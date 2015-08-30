@@ -11229,6 +11229,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TextMultiMarkdown = buildPerlPackage {
+    name = "Text-MultiMarkdown-1.000035";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Text-MultiMarkdown-1.000035.tar.gz;
+      sha256 = "2467dd13751dc2979d7c880b24e762952130fdf42a1ed3ee04fdf72d4b52646a";
+    };
+    buildInputs = [ ListMoreUtils TestException ];
+    propagatedBuildInputs = [ HTMLParser TextMarkdown ];
+    meta = {
+      description = "Convert MultiMarkdown syntax to (X)HTML";
+      license = "bsd";
+      maintainers = with maintainers; [ lowfatcomputing ];
+    };
+  };
+
   TextPDF = buildPerlPackage rec {
     name = "Text-PDF-0.29a";
     src = fetchurl {
