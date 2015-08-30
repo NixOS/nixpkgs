@@ -2051,6 +2051,21 @@ let
     };
   };
 
+  prometheus.haproxy-exporter = buildFromGitHub {
+    rev = "0.4.0";
+    owner = "prometheus";
+    repo = "haproxy_exporter";
+    sha256 = "0cwls1d4hmzjkwc50mjkxjb4sa4q6yq581wlc5sg9mdvl6g91zxr";
+    buildInputs = [ prometheus.client_golang ];
+    meta = with stdenv.lib; {
+      description = "HAProxy Exporter for the Prometheus monitoring system";
+      homepage = https://github.com/prometheus/haproxy_exporter;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
   prometheus.log = buildFromGitHub {
     rev    = "439e5db48fbb50ebbaf2c816030473a62f505f55";
     date   = "2015-05-29";
