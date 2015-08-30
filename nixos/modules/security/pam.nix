@@ -192,6 +192,16 @@ let
         description = "Whether to log authentication failures in <filename>/var/log/faillog</filename>.";
       };
 
+      enableAppArmor = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Enable support for attaching AppArmor profiles at the
+          user/group level, e.g., as part of a role based access
+          control scheme.
+        '';
+      };
+
       text = mkOption {
         type = types.nullOr types.lines;
         description = "Contents of the PAM service file.";
@@ -294,6 +304,8 @@ let
               "session optional ${pkgs.pam}/lib/security/pam_motd.so motd=${motd}"}
           ${optionalString cfg.pamMount
               "session optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
+          ${optionalString (cfg.enableAppArmor && config.security.apparmor.enable)
+              "session optional ${pkgs.apparmor-pam}/lib/security/pam_apparmor.so order=user,group,default debug"}
         '';
     };
 

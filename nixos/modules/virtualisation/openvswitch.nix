@@ -67,7 +67,6 @@ in {
       description = "Open_vSwitch Database Server";
       wantedBy = [ "multi-user.target" ];
       after = [ "systemd-udev-settle.service" ];
-      wants = [ "vswitchd.service" ];
       path = [ cfg.package ];
       restartTriggers = [ db cfg.package ];
       # Create the config database
@@ -108,6 +107,7 @@ in {
 
     systemd.services.vswitchd = {
       description = "Open_vSwitch Daemon";
+      wantedBy = [ "multi-user.target" ];
       bindsTo = [ "ovsdb.service" ];
       after = [ "ovsdb.service" ];
       path = [ cfg.package ];
@@ -135,8 +135,8 @@ in {
     systemd.services.ovs-monitor-ipsec = {
       description = "Open_vSwitch Ipsec Daemon";
       wantedBy = [ "multi-user.target" ];
-      requires = [ "racoon.service" ];
-      after = [ "vswitchd.service" ];
+      requires = [ "ovsdb.service" ];
+      before = [ "vswitchd.service" "racoon.service" ];
       environment.UNIXCTLPATH = "/tmp/ovsdb.ctl.sock";
       serviceConfig = {
         ExecStart = ''

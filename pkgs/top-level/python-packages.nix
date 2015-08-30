@@ -3513,20 +3513,34 @@ let
 
   gcutil = buildPythonPackage rec {
     name = "gcutil-1.16.1";
-    meta.maintainers = with maintainers; [ phreedom ];
 
     src = pkgs.fetchurl {
       url = https://dl.google.com/dl/cloudsdk/release/artifacts/gcutil-1.16.1.tar.gz;
       sha256 = "00jaf7x1ji9y46fbkww2sg6r6almrqfsprydz3q2swr4jrnrsx9x";
     };
 
+    propagatedBuildInputs = with self; [
+      gflags
+      iso8601
+      ipaddr
+      httplib2
+      google_apputils
+      google_api_python_client
+    ];
+
     prePatch = ''
+      sed -i -e "s|google-apputils==0.4.0|google-apputils==0.4.1|g" setup.py
       substituteInPlace setup.py \
         --replace "httplib2==0.8" "httplib2" \
         --replace "iso8601==0.1.4" "iso8601"
     '';
 
-    propagatedBuildInputs = with self; [ gflags iso8601 ipaddr httplib2 google_apputils google_api_python_client ];
+    meta = {
+      description = "Command-line tool for interacting with Google Compute Engine.";
+      homepage = "https://cloud.google.com/compute/docs/gcutil/";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ phreedom ];
+    };
   };
 
   gmpy = buildPythonPackage rec {
@@ -3552,7 +3566,7 @@ let
   gmpy2 = buildPythonPackage rec {
     name = "gmpy2-2.0.6";
     disabled = isPyPy;
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gmpy2/${name}.zip";
       md5 = "7365d880953ba54c2cdcf171c7e19b2b";
@@ -6241,7 +6255,7 @@ let
       description = "Coroutine-based networking library";
       homepage = http://www.gevent.org/;
       license = licenses.mit;
-      platforms = platforms.linux;
+      platforms = platforms.unix;
       maintainers = with maintainers; [ bjornfor ];
     };
   };
@@ -6805,14 +6819,16 @@ let
     };
   };
 
-  importlib = if isPy26 then (buildPythonPackage {
+  importlib = buildPythonPackage rec {
     name = "importlib-1.0.2";
+
+    disabled = (!isPy26) || isPyPy;
+
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/i/importlib/importlib-1.0.2.tar.gz";
       md5 = "4aa23397da8bd7c7426864e88e4db7e1";
     };
-    doCheck = false;
-  }) else null;
+  };
 
   influxdb = buildPythonPackage rec {
     name = "influxdb-0.1.12";
@@ -8406,7 +8422,7 @@ let
       nose
       modules.sqlite3
     ];
-    
+
     # Test does not work on Py3k because it calls 'python'.
     # https://github.com/nipy/nibabel/issues/341
     preCheck = ''
@@ -9862,7 +9878,7 @@ let
   protobuf2_5 = self.protobufBuild pkgs.protobuf2_5;
   protobufBuild = protobuf: buildPythonPackage rec {
     inherit (protobuf) name src;
-    disabled = isPy3k;
+    disabled = isPy3k || isPyPy;
 
     propagatedBuildInputs = with self; [ protobuf google_apputils ];
 
@@ -10323,6 +10339,10 @@ let
       url = "https://pypi.python.org/packages/source/p/pycdio/${name}.tar.gz";
       sha256 = "1mrh233pj584gf7la64d4xlmvdnfl4jwpxs95lnd3i4zd5drid14";
     };
+
+    prePatch = ''
+      sed -i -e "s|if type(driver_id)==int|if type(driver_id) in (int, long)|g" cdio.py
+    '';
 
     preConfigure = ''
       patchShebangs .
@@ -11821,35 +11841,36 @@ let
     };
   };
 
-  qscintilla = pkgs.stdenv.mkDerivation rec {
-    # TODO: Qt5 support
-    name = "qscintilla-${version}";
-    version = pkgs.qscintilla.version;
-    disabled = isPy3k || isPyPy;
+  qscintilla = if isPy3k || isPyPy
+    then throw "qscintilla-${pkgs.qscintilla.version} not supported for interpreter ${python.executable}"
+    else pkgs.stdenv.mkDerivation rec {
+      # TODO: Qt5 support
+      name = "qscintilla-${version}";
+      version = pkgs.qscintilla.version;
 
-    src = pkgs.qscintilla.src;
+      src = pkgs.qscintilla.src;
 
-    buildInputs = with pkgs; [ xorg.lndir qt4 pyqt4 python ];
+      buildInputs = with pkgs; [ xorg.lndir qt4 pyqt4 python ];
 
-    preConfigure = ''
-      mkdir -p $out
-      lndir ${pkgs.pyqt4} $out
-      cd Python
-      ${python.executable} ./configure-old.py \
-          --destdir $out/lib/${python.libPrefix}/site-packages/PyQt4 \
-          --apidir $out/api/${python.libPrefix} \
-          -n ${pkgs.qscintilla}/include \
-          -o ${pkgs.qscintilla}/lib \
-          --sipdir $out/share/sip
-    '';
+      preConfigure = ''
+        mkdir -p $out
+        lndir ${pkgs.pyqt4} $out
+        cd Python
+        ${python.executable} ./configure-old.py \
+            --destdir $out/lib/${python.libPrefix}/site-packages/PyQt4 \
+            --apidir $out/api/${python.libPrefix} \
+            -n ${pkgs.qscintilla}/include \
+            -o ${pkgs.qscintilla}/lib \
+            --sipdir $out/share/sip
+      '';
 
-    meta = with stdenv.lib; {
-      description = "A Python binding to QScintilla, Qt based text editing control";
-      license = licenses.lgpl21Plus;
-      maintainers = [ "abcz2.uprola@gmail.com" ];
-      platforms = platforms.linux;
+      meta = with stdenv.lib; {
+        description = "A Python binding to QScintilla, Qt based text editing control";
+        license = licenses.lgpl21Plus;
+        maintainers = [ "abcz2.uprola@gmail.com" ];
+        platforms = platforms.linux;
+      };
     };
-  };
 
 
   qserve = buildPythonPackage rec {
@@ -13269,6 +13290,10 @@ let
       license = "BSD";
     };
   });
+
+  spyder = callPackage ../applications/science/spyder {
+    rope = if isPy3k then null else self.rope;
+  };
 
   sqlalchemy = self.sqlalchemy9.override rec {
     name = "SQLAlchemy-0.7.10";

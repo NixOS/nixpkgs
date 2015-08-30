@@ -1,4 +1,4 @@
-{ go, govers, lib }:
+{ go, govers, parallel, lib }:
 
 { name, buildInputs ? [], nativeBuildInputs ? [], passthru ? {}, preFixup ? ""
 
@@ -41,7 +41,7 @@ go.stdenv.mkDerivation (
   (builtins.removeAttrs args [ "goPackageAliases" "disabled" ]) // {
 
   name = "go${go.meta.branch}-${name}";
-  nativeBuildInputs = [ go ]
+  nativeBuildInputs = [ go parallel ]
     ++ (lib.optional (!dontRenameImports) govers) ++ nativeBuildInputs;
   buildInputs = [ go ] ++ buildInputs;
 
@@ -62,7 +62,7 @@ go.stdenv.mkDerivation (
     rmdir extraSrc
 
   '') + ''
-    GOPATH=$NIX_BUILD_TOP/go:$GOPATH
+    export GOPATH=$NIX_BUILD_TOP/go:$GOPATH
 
     runHook postConfigure
   '';
@@ -80,38 +80,39 @@ go.stdenv.mkDerivation (
 
     runHook renameImports
 
-    PIDS=()
-    if [ -n "$subPackages" ] ; then
-        for p in $subPackages ; do
-            go install $buildFlags "''${buildFlagsArray[@]}" -p $NIX_BUILD_CORES -v $goPackagePath/$p &
-            PIDS+=("$!")
-        done
-    else
-        pushd go/src
-        while read d; do
-          {
-            echo "$d" | grep -q "/_" && continue
-            [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && continue
-            local OUT
-            if ! OUT="$(go install $buildFlags "''${buildFlagsArray[@]}" -p $NIX_BUILD_CORES -v $d 2>&1)"; then
-                if ! echo "$OUT" | grep -q 'no buildable Go source files'; then
-                    echo "$OUT" >&2
-                    exit 1
-                fi
-            fi
-            if [ -n "$OUT" ]; then
-              echo "$OUT" >&2
-            fi
-          } &
-          PIDS+=("$!")
-        done < <(find $goPackagePath -type f -name \*.go -exec dirname {} \; | sort | uniq)
-        popd
-    fi
+    buildGoDir() {
+      local d; local cmd;
+      cmd="$1"
+      d="$2"
+      echo "$d" | grep -q "/_" && return 0
+      [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && return 0
+      local OUT
+      if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" -v $d 2>&1)"; then
+        if ! echo "$OUT" | grep -q 'no buildable Go source files'; then
+          echo "$OUT" >&2
+          return 1
+        fi
+      fi
+      if [ -n "$OUT" ]; then
+        echo "$OUT" >&2
+      fi
+      return 0
+    }
 
-    # Exit on error from the parallel process
-    for PID in "''${PIDS[@]}"; do
-        wait $PID || exit 1
-    done
+    getGoDirs() {
+      local type;
+      type="$1"
+      if [ -n "$subPackages" ]; then
+        echo "$subPackages" | sed "s,\(^\| \),\1$goPackagePath/,g"
+      else
+        pushd go/src >/dev/null
+        find "$goPackagePath" -type f -name \*$type.go -exec dirname {} \; | sort | uniq
+        popd >/dev/null
+      fi
+    }
+
+    export -f buildGoDir # parallel needs to see the function
+    getGoDirs "" | parallel -j $NIX_BUILD_CORES buildGoDir install
 
     runHook postBuild
   '';
@@ -119,25 +120,7 @@ go.stdenv.mkDerivation (
   checkPhase = args.checkPhase or ''
     runHook preCheck
 
-    PIDS=()
-    if [ -n "$subPackages" ] ; then
-        for p in $subPackages ; do
-            go test -p $NIX_BUILD_CORES -v $goPackagePath/$p &
-            PIDS+=("$!")
-        done
-    else
-        pushd go/src
-        while read d; do
-            go test -p $NIX_BUILD_CORES -v $d &
-            PIDS+=("$!")
-        done < <(find $goPackagePath -type f -name \*_test.go -exec dirname {} \; | sort | uniq)
-        popd
-    fi
-
-    # Exit on error from the parallel process
-    for PID in "''${PIDS[@]}"; do
-        wait $PID || exit 1
-    done
+    getGoDirs test | parallel -j $NIX_BUILD_CORES buildGoDir test
 
     runHook postCheck
   '';
@@ -146,19 +129,17 @@ go.stdenv.mkDerivation (
     runHook preInstall
 
     mkdir -p $out
+    pushd "$NIX_BUILD_TOP/go"
+    while read f; do
+      echo "$f" | grep -q '^./\(src\|pkg/[^/]*\)/${goPackagePath}' || continue
+      mkdir -p "$(dirname "$out/share/go/$f")"
+      cp "$NIX_BUILD_TOP/go/$f" "$out/share/go/$f"
+    done < <(find . -type f)
+    popd
 
-    if [ -z "$dontInstallSrc" ]; then
-        pushd "$NIX_BUILD_TOP/go"
-        while read f; do
-          echo "$f" | grep -q '^./\(src\|pkg/[^/]*\)/${goPackagePath}' || continue
-          mkdir -p "$(dirname "$out/share/go/$f")"
-          cp "$NIX_BUILD_TOP/go/$f" "$out/share/go/$f"
-        done < <(find . -type f)
-        popd
-    fi
-
+    mkdir -p $bin
     dir="$NIX_BUILD_TOP/go/bin"
-    [ -e "$dir" ] && cp -r $dir $out
+    [ -e "$dir" ] && cp -r $dir $bin
 
     runHook postInstall
   '';
@@ -168,7 +149,7 @@ go.stdenv.mkDerivation (
       cat $file ${removeExpr removeReferences} > $file.tmp
       mv $file.tmp $file
       chmod +x $file
-    done < <(find $out/bin -type f 2>/dev/null)
+    done < <(find $bin/bin -type f 2>/dev/null)
   '';
 
   disallowedReferences = lib.optional (!allowGoReference) go
@@ -177,6 +158,9 @@ go.stdenv.mkDerivation (
   passthru = passthru // lib.optionalAttrs (goPackageAliases != []) { inherit goPackageAliases; };
 
   enableParallelBuilding = enableParallelBuilding;
+
+  # I prefer to call this dev but propagatedBuildInputs expects $out to exist
+  outputs = [ "out" "bin" ];
 
   meta = {
     # Add default meta information
