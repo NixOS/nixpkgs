@@ -52,4 +52,5 @@ mkDerivation rec {
   homepage = "http://github.com/NixOS/cabal2nix/";
   description = "Convert Cabal files into Nix build instructions";
   license = stdenv.lib.licenses.bsd3;
+  maintainers = with stdenv.lib.maintainers; [ simons ];
 }
