@@ -2228,6 +2228,46 @@ let
     };
   };
 
+  prometheus.pushgateway = buildFromGitHub rec {
+    rev = "0.1.1";
+    owner = "prometheus";
+    repo = "pushgateway";
+    sha256 = "17q5z9msip46wh3vxcsq9lvvhbxg75akjjcr2b29zrky8bp2m230";
+
+    buildInputs = [
+      protobuf
+      httprouter
+      golang_protobuf_extensions
+      prometheus.client_golang
+    ];
+
+    nativeBuildInputs = [ go-bindata.bin ];
+    preBuild = ''
+    (
+      cd "go/src/$goPackagePath"
+      go-bindata ./resources/
+    )
+    '';
+
+    buildFlagsArray = ''
+      -ldflags=
+          -X main.buildVersion=${rev}
+          -X main.buildRev=${rev}
+          -X main.buildBranch=master
+          -X main.buildUser=nix@nixpkgs
+          -X main.buildDate=20150101-00:00:00
+          -X main.goVersion=${stdenv.lib.getVersion go}
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Allows ephemeral and batch jobs to expose metrics to Prometheus";
+      homepage = https://github.com/prometheus/pushgateway;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
   pty = buildFromGitHub {
     rev    = "67e2db24c831afa6c64fc17b4a143390674365ef";
     owner  = "kr";
