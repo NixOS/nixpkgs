@@ -2745,6 +2745,8 @@ let
 
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
+  psoc-programmer = callPackage ../tools/misc/psoc-programmer { };
+
   pstoedit = callPackage ../tools/graphics/pstoedit { };
 
   pv = callPackage ../tools/misc/pv { };
