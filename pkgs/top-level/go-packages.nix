@@ -511,8 +511,6 @@ let
     name = "dbus-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/godbus/dbus";
 
-    excludedPackages = "examples";
-
     src = fetchFromGitHub {
       inherit rev;
       owner = "godbus";
@@ -566,7 +564,6 @@ let
     owner  = "coreos";
     repo   = "etcd";
     sha256 = "0jd97091jwwdvx50vbdi1py9v5w9fk86cw85p0zinb0ww6bs4y0s";
-    excludedPackages = "Godeps";
   };
 
   fsnotify.v0 = buildGoPackage rec {
@@ -830,7 +827,6 @@ let
     sha256 = "1w6bjhd8p6fxvm002jqk3r9vk50hlaqnxc9g6msb2wswy3nxcw57";
     goPackagePath = "google.golang.org/api";
     goPackageAliases = [ "github.com/google/google-api-client" ];
-    excludedPackages = "examples";
     buildInputs = [ net ];
   };
 
@@ -873,7 +869,6 @@ let
     repo   = "goproxy";
     sha256 = "1zz425y8byjaa9i7mslc9anz9w2jc093fjl0562rmm5hh4rc5x5f";
     buildInputs = [ go-charset ];
-    excludedPackages = "examples";
   };
 
   gosnappy = buildFromGitHub {
@@ -1042,7 +1037,6 @@ let
     sha256 = "0ygh0f6p679r095l4bym8q4l45w2l3d8r3hx9xrnnppxq59i2395";
     buildInputs = [ oauth2 ];
     propagatedBuildInputs = [ go-querystring ];
-    excludedPackages = "examples";
   };
 
   go-gypsy = buildFromGitHub {
@@ -1103,7 +1097,6 @@ let
     goPackagePath = "gopkg.in/lxc/go-lxc.v2";
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ pkgs.lxc ];
-    excludedPackages = "examples";
   };
 
   rcrowley.go-metrics = buildGoPackage rec {
@@ -1259,8 +1252,6 @@ let
     name = "go-systemd-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/coreos/go-systemd";
 
-    excludedPackages = "examples";
-
     src = fetchFromGitHub {
       inherit rev;
       owner = "coreos";
@@ -1277,7 +1268,6 @@ let
     owner = "stgraber";
     repo = "lxd-go-systemd";
     sha256 = "006dhy3j8ld0kycm8hrjxvakd7xdn1b6z2dsjp1l4sqrxdmm188w";
-    excludedPackages = "examples";
     buildInputs = [ dbus ];
   };
 
@@ -1406,8 +1396,6 @@ let
     name = "hipchat-go-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/tbruyelle/hipchat-go";
 
-    excludedPackages = "examples";
-
     src = fetchFromGitHub {
       inherit rev;
       owner = "tbruyelle";
@@ -1521,7 +1509,6 @@ let
     owner  = "ipfs";
     repo   = "go-ipfs";
     sha256 = "0qj3rwq5i4aiwn0i09skpi1s3mzqm8ma9v1cpjl7rya2y6ypx8xg";
-    excludedPackages = "Godeps";
   };
 
   ldap = buildGoPackage rec {
@@ -1547,8 +1534,6 @@ let
     rev = "1ddad808d437abb2b8a55a950ec2616caa88969b";
     name = "levigo-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/jmhodges/levigo";
-
-    excludedPackages = "examples";
 
     src = fetchFromGitHub {
       inherit rev;
@@ -1592,8 +1577,6 @@ let
       "code.google.com/p/log4go"
     ];
 
-    excludedPackages = "examples";
-
     src = fetchFromGitHub {
       inherit rev;
       owner = "ccpaging";
@@ -1610,7 +1593,6 @@ let
     owner = "Sirupsen";
     repo = "logrus";
     sha256 = "1v2qcjy6w24jgdm7kk0f8lqpa25qxzll2x6ycqwidd3pzjhrkifa";
-    excludedPackages = "examples";
     propagatedBuildInputs = [ airbrake-go bugsnag-go raven-go ];
   };
 
@@ -1986,7 +1968,6 @@ let
       prometheus.procfs
       beorn7.perks
     ];
-    excludedPackages = "examples";
   };
 
   prometheus.client_model = buildFromGitHub {
