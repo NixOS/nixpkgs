@@ -10020,6 +10020,10 @@ let
 
   libcap_ng = callPackage ../os-specific/linux/libcap-ng { };
 
+  libcap_ng_python = callPackage ../os-specific/linux/libcap-ng {
+    pythonSupport = true;
+  };
+
   libnscd = callPackage ../os-specific/linux/libnscd { };
 
   libnotify = callPackage ../development/libraries/libnotify { };
