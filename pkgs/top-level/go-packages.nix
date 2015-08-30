@@ -2010,6 +2010,26 @@ let
     ];
   };
 
+  prometheus.cli = buildFromGitHub {
+    rev = "0.3.0";
+    owner = "prometheus";
+    repo = "prometheus_cli";
+    sha256 = "1qxqrcbd0d4mrjrgqz882jh7069nn5gz1b84rq7d7z1f1dqhczxn";
+
+    buildInputs = [
+      prometheus.client_model
+      prometheus.client_golang
+    ];
+
+    meta = with stdenv.lib; {
+      description = "Command line tool for querying the Prometheus HTTP API";
+      homepage = https://github.com/prometheus/prometheus_cli;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
   prometheus.client_model = buildFromGitHub {
     rev    = "fa8ad6fec33561be4280a8f0514318c79d7f6cb6";
     date   = "2015-02-12";
