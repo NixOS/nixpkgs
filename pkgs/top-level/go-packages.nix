@@ -2056,6 +2056,27 @@ let
     sha256 = "0pj3gzw9b58l72w0rkpn03ayssglmqfmyxghhfad6mh0b49dvj3r";
   };
 
+  prometheus.prom2json = buildFromGitHub {
+    rev = "0.1.0";
+    owner = "prometheus";
+    repo = "prom2json";
+    sha256 = "0wwh3mz7z81fwh8n78sshvj46akcgjhxapjgfic5afc4nv926zdl";
+
+    buildInputs = [
+      golang_protobuf_extensions
+      prometheus.client_golang
+      protobuf
+    ];
+
+    meta = with stdenv.lib; {
+      description = "Tool to scrape a Prometheus client and dump the result as JSON";
+      homepage = https://github.com/prometheus/prom2json;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
   prometheus.prometheus = buildGoPackage rec {
     name = "prometheus-${version}";
     version = "0.15.1";

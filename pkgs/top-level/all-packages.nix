@@ -9196,8 +9196,7 @@ let
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
-  prom2json = callPackage ../servers/monitoring/prometheus/prom2json { };
-
+  prom2json = goPackages.prometheus.prom2json.bin;
   prometheus = goPackages.prometheus.prometheus.bin;
   prometheus-alertmanager = goPackages.prometheus.alertmanager.bin;
   prometheus-cli = goPackages.prometheus.cli.bin;
