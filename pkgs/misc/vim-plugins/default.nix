@@ -420,6 +420,17 @@ rec {
 
   };
 
+  vim-go = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-go-2015-08-12";
+    src = fetchgit {
+      url = "git://github.com/fatih/vim-go";
+      rev = "5048bdbebcffb296aa60b4c21c44ae8276244539";
+      sha256 = "1k9r6zdlb553d8zhhswbjph4fa6n17qdvc8zz0cix6h2lw9dr9mj";
+    };
+    dependencies = [];
+
+  };
+
   idris-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "idris-vim-2015-08-14";
     src = fetchgit {
@@ -503,17 +514,6 @@ rec {
       url = "git://github.com/jistr/vim-nerdtree-tabs";
       rev = "0decec122e9bb3e9328b01fa20a9650e79cc6ca7";
       sha256 = "ac4bfc3ae18e8a62ef8e20d0dd0a0f7c172d0ebd5fed58c533ccccec3ae7bdc2";
-    };
-    dependencies = [];
-
-  };
-
-  vim-golang = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "vim-golang-2014-08-06";
-    src = fetchgit {
-      url = "git://github.com/jnwhiteh/vim-golang";
-      rev = "e6d0c6a72a66af2674b96233c4747661e0f47a8c";
-      sha256 = "1231a2eff780dbff4f885fcb4f656f7dd70597e1037ca800470de03bf0c5e7af";
     };
     dependencies = [];
 
