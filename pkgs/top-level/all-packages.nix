@@ -9197,9 +9197,10 @@ let
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json { };
+
   prometheus = goPackages.prometheus.prometheus.bin;
-  prometheus-alertmanager =
-    callPackage ../servers/monitoring/prometheus/alertmanager { };
+  prometheus-alertmanager = goPackages.prometheus.alertmanager.bin;
+
   prometheus-cli =
     callPackage ../servers/monitoring/prometheus/cli { };
   prometheus-collectd-exporter =
