@@ -9207,9 +9207,7 @@ let
   prometheus-nginx-exporter = goPackages.prometheus.nginx-exporter.bin;
   prometheus-node-exporter = goPackages.prometheus.node-exporter.bin;
   prometheus-pushgateway = goPackages.prometheus.pushgateway.bin;
-
-  prometheus-statsd-bridge =
-    callPackage ../servers/monitoring/prometheus/statsd_bridge { };
+  prometheus-statsd-bridge = goPackages.prometheus.statsd-bridge.bin;
 
   psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
 
