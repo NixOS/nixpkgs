@@ -7700,7 +7700,6 @@ let
 
   nethack = callPackage ../games/nethack { };
 
-  nettle27 = callPackage ../development/libraries/nettle/27.nix { };
   nettle = callPackage ../development/libraries/nettle { };
 
   newt = callPackage ../development/libraries/newt { };
