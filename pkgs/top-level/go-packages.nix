@@ -384,7 +384,6 @@ let
 
   consul = buildFromGitHub rec {
     rev = "v0.5.2";
-    date = rev;
     owner = "hashicorp";
     repo = "consul";
     sha256 = "0p3lc1p346a5ipvkf15l94gn1ml3m7zz6bx0viark3hsv0a7iij7";
@@ -1591,7 +1590,6 @@ let
 
   logrus = buildFromGitHub rec {
     rev = "v0.8.6";
-    date = rev;  # Trick buildFromGitHub into keeping the version number.
     owner = "Sirupsen";
     repo = "logrus";
     sha256 = "1v2qcjy6w24jgdm7kk0f8lqpa25qxzll2x6ycqwidd3pzjhrkifa";
@@ -1956,9 +1954,46 @@ let
     propagatedBuildInputs = [ kr.text ];
   };
 
-  prometheus.client_golang = buildFromGitHub rec {
+  prometheus.alertmanager = buildGoPackage rec {
+    name = "prometheus-alertmanager-${rev}";
+    rev = "0.0.4";
+    goPackagePath = "github.com/prometheus/alertmanager";
+
+    src = fetchFromGitHub {
+      owner = "prometheus";
+      repo = "alertmanager";
+      inherit rev;
+      sha256 = "0g656rzal7m284mihqdrw23vhs7yr65ax19nvi70jl51wdallv15";
+    };
+
+    buildInputs = [
+      fsnotify.v0
+      httprouter
+      prometheus.client_golang
+      prometheus.log
+      pushover
+    ];
+
+    buildFlagsArray = ''
+      -ldflags=
+          -X main.buildVersion=${rev}
+          -X main.buildBranch=master
+          -X main.buildUser=nix@nixpkgs
+          -X main.buildDate=20150101-00:00:00
+          -X main.goVersion=${stdenv.lib.getVersion go}
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Alert dispatcher for the Prometheus monitoring system";
+      homepage = https://github.com/prometheus/alertmanager;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
+  prometheus.client_golang = buildFromGitHub {
     rev = "0.7.0";
-    date = rev;  # Trick buildFromGitHub into keeping the version number
     owner = "prometheus";
     repo = "client_golang";
     sha256 = "1i3g5h2ncdb8b67742kfpid7d0a1jas1pyicglbglwngfmzhpkna";
@@ -1972,6 +2007,26 @@ let
     ];
   };
 
+  prometheus.cli = buildFromGitHub {
+    rev = "0.3.0";
+    owner = "prometheus";
+    repo = "prometheus_cli";
+    sha256 = "1qxqrcbd0d4mrjrgqz882jh7069nn5gz1b84rq7d7z1f1dqhczxn";
+
+    buildInputs = [
+      prometheus.client_model
+      prometheus.client_golang
+    ];
+
+    meta = with stdenv.lib; {
+      description = "Command line tool for querying the Prometheus HTTP API";
+      homepage = https://github.com/prometheus/prometheus_cli;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
   prometheus.client_model = buildFromGitHub {
     rev    = "fa8ad6fec33561be4280a8f0514318c79d7f6cb6";
     date   = "2015-02-12";
@@ -1979,6 +2034,36 @@ let
     repo   = "client_model";
     sha256 = "11a7v1fjzhhwsl128znjcf5v7v6129xjgkdpym2lial4lac1dhm9";
     buildInputs = [ protobuf ];
+  };
+
+  prometheus.collectd-exporter = buildFromGitHub {
+    rev = "0.1.0";
+    owner = "prometheus";
+    repo = "collectd_exporter";
+    sha256 = "165zsdn0lffb6fvxz75szmm152a6wmia5skb96k1mv59qbmn9fi1";
+    buildInputs = [ prometheus.client_golang ];
+    meta = with stdenv.lib; {
+      description = "Relay server for exporting metrics from collectd to Prometheus";
+      homepage = https://github.com/prometheus/alertmanager;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
+  prometheus.haproxy-exporter = buildFromGitHub {
+    rev = "0.4.0";
+    owner = "prometheus";
+    repo = "haproxy_exporter";
+    sha256 = "0cwls1d4hmzjkwc50mjkxjb4sa4q6yq581wlc5sg9mdvl6g91zxr";
+    buildInputs = [ prometheus.client_golang ];
+    meta = with stdenv.lib; {
+      description = "HAProxy Exporter for the Prometheus monitoring system";
+      homepage = https://github.com/prometheus/haproxy_exporter;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
   };
 
   prometheus.log = buildFromGitHub {
@@ -1990,12 +2075,212 @@ let
     propagatedBuildInputs = [ logrus ];
   };
 
+  prometheus.mesos-exporter = buildFromGitHub {
+    rev = "0.1.0";
+    owner = "prometheus";
+    repo = "mesos_exporter";
+    sha256 = "059az73j717gd960g4jigrxnvqrjh9jw1c324xpwaafa0bf10llm";
+    buildInputs = [ mesos-stats prometheus.client_golang glog ];
+    meta = with stdenv.lib; {
+      description = "Export Mesos metrics to Prometheus";
+      homepage = https://github.com/prometheus/mesos_exporter;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
+  prometheus.mysqld-exporter = buildFromGitHub {
+    rev = "0.1.0";
+    owner = "prometheus";
+    repo = "mysqld_exporter";
+    sha256 = "10xnyxyb6saz8pq3ijp424hxy59cvm1b5c9zcbw7ddzzkh1f6jd9";
+    buildInputs = [ mysql prometheus.client_golang ];
+    meta = with stdenv.lib; {
+      description = "Prometheus exporter for MySQL server metrics";
+      homepage = https://github.com/prometheus/mysqld_exporter;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
+  prometheus.nginx-exporter = buildFromGitHub {
+    rev = "2cf16441591f6b6e58a8c0439dcaf344057aea2b";
+    date = "2015-06-01";
+    owner = "discordianfish";
+    repo = "nginx_exporter";
+    sha256 = "0p9j0bbr2lr734980x2p8d67lcify21glwc5k3i3j4ri4vadpxvc";
+    buildInputs = [ prometheus.client_golang prometheus.log ];
+    meta = with stdenv.lib; {
+      description = "Metrics relay from nginx stats to Prometheus";
+      homepage = https://github.com/discordianfish/nginx_exporter;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
+  prometheus.node-exporter = buildFromGitHub {
+    rev = "0.10.0";
+    owner = "prometheus";
+    repo = "node_exporter";
+    sha256 = "0dmczav52v9vi0kxl8gd2s7x7c94g0vzazhyvlq1h3729is2nf0p";
+
+    buildInputs = [
+      go-runit
+      ntp
+      prometheus.client_golang
+      prometheus.client_model
+      prometheus.log
+      protobuf
+    ];
+
+    meta = with stdenv.lib; {
+      description = "Prometheus exporter for machine metrics";
+      homepage = https://github.com/prometheus/node_exporter;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
   prometheus.procfs = buildFromGitHub {
     rev    = "c91d8eefde16bd047416409eb56353ea84a186e4";
     date   = "2015-06-16";
     owner  = "prometheus";
     repo   = "procfs";
     sha256 = "0pj3gzw9b58l72w0rkpn03ayssglmqfmyxghhfad6mh0b49dvj3r";
+  };
+
+  prometheus.prom2json = buildFromGitHub {
+    rev = "0.1.0";
+    owner = "prometheus";
+    repo = "prom2json";
+    sha256 = "0wwh3mz7z81fwh8n78sshvj46akcgjhxapjgfic5afc4nv926zdl";
+
+    buildInputs = [
+      golang_protobuf_extensions
+      prometheus.client_golang
+      protobuf
+    ];
+
+    meta = with stdenv.lib; {
+      description = "Tool to scrape a Prometheus client and dump the result as JSON";
+      homepage = https://github.com/prometheus/prom2json;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
+  prometheus.prometheus = buildGoPackage rec {
+    name = "prometheus-${version}";
+    version = "0.15.1";
+    goPackagePath = "github.com/prometheus/prometheus";
+    rev = "64349aade284846cb194be184b1b180fca629a7c";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "prometheus";
+      repo = "prometheus";
+      sha256 = "0gljpwnlip1fnmhbc96hji2rc56xncy97qccm7v1z5j1nhc5fam2";
+    };
+
+    buildInputs = [
+      consul
+      dns
+      fsnotify.v1
+      go-zookeeper
+      goleveldb
+      httprouter
+      logrus
+      net
+      prometheus.client_golang
+      prometheus.log
+      yaml-v2
+    ];
+
+    preInstall = ''
+      mkdir -p "$bin/share/doc/prometheus" "$bin/etc/prometheus"
+      cp -a $src/documentation/* $bin/share/doc/prometheus
+      cp -a $src/console_libraries $src/consoles $bin/etc/prometheus
+    '';
+
+    # Metadata that gets embedded into the binary
+    buildFlagsArray = let t = "${goPackagePath}/version"; in
+    ''
+      -ldflags=
+          -X ${t}.Version=${version}
+          -X ${t}.Revision=${builtins.substring 0 6 rev}
+          -X ${t}.Branch=master
+          -X ${t}.BuildUser=nix@nixpkgs
+          -X ${t}.BuildDate=20150101-00:00:00
+          -X ${t}.GoVersion=${stdenv.lib.getVersion go}
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Service monitoring system and time series database";
+      homepage = http://prometheus.io;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
+  prometheus.pushgateway = buildFromGitHub rec {
+    rev = "0.1.1";
+    owner = "prometheus";
+    repo = "pushgateway";
+    sha256 = "17q5z9msip46wh3vxcsq9lvvhbxg75akjjcr2b29zrky8bp2m230";
+
+    buildInputs = [
+      protobuf
+      httprouter
+      golang_protobuf_extensions
+      prometheus.client_golang
+    ];
+
+    nativeBuildInputs = [ go-bindata.bin ];
+    preBuild = ''
+    (
+      cd "go/src/$goPackagePath"
+      go-bindata ./resources/
+    )
+    '';
+
+    buildFlagsArray = ''
+      -ldflags=
+          -X main.buildVersion=${rev}
+          -X main.buildRev=${rev}
+          -X main.buildBranch=master
+          -X main.buildUser=nix@nixpkgs
+          -X main.buildDate=20150101-00:00:00
+          -X main.goVersion=${stdenv.lib.getVersion go}
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Allows ephemeral and batch jobs to expose metrics to Prometheus";
+      homepage = https://github.com/prometheus/pushgateway;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
+  prometheus.statsd-bridge = buildFromGitHub {
+    rev = "0.1.0";
+    owner = "prometheus";
+    repo = "statsd_bridge";
+    sha256 = "1fndpmd1k0a3ar6f7zpisijzc60f2dng5399nld1i1cbmd8jybjr";
+    buildInputs = [ fsnotify.v0 prometheus.client_golang ];
+    meta = with stdenv.lib; {
+      description = "Receives StatsD-style metrics and exports them to Prometheus";
+      homepage = https://github.com/prometheus/statsd_bridge;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
   };
 
   pty = buildFromGitHub {
