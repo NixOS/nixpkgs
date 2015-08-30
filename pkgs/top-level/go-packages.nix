@@ -1998,6 +1998,60 @@ let
     sha256 = "0pj3gzw9b58l72w0rkpn03ayssglmqfmyxghhfad6mh0b49dvj3r";
   };
 
+  prometheus.prometheus = buildGoPackage rec {
+    name = "prometheus-${version}";
+    version = "0.15.1";
+    goPackagePath = "github.com/prometheus/prometheus";
+    rev = "64349aade284846cb194be184b1b180fca629a7c";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "prometheus";
+      repo = "prometheus";
+      sha256 = "0gljpwnlip1fnmhbc96hji2rc56xncy97qccm7v1z5j1nhc5fam2";
+    };
+
+    buildInputs = [
+      consul
+      dns
+      fsnotify.v1
+      go-zookeeper
+      goleveldb
+      httprouter
+      logrus
+      net
+      prometheus.client_golang
+      prometheus.log
+      yaml-v2
+    ];
+
+    preInstall = ''
+      mkdir -p "$bin/share/doc/prometheus" "$bin/etc/prometheus"
+      cp -a $src/documentation/* $bin/share/doc/prometheus
+      cp -a $src/console_libraries $src/consoles $bin/etc/prometheus
+    '';
+
+    # Metadata that gets embedded into the binary
+    buildFlagsArray = let t = "${goPackagePath}/version"; in
+    ''
+      -ldflags=
+          -X ${t}.Version=${version}
+          -X ${t}.Revision=${builtins.substring 0 6 rev}
+          -X ${t}.Branch=master
+          -X ${t}.BuildUser=nix@nixpkgs
+          -X ${t}.BuildDate=20150101-00:00:00
+          -X ${t}.GoVersion=${stdenv.lib.getVersion go}
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Service monitoring system and time series database";
+      homepage = http://prometheus.io;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
   pty = buildFromGitHub {
     rev    = "67e2db24c831afa6c64fc17b4a143390674365ef";
     owner  = "kr";
