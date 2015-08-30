@@ -561,10 +561,10 @@ let
   };
 
   etcd = buildFromGitHub {
-    rev    = "v2.1.1";
+    rev    = "v2.1.2";
     owner  = "coreos";
     repo   = "etcd";
-    sha256 = "0jd97091jwwdvx50vbdi1py9v5w9fk86cw85p0zinb0ww6bs4y0s";
+    sha256 = "1d3wl9rqbhkkdhfkjfrzjfcwz8hx315zbjbmij3pf62bc1p5nh60";
   };
 
   fsnotify.v0 = buildGoPackage rec {
