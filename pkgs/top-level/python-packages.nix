@@ -13527,11 +13527,11 @@ let
 
   sqlparse = buildPythonPackage rec {
     name = "sqlparse-${version}";
-    version = "0.1.14";
+    version = "0.1.16";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/sqlparse/${name}.tar.gz";
-      sha256 = "1w6shyh7n139cp636sym0frdyiwybw1m7gd2l4s3d7xbaccf6qg5";
+      sha256 = "108gy82x7davjrn3jqn7yv4r5v4jrzp892ysfx8l00abr8v6r337";
     };
 
     meta = {
