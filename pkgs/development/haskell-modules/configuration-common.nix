@@ -1016,7 +1016,4 @@ self: super: {
   # https://github.com/brendanhay/amazonka/issues/203
   amazonka-core = dontCheck super.amazonka-core;
 
-  # https://github.com/agocorona/MFlow/issues/63
-  MFlow = addBuildTool super.MFlow self.cpphs;
-
 }
