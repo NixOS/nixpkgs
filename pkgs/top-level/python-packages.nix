@@ -12808,16 +12808,17 @@ let
   };
 
   stevedore = buildPythonPackage rec {
-    name = "stevedore-0.15";
+    name = "stevedore-1.7.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/stevedore/${name}.tar.gz";
-      sha256 = "bec9269cbfa58de4f0849ec79bb7d54eeeed9df8b5fbfa1637fbc68062822847";
+      sha256 = "149pjc0c3z6khjisn4yil3f94qjnzwafz093wc8rrzbw828qdkv8";
     };
 
-    buildInputs = with self; [ pbr pip ] ++ optional isPy26 argparse;
+    doCheck = false;
 
-    propagatedBuildInputs = with self; [ setuptools ];
+    buildInputs = with self; [ pbr oslosphinx ];
+    propagatedBuildInputs = with self; [ six argparse ];
 
     meta = {
       description = "Manage dynamic plugins for Python applications";
