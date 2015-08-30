@@ -19,10 +19,11 @@ let
   ## OFFICIAL GO PACKAGES
 
   crypto = buildFromGitHub {
-    rev      = "e7913d6af127b363879a06a5ae7c5e93c089aedd";
+    rev      = "d5c5f1769f2fcd2377be6f29863081f59a4fc80f";
+    date     = "2015-08-29";
     owner    = "golang";
     repo     = "crypto";
-    sha256   = "0g2gm2wmanprsirmclxi8qxjkw93nih60ff8jwrfb4wyn7hxbds7";
+    sha256   = "0rkcvl3q8akkar4rmj052z23y61hbav9514ky6grb4gvxfx4ydbn";
     goPackagePath = "golang.org/x/crypto";
     goPackageAliases = [
       "code.google.com/p/go.crypto"
@@ -31,31 +32,29 @@ let
   };
 
   glog = buildFromGitHub {
-    rev    = "44145f04b68cf362d9c4df2182967c2275eaefed";
+    rev    = "fca8c8854093a154ff1eb580aae10276ad6b1b5f";
+    date   = "2015-07-31";
     owner  = "golang";
     repo   = "glog";
-    sha256 = "1k7sf6qmpgm0iw81gx2dwggf9di6lgw0n54mni7862hihwfrb5rq";
+    sha256 = "1nr2q0vas0a2f395f4shjxqpas18mjsf8yhgndsav7svngpbbpg8";
   };
 
-  image = buildGoPackage rec {
-    rev = "d8e202c6ce59fad0017414839b6648851d10767e";
-    name = "image-${stdenv.lib.strings.substring 0 7 rev}";
+  image = buildFromGitHub {
+    rev = "8ab1ac6834edd43d91cbe24272897a87ce7e835e";
+    date = "2015-08-23";
+    owner = "golang";
+    repo = "image";
+    sha256 = "1ckr7yh5dx2kbvp9mis7i090ss9qcz46sazrj9f2hw4jj5g3y7dr";
     goPackagePath = "golang.org/x/image";
-
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "golang";
-      repo = "image";
-      sha256 = "0cxymm28rgbzsk76d19wm8fwp40dkwxhzmmdjnbkw5541272339l";
-    };
+    goPackageAliases = [ "github.com/golang/image" ];
   };
 
   net = buildFromGitHub {
-    rev    = "3a29182c25eeabbaaf94daaeecbc7823d86261e7";
-    date   = "2015-07-28";
+    rev    = "ea47fc708ee3e20177f3ca3716217c4ab75942cb";
+    date   = "2015-08-29";
     owner  = "golang";
     repo   = "net";
-    sha256 = "0g4w411l0v9yg8aib05kzjm9j6dwsd6nk6ayk8j0dkmqildqrx5v";
+    sha256 = "0x1pmg97n7l62vak9qnjdjrrfl98jydhv6j0w3jkk4dycdlzn30d";
     goPackagePath = "golang.org/x/net";
     goPackageAliases = [
       "code.google.com/p/go.net"
@@ -66,10 +65,11 @@ let
   };
 
   oauth2 = buildFromGitHub {
-    rev = "f98d0160877ab4712b906626425ed8b0b320907c";
+    rev = "397fe7649477ff2e8ced8fc0b2696f781e53745a";
+    date = "2015-06-23";
     owner = "golang";
     repo = "oauth2";
-    sha256 = "0hi54mm63ha7a75avydj6xm0a4dd2njdzllr9y2si1i1wnijqw2i";
+    sha256 = "0fza0l7iwh6llkq2yzqn7dxi138vab0da64lnghfj1p71fprjzn8";
     goPackagePath = "golang.org/x/oauth2";
     goPackageAliases = [ "github.com/golang/oauth2" ];
     propagatedBuildInputs = [ net gcloud-golang-compute-metadata ];
@@ -77,10 +77,11 @@ let
 
 
   protobuf = buildFromGitHub {
-    rev = "68c687dc49948540b356a6b47931c9be4fcd0245";
+    rev = "59b73b37c1e45995477aae817e4a653c89a858db";
+    date = "2015-08-23";
     owner = "golang";
     repo = "protobuf";
-    sha256 = "0va2x13mygmkvr7ajkg0fj4i1ha0jbxgghya20qgsh0vlp7k5maf";
+    sha256 = "1dx22jvhvj34ivpr7gw01fncg9yyx35mbpal4mpgnqka7ajmgjsa";
     goPackagePath = "github.com/golang/protobuf";
     goPackageAliases = [ "code.google.com/p/goprotobuf" ];
   };
@@ -111,10 +112,11 @@ let
   };
 
   text = buildFromGitHub {
-    rev = "3eb7007b740b66a77f3c85f2660a0240b284115a";
+    rev = "505f8b49cc14d790314b7535959a10b87b9161c7";
+    date = "2015-08-27";
     owner = "golang";
     repo = "text";
-    sha256 = "1pxrqbs760azmjaigf63qd6rwmz51hi6i8fq0vwcf5svxgxz2szp";
+    sha256 = "0h31hyb1ijs7zcsmpwa713x41k1wkh0igv7i4chwvwyjyl7zligy";
     goPackagePath = "golang.org/x/text";
     goPackageAliases = [ "github.com/golang/text" ];
   };
@@ -761,6 +763,7 @@ let
 
   govers = buildFromGitHub {
     rev = "3b5f175f65d601d06f48d78fcbdb0add633565b9";
+    date = "2015-01-09";
     owner = "rogpeppe";
     repo = "govers";
     sha256 = "0din5a7nff6hpc4wg0yad2nwbgy4q1qaazxl8ni49lkkr4hyp8pc";
@@ -821,10 +824,11 @@ let
   };
 
   google-api-go-client = buildFromGitHub {
-    rev = "ca0499560ea76ac6561548f36ffe841364fe2348";
+    rev = "a5c3e2a4792aff40e59840d9ecdff0542a202a80";
+    date = "2015-08-19";
     owner = "google";
     repo = "google-api-go-client";
-    sha256 = "1w6bjhd8p6fxvm002jqk3r9vk50hlaqnxc9g6msb2wswy3nxcw57";
+    sha256 = "1kigddnbyrl9ddpj5rs8njvf1ck54ipi4q1282k0d6b3am5qfbj8";
     goPackagePath = "google.golang.org/api";
     goPackageAliases = [ "github.com/google/google-api-client" ];
     buildInputs = [ net ];
@@ -840,9 +844,6 @@ let
       repo = "google-api-go-client";
       sha256 = "1fidlljxnd82i2r9yia0b9gh0vv3hwb5k65papnvw7sqpc4sriby";
     };
-    preBuild = ''
-      rm -rf go/src/${goPackagePath}/examples
-    '';
     buildInputs = [ net ];
     propagatedBuildInputs = [ google-api-go-client ];
   };
@@ -1357,14 +1358,15 @@ let
   };
 
   grpc = buildFromGitHub {
-    rev = "7d81e8054fb2d57468136397b9b681e4ba4a7f8e";
+    rev = "d455e65570c07e6ee7f23275063fbf34660ea616";
+    date = "2015-08-29";
     owner = "grpc";
     repo = "grpc-go";
-    sha256 = "0hknsqyzpnvjc2jvm741b16qi4jayijyhpxinskkm0nj0iy59h27";
+    sha256 = "08vra95hc8ihnj353680zhiqrv3ssw5yywkrifzb1zwl0l3cs2hr";
     goPackagePath = "google.golang.org/grpc";
     goPackageAliases = [ "github.com/grpc/grpc-go" ];
-    propagatedBuildInputs = [ http2 net protobuf oauth2 glog ];
-    excludedPackages = "\\(examples\\|benchmark\\)";
+    propagatedBuildInputs = [ http2 net protobuf oauth2 glog etcd ];
+    excludedPackages = "\\(test\\|benchmark\\)";
   };
 
   gucumber = buildGoPackage rec {
