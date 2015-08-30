@@ -95,7 +95,7 @@ $ nix-env -qaP coreutils
 nixos.coreutils  coreutils-8.23
 </programlisting>
   <para>
-    If your system responds like that (most NixOS installatios will),
+    If your system responds like that (most NixOS installations will),
     then the attribute path to <literal>haskellPackages</literal> is
     <literal>nixos.haskellPackages</literal>. Thus, if you want to
     use <literal>nix-env</literal> without giving an explicit
@@ -812,7 +812,7 @@ export NIX_CFLAGS_LINK=&quot;-L/usr/lib&quot;
           <para>
             <link xlink:href="http://lists.science.uu.nl/pipermail/nix-dev/2015-April/016912.html">Part
             3</link> describes the infrastructure that keeps the
-            Haskell package set in Nixpkgs uptodate.
+            Haskell package set in Nixpkgs up-to-date.
           </para>
         </listitem>
       </itemizedlist>
