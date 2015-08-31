@@ -818,9 +818,6 @@ self: super: {
   # FPCO's fork of Cabal won't succeed its test suite.
   Cabal-ide-backend = dontCheck super.Cabal-ide-backend;
 
-  # https://github.com/ekmett/comonad/issues/25
-  comonad = dontCheck super.comonad;
-
   # https://github.com/jaspervdj/websockets/issues/104
   websockets = dontCheck super.websockets;
 
