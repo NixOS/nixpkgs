@@ -6,10 +6,10 @@ let
 in
 stdenv.mkDerivation rec {
   name = "mono-${version}";
-  version = "4.0.2.5";
+  version = "4.0.3.20";
   src = fetchurl {
     url = "http://download.mono-project.com/sources/mono/${name}.tar.bz2";
-    sha256 = "0lfndz7l3j593wilyczb5w6kvrdbf2fsd1i46qlszfjvx975hx5h";
+    sha256 = "1z0k8gv5z3yrkjhi2yjaqj42p55jn5h3q4z890gkcrlvmgihnv4p";
   };
 
   buildInputs =
