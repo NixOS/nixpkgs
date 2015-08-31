@@ -37,17 +37,14 @@ let
     sha256 = "1k7sf6qmpgm0iw81gx2dwggf9di6lgw0n54mni7862hihwfrb5rq";
   };
 
-  image = buildGoPackage rec {
-    rev = "d8e202c6ce59fad0017414839b6648851d10767e";
-    name = "image-${stdenv.lib.strings.substring 0 7 rev}";
+  image = buildFromGitHub {
+    rev = "8ab1ac6834edd43d91cbe24272897a87ce7e835e";
+    date = "2015-08-23";
+    owner = "golang";
+    repo = "image";
+    sha256 = "1ckr7yh5dx2kbvp9mis7i090ss9qcz46sazrj9f2hw4jj5g3y7dr";
     goPackagePath = "golang.org/x/image";
-
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "golang";
-      repo = "image";
-      sha256 = "0cxymm28rgbzsk76d19wm8fwp40dkwxhzmmdjnbkw5541272339l";
-    };
+    goPackageAliases = [ "github.com/golang/image" ];
   };
 
   net = buildFromGitHub {
