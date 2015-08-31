@@ -1,7 +1,5 @@
-# FIXME: upgrading qt5Full (Qt 5.3) to qt5.{base,multimedia} (Qt 5.4) breaks
-# the default Qt audio capture source!
-{ stdenv, fetchFromGitHub, fftw, freeglut, qt5Full
-, alsaSupport ? false, alsaLib ? null
+{ stdenv, fetchFromGitHub, fftw, freeglut, qt5
+, alsaSupport ? true, alsaLib ? null
 , jackSupport ? false, libjack2 ? null }:
 
 assert alsaSupport -> alsaLib != null;
@@ -18,7 +16,7 @@ stdenv.mkDerivation {
     owner = "gillesdegottex";
   };
 
-  buildInputs = [ fftw freeglut qt5Full ]
+  buildInputs = [ fftw freeglut qt5.base qt5.multimedia ]
     ++ stdenv.lib.optional alsaSupport [ alsaLib ]
     ++ stdenv.lib.optional jackSupport [ libjack2 ];
 
