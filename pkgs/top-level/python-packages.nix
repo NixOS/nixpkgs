@@ -9071,6 +9071,25 @@ let
 
   });
 
+  oslosphinx = buildPythonPackage rec {
+    name = "oslosphinx-3.1.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/o/oslosphinx/${name}.tar.gz";
+      md5= "4fcac44bd6ef174586307a1508ff228f";
+    };
+
+    doCheck = false;
+
+    buildInputs = with self; [
+      pbr requests2
+        (sphinx.override {src = pkgs.fetchurl {
+          url = "https://pypi.python.org/packages/source/s/sphinx/sphinx-1.2.3.tar.gz";
+          sha256 = "94933b64e2fe0807da0612c574a021c0dac28c7bd3c4a23723ae5a39ea8f3d04";
+        };})
+    ];
+  };
+
   pagerduty = buildPythonPackage rec {
     name = "pagerduty-${version}";
     version = "0.2.1";
@@ -9334,19 +9353,18 @@ let
   };
 
   pbr = buildPythonPackage rec {
-    name = "pbr-0.9.0";
+    name = "pbr-1.6.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pbr/${name}.tar.gz";
-      sha256 = "e5a57c434b1faa509a00bf458d2c7af965199d9cced3d05a547bff9880f7e8cb";
+      sha256 = "1lg1klrczvzfan89y3bl9ykrknl3nb01vvai37fkww24apzyibjf";
     };
-
-    # pip depend on $HOME setting
-    preConfigure = "export HOME=$TMPDIR";
 
     doCheck = false;
 
-    buildInputs = with self; [ pip ];
+    propagatedBuildInputs = with self; [ pip ];
+    buildInputs = with self; [ virtualenv ]
+      ++ stdenv.lib.optional doCheck testtools;
 
     meta = {
       description = "Python Build Reasonableness";
@@ -12854,16 +12872,17 @@ let
   };
 
   stevedore = buildPythonPackage rec {
-    name = "stevedore-0.15";
+    name = "stevedore-1.7.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/stevedore/${name}.tar.gz";
-      sha256 = "bec9269cbfa58de4f0849ec79bb7d54eeeed9df8b5fbfa1637fbc68062822847";
+      sha256 = "149pjc0c3z6khjisn4yil3f94qjnzwafz093wc8rrzbw828qdkv8";
     };
 
-    buildInputs = with self; [ pbr pip ] ++ optional isPy26 argparse;
+    doCheck = false;
 
-    propagatedBuildInputs = with self; [ setuptools ];
+    buildInputs = with self; [ pbr oslosphinx ];
+    propagatedBuildInputs = with self; [ six argparse ];
 
     meta = {
       description = "Manage dynamic plugins for Python applications";
