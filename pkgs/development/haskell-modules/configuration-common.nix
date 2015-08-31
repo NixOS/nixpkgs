@@ -430,6 +430,7 @@ self: super: {
   language-slice = dontCheck super.language-slice;
   lensref = dontCheck super.lensref;
   liquidhaskell = dontCheck super.liquidhaskell;
+  lucid = dontCheck super.lucid; #https://github.com/chrisdone/lucid/issues/25
   lvmrun = dontCheck super.lvmrun;
   memcache = dontCheck super.memcache;
   milena = dontCheck super.milena;
