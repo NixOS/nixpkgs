@@ -600,6 +600,12 @@ $ nix-shell &quot;&lt;nixpkgs&gt;&quot; -A haskellPackages.bar.env
   };
 }
 </programlisting>
+    <para>
+        Then, replace instances of <literal>haskellPackages</literal> in the
+        <literal>cabal2nix</literal>-generated <literal>default.nix</literal>
+        or <literal>shell.nix</literal> files with
+        <literal>profiledHaskellPackages</literal>.
+    </para>
   </section>
   <section xml:id="how-to-override-package-versions-in-a-compiler-specific-package-set">
     <title>How to override package versions in a compiler-specific
