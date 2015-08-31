@@ -37,6 +37,8 @@ stdenv.mkDerivation {
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
+  patches = [ ./nvidia-4.2.patch ];
+
   inherit versionNumber libsOnly;
   inherit (stdenv) system;
 
