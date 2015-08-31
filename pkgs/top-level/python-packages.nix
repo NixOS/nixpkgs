@@ -4356,6 +4356,25 @@ let
     };
   };
 
+  pirate-get = pythonPackages.buildPythonPackage rec {
+    name = "pirate-get-${version}";
+    version = "0.2.7";
+
+    disabled = !isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pirate-get/${name}.tar.gz";
+      sha256 = "0awjrmczvd6rwzj4fb7bhjlil5mx91amjs7fk5890h3in52clxg3";
+    };
+
+    propagatedBuildInputs = [ self.colorama ];
+
+    meta = {
+      description = "A command line interface for The Pirate Bay";
+      homepage = https://github.com/vikstrous/pirate-get;
+      license = licenses.gpl1;
+    };
+  };
 
   poppler-qt4 = buildPythonPackage rec {
     name = "poppler-qt4-${version}";
