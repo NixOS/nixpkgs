@@ -47,6 +47,9 @@ stdenv.mkDerivation rec {
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
 
   postInstall = ''
+    # Install the bash completion file.
+    install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/ghc
+
     # Patch scripts to include "readelf" and "cat" in $PATH.
     for i in "$out/bin/"*; do
       test ! -h $i || continue
