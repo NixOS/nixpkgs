@@ -5,17 +5,18 @@ let
     if stdenv.system == "i686-linux" then fetchurl {
       name = "rescuetime-installer.deb";
       url = "https://www.rescuetime.com/installers/rescuetime_current_i386.deb";
-      sha256 = "1np8fkmgcwfjv82v4y1lkqcgfki368w6317gac3i0vlqi4qbfjiq";
+      sha256 = "15x3nvhxk4f0rga0i99c6lhaa1rwdi446kxnx1l4jprhbl788sx6";
     } else fetchurl {
       name = "rescuetime-installer.deb";
       url = "https://www.rescuetime.com/installers/rescuetime_current_amd64.deb";
-      sha256 = "0bb0kzayj0wwvyh1b8g0l3aw2xqlrkhn85j3aw90xmchnsx42xh5";
+      sha256 = "0ibdlx8fdlmh81908d1syb7c5lf88pqp49fl7r43cj6bybpdx411";
     };
 
 in
 
 stdenv.mkDerivation {
-  name = "rescuetime-2.8.8.1040";
+  # https://www.rescuetime.com/updates/linux_release_notes.html
+  name = "rescuetime-2.8.9.1170";
   inherit src;
   buildInputs = [ dpkg makeWrapper ];
   unpackPhase = ''
