@@ -44,7 +44,7 @@ let
   pluginsWithoutDeps = [
     "bench" "bpd" "bpm" "bucket" "convert" "cue" "duplicates" "embedart"
     "filefilter" "freedesktop" "fromfilename" "ftintitle" "fuzzy" "ihate"
-    "importadded" "importfeeds" "info" "inline" "keyfinder" "lyrics"
+    "importadded" "importfeeds" "info" "inline" "ipfs" "keyfinder" "lyrics"
     "mbcollection" "mbsync" "metasync" "missing" "permissions" "play"
     "plexupdate" "random" "rewrite" "scrub" "smartplaylist" "spotify" "the"
     "types" "zero"
@@ -60,14 +60,14 @@ let
 
 in buildPythonPackage rec {
   name = "beets-${version}";
-  version = "1.3.13";
+  version = "1.3.14";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "sampsyo";
     repo = "beets";
     rev = "v${version}";
-    sha256 = "05gnp0y3n1jl7fnyslx56x2lsp8f4mv3xwy7gbyghax0vs3ccfvl";
+    sha256 = "0bha101x1wdrl2hj31fhixm3hp7ahdm2064b9k5gg0ywm651128g";
   };
 
   propagatedBuildInputs = [

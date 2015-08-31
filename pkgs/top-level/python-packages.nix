@@ -2719,6 +2719,24 @@ let
       license = "BSD-style";
     };
   });
+  
+  dask = buildPythonPackage rec {
+    name = "dask-${version}";
+    version = "0.7.0";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dask/${name}.tar.gz";
+      sha256 = "3b48646e9e66ec21a6885700d39ea90e2c2a7ad5d26773a8413b570eb1a67b3e";
+    };
+    
+    propagatedBuildInputs = with self; [numpy toolz dill];
+    
+    meta = {
+      description = "Minimal task scheduling abstraction";
+      homepage = "http://github.com/ContinuumIO/dask/";
+      licenses = licenses.bsd3;
+    };
+  };
 
   datashape = buildPythonPackage rec {
     name = "datashape-${version}";
@@ -2944,6 +2962,24 @@ let
       description = "derpconf abstracts loading configuration files for your app";
       homepage = https://github.com/globocom/derpconf;
       license = licenses.mit;
+    };
+  };
+  
+  dill = buildPythonPackage rec {
+    name = "dill-${version}";
+    version = "0.2.4";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dill/${name}.tgz";
+      sha256 = "deca57da33ad2121ab1b9c4493bf8eb2b3a72b6426d4b9a3a853a073c68b97ca";
+    };
+    
+    propagatedBuildInputs = with self; [objgraph];
+    
+    meta = {
+      description = "Serialize all of python (almost)";
+      homepage = http://www.cacr.caltech.edu/~mmckerns/dill.htm;
+      license = licenses.bsd3;
     };
   };
 
@@ -4320,6 +4356,25 @@ let
     };
   };
 
+  pirate-get = pythonPackages.buildPythonPackage rec {
+    name = "pirate-get-${version}";
+    version = "0.2.7";
+
+    disabled = !isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pirate-get/${name}.tar.gz";
+      sha256 = "0awjrmczvd6rwzj4fb7bhjlil5mx91amjs7fk5890h3in52clxg3";
+    };
+
+    propagatedBuildInputs = [ self.colorama ];
+
+    meta = {
+      description = "A command line interface for The Pirate Bay";
+      homepage = https://github.com/vikstrous/pirate-get;
+      license = licenses.gpl1;
+    };
+  };
 
   poppler-qt4 = buildPythonPackage rec {
     name = "poppler-qt4-${version}";
@@ -8874,6 +8929,27 @@ let
       maintainers = with maintainers; [ phreedom thoughtpolice ];
     };
   });
+  
+  objgraph = buildPythonPackage rec {
+    name = "objgraph-${version}";
+    version = "2.0.1";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/o/objgraph/${name}.tar.gz";
+      sha256 = "841de52715774ec1d0e97d9b4462d6e3e10406155f9b61f54ba7db984c45442a";
+    };
+    
+    # Tests fail with PyPy.
+    disabled = isPyPy;
+    
+    propagatedBuildInputs = with self; [pkgs.graphviz];
+    
+    meta = {
+      description = "Draws Python object reference graphs with graphviz";
+      homepage = http://mg.pov.lt/objgraph/;
+      license = licenses.mit;
+    };
+  };
 
   odo = buildPythonPackage rec {
     name = "odo-${version}";
@@ -9013,6 +9089,25 @@ let
     propagatedBuildInputs = with self; [ self.m2crypto ];
 
   });
+
+  oslosphinx = buildPythonPackage rec {
+    name = "oslosphinx-3.1.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/o/oslosphinx/${name}.tar.gz";
+      md5= "4fcac44bd6ef174586307a1508ff228f";
+    };
+
+    doCheck = false;
+
+    buildInputs = with self; [
+      pbr requests2
+        (sphinx.override {src = pkgs.fetchurl {
+          url = "https://pypi.python.org/packages/source/s/sphinx/sphinx-1.2.3.tar.gz";
+          sha256 = "94933b64e2fe0807da0612c574a021c0dac28c7bd3c4a23723ae5a39ea8f3d04";
+        };})
+    ];
+  };
 
   pagerduty = buildPythonPackage rec {
     name = "pagerduty-${version}";
@@ -9277,19 +9372,18 @@ let
   };
 
   pbr = buildPythonPackage rec {
-    name = "pbr-0.9.0";
+    name = "pbr-1.6.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pbr/${name}.tar.gz";
-      sha256 = "e5a57c434b1faa509a00bf458d2c7af965199d9cced3d05a547bff9880f7e8cb";
+      sha256 = "1lg1klrczvzfan89y3bl9ykrknl3nb01vvai37fkww24apzyibjf";
     };
-
-    # pip depend on $HOME setting
-    preConfigure = "export HOME=$TMPDIR";
 
     doCheck = false;
 
-    buildInputs = with self; [ pip ];
+    propagatedBuildInputs = with self; [ pip ];
+    buildInputs = with self; [ virtualenv ]
+      ++ stdenv.lib.optional doCheck testtools;
 
     meta = {
       description = "Python Build Reasonableness";
@@ -9449,10 +9543,10 @@ let
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "0.19.1";
+    version = "0.19.2";
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "1r34bbqbd4h72cl0cxi9w6q2nwx806wpxq220mzyiy8g45xv0ghj";
+      sha256 = "1xl3yqwksnszd2vcgzb576m56613qcl82jfqmb9fbvcqlcpks6ln";
       rev = "v${version}";
       repo = "pgcli";
       owner = "dbcli";
@@ -9461,10 +9555,6 @@ let
     propagatedBuildInputs = with self; [
       click configobj prompt_toolkit psycopg2 pygments sqlparse
     ];
-
-    postPatch = ''
-      substituteInPlace setup.py --replace "==" ">="
-    '';
 
     meta = {
       inherit version;
@@ -9481,17 +9571,17 @@ let
 
   mycli = buildPythonPackage rec {
     name = "mycli-${version}";
-    version = "1.3.0";
+    version = "1.4.0";
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "109jz84m29v4fjhk2ngsfc1b6zw4w6dbjlr2izvib63ylcz7b5nh";
+      sha256 = "175jcfixjkq17fbda9kifbljfd5iwjpjisvhs5xhxsyf6n5ykv2l";
       rev = "v${version}";
       repo = "mycli";
       owner = "dbcli";
     };
 
     propagatedBuildInputs = with self; [
-      pymysql configobj sqlparse prompt_toolkit0_45 pygments click
+      pymysql configobj sqlparse prompt_toolkit pygments click
     ];
 
     meta = {
@@ -9823,36 +9913,10 @@ let
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "0.47";
+    version = "0.46";
 
     src = pkgs.fetchurl {
-      sha256 = "1xkrbz7d2mzd5r5a8aqbnhym57fkpri9x73cql5vb573glzwddla";
-      url = "https://pypi.python.org/packages/source/p/prompt_toolkit/${name}.tar.gz";
-    };
-
-    buildInputs = with self; [ jedi ipython pygments ];
-    propagatedBuildInputs = with self; [ docopt six wcwidth ];
-
-    meta = {
-      description = "Python library for building powerful interactive command lines";
-      longDescription = ''
-        prompt_toolkit could be a replacement for readline, but it can be
-        much more than that. It is cross-platform, everything that you build
-        with it should run fine on both Unix and Windows systems. Also ships
-        with a nice interactive Python shell (called ptpython) built on top.
-      '';
-      homepage = https://github.com/jonathanslenders/python-prompt-toolkit;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ nckx ];
-    };
-  };
-
-  prompt_toolkit0_45 = buildPythonPackage rec {
-    name = "prompt_toolkit-${version}";
-    version = "0.45";
-
-    src = pkgs.fetchurl {
-      sha256 = "19lp15rc0rq4jqaacg2a38cdgfy2avhf5v97yanasx4n2swx4gsm";
+      sha256 = "1yq9nis1b2rgpndi2rqh4divf6j22jjva83r5z8jf7iffywmr8hs";
       url = "https://pypi.python.org/packages/source/p/prompt_toolkit/${name}.tar.gz";
     };
 
@@ -12489,6 +12553,13 @@ let
     buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
     propagatedBuildInputs = with self; [ numpy scipy pkgs.openblas ];
 
+    # doctests fail on i686
+    # https://github.com/NixOS/nixpkgs/issues/9472
+    # https://github.com/scikit-learn/scikit-learn/issues/5177
+    patchPhase = ''
+      substituteInPlace setup.cfg --replace 'with-doctest = 1' 'with-doctest = 0'
+    '';
+
     buildPhase = ''
       ${self.python.executable} setup.py build_ext -i --fcompiler='gnu95'
     '';
@@ -12790,16 +12861,17 @@ let
   };
 
   stevedore = buildPythonPackage rec {
-    name = "stevedore-0.15";
+    name = "stevedore-1.7.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/stevedore/${name}.tar.gz";
-      sha256 = "bec9269cbfa58de4f0849ec79bb7d54eeeed9df8b5fbfa1637fbc68062822847";
+      sha256 = "149pjc0c3z6khjisn4yil3f94qjnzwafz093wc8rrzbw828qdkv8";
     };
 
-    buildInputs = with self; [ pbr pip ] ++ optional isPy26 argparse;
+    doCheck = false;
 
-    propagatedBuildInputs = with self; [ setuptools ];
+    buildInputs = with self; [ pbr oslosphinx ];
+    propagatedBuildInputs = with self; [ six argparse ];
 
     meta = {
       description = "Manage dynamic plugins for Python applications";
@@ -13425,11 +13497,11 @@ let
 
   sqlparse = buildPythonPackage rec {
     name = "sqlparse-${version}";
-    version = "0.1.14";
+    version = "0.1.16";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/sqlparse/${name}.tar.gz";
-      sha256 = "1w6shyh7n139cp636sym0frdyiwybw1m7gd2l4s3d7xbaccf6qg5";
+      sha256 = "108gy82x7davjrn3jqn7yv4r5v4jrzp892ysfx8l00abr8v6r337";
     };
 
     meta = {

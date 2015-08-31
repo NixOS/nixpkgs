@@ -430,6 +430,7 @@ self: super: {
   language-slice = dontCheck super.language-slice;
   lensref = dontCheck super.lensref;
   liquidhaskell = dontCheck super.liquidhaskell;
+  lucid = dontCheck super.lucid; #https://github.com/chrisdone/lucid/issues/25
   lvmrun = dontCheck super.lvmrun;
   memcache = dontCheck super.memcache;
   milena = dontCheck super.milena;
@@ -818,9 +819,6 @@ self: super: {
   # FPCO's fork of Cabal won't succeed its test suite.
   Cabal-ide-backend = dontCheck super.Cabal-ide-backend;
 
-  # https://github.com/ekmett/comonad/issues/25
-  comonad = dontCheck super.comonad;
-
   # https://github.com/jaspervdj/websockets/issues/104
   websockets = dontCheck super.websockets;
 
@@ -1015,10 +1013,7 @@ self: super: {
   # https://github.com/basvandijk/concurrent-extra/issues/12
   concurrent-extra = dontCheck super.concurrent-extra;
 
-  # https://github.com/brendanhay/amazonka/issues/203
-  amazonka-core = dontCheck super.amazonka-core;
-
-  # https://github.com/agocorona/MFlow/issues/63
-  MFlow = addBuildTool super.MFlow self.cpphs;
+  # https://github.com/GaloisInc/DSA/issues/1
+  DSA = dontCheck super.DSA;
 
 }

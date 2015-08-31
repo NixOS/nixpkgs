@@ -14,17 +14,17 @@ let
   saw-bin =
     if stdenv.system == "i686-linux"
     then fetchurl {
-      url    = url + "/v0.1-dev/saw-0.1-dev-2015-06-09-CentOS6-32.tar.gz";
-      sha256 = "0hfb3a749fvwn33jnj1bgpk7v4pbvjjjffhafck6s8yz2sknnq4w";
+      url    = url + "/v0.1.1-dev/saw-0.1.1-dev-2015-07-31-CentOS6-32.tar.gz";
+      sha256 = "126iag5nnvndi78c921z7vjrjfwcspn1hlxwwhzmqm4rvbhhr9v9";
     }
     else fetchurl {
-      url    = url + "/v0.1-dev/saw-0.1-dev-2015-06-09-CentOS6-64.tar.gz";
-      sha256 = "1yz56kr8s0jcrfk1i87x63ngxip2i1s123arydnqq8myjyfz8id9";
+      url    = url + "/v0.1.1-dev/saw-0.1.1-dev-2015-07-31-CentOS6-64.tar.gz";
+      sha256 = "07gyf319v6ama6n1aj96403as04bixi8mbisfy7f7va689zklflr";
     };
 in
 stdenv.mkDerivation rec {
   name    = "saw-tools-${version}";
-  version = "0.1-20150609";
+  version = "0.1.1-20150731";
 
   src = saw-bin;
 

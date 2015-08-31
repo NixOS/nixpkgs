@@ -130,7 +130,7 @@ in
 assert allPkgconfigDepends != [] -> pkgconfig != null;
 
 stdenv.mkDerivation ({
-  name = "${optionalString (hasActiveLibrary && pname != "ghcjs") "haskell-"}${pname}-${version}";
+  name = "${pname}-${version}";
 
   pos = builtins.unsafeGetAttrPos "pname" args;
 

@@ -1576,6 +1576,8 @@ let
 
   fsfs = callPackage ../tools/filesystems/fsfs { };
 
+  fuseiso = callPackage ../tools/filesystems/fuseiso { };
+
   fuse_zip = callPackage ../tools/filesystems/fuse-zip { };
 
   fuse_exfat = callPackage ../tools/filesystems/fuse-exfat { };
@@ -3455,6 +3457,11 @@ let
   unzipNLS = lowPrio (unzip.override { enableNLS = true; });
 
   uptimed = callPackage ../tools/system/uptimed { };
+
+  urjtag = callPackage ../tools/misc/urjtag {
+    jedecSupport = true;
+    pythonBindings = true;
+  };
 
   urlwatch = callPackage ../tools/networking/urlwatch { };
 
@@ -7709,7 +7716,6 @@ let
 
   nethack = callPackage ../games/nethack { };
 
-  nettle27 = callPackage ../development/libraries/nettle/27.nix { };
   nettle = callPackage ../development/libraries/nettle { };
 
   newt = callPackage ../development/libraries/newt { };
@@ -9201,28 +9207,18 @@ let
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
-  prom2json = callPackage ../servers/monitoring/prometheus/prom2json { };
-  prometheus = callPackage ../servers/monitoring/prometheus { };
-  prometheus-alertmanager =
-    callPackage ../servers/monitoring/prometheus/alertmanager { };
-  prometheus-cli =
-    callPackage ../servers/monitoring/prometheus/cli { };
-  prometheus-collectd-exporter =
-    callPackage ../servers/monitoring/prometheus/collectd_exporter { };
-  prometheus-haproxy-exporter =
-    callPackage ../servers/monitoring/prometheus/haproxy_exporter { };
-  prometheus-mesos-exporter =
-    callPackage ../servers/monitoring/prometheus/mesos_exporter { };
-  prometheus-mysqld-exporter =
-    callPackage ../servers/monitoring/prometheus/mysqld_exporter { };
-  prometheus-nginx-exporter =
-    callPackage ../servers/monitoring/prometheus/nginx_exporter { };
-  prometheus-node-exporter =
-    callPackage ../servers/monitoring/prometheus/node_exporter { };
-  prometheus-pushgateway =
-    callPackage ../servers/monitoring/prometheus/pushgateway { };
-  prometheus-statsd-bridge =
-    callPackage ../servers/monitoring/prometheus/statsd_bridge { };
+  prom2json = goPackages.prometheus.prom2json.bin;
+  prometheus = goPackages.prometheus.prometheus.bin;
+  prometheus-alertmanager = goPackages.prometheus.alertmanager.bin;
+  prometheus-cli = goPackages.prometheus.cli.bin;
+  prometheus-collectd-exporter = goPackages.prometheus.collectd-exporter.bin;
+  prometheus-haproxy-exporter = goPackages.prometheus.haproxy-exporter.bin;
+  prometheus-mesos-exporter = goPackages.prometheus.mesos-exporter.bin;
+  prometheus-mysqld-exporter = goPackages.prometheus.mysqld-exporter.bin;
+  prometheus-nginx-exporter = goPackages.prometheus.nginx-exporter.bin;
+  prometheus-node-exporter = goPackages.prometheus.node-exporter.bin;
+  prometheus-pushgateway = goPackages.prometheus.pushgateway.bin;
+  prometheus-statsd-bridge = goPackages.prometheus.statsd-bridge.bin;
 
   psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
 
@@ -9791,6 +9787,16 @@ let
       ];
   };
 
+  linux_4_2 = makeOverridable (import ../os-specific/linux/kernel/linux-4.2.nix) {
+    inherit fetchurl stdenv perl buildLinux;
+    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   linux_testing = makeOverridable (import ../os-specific/linux/kernel/linux-testing.nix) {
     inherit fetchurl stdenv perl buildLinux;
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
@@ -9956,7 +9962,7 @@ let
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = pkgs.linuxPackages_4_1;
+  linuxPackages_latest = pkgs.linuxPackages_4_2;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -9968,6 +9974,7 @@ let
   linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18 linuxPackages_3_18);
   linuxPackages_4_0 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_0 linuxPackages_4_0);
   linuxPackages_4_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_1 linuxPackages_4_1);
+  linuxPackages_4_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_2 linuxPackages_4_2);
   linuxPackages_testing = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing linuxPackages_testing);
   linuxPackages_custom = {version, src, configfile}:
                            let linuxPackages_self = (linuxPackagesFor (pkgs.linuxManualConfig {inherit version src configfile;
@@ -11417,9 +11424,7 @@ let
     fftw = fftwFloat;
   };
 
-  gnuradio-wrapper = callPackage ../applications/misc/gnuradio/wrapper.nix { };
-
-  gnuradio-full = gnuradio-wrapper.override {
+  gnuradio-with-packages = callPackage ../applications/misc/gnuradio/wrapper.nix {
     extraPackages = [ gnuradio-osmosdr ];
   };
 
@@ -15276,8 +15281,13 @@ let
 
   mg = callPackage ../applications/editors/mg { };
 
-
-  # Attributes for backward compatibility.
+}
+  ### Aliases to attributes converted to the dashed-style.
+  // lib.mapAttrs (name: builtins.trace
+    ( "Warning: using a deprecated attribute '${name}'."
+    + " CamelCase and under_scores are replaced by dashed-names"
+    + " to match the nix-env names better."))
+{ # warnings since 2015-09
   adobeReader = adobe-reader;
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
@@ -15286,8 +15296,6 @@ let
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
   jquery_ui = jquery-ui;  # added 2014-09-07
-  youtubeDL = youtube-dl;  # added 2014-10-26
-  youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   htmlTidy = html-tidy;  # added 2014-12-06
   libtidy = html-tidy;  # added 2014-12-21
@@ -15295,8 +15303,17 @@ let
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   nfsUtils = nfs-utils;  # added 2014-12-06
   buildbotSlave = buildbot-slave;  # added 2014-12-09
-  cool-old-term = cool-retro-term; # added 2015-01-31
   rssglx = rss-glx; #added 2015-03-25
+
+}
+  ### Other attribute aliases for backward compatibility.
+  // lib.mapAttrs
+      (name: builtins.trace "Warning: using a deprecated attribute '${name}'.")
+{ # warnings since 2015-09
+  youtubeDL = youtube-dl;  # added 2014-10-26
+  youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
+  cool-old-term = cool-retro-term; # added 2015-01-31
+
   haskell-ng = haskell;                 # 2015-04-19
   haskellngPackages = haskellPackages;  # 2015-04-19
   inherit (haskell.compiler) jhc uhc;   # 2015-05-15

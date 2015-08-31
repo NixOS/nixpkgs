@@ -12,7 +12,7 @@ mkDerivation rec {
   src = fetchgit {
     url = "http://github.com/NixOS/cabal2nix.git";
     rev = "560fb2b1d22f4c995a526529bb034bd183e85a31";
-    sha256 = "0qaa0l23lc8677wvbgz327yvfg2pxxmvrxga6568ra5kgdy4204c";
+    sha256 = "1pyjy9kb8g18g6shlg7vnyaspa892zaq4hqvmqvdbxrlf24vg0wp";
     deepClone = true;
   };
   isLibrary = false;
@@ -52,4 +52,5 @@ mkDerivation rec {
   homepage = "http://github.com/NixOS/cabal2nix/";
   description = "Convert Cabal files into Nix build instructions";
   license = stdenv.lib.licenses.bsd3;
+  maintainers = with stdenv.lib.maintainers; [ simons ];
 }
