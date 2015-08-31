@@ -1,11 +1,11 @@
 { stdenv, fetchurl, intltool, glib, pkgconfig, polkit, python, sqlite }:
 
-let version = "1.0.7"; in
+let version = "1.0.8"; in
 stdenv.mkDerivation {
   name = "packagekit-${version}";
 
   src = fetchurl {
-    sha256 = "0klwr0y3a72xpz6bwv4afbk3vvx5r1av5idhz3mx4p9ssnscb1mi";
+    sha256 = "1vaxn4kwdwx6p03n88k4pnbd2l6lb0cbxpcs88kjack1jml17c3l";
     url = "http://www.freedesktop.org/software/PackageKit/releases/PackageKit-${version}.tar.xz";
   };
 
