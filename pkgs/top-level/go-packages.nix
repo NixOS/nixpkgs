@@ -1723,12 +1723,10 @@ let
 
     # Mongodb incorrectly names all of their binaries main
     # Let's work around this with our own installer
-    installPhase = ''
-      mkdir -p $out/bin
+    buildPhase = ''
       while read b; do
-        rm -f go/bin/main
         go install $goPackagePath/$b/main
-        cp go/bin/main $out/bin/$b
+        mv go/bin/main go/bin/$b
       done < <(find go/src/$goPackagePath -name main | xargs dirname | xargs basename -a)
     '';
   };

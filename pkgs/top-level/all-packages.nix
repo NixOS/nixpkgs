@@ -948,7 +948,7 @@ let
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
-  mongodb-tools = go14Packages.mongo-tools;
+  mongodb-tools = mongo-tools;
 
   mstflint = callPackage ../tools/misc/mstflint { };
 
