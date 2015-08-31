@@ -58,17 +58,18 @@ let
         }
       ];
 
-    xenserverPatches = let
-      patches = {
-        url = https://github.com/ts468/xen-4.5.pg.git;
-        rev = "3442b65b490f43c817cbc53369220d0b1ab9b785";
-        sha256 = "31436c15def0a300b3ea1a63b2208c4a3bcbb143db5c6488d4db370b3ceeb845";
-      };
+    xenserverPatches =
+      let
+        patches = {
+          url = https://github.com/ts468/xen-4.5.pg.git;
+          rev = "3442b65b490f43c817cbc53369220d0b1ab9b785";
+          sha256 = "31436c15def0a300b3ea1a63b2208c4a3bcbb143db5c6488d4db370b3ceeb845";
+        };
       in ''
         cp -r ${fetchgit patches}/master patches
         quilt push -a
         substituteInPlace tools/xenguest/Makefile --replace "_BSD_SOURCE" "_DEFAULT_SOURCE"
-        '';
+      '';
 
     xenPatches = [ ./0001-libxl-Spice-image-compression-setting-support-for-up.patch
                    ./0002-libxl-Spice-streaming-video-setting-support-for-upst.patch
