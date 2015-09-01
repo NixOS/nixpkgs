@@ -7295,16 +7295,16 @@ let
   };
 
   klaus = buildPythonPackage rec {
-    version = "0.4.10";
+    version = "0.6.0";
     name = "klaus-${version}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/jonashaag/klaus/archive/${version}.tar.gz";
-      sha256 = "1yq1dz3cd2qdn8vi1ivf6biab76cfmcvis07d6a8039w5wxdzc80";
+      sha256 = "0ab3lxbysnvsx7irlxhiy78clbk4d0gzv2241pqkkvlmqq3968p4";
     };
 
     propagatedBuildInputs = with self;
-      [ humanize httpauth dulwich pygments flask ];
+      [ humanize httpauth dulwich pygments flask six ];
 
     meta = {
       description = "The first Git web viewer that Just Works";
