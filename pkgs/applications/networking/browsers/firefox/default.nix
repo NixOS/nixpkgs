@@ -97,10 +97,16 @@ stdenv.mkDerivation rec {
       # Remove SDK cruft. FIXME: move to a separate output?
       rm -rf $out/share/idl $out/include $out/lib/firefox-devel-*
     '' + lib.optionalString enableGTK3
+      # argv[0] must point to firefox itself
     ''
       wrapProgram "$out/bin/firefox" \
+        --argv0 "$out/bin/.firefox-wrapped" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:" \
         --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+    '' +
+      # some basic testing
+    ''
+      "$out/bin/firefox" --version
     '';
 
   meta = {
