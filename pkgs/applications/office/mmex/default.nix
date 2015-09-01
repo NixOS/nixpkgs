@@ -8,7 +8,7 @@ in
   stdenv.mkDerivation {
     name = "money-manager-ex-${version}";
 
-    src = fetchsvn {
+    src = fetchurl {
       url = "https://moneymanagerex.svn.sourceforge.net/svnroot/moneymanagerex/tags/releases/${version}";
       sha256 = "0mby1p01fyxk5pgd7h3919q91r10zbfk16rfz1kbchqxqz87x4jq";
     };
@@ -31,5 +31,6 @@ in
       license = stdenv.lib.licenses.gpl2Plus;
       maintainers = with stdenv.lib.maintainers; [viric];
       platforms = with stdenv.lib.platforms; linux;
+      broken = true;
     };
   }
