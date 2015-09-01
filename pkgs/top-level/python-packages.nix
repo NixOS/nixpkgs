@@ -14258,6 +14258,19 @@ let
     };
   };
 
+  traceback2 = buildPythonPackage rec {
+    name = "traceback2-1.4.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/traceback2/${name}.tar.gz";
+      md5 = "9e9723f4d70bfc6308fa992dd193c400";
+    };
+    buildInputs = with pythonPackages; [ pbr pip ];
+    meta = {
+      description = "Backports of the traceback module";
+      homepage = https://github.com/testing-cabal/traceback2;
+    };
+  };
+
   traits = buildPythonPackage rec {
     name = "traits-${version}";
     version = "4.5.0";
