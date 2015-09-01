@@ -14616,6 +14616,8 @@ let
 
   caneda = callPackage ../applications/science/electronics/caneda { };
 
+  geda = callPackage ../applications/science/electronics/geda { };
+
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
 
   kicad = callPackage ../applications/science/electronics/kicad {
