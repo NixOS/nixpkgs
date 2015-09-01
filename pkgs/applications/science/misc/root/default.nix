@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, mesa, gfortran
+{ stdenv, fetchurl, fetchpatch, cmake, pkgconfig, mesa, gfortran
 , libX11,libXpm, libXft, libXext, zlib }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "1bkiggcyya39a794d3d2rzzmmkbdymf86hbqhh0l1pl4f38xvp6i";
   };
 
-  buildInputs = [ cmake gfortran mesa libX11 libXpm libXft libXext zlib ];
+  buildInputs = [ cmake pkgconfig gfortran mesa libX11 libXpm libXft libXext zlib ];
+
+  NIX_CFLAGS_LINK = "-lX11";
 
   # CMAKE_INSTALL_RPATH_USE_LINK_PATH is set to FALSE in
   # <rootsrc>/cmake/modules/RootBuildOptions.cmake.
