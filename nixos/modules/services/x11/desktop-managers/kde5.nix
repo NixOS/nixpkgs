@@ -78,6 +78,7 @@ in
       bgSupport = true;
       start = ''exec ${plasma5.plasma-workspace}/bin/startkde;'';
     };
+    services.xserver.displayManager.desktopManagerHandlesLidAndPower = true;
 
     security.setuidOwners = singleton {
       program = "kcheckpass";

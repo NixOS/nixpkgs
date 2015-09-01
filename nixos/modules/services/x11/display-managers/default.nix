@@ -229,7 +229,7 @@ in
 
       desktopManagerHandlesLidAndPower = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Whether the display manager should prevent systemd from handling
           lid and power events. This is normally handled by the desktop
