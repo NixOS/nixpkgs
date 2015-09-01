@@ -1701,11 +1701,14 @@ let
 
     # Mongodb incorrectly names all of their binaries main
     # Let's work around this with our own installer
-    buildPhase = ''
+    preInstall = ''
+      mkdir -p $bin/bin
       while read b; do
+        rm -f go/bin/main
         go install $goPackagePath/$b/main
-        mv go/bin/main go/bin/$b
+        cp go/bin/main $bin/bin/$b
       done < <(find go/src/$goPackagePath -name main | xargs dirname | xargs basename -a)
+      rm -r go/bin
     '';
   };
 
