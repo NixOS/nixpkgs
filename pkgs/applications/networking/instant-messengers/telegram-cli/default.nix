@@ -1,5 +1,5 @@
-{ stdenv, fetchgit, libconfig, lua5_2, openssl, readline, zlib
-, libevent, pkgconfig, python, jansson, bash
+{ stdenv, fetchgit, bash, libconfig, libevent, openssl,
+  readline, zlib, lua5_2, python, pkgconfig, jansson
 }:
 
 stdenv.mkDerivation rec {
@@ -11,14 +11,17 @@ stdenv.mkDerivation rec {
     rev = "2052f4b381337d75e783facdbfad56b04dec1a9c";
   };
 
-  buildInputs = [ libconfig lua5_2 openssl readline zlib libevent pkgconfig python jansson ];
+  buildInputs = [
+    libconfig libevent openssl readline zlib
+    lua5_2 python pkgconfig jansson
+  ];
   installPhase = ''
     mkdir -p $out/bin
     cp ./bin/telegram-cli $out/bin/telegram-wo-key
     cp ./tg-server.pub $out/
     cat > $out/bin/telegram-cli <<EOF
     #!${bash}/bin/sh
-    $out/bin/telegram-wo-key -k $out/tg-server.pub
+    $out/bin/telegram-wo-key -k $out/tg-server.pub "\$@"
     EOF
     chmod +x $out/bin/telegram-cli
   '';
