@@ -6980,7 +6980,6 @@ let
 
   libev = callPackage ../development/libraries/libev { };
 
-  libevent14 = callPackage ../development/libraries/libevent/1.4.nix { };
   libevent = callPackage ../development/libraries/libevent { };
 
   libewf = callPackage ../development/libraries/libewf { };
