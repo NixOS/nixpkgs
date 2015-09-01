@@ -7556,10 +7556,6 @@ let
 
   libxslt = callPackage ../development/libraries/libxslt { };
 
-  libixp_for_wmii = lowPrio (import ../development/libraries/libixp_for_wmii {
-    inherit fetchurl stdenv;
-  });
-
   libixp_hg = callPackage ../development/libraries/libixp-hg { };
 
   libyaml = callPackage ../development/libraries/libyaml { };
@@ -13307,20 +13303,6 @@ let
   wmname = callPackage ../applications/misc/wmname { };
 
   wmctrl = callPackage ../tools/X11/wmctrl { };
-
-  # I'm keen on wmiimenu only  >wmii-3.5 no longer has it...
-  wmiimenu = import ../applications/window-managers/wmii31 {
-    libixp = libixp_for_wmii;
-    inherit fetchurl /* fetchhg */ stdenv gawk;
-    inherit (xlibs) libX11;
-  };
-
-  wmiiSnap = import ../applications/window-managers/wmii {
-    libixp = libixp_for_wmii;
-    inherit fetchurl /* fetchhg */ stdenv gawk;
-    inherit (xlibs) libX11 xextproto libXt libXext;
-    includeUnpack = config.stdenv.includeUnpack or false;
-  };
 
   wmii_hg = callPackage ../applications/window-managers/wmii-hg { };
 
