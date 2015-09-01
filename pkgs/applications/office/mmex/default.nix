@@ -8,7 +8,7 @@ in
   stdenv.mkDerivation {
     name = "money-manager-ex-${version}";
 
-    src = fetchurl {
+    src = fetchsvn {
       url = "https://moneymanagerex.svn.sourceforge.net/svnroot/moneymanagerex/tags/releases/${version}";
       sha256 = "0mby1p01fyxk5pgd7h3919q91r10zbfk16rfz1kbchqxqz87x4jq";
     };
