@@ -884,6 +884,8 @@ let
 
   ent = callPackage ../tools/misc/ent { };
 
+  facter = callPackage ../tools/system/facter {};
+
   fasd = callPackage ../tools/misc/fasd { };
 
   fop = callPackage ../tools/typesetting/fop { };
@@ -2539,6 +2541,8 @@ let
   spCompat = callPackage ../tools/text/sgml/opensp/compat.nix { };
 
   opentracker = callPackage ../applications/networking/p2p/opentracker { };
+
+  opentsdb = callPackage ../tools/misc/opentsdb {};
 
   openvpn = callPackage ../tools/networking/openvpn { };
 
@@ -9000,6 +9004,8 @@ let
 
   groovebasin = callPackage ../applications/audio/groovebasin { };
 
+  hbase = callPackage ../servers/hbase {};
+
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
   jboss = callPackage ../servers/http/jboss { };
@@ -12694,6 +12700,8 @@ let
     unicode3Support = true;
   };
 
+  udevil = callPackage ../applications/misc/udevil {};
+
   # urxvt plugins
   urxvt_perl = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-perl { };
   urxvt_perls = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-perls { };
@@ -15307,13 +15315,5 @@ let
   haskellngPackages = haskellPackages;  # 2015-04-19
   inherit (haskell.compiler) jhc uhc;   # 2015-05-15
   cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
-
-  opentsdb = callPackage ../tools/misc/opentsdb {};
-
-  hbase = callPackage ../servers/hbase {};
-
-  udevil = callPackage ../applications/misc/udevil {};
-
-  facter = callPackage ../tools/system/facter {};
 
 }; in self; in pkgs
