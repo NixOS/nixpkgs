@@ -1104,6 +1104,29 @@ let
     propagatedBuildInputs = with self; [ boto crcmod psutil ];
   };
 
+  cgroup-utils = buildPythonPackage rec {
+    version = "0.6";
+    name = "cgroup-utils-${version}";
+
+    propagatedBuildInputs = with self; [ argparse ];
+    buildInputs = with self; [ pep8 nose ];
+    # Pep8 tests fail...
+    doCheck = false;
+
+    src = pkgs.fetchFromGitHub {
+      owner = "peo3";
+      repo = "cgroup-utils";
+      rev = "v${version}";
+      sha256 = "1ck0aijzrg9xf6hjdxnynkapnyxw0y385jb0q7wyq4jf77ayfszc";
+    };
+
+    meta = {
+      description = "Utility tools for control groups of Linux";
+      maintainers = with maintainers; [ layus ];
+      license = licenses.gpl2;
+    };
+  };
+
   circus = buildPythonPackage rec {
     name = "circus-0.11.1";
 
@@ -3255,6 +3278,21 @@ let
     };
   };
 
+  easy-process = buildPythonPackage rec {
+    name = "EasyProcess-0.1.9";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/E/EasyProcess/${name}.tar.gz";
+      md5 = "3da72e2fe16781fe5c7b3b0c6c40ee7b";
+    };
+
+    meta = {
+      description = "Easy to use python subprocess interface";
+      homepage = "https://github.com/ponty/EasyProcess";
+      licenses = licenses.bsdOriginal;
+      maintainers = with maintainers; [ layus ];
+    };
+  };
 
   elasticsearch = buildPythonPackage (rec {
     name = "elasticsearch-1.6.0";
@@ -3984,6 +4022,29 @@ let
       homepage = "https://github.com/dbohdan/jsonwatch";
       license = licenses.mit;
       platforms = platforms.all;
+    };
+  };
+
+  lti = buildPythonPackage rec {
+    version = "0.4.0";
+    name = "PyLTI-${version}";
+
+    propagatedBuildInputs = with self; [ httplib2 oauth oauth2 semantic-version ];
+    buildInputs = with self; [
+      flask httpretty oauthlib pyflakes pytest pytestcache pytestcov covCore
+      pytestflakes pytestpep8 sphinx mock
+    ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/P/PyLTI/${name}.tar.gz";
+      sha256 = "1lkk6qx8yfx1h0rhi4abnd44x0wakggi6zs0nvi572lajf6ydmdh";
+    };
+
+    meta = {
+      description = "Implementation of IMS LTI interface that works with edX";
+      homepage = "https://github.com/mitodl/pylti";
+      license = licenses.bsdOriginal;
+      maintainers = with maintainers; [ layus ];
     };
   };
 
@@ -6928,6 +6989,43 @@ let
     };
   };
 
+  inginious = buildPythonPackage rec {
+    version = "0.3.dev1";
+    name = "inginious-${version}";
+
+    disabled = isPy3k;
+
+    # patched version of docker bindings.
+    docker-custom = self.docker.override {
+      name = "docker-1.3.0-dirty";
+      src = pkgs.fetchFromGitHub {
+        owner = "GuillaumeDerval";
+        repo = "docker-py";
+        rev = "1.3.0-dev";
+        sha256 = "0rx686riw4w6kanw4nsyzhcy84fz251g9x59piba2n62qpa1rlxf";
+      };
+    };
+
+    propagatedBuildInputs = with self; [
+      requests2 # Needs to be first;
+      cgroup-utils docker-custom docutils lti multiprocessing pygments pymongo
+      pyyaml rpyc selenium sh simpleldap tidylib virtual-display web
+      websocket_client
+    ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/I/INGInious/INGInious-${version}.tar.gz";
+      md5 = "40474dd6b6d4fc26e47a1d9c77bcf943";
+    };
+
+    meta = {
+      description = "An intelligent grader that allows secured and automated testing of code made by students.";
+      homepage = "https://github.com/UCL-INGI/INGInious";
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ layus ];
+    };
+  };
+
   iptools = buildPythonPackage rec {
     version = "0.6.1";
     name = "iptools-${version}";
@@ -8063,6 +8161,15 @@ let
       homepage = http://github.com/mrocklin/multipledispatch/;
       description = "A relatively sane approach to multiple dispatch in Python";
       license = licenses.bsd3;
+    };
+  };
+
+  multiprocessing = buildPythonPackage rec {
+    name = "multiprocessing-2.6.2.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/m/multiprocessing/${name}.tar.gz";
+      md5 = "5cc484396c040102116ccc2355379c72";
     };
   };
 
@@ -9771,13 +9878,13 @@ let
   };
 
   plumbum = buildPythonPackage rec {
-    name = "plumbum-1.4.2";
+    name = "plumbum-1.5.0";
 
     buildInputs = with self; [ self.six ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/plumbum/${name}.tar.gz";
-      md5 = "38b526af9012a5282ae91dfe372cefd3";
+      sha256 = "b759f9e3b6771dff3332f01bc0683d1a56218f44d97942dabd906a0cd1cfb756";
     };
   };
 
@@ -11487,11 +11594,11 @@ let
   };
 
   pymongo = buildPythonPackage rec {
-    name = "pymongo-2.8";
+    name = "pymongo-3.0.3";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pymongo/${name}.tar.gz";
-      sha256 = "0d9rlxghqg9dqmcmrlf1lw9ap2g6npv6q4slp5agnm7vci9zchq5";
+      sha256 = "3c6b2317f8031bc1e200fd1ea35f00a96f4569e3f3f220a5e66ab6227d96ccaf";
     };
 
     doCheck = false;
@@ -11748,11 +11855,11 @@ let
 
 
   pyyaml = buildPythonPackage (rec {
-    name = "PyYAML-3.10";
+    name = "PyYAML-3.11";
 
     src = pkgs.fetchurl {
       url = "http://pyyaml.org/download/pyyaml/${name}.zip";
-      sha256 = "1r127fa354ppb667f4acxlzwxixap1jgzjrr790bw8mcpxv2hqaa";
+      sha256 = "19bb3ac350ef878dda84a62d37c7d5c17a137386dde9c2ce7249c7a21d7f6ac9";
     };
 
     buildInputs = with self; [ pkgs.pyrex ];
@@ -12730,6 +12837,30 @@ let
     };
   });
 
+  simpleldap = buildPythonPackage rec {
+    version = "0.8";
+    name = "simpleldap-${version}";
+
+    propagatedBuildInputs = with self; [ ldap ];
+    buildInputs = with self; [ pep8 pytest tox ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/simpleldap/simpleldap-${version}.tar.gz";
+      md5 = "f8a95b24895596338032ca4b4450f1de";
+    };
+
+    meta = {
+      description = "A module that makes simple LDAP usage simple";
+      longDescription = ''
+        A small wrapper around the python-ldap library that provides a more
+        Pythonic interface for LDAP server connections, LDAP objects, and the
+        common get and search operations.
+      '';
+      license = licenses.mit;
+      maintainers = with maintainers; [ layus ];
+    };
+  };
+
   simpleparse = buildPythonPackage rec {
     version = "2.1.1";
     name = "simpleparse-${version}";
@@ -12877,6 +13008,27 @@ let
       description = "Manage dynamic plugins for Python applications";
       homepage = "https://pypi.python.org/pypi/stevedore";
       license = licenses.asl20;
+    };
+  };
+
+  tidylib = buildPythonPackage rec {
+    version = "0.2.4";
+    name = "pytidylib-${version}";
+
+    propagatedBuildInputs = [ pkgs.html-tidy ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pytidylib/pytidylib-${version}.tar.gz";
+      md5 = "2a28267370c9409b592cdb786649cb25";
+    };
+
+    patchPhase = ''
+      sed -i 's#load_library(name)#load_library("${pkgs.html-tidy}/lib/libtidy.so")#' tidylib/__init__.py
+    '';
+
+    meta = {
+      homepage = " http://countergram.com/open-source/pytidylib/";
+      maintainers = with maintainers; [ layus ];
     };
   };
 
@@ -13051,6 +13203,20 @@ let
     };
   };
 
+  semantic-version = buildPythonPackage rec {
+    name = "semantic_version-2.4.2";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/semantic_version/${name}.tar.gz";
+      md5 = "fd7d5ade76e78d8540b9a4044496a57c";
+    };
+
+    meta = {
+      description = "A library implementing the 'SemVer' scheme";
+      license = licenses.bsdOriginal;
+      maintainers = with maintainers; [ layus ];
+    };
+  };
+
   sexpdata = buildPythonPackage rec {
     name = "sexpdata-0.0.2";
     src = pkgs.fetchurl {
@@ -13068,11 +13234,11 @@ let
 
 
   sh = buildPythonPackage rec {
-    name = "sh-1.08";
+    name = "sh-1.11";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/sh/${name}.tar.gz";
-      md5 = "4028bcba85daa0aef579ed24261e88a3";
+      md5 = "7af8df6c92d29ff927b6db0146bddec3";
     };
 
     doCheck = false;
@@ -14415,6 +14581,24 @@ let
     };
   };
 
+  virtual-display = buildPythonPackage rec {
+    name = "PyVirtualDisplay-0.1.5";
+
+    propagatedBuildInputs = with self; [ easy-process ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/P/PyVirtualDisplay/${name}.tar.gz";
+      md5 = "90b65fe15b81788c2e208d124e3a3c14";
+    };
+
+    meta = {
+      description = "python wrapper for Xvfb, Xephyr and Xvnc";
+      homepage = "https://github.com/ponty/pyvirtualdisplay";
+      license = licenses.bsdOriginal;
+      maintainers = with maintainers; [ layus ];
+    };
+  };
+
   virtualenv = buildPythonPackage rec {
     name = "virtualenv-1.11.6";
     src = pkgs.fetchurl {
@@ -14629,6 +14813,27 @@ let
       homepage = https://github.com/jquast/wcwidth;
       license = licenses.mit;
       maintainers = with maintainers; [ nckx ];
+    };
+  };
+
+  web = buildPythonPackage rec {
+    version = "0.37";
+    name = "web.py-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/w/web.py/web.py-${version}.tar.gz";
+      md5 = "93375e3f03e74d6bf5c5096a4962a8db";
+    };
+
+    meta = {
+      description = "Makes web apps";
+      longDescription = ''
+        Think about the ideal way to write a web app.
+        Write the code to make it happen.
+      '';
+      homepage = "http://webpy.org/";
+      license = licenses.publicDomain;
+      maintainers = with maintainers; [ layus ];
     };
   };
 
