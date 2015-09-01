@@ -122,6 +122,9 @@ installPhase() {
 
     # For simplicity and dependency reduction, don't support the gtk3 interface.
     rm $out/lib/libnvidia-gtk3.*
+
+    # we distribute these separately in `libvdpau`
+    rm "$out"/lib/libvdpau{.*,_trace.*}
 }
 
 

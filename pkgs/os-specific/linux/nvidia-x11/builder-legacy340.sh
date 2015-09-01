@@ -107,6 +107,9 @@ installPhase() {
     #patchelf --set-rpath $out/lib:$glPath $out/lib/libvdpau_nvidia.so.*.*
     #patchelf --set-rpath $cudaPath $out/lib/libcuda.so.*.*
     #patchelf --set-rpath $openclPath $out/lib/libnvidia-opencl.so.*.*
+
+    # we distribute these separately in `libvdpau`
+    rm "$out"/lib/libvdpau{.*,_trace.*}
 }
 
 
