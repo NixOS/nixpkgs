@@ -25,7 +25,7 @@ buildGoPackage rec {
   '';
 
   buildInputs = [ git log4go websocket go-vhost mousetrap termbox-go rcrowley.go-metrics
-                  yaml-v1 go-bindata go-update binarydist osext ];
+                  yaml-v1 go-bindata.bin go-update binarydist osext ];
 
   buildFlags = "-tags release";
 
