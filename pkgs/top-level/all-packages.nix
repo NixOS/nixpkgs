@@ -8415,6 +8415,8 @@ let
 
   czmq = callPackage ../development/libraries/czmq { };
 
+  zimlib = callPackage ../development/libraries/zimlib { };
+
   zita-convolver = callPackage ../development/libraries/audio/zita-convolver { };
 
   zita-alsa-pcmi = callPackage ../development/libraries/audio/zita-alsa-pcmi { };
