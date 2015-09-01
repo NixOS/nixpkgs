@@ -51,6 +51,7 @@
 "github:shougo/neocomplete.vim"
 "github:shougo/neosnippet-snippets"
 "github:shougo/neosnippet.vim"
+"github:shuogo/unite.vim"
 "github:shougo/vimproc.vim"
 "github:shougo/vimshell.vim"
 "github:takac/vim-hardtime"
