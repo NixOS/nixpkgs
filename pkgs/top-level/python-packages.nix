@@ -6216,7 +6216,7 @@ let
       '';
       homepage = http://github.com/terencehonles/fusepy;
       license = licenses.isc;
-      platforms = with platforms; linux;
+      platforms = platforms.unix;
       maintainers = with maintainers; [ nckx ];
     };
   };
@@ -6317,7 +6317,7 @@ let
       '';
       homepage = https://github.com/dsoprea/GDriveFS;
       license = licenses.gpl2;
-      platforms = with platforms; linux;
+      platforms = platforms.unix;
       maintainers = with maintainers; [ nckx ];
     };
   };
