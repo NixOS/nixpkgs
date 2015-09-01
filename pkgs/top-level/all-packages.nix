@@ -12830,6 +12830,8 @@ let
 
   cura = callPackage ../applications/misc/cura { };
 
+  curaLulzbot = callPackage ../applications/misc/cura/lulzbot.nix { };
+
   peru = callPackage ../applications/version-management/peru {};
 
   printrun = callPackage ../applications/misc/printrun { };
