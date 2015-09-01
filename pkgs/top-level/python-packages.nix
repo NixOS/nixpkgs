@@ -12654,21 +12654,26 @@ let
 
 
   scikitlearn = buildPythonPackage rec {
-    name = "scikit-learn-0.16.1";
+    name = "scikit-learn-${version}";
+    version = "0.16.1";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/s/scikit-learn/${name}.tar.gz";
-      sha256 = "1r761qmsq2mnl8sapplbx0ipj6i7ppr2cmz009q5rjana0liwwn0";
+      url = "https://github.com/scikit-learn/scikit-learn/archive/${version}.tar.gz";
+      sha256 = "140skabifgc7lvvj873pnzlwx0ni6q8qkrsyad2ccjb3h8rxzkih";
     };
 
     buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
     propagatedBuildInputs = with self; [ numpy scipy pkgs.openblas ];
 
-    # doctests fail on i686
-    # https://github.com/NixOS/nixpkgs/issues/9472
-    # https://github.com/scikit-learn/scikit-learn/issues/5177
-    patchPhase = ''
-      substituteInPlace setup.cfg --replace 'with-doctest = 1' 'with-doctest = 0'
+    patches = [
+      (pkgs.fetchurl {
+        url = "https://patch-diff.githubusercontent.com/raw/scikit-learn/scikit-learn/pull/5197.patch";
+        sha256 = "1b261wcvim6s0sqmd20jylwz09g5bh3xzhagjlslmv4q50qxpvkg";
+      })
+    ];
+
+    postPatch = optionalString (stdenv.isi686 && isPy3k) ''
+      sed -i -e "s|test_standard_scaler_numerical_stability|_skip_test_standard_scaler_numerical_stability|g" sklearn/preprocessing/tests/test_data.py
     '';
 
     buildPhase = ''
