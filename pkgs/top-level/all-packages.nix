@@ -13322,6 +13322,8 @@ let
     includeUnpack = config.stdenv.includeUnpack or false;
   };
 
+  wmii_hg = callPackage ../applications/window-managers/wmii-hg { };
+
   wordnet = callPackage ../applications/misc/wordnet { };
 
   workrave = callPackage ../applications/misc/workrave {
