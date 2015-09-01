@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "ibus-anthy-${version}";
-  version = "1.5.6";
+  version = "1.5.7";
 
   meta = with stdenv.lib; {
     description = "IBus interface to the anthy input method";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     platforms   = platforms.linux;
     maintainers = with maintainers; [ gebner ];
   };
+
+  configureFlags = "--with-anthy-zipcode=${anthy}/share/anthy/zipcode.t";
 
   buildInputs = [ makeWrapper ibus anthy intltool pkgconfig glib gobjectIntrospection python pythonPackages.pygobject3 ];
 
@@ -24,6 +26,6 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ibus/ibus-anthy/releases/download/${version}/${name}.tar.gz";
-    sha256 = "0vl904l5862zxfi8fiiljwvqv4yvb3nfdbkmpcqk3zw4r1mn6p03";
+    sha256 = "00sjrfhghrgkqm72mf39f8sz6wr4fwvvs9mn2alaldhgr5v0c861";
   };
 }
