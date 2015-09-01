@@ -3254,6 +3254,8 @@ let
 
   txt2man = callPackage ../tools/misc/txt2man { };
 
+  txt2tags = callPackage ../tools/text/txt2tags { };
+
   u9fs = callPackage ../servers/u9fs { };
 
   ucl = callPackage ../development/libraries/ucl { };
