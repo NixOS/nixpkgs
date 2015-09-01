@@ -5639,7 +5639,7 @@ let
 
   ino = callPackage ../development/arduino/ino { };
 
-  inotifyTools = callPackage ../development/tools/misc/inotify-tools { };
+  inotify-tools = callPackage ../development/tools/misc/inotify-tools { };
 
   intel-gpu-tools = callPackage ../development/tools/misc/intel-gpu-tools {
     inherit (xorg) libpciaccess dri2proto libX11 libXext libXv libXrandr;
@@ -15296,24 +15296,25 @@ let
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
   bridge_utils = bridge-utils;  # added 2015-02-20
-  clangAnalyzer = clang-analyzer;  # added 2015-02-20
-  lttngTools = lttng-tools;  # added 2014-07-31
-  lttngUst = lttng-ust;  # added 2014-07-31
-  jquery_ui = jquery-ui;  # added 2014-09-07
-  youtubeDL = youtube-dl;  # added 2014-10-26
-  youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
-  rdiff_backup = rdiff-backup;  # added 2014-11-23
-  htmlTidy = html-tidy;  # added 2014-12-06
-  libtidy = html-tidy;  # added 2014-12-21
-  speedtest_cli = speedtest-cli;  # added 2015-02-17
-  sqliteInteractive = sqlite-interactive;  # added 2014-12-06
-  nfsUtils = nfs-utils;  # added 2014-12-06
   buildbotSlave = buildbot-slave;  # added 2014-12-09
+  cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
+  clangAnalyzer = clang-analyzer;  # added 2015-02-20
   cool-old-term = cool-retro-term; # added 2015-01-31
-  rssglx = rss-glx; #added 2015-03-25
   haskell-ng = haskell;                 # 2015-04-19
   haskellngPackages = haskellPackages;  # 2015-04-19
+  htmlTidy = html-tidy;  # added 2014-12-06
   inherit (haskell.compiler) jhc uhc;   # 2015-05-15
-  cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
+  inotifyTools = inotify-tools;
+  jquery_ui = jquery-ui;  # added 2014-09-07
+  libtidy = html-tidy;  # added 2014-12-21
+  lttngTools = lttng-tools;  # added 2014-07-31
+  lttngUst = lttng-ust;  # added 2014-07-31
+  nfsUtils = nfs-utils;  # added 2014-12-06
+  rdiff_backup = rdiff-backup;  # added 2014-11-23
+  rssglx = rss-glx; #added 2015-03-25
+  speedtest_cli = speedtest-cli;  # added 2015-02-17
+  sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
+  youtubeDL = youtube-dl;  # added 2014-10-26
 
 }; in self; in pkgs

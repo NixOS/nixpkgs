@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, systemd, openssl, pam, bzip2, zlib, openldap
-, inotifyTools, clucene_core_2, sqlite }:
+, inotify-tools, clucene_core_2, sqlite }:
 
 stdenv.mkDerivation rec {
   name = "dovecot-2.2.16";
 
   buildInputs = [perl openssl bzip2 zlib openldap clucene_core_2 sqlite]
-    ++ stdenv.lib.optionals (stdenv.isLinux) [ systemd pam inotifyTools ];
+    ++ stdenv.lib.optionals (stdenv.isLinux) [ systemd pam inotify-tools ];
 
   src = fetchurl {
     url = "http://dovecot.org/releases/2.2/${name}.tar.gz";
