@@ -1013,4 +1013,7 @@ self: super: {
   # https://github.com/GaloisInc/DSA/issues/1
   DSA = dontCheck super.DSA;
 
+  # https://github.com/bos/bloomfilter/issues/7
+  bloomfilter = appendPatch super.bloomfilter ./patches/bloomfilter-fix-on-32bit.patch;
+
 }
