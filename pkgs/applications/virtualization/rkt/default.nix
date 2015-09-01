@@ -1,7 +1,10 @@
 { stdenv, lib, autoconf, automake, go, file, git, wget, gnupg1, squashfsTools, cpio
-, fetchFromGitHub }:
+, fetchurl, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+let
+  coreosImageRelease = "738.1.0";
+  
+in stdenv.mkDerivation rec {
   version = "0.8.0";
   name = "rkt-${version}";
 
@@ -12,12 +15,19 @@ stdenv.mkDerivation rec {
       sha256 = "1abv9psd5w0m8p2kvrwyjnrclzajmrpbwfwmkgpnkydhmsimhnn0";
   };
 
+  stage1image = fetchurl {
+    url = "http://alpha.release.core-os.net/amd64-usr/${coreosImageRelease}/coreos_production_pxe_image.cpio.gz";
+    sha256 = "1rnb9rwms5g7f142d9yh169a5k2hxiximpgk4y4kqmc1294lqnl0";
+  };
+  
   buildInputs = [ autoconf automake go file git wget gnupg1 squashfsTools cpio ];
   
   preConfigure = ''
     ./autogen.sh
   '';
 
+  configureFlags = "--with-stage1-image-path=${stage1image}";
+  
   installPhase = ''
     mkdir -p $out/bin
     cp -Rv build-rkt-${version}/bin/* $out/bin
