@@ -609,6 +609,7 @@ let
     goPackagePath = "google.golang.org/cloud";
     buildInputs = [ net oauth2 protobuf google-api-go-client grpc ];
     excludedPackages = "oauth2";
+    meta.hydraPlatforms = [ ];
   };
 
   gcloud-golang-compute-metadata = buildGoPackage rec {
@@ -1510,6 +1511,7 @@ let
     owner  = "ipfs";
     repo   = "go-ipfs";
     sha256 = "0qj3rwq5i4aiwn0i09skpi1s3mzqm8ma9v1cpjl7rya2y6ypx8xg";
+    disabled = !isGo14;
   };
 
   ldap = buildGoPackage rec {
