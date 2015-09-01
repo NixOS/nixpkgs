@@ -161,7 +161,11 @@ let
       exit 0
     '';
 
-  mkDesktops = names: pkgs.runCommand "desktops" {}
+  mkDesktops = names: pkgs.runCommand "desktops"
+    { # trivial derivation
+      preferLocalBuild = true;
+      allowSubstitutes = false;
+    }
     ''
       mkdir -p $out
       ${concatMapStrings (n: ''
