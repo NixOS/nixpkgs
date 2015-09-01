@@ -7560,6 +7560,8 @@ let
     inherit fetchurl stdenv;
   });
 
+  libixp_hg = callPackage ../development/libraries/libixp-hg { };
+
   libyaml = callPackage ../development/libraries/libyaml { };
 
   libyamlcpp = callPackage ../development/libraries/libyaml-cpp { };
