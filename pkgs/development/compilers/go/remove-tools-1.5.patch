@@ -1,22 +1,10 @@
 diff --git a/src/cmd/go/pkg.go b/src/cmd/go/pkg.go
-index 61e3d8d..f8475f4 100644
+index 61e3d8d..b8422ad 100644
 --- a/src/cmd/go/pkg.go
 +++ b/src/cmd/go/pkg.go
-@@ -665,7 +665,7 @@ var goTools = map[string]targetDir{
- 	"cmd/asm":                              toTool,
- 	"cmd/compile":                          toTool,
- 	"cmd/cgo":                              toTool,
--	"cmd/cover":                            toTool,
-+	"nixos.org/x/tools/cmd/cover":          toTool,
- 	"cmd/dist":                             toTool,
- 	"cmd/doc":                              toTool,
- 	"cmd/fix":                              toTool,
-@@ -676,9 +676,9 @@ var goTools = map[string]targetDir{
- 	"cmd/pack":                             toTool,
- 	"cmd/pprof":                            toTool,
+@@ -678,7 +678,7 @@ var goTools = map[string]targetDir{
  	"cmd/trace":                            toTool,
--	"cmd/vet":                              toTool,
-+	"nixos.org/x/tools/cmd/vet":            toTool,
+ 	"cmd/vet":                              toTool,
  	"cmd/yacc":                             toTool,
 -	"golang.org/x/tools/cmd/godoc":         toBin,
 +	"nixos.org/x/tools/cmd/godoc":          toBin,
