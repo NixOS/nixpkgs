@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
+  # TODO: Pre-download IPP so that OpenCV doesn't try to download it itself
+  # (which fails).
+  cmakeFlags = [ "-DWITH_IPP=OFF" ];
+
   enableParallelBuilding = true;
 
   meta = {
