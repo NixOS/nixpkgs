@@ -216,7 +216,7 @@ let
           exist. If <option>users.mutableUsers</option> is true, the
           password can be changed subsequently using the
           <command>passwd</command> command. Otherwise, it's
-          equivalent to setting the <option>password</option> option.
+          equivalent to setting the <option>hashedPassword</option> option.
 
           ${hashedPasswordDescription}
         '';
@@ -524,6 +524,27 @@ in {
     assertions = [
       { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
         message = "UIDs and GIDs must be unique!";
+      }
+      { # If mutableUsers is false, to prevent users creating a
+        # configuration that locks them out of the system, ensure that
+        # there is at least one "privileged" account that has a
+        # password or an SSH authorized key. Privileged accounts are
+        # root and users in the wheel group.
+        assertion = !cfg.mutableUsers ->
+          any id (mapAttrsToList (name: cfg:
+            (name == "root"
+             || cfg.group == "wheel"
+             || elem "wheel" cfg.extraGroups)
+            &&
+            ((cfg.hashedPassword != null && cfg.hashedPassword != "!")
+             || cfg.password != null
+             || cfg.passwordFile != null
+             || cfg.openssh.authorizedKeys.keys != []
+             || cfg.openssh.authorizedKeys.keyFiles != [])
+          ) cfg.extraUsers);
+        message = ''
+          Neither the root account nor any wheel user has a password or SSH authorized key.
+          You must set one to prevent being locked out of your system.'';
       }
     ];
 
