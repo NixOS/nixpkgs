@@ -230,7 +230,7 @@ assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 assert x11grabExtlib -> libX11 != null && libXv != null;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-${version}";
+  name = "ffmpeg-full-${version}";
   version = "2.7.2";
 
   src = fetchurl {
