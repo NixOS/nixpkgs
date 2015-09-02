@@ -12672,7 +12672,7 @@ let
       })
     ];
 
-    postPatch = optionalString (stdenv.isi686 && isPy3k) ''
+    postPatch = optionalString stdenv.isi686 ''
       sed -i -e "s|test_standard_scaler_numerical_stability|_skip_test_standard_scaler_numerical_stability|g" sklearn/preprocessing/tests/test_data.py
     '';
 
