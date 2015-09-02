@@ -82,7 +82,7 @@ stdenv.mkDerivation {
     echo building hoogle database
     # FIXME: rehoo is marked as depricated on Hackage
     chmod 644 *.hoo *.txt
-    rehoo -j4 -c64 .
+    rehoo -j$NIX_BUILD_CORES -c64 .
 
     mv default.hoo .x
     rm -fr downloads *.dep *.txt *.hoo
