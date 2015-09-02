@@ -11845,8 +11845,9 @@ let
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
-      RpcXML XMLSimple PerlMagick YAML YAMLLibYAML HTMLTree Filechdir
+      RpcXML XMLSimple YAML YAMLLibYAML HTMLTree Filechdir
       AuthenPassphrase NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay;
+    inherit (perlPackages.override { pkgs = pkgs // { imagemagick = imagemagickBig;}; }) PerlMagick;
   };
 
   imagemagick_light = imagemagick.override {
