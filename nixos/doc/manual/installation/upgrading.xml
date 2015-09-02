@@ -107,4 +107,30 @@ newer Nix version, which may involve an upgrade of Nix’s database
 schema.  This cannot be undone easily, so in that case you will not be
 able to go back to your original channel.</para></warning>
 
+
+<section><title>Automatic Upgrades</title>
+
+<para>You can keep a NixOS system up-to-date automatically by adding
+the following to <filename>configuration.nix</filename>:
+
+<programlisting>
+system.autoUpgrade.enable = true;
+</programlisting>
+
+This enables a periodically executed systemd service named
+<literal>nixos-upgrade.service</literal>. It runs
+<command>nixos-rebuild switch --upgrade</command> to upgrade NixOS to
+the latest version in the current channel. (To see when the service
+runs, see <command>systemctl list-timers</command>.)  You can also
+specify a channel explicitly, e.g.
+
+<programlisting>
+system.autoUpgrade.channel = https://nixos.org/channels/nixos-15.09;
+</programlisting>
+
+</para>
+
+</section>
+
+
 </chapter>
