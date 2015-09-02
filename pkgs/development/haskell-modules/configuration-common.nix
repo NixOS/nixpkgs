@@ -89,6 +89,12 @@ self: super: {
   yices-easy = dontDistribute super.yices-easy;
   yices-painless = dontDistribute super.yices-painless;
 
+  # https://github.com/GaloisInc/RSA/issues/9
+  RSA = dontCheck super.RSA;
+
+  # https://github.com/froozen/kademlia/issues/2
+  kademlia = dontCheck super.kademlia;
+
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
