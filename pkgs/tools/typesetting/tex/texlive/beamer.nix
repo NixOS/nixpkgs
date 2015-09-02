@@ -18,6 +18,8 @@ rec {
     ln -s $out/texmf* $out/share/
   '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];
 
+  preferLocalBuild = true;
+
   meta = {
     description = "Extra components for TeXLive: beamer class";
     maintainers = [ stdenv.lib.maintainers.mornfall stdenv.lib.maintainers.jwiegley ];

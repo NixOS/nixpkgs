@@ -6,7 +6,6 @@ rec {
     sha256 = "0z78xfn5iq5ncg82sd6v2qrxs8p9hs3m4agaz90p4db5dvk2w0mn";
   };
 
-  buildInputs = [texLive];
   phaseNames = ["doCopy"];
   doCopy = fullDepEntry (''
     export HOME=$PWD
@@ -30,6 +29,8 @@ rec {
 
     ln -s $out/texmf* $out/share/
   '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];
+
+  preferLocalBuild = true;
 
   meta = {
     description = "Extra components for TeXLive: LaTeX color support";
