@@ -12926,7 +12926,7 @@ let
 
   symlinks = callPackage ../tools/system/symlinks { };
 
-  syncthing = callPackage ../applications/networking/syncthing { };
+  syncthing = (callPackage ../applications/networking/syncthing { }).bin // { outputs = [ "bin" ]; };
 
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
