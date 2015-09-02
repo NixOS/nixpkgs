@@ -11867,11 +11867,11 @@ let
     libxml2 = null;
   };
 
-  imagemagick = callPackage ../applications/graphics/ImageMagick {
+  imagemagick = imagemagickBig.override {
     ghostscript = null;
   };
 
-  imagemagickBig = imagemagick;
+  imagemagickBig = callPackage ../applications/graphics/ImageMagick { };
 
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive {
