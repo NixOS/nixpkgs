@@ -77,6 +77,8 @@ in zipModules ([]
 ++ obsolete [ "environment" "nix" ] [ "nix" "package" ]
 ++ obsolete [ "fonts" "enableFontConfig" ] [ "fonts" "fontconfig" "enable" ]
 ++ obsolete [ "fonts" "extraFonts" ] [ "fonts" "fonts" ]
+++ alias [ "users" "extraUsers" ] [ "users" "users" ]
+++ alias [ "users" "extraGroups" ] [ "users" "groups" ]
 
 ++ obsolete [ "security" "extraSetuidPrograms" ] [ "security" "setuidPrograms" ]
 ++ obsolete [ "networking" "enableWLAN" ] [ "networking" "wireless" "enable" ]
