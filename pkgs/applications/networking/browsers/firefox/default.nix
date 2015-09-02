@@ -99,6 +99,7 @@ stdenv.mkDerivation rec {
     '' + lib.optionalString enableGTK3
     ''
       wrapProgram "$out/bin/firefox" \
+        --argv0 "$out/bin/firefox" \  # argv[0] must point to firefox itself
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:" \
         --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
     '';
