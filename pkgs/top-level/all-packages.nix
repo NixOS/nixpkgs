@@ -8738,7 +8738,7 @@ let
 
   buildPerlPackage = import ../development/perl-modules/generic perl;
 
-  perlPackages = recurseIntoAttrs (import ./perl-packages.nix {
+  perlPackages = recurseIntoAttrs (callPackage ./perl-packages.nix {
     inherit pkgs;
     overrides = (config.perlPackageOverrides or (p: {})) pkgs;
   });
