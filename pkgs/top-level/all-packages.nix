@@ -573,6 +573,8 @@ let
 
   analog = callPackage ../tools/admin/analog {};
 
+  antigen = callPackage ../tools/package-management/antigen {};
+
   apktool = callPackage ../development/tools/apktool {
     buildTools = androidenv.buildTools;
   };
@@ -721,7 +723,7 @@ let
 
   bc = callPackage ../tools/misc/bc { };
 
-  bdf2psf = callPackage ../tools/misc/bdf2psf { };  
+  bdf2psf = callPackage ../tools/misc/bdf2psf { };
 
   bcache-tools = callPackage ../tools/filesystems/bcache-tools { };
 
@@ -6289,8 +6291,8 @@ let
   freealut = callPackage ../development/libraries/freealut { };
 
   freeglut = callPackage ../development/libraries/freeglut { };
-  
-  freenect = callPackage ../development/libraries/freenect { 
+
+  freenect = callPackage ../development/libraries/freenect {
       inherit (xlibs) libXi libXmu;
   };
 

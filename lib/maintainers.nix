@@ -7,6 +7,7 @@
      so it's easy to ping a package @maintainer.
   */
 
+  aaronschif = "Aaron Schif <aaronschif@gmail.com>";
   abaldeau = "Andreas Baldeau <andreas@baldeau.net>";
   abbradar = "Nikolay Amiantov <ab@fmap.me>";
   adev	   = "Adrien Devresse <adev@adev.name>";
