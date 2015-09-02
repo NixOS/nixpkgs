@@ -6659,6 +6659,8 @@ let
 
   hstr = callPackage ../applications/misc/hstr { };
 
+  htmlcxx = callPackage ../development/libraries/htmlcxx { };
+
   http-parser = callPackage ../development/libraries/http-parser { inherit (pythonPackages) gyp; };
 
   hunspell = callPackage ../development/libraries/hunspell { };
@@ -13808,6 +13810,8 @@ let
   };
 
   kobodeluxe = callPackage ../games/kobodeluxe { };
+
+  lgogdownloader = callPackage ../games/lgogdownloader { };
 
   lincity = builderDefsPackage (import ../games/lincity) {
     inherit (xlibs) libX11 libXext xextproto
