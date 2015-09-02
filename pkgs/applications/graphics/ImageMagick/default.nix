@@ -40,6 +40,12 @@ stdenv.mkDerivation rec {
       openexr libpng librsvg libtiff libxml2
     ];
 
+  postFixup = ''
+    for file in $out/bin/Magick++-config $out/bin/Magick-config $out/bin/MagickCore-config $out/bin/MagickWand-config $out/bin/Wand-config; do
+      substituteInPlace $file --replace pkg-config ${pkgconfig}/bin/pkg-config
+    done
+  '';
+
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg libX11 libXext libXt lcms2 ];
 
