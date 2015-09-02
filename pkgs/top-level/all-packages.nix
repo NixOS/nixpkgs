@@ -1961,6 +1961,8 @@ let
 
   isync = callPackage ../tools/networking/isync { };
 
+  j4-dmenu-desktop = callPackage ../misc/launchers/j4-dmenu-desktop { };
+
   jaaa = callPackage ../applications/audio/jaaa { };
 
   jd-gui = callPackage_i686 ../tools/security/jd-gui { };
