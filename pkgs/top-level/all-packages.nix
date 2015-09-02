@@ -4310,17 +4310,17 @@ let
 
     asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
 
-    async_extra = callPackage ../development/ocaml-modules/async_extra { };
+    async-extra = callPackage ../development/ocaml-modules/async-extra { };
 
-    async_find = callPackage ../development/ocaml-modules/async_find { };
+    async-find = callPackage ../development/ocaml-modules/async-find { };
 
-    async_kernel = callPackage ../development/ocaml-modules/async_kernel { };
+    async-kernel = callPackage ../development/ocaml-modules/async-kernel { };
 
-    async_shell = callPackage ../development/ocaml-modules/async_shell { };
+    async-shell = callPackage ../development/ocaml-modules/async-shell { };
 
-    async_ssl = callPackage ../development/ocaml-modules/async_ssl { };
+    async-ssl = callPackage ../development/ocaml-modules/async-ssl { };
 
-    async_unix = callPackage ../development/ocaml-modules/async_unix { };
+    async-unix = callPackage ../development/ocaml-modules/async-unix { };
 
     async =
       if lib.versionOlder "4.02" ocaml_version
@@ -4396,11 +4396,11 @@ let
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
-    bin_prot = callPackage ../development/ocaml-modules/bin_prot { };
+    bin-prot = callPackage ../development/ocaml-modules/bin-prot { };
 
-    ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
+    ocaml-cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
-    ocaml_cairo2 = callPackage ../development/ocaml-modules/ocaml-cairo2 { };
+    ocaml-cairo2 = callPackage ../development/ocaml-modules/ocaml-cairo2 { };
 
     cil = callPackage ../development/ocaml-modules/cil { };
 
@@ -4424,7 +4424,7 @@ let
 
     csv = callPackage ../development/ocaml-modules/csv { };
 
-    custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
+    custom-printf = callPackage ../development/ocaml-modules/custom-printf { };
 
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
 
@@ -4440,9 +4440,9 @@ let
 
     enumerate = callPackage ../development/ocaml-modules/enumerate { };
 
-    erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
+    erm-xml = callPackage ../development/ocaml-modules/erm-xml { };
 
-    erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
+    erm-xmpp = callPackage ../development/ocaml-modules/erm-xmpp { };
 
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
       lwt = ocaml_lwt;
@@ -4535,15 +4535,15 @@ let
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
 
-    core_extended = callPackage ../development/ocaml-modules/core_extended { };
+    core-extended = callPackage ../development/ocaml-modules/core-extended { };
 
-    core_kernel = callPackage ../development/ocaml-modules/core_kernel { };
+    core-kernel = callPackage ../development/ocaml-modules/core-kernel { };
 
     core = callPackage ../development/ocaml-modules/core { };
 
-    ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
+    ocaml-cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 
-    ocaml_data_notation = callPackage ../development/ocaml-modules/odn { };
+    ocaml-data-notation = callPackage ../development/ocaml-modules/odn { };
 
     ocaml_expat = callPackage ../development/ocaml-modules/expat { };
 
@@ -4617,16 +4617,16 @@ let
 
     textutils = callPackage ../development/ocaml-modules/textutils { };
 
-    type_conv_108_08_00 = callPackage ../development/ocaml-modules/type_conv/108.08.00.nix { };
-    type_conv_109_60_01 = callPackage ../development/ocaml-modules/type_conv/109.60.01.nix { };
-    type_conv_112_01_01 = callPackage ../development/ocaml-modules/type_conv/112.01.01.nix { };
-    type_conv =
+    type-conv-108_08_00 = callPackage ../development/ocaml-modules/type-conv/108.08.00.nix { };
+    type-conv-109_60_01 = callPackage ../development/ocaml-modules/type-conv/109.60.01.nix { };
+    type-conv-112_01_01 = callPackage ../development/ocaml-modules/type-conv/112.01.01.nix { };
+    type-conv =
       if lib.versionOlder "4.02" ocaml_version
-      then type_conv_112_01_01
+      then type-conv-112_01_01
       else if lib.versionOlder "4.00" ocaml_version
-      then type_conv_109_60_01
+      then type-conv-109_60_01
       else if lib.versionOlder "3.12" ocaml_version
-      then type_conv_108_08_00
+      then type-conv-108_08_00
       else null;
 
     sexplib_108_08_00 = callPackage ../development/ocaml-modules/sexplib/108.08.00.nix { };
@@ -4649,11 +4649,11 @@ let
 
     ocurl = callPackage ../development/ocaml-modules/ocurl { };
 
-    pa_ounit = callPackage ../development/ocaml-modules/pa_ounit { };
+    pa-ounit = callPackage ../development/ocaml-modules/pa-ounit { };
 
-    pa_bench = callPackage ../development/ocaml-modules/pa_bench { };
+    pa-bench = callPackage ../development/ocaml-modules/pa-bench { };
 
-    pa_test = callPackage ../development/ocaml-modules/pa_test { };
+    pa-test = callPackage ../development/ocaml-modules/pa-test { };
 
     pipebang = callPackage ../development/ocaml-modules/pipebang { };
 
@@ -4713,6 +4713,32 @@ let
     ocsigen_deriving = callPackage ../development/ocaml-modules/ocsigen-deriving {
       oasis = ocaml_oasis;
     };
+
+
+    # Attributes for backward compatibility.
+    async_extra = async-extra; # added 2015-07-21
+    async_find = async-find; # added 2015-07-21
+    async_kernel = async-kernel; # added 2015-07-21
+    async_shell = async-shell; # added 2015-07-21
+    async_ssl = async-ssl; # added 2015-07-21
+    async_unix = async-unix; # added 2015-07-21
+    bin_prot = bin-prot; # added 2015-07-21
+    core_extended = core-extended; # added 2015-07-21
+    core_kernel = core-kernel; # added 2015-07-21
+    custom_printf = custom-printf; # added 2015-07-21
+    erm_xml = erm-xml; # added 2015-07-21
+    erm_xmpp = erm-xmpp; # added 2015-07-21
+    ocaml_cairo = ocaml-cairo; # added 2015-07-21
+    ocaml_cairo2 = ocaml-cairo2; # added 2015-07-21
+    ocaml_cryptgps = ocaml-cryptgps; # added 2015-07-21
+    ocaml_data_notation = ocaml-data-notation; # added 2015-07-21
+    pa_bench = pa-bench; # added 2015-07-21
+    pa_ounit = pa-ounit; # added 2015-07-21
+    pa_test = pa-test; # added 2015-07-21
+    type_conv_108_08_00 = type-conv-108_08_00; # added 2015-07-21
+    type_conv_109_60_01 = type-conv-109_60_01; # added 2015-07-21
+    type_conv_112_01_01 = type-conv-112_01_01; # added 2015-07-21
+    type_conv = type-conv; # added 2015-07-21
 
   };
 
@@ -15255,7 +15281,7 @@ let
       buildInputs = [ stdenv ncurses mesa freeglut libzip gcc
                                    pack.ocaml pack.findlib pack.camomile
                                    pack.dypgen pack.ocaml_sqlite3 pack.camlzip
-                                   pack.lablgtk pack.camlimages pack.ocaml_cairo
+                                   pack.lablgtk pack.camlimages pack.ocaml-cairo
                                    pack.lablgl pack.ocamlnet pack.cryptokit
                                    pack.ocaml_pcre pack.patoline
                                    ];
