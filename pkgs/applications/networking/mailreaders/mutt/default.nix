@@ -17,14 +17,14 @@ assert saslSupport -> cyrus_sasl != null;
 assert gpgmeSupport -> gpgme != null;
 
 let
-  version = "1.5.23";
+  version = "1.5.24";
 in
 stdenv.mkDerivation rec {
   name = "mutt${stdenv.lib.optionalString withSidebar "-with-sidebar"}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mutt/mutt-${version}.tar.gz";
-    sha256 = "0dzx4qk50pjfsb6cs5jahng96a52k12f7pm0sc78iqdrawg71w1s";
+    url = "http://ftp.mutt.org/pub/mutt/mutt-${version}.tar.gz";
+    sha256 = "0012njrgxf1barjksqkx7ccid2l0xyikhna9mjs9vcfpbrvcm4m2";
   };
 
   buildInputs = with stdenv.lib;
