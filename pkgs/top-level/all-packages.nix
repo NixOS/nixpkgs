@@ -8807,8 +8807,6 @@ let
 
   pyopenssl = pythonPackages.pyopenssl;
 
-  rhpl = callPackage ../development/python-modules/rhpl { };
-
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix { };
 
   pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
