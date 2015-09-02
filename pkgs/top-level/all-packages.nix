@@ -12746,9 +12746,6 @@ let
     plugins = [ urxvt_perl urxvt_perls urxvt_tabbedex urxvt_font_size ];
   };
 
-  # FIXME: remove somewhere in future
-  rxvt_unicode_with-plugins = rxvt_unicode-with-plugins;
-
   sakura = callPackage ../applications/misc/sakura {
     vte = gnome3.vte_290;
   };
@@ -15347,6 +15344,7 @@ let
   nfsUtils = nfs-utils;  # added 2014-12-06
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rssglx = rss-glx; #added 2015-03-25
+  rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
