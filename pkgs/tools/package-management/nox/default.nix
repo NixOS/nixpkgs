@@ -12,7 +12,7 @@ pythonPackages.buildPythonPackage rec {
 
   buildInputs = [ pythonPackages.pbr ];
 
-  pythonPath = with pythonPackages; [
+  propagatedBuildInputs = with pythonPackages; [
       dogpile_cache
       click
       requests2
