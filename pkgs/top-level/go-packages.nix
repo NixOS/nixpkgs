@@ -1279,19 +1279,13 @@ let
     buildInputs = [ dbus ];
   };
 
-  go-update = buildGoPackage rec {
-    rev = "c1385108bc3a016f1c88b75ea7d2e2a356a1571d";
-    name = "go-update-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/inconshreveable/go-update";
-
+  go-update-v0 = buildFromGitHub {
+    rev = "d8b0b1d421aa1cbf392c05869f8abbc669bb7066";
+    owner = "inconshreveable";
+    repo = "go-update";
+    sha256 = "0cvkik2w368fzimx3y29ncfgw7004qkbdf2n3jy5czvzn35q7dpa";
+    goPackagePath = "gopkg.in/inconshreveable/go-update.v0";
     buildInputs = [ osext binarydist ];
-
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "inconshreveable";
-      repo = "go-update";
-      sha256 = "16zaxa0i07ismxdmkvjj4dpyc9lgp6wa94q090m9a48si40w9sjn";
-    };
   };
 
   go-uuid = buildFromGitHub {
@@ -1779,6 +1773,30 @@ let
     };
 
     propagatedBuildInputs = [ ugorji.go ];
+  };
+
+  ngrok = buildFromGitHub {
+    rev = "1.7.1";
+    owner = "inconshreveable";
+    repo = "ngrok";
+    sha256 = "1r4nc9knp0nxg4vglg7v7jbyd1nh1j2590l720ahll8a4fbsx5a4";
+    goPackagePath = "ngrok";
+
+    preConfigure = ''
+      sed -e '/jteeuwen\/go-bindata/d' \
+          -e '/export GOPATH/d' \
+          -e 's/go get/#go get/' \
+          -e 's|bin/go-bindata|go-bindata|' -i Makefile
+      make assets BUILDTAGS=release
+      export sourceRoot=$sourceRoot/src/ngrok
+    '';
+
+    buildInputs = [
+      git log4go websocket go-vhost mousetrap termbox-go rcrowley.go-metrics
+      yaml-v1 go-bindata.bin go-update-v0 binarydist osext
+    ];
+
+    buildFlags = [ "-tags release" ];
   };
 
   ntp = buildFromGitHub {
