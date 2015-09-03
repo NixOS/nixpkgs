@@ -7713,7 +7713,7 @@ let
 
   mtdev = callPackage ../development/libraries/mtdev { };
 
-  mtpfs = callPackage ../tools/filesystems/mtpfs { };
+  mtpfs = pkgs.goPackages.mtpfs.bin // { outputs = [ "bin" ]; };
 
   mu = callPackage ../tools/networking/mu {
     texinfo = texinfo4;

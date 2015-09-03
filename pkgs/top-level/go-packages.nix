@@ -1036,17 +1036,12 @@ let
     sha256 = "027nglc5xx1cm03z9sisg0iqrhwcj6gh5z254rrpl8p4fwrxx680";
   };
 
-  go-fuse = buildGoPackage rec {
-    rev = "5d16aa11eef4643de2d91e88a64dcb6138705d58";
-    name = "go-fuse-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/hanwen/go-fuse";
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "hanwen";
-      repo = "go-fuse";
-      sha256 = "0lycfhchn88kbs81ypz8m5jh032fpbv14gldrjirf32wm1d4f8pj";
-    };
-    subPackages = [ "fuse" "fuse/nodefs" "fuse/pathfs" ];
+  go-fuse = buildFromGitHub rec {
+    rev = "324ea173d0a4d90e0e97c464a6ad33f80c9587a8";
+    date = "2015-07-27";
+    owner = "hanwen";
+    repo = "go-fuse";
+    sha256 = "0r5amgnpb4g7b6kpz42vnj01w515by4yhy64s5lqf3snzjygaycf";
   };
 
   go-github = buildFromGitHub {
@@ -1746,6 +1741,16 @@ let
       repo = "msgpack";
       sha256 = "0nq9yb85hi3c35kwyl38ywv95vd8n7aywmj78wwylglld22nfmw2";
     };
+  };
+
+  mtpfs = buildFromGitHub {
+    rev = "3ef47f91c38cf1da3e965e37debfc81738e9cd94";
+    date = "2015-08-01";
+    owner = "hanwen";
+    repo = "go-mtpfs";
+    sha256 = "1f7lcialkpkwk01f7yxw77qln291sqjkspb09mh0yacmrhl231g8";
+
+    buildInputs = [ go-fuse usb ];
   };
 
   mux = buildFromGitHub {
@@ -2636,18 +2641,15 @@ let
     sha256 = "0gkgkw04ndr5y7hrdy0r4v2drs5srwfcw2bs1gyas066hwl84xyw";
   };
 
-  usb = buildGoPackage rec {
+  usb = buildFromGitHub rec {
     rev = "69aee4530ac705cec7c5344418d982aaf15cf0b1";
-    name = "usb-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/hanwen/usb";
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "hanwen";
-      repo = "usb";
-      sha256 = "01k0c2g395j65vm1w37mmrfkg6nm900khjrrizzpmx8f8yf20dky";
-    };
+    date = "2014-12-17";
+    owner = "hanwen";
+    repo = "usb";
+    sha256 = "01k0c2g395j65vm1w37mmrfkg6nm900khjrrizzpmx8f8yf20dky";
+
     nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = [ pkgs.libusb ];
+    buildInputs = [ pkgs.libusb1 ];
   };
 
   vault = buildFromGitHub {
