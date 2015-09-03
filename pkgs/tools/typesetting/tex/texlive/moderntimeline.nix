@@ -1,13 +1,13 @@
 args: with args;
 rec {
-  version = "0.8";
+  version = "0.9";
   name = "moderntimeline-${version}";
   src = fetchurl {
     urls = [
       "http://www.ctan.org/tex-archive/macros/latex/contrib/moderntimeline.zip"
       "http://mirror.ctan.org/macros/latex/contrib/moderntimeline.zip"
     ];
-    sha256 = "0y2m0qd0izrfjcwrmf3nvzkqmrhkdhzbv29s4c0knksdnfgcchc8";
+    sha256 = "155c3m9qk8pzbkvy60pan5byfzf1wn6pd43fq7k3732g9zjzrsak";
   };
 
   buildInputs = [texLive unzip];
