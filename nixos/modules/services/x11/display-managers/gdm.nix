@@ -35,7 +35,7 @@ in
               type = types.bool;
               default = false;
               description = ''
-                Automatically log in as the sepecified <option>auto.user</option>.
+                Automatically log in as the sepecified <option>autoLogin.user</option>.
               '';
             };
 
