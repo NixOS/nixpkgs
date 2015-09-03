@@ -9075,7 +9075,7 @@ let
 
   nsd = callPackage ../servers/dns/nsd (config.nsd or {});
 
-  nsq = callPackage ../servers/nsq { };
+  nsq = pkgs.goPackages.nsq.bin // { outputs = [ "bin" ]; };
 
   openpts = callPackage ../servers/openpts { };
 
