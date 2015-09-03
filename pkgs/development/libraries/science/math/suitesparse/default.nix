@@ -14,6 +14,8 @@ stdenv.mkDerivation {
     sha256 = "1zdn1y0ij6amj7smmcslkqgbqv9yy5cwmbyzqc9v6drzdzllgbpj";
   };
 
+  patches = [ ./shared_suitesparseconfig.patch ];
+
   preConfigure = ''
     mkdir -p $out/lib
     mkdir -p $out/include
