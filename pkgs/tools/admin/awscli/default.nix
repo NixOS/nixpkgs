@@ -1,13 +1,15 @@
-{ stdenv, fetchzip, pythonPackages, groff }:
+{ stdenv, fetchFromGitHub, pythonPackages, groff }:
 
 pythonPackages.buildPythonPackage rec {
   name = "awscli-${version}";
-  version = "1.7.41";
+  version = "1.7.44";
   namePrefix = "";
 
-  src = fetchzip {
-    url = "https://github.com/aws/aws-cli/archive/${version}.tar.gz";
-    sha256 = "1xfvpqyxi5qaqcvm56q616k9zjidbc9l2vk1v3ld6lnlzri3a1ra";
+  src = fetchFromGitHub {
+    owner = "aws";
+    repo = "aws-cli";
+    rev = "42389bdca10b2bd708585d46a2a8a4e51b5f7ce7";
+    sha256 = "0p7s7kqpiki02m2vzwjsnkzms5smwsa6ipgnjab8sb6ihfd7ib3n";
   };
 
   propagatedBuildInputs = [
