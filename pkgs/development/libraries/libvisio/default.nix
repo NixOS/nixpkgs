@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ boost libwpd libwpg zlib gperf librevenge libxml2 icu perl ];
 
+  # Boost 1.59 compatability fix
+  # Attempt removing when updating
+  postPatch = ''
+    sed -i 's,^CPPFLAGS.*,\0 -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED,' src/lib/Makefile.in
+  '';
+
   configureFlags = [
     "--disable-werror"
     "--disable-tests"
