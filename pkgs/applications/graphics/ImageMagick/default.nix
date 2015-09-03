@@ -40,7 +40,13 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg libX11 libXext libXt lcms2 ];
 
-  postInstall = ''(cd "$out/include" && ln -s ImageMagick* ImageMagick)'';
+  postInstall = ''
+    (cd "$out/include" && ln -s ImageMagick* ImageMagick)
+  '' + lib.optionalString (ghostscript != null) ''
+    for la in $out/lib/*.la; do
+      sed 's|-lgs|-L${ghostscript}/lib -lgs|' -i $la
+    done
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.imagemagick.org/;
