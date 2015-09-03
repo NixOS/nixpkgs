@@ -12496,7 +12496,7 @@ let
     inherit (xorg) libXpm;
   };
 
-  pond = callPackage ../applications/networking/pond { };
+  pond = goPackages.pond.bin // { outputs = [ "bin" ]; };
 
   ponymix = callPackage ../applications/audio/ponymix { };
 
