@@ -20,30 +20,40 @@ perlPackages.buildPerlPackage rec {
     sed -i '/p2_mp4h\/doc/d' Makefile.in
   '';
   
-  buildInputs = [ perlPackages.perl ncurses lynx makeWrapper ];
+  buildInputs = with perlPackages; 
+    [ perl TermReadKey GD BitVector ncurses lynx makeWrapper ImageSize ];
 
   patches = [ ./redhat-with-thr.patch ./dynaloader.patch ./no_bitvector.patch ];
   
-  preFixup = ''
-    substituteInPlace $out/bin/wml \
+  postPatch = ''
+    substituteInPlace wml_frontend/wml.src \
       --replace "File::PathConvert::realpath" "Cwd::realpath" \
       --replace "File::PathConvert::abs2rel" "File::Spec->abs2rel" \
       --replace "File::PathConvert" "File::Spec"
 
+    for i in wml_include/des/imgbg.src wml_include/des/imgdot.src; do
+      substituteInPlace $i \
+        --replace "WML::GD" "GD"
+    done
+
+    rm wml_test/t/11-wmk.t
+  '';
+
+  preFixup = ''
     wrapProgram $out/bin/wml \
       --set PERL5LIB ${with perlPackages; stdenv.lib.makePerlPath [
         BitVector TermReadKey ImageSize
       ]}
   '';
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
+
+  installTargets = "install";
 
   meta = with stdenv.lib; {
     homepage = http://thewml.org/;
     description = "Off-line HTML generation toolkit for Unix";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    # Not sure what broke this build, it used to work
-    broken = true;
   };
 }
