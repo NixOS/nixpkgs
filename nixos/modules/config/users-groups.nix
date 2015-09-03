@@ -216,7 +216,7 @@ let
           exist. If <option>users.mutableUsers</option> is true, the
           password can be changed subsequently using the
           <command>passwd</command> command. Otherwise, it's
-          equivalent to setting the <option>password</option> option.
+          equivalent to setting the <option>hashedPassword</option> option.
 
           ${hashedPasswordDescription}
         '';
@@ -336,13 +336,13 @@ let
     map (range: "${user.name}:${toString range.startUid}:${toString range.count}\n")
       user.subUidRanges);
 
-  subuidFile = concatStrings (map mkSubuidEntry (attrValues cfg.extraUsers));
+  subuidFile = concatStrings (map mkSubuidEntry (attrValues cfg.users));
 
   mkSubgidEntry = user: concatStrings (
     map (range: "${user.name}:${toString range.startGid}:${toString range.count}\n")
         user.subGidRanges);
 
-  subgidFile = concatStrings (map mkSubgidEntry (attrValues cfg.extraUsers));
+  subgidFile = concatStrings (map mkSubgidEntry (attrValues cfg.users));
 
   idsAreUnique = set: idAttr: !(fold (name: args@{ dup, acc }:
     let
@@ -354,8 +354,8 @@ let
       else { dup = false; acc = newAcc; }
     ) { dup = false; acc = {}; } (builtins.attrNames set)).dup;
 
-  uidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) cfg.extraUsers) "uid";
-  gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.extraGroups) "gid";
+  uidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) cfg.users) "uid";
+  gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.groups) "gid";
 
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
@@ -364,13 +364,13 @@ let
           name uid group description home shell createHome isSystemUser
           password passwordFile hashedPassword
           initialPassword initialHashedPassword;
-      }) cfg.extraUsers;
+      }) cfg.users;
     groups = mapAttrsToList (n: g:
       { inherit (g) name gid;
         members = g.members ++ (mapAttrsToList (n: u: u.name) (
-          filterAttrs (n: u: elem g.name u.extraGroups) cfg.extraUsers
+          filterAttrs (n: u: elem g.name u.extraGroups) cfg.users
         ));
-      }) cfg.extraGroups;
+      }) cfg.groups;
   });
 
 in {
@@ -388,10 +388,10 @@ in {
         <literal>groupadd</literal> commands. On system activation, the
         existing contents of the <literal>/etc/passwd</literal> and
         <literal>/etc/group</literal> files will be merged with the
-        contents generated from the <literal>users.extraUsers</literal> and
-        <literal>users.extraGroups</literal> options.
+        contents generated from the <literal>users.users</literal> and
+        <literal>users.groups</literal> options.
         The initial password for a user will be set
-        according to <literal>users.extraUsers</literal>, but existing passwords
+        according to <literal>users.users</literal>, but existing passwords
         will not be changed.
 
         <warning><para>
@@ -399,7 +399,7 @@ in {
         group files will simply be replaced on system activation. This also
         holds for the user passwords; all changed
         passwords will be reset according to the
-        <literal>users.extraUsers</literal> configuration on activation.
+        <literal>users.users</literal> configuration on activation.
         </para></warning>
       '';
     };
@@ -412,7 +412,7 @@ in {
       '';
     };
 
-    users.extraUsers = mkOption {
+    users.users = mkOption {
       default = {};
       type = types.loaOf types.optionSet;
       example = {
@@ -433,7 +433,7 @@ in {
       options = [ userOpts ];
     };
 
-    users.extraGroups = mkOption {
+    users.groups = mkOption {
       default = {};
       example =
         { students.gid = 1001;
@@ -461,7 +461,7 @@ in {
 
   config = {
 
-    users.extraUsers = {
+    users.users = {
       root = {
         uid = ids.uids.root;
         description = "System administrator";
@@ -478,7 +478,7 @@ in {
       };
     };
 
-    users.extraGroups = {
+    users.groups = {
       root.gid = ids.gids.root;
       wheel.gid = ids.gids.wheel;
       disk.gid = ids.gids.disk;
@@ -524,6 +524,27 @@ in {
     assertions = [
       { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
         message = "UIDs and GIDs must be unique!";
+      }
+      { # If mutableUsers is false, to prevent users creating a
+        # configuration that locks them out of the system, ensure that
+        # there is at least one "privileged" account that has a
+        # password or an SSH authorized key. Privileged accounts are
+        # root and users in the wheel group.
+        assertion = !cfg.mutableUsers ->
+          any id (mapAttrsToList (name: cfg:
+            (name == "root"
+             || cfg.group == "wheel"
+             || elem "wheel" cfg.extraGroups)
+            &&
+            ((cfg.hashedPassword != null && cfg.hashedPassword != "!")
+             || cfg.password != null
+             || cfg.passwordFile != null
+             || cfg.openssh.authorizedKeys.keys != []
+             || cfg.openssh.authorizedKeys.keyFiles != [])
+          ) cfg.users);
+        message = ''
+          Neither the root account nor any wheel user has a password or SSH authorized key.
+          You must set one to prevent being locked out of your system.'';
       }
     ];
 

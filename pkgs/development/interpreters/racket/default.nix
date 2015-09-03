@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     cd src/build
   '';
 
-  configureFlags = [ "--enable-shared" "--enable-lt=${libtool}/bin/libtool" ];
+  configureFlags = [ "--enable-shared" "--enable-lt=${libtool}/bin/libtool" "--disable-docs"];
 
   configureScript = "../configure";
 
