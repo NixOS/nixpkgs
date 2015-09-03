@@ -13010,8 +13010,8 @@ let
 
     doCheck = false;
 
-    buildInputs = with self; [ pbr oslosphinx ];
-    propagatedBuildInputs = with self; [ six argparse ];
+    buildInputs = with self; [ oslosphinx ];
+    propagatedBuildInputs = with self; [ pbr six argparse ];
 
     meta = {
       description = "Manage dynamic plugins for Python applications";
