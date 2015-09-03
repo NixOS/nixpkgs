@@ -295,21 +295,22 @@ self: super: {
   hakyll = dontCheck super.hakyll;
   Hclip = dontCheck super.Hclip;
   HList = dontCheck super.HList;
+  ide-backend = dontCheck super.ide-backend;
   marquise = dontCheck super.marquise;                  # https://github.com/anchor/marquise/issues/69
   memcached-binary = dontCheck super.memcached-binary;
+  msgpack-rpc = dontCheck super.msgpack-rpc;
   persistent-zookeeper = dontCheck super.persistent-zookeeper;
   pocket-dns = dontCheck super.pocket-dns;
   postgresql-simple = dontCheck super.postgresql-simple;
   postgrest = dontCheck super.postgrest;
   snowball = dontCheck super.snowball;
+  sophia = dontCheck super.sophia;
   test-sandbox = dontCheck super.test-sandbox;
   users-postgresql-simple = dontCheck super.users-postgresql-simple;
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
   wai-middleware-throttle = dontCheck super.wai-middleware-throttle; # https://github.com/creichert/wai-middleware-throttle/issues/1
   xkbcommon = dontCheck super.xkbcommon;
   xmlgen = dontCheck super.xmlgen;
-  ide-backend = dontCheck super.ide-backend;
-  msgpack-rpc = dontCheck super.msgpack-rpc;
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
