@@ -16,14 +16,14 @@
 
 assert stdenv.cc ? libc && stdenv.cc.libc != null;
 
-let version = "40.0.3"; in
+let
 
-stdenv.mkDerivation rec {
-  name = "firefox-${version}";
+common = { pname, version, sha1 }: stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${version}/source/firefox-${version}.source.tar.bz2";
-    sha1 = "6ddda46bd6540ab3ae932fbb5ffec8e9a85cab13";
+    inherit sha1;
   };
 
   patches = if !enableGTK3 then null else [(fetchpatch {
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     ''
       mkdir ../objdir
       cd ../objdir
-      configureScript=../mozilla-release/configure
+      configureScript=../mozilla-*/configure
     '';
 
   preInstall =
@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    description = "Web browser";
+    description = "A web browser" + lib.optionalString (pname == "firefox-esr") " (Extended Support Release)";
     homepage = http://www.mozilla.com/en-US/firefox/;
     maintainers = with lib.maintainers; [ eelco ];
     platforms = lib.platforms.linux;
@@ -131,4 +131,20 @@ stdenv.mkDerivation rec {
     inherit gtk nspr version;
     isFirefox3Like = true;
   };
+};
+
+in {
+
+  firefox = common {
+    pname = "firefox";
+    version = "40.0.3";
+    sha1 = "6ddda46bd6540ab3ae932fbb5ffec8e9a85cab13";
+  };
+
+  firefox-esr = common {
+    pname = "firefox-esr";
+    version = "38.2.1esr";
+    sha1 = "c596174e7273be5079bf55aecde33ec191d99538";
+  };
+
 }
