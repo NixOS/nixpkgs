@@ -1135,16 +1135,12 @@ let
     buildInputs = [ influxdb8 stathat ];
   };
 
-  appengine = buildGoPackage rec {
-    rev = "25b8450bec636c6b6e3b9b33d3a3f55230b10812";
-    name = "appengine-${stdenv.lib.strings.substring 0 7 rev}";
+  appengine = buildFromGitHub {
+    rev = "72f4367c4f14a20a98dcc8b762953b40788407be";
+    owner = "golang";
+    repo = "appengine";
+    sha256 = "1phjkb0f0xp08db3irbf5wzdsxzsddsig5wv70wvmnr44ijllh4f";
     goPackagePath = "google.golang.org/appengine";
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "golang";
-      repo = "appengine";
-      sha256 = "1b0v244hmw8078601v18xda501aix0kw4q2m1g3ai33dl0p2dh2n";
-    };
     buildInputs = [ protobuf net ];
   };
 
