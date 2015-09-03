@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
+  # Boost 1.59 compatability fix
+  # Attempt removing when updating
+  postPatch = ''
+    sed -i 's,^CPPFLAGS.*,\0 -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED,' src/lib/Makefile.in
+  '';
+
   configureFlags = if stdenv.cc.isClang
     then [ "--disable-werror" ] else null;
 
