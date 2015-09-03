@@ -2773,6 +2773,8 @@ let
   
   pyenv = callPackage ../development/python/pyenv { };
 
+  pyenv = callPackage ../development/python/pyenv { };
+
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
   pythonDBus = dbus_python;
