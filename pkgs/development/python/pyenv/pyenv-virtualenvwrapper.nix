@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 stdenv.mkDerivation rec {
-    name = "pyenv-virtualenv-${version}";
+    name = "pyenv-virtualenvwrapper-${version}";
     version = "20140609";
 
     src = fetchurl {
