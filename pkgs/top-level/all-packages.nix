@@ -892,7 +892,7 @@ let
 
   filter_audio = callPackage ../development/libraries/filter_audio { };
 
-  fzf = callPackage ../tools/misc/fzf { };
+  fzf = goPackages.fzf.bin // { outputs = [ "bin" ]; };
 
   gist = callPackage ../tools/text/gist { };
 

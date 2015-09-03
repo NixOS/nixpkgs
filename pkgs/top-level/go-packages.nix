@@ -601,6 +601,17 @@ let
     };
   };
 
+  fzf = buildFromGitHub {
+    rev = "0.10.4";
+    owner = "junegunn";
+    repo = "fzf";
+    sha256 = "06wda8pm1invnj4sfwcicw9qim3jdf9s1fcrai7xqz7wgy74qv1f";
+
+    buildInputs = [
+      crypto ginkgo gomega junegunn.go-runewidth go-shellwords pkgs.ncurses text
+    ];
+  };
+
   g2s = buildFromGitHub {
     rev    = "ec76db4c1ac16400ac0e17ca9c4840e1d23da5dc";
     owner  = "peterbourgon";
