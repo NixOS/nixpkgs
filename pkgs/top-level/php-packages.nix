@@ -12,6 +12,13 @@ let self = with self; {
     sha256 = "1mhbz56mbnq7dryf2d64l84lj3fpr5ilmg2424glans3wcg772hp";
   };
 
+  imagick = buildPecl {
+    name = "imagick-3.1.2";
+    sha256 = "14vclf2pqcgf3w8nzqbdw0b9v30q898344c84jdbw2sa62n6k1sj";
+    configureFlags = "--with-imagick=${pkgs.imagemagick}";
+    buildInputs = [ pkgs.pkgconfig ];
+  };
+
   memcache = buildPecl {
     name = "memcache-3.0.8";
 
