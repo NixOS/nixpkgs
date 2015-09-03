@@ -9295,7 +9295,7 @@ let
 
   shairport-sync = callPackage ../servers/shairport-sync { };
 
-  serfdom = callPackage ../servers/serfdom { };
+  serfdom = pkgs.goPackages.serf.bin // { outputs = [ "bin" ]; };
 
   seyren = callPackage ../servers/monitoring/seyren { };
 
