@@ -3620,6 +3620,7 @@ let
     pygtk = lib.overrideDerivation pygtk (x: {
       gtk = gtk2;
     });
+    ghostscript = ghostscriptX;
   };
 
   zdelta = callPackage ../tools/compression/zdelta { };
