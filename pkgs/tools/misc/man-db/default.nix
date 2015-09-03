@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libpipeline, db, groff }:
  
 stdenv.mkDerivation rec {
-  name = "man-db-2.7.1";
+  name = "man-db-2.7.2";
   
   src = fetchurl {
     url = "mirror://savannah/man-db/${name}.tar.xz";
-    sha256 = "03ly0hbpgjnag576rgccanaisn7f6422q5qxrj64vyzslc2651y4";
+    sha256 = "14p4sr57qc02gfnpybcnv33fb7gr266iqsyq7z4brs6wa6plwrr2";
   };
   
   buildInputs = [ pkgconfig libpipeline db groff ];

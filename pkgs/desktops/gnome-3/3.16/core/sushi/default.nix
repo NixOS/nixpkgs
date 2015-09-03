@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, file, intltool, gobjectIntrospection, glib
 , clutter_gtk, clutter-gst, gnome3, gtksourceview, libmusicbrainz
 , webkitgtk, libmusicbrainz5, icu, makeWrapper, gst_all_1
-, gdk_pixbuf, librsvg, hicolor_icon_theme, gtk3 }:
+, gdk_pixbuf, librsvg, gtk3 }:
 
 stdenv.mkDerivation rec {
   name = "sushi-3.12.0";
@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good ];
 
   buildInputs = [ pkgconfig file intltool gobjectIntrospection glib gtk3
-                  clutter_gtk clutter-gst gnome3.gjs gtksourceview gdk_pixbuf librsvg
-                  gnome3.adwaita-icon-theme hicolor_icon_theme 
-                  libmusicbrainz5 webkitgtk gnome3.evince icu makeWrapper ];
+                  clutter_gtk clutter-gst gnome3.gjs gtksourceview gdk_pixbuf
+                  librsvg gnome3.defaultIconTheme libmusicbrainz5 webkitgtk
+                  gnome3.evince icu makeWrapper ];
 
   enableParallelBuilding = true;
 

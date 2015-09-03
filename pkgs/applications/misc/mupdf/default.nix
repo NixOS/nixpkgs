@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     Version=1.0
     Name=mupdf
     Comment=PDF viewer
-    Exec=$out/bin/mupdf-x11
+    Exec=$out/bin/mupdf-x11 %f
     Terminal=false
     EOF
   '';

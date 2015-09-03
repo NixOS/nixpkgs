@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     sha1 = "9d1977cc89242cd11471269ece2ed4650947c046";
   };
 
+  outputs = [ "out" "man" ];
+
   patches = optional stdenv.isCygwin ./1.0.1-cygwin64.patch
     ++ optional (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem")) ./darwin-arch.patch;
 

@@ -6,7 +6,7 @@ version = if ARGV.empty?
             ARGV[0]
           end
 
-base_path = "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases"
+base_path = "http://archive.mozilla.org/pub/thunderbird/releases"
 
 Source = Struct.new(:hash, :arch, :locale, :filename)
 

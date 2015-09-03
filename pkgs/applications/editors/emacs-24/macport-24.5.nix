@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   emacsName = "emacs-24.5";
-  name = "${emacsName}-mac-5.9";
+  name = "${emacsName}-mac-5.10";
 
   #builder = ./builder.sh;
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${name}.tar.gz";
-    sha256 = "1xjskagjlnni1nqshszbvk8h8vhwq9sk09l25vb6fijn4g9akwqr";
+    sha256 = "0d4r4mgqxcdba715lbr7rk4bxz7yjxi6wv63kyh6gaqbfgql41vf";
   };
 
   buildInputs = [ ncurses pkgconfig texinfo libxml2 gnutls ];

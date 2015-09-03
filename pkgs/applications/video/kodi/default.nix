@@ -37,17 +37,17 @@ assert rtmpSupport  -> rtmpdump != null;
 
 let
   rel = "Isengard";
-  ffmpeg_2_6_3 = fetchurl {
-    url = "https://github.com/xbmc/FFmpeg/archive/2.6.3-${rel}.tar.gz";
-    sha256 = "129nwrj9i758vz9xakpp68sm1l7z4in0krq6ayyqnpsnm54r9xlc";
+  ffmpeg_2_6_4 = fetchurl {
+    url = "https://github.com/xbmc/FFmpeg/archive/2.6.4-${rel}.tar.gz";
+    sha256 = "0gsjz8sr0dqq68gcln29xhz3h35n77769h1gb0ias0apmpaad1r4";
   };
 in stdenv.mkDerivation rec {
     name = "kodi-" + version;
-    version = "15.0";
+    version = "15.1";
 
     src = fetchurl {
       url = "https://github.com/xbmc/xbmc/archive/${version}-${rel}.tar.gz";
-      sha256 = "1zqdmqffjfr5219cvpbvq9v1z5p5pzi2m9xs9lzk4jz7rxrs3nr7";
+      sha256 = "0187qxzyq4nhzbcwbhi71j4bl5k7pwjryhklil90gy5ziw6n3ckj";
     };
 
     buildInputs = [
@@ -85,7 +85,7 @@ in stdenv.mkDerivation rec {
         --replace 'usr/share/zoneinfo' 'etc/zoneinfo'
       substituteInPlace tools/depends/target/ffmpeg/autobuild.sh \
         --replace "/bin/bash" "${bash}/bin/bash -ex"
-      cp ${ffmpeg_2_6_3} tools/depends/target/ffmpeg/ffmpeg-2.6.3-${rel}.tar.gz
+      cp ${ffmpeg_2_6_4} tools/depends/target/ffmpeg/ffmpeg-2.6.4-${rel}.tar.gz
     '';
 
     preConfigure = ''

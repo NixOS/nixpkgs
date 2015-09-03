@@ -61,7 +61,6 @@
   ./programs/command-not-found/command-not-found.nix
   ./programs/dconf.nix
   ./programs/environment.nix
-  ./programs/info.nix
   ./programs/ibus.nix
   ./programs/kbdlight.nix
   ./programs/light.nix
@@ -75,6 +74,7 @@
   ./programs/venus.nix
   ./programs/wvdial.nix
   ./programs/freetds.nix
+  ./programs/xfs_quota.nix
   ./programs/zsh/zsh.nix
   ./rename.nix
   ./security/apparmor.nix
@@ -279,6 +279,7 @@
   ./services/networking/dnsmasq.nix
   ./services/networking/docker-registry-server.nix
   ./services/networking/ejabberd.nix
+  ./services/networking/fan.nix
   ./services/networking/firefox/sync-server.nix
   ./services/networking/firewall.nix
   ./services/networking/flashpolicyd.nix
@@ -330,6 +331,7 @@
   ./services/networking/seeks.nix
   ./services/networking/skydns.nix
   ./services/networking/shout.nix
+  ./services/networking/softether.nix
   ./services/networking/spiped.nix
   ./services/networking/sslh.nix
   ./services/networking/ssh/lshd.nix
@@ -391,6 +393,7 @@
   ./services/web-servers/lighttpd/default.nix
   ./services/web-servers/lighttpd/gitweb.nix
   ./services/web-servers/nginx/default.nix
+  ./services/web-servers/nginx/reverse_proxy.nix
   ./services/web-servers/phpfpm.nix
   ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix

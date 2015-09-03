@@ -126,7 +126,7 @@ exitHandler() {
 
         # If the builder had a non-zero exit code and
         # $succeedOnFailure is set, create the file
-        # `$out/nix-support/failed' to signal failure, and exit
+        # ‘$out/nix-support/failed’ to signal failure, and exit
         # normally.  Otherwise, return the original exit code.
         if [ -n "$succeedOnFailure" ]; then
             echo "build failed with exit code $exitCode (ignored)"

@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.openshift.org;
     maintainers = with maintainers; [offline];
     platforms = [ "x86_64-linux" ];
+    broken = true;
   };
 }

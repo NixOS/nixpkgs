@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ncurses, x11, libXaw, libXpm, Xaw3d
-, pkgconfig, gettext, gtk, libXft, dbus, libpng, libjpeg, libungif
+, pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
 , alsaLib, cairo, acl, gpm
 , withX ? !stdenv.isDarwin
@@ -45,12 +45,14 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals withX
       [ x11 libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
         imagemagick gconf ]
-    ++ stdenv.lib.optional (withX && withGTK2) [ gtk2 ]
-    ++ stdenv.lib.optional (withX && withGTK3) [ gtk3 ]
+    ++ stdenv.lib.optional (withX && withGTK2) gtk2
+    ++ stdenv.lib.optional (withX && withGTK3) gtk3
     ++ stdenv.lib.optional (stdenv.isDarwin && withX) cairo;
 
   configureFlags =
-    if withX
+    if stdenv.isDarwin
+      then [ "--with-ns" "--disable-ns-self-contained" ]
+    else if withX
       then [ "--with-x-toolkit=${toolkit}" "--with-xft" ]
       else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
              "--with-gif=no" "--with-tiff=no" ];
@@ -61,6 +63,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/
     cp ${./site-start.el} $out/share/emacs/site-lisp/site-start.el
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv nextstep/Emacs.app $out/Applications
   '';
 
   doCheck = true;

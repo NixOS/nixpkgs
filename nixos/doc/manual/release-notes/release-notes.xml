@@ -10,6 +10,7 @@
 and current unstable revision.</para>
 
 <xi:include href="rl-unstable.xml" />
+<xi:include href="rl-1509.xml" />
 <xi:include href="rl-1412.xml" />
 <xi:include href="rl-1404.xml" />
 <xi:include href="rl-1310.xml" />

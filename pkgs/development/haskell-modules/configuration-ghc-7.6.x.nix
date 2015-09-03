@@ -85,10 +85,15 @@ self: super: {
 
   # https://github.com/magthe/sandi/issues/7
   sandi = overrideCabal super.sandi (drv: {
-    patchPhase = "sed -i -e 's|base ==4.8.*,|base,|' sandi.cabal"; }
-  );
+    postPatch = "sed -i -e 's|base ==4.8.*,|base,|' sandi.cabal";
+  });
 
   # blaze-builder requires an additional build input on older compilers.
   blaze-builder = addBuildDepend super.blaze-builder super.bytestring-builder;
+
+  # available convertible package won't build with the available
+  # bytestring and ghc-mod won't build without convertible
+  convertible = markBroken super.convertible;
+  ghc-mod = markBroken super.ghc-mod;
 
 }

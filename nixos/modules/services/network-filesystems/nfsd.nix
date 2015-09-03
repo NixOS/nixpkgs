@@ -88,10 +88,7 @@ in
 
     environment.systemPackages = [ pkgs.nfs-utils ];
 
-    environment.etc = singleton
-      { source = exports;
-        target = "exports";
-      };
+    environment.etc.exports.source = exports;
 
     boot.kernelModules = [ "nfsd" ];
 

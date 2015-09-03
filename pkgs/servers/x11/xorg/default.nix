@@ -2115,11 +2115,11 @@ let
   }) // {inherit libX11 xproto ;};
 
   xproto = (mkDerivation "xproto" {
-    name = "xproto-7.0.27";
+    name = "xproto-7.0.28";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/xproto-7.0.27.tar.bz2;
-      sha256 = "030ix881p0crnd4bc01nz6cs0afmfv6ivsyyhf0h1j1mnak26vr4";
+      url = mirror://xorg/individual/proto/xproto-7.0.28.tar.bz2;
+      sha256 = "1jpnvm33vi2dar5y5zgz7jjh0m8fpkcxm0f0lbwfx37ns5l5bs19";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};

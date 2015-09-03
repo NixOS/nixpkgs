@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "osmo-${version}";
-  version = "0.2.12";
+  version = "0.2.14";
 
   src = fetchurl {
     url = "mirror://sourceforge/osmo-pim/${name}.tar.gz";
-    sha256 = "0y3bpsi18v3dxb3vsy0dr7cgf692g4p62l84hj9l2bpr2hbabgck";
+    sha256 = "0vaayrmyiqn010gr11drmhkkg8fkxdmla3gwj9v3zvp5x44kab05";
   };
 
   buildInputs = [ pkgconfig gtk libxml2 gettext libical libnotify libarchive

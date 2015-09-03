@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "synthv1-${version}";
-  version = "0.6.3";
+  version = "0.7.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/synthv1/${name}.tar.gz";
-    sha256 = "19zyvrvnmi7ahwg121vl2q17j9y8ln6lvpj5wxxcwif5538q75iw";
+    sha256 = "0asjhz0xj1kwysvsj9q54r8j8fy7cnr408ygfpdhg7yn24rv67hh";
   };
 
   buildInputs = [ qt4 libjack2 lv2 ];

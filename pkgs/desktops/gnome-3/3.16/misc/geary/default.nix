@@ -1,7 +1,7 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk3, vala
 , makeWrapper, gdk_pixbuf, cmake, desktop_file_utils
 , libnotify, libcanberra, libsecret, gmime
-, libpthreadstubs, hicolor_icon_theme, sqlite
+, libpthreadstubs, sqlite
 , gnome3, librsvg, gnome_doc_utils, webkitgtk }:
 
 let
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ intltool pkgconfig gtk3 makeWrapper cmake desktop_file_utils gnome_doc_utils
                   vala webkitgtk libnotify libcanberra gnome3.libgee libsecret gmime sqlite
-                  libpthreadstubs gnome3.gsettings_desktop_schemas hicolor_icon_theme gnome3.gcr
-                  gdk_pixbuf librsvg gnome3.adwaita-icon-theme gnome3.adwaita-icon-theme ];
+                  libpthreadstubs gnome3.gsettings_desktop_schemas gnome3.gcr
+                  gdk_pixbuf librsvg gnome3.defaultIconTheme ];
 
   preConfigure = ''
     substituteInPlace src/CMakeLists.txt --replace '`pkg-config --variable=girdir gobject-introspection-1.0`' '${webkitgtk}/share/gir-1.0'

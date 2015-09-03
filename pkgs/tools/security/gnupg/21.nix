@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba, npth
+{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba, libiconv, npth
 , autoreconfHook, gettext, texinfo, pcsclite
 
 # Each of the dependencies below are optional.
@@ -13,11 +13,11 @@ with stdenv.lib;
 assert x11Support -> pinentry != null;
 
 stdenv.mkDerivation rec {
-  name = "gnupg-2.1.6";
+  name = "gnupg-2.1.7";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "1zcj5vsrc64zyq7spnx2xlxlq6wxaf5bilpf6gbkp7qr8barlnay";
+    sha256 = "0vl4wzraln0h4db0kfza4l5by5pgfijqplji5n4riv3zsiv3g2n1";
   };
 
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    pkgconfig libgcrypt libassuan libksba npth
+    pkgconfig libgcrypt libassuan libksba libiconv npth
     autoreconfHook gettext texinfo
     readline libusb gnutls adns openldap zlib bzip2
   ];

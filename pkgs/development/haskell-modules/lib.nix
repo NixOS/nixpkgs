@@ -66,7 +66,7 @@ rec {
     buildPhase = "./Setup sdist";
     haddockPhase = ":";
     checkPhase = ":";
-    installPhase = "install -D dist/${drv.pname}-${drv.version}.tar.gz $out/${drv.pname}-${drv.version}.tar.gz";
+    installPhase = "install -D dist/${drv.pname}-*.tar.gz $out/${drv.pname}-${drv.version}.tar.gz";
     fixupPhase = ":";
   });
 
@@ -74,7 +74,7 @@ rec {
     unpackPhase = let src = sdistTarball pkg; tarname = "${pkg.pname}-${pkg.version}"; in ''
       echo "Source tarball is at ${src}/${tarname}.tar.gz"
       tar xf ${src}/${tarname}.tar.gz
-      cd ${tarname}
+      cd ${pkg.pname}-*
     '';
   });
 
@@ -82,10 +82,6 @@ rec {
 
   triggerRebuild = drv: i: overrideCabal drv (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
 
-  withHoogle = haskellEnv: with haskellEnv.haskellPackages;
-    import ./hoogle.nix {
-      inherit (pkgs) stdenv;
-      inherit hoogle rehoo ghc;
-      packages = haskellEnv.paths;
-    };
+  #FIXME: throw this away sometime in the future. added 2015-08-18
+  withHoogle = throw "withHoogle is no longer supported, use ghcWithHoogle instead";
 }

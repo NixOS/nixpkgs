@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, which, go, makeWrapper, iptables, rsync, utillinux, coreutils }:
+{ stdenv, fetchFromGitHub, which, go, makeWrapper, iptables, rsync, utillinux, coreutils, e2fsprogs, procps-ng }:
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "0.18.0";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "1adbd5n2fs1278f6kz6pd23813w2k4pgcxjl21idflh8jafxsyj7";
+    sha256 = "12wqw9agiz07wlw1sd0n41fn6xf74zn5sv37hslfa77w2d4ri5yb";
   };
 
   buildInputs = [ makeWrapper which go iptables rsync ];
@@ -26,14 +26,23 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p "$out/bin"
-    cp _output/local/go/bin/* "$out/bin/"
+    mkdir -p "$out/bin" "$out"/libexec/kubernetes/cluster
+    cp _output/local/go/bin/{kube*,hyperkube} "$out/bin/"
     cp cluster/addons/dns/kube2sky/kube2sky "$out/bin/"
+    cp cluster/saltbase/salt/helpers/safe_format_and_mount "$out/libexec/kubernetes"
+    cp -R hack "$out/libexec/kubernetes"
+    cp cluster/update-storage-objects.sh "$out/libexec/kubernetes/cluster"
+    makeWrapper "$out"/libexec/kubernetes/cluster/update-storage-objects.sh "$out"/bin/kube-update-storage-objects \
+      --prefix KUBE_BIN : "$out/bin"
   '';
 
   preFixup = ''
     wrapProgram "$out/bin/kube-proxy" --prefix PATH : "${iptables}/bin"
-    wrapProgram "$out/bin/kubelet" --prefix PATH : "${utillinux}/bin"
+    wrapProgram "$out/bin/kubelet" --prefix PATH : "${utillinux}/bin:${procps-ng}/bin"
+    chmod +x "$out/libexec/kubernetes/safe_format_and_mount"
+    wrapProgram "$out/libexec/kubernetes/safe_format_and_mount" --prefix PATH : "${e2fsprogs}/bin:${utillinux}/bin"
+    substituteInPlace "$out"/libexec/kubernetes/cluster/update-storage-objects.sh \
+      --replace KUBE_OUTPUT_HOSTBIN KUBE_BIN
   '';
 
   meta = with stdenv.lib; {

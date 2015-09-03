@@ -1,7 +1,5 @@
-{ stdenv, intltool, fetchurl, libgtop
-, pkgconfig, gtk3, glib, hicolor_icon_theme
-, bash, makeWrapper, itstool
-, gnome3, file }:
+{ stdenv, intltool, fetchurl, libgtop, pkgconfig, gtk3, glib
+, bash, makeWrapper, itstool, gnome3, file }:
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extensions-${gnome3.version}.1";

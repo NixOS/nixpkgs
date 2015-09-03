@@ -17,6 +17,8 @@
   baseModules ? import ../modules/module-list.nix
 , # !!! See comment about args in lib/modules.nix
   extraArgs ? {}
+, # !!! See comment about args in lib/modules.nix
+  specialArgs ? {}
 , modules
 , # !!! See comment about check in lib/modules.nix
   check ? true
@@ -47,16 +49,11 @@ in rec {
     inherit prefix check;
     modules = modules ++ extraModules ++ baseModules ++ [ pkgsModule ];
     args = extraArgs;
-    specialArgs = { modulesPath = ../modules; };
+    specialArgs = { modulesPath = ../modules; } // specialArgs;
   }) config options;
 
   # These are the extra arguments passed to every module.  In
   # particular, Nixpkgs is passed through the "pkgs" argument.
-  # FIXME: we enable config.allowUnfree to make packages like
-  # nvidia-x11 available. This isn't a problem because if the user has
-  # ‘nixpkgs.config.allowUnfree = false’, then evaluation will fail on
-  # the 64-bit package anyway. However, it would be cleaner to respect
-  # nixpkgs.config here.
   extraArgs = extraArgs_ // {
     inherit modules baseModules;
   };

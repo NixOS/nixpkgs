@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, exempi, libxml2
-, pkgconfig, gtk3, glib, hicolor_icon_theme
+, pkgconfig, gtk3, glib
 , makeWrapper, itstool, gegl, babl, lcms2
 , desktop_file_utils, gmp, libmediaart, wrapGAppsHook
 , gnome3, librsvg, gdk_pixbuf, libexif }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool gegl babl gnome3.libgdata
                   gnome3.gsettings_desktop_schemas makeWrapper gmp libmediaart
-                  gdk_pixbuf gnome3.adwaita-icon-theme librsvg exempi
+                  gdk_pixbuf gnome3.defaultIconTheme librsvg exempi
                   gnome3.gfbgraph gnome3.grilo-plugins gnome3.grilo
                   gnome3.gnome_online_accounts gnome3.gnome_desktop
                   lcms2 libexif gnome3.tracker libxml2 desktop_file_utils

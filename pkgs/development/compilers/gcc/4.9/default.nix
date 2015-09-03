@@ -61,13 +61,10 @@ let version = "4.9.3";
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
 
-    # Builds of gfortran have failed with strange errors that we cannot reproduce
-    # (http://hydra.nixos.org/build/23951123). Our best guess is that the build
-    # system has bugs that are exposed by compiling with multiple threads.
-    enableParallelBuilding = !langFortran;
+    enableParallelBuilding = true;
 
     patches = [ ]
-      ++ optional enableParallelBuilding ../parallel-bconfig.patch
+      ++ optionals enableParallelBuilding [ ../parallel-bconfig.patch ./parallel-strsignal.patch ]
       ++ optional (cross != null) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, emacs }:
 
 let
-  version = "0.15.0-8-g4e10851";
+  version = "1.2.0";
 in
 stdenv.mkDerivation {
   name = "git-modes-${version}";
@@ -9,8 +9,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "magit";
     repo = "git-modes";
-    rev = "4e10851843145e0c05fc665683d3b487a57ad114";
-    sha256 = "13j794a2p4ql9dnw2z0c1m0ybclxsicbk8cmmfqcchs4ygiyc6ag";
+    rev = version;
+    sha256 = "1ipr51v7nhbbgxbbz0fp3i78ypp73kyxgc4ni8nnr7yirjhsksfd";
   };
 
   buildInputs = [ emacs ];

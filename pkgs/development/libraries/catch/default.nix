@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   name = "catch-${version}";
-  version = "1.1-3";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "philsquared";
     repo = "Catch";
-    rev = "c51e86819dc993d590e5d0adaf1952f4b53e5355";
-    sha256 = "0kgi7wxxysgjbpisqfj4dj0k19cyyai92f001zi8gzkybd4fkgv5";
+    rev = "v" + version;
+    sha256 = "0rz2nmvvh66x6w2nb7l08vc5x9aqg1qfz2qfiykaz1ybc19fwck2";
   };
 
   buildInputs = [ cmake ];

@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "lld-${version}";
 
-  src = fetch "lld" "1sd4scqynryfrmcc4h0ljgwn2dgjmbbmf38z50ya6l0janpd2nxx";
+  src = fetch "lld" "1hpqawg1sc8mdqxqaxqmlzbrn69w1pkj8rxhjgqgmwra6c0xky89";
 
   preUnpack = ''
     # !!! Hopefully won't be needed for 3.5

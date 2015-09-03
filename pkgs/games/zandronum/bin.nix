@@ -21,10 +21,10 @@
 assert stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
-  name = "zandronum-2.1";
+  name = "zandronum-2.1.2";
   src = fetchurl {
-    url = "http://zandronum.com/downloads/zandronum2.1-linux-x86_64.tar.bz2";
-    sha256 = "0fhk2gd0lqmc6brbli17ks5ywnlzkjyas1kfdqsf3d96w0z5rz11";
+    url = "http://zandronum.com/downloads/zandronum2.1.2-linux-x86_64.tar.bz2";
+    sha256 = "1f5aw2m8c0bl3lrvi2k3rrzq3q9x1ikxnxxjgh3k9qvanfn7ykbk";
   };
 
   libPath = stdenv.lib.makeLibraryPath [

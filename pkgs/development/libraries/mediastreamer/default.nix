@@ -4,18 +4,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mediastreamer-2.11.1";
+  name = "mediastreamer-2.11.2";
 
   src = fetchurl {
     url = "mirror://savannah/linphone/mediastreamer/${name}.tar.gz";
-    sha256 = "0gfv4k2rsyvyq838xjgsrxmmn0fkw40apqs8vakzjwzsz2c9z8pd";
+    sha256 = "1g6gawrlz1lixzs1kzckm3rxc401ww8pi00x7r5kb84bdijb02cc";
   };
+
+  patches = [ ./plugins_dir.patch ];
 
   postPatch = ''
     sed -i "s/\(SRTP_LIBS=\"\$SRTP_LIBS -lsrtp\"\)/SRTP_LIBS=\"$(pkg-config --libs-only-l libsrtp)\"/g" configure
   '';
 
-  # TODO: make it load plugins from *_PLUGIN_PATH
   nativeBuildInputs = [ pkgconfig intltool ];
 
   propagatedBuildInputs = [
@@ -28,6 +29,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-external-ortp"
     "--with-srtp=${srtp}"
+    "--enable-xv"
+    "--enable-glx"
   ];
 
   meta = with stdenv.lib; {

@@ -5,6 +5,7 @@ use Cwd 'abs_path';
 use IO::Handle;
 use File::Path;
 use File::Basename;
+use JSON::PP;
 
 STDOUT->autoflush(1);
 
@@ -17,7 +18,7 @@ sub isInPathsToLink {
     $path = "/" if $path eq "";
     foreach my $elem (@pathsToLink) {
         return 1 if
-            $elem eq "/" || 
+            $elem eq "/" ||
             (substr($path, 0, length($elem)) eq $elem
              && (($path eq $elem) || (substr($path, length($elem), 1) eq "/")));
     }
@@ -28,25 +29,29 @@ sub isInPathsToLink {
 # For each activated package, determine what symlinks to create.
 
 my %symlinks;
-$symlinks{""} = ""; # create root directory
+
+for my $p (@pathsToLink) {
+    $p = "" if $p eq "/";
+    $symlinks{$p} = ["", 0];
+}
 
 sub findFiles;
 
 sub findFilesInDir {
-    my ($relName, $target, $ignoreCollisions) = @_;
+    my ($relName, $target, $ignoreCollisions, $priority) = @_;
 
     opendir DIR, "$target" or die "cannot open `$target': $!";
     my @names = readdir DIR or die;
     closedir DIR;
-    
+
     foreach my $name (@names) {
         next if $name eq "." || $name eq "..";
-        findFiles("$relName/$name", "$target/$name", $name, $ignoreCollisions);
+        findFiles("$relName/$name", "$target/$name", $name, $ignoreCollisions, $priority);
     }
 }
-    
+
 sub findFiles {
-    my ($relName, $target, $baseName, $ignoreCollisions) = @_;
+    my ($relName, $target, $baseName, $ignoreCollisions, $priority) = @_;
 
     # Urgh, hacky...
     return if
@@ -57,41 +62,48 @@ sub findFiles {
         $baseName eq "perllocal.pod" ||
         $baseName eq "log";
 
-    my $oldTarget = $symlinks{$relName};
+    my ($oldTarget, $oldPriority) = @{$symlinks{$relName} // [undef, undef]};
 
-    if (!defined $oldTarget) {
-        $symlinks{$relName} = $target;
+    # If target doesn't exist, create it. If it already exists as a
+    # symlink to a file (not a directory) in a lower-priority package,
+    # overwrite it.
+    if (!defined $oldTarget || ($priority < $oldPriority && ($oldTarget ne "" && ! -d $oldTarget))) {
+        $symlinks{$relName} = [$target, $priority];
+        return;
+    }
+
+    # If target already exists as a symlink to a file (not a
+    # directory) in a higher-priority package, skip.
+    if (defined $oldTarget && $priority > $oldPriority && $oldTarget ne "" && ! -d $oldTarget) {
         return;
     }
 
     unless (-d $target && ($oldTarget eq "" || -d $oldTarget)) {
         if ($ignoreCollisions) {
-            warn "collision between `$target' and `$oldTarget'" if $ignoreCollisions == 1;
+            warn "collision between `$target' and `$oldTarget'\n" if $ignoreCollisions == 1;
             return;
         } else {
-            die "collision between `$target' and `$oldTarget'";
+            die "collision between `$target' and `$oldTarget'\n";
         }
     }
 
-    findFilesInDir($relName, $oldTarget, $ignoreCollisions) unless $oldTarget eq "";
-    findFilesInDir($relName, $target, $ignoreCollisions);
-    
-    $symlinks{$relName} = ""; # denotes directory
+    findFilesInDir($relName, $oldTarget, $ignoreCollisions, $oldPriority) unless $oldTarget eq "";
+    findFilesInDir($relName, $target, $ignoreCollisions, $priority);
+
+    $symlinks{$relName} = ["", $priority]; # denotes directory
 }
 
 
 my %done;
 my %postponed;
 
-sub addPkg;
-sub addPkg($;$) {
-    my $pkgDir = shift;
-    my $ignoreCollisions = shift;
+sub addPkg {
+    my ($pkgDir, $ignoreCollisions, $priority)  = @_;
 
     return if (defined $done{$pkgDir});
     $done{$pkgDir} = 1;
 
-    findFiles("", "$pkgDir", "", $ignoreCollisions);
+    findFiles("", $pkgDir, "", $ignoreCollisions, $priority);
 
     my $propagatedFN = "$pkgDir/nix-support/propagated-user-env-packages";
     if (-e $propagatedFN) {
@@ -106,23 +118,25 @@ sub addPkg($;$) {
 }
 
 
-# Symlink to the packages that have been installed explicitly by the user.
-my @args = split ' ', $ENV{"paths"};
-
-foreach my $pkgDir (@args) {
-    addPkg($pkgDir, $ENV{"ignoreCollisions"} eq "1") if -e $pkgDir;
+# Symlink to the packages that have been installed explicitly by the
+# user.
+for my $pkg (@{decode_json $ENV{"pkgs"}}) {
+    for my $path (@{$pkg->{paths}}) {
+        addPkg($path, $ENV{"ignoreCollisions"} eq "1", $pkg->{priority}) if -e $path;
+    }
 }
 
 
 # Symlink to the packages that have been "propagated" by packages
-# installed by the user (i.e., package X declares that it want Y
+# installed by the user (i.e., package X declares that it wants Y
 # installed as well).  We do these later because they have a lower
 # priority in case of collisions.
+my $priorityCounter = 1000; # don't care about collisions
 while (scalar(keys %postponed) > 0) {
     my @pkgDirs = keys %postponed;
     %postponed = ();
     foreach my $pkgDir (sort @pkgDirs) {
-        addPkg($pkgDir, 2);
+        addPkg($pkgDir, 2, $priorityCounter++);
     }
 }
 
@@ -130,7 +144,7 @@ while (scalar(keys %postponed) > 0) {
 # Create the symlinks.
 my $nrLinks = 0;
 foreach my $relName (sort keys %symlinks) {
-    my $target = $symlinks{$relName};
+    my ($target, $priority) = @{$symlinks{$relName}};
     my $abs = "$out/$relName";
     next unless isInPathsToLink $relName;
     if ($target eq "") {

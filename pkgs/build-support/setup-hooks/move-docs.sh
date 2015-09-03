@@ -42,6 +42,7 @@ _moveDocs() {
     _moveToOutput share/man "$man"
     _moveToOutput share/info "$info"
     _moveToOutput share/doc "$doc"
+    _moveToOutput share/gtk-doc "$doc"
 
     # Remove empty share directory.
     if [ -d "$out/share" ]; then

@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "17bqykp604p7376wj3q2nmjdhrb6v1ny8q08zdwi7qvc02l9wrsi";
   };
 
+  outputs = [ "out" "doc" "man" ];
+
   configureFlags = ''
     --enable-jit
     ${if unicodeSupport then "--enable-unicode-properties" else ""}

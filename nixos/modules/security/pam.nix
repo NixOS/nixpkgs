@@ -192,6 +192,16 @@ let
         description = "Whether to log authentication failures in <filename>/var/log/faillog</filename>.";
       };
 
+      enableAppArmor = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Enable support for attaching AppArmor profiles at the
+          user/group level, e.g., as part of a role based access
+          control scheme.
+        '';
+      };
+
       text = mkOption {
         type = types.nullOr types.lines;
         description = "Contents of the PAM service file.";
@@ -251,9 +261,9 @@ let
           ${optionalString (!(config.security.pam.enableEcryptfs || cfg.pamMount)) "auth required pam_deny.so"}
 
           # Password management.
+          password requisite pam_unix.so nullok sha512
           ${optionalString config.security.pam.enableEcryptfs
               "password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
-          password requisite pam_unix.so nullok sha512
           ${optionalString cfg.pamMount
               "password optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
           ${optionalString config.users.ldap.enable
@@ -294,6 +304,8 @@ let
               "session optional ${pkgs.pam}/lib/security/pam_motd.so motd=${motd}"}
           ${optionalString cfg.pamMount
               "session optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
+          ${optionalString (cfg.enableAppArmor && config.security.apparmor.enable)
+              "session optional ${pkgs.apparmor-pam}/lib/security/pam_apparmor.so order=user,group,default debug"}
         '';
     };
 

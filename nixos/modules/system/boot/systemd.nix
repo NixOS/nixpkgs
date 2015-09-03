@@ -643,6 +643,10 @@ in
         if ! [ -e /etc/machine-id ]; then
           ${systemd}/bin/systemd-machine-id-setup
         fi
+
+        # Keep a persistent journal. Note that systemd-tmpfiles will
+        # set proper ownership/permissions.
+        mkdir -m 0700 -p /var/log/journal
       '';
 
     users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
@@ -712,6 +716,14 @@ in
           timerConfig.OnCalendar = service.startAt;
         })
         (filterAttrs (name: service: service.startAt != "") cfg.services);
+
+    # Generate timer units for all services that have a ‘startAt’ value.
+    systemd.user.timers =
+      mapAttrs (name: service:
+        { wantedBy = [ "timers.target" ];
+          timerConfig.OnCalendar = service.startAt;
+        })
+        (filterAttrs (name: service: service.startAt != "") cfg.user.services);
 
     systemd.sockets.systemd-journal-gatewayd.wantedBy =
       optional config.services.journald.enableHttpGateway "sockets.target";

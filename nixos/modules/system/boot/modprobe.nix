@@ -35,6 +35,7 @@ with lib;
             fi
 
           '';
+        meta.priority = 4;
       };
       description = ''
         Wrapper around modprobe that sets the path to the modules

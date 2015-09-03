@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pidgin, intltool, libxml2 }:
+{ stdenv, fetchurl, pidgin, intltool, libxml2, nss, nspr }:
 
 let version = "1.18.1"; in
 
@@ -19,5 +19,6 @@ stdenv.mkDerivation {
 
   postInstall = "find $out -ls; ln -s \$out/lib/purple-2 \$out/share/pidgin-sipe";
 
-  buildInputs = [pidgin intltool libxml2];
+  buildInputs = [ pidgin intltool libxml2 nss nspr ];
+
 }

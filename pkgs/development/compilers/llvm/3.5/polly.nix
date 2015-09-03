@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "polly-${version}";
 
-  src =  fetch "polly" "1rqflmgzg1vzjm0r32c5ck8x3q0qm3g0hh8ggbjazh6x7nvmy6ll";
+  src =  fetch "polly" "1s6v54czmgq626an4yk2k34lrzkwmz1bjrbiafh7j23yc2w4nalx";
 
   patches = [ ./polly-separate-build.patch ];
 

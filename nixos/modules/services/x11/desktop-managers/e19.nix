@@ -62,6 +62,7 @@ in
         waitPID=$!
       '';
     }];
+    services.xserver.displayManager.desktopManagerHandlesLidAndPower = true;
 
     security.setuidPrograms = [ "e19_freqset" ];
 

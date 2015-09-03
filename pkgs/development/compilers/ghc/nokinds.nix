@@ -27,18 +27,20 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "7.11.20150718";
-  name = "ghc-nokinds-${version}";
-  rev = "4cb79c85a4976c509a65a8638899391a60cd0962";
+  version = "7.11.20150826";
+  name = "ghc-${version}"; # We cannot add a "nokinds" tag here; see git comment for details.
+  rev = "5f7f64b7fc879b5ecfd6987ec5565bd90f7c0179";
 
   src = fetchgit {
     url = "https://github.com/goldfirere/ghc.git";
     inherit rev;
-    sha256 = "1pyz459hs189bw2jaz7k2j2r53nc1vfa4q3zd3zz1zm0h14lsmlv";
+    sha256 = "183l4v6aw52r3ydwl8bxg1lh3cwfakb35rpy6mjg23dqmqsynmcn";
   };
 
   postUnpack = ''
     pushd ghc-${builtins.substring 0 7 rev}
+    echo ${version} >VERSION
+    echo ${rev} >GIT_COMMIT_ID
     patchShebangs .
     ./boot
     popd
@@ -67,7 +69,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The dependently-typed 'nokinds' branch of the Glasgow Haskell Compiler by Richard Eisenberg";
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with stdenv.lib.maintainers; [ deepfire ];
     inherit (ghc.meta) license platforms;
   };
 

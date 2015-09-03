@@ -36,4 +36,9 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   installFlags = "prefix=$(out)";
+
+  postInstall = ''
+    # Remove inert ftdetect vim plugin and a README that's a man page subset:
+    rm -r $out/share/{doc,vim}
+  '';
 }

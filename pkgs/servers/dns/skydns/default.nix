@@ -4,7 +4,7 @@ with goPackages;
 
 buildGoPackage rec {
   name = "skydns-${version}";
-  version = "2.5.0a";
+  version = "2.5.2b";
 
   goPackagePath = "github.com/skynetservices/skydns";
 
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "skynetservices";
     repo = "skydns";
     rev = version;
-    sha256 = "18mw8bcz54i4yrv6pc73s3ffcj1vv9cwnn76c9k0bj1mxp1pmdl2";
+    sha256 = "01vac6bd71wky5jbd5k4a0x665bjn1cpmw7p655jrdcn5757c2lv";
   };
 
   buildInputs = with goPackages; [ go-etcd rcrowley.go-metrics influxdb go-systemd go-log dns stathat osext etcd ];

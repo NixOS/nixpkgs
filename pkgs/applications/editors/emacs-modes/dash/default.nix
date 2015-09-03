@@ -1,13 +1,14 @@
 {stdenv, fetchurl, emacs}:
 
-let version = "1.5.0";
-
-in stdenv.mkDerivation {
+let
+  version = "2.11.0";
+in
+stdenv.mkDerivation {
   name = "emacs-dash-${version}";
 
   src = fetchurl {
     url = "https://github.com/magnars/dash.el/archive/${version}.tar.gz";
-    sha256 = "0c6jknzy306vn22vqlabxkwxfnllrd33spymi74fkirbxaxvp8kp";
+    sha256 = "1piwcwilkxcbjxx832mhb7q3pz1fgwp203r581bpqcw6kd5x726q";
   };
 
   buildInputs = [ emacs ];

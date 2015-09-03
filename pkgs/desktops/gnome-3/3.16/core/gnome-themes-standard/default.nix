@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, gtk3, gnome3, librsvg, pkgconfig, pango, atk, gtk2
-, gdk_pixbuf, hicolor_icon_theme }:
+, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
   name = "gnome-themes-standard-${gnome3.version}.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
   
   buildInputs = [ intltool gtk3 librsvg pkgconfig pango atk gtk2 gdk_pixbuf
-                  hicolor_icon_theme ];
+                  gnome3.defaultIconTheme ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

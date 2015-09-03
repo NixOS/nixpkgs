@@ -1,0 +1,46 @@
+From d1b753212ee5151db941de0e2b826dcf9722f2f3 Mon Sep 17 00:00:00 2001
+From: Arseniy Seroka <ars.seroka@gmail.com>
+Date: Fri, 21 Aug 2015 20:20:16 +0300
+Subject: [PATCH] [PATCH]: recognize NixOS Linux
+
+---
+ open-vm-tools/lib/include/guest_os.h   | 1 +
+ open-vm-tools/lib/misc/hostinfoPosix.c | 3 +++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/open-vm-tools/lib/include/guest_os.h b/open-vm-tools/lib/include/guest_os.h
+index 4fc9ea7..f5104fd 100644
+--- a/open-vm-tools/lib/include/guest_os.h
++++ b/open-vm-tools/lib/include/guest_os.h
+@@ -215,6 +215,7 @@ Bool Gos_InSetArray(uint32 gos, const uint32 *set);
+ #define STR_OS_MANDRAKE_FULL      "Mandrake Linux"
+ #define STR_OS_MANDRIVA           "mandriva"
+ #define STR_OS_MKLINUX            "MkLinux"
++#define STR_OS_NIXOS              "NixOS"
+ #define STR_OS_NOVELL             "nld9"
+ #define STR_OS_NOVELL_FULL        "Novell Linux Desktop 9"
+ #define STR_OS_ORACLE             "oraclelinux"
+diff --git a/open-vm-tools/lib/misc/hostinfoPosix.c b/open-vm-tools/lib/misc/hostinfoPosix.c
+index 6c13fe3..5b82983 100644
+--- a/open-vm-tools/lib/misc/hostinfoPosix.c
++++ b/open-vm-tools/lib/misc/hostinfoPosix.c
+@@ -184,6 +184,7 @@ static const DistroInfo distroArray[] = {
+    {"Mandrake",           "/etc/mandrake-release"},
+    {"Mandriva",           "/etc/mandriva-release"},
+    {"Mandrake",           "/etc/mandrakelinux-release"},
++   {"NixOS",              "/etc/os-release"},
+    {"TurboLinux",         "/etc/turbolinux-release"},
+    {"Fedora Core",        "/etc/fedora-release"},
+    {"Gentoo",             "/etc/gentoo-release"},
+@@ -613,6 +614,8 @@ HostinfoGetOSShortName(char *distro,         // IN: full distro name
+       Str_Strcpy(distroShort, STR_OS_MANDRIVA, distroShortSize);
+    } else if (strstr(distroLower, "mklinux")) {
+       Str_Strcpy(distroShort, STR_OS_MKLINUX, distroShortSize);
++   } else if (strstr(distroLower, "nixos")) {
++      Str_Strcpy(distroShort, STR_OS_NIXOS, distroShortSize);
+    } else if (strstr(distroLower, "pld")) {
+       Str_Strcpy(distroShort, STR_OS_PLD, distroShortSize);
+    } else if (strstr(distroLower, "slackware")) {
+-- 
+2.5.0
+

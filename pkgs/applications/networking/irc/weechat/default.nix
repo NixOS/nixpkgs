@@ -1,16 +1,19 @@
 { stdenv, fetchurl, ncurses, openssl, perl, python, aspell, gnutls
 , zlib, curl , pkgconfig, libgcrypt, ruby, lua5, tcl, guile
-, pythonPackages, cmake, makeWrapper, libobjc
+, pythonPackages, cmake, makeWrapper, libobjc, libiconv
 , extraBuildInputs ? [] }:
 
 stdenv.mkDerivation rec {
-  version = "1.2";
+  version = "1.3";
   name = "weechat-${version}";
 
   src = fetchurl {
     url = "http://weechat.org/files/src/weechat-${version}.tar.bz2";
-    sha256 = "0kb8mykhzm7zcxsl6l6cia2n4nc9akiysg0v6d8xb51p3x002ibw";
+    sha256 = "0j2ic1c69ksf78wi0cmc4yi5348x6c92g6annsx928sayxqxfgbh";
   };
+
+  cmakeFlags = stdenv.lib.optional stdenv.isDarwin
+    "-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib";
 
   buildInputs = 
     [ ncurses perl python openssl aspell gnutls zlib curl pkgconfig

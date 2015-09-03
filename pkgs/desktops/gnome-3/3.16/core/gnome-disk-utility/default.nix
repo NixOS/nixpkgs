@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, pkgconfig, udisks2, libsecret, libdvdread
-, bash, gtk3, glib, hicolor_icon_theme, makeWrapper, cracklib, libnotify
+, bash, gtk3, glib, makeWrapper, cracklib, libnotify
 , itstool, gnome3, librsvg, gdk_pixbuf, libxml2, python
 , libcanberra_gtk3, libxslt, libtool, docbook_xsl, libpwquality }:
 
@@ -20,9 +20,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ bash pkgconfig gtk3 glib intltool itstool
                   libxslt libtool libsecret libpwquality cracklib
                   libnotify libdvdread libcanberra_gtk3 docbook_xsl
-                  gdk_pixbuf gnome3.adwaita-icon-theme
+                  gdk_pixbuf gnome3.defaultIconTheme
                   librsvg udisks2 gnome3.gnome_settings_daemon
-                  hicolor_icon_theme gnome3.adwaita-icon-theme
                   gnome3.gsettings_desktop_schemas makeWrapper libxml2 ];
 
   preFixup = ''

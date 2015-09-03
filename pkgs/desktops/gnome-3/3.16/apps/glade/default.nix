@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, python
-, pkgconfig, gtk3, glib, hicolor_icon_theme
+, pkgconfig, gtk3, glib
 , makeWrapper, itstool, libxml2, docbook_xsl
 , gnome3, librsvg, gdk_pixbuf, libxslt }:
 
@@ -15,8 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool libxml2 python
                   gnome3.gsettings_desktop_schemas makeWrapper docbook_xsl
-                  gdk_pixbuf gnome3.adwaita-icon-theme librsvg libxslt
-                  hicolor_icon_theme gnome3.adwaita-icon-theme ];
+                  gdk_pixbuf gnome3.defaultIconTheme librsvg libxslt ];
 
   enableParallelBuilding = true;
 

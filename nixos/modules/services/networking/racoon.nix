@@ -36,7 +36,10 @@ in {
         Type = "forking";
         Restart = "always";
       };
-      preStart = "rm /var/run/racoon.pid || true";
+      preStart = ''
+        rm /var/run/racoon.pid || true
+        mkdir -p /var/racoon
+      '';
     };
   };
 }

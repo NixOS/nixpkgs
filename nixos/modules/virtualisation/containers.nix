@@ -120,6 +120,15 @@ in
               '';
             };
 
+            interfaces = mkOption {
+              type = types.listOf types.string;
+              default = [];
+              example = [ "eth1" "eth2" ];
+              description = ''
+                The list of interfaces to be moved into the container.
+              '';
+            };
+
             autoStart = mkOption {
               type = types.bool;
               default = false;
@@ -217,6 +226,10 @@ in
             if [ "$PRIVATE_NETWORK" = 1 ]; then
               extraFlags+=" --network-veth"
             fi
+
+            for iface in $INTERFACES; do
+              extraFlags+=" --network-interface=$iface"
+            done
 
             for iface in $MACVLANS; do
               extraFlags+=" --network-macvlan=$iface"
@@ -331,6 +344,7 @@ in
                 LOCAL_ADDRESS=${cfg.localAddress}
               ''}
             ''}
+             INTERFACES="${toString cfg.interfaces}"
            ${optionalString cfg.autoStart ''
              AUTO_START=1
            ''}

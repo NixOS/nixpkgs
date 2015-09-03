@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl, python
-, makeWrapper, virtinst, pyGtkGlade, pythonDBus, gnome_python, gtkvnc, vte
+, wrapGAppsHook, virtinst, pyGtkGlade, pythonDBus, gnome_python, gtkvnc, vte
 , gtk3, gobjectIntrospection, libvirt-glib, gsettings_desktop_schemas, glib
-, avahi, dconf, spiceSupport ? true, spice_gtk, libosinfo
+, avahi, dconf, spiceSupport ? true, spice_gtk, libosinfo, gnome3
 }:
 
 with stdenv.lib;
@@ -35,6 +35,8 @@ buildPythonPackage rec {
       glib
       gobjectIntrospection
       gsettings_desktop_schemas
+      gnome3.defaultIconTheme
+      wrapGAppsHook
     ];
 
   configurePhase = ''
@@ -46,15 +48,6 @@ buildPythonPackage rec {
   buildPhase = "true";
 
   postInstall = ''
-    # GI_TYPELIB_PATH is needed at runtime for GObject stuff to work
-    for file in "$out"/bin/*; do
-        wrapProgram "$file" \
-            --prefix GI_TYPELIB_PATH : $GI_TYPELIB_PATH \
-            --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules" \
-            --prefix GSETTINGS_SCHEMA_DIR : $out/share/glib-2.0/schemas \
-            --prefix XDG_DATA_DIRS : "$out/share:${gtk3}/share:$GSETTINGS_SCHEMAS_PATH:\$XDG_DATA_DIRS"
-    done
-
     ${glib}/bin/glib-compile-schemas "$out"/share/glib-2.0/schemas
   '';
 

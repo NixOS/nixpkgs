@@ -2,7 +2,6 @@
 
 let
   inherit (stdenv.lib) optional;
-  isClang = (stdenv.cc.cc.isClang or false);
 in
 stdenv.mkDerivation rec{
   name = "iniparser-3.1";
@@ -15,8 +14,7 @@ stdenv.mkDerivation rec{
   patches = ./no-usr.patch;
 
   # TODO: Build dylib on Darwin
-  buildFlags = (if stdenv.isDarwin then [ "libiniparser.a" ] else [ "libiniparser.so" ])
-    ++ optional isClang "CC=clang";
+  buildFlags = (if stdenv.isDarwin then [ "libiniparser.a" ] else [ "libiniparser.so" ]) ++ [ "CC=cc" ];
 
   installPhase = ''
     mkdir -p $out/lib

@@ -2,20 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "xca-${version}";
-  version = "0.9.3";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/xca/${name}.tar.gz";
-    sha256 = "1fn6kh8mdy65rrgjif7j9wn3mxg1mrrcnhzpi86hfy24ic6bahk8";
+    sha256 = "10rxma0zm7vryzv69m0aqlvmbf82d261wa77kxni4h3lndwqvpf2";
   };
-
-  patches = [ ./0001-Fix-for-openssl-1.0.1i.patch ];
-
-  configurePhase = ''
-    export PATH=$PATH:${which}/bin
-    export QTDIR=${qt4}
-    prefix=$out ./configure ${openssl} ${libtool}
-  '';
 
   postInstall = ''
     wrapProgram "$out/bin/xca" \

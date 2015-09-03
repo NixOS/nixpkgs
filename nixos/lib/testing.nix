@@ -15,6 +15,8 @@ rec {
 
     unpackPhase = "true";
 
+    preferLocalBuild = true;
+
     installPhase =
       ''
         mkdir -p $out/bin

@@ -1,15 +1,15 @@
-{ stdenv, fetchgit, makeWrapper, curl, spidermonkey }:
+{ stdenv, fetchFromGitHub, makeWrapper, curl, spidermonkey }:
 
 stdenv.mkDerivation rec {
 
   name = "plowshare4-${version}";
-
   version = "1.1.0";
 
-  src = fetchgit {
-    url = "https://code.google.com/p/plowshare/";
-    rev = "87bd955e681ddda05009ca8594d727260989d5ed";
-    sha256 = "0cbsnalmr6fa1ijsn1j1p9fdqi3ii96bx3xabgvvbbqkl7q938f9";
+  src = fetchFromGitHub {
+    owner = "mcrapet";
+    repo = "plowshare";
+    rev = "v${version}";
+    sha256 = "1xxkdv4q97dfzbcdnmy5079a59fwh8myxlvdr2dlxdv70fb72sq9";
   };
 
   buildInputs = [ makeWrapper ];

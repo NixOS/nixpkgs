@@ -2,13 +2,12 @@
 
 stdenv.mkDerivation rec {
 
-  version = "1.7.3";
-
   name = "sword-${version}";
+  version = "1.7.4";
 
   src = fetchurl {
     url = "http://www.crosswire.org/ftpmirror/pub/sword/source/v1.7/${name}.tar.gz";
-    sha256 = "1sm9ivypsx3mraqnziic7qkxjx1b7crvlln0zq6cnpjx2pzqfgas";
+    sha256 = "0g91kpfkwccvdikddffdbzd6glnp1gdvkx4vh04iyz10bb7shpcr";
   };
 
   buildInputs = [ pkgconfig icu clucene_core curl ];

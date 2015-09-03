@@ -200,13 +200,13 @@ in {
 
     staticRootPath = mkOption {
       description = "Root path for static assets.";
-      default = "${cfg.package}/share/go/src/github.com/grafana/grafana/public";
+      default = "${cfg.package.out}/share/go/src/github.com/grafana/grafana/public";
       type = types.str;
     };
 
     package = mkOption {
       description = "Package to use.";
-      default = pkgs.goPackages.grafana;
+      default = pkgs.grafana-backend;
       type = types.package;
     };
 
@@ -319,7 +319,7 @@ in {
       wantedBy = ["multi-user.target"];
       after = ["networking.target"];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/grafana --config ${cfgFile} web";
+        ExecStart = "${cfg.package-backend}/bin/grafana --config ${cfgFile} web";
         WorkingDirectory = cfg.dataDir;
         User = "grafana";
       };

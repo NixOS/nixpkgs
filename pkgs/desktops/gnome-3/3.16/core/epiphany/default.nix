@@ -2,7 +2,7 @@
 , bash, makeWrapper, gnome3, libwnck3, libxml2, libxslt, libtool
 , webkitgtk, libsoup, libsecret, gnome_desktop, libnotify, p11_kit
 , sqlite, gcr, avahi, nss, isocodes, itstool, file, which
-, hicolor_icon_theme, gdk_pixbuf, librsvg, gnome_common }:
+, gdk_pixbuf, librsvg, gnome_common }:
 
 stdenv.mkDerivation rec {
   name = "epiphany-${gnome3.version}.0";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk3 glib intltool libwnck3 libxml2 libxslt pkgconfig file 
                   webkitgtk libsoup libsecret gnome_desktop libnotify libtool
                   sqlite isocodes nss itstool p11_kit nspr icu gnome3.yelp_tools
-                  gdk_pixbuf gnome3.adwaita-icon-theme librsvg which gnome_common
+                  gdk_pixbuf gnome3.defaultIconTheme librsvg which gnome_common
                   gcr avahi gnome3.gsettings_desktop_schemas makeWrapper ];
 
   NIX_CFLAGS_COMPILE = "-I${nspr}/include/nspr -I${nss}/include/nss -I${glib}/include/gio-unix-2.0";

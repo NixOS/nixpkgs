@@ -76,7 +76,7 @@ let
   hasRadosgw = optFcgi != null && optExpat != null && optCurl != null && optLibedit != null;
 
   hasXio = (stdenv.isLinux || stdenv.isFreeBSD) &&
-    versionAtLeast version "10.0.0" &&
+    versionAtLeast version "9.0.3" &&
     optAccelio != null && optLibibverbs != null && optLibrdmacm != null;
 
   hasRocksdb = versionAtLeast version "9.0.0" && optRocksdb != null;

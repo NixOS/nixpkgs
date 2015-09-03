@@ -81,11 +81,14 @@ stdenv.mkDerivation rec {
       (substituteAll { src = ./0011-dlopen-openssl.patch; inherit openssl; })
       (substituteAll { src = ./0012-dlopen-dbus.patch; dbus_libs = dbus; })
       ./0013-qtwebkit-glib-2.44.patch
-    ];
+    ] ++ optional mesaSupported
+      (substituteAll { src = ./0014-mkspecs-libgl.patch; inherit mesa; });
 
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/qtbase/lib:$PWD/qtbase/plugins/platforms:$PWD/qttools/lib:$LD_LIBRARY_PATH"
     export MAKEFLAGS=-j$NIX_BUILD_CORES
+    export configureFlags+="-plugindir $out/lib/qt5/plugins -importdir $out/lib/qt5/imports -qmldir $out/lib/qt5/qml"
+    export configureFlags+=" -docdir $out/share/doc/qt5"
   '';
 
   prefixKey = "-prefix ";
@@ -176,7 +179,9 @@ stdenv.mkDerivation rec {
   ++ optional (postgresql != null) postgresql
   ++ optionals gtkStyle [gnome_vfs libgnomeui gtk GConf];
 
-  buildInputs = [ gdb bison flex gperf ruby ];
+  buildInputs =
+    [ bison flex gperf ruby ]
+    ++ optional developerBuild gdb;
 
   nativeBuildInputs = [ python perl pkgconfig ];
 

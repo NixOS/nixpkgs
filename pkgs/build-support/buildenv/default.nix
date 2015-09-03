@@ -9,10 +9,10 @@
 , # The manifest file (if any).  A symlink $out/manifest will be
   # created to it.
   manifest ? ""
-  
+
 , # The paths to symlink.
   paths
-  
+
 , # Whether to ignore collisions or abort.
   ignoreCollisions ? false
 
@@ -28,7 +28,11 @@
 }:
 
 runCommand name
-  { inherit manifest paths ignoreCollisions passthru pathsToLink postBuild;
+  { inherit manifest ignoreCollisions passthru pathsToLink postBuild;
+    pkgs = builtins.toJSON (map (drv: {
+      paths = [ drv ]; # FIXME: handle multiple outputs
+      priority = drv.meta.priority or 5;
+    }) paths);
     preferLocalBuild = true;
   }
   ''

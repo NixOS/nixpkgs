@@ -15,7 +15,7 @@ import ./make-test.nix (
   enableOCR = true;
 
   machine.imports = [ ./common/x11.nix ];
-  machine.virtualisation.memorySize = 1024;
+  machine.virtualisation.memorySize = 2047;
 
   startupHTML = pkgs.writeText "chromium-startup.html" ''
     <!DOCTYPE html>

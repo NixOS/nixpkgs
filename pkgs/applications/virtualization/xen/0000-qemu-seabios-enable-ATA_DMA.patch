@@ -1,8 +1,7 @@
-diff --git a/src/Kconfig b/src/Kconfig
-index 45ca59c..faf8951 100644
---- a/src/Kconfig
-+++ b/src/Kconfig
-@@ -144,13 +144,13 @@ menu "Hardware support"
+diff -uNr a/src/Kconfig b/src/Kconfig
+--- a/src/Kconfig	2015-08-31 10:15:13.231134858 +0200
++++ b/src/Kconfig	2015-08-31 10:14:24.039180178 +0200
+@@ -144,13 +144,13 @@
      config ATA_DMA
          depends on ATA
          bool "ATA DMA"
@@ -16,8 +15,5 @@ index 45ca59c..faf8951 100644
 -        default n
 +        default y
          help
-             Use 32bit PIO accesses on ATA (minor optimization on PCI 
-transfers).
+             Use 32bit PIO accesses on ATA (minor optimization on PCI transfers).
      config AHCI
--- 
-1.7.10.4

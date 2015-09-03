@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, emacs, texinfo }:
 
 let
-  version = "13.14-130-ga03bd9b";      # git describe --tags
+  version = "13.14-169-g0d3569d";      # git describe --tags
 in
 stdenv.mkDerivation {
   name = "haskell-mode-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     owner = "haskell";
     repo = "haskell-mode";
     rev = "v${version}";
-    sha256 = "0k4jfixzsvwpsz37f2pvbr9slz8fpcd9nwddcv2bvi4x20jp11ma";
+    sha256 = "0v5iy9wy05hf44wy7qs0c9q0v34m4k6wrqg4kyvji61568k1yx3k";
   };
 
   buildInputs = [ emacs texinfo ];

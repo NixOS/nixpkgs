@@ -1,10 +1,11 @@
 { fetchurl, stdenv, pkgconfig, gnome3, ibus, intltool, upower, makeWrapper
-, libcanberra, libcanberra_gtk3, accountsservice, libpwquality, libpulseaudio, fontconfig
-, gdk_pixbuf, hicolor_icon_theme, librsvg, libxkbfile, libnotify
+, libcanberra, libcanberra_gtk3, accountsservice, libpwquality, libpulseaudio
+, gdk_pixbuf, librsvg, libxkbfile, libnotify
 , libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk
 , cracklib, python, libkrb5, networkmanagerapplet, networkmanager
 , libwacom, samba, shared_mime_info, tzdata, icu, libtool, udev
-, docbook_xsl, docbook_xsl_ns, modemmanager, clutter, clutter_gtk }:
+, docbook_xsl, docbook_xsl_ns, modemmanager, clutter, clutter_gtk
+, fontconfig, sound-theme-freedesktop }:
 
 # http://ftp.gnome.org/pub/GNOME/teams/releng/3.10.2/gnome-suites-core-3.10.2.modules
 # TODO: bluetooth, wacom, printers
@@ -17,7 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "07vvmnqjjcc0cblpr6cdmg3693hihpjrq3q30mm3q68pdyfzbjgf";
   };
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard gnome3.libgnomekbd ];
+  propagatedUserEnvPkgs =
+    [ gnome3.gnome_themes_standard gnome3.libgnomekbd ];
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=752596
   enableParallelBuilding = false;
@@ -46,7 +48,7 @@ stdenv.mkDerivation rec {
   preFixup = with gnome3; ''
     wrapProgram $out/bin/gnome-control-center \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$out/share:$out/share/gnome-control-center:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:${sound-theme-freedesktop}/share:$out/share:$out/share/gnome-control-center:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
     for i in $out/share/applications/*; do
       substituteInPlace $i --replace "gnome-control-center" "$out/bin/gnome-control-center"
     done

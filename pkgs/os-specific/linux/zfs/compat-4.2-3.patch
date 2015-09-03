@@ -1,0 +1,214 @@
+From bd29109f1ac5be68f7f7c8bcb49e1b706fe899f0 Mon Sep 17 00:00:00 2001
+From: Brian Behlendorf <behlendorf1@llnl.gov>
+Date: Wed, 15 Jul 2015 10:54:26 -0700
+Subject: [PATCH] Linux 4.2 compat: follow_link() / put_link()
+
+As of Linux 4.2 the kernel has completely retired the nameidata
+structure.  One of the few remaining consumers of this interface
+were the follow_link() and put_link() callbacks.
+
+This patch adds the required checks to configure to detect the
+interface change and updates the functions accordingly.  Migrating
+to the simple_follow_link() interface was considered but was decided
+against ironically due to the increased complexity.
+
+It also should be noted that the kernel follow_link() and put_link()
+interfaces changes several times after 4.1 and but before 4.2.  This
+means there is a narrow range of kernel commits which never appear
+in an official tag of the Linux kernel which ZoL will not build.
+
+Signed-off-by: Brian Behlendorf <behlendorf1@llnl.gov>
+Signed-off-by: Richard Yao <ryao@gentoo.org>
+Issue #3596
+---
+ config/kernel-create-nameidata.m4      |  4 ++--
+ config/kernel-follow-link-nameidata.m4 | 24 ++++++++++++++++++++++++
+ config/kernel-lookup-nameidata.m4      |  4 ++--
+ config/kernel-put-link-nameidata.m4    | 23 +++++++++++++++++++++++
+ config/kernel.m4                       |  2 ++
+ module/zfs/zpl_inode.c                 | 31 +++++++++++++++++++++++++++----
+ 6 files changed, 80 insertions(+), 8 deletions(-)
+ create mode 100644 config/kernel-follow-link-nameidata.m4
+ create mode 100644 config/kernel-put-link-nameidata.m4
+
+diff --git a/config/kernel-create-nameidata.m4 b/config/kernel-create-nameidata.m4
+index 9aad46f..a71490a 100644
+--- a/config/kernel-create-nameidata.m4
++++ b/config/kernel-create-nameidata.m4
+@@ -2,7 +2,7 @@ dnl #
+ dnl # 3.6 API change
+ dnl #
+ AC_DEFUN([ZFS_AC_KERNEL_CREATE_NAMEIDATA], [
+-	AC_MSG_CHECKING([whether iops->create() takes struct nameidata])
++	AC_MSG_CHECKING([whether iops->create() passes nameidata])
+ 	ZFS_LINUX_TRY_COMPILE([
+ 		#include <linux/fs.h>
+ 
+@@ -22,7 +22,7 @@ AC_DEFUN([ZFS_AC_KERNEL_CREATE_NAMEIDATA], [
+ 	],[
+ 		AC_MSG_RESULT(yes)
+ 		AC_DEFINE(HAVE_CREATE_NAMEIDATA, 1,
+-		          [iops->create() operation takes nameidata])
++		          [iops->create() passes nameidata])
+ 	],[
+ 		AC_MSG_RESULT(no)
+ 	])
+diff --git a/config/kernel-follow-link-nameidata.m4 b/config/kernel-follow-link-nameidata.m4
+new file mode 100644
+index 0000000..88c85ac
+--- /dev/null
++++ b/config/kernel-follow-link-nameidata.m4
+@@ -0,0 +1,24 @@
++dnl #
++dnl # 4.2 API change
++dnl # This kernel retired the nameidata structure which forced the
++dnl # restructuring of the follow_link() prototype and how it is called.
++dnl # We check for the new interface rather than detecting the old one.
++dnl #
++AC_DEFUN([ZFS_AC_KERNEL_FOLLOW_LINK], [
++	AC_MSG_CHECKING([whether iops->follow_link() passes nameidata])
++	ZFS_LINUX_TRY_COMPILE([
++		#include <linux/fs.h>
++		const char *follow_link(struct dentry *de, void **cookie)
++		    { return "symlink"; }
++		static struct inode_operations iops __attribute__ ((unused)) = {
++			.follow_link = follow_link,
++		};
++	],[
++	],[
++		AC_MSG_RESULT(no)
++	],[
++		AC_MSG_RESULT(yes)
++		AC_DEFINE(HAVE_FOLLOW_LINK_NAMEIDATA, 1,
++		          [iops->follow_link() nameidata])
++	])
++])
+diff --git a/config/kernel-lookup-nameidata.m4 b/config/kernel-lookup-nameidata.m4
+index 6455603..43f5fb4 100644
+--- a/config/kernel-lookup-nameidata.m4
++++ b/config/kernel-lookup-nameidata.m4
+@@ -2,7 +2,7 @@ dnl #
+ dnl # 3.6 API change
+ dnl #
+ AC_DEFUN([ZFS_AC_KERNEL_LOOKUP_NAMEIDATA], [
+-	AC_MSG_CHECKING([whether iops->lookup() takes struct nameidata])
++	AC_MSG_CHECKING([whether iops->lookup() passes nameidata])
+ 	ZFS_LINUX_TRY_COMPILE([
+ 		#include <linux/fs.h>
+ 
+@@ -18,7 +18,7 @@ AC_DEFUN([ZFS_AC_KERNEL_LOOKUP_NAMEIDATA], [
+ 	],[
+ 		AC_MSG_RESULT(yes)
+ 		AC_DEFINE(HAVE_LOOKUP_NAMEIDATA, 1,
+-		          [iops->lookup() operation takes nameidata])
++		          [iops->lookup() passes nameidata])
+ 	],[
+ 		AC_MSG_RESULT(no)
+ 	])
+diff --git a/config/kernel-put-link-nameidata.m4 b/config/kernel-put-link-nameidata.m4
+new file mode 100644
+index 0000000..0181ae5
+--- /dev/null
++++ b/config/kernel-put-link-nameidata.m4
+@@ -0,0 +1,23 @@
++dnl #
++dnl # 4.2 API change
++dnl # This kernel retired the nameidata structure which forced the
++dnl # restructuring of the put_link() prototype and how it is called.
++dnl # We check for the new interface rather than detecting the old one.
++dnl #
++AC_DEFUN([ZFS_AC_KERNEL_PUT_LINK], [
++	AC_MSG_CHECKING([whether iops->put_link() passes nameidata])
++	ZFS_LINUX_TRY_COMPILE([
++		#include <linux/fs.h>
++		void put_link(struct inode *ip, void *cookie) { return; }
++		static struct inode_operations iops __attribute__ ((unused)) = {
++			.put_link = put_link,
++		};
++	],[
++	],[
++		AC_MSG_RESULT(no)
++	],[
++		AC_MSG_RESULT(yes)
++		AC_DEFINE(HAVE_PUT_LINK_NAMEIDATA, 1,
++		          [iops->put_link() nameidata])
++	])
++])
+diff --git a/config/kernel.m4 b/config/kernel.m4
+index 806c574..5c97659 100644
+--- a/config/kernel.m4
++++ b/config/kernel.m4
+@@ -70,6 +70,8 @@ AC_DEFUN([ZFS_AC_CONFIG_KERNEL], [
+ 	ZFS_AC_KERNEL_MKDIR_UMODE_T
+ 	ZFS_AC_KERNEL_LOOKUP_NAMEIDATA
+ 	ZFS_AC_KERNEL_CREATE_NAMEIDATA
++	ZFS_AC_KERNEL_FOLLOW_LINK
++	ZFS_AC_KERNEL_PUT_LINK
+ 	ZFS_AC_KERNEL_TRUNCATE_RANGE
+ 	ZFS_AC_KERNEL_AUTOMOUNT
+ 	ZFS_AC_KERNEL_ENCODE_FH_WITH_INODE
+diff --git a/module/zfs/zpl_inode.c b/module/zfs/zpl_inode.c
+index 31251e7..70b5e12 100644
+--- a/module/zfs/zpl_inode.c
++++ b/module/zfs/zpl_inode.c
+@@ -348,8 +348,13 @@ zpl_symlink(struct inode *dir, struct dentry *dentry, const char *name)
+ 	return (error);
+ }
+ 
++#ifdef HAVE_FOLLOW_LINK_NAMEIDATA
+ static void *
+ zpl_follow_link(struct dentry *dentry, struct nameidata *nd)
++#else
++const char *
++zpl_follow_link(struct dentry *dentry, void **symlink_cookie)
++#endif
+ {
+ 	cred_t *cr = CRED();
+ 	struct inode *ip = dentry->d_inode;
+@@ -372,17 +377,28 @@ zpl_follow_link(struct dentry *dentry, struct nameidata *nd)
+ 	cookie = spl_fstrans_mark();
+ 	error = -zfs_readlink(ip, &uio, cr);
+ 	spl_fstrans_unmark(cookie);
+-	if (error) {
++
++	if (error)
+ 		kmem_free(link, MAXPATHLEN);
++
++	crfree(cr);
++
++#ifdef HAVE_FOLLOW_LINK_NAMEIDATA
++	if (error)
+ 		nd_set_link(nd, ERR_PTR(error));
+-	} else {
++	else
+ 		nd_set_link(nd, link);
+-	}
+ 
+-	crfree(cr);
+ 	return (NULL);
++#else
++	if (error)
++		return (ERR_PTR(error));
++	else
++		return (*symlink_cookie = link);
++#endif
+ }
+ 
++#ifdef HAVE_PUT_LINK_NAMEIDATA
+ static void
+ zpl_put_link(struct dentry *dentry, struct nameidata *nd, void *ptr)
+ {
+@@ -391,6 +407,13 @@ zpl_put_link(struct dentry *dentry, struct nameidata *nd, void *ptr)
+ 	if (!IS_ERR(link))
+ 		kmem_free(link, MAXPATHLEN);
+ }
++#else
++static void
++zpl_put_link(struct inode *unused, void *symlink_cookie)
++{
++	kmem_free(symlink_cookie, MAXPATHLEN);
++}
++#endif
+ 
+ static int
+ zpl_link(struct dentry *old_dentry, struct inode *dir, struct dentry *dentry)

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qtLib, sdkBuild ? false, withDocumentation ? true }:
+{ stdenv, fetchurl, makeWrapper, qtLib, withDocumentation ? false }:
 
 with stdenv.lib;
 
@@ -9,31 +9,21 @@ let
 in
 
 stdenv.mkDerivation rec {
-  # The package name depends on wether we are just building the QtCreator package or the whole Qt SDK
-  # If we are building the QtCreator package: qtcreator-version
-  # If we are building the QtSDK package, the Qt version is also included: qtsdk-version-qt-version
-  name = "qt${if sdkBuild then "sdk" else "creator"}-${version}"
-    + optionalString sdkBuild "-qt-${qtLib.version}";
+  name = "qtcreator-${version}";
 
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qtcreator/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.gz";
     sha256 = "1asbfphws0aqs92gjgh0iqzr1911kg51r9al44jxpfk88yazjzgm";
   };
 
-  # This property can be used in a nix development environment to refer to the Qt package
-  # eg: export QTDIR=${qtSDK.qt}
-  qt = qtLib;
-
-  # We must only propagate Qt (including qmake) when building the QtSDK
-  propagatedBuildInputs = if sdkBuild then [ qtLib ] else [];
-  buildInputs = if sdkBuild == false then [ qtLib ] else [];
+  buildInputs = [ makeWrapper qtLib.base qtLib.script qtLib.quickcontrols qtLib.declarative ];
 
   doCheck = false;
 
   enableParallelBuilding = true;
 
   preConfigure = ''
-    qmake -spec linux-g++ "QT_PRIVATE_HEADERS=${qtLib}/include" qtcreator.pro
+    qmake -spec linux-g++ qtcreator.pro
   '';
 
   buildFlags = optionalString withDocumentation " docs";
@@ -54,6 +44,12 @@ stdenv.mkDerivation rec {
     Type=Application
     Categories=Qt;Development;IDE;
     __EOF__
+    # Wrap the qtcreator binary
+    addToSearchPath QML2_IMPORT_PATH "${qtLib.quickcontrols}/lib/qt5/qml"
+    wrapProgram $out/bin/qtcreator \
+      --prefix QT_PLUGIN_PATH : "$QT_PLUGIN_PATH" \
+      --prefix QML_IMPORT_PATH : "$QML_IMPORT_PATH" \
+      --prefix QML2_IMPORT_PATH : "$QML2_IMPORT_PATH"
   '';
 
   meta = {
@@ -63,9 +59,9 @@ stdenv.mkDerivation rec {
       tailored to the needs of Qt developers. It includes features such as an
       advanced code editor, a visual debugger and a GUI designer.
     '';
-    homepage = "http://qt-project.org/wiki/Category:Tools::QtCreator";
+    homepage = "https://wiki.qt.io/Category:Tools::QtCreator";
     license = "LGPL";
-    maintainers = [ maintainers.bbenoist ];
+    maintainers = [ maintainers.akaWolf maintainers.bbenoist ];
     platforms = platforms.all;
   };
 }

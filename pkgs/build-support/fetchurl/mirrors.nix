@@ -280,6 +280,7 @@ rec {
     http://archive.apache.org/dist/ # fallback for old releases
     ftp://ftp.funet.fi/pub/mirrors/apache.org/
     http://apache.cs.uu.nl/dist/
+    http://apache.cs.utah.edu/
   ];
 
   postgresql = [

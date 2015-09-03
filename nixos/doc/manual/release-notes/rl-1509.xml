@@ -1,0 +1,231 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-15.09">
+
+<title>Release 15.09 (“Dingo”, 2015/09/??)</title>
+
+<para>In addition to numerous new and upgraded packages, this release has the following highlights:
+
+  <itemizedlist>
+    <listitem>
+      <para>
+        The Haskell packages infrastructure has been re-designed from the ground up.
+        NixOS now distributes the latest version of every single package registered on
+        <link xlink:href="http://hackage.haskell.org/">Hackage</link>, i.e. well over
+        8000 Haskell packages. Further information and usage instructions for the
+        improved infrastructure are available at <link
+        xlink:href="https://nixos.org/wiki/Haskell">https://nixos.org/wiki/Haskell</link>.
+        Users migrating from an earlier release will find also find helpful information
+        below, in the list of backwards-incompatible changes.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>
+        Users running an SSH server who worry about the quality of their
+        <literal>/etc/ssh/moduli</literal> file with respect to the <link
+        xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html">vulnerabilities
+        discovered in the Diffie-Hellman key exchange</link> can now replace OpenSSH's
+        default version with one they generated themselves using the new
+        <literal>services.openssh.moduliFile</literal> option.
+      </para>
+    </listitem>
+  </itemizedlist>
+
+</para>
+
+
+<para>When upgrading from a previous release, please be aware of the
+following incompatible changes:
+
+<itemizedlist>
+
+<listitem><para><command>sshd</command> no longer supports DSA and ECDSA
+host keys by default. If you have existing systems with such host keys
+and want to continue to use them, please set
+
+<programlisting>
+system.stateVersion = "14.12";
+</programlisting>
+
+(The new option <option>system.stateVersion</option> ensures that
+certain configuration changes that could break existing systems (such
+as the <command>sshd</command> host key setting) will maintain
+compatibility with the specified NixOS release.)</para></listitem>
+
+<listitem><para><command>cron</command> is no longer enabled by
+default, unless you have a non-empty
+<option>services.cron.systemCronJobs</option>. To force
+<command>cron</command> to be enabled, set
+<option>services.cron.enable = true</option>.</para></listitem>
+
+<listitem><para>Nix now requires binary caches to be cryptographically
+signed. If you have unsigned binary caches that you want to continue
+to use, you should set <option>nix.requireSignedBinaryCaches =
+false</option>.</para></listitem>
+
+<listitem><para>Steam now doesn't need root rights to work. Instead of using
+<literal>*-steam-chrootenv</literal>, you should now just run <literal>steam</literal>.
+<literal>steamChrootEnv</literal> package was renamed to <literal>steam</literal>,
+and old <literal>steam</literal> package -- to <literal>steamOriginal</literal>.
+</para></listitem>
+
+<listitem><para>CMPlayer has been renamed to bomi upstream. Package <literal>cmplayer</literal>
+was accordingly renamed to <literal>bomi</literal>
+</para></listitem>
+
+<listitem><para>Atom Shell has been renamed to Electron upstream.  Package <literal>atom-shell</literal>
+was accordingly renamed to <literal>electron</literal>
+</para></listitem>
+
+<listitem><para>Elm is not released on Hackage anymore. You should now use <literal>elmPackages.elm</literal>
+which contains the latest Elm platform.</para></listitem>
+
+<listitem>
+  <para>
+	The CUPS printing service has been updated to version <literal>2.0.2</literal>.
+	Furthermore its systemd service has been renamed to <literal>cups.service</literal>.
+  </para>
+  <para>
+	Local printers are no longer shared or advertised by default. This behavior
+	can be changed by enabling <literal>services.printing.defaultShared</literal>
+	or <literal>services.printing.browsing</literal> respectively.
+  </para>
+</listitem>
+
+<listitem>
+  <para>
+    The VirtualBox host and guest options have been moved/renamed more
+    consistently and less confusing to be now found in
+    <literal>virtualisation.virtualbox.host.*</literal> instead of
+    <literal>services.virtualboxHost.*</literal> and
+    <literal>virtualisation.virtualbox.guest.*</literal> instead of
+    <literal>services.virtualboxGuest.*</literal>.
+  </para>
+</listitem>
+
+<listitem>
+  <para>
+    Haskell packages can no longer be found by name, i.e. the commands
+    <literal>nix-env -qa cabal-install</literal> and <literal>nix-env -i
+    ghc</literal> will fail, even though we <emphasis>do</emphasis> ship
+    both <literal>cabal-install</literal> and <literal>ghc</literal>.
+    The reason for this inconvenience is the sheer size of the Haskell
+    package set: name-based lookups such as these would become much
+    slower than they are today if we'd add the entire Hackage database
+    into the top level attribute set. Instead, the list of Haskell
+    packages can be displayed by
+  </para>
+  <programlisting>
+nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qaP -A haskellPackages
+</programlisting>
+  <para>
+    and packages can be installed with:
+  </para>
+  <programlisting>
+nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.cabal-install
+</programlisting>
+</listitem>
+
+<listitem>
+  <para>
+    Previous versions of NixOS came with a feature called
+    <literal>ghc-wrapper</literal>, a small wrapper script that allows
+    GHC to transparently pick up on libraries installed in the user's
+    profile. This feature has been deprecated;
+    <literal>ghc-wrapper</literal> was removed from the distribution.
+    The proper way to register Haskell libraries with the compiler now
+    is the <literal>haskellPackages.ghcWithPackages</literal>
+    function.
+    <link xlink:href="https://nixos.org/wiki/Haskell">https://nixos.org/wiki/Haskell</link>
+    provides much information about this subject.
+  </para>
+</listitem>
+
+<listitem>
+  <para>
+    All Haskell builds that have been generated with version 1.x of
+    the <literal>cabal2nix</literal> utility are now invalid and need
+    to be re-generated with a current version of
+    <literal>cabal2nix</literal> to function. The most recent version
+    of this tool can be installed by running
+    <literal>nix-env -i cabal2nix</literal>.
+  </para>
+</listitem>
+
+<listitem>
+  <para>
+    The <literal>haskellPackages</literal> set in Nixpkgs used to have a
+    function attribute called <literal>extension</literal> that users
+    could override in their <literal>~/.nixpkgs/config.nix</literal>
+    files to configure additional attributes, etc. That function still
+    exists, but it's now called <literal>overrides</literal>.
+  </para>
+</listitem>
+
+<listitem>
+  <para>
+    The OpenBLAS library has been updated to version
+    <literal>0.2.14</literal>. Support for the
+    <literal>x86_64-darwin</literal> platform was added. Dynamic
+    architecture detection was enabled; OpenBLAS now selects
+    microarchitecture-optimized routines at runtime, so optimal
+    performance is achieved without the need to rebuild OpenBLAS
+    locally. OpenBLAS has replaced ATLAS in most packages which use an
+    optimized BLAS or LAPACK implementation.
+ </para>
+</listitem>
+
+<listitem>
+  <para>
+    The <literal>phpfpm</literal> is now using the default PHP version
+    (<literal>pkgs.php</literal>) instead of PHP 5.4 (<literal>pkgs.php54</literal>).
+  </para>
+</listitem>
+
+<listitem>
+  <para>
+    The <literal>locate</literal> service no longer indexes the Nix store
+    by default, preventing packages with potentially numerous versions from
+    cluttering the output. Indexing the store can be activated by setting
+    <literal>services.locate.includeStore = true</literal>.
+  </para>
+</listitem>
+
+<listitem>
+  <para>
+    The Nix expression search path (<envar>NIX_PATH</envar>) no longer
+    contains <filename>/etc/nixos/nixpkgs</filename> by default. You
+    can override <envar>NIX_PATH</envar> by setting
+    <option>nix.nixPath</option>.
+  </para>
+</listitem>
+
+</itemizedlist>
+</para>
+
+
+<para>The following new services were added since the last release:
+
+<itemizedlist>
+<listitem><para><literal>brltty</literal></para></listitem>
+<listitem><para><literal>marathon</literal></para></listitem>
+<listitem><para><literal>tvheadend</literal></para></listitem>
+</itemizedlist>
+</para>
+
+
+<para>Other notable improvements:
+
+<itemizedlist>
+  <listitem><para>The nixos and nixpkgs channels were unified,
+    so one <emphasis>can</emphasis> use <literal>nix-env -iA nixos.bash</literal>
+    instead of <literal>nix-env -iA nixos.pkgs.bash</literal>.
+    See <link xlink:href="https://github.com/NixOS/nixpkgs/commit/2cd7c1f198">the commit</link> for details.
+  </para></listitem>
+</itemizedlist>
+</para>
+
+</section>
