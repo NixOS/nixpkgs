@@ -12,13 +12,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.3.10";
+  version = "0.3.11";
   name = "${pname}-${version}";
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0px1zd7qmz6rrjf58k4kq55s7h8mny1w6xvcsrny2wbgckxzhqsg";
+    sha256 = "06xmv2l8hskdh1s5y2dh28vpb5pc0gzmfl5a03yp0qjjsl5cb284";
     name = "julia-git-v${version}";
   };
 
