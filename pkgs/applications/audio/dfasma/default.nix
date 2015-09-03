@@ -1,12 +1,28 @@
 { stdenv, fetchFromGitHub, fftw, libsndfile, qt5 }:
 
-let version = "1.1.2"; in
-stdenv.mkDerivation {
+let
+
+  version = "1.1.3";
+  rev = "v${version}";
+  sha256 = "0rprnyvvd6yziwl94d3khd7rq95mvsmwag3x4ah0a5iar9w17r0c";
+
+  reaperFork = {
+    src = fetchFromGitHub {
+      sha256 = "07m2wf2gqyya95b65gawrnr4pvc9jyzmg6h8sinzgxlpskz93wwc";
+      rev = "39053e8896eedd7b3e8a9e9a9ffd80f1fc6ceb16";
+      repo = "reaper";
+      owner = "gillesdegottex";
+    };
+    meta = with stdenv.lib; {
+     license = licenses.asl20;
+    };
+  };
+
+in stdenv.mkDerivation {
   name = "dfasma-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "0xqam5hm4kvfksdlyz1rviijv386fk3px4lhz6glfsimbcvvzl0r";
-    rev = "v${version}";
+    inherit sha256 rev;
     repo = "dfasma";
     owner = "gillesdegottex";
   };
@@ -23,25 +39,22 @@ stdenv.mkDerivation {
       amplitude, this software does not aim to be an audio editor.
     '';
     homepage = http://gillesdegottex.github.io/dfasma/;
-    license = licenses.gpl3Plus;
-    platforms = with platforms; linux;
+    license = [ licenses.gpl3Plus reaperFork.meta.license ];
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 
   buildInputs = [ fftw libsndfile qt5.base qt5.multimedia ];
 
   postPatch = ''
-    substituteInPlace dfasma.pro --replace '$$DFASMAVERSIONGITPRO' '${version}'
+    substituteInPlace dfasma.pro \
+      --replace '$$DFASMAVERSIONGITPRO' '${version}'
+    cp -Rv "${reaperFork.src}"/* external/REAPER
   '';
 
   configurePhase = ''
-    qmake DESTDIR=$out/bin dfasma.pro
+    qmake PREFIX=$out PREFIXSHORTCUT=$out dfasma.pro
   '';
 
   enableParallelBuilding = true;
-
-  postInstall = ''
-    install -Dm644 distrib/dfasma.desktop $out/share/applications/dfasma.desktop
-    install -Dm644 icons/dfasma.png $out/share/pixmaps/dfasma.png
-  '';
 }
