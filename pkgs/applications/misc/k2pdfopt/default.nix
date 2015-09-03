@@ -5,8 +5,8 @@
 
 let
   mupdf_src = fetchurl {
-    url = http://www.mupdf.com/downloads/archive/mupdf-1.5-source.tar.gz;
-    sha256 = "0sl47zqf4c9fhs4h5zg046vixjmwgy4vhljhr5g4md733nash7z4";
+    url = http://www.mupdf.com/downloads/archive/mupdf-1.6-source.tar.gz;
+    sha256 = "0qx51rj6alzcagcixm59rvdpm54w6syrwr4184v439jh14ryw4wq";
   };
 
   tess_src = fetchurl {
@@ -21,10 +21,10 @@ let
 
 in stdenv.mkDerivation rec {
   name = "k2pdfopt-${version}";
-  version = "2.30";
+  version = "2.32";
   src = fetchzip {
     url = "http://www.willus.com/k2pdfopt/src/k2pdfopt_v${version}_src.zip";
-    sha256 = "1fjjznkplrbyrg48wbij4kqgkz9i5icq7savl6brsf9haahdz6q5";
+    sha256 = "1v3cj5bwpjvy7s66sfqcmkxs91f7nxaykjpdjm2wn87vn6q7n19m";
   };
 
   buildInputs = [ libX11 libXext autoconf automake libtool leptonica libpng libtiff zlib
@@ -41,8 +41,8 @@ in stdenv.mkDerivation rec {
     plibs=`pwd`/patched_libraries
 
     tar zxf ${mupdf_src}
-    cp $src/mupdf_mod/font.c $src/mupdf_mod/string.c mupdf-1.5-source/source/fitz/
-    cp $src/mupdf_mod/pdf-* mupdf-1.5-source/source/pdf
+    cp $src/mupdf_mod/font.c $src/mupdf_mod/string.c mupdf-1.6-source/source/fitz/
+    cp $src/mupdf_mod/pdf-* mupdf-1.6-source/source/pdf
 
     tar zxf ${tess_src}
     cp $src/tesseract_mod/dawg.cpp tesseract-ocr/dict
@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
     make libs
     cp src/libPgm2asc.a $plibs/lib
 
-    cd ../mupdf-1.5-source
+    cd ../mupdf-1.6-source
     make prefix=$plibs install
     install -Dm644 build/debug/libmujs.a $plibs/lib
 
