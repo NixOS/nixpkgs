@@ -2769,6 +2769,10 @@ let
 
   pyenv = callPackage ../development/python/pyenv { };
 
+  pyenv-virtualenv = callPackage ../development/python/pyenv/pyenv-virtualenv.nix { };
+
+  pyenv-virtualenvwrapper = callPackage ../development/python/pyenv/pyenv-virtualenvwrapper.nix { };
+
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
   pythonDBus = dbus_python;
