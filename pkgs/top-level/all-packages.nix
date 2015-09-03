@@ -2770,6 +2770,8 @@ let
   pycangjie = callPackage ../development/python-modules/pycangjie { };
 
   pydb = callPackage ../development/tools/pydb { };
+  
+  pyenv = callPackage ../development/python/pyenv { };
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
