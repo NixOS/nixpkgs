@@ -47,7 +47,6 @@ stdenv.mkDerivation {
 
     ${ lib.optionalString libtrick
     ''
-    sed -e "s@exec @exec -a '$out/bin/${browserName}${nameSuffix}' @" -i "$out/bin/${browserName}${nameSuffix}"
     libdirname="$(echo "${browser}/lib/${browserName}"*)"
     libdirbasename="$(basename "$libdirname")"
     mkdir -p "$out/lib/$libdirbasename"

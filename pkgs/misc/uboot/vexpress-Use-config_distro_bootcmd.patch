@@ -1,4 +1,4 @@
-From 53a8612ff19f360363edaaf70137968f7fd6a1cd Mon Sep 17 00:00:00 2001
+From 1fb764e1866513a69b4a0c29b69f8e78ea1df7fa Mon Sep 17 00:00:00 2001
 From: Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>
 Date: Mon, 8 Jun 2015 22:29:23 +0300
 Subject: [PATCH] vexpress: Use config_distro_bootcmd
@@ -7,9 +7,10 @@ Also had to hack cli_readline.c, as one codepath in
 cli_readline_into_buffer doesn't respect the timeout.
 ---
  common/cli_readline.c             | 12 +++++++++++-
+ configs/vexpress_ca9x4_defconfig  |  2 --
  include/configs/vexpress_ca9x4.h  |  1 -
- include/configs/vexpress_common.h | 35 +++++++++++++++++++++++------------
- 3 files changed, 34 insertions(+), 14 deletions(-)
+ include/configs/vexpress_common.h | 34 ++++++++++++++++++++++------------
+ 4 files changed, 33 insertions(+), 16 deletions(-)
 
 diff --git a/common/cli_readline.c b/common/cli_readline.c
 index 9a9fb35..ca997a9 100644
@@ -41,6 +42,22 @@ index 9a9fb35..ca997a9 100644
  
  #ifdef CONFIG_SHOW_ACTIVITY
  		while (!tstc()) {
+diff --git a/configs/vexpress_ca9x4_defconfig b/configs/vexpress_ca9x4_defconfig
+index 2947fc1..9a5123d 100644
+--- a/configs/vexpress_ca9x4_defconfig
++++ b/configs/vexpress_ca9x4_defconfig
+@@ -5,11 +5,9 @@ CONFIG_TARGET_VEXPRESS_CA9X4=y
+ # CONFIG_CMD_IMLS is not set
+ # CONFIG_CMD_XIMG is not set
+ # CONFIG_CMD_EDITENV is not set
+-# CONFIG_CMD_ENV_EXISTS is not set
+ # CONFIG_CMD_LOADB is not set
+ # CONFIG_CMD_LOADS is not set
+ # CONFIG_CMD_FPGA is not set
+-# CONFIG_CMD_ECHO is not set
+ # CONFIG_CMD_ITEST is not set
+ # CONFIG_CMD_SETEXPR is not set
+ # CONFIG_CMD_NFS is not set
 diff --git a/include/configs/vexpress_ca9x4.h b/include/configs/vexpress_ca9x4.h
 index 38ac4ed..993398c 100644
 --- a/include/configs/vexpress_ca9x4.h
@@ -53,7 +70,7 @@ index 38ac4ed..993398c 100644
  
  #endif /* VEXPRESS_CA9X4_H */
 diff --git a/include/configs/vexpress_common.h b/include/configs/vexpress_common.h
-index db78c85..1dd069b 100644
+index 0c1da01..72850d0 100644
 --- a/include/configs/vexpress_common.h
 +++ b/include/configs/vexpress_common.h
 @@ -123,7 +123,6 @@
@@ -64,16 +81,15 @@ index db78c85..1dd069b 100644
  
  /* Size of malloc() pool */
  #define CONFIG_SYS_MALLOC_LEN		(CONFIG_ENV_SIZE + 128 * 1024)
-@@ -152,6 +151,8 @@
+@@ -152,6 +151,7 @@
  #define CONFIG_SYS_SERIAL0		V2M_UART0
  #define CONFIG_SYS_SERIAL1		V2M_UART1
  
 +#include <config_distro_defaults.h>
-+#include <config_cmd_default.h>
  /* Command line configuration */
- #define CONFIG_CMD_BDI
  #define CONFIG_CMD_DHCP
-@@ -169,7 +170,6 @@
+ #define CONFIG_CMD_PXE
+@@ -163,7 +163,6 @@
  #define CONFIG_SUPPORT_RAW_INITRD
  
  #define CONFIG_CMD_FAT
@@ -81,7 +97,7 @@ index db78c85..1dd069b 100644
  #define CONFIG_MMC			1
  #define CONFIG_CMD_MMC
  #define CONFIG_GENERIC_MMC
-@@ -207,17 +207,28 @@
+@@ -201,17 +200,28 @@
  					 GENERATED_GBL_DATA_SIZE)
  #define CONFIG_SYS_INIT_SP_ADDR		CONFIG_SYS_GBL_DATA_OFFSET
  
@@ -118,7 +134,7 @@ index db78c85..1dd069b 100644
  #elif defined(CONFIG_VEXPRESS_EXTENDED_MEMORY_MAP)
  #define CONFIG_PLATFORM_ENV_SETTINGS \
  		"loadaddr=0xa0008000\0" \
-@@ -240,7 +251,8 @@
+@@ -234,7 +244,8 @@
  			"devtmpfs.mount=0  vmalloc=256M\0" \
  		"bootflash=run flashargs; " \
  			"cp ${ramdisk_addr} ${ramdisk_addr_r} ${maxramdisk}; " \
@@ -128,14 +144,14 @@ index db78c85..1dd069b 100644
  
  /* FLASH and environment organization */
  #define PHYS_FLASH_SIZE			0x04000000	/* 64MB */
-@@ -294,7 +306,6 @@
+@@ -287,7 +298,6 @@
+ 
  #define CONFIG_SYS_BARGSIZE		CONFIG_SYS_CBSIZE /* Boot args buffer */
- #define CONFIG_CMD_SOURCE
  #define CONFIG_SYS_LONGHELP
 -#define CONFIG_CMDLINE_EDITING		1
  #define CONFIG_SYS_MAXARGS		16	/* max command args */
  
  #endif /* VEXPRESS_COMMON_H */
 -- 
-2.4.4
+2.4.5
 

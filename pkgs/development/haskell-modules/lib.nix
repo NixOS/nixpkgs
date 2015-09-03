@@ -66,7 +66,7 @@ rec {
     buildPhase = "./Setup sdist";
     haddockPhase = ":";
     checkPhase = ":";
-    installPhase = "install -D dist/${drv.pname}-${drv.version}.tar.gz $out/${drv.pname}-${drv.version}.tar.gz";
+    installPhase = "install -D dist/${drv.pname}-*.tar.gz $out/${drv.pname}-${drv.version}.tar.gz";
     fixupPhase = ":";
   });
 
@@ -74,7 +74,7 @@ rec {
     unpackPhase = let src = sdistTarball pkg; tarname = "${pkg.pname}-${pkg.version}"; in ''
       echo "Source tarball is at ${src}/${tarname}.tar.gz"
       tar xf ${src}/${tarname}.tar.gz
-      cd ${tarname}
+      cd ${pkg.pname}-*
     '';
   });
 

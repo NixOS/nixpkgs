@@ -8,7 +8,7 @@ buildOcaml rec {
     sha256 = "0mapzn2ls5qcrzjm1az50lqjj76ldkmz4fbv2phc9w6smab50qy5";
   };
 
-  patches = [ ./camlp4.patch ./meta.patch ];
+  patches = [ ./camlp4.patch ./meta.patch ./srcdir.patch ];
 
   buildInputs = [time];
   doCheck = true;

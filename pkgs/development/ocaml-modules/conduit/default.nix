@@ -1,5 +1,5 @@
 {stdenv, buildOcaml, fetchurl, sexplib, stringext, uri, cstruct, ipaddr,
- async ? null, async_ssl ? null, lwt ? null}:
+ async ? null, async-ssl ? null, lwt ? null}:
 
 buildOcaml rec {
   name = "conduit";
@@ -13,7 +13,7 @@ buildOcaml rec {
   propagatedBuildInputs = ([ sexplib stringext uri cstruct ipaddr ]
                             ++ stdenv.lib.optional (lwt != null) lwt
                             ++ stdenv.lib.optional (async != null) async
-                            ++ stdenv.lib.optional (async_ssl != null) async_ssl);
+                            ++ stdenv.lib.optional (async-ssl != null) async-ssl);
 
   meta = with stdenv.lib; {
     homepage = https://github.com/mirage/ocaml-conduit;

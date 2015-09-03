@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
 
   patches = [ (fetchpatch {
                 url = "https://github.com/Alexey-Yakovenko/deadbeef/commit/e7725ea73fa1bd279a3651704870156bca8efea8.patch";
-                sha256 = "0a04l2607y3swcq9b1apffl1chdwj38jwfiizxcfmdbia4a0qlyg";
+                sha256 = "1530w968zyvcm9c8k57889n125k7a1kk3ydinjm398n07gypd599";
               })
             ];
 

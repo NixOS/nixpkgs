@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, perl }:
+{ fetchurl, stdenv, perl, makeWrapper, procps }:
 
 stdenv.mkDerivation rec {
   name = "parallel-20150822";
@@ -8,13 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "1ij7bjxhk2866mzh0v0v2m629b6d39r5ivwdzmh72s471m9hg45d";
   };
 
-  patchPhase = ''
-    sed -i "src/parallel" -e's|/usr/bin/perl|${perl}/bin/perl|g'
-  '';
+  nativeBuildInputs = [ makeWrapper ];
 
-  # The `sem' program wants to write to `~/.parallel'.
-  preBuild = ''
-    export HOME="$PWD"
+  preFixup = ''
+    sed -i 's,#![ ]*/usr/bin/env[ ]*perl,#!${perl}/bin/perl,' $out/bin/*
+
+    wrapProgram $out/bin/parallel \
+      --prefix PATH : "${procps}/bin" \
+      --prefix PATH : "${perl}/bin" \
   '';
 
   doCheck = true;

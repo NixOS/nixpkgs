@@ -7,7 +7,7 @@ let
 
     { services.httpd.enable = true;
       services.httpd.adminAddr = "foo@example.org";
-      services.httpd.documentRoot = "${pkgs.valgrind}/share/doc/valgrind/html";
+      services.httpd.documentRoot = "${pkgs.valgrind.doc}/share/doc/valgrind/html";
       networking.firewall.allowedTCPPorts = [ 80 ];
     };
 
@@ -67,6 +67,7 @@ in
       $proxy->waitForUnit("httpd");
       $backend1->waitForUnit("httpd");
       $backend2->waitForUnit("httpd");
+      $client->waitForUnit("network.target");
 
       # With the back-ends up, the proxy should work.
       $client->succeed("curl --fail http://proxy/");

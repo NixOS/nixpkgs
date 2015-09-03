@@ -111,6 +111,7 @@ in
             exec ${kde_workspace}/bin/startkde
           '';
       };
+    services.xserver.displayManager.desktopManagerHandlesLidAndPower = true;
 
     security.setuidOwners = singleton
       { program = "kcheckpass";

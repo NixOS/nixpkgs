@@ -63,5 +63,6 @@ rec {
     license = with a.lib.licenses;
       gpl2;
     homepage = "http://gap-system.org/";
+    broken = true;
   };
 }) x

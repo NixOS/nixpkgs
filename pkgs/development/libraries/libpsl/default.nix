@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, docbook_xsl, gtk_doc
-, icu, libxslt, pkgconfig }:
+{ stdenv, fetchFromGitHub, autoreconfHook, docbook_xsl, gtk_doc, icu
+, libxslt, pkgconfig }:
 
 let
 
   version = "${libVersion}-list-${listVersion}";
 
-  listVersion = "2015-08-07";
-  listArchive = let
-    rev = "de9af76664aa5fd89dfee3c44c56ba91c03eefab";
-  in fetchurl {
-    sha256 = "007yxs92dffgapkqik6rfrng5af8hjzf8wd7hlff91q836k40abi";
-    url = "https://codeload.github.com/publicsuffix/list/tar.gz/${rev}";
+  listVersion = "2015-08-27";
+  listSources = fetchFromGitHub {
+    sha256 = "14kgxyfvvrwqyxmfy1by1pzbbv6hs9n744v8zr160rz8rln8lzb9";
+    rev = "1fc1ed365818a6a77d6f31d425ff03ca54cdc7f3";
+    repo = "list";
+    owner = "publicsuffix";
   };
 
   libVersion = "0.8.0";
@@ -35,7 +35,7 @@ in stdenv.mkDerivation {
 
   preConfigure = ''
     # The libpsl check phase requires the list's test scripts (tests/) as well
-    tar --directory=list --strip-components=1 -xf "${listArchive}"
+    cp -Rv "${listSources}"/* list
   '';
   configureFlags = "--disable-static --enable-gtk-doc --enable-man";
 

@@ -12,7 +12,7 @@ assert (!libsOnly) -> kernel != null;
 
 let
 
-  versionNumber = "352.30";
+  versionNumber = "352.41";
 
   # Policy: use the highest stable version as the default (on our master).
   inherit (stdenv.lib) makeLibraryPath;
@@ -28,14 +28,16 @@ stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "1qrjvf41zk50hw7gjiwg9jxwgpaarlwm019py4wfqgjgb1cbhgjn";
+        sha256 = "1qzn6dhkrpkx015f7y9adafn7fmz7zbxbczzf9930li8pgvmmz5k";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "1h7ghmykhdyy3n853s8yjzc0qbh50qb2kc0khz672b1rna4wqyhg";
+        sha256 = "1k9hmmn5x9snzyggx23km64kjdqjh2kva090ha6mlayyyxrclz56";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
+
+  patches = [ ./nvidia-4.2.patch ];
 
   inherit versionNumber libsOnly;
   inherit (stdenv) system;

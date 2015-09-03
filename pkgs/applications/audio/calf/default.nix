@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.0.60";
 
   src = fetchurl {
-    url = "mirror://sourceforge/calf/${name}.tar.gz";
+    url = "http://calf-studio-gear.org/files/${name}.tar.gz";
     sha256 = "019fwg00jv217a5r767z7szh7vdrarybac0pr2sk26xp81kibrx9";
   };
 

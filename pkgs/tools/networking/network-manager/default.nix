@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-distro=exherbo"
     "--with-dhclient=${dhcp}/bin/dhclient"
+    "--with-dnsmasq=${dnsmasq}/bin/dnsmasq"
     # Upstream prefers dhclient, so don't add dhcpcd to the closure
     #"--with-dhcpcd=${dhcpcd}/sbin/dhcpcd"
     "--with-dhcpcd=no"

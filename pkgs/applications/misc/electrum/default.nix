@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   name = "electrum-${version}";
-  version = "2.4";
+  version = "2.4.3";
 
   src = fetchurl {
     url = "https://download.electrum.org/Electrum-${version}.tar.gz";
-    sha256 = "0y04m5b410y3s9vqvkbvmlvvx1nr0cyvrnl41yapz8hydw9vdkjx";
+    sha256 = "00z02rdlhasryccjsw1j7563xl76i6x40ah1lnn9asad1gp6520f";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -27,6 +27,7 @@ buildPythonPackage rec {
   preInstall = ''
     mkdir -p $out/share
     sed -i 's@usr_share = .*@usr_share = os.getenv("out")+"/share"@' setup.py
+    pyrcc4 icons.qrc -o gui/qt/icons_rc.py
   '';
 
   meta = with stdenv.lib; {

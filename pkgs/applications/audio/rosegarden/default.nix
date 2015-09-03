@@ -17,7 +17,7 @@ stdenv.mkDerivation (rec {
                   libsndfile libsamplerate perl makedepend libjack2 ]
 		++ stdenv.lib.optional withLirc [ lirc ];
   
-  enableParallelBuilding = true;
+  #enableParallelBuilding = true; issues on hydra
   
   meta = with stdenv.lib; {
     homepage = http://www.rosegardenmusic.com/;

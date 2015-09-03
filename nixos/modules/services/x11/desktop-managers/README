@@ -1,0 +1,1 @@
+Each desktop manager should explicitly specify a value for `services.xserver.displayManager.desktopManagerHandlesLidAndPower`.

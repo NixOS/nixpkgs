@@ -95,7 +95,7 @@ $ nix-env -qaP coreutils
 nixos.coreutils  coreutils-8.23
 </programlisting>
   <para>
-    If your system responds like that (most NixOS installatios will),
+    If your system responds like that (most NixOS installations will),
     then the attribute path to <literal>haskellPackages</literal> is
     <literal>nixos.haskellPackages</literal>. Thus, if you want to
     use <literal>nix-env</literal> without giving an explicit
@@ -600,6 +600,12 @@ $ nix-shell &quot;&lt;nixpkgs&gt;&quot; -A haskellPackages.bar.env
   };
 }
 </programlisting>
+    <para>
+        Then, replace instances of <literal>haskellPackages</literal> in the
+        <literal>cabal2nix</literal>-generated <literal>default.nix</literal>
+        or <literal>shell.nix</literal> files with
+        <literal>profiledHaskellPackages</literal>.
+    </para>
   </section>
   <section xml:id="how-to-override-package-versions-in-a-compiler-specific-package-set">
     <title>How to override package versions in a compiler-specific
@@ -753,6 +759,71 @@ export NIX_CFLAGS_LINK=&quot;-L/usr/lib&quot;
       error.
     </para>
   </section>
+</section>
+
+<section xml:id="other-resources">
+  <title>Other resources</title>
+  <itemizedlist>
+    <listitem>
+      <para>
+        The Youtube video
+        <link xlink:href="https://www.youtube.com/watch?v=BsBhi_r-OeE">Nix
+        Loves Haskell</link> provides an introduction into Haskell NG
+        aimed at beginners. The slides are available at
+        http://cryp.to/nixos-meetup-3-slides.pdf and also -- in a form
+        ready for cut &amp; paste -- at
+        https://github.com/NixOS/cabal2nix/blob/master/doc/nixos-meetup-3-slides.md.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Another Youtube video is
+        <link xlink:href="https://www.youtube.com/watch?v=mQd3s57n_2Y">Escaping
+        Cabal Hell with Nix</link>, which discusses the subject of
+        Haskell development with Nix but also provides a basic
+        introduction to Nix as well, i.e. it's suitable for viewers with
+        almost no prior Nix experience.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Oliver Charles wrote a very nice
+        <link xlink:href="http://wiki.ocharles.org.uk/Nix">Tutorial how to
+        develop Haskell packages with Nix</link>.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        The <emphasis>Journey into the Haskell NG
+        infrastructure</emphasis> series of postings describe the new
+        Haskell infrastructure in great detail:
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            <link xlink:href="http://lists.science.uu.nl/pipermail/nix-dev/2015-January/015591.html">Part
+            1</link> explains the differences between the old and the
+            new code and gives instructions how to migrate to the new
+            setup.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <link xlink:href="http://lists.science.uu.nl/pipermail/nix-dev/2015-January/015608.html">Part
+            2</link> looks in-depth at how to tweak and configure your
+            setup by means of overrides.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <link xlink:href="http://lists.science.uu.nl/pipermail/nix-dev/2015-April/016912.html">Part
+            3</link> describes the infrastructure that keeps the
+            Haskell package set in Nixpkgs up-to-date.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </itemizedlist>
 </section>
 
 </chapter>

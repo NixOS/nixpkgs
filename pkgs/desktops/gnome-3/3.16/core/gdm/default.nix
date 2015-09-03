@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
     substituteInPlace ./configure --replace "/usr/bin/X" "${xorg.xorgserver}/bin/X"
   '';
 
-  configureFlags = [ "--localstatedir=/var" "--with-systemd=yes"
+  configureFlags = [ "--sysconfdir=/etc"
+                     "--localstatedir=/var"
+                     "--with-systemd=yes"
                      "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ];
 
   buildInputs = [ pkgconfig glib itstool libxml2 intltool
@@ -30,7 +32,10 @@ stdenv.mkDerivation rec {
   '';
 
   # Disable Access Control because our X does not support FamilyServerInterpreted yet
-  patches = [ ./xserver_path.patch ./sessions_dir.patch ./disable_x_access_control.patch ./no-dbus-launch.patch ];
+  patches = [ ./xserver_path.patch ./sessions_dir.patch
+              ./disable_x_access_control.patch ./no-dbus-launch.patch ];
+
+  installFlags = [ "sysconfdir=$(out)/etc" "dbusconfdir=$(out)/etc/dbus-1/system.d" ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GDM;

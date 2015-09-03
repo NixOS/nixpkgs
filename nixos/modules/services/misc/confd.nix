@@ -63,7 +63,7 @@ in {
 
     package = mkOption {
       description = "Confd package to use.";
-      default = pkgs.goPackages.confd;
+      default = pkgs.confd;
       type = types.package;
     };
   };

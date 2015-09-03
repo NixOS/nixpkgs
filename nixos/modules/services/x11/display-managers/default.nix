@@ -161,7 +161,11 @@ let
       exit 0
     '';
 
-  mkDesktops = names: pkgs.runCommand "desktops" {}
+  mkDesktops = names: pkgs.runCommand "desktops"
+    { # trivial derivation
+      preferLocalBuild = true;
+      allowSubstitutes = false;
+    }
     ''
       mkdir -p $out
       ${concatMapStrings (n: ''
@@ -225,7 +229,7 @@ in
 
       desktopManagerHandlesLidAndPower = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Whether the display manager should prevent systemd from handling
           lid and power events. This is normally handled by the desktop

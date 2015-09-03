@@ -1,5 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, go, lxc, sqlite, iproute, bridge-utils, devicemapper,
-btrfsProgs, iptables, bash, e2fsprogs, xz}:
+btrfsProgs, iptables, bash, e2fsprogs, xz, utillinux}:
+
+# https://github.com/docker/docker/blob/master/project/PACKAGERS.md
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
@@ -16,6 +18,11 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
+  preConfigure = ''
+    mv vendor/src/github.com/opencontainers/runc/libcontainer/seccomp/{jump_amd64.go,jump_linux.go}
+    sed -i 's/,amd64//' vendor/src/github.com/opencontainers/runc/libcontainer/seccomp/jump_linux.go
+  '';
+
   buildPhase = ''
     patchShebangs .
     export AUTO_GOPATH=1
@@ -26,7 +33,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 ./bundles/${version}/dynbinary/docker-${version} $out/libexec/docker/docker
     install -Dm755 ./bundles/${version}/dynbinary/dockerinit-${version} $out/libexec/docker/dockerinit
-    makeWrapper $out/libexec/docker/docker $out/bin/docker --prefix PATH : "${iproute}/sbin:sbin:${lxc}/bin:${iptables}/sbin:${e2fsprogs}/sbin:${xz}/bin"
+    makeWrapper $out/libexec/docker/docker $out/bin/docker --prefix PATH : "${iproute}/sbin:sbin:${lxc}/bin:${iptables}/sbin:${e2fsprogs}/sbin:${xz}/bin:${utillinux}/bin"
 
     # systemd
     install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service

@@ -3,11 +3,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "openvpn-2.3.8";
+  name = "openvpn-2.3.7";
 
   src = fetchurl {
     url = "http://swupdate.openvpn.net/community/releases/${name}.tar.gz";
-    sha256 = "0lbw22qv3m0axhs13razr6b4x1p7jcpvf9rzb15b850wyvpka92k";
+    sha256 = "0vhl0ddpxqfibc0ah0ci7ix9bs0cn5shhmhijg550qpbdb6s80hz";
   };
 
   patches = optional stdenv.isLinux ./systemd-notify.patch;
@@ -19,11 +19,6 @@ stdenv.mkDerivation rec {
     --enable-iproute2
     --enable-systemd
     IPROUTE=${iproute}/sbin/ip
-  '';
-
-  preConfigure = ''
-    substituteInPlace ./src/openvpn/console.c \
-      --replace /bin/systemd-ask-password /run/current-system/sw/bin/systemd-ask-password
   '';
 
   postInstall = ''

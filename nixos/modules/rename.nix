@@ -77,6 +77,8 @@ in zipModules ([]
 ++ obsolete [ "environment" "nix" ] [ "nix" "package" ]
 ++ obsolete [ "fonts" "enableFontConfig" ] [ "fonts" "fontconfig" "enable" ]
 ++ obsolete [ "fonts" "extraFonts" ] [ "fonts" "fonts" ]
+++ alias [ "users" "extraUsers" ] [ "users" "users" ]
+++ alias [ "users" "extraGroups" ] [ "users" "groups" ]
 
 ++ obsolete [ "security" "extraSetuidPrograms" ] [ "security" "setuidPrograms" ]
 ++ obsolete [ "networking" "enableWLAN" ] [ "networking" "wireless" "enable" ]
@@ -110,6 +112,7 @@ in zipModules ([]
 ++ obsolete [ "services" "sshd" "permitRootLogin" ] [ "services" "openssh" "permitRootLogin" ]
 ++ obsolete [ "services" "xserver" "startSSHAgent" ] [ "services" "xserver" "startOpenSSHAgent" ]
 ++ obsolete [ "services" "xserver" "startOpenSSHAgent" ] [ "programs" "ssh" "startAgent" ]
+++ alias [ "services" "openssh" "knownHosts" ] [ "programs" "ssh" "knownHosts" ]
 
 # VirtualBox
 ++ obsolete [ "services" "virtualbox" "enable" ] [ "virtualisation" "virtualbox" "guest" "enable" ]
