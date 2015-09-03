@@ -2386,7 +2386,7 @@ let
     inherit gnumake3;
   };
 
-  ngrok = callPackage ../tools/misc/ngrok { };
+  ngrok = pkgs.goPackages.ngrok.bin // { outputs = [ "bin" ]; };
 
   noip = callPackage ../tools/networking/noip { };
 
