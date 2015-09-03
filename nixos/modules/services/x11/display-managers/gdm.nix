@@ -68,6 +68,13 @@ in
 
   config = mkIf cfg.gdm.enable {
 
+    assertions = [
+      { assertion = let autoLogin = cfg.gdm.autoLogin; in
+          if autoLogin.enable then autoLogin.user != null else true;
+        message = "GDM auto-login requires services.xserver.displayManager.gdm.autoLogin.user to be set";
+      }
+    ];
+
     services.xserver.displayManager.slim.enable = false;
 
     users.extraUsers.gdm =
