@@ -6992,6 +6992,8 @@ let
 
   libserialport = callPackage ../development/libraries/libserialport { };
 
+  libsoundio = callPackage ../development/libraries/libsoundio { };
+
   libgtop = callPackage ../development/libraries/libgtop {};
 
   libLAS = callPackage ../development/libraries/libLAS { };
