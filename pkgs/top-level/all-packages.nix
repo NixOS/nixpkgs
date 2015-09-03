@@ -1489,7 +1489,7 @@ let
     inherit (perlPackages) ImageExifTool JSON;
   };
 
-  flannel = pkgs.goPackages.flannel.bin // { outputs = [ "bin" ]; };
+  flannel = goPackages.flannel.bin // { outputs = [ "bin" ]; };
 
   flashbench = callPackage ../os-specific/linux/flashbench { };
 
@@ -1708,7 +1708,7 @@ let
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
   grafana-frontend = callPackage ../development/tools/misc/grafana { };
-  grafana-backend = pkgs.goPackages.grafana.bin // { outputs = [ "bin" ]; };
+  grafana-backend = goPackages.grafana.bin // { outputs = [ "bin" ]; };
 
   grafx2 = callPackage ../applications/graphics/grafx2 {};
 
@@ -2385,7 +2385,7 @@ let
     inherit gnumake3;
   };
 
-  ngrok = pkgs.goPackages.ngrok.bin // { outputs = [ "bin" ]; };
+  ngrok = goPackages.ngrok.bin // { outputs = [ "bin" ]; };
 
   noip = callPackage ../tools/networking/noip { };
 
@@ -13705,7 +13705,7 @@ let
 
   chessdb = callPackage ../games/chessdb { };
 
-  confd = pkgs.goPackages.confd.bin // { outputs = [ "bin" ]; };
+  confd = goPackages.confd.bin // { outputs = [ "bin" ]; };
 
   construoBase = lowPrio (callPackage ../games/construo {
     mesa = null;
@@ -14568,7 +14568,7 @@ let
     camlp5 = ocamlPackages.camlp5_strict;
   };
 
-  hologram = pkgs.goPackages.hologram.bin // { outputs = [ "bin" ]; };
+  hologram = goPackages.hologram.bin // { outputs = [ "bin" ]; };
 
   isabelle = import ../applications/science/logic/isabelle {
     inherit (pkgs) stdenv fetchurl nettools perl polyml;
