@@ -7889,6 +7889,10 @@ let
     unicodeSupport = config.pcre.unicode or true;
   };
 
+  pcre2 = callPackage ../development/libraries/pcre2 {
+    unicodeSupport = config.pcre.unicode or true;
+  };
+
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
   phonon = callPackage ../development/libraries/phonon/qt4 {};
