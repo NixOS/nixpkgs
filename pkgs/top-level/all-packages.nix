@@ -1693,7 +1693,7 @@ let
 
   goaccess = callPackage ../tools/misc/goaccess { };
 
-  go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
+  go-mtpfs = pkgs.goPackages.mtpfs.bin // { outputs = [ "bin" ]; };
 
   googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
 
@@ -7713,7 +7713,7 @@ let
 
   mtdev = callPackage ../development/libraries/mtdev { };
 
-  mtpfs = pkgs.goPackages.mtpfs.bin // { outputs = [ "bin" ]; };
+  mtpfs = callPackage ../tools/filesystems/mtpfs { };
 
   mu = callPackage ../tools/networking/mu {
     texinfo = texinfo4;
