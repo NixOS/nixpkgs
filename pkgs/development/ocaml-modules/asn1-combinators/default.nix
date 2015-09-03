@@ -27,5 +27,6 @@ stdenv.mkDerivation {
     platforms = ocaml.meta.platforms;
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    broken = stdenv.isi686; # https://github.com/mirleft/ocaml-asn1-combinators/issues/13
   };
 }

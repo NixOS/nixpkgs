@@ -76,79 +76,9 @@ stdenv.mkDerivation {
   pythonPath = [ pythonPackages.curses ];
 
   patches = stdenv.lib.optionals ((xenserverPatched == false) && (builtins.hasAttr "xenPatches" xenConfig)) xenConfig.xenPatches;
-  patchPhase = stdenv.lib.optional ((xenserverPatched == true) && (builtins.hasAttr "xenserverPatches" xenConfig)) xenConfig.xenserverPatches;
 
-  preConfigure = ''
-    # Fake wget: copy prefetched downloads instead
-    mkdir wget
-    echo "#!/bin/sh" > wget/wget
-    echo "echo ===== Not fetching \$*, copy pre-fetched file instead" >> wget/wget
-    echo "cp \$4 \$3" >> wget/wget
-    chmod +x wget/wget
-    export PATH=$PATH:$PWD/wget
-    export EXTRA_QEMUU_CONFIGURE_ARGS="--enable-spice --enable-usb-redir --enable-linux-aio"
-  '';
-
-  # TODO: Flask needs more testing before enabling it by default.
-  #makeFlags = "XSM_ENABLE=y FLASK_ENABLE=y PREFIX=$(out) CONFIG_DIR=/etc XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files ";
-  makeFlags = "PREFIX=$(out) CONFIG_DIR=/etc XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files ";
-
-  buildFlags = "xen tools stubdom";
-
-  preBuild =
-    ''
-      substituteInPlace tools/libfsimage/common/fsimage_plugin.c \
-        --replace /usr $out
-
-      substituteInPlace tools/blktap2/lvm/lvm-util.c \
-        --replace /usr/sbin/vgs ${lvm2}/sbin/vgs \
-        --replace /usr/sbin/lvs ${lvm2}/sbin/lvs
-
-      substituteInPlace tools/hotplug/Linux/network-bridge \
-        --replace /usr/bin/logger ${utillinux}/bin/logger
-
-      substituteInPlace tools/xenmon/xenmon.py \
-        --replace /usr/bin/pkill ${procps}/bin/pkill
-
-      substituteInPlace tools/xenstat/Makefile \
-        --replace /usr/include/curses.h ${ncurses}/include/curses.h
-
-      substituteInPlace tools/ioemu-qemu-xen/xen-hooks.mak \
-        --replace /usr/include/pci ${pciutils}/include/pci
-
-      substituteInPlace tools/hotplug/Linux/xen-backend.rules \
-        --replace /etc/xen/scripts $out/etc/xen/scripts
-
-      # blktap is not provided by xen, but by xapi
-      sed -i '/blktap/d' tools/hotplug/Linux/xen-backend.rules
-
-      # Work around a bug in our GCC wrapper: `gcc -MF foo -v' doesn't
-      # print the GCC version number properly.
-      substituteInPlace xen/Makefile \
-        --replace '$(CC) $(CFLAGS) -v' '$(CC) -v'
-
-      substituteInPlace tools/python/xen/xend/server/BlktapController.py \
-        --replace /usr/sbin/tapdisk2 $out/sbin/tapdisk2
-
-      substituteInPlace tools/python/xen/xend/XendQCoWStorageRepo.py \
-        --replace /usr/sbin/qcow-create $out/sbin/qcow-create
-
-      substituteInPlace tools/python/xen/remus/save.py \
-        --replace /usr/lib/xen/bin/xc_save $out/${libDir}/xen/bin/xc_save
-
-      substituteInPlace tools/python/xen/remus/device.py \
-        --replace /usr/lib/xen/bin/imqebt $out/${libDir}/xen/bin/imqebt
-
-      # Allow the location of the xendomains config file to be
-      # overriden at runtime.
-      substituteInPlace tools/hotplug/Linux/init.d/xendomains \
-        --replace 'XENDOM_CONFIG=/etc/sysconfig/xendomains' "" \
-        --replace 'XENDOM_CONFIG=/etc/default/xendomains' "" \
-        --replace /etc/xen/scripts/hotplugpath.sh $out/etc/xen/scripts/hotplugpath.sh \
-        --replace /bin/ls ls
-
-      substituteInPlace tools/hotplug/Linux/xendomains \
-        --replace /bin/ls ls
+  postPatch = ''
+      ${stdenv.lib.optionalString ((xenserverPatched == true) && (builtins.hasAttr "xenserverPatches" xenConfig)) xenConfig.xenserverPatches}
 
       # Xen's tools and firmares need various git repositories that it
       # usually checks out at time using git.  We can't have that.
@@ -171,11 +101,75 @@ stdenv.mkDerivation {
       ${flip concatMapStrings xenExtfiles (x: let src = fetchurl x; in ''
         cp ${src} xen_ext_files/${src.name}
       '')}
+  '';
+
+  preConfigure = ''
+    # Fake wget: copy prefetched downloads instead
+    mkdir wget
+    echo "#!/bin/sh" > wget/wget
+    echo "echo ===== Not fetching \$*, copy pre-fetched file instead" >> wget/wget
+    echo "cp \$4 \$3" >> wget/wget
+    chmod +x wget/wget
+    export PATH=$PATH:$PWD/wget
+    export EXTRA_QEMUU_CONFIGURE_ARGS="--enable-spice --enable-usb-redir --enable-linux-aio"
+  '';
+
+  postConfigure =
+    ''
+      substituteInPlace tools/libfsimage/common/fsimage_plugin.c \
+        --replace /usr $out
+
+      substituteInPlace tools/blktap2/lvm/lvm-util.c \
+        --replace /usr/sbin/vgs ${lvm2}/sbin/vgs \
+        --replace /usr/sbin/lvs ${lvm2}/sbin/lvs
+
+      substituteInPlace tools/hotplug/Linux/network-bridge \
+        --replace /usr/bin/logger ${utillinux}/bin/logger
+
+      substituteInPlace tools/xenmon/xenmon.py \
+        --replace /usr/bin/pkill ${procps}/bin/pkill
+
+      substituteInPlace tools/xenstat/Makefile \
+        --replace /usr/include/curses.h ${ncurses}/include/curses.h
+
+      substituteInPlace tools/qemu-xen-traditional/xen-hooks.mak \
+        --replace /usr/include/pci ${pciutils}/include/pci
+
+      substituteInPlace tools/qemu-xen-traditional-dir-remote/xen-hooks.mak \
+        --replace /usr/include/pci ${pciutils}/include/pci
+
+      substituteInPlace tools/hotplug/Linux/xen-backend.rules \
+        --replace /etc/xen/scripts $out/etc/xen/scripts
+
+      # blktap is not provided by xen, but by xapi
+      sed -i '/blktap/d' tools/hotplug/Linux/xen-backend.rules
+
+      # Work around a bug in our GCC wrapper: `gcc -MF foo -v' doesn't
+      # print the GCC version number properly.
+      substituteInPlace xen/Makefile \
+        --replace '$(CC) $(CFLAGS) -v' '$(CC) -v'
+
+      # Allow the location of the xendomains config file to be
+      # overriden at runtime.
+      substituteInPlace tools/hotplug/Linux/init.d/xendomains \
+        --replace 'XENDOM_CONFIG=/etc/sysconfig/xendomains' "" \
+        --replace 'XENDOM_CONFIG=/etc/default/xendomains' "" \
+        --replace /etc/xen/scripts/hotplugpath.sh $out/etc/xen/scripts/hotplugpath.sh \
+        --replace /bin/ls ls
+
+      substituteInPlace tools/hotplug/Linux/xendomains \
+        --replace /bin/ls ls
 
       # Hack to get `gcc -m32' to work without having 32-bit Glibc headers.
       mkdir -p tools/include/gnu
       touch tools/include/gnu/stubs-32.h
     '';
+
+  # TODO: Flask needs more testing before enabling it by default.
+  #makeFlags = "XSM_ENABLE=y FLASK_ENABLE=y PREFIX=$(out) CONFIG_DIR=/etc XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files ";
+  makeFlags = "PREFIX=$(out) CONFIG_DIR=/etc XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files ";
+
+  buildFlags = "xen tools stubdom";
 
   postBuild =
     ''

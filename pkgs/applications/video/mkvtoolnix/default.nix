@@ -17,11 +17,11 @@ assert legacyGUI -> wxGTK != null;
 
 stdenv.mkDerivation rec {
   name = "mkvtoolnix-${version}";
-  version = "7.9.0";
+  version = "8.3.0";
 
   src = fetchurl {
     url = "http://www.bunkus.org/videotools/mkvtoolnix/sources/${name}.tar.xz";
-    sha256 = "0jmsgfkxrnplpmwlzynqdb4xf3x1z3dminz97gmddswwgnjqyy1r";
+    sha256 = "0dzwmwa76y4nhb5brp5a1kxgxjr71czd8vj218qmrlwm54i85gc7";
   };
 
   patchPhase = ''

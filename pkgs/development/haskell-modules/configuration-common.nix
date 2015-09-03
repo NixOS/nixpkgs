@@ -89,6 +89,12 @@ self: super: {
   yices-easy = dontDistribute super.yices-easy;
   yices-painless = dontDistribute super.yices-painless;
 
+  # https://github.com/GaloisInc/RSA/issues/9
+  RSA = dontCheck super.RSA;
+
+  # https://github.com/froozen/kademlia/issues/2
+  kademlia = dontCheck super.kademlia;
+
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
@@ -748,7 +754,11 @@ self: super: {
   zlib = dontCheck super.zlib;
 
   # Override the obsolete version from Hackage with our more up-to-date copy.
-  cabal2nix = self.callPackage ../tools/haskell/cabal2nix {};
+  cabal2nix = self.callPackage ../tools/haskell/cabal2nix/cabal2nix.nix {};
+  hackage2nix = self.callPackage ../tools/haskell/cabal2nix/hackage2nix.nix {};
+  lens-construction-helper = self.callPackage ../tools/haskell/cabal2nix/lens-construction-helper.nix {};
+  language-nix = self.callPackage ../tools/haskell/cabal2nix/language-nix.nix {};
+  distribution-nixpkgs = self.callPackage ../tools/haskell/cabal2nix/distribution-nixpkgs.nix {};
 
   # https://github.com/urs-of-the-backwoods/HGamer3D/issues/7
   HGamer3D-Bullet-Binding = dontDistribute super.HGamer3D-Bullet-Binding;

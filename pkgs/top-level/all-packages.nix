@@ -611,7 +611,7 @@ let
 
   ascii = callPackage ../tools/text/ascii { };
 
-  asciinema = callPackage ../tools/misc/asciinema { };
+  asciinema = goPackages.asciinema.bin // { outputs = [ "bin" ]; };
 
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texLiveAggregationFun {
@@ -892,7 +892,7 @@ let
 
   filter_audio = callPackage ../development/libraries/filter_audio { };
 
-  fzf = callPackage ../tools/misc/fzf { };
+  fzf = goPackages.fzf.bin // { outputs = [ "bin" ]; };
 
   gist = callPackage ../tools/text/gist { };
 
@@ -1489,7 +1489,7 @@ let
     inherit (perlPackages) ImageExifTool JSON;
   };
 
-  flannel = callPackage ../tools/networking/flannel { };
+  flannel = goPackages.flannel.bin // { outputs = [ "bin" ]; };
 
   flashbench = callPackage ../os-specific/linux/flashbench { };
 
@@ -1693,7 +1693,7 @@ let
 
   goaccess = callPackage ../tools/misc/goaccess { };
 
-  go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
+  go-mtpfs = goPackages.mtpfs.bin // { outputs = [ "bin" ]; };
 
   googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
 
@@ -1708,7 +1708,7 @@ let
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
   grafana-frontend = callPackage ../development/tools/misc/grafana { };
-  grafana-backend = pkgs.goPackages.grafana.bin // { outputs = [ "bin" ]; };
+  grafana-backend = goPackages.grafana.bin // { outputs = [ "bin" ]; };
 
   grafx2 = callPackage ../applications/graphics/grafx2 {};
 
@@ -2385,7 +2385,7 @@ let
     inherit gnumake3;
   };
 
-  ngrok = callPackage ../tools/misc/ngrok { };
+  ngrok = goPackages.ngrok.bin // { outputs = [ "bin" ]; };
 
   noip = callPackage ../tools/networking/noip { };
 
@@ -3175,8 +3175,6 @@ let
 
   telnet = callPackage ../tools/networking/telnet { };
 
-  tessel = callPackage ../applications/misc/tessel { };
-
   texmacs = callPackage ../applications/editors/texmacs {
     tex = texLive; /* tetex is also an option */
     extraFonts = true;
@@ -3628,6 +3626,7 @@ let
     pygtk = lib.overrideDerivation pygtk (x: {
       gtk = gtk2;
     });
+    ghostscript = ghostscriptX;
   };
 
   zdelta = callPackage ../tools/compression/zdelta { };
@@ -4316,17 +4315,17 @@ let
 
     asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
 
-    async_extra = callPackage ../development/ocaml-modules/async_extra { };
+    async-extra = callPackage ../development/ocaml-modules/async-extra { };
 
-    async_find = callPackage ../development/ocaml-modules/async_find { };
+    async-find = callPackage ../development/ocaml-modules/async-find { };
 
-    async_kernel = callPackage ../development/ocaml-modules/async_kernel { };
+    async-kernel = callPackage ../development/ocaml-modules/async-kernel { };
 
-    async_shell = callPackage ../development/ocaml-modules/async_shell { };
+    async-shell = callPackage ../development/ocaml-modules/async-shell { };
 
-    async_ssl = callPackage ../development/ocaml-modules/async_ssl { };
+    async-ssl = callPackage ../development/ocaml-modules/async-ssl { };
 
-    async_unix = callPackage ../development/ocaml-modules/async_unix { };
+    async-unix = callPackage ../development/ocaml-modules/async-unix { };
 
     async =
       if lib.versionOlder "4.02" ocaml_version
@@ -4402,11 +4401,11 @@ let
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
-    bin_prot = callPackage ../development/ocaml-modules/bin_prot { };
+    bin-prot = callPackage ../development/ocaml-modules/bin-prot { };
 
-    ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
+    ocaml-cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
-    ocaml_cairo2 = callPackage ../development/ocaml-modules/ocaml-cairo2 { };
+    ocaml-cairo2 = callPackage ../development/ocaml-modules/ocaml-cairo2 { };
 
     cil = callPackage ../development/ocaml-modules/cil { };
 
@@ -4430,7 +4429,7 @@ let
 
     csv = callPackage ../development/ocaml-modules/csv { };
 
-    custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
+    custom-printf = callPackage ../development/ocaml-modules/custom-printf { };
 
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
 
@@ -4446,9 +4445,9 @@ let
 
     enumerate = callPackage ../development/ocaml-modules/enumerate { };
 
-    erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
+    erm-xml = callPackage ../development/ocaml-modules/erm-xml { };
 
-    erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
+    erm-xmpp = callPackage ../development/ocaml-modules/erm-xmpp { };
 
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
       lwt = ocaml_lwt;
@@ -4541,15 +4540,15 @@ let
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
 
-    core_extended = callPackage ../development/ocaml-modules/core_extended { };
+    core-extended = callPackage ../development/ocaml-modules/core-extended { };
 
-    core_kernel = callPackage ../development/ocaml-modules/core_kernel { };
+    core-kernel = callPackage ../development/ocaml-modules/core-kernel { };
 
     core = callPackage ../development/ocaml-modules/core { };
 
-    ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
+    ocaml-cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 
-    ocaml_data_notation = callPackage ../development/ocaml-modules/odn { };
+    ocaml-data-notation = callPackage ../development/ocaml-modules/odn { };
 
     ocaml_expat = callPackage ../development/ocaml-modules/expat { };
 
@@ -4623,16 +4622,16 @@ let
 
     textutils = callPackage ../development/ocaml-modules/textutils { };
 
-    type_conv_108_08_00 = callPackage ../development/ocaml-modules/type_conv/108.08.00.nix { };
-    type_conv_109_60_01 = callPackage ../development/ocaml-modules/type_conv/109.60.01.nix { };
-    type_conv_112_01_01 = callPackage ../development/ocaml-modules/type_conv/112.01.01.nix { };
-    type_conv =
+    type-conv-108_08_00 = callPackage ../development/ocaml-modules/type-conv/108.08.00.nix { };
+    type-conv-109_60_01 = callPackage ../development/ocaml-modules/type-conv/109.60.01.nix { };
+    type-conv-112_01_01 = callPackage ../development/ocaml-modules/type-conv/112.01.01.nix { };
+    type-conv =
       if lib.versionOlder "4.02" ocaml_version
-      then type_conv_112_01_01
+      then type-conv-112_01_01
       else if lib.versionOlder "4.00" ocaml_version
-      then type_conv_109_60_01
+      then type-conv-109_60_01
       else if lib.versionOlder "3.12" ocaml_version
-      then type_conv_108_08_00
+      then type-conv-108_08_00
       else null;
 
     sexplib_108_08_00 = callPackage ../development/ocaml-modules/sexplib/108.08.00.nix { };
@@ -4655,11 +4654,11 @@ let
 
     ocurl = callPackage ../development/ocaml-modules/ocurl { };
 
-    pa_ounit = callPackage ../development/ocaml-modules/pa_ounit { };
+    pa-ounit = callPackage ../development/ocaml-modules/pa-ounit { };
 
-    pa_bench = callPackage ../development/ocaml-modules/pa_bench { };
+    pa-bench = callPackage ../development/ocaml-modules/pa-bench { };
 
-    pa_test = callPackage ../development/ocaml-modules/pa_test { };
+    pa-test = callPackage ../development/ocaml-modules/pa-test { };
 
     pipebang = callPackage ../development/ocaml-modules/pipebang { };
 
@@ -4719,6 +4718,32 @@ let
     ocsigen_deriving = callPackage ../development/ocaml-modules/ocsigen-deriving {
       oasis = ocaml_oasis;
     };
+
+
+    # Attributes for backward compatibility.
+    async_extra = async-extra; # added 2015-07-21
+    async_find = async-find; # added 2015-07-21
+    async_kernel = async-kernel; # added 2015-07-21
+    async_shell = async-shell; # added 2015-07-21
+    async_ssl = async-ssl; # added 2015-07-21
+    async_unix = async-unix; # added 2015-07-21
+    bin_prot = bin-prot; # added 2015-07-21
+    core_extended = core-extended; # added 2015-07-21
+    core_kernel = core-kernel; # added 2015-07-21
+    custom_printf = custom-printf; # added 2015-07-21
+    erm_xml = erm-xml; # added 2015-07-21
+    erm_xmpp = erm-xmpp; # added 2015-07-21
+    ocaml_cairo = ocaml-cairo; # added 2015-07-21
+    ocaml_cairo2 = ocaml-cairo2; # added 2015-07-21
+    ocaml_cryptgps = ocaml-cryptgps; # added 2015-07-21
+    ocaml_data_notation = ocaml-data-notation; # added 2015-07-21
+    pa_bench = pa-bench; # added 2015-07-21
+    pa_ounit = pa-ounit; # added 2015-07-21
+    pa_test = pa-test; # added 2015-07-21
+    type_conv_108_08_00 = type-conv-108_08_00; # added 2015-07-21
+    type_conv_109_60_01 = type-conv-109_60_01; # added 2015-07-21
+    type_conv_112_01_01 = type-conv-112_01_01; # added 2015-07-21
+    type_conv = type-conv; # added 2015-07-21
 
   };
 
@@ -7456,7 +7481,7 @@ let
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
 
   libunwind = if stdenv.isDarwin
-    then callPackage ../development/libraries/libunwind/native.nix {}
+    then libunwindNative
     else callPackage ../development/libraries/libunwind { };
 
   libunwindNative = callPackage ../development/libraries/libunwind/native.nix {};
@@ -8718,7 +8743,7 @@ let
 
   buildPerlPackage = import ../development/perl-modules/generic perl;
 
-  perlPackages = recurseIntoAttrs (import ./perl-packages.nix {
+  perlPackages = recurseIntoAttrs (callPackage ./perl-packages.nix {
     inherit pkgs;
     overrides = (config.perlPackageOverrides or (p: {})) pkgs;
   });
@@ -9090,7 +9115,7 @@ let
 
   nsd = callPackage ../servers/dns/nsd (config.nsd or {});
 
-  nsq = callPackage ../servers/nsq { };
+  nsq = goPackages.nsq.bin // { outputs = [ "bin" ]; };
 
   openpts = callPackage ../servers/openpts { };
 
@@ -9310,7 +9335,7 @@ let
 
   shairport-sync = callPackage ../servers/shairport-sync { };
 
-  serfdom = callPackage ../servers/serfdom { };
+  serfdom = goPackages.serf.bin // { outputs = [ "bin" ]; };
 
   seyren = callPackage ../servers/monitoring/seyren { };
 
@@ -10992,6 +11017,7 @@ let
   cmatrix = callPackage ../applications/misc/cmatrix { };
 
   bomi = callPackage ../applications/video/bomi {
+    youtube-dl = pythonPackages.youtube-dl;
     pulseSupport = config.pulseaudio or true;
   };
 
@@ -11825,8 +11851,9 @@ let
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
-      RpcXML XMLSimple PerlMagick YAML YAMLLibYAML HTMLTree Filechdir
+      RpcXML XMLSimple YAML YAMLLibYAML HTMLTree Filechdir
       AuthenPassphrase NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay;
+    inherit (perlPackages.override { pkgs = pkgs // { imagemagick = imagemagickBig;}; }) PerlMagick;
   };
 
   imagemagick_light = imagemagick.override {
@@ -11847,11 +11874,11 @@ let
     libxml2 = null;
   };
 
-  imagemagick = callPackage ../applications/graphics/ImageMagick {
+  imagemagick = imagemagickBig.override {
     ghostscript = null;
   };
 
-  imagemagickBig = imagemagick;
+  imagemagickBig = callPackage ../applications/graphics/ImageMagick { };
 
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive {
@@ -12223,6 +12250,7 @@ let
   mpv = callPackage ../applications/video/mpv rec {
     lua = lua5_1;
     lua5_sockets = lua5_1_sockets;
+    youtube-dl = pythonPackages.youtube-dl;
     bs2bSupport = config.mpv.bs2bSupport or true;
     youtubeSupport = config.mpv.youtubeSupport or true;
     cacaSupport = config.mpv.cacaSupport or true;
@@ -12722,9 +12750,6 @@ let
   rxvt_unicode-with-plugins = callPackage ../applications/misc/rxvt_unicode/wrapper.nix {
     plugins = [ urxvt_perl urxvt_perls urxvt_tabbedex urxvt_font_size ];
   };
-
-  # FIXME: remove somewhere in future
-  rxvt_unicode_with-plugins = rxvt_unicode-with-plugins;
 
   sakura = callPackage ../applications/misc/sakura {
     vte = gnome3.vte_290;
@@ -13467,7 +13492,6 @@ let
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
-  xen_4_4_1 = callPackage ../applications/virtualization/xen/4.4.1.nix { };
   xen_4_5_0 = callPackage ../applications/virtualization/xen/4.5.0.nix { };
   xen_4_5_1 = callPackage ../applications/virtualization/xen/4.5.1.nix { };
   xen_xenServer = callPackage ../applications/virtualization/xen/4.5.0.nix { xenserverPatched = true; };
@@ -13688,7 +13712,7 @@ let
 
   chessdb = callPackage ../games/chessdb { };
 
-  confd = pkgs.goPackages.confd.bin // { outputs = [ "bin" ]; };
+  confd = goPackages.confd.bin // { outputs = [ "bin" ]; };
 
   construoBase = lowPrio (callPackage ../games/construo {
     mesa = null;
@@ -14551,7 +14575,7 @@ let
     camlp5 = ocamlPackages.camlp5_strict;
   };
 
-  hologram = pkgs.goPackages.hologram.bin // { outputs = [ "bin" ]; };
+  hologram = goPackages.hologram.bin // { outputs = [ "bin" ]; };
 
   isabelle = import ../applications/science/logic/isabelle {
     inherit (pkgs) stdenv fetchurl nettools perl polyml;
@@ -15262,7 +15286,7 @@ let
       buildInputs = [ stdenv ncurses mesa freeglut libzip gcc
                                    pack.ocaml pack.findlib pack.camomile
                                    pack.dypgen pack.ocaml_sqlite3 pack.camlzip
-                                   pack.lablgtk pack.camlimages pack.ocaml_cairo
+                                   pack.lablgtk pack.camlimages pack.ocaml-cairo
                                    pack.lablgl pack.ocamlnet pack.cryptokit
                                    pack.ocaml_pcre pack.patoline
                                    ];
@@ -15325,6 +15349,7 @@ let
   nfsUtils = nfs-utils;  # added 2014-12-06
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rssglx = rss-glx; #added 2015-03-25
+  rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
