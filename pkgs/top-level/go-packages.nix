@@ -1823,6 +1823,8 @@ let
     repo = "nsq";
     sha256 = "1r7jgplzn6bgwhd4vn8045n6cmm4iqbzssbjgj7j1c28zbficy2f";
 
+    excludedPackages = "bench";
+
     buildInputs = [ go-nsq go-options semver perks toml go-hostpool timer_metrics ];
   };
 
