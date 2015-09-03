@@ -611,7 +611,7 @@ let
 
   ascii = callPackage ../tools/text/ascii { };
 
-  asciinema = pkgs.goPackages.asciinema.bin // { outputs = [ "bin" ]; };
+  asciinema = goPackages.asciinema.bin // { outputs = [ "bin" ]; };
 
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texLiveAggregationFun {
@@ -1693,7 +1693,7 @@ let
 
   goaccess = callPackage ../tools/misc/goaccess { };
 
-  go-mtpfs = pkgs.goPackages.mtpfs.bin // { outputs = [ "bin" ]; };
+  go-mtpfs = goPackages.mtpfs.bin // { outputs = [ "bin" ]; };
 
   googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
 
@@ -9108,7 +9108,7 @@ let
 
   nsd = callPackage ../servers/dns/nsd (config.nsd or {});
 
-  nsq = pkgs.goPackages.nsq.bin // { outputs = [ "bin" ]; };
+  nsq = goPackages.nsq.bin // { outputs = [ "bin" ]; };
 
   openpts = callPackage ../servers/openpts { };
 
@@ -9328,7 +9328,7 @@ let
 
   shairport-sync = callPackage ../servers/shairport-sync { };
 
-  serfdom = pkgs.goPackages.serf.bin // { outputs = [ "bin" ]; };
+  serfdom = goPackages.serf.bin // { outputs = [ "bin" ]; };
 
   seyren = callPackage ../servers/monitoring/seyren { };
 
