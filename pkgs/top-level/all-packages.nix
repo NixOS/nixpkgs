@@ -7911,7 +7911,7 @@ let
   });
 
   qtcreator = callPackage ../development/qtcreator {
-    qtLib = qt54;
+    qtLib = qt54.override { buildDocs = true; buildExamples = true; };
     withDocumentation = true;
   };
 
