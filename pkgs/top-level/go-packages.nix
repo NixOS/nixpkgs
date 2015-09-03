@@ -167,6 +167,13 @@ let
     sha256 = "0gwplb1b4fvav1vjf4b2dypy5rcp2w41vrbxkd1dsmac870cy75p";
   };
 
+  asciinema = buildFromGitHub {
+    rev = "v1.1.1";
+    owner = "asciinema";
+    repo = "asciinema";
+    sha256 = "0k48k8815k433s25lh8my2swl89kczp0m2gbqzjlpy1xwmk06nxc";
+  };
+
   asn1-ber = buildGoPackage rec {
     rev = "f4b6f4a84f5cde443d1925b5ec185ee93c2bdc72";
     name = "asn1-ber-${stdenv.lib.strings.substring 0 7 rev}";
