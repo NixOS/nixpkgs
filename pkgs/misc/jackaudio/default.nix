@@ -41,9 +41,11 @@ stdenv.mkDerivation rec {
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
   ];
 
-  patchPhase = ''
+  prePatch = ''
     substituteInPlace svnversion_regenerate.sh --replace /bin/bash ${bash}/bin/bash
   '';
+
+  patches = [ ./jack-gcc5.patch ];
 
   configurePhase = ''
     python waf configure --prefix=$out \
