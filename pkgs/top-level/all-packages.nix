@@ -6194,8 +6194,6 @@ let
 
   dssi = callPackage ../development/libraries/dssi {};
 
-  dragonegg = llvmPackages_35.dragonegg;
-
   dxflib = callPackage ../development/libraries/dxflib {};
 
   eigen = callPackage ../development/libraries/eigen {};
