@@ -2489,17 +2489,12 @@ let
     buildInputs = [ armon.go-metrics net-rpc-msgpackrpc yamux ];
   };
 
-  serf = buildGoPackage rec {
+  serf = buildFromGitHub {
     rev = "668982d8f90f5eff4a766583c1286393c1d27f68";
-    name = "serf-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/hashicorp/serf";
-
-    src = fetchFromGitHub {
-      inherit rev;
-      owner  = "hashicorp";
-      repo   = "serf";
-      sha256 = "1h05h5xhaj27r1mh5zshnykax29lqjhfc0bx4v9swiwb873c24qk";
-    };
+    date = "2015-05-15";
+    owner  = "hashicorp";
+    repo   = "serf";
+    sha256 = "1h05h5xhaj27r1mh5zshnykax29lqjhfc0bx4v9swiwb873c24qk";
 
     buildInputs = [
       circbuf armon.go-metrics ugorji.go go-syslog logutils mdns memberlist
