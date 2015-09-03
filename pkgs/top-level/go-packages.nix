@@ -1969,6 +1969,17 @@ let
     doCheck = false; # bad import path in tests
   };
 
+  pond = buildFromGitHub {
+    rev = "bce6e0dc61803c23699c749e29a83f81da3c41b2";
+    owner = "agl";
+    repo = "pond";
+    sha256 = "1dmgbg4ak3jkbgmxh0lr4hga1nl623mh7pvsgby1rxl4ivbzwkh4";
+
+    buildInputs = [ net crypto protobuf ed25519 pkgs.trousers pkgs.dclxvi ];
+    buildFlags = "-tags nogui";
+    excludedPackages = "appengine";
+  };
+
   pongo2 = buildFromGitHub {
     rev    = "5e81b817a0c48c1c57cdf1a9056cf76bdee02ca9";
     date   = "2014-10-27";
