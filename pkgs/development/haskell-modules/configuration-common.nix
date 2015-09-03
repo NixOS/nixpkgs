@@ -1026,4 +1026,7 @@ self: super: {
   # https://github.com/bos/bloomfilter/issues/7
   bloomfilter = appendPatch super.bloomfilter ./patches/bloomfilter-fix-on-32bit.patch;
 
+  # https://github.com/pxqr/base32-bytestring/issues/4
+  base32-bytestring = dontCheck super.base32-bytestring;
+
 }
