@@ -4206,6 +4206,9 @@ let
   julia03 = callPackage ../development/compilers/julia/0.3.nix {
     llvm = llvm_33;
   };
+
+  julia-dev = callPackage ../development/compilers/julia/dev.nix { };
+
   julia = julia03;
 
   lazarus = callPackage ../development/compilers/fpc/lazarus.nix {

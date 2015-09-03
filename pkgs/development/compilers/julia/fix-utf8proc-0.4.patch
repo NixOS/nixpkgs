@@ -1,0 +1,22 @@
+diff --git a/src/flisp/Makefile b/src/flisp/Makefile
+index bec8624..4f36777 100644
+--- a/src/flisp/Makefile
++++ b/src/flisp/Makefile
+@@ -24,9 +24,15 @@ DOBJS = $(SRCS:%.c=$(BUILDDIR)/%.dbg.obj)
+ LLTDIR = ../support
+ LLT_release = $(BUILDDIR)/$(LLTDIR)/libsupport.a
+ LLT_debug = $(BUILDDIR)/$(LLTDIR)/libsupport-debug.a
+-LIBFILES_release = $(LLT_release) $(LIBUV) $(LIBUTF8PROC)
+-LIBFILES_debug = $(LLT_debug) $(LIBUV) $(LIBUTF8PROC)
++LIBFILES_common = $(LIBUV)
+ LIBS =
++ifeq ($(USE_SYSTEM_UTF8PROC), 1)
++  LIBS += $(LIBUTF8PROC)
++else
++  LIBFILES_common += $(LIBUTF8PROC)
++endif
++LIBFILES_release = $(LLT_release) $(LIBFILES_common)
++LIBFILES_debug = $(LLT_debug) $(LIBFILES_common)
+ ifneq ($(OS),WINNT)
+ LIBS += -lpthread
+ endif
