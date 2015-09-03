@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
     (if webuiSupport then "" else "--disable-webui")
   ] ++ optional debugSupport "--enable-debug";
 
-  enableParallelBuilding = true;
+  # https://github.com/qbittorrent/qBittorrent/issues/1992 
+  enableParallelBuilding = false;
 
   meta = {
     description = "Free Software alternative to µtorrent";

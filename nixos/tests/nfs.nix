@@ -6,7 +6,7 @@ let
     { config, pkgs, ... }:
     { fileSystems = pkgs.lib.mkVMOverride
         [ { mountPoint = "/data";
-            device = "server:${if version == 4 then "/" else "/data"}";
+            device = "server:/data";
             fsType = "nfs";
             options = "vers=${toString version}";
           }

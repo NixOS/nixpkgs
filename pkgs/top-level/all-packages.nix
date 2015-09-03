@@ -611,7 +611,7 @@ let
 
   ascii = callPackage ../tools/text/ascii { };
 
-  asciinema = callPackage ../tools/misc/asciinema { };
+  asciinema = goPackages.asciinema.bin // { outputs = [ "bin" ]; };
 
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texLiveAggregationFun {
@@ -722,6 +722,8 @@ let
   bastet = callPackage ../games/bastet {};
 
   bc = callPackage ../tools/misc/bc { };
+
+  bdf2psf = callPackage ../tools/misc/bdf2psf { };  
 
   bcache-tools = callPackage ../tools/filesystems/bcache-tools { };
 
@@ -884,13 +886,15 @@ let
 
   ent = callPackage ../tools/misc/ent { };
 
+  facter = callPackage ../tools/system/facter {};
+
   fasd = callPackage ../tools/misc/fasd { };
 
   fop = callPackage ../tools/typesetting/fop { };
 
   filter_audio = callPackage ../development/libraries/filter_audio { };
 
-  fzf = callPackage ../tools/misc/fzf { };
+  fzf = goPackages.fzf.bin // { outputs = [ "bin" ]; };
 
   gist = callPackage ../tools/text/gist { };
 
@@ -1259,6 +1263,8 @@ let
 
   dbench = callPackage ../development/tools/misc/dbench { };
 
+  dclxvi = callPackage ../development/libraries/dclxvi { };
+
   dcraw = callPackage ../tools/graphics/dcraw { };
 
   dcfldd = callPackage ../tools/system/dcfldd { };
@@ -1487,7 +1493,7 @@ let
     inherit (perlPackages) ImageExifTool JSON;
   };
 
-  flannel = callPackage ../tools/networking/flannel { };
+  flannel = goPackages.flannel.bin // { outputs = [ "bin" ]; };
 
   flashbench = callPackage ../os-specific/linux/flashbench { };
 
@@ -1691,7 +1697,7 @@ let
 
   goaccess = callPackage ../tools/misc/goaccess { };
 
-  go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
+  go-mtpfs = goPackages.mtpfs.bin // { outputs = [ "bin" ]; };
 
   googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
 
@@ -1706,7 +1712,7 @@ let
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
   grafana-frontend = callPackage ../development/tools/misc/grafana { };
-  grafana-backend = pkgs.goPackages.grafana.bin // { outputs = [ "bin" ]; };
+  grafana-backend = goPackages.grafana.bin // { outputs = [ "bin" ]; };
 
   grafx2 = callPackage ../applications/graphics/grafx2 {};
 
@@ -2383,7 +2389,7 @@ let
     inherit gnumake3;
   };
 
-  ngrok = callPackage ../tools/misc/ngrok { };
+  ngrok = goPackages.ngrok.bin // { outputs = [ "bin" ]; };
 
   noip = callPackage ../tools/networking/noip { };
 
@@ -2539,6 +2545,8 @@ let
   spCompat = callPackage ../tools/text/sgml/opensp/compat.nix { };
 
   opentracker = callPackage ../applications/networking/p2p/opentracker { };
+
+  opentsdb = callPackage ../tools/misc/opentsdb {};
 
   openvpn = callPackage ../tools/networking/openvpn { };
 
@@ -2786,6 +2794,8 @@ let
   };
 
   ocz-ssd-guru = callPackage ../tools/misc/ocz-ssd-guru { };
+
+  qalculate-gtk = callPackage ../applications/science/math/qalculate-gtk { };
 
   qastools = callPackage ../tools/audio/qastools {
     qt = qt4;
@@ -3163,8 +3173,6 @@ let
 
   telnet = callPackage ../tools/networking/telnet { };
 
-  tessel = callPackage ../applications/misc/tessel { };
-
   texmacs = callPackage ../applications/editors/texmacs {
     tex = texLive; /* tetex is also an option */
     extraFonts = true;
@@ -3247,6 +3255,8 @@ let
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
 
   txt2man = callPackage ../tools/misc/txt2man { };
+
+  txt2tags = callPackage ../tools/text/txt2tags { };
 
   u9fs = callPackage ../servers/u9fs { };
 
@@ -4302,17 +4312,17 @@ let
 
     asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
 
-    async_extra = callPackage ../development/ocaml-modules/async_extra { };
+    async-extra = callPackage ../development/ocaml-modules/async-extra { };
 
-    async_find = callPackage ../development/ocaml-modules/async_find { };
+    async-find = callPackage ../development/ocaml-modules/async-find { };
 
-    async_kernel = callPackage ../development/ocaml-modules/async_kernel { };
+    async-kernel = callPackage ../development/ocaml-modules/async-kernel { };
 
-    async_shell = callPackage ../development/ocaml-modules/async_shell { };
+    async-shell = callPackage ../development/ocaml-modules/async-shell { };
 
-    async_ssl = callPackage ../development/ocaml-modules/async_ssl { };
+    async-ssl = callPackage ../development/ocaml-modules/async-ssl { };
 
-    async_unix = callPackage ../development/ocaml-modules/async_unix { };
+    async-unix = callPackage ../development/ocaml-modules/async-unix { };
 
     async =
       if lib.versionOlder "4.02" ocaml_version
@@ -4388,11 +4398,11 @@ let
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
-    bin_prot = callPackage ../development/ocaml-modules/bin_prot { };
+    bin-prot = callPackage ../development/ocaml-modules/bin-prot { };
 
-    ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
+    ocaml-cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
-    ocaml_cairo2 = callPackage ../development/ocaml-modules/ocaml-cairo2 { };
+    ocaml-cairo2 = callPackage ../development/ocaml-modules/ocaml-cairo2 { };
 
     cil = callPackage ../development/ocaml-modules/cil { };
 
@@ -4416,7 +4426,7 @@ let
 
     csv = callPackage ../development/ocaml-modules/csv { };
 
-    custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
+    custom-printf = callPackage ../development/ocaml-modules/custom-printf { };
 
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
 
@@ -4432,9 +4442,9 @@ let
 
     enumerate = callPackage ../development/ocaml-modules/enumerate { };
 
-    erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
+    erm-xml = callPackage ../development/ocaml-modules/erm-xml { };
 
-    erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
+    erm-xmpp = callPackage ../development/ocaml-modules/erm-xmpp { };
 
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
       lwt = ocaml_lwt;
@@ -4527,15 +4537,15 @@ let
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
 
-    core_extended = callPackage ../development/ocaml-modules/core_extended { };
+    core-extended = callPackage ../development/ocaml-modules/core-extended { };
 
-    core_kernel = callPackage ../development/ocaml-modules/core_kernel { };
+    core-kernel = callPackage ../development/ocaml-modules/core-kernel { };
 
     core = callPackage ../development/ocaml-modules/core { };
 
-    ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
+    ocaml-cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 
-    ocaml_data_notation = callPackage ../development/ocaml-modules/odn { };
+    ocaml-data-notation = callPackage ../development/ocaml-modules/odn { };
 
     ocaml_expat = callPackage ../development/ocaml-modules/expat { };
 
@@ -4609,16 +4619,16 @@ let
 
     textutils = callPackage ../development/ocaml-modules/textutils { };
 
-    type_conv_108_08_00 = callPackage ../development/ocaml-modules/type_conv/108.08.00.nix { };
-    type_conv_109_60_01 = callPackage ../development/ocaml-modules/type_conv/109.60.01.nix { };
-    type_conv_112_01_01 = callPackage ../development/ocaml-modules/type_conv/112.01.01.nix { };
-    type_conv =
+    type-conv-108_08_00 = callPackage ../development/ocaml-modules/type-conv/108.08.00.nix { };
+    type-conv-109_60_01 = callPackage ../development/ocaml-modules/type-conv/109.60.01.nix { };
+    type-conv-112_01_01 = callPackage ../development/ocaml-modules/type-conv/112.01.01.nix { };
+    type-conv =
       if lib.versionOlder "4.02" ocaml_version
-      then type_conv_112_01_01
+      then type-conv-112_01_01
       else if lib.versionOlder "4.00" ocaml_version
-      then type_conv_109_60_01
+      then type-conv-109_60_01
       else if lib.versionOlder "3.12" ocaml_version
-      then type_conv_108_08_00
+      then type-conv-108_08_00
       else null;
 
     sexplib_108_08_00 = callPackage ../development/ocaml-modules/sexplib/108.08.00.nix { };
@@ -4641,11 +4651,11 @@ let
 
     ocurl = callPackage ../development/ocaml-modules/ocurl { };
 
-    pa_ounit = callPackage ../development/ocaml-modules/pa_ounit { };
+    pa-ounit = callPackage ../development/ocaml-modules/pa-ounit { };
 
-    pa_bench = callPackage ../development/ocaml-modules/pa_bench { };
+    pa-bench = callPackage ../development/ocaml-modules/pa-bench { };
 
-    pa_test = callPackage ../development/ocaml-modules/pa_test { };
+    pa-test = callPackage ../development/ocaml-modules/pa-test { };
 
     pipebang = callPackage ../development/ocaml-modules/pipebang { };
 
@@ -4705,6 +4715,32 @@ let
     ocsigen_deriving = callPackage ../development/ocaml-modules/ocsigen-deriving {
       oasis = ocaml_oasis;
     };
+
+
+    # Attributes for backward compatibility.
+    async_extra = async-extra; # added 2015-07-21
+    async_find = async-find; # added 2015-07-21
+    async_kernel = async-kernel; # added 2015-07-21
+    async_shell = async-shell; # added 2015-07-21
+    async_ssl = async-ssl; # added 2015-07-21
+    async_unix = async-unix; # added 2015-07-21
+    bin_prot = bin-prot; # added 2015-07-21
+    core_extended = core-extended; # added 2015-07-21
+    core_kernel = core-kernel; # added 2015-07-21
+    custom_printf = custom-printf; # added 2015-07-21
+    erm_xml = erm-xml; # added 2015-07-21
+    erm_xmpp = erm-xmpp; # added 2015-07-21
+    ocaml_cairo = ocaml-cairo; # added 2015-07-21
+    ocaml_cairo2 = ocaml-cairo2; # added 2015-07-21
+    ocaml_cryptgps = ocaml-cryptgps; # added 2015-07-21
+    ocaml_data_notation = ocaml-data-notation; # added 2015-07-21
+    pa_bench = pa-bench; # added 2015-07-21
+    pa_ounit = pa-ounit; # added 2015-07-21
+    pa_test = pa-test; # added 2015-07-21
+    type_conv_108_08_00 = type-conv-108_08_00; # added 2015-07-21
+    type_conv_109_60_01 = type-conv-109_60_01; # added 2015-07-21
+    type_conv_112_01_01 = type-conv-112_01_01; # added 2015-07-21
+    type_conv = type-conv; # added 2015-07-21
 
   };
 
@@ -5635,7 +5671,7 @@ let
 
   ino = callPackage ../development/arduino/ino { };
 
-  inotifyTools = callPackage ../development/tools/misc/inotify-tools { };
+  inotify-tools = callPackage ../development/tools/misc/inotify-tools { };
 
   intel-gpu-tools = callPackage ../development/tools/misc/intel-gpu-tools {
     inherit (xorg) libpciaccess dri2proto libX11 libXext libXv libXrandr;
@@ -6162,8 +6198,6 @@ let
 
   dssi = callPackage ../development/libraries/dssi {};
 
-  dragonegg = llvmPackages_35.dragonegg;
-
   dxflib = callPackage ../development/libraries/dxflib {};
 
   eigen = callPackage ../development/libraries/eigen {};
@@ -6628,6 +6662,8 @@ let
 
   hstr = callPackage ../applications/misc/hstr { };
 
+  htmlcxx = callPackage ../development/libraries/htmlcxx { };
+
   http-parser = callPackage ../development/libraries/http-parser { inherit (pythonPackages) gyp; };
 
   hunspell = callPackage ../development/libraries/hunspell { };
@@ -6995,7 +7031,6 @@ let
 
   libev = callPackage ../development/libraries/libev { };
 
-  libevent14 = callPackage ../development/libraries/libevent/1.4.nix { };
   libevent = callPackage ../development/libraries/libevent { };
 
   libewf = callPackage ../development/libraries/libewf { };
@@ -7446,7 +7481,7 @@ let
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
 
   libunwind = if stdenv.isDarwin
-    then callPackage ../development/libraries/libunwind/native.nix {}
+    then libunwindNative
     else callPackage ../development/libraries/libunwind { };
 
   libunwindNative = callPackage ../development/libraries/libunwind/native.nix {};
@@ -7528,9 +7563,7 @@ let
 
   libxslt = callPackage ../development/libraries/libxslt { };
 
-  libixp_for_wmii = lowPrio (import ../development/libraries/libixp_for_wmii {
-    inherit fetchurl stdenv;
-  });
+  libixp_hg = callPackage ../development/libraries/libixp-hg { };
 
   libyaml = callPackage ../development/libraries/libyaml { };
 
@@ -7786,6 +7819,8 @@ let
   opencv_2_1 = callPackage ../development/libraries/opencv/2.1.nix {
     libpng = libpng12;
   };
+
+  opencv3 = callPackage ../development/libraries/opencv/3.x.nix { };
 
   # this ctl version is needed by openexr_viewers
   openexr_ctl = ctl;
@@ -8706,7 +8741,7 @@ let
 
   buildPerlPackage = import ../development/perl-modules/generic perl;
 
-  perlPackages = recurseIntoAttrs (import ./perl-packages.nix {
+  perlPackages = recurseIntoAttrs (callPackage ./perl-packages.nix {
     inherit pkgs;
     overrides = (config.perlPackageOverrides or (p: {})) pkgs;
   });
@@ -9001,6 +9036,8 @@ let
 
   groovebasin = callPackage ../applications/audio/groovebasin { };
 
+  hbase = callPackage ../servers/hbase {};
+
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
   jboss = callPackage ../servers/http/jboss { };
@@ -9076,7 +9113,7 @@ let
 
   nsd = callPackage ../servers/dns/nsd (config.nsd or {});
 
-  nsq = callPackage ../servers/nsq { };
+  nsq = goPackages.nsq.bin // { outputs = [ "bin" ]; };
 
   openpts = callPackage ../servers/openpts { };
 
@@ -9296,7 +9333,7 @@ let
 
   shairport-sync = callPackage ../servers/shairport-sync { };
 
-  serfdom = callPackage ../servers/serfdom { };
+  serfdom = goPackages.serf.bin // { outputs = [ "bin" ]; };
 
   seyren = callPackage ../servers/monitoring/seyren { };
 
@@ -9767,16 +9804,6 @@ let
       ];
   };
 
-  linux_4_0 = makeOverridable (import ../os-specific/linux/kernel/linux-4.0.nix) {
-    inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
   linux_4_1 = makeOverridable (import ../os-specific/linux/kernel/linux-4.1.nix) {
     inherit fetchurl stdenv perl buildLinux;
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
@@ -9972,7 +9999,6 @@ let
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
   linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
   linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18 linuxPackages_3_18);
-  linuxPackages_4_0 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_0 linuxPackages_4_0);
   linuxPackages_4_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_1 linuxPackages_4_1);
   linuxPackages_4_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_2 linuxPackages_4_2);
   linuxPackages_testing = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing linuxPackages_testing);
@@ -10978,6 +11004,7 @@ let
   cmatrix = callPackage ../applications/misc/cmatrix { };
 
   bomi = callPackage ../applications/video/bomi {
+    youtube-dl = pythonPackages.youtube-dl;
     pulseSupport = config.pulseaudio or true;
   };
 
@@ -11493,14 +11520,15 @@ let
 
   filezilla = callPackage ../applications/networking/ftp/filezilla { };
 
-  firefox = callPackage ../applications/networking/browsers/firefox {
+  inherit (callPackages ../applications/networking/browsers/firefox {
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
     libpng = libpng_apng;
     enableGTK3 = false;
-  };
+  }) firefox firefox-esr;
 
-  firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
+  firefox-wrapper = wrapFirefox { browser = pkgs.firefox; };
+  firefox-esr-wrapper = wrapFirefox { browser = pkgs.firefox-esr; };
 
   firefox-bin = callPackage ../applications/networking/browsers/firefox-bin {
     gconf = pkgs.gnome.GConf;
@@ -11811,8 +11839,9 @@ let
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
-      RpcXML XMLSimple PerlMagick YAML YAMLLibYAML HTMLTree Filechdir
+      RpcXML XMLSimple YAML YAMLLibYAML HTMLTree Filechdir
       AuthenPassphrase NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay;
+    inherit (perlPackages.override { pkgs = pkgs // { imagemagick = imagemagickBig;}; }) PerlMagick;
   };
 
   imagemagick_light = imagemagick.override {
@@ -11833,11 +11862,11 @@ let
     libxml2 = null;
   };
 
-  imagemagick = callPackage ../applications/graphics/ImageMagick {
+  imagemagick = imagemagickBig.override {
     ghostscript = null;
   };
 
-  imagemagickBig = imagemagick;
+  imagemagickBig = callPackage ../applications/graphics/ImageMagick { };
 
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive {
@@ -12209,6 +12238,7 @@ let
   mpv = callPackage ../applications/video/mpv rec {
     lua = lua5_1;
     lua5_sockets = lua5_1_sockets;
+    youtube-dl = pythonPackages.youtube-dl;
     bs2bSupport = config.mpv.bs2bSupport or true;
     youtubeSupport = config.mpv.youtubeSupport or true;
     cacaSupport = config.mpv.cacaSupport or true;
@@ -12222,6 +12252,8 @@ let
   mudlet = callPackage ../games/mudlet {
     inherit (lua51Packages) luafilesystem lrexlib luazip luasqlite3;
   };
+
+  multimarkdown = callPackage ../tools/typesetting/multimarkdown { };
 
   multimon-ng = callPackage ../applications/misc/multimon-ng { };
 
@@ -12503,7 +12535,7 @@ let
     inherit (xorg) libXpm;
   };
 
-  pond = callPackage ../applications/networking/pond { };
+  pond = goPackages.pond.bin // { outputs = [ "bin" ]; };
 
   ponymix = callPackage ../applications/audio/ponymix { };
 
@@ -12695,6 +12727,8 @@ let
     unicode3Support = true;
   };
 
+  udevil = callPackage ../applications/misc/udevil {};
+
   # urxvt plugins
   urxvt_perl = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-perl { };
   urxvt_perls = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-perls { };
@@ -12704,9 +12738,6 @@ let
   rxvt_unicode-with-plugins = callPackage ../applications/misc/rxvt_unicode/wrapper.nix {
     plugins = [ urxvt_perl urxvt_perls urxvt_tabbedex urxvt_font_size ];
   };
-
-  # FIXME: remove somewhere in future
-  rxvt_unicode_with-plugins = rxvt_unicode-with-plugins;
 
   sakura = callPackage ../applications/misc/sakura {
     vte = gnome3.vte_290;
@@ -12817,6 +12848,8 @@ let
 
   cura = callPackage ../applications/misc/cura { };
 
+  curaLulzbot = callPackage ../applications/misc/cura/lulzbot.nix { };
+
   peru = callPackage ../applications/version-management/peru {};
 
   printrun = callPackage ../applications/misc/printrun { };
@@ -12912,7 +12945,7 @@ let
 
   symlinks = callPackage ../tools/system/symlinks { };
 
-  syncthing = callPackage ../applications/networking/syncthing { };
+  syncthing = (callPackage ../applications/networking/syncthing { }).bin // { outputs = [ "bin" ]; };
 
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
@@ -13267,19 +13300,7 @@ let
 
   wmctrl = callPackage ../tools/X11/wmctrl { };
 
-  # I'm keen on wmiimenu only  >wmii-3.5 no longer has it...
-  wmiimenu = import ../applications/window-managers/wmii31 {
-    libixp = libixp_for_wmii;
-    inherit fetchurl /* fetchhg */ stdenv gawk;
-    inherit (xlibs) libX11;
-  };
-
-  wmiiSnap = import ../applications/window-managers/wmii {
-    libixp = libixp_for_wmii;
-    inherit fetchurl /* fetchhg */ stdenv gawk;
-    inherit (xlibs) libX11 xextproto libXt libXext;
-    includeUnpack = config.stdenv.includeUnpack or false;
-  };
+  wmii_hg = callPackage ../applications/window-managers/wmii-hg { };
 
   wordnet = callPackage ../applications/misc/wordnet { };
 
@@ -13447,7 +13468,6 @@ let
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
-  xen_4_4_1 = callPackage ../applications/virtualization/xen/4.4.1.nix { };
   xen_4_5_0 = callPackage ../applications/virtualization/xen/4.5.0.nix { };
   xen_4_5_1 = callPackage ../applications/virtualization/xen/4.5.1.nix { };
   xen_xenServer = callPackage ../applications/virtualization/xen/4.5.0.nix { xenserverPatched = true; };
@@ -13668,7 +13688,7 @@ let
 
   chessdb = callPackage ../games/chessdb { };
 
-  confd = pkgs.goPackages.confd.bin // { outputs = [ "bin" ]; };
+  confd = goPackages.confd.bin // { outputs = [ "bin" ]; };
 
   construoBase = lowPrio (callPackage ../games/construo {
     mesa = null;
@@ -13768,6 +13788,8 @@ let
   };
 
   kobodeluxe = callPackage ../games/kobodeluxe { };
+
+  lgogdownloader = callPackage ../games/lgogdownloader { };
 
   lincity = builderDefsPackage (import ../games/lincity) {
     inherit (xlibs) libX11 libXext xextproto
@@ -14531,7 +14553,7 @@ let
     camlp5 = ocamlPackages.camlp5_strict;
   };
 
-  hologram = pkgs.goPackages.hologram.bin // { outputs = [ "bin" ]; };
+  hologram = goPackages.hologram.bin // { outputs = [ "bin" ]; };
 
   isabelle = import ../applications/science/logic/isabelle {
     inherit (pkgs) stdenv fetchurl nettools perl polyml;
@@ -14616,6 +14638,8 @@ let
   eagle = callPackage_i686 ../applications/science/electronics/eagle { };
 
   caneda = callPackage ../applications/science/electronics/caneda { };
+
+  geda = callPackage ../applications/science/electronics/geda { };
 
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
 
@@ -15240,7 +15264,7 @@ let
       buildInputs = [ stdenv ncurses mesa freeglut libzip gcc
                                    pack.ocaml pack.findlib pack.camomile
                                    pack.dypgen pack.ocaml_sqlite3 pack.camlzip
-                                   pack.lablgtk pack.camlimages pack.ocaml_cairo
+                                   pack.lablgtk pack.camlimages pack.ocaml-cairo
                                    pack.lablgl pack.ocamlnet pack.cryptokit
                                    pack.ocaml_pcre pack.patoline
                                    ];
@@ -15281,50 +15305,33 @@ let
 
   mg = callPackage ../applications/editors/mg { };
 
-}
-  ### Aliases to attributes converted to the dashed-style.
-  // lib.mapAttrs (name: builtins.trace
-    ( "Warning: using a deprecated attribute '${name}'."
-    + " CamelCase and under_scores are replaced by dashed-names"
-    + " to match the nix-env names better."))
-{ # warnings since 2015-09
+
+  # Attributes for backward compatibility.
   adobeReader = adobe-reader;
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
   bridge_utils = bridge-utils;  # added 2015-02-20
-  clangAnalyzer = clang-analyzer;  # added 2015-02-20
-  lttngTools = lttng-tools;  # added 2014-07-31
-  lttngUst = lttng-ust;  # added 2014-07-31
-  jquery_ui = jquery-ui;  # added 2014-09-07
-  rdiff_backup = rdiff-backup;  # added 2014-11-23
-  htmlTidy = html-tidy;  # added 2014-12-06
-  libtidy = html-tidy;  # added 2014-12-21
-  speedtest_cli = speedtest-cli;  # added 2015-02-17
-  sqliteInteractive = sqlite-interactive;  # added 2014-12-06
-  nfsUtils = nfs-utils;  # added 2014-12-06
   buildbotSlave = buildbot-slave;  # added 2014-12-09
-  rssglx = rss-glx; #added 2015-03-25
-
-}
-  ### Other attribute aliases for backward compatibility.
-  // lib.mapAttrs
-      (name: builtins.trace "Warning: using a deprecated attribute '${name}'.")
-{ # warnings since 2015-09
-  youtubeDL = youtube-dl;  # added 2014-10-26
-  youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
+  cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
+  clangAnalyzer = clang-analyzer;  # added 2015-02-20
   cool-old-term = cool-retro-term; # added 2015-01-31
-
+  firefoxWrapper = firefox-wrapper;
   haskell-ng = haskell;                 # 2015-04-19
   haskellngPackages = haskellPackages;  # 2015-04-19
+  htmlTidy = html-tidy;  # added 2014-12-06
   inherit (haskell.compiler) jhc uhc;   # 2015-05-15
-  cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
-
-  opentsdb = callPackage ../tools/misc/opentsdb {};
-
-  hbase = callPackage ../servers/hbase {};
-
-  udevil = callPackage ../applications/misc/udevil {};
-
-  facter = callPackage ../tools/system/facter {};
+  inotifyTools = inotify-tools;
+  jquery_ui = jquery-ui;  # added 2014-09-07
+  libtidy = html-tidy;  # added 2014-12-21
+  lttngTools = lttng-tools;  # added 2014-07-31
+  lttngUst = lttng-ust;  # added 2014-07-31
+  nfsUtils = nfs-utils;  # added 2014-12-06
+  rdiff_backup = rdiff-backup;  # added 2014-11-23
+  rssglx = rss-glx; #added 2015-03-25
+  rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
+  speedtest_cli = speedtest-cli;  # added 2015-02-17
+  sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
+  youtubeDL = youtube-dl;  # added 2014-10-26
 
 }; in self; in pkgs

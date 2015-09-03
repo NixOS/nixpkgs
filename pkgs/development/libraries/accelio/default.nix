@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "accelio-${version}${stdenv.lib.optionalString (kernel != null) "-kernel"}";
-  version = "2015-07-28";
+  version = "2015-08-30";
 
   src = fetchFromGitHub {
     owner = "accelio";
     repo = "accelio";
-    rev = "0c4b6d535831650112ba9409a5c7d6e1bc436d61";
-    sha256 = "044m92pnvdl64irvy7bdqr51gz0qr5f14xnsig4gkc3vb0afbb4j";
+    rev = "3d1f2b2d311aa70de9856832fd02647266624e82";
+    sha256 = "172frqk2n43g0arhazgcwfvj0syf861vdzdpxl7idr142bb0ykf7";
   };
 
   postPatch = ''

@@ -1,0 +1,29 @@
+From e80da86447174b583e4b6cebedae2956fac926ee Mon Sep 17 00:00:00 2001
+From: Brian Behlendorf <behlendorf1@llnl.gov>
+Date: Tue, 14 Jul 2015 14:15:13 -0700
+Subject: [PATCH] Linux 4.2 compat: bdi_setup_and_register()
+
+The vfs_compat.h header should include the linux/backing-dev.h header
+because it depends on the bdi_* functions defined there.  In previous
+kernels this header was being indirectly included which prevented a
+build failure.
+
+Signed-off-by: Brian Behlendorf <behlendorf1@llnl.gov>
+Signed-off-by: Richard Yao <ryao@gentoo.org>
+Closes #3596
+---
+ include/linux/vfs_compat.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/linux/vfs_compat.h b/include/linux/vfs_compat.h
+index e8f8448..40832d9 100644
+--- a/include/linux/vfs_compat.h
++++ b/include/linux/vfs_compat.h
+@@ -28,6 +28,7 @@
+ #define	_ZFS_VFS_H
+ 
+ #include <sys/taskq.h>
++#include <linux/backing-dev.h>
+ 
+ /*
+  * 2.6.28 API change,

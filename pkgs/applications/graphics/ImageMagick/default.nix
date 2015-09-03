@@ -4,22 +4,19 @@
 }:
 
 let
-
-  version = "6.9.1-0";
-
   arch =
     if stdenv.system == "i686-linux" then "i686"
     else if stdenv.system == "x86_64-linux" || stdenv.system == "x86_64-darwin" then "x86-64"
     else throw "ImageMagick is not supported on this platform.";
-
 in
 
 stdenv.mkDerivation rec {
   name = "imagemagick-${version}";
+  version = "6.9.2-0";
 
   src = fetchurl {
     url = "mirror://imagemagick/releases/ImageMagick-${version}.tar.xz";
-    sha256 = "03lvj6rxv16xk0dpsbzvm2gq5bggkwff9wqbpkq0znihzijpax1j";
+    sha256 = "17ir8bw1j7g7srqmsz3rx780sgnc21zfn0kwyj78iazrywldx8h7";
   };
 
   outputs = [ "out" "doc" ];
@@ -43,7 +40,13 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg libX11 libXext libXt lcms2 ];
 
-  postInstall = ''(cd "$out/include" && ln -s ImageMagick* ImageMagick)'';
+  postInstall = ''
+    (cd "$out/include" && ln -s ImageMagick* ImageMagick)
+  '' + lib.optionalString (ghostscript != null) ''
+    for la in $out/lib/*.la; do
+      sed 's|-lgs|-L${ghostscript}/lib -lgs|' -i $la
+    done
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.imagemagick.org/;

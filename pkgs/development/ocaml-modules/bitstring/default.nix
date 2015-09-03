@@ -9,7 +9,7 @@ buildOcaml rec {
     sha256 = "1lh97qf1b7mq64pxkphr2w91ri5hfwg58cpjb2xd8a453c9jylw4";
   };
 
-  patches = [ ./camlp4-git.patch ./meta.patch ];
+  patches = [ ./camlp4-git.patch ./meta.patch ./srcdir.patch ];
 
   buildInputs = [time autoconf automake];
   doCheck = true;

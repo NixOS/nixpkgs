@@ -214,7 +214,7 @@ in
 
     };
 
-    users.extraUsers = mkOption {
+    users.users = mkOption {
       options = [ userOptions ];
     };
 
