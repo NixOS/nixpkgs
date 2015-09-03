@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     Categories=Qt;Development;IDE;
     __EOF__
     # Wrap the qtcreator binary
+    addToSearchPath QML2_IMPORT_PATH "${qtLib.quickcontrols}/lib/qt5/qml"
     wrapProgram $out/bin/qtcreator \
       --prefix QT_PLUGIN_PATH : "$QT_PLUGIN_PATH" \
       --prefix QML_IMPORT_PATH : "$QML_IMPORT_PATH" \
