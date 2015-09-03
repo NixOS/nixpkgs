@@ -581,6 +581,13 @@ let
     };
   };
 
+  flannel = buildFromGitHub {
+    rev = "v0.5.3";
+    owner = "coreos";
+    repo = "flannel";
+    sha256 = "0d9khv0bczvsaqnz16p546m4r5marmnkcrdhi0f3ajnwxb776r9p";
+  };
+
   fsnotify.v1 = buildGoPackage rec {
     rev = "v1.2.0";
     name = "fsnotify.v1-${rev}";
