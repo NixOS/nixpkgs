@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
       --replace /bin/bash ${stdenv.shell}
     substituteInPlace ./configure \
       --replace "/usr/bin/env bash" ${stdenv.shell}
+    sed '1i#include <vector>' \
+      -i ./third-party/mcrouter/mcrouter/lib/fibers/TimeoutController.h
   '';
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
