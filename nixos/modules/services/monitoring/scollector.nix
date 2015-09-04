@@ -42,8 +42,8 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.scollector;
-        example = literalExample "pkgs.scollector";
+        default = pkgs.scollector.bin;
+        example = literalExample "pkgs.scollector.bin";
         description = ''
           scollector binary to use.
         '';
