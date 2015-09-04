@@ -3525,6 +3525,17 @@ let
     propagatedBuildInputs = with self; [ rpkg offtrac urlgrabber fedora_cert ];
   });
 
+  fixtures = buildPythonPackage rec {
+    name = "fixtures-1.3.1";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/f/fixtures/${name}.tar.gz";
+      md5 = "72959be66e26b09641a1e3902f631e62";
+    };
+    doCheck = true;
+    buildInputs = with self; [ pbr ] ++
+      stdenv.lib.optional doCheck [ testtools ];
+  };
+
   fudge = buildPythonPackage rec {
     name = "fudge-0.9.6";
     src = pkgs.fetchurl {
