@@ -11260,6 +11260,8 @@ let
 
     htmlize = callPackage ../applications/editors/emacs-modes/htmlize { };
 
+    ido-ubiquitous = callPackage ../applications/editors/emacs-modes/ido-ubiquitous { };
+
     icicles = callPackage ../applications/editors/emacs-modes/icicles { };
 
     idris = callPackage ../applications/editors/emacs-modes/idris { };
