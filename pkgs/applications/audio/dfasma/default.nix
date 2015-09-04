@@ -2,9 +2,9 @@
 
 let
 
-  version = "1.1.3";
+  version = "1.1.11";
   rev = "v${version}";
-  sha256 = "0rprnyvvd6yziwl94d3khd7rq95mvsmwag3x4ah0a5iar9w17r0c";
+  sha256 = "1qn2b074pg2w3kd17mld2ibq4x9slmydd3kczz1zyxl8dryrrgfk";
 
   reaperFork = {
     src = fetchFromGitHub {
@@ -27,6 +27,19 @@ in stdenv.mkDerivation {
     owner = "gillesdegottex";
   };
 
+  buildInputs = [ fftw libsndfile qt5.base qt5.multimedia ];
+
+  postPatch = ''
+    substituteInPlace dfasma.pro --replace '$$DFASMAVERSIONGITPRO' '${version}'
+    cp -Rv "${reaperFork.src}"/* external/REAPER
+  '';
+
+  configurePhase = ''
+    qmake PREFIX=$out PREFIXSHORTCUT=$out dfasma.pro
+  '';
+
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     inherit version;
     description = "Analyse and compare audio files in time and frequency";
@@ -43,18 +56,4 @@ in stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
-
-  buildInputs = [ fftw libsndfile qt5.base qt5.multimedia ];
-
-  postPatch = ''
-    substituteInPlace dfasma.pro \
-      --replace '$$DFASMAVERSIONGITPRO' '${version}'
-    cp -Rv "${reaperFork.src}"/* external/REAPER
-  '';
-
-  configurePhase = ''
-    qmake PREFIX=$out PREFIXSHORTCUT=$out dfasma.pro
-  '';
-
-  enableParallelBuilding = true;
 }
