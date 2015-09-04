@@ -14291,7 +14291,10 @@ let
       url = "https://pypi.python.org/packages/source/t/traceback2/${name}.tar.gz";
       md5 = "9e9723f4d70bfc6308fa992dd193c400";
     };
-    buildInputs = with pythonPackages; [ pbr pip ];
+    doCheck = false;
+    buildInputs = with self; [ pbr pip ] ++
+      stdenv.lib.optional doCheck [ unittest2 testtools ];
+    propagatedBuildInputs = with self; [ linecache2 ];
     meta = {
       description = "Backports of the traceback module";
       homepage = https://github.com/testing-cabal/traceback2;
