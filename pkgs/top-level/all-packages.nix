@@ -10449,6 +10449,8 @@ let
 
   xorg_sys_opengl = callPackage ../os-specific/linux/opengl/xorg-sys { };
 
+  xpilot-ng = callPackage ../games/xpilot { };
+
   zd1211fw = callPackage ../os-specific/linux/firmware/zd1211 { };
 
   zfs = callPackage ../os-specific/linux/zfs {
