@@ -5,7 +5,7 @@
 , pythonPackages, perlPackages
 }:
 
-let version = "1.2.17"; in
+let version = "1.2.18"; in
 
 assert version == pythonPackages.libvirt.version;
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.gz";
-    sha256 = "1b9gs3fj6bv9ig3kqmip2ivvsprymi6sslrvp82sw3srn0hayzp0";
+    sha256 = "1pkaxcg77izi1yzjc0wjav985dr11bx2hvcqxlgx5kjcmwcgz9fm";
   };
 
   buildInputs = [
