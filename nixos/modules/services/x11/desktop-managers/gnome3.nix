@@ -99,7 +99,6 @@ in {
     networking.networkmanager.enable = mkDefault true;
     services.upower.enable = config.powerManagement.enable;
     hardware.bluetooth.enable = mkDefault true;
-    services.xserver.displayManager.desktopManagerHandlesLidAndPower = false; # true doesn't make sense here, GNOME just doesn't handle it anymore
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
 
