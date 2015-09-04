@@ -14,7 +14,7 @@ with stdenv.lib;
 let
   buildType = "release";
 
-  version = "5.0.0"; # changes ./guest-additions as well
+  version = "5.0.2"; # changes ./guest-additions as well
 
   forEachModule = action: ''
     for mod in \
@@ -60,7 +60,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "bb71356c8f82012c9b5ae16e12302eb111c71ae7b063ada7688fbfa8aa10c2f7";
+    sha256 = "f290c220d62af2a7fdabb1934c1a0b924b68968a236bb2509bcb507d2c19485e";
   };
 
   buildInputs =
