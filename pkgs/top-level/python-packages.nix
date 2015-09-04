@@ -14552,22 +14552,18 @@ let
   };
 
   unittest2 = buildPythonPackage rec {
-    version = "0.5.1";
+    version = "1.1.0";
     name = "unittest2-${version}";
 
-    src = if python.is_py3k or false
-       then pkgs.fetchurl {
-           url = "http://pypi.python.org/packages/source/u/unittest2py3k/unittest2py3k-${version}.tar.gz";
-           sha256 = "00yl6lskygcrddx5zspkhr0ibgvpknl4678kkm6s626539grq93q";
-         }
-       else pkgs.fetchurl {
-           url = "http://pypi.python.org/packages/source/u/unittest2/unittest2-${version}.tar.gz";
-           md5 = "a0af5cac92bbbfa0c3b0e99571390e0f";
-         };
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/u/unittest2/unittest2-${version}.tar.gz";
+      md5 = "f72dae5d44f091df36b6b513305ea000";
+     };
 
-    preConfigure = ''
-      sed -i 's/unittest2py3k/unittest2/' setup.py
-    '';
+#    preConfigure = ''
+#      sed -i 's/unittest2py3k/unittest2/' setup.py
+#    '';
+    buildInputs = with pythonPackages; [ traceback2 ];
 
     meta = {
       description = "A backport of the new features added to the unittest testing framework in Python 2.7";
