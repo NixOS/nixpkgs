@@ -3530,6 +3530,8 @@ let
 
   xbrightness = callPackage ../tools/X11/xbrightness { };
 
+  xfstests = callPackage ../tools/misc/xfstests { };
+
   xprintidle-ng = callPackage ../tools/X11/xprintidle-ng {};
 
   xsettingsd = callPackage ../tools/X11/xsettingsd { };
