@@ -2742,18 +2742,18 @@ let
       license = "BSD-style";
     };
   });
-  
+
   dask = buildPythonPackage rec {
     name = "dask-${version}";
     version = "0.7.0";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/dask/${name}.tar.gz";
       sha256 = "3b48646e9e66ec21a6885700d39ea90e2c2a7ad5d26773a8413b570eb1a67b3e";
     };
-    
+
     propagatedBuildInputs = with self; [numpy toolz dill];
-    
+
     meta = {
       description = "Minimal task scheduling abstraction";
       homepage = "http://github.com/ContinuumIO/dask/";
@@ -2987,18 +2987,18 @@ let
       license = licenses.mit;
     };
   };
-  
+
   dill = buildPythonPackage rec {
     name = "dill-${version}";
     version = "0.2.4";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/dill/${name}.tgz";
       sha256 = "deca57da33ad2121ab1b9c4493bf8eb2b3a72b6426d4b9a3a853a073c68b97ca";
     };
-    
+
     propagatedBuildInputs = with self; [objgraph];
-    
+
     meta = {
       description = "Serialize all of python (almost)";
       homepage = http://www.cacr.caltech.edu/~mmckerns/dill.htm;
@@ -9063,21 +9063,21 @@ let
       maintainers = with maintainers; [ phreedom thoughtpolice ];
     };
   });
-  
+
   objgraph = buildPythonPackage rec {
     name = "objgraph-${version}";
     version = "2.0.1";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/o/objgraph/${name}.tar.gz";
       sha256 = "841de52715774ec1d0e97d9b4462d6e3e10406155f9b61f54ba7db984c45442a";
     };
-    
+
     # Tests fail with PyPy.
     disabled = isPyPy;
-    
+
     propagatedBuildInputs = with self; [pkgs.graphviz];
-    
+
     meta = {
       description = "Draws Python object reference graphs with graphviz";
       homepage = http://mg.pov.lt/objgraph/;
@@ -15098,24 +15098,24 @@ let
       license = licenses.mit;
     };
   });
-  
+
   xray = buildPythonPackage rec {
     name = "xray-${version}";
     version = "0.6.0";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/x/xray/${name}.tar.gz";
       sha256 = "c8c4aadb0d39662a81c259bd609f42708ff31c90012a9dd0a1f9ee56a798196f";
     };
-    
+
     buildInputs = with self; [nose];
     propagatedBuildInputs = with self; [numpy pandas];
-    
+
     meta = {
       description = "N-D labeled arrays and datasets in Python";
       homepage = https://github.com/xray/xray;
       license = licenses.asl20;
-    };  
+    };
   };
 
   youtube-dl = callPackage ../tools/misc/youtube-dl {
