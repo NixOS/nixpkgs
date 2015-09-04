@@ -15,10 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "172frqk2n43g0arhazgcwfvj0syf861vdzdpxl7idr142bb0ykf7";
   };
 
-  postPatch = ''
-    # Don't build broken examples
-    sed -i '/AC_CONFIG_SUBDIRS(\[\(examples\|tests\).*\/kernel/d' configure.ac
+  patches = [ ./fix-printfs.patch ];
 
+  postPatch = ''
     # Allow the installation of xio kernel headers
     sed -i 's,/opt/xio,''${out},g' src/kernel/xio/Makefile.in
 
@@ -26,6 +25,8 @@ stdenv.mkDerivation rec {
     sed -i '\,/etc/ld.so.conf.d/libxio.conf,d' src/usr/Makefile.am
     sed -i '\,/sbin/ldconfig,d' src/usr/Makefile.am
   '';
+
+  doCheck = true;
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libevent ];
