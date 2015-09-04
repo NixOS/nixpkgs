@@ -1607,6 +1607,8 @@ let
   gawkInteractive = appendToName "interactive"
     (gawk.override { readlineSupport = true; });
 
+  gawp = goPackages.gawp;
+
   gbdfed = callPackage ../tools/misc/gbdfed {
     gtk = gtk2;
   };
