@@ -131,6 +131,10 @@ stdenv.mkDerivation rec {
   QT4DIR = qt4;
   KDE4DIR = kde4.kdelibs;
 
+  # Fix boost 1.59 compat
+  # Try removing in the next version
+  CPPFLAGS = "-DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED";
+
   preConfigure = ''
     # Needed to find genccode
     PATH=$PATH:${icu}/sbin
