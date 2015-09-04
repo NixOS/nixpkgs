@@ -4059,6 +4059,21 @@ let
     };
   };
 
+  linecache2 = buildPythonPackage rec {
+    name = "linecache2-1.0.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/linecache2/${name}.tar.gz";
+      md5 = "7b25d0289ec36bff1f9e63c4329ce65c";
+    };
+    doCheck = false;
+    buildInputs = with pythonPackages; [ pbr ] ++
+      stdenv.lib.optional doCheck [ unittest2 fixtures ];
+    meta = {
+      description = "Backports of the linecache module";
+      homepage =  https://github.com/testing-cabal/linecache2;
+    };
+  };
+
   logilab_astng = buildPythonPackage rec {
     name = "logilab-astng-0.24.3";
 
