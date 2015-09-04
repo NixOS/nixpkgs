@@ -37,7 +37,6 @@ in
             exec ${pkgs.stdenv.shell} ${pkgs.xfce.xinitrc}
           '';
       };
-    services.xserver.displayManager.desktopManagerHandlesLidAndPower = true;
 
     environment.systemPackages =
       [ pkgs.gtk # To get GTK+'s themes.
