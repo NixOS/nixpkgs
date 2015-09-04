@@ -10399,7 +10399,6 @@ let
       description = "A collection of tools for internationalizing Python applications";
       license = "BSD";
       maintainers = with maintainers; [ garbas ];
-      platforms = platforms.linux;
     };
   });
 
