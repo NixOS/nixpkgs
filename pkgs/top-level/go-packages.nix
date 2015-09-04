@@ -626,6 +626,24 @@ let
     sha256 = "1p4p8755v2nrn54rik7yifpg9szyg44y5rpp0kryx4ycl72307rj";
   };
 
+  gawp = buildFromGitHub {
+    rev    = "488705639109de54d38974cc31353d34cc2cd609";
+    date = "2015-08-31";
+    owner  = "martingallagher";
+    repo   = "gawp";
+    sha256 = "0iqqd63nqdijdskdb9f0jwnm6akkh1p2jw4p2w7r1dbaqz1znyay";
+    dontInstallSrc = true;
+    buildInputs = [ fsnotify.v1 yaml-v2 ];
+
+    meta = with stdenv.lib; {
+      homepage    = "https://github.com/martingallagher/gawp";
+      description = "A simple, configurable, file watching, job execution tool implemented in Go.";
+      maintainers = with maintainers; [ kamilchm ];
+      license     = licenses.asl20 ;
+      platforms   = platforms.all;
+    };
+  };
+
   gcloud-golang = buildFromGitHub {
     rev = "6335269abf9002cf5a84613c13cda6010842b834";
     owner = "GoogleCloudPlatform";
