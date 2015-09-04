@@ -1,6 +1,6 @@
 { stdenv, fetchgit, fetchurl
 # build tools
-, gfortran, git, m4, patchelf, perl, which
+, gfortran, git, m4, patchelf, perl, which, python2
 # libjulia dependencies
 , libunwind, llvm, readline, utf8proc, zlib
 # standard library dependencies
@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
         name = "dsfmt-${dsfmt_ver}.tar.gz";
         md5 = "cb61be3be7254eae39684612c524740d";
       };
-    in [ dsfmt_src ];
+
+    in [ dsfmt_src llvm.src ];
 
   prePatch = ''
     copy_kill_hash(){
@@ -59,12 +60,12 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs =
-    [ libunwind llvm readline utf8proc zlib
+    [ libunwind readline utf8proc zlib
       double_conversion fftw fftwSinglePrec glpk gmp mpfr pcre
       openblas arpack suitesparse
     ];
 
-  nativeBuildInputs = [ gfortran git m4 patchelf perl which ];
+  nativeBuildInputs = [ gfortran git m4 patchelf perl which python2 ];
 
   makeFlags =
     let
@@ -96,7 +97,6 @@ stdenv.mkDerivation rec {
       "USE_SYSTEM_GMP=1"
       "USE_SYSTEM_GRISU=1"
       "USE_SYSTEM_LIBUNWIND=1"
-      "USE_SYSTEM_LLVM=1"
       "USE_SYSTEM_MPFR=1"
       "USE_SYSTEM_PATCHELF=1"
       "USE_SYSTEM_PCRE=1"
@@ -142,6 +142,5 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ raskin ttuegel ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
-    broken = false;
   };
 }

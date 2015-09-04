@@ -35,7 +35,7 @@ in
               type = types.bool;
               default = false;
               description = ''
-                Automatically log in as the sepecified <option>auto.user</option>.
+                Automatically log in as the sepecified <option>autoLogin.user</option>.
               '';
             };
 
@@ -67,6 +67,13 @@ in
   ###### implementation
 
   config = mkIf cfg.gdm.enable {
+
+    assertions = [
+      { assertion = let autoLogin = cfg.gdm.autoLogin; in
+          if autoLogin.enable then autoLogin.user != null else true;
+        message = "GDM auto-login requires services.xserver.displayManager.gdm.autoLogin.user to be set";
+      }
+    ];
 
     services.xserver.displayManager.slim.enable = false;
 

@@ -723,7 +723,7 @@ let
 
   bc = callPackage ../tools/misc/bc { };
 
-  bdf2psf = callPackage ../tools/misc/bdf2psf { };  
+  bdf2psf = callPackage ../tools/misc/bdf2psf { };
 
   bcache-tools = callPackage ../tools/filesystems/bcache-tools { };
 
@@ -5948,7 +5948,7 @@ let
 
   aalib = callPackage ../development/libraries/aalib { };
 
-  accelio = callPackage ../development/libraries/accelio { };
+  accelio = callPackage ../development/libraries/accelio { stdenv = overrideCC stdenv gcc5; };
 
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
@@ -6320,8 +6320,8 @@ let
   freealut = callPackage ../development/libraries/freealut { };
 
   freeglut = callPackage ../development/libraries/freeglut { };
-  
-  freenect = callPackage ../development/libraries/freenect { 
+
+  freenect = callPackage ../development/libraries/freenect {
       inherit (xlibs) libXi libXmu;
   };
 
@@ -9915,6 +9915,8 @@ let
     nvidia_x11_beta      = callPackage ../os-specific/linux/nvidia-x11/beta.nix { };
     nvidia_x11           = callPackage ../os-specific/linux/nvidia-x11 { };
 
+    rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
+
     openafsClient = callPackage ../servers/openafs-client { };
 
     openiscsi = callPackage ../os-specific/linux/open-iscsi { };
@@ -11264,6 +11266,8 @@ let
     hol_light_mode = callPackage ../applications/editors/emacs-modes/hol_light { };
 
     htmlize = callPackage ../applications/editors/emacs-modes/htmlize { };
+
+    ido-ubiquitous = callPackage ../applications/editors/emacs-modes/ido-ubiquitous { };
 
     icicles = callPackage ../applications/editors/emacs-modes/icicles { };
 

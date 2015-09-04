@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "172frqk2n43g0arhazgcwfvj0syf861vdzdpxl7idr142bb0ykf7";
   };
 
+  patches = [ ./fix-printfs.patch ];
+
   postPatch = ''
     # Don't build broken examples
     sed -i '/AC_CONFIG_SUBDIRS(\[\(examples\|tests\).*\/kernel/d' configure.ac
