@@ -53,7 +53,7 @@ self: super: {
     configureFlags = (drv.configureFlags or []) ++
       pkgs.lib.optional pkgs.stdenv.is64bit "--extra-lib-dirs=${pkgs.cudatoolkit}/lib64" ++ [
       "--extra-lib-dirs=${pkgs.cudatoolkit}/lib"
-      "--extra-include-dirs=${pkgs.cudatoolkit}/usr_include"
+      "--extra-include-dirs=${pkgs.cudatoolkit}/include"
     ];
     preConfigure = ''
       unset CC          # unconfuse the haskell-cuda configure script
