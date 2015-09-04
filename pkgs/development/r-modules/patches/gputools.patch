@@ -5,7 +5,7 @@ diff -ru -x '*~' gputools_orig/src/Makefile gputools/src/Makefile
  
  R_HOME := $(shell R RHOME)
  
-+CUDA_INC := $(CUDA_HOME)/usr_include
++CUDA_INC := $(CUDA_HOME)/include
 +CUDA_LIB := $(CUDA_HOME)/lib
 +
  #compiler/preprocessor options
