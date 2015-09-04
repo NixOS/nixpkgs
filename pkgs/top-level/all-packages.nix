@@ -5813,7 +5813,7 @@ let
 
   aalib = callPackage ../development/libraries/aalib { };
 
-  accelio = callPackage ../development/libraries/accelio { stdenv = overrideCC stdenv gcc5; };
+  accelio = callPackage ../development/libraries/accelio { };
 
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
