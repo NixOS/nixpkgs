@@ -2620,6 +2620,17 @@ let
     propagatedBuildInputs = [ slices ];
   };
 
+  skydns = buildFromGitHub {
+    rev = "2.5.2b";
+    owner = "skynetservices";
+    repo = "skydns";
+    sha256 = "01vac6bd71wky5jbd5k4a0x665bjn1cpmw7p655jrdcn5757c2lv";
+
+    buildInputs = [
+      go-etcd rcrowley.go-metrics influxdb go-systemd go-log dns stathat osext
+    ];
+  };
+
   slices = buildGoPackage rec {
     rev = "bb44bb2e4817fe71ba7082d351fd582e7d40e3ea";
     name = "slices-${stdenv.lib.strings.substring 0 7 rev}";

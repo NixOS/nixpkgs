@@ -3012,7 +3012,7 @@ let
 
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
-  skydns = callPackage ../servers/dns/skydns { };
+  skydns = goPackages.skydns.bin // { outputs = [ "bin" ]; };
 
   sipcalc = callPackage ../tools/networking/sipcalc { };
 
