@@ -10105,7 +10105,7 @@ let
 
   gocode = goPackages.gocode.bin // { outputs = [ "bin" ]; };
 
-  gotags = callPackage ../development/tools/gotags { };
+  gotags = goPackages.gotags.bin // { outputs = [ "bin" ]; };
 
   golint = goPackages.lint.bin // { outputs = [ "bin" ]; };
 

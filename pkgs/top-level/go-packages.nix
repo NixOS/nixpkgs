@@ -926,6 +926,14 @@ let
     buildInputs = [ go-charset ];
   };
 
+  gotags = buildFromGitHub {
+    rev    = "be986a34e20634775ac73e11a5b55916085c48e7";
+    date   = "2015-08-03";
+    owner  = "jstemmer";
+    repo   = "gotags";
+    sha256 = "071wyq90b06xlb3bb0l4qjz1gf4nnci4bcngiddfcxf2l41w1vja";
+  };
+
   gosnappy = buildFromGitHub {
     rev    = "ce8acff4829e0c2458a67ead32390ac0a381c862";
     owner  = "syndtr";
