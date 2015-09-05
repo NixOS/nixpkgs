@@ -7752,6 +7752,41 @@ let
   };
 
 
+  mathics = buildPythonPackage rec {
+    name = "mathics-${version}";
+    version = "0.8";
+    src = pkgs.fetchFromGitHub {
+      owner = "mathics";
+      repo = "Mathics";
+      rev = "v${version}";
+      sha256 = "1hyrxnhxw35vn00k55hp9bkg8vg4dsphrpfg1yg4cn53y78rk1im";
+    };
+
+    buildInputs = with self; [ pexpect ];
+
+    propagatedBuildInputs = with self; [
+      argparse
+      cython
+      colorama
+      dateutil
+      django_1_6
+      mpmath
+      readline
+      interruptingcow
+      ply
+      sqlite3
+      sympy
+    ];
+
+    meta = {
+      description = "A general-purpose computer algebra system";
+      homepage = http://www.mathics.org;
+      license = licenses.gpl3;
+      maintainers = [ maintainers.benley ];
+    };
+  };
+
+
   matplotlib = callPackage ../development/python-modules/matplotlib/default.nix {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     enableGhostscript = true;
