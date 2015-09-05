@@ -2286,11 +2286,11 @@ let
 
   cython = buildPythonPackage rec {
     name = "Cython-${version}";
-    version = "0.22.1";
+    version = "0.23.1";
 
     src = pkgs.fetchurl {
       url = "http://www.cython.org/release/${name}.tar.gz";
-      sha256 = "7fff120e65e7b66edb4a42823f5642bad3bc1e5601bf882d66aee50248cf0682";
+      sha256 = "12h1g21xmp2jk8j3sw2i73ffxgfafakza6mw3fd4pqx2lbb15zdx";
     };
 
     setupPyBuildFlags = ["--build-base=$out"];
