@@ -5039,7 +5039,7 @@ let
     perf = linuxPackages.perf;
   };
 
-  mesos-dns = callPackage ../servers/dns/mesos-dns { };
+  mesos-dns = goPackages.mesos-dns.bin // { outputs = [ "bin" ]; };
 
   mujs = callPackage ../development/interpreters/mujs { };
 

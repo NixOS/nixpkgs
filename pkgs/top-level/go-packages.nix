@@ -86,22 +86,6 @@ let
     goPackageAliases = [ "code.google.com/p/goprotobuf" ];
   };
 
-  gogo.protobuf = buildGoPackage rec {
-    rev = "499788908625f4d83de42a204d1350fde8588e4f";
-    name = "protobuf-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/gogo/protobuf";
-    goPackageAliases = [ "code.google.com/p/gogoprotobuf/proto" "code.google.com/p/goprotobuf/proto" ];
-
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "gogo";
-      repo = "protobuf";
-      sha256 = "09h2j0apl70709nbqasqrkss6fdk99xm7xr5ci311dl48rmm1dzn";
-    };
-
-    subPackages = [ "proto" ];
-  };
-
   snappy = buildFromGitHub {
     rev    = "0c7f8a7704bfec561913f4df52c832f094ef56f0";
     date   = "2015-07-21";
@@ -1265,6 +1249,13 @@ let
     };
   };
 
+  go-restful = buildFromGitHub {
+    rev    = "892402ba11a2e2fd5e1295dd633481f27365f14d";
+    owner  = "emicklei";
+    repo   = "go-restful";
+    sha256 = "0gr9f53vayc6501a1kaw4p3h9pgf376cgxsfnr3f2dvp0xacvw8x";
+  };
+
   go-runit = buildFromGitHub {
     rev    = "a9148323a615e2e1c93b7a9893914a360b4945c8";
     owner  = "soundcloud";
@@ -1737,6 +1728,27 @@ let
     };
 
     propagatedBuildInputs = [ ugorji.go armon.go-metrics ];
+  };
+
+  mesos-dns = buildFromGitHub {
+    rev = "v0.1.2";
+    owner = "mesosphere";
+    repo = "mesos-dns";
+    sha256 = "0zs6lcgk43j7jp370qnii7n55cd9pa8gl56r8hy4nagfvlvrcm02";
+
+    # Avoid including the benchmarking test helper in the output:
+    subPackages = [ "." ];
+
+    buildInputs = [ glog mesos-go dns go-restful ];
+  };
+
+  mesos-go = buildFromGitHub {
+    rev = "d98afa618cc9a9251758916f49ce87f9051b69a4";
+    owner = "mesos";
+    repo = "mesos-go";
+    sha256 = "01ab0jf3cfb1rdwwb21r38rcfr5vp86pkfk28mws8298mlzbpri7";
+    propagatedBuildInputs = [ gogo.protobuf glog net testify go-zookeeper objx uuid ];
+    excludedPackages = "test";
   };
 
   mesos-stats = buildGoPackage rec {
@@ -2412,6 +2424,14 @@ let
     };
   };
 
+  gogo.protobuf = buildFromGitHub {
+    rev = "932b70afa8b0bf4a8e167fdf0c3367cebba45903";
+    owner = "gogo";
+    repo = "protobuf";
+    sha256 = "1djhv9ckqhyjnnqajjv8ivcwpmjdnml30l6zhgbjcjwdyz3nyzhx";
+    excludedPackages = "test";
+  };
+
   pty = buildFromGitHub {
     rev    = "67e2db24c831afa6c64fc17b4a143390674365ef";
     owner  = "kr";
@@ -2811,6 +2831,14 @@ let
 
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ pkgs.libusb1 ];
+  };
+
+  uuid = buildFromGitHub {
+    rev = "cccd189d45f7ac3368a0d127efb7f4d08ae0b655";
+    date = "2015-08-24";
+    owner = "pborman";
+    repo = "uuid";
+    sha256 = "0hswk9ihv3js5blp9pk2bpig64zkmyp5p1zhmgydfhb0dr2w8iad";
   };
 
   vault = buildFromGitHub {
