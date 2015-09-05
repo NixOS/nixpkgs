@@ -9191,11 +9191,11 @@ let
   };
 
   ply = buildPythonPackage (rec {
-    name = "ply-3.4";
+    name = "ply-3.7";
 
     src = pkgs.fetchurl {
       url = "http://www.dabeaz.com/ply/${name}.tar.gz";
-      sha256 = "0sslnbpws847r1j1f41fjpn76w0asywfqgxwzyjrvmmxnw8myhxg";
+      sha256 = "105gw1xayqww99qsls0lv37z4hzg5qnglxkd7s3h96hw9jsbfpzq";
     };
 
     meta = {
