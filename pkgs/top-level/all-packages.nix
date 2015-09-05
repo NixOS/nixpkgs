@@ -10111,7 +10111,7 @@ let
 
   godep = callPackage ../development/tools/godep { };
 
-  goimports = callPackage ../development/tools/goimports { };
+  goimports = goPackages.tools.bin // { outputs = [ "bin" ]; };
 
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
