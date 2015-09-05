@@ -1,14 +1,16 @@
-{stdenv, fetchurl, libX11, libXinerama, imlib2}:
+{stdenv, fetchurl, pkgconfig, libX11, libXinerama, imlib2}:
 
 stdenv.mkDerivation rec {
 
   name = "bgs-${version}";
-  version = "0.7.1";
+  version = "0.8";
 
   src = fetchurl {
     url = "https://github.com/Gottox/bgs/archive/v${version}.tar.gz";
-    sha256 = "1kgm139daz4xrymx11whbmwzsnps9yn4g34a17s34ihi0raf70w8";
+    sha256 = "1rw9ingkkpvvr2dixx126ziim67a54r8k49918h1mbph0fjj08n5";
   };
+
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ libX11 libXinerama imlib2 ];
 
