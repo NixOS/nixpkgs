@@ -537,6 +537,19 @@ let
     sha256 = "1sddkxgl1pwlipfvmv14h8vg9b9wq1km427j1gjarhb5yfqhh3l1";
   };
 
+  drive = buildFromGitHub {
+    rev = "4530cf8d59e1047cb1c005a6bd5b14ecb98b9e68";
+    owner = "odeke-em";
+    repo = "drive";
+    sha256 = "1y4qlzvgg84mh8l6bhaazzy6bv6dwjcbpm0rxvvc5aknvvh581ps";
+    subPackages = [ "cmd/drive" ];
+    buildInputs = [
+      pb go-isatty command dts odeke-em.log statos xon odeke-em.google-api-go-client
+      cli-spinner oauth2 text net
+    ];
+    disabled = !isGo14;
+  };
+
   dts = buildFromGitHub {
     rev    = "ec2daabf2f9078e887405f7bcddb3d79cb65502d";
     owner  = "odeke-em";
