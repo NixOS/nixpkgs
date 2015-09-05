@@ -1,11 +1,13 @@
 { stdenv, autoconf, automake, libtool, m4, fetchurl, bash, pkgconfig, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "libcangjie-1.1";
+  name = "libcangjie-${version}";
+  version = "1.4_rev_${rev}";
+  rev = "a73c1d8783f7b6526fd9b2cc44a669ffa5518d3d";
 
   src = fetchurl {
-    url = "https://github.com/Cangjians/libcangjie/archive/v1.1.tar.gz";
-    sha256 = "1iy57vlmwgai9763adx6q4fisg2c63cmp31d1cd8mk00c222bw1z";
+    url = "https://github.com/Cangjians/libcangjie/archive/${rev}.tar.gz";
+    sha256 = "0i5svvcx099fc9hh5dvr3gpb1041v6vn5fnylxy82zjy239114lg";
   };
 
   buildInputs = [ automake autoconf libtool m4 pkgconfig sqlite ];
