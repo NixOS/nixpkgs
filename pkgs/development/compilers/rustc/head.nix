@@ -1,3 +1,5 @@
+# Please make sure to check if rustfmt still builds when updating nightly
+
 { stdenv, callPackage }:
 callPackage ./generic.nix {
   shortVersion = "2015-09-05";
