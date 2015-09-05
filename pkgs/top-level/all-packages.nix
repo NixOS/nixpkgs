@@ -8947,8 +8947,8 @@ let
 
   bird = callPackage ../servers/bird { };
 
-  bosun = callPackage ../servers/monitoring/bosun { goPackages = go14Packages; };
-  scollector = callPackage ../servers/monitoring/bosun/scollector.nix { goPackages = go14Packages; };
+  bosun = go14Packages.bosun.bin // { outputs = [ "bin" ]; };
+  scollector = bosun;
 
   charybdis = callPackage ../servers/irc/charybdis {};
 
