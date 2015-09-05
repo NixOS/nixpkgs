@@ -8106,11 +8106,11 @@ let
   };
 
   mpmath = buildPythonPackage rec {
-    name = "mpmath-0.17";
+    name = "mpmath-0.19";
 
     src = pkgs.fetchurl {
-      url    = "https://mpmath.googlecode.com/files/${name}.tar.gz";
-      sha256 = "1blgzwq4irzaf8abb4z0d2r48903n9zxf51fhnv3gv09bgxjqzxh";
+      url = "https://pypi.python.org/packages/source/m/mpmath/${name}.tar.gz";
+      sha256 = "08ijsr4ifrqv3cjc26mkw0dbvyygsa99in376hr4b96ddm1gdpb8";
     };
 
     meta = {
