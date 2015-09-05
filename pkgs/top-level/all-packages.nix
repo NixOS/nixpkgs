@@ -7906,9 +7906,11 @@ let
   qtEnv = callPackage ../development/libraries/qt-5/qt-env.nix {};
 
   qt5Full = appendToName "full" (qtEnv {
-    qtbase = qt5.base;
-    paths = lib.filter lib.isDerivation (lib.attrValues qt5);
+    qtbase = qt5-with-docs.base;
+    paths = lib.filter lib.isDerivation (lib.attrValues qt5-with-docs);
   });
+
+  qt5-with-docs = qt5.override { buildDocs = true; buildExamples = true; };
 
   qtcreator = callPackage ../development/qtcreator {
     qtLib = qt54.override { buildDocs = true; buildExamples = true; };

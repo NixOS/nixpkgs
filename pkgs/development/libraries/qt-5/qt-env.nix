@@ -14,6 +14,8 @@ Plugins = lib/qt5/plugins
 Imports = lib/qt5/imports
 Qml2Imports = lib/qt5/qml
 Documentation = share/doc/qt5
+Examples = share/doc/qt5/examples
+Help/InstalledExamples = share/doc/qt5/examples
 EOF
 
 for pkg in $paths $qtbase; do
