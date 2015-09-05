@@ -104,6 +104,7 @@
   garrison = "Jim Garrison <jim@garrison.cc>";
   gavin = "Gavin Rogers <gavin@praxeology.co.uk>";
   gebner = "Gabriel Ebner <gebner@gebner.org>";
+  gfxmonk = "Tim Cuthbertson <tim@gfxmonk.net>";
   giogadi = "Luis G. Torres <lgtorres42@gmail.com>";
   globin = "Robin Gloster <robin@glob.in>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
