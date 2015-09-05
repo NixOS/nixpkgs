@@ -7026,6 +7026,23 @@ let
     };
   };
 
+  interruptingcow = buildPythonPackage rec {
+    name = "interruptingcow-${version}";
+    version = "0.6";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/interruptingcow/${name}.tar.gz";
+      sha256 = "1cv4pm2h0f87n9w4r3l1f96skwmng95sawn7j00ns0rdp1zshr9d";
+    };
+
+    meta = {
+      description = "A watchdog that interrupts long running code";
+      homepage = https://bitbucket.org/evzijst/interruptingcow;
+      license = licenses.mit;
+      maintainers = with maintainers; [ benley ];
+    };
+  };
+
   iptools = buildPythonPackage rec {
     version = "0.6.1";
     name = "iptools-${version}";
