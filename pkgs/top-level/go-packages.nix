@@ -767,6 +767,14 @@ let
     propagatedBuildInputs = [ inf snappy groupcache ];
   };
 
+  gocode = buildFromGitHub {
+    rev = "680a0fbae5119fb0dbea5dca1d89e02747a80de0";
+    date = "2015-09-03";
+    owner = "nsf";
+    repo = "gocode";
+    sha256 = "1ay2xakz4bcn8r3ylicbj753gjljvv4cj9l4wfly55cj1vjybjpv";
+  };
+
   gocolorize = buildGoPackage rec {
     rev = "v1.0.0";
     name = "gocolorize-${rev}";

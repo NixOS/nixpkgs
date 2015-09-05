@@ -10103,7 +10103,7 @@ let
     inherit (gnome) gtk gtkmm;
   };
 
-  gocode = callPackage ../development/tools/gocode { };
+  gocode = goPackages.gocode.bin // { outputs = [ "bin" ]; };
 
   gotags = callPackage ../development/tools/gotags { };
 
