@@ -10044,6 +10044,8 @@ let
 
   kmod-blacklist-ubuntu = callPackage ../os-specific/linux/kmod-blacklist-ubuntu { };
 
+  kmod-debian-aliases = callPackage ../os-specific/linux/kmod-debian-aliases { };
+
   kvm = qemu_kvm;
 
   libcap = callPackage ../os-specific/linux/libcap { };

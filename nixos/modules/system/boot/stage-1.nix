@@ -241,6 +241,9 @@ let
           };
           symlink = "/etc/modprobe.d/ubuntu.conf";
         }
+        { object = pkgs.kmod-debian-aliases;
+          symlink = "/etc/modprobe.d/debian.conf";
+        }
       ];
   };
 
