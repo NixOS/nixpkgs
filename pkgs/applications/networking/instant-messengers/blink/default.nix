@@ -3,11 +3,11 @@
 
 pythonPackages.buildPythonPackage rec {
   name = "blink-${version}";
-  version = "1.4.0";
+  version = "1.4.1";
   
   src = fetchurl {
     url = "http://download.ag-projects.com/BlinkQt/${name}.tar.gz";
-    sha256 = "0vd4ky4djhrrlmfpz7g43bxjynhpql4d3s9jdirh21kc8d1bgayk";
+    sha256 = "0lpc3gm0hk55m7i2hlmk2p76akcfvnqxg0hyamfhha90nv6fk7sf";
   };
 
   patches = [ ./pythonpath.patch ];
