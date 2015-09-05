@@ -1607,7 +1607,7 @@ let
   gawkInteractive = appendToName "interactive"
     (gawk.override { readlineSupport = true; });
 
-  gawp = goPackages.gawp;
+  gawp = goPackages.gawp.bin // { outputs = [ "bin" ]; };
 
   gbdfed = callPackage ../tools/misc/gbdfed {
     gtk = gtk2;
@@ -9239,18 +9239,18 @@ let
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
-  prom2json = goPackages.prometheus.prom2json.bin;
-  prometheus = goPackages.prometheus.prometheus.bin;
-  prometheus-alertmanager = goPackages.prometheus.alertmanager.bin;
-  prometheus-cli = goPackages.prometheus.cli.bin;
-  prometheus-collectd-exporter = goPackages.prometheus.collectd-exporter.bin;
-  prometheus-haproxy-exporter = goPackages.prometheus.haproxy-exporter.bin;
-  prometheus-mesos-exporter = goPackages.prometheus.mesos-exporter.bin;
-  prometheus-mysqld-exporter = goPackages.prometheus.mysqld-exporter.bin;
-  prometheus-nginx-exporter = goPackages.prometheus.nginx-exporter.bin;
-  prometheus-node-exporter = goPackages.prometheus.node-exporter.bin;
-  prometheus-pushgateway = goPackages.prometheus.pushgateway.bin;
-  prometheus-statsd-bridge = goPackages.prometheus.statsd-bridge.bin;
+  prom2json = goPackages.prometheus.prom2json.bin // { outputs = [ "bin" ]; };
+  prometheus = goPackages.prometheus.prometheus.bin // { outputs = [ "bin" ]; };
+  prometheus-alertmanager = goPackages.prometheus.alertmanager.bin // { outputs = [ "bin" ]; };
+  prometheus-cli = goPackages.prometheus.cli.bin // { outputs = [ "bin" ]; };
+  prometheus-collectd-exporter = goPackages.prometheus.collectd-exporter.bin // { outputs = [ "bin" ]; };
+  prometheus-haproxy-exporter = goPackages.prometheus.haproxy-exporter.bin // { outputs = [ "bin" ]; };
+  prometheus-mesos-exporter = goPackages.prometheus.mesos-exporter.bin // { outputs = [ "bin" ]; };
+  prometheus-mysqld-exporter = goPackages.prometheus.mysqld-exporter.bin // { outputs = [ "bin" ]; };
+  prometheus-nginx-exporter = goPackages.prometheus.nginx-exporter.bin // { outputs = [ "bin" ]; };
+  prometheus-node-exporter = goPackages.prometheus.node-exporter.bin // { outputs = [ "bin" ]; };
+  prometheus-pushgateway = goPackages.prometheus.pushgateway.bin // { outputs = [ "bin" ]; };
+  prometheus-statsd-bridge = goPackages.prometheus.statsd-bridge.bin // { outputs = [ "bin" ]; };
 
   psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
 
