@@ -384,7 +384,7 @@ let
     sha256 = "0xmxy8ay0wzd307x7xba3rmigvr6rjlpfk9fmn6ir2nc97ifv3i0";
   };
 
-  consul = buildFromGitHub rec {
+  consul = buildFromGitHub {
     rev = "v0.5.2";
     owner = "hashicorp";
     repo = "consul";
@@ -401,37 +401,30 @@ let
     passthru.ui = pkgs.consul-ui;
   };
 
-  consul-alerts = buildGoPackage rec {
-    rev = "7dff28aa4c8c883a65106f8ec22796e1a589edab";
-    name = "consul-alerts-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/AcalephStorage/consul-alerts";
+  consul-api = buildFromGitHub {
+    inherit (consul) rev owner repo sha256;
+    subPackages = [ "api" ];
+  };
+
+  consul-alerts = buildFromGitHub {
+    rev = "6eb4bc556d5f926dbf15d86170664d35d504ae54";
+    date = "2015-08-09";
+    owner = "AcalephStorage";
+    repo = "consul-alerts";
+    sha256 = "191bmxix3nl4pr26hcdfxa9qpv5dzggjvi86h2slajgyd2rzn23b";
 
     renameImports = ''
       # Remove all references to included dependency store
-      rm -rf go/src/${goPackagePath}/Godeps
+      rm -rf go/src/github.com/AcalephStorage/consul-alerts/Godeps
       govers -d -m github.com/AcalephStorage/consul-alerts/Godeps/_workspace/src/ ""
-
-      # Fix references to consul-api
-      govers -d -m github.com/armon/consul-api github.com/hashicorp/consul/api
-      sed -i 's,consulapi,api,g' go/src/${goPackagePath}/consul/client.go
-      sed -i 's,consulapi,api,g' go/src/${consul-skipper.goPackagePath}/skipper.go
     '';
 
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "AcalephStorage";
-      repo = "consul-alerts";
-      sha256 = "1vwybkvjgyilxk3l6avzivd31l8gnk8d0v7bl10qll0cd068fabq";
-    };
+    # Temporary fix for name change
+    postPatch = ''
+      sed -i 's,SetApiKey,SetAPIKey,' notifier/opsgenie-notifier.go
+    '';
 
-    # We just want the consul api not all of consul
-    extraSrcs = [
-      { inherit (consul) src goPackagePath; }
-      { inherit (influxdb8) src goPackagePath; }
-      { inherit (consul-skipper) src goPackagePath; }
-    ];
-
-    buildInputs = [ logrus docopt-go hipchat-go gopherduty ];
+    buildInputs = [ logrus docopt-go hipchat-go gopherduty consul-api opsgenie-go-sdk influxdb8-client ];
   };
 
   consul-migrate = buildFromGitHub {
@@ -441,31 +434,6 @@ let
     repo   = "consul-migrate";
     sha256 = "18zqyzbc3pny700fnh4hi45i5mlsramqykikcr7lgyx7id6alf16";
     buildInputs = [ raft raft-boltdb raft-mdb ];
-  };
-
-  consul-skipper = buildGoPackage rec {
-    rev = "729b4fdcc7f572f7c083673595f939256b80b76f";
-    name = "consul-skipper-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/darkcrux/consul-skipper";
-
-    renameImports = ''
-      govers -d -m github.com/armon/consul-api github.com/hashicorp/consul/api
-      sed -i 's,consulapi,api,g' go/src/${goPackagePath}/skipper.go
-    '';
-
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "darkcrux";
-      repo = "consul-skipper";
-      sha256 = "0shqvihbmq1w5ddnkn62qd4k6gs5zalq6k4alacjz92bwf6d2x6x";
-    };
-
-    # We just want the consul api not all of consul
-    extraSrcs = [
-      { inherit (consul) src goPackagePath; }
-    ];
-
-    buildInputs = [ logrus ];
   };
 
   consul-template = buildGoPackage rec {
@@ -939,6 +907,14 @@ let
     buildInputs = [ go-charset ];
   };
 
+  goreq = buildFromGitHub {
+    rev    = "72c51a544272e007ab3da4f7d9ac959b7af7af03";
+    date   = "2015-08-18";
+    owner  = "franela";
+    repo   = "goreq";
+    sha256 = "0dnqbijdzp2dgsf6m934nadixqbv73q0zkqglaa956zzw0pyhcxp";
+  };
+
   gotags = buildFromGitHub {
     rev    = "be986a34e20634775ac73e11a5b55916085c48e7";
     date   = "2015-08-03";
@@ -1178,18 +1154,13 @@ let
     sha256 = "1vdid8v0c2v2qhrg9rzn3l7ya1h34jirrxfnir7gv7w6s4ivdvc1";
   };
 
-  rcrowley.go-metrics = buildGoPackage rec {
-    rev = "f770e6f5e91a8770cecee02d5d3f7c00b023b4df";
-    name = "rcrowley.go-metrics-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/rcrowley/go-metrics";
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "rcrowley";
-      repo = "go-metrics";
-      sha256 = "07dc74kiam8v5my7rhi3yxqrpnaapladhk8b3qbnrpjk3shvnx5f";
-    };
-
-    buildInputs = [ influxdb8 stathat ];
+  rcrowley.go-metrics = buildFromGitHub {
+    rev = "1ce93efbc8f9c568886b2ef85ce305b2217b3de3";
+    date = "2015-08-22";
+    owner = "rcrowley";
+    repo = "go-metrics";
+    sha256 = "06gg72krlmd0z3zdq6s716blrga95pyj8dc2f2psfbknbkyrkfqa";
+    propagatedBuildInputs = [ stathat ];
   };
 
   appengine = buildFromGitHub {
@@ -1523,49 +1494,29 @@ let
     goPackageAliases = [ "github.com/go-inf/inf" ];
   };
 
-  influxdb = buildGoPackage rec {
-    rev = "50a2b9ba0f189213fc399f59247787e71b872b2d";
-    name = "influxdb-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/influxdb/influxdb";
-    goPackageAliases = [
-      "github.com/influxdb/influxdb-go"
-    ];
-
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "influxdb";
-      repo = "influxdb";
-      sha256 = "0spwnr9dwxwrjxrajpcspj3aci2ylkrm085jhq7rd99nmbsms6jq";
-    };
-
-    propagatedBuildInputs = [ bolt crypto statik liner toml pat gollectd gogo.protobuf raft raft-boltdb pool ];
+  influxdb = buildFromGitHub {
+    rev = "v0.9.3";
+    owner = "influxdb";
+    repo = "influxdb";
+    sha256 = "0hsvm8ls1g12j1d5ap396vqfpvd0g72hymhczdqg6z96h3zi90bx";
+    propagatedBuildInputs = [ raft raft-boltdb snappy crypto gogo.protobuf pool pat toml gollectd statik liner ];
+    excludedPackages = "test";
   };
 
-  influxdb8 = buildGoPackage rec {
+  influxdb8-client = buildFromGitHub{
     rev = "v0.8.8";
-    name = "influxdb-${rev}";
-    goPackagePath = "github.com/influxdb/influxdb";
-    goPackageAliases = [
-      "github.com/influxdb/influxdb-go"
-    ];
-
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "influxdb";
-      repo = "influxdb";
-      sha256 = "0xpigp76rlsxqj93apjzkbi98ha5g4678j584l6hg57p711gqsdv";
-    };
-
-    buildInputs = [ statik crypto gogo.protobuf log4go toml pmylund.go-cache gollectd pat dgnorton.goback mux context gocheck influx.gomdb levigo ];
+    owner = "influxdb";
+    repo = "influxdb";
+    sha256 = "0xpigp76rlsxqj93apjzkbi98ha5g4678j584l6hg57p711gqsdv";
+    subPackages = [ "client" ];
   };
 
-  influxdb-backup = buildFromGitHub rec {
+  influxdb-backup = buildFromGitHub {
     rev = "4556edbffa914a8c17fa1fa1564962a33c6c7596";
     date = "2014-07-28";
     owner = "eckardt";
     repo = "influxdb-backup";
     sha256 = "2928063e6dfe4be7b69c8e72e4d6a5fc557f0c75e9625fadf607d59b8e80e34b";
-
     buildInputs = [ eckardt.influxdb-go ];
   };
 
@@ -2012,6 +1963,16 @@ let
     preBuild = ''
       find go/src/$goPackagePath -name \*.go | xargs sed -i 's,spacemonkeygo/openssl,10gen/openssl,g'
     '';
+  };
+
+  opsgenie-go-sdk = buildFromGitHub {
+    rev = "c6e1235dfed2126eb9b562c4d776baf55ccd23e3";
+    date = "2015-08-24";
+    owner = "opsgenie";
+    repo = "opsgenie-go-sdk";
+    sha256 = "1prvnjiqmhnp9cggp9f6882yckix2laqik35fcj32117ry26p4jm";
+    propagatedBuildInputs = [ seelog go-querystring goreq ];
+    excludedPackages = "samples";
   };
 
   osext = buildFromGitHub {
@@ -2484,6 +2445,9 @@ let
     repo = "protobuf";
     sha256 = "1djhv9ckqhyjnnqajjv8ivcwpmjdnml30l6zhgbjcjwdyz3nyzhx";
     excludedPackages = "test";
+    goPackageAliases = [
+      "code.google.com/p/gogoprotobuf"
+    ];
   };
 
   pty = buildFromGitHub {
@@ -2660,6 +2624,14 @@ let
     buildInputs = [ armon.go-metrics net-rpc-msgpackrpc yamux ];
   };
 
+  seelog = buildFromGitHub {
+    rev = "c510775bb50d98213cfafca75a4bc5e3fddc8d8f";
+    date = "2015-05-26";
+    owner = "cihub";
+    repo = "seelog";
+    sha256 = "1f0rwgqlffv1a7b05736a4gf4l9dn80wsfyqcnz6qd2skhwnzv29";
+  };
+
   semver = buildFromGitHub {
     rev = "31b736133b98f26d5e078ec9eb591666edfd091f";
     date = "2015-07-20";
@@ -2701,7 +2673,7 @@ let
     sha256 = "01vac6bd71wky5jbd5k4a0x665bjn1cpmw7p655jrdcn5757c2lv";
 
     buildInputs = [
-      go-etcd rcrowley.go-metrics influxdb go-systemd go-log dns stathat osext
+      go-etcd rcrowley.go-metrics dns go-systemd prometheus.client_golang
     ];
   };
 
