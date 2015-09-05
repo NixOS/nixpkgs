@@ -1634,6 +1634,7 @@ let
     owner  = "lxc";
     repo   = "lxd";
     sha256 = "1n7fhzl6vrn82r3cqpgqpgq5d5142rnk1cp7vig38323n2yh3749";
+    excludedPackages = "test"; # Don't build the binary called test which causes conflicts
     buildInputs = [
       gettext-go websocket crypto log15 go-lxc yaml-v2 tomb protobuf pongo2
       lxd-go-systemd go-uuid tablewriter golang-petname mux go-sqlite3 goproxy
