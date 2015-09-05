@@ -2336,6 +2336,20 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ Clone ];
   };
 
+  Curses = buildPerlPackage {
+    name = "Curses-1.32";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GI/GIRAFFED/Curses-1.32.tgz;
+      sha256 = "0l569g8saw20ka5z4h17xpn0mcwfxg3jnsg6cnbnv034g7yl9fjx";
+    };
+    propagatedBuildInputs = [ pkgs.ncurses ];
+    NIX_CFLAGS_LINK = "-lncurses";
+    meta = {
+      description = "Perl bindings to ncurses";
+      license = stdenv.lib.licenses.artistic1;
+    };
+  };
+
   CwdGuard = buildPerlModule rec {
     name = "Cwd-Guard-0.04";
     src = fetchurl {
