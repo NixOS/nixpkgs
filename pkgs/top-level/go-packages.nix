@@ -549,6 +549,14 @@ let
     sha256 = "0vq3cz4ab9vdsz9s0jjlp7z27w218jjabjzsh607ps4i8m5d441s";
   };
 
+  du = buildFromGitHub {
+    rev    = "3c0690cca16228b97741327b1b6781397afbdb24";
+    date   = "2015-08-05";
+    owner  = "calmh";
+    repo   = "du";
+    sha256 = "1mv6mkbslfc8giv47kyl97ny0igb3l7jya5hc75sm54xi6g205wa";
+  };
+
   ed25519 = buildGoPackage rec {
     rev = "d2b94fd789ea21d12fac1a4443dd3a3f79cda72c";
     name = "ed25519-${stdenv.lib.strings.substring 0 7 rev}";
@@ -1139,6 +1147,13 @@ let
     buildInputs = [ pkgs.lxc ];
   };
 
+  go-lz4 = buildFromGitHub {
+    rev    = "74ddf82598bc4745b965729e9c6a463bedd33049";
+    owner  = "bkaradzic";
+    repo   = "go-lz4";
+    sha256 = "1vdid8v0c2v2qhrg9rzn3l7ya1h34jirrxfnir7gv7w6s4ivdvc1";
+  };
+
   rcrowley.go-metrics = buildGoPackage rec {
     rev = "f770e6f5e91a8770cecee02d5d3f7c00b023b4df";
     name = "rcrowley.go-metrics-${stdenv.lib.strings.substring 0 7 rev}";
@@ -1613,6 +1628,14 @@ let
     propagatedBuildInputs = [ go-colortext ];
   };
 
+  logger = buildFromGitHub {
+    rev = "c96f6a1a8c7b6bf2f4860c667867d90174799eb2";
+    date = "2015-05-23";
+    owner = "calmh";
+    repo = "logger";
+    sha256 = "1f67xbvvf210g5cqa84l12s00ynfbkjinhl8y6m88yrdb025v1vg";
+  };
+
   logrus = buildFromGitHub rec {
     rev = "v0.8.6";
     owner = "Sirupsen";
@@ -1626,6 +1649,14 @@ let
     owner  = "hashicorp";
     repo   = "logutils";
     sha256 = "0rynhjwvacv9ibl2k4fwz0xy71d583ac4p33gm20k9yldqnznc7r";
+  };
+
+  luhn = buildFromGitHub {
+    rev    = "0c8388ff95fa92d4094011e5a04fc99dea3d1632";
+    date   = "2015-01-13";
+    owner  = "calmh";
+    repo   = "luhn";
+    sha256 = "1hfj1lx7wdpifn16zqrl4xml6cj5gxbn6hfz1f46g2a6bdf0gcvs";
   };
 
   lxd = buildFromGitHub {
@@ -2384,6 +2415,13 @@ let
     sha256 = "0j4k43ppka20hmixlwhhz5mhv92p6wxbkvdabs4cf7k8jpk5argq";
   };
 
+  qart = buildFromGitHub {
+    rev    = "ccb109cf25f0cd24474da73b9fee4e7a3e8a8ce0";
+    owner  = "vitrun";
+    repo   = "qart";
+    sha256 = "0bhp768b8ha6f25dmhwn9q8m2lkbn4qnjf8n7pizk25jn5zjdvc8";
+  };
+
   raft = buildGoPackage rec {
     rev = "a8065f298505708bf60f518c09178149f3c06f21";
     name = "raft-${stdenv.lib.strings.substring 0 7 rev}";
@@ -2429,6 +2467,14 @@ let
     propagatedBuildInputs = [ gomdb ugorji.go raft ];
   };
 
+  ratelimit = buildFromGitHub {
+    rev    = "772f5c38e468398c4511514f4f6aa9a4185bc0a0";
+    date   = "2015-06-19";
+    owner  = "juju";
+    repo   = "ratelimit";
+    sha256 = "02rs61ay6sq499lxxszjsrxp33m6zklds1xrmnr5fk73vpqfa28p";
+  };
+
   raw = buildFromGitHub {
     rev    = "724aedf6e1a5d8971aafec384b6bde3d5608fba4";
     owner  = "feyeleanor";
@@ -2449,6 +2495,14 @@ let
     owner  = "garyburd";
     repo   = "redigo";
     sha256 = "1m7nc1gvv5yqnq8ii75f33485il6y6prf8gxl97dimsw94qccc5v";
+  };
+
+  relaysrv = buildFromGitHub {
+    rev    = "7fe1fdd8c751df165ea825bc8d3e895f118bb236";
+    owner  = "syncthing";
+    repo   = "relaysrv";
+    sha256 = "0qy14pa0z2dq5mix5ylv2raabwxqwj31g5kkz905wzki6d4j5lnp";
+    buildInputs = [ xdr syncthing-protocol ratelimit syncthing-lib ];
   };
 
   reflectwalk = buildFromGitHub {
@@ -2617,6 +2671,40 @@ let
     sha256 = "0pyrc7svc826g37al3db19n5l4r2m9h1mlhjh3hz2r41xfaqia50";
   };
 
+  suture = buildFromGitHub {
+    rev    = "fc7aaeabdc43fe41c5328efa1479ffea0b820978";
+    owner  = "thejerf";
+    repo   = "suture";
+    sha256 = "1l7nw00pazp317n5nprrxwhcq56kdblc774lsznxmbb30xcp8nmf";
+  };
+
+  syncthing = buildFromGitHub {
+    rev = "v0.11.23";
+    owner = "syncthing";
+    repo = "syncthing";
+    sha256 = "06a5b68fq440xcysba65xbpr3zd4yhp7y1x6a11n5bx0rpxa4jzi";
+    doCheck = true;
+    buildInputs = [
+      go-lz4 du luhn xdr snappy ratelimit osext syncthing-protocol relaysrv
+      goleveldb suture qart crypto net text
+    ];
+  };
+
+  syncthing-lib = buildFromGitHub {
+    inherit (syncthing) rev owner repo sha256;
+    subPackages = [ "lib/sync" ];
+    buildInputs = [ logger ];
+  };
+
+  syncthing-protocol = buildFromGitHub {
+    rev = "84365882de255d2204d0eeda8dee288082a27f98";
+    date = "2015-08-28";
+    owner = "syncthing";
+    repo = "protocol";
+    sha256 = "07xjs43lpd51pc339f8x487yhs39riysj3ifbjxsx329kljbflwx";
+    propagatedBuildInputs = [ go-lz4 logger luhn xdr text ];
+  };
+
   tablewriter = buildFromGitHub {
     rev    = "bc39950e081b457853031334b3c8b95cdfe428ba";
     date   = "2015-06-03";
@@ -2780,6 +2868,14 @@ let
     owner  = "hashicorp";
     repo   = "yamux";
     sha256 = "0mr87my5m8lgc0byjcddlclxg34d07cpi9p78ps3rhzq7p37g533";
+  };
+
+  xdr = buildFromGitHub {
+    rev    = "5f7208e86762911861c94f1849eddbfc0a60cbf0";
+    date   = "2015-04-08";
+    owner  = "calmh";
+    repo   = "xdr";
+    sha256 = "18m8ms2kg4apj5772r317i3axklgci8x1pq3pgicsv3acmpclh47";
   };
 
   xon = buildFromGitHub {
