@@ -15,6 +15,7 @@ stdenv.mkDerivation {
       substituteInPlace src/dmd/posix.mak --replace g++ clang++
   '';
 
+  # Buid and install are based on http://wiki.dlang.org/Building_DMD
   buildPhase = ''
       cd src/dmd
       make -f posix.mak INSTALL_DIR=$out
@@ -50,7 +51,7 @@ stdenv.mkDerivation {
       cd $out/bin
       tee dmd.conf << EOF
       [Environment]
-      DFLAGS=-I$out/include/d2 -L-L$out/lib -L--no-warn-search-mismatch -L--export-dynamic
+      DFLAGS=-I$out/include/d2 -L-L$out/lib ${stdenv.lib.optionalString (!stdenv.cc.isClang) "-L--no-warn-search-mismatch -L--export-dynamic"}
       EOF
   '';
 
