@@ -15117,9 +15117,10 @@ let
   You need to use texLiveAggregationFun to regenerate, say, ls-R (TeX-related file list)
   Just installing a few packages doesn't work.
   */
-  texLiveAggregationFun = params:
+  texLiveAggregationFun = makeOverridable (params:
     builderDefsPackage (import ../tools/typesetting/tex/texlive/aggregate.nix)
-      ({inherit poppler perl makeWrapper;} // params);
+      ({inherit poppler perl makeWrapper;} // params)
+  );
 
   texDisser = callPackage ../tools/typesetting/tex/disser {};
 
