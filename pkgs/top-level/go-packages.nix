@@ -1521,6 +1521,16 @@ let
     buildInputs = [ statik crypto gogo.protobuf log4go toml pmylund.go-cache gollectd pat dgnorton.goback mux context gocheck influx.gomdb levigo ];
   };
 
+  influxdb-backup = buildFromGitHub rec {
+    rev = "4556edbffa914a8c17fa1fa1564962a33c6c7596";
+    date = "2014-07-28";
+    owner = "eckardt";
+    repo = "influxdb-backup";
+    sha256 = "2928063e6dfe4be7b69c8e72e4d6a5fc557f0c75e9625fadf607d59b8e80e34b";
+
+    buildInputs = [ eckardt.influxdb-go ];
+  };
+
   eckardt.influxdb-go = buildGoPackage rec {
     rev = "8b71952efc257237e077c5d0672e936713bad38f";
     name = "influxdb-go-${stdenv.lib.strings.substring 0 7 rev}";
