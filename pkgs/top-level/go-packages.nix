@@ -1272,6 +1272,15 @@ let
     sha256 = "0gr9f53vayc6501a1kaw4p3h9pgf376cgxsfnr3f2dvp0xacvw8x";
   };
 
+  go-repo-root = buildFromGitHub {
+    rev = "90041e5c7dc634651549f96814a452f4e0e680f9";
+    date = "2014-09-11";
+    owner = "cstrahan";
+    repo = "go-repo-root";
+    sha256 = "1rlzp8kjv0a3dnfhyqcggny0ad648j5csr2x0siq5prahlp48mg4";
+    buildInputs = [ tools ];
+  };
+
   go-runit = buildFromGitHub {
     rev    = "a9148323a615e2e1c93b7a9893914a360b4945c8";
     owner  = "soundcloud";

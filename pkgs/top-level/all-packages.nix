@@ -4092,7 +4092,7 @@ let
     then go_1_4 # missing DWARF files during go-1.5 build
     else go_1_5;
 
-  go-repo-root = callPackage ../development/tools/misc/go-repo-root { };
+  go-repo-root = goPackages.go-repo-root.bin // { outputs = [ "bin" ]; };
 
   gox = goPackages.gox.bin // { outputs = [ "bin" ]; };
 
