@@ -96,8 +96,9 @@ in
       extraAliases = concatMapStrings (alias cfg.listDomain) cfg.mailLists;
 
       extraConfig = ''
-        transport = hash:${stateDir}/transports
-        virtual = hash:${stateDir}/virtuals
+        transport_maps = hash:${stateDir}/transports
+        virtual_alias_maps = hash:${stateDir}/virtuals
+        propagate_unmatched_extensions = virtual
       '';
     };
 
