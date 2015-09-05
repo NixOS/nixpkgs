@@ -1351,7 +1351,7 @@ let
 
   doomseeker = callPackage ../applications/misc/doomseeker { };
 
-  drive = callPackage ../applications/networking/drive { goPackages = go14Packages; };
+  drive = go14Packages.drive.bin // { outputs = [ "bin" ]; };
 
   driftnet = callPackage ../tools/networking/driftnet {};
 
