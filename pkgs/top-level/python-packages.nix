@@ -7026,6 +7026,23 @@ let
     };
   };
 
+  interruptingcow = buildPythonPackage rec {
+    name = "interruptingcow-${version}";
+    version = "0.6";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/interruptingcow/${name}.tar.gz";
+      sha256 = "1cv4pm2h0f87n9w4r3l1f96skwmng95sawn7j00ns0rdp1zshr9d";
+    };
+
+    meta = {
+      description = "A watchdog that interrupts long running code";
+      homepage = https://bitbucket.org/evzijst/interruptingcow;
+      license = licenses.mit;
+      maintainers = with maintainers; [ benley ];
+    };
+  };
+
   iptools = buildPythonPackage rec {
     version = "0.6.1";
     name = "iptools-${version}";
@@ -7735,6 +7752,41 @@ let
   };
 
 
+  mathics = buildPythonPackage rec {
+    name = "mathics-${version}";
+    version = "0.8";
+    src = pkgs.fetchFromGitHub {
+      owner = "mathics";
+      repo = "Mathics";
+      rev = "v${version}";
+      sha256 = "1hyrxnhxw35vn00k55hp9bkg8vg4dsphrpfg1yg4cn53y78rk1im";
+    };
+
+    buildInputs = with self; [ pexpect ];
+
+    propagatedBuildInputs = with self; [
+      argparse
+      cython
+      colorama
+      dateutil
+      django_1_6
+      mpmath
+      readline
+      interruptingcow
+      ply
+      sqlite3
+      sympy
+    ];
+
+    meta = {
+      description = "A general-purpose computer algebra system";
+      homepage = http://www.mathics.org;
+      license = licenses.gpl3;
+      maintainers = [ maintainers.benley ];
+    };
+  };
+
+
   matplotlib = callPackage ../development/python-modules/matplotlib/default.nix {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     enableGhostscript = true;
@@ -8089,11 +8141,11 @@ let
   };
 
   mpmath = buildPythonPackage rec {
-    name = "mpmath-0.17";
+    name = "mpmath-0.19";
 
     src = pkgs.fetchurl {
-      url    = "https://mpmath.googlecode.com/files/${name}.tar.gz";
-      sha256 = "1blgzwq4irzaf8abb4z0d2r48903n9zxf51fhnv3gv09bgxjqzxh";
+      url = "https://pypi.python.org/packages/source/m/mpmath/${name}.tar.gz";
+      sha256 = "08ijsr4ifrqv3cjc26mkw0dbvyygsa99in376hr4b96ddm1gdpb8";
     };
 
     meta = {
@@ -9174,11 +9226,11 @@ let
   };
 
   ply = buildPythonPackage (rec {
-    name = "ply-3.4";
+    name = "ply-3.7";
 
     src = pkgs.fetchurl {
       url = "http://www.dabeaz.com/ply/${name}.tar.gz";
-      sha256 = "0sslnbpws847r1j1f41fjpn76w0asywfqgxwzyjrvmmxnw8myhxg";
+      sha256 = "105gw1xayqww99qsls0lv37z4hzg5qnglxkd7s3h96hw9jsbfpzq";
     };
 
     meta = {

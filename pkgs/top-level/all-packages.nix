@@ -896,6 +896,8 @@ let
 
   gmic = callPackage ../tools/graphics/gmic { };
 
+  mathics = pythonPackages.mathics;
+
   mcrl = callPackage ../tools/misc/mcrl { };
 
   mcrl2 = callPackage ../tools/misc/mcrl2 { };
