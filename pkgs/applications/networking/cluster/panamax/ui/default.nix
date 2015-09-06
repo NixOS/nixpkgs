@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     buildInputs = [ openssl ];
   };
 
-  bundler = bundler_HEAD.override { inherit ruby; };
+  bundler = bundler_HEAD.overrideDerivation { inherit ruby; };
 
   src = fetchgit {
     rev = "refs/tags/v${version}";

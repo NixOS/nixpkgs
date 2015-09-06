@@ -50,4 +50,4 @@ lib.overrideDerivation (fetchurl ({
     '');
 } // removeAttrs args [ "stripRoot" ]))
 # Hackety-hack: we actually need unzip hooks, too
-(x: {nativeBuildInputs = x.nativeBuildInputs++ [unzip];})
+(x: {buildInputs = x.buildInputs++ [unzip];})

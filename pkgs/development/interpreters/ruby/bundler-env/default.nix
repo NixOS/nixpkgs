@@ -18,7 +18,7 @@ let
 
   shellEscape = x: "'${lib.replaceChars ["'"] [("'\\'" + "'")] x}'";
   const = x: y: x;
-  bundler = bundler_HEAD.override { inherit ruby; };
+  bundler = bundler_HEAD.overrideDerivation { inherit ruby; };
   inherit (builtins) attrValues;
 
   gemName = attrs: "${attrs.name}-${attrs.version}.gem";

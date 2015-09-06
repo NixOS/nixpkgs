@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     lockfile = ./Gemfile.lock;
     buildInputs = [ openssl ];
   };
-  bundler = bundler_HEAD.override { inherit ruby; };
+  bundler = bundler_HEAD.overrideDerivation { inherit ruby; };
 
   database_yml = builtins.toFile "database.yml" ''
     production:

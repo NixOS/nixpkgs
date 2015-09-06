@@ -34,21 +34,13 @@ rec {
      virtual machine.
   */
   overrideDerivation = drv: f:
-    let
-      newDrv = derivation (drv.drvAttrs // (f drv));
-    in addPassthru newDrv (
-      { meta = drv.meta or {};
-        passthru = if drv ? passthru then drv.passthru else {};
-      }
-      //
-      (drv.passthru or {})
-      //
-      (if (drv ? crossDrv && drv ? nativeDrv)
-       then {
-         crossDrv = overrideDerivation drv.crossDrv f;
-         nativeDrv = overrideDerivation drv.nativeDrv f;
-       }
-       else { }));
+    if drv ? overrideInner then overrideDerivation (drv.overrideInner) f else
+    (drv.overrideDerivation or drv.override) (x: f (x // {
+        buildInputs = x.buildInputs or [];
+        nativeBuildInputs = x.nativeBuildInputs or [];
+        propagatedBuildInputs = x.propagatedBuildInputs or [];
+        propagatedNativeBuildInputs = x.propagatedNativeBuildInputs or [];
+      }));
 
 
   makeOverridable = f: origArgs:
@@ -57,10 +49,9 @@ rec {
       overrideWith = newArgs: origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs);
     in
       if builtins.isAttrs ff then (ff //
-        { override = newArgs: makeOverridable f (overrideWith newArgs);
-          overrideDerivation = fdrv:
-            makeOverridable (args: overrideDerivation (f args) fdrv) origArgs;
-        })
+        { override = newArgs: makeOverridable f (overrideWith newArgs); }
+          // lib.optionalAttrs (ff ? override) { overrideDerivation = ff.override; }
+          // lib.optionalAttrs (ff ? overrideDerivation) { overrideInner = ff; } )
       else if builtins.isFunction ff then
         { override = newArgs: makeOverridable f (overrideWith newArgs);
           __functor = self: ff;
@@ -106,9 +97,7 @@ rec {
       auto = builtins.intersectAttrs (builtins.functionArgs f) autoArgs;
       finalArgs = auto // args;
       pkgs = f finalArgs;
-      mkAttrOverridable = name: pkg: pkg // {
-        override = newArgs: mkAttrOverridable name (f (finalArgs // newArgs)).${name};
-      };
+      mkAttrOverridable = name: pkg: makeOverridable (a: (f a).${name}) finalArgs;
     in lib.mapAttrs mkAttrOverridable pkgs;
 
 
