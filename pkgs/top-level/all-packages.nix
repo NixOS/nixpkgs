@@ -846,8 +846,6 @@ let
     tileMode = false;
   };
 
-  cv = callPackage ../tools/misc/cv { };
-
   contacts = callPackage ../tools/misc/contacts { };
 
   datamash = callPackage ../tools/misc/datamash { };
@@ -2754,6 +2752,8 @@ let
   pastebinit = callPackage ../tools/misc/pastebinit { };
 
   polygraph = callPackage ../tools/networking/polygraph { };
+
+  progress = callPackage ../tools/misc/progress { };
 
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
@@ -15320,6 +15320,7 @@ let
   cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
   cool-old-term = cool-retro-term; # added 2015-01-31
+  cv = progress; # added 2015-09-06
   firefoxWrapper = firefox-wrapper;
   haskell-ng = haskell;                 # 2015-04-19
   haskellngPackages = haskellPackages;  # 2015-04-19
