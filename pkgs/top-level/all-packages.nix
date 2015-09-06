@@ -3322,6 +3322,7 @@ let
 
   viking = callPackage ../applications/misc/viking {
     inherit (gnome) scrollkeeper;
+    inherit (gnome3) gexiv2;
   };
 
   vnc2flv = callPackage ../tools/video/vnc2flv {};
