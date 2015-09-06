@@ -205,7 +205,7 @@ in {
 
     package = mkOption {
       description = "Package to use.";
-      default = pkgs.goPackages.grafana;
+      default = pkgs.grafana;
       type = types.package;
     };
 
