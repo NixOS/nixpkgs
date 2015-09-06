@@ -9,19 +9,28 @@ in {
     programs.cdemu = {
       enable = mkOption {
         default = false;
-        description = "Whether to enable cdemu for users of appropriate group (default cdrom)";
+        description = ''
+          <command>cdemu</command> for members of
+          <option>programs.cdemu.group</option>.
+        '';
       };
       group = mkOption {
         default = "cdrom";
-        description = "Required group for users of cdemu";
+        description = ''
+          Group that users must be in to use <command>cdemu</command>.
+        '';
       };
       gui = mkOption {
         default = true;
-        description = "Whether to install cdemu GUI (gCDEmu)";
+        description = ''
+          Whether to install the <command>cdemu</command> GUI (gCDEmu).
+        '';
       };
       image-analyzer = mkOption {
         default = true;
-        description = "Whether to install image analyzer";
+        description = ''
+          Whether to install the image analyzer.
+        '';
       };
     };
   };
