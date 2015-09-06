@@ -1026,4 +1026,8 @@ self: super: {
   # https://github.com/pxqr/base32-bytestring/issues/4
   base32-bytestring = dontCheck super.base32-bytestring;
 
+  # Broken by HUnit 1.3.x
+  ListLike = dontCheck super.ListLike;
+  yesod-static = dontCheck super.yesod-static;
+
 }
