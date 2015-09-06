@@ -25,6 +25,8 @@ stdenv.mkDerivation {
     configureFlags="--enable-maildir-support --enable-multibyte --enable-zprofile=$out/etc/zprofile --with-tcsetpgrp --enable-pcre"
   '';
 
+  doCheck = true;
+
   # XXX: think/discuss about this, also with respect to nixos vs nix-on-X
   postInstall = ''
     mkdir -p $out/share/
