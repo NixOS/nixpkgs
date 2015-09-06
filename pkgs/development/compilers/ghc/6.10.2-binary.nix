@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     # On Linux, use patchelf to modify the executables so that they can
     # find editline/gmp.
     (if stdenv.isLinux then ''
-      find . -type f -perm +100 \
+      find . -type f -perm -0100 \
           -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "${libedit}/lib:${ncurses}/lib:${gmp}/lib" {} \;
       for prog in ld ar gcc strip ranlib; do
