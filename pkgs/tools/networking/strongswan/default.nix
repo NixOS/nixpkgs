@@ -1,5 +1,6 @@
 { stdenv, fetchurl, gmp, pkgconfig, python, autoreconfHook
 , curl, trousers, sqlite, iptables, libxml2, openresolv
+, ldns, unbound, pcsclite, openssl
 , enableTNC ? false }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   buildInputs =
-    [ gmp pkgconfig python autoreconfHook iptables ]
+    [ gmp pkgconfig python autoreconfHook iptables ldns unbound openssl pcsclite ]
     ++ stdenv.lib.optionals enableTNC [ curl trousers sqlite libxml2 ];
 
   patches = [
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
       "--enable-eap-gtc" "--enable-eap-aka" "--enable-eap-aka-3gpp2"
       "--enable-eap-mschapv2" "--enable-xauth-eap" "--enable-ext-auth"
       "--enable-forecast" "--enable-connmark" "--enable-acert"
+      "--enable-pkcs11" "--enable-eap-sim-pcsc" "--enable-dnscert" "--enable-unbound"
       "--enable-aesni" "--enable-af-alg" "--enable-rdrand" ]
     ++ stdenv.lib.optional (stdenv.system == "i686-linux") "--enable-padlock" 
     ++ stdenv.lib.optionals enableTNC [
