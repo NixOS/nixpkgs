@@ -132,6 +132,7 @@ in
       description = "Logstash Daemon";
       wantedBy = [ "multi-user.target" ];
       environment = { JAVA_HOME = jre; };
+      path = [ pkgs.bash ];
       serviceConfig = {
         ExecStart =
           "${cfg.package}/bin/logstash agent " +
