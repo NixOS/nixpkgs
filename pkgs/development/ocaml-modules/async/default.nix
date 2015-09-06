@@ -1,5 +1,5 @@
-{stdenv, buildOcaml, fetchurl, async-kernel,
- async-unix, async-extra, pa-ounit}:
+{stdenv, buildOcaml, fetchurl, async_kernel,
+ async_unix, async_extra, pa_ounit}:
 
 buildOcaml rec {
   name = "async";
@@ -12,7 +12,7 @@ buildOcaml rec {
     sha256 = "ecc4ca939ab098e689332921b110dbaacd06d9f8d8bf697023dfff3ca37dc1e9";
   };
 
-  propagatedBuildInputs = [ async-kernel async-unix async-extra pa-ounit ];
+  propagatedBuildInputs = [ async_kernel async_unix async_extra pa_ounit ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/janestreet/async;
