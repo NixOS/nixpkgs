@@ -11768,6 +11768,7 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
+      broken = true; # tests fail http://hydra.nixos.org/build/25141764/nixlog/1/raw
     };
     buildInputs = [ pkgs.icu ];
   };
