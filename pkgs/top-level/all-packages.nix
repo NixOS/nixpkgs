@@ -1711,8 +1711,8 @@ let
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
-  grafana-frontend = callPackage ../development/tools/misc/grafana { };
-  grafana-backend = goPackages.grafana.bin // { outputs = [ "bin" ]; };
+  grafana-old = callPackage ../development/tools/misc/grafana { };
+  grafana = pkgs.goPackages.grafana.bin // { outputs = [ "bin" ]; };
 
   grafx2 = callPackage ../applications/graphics/grafx2 {};
 

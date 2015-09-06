@@ -206,7 +206,7 @@ in {
 
     package = mkOption {
       description = "Package to use.";
-      default = pkgs.grafana-backend;
+      default = pkgs.grafana;
       type = types.package;
     };
 
