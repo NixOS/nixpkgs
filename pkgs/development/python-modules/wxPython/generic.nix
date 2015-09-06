@@ -28,7 +28,5 @@ buildPythonPackage rec {
     ${python}/bin/${python.executable} setup.py ${stdenv.lib.concatStringsSep " " setupPyBuildFlags} install --prefix=$out
   '';
 
-  inherit openglSupport;
-
   passthru = { inherit wxGTK openglSupport; };
 }
