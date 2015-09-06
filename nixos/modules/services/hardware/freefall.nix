@@ -2,39 +2,41 @@
 
 with lib;
 
-{
+let
 
-  ###### interface
+  cfg = config.services.freefall;
 
-  options = with types; {
+in {
 
-    services.freefall = {
+  options.services.freefall = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to protect HP/Dell laptop hard drives (not SSDs) in free fall.
-        '';
-        type = bool;
-      };
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to protect HP/Dell laptop hard drives (not SSDs) in free fall.
+      '';
+    };
 
-      devices = mkOption {
-        default = [ "/dev/sda" ];
-        description = ''
-          Device paths to all internal spinning hard drives.
-        '';
-        type = listOf string;
-      };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.freefall;
+      description = ''
+        freefall derivation to use.
+      '';
+    };
 
+    devices = mkOption {
+      type = types.listOf types.string;
+      default = [ "/dev/sda" ];
+      description = ''
+        Device paths to all internal spinning hard drives.
+      '';
     };
 
   };
 
-  ###### implementation
-
   config = let
-
-    cfg = config.services.freefall;
 
     mkService = dev:
       assert dev != "";
@@ -43,12 +45,8 @@ with lib;
         description = "Free-fall protection for ${dev}";
         after = [ "${dev'}.device" ];
         wantedBy = [ "${dev'}.device" ];
-        path = [ pkgs.freefall ];
-        unitConfig = {
-          DefaultDependencies = false;
-        };
         serviceConfig = {
-          ExecStart = "${pkgs.freefall}/bin/freefall ${dev}";
+          ExecStart = "${cfg.package}/bin/freefall ${dev}";
           Restart = "on-failure";
           Type = "forking";
         };
@@ -56,9 +54,9 @@ with lib;
 
   in mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.freefall ];
+    environment.systemPackages = [ cfg.package ];
 
-    systemd.services = listToAttrs (map mkService cfg.devices);
+    systemd.services = builtins.listToAttrs (map mkService cfg.devices);
 
   };
 
