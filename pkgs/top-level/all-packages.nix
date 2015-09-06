@@ -3194,6 +3194,8 @@ let
 
   tlsdate = callPackage ../tools/networking/tlsdate { };
 
+  tmate = callPackage ../tools/misc/tmate { };
+
   tmpwatch = callPackage ../tools/misc/tmpwatch  { };
 
   tmux = callPackage ../tools/misc/tmux { };
