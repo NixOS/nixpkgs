@@ -3,7 +3,7 @@
 , libusb ? null, gnutls ? null, avahi ? null, libpaper ? null
 }:
 
-let version = "2.0.3"; in
+let version = "2.0.4"; in
 
 with stdenv.lib;
 stdenv.mkDerivation {
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.cups.org/software/${version}/cups-${version}-source.tar.bz2";
-    sha256 = "10c84ppc9prx6gcyskmm6fh0rks346yryzd356gkg9whhq26fcdw";
+    sha256 = "1gaakz24k6x5nc09rmpiq0xq20j1qdjc3szag8qwmyi4ky6ydmg1";
   };
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls avahi libpaper ]
