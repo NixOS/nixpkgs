@@ -5,7 +5,7 @@
 
 mkDerivation rec {
   pname = "cabal2nix";
-  version = "20180903";
+  version = "20150903";
   src = fetchFromGitHub {
     owner = "nixos";
     repo = "cabal2nix";
