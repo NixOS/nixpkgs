@@ -12240,6 +12240,8 @@ let
 
   pig = callPackage ../applications/networking/cluster/pig { };
 
+  playonlinux = callPackage ../applications/misc/playonlinux { };
+
   shotcut = callPackage ../applications/video/shotcut { mlt = mlt-qt5; };
 
   smplayer = callPackage ../applications/video/smplayer { };
