@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gtk2, nssTools, pcsclite
 , pkgconfig }:
 
-let version = "4.1.2"; in
-stdenv.mkDerivation rec {
+let version = "4.1.5"; in
+stdenv.mkDerivation {
   name = "eid-mw-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "034ar1v2qamdyq71nklh1nvqbmw6ryz63jdwnnc873f639mf5w94";
+    sha256 = "0m2awjfj2vs3aahy1ygrxi7mx12bhr1a621kiiszzai38crpgwbj";
     rev = "v${version}";
     repo = "eid-mw";
     owner = "Fedict";
@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk2 pcsclite ];
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  postPatch = ''
+    sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
+  '';
 
   enableParallelBuilding = true;
 
@@ -24,8 +28,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/eid-nssdb \
       --replace "modutil" "${nssTools}/bin/modutil"
 
-    # Only provides a useless "about-eid-mw.desktop" that doesn't even work:
-    rm -rf $out/share/applications
+    # Only provides a useless "about-eid-mw.desktop" that segfaults anyway:
+    rm -rf $out/share/applications $out/bin/about-eid-mw
   '';
 
   meta = with stdenv.lib; {
@@ -51,6 +55,6 @@ stdenv.mkDerivation rec {
       and remove all ~/.pki and/or /etc/pki directories no longer needed.
     '';
     maintainers = with maintainers; [ nckx ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

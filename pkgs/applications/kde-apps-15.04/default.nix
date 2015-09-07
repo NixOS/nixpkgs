@@ -223,6 +223,10 @@ let
         '';
       };
 
+      cantor = extendDerivation (kde4Package super.cantor) {
+        patches = [ ./cantor/0001-qalculate-filename-string-type.patch ];
+      };
+
       cervisia = kde4Package super.cervisia;
 
       dolphin-plugins = kde4Package super.dolphin-plugins;

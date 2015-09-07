@@ -1,11 +1,10 @@
-{ stdenv, lib, fetchurl, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc, perl, goPackages
-
+{ stdenv, lib, fetchurl, tzdata, iana_etc, libcCross
+, pkgconfig
+, pcre
 , Security }:
 
 let
-  loader386 = "${glibc}/lib/ld-linux.so.2";
-  loaderAmd64 = "${glibc}/lib/ld-linux-x86-64.so.2";
-  loaderArm = "${glibc}/lib/ld-linux.so.3";
+  libc = if stdenv ? "cross" then libcCross else stdenv.cc.libc;
 in
 
 stdenv.mkDerivation rec {
@@ -17,10 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "3e5d07bc5214a1ffe187cf6406c5b5a80ee44f12f6bca97a5463db0afee2f6ac";
   };
 
-  # perl is used for testing go vet
-  buildInputs = [ bison bash makeWrapper perl ]
-             ++ lib.optionals stdenv.isLinux [ glibc ];
-
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ pcre ];
   propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
 
   # I'm not sure what go wants from its 'src', but the go installation manual
@@ -51,26 +48,36 @@ stdenv.mkDerivation rec {
     sed -i '/TestShutdownUnix/areturn' src/net/net_test.go
     # Disable the hostname test
     sed -i '/TestHostname/areturn' src/os/os_test.go
-    sed -i 's,/etc/protocols,${iana_etc}/etc/protocols,' src/net/lookup_unix.go
     # ParseInLocation fails the test
     sed -i '/TestParseInSydney/areturn' src/time/format_test.go
+
+    sed -i 's,/etc/protocols,${iana_etc}/etc/protocols,' src/net/lookup_unix.go
   '' + lib.optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
-    sed -i 's,/lib/ld-linux.so.3,${loaderArm},' src/cmd/5l/asm.c
-    sed -i 's,/lib64/ld-linux-x86-64.so.2,${loaderAmd64},' src/cmd/6l/asm.c
-    sed -i 's,/lib/ld-linux.so.2,${loader386},' src/cmd/8l/asm.c
+
+    # Find the loader dynamically
+    LOADER="$(find ${libc}/lib -name ld-linux\* | head -n 1)"
+
+    # Replace references to the loader
+    find src/cmd -name asm.c -exec sed -i "s,/lib/ld-linux.*\.so\.[0-9],$LOADER," {} \;
   '' + lib.optionalString stdenv.isDarwin ''
     sed -i 's,"/etc","'"$TMPDIR"'",' src/os/os_test.go
     sed -i 's,/_go_os_test,'"$TMPDIR"'/_go_os_test,' src/os/path_test.go
     sed -i '/TestRead0/areturn' src/os/os_test.go
     sed -i '/TestSystemRoots/areturn' src/crypto/x509/root_darwin_test.go
+    sed -i '/TestDialDualStackLocalhost/areturn' src/net/dial_test.go
+
+    # remove IP resolving tests, on darwin they can find fe80::1%lo while expecting ::1
+    sed -i '/TestResolveIPAddr/areturn' src/net/ipraw_test.go
+    sed -i '/TestResolveTCPAddr/areturn' src/net/tcp_test.go
+    sed -i '/TestResolveUDPAddr/areturn' src/net/udp_test.go
 
     touch $TMPDIR/group $TMPDIR/hosts $TMPDIR/passwd
   '';
 
   patches = [
     ./cacert-1.4.patch
-    ./remove-tools.patch
+    ./remove-tools-1.4.patch
   ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";

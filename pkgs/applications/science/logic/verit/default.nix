@@ -1,24 +1,21 @@
-{ stdenv, fetchurl, gmp, flex, bison }:
+{ stdenv, fetchurl, autoreconfHook, gmp, flex, bison }:
 
 stdenv.mkDerivation rec {
   name = "veriT-${version}";
-  version = "201410";
+  version = "201506";
 
   src = fetchurl {
     url = "http://www.verit-solver.org/distrib/${name}.tar.gz";
-    sha256 = "0b31rl3wjn3b09jpka93lx83d26m8a5pixa216vq8pmjach8q5a3";
+    sha256 = "1cc9gcspw3namkdfypkians2j5dn224dsw6xx95qicad6033bsgk";
   };
 
-  buildInputs = [ gmp flex bison ];
+  nativeBuildInputs = [ autoreconfHook flex bison ];
+  buildInputs = [ gmp ];
 
-  enableParallelBuilding = false;
+  makeFlags = [ "LEX=${flex}/bin/flex" ];
 
-  makeFlags = [
-    "EXTERN=" # use system copy of gmp
-  ];
-
-  installPhase = ''
-    install -D -m0755 veriT $out/bin/veriT
+  preInstall = ''
+    mkdir -p $out/bin
   '';
 
   meta = with stdenv.lib; {

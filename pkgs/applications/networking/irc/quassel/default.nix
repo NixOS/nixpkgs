@@ -1,20 +1,27 @@
 { monolithic ? true # build monolithic Quassel
 , daemon ? false # build Quassel daemon
 , client ? false # build Quassel client
-, withKDE ? stdenv.isLinux # enable KDE integration
 , previews ? false # enable webpage previews on hovering over URLs
 , tag ? "" # tag added to the package name
-, kdelibs ? null # optional
-, useQt5 ? false
-, phonon_qt5, libdbusmenu_qt5
-, stdenv, fetchurl, cmake, makeWrapper, qt, automoc4, phonon, dconf, qca2, qca-qt5 }:
+, useQt5 ? false, phonon_qt5, libdbusmenu_qt5, qca-qt5
+, withKDE ? stdenv.isLinux # enable KDE integration
+, kf5 ? null, kdelibs ? null
 
+, stdenv, fetchurl, cmake, makeWrapper, qt, automoc4, phonon, dconf, qca2 }:
+
+let useKF5 = useQt5 && withKDE;
+    useKDE4 = withKDE && !useQt5;
+    buildClient = monolithic || client;
+    buildCore = monolithic || daemon;
+in
 
 assert stdenv.isLinux;
 
 assert monolithic -> !client && !daemon;
 assert client || daemon -> !monolithic;
-assert withKDE -> kdelibs != null;
+assert useKDE4 -> kdelibs != null;
+assert useKF5 -> kf5 != null;
+assert !buildClient -> !withKDE; # KDE is used by the client only
 
 let
   edf = flag: feature: [("-D" + feature + (if flag then "=ON" else "=OFF"))];
@@ -31,15 +38,21 @@ in with stdenv; mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake makeWrapper ]
-    ++ (if useQt5 then [ qt.base qca-qt5 ] else [ qt qca2 ])
-    ++ (if useQt5 && (monolithic || daemon) then [ qt.script ] else [])
-    ++ (if useQt5 && previews then [ qt.webkit qt.webkitwidgets ] else [])
-    ++ lib.optional withKDE kdelibs
-    ++ lib.optional withKDE automoc4
-    ++ lib.optional withKDE phonon
-    ++ lib.optional useQt5 phonon_qt5
-    ++ lib.optional useQt5 libdbusmenu_qt5;
+  buildInputs =
+       [ cmake makeWrapper ]
+    ++ [(if useQt5 then qt.base else qt)]
+    ++ lib.optionals buildCore (if useQt5 then [qt.script qca-qt5] else [qca2])
+    ++ lib.optionals buildClient
+       (   lib.optionals (previews && useQt5) [qt.webkit qt.webkitwidgets]
+        ++ lib.optionals useQt5 [libdbusmenu_qt5 phonon_qt5]
+        ++ lib.optionals useKDE4 [automoc4 kdelibs phonon]
+        ++ lib.optionals useKF5
+           (with kf5; [
+             extra-cmake-modules kconfigwidgets kcoreaddons
+             knotifications knotifyconfig ktextwidgets kwidgetsaddons
+             kxmlgui
+           ])
+       );
 
   cmakeFlags = [
     "-DEMBED_DATA=OFF"
@@ -52,24 +65,20 @@ in with stdenv; mkDerivation rec {
     ++ edf useQt5 "USE_QT5";
 
   preFixup =
-    lib.optionalString client ''
-        wrapProgram "$out/bin/quasselclient" \
-          --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
-    '' +
-    lib.optionalString monolithic ''
-        wrapProgram "$out/bin/quassel" \
+    lib.optionalString buildClient ''
+        wrapProgram "$out/bin/quassel${lib.optionalString client "client"}" \
           --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
     '';
 
   meta = with stdenv.lib; {
     homepage = http://quassel-irc.org/;
-    description = "Qt4/KDE4/Qt5 distributed IRC client suppporting a remote daemon";
+    description = "Qt/KDE distributed IRC client suppporting a remote daemon";
     longDescription = ''
       Quassel IRC is a cross-platform, distributed IRC client,
       meaning that one (or multiple) client(s) can attach to
       and detach from a central core -- much like the popular
       combination of screen and a text-based IRC client such
-      as WeeChat, but graphical (based on Qt4/KDE4 or Qt5).
+      as WeeChat, but graphical (based on Qt4/KDE4 or Qt5/KF5).
     '';
     license = stdenv.lib.licenses.gpl3;
     maintainers = with maintainers; [ phreedom ttuegel ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig glib libxslt gtk webkitgtk json_glib rest gnome_common makeWrapper
                   libsecret dbus_glib telepathy_glib intltool icu libsoup autoreconfHook
-                  docbook_xsl_ns docbook_xsl ];
+                  docbook_xsl_ns docbook_xsl gnome3.defaultIconTheme ];
 
   preFixup = ''
     for f in "$out/libexec/"*; do
@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = gnome3.maintainers;
   };
 }

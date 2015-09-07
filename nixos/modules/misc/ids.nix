@@ -226,6 +226,9 @@
       gitit = 202;
       riemanntools = 203;
       subsonic = 204;
+      riak = 205;
+      shout = 206;
+      gateone = 207;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -430,6 +433,9 @@
       gitit = 202;
       riemanntools = 203;
       subsonic = 204;
+      riak = 205;
+      #shout = 206; #unused
+      gateone = 207;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

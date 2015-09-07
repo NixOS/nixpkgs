@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, type_conv, camlp4 }:
+{ stdenv, fetchurl, ocaml, findlib, type-conv, camlp4 }:
 
 assert stdenv.lib.versionOlder "4.00" (stdenv.lib.getVersion ocaml);
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ ocaml findlib ];
-  propagatedBuildInputs = [ type_conv camlp4 ];
+  propagatedBuildInputs = [ type-conv camlp4 ];
 
   createFindlibDestdir = true;
 

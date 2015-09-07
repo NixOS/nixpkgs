@@ -1,4 +1,5 @@
-{ stdenv, coreutils, fetchurl, patchelf, gcc }:
+{ stdenv, fetchurl, patchelf, fontconfig, freetype
+, gcc, glib, libICE, libSM, libX11, libXext, libXrender }:
 
 let
   arch = if stdenv.system == "x86_64-linux" then "x86_64"
@@ -13,45 +14,54 @@ let
 
   appdir = "opt/copy";
   
+  libPackages = [ fontconfig freetype gcc.cc glib libICE libSM libX11 libXext
+    libXrender ];
+  libPaths = stdenv.lib.concatStringsSep ":"
+    (map (path: "${path}/lib") libPackages);
+
 in stdenv.mkDerivation {
   
-  name = "copy-com-1.47.0410";
+  name = "copy-com-3.2.01.0481";
 
   src = fetchurl {
     # Note: copy.com doesn't version this file. Annoying.
     url = "https://copy.com/install/linux/Copy.tgz";
-    sha256 = "a48c69f6798f888617cfeef5359829e619057ae0e6edf3940b4ea6c81131012a";
+    sha256 = "0bpphm71mqpaiygs57kwa23nli0qm64fvgl1qh7fkxyqqabh4g7k";
   };
 
-  buildInputs = [ coreutils patchelf ];
+  nativeBuildInputs = [ patchelf ];
 
   phases = "unpackPhase installPhase";
 
   installPhase = ''
     mkdir -p $out/opt
     cp -r ${arch} "$out/${appdir}"
-    ensureDir "$out/bin"
-    ln -s "$out/${appdir}/CopyConsole" "$out/bin/copy_console"
-    ln -s "$out/${appdir}/CopyAgent" "$out/bin/copy_agent"
-    ln -s "$out/${appdir}/CopyCmd" "$out/bin/copy_cmd"
-    patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} \
-      "$out/${appdir}/CopyConsole"
 
-    RPATH=${gcc.cc}/lib:$out/${appdir}
-    echo "updating rpaths to: $RPATH"
-    find "$out/${appdir}" -type f -a -perm +0100 \
+    mkdir -p "$out/bin"
+    for binary in Copy{Agent,Console,Cmd}; do
+      binary="$out/${appdir}/$binary"
+      ln -sv "$binary" "$out/bin"
+      patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} "$binary"
+    done
+
+    # Older versions of this package happily installed broken copies of
+    # anything other than CopyConsole - which was then also mangled to
+    # copy_console for some reason. Keep backwards compatibility (only
+    # for CopyConsole) for now; the NixOS service is already fixed.
+    ln -sv "$out/bin"/{CopyConsole,copy_console}
+
+    RPATH=${libPaths}:$out/${appdir}
+    echo "Updating rpaths to $RPATH in:"
+    find "$out/${appdir}" -type f -a -perm /0100 \
       -print -exec patchelf --force-rpath --set-rpath "$RPATH" {} \;
-
-
-
   '';
 
   meta = {
     homepage = http://copy.com;
-    description = "Copy.com Client";
+    description = "Copy.com graphical & command-line clients";
     # Closed Source unfortunately.
     license = stdenv.lib.licenses.unfree;
-    maintainers = with stdenv.lib.maintainers; [ nathan-gs ];
+    maintainers = with stdenv.lib.maintainers; [ nathan-gs nckx ];
     # NOTE: Copy.com itself only works on linux, so this is ok.
     platforms = stdenv.lib.platforms.linux;
   };

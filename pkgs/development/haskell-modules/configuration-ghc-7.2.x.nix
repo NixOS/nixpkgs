@@ -35,13 +35,13 @@ self: super: {
   unix = null;
 
   # deepseq is not a core library for this compiler.
-  deepseq = self.deepseq_1_4_1_1;
+  deepseq = self.deepseq_1_4_1_2;
 
   # transformers is not a core library for this compiler.
   transformers = self.transformers_0_4_3_0;
 
   # https://github.com/haskell/cabal/issues/2322
-  Cabal_1_22_4_0 = super.Cabal_1_22_4_0.override { binary = self.binary_0_7_5_0; process = self.process_1_2_3_0; };
+  Cabal_1_22_4_0 = super.Cabal_1_22_4_0.override { binary = self.binary_0_7_6_1; process = self.process_1_2_3_0; };
 
   # Newer versions don't compile.
   Cabal_1_18_1_6 = dontJailbreak super.Cabal_1_18_1_6;
@@ -69,5 +69,8 @@ self: super: {
 
   # Needs hashable on pre 7.10.x compilers.
   nats = addBuildDepend super.nats self.hashable;
+
+  # Newer versions require bytestring >=0.10.
+  tar = super.tar_0_4_1_0;
 
 }

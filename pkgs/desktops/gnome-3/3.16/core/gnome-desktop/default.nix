@@ -21,10 +21,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig python libxml2Python libxslt which libX11
                   xkeyboard_config isocodes itstool wayland
                   gtk3 glib intltool gnome_doc_utils libxkbfile
-                  gnome3.gsettings_desktop_schemas gobjectIntrospection ];
+                  gobjectIntrospection ];
+
+  propagatedBuildInputs = [ gnome3.gsettings_desktop_schemas ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = gnome3.maintainers;
   };
 }

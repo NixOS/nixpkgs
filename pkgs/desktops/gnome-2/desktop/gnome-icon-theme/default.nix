@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool iconnamingutils gtk ];
 
+  # remove a tree of dirs with no files within
+  postInstall = '' rm -r "$out/share/locale" '';
+
   meta = {
     platforms = stdenv.lib.platforms.linux;
   };

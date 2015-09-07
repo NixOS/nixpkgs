@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, intltool, gnutls, libproxy
-, gsettings_desktop_schemas, cacert }:
+, gsettings_desktop_schemas }:
 
 let
   ver_maj = "2.44";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "8f8a340d3ba99bfdef38b653da929652ea6640e27969d29f7ac51fbbe11a4346";
   };
 
-  configureFlags = "--with-ca-certificates=${cacert}/etc/ssl/certs/ca-bundle.crt";
+  configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt";
 
   preBuild = ''
     sed -e "s@${glib}/lib/gio/modules@$out/lib/gio/modules@g" -i $(find . -name Makefile)

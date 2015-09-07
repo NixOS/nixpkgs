@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   preAutoreconf = ''
     substituteInPlace configure.ac --replace AM_GCONF_SOURCE_2 ""
+    substituteInPlace configure.ac --replace gnome-icon-theme adwaita-icon-theme
   '';
 
   configureFlags = [

@@ -49,9 +49,8 @@ in
       type = types.int;
       default = 4;
       description = ''
-        The kernel console log level.  Only log messages with a
-        priority numerically less than this will appear on the
-        console.
+        The kernel console log level.  Log messages with a priority
+        numerically less than this will not appear on the console.
       '';
     };
 
@@ -217,7 +216,7 @@ in
       ];
 
     # The Linux kernel >= 2.6.27 provides firmware.
-    hardware.firmware = [ "${kernel}/lib/firmware" ];
+    hardware.firmware = [ kernel ];
 
     # Create /etc/modules-load.d/nixos.conf, which is read by
     # systemd-modules-load.service to load required kernel modules.

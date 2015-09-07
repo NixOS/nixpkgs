@@ -1,9 +1,9 @@
 { stdenv, fetchurl }:
 stdenv.mkDerivation rec {
-  name = "getdata-0.8.8";
+  name = "getdata-0.8.9";
   src = fetchurl {
     url = "mirror://sourceforge/getdata/${name}.tar.bz2";
-    sha256 = "1p5sncbr0bjrx1ki57di0j9rl5ksv0hbfy7bkcb4vaz9z9mrn8xj";
+    sha256 = "1cgwrflpp9ia2cwnhmwp45nmsg15ymjh03pysrfigyfmag94ac51";
   };
 
   meta = with stdenv.lib; {

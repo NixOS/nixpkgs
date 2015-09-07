@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ pkgconfig ];
 
   # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.

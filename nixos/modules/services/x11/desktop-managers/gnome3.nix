@@ -25,6 +25,24 @@ let
     '';
   };
 
+  nixos-gsettings-desktop-schemas = pkgs.stdenv.mkDerivation {
+    name = "nixos-gsettings-desktop-schemas";
+    buildInputs = [ pkgs.nixos-artwork ];
+    buildCommand = ''
+     mkdir -p $out/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas
+     cp -rf ${gnome3.gsettings_desktop_schemas}/share/gsettings-schemas/gsettings-desktop-schemas*/glib-2.0 $out/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas/
+     chmod -R a+w $out/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas
+     cat - > $out/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
+       [org.gnome.desktop.background]
+       picture-uri='${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png'
+
+       [org.gnome.desktop.screensaver]
+       picture-uri='${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png'
+     EOF
+     ${pkgs.glib}/bin/glib-compile-schemas $out/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas/glib-2.0/schemas/
+    '';
+  };
+
 in {
 
   options = {
@@ -40,7 +58,7 @@ in {
       example = literalExample "[ pkgs.gnome3.gpaste ]";
       description = "Additional list of packages to be added to the session search path.
                      Useful for gnome shell extensions or gsettings-conditionated autostart.";
-      apply = list: list ++ [ gnome3.gnome_shell ]; 
+      apply = list: list ++ [ gnome3.gnome_shell gnome3.gnome-shell-extensions ];
     };
 
     environment.gnome3.packageSet = mkOption {
@@ -81,6 +99,7 @@ in {
     networking.networkmanager.enable = mkDefault true;
     services.upower.enable = config.powerManagement.enable;
     hardware.bluetooth.enable = mkDefault true;
+    services.xserver.displayManager.desktopManagerHandlesLidAndPower = false; # true doesn't make sense here, GNOME just doesn't handle it anymore
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
 
@@ -108,6 +127,9 @@ in {
 
           # Override default mimeapps
           export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${mimeAppsList}/share
+
+          # Override gsettings-desktop-schema
+          export XDG_DATA_DIRS=${nixos-gsettings-desktop-schemas}/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas''${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS
 
           # Let nautilus find extensions
           export NAUTILUS_EXTENSION_DIR=${config.system.path}/lib/nautilus/extensions-3.0/

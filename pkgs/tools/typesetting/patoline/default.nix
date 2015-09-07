@@ -2,7 +2,7 @@
 { stdenv, fetchurl, ncurses, mesa, freeglut, libzip, 
    ocaml, findlib, camomile, 
    dypgen, ocaml_sqlite3, camlzip, 
-   lablgtk, camlimages, ocaml_cairo,
+   lablgtk, camlimages, ocaml-cairo,
    lablgl, ocamlnet, cryptokit,
    ocaml_pcre }:
 
@@ -21,13 +21,13 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
    
    buildInputs = [ ocaml findlib dypgen camomile ocaml_sqlite3 camlzip 
-   lablgtk camlimages ocaml_cairo
+   lablgtk camlimages ocaml-cairo
    lablgl ocamlnet cryptokit
    ocaml_pcre ncurses mesa freeglut libzip ];
 
   propagatedbuildInputs = [ camomile 
    dypgen ocaml_sqlite3 camlzip 
-   lablgtk camlimages ocaml_cairo
+   lablgtk camlimages ocaml-cairo
    lablgl ocamlnet cryptokit
    ocaml_pcre ncurses mesa freeglut libzip ];
 

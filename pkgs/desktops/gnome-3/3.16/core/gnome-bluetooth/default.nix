@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://help.gnome.org/users/gnome-bluetooth/stable/index.html.en;
     description = "Application that let you manage Bluetooth in the GNOME destkop";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

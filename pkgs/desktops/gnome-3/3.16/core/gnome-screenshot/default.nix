@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, pkgconfig, libcanberra_gtk3
-, bash, gtk3, glib, hicolor_icon_theme, makeWrapper
+, bash, gtk3, glib, makeWrapper
 , itstool, gnome3, librsvg, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +15,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
-  propagatedBuildInputs = [ gdk_pixbuf gnome3.adwaita-icon-theme librsvg
-                            hicolor_icon_theme gnome3.adwaita-icon-theme ];
+  propagatedBuildInputs = [ gdk_pixbuf gnome3.defaultIconTheme librsvg ];
 
   buildInputs = [ bash pkgconfig gtk3 glib intltool itstool libcanberra_gtk3
                   gnome3.gsettings_desktop_schemas makeWrapper ];
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://en.wikipedia.org/wiki/GNOME_Screenshot;
     description = "Utility used in the GNOME desktop environment for taking screenshots";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

@@ -6,18 +6,13 @@
 , which
 }:
 
-let
-  the_version = "6_5_9";
-
-in
-
 stdenv.mkDerivation rec {
-  name = "smartgithg-${the_version}";
+  name = "smartgithg-${version}";
+  version = "7_0_0";
 
   src = fetchurl {
-    url = "http://www.syntevo.com/downloads/smartgit/" +
-          "smartgit-generic-${the_version}.tar.gz";
-    sha256 = "09bvx1jgaqfxg8qv9f306bgh3k057shsi2xllxv1vw3xf0pvkbwa";
+    url = "http://www.syntevo.com/downloads/smartgit/smartgit-generic-${version}.tar.gz";
+    sha256 = "099hnpczh2c0s86nsdybymmm4903n0bsjdq1fpdmm0x5w4216iy6";
   };
 
   buildInputs = [

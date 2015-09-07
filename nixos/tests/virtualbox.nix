@@ -8,7 +8,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
         #!${pkgs.stdenv.shell} -xe
         export PATH="${pkgs.coreutils}/bin:${pkgs.utillinux}/bin"
 
-        ${pkgs.linuxPackages.virtualboxGuestAdditions}/sbin/VBoxService
+        ${pkgs.linuxPackages.virtualboxGuestAdditions}/bin/VBoxService
         ${(attrs.vmScript or (const "")) pkgs}
 
         i=0
@@ -31,7 +31,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
       fsType = "vboxsf";
     };
 
-    services.virtualboxGuest.enable = true;
+    virtualisation.virtualbox.guest.enable = true;
 
     boot.initrd.kernelModules = [
       "af_packet" "vboxsf"
@@ -39,7 +39,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     ];
 
     boot.initrd.extraUtilsCommands = ''
-      copy_bin_and_libs "${pkgs.linuxPackages.virtualboxGuestAdditions}/sbin/mount.vboxsf"
+      copy_bin_and_libs "${pkgs.linuxPackages.virtualboxGuestAdditions}/bin/mount.vboxsf"
       copy_bin_and_libs "${pkgs.utillinux}/bin/unshare"
       ${(attrs.extraUtilsCommands or (const "")) pkgs}
     '';
@@ -308,9 +308,9 @@ in {
       vmConfigs = mapAttrsToList mkVMConf vboxVMs;
     in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
     virtualisation.memorySize = 768;
-    services.virtualboxHost.enable = true;
+    virtualisation.virtualbox.host.enable = true;
     users.extraUsers.alice.extraGroups = let
-      inherit (config.services.virtualboxHost) enableHardening;
+      inherit (config.virtualisation.virtualbox.host) enableHardening;
     in lib.mkIf enableHardening (lib.singleton "vboxusers");
   };
 

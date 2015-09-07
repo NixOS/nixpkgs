@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-1.5.1";
+  name = "libva-1.6.0";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/vaapi/releases/libva/${name}.tar.bz2";
-    sha256 = "01d01mm9fgpwzqycmjjcj3in3vvzcibi3f64icsw2sksmmgb4495";
+    sha256 = "0n1l2mlhsvmsbs3qcphl4p6w13jnbv6s3hil8b6fj43a3afdrn9s";
   };
 
   buildInputs = [ libX11 libXext pkgconfig libdrm libXfixes wayland libffi mesa ];

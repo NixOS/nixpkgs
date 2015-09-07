@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://help.gnome.org/users/gnome-help/${gnome3.version}";
     description = "User and system administration help for the GNOME desktop";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.cc-by-30;
     platforms = platforms.linux;
   };

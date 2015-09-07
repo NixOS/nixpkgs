@@ -8,12 +8,14 @@
 # (icu is a ~30 MB dependency, the rest is very small in comparison)
 
 stdenv.mkDerivation rec {
-  name = "harfbuzz-0.9.41";
+  name = "harfbuzz-1.0.2";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/harfbuzz/release/${name}.tar.bz2";
-    sha256 = "0z05vj3va43adzxn026fpdvdd533q5zrs5dcxaz3gd021hysa6nq";
+    sha256 = "0rmlwfxyzdblnvg72hpfcz2py8rjflx0m08wlvfgq420cpwcmcxy";
   };
+
+  outputs = [ "out" "doc" ];
 
   configureFlags = [
     ( "--with-graphite2=" + (if withGraphite2 then "yes" else "no") ) # not auto-detected by default

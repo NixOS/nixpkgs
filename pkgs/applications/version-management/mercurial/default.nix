@@ -1,10 +1,9 @@
 { stdenv, fetchurl, python, makeWrapper, docutils, unzip, hg-git, dulwich
-, guiSupport ? false, tk ? null, curses, cacert
-
+, guiSupport ? false, tk ? null, curses
 , ApplicationServices }:
 
 let
-  version = "3.3.3";
+  version = "3.5.1";
   name = "mercurial-${version}";
 in
 
@@ -13,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://mercurial.selenic.com/release/${name}.tar.gz";
-    sha256 = "04xfzwb7jabzsfv2r18c3w6vwag7cjrl79xzg5i3mbyb1mzkcid4";
+    sha256 = "1795ia6ghbqwfp4d6bz0qwlvzymh76zdgk2viikrkqq3ldfs8zcr";
   };
 
   inherit python; # pass it so that the same version can be used in hg2git
@@ -48,7 +47,7 @@ stdenv.mkDerivation {
       mkdir -p $out/etc/mercurial
       cat >> $out/etc/mercurial/hgrc << EOF
       [web]
-      cacerts = ${cacert}/etc/ssl/certs/ca-bundle.crt
+      cacerts = /etc/ssl/certs/ca-certificates.crt
       EOF
 
       # copy hgweb.cgi to allow use in apache

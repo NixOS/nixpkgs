@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, ncurses, remind }:
+{ stdenv, fetchurl, ocaml, ncurses, remind, camlp4 }:
 
 stdenv.mkDerivation rec {
   version = "1.4.6";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zlrg602q781q8dij62lwdprpfliyy9j1rqfqcz8p2wgndpivddj";
   };
 
-  buildInputs = [ ocaml ncurses remind ];
+  buildInputs = [ ocaml ncurses remind camlp4 ];
 
   preferLocalBuild = true;
 

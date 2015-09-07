@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "jsoncpp-${version}";
-  version = "1.6.2";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "open-source-parsers";
     repo = "jsoncpp";
     rev = version;
-    sha256 = "0p92i0hx2k3g8mwrcy339b56bfq8qgpb65id8xllkgd2ns4wi9zi";
+    sha256 = "08y54n4v3q18ik8iv8zyziava3x130ilzf1l3qli3vjwf6l42fm0";
   };
 
   /* During darwin bootstrap, we have a cp that doesn't understand the

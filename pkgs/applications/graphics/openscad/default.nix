@@ -1,23 +1,22 @@
 { stdenv, fetchurl, qt4, bison, flex, eigen, boost, mesa, glew, opencsg, cgal
-, mpfr, gmp, glib, pkgconfig
+, mpfr, gmp, glib, pkgconfig, harfbuzz, qscintilla, gettext
 }:
 
 stdenv.mkDerivation rec {
-  version = "2014.03";
+  version = "2015.03-1";
   name = "openscad-${version}";
 
   src = fetchurl {
     url = "http://files.openscad.org/${name}.src.tar.gz";
-    sha256 = "1hv1lmq1ayhlvrz5sqipg650xryq25a9k22ysdw0dsrwg9ixqpw6";
+    sha256 = "61e0dd3cd107e5670d727526700104cca5ac54a1f0a84117fcc9e57bf3b6b279";
   };
 
   buildInputs = [
     qt4 bison flex eigen boost mesa glew opencsg cgal mpfr gmp glib
-    pkgconfig
+    pkgconfig harfbuzz qscintilla gettext
   ];
 
   configurePhase = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$(echo ${eigen}/include/eigen*) "
     qmake PREFIX="$out" VERSION=${version}
   '';
 

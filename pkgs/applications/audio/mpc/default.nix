@@ -13,15 +13,15 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      export LIBMPDCLIENT_LIBS=${mpd_clientlib}/lib/libmpdclient.so.${mpd_clientlib.majorVersion}.0.${mpd_clientlib.minorVersion}
+      export LIBMPDCLIENT_LIBS=${mpd_clientlib}/lib/libmpdclient.${if stdenv.isDarwin then mpd_clientlib.majorVersion + ".dylib" else "so." + mpd_clientlib.majorVersion + ".0." + mpd_clientlib.minorVersion}
       export LIBMPDCLIENT_CFLAGS=${mpd_clientlib}
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A minimalist command line interface to MPD";
     homepage = http://www.musicpd.org/clients/mpc/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.algorith ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.algorith ];
+    platforms = with platforms; linux ++ darwin;
   };
 }

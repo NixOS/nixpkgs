@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgs, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  version = "0.5.0";
+  version = "0.6.0";
   name = "khal-${version}";
 
   src = fetchurl {
-    url = "https://github.com/geier/khal/archive/v${version}.tar.gz";
-    sha256 = "1rjs5s8ky4n628rs6l5ggaj2abb4kq2avvxmimjjgxz3zh9xlz6s";
+    url = "https://pypi.python.org/packages/source/k/khal/khal-${version}.tar.gz";
+    sha256 = "16nsib70rczln0hrh93bas58lr8crvq8yipj7qnfs4hbs9b8sbhs";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -23,6 +23,7 @@ pythonPackages.buildPythonPackage rec {
     tzlocal
     urwid
     python.modules.sqlite3
+    pkginfo
   ];
 
   meta = with stdenv.lib; {

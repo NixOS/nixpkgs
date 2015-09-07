@@ -6,13 +6,15 @@ let
 in
 stdenv.mkDerivation rec {
   name = "mono-${version}";
-  version = "4.0.1";
+  version = "4.0.3.20";
   src = fetchurl {
     url = "http://download.mono-project.com/sources/mono/${name}.tar.bz2";
-    sha256 = "1kjv1zhcmd2qfr89vkaas6541n5jfzisn3y030l6lg6lp3ria7zz";
+    sha256 = "1z0k8gv5z3yrkjhi2yjaqj42p55jn5h3q4z890gkcrlvmgihnv4p";
   };
 
-  buildInputs = [bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib];
+  buildInputs =
+    [ bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib
+    ];
   propagatedBuildInputs = [glib];
 
   NIX_LDFLAGS = "-lgcc_s" ;

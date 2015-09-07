@@ -78,8 +78,8 @@ in
         description = ''
           This option defines the maximum number of jobs that Nix will try
           to build in parallel.  The default is 1.  You should generally
-          set it to the number of CPUs in your system (e.g., 2 on an Athlon
-          64 X2).
+          set it to the total number of logical cores in your system (e.g., 16
+          for two CPUs with 4 cores each and hyper-threading).
         '';
       };
 
@@ -254,7 +254,7 @@ in
 
       requireSignedBinaryCaches = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = ''
           If enabled, Nix will only download binaries from binary
           caches if they are cryptographically signed with any of the
@@ -306,6 +306,20 @@ in
           allow all users by specifying <literal>*</literal>. The
           default is <literal>*</literal>. Note that trusted users are
           always allowed to connect.
+        '';
+      };
+
+      nixPath = mkOption {
+        type = types.listOf types.str;
+        default =
+          [ "/nix/var/nix/profiles/per-user/root/channels/nixos"
+            "nixos-config=/etc/nixos/configuration.nix"
+            "/nix/var/nix/profiles/per-user/root/channels"
+          ];
+        description = ''
+          The default Nix expression search path, used by the Nix
+          evaluator to look up paths enclosed in angle brackets
+          (e.g. <literal>&lt;nixpkgs&gt;</literal>).
         '';
       };
 
@@ -378,7 +392,9 @@ in
       };
 
     # Set up the environment variables for running Nix.
-    environment.sessionVariables = cfg.envVars;
+    environment.sessionVariables = cfg.envVars //
+      { NIX_PATH = concatStringsSep ":" cfg.nixPath;
+      };
 
     environment.extraInit =
       ''

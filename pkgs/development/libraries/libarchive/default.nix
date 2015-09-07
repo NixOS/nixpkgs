@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
     echo "#include <windows.h>" >> config.h
   '' else null;
 
+  preFixup = ''
+    sed 's|-lcrypto|-L${openssl}/lib -lcrypto|' -i $out/lib/libarchive.la
+  '';
+
   meta = {
     description = "Multi-format archive and compression library";
     longDescription = ''

@@ -1,6 +1,8 @@
 let
+
   lib = import ./default.nix;
   inherit (builtins) attrNames isFunction;
+
 in
 
 rec {
@@ -49,10 +51,6 @@ rec {
        else { }));
 
 
-  # usage: (you can use override multiple times)
-  # let d = makeOverridable stdenv.mkDerivation { name = ..; buildInputs; }
-  #     noBuildInputs = d.override { buildInputs = []; }
-  #     additionalBuildInputs = d.override ( args : args // { buildInputs = args.buildInputs ++ [ additional ]; } )
   makeOverridable = f: origArgs:
     let
       ff = f origArgs;
@@ -60,23 +58,15 @@ rec {
     in
       if builtins.isAttrs ff then (ff //
         { override = newArgs: makeOverridable f (overrideWith newArgs);
-          deepOverride = newArgs:
-            makeOverridable f (lib.overrideExisting (lib.mapAttrs (deepOverrider newArgs) origArgs) newArgs);
           overrideDerivation = fdrv:
             makeOverridable (args: overrideDerivation (f args) fdrv) origArgs;
         })
       else if builtins.isFunction ff then
         { override = newArgs: makeOverridable f (overrideWith newArgs);
           __functor = self: ff;
-          deepOverride = throw "deepOverride not yet supported for functors";
           overrideDerivation = throw "overrideDerivation not yet supported for functors";
         }
       else ff;
-
-  deepOverrider = newArgs: name: x: if builtins.isAttrs x then (
-    if x ? deepOverride then (x.deepOverride newArgs) else
-    if x ? override then (x.override newArgs) else
-    x) else x;
 
 
   /* Call the package function in the file `fn' with the required
@@ -102,12 +92,28 @@ rec {
   */
   callPackageWith = autoArgs: fn: args:
     let
-      f    = if builtins.isFunction fn then fn else import fn;
+      f = if builtins.isFunction fn then fn else import fn;
       auto = builtins.intersectAttrs (builtins.functionArgs f) autoArgs;
     in makeOverridable f (auto // args);
 
 
-  /* Add attributes to each output of a derivation without changing the derivation itself */
+  /* Like callPackage, but for a function that returns an attribute
+     set of derivations. The override function is added to the
+     individual attributes. */
+  callPackagesWith = autoArgs: fn: args:
+    let
+      f = if builtins.isFunction fn then fn else import fn;
+      auto = builtins.intersectAttrs (builtins.functionArgs f) autoArgs;
+      finalArgs = auto // args;
+      pkgs = f finalArgs;
+      mkAttrOverridable = name: pkg: pkg // {
+        override = newArgs: mkAttrOverridable name (f (finalArgs // newArgs)).${name};
+      };
+    in lib.mapAttrs mkAttrOverridable pkgs;
+
+
+  /* Add attributes to each output of a derivation without changing
+     the derivation itself. */
   addPassthru = drv: passthru:
     let
       outputs = drv.outputs or [ "out" ];

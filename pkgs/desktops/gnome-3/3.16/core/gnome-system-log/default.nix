@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, pkgconfig
-, bash, gtk3, glib, hicolor_icon_theme, makeWrapper
+, bash, gtk3, glib, makeWrapper
 , itstool, gnome3, librsvg, gdk_pixbuf, libxml2 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +15,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
-  propagatedBuildInputs = [ gdk_pixbuf gnome3.adwaita-icon-theme librsvg
-                            hicolor_icon_theme gnome3.adwaita-icon-theme ];
+  propagatedBuildInputs = [ gdk_pixbuf gnome3.defaultIconTheme librsvg ];
 
   buildInputs = [ bash pkgconfig gtk3 glib intltool itstool
                   gnome3.gsettings_desktop_schemas makeWrapper libxml2 ];
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://help.gnome.org/users/gnome-system-log/3.9/;
     description = "Graphical, menu-driven viewer that you can use to view and monitor your system logs";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, ocaml_data_notation, type_conv, camlp4,
+{stdenv, fetchurl, ocaml, findlib, ocaml-data-notation, type-conv, camlp4,
  ocamlmod, ocamlify, ounit, expect}:
 
 stdenv.mkDerivation {
@@ -13,10 +13,10 @@ stdenv.mkDerivation {
 
   buildInputs =
     [
-      ocaml findlib type_conv ocamlmod ocamlify ounit camlp4
+      ocaml findlib type-conv ocamlmod ocamlify ounit camlp4
     ];
 
-  propagatedBuildInputs = [ ocaml_data_notation ];
+  propagatedBuildInputs = [ ocaml-data-notation ];
 
   configurePhase = "ocaml setup.ml -configure --prefix $out";
   buildPhase     = "ocaml setup.ml -build";

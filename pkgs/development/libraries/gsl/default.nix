@@ -11,10 +11,9 @@ stdenv.mkDerivation rec {
   patches = [
     # ToDo: there might be more impurities than FMA support check
     ./disable-fma.patch # http://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html
-
     (fetchpatch {
       name = "bug-39055.patch";
-      url = "http://git.savannah.gnu.org/cgit/gsl.git/patch/?id=9cc12d0377";
+      url = "http://git.savannah.gnu.org/cgit/gsl.git/patch/?id=9cc12d";
       sha256 = "1bmrmihi28cly9g9pq54kkix2jy59y7cd7h5fw4v1c7h5rc2qvs8";
     })
   ];

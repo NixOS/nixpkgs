@@ -1,8 +1,7 @@
 { stdenv, fetchurl, tcl, makeWrapper }:
 
-let version = "5.45";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
+  version = "5.45";
   name = "expect-${version}";
 
   src = fetchurl {
@@ -27,7 +26,8 @@ stdenv.mkDerivation {
     for i in $out/bin/*; do
       wrapProgram $i \
         --prefix PATH : "${tcl}/bin" \
-        --prefix TCLLIBPATH ' ' $out/lib/*
+        --prefix TCLLIBPATH ' ' $out/lib/* \
+        ${stdenv.lib.optionalString stdenv.isDarwin "--prefix DYLD_LIBRARY_PATH : $out/lib/expect${version}"}
     done
   '';
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     description = "A tool for automating interactive applications";
     homepage = http://expect.nist.gov/;
     license = "Expect";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];
   };
 }

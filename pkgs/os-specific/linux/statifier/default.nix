@@ -17,9 +17,9 @@ stdenv.mkDerivation {
     sed -e s@/usr/@"$out/"@g -i */Makefile src/statifier
     sed -e s@/bin/bash@"${stdenv.shell}"@g -i src/*.sh
   '';
-      
+
   meta = with stdenv.lib; {
     description = "Tool for creating static Linux binaries";
-    platforms = with platforms; [ linux ];
+    platforms = with platforms; linux;
   };
 }

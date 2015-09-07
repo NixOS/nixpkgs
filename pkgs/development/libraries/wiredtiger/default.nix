@@ -58,6 +58,12 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace api/leveldb/leveldb_wt.h --replace \
+      '#include "wiredtiger.h"' \
+      ''$'#include "wiredtiger.h"\n#include "pthread.h"'
+  '';
+
   meta = {
     homepage = http://wiredtiger.com/;
     description = "";

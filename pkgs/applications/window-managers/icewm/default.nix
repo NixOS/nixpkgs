@@ -1,35 +1,39 @@
-{ stdenv, fetchurl, gettext, libjpeg, libtiff, libungif, libpng, freetype
-, fontconfig, xlibs, automake, pkgconfig, gdk_pixbuf }:
+{ stdenv, fetchurl, cmake, gettext
+, libjpeg, libtiff, libungif, libpng, imlib, expat
+, freetype, fontconfig, pkgconfig, gdk_pixbuf
+, mkfontdir, libX11, libXft, libXext, libXinerama
+, libXrandr, libICE, libSM, libXpm, libXdmcp, libxcb
+, libpthreadstubs }:
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "icewm-1.3.8";
+  name = "icewm-${version}";
+  version = "1.3.10";
 
   buildInputs =
-    [ gettext libjpeg libtiff libungif libpng
-      xlibs.libX11 xlibs.libXft xlibs.libXext xlibs.libXinerama xlibs.libXrandr
-      xlibs.libICE xlibs.libSM freetype fontconfig
-      pkgconfig gdk_pixbuf
-    ];
+  [ cmake gettext libjpeg libtiff libungif libpng imlib expat
+    freetype fontconfig pkgconfig gdk_pixbuf mkfontdir libX11
+    libXft libXext libXinerama libXrandr libICE libSM libXpm
+    libXdmcp libxcb libpthreadstubs ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/icewm/${name}.tar.gz";
-    sha256 = "066d1mw0vm9ygxnyxksfi6k4vzclvnlkvj04pj3kbcmv1fg8sn0p";
+    url = "https://github.com/bbidulock/icewm/archive/${version}.tar.gz";
+    sha256 = "01i7a21gf810spmzjx32dxsmx4527qivs744rhvhaw4gr00amrns";
   };
 
-  NIX_LDFLAGS = "-lfontconfig";
-
-  # The fuloong2f is not supported by 1.3.6 still
-  #
-  # Don't know whether 1.3.7 supports fuloong2f and don't know how to test it
-  # on x86_64 hardware. So I left this 'cp' -- urkud
-
   preConfigure = ''
-    cp -v ${automake}/share/automake*/config.{sub,guess} .
+    export cmakeFlags="-DPREFIX=$out"
   '';
 
   meta = {
-    description = "A window manager for the X Window System";
+    description = "A simple, lightweight X window manager";
+    longDescription = ''
+      IceWM is a window manager for the X Window System. The goal of
+      IceWM is speed, simplicity, and not getting in the user's way.
+    '';
     homepage = http://www.icewm.org/;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.lgpl2;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.unix;
   };
 }

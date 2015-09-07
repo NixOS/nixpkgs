@@ -154,6 +154,12 @@ in
 
   config = mkIf config.services.postgresql.enable {
 
+    services.postgresql.package =
+      # Note: when changing the default, make it conditional on
+      # ‘system.stateVersion’ to maintain compatibility with existing
+      # systems!
+      mkDefault pkgs.postgresql94;
+
     services.postgresql.authentication = mkAfter
       ''
         # Generated file; do not edit!
@@ -207,6 +213,7 @@ in
 
         serviceConfig =
           { ExecStart = "@${postgresql}/bin/postgres postgres ${toString flags}";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             User = "postgres";
             Group = "postgres";
             PermissionsStartOnly = true;

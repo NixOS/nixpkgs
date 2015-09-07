@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "rocksdb-${version}";
-  version = "3.11.2";
+  version = "3.13.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
     rev = "rocksdb-${version}";
-    sha256 = "0cjwr7n5l2wdzdv4b0p90k0ijg9ka28akpq2aqa8lknsa1kb1cyv";
+    sha256 = "1jw2sjvpixz565wvmgls4rly3wylcmyypka4pvd9mhxkq8d699h9";
   };
 
   buildInputs = [ snappy google-gflags zlib bzip2 lz4 numactl malloc ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     homepage = http://rocksdb.org;
     description = "A library that provides an embeddable, persistent key-value store for fast storage";
     license = licenses.bsd3;
-    platforms = platforms.all;
+    platforms = platforms.allBut [ "i686-linux" ];
     maintainers = with maintainers; [ wkennington ];
   };
 }

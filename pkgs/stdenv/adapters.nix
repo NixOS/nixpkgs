@@ -224,7 +224,7 @@ rec {
   keepDebugInfo = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         dontStrip = true;
-        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -g -O0";
+        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og";
       });
     };
 

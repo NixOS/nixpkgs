@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = https://wiki.gnome.org/Apps/Vinagre;
     description = "Remote desktop viewer for GNOME";
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = gnome3.maintainers;
   };
 }

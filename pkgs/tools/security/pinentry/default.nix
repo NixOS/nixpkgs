@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig
-, libcap ? null, ncurses ? null, gtk2 ? null, qt4 ? null
+, libgpgerror, libassuan, libcap ? null, ncurses ? null, gtk2 ? null, qt4 ? null
 }:
 
 let
@@ -10,14 +10,14 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "pinentry-0.9.4";
+  name = "pinentry-0.9.5";
 
   src = fetchurl {
     url = "mirror://gnupg/pinentry/${name}.tar.bz2";
-    sha256 = "1q72ir9r9j70px61rdpd80an56k4ixmzy810nr14aildffxkb22b";
+    sha256 = "1338hj1h3sh34897120y30x12b64wyj3xjzzk5asm2hdzhxgsmva";
   };
 
-  buildInputs = [ libcap gtk2 ncurses qt4 ];
+  buildInputs = [ libgpgerror libassuan libcap gtk2 ncurses qt4 ];
 
   prePatch = ''
     substituteInPlace pinentry/pinentry-curses.c --replace ncursesw ncurses

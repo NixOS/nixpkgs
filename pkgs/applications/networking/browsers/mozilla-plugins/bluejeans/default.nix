@@ -1,5 +1,5 @@
 { stdenv, fetchurl, xorg, gtk, glib, gdk_pixbuf, dpkg, libXext, libXfixes
-, libXrender, libuuid, libXrandr, libXcomposite
+, libXrender, libuuid, libXrandr, libXcomposite, libpulseaudio
 }:
 
 with stdenv.lib;
@@ -10,18 +10,18 @@ let
     [gtk glib stdenv.cc.cc];
 
   rpathPlugin = makeLibraryPath
-    [ stdenv.cc.cc gtk glib xorg.libX11 gdk_pixbuf libXext libXfixes libXrender libXrandr libuuid libXcomposite ];
+    [ stdenv.cc.cc gtk glib xorg.libX11 gdk_pixbuf libXext libXfixes libXrender libXrandr libuuid libXcomposite libpulseaudio ];
 
 in
 
 stdenv.mkDerivation rec {
-  name = "bluejeans-2.100.41.8";
+  name = "bluejeans-${version}";
 
-  version = "2.100.41.8";
+  version = "2.100.102.8";
 
   src = fetchurl {
-    url = "https://swdl.bluejeans.com/skinny/bjnplugin_2.100.41.8-1_amd64.deb";
-    sha256 = "013m17lpgi6nhw2df10wvrsnsjxy5n7z41ab69vj5m9h0prw9vd1";
+    url = "https://swdl.bluejeans.com/skinny/bjnplugin_${version}-1_amd64.deb";
+    sha256 = "18f8jmhxvqy1yiiwlsssj7rjlfcb41xn16hnl6wv8r8r2mmic4v8";
   };
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
       plugins=$out/lib/mozilla/plugins
       patchelf \
         --set-rpath "${rpathPlugin}" \
-        $plugins/npbjnplugin_2.100.41.8.so
+        $plugins/npbjnplugin_${version}.so
 
       patchelf \
         --set-rpath "${rpathInstaller}" \
-        $plugins/npbjninstallplugin_2.100.41.8.so
+        $plugins/npbjninstallplugin_${version}.so
     '';
 
   dontStrip = true;
@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://bluejeans.com;
     license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.ocharles ];
+    maintainers = with maintainers; [ ocharles kamilchm ];
   };
 }

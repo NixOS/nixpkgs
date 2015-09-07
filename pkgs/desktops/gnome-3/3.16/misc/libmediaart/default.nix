@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, gobjectIntrospection }:
+{ stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, gobjectIntrospection, gnome3 }:
 
 let
   majorVersion = "1.9";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library tasked with managing, extracting and handling media art caches";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

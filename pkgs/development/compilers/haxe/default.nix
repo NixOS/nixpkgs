@@ -1,9 +1,9 @@
-{ stdenv, fetchgit, ocaml, zlib, neko }:
+{ stdenv, fetchgit, ocaml, zlib, neko, camlp4 }:
 
 stdenv.mkDerivation {
   name = "haxe-3.1.3";
 
-  buildInputs = [ocaml zlib neko];
+  buildInputs = [ocaml zlib neko camlp4];
 
   src = fetchgit {
     url = "https://github.com/HaxeFoundation/haxe.git";

@@ -40,10 +40,10 @@ self: super: {
   xhtml = self.xhtml_3000_2_1;
 
   # https://github.com/haskell/cabal/issues/2322
-  Cabal_1_22_4_0 = super.Cabal_1_22_4_0.override { binary = dontCheck self.binary_0_7_5_0; };
+  Cabal_1_22_4_0 = super.Cabal_1_22_4_0.override { binary = dontCheck self.binary_0_7_6_1; };
 
   # Avoid inconsistent 'binary' versions from 'text' and 'Cabal'.
-  cabal-install = super.cabal-install.overrideScope (self: super: { binary = dontCheck self.binary_0_7_5_0; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { binary = dontCheck self.binary_0_7_6_1; });
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
@@ -85,10 +85,15 @@ self: super: {
 
   # https://github.com/magthe/sandi/issues/7
   sandi = overrideCabal super.sandi (drv: {
-    patchPhase = "sed -i -e 's|base ==4.8.*,|base,|' sandi.cabal"; }
-  );
+    postPatch = "sed -i -e 's|base ==4.8.*,|base,|' sandi.cabal";
+  });
 
   # blaze-builder requires an additional build input on older compilers.
   blaze-builder = addBuildDepend super.blaze-builder super.bytestring-builder;
+
+  # available convertible package won't build with the available
+  # bytestring and ghc-mod won't build without convertible
+  convertible = markBroken super.convertible;
+  ghc-mod = markBroken super.ghc-mod;
 
 }

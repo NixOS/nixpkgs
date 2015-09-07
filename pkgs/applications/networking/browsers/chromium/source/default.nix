@@ -17,8 +17,6 @@ let
     "s,^/,,"
   ]);
 
-  pre44 = versionOlder version "44.0.0.0";
-
 in stdenv.mkDerivation {
   name = "chromium-source-${version}";
 
@@ -46,9 +44,11 @@ in stdenv.mkDerivation {
     done
   '';
 
-  patches = if pre44
-            then singleton ./nix_plugin_paths_42.patch
-            else singleton ./nix_plugin_paths_44.patch;
+  patches =
+    if versionOlder version "45.0.0.0"
+    then singleton ./nix_plugin_paths_44.patch
+    else singleton ./nix_plugin_paths_46.patch ++
+         optional (!versionOlder version "46.0.0.0") ./build_fixes_46.patch;
 
   patchPhase = let
     diffmod = sym: "/^${sym} /{s/^${sym} //;${transform ""};s/^/${sym} /}";

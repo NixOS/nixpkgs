@@ -1,5 +1,5 @@
-{ stdenv, autoconf, automake, makeWrapper, pkgconfig, libtool, which
-, boost, python, pythonPackages, libxml2, git, zlib
+{ stdenv, autoconf, automake, makeWrapper, pkgconfig, libtool, which, git
+, boost, python, pythonPackages, libxml2, zlib
 
 # Optional Dependencies
 , snappy ? null, leveldb ? null, yasm ? null, fcgi ? null, expat ? null
@@ -56,7 +56,7 @@ let
   optLibatomic_ops = shouldUsePkg libatomic_ops;
   optKinetic-cpp-client = shouldUsePkg kinetic-cpp-client;
   optRocksdb = shouldUsePkg rocksdb;
-  optLibs3 = shouldUsePkg libs3;
+  optLibs3 = if versionAtLeast version "10.0.0" then null else shouldUsePkg libs3;
 
   optJemalloc = shouldUsePkg jemalloc;
   optGperftools = shouldUsePkg gperftools;
@@ -75,10 +75,9 @@ let
   hasOsd = hasServer;
   hasRadosgw = optFcgi != null && optExpat != null && optCurl != null && optLibedit != null;
 
-  /*hasXio = (stdenv.isLinux || stdenv.isFreeBSD) &&
-    versionAtLeast version "9.0.0" &&
-    optAccelio != null && optLibibverbs != null && optLibrdmacm != null;*/
-  hasXio = false;  # Broken with xio 1.4
+  hasXio = (stdenv.isLinux || stdenv.isFreeBSD) &&
+    versionAtLeast version "9.0.3" &&
+    optAccelio != null && optLibibverbs != null && optLibrdmacm != null;
 
   hasRocksdb = versionAtLeast version "9.0.0" && optRocksdb != null;
 
@@ -101,7 +100,7 @@ let
   wrapArgs = "--set PYTHONPATH \"$(toPythonPath $lib)\""
     + " --prefix PYTHONPATH : \"$(toPythonPath ${python.modules.readline})\""
     + " --prefix PYTHONPATH : \"$(toPythonPath ${pythonPackages.flask})\""
-    + " --set PATH : \"$out/bin\"";
+    + " --set PATH \"$out/bin\"";
 in
 stdenv.mkDerivation {
   name="ceph-${version}";
@@ -112,14 +111,13 @@ stdenv.mkDerivation {
     ./0001-Makefile-env-Don-t-force-sbin.patch
   ];
 
-  nativeBuildInputs = [ autoconf automake makeWrapper pkgconfig libtool which ]
+  nativeBuildInputs = [ autoconf automake makeWrapper pkgconfig libtool which git ]
     ++ optionals (versionAtLeast version "9.0.2") [
       pythonPackages.setuptools pythonPackages.argparse
     ];
   buildInputs = buildInputs ++ cryptoLibsMap.${cryptoStr} ++ [
     boost python libxml2 optYasm optLibatomic_ops optLibs3 malloc pythonPackages.flask zlib
   ] ++ optional (versionAtLeast version "9.0.0") [
-    git                   # Used for the gitversion string
     pythonPackages.sphinx # Used for docs
   ] ++ optional stdenv.isLinux [
     linuxHeaders libuuid udev keyutils optLibaio optLibxfs optZfs
@@ -166,49 +164,56 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = [
-    (mkOther                               "exec_prefix"        "\${out}")
-    (mkOther                               "sysconfdir"         "/etc")
-    (mkOther                               "localstatedir"      "/var")
-    (mkOther                               "libdir"             "\${lib}/lib")
-    (mkOther                               "includedir"         "\${lib}/include")
-    (mkWith   true                         "rbd"                 null)
-    (mkWith   true                         "cephfs"              null)
-    (mkWith   hasRadosgw                   "radosgw"             null)
-    (mkWith   true                         "radosstriper"        null)
-    (mkWith   hasServer                    "mon"                 null)
-    (mkWith   hasServer                    "osd"                 null)
-    (mkWith   hasServer                    "mds"                 null)
-    (mkEnable true                         "client"              null)
-    (mkEnable hasServer                    "server"              null)
-    (mkWith   (cryptoStr == "cryptopp")    "cryptopp"            null)
-    (mkWith   (cryptoStr == "nss")         "nss"                 null)
-    (mkEnable false                        "root-make-check"     null)
-    (mkWith   false                        "profiler"            null)
-    (mkWith   false                        "debug"               null)
-    (mkEnable false                        "coverage"            null)
-    (mkWith   (optFuse != null)            "fuse"                null)
-    (mkWith   (malloc == optJemalloc)      "jemalloc"            null)
-    (mkWith   (malloc == optGperftools)    "tcmalloc"            null)
-    (mkEnable false                        "pgrefdebugging"      null)
-    (mkEnable false                        "cephfs-java"         null)
-    (mkEnable hasXio                       "xio"                 null)
-    (mkWith   (optLibatomic_ops != null)   "libatomic-ops"       null)
-    (mkWith   true                         "ocf"                 null)
-    (mkWith   hasKinetic                   "kinetic"             null)
-    (mkWith   hasRocksdb                   "librocksdb"          null)
-    (mkWith   false                        "librocksdb-static"   null)
-    (mkWith   (optLibs3 != null)           "system-libs3"        null)
-    (mkWith   true                         "rest-bench"          null)
+    (mkOther                               "exec_prefix"         "\${out}")
+    (mkOther                               "sysconfdir"          "/etc")
+    (mkOther                               "localstatedir"       "/var")
+    (mkOther                               "libdir"              "\${lib}/lib")
+    (mkOther                               "includedir"          "\${lib}/include")
+    (mkWith   true                         "rbd"                  null)
+    (mkWith   true                         "cephfs"               null)
+    (mkWith   hasRadosgw                   "radosgw"              null)
+    (mkWith   true                         "radosstriper"         null)
+    (mkWith   hasServer                    "mon"                  null)
+    (mkWith   hasServer                    "osd"                  null)
+    (mkWith   hasServer                    "mds"                  null)
+    (mkEnable true                         "client"               null)
+    (mkEnable hasServer                    "server"               null)
+    (mkWith   (cryptoStr == "cryptopp")    "cryptopp"             null)
+    (mkWith   (cryptoStr == "nss")         "nss"                  null)
+    (mkEnable false                        "root-make-check"      null)
+    (mkWith   false                        "profiler"             null)
+    (mkWith   false                        "debug"                null)
+    (mkEnable false                        "coverage"             null)
+    (mkWith   (optFuse != null)            "fuse"                 null)
+    (mkWith   (malloc == optJemalloc)      "jemalloc"             null)
+    (mkWith   (malloc == optGperftools)    "tcmalloc"             null)
+    (mkEnable false                        "pgrefdebugging"       null)
+    (mkEnable false                        "cephfs-java"          null)
+    (mkEnable hasXio                       "xio"                  null)
+    (mkWith   (optLibatomic_ops != null)   "libatomic-ops"        null)
+    (mkWith   true                         "ocf"                  null)
+    (mkWith   hasKinetic                   "kinetic"              null)
+    (mkWith   hasRocksdb                   "librocksdb"           null)
+    (mkWith   false                        "librocksdb-static"    null)
   ] ++ optional stdenv.isLinux [
-    (mkWith   (optLibaio != null)          "libaio"              null)
-    (mkWith   (optLibxfs != null)          "libxfs"              null)
-    (mkWith   (optZfs != null)             "libzfs"              null)
+    (mkWith   (optLibaio != null)          "libaio"               null)
+    (mkWith   (optLibxfs != null)          "libxfs"               null)
+    (mkWith   (optZfs != null)             "libzfs"               null)
+  ] ++ optional (versionAtLeast version "0.94.3") [
+    (mkWith   false                        "tcmalloc-minimal"     null)
   ] ++ optional (versionAtLeast version "9.0.1") [
-    (mkWith   false                        "tcmalloc-minimal"    null)
-    (mkWith   false                        "valgrind"            null)
+    (mkWith   false                        "valgrind"             null)
   ] ++ optional (versionAtLeast version "9.0.2") [
-    (mkWith   true                         "man-pages"           null)
-    (mkWith   true                         "systemd-libexec-dir" "\${TMPDIR}")
+    (mkWith   true                         "man-pages"            null)
+    (mkWith   true                         "systemd-libexec-dir"  "\${out}/libexec")
+  ] ++ optional (versionOlder version "10.0.0") [
+    (mkWith   (optLibs3 != null)           "system-libs3"         null)
+    (mkWith   true                         "rest-bench"           null)
+  ] ++ optional (versionAtLeast version "10.0.0") [
+    (mkWith   true                         "rgw-user"             "rgw")
+    (mkWith   true                         "rgw-group"            "rgw")
+    (mkWith   true                         "systemd-unit-dir"     "\${out}/etc/systemd/system")
+    (mkWith   false                        "selinux"              null)  # TODO: Implement
   ];
 
   preBuild = optionalString (versionAtLeast version "9.0.0") ''
@@ -236,15 +241,24 @@ stdenv.mkDerivation {
     for PY in $(find $lib/lib -name \*.py); do
       LIBS="$(sed -n "s/.*find_library('\([^)]*\)').*/\1/p" "$PY")"
 
+      # Delete any calls to find_library
+      sed -i '/find_library/d' "$PY"
+
       # Fix each find_library call
       for LIB in $LIBS; do
         REALLIB="$lib/lib/lib$LIB.so"
-        sed -i "s,find_library('$LIB'),'$REALLIB',g" "$PY"
+        sed -i "s,\(lib$LIB = CDLL(\).*,\1'$REALLIB'),g" "$PY"
       done
 
       # Reapply compilation optimizations
       NAME=$(basename -s .py "$PY")
-      (cd "$(dirname $PY)"; python -c "import $NAME"; python -O -c "import $NAME")
+      rm -f "$PY"{c,o}
+      pushd "$(dirname $PY)"
+      python -c "import $NAME"
+      python -O -c "import $NAME"
+      popd
+      test -f "$PY"c
+      test -f "$PY"o
     done
   '';
 

@@ -11,7 +11,7 @@ let
   listCtl = domain: list: "${listDir domain list}/control";
   transport = domain: list: "${domain}--${list}@local.list.mlmmj mlmmj:${domain}/${list}";
   virtual = domain: list: "${list}@${domain} ${domain}--${list}@local.list.mlmmj";
-  alias = domain: list: "${list}: \"|${pkgs.mlmmj}/mlmmj-receive -L ${listDir domain list}/\"";
+  alias = domain: list: "${list}: \"|${pkgs.mlmmj}/bin/mlmmj-receive -L ${listDir domain list}/\"";
   subjectPrefix = list: "[${list}]";
   listAddress = domain: list: "${list}@${domain}";
   customHeaders = list: domain: [ "List-Id: ${list}" "Reply-To: ${list}@${domain}" ];

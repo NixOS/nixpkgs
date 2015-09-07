@@ -1,21 +1,39 @@
 # package.el-based emacs packages
+
+## FOR USERS
 #
-## add this at the start your init.el:
-# (require 'package)
+# Recommended way: simply use `emacsWithPackages` from
+# `all-packages.nix` with the packages you want.
 #
-# ;; optional. makes unpure packages archives unavailable
-# (setq package-archives nil)
+# Possible way: use `emacs` from `all-packages.nix`, install
+# everything to a system or user profile and then add this at the
+# start your `init.el`:
+/*
+  (require 'package)
+
+  ;; optional. makes unpure packages archives unavailable
+  (setq package-archives nil)
+
+  ;; optional. use this if you install emacs packages to the system profile
+  (add-to-list 'package-directory-list "/run/current-system/sw/share/emacs/site-lisp/elpa")
+
+  ;; optional. use this if you install emacs packages to user profiles (with nix-env)
+  (add-to-list 'package-directory-list "~/.nix-profile/share/emacs/site-lisp/elpa")
+
+  (package-initialize)
+*/
+
+## FOR CONTRIBUTORS
 #
-# (add-to-list 'package-directory-list "/run/current-system/sw/share/emacs/site-lisp/elpa")
-#
-# ;; optional. use this if you install emacs packages to user profiles (with nix-env)
-# (add-to-list 'package-directory-list "~/.nix-profile/share/emacs/site-lisp/elpa")
-#
-# (package-initialize)
+# When adding a new package here please note that
+# * lib.licenses are `with`ed on top of the file here
+# * both trivialBuild and melpaBuild will automatically derive a
+#   `meta` with `platforms` and `homepage` set to something you are
+#   unlikely to want to override for most packages
 
 { overrides
 
-, lib, stdenv, fetchurl, fetchgit, fetchFromGitHub
+, lib, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
 
 , emacs
 , trivialBuild
@@ -44,7 +62,10 @@ let self = _self // overrides;
       sha256 = "0dlrhc1dmzgrjvcnlqvm6clyv0r6zray6qqliqngy14880grghbm";
     };
     packageRequires = [ auto-complete haskell-mode ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Haskell code completion for auto-complete Emacs framework";
+      license = gpl3Plus;
+    };
   };
 
   ace-jump-mode = melpaBuild rec {
@@ -72,7 +93,10 @@ let self = _self // overrides;
       sha256 = "19y5w9m2flp4as54q8yfngrkri3kd7fdha9pf2xjgx6ryflqx61k";
     };
     packageRequires = [ dash s ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Search using ag from inside Emacs";
+      license = gpl3Plus;
+    };
   };
 
   agda2-mode = with external; trivialBuild {
@@ -108,7 +132,10 @@ let self = _self // overrides;
       sha256 = "1vpc3q40m6dcrslki4bg725j4kv6c6xfxwjjl1ilg7la49fwwf26";
     };
     packageRequires = [ gntp log4e ];
-    meta = { license = gpl2Plus; };
+    meta = {
+      description = "A Growl-like alerts notifier for Emacs";
+      license = gpl2Plus;
+    };
   };
 
   anzu = melpaBuild rec {
@@ -127,7 +154,6 @@ let self = _self // overrides;
         mode which displays current match and total matches information
         in the mode-line in various search mode.
       '';
-      homepage = https://github.com/syohex/emacs-anzu/;
       license = gpl3Plus;
     };
   };
@@ -164,7 +190,10 @@ let self = _self // overrides;
       rev    = "v${version}";
       sha256 = "1j6mbvvbnm2m1gpsy9ipxiv76b684nn57yssbqdyiwyy499cma6q";
     };
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Asynchronous processing in Emacs";
+      license = gpl3Plus;
+    };
   };
 
   auctex = melpaBuild rec {
@@ -177,7 +206,11 @@ let self = _self // overrides;
     buildPhase = ''
       cp $src ${pname}-${version}.tar
     '';
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Extensible package for writing and formatting TeX files in GNU Emacs and XEmacs";
+      homepage = https://www.gnu.org/software/auctex/;
+      license = gpl3Plus;
+    };
   };
 
   auto-complete = melpaBuild rec {
@@ -194,7 +227,6 @@ let self = _self // overrides;
       description = "Auto-complete extension for Emacs";
       homepage = http://cx4a.org/software/auto-complete/;
       license = gpl3Plus;
-      platforms = lib.platforms.all;
     };
   };
 
@@ -221,7 +253,10 @@ let self = _self // overrides;
       sha256 = "187wnqqm5g43cg8b6a9rbd9ncqad5fhjb96wjszbinjh1mjxyh7i";
     };
     files = [ "bind-key.el" ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "A simple way to manage personal keybindings";
+      license = gpl3Plus;
+    };
   };
 
   browse-kill-ring = melpaBuild rec {
@@ -235,7 +270,6 @@ let self = _self // overrides;
     };
     meta = {
       description = "Interactively insert items from Emacs kill-ring";
-      homepage = https://github.com/browse-kill-ring/browse-kill-ring/;
       license = gpl2Plus;
     };
   };
@@ -251,7 +285,6 @@ let self = _self // overrides;
     };
     meta = {
       description = "Mouseable text in Emacs";
-      homepage = "https://github.com/rolandwalker/button-lock";
       license  = bsd2;
     };
   };
@@ -267,7 +300,10 @@ let self = _self // overrides;
     };
     fileSpecs = [ "emacs/*.el" ];
     configurePhase = "true";
-    meta = { license = gpl2Plus; };
+    meta = {
+      description = "OCaml code editing commands for Emacs";
+      license = gpl2Plus;
+    };
   };
 
   change-inner = melpaBuild rec {
@@ -280,7 +316,10 @@ let self = _self // overrides;
       sha256 = "1fv8630bqbmfr56zai08f1q4dywksmghhm70084bz4vbs6rzdsbq";
     };
     packageRequires = [ expand-region ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Change contents based on semantic units in Emacs";
+      license = gpl3Plus;
+    };
   };
 
   circe = melpaBuild rec {
@@ -294,7 +333,10 @@ let self = _self // overrides;
     };
     packageRequires = [ lcs lui ];
     fileSpecs = [ "lisp/circe*.el" ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "IRC client for Emacs";
+      license = gpl3Plus;
+    };
   };
 
   company = melpaBuild rec {
@@ -306,7 +348,10 @@ let self = _self // overrides;
       rev    = version;
       sha256 = "08rrjfp2amgya1hswjz3vd5ja6lg2nfmm7454p0h1naz00hlmmw0";
     };
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Modular text completion framework for Emacs";
+      license = gpl3Plus;
+    };
   };
 
   company-ghc = melpaBuild rec {
@@ -327,14 +372,17 @@ let self = _self // overrides;
 
   dash = melpaBuild rec {
     pname   = "dash";
-    version = "2.9.0";
+    version = "2.11.0";
     src = fetchFromGitHub {
       owner  = "magnars";
       repo   = "${pname}.el";
       rev    = version;
-      sha256 = "1lg31s8y6ljsz6ps765ia5px39wim626xy8fbc4jpk8fym1jh7ay";
+      sha256 = "02gfrcda7gj3j5yx71dz40xylrafl4pcaj7bgfajqi9by0w2nrnx";
     };
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "A modern list library for Emacs";
+      license = gpl3Plus;
+    };
   };
 
   deferred = melpaBuild rec {
@@ -355,7 +403,6 @@ let self = _self // overrides;
         The API and implementations were translated from JSDeferred (by cho45)
          and Mochikit.Async (by Bob Ippolito) in JavaScript.
       '';
-      homepage =  https://github.com/kiwanami/emacs-deferred;
       license = gpl3Plus;
     };
   };
@@ -369,7 +416,11 @@ let self = _self // overrides;
       rev    = version;
       sha256 = "0hshw7z5f8pqxvgxw74kbj6nvprsgfvy45fl854xarnkvqcara09";
     };
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Diminishes the amount of space taken on the mode-line by Emacs minor modes";
+      homepage = http://www.eskimo.com/~seldon/;
+      license = gpl3Plus;
+    };
   };
 
   epl = melpaBuild rec {
@@ -447,11 +498,11 @@ let self = _self // overrides;
 
   evil = melpaBuild {
     pname   = "evil";
-    version = "20141020";
-    src = fetchgit {
-      url = "https://github.com/emacsmirror/evil.git";
-      rev = "999ec15587f85100311c031aa8efb5d50c35afe4";
-      sha256 = "5f67643d19a31172e68f2f195959d33bcd26c2786eb71e67eb27eb52f5bf387a";
+    version = "1.2.3";
+    src = fetchhg {
+      url = "https://bitbucket.org/lyro/evil";
+      rev = "e5588e50c0e40a66c099868ea825755e348311fb";
+      sha256 = "0185vrzfdz6iwhmc22rjy0n7ppfppp2ddc8xl0vvbda79q6w3bp8";
     };
     packageRequires = [ goto-chg undo-tree ];
     meta = {
@@ -503,6 +554,32 @@ let self = _self // overrides;
     };
   };
 
+  flycheck = melpaBuild rec {
+    pname   = "flycheck";
+    version = "0.23";
+    src = fetchFromGitHub {
+      owner  = pname;
+      repo   = pname;
+      rev    = version;
+      sha256 = "1ydk1wa7h7z9qw7prfvszxrmy2dyzsdij3xdy10rq197xnrw94wz";
+    };
+    packageRequires = [ dash let-alist pkg-info ];
+    meta = { license = gpl3Plus; };
+  };
+
+  flycheck-haskell = melpaBuild rec {
+    pname   = "flycheck-haskell";
+    version = "0.7.2";
+    src = fetchFromGitHub {
+      owner  = "flycheck";
+      repo   = pname;
+      rev    = version;
+      sha256 = "0143lcn6g46g7skm4r6lqq09s8mr3268rikbzlh65qg80rpg9frj";
+    };
+    packageRequires = [ dash flycheck haskell-mode let-alist pkg-info ];
+    meta = { license = gpl3Plus; };
+  };
+
   flycheck-pos-tip = melpaBuild rec {
     pname   = "flycheck-pos-tip";
     version = "20140813";
@@ -516,23 +593,11 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
-  flycheck = melpaBuild rec {
-    pname   = "flycheck";
-    version = "0.20";
-    src = fetchFromGitHub {
-      owner  = pname;
-      repo   = pname;
-      rev    = version;
-      sha256 = "0cq7y7ssm6phvx5pfv2yqq4j0yqmm0lhjav7v4a8ql7094cd790a";
-    };
-    packageRequires = [ dash pkg-info ];
-    meta = { license = gpl3Plus; };
-  };
-
   ghc-mod = melpaBuild rec {
     pname = "ghc";
     version = external.ghc-mod.version;
     src = external.ghc-mod.src;
+    packageRequires = [ haskell-mode ];
     propagatedUserEnvPkgs = [ external.ghc-mod ];
     fileSpecs = [ "elisp/*.el" ];
     meta = { license = bsd3; };
@@ -675,10 +740,10 @@ let self = _self // overrides;
   goto-chg = melpaBuild rec {
     pname   = "goto-chg";
     version = "1.6";
-    src = fetchgit {
-      url = "https://gitorious.org/evil/evil.git";
-      rev = "999ec15587f85100311c031aa8efb5d50c35afe4";
-      sha256 = "5f67643d19a31172e68f2f195959d33bcd26c2786eb71e67eb27eb52f5bf387a";
+    src = fetchhg {
+      url = "https://bitbucket.org/lyro/evil";
+      rev = "e5588e50c0e40a66c099868ea825755e348311fb";
+      sha256 = "0185vrzfdz6iwhmc22rjy0n7ppfppp2ddc8xl0vvbda79q6w3bp8";
     };
     files = [ "lib/goto-chg.el" ];
     meta = { license = gpl3Plus; };
@@ -757,21 +822,20 @@ let self = _self // overrides;
     };
     meta = {
       description = "Does what you expected ido-everywhere to do in Emacs";
-      homepage = https://github.com/DarwinAwardWinner/ido-ubiquitous/;
       license = gpl3Plus;
     };
   };
 
   idris-mode = melpaBuild rec {
     pname   = "idris-mode";
-    version = "0.9.15";
+    version = "0.9.19";
     src = fetchFromGitHub {
       owner  = "idris-hackers";
       repo   = "idris-mode";
       rev    = version;
-      sha256 = "00pkgk1zxan89i8alsa2dpa9ls7imqk5zb1kbjwzrlbr0gk4smdb";
+      sha256 = "0iwgbaq2797k1f7ql86i2pjfa67cha4s2v0mgmrd0qcgqkxsdq92";
     };
-    packageRequires = [ flycheck ];
+    packageRequires = [ prop-menu ];
     meta = { license = gpl3Plus; };
   };
 
@@ -785,6 +849,20 @@ let self = _self // overrides;
       sha256 = "08dsv1dzgb9jx076ia7xbpyjpaxn1w87h6rzlb349spaydq7ih24";
     };
     fileSpecs = [ "lisp/lcs*.el" ];
+    meta = { license = gpl3Plus; };
+  };
+
+  let-alist = melpaBuild rec {
+    pname   = "let-alist";
+    version = "1.0.4";
+    src = fetchurl {
+      url    = "http://elpa.gnu.org/packages/${pname}-${version}.el";
+      sha256 = "07312bvvyz86lf64vdkxg2l1wgfjl25ljdjwlf1bdzj01c4hm88x";
+    };
+    unpackPhase = "true";
+    buildPhase = ''
+      cp $src ${pname}-${version}.el
+    '';
     meta = { license = gpl3Plus; };
   };
 
@@ -816,14 +894,62 @@ let self = _self // overrides;
 
   magit = melpaBuild rec {
     pname   = "magit";
-    version = "1.4.0";
+    version = "2.1.0";
     src = fetchFromGitHub {
-      owner  = "magit";
-      repo   = "magit";
+      owner  = pname;
+      repo   = pname;
       rev    = version;
-      sha256 = "0x8bvfw47bfpzsv9yr98aays4idbbwvnkp0pag1q78gcn9h2k9vi";
+      sha256 = "0pyqa79km1y58phsf4sq2a25rx9lw0di1hb6a5y17xisa8li7sfl";
     };
-    packageRequires = [ git-commit-mode git-rebase-mode ];
+    packageRequires = [ dash git-commit magit-popup with-editor ];
+    fileSpecs = [ "lisp/magit-utils.el"
+                  "lisp/magit-section.el"
+                  "lisp/magit-git.el"
+                  "lisp/magit-mode.el"
+                  "lisp/magit-process.el"
+                  "lisp/magit-core.el"
+                  "lisp/magit-diff.el"
+                  "lisp/magit-wip.el"
+                  "lisp/magit-apply.el"
+                  "lisp/magit-log.el"
+                  "lisp/magit.el"
+                  "lisp/magit-sequence.el"
+                  "lisp/magit-commit.el"
+                  "lisp/magit-remote.el"
+                  "lisp/magit-bisect.el"
+                  "lisp/magit-stash.el"
+                  "lisp/magit-blame.el"
+                  "lisp/magit-ediff.el"
+                  "lisp/magit-extras.el"
+                  "lisp/git-rebase.el"
+                  "Documentation/magit.texi"
+                  "Documentation/AUTHORS.md"
+                  "COPYING"
+                ];
+    meta = { license = gpl3Plus; };
+  };
+  git-commit = melpaBuild rec {
+    pname = "git-commit";
+    version = magit.version;
+    src = magit.src;
+    packageRequires = [ dash with-editor ];
+    fileSpecs = [ "lisp/git-commit.el" ];
+    meta = { license = gpl3Plus; };
+  };
+  magit-popup = melpaBuild rec {
+    pname = "magit-popup";
+    version = magit.version;
+    src = magit.src;
+    packageRequires = [ dash with-editor ];
+    fileSpecs = [ "Documentation/magit-popup.texi" "lisp/magit-popup.el" ];
+    meta = { license = gpl3Plus; };
+  };
+  with-editor = melpaBuild rec {
+    pname = "with-editor";
+    version = magit.version;
+    src = magit.src;
+    packageRequires = [ dash ];
+    fileSpecs = [ "Documentation/with-editor.texi" "lisp/with-editor.el" ];
     meta = { license = gpl3Plus; };
   };
 
@@ -874,7 +1000,9 @@ let self = _self // overrides;
     };
   };
 
-  nyan-mode = callPackage ../applications/editors/emacs-modes/nyan-mode {};
+  nyan-mode = callPackage ../applications/editors/emacs-modes/nyan-mode {
+    inherit lib;
+  };
 
   org-plus-contrib = melpaBuild rec {
     pname   = "org-plus-contrib";
@@ -906,7 +1034,7 @@ let self = _self // overrides;
         Org-trello is an emacs minor mode that extends org-mode with
         Trello abilities.
       '';
-      homepage = https://org-trello.github.io;
+      homepage = https://org-trello.github.io/;
       license = gpl3Plus;
     };
   };
@@ -978,6 +1106,18 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  prop-menu = melpaBuild rec {
+    pname   = "prop-menu";
+    version = "0.1.2";
+    src = fetchFromGitHub {
+      owner  = "david-christiansen";
+      repo   = "${pname}-el";
+      rev    = version;
+      sha256 = "18ap2liz5r5a8ja2zz9182fnfm47jnsbyblpq859zks356k37iwc";
+    };
+    meta = { license = gpl3Plus; };
+  };
+
   rainbow-delimiters = melpaBuild rec {
     pname = "rainbow-delimiters";
     version = "2.1.1";
@@ -1004,7 +1144,9 @@ let self = _self // overrides;
       sha256 = "0dja4g43zfjbxqvz2cgivgq5sfm6fz1563qgrp4yxknl7bdggb92";
     };
 
-    meta = with stdenv.lib; {
+    files = [ "request.el" ];
+
+    meta = {
       description = "Easy HTTP request for Emacs Lisp";
       longDescription = ''
         Request.el is a HTTP request library with multiple backends. It supports
@@ -1013,36 +1155,18 @@ let self = _self // overrides;
         Library author can use request.el to avoid imposing external dependencies
         such as curl to users while giving richer experience for users who have curl.
       '';
-      homepage = https://github.com/tkf/emacs-request;
       license = gpl3Plus;
     };
   };
 
   request-deferred = melpaBuild rec {
     pname = "request-deferred";
-    version = "0.2.0";
-
-    src = fetchFromGitHub {
-      owner = "tkf";
-      repo = "emacs-request";
-      rev = "adf7de452f9914406bfb693541f1d280093c4efd";
-      sha256 = "0dja4g43zfjbxqvz2cgivgq5sfm6fz1563qgrp4yxknl7bdggb92";
-    };
-
+    version = request.version;
+    src = request.src;
     packageRequires = [ request deferred ];
-
-    meta = with stdenv.lib; {
-      description = "Easy HTTP request for Emacs Lisp";
-      longDescription = ''
-        Request.el is a HTTP request library with multiple backends. It supports
-        url.el which is shipped with Emacs and curl command line program. User
-        can use curl when s/he has it, as curl is more reliable than url.el.
-        Library author can use request.el to avoid imposing external dependencies
-        such as curl to users while giving richer experience for users who have curl.
-      '';
-      homepage = https://github.com/tkf/emacs-request;
-      license = gpl3Plus;
-    };
+    files = [ "request-deferred.el" ];
+    meta = request.meta
+        // { description = "${request.meta.description} (deferred)"; };
   };
 
   rich-minority = melpaBuild rec {
@@ -1055,7 +1179,10 @@ let self = _self // overrides;
       sha256 = "0kvhy4mgs9llihwsb1a9n5a85xzjiyiyawxnz0axy2bvwcxnp20k";
     };
     packageRequires = [ dash ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Hiding and/or highlighting the list of minor modes in the Emacs mode-line.";
+      license = gpl3Plus;
+    };
   };
 
   s = melpaBuild rec {
@@ -1136,7 +1263,6 @@ let self = _self // overrides;
     };
     meta = {
       description = "M-x enhancement for Emacs build on top of Ido";
-      homepage = https://github.com/nonsequitur/smex/;
       license = emacs.meta.license; # should be "same as Emacs"
     };
   };
@@ -1149,7 +1275,6 @@ let self = _self // overrides;
     fileSpecs = [ "elisp/*.el" ];
 
     meta = {
-      homepage = "https://github.com/chrisdone/structured-haskell-mode";
       description = "Structured editing Emacs mode for Haskell";
       license = bsd3;
       platforms = external.structured-haskell-mode.meta.platforms;

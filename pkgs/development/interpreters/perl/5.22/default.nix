@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     sha256 = "0g5bl8sdpzx9gx2g5jq3py4bj07z2ylk7s1qn0fvsss2yl3hhs8c";
   };
 
+  outputs = [ "out" "man" ];
+
   patches =
     [ # Do not look in /usr etc. for dependencies.
       ./no-sys-dirs.patch

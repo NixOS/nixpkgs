@@ -15,15 +15,27 @@ infoFile: let
 
   script = writeText "build-maven-repository.sh" ''
     ${lib.concatStrings (map (dep: let
-      inherit (dep) url sha1 groupId artifactId version authenticated;
+      inherit (dep)
+        url sha1 groupId artifactId version
+        authenticated metadata extension repository-id;
+
+      versionDir = dep.unresolved-version or version;
 
       fetch = (if authenticated then requireFile else fetchurl) {
         inherit url sha1;
       };
+
+      fetchMetadata = (if authenticated then requireFile else fetchurl) {
+        inherit (metadata) url sha1;
+      };
     in ''
-      dir=$out/$(echo ${groupId} | sed 's|\.|/|g')/${artifactId}/${version}
+      dir=$out/$(echo ${groupId} | sed 's|\.|/|g')/${artifactId}/${versionDir}
       mkdir -p $dir
       ln -sv ${fetch} $dir/${fetch.name}
+      ${lib.optionalString (dep ? metadata) ''
+        ln -svf ${fetchMetadata} $dir/maven-metadata-${repository-id}.xml
+        ln -sv ${fetch} $dir/$(echo ${fetch.name} | sed 's|${version}|${dep.unresolved-version}|')
+      ''}
     '') info.dependencies)}
   '';
 

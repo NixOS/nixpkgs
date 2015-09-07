@@ -40,6 +40,7 @@ let
     src = ./nixos-generate-config.pl;
     path = [ pkgs.btrfsProgs ];
     perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
+    inherit (config.system) nixosRelease;
   };
 
   nixos-option = makeProg {
@@ -56,7 +57,9 @@ let
 in
 
 {
+
   config = {
+
     environment.systemPackages =
       [ nixos-build-vms
         nixos-install
@@ -69,5 +72,7 @@ in
     system.build = {
       inherit nixos-install nixos-generate-config nixos-option nixos-rebuild;
     };
+
   };
+
 }

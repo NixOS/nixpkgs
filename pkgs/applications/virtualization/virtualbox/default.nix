@@ -98,7 +98,10 @@ in stdenv.mkDerivation {
       src/apps/adpctl/VBoxNetAdpCtl.cpp
   '';
 
+  # first line: ugly hack, and it isn't yet clear why it's a problem
   configurePhase = ''
+    NIX_CFLAGS_COMPILE=$(echo "$NIX_CFLAGS_COMPILE" | sed 's,\-isystem ${stdenv.cc.libc}/include,,g')
+
     cat >> LocalConfig.kmk <<LOCAL_CONFIG
     VBOX_WITH_TESTCASES            :=
     VBOX_WITH_TESTSUITE            :=

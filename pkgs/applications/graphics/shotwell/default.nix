@@ -1,23 +1,11 @@
-{ fetchurl, stdenv, m4, glibc, gtk3, libexif, libgphoto2, libsoup, libxml2, vala, sqlite, webkitgtk24x
-, pkgconfig, gnome3, gst_all_1, which, udev, libraw, glib, json_glib, gettext, desktop_file_utils
-, lcms2, gdk_pixbuf, librsvg, makeWrapper, gnome_doc_utils, hicolor_icon_theme, cacert }:
+{ fetchurl, stdenv, m4, glibc, gtk3, libexif, libgphoto2, libsoup, libxml2, vala, sqlite
+, webkitgtk24x, pkgconfig, gnome3, gst_all_1, which, udev, libraw, glib, json_glib
+, gettext, desktop_file_utils, lcms2, gdk_pixbuf, librsvg, makeWrapper
+, gnome_doc_utils, hicolor_icon_theme }:
 
 # for dependencies see http://www.yorba.org/projects/shotwell/install/
 
-let
-  rest = stdenv.mkDerivation rec {
-    name = "rest-0.7.12";
-
-    src = fetchurl {
-      url = "mirror://gnome/sources/rest/0.7/${name}.tar.xz";
-      sha256 = "0fmg7fq5fx0jg3ryk71kwdkspsvj42acxy9imk7vznkqj29a9zqn";
-    };
-    
-    configureFlags = "--with-ca-certificates=${cacert}/etc/ssl/certs/ca-bundle.crt";
-    
-    buildInputs = [ pkgconfig glib libsoup ];
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "0.20.2";
   name = "shotwell-${version}";
 
@@ -27,9 +15,9 @@ in stdenv.mkDerivation rec {
   };
 
   NIX_CFLAGS_COMPILE = "-I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include";
-  
+
   configureFlags = [ "--disable-gsettings-convert-install" ];
-  
+
   preConfigure = ''
     patchShebangs .
   '';
@@ -47,10 +35,11 @@ in stdenv.mkDerivation rec {
   '';
 
 
-  buildInputs = [ m4 glibc gtk3 libexif libgphoto2 libsoup libxml2 vala sqlite webkitgtk24x pkgconfig
-                  gst_all_1.gstreamer gst_all_1.gst-plugins-base gnome3.libgee which udev gnome3.gexiv2
-                  libraw rest json_glib gettext desktop_file_utils glib lcms2 gdk_pixbuf librsvg
-                  makeWrapper gnome_doc_utils
+  buildInputs = [ m4 glibc gtk3 libexif libgphoto2 libsoup libxml2 vala sqlite webkitgtk24x
+                  pkgconfig gst_all_1.gstreamer gst_all_1.gst-plugins-base gnome3.libgee
+                  which udev gnome3.gexiv2 hicolor_icon_theme
+                  libraw json_glib gettext desktop_file_utils glib lcms2 gdk_pixbuf librsvg
+                  makeWrapper gnome_doc_utils gnome3.rest
                   gnome3.defaultIconTheme ];
 
   meta = with stdenv.lib; {

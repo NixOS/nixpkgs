@@ -30,13 +30,11 @@ stdenv.mkDerivation rec {
     ln -s ${unicodeData} resources/UnicodeData.txt
     ln -s ${blocks} resources/Blocks.txt
   '';
-  installPhase = '' 
+  installPhase = ''
     mkdir -p $out/share/fonts/truetype
-    for i in $(find build -name '*.ttf'); do 
-        cp $i $out/share/fonts/truetype; 
+    for i in $(find build -name '*.ttf'); do
+        cp $i $out/share/fonts/truetype;
     done;
-    mkdir -p $out/share/dejavu-fonts
-    cp -r build/* $out/share/dejavu-fonts
   '';
 }
-  
+

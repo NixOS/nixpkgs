@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.lgpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

@@ -6,6 +6,19 @@ let self = with self; {
     inherit (pkgs) stdenv autoreconfHook fetchurl;
   };
 
+  apcu = buildPecl {
+    name = "apcu-4.0.7";
+
+    sha256 = "1mhbz56mbnq7dryf2d64l84lj3fpr5ilmg2424glans3wcg772hp";
+  };
+
+  imagick = buildPecl {
+    name = "imagick-3.1.2";
+    sha256 = "14vclf2pqcgf3w8nzqbdw0b9v30q898344c84jdbw2sa62n6k1sj";
+    configureFlags = "--with-imagick=${pkgs.imagemagick}";
+    buildInputs = [ pkgs.pkgconfig ];
+  };
+
   memcache = buildPecl {
     name = "memcache-3.0.8";
 
@@ -102,11 +115,11 @@ let self = with self; {
 
   composer = pkgs.stdenv.mkDerivation rec {
     name = "composer-${version}";
-    version = "1.0.0-alpha9";
+    version = "1.0.0-alpha10";
 
     src = pkgs.fetchurl {
-      url = "https://getcomposer.org/download/1.0.0-alpha9/composer.phar";
-      sha256 = "1x7i9xs9xggq0qq4kzrwh2pky8skax0l829zwwsy3hcvch3irvrk";
+      url = "https://getcomposer.org/download/${version}/composer.phar";
+      sha256 = "0a26zlsr2jffcqlz8z6l8s6c6nlyfj2gxqfgx76knx5wch1psb4z";
     };
 
     phases = [ "installPhase" ];
@@ -123,7 +136,7 @@ let self = with self; {
       description = "Dependency Manager for PHP";
       license = licenses.mit;
       homepage = https://getcomposer.org/;
-      maintainers = with maintainers; [offline];
+      maintainers = with maintainers; [ globin offline ];
     };
   };
 }; in self

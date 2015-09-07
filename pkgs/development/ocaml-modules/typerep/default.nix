@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, type_conv}:
+{stdenv, buildOcaml, fetchurl, type-conv}:
 
 buildOcaml rec {
   name = "typerep";
@@ -11,7 +11,7 @@ buildOcaml rec {
     sha256 = "4f1ab611a00aaf774e9774b26b687233e0c70d91f684415a876f094a9969eada";
   };
 
-  propagatedBuildInputs = [ type_conv ];
+  propagatedBuildInputs = [ type-conv ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/janestreet/typerep;

@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, doxygen, qt5 }:
+{ stdenv, fetchzip, doxygen, qt5 }:
 
 stdenv.mkDerivation rec {
-  name = "signon-8.56";
-  src = fetchurl {
-    url = "https://accounts-sso.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "00kwysm7bga0bycclkcyslsa6aahcn98drm125l6brzhigc7qxa8";
+  name = "signon-${version}";
+  version = "8.57";
+  src = fetchzip {
+    url = "http://signond.accounts-sso.googlecode.com/archive/${version}.zip";
+    sha256 = "0q1ncmp27jrwbjkqisf0l63zzpw6bcsx5i4y86xixh8wd5arj87a";
   };
 
   buildInputs = [ qt5.base ];
@@ -12,13 +13,6 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     qmake PREFIX=$out LIBDIR=$out/lib CMAKE_CONFIG_PATH=$out/lib/cmake/SignOnQt5
-  '';
-
-  postInstall = ''
-    mv $out/lib/cmake/SignOnQt5/SignOnQtConfig.cmake \
-      $out/lib/cmake/SignOnQt5/SignOnQt5Config.cmake
-    mv $out/lib/cmake/SignOnQt5/SignOnQtConfigVersion.cmake \
-      $out/lib/cmake/SignOnQt5/SignOnQt5ConfigVersion.cmake
   '';
 
 }

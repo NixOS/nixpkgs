@@ -569,7 +569,7 @@ let inherit (builtins) head tail trace; in
      # Interpreters that are already in the store are left untouched.
          echo "patching script interpreter paths"
          local f
-         for f in $(find "${dir}" -xtype f -perm +0100); do
+         for f in $(find "${dir}" -xtype f -perm /0100); do
              local oldPath=$(sed -ne '1 s,^#![ ]*\([^ ]*\).*$,\1,p' "$f")
              if test -n "$oldPath" -a "''${oldPath:0:''${#NIX_STORE}}" != "$NIX_STORE"; then
                  local newPath=$(type -P $(basename $oldPath) || true)

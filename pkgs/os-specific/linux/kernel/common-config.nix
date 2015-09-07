@@ -141,6 +141,8 @@ with stdenv.lib;
   # Video configuration.
   # Enable KMS for devices whose X.org driver supports it.
   DRM_I915_KMS y
+  # Allow specifying custom EDID on the kernel command line
+  DRM_LOAD_EDID_FIRMWARE y
   ${optionalString (versionOlder version "3.9") ''
     DRM_RADEON_KMS? y
   ''}
@@ -338,6 +340,7 @@ with stdenv.lib;
   X86_MCE y
 
   # Linux containers.
+  NAMESPACES? y #  Required by 'unshare' used by 'nixos-install'
   RT_GROUP_SCHED? y
   CGROUP_DEVICE? y
   ${if versionAtLeast version "3.6" then ''

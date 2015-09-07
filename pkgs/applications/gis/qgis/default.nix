@@ -1,12 +1,12 @@
 { stdenv, fetchurl, gdal, cmake, qt4, flex, bison, proj, geos, x11, sqlite, gsl,
-  pyqt4, qwt, fcgi, pythonPackages, libspatialindex, libspatialite, qscintilla, postgresql, makeWrapper }:
+  qwt, fcgi, pythonPackages, libspatialindex, libspatialite, qscintilla, postgresql, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "qgis-2.8.2";
+  name = "qgis-2.10.1";
 
-  buildInputs = [ gdal qt4 flex bison proj geos x11 sqlite gsl pyqt4 qwt qscintilla
+  buildInputs = [ gdal qt4 flex bison proj geos x11 sqlite gsl qwt qscintilla
     fcgi libspatialindex libspatialite postgresql ] ++
-    (with pythonPackages; [ numpy psycopg2 ]);
+    (with pythonPackages; [ numpy psycopg2 ]) ++ [ pythonPackages.qscintilla ];
 
   nativeBuildInputs = [ cmake makeWrapper ];
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://qgis.org/downloads/${name}.tar.bz2";
-    sha256 = "fd3c01e48224f611c3bb279b0af9cc1dff3844cdc93f7b45e4f37cf8f350bc4b";
+    sha256 = "79119b54642edaffe3cda513531eb7b81913e013954a49c6d3b21c8b00143307";
   };
 
   postInstall = ''

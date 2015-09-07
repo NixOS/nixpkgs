@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1998v2kcs288d3y7kfxpvl369nqi06zbbvjzafyvyl3pr7bajj1s";
   };
 
+  outputs = [ "out" "doc" ];
+
   enableParallelBuilding = false;
 
   buildInputs = [ ghostscript ];

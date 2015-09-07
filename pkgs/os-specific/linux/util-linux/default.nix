@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.kernel.org/pub/linux/utils/util-linux/;
     description = "A set of system utilities for Linux";
     platforms = stdenv.lib.platforms.linux;
+    priority = 6; # lower priority than coreutils ("kill") and shadow ("login" etc.) packages
   };
 }

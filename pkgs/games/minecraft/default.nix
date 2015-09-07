@@ -1,10 +1,11 @@
 { stdenv, fetchurl, jre, libX11, libXext, libXcursor, libXrandr, libXxf86vm
-, mesa, openal, alsaOss, pulseaudioSupport ? false, libpulseaudio }:
+, mesa, openal
+, useAlsa ? false, alsaOss ? null }:
 
-assert jre ? architecture;
+assert useAlsa -> alsaOss != null;
 
 stdenv.mkDerivation {
-  name = "minecraft-2013.07.01";
+  name = "minecraft-2015.07.24";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/Minecraft.Download/launcher/Minecraft.jar";
@@ -22,8 +23,8 @@ stdenv.mkDerivation {
     #!${stdenv.shell}
 
     # wrapper for minecraft
-    export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${jre}/lib/${jre.architecture}/:${libX11}/lib/:${libXext}/lib/:${libXcursor}/lib/:${libXrandr}/lib/:${libXxf86vm}/lib/:${mesa}/lib/:${openal}/lib/
-    ${if pulseaudioSupport then "${libpulseaudio}/bin/padsp" else "${alsaOss}/bin/aoss" } \
+    export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${libX11}/lib/:${libXext}/lib/:${libXcursor}/lib/:${libXrandr}/lib/:${libXxf86vm}/lib/:${mesa}/lib/:${openal}/lib/
+    ${if useAlsa then "${alsaOss}/bin/aoss" else "" } \
       ${jre}/bin/java -jar $out/minecraft.jar
     EOF
 

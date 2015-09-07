@@ -11,7 +11,7 @@ let
 
   inPCSystems = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
-  version = "2.0-git-2015-07-04";
+  version = "1.2.0";
 
   unifont_bdf = fetchurl {
     url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
@@ -28,12 +28,12 @@ let
 in (
 
 stdenv.mkDerivation rec {
-  name = "trustedGRUB-${version}";
+  name = "trustedGRUB2-${version}";
 
   src = fetchgit {
     url = "https://github.com/Sirrix-AG/TrustedGRUB2";
-    rev = "1865d07bdef7f39916790c77103fb85e99de14a4";
-    sha256 = "e6bd9edfeb653e98e585fd691a31533b649b2fca1f4a903c70f6ea371014c9f7";
+    rev = "1ff54a5fbe02ea01df5a7de59b1e0201e08d4f76";
+    sha256 = "8c17bd7e14dd96ae9c4e98723f4e18ec6b21d45ac486ecf771447649829d0b34";
   };
 
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];

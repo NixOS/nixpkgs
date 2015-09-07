@@ -29,7 +29,7 @@ pythonPackages.buildPythonPackage rec {
         docdir=$out/share/doc/nixops mandir=$out/share/man
 
       mkdir -p $out/share/nix/nixops
-      cp -av nix/* $out/share/nix/nixops
+      cp -av "nix/"* $out/share/nix/nixops
 
       # Add openssh to nixops' PATH. On some platforms, e.g. CentOS and RHEL
       # the version of openssh is causing errors when have big networks (40+)

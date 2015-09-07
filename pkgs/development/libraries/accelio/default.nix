@@ -6,19 +6,18 @@
 
 stdenv.mkDerivation rec {
   name = "accelio-${version}${stdenv.lib.optionalString (kernel != null) "-kernel"}";
-  version = "1.4";
+  version = "2015-08-30";
 
   src = fetchFromGitHub {
     owner = "accelio";
     repo = "accelio";
-    rev = "v${version}";
-    sha256 = "0cxiwn63481m88zisd0pqs6g0h5k1amz2kidwyxkdbl6xgf70cwd";
+    rev = "3d1f2b2d311aa70de9856832fd02647266624e82";
+    sha256 = "172frqk2n43g0arhazgcwfvj0syf861vdzdpxl7idr142bb0ykf7";
   };
 
-  postPatch = ''
-    # Don't build broken examples
-    sed -i '/AC_CONFIG_SUBDIRS(\[\(examples\|tests\)\/kernel/d' configure.ac
+  patches = [ ./fix-printfs.patch ];
 
+  postPatch = ''
     # Allow the installation of xio kernel headers
     sed -i 's,/opt/xio,''${out},g' src/kernel/xio/Makefile.in
 
@@ -26,6 +25,8 @@ stdenv.mkDerivation rec {
     sed -i '\,/etc/ld.so.conf.d/libxio.conf,d' src/usr/Makefile.am
     sed -i '\,/sbin/ldconfig,d' src/usr/Makefile.am
   '';
+
+  doCheck = true;
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libevent ];

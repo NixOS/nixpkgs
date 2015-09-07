@@ -2,14 +2,14 @@
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "5.2.3";
+  version = "5.4.3";
   name = "dd-agent-${version}";
 
   src = fetchFromGitHub {
-    owner = "DataDog";
-    repo = "dd-agent";
-    rev = version;
-    sha256 = "05flcbzpnmhf6qskkccbfk957sl9hhydlp4p5vqhs62hkpwmqwan";
+    owner  = "datadog";
+    repo   = "dd-agent";
+    rev    = version;
+    sha256 = "07cign0ydxf1h6xsyi3iviywlm9x6d6rcaz46f3wipby6mv1s5dc";
   };
 
   buildInputs = [
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     pythonPackages.simplejson
     pythonPackages.pyyaml
     pythonPackages.requests
+    pythonPackages.pymongo
   ];
   propagatedBuildInputs = [ python tornado ];
 

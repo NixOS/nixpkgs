@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper, coreutils, openssh, gnupg
-, perl, procps, gnugrep, gawk, findutils, gnused }:
+, perl, procps, gnugrep, gawk, findutils, gnused
+, withProcps ? stdenv.isLinux }:
 
 stdenv.mkDerivation rec {
   name = "keychain-${version}";
@@ -26,12 +27,16 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "${gnused}/bin" \
       --prefix PATH ":" "${findutils}/bin" \
       --prefix PATH ":" "${gawk}/bin" \
-      --prefix PATH ":" "${procps}/bin"
+      ${if withProcps then ("--prefix PATH \":\" ${procps}/bin") else ""}
   '';
 
   meta = {
     description = "Keychain management tool";
     homepage = "http://www.funtoo.org/Keychain";
     license = stdenv.lib.licenses.gpl2;
+    # other platforms are untested (AFAIK)
+    platforms =
+      with stdenv.lib;
+      platforms.linux ++ platforms.darwin;
   };
 }

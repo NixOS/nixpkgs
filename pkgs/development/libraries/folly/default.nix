@@ -2,14 +2,14 @@
 , google-gflags, python, libiberty, openssl }:
 
 stdenv.mkDerivation rec {
-  version = "0.38.0";
+  version = "0.52.0";
   name = "folly-${version}";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "0b273iwizy08r8lap367q79lai4l4aib2bvd827lkkdax5jpqf6b";
+    sha256 = "16g3hpy1gy56zqnhwzkvzzpm6dgm01qa9yaigmrqr9b59c3k6cqf";
   };
 
   buildInputs = [ libiberty boost.lib libevent double_conversion glog google-gflags openssl ];

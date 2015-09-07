@@ -1,14 +1,14 @@
 { stdenv, gcc5, pkgconfig, cmake, bluez, ffmpeg, libao, mesa, gtk2, glib
 , gettext, git, libpthreadstubs, libXrandr, libXext, readline
-, openal, libXdmcp, portaudio, SDL, fetchgit, libusb
+, openal, libXdmcp, portaudio, fetchgit, libusb, libevdev
 , libpulseaudio ? null }:
 
 stdenv.mkDerivation rec {
-  name = "dolphin-emu-20150609";
+  name = "dolphin-emu-20150802";
   src = fetchgit {
     url = git://github.com/dolphin-emu/dolphin.git;
-    rev = "e47e4c677ad22895f8c8bc78676dd295e36f2695";
-    sha256 = "0g176x0rw9lssw68alr83cakldq1q38mzjwxdaf524bkvnn7fl3r";
+    rev = "5097a22844b850b429872f4de390bd958b11a616";
+    sha256 = "1qizkahbimpmgjs51av1cdmnnyvbz0j0gknmi5vdc38vrzxvwkrf";
     fetchSubmodules = false;
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gcc5 pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
                   gettext libpthreadstubs libXrandr libXext readline openal
-                  git libXdmcp portaudio SDL libusb libpulseaudio ];
+                  libevdev git libXdmcp portaudio libusb libpulseaudio ];
 
   meta = {
     homepage = http://dolphin-emu.org/;

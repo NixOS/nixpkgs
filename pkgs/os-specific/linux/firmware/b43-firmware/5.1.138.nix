@@ -15,8 +15,8 @@ stdenv.mkDerivation {
   phases = [ "unpackPhase" "installPhase" ];
 
   installPhase = ''
-    mkdir $out
-    b43-fwcutter -w $out linux/wl_apsta.o
+    mkdir -p $out/lib/firmware
+    b43-fwcutter -w $out/lib/firmware linux/wl_apsta.o
   '';
 
   meta = {

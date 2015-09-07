@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libdmtx, pkgconfig}:
+{stdenv, fetchurl, libdmtx, pkgconfig, imagemagick}:
 let
   s = # Generated upstream information
   rec {
@@ -10,7 +10,7 @@ let
     sha256="1di8ymlziy9856abd6rb72z0zqzmrff4r3vql0q9r5sk5ax4s417";
   };
   buildInputs = [
-    libdmtx pkgconfig
+    libdmtx pkgconfig imagemagick
   ];
 in
 stdenv.mkDerivation {

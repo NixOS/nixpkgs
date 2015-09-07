@@ -1,6 +1,7 @@
 { stdenv, fetchurl
 , qt4, xapian, file, python
 , djvulibre, groff, libxslt, unzip, xpdf, antiword, catdoc, lyx
+, libwpd, unrtf, untex
 , ghostscript, gawk, gnugrep, gnused, gnutar, gzip, libiconv }:
 
 assert stdenv.system != "powerpc-linux";
@@ -40,12 +41,11 @@ stdenv.mkDerivation rec {
       substituteInPlace  $f --replace unzip         ${unzip}/bin/unzip
       substituteInPlace  $f --replace xls2csv       ${catdoc}/bin/xls2csv
       substituteInPlace  $f --replace xsltproc      ${libxslt}/bin/xsltproc
+      substituteInPlace  $f --replace unrtf         ${unrtf}/bin/unrtf
+      substituteInPlace  $f --replace untex         ${untex}/bin/untex
+      substituteInPlace  $f --replace wpd2html      ${libwpd}/bin/wpd2html
     done
   '';
-    # TODO:
-    #substituteInPlace  $f --replace unrtf         ${unrtf}/bin/unrtf 
-    #substituteInPlace  $f --replace untex         ${untex}/bin/untex
-    #substituteInPlace  $f --replace wpd2html      ${wpd2html}/bin/wpd2html
 
   meta = with stdenv.lib; {
     description = "A full-text search tool";

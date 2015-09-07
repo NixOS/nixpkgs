@@ -11,8 +11,8 @@
 
 let
 
-  version = "2.1.7";
-  sha256 = "12chnxcl9zg20d0l4rlzp13cnxvdqr8bx3bbvwbcpnh7ir5s7ldd";
+  version = "2.1.9";
+  sha256 = "10nwh7kx4k0kkfvl3sf22v3x58q37b81lkr6s6gvzkq67f6mjcvs";
 
 in
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     inherit sha256;
-    url = "http://apache.cs.utah.edu/cassandra/${version}/apache-${name}-bin.tar.gz";
+    url = "mirror://apache/cassandra/${version}/apache-${name}-bin.tar.gz";
   };
 
   nativeBuildInputs = [ makeWrapper ];

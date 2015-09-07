@@ -2,7 +2,7 @@
       xmlns:xlink="http://www.w3.org/1999/xlink"
       xmlns:xi="http://www.w3.org/2001/XInclude"
       version="5.0"
-      xml:id="NixOSManual">
+      xml:id="book-nixos-manual">
   
   <info>
     <title>NixOS Manual</title>
@@ -33,11 +33,12 @@
   <xi:include href="administration/running.xml" />
   <!-- <xi:include href="userconfiguration.xml" /> -->
   <xi:include href="development/development.xml" />
-  <xi:include href="release-notes/release-notes.xml" />
 
   <appendix xml:id="ch-options">
     <title>Configuration Options</title>
     <xi:include href="options-db.xml" />
   </appendix>
+
+  <xi:include href="release-notes/release-notes.xml" />
 
 </book>

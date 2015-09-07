@@ -11,8 +11,8 @@ stdenv.mkDerivation {
 
   postInstall = ''
     for p in $out/bin/*; do
-      rpath=`patchelf --print-rpath $p`:$out
-      patchelf --set-rpath $rpath $p
+      rpath=`patchelf --print-rpath $p || true`:$out
+      patchelf --set-rpath "$rpath" $p || true
     done
   '';
 

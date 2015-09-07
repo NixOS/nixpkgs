@@ -9,15 +9,20 @@ let
   soext = if stdenv.system == "x86_64-darwin" then "dylib" else "so";
 
 in stdenv.mkDerivation rec {
-  version = "0.22.1";
+  version = "0.23.0";
   name = "mesos-${version}";
 
   dontDisableStatic = true;
 
   src = fetchurl {
     url = "http://www.apache.org/dist/mesos/${version}/mesos-${version}.tar.gz";
-    sha256 = "0ry0ppzgpab68fz5bzd7ry5rjbg8xjz73x1x4c5id42cpsqnn7x5";
+    sha256 = "1v5xpn4wal4vcrvcklchx9slkpa8xlwqkdbnxzy9zkzpq5g3arxr";
   };
+
+  patches = [
+    # https://reviews.apache.org/r/36610/
+    ./rb36610.patch
+  ];
 
   buildInputs = [
     makeWrapper autoconf automake114x libtool curl sasl jdk maven
@@ -93,13 +98,15 @@ in stdenv.mkDerivation rec {
     echo "export MESOS_NATIVE_LIBRARY=$MESOS_NATIVE_JAVA_LIBRARY" >> $out/nix-support/setup-hook
 
     # Inspired by: pkgs/development/python-modules/generic/default.nix
+    pushd src/python
     mkdir -p $out/lib/${python.libPrefix}/site-packages
     export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-    ${python}/bin/${python.executable} src/python/setup.py install \
+    ${python}/bin/${python.executable} setup.py install \
       --install-lib=$out/lib/${python.libPrefix}/site-packages \
       --old-and-unmanageable \
       --prefix="$out"
     rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
+    popd
   '';
 
   postFixup = ''

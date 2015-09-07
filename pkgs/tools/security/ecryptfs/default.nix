@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pkgconfig, perl, utillinux, keyutils, nss, nspr, python, pam
-, intltool, makeWrapper, coreutils, bash, gettext, cryptsetup, lvm2, rsync, which }:
+, intltool, makeWrapper, coreutils, bash, gettext, cryptsetup, lvm2, rsync, which, lsof }:
 
 stdenv.mkDerivation rec {
   name = "ecryptfs-${version}";
-  version = "106";
+  version = "108";
 
   src = fetchurl {
     url = "http://launchpad.net/ecryptfs/trunk/${version}/+download/ecryptfs-utils_${version}.orig.tar.gz";
-    sha256 = "1d5nlzcbl8ch639zi3lq6d14gkk4964j6dqhfs87i67867fhlghp";
+    sha256 = "1pfpzc907m4qi5h2rxmkqq072c6g22pik2rilj4bl4qishd8p0sj";
   };
 
   #TODO: replace wrapperDir below with from <nixos> config.security.wrapperDir;
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
         --prefix PATH ":" "${rsync}/bin" \
         --prefix PATH ":" "${keyutils}/bin" \
         --prefix PATH ":" "${which}/bin" \
+        --prefix PATH ":" "${lsof}/bin" \
         --prefix PATH ":" "$out/bin"
     done
   '';

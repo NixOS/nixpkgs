@@ -88,20 +88,22 @@ rec {
     attrs = mkOptionType {
       name = "attribute set";
       check = isAttrs;
-      merge = loc: fold (def: mergeAttrs def.value) {};
+      merge = loc: foldl' (res: def: mergeAttrs res def.value) {};
     };
 
     # derivation is a reserved keyword.
     package = mkOptionType {
       name = "derivation";
-      check = isDerivation;
-      merge = mergeOneOption;
+      check = x: isDerivation x || isStorePath x;
+      merge = loc: defs:
+        let res = mergeOneOption loc defs;
+        in if isDerivation res then res else toDerivation res;
     };
 
     path = mkOptionType {
       name = "path";
       # Hacky: there is no ‘isPath’ primop.
-      check = x: builtins.unsafeDiscardStringContext (builtins.substring 0 1 (toString x)) == "/";
+      check = x: builtins.substring 0 1 (toString x) == "/";
       merge = mergeOneOption;
     };
 

@@ -2,7 +2,7 @@
 , profilePaths ? (config.nixui.profilePaths or ["/nix/var/nix/profiles"])
 , dataDir ? (config.nixui.dataDir or "/tmp")
 , configurations ? (config.nixui.configurations or ["/etc/nixos/configuration.nix"])
-, NIX_PATH ? (config.nixui.NIX_PATH or "/nix/var/nix/profiles/per-user/root/channels/nixos:nixpkgs=/etc/nixos/nixpkgs:nixos-config=/etc/nixos/configuration.nix") }:
+, NIX_PATH ? (config.nixui.NIX_PATH or "/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix") }:
 let
   version = "0.1.2";
   src = fetchgit {

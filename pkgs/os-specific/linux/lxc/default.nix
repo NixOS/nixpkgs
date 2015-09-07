@@ -1,7 +1,9 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, docbook2x
-, docbook_xml_dtd_45, systemd, wrapPython
-, libapparmor ? null, gnutls ? null, libseccomp ? null, cgmanager ? null
-, libnih ? null, dbus ? null, libcap ? null, python3 ? null
+, docbook_xml_dtd_45, python3Packages
+
+# Optional Dependencies
+, libapparmor ? null, gnutls ? null, libselinux ? null, libseccomp ? null
+, cgmanager ? null, libnih ? null, dbus ? null, libcap ? null, systemd ? null
 }:
 
 let
@@ -9,19 +11,21 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lxc-1.1.2";
+  name = "lxc-1.1.3";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxc";
     rev = name;
-    sha256 = "149nq630h9bg87hb3cn086ci0cz29l7fp3i6qf1mqxv7hnildm8p";
+    sha256 = "109vpkxzkhixfvwfs6qphfbxb7pbk2qx22qc4zbk52d6gl78ygsb";
   };
 
+  nativeBuildInputs = [
+    autoreconfHook pkgconfig perl docbook2x python3Packages.wrapPython
+  ];
   buildInputs = [
-    autoreconfHook pkgconfig perl docbook2x systemd
-    libapparmor gnutls libseccomp cgmanager libnih dbus libcap python3
-    wrapPython
+    libapparmor gnutls libselinux libseccomp cgmanager libnih dbus libcap
+    python3Packages.python systemd
   ];
 
   patches = [ ./support-db2x.patch ];
@@ -31,16 +35,22 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
-    "--with-rootfs-path=/var/lib/lxc/rootfs"
+    "--enable-doc"
+    "--disable-api-docs"
   ] ++ optional (libapparmor != null) "--enable-apparmor"
-    ++ optional (gnutls != null) "--enable-gnutls"
+    ++ optional (libselinux != null) "--enable-selinux"
     ++ optional (libseccomp != null) "--enable-seccomp"
-    ++ optional (enableCgmanager) "--enable-cgmanager"
     ++ optional (libcap != null) "--enable-capabilities"
     ++ [
-    "--enable-doc"
-    "--enable-tests"
+    "--disable-examples"
+    "--enable-python"
+    "--disable-lua"
+    "--enable-bash"
+    (if doCheck then "--enable-tests" else "--disable-tests")
+    "--with-rootfs-path=/var/lib/lxc/rootfs"
   ];
+
+  doCheck = false;
 
   installFlags = [
     "localstatedir=\${TMPDIR}"
@@ -50,7 +60,9 @@ stdenv.mkDerivation rec {
     "LXCPATH=\${TMPDIR}/var/lib/lxc"
   ];
 
-  postInstall = "wrapPythonPrograms";
+  postInstall = ''
+    wrapPythonPrograms
+  '';
 
   meta = {
     homepage = "http://lxc.sourceforge.net";

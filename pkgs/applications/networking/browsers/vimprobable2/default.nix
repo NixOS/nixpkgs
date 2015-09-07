@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, glib, glib_networking, gtk, libsoup, libX11, perl,
-  pkgconfig, webkit, gsettings_desktop_schemas, cacert }:
+  pkgconfig, webkit, gsettings_desktop_schemas }:
 
 stdenv.mkDerivation rec {
   version = "1.4.2";
@@ -8,11 +8,6 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/vimprobable/vimprobable2_${version}.tar.bz2";
     sha256 = "13jdximksh9r3cgd2f8vms0pbsn3x0gxvyqdqiw16xp5fmdx5kzr";
   };
-
-  # Nixos default ca bundle
-  patchPhase = ''
-    sed -i s,/etc/ssl/certs/ca-certificates.crt,${cacert}/etc/ssl/certs/ca-bundle.crt, config.h
-  '';
 
   buildInputs = [ makeWrapper gtk libsoup libX11 perl pkgconfig webkit gsettings_desktop_schemas ];
 

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
-, dbus, acl, gmp, xdg_utils
+{ stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam
+, dbus, acl, gmp
 , libusb ? null, gnutls ? null, avahi ? null, libpaper ? null
 }:
 
@@ -17,9 +17,9 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls avahi libpaper ]
-    ++ optionals stdenv.isLinux [ pam dbus.libs acl xdg_utils ] ;
+    ++ optionals stdenv.isLinux [ pam dbus.libs acl ];
 
-  propagatedBuildInputs = [ openssl gmp ];
+  propagatedBuildInputs = [ gmp ];
 
   configureFlags = [
     "--localstatedir=/var"
@@ -54,8 +54,7 @@ stdenv.mkDerivation {
       "CUPS_PRIMARY_SYSTEM_GROUP=root"
     ];
 
-  postInstall =
-    ''
+  postInstall = ''
       # Delete obsolete stuff that conflicts with cups-filters.
       rm -rf $out/share/cups/banners $out/share/cups/data/testprint
 
@@ -71,6 +70,10 @@ stdenv.mkDerivation {
           mv "$f" "''${f/org\.cups\./}"
         fi
       done
+    '' + optionalString stdenv.isLinux ''
+      # Use xdg-open when on Linux
+      substituteInPlace $out/share/applications/cups.desktop \
+        --replace "Exec=htmlview" "Exec=xdg-open"
     '';
 
   meta = {

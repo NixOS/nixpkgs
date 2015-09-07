@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
     find . -type f -iname "*.haml" -exec sed -e 's|CoreOS Local|NixOS Local|g' -i "{}" \;
     find . -type f -iname "*.haml" -exec sed -e 's|CoreOS Host|NixOS Host|g' -i "{}" \;
     sed -e 's|CoreOS Local|NixOS Local|g' -i "spec/features/manage_application_spec.rb"
+    # fix libv8 dependency
+    substituteInPlace Gemfile.lock --replace "3.16.14.7" "3.16.14.11"
   '';
 
   configurePhase = ''

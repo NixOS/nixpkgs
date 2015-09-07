@@ -1,12 +1,13 @@
-{ callPackage, fetchgit, ... } @ args:
+{ callPackage, fetchFromGitHub, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "2015-06-29";
+  version = "2015-08-25";
 
-  src = fetchgit {
-    url = git://github.com/zfsonlinux/spl.git;
-    rev = "77ab5dd33a99bdf7fb062f0ea327582236a225b3";
-    sha256 = "1hbn8hi305cn15nlcm9x99nczjqjkhdc38hzww11xn78py8d90w9";
+  src = fetchFromGitHub {
+    owner = "zfsonlinux";
+    repo = "spl";
+    rev = "ae89cf0f34de323c4a7c39bfd9b906acc2635a87";
+    sha256 = "04i3c4qg5zccl1inr17vgkjrz9zr718m64pbrlw9rvc82fw5g199";
   };
 
   patches = [ ./const.patch ./install_prefix.patch ];

@@ -3,7 +3,7 @@
 import ./make-test.nix ({pkgs, ... }: {
   name = "printing";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ iElectric eelco chaoflow jgeerds vcunat ];
+    maintainers = [ iElectric eelco chaoflow jgeerds ];
   };
 
   nodes = {
@@ -60,10 +60,10 @@ import ./make-test.nix ({pkgs, ... }: {
       $client->succeed("lpq") =~ /DeskjetRemote is ready.*no entries/s or die;
 
       # Test printing various file types.
-      foreach my $file ("${pkgs.groff}/share/doc/*/examples/mom/penguin.pdf",
-                        "${pkgs.groff}/share/doc/*/meref.ps",
+      foreach my $file ("${pkgs.groff.doc}/share/doc/*/examples/mom/penguin.pdf",
+                        "${pkgs.groff.doc}/share/doc/*/meref.ps",
                         "${pkgs.cups}/share/doc/cups/images/cups.png",
-                        "${pkgs.pcre}/share/doc/pcre/pcre.txt")
+                        "${pkgs.pcre.doc}/share/doc/pcre/pcre.txt")
       {
           $file =~ /([^\/]*)$/; my $fn = $1;
 

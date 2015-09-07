@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name    = "lockdep-${version}";
-  version = "3.19.1";
-  fullver = "3.19.1";
+  version = "4.1.2";
+  fullver = "4.1.2";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.xz";
-    sha256 = "0qx7vxmlcwr4nvzf4wq0da7xwzqw4b67h9a5rfpxgg9mayk3czvi";
+    url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
+    sha256 = "1mdyjhnzhh254cblahqmpsk226z006z6sm9dmwvg6jlhpsw4cjhy";
   };
 
   preConfigure = "cd tools/lib/lockdep";

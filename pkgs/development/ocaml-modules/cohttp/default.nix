@@ -1,6 +1,6 @@
 {stdenv, buildOcaml, fetchurl, cmdliner, re, uri, fieldslib, sexplib, conduit,
  stringext, base64, magic-mime, ounit, alcotest, lwt ? null,
- async ? null, async_ssl ? null}:
+ async ? null, async-ssl ? null}:
 
 buildOcaml rec {
   name = "cohttp";
@@ -16,7 +16,7 @@ buildOcaml rec {
   buildInputs = [ alcotest ];
   propagatedBuildInputs = [ cmdliner re uri fieldslib sexplib sexplib
                             conduit stringext base64 magic-mime ounit async
-                            async_ssl lwt ];
+                            async-ssl lwt ];
 
   buildFlags = "PREFIX=$(out)";
 

@@ -1,11 +1,11 @@
 { stdenv, fetchhg, cmake, SDL, mesa, fmod42416, openssl, sqlite, sqlite-amalgamation }:
 
 stdenv.mkDerivation {
-  name = "zandronum-2.1";
+  name = "zandronum-2.1.2";
   src = fetchhg {
     url = "https://bitbucket.org/Torr_Samaho/zandronum-stable";
-    rev = "27275a8";
-    sha256 = "00xyrk0d1jrvy6zk059yawgd9b33z0fx4hvzcjvvbn03rqci60yc";
+    rev = "a3663b0061d5";
+    sha256 = "0qwsnbwhcldwrirfk6hpiklmcj3a7dzh6pn36nizci6pcza07p56";
   };
 
   phases = [ "unpackPhase" "configurePhase" "buildPhase" "installPhase" ];

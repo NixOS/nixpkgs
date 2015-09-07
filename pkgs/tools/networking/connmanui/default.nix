@@ -2,17 +2,20 @@
 
 stdenv.mkDerivation rec {
   name = "connmanui-${version}";
-  version = "e4a8ddcca0870eb2ece5a7e3ea0296de9c86e5b2";
+  rev = "fce0af94e121bde77c7fa2ebd6a319f0180c5516";
+  version = "22062015-${rev}";
 
   src = fetchgit {
+    inherit rev;
     url = "git://github.com/tbursztyka/connman-ui.git";
-    rev = version;
-    sha256 = "0rml52v81s7hr0g6qbj5bamli08kn66hay84qicx8sy8679wg443";
+    sha256 = "2072b337379b849cc55a19a3bb40834941e3f82b3924ef5d9b29e887fd19055e";
   };
 
   buildInputs = [ autoconf automake libtool glib gtk3 dbus pkgconfig file intltool connman ];
 
   preConfigure = ''
+    rm m4/intltool.m4
+    ln -s ${intltool}/share/aclocal/intltool.m4 m4/
     set -e
     ./autogen.sh
     sed -i "s/\/usr\/bin\/file/file/g" ./configure

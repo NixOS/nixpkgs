@@ -52,9 +52,9 @@ in
     systemd.services.bumblebeed = {
       description = "Bumblebee Hybrid Graphics Switcher";
       wantedBy = [ "display-manager.service" ];
-      script = "bumblebeed --use-syslog -g ${config.hardware.bumblebee.group}";
       path = [ kernel.bbswitch bumblebee ];
       serviceConfig = {
+        ExecStart = "${bumblebee}/bin/bumblebeed --use-syslog -g ${config.hardware.bumblebee.group}";
         Restart = "always";
         RestartSec = 60;
         CPUSchedulingPolicy = "idle";

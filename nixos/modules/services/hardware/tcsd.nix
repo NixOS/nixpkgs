@@ -17,8 +17,8 @@ let
     # what is available directly from the PCR registers.
     firmware_log_file = /sys/kernel/security/tpm0/binary_bios_measurements
     kernel_log_file = /sys/kernel/security/ima/binary_runtime_measurements
-    #firmware_pcrs = 0,1,2,3,4,5,6,7
-    #kernel_pcrs = 10,11
+    firmware_pcrs = ${cfg.firmwarePCRs}
+    kernel_pcrs = ${cfg.kernelPCRs}
     platform_cred = ${cfg.platformCred}
     conformance_cred = ${cfg.conformanceCred}
     endorsement_cred = ${cfg.endorsementCred}
@@ -60,20 +60,32 @@ in
       };
 
       stateDir = mkOption {
-	default = "/var/lib/tpm";
+        default = "/var/lib/tpm";
         type = types.path;
-	description = ''
+        description = ''
           The location of the system persistent storage file.
           The system persistent storage file holds keys and data across
           restarts of the TCSD and system reboots. 
-	'';
+        '';
+      };
+
+      firmwarePCRs = mkOption {
+        default = "0,1,2,3,4,5,6,7";
+        type = types.string;
+        description = "PCR indices used in the TPM for firmware measurements.";
+      };
+
+      kernelPCRs = mkOption {
+        default = "8,9,10,11,12";
+        type = types.string;
+        description = "PCR indices used in the TPM for kernel measurements.";
       };
 
       platformCred = mkOption {
         default = "${cfg.stateDir}/platform.cert";
         type = types.path;
         description = ''
-	  Path to the platform credential for your TPM. Your TPM
+          Path to the platform credential for your TPM. Your TPM
           manufacturer may have provided you with a set of credentials
           (certificates) that should be used when creating identities
           using your TPM. When a user of your TPM makes an identity,

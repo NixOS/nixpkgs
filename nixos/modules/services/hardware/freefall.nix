@@ -39,11 +39,14 @@ with lib;
     mkService = dev:
       assert dev != "";
       let dev' = utils.escapeSystemdPath dev; in
-      nameValuePair "freefall-${dev'}"
-        { description = "Free-fall protection for ${dev}";
+      nameValuePair "freefall-${dev'}" {
+        description = "Free-fall protection for ${dev}";
         after = [ "${dev'}.device" ];
         wantedBy = [ "${dev'}.device" ];
         path = [ pkgs.freefall ];
+        unitConfig = {
+          DefaultDependencies = false;
+        };
         serviceConfig = {
           ExecStart = "${pkgs.freefall}/bin/freefall ${dev}";
           Restart = "on-failure";

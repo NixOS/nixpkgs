@@ -19,11 +19,11 @@
 
 let
   # NOTE: When updating, please also update in current stable, as older versions stop working
-  version = "3.6.7";
+  version = "3.8.5";
   sha256 =
     {
-      "x86_64-linux" = "1jwzrpw382amx0jap9m411a3yvkc9iwnw6n35kwq3infmbwjs6q8";
-      "i686-linux" = "0rjd908bhfk00qh6gvizf2fyfb3cccd78spyvh435z377x2pmxzy";
+      "x86_64-linux" = "1r0wz2fsx2piasl04qsgwbl88bi0ajr0dm2swbslxwkf789vk18y";
+      "i686-linux" = "1dvfgp9dg3frhwmchwa6fyws4im9vgicchfsv0zzflvc7rm9fcig";
     }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   arch =
@@ -101,12 +101,12 @@ in stdenv.mkDerivation {
     rm "$out/${appdir}/qt.conf"
     rm -fr "$out/${appdir}/plugins"
 
-    find "$out/${appdir}" -type f -a -perm +0100 \
+    find "$out/${appdir}" -type f -a -perm /0100 \
       -print -exec patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} {} \;
 
     RPATH=${ldpath}:${gcc.cc}/lib:$out/${appdir}
     echo "updating rpaths to: $RPATH"
-    find "$out/${appdir}" -type f -a -perm +0100 \
+    find "$out/${appdir}" -type f -a -perm /0100 \
       -print -exec patchelf --force-rpath --set-rpath "$RPATH" {} \;
 
     mkdir -p "$out/share/applications"

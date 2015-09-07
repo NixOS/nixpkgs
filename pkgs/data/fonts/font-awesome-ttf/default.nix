@@ -1,11 +1,11 @@
 {stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation rec {
-  name = "font-awesome-4.3.0";
+  name = "font-awesome-4.4.0";
 
   src = fetchurl {
     url = "http://fortawesome.github.io/Font-Awesome/assets/${name}.zip";
-    sha256 = "018syfvkj01jym60mpys93xv84ky9l2x90gprnm9npzwkw5169jc";
+    sha256 = "1bmjh3j533awihdxihvlk2d1ypzs9q7azj0viqbm0df8jj2v4rwq";
   };
 
   buildCommand = ''

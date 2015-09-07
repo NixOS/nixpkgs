@@ -23,15 +23,6 @@ in
         EDITOR = mkDefault "nano";
       };
 
-    environment.sessionVariables =
-      { NIX_PATH =
-          [ "/nix/var/nix/profiles/per-user/root/channels/nixos"
-            "nixpkgs=/etc/nixos/nixpkgs"
-            "nixos-config=/etc/nixos/configuration.nix"
-            "/nix/var/nix/profiles/per-user/root/channels"
-          ];
-      };
-
     environment.profiles =
       [ "$HOME/.nix-profile"
         "/nix/var/nix/profiles/default"

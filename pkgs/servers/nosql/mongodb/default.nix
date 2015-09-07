@@ -4,7 +4,7 @@
 
 with stdenv.lib;
 
-let version = "3.0.4";
+let version = "3.0.5";
     system-libraries = [
       "pcre"
       "wiredtiger"
@@ -21,6 +21,10 @@ let version = "3.0.4";
     ] ++ optional stdenv.is64bit wiredtiger;
 
     other-args = concatStringsSep " " ([
+      # these are opt-in, lol
+      "--cc-use-shell-environment"
+      "--cxx-use-shell-environment"
+
       "--c++11=on"
       "--ssl"
       #"--rocksdb" # Don't have this packaged yet
@@ -37,7 +41,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "0q23hvi0axc14s1ah1p67rxvi36skw34kj9ahpijx2dd2a5smrvd";
+    sha256 = "1nvzbxgyjsp72w4fvfd8zxpj38zv0whn5p53jv9v2rdaj5wnmc85";
   };
 
   nativeBuildInputs = [ scons ];
@@ -47,6 +51,13 @@ in stdenv.mkDerivation rec {
     # fix environment variable reading
     substituteInPlace SConstruct \
         --replace "env = Environment(" "env = Environment(ENV = os.environ,"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+
+    substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
+    substituteInPlace src/third_party/s2/s1interval.cc --replace drem remainder
+    substituteInPlace src/third_party/s2/s2cap.cc --replace drem remainder
+    substituteInPlace src/third_party/s2/s2latlng.cc --replace drem remainder
+    substituteInPlace src/third_party/s2/s2latlngrect.cc --replace drem remainder
   '';
 
   buildPhase = ''

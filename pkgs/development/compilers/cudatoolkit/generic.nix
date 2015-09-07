@@ -63,6 +63,11 @@ in stdenv.mkDerivation rec {
 
     # let's remove the 32-bit libraries, they confuse the lib64->lib mover
     rm -rf $out/lib
+
+    # Fixup path to samples (needed for cuda 6.5 or else nsight will not find them)
+    if [ -d "$out"/cuda-samples ]; then
+        mv "$out"/cuda-samples "$out"/samples
+    fi
   '';
 
   setupHook = ./setup-hook.sh;

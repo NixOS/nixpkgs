@@ -16,14 +16,14 @@ assert saslSupport -> cyrus_sasl != null;
 assert gpgmeSupport -> gpgme != null;
 
 let
-  version = "1.5.23.1-rc1";
+  version = "1.5.23.1";
 in
 stdenv.mkDerivation rec {
   name = "mutt-kz-${version}";
 
   src = fetchurl {
     url = "https://github.com/karelzak/mutt-kz/archive/v${version}.tar.gz";
-    sha256 = "1m4bnn8psyrx2wy8ribannmp5qf75lv1gz116plji2z37z015zny";
+    sha256 = "01k4hrf8x2100pcqnrm61mm1x0pqi2kr3rx22k5hwvbs1wh8zyhz";
   };
 
   buildInputs = with stdenv.lib;

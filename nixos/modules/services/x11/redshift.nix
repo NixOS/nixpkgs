@@ -47,6 +47,13 @@ in {
         type = types.str;
       };
     };
+
+    services.redshift.extraOptions = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "-v" "-m randr" ];
+      description = "Additional command-line arguments to pass to the redshift(1) command";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -59,7 +66,8 @@ in {
         ${pkgs.redshift}/bin/redshift \
           -l ${cfg.latitude}:${cfg.longitude} \
           -t ${toString cfg.temperature.day}:${toString cfg.temperature.night} \
-          -b ${toString cfg.brightness.day}:${toString cfg.brightness.night}
+          -b ${toString cfg.brightness.day}:${toString cfg.brightness.night} \
+          ${lib.strings.concatStringsSep " " cfg.extraOptions}
       '';
       environment = { DISPLAY = ":0"; };
       serviceConfig.Restart = "always";

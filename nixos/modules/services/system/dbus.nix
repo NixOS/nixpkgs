@@ -73,6 +73,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = true;
+        internal = true;
         description = ''
           Whether to start the D-Bus message bus daemon, which is
           required by many other system services and applications.

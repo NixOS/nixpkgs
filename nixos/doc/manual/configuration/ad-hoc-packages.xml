@@ -11,7 +11,7 @@ uninstall packages from the command line.  For instance, to install
 Mozilla Thunderbird:
 
 <screen>
-$ nix-env -iA nixos.pkgs.thunderbird</screen>
+$ nix-env -iA nixos.thunderbird</screen>
 
 If you invoke this as root, the package is installed in the Nix
 profile <filename>/nix/var/nix/profiles/default</filename> and visible

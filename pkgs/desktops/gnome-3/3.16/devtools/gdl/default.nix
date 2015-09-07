@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Gnome docking library";
     homepage = https://developer.gnome.org/gdl/;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

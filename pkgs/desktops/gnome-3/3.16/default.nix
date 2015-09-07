@@ -20,24 +20,37 @@ let
     gtk3 # for gtk-update-icon-cache
     glib_networking gvfs dconf gnome-backgrounds gnome_control_center
     gnome-menus gnome_settings_daemon gnome_shell
-    gnome_themes_standard defaultIconTheme
+    gnome_themes_standard defaultIconTheme gnome-shell-extensions
+    pkgs.hicolor_icon_theme
   ];
 
   optionalPackages = with gnome3; [ baobab empathy eog epiphany evince
     gucharmap nautilus totem vino yelp gnome-bluetooth
     gnome-calculator gnome-contacts gnome-font-viewer gnome-screenshot
-    gnome-shell-extensions gnome-system-log gnome-system-monitor
+    gnome-system-log gnome-system-monitor
     gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
-    nautilus-sendto dconf-editor vinagre
+    nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
+    gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool
+    gnome-getting-started-docs
   ];
 
-  inherit (pkgs) libsoup glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
+  gamesPackages = with gnome3; [ swell-foop lightsoff iagno
+    tali quadrapassel gnome-sudoku aisleriot five-or-more
+    four-in-a-row gnome-chess gnome-klotski gnome-mahjongg
+    gnome-mines gnome-nibbles gnome-robots gnome-tetravex
+    hitori gnome-taquin
+  ];
+
+  inherit (pkgs) glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
   inherit (pkgs.gnome2) ORBit2;
+  libsoup = pkgs.libsoup.override { gnomeSupport = true; };
+  libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
   orbit = ORBit2;
   gnome3 = self // { recurseForDerivations = false; };
   clutter = pkgs.clutter_1_22;
   clutter_gtk = pkgs.clutter_gtk_1_6.override { inherit clutter gtk3; };
+  clutter-gst_2 = pkgs.clutter-gst;
   clutter-gst = pkgs.clutter-gst_3_0.override { inherit clutter; };
   cogl = pkgs.cogl_1_20;
   gtk = gtk3;
@@ -47,6 +60,7 @@ let
   gegl_0_3 = pkgs.gegl_0_3.override { inherit gtk; };
 
   version = "3.16";
+  maintainers = with pkgs.lib.maintainers; [ lethalman jgeerds ];
 
 # Simplify the nixos module and gnome packages
   defaultIconTheme = adwaita-icon-theme;
@@ -235,9 +249,13 @@ let
 
 #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
 
+  accerciser = callPackage ./apps/accerciser { };
+
   bijiben = callPackage ./apps/bijiben {
     webkitgtk = webkitgtk24x;
   };
+
+  cheese = callPackage ./apps/cheese { };
 
   evolution = callPackage ./apps/evolution {
     webkitgtk = webkitgtk24x;
@@ -254,17 +272,33 @@ let
     spice_gtk = pkgs.spice_gtk.override { enableGTK3 = true; };
   };
 
+  gnome-calendar = callPackage ./apps/gnome-calendar { };
+
+  gnome-characters = callPackage ./apps/gnome-characters { };
+
   gnome-clocks = callPackage ./apps/gnome-clocks { };
 
   gnome-documents = callPackage ./apps/gnome-documents { };
 
+  gnome-getting-started-docs = callPackage ./apps/gnome-getting-started-docs { };
+
+  gnome-logs = callPackage ./apps/gnome-logs { };
+
+  gnome-maps = callPackage ./apps/gnome-maps { };
+
   gnome-music = callPackage ./apps/gnome-music { };
+
+  gnome-nettool = callPackage ./apps/gnome-nettool { };
 
   gnome-photos = callPackage ./apps/gnome-photos {
     gegl = gegl_0_3;
   };
 
+  gnome-weather = callPackage ./apps/gnome-weather { };
+
   nautilus-sendto = callPackage ./apps/nautilus-sendto { };
+
+  polari = callPackage ./apps/polari { };
 
   # scrollkeeper replacement
   rarian = callPackage ./desktop/rarian { };
@@ -277,7 +311,51 @@ let
 
   anjuta = callPackage ./devtools/anjuta { };
 
+  devhelp = callPackage ./devtools/devhelp {
+    webkitgtk = webkitgtk24x;
+  };
+
   gdl = callPackage ./devtools/gdl { };
+
+  gnome-devel-docs = callPackage ./devtools/gnome-devel-docs { };
+
+#### Games
+
+  aisleriot = callPackage ./games/aisleriot { };
+
+  five-or-more = callPackage ./games/five-or-more { };
+
+  four-in-a-row = callPackage ./games/four-in-a-row { };
+
+  gnome-chess = callPackage ./games/gnome-chess { };
+
+  gnome-klotski = callPackage ./games/gnome-klotski { };
+
+  gnome-mahjongg = callPackage ./games/gnome-mahjongg { };
+
+  gnome-mines = callPackage ./games/gnome-mines { };
+
+  gnome-nibbles = callPackage ./games/gnome-nibbles { };
+
+  gnome-robots = callPackage ./games/gnome-robots { };
+
+  gnome-sudoku = callPackage ./games/gnome-sudoku { };
+
+  gnome-taquin = callPackage ./games/gnome-taquin { };
+
+  gnome-tetravex = callPackage ./games/gnome-tetravex { };
+
+  hitori = callPackage ./games/hitori { };
+
+  iagno = callPackage ./games/iagno { };
+
+  lightsoff = callPackage ./games/lightsoff { };
+
+  swell-foop = callPackage ./games/swell-foop { };
+
+  tali = callPackage ./games/tali { };
+
+  quadrapassel = callPackage ./games/quadrapassel { };
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 
@@ -310,6 +388,8 @@ let
   gtkhtml = callPackage ./misc/gtkhtml { };
 
   pomodoro = callPackage ./misc/pomodoro { };
+
+  gnome-video-effects = callPackage ./misc/gnome-video-effects { };
 
     };
   in self; # pkgsFun

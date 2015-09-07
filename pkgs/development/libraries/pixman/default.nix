@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optional stdenv.isDarwin ./fix-clang36.patch;
 
+  configureFlags = if stdenv.isArm then ["--disable-arm-iwmmxt"] else null;
+
   meta = {
     homepage = http://pixman.org;
     description = "A low-level library for pixel manipulation";

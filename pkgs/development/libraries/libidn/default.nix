@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "libidn-1.31";
+  name = "libidn-1.32";
 
   src = fetchurl {
     url = "mirror://gnu/libidn/${name}.tar.gz";
-    sha256 = "026z12mczlag443ms9n954h36pi3m7iva9jfw8y4ispsj772zpxg";
+    sha256 = "1xf4hphhahcjm2xwx147lfpsavjwv9l4c2gf6hx71zxywbz5lpds";
   };
 
   doCheck = ! stdenv.isDarwin;

@@ -7,9 +7,9 @@
 
 { name ? "", stdenv, nativeTools, nativeLibc, nativePrefix ? ""
 , cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenv.shell
-, zlib ? null, extraPackages ? []
+, zlib ? null, extraPackages ? [], extraBuildCommands ? ""
 , dyld ? null # TODO: should this be a setup-hook on dyld?
-, isGNU ? false, isClang ? false
+, isGNU ? false, isClang ? cc.isClang or false
 }:
 
 with stdenv.lib;
@@ -232,7 +232,8 @@ stdenv.mkDerivation {
 
       substituteAll ${./add-flags} $out/nix-support/add-flags.sh
       cp -p ${./utils.sh} $out/nix-support/utils.sh
-    '';
+    ''
+    + extraBuildCommands;
 
   # The dynamic linker has different names on different Linux platforms.
   dynamicLinker =

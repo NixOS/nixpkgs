@@ -9,18 +9,17 @@ let
 
   # We need a copy of the Nix expressions for Nixpkgs and NixOS on the
   # CD.  These are installed into the "nixos" channel of the root
-  # user, as expected by nixos-rebuild/nixos-install.
+  # user, as expected by nixos-rebuild/nixos-install. FIXME: merge
+  # with make-channel.nix.
   channelSources = pkgs.runCommand "nixos-${config.system.nixosVersion}"
-    { expr = readFile ../../../lib/channel-expr.nix; }
+    { }
     ''
-      mkdir -p $out/nixos
-      cp -prd ${pkgs.path} $out/nixos/nixpkgs
-      ln -s nixpkgs/nixos $out/nixos/nixos
+      mkdir -p $out
+      cp -prd ${pkgs.path} $out/nixos
       chmod -R u+w $out/nixos
-      rm -rf $out/nixos/nixpkgs/.git
-      echo -n ${config.system.nixosVersion} > $out/nixos/nixpkgs/.version
-      echo -n "" > $out/nixos/nixpkgs/.version-suffix
-      echo "$expr" > $out/nixos/default.nix
+      ln -s . $out/nixos/nixpkgs
+      rm -rf $out/nixos/.git
+      echo -n ${config.system.nixosVersionSuffix} > $out/nixos/.version-suffix
     '';
 
 in

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, readline }:
 
 let version = "2015-05-04"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "picoc-${version}";
 
   src = fetchFromGitHub {
@@ -39,7 +39,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  # Tests are currently broken on i686 see
+  # http://hydra.nixos.org/build/24003763/nixlog/1
+  doCheck = if stdenv.isi686 then false else true;
   checkTarget = "test";
 
   installPhase = ''

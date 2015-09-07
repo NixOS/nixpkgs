@@ -43,7 +43,7 @@ diff -urN pipelight.old/bin/pipelight-plugin.in pipelight.new/bin/pipelight-plug
 -fi
 +download_file()
 +{
-+	curl --cacert /etc/ssl/certs/ca-bundle.crt -o "$1" "$2"
++	curl --cacert /etc/ssl/certs/ca-certificates.crt -o "$1" "$2"
 +}
 
  # Use shasum instead of sha256sum on MacOS / *BSD
@@ -111,7 +111,7 @@ diff -urN pipelight.old/share/install-dependency pipelight.new/share/install-dep
 -fi
 +download_file()
 +{
-+	curl --cacert /etc/ssl/certs/ca-bundle.crt -o "$1" "$2"
++	curl --cacert /etc/ssl/certs/ca-certificates.crt -o "$1" "$2"
 +}
 +get_download_size()
 +{

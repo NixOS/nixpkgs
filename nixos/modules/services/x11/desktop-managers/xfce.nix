@@ -37,6 +37,7 @@ in
             exec ${pkgs.stdenv.shell} ${pkgs.xfce.xinitrc}
           '';
       };
+    services.xserver.displayManager.desktopManagerHandlesLidAndPower = true;
 
     environment.systemPackages =
       [ pkgs.gtk # To get GTK+'s themes.
@@ -62,7 +63,7 @@ in
         pkgs.xfce.xfwm4
         # This supplies some "abstract" icons such as
         # "utilities-terminal" and "accessories-text-editor".
-        pkgs.gnome.gnomeicontheme
+        pkgs.gnome3.defaultIconTheme
         pkgs.desktop_file_utils
         pkgs.xfce.libxfce4ui
         pkgs.xfce.garcon

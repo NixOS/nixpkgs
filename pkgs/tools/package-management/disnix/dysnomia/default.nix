@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, ejabberd ? null, mysql ? null, postgresql ? null, subversion ? null, mongodb ? null
+, ejabberd ? null, mysql ? null, postgresql ? null, subversion ? null, mongodb ? null, mongodb-tools ? null
 , enableApacheWebApplication ? false
 , enableAxis2WebService ? false
 , enableEjabberdDump ? false
@@ -17,7 +17,7 @@ assert enableMySQLDatabase -> mysql != null;
 assert enablePostgreSQLDatabase -> postgresql != null;
 assert enableSubversionRepository -> subversion != null;
 assert enableEjabberdDump -> ejabberd != null;
-assert enableMongoDatabase -> mongodb != null;
+assert enableMongoDatabase -> (mongodb != null && mongodb-tools != null);
 
 stdenv.mkDerivation {
   name = "dysnomia-0.4";
@@ -45,7 +45,8 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional enableMySQLDatabase mysql.out
     ++ stdenv.lib.optional enablePostgreSQLDatabase postgresql
     ++ stdenv.lib.optional enableSubversionRepository subversion
-    ++ stdenv.lib.optional enableMongoDatabase mongodb;
+    ++ stdenv.lib.optional enableMongoDatabase mongodb
+    ++ stdenv.lib.optional enableMongoDatabase mongodb-tools;
 
   meta = {
     description = "Automated deployment of mutable components and services for Disnix";

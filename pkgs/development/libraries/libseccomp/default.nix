@@ -1,13 +1,13 @@
 { stdenv, fetchurl, getopt }:
 
-let version = "2.2.1"; in
+let version = "2.2.3"; in
 
 stdenv.mkDerivation rec {
   name = "libseccomp-${version}";
 
   src = fetchurl {
     url = "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
-    sha256 = "0h57a4l5v1aqyqrkj5gfnar8n2nxs2gzrpscym568v3qajgpi88b";
+    sha256 = "1vgc9xgdx6mc4fj21axlv2ym9ndnz06ylq3ps3f8210n3xksdq7y";
   };
 
   buildInputs = [ getopt ];

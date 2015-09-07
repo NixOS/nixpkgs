@@ -1,5 +1,5 @@
 { fetchurl, stdenv, ncurses, curl, pkgconfig, gnutls, readline, openssl, perl, libjpeg
-, libzrtpcpp }:
+, libzrtpcpp, gcc48 }:
 
 stdenv.mkDerivation rec {
   name = "freeswitch-1.2.3";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ncurses curl pkgconfig gnutls readline openssl perl libjpeg
-    libzrtpcpp ];
+    libzrtpcpp gcc48 ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 

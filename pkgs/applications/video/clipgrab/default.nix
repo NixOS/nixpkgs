@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, makeDesktopItem, qt4 }:
+{ stdenv, fetchurl, ffmpeg, makeDesktopItem, qt4 }:
 
-let version = "3.4.11"; in
+let version = "3.5.1"; in
 stdenv.mkDerivation rec {
   name = "clipgrab-${version}";
 
   src = fetchurl {
-    sha256 = "10xxcnib7xkvrx7wma2vbya5fz5s5f6syc9dmr395c83lpcwpxs8";
-    # The "Download" button is a .tar.gz, but there's a .tar.bz2 further down:
-    url = "http://download.clipgrab.de/${name}.tar.bz2";
+    sha256 = "16hm7zv0yhxj7gdd8q462jcxy0jk6hicsk1mkhmarwrhifwsy4g9";
+    # The .tar.bz2 "Download" link is a binary blob, the source is .tar.gz!
+    url = "http://download.clipgrab.de/${name}.tar.gz";
   };
 
   meta = with stdenv.lib; {
@@ -20,11 +20,17 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://clipgrab.org/;
     license = licenses.gpl3Plus;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ qt4 ];
+  buildInputs = [ ffmpeg qt4 ];
+
+  postPatch = stdenv.lib.optionalString (ffmpeg != null) ''
+  substituteInPlace converter_ffmpeg.cpp \
+    --replace '"ffmpeg"' '"${ffmpeg}/bin/ffmpeg"' \
+    --replace '"ffmpeg ' '"${ffmpeg}/bin/ffmpeg '
+  '';
 
   configurePhase = ''
     qmake clipgrab.pro

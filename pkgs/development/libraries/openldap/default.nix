@@ -1,20 +1,16 @@
-{ stdenv, fetchurl, autoconf, openssl, cyrus_sasl, db, groff }:
+{ stdenv, fetchurl, openssl, cyrus_sasl, db, groff }:
 
 stdenv.mkDerivation rec {
-  name = "openldap-2.4.41";
+  name = "openldap-2.4.42";
 
   src = fetchurl {
     url = "http://www.openldap.org/software/download/OpenLDAP/openldap-release/${name}.tgz";
-    sha256 = "0vkzfd1pmin6xsv8lb1nabfxma8n1q00khr6nfifqkxlm2s6p197";
+    sha256 = "0qwfpb5ipp2l76v11arghq5mr0sjc6xhjfg8a0kgsaw5qpib1dzf";
   };
 
-  nativeBuildInputs = [ autoconf ];
-  buildInputs = [ openssl cyrus_sasl db groff ];
+  outputs = [ "out" "man" ];
 
-  # NOTE: Only needed for the gcc5 patch
-  preConfigure = ''
-    autoconf
-  '';
+  buildInputs = [ openssl cyrus_sasl db groff ];
 
   configureFlags =
     [ "--enable-overlays"

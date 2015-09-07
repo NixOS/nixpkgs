@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, which, automake113x, intltool, pkgconfig, libtool, makeWrapper,
   dbus_glib, libcanberra, gst_all_1, vala, gnome3, gtk3, gst_plugins_base,
-  glib, gobjectIntrospection, hicolor_icon_theme, telepathy_glib
+  glib, gobjectIntrospection, telepathy_glib
 }:
 
 stdenv.mkDerivation rec {
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
     makeWrapper dbus_glib libcanberra vala gst_all_1.gstreamer
     gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     gnome3.gsettings_desktop_schemas gnome3.gnome_desktop
-    gnome3.gnome_common gnome3.gnome_shell hicolor_icon_theme gtk3
-    telepathy_glib
+    gnome3.gnome_common gnome3.gnome_shell gtk3 telepathy_glib
+    gnome3.defaultIconTheme
   ];
 
   preBuild = ''

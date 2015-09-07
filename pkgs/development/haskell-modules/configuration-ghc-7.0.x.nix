@@ -35,10 +35,10 @@ self: super: {
   unix = null;
 
   # binary is not a core library for this compiler.
-  binary = self.binary_0_7_5_0;
+  binary = self.binary_0_7_6_1;
 
   # deepseq is not a core library for this compiler.
-  deepseq = self.deepseq_1_4_1_1;
+  deepseq = self.deepseq_1_4_1_2;
 
   # transformers is not a core library for this compiler.
   transformers = self.transformers_0_4_3_0;
@@ -69,5 +69,8 @@ self: super: {
 
   # Needs hashable on pre 7.10.x compilers.
   nats = addBuildDepend super.nats self.hashable;
+
+  # Newer versions require bytestring >=0.10.
+  tar = super.tar_0_4_1_0;
 
 }

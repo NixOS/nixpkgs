@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, dbus, libgcrypt, libtasn1, pam, python, glib, libxslt
 , intltool, pango, gcr, gdk_pixbuf, atk, p11_kit, makeWrapper
-, docbook_xsl_ns, docbook_xsl, gnome3, cacert }:
+, docbook_xsl_ns, docbook_xsl, gnome3 }:
 
 let
   majVer = gnome3.version;
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool docbook_xsl_ns docbook_xsl ];
 
   configureFlags = [
-    "--with-ca-certificates=${cacert}/etc/ssl/certs/ca-bundle.crt" # NixOS hardcoded path
+    "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt" # NixOS hardcoded path
     "--with-pkcs11-config=$$out/etc/pkcs11/" # installation directories
     "--with-pkcs11-modules=$$out/lib/pkcs11/"
   ];
@@ -36,6 +36,6 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = gnome3.maintainers;
   };
 }

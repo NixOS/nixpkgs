@@ -75,8 +75,10 @@ addEntry() {
 
     copyToKernelsDir "$path/kernel"; kernel=$result
     copyToKernelsDir "$path/initrd"; initrd=$result
-    # XXX UGLY: maybe the system config should have a top-level "dtbs" entry?
-    copyToKernelsDir $(readlink -m "$path/kernel/../dtbs"); dtbs=$result
+    if [ -n "@kernelDTB@" ]; then
+        # XXX UGLY: maybe the system config should have a top-level "dtbs" entry?
+        copyToKernelsDir $(readlink -m "$path/kernel/../dtbs"); dtbs=$result
+    fi
 
     timestampEpoch=$(stat -L -c '%Z' $path)
 
@@ -93,7 +95,9 @@ addEntry() {
     fi
     echo "  LINUX ../nixos/$(basename $kernel)"
     echo "  INITRD ../nixos/$(basename $initrd)"
-    echo "  FDTDIR ../nixos/$(basename $dtbs)"
+    if [ -n "@kernelDTB@" ]; then
+        echo "  FDTDIR ../nixos/$(basename $dtbs)"
+    fi
     echo "  APPEND systemConfig=$path init=$path/init $extraParams"
 }
 
@@ -105,20 +109,24 @@ cat > $tmpFile <<EOF
 # Change this to e.g. nixos-42 to temporarily boot to an older configuration.
 DEFAULT nixos-default
 
+MENU TITLE ------------------------------------------------------------
 TIMEOUT $timeout
-$(addEntry $default default)
 EOF
 
-# Add up to $numGenerations generations of the system profile to the menu,
-# in reverse (most recent to least recent) order.
-for generation in $(
-        (cd /nix/var/nix/profiles && ls -d system-*-link) \
-        | sed 's/system-\([0-9]\+\)-link/\1/' \
-        | sort -n -r \
-        | head -n $numGenerations); do
-    link=/nix/var/nix/profiles/system-$generation-link
-    addEntry $link $generation
-done >> $tmpFile
+addEntry $default default >> $tmpFile
+
+if [ "$numGenerations" -gt 0 ]; then
+    # Add up to $numGenerations generations of the system profile to the menu,
+    # in reverse (most recent to least recent) order.
+    for generation in $(
+            (cd /nix/var/nix/profiles && ls -d system-*-link) \
+            | sed 's/system-\([0-9]\+\)-link/\1/' \
+            | sort -n -r \
+            | head -n $numGenerations); do
+        link=/nix/var/nix/profiles/system-$generation-link
+        addEntry $link $generation
+    done >> $tmpFile
+fi
 
 mv -f $tmpFile $target/extlinux/extlinux.conf
 

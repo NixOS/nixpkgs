@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "${prefix}jack2-${version}";
-  version = "2015-06-02";
+  version = "1.9.10";
 
   src = fetchFromGitHub {
     owner = "jackaudio";
     repo = "jack2";
-    rev = "b5bceb50c708f55cc569c3e1f0f1876a49fbdade";
-    sha256 = "0dc00729wkbxnbhnmyfam1wdwd5m8jvrjccypb32bj072jqaqaw7";
+    rev = "v${version}";
+    sha256 = "1a2213l7x6sgqg2hq3yhnpvvvqyskhsmx8j3z0jgjsqwz9xa3wbr";
   };
 
   nativeBuildInputs = [ pkgconfig python makeWrapper ];
@@ -41,9 +41,11 @@ stdenv.mkDerivation rec {
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
   ];
 
-  patchPhase = ''
+  prePatch = ''
     substituteInPlace svnversion_regenerate.sh --replace /bin/bash ${bash}/bin/bash
   '';
+
+  patches = [ ./jack-gcc5.patch ];
 
   configurePhase = ''
     python waf configure --prefix=$out \
