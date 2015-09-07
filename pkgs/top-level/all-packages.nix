@@ -4357,8 +4357,6 @@ let
 
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
 
-    deriving = callPackage ../development/tools/ocaml/deriving { };
-
     dolog = callPackage ../development/ocaml-modules/dolog { };
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
