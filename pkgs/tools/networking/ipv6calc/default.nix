@@ -1,12 +1,12 @@
 { stdenv, fetchurl, geoip, geolite-legacy, getopt, openssl, perl }:
 
-let version = "0.99.0"; in
+let version = "0.99.1"; in
 stdenv.mkDerivation rec {
   name = "ipv6calc-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/${name}.tar.gz";
-    sha256 = "1dgx6gji9dyz77jssk2ax5r0ycq4jcsks71bhvcpb79k02wkaxgw";
+    sha256 = "0a0xpai14y969hp6l10r2wcd16sqf3v40fq5h97m4a69hcpmvg5h";
   };
 
   buildInputs = [ geoip geolite-legacy getopt openssl ];
