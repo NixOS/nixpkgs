@@ -1,6 +1,6 @@
-{ mkDerivation, ansi-wl-pprint, base, Cabal, containers
-, distribution-nixpkgs, fetchFromGitHub, language-nix, lens
-, optparse-applicative, pretty, pretty-show, stdenv
+{ mkDerivation, ansi-wl-pprint, base, Cabal, containers, distribution-nixpkgs
+, fetchFromGitHub, language-nix, lens, optparse-applicative, pretty, pretty-show
+, stdenv, nix-prefetch-scripts, makeWrapper
 }:
 
 mkDerivation rec {
