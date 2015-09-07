@@ -11688,6 +11688,24 @@ let
     };
   };
 
+  pyperclip = buildPythonPackage rec {
+    version = "1.5.11";
+    name = "pyperclip-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyperclip/${name}.zip";
+      sha256 = "07q8krmi7phizzp192x3j7xbk1gzhc1kc3jp4mxrm32dn84sp1vh";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = "https://github.com/asweigart/pyperclip";
+      license = licenses.bsdOriginal;
+      description = "cross-platform clipboard module";
+    };
+  };
+
   pysphere = buildPythonPackage rec {
     name = "pysphere-0.1.8";
 
