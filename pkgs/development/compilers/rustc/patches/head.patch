@@ -1,18 +1,3 @@
-diff --git a/src/librustc_back/target/mod.rs b/src/librustc_back/target/mod.rs
-index 39e4291..b352bd1 100644
---- a/src/librustc_back/target/mod.rs
-+++ b/src/librustc_back/target/mod.rs
-@@ -179,8 +179,8 @@ impl Default for TargetOptions {
-     fn default() -> TargetOptions {
-         TargetOptions {
-             data_layout: String::new(),
--            linker: "cc".to_string(),
--            ar: "ar".to_string(),
-+            linker: "@ccPath@".to_string(), // ignore-tidy-linelength
-+            ar: "@arPath@".to_string(), // ignore-tidy-linelength
-             pre_link_args: Vec::new(),
-             post_link_args: Vec::new(),
-             cpu: "generic".to_string(),
 diff --git a/src/test/run-pass/issue-20797.rs b/src/test/run-pass/issue-20797.rs
 index 2772fc8..3d37b08 100644
 --- a/src/test/run-pass/issue-20797.rs

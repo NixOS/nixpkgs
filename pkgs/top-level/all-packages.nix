@@ -4778,6 +4778,8 @@ let
       buildRustPackage = callPackage ../build-support/rust { };
     };
 
+  rustfmt = callPackage ../development/tools/rust/rustfmt { };
+
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
   sbcl = callPackage ../development/compilers/sbcl {
     clisp = clisp;
