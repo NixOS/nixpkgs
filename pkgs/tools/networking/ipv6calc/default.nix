@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, geoip, geolite-legacy, getopt, openssl, perl }:
+{ stdenv, fetchurl, getopt, ip2location-c, openssl, perl
+, geoip ? null, geolite-legacy ? null
+, ip2location-database ? null }:
 
 let version = "0.99.1"; in
 stdenv.mkDerivation rec {
@@ -9,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0a0xpai14y969hp6l10r2wcd16sqf3v40fq5h97m4a69hcpmvg5h";
   };
 
-  buildInputs = [ geoip geolite-legacy getopt openssl ];
+  buildInputs = [ geoip geolite-legacy getopt ip2location-c openssl ];
   nativeBuildInputs = [ perl ];
 
   patchPhase = ''
@@ -30,6 +32,8 @@ stdenv.mkDerivation rec {
     "--enable-geoip"
   ] ++ stdenv.lib.optional (geolite-legacy != null) [
     "--with-geoip-db=${geolite-legacy}/share/GeoIP"
+  ] ++ stdenv.lib.optional (ip2location-c != null ) [
+    "--enable-ip2location"
   ];
 
   enableParallelBuilding = true;
