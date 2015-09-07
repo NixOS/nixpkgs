@@ -14601,7 +14601,28 @@ let
     };
   };
 
+  upass = buildPythonPackage rec {
+    version = "0.1.2";
+    name = "upass-${version}";
 
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/u/upass/upass-${version}.tar.gz";
+      sha256 = "1navsygidw77kr8ap8wlfwvjn3gf0chrq896yv8s4nfmaqpm39zc";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [
+      pyperclip
+      urwid
+    ];
+
+    doCheck = false;
+
+    meta = {
+      description = "Console UI for pass";
+      homepage = https://github.com/Kwpolska/upass;
+      license = licenses.bsd3;
+    };
+  };
 
   update_checker = pythonPackages.buildPythonPackage rec {
     name = "update_checker-0.11";
