@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
   nativeBuildInputs = [ autoreconfHook ];
 
+  postPatch = ''
+    touch *.h # unnecessary regeneration requires Python
+  '';
+
   meta = {
     description = "An interactive process viewer for Linux";
     homepage = "http://htop.sourceforge.net";
