@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     '';
     homepage = http://www.ip2location.com/developers/c-7;
     license = with licenses; [ gpl3Plus lgpl3Plus ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 }
