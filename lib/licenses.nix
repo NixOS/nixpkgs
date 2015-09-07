@@ -331,7 +331,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     url = "https://raw.githubusercontent.com/raboof/notion/master/LICENSE";
     fullName = "Notion modified LGPL";
   };
-  
+
   ofl = spdx {
     spdxId = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";
@@ -458,4 +458,8 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Zope Public License 2.1";
   };
 
+  dynect = {
+    fullName = "Dyn Inc, Integration Team Deliverable";
+    url = https://github.com/dyninc/dyn-python/blob/master/LICENSE;
+  };
 }

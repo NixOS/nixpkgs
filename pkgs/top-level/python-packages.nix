@@ -17767,4 +17767,30 @@ let
     };
   };
 
+  dyn = pkgs.pythonPackages.buildPythonPackage rec {
+    version = "1.4.2";
+    name = "dyn-${version}";
+    disabled = pythonOlder "2.6";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dyn/${name}.tar.gz";
+      sha256 = "1aw22hspifvrjz6syp8sryksdvs666i22jlgy2bskxl6v3xi62cp";
+    };
+
+    buildInputs = with self; [
+      pytest
+      pytestcov
+      mock
+      pytestpep8
+      pytest_xdist
+      covCore
+    ];
+
+    meta = {
+      description = "Dynect dns lib";
+      homepage = "http://dyn.readthedocs.org/en/latest/intro.html";
+      license = licenses.dynect;
+    };
+  };
+
 }; in pythonPackages
