@@ -2331,6 +2331,8 @@ let
 
   mysql2pgsql = callPackage ../tools/misc/mysql2pgsql { };
 
+  nabi = callPackage ../tools/inputmethods/nabi { };
+
   namazu = callPackage ../tools/text/namazu { };
 
   nbd = callPackage ../tools/networking/nbd { };
@@ -7064,6 +7066,8 @@ let
   libguestfs = callPackage ../development/libraries/libguestfs {
     inherit (perlPackages) libintlperl GetoptLong SysVirt;
   };
+
+  libhangul = callPackage ../development/libraries/libhangul { };
 
   libharu = callPackage ../development/libraries/libharu { };
 
