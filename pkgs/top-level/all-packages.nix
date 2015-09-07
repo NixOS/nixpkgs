@@ -8968,6 +8968,8 @@ let
 
   diod = callPackage ../servers/diod { lua = lua5_1; };
 
+  dnschain = callPackage ../servers/dnschain { };
+
   dovecot = dovecot21;
 
   dovecot21 = callPackage ../servers/mail/dovecot { };
