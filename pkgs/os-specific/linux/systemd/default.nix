@@ -2,6 +2,7 @@
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux
 , glib, kbd, libxslt, coreutils, libgcrypt
 , kexectools, libmicrohttpd, linuxHeaders, libseccomp
+, autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , pythonPackages ? null, pythonSupport ? false
 }:
 
@@ -10,17 +11,17 @@ assert stdenv.isLinux;
 assert pythonSupport -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
-  version = "220";
+  version = "225";
   name = "systemd-${version}";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "0ck38kmhscbd7w0n1rbvw7drc9zpj5a77h02fljyf7i28265hn9n";
+    url = "https://github.com/systemd/systemd/archive/v${version}.tar.gz";
+    sha256 = "00cpdw52lcypiyyqxsbhfdb69yf638a8xfa95xgk3sc86sxpdxdj";
   };
 
   patches =
     [ # These are all changes between upstream and
-      # https://github.com/NixOS/systemd/tree/nixos-v220.
+      # https://github.com/NixOS/systemd/tree/nixos-${version}.
       ./fixes.patch
     ];
 
@@ -28,6 +29,10 @@ stdenv.mkDerivation rec {
     [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt
       libmicrohttpd kexectools libseccomp
+      /* FIXME: we may be able to prevent the following dependencies
+         by generating an autoconf'd tarball, but that's probably not
+         worth it. */
+      autoreconfHook gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
     ] ++ stdenv.lib.optionals pythonSupport [pythonPackages.python pythonPackages.lxml];
 
   configureFlags =
@@ -37,11 +42,9 @@ stdenv.mkDerivation rec {
       "--with-kbd-loadkeys=${kbd}/bin/loadkeys"
       "--with-kbd-setfont=${kbd}/bin/setfont"
       "--with-rootprefix=$(out)"
-      "--with-dbusinterfacedir=$(out)/share/dbus-1/interfaces"
       "--with-dbuspolicydir=$(out)/etc/dbus-1/system.d"
       "--with-dbussystemservicedir=$(out)/share/dbus-1/system-services"
       "--with-dbussessionservicedir=$(out)/share/dbus-1/services"
-      "--with-firmware-path=/root/test-firmware:/run/current-system/firmware"
       "--with-tty-gid=3" # tty in NixOS has gid 3
       "--enable-compat-libs" # get rid of this eventually
       "--disable-tests"
@@ -51,7 +54,6 @@ stdenv.mkDerivation rec {
       "--disable-sysusers"
       "--disable-timedated"
       "--enable-timesyncd"
-      "--disable-readahead"
       "--disable-firstboot"
       "--disable-localed"
       "--enable-resolved"
@@ -60,6 +62,7 @@ stdenv.mkDerivation rec {
       "--disable-libidn"
       "--disable-quotacheck"
       "--disable-ldconfig"
+      "--disable-smack"
 
       "--with-sysvinit-path="
       "--with-sysvrcnd-path="
@@ -68,6 +71,8 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
+      ./autogen.sh
+
       # FIXME: patch this in systemd properly (and send upstream).
       for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/core/shutdown.c src/nspawn/nspawn.c src/shared/generator.c; do
         test -e $i
@@ -85,8 +90,6 @@ stdenv.mkDerivation rec {
 
       substituteInPlace src/journal/catalog.c \
         --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
-
-      rm src/journal/audit_type-to-name.h src/udev/keyboard-keys-from-name.gperf
 
       configureFlagsArray+=("--with-ntp-servers=0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
     '';
@@ -150,6 +153,8 @@ stdenv.mkDerivation rec {
       rm -rf $out/etc/rpm
 
       rm $out/lib/*.la
+
+      rm -rf $out/share/doc
 
       # "kernel-install" shouldn't be used on NixOS.
       find $out -name "*kernel-install*" -exec rm {} \;

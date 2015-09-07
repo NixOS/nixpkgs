@@ -1,16 +1,3 @@
-diff --git a/rules/60-persistent-storage.rules b/rules/60-persistent-storage.rules
-index 3f803ce..2aa15f3 100644
---- a/rules/60-persistent-storage.rules
-+++ b/rules/60-persistent-storage.rules
-@@ -6,7 +6,7 @@
- ACTION=="remove", GOTO="persistent_storage_end"
- 
- SUBSYSTEM!="block", GOTO="persistent_storage_end"
--KERNEL!="loop*|mmcblk*[0-9]|msblk*[0-9]|mspblk*[0-9]|nvme*|sd*|sr*|vd*", GOTO="persistent_storage_end"
-+KERNEL!="loop*|mmcblk*[0-9]|msblk*[0-9]|mspblk*[0-9]|nvme*|sd*|sr*|vd*|bcache*", GOTO="persistent_storage_end"
- 
- # ignore partitions that span the entire disk
- TEST=="whole_disk", GOTO="persistent_storage_end"
 diff --git a/rules/99-systemd.rules.in b/rules/99-systemd.rules.in
 index 10b90b8..db63c11 100644
 --- a/rules/99-systemd.rules.in
@@ -26,8 +13,21 @@ index 10b90b8..db63c11 100644
  # Ignore raid devices that are not yet assembled and started
  SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", KERNEL=="md*", TEST!="md/array_state", ENV{SYSTEMD_READY}="0"
  SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", KERNEL=="md*", ATTR{md/array_state}=="|clear|inactive", ENV{SYSTEMD_READY}="0"
+diff --git a/src/basic/path-util.h b/src/basic/path-util.h
+index 1eac89c..38a134c 100644
+--- a/src/basic/path-util.h
++++ b/src/basic/path-util.h
+@@ -26,7 +26,7 @@
+ #include "macro.h"
+ #include "time-util.h"
+ 
+-#define DEFAULT_PATH_NORMAL "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
++#define DEFAULT_PATH_NORMAL "/no-such-path"
+ #define DEFAULT_PATH_SPLIT_USR DEFAULT_PATH_NORMAL ":/sbin:/bin"
+ 
+ #ifdef HAVE_SPLIT_USR
 diff --git a/src/core/mount.c b/src/core/mount.c
-index ba1dcf1..b700ce7 100644
+index c0d1cdf..0711748 100644
 --- a/src/core/mount.c
 +++ b/src/core/mount.c
 @@ -367,7 +367,9 @@ static bool should_umount(Mount *m) {
@@ -66,7 +66,7 @@ index ac52b30..d2e28f4 100644
  systemdusergeneratordir=@usergeneratordir@
  systemdsleepdir=@systemsleepdir@
 diff --git a/src/core/umount.c b/src/core/umount.c
-index bee267a..dc88e17 100644
+index d59b5d0..30b66e3 100644
 --- a/src/core/umount.c
 +++ b/src/core/umount.c
 @@ -392,6 +392,8 @@ static int mount_points_list_umount(MountPoint **head, bool *changed, bool log_e
@@ -79,10 +79,18 @@ index bee267a..dc88e17 100644
                      || path_equal(m->path, "/usr")
  #endif
 diff --git a/src/core/unit.c b/src/core/unit.c
-index e380276..a875df7 100644
+index 43a5ca1..5d5ac2a 100644
 --- a/src/core/unit.c
 +++ b/src/core/unit.c
-@@ -1676,7 +1676,8 @@ static void unit_check_binds_to(Unit *u) {
+@@ -49,6 +49,7 @@
+ #include "formats-util.h"
+ #include "process-util.h"
+ #include "bus-util.h"
++#include "virt.h"
+ 
+ const UnitVTable * const unit_vtable[_UNIT_TYPE_MAX] = {
+         [UNIT_SERVICE] = &service_vtable,
+@@ -1646,7 +1647,8 @@ static void unit_check_binds_to(Unit *u) {
          }
  
          assert(other);
@@ -93,10 +101,10 @@ index e380276..a875df7 100644
          /* A unit we need to run is gone. Sniff. Let's stop this. */
          r = manager_add_job(u->manager, JOB_STOP, u, JOB_FAIL, true, NULL, NULL);
 diff --git a/src/fsck/fsck.c b/src/fsck/fsck.c
-index 9bbe9ff..d8a2889 100644
+index bd3051f..3ae8099 100644
 --- a/src/fsck/fsck.c
 +++ b/src/fsck/fsck.c
-@@ -412,7 +412,7 @@ int main(int argc, char *argv[]) {
+@@ -413,7 +413,7 @@ int main(int argc, char *argv[]) {
                  } else
                          dash_c[0] = 0;
  
@@ -105,125 +113,11 @@ index 9bbe9ff..d8a2889 100644
                  cmdline[i++] =  arg_repair;
                  cmdline[i++] = "-T";
  
-diff --git a/src/libsystemd/sd-device/device-enumerator.c b/src/libsystemd/sd-device/device-enumerator.c
-index ce4862d..3692d46 100644
---- a/src/libsystemd/sd-device/device-enumerator.c
-+++ b/src/libsystemd/sd-device/device-enumerator.c
-@@ -367,11 +367,11 @@ static bool match_sysattr(sd_device_enumerator *enumerator, sd_device *device) {
-         assert(enumerator);
-         assert(device);
- 
--        HASHMAP_FOREACH_KEY(sysattr, value, enumerator->nomatch_sysattr, i)
-+        HASHMAP_FOREACH_KEY(value, sysattr, enumerator->nomatch_sysattr, i)
-                 if (match_sysattr_value(device, sysattr, value))
-                         return false;
- 
--        HASHMAP_FOREACH_KEY(sysattr, value, enumerator->match_sysattr, i)
-+        HASHMAP_FOREACH_KEY(value, sysattr, enumerator->match_sysattr, i)
-                 if (!match_sysattr_value(device, sysattr, value))
-                         return false;
- 
-@@ -389,7 +389,7 @@ static bool match_property(sd_device_enumerator *enumerator, sd_device *device)
-         if (hashmap_isempty(enumerator->match_property))
-                 return true;
- 
--        HASHMAP_FOREACH_KEY(property, value, enumerator->match_property, i) {
-+        HASHMAP_FOREACH_KEY(value, property, enumerator->match_property, i) {
-                 const char *property_dev, *value_dev;
- 
-                 FOREACH_DEVICE_PROPERTY(device, property_dev, value_dev) {
-diff --git a/src/libsystemd/sd-device/device-private.c b/src/libsystemd/sd-device/device-private.c
-index 3cadedb..deb8efd 100644
---- a/src/libsystemd/sd-device/device-private.c
-+++ b/src/libsystemd/sd-device/device-private.c
-@@ -636,10 +636,9 @@ int device_new_from_nulstr(sd_device **ret, uint8_t *nulstr, size_t len) {
- 
- static int device_update_properties_bufs(sd_device *device) {
-         const char *val, *prop;
--        char **buf_strv = NULL;
-         uint8_t *buf_nulstr = NULL;
--        size_t allocated_nulstr = 0, allocated_strv = 0;
--        size_t nulstr_len = 0, strv_size = 0;
-+        size_t allocated_nulstr = 0;
-+        size_t nulstr_len = 0, num = 0, i;
- 
-         assert(device);
- 
-@@ -655,20 +654,24 @@ static int device_update_properties_bufs(sd_device *device) {
-                 if (!buf_nulstr)
-                         return -ENOMEM;
- 
--                buf_strv = GREEDY_REALLOC0(buf_strv, allocated_strv, strv_size + 2);
--                if (!buf_strv)
--                        return -ENOMEM;
--
--                buf_strv[++ strv_size] = (char *)&buf_nulstr[nulstr_len];
-                 strscpyl((char *)buf_nulstr + nulstr_len, len + 1, prop, "=", val, NULL);
-                 nulstr_len += len + 1;
-+                ++num;
-         }
- 
-         free(device->properties_nulstr);
--        free(device->properties_strv);
-         device->properties_nulstr = buf_nulstr;
-         device->properties_nulstr_len = nulstr_len;
--        device->properties_strv = buf_strv;
-+
-+        /* build strv from buf_nulstr */
-+        free(device->properties_strv);
-+        device->properties_strv = new0(char *, num + 1);
-+        i = 0;
-+        NULSTR_FOREACH(val, (char*) buf_nulstr) {
-+                device->properties_strv[i] = (char *) val;
-+                assert(i < num);
-+                i++;
-+        }
- 
-         device->properties_buf_outdated = false;
- 
-diff --git a/src/login/logind-dbus.c b/src/login/logind-dbus.c
-index 1f5cf86..3555bcc 100644
---- a/src/login/logind-dbus.c
-+++ b/src/login/logind-dbus.c
-@@ -1964,6 +1964,11 @@ static int method_cancel_scheduled_shutdown(sd_bus_message *message, void *userd
-         m->scheduled_shutdown_type = NULL;
-         m->scheduled_shutdown_timeout = 0;
- 
-+        if (m->unlink_nologin) {
-+                unlink("/run/nologin");
-+                m->unlink_nologin = false;
-+        }
-+
-         if (cancelled) {
-                 _cleanup_bus_creds_unref_ sd_bus_creds *creds = NULL;
-                 const char *tty = NULL;
-diff --git a/src/network/networkctl.c b/src/network/networkctl.c
-index 69b4ab4..3454394 100644
---- a/src/network/networkctl.c
-+++ b/src/network/networkctl.c
-@@ -62,7 +62,7 @@ static int link_get_type_string(int iftype, sd_device *d, char **ret) {
-         assert(ret);
- 
-         if (iftype == ARPHRD_ETHER && d) {
--                const char *devtype, *id = NULL;
-+                const char *devtype = NULL, *id = NULL;
-                 /* WLANs have iftype ARPHRD_ETHER, but we want
-                  * to show a more useful type string for
-                  * them */
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index 5009363..62a8dba 100644
+index 837947e..2884c6e 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
-@@ -2627,7 +2627,7 @@ static int setup_veth(pid_t pid, char iface_name[IFNAMSIZ], int *ifi) {
- 
-         r = sd_rtnl_call(rtnl, m, 0, NULL);
-         if (r < 0)
--                return log_error_errno(r, "Failed to add new veth interfaces: %m");
-+                return log_error_errno(r, "Failed to add new veth interfaces (host0, %s): %m", iface_name);
- 
-         i = (int) if_nametoindex(iface_name);
-         if (i <= 0)
-@@ -4589,6 +4589,7 @@ int main(int argc, char *argv[]) {
+@@ -4655,6 +4655,7 @@ int main(int argc, char *argv[]) {
                                  goto finish;
                          }
                  } else {
@@ -231,7 +125,7 @@ index 5009363..62a8dba 100644
                          const char *p;
  
                          p = strjoina(arg_directory,
-@@ -4598,6 +4599,7 @@ int main(int argc, char *argv[]) {
+@@ -4664,6 +4665,7 @@ int main(int argc, char *argv[]) {
                                  r = -EINVAL;
                                  goto finish;
                          }
@@ -295,369 +189,6 @@ index f6a1271..9bec8e9 100644
                                  STRV_IFNOTNULL(generator_late),
                                  NULL);
  
-diff --git a/src/shared/path-util.c b/src/shared/path-util.c
-index 7090989..8be479c 100644
---- a/src/shared/path-util.c
-+++ b/src/shared/path-util.c
-@@ -509,7 +509,7 @@ static int fd_fdinfo_mnt_id(int fd, const char *filename, int flags, int *mnt_id
-         return safe_atoi(p, mnt_id);
- }
- 
--int fd_is_mount_point(int fd) {
-+int fd_is_mount_point(int fd, const char *filename, int flags) {
-         union file_handle_union h = FILE_HANDLE_INIT, h_parent = FILE_HANDLE_INIT;
-         int mount_id = -1, mount_id_parent = -1;
-         bool nosupp = false, check_st_dev = true;
-@@ -517,6 +517,7 @@ int fd_is_mount_point(int fd) {
-         int r;
- 
-         assert(fd >= 0);
-+        assert(filename);
- 
-         /* First we will try the name_to_handle_at() syscall, which
-          * tells us the mount id and an opaque file "handle". It is
-@@ -541,7 +542,7 @@ int fd_is_mount_point(int fd) {
-          * subvolumes have different st_dev, even though they aren't
-          * real mounts of their own. */
- 
--        r = name_to_handle_at(fd, "", &h.handle, &mount_id, AT_EMPTY_PATH);
-+        r = name_to_handle_at(fd, filename, &h.handle, &mount_id, flags);
-         if (r < 0) {
-                 if (errno == ENOSYS)
-                         /* This kernel does not support name_to_handle_at()
-@@ -558,7 +559,7 @@ int fd_is_mount_point(int fd) {
-                         return -errno;
-         }
- 
--        r = name_to_handle_at(fd, "..", &h_parent.handle, &mount_id_parent, 0);
-+        r = name_to_handle_at(fd, "", &h_parent.handle, &mount_id_parent, AT_EMPTY_PATH);
-         if (r < 0) {
-                 if (errno == EOPNOTSUPP) {
-                         if (nosupp)
-@@ -593,13 +594,13 @@ int fd_is_mount_point(int fd) {
-         return mount_id != mount_id_parent;
- 
- fallback_fdinfo:
--        r = fd_fdinfo_mnt_id(fd, "", AT_EMPTY_PATH, &mount_id);
-+        r = fd_fdinfo_mnt_id(fd, filename, flags, &mount_id);
-         if (r == -EOPNOTSUPP)
-                 goto fallback_fstat;
-         if (r < 0)
-                 return r;
- 
--        r = fd_fdinfo_mnt_id(fd, "..", 0, &mount_id_parent);
-+        r = fd_fdinfo_mnt_id(fd, "", AT_EMPTY_PATH, &mount_id_parent);
-         if (r < 0)
-                 return r;
- 
-@@ -615,10 +616,16 @@ fallback_fdinfo:
-         check_st_dev = false;
- 
- fallback_fstat:
--        if (fstatat(fd, "", &a, AT_EMPTY_PATH) < 0)
-+        /* yay for fstatat() taking a different set of flags than the other
-+         * _at() above */
-+        if (flags & AT_SYMLINK_FOLLOW)
-+                flags &= ~AT_SYMLINK_FOLLOW;
-+        else
-+                flags |= AT_SYMLINK_NOFOLLOW;
-+        if (fstatat(fd, filename, &a, flags) < 0)
-                 return -errno;
- 
--        if (fstatat(fd, "..", &b, 0) < 0)
-+        if (fstatat(fd, "", &b, AT_EMPTY_PATH) < 0)
-                 return -errno;
- 
-         /* A directory with same device and inode as its parent? Must
-@@ -632,17 +639,23 @@ fallback_fstat:
- 
- int path_is_mount_point(const char *t, bool allow_symlink) {
-         _cleanup_close_ int fd = -1;
-+        _cleanup_free_ char *parent = NULL;
-+        int r;
- 
-         assert(t);
- 
-         if (path_equal(t, "/"))
-                 return 1;
- 
--        fd = openat(AT_FDCWD, t, O_RDONLY|O_NONBLOCK|O_DIRECTORY|O_CLOEXEC|(allow_symlink ? 0 : O_PATH));
-+        r = path_get_parent(t, &parent);
-+        if (r < 0)
-+                return r;
-+
-+        fd = openat(AT_FDCWD, parent, O_RDONLY|O_NONBLOCK|O_DIRECTORY|O_CLOEXEC|O_PATH);
-         if (fd < 0)
-                 return -errno;
- 
--        return fd_is_mount_point(fd);
-+        return fd_is_mount_point(fd, basename(t), (allow_symlink ? AT_SYMLINK_FOLLOW : 0));
- }
- 
- int path_is_read_only_fs(const char *path) {
-diff --git a/src/shared/path-util.h b/src/shared/path-util.h
-index 4f45cfd..a8a0662 100644
---- a/src/shared/path-util.h
-+++ b/src/shared/path-util.h
-@@ -26,7 +26,7 @@
- #include "macro.h"
- #include "time-util.h"
- 
--#define DEFAULT_PATH_NORMAL "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
-+#define DEFAULT_PATH_NORMAL "/no-such-path"
- #define DEFAULT_PATH_SPLIT_USR DEFAULT_PATH_NORMAL ":/sbin:/bin"
- 
- #ifdef HAVE_SPLIT_USR
-@@ -53,7 +53,7 @@ char** path_strv_make_absolute_cwd(char **l);
- char** path_strv_resolve(char **l, const char *prefix);
- char** path_strv_resolve_uniq(char **l, const char *prefix);
- 
--int fd_is_mount_point(int fd);
-+int fd_is_mount_point(int fd, const char *filename, int flags);
- int path_is_mount_point(const char *path, bool allow_symlink);
- int path_is_read_only_fs(const char *path);
- int path_is_os_tree(const char *path);
-diff --git a/src/shared/rm-rf.c b/src/shared/rm-rf.c
-index a89e8af..bafd483 100644
---- a/src/shared/rm-rf.c
-+++ b/src/shared/rm-rf.c
-@@ -103,7 +103,7 @@ int rm_rf_children(int fd, RemoveFlags flags, struct stat *root_dev) {
-                         }
- 
-                         /* Stop at mount points */
--                        r = fd_is_mount_point(subdir_fd);
-+                        r = fd_is_mount_point(fd, de->d_name, 0);
-                         if (r < 0) {
-                                 if (ret == 0 && r != -ENOENT)
-                                         ret = r;
-diff --git a/src/test/test-path-util.c b/src/test/test-path-util.c
-index 09f0f2f..80782ff 100644
---- a/src/test/test-path-util.c
-+++ b/src/test/test-path-util.c
-@@ -21,6 +21,7 @@
- 
- #include <stdio.h>
- #include <unistd.h>
-+#include <sys/mount.h>
- 
- #include "path-util.h"
- #include "util.h"
-@@ -88,21 +89,9 @@ static void test_path(void) {
-         test_parent("/aa///file...", "/aa///");
-         test_parent("file.../", NULL);
- 
--        assert_se(path_is_mount_point("/", true) > 0);
--        assert_se(path_is_mount_point("/", false) > 0);
--
-         fd = open("/", O_RDONLY|O_CLOEXEC|O_DIRECTORY|O_NOCTTY);
-         assert_se(fd >= 0);
--        assert_se(fd_is_mount_point(fd) > 0);
--
--        assert_se(path_is_mount_point("/proc", true) > 0);
--        assert_se(path_is_mount_point("/proc", false) > 0);
--
--        assert_se(path_is_mount_point("/proc/1", true) == 0);
--        assert_se(path_is_mount_point("/proc/1", false) == 0);
--
--        assert_se(path_is_mount_point("/sys", true) > 0);
--        assert_se(path_is_mount_point("/sys", false) > 0);
-+        assert_se(fd_is_mount_point(fd, "/", 0) > 0);
- 
-         {
-                 char p1[] = "aaa/bbb////ccc";
-@@ -322,6 +311,66 @@ static void test_prefix_root(void) {
-         test_prefix_root_one("/foo///", "//bar", "/foo/bar");
- }
- 
-+static void test_path_is_mount_point(void) {
-+        int fd, rt, rf, rlt, rlf;
-+        char tmp_dir[] = "/tmp/test-path-is-mount-point-XXXXXX";
-+        _cleanup_free_ char *file1 = NULL, *file2 = NULL, *link1 = NULL, *link2 = NULL;
-+
-+        assert_se(path_is_mount_point("/", true) > 0);
-+        assert_se(path_is_mount_point("/", false) > 0);
-+
-+        assert_se(path_is_mount_point("/proc", true) > 0);
-+        assert_se(path_is_mount_point("/proc", false) > 0);
-+
-+        assert_se(path_is_mount_point("/proc/1", true) == 0);
-+        assert_se(path_is_mount_point("/proc/1", false) == 0);
-+
-+        assert_se(path_is_mount_point("/sys", true) > 0);
-+        assert_se(path_is_mount_point("/sys", false) > 0);
-+
-+        /* file mountpoints */
-+        assert_se(mkdtemp(tmp_dir) != NULL);
-+        file1 = path_join(NULL, tmp_dir, "file1");
-+        assert_se(file1);
-+        file2 = path_join(NULL, tmp_dir, "file2");
-+        assert_se(file2);
-+        fd = open(file1, O_WRONLY|O_CREAT|O_EXCL|O_CLOEXEC, 0664);
-+        assert_se(fd > 0);
-+        close(fd);
-+        fd = open(file2, O_WRONLY|O_CREAT|O_EXCL|O_CLOEXEC, 0664);
-+        assert_se(fd > 0);
-+        close(fd);
-+        link1 = path_join(NULL, tmp_dir, "link1");
-+        assert_se(link1);
-+        assert_se(symlink("file1", link1) == 0);
-+        link2 = path_join(NULL, tmp_dir, "link2");
-+        assert_se(link1);
-+        assert_se(symlink("file2", link2) == 0);
-+
-+        assert_se(path_is_mount_point(file1, true) == 0);
-+        assert_se(path_is_mount_point(file1, false) == 0);
-+        assert_se(path_is_mount_point(link1, true) == 0);
-+        assert_se(path_is_mount_point(link1, false) == 0);
-+
-+        /* this test will only work as root */
-+        if (mount(file1, file2, NULL, MS_BIND, NULL) >= 0) {
-+                rf = path_is_mount_point(file2, false);
-+                rt = path_is_mount_point(file2, true);
-+                rlf = path_is_mount_point(link2, false);
-+                rlt = path_is_mount_point(link2, true);
-+
-+                assert_se(umount(file2) == 0);
-+
-+                assert_se(rf == 1);
-+                assert_se(rt == 1);
-+                assert_se(rlf == 0);
-+                assert_se(rlt == 1);
-+        } else
-+                printf("Skipping bind mount file test: %m\n");
-+
-+        assert_se(rm_rf(tmp_dir, REMOVE_ROOT|REMOVE_PHYSICAL) == 0);
-+}
-+
- int main(int argc, char **argv) {
-         test_path();
-         test_find_binary(argv[0], true);
-@@ -333,6 +382,7 @@ int main(int argc, char **argv) {
-         test_strv_resolve();
-         test_path_startswith();
-         test_prefix_root();
-+        test_path_is_mount_point();
- 
-         return 0;
- }
-diff --git a/src/udev/udev-builtin-net_id.c b/src/udev/udev-builtin-net_id.c
-index 78aef20..4489205 100644
---- a/src/udev/udev-builtin-net_id.c
-+++ b/src/udev/udev-builtin-net_id.c
-@@ -91,6 +91,7 @@
- #include <stdlib.h>
- #include <stdarg.h>
- #include <unistd.h>
-+#include <fcntl.h>
- #include <string.h>
- #include <errno.h>
- #include <net/if.h>
-@@ -166,15 +167,15 @@ static int dev_pci_onboard(struct udev_device *dev, struct netnames *names) {
- 
- /* read the 256 bytes PCI configuration space to check the multi-function bit */
- static bool is_pci_multifunction(struct udev_device *dev) {
--        _cleanup_fclose_ FILE *f = NULL;
-+        _cleanup_close_ int fd = -1;
-         const char *filename;
-         uint8_t config[64];
- 
-         filename = strjoina(udev_device_get_syspath(dev), "/config");
--        f = fopen(filename, "re");
--        if (!f)
-+        fd = open(filename, O_RDONLY | O_CLOEXEC);
-+        if (fd < 0)
-                 return false;
--        if (fread(&config, sizeof(config), 1, f) != 1)
-+        if (read(fd, &config, sizeof(config)) != sizeof(config))
-                 return false;
- 
-         /* bit 0-6 header type, bit 7 multi/single function device */
-diff --git a/src/udev/udevd.c b/src/udev/udevd.c
-index afd4640..b5dadbc 100644
---- a/src/udev/udevd.c
-+++ b/src/udev/udevd.c
-@@ -564,7 +564,10 @@ static int event_queue_insert(Manager *manager, struct udev_device *dev) {
-         assert(manager);
-         assert(dev);
- 
--        /* only the main process can add events to the queue */
-+        /* only one process can add events to the queue */
-+        if (manager->pid == 0)
-+                manager->pid = getpid();
-+
-         assert(manager->pid == getpid());
- 
-         event = new0(struct event, 1);
-@@ -1286,13 +1289,6 @@ static int parse_argv(int argc, char *argv[]) {
- 
- static int manager_new(Manager **ret) {
-         _cleanup_(manager_freep) Manager *manager = NULL;
--        struct epoll_event ep_ctrl = { .events = EPOLLIN };
--        struct epoll_event ep_inotify = { .events = EPOLLIN };
--        struct epoll_event ep_signal = { .events = EPOLLIN };
--        struct epoll_event ep_netlink = { .events = EPOLLIN };
--        struct epoll_event ep_worker = { .events = EPOLLIN };
--        sigset_t mask;
--        int r, one = 1;
- 
-         assert(ret);
- 
-@@ -1300,8 +1296,6 @@ static int manager_new(Manager **ret) {
-         if (!manager)
-                 return log_oom();
- 
--        manager->pid = getpid();
--
-         manager->fd_ep = -1;
-         manager->fd_ctrl = -1;
-         manager->fd_uevent = -1;
-@@ -1323,6 +1317,23 @@ static int manager_new(Manager **ret) {
-         udev_list_node_init(&manager->events);
-         udev_list_init(manager->udev, &manager->properties, true);
- 
-+        *ret = manager;
-+        manager = NULL;
-+
-+        return 0;
-+}
-+
-+static int manager_listen(Manager *manager) {
-+        struct epoll_event ep_ctrl = { .events = EPOLLIN };
-+        struct epoll_event ep_inotify = { .events = EPOLLIN };
-+        struct epoll_event ep_signal = { .events = EPOLLIN };
-+        struct epoll_event ep_netlink = { .events = EPOLLIN };
-+        struct epoll_event ep_worker = { .events = EPOLLIN };
-+        sigset_t mask;
-+        int r, one = 1;
-+
-+        assert(manager);
-+
-         r = systemd_fds(&manager->fd_ctrl, &manager->fd_uevent);
-         if (r >= 0) {
-                 /* get control and netlink socket from systemd */
-@@ -1404,10 +1415,7 @@ static int manager_new(Manager **ret) {
-             epoll_ctl(manager->fd_ep, EPOLL_CTL_ADD, manager->fd_worker, &ep_worker) < 0)
-                 return log_error_errno(errno, "fail to add fds to epoll: %m");
- 
--        *ret = manager;
--        manager = NULL;
--
--        return 1;
-+        return 0;
- }
- 
- int main(int argc, char *argv[]) {
-@@ -1518,6 +1526,10 @@ int main(int argc, char *argv[]) {
-         } else
-                 sd_notify(1, "READY=1");
- 
-+        r = manager_listen(manager);
-+        if (r < 0)
-+                return log_error_errno(r, "failed to set up fds and listen for events: %m");
-+
-         for (;;) {
-                 static usec_t last_usec;
-                 struct epoll_event ev[8];
 diff --git a/units/console-getty.service.m4.in b/units/console-getty.service.m4.in
 index 413d940..972b86a 100644
 --- a/units/console-getty.service.m4.in
@@ -683,14 +214,14 @@ index e126f3a..925af72 100644
  Restart=always
  RestartSec=0
 diff --git a/units/emergency.service.in b/units/emergency.service.in
-index 52b9b1c..a3efec2 100644
+index 8dc3cbd..a3efec2 100644
 --- a/units/emergency.service.in
 +++ b/units/emergency.service.in
 @@ -16,7 +16,6 @@ Before=shutdown.target
  [Service]
  Environment=HOME=/root
  WorkingDirectory=/root
--ExecStartPre=-/bin/plymouth quit
+-ExecStartPre=-/bin/plymouth --wait quit
  ExecStartPre=-/bin/echo -e 'Welcome to emergency mode! After logging in, type "journalctl -xb" to view\\nsystem logs, "systemctl reboot" to reboot, "systemctl default" or ^D to\\ntry again to boot into default mode.'
  ExecStart=-/bin/sh -c "@SULOGIN@; @SYSTEMCTL@ --job-mode=fail --no-block default"
  Type=idle
