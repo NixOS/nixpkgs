@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 
-let version = "7.0.0"; in # meta.homepage might change after a major update
+let version = "7.0.0"; in
 stdenv.mkDerivation {
   name = "ip2location-${version}";
 
@@ -15,14 +15,14 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     inherit version;
-    description = "Library to look up locations of host names and IP addresses";
+    description = "Look up locations of host names and IP addresses";
     longDescription = ''
-      A command-line tool and C library to find the country, region, city,
-      coordinates, zip code, time zone, ISP, domain name, connection type,
-      area code, weather, MCC, MNC, mobile brand name, elevation and usage
-      type of any IP address or host name in the IP2Location databases.
+      A command-line tool to find the country, region, city,coordinates,
+      zip code, time zone, ISP, domain name, connection type, area code,
+      weather, MCC, MNC, mobile brand name, elevation and usage type of
+      any IP address or host name in the IP2Location databases.
     '';
-    homepage = http://www.ip2location.com/developers/c-7;
+    homepage = http://www.ip2location.com/free/applications;
     license = with licenses; [ gpl3Plus lgpl3Plus ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ nckx ];

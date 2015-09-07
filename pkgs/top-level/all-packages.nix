@@ -1937,6 +1937,8 @@ let
 
   iodine = callPackage ../tools/networking/iodine { };
 
+  ip2location = callPackage ../tools/networking/ip2location { };
+
   ipad_charge = callPackage ../tools/misc/ipad_charge { };
 
   iperf2 = callPackage ../tools/networking/iperf/2.nix { };
@@ -6685,8 +6687,6 @@ let
   iniparser = callPackage ../development/libraries/iniparser { };
 
   intltool = callPackage ../development/tools/misc/intltool { };
-
-  ip2location = callPackage ../development/libraries/ip2location { };
 
   irrlicht = callPackage ../development/libraries/irrlicht { };
   irrlicht3843 = callPackage ../development/libraries/irrlicht/irrlicht3843.nix { };
