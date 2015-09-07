@@ -11688,6 +11688,24 @@ let
     };
   };
 
+  pyperclip = buildPythonPackage rec {
+    version = "1.5.11";
+    name = "pyperclip-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyperclip/${name}.zip";
+      sha256 = "07q8krmi7phizzp192x3j7xbk1gzhc1kc3jp4mxrm32dn84sp1vh";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = "https://github.com/asweigart/pyperclip";
+      license = licenses.bsdOriginal;
+      description = "cross-platform clipboard module";
+    };
+  };
+
   pysphere = buildPythonPackage rec {
     name = "pysphere-0.1.8";
 
@@ -14583,7 +14601,28 @@ let
     };
   };
 
+  upass = buildPythonPackage rec {
+    version = "0.1.2";
+    name = "upass-${version}";
 
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/u/upass/upass-${version}.tar.gz";
+      sha256 = "1navsygidw77kr8ap8wlfwvjn3gf0chrq896yv8s4nfmaqpm39zc";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [
+      pyperclip
+      urwid
+    ];
+
+    doCheck = false;
+
+    meta = {
+      description = "Console UI for pass";
+      homepage = https://github.com/Kwpolska/upass;
+      license = licenses.bsd3;
+    };
+  };
 
   update_checker = pythonPackages.buildPythonPackage rec {
     name = "update_checker-0.11";
