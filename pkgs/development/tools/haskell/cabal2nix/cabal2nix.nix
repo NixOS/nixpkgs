@@ -1,6 +1,6 @@
-{ mkDerivation, ansi-wl-pprint, base, Cabal, containers, distribution-nixpkgs
-, language-nix, lens, optparse-applicative, pretty
-, pretty-show, stdenv, fetchFromGitHub, nix-prefetch-scripts, makeWrapper
+{ mkDerivation, ansi-wl-pprint, base, Cabal, containers
+, distribution-nixpkgs, fetchFromGitHub, language-nix, lens
+, optparse-applicative, pretty, pretty-show, stdenv
 }:
 
 mkDerivation rec {
@@ -18,8 +18,7 @@ mkDerivation rec {
   enableSharedExecutables = false;
   executableHaskellDepends = [
     ansi-wl-pprint base Cabal containers distribution-nixpkgs
-    language-nix lens optparse-applicative
-    pretty pretty-show
+    language-nix lens optparse-applicative pretty pretty-show
   ];
   executableToolDepends = [ makeWrapper ];
   postInstall = ''

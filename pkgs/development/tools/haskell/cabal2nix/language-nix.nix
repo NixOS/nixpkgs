@@ -1,5 +1,5 @@
-{ mkDerivation, base, deepseq, doctest, lens, pretty, regex-posix
-, stdenv, fetchFromGitHub, QuickCheck
+{ mkDerivation, base, deepseq, doctest, fetchFromGitHub, lens
+, pretty, QuickCheck, regex-posix, stdenv
 }:
 
 mkDerivation rec {
@@ -13,10 +13,10 @@ mkDerivation rec {
   };
   postUnpack = "sourceRoot+=/${pname}";
   libraryHaskellDepends = [
-    base deepseq lens pretty regex-posix
+    base deepseq doctest lens pretty QuickCheck regex-posix
   ];
   testHaskellDepends = [
-    base deepseq doctest lens pretty regex-posix QuickCheck
+    base deepseq doctest lens pretty QuickCheck regex-posix
   ];
   homepage = "https://github.com/nixos/cabal2nix#readme";
   description = "Data types and useful functions to represent and manipulate the Nix language";
