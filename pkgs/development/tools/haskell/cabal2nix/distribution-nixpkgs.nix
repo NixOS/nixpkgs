@@ -1,7 +1,7 @@
 { mkDerivation, aeson, base, bytestring, Cabal, containers, deepseq
-, deepseq-generics, directory, doctest, filepath, hackage-db, hspec
-, language-nix, lens, pretty, process, SHA, split, stdenv
-, transformers, utf8-string, fetchFromGitHub
+, deepseq-generics, directory, doctest, fetchFromGitHub, filepath
+, hackage-db, hspec, language-nix, lens, pretty, process, SHA
+, split, stdenv, transformers, utf8-string
 }:
 
 mkDerivation rec {
