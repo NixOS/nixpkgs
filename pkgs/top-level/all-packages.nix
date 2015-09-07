@@ -11179,6 +11179,8 @@ let
 
     ensime = callPackage ../applications/editors/emacs-modes/ensime { };
 
+    erlangMode = callPackage ../applications/editors/emacs-modes/erlang { };
+
     ess = callPackage ../applications/editors/emacs-modes/ess { };
 
     flycheck = callPackage ../applications/editors/emacs-modes/flycheck { };
