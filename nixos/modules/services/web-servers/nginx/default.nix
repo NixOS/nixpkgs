@@ -11,9 +11,7 @@ let
     ${cfg.config}
     ${optionalString (cfg.httpConfig != "") ''
     http {
-    ${cfg.httpConfig}
-    ${cfg.httpServers}
-    ${cfg.httpDefaultServer}
+      ${cfg.httpConfig}
     }
     ''}
     ${cfg.appendConfig}
@@ -62,32 +60,7 @@ in
       httpConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
-          Configuration lines to be placed at the top inside of
-          the http {} block. The option is intended to be used for
-          the default configuration of the servers.
-        '';
-      };
-
-      httpServers = mkOption {
-        type = types.lines;
-        default = "";
-        description = ''
-          Configuration lines to be placed inside of the http {}
-          block. The option is intended to be used for defining
-          individual servers.
-        '';
-      };
-
-      httpDefaultServer = mkOption {
-        type = types.lines;
-        default = "";
-        description = ''
-          Configuration lines to be placed at the bottom inside of
-          the http {} block. The option is intended to be used for
-          setting up the default servers. The default server is used
-          if no previously specified server matches a request.
-        '';
+        description = "Configuration lines to be appended inside of the http {} block.";
       };
 
       stateDir = mkOption {
