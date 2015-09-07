@@ -6686,6 +6686,8 @@ let
 
   intltool = callPackage ../development/tools/misc/intltool { };
 
+  ip2location = callPackage ../development/libraries/ip2location { };
+
   irrlicht = callPackage ../development/libraries/irrlicht { };
   irrlicht3843 = callPackage ../development/libraries/irrlicht/irrlicht3843.nix { };
 
