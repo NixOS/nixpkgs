@@ -13073,6 +13073,8 @@ let
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
+  github-release = callPackage ../development/tools/github/github-release { };
+
   tuxguitar = callPackage ../applications/editors/music/tuxguitar { };
 
   twister = callPackage ../applications/networking/p2p/twister { };
