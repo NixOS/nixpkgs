@@ -5475,6 +5475,24 @@ let
     };
   };
 
+  djangorestframework = buildPythonPackage rec {
+    name = "djangorestframework-${version}";
+    version = "3.2.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/djangorestframework/${name}.tar.gz";
+      sha256 = "06kp4hg3y4bqy2ixlb1q6bw81gwgsb86l4lanbav7bp1grrbbnj1";
+    };
+
+    propagatedBuildInputs = with self; [ django ];
+
+    meta = {
+      description = "Web APIs for Django, made easy";
+      homepage = http://www.django-rest-framework.org/;
+      maintainers = with maintainers; [ desiderius ];
+      license = licenses.bsd2;
+    };
+  };
 
   django_reversion = buildPythonPackage rec {
     name = "django-reversion-${version}";
