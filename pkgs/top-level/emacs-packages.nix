@@ -385,6 +385,23 @@ let self = _self // overrides;
     };
   };
 
+  dash-functional = melpaBuild rec {
+    pname = "dash-functional";
+      version = "2.11.0";
+      src = fetchFromGitHub {
+      owner  = "magnars";
+      repo   = "dash.el";
+      rev    = version;
+      sha256 = "02gfrcda7gj3j5yx71dz40xylrafl4pcaj7bgfajqi9by0w2nrnx";
+    };
+    packageRequires = [ dash ];
+    files = [ "dash-functional.el" ];
+    meta = {
+      description = "Collection of useful combinators for Emacs Lisp.";
+      license = gpl3Plus;
+    };
+  };
+
   deferred = melpaBuild rec {
     version = "0.3.2";
     pname = "deferred";
