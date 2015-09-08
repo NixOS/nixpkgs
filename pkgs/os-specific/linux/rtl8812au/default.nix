@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, kernel }:
 
+assert !kernel.features ? grsecurity;
 stdenv.mkDerivation rec {
   name = "rtl8812au-${kernel.version}-${version}";
   version = "4.2.2-1";
