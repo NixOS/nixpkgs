@@ -9594,14 +9594,14 @@ let
 
   pelican = buildPythonPackage rec {
     name = "pelican-${version}";
-    version = "3.6.0";
+    version = "3.6.3";
     disabled = isPy26;
 
     src = pkgs.fetchFromGitHub {
       owner = "getpelican";
       repo = "pelican";
       rev = version;
-      sha256 = "0a9r90d85rn2cvl6yyk6q5i5kwz9igfj8fdwi37zsx4ijhmn2b5j";
+      sha256 = "1k572anw39rws67mvxl2w6y93y8w8q5smnwc0dd2gnnr16cc2vsh";
     };
 
     buildInputs = with self; [
