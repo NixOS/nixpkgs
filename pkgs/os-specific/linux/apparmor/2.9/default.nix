@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, perl, which
-, glibc, flex, bison, python27, swig, dbus, pam
+, glibc, flex, bison, python27, swig, dbus, pam, makeWrapper, python27Packages
 }:
 
 let
@@ -73,6 +73,9 @@ let
       python27
       libapparmor
       which
+      makeWrapper
+      python27Packages.readline
+      perl
     ];
 
     prePatch = prePatchCommon;
@@ -82,8 +85,17 @@ let
       make LANGS=""
     '';
 
-    installPhase = ''
+    installPhase = 
+    let
+      perlVersion = (builtins.parseDrvName perl.name).version;
+    in ''
       make install LANGS="" DESTDIR="$out" BINDIR="$out/bin" VIM_INSTALL_PATH="$out/share" PYPREFIX=""
+      for i in $out/bin/aa-{audit,autodep,cleanprof,complain,disable,enforce,genprof,logprof,mergeprof,status,unconfined}; do
+        wrapProgram $i --set PYTHONPATH "$(toPythonPath $out)" --prefix PYTHONPATH : "$PYTHONPATH"
+      done
+      for i in $out/bin/aa-{exec,notify}; do
+        wrapProgram $i --set PERL5LIB "${libapparmor}/lib/perl5/${perlVersion}/${stdenv.system}-thread-multi/"
+      done
     '';
 
     meta = apparmor-meta "user-land utilities";
