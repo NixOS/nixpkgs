@@ -82,6 +82,7 @@ package-maintainers:
     - located-base
     - target
   jb55:
+    - skeletons
     - cased
     - pipes-csv
     - pipes-mongodb
