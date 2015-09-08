@@ -5500,6 +5500,24 @@ let
     };
   };
 
+  django_treebeard = buildPythonPackage rec {
+    name = "django-treebeard-${version}";
+    version = "3.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/django-treebeard/${name}.tar.gz";
+      sha256 = "10p9rb2m1zccszg7590fjd0in6rabzsh86f5m7qm369mapc3b6dc";
+    };
+
+    propagatedBuildInputs = with self; [ django pytest ];
+
+    meta = {
+      description = "Efficient tree implementations for Django 1.6+";
+      homepage = https://tabo.pe/projects/django-treebeard/;
+      maintainers = with maintainers; [ desiderius ];
+      license = licenses.asl20;
+    };
+  };
 
   django_pipeline = buildPythonPackage rec {
     name = "django-pipeline-${version}";
