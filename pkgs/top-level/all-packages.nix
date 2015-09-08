@@ -8064,7 +8064,9 @@ let
 
   readosm = callPackage ../development/libraries/readosm { };
 
-  lambdabot = callPackage ../development/tools/haskell/lambdabot { };
+  lambdabot = callPackage ../development/tools/haskell/lambdabot {
+    haskell-lib = haskell.lib;
+  };
 
   leksah = callPackage ../development/tools/haskell/leksah {
     inherit (haskellPackages) ghcWithPackages;
