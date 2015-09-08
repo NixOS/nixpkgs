@@ -11806,6 +11806,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  UnicodeString = buildPerlPackage rec {
+    name = "Unicode-String-2.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
+      sha256 = "1bgsaf3dgmlgyvi84r42ysc037mr5280amnypa4d98jfjpdvw5y8";
+    };
+  };
+
   UnixGetrusage = buildPerlPackage {
     name = "Unix-Getrusage-0.03";
     src = fetchurl {
