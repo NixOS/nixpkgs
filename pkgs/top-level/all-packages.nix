@@ -11031,6 +11031,8 @@ let
     desktopName = "Conkeror";
   };
 
+  csdp = callPackage ../applications/science/math/csdp { };
+
   cuneiform = builderDefsPackage (import ../tools/graphics/cuneiform) {
     inherit cmake patchelf;
     imagemagick = imagemagick;
