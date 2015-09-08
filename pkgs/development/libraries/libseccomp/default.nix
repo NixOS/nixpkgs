@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
-    sha256 = "1vgc9xgdx6mc4fj21axlv2ym9ndnz06ylq3ps3f8210n3xksdq7y";
+    sha256 = "d9b400b703cab7bb04b84b9b6e52076a630b673819d7541757bcc16467b6d49e";
   };
 
   buildInputs = [ getopt ];
