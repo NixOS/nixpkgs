@@ -7905,12 +7905,17 @@ let
   mathics = buildPythonPackage rec {
     name = "mathics-${version}";
     version = "0.8";
+
+    disabled = isPy3k;
+
     src = pkgs.fetchFromGitHub {
       owner = "mathics";
       repo = "Mathics";
       rev = "v${version}";
       sha256 = "1hyrxnhxw35vn00k55hp9bkg8vg4dsphrpfg1yg4cn53y78rk1im";
     };
+
+    patches = [ ../development/python-modules/mathics/disable_console_tests.patch ];
 
     buildInputs = with self; [ pexpect ];
 
