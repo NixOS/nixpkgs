@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "pecita-${version}";
-  version = "5.1";
+  version = "5.2";
 
   src = fetchurl {
     url = "http://pecita.eu/b/Pecita.otf";
-    sha256 = "0v2k6vvzl1f809h3lfld6zy5m56w1dn27xmdy3hjniv6j9xbhbs4";
+    sha256 = "1zawd83jrvzxfj5n5m65ja6rcl0w4bm4179g053b0icm152lgmns";
   };
 
   phases = ["installPhase"];
