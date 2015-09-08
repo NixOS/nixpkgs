@@ -115,7 +115,7 @@ in
           Type = "simple";
           User = "namecoin";
           EnvironmentFile = cfg.userFile;
-          ExecStart = "${pkgs.altcoins.namecoind}/bin/namecoind -conf=${namecoinConf} -rpcuser=$USER -rpcpassword=$PASSWORD -printtoconsole";
+          ExecStart = "${pkgs.altcoins.namecoind}/bin/namecoind -conf=${namecoinConf} -rpcuser=\${USER} -rpcpassword=\${PASSWORD} -printtoconsole";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           ExecStop = "${pkgs.coreutils}/bin/kill -KILL $MAINPID";
           StandardOutput = "null";
