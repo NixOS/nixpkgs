@@ -977,15 +977,12 @@ let
   });
 
   beautifulsoup4 = buildPythonPackage (rec {
-    name = "beautifulsoup4-4.1.3";
+    name = "beautifulsoup4-4.4.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/b/beautifulsoup4/${name}.tar.gz";
-      md5 = "f1481ed77336de77a2d8e5b061b6ad62";
+      sha256 = "1xhp57nr7aapn55wpk7i2kcv2cdamcn1parrm6dqnhv9iyl1vngs";
     };
-
-    # invalid command 'test'
-    doCheck = false;
 
     meta = {
       homepage = http://crummy.com/software/BeautifulSoup/bs4/;
@@ -994,7 +991,6 @@ let
       maintainers = with maintainers; [ iElectric ];
     };
   });
-
 
   beaker = buildPythonPackage rec {
     name = "Beaker-1.6.4";
