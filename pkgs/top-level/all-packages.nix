@@ -5203,6 +5203,10 @@ let
   ruby_2_1 = ruby_2_1_6;
   ruby_2_2 = ruby_2_2_2;
 
+  # This should be deprecated at some point, now that we can package Ruby
+  # applications per their Gemfile (see bundix).
+  rubyLibs = recurseIntoAttrs (callPackage ../development/interpreters/ruby/old-libs.nix { });
+
   rubygemsFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/rubygems.nix) {
     inherit ruby makeWrapper;
   };
