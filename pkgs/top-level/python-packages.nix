@@ -17767,4 +17767,24 @@ let
     };
   };
 
+  willow = buildPythonPackage rec {
+    name = "willow-${version}";
+    version = "0.2.1";
+    disabled = pythonOlder "2.7";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/W/Willow/Willow-${version}.tar.gz";
+      sha256 = "0mgdpq7cvyvgk0n8ibkym3nsw1xg89kbismsj2y186ldcyxfajwa";
+    };
+
+    propagatedBuildInputs = with self; [ six ];
+
+    meta = {
+      description = "A Python image library that sits on top of Pillow, Wand and OpenCV";
+      homepage = https://github.com/torchbox/Willow/;
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ desiderius ];
+    };
+  };
+
 }; in pythonPackages
