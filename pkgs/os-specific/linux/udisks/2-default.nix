@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool
 , expat, acl, systemd, glib, libatasmart, polkit
-, libxslt, docbook_xsl, utillinux, mdadm
+, libxslt, docbook_xsl, utillinux, mdadm, libgudev
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ expat acl systemd glib libatasmart polkit ]; # in closure anyway
 
-  buildInputs = [ libxslt docbook_xsl ];
+  buildInputs = [ libxslt docbook_xsl libgudev ];
 
   configureFlags = [
     "--localstatedir=/var"
