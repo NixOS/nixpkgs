@@ -13647,6 +13647,8 @@ let
 
   ### GAMES
 
+  airstrike = callPackage ../games/airstrike { };
+
   alienarena = callPackage ../games/alienarena { };
 
   andyetitmoves = if stdenv.isLinux then callPackage ../games/andyetitmoves {} else null;
