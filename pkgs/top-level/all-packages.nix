@@ -11601,7 +11601,7 @@ let
     inherit pkgs;
   });
 
-  inherit (gitAndTools) git gitFull gitSVN git-cola svn2git;
+  inherit (gitAndTools) git gitFull gitSVN git-cola svn2git git-radar;
 
   gitMinimal = git.override {
     withManual = false;
