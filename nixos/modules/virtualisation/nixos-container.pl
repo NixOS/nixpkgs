@@ -290,7 +290,8 @@ elsif ($action eq "show-ip") {
 }
 
 elsif ($action eq "show-host-key") {
-    my $fn = "$root/etc/ssh/ssh_host_ecdsa_key.pub";
+    my $fn = "$root/etc/ssh/ssh_host_ed25519_key.pub";
+    $fn = "$root/etc/ssh/ssh_host_ecdsa_key.pub" unless -e $fn;
     exit 1 if ! -f $fn;
     print read_file($fn);
 }
