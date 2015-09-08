@@ -108,6 +108,10 @@ for o in $(cat /proc/cmdline); do
         boot.panic_on_fail|stage1panic=1)
             panicOnFail=1
             ;;
+        boot.iso=*)
+            set -- $(IFS==; echo $o)
+            isoImage=$2
+            ;;
         root=*)
             # If a root device is specified on the kernel command
             # line, make it available through the symlink /dev/root.
@@ -329,9 +333,16 @@ while read -u 3 mountPoint; do
     # !!! Really quick hack to support bind mounts, i.e., where the
     # "device" should be taken relative to /mnt-root, not /.  Assume
     # that every device that starts with / but doesn't start with /dev
-    # is a bind mount.
+    # is a bind mount. Also handle the different names of squashfs image.
     pseudoDevice=
     case $device in
+        /iso/nix-store.squashfs)
+            if test -n "$isoImage"; then
+                device=/mnt-root/iso/$isoImage
+            else
+                device=/mnt-root$device
+            fi
+            ;;
         /dev/*)
             ;;
         //*)
