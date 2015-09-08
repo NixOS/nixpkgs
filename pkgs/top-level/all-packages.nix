@@ -7076,6 +7076,8 @@ let
 
   libgsystem = callPackage ../development/libraries/libgsystem { };
 
+  libgudev = callPackage ../development/libraries/libgudev { };
+
   libguestfs = callPackage ../development/libraries/libguestfs {
     inherit (perlPackages) libintlperl GetoptLong SysVirt;
   };
