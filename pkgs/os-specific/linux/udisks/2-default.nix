@@ -26,9 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
-  propagatedBuildInputs = [ expat acl systemd glib libatasmart polkit ]; # in closure anyway
-
-  buildInputs = [ libxslt docbook_xsl libgudev ];
+  buildInputs = [ libxslt docbook_xsl libgudev expat acl systemd glib libatasmart polkit ];
 
   configureFlags = [
     "--localstatedir=/var"
