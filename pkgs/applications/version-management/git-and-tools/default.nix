@@ -96,6 +96,8 @@ rec {
 
   gitflow = callPackage ./gitflow { };
 
+  git-radar = callPackage ./git-radar { };
+
   git-remote-hg = callPackage ./git-remote-hg { };
 
   gitRemoteGcrypt = callPackage ./git-remote-gcrypt { };
