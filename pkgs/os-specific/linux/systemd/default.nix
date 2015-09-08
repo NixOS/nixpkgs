@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
+{ stdenv, fetchFromGitHub, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux
 , glib, kbd, libxslt, coreutils, libgcrypt
 , kexectools, libmicrohttpd, linuxHeaders, libseccomp
@@ -14,16 +14,12 @@ stdenv.mkDerivation rec {
   version = "225";
   name = "systemd-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/systemd/systemd/archive/v${version}.tar.gz";
-    sha256 = "00cpdw52lcypiyyqxsbhfdb69yf638a8xfa95xgk3sc86sxpdxdj";
+  src = fetchFromGitHub {
+    owner = "NixOS";
+    repo = "systemd";
+    rev = "72184f47631ede4cb0df44e7c96d5183ac0ea5b4";
+    sha256 = "1j8rkf7x27gvaqw2jqizf62lb1850kwpb763qm11799jbf5m9l95";
   };
-
-  patches =
-    [ # These are all changes between upstream and
-      # https://github.com/NixOS/systemd/tree/nixos-${version}.
-      ./fixes.patch
-    ];
 
   buildInputs =
     [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
