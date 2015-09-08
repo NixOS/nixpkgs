@@ -7968,6 +7968,8 @@ let
 
   ptlib = callPackage ../development/libraries/ptlib {};
 
+  pugixml = callPackage ../development/libraries/pugixml { };
+
   re2 = callPackage ../development/libraries/re2 { };
 
   qca2 = callPackage ../development/libraries/qca2 { qt = qt4; };
