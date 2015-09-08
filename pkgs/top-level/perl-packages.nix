@@ -5469,6 +5469,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  IOTee = buildPerlPackage rec {
+    name = "IO-Tee-0.64";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KE/KENSHAN/${name}.tar.gz";
+      sha256 = "1mjy6hmwrzipzxcm33qs7ja89ljk6zkk499wclw16lfkqaqpdliy";
+    };
+  };
+
   IOTieCombine = buildPerlPackage {
     name = "IO-TieCombine-1.004";
     src = fetchurl {
