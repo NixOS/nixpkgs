@@ -8766,10 +8766,10 @@ let
 
 
   nose2 = if isPy26 then null else (buildPythonPackage rec {
-    name = "nose2-0.4.5";
+    name = "nose2-0.5.0";
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/n/nose2/${name}.tar.gz";
-      md5 = "d7e51c848227488e3cc0424faf5511cd";
+      sha256 = "0595rh6b6dncbj0jigsyrgrh6h8fsl6w1fr69h76mxv9nllv0rlr";
     };
     meta = {
       description = "nose2 is the next generation of nicer testing for Python";
