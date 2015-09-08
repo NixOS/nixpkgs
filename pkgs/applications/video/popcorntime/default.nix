@@ -13,7 +13,7 @@ let
       else if stdenv.system == "i686-linux" then
         fetchurl {
           url = "https://get.popcorntime.io/build/Popcorn-Time-${version}-Linux-32.tar.xz";
-          sha256 = "1dz1cp31qbwamm9pf8ydmzzhnb6d9z73bigdv3y74dgicz3dpr92";
+          sha256 = "0168gly2z6ssb5j24jnq4rhz5i7spmg2g557hf2whzz1xbzgq5yp";
         }
       else throw "Unsupported system ${stdenv.system}";
 
