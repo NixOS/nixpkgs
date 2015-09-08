@@ -1805,6 +1805,8 @@ let
 
   gummiboot = callPackage ../tools/misc/gummiboot { };
 
+  gup = callPackage ../development/tools/build-managers/gup {};
+
   gupnp = callPackage ../development/libraries/gupnp {
     inherit (gnome) libsoup;
   };
