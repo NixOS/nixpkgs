@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 let
-  version = "07-09-2015";
+  version = "2015-09-07";
   rpath = makeLibraryPath [ "$out/lib" "$out/bin" ];
   platform = with stdenv;
     if isx86_64 then "64bit"
