@@ -15028,6 +15028,8 @@ let
 
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
 
+  xtrlock-pam = callPackage ../misc/screensavers/xtrlock-pam { };
+
   sails = callPackage ../misc/sails { };
 
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
