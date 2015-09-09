@@ -119,7 +119,7 @@ $ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qaP -A haskell.packages.ghc763
 </programlisting>
   <para>
     The name <literal>haskellPackages</literal> is really just a synonym
-    for <literal>haskell.packages.ghc7101</literal>, because we prefer
+    for <literal>haskell.packages.ghc7102</literal>, because we prefer
     that package set internally and recommend it to our users as their
     default choice, but ultimately you are free to compile your Haskell
     packages with any GHC version you please. The following command
@@ -134,7 +134,7 @@ haskell.compiler.ghc722         ghc-7.2.2
 haskell.compiler.ghc742         ghc-7.4.2
 haskell.compiler.ghc763         ghc-7.6.3
 haskell.compiler.ghc784         ghc-7.8.4
-haskell.compiler.ghc7101        ghc-7.10.1
+haskell.compiler.ghc7102        ghc-7.10.2
 haskell.compiler.ghcHEAD        ghc-7.11.20150402
 haskell.compiler.ghcNokinds     ghc-nokinds-7.11.20150704
 haskell.compiler.ghcjs          ghcjs-0.1.0
@@ -167,7 +167,7 @@ $ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.ghc haskellPackages
     <para>
       Instead of the default package set
       <literal>haskellPackages</literal>, you can also use the more
-      precise name <literal>haskell.compiler.ghc7101</literal>, which
+      precise name <literal>haskell.compiler.ghc7102</literal>, which
       has the advantage that it refers to the same GHC version
       regardless of what Nixpkgs considers &quot;default&quot; at any
       given time.
@@ -254,7 +254,7 @@ $ nix-shell -p haskell.compiler.ghc784 --command &quot;cabal configure&quot;
 $ nix-shell -p &quot;haskellPackages.ghcWithPackages (pkgs: [pkgs.mtl])&quot;
 
 [nix-shell:~]$ ghc-pkg list mtl
-/nix/store/zy79...-ghc-7.10.1/lib/ghc-7.10.1/package.conf.d:
+/nix/store/zy79...-ghc-7.10.2/lib/ghc-7.10.2/package.conf.d:
     mtl-2.2.1
 </programlisting>
     <para>
@@ -266,7 +266,7 @@ $ nix-shell -p &quot;haskellPackages.ghcWithPackages (pkgs: [pkgs.mtl])&quot;
 {
   packageOverrides = super: let self = super.pkgs; in
   {
-    myHaskellEnv = self.haskell.packages.ghc7101.ghcWithPackages
+    myHaskellEnv = self.haskell.packages.ghc7102.ghcWithPackages
                      (haskellPackages: with haskellPackages; [
                        # libraries
                        arrows async cgi criterion
@@ -281,7 +281,7 @@ $ nix-shell -p &quot;haskellPackages.ghcWithPackages (pkgs: [pkgs.mtl])&quot;
       <literal>nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA myHaskellEnv</literal>.
       If you'd like to switch that development environment to a
       different version of GHC, just replace the
-      <literal>ghc7101</literal> bit in the previous definition with the
+      <literal>ghc7102</literal> bit in the previous definition with the
       appropriate name. Of course, it's also possible to define any
       number of these development environments! (You can't install two
       of them into the same profile at the same time, though, because
@@ -296,11 +296,11 @@ $ nix-shell -p &quot;haskellPackages.ghcWithPackages (pkgs: [pkgs.mtl])&quot;
     <programlisting>
 $ cat $(type -p ghc)
 #! /nix/store/xlxj...-bash-4.3-p33/bin/bash -e
-export NIX_GHC=/nix/store/19sm...-ghc-7.10.1/bin/ghc
-export NIX_GHCPKG=/nix/store/19sm...-ghc-7.10.1/bin/ghc-pkg
-export NIX_GHC_DOCDIR=/nix/store/19sm...-ghc-7.10.1/share/doc/ghc/html
-export NIX_GHC_LIBDIR=/nix/store/19sm...-ghc-7.10.1/lib/ghc-7.10.1
-exec /nix/store/j50p...-ghc-7.10.1/bin/ghc &quot;-B$NIX_GHC_LIBDIR&quot; &quot;$@&quot;
+export NIX_GHC=/nix/store/19sm...-ghc-7.10.2/bin/ghc
+export NIX_GHCPKG=/nix/store/19sm...-ghc-7.10.2/bin/ghc-pkg
+export NIX_GHC_DOCDIR=/nix/store/19sm...-ghc-7.10.2/share/doc/ghc/html
+export NIX_GHC_LIBDIR=/nix/store/19sm...-ghc-7.10.2/lib/ghc-7.10.2
+exec /nix/store/j50p...-ghc-7.10.2/bin/ghc &quot;-B$NIX_GHC_LIBDIR&quot; &quot;$@&quot;
 </programlisting>
     <para>
       The variables <literal>$NIX_GHC</literal>,
@@ -371,7 +371,7 @@ nix-shell -p &quot;haskellPackages.ghcWithPackages (pkgs: with pkgs; [mtl pandoc
       <literal>shell.nix</literal> that looks like this:
     </para>
     <programlisting>
-{ nixpkgs ? import &lt;nixpkgs&gt; {}, compiler ? &quot;ghc7101&quot; }:
+{ nixpkgs ? import &lt;nixpkgs&gt; {}, compiler ? &quot;ghc7102&quot; }:
 let
   inherit (nixpkgs) pkgs;
   ghc = pkgs.haskell.packages.${compiler}.ghcWithPackages (ps: with ps; [
@@ -451,7 +451,7 @@ $ cabal2nix . &gt;foo.nix
       <literal>default.nix</literal>:
     </para>
     <programlisting>
-{ nixpkgs ? import &lt;nixpkgs&gt; {}, compiler ? &quot;ghc7101&quot; }:
+{ nixpkgs ? import &lt;nixpkgs&gt; {}, compiler ? &quot;ghc7102&quot; }:
 nixpkgs.pkgs.haskell.packages.${compiler}.callPackage ./foo.nix { }
 </programlisting>
     <para>
@@ -459,7 +459,7 @@ nixpkgs.pkgs.haskell.packages.${compiler}.callPackage ./foo.nix { }
       <literal>shell.nix</literal>:
     </para>
     <programlisting>
-{ nixpkgs ? import &lt;nixpkgs&gt; {}, compiler ? &quot;ghc7101&quot; }:
+{ nixpkgs ? import &lt;nixpkgs&gt; {}, compiler ? &quot;ghc7102&quot; }:
 (import ./default.nix { inherit nixpkgs compiler; }).env
 </programlisting>
     <para>
