@@ -9892,6 +9892,11 @@ let self = _self // overrides; _self = with self; {
       ClassAccessor Filechdir pkgs.subversion URI
       TermReadKey TimeDate SVNSimple
     ];
+    meta = {
+      # It is no longer developed and fails to build. It was also removed from
+      # debian https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=554336
+      broken = true;
+    };
   };
 
   SVNSimple = buildPerlPackage {
