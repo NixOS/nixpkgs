@@ -7905,6 +7905,9 @@ let
   mathics = buildPythonPackage rec {
     name = "mathics-${version}";
     version = "0.8";
+
+    disabled = isPy3k;
+
     src = pkgs.fetchFromGitHub {
       owner = "mathics";
       repo = "Mathics";
