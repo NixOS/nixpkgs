@@ -1,13 +1,13 @@
 { fetchgit, stdenv, smlnj, which }:
 
 stdenv.mkDerivation rec {
-  name = "JonPRL";
-  version = "v0.1.0";
+  name    = "jonprl-${version}";
+  version = "0.1.0";
 
   src = fetchgit {
     url = "https://github.com/jonsterling/JonPRL.git";
     deepClone = true;
-    rev = "refs/tags/${version}";
+    rev = "refs/tags/v${version}";
     sha256 = "1z0d8dq1nb4dycic58nnk617hbfgafz0vmwr8gkl0i6405gfg1zy";
   };
 
