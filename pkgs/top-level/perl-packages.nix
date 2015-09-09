@@ -53,11 +53,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [AlgorithmDiff];
   };
 
-  AlgorithmC3 = buildPerlModule {
-    name = "Algorithm-C3-0.08";
+  AlgorithmC3 = buildPerlPackage rec {
+    name = "Algorithm-C3-0.10";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FL/FLORA/Algorithm-C3-0.08.tar.gz;
-      sha256 = "016cjr63wivg54ms6sjnxz4g75fafgvgwralamv29phcic2cl2am";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
+      sha256 = "01hlcaxndls86bl92rkd3fvf9pfa3inxqaimv88bxs95803kmkss";
     };
     meta = {
       description = "A module for merging hierarchies using the C3 algorithm";
