@@ -70,12 +70,6 @@ self: super: {
     configureFlags = [];
   });
 
-  dependent-map = overrideCabal super.dependent-map (drv: {
-    preConfigure = ''
-      sed -i 's/^.*trust base.*$//' *.cabal
-    '';
-  });
-
   profunctors = overrideCabal super.profunctors (drv: {
     preConfigure = ''
       sed -i 's/^{-# ANN .* #-}//' src/Data/Profunctor/Unsafe.hs
