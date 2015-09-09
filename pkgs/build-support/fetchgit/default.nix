@@ -65,4 +65,13 @@ stdenv.mkDerivation {
     ];
 
   preferLocalBuild = true;
+
+  # See in ../fetchurl/default.nix for description.
+  fetchType = "git";
+  fetchArguments = {
+     url = url;
+     hash = outputHash;
+     type = outputHashAlgo;
+     inherit out rev leaveDotGit deepClone fetchSubmodules branchName;
+  };
 }

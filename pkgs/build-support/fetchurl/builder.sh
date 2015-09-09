@@ -57,12 +57,15 @@ tryHashedMirrors() {
     fi
 
     for mirror in $hashedMirrors; do
-        url="$mirror/$outputHashAlgo/$outputHash"
+        url="$mirror/$fetchType/$outputHash"
         if $curl --retry 0 --connect-timeout "${NIX_CONNECT_TIMEOUT:-15}" \
             --fail --silent --show-error --head "$url" \
             --write-out "%{http_code}" --output /dev/null > code 2> log; then
             tryDownload "$url"
-            if test -n "$success"; then finish; fi
+            if test -n "$success"; then
+                tar -xxf $downloadedFile -C $(dirname $downloadedFile)
+                finish;
+            fi
         else
             # Be quiet about 404 errors, which we interpret as the file
             # not being present on this particular mirror.

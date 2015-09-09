@@ -77,6 +77,16 @@ in
   # URLs (resulting from resolving mirror:// URLs) to $out.
   showURLs ? false
 
+, # Identifier that specifies the associated nix-prefetch-FOO method.
+  # Every nix-prefetch-FOO method has a unique identifier fetchType =
+  # FOO. Arguments needed to execute the nix-prefetch-FOO method
+  # are passed within fetchArguments.
+  # fetchType is helpful for centrally caching or mirroring all downloads
+  # that nixpkgs rely on.
+  # NOTE: fetchType is an internal argument and should not be set within
+  #       a nixpkg expression. It is only exposed for, e.g., fetchzip.
+  fetchType ? "url"
+
 , # Meta information, if any.
   meta ? {}
 }:
@@ -94,7 +104,7 @@ let
 
 in
 
-if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${stdenv.lib.concatStringsSep ", " urls_}" else stdenv.mkDerivation {
+if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${stdenv.lib.concatStringsSep ", " urls_}" else stdenv.mkDerivation rec {
   name =
     if showURLs then "urls"
     else if name != "" then name
@@ -123,6 +133,13 @@ if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${s
   # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that.
   preferLocalBuild = true;
+
+  inherit fetchType;
+  fetchArguments = {
+     url = head urls;
+     hash = outputHash;
+     type = outputHashAlgo;
+  };
 
   inherit meta;
 }

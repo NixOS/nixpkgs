@@ -1,4 +1,4 @@
-# This expression returns a list of all fetchurl calls used by all
+# This expression returns a list of all fetchFOO calls used by all
 # packages reachable from release.nix.
 
 with import ../.. { };
@@ -8,14 +8,14 @@ let
 
   root = removeAttrs (import ../../pkgs/top-level/release.nix { }) [ "tarball" "unstable" ];
 
-  uniqueUrls = map (x: x.file) (genericClosure {
-    startSet = map (file: { key = file.url; inherit file; }) urls;
+  uniqueFetches = map (x: x.file) (genericClosure {
+    startSet = map (file: { key = file.url; inherit file; }) fetches;
     operator = const [ ];
   });
 
-  urls = map (drv: { url = head drv.urls; hash = drv.outputHash; type = drv.outputHashAlgo; }) fetchurlDependencies;
+  fetches = map (drv: { fetchType = drv.fetchType; fetchArguments = drv.fetchArguments; }) fetchDependencies;
 
-  fetchurlDependencies = filter (drv: drv.outputHash or "" != "" && drv ? urls) dependencies;
+  fetchDependencies = filter (drv: drv.outputHash or "" != "" && drv ? fetchType) dependencies;
 
   dependencies = map (x: x.value) (genericClosure {
     startSet = map keyDrv (derivationsIn' root);
@@ -42,4 +42,4 @@ let
 
   canEval = val: (builtins.tryEval val).success;
 
-in uniqueUrls
+in uniqueFetches

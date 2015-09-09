@@ -23,9 +23,10 @@ mkpath("$tarballsCache/sha1");
 mkpath("$tarballsCache/sha256");
 
 foreach my $file (@{$data->{list}->{attrs}}) {
-    my $url = $file->{attr}->{url}->{string}->{value};
-    my $algo = $file->{attr}->{type}->{string}->{value};
-    my $hash = $file->{attr}->{hash}->{string}->{value};
+    my $fetchType = $file->{attr}->{fetchType}->{string}->{value};
+    my $fetchArguments = $file->{attr}->{fetchArguments}->{attrs};
+    my $url = $fetchArguments->{attr}->{url}->{string}->{value};
+    my $hash = $fetchArguments->{attr}->{hash}->{string}->{value};
 
     if ($url !~ /^http:/ && $url !~ /^https:/ && $url !~ /^ftp:/ && $url !~ /^mirror:/) {
         print STDERR "skipping $url (unsupported scheme)\n";
@@ -60,7 +61,7 @@ foreach my $file (@{$data->{list}->{attrs}}) {
         next;
     }
 
-    my $dstPath = "$tarballsCache/$fn";
+    my $dstPath = "$tarballsCache/$fetchType/$hash";
 
     next if -e $dstPath;
 
@@ -71,7 +72,24 @@ foreach my $file (@{$data->{list}->{attrs}}) {
     $ENV{QUIET} = 1;
     $ENV{PRINT_PATH} = 1;
     my $fh;
-    my $pid = open($fh, "-|", "nix-prefetch-url", "--type", $algo, $url, $hash) or die;
+    my %nixPrefetch = (
+        "url" =>
+          sub {
+            local $algo = $fetchArguments->{attr}->{algo}->{string}->{value};
+            return open($fh, "-|", "nix-prefetch-url", "--type", $algo, $url, $hash) or die;
+          },
+        "git" =>
+          sub {
+            local $out = "--out " ++ $fetchArguments->{attr}->{out}->{string}->{value};
+            local $rev = "--rev " ++ $fetchArguments->{attr}->{ref}->{string}->{value};
+            local $leaveDotGit = if ($fetchArguments->{attr}->{leaveDotGit}->{bool}->{value} == 1) "--leave-dotGit" else "";
+            local $deepClone = if ($fetchArguments->{attr}->{deepClone}->{bool}->{value} == 1) "--deepClone" else "";
+            local $fetchSubmodules = if ($fetchArguments->{attr}->{fetchSubmodules}->{bool}->{value} == 1) "--fetch-submodules" else "";
+            local $branchName = if ($fetchArguments->{attr}->{branchName}->{string}->{value} != "") "--branch-name $fetchArguments->{attr}->{branchName}->{string}->{value}" else "";
+            return open($fh, "-|", "nix-prefetch-git", "--builder", "--url", $url, "--hash", $hash, $out, $rev, $leaveDotGit, $deepClone, $fetchSubmodules, $branchName ) or die;
+          }
+    );
+    my $pid = $nixPrefetch{$fetchType};
     waitpid($pid, 0) or die;
     if ($? != 0) {
         print STDERR "failed to fetch $url: $?\n";
@@ -81,17 +99,6 @@ foreach my $file (@{$data->{list}->{attrs}}) {
 
     die unless -e $storePath;
 
-    cp($storePath, $dstPath) or die;
+    `tar -cJf $dstPath -C $(dirname $storePath) $storePath` or die;
 
-    my $md5 = hashFile("md5", 0, $storePath) or die;
-    symlink("../$fn", "$tarballsCache/md5/$md5");
-
-    my $sha1 = hashFile("sha1", 0, $storePath) or die;
-    symlink("../$fn", "$tarballsCache/sha1/$sha1");
-
-    my $sha256 = hashFile("sha256", 0, $storePath) or die;
-    symlink("../$fn", "$tarballsCache/sha256/$sha256");
-
-    $sha256 = hashFile("sha256", 1, $storePath) or die;
-    symlink("../$fn", "$tarballsCache/sha256/$sha256");
 }
