@@ -939,6 +939,12 @@ let self = _self // overrides; _self = with self; {
       # the end, which makes curl barf).
       ../development/perl-modules/catalyst-fix-chunked-encoding.patch
     ];
+
+    meta = {
+      # Depends on some old version of Catalyst-Runtime that contains
+      # Catalyst::Engine::CGI. But those version do not compile.
+      broken = true;
+    };
   };
 
   CatalystManual = buildPerlPackage {
