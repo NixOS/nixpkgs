@@ -3082,6 +3082,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  DBIxIntrospector = buildPerlPackage rec {
+    name = "DBIx-Introspector-0.001005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FR/FREW/${name}.tar.gz";
+      sha256 = "0fp6h71xv4pgb8l815rs6ad4camzhjqf64s1sf7zmhchqqn4vacn";
+    };
+
+    propagatedBuildInputs = [ TestFatal TestRoo Moo DBI DBDSQLite ];
+  };
+
   DevelCycle = buildPerlPackage {
     name = "Devel-Cycle-1.11";
     src = fetchurl {
