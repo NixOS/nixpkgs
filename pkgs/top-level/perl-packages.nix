@@ -8494,6 +8494,14 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/C/CL/CLKAO/PerlIO-via-symlink-0.05.tar.gz;
       sha256 = "0lidddcaz9anddqrpqk4zwm550igv6amdhj86i2jjdka9b1x81s1";
     };
+
+    buildInputs = [ ModuleInstall ];
+
+    postPatch = ''
+      # remove outdated inc::Module::Install included with module
+      # causes build failure for perl5.18+
+      rm -r  inc
+    '';
   };
 
   PerlMagick = buildPerlPackage rec {
