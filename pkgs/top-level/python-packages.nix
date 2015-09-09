@@ -5421,6 +5421,24 @@ let
     };
   };
 
+  django_appconf = buildPythonPackage rec {
+    name = "django-appconf-${version}";
+    version = "1.0.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/django-appconf/django-appconf-${version}.tar.gz";
+      sha256 = "0q3fg17qi4vwpipbj075zn4wk58p6a946kah8wayks1423xpa4xs";
+    };
+
+    propagatedBuildInputs = with self; [ six ];
+
+    meta = {
+      description = "A helper class for handling configuration defaults of packaged apps gracefully";
+      homepage = http://django-appconf.readthedocs.org/;
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ desiderius ];
+    };
+  };
 
   django_evolution = buildPythonPackage rec {
     name = "django_evolution-0.6.9";
