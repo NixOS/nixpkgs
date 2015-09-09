@@ -96,6 +96,7 @@
   fluffynukeit = "Daniel Austin <dan@fluffynukeit.com>";
   forkk = "Andrew Okin <forkk@forkk.net>";
   fpletz = "Franz Pletz <fpletz@fnordicwalking.de>";
+  fridh = "Frederik Rietdijk <fridh@fridh.nl>";
   fro_ozen = "fro_ozen <fro_ozen@gmx.de>";
   ftrvxmtrx = "Siarhei Zirukin <ftrvxmtrx@gmail.com>";
   funfunctor = "Edward O'Callaghan <eocallaghan@alterapraxis.com>";

@@ -1373,6 +1373,7 @@ let
       homepage = https://github.com/ContinuumIO/blaze;
       description = "Allows Python users a familiar interface to query data living in other data storage systems";
       license = licenses.bsdOriginal;
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -2284,6 +2285,7 @@ let
       platforms = platforms.all;
       homepage = http://cython.org;
       license = licenses.asl20;
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -2300,6 +2302,7 @@ let
       homepage = "http://github.com/pytoolz/cytoolz/";
       description = "Cython implementation of Toolz: High performance functional utilities";
       license = "licenses.bsd3";
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -2761,6 +2764,7 @@ let
       description = "Minimal task scheduling abstraction";
       homepage = "http://github.com/ContinuumIO/dask/";
       licenses = licenses.bsd3;
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -2779,6 +2783,7 @@ let
       homepage = https://github.com/ContinuumIO/datashape;
       description = "A data description language";
       license = licenses.bsd2;
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -7189,6 +7194,7 @@ let
       description = "IPython Kernel for Jupyter";
       homepage = http://ipython.org/;
       license = licenses.bsd3;
+      maintainers = with maintainers; [ fridh ];
     };
   };
   
@@ -7207,6 +7213,7 @@ let
       description = "Interactive Parallel Computing with IPython";
       homepage = http://ipython.org/;
       license = licenses.bsd3;
+      maintainers = with maintainers; [ fridh ];
     };
   
   };
@@ -7228,7 +7235,7 @@ let
       description = "IPython: Productive Interactive Computing";
       homepage = http://ipython.org/;
       license = licenses.bsd3;
-      maintainers = with maintainers; [ bjornfor jgeerds ];
+      maintainers = with maintainers; [ bjornfor jgeerds fridh ];
     };
   };
   
@@ -7474,6 +7481,7 @@ let
       description = "Jupyter protocol implementation and client libraries";
       homepage = http://jupyter.org/;
       license = licenses.bsd3;
+      maintainers = with maintainers; [ fridh ];
     };  
   };
   
@@ -7492,6 +7500,7 @@ let
       description = "Jupyter core package. A base package on which Jupyter projects rely";
       homepage = http://jupyter.org/;
       license = licenses.bsd3;
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -8465,6 +8474,7 @@ let
       homepage = http://github.com/mrocklin/multipledispatch/;
       description = "A relatively sane approach to multiple dispatch in Python";
       license = licenses.bsd3;
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -8737,6 +8747,7 @@ let
       description = "Converting Jupyter Notebooks";
       homepage = http://jupyter.org/;
       license = licenses.bsd3;
+      maintainers = with maintainers; [ fridh ];
     }; 
   };
   
@@ -8755,6 +8766,7 @@ let
       description = "The Jupyter Notebook format";
       homepage = "http://jupyter.org/";
       license = licenses.bsd3;
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -9104,6 +9116,7 @@ let
       description = "The Jupyter HTML notebook is a web-based notebook environment for interactive computing";
       homepage = http://jupyter.org/;
       license = licenses.bsd3;
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -9434,6 +9447,7 @@ let
       homepage = https://github.com/ContinuumIO/odo;
       description = "Data migration utilities";
       license = licenses.bsdOriginal;
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -9645,7 +9659,7 @@ let
       homepage = "http://pandas.pydata.org/";
       description = "Python Data Analysis Library";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ raskin ];
+      maintainers = with maintainers; [ raskin fridh ];
       platforms = platforms.unix;
     };
   };
@@ -12486,6 +12500,7 @@ let
       description = "Jupyter Qt console";
       homepage = http://jupyter.org/;
       license = licenses.bsd3;
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -13111,9 +13126,9 @@ let
       description = "A set of python modules for machine learning and data mining";
       homepage = http://scikit-learn.org;
       license = licenses.bsd3;
+      maintainers = with maintainers; [ fridh ];
     };
   };
-
 
   scripttest = buildPythonPackage rec {
     version = "1.3";
@@ -13145,6 +13160,7 @@ let
       description = "statisitical data visualization";
       homepage = "http://stanford.edu/~mwaskom/software/seaborn/";
       license     = "BSD";
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -14517,6 +14533,7 @@ let
       description = "Traitlets Python config system";
       homepage = http://ipython.org/;
       license = licenses.bsd3;
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -14637,6 +14654,7 @@ let
       homepage = "http://github.com/pytoolz/toolz/";
       description = "List processing tools and functional utilities";
       license = "licenses.bsd3";
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -15566,6 +15584,7 @@ let
       description = "N-D labeled arrays and datasets in Python";
       homepage = https://github.com/xray/xray;
       license = licenses.asl20;
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
