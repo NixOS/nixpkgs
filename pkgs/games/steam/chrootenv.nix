@@ -51,6 +51,7 @@ buildFHSUserEnv {
       pkgs.mesa
       pkgs.SDL
       pkgs.SDL2
+      pkgs.libdrm
 
       pkgs.libgcrypt
       pkgs.zlib
