@@ -2,9 +2,9 @@
 
 let
 
-  version = "1.2.0";
+  version = "1.2.4";
   rev = "v${version}";
-  sha256 = "05w2sqnzxy4lwc0chjlizpxqwc6ni58yz8xcwvp18fq68wa28qvf";
+  sha256 = "1mccfs5dgmfqxa7wvvz2j3qdifh0kxwzcz8bb3pdwv3phrf8lvji";
 
   reaperFork = {
     src = fetchFromGitHub {
