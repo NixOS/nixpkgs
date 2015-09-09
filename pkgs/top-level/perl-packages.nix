@@ -11563,11 +11563,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ DevelStackTrace Moose Moo MooXTypesMooseLike ];
   };
 
-  TieCycle = buildPerlPackage {
-    name = "Tie-Cycle-1.19";
+  TieCycle = buildPerlPackage rec {
+    name = "Tie-Cycle-1.21";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BD/BDFOY/Tie-Cycle-1.19.tar.gz;
-      sha256 = "bd315874c85feaf8948eeb2f40fe2768a6ca00f089e35b32bfe88f3f384f9ca1";
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/${name}.tar.gz";
+      sha256 = "0r1mdmd01s42vwlwr2mvr1ywjvvfkc79vz6ysdii5fvcgs6wk50y";
     };
     meta = {
       description = "Cycle through a list of values via a scalar";
