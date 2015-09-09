@@ -2728,6 +2728,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  DateTimeFormatSQLite = buildPerlPackage rec {
+    name = "DateTime-Format-SQLite-0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CF/CFAERBER/${name}.tar.gz";
+      sha256 = "1d4ln8x5bjpqmgnbbi2h16knfz674dsgvk6x7m60v6ykw454w7yc";
+    };
+
+    propagatedBuildInputs = [ DateTime DateTimeFormatBuilder ];
+  };
+
   DateTimeLocale = buildPerlPackage {
     name = "DateTime-Locale-0.46";
     src = fetchurl {
