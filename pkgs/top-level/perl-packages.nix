@@ -2892,6 +2892,8 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/timbunce/devel-sizeme;
       description = "Unknown";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      # See https://rt.cpan.org/Public/Bug/Display.html?id=92348
+      broken = true;
     };
   };
 
