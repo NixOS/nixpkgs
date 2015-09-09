@@ -10887,6 +10887,9 @@ let
   bibletime = callPackage ../applications/misc/bibletime { };
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
+  bitlbee-plugins = callPackage ../applications/networking/instant-messengers/bitlbee/plugins.nix { };
+
+  bitlbee-facebook = callPackage ../applications/networking/instant-messengers/bitlbee-facebook { };
 
   bitmeter = callPackage ../applications/audio/bitmeter { };
 
