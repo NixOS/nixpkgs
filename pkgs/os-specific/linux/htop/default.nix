@@ -1,11 +1,11 @@
 { fetchFromGitHub, stdenv, autoreconfHook, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "htop-1.0.3-584-8f07868f";
+  name = "htop-1.0.3-584-229d0058";
 
   src = fetchFromGitHub {
-    sha256 = "0s7l9v7n7hw32hznvdq2sykyxgb30hmzycwcjxw8f0c2mww61xcd";
-    rev = "8f07868fefeb844a852fab704c0763b0e9a9bf01";
+    sha256 = "1bym6ligd8db4iyv2m1y7aylh7f9fmk71v67rkhird05hx1xb80r";
+    rev = "229d005851af8dca595b3df8e385375fb9c382b4";
     repo = "htop";
     owner = "hishamhm";
   };
