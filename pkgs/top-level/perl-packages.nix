@@ -11132,6 +11132,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TextBrew = buildPerlPackage rec {
+    name = "Text-Brew-0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KC/KCIVEY/${name}.tar.gz";
+      sha256 = "0k7nxglbx5pxl693zrj1fsi094sf1a3vqsrn73inzz7r3j28a6xa";
+    };
+  };
+
   TextCSV = buildPerlPackage rec {
     name = "Text-CSV-1.32";
     src = fetchurl {
