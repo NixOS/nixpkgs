@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, glib, dbus, dbus_glib, dbus_tools
-, intltool, libxslt, docbook_xsl, udev, libusb1, pmutils
+{ stdenv, fetchurl, pkgconfig, glib, dbus_glib
+, intltool, libxslt, docbook_xsl, udev, libusb1
 , useSystemd ? true, systemd, gobjectIntrospection
 }:
 
@@ -19,22 +19,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  preConfigure =
-    ''
-      substituteInPlace src/linux/up-backend.c \
-        --replace /usr/bin/pm- ${pmutils}/bin/pm- \
-        --replace /usr/sbin/pm- ${pmutils}/sbin/pm-
-      substituteInPlace src/notify-upower.sh \
-        --replace /usr/bin/dbus-send ${dbus_tools}/bin/dbus-send
-    '';
-
   configureFlags =
     [ "--with-backend=linux" "--localstatedir=/var"
-      "--enable-deprecated" # needed for Xfce (Nov 2013)
     ]
     ++ stdenv.lib.optional useSystemd
-    [ "--enable-systemd"
-      "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    [ "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
       "--with-systemdutildir=$(out)/lib/systemd"
       "--with-udevrulesdir=$(out)/lib/udev/rules.d"
     ];
