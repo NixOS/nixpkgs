@@ -14560,7 +14560,7 @@ let
 
   iprover = callPackage ../applications/science/logic/iprover {};
 
-  JonPRL = callPackage ../applications/science/logic/jonprl {
+  jonprl = callPackage ../applications/science/logic/jonprl {
     smlnj = if stdenv.isDarwin
       then smlnjBootstrap
       else smlnj;
