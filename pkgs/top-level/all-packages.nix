@@ -6504,13 +6504,11 @@ let
 
   gnutls = gnutls34;
 
-  gnutls33 = import ../development/libraries/gnutls/3.3.nix {
-    inherit callPackage fetchurl;
+  gnutls33 = callPackage ../development/libraries/gnutls/3.3.nix {
     guileBindings = config.gnutls.guile or false;
   };
 
-  gnutls34 = import ../development/libraries/gnutls/3.4.nix {
-    inherit callPackage fetchurl;
+  gnutls34 = callPackage ../development/libraries/gnutls/3.4.nix {
     guileBindings = config.gnutls.guile or false;
   };
 
