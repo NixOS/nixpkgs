@@ -3325,11 +3325,11 @@ let
 
 
   elasticsearchdsl = buildPythonPackage (rec {
-    name = "elasticsearch-dsl-0.0.4";
+    name = "elasticsearch-dsl-0.0.8";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/e/elasticsearch-dsl/${name}.tar.gz";
-      sha256 = "0bz8p10qk7rz10glq9dm2nq9m1x6czzlqk518107x39gx18lm1a2";
+      sha256 = "0dd46s7g5l2b2jnjhcpcm721kcsnsqwngzik85jl5qbbcvnqqjzi";
     };
 
     buildInputs = with self; [ covCore dateutil elasticsearch mock pytest pytestcov unittest2 urllib3 pytz ];
@@ -3342,6 +3342,7 @@ let
       description = "Python client for Elasticsearch";
       homepage = https://github.com/elasticsearch/elasticsearch-dsl-py;
       license = licenses.asl20;
+      maintainers = with maintainers; [ desiderius ];
     };
   });
 
