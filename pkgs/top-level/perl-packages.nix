@@ -96,10 +96,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   AlienWxWidgets = buildPerlPackage rec {
-    name = "Alien-wxWidgets-0.65";
+    name = "Alien-wxWidgets-0.67";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MD/MDOOTSON/${name}.tar.gz";
-      sha256 = "0h4g7jl0p8a35kyvsji3qlb75mbcfqpvvmwh7s9krkbqklqjlxxl";
+      sha256 = "075m880klf66pbcfk0la2nl60vd37jljizqndrklh5y4zvzdy1nr";
     };
     propagatedBuildInputs = [ pkgs.pkgconfig pkgs.gtk2 pkgs.wxGTK ModulePluggable ];
   };
