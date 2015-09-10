@@ -9881,23 +9881,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  SVNMirror = buildPerlPackage {
-    name = "SVN-Mirror-0.73";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/C/CL/CLKAO/SVN-Mirror-0.73.tar.gz;
-      sha256 = "1scjaq7qjz6jlsk1c2l5q15yxf0sqbydvf22mb2xzy1bzaln0x2c";
-    };
-    propagatedBuildInputs = [
-      ClassAccessor Filechdir pkgs.subversion URI
-      TermReadKey TimeDate SVNSimple
-    ];
-    meta = {
-      # It is no longer developed and fails to build. It was also removed from
-      # debian https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=554336
-      broken = true;
-    };
-  };
-
   SVNSimple = buildPerlPackage rec {
     name = "SVN-Simple-0.28";
     src = fetchurl {
