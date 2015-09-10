@@ -10,11 +10,11 @@ composableDerivation.composableDerivation {} rec {
     # (if args.use_svn then ["libtool" "autoconf" "automake" "swig"] else [])
     # // edf { name = "ruby"; enable = { buildInputs = [ ruby ]; };}
 
-  name = "geos-3.4.2";
+  name = "geos-3.5.0";
 
   src = fetchurl {
     url = "http://download.osgeo.org/geos/${name}.tar.bz2";
-    sha256 = "0lvcs8x9as5jlxilykgg3i4220x8m4z59b2ngfapl219gvgvzs0m";
+    sha256 = "49982b23bcfa64a53333dab136b82e25354edeb806e5a2e2f5b8aa98b1d0ae02";
   };
 
   enableParallelBuilding = true;
