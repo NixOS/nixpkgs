@@ -437,7 +437,7 @@
       riak = 205;
       #shout = 206; #unused
       gateone = 207;
-      #namecoin = 208; #unused
+      namecoin = 208;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

@@ -45,7 +45,8 @@ in
         type = types.path;
         example = "/etc/namecoin/wallet.dat";
         description = ''
-          Wallet file.
+          Wallet file. The ownership of the file has to be
+          namecoin:namecoin, and the permissions must be 0640.
         '';
       };
 
@@ -61,6 +62,8 @@ in
           USER=namecoin
           PASSWORD=secret
           </literal>
+          The ownership of the file has to be namecoin:namecoin,
+          and the permissions must be 0640.
         '';
       };
 
@@ -107,10 +110,29 @@ in
         createHome = true;
       };
 
+    users.extraGroups = singleton
+      { name = "namecoin";
+        gid = config.ids.gids.namecoin;
+      };
+
     systemd.services.namecoind = {
         description = "Namecoind Daemon";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+        preStart = ''
+          if [  "$(stat --printf '%u' ${cfg.userFile})" != "${toString config.ids.uids.namecoin}" \
+             -o "$(stat --printf '%g' ${cfg.userFile})" != "${toString config.ids.gids.namecoin}" \
+             -o "$(stat --printf '%a' ${cfg.userFile})" != "640" ]; then
+             echo "ERROR: bad ownership or rights on ${cfg.userFile}" >&2
+             exit 1
+          fi
+          if [  "$(stat --printf '%u' ${cfg.wallet})" != "${toString config.ids.uids.namecoin}" \
+             -o "$(stat --printf '%g' ${cfg.wallet})" != "${toString config.ids.gids.namecoin}" \
+             -o "$(stat --printf '%a' ${cfg.wallet})" != "640" ]; then
+             echo "ERROR: bad ownership or rights on ${cfg.wallet}" >&2
+             exit 1
+          fi
+        '';
         serviceConfig = {
           Type = "simple";
           User = "namecoin";
