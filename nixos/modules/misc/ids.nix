@@ -230,6 +230,7 @@
       shout = 206;
       gateone = 207;
       namecoin = 208;
+      dnschain = 209;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -438,6 +439,7 @@
       #shout = 206; #unused
       gateone = 207;
       namecoin = 208;
+      #dnschain = 209; #unused
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
