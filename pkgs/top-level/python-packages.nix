@@ -5445,6 +5445,25 @@ let
     };
   };
 
+  django_compressor = buildPythonPackage rec {
+    name = "django-compressor-${version}";
+    version = "1.5";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/django_compressor/django_compressor-${version}.tar.gz";
+      sha256 = "0bp2acagc6b1mmcajlmjf5vvp6zj429bq7p2wks05n47pwfzv281";
+    };
+
+    propagatedBuildInputs = with self; [ django_appconf ];
+
+    meta = {
+      description = "Compresses linked and inline JavaScript or CSS into single cached files";
+      homepage = http://django-compressor.readthedocs.org/en/latest/;
+      license = licenses.mit;
+      maintainers = with maintainers; [ desiderius ];
+    };
+  };
+
   django_evolution = buildPythonPackage rec {
     name = "django_evolution-0.6.9";
     disabled = isPy3k;
