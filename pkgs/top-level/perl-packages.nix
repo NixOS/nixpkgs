@@ -295,12 +295,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ArrayCompare = buildPerlPackage {
-    name = "Array-Compare-1.18";
+  ArrayCompare = buildPerlPackage rec {
+    name = "Array-Compare-2.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAVECROSS/Array-Compare-1.18.tar.gz;
-      sha256 = "0zbvr1bj9bp836b3g9s32193vvn53d03xv0zn317hz247skn15lh";
+      url = "mirror://cpan/authors/id/D/DA/DAVECROSS/${name}.tar.gz";
+      sha256 = "0f1mg2lpr5jzxy1hciww7vlp4r602vfwpzsqmhkgv1i107pmiwcs";
     };
+
+    buildInputs = [ TestNoWarnings Moo TypeTiny ];
   };
 
   ListCompare = buildPerlPackage {
