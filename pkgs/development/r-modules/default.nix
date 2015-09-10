@@ -1566,7 +1566,6 @@ let
     });
 
     iFes = old.iFes.overrideDerivation (attrs: {
-      patches = [ ./patches/iFes.patch ];
       CUDA_HOME = "${pkgs.cudatoolkit}";
     });
 
@@ -1661,7 +1660,7 @@ let
       patches = [ ./patches/gmatrix.patch ];
       CUDA_LIB_PATH = "${pkgs.cudatoolkit}/lib64";
       R_INC_PATH = "${pkgs.R}/lib/R/include";
-      CUDA_INC_PATH = "${pkgs.cudatoolkit}/usr_include";
+      CUDA_INC_PATH = "${pkgs.cudatoolkit}/include";
     });
 
     # It seems that we cannot override meta attributes with overrideDerivation.

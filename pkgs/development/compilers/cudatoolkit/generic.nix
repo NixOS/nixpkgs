@@ -59,7 +59,6 @@ in stdenv.mkDerivation rec {
     perl ./install-linux.pl --prefix="$out"
     rm $out/tools/CUDA_Occupancy_Calculator.xls
     perl ./install-sdk-linux.pl --prefix="$sdk" --cudaprefix="$out"
-    mv $out/include $out/usr_include
 
     # let's remove the 32-bit libraries, they confuse the lib64->lib mover
     rm -rf $out/lib
@@ -69,8 +68,6 @@ in stdenv.mkDerivation rec {
         mv "$out"/cuda-samples "$out"/samples
     fi
   '';
-
-  setupHook = ./setup-hook.sh;
 
   meta = {
     license = lib.licenses.unfree;
