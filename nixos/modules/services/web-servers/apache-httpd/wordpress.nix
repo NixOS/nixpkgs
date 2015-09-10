@@ -40,6 +40,8 @@ let
     RewriteRule ^(.*\.php)$ $1 [L]
     RewriteRule . index.php [L]
     </IfModule>
+
+    ${config.extraHtaccess}
   '';
 
   # WP translation can be found here:
@@ -220,7 +222,18 @@ in
         settings, see <link xlink:href='http://codex.wordpress.org/Editing_wp-config.php'/>.
       '';
     };
-  }; 
+    extraHtaccess = mkOption {
+      default = "";
+      example =
+        ''
+          php_value upload_max_filesize 20M
+          php_value post_max_size 20M
+        '';
+      description = ''
+        Any additional text to be appended to Wordpress's .htaccess file.
+      '';
+    };
+  };
 
   documentRoot = wordpressRoot;
 
