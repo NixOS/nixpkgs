@@ -2854,7 +2854,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/B/BI/BINGOS/Devel-PatchPerl-1.28.tar.gz;
       sha256 = "03085cd6a8b565a4f789c838e8208a8377e0d1aeb7f5becc3b0d3219409d6b82";
     };
-    propagatedBuildInputs = [ Filepushd ];
+    propagatedBuildInputs = [ Filepushd ModulePluggable ];
     meta = {
       homepage = https://github.com/bingos/devel-patchperl;
       description = "Patch perl source a la Devel::PPPort's buildperl.pl";
