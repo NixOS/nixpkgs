@@ -263,7 +263,6 @@ let
     ncdf = [ pkgs.netcdf ];
     nloptr = [ pkgs.nlopt ];
     openssl = [ pkgs.openssl ];
-    outbreaker = [ pkgs.gsl ];
     pander = [ pkgs.pandoc pkgs.which ];
     pbdMPI = [ pkgs.openmpi ];
     pbdNCDF4 = [ pkgs.netcdf ];
@@ -592,7 +591,6 @@ let
     "RcmdrPlugin_SLC"
     "RcmdrPlugin_SM"
     "RcmdrPlugin_sos"
-    "RcmdrPlugin_StatisticalURV"
     "RcmdrPlugin_steepness"
     "RcmdrPlugin_survival"
     "RcmdrPlugin_TeachingDemos"
@@ -1322,7 +1320,6 @@ let
     "RcmdrPlugin_SLC" # depends on broken package nlopt-2.4.2
     "RcmdrPlugin_SM" # depends on broken package nlopt-2.4.2
     "RcmdrPlugin_sos" # depends on broken package nlopt-2.4.2
-    "RcmdrPlugin_StatisticalURV" # depends on broken package nlopt-2.4.2
     "RcmdrPlugin_steepness" # depends on broken package nlopt-2.4.2
     "RcmdrPlugin_survival" # depends on broken package nlopt-2.4.2
     "RcmdrPlugin_TeachingDemos" # depends on broken package nlopt-2.4.2
