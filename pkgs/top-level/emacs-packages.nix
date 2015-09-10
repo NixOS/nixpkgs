@@ -385,6 +385,23 @@ let self = _self // overrides;
     };
   };
 
+  dash-functional = melpaBuild rec {
+    pname = "dash-functional";
+      version = "2.11.0";
+      src = fetchFromGitHub {
+      owner  = "magnars";
+      repo   = "dash.el";
+      rev    = version;
+      sha256 = "02gfrcda7gj3j5yx71dz40xylrafl4pcaj7bgfajqi9by0w2nrnx";
+    };
+    packageRequires = [ dash ];
+    files = [ "dash-functional.el" ];
+    meta = {
+      description = "Collection of useful combinators for Emacs Lisp.";
+      license = gpl3Plus;
+    };
+  };
+
   deferred = melpaBuild rec {
     version = "0.3.2";
     pname = "deferred";
@@ -1019,14 +1036,14 @@ let self = _self // overrides;
 
   org-trello = melpaBuild rec {
     pname = "org-trello";
-    version = "0.6.9.3";
+    version = "0.7.5";
     src = fetchFromGitHub {
       owner = "org-trello";
       repo = pname;
-      rev = "f1e1401a373dd492eee49fb131b1cd66b3a9ac37";
-      sha256 = "003gdh8rgdl3k8h20wgbciqyacyqr64w1wfdqvwm9qdz414q5yj3";
+      rev = "3718ed704094e5e5a491749f1f722d76ba4b7d73";
+      sha256 = "1561nxjva8892via0l8315y3fih4r4q9gzycmvh33db8gqzq4l86";
     };
-    packageRequires = [ request-deferred deferred dash s ];
+    packageRequires = [ request-deferred deferred dash-functional s ];
     files = [ "org-trello-*.el" ];
     meta = {
       description = "Org minor mode - 2-way sync org & trello";
