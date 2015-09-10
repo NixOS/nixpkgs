@@ -165,5 +165,6 @@ in zipModules ([]
 ++ obsolete' [ "services" "syslog-ng" "serviceName" ]
 ++ obsolete' [ "services" "syslog-ng" "listenToJournal" ]
 ++ obsolete' [ "ec2" "metadata" ]
+++ obsolete' [ "services" "openvpn" "enable" ]
 
 )
