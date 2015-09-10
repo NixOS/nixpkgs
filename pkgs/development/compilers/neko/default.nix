@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boehmgc, zlib, sqlite, pcre }:
+{ stdenv, fetchurl, fetchpatch, boehmgc, zlib, sqlite, pcre }:
 
 stdenv.mkDerivation rec {
   name = "neko-${version}";
@@ -8,6 +8,12 @@ stdenv.mkDerivation rec {
     url = "http://nekovm.org/_media/neko-${version}.tar.gz";
     sha256 = "1lcm1ahbklfpd5lnqjwmvyj2vr85jbq57hszk5jgq0x6yx6p3927";
   };
+
+  patches = stdenv.lib.singleton (fetchpatch {
+    url = "https://github.com/HaxeFoundation/neko/commit/"
+        + "ccc78c29deab7971e1369f4fe3dedd14cf9f3128.patch";
+    sha256 = "1nya50rzai15hmpq2azganjxzgrfydf30glfwirgw6q8z7z3wpkq";
+  });
 
   prePatch = with stdenv.lib; let
     libs = concatStringsSep "," (map (lib: "\"${lib}/include\"") buildInputs);
