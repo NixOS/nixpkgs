@@ -67,12 +67,6 @@ in
 
   options = {
 
-    /* !!! Obsolete. */
-    services.openvpn.enable = mkOption {
-      default = true;
-      description = "Whether to enable OpenVPN.";
-    };
-
     services.openvpn.servers = mkOption {
       default = {};
 
