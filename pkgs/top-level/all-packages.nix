@@ -10442,6 +10442,8 @@ let
   xorg_sys_opengl = callPackage ../os-specific/linux/opengl/xorg-sys { };
 
   xpilot-ng = callPackage ../games/xpilot { };
+  bloodspilot-server = callPackage ../games/xpilot/bloodspilot-server.nix {};
+  bloodspilot-client = callPackage ../games/xpilot/bloodspilot-client.nix {};
 
   zd1211fw = callPackage ../os-specific/linux/firmware/zd1211 { };
 
