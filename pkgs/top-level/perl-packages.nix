@@ -202,11 +202,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  AppConfig = buildPerlPackage {
-    name = "AppConfig-1.66";
+  AppConfig = buildPerlPackage rec {
+    name = "AppConfig-1.71";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AB/ABW/AppConfig-1.66.tar.gz;
-      sha256 = "1p1vs9px20lrq9mdwpzp309a8r6rchibsdmxang4krk90pi2sh4b";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
+      sha256 = "03vvi3mk4833mx2c6dkm9zhvakf02mb2b7wz9pk9xc7c4mq04xqi";
     };
     meta = {
       description = "A bundle of Perl5 modules for reading configuration files and parsing command line arguments";
