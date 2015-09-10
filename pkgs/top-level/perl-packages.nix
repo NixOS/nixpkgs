@@ -9881,23 +9881,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  SVK = buildPerlPackage {
-    name = "SVK-2.0.2";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/C/CL/CLKAO/SVK-v2.0.2.tar.gz;
-      sha256 = "0c4m2q7cvzwh9kk1nc1vd8lkxx2kss5nd4k20dpkal4c7735jns0";
-    };
-    propagatedBuildInputs = [
-      AlgorithmDiff AlgorithmAnnotate AppCLI
-      ClassDataInheritable DataHierarchy Encode FileTemp
-      IODigest ListMoreUtils PathClass PerlIOeol
-      PerlIOviadynamic PerlIOviasymlink PodEscapes
-      PodSimple SVNMirror TimeHiRes UNIVERSALrequire
-      URI YAMLSyck ClassAutouse IOPager
-      LocaleMaketextLexicon FreezeThaw
-    ];
-  };
-
   SVNMirror = buildPerlPackage {
     name = "SVN-Mirror-0.73";
     src = fetchurl {
