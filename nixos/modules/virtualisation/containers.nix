@@ -299,7 +299,7 @@ in
             ''
               #! ${pkgs.stdenv.shell} -e
               ${nixos-container}/bin/nixos-container run "$INSTANCE" -- \
-                bash --login -c "/nix/var/nix/profiles/system/bin/switch-to-configuration test"
+                bash --login -c "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/bin/switch-to-configuration test"
             '';
 
           SyslogIdentifier = "container %i";
