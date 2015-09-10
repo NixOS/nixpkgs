@@ -625,12 +625,12 @@ video/x-ms-wmx  wmx
     xss-sanitize: ${toYesNo cfg.xssSanitize}
 
     [Github]
-    oauthclientid: ${cfg.oauthClientId}
-    oauthclientsecret: ${cfg.oauthClientSecret}
-    oauthcallback: ${cfg.oauthCallback}
-    oauthauthorizeendpoint: ${cfg.oauthAuthorizeEndpoint}
-    oauthaccesstokenendpoint: ${cfg.oauthAccessTokenEndpoint}
-    github-org: ${cfg.githubOrg}
+    oauthclientid: ${toString cfg.oauthClientId}
+    oauthclientsecret: ${toString cfg.oauthClientSecret}
+    oauthcallback: ${toString cfg.oauthCallback}
+    oauthauthorizeendpoint: ${toString cfg.oauthAuthorizeEndpoint}
+    oauthaccesstokenendpoint: ${toString cfg.oauthAccessTokenEndpoint}
+    github-org: ${toString cfg.githubOrg}
   '';
 
 in
