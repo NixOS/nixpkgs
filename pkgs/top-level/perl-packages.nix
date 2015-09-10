@@ -2848,11 +2848,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DevelPatchPerl = buildPerlPackage {
-    name = "Devel-PatchPerl-1.28";
+  DevelPatchPerl = buildPerlPackage rec {
+    name = "Devel-PatchPerl-1.38";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/Devel-PatchPerl-1.28.tar.gz;
-      sha256 = "03085cd6a8b565a4f789c838e8208a8377e0d1aeb7f5becc3b0d3219409d6b82";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
+      sha256 = "0997ms4ksvxy0x0bnhrm7mhx3d2rbmgdiv3xdsawb17r2695vrgk";
     };
     propagatedBuildInputs = [ Filepushd ModulePluggable ];
     meta = {
