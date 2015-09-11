@@ -1217,6 +1217,10 @@ let
     inherit callPackage;
   };
 
+  cudatoolkit75 = import ../development/compilers/cudatoolkit/7.5.nix {
+    inherit callPackage;
+  };
+
   cudatoolkit = cudatoolkit7;
 
   curlFull = curl.override {
