@@ -14,7 +14,7 @@ let
   alias = domain: list: "${list}: \"|${pkgs.mlmmj}/bin/mlmmj-receive -L ${listDir domain list}/\"";
   subjectPrefix = list: "[${list}]";
   listAddress = domain: list: "${list}@${domain}";
-  customHeaders = list: domain: [ "List-Id: ${list}" "Reply-To: ${list}@${domain}" ];
+  customHeaders = domain: list: [ "List-Id: ${list}" "Reply-To: ${list}@${domain}" ];
   footer = domain: list: "To unsubscribe send a mail to ${list}+unsubscribe@${domain}";
   createList = d: l: ''
     ${pkgs.coreutils}/bin/mkdir -p ${listCtl d l}
