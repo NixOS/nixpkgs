@@ -585,11 +585,11 @@ let self = _self // overrides; _self = with self; {
     ];
   };
 
-  BusinessISBN = buildPerlPackage {
-    name = "Business-ISBN-2.07";
+  BusinessISBN = buildPerlPackage rec {
+    name = "Business-ISBN-2.09";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BD/BDFOY/Business-ISBN-2.07.tar.gz;
-      sha256 = "4c11279580872bf3cc7176bb75c25b165d4b59a2828fc43d9a355cec3d0a45ff";
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/${name}.tar.gz";
+      sha256 = "0fhjzgwjxypai16vv0bws6pnxgcglcbgza81avkck6w6d3jkki4r";
     };
     propagatedBuildInputs = [ BusinessISBNData URI ];
     meta = {
