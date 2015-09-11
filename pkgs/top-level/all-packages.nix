@@ -9202,9 +9202,7 @@ let
 
   etcd = goPackages.etcd.bin // { outputs = [ "bin" ]; };
 
-  ejabberd = callPackage ../servers/xmpp/ejabberd {
-    erlang = erlangR16;
-  };
+  ejabberd = callPackage ../servers/xmpp/ejabberd { };
 
   prosody = callPackage ../servers/xmpp/prosody {
     lua5 = lua5_1;
