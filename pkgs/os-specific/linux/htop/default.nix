@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   postPatch = ''
-    touch *.h # unnecessary regeneration requires Python
+    touch *.h */*.h # unnecessary regeneration requires Python
   '';
 
   meta = {
