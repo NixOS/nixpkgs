@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libiconv, xz }:
 
 stdenv.mkDerivation (rec {
-  name = "gettext-0.19.5.1";
+  name = "gettext-0.19.6";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${name}.tar.gz";
-    sha256 = "0cbp498ckjwj7qr8b9pmkry8hkhldgkvg5yix8hi9c8z1hxxb651";
+    sha256 = "0pb9vp4ifymvdmc31ks3xxcnfqgzj8shll39czmk8c1splclqjzd";
   };
 
   outputs = [ "out" "doc" ];
