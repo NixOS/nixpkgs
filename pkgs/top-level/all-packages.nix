@@ -13648,6 +13648,8 @@ let
 
   ### GAMES
 
+  "2048-in-terminal" = callPackage ../games/2048-in-terminal { };
+
   airstrike = callPackage ../games/airstrike { };
 
   alienarena = callPackage ../games/alienarena { };
