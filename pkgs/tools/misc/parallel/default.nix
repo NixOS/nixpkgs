@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sed -i 's,#![ ]*/usr/bin/env[ ]*perl,#!${perl}/bin/perl,' $out/bin/*
 
     wrapProgram $out/bin/parallel \
-      --prefix PATH : "${procps}/bin" \
+      ${if stdenv.isLinux then ("--prefix PATH \":\" ${procps}/bin") else ""} \
       --prefix PATH : "${perl}/bin" \
   '';
 
