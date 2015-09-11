@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   name = "calibre-${version}";
-  version = "2.37.1";
+  version = "2.38.0";
 
   src = fetchurl {
     url = "https://github.com/kovidgoyal/calibre/releases/download/v${version}/${name}.tar.xz";
-    sha256 = "0cbpkhchxjz9dz4chkrlgq0q1sjmyp6lm9vrhnm2mwai61kzn25s";
+    sha256 = "075axil53djss99fj9drfh5cvxdbjw6z5z5qk53vm13k5pw6bmhn";
   };
 
   inherit python;
