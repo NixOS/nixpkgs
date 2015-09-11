@@ -73,6 +73,11 @@ stdenv.mkDerivation rec {
     sed -i '/TestSystemRoots/areturn' src/crypto/x509/root_darwin_test.go
 
     touch $TMPDIR/group $TMPDIR/hosts $TMPDIR/passwd
+
+    # Hack, dsymutil is an empty shim in the Darwin stdenv but we need it here
+    mkdir tmp
+    ln -s /usr/bin/dsymutil tmp/dsymutil
+    export PATH="$PWD/tmp:$PATH"
   '';
 
   patches = [
