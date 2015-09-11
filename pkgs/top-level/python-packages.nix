@@ -13955,11 +13955,11 @@ let
 
 
   sphinx_rtd_theme = buildPythonPackage (rec {
-    name = "sphinx_rtd_theme-0.1.7";
+    name = "sphinx_rtd_theme-0.1.8";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/sphinx_rtd_theme/${name}.tar.gz";
-      md5 = "3ffe014445195705968d899c38b305fd";
+      sha256 = "12mnb7qscr07mllmyyqfpx37778sr21m8663b4fivnk17bnk7xkl";
     };
 
     postPatch = ''
