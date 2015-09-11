@@ -21,10 +21,11 @@ stdenv.mkDerivation rec {
     cp -dr --no-preserve='ownership' Numix-Circle{,-Light} $out/share/icons/
   '';
   
-  meta = {
+  meta = with stdenv.lib; {
     description = "Numix icon theme (circle version)";
     homepage = https://numixproject.org;
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ jgeerds ];
   };
 }
