@@ -11955,14 +11955,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  VersionRequirements = buildPerlPackage rec {
-    name = "Version-Requirements-0.101022";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "0gn4cfx28sfsinxbf9lrxg4lzma8bsj99zb66lsg9irplrkx1pgl";
-    };
-  };
-
   W3CLinkChecker = buildPerlPackage rec {
     name = "W3C-LinkChecker-4.5";
     src = fetchurl {
