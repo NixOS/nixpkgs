@@ -16722,12 +16722,18 @@ let
 
 
   unidecode = buildPythonPackage rec {
-    name = "Unidecode-0.04.12";
+    name = "Unidecode-0.04.18";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/U/Unidecode/${name}.tar.gz";
-      md5 = "351dc98f4512bdd2e93f7a6c498730eb";
+      sha256 = "12hhblqy1ajvidm38im4171x4arg83pfmziyn53nizp29p3m14gi";
     };
+
+    preBuild = ''
+      export LC_ALL="en_US.UTF-8"
+    '';
+
+    buildInputs = [ pkgs.glibcLocales ];
 
     meta = {
       homepage = http://pypi.python.org/pypi/Unidecode/;
