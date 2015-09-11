@@ -11966,15 +11966,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   W3CLinkChecker = buildPerlPackage rec {
-    name = "W3C-LinkChecker-4.5";
+    name = "W3C-LinkChecker-4.81";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SC/SCOP/${name}.tar.gz";
-      sha256 = "0j2zlg57g0y9hqy8n35x5rfkpm7rnfjlwny5g0zaxwrl62ndkbm9";
+      sha256 = "0rbaqvv8ql0db4am1nh7ybig3a4kmckgdm7445xww7fr40dzcfb2";
     };
     propagatedBuildInputs = [
       LWP ConfigGeneral NetIP TermReadKey Perl5lib
-      CryptSSLeay
-    ];
+      CryptSSLeay CSSDOM ];
     meta = {
       homepage = http://validator.w3.org/checklink;
       description = "A tool to check links and anchors in Web pages or full Web sites";
