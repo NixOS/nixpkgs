@@ -547,11 +547,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  BKeywords = buildPerlPackage {
-    name = "B-Keywords-1.13";
+  BKeywords = buildPerlPackage rec {
+    name = "B-Keywords-1.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RU/RURBAN/B-Keywords-1.13.tar.gz;
-      sha256 = "073eb916f69bd337261de6cb6cab8ccdb06f67415d8c7291453ebdfdfe0be405";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/${name}.tar.gz";
+      sha256 = "1llaqhx6711lsf6mxmvrhjigpy3ymmf3wl8kvn7l0fsppnmn45lw";
     };
     meta = {
       description = "Lists of reserved barewords and symbol names";
