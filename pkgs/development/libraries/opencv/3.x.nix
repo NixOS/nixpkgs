@@ -1,9 +1,19 @@
-{ lib, stdenv, fetchurl, cmake, gtk, libjpeg, libpng, libtiff, jasper, ffmpeg
+{ lib, stdenv, fetchurl, fetchzip, cmake, gtk, libjpeg, libpng, libtiff, jasper, ffmpeg
 , fetchpatch, pkgconfig, gstreamer, xineLib, glib, python27, python27Packages, unzip
 , enableIpp ? false
+, enableContrib ? false
 , enableBloat ? false }:
 
-let v = "3.0.0"; in
+let
+  v = "3.0.0";
+
+  contribSrc = fetchzip {
+    url = "https://github.com/Itseez/opencv_contrib/archive/3.0.0.tar.gz";
+    sha256 = "1gx7f9v85hmzh37s0zaillg7bs6cy9prm3wl0jb5zc5zrf9d8bm8";
+    name = "opencv-contrib-3.0.0-src";
+  };
+
+in
 
 stdenv.mkDerivation rec {
   name = "opencv-${v}";
@@ -33,7 +43,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  cmakeFlags = [ "-DWITH_IPP=${if enableIpp then "ON" else "OFF"}" ];
+  cmakeFlags = [
+    "-DWITH_IPP=${if enableIpp then "ON" else "OFF"}"
+  ] ++ stdenv.lib.optionals enableContrib [ "-DOPENCV_EXTRA_MODULES_PATH=${contribSrc}/modules" ];
 
   enableParallelBuilding = true;
 
