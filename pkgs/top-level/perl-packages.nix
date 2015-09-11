@@ -4784,10 +4784,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   GraphViz = buildPerlPackage rec {
-    name = "GraphViz-2.15";
+    name = "GraphViz-2.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RS/RSAVAGE/${name}.tgz";
-      sha256 = "0ngm90vd1ymrm2c9k4dbgzpbip501gklll32l9jsj8j00x845iz2";
+      sha256 = "1zdgdd42ywg7bklysd8p8dra66q64vlm4fmnj5gjslp98cm02p9h";
     };
 
     # XXX: It'd be nicer it `GraphViz.pm' could record the path to graphviz.
