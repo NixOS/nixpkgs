@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   baseName = "octave";
-  version = "0.6";
+  version = "0.7";
   name = "pure-${baseName}-${version}";
 
   src = fetchurl {
     url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
-    sha256 = "5a42e8dff8023f6bf1214ed31b7999645d88ce2f103d9fba23b527259da9a0df";
+    sha256 = "04c1q5cjcyc5sg15ny1hn43rkphja3virw4k110cahc3piwbpsqk";
   };
 
   buildInputs = [ pkgconfig ];
@@ -21,8 +21,5 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ asppsa ];
-
-    # See https://bitbucket.org/purelang/pure-lang/issues/38
-    broken = true;
   };
 }
