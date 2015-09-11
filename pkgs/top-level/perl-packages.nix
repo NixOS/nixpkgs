@@ -2314,6 +2314,16 @@ let self = _self // overrides; _self = with self; {
     makeMakerFlags = "--lib=${pkgs.openssl}/lib";
   };
 
+  CSSDOM = buildPerlPackage rec {
+    name = "CSS-DOM-0.15";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SP/SPROUT/${name}.tar.gz";
+      sha256 = "12xb6xsd828r5pxavvamhqf3pilj9prvcnxmzs4fpjj07x1ikwy4";
+    };
+
+    buildInputs = [ Clone ];
+  };
+
   CwdGuard = buildPerlModule rec {
     name = "Cwd-Guard-0.04";
     src = fetchurl {
