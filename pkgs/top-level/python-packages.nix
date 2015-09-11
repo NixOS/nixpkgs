@@ -10250,15 +10250,19 @@ let
 
 
   pillow = buildPythonPackage rec {
-    name = "Pillow-2.3.0";
+    name = "Pillow-2.9.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pillow/${name}.zip";
-      md5 = "56b6614499aacb7d6b5983c4914daea7";
+      sha256 = "1mal92cwh85z6zqx7lrmg0dbqb2gw2cbb2fm6xh0fivmszz8vnyi";
     };
 
+    # Check is disabled because of assertion errors, see
+    # https://github.com/python-pillow/Pillow/issues/1259
+    doCheck = false;
+
     buildInputs = with self; [
-      pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl ]
+      pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl nose ]
       ++ optionals (isPy26 || isPy27 || isPy33 || isPyPy) [ pkgs.lcms2 ]
       ++ optionals (isPyPy) [ pkgs.tk pkgs.xlibs.libX11 ];
 
