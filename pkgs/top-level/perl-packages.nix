@@ -10485,4 +10485,25 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Tk = buildPerlPackage {
+    name = "Tk-804.033";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SR/SREZIC/Tk-804.033.tar.gz;
+      sha256 = "84756e9b07a2555c8eecf88e63d5cbbba9b1aa97b1e71a3d4aa524a7995a88ad";
+    };
+
+    buildInputs = [ pkgs.xlibs.libXext pkgs.xlibs.libX11 pkgs.libpng ];
+
+    configurePhase=''
+        perl Makefile.PL PREFIX=$out X11LIB=${pkgs.xlibs.libX11}/lib X11INC=${pkgs.xlibs.libX11}/include 
+    '';
+
+    NIX_CFLAGS_LINK = "-lpng";
+
+    meta = {
+      description = "A Graphical User Interface Toolkit";
+      license = "unrestricted";
+    };
+  };
+
 }; in self
