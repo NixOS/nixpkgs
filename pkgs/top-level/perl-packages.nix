@@ -610,11 +610,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  BusinessISMN = buildPerlPackage {
-    name = "Business-ISMN-1.11";
+  BusinessISMN = buildPerlPackage rec {
+    name = "Business-ISMN-1.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BD/BDFOY/Business-ISMN-1.11.tar.gz;
-      sha256 = "76d5240a5672c7a8b1ba9e9ea8238a5c8882139911acbb67b7059b5ee3da342d";
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/${name}.tar.gz";
+      sha256 = "0cm1v75axg4gp6cnbyavmnqqjscsxh7nc60vcbw34rqivvf9idc9";
     };
     propagatedBuildInputs = [ TieCycle ];
     meta = {
