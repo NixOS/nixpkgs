@@ -4671,10 +4671,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   GeoIP = buildPerlPackage rec {
-    name = "Geo-IP-1.43";
+    name = "Geo-IP-1.45";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BO/BORISZ/${name}.tar.gz";
-      sha256 = "0p7mcn4rzvhrblx72f5a1yg88mqgv6f46mq0rvhhkmkpwckb0yjq";
+      url = "mirror://cpan/authors/id/M/MA/MAXMIND/${name}.tar.gz";
+      sha256 = "0qinkq2br1cjicbgqb5bvrhm73h7f9f4fgc6bjfs5r6x7316bdqf";
     };
     makeMakerFlags = "LIBS=-L${pkgs.geoip}/lib INC=-I${pkgs.geoip}/include";
     doCheck = false; # seems to access the network
