@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   name = "playonlinux-${version}";
-  version = "4.2.8";
+  version = "4.2.9";
 
   src = fetchurl {
     url = "https://www.playonlinux.com/script_files/PlayOnLinux/${version}/PlayOnLinux_${version}.tar.gz";
-    sha256 = "2ae8d5132706f3c697d0a53573c5835938dd042b620eb76790181b285797985c";
+    sha256 = "89bb0fd7cce8cf598ebf38cad716b8587eaca5b916d54386fb24b3ff66b48624";
   };
 
   nativeBuildInputs = [ makeWrapper ];
