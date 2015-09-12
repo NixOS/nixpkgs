@@ -86,6 +86,9 @@ package-maintainers:
     - cased
     - pipes-csv
     - pipes-mongodb
+  khumba:
+    - goatee
+    - goatee-gtk
   psibi:
     - path-pieces
     - persistent
