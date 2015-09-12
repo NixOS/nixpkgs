@@ -8316,6 +8316,8 @@ let
 
   thrift = callPackage ../development/libraries/thrift { };
 
+  tidyp = callPackage ../development/libraries/tidyp { };
+
   tinyxml = tinyxml2;
 
   tinyxml2 = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
