@@ -1313,8 +1313,6 @@ dont-distribute-packages:
   g-npm:                                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   gnuidn:                                            [ x86_64-darwin ]
   goa:                                               [ i686-linux, x86_64-linux, x86_64-darwin ]
-  goatee-gtk:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
-  goatee:                                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   gofer-prelude:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   google-html5-slide:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   google-mail-filters:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
