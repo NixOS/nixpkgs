@@ -7866,10 +7866,11 @@ let self = _self // overrides; _self = with self; {
 
   NetAmazonEC2 = buildPerlPackage rec {
     name = "Net-Amazon-EC2-0.14-stanaka-bc66577e13";
-    src = fetchurl {
-      url = https://github.com/stanaka/net-amazon-ec2/zipball/bc66577e1312e828e252937d95f9f5f637af6a0b;
-      sha256 = "1c0k3addkaaf4zj7z87svm9xc3c06v0r06rf5rpqmps413lqisbn";
-      name  = "${name}.zip";
+    src = fetchFromGitHub {
+      owner = "stanaka";
+      repo = "net-amazon-ec2";
+      rev = "bc66577e1312e828e252937d95f9f5f637af6a0b";
+      sha256 = "0x7kac27vp60a0qmvf6zpr2ds7245hncpn2y1qbacmdp092x212k";
     };
     buildInputs = [ pkgs.unzip ];
     patches =
