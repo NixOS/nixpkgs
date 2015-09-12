@@ -2011,7 +2011,6 @@ let
   ninka = callPackage ../development/tools/misc/ninka { };
 
   nodejs-4_1 = callPackage ../development/web/nodejs {
-    libuv = libuvVersions.v1_6_1;
     openssl = openssl_1_0_2;
   };
 
@@ -7407,7 +7406,7 @@ let
     inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   });
 
-  libuv = libuvVersions.v1_6_1;
+  libuv = libuvVersions.v1_7_5;
 
   libv4l = lowPrio (v4l_utils.override {
     alsaLib = null;
