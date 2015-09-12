@@ -10083,7 +10083,7 @@ let self = _self // overrides; _self = with self; {
   TaskPlack = buildPerlPackage rec {
     name = "Task-Plack-0.25";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Task/${name}.tar.gz";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
       sha256 = "1mk3z7xis1akf8245qgw5mnnsl7570kdidx83nj81kv410pw2v43";
     };
     propagatedBuildInputs = [ Plack PSGI ];
