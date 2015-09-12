@@ -79,4 +79,9 @@ stdenv.mkDerivation {
     ++ optional (!enablePluginSpamReport) "--disable-spam_report-plugin"
     ++ optional (!enablePluginVcalendar) "--disable-vcalendar-plugin"
     ++ optional (!enableSpellcheck) "--disable-enchant";
+
+  postInstall = ''
+    mkdir -p $out/share/applications
+    cp claws-mail.desktop $out/share/applications
+  '';
 }
