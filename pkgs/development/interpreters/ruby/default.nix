@@ -6,7 +6,7 @@
 , groff, docSupport ? false
 , libyaml, yamlSupport ? true
 , libffi, fiddleSupport ? true
-, autoreconfHook, bison
+, autoreconfHook, bison, autoconf
 , darwin ? null
 }:
 
@@ -20,6 +20,7 @@ let
   let
     versionNoPatch = "${majorVersion}.${minorVersion}.${teenyVersion}";
     isRuby21 = majorVersion == "2" && minorVersion == "1";
+    isRuby18 = majorVersion == "1" && minorVersion == "8";
     baseruby = self false;
     self = useRailsExpress: stdenv.mkDerivation rec {
       version = "${versionNoPatch}-p${patchLevel}";
@@ -57,19 +58,20 @@ let
         # support is disabled (if it's enabled, we already have it) and we're
         # running on darwin
         ++ (op (!cursesSupport && stdenv.isDarwin) readline)
-        ++ (ops stdenv.isDarwin (with darwin; [ libiconv libobjc libunwind ]));
+        ++ (ops stdenv.isDarwin (with darwin; [ libiconv libobjc libunwind ]))
+        ++ op isRuby18 autoconf;
 
       enableParallelBuilding = true;
 
-      patches = let patchsets = import ./patchsets.nix {
+      patches = (import ./patchsets.nix {
         inherit patchSet useRailsExpress ops patchLevel;
-      }; in patchsets."${versionNoPatch}";
+      })."${versionNoPatch}";
 
       postUnpack = opString isRuby21 ''
         rm "$sourceRoot/enc/unicode/name2ctype.h"
       '';
 
-      postPatch = if isRuby21 then ''
+      postPatch = opString (!isRuby18) (if isRuby21 then ''
         rm tool/config_files.rb
         cp ${config}/config.guess tool/
         cp ${config}/config.sub tool/
@@ -77,9 +79,9 @@ let
         sed -i configure.in -e '/config.guess/d'
         cp ${config}/config.guess tool/
         cp ${config}/config.sub tool/
-      '';
+      '');
 
-      configureFlags = ["--enable-shared"]
+      configureFlags = ["--enable-shared" "--enable-pthread"]
         ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
         ++ ops stdenv.isDarwin [
           # on darwin, we have /usr/include/tk.h -- so the configure script detects
