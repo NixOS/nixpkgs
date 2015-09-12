@@ -1044,7 +1044,7 @@ let self = _self // overrides;
       sha256 = "1561nxjva8892via0l8315y3fih4r4q9gzycmvh33db8gqzq4l86";
     };
     packageRequires = [ request-deferred deferred dash-functional s ];
-    files = [ "org-trello-*.el" ];
+    files = [ "org-trello*.el" ];
     meta = {
       description = "Org minor mode - 2-way sync org & trello";
       longDescription = ''
