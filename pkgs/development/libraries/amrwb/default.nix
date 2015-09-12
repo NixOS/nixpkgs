@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   src = fetchurl {
-    url = http://ftp.penguin.cz/pub/users/utx/amr/amrwb-7.0.0.3.tar.bz2;
+    url = http://www.penguin.cz/~utx/ftp/amr/amrwb-7.0.0.3.tar.bz2;
     sha256 = "0nn94i3gw3d5fgks43wdhshdlhpd4rcrzj46f2vsby0viwkxxp8z";
   };
 
