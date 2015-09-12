@@ -11167,12 +11167,12 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TextBibTeX = buildPerlModule {
-    name = "Text-BibTeX-0.69";
+  TextBibTeX = buildPerlModule rec {
+    name = "Text-BibTeX-0.71";
     buildInputs = [ ConfigAutoConf ExtUtilsLibBuilder ];
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AM/AMBS/Text/Text-BibTeX-0.69.tar.gz;
-      sha256 = "1gzh5zh2ggfp15q5im7gpr1krq4mzmhbjdivyb2x03vcg0qdkk3z";
+      url = "mirror://cpan/authors/id/A/AM/AMBS/${name}.tar.gz";
+      sha256 = "1jwi4yc4l1sf9pyc6qifcm493lwf8iggdjli7f9a9aqin1swh36d";
     };
     meta = {
       description = "Interface to read and parse BibTeX files";
