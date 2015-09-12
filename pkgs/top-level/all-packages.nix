@@ -14816,6 +14816,8 @@ let
 
   darcnes = callPackage ../misc/emulators/darcnes { };
 
+  desmume = callPackage ../misc/emulators/desmume { inherit (pkgs.gnome) gtkglext libglade; };
+
   dbacl = callPackage ../tools/misc/dbacl { };
 
   dblatex = callPackage ../tools/typesetting/tex/dblatex {
