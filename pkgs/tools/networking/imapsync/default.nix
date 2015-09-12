@@ -1,10 +1,10 @@
 {stdenv, makeWrapper, fetchurl, perl, openssl, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "imapsync-1.607";
+  name = "imapsync-1.644";
   src = fetchurl {
     url = "https://fedorahosted.org/released/imapsync/${name}.tgz";
-    sha256 = "0ajgzsil2fa15c3ky8cvpvfz62ymlpmr0lnwvi8ifffclv7k2hvq";
+    sha256 = "1lni950qyp841277dnzb43pxpzqyfcl6sachd8j6a0j08826gfky";
   };
 
   patchPhase = ''
