@@ -11130,11 +11130,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TextAligner = buildPerlPackage {
-    name = "Text-Aligner-0.10";
+  TextAligner = buildPerlPackage rec {
+    name = "Text-Aligner-0.12";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Aligner-0.10.tar.gz;
-      sha256 = "0d80x5jrv5j9yi234rdnjvnsnmhm4jsssqv7bpkl1fhjd1kfc7v0";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "0a6zkchc0apvzkch6z18cx6h97xfiv50r7n4xhg90x8dvk75qzcs";
     };
     meta = {
       description = "Align text in columns";
