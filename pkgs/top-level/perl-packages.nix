@@ -11653,11 +11653,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TimeDurationParse = buildPerlPackage {
-    name = "Time-Duration-Parse-0.06";
+  TimeDurationParse = buildPerlPackage rec {
+    name = "Time-Duration-Parse-0.12";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Time-Duration-Parse-0.06.tar.gz;
-      sha256 = "e88f0e1c322b477ec98fb295324bc78657ce25aa53cb353656f01241ea7fe4db";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
+      sha256 = "0yxfxw7fxs19nncpv54nqh21ak2cmvpz7ks8d9v4lz3mbq6q0q9s";
     };
     buildInputs = [ TimeDuration ];
     propagatedBuildInputs = [ ExporterLite ];
