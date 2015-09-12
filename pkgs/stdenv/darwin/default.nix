@@ -58,6 +58,8 @@ rec {
     export NIX_CFLAGS_COMPILE+=" --sysroot=/var/empty -idirafter $SDKROOT/usr/include -F$SDKROOT/System/Library/Frameworks -Wno-multichar -Wno-deprecated-declarations"
     export NIX_LDFLAGS_AFTER+=" -L$SDKROOT/usr/lib"
     export CMAKE_OSX_ARCHITECTURES=x86_64
+    # Workaround for https://openradar.appspot.com/22671534 on 10.11.
+    export gl_cv_func_getcwd_abort_bug=no
   '';
 
   # A stdenv that wraps the Apple command-line tools and our other trivial symlinked bootstrap tools
