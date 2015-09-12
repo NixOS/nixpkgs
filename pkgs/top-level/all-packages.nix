@@ -3738,7 +3738,8 @@ let
 
   clang = llvmPackages.clang;
 
-  clang_36 = llvmPackages.clang;
+  clang_37 = llvmPackages_37.clang;
+  clang_36 = llvmPackages_36.clang;
   clang_35 = wrapCC llvmPackages_35.clang;
   clang_34 = wrapCC llvmPackages_34.clang;
   clang_33 = wrapCC (clangUnwrapped llvm_33 ../development/compilers/llvm/3.3/clang.nix);
@@ -4220,6 +4221,7 @@ let
 
   llvm = llvmPackages.llvm;
 
+  llvm_37 = llvmPackages_37.llvm;
   llvm_36 = llvmPackages_36.llvm;
   llvm_35 = llvmPackages_35.llvm;
   llvm_34 = llvmPackages_34.llvm;
@@ -4240,6 +4242,10 @@ let
   };
 
   llvmPackages_36 = callPackage ../development/compilers/llvm/3.6 {
+    inherit (stdenvAdapters) overrideCC;
+  };
+
+  llvmPackages_37 = callPackage ../development/compilers/llvm/3.7 {
     inherit (stdenvAdapters) overrideCC;
   };
 
