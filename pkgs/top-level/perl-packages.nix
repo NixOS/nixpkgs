@@ -11251,13 +11251,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextMarkdown = buildPerlPackage rec {
-    name = "Text-Markdown-1.0.26";
+    name = "Text-Markdown-1.000031";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
-      sha256 = "1ch8018yhn8mz38k0mrv5iljji1qqby2gfnvhvcm2vp65pjq2zdn";
+      sha256 = "06y79lla8adkqhrs41xdddqjs81dcrh266b50mfbg37bxkawd4f1";
     };
-    buildInputs = [ FileSlurp ListMoreUtils Encode
-      ExtUtilsMakeMaker TestException ];
+    buildInputs = [ FileSlurp ListMoreUtils Encode ExtUtilsMakeMaker
+      TestException HTMLTidy TestDifferences ];
   };
 
   TestMagpie = buildPerlPackage {
