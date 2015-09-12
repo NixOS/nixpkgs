@@ -1014,4 +1014,14 @@ self: super: {
   # https://github.com/goldfirere/singletons/issues/122
   singletons = dontCheck super.singletons;
 
+  # cabal2nix doesn't pick up some of the dependencies.
+  ginsu = let
+    g = addBuildDepend super.ginsu pkgs.perl;
+    g' = overrideCabal g (drv: {
+      executableSystemDepends = (drv.executableSystemDepends or []) ++ [
+        pkgs.ncurses
+      ];
+    });
+  in g';
+
 }
