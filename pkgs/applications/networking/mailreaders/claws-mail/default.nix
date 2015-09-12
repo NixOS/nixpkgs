@@ -39,6 +39,7 @@ stdenv.mkDerivation {
     homepage = http://www.claws-mail.org/;
     license = licenses.gpl3;
     platforms = platforms.linux;
+    maintainers = [ maintainers.khumba ];
   };
 
   src = fetchurl {
