@@ -1042,6 +1042,23 @@ let self = _self // overrides;
     inherit lib;
   };
 
+  org2jekyll = melpaBuild rec {
+    pname   = "org2jekyll";
+    version = "0.1.8";
+    src = fetchFromGitHub {
+      owner = "ardumont";
+      repo = pname;
+      rev = "a12173b9507b3ef54dfebb5751503ba1ee93c6aa";
+      sha256 = "064kw64w9snm0lbshxn8d6yd9xvyislhg37fmhq1w7vy8lm61xvf";
+    };
+    packageRequires = [ dash-functional s deferred ];
+    files = [ "${pname}.el" ];
+    meta = {
+      description = "Blogging with org-mode and jekyll without alien yaml headers";
+      license = gpl3Plus;
+    };
+  };
+
   org-plus-contrib = melpaBuild rec {
     pname   = "org-plus-contrib";
     version = "20150406";
