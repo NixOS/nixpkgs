@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
     description = "Open Source Video Calls and Chat";
     license = stdenv.lib.licenses.lgpl21Plus.shortName;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.khumba ];
   };
 
 }
