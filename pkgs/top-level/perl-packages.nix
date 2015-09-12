@@ -5086,6 +5086,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  HTMLTidy = buildPerlPackage rec {
+    name = "HTML-Tidy-1.56";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PETDANCE/${name}.tar.gz";
+      sha256 = "1zp4wndvr9vadbqjmd8d8ck6hlmr0dqg20vpa8cqfdflqkzqf208";
+    };
+
+    propagatedBuildInputs = [ TextDiff ];
+
+    patchPhase = ''
+      sed -i "s#/usr/include/tidyp#${pkgs.tidyp}/include/tidyp#" Makefile.PL
+      sed -i "s#/usr/lib#${pkgs.tidyp}/lib#" Makefile.PL
+    '';
+  };
+
   HTMLTiny = buildPerlPackage rec {
     name = "HTML-Tiny-1.05";
     src = fetchurl {
