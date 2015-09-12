@@ -39,6 +39,7 @@ stdenv.mkDerivation {
     homepage = http://www.claws-mail.org/;
     license = licenses.gpl3;
     platforms = platforms.linux;
+    maintainers = [ maintainers.khumba ];
   };
 
   src = fetchurl {
@@ -78,4 +79,9 @@ stdenv.mkDerivation {
     ++ optional (!enablePluginSpamReport) "--disable-spam_report-plugin"
     ++ optional (!enablePluginVcalendar) "--disable-vcalendar-plugin"
     ++ optional (!enableSpellcheck) "--disable-enchant";
+
+  postInstall = ''
+    mkdir -p $out/share/applications
+    cp claws-mail.desktop $out/share/applications
+  '';
 }
