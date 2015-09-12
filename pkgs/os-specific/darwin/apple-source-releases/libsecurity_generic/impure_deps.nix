@@ -40,7 +40,6 @@
   "/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Metadata"
   "/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/OSServices.framework/Versions/A/OSServices"
   "/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SearchKit.framework/Versions/A/SearchKit"
-  "/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SharedFileList.framework/Versions/A/SharedFileList"
   "/System/Library/Frameworks/CoreText.framework/Versions/A/CoreText"
   "/System/Library/Frameworks/CoreVideo.framework/Versions/A/CoreVideo"
   "/System/Library/Frameworks/CoreWLAN.framework/Versions/A/CoreWLAN"
