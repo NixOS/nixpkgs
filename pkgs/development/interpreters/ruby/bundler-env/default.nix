@@ -30,7 +30,6 @@ let
   };
   fetchers.git = attrs: fetchgit {
     inherit (attrs.source) url rev sha256 fetchSubmodules;
-    leaveDotGit = true;
   };
 
   applySrc = attrs:

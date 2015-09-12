@@ -38,7 +38,6 @@ let
   };
   fetchers.git = attrs: fetchgit {
     inherit (attrs.src) url rev sha256 fetchSubmodules;
-    leaveDotGit = true;
   };
 
   instantiate = (attrs:

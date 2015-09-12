@@ -1,4 +1,4 @@
-{ lib, ruby, rubygemsFun, fetchurl, makeWrapper, git } @ defs:
+{ lib, ruby, rubygemsFun, fetchurl, makeWrapper, writeScriptBin } @ defs:
 
 lib.makeOverridable (
 
@@ -14,11 +14,25 @@ lib.makeOverridable (
 , gemPath ? []
 , ...} @ attrs:
 
+let
+  # A fake 'git' command that only supports 'ls-files -z'
+  # Bundler itself & several gems require this.
+  fakeGit = writeScriptBin "git" ''
+    #!${stdenv.shell}
+    if [ "$*" = "ls-files -z" ]; then
+        find -type f -printf '%P\0'
+    else
+        echo "fakeGit: Don't know how to handle git $@" >&2
+        exit 1
+    fi
+  '';
+in
+
 stdenv.mkDerivation (attrs // {
   inherit ruby rubygems;
   inherit doCheck;
 
-  buildInputs = [ ruby rubygems makeWrapper git ] ++ buildInputs;
+  buildInputs = [ ruby rubygems makeWrapper fakeGit ] ++ buildInputs;
 
   name = namePrefix + name;
 
@@ -56,11 +70,6 @@ stdenv.mkDerivation (attrs // {
 
   buildPhase = ''
     runHook preBuild
-
-    # TODO: Investigate. The complete working tree is touched by fetchgit.
-    if [ -d .git ]; then
-      git reset
-    fi
 
     gemspec=$(find . -name '*.gemspec')
     echo "found the following gemspecs:"
