@@ -1,11 +1,7 @@
-{ stdenv, fetchurl, ant, jdk, commonsBsf, commonsLogging }:
+{ stdenv, fetchurl, ant, jdk, commonsBsf, commonsLogging, bsh }:
 
 let
   version = "5.2.0";
-  bsh = fetchurl {
-    url = http://www.beanshell.org/bsh-2.0b5.jar;
-    sha256 = "0p2sxrpzd0vsk11zf3kb5h12yl1nq4yypb5mpjrm8ww0cfaijck2";
-  };
   bcpg = fetchurl {
     url = http://central.maven.org/maven2/org/bouncycastle/bcpg-jdk16/1.46/bcpg-jdk16-1.46.jar;
     sha256 = "16xhmwks4l65m5x150nd23y5lyppha9sa5fj65rzhxw66gbli82d";
