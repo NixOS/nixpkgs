@@ -1,14 +1,7 @@
 { stdenv, lib, fetchurl, fetchFromSavannah, fetchFromGitHub
-, zlib, zlibSupport ? true
-, openssl, opensslSupport ? true
-, gdbm, gdbmSupport ? true
-, ncurses, readline, cursesSupport ? true
-, groff, docSupport ? false
-, libyaml, yamlSupport ? true
-, libffi, fiddleSupport ? true
-, autoreconfHook, bison, autoconf
-, darwin ? null
-}:
+, zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
+, autoconf, darwin ? null
+} @ args:
 
 let
   op = stdenv.lib.optional;
@@ -16,30 +9,43 @@ let
   opString = stdenv.lib.optionalString;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix { inherit fetchFromSavannah; };
-  generic = { majorVersion, minorVersion, teenyVersion, patchLevel, sha256 } @ args:
-  let
-    versionNoPatch = "${majorVersion}.${minorVersion}.${teenyVersion}";
-    isRuby21 = majorVersion == "2" && minorVersion == "1";
-    isRuby18 = majorVersion == "1" && minorVersion == "8";
-    baseruby = self false;
-    self = useRailsExpress: stdenv.mkDerivation rec {
-      version = "${versionNoPatch}-p${patchLevel}";
+
+generic = { majorVersion, minorVersion, teenyVersion, patchLevel, sha256 }: let
+  versionNoPatch = "${majorVersion}.${minorVersion}.${teenyVersion}";
+  version = "${versionNoPatch}-p${patchLevel}";
+  fullVersionName = if patchLevel != "0" && stdenv.lib.versionOlder versionNoPatch "2.1"
+    then version
+    else versionNoPatch;
+  tag = "v" + stdenv.lib.replaceChars ["." "p" "-"] ["_" "_" ""] fullVersionName;
+  isRuby21 = majorVersion == "2" && minorVersion == "1";
+  isRuby18 = majorVersion == "1" && minorVersion == "8";
+  baseruby = self.override { useRailsExpress = false; };
+  self = lib.makeOverridable (
+    { stdenv, lib, fetchurl, fetchFromSavannah, fetchFromGitHub
+    , useRailsExpress ? true
+    , zlib, zlibSupport ? true
+    , openssl, opensslSupport ? true
+    , gdbm, gdbmSupport ? true
+    , ncurses, readline, cursesSupport ? true
+    , groff, docSupport ? false
+    , libyaml, yamlSupport ? true
+    , libffi, fiddleSupport ? true
+    , autoreconfHook, bison, autoconf
+    , darwin ? null
+    }:
+    stdenv.mkDerivation rec {
+      inherit version;
 
       name = "ruby-${version}";
 
-      src = let
-        versionName = if patchLevel != "0" && stdenv.lib.versionOlder versionNoPatch "2.1"
-          then version
-          else versionNoPatch;
-        tag = "v" + stdenv.lib.replaceChars ["." "p" "-"] ["_" "_" ""] versionName;
-      in if useRailsExpress then fetchFromGitHub {
+      src = if useRailsExpress then fetchFromGitHub {
         owner  = "ruby";
         repo   = "ruby";
         rev    = tag;
-        sha256 = args.sha256.git;
+        sha256 = sha256.git;
       } else fetchurl {
-        url = "http://cache.ruby-lang.org/pub/ruby/${majorVersion}.${minorVersion}/ruby-${versionName}.tar.gz";
-        sha256 = args.sha256.src;
+        url = "http://cache.ruby-lang.org/pub/ruby/${majorVersion}.${minorVersion}/ruby-${fullVersionName}.tar.gz";
+        sha256 = sha256.src;
       };
 
       # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
@@ -104,7 +110,7 @@ let
 
         envHooks+=(addGemPath)
         EOF
-      '' + lib.optionalString useRailsExpress ''
+      '' + opString useRailsExpress ''
         rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
 
         # Prevent the baseruby from being included in the closure.
@@ -126,7 +132,8 @@ let
         libPath = "lib/${versionNoPatch}";
         gemPath = "lib/${rubyEngine}/gems/${versionNoPatch}";
       };
-    }; in self true;
+    }
+  ) args; in self;
 
 in {
   ruby_1_8_7 = generic {
