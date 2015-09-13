@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, boost, cairo, fontsConf, gettext, glibmm, gtk, gtkmm
-, libsigcxx, libtool, libxmlxx, pango, pkgconfig, imagemagick
-, intltool
+{ stdenv, fetchurl, boost, cairo, fontsConf, gettext, glibmm, gtk3, gtkmm3
+, libjack2, libsigcxx, libtool, libxmlxx, makeWrapper, mlt-qt5, pango, pkgconfig
+, imagemagick, intltool
 }:
 
 let
-  version = "0.64.3";
+  version = "1.0.1";
 
   ETL = stdenv.mkDerivation rec {
-    name = "ETL-0.04.17";
+    name = "ETL-0.04.19";
 
     src = fetchurl {
-       url = "mirror://sourceforge/synfig/${name}.tar.gz";
-       sha256 = "0rb9czkgan41q6xlck97kh77g176vjm1wnq620sqky7k2hiahr3s";
+       url = "http://download.tuxfamily.org/synfig/releases/${version}/${name}.tar.gz";
+       sha256 = "1zmqv2fa5zxprza3wbhk5mxjk7491jqshxxai92s7fdiza0nhs91";
     };
   };
 
@@ -19,8 +19,8 @@ let
     name = "synfig-${version}";
 
     src = fetchurl {
-       url = "mirror://sourceforge/synfig/synfig-${version}.tar.gz";
-       sha256 = "0p4wqjidb4k3viahck4wzbh777f5ifpivn4vxhxs5fbq8nsvqksh";
+       url = "http://download.tuxfamily.org/synfig/releases/${version}/${name}.tar.gz";
+       sha256 = "0l1f2xwmzds32g46fqwsq7j5qlnfps6944chbv14d3ynzgyyp1i3";
     };
 
     configureFlags = [
@@ -28,10 +28,8 @@ let
       "--with-boost-libdir=${boost.lib}/lib"
     ];
 
-    patches = [ ./synfig-cstring.patch ];
-
     buildInputs = [
-      ETL boost cairo gettext glibmm libsigcxx libtool libxmlxx pango
+      ETL boost cairo gettext glibmm mlt-qt5 libsigcxx libtool libxmlxx pango
       pkgconfig
     ];
   };
@@ -40,22 +38,19 @@ stdenv.mkDerivation rec {
   name = "synfigstudio-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/synfig/${name}.tar.gz";
-    sha256 = "1li3ac8qvg25h9fgym0zywnq5bg3sgbv162xs4c6pwksn75i6gsv";
+    url = "http://download.tuxfamily.org/synfig/releases/${version}/${name}.tar.gz";
+    sha256 = "0jfa946rfh0dbagp18zknlj9ffrd4h45xcy2dh2vlhn6jdm08yfi";
   };
 
   buildInputs = [
-    ETL boost cairo gettext glibmm gtk gtkmm imagemagick intltool
-    intltool libsigcxx libtool libxmlxx pkgconfig synfig
+    ETL boost cairo gettext glibmm gtk3 gtkmm3 imagemagick intltool
+    libjack2 libsigcxx libtool libxmlxx makeWrapper mlt-qt5 pkgconfig
+    synfig
   ];
 
-  configureFlags = [
-    "--with-boost=${boost.dev}"
-    "--with-boost-libdir=${boost.lib}/lib"
-  ];
-
-  preBuild = ''
-    export FONTCONFIG_FILE=${fontsConf}
+  postInstall = ''
+    wrapProgram "$out/bin/synfigstudio" \
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   enableParallelBuilding = true;
