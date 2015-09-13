@@ -4127,6 +4127,8 @@ let
 
   ikarus = callPackage ../development/compilers/ikarus { };
 
+  intercal = callPackage ../development/compilers/intercal { };
+
   hugs = callPackage ../development/interpreters/hugs { };
 
   path64 = callPackage ../development/compilers/path64 { };
