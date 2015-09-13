@@ -239,14 +239,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Appperlbrew = buildPerlPackage {
-    name = "App-perlbrew-0.71";
+  Appperlbrew = buildPerlPackage rec {
+    name = "App-perlbrew-0.73";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GU/GUGOD/App-perlbrew-0.71.tar.gz;
-      sha256 = "5e5de7c4d5235556f6cd5c5e56751fb2d73821ef58390e457db4253542224a09";
+      url = "mirror://cpan/authors/id/G/GU/GUGOD/${name}.tar.gz";
+      sha256 = "0ym7ahjm95igm1hg0qwy29zdcjqdcakcmrn3r8xlbvqkk5xrxg5c";
     };
     buildInputs = [ pkgs.curl IOAll PathClass TestException TestNoWarnings TestOutput TestSpec ];
     propagatedBuildInputs = [ CPANPerlReleases CaptureTiny DevelPatchPerl locallib ];
+
+    preConfigure = ''
+      patchShebangs .
+    '';
+
+    doCheck = false;
+
     meta = {
       description = "Manage perl installations in your $HOME";
       license = stdenv.lib.licenses.mit;
