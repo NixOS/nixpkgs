@@ -2747,10 +2747,10 @@ let
   };
 
   syncthing = buildFromGitHub {
-    rev = "v0.11.24";
+    rev = "v0.11.25";
     owner = "syncthing";
     repo = "syncthing";
-    sha256 = "02hmjx9m6zcf3pl1991fmidr0jbbf0zxafk0m9iwrdd40m77m2dj";
+    sha256 = "17phkj0dxzc1j755ddpf15rq34yp52pw2lx9kpg7gyc9qp0pzacl";
     doCheck = false; # Tests are currently broken for 32-bit but they are benign
     buildInputs = [
       go-lz4 du luhn xdr snappy ratelimit osext syncthing-protocol relaysrv
