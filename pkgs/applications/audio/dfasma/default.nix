@@ -2,9 +2,9 @@
 
 let
 
-  version = "1.2.4";
+  version = "1.2.5";
   rev = "v${version}";
-  sha256 = "1mccfs5dgmfqxa7wvvz2j3qdifh0kxwzcz8bb3pdwv3phrf8lvji";
+  sha256 = "0mgy2bkmyp7lvaqsr7hkndwdgjf26mlpsj6smrmn1vp0cqyrw72d";
 
   reaperFork = {
     src = fetchFromGitHub {
@@ -15,6 +15,18 @@ let
     };
     meta = with stdenv.lib; {
      license = licenses.asl20;
+    };
+  };
+
+  libqaudioextra = {
+    src = fetchFromGitHub {
+      sha256 = "17pvlij8cc4lwzf6f1cnygj3m3ci6xfa3lv5bgcr5i1gzyjxqpq1";
+      rev = "b7d187cd9a1fd76ea94151e2e02453508d0151d3";
+      repo = "libqaudioextra";
+      owner = "gillesdegottex";
+    };
+    meta = with stdenv.lib; {
+     license = licenses.gpl3Plus;
     };
   };
 
@@ -32,6 +44,7 @@ in stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace dfasma.pro --replace '$$DFASMAVERSIONGITPRO' '${version}'
     cp -Rv "${reaperFork.src}"/* external/REAPER
+    cp -Rv "${libqaudioextra.src}"/* external/libqaudioextra
   '';
 
   configurePhase = ''
