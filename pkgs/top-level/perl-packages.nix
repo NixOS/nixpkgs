@@ -11328,18 +11328,19 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextRecordParser = buildPerlPackage rec {
-    name = "Text-RecordParser-1.5.0";
+    name = "Text-RecordParser-1.6.5";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KC/KCLARK/Text-RecordParser-v1.5.0.tar.gz";
-      sha256 = "0zlwpayjnpjani3v3hgi77207i3n5fppcxww20chdldx98dkj7jm";
+      url = "mirror://cpan/authors/id/K/KC/KCLARK/${name}.tar.gz";
+      sha256 = "0nn33c058bl957v38xhqig4ld34lifl4arqiilhxky339i0q2fys";
     };
 
     # In a NixOS chroot build, the tests fail because the font configuration
     # at /etc/fonts/font.conf is not available.
     doCheck = false;
 
-    propagatedBuildInputs = [ TestException IOStringy ClassAccessor Readonly ListMoreUtils
-                              TestPod TestPodCoverage GraphViz ReadonlyXS TextTabularDisplay];
+    propagatedBuildInputs = [ TestException IOStringy ClassAccessor Readonly
+      ListMoreUtils TestPod TestPodCoverage GraphViz ReadonlyXS
+      TextTabularDisplay];
   };
 
   TextReform = buildPerlPackage {
