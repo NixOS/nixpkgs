@@ -11493,10 +11493,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextUnidecode = buildPerlPackage rec {
-    name = "Text-Unidecode-0.04";
+    name = "Text-Unidecode-1.24";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Text/${name}.tar.gz";
-      sha256 = "01kbw5xshs906ikg0rgf51y9m6m26a4msv7ghcqwx7w2shgs0ga7";
+      sha256 = "124q1zfiyj70zz691nrfjfmv4i8dyalddhqisp8y28kzfnba9vrh";
     };
   };
 
