@@ -2093,11 +2093,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CPANPerlReleases = buildPerlPackage {
-    name = "CPAN-Perl-Releases-1.94";
+  CPANPerlReleases = buildPerlPackage rec {
+    name = "CPAN-Perl-Releases-2.36";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/CPAN-Perl-Releases-1.94.tar.gz;
-      sha256 = "ebc70640541f5b6d1191ba7bf958d369d9e21be0908ac812663047290b95fdf2";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
+      sha256 = "092nr3x2bs0lb3k8vk0mkghqzcw05s0gyyvfnmvx4fwwza8kya85";
     };
     meta = {
       homepage = https://github.com/bingos/cpan-perl-releases;
