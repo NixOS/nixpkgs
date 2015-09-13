@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     cp build/utility/vbutil_kernel $out/bin
     cp build/utility/vbutil_key $out/bin
     cp build/utility/vbutil_keyblock $out/bin
-    cp build/utility/vbutil_firmware $out/bin
+    cp build/utility/vbutil_firmware $out/bin 
   '';
 
   meta = {
