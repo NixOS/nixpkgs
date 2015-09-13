@@ -9,6 +9,23 @@ let
     locales = config.i18n.supportedLocales;
   };
 
+  xcfg = config.services.xserver;
+
+  ckbKeymap = pkgs.stdenv.mkDerivation {
+    name = "xkb-console-keymap";
+
+    buildInputs = with pkgs; [ ckbcomp ];
+
+    model = xcfg.xkbModel;
+    layout = xcfg.layout;
+    options = xcfg.xkbOptions;
+    variant = xcfg.xkbVariant;
+
+    buildCommand = ''
+      ${pkgs.ckbcomp}/bin/ckbcomp -model "$model" -layout "$layout" -option "$options" -variant "$variant" > $out
+    '';
+  };
+
 in
 
 {
@@ -52,6 +69,15 @@ in
         '';
       };
 
+      consoleUseXkbConfig = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set, configure the console keymap from the xserver keyboard
+          settings.
+        '';
+      };
+
       consoleKeyMap = mkOption {
         type = mkOptionType {
           name = "string or path";
@@ -73,6 +99,8 @@ in
   ###### implementation
 
   config = {
+
+    i18n.consoleKeyMap = mkIf config.i18n.consoleUseXkbConfig ckbKeymap;
 
     environment.systemPackages =
       optional (config.i18n.supportedLocales != []) glibcLocales;
