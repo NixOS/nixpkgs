@@ -2,7 +2,7 @@
 , libXrender, libXext, libtiff, libjpeg, libpng, libXScrnSaver, writeText
 , libXdmcp, libXau, lib, openssl, zlib }:
 let
-  version = "1.8.1";
+  version = "1.8.2";
  in
 stdenv.mkDerivation rec {
   name = "argyllcms-${version}";
@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
     # Kind of flacky URL, it was reaturning 406 and inconsistent binaries for a
     # while on me. It might be good to find a mirror
     url = "http://www.argyllcms.com/Argyll_V${version}_src.zip";
-    sha256 = "1nnhqcvx65m5rzrlry5kkjgrnl90shjgz7dbin8nz27lzni6c3xz";
+    sha256 = "0hnsciwak5chy4a421l8fz7amxzg8kbmy57a07dn460gdg6r63cy";
+
+    # The argyllcms web server doesn't like curl ...
+    curlOpts = "--user-agent 'Mozilla/5.0'";
   };
 
   # The contents of this file comes from the Jamtop file from the
