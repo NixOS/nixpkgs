@@ -11439,12 +11439,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestVars = buildPerlModule {
-    name = "Test-Vars-0.005";
+  TestVars = buildPerlModule rec {
+    name = "Test-Vars-0.008";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GF/GFUJI/Test-Vars-0.005.tar.gz;
-      sha256 = "2aec9787332dd2f12bd7b07e18530ff9c07954116bbaae8ae902a8befff57ae7";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
+      sha256 = "1h0kifiia78s3425hvpjs5di5539vsz15mmkkk0cwshwizhcwp7h";
     };
+
+    buildInputs = [ TestTester ];
+
     meta = {
       homepage = https://github.com/gfx/p5-Test-Vars;
       description = "Detects unused variables";
