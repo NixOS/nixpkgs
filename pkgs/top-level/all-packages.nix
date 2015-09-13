@@ -3657,6 +3657,8 @@ let
   zpaq = callPackage ../tools/archivers/zpaq { };
   zpaqd = callPackage ../tools/archivers/zpaq/zpaqd.nix { };
 
+  zsh-navigation-tools = callPackage ../tools/misc/zsh-navigation-tools { };
+
   zsync = callPackage ../tools/compression/zsync { };
 
   zxing = callPackage ../tools/graphics/zxing {};
