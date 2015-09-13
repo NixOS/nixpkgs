@@ -110,7 +110,7 @@ in
           { description = "Address configuration of ${i.name}";
             wantedBy = [ "network-interfaces.target" ];
             before = [ "network-interfaces.target" ];
-            bindsTo = [ (subsystemDevice i.name) ];
+            bindsTo = if config.boot.isContainer then [] else [ (subsystemDevice i.name) ];
             after = [ (subsystemDevice i.name) "network-pre.target" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
