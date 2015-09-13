@@ -11404,12 +11404,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextTabularDisplay = buildPerlPackage rec {
-    name = "Text-TabularDisplay-1.35";
+    name = "Text-TabularDisplay-1.38";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DARREN/${name}.tar.gz";
-      sha256 = "0sbyfdiln6q2g66mv64alayfcqnqg17kihdzgpslxdsn14vpvjq5";
+      sha256 = "1s46s4pg5mpfllx3icf4vnqz9iadbbdbsr5p7pr6gdjnzbx902gb";
     };
-    propagatedBuildInputs = [TextAligner];
+    propagatedBuildInputs = [ TextAligner ];
   };
 
   TextTemplate = buildPerlPackage {
