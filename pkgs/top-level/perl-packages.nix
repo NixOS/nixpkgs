@@ -2479,13 +2479,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DataSection = buildPerlPackage {
-    name = "Data-Section-0.101622";
+  DataSection = buildPerlPackage rec {
+    name = "Data-Section-0.200006";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Data-Section-0.101622.tar.gz;
-      sha256 = "33613e5daf0791fc2c5878fd82ef260e944b1e1fa205bcc753c31c62f5b7c7d3";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "0psvsfn5q9y1qkzkq62dr1c6bfrckkkz8hr1sgkdn2mbkpwh319l";
     };
-    propagatedBuildInputs = [ MROCompat SubExporter ];
+    propagatedBuildInputs = [ MROCompat SubExporter TestFailWarnings ];
     meta = {
       homepage = https://github.com/rjbs/data-section;
       description = "Read multiple hunks of data out of your DATA section";
