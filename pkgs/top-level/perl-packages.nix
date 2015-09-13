@@ -2121,11 +2121,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CPANUploader = buildPerlPackage {
-    name = "CPAN-Uploader-0.103006";
+  CPANUploader = buildPerlPackage rec {
+    name = "CPAN-Uploader-0.103010";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/CPAN-Uploader-0.103006.tar.gz;
-      sha256 = "1hkbi2j0a9v4577jxfzw586rvpzw0af61qbiggh3dd7j9b183w39";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "1n57d61q9g37s0pp7sriq8vvqj2cvp3s9v0grpv277s9idvm37x8";
     };
     propagatedBuildInputs = [ FileHomeDir GetoptLongDescriptive HTTPMessage LWP LWPProtocolhttps TermReadKey ];
     meta = {
