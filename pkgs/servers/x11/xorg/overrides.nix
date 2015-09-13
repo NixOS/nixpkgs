@@ -72,7 +72,7 @@ in
 
   libxcb = attrs : attrs // {
     nativeBuildInputs = [ args.python ];
-    configureFlags = "--enable-xkb";
+    configureFlags = "--enable-xkb --enable-xinput";
     outputs = [ "out" "doc" "man" ];
   };
 
