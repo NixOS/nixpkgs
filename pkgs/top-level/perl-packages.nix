@@ -3353,13 +3353,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DistCheckConflicts = buildPerlPackage {
-    name = "Dist-CheckConflicts-0.02";
+  DistCheckConflicts = buildPerlPackage rec {
+    name = "Dist-CheckConflicts-0.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOY/Dist-CheckConflicts-0.02.tar.gz;
-      sha256 = "1lh7j20vvsh4dyh74hr0wnabyv8vcdkilfi93m2fbk69qk3w995j";
+      url = "mirror://cpan/authors/id/D/DO/DOY/${name}.tar.gz";
+      sha256 = "1i7dr9jpdiy2nijl2p4q5zg2q2s9ckbj2hs4kmnnckf9hsb4p17a";
     };
-    buildInputs = [ TestFatal ];
+    buildInputs = [ TestFatal ModuleRuntime ];
     propagatedBuildInputs = [ SubExporter ListMoreUtils ];
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
