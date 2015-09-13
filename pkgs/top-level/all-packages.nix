@@ -14073,6 +14073,8 @@ in
 
   neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
 
+  natron = callPackage ../applications/video/natron { };
+
   notion = callPackage ../applications/window-managers/notion { };
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
