@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, libav, libkeyfinder }:
 
-let version = "2015-09-11"; in
+let version = "2015-09-13"; in
 stdenv.mkDerivation rec {
   name = "keyfinder-cli-${version}";
 
   src = fetchFromGitHub {
     repo = "keyfinder-cli";
     owner = "EvanPurkhiser";
-    rev = "94df5e6c012a2643a4e5eda49a80cdc57d2e1bb2";
-    sha256 = "04276z5xrpgf1zga565awypy5r7g054fwl4x75l7j308x0xcp12j";
+    rev = "8579282f15ab3ebad937fed398ec5c88843be03d";
+    sha256 = "0jylykigxmsqvdny265k58vpxa4cqs1hq2f7mph1nl3apfx2shrh";
   };
 
   buildInputs = [ libav libkeyfinder ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       used to estimate the musical key of many different audio formats.
     '';
     license = licenses.gpl3Plus;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 }
