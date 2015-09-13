@@ -7670,11 +7670,7 @@ let
     wxGTK = null;
   };
 
-  mlt-qt4 = callPackage ../development/libraries/mlt {
-    qt = qt4;
-  };
-
-  mlt-qt5 = callPackage ../development/libraries/mlt/qt5.nix { };
+  mlt = callPackage ../development/libraries/mlt { };
 
   movit = callPackage ../development/libraries/movit { };
 
@@ -12311,7 +12307,7 @@ let
 
   playonlinux = callPackage ../applications/misc/playonlinux { };
 
-  shotcut = callPackage ../applications/video/shotcut { mlt = mlt-qt5; };
+  shotcut = callPackage ../applications/video/shotcut { };
 
   smplayer = callPackage ../applications/video/smplayer { };
 
@@ -14149,8 +14145,6 @@ let
           kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
 
           kdeconnect = callPackage ../applications/misc/kdeconnect { };
-
-          kdenlive = callPackage ../applications/video/kdenlive { mlt = mlt-qt4; };
 
           kdesvn = callPackage ../applications/version-management/kdesvn { };
 
