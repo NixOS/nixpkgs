@@ -2147,6 +2147,8 @@ let
 
   librdmacm = callPackage ../development/libraries/librdmacm { };
 
+  libwebsockets = callPackage ../development/libraries/libwebsockets { };
+
   limesurvey = callPackage ../servers/limesurvey { };
 
   logcheck = callPackage ../tools/system/logcheck {
