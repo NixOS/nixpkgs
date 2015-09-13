@@ -11224,11 +11224,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TextDiff = buildPerlPackage {
-    name = "Text-Diff-1.41";
+  TextDiff = buildPerlPackage rec {
+    name = "Text-Diff-1.43";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OV/OVID/Text-Diff-1.41.tar.gz;
-      sha256 = "1ynjsa4sr1yvyh65sdfvahaafglibz70j8b6rj01cg1iisj50zx6";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
+      sha256 = "1ampmj1k5cabgcaw2iqwqbmnq6hrnl96f7rk8hh22gsw6my86bac";
     };
     propagatedBuildInputs = [ AlgorithmDiff ];
     meta = {
