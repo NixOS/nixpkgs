@@ -790,6 +790,11 @@ let
 
   byobu = callPackage ../tools/misc/byobu { };
 
+  bsh = fetchurl {
+    url = http://www.beanshell.org/bsh-2.0b5.jar;
+    sha256 = "0p2sxrpzd0vsk11zf3kb5h12yl1nq4yypb5mpjrm8ww0cfaijck2";
+  };
+
   cabal2nix = haskellPackages.cabal2nix;
 
   capstone = callPackage ../development/libraries/capstone { };
@@ -2102,6 +2107,8 @@ let
   lftp = callPackage ../tools/networking/lftp { };
 
   libconfig = callPackage ../development/libraries/libconfig { };
+
+  libcmis = callPackage ../development/libraries/libcmis { };
 
   libee = callPackage ../development/libraries/libee { };
 
@@ -6095,6 +6102,8 @@ let
 
   coin3d = callPackage ../development/libraries/coin3d { };
 
+  CoinMP = callPackage ../development/libraries/CoinMP { };
+
   commoncpp2 = callPackage ../development/libraries/commoncpp2 { };
 
   confuse = callPackage ../development/libraries/confuse { };
@@ -6767,6 +6776,8 @@ let
   libao = callPackage ../development/libraries/libao {
     usePulseAudio = config.pulseaudio or true;
   };
+
+  libabw = callPackage ../development/libraries/libabw { };
 
   libantlr3c = callPackage ../development/libraries/libantlr3c {};
 
@@ -7487,6 +7498,8 @@ let
   libwpd = callPackage ../development/libraries/libwpd { };
 
   libwpd_08 = callPackage ../development/libraries/libwpd/0.8.nix { };
+
+  libwps = callPackage ../development/libraries/libwps { };
 
   libwpg = callPackage ../development/libraries/libwpg { };
 
