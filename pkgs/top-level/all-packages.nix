@@ -14563,7 +14563,6 @@ let
   hol = callPackage ../applications/science/logic/hol { };
 
   hol_light = callPackage ../applications/science/logic/hol_light {
-    inherit (ocamlPackages) findlib;
     camlp5 = ocamlPackages.camlp5_strict;
   };
 
