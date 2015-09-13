@@ -1598,13 +1598,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ClassMethodModifiers = buildPerlPackage {
-    name = "Class-Method-Modifiers-2.10";
+  ClassMethodModifiers = buildPerlPackage rec {
+    name = "Class-Method-Modifiers-2.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Class-Method-Modifiers-2.10.tar.gz;
-      sha256 = "1dp757rzv6a9k7q0bpmjxv69g4r893vb143qq7fyqlwzg0zva3s2";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "14nk2gin9cjwpysakli7f0gs4q1w220sn73xzv35rhlspngrggyy";
     };
-    buildInputs = [ TestFatal ];
+    buildInputs = [ TestFatal TestRequires ];
     meta = {
       homepage = https://github.com/sartak/Class-Method-Modifiers/tree;
       description = "Provides Moose-like method modifiers";
