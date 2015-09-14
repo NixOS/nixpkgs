@@ -2106,11 +2106,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CPANPLUS = buildPerlPackage {
-    name = "CPANPLUS-0.9152";
+  CPANPLUS = buildPerlPackage rec {
+    name = "CPANPLUS-0.9154";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/CPANPLUS-0.9152.tar.gz;
-      sha256 = "732d9978ca6e8cde9b16431e1d1bafa543a66d8bce3fbfca4e5ac297a348ad17";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
+      sha256 = "1mz20qlk0wjl4mwi4b9nji4hyh9a0l7m1v5bmypwwmhzpac5rq5c";
     };
     propagatedBuildInputs = [ ArchiveExtract LogMessage ModulePluggable ObjectAccessor PackageConstants ];
     doCheck = false;
