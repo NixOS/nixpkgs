@@ -4140,28 +4140,21 @@ let
   openjdk7 = callPackage ../development/compilers/openjdk/7.nix {
     bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "7"; };
   };
-  openjdk7_jdk = openjdk7 // { outputs = [ "out" ]; };
-  openjdk7_jre = openjdk7.jre // { outputs = [ "jre" ]; };
 
   openjdk8 = callPackage ../development/compilers/openjdk/8.nix {
     bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "8"; };
   };
-  openjdk8_jdk = openjdk8 // { outputs = [ "out" ]; };
-  openjdk8_jre = openjdk8.jre // { outputs = [ "jre" ]; };
 
   openjdk = if stdenv.isDarwin then openjdk-darwin else openjdk8;
 
-  java7 = openjdk7;
-  jdk7 = java7 // { outputs = [ "out" ]; };
-  jre7 = java7.jre // { outputs = [ "jre" ]; };
+  jdk7 = openjdk7 // { outputs = [ "out" ]; };
+  jre7 = lib.setName "openjre-${lib.getVersion pkgs.openjdk7.jre}" (openjdk7.jre // { outputs = [ "jre" ]; });
 
-  java8 = openjdk8;
-  jdk8 = java8 // { outputs = [ "out" ]; };
-  jre8 = java8.jre // { outputs = [ "jre" ]; };
+  jdk8 = openjdk8 // { outputs = [ "out" ]; };
+  jre8 = lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}" (openjdk8.jre // { outputs = [ "jre" ]; });
 
-  java = if stdenv.isDarwin then openjdk-darwin else jdk8;
-  jdk = java // { outputs = [ "out" ]; };
-  jre = java.jre // { outputs = [ "jre" ]; };
+  jdk = jdk8;
+  jre = jre8;
 
   oraclejdk = pkgs.jdkdistro true false;
 
