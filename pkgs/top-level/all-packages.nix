@@ -10573,6 +10573,8 @@ let
 
   gyre-fonts = callPackage ../data/fonts/gyre {};
 
+  hack-font = callPackage ../data/fonts/hack { };
+
   hicolor_icon_theme = callPackage ../data/icons/hicolor-icon-theme { };
 
   inconsolata = callPackage ../data/fonts/inconsolata {};
