@@ -15,11 +15,11 @@ let
   quazipQt4 = quazip.override { qt = qt4; };
 in stdenv.mkDerivation rec {
   name = "tomahawk-${version}";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchurl {
     url = "http://download.tomahawk-player.org/${name}.tar.bz2";
-    sha256 = "0kjzkq21g3jl1lvadsm7gf0zvpbsv208kqf76wg2hnbm4k1a02wj";
+    sha256 = "0j84h36wkjfjbsd7ybyji7rcc9wpjdbl0f1xdcc1g7h0nz34pc0g";
   };
 
   cmakeFlags = [
