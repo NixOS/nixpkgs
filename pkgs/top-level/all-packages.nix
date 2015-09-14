@@ -4135,17 +4135,19 @@ let
 
   path64 = callPackage ../development/compilers/path64 { };
 
-  openjdk-darwin = callPackage ../development/compilers/openjdk-darwin { };
-
-  openjdk7 = callPackage ../development/compilers/openjdk/7.nix {
-    bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "7"; };
-  };
+  openjdk7 =
+    if stdenv.isDarwin then
+      callPackage ../development/compilers/openjdk-darwin { }
+    else
+      callPackage ../development/compilers/openjdk/7.nix {
+        bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "7"; };
+      };
 
   openjdk8 = callPackage ../development/compilers/openjdk/8.nix {
     bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "8"; };
   };
 
-  openjdk = if stdenv.isDarwin then openjdk-darwin else openjdk8;
+  openjdk = if stdenv.isDarwin then openjdk7 else openjdk8;
 
   jdk7 = openjdk7 // { outputs = [ "out" ]; };
   jre7 = lib.setName "openjre-${lib.getVersion pkgs.openjdk7.jre}" (openjdk7.jre // { outputs = [ "jre" ]; });
