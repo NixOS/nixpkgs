@@ -1,7 +1,9 @@
 { stdenv, fetchurl, cpio, file, which, unzip, zip, xorg, cups, freetype
 , alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig, zlib
+, setJavaClassPath
+, minimal ? false
+}:
 
-, minimal ? false } :
 let
   update = "60";
   build = "24";
@@ -98,14 +100,14 @@ let
     installPhase = ''
       mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
 
-      cp -av build"/"*/images/j2sdk-image"/"* $out/lib/openjdk
+      cp -av build/*/images/j2sdk-image/* $out/lib/openjdk
 
       # Move some stuff to top-level.
       mv $out/lib/openjdk/include $out/include
       mv $out/lib/openjdk/man $out/share/man
 
       # jni.h expects jni_md.h to be in the header search path.
-      ln -s $out/include/linux"/"*_md.h $out/include/
+      ln -s $out/include/linux/*_md.h $out/include/
 
       # Remove some broken manpages.
       rm -rf $out/share/man/ja*
@@ -124,7 +126,7 @@ let
       ln -s $out/lib/openjdk/bin $out/lib/openjdk/jre/bin
 
       # Set PaX markings
-      exes=$(file $out/lib/openjdk/bin"/"* $jre/lib/openjdk/jre/bin"/"* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
+      exes=$(file $out/lib/openjdk/bin/* $jre/lib/openjdk/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
       echo "to mark: *$exes*"
       for file in $exes; do
         echo "marking *$file*"
@@ -147,6 +149,25 @@ let
 
       ln -s $out/lib/openjdk/bin $out/bin
       ln -s $jre/lib/openjdk/jre/bin $jre/bin
+    '';
+
+    # FIXME: this is unnecessary once the multiple-outputs branch is merged.
+    preFixup = ''
+      prefix=$jre stripDirs "$stripDebugList" "''${stripDebugFlags:--S}"
+      patchELF $jre
+      propagatedNativeBuildInputs+=" $jre"
+
+      # Propagate the setJavaClassPath setup hook from the JRE so that
+      # any package that depends on the JRE has $CLASSPATH set up
+      # properly.
+      mkdir -p $jre/nix-support
+      echo -n "${setJavaClassPath}" > $jre/nix-support/propagated-native-build-inputs
+
+      # Set JAVA_HOME automatically.
+      mkdir -p $out/nix-support
+      cat <<EOF > $out/nix-support/setup-hook
+      if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out/lib/openjdk; fi
+      EOF
     '';
 
     postFixup = ''
