@@ -12161,6 +12161,27 @@ let
     };
   };
 
+  python-wifi = buildPythonPackage rec {
+    name = "python-wifi-${version}";
+    version = "0.6.0";
+    disabled = ! (isPy26 || isPy27 );
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-wifi/${name}.tar.bz2";
+      md5 = "f9d520a8c17b0dfffce95a8a7efba7dd";
+    };
+
+    meta = {
+      inherit version;
+      description = "Read & write wireless card capabilities using the Linux Wireless Extensions";
+      homepage = http://pythonwifi.tuxfamily.org/;
+      # From the README: "pythonwifi is licensed under LGPLv2+, however, the
+      # examples (e.g. iwconfig.py and iwlist.py) are licensed under GPLv2+."
+      license = with licenses; [ lgpl2Plus gpl2Plus ];
+      maintainers = with maintainers; [ nckx ];
+    };
+  };
+
 
   pytz = buildPythonPackage rec {
     name = "pytz-${version}";
