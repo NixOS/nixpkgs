@@ -10087,13 +10087,13 @@ let self = _self // overrides; _self = with self; {
     meta.platforms = stdenv.lib.platforms.linux;
   };
 
-  TaskPlack = buildPerlPackage rec {
-    name = "Task-Plack-0.25";
+  TaskPlack = buildPerlModule rec {
+    name = "Task-Plack-0.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
-      sha256 = "1mk3z7xis1akf8245qgw5mnnsl7570kdidx83nj81kv410pw2v43";
+      sha256 = "0ajwkyr9nwn11afi6fz6kx4bi7a3p8awjsldmsakz3sl0s42pmbr";
     };
-    propagatedBuildInputs = [ Plack PSGI ];
+    propagatedBuildInputs = [ Plack PSGI ModuleBuildTiny ];
   };
 
   TaskWeaken = buildPerlPackage {
