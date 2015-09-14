@@ -4155,8 +4155,8 @@ let
   jdk8 = openjdk8 // { outputs = [ "out" ]; };
   jre8 = lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}" (openjdk8.jre // { outputs = [ "jre" ]; });
 
-  jdk = jdk8;
-  jre = jre8;
+  jdk = if stdenv.isDarwin then jdk7 else jdk8;
+  jre = if stdenv.isDarwin then jre7 else jre8;
 
   oraclejdk = pkgs.jdkdistro true false;
 
