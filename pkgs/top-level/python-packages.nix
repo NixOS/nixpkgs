@@ -5222,11 +5222,11 @@ let
   };
 
   deluge = buildPythonPackage rec {
-    name = "deluge-1.3.11";
+    name = "deluge-1.3.12";
 
     src = pkgs.fetchurl {
       url = "http://download.deluge-torrent.org/source/${name}.tar.bz2";
-      sha256 = "16681sg7yi03jqyifhalnw4vavb8sj94cisldal7nviai8dz9qc3";
+      sha256 = "14rwc5k7q0d36b4jxnmxgnyvx9lnmaifxpyv0z07ymphlfr4amsn";
     };
 
     propagatedBuildInputs = with self; [
@@ -5244,7 +5244,7 @@ let
       homepage = http://deluge-torrent.org;
       description = "Torrent client";
       license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ iElectric ebzzry ];
       platforms = platforms.all;
     };
   };
