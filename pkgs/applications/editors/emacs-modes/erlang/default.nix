@@ -15,11 +15,11 @@ stdenv.mkDerivation {
 
   # emacs highlighting */
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://github.com/erlang/otp";
     description = "Erlang mode for Emacs";
-    licence = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ "Samuel Rivas <samuelrivas@gmail.com>" ];
+    licence = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.samuelrivas ];
   };
 }
