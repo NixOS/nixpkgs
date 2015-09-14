@@ -1661,11 +1661,10 @@ let
   };
 
   lxd = buildFromGitHub {
-    rev    = "22fec6bb6bb5988eb0f1b3532a02ebacfb26cf47";
-    date   = "2015-08-05";
+    rev    = "lxd-0.17";
     owner  = "lxc";
     repo   = "lxd";
-    sha256 = "1n7fhzl6vrn82r3cqpgqpgq5d5142rnk1cp7vig38323n2yh3749";
+    sha256 = "1yi3dr1bgdplc6nya10k5jsj3psbf3077vqad8x8cjza2z9i48fp";
     excludedPackages = "test"; # Don't build the binary called test which causes conflicts
     buildInputs = [
       gettext-go websocket crypto log15 go-lxc yaml-v2 tomb protobuf pongo2
