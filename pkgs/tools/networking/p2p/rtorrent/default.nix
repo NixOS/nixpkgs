@@ -3,11 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "rtorrent-0.9.4";
+  name = "rtorrent-${version}";
+  version = "0.9.6";
 
   src = fetchurl {
-    url = "http://libtorrent.rakshasa.no/downloads/${name}.tar.gz";
-    sha256 = "113yrrac75vqi4g8r6bgs0ggjllj9bkg9shv08vqzdhkwqg2q2mw";
+    url = "http://rtorrent.net/downloads/${name}.tar.gz";
+    sha256 = "03jvzw9pi2mhcm913h8qg0qw9gwjqc6lhwynb1yz1y163x7w4s8y";
   };
 
   buildInputs = [ libtorrent ncurses pkgconfig libsigcxx curl zlib openssl xmlrpc_c ];
@@ -19,11 +20,11 @@ stdenv.mkDerivation rec {
   #   mv doc/rtorrent.rc $out/share/rtorrent/rtorrent.rc
   # '';
 
-  meta = {
-    homepage = "http://libtorrent.rakshasa.no/";
-    description = "An ncurses client for libtorrent, ideal for use with screen or dtach";
+  meta = with stdenv.lib; {
+    homepage = https://github.com/rakshasa/rtorrent/;
+    description = "An ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ simons ebzzry ];
   };
 }
