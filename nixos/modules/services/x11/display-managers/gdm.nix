@@ -23,6 +23,10 @@ in
         <emphasis>GDM is very experimental and may render system unusable.</emphasis>
       '';
 
+      debug = mkEnableOption ''
+        debugging messages in GDM
+      '';
+
       autoLogin = mkOption {
         default = {};
         description = ''
@@ -125,6 +129,7 @@ in
       [chooser]
 
       [debug]
+      ${optionalString cfg.gdm.debug "Enable=true"}
     '';
 
     # GDM LFS PAM modules, adapted somehow to NixOS
