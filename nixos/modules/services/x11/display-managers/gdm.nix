@@ -112,13 +112,21 @@ in
 
     programs.dconf.profiles.gdm = "${gdm}/share/dconf/profile/gdm";
 
+    # Use AutomaticLogin if delay is zero, because it's immediate.
+    # Otherwise with TimedLogin with zero seconds the prompt is still
+    # presented and there's a little delay.
     environment.etc."gdm/custom.conf".text = ''
       [daemon]
-      ${optionalString cfg.gdm.autoLogin.enable ''
-      TimedLoginEnable=true
-      TimedLogin=${cfg.gdm.autoLogin.user}
-      TimedLoginDelay=${toString cfg.gdm.autoLogin.delay}
-      ''}
+      ${optionalString cfg.gdm.autoLogin.enable (
+        if cfg.gdm.autoLogin.delay > 0 then ''
+          TimedLoginEnable=true
+          TimedLogin=${cfg.gdm.autoLogin.user}
+          TimedLoginDelay=${toString cfg.gdm.autoLogin.delay}
+        '' else ''
+          AutomaticLoginEnable=true
+          AutomaticLogin=${cfg.gdm.autoLogin.user}
+        '')
+      }
 
       [security]
 
