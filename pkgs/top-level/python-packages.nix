@@ -2633,24 +2633,24 @@ let
        license = licenses.mit;
      };
   };
-  
+
   pytestrunner = buildPythonPackage rec {
     version = "2.6.2";
     name = "pytest-runner-${version}";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pytest-runner/${name}.tar.gz";
       sha256 = "e775a40ee4a3a1d45018b199c44cc20bbe7f3df2dc8882f61465bb4141c78cdb";
     };
-    
+
     buildInputs = with self; [setuptools_scm pytest];
-    
+
     meta = {
       description = "Invoke py.test as distutils command with dependency resolution";
       homepage = https://bitbucket.org/pytest-dev/pytest-runner;
       license = licenses.mit;
     };
-    
+
     # Trying to run tests fails with # RuntimeError: dictionary changed size during iteration
     doCheck = false;
   };
@@ -7225,19 +7225,19 @@ let
       homepage = http://pypi.python.org/pypi/IPy;
     };
   };
-  
+
   ipykernel = buildPythonPackage rec {
     version = "4.0.3";
     name = "ipykernel-${version}";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipykernel/${name}.tar.gz";
       sha256 = "a4d7d2d35a0af432c8391872cb4dae727d77031212f32ca858b5c84cd0ea821f";
     };
-    
+
     buildInputs = with self; [] ++ optionals isPy27 [mock];
     propagatedBuildInputs = with self; [ipython traitlets jupyter_client pexpect];
-    
+
     meta = {
       description = "IPython Kernel for Jupyter";
       homepage = http://ipython.org/;
@@ -7245,40 +7245,40 @@ let
       maintainers = with maintainers; [ fridh ];
     };
   };
-  
+
   ipyparallel = buildPythonPackage rec {
     version = "4.0.2";
     name = "ipyparallel-${version}";
-    
-    src = pkgs.fetchurl { 
+
+    src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipyparallel/${name}.tar.gz";
       sha256 = "6b9e09ca441a45e055b97cb8e3e1dd30de85b935fae3aa0d97f138352fd3089b";
     };
-    
+
     propagatedBuildInputs = with self; [ipython_genutils decorator pyzmq ipython jupyter_client ipykernel];
-    
+
     meta = {
       description = "Interactive Parallel Computing with IPython";
       homepage = http://ipython.org/;
       license = licenses.bsd3;
       maintainers = with maintainers; [ fridh ];
     };
-  
+
   };
-  
+
   ipython = buildPythonPackage rec {
     version = "4.0.0";
     name = "ipython-${version}";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipython/${name}.tar.gz";
       sha256 = "2fd276c407fb0b29e5d4884a7029a2c27fef0a06fd7a34924cce69b7cc43f4da";
     };
-    
+
     buildInputs = with self; [nose] ++ optionals isPy27 [mock];
-    
+
     propagatedBuildInputs = with self; [decorator pickleshare simplegeneric traitlets requests pexpect sqlite3];
-    
+
     meta = {
       description = "IPython: Productive Interactive Computing";
       homepage = http://ipython.org/;
@@ -7286,16 +7286,16 @@ let
       maintainers = with maintainers; [ bjornfor jgeerds fridh ];
     };
   };
-  
+
   ipython_genutils = buildPythonPackage rec {
     version = "0.1.0";
     name = "ipython_genutils-${version}";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipython_genutils/${name}.tar.gz";
       sha256 = "3a0624a251a26463c9dfa0ffa635ec51c4265380980d9a50d65611c3c2bd82a6";
     };
-    
+
     meta = {
       description = "Vestigial utilities from IPython";
       homepage = http://ipython.org/;
@@ -7513,37 +7513,37 @@ let
       license = licenses.mit;
     };
   };
-  
+
   jupyter_client = buildPythonPackage rec {
     version = "4.0.0";
     name = "jupyter_client-${version}";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jupyter_client/${name}.tar.gz";
       sha256 = "a39a4181ea2021daf6e821acae836999ef6e0fefe603813a7a7d4658d2ffa2ac";
     };
-        
+
     propagatedBuildInputs = with self; [traitlets jupyter_core pyzmq] ++ optional isPyPy py;
-    
+
     meta = {
       description = "Jupyter protocol implementation and client libraries";
       homepage = http://jupyter.org/;
       license = licenses.bsd3;
       maintainers = with maintainers; [ fridh ];
-    };  
+    };
   };
-  
+
   jupyter_core = buildPythonPackage rec {
     version = "4.0.4";
     name = "jupyter_core-${version}";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jupyter_core/${name}.tar.gz";
       sha256 = "fcf45478025f34174943993947f51a41ad871ac998a14bf1cb87d8eb61e75c6d";
     };
-    
+
     propagatedBuildInputs = with self; [traitlets];
-    
+
     meta = {
       description = "Jupyter core package. A base package on which Jupyter projects rely";
       homepage = http://jupyter.org/;
@@ -8334,18 +8334,18 @@ let
       maintainers = with maintainers; [ thoughtpolice ];
     };
   };
-  
+
   mistune = buildPythonPackage rec {
     version = "0.7.1";
     name = "mistune-${version}";
-   
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/m/mistune/${name}.tar.gz";
       sha256 = "6076dedf768348927d991f4371e5a799c6a0158b16091df08ee85ee231d929a7";
     };
-    
+
     buildInputs = with self; [nose];
-    
+
     meta = {
       decription = "The fastest markdown parser in pure Python";
       homepage = https://github.com/lepture/mistune;
@@ -8827,39 +8827,39 @@ let
       license = licenses.lgpl21Plus;
     };
   };
-  
+
   nbconvert = buildPythonPackage rec {
     version = "4.0.0";
     name = "nbconvert-${version}";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/nbconvert/${name}.tar.gz";
       sha256 = "472ad15d1a71f1ef00c4094c11bb93638858fc89fb2c5838b3aa6b67d981b437";
     };
-    
+
     buildInputs = with self; [nose];
-    
+
     propagatedBuildInputs = with self; [mistune jinja2 pygments traitlets jupyter_core nbformat ipykernel tornado jupyter_client];
-    
+
     meta = {
       description = "Converting Jupyter Notebooks";
       homepage = http://jupyter.org/;
       license = licenses.bsd3;
       maintainers = with maintainers; [ fridh ];
-    }; 
+    };
   };
-  
+
   nbformat = buildPythonPackage rec {
     version = "4.0.0";
     name = "nbformat-${version}";
-  
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/nbformat/${name}.tar.gz";
       sha256 = "daf9b990e96863d120aff123361156a316757757b81a8070eb6945e4a9774b2d";
     };
-    
+
     propagatedBuildInputs = with self; [ipython_genutils traitlets jsonschema jupyter_core];
-    
+
     meta = {
       description = "The Jupyter Notebook format";
       homepage = "http://jupyter.org/";
@@ -9196,20 +9196,20 @@ let
 
     buildInputs = with self; [ nose ];
   };
-  
+
   notebook = buildPythonPackage rec {
     version = "4.0.4";
     name = "notebook-${version}";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/notebook/${name}.tar.gz";
       sha256 = "a57852514bce1b1cf41fa0311f6cf894960cf68b083b55e6c408316b598d5648";
     };
-    
+
     buildInputs = with self; [nose]  ++ optionals isPy27 [mock];
-    
+
     propagatedBuildInputs = with self; [jinja2 tornado ipython_genutils traitlets jupyter_core jupyter_client nbformat nbconvert ipykernel terminado requests pexpect];
-    
+
     meta = {
       description = "The Jupyter HTML notebook is a web-based notebook environment for interactive computing";
       homepage = http://jupyter.org/;
@@ -9731,7 +9731,10 @@ let
     };
   };
 
-  pandas = buildPythonPackage rec {
+  pandas = let
+    inherit (pkgs.stdenv.lib) optional optionalString;
+    inherit (pkgs.stdenv) isDarwin;
+  in buildPythonPackage rec {
     name = "pandas-0.16.2";
 
     src = pkgs.fetchurl {
@@ -9739,7 +9742,7 @@ let
       sha256 = "10agmrkps8bi5948vwpipfxds5kj1d076m9i0nhaxwqiw7gm6670";
     };
 
-    buildInputs = [ self.nose ];
+    buildInputs = [ self.nose ] ++ optional isDarwin pkgs.libcxx;
     propagatedBuildInputs = with self; [
       dateutil
       numpy
@@ -9753,7 +9756,17 @@ let
       html5lib
       modules.sqlite3
       beautifulsoup4
-    ];
+    ] ++ optional isDarwin pkgs.darwin.adv_cmds; # provides the locale command
+
+    # For OSX, we need to add a dependency on libcxx, which provides
+    # `complex.h` and other libraries that pandas depends on to build.
+    patchPhase = optionalString isDarwin ''
+      cpp_sdk="${pkgs.libcxx}/include/c++/v1";
+      echo "Adding $cpp_sdk to the setup.py common_include variable"
+      substituteInPlace setup.py \
+        --replace "['pandas/src/klib', 'pandas/src']" \
+                  "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
+    '';
 
     preCheck = ''
       # Broken test, probably https://github.com/pydata/pandas/issues/10312:
@@ -9957,16 +9970,16 @@ let
       url = "https://pypi.python.org/packages/source/p/path.py/${name}.tar.gz";
       sha256 = "5cdf60f359f1add18f8556c9a1855cbd1d517f0780e3d386c256515f698ba0e0";
     };
-    
+
     buildInputs = with self; [setuptools_scm pytestrunner pytest];
-    
+
     meta = {
       description = "A module wrapper for os.path";
       homepage = http://github.com/jaraco/path.py;
       license = licenses.mit;
       platforms = platforms.linux;
     };
-    
+
     # Test fails with python 2.7: TestUnicodePaths.test_walkdirs_with_unicode_name
     # Also during tests with python 3.4: RuntimeError: dictionary changed size during iteration
     # Caused by pytestrunner
@@ -10220,21 +10233,21 @@ let
   pickleshare = buildPythonPackage rec {
     version = "0.5";
     name = "pickleshare-${version}";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pickleshare/${name}.tar.gz";
       sha256 = "c0be5745035d437dbf55a96f60b7712345b12423f7d0951bd7d8dc2141ca9286";
     };
-    
+
     propagatedBuildInputs = with self; [pathpy];
-    
+
     meta = {
       description = "Tiny 'shelve'-like database with concurrency support";
       homepage = https://github.com/vivainio/pickleshare;
       license = licenses.mit;
     };
   };
-  
+
   pip = buildPythonPackage rec {
     version = "1.5.6";
     name = "pip-${version}";
@@ -12628,19 +12641,19 @@ let
       license = licenses.bsd3;
     };
   };
-  
+
   qtconsole = buildPythonPackage rec {
     version = "4.0.1";
     name = "qtconsole-${version}";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/q/qtconsole/${name}.tar.gz";
       sha256 = "7d2cf976bb960df11f413709b5b5b809365c48426110e946d0c12117e6ced3a5";
     };
-    
+
     buildInputs = with self; [] ++ optionals isPy27 [mock];
     propagatedBuildInputs = with self; [traitlets jupyter_core jupyter_client pygments ipykernel pyqt4];
-    
+
     meta = {
       description = "Jupyter Qt console";
       homepage = http://jupyter.org/;
@@ -13403,16 +13416,16 @@ let
       license = "unspecified"; # !
     };
   };
-  
+
   simplegeneric = buildPythonPackage rec {
     version = "0.8.1";
     name = "simplegeneric-${version}";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/simplegeneric/${name}.zip";
       sha256 = "dc972e06094b9af5b855b3df4a646395e43d1c9d0d39ed345b7393560d0b9173";
     };
-    
+
     meta = {
       description = "Simple generic functions";
       homepage = http://cheeseshop.python.org/pypi/simplegeneric;
@@ -14666,14 +14679,14 @@ let
   traitlets = buildPythonPackage rec {
     version = "4.0.0";
     name = "traitlets-${version}";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/traitlets/${name}.tar.gz";
       sha256 = "0b140b4a94a4f1951887d9bce4650da211f79600fc9fdb422acc90c5bbe0233b";
     };
-    
+
     propagatedBuildInputs = with self; [ipython_genutils decorator];
-    
+
     meta = {
       description = "Traitlets Python config system";
       homepage = http://ipython.org/;
