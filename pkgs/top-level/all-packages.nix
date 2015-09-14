@@ -4137,13 +4137,13 @@ let
 
   openjdk-darwin = callPackage ../development/compilers/openjdk-darwin { };
 
-  openjdk7 = callPackage ../development/compilers/openjdk {
+  openjdk7 = callPackage ../development/compilers/openjdk/7.nix {
     bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "7"; };
   };
   openjdk7_jdk = openjdk7 // { outputs = [ "out" ]; };
   openjdk7_jre = openjdk7.jre // { outputs = [ "jre" ]; };
 
-  openjdk8 = callPackage ../development/compilers/openjdk/openjdk8.nix {
+  openjdk8 = callPackage ../development/compilers/openjdk/8.nix {
     bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "8"; };
   };
   openjdk8_jdk = openjdk8 // { outputs = [ "out" ]; };
