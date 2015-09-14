@@ -209,18 +209,6 @@ self: super: {
   # http://hub.darcs.net/ivanm/graphviz/issue/5
   graphviz = dontCheck (dontJailbreak (appendPatch super.graphviz ./patches/graphviz-fix-ghc710.patch));
 
-  # Broken with GHC 7.10.x.
-  aeson_0_7_0_6 = markBroken super.aeson_0_7_0_6;
-  Cabal_1_20_0_3 = markBroken super.Cabal_1_20_0_3;
-  cabal-install_1_18_1_0 = markBroken super.cabal-install_1_18_1_0;
-  containers_0_4_2_1 = markBroken super.containers_0_4_2_1;
-  control-monad-free_0_5_3 = markBroken super.control-monad-free_0_5_3;
-  haddock-api_2_15_0_2 = markBroken super.haddock-api_2_15_0_2;
-  QuickCheck_1_2_0_1 = markBroken super.QuickCheck_1_2_0_1;
-  seqid-streams_0_1_0 = markBroken super.seqid-streams_0_1_0;
-  vector_0_10_9_2 = markBroken super.vector_0_10_9_2;
-  hoopl_3_10_2_0 = markBroken super.hoopl_3_10_2_0;
-
   # https://github.com/HugoDaniel/RFC3339/issues/14
   timerep = dontCheck super.timerep;
 
