@@ -82,12 +82,7 @@ in
 
     services.xtreemfs = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable XtreemFS.
-        '';
-      };
+      enable = mkEnableOption "XtreemFS";
 
       homeDir = mkOption {
         default = "/var/lib/xtreemfs";
@@ -169,12 +164,7 @@ in
           '';
         };
         replication = {
-          enable = mkOption {
-            default = false;
-            description = ''
-              Whether to enable XtreemFS DIR replication plugin.
-            '';
-          };
+          enable = mkEnableOption "XtreemFS DIR replication plugin";
           extraConfig = mkOption {
             example = ''
               # participants of the replication including this replica
@@ -308,12 +298,7 @@ in
           '';
         };
         replication = {
-          enable = mkOption {
-            default = false;
-            description = ''
-              Whether to enable XtreemFS MRC replication plugin.
-            '';
-          };
+          enable = mkEnableOption "XtreemFS MRC replication plugin";
           extraConfig = mkOption {
             example = ''
               # participants of the replication including this replica
