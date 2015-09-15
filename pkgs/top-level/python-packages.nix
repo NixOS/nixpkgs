@@ -2527,11 +2527,11 @@ let
   };
 
   pytest = buildPythonPackage rec {
-    name = "pytest-2.7.2";
+    name = "pytest-2.7.3";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pytest/${name}.tar.gz";
-      sha256 = "b30457f735420d0000d10a44bbd478cf03f8bf20e25bd77248f9bab40f4fd6a4";
+      sha256 = "1z4yi986f9n0p8qmzmn21m21m8j1x78hk3505f89baqm6pdw7afm";
     };
 
     preCheck = ''
@@ -7920,11 +7920,11 @@ let
 
 
   Mako = buildPythonPackage rec {
-    name = "Mako-1.0.1";
+    name = "Mako-1.0.2";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/M/Mako/${name}.tar.gz";
-      md5 = "9f0aafd177b039ef67b90ea350497a54";
+      sha256 = "17k7jy3byi4hj6ksszib6gxbf6n7snnnirnbrdldn848abjc4l15";
     };
 
     buildInputs = with self; [ markupsafe nose mock ];
@@ -9952,11 +9952,11 @@ let
 
   pep8 = buildPythonPackage rec {
     name = "pep8-${version}";
-    version = "1.5.7";
+    version = "1.6.2";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pep8/${name}.tar.gz";
-      md5 = "f6adbdd69365ecca20513c709f9b7c93";
+      sha256 = "1zybkcdw1sx84dvkfss96nhykqg9bc0cdpwpl4k9wlxm61bf7dxq";
     };
 
     meta = {
@@ -11148,11 +11148,11 @@ let
   };
 
   pyflakes = buildPythonPackage rec {
-    name = "pyflakes-0.8.1";
+    name = "pyflakes-0.9.2";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyflakes/${name}.tar.gz";
-      md5 = "905fe91ad14b912807e8fdc2ac2e2c23";
+      sha256 = "0pvawddspdq0y22dbraq5gld9qr6rwa7zhmpfhl2b7v9rqiiqs82";
     };
 
     buildInputs = with self; [ unittest2 ];
@@ -15825,15 +15825,13 @@ let
 
 
   BTrees = self.buildPythonPackage rec {
-    name = "BTrees-4.0.8";
-
-    patches = [ ./../development/python-modules/btrees_interger_overflow.patch ];
+    name = "BTrees-4.1.4";
 
     propagatedBuildInputs = with self; [ persistent zope_interface transaction ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/B/BTrees/${name}.tar.gz";
-      md5 = "7f5df4cf8dd50fb0c584c0929a406c92";
+      sha256 = "1avvhkd7rvp3rzhw20v6ank8a8m9a1lmh99c4gjjsa1ry0zsri3y";
     };
 
     meta = {
@@ -16244,11 +16242,11 @@ let
 
   zope_testing = buildPythonPackage rec {
     name = "zope.testing-${version}";
-    version = "4.1.3";
+    version = "4.5.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.testing/${name}.tar.gz";
-      md5 = "6c73c5b668a67fdc116a25b884058ed9";
+      sha256 = "1yvglxhzvhl45mndvn9gskx2ph30zz1bz7rrlyfs62fv2pvih90s";
     };
 
     doCheck = !isPyPy;
