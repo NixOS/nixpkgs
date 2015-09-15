@@ -7128,7 +7128,7 @@ let
 
     propagatedBuildInputs = with self; [
       requests2 # Needs to be first;
-      cgroup-utils docker-custom docutils lti multiprocessing pygments pymongo
+      cgroup-utils docker-custom docutils lti pygments pymongo
       pyyaml rpyc selenium sh simpleldap tidylib virtual-display web
       websocket_client
     ];
@@ -7137,6 +7137,12 @@ let
       url = "https://pypi.python.org/packages/source/I/INGInious/INGInious-${version}.tar.gz";
       md5 = "40474dd6b6d4fc26e47a1d9c77bcf943";
     };
+
+    # Remove multiprocessing
+    # https://github.com/UCL-INGI/INGInious/issues/73
+    patchPhase = ''
+      sed -i '34d' setup.py
+    '';
 
     meta = {
       description = "An intelligent grader that allows secured and automated testing of code made by students.";
@@ -8496,15 +8502,6 @@ let
       description = "A relatively sane approach to multiple dispatch in Python";
       license = licenses.bsd3;
       maintainers = with maintainers; [ fridh ];
-    };
-  };
-
-  multiprocessing = buildPythonPackage rec {
-    name = "multiprocessing-2.6.2.1";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/m/multiprocessing/${name}.tar.gz";
-      md5 = "5cc484396c040102116ccc2355379c72";
     };
   };
 
