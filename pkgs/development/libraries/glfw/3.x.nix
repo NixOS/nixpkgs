@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, mesa, libXrandr, libXi, libXxf86vm, libXfixes, x11
+{ stdenv, fetchurl, cmake, mesa, libXrandr, libXi, libXxf86vm, libXfixes, xlibsWrapper
 , libXinerama, libXcursor
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs = [
-    cmake mesa libXrandr libXi libXxf86vm libXfixes x11
+    cmake mesa libXrandr libXi libXxf86vm libXfixes xlibsWrapper
     libXinerama libXcursor
   ];
 

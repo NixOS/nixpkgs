@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, x11, libXaw, libXpm, Xaw3d
+{ stdenv, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
 , pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
 , alsaLib, cairo, acl, gpm
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     [ ncurses gconf libxml2 gnutls alsaLib pkgconfig texinfo acl gpm gettext ]
     ++ stdenv.lib.optional stdenv.isLinux dbus
     ++ stdenv.lib.optionals withX
-      [ x11 libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
+      [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
         imagemagick gconf ]
     ++ stdenv.lib.optional (withX && withGTK2) gtk2
     ++ stdenv.lib.optional (withX && withGTK3) gtk3

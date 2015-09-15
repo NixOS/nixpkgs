@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, imake
-, x11, libXpm, libXmu, libXi, libXp, Xaw3d, libpng, libjpeg}:
+, xlibsWrapper, libXpm, libXmu, libXi, libXp, Xaw3d, libpng, libjpeg}:
 
 let version = "3.2.5b"; in
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
 
-  buildInputs = [x11 libXpm libXmu libXi libXp Xaw3d libpng libjpeg];
+  buildInputs = [xlibsWrapper libXpm libXmu libXi libXp Xaw3d libpng libjpeg];
 
   nativeBuildInputs = [ imake makeWrapper ];
 

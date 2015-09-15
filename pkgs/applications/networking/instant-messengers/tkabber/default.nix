@@ -1,5 +1,5 @@
 { stdenv, fetchurl, tcl, tk, tcllib, tcltls, tclgpg
-, bwidget, makeWrapper, x11
+, bwidget, makeWrapper, xlibsWrapper
 , withSitePlugins ? true
 , theme ? null
 }:
@@ -62,7 +62,7 @@ in mkTkabber (main // {
     done
   '';
 
-  buildInputs = [ tcl tk x11 makeWrapper ] ++ tclLibraries;
+  buildInputs = [ tcl tk xlibsWrapper makeWrapper ] ++ tclLibraries;
 
   meta = {
     homepage = "http://tkabber.jabber.ru/";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, x11 }:
+{ stdenv, fetchurl, xlibsWrapper }:
 
 stdenv.mkDerivation {
   name = "ocaml-3.08.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
   configureScript = ./configure-3.08.0;
   dontAddPrefix = "True";
-  configureFlags = ["-no-tk" "-x11lib" x11];
+  configureFlags = ["-no-tk" "-x11lib" xlibsWrapper];
   buildFlags = ["world" "bootstrap" "opt"];
   checkTarget = ["opt.opt"];
 }

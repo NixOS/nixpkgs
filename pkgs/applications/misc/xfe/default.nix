@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fox, pkgconfig, gettext, x11, gcc, intltool, file, libpng }:
+{ stdenv, fetchurl, fox, pkgconfig, gettext, xlibsWrapper, gcc, intltool, file, libpng }:
 
 stdenv.mkDerivation rec {
   name = "xfe-1.37";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1g9a0bpny2m7ixgxpqjh0wvh2x6d0lpj6682zn5dfqwan4j2xfsd";
   };
 
-  buildInputs = [ fox pkgconfig gettext x11 gcc intltool file libpng ];
+  buildInputs = [ fox pkgconfig gettext xlibsWrapper gcc intltool file libpng ];
 
   preConfigure = ''
     sed -i s,/usr/share/xfe,$out/share/xfe, src/xfedefs.h

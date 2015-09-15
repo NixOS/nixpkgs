@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, x11, ncurses }:
+{ stdenv, fetchurl, xlibsWrapper, ncurses }:
 
 stdenv.mkDerivation (rec {
 
@@ -10,9 +10,9 @@ stdenv.mkDerivation (rec {
   };
 
   prefixKey = "-prefix ";
-  configureFlags = ["-no-tk" "-x11lib" x11];
+  configureFlags = ["-no-tk" "-x11lib" xlibsWrapper];
   buildFlags = "world bootstrap world.opt";
-  buildInputs = [x11 ncurses];
+  buildInputs = [xlibsWrapper ncurses];
   installTargets = "install installopt";
   patchPhase = ''
     CAT=$(type -tp cat)

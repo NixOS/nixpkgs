@@ -1,4 +1,4 @@
-{ composableDerivation, fetchurl, pkgconfig, x11, inputproto, libXi
+{ composableDerivation, fetchurl, pkgconfig, xlibsWrapper, inputproto, libXi
 , freeglut, mesa, libjpeg, zlib, libXinerama, libXft, libpng }:
 
 let inherit (composableDerivation) edf; in
@@ -11,7 +11,7 @@ composableDerivation.composableDerivation {} rec {
     sha256 = "0353ngb7gpyklc9mdz8629big2na3c73akfwhis8fhqp7jkbs9ih";
   };
 
-  propagatedBuildInputs = [ x11 inputproto libXi freeglut ];
+  propagatedBuildInputs = [ xlibsWrapper inputproto libXi freeglut ];
 
   buildInputs = [ pkgconfig ];
 

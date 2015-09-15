@@ -1,4 +1,4 @@
-{stdenv, fetchurl, x11, imake, libXScrnSaver, scrnsaverproto}:
+{stdenv, fetchurl, xlibsWrapper, imake, libXScrnSaver, scrnsaverproto}:
 
 stdenv.mkDerivation rec
 {
@@ -11,5 +11,5 @@ stdenv.mkDerivation rec
   makeFlags="BINDIR=\${out}/bin MANPATH=\${out}/man";
   preBuild = "xmkmf";
   installTargets = "install install.man";
-  buildInputs = [x11 imake libXScrnSaver scrnsaverproto];
+  buildInputs = [xlibsWrapper imake libXScrnSaver scrnsaverproto];
 }

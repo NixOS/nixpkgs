@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, x11, xlibs, dbus, imlib2, freetype }:
+{ stdenv, fetchurl, pkgconfig, xlibsWrapper, xlibs, dbus, imlib2, freetype }:
 
 let version = "0.16.8.15"; in
   stdenv.mkDerivation {

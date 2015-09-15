@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mesa_glu, x11, libXmu, libXi }:
+{ stdenv, fetchurl, mesa_glu, xlibsWrapper, libXmu, libXi }:
 
 with stdenv.lib;
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mhkllxz49l1x680dmzrv2i82qjrq017sykah3xc90f2d8qcxfv9";
   };
 
-  nativeBuildInputs = [ x11 libXmu libXi ];
+  nativeBuildInputs = [ xlibsWrapper libXmu libXi ];
   propagatedNativeBuildInputs = [ mesa_glu ]; # GL/glew.h includes GL/glu.h
 
   patchPhase = ''

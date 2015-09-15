@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, x11, glib, cairo, libpng, harfbuzz
+{ stdenv, fetchurl, pkgconfig, xlibsWrapper, glib, cairo, libpng, harfbuzz
 , fontconfig, freetype, libintlOrEmpty, gobjectIntrospection
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isDarwin [ fontconfig ];
   nativeBuildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ x11 glib cairo libpng fontconfig freetype harfbuzz ] ++ libintlOrEmpty;
+  propagatedBuildInputs = [ xlibsWrapper glib cairo libpng fontconfig freetype harfbuzz ] ++ libintlOrEmpty;
 
   enableParallelBuilding = true;
 

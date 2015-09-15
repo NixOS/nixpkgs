@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, ncurses, x11, bzip2, zlib, openssl
+{ stdenv, fetchurl, perl, ncurses, xlibsWrapper, bzip2, zlib, openssl
 , spidermonkey, gpm
 , enableGuile ? false, guile ? null   # Incompatible licenses, LGPLv3 - GPLv2
 , enablePython ? false, python ? null
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gc-init.patch ];
 
-  buildInputs = [ perl ncurses x11 bzip2 zlib openssl spidermonkey gpm ]
+  buildInputs = [ perl ncurses xlibsWrapper bzip2 zlib openssl spidermonkey gpm ]
     ++ stdenv.lib.optional enableGuile guile
     ++ stdenv.lib.optional enablePython python;
 

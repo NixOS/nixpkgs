@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qt4, pkgconfig, x11
+{ stdenv, fetchurl, cmake, qt4, pkgconfig, xlibsWrapper
 # transports
 , curl, libmms
 # input plugins
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ # basic requirements
-      cmake qt4 pkgconfig x11
+      cmake qt4 pkgconfig xlibsWrapper
       # transports
       curl libmms
       # input plugins

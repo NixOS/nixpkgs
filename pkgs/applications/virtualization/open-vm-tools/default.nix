@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeWrapper, autoconf, automake,
   libmspack, openssl, pam, xercesc, icu, libdnet, procps, 
-  x11, libXinerama, libXi, libXrender, libXrandr, libXtst,
+  xlibsWrapper, libXinerama, libXi, libXrender, libXrandr, libXtst,
   pkgconfig, glib, gtk, gtkmm }:
 
 let
@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
 
   buildInputs = 
     [ autoconf automake makeWrapper libmspack openssl pam xercesc icu libdnet procps
-      pkgconfig glib gtk gtkmm x11 libXinerama libXi libXrender libXrandr libXtst ];
+      pkgconfig glib gtk gtkmm xlibsWrapper libXinerama libXi libXrender libXrandr libXtst ];
 
   patchPhase = ''
      sed -i s,-Werror,,g configure.ac

@@ -8,7 +8,7 @@
 , ocaml, withOCaml ? false
 #, withJava ? false
 #, atlasMath, withAtlas ? false
-, x11, withX ? false
+, xlibsWrapper, withX ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [gfortran ncurses]
   ++ lib.optionals withGtk [gtk]
   ++ lib.optionals withOCaml [ocaml]
-  ++ lib.optionals withX [x11]
+  ++ lib.optional withX xlibsWrapper
   ;
 
 
@@ -58,11 +58,7 @@ stdenv.mkDerivation rec {
   # do not compile Java interface
   + " --without-java"
   # use the X Window System
-  + (lib.optionalString withX "
-      --with-x
-      --x-libraries=${x11}/lib
-      --x-includes=${x11}/include
-    ")
+  + lib.optionalString withX "--with-x"
   ;
 
   makeFlags = "all";

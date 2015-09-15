@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, audiofile
 , openglSupport ? false, mesa ? null
 , alsaSupport ? true, alsaLib ? null
-, x11Support ? true, x11 ? null, libXrandr ? null
+, x11Support ? true, xlibsWrapper ? null, libXrandr ? null
 , pulseaudioSupport ? true, libpulseaudio ? null
 }:
 
@@ -10,7 +10,7 @@
 assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
 
 assert openglSupport -> (stdenv.isDarwin || mesa != null && x11Support);
-assert x11Support -> (x11 != null && libXrandr != null);
+assert x11Support -> (xlibsWrapper != null && libXrandr != null);
 assert alsaSupport -> alsaLib != null;
 assert pulseaudioSupport -> libpulseaudio != null;
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
-  propagatedBuildInputs = stdenv.lib.optionals x11Support [ x11 libXrandr ] ++
+  propagatedBuildInputs = stdenv.lib.optionals x11Support [ xlibsWrapper libXrandr ] ++
     stdenv.lib.optional pulseaudioSupport libpulseaudio;
 
   buildInputs = [ pkgconfig audiofile ] ++

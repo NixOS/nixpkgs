@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure, tcl, tk, x11 }:
+{ stdenv, fetchurl, pkgconfig, pure, tcl, tk, xlibsWrapper }:
 
 stdenv.mkDerivation rec {
   baseName = "tk";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ pure tcl tk x11 ];
+  propagatedBuildInputs = [ pure tcl tk xlibsWrapper ];
   makeFlags = "libdir=$(out)/lib prefix=$(out)/";
   setupHook = ../generic-setup-hook.sh;
 

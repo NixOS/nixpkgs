@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, x11, SDL, mesa, openal, gcc46 }:
+{ lib, stdenv, fetchurl, xlibsWrapper, SDL, mesa, openal, gcc46 }:
 
 stdenv.mkDerivation {
   name = "ioquake3-1.36";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     ./botlib.patch
   ];
 
-  buildInputs = [ x11 SDL mesa openal gcc46 ];
+  buildInputs = [ xlibsWrapper SDL mesa openal gcc46 ];
 
   # Fix building on GCC 4.6.
   NIX_CFLAGS_COMPILE = "-Wno-error";

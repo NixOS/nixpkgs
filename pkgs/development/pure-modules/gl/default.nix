@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure, freeglut, mesa, x11 }:
+{ stdenv, fetchurl, pkgconfig, pure, freeglut, mesa, xlibsWrapper }:
 
 stdenv.mkDerivation rec {
   baseName = "gl";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ pure freeglut mesa x11 ];
+  propagatedBuildInputs = [ pure freeglut mesa xlibsWrapper ];
   makeFlags = "libdir=$(out)/lib prefix=$(out)/";
   setupHook = ../generic-setup-hook.sh;
 

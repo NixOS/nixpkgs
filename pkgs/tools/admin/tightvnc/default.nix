@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, x11, zlib, libjpeg, imake, gccmakedep, libXmu
+{ stdenv, fetchurl, xlibsWrapper, zlib, libjpeg, imake, gccmakedep, libXmu
 , libXaw, libXpm, libXp , perl, xauth, fontDirectories, openssh }:
 
 stdenv.mkDerivation {
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   inherit xauth fontDirectories perl;
   gcc = stdenv.cc.cc;
 
-  buildInputs = [ x11 zlib libjpeg imake gccmakedep libXmu libXaw
+  buildInputs = [ xlibsWrapper zlib libjpeg imake gccmakedep libXmu libXaw
                   libXpm libXp xauth openssh ];
 
   patchPhase = ''
