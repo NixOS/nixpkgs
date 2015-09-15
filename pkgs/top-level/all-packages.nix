@@ -181,17 +181,6 @@ let
   path = ../..;
 
 
-  ### Symbolic names.
-
-  x11 = xlibsWrapper;
-
-  # `xlibs' is the set of X library components.  This used to be the
-  # old modular X libraries project (called `xlibs') but now it's just
-  # the set of packages in the modular X.org tree (which also includes
-  # non-library components like the server, drivers, fonts, etc.).
-  xlibs = xorg;
-
-
   ### Helper functions.
 
   inherit lib config stdenvAdapters;
@@ -15025,6 +15014,8 @@ let
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  xlibs = xorg; # added 2015-09
+  x11 = xlibsWrapper; # added 2015-09
   youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
   youtubeDL = youtube-dl;  # added 2014-10-26
 
