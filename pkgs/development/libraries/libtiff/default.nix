@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, zlib, libjpeg, xz }:
 
 let
-  version = "4.0.5";
+  version = "4.0.6";
 in
 stdenv.mkDerivation rec {
   name = "libtiff-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
       [ "ftp://ftp.remotesensing.org/pub/libtiff/tiff-${version}.tar.gz"
         "http://download.osgeo.org/libtiff/tiff-${version}.tar.gz"
       ];
-    sha256 = "171hgy4mylwmvdm7gp6ffjva81m4j56v3fbqsbfl7avzxn1slpp2";
+    sha256 = "136nf1rj9dp5jgv1p7z4dk0xy3wki1w0vfjbk82f645m0w4samsd";
   };
 
   outputs = [ "out" "doc" "man" ];
