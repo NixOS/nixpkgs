@@ -424,17 +424,13 @@ let
 
   makeAutostartItem = callPackage ../build-support/make-startupitem { };
 
-  makeInitrd = { contents, compressor ? "gzip -9n", prepend ? [ ] }:
-    callPackage ../build-support/kernel/make-initrd.nix {
-      inherit contents compressor prepend;
-    };
+  makeInitrd = { contents, compressor ? "gzip -9n", prepend ? [ ] }@args:
+    callPackage ../build-support/kernel/make-initrd.nix args;
 
   makeWrapper = makeSetupHook { } ../build-support/setup-hooks/make-wrapper.sh;
 
-  makeModulesClosure = { kernel, rootModules, allowMissing ? false }:
-    callPackage ../build-support/kernel/modules-closure.nix {
-      inherit kernel rootModules allowMissing;
-    };
+  makeModulesClosure = { kernel, rootModules, allowMissing ? false }@args:
+    callPackage ../build-support/kernel/modules-closure.nix args;
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
