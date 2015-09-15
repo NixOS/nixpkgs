@@ -4,8 +4,13 @@
 , zlib ? null
 , szip ? null
 , mpi ? null
+, cxx ? false
 , enableShared ? true
 }:
+
+# C++ bindings are incompatible with mpi parallel mode 
+assert cxx -> mpi == null;
+
 stdenv.mkDerivation rec {
   version = "1.8.14";
   name = "hdf5-${version}";
@@ -13,6 +18,8 @@ stdenv.mkDerivation rec {
     url = "http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-${version}/src/hdf5-${version}.tar.gz";
     sha256 = "0f86gv32pjrrphvamgims1dd7f3bp46hjarbcdy8k4gmyzpgxghx";
  };
+ 
+
 
   passthru = {
     mpiSupport = (mpi != null);
@@ -29,6 +36,7 @@ stdenv.mkDerivation rec {
   configureFlags = "
     ${if szip != null then "--with-szlib=${szip}" else ""}
     ${if mpi != null then "--enable-parallel" else ""}
+    ${if cxx then "--enable-cxx" else ""}
     ${if enableShared then "--enable-shared" else ""}
   ";
   
