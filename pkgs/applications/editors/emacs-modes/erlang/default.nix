@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = "http://github.com/erlang/otp";
     description = "Erlang mode for Emacs";
-    licence = licenses.asl20;
+    license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = [ maintainers.samuelrivas ];
   };

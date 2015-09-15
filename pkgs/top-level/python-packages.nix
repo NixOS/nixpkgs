@@ -2765,7 +2765,7 @@ let
     meta = {
       description = "Minimal task scheduling abstraction";
       homepage = "http://github.com/ContinuumIO/dask/";
-      licenses = licenses.bsd3;
+      license = licenses.bsd3;
       maintainers = with maintainers; [ fridh ];
     };
   };
@@ -3299,7 +3299,7 @@ let
     meta = {
       description = "Easy to use python subprocess interface";
       homepage = "https://github.com/ponty/EasyProcess";
-      licenses = licenses.bsdOriginal;
+      license = licenses.bsdOriginal;
       maintainers = with maintainers; [ layus ];
     };
   };
