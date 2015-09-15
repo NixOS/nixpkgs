@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, qt48, SDL, fontconfig, freetype, SDL_ttf, xlibs }:
+{ stdenv, fetchurl, alsaLib, qt48, SDL, fontconfig, freetype, SDL_ttf, xorg }:
 
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${alsaLib}/lib:${qt48}/lib:${SDL}/lib:${fontconfig}/lib:${freetype}/lib:${SDL_ttf}/lib:${xlibs.libX11}/lib:${xlibs.libXinerama}/lib:${stdenv.cc.cc}/lib" \
+      --set-rpath "${alsaLib}/lib:${qt48}/lib:${SDL}/lib:${fontconfig}/lib:${freetype}/lib:${SDL_ttf}/lib:${xorg.libX11}/lib:${xorg.libXinerama}/lib:${stdenv.cc.cc}/lib" \
       share/sdlmame/sdlmame
 
     mkdir -p "$out/bin"

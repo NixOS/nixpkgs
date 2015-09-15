@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib, makeWrapper, openssl, freetype
+{ fetchurl, stdenv, dpkg, xorg, qt4, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng, GConf
 , libgcrypt, chromium, udev, fontconfig
 , dbus, expat }:
@@ -28,16 +28,16 @@ let
     qt4
     stdenv.cc.cc
     udev
-    xlibs.libX11
-    xlibs.libXcomposite
-    xlibs.libXdamage
-    xlibs.libXext
-    xlibs.libXfixes
-    xlibs.libXi
-    xlibs.libXrandr
-    xlibs.libXrender
-    xlibs.libXrender
-    xlibs.libXScrnSaver
+    xorg.libX11
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXrender
+    xorg.libXScrnSaver
   ];
 
 in

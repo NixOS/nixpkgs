@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, bash, unzip, glibc, openssl, gcc, mesa, freetype, xlibs, alsaLib, cairo }:
+{ stdenv, fetchurl, cmake, bash, unzip, glibc, openssl, gcc, mesa, freetype, xorg, alsaLib, cairo }:
 
 stdenv.mkDerivation rec {
 
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     unzip ${sources40Zip} -d $prefix/lib/pharo-vm/
   '';
 
-  buildInputs = [ bash unzip cmake glibc openssl gcc mesa freetype xlibs.libX11 xlibs.libICE xlibs.libSM alsaLib cairo ];
+  buildInputs = [ bash unzip cmake glibc openssl gcc mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo ];
 
   meta = {
     description = "Clean and innovative Smalltalk-inspired environment";

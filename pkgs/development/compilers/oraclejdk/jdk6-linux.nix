@@ -3,14 +3,14 @@
 , requireFile
 , unzip
 , makeWrapper
-, xlibs ? null
+, xorg ? null
 , installjdk ? true
 , pluginSupport ? true
 , installjce ? false
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
-assert swingSupport -> xlibs != null;
+assert swingSupport -> xorg != null;
 
 let
 
@@ -73,10 +73,10 @@ stdenv.mkDerivation {
    */
   libraries =
     [stdenv.cc.libc] ++
-    (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi xlibs.libXp xlibs.libXt] else []);
+    (if swingSupport then [xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp xorg.libXt] else []);
 
   inherit swingSupport pluginSupport architecture jce;
-  inherit (xlibs) libX11;
+  inherit (xorg) libX11;
 
   mozillaPlugin = if installjdk then "/jre/lib/${architecture}/plugins" else "/lib/${architecture}/plugins";
 

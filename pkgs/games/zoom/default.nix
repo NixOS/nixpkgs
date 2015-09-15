@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl, expat, xlibsWrapper, freetype }:
 
-# !!! assert freetype == xlibs.freetype
+# !!! assert freetype == xorg.freetype
 
 stdenv.mkDerivation {
   name = "zoom-1.1.5";

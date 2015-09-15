@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, patchelf, perl, ncurses, expat, python, zlib
-, xlibs, gtk2, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
+, xorg, gtk2, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
 # generic inputs
 , version, sha256, url ? null, ...
 } :
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   runtimeDependencies = [
     ncurses expat python zlib glibc
-    xlibs.libX11 xlibs.libXext xlibs.libXrender xlibs.libXt xlibs.libXtst xlibs.libXi xlibs.libXext
+    xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
     gtk2 glib fontconfig freetype unixODBC alsaLib
   ];
 

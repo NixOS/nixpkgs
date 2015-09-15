@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xlibs }:
+{ stdenv, fetchurl, xorg }:
 
 stdenv.mkDerivation {
 
@@ -9,13 +9,13 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    xlibs.imake
-    xlibs.libX11
-    xlibs.libXaw
-    xlibs.libXext
-    xlibs.libXmu
-    xlibs.libXpm
-    xlibs.libXxf86vm
+    xorg.imake
+    xorg.libX11
+    xorg.libXaw
+    xorg.libXext
+    xorg.libXmu
+    xorg.libXpm
+    xorg.libXxf86vm
   ];
 
   configurePhase = "xmkmf";

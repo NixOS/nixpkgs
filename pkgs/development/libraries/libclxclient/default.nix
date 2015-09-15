@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libclthreads, libX11, libXft, xlibs }:
+{ stdenv, fetchurl, libclthreads, libX11, libXft, xorg }:
 
 stdenv.mkDerivation rec {
   name = "libclxclient-${version}";
@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "14l7xrh964gllymraq4n5pgax94p5jsfjslqi5c6637zc4lmgnl0";
   };
 
-  buildInputs = [ libclthreads libX11 libXft xlibs.xproto ];
+  buildInputs = [ libclthreads libX11 libXft xorg.xproto ];
 
-  NIX_CFLAGS_COMPILE = "-I${xlibs.xproto}/include -I${libXft}/include";
+  NIX_CFLAGS_COMPILE = "-I${xorg.xproto}/include -I${libXft}/include";
 
   patchPhase = ''
     sed -e "s@ldconfig@@" -i Makefile

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, patchelf, xlibs, openal }:
+{ stdenv, fetchurl, unzip, patchelf, xorg, openal }:
 
 assert stdenv.isLinux;
 assert stdenv.isx86_64;
@@ -11,7 +11,7 @@ let
       buildInputs = [ unzip patchelf ];
 
       rtdeps = stdenv.lib.makeLibraryPath
-        [ xlibs.libXxf86vm xlibs.libXext openal ]
+        [ xorg.libXxf86vm xorg.libXext openal ]
         + ":" + stdenv.lib.makeSearchPath "lib64" [ stdenv.cc.cc ];
 
       buildCommand =

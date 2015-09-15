@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, freetype, fontconfig, fribidi, SDL2, SDL, mesa, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio, libsndfile, xlibs, libdrm, libxkbcommon, udev, utillinuxCurses, dbus, bullet, luajit, python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg, dbus_libs, alsaLib, poppler, libraw, libspectre, xineLib, vlc, libwebp, curl, libinput }:
+{ stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, freetype, fontconfig, fribidi, SDL2, SDL, mesa, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio, libsndfile, xorg, libdrm, libxkbcommon, udev, utillinuxCurses, dbus, bullet, luajit, python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg, dbus_libs, alsaLib, poppler, libraw, libspectre, xineLib, vlc, libwebp, curl, libinput }:
 
 
 stdenv.mkDerivation rec {
@@ -11,13 +11,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig openssl zlib freetype fontconfig fribidi SDL2 SDL mesa
     giflib libpng libtiff glib gst_all_1.gstreamer gst_all_1.gst-plugins-base
-    gst_all_1.gst-libav libpulseaudio libsndfile xlibs.libXcursor xlibs.printproto
-    xlibs.libX11 udev utillinuxCurses ];
+    gst_all_1.gst-libav libpulseaudio libsndfile xorg.libXcursor xorg.printproto
+    xorg.libX11 udev utillinuxCurses ];
 
-  propagatedBuildInputs = [ libxkbcommon python27Packages.dbus dbus libjpeg xlibs.libXcomposite
-    xlibs.libXdamage xlibs.libXinerama xlibs.libXp xlibs.libXtst xlibs.libXi xlibs.libXext
-    bullet xlibs.libXScrnSaver xlibs.libXrender xlibs.libXfixes xlibs.libXrandr
-    xlibs.libxkbfile xlibs.libxcb xlibs.xcbutilkeysyms openjpeg doxygen expat luajit
+  propagatedBuildInputs = [ libxkbcommon python27Packages.dbus dbus libjpeg xorg.libXcomposite
+    xorg.libXdamage xorg.libXinerama xorg.libXp xorg.libXtst xorg.libXi xorg.libXext
+    bullet xorg.libXScrnSaver xorg.libXrender xorg.libXfixes xorg.libXrandr
+    xorg.libxkbfile xorg.libxcb xorg.xcbutilkeysyms openjpeg doxygen expat luajit
     harfbuzz jbig2dec librsvg dbus_libs alsaLib poppler libraw libspectre xineLib vlc libwebp curl libdrm
     libinput ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "--disable-tslib" "--with-systemdunitdir=$out/systemd/user"
     "ac_ct_CXX=foo" ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${xlibs.libXtst}" "-I${dbus_libs}/include/dbus-1.0" "-I${dbus_libs}/lib/dbus-1.0/include" ];
+  NIX_CFLAGS_COMPILE = [ "-I${xorg.libXtst}" "-I${dbus_libs}/include/dbus-1.0" "-I${dbus_libs}/lib/dbus-1.0/include" ];
 
   patches = [ ./efl-elua.patch ];
 

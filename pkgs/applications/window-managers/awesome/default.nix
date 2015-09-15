@@ -1,5 +1,5 @@
 { stdenv, fetchurl, luaPackages, cairo, cmake, imagemagick, pkgconfig, gdk_pixbuf
-, xlibs, libstartup_notification, libxdg_basedir, libpthreadstubs
+, xorg, libstartup_notification, libxdg_basedir, libpthreadstubs
 , xcb-util-cursor, makeWrapper, pango, gobjectIntrospection, unclutter
 , compton, procps, iproute, coreutils, curl, alsaUtils, findutils, xterm
 , which, dbus, nettools, git, asciidoc, doxygen
@@ -46,15 +46,15 @@ stdenv.mkDerivation rec {
     pango
     pkgconfig
     xcb-util-cursor
-    xlibs.libXau
-    xlibs.libXdmcp
-    xlibs.libxcb
-    xlibs.libxshmfence
-    xlibs.xcbutil
-    xlibs.xcbutilimage
-    xlibs.xcbutilkeysyms
-    xlibs.xcbutilrenderutil
-    xlibs.xcbutilwm
+    xorg.libXau
+    xorg.libXdmcp
+    xorg.libxcb
+    xorg.libxshmfence
+    xorg.xcbutil
+    xorg.xcbutilimage
+    xorg.xcbutilkeysyms
+    xorg.xcbutilrenderutil
+    xorg.xcbutilwm
     #xmlto docbook_xml_dtd_45 docbook_xsl
   ];
 

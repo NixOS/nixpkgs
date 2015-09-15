@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qt5, libarchive, xlibs }:
+{ stdenv, fetchFromGitHub, pkgconfig, qt5, libarchive, xorg }:
 
 stdenv.mkDerivation rec {
   version = "0.1.1";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    xlibs.xcbutilkeysyms pkgconfig qt5.base qt5.webkit qt5.imageformats libarchive
+    xorg.xcbutilkeysyms pkgconfig qt5.base qt5.webkit qt5.imageformats libarchive
   ];
 
   configurePhase = ''

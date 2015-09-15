@@ -1,6 +1,6 @@
 { stdenv, fetchurl, buildEnv, makeDesktopItem, makeWrapper, zlib, glib, alsaLib
 , dbus, gtk, atk, pango, freetype, fontconfig, libgnome_keyring3, gdk_pixbuf
-, cairo, cups, expat, libgpgerror, nspr, gconf, nss, xlibs, libcap, systemd
+, cairo, cups, expat, libgpgerror, nspr, gconf, nss, xorg, libcap, systemd
 }:
 
 let
@@ -9,9 +9,9 @@ let
     paths = [
       stdenv.cc.cc zlib glib dbus gtk atk pango freetype libgnome_keyring3
       fontconfig gdk_pixbuf cairo cups expat libgpgerror alsaLib nspr gconf nss
-      xlibs.libXrender xlibs.libX11 xlibs.libXext xlibs.libXdamage xlibs.libXtst
-      xlibs.libXcomposite xlibs.libXi xlibs.libXfixes xlibs.libXrandr
-      xlibs.libXcursor libcap systemd
+      xorg.libXrender xorg.libX11 xorg.libXext xorg.libXdamage xorg.libXtst
+      xorg.libXcomposite xorg.libXi xorg.libXfixes xorg.libXrandr
+      xorg.libXcursor libcap systemd
     ];
   };
 in stdenv.mkDerivation rec {

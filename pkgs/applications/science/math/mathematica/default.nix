@@ -12,7 +12,7 @@
 , opencv
 , openssl
 , unixODBC
-, xlibs
+, xorg
 , zlib
 , libxml2
 , libuuid
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     unixODBC
     libxml2
     libuuid
-  ] ++ (with xlibs; [
+  ] ++ (with xorg; [
     libX11
     libXext
     libXtst

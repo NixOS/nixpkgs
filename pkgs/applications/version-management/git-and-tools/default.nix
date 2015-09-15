@@ -51,13 +51,13 @@ rec {
 
   qgit = import ./qgit {
     inherit fetchurl stdenv;
-    inherit (xlibs) libXext libX11;
+    inherit (xorg) libXext libX11;
     qt = qt4;
   };
 
   qgitGit = import ./qgit/qgit-git.nix {
     inherit fetchurl sourceFromHead stdenv;
-    inherit (xlibs) libXext libX11;
+    inherit (xorg) libXext libX11;
     qt = qt4;
   };
 

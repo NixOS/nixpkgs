@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, shhmsg, shhopt, xlibs }:
+{ stdenv, fetchurl, shhmsg, shhopt, xorg }:
 
 stdenv.mkDerivation rec {
   name = "snake4-1.0.14";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "14cng9l857np42zixp440mbc8y5675frb6lhsds53j1cws9cncw9";
   };
 
-  buildInputs = with xlibs; [ shhmsg shhopt libX11 libXt libXpm libXaw libXext];
+  buildInputs = with xorg; [ shhmsg shhopt libX11 libXt libXpm libXaw libXext];
 
   preInstall = ''
     substituteInPlace Makefile --replace "-o \$(OWNER) -g \$(GROUP)" ""

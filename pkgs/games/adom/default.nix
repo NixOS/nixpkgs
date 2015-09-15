@@ -1,10 +1,10 @@
 { stdenv, fetchurl, patchelf, zlib, libmad, libpng12, libcaca, mesa, alsaLib, libpulseaudio
-, xlibs }:
+, xorg }:
 
 assert stdenv.system == "x86_64-linux";
 let
 
-  inherit (xlibs) libXext libX11;
+  inherit (xorg) libXext libX11;
 
   lpath = "${stdenv.cc.cc}/lib64:" + stdenv.lib.makeSearchPath "lib" [
       zlib libmad libpng12 libcaca libXext libX11 mesa alsaLib libpulseaudio];

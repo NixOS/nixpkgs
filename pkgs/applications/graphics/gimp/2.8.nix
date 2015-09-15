@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, babl, gegl, gtk, glib, gdk_pixbuf
 , pango, cairo, freetype, fontconfig, lcms, libpng, libjpeg, poppler, libtiff
 , webkit, libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, jasper
-, python, pygtk, libart_lgpl, libexif, gettext, xlibs, wrapPython }:
+, python, pygtk, libart_lgpl, libexif, gettext, xorg, wrapPython }:
 
 stdenv.mkDerivation rec {
   name = "gimp-2.8.14";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     [ pkgconfig intltool babl gegl gtk glib gdk_pixbuf pango cairo
       freetype fontconfig lcms libpng libjpeg poppler libtiff webkit
       libmng librsvg libwmf zlib libzip ghostscript aalib jasper
-      python pygtk libart_lgpl libexif gettext xlibs.libXpm
+      python pygtk libart_lgpl libexif gettext xorg.libXpm
       wrapPython
     ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   #configureFlags = [ "--disable-print" ];
 
   # "screenshot" needs this.
-  NIX_LDFLAGS = "-rpath ${xlibs.libX11}/lib"
+  NIX_LDFLAGS = "-rpath ${xorg.libX11}/lib"
     + stdenv.lib.optionalString stdenv.isDarwin " -lintl";
 
   meta = {

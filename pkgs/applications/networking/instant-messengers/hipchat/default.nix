@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libtool, xlibs, freetype, fontconfig, openssl, glib
+{ stdenv, fetchurl, libtool, xorg, freetype, fontconfig, openssl, glib
 , mesa, gstreamer, gst_plugins_base, dbus, alsaLib, zlib, libuuid
 , libxml2, libxslt, sqlite, libogg, libvorbis, xz, libcanberra
 , makeWrapper, libredirect, xkeyboard_config, xcbutilkeysyms }:
@@ -10,18 +10,18 @@ let
   rpath = stdenv.lib.makeSearchPath "lib" [
     stdenv.glibc
     libtool
-    xlibs.libXext
-    xlibs.libSM
-    xlibs.libICE
-    xlibs.libX11
-    xlibs.libXft
-    xlibs.libXau
-    xlibs.libXdmcp
-    xlibs.libXrender
-    xlibs.libXfixes
-    xlibs.libXcomposite
-    xlibs.libxcb
-    xlibs.libXi
+    xorg.libXext
+    xorg.libSM
+    xorg.libICE
+    xorg.libX11
+    xorg.libXft
+    xorg.libXau
+    xorg.libXdmcp
+    xorg.libXrender
+    xorg.libXfixes
+    xorg.libXcomposite
+    xorg.libxcb
+    xorg.libXi
     freetype
     fontconfig
     openssl

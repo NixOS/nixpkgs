@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper
 , expat, fftwFloat, fontconfig, freetype, libjack2, jack2Full, libclthreads, libclxclient
-, libsndfile, libxcb, xlibs
+, libsndfile, libxcb, xorg
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat libjack2 libclthreads libclxclient fftwFloat fontconfig libsndfile freetype
-    libxcb xlibs.libX11 xlibs.libXau xlibs.libXdmcp xlibs.libXft xlibs.libXrender
+    libxcb xorg.libX11 xorg.libXau xorg.libXdmcp xorg.libXft xorg.libXrender
   ];
 
   makeFlags = [

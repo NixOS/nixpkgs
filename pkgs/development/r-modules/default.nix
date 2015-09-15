@@ -235,7 +235,7 @@ let
     ChemmineOB = [ pkgs.openbabel pkgs.pkgconfig ];
     cit = [ pkgs.gsl ];
     curl = [ pkgs.curl ];
-    devEMF = [ pkgs.xlibs.libXft ];
+    devEMF = [ pkgs.xorg.libXft ];
     diversitree = [ pkgs.gsl pkgs.fftw ];
     EMCluster = [ pkgs.liblapack ];
     fftw = [ pkgs.fftw ];
@@ -340,7 +340,7 @@ let
     TAQMNGR = [ pkgs.zlib ];
     tiff = [ pkgs.libtiff ];
     TKF = [ pkgs.gsl ];
-    tkrplot = [ pkgs.xlibs.libX11 ];
+    tkrplot = [ pkgs.xorg.libX11 ];
     topicmodels = [ pkgs.gsl ];
     udunits2 = [ pkgs.udunits pkgs.expat ];
     V8 = [ pkgs.v8 ];
@@ -1632,7 +1632,7 @@ let
     });
 
     devEMF = old.devEMF.overrideDerivation (attrs: {
-      NIX_CFLAGS_LINK = "-L${pkgs.xlibs.libXft}/lib -lXft";
+      NIX_CFLAGS_LINK = "-L${pkgs.xorg.libXft}/lib -lXft";
     });
 
     slfm = old.slfm.overrideDerivation (attrs: {

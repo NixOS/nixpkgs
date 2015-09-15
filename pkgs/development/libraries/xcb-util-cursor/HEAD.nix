@@ -1,5 +1,5 @@
 { stdenv, fetchgit, bashInteractive, autoconf, automake, libtool, pkgconfig
-, git, xlibs, gnum4, libxcb, gperf }:
+, git, xorg, gnum4, libxcb, gperf }:
 
 stdenv.mkDerivation rec {
   name = "xcb-util-cursor-0.1.1-3-gf03cc27";
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
     libtool
     libxcb
     pkgconfig
-    xlibs.utilmacros
-    xlibs.xcbutilimage
-    xlibs.xcbutilrenderutil
+    xorg.utilmacros
+    xorg.xcbutilimage
+    xorg.xcbutilrenderutil
   ];
 
   configurePhase = ''

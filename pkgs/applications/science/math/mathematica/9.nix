@@ -12,7 +12,7 @@
 , opencv
 , openssl
 , unixODBC
-, xlibs
+, xorg
 , zlib
 }:
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     opencv
     openssl
     unixODBC
-  ] ++ (with xlibs; [
+  ] ++ (with xorg; [
     libX11
     libXext
     libXtst

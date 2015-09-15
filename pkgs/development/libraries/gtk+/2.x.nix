@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xlibs
+{ stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xorg
 , gdk_pixbuf, libintlOrEmpty, xlibsWrapper
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? true, cups ? null
 }:
 
-assert xineramaSupport -> xlibs.libXinerama != null;
+assert xineramaSupport -> xorg.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl pkgconfig gettext ];
 
-  propagatedBuildInputs = with xlibs; with stdenv.lib;
+  propagatedBuildInputs = with xorg; with stdenv.lib;
     [ glib cairo pango gdk_pixbuf atk ]
     ++ optionals (stdenv.isLinux || stdenv.isDarwin) [
          libXrandr libXrender libXcomposite libXi libXcursor

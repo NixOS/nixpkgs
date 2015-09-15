@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, gettext, pkgconfig # Build tools
 , gtk2, kde_workspace, kdelibs # Toolkit dependencies
-, libpthreadstubs, libXdmcp, libxcb, xlibs # X11 dependencies
+, libpthreadstubs, libXdmcp, libxcb, xorg # X11 dependencies
 }:
 
 stdenv.mkDerivation {
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     libXdmcp
     libxcb
     pkgconfig
-    xlibs.libxshmfence
+    xorg.libxshmfence
   ];
 
   patches = [

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, xlibs, libjpeg }:
+{ stdenv, fetchurl, unzip, xorg, libjpeg }:
 
 stdenv.mkDerivation rec {
   name = "jasper-1.900.1";

@@ -2,7 +2,7 @@
 , libXfixes, freetype, fontconfig, zlib, libjpeg, libpng
 , mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
-, gdk_pixbuf, python, gdb, xlibs, libX11, libxcb, xcbutil, xcbutilimage
+, gdk_pixbuf, python, gdb, xorg, libX11, libxcb, xcbutil, xcbutilimage
 , xcbutilkeysyms, xcbutilwm, udev, libxml2, libxslt, pcre, libxkbcommon
 , alsaLib, gstreamer, gst_plugins_base
 , libpulseaudio, bison, flex, gperf, ruby, libwebp, libXcursor
@@ -165,7 +165,7 @@ stdenv.mkDerivation rec {
   PSQL_LIBS = optionalString (postgresql != null) "-L${postgresql}/lib -lpq";
 
   propagatedBuildInputs = [
-    xlibs.libXcomposite libX11 libxcb libXext libXrender libXi
+    xorg.libXcomposite libX11 libxcb libXext libXrender libXi
     fontconfig freetype openssl dbus.libs glib udev libxml2 libxslt pcre
     zlib libjpeg libpng libtiff sqlite icu
     libwebp alsaLib gstreamer gst_plugins_base libpulseaudio

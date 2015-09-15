@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, lzma, boost, libdevil, zlib, p7zip
-, openal, libvorbis, glew, freetype, xlibs, SDL, mesa, binutils
+, openal, libvorbis, glew, freetype, xorg, SDL, mesa, binutils
 , asciidoc, libxslt, docbook_xsl, docbook_xsl_ns, curl, makeWrapper
 , jdk ? null, python ? null, systemd
 , withAI ? true # support for AI Interfaces and Skirmish AIs
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
                 "-DPREFER_STATIC_LIBS:BOOL=OFF"];
 
   buildInputs = [ cmake lzma boost libdevil zlib p7zip openal libvorbis freetype SDL
-    xlibs.libX11 xlibs.libXcursor mesa glew asciidoc libxslt docbook_xsl curl makeWrapper
+    xorg.libX11 xorg.libXcursor mesa glew asciidoc libxslt docbook_xsl curl makeWrapper
     docbook_xsl_ns systemd ]
     ++ stdenv.lib.optional withAI jdk
     ++ stdenv.lib.optional withAI python;

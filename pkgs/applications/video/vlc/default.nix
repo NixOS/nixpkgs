@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xz, bzip2, perl, xlibs, libdvdnav, libbluray
+{ stdenv, fetchurl, xz, bzip2, perl, xorg, libdvdnav, libbluray
 , zlib, a52dec, libmad, faad2, ffmpeg, alsaLib
 , pkgconfig, dbus, fribidi, freefont_ttf, libebml, libmatroska
 , libvorbis, libtheora, speex, lua5, libgcrypt, libupnp
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       libupnp libcaca libpulseaudio flac schroedinger libxml2 librsvg mpeg2dec
       udev gnutls avahi libcddb SDL SDL_image libmtp unzip taglib
       libkate libtiger libv4l samba liboggz libass libdvbpsi libva
-      xlibs.xlibsWrapper xlibs.libXv xlibs.libXvMC xlibs.libXpm xlibs.xcbutilkeysyms
+      xorg.xlibsWrapper xorg.libXv xorg.libXvMC xorg.libXpm xorg.xcbutilkeysyms
       libdc1394 libraw1394 libopus libebml libmatroska libvdpau
     ]
     ++ (if withQt5 then with qt5; [ base ] else [qt4])

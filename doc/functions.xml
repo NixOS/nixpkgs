@@ -248,7 +248,7 @@ c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
   targetPkgs = pkgs: (with pkgs;
     [ udev
       alsaLib
-    ]) ++ (with pkgs.xlibs;
+    ]) ++ (with pkgs.xorg;
     [ libX11
       libXcursor
       libXrandr

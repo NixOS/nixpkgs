@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, firefox, perl, unzipNLS, xlibs }:
+{ stdenv, fetchurl, bash, firefox, perl, unzipNLS, xorg }:
 
 let
 

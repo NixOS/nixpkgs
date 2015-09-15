@@ -1,6 +1,6 @@
 { stdenv, fetchurl, buildEnv, makeWrapper, glib, alsaLib , dbus, gtk, atk
 , pango, freetype, fontconfig, gdk_pixbuf , cairo, cups, expat, nspr, gconf, nss
-, xlibs, libcap, unzip
+, xorg, libcap, unzip
 }:
 
 let
@@ -8,9 +8,9 @@ let
     name = "env-thrust";
     paths = [
       stdenv.cc.cc glib dbus gtk atk pango freetype fontconfig gdk_pixbuf
-      cairo cups expat alsaLib nspr gconf nss xlibs.libXrender xlibs.libX11
-      xlibs.libXext xlibs.libXdamage xlibs.libXtst xlibs.libXcomposite
-      xlibs.libXi xlibs.libXfixes xlibs.libXrandr xlibs.libXcursor libcap
+      cairo cups expat alsaLib nspr gconf nss xorg.libXrender xorg.libX11
+      xorg.libXext xorg.libXdamage xorg.libXtst xorg.libXcomposite
+      xorg.libXi xorg.libXfixes xorg.libXrandr xorg.libXcursor libcap
     ];
   };
 in stdenv.mkDerivation rec {
