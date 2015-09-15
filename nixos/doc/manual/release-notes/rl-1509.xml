@@ -32,6 +32,18 @@
         <literal>services.openssh.moduliFile</literal> option.
       </para>
     </listitem>
+    <listitem>
+      <para>
+        Support for declarative user management has been improved. It
+        is now possible by means of the new option
+        <literal>users.initialHomeSetup</literal> to setup home directory
+        contents for newly created users in addition to just creating them.
+        This way you can provide basic dot files in the user's home directory
+        or even clone your home git repository from a server!
+
+        Set up the configuration, run nixos-install, log in and have everything ready.
+      </para>
+    </listitem>
   </itemizedlist>
 
 </para>
