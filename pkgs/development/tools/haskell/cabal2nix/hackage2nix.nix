@@ -1,6 +1,6 @@
 { mkDerivation, base, Cabal, containers, distribution-nixpkgs
-, filepath, language-nix, lens, monad-par, monad-par-extras, mtl
-, optparse-applicative, pretty, stdenv, fetchFromGitHub
+, fetchFromGitHub, filepath, language-nix, lens, monad-par
+, monad-par-extras, mtl, optparse-applicative, pretty, stdenv
 }:
 
 mkDerivation rec {

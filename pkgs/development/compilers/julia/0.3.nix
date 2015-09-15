@@ -68,17 +68,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gfortran git m4 patchelf perl which python2 ];
 
   makeFlags =
-    let
-      arch = head (splitString "-" stdenv.system);
-      march =
-        { "x86_64-linux" = "x86-64";
-          "x86_64-darwin" = "x86-64";
-          "i686-linux" = "i686";
-        }."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
-    in [
-      "ARCH=${arch}"
-      "MARCH=${march}"
-      "JULIA_CPU_TARGET=${march}"
+    [
       "PREFIX=$(out)"
       "prefix=$(out)"
       "SHELL=${stdenv.shell}"

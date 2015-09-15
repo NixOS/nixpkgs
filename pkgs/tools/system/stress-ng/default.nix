@@ -1,11 +1,13 @@
 { stdenv, fetchurl, attr, keyutils }:
 
-let version = "0.04.15"; in
-stdenv.mkDerivation rec {
+let
+  version = "0.04.18";
   name = "stress-ng-${version}";
+in stdenv.mkDerivation {
+  inherit name;
 
   src = fetchurl {
-    sha256 = "1jazcfviqx3pyhv2jzsp6y37ndsj1smfk6jacpxg9vrg5k3cm3wq";
+    sha256 = "04slzjpjv9kw0glzl3nr9p073shlcgs6aalc6ij9w3h4p7ibn0wh";
     url = "http://kernel.ubuntu.com/~cking/tarballs/stress-ng/${name}.tar.gz";
   };
 
@@ -36,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = http://kernel.ubuntu.com/~cking/stress-ng;
     downloadPage = http://kernel.ubuntu.com/~cking/tarballs/stress-ng/;
     license = licenses.gpl2Plus;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 }

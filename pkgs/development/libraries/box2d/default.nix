@@ -3,9 +3,9 @@ x@{builderDefsPackage
   , inputproto, libXi, fetchsvn, pkgconfig
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchsvn" "builderDefsPackage"] ++
     [];
 
   buildInputs = map (n: builtins.getAttr n x)

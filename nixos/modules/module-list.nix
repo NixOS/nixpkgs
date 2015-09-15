@@ -275,6 +275,7 @@
   ./services/networking/ddclient.nix
   ./services/networking/dhcpcd.nix
   ./services/networking/dhcpd.nix
+  ./services/networking/dnschain.nix
   ./services/networking/dnscrypt-proxy.nix
   ./services/networking/dnsmasq.nix
   ./services/networking/docker-registry-server.nix
@@ -303,6 +304,7 @@
   ./services/networking/minidlna.nix
   ./services/networking/mstpd.nix
   ./services/networking/murmur.nix
+  ./services/networking/namecoind.nix
   ./services/networking/nat.nix
   ./services/networking/networkmanager.nix
   ./services/networking/ngircd.nix
@@ -393,7 +395,6 @@
   ./services/web-servers/lighttpd/default.nix
   ./services/web-servers/lighttpd/gitweb.nix
   ./services/web-servers/nginx/default.nix
-  ./services/web-servers/nginx/reverse_proxy.nix
   ./services/web-servers/phpfpm.nix
   ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix
@@ -486,6 +487,7 @@
   ./virtualisation/docker.nix
   ./virtualisation/libvirtd.nix
   ./virtualisation/lxc.nix
+  ./virtualisation/lxd.nix
   ./virtualisation/amazon-options.nix
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix

@@ -1,4 +1,4 @@
-{ pkgs, fetchurl, stdenv, gtk3, udev, desktop_file_utils, shared_mime_info , intltool, pkgconfig, makeWrapper, ffmpegthumbnailer, jmtpfs, ifuse, lsof, udisks }:
+{ pkgs, fetchurl, stdenv, gtk3, udev, desktop_file_utils, shared_mime_info , intltool, pkgconfig, makeWrapper, ffmpegthumbnailer, jmtpfs, ifuse, lsof, udisks, hicolor_icon_theme, adwaita-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "spacefm-${version}";

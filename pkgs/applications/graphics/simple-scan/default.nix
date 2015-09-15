@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, cairo, colord, glib, gtk3, gusb, intltool, itstool, libusb, libxml2
-, makeWrapper, packagekit, pkgconfig, saneBackends, systemd, vala }:
+{ stdenv, fetchurl, cairo, colord, glib, gtk3, gusb, intltool, itstool, libusb
+, libxml2, makeWrapper, packagekit, pkgconfig, saneBackends, systemd, vala }:
 
-let version = "3.17.90"; in
+let version = "3.17.92"; in
 stdenv.mkDerivation rec {
   name = "simple-scan-${version}";
 
   src = fetchurl {
-    sha256 = "0xc3ln97dgvxrwy2qn82k9qvsr5kxksms4igzkivya3xpq2kx85c";
+    sha256 = "0ax4rqqpwcz65nvw8l89npjc5v0g1ik1mb5w3025xlipm7djgybp";
     url = "https://launchpad.net/simple-scan/3.17/${version}/+download/${name}.tar.xz";
   };
 
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    inherit version;
     description = "Simple scanning utility";
     longDescription = ''
       A really easy way to scan both documents and photos. You can crop out the
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://launchpad.net/simple-scan;
     license = licenses.gpl3Plus;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 }

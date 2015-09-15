@@ -477,8 +477,7 @@ with stdenv.lib;
 
   ${optionalString (versionAtLeast version "3.17") "NFC? n"}
 
-  # Enable firmware loading via udev. Only needed for non-declarative
-  # firmware in /root/test-firmware.
+  # Enable firmware loading via udev (legacy).
   ${optionalString (versionAtLeast version "3.17") ''
     FW_LOADER_USER_HELPER_FALLBACK y
   ''}

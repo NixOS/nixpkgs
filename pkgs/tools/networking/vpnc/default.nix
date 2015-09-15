@@ -1,7 +1,7 @@
 { stdenv, fetchsvn, nettools, libgcrypt, openssl, openresolv, perl, gawk, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "vpnc-rev550";
+  name = "vpnc-0.5.3-post-r550";
   src = fetchsvn {
     url = "http://svn.unix-ag.uni-kl.de/vpnc";
     rev = "550";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     rm -r $sourceRoot/{trunk,branches,tags}
   '';
 
-  patches = [ ./makefile.patch ];
+  patches = [ ./makefile.patch ./no_default_route_when_netmask.patch ];
 
   # The `etc/vpnc/vpnc-script' script relies on `which' and on
   # `ifconfig' as found in net-tools (not GNU Inetutils).

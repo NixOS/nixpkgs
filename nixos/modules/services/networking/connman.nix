@@ -5,7 +5,12 @@ with lib;
 
 let
   cfg = config.networking.connman;
+  configFile = pkgs.writeText "connman.conf" ''
+    [General]
+    NetworkInterfaceBlacklist=${concatStringsSep "," cfg.networkInterfaceBlacklist}
 
+    ${cfg.extraConfig}
+  '';
 in {
 
   ###### interface
@@ -19,6 +24,23 @@ in {
         default = false;
         description = ''
           Whether to use ConnMan for managing your network connections.
+        '';
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = ''
+        '';
+        description = ''
+          Configuration lines appended to the generated connman configuration file.
+        '';
+      };
+
+      networkInterfaceBlacklist = mkOption {
+        type = with types; listOf string;
+        default = [ "vmnet" "vboxnet" "virbr" "ifb" "ve" ];
+        description = ''
+          Default blacklisted interfaces, this includes NixOS containers interfaces (ve).
         '';
       };
 
@@ -51,7 +73,7 @@ in {
         Type = "dbus";
         BusName = "net.connman";
         Restart = "on-failure";
-        ExecStart = "${pkgs.connman}/sbin/connmand --nodaemon";
+        ExecStart = "${pkgs.connman}/sbin/connmand --config=${configFile} --nodaemon";
         StandardOutput = "null";
       };
     };

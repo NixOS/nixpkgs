@@ -36,6 +36,8 @@ in {
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.pythonPackages.deluge ];
       serviceConfig.ExecStart = "${pkgs.pythonPackages.deluge}/bin/deluged -d";
+      # To prevent "Quit & shutdown daemon" from working; we want systemd to manage it!
+      serviceConfig.Restart = "on-success";
       serviceConfig.User = "deluge";
       serviceConfig.Group = "deluge";
     };

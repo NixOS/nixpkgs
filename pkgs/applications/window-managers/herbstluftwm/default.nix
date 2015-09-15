@@ -9,9 +9,10 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
-      sed -i -e "s:/usr/local:$\{out}:" \
-             -e "s:/etc:$\{out}/etc:" \
-          config.mk
+    substituteInPlace config.mk \
+      --replace "/usr/local" "$out" \
+      --replace "/etc" "$out/etc" \
+      --replace "/zsh/functions/Completion/X" "/zsh/site-functions"
   '';
 
   buildInputs = [ pkgconfig glib libX11 libXext libXinerama ];

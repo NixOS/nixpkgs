@@ -1,4 +1,4 @@
-args : with args; 
+args @ { graphviz, pkgconfig, autoconf, automake, libtool, glib, gtk, ... }: with args;
 rec {
   srcDrv = fetchmtn {
     name = "monotone-viz-mtn-checkout";
@@ -9,7 +9,7 @@ rec {
   };
   src = srcDrv + "/";
 
-  buildInputs = [ocaml lablgtk libgnomecanvas gtk graphviz glib 
+  buildInputs = [ocaml lablgtk libgnomecanvas gtk graphviz glib
     pkgconfig autoconf automake libtool];
   configureFlags = ["--with-lablgtk-dir=$(echo ${lablgtk}/lib/ocaml/*/site-lib/lablgtk2)"];
 

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, libaio, zlib }:
 
-let version = "2.2.7"; in
+let version = "2.2.10"; in
 
 stdenv.mkDerivation rec {
   name = "fio-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "axboe";
     repo = "fio";
     rev = "fio-${version}";
-    sha256 = "02k528n97xp1ly3d0mdn0lgwqlpn49b644696m75kcr0hn07382v";
+    sha256 = "0hg72k8cifw6lc46kyiic7ai4gqn2819d6g998vmx01jnlcixp8q";
   };
 
   buildInputs = [ libaio zlib ];
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configurePhase = ''
-    substituteInPlace tools/plot/fio2gnuplot --replace /usr/share/fio $out/share/fio
+    substituteInPlace tools/plot/fio2gnuplot \
+      --replace /usr/share/fio $out/share/fio
     ./configure
   '';
 

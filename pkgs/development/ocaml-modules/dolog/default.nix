@@ -1,12 +1,12 @@
 { stdenv, fetchzip, ocaml, findlib }:
 
-let version = "1.0"; in
+let version = "1.1"; in
 
 stdenv.mkDerivation {
   name = "ocaml-dolog-${version}";
   src = fetchzip {
     url = "https://github.com/UnixJunkie/dolog/archive/v${version}.tar.gz";
-    sha256 = "1yy3a0h9xn5mv8q38yx5jgavj2hgfw42mdnrzixl25pqx7idvcmf";
+    sha256 = "093lmprb1v2ran3pyymcdq80xnsgdz7h76g764xsy97dba5ik40n";
   };
 
   buildInputs = [ ocaml findlib ];

@@ -1,11 +1,11 @@
-a :  
-let 
+a @ { tcsh, mesa, lesstif, libX11, libXaw, xproto, libXt, libSM, libICE, libXmu, libXext, ... }:
+let
   fetchurl = a.fetchurl;
 
-  version = "20090809"; 
+  version = "20090809";
   buildInputs = with a; [
-    tcsh libX11 libXaw lesstif xproto mesa libXt 
-    libSM libICE libXmu libXext 
+    tcsh libX11 libXaw lesstif xproto mesa libXt
+    libSM libICE libXmu libXext
   ];
 in
 rec {

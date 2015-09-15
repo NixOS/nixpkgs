@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonPackage rec {
   name = "obnam-${version}";
-  version = "1.15";
+  version = "1.16";
 
   namePrefix = "";
 
   src = fetchurl rec {
     url = "http://code.liw.fi/debian/pool/main/o/obnam/obnam_${version}.orig.tar.xz";
-    sha256 = "1wpvy6qrrp2k0b38a864n0ayh5mr8353rndiqb8ax7z0y3jz484x";
+    sha256 = "0fv9pxilg0mjs6pw80c3sm23p5smpapyc49zgcm839qarl90fqz5";
   };
 
   buildInputs = [ pythonPackages.sphinx attr ];

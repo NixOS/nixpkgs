@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ... } @ args:
+{ stdenv, fetchurl, perl, buildLinux, ... } @ args:
 
 let
 

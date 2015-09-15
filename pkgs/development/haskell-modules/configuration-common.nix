@@ -12,7 +12,7 @@ self: super: {
   cabal-install_1_18_1_0 = (dontCheck super.cabal-install_1_18_1_0).overrideScope (self: super: { Cabal = self.Cabal_1_18_1_6; zlib = self.zlib_0_5_4_2; });
 
   # Link statically to avoid runtime dependency on GHC.
-  jailbreak-cabal = disableSharedExecutables super.jailbreak-cabal;
+  jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = dontJailbreak self.Cabal_1_20_0_3; };
 
   # Apply NixOS-specific patches.
   ghc-paths = appendPatch super.ghc-paths ./patches/ghc-paths-nix.patch;
@@ -53,7 +53,7 @@ self: super: {
     configureFlags = (drv.configureFlags or []) ++
       pkgs.lib.optional pkgs.stdenv.is64bit "--extra-lib-dirs=${pkgs.cudatoolkit}/lib64" ++ [
       "--extra-lib-dirs=${pkgs.cudatoolkit}/lib"
-      "--extra-include-dirs=${pkgs.cudatoolkit}/usr_include"
+      "--extra-include-dirs=${pkgs.cudatoolkit}/include"
     ];
     preConfigure = ''
       unset CC          # unconfuse the haskell-cuda configure script
@@ -757,7 +757,6 @@ self: super: {
   # Override the obsolete version from Hackage with our more up-to-date copy.
   cabal2nix = self.callPackage ../tools/haskell/cabal2nix/cabal2nix.nix {};
   hackage2nix = self.callPackage ../tools/haskell/cabal2nix/hackage2nix.nix {};
-  language-nix = self.callPackage ../tools/haskell/cabal2nix/language-nix.nix {};
   distribution-nixpkgs = self.callPackage ../tools/haskell/cabal2nix/distribution-nixpkgs.nix {};
 
   # https://github.com/urs-of-the-backwoods/HGamer3D/issues/7
@@ -771,23 +770,6 @@ self: super: {
 
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
-
-  # https://github.com/goldfirere/singletons/issues/117
-  clash-lib = dontDistribute super.clash-lib;
-  clash-verilog = dontDistribute super.clash-verilog;
-  Frames = dontDistribute super.Frames;
-  hgeometry = dontDistribute super.hgeometry;
-  hipe = dontDistribute super.hipe;
-  hsqml-datamodel-vinyl = dontDistribute super.hsqml-datamodel-vinyl;
-  singleton-nats = dontDistribute super.singleton-nats;
-  singletons = markBroken super.singletons;
-  units-attoparsec = dontDistribute super.units-attoparsec;
-  ihaskell-widgets = dontDistribute super.ihaskell-widgets;
-  exinst-bytes = dontDistribute super.exinst-bytes;
-  exinst-deepseq = dontDistribute super.exinst-deepseq;
-  exinst-aeson = dontDistribute super.exinst-aeson;
-  exinst = dontDistribute super.exinst;
-  exinst-hashable = dontDistribute super.exinst-hashable;
 
   # https://github.com/anton-k/temporal-music-notation/issues/1
   temporal-music-notation = markBroken super.temporal-music-notation;
@@ -1025,5 +1007,21 @@ self: super: {
 
   # https://github.com/pxqr/base32-bytestring/issues/4
   base32-bytestring = dontCheck super.base32-bytestring;
+
+  # https://github.com/JohnLato/listlike/pull/6#issuecomment-137986095
+  ListLike = dontCheck super.ListLike;
+
+  # https://github.com/goldfirere/singletons/issues/122
+  singletons = dontCheck super.singletons;
+
+  # cabal2nix doesn't pick up some of the dependencies.
+  ginsu = let
+    g = addBuildDepend super.ginsu pkgs.perl;
+    g' = overrideCabal g (drv: {
+      executableSystemDepends = (drv.executableSystemDepends or []) ++ [
+        pkgs.ncurses
+      ];
+    });
+  in g';
 
 }

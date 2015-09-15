@@ -16,11 +16,12 @@ let
     ''
     [settings]
     RunMode = Daemon
-    User = bitlbee  
+    User = bitlbee
     ConfigDir = ${cfg.configDir}
     DaemonInterface = ${cfg.interface}
     DaemonPort = ${toString cfg.portNumber}
     AuthMode = ${cfg.authMode}
+    Plugindir = ${pkgs.bitlbee-plugins cfg.plugins}/lib/bitlbee
     ${lib.optionalString (cfg.hostName != "") "HostName = ${cfg.hostName}"}
     ${lib.optionalString (cfg.protocols != "") "Protocols = ${cfg.protocols}"}
     ${cfg.extraSettings}
@@ -72,7 +73,7 @@ in
             Open -- Accept connections from anyone, use NickServ for user authentication.
             Closed -- Require authorization (using the PASS command during login) before allowing the user to connect at all.
             Registered -- Only allow registered users to use this server; this disables the register- and the account command until the user identifies himself.
-        ''; 
+        '';
       };
 
       hostName = mkOption {
@@ -82,6 +83,15 @@ in
           Normally, BitlBee gets a hostname using getsockname(). If you have a nicer
           alias for your BitlBee daemon, you can set it here and BitlBee will identify
           itself with that name instead.
+        '';
+      };
+
+      plugins = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        example = literalExample "[ pkgs.bitlbee-facebook ]";
+        description = ''
+          The list of bitlbee plugins to install.
         '';
       };
 
@@ -107,14 +117,14 @@ in
         default = "";
         description = ''
           Will be inserted in the Settings section of the config file.
-        ''; 
+        '';
       };
 
       extraDefaults = mkOption {
         default = "";
         description = ''
           Will be inserted in the Default section of the config file.
-        ''; 
+        '';
       };
 
     };
@@ -138,7 +148,7 @@ in
         gid = config.ids.gids.bitlbee;
       };
 
-    systemd.services.bitlbee = 
+    systemd.services.bitlbee =
       { description = "BitlBee IRC to other chat networks gateway";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];

@@ -42,6 +42,7 @@
 , installPhase ? "", preInstall ? "", postInstall ? ""
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , preFixup ? "", postFixup ? ""
+, shellHook ? ""
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
 } @ args:
@@ -270,7 +271,7 @@ stdenv.mkDerivation ({
     isHaskellLibrary = hasActiveLibrary;
 
     env = stdenv.mkDerivation {
-      name = "interactive-${optionalString (hasActiveLibrary && pname != "ghcjs") "haskell-"}${pname}-${version}-environment";
+      name = "interactive-${pname}-${version}-environment";
       nativeBuildInputs = [ ghcEnv systemBuildInputs ];
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
@@ -279,6 +280,7 @@ stdenv.mkDerivation ({
         export NIX_${ghcCommandCaps}PKG="${ghcEnv}/bin/${ghcCommand}-pkg"
         export NIX_${ghcCommandCaps}_DOCDIR="${ghcEnv}/share/doc/ghc/html"
         export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcEnv.name}"
+        ${shellHook}
       '';
     };
 

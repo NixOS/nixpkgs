@@ -58,6 +58,6 @@ buildPythonPackage rec {
     homepage = https://github.com/spyder-ide/spyder/;
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor fridh ];
   };
 }

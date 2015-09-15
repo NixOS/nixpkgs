@@ -99,7 +99,7 @@ let
       };
 
       authenticationMethod = mkOption {
-        type = types.enum [ "form" "http" "generic"];
+        type = types.enum [ "form" "http" "generic" "github" ];
         default = "form";
         description = ''
           'form' means that users will be logged in and registered using forms
@@ -537,6 +537,42 @@ video/x-ms-wmx  wmx
           through xss-sanitize.  Set to no only if you trust all of your users.
         '';
       };
+
+      oauthClientId = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = "OAuth client ID";
+      };
+
+      oauthClientSecret = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = "OAuth client secret";
+      };
+
+      oauthCallback = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = "OAuth callback URL";
+      };
+
+      oauthAuthorizeEndpoint = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = "OAuth authorize endpoint";
+      };
+
+      oauthAccessTokenEndpoint = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = "OAuth access token endpoint";
+      };
+
+      githubOrg = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = "Github organization";
+      };
   };
 
   configFile = pkgs.writeText "gitit.conf" ''
@@ -587,6 +623,14 @@ video/x-ms-wmx  wmx
     pdf-export: ${toYesNo cfg.pdfExport}
     pandoc-user-data: ${toString cfg.pandocUserData}
     xss-sanitize: ${toYesNo cfg.xssSanitize}
+
+    [Github]
+    oauthclientid: ${toString cfg.oauthClientId}
+    oauthclientsecret: ${toString cfg.oauthClientSecret}
+    oauthcallback: ${toString cfg.oauthCallback}
+    oauthauthorizeendpoint: ${toString cfg.oauthAuthorizeEndpoint}
+    oauthaccesstokenendpoint: ${toString cfg.oauthAccessTokenEndpoint}
+    github-org: ${toString cfg.githubOrg}
   '';
 
 in
@@ -681,4 +725,3 @@ NAMED
     };
   };
 }
-

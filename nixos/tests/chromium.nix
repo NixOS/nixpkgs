@@ -44,6 +44,8 @@ import ./make-test.nix (
           search --onlyvisible --name "startup done"
           windowfocus --sync
           windowactivate --sync
+        ''}");
+        $machine->execute("${xdo "new-window" ''
           key Ctrl+n
         ''}");
       });
@@ -55,6 +57,8 @@ import ./make-test.nix (
           search --onlyvisible --name "new tab"
           windowfocus --sync
           windowactivate --sync
+        ''}");
+        $machine->execute("${xdo "close-window" ''
           key Ctrl+w
         ''}");
         for (1..20) {
@@ -155,6 +159,8 @@ import ./make-test.nix (
           $machine->succeed("${xdo "submit-url" ''
             search --sync --onlyvisible --name "sandbox status"
             windowfocus --sync
+          ''}");
+          $machine->succeed("${xdo "submit-url" ''
             key --delay 1000 Ctrl+a Ctrl+c
           ''}");
 

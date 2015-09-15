@@ -7,6 +7,7 @@
      so it's easy to ping a package @maintainer.
   */
 
+  a1russell = "Adam Russell <adamlr6+pub@gmail.com>";
   abaldeau = "Andreas Baldeau <andreas@baldeau.net>";
   abbradar = "Nikolay Amiantov <ab@fmap.me>";
   adev	   = "Adrien Devresse <adev@adev.name>";
@@ -79,6 +80,7 @@
   dfoxfranke = "Daniel Fox Franke <dfoxfranke@gmail.com>";
   dmalikov = "Dmitry Malikov <malikov.d.y@gmail.com>";
   doublec = "Chris Double <chris.double@double.co.nz>";
+  ebzzry = "Rommel Martinez <ebzzry@gmail.com>";
   ederoyd46 = "Matthew Brown <matt@ederoyd.co.uk>";
   eduarrrd = "Eduard Bachmakov <e.bachmakov@gmail.com>";
   edwtjo = "Edward Tjörnhammar <ed@cflags.cc>";
@@ -95,6 +97,7 @@
   fluffynukeit = "Daniel Austin <dan@fluffynukeit.com>";
   forkk = "Andrew Okin <forkk@forkk.net>";
   fpletz = "Franz Pletz <fpletz@fnordicwalking.de>";
+  fridh = "Frederik Rietdijk <fridh@fridh.nl>";
   fro_ozen = "fro_ozen <fro_ozen@gmx.de>";
   ftrvxmtrx = "Siarhei Zirukin <ftrvxmtrx@gmail.com>";
   funfunctor = "Edward O'Callaghan <eocallaghan@alterapraxis.com>";
@@ -104,6 +107,7 @@
   garrison = "Jim Garrison <jim@garrison.cc>";
   gavin = "Gavin Rogers <gavin@praxeology.co.uk>";
   gebner = "Gabriel Ebner <gebner@gebner.org>";
+  gfxmonk = "Tim Cuthbertson <tim@gfxmonk.net>";
   giogadi = "Luis G. Torres <lgtorres42@gmail.com>";
   globin = "Robin Gloster <robin@glob.in>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
@@ -137,6 +141,7 @@
   jwilberding = "Jordan Wilberding <jwilberding@afiniate.com>";
   jzellner = "Jeff Zellner <jeffz@eml.cc>";
   kamilchm = "Kamil Chmielewski <kamil.chm@gmail.com>";
+  khumba = "Bryan Gardiner <bog@khumba.net>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   koral = "Koral <koral@mailoo.org>";
   kovirobi = "Kovacsics Robert <kovirobi@gmail.com>";
@@ -229,6 +234,7 @@
   rszibele = "Richard Szibele <richard_szibele@hotmail.com>";
   rushmorem = "Rushmore Mushambi <rushmore@webenchanter.com>";
   rycee = "Robert Helgesson <robert@rycee.net>";
+  samuelrivas = "Samuel Rivas <samuelrivas@gmail.com>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   schmitthenner = "Fabian Schmitthenner <development@schmitthenner.eu>";
   schristo = "Scott Christopher <schristopher@konputa.com>";

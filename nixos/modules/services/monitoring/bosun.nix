@@ -30,6 +30,7 @@ in {
 
       package = mkOption {
         type = types.package;
+        default = pkgs.bosun;
         example = literalExample "pkgs.bosun";
         description = ''
           bosun binary to use.
@@ -95,8 +96,6 @@ in {
 
   config = mkIf cfg.enable {
   
-    services.bosun.package = mkDefault pkgs.bosun; 
-
     systemd.services.bosun = {
       description = "bosun metrics collector (part of Bosun)";
       wantedBy = [ "multi-user.target" ];

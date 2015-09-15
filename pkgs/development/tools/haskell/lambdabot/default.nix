@@ -1,16 +1,9 @@
-{ lib, makeWrapper, haskellngPackages
+{ lib, haskell-lib, fetchpatch, makeWrapper, haskellPackages
 , mueval
 , withDjinn ? true
 , aspell ? null
 , packages ? (pkgs: [])
-, modules ? ''
-    haskellPlugins
-    ++ ["irc", "localtime", "topic"]
-    ++ ["dummy", "fresh", "todo"]
-    ++ ["bf", "dice", "elite", "filter", "quote", "slap", "unlambda", "vixen"]
-    ++ referencePlugins
-    ++ socialPlugins
-''
+, modules ? "oldDefaultModules"
 , configuration ? "[]"
 }:
 
@@ -18,34 +11,32 @@
 
 let allPkgs = pkgs: mueval.defaultPkgs pkgs ++ [ pkgs.lambdabot-trusted ] ++ packages pkgs;
     mueval' = mueval.override {
-      inherit haskellngPackages;
+      inherit haskellPackages;
       packages = allPkgs;
     };
     bins = lib.makeSearchPath "bin" ([ mueval'
-                                       (haskellngPackages.ghcWithPackages allPkgs)
-                                       haskellngPackages.unlambda
-                                       haskellngPackages.brainfuck
+                                       (haskellPackages.ghcWithPackages allPkgs)
+                                       haskellPackages.unlambda
+                                       haskellPackages.brainfuck
                                      ]
-                                     ++ lib.optional withDjinn haskellngPackages.djinn
+                                     ++ lib.optional withDjinn haskellPackages.djinn
                                      ++ lib.optional (aspell != null) aspell
                                     );
-    modulesStr = lib.replaceChars ["\n"] [" "] ("corePlugins ++ " + modules);
+    modulesStr = lib.replaceChars ["\n"] [" "] modules;
     configStr = lib.replaceChars ["\n"] [" "] configuration;
 
-in lib.overrideDerivation haskellngPackages.lambdabot (self: {
+in haskell-lib.overrideCabal haskellPackages.lambdabot (self: {
+  patches = (self.patches or []) ++ [ ./custom-config.patch ];
   postPatch = (self.postPatch or "") + ''
-    sed -i 's/\(\$(modules \$ \).*/\1@modules@)/; /@modules@/q' src/Modules.hs
-    # not via sed to avoid escaping issues
-    substituteInPlace src/Modules.hs \
-      --replace '@modules@' '${modulesStr}'
-    sed -i 's/\[dataDir :=> dir\]/@config@ ++ \0/' src/Main.hs
     substituteInPlace src/Main.hs \
       --replace '@config@' '${configStr}'
+    substituteInPlace src/Modules.hs \
+      --replace '@modules@' '${modulesStr}'
   '';
 
-  buildInputs = self.buildInputs ++ [ makeWrapper ];
+  buildTools = (self.buildTools or []) ++ [ makeWrapper ];
 
-  postInstall = (self.postInstall or "") + lib.optionalString (bins != "") ''
+  postInstall = (self.postInstall or "") + ''
     wrapProgram $out/bin/lambdabot \
       --prefix PATH ":" '${bins}'
   '';

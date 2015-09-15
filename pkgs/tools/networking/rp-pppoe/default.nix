@@ -1,10 +1,10 @@
-a :  
-let 
+a @ {ppp, ...} :
+let
   fetchurl = a.fetchurl;
 
   version = a.lib.attrByPath ["version"] "3.11" a;
   buildInputs = with a; [
-    ppp   
+    ppp
   ];
 in
 rec {

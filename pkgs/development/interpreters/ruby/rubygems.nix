@@ -1,4 +1,4 @@
-args : with args; 
+args @ { makeWrapper, ruby, ... }: with args;
 
 rec {
   name = "rubygems-" + version;
@@ -23,7 +23,7 @@ rec {
 
   /* doConfigure should be specified separately */
   phaseNames = ["doPatch" "doInstall"];
-      
+
   meta = {
     description = "Ruby gems package collection";
     longDescription = ''

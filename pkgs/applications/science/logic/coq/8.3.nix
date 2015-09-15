@@ -1,6 +1,9 @@
 # - coqide compilation can be disabled by setting lablgtk to null;
+# - The csdp program used for the Micromega tactic is statically referenced.
+#   However, coq can build without csdp by setting it to null.
+#   In this case some Micromega tactics will search the user's path for the csdp program and will fail if it is not found.
 
-{ stdenv, make, fetchurl, ocaml, findlib, camlp5, ncurses, lablgtk ? null }:
+{ stdenv, make, fetchurl, ocaml, findlib, camlp5, ncurses, lablgtk ? null, csdp ? null }:
 
 let 
   version = "8.3pl4";
@@ -10,6 +13,10 @@ let
     substituteInPlace scripts/coqmktop.ml --replace \
     "\"-I\"; \"+lablgtk2\"" \
     "\"-I\"; \"$(echo "${lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)\"; \"-I\"; \"$(echo "${lablgtk}"/lib/ocaml/*/site-lib/stublibs)\""
+  '' else "";
+  csdpPatch = if csdp != null then ''
+    substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
+    substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.search_exe_in_path \"csdp\"" "Some \"${csdp}/bin/csdp\""
   '' else "";
 in
 
@@ -44,6 +51,7 @@ stdenv.mkDerivation {
     substituteInPlace configure --replace "/bin/uname" "$UNAME"
     substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
     ${idePatch}
+    ${csdpPatch}
   '';
 
   # This post install step is needed to build ssrcoqide from the ssreflect package
