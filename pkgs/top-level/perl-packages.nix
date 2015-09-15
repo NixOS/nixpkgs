@@ -11596,14 +11596,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-
   Throwable = buildPerlPackage rec {
-    name = "Throwable-0.200010";
+    name = "Throwable-0.200013";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "0qhq1f5bvgf5kjhmdg45vadq8dbc9gfms81hply5c6a71nmkv8yp";
+      sha256 = "184gdcwxqwnkrx5md968v1ny70pq6blzpkihccm3bpdxnpgd11wr";
     };
-    propagatedBuildInputs = [ DevelStackTrace Moose Moo MooXTypesMooseLike ];
+    buildInputs = [ DevelStackTrace ];
+    propagatedBuildInputs = [ DevelStackTrace ModuleRuntime Moo ];
+    meta = {
+      homepage = https://github.com/rjbs/Throwable;
+      description = "A role for classes that can be thrown";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
   };
 
   TieCycle = buildPerlPackage rec {
