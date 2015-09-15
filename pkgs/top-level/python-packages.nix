@@ -9178,6 +9178,11 @@ let
 
     buildInputs = with self; [ python pkgs.notmuch ];
 
+    postPatch = ''
+      sed -i -e '/CDLL/s@"libnotmuch\.@"${pkgs.notmuch}/lib/libnotmuch.@' \
+        notmuch/globals.py
+    '';
+
     meta = {
       description = "A Python wrapper around notmuch";
       homepage = http://notmuchmail.org/;
