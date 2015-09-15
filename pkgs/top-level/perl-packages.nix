@@ -6652,17 +6652,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MixinLinewise = buildPerlPackage {
-    name = "Mixin-Linewise-0.004";
+  MixinLinewise = buildPerlPackage rec {
+    name = "Mixin-Linewise-0.108";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Mixin-Linewise-0.004.tar.gz;
-      sha256 = "7a50d171850d3e0dde51e041eecd40abc68396ea822baa4381951a7710833dd9";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "7df20678474c0973930a472b0c55e3f8e85b7790b68ab18ef618f9c453c8aef2";
     };
-    propagatedBuildInputs = [ IOString SubExporter ];
+    propagatedBuildInputs = [ PerlIOutf8_strict SubExporter ];
     meta = {
       homepage = https://github.com/rjbs/mixin-linewise;
       description = "Write your linewise code for handles; this does the rest";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
