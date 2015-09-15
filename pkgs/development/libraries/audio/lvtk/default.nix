@@ -9,10 +9,18 @@ stdenv.mkDerivation rec {
     sha256 = "03nbj2cqcklqwh50zj2gwm07crh5iwqbpxbpzwbg5hvgl4k4rnjd";
   };
 
-  buildInputs = [ boost gtkmm lv2 pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig python ];
+  buildInputs = [ boost gtkmm lv2 ];
+
+  # Fix including the boost libraries during linking
+  postPatch = ''
+    sed -i '/target[ ]*= "ttl2c"/ ilib=["boost_system"],' tools/wscript_build
+  '';
 
   configurePhase = ''
-    python waf configure --prefix=$out --boost-includes="${boost.dev}/include"
+    python waf configure --prefix=$out \
+      --boost-includes="${boost.dev}/include" \
+      --boost-libs="${boost.lib}/lib"
   '';
 
   buildPhase = "python waf";

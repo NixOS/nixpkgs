@@ -82,7 +82,7 @@ rec {
     find . -name '*.so' -exec cp '{}' $out/lib ';'
     find . -name '*.txt' -exec cp '{}' $out/share/${name}/doc ';'
     find . -name '*.hlp' -exec cp '{}' $out/share/${name}/doc ';'
-    find . -perm +111 -a ! -name '*.*' -exec cp '{}' $out/bin ';'
+    find . -perm -0100 -a ! -name '*.*' -exec cp '{}' $out/bin ';'
     cp -r . $out/share/${name}/build-snapshot
   '') ["buildContent" "defEnsureDir" "minInit"];
       

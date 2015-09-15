@@ -2,19 +2,18 @@
 , google-gflags, python, libiberty, openssl }:
 
 stdenv.mkDerivation rec {
-  version = "0.52.0";
+  version = "0.57.0";
   name = "folly-${version}";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "16g3hpy1gy56zqnhwzkvzzpm6dgm01qa9yaigmrqr9b59c3k6cqf";
+    sha256 = "12b9bkwmndfwmsknc209kpplxn9wqmwr3p2h0l2szrppq4qqyfq9";
   };
 
-  buildInputs = [ libiberty boost.lib libevent double_conversion glog google-gflags openssl ];
-
-  nativeBuildInputs = [ autoreconfHook python boost ];
+  nativeBuildInputs = [ autoreconfHook python ];
+  buildInputs = [ libiberty boost libevent double_conversion glog google-gflags openssl ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/folly";
   preBuild = ''

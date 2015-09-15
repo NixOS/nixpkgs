@@ -20,9 +20,9 @@ stdenv.mkDerivation {
   buildPhase = ''
     find . -name Makefile | xargs sed -i -e "s@/bin/rm@$(type -P rm)@g"
     find . -name Makefile | xargs sed -i -e "s@/bin/mv@$(type -P mv)@g"
-    find . -perm +111 -type f | xargs sed -i -e "s@/bin/csh@$(type -P csh)@g"
-    find . -perm +111 -type f | xargs sed -i -e "s@/bin/rm@$(type -P rm)@g"
-    find . -perm +111 -type f | xargs sed -i -e "s@/bin/mv@$(type -P mv)@g"
+    find . -perm -0100 -type f | xargs sed -i -e "s@/bin/csh@$(type -P csh)@g"
+    find . -perm -0100 -type f | xargs sed -i -e "s@/bin/rm@$(type -P rm)@g"
+    find . -perm -0100 -type f | xargs sed -i -e "s@/bin/mv@$(type -P mv)@g"
 
     sed -i -e "s/^XLIBS *=.*/XLIBS=-lXaw -lXt -lX11/" source/formed/Makefile 
 

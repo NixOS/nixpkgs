@@ -617,6 +617,8 @@ let
   derez = callPackage ../os-specific/darwin/derez { };
   rez = callPackage ../os-specific/darwin/rez { };
 
+  reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace {};
+
   setfile = callPackage ../os-specific/darwin/setfile { };
 
   install_name_tool = callPackage ../os-specific/darwin/install_name_tool { };
@@ -5071,7 +5073,9 @@ let
   ruby_2_1_1 = callPackage ../development/interpreters/ruby/ruby-2.1.1.nix { };
   ruby_2_1_2 = callPackage ../development/interpreters/ruby/ruby-2.1.2.nix { };
   ruby_2_1_3 = callPackage ../development/interpreters/ruby/ruby-2.1.3.nix { };
-  ruby_2_1_6 = callPackage ../development/interpreters/ruby/ruby-2.1.6.nix { };
+  ruby_2_1_6 = callPackage ../development/interpreters/ruby/ruby-2.1.6.nix {
+    inherit (darwin) libobjc libunwind;
+  };
   ruby_2_2_0 = callPackage ../development/interpreters/ruby/ruby-2.2.0.nix {
     inherit (darwin) libobjc libunwind;
   };
@@ -5889,7 +5893,8 @@ let
   boost156 = callPackage ../development/libraries/boost/1.56.nix { };
   boost157 = callPackage ../development/libraries/boost/1.57.nix { };
   boost158 = callPackage ../development/libraries/boost/1.58.nix { };
-  boost = boost158;
+  boost159 = callPackage ../development/libraries/boost/1.59.nix { };
+  boost = boost159;
 
   boost_process = callPackage ../development/libraries/boost-process { };
 
@@ -6164,7 +6169,9 @@ let
 
   fontconfig-ultimate = callPackage ../development/libraries/fontconfig-ultimate {};
 
-  folly = callPackage ../development/libraries/folly { };
+  folly = callPackage ../development/libraries/folly {
+    boost = boost157;
+  };
 
   makeFontsConf = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
     callPackage ../development/libraries/fontconfig/make-fonts-conf.nix {

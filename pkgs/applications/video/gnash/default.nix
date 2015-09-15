@@ -117,5 +117,6 @@ stdenv.mkDerivation rec {
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;
+    broken = true;
   };
 } // {mozillaPlugin = "/plugins";}

@@ -26,6 +26,12 @@ stdenv.mkDerivation {
   configureFlags = if stdenv.cc.isClang
     then [ "--disable-werror" ] else null;
 
+  # Fix an issue with boost 1.59
+  # This is fixed upstream so please remove this when updating
+  postPatch = ''
+    sed -i 's,-DLIBREVENGE_BUILD,\0 -DBOOST_ERROR_CODE_HEADER_ONLY,g' src/lib/Makefile.in
+  '';
+
   meta = {
     inherit (s) version;
     description = ''A base library for writing document import filters'';

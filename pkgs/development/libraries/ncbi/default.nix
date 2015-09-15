@@ -40,7 +40,7 @@ rec {
     cp ../make/makedis.csh $out/share/${name}/build-snapshot
     cp *.h $out/include 
     cp *.c *.h $out/source
-    find . -perm +111 -a '(' '(' ! -name '*.*' ')' -o '(' -name '*.REAL' ')' ')' -exec cp '{}' $out/bin ';'
+    find . -perm -0100 -a '(' '(' ! -name '*.*' ')' -o '(' -name '*.REAL' ')' ')' -exec cp '{}' $out/bin ';'
   '') ["defEnsureDir" "build" "minInit"];
       
   name = "NCBI-Toolbox-" + version;
