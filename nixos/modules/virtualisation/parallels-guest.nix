@@ -17,7 +17,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          This enables Parallel Tools for Linux guests, along with provided
+          This enables Parallels Tools for Linux guests, along with provided
           video, mouse and other hardware drivers.
         '';
       };

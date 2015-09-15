@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     name = "prl-tools-lin.iso";
     sha256 = "07960jvyv7gihjlg922znjm6db6l6bd23x9mg6ympwibzf2mylmx";
     message = ''
-      Please, place Parallel Tools for Linux image into Nix store
+      Please, place Parallels Tools for Linux image into Nix store
       using either
         nix-store --add-fixed sha256 ${name}
       or
