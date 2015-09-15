@@ -320,7 +320,7 @@ in {
       mkVMConf = name: val: val.machine // { key = "${name}-config"; };
       vmConfigs = mapAttrsToList mkVMConf vboxVMs;
     in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
-    virtualisation.memorySize = 768;
+    virtualisation.memorySize = 1024;
     virtualisation.virtualbox.host.enable = true;
     users.extraUsers.alice.extraGroups = let
       inherit (config.virtualisation.virtualbox.host) enableHardening;
