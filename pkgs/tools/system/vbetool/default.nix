@@ -1,5 +1,5 @@
-a :  
-let 
+a @ {pciutils, libx86, zlib, ...} :
+let
   s = import ./src-for-default.nix;
   buildInputs = with a; [
     libx86 pciutils zlib
@@ -19,13 +19,13 @@ rec {
     sed -e 's@$(libdir)/libpci.a@${a.pciutils}/lib/libpci.so@' -i Makefile.in
     export NIX_LDFLAGS="$NIX_LDFLAGS -lpci"
   '') ["doUnpack" "minInit"];
-      
+
   meta = {
     description = "Video BIOS execution tool";
     maintainers = [
       a.lib.maintainers.raskin
     ];
-    platforms = with a.lib.platforms; 
+    platforms = with a.lib.platforms;
       linux;
   };
 }

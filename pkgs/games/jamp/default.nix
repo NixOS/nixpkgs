@@ -1,5 +1,5 @@
-a :  
-let 
+a @ { mesa, SDL, SDL_image, SDL_mixer, ... } :
+let
   s = import ./src-for-default.nix;
   buildInputs = with a; [
     mesa SDL SDL_mixer SDL_image
@@ -21,7 +21,7 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["preBuild" "doMakeInstall"];
-      
+
   meta = {
     description = "A physics-based game";
     maintainers = [ a.lib.maintainers.raskin ];

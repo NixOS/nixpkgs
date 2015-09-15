@@ -1,4 +1,5 @@
-args : with args;
+args @ { fetchurl, stdenv, builderDefs, paths, mkfontdir, mkfontscale }:
+with args;
 	let localDefs = builderDefs.passthru.function {
 		src =""; /* put a fetchurl here */
 		buildInputs = [mkfontdir mkfontscale];

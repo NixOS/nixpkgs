@@ -1,11 +1,15 @@
-args : with args; 
+args @ { fetchurl, stdenv, pkgconfig, perl, perlXMLParser, libxml2, openssl, nss
+, gtkspell, aspell, gettext, ncurses, avahi, dbus, dbus_glib, python
+, libtool, automake, autoconf, gstreamer
+, gtk, glib
+, libXScrnSaver, scrnsaverproto, libX11, xproto, kbproto, ... }: with args;
 /*
   arguments: all buildInputs
-  optional: purple2Source: purple-2 source - place to copy libpurple from 
+  optional: purple2Source: purple-2 source - place to copy libpurple from
     (to use a fresher pidgin build)
 */
-let 
-  externalPurple2 = (lib.attrByPath ["purple2Source"] null args) != null; 
+let
+  externalPurple2 = (lib.attrByPath ["purple2Source"] null args) != null;
 in
 rec {
   src = fetchurl {
@@ -16,9 +20,9 @@ rec {
   buildInputs = [gtkspell aspell
     gstreamer startupnotification
     libxml2 openssl nss
-    libXScrnSaver ncurses scrnsaverproto 
+    libXScrnSaver ncurses scrnsaverproto
     libX11 xproto kbproto GConf avahi
-    dbus dbus_glib glib python 
+    dbus dbus_glib glib python
     autoconf libtool automake];
 
   propagatedBuildInputs = [
@@ -38,11 +42,11 @@ rec {
   phaseNames = ["doConfigure" "preBuild" "doMakeInstall"]
     ++ (lib.optional externalPurple2 "postInstall")
   ;
-      
+
   name = "carrier-2.5.0";
   meta = {
     description = "PidginIM GUI fork with user-friendly development model";
-    homepage = http://funpidgin.sf.net; 
+    homepage = http://funpidgin.sf.net;
   };
 } // (if externalPurple2 then {
   postInstall = fullDepEntry (''

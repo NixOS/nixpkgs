@@ -1,4 +1,4 @@
-args : with args;
+{fetchurl, stdenv, unixODBC, glibc, libtool, openssl, zlib, postgresql, mysql, sqlite}:
 # each attr contains the name deriv referencing the derivation and ini which
 # evaluates to a string which can be appended to the global unix odbc ini file
 # to register the driver
@@ -9,7 +9,7 @@ args : with args;
     deriv = stdenv.mkDerivation {
       name = "unix-odbc-pg-odbcng-0.90.101";
       buildInputs = [ unixODBC glibc libtool postgresql ];
-      # added -ltdl to resolve missing references `dlsym' `dlerror' `dlopen' `dlclose' 
+      # added -ltdl to resolve missing references `dlsym' `dlerror' `dlopen' `dlclose'
       preConfigure="
         export CPPFLAGS=-I${unixODBC}/include
         export LDFLAGS='-L${unixODBC}/lib -lltdl'
@@ -37,7 +37,7 @@ args : with args;
       export CPPFLAGS=-I${unixODBC}/include
       export LDFLAGS='-L${unixODBC}/lib -lltdl'
     ";
-    # added -ltdl to resolve missing references `dlsym' `dlerror' `dlopen' `dlclose' 
+    # added -ltdl to resolve missing references `dlsym' `dlerror' `dlopen' `dlclose'
     src = fetchurl {
       url = "http://ftp.postgresql.org/pub/odbc/versions/src/${name}.tar.gz";
       sha256 = "0mh10chkmlppidnmvgbp47v5jnphsrls28zwbvyk2crcn8gdx9q1";
@@ -48,7 +48,7 @@ args : with args;
         license = "LGPL";
     };
   };
-  ini = 
+  ini =
     "[PostgreSQL]\n" +
     "Description     = official PostgreSQL driver for Linux & Win32\n" +
     "Driver          = ${deriv}/lib/psqlodbcw.so\n" +
@@ -97,7 +97,7 @@ args : with args;
         mv "$out"/*.la "$out/lib"
       '';
 
-      meta = { 
+      meta = {
         description = "ODBC driver for SQLite";
         homepage = http://www.ch-werner.de/sqliteodbc;
         license = stdenv.lib.licenses.bsd2;

@@ -1,4 +1,4 @@
-a :
+a @ {libX11, xproto, libXpm, libXt, ...} :
 let
   fetchurl = a.fetchurl;
 

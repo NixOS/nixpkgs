@@ -1,7 +1,7 @@
 /* moving all git tools into one attribute set because git is unlikely to be
  * referenced by other packages and you can get a fast overview.
 */
-args: with args; with pkgs;
+args @ {pkgs}: with args; with pkgs;
 let
   inherit (pkgs) stdenv fetchgit fetchurl subversion;
 

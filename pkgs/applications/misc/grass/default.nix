@@ -1,4 +1,11 @@
-{ config, ... }@a:
+{ config, libXmu, libXext, libXp, libX11, libXt, libSM, libICE, libXpm
+   , libXaw, libXrender
+  , composableDerivation, stdenv, fetchurl
+   , lib, flex, bison, cairo, fontconfig
+   , gdal, zlib, ncurses, gdbm, proj, pkgconfig, swig
+   , blas, liblapack, libjpeg, libpng, mysql, unixODBC, mesa, postgresql, python
+   , readline, sqlite, tcl, tk, libtiff, freetype, makeWrapper, wxGTK, ffmpeg, fftw
+   , wxPython, motif, opendwg }@a:
 
 # You can set gui by exporting GRASS_GUI=..
 # see http://grass.itc.it/gdp/html_grass64/g.gui.html
@@ -28,7 +35,7 @@ a.composableDerivation.composableDerivation {} (fix: {
   name = "grass-6.4.0RC6";
 
   buildInputs = [
-    # gentoos package depends on gmath ? 
+    # gentoos package depends on gmath ?
     a.pkgconfig
     a.flex a.bison a.libXmu a.libXext a.libXp a.libX11 a.libXt a.libSM a.libICE
     a.libXpm a.libXaw a.flex a.bison a.gdbm
@@ -72,7 +79,7 @@ a.composableDerivation.composableDerivation {} (fix: {
       configureFlags = [ "--with-python=${a.python}/bin/python-config" ];
       buildInputs = [a.python a.swig];
     };
-    
+
   }
   // edf { name = "_64bit"; feat = "64bit"; }
   // wwfp a.ncurses { name = "curses"; }
@@ -119,7 +126,7 @@ a.composableDerivation.composableDerivation {} (fix: {
   // wwfp a.unixODBC { name = "odbc"; }
   // wwfp a.fftw { name = "fftw"; }
   // wwf {
-    name = "blas"; 
+    name = "blas";
     enable.configureFlags = [ "--with-blas-libs=${a.blas}/lib" ];
   }
   // wwf {

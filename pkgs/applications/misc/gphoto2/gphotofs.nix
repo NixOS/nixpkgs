@@ -1,4 +1,4 @@
-a :
+a @ { libgphoto2, fuse, pkgconfig, glib, libtool, ... } :
 let
   fetchurl = a.fetchurl;
   s = import ./src-info-for-gphotofs.nix;

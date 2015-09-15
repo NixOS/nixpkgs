@@ -1,5 +1,5 @@
-a :  
-let 
+a @ { libjpeg, pkgconfig, zlib, directfb, xproto, ... } :
+let
   s = import ./src-for-default.nix;
   buildInputs = with a; [
     directfb zlib libjpeg pkgconfig xproto
@@ -14,13 +14,13 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["doConfigure" "doMakeInstall"];
-      
+
   meta = {
     description = "DirectFB VNC client";
     maintainers = [
       a.lib.maintainers.raskin
     ];
-    platforms = with a.lib.platforms; 
+    platforms = with a.lib.platforms;
       linux;
   };
 }
