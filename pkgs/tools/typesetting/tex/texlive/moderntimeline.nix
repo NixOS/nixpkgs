@@ -1,4 +1,4 @@
-args: with args;
+args @ {texLive, unzip, ...}: with args;
 rec {
   version = "0.9";
   name = "moderntimeline-${version}";

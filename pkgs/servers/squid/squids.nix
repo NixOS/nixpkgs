@@ -1,4 +1,6 @@
-args: with args;
+args @ { fetchurl, stdenv, perl, lib, composableDerivation
+, openldap, pam, db, cyrus_sasl, kerberos, libcap, expat, libxml2, libtool
+, openssl, ... }: with args;
 let edf = composableDerivation.edf; in
 rec {
   squid30 = composableDerivation.composableDerivation {} {

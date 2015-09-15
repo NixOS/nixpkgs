@@ -1,4 +1,4 @@
-args: with args;
+args @ {texLiveLatexXColor, texLivePGF, texLive, ...}: with args;
 rec {
   name = "texlive-beamer-2013";
   src = fetchurl {

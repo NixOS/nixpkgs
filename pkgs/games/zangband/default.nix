@@ -1,4 +1,4 @@
-a :
+a @ { ncurses, flex, bison, autoconf, automake, m4, coreutils, ... } :
 let
   fetchurl = a.fetchurl;
 

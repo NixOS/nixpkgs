@@ -1,4 +1,4 @@
-args: with args;
+args @ {texLive, unzip, ...}: with args;
 rec {
   version = "1.5.1";
   name = "moderncv-${version}";
