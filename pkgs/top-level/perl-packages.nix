@@ -1839,17 +1839,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ConfigINI = buildPerlPackage {
-    name = "Config-INI-0.020";
+  ConfigINI = buildPerlPackage rec {
+    name = "Config-INI-0.025";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Config-INI-0.020.tar.gz;
-      sha256 = "0ef298da75e3a7becd1f358422cea621c5cf0420278aa6a1bdd2dd14efe07bc9";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "628bf76d5b91f89dde22d4813ec033026ebf71b772bb61ccda909da00c869732";
     };
-    propagatedBuildInputs = [ IOString MixinLinewise ];
+    propagatedBuildInputs = [ MixinLinewise ];
     meta = {
       homepage = https://github.com/rjbs/Config-INI;
       description = "Simple .ini-file format";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
