@@ -425,7 +425,9 @@ let
   makeAutostartItem = callPackage ../build-support/make-startupitem { };
 
   makeInitrd = { contents, compressor ? "gzip -9n", prepend ? [ ] }:
-    callPackage ../build-support/kernel/make-initrd.nix { };
+    callPackage ../build-support/kernel/make-initrd.nix {
+      inherit contents compressor prepend;
+    };
 
   makeWrapper = makeSetupHook { } ../build-support/setup-hooks/make-wrapper.sh;
 
