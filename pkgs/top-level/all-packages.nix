@@ -8611,10 +8611,10 @@ let
     self = python32Packages;
   };
 
-  python33Packages = recurseIntoAttrs (callPackage ./python-packages.nix {
+  python33Packages = callPackage ./python-packages.nix {
     python = python33;
     self = python33Packages;
-  });
+  };
 
   python34Packages = recurseIntoAttrs (callPackage ./python-packages.nix {
     python = python34;
