@@ -809,7 +809,7 @@ let
   dfilemanager = callPackage ../applications/misc/dfilemanager { };
 
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
-    inherit (haskellngPackages) ghcWithPackages diagrams-builder;
+    inherit (haskellPackages) ghcWithPackages diagrams-builder;
   };
 
   dialog = callPackage ../development/tools/misc/dialog { };
