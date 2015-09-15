@@ -1,5 +1,5 @@
 { stdenv, fetchgit, fetchurl, qt4, pkgconfig, expat, cairo, boost, glew,
-  openexr, ffmpeg, opencolorio, openimageio }:
+  openexr, ffmpeg, opencolorio, openimageio, imagemagick }:
 
 let
   version = "1.2.1";
@@ -20,6 +20,12 @@ let
       sha256 = "1krndh8yp8lxns28425sivfa6svwac1lfgdlhz2ki0i4kqw2vzh7";
       deepClone = true;
     };
+    arena = fetchgit {
+      url = https://github.com/olear/openfx-arena.git;
+      rev = "refs/tags/1.9.0";
+      sha256 = "1c51c002z234v994w2xlnzid71kkgk91n0i9yyq8sali7ib1234d";
+      deepClone = true;
+    };
   };
 in
 stdenv.mkDerivation {
@@ -34,6 +40,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     qt4 pkgconfig expat cairo boost glew openexr ffmpeg opencolorio openimageio
+    imagemagick
   ];
 
   prePatch = ''
@@ -45,6 +52,9 @@ stdenv.mkDerivation {
 
     cp -r ${plugins.io} plugins/openfx-io
     chmod -R u+w plugins/openfx-io
+
+    cp -r ${plugins.arena} plugins/openfx-arena
+    chmod -R u+w plugins/openfx-arena
   '';
 
   configurePhase = ''
@@ -63,6 +73,7 @@ stdenv.mkDerivation {
     # TODO: It might be better have separate outputs and symlink the paths.
     make -C plugins/openfx-misc
     make -C plugins/openfx-io
+    make -C plugins/openfx-arena
   '';
 
   installPhase = ''
@@ -78,6 +89,8 @@ stdenv.mkDerivation {
     cp -r plugins/openfx-misc/Misc/*/Misc.ofx.bundle $out/Plugins/
 
     cp -r plugins/openfx-io/IO/*/IO.ofx.bundle $out/Plugins/
+
+    cp -r plugins/openfx-arena/Bundle/*/Arena.ofx.bundle $out/Plugins/
   '';
 
   meta = with stdenv.lib; {
