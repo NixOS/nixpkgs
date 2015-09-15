@@ -8505,15 +8505,6 @@ let
     };
   };
 
-  multiprocessing = buildPythonPackage rec {
-    name = "multiprocessing-2.6.2.1";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/m/multiprocessing/${name}.tar.gz";
-      md5 = "5cc484396c040102116ccc2355379c72";
-    };
-  };
-
   munkres = buildPythonPackage rec {
     name = "munkres-1.0.6";
 
