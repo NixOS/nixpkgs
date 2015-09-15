@@ -6440,11 +6440,11 @@ let self = _self // overrides; _self = with self; {
     NIX_CFLAGS_LINK = "-L${pkgs.gmp}/lib -lgmp";
   };
 
-  MathBigRat = buildPerlPackage {
-    name = "Math-BigRat-0.2606";
+  MathBigRat = buildPerlPackage rec {
+    name = "Math-BigRat-0.260801";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PJ/PJACKLAM/Math-BigRat-0.2606.tar.gz;
-      sha256 = "a69506468dd3067249e6ba9ce35eb9d5509471d939c1efae8283cbd038ca7e28";
+      url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
+      sha256 = "0ghzz7qzfvp70ywvb2vnvr06l62sx1bcjbrjyara0pmqdnvpysar";
     };
     meta = {
       description = "Arbitrary big rational numbers";
