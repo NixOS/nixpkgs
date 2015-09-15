@@ -9,6 +9,7 @@ let
   isPy27 = python.majorVersion == "2.7";
   isPy33 = python.majorVersion == "3.3";
   isPy34 = python.majorVersion == "3.4";
+  isPy35 = python.majorVersion == "3.5";
   isPyPy = python.executable == "pypy";
   isPy3k = strings.substring 0 1 python.majorVersion == "3";
 
@@ -22,6 +23,7 @@ let
     if isPy27 then "python27" else
     if isPy33 then "python33" else
     if isPy34 then "python34" else
+    if isPy35 then "python35" else
     if isPyPy then "pypy" else "";
 
   modules = python.modules or {
@@ -34,7 +36,7 @@ let
 
   pythonPackages = modules // {
 
-  inherit python isPy26 isPy27 isPy33 isPy34 isPyPy isPy3k pythonName buildPythonPackage;
+  inherit python isPy26 isPy27 isPy33 isPy34 isPy35 isPyPy isPy3k pythonName buildPythonPackage;
 
   # helpers
 
