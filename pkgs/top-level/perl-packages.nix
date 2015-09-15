@@ -7184,22 +7184,22 @@ let self = _self // overrides; _self = with self; {
       license = "perl";
     };
   };
-  
+
   MouseXGetOpt = buildPerlModule {
-    name = "mousex-getopt-0.35";
+    name = "mousex-getopt-0.36";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TOKUHIROM/mousex-getopt-0.35.tar.gz;
-      sha256 = "5abe243a1ab05d64562358604de1d31d36994414c5c5eaeac688897129d2f9ae";
+      url = mirror://cpan/authors/id/G/GF/GFUJI/MouseX-Getopt-0.36.tar.gz;
+      sha256 = "172ab0609f1638c6d8800d2dff1bdaa044e305aaa2e9b1fbb8a9dc722a3bf430";
     };
-    buildInputs = [ Mouse MouseXConfigFromFile MouseXSimpleConfig TestException TestWarn ];
+    buildInputs = [ MouseXConfigFromFile MouseXSimpleConfig TestException TestWarn ];
     propagatedBuildInputs = [ GetoptLongDescriptive Mouse ];
     meta = {
       homepage = https://github.com/gfx/mousex-getopt;
       description = "A Mouse role for processing command line options";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
-
 
   MooseXAttributeChained = buildPerlModule rec {
     name = "MooseX-Attribute-Chained-1.0.1";
