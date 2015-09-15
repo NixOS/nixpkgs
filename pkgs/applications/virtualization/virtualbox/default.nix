@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
 , libXcursor, libXmu, qt4, libIDL, SDL, libcap, zlib, libpng, glib, kernel, lvm2
-, which, alsaLib, curl, libvpx, gawk, nettools
+, which, alsaLib, curl, libvpx, gawk, nettools, dbus
 , xorriso, makeself, perl, pkgconfig, nukeReferences
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python ? null
@@ -85,11 +85,14 @@ in stdenv.mkDerivation {
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2
     find . -type f -iname '*makefile*' -exec sed -i -e 's/depmod -a/:/g' {} +
     sed -i -e '
-      s@"libasound.so.2"@"${alsaLib}/lib/libasound.so.2"@g
+      s@"libdbus-1\.so\.3"@"${dbus}/lib/libdbus-1.so.3"@g
+      s@"libasound\.so\.2"@"${alsaLib}/lib/libasound.so.2"@g
       ${optionalString pulseSupport ''
-      s@"libpulse.so.0"@"${libpulseaudio}/lib/libpulse.so.0"@g
+      s@"libpulse\.so\.0"@"${libpulseaudio}/lib/libpulse.so.0"@g
       ''}
-    ' src/VBox/Main/xml/Settings.cpp src/VBox/Devices/Audio/{alsa,pulse}_stubs.c
+    ' src/VBox/Main/xml/Settings.cpp \
+      src/VBox/Devices/Audio/{alsa,pulse}_stubs.c \
+      include/VBox/dbus-calls.h
     export USER=nix
     set +x
   '';
