@@ -9258,7 +9258,7 @@ let
       sha256 = "0apgmsk9jlaphb2dp1zaxqzdxkf69h1y3iw2d1pcnkj31cmmypij";
     };
 
-    disabled = isPyPy;  # WIP
+    disabled = isPyPy || isPy35;  # WIP
 
     preConfigure = ''
       sed -i 's/-faltivec//' numpy/distutils/system_info.py
