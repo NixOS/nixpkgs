@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig libpng libjpeg expat libXaw yacc libtool fontconfig
       pango gd gts
-    ] ++ stdenv.lib.optionals (xlibs != null) [ xlibs.xlibs xlibs.libXrender ]
+    ] ++ stdenv.lib.optionals (xlibs != null) [ xlibs.xlibsWrapper xlibs.libXrender ]
     ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") gettext;
 
   CPPFLAGS = stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") "-I${cairo}/include/cairo";

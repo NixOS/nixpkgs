@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "11i5z8l5v5ffihif35k5j8igj0rahsk4jdmsj24xhdw2s0zx53kn";
   };
   buildInputs = [
-    pkgconfig glib xlibs.xlibs xlibs.libXdamage xlibs.libXcomposite
+    pkgconfig glib xlibs.xlibsWrapper xlibs.libXdamage xlibs.libXcomposite
     xlibs.libXtst xlibs.inputproto
     # !!! inputproto should really be propagated by libXtst
   ];

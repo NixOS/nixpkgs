@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ xineLib libpng readline ncurses curl lirc libjpeg
-      xlibs.xlibs xlibs.libXext xlibs.libXv xlibs.libXxf86vm xlibs.libXtst xlibs.inputproto
+      xlibs.xlibsWrapper xlibs.libXext xlibs.libXv xlibs.libXxf86vm xlibs.libXtst xlibs.inputproto
       xlibs.libXinerama xlibs.libXi xlibs.libXft
     ];
 

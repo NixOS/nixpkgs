@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     # can't build alsaLib on darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib
     ++ stdenv.lib.optionals (!minimalDeps)
-      [ xlibs.xlibs xlibs.libXv libogg libtheora libvorbis freetype pango
+      [ xlibs.xlibsWrapper xlibs.libXv libogg libtheora libvorbis freetype pango
         liboil ]
     # can't build cdparanoia on darwin
     ++ stdenv.lib.optional (!minimalDeps && !stdenv.isDarwin) cdparanoia

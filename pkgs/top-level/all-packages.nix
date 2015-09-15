@@ -189,7 +189,7 @@ let
   # old modular X libraries project (called `xlibs') but now it's just
   # the set of packages in the modular X.org tree (which also includes
   # non-library components like the server, drivers, fonts, etc.).
-  xlibs = xorg // {xlibs = xlibsWrapper;};
+  xlibs = xorg;
 
 
   ### Helper functions.
@@ -8350,6 +8350,7 @@ let
 
   xercesc = callPackage ../development/libraries/xercesc {};
 
+  # Avoid using this. It isn't really a wrapper anymore, but we keep the name.
   xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper {
     packages = [
       freetype fontconfig xlibs.xproto xlibs.libX11 xlibs.libXt
@@ -9219,7 +9220,7 @@ let
     mesa = mesa_noglu;
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
-  });
+  } // { inherit xlibsWrapper; } );
 
   xorgReplacements = callPackage ../servers/x11/xorg/replacements.nix { };
 

@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing ]
       ++ lib.optional jackaudioSupport libjack2
-      ++ lib.optionals x11Support [ xlibs.xlibs xlibs.libXtst xlibs.libXi ]
+      ++ lib.optionals x11Support [ xlibs.xlibsWrapper xlibs.libXtst xlibs.libXi ]
       ++ lib.optional useSystemd systemd
       ++ lib.optionals stdenv.isLinux [ alsaLib udev ]
       ++ lib.optional airtunesSupport openssl
