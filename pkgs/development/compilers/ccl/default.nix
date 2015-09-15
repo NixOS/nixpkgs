@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchsvn {
     url = http://svn.clozure.com/publicsvn/openmcl/release/1.10/linuxx86/ccl;
     rev = revision;
-    sha256 = "11lmdvzj1mbm7mbr22vjbcrsvinyz8n32a91ms324xqdqpr82ifb";
+    sha256 = "04p77n18cw0bc8i66mp2vfrhlliahrx66lm004a3nw3h0mdk0gd8";
   };
 
   buildInputs = [ gcc glibc m4 ];
