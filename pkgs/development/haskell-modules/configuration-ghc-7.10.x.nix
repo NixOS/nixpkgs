@@ -41,7 +41,7 @@ self: super: {
   # Cabal_1_22_1_1 requires filepath >=1 && <1.4
   cabal-install = dontCheck (super.cabal-install.override { Cabal = null; });
 
-  # Don't use jailbreak built with Cabal 1.22.x because of https://github.com/peti/jailbreak-cabal/issues/9.
+  # Don't compile jailbreak-cabal with Cabal 1.22.x because of https://github.com/peti/jailbreak-cabal/issues/9.
   Cabal_1_23_0_0 = overrideCabal super.Cabal_1_22_4_0 (drv: {
     version = "1.23.0.0";
     src = pkgs.fetchFromGitHub {
@@ -54,10 +54,12 @@ self: super: {
     doHaddock = false;
     postUnpack = "sourceRoot+=/Cabal";
   });
-  jailbreak-cabal = overrideCabal super.jailbreak-cabal (drv: {
-    executableHaskellDepends = [ self.Cabal_1_23_0_0 ];
-    preConfigure = "sed -i -e 's/Cabal == 1.20\\.\\*/Cabal >= 1.23/' jailbreak-cabal.cabal";
-  });
+  jailbreak-cabal = super.jailbreak-cabal.override {
+    Cabal = self.Cabal_1_23_0_0;
+    mkDerivation = drv: self.mkDerivation (drv // {
+      preConfigure = "sed -i -e 's/Cabal == 1.20\\.\\*/Cabal >= 1.23/' jailbreak-cabal.cabal";
+    });
+  };
 
   idris =
     let idris' = overrideCabal super.idris (drv: {

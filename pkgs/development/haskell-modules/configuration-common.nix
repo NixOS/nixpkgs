@@ -12,7 +12,7 @@ self: super: {
   cabal-install_1_18_1_0 = (dontCheck super.cabal-install_1_18_1_0).overrideScope (self: super: { Cabal = self.Cabal_1_18_1_6; zlib = self.zlib_0_5_4_2; });
 
   # Link statically to avoid runtime dependency on GHC.
-  jailbreak-cabal = disableSharedExecutables super.jailbreak-cabal;
+  jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = dontJailbreak self.Cabal_1_20_0_3; };
 
   # Apply NixOS-specific patches.
   ghc-paths = appendPatch super.ghc-paths ./patches/ghc-paths-nix.patch;
