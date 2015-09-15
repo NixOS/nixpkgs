@@ -24,7 +24,7 @@ let
 in
 stdenv.mkDerivation {
   inherit version;
-  name = "Natron-${version}";
+  name = "natron-${version}";
   src = fetchgit {
     url = https://github.com/MrKepzie/Natron.git;
     rev = "refs/tags/${version}";

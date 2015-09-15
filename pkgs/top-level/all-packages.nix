@@ -12294,7 +12294,7 @@ let
 
   mutt-kz = callPackage ../applications/networking/mailreaders/mutt-kz { };
 
-  natron = callPackage ../applications/video/Natron { };
+  natron = callPackage ../applications/video/natron { };
 
   notion = callPackage ../applications/window-managers/notion { };
 
