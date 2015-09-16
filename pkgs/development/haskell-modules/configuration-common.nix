@@ -35,6 +35,7 @@ self: super: {
   HTTP = dontCheck super.HTTP;
   mwc-random = dontCheck super.mwc-random;
   nanospec = dontCheck super.nanospec;
+  nanospec_0_2_0 = dontCheck super.nanospec_0_2_0;
   options_1_2_1 = dontCheck super.options_1_2_1;
   options_1_2 = dontCheck super.options_1_2;
   options = dontCheck super.options;
