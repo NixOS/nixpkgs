@@ -1029,4 +1029,7 @@ self: super: {
   hpc-coveralls = disableSharedExecutables super.hpc-coveralls;
   hpc-coveralls_0_9_0 = disableSharedExecutables super.hpc-coveralls_0_9_0;
 
+  # Test suite won't compile.
+  semigroupoids_5_0_0_3 = dontCheck super.semigroupoids_5_0_0_3;
+
 }
