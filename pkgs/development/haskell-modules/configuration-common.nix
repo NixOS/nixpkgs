@@ -1025,4 +1025,8 @@ self: super: {
     });
   in g';
 
+  # https://github.com/guillaume-nargeot/hpc-coveralls/issues/52
+  hpc-coveralls = disableSharedExecutables super.hpc-coveralls;
+  hpc-coveralls_0_9_0 = disableSharedExecutables super.hpc-coveralls_0_9_0;
+
 }
