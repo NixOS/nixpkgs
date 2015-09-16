@@ -279,8 +279,8 @@ self: super: {
   xmlgen = dontCheck super.xmlgen;
 
   # These packages try to access the network.
-  amqp = dontCheck super.amqp;
   amqp-conduit = dontCheck super.amqp-conduit;
+  amqp = dontCheck super.amqp;
   bitcoin-api = dontCheck super.bitcoin-api;
   bitcoin-api-extra = dontCheck super.bitcoin-api-extra;
   bitx-bitcoin = dontCheck super.bitx-bitcoin;          # http://hydra.cryp.to/build/926187/log/raw
@@ -293,6 +293,27 @@ self: super: {
   hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
   holy-project = dontCheck super.holy-project;          # http://hydra.cryp.to/build/502002/nixlog/1/raw
   hoogle = overrideCabal super.hoogle (drv: { testTarget = "--test-option=--no-net"; });
+  http-client_0_4_11_1 = dontCheck super.http-client_0_4_11_1;
+  http-client_0_4_11_2 = dontCheck super.http-client_0_4_11_2;
+  http-client_0_4_11_3 = dontCheck super.http-client_0_4_11_3;
+  http-client_0_4_11 = dontCheck super.http-client_0_4_11;
+  http-client_0_4_12 = dontCheck super.http-client_0_4_12;
+  http-client_0_4_13 = dontCheck super.http-client_0_4_13;
+  http-client_0_4_15 = dontCheck super.http-client_0_4_15;
+  http-client_0_4_16 = dontCheck super.http-client_0_4_16;
+  http-client_0_4_18_1 = dontCheck super.http-client_0_4_18_1;
+  http-client_0_4_19 = dontCheck super.http-client_0_4_19;
+  http-client_0_4_20 = dontCheck super.http-client_0_4_20;
+  http-client_0_4_21 = dontCheck super.http-client_0_4_21;
+  http-client_0_4_22_1 = dontCheck super.http-client_0_4_22_1;
+  http-client_0_4_6_1 = dontCheck super.http-client_0_4_6_1;
+  http-client_0_4_6_2 = dontCheck super.http-client_0_4_6_2;
+  http-client_0_4_6 = dontCheck super.http-client_0_4_6;
+  http-client_0_4_7_1 = dontCheck super.http-client_0_4_7_1;
+  http-client_0_4_7 = dontCheck super.http-client_0_4_7;
+  http-client_0_4_8_1 = dontCheck super.http-client_0_4_8_1;
+  http-client_0_4_8 = dontCheck super.http-client_0_4_8;
+  http-client_0_4_9 = dontCheck super.http-client_0_4_9;
   http-client = dontCheck super.http-client;            # http://hydra.cryp.to/build/501430/nixlog/1/raw
   http-conduit = dontCheck super.http-conduit;          # http://hydra.cryp.to/build/501966/nixlog/1/raw
   js-jquery = dontCheck super.js-jquery;
