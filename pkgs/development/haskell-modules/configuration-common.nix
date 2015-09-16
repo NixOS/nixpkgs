@@ -27,14 +27,16 @@ self: super: {
   hspec_2_1_5 = super.hspec_2_1_5.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_6 = super.hspec_2_1_6.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_7 = super.hspec_2_1_7.override { stringbuilder = dontCheck super.stringbuilder; };
-  hspec = super.hspec.override { stringbuilder = dontCheck super.stringbuilder; };
-  hspec-expectations_0_6_1 = dontCheck super.hspec-expectations_0_6_1;
   hspec-expectations_0_6_1_1 = dontCheck super.hspec-expectations_0_6_1_1;
+  hspec-expectations_0_6_1 = dontCheck super.hspec-expectations_0_6_1;
   hspec-expectations_0_7_1 = dontCheck super.hspec-expectations_0_7_1;
   hspec-expectations = dontCheck super.hspec-expectations;
+  hspec = super.hspec.override { stringbuilder = dontCheck super.stringbuilder; };
   HTTP = dontCheck super.HTTP;
   mwc-random = dontCheck super.mwc-random;
   nanospec = dontCheck super.nanospec;
+  options_1_2_1 = dontCheck super.options_1_2_1;
+  options_1_2 = dontCheck super.options_1_2;
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
   text_1_1_1_3 = dontCheck super.text_1_1_1_3;
