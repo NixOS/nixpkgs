@@ -239,20 +239,11 @@ self: super: {
         '';
       });
 
-  # Does not compile: "fatal error: ieee-flpt.h: No such file or directory"
-  base_4_8_1_0 = markBroken super.base_4_8_1_0;
-
   # Obsolete: https://github.com/massysett/prednote/issues/1.
   prednote-test = markBrokenVersion "0.26.0.4" super.prednote-test;
 
-  # Doesn't compile: "Setup: can't find include file ghc-gmp.h"
-  integer-gmp_1_0_0_0 = markBroken super.integer-gmp_1_0_0_0;
-
   # Obsolete.
   lushtags = markBrokenVersion "0.0.1" super.lushtags;
-
-  # https://github.com/haskell/bytestring/issues/41
-  bytestring_0_10_6_0 = dontCheck super.bytestring_0_10_6_0;
 
   # tests don't compile for some odd reason
   jwt = dontCheck super.jwt;
