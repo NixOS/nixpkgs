@@ -106,9 +106,6 @@ self: super: {
   yices-easy = dontDistribute super.yices-easy;
   yices-painless = dontDistribute super.yices-painless;
 
-  # https://github.com/GaloisInc/RSA/issues/9
-  RSA = dontCheck super.RSA;
-
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
 
