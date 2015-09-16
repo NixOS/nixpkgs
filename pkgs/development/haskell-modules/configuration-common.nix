@@ -38,9 +38,6 @@ self: super: {
   # The package doesn't compile with ruby 1.9, which is our default at the moment.
   hruby = super.hruby.override { ruby = pkgs.ruby_2_1; };
 
-  # Doesn't compile with lua 5.2.
-  hslua = super.hslua.override { lua = pkgs.lua5_1; };
-
   # Use the default version of mysql to build this package (which is actually mariadb).
   mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
 
