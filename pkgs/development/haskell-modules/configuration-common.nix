@@ -150,6 +150,13 @@ self: super: {
   HDBC-odbc = dontHaddock super.HDBC-odbc;
   hoodle-core = dontHaddock super.hoodle-core;
   hsc3-db = dontHaddock super.hsc3-db;
+  hspec-discover_2_1_10 = dontHaddock super.hspec-discover_2_1_10;
+  hspec-discover_2_1_2 = dontHaddock super.hspec-discover_2_1_2;
+  hspec-discover_2_1_3 = dontHaddock super.hspec-discover_2_1_3;
+  hspec-discover_2_1_4 = dontHaddock super.hspec-discover_2_1_4;
+  hspec-discover_2_1_5 = dontHaddock super.hspec-discover_2_1_5;
+  hspec-discover_2_1_6 = dontHaddock super.hspec-discover_2_1_6;
+  hspec-discover_2_1_7 = dontHaddock super.hspec-discover_2_1_7;
   hspec-discover = dontHaddock super.hspec-discover;
   http-client-conduit = dontHaddock super.http-client-conduit;
   http-client-multipart = dontHaddock super.http-client-multipart;
