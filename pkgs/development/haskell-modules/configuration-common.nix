@@ -33,9 +33,11 @@ self: super: {
   hspec-expectations = dontCheck super.hspec-expectations;
   hspec = super.hspec.override { stringbuilder = dontCheck super.stringbuilder; };
   HTTP = dontCheck super.HTTP;
+  mwc-random_0_13_2_2 = dontCheck super.mwc-random_0_13_2_2;
+  mwc-random_0_13_3_0 = dontCheck super.mwc-random_0_13_3_0;
   mwc-random = dontCheck super.mwc-random;
-  nanospec = dontCheck super.nanospec;
   nanospec_0_2_0 = dontCheck super.nanospec_0_2_0;
+  nanospec = dontCheck super.nanospec;
   options_1_2_1 = dontCheck super.options_1_2_1;
   options_1_2 = dontCheck super.options_1_2;
   options = dontCheck super.options;
