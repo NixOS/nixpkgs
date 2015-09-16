@@ -59,6 +59,9 @@ fi
 
 dbdir="sql:$dbdir"
 
+echo "NSS database: $dbdir"
+echo "BEID library: $libfile"
+
 case "$1" in
 add)	echo "Adding $dbentry to database:"
 	modutil -dbdir "$dbdir" -add "$dbentry" -libfile "$libfile" ||
@@ -74,9 +77,6 @@ show)	echo "Displaying $dbentry database entry, if any:"
 esac
 
 ret=$?
-
-echo "NSS database: $dbdir"
-echo "BEID library: $libfile"
 
 modutil -dbdir "$dbdir" -list "$dbentry" 2>/dev/null
 
