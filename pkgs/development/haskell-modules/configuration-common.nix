@@ -123,9 +123,7 @@ self: super: {
   # https://github.com/haskell/time/issues/23
   time_1_5_0_1 = dontCheck super.time_1_5_0_1;
 
-  # Help libconfig find it's C language counterpart.
-  libconfig = (dontCheck super.libconfig).override { config = pkgs.libconfig; };
-
+  # Switch levmar build to openblas.
   bindings-levmar = overrideCabal super.bindings-levmar (drv: {
     preConfigure = ''
       sed -i bindings-levmar.cabal \
