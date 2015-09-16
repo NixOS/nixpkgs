@@ -5,10 +5,21 @@
 , libunwind, llvm, readline, utf8proc, zlib
 # standard library dependencies
 , double_conversion, fftwSinglePrec, fftw, glpk, gmp, mpfr, pcre
+# linear algebra
 , openblas, arpack, suitesparse
 }:
 
 with stdenv.lib;
+
+# All dependencies should use the same OpenBLAS.
+let
+  arpack_ = arpack;
+  suitesparse_ = suitesparse;
+in
+let
+  arpack = arpack_.override { inherit openblas; };
+  suitesparse = suitesparse_.override { inherit openblas; };
+in
 
 stdenv.mkDerivation rec {
   pname = "julia";
