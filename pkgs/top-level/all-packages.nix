@@ -3069,7 +3069,7 @@ let
   svnfs = callPackage ../tools/filesystems/svnfs { };
 
   svtplay-dl = callPackage ../tools/misc/svtplay-dl {
-    inherit (pythonPackages) nose mock;
+    inherit (pythonPackages) nose mock requests2;
   };
 
   sysbench = callPackage ../development/tools/misc/sysbench {};
