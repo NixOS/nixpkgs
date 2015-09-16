@@ -23,10 +23,10 @@ stdenv.mkDerivation {
   FFLAGS = optional openblas.blas64 "-fdefault-integer-8";
 
   meta = {
-    homepage = "http://forge.scilab.org/index.php/p/arpack-ng/";
+    homepage = "http://github.com/opencollab/arpack-ng";
     description = ''
       A collection of Fortran77 subroutines to solve large scale eigenvalue
-      problems
+      problems.
     '';
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.ttuegel ];
