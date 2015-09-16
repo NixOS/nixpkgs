@@ -268,6 +268,7 @@ self: super: {
   pocket-dns = dontCheck super.pocket-dns;
   postgresql-simple = dontCheck super.postgresql-simple;
   postgrest = dontCheck super.postgrest;
+  setenv_0_1_1_1 = dontCheck super.setenv_0_1_1_1;
   snowball = dontCheck super.snowball;
   sophia = dontCheck super.sophia;
   test-sandbox = dontCheck super.test-sandbox;
