@@ -419,6 +419,9 @@ self: super: {
   hsexif = dontCheck super.hsexif;
   hspec-server = dontCheck super.hspec-server;
   HTF = dontCheck super.HTF;
+  HTF_0_12_2_3 = dontCheck super.HTF_0_12_2_3;
+  HTF_0_12_2_4 = dontCheck super.HTF_0_12_2_4;
+  HTF_0_13_0_0 = dontCheck super.HTF_0_13_0_0;
   htsn = dontCheck super.htsn;
   htsn-import = dontCheck super.htsn-import;
   http2 = dontCheck super.http2;
