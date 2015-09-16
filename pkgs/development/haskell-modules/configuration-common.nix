@@ -316,6 +316,8 @@ self: super: {
   http-client_0_4_9 = dontCheck super.http-client_0_4_9;
   http-client = dontCheck super.http-client;            # http://hydra.cryp.to/build/501430/nixlog/1/raw
   http-conduit = dontCheck super.http-conduit;          # http://hydra.cryp.to/build/501966/nixlog/1/raw
+  js-jquery_1_11_1 = dontCheck super.js-jquery_1_11_1;
+  js-jquery_1_11_2 = dontCheck super.js-jquery_1_11_2;
   js-jquery = dontCheck super.js-jquery;
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
   network-transport-tcp = dontCheck super.network-transport-tcp;
