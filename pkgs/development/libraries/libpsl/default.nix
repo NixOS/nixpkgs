@@ -5,10 +5,10 @@ let
 
   version = "${libVersion}-list-${listVersion}";
 
-  listVersion = "2015-09-07";
+  listVersion = "2015-09-15";
   listSources = fetchFromGitHub {
-    sha256 = "0inpdixg967ibi5f41jq15l6r027lj2y5q0ymlfrp9b29gfay50n";
-    rev = "ee621394b6d863dcc2ff89956d91cdd7d15d8c9d";
+    sha256 = "1rrds3bsnxb2n2ifl0zg6mh1h8nd3h1ba4bz0dznrrlqzfbav0l2";
+    rev = "4f89204a24e99d8a65353cc62d5bc4dea1b2ae31";
     repo = "list";
     owner = "publicsuffix";
   };
