@@ -12426,6 +12426,8 @@ let
     inherit (python34Packages) buildPythonPackage python pyqt5 jinja2 pygments pyyaml pypeg2;
   };
 
+  rabbitvcs = callPackage ../applications/version-management/rabbitvcs {};
+
   rakarrack = callPackage ../applications/audio/rakarrack {
     fltk = fltk13;
   };
