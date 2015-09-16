@@ -6934,11 +6934,11 @@ in modules // {
   };
 
   chardet = buildPythonPackage rec {
-    name = "chardet-2.1.1";
+    name = "chardet-2.3.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/c/chardet/${name}.tar.gz";
-      md5 = "295367fd210d20f3febda615a88e1ef0";
+      sha256 = "1ak87ikcw34fivcgiz2xvi938dmclh078az65l9x3rmgljrkhgp5";
     };
 
     meta = {
