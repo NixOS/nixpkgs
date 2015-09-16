@@ -129,4 +129,10 @@ self: super: {
   # Overriding mtl 2.2.x is fine here because ghc-events is an stand-alone executable.
   ghc-events = super.ghc-events.override { mtl = self.mtl_2_2_1; };
 
+  # The network library is required in configurations that don't have network-uri.
+  hxt = addBuildDepend super.hxt self.network;
+  hxt_9_3_1_7 = addBuildDepend super.hxt_9_3_1_7 self.network;
+  hxt_9_3_1_10 = addBuildDepend super.hxt_9_3_1_10 self.network;
+  hxt_9_3_1_12 = addBuildDepend super.hxt_9_3_1_12 self.network;
+
 }
