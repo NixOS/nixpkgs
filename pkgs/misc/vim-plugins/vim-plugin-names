@@ -69,6 +69,7 @@
 "github:vim-scripts/wombat256.vim"
 "github:wakatime/vim-wakatime"
 "github:wincent/command-t"
+"github:digitaltoad/vim-jade"
 "goyo"
 "matchit.zip"
 "pathogen"
