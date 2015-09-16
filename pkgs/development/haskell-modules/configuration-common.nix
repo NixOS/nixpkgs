@@ -982,11 +982,8 @@ self: super: {
     ];
   });
 
-  # https://github.com/chrisdone/freenect/pull/11
-  freenect = overrideCabal super.freenect (drv: {
-    libraryPkgconfigDepends = [ pkgs.freenect ];
-    prePatch = '' echo "  Pkgconfig-Depends: libfreenect" >> freenect.cabal '';
-  });
+  # Old versions don't detect this library reliably.
+  freenect = appendConfigureFlag super.freenect "--extra-include-dirs=${pkgs.freenect}/include/libfreenect --extra-lib-dirs=${pkgs.freenect}/lib";
 
   # https://github.com/ivanperez-keera/hcwiid/pull/4
   hcwiid = overrideCabal super.hcwiid (drv: {
