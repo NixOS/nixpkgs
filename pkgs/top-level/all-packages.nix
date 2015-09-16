@@ -9667,9 +9667,14 @@ let
   grPackage = opts: recurseIntoAttrs (mkGrsecurity opts).grsecPackage;
 
   # Stable kernels
-  linux_grsec_stable_desktop    = grKernel grFlavors.linux_grsec_stable_desktop;
-  linux_grsec_stable_server     = grKernel grFlavors.linux_grsec_stable_server;
-  linux_grsec_stable_server_xen = grKernel grFlavors.linux_grsec_stable_server_xen;
+  # This is no longer supported. Please see the official announcement on the
+  # grsecurity page. https://grsecurity.net/announce.php
+  linux_grsec_stable_desktop    = throw "No longer supported due to https://grsecurity.net/announce.php. "
+    + "Please use linux_grsec_testing_desktop.";
+  linux_grsec_stable_server     = throw "No longer supported due to https://grsecurity.net/announce.php. "
+    + "Please use linux_grsec_testing_server.";
+  linux_grsec_stable_server_xen = throw "No longer supporteddue to https://grsecurity.net/announce.php. "
+    + "Please use linux_grsec_testing_server_xen.";
 
   # Testing kernels
   linux_grsec_testing_desktop = grKernel grFlavors.linux_grsec_testing_desktop;
