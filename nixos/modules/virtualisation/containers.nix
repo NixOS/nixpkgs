@@ -12,6 +12,12 @@ let
     perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
     su = "${pkgs.shadow.su}/bin/su";
     inherit (pkgs) utillinux;
+
+    postInstall = ''
+      t=$out/etc/bash_completion.d
+      mkdir -p $t
+      cp ${./nixos-container-completion.sh} $t/nixos-container
+    '';
   };
 
   # The container's init script, a small wrapper around the regular
