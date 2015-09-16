@@ -1,12 +1,12 @@
 { stdenv, fetchurl, python }:
 
 stdenv.mkDerivation {
-  name = "git-repo-1.21";
+  name = "git-repo-1.22";
   src = fetchurl {
     # I could not find a versioned url for the 1.21 version. In case
     # the sha mismatches, check the homepage for new version and sha.
     url = "http://commondatastorage.googleapis.com/git-repo-downloads/repo";
-    sha1 = "b8bd1804f432ecf1bab730949c82b93b0fc5fede";
+    sha1 = "da0514e484f74648a890c0467d61ca415379f791";
   };
 
   unpackPhase = "true";
