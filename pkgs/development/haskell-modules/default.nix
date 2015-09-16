@@ -1,4 +1,5 @@
 { pkgs, stdenv, ghc
+, compilerConfig ? (self: super: {})
 , packageSetConfig ? (self: super: {})
 , overrides ? (self: super: {})
 }:
@@ -77,4 +78,4 @@ let
 
 in
 
-  fix (extend (extend (extend haskellPackages commonConfiguration) packageSetConfig) overrides)
+  fix (extend (extend (extend (extend haskellPackages commonConfiguration) compilerConfig) packageSetConfig) overrides)

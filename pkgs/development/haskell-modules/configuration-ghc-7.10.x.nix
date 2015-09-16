@@ -61,19 +61,14 @@ self: super: {
     });
   };
 
-  idris =
-    let idris' = overrideCabal super.idris (drv: {
-      # "idris" binary cannot find Idris library otherwise while building.
-      # After installing it's completely fine though. Seems like Nix-specific
-      # issue so not reported.
-      preBuild = "export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH";
-      # https://github.com/idris-lang/Idris-dev/issues/2499
-      librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
-    });
-    in idris'.overrideScope (self: super: {
-      # https://github.com/idris-lang/Idris-dev/issues/2500
-      zlib = self.zlib_0_5_4_2;
-    });
+  idris = overrideCabal super.idris (drv: {
+    # "idris" binary cannot find Idris library otherwise while building.
+    # After installing it's completely fine though. Seems like Nix-specific
+    # issue so not reported.
+    preBuild = "export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH";
+    # https://github.com/idris-lang/Idris-dev/issues/2499
+    librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
+  });
 
   Extra = appendPatch super.Extra (pkgs.fetchpatch {
     url = "https://github.com/seereason/sr-extra/commit/29787ad4c20c962924b823d02a7335da98143603.patch";
