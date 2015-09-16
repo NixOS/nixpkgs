@@ -20,19 +20,23 @@ self: super: {
   # Break infinite recursions.
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
-  hspec = super.hspec.override { stringbuilder = dontCheck super.stringbuilder; };
+  hspec_2_1_10 = super.hspec_2_1_10.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_2 = super.hspec_2_1_2.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_3 = super.hspec_2_1_3.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_4 = super.hspec_2_1_4.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_5 = super.hspec_2_1_5.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_6 = super.hspec_2_1_6.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_7 = super.hspec_2_1_7.override { stringbuilder = dontCheck super.stringbuilder; };
-  hspec_2_1_10 = super.hspec_2_1_10.override { stringbuilder = dontCheck super.stringbuilder; };
+  hspec = super.hspec.override { stringbuilder = dontCheck super.stringbuilder; };
   HTTP = dontCheck super.HTTP;
   mwc-random = dontCheck super.mwc-random;
   nanospec = dontCheck super.nanospec;
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
+  text_1_1_1_3 = dontCheck super.text_1_1_1_3;
+  text_1_2_0_3 = dontCheck super.text_1_2_0_3;
+  text_1_2_0_4 = dontCheck super.text_1_2_0_4;
+  text_1_2_0_6 = dontCheck super.text_1_2_0_6;
   text = dontCheck super.text;
 
   # The package doesn't compile with ruby 1.9, which is our default at the moment.
