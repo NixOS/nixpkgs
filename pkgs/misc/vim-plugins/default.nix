@@ -398,6 +398,17 @@ rec {
 
   };
 
+  vim-jade = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-jade-2015-07-06";
+    src = fetchgit {
+      url = "git://github.com/digitaltoad/vim-jade";
+      rev = "fb47bb8303e81fc17b4340ccd01a462332f7d90a";
+      sha256 = "c3dde95c01d9e174a9143103e76796d2da40ddb68de9f321fce3f88df312e15a";
+    };
+    dependencies = [];
+
+  };
+
   neco-ghc = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "neco-ghc-2015-08-28";
     src = fetchgit {
