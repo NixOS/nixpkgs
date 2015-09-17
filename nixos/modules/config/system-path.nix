@@ -103,7 +103,8 @@ in
       [ "/bin"
         "/etc/xdg"
         "/info"
-        "/lib"
+        "/lib" # FIXME: remove
+        #"/lib/debug/.build-id" # enables GDB to find separated debug info
         "/man"
         "/sbin"
         "/share/applications"

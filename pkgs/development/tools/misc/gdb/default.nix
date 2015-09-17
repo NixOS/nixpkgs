@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   configureFlags = with stdenv.lib;
     '' --with-gmp=${gmp} --with-mpfr=${mpfr} --with-system-readline
        --with-expat --with-libexpat-prefix=${expat}
+       --with-separate-debug-dir=/run/current-system/sw/lib/debug
     ''
     + optionalString (target != null) " --target=${target.config}"
     + optionalString (elem stdenv.system platforms.cygwin) "  --without-python";
