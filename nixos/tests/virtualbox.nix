@@ -172,7 +172,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
   in {
     machine = {
       systemd.sockets."vboxtestlog-${name}" = {
-        description = "VirtualBox Test Machine Log Socket";
+        description = "VirtualBox Test Machine Log Socket For ${name}";
         wantedBy = [ "sockets.target" ];
         before = [ "multi-user.target" ];
         socketConfig.ListenStream = "/run/virtualbox-log-${name}.sock";
@@ -180,7 +180,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
       };
 
       systemd.services."vboxtestlog-${name}@" = {
-        description = "VirtualBox Test Machine Log";
+        description = "VirtualBox Test Machine Log For ${name}";
         serviceConfig.StandardInput = "socket";
         serviceConfig.StandardOutput = "syslog";
         serviceConfig.SyslogIdentifier = "GUEST-${name}";
