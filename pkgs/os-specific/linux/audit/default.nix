@@ -5,11 +5,11 @@
 assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
-  name = "audit-2.4.2";
+  name = "audit-2.4.4";
 
   src = fetchurl {
     url = "http://people.redhat.com/sgrubb/audit/${name}.tar.gz";
-    sha256 = "08j134s4509rxfi3hwsp8yyxzlqqxl8kqgv2rfv6p3qng5pjd80j";
+    sha256 = "08sfcx8ykcn5jsryil15q8yqm0a8czymyqbb2sqxfc1jbx37zx95";
   };
 
   buildInputs = [ openldap ]
