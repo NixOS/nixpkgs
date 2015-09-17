@@ -3,6 +3,8 @@
 , alsaLib, dbus_libs, gtk2, libpulseaudio, openssl, xlibs
 }:
 
+assert stdenv.isLinux;
+
 stdenv.mkDerivation rec {
 
   name = "jitsi-${version}";
