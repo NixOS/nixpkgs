@@ -177,7 +177,7 @@ let
               strigi taglib udev xlibs xplanet xscreensaver xz;
       alsa = alsaLib;
       assuan = libassuan;
-      boost = boost156;
+      boost = boost155;
       canberra = libcanberra;
       eigen3 = eigen;
       epub = ebook_tools;

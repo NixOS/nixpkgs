@@ -1053,7 +1053,7 @@ let
   cksfv = callPackage ../tools/networking/cksfv { };
 
   clementine = callPackage ../applications/audio/clementine {
-    boost = boost156;
+    boost = boost155;
     gst_plugins = [ gst_plugins_base gst_plugins_good gst_plugins_ugly gst_ffmpeg ];
   };
 
@@ -5766,7 +5766,7 @@ let
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
   uhd = callPackage ../development/tools/misc/uhd {
-    boost = boost157;
+    boost = boost155;
   };
 
   uisp = callPackage ../development/tools/misc/uisp { };
@@ -5896,8 +5896,6 @@ let
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
   boost155 = callPackage ../development/libraries/boost/1.55.nix { };
-  boost156 = callPackage ../development/libraries/boost/1.56.nix { };
-  boost157 = callPackage ../development/libraries/boost/1.57.nix { };
   boost159 = callPackage ../development/libraries/boost/1.59.nix { };
   boost = boost159;
 
@@ -6376,7 +6374,7 @@ let
 
   qt_gstreamer = callPackage ../development/libraries/gstreamer/legacy/qt-gstreamer {};
 
-  qt_gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer { boost = boost156;};
+  qt_gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer { boost = boost155;};
 
   gnet = callPackage ../development/libraries/gnet { };
 
@@ -8504,7 +8502,7 @@ let
   lucene = callPackage ../development/libraries/java/lucene { };
 
   lucenepp = callPackage ../development/libraries/lucene++ {
-    boost = boost157;
+    boost = boost155;
   };
 
   mockobjects = callPackage ../development/libraries/java/mockobjects { };
@@ -9113,7 +9111,7 @@ let
   rethinkdb = callPackage ../servers/nosql/rethinkdb { };
 
   rippled = callPackage ../servers/rippled {
-    boost = boost157;
+    boost = boost155;
   };
 
   ripple-rest = callPackage ../servers/rippled/ripple-rest.nix { };
@@ -10628,7 +10626,7 @@ let
   schismtracker = callPackage ../applications/audio/schismtracker { };
 
   altcoins = recurseIntoAttrs ( callPackage ../applications/altcoins {
-    callPackage = newScope { boost = boost157; };
+    callPackage = newScope { boost = boost155; };
   } );
   bitcoin = altcoins.bitcoin;
   bitcoin-xt = altcoins.bitcoin-xt;
@@ -11352,7 +11350,7 @@ let
   fomp = callPackage ../applications/audio/fomp { };
 
   freecad = callPackage ../applications/graphics/freecad {
-    boost = boost156;
+    boost = boost155;
     opencascade = opencascade_6_5;
     inherit (pythonPackages) matplotlib pycollada;
   };
@@ -11375,7 +11373,7 @@ let
   };
 
   freicoin = callPackage ../applications/misc/freicoin {
-    boost = boost157;
+    boost = boost155;
   };
 
   fuze = callPackage ../applications/networking/instant-messengers/fuze {};
@@ -11827,7 +11825,7 @@ let
 
   ledger2 = callPackage ../applications/office/ledger/2.6.3.nix { };
   ledger3 = callPackage ../applications/office/ledger {
-    boost = boost157;
+    boost = boost155;
   };
   ledger = ledger3;
 
@@ -13841,7 +13839,7 @@ let
       {
         libusb = libusb1;
         libcanberra = libcanberra_kde;
-        boost = boost156;
+        boost = boost155;
         kdelibs = kdeApps_stable.kdelibs;
       }
       ../desktops/kde-4.14;
@@ -13895,7 +13893,7 @@ let
           kdevelop = callPackage ../applications/editors/kdevelop { };
 
           kdevplatform = callPackage ../development/libraries/kdevplatform {
-            boost = boost156;
+            boost = boost155;
           };
 
           kdiff3 = callPackage ../tools/text/kdiff3 { };
@@ -13927,7 +13925,7 @@ let
           libalkimia = callPackage ../development/libraries/libalkimia { };
 
           libktorrent = callPackage ../development/libraries/libktorrent {
-            boost = boost156;
+            boost = boost155;
           };
 
           libkvkontakte = callPackage ../development/libraries/libkvkontakte { };
