@@ -195,6 +195,8 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     };
 
     testSubs = ''
+      my ${"$" + name}_sharepath = '${sharePath}';
+
       sub checkRunning_${name} {
         my $cmd = 'VBoxManage list runningvms | grep -q "^\"${name}\""';
         my ($status, $out) = $machine->execute(ru $cmd);
@@ -301,8 +303,14 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     echo "$otherIP reachable" | ${pkgs.netcat}/bin/netcat -clp 5678 || :
   '';
 
+  sysdDetectVirt = pkgs: ''
+    ${pkgs.systemd}/bin/systemd-detect-virt > /mnt-root/result
+  '';
+
   vboxVMs = mapAttrs createVM {
     simple = {};
+
+    detectvirt.vmScript = sysdDetectVirt;
 
     test1.vmFlags = hostonlyVMFlags;
     test1.vmScript = dhcpScript;
@@ -386,6 +394,18 @@ in {
     };
 
     destroyVM_simple;
+
+    subtest "systemd-detect-virt", sub {
+      createVM_detectvirt;
+      vbm("startvm detectvirt");
+      waitForStartup_detectvirt;
+      waitForVMBoot_detectvirt;
+      shutdownVM_detectvirt;
+      my $result = $machine->succeed("cat '$detectvirt_sharepath/result'");
+      chomp $result;
+      die "systemd-detect-virt returned \"$result\" instead of \"oracle\""
+        if $result ne "oracle";
+    };
 
     subtest "net-hostonlyif", sub {
       createVM_test1;
