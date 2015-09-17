@@ -15588,11 +15588,13 @@ let
 
   wxPython = self.wxPython28;
 
-  wxPython28 = callPackage ../development/python-modules/wxPython/2.8.nix {
+  wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
+    inherit callPackage;
     wxGTK = pkgs.wxGTK28;
   };
 
-  wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
+  wxPython30 = import ../development/python-modules/wxPython/3.0.nix {
+    inherit callPackage;
     wxGTK = pkgs.wxGTK30;
   };
 
