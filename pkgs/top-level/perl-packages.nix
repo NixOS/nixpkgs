@@ -2255,10 +2255,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptRijndael = buildPerlPackage rec {
-    name = "Crypt-Rijndael-1.12";
+    name = "Crypt-Rijndael-1.13";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/${name}.tar.gz";
-      sha256 = "1rgzlxp882cc52287awwha4ipglm6nxw5jryd6cshrr99qcx55m0";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/${name}.tar.gz";
+      sha256 = "0ki16vkgzvzyjdx6mmvjfpngyvhf7cis46pymy6dr8z0vyk0jwnd";
     };
   };
 
