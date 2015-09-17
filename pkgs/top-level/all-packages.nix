@@ -14809,6 +14809,10 @@ let
 
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
 
+  # All the new TeX Live is inside. See description in default.nix.
+  texlive = recurseIntoAttrs
+    (callPackage ../tools/typesetting/tex/texlive-new { });
+
   texLive = builderDefsPackage (callPackage ../tools/typesetting/tex/texlive) {
     ghostscript = ghostscriptX;
     harfbuzz = harfbuzz.override {
