@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "0ssi1wpaf7plaswqqjwigppsg5fyh99vdlb9kzl7c9lng89ndq1i";
   };
 
-  doCheck = true;
+  doCheck = false;
+
+  separateDebugInfo = true;
 
   meta = {
     description = "A program that produces a familiar, friendly greeting";
