@@ -10257,8 +10257,6 @@ let
 
   xf86_video_nested = callPackage ../os-specific/linux/xf86-video-nested { };
 
-  xf86_video_nouveau = xorg.xf86videonouveau;
-
   xmoto = callPackage ../games/xmoto { };
 
   xorg_sys_opengl = callPackage ../os-specific/linux/opengl/xorg-sys { };
@@ -15044,6 +15042,7 @@ let
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
   youtubeDL = youtube-dl;  # added 2014-10-26
 
