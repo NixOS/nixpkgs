@@ -109,7 +109,7 @@ in {
         VBoxManage createvm --name "$vmName" --register \
           --ostype ${if pkgs.stdenv.system == "x86_64-linux" then "Linux26_64" else "Linux26"}
         VBoxManage modifyvm "$vmName" \
-          --memory 1536 --acpi on --vram 10 \
+          --memory 1536 --acpi on --vram 32 \
           ${optionalString (pkgs.stdenv.system == "i686-linux") "--pae on"} \
           --nictype1 virtio --nic1 nat \
           --audiocontroller ac97 --audio alsa \
