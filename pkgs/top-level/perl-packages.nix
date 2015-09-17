@@ -404,11 +404,11 @@ let self = _self // overrides; _self = with self; {
 
   autobox = pkgs.perlPackages.Autobox;
 
-  Autobox = buildPerlPackage {
-    name = "autobox-2.82";
+  Autobox = buildPerlPackage rec {
+    name = "autobox-2.83";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHOCOLATE/autobox-2.82.tar.gz;
-      sha256 = "0w008z8ych54czr6drmhqrrvikcfhra6ig3v1fhk36apq64p9k1p";
+      url = "mirror://cpan/authors/id/C/CH/CHOCOLATE/${name}.tar.gz";
+      sha256 = "1i493ss5nr0hp3wncn0s31gyka4r09wx65b8g2f8av2nm4zs70rz";
     };
     propagatedBuildInputs = [ ScopeGuard ];
     meta = {
