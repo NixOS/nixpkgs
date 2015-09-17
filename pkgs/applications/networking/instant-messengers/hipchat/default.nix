@@ -5,7 +5,7 @@
 
 let
 
-  version = "2.2.1373";
+  version = "2.2.1388";
 
   rpath = stdenv.lib.makeSearchPath "lib" [
     stdenv.glibc
@@ -47,12 +47,12 @@ let
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://downloads.hipchat.com/linux/arch/x86_64/hipchat-${version}-x86_64.pkg.tar.xz";
-        sha256 = "0mxjzigncp8sh5w2rpr7kvkiahagm3adss1zv6rqk8hc1awrnd8n";
+        sha256 = "18vl0c7xgyzd2miwkfzc638z0wzszgsdlbnslkkvxmg95ykdrdnz";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://downloads.hipchat.com/linux/arch/i686/hipchat-${version}-i686.pkg.tar.xz";
-        sha256 = "1f4cjbazgifxpyr6589frs417h4wpxbykf46w5qiw0m2wiqpqff5";
+        sha256 = "12q8hf3gmcgrqg6v9xqyknwsmwywpwm76jc54sfniiqv5ngq24hl";
       }
     else
       throw "HipChat is not supported on ${stdenv.system}";
