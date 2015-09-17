@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
   # a quick configure to get the Makefile generated. Since
   # we do not build the ocaml itself, we don't really
   # need it to support any features.
-  configureFlags = [ "-no-tk" "-no-curses" "-no-pthread" ];
+  configureFlags = [ "-no-curses" "-no-pthread" ];
 
   buildInputs = [ emacs ];
   dontBuild = true;

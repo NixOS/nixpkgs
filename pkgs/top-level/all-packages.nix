@@ -4240,7 +4240,9 @@ let
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
-    bolt = callPackage ../development/ocaml-modules/bolt { };
+    bolt = callPackage ../development/ocaml-modules/bolt {
+      ocaml = ocamlPackages_4_01_0.ocaml;
+    };
 
     bitstring_2_0_4 = callPackage ../development/ocaml-modules/bitstring/2.0.4.nix { };
     bitstring_git   = callPackage ../development/ocaml-modules/bitstring { };
@@ -4621,7 +4623,27 @@ let
 
   };
 
-  ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
+  ocamlPackages = (recurseIntoAttrs ocamlPackages_4_02_1)
+  // { # Don't compile correctly on 4.02 (need fixing)
+       inherit (ocamlPackages_4_01_0)
+       camlimages_4_0
+       bolt
+       ocaml_optcomp
+       eliom
+       ocpBuild
+       ocpIndent
+       ulex
+       ocp-index;
+
+       # Depend on things in the list above
+       inherit (ocamlPackages_4_01_0)
+       ocsigen_deriving
+       js_of_ocaml
+       vg
+       mezzo
+       ojquery
+       acgtk;
+     };
   ocamlPackages_3_10_0 = (mkOcamlPackages ocaml_3_10_0 pkgs.ocamlPackages_3_10_0)
   // { lablgtk = ocamlPackages_3_10_0.lablgtk_2_14; };
   ocamlPackages_3_11_2 = (mkOcamlPackages ocaml_3_11_2 pkgs.ocamlPackages_3_11_2)
@@ -4635,13 +4657,17 @@ let
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
-  ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
+  ocaml-top = callPackage ../development/tools/ocaml/ocaml-top {
+    ocamlPackages = ocamlPackages_4_01_0;
+  };
 
   opa = callPackage ../development/compilers/opa {
     ocamlPackages = ocamlPackages_4_00_1;
   };
 
-  opam_1_0_0 = callPackage ../development/tools/ocaml/opam/1.0.0.nix { };
+  opam_1_0_0 = callPackage ../development/tools/ocaml/opam/1.0.0.nix {
+    inherit (ocamlPackages_4_01_0) ocaml;
+  };
   opam_1_1 = callPackage ../development/tools/ocaml/opam/1.1.nix {
     inherit (ocamlPackages_4_01_0) ocaml;
   };
@@ -5614,6 +5640,7 @@ let
   noweb = callPackage ../development/tools/literate-programming/noweb { };
 
   omake = callPackage ../development/tools/ocaml/omake { };
+
   omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
 
   omniorb = callPackage ../development/tools/omniorb { };
@@ -6310,10 +6337,10 @@ let
   glpk = callPackage ../development/libraries/glpk { };
 
   glsurf = callPackage ../applications/science/math/glsurf {
-    inherit (ocamlPackages) lablgl findlib ocaml_mysql mlgmp;
+    inherit (ocamlPackages_4_01_0) ocaml lablgl findlib ocaml_mysql mlgmp;
     libpng = libpng12;
     giflib = giflib_4_1;
-    camlimages = ocamlPackages.camlimages_4_0;
+    camlimages = ocamlPackages_4_01_0.camlimages_4_0;
   };
 
   gmime = callPackage ../development/libraries/gmime { };
@@ -11948,7 +11975,9 @@ let
 
   mjpg-streamer = callPackage ../applications/video/mjpg-streamer { };
 
-  mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
+  mldonkey = callPackage ../applications/networking/p2p/mldonkey {
+    inherit (ocamlPackages_4_01_0) ocaml;
+  };
 
   mmex = callPackage ../applications/office/mmex { };
 
@@ -14311,7 +14340,9 @@ let
 
   lean = callPackage ../applications/science/logic/lean {};
 
-  leo2 = callPackage ../applications/science/logic/leo2 {};
+  leo2 = callPackage ../applications/science/logic/leo2 {
+    inherit (ocamlPackages_4_01_0) ocaml;
+  };
 
   logisim = callPackage ../applications/science/logic/logisim {};
 
