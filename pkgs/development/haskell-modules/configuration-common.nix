@@ -895,4 +895,8 @@ self: super: {
   # This is fixed in newer versions.
   zip-archive_0_2_3_5 = addBuildTool super.zip-archive_0_2_3_5 pkgs.zip;
 
+  # https://github.com/fpco/stackage/issues/838
+  cryptonite = dontCheck super.cryptonite;
+  cryptonite_0_6   = dontCheck super.cryptonite_0_6  ;
+
 }
