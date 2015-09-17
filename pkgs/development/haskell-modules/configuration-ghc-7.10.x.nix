@@ -82,7 +82,7 @@ self: super: {
 
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
-  bytestring-builder = dontHaddock super.bytestring-builder;
+  bytestring-builder = dontHaddock (triggerRebuild super.bytestring-builder 1);
 
   # We have time 1.5
   aeson = disableCabalFlag super.aeson "old-locale";

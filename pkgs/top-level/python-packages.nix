@@ -7704,11 +7704,11 @@ let
 
 
   libcloud = buildPythonPackage (rec {
-    name = "libcloud-0.14.1";
+    name = "libcloud-0.18.0";
 
     src = pkgs.fetchurl {
-      url = https://pypi.python.org/packages/source/a/apache-libcloud/apache-libcloud-0.14.1.tar.bz2;
-      sha256 = "1l6190pjv54c7y8pzr089ij727qv7bqhhaznr2mkvimgr1wzsql5";
+      url = https://pypi.python.org/packages/source/a/apache-libcloud/apache-libcloud-0.18.0.tar.bz2;
+      sha256 = "0ahdp14ddly074qg5cksxdhqaws0kj445xmhz1y7lzspsp6fk1xg";
     };
 
     buildInputs = with self; [ mock ];
@@ -11546,27 +11546,16 @@ let
 
   pyparted = buildPythonPackage rec {
     name = "pyparted-${version}";
-    version = "3.10";
+    version = "3.10.7";
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
-      url = "https://fedorahosted.org/releases/p/y/pyparted/${name}.tar.gz";
-      sha256 = "17wq4invmv1nfazaksf59ymqyvgv3i8h4q03ry2az0s9lldyg3dv";
+      url = "https://github.com/rhinstaller/pyparted/archive/v${version}.tar.gz";
+      sha256 = "0c9ljrdggwawd8wdzqqqzrna9prrlpj6xs59b0vkxzip0jkf652r";
     };
 
-    patches = singleton (pkgs.fetchurl {
-      url = "https://www.redhat.com/archives/pyparted-devel/"
-          + "2014-April/msg00000.html";
-      postFetch = ''
-        sed -i -ne '/<!--X-Body-of-Message-->/,/<!--X-Body-of-Message-End-->/ {
-          s/^<[^>]*>//; /^$/!p
-        }' "$downloadedFile"
-      '';
-      sha256 = "1lakhz3nvx0qacn90bj1nq13zqxphiw4d9dsc44gwa8nj24j2zws";
-    });
-
     postPatch = ''
-      sed -i -e 's|/sbin/mke2fs|${pkgs.e2fsprogs}&|' tests/baseclass.py
+      sed -i -e 's|mke2fs|${pkgs.e2fsprogs}/bin/mke2fs|' tests/baseclass.py
       sed -i -e '
         s|e\.path\.startswith("/tmp/temp-device-")|"temp-device-" in e.path|
       ' tests/test__ped_ped.py
@@ -14105,7 +14094,7 @@ let
 
   sqlalchemy = self.sqlalchemy9.override rec {
     name = "SQLAlchemy-0.7.10";
-    disabled = isPy34;
+    disabled = isPy34 || isPy35;
     doCheck = !isPyPy;
 
     src = pkgs.fetchurl {
@@ -14124,7 +14113,7 @@ let
 
   sqlalchemy8 = self.sqlalchemy9.override rec {
     name = "SQLAlchemy-0.8.7";
-    disabled = isPy34;
+    disabled = isPy34 || isPy35;
     doCheck = !isPyPy;
 
     src = pkgs.fetchurl {
@@ -17150,7 +17139,7 @@ let
   IMAPClient = buildPythonPackage rec {
     name = "IMAPClient-${version}";
     version = "0.11";
-    disabled = isPy34;
+    disabled = isPy34 || isPy35;
 
     src = pkgs.fetchurl {
       url = "http://freshfoo.com/projects/IMAPClient/${name}.tar.gz";

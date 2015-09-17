@@ -11,17 +11,17 @@
 
 with stdenv.lib;
 let
-  n = "qemu-2.4.0";
+  version = "2.4.0";
   audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
 in
 
 stdenv.mkDerivation rec {
-  name = n + (if x86Only then "-x86-only" else "");
+  name = "qemu-" + stdenv.lib.optionalString x86Only "x86-only-" + version;
 
   src = fetchurl {
-    url = "http://wiki.qemu.org/download/${n}.tar.bz2";
+    url = "http://wiki.qemu.org/download/qemu-${version}.tar.bz2";
     sha256 = "0836gqv5zcl0xswwjcns3mlkn18lyz2fiq8rl1ihcm6cpf8vkc3j";
   };
 

@@ -96,6 +96,10 @@ let
     , meta ? {}
     , passthru ? {}
     , pos ? null # position used in error messages and for meta.position
+    , separateDebugInfo ? false
+    , outputs ? [ "out" ]
+    , __impureHostDeps ? []
+    , __propagatedImpureHostDeps ? []
     , ... } @ attrs:
     let
       pos' =
@@ -132,6 +136,13 @@ let
           throwEvalHelp "Broken" "is not supported on ‘${result.system}’"
         else true;
 
+      outputs' =
+        outputs ++
+        (if separateDebugInfo then [ "debug" ] else []);
+
+      buildInputs' = buildInputs ++
+        (if separateDebugInfo then [ ../../build-support/setup-hooks/separate-debug-info.sh ] else []);
+
     in
       assert licenseAllowed attrs;
 
@@ -140,18 +151,11 @@ let
           ["meta" "passthru" "crossAttrs" "pos"
            "__impureHostDeps" "__propagatedImpureHostDeps"])
         // (let
-          buildInputs = attrs.buildInputs or [];
-          nativeBuildInputs = attrs.nativeBuildInputs or [];
-          propagatedBuildInputs = attrs.propagatedBuildInputs or [];
-          propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [];
-          crossConfig = attrs.crossConfig or null;
-
-          __impureHostDeps = attrs.__impureHostDeps or [];
-          __propagatedImpureHostDeps = attrs.__propagatedImpureHostDeps or [];
-
           # TODO: remove lib.unique once nix has a list canonicalization primitive
-          computedImpureHostDeps           = lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs));
-          computedPropagatedImpureHostDeps = lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs));
+          computedImpureHostDeps =
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs));
+          computedPropagatedImpureHostDeps =
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs));
         in
         {
           builder = attrs.realBuilder or shell;
@@ -162,10 +166,10 @@ let
           __ignoreNulls = true;
 
           # Inputs built by the cross compiler.
-          buildInputs = if crossConfig != null then buildInputs else [];
+          buildInputs = if crossConfig != null then buildInputs' else [];
           propagatedBuildInputs = if crossConfig != null then propagatedBuildInputs else [];
           # Inputs built by the usual native compiler.
-          nativeBuildInputs = nativeBuildInputs ++ (if crossConfig == null then buildInputs else []);
+          nativeBuildInputs = nativeBuildInputs ++ (if crossConfig == null then buildInputs' else []);
           propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
             (if crossConfig == null then propagatedBuildInputs else []);
         } // ifDarwin {
@@ -176,7 +180,9 @@ let
             "/bin/sh"
           ];
           __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
-        }))) (
+        } // (if outputs' != [ "out" ] then {
+          outputs = outputs';
+        } else { })))) (
       {
         # The meta attribute is passed in the resulting attribute set,
         # but it's not part of the actual derivation, i.e., it's not

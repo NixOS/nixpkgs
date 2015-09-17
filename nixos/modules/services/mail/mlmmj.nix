@@ -109,9 +109,10 @@ in
           ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} ${spoolDir}
           ${lib.concatMapStrings (createList cfg.listDomain) cfg.mailLists}
           echo ${lib.concatMapStrings (virtual cfg.listDomain) cfg.mailLists} > ${stateDir}/virtuals
-          echo ${cfg.listDomain} mailman: > ${stateDir}/transports
-          echo ${lib.concatMapStrings (transport cfg.listDomain) cfg.mailLists} >> ${stateDir}/transports
-    '';
+          echo ${lib.concatMapStrings (transport cfg.listDomain) cfg.mailLists} > ${stateDir}/transports
+          ${pkgs.postfix}/bin/postmap ${stateDir}/virtuals
+          ${pkgs.postfix}/bin/postmap ${stateDir}/transports
+      '';
 
     systemd.services."mlmmj-maintd" = {
       description = "mlmmj maintenance daemon";

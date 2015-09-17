@@ -1,26 +1,41 @@
+{ debug ? false, ... } @ args:
+
 import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
 
-  debug = false;
+  testVMConfig = vmName: attrs: { config, pkgs, ... }: let
+    guestAdditions = pkgs.linuxPackages.virtualboxGuestAdditions;
 
-  testVMConfig = vmName: attrs: { config, pkgs, ... }: {
-    boot.kernelParams = let
-      miniInit = ''
-        #!${pkgs.stdenv.shell} -xe
-        export PATH="${pkgs.coreutils}/bin:${pkgs.utillinux}/bin"
+    miniInit = ''
+      #!${pkgs.stdenv.shell} -xe
+      export PATH="${pkgs.coreutils}/bin:${pkgs.utillinux}/bin"
 
-        ${pkgs.linuxPackages.virtualboxGuestAdditions}/bin/VBoxService
-        ${(attrs.vmScript or (const "")) pkgs}
+      mkdir -p /etc/dbus-1 /var/run/dbus
+      cat > /etc/passwd <<EOF
+      root:x:0:0::/root:/bin/false
+      messagebus:x:1:1::/var/run/dbus:/bin/false
+      EOF
+      cat > /etc/group <<EOF
+      root:x:0:
+      messagebus:x:1:
+      EOF
+      cp -v "${pkgs.dbus.daemon}/etc/dbus-1/system.conf" \
+        /etc/dbus-1/system.conf
+      "${pkgs.dbus.daemon}/bin/dbus-daemon" --fork --system
 
-        i=0
-        while [ ! -e /mnt-root/shutdown ]; do
-          sleep 10
-          i=$(($i + 10))
-          [ $i -le 120 ] || fail
-        done
+      ${guestAdditions}/bin/VBoxService
+      ${(attrs.vmScript or (const "")) pkgs}
 
-        rm -f /mnt-root/boot-done /mnt-root/shutdown
-      '';
-    in [
+      i=0
+      while [ ! -e /mnt-root/shutdown ]; do
+        sleep 10
+        i=$(($i + 10))
+        [ $i -le 120 ] || fail
+      done
+
+      rm -f /mnt-root/boot-done /mnt-root/shutdown
+    '';
+  in {
+    boot.kernelParams = [
       "console=tty0" "console=ttyS0" "ignore_loglevel"
       "boot.trace" "panic=1" "boot.panic_on_fail"
       "init=${pkgs.writeScript "mini-init.sh" miniInit}"
@@ -39,7 +54,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     ];
 
     boot.initrd.extraUtilsCommands = ''
-      copy_bin_and_libs "${pkgs.linuxPackages.virtualboxGuestAdditions}/bin/mount.vboxsf"
+      copy_bin_and_libs "${guestAdditions}/bin/mount.vboxsf"
       copy_bin_and_libs "${pkgs.utillinux}/bin/unshare"
       ${(attrs.extraUtilsCommands or (const "")) pkgs}
     '';
@@ -156,30 +171,26 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     ];
   in {
     machine = {
-      systemd.sockets = listToAttrs (singleton {
-        name = "vboxtestlog-${name}";
-        value = {
-          description = "VirtualBox Test Machine Log Socket";
-          wantedBy = [ "sockets.target" ];
-          before = [ "multi-user.target" ];
-          socketConfig.ListenStream = "/run/virtualbox-log-${name}.sock";
-          socketConfig.Accept = true;
-        };
-      });
+      systemd.sockets."vboxtestlog-${name}" = {
+        description = "VirtualBox Test Machine Log Socket For ${name}";
+        wantedBy = [ "sockets.target" ];
+        before = [ "multi-user.target" ];
+        socketConfig.ListenStream = "/run/virtualbox-log-${name}.sock";
+        socketConfig.Accept = true;
+      };
 
-      systemd.services = listToAttrs (singleton {
-        name = "vboxtestlog-${name}@";
-        value = {
-          description = "VirtualBox Test Machine Log";
-          serviceConfig.StandardInput = "socket";
-          serviceConfig.StandardOutput = "syslog";
-          serviceConfig.SyslogIdentifier = "GUEST-${name}";
-          serviceConfig.ExecStart = "${pkgs.coreutils}/bin/cat";
-        };
-      });
+      systemd.services."vboxtestlog-${name}@" = {
+        description = "VirtualBox Test Machine Log For ${name}";
+        serviceConfig.StandardInput = "socket";
+        serviceConfig.StandardOutput = "syslog";
+        serviceConfig.SyslogIdentifier = "GUEST-${name}";
+        serviceConfig.ExecStart = "${pkgs.coreutils}/bin/cat";
+      };
     };
 
     testSubs = ''
+      my ${"$" + name}_sharepath = '${sharePath}';
+
       sub checkRunning_${name} {
         my $cmd = 'VBoxManage list runningvms | grep -q "^\"${name}\""';
         my ($status, $out) = $machine->execute(ru $cmd);
@@ -286,8 +297,14 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     echo "$otherIP reachable" | ${pkgs.netcat}/bin/netcat -clp 5678 || :
   '';
 
+  sysdDetectVirt = pkgs: ''
+    ${pkgs.systemd}/bin/systemd-detect-virt > /mnt-root/result
+  '';
+
   vboxVMs = mapAttrs createVM {
     simple = {};
+
+    detectvirt.vmScript = sysdDetectVirt;
 
     test1.vmFlags = hostonlyVMFlags;
     test1.vmScript = dhcpScript;
@@ -307,7 +324,7 @@ in {
       mkVMConf = name: val: val.machine // { key = "${name}-config"; };
       vmConfigs = mapAttrsToList mkVMConf vboxVMs;
     in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
-    virtualisation.memorySize = 768;
+    virtualisation.memorySize = 1024;
     virtualisation.virtualbox.host.enable = true;
     users.extraUsers.alice.extraGroups = let
       inherit (config.virtualisation.virtualbox.host) enableHardening;
@@ -372,6 +389,18 @@ in {
 
     destroyVM_simple;
 
+    subtest "systemd-detect-virt", sub {
+      createVM_detectvirt;
+      vbm("startvm detectvirt");
+      waitForStartup_detectvirt;
+      waitForVMBoot_detectvirt;
+      shutdownVM_detectvirt;
+      my $result = $machine->succeed("cat '$detectvirt_sharepath/result'");
+      chomp $result;
+      die "systemd-detect-virt returned \"$result\" instead of \"oracle\""
+        if $result ne "oracle";
+    };
+
     subtest "net-hostonlyif", sub {
       createVM_test1;
       createVM_test2;
@@ -403,4 +432,4 @@ in {
       destroyVM_test2;
     };
   '';
-})
+}) args

@@ -8,12 +8,7 @@
 # http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-${gnome3.version}.1";
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell/${gnome3.version}/${name}.tar.xz";
-    sha256 = "00gjdfaznpnspb4jmjc19axiz6snd9drvqmzpq4sw0xh1ysgpncv";
-  };
+  inherit (import ./src.nix fetchurl) name src;
 
   # Needed to find /etc/NetworkManager/VPN
   configureFlags = [ "--sysconfdir=/etc" ];

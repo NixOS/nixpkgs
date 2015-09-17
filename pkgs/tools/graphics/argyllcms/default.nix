@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     curlOpts = "--user-agent 'Mozilla/5.0'";
   };
 
+  patches = [ ./gcc5.patch ];
+
   # The contents of this file comes from the Jamtop file from the
   # root of the ArgyllCMS distribution, rewritten to pick up Nixpkgs
   # library paths. When ArgyllCMS is updated, make sure that changes

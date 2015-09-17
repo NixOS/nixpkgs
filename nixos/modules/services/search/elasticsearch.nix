@@ -37,6 +37,12 @@ in {
       type = types.bool;
     };
 
+    package = mkOption {
+      description = "Elasticsearch package to use.";
+      default = pkgs.elasticsearch;
+      type = types.package;
+    };
+
     host = mkOption {
       description = "Elasticsearch listen address.";
       default = "127.0.0.1";
@@ -123,7 +129,7 @@ in {
       after = [ "network-interfaces.target" ];
       environment = { ES_HOME = cfg.dataDir; };
       serviceConfig = {
-        ExecStart = "${pkgs.elasticsearch}/bin/elasticsearch -Des.path.conf=${configDir} ${toString cfg.extraCmdLineOptions}";
+        ExecStart = "${cfg.package}/bin/elasticsearch -Des.path.conf=${configDir} ${toString cfg.extraCmdLineOptions}";
         User = "elasticsearch";
         PermissionsStartOnly = true;
       };
@@ -142,7 +148,7 @@ in {
       '';
     };
 
-    environment.systemPackages = [ pkgs.elasticsearch ];
+    environment.systemPackages = [ cfg.package ];
 
     users.extraUsers = singleton {
       name = "elasticsearch";

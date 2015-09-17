@@ -8,7 +8,7 @@
 
 let
 
-  basename = "gdb-7.9.1";
+  basename = "gdb-7.10";
 
   # Whether (cross-)building for GNU/Hurd.  This is an approximation since
   # having `stdenv ? cross' doesn't tell us if we're building `crossDrv' and
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "0h5sfg4ndhb8q4fxbq0hdxfjp35n6ih96f6x8yvb418s84x5976d";
+    sha256 = "1a08c9svaihqmz2mm44il1gwa810gmwkckns8b0y0v3qz52amgby";
   };
 
   # I think python is not a native input, but I leave it
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   configureFlags = with stdenv.lib;
     '' --with-gmp=${gmp} --with-mpfr=${mpfr} --with-system-readline
        --with-expat --with-libexpat-prefix=${expat}
+       --with-separate-debug-dir=/run/current-system/sw/lib/debug
     ''
     + optionalString (target != null) " --target=${target.config}"
     + optionalString (elem stdenv.system platforms.cygwin) "  --without-python";
