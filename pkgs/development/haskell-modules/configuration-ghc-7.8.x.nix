@@ -134,5 +134,8 @@ self: super: {
   hxt_9_3_1_7 = addBuildDepend super.hxt_9_3_1_7 self.network;
   hxt_9_3_1_10 = addBuildDepend super.hxt_9_3_1_10 self.network;
   hxt_9_3_1_12 = addBuildDepend super.hxt_9_3_1_12 self.network;
+  xss-sanitize = addBuildDepend super.xss-sanitize self.network;
+  xss-sanitize_0_3_5_4 = addBuildDepend super.xss-sanitize_0_3_5_4 self.network;
+  xss-sanitize_0_3_5_5 = addBuildDepend super.xss-sanitize_0_3_5_5 self.network;
 
 }
