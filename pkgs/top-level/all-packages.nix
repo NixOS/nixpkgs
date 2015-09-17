@@ -3169,6 +3169,8 @@ let
 
   tpm-luks = callPackage ../tools/security/tpm-luks { };
 
+  tthsum = callPackage ../applications/misc/tthsum { };
+
   chaps = callPackage ../tools/security/chaps { };
 
   trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
