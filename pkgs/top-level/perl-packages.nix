@@ -2039,11 +2039,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CPANMeta = buildPerlPackage {
-    name = "CPAN-Meta-2.142690";
+  CPANMeta = buildPerlPackage rec {
+    name = "CPAN-Meta-2.150005";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/CPAN-Meta-2.142690.tar.gz;
-      sha256 = "495770e22e91e3d2bd04dc364f05061cabacfdce35baa3868bc0c05733d145db";
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
+      sha256 = "04g7cfbx7vi8kqc9pwv7n3z95vimkbv0h7v6p1ky37gzz3nsw66j";
     };
     propagatedBuildInputs = [ ParseCPANMeta CPANMetaYAML CPANMetaRequirements JSONPP ];
     meta = {
