@@ -14094,7 +14094,7 @@ let
 
   sqlalchemy = self.sqlalchemy9.override rec {
     name = "SQLAlchemy-0.7.10";
-    disabled = isPy34;
+    disabled = isPy34 || isPy35;
     doCheck = !isPyPy;
 
     src = pkgs.fetchurl {
@@ -14113,7 +14113,7 @@ let
 
   sqlalchemy8 = self.sqlalchemy9.override rec {
     name = "SQLAlchemy-0.8.7";
-    disabled = isPy34;
+    disabled = isPy34 || isPy35;
     doCheck = !isPyPy;
 
     src = pkgs.fetchurl {
@@ -17139,7 +17139,7 @@ let
   IMAPClient = buildPythonPackage rec {
     name = "IMAPClient-${version}";
     version = "0.11";
-    disabled = isPy34;
+    disabled = isPy34 || isPy35;
 
     src = pkgs.fetchurl {
       url = "http://freshfoo.com/projects/IMAPClient/${name}.tar.gz";
