@@ -7780,6 +7780,11 @@ let
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
 
+  poppler_min = poppler.override { # TODO: maybe reduce even more
+    minimal = true;
+    suffix = "min";
+  };
+
   poppler_qt4 = poppler.override {
     qt4Support = true;
     suffix = "qt4";
