@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "miniupnpc-1.9.20150730";
+  name = "miniupnpc-1.9.20150917";
 
   src = fetchurl {
     url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
-    sha256 = "0156hssql8iaziwba8ag7y39lchrgwcvlhck2d2qak1vznqzlr0x";
+    sha256 = "1nhiixfmlagcv9srni19r95n1v069rlq98fn8x4xpsf154lw71rh";
     name = "${name}.tar.gz";
   };
 
