@@ -8,6 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "0qwfpb5ipp2l76v11arghq5mr0sjc6xhjfg8a0kgsaw5qpib1dzf";
   };
 
+  # Should be removed with >=2.4.43
+  patches = [ ./CVE-2015-6908.patch ];
+
   outputs = [ "out" "man" ];
 
   buildInputs = [ openssl cyrus_sasl db groff ];
