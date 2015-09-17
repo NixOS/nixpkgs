@@ -2,38 +2,40 @@
 
 import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
 
-  testVMConfig = vmName: attrs: { config, pkgs, ... }: {
-    boot.kernelParams = let
-      miniInit = ''
-        #!${pkgs.stdenv.shell} -xe
-        export PATH="${pkgs.coreutils}/bin:${pkgs.utillinux}/bin"
+  testVMConfig = vmName: attrs: { config, pkgs, ... }: let
+    guestAdditions = pkgs.linuxPackages.virtualboxGuestAdditions;
 
-        mkdir -p /etc/dbus-1 /var/run/dbus
-        cat > /etc/passwd <<EOF
-        root:x:0:0::/root:/bin/false
-        messagebus:x:1:1::/var/run/dbus:/bin/false
-        EOF
-        cat > /etc/group <<EOF
-        root:x:0:
-        messagebus:x:1:
-        EOF
-        cp -v "${pkgs.dbus.daemon}/etc/dbus-1/system.conf" \
-          /etc/dbus-1/system.conf
-        "${pkgs.dbus.daemon}/bin/dbus-daemon" --fork --system
+    miniInit = ''
+      #!${pkgs.stdenv.shell} -xe
+      export PATH="${pkgs.coreutils}/bin:${pkgs.utillinux}/bin"
 
-        ${pkgs.linuxPackages.virtualboxGuestAdditions}/bin/VBoxService
-        ${(attrs.vmScript or (const "")) pkgs}
+      mkdir -p /etc/dbus-1 /var/run/dbus
+      cat > /etc/passwd <<EOF
+      root:x:0:0::/root:/bin/false
+      messagebus:x:1:1::/var/run/dbus:/bin/false
+      EOF
+      cat > /etc/group <<EOF
+      root:x:0:
+      messagebus:x:1:
+      EOF
+      cp -v "${pkgs.dbus.daemon}/etc/dbus-1/system.conf" \
+        /etc/dbus-1/system.conf
+      "${pkgs.dbus.daemon}/bin/dbus-daemon" --fork --system
 
-        i=0
-        while [ ! -e /mnt-root/shutdown ]; do
-          sleep 10
-          i=$(($i + 10))
-          [ $i -le 120 ] || fail
-        done
+      ${guestAdditions}/bin/VBoxService
+      ${(attrs.vmScript or (const "")) pkgs}
 
-        rm -f /mnt-root/boot-done /mnt-root/shutdown
-      '';
-    in [
+      i=0
+      while [ ! -e /mnt-root/shutdown ]; do
+        sleep 10
+        i=$(($i + 10))
+        [ $i -le 120 ] || fail
+      done
+
+      rm -f /mnt-root/boot-done /mnt-root/shutdown
+    '';
+  in {
+    boot.kernelParams = [
       "console=tty0" "console=ttyS0" "ignore_loglevel"
       "boot.trace" "panic=1" "boot.panic_on_fail"
       "init=${pkgs.writeScript "mini-init.sh" miniInit}"
@@ -52,7 +54,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     ];
 
     boot.initrd.extraUtilsCommands = ''
-      copy_bin_and_libs "${pkgs.linuxPackages.virtualboxGuestAdditions}/bin/mount.vboxsf"
+      copy_bin_and_libs "${guestAdditions}/bin/mount.vboxsf"
       copy_bin_and_libs "${pkgs.utillinux}/bin/unshare"
       ${(attrs.extraUtilsCommands or (const "")) pkgs}
     '';
