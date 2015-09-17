@@ -9,6 +9,7 @@ let
     inherit fetchurl stdenv curl openssl zlib expat perl python gettext gnugrep
       asciidoc xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt cpio tcl
       tk makeWrapper subversionClient gzip libiconv;
+    inherit (darwin.apple_sdk.frameworks) Security;
     texinfo = texinfo5;
     svnSupport = false;		# for git-svn support
     guiSupport = false;		# requires tcl/tk
