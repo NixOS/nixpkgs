@@ -1,6 +1,6 @@
-import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
+{ debug ? false, ... } @ args:
 
-  debug = false;
+import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
 
   testVMConfig = vmName: attrs: { config, pkgs, ... }: {
     boot.kernelParams = let
@@ -416,4 +416,4 @@ in {
       destroyVM_test2;
     };
   '';
-})
+}) args
