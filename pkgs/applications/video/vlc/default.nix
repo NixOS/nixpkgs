@@ -6,7 +6,7 @@
 , mpeg2dec, udev, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, liboggz
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
-, libvdpau
+, libvdpau, libsamplerate
 , onlyLibVLC ? false
 , qt4 ? null, qt5 ? null, withQt5 ? false
 , jackSupport ? false
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       udev gnutls avahi libcddb SDL SDL_image libmtp unzip taglib
       libkate libtiger libv4l samba liboggz libass libdvbpsi libva
       xlibs.xlibs xlibs.libXv xlibs.libXvMC xlibs.libXpm xlibs.xcbutilkeysyms
-      libdc1394 libraw1394 libopus libebml libmatroska libvdpau
+      libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate
     ]
     ++ (if withQt5 then with qt5; [ base ] else [qt4])
     ++ optional jackSupport libjack2;
@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
       "--enable-ncurses"
       "--enable-vdpau"
       "--enable-dvdnav"
+      "--enable-samplerate"
     ]
     ++ optional onlyLibVLC  "--disable-vlc";
 
