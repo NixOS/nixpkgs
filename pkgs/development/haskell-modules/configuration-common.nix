@@ -315,6 +315,10 @@ self: super: {
   http-client_0_4_8 = dontCheck super.http-client_0_4_8;
   http-client_0_4_9 = dontCheck super.http-client_0_4_9;
   http-client = dontCheck super.http-client;            # http://hydra.cryp.to/build/501430/nixlog/1/raw
+  http-conduit_2_1_5_1 = dontCheck super.http-conduit_2_1_5_1;
+  http-conduit_2_1_5 = dontCheck super.http-conduit_2_1_5;
+  http-conduit_2_1_7_1 = dontCheck super.http-conduit_2_1_7_1;
+  http-conduit_2_1_7_2 = dontCheck super.http-conduit_2_1_7_2;
   http-conduit = dontCheck super.http-conduit;          # http://hydra.cryp.to/build/501966/nixlog/1/raw
   js-jquery_1_11_1 = dontCheck super.js-jquery_1_11_1;
   js-jquery_1_11_2 = dontCheck super.js-jquery_1_11_2;
