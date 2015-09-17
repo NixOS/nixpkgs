@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libressl-${version}";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchurl {
     url    = "mirror://openbsd/LibreSSL/${name}.tar.gz";
-    sha256 = "0551i4jbs81ark3jy6nycqpyqn7rg30nvcdjvdg58s6l6fgv1570";
+    sha256 = "10nq2rpyzgl7xhdip9mmn7hzb6hcjffbjcb04jchxmlivwdc5k51";
   };
 
   enableParallelBuilding = true;
