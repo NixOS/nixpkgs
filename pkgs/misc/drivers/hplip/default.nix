@@ -6,20 +6,18 @@
 
 let
 
-  # Version 3.15.7 breaks certain (but not all) PCL-based printers:
-  # https://github.com/NixOS/nixpkgs/commit/b0e46fc3ead209ef24ed6214bd41ef6e604af54f
-  version = "3.15.6";
+  version = "3.15.9";
 
   name = "hplip-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "1jbnjw7vrn1qawrjfdv8j58w69q8ki1qkzvlh0nk8nxacpp17i9h";
+    sha256 = "0vcxz3gsqcamlzx61xm77h7c769ya8kdhzwafa9w2wvkf3l8zxd1";
   };
 
   plugin = fetchurl {
     url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "1rymxahz12s1s37rri5qyvka6q0yi0yai08kgspg24176ry3a3fx";
+    sha256 = "1ahalw83xm8x0h6hljhnkknry1hny9flkrlzcymv8nmwgic0kjgs";
   };
 
   hplip_state =
