@@ -6663,7 +6663,9 @@ let
     usePulseAudio = config.pulseaudio or true;
   };
 
-  libabw = callPackage ../development/libraries/libabw { };
+  libabw = callPackage ../development/libraries/libabw {
+    boost = boost158;
+  };
 
   libantlr3c = callPackage ../development/libraries/libantlr3c {};
 
