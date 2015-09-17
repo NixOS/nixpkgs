@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unicodeSupport ? true, cplusplusSupport ? true
+{ stdenv, fetchurl, autoreconfHook, unicodeSupport ? true, cplusplusSupport ? true
 , windows ? null
 }:
 
@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "17bqykp604p7376wj3q2nmjdhrb6v1ny8q08zdwi7qvc02l9wrsi";
   };
 
+  nativeBuildInputs = [ autoreconfHook ];
+
   # A bundle of fixes which should be removed for 8.38
-  patches = [ ./fixes.patch ];
+  patchPhase = ''
+    patch -p0 -i ${./fixes.patch}
+  '';
 
   outputs = [ "out" "doc" "man" ];
 
