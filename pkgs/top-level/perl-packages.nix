@@ -3523,7 +3523,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Compile-2.021.tar.gz;
       sha256 = "665c48de1c7c33e9b00e8ddc0204d02b45009e60b9b65033fa4a832dfe9fc808";
     };
-    buildInputs = [ DistCheckConflicts DistZilla JSON ModuleBuildTiny PathClass TestCheckDeps TestWarnings ];
+    buildInputs = [ DistCheckConflicts DistZilla JSON ModuleBuildTiny PathClass TestCheckDeps TestWarnings ModuleMetadata ];
     propagatedBuildInputs = [ DataSection DistCheckConflicts DistZilla Moose PathTiny SubExporterForMethods namespaceautoclean ModuleCoreList ];
     meta = {
       homepage = http://search.cpan.org/dist/Dist-Zilla-Plugin-Test-Compile/;
@@ -7029,7 +7029,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/E/ET/ETHER/Moose-2.1213.tar.gz;
       sha256 = "0f3b196ae67dc1daaa43c44ae7703f27c4f92c391ad3e252a90e90c50c851e03";
     };
-    buildInputs = [ CPANMetaCheck CPANMetaRequirements DistCheckConflicts TestCleanNamespaces TestFatal TestRequires ];
+    buildInputs = [ CPANMetaCheck CPANMetaRequirements DistCheckConflicts TestCleanNamespaces TestFatal TestRequires ModuleMetadata ];
     propagatedBuildInputs = [ ClassLoad ClassLoadXS DataOptList DevelGlobalDestruction DevelStackTrace DistCheckConflicts EvalClosure ListMoreUtils MROCompat ModuleRuntime ModuleRuntimeConflicts PackageDeprecationManager PackageStash PackageStashXS ParamsUtil SubExporter SubName TaskWeaken TryTiny ];
     meta = {
       homepage = http://moose.perl.org/;
@@ -7343,7 +7343,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-LazyRequire-0.10.tar.gz;
       sha256 = "a555f80c0e91bc428f040015f00dd98f3c022704ec089516b9b3507f3d437090";
     };
-    buildInputs = [ TestCheckDeps TestFatal ];
+    buildInputs = [ TestCheckDeps TestFatal ModuleMetadata ];
     propagatedBuildInputs = [ Moose aliased namespaceautoclean ];
     meta = {
       homepage = https://github.com/karenetheridge/moosex-lazyrequire;
@@ -7373,7 +7373,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-MethodAttributes-0.28.tar.gz;
       sha256 = "0srk85z6py9brw1jfvacd76y6219wycq3dj0wackbkmmbq04ln0g";
     };
-    buildInputs = [ namespaceautoclean TestCheckDeps TestException ];
+    buildInputs = [ namespaceautoclean TestCheckDeps TestException ModuleMetadata ];
     propagatedBuildInputs = [ Moose MooseXTypes namespaceautoclean ];
     meta = {
       homepage = https://github.com/karenetheridge/moosex-methodattributes;
@@ -7456,7 +7456,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Role-WithOverloading-0.13.tar.gz;
       sha256 = "01mqpvbz7yw993918hgp72vl22i6mgicpq5b3zrrsp6vl8sqj2sw";
     };
-    buildInputs = [ TestCheckDeps TestNoWarnings ];
+    buildInputs = [ TestCheckDeps TestNoWarnings ModuleMetadata];
     propagatedBuildInputs = [ aliased Moose namespaceautoclean namespaceclean ];
     meta = {
       homepage = http://metacpan.org/release/MooseX-Role-WithOverloading;
@@ -7638,7 +7638,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-Path-Tiny-0.006.tar.gz;
       sha256 = "0260c6fbbf84d411b145238ffd92a73f754bd92434448d9f78798fba0a2dfdd6";
     };
-    buildInputs = [ Filepushd ModuleBuildTiny TestCheckDeps TestFatal ];
+    buildInputs = [ Filepushd ModuleBuildTiny TestCheckDeps TestFatal ModuleMetadata ];
     propagatedBuildInputs = [ Moose MooseXTypes MooseXTypesStringlike PathTiny ];
     meta = {
       homepage = https://github.com/karenetheridge/moosex-types-path-tiny;
@@ -10432,7 +10432,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/L/LE/LEONT/Test-CheckDeps-0.006.tar.gz;
       sha256 = "774c1455566d11746118fd95305d1dbd111af86eac78058918e72468c43d9bcb";
     };
-    buildInputs = [ ModuleBuildTiny ];
+    buildInputs = [ ModuleBuildTiny ModuleMetadata ];
     propagatedBuildInputs = [ CPANMetaCheck ];
     meta = {
       description = "Check for presence of dependencies";
