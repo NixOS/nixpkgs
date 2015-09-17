@@ -2327,12 +2327,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptSSLeay = buildPerlPackage rec {
-    name = "Crypt-SSLeay-0.57";
+    name = "Crypt-SSLeay-0.72";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DL/DLAND/${name}.tar.gz";
-      sha256 = "1f0i5y99ly39vf86jpzwqz8mkz1460vryv85jgqmfx007p781s0l";
+      url = "mirror://cpan/authors/id/N/NA/NANIS/${name}.tar.gz";
+      sha256 = "1s7zm6ph37kg8jzaxnhi4ff4snxl7mi5h14arxbri0kp6s0lzlzm";
     };
-    makeMakerFlags = "--lib=${pkgs.openssl}/lib";
+    makeMakerFlags = "--libpath=${pkgs.openssl}/lib --incpath=${pkgs.openssl}/include";
+    buildInputs = [ PathClass TryTiny ];
   };
 
   CSSDOM = buildPerlPackage rec {
