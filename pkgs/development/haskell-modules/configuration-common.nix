@@ -305,7 +305,7 @@ self: super: {
   http-client_0_4_19 = dontCheck super.http-client_0_4_19;
   http-client_0_4_20 = dontCheck super.http-client_0_4_20;
   http-client_0_4_21 = dontCheck super.http-client_0_4_21;
-  http-client_0_4_22_1 = dontCheck super.http-client_0_4_22_1;
+  http-client_0_4_22 = dontCheck super.http-client_0_4_22;
   http-client_0_4_6_1 = dontCheck super.http-client_0_4_6_1;
   http-client_0_4_6_2 = dontCheck super.http-client_0_4_6_2;
   http-client_0_4_6 = dontCheck super.http-client_0_4_6;
