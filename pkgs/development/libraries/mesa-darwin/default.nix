@@ -2,6 +2,7 @@
 , python, libxml2Python, file, expat, makedepend, xorg, llvm, libffi, libvdpau
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
 , enableExtraFeatures ? false # not maintained
+, darwin
 }:
 
 let
@@ -22,10 +23,18 @@ let
       presentproto
       libX11 libXext libxcb libXt libxshmfence
       libffi libvdpau
+    ] ++ stdenv.lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.OpenGL
+      darwin.apple_sdk.sdk
+      darwin.apple_sdk.libs.Xplugin
     ];
 
     postUnpack = ''
       ln -s darwin $sourceRoot/configs/current
+    '';
+
+    preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace bin/mklib --replace g++ clang++
     '';
 
     patches = [

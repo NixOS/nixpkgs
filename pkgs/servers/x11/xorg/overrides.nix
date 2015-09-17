@@ -93,6 +93,10 @@ in
     outputs = [ "out" "man" ];
   };
 
+  libAppleWM = attrs: attrs // {
+    propagatedBuildInputs = [ args.apple_sdk.frameworks.ApplicationServices ];
+  };
+
   libXfont = attrs: attrs // {
     propagatedBuildInputs = [ args.freetype ]; # propagate link reqs. like bzip2
     # prevents "misaligned_stack_error_entering_dyld_stub_binder"
