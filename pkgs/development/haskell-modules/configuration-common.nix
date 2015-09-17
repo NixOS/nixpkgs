@@ -892,4 +892,7 @@ self: super: {
   # Test suite won't compile.
   semigroupoids_5_0_0_3 = dontCheck super.semigroupoids_5_0_0_3;
 
+  # This is fixed in newer versions.
+  zip-archive_0_2_3_5 = addBuildTool super.zip-archive_0_2_3_5 pkgs.zip;
+
 }
