@@ -9,7 +9,7 @@ if [ "$project" == "--help" ]; then
   exit 0
 fi
 
-baseVersion=$2
+majorVersion=$2
 
 if [ -z "$project" ]; then
   echo "No project specified, exiting"
@@ -28,15 +28,15 @@ else
   }
 fi
 
-if [ -z "$baseVersion" ]; then
+if [ -z "$majorVersion" ]; then
   echo "Looking for available versions..." >&2
   available_baseversions=( `ls_ftp ftp://${GNOME_FTP}/${project} | grep '[0-9]\.[0-9]' | sort -t. -k1,1n -k 2,2n` )
   echo -e "The following versions are available:\n ${available_baseversions[@]}" >&2
   echo -en "Choose one of them: " >&2
-  read baseVersion
+  read majorVersion
 fi
 
-FTPDIR="${GNOME_FTP}/${project}/${baseVersion}"
+FTPDIR="${GNOME_FTP}/${project}/${majorVersion}"
 
 #version=`curl -l ${FTPDIR}/ 2>/dev/null | grep LATEST-IS | sed -e s/LATEST-IS-//`
 # gnome's LATEST-IS is broken. Do not trust it.
@@ -69,14 +69,14 @@ echo "Latest version is: ${version}" >&2
 
 name=${project}-${version}
 echo "Fetching .sha256 file" >&2
-curl -O http://${FTPDIR}/${name}.sha256sum
+sha256out=$(curl -s http://${FTPDIR}/${name}.sha256sum)
 
 extensions=( "xz" "bz2" "gz" )
 echo "Choosing archive extension (known are ${extensions[@]})..." >&2
 for ext in ${extensions[@]}; do
-  if grep "\\.tar\\.${ext}$" ${name}.sha256sum >& /dev/null; then
+  if echo -e "$sha256out" | grep -q "\\.tar\\.${ext}$"; then
     ext_pref=$ext
-    sha256=$(grep "\\.tar\\.${ext}$" ${name}.sha256sum | cut -f1 -d\ )
+    sha256=$(echo -e "$sha256out" | grep "\\.tar\\.${ext}$" | cut -f1 -d\ )
     break
   fi
 done
@@ -84,12 +84,12 @@ sha256=`nix-hash --to-base32 --type sha256 $sha256`
 echo "Chosen ${ext_pref}, hash is ${sha256}" >&2
 
 cat <<EOF
+{
   name = "${project}-${version}";
 
   src = fetchurl {
-    url = mirror://gnome/sources/${project}/${baseVersion}/${project}-${version}.tar.${ext_pref};
+    url = mirror://gnome/sources/${project}/${majorVersion}/${project}-${version}.tar.${ext_pref};
     sha256 = "${sha256}";
   };
+}
 EOF
-
-rm -v ${name}.sha256sum >&2
