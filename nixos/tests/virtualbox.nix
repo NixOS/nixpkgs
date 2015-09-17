@@ -171,27 +171,21 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     ];
   in {
     machine = {
-      systemd.sockets = listToAttrs (singleton {
-        name = "vboxtestlog-${name}";
-        value = {
-          description = "VirtualBox Test Machine Log Socket";
-          wantedBy = [ "sockets.target" ];
-          before = [ "multi-user.target" ];
-          socketConfig.ListenStream = "/run/virtualbox-log-${name}.sock";
-          socketConfig.Accept = true;
-        };
-      });
+      systemd.sockets."vboxtestlog-${name}" = {
+        description = "VirtualBox Test Machine Log Socket";
+        wantedBy = [ "sockets.target" ];
+        before = [ "multi-user.target" ];
+        socketConfig.ListenStream = "/run/virtualbox-log-${name}.sock";
+        socketConfig.Accept = true;
+      };
 
-      systemd.services = listToAttrs (singleton {
-        name = "vboxtestlog-${name}@";
-        value = {
-          description = "VirtualBox Test Machine Log";
-          serviceConfig.StandardInput = "socket";
-          serviceConfig.StandardOutput = "syslog";
-          serviceConfig.SyslogIdentifier = "GUEST-${name}";
-          serviceConfig.ExecStart = "${pkgs.coreutils}/bin/cat";
-        };
-      });
+      systemd.services."vboxtestlog-${name}@" = {
+        description = "VirtualBox Test Machine Log";
+        serviceConfig.StandardInput = "socket";
+        serviceConfig.StandardOutput = "syslog";
+        serviceConfig.SyslogIdentifier = "GUEST-${name}";
+        serviceConfig.ExecStart = "${pkgs.coreutils}/bin/cat";
+      };
     };
 
     testSubs = ''
