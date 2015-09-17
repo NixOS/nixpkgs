@@ -7704,11 +7704,11 @@ let
 
 
   libcloud = buildPythonPackage (rec {
-    name = "libcloud-0.14.1";
+    name = "libcloud-0.18.0";
 
     src = pkgs.fetchurl {
-      url = https://pypi.python.org/packages/source/a/apache-libcloud/apache-libcloud-0.14.1.tar.bz2;
-      sha256 = "1l6190pjv54c7y8pzr089ij727qv7bqhhaznr2mkvimgr1wzsql5";
+      url = https://pypi.python.org/packages/source/a/apache-libcloud/apache-libcloud-0.18.0.tar.bz2;
+      sha256 = "0ahdp14ddly074qg5cksxdhqaws0kj445xmhz1y7lzspsp6fk1xg";
     };
 
     buildInputs = with self; [ mock ];
