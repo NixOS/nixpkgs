@@ -419,7 +419,7 @@ in
     users.motd = mkOption {
       default = null;
       example = "Today is Sweetmorn, the 4th day of The Aftermath in the YOLD 3178.";
-      type = types.nullOr types.string;
+      type = types.nullOr types.lines;
       description = "Message of the day shown to users when they log in.";
     };
 

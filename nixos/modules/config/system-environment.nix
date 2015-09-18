@@ -23,20 +23,7 @@ in
         strings.  The latter is concatenated, interspersed with colon
         characters.
       '';
-      type = types.attrsOf (mkOptionType {
-        name = "a string or a list of strings";
-        merge = loc: defs:
-          let
-            defs' = filterOverrides defs;
-            res = (head defs').value;
-          in
-          if isList res then concatLists (getValues defs')
-          else if lessThan 1 (length defs') then
-            throw "The option `${showOption loc}' is defined multiple times, in ${showFiles (getFiles defs)}."
-          else if !isString res then
-            throw "The option `${showOption loc}' does not have a string value, in ${showFiles (getFiles defs)}."
-          else res;
-      });
+      type = types.attrsOf (types.loeOf types.str);
       apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
     };
 
