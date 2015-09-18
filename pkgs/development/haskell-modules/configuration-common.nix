@@ -292,6 +292,8 @@ self: super: {
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
   hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
   holy-project = dontCheck super.holy-project;          # http://hydra.cryp.to/build/502002/nixlog/1/raw
+  holy-project_0_1_1_1 = dontCheck super.holy-project_0_1_1_1;
+  holy-project_0_2_0_0   = dontCheck super.holy-project_0_2_0_0  ;
   hoogle = overrideCabal super.hoogle (drv: { testTarget = "--test-option=--no-net"; });
   http-client_0_4_11_1 = dontCheck super.http-client_0_4_11_1;
   http-client_0_4_11_2 = dontCheck super.http-client_0_4_11_2;
