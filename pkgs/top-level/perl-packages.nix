@@ -1397,6 +1397,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  CHI = buildPerlPackage rec {
+    name = "CHI-0.60";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JS/JSWARTZ/${name}.tar.gz";
+      sha256 = "c7f1a2b3570a8fede484e933f89ba1729e0abd05935791d146c522dd120ee851";
+    };
+    buildInputs = [ TestClass TestDeep TestException TestWarn TimeDate ];
+    propagatedBuildInputs = [ CarpAssert ClassLoad DataUUID DigestJHash HashMoreUtils JSONMaybeXS ListMoreUtils LogAny Moo MooXTypesMooseLike MooXTypesMooseLikeNumeric StringRewritePrefix TaskWeaken TimeDuration TimeDurationParse TryTiny ];
+    meta = {
+      description = "Unified cache handling interface";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   ClassAccessor = buildPerlPackage {
     name = "Class-Accessor-0.34";
     src = fetchurl {
@@ -2754,6 +2769,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  DateTimeFormatMySQL = buildPerlPackage rec {
+    name = "DateTime-Format-MySQL-0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XM/XMIKEW/${name}.tar.gz";
+      sha256 = "26d0348a930aa34d3b33ec1b2a9d9629f2ee78234e224ca74d594703922ca2e9";
+    };
+    propagatedBuildInputs = [ DateTime DateTimeFormatBuilder ];
+    meta = {
+      description = "Parse and format MySQL dates and times";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   DateTimeFormatPg = buildPerlPackage {
     name = "DateTime-Format-Pg-0.16008";
     src = fetchurl {
@@ -3305,6 +3334,19 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
+    };
+  };
+
+  DigestJHash = buildPerlPackage rec {
+    name = "Digest-JHash-0.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "ba77919b7b7a1b6f222f1bb5a7a34d88b1a92093e40a2aec37352cb38926ada3";
+    };
+    meta = {
+      description = "Perl extension for 32 bit Jenkins Hashing Algorithm";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -4426,6 +4468,26 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ CryptRijndael ];
   };
 
+  FileLibMagic = buildPerlPackage rec {
+    name = "File-LibMagic-1.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
+      sha256 = "61f92c3137a3b86d63e61313b51aa2673991110d655eee792ea11c68bf2c0092";
+    };
+    buildInputs = [ TestFatal pkgs.file ];
+    makeMakerFlags = "--lib=${pkgs.file}/lib";
+    preCheck = ''
+      substituteInPlace t/oo-api.t \
+        --replace "/usr/share/file/magic.mgc" "${pkgs.file}/share/misc/magic.mgc"
+    '';
+    meta = {
+      homepage = http://metacpan.org/release/File::LibMagic;
+      description = "Determine MIME types of data or files using libmagic";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   FileListing = buildPerlPackage rec {
     name = "File-Listing-6.04";
     src = fetchurl {
@@ -4575,6 +4637,21 @@ let self = _self // overrides; _self = with self; {
       description = "Simple and Efficient Reading/Writing/Modifying of Complete Files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       platforms = stdenv.lib.platforms.linux;
+    };
+  };
+
+  FileUtil = buildPerlPackage rec {
+    name = "File-Util-4.132140";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOMMY/${name}.tar.gz";
+      sha256 = "4233c493468da8b34f2df19b191aaa400f328d877c8c023605e43385976a99d1";
+    };
+    buildInputs = [ TestFatal TestNoWarnings ];
+    meta = {
+      homepage = https://github.com/tommybutler/file-util/wiki;
+      description = "Easy, versatile, portable file handling";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -4917,6 +4994,19 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Recursively merge two or more hashes, simply";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  HashMoreUtils = buildPerlModule rec {
+    name = "Hash-MoreUtils-0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RE/REHSACK/${name}.tar.gz";
+      sha256 = "5e9c8458457eb18315a5669e3bef68488cd5ed8c2220011ac7429ff983288ab1";
+    };
+    meta = {
+      description = "Provide the stuff missing in Hash::Util";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -6160,16 +6250,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  LogAny = buildPerlPackage {
+  LogAny = buildPerlPackage rec {
     name = "Log-Any-1.032";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Log-Any-1.032.tar.gz;
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
       sha256 = "808558fa42aa96365ed0af773973a5618b4ad50511d81fc7548f67133efdb956";
     };
     meta = {
       homepage = https://github.com/dagolden/Log-Any;
       description = "Bringing loggers and listeners together";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -6201,6 +6292,20 @@ let self = _self // overrides; _self = with self; {
       license = stdenv.lib.licenses.artistic2;
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
+    };
+  };
+
+  LogHandler = buildPerlPackage rec {
+    name = "Log-Handler-0.87";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BL/BLOONIX/${name}.tar.gz";
+      sha256 = "aaf68894ddf51aeaec7e6e22069b5840994517a8937cc6ceaff4d73cee2cf3ed";
+    };
+    propagatedBuildInputs = [ ParamsValidate ];
+    meta = {
+      description = "Log messages to several outputs";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -7048,6 +7153,21 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1489almsam2zcrs5039sh0y88gjicwna8kws8j2jgfs8bpcf4dgf";
     };
     propagatedBuildInputs = [ Moo TestFatal ];
+  };
+
+  MooXTypesMooseLikeNumeric = buildPerlPackage rec {
+    name = "MooX-Types-MooseLike-Numeric-1.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MATEU/${name}.tar.gz";
+      sha256 = "6186f75ab2747723fd979249ec6ee0c4550f5b47aa50c0d222cc7d3590182bb6";
+    };
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ MooXTypesMooseLike ];
+    meta = {
+      description = "Moo types for numbers";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
   };
 
   MooseAutobox = buildPerlPackage {
@@ -10438,6 +10558,21 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Check for presence of dependencies";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TestClass = buildPerlPackage rec {
+    name = "Test-Class-0.50";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "099154ed8caf3ff97c71237fab952264ac1c03d9270737a56071cabe65991350";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [ MROCompat ModuleRuntime TryTiny ];
+    meta = {
+      description = "Easily create test classes in an xUnit/JUnit style";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
