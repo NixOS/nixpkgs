@@ -80,6 +80,8 @@ stdenv.mkDerivation {
     ++ optional (!enablePluginVcalendar) "--disable-vcalendar-plugin"
     ++ optional (!enableSpellcheck) "--disable-enchant";
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     mkdir -p $out/share/applications
     cp claws-mail.desktop $out/share/applications
