@@ -7896,6 +7896,8 @@ let
 
   pygame = callPackage ../development/python-modules/pygame { };
 
+  pygame3 = callPackage ../development/python-modules/pygame/py3.nix { inherit (python3Packages) buildPythonPackage; };
+
   pygobject = pythonPackages.pygobject;
 
   pygobject3 = pythonPackages.pygobject3;
