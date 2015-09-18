@@ -99,7 +99,9 @@ let
   # makes it bootable.
   baseSystem = showWarnings (
     if [] == failed then pkgs.stdenv.mkDerivation {
-      name = "nixos-${config.system.nixosVersion}";
+      name = let hn = config.networking.hostName;
+                 nn = if (hn != "") then hn else "unnamed";
+          in "nixos-system-${nn}-${config.system.nixosVersion}";
       preferLocalBuild = true;
       allowSubstitutes = false;
       buildCommand = systemBuilder;

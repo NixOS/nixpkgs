@@ -26,7 +26,7 @@ in
               ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -O vpc $diskImage $out/disk.vhd
               rm $diskImage
             '';
-          diskImageBase = "nixos-${config.system.nixosVersion}-${pkgs.stdenv.system}.raw";
+          diskImageBase = "nixos-image-${config.system.nixosVersion}-${pkgs.stdenv.system}.raw";
           buildInputs = [ pkgs.utillinux pkgs.perl ];
           exportReferencesGraph =
             [ "closure" config.system.build.toplevel ];
