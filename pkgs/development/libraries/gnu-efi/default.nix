@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnu-efi-${version}";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnu-efi/${name}.tar.bz2";
-    sha256 = "1mxl6xarwickhssn0nc5hyvayyf2cjh5p10l37jd1ymirl75hjqr";
+    sha256 = "1jxlypkgb8bd1c114x96i699ib0glb5aca9dv56j377x2ldg4c65";
   };
 
   buildInputs = [ pciutils ];
