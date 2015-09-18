@@ -471,6 +471,9 @@ self: super: {
   separated = dontCheck super.separated;
   shadowsocks = dontCheck super.shadowsocks;
   shake-language-c = dontCheck super.shake-language-c;
+  shake-language-c_0_6_3 = dontCheck super.shake-language-c_0_6_3;
+  shake-language-c_0_6_4 = dontCheck super.shake-language-c_0_6_4;
+  shake-language-c_0_8_0 = dontCheck super.shake-language-c_0_8_0;
   static-resources = dontCheck super.static-resources;
   strive = dontCheck super.strive;                      # fails its own hlint test with tons of warnings
   svndump = dontCheck super.svndump;
