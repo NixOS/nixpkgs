@@ -812,6 +812,8 @@ let
 
   ddate = callPackage ../tools/misc/ddate { };
 
+  deis = goPackages.deis.bin // { outputs = [ "bin" ]; };
+
   dfilemanager = callPackage ../applications/misc/dfilemanager { };
 
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
