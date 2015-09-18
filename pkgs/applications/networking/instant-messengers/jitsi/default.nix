@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -a lib $out/
+    rm -rf $out/lib/native/solaris
     cp -a sc-bundles $out/
     mkdir $out/bin
     cp resources/install/generic/run.sh $out/bin/jitsi
