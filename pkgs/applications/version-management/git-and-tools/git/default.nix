@@ -1,6 +1,6 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio, gnugrep, gzip
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
-, libxslt, tcl, tk, makeWrapper, libiconv, Security
+, libxslt, tcl, tk, makeWrapper, libiconv
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
 , guiSupport
 , withManual ? true
@@ -28,19 +28,10 @@ stdenv.mkDerivation {
     ./ssl-cert-file.patch
   ];
 
-  __impureHostDeps = [
-    "/System/Library/Frameworks/Security.framework/Versions/A/Security"
-  ];
-
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ]
-    ++ stdenv.lib.optionals guiSupport [tcl tk]
-    ++ stdenv.lib.optional stdenv.isDarwin [ Security ];
-
-  postBuild = stdenv.lib.optionalString stdenv.isDarwin ''
-    make -C contrib/credential/osxkeychain
-  '';
+    ++ stdenv.lib.optionals guiSupport [tcl tk];
 
   # required to support pthread_cancel()
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
@@ -64,14 +55,12 @@ stdenv.mkDerivation {
       }
 
       # Install git-subtree.
-      make -C contrib/subtree install ${stdenv.lib.optionalString withManual "install-doc"}
+      pushd contrib/subtree
+      make
+      make install ${stdenv.lib.optionalString withManual "install-doc"}
+      popd
       rm -rf contrib/subtree
 
-    '' + stdenv.lib.optionalString stdenv.isDarwin ''
-      install -m 755 contrib/credential/osxkeychain/git-credential-osxkeychain $out/libexec/git-core
-      rm -rf contrib/credential/osxkeychain
-
-    '' + ''
       # Install contrib stuff.
       mkdir -p $out/share/git
       mv contrib $out/share/git/
