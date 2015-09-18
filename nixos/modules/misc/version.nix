@@ -30,6 +30,29 @@ in
       '';
     };
 
+    nixosLabel = mkOption {
+      type = types.str;
+      description = ''
+        NixOS version name to be used in the names of generated
+        outputs and boot labels.
+
+        If you ever wanted to influence the labels in your GRUB menu,
+        this is option is for you.
+
+        Can be set directly or with <envar>NIXOS_LABEL</envar>
+        environment variable for <command>nixos-rebuild</command>,
+        e.g.:
+
+        <screen>
+        #!/bin/sh
+        today=`date +%Y%m%d`
+        branch=`(cd nixpkgs ; git branch 2>/dev/null | sed -n '/^\* / { s|^\* ||; p; }')`
+        revision=`(cd nixpkgs ; git rev-parse HEAD)`
+        export NIXOS_LABEL="$today.$branch-''${revision:0:7}"
+        nixos-rebuild switch</screen>
+      '';
+    };
+
     nixosVersion = mkOption {
       internal = true;
       type = types.str;
@@ -75,8 +98,9 @@ in
   config = {
 
     system = {
-      # This is set here rather than up there so that changing this
-      # env variable will not rebuild the manual
+      # These defaults are set here rather than up there so that
+      # changing them would not rebuild the manual
+      nixosLabel   = mkDefault (maybeEnv "NIXOS_LABEL" cfg.nixosVersion);
       nixosVersion = mkDefault (maybeEnv "NIXOS_VERSION" (cfg.nixosRelease + cfg.nixosVersionSuffix));
 
       # Note: code names must only increase in alphabetical order.
