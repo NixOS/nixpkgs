@@ -51,7 +51,9 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
     cp resources/install/generic/run.sh $out/bin/jitsi
     chmod +x $out/bin/jitsi
-    substituteInPlace $out/bin/jitsi --replace '@JAVA@' '${jdk}/bin/java'
+    substituteInPlace $out/bin/jitsi \
+        --subst-var-by JAVA ${jdk}/bin/java \
+        --subst-var-by EXTRALIBS ${gtk2}/lib
     patchShebangs $out
 
     libPath="$libPath:${jdk.jre.home}/lib/${jdk.architecture}"
