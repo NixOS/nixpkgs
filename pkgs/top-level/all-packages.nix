@@ -882,7 +882,6 @@ let
   syslogng_incubator = callPackage ../tools/system/syslog-ng-incubator { };
 
   rsyslog = callPackage ../tools/system/rsyslog {
-    czmq = null; # Currently Broken
     hadoop = null; # Currently Broken
   };
 
@@ -902,6 +901,7 @@ let
     openssl = null;
     librelp = null;
     libgt = null;
+    libksi = null;
     liblogging = null;
     libnet = null;
     hadoop = null;
