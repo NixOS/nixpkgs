@@ -132,8 +132,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Test fail on i686 (julia version 0.3.10)
-  doCheck = !stdenv.isi686;
   checkTarget = "testall";
 
   meta = {
