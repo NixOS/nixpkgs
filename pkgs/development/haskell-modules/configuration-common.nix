@@ -899,4 +899,9 @@ self: super: {
   cryptonite = dontCheck super.cryptonite;
   cryptonite_0_6   = dontCheck super.cryptonite_0_6  ;
 
+  # https://github.com/fpco/stackage/issues/843
+  hmatrix-gsl-stats_0_4_1 = overrideCabal super.hmatrix-gsl-stats_0_4_1 (drv: {
+    postUnpack = "rm */Setup.lhs";
+  });
+
 }
