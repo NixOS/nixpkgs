@@ -7965,6 +7965,8 @@ let
 
   redland = pkgs.librdf_redland;
 
+  resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
+
   rhino = callPackage ../development/libraries/java/rhino {
     javac = gcj;
     jvm = gcj;
