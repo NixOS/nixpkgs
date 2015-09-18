@@ -1692,6 +1692,20 @@ let
     '';
   };
 
+  manners = buildFromGitHub {
+    rev = "0.4.0";
+    owner = "braintree";
+    repo = "manners";
+    sha256 = "07985pbfhwlhbglr9zwh2wx8kkp0wzqr1lf0xbbxbhga4hn9q3ak";
+
+    meta = {
+      description = "A polite Go HTTP server that shuts down gracefully";
+      homepage = "https://github.com/braintree/manners";
+      maintainers = with lib.maintainers; [ matthiasbeyer ];
+      license = licenses.mit;
+    };
+  };
+
   mapstructure = buildFromGitHub {
     rev    = "281073eb9eb092240d33ef253c404f1cca550309";
     owner  = "mitchellh";
