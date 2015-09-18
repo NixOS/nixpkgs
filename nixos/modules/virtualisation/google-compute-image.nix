@@ -30,7 +30,7 @@ in
               rm $out/disk.raw
               popd
             '';
-          diskImageBase = "nixos-image-${config.system.nixosVersion}-${pkgs.stdenv.system}.raw";
+          diskImageBase = "nixos-image-${config.system.nixosLabel}-${pkgs.stdenv.system}.raw";
           buildInputs = [ pkgs.utillinux pkgs.perl ];
           exportReferencesGraph =
             [ "closure" config.system.build.toplevel ];
