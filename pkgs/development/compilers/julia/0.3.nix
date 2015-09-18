@@ -141,6 +141,6 @@ stdenv.mkDerivation rec {
     homepage = "http://julialang.org/";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ raskin ttuegel ];
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }
