@@ -62,6 +62,13 @@ in {
         description = "Cursor speed factor for highest-speed finger motion.";
       };
 
+      scrollDelta = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        example = 75;
+        description = "Move distance of the finger for a scroll event.";
+      };
+
       twoFingerScroll = mkOption {
         type = types.bool;
         default = false;
@@ -191,7 +198,9 @@ in {
           ${optionalString cfg.palmDetect ''Option "PalmDetect" "1"''}
           ${optionalString (cfg.palmMinWidth != null) ''Option "PalmMinWidth" "${toString cfg.palmMinWidth}"''}
           ${optionalString (cfg.palmMinZ != null) ''Option "PalmMinZ" "${toString cfg.palmMinZ}"''}
-          ${if cfg.horizontalScroll then "" else ''Option "HorizScrollDelta" "0"''}
+          ${optionalString (cfg.scrollDelta != null) ''Option "VertScrollDelta" "${toString cfg.scrollDelta}"''}
+          ${if !cfg.horizontalScroll then ''Option "HorizScrollDelta" "0"''
+            else (optionalString (cfg.scrollDelta != null) ''Option "HorizScrollDelta" "${toString cfg.scrollDelta}"'')}
           ${cfg.additionalOptions}
         EndSection
       '';
