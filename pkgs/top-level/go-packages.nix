@@ -989,6 +989,22 @@ let
     };
   };
 
+  go-bindata-assetfs = buildFromGitHub {
+    rev     = "d5cac425555ca5cf00694df246e04f05e6a55150";
+    owner   = "elazarl";
+    repo    = "go-bindata-assetfs";
+    sha256  = "636ce247ff6f85c14f38a421f46662fa77bdc29762692e1f72b3cd1f9d7a1d17";
+
+    date = "2015-08-13";
+
+    meta = {
+      description = "Serves embedded files from jteeuwen/go-bindata with net/http";
+      homepage = "https://github.com/elazarl/go-bindata-assetfs";
+      maintainers = with lib.maintainers; [ matthiasbeyer ];
+      license = licenses.bsd2;
+    };
+  };
+
   pmylund.go-cache = buildGoPackage rec {
     rev = "93d85800f2fa6bd0a739e7bd612bfa3bc008b72d";
     name = "go-cache-${stdenv.lib.strings.substring 0 7 rev}";
