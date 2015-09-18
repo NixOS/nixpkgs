@@ -2204,6 +2204,8 @@ let
     libpng = libpng12;
   };
 
+  minissdpd = callPackage ../tools/networking/minissdpd { };
+
   miniupnpc = callPackage ../tools/networking/miniupnpc { };
 
   miniupnpd = callPackage ../tools/networking/miniupnpd { };
