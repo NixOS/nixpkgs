@@ -3758,6 +3758,10 @@ let
     propagatedBuildInputs = with self; [ gdata ];
   };
 
+  gst-python = callPackage ../development/libraries/gstreamer/python {
+    gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
+  };
+
   gtimelog = buildPythonPackage rec {
     name = "gtimelog-${version}";
     version = "0.9.1";
