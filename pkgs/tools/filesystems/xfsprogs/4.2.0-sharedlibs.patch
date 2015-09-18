@@ -1,9 +1,5 @@
-use libtool to do all installing.  do not use the manual file install as
-that'll copy files directly from the .libs/ subdir which might have rpaths
-that we do not want.
-
---- xfsprogs-3.2.2/include/buildmacros
-+++ xfsprogs-3.2.2/include/buildmacros
+--- xfsprogs-4.2.0/include/buildmacros
++++ xfsprogs-4.2.0/include/buildmacros
 @@ -70,18 +70,9 @@
  # /usr/lib.
  ifeq ($(ENABLE_SHARED),yes)
@@ -15,7 +11,7 @@ that we do not want.
 -	../$(INSTALL) -m 755 -d $(PKG_ROOT_LIB_DIR); \
 -	../$(INSTALL) -T so_base $(LIBNAME).lai $(PKG_ROOT_LIB_DIR); \
 -	if [ "x$(shell readlink -f $(PKG_LIB_DIR))" != \
--	     "x$(shell readlink -f $(PKG_ROOT_LIB_DIR))"; ]; then \
+-	     "x$(shell readlink -f $(PKG_ROOT_LIB_DIR))" ]; then \
 -		../$(INSTALL) -S $(PKG_LIB_DIR)/$(LIBNAME).a $(PKG_ROOT_LIB_DIR)/$(LIBNAME).a; \
 -		../$(INSTALL) -S $(PKG_LIB_DIR)/$(LIBNAME).la $(PKG_ROOT_LIB_DIR)/$(LIBNAME).la; \
 -		../$(INSTALL) -S $(PKG_ROOT_LIB_DIR)/$(LIBNAME).so $(PKG_LIB_DIR)/$(LIBNAME).so; \
@@ -26,53 +22,31 @@ that we do not want.
  else
  INSTALL_LTLIB_DEV = $(INSTALL_LTLIB_STATIC)
  endif
---- xfsprogs-3.2.2/libdisk/Makefile
-+++ xfsprogs-3.2.2/libdisk/Makefile
-@@ -31,6 +31,7 @@
- install: default
- 
- install-dev: default
-+	$(INSTALL_LTLIB_DEV)
- 
- install-qa: install-dev
- 
---- xfsprogs-3.2.2/libhandle/Makefile
-+++ xfsprogs-3.2.2/libhandle/Makefile
-@@ -20,7 +20,6 @@
- include $(BUILDRULES)
- 
- install: default
--	$(INSTALL_LTLIB)
- 
- install-dev: default
- 	$(INSTALL_LTLIB_DEV)
---- xfsprogs-3.2.2/libxcmd/Makefile
-+++ xfsprogs-3.2.2/libxcmd/Makefile
-@@ -34,6 +34,11 @@
+--- xfsprogs-4.2.0/libxcmd/Makefile
++++ xfsprogs-4.2.0/libxcmd/Makefile
+@@ -34,6 +34,9 @@
  
  include $(BUILDRULES)
  
--install install-dev install-qa: default
+-install install-dev: default
 +install: default
 +
-+ install-dev: default
++install-dev: default
 +	$(INSTALL_LTLIB_DEV)
-+
-+install-qa: default
  
  -include .ltdep
---- xfsprogs-3.2.2/libxfs/Makefile
-+++ xfsprogs-3.2.2/libxfs/Makefile
-@@ -86,6 +86,7 @@
- install: default
+--- xfsprogs-4.2.0/libxfs/Makefile
++++ xfsprogs-4.2.0/libxfs/Makefile
+@@ -138,6 +138,7 @@
  
- install-dev: default
+ install-dev: install
+ 	$(INSTALL) -m 644 $(PKGHFILES) $(PKG_INC_DIR)
 +	$(INSTALL_LTLIB_DEV)
  
- install-qa: default
- 
---- xfsprogs-3.2.2/libxlog/Makefile
-+++ xfsprogs-3.2.2/libxlog/Makefile
+ # We need to install the headers before building the dependencies.  If we
+ # include the .ltdep file, the makefile decides that it needs to build the
+--- xfsprogs-4.2.0/libxlog/Makefile
++++ xfsprogs-4.2.0/libxlog/Makefile
 @@ -12,6 +12,8 @@
  
  CFILES = xfs_log_recover.c util.c
@@ -82,27 +56,25 @@ that we do not want.
  # don't want to link xfs_repair with a debug libxlog.
  DEBUG = -DNDEBUG
  
-@@ -19,6 +21,11 @@
+@@ -19,6 +21,9 @@
  
  include $(BUILDRULES)
  
--install install-dev install-qa: default
+-install install-dev: default
 +install: default
 +
 +install-dev: default
 +	$(INSTALL_LTLIB_DEV)
-+
-+install-qa: default
  
  -include .ltdep
---- xfsprogs-3.2.2/Makefile
-+++ xfsprogs-3.2.2/Makefile
-@@ -63,6 +63,8 @@
- mkfs: libxfs
+--- xfsprogs-4.2.0/Makefile
++++ xfsprogs-4.2.0/Makefile
+@@ -81,6 +81,8 @@
+ io: libxcmd libhandle
  quota: libxcmd
- repair: libxfs libxlog
+ repair: libxlog
 +libxlog: libxfs
 +libxlog-install-dev: libxfs-install-dev
  
- ifneq ($(ENABLE_BLKID), yes)
- mkfs: libdisk
+ 
+ ifeq ($(HAVE_BUILDDEFS), yes)
