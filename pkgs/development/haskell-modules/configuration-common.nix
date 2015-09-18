@@ -904,4 +904,7 @@ self: super: {
     postUnpack = "rm */Setup.lhs";
   });
 
+  # We cannot build this package w/o the C library from <http://www.phash.org/>.
+  phash = markBroken super.phash;
+
 }
