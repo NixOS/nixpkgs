@@ -1,20 +1,17 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "snappy-1.1.2";
+  name = "snappy-${version}";
+  version = "1.1.3";
   
   src = fetchFromGitHub {
     owner = "google";
     repo = "snappy";
-    rev = "1ff9be9b8fafc8528ca9e055646f5932aa5db9c4";
-    sha256 = "1zyjj13max0z42g3ii54n3qn7rbcga34dbi26lpm7v5ya752shx7";
+    rev = version;
+    sha256 = "1w9pq8vag8c6m4ib0qbdbqzsnpwjvw01jbp15lgwg1rzwhvflm10";
   };
 
-  buildInputs = [ pkgconfig autoreconfHook ];
-
-  preConfigure = ''
-    sh autogen.sh
-  '';
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
 
   # -DNDEBUG for speed
   configureFlags = [ "CXXFLAGS=-DNDEBUG" ];
