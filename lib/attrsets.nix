@@ -78,6 +78,26 @@ rec {
     listToAttrs (concatMap (name: let v = set.${name}; in if pred name v then [(nameValuePair name v)] else []) (attrNames set));
 
 
+  /* Filter an attribute set recursivelly by removing all attributes for
+     which the given predicate return false.
+
+     Example:
+       filterAttrsRecursive (n: v: v != null) { foo = { bar = null; }; }
+       => { foo = {}; }
+  */
+  filterAttrsRecursive = pred: set:
+    listToAttrs (
+      concatMap (name:
+        let v = set.${name}; in
+        if pred name v then [
+          (nameValuePair name (
+            if isAttrs v then filterAttrsRecursive pred v
+            else v
+          ))
+        ] else []
+      ) (attrNames set)
+    );
+
   /* foldAttrs: apply fold functions to values grouped by key. Eg accumulate values as list:
      foldAttrs (n: a: [n] ++ a) [] [{ a = 2; } { a = 3; }]
      => { a = [ 2 3 ]; }
