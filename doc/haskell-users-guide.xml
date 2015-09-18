@@ -354,6 +354,90 @@ if [ -e ~/.nix-profile/bin/ghc ]; then
 fi
 </programlisting>
   </section>
+  <section xml:id="how-to-install-a-compiler-with-indexes">
+    <title>How to install a compiler with libraries, hoogle and documentation indexes</title>
+    <para>
+      If you plan to use your environment for interactive programming,
+      not just compiling random Haskell code, you might want to
+      replace <literal>ghcWithPackages</literal> in all the listings
+      above with <literal>ghcWithHoogle</literal>.
+    </para>
+    <para>
+      This environment generator not only produces an environment with
+      GHC and all the specified libraries, but also generates a
+      <literal>hoogle</literal> and <literal>haddock</literal> indexes
+      for all the packages, and provides a wrapper script around
+      <literal>hoogle</literal> binary that uses all those things. A
+      precise name for this thing would be
+      "<literal>ghcWithPackagesAndHoogleAndDocumentationIndexes</literal>",
+      which is, regrettably, too long and scary.
+    </para>
+    <para>
+      For example, installing the following environment
+    </para>
+    <programlisting>
+{
+  packageOverrides = super: let self = super.pkgs; in
+  {
+    myHaskellEnv = self.haskellPackages.ghcWithHoogle
+                     (haskellPackages: with haskellPackages; [
+                       # libraries
+                       arrows async cgi criterion
+                       # tools
+                       cabal-install haskintex
+                     ]);
+  };
+}
+</programlisting>
+    <para>
+      allows one to browse module documentation index <link
+      xlink:href="https://downloads.haskell.org/~ghc/latest/docs/html/libraries/index.html">not
+      too dissimilar to this</link> for all the specified packages and
+      their dependencies by directing a browser of choice to
+      <literal>~/.nix-profiles/share/doc/hoogle/index.html</literal>
+      (or
+      <literal>/run/current-system/sw/share/doc/hoogle/index.html</literal>
+      in case you put it in
+      <literal>environment.systemPackages</literal> in NixOS).
+    </para>
+    <para>
+      After you've marveled enough at that try adding the following to
+      your <literal>~/.ghc/ghci.conf</literal>
+    </para>
+    <programlisting>
+:def hoogle \s -> return $ ":! hoogle search -cl --count=15 \"" ++ s ++ "\""
+:def doc \s -> return $ ":! hoogle search -cl --info \"" ++ s ++ "\""
+</programlisting>
+    <para>
+      and test it by typing into <literal>ghci</literal>:
+    </para>
+    <programlisting>
+:hoogle a -> a
+:doc a -> a
+</programlisting>
+    <para>
+      Be sure to note the links to <literal>haddock</literal> files in
+      the output. With any modern and properly configured terminal
+      emulator you can just click those links to navigate there.
+    </para>
+    <para>
+      Finally, you can run
+    </para>
+    <programlisting>
+hoogle server -p 8080
+</programlisting>
+    <para>
+      and navigate to <link xlink:href="http://localhost:8080/"/> for
+      your own local <link
+      xlink:href="https://www.haskell.org/hoogle/">Hoogle</link>.
+      Note, however, that Firefox and possibly other browsers disallow
+      navigation from <literal>http:</literal> to
+      <literal>file:</literal> URIs for security reasons, which might
+      be quite an inconvenience. See <link
+      xlink:href="http://kb.mozillazine.org/Links_to_local_pages_do_not_work">this
+      page</link> for workarounds.
+    </para>
+  </section>
   <section xml:id="how-to-create-ad-hoc-environments-for-nix-shell">
     <title>How to create ad hoc environments for
     <literal>nix-shell</literal></title>
