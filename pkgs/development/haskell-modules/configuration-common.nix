@@ -907,4 +907,8 @@ self: super: {
   # We cannot build this package w/o the C library from <http://www.phash.org/>.
   phash = markBroken super.phash;
 
+  # https://github.com/yesodweb/serversession/issues/2
+  # https://github.com/haskell/cabal/issues/2661
+  serversession-backend-acid-state_1_0_1 = dontCheck super.serversession-backend-acid-state_1_0_1;
+
 }
