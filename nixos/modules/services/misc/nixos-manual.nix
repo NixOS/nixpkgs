@@ -93,7 +93,7 @@ in
 
     system.build.manual = manual;
 
-    environment.systemPackages = [ manual.manpages help ];
+    environment.systemPackages = [ manual.manpages manual.manual help ];
 
     boot.extraTTYs = mkIf cfg.showManual ["tty${cfg.ttyNumber}"];
 
