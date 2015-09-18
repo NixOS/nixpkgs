@@ -57,8 +57,22 @@ self: super: {
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
-  # These changes are required to support Darwin.
-  git-annex = (disableSharedExecutables super.git-annex).override {
+  # This package needs a little help compiling properly on Darwin. Furthermore,
+  # Stackage compiles git-annex without the Assistant, supposedly because not
+  # all required dependencies are part of Stackage. To comply with Stackage, we
+  # make 'git-annex-without-assistant' our default version, but offer another
+  # build which has the assistant to be used in the top-level.
+  git-annex_5_20150916 = (disableCabalFlag super.git-annex_5_20150916 "assistant").override {
+    dbus = if pkgs.stdenv.isLinux then self.dbus else null;
+    fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
+    hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
+  };
+  git-annex = (disableCabalFlag super.git-annex "assistant").override {
+    dbus = if pkgs.stdenv.isLinux then self.dbus else null;
+    fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
+    hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
+  };
+  git-annex-with-assistant = super.git-annex.override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
