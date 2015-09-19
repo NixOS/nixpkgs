@@ -7891,7 +7891,7 @@ let
 
   qt5Full = appendToName "full" (qtEnv {
     qtbase = qt5.base;
-    paths = lib.filter (x: !(builtins.isFunction x)) (lib.attrValues qt5);
+    paths = lib.filter lib.isDerivation (lib.attrValues qt5);
   });
 
   qtcreator = callPackage ../development/qtcreator {
