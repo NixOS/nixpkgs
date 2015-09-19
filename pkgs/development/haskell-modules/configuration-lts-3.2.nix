@@ -880,6 +880,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "Thingie" = dontDistribute super."Thingie";
   "ThreadObjects" = dontDistribute super."ThreadObjects";
   "Thrift" = dontDistribute super."Thrift";
+  "Tic-Tac-Toe" = dontDistribute super."Tic-Tac-Toe";
   "TicTacToe" = dontDistribute super."TicTacToe";
   "TigerHash" = dontDistribute super."TigerHash";
   "TimePiece" = dontDistribute super."TimePiece";
@@ -2796,6 +2797,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "fold-debounce-conduit" = dontDistribute super."fold-debounce-conduit";
   "foldl-incremental" = dontDistribute super."foldl-incremental";
   "foldl-transduce" = dontDistribute super."foldl-transduce";
+  "foldl-transduce-attoparsec" = dontDistribute super."foldl-transduce-attoparsec";
   "folds" = dontDistribute super."folds";
   "folds-common" = dontDistribute super."folds-common";
   "follower" = dontDistribute super."follower";
@@ -2874,6 +2876,8 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "full-text-search" = dontDistribute super."full-text-search";
   "fullstop" = dontDistribute super."fullstop";
   "funbot" = dontDistribute super."funbot";
+  "funbot-client" = dontDistribute super."funbot-client";
+  "funbot-ext-events" = dontDistribute super."funbot-ext-events";
   "funcmp" = dontDistribute super."funcmp";
   "function-combine" = dontDistribute super."function-combine";
   "function-instances-algebra" = dontDistribute super."function-instances-algebra";
@@ -4462,6 +4466,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "leksah" = dontDistribute super."leksah";
   "leksah-server" = dontDistribute super."leksah-server";
   "lendingclub" = dontDistribute super."lendingclub";
+  "lens-aeson" = doDistribute super."lens-aeson_1_0_0_4";
   "lens-datetime" = dontDistribute super."lens-datetime";
   "lens-properties" = dontDistribute super."lens-properties";
   "lens-regex" = dontDistribute super."lens-regex";
@@ -6531,6 +6536,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "streaming-bytestring" = dontDistribute super."streaming-bytestring";
   "streaming-commons" = doDistribute super."streaming-commons_0_1_12_1";
   "streaming-histogram" = dontDistribute super."streaming-histogram";
+  "streaming-utils" = dontDistribute super."streaming-utils";
   "streamproc" = dontDistribute super."streamproc";
   "strict-base-types" = dontDistribute super."strict-base-types";
   "strict-concurrency" = dontDistribute super."strict-concurrency";
