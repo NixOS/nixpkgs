@@ -32,25 +32,25 @@ in
             };
 
             fileSystem = mkOption {
-              type = types.string;
+              type = types.str;
               description = "XFS filesystem hosting the xfs_quota project.";
               default = "/";
             };
 
             path = mkOption {
-              type = types.string;
+              type = types.str;
               description = "Project directory.";
             };
 
             sizeSoftLimit = mkOption {
-              type = types.nullOr types.string;
+              type = types.nullOr types.str;
               default = null;
               example = "30g";
               description = "Soft limit of the project size";
             };
 
             sizeHardLimit = mkOption {
-              type = types.nullOr types.string;
+              type = types.nullOr types.str;
               default = null;
               example = "50g";
               description = "Hard limit of the project size.";

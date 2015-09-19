@@ -22,14 +22,14 @@ let
       device = mkOption {
         default = null;
         example = "/dev/sda";
-        type = types.uniq (types.nullOr types.string);
+        type = types.nullOr types.str;
         description = "Location of the device.";
       };
 
       label = mkOption {
         default = null;
         example = "root-partition";
-        type = types.uniq (types.nullOr types.string);
+        type = types.nullOr types.str;
         description = "Label of the device (if any).";
       };
 

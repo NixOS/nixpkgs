@@ -3,6 +3,8 @@
 , alsaLib, dbus_libs, gtk2, libpulseaudio, openssl, xlibs
 }:
 
+assert stdenv.isLinux;
+
 stdenv.mkDerivation rec {
 
   name = "jitsi-${version}";
@@ -47,11 +49,14 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -a lib $out/
+    rm -rf $out/lib/native/solaris
     cp -a sc-bundles $out/
     mkdir $out/bin
     cp resources/install/generic/run.sh $out/bin/jitsi
     chmod +x $out/bin/jitsi
-    substituteInPlace $out/bin/jitsi --replace '@JAVA@' '${jdk}/bin/java'
+    substituteInPlace $out/bin/jitsi \
+        --subst-var-by JAVA ${jdk}/bin/java \
+        --subst-var-by EXTRALIBS ${gtk2}/lib
     patchShebangs $out
 
     libPath="$libPath:${jdk.jre.home}/lib/${jdk.architecture}"

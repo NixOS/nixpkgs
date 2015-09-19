@@ -1,5 +1,6 @@
-{ fetchurl, stdenv, pkgconfig, python, gstreamer
-  , gst-plugins-base, pygtk, pygobject3
+{ fetchurl, stdenv, pkgconfig, python
+, gst-plugins-base, pygobject3
+, ncurses
 }:
 
 stdenv.mkDerivation rec {
@@ -15,15 +16,16 @@ stdenv.mkDerivation rec {
 
   patches = [ ./different-path-with-pygobject.patch ];
 
-  buildInputs =
-    [ pkgconfig gst-plugins-base pygtk pygobject3 ]
-    ;
+  nativeBuildInputs = [ pkgconfig python ];
+
+  # XXX: in the Libs.private field of python3.pc
+  buildInputs = [ ncurses ];
 
   preConfigure = ''
     export configureFlags="$configureFlags --with-pygi-overrides-dir=$out/lib/${python.libPrefix}/site-packages/gi/overrides"
   '';
 
-  propagatedBuildInputs = [ gstreamer python ];
+  propagatedBuildInputs = [ gst-plugins-base pygobject3 ];
 
   meta = {
     homepage = http://gstreamer.freedesktop.org;

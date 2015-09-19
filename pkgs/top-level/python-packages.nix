@@ -3325,11 +3325,11 @@ let
 
 
   elasticsearchdsl = buildPythonPackage (rec {
-    name = "elasticsearch-dsl-0.0.4";
+    name = "elasticsearch-dsl-0.0.8";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/e/elasticsearch-dsl/${name}.tar.gz";
-      sha256 = "0bz8p10qk7rz10glq9dm2nq9m1x6czzlqk518107x39gx18lm1a2";
+      sha256 = "0dd46s7g5l2b2jnjhcpcm721kcsnsqwngzik85jl5qbbcvnqqjzi";
     };
 
     buildInputs = with self; [ covCore dateutil elasticsearch mock pytest pytestcov unittest2 urllib3 pytz ];
@@ -3342,6 +3342,7 @@ let
       description = "Python client for Elasticsearch";
       homepage = https://github.com/elasticsearch/elasticsearch-dsl-py;
       license = licenses.asl20;
+      maintainers = with maintainers; [ desiderius ];
     };
   });
 
@@ -3755,6 +3756,10 @@ let
     };
 
     propagatedBuildInputs = with self; [ gdata ];
+  };
+
+  gst-python = callPackage ../development/libraries/gstreamer/python {
+    gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
   };
 
   gtimelog = buildPythonPackage rec {
@@ -10316,15 +10321,19 @@ let
 
 
   pillow = buildPythonPackage rec {
-    name = "Pillow-2.3.0";
+    name = "Pillow-2.9.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pillow/${name}.zip";
-      md5 = "56b6614499aacb7d6b5983c4914daea7";
+      sha256 = "1mal92cwh85z6zqx7lrmg0dbqb2gw2cbb2fm6xh0fivmszz8vnyi";
     };
 
+    # Check is disabled because of assertion errors, see
+    # https://github.com/python-pillow/Pillow/issues/1259
+    doCheck = false;
+
     buildInputs = with self; [
-      pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl ]
+      pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl nose ]
       ++ optionals (isPy26 || isPy27 || isPy33 || isPyPy) [ pkgs.lcms2 ]
       ++ optionals (isPyPy) [ pkgs.tk pkgs.xlibs.libX11 ];
 
@@ -15587,11 +15596,13 @@ let
 
   wxPython = self.wxPython28;
 
-  wxPython28 = callPackage ../development/python-modules/wxPython/2.8.nix {
+  wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
+    inherit callPackage;
     wxGTK = pkgs.wxGTK28;
   };
 
-  wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
+  wxPython30 = import ../development/python-modules/wxPython/3.0.nix {
+    inherit callPackage;
     wxGTK = pkgs.wxGTK30;
   };
 

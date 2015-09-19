@@ -142,10 +142,11 @@ while (scalar(keys %postponed) > 0) {
 
 
 # Create the symlinks.
+my $extraPrefix = $ENV{"extraPrefix"};
 my $nrLinks = 0;
 foreach my $relName (sort keys %symlinks) {
     my ($target, $priority) = @{$symlinks{$relName}};
-    my $abs = "$out/$relName";
+    my $abs = "$out" . "$extraPrefix" . "/$relName";
     next unless isInPathsToLink $relName;
     if ($target eq "") {
         #print "creating directory $relName\n";

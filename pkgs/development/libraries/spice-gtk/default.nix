@@ -6,11 +6,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "spice-gtk-0.27";
+  name = "spice-gtk-0.29";
 
   src = fetchurl {
     url = "http://www.spice-space.org/download/gtk/${name}.tar.bz2";
-    sha256 = "0323j3q7gagi83fvxd7v9vdxqv2s3ziss44ici342hyv21qf0xah";
+    sha256 = "0wz9sm44gnmwjpmyacwd5jyzvhfl1wlf1dn3qda20si42cky5is4";
   };
 
   buildInputs = [
@@ -23,9 +23,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
   preConfigure = ''
-    substituteInPlace gtk/Makefile.am \
+    substituteInPlace src/Makefile.am \
       --replace '=codegendir pygtk-2.0' '=codegendir pygobject-2.0'
-
     autoreconf -v --force --install
     intltoolize -f
   '';

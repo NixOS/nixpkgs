@@ -2,15 +2,16 @@
 
 stdenv.mkDerivation rec {
   baseName="czmq";
-  version="3.0.0-rc1";
+  version="3.0.2";
   name="${baseName}-${version}";
 
   src = fetchurl {
     url = "http://download.zeromq.org/${name}.tar.gz";
-    sha256 = "1g3rk3fz7xzsbqcdcwn0x18nmiyr70k47kg00gdrq8g10li8mmd9";
+    sha256 = "16k9awrhdsymx7dnmvqcnkaq8lz8x8zppy6sh7ls8prpd6mkkjlb";
   };
 
-  buildInputs = [ zeromq ];
+  # Needs to be propagated for the .pc file to work
+  propagatedBuildInputs = [ zeromq ];
 
   meta = with stdenv.lib; {
     homepage = "http://czmq.zeromq.org/";

@@ -1,17 +1,15 @@
-{stdenv, fetchurl, flex, bison, linuxHeaders}:
+{ stdenv, fetchurl, flex, bison, linuxHeaders }:
 
 let
-  baseURL = mirror://kernel/linux/daemons/autofs/v5;
-in
-stdenv.mkDerivation {
-  name = "autofs-5.0.8";
+  version = "5.1.1";
+  name = "autofs-${version}";
+in stdenv.mkDerivation {
+  inherit name;
 
   src = fetchurl {
-    url = "${baseURL}/autofs-5.0.8.tar.bz2";
-    sha256 = "0zczihrqdamj43401v2pczf7zi94f8qk20gc6l92nxmpak3443if";
+    url = "mirror://kernel/linux/daemons/autofs/v5/${name}.tar.xz";
+    sha256 = "1hr1f11wp538h7r298wpa5khfkhfs8va3p1kdixxhrgkkzpz13z0";
   };
-
-  patches = import ./patches-v5.nix fetchurl;
 
   preConfigure = ''
     configureFlags="--disable-move-mount --with-path=$PATH"
@@ -31,11 +29,12 @@ stdenv.mkDerivation {
     #make install SUBDIRS="samples" # impure!
   '';
 
-  buildInputs = [flex bison linuxHeaders];
+  buildInputs = [ flex bison linuxHeaders ];
 
-  meta = { 
-    description="Kernel based automounter";
-    homepage="http://www.linux-consulting.com/Amd_AutoFS/autofs.html";
+  meta = {
+    inherit version;
+    description = "Kernel-based automounter";
+    homepage = http://www.linux-consulting.com/Amd_AutoFS/autofs.html;
     license = stdenv.lib.licenses.gpl2;
     executables = [ "automount" ];
   };

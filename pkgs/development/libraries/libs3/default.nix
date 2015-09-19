@@ -18,6 +18,6 @@ stdenv.mkDerivation {
     homepage = https://github.com/bji/libs3;
     description = "A library for interfacing with amazon s3";
     license = licenses.lgpl3;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

@@ -4,7 +4,7 @@
 
 with stdenv.lib;
 
-let version = "3.0.5";
+let version = "3.0.6";
     system-libraries = [
       "pcre"
       "wiredtiger"
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "1nvzbxgyjsp72w4fvfd8zxpj38zv0whn5p53jv9v2rdaj5wnmc85";
+    sha256 = "0bc2khi36ck0y7dhppvjp8wy479hzyw34qs0965qj4gd2va6p7v0";
   };
 
   nativeBuildInputs = [ scons ];

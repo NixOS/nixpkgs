@@ -119,7 +119,7 @@ in
 
           recipient = mkOption {
             default = "root";
-            type = types.string;
+            type = types.str;
             description = "Recipient of the notification messages.";
           };
 
@@ -153,7 +153,7 @@ in
 
           display = mkOption {
             default = ":${toString config.services.xserver.display}";
-            type = types.string;
+            type = types.str;
             description = "DISPLAY to send X11 notifications to.";
           };
         };

@@ -1,30 +1,31 @@
 { stdenv, fetchurl, pam, pkgconfig, libxcb, glib, libXdmcp, itstool, libxml2
-, intltool, x11, libxklavier, libgcrypt
+, intltool, x11, libxklavier, libgcrypt, libaudit
 , qt4 ? null, qt5 ? null
 }:
 
 let
-  ver_branch = "1.14";
-  version = "1.14.2";
+  ver_branch = "1.16";
+  version = "1.16.2";
 in
 stdenv.mkDerivation rec {
   name = "lightdm-${version}";
 
   src = fetchurl {
     url = "${meta.homepage}/${ver_branch}/${version}/+download/${name}.tar.xz";
-    sha256 = "18dvipdkp6hc1hysyiwpd5nwq6db3mg98rwi3am2ly3hk2bpic18";
+    sha256 = "062jj21bjrl29mk66lpihwhrff038h2wny3p6b5asacf2mklf0hq";
   };
 
   patches = [ ./fix-paths.patch ];
 
   buildInputs = [
     pkgconfig pam libxcb glib libXdmcp itstool libxml2 intltool libxklavier libgcrypt
-    qt4
+    qt4 libaudit
   ] ++ stdenv.lib.optional (qt5 != null) qt5.base;
 
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
+    "--disable-tests"
   ] ++ stdenv.lib.optional (qt4 != null) "--enable-liblightdm-qt"
     ++ stdenv.lib.optional ((qt5.base or null) != null) "--enable-liblightdm-qt5";
 
