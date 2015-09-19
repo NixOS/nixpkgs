@@ -12246,6 +12246,8 @@ let
 
   pencil = callPackage ../applications/graphics/pencil { };
 
+  perseus = callPackage ../applications/science/math/perseus {};  
+
   petrifoo = callPackage ../applications/audio/petrifoo {
     inherit (gnome) libgnomecanvas;
   };
