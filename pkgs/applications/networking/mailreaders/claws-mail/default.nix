@@ -1,7 +1,7 @@
 { fetchurl, stdenv
 , curl, dbus, dbus_glib, enchant, gtk, gnutls, gnupg, gpgme, libarchive
 , libcanberra, libetpan, libnotify, libsoup, libxml2, networkmanager, openldap
-, perl, pkgconfig, poppler, python, webkitgtk2
+, perl, pkgconfig, poppler, python, shared_mime_info, webkitgtk2
 
 # Build options
 # TODO: A flag to build the manual.
@@ -47,6 +47,8 @@ stdenv.mkDerivation {
     sha256 = "0w13xzri9d3165qsxf1dig1f0gxn3ib4lysfc9pgi4zpyzd0zgrw";
   };
 
+  patches = [ ./mime.patch ];
+
   buildInputs =
     [ curl dbus dbus_glib gtk gnutls libetpan perl pkgconfig python ]
     ++ optional enableSpellcheck enchant
@@ -80,8 +82,12 @@ stdenv.mkDerivation {
     ++ optional (!enablePluginVcalendar) "--disable-vcalendar-plugin"
     ++ optional (!enableSpellcheck) "--disable-enchant";
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     mkdir -p $out/share/applications
     cp claws-mail.desktop $out/share/applications
+
+    ln -sT ${shared_mime_info}/share/mime $out/share/mime
   '';
 }

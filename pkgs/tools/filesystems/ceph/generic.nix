@@ -260,6 +260,17 @@ stdenv.mkDerivation {
       test -f "$PY"c
       test -f "$PY"o
     done
+
+    # Fix .la file link dependencies
+    find "$lib/lib" -name \*.la | xargs sed -i \
+      -e 's,-lboost_[a-z]*,-L${boost.lib}/lib \0,g' \
+  '' + optionalString (cryptoStr == "cryptopp") ''
+      -e 's,-lcryptopp,-L${optCryptopp}/lib \0,g' \
+  '' + optionalString (cryptoStr == "nss") ''
+      -e 's,-l\(plds4\|plc4\|nspr4\),-L${optNss}/lib \0,g' \
+      -e 's,-l\(ssl3\|smime3\|nss3\|nssutil3\),-L${optNspr}/lib \0,g' \
+  '' + ''
+
   '';
 
   enableParallelBuilding = true;

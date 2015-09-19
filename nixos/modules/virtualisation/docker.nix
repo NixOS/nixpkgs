@@ -67,7 +67,7 @@ in
 
     postStart =
       mkOption {
-        type = types.string;
+        type = types.lines;
         default = ''
           while ! [ -e /var/run/docker.sock ]; do
             sleep 0.1

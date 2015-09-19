@@ -12,6 +12,12 @@ let
     perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
     su = "${pkgs.shadow.su}/bin/su";
     inherit (pkgs) utillinux;
+
+    postInstall = ''
+      t=$out/etc/bash_completion.d
+      mkdir -p $t
+      cp ${./nixos-container-completion.sh} $t/nixos-container
+    '';
   };
 
   # The container's init script, a small wrapper around the regular
@@ -102,7 +108,7 @@ in
             };
 
             hostAddress = mkOption {
-              type = types.nullOr types.string;
+              type = types.nullOr types.str;
               default = null;
               example = "10.231.136.1";
               description = ''
@@ -111,7 +117,7 @@ in
             };
 
             localAddress = mkOption {
-              type = types.nullOr types.string;
+              type = types.nullOr types.str;
               default = null;
               example = "10.231.136.2";
               description = ''

@@ -1,12 +1,12 @@
 { fetchurl, stdenv }:
 
-let version = "0.9.14"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "check-${version}";
+  version = "0.10.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/check/${version}/check-${version}.tar.gz";
-    sha256 = "02l4g79d81s07hzywcv1knwj5dyrwjiq2pgxaz7kidxi8m364wn2";
+    sha256 = "0lhhywf5nxl3dd0hdakra3aasl590756c9kmvyifb3vgm9k0gxgm";
   };
 
   # Test can randomly fail: http://hydra.nixos.org/build/7243912

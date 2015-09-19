@@ -2145,10 +2145,47 @@ index 8d171a5..bd0d324 100644
  bool paths_check_timestamp(const char* const* paths, usec_t *paths_ts_usec, bool update);
  
 diff --git a/src/shared/virt.c b/src/shared/virt.c
-index f9c4e67..f10baab 100644
+index f9c4e67..f3104d5 100644
 --- a/src/shared/virt.c
 +++ b/src/shared/virt.c
-@@ -293,8 +293,26 @@ int detect_container(const char **id) {
+@@ -151,7 +151,7 @@ int detect_vm(const char **id) {
+         _cleanup_free_ char *domcap = NULL, *cpuinfo_contents = NULL;
+         static thread_local int cached_found = -1;
+         static thread_local const char *cached_id = NULL;
+-        const char *_id = NULL;
++        const char *_id = NULL, *_id_cpuid = NULL;
+         int r;
+ 
+         if (_likely_(cached_found >= 0)) {
+@@ -197,10 +197,26 @@ int detect_vm(const char **id) {
+ 
+         /* this will set _id to "other" and return 0 for unknown hypervisors */
+         r = detect_vm_cpuid(&_id);
+-        if (r != 0)
++
++        /* finish when found a known hypervisor other than kvm */
++        if (r < 0 || (r > 0 && !streq(_id, "kvm")))
+                 goto finish;
+ 
++        _id_cpuid = _id;
++
+         r = detect_vm_dmi(&_id);
++
++        /* kvm with and without Virtualbox */
++        if (streq_ptr(_id_cpuid, "kvm")) {
++                if (r > 0 && streq(_id, "oracle"))
++                        goto finish;
++
++                _id = _id_cpuid;
++                r = 1;
++                goto finish;
++        }
++
++        /* information from dmi */
+         if (r != 0)
+                 goto finish;
+ 
+@@ -293,8 +309,26 @@ int detect_container(const char **id) {
  
                  r = read_one_line_file("/run/systemd/container", &m);
                  if (r == -ENOENT) {

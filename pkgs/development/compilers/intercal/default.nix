@@ -1,6 +1,7 @@
 { stdenv, fetchurl
 , pkgconfig
-, bison, flex }:
+, bison, flex
+, makeWrapper }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -14,7 +15,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-  [ pkgconfig bison flex ];
+  [ pkgconfig bison flex makeWrapper ];
+
+  # Intercal invokes gcc, so we need an explicit PATH
+  postInstall = ''
+    wrapProgram $out/bin/ick --suffix PATH ':' ${stdenv.cc}/bin
+  '';
 
   meta = {
     description = "The original esoteric programming language";
@@ -33,3 +39,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
+# TODO: investigate if LD_LIBRARY_PATH needs to be set

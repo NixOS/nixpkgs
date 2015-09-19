@@ -3325,11 +3325,11 @@ let
 
 
   elasticsearchdsl = buildPythonPackage (rec {
-    name = "elasticsearch-dsl-0.0.4";
+    name = "elasticsearch-dsl-0.0.8";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/e/elasticsearch-dsl/${name}.tar.gz";
-      sha256 = "0bz8p10qk7rz10glq9dm2nq9m1x6czzlqk518107x39gx18lm1a2";
+      sha256 = "0dd46s7g5l2b2jnjhcpcm721kcsnsqwngzik85jl5qbbcvnqqjzi";
     };
 
     buildInputs = with self; [ covCore dateutil elasticsearch mock pytest pytestcov unittest2 urllib3 pytz ];
@@ -3342,6 +3342,7 @@ let
       description = "Python client for Elasticsearch";
       homepage = https://github.com/elasticsearch/elasticsearch-dsl-py;
       license = licenses.asl20;
+      maintainers = with maintainers; [ desiderius ];
     };
   });
 
@@ -3755,6 +3756,10 @@ let
     };
 
     propagatedBuildInputs = with self; [ gdata ];
+  };
+
+  gst-python = callPackage ../development/libraries/gstreamer/python {
+    gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
   };
 
   gtimelog = buildPythonPackage rec {
@@ -7704,11 +7709,11 @@ let
 
 
   libcloud = buildPythonPackage (rec {
-    name = "libcloud-0.14.1";
+    name = "libcloud-0.18.0";
 
     src = pkgs.fetchurl {
-      url = https://pypi.python.org/packages/source/a/apache-libcloud/apache-libcloud-0.14.1.tar.bz2;
-      sha256 = "1l6190pjv54c7y8pzr089ij727qv7bqhhaznr2mkvimgr1wzsql5";
+      url = https://pypi.python.org/packages/source/a/apache-libcloud/apache-libcloud-0.18.0.tar.bz2;
+      sha256 = "0ahdp14ddly074qg5cksxdhqaws0kj445xmhz1y7lzspsp6fk1xg";
     };
 
     buildInputs = with self; [ mock ];
@@ -10316,15 +10321,19 @@ let
 
 
   pillow = buildPythonPackage rec {
-    name = "Pillow-2.3.0";
+    name = "Pillow-2.9.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pillow/${name}.zip";
-      md5 = "56b6614499aacb7d6b5983c4914daea7";
+      sha256 = "1mal92cwh85z6zqx7lrmg0dbqb2gw2cbb2fm6xh0fivmszz8vnyi";
     };
 
+    # Check is disabled because of assertion errors, see
+    # https://github.com/python-pillow/Pillow/issues/1259
+    doCheck = false;
+
     buildInputs = with self; [
-      pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl ]
+      pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl nose ]
       ++ optionals (isPy26 || isPy27 || isPy33 || isPyPy) [ pkgs.lcms2 ]
       ++ optionals (isPyPy) [ pkgs.tk pkgs.xlibs.libX11 ];
 
@@ -11546,27 +11555,16 @@ let
 
   pyparted = buildPythonPackage rec {
     name = "pyparted-${version}";
-    version = "3.10";
+    version = "3.10.7";
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
-      url = "https://fedorahosted.org/releases/p/y/pyparted/${name}.tar.gz";
-      sha256 = "17wq4invmv1nfazaksf59ymqyvgv3i8h4q03ry2az0s9lldyg3dv";
+      url = "https://github.com/rhinstaller/pyparted/archive/v${version}.tar.gz";
+      sha256 = "0c9ljrdggwawd8wdzqqqzrna9prrlpj6xs59b0vkxzip0jkf652r";
     };
 
-    patches = singleton (pkgs.fetchurl {
-      url = "https://www.redhat.com/archives/pyparted-devel/"
-          + "2014-April/msg00000.html";
-      postFetch = ''
-        sed -i -ne '/<!--X-Body-of-Message-->/,/<!--X-Body-of-Message-End-->/ {
-          s/^<[^>]*>//; /^$/!p
-        }' "$downloadedFile"
-      '';
-      sha256 = "1lakhz3nvx0qacn90bj1nq13zqxphiw4d9dsc44gwa8nj24j2zws";
-    });
-
     postPatch = ''
-      sed -i -e 's|/sbin/mke2fs|${pkgs.e2fsprogs}&|' tests/baseclass.py
+      sed -i -e 's|mke2fs|${pkgs.e2fsprogs}/bin/mke2fs|' tests/baseclass.py
       sed -i -e '
         s|e\.path\.startswith("/tmp/temp-device-")|"temp-device-" in e.path|
       ' tests/test__ped_ped.py
@@ -14105,7 +14103,7 @@ let
 
   sqlalchemy = self.sqlalchemy9.override rec {
     name = "SQLAlchemy-0.7.10";
-    disabled = isPy34;
+    disabled = isPy34 || isPy35;
     doCheck = !isPyPy;
 
     src = pkgs.fetchurl {
@@ -14124,7 +14122,7 @@ let
 
   sqlalchemy8 = self.sqlalchemy9.override rec {
     name = "SQLAlchemy-0.8.7";
-    disabled = isPy34;
+    disabled = isPy34 || isPy35;
     doCheck = !isPyPy;
 
     src = pkgs.fetchurl {
@@ -15598,11 +15596,13 @@ let
 
   wxPython = self.wxPython28;
 
-  wxPython28 = callPackage ../development/python-modules/wxPython/2.8.nix {
+  wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
+    inherit callPackage;
     wxGTK = pkgs.wxGTK28;
   };
 
-  wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
+  wxPython30 = import ../development/python-modules/wxPython/3.0.nix {
+    inherit callPackage;
     wxGTK = pkgs.wxGTK30;
   };
 
@@ -17150,7 +17150,7 @@ let
   IMAPClient = buildPythonPackage rec {
     name = "IMAPClient-${version}";
     version = "0.11";
-    disabled = isPy34;
+    disabled = isPy34 || isPy35;
 
     src = pkgs.fetchurl {
       url = "http://freshfoo.com/projects/IMAPClient/${name}.tar.gz";

@@ -82,5 +82,6 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = https://developer.mozilla.org/en-US/docs/NSS;
     description = "A set of libraries for development of security-enabled client and server applications";
+    platforms = stdenv.lib.platforms.all;
   };
 }

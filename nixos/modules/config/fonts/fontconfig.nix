@@ -108,10 +108,8 @@ with lib;
         subpixel = {
 
           rgba = mkOption {
-            type = types.string // {
-              check = flip elem ["rgb" "bgr" "vrgb" "vbgr" "none"];
-            };
             default = "rgb";
+            type = types.enum ["rgb" "bgr" "vrgb" "vbgr" "none"];
             description = ''
               Subpixel order, one of <literal>none</literal>,
               <literal>rgb</literal>, <literal>bgr</literal>,
@@ -120,10 +118,8 @@ with lib;
           };
 
           lcdfilter = mkOption {
-            type = types.str // {
-              check = flip elem ["none" "default" "light" "legacy"];
-            };
             default = "default";
+            type = types.enum ["none" "default" "light" "legacy"];
             description = ''
               FreeType LCD filter, one of <literal>none</literal>,
               <literal>default</literal>, <literal>light</literal>, or

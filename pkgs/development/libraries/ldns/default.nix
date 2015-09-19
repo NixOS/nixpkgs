@@ -8,11 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "1kf8pkwhcssvgzhh6ha1pjjiziwvwmfaali7kaafh6118mcy124b";
   };
 
-  patchPhase = ''
-    sed -i 's,\$(srcdir)/doc/doxyparse.pl,perl $(srcdir)/doc/doxyparse.pl,' Makefile.in
+  patches = [ ./perl-5.22-compat.patch ];
+
+  postPatch = ''
+    patchShebangs doc/doxyparse.pl
   '';
 
-  buildInputs = [ openssl perl ];
+  nativeBuildInputs = [ perl ];
+  buildInputs = [ openssl ];
 
   configureFlags = [ "--with-ssl=${openssl}" "--with-drill" ];
 

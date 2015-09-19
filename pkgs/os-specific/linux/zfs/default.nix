@@ -10,5 +10,8 @@ callPackage ./generic.nix (args // rec {
     sha256 = "1jqm2a9mldp4km5m454zszsw6p8hrqd7xrbf52pgp82kf5w3d6wz";
   };
 
-  patches = [ ./nix-build.patch ];
+  patches = [
+    ./nix-build.patch
+    ./0.6.5-fix-corruption.patch
+  ];
 })

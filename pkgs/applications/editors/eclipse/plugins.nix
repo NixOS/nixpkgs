@@ -127,6 +127,29 @@ rec {
     };
   };
 
+  bytecode-outline = buildEclipsePlugin rec {
+    name = "bytecode-outline-${version}";
+    version = "2.4.3";
+
+    srcFeature = fetchurl {
+      url = "http://andrei.gmxhome.de/eclipse/features/de.loskutov.BytecodeOutline.feature_${version}.jar";
+      sha256 = "0imhwp73gxy1y5d5gpjgd05ywn0xg3vqc5980wcx3fd51g4ifc67";
+    };
+
+    srcPlugin = fetchurl {
+      url = "http://dl.bintray.com/iloveeclipse/plugins/de.loskutov.BytecodeOutline_${version}.jar";
+      sha256 = "0230i88mvvxhn11m9c5mv3494zhh1xkxyfyva9qahck0wbqwpzkw";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = http://andrei.gmxhome.de/bytecode/;
+      description = "Shows disassembled bytecode of current java editor or class file";
+      license = licenses.bsd2;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
     version = "8.7.0";

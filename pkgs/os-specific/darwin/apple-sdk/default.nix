@@ -120,7 +120,7 @@ in rec {
       __propagatedImpureHostDeps = [ "/usr/lib/libXplugin.1.dylib" ];
 
       propagatedBuildInputs = with frameworks; [
-        OpenGL ApplicationServices Carbon IOKit CoreFoundation CoreGraphics CoreServices CoreText
+        OpenGL ApplicationServices Carbon IOKit CF CoreGraphics CoreServices CoreText
       ];
 
       installPhase = ''
@@ -144,9 +144,7 @@ in rec {
     };
   };
 
-  frameworks = (stdenv.lib.mapAttrs framework (import ./frameworks.nix { inherit frameworks libs; })) // {
-    CoreFoundation = CF;
-  };
+  frameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix { inherit frameworks libs CF; });
 
   inherit sdk;
 }

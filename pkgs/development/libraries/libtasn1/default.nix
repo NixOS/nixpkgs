@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "libtasn1-4.5";
+  name = "libtasn1-4.7";
 
   src = fetchurl {
     url = "mirror://gnu/libtasn1/${name}.tar.gz";
-    sha256 = "1nhvnznhg2aqfrfjxc8v008hjlzkh5831jsfahqk89qrw7fbbcw9";
+    sha256 = "1j8iixynchziw1y39lnibyl5h81m4p78w3i4f28q2vgwjgf801x4";
   };
 
   buildInputs = [ perl texinfo ];

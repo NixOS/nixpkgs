@@ -6,7 +6,7 @@ let
     mpfr m4 binutils emacs gmp
     libX11 xproto inputproto libXi
     libXext xextproto libXt libXaw libXmu
-    zlib which texinfo texLive
+    zlib which texinfo
   ];
 in
 

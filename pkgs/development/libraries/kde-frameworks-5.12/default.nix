@@ -117,7 +117,7 @@ let
         inherit acl cmake docbook_xml_dtd_45 docbook5_xsl epoxy fam gpgme
                 libgcrypt libgit2 modemmanager networkmanager perl
                 perlPackages qimageblitz xlibs zlib;
-        boost = boost156;
+        boost = boost155;
         gif = giflib;
         glib2 = glib;
         jpeg = libjpeg;

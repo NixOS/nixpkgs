@@ -21,14 +21,20 @@
   # directories in the list is not symlinked.
   pathsToLink ? ["/"]
 
-, # Shell command to run after building the symlink tree.
+, # Root the result in directory "$out${extraPrefix}", e.g. "/share".
+  extraPrefix ? ""
+
+, # Shell commands to run after building the symlink tree.
   postBuild ? ""
+
+, # Additional inputs. Handy e.g. if using makeWrapper in `postBuild`.
+  buildInputs ? []
 
 , passthru ? {}
 }:
 
 runCommand name
-  { inherit manifest ignoreCollisions passthru pathsToLink postBuild;
+  { inherit manifest ignoreCollisions passthru pathsToLink extraPrefix postBuild buildInputs;
     pkgs = builtins.toJSON (map (drv: {
       paths = [ drv ]; # FIXME: handle multiple outputs
       priority = drv.meta.priority or 5;

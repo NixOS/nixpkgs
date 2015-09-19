@@ -41,7 +41,9 @@ let
 
     installFlags = "sysconfdir=$(out)/etc";
 
-    doInstallCheck = true;
+    doInstallCheck = false;
+
+    separateDebugInfo = true;
 
     crossAttrs = {
       postUnpack =

@@ -5,6 +5,18 @@
 }:
 
 let
+
+  /**
+   * The JRE libraries are in directories that depend on the CPU.
+   */
+  architecture =
+    if stdenv.system == "i686-linux" then
+      "i386"
+    else if stdenv.system == "x86_64-linux" then
+      "amd64"
+    else
+      throw "openjdk requires i686-linux or x86_64 linux";
+
   update = "60";
   build = "24";
   baseurl = "http://hg.openjdk.java.net/jdk8u/jdk8u";
@@ -204,6 +216,9 @@ let
       platforms = platforms.linux;
     };
 
-    passthru.home = "${openjdk8}/lib/openjdk";
+    passthru = {
+      inherit architecture;
+      home = "${openjdk8}/lib/openjdk";
+    };
   };
 in openjdk8

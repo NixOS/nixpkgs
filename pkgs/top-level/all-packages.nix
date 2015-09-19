@@ -424,13 +424,17 @@ let
 
   makeAutostartItem = callPackage ../build-support/make-startupitem { };
 
-  makeInitrd = { contents, compressor ? "gzip -9n", prepend ? [ ] }@args:
-    callPackage ../build-support/kernel/make-initrd.nix args;
+  makeInitrd = { contents, compressor ? "gzip -9n", prepend ? [ ] }:
+    callPackage ../build-support/kernel/make-initrd.nix {
+      inherit contents compressor prepend;
+    };
 
   makeWrapper = makeSetupHook { } ../build-support/setup-hooks/make-wrapper.sh;
 
-  makeModulesClosure = { kernel, rootModules, allowMissing ? false }@args:
-    callPackage ../build-support/kernel/modules-closure.nix args;
+  makeModulesClosure = { kernel, rootModules, allowMissing ? false }:
+    callPackage ../build-support/kernel/modules-closure.nix {
+      inherit kernel rootModules allowMissing;
+    };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
@@ -472,6 +476,8 @@ let
   wrapGAppsHook = makeSetupHook {
     deps = [ makeWrapper ];
   } ../build-support/setup-hooks/wrap-gapps-hook.sh;
+
+  separateDebugInfo = makeSetupHook { } ../build-support/setup-hooks/separate-debug-info.sh;
 
 
   ### TOOLS
@@ -876,7 +882,6 @@ let
   syslogng_incubator = callPackage ../tools/system/syslog-ng-incubator { };
 
   rsyslog = callPackage ../tools/system/rsyslog {
-    czmq = null; # Currently Broken
     hadoop = null; # Currently Broken
   };
 
@@ -896,6 +901,7 @@ let
     openssl = null;
     librelp = null;
     libgt = null;
+    libksi = null;
     liblogging = null;
     libnet = null;
     hadoop = null;
@@ -1047,7 +1053,7 @@ let
   cksfv = callPackage ../tools/networking/cksfv { };
 
   clementine = callPackage ../applications/audio/clementine {
-    boost = boost156;
+    boost = boost155;
     gst_plugins = [ gst_plugins_base gst_plugins_good gst_plugins_ugly gst_ffmpeg ];
   };
 
@@ -2085,6 +2091,8 @@ let
 
   librdmacm = callPackage ../development/libraries/librdmacm { };
 
+  libwebsockets = callPackage ../development/libraries/libwebsockets { };
+
   limesurvey = callPackage ../servers/limesurvey { };
 
   logcheck = callPackage ../tools/system/logcheck {
@@ -2198,6 +2206,8 @@ let
     libpng = libpng12;
   };
 
+  minissdpd = callPackage ../tools/networking/minissdpd { };
+
   miniupnpc = callPackage ../tools/networking/miniupnpc { };
 
   miniupnpd = callPackage ../tools/networking/miniupnpd { };
@@ -2270,6 +2280,8 @@ let
   muscletool = callPackage ../tools/security/muscletool { };
 
   mysql2pgsql = callPackage ../tools/misc/mysql2pgsql { };
+
+  nabi = callPackage ../tools/inputmethods/nabi { };
 
   namazu = callPackage ../tools/text/namazu { };
 
@@ -3065,7 +3077,7 @@ let
   svnfs = callPackage ../tools/filesystems/svnfs { };
 
   svtplay-dl = callPackage ../tools/misc/svtplay-dl {
-    inherit (pythonPackages) nose mock;
+    inherit (pythonPackages) nose mock requests2;
   };
 
   sysbench = callPackage ../development/tools/misc/sysbench {};
@@ -3109,7 +3121,7 @@ let
   telnet = callPackage ../tools/networking/telnet { };
 
   texmacs = callPackage ../applications/editors/texmacs {
-    tex = texLive; /* tetex is also an option */
+    tex = texlive.combined.scheme-small;
     extraFonts = true;
   };
 
@@ -3162,6 +3174,8 @@ let
   tpm-tools = callPackage ../tools/security/tpm-tools { };
 
   tpm-luks = callPackage ../tools/security/tpm-luks { };
+
+  tthsum = callPackage ../applications/misc/tthsum { };
 
   chaps = callPackage ../tools/security/chaps { };
 
@@ -3939,11 +3953,6 @@ let
 
   gcl = builderDefsPackage (callPackage ../development/compilers/gcl) {
     gmp = gmp4;
-    texLive = texLiveAggregationFun {
-      paths = [
-        texLive texLiveExtra
-      ];
-    };
   };
 
   gcc-arm-embedded-4_7 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
@@ -5554,6 +5563,8 @@ let
 
   leiningen = callPackage ../development/tools/build-managers/leiningen { };
 
+  lemon = callPackage ../development/tools/parsing/lemon { };
+
   libtool = libtool_2;
 
   libtool_1_5 = callPackage ../development/tools/misc/libtool { };
@@ -5745,7 +5756,7 @@ let
 
   tcptrack = callPackage ../development/tools/misc/tcptrack { };
 
-  teensy-loader = callPackage ../development/tools/misc/teensy { };
+  teensy-loader-cli = callPackage ../development/tools/misc/teensy-loader-cli { };
 
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
@@ -5759,7 +5770,7 @@ let
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
   uhd = callPackage ../development/tools/misc/uhd {
-    boost = boost157;
+    boost = boost155;
   };
 
   uisp = callPackage ../development/tools/misc/uisp { };
@@ -5889,9 +5900,6 @@ let
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
   boost155 = callPackage ../development/libraries/boost/1.55.nix { };
-  boost156 = callPackage ../development/libraries/boost/1.56.nix { };
-  boost157 = callPackage ../development/libraries/boost/1.57.nix { };
-  boost158 = callPackage ../development/libraries/boost/1.58.nix { };
   boost159 = callPackage ../development/libraries/boost/1.59.nix { };
   boost = boost159;
 
@@ -6097,8 +6105,9 @@ let
 
   farstream = callPackage ../development/libraries/farstream {
     inherit (gst_all_1)
-      gstreamer gst-plugins-base gst-python gst-plugins-good gst-plugins-bad
+      gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
       gst-libav;
+    inherit (pythonPackages) gst-python;
   };
 
   fcgi = callPackage ../development/libraries/fcgi { };
@@ -6168,9 +6177,7 @@ let
 
   fontconfig-ultimate = callPackage ../development/libraries/fontconfig-ultimate {};
 
-  folly = callPackage ../development/libraries/folly {
-    boost = boost157;
-  };
+  folly = callPackage ../development/libraries/folly { };
 
   makeFontsConf = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
     callPackage ../development/libraries/fontconfig/make-fonts-conf.nix {
@@ -6373,7 +6380,7 @@ let
 
   qt_gstreamer = callPackage ../development/libraries/gstreamer/legacy/qt-gstreamer {};
 
-  qt_gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer { boost = boost156;};
+  qt_gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer { boost = boost155;};
 
   gnet = callPackage ../development/libraries/gnet { };
 
@@ -6932,6 +6939,8 @@ let
     inherit (perlPackages) libintlperl GetoptLong SysVirt;
   };
 
+  libhangul = callPackage ../development/libraries/libhangul { };
+
   libharu = callPackage ../development/libraries/libharu { };
 
   libHX = callPackage ../development/libraries/libHX { };
@@ -7071,6 +7080,8 @@ let
   libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
 
   libksba = callPackage ../development/libraries/libksba { };
+
+  libksi = callPackage ../development/libraries/libksi { };
 
   libmad = callPackage ../development/libraries/libmad { };
 
@@ -7772,6 +7783,11 @@ let
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
 
+  poppler_min = poppler.override { # TODO: maybe reduce even more
+    minimal = true;
+    suffix = "min";
+  };
+
   poppler_qt4 = poppler.override {
     qt4Support = true;
     suffix = "qt4";
@@ -7937,6 +7953,8 @@ let
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
   redland = pkgs.librdf_redland;
+
+  resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
 
   rhino = callPackage ../development/libraries/java/rhino {
     javac = gcj;
@@ -8402,6 +8420,8 @@ let
 
   czmq = callPackage ../development/libraries/czmq { };
 
+  zimlib = callPackage ../development/libraries/zimlib { };
+
   zita-convolver = callPackage ../development/libraries/audio/zita-convolver { };
 
   zita-alsa-pcmi = callPackage ../development/libraries/audio/zita-alsa-pcmi { };
@@ -8491,7 +8511,7 @@ let
   lucene = callPackage ../development/libraries/java/lucene { };
 
   lucenepp = callPackage ../development/libraries/lucene++ {
-    boost = boost157;
+    boost = boost155;
   };
 
   mockobjects = callPackage ../development/libraries/java/mockobjects { };
@@ -8700,7 +8720,10 @@ let
   ### DEVELOPMENT / R MODULES
 
   R = callPackage ../applications/science/math/R {
-    texLive = texLiveAggregationFun { paths = [ texLive texLiveExtra ]; };
+    # TODO: split docs into a separate output
+    texLive = texlive.combine {
+      inherit (texlive) scheme-small inconsolata helvetic texinfo fancyvrb cm-super;
+    };
     openblas = openblasCompat;
     withRecommendedPackages = false;
   };
@@ -9100,7 +9123,7 @@ let
   rethinkdb = callPackage ../servers/nosql/rethinkdb { };
 
   rippled = callPackage ../servers/rippled {
-    boost = boost157;
+    boost = boost155;
   };
 
   ripple-rest = callPackage ../servers/rippled/ripple-rest.nix { };
@@ -9214,6 +9237,11 @@ let
   quartz-wm = callPackage ../servers/x11/quartz-wm { stdenv = clangStdenv; };
 
   xorg = recurseIntoAttrs (lib.callPackagesWith pkgs ../servers/x11/xorg/default.nix {
+    inherit clangStdenv fetchurl fetchgit fetchpatch stdenv pkgconfig intltool freetype fontconfig
+      libxslt expat libpng zlib perl mesa_drivers spice_protocol
+      dbus libuuid openssl gperf m4 libevdev tradcpp libinput mcpp makeWrapper autoreconfHook
+      autoconf automake libtool xmlto asciidoc flex bison python mtdev pixman;
+    inherit (darwin) apple_sdk;
     bootstrap_cmds = if stdenv.isDarwin then darwin.bootstrap_cmds else null;
     mesa = mesa_noglu;
     udev = if stdenv.isLinux then udev else null;
@@ -9238,7 +9266,7 @@ let
 
   afuse = callPackage ../os-specific/linux/afuse { };
 
-  autofs5 = callPackage ../os-specific/linux/autofs/autofs-v5.nix { };
+  autofs5 = callPackage ../os-specific/linux/autofs { };
 
   _915resolution = callPackage ../os-specific/linux/915resolution { };
 
@@ -9269,18 +9297,12 @@ let
 
   microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
 
-  apparmor = callPackage ../os-specific/linux/apparmor {
-    inherit (perlPackages) LocaleGettext TermReadKey RpcXML;
-    bison = bison2;
-    perl = perl516; # ${perl}/.../CORE/handy.h:124:34: error: 'bool' undeclared
-  };
-
-  apparmor_2_9 = callPackage ../os-specific/linux/apparmor/2.9 { };
-  libapparmor = apparmor_2_9.libapparmor;
-  apparmor-pam = apparmor_2_9.apparmor-pam;
-  apparmor-parser = apparmor_2_9.apparmor-parser;
-  apparmor-profiles = apparmor_2_9.apparmor-profiles;
-  apparmor-utils = apparmor_2_9.apparmor-utils;
+  apparmor = callPackage ../os-specific/linux/apparmor { swig = swig2; };
+  libapparmor = apparmor.libapparmor;
+  apparmor-pam = apparmor.apparmor-pam;
+  apparmor-parser = apparmor.apparmor-parser;
+  apparmor-profiles = apparmor.apparmor-profiles;
+  apparmor-utils = apparmor.apparmor-utils;
 
   atop = callPackage ../os-specific/linux/atop { };
 
@@ -9655,9 +9677,14 @@ let
   grPackage = opts: recurseIntoAttrs (mkGrsecurity opts).grsecPackage;
 
   # Stable kernels
-  linux_grsec_stable_desktop    = grKernel grFlavors.linux_grsec_stable_desktop;
-  linux_grsec_stable_server     = grKernel grFlavors.linux_grsec_stable_server;
-  linux_grsec_stable_server_xen = grKernel grFlavors.linux_grsec_stable_server_xen;
+  # This is no longer supported. Please see the official announcement on the
+  # grsecurity page. https://grsecurity.net/announce.php
+  linux_grsec_stable_desktop    = throw "No longer supported due to https://grsecurity.net/announce.php. "
+    + "Please use linux_grsec_testing_desktop.";
+  linux_grsec_stable_server     = throw "No longer supported due to https://grsecurity.net/announce.php. "
+    + "Please use linux_grsec_testing_server.";
+  linux_grsec_stable_server_xen = throw "No longer supporteddue to https://grsecurity.net/announce.php. "
+    + "Please use linux_grsec_testing_server_xen.";
 
   # Testing kernels
   linux_grsec_testing_desktop = grKernel grFlavors.linux_grsec_testing_desktop;
@@ -10246,8 +10273,6 @@ let
 
   xf86_video_nested = callPackage ../os-specific/linux/xf86-video-nested { };
 
-  xf86_video_nouveau = xorg.xf86videonouveau;
-
   xmoto = callPackage ../games/xmoto { };
 
   xorg_sys_opengl = callPackage ../os-specific/linux/opengl/xorg-sys { };
@@ -10618,7 +10643,7 @@ let
   schismtracker = callPackage ../applications/audio/schismtracker { };
 
   altcoins = recurseIntoAttrs ( callPackage ../applications/altcoins {
-    callPackage = newScope { boost = boost157; };
+    callPackage = newScope { boost = boost155; };
   } );
   bitcoin = altcoins.bitcoin;
   bitcoin-xt = altcoins.bitcoin-xt;
@@ -11104,15 +11129,11 @@ let
 
     proofgeneral_4_2 = callPackage ../applications/editors/emacs-modes/proofgeneral/4.2.nix {
       texinfo = texinfo4 ;
-      texLive = pkgs.texLiveAggregationFun {
-        paths = [ pkgs.texLive pkgs.texLiveCMSuper ];
-      };
+      texLive = texlive.combine { inherit (texlive) scheme-basic cm-super ec; };
     };
     proofgeneral_4_3_pre = callPackage ../applications/editors/emacs-modes/proofgeneral/4.3pre.nix {
       texinfo = texinfo4 ;
-      texLive = pkgs.texLiveAggregationFun {
-        paths = [ pkgs.texLive pkgs.texLiveCMSuper ];
-      };
+      texLive = texlive.combine { inherit (texlive) scheme-basic cm-super ec; };
     };
     proofgeneral = self.proofgeneral_4_2;
 
@@ -11342,7 +11363,7 @@ let
   fomp = callPackage ../applications/audio/fomp { };
 
   freecad = callPackage ../applications/graphics/freecad {
-    boost = boost156;
+    boost = boost155;
     opencascade = opencascade_6_5;
     inherit (pythonPackages) matplotlib pycollada;
   };
@@ -11365,7 +11386,7 @@ let
   };
 
   freicoin = callPackage ../applications/misc/freicoin {
-    boost = boost157;
+    boost = boost155;
   };
 
   fuze = callPackage ../applications/networking/instant-messengers/fuze {};
@@ -11817,7 +11838,7 @@ let
 
   ledger2 = callPackage ../applications/office/ledger/2.6.3.nix { };
   ledger3 = callPackage ../applications/office/ledger {
-    boost = boost157;
+    boost = boost155;
   };
   ledger = ledger3;
 
@@ -12424,8 +12445,14 @@ let
     inherit (python34Packages) buildPythonPackage python pyqt5 jinja2 pygments pyyaml pypeg2;
   };
 
+  rabbitvcs = callPackage ../applications/version-management/rabbitvcs {};
+
   rakarrack = callPackage ../applications/audio/rakarrack {
     fltk = fltk13;
+  };
+
+  renoise = callPackage ../applications/audio/renoise {
+    demo = false;
   };
 
   rapcad = callPackage ../applications/graphics/rapcad {};
@@ -13825,7 +13852,7 @@ let
       {
         libusb = libusb1;
         libcanberra = libcanberra_kde;
-        boost = boost156;
+        boost = boost155;
         kdelibs = kdeApps_stable.kdelibs;
       }
       ../desktops/kde-4.14;
@@ -13879,7 +13906,7 @@ let
           kdevelop = callPackage ../applications/editors/kdevelop { };
 
           kdevplatform = callPackage ../development/libraries/kdevplatform {
-            boost = boost156;
+            boost = boost155;
           };
 
           kdiff3 = callPackage ../tools/text/kdiff3 { };
@@ -13911,7 +13938,7 @@ let
           libalkimia = callPackage ../development/libraries/libalkimia { };
 
           libktorrent = callPackage ../development/libraries/libktorrent {
-            boost = boost156;
+            boost = boost155;
           };
 
           libkvkontakte = callPackage ../development/libraries/libkvkontakte { };
@@ -14617,8 +14644,6 @@ let
 
   keynav = callPackage ../tools/X11/keynav { };
 
-  lazylist = callPackage ../tools/typesetting/tex/lazylist { };
-
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
 
   mailcore2 = callPackage ../development/libraries/mailcore2 { };
@@ -14721,8 +14746,6 @@ let
 
   pjsip = callPackage ../applications/networking/pjsip { };
 
-  polytable = callPackage ../tools/typesetting/tex/polytable { };
-
   PPSSPP = callPackage ../misc/emulators/ppsspp { SDL = SDL2; };
 
   uae = callPackage ../misc/emulators/uae { };
@@ -14801,6 +14824,10 @@ let
   tex4ht = callPackage ../tools/typesetting/tex/tex4ht { };
 
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
+
+  # All the new TeX Live is inside. See description in default.nix.
+  texlive = recurseIntoAttrs
+    (callPackage ../tools/typesetting/tex/texlive-new { });
 
   texLive = builderDefsPackage (callPackage ../tools/typesetting/tex/texlive) {
     ghostscript = ghostscriptX;
@@ -15029,6 +15056,7 @@ let
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
   youtubeDL = youtube-dl;  # added 2014-10-26
 

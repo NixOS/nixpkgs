@@ -11,19 +11,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "sox-14.4.1";
+  name = "sox-14.4.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/sox/${name}.tar.gz";
-    sha256 = "16x8gykfjdhxg0kdxwzcwgwpm5caa08y2mx18siqsq0ywmpjr34s";
+    sha256 = "0v2znlxkxxcd3f48hf3dx9pq7i6fdhb62kgj7wv8xggz8f35jpxl";
   };
-
-  patches = [
-    # Patches for CVE-2014-8145, found via RedHat bug 1174792.  It was not
-    # clear whether these address a NULL deref and a division by zero.
-    ./0001-Check-for-minimum-size-sphere-headers.patch
-    ./0002-More-checks-for-invalid-MS-ADPCM-blocks.patch
-  ];
 
   buildInputs =
     optional (enableAlsa && stdenv.isLinux) alsaLib ++

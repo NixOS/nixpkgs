@@ -129,7 +129,7 @@ let
               modemmanager openconnect openexr pam pango qt4 samba
               socat substituteAll taglib utillinux wayland xapian
               xkeyboard_config xlibs xorg;
-      boost = boost156;
+      boost = boost155;
       canberra = libcanberra;
       epub = ebook_tools;
       fontforge_executable = fontforge;

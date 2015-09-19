@@ -1,0 +1,28 @@
+From 96165264ad0afe7a5d440ef49f9712a188486266 Mon Sep 17 00:00:00 2001
+From: Richard Yao <ryao@gentoo.org>
+Date: Fri, 18 Sep 2015 08:32:52 -0400
+Subject: [PATCH] Discard on zvols should not exceed the length of a block
+
+37f9dac592bf5889c3efb305c48ac39b4c7dd140 replaced the end-start
+calculation with a cached value, but neglected to update it on discard
+operations. This can cause us to discard data not requested, causing
+data loss on zvols.
+
+Reported-by: Richard Connon <richard.connon@zynstra.com>
+Signed-off-by: Richard Yao <ryao@gentoo.org>
+---
+ module/zfs/zvol.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/module/zfs/zvol.c b/module/zfs/zvol.c
+index 492f8ff..c5a8071 100644
+--- a/module/zfs/zvol.c
++++ b/module/zfs/zvol.c
+@@ -661,6 +661,7 @@ zvol_discard(struct bio *bio)
+ 	if (!(bio->bi_rw & REQ_SECURE)) {
+ 		start = P2ROUNDUP(start, zv->zv_volblocksize);
+ 		end = P2ALIGN(end, zv->zv_volblocksize);
++		size = end - start;
+ 	}
+ #endif
+ 

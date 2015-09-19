@@ -182,6 +182,9 @@ let result = stdenv.mkDerivation rec {
 
   passthru.home = result;
 
-  meta.license = stdenv.lib.licenses.unfree;
+  meta = with stdenv.lib; {
+    license = licenses.unfree;
+    platforms = [ "i686-linux" "x86_64-linux" ]; # some inherit jre.meta.platforms
+  };
 
 }; in result

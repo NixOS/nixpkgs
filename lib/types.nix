@@ -6,7 +6,7 @@ with import ./attrsets.nix;
 with import ./options.nix;
 with import ./trivial.nix;
 with import ./strings.nix;
-with {inherit (import ./modules.nix) mergeDefinitions; };
+with {inherit (import ./modules.nix) mergeDefinitions filterOverrides; };
 
 rec {
 
@@ -165,6 +165,23 @@ rec {
         getSubModules = elemType.getSubModules;
         substSubModules = m: loaOf (elemType.substSubModules m);
       };
+
+    # List or element of ...
+    loeOf = elemType: mkOptionType {
+      name = "element or list of ${elemType.name}s";
+      check = x: isList x || elemType.check x;
+      merge = loc: defs:
+        let
+          defs' = filterOverrides defs;
+          res = (head defs').value;
+        in
+        if isList res then concatLists (getValues defs')
+        else if lessThan 1 (length defs') then
+          throw "The option `${showOption loc}' is defined multiple times, in ${showFiles (getFiles defs)}."
+        else if !isString res then
+          throw "The option `${showOption loc}' does not have a string value, in ${showFiles (getFiles defs)}."
+        else res;
+    };
 
     uniq = elemType: mkOptionType {
       inherit (elemType) name check;
