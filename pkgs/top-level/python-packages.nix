@@ -15084,12 +15084,12 @@ let
   };
 
   upass = buildPythonPackage rec {
-    version = "0.1.3";
+    version = "0.1.4";
     name = "upass-${version}";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/u/upass/upass-${version}.tar.gz";
-      sha256 = "1gwp1b2xydc06pnj4a7kwadzs81fizqiyrq07l82dqjx4zkwn292";
+      url = "https://github.com/Kwpolska/upass/archive/v${version}.tar.gz";
+      sha256 = "0f2lyi7xhvb60pvzx82dpc13ksdj5k92ww09czclkdz8k0dxa7hb";
     };
 
     propagatedBuildInputs = with pythonPackages; [
