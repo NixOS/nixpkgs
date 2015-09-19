@@ -4369,6 +4369,10 @@ let
 
     fix = callPackage ../development/ocaml-modules/fix { };
 
+    fontconfig = callPackage ../development/ocaml-modules/fontconfig {
+      inherit (pkgs) fontconfig;
+    };
+
     functory = callPackage ../development/ocaml-modules/functory { };
 
     herelib = callPackage ../development/ocaml-modules/herelib { };
