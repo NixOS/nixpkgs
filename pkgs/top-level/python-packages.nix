@@ -10021,6 +10021,8 @@ let
     name = "pep8-${version}";
     version = "1.6.2";
 
+    disabled = isPy35; # Not yet supported
+
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pep8/${name}.tar.gz";
       sha256 = "1zybkcdw1sx84dvkfss96nhykqg9bc0cdpwpl4k9wlxm61bf7dxq";
