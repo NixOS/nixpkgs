@@ -9249,6 +9249,8 @@ let
 
   vsftpd = callPackage ../servers/ftp/vsftpd { };
 
+  vstsdk = callPackage ../development/libraries/steinberg/vstsdk.nix { };
+
   winstone = callPackage ../servers/http/winstone { };
 
   xinetd = callPackage ../servers/xinetd { };
