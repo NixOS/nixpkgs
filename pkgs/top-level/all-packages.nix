@@ -7883,14 +7883,6 @@ let
     developerBuild = true;
   });
 
-  qt53 = callPackage ../development/libraries/qt-5/5.3 {
-    mesa = mesa_noglu;
-    cups = if stdenv.isLinux then cups else null;
-    # GNOME dependencies are not used unless gtkStyle == true
-    inherit (gnome) libgnomeui GConf gnome_vfs;
-    bison = bison2; # error: too few arguments to function 'int yylex(...
-  };
-
   qt54 = recurseIntoAttrs (callPackage ../development/libraries/qt-5/5.4 {});
 
   qt5 = qt54;
