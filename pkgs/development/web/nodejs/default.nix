@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openssl, python, zlib, libuv, v8, utillinux, http-parser
-, pkgconfig, runCommand, which, libtool, unstableVersion ? false
+, pkgconfig, runCommand, which, libtool
 }:
 
 # nodejs 0.12 can't be built on armv5tel. Armv6 with FPU, minimum I think.
