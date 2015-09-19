@@ -980,6 +980,23 @@ let
     };
   });
 
+  # flexget needs beatifulsoup < 4.4 for now
+  beautifulsoup_4_1_3 = buildPythonPackage (rec {
+    name = "beautifulsoup4-4.1.3";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/b/beautifulsoup4/${name}.tar.gz";
+      sha256 = "0cbcml88bkx9gf1wznxa0kqz1wpyakfbyh9gmxw0wljhda1q0zk1";
+    };
+
+    meta = {
+      homepage = http://crummy.com/software/BeautifulSoup/bs4/;
+      description = "HTML and XML parser";
+      license = licenses.mit;
+      maintainers = with maintainers; [ iElectric ];
+    };
+  });
+
   beaker = buildPythonPackage rec {
     name = "Beaker-1.6.4";
 
@@ -6088,7 +6105,7 @@ let
 
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ paver feedparser sqlalchemy9 pyyaml rpyc
-	    beautifulsoup4 html5lib pyrss2gen pynzb progressbar jinja2 flask
+	    beautifulsoup_4_1_3 html5lib pyrss2gen pynzb progressbar jinja2 flask
 	    cherrypy requests dateutil_2_1 jsonschema python_tvrage tmdb3
       guessit pathpy apscheduler ]
 	# enable deluge and transmission plugin support, if they're installed
