@@ -5879,6 +5879,8 @@ let
 
   asio = callPackage ../development/libraries/asio { };
 
+  asiosdk = callPackage ../development/libraries/steinberg/asiosdk.nix { };
+
   aspell = callPackage ../development/libraries/aspell { };
 
   aspellDicts = recurseIntoAttrs (callPackages ../development/libraries/aspell/dictionaries.nix {});
