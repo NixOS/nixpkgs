@@ -2031,10 +2031,6 @@ let
   else
     nodePackages_4_1;
 
-  iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_6_1; };
-
-  iojsPackages = callPackage ./node-packages.nix { self = iojsPackages; nodejs = iojs; };
-
   npm2nix = nodePackages.npm2nix;
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
