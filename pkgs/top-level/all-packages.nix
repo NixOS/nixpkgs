@@ -10745,6 +10745,8 @@ let
 
   bristol = callPackage ../applications/audio/bristol { };
 
+  bs1770gain = callPackage ../applications/audio/bs1770gain { };
+
   bspwm = callPackage ../applications/window-managers/bspwm { };
 
   bvi = callPackage ../applications/editors/bvi { };
