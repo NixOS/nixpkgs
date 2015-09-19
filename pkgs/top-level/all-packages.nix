@@ -14963,6 +14963,8 @@ let
     inherit (gnome2) zenity;
   };
 
+  wineasio = callPackage ../misc/emulators/wine/wineasio.nix { };
+
   wmutils-core = callPackage ../tools/X11/wmutils-core { };
 
   wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
