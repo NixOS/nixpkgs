@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, ffmpeg, imagemagick, libzip, pkgconfig, qt53, SDL2 }:
+{ stdenv, fetchurl, cmake, ffmpeg, imagemagick, libzip, pkgconfig, qt5, SDL2 }:
 
 stdenv.mkDerivation rec {
   name = "mgba-0.3.0";
@@ -7,7 +7,10 @@ stdenv.mkDerivation rec {
     sha256 = "02zz6bdcwr1fx7i7dacff0s8mwp0pvabycp282qvhhx44x44q7fm";
   };
 
-  buildInputs = [ cmake ffmpeg imagemagick libzip pkgconfig qt53 SDL2 ];
+  buildInputs = [
+    cmake ffmpeg imagemagick libzip pkgconfig qt5.base qt5.multimedia
+    SDL2
+  ];
 
   enableParallelBuilding = true;
 

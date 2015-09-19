@@ -605,7 +605,7 @@ self: super: {
   configuration-tools = dontCheck super.configuration-tools;
 
   # Test suite wants to connect to $DISPLAY.
-  hsqml = dontCheck (super.hsqml.override { qt5 = pkgs.qt53; });
+  hsqml = dontCheck (addExtraLibrary (super.hsqml.override { qt5 = pkgs.qt5Full; }) pkgs.mesa);
 
   # HsColour: Language/Unlambda.hs: hGetContents: invalid argument (invalid byte sequence)
   unlambda = dontHyperlinkSource super.unlambda;

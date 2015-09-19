@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt5, pkgconfig, boost, wirelesstools, iw }:
+{ stdenv, fetchurl, qt5, pkgconfig, boost, wirelesstools, iw, qwt6 }:
 
 stdenv.mkDerivation rec {
   name = "linssid-${version}";
@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "13d35rlcjncd8lx3khkgn9x8is2xjd5fp6ns5xsn3w6l4xj9b4gl";
   };
 
-  buildInputs = [ qt5 pkgconfig boost ];
+  buildInputs = [ qt5.base qt5.svg pkgconfig boost qwt6 ];
+
+  patches = [ ./0001-unbundled-qwt.patch ];
 
   postPatch = ''
     sed -e "s|/usr/include/|/nonexistent/|g" -i linssid-app/*.pro
@@ -20,6 +22,9 @@ stdenv.mkDerivation rec {
 
     sed -e "s|iwlist|${wirelesstools}/sbin/iwlist|g" -i linssid-app/Getter.cpp
     sed -e "s|iw dev|${iw}/sbin/iw dev|g" -i linssid-app/MainForm.cpp
+
+    # Remove bundled qwt
+    rm -fr qwt-lib
   '';
 
   configurePhase = "qmake linssid.pro";
