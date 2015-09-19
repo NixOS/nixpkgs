@@ -6231,13 +6231,12 @@ let
   });
 
   fonttools = buildPythonPackage (rec {
-    version = "2.4";
+    version = "3.0";
     name = "fonttools-${version}";
-    disabled = isPy3k;
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/F/FontTools/FontTools-${version}.tar.gz";
-      sha256 = "13ggkzcj34kcca6bsxjkaqsxkp2bvxxf6ijiyhq1xlyb0z37z4qa";
+      url = "https://pypi.python.org/packages/source/F/FontTools/fonttools-${version}.tar.gz";
+      sha256 = "0f4iblpbf3y3ghajiccvdwk2f46cim6dsj6fq1kkrbqfv05dr4nz";
     };
 
     buildInputs = with self; [
@@ -6245,7 +6244,7 @@ let
     ];
 
     meta = {
-      homepage = "http://sourceforge.net/projects/fonttools/";
+      homepage = "https://github.com/behdad/fonttools";
       description = "Font file processing tools";
     };
   });
