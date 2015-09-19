@@ -8248,6 +8248,29 @@ let
     };
   };
 
+  nototools = buildPythonPackage rec {
+    version = "git-2015-09-16";
+    name = "nototools-${version}";
+    disabled = isPy3k;
+
+    pythonPath = with self; [ fonttools numpy ];
+
+    postPatch = ''
+      sed -ie "s^join(_DATA_DIR_PATH,^join(\"$out/third_party/ucd\",^" nototools/unicode_data.py
+    '';
+
+    postInstall = ''
+      cp -r third_party $out
+    '';
+
+    src = pkgs.fetchFromGitHub {
+      owner = "googlei18n";
+      repo = "nototools";
+      rev = "5a79bee819941849da7b414447929fc7ba6c2c08";
+      sha256 = "0srrmyrjgksk4c6smgi1flyq325r4ma8r6bpkvbn731q3yykhmaa";
+    };
+  };
+
   rainbowstream = buildPythonPackage rec {
     name = "rainbowstream-${version}";
     version = "1.2.7";
