@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "13d35rlcjncd8lx3khkgn9x8is2xjd5fp6ns5xsn3w6l4xj9b4gl";
   };
 
-  buildInputs = [ qt5 pkgconfig boost ];
+  buildInputs = [ qt5.base qt5.svg pkgconfig boost ];
 
   postPatch = ''
     sed -e "s|/usr/include/|/nonexistent/|g" -i linssid-app/*.pro
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
+    broken = true;
   };
 }
