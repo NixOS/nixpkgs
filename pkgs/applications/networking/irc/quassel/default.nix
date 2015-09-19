@@ -54,6 +54,8 @@ in with stdenv; mkDerivation rec {
            ])
        );
 
+  NIX_CFLAGS_COMPILE = "-fPIC";
+
   cmakeFlags = [
     "-DEMBED_DATA=OFF"
     "-DSTATIC=OFF" ]
