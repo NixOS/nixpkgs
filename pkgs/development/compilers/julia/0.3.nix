@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
         md5 = "cb61be3be7254eae39684612c524740d";
       };
 
-    in [ dsfmt_src llvm.src ];
+    in [ dsfmt_src ];
 
   prePatch = ''
     copy_kill_hash(){
@@ -70,22 +70,18 @@ stdenv.mkDerivation rec {
     sed -e "s@/sbin/ldconfig@true@" -i src/ccall.*
   '';
 
-  buildInputs =
-    [ libunwind readline utf8proc zlib
-      double_conversion fftw fftwSinglePrec glpk gmp mpfr pcre
-      openblas arpack suitesparse
-    ];
+  buildInputs = [
+    arpack double_conversion fftw fftwSinglePrec glpk gmp libunwind
+    llvm mpfr pcre openblas readline suitesparse utf8proc zlib
+  ];
 
-  nativeBuildInputs = [ gfortran git m4 patchelf perl which python2 ];
+  nativeBuildInputs = [ gfortran git m4 patchelf perl python2 which ];
 
   makeFlags =
     let
       arch = head (splitString "-" stdenv.system);
-      march =
-        { "x86_64-linux" = "x86-64";
-          "x86_64-darwin" = "x86-64";
-          "i686-linux" = "i686";
-        }."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
+      march = { "x86_64" = "x86-64"; "i686" = "i686"; }."${arch}"
+              or (throw "unsupported architecture: ${arch}");
     in [
       "ARCH=${arch}"
       "MARCH=${march}"
@@ -108,6 +104,7 @@ stdenv.mkDerivation rec {
       "USE_SYSTEM_GMP=1"
       "USE_SYSTEM_GRISU=1"
       "USE_SYSTEM_LIBUNWIND=1"
+      "USE_SYSTEM_LLVM=1"
       "USE_SYSTEM_MPFR=1"
       "USE_SYSTEM_PATCHELF=1"
       "USE_SYSTEM_PCRE=1"
@@ -143,6 +140,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # Test fail on i686 (julia version 0.3.10)
+  doCheck = !stdenv.isi686;
   checkTarget = "testall";
 
   meta = {
@@ -150,6 +149,6 @@ stdenv.mkDerivation rec {
     homepage = "http://julialang.org/";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ raskin ttuegel ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 }

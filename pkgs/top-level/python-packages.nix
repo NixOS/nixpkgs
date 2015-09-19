@@ -10021,6 +10021,8 @@ let
     name = "pep8-${version}";
     version = "1.6.2";
 
+    disabled = isPy35; # Not yet supported
+
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pep8/${name}.tar.gz";
       sha256 = "1zybkcdw1sx84dvkfss96nhykqg9bc0cdpwpl4k9wlxm61bf7dxq";
@@ -15084,12 +15086,12 @@ let
   };
 
   upass = buildPythonPackage rec {
-    version = "0.1.3";
+    version = "0.1.4";
     name = "upass-${version}";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/u/upass/upass-${version}.tar.gz";
-      sha256 = "1gwp1b2xydc06pnj4a7kwadzs81fizqiyrq07l82dqjx4zkwn292";
+      url = "https://github.com/Kwpolska/upass/archive/v${version}.tar.gz";
+      sha256 = "0f2lyi7xhvb60pvzx82dpc13ksdj5k92ww09czclkdz8k0dxa7hb";
     };
 
     propagatedBuildInputs = with pythonPackages; [

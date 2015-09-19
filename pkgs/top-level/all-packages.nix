@@ -2015,7 +2015,6 @@ let
     libuv = libuvVersions.v1_6_1;
     libtool = darwin.cctools;
   };
-  nodejs-unstable = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_2_0; unstableVersion = true; };
   nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix {
     libtool = darwin.cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices Carbon Foundation;
@@ -3570,6 +3569,8 @@ let
 
   zinnia = callPackage ../tools/inputmethods/zinnia { };
   tegaki-zinnia-japanese = callPackage ../tools/inputmethods/tegaki-zinnia-japanese { };
+
+  zimwriterfs = callPackage ../tools/text/zimwriterfs { };
 
   zip = callPackage ../tools/archivers/zip { };
 
@@ -7868,14 +7869,6 @@ let
     developerBuild = true;
   });
 
-  qt53 = callPackage ../development/libraries/qt-5/5.3 {
-    mesa = mesa_noglu;
-    cups = if stdenv.isLinux then cups else null;
-    # GNOME dependencies are not used unless gtkStyle == true
-    inherit (gnome) libgnomeui GConf gnome_vfs;
-    bison = bison2; # error: too few arguments to function 'int yylex(...
-  };
-
   qt54 = recurseIntoAttrs (callPackage ../development/libraries/qt-5/5.4 {});
 
   qt5 = qt54;
@@ -7884,7 +7877,7 @@ let
 
   qt5Full = appendToName "full" (qtEnv {
     qtbase = qt5.base;
-    paths = lib.filter (x: !(builtins.isFunction x)) (lib.attrValues qt5);
+    paths = lib.filter lib.isDerivation (lib.attrValues qt5);
   });
 
   qtcreator = callPackage ../development/qtcreator {
@@ -11451,9 +11444,7 @@ let
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
-  linssid = callPackage ../applications/networking/linssid {
-    qt5 = qt53;
-  };
+  linssid = callPackage ../applications/networking/linssid { };
 
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
@@ -12243,6 +12234,8 @@ let
   paraview = callPackage ../applications/graphics/paraview { };
 
   pencil = callPackage ../applications/graphics/pencil { };
+
+  perseus = callPackage ../applications/science/math/perseus {};  
 
   petrifoo = callPackage ../applications/audio/petrifoo {
     inherit (gnome) libgnomecanvas;

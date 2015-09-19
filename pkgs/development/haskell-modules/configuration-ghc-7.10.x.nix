@@ -61,19 +61,14 @@ self: super: {
     });
   };
 
-  idris =
-    let idris' = overrideCabal super.idris (drv: {
-      # "idris" binary cannot find Idris library otherwise while building.
-      # After installing it's completely fine though. Seems like Nix-specific
-      # issue so not reported.
-      preBuild = "export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH";
-      # https://github.com/idris-lang/Idris-dev/issues/2499
-      librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
-    });
-    in idris'.overrideScope (self: super: {
-      # https://github.com/idris-lang/Idris-dev/issues/2500
-      zlib = self.zlib_0_5_4_2;
-    });
+  idris = overrideCabal super.idris (drv: {
+    # "idris" binary cannot find Idris library otherwise while building.
+    # After installing it's completely fine though. Seems like Nix-specific
+    # issue so not reported.
+    preBuild = "export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH";
+    # https://github.com/idris-lang/Idris-dev/issues/2499
+    librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
+  });
 
   Extra = appendPatch super.Extra (pkgs.fetchpatch {
     url = "https://github.com/seereason/sr-extra/commit/29787ad4c20c962924b823d02a7335da98143603.patch";
@@ -180,22 +175,6 @@ self: super: {
             in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
                                           self.webkitgtk3-javascriptcore ];
 
-  # https://github.com/cartazio/arithmoi/issues/1
-  arithmoi = markBroken super.arithmoi;
-  NTRU = dontDistribute super.NTRU;
-  arith-encode = dontDistribute super.arith-encode;
-  barchart = dontDistribute super.barchart;
-  constructible = dontDistribute super.constructible;
-  cyclotomic = dontDistribute super.cyclotomic;
-  diagrams = dontDistribute super.diagrams;
-  diagrams-contrib = dontDistribute super.diagrams-contrib;
-  enumeration = dontDistribute super.enumeration;
-  ghci-diagrams = dontDistribute super.ghci-diagrams;
-  ihaskell-diagrams = dontDistribute super.ihaskell-diagrams;
-  nimber = dontDistribute super.nimber;
-  pell = dontDistribute super.pell;
-  quadratic-irrational = dontDistribute super.quadratic-irrational;
-
   # https://github.com/lymar/hastache/issues/47
   hastache = dontCheck super.hastache;
 
@@ -214,36 +193,8 @@ self: super: {
   # https://github.com/HugoDaniel/RFC3339/issues/14
   timerep = dontCheck super.timerep;
 
-  # Upstream has no issue tracker.
-  llvm-base-types = markBroken super.llvm-base-types;
-  llvm-analysis = dontDistribute super.llvm-analysis;
-  llvm-data-interop = dontDistribute super.llvm-data-interop;
-  llvm-tools = dontDistribute super.llvm-tools;
-
-  # Upstream has no issue tracker.
-  MaybeT = markBroken super.MaybeT;
-  grammar-combinators = dontDistribute super.grammar-combinators;
-
   # Required to fix version 0.91.0.0.
   wx = dontHaddock (appendConfigureFlag super.wx "--ghc-option=-XFlexibleContexts");
-
-  # Upstream has no issue tracker.
-  Graphalyze = markBroken super.Graphalyze;
-  gbu = dontDistribute super.gbu;
-  SourceGraph = dontDistribute super.SourceGraph;
-
-  # Upstream has no issue tracker.
-  markBroken = super.protocol-buffers;
-  caffegraph = dontDistribute super.caffegraph;
-
-  # Deprecated: https://github.com/mikeizbicki/ConstraintKinds/issues/8
-  ConstraintKinds = markBroken super.ConstraintKinds;
-  HLearn-approximation = dontDistribute super.HLearn-approximation;
-  HLearn-distributions = dontDistribute super.HLearn-distributions;
-  HLearn-classification = dontDistribute super.HLearn-classification;
-
-  # Doesn't work with LLVM 3.5.
-  llvm-general = markBroken super.llvm-general;
 
   # Inexplicable haddock failure
   # https://github.com/gregwebs/aeson-applicative/issues/2
