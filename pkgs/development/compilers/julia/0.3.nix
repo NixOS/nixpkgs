@@ -129,6 +129,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = true;
   checkTarget = "testall";
 
   meta = {
