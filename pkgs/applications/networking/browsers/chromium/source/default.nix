@@ -74,8 +74,6 @@ in stdenv.mkDerivation {
     cat $opensslPatches | patch -p1 -d "$bundled/openssl/openssl"
   '';
 
-  preferLocalBuild = true;
-
   passthru = {
     inherit version channel;
     plugins = fetchurl binary;
