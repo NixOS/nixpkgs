@@ -1,29 +1,13 @@
 { lib, pythonPackages, fetchgit, libxslt, docbook5_xsl, openssh }:
 
-let
-
-  # Use this until the patches are upstreamed.
-  # Warning: will be rebased at will
-  libcloud = lib.overrideDerivation pythonPackages.libcloud ( args: {
-    src = fetchgit {
-      url = https://github.com/Phreedom/libcloud.git;
-      rev = "784427f549829a00d551e3468184a708420ad1ec";
-      sha256 = "fd0e092b39fa1fde6a8847e6dc69855d30c2dad9e95ee0373297658ff53edf8a";
-    };
-
-    preConfigure = "cp libcloud/test/secrets.py-dist libcloud/test/secrets.py";
-  });
-
-in
-
 pythonPackages.buildPythonPackage rec {
   name = "nixops-1.3pre-cefcd9ba";
   namePrefix = "";
 
   src = fetchgit {
     url = https://github.com/NixOS/nixops;
-    rev = "cefcd9bae9a4d3bac83f188460619d18972321a8";
-    sha256 = "1jwkbnfwics2j0m6mr75rz914vg0z46d2xv0z1717c1ac5rki0l2";
+    rev = "9a05ebc332701247fa99fbf6d1215d48e08f3edd";
+    sha256 = "17vxr51wpdd5dnasiaafga3a6ddhxyrwgr0yllczxj6bq0n5skp2";
   };
 
   buildInputs = [ /* libxslt */ pythonPackages.nose pythonPackages.coverage ];
@@ -32,7 +16,7 @@ pythonPackages.buildPythonPackage rec {
     [ pythonPackages.prettytable
       pythonPackages.boto
       pythonPackages.hetzner
-      libcloud
+      pythonPackages.libcloud
       pythonPackages.sqlite3
     ];
 
