@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, qt4 }:
+{ stdenv, fetchurl, qt5 }:
 
 stdenv.mkDerivation rec {
-  name = "qwt-6.1.0";
+  name = "qwt-6.1.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/qwt/${name}.tar.bz2";
-    sha256 = "00klw6jsn8z3dnhxg52pqg3hg5mw2sih8prwjxm1hzcivgqxkqx7";
+    sha256 = "031x4hz1jpbirv9k35rqb52bb9mf2w7qav89qv1yfw1r3n6z221b";
   };
 
-  propagatedBuildInputs = [ qt4 ];
+  propagatedBuildInputs = [ qt5.base qt5.svg qt5.tools ];
 
   postPatch = ''
     sed -e "s|QWT_INSTALL_PREFIX.*=.*|QWT_INSTALL_PREFIX = $out|g" -i qwtconfig.pri
