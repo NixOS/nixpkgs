@@ -3570,6 +3570,8 @@ let
   zinnia = callPackage ../tools/inputmethods/zinnia { };
   tegaki-zinnia-japanese = callPackage ../tools/inputmethods/tegaki-zinnia-japanese { };
 
+  zimreader = callPackage ../tools/text/zimreader { };
+
   zimwriterfs = callPackage ../tools/text/zimwriterfs { };
 
   zip = callPackage ../tools/archivers/zip { };
