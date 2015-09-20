@@ -119,6 +119,11 @@ with stdenv.lib;
     B43_PHY_HT? y
   ''}
   BCMA_HOST_PCI? y
+  ${if versionAtLeast version "3.17" then ''
+    BRCMFMAC_SDIO y
+    BRCMFMAC_USB y
+    BRCMFMAC_PCIE y
+  ''}
 
   # Enable various FB devices.
   FB y
