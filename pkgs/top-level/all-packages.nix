@@ -269,7 +269,7 @@ let
   autonix = import ../build-support/autonix { inherit pkgs; };
 
   autoreconfHook = makeSetupHook
-    { substitutions = { inherit autoconf automake libtool gettext; }; }
+    { substitutions = { inherit autoconf automake gettext; libtool = realLibtool; }; }
     ../build-support/setup-hooks/autoreconf.sh;
 
   buildEnv = callPackage ../build-support/buildenv {};
@@ -5564,7 +5564,9 @@ let
 
   libtool = if stdenv.isDarwin
     then darwin.cctools
-    else libtool_2;
+    else realLibtool;
+
+  realLibtool = libtool_2;
 
   libtool_1_5 = callPackage ../development/tools/misc/libtool { };
 
