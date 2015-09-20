@@ -10441,6 +10441,9 @@ let
 
   nafees = callPackage ../data/fonts/nafees { };
 
+  inherit (callPackages ../data/fonts/noto-fonts {})
+    noto-fonts noto-fonts-cjk noto-fonts-emoji;
+
   numix-icon-theme = callPackage ../data/icons/numix-icon-theme { };
 
   numix-icon-theme-circle = callPackage ../data/icons/numix-icon-theme-circle { };

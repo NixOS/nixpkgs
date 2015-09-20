@@ -6248,13 +6248,12 @@ let
   });
 
   fonttools = buildPythonPackage (rec {
-    version = "2.4";
+    version = "3.0";
     name = "fonttools-${version}";
-    disabled = isPy3k;
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/F/FontTools/FontTools-${version}.tar.gz";
-      sha256 = "13ggkzcj34kcca6bsxjkaqsxkp2bvxxf6ijiyhq1xlyb0z37z4qa";
+      url = "https://pypi.python.org/packages/source/F/FontTools/fonttools-${version}.tar.gz";
+      sha256 = "0f4iblpbf3y3ghajiccvdwk2f46cim6dsj6fq1kkrbqfv05dr4nz";
     };
 
     buildInputs = with self; [
@@ -6262,7 +6261,7 @@ let
     ];
 
     meta = {
-      homepage = "http://sourceforge.net/projects/fonttools/";
+      homepage = "https://github.com/behdad/fonttools";
       description = "Font file processing tools";
     };
   });
@@ -8263,6 +8262,29 @@ let
     meta = {
       description = "A minimalistic mocking library for python";
       homepage = https://pypi.python.org/pypi/MiniMock;
+    };
+  };
+
+  nototools = buildPythonPackage rec {
+    version = "git-2015-09-16";
+    name = "nototools-${version}";
+    disabled = isPy3k;
+
+    pythonPath = with self; [ fonttools numpy ];
+
+    postPatch = ''
+      sed -ie "s^join(_DATA_DIR_PATH,^join(\"$out/third_party/ucd\",^" nototools/unicode_data.py
+    '';
+
+    postInstall = ''
+      cp -r third_party $out
+    '';
+
+    src = pkgs.fetchFromGitHub {
+      owner = "googlei18n";
+      repo = "nototools";
+      rev = "5a79bee819941849da7b414447929fc7ba6c2c08";
+      sha256 = "0srrmyrjgksk4c6smgi1flyq325r4ma8r6bpkvbn731q3yykhmaa";
     };
   };
 
