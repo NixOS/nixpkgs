@@ -15,12 +15,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "xdg-utils-1.1.0-rc3p7";
+  name = "xdg-utils-1.1.0-rc3p36";
 
   src = fetchzip {
     name = "${name}.tar.gz";
-    url = "http://cgit.freedesktop.org/xdg/xdg-utils/snapshot/e8ee3b18d16e4.tar.gz";
-    sha256 = "1hz6rv45blcii1a8n1j45rg8vzm98vh4fvlca3zmay1kp57yr4jl";
+    url = "http://cgit.freedesktop.org/xdg/xdg-utils/snapshot/3bfe91b7eaee40bb1bb7cc7a3b3cae982c282fa8.tar.gz";
+    sha256 = "1llf9vl0qicsbaj9pw87xwa27v68sv4s41z7qqj7wq85n3jdd2db";
   };
 
   # just needed when built from git
