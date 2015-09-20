@@ -2011,13 +2011,9 @@ let
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
-  nodejs-0_12 = callPackage ../development/web/nodejs {
-    libuv = libuvVersions.v1_6_1;
-    libtool = darwin.cctools;
-  };
+  nodejs-0_12 = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_6_1; };
   nodejs-unstable = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_2_0; unstableVersion = true; };
   nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix {
-    libtool = darwin.cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices Carbon Foundation;
   };
 
@@ -5566,7 +5562,9 @@ let
 
   lemon = callPackage ../development/tools/parsing/lemon { };
 
-  libtool = libtool_2;
+  libtool = if stdenv.isDarwin
+    then darwin.cctools
+    else libtool_2;
 
   libtool_1_5 = callPackage ../development/tools/misc/libtool { };
 
