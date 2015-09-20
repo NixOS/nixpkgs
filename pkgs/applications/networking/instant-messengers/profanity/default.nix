@@ -1,5 +1,5 @@
 { stdenv, fetchurl, automake, autoconf, pkgconfig, glib, openssl, expat
-, ncurses, libotr, curl, libstrophe
+, ncurses, libotr, curl, libstrophe, readline, libuuid
 
 , autoAwaySupport ? false, libXScrnSaver ? null, libX11 ? null
 , notifySupport ? false,   libnotify ? null, gdk_pixbuf ? null
@@ -12,15 +12,15 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "profanity-${version}";
-  version = "0.4.6";
+  version = "0.4.7";
 
   src = fetchurl {
     url = "http://www.profanity.im/profanity-${version}.tar.gz";
-    sha256 = "17ra53c1m0w0lzm5bj63y1ysx8bv119z5h0csisxsn4r85z6cwln";
+    sha256 = "1p8ixvxacvf63r6lnf6iwlyz4pgiyp6widna1h2l2jg8kw14wb5h";
   };
 
   buildInputs = [
-    automake autoconf pkgconfig
+    automake autoconf pkgconfig readline libuuid
     glib openssl expat ncurses libotr curl libstrophe
   ] ++ optionals autoAwaySupport [ libXScrnSaver libX11 ]
     ++ optionals notifySupport   [ libnotify gdk_pixbuf ];
