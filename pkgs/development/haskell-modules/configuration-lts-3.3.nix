@@ -5779,6 +5779,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "reddit" = dontDistribute super."reddit";
   "redis" = dontDistribute super."redis";
   "redis-hs" = dontDistribute super."redis-hs";
+  "redis-job-queue" = dontDistribute super."redis-job-queue";
   "redis-simple" = dontDistribute super."redis-simple";
   "redo" = dontDistribute super."redo";
   "reducers" = doDistribute super."reducers_3_10_3_2";
@@ -7481,6 +7482,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "yesod-auth-zendesk" = dontDistribute super."yesod-auth-zendesk";
   "yesod-bootstrap" = dontDistribute super."yesod-bootstrap";
   "yesod-comments" = dontDistribute super."yesod-comments";
+  "yesod-content-pdf" = dontDistribute super."yesod-content-pdf";
   "yesod-continuations" = dontDistribute super."yesod-continuations";
   "yesod-crud" = dontDistribute super."yesod-crud";
   "yesod-crud-persist" = dontDistribute super."yesod-crud-persist";

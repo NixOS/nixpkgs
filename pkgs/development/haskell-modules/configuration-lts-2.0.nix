@@ -6240,6 +6240,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "redis" = dontDistribute super."redis";
   "redis-hs" = dontDistribute super."redis-hs";
   "redis-io" = dontDistribute super."redis-io";
+  "redis-job-queue" = dontDistribute super."redis-job-queue";
   "redis-resp" = dontDistribute super."redis-resp";
   "redis-simple" = dontDistribute super."redis-simple";
   "redo" = dontDistribute super."redo";
@@ -8108,6 +8109,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "yesod-bin" = doDistribute super."yesod-bin_1_4_6";
   "yesod-bootstrap" = dontDistribute super."yesod-bootstrap";
   "yesod-comments" = dontDistribute super."yesod-comments";
+  "yesod-content-pdf" = dontDistribute super."yesod-content-pdf";
   "yesod-continuations" = dontDistribute super."yesod-continuations";
   "yesod-core" = doDistribute super."yesod-core_1_4_9";
   "yesod-crud" = dontDistribute super."yesod-crud";
