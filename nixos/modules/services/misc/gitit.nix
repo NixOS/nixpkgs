@@ -137,6 +137,7 @@ let
 
       staticDir = mkOption {
         type = types.path;
+        default = gititShared + "/data/static";
         description = ''
           Specifies the path of the static directory (containing javascript,
           css, and images).  If it does not exist, gitit will create it and
@@ -207,6 +208,7 @@ let
 
       templatesDir = mkOption {
         type = types.path;
+        default = gititShared + "/data/templates";
         description = ''
           Specifies the path of the directory containing page templates.  If it
           does not exist, gitit will create it with default templates.  Users
@@ -643,8 +645,6 @@ in
 
     services.gitit = {
       haskellPackages = mkDefault pkgs.haskellPackages;
-      staticDir = gititShared + "/data/static";
-      templatesDir = gititShared + "/data/templates";
       plugins = [ ];
     };
 
