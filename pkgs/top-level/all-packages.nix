@@ -3271,6 +3271,8 @@ let
     inherit (gnome3) gexiv2;
   };
 
+  vit = callPackage ../applications/misc/vit { };
+
   vnc2flv = callPackage ../tools/video/vnc2flv {};
 
   vncrec = builderDefsPackage (callPackage ../tools/video/vncrec) {};
