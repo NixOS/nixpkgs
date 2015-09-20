@@ -30,6 +30,8 @@ core-packages:
   - xhtml-3000.2.1
 
 default-package-overrides:
+  # Add overrides in this section only for packages that are *not* part of
+  # Stackage to make sure we're conforming to their preferred version list.
 
 extra-packages:
   - aeson < 0.8                         # newer versions don't work with GHC 6.12.3
@@ -1056,6 +1058,7 @@ dont-distribute-packages:
   FModExRaw:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   FM-SBLEX:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   foldl-incremental:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
+  foldl-transduce-attoparsec:                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   foldl-transduce:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   folds-common:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   folds:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -1754,6 +1757,7 @@ dont-distribute-packages:
   hslogstash:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   hsmagick:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   HSmarty:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
+  hs-mesos:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   Hsmtlib:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   hsmtpclient:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   hsndfile-storablevector:                      [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -2771,6 +2775,7 @@ dont-distribute-packages:
   reified-records:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   reify:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   rei:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
+  relational-record-examples:                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   remote:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   remotion:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   reorderable:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -3395,6 +3400,7 @@ dont-distribute-packages:
   vision:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   visual-graphrewrite:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   visual-prof:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
+  vivid:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   vk-aws-route53:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   VKHS:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   vorbiscomment:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -3560,6 +3566,7 @@ dont-distribute-packages:
   yavie:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   ycextra:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   yesod-angular-ui:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
+  yesod-auth-account-fork:                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   yesod-auth-ldap:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   yesod-auth-pam:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   yesod-auth-smbclient:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
