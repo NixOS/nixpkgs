@@ -4469,10 +4469,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileLibMagic = buildPerlPackage rec {
-    name = "File-LibMagic-1.13";
+    name = "File-LibMagic-1.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "61f92c3137a3b86d63e61313b51aa2673991110d655eee792ea11c68bf2c0092";
+      sha256 = "2c7fb54912caf2c22d06b02d6a88edad970e0f8b017634dc30eec46e53763e84";
     };
     buildInputs = [ TestFatal pkgs.file ];
     makeMakerFlags = "--lib=${pkgs.file}/lib";
