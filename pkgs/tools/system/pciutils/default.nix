@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, zlib, kmod, which }:
 
 stdenv.mkDerivation rec {
-  name = "pciutils-3.3.1"; # with database from 2015-04
+  name = "pciutils-3.4.0"; # with database from 2015-09
 
   src = fetchurl {
     url = "mirror://kernel/software/utils/pciutils/${name}.tar.xz";
-    sha256 = "1ag3skny1bamqil46dlppw8j1fp08spqa60fjygbxkg4fzdknjji";
+    sha256 = "15liffqvdwbpza210wfqy2y135dvg7sbyqr7gvhyjllgspv8z2gq";
   };
 
   buildInputs = [ pkgconfig zlib kmod which ];

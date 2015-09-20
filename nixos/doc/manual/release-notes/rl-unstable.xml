@@ -23,5 +23,17 @@
         <command>wmii-hg</command> package.
     </para></listitem>
   </itemizedlist>
+
+  <listitem><para>Gitit! Is no longer automatically added to the module list in
+    NixOS and as such there will not be any manual entries for it. You will need to
+    add an import statement to your nixos configuration in order to use it. As
+    an example adding:
+    <programlisting><![CDATA[
+    {
+      imports = [ <nixos/modules/services/misc/gitit.nix> ];
+    }
+    ]]>
+    </programlisting>
+    Will include the gitit service configuration options.
 </para>
 </section>

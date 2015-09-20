@@ -2011,8 +2011,10 @@ let
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
-  nodejs-0_12 = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_6_1; };
-  nodejs-unstable = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_2_0; unstableVersion = true; };
+  nodejs-0_12 = callPackage ../development/web/nodejs {
+    libuv = libuvVersions.v1_6_1;
+  };
+
   nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices Carbon Foundation;
   };
@@ -3268,6 +3270,8 @@ let
     inherit (gnome3) gexiv2;
   };
 
+  vit = callPackage ../applications/misc/vit { };
+
   vnc2flv = callPackage ../tools/video/vnc2flv {};
 
   vncrec = builderDefsPackage (callPackage ../tools/video/vncrec) {};
@@ -3566,6 +3570,10 @@ let
 
   zinnia = callPackage ../tools/inputmethods/zinnia { };
   tegaki-zinnia-japanese = callPackage ../tools/inputmethods/tegaki-zinnia-japanese { };
+
+  zimreader = callPackage ../tools/text/zimreader { };
+
+  zimwriterfs = callPackage ../tools/text/zimwriterfs { };
 
   zip = callPackage ../tools/archivers/zip { };
 
@@ -4363,6 +4371,10 @@ let
     findlib = callPackage ../development/tools/ocaml/findlib { };
 
     fix = callPackage ../development/ocaml-modules/fix { };
+
+    fontconfig = callPackage ../development/ocaml-modules/fontconfig {
+      inherit (pkgs) fontconfig;
+    };
 
     functory = callPackage ../development/ocaml-modules/functory { };
 
@@ -7876,14 +7888,6 @@ let
     developerBuild = true;
   });
 
-  qt53 = callPackage ../development/libraries/qt-5/5.3 {
-    mesa = mesa_noglu;
-    cups = if stdenv.isLinux then cups else null;
-    # GNOME dependencies are not used unless gtkStyle == true
-    inherit (gnome) libgnomeui GConf gnome_vfs;
-    bison = bison2; # error: too few arguments to function 'int yylex(...
-  };
-
   qt54 = recurseIntoAttrs (callPackage ../development/libraries/qt-5/5.4 {});
 
   qt5 = qt54;
@@ -7892,7 +7896,7 @@ let
 
   qt5Full = appendToName "full" (qtEnv {
     qtbase = qt5.base;
-    paths = lib.filter (x: !(builtins.isFunction x)) (lib.attrValues qt5);
+    paths = lib.filter lib.isDerivation (lib.attrValues qt5);
   });
 
   qtcreator = callPackage ../development/qtcreator {
@@ -10442,6 +10446,9 @@ let
 
   nafees = callPackage ../data/fonts/nafees { };
 
+  inherit (callPackages ../data/fonts/noto-fonts {})
+    noto-fonts noto-fonts-cjk noto-fonts-emoji;
+
   numix-icon-theme = callPackage ../data/icons/numix-icon-theme { };
 
   numix-icon-theme-circle = callPackage ../data/icons/numix-icon-theme-circle { };
@@ -11453,9 +11460,7 @@ let
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
-  linssid = callPackage ../applications/networking/linssid {
-    qt5 = qt53;
-  };
+  linssid = callPackage ../applications/networking/linssid { };
 
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
@@ -12245,6 +12250,8 @@ let
   paraview = callPackage ../applications/graphics/paraview { };
 
   pencil = callPackage ../applications/graphics/pencil { };
+
+  perseus = callPackage ../applications/science/math/perseus {};  
 
   petrifoo = callPackage ../applications/audio/petrifoo {
     inherit (gnome) libgnomecanvas;

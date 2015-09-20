@@ -2,11 +2,11 @@
 , makeWrapper, perl, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "mosh-1.2.4";
+  name = "mosh-1.2.5";
 
   src = fetchurl {
     url = "http://mosh.mit.edu/${name}.tar.gz";
-    sha256 = "0inzfmqrab3n97m7rrmhd4xh3hjz0xva2sfl5m06w11668r0skg7";
+    sha256 = "1qsb0y882yfgwnpy6f98pi5xqm6kykdsrxzvaal37hs7szjhky0s";
   };
 
   buildInputs = [ boost protobuf ncurses zlib pkgconfig IOTty makeWrapper perl openssl ];

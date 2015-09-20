@@ -1,22 +1,24 @@
-{ stdenv, fetchurl, conf ? null }:
+{ stdenv, makeWrapper, fetchurl, nodejs, coreutils, which }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "kibana-${version}";
-  version = "3.1.1";
+  version = "4.2.0";
 
   src = fetchurl {
-    url = "https://download.elasticsearch.org/kibana/kibana/${name}.tar.gz";
-    sha256 = "195x6zq9x16nlh2akvn6z0kp8qnba4vq90yrysiafgv8dmw34p5b";
+    url = "http://download.elastic.co/kibana/kibana-snapshot/kibana-4.2.0-snapshot-linux-x86.tar.gz";
+    sha256 = "01v35iwy8y6gpbl0v9gikvbx3zdxkrm60sxann76mkaq2al3pv0i";
   };
 
-  phases = ["unpackPhase" "installPhase"];
+  buildInputs = [ makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out
-    mv * $out/
-    ${optionalString (conf != null) "cp ${conf} $out/config.js"}
+    mkdir -p $out/libexec/kibana $out/bin
+    mv * $out/libexec/kibana/
+    rm -r $out/libexec/kibana/node
+    makeWrapper $out/libexec/kibana/bin/kibana $out/bin/kibana \
+      --prefix PATH : "${nodejs}/bin:${coreutils}/bin:${which}/bin"
   '';
 
   meta = {

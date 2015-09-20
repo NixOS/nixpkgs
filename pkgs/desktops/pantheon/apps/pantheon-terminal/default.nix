@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   majorVersion = "0.3";
-  minorVersion = "0.1";
+  minorVersion = "1.3";
   name = "pantheon-terminal-${majorVersion}.${minorVersion}";
   src = fetchurl {
     url = "https://launchpad.net/pantheon-terminal/${majorVersion}.x/${majorVersion}.${minorVersion}/+download/${name}.tgz";
-    sha256 = "14wspqxp79myyyjngr1x7jg1kw15g3nm2pav2zffp8xs16s1i5za";
+    sha256 = "0bfrqxig26i9qhm15kk7h9lgmzgnqada5snbbwqkp0n0pnyyh4ss";
   };
 
   preConfigure = ''
