@@ -1702,7 +1702,7 @@ let
 
   calamares = callPackage ../tools/misc/calamares rec {
     python = python3;
-    boost = callPackage ../development/libraries/boost/1.57.nix { python=python3; };
+    boost = pkgs.boost.override { python=python3; };
     libyamlcpp = callPackage ../development/libraries/libyaml-cpp { makePIC=true; boost=boost; };
     inherit (kf5_stable) extra-cmake-modules kconfig ki18n kcoreaddons solid;
   };
