@@ -28,7 +28,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.9";
+  version = "0.10.2";
   name = "handbrake-${version}";
 
   # ToDo: doesn't work (yet)
