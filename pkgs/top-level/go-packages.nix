@@ -2745,8 +2745,9 @@ let
     sha256 = "1l7nw00pazp317n5nprrxwhcq56kdblc774lsznxmbb30xcp8nmf";
   };
 
-  syncthing = buildFromGitHub {
-    rev = "v0.11.25";
+  syncthing = buildFromGitHub rec {
+    version = "0.11.25";
+    rev = "v${version}";
     owner = "syncthing";
     repo = "syncthing";
     sha256 = "17phkj0dxzc1j755ddpf15rq34yp52pw2lx9kpg7gyc9qp0pzacl";
@@ -2755,6 +2756,10 @@ let
       go-lz4 du luhn xdr snappy ratelimit osext syncthing-protocol relaysrv
       goleveldb suture qart crypto net text
     ];
+    postPatch = ''
+      # Mostly a costmetic change
+      sed -i 's,unknown-dev,${version},g' cmd/syncthing/main.go
+    '';
   };
 
   syncthing-lib = buildFromGitHub {
