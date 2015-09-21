@@ -7979,7 +7979,7 @@ let
       md5 = "f93d8462ff7646397a9f77a2fe602d17";
     };
 
-    buildInputs = with self; [ pkgs.swig pkgs.openssl ];
+    buildInputs = with self; [ pkgs.swig2 pkgs.openssl ];
 
     preBuild = "${python}/bin/${python.executable} setup.py build_ext --openssl=${pkgs.openssl}";
 
