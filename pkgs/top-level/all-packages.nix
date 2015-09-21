@@ -14349,6 +14349,8 @@ let
             ocaml_mysql ocamlnet ulex08 camlzip ocaml_pcre;
   });
 
+  metis-prover = callPackage ../applications/science/logic/metis-prover { };
+
   minisat = callPackage ../applications/science/logic/minisat {};
 
   opensmt = callPackage ../applications/science/logic/opensmt { };
