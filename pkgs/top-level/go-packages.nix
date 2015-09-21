@@ -809,10 +809,10 @@ let
       ln -s go/bin/gotty $out/bin/
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "Share your terminal as a web application";
       homepage = "https://github.com/yudai/gotty";
-      maintainers = with lib.maintainers; [ matthiasbeyer ];
+      maintainers = with maintainers; [ matthiasbeyer ];
       license = licenses.mit;
     };
   };
@@ -1018,10 +1018,10 @@ let
 
     date = "2015-08-13";
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "Serves embedded files from jteeuwen/go-bindata with net/http";
       homepage = "https://github.com/elazarl/go-bindata-assetfs";
-      maintainers = with lib.maintainers; [ matthiasbeyer ];
+      maintainers = with maintainers; [ matthiasbeyer ];
       license = licenses.bsd2;
     };
   };
@@ -1719,10 +1719,10 @@ let
     repo = "manners";
     sha256 = "07985pbfhwlhbglr9zwh2wx8kkp0wzqr1lf0xbbxbhga4hn9q3ak";
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "A polite Go HTTP server that shuts down gracefully";
       homepage = "https://github.com/braintree/manners";
-      maintainers = with lib.maintainers; [ matthiasbeyer ];
+      maintainers = with maintainers; [ matthiasbeyer ];
       license = licenses.mit;
     };
   };
