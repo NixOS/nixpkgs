@@ -6,35 +6,48 @@
 
 <title>Release 15.09 (“Dingo”, 2015/09/??)</title>
 
-<para>In addition to numerous new and upgraded packages, this release has the following highlights:
+<para>In addition to numerous new and upgraded packages, this release
+has the following highlights:</para>
 
-  <itemizedlist>
-    <listitem>
-      <para>
-        The Haskell packages infrastructure has been re-designed from the ground up.
-        NixOS now distributes the latest version of every single package registered on
-        <link xlink:href="http://hackage.haskell.org/">Hackage</link>, i.e. well over
-        8000 Haskell packages. Further information and usage instructions for the
-        improved infrastructure are available at <link
-        xlink:href="https://nixos.org/wiki/Haskell">https://nixos.org/wiki/Haskell</link>.
-        Users migrating from an earlier release will find also find helpful information
-        below, in the list of backwards-incompatible changes.
-      </para>
-    </listitem>
+<itemizedlist>
 
-    <listitem>
-      <para>
-        Users running an SSH server who worry about the quality of their
-        <literal>/etc/ssh/moduli</literal> file with respect to the <link
-        xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html">vulnerabilities
-        discovered in the Diffie-Hellman key exchange</link> can now replace OpenSSH's
-        default version with one they generated themselves using the new
-        <literal>services.openssh.moduliFile</literal> option.
-      </para>
-    </listitem>
-  </itemizedlist>
+  <listitem>
+    <para>The Haskell packages infrastructure has been re-designed
+    from the ground up.  NixOS now distributes the latest version of
+    every single package registered on <link
+    xlink:href="http://hackage.haskell.org/">Hackage</link>, i.e. well
+    over 8000 Haskell packages. Further information and usage
+    instructions for the improved infrastructure are available at
+    <link
+    xlink:href="https://nixos.org/wiki/Haskell">https://nixos.org/wiki/Haskell</link>.
+    Users migrating from an earlier release will also find helpful
+    information below, in the list of backwards-incompatible changes.</para>
+  </listitem>
 
-</para>
+  <listitem>
+    <para>Nix has been updated to version 1.10, which among other
+    improvements enables cryptographic signatures on binary caches for
+    improved security.</para>
+  </listitem>
+
+  <listitem>
+    <para>You can now keep your NixOS system up to date automatically
+    by setting
+
+<programlisting>
+system.autoUpgrade.enable = true;
+</programlisting>
+
+    This will cause the system to periodically check for updates in
+    your current channel and run <command>nixos-rebuild</command>.</para>
+  </listitem>
+
+  <listitem>
+    <para>This release is based on Glibc 2.21, GCC 4.9 and Linux
+    3.18.</para>
+  </listitem>
+
+</itemizedlist>
 
 
 <para>When upgrading from a previous release, please be aware of the
@@ -50,10 +63,11 @@ and want to continue to use them, please set
 system.stateVersion = "14.12";
 </programlisting>
 
-(The new option <option>system.stateVersion</option> ensures that
+The new option <option>system.stateVersion</option> ensures that
 certain configuration changes that could break existing systems (such
 as the <command>sshd</command> host key setting) will maintain
-compatibility with the specified NixOS release.)</para></listitem>
+compatibility with the specified NixOS release. NixOps sets the state
+version of existing deployments automatically.</para></listitem>
 
 <listitem><para><command>cron</command> is no longer enabled by
 default, unless you have a non-empty
@@ -72,9 +86,9 @@ false</option>.</para></listitem>
 and old <literal>steam</literal> package -- to <literal>steamOriginal</literal>.
 </para></listitem>
 
-<listitem><para>CMPlayer has been renamed to bomi upstream. Package <literal>cmplayer</literal>
-was accordingly renamed to <literal>bomi</literal>
-</para></listitem>
+<listitem><para>CMPlayer has been renamed to bomi upstream. Package
+<literal>cmplayer</literal> was accordingly renamed to
+<literal>bomi</literal> </para></listitem>
 
 <listitem><para>Atom Shell has been renamed to Electron upstream.  Package <literal>atom-shell</literal>
 was accordingly renamed to <literal>electron</literal>
@@ -84,21 +98,20 @@ was accordingly renamed to <literal>electron</literal>
 which contains the latest Elm platform.</para></listitem>
 
 <listitem>
-  <para>
-	The CUPS printing service has been updated to version <literal>2.0.2</literal>.
-	Furthermore its systemd service has been renamed to <literal>cups.service</literal>.
-  </para>
-  <para>
-	Local printers are no longer shared or advertised by default. This behavior
-	can be changed by enabling <literal>services.printing.defaultShared</literal>
-	or <literal>services.printing.browsing</literal> respectively.
-  </para>
+  <para>The CUPS printing service has been updated to version
+  <literal>2.0.2</literal>.  Furthermore its systemd service has been
+  renamed to <literal>cups.service</literal>.</para>
+
+  <para>Local printers are no longer shared or advertised by
+  default. This behavior can be changed by enabling
+  <literal>services.printing.defaultShared</literal> or
+  <literal>services.printing.browsing</literal> respectively.</para>
 </listitem>
 
 <listitem>
   <para>
-    The VirtualBox host and guest options have been moved/renamed more
-    consistently and less confusing to be now found in
+    The VirtualBox host and guest options have been named more
+    consistently. They can now found in
     <literal>virtualisation.virtualbox.host.*</literal> instead of
     <literal>services.virtualboxHost.*</literal> and
     <literal>virtualisation.virtualbox.guest.*</literal> instead of
@@ -207,25 +220,31 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.cabal-install
 </para>
 
 
-<para>The following new services were added since the last release:
-
-<itemizedlist>
-<listitem><para><literal>brltty</literal></para></listitem>
-<listitem><para><literal>marathon</literal></para></listitem>
-<listitem><para><literal>tvheadend</literal></para></listitem>
-</itemizedlist>
-</para>
-
-
 <para>Other notable improvements:
 
 <itemizedlist>
+
   <listitem><para>The nixos and nixpkgs channels were unified,
     so one <emphasis>can</emphasis> use <literal>nix-env -iA nixos.bash</literal>
     instead of <literal>nix-env -iA nixos.pkgs.bash</literal>.
     See <link xlink:href="https://github.com/NixOS/nixpkgs/commit/2cd7c1f198">the commit</link> for details.
   </para></listitem>
+
+  <listitem>
+    <para>
+      Users running an SSH server who worry about the quality of their
+      <literal>/etc/ssh/moduli</literal> file with respect to the
+      <link
+      xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html">vulnerabilities
+      discovered in the Diffie-Hellman key exchange</link> can now
+      replace OpenSSH's default version with one they generated
+      themselves using the new
+      <literal>services.openssh.moduliFile</literal> option.
+      </para>
+  </listitem>
+
 </itemizedlist>
+
 </para>
 
 </section>
