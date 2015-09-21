@@ -143,7 +143,7 @@ in
 
     environment.etc.fstab.text =
       let
-        fsToSkipCheck = [ "none" "btrfs" "zfs" "tmpfs" "nfs" ];
+        fsToSkipCheck = [ "none" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" ];
         skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck;
       in ''
         # This is a generated file.  Do not edit!
