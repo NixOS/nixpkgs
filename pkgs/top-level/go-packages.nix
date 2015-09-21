@@ -796,6 +796,27 @@ let
     sha256 = "0yg1jpr7lcaqh6i8n9wbs9r128kk541qjv06r9a6fp9vj56rqr3m";
   };
 
+  gotty = buildFromGitHub {
+    rev     = "v0.0.10";
+    owner   = "yudai";
+    repo    = "gotty";
+    sha256  = "0gvnbr61d5si06ik2j075jg00r9b94ryfgg06nqxkf10dp8lgi09";
+
+    buildInputs = [ cli-go go manners go-bindata-assetfs go-multierror structs websocket hcl pty ];
+
+    postInstall = ''
+      mkdir $out/bin
+      cp go/bin/gotty $out/bin/
+    '';
+
+    meta = {
+      description = "Share your terminal as a web application";
+      homepage = "https://github.com/yudai/gotty";
+      maintainers = with lib.maintainers; [ matthiasbeyer ];
+      license = licenses.mit;
+    };
+  };
+
   govers = buildFromGitHub {
     rev = "3b5f175f65d601d06f48d78fcbdb0add633565b9";
     date = "2015-01-09";
@@ -986,6 +1007,22 @@ let
       maintainers = with maintainers; [ cstrahan ];
       license     = licenses.cc0 ;
       platforms   = platforms.all;
+    };
+  };
+
+  go-bindata-assetfs = buildFromGitHub {
+    rev     = "d5cac425555ca5cf00694df246e04f05e6a55150";
+    owner   = "elazarl";
+    repo    = "go-bindata-assetfs";
+    sha256  = "636ce247ff6f85c14f38a421f46662fa77bdc29762692e1f72b3cd1f9d7a1d17";
+
+    date = "2015-08-13";
+
+    meta = {
+      description = "Serves embedded files from jteeuwen/go-bindata with net/http";
+      homepage = "https://github.com/elazarl/go-bindata-assetfs";
+      maintainers = with lib.maintainers; [ matthiasbeyer ];
+      license = licenses.bsd2;
     };
   };
 
@@ -1674,6 +1711,20 @@ let
     postInstall = ''
       cp go/src/$goPackagePath/scripts/lxd-images $bin/bin
     '';
+  };
+
+  manners = buildFromGitHub {
+    rev = "0.4.0";
+    owner = "braintree";
+    repo = "manners";
+    sha256 = "07985pbfhwlhbglr9zwh2wx8kkp0wzqr1lf0xbbxbhga4hn9q3ak";
+
+    meta = {
+      description = "A polite Go HTTP server that shuts down gracefully";
+      homepage = "https://github.com/braintree/manners";
+      maintainers = with lib.maintainers; [ matthiasbeyer ];
+      license = licenses.mit;
+    };
   };
 
   mapstructure = buildFromGitHub {
