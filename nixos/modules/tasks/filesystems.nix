@@ -69,6 +69,8 @@ let
     config = {
       mountPoint = mkDefault name;
       device = mkIf (config.fsType == "tmpfs") (mkDefault config.fsType);
+      # The vboxsf filesystem doesn't support the relatime option:
+      options = mkIf (config.fsType == "vboxsf") (mkDefault "defaults");
     };
 
   };
