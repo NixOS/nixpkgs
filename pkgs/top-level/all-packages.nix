@@ -2005,6 +2005,10 @@ let
 
   lsdvd = callPackage ../tools/cd-dvd/lsdvd {};
 
+  lsyncd = callPackage ../applications/networking/sync/lsyncd {
+    lua = lua5_2_compat;
+  };
+
   kippo = callPackage ../servers/kippo { };
 
   klavaro = callPackage ../games/klavaro {};
