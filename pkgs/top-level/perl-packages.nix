@@ -5621,10 +5621,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   IOSocketSSL = buildPerlPackage {
-    name = "IO-Socket-SSL-2.016";
+    name = "IO-Socket-SSL-2.020";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SU/SULLR/IO-Socket-SSL-2.016.tar.gz;
-      sha256 = "0hgyggdbw16nm85fds48m79lxy5318panqhpkh7r192jq6rnhqlk";
+      url = mirror://cpan/authors/id/S/SU/SULLR/IO-Socket-SSL-2.020.tar.gz;
+      sha256 = "1nqjwnyd8iy0whisa352a97ihxw2zc78cmbxa0ccs4547bljr3js";
     };
     propagatedBuildInputs = [ URI NetSSLeay ];
     meta = {
