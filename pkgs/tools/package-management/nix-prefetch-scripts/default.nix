@@ -27,6 +27,10 @@ stdenv.mkDerivation {
     copyScript "bzr" ${../../../build-support/fetchbzr/nix-prefetch-bzr} ${bazaar}
     copyScript "cvs" ${../../../build-support/fetchcvs/nix-prefetch-cvs} ${cvs}
     copyScript "zip" ${../../../build-support/fetchzip/nix-prefetch-zip} ${unzip} ${curl}
+
+    for each in github bitbucket savannah repoorcz gitlab gitorious; do
+      copyScript $each ${./nix-prefetch-github} ${unzip} ${curl} $out
+    done
   '';
 
   meta = with stdenv.lib; {

@@ -1,0 +1,97 @@
+#! /bin/sh -e
+
+usage(){
+    echo  >&2 "syntax: nix-prefetch-$site [OPTIONS] [OWNER REPO REV [EXPECTED-HASH]]
+
+Options:
+      --owner       owner       The owner of the repo to fetch.
+      --ewpo        repo        The repo to fetch from.
+      --revision    revision    The revision to fetch.
+      --site        site        The site to take repo snapshot from: github, gitlab, repoorcz, savannah (only git), gitorious, bitbucket (defaults to $site)
+      --name        name        The name to use for the store path (defaults to \`basename \$url\`).
+      --hash        hash        The hash of unpacked archive.
+      --hash-type   type        Use the specified cryptographic hash algorithm, which can be one of md5, sha1, and sha256.
+      --leave-root              Keep the root directory of the archive.
+      --help                    Show this help text.
+"
+    exit 1
+}
+
+site="$(basename $0 | sed 's,\-wrapped,,; s,\.*nix\-prefetch\-,,')"
+leaveRoot=""
+name=""
+argi=0
+argfun=""
+for arg; do
+  if test -z "$argfun"; then
+    case $arg in
+      --owner) argfun=set_owner;;
+      --repo) argfun=set_repo;;
+      --revision) argfun=set_rev;;
+      --site) argfun=set_site;;
+      --name) argfun=set_name;;
+      --hash) argfun=set_expHash;;
+      --hash-type) argfun=set_hashType;;
+      --leave-root) leaveRoot="--leave-root";;
+      --help) usage;;
+      --*) usage;;
+      *) argi=$(($argi + 1))
+         case $argi in
+           1) owner=$arg;;
+           2) repo=$arg;;
+           3) rev=$arg;;
+           4) expHash=$arg;;
+           *) echo "Unexpected argument: $arg" >&2
+              usage
+              ;;
+         esac
+         ;;
+    esac
+  else
+    case $argfun in
+      set_*)
+        var=$(echo $argfun | sed 's,^set_,,')
+        eval "$var=\$arg"
+        ;;
+    esac
+    argfun=""
+  fi
+done
+
+case "$site" in
+  "github") url="https://github.com/${owner}/${repo}/archive/${rev}.tar.gz" ;;
+  "bitbucket") url="https://bitbucket.org/${owner}/${repo}/get/${rev}.tar.gz" ;;
+  "gitorious") url="https://gitorious.org/${owner}/${repo}/archive/${rev}.tar.gz";;
+  "savannah") url="http://git.savannah.gnu.org/cgit/${repo}.git/snapshot/${repo}-${rev}.tar.gz";;
+  "repoorcz") url="http://git.savannah.gnu.org/cgit/${repo}.git/snapshot/${repo}-${rev}.tar.gz";;
+  "gitlab") url="https://gitlab.com/${owner}/${repo}/repository/archive.tar.gz?ref=${rev}";;
+  *)
+    echo "Error: unknown --site $site given" >&2
+    usage
+    ;;
+esac
+
+missing() {
+    echo "--$1 not specified" >&2
+    usage
+}
+
+if test -z "$repo"; then
+    missing repo
+fi
+if test -z "$owner"; then
+    missing owner
+fi
+if test -z "$rev"; then
+    missing revision
+fi
+
+if test -z "$name"; then
+  name="$repo-$rev-src"
+fi
+
+if test -z "$hashType"; then
+  hashType=sha256
+fi
+
+exec nix-prefetch-zip --url "$url" --name "$name" --hash "$expHash" --hash-type "$hashType" $leaveRoot
