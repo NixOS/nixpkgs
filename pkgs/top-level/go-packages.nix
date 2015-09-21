@@ -490,6 +490,20 @@ let
     };
   };
 
+  deis = buildFromGitHub {
+    rev = "v1.10.0";
+    owner = "deis";
+    repo = "deis";
+    sha256 = "0qji0dcfqgvjrfn5fjagjib606n24iy9qank2ckh202s75rxx5w9";
+    subPackages = [ "client" ];
+    buildInputs = [ docopt-go crypto yaml-v2 ];
+    postInstall = ''
+      if [ -f "$bin/bin/client" ]; then
+        mv "$bin/bin/client" "$bin/bin/deis"
+      fi
+    '';
+  };
+
   dns = buildFromGitHub {
     rev    = "e59f851c912767b1db587dcabee6e6652e495c75";
     date   = "2015-07-22";
