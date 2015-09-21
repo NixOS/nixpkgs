@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "swig-${version}";
-  version = "3.0.6";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "swig";
     repo = "swig";
     rev = "rel-${version}";
-    sha256 = "1y8rlrkqs9h5cyp75s1i9rvrj35kkcwjjw65dyv3xy1skgfxb6w8";
+    sha256 = "18zp9546d5xfq88nyykk5v3hh0iyp8r59i2ridbavxn3z914mhyv";
   };
 
   nativeBuildInputs = [ autoconf automake libtool bison ];
@@ -23,26 +23,12 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "SWIG, an interface compiler that connects C/C++ code to higher-level languages";
-
-    longDescription = ''
-       SWIG is an interface compiler that connects programs written in C and
-       C++ with languages such as Perl, Python, Ruby, Scheme, and Tcl.  It
-       works by taking the declarations found in C/C++ header files and using
-       them to generate the wrapper code that scripting languages need to
-       access the underlying C/C++ code.  In addition, SWIG provides a variety
-       of customization features that let you tailor the wrapping process to
-       suit your application.
-    '';
-
     homepage = http://swig.org/;
-
     # Licensing is a mess: http://www.swig.org/Release/LICENSE .
     license = "BSD-style";
-
-    platforms = stdenv.lib.platforms.unix;
-
-    maintainers = with stdenv.lib.maintainers; [ urkud ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ urkud wkennington ];
   };
 }
