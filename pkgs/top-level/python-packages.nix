@@ -1,4 +1,4 @@
-{ pkgs, stdenv, python, self }:
+{ pkgs, stdenv, python, self, awscli }:
 
 with pkgs.lib;
 
@@ -504,6 +504,22 @@ let
     };
   };
 
+  appnope = buildPythonPackage rec {
+    name = "appnope-${version}";
+    version = "0.1.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/appnope/appnope-0.1.0.tar.gz";
+      md5 = "932fbaa73792c9b06754755a774dcac5";
+    };
+
+    meta = {
+      description = "Disable App Nap on OS X 10.9";
+      homepage = https://pypi.python.org/pypi/appnope/;
+      license = licenses.bsd3;
+      platforms = platforms.darwin;
+    };
+  };
 
   apsw = buildPythonPackage rec {
     name = "apsw-3.7.6.2-r1";
@@ -7282,6 +7298,26 @@ let
 
   };
 
+  gnureadline = buildPythonPackage rec {
+    version = "6.3.3";
+    name = "gnureadline-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gnureadline/gnureadline-6.3.3.tar.gz";
+      md5 = "c4af83c9a3fbeac8f2da9b5a7c60e51c";
+    };
+
+    propagatedBuildInputs = with self; [];
+
+    meta = {
+      description = "Stand-alone GNU readline module for Python ";
+      homepage = https://github.com/ludwigschwardt/python-gnureadline;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ fridh ];
+    };
+
+   };
+
   ipython = buildPythonPackage rec {
     version = "4.0.0";
     name = "ipython-${version}";
@@ -7293,7 +7329,10 @@ let
 
     buildInputs = with self; [nose] ++ optionals isPy27 [mock];
 
-    propagatedBuildInputs = with self; [decorator pickleshare simplegeneric traitlets requests pexpect sqlite3];
+    propagatedBuildInputs = with self;
+    [decorator pickleshare simplegeneric gnureadline
+     traitlets requests pexpect sqlite3 ]
+     ++ optional stdenv.isDarwin appnope;
 
     meta = {
       description = "IPython: Productive Interactive Computing";
@@ -9993,7 +10032,7 @@ let
       description = "A module wrapper for os.path";
       homepage = http://github.com/jaraco/path.py;
       license = licenses.mit;
-      platforms = platforms.linux;
+      platforms = platforms.unix;
     };
 
     # Test fails with python 2.7: TestUnicodePaths.test_walkdirs_with_unicode_name
@@ -18133,6 +18172,22 @@ let
       homepage = "https://github.com/mintchaos/typogrify";
       license = licenses.bsd3;
       maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  saws = buildPythonPackage rec {
+    name = "saws-0.1.1";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/saws/saws-0.1.1.tar.gz";
+      md5 = "e81437360466216a41db6c78d9b46aae";
+    };
+    disabled = isPyPy;
+    propagatedBuildInputs = with self; [ awscli pygments six prompt_toolkit ordereddict ];
+    meta = {
+      description = "SAWS: A Supercharged AWS Command Line Interface (CLI)";
+      homepage = "https://github.com/donnemartin/saws";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ martinklepsch ];
     };
   };
 
