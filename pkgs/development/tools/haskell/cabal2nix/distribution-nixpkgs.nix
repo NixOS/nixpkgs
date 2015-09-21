@@ -1,17 +1,17 @@
 { mkDerivation, aeson, base, bytestring, Cabal, containers, deepseq
-, deepseq-generics, directory, doctest, filepath, hackage-db, hspec
-, language-nix, lens, pretty, process, SHA, split, stdenv
-, transformers, utf8-string, fetchFromGitHub
+, deepseq-generics, directory, doctest, fetchFromGitHub, filepath
+, hackage-db, hspec, language-nix, lens, pretty, process, SHA
+, split, stdenv, transformers, utf8-string
 }:
 
 mkDerivation rec {
   pname = "distribution-nixpkgs";
-  version = "20180903";
+  version = "20150903";
   src = fetchFromGitHub {
     owner = "nixos";
     repo = "cabal2nix";
     rev = "v${version}";
-    sha256 = "1qb7h4bgd1gv025hdbrpwaajpfkyz95id7br3k3danrj1havr9ja";
+    sha256 = "1cniaymgwz96bjchan49jv627wjbymc3vs48w1p19qj2k9rly6q7";
   };
   postUnpack = "sourceRoot+=/${pname}";
   libraryHaskellDepends = [

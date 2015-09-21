@@ -180,9 +180,7 @@ in
         firmware to function).  If multiple packages contain firmware
         files with the same name, the first package in the list takes
         precedence.  Note that you must rebuild your system if you add
-        files to any of these directories.  For quick testing,
-        put firmware files in <filename>/root/test-firmware</filename>
-        and add that directory to the list.
+        files to any of these directories.
       '';
       apply = list: pkgs.buildEnv {
         name = "firmware";

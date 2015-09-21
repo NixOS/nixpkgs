@@ -1,5 +1,5 @@
-a :  
-let 
+a @ { openssl, gmp, nettools, iproute, zlib, ... } :
+let
   s = import ./src-for-default.nix;
   buildInputs = with a; [
     openssl gmp zlib
@@ -22,7 +22,7 @@ rec {
     sed -e 's@"/sbin/ifconfig.*"@"${a.iproute}/sbin/ip link set $IFNAME address $MAC mtu $MTU"@' -i src/device-linux.C
     sed -e 's@/sbin/ifconfig@${a.nettools}/sbin/ifconfig@g' -i src/device-*.C
   '') ["minInit" "doUnpack"];
-      
+
   meta = {
     description = "A proteted multinode virtual network";
     maintainers = [

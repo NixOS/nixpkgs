@@ -1,8 +1,8 @@
-a :  
-let 
+a @ {python, ...} :
+let
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "0.4.8" a; 
+  version = a.lib.attrByPath ["version"] "0.4.8" a;
   buildInputs = with a; [
     python
   ];
@@ -24,7 +24,7 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["doPatch" "installPythonPackage"];
-      
+
   name = "python-irclib-" + version;
   meta = {
     description = "Python IRC library";

@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gtk2, nssTools, pcsclite
 , pkgconfig }:
 
-let version = "4.1.5"; in
+let version = "4.1.6"; in
 stdenv.mkDerivation {
   name = "eid-mw-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "0m2awjfj2vs3aahy1ygrxi7mx12bhr1a621kiiszzai38crpgwbj";
+    sha256 = "006s7093wqmk36mrlakjv89bqddyh599rvmgv0zgsp15vf9160zi";
     rev = "v${version}";
     repo = "eid-mw";
     owner = "Fedict";

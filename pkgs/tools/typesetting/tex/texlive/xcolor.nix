@@ -1,4 +1,4 @@
-args: with args;
+args @ {texLive, ... }: with args;
 rec {
   name = "texlive-latex-xcolor-2007";
   src = fetchurl {

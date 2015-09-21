@@ -1,23 +1,21 @@
 { stdenv, fetchurl, pkgconfig, openssl, libsigcxx, zlib }:
 
-let
-  version = "0.13.4";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "libtorrent-${version}";
+  version = "0.13.6";
 
   src = fetchurl {
-    url = "http://libtorrent.rakshasa.no/downloads/libtorrent-${version}.tar.gz";
-    sha256 = "0ma910br5vxrfpm4f4w4942lpmhwvqjnnf9h8vpf52fw35qhjkkh";
+    url = "http://rtorrent.net/downloads/${name}.tar.gz";
+    sha256 = "012s1nwcvz5m5r4d2z9klgy2n34kpgn9kgwgzxm97zgdjs6a0f18";
   };
 
   buildInputs = [ pkgconfig openssl libsigcxx zlib ];
 
-  meta = {
-    homepage = "http://libtorrent.rakshasa.no/";
-    description = "A BitTorrent library written in C++ for *nix, with a focus on high performance and good code";
+  meta = with stdenv.lib; {
+    homepage = https://github.com/rakshasa/libtorrent/;
+    description = "A BitTorrent library written in C++ for *nix, with focus on high performance and good code";
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ simons ebzzry ];
   };
 }

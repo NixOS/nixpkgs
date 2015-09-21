@@ -118,15 +118,13 @@ stdenv.mkDerivation {
 
   configureFlags = configureFlags
                 ++ [ "--enable-local-rust" "--local-rust-root=$snapshot" "--enable-rpath" ]
+                # TODO always include starting from 1.3.0, superseeding patch and substituteInPlace below
+                ++ stdenv.lib.optional (!isRelease) [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${stdenv.cc.binutils}/bin/ar" ]
                 ++ stdenv.lib.optional (stdenv.cc.cc ? isClang) "--enable-clang";
 
   inherit patches;
 
   postPatch = ''
-    substituteInPlace src/librustc_back/target/mod.rs \
-      --subst-var-by "ccPath" "${stdenv.cc}/bin/cc" \
-      --subst-var-by "arPath" "${stdenv.cc.binutils}/bin/ar"
-
     substituteInPlace src/rust-installer/gen-install-script.sh \
       --replace /bin/echo "${coreutils}/bin/echo"
     substituteInPlace src/rust-installer/gen-installer.sh \
@@ -135,7 +133,11 @@ stdenv.mkDerivation {
     # Workaround for NixOS/nixpkgs#8676
     substituteInPlace mk/rustllvm.mk \
       --replace "\$\$(subst  /,//," "\$\$(subst /,/,"
-  '';
+    '' + stdenv.lib.optionalString (isRelease) ''
+    substituteInPlace src/librustc_back/target/mod.rs \
+      --subst-var-by "ccPath" "${stdenv.cc}/bin/cc" \
+      --subst-var-by "arPath" "${stdenv.cc.binutils}/bin/ar"
+    ''; # TODO remove in 1.3.0, superseeded by configure flags
 
   buildInputs = [ which file perl curl python27 makeWrapper git ]
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ procps valgrind ];

@@ -10,7 +10,7 @@ buildRubyGem {
   };
   dontPatchShebangs = true;
   postInstall = ''
-    find $out -type f -perm /0100 | while read f; do
+    find $out -type f -perm -0100 | while read f; do
       substituteInPlace $f \
          --replace "/usr/bin/env" "${coreutils}/bin/env"
     done

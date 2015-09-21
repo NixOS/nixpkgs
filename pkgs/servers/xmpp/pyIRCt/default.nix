@@ -1,8 +1,8 @@
-a :  
-let 
+a @ { xmpppy, pythonIRClib, python, makeWrapper, ... } :
+let
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "0.4" a; 
+  version = a.lib.attrByPath ["version"] "0.4" a;
   buildInputs = with a; [
     xmpppy pythonIRClib python makeWrapper
   ];
@@ -30,7 +30,7 @@ rec {
     echo "./irc.py \"$@\"" >> $out/bin/pyIRCt
     chmod a+rx  $out/bin/pyIRCt $out/share/${name}/irc.py
   '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
-      
+
   name = "pyIRCt-" + version;
   meta = {
     description = "IRC transport module for XMPP";

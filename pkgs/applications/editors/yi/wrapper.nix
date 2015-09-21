@@ -1,6 +1,3 @@
-# Note: this relies on dyre patched for NIX_GHC which is done in
-# haskell-ng only.
-#
 # To use this for hacking of your Yi config file, drop into a shell
 # with env attribute.
 { stdenv, makeWrapper

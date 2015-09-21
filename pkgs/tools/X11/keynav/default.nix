@@ -1,16 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, libX11, xextproto, libXtst, libXi, libXext
+{ stdenv, fetchFromGitHub, pkgconfig, libX11, xextproto, libXtst, libXi, libXext
 , libXinerama, glib, cairo, xdotool }:
 
+let release = "20150730"; in
 stdenv.mkDerivation rec {
-  name = "keynav-0.20110708.0";
+  name = "keynav-0.${release}.0";
 
-  src = fetchurl {
-    url = "https://semicomplete.googlecode.com/files/${name}.tar.gz";
-    sha256 = "1gizjhji3yspxxxvb90js3z1bv18rbf5phxg8rciixpj3cccff8z";
+  src = fetchFromGitHub {
+    owner = "jordansissel";
+    repo = "keynav";
+    rev = "4ae486db6697877e84b66583a0502afc7301ba16";
+    sha256 = "0v1m8w877fcrk918p6b6q3753dsz8i1f4mb9bi064cp11kh85nq5";
   };
 
   buildInputs = [ pkgconfig libX11 xextproto libXtst libXi libXext libXinerama
                   glib cairo xdotool ];
+
+  patchPhase = ''
+    echo >>VERSION MAJOR=0
+    echo >>VERSION RELEASE=${release}
+    echo >>VERSION REVISION=0
+  '';
 
   installPhase =
     ''

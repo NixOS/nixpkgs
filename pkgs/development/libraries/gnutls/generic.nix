@@ -3,15 +3,15 @@
 , tpmSupport ? false, trousers
 
 # Version dependent args
-, version, src, patches ? []
+, version, src, patches ? [], postPatch ? "", nativeBuildInputs ? []
 , ...}:
 
 assert guileBindings -> guile != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "gnutls-${version}";
 
-  inherit src patches;
+  inherit src patches postPatch;
 
   outputs = [ "out" "man" ];
 
@@ -34,7 +34,9 @@ stdenv.mkDerivation rec {
     ++ [ unbound ]
     ++ lib.optional guileBindings guile;
 
-  nativeBuildInputs = [ perl pkgconfig ];
+  # AutoreconfHook is temporary until the patch lands upstream to fix
+  # header file generation with parallel building
+  nativeBuildInputs = [ perl pkgconfig ] ++ nativeBuildInputs;
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .

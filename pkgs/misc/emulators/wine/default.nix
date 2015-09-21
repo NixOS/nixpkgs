@@ -6,7 +6,7 @@
 # };
 # Make additional configurations on demand:
 # wine.override { wineBuild = "wine32"; wineRelease = "staging"; };
-{ lib, pkgs, system, callPackage,
+{ lib, pkgs, system, callPackage, wineUnstable,
   wineRelease ? "stable",
   wineBuild ? (if system == "x86_64-linux" then "wineWow" else "wine32"),
   libtxc_dxtn_Name ? "libtxc_dxtn_s2tc" }:
@@ -14,7 +14,7 @@
 if wineRelease == "staging" then
   callPackage ./staging.nix {
     inherit libtxc_dxtn_Name;
-    wine = lib.getAttr wineBuild (callPackage ./packages.nix { wineRelease = "unstable"; });
+    wine = wineUnstable;
   }
 else
   lib.getAttr wineBuild (callPackage ./packages.nix {

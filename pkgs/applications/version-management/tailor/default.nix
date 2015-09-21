@@ -1,4 +1,4 @@
-args : with args; 
+args @ { makeWrapper, python, ... }: with args;
 let version = if args ? version then args.version else "0.9.35"; in
 rec {
   src = fetchurl {
@@ -14,10 +14,10 @@ rec {
 
   /* doConfigure should be specified separately */
   phaseNames = ["installPythonPackage" "wrapBinContentsPython"];
-      
+
   name = "tailor-" + version;
   meta = {
     description = "Version control tools integration tool";
   };
 }
- 
+

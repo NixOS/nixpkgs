@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchgit, fetchFromGitHub
+{ stdenv, lib, fetchurl, fetchFromSavannah, fetchFromGitHub
 , zlib, zlibSupport ? true
 , openssl, opensslSupport ? true
 , gdbm, gdbmSupport ? true
@@ -7,13 +7,14 @@
 , libyaml, yamlSupport ? true
 , libffi, fiddleSupport ? true
 , ruby_2_1_6, autoreconfHook, bison, useRailsExpress ? true
+, libiconv, libobjc, libunwind
 }:
 
 let
   op = stdenv.lib.optional;
   ops = stdenv.lib.optionals;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
-  config = import ./config.nix fetchgit;
+  config = import ./config.nix { inherit fetchFromSavannah; };
   baseruby = ruby_2_1_6.override { useRailsExpress = false; };
 in
 
@@ -47,7 +48,8 @@ stdenv.mkDerivation rec {
     # support is not enabled, so add readline to the build inputs if curses
     # support is disabled (if it's enabled, we already have it) and we're
     # running on darwin
-    ++ (op (!cursesSupport && stdenv.isDarwin) readline);
+    ++ (op (!cursesSupport && stdenv.isDarwin) readline)
+    ++ (ops stdenv.isDarwin [ libiconv libobjc libunwind ]);
 
   enableParallelBuilding = true;
 

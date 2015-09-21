@@ -244,7 +244,7 @@ stdenv.mkDerivation {
        if stdenv.isArm then "ld-linux*.so.3" else
        if stdenv.system == "powerpc-linux" then "ld.so.1" else
        if stdenv.system == "mips64el-linux" then "ld.so.1" else
-       if stdenv.system == "x86_64-darwin" then "${dyld}/lib/dyld" else
+       if stdenv.system == "x86_64-darwin" then "/usr/lib/dyld" else
        abort "Don't know the name of the dynamic linker for this platform.")
     else "";
 

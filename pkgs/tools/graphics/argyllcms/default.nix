@@ -1,14 +1,23 @@
-{ stdenv, fetchurl, jam, unzip, libX11, libXxf86vm, libXrandr, libXinerama
-, libXrender, libXext, libtiff, libjpeg, libXScrnSaver, writeText
-, libXdmcp, libXau, lib }:
-
+{ stdenv, fetchzip, jam, unzip, libX11, libXxf86vm, libXrandr, libXinerama
+, libXrender, libXext, libtiff, libjpeg, libpng, libXScrnSaver, writeText
+, libXdmcp, libXau, lib, openssl, zlib }:
+let
+  version = "1.8.2";
+ in
 stdenv.mkDerivation rec {
-  name = "argyllcms-1.4.0";
+  name = "argyllcms-${version}";
 
-  src = fetchurl {
-    url = "http://www.argyllcms.com/Argyll_V1.4.0_src.zip";
-    sha256 = "1a5i0972cjp6asmawmyzih2y4bv3i0qvf7p6z5lxnr199mq38cfk";
+  src = fetchzip {
+    # Kind of flacky URL, it was reaturning 406 and inconsistent binaries for a
+    # while on me. It might be good to find a mirror
+    url = "http://www.argyllcms.com/Argyll_V${version}_src.zip";
+    sha256 = "0hnsciwak5chy4a421l8fz7amxzg8kbmy57a07dn460gdg6r63cy";
+
+    # The argyllcms web server doesn't like curl ...
+    curlOpts = "--user-agent 'Mozilla/5.0'";
   };
+
+  patches = [ ./gcc5.patch ];
 
   # The contents of this file comes from the Jamtop file from the
   # root of the ArgyllCMS distribution, rewritten to pick up Nixpkgs
@@ -17,21 +26,30 @@ stdenv.mkDerivation rec {
   jamTop = writeText "argyllcms_jamtop" ''
     DESTDIR = "/" ;
     REFSUBDIR = "ref" ;
-    
+
     # Keep this DESTDIR anchored to Jamtop. PREFIX is used literally
     ANCHORED_PATH_VARS = DESTDIR ;
-    
+
     # Tell standalone libraries that they are part of Argyll:
     DEFINES += ARGYLLCMS ;
-    
-    # Use libusb1 rather than libusb0 & libusb0-win32
-    USE_LIBUSB1 = true ;
-    
-    # Make the USB V1 library static
-    LIBUSB_IS_DLL = false ;
-    
-    # Set the libubs1 library name.
-    LIBUSB1NAME = libusb-1A ;
+
+    # enable serial instruments & support
+    USE_SERIAL = true ;
+
+    # enable fast serial instruments & support
+    USE_FAST_SERIAL = true ;                # (Implicit in USE_SERIAL too)
+
+    # enable USB instruments & support
+    USE_USB = true ;
+
+    # enable dummy Demo Instrument (only if code is available)
+    USE_DEMOINST = true ;
+
+    # Use ArgyllCMS version of libusb (deprecated - don't use)
+    USE_LIBUSB = false ;
+
+    # For testing CCast
+    DEFINES += CCTEST_PATTERN ;
 
     JPEGLIB = ;
     JPEGINC = ;
@@ -41,10 +59,22 @@ stdenv.mkDerivation rec {
     TIFFINC = ;
     HAVE_TIFF = true ;
 
+    PNGLIB = ;
+    PNGINC = ;
+    HAVE_PNG = true ;
+
+    ZLIB = ;
+    ZINC = ;
+    HAVE_Z = true ;
+
+    SSLLIB = ;
+    SSLINC = ;
+    HAVE_SSL = true ;
+
     LINKFLAGS +=
       ${lib.concatStringsSep " " (map (x: "-L${x}/lib") buildInputs)}
       -ldl -lrt -lX11 -lXext -lXxf86vm -lXinerama -lXrandr -lXau -lXdmcp -lXss
-      -ljpeg -ltiff ;
+      -ljpeg -ltiff -lpng -lssl ;
   '';
 
   nativeBuildInputs = [ jam unzip ];
@@ -52,27 +82,31 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     cp ${jamTop} Jamtop
     substituteInPlace Makefile --replace "-j 3" "-j $NIX_BUILD_CORES"
-    # Remove tiff and jpg to be sure the nixpkgs-provided ones are used
-    rm -rf tiff jpg
+    # Remove tiff, jpg and png to be sure the nixpkgs-provided ones are used
+    rm -rf tiff jpg png
   '';
 
-  buildInputs = [ 
-    libtiff libjpeg libX11 libXxf86vm libXrandr libXinerama libXext
-    libXrender libXScrnSaver libXdmcp libXau
+  buildInputs = [
+    libtiff libjpeg libpng libX11 libXxf86vm libXrandr libXinerama libXext
+    libXrender libXScrnSaver libXdmcp libXau openssl
   ];
 
   buildFlags = "PREFIX=$(out) all";
 
   installFlags = "PREFIX=$(out)";
 
-  # Install udev rules, but remove lines that set up the udev-acl and plugdev
+  # Install udev rules, but remove lines that set up the udev-acl
   # stuff, since that is handled by udev's own rules (70-udev-acl.rules)
+  #
+  # Move ref to a better place (there must be a way to make the install target
+  # do that for us)
   postInstall = ''
     rm -v $out/bin/License.txt
     mkdir -p $out/etc/udev/rules.d
-    sed -i '/udev-acl/d' libusb1/55-Argyll.rules
-    sed -i '/plugdev/d' libusb1/55-Argyll.rules
-    cp -v libusb1/55-Argyll.rules $out/etc/udev/rules.d/
+    sed -i '/udev-acl/d' usb/55-Argyll.rules
+    cp -v usb/55-Argyll.rules $out/etc/udev/rules.d/
+    mkdir -p $out/share/
+    mv $out/ref $out/share/argyllcms
   '';
 
   meta = with stdenv.lib; {

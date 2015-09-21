@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ibus anthy intltool pkgconfig glib gobjectIntrospection python pythonPackages.pygobject3 ];
 
   postFixup = ''
+    substituteInPlace $out/share/ibus/component/anthy.xml --replace \$\{exec_prefix\} $out
     for file in "$out"/libexec/*; do
       wrapProgram "$file" \
         --prefix PYTHONPATH : $PYTHONPATH \

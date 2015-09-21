@@ -14,7 +14,7 @@ manifestXML=$(nix-build -E 'with (import ../../../.. {}); autonix.writeManifestX
 
 autonixDepsKf5=""
 if [[ -z $1 ]]; then
-    autonixDepsKF5=$(nix-build ../../../.. -A haskellngPackages.autonix-deps-kf5)/bin
+    autonixDepsKF5=$(nix-build ../../../.. -A haskellPackages.autonix-deps-kf5)/bin
 else
     autonixDepsKF5="$1/dist/build/kf5-deps"
 fi

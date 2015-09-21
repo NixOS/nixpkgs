@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig gtk3 wrapGAppsHook itstool libxml2 python3 pyatspi
-    python3Packages.pygobject3 python3Packages.ipythonLight
+    python3Packages.pygobject3 python3Packages.ipython
     at_spi2_core dbus intltool libwnck3 gnome3.defaultIconTheme
   ];
 

@@ -1,48 +1,39 @@
-{ lib, stdenv, fetchurl, runCommand, makeWrapper, node_webkit_0_9,
-  fromCi ? true,
-  build ? "652",
-  version ? if fromCi then "0.3.7-2-0ac62b848" else "0.3.7.2"
-}:
+{ lib, stdenv, fetchurl, runCommand, makeWrapper, nwjs, zip }:
 
 let
-  config = 
-    if stdenv.system == "x86_64-linux" then 
-      {sys = "Linux32"; 
-       sha256 = 
-          if fromCi then "06av40b68xy2mv2fp9qg8npqmnvkl00p2jvbm2fdfnpc9jj746iy"
-                    else "0lm9k4fr73a9p00i3xj2ywa4wvjf9csadm0pcz8d6imwwq44sa8b";
-      }
-    else if stdenv.system == "i686-linux" then 
-      {sys = "Linux64"; 
-       sha256 = 
-        if fromCi then "1nr2zaixdr5vqynga7jig3fw9dckcnzcbdmbr8haq4a486x2nq0f"
-                  else "1dz1cp31qbwamm9pf8ydmzzhnb6d9z73bigdv3y74dgicz3dpr91";
-      }
-    else throw "Unsupported system ${stdenv.system}";
-
-  fetchurlConf = 
-    let
-      ciBase = "https://ci.popcorntime.io/job/Popcorn-Experimental/652/artifact/build/releases/Popcorn-Time";
-      relBase = "https://get.popcorntime.io/build";
-    in {
-      url = 
-        if fromCi then "${ciBase}/${lib.toLower config.sys}/Popcorn-Time-${version}-${config.sys}.tar.xz"
-        else "${relBase}/Popcorn-Time-${version}-Linux64.tar.xz";
-      sha256 = config.sha256;
-    };
+  version = "0.3.8-3";
 
   popcorntimePackage = stdenv.mkDerivation rec {
-    name = 
-      if fromCi then "popcorntime-git-2015-07-07"
-                else "popcorntime-${version}";
-    src = fetchurl fetchurlConf;
+    name = "popcorntime-${version}";
+    src = if stdenv.system == "x86_64-linux" then
+        fetchurl {
+          url = "http://get.popcorntime.io/build/Popcorn-Time-${version}-Linux-64.tar.xz";
+          sha256 = "0q8c6m9majgv5a6hjl1b2ndmq4xx05zbarsydhqkivhh9aymvxgm";
+        }
+      else if stdenv.system == "i686-linux" then
+        fetchurl {
+          url = "https://get.popcorntime.io/build/Popcorn-Time-${version}-Linux-32.tar.xz";
+          sha256 = "1dz1cp31qbwamm9pf8ydmzzhnb6d9z73bigdv3y74dgicz3dpr92";
+        }
+      else throw "Unsupported system ${stdenv.system}";
+
     sourceRoot = ".";
+
+    buildInputs = [ zip ];
+
+    buildPhase = ''
+      rm Popcorn-Time install
+      zip -r package.nw package.json src node_modules
+      cat ${nwjs}/bin/nw package.nw > Popcorn-Time
+      chmod 555 Popcorn-Time
+    '';
+
     installPhase = ''
       mkdir -p $out
-      cp -r *.so *.pak $out/
-      cat ${node_webkit_0_9}/bin/nw package.nw > $out/Popcorn-Time
-      chmod 555 $out/Popcorn-Time
+      cp -r * $out/
     '';
+
+    dontPatchELF = true;
   };
 in
   runCommand "popcorntime-${version}" {

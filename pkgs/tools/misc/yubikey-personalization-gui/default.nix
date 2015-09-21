@@ -1,14 +1,15 @@
 { stdenv, fetchurl, pkgconfig, yubikey-personalization, qt, libyubikey }:
 
 stdenv.mkDerivation rec {
-  name = "yubikey-personalization-gui-3.1.20";
+  name = "yubikey-personalization-gui-3.1.21";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubikey-personalization-gui/Releases/${name}.tar.gz";
-    sha256 = "157ra39m4rv7ni28q9n7v3n102h89fn43kccvs91fmqbj02i3qvh";
+    sha256 = "1b5mf6h3jj35f3xwzdbqsyzk171sn8rp9ym4vipmzzcg10jxyp0m";
   };
 
-  buildInputs = [ pkgconfig yubikey-personalization qt libyubikey ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ yubikey-personalization qt libyubikey ];
   
   configurePhase = ''
     qmake

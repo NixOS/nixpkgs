@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, type-conv}:
+{stdenv, buildOcaml, fetchurl, type_conv}:
 
 buildOcaml rec {
   name = "variantslib";
@@ -11,7 +11,7 @@ buildOcaml rec {
     sha256 = "a948dcdd4ca54786fe0646386b6e37a9db03bf276c6557ea374d82740bf18055";
   };
 
-  propagatedBuildInputs = [ type-conv ];
+  propagatedBuildInputs = [ type_conv ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/janestreet/variantslib;

@@ -1,11 +1,11 @@
-a :  
-let 
+a @ { tcsh, mesa, lesstif, libX11, libXaw, xproto, libXt, libSM, libICE, libXmu, libXext, ... }:
+let
   fetchurl = a.fetchurl;
 
-  version = "20090809"; 
+  version = "20090809";
   buildInputs = with a; [
-    tcsh libX11 libXaw lesstif xproto mesa libXt 
-    libSM libICE libXmu libXext 
+    tcsh libX11 libXaw lesstif xproto mesa libXt
+    libSM libICE libXmu libXext
   ];
 in
 rec {
@@ -40,7 +40,7 @@ rec {
     cp ../make/makedis.csh $out/share/${name}/build-snapshot
     cp *.h $out/include 
     cp *.c *.h $out/source
-    find . -perm +111 -a '(' '(' ! -name '*.*' ')' -o '(' -name '*.REAL' ')' ')' -exec cp '{}' $out/bin ';'
+    find . -perm -0100 -a '(' '(' ! -name '*.*' ')' -o '(' -name '*.REAL' ')' ')' -exec cp '{}' $out/bin ';'
   '') ["defEnsureDir" "build" "minInit"];
       
   name = "NCBI-Toolbox-" + version;

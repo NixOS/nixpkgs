@@ -82,7 +82,7 @@ import ./make-test.nix ({ pkgs, ... } : {
     subtest "single node", sub {
       $simple->start();
       $simple->waitForUnit("etcd.service");
-      $simple->succeed("etcdctl set /foo/bar 'Hello world'");
+      $simple->waitUntilSucceeds("etcdctl set /foo/bar 'Hello world'");
       $simple->waitUntilSucceeds("etcdctl get /foo/bar | grep 'Hello world'");
     };
 
@@ -91,7 +91,7 @@ import ./make-test.nix ({ pkgs, ... } : {
       $node2->start();
       $node1->waitForUnit("etcd.service");
       $node2->waitForUnit("etcd.service");
-      $node1->succeed("etcdctl set /foo/bar 'Hello world'");
+      $node1->waitUntilSucceeds("etcdctl set /foo/bar 'Hello world'");
       $node2->waitUntilSucceeds("etcdctl get /foo/bar | grep 'Hello world'");
       $node1->shutdown();
       $node2->shutdown();
@@ -104,7 +104,7 @@ import ./make-test.nix ({ pkgs, ... } : {
       $discovery2->start();
       $discovery1->waitForUnit("etcd.service");
       $discovery2->waitForUnit("etcd.service");
-      $discovery1->succeed("etcdctl set /foo/bar 'Hello world'");
+      $discovery1->waitUntilSucceeds("etcdctl set /foo/bar 'Hello world'");
       $discovery2->waitUntilSucceeds("etcdctl get /foo/bar | grep 'Hello world'");
     };
   '';

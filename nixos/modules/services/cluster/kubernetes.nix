@@ -73,7 +73,7 @@ in {
       };
 
       port = mkOption {
-        description = "Kubernets apiserver listening port.";
+        description = "Kubernetes apiserver listening port.";
         default = 8080;
         type = types.int;
       };
@@ -211,7 +211,7 @@ in {
       };
 
       port = mkOption {
-        description = "Kubernets scheduler listening port.";
+        description = "Kubernetes scheduler listening port.";
         default = 10251;
         type = types.int;
       };
@@ -243,7 +243,7 @@ in {
       };
 
       port = mkOption {
-        description = "Kubernets controller manager listening port.";
+        description = "Kubernetes controller manager listening port.";
         default = 10252;
         type = types.int;
       };
@@ -299,7 +299,7 @@ in {
       };
 
       port = mkOption {
-        description = "Kubernets kubelet info server listening port.";
+        description = "Kubernetes kubelet info server listening port.";
         default = 10250;
         type = types.int;
       };

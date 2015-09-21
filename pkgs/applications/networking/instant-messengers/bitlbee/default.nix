@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, gnutls, glib, pkgconfig, check, libotr, python }:
+{ fetchurl, fetchpatch, stdenv, gnutls, glib, pkgconfig, check, libotr, python }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -12,11 +12,20 @@ stdenv.mkDerivation rec {
   buildInputs = [ gnutls glib pkgconfig libotr python ]
     ++ optional doCheck check;
 
+  patches = [(fetchpatch {
+    url = "https://github.com/bitlbee/bitlbee/commit/34d16d5b4b5265990125894572a90493284358cd.patch";
+    sha256 = "05in9kxabb6s2c1l4b9ry58ppfciwmwzrkaq33df2zv0pr3z7w33";
+  })];
+
   configureFlags = [
     "--gcov=1"
     "--otr=1"
     "--ssl=gnutls"
   ];
+
+  buildPhase = ''
+    make install-dev
+  '';
 
   doCheck = true;
 

@@ -1,4 +1,4 @@
-a :
+a @ { libXt, libX11, libXext, xextproto, xproto, gsl, aalib, zlib, intltool, gettext, perl, ... }:
 let
   fetchurl = a.fetchurl;
 

@@ -29,5 +29,5 @@ mkDerivation rec {
   homepage = "https://github.com/NorfairKing/super-user-spark";
   description = "A safe way to never worry about your beautifully configured system again";
   platforms = ghc.meta.platforms;
-  maintainers = stdenv.lib.maintainers.badi;
+  maintainers = [ stdenv.lib.maintainers.badi ];
 }

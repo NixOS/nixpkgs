@@ -197,7 +197,7 @@
   ./services/misc/etcd.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
-  ./services/misc/gitit.nix
+  #./services/misc/gitit.nix
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
   ./services/misc/gpsd.nix
@@ -275,6 +275,7 @@
   ./services/networking/ddclient.nix
   ./services/networking/dhcpcd.nix
   ./services/networking/dhcpd.nix
+  ./services/networking/dnschain.nix
   ./services/networking/dnscrypt-proxy.nix
   ./services/networking/dnsmasq.nix
   ./services/networking/docker-registry-server.nix
@@ -303,6 +304,7 @@
   ./services/networking/minidlna.nix
   ./services/networking/mstpd.nix
   ./services/networking/murmur.nix
+  ./services/networking/namecoind.nix
   ./services/networking/nat.nix
   ./services/networking/networkmanager.nix
   ./services/networking/ngircd.nix
@@ -363,6 +365,7 @@
   ./services/scheduling/fcron.nix
   ./services/scheduling/marathon.nix
   ./services/search/elasticsearch.nix
+  ./services/search/kibana.nix
   ./services/search/solr.nix
   ./services/security/clamav.nix
   ./services/security/fail2ban.nix
@@ -372,6 +375,7 @@
   ./services/security/haveged.nix
   ./services/security/hologram.nix
   ./services/security/munge.nix
+  ./services/security/physlock.nix
   ./services/security/torify.nix
   ./services/security/tor.nix
   ./services/security/torsocks.nix
@@ -393,7 +397,6 @@
   ./services/web-servers/lighttpd/default.nix
   ./services/web-servers/lighttpd/gitweb.nix
   ./services/web-servers/nginx/default.nix
-  ./services/web-servers/nginx/reverse_proxy.nix
   ./services/web-servers/phpfpm.nix
   ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix
@@ -486,6 +489,7 @@
   ./virtualisation/docker.nix
   ./virtualisation/libvirtd.nix
   ./virtualisation/lxc.nix
+  ./virtualisation/lxd.nix
   ./virtualisation/amazon-options.nix
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix

@@ -1,4 +1,4 @@
-args : with args;
+args @ {poppler, perl, makeWrapper, ... }: with args;
 rec {
   name = "TeXLive-linkdir";
 

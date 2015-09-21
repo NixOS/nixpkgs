@@ -3,11 +3,11 @@
 assert enableCapabilities -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "libgcrypt-1.6.3";
+  name = "libgcrypt-1.6.4";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha256 = "0pq2nwfqgggrsh8rk84659d80vfnlkbphwqjwahccd5fjdxr3d21";
+    sha256 = "09k06gs27gxfha07sa9rpf4xh6mvphj9sky7n09ymx75w9zjrg69";
   };
 
   buildInputs =
@@ -20,6 +20,13 @@ stdenv.mkDerivation rec {
     sed -i 's,#include <gpg-error.h>,#include "${libgpgerror}/include/gpg-error.h",g' $out/include/gcrypt.h
   '' + stdenv.lib.optionalString enableCapabilities ''
     sed -i 's,\(-lcap\),-L${libcap}/lib \1,' $out/lib/libgcrypt.la
+  '';
+
+  # TODO: figure out why this is even necessary and why the missing dylib only crashes
+  # random instead of every test
+  preCheck = stdenv.lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/lib
+    cp src/.libs/libgcrypt.20.dylib $out/lib
   '';
 
   doCheck = true;

@@ -15,10 +15,16 @@ let
   buildInputs = [
     gperf pkgconfig librevenge libxml2 boost icu cppunit zlib
   ];
+
+  # Boost 1.59 compatability fix
+  # Attempt removing when updating
+  postPatch = ''
+    sed -i 's,^CPPFLAGS.*,\0 -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED,' src/lib/Makefile.in
+  '';
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  inherit buildInputs;
+  inherit buildInputs postPatch;
   src = fetchurl {
     inherit (s) url sha256;
   };

@@ -1,4 +1,4 @@
-args: with args;
+args @ {texLive, ...}: with args;
 rec {
   name = "texlive-cm-super-2009";
   src = fetchurl {
@@ -29,7 +29,7 @@ rec {
     description = "Extra components for TeXLive: CM-Super fonts";
     maintainers = [ args.lib.maintainers.raskin ];
 
-    # Actually, arch-independent.. 
+    # Actually, arch-independent..
     hydraPlatforms = [];
   };
 }

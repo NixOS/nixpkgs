@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   #doCheck = true;
 
-  enableParallelBuilding = true;
+  #enableParallelBuilding = true; issues on hydra
 
   preFixup = ''
     wrapProgram "$out/bin/gcr-viewer" \

@@ -1,13 +1,13 @@
 { stdenv, fetchurl, ffmpeg, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite, gettext }:
 
-let version = "1.1.4"; in
+let version = "1.1.5"; in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "minidlna-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/minidlna/minidlna/${version}/minidlna-${version}.tar.gz";
-    sha256 = "9814c04a2c506a0dd942c4218d30c07dedf90dabffbdef2d308a3f9f23545314";
+    sha256 = "16xb2nz8g1dwcail1zmpj8s426pygz0fdpd6ip6zaamv2q2asxw4";
   };
 
   preConfigure = ''
@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite gettext ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Media server software";
     longDescription = ''
       MiniDLNA (aka ReadyDLNA) is server software with the aim of being fully
       compliant with DLNA/UPnP-AV clients.
     '';
     homepage = http://sourceforge.net/projects/minidlna/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

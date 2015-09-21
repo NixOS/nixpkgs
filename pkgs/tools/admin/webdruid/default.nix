@@ -1,5 +1,5 @@
-a :  
-let 
+a @ { zlib, libpng, freetype, gd, which, libxml2, geoip, ... } :
+let
   s = import ./src-for-default.nix;
   buildInputs = with a; [
     zlib libpng freetype gd which libxml2
@@ -15,7 +15,7 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["doConfigure" "doMakeInstall" "doLinks"];
-      
+
   doLinks = a.fullDepEntry (''
     ln -s shared_en.xsl $out/share/webdruid/classic/shared.xsl
   '') ["minInit"];

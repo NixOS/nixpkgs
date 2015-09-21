@@ -899,6 +899,34 @@ following:
     phase.</para></listitem>
   </varlistentry>
 
+  <varlistentry>
+    <term><varname>separateDebugInfo</varname></term>
+    <listitem><para>If set to <literal>true</literal>, the standard
+    environment will enable debug information in C/C++ builds. After
+    installation, the debug information will be separated from the
+    executables and stored in the output named
+    <literal>debug</literal>. (This output is enabled automatically;
+    you don’t need to set the <varname>outputs</varname> attribute
+    explicitly.) To be precise, the debug information is stored in
+    <filename><replaceable>debug</replaceable>/lib/debug/.build-id/<replaceable>XX</replaceable>/<replaceable>YYYY…</replaceable></filename>,
+    where <replaceable>XXYYYY…</replaceable> is the <replaceable>build
+    ID</replaceable> of the binary — a SHA-1 hash of the contents of
+    the binary. Debuggers like GDB use the build ID to look up the
+    separated debug information.</para>
+
+    <para>For example, with GDB, you can add
+
+<programlisting>
+set debug-file-directory ~/.nix-profile/lib/debug
+</programlisting>
+
+    to <filename>~/.gdbinit</filename>. GDB will then be able to find
+    debug information installed via <literal>nix-env
+    -i</literal>.</para>
+
+    </listitem>
+  </varlistentry>
+
 </variablelist>
 
 </section>

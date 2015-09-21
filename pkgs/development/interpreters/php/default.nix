@@ -285,18 +285,18 @@ let
 in {
 
   php54 = generic {
-    version = "5.4.44";
-    sha256 = "0vc5lf0yjk1fs7inri76mh0lrcmq32ji4m6yqdmg7314x5f9xmcd";
+    version = "5.4.45";
+    sha256 = "10k59j7zjx2mrldmgfvjrrcg2cslr2m68azslspcz5acanqjh3af";
   };
 
   php55 = generic {
-    version = "5.5.28";
-    sha256 = "1wy2v5rmbiia3v6fc8nwg1y3sdkdmicksxnkadz1f3035rbjqz8r";
+    version = "5.5.29";
+    sha256 = "0imr8c48ffjhc2zm96ndq92z3736xrm12hd5c1lssz67xiwybkpv";
   };
 
   php56 = generic {
-    version = "5.6.12";
-    sha256 = "0fl5r0lzav7icg97p7gkvbxk0xk2mh7i1r45dycjlyxgf91109vg";
+    version = "5.6.13";
+    sha256 = "14zq40j229salk0wp7inl4jvj3xff03bz7g5xn8ipd5skiy86n33";
   };
 
   php70 = lib.lowPrio (generic {

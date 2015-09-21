@@ -142,7 +142,7 @@ let result = stdenv.mkDerivation rec {
     rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}
 
     # set all the dynamic linkers
-    find $out -type f -perm +100 \
+    find $out -type f -perm -0100 \
         -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "$rpath" {} \;
 
@@ -182,6 +182,9 @@ let result = stdenv.mkDerivation rec {
 
   passthru.home = result;
 
-  meta.license = stdenv.lib.licenses.unfree;
+  meta = with stdenv.lib; {
+    license = licenses.unfree;
+    platforms = [ "i686-linux" "x86_64-linux" ]; # some inherit jre.meta.platforms
+  };
 
 }; in result

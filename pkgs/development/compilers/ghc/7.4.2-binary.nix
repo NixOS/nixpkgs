@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optionalString stdenv.isLinux ''
       mkdir -p "$out/lib"
       ln -sv "${ncurses}/lib/libncurses.so" "$out/lib/libncurses${stdenv.lib.optionalString stdenv.is64bit "w"}.so.5"
-      find . -type f -perm +100 \
+      find . -type f -perm -0100 \
           -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "$out/lib:${gmp}/lib" {} \;
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2

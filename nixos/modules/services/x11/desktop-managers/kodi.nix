@@ -25,7 +25,6 @@ in
         waitPID=$!
       '';
     }];
-    services.xserver.displayManager.desktopManagerHandlesLidAndPower = true;
 
     environment.systemPackages = [ pkgs.kodi ];
   };

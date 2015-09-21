@@ -79,7 +79,19 @@
  
  	if (unlikely(!cbss))
  		return -ENOMEM;
-@@ -2071,7 +2096,26 @@
+@@ -2047,7 +2072,11 @@
+ 		}
+ 		else if ((event == WLC_E_LINK && ~(flags & WLC_EVENT_MSG_LINK)) ||
+ 			event == WLC_E_DEAUTH_IND || event == WLC_E_DISASSOC_IND) {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 2, 0)
++			cfg80211_disconnected(ndev, 0, NULL, 0, false, GFP_KERNEL);
++#else
+ 			cfg80211_disconnected(ndev, 0, NULL, 0, GFP_KERNEL);
++#endif
+ 			clear_bit(WL_STATUS_CONNECTED, &wl->status);
+ 			wl_link_down(wl);
+ 			wl_init_prof(wl->profile);
+@@ -2071,7 +2100,26 @@
  			wl_get_assoc_ies(wl);
  			memcpy(&wl->bssid, &e->addr, ETHER_ADDR_LEN);
  			wl_update_bss_info(wl);
@@ -106,7 +118,7 @@
  			set_bit(WL_STATUS_CONNECTED, &wl->status);
  			wl->profile->active = true;
  		}
-@@ -2629,7 +2673,15 @@
+@@ -2629,7 +2677,15 @@
  
  void wl_cfg80211_detach(struct net_device *ndev)
  {

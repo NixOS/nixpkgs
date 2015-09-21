@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
 , libXcursor, libXmu, qt4, libIDL, SDL, libcap, zlib, libpng, glib, kernel, lvm2
-, which, alsaLib, curl, libvpx, gawk, nettools
+, which, alsaLib, curl, libvpx, gawk, nettools, dbus
 , xorriso, makeself, perl, pkgconfig, nukeReferences
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python ? null
@@ -14,7 +14,11 @@ with stdenv.lib;
 let
   buildType = "release";
 
-  version = "5.0.0"; # changes ./guest-additions as well
+  # When changing this, update ./guest-additions and the extpack
+  # revision/hash as well. See
+  # http://download.virtualbox.org/virtualbox/${version}/SHA256SUMS
+  # for hashes.
+  version = "5.0.4";
 
   forEachModule = action: ''
     for mod in \
@@ -35,13 +39,12 @@ let
   '';
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
-  extpackRevision = "101573";
+  extpackRevision = "102546";
   extensionPack = requireFile rec {
     name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}.vbox-extpack";
     # IMPORTANT: Hash must be base16 encoded because it's used as an input to
     # VBoxExtPackHelperApp!
-    # Tip: see http://dlc.sun.com.edgesuite.net/virtualbox/4.3.10/SHA256SUMS
-    sha256 = "c357e36368883df821ed092d261890a95c75e50422b75848c40ad20984086a7a";
+    sha256 = "e4618e7847eff7c31426f4639bcd83c37bd817147081d3218f21c8e7b6bc7cfa";
     message = ''
       In order to use the extension pack, you need to comply with the VirtualBox Personal Use
       and Evaluation License (PUEL) by downloading the related binaries from:
@@ -60,7 +63,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "bb71356c8f82012c9b5ae16e12302eb111c71ae7b063ada7688fbfa8aa10c2f7";
+    sha256 = "b19e23fc8e71f38aef7c059f44e59fcbff3bb2ce85baa8de81f1629b85f68fcf";
   };
 
   buildInputs =
@@ -82,11 +85,14 @@ in stdenv.mkDerivation {
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2
     find . -type f -iname '*makefile*' -exec sed -i -e 's/depmod -a/:/g' {} +
     sed -i -e '
-      s@"libasound.so.2"@"${alsaLib}/lib/libasound.so.2"@g
+      s@"libdbus-1\.so\.3"@"${dbus}/lib/libdbus-1.so.3"@g
+      s@"libasound\.so\.2"@"${alsaLib}/lib/libasound.so.2"@g
       ${optionalString pulseSupport ''
-      s@"libpulse.so.0"@"${libpulseaudio}/lib/libpulse.so.0"@g
+      s@"libpulse\.so\.0"@"${libpulseaudio}/lib/libpulse.so.0"@g
       ''}
-    ' src/VBox/Main/xml/Settings.cpp src/VBox/Devices/Audio/{alsa,pulse}_stubs.c
+    ' src/VBox/Main/xml/Settings.cpp \
+      src/VBox/Devices/Audio/{alsa,pulse}_stubs.c \
+      include/VBox/dbus-calls.h
     export USER=nix
     set +x
   '';

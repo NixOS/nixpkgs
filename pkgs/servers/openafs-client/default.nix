@@ -1,13 +1,25 @@
-{ stdenv, fetchurl, which, autoconf, automake, flex, yacc,
+{ stdenv, fetchurl, fetchgit, which, autoconf, automake, flex, yacc,
   kernel, glibc, ncurses, perl, kerberos }:
 
+let
+  version = if stdenv.lib.versionAtLeast kernel.version "4.2"
+    then "1.6.14-1-602130"
+    else "1.6.14";
+in
 stdenv.mkDerivation {
-  name = "openafs-1.6.14-${kernel.version}";
+  name = "openafs-${version}-${kernel.version}";
 
-  src = fetchurl {
-    url = http://www.openafs.org/dl/openafs/1.6.14/openafs-1.6.14-src.tar.bz2;
-    sha256 = "3e62c798a7f982c4f88d85d32e46bee6a47848d207b1e318fe661ce44ae4e01f";
-  };
+  src = if version == "1.6.14-1-602130"
+    # 1.6.14 + patches to run on linux 4.2 that will get into 1.6.15
+    then fetchgit {
+      url = "git://git.openafs.org/openafs.git";
+      rev = "feab09080ec050b3026eff966352b058e2c2295b";
+      sha256 = "03j71c7y487jbjmm6ydr1hw38pf43j2dz153xknndf4x4v21nnp2";
+    }
+    else fetchurl {
+      url = "http://www.openafs.org/dl/openafs/${version}/openafs-${version}-src.tar.bz2";
+      sha256 = "3e62c798a7f982c4f88d85d32e46bee6a47848d207b1e318fe661ce44ae4e01f";
+    };
 
   buildInputs = [ autoconf automake flex yacc ncurses perl which ];
 

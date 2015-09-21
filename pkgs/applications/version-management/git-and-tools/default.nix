@@ -1,7 +1,7 @@
-/* moving all git tools into one attribute set because git is unlikely to be
- * referenced by other packages and you can get a fast overview.
-*/
-args: with args; with pkgs;
+/* All git-relates tools live here, in a separate attribute set so that users
+ * can get a fast overview over what's available.
+ */
+args @ {pkgs}: with args; with pkgs;
 let
   inherit (pkgs) stdenv fetchgit fetchurl subversion;
 
@@ -46,7 +46,7 @@ rec {
     sendEmailSupport = !stdenv.isDarwin;
   };
 
-  inherit (pkgs.haskellPackages) git-annex;
+  git-annex = pkgs.haskellPackages.git-annex-with-assistant;
   gitAnnex = git-annex;
 
   qgit = import ./qgit {
@@ -95,6 +95,8 @@ rec {
   darcsToGit = callPackage ./darcs-to-git { };
 
   gitflow = callPackage ./gitflow { };
+
+  git-radar = callPackage ./git-radar { };
 
   git-remote-hg = callPackage ./git-remote-hg { };
 

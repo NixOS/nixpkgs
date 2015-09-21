@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "conntrack-tools-${version}";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchurl {
     url = "http://www.netfilter.org/projects/conntrack-tools/files/${name}.tar.bz2";
-    sha256 = "e5c423dc077f9ca8767eaa6cf40446943905711c6a8fe27f9cc1977d4d6aa11e";
+    sha256 = "0mrzrzp6y41pmxc6ixc4fkgz6layrpwsmzb522adzzkc6mhcqg5g";
   };
 
   buildInputs = [ libmnl libnfnetlink libnetfilter_conntrack libnetfilter_queue
@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "Connection tracking userspace tools";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ nckx ];
   };
 }

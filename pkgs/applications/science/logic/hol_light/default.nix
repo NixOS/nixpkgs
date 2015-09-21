@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, writeScript, ocaml, findlib, camlp5 }:
+{ stdenv, fetchsvn, writeScript, ocaml, camlp5 }:
 
 let
   start_script = ''
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qzb48j7zbx7c327ixmvq2k0ap7y6fqvwal0195chfxvhs858lfq";
   };
 
-  buildInputs = [ ocaml findlib camlp5 ];
+  buildInputs = [ ocaml camlp5 ];
 
   installPhase = ''
     mkdir -p "$out/lib/hol_light" "$out/bin"

@@ -15,7 +15,7 @@ with lib;
     efiSysMountPoint = mkOption {
       default = "/boot";
 
-      type = types.string;
+      type = types.str;
 
       description = "Where the EFI System Partition is mounted.";
     };

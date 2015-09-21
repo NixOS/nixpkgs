@@ -1,5 +1,5 @@
-args :  
-let 
+args @ {unzip, ... } :
+let
   lib = args.lib;
   fetchurl = args.fetchurl;
   fullDepEntry = args.fullDepEntry;

@@ -1,32 +1,29 @@
-{ stdenv, makeWrapper, requireFile, unzip, oraclejdk8, bash}:
+{ stdenv, makeWrapper, requireFile, unzip, openjdk }:
 
 stdenv.mkDerivation rec {
-  version = "4.1.0.19.07";
-  name = "sqldeveloper-${version}";
+  name = "sqldeveloper-4.1.1.19.59";
 
   src = requireFile {
     name = "${name}-no-jre.zip";
-    url = http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/index.html;
-    sha256 = "09gr40n4574fw9hg47xi4dk8vwgawzkjzzzj2h5jaicy0fdjkpbx";
+    url = "http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/";
+    sha256 = "1dbbqlz11zps9w5qvzlcv5rdv43s25c3mbzf8il1px4m2j33y3rv";
   };
 
   buildInputs = [ makeWrapper unzip ];
 
   buildCommand = ''
     mkdir -p $out/bin
-    # patch to be able to install a sqldeveloper wrapper script compliant with nix's bin folder once installed
-    echo -e '#!${bash}/bin/bash\ncd "`dirname $0`"/../sqldeveloper/bin && ${bash}/bin/bash sqldeveloper $*' >> $out/bin/sqldeveloper
+    echo  >$out/bin/sqldeveloper '#! ${stdenv.shell}'
+    echo >>$out/bin/sqldeveloper 'export JAVA_HOME=${openjdk}/lib/openjdk'
+    echo >>$out/bin/sqldeveloper 'export JDK_HOME=$JAVA_HOME'
+    echo >>$out/bin/sqldeveloper "cd $out/lib/${name}/sqldeveloper/bin"
+    echo >>$out/bin/sqldeveloper '${stdenv.shell} sqldeveloper "$@"'
+    chmod +x $out/bin/sqldeveloper
 
+    mkdir -p $out/lib/
     cd $out
     unzip ${src}
-    cp -r sqldeveloper/* $out/
-    # Activate the needed shell script
-    rm $out/sqldeveloper.sh
-    chmod +x $out/bin/sqldeveloper
-    chmod +x $out/sqldeveloper/bin/sqldeveloper
-
-    wrapProgram $out/bin/sqldeveloper \
-      --set JAVA_HOME "${oraclejdk8}"
+    mv sqldeveloper $out/lib/${name}
   '';
 
   meta = with stdenv.lib; {
@@ -40,7 +37,7 @@ stdenv.mkDerivation rec {
       a reports interface, a complete data modeling solution, and a migration
       platform for moving your 3rd party databases to Oracle.
     '';
-    homepage = http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/index.html;
+    homepage = "http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/";
     license = licenses.unfree;
     maintainers = [ maintainers.ardumont ];
     platforms = platforms.linux;

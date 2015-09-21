@@ -385,6 +385,23 @@ let self = _self // overrides;
     };
   };
 
+  dash-functional = melpaBuild rec {
+    pname = "dash-functional";
+      version = "2.11.0";
+      src = fetchFromGitHub {
+      owner  = "magnars";
+      repo   = "dash.el";
+      rev    = version;
+      sha256 = "02gfrcda7gj3j5yx71dz40xylrafl4pcaj7bgfajqi9by0w2nrnx";
+    };
+    packageRequires = [ dash ];
+    files = [ "dash-functional.el" ];
+    meta = {
+      description = "Collection of useful combinators for Emacs Lisp.";
+      license = gpl3Plus;
+    };
+  };
+
   deferred = melpaBuild rec {
     version = "0.3.2";
     pname = "deferred";
@@ -419,6 +436,22 @@ let self = _self // overrides;
     meta = {
       description = "Diminishes the amount of space taken on the mode-line by Emacs minor modes";
       homepage = http://www.eskimo.com/~seldon/;
+      license = gpl3Plus;
+    };
+  };
+
+  engine-mode = melpaBuild rec {
+    pname = "engine-mode";
+    version = "1.0.0";
+    src = fetchFromGitHub {
+      owner  = "hrs";
+      repo   = "engine-mode";
+      rev    = "v${version}";
+      sha256 = "1dsa3r39ip20ddbw0m9vq8z3r4ahrxvb37adyqi4mbdgyr6fq6sw";
+    };
+
+    meta = {
+      description = "Minor mode for defining and querying search engines through Emacs";
       license = gpl3Plus;
     };
   };
@@ -965,6 +998,27 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  markdown-toc = melpaBuild rec {
+    pname = "markdown-toc";
+    version = "0.0.8";
+    src = fetchFromGitHub {
+      owner = "ardumont";
+      repo = pname;
+      rev = "06903e24457460a8964a978ace709c69afc36692";
+      sha256 = "07w0w9g81c6c404l3j7gb420wc2kjmah728w84mdymscdl5w3qyl";
+    };
+    packageRequires = [ markdown-mode dash s ];
+    files = [ "${pname}.el" ];
+    meta = {
+      description = "Generate a TOC in markdown file";
+      longDescription = ''
+        A simple mode to create TOC in a markdown file.
+      '';
+      homepage = https://github.com/ardumont/mardown-toc;
+      license = gpl3Plus;
+    };
+  };
+
   moe-theme = melpaBuild rec {
     pname   = "moe-theme";
     version = "1.0";
@@ -1004,6 +1058,23 @@ let self = _self // overrides;
     inherit lib;
   };
 
+  org2jekyll = melpaBuild rec {
+    pname   = "org2jekyll";
+    version = "0.1.8";
+    src = fetchFromGitHub {
+      owner = "ardumont";
+      repo = pname;
+      rev = "a12173b9507b3ef54dfebb5751503ba1ee93c6aa";
+      sha256 = "064kw64w9snm0lbshxn8d6yd9xvyislhg37fmhq1w7vy8lm61xvf";
+    };
+    packageRequires = [ dash-functional s deferred ];
+    files = [ "${pname}.el" ];
+    meta = {
+      description = "Blogging with org-mode and jekyll without alien yaml headers";
+      license = gpl3Plus;
+    };
+  };
+
   org-plus-contrib = melpaBuild rec {
     pname   = "org-plus-contrib";
     version = "20150406";
@@ -1019,15 +1090,15 @@ let self = _self // overrides;
 
   org-trello = melpaBuild rec {
     pname = "org-trello";
-    version = "0.6.9.3";
+    version = "0.7.5";
     src = fetchFromGitHub {
       owner = "org-trello";
       repo = pname;
-      rev = "f1e1401a373dd492eee49fb131b1cd66b3a9ac37";
-      sha256 = "003gdh8rgdl3k8h20wgbciqyacyqr64w1wfdqvwm9qdz414q5yj3";
+      rev = "3718ed704094e5e5a491749f1f722d76ba4b7d73";
+      sha256 = "1561nxjva8892via0l8315y3fih4r4q9gzycmvh33db8gqzq4l86";
     };
-    packageRequires = [ request-deferred deferred dash s ];
-    files = [ "org-trello-*.el" ];
+    packageRequires = [ request-deferred deferred dash-functional s ];
+    files = [ "org-trello*.el" ];
     meta = {
       description = "Org minor mode - 2-way sync org & trello";
       longDescription = ''
@@ -1446,6 +1517,5 @@ let self = _self // overrides;
     };
     meta = { license = gpl3Plus; };
   };
-
 
 }; in self

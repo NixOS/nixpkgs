@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     homepage = http://bluejeans.com;
     license = stdenv.lib.licenses.unfree;
     maintainers = with maintainers; [ ocharles kamilchm ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

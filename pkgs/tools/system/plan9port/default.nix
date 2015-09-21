@@ -1,7 +1,9 @@
 {stdenv, fetchgit, which, libX11, libXt, fontconfig
 , xproto ? null
 , xextproto ? null
-, libXext ? null }:
+, libXext ? null
+  # For building web manuals
+, perl ? null }:
 
 stdenv.mkDerivation rec {
   name = "plan9port-2015-06-29";
@@ -23,7 +25,17 @@ stdenv.mkDerivation rec {
   builder = ./builder.sh;
 
   NIX_LDFLAGS="-lgcc_s";
-  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ which libX11 fontconfig xproto libXt xextproto libXext ];
+  buildInputs = stdenv.lib.optionals
+                  (!stdenv.isDarwin)
+                  [ which
+                    perl
+                    libX11
+                    fontconfig
+                    xproto
+                    libXt
+                    xextproto
+                    libXext
+                  ];
 
   enableParallelBuilding = true;
 

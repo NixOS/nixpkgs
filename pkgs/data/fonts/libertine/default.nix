@@ -1,4 +1,4 @@
-args: with args; rec {
+args @ { fetchurl, fontforge, lib, ... }: with args; rec {
   name = "linux-libertine-5.3.0";
 
   src = fetchurl {

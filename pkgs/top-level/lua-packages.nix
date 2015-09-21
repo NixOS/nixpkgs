@@ -174,17 +174,17 @@ let
 
   luasocket = buildLuaPackage rec {
     name = "socket-${version}";
-    version = "2.0.2";
+    version = "3.0-rc1";
     src = fetchurl {
-      url = "http://files.luaforge.net/releases/luasocket/luasocket/luasocket-${version}/luasocket-${version}.tar.gz";
-      sha256 = "19ichkbc4rxv00ggz8gyf29jibvc2wq9pqjik0ll326rrxswgnag";
+      url = "https://github.com/diegonehab/luasocket/archive/v${version}.tar.gz";
+      sha256 = "0j8jx8bjicvp9khs26xjya8c495wrpb7parxfnabdqa5nnsxjrwb";
     };
-    disabled = isLua52;
+
     patchPhase = ''
-      sed -e "s,^INSTALL_TOP_SHARE.*,INSTALL_TOP_SHARE=$out/share/lua/${lua.luaversion}," \
-          -e "s,^INSTALL_TOP_LIB.*,INSTALL_TOP_LIB=$out/lib/lua/${lua.luaversion}," \
-          -i config
+      sed -e "s,^LUAPREFIX_linux.*,LUAPREFIX_linux=$out," \
+          -i src/makefile
     '';
+
     meta = {
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
       hydraPlatforms = stdenv.lib.platforms.linux;

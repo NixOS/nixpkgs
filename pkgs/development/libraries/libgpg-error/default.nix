@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "libgpg-error-1.19";
+  name = "libgpg-error-1.20";
 
   src = fetchurl {
     url = "mirror://gnupg/libgpg-error/${name}.tar.bz2";
-    sha256 = "12wpqhjlsw4iaanifbqm2kich6c7x7lm8a7zhy6x5ifm6c9hw4jk";
+    sha256 = "08i5wxs6zlngjkv6s3dwm60w8mihxvi9agp6jfq7z6j1wdf8jrij";
   };
 
   postPatch = "sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure";

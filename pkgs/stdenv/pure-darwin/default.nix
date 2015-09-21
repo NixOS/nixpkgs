@@ -32,7 +32,7 @@ let
     mkdir = fetch { file = "mkdir"; sha256 = "1yfl8w65ksji7fggrbvqxw8lp0gm02qilk11n9axj2jxay53ngvg"; };
     cpio  = fetch { file = "cpio";  sha256 = "0nssyg19smgcblwq1mfcw4djbd85md84d2f093qcqkbigdjg484b"; };
   };
-  tarball = fetch { file = "bootstrap-tools.9.cpio.bz2"; sha256 = "0fd79k7gy3z3sba5w4f4lnrcpiwff31vw02480x1pdry8bbgbf2j"; };
+  tarball = fetch { file = "bootstrap-tools.9.cpio.bz2"; sha256 = "1xim0wm4ld45ysdmgpsa6b1f6srdnfj054ilv86k0pa5plvcmsf4"; };
 in rec {
   allPackages = import ../../top-level/all-packages.nix;
 

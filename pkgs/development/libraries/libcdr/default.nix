@@ -1,16 +1,22 @@
 { stdenv, fetchurl, libwpg, libwpd, lcms, pkgconfig, librevenge, icu, boost }:
 
 stdenv.mkDerivation rec {
-  name = "libcdr-0.1.0";
+  name = "libcdr-0.1.1";
 
   src = fetchurl {
     url = "http://dev-www.libreoffice.org/src/${name}.tar.bz2";
-    sha256 = "1l4glkyyxhzqq6j9n9cc01sf1q7xx8dd97cl3bwj8w4fp06ihv7g";
+    sha256 = "0javd72wmaqd6vprsh3clm393b3idjdjzbb7vyn44li7yaxppzkj";
   };
 
   buildInputs = [ libwpg libwpd lcms librevenge icu boost ];
 
   nativeBuildInputs = [ pkgconfig ];
+
+  # Boost 1.59 compatability fix
+  # Attempt removing when updating
+  postPatch = ''
+    sed -i 's,^CPPFLAGS.*,\0 -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED,' src/lib/Makefile.in
+  '';
 
   configureFlags = if stdenv.cc.isClang
     then [ "--disable-werror" ] else null;

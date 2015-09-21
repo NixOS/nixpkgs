@@ -18,7 +18,7 @@ diff -ru -x '*~' rpud_orig/src/Makefile.in rpud/src/Makefile.in
  
  #compiler/preprocessor options
 -INCS := -I@CUDA_HOME@/include
-+INCS := -I@CUDA_HOME@/usr_include
++INCS := -I@CUDA_HOME@/include
  PARAMS := -Xcompiler "@R_INCLUDE@ @CPICFLAGS@"
  
  #linker options

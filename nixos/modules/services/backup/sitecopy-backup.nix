@@ -21,15 +21,16 @@ in
       enable = mkOption {
         default = false;
         description = ''
-          Whether to enable sitecopy backups of specified directories.
+          Whether to enable <command>sitecopy</command> backups of specified
+          directories.
         '';
       };
 
       period = mkOption {
         default = "15 04 * * *";
         description = ''
-          This option defines (in the format used by cron) when the
-          sitecopy backup are being run.
+          This option defines (in the format used by <command>cron</command>)
+          when the <command>sitecopy</command> backups are to be run.
           The default is to update at 04:15 (at night) every day.
         '';
       };
@@ -47,9 +48,10 @@ in
         ];
         default = [];
         description = ''
-           List of attributesets describing the backups.
+           List of attribute sets describing the backups.
 
-           Username/password are extracted from <filename>${stateDir}/sitecopy.secrets</filename> at activation
+           Username/password are extracted from
+           <filename>${stateDir}/sitecopy.secrets</filename> at activation
            time. The secrets file lines should have the following structure:
            <screen>
              server username password

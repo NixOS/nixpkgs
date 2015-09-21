@@ -16,11 +16,11 @@ assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.43.0";
+  name = "curl-7.44.0";
 
   src = fetchurl {
     url = "http://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "1ycdhp47v8z6y64s7ihi5jl28dzc5w8wqn0wrhy4hc152ahm99ms";
+    sha256 = "050q6i20lbh7dyyhva2sbp8dbyp6sghlkbpvq2bvcasqwsx4298y";
   };
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains

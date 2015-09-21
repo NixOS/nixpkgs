@@ -9,5 +9,8 @@ callPackage ./generic.nix (args // rec {
     sha256 = "08ccy735srzmi505qlrpqdh5js40mpd5k1vdhnysknra0vqlpmdx";
   };
 
-  patches = [ ./fix-pythonpath.patch ];
+  patches = [
+    ./fix-pythonpath.patch
+    ./9.0.3-i686-fix.patch
+  ];
 })

@@ -20,8 +20,6 @@ stdenv.mkDerivation {
 
     substituteInPlace Makefile \
       --replace "/usr/local" $out
-    substituteInPlace bin/mix \
-      --replace "/usr/bin/env elixir" "$out/bin/elixir"
   '';
 
   postFixup = ''
@@ -35,6 +33,9 @@ stdenv.mkDerivation {
         --prefix PATH ":" "${erlang}/bin:${coreutils}/bin:${curl}/bin:${bash}/bin" \
         --set CURL_CA_BUNDLE /etc/ssl/certs/ca-certificates.crt
     done
+
+    substituteInPlace $out/bin/mix \
+          --replace "/usr/bin/env elixir" "${coreutils}/bin/env $out/bin/elixir"
   '';
 
   meta = with stdenv.lib; {

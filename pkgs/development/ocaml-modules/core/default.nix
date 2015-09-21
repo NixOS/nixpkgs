@@ -1,6 +1,6 @@
-{stdenv, buildOcaml, fetchurl, type-conv,
- core-kernel, bin-prot, comparelib, custom-printf, enumerate,
- fieldslib, herelib, pa-bench, pa-test, pa-ounit,
+{stdenv, buildOcaml, fetchurl, type_conv,
+ core_kernel, bin_prot, comparelib, custom_printf, enumerate,
+ fieldslib, herelib, pa_bench, pa_test, pa_ounit,
  pipebang, sexplib, typerep, variantslib}:
 
 buildOcaml rec {
@@ -16,9 +16,9 @@ buildOcaml rec {
 
   hasSharedObjects = true;
 
-  buildInputs = [ pa-bench pa-test pa-ounit ];
-  propagatedBuildInputs = [ type-conv core-kernel bin-prot comparelib
-                            custom-printf enumerate fieldslib herelib
+  buildInputs = [ pa_bench pa_test pa_ounit ];
+  propagatedBuildInputs = [ type_conv core_kernel bin_prot comparelib
+                            custom_printf enumerate fieldslib herelib
                             pipebang sexplib typerep variantslib ];
 
   meta = with stdenv.lib; {

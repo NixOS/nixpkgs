@@ -15,7 +15,7 @@ $(nix-build -A autonix.manifest) \
     "${KDE_MIRROR}/stable/frameworks/5.10/" \
     "$@" -A '*.tar.xz'
 
-AUTONIX_DEPS_KF5=${AUTONIX_DEPS_KF5:-"$(nix-build -A haskellngPackages.autonix-deps-kf5)/bin/kf5-deps"}
+AUTONIX_DEPS_KF5=${AUTONIX_DEPS_KF5:-"$(nix-build -A haskellPackages.autonix-deps-kf5)/bin/kf5-deps"}
 
 $AUTONIX_DEPS_KF5 manifest.json
 

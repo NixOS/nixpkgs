@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # Fixes compat with boost 1.59
+  # Please attempt removing when updating
+  CPPFLAGS = "-DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED";
+
   meta = {
     homepage = "http://mini-httpd.nongnu.org/";
     description = "a minimalistic high-performance web server";

@@ -103,16 +103,23 @@ in
       [ "/bin"
         "/etc/xdg"
         "/info"
-        "/lib"
+        "/lib" # FIXME: remove
+        #"/lib/debug/.build-id" # enables GDB to find separated debug info
         "/man"
         "/sbin"
+        "/share/applications"
+        "/share/desktop-directories"
         "/share/doc"
         "/share/emacs"
+        "/share/icons"
         "/share/info"
         "/share/man"
+        "/share/menus"
+        "/share/mime"
         "/share/nano"
         "/share/org"
         "/share/terminfo"
+        "/share/themes"
         "/share/vim-plugins"
       ];
 

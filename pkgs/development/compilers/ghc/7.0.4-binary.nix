@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     # On Linux, use patchelf to modify the executables so that they can
     # find editline/gmp.
     stdenv.lib.optionalString stdenv.isLinux ''
-      find . -type f -perm +100 \
+      find . -type f -perm -0100 \
           -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "${ncurses}/lib:${gmp}/lib" {} \;
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2

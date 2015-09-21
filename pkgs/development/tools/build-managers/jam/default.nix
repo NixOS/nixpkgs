@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, yacc}:
 
 let
   bindir = if stdenv.system == "i686-linux" then "bin.linuxx86"
@@ -12,6 +12,8 @@ stdenv.mkDerivation {
     url = ftp://ftp.perforce.com/jam/jam-2.5.tar;
     sha256 = "04c6khd7gdkqkvx4h3nbz99lyz7waid4fd221hq5chcygyx1sj3i";
   };
+
+  buildInputs = [ yacc ];
 
   installPhase = ''
     mkdir -p $out/bin

@@ -1,5 +1,8 @@
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
-args: with args;
+args @ { clangStdenv, fetchurl, fetchgit, fetchpatch, stdenv, pkgconfig, intltool, freetype, fontconfig
+, libxslt, expat, libpng, zlib, perl, mesa_drivers, spice_protocol
+, dbus, libuuid, openssl, gperf, m4, libevdev, tradcpp, libinput, mcpp, makeWrapper, autoreconfHook
+, autoconf, automake, libtool, xmlto, asciidoc, flex, bison, python, mtdev, pixman, ... }: with args;
 
 let
 
@@ -725,11 +728,11 @@ let
   }) // {inherit fontconfig freetype libX11 xproto libXrender ;};
 
   libXi = (mkDerivation "libXi" {
-    name = "libXi-1.7.4";
+    name = "libXi-1.7.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXi-1.7.4.tar.bz2;
-      sha256 = "0i12lj973grlp9fa79v0vh9cahk3nf9csdjnf81iip0qcrlc5zrc";
+      url = mirror://xorg/individual/lib/libXi-1.7.5.tar.bz2;
+      sha256 = "0ad21jy40d8b2f9ldadx7lkspmvka1i9r5jqqfwxdxyqnpgdfr6r";
     };
     buildInputs = [pkgconfig inputproto libX11 libXext xextproto libXfixes xproto ];
   }) // {inherit inputproto libX11 libXext xextproto libXfixes xproto ;};
@@ -925,11 +928,11 @@ let
   }) // {inherit ;};
 
   libxcb = (mkDerivation "libxcb" {
-    name = "libxcb-1.11";
+    name = "libxcb-1.11.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/libxcb-1.11.tar.bz2;
-      sha256 = "1xqgc81krx14f2c8yl5chzg5g2l26mhm2rwffy8dx7jv0iq5sqq3";
+      url = http://xcb.freedesktop.org/dist/libxcb-1.11.1.tar.bz2;
+      sha256 = "0c4xyvdyx5adh8dzyhnrmvwwz24gri4z1czxmxqm63i0gmngs85p";
     };
     buildInputs = [pkgconfig libxslt libpthreadstubs python libXau xcbproto libXdmcp ];
   }) // {inherit libxslt libpthreadstubs python libXau xcbproto libXdmcp ;};

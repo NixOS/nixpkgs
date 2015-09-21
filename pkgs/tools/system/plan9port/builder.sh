@@ -1,6 +1,7 @@
 source $stdenv/setup
 
 export PLAN9=$out/plan9
+export PLAN9_TARGET=$PLAN9
 
 configurePhase()
 {
@@ -15,12 +16,12 @@ configurePhase()
 buildPhase()
 {
     mkdir -p $PLAN9
-    ./INSTALL -b $PLAN9
+    ./INSTALL -b
 }
 
 installPhase()
 {
-    ./INSTALL -c -r $PLAN9
+    ./INSTALL -c
     # Copy sources
     cp -R * $PLAN9
 

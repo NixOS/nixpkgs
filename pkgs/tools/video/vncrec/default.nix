@@ -1,10 +1,12 @@
-a :  
-let 
+a @ {imake, libX11, xproto, gccmakedep, libXt
+, libXmu, libXaw, libXext, xextproto, libSM, libICE, libXpm
+, libXp, ...} :
+let
   fetchurl = a.fetchurl;
 
   buildInputs = with a; [
     libX11 xproto imake gccmakedep libXt libXmu libXaw
-    libXext xextproto libSM libICE libXpm libXp 
+    libXext xextproto libSM libICE libXpm libXp
   ];
 in
 rec {
@@ -29,7 +31,7 @@ rec {
   doXMKMF = a.fullDepEntry (''
     xmkmf
   '') ["doUnpack" "minInit" "addInputs"];
-      
+
   name = "vncrec-0.2"; # version taken from Arch AUR
   meta = {
     description = "VNC recorder";

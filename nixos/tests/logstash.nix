@@ -19,8 +19,8 @@ import ./make-test.nix ({ pkgs, ...} : {
                 exec { command => "echo dragons" interval => 1 type => "test" }
               '';
               filterConfig = ''
-                if [type] == "test" {
-                  grep { match => ["message", "flowers"] drop => true }
+                if [message] =~ /dragons/ {
+                  drop {}
                 }
               '';
               outputConfig = ''
