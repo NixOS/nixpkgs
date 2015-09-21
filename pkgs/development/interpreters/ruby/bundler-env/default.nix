@@ -1,5 +1,5 @@
 { stdenv, runCommand, writeText, writeScript, writeScriptBin, ruby, lib
-, callPackage, defaultGemConfig, fetchurl, fetchgit, buildRubyGem , bundler_HEAD
+, callPackage, defaultGemConfig, fetchurl, fetchgit, buildRubyGem, bundler
 , git
 }@defs:
 
@@ -18,7 +18,7 @@ let
 
   shellEscape = x: "'${lib.replaceChars ["'"] [("'\\'" + "'")] x}'";
   const = x: y: x;
-  bundler = bundler_HEAD.override { inherit ruby; };
+  bundler' = bundler.override { inherit ruby; };
   inherit (builtins) attrValues;
 
   gemName = attrs: "${attrs.name}-${attrs.version}.gem";
@@ -252,7 +252,7 @@ let
 
     buildInputs = [
       ruby
-      bundler
+      bundler'
       git
     ] ++ args.buildInputs or [];
 
@@ -270,7 +270,7 @@ let
       cp ${purifiedLockfile} $BUNDLE_GEMFILE.lock
 
       export NIX_GEM_SOURCES=${sources}
-      export NIX_BUNDLER_GEMPATH=${bundler}/${ruby.gemPath}
+      export NIX_BUNDLER_GEMPATH=${bundler'}/${ruby.gemPath}
 
       export GEM_HOME=$out/${ruby.gemPath}
       export GEM_PATH=$NIX_BUNDLER_GEMPATH:$GEM_HOME
@@ -279,7 +279,7 @@ let
       ${allBuildFlags}
 
       mkdir gems
-      cp ${bundler}/${bundler.ruby.gemPath}/cache/bundler-*.gem gems
+      cp ${bundler'}/${ruby.gemPath}/cache/bundler-*.gem gems
       ${copyGems}
 
       ${lib.optionalString (!documentation) ''
@@ -304,7 +304,7 @@ let
 
     passthru = {
       inherit ruby;
-      inherit bundler;
+      bundler = bundler';
 
       env = let
         irbrc = builtins.toFile "irbrc" ''
@@ -320,7 +320,7 @@ let
           shellHook = ''
             export BUNDLE_GEMFILE=${derivation.bundle}/Gemfile
             export GEM_HOME=${derivation}/${ruby.gemPath}
-            export NIX_BUNDLER_GEMPATH=${bundler}/${ruby.gemPath}
+            export NIX_BUNDLER_GEMPATH=${bundler'}/${ruby.gemPath}
             export GEM_PATH=$NIX_BUNDLER_GEMPATH:$GEM_HOME
             export OLD_IRBRC="$IRBRC"
             export IRBRC=${irbrc}

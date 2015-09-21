@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, makeWrapper, bundlerEnv, bundler_HEAD
+{ stdenv, fetchgit, fetchurl, makeWrapper, bundlerEnv, bundler
 , ruby, rubygemsFun, openssl, sqlite, dataDir ? "/var/lib/panamax-ui"}:
 
 with stdenv.lib;
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     buildInputs = [ openssl ];
   };
 
-  bundler = bundler_HEAD.override { inherit ruby; };
+  bundler' = bundler.override { inherit ruby; };
 
   src = fetchgit {
     rev = "refs/tags/v${version}";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vwy0gazfx3zkf2bx862jspidgn5p97d3jaq99x38qfhxp554sn9";
   };
 
-  buildInputs = [ makeWrapper env.ruby openssl sqlite bundler ];
+  buildInputs = [ makeWrapper env.ruby openssl sqlite bundler' ];
 
   setSourceRoot = ''
     mkdir -p $out/share
