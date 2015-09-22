@@ -18,7 +18,6 @@ _separateDebugInfo() {
         # Skip non-ELF files.
         exec 10< "$i"
         read -n 4 -u 10 magic
-        if [[ "$magic" =~ ELF ]]; then echo FOO; fi
         exec 10<&-
 
         # Extract the Build ID. FIXME: there's probably a cleaner way.

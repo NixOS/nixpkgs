@@ -42,8 +42,6 @@ let
 
     doInstallCheck = false;
 
-    separateDebugInfo = true;
-
     crossAttrs = {
       postUnpack =
         '' export CPATH="${bzip2.crossDrv}/include"
