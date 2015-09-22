@@ -3406,8 +3406,10 @@ let
   uptimed = callPackage ../tools/system/uptimed { };
 
   urjtag = callPackage ../tools/misc/urjtag {
+    svfSupport = true;
+    bsdlSupport = true;
+    staplSupport = true;
     jedecSupport = true;
-    pythonBindings = true;
   };
 
   urlwatch = callPackage ../tools/networking/urlwatch { };

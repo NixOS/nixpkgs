@@ -1,8 +1,10 @@
 { stdenv, autoconf, automake, pkgconfig, gettext, intltool, libtool, bison
-, flex, which, subversion, fetchsvn, makeWrapper
+, flex, which, subversion, fetchsvn, makeWrapper, libftdi, libusb, readline
+, python3
+, svfSupport ? false
+, bsdlSupport ? false
+, staplSupport ? false
 , jedecSupport ? false
-, pythonBindings ? false
-, python3 ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -15,12 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "0pyl0y27136nr8mmjdml7zjnfnpbjmgqzkjk99j3hvj38k10wq7f";
   };
 
-  buildInputs = [ gettext pkgconfig autoconf automake libtool bison flex which subversion makeWrapper ]
-    ++ stdenv.lib.optional pythonBindings python3;
+  buildInputs = [ gettext pkgconfig autoconf automake libtool bison flex which
+    subversion makeWrapper readline libftdi libusb python3 ];
 
   configureFlags = ''
+    ${if svfSupport then "--enable-svf" else "--disable-svf"}
+    ${if bsdlSupport then "--enable-bsdl" else "--disable-bsdl"}
+    ${if staplSupport then "--enable-stapl" else "--disable-stapl"}
     ${if jedecSupport then "--enable-jedec-exp" else "--disable-jedec-exp"}
-    ${if pythonBindings then "--enable-python" else "--disable-python"}
   '';
 
   preConfigure = "./autogen.sh";
