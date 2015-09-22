@@ -324,7 +324,11 @@ in
         '';
         passthru.version = version; # needed by virtualbox guest additions
       } else {
-        buildInputs = commonBuildInputs ++ [ args.bootstrap_cmds args.automake args.autoconf ];
+        buildInputs = commonBuildInputs ++ [
+          args.bootstrap_cmds args.automake args.autoconf
+          args.CF args.apple_sdk.libs.Xplugin args.apple_sdk.frameworks.Foundation
+          args.libobjc args.apple_sdk.frameworks.Cocoa
+        ];
         propagatedBuildInputs = commonPropagatedBuildInputs ++ [
           libAppleWM applewmproto
         ];
