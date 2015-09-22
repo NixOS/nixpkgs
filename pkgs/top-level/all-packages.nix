@@ -5516,6 +5516,8 @@ let
 
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
+  gotty = goPackages.gotty.bin // { outputs = [ "bin" ]; };
+
   gradle = callPackage ../development/tools/build-managers/gradle { };
 
   gperf = callPackage ../development/tools/misc/gperf { };

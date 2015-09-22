@@ -818,11 +818,6 @@ let
 
     buildInputs = [ cli-go go manners go-bindata-assetfs go-multierror structs websocket hcl pty ];
 
-    postInstall = ''
-      mkdir $out/bin
-      ln -s go/bin/gotty $out/bin/
-    '';
-
     meta = with stdenv.lib; {
       description = "Share your terminal as a web application";
       homepage = "https://github.com/yudai/gotty";
