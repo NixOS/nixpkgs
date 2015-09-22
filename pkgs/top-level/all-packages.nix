@@ -11768,6 +11768,8 @@ let
     inherit (gnome) libglade;
   };
 
+  kiwix = callPackage ../applications/misc/kiwix { };
+
   koji = callPackage ../tools/package-management/koji { };
 
   ksuperkey = callPackage ../tools/X11/ksuperkey { };
