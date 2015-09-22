@@ -4853,7 +4853,9 @@ let
 
   guile_1_8 = callPackage ../development/interpreters/guile/1.8.nix { };
 
-  guile_2_0 = callPackage ../development/interpreters/guile { };
+  guile_2_0 = callPackage ../development/interpreters/guile {
+    libtool = realLibtool;
+  };
 
   guile = guile_2_0;
 
@@ -6051,7 +6053,9 @@ let
   db6 = db60;
   db60 = callPackage ../development/libraries/db/db-6.0.nix { };
 
-  dbus = callPackage ../development/libraries/dbus { };
+  dbus = callPackage ../development/libraries/dbus {
+    libtool = realLibtool;
+  };
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
   dbus_glib       = callPackage ../development/libraries/dbus-glib { };
   dbus_java       = callPackage ../development/libraries/java/dbus-java { };
