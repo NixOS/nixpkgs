@@ -9,7 +9,7 @@ with lib;
 {
   config = {
 
-    systemd.services."fetch-ec2-data" =
+    systemd.services.fetch-ec2-data =
       { description = "Fetch EC2 Data";
 
         wantedBy = [ "multi-user.target" "sshd.service" ];
@@ -48,12 +48,21 @@ with lib;
             # the supplied user data, if available.  Otherwise sshd will
             # generate one normally.
             $wget http://169.254.169.254/2011-01-01/user-data > /root/user-data || true
+
+            mkdir -m 0755 -p /etc/ssh
+
             key="$(sed 's/|/\n/g; s/SSH_HOST_DSA_KEY://; t; d' /root/user-data)"
             key_pub="$(sed 's/SSH_HOST_DSA_KEY_PUB://; t; d' /root/user-data)"
             if [ -n "$key" -a -n "$key_pub" -a ! -e /etc/ssh/ssh_host_dsa_key ]; then
-                mkdir -m 0755 -p /etc/ssh
                 (umask 077; echo "$key" > /etc/ssh/ssh_host_dsa_key)
                 echo "$key_pub" > /etc/ssh/ssh_host_dsa_key.pub
+            fi
+
+            key="$(sed 's/|/\n/g; s/SSH_HOST_ED25519_KEY://; t; d' /root/user-data)"
+            key_pub="$(sed 's/SSH_HOST_ED25519_KEY_PUB://; t; d' /root/user-data)"
+            if [ -n "$key" -a -n "$key_pub" -a ! -e /etc/ssh/ssh_host_ed25519_key ]; then
+                (umask 077; echo "$key" > /etc/ssh/ssh_host_ed25519_key)
+                echo "$key_pub" > /etc/ssh/ssh_host_ed25519_key.pub
             fi
           '';
 
@@ -72,6 +81,7 @@ with lib;
             # ec2-get-console-output.
             echo "-----BEGIN SSH HOST KEY FINGERPRINTS-----" > /dev/console
             ${config.programs.ssh.package}/bin/ssh-keygen -l -f /etc/ssh/ssh_host_dsa_key.pub > /dev/console
+            ${config.programs.ssh.package}/bin/ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub > /dev/console
             echo "-----END SSH HOST KEY FINGERPRINTS-----" > /dev/console
           '';
         serviceConfig.Type = "oneshot";
