@@ -12251,12 +12251,12 @@ let
   });
 
 
-  pysvn = pkgs.stdenv.mkDerivation {
-    name = "pysvn-1.7.8";
+  pysvn = pkgs.stdenv.mkDerivation rec {
+    name = "pysvn-1.8.0";
 
     src = pkgs.fetchurl {
-      url = "http://pysvn.barrys-emacs.org/source_kits/pysvn-1.7.8.tar.gz";
-      sha256 = "1qk7af0laby1f79bd07l9p0dxn5xmcmfwlcb9l1hk29zwwq6x4v0";
+      url = "http://pysvn.barrys-emacs.org/source_kits/${name}.tar.gz";
+      sha256 = "0srjr2qgxfs69p65d9vvdib2lc142x10w8afbbdrqs7dhi46yn9r";
     };
 
     buildInputs = with self; [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
