@@ -11360,6 +11360,11 @@ let
     inherit (pkgs.gnome) libgnome libgnomeui;
   };
 
+  firefox-bin-developer-edition-launcher = callPackage ../applications/networking/browsers/firefox-bin-developer-edition-launcher {
+    gconf = pkgs.gnome.GConf;
+    inherit (pkgs.gnome) libgnome libgnomeui;
+  };
+
   firestr = callPackage ../applications/networking/p2p/firestr
     { boost = boost155;
     };
