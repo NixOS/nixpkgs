@@ -141,6 +141,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     vmFlags = mkFlags ([
       "--uart1 0x3F8 4"
       "--uartmode1 client /run/virtualbox-log-${name}.sock"
+      "--memory 768"
     ] ++ (attrs.vmFlags or []));
 
     controllerFlags = mkFlags [
@@ -324,7 +325,7 @@ in {
       mkVMConf = name: val: val.machine // { key = "${name}-config"; };
       vmConfigs = mapAttrsToList mkVMConf vboxVMs;
     in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
-    virtualisation.memorySize = 1024;
+    virtualisation.memorySize = 2048;
     virtualisation.virtualbox.host.enable = true;
     users.extraUsers.alice.extraGroups = let
       inherit (config.virtualisation.virtualbox.host) enableHardening;
