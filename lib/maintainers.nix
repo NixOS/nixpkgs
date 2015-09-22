@@ -19,6 +19,7 @@
   akc = "Anders Claesson <akc@akc.is>";
   algorith = "Dries Van Daele <dries_van_daele@telenet.be>";
   all = "Nix Committers <nix-commits@lists.science.uu.nl>";
+  ambrop72 = "Ambroz Bizjak <ambrop7@gmail.com>";
   amiddelk = "Arie Middelkoop <amiddelk@gmail.com>";
   amorsillo = "Andrew Morsillo <andrew.morsillo@gmail.com>";
   AndersonTorres = "Anderson Torres <torres.anderson.85@gmail.com>";

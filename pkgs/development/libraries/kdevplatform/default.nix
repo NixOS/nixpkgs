@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    maintainers = [ maintainers.urkud ];
+    maintainers = [ maintainers.ambrop72 ];
     platforms = platforms.linux;
     description = "KDE libraries for IDE-like programs";
     longDescription = ''
