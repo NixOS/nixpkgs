@@ -1587,6 +1587,8 @@ let
 
   gitfs = callPackage ../tools/filesystems/gitfs { };
 
+  gitinspector = callPackage ../applications/version-management/gitinspector { };
+
   gitlab = callPackage ../applications/version-management/gitlab {
     ruby = ruby_2_1_3;
   };
