@@ -1,16 +1,17 @@
-{ mkDerivation, ansi-wl-pprint, base, Cabal, containers, distribution-nixpkgs
-, fetchFromGitHub, language-nix, lens, optparse-applicative, pretty, pretty-show
-, stdenv, nix-prefetch-scripts, makeWrapper
+{ mkDerivation, ansi-wl-pprint, base, Cabal, containers
+, distribution-nixpkgs, language-nix, lens, optparse-applicative
+, pretty, pretty-show, stdenv, text, yaml
+, nix-prefetch-scripts, makeWrapper, fetchFromGitHub
 }:
 
 mkDerivation rec {
   pname = "cabal2nix";
-  version = "20150903";
+  version = "20150922";
   src = fetchFromGitHub {
     owner = "nixos";
     repo = "cabal2nix";
     rev = "v${version}";
-    sha256 = "1cniaymgwz96bjchan49jv627wjbymc3vs48w1p19qj2k9rly6q7";
+    sha256 = "17s800yd8mm48yjjqiayvycaf8z0y1giwp8jp271875wdrx3p75a";
   };
   postUnpack = "sourceRoot+=/${pname}";
   isLibrary = false;
@@ -18,7 +19,7 @@ mkDerivation rec {
   enableSharedExecutables = false;
   executableHaskellDepends = [
     ansi-wl-pprint base Cabal containers distribution-nixpkgs
-    language-nix lens optparse-applicative pretty pretty-show
+    language-nix lens optparse-applicative pretty pretty-show text yaml
   ];
   executableToolDepends = [ makeWrapper ];
   postInstall = ''
