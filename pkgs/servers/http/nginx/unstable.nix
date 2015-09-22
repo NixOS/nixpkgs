@@ -5,7 +5,8 @@
 , syslog ? false
 , moreheaders ? false
 , echo ? false
-, ngx_lua ? false }:
+, ngx_lua ? false
+, withStream ? false }:
 
 with stdenv.lib;
 
@@ -109,6 +110,7 @@ stdenv.mkDerivation rec {
     ++ optional moreheaders "--add-module=${moreheaders-ext}"
     ++ optional echo "--add-module=${echo-ext}"
     ++ optional ngx_lua "--add-module=${develkit-ext} --add-module=${lua-ext}"
+    ++ optional withStream "--with-stream"
     ++ optional (elem stdenv.system (with platforms; linux ++ freebsd)) "--with-file-aio";
 
 
