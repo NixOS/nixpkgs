@@ -22,7 +22,9 @@ common = { pname, version, sha1 }: stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${version}/source/firefox-${version}.source.tar.bz2";
+    url =
+      let ext = if lib.versionAtLeast version "41.0" then "xz" else "bz2";
+      in "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${version}/source/firefox-${version}.source.tar.${ext}";
     inherit sha1;
   };
 
@@ -77,6 +79,7 @@ common = { pname, version, sha1 }: stdenv.mkDerivation rec {
       "--disable-installer"
       "--disable-updater"
       "--enable-jemalloc"
+      "--disable-gconf"
     ]
     ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
@@ -137,8 +140,8 @@ in {
 
   firefox = common {
     pname = "firefox";
-    version = "40.0.3";
-    sha1 = "6ddda46bd6540ab3ae932fbb5ffec8e9a85cab13";
+    version = "41.0";
+    sha1 = "0ce7a5ccdf671a6c98eaac07d06d49a895a99449";
   };
 
   firefox-esr = common {
