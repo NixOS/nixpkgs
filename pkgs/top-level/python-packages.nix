@@ -18197,8 +18197,18 @@ let
       url = "https://pypi.python.org/packages/source/s/saws/saws-0.1.1.tar.gz";
       md5 = "e81437360466216a41db6c78d9b46aae";
     };
-    disabled = isPyPy;
-    propagatedBuildInputs = with self; [ awscli pygments six prompt_toolkit ordereddict ];
+
+    propagatedBuildInputs = with self; [ awscli pygments six prompt_toolkit fuzzyfinder configobj click ]
+        ++ (optionals (pythonOlder "3.4") [ enum34 ])
+        ++ (optionals (pythonOlder "2.7") [ ordereddict ]);
+
+    # this should be fixed upstream see:
+    # https://github.com/donnemartin/saws/issues/22
+    preConfigure = ''
+      sed -i '/ordereddict/d' setup.py
+      sed -i '/enum34/d' setup.py
+    '';
+
     meta = {
       description = "SAWS: A Supercharged AWS Command Line Interface (CLI)";
       homepage = "https://github.com/donnemartin/saws";
