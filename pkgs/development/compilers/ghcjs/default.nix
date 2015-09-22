@@ -29,7 +29,7 @@
 , lens
 , parallel, safe, shelly, split, stringsearch, syb
 , tar, terminfo
-, vector, yaml, fetchgit, Cabal
+, vector, yaml, fetchgit, fetchFromGitHub, Cabal
 , alex, happy, git, gnumake, autoconf, patch
 , automake, libtool
 , cryptohash
@@ -40,23 +40,27 @@
 let
   version = "0.1.0";
   ghcjsBoot = fetchgit {
-    url = git://github.com/ghcjs/ghcjs-boot.git;
-    rev = "d435c60b62d24b7a4117493f7aaecbfa09968fe6"; # 7.10 branch
-    sha256 = "07vhmjz21ccnqccms003550xacmwb08pjdkhnjcwcbl2603v4na1";
+    url = "git://github.com/ghcjs/ghcjs-boot.git";
+    rev = "ec9f795b42b40fd24933d1672db153df5a29cc00"; # master branch
+    sha256 = "0bkvqlsgb9n0faayi4k1dlkn9cbm99a66m9nnx1kykb44qcl40yg";
     fetchSubmodules = true;
   };
-  shims = fetchgit {
-    url = git://github.com/ghcjs/shims.git;
-    rev = "0b670ca27fff3f0bad515c37e56ccb8b4d6758fb"; # master branch
-    sha256 = "19zq79f2y59lw7c8m100awh3rcra5yhbsvpb5xmp3mq6grac7h08";
+  shims = fetchFromGitHub {
+    owner = "ghcjs";
+    repo = "shims";
+    rev = "01e01dee31a4786b3d01092e72350b0859a9f8c9"; # master branch
+    sha256 = "01m1yhq6l71azx0zqbpzmqc6rxxf654hgjibc0lz2cg5942wh1hf";
   };
 in mkDerivation (rec {
   pname = "ghcjs";
   inherit version;
-  src = fetchgit {
-    url = git://github.com/ghcjs/ghcjs.git;
-    rev = "39c1cb6d5d2551b306a7957a0e7f682f4a048490"; # master branch
-    sha256 = "1v2hpmhdssgf1jmchiwkvp5j8j6rw3k0hpkf326vb8l1b0kbmibr";
+  # `src` is ghcjs's a3157072c2593debf2e45e751e9a8aa90b860b4d plus this
+  # additional dependency bump: https://github.com/ghcjs/ghcjs/pull/408
+  src = fetchFromGitHub {
+    owner = "k0001";
+    repo = "ghcjs";
+    rev = "1b767e0b3dabdd1561bd17314d472651bfd9b97c";
+    sha256 = "0j4vj47qljbcbrp3md3jwxwl2kz9k85visq6yi1x8wdch4wb2kgy";
   };
   isLibrary = true;
   isExecutable = true;
