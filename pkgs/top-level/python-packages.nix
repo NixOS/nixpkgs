@@ -3596,6 +3596,22 @@ let
     };
   };
 
+  fuzzyfinder = buildPythonPackage rec {
+    name = "fuzzyfinder-1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/f/fuzzyfinder/fuzzyfinder-1.0.0.tar.gz";
+      md5 = "c76fac258987760c9e59d077bc699a06";
+    };
+
+    meta = {
+      description = "Fuzzy Finder implemented in Python.";
+      homepage = https://github.com/amjith/fuzzyfinder;
+      license = licenses.bsd3;
+      platforms = platforms.unix;
+    };
+  };
+
   singledispatch = buildPythonPackage rec {
     name = "singledispatch-3.4.0.3";
 
