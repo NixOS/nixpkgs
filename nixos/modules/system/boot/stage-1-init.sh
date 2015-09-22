@@ -290,6 +290,13 @@ mountFS() {
         if [ -z "$fsType" ]; then fsType=auto; fi
     fi
 
+    if [ "$fsType" = zfs ]; then
+        echo "mounting $device on $mountPoint..."
+        mkdir -p "/mnt-root$mountPoint" || true
+        mount -t zfs -o zfsutil "$device" "/mnt-root$mountPoint"
+        return
+    fi
+    
     echo "$device /mnt-root$mountPoint $fsType $options" >> /etc/fstab
 
     checkFS "$device" "$fsType"
