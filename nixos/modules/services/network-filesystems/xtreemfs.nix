@@ -72,6 +72,13 @@ let
     ${cfg.osd.extraConfig}
   '';
 
+  optionalDir = optionals cfg.dir.enable ["xtreemfs-dir.service"];
+
+  systemdOptionalDependencies = {
+    after = [ "network.target" ] ++ optionalDir;
+    wantedBy = [ "multi-user.target" ] ++ optionalDir;
+  };
+
 in
 
 {
@@ -441,25 +448,21 @@ in
       };
     };
 
-    systemd.services.xtreemfs-mrc = mkIf cfg.mrc.enable {
+    systemd.services.xtreemfs-mrc = mkIf cfg.mrc.enable ({
       description = "XtreemFS-MRC Server";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         User = "xtreemfs";
         ExecStart = "${startupScript "org.xtreemfs.mrc.MRC" mrcConfig}";
       };
-    };
+    } // systemdOptionalDependencies);
 
-    systemd.services.xtreemfs-osd = mkIf cfg.osd.enable {
+    systemd.services.xtreemfs-osd = mkIf cfg.osd.enable ({
       description = "XtreemFS-OSD Server";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         User = "xtreemfs";
         ExecStart = "${startupScript "org.xtreemfs.osd.OSD" osdConfig}";
       };
-    };
+    } // systemdOptionalDependencies);
 
   };
 
