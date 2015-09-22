@@ -11585,7 +11585,7 @@ let
     inherit (gnome) gnome_python;
   };
 
-  hello = callPackage ../applications/misc/hello/ex-2 { };
+  hello = callPackage ../applications/misc/hello { };
 
   helmholtz = callPackage ../applications/audio/pd-plugins/helmholtz { };
 
