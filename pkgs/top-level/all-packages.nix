@@ -10395,6 +10395,8 @@ let
 
   geolite-legacy = callPackage ../data/misc/geolite-legacy { };
 
+  gillius = callPackage ../data/fonts/gillius { };
+
   gohufont = callPackage ../data/fonts/gohufont { };
 
   gnome_user_docs = callPackage ../data/documentation/gnome-user-docs { };

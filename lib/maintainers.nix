@@ -134,6 +134,7 @@
   jefdaj = "Jeffrey David Johnson <jefdaj@gmail.com>";
   jfb = "James Felix Black <james@yamtime.com>";
   jgeerds = "Jascha Geerds <jg@ekby.de>";
+  jgertm = "Tim Jaeger <jger.tm@gmail.com>";
   jirkamarsik = "Jirka Marsik <jiri.marsik89@gmail.com>";
   joachifm = "Joachim Fasting <joachifm@fastmail.fm>";
   joamaki = "Jussi Maki <joamaki@gmail.com>";
