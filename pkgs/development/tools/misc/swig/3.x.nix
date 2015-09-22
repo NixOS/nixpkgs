@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, pcre }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, pcre }:
 
 stdenv.mkDerivation rec {
   name = "swig-${version}";
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "SWIG, an interface compiler that connects C/C++ code to higher-level languages";
     homepage = http://swig.org/;
     # Licensing is a mess: http://www.swig.org/Release/LICENSE .
     license = "BSD-style";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ urkud wkennington ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = [ lib.maintainers.urkud lib.maintainers.wkennington ];
   };
 }
