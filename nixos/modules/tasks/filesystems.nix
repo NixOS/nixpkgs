@@ -134,6 +134,22 @@ in
 
   config = {
 
+    assertions = [
+      { assertion =
+          any (fs: [] != intersectLists (splitString "," fs.options)
+                                        [ "owner" "user" "users" ])
+              fileSystems
+          -> all (x: elem x config.security.setuidPrograms)
+                 [ "mount" "umount" ];
+        message = ''
+          The fstab "owner", "user", and "users" options require "mount" and "umount"
+          to be setuid.  Please add the following to your system configuration:
+
+              security.setuidPrograms = [ "mount" "umount" ];
+        '';
+      }
+    ];
+
     boot.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
     # Add the mount helpers to the system path so that `mount' can find them.
