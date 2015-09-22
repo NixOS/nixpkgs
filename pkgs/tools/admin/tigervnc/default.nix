@@ -67,8 +67,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     pushd unix/xserver
     make TIGERVNC_SRCDIR=`pwd`/../.. install
-    rm $out/share/man/man1/Xserver.1.gz
-    rm $out/lib/xorg/protocol.txt
+    rm -f $out/share/man/man1/Xserver.1.gz
+    rm -f $out/lib/xorg/protocol.txt
   '';
 
   crossAttrs = {
