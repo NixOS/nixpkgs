@@ -37,7 +37,7 @@ _separateDebugInfo() {
 
 # - We might prefer to compress the debug info during link-time already,
 #   but our ld doesn't support --compress-debug-sections=zlib (yet).
-# - Debug info may cause due to excessive memory usage during linking.
+# - Debug info may cause problems due to excessive memory usage during linking.
 #   Using -Wa,--compress-debug-sections should help with that;
 #   further interesting information: https://gcc.gnu.org/wiki/DebugFission
 
