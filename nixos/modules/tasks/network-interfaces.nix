@@ -12,7 +12,8 @@ let
   hasBonds = cfg.bonds != { };
 
   slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
-    ++ concatMap (i: i.interfaces) (attrValues cfg.bridges);
+    ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
+    ++ concatMap (i: i.interfaces) (attrValues cfg.vswitches);
 
   slaveIfs = map (i: cfg.interfaces.${i}) (filter (i: cfg.interfaces ? ${i}) slaves);
 
@@ -369,6 +370,81 @@ in
       '';
       type = types.loaOf types.optionSet;
       options = [ interfaceOpts ];
+    };
+
+    networking.vswitches = mkOption {
+      default = { };
+      example =
+        { vs0.interfaces = [ "eth0" "eth1" ];
+          vs1.interfaces = [ "eth2" "wlan0" ];
+        };
+      description =
+        ''
+          This option allows you to define Open vSwitches that connect
+          physical networks together.  The value of this option is an
+          attribute set.  Each attribute specifies a vswitch, with the
+          attribute name specifying the name of the vswitch's network
+          interface.
+        '';
+
+      type = types.attrsOf types.optionSet;
+
+      options = {
+
+        interfaces = mkOption {
+          example = [ "eth0" "eth1" ];
+          type = types.listOf types.str;
+          description =
+            "The physical network interfaces connected by the vSwitch.";
+        };
+
+        bindInterfaces = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            If true, then the interfaces of the vSwitch are brought 'up' and especially
+            also 'down' together with the vSwitch. That requires that every interfaces
+            is configured as a systemd network services.
+          '';
+        };
+
+        controllers = mkOption {
+          type = types.listOf types.str;
+          default = [];
+          example = [ "ptcp:6653:[::1]" ];
+          description = ''
+            Specify the controller targets. For the allowed options see <literal>man 8 ovs-vsctl</literal>.
+          '';
+        };
+
+        openFlowRules = mkOption {
+          type = types.lines;
+          default = "";
+          example = ''
+            actions=normal
+          '';
+          description = ''
+            OpenFlow rules to insert into the Open vSwitch. All <literal>openFlowRules</literal> are
+            loaded with <literal>ovs-ofctl</literal> within one atomic operation.
+          '';
+        };
+
+        extraOvsctlCmds = mkOption {
+          type = types.lines;
+          default = "";
+          example = ''
+            set-fail-mode <switch_name> secure
+            set Bridge <switch_name> stp_enable=true
+          '';
+          description = ''
+            Commands to manipulate the Open vSwitch database. Every line executed with <literal>ovs-vsctl</literal>.
+            All commands are bundled together with the operations for adding the interfaces
+            into one atomic operation.
+          '';
+        };
+
+      };
+
     };
 
     networking.bridges = mkOption {
@@ -765,6 +841,8 @@ in
       })));
 
     services.mstpd = mkIf needsMstpd { enable = true; };
+
+    virtualisation.vswitch = mkIf (cfg.vswitches != { }) { enable = true; };
 
   };
 
