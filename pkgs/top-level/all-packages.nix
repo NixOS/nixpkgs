@@ -597,7 +597,7 @@ let
   arp-scan = callPackage ../tools/misc/arp-scan { };
 
   artyFX = callPackage ../applications/audio/artyFX {
-    inherit (xlibs) libpthreadstubs;
+    inherit (xorg) libpthreadstubs;
   };
 
   ascii = callPackage ../tools/text/ascii { };
@@ -853,7 +853,7 @@ let
   dfilemanager = callPackage ../applications/misc/dfilemanager { };
 
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
-    inherit (haskellngPackages) ghcWithPackages diagrams-builder;
+    inherit (haskellPackages) ghcWithPackages diagrams-builder;
   };
 
   dialog = callPackage ../development/tools/misc/dialog { };
@@ -1387,7 +1387,7 @@ let
   ecryptfs = callPackage ../tools/security/ecryptfs { };
 
   editres = callPackage ../tools/graphics/editres {
-    inherit (xlibs) libXt libXaw;
+    inherit (xorg) libXt libXaw;
     inherit (xorg) utilmacros;
   };
 
@@ -2402,7 +2402,7 @@ let
   pnmixer = callPackage ../tools/audio/pnmixer { };
 
   pwsafe = callPackage ../applications/misc/pwsafe {
-    inherit (xlibs) libXt libXtst libXi xextproto;
+    inherit (xorg) libXt libXtst libXi xextproto;
     wxGTK = wxGTK30;
   };
 
@@ -3325,7 +3325,7 @@ let
   vnc2flv = callPackage ../tools/video/vnc2flv {};
 
   vncrec = builderDefsPackage ../tools/video/vncrec {
-    inherit (xlibs) imake libX11 xproto gccmakedep libXt
+    inherit (xorg) imake libX11 xproto gccmakedep libXt
       libXmu libXaw libXext xextproto libSM libICE libXpm
       libXp;
   };
@@ -3400,12 +3400,12 @@ let
   qfsm = callPackage ../applications/science/electronics/qfsm { };
 
   tkgate = callPackage ../applications/science/electronics/tkgate/1.x.nix {
-    inherit (xlibs) libX11 imake xproto gccmakedep;
+    inherit (xorg) libX11 imake xproto gccmakedep;
   };
 
   # The newer package is low-priority because it segfaults at startup.
   tkgate2 = lowPrio (callPackage ../applications/science/electronics/tkgate/2.x.nix {
-    inherit (xlibs) libX11;
+    inherit (xorg) libX11;
   });
 
   tm = callPackage ../tools/system/tm { };
@@ -3511,7 +3511,7 @@ let
 
   wkhtmltopdf = callPackage ../tools/graphics/wkhtmltopdf {
     overrideDerivation = lib.overrideDerivation;
-    inherit (xlibs) libX11 libXext libXrender;
+    inherit (xorg) libX11 libXext libXrender;
   };
 
   wml = callPackage ../development/web/wml { };
@@ -3607,7 +3607,7 @@ let
   xvfb_run = callPackage ../tools/misc/xvfb-run { inherit (texFunctions) fontsConf; };
 
   xvkbd = callPackage ../tools/X11/xvkbd {
-    inherit (xlibs) libXt libXaw libXtst xextproto libXi libXpm gccmakedep;
+    inherit (xorg) libXt libXaw libXtst xextproto libXi libXpm gccmakedep;
   };
 
   xwinmosaic = callPackage ../tools/X11/xwinmosaic {};
@@ -4023,7 +4023,7 @@ let
     inherit mpfr m4 binutils fetchcvs emacs zlib which
       texinfo;
     gmp = gmp4;
-    inherit (xlibs) libX11 xproto inputproto libXi
+    inherit (xorg) libX11 xproto inputproto libXi
       libXext xextproto libXt libXaw libXmu;
     inherit stdenv;
   };
@@ -4234,7 +4234,7 @@ let
   mlton = callPackage ../development/compilers/mlton { };
 
   mono = callPackage ../development/compilers/mono {
-    inherit (xlibs) libX11;
+    inherit (xorg) libX11;
   };
 
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
@@ -6028,7 +6028,7 @@ let
   check = callPackage ../development/libraries/check { };
 
   chipmunk = callPackage ../development/libraries/chipmunk {
-    inherit (xlibs) libX11 xproto inputproto libXi libXmu;
+    inherit (xorg) libX11 xproto inputproto libXi libXmu;
   };
 
   chmlib = callPackage ../development/libraries/chmlib { };
@@ -6274,7 +6274,7 @@ let
   freeglut = callPackage ../development/libraries/freeglut { };
   
   freenect = callPackage ../development/libraries/freenect { 
-      inherit (xlibs) libXi libXmu;
+      inherit (xorg) libXi libXmu;
   };
 
   freetype = callPackage ../development/libraries/freetype { };
@@ -6623,7 +6623,7 @@ let
   });
 
   hwloc = callPackage ../development/libraries/hwloc {
-    inherit (xlibs) libX11;
+    inherit (xorg) libX11;
   };
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
@@ -6928,7 +6928,7 @@ let
   libfaketime = callPackage ../development/libraries/libfaketime { };
 
   libfakekey = callPackage ../development/libraries/libfakekey {
-    inherit (xlibs) libX11 libXi xextproto;
+    inherit (xorg) libX11 libXi xextproto;
   };
 
   libfm = callPackage ../development/libraries/libfm { };
@@ -7542,7 +7542,7 @@ let
   liquidfun = callPackage ../development/libraries/liquidfun { };
 
   liquidwar = builderDefsPackage ../games/liquidwar {
-    inherit (xlibs) xproto libX11 libXrender;
+    inherit (xorg) xproto libX11 libXrender;
     inherit gmp mesa libjpeg libpng
       expat gettext perl
       SDL SDL_image SDL_mixer SDL_ttf
@@ -8194,7 +8194,7 @@ let
 
   spice = callPackage ../development/libraries/spice {
     celt = celt_0_5_1;
-    inherit (xlibs) libXrandr libXfixes libXext libXrender libXinerama;
+    inherit (xorg) libXrandr libXfixes libXext libXrender libXinerama;
     inherit (pythonPackages) pyparsing;
   };
 
@@ -8830,7 +8830,7 @@ let
   ### DEVELOPMENT / R MODULES
 
   R = callPackage ../applications/science/math/R {
-    inherit (xlibs) libX11 libXt;
+    inherit (xorg) libX11 libXt;
     texLive = texlive.combine {
       inherit (texlive) scheme-small inconsolata helvetic texinfo fancyvrb cm-super;
     };
@@ -9543,7 +9543,7 @@ let
 
   directvnc = builderDefsPackage ../os-specific/linux/directvnc {
     inherit libjpeg pkgconfig zlib directfb;
-    inherit (xlibs) xproto;
+    inherit (xorg) xproto;
   };
 
   dmraid = callPackage ../os-specific/linux/dmraid {
@@ -10069,7 +10069,7 @@ let
   numactl = callPackage ../os-specific/linux/numactl { };
 
   open-vm-tools = callPackage ../applications/virtualization/open-vm-tools {
-    inherit (xlibs) libXinerama libXi libXrender libXrandr libXtst;
+    inherit (xorg) libXinerama libXi libXrender libXrandr libXtst;
     inherit (gnome) gtk gtkmm;
   };
 
@@ -10724,7 +10724,7 @@ let
   aewan = callPackage ../applications/editors/aewan { };
 
   afterstep = callPackage ../applications/window-managers/afterstep {
-    inherit (xlibs) libX11 libXext libICE;
+    inherit (xorg) libX11 libXext libICE;
     fltk = fltk13;
     gtk = gtk2;
   };
@@ -10904,7 +10904,7 @@ let
       libtool automake autoconf gstreamer;
     inherit gtk glib;
     inherit (gnome) startupnotification GConf ;
-    inherit (xlibs) libXScrnSaver scrnsaverproto libX11 xproto kbproto;
+    inherit (xorg) libXScrnSaver scrnsaverproto libX11 xproto kbproto;
   };
   funpidgin = carrier;
 
@@ -11089,7 +11089,7 @@ let
 
   doodle = callPackage ../applications/search/doodle { };
 
-  drumgizmo = callPackage ../applications/audio/drumgizmo { inherit (xlibs) libX11; };
+  drumgizmo = callPackage ../applications/audio/drumgizmo { inherit (xorg) libX11; };
 
   dunst = callPackage ../applications/misc/dunst { };
 
@@ -11432,7 +11432,7 @@ let
   gqrx = callPackage ../applications/misc/gqrx { };
 
   grass = import ../applications/misc/grass {
-    inherit (xlibs) libXmu libXext libXp libX11 libXt libSM libICE libXpm
+    inherit (xorg) libXmu libXext libXp libX11 libXt libSM libICE libXpm
       libXaw libXrender;
     inherit config composableDerivation stdenv fetchurl
       lib flex bison cairo fontconfig
@@ -11495,13 +11495,13 @@ let
   firefox-bin = callPackage ../applications/networking/browsers/firefox-bin {
     gconf = pkgs.gnome.GConf;
     inherit (pkgs.gnome) libgnome libgnomeui;
-    inherit (pkgs.xlibs) libX11 libXScrnSaver libXcomposite libXdamage libXext
+    inherit (pkgs.xorg) libX11 libXScrnSaver libXcomposite libXdamage libXext
       libXfixes libXinerama libXrender libXt;
   };
 
   firestr = callPackage ../applications/networking/p2p/firestr
     { boost = boost155;
-      inherit (xlibs) libXScrnSaver;
+      inherit (xorg) libXScrnSaver;
     };
 
   flac = callPackage ../applications/audio/flac { };
@@ -11694,7 +11694,7 @@ let
   gqview = callPackage ../applications/graphics/gqview { };
 
   gmpc = callPackage ../applications/audio/gmpc {
-    inherit (xlibs) libSM libICE;
+    inherit (xorg) libSM libICE;
   };
 
   gmtk = callPackage ../applications/networking/browsers/mozilla-plugins/gmtk {
@@ -11786,7 +11786,7 @@ let
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
   icewm = callPackage ../applications/window-managers/icewm {
-    inherit (xlibs) libX11 libXft libXext libXinerama
+    inherit (xorg) libX11 libXft libXext libXinerama
       libXrandr libICE libSM;
   };
 
@@ -12160,7 +12160,7 @@ let
   mopidy-mopify = callPackage ../applications/audio/mopidy-mopify { };
 
   mozplugger = callPackage ../applications/networking/browsers/mozilla-plugins/mozplugger {
-    inherit (xlibs) libX11 xproto;
+    inherit (xorg) libX11 xproto;
   };
 
   easytag = callPackage ../applications/audio/easytag { };
@@ -12193,7 +12193,7 @@ let
   MPlayerPlugin = browser:
     callPackage ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
       inherit browser;
-      inherit (xlibs) libXpm;
+      inherit (xorg) libXpm;
       # !!! should depend on MPlayer
     };
 
@@ -12251,7 +12251,7 @@ let
   openshift = callPackage ../applications/networking/cluster/openshift { };
 
   oroborus = callPackage ../applications/window-managers/oroborus {
-    inherit (xlibs) libSM libICE libXt libXaw libXmu libXext libXft libXpm libXrandr libXrender xextproto libXinerama;
+    inherit (xorg) libSM libICE libXt libXaw libXmu libXext libXft libXpm libXrandr libXrender xextproto libXinerama;
   };
 
   panamax_api = callPackage ../applications/networking/cluster/panamax/api {
@@ -12445,7 +12445,7 @@ let
     gnutls = if config.pidgin.gnutls or false then gnutls else null;
     libgcrypt = if config.pidgin.gnutls or false then libgcrypt else null;
     startupnotification = libstartup_notification;
-    inherit (xlibs) libXext libICE libSM;
+    inherit (xorg) libXext libICE libSM;
   };
 
   pidgin-with-plugins = callPackage ../applications/networking/instant-messengers/pidgin/wrapper.nix {
@@ -12840,7 +12840,7 @@ let
 
   sonic-visualiser = callPackage ../applications/audio/sonic-visualiser {
     inherit (pkgs.vamp) vampSDK;
-    inherit (pkgs.xlibs) libX11;
+    inherit (pkgs.xorg) libX11;
   };
 
   sox = callPackage ../applications/misc/audio/sox { };
@@ -12991,7 +12991,7 @@ let
   thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin {
     gconf = pkgs.gnome.GConf;
     inherit (pkgs.gnome) libgnome libgnomeui;
-    inherit (pkgs.xlibs) libX11 libXScrnSaver libXcomposite libXdamage libXext
+    inherit (pkgs.xorg) libX11 libXScrnSaver libXcomposite libXdamage libXext
       libXfixes libXinerama libXrender libXt;
   };
 
@@ -13112,7 +13112,7 @@ let
   vim_configurable = vimUtils.makeCustomizable (callPackage ../applications/editors/vim/configurable.nix {
     inherit (pkgs) fetchurl fetchhg stdenv ncurses pkgconfig gettext
       composableDerivation lib config glib gtk python perl tcl ruby;
-    inherit (pkgs.xlibs) libX11 libXext libSM libXpm libXt libXaw libXau libXmu
+    inherit (pkgs.xorg) libX11 libXext libSM libXpm libXt libXaw libXau libXmu
       libICE;
 
     features = "huge"; # one of  tiny, small, normal, big or huge
@@ -13132,7 +13132,7 @@ let
   qvim = lowPrio (callPackage ../applications/editors/vim/qvim.nix {
     inherit (pkgs) fetchgit stdenv ncurses pkgconfig gettext
       composableDerivation lib config python perl tcl ruby qt4;
-    inherit (pkgs.xlibs) libX11 libXext libSM libXpm libXt libXaw libXau libXmu
+    inherit (pkgs.xorg) libX11 libXext libSM libXpm libXt libXaw libXau libXmu
       libICE;
 
     inherit (pkgs) stdenvAdapters;
@@ -13193,7 +13193,7 @@ let
   };
 
   vkeybd = callPackage ../applications/audio/vkeybd {
-    inherit (xlibs) libX11;
+    inherit (xorg) libX11;
   };
 
   vlc = callPackage ../applications/video/vlc {
@@ -13267,13 +13267,13 @@ let
   wmiimenu = import ../applications/window-managers/wmii31 {
     libixp = libixp_for_wmii;
     inherit fetchurl /* fetchhg */ stdenv gawk;
-    inherit (xlibs) libX11;
+    inherit (xorg) libX11;
   };
 
   wmiiSnap = import ../applications/window-managers/wmii {
     libixp = libixp_for_wmii;
     inherit fetchurl /* fetchhg */ stdenv gawk;
-    inherit (xlibs) libX11 xextproto libXt libXext;
+    inherit (xorg) libX11 xextproto libXt libXext;
     includeUnpack = config.stdenv.includeUnpack or false;
   };
 
@@ -13383,7 +13383,7 @@ let
   x42-plugins = callPackage ../applications/audio/x42-plugins { };
 
   xaos = builderDefsPackage (import ../applications/graphics/xaos) {
-    inherit (xlibs) libXt libX11 libXext xextproto xproto;
+    inherit (xorg) libXt libX11 libXext xextproto xproto;
     inherit gsl aalib zlib intltool gettext perl;
     libpng = libpng12;
   };
@@ -13523,7 +13523,7 @@ let
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
   xpra = callPackage ../tools/X11/xpra { inherit (texFunctions) fontsConf; };
-  libfakeXinerama = callPackage ../tools/X11/xpra/libfakeXinerama.nix { inherit (xlibs) libXinerama; };
+  libfakeXinerama = callPackage ../tools/X11/xpra/libfakeXinerama.nix { inherit (xorg) libXinerama; };
   #TODO: 'pil' is not available for python3, yet
   xpraGtk3 = callPackage ../tools/X11/xpra/gtk3.nix { inherit (texFunctions) fontsConf; inherit (python3Packages) buildPythonPackage python cython pygobject3 pycairo; };
 
@@ -13583,7 +13583,7 @@ let
     fltk = fltk13.override { cfg.xftSupport = true; };
   };
 
-  zam-plugins = callPackage ../applications/audio/zam-plugins { inherit (xlibs) libX11; };
+  zam-plugins = callPackage ../applications/audio/zam-plugins { inherit (xorg) libX11; };
 
   zathuraCollection = recurseIntoAttrs
     (let callPackage = newScope pkgs.zathuraCollection; in
@@ -13765,7 +13765,7 @@ let
   kobodeluxe = callPackage ../games/kobodeluxe { };
 
   lincity = builderDefsPackage (import ../games/lincity) {
-    inherit (xlibs) libX11 libXext xextproto
+    inherit (xorg) libX11 libXext xextproto
       libICE libSM xproto;
     inherit libpng zlib;
   };
@@ -13994,7 +13994,7 @@ let
   xsnow = callPackage ../games/xsnow { };
 
   xsokoban = builderDefsPackage (import ../games/xsokoban) {
-    inherit (xlibs) libX11 xproto libXpm libXt;
+    inherit (xorg) libX11 xproto libXpm libXt;
   };
 
   zandronum = callPackage ../games/zandronum { };
@@ -14329,7 +14329,7 @@ let
 
   ncbiCTools = builderDefsPackage ../development/libraries/ncbi {
     inherit tcsh mesa lesstif;
-    inherit (xlibs) libX11 libXaw xproto libXt libSM libICE
+    inherit (xorg) libX11 libXaw xproto libXt libSM libICE
       libXmu libXext;
   };
 
@@ -14362,7 +14362,7 @@ let
 
   content = builderDefsPackage ../applications/science/math/content {
     inherit mesa lesstif;
-    inherit (xlibs) libX11 libXaw xproto libXt libSM libICE
+    inherit (xorg) libX11 libXaw xproto libXt libSM libICE
       libXmu libXext libXcursor;
   };
 
@@ -14683,7 +14683,7 @@ let
 
   celestia = callPackage ../applications/science/astronomy/celestia {
     lua = lua5_1;
-    inherit (xlibs) libXmu;
+    inherit (xorg) libXmu;
     inherit (pkgs.gnome) gtkglext;
   };
 
@@ -14744,7 +14744,7 @@ let
     # For enableQT, enableXM, enableOpenGLX11, enableRaytracerX11.
     mesa = mesa;
     xlibsWrapper = xlibsWrapper;
-    inherit (xlibs) libXmu;
+    inherit (xorg) libXmu;
   };
 
   g4py = callPackage ../development/libraries/physics/geant4/g4py { };
@@ -15057,7 +15057,7 @@ let
       gd t1lib freetype icu perl expat curl xz pkgconfig zziplib texinfo
       libjpeg bison python fontconfig flex poppler libpaper graphite2
       makeWrapper gmp mpfr xpdf config;
-    inherit (xlibs) libXaw libX11 xproto libXt libXpm
+    inherit (xorg) libXaw libX11 xproto libXt libXpm
       libXmu libXext xextproto libSM libICE;
     ghostscript = ghostscriptX;
     harfbuzz = harfbuzz.override {
@@ -15132,7 +15132,7 @@ let
   vault = goPackages.vault.bin // { outputs = [ "bin" ]; };
 
   vbam = callPackage ../misc/emulators/vbam {
-    inherit (xlibs) libpthreadstubs;
+    inherit (xorg) libpthreadstubs;
   };
 
   vice = callPackage ../misc/emulators/vice {
@@ -15198,7 +15198,7 @@ let
   xhyve = callPackage ../applications/virtualization/xhyve { };
 
   xinput_calibrator = callPackage ../tools/X11/xinput_calibrator {
-    inherit (xlibs) libXi inputproto;
+    inherit (xorg) libXi inputproto;
   };
 
   xosd = callPackage ../misc/xosd { };
