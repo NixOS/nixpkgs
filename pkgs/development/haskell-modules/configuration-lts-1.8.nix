@@ -636,6 +636,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "MFlow" = dontDistribute super."MFlow";
   "MHask" = dontDistribute super."MHask";
   "MSQueue" = dontDistribute super."MSQueue";
+  "MTGBuilder" = dontDistribute super."MTGBuilder";
   "MagicHaskeller" = dontDistribute super."MagicHaskeller";
   "MailchimpSimple" = dontDistribute super."MailchimpSimple";
   "MaybeT-monads-tf" = dontDistribute super."MaybeT-monads-tf";
@@ -2074,6 +2075,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "compact-socket" = dontDistribute super."compact-socket";
   "compact-string" = dontDistribute super."compact-string";
   "compact-string-fix" = dontDistribute super."compact-string-fix";
+  "compactmap" = dontDistribute super."compactmap";
   "compare-type" = dontDistribute super."compare-type";
   "compdata" = doDistribute super."compdata_0_9";
   "compdata-automata" = dontDistribute super."compdata-automata";
@@ -2255,6 +2257,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "crypto-cipher-benchmarks" = dontDistribute super."crypto-cipher-benchmarks";
   "crypto-classical" = dontDistribute super."crypto-classical";
   "crypto-conduit" = dontDistribute super."crypto-conduit";
+  "crypto-enigma" = dontDistribute super."crypto-enigma";
   "crypto-pubkey-openssh" = dontDistribute super."crypto-pubkey-openssh";
   "crypto-random" = doDistribute super."crypto-random_0_0_8";
   "crypto-random-effect" = dontDistribute super."crypto-random-effect";
@@ -2562,6 +2565,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "direct-http" = dontDistribute super."direct-http";
   "direct-murmur-hash" = dontDistribute super."direct-murmur-hash";
   "direct-plugins" = dontDistribute super."direct-plugins";
+  "direct-sqlite" = doDistribute super."direct-sqlite_2_3_15";
   "directed-cubical" = dontDistribute super."directed-cubical";
   "directory-layout" = dontDistribute super."directory-layout";
   "dirfiles" = dontDistribute super."dirfiles";
@@ -3880,6 +3884,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "hgl-example" = dontDistribute super."hgl-example";
   "hgom" = dontDistribute super."hgom";
   "hgopher" = dontDistribute super."hgopher";
+  "hgrev" = dontDistribute super."hgrev";
   "hgrib" = dontDistribute super."hgrib";
   "hharp" = dontDistribute super."hharp";
   "hi" = dontDistribute super."hi";
@@ -6027,6 +6032,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "poll" = dontDistribute super."poll";
   "poly-arity" = dontDistribute super."poly-arity";
   "polyToMonoid" = dontDistribute super."polyToMonoid";
+  "polymap" = dontDistribute super."polymap";
   "polynomial" = dontDistribute super."polynomial";
   "polynomials-bernstein" = dontDistribute super."polynomials-bernstein";
   "polyparse" = doDistribute super."polyparse_1_10";
@@ -7227,6 +7233,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "sunroof-compiler" = dontDistribute super."sunroof-compiler";
   "sunroof-examples" = dontDistribute super."sunroof-examples";
   "sunroof-server" = dontDistribute super."sunroof-server";
+  "super-user-spark" = dontDistribute super."super-user-spark";
   "supercollider-ht" = dontDistribute super."supercollider-ht";
   "supercollider-midi" = dontDistribute super."supercollider-midi";
   "superdoc" = dontDistribute super."superdoc";

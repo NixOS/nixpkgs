@@ -640,6 +640,7 @@ self: super: assert super.ghc.name == "ghc-7.8.3"; {
   "MFlow" = dontDistribute super."MFlow";
   "MHask" = dontDistribute super."MHask";
   "MSQueue" = dontDistribute super."MSQueue";
+  "MTGBuilder" = dontDistribute super."MTGBuilder";
   "MagicHaskeller" = dontDistribute super."MagicHaskeller";
   "MailchimpSimple" = dontDistribute super."MailchimpSimple";
   "MaybeT-monads-tf" = dontDistribute super."MaybeT-monads-tf";
@@ -2093,6 +2094,7 @@ self: super: assert super.ghc.name == "ghc-7.8.3"; {
   "compact-socket" = dontDistribute super."compact-socket";
   "compact-string" = dontDistribute super."compact-string";
   "compact-string-fix" = dontDistribute super."compact-string-fix";
+  "compactmap" = dontDistribute super."compactmap";
   "compare-type" = dontDistribute super."compare-type";
   "compdata" = doDistribute super."compdata_0_9";
   "compdata-automata" = dontDistribute super."compdata-automata";
@@ -2275,6 +2277,7 @@ self: super: assert super.ghc.name == "ghc-7.8.3"; {
   "crypto-cipher-benchmarks" = dontDistribute super."crypto-cipher-benchmarks";
   "crypto-classical" = dontDistribute super."crypto-classical";
   "crypto-conduit" = dontDistribute super."crypto-conduit";
+  "crypto-enigma" = dontDistribute super."crypto-enigma";
   "crypto-numbers" = doDistribute super."crypto-numbers_0_2_3";
   "crypto-pubkey" = doDistribute super."crypto-pubkey_0_2_5";
   "crypto-pubkey-openssh" = dontDistribute super."crypto-pubkey-openssh";
@@ -3922,6 +3925,7 @@ self: super: assert super.ghc.name == "ghc-7.8.3"; {
   "hgl-example" = dontDistribute super."hgl-example";
   "hgom" = dontDistribute super."hgom";
   "hgopher" = dontDistribute super."hgopher";
+  "hgrev" = dontDistribute super."hgrev";
   "hgrib" = dontDistribute super."hgrib";
   "hharp" = dontDistribute super."hharp";
   "hi" = dontDistribute super."hi";
@@ -6090,6 +6094,7 @@ self: super: assert super.ghc.name == "ghc-7.8.3"; {
   "poll" = dontDistribute super."poll";
   "poly-arity" = dontDistribute super."poly-arity";
   "polyToMonoid" = dontDistribute super."polyToMonoid";
+  "polymap" = dontDistribute super."polymap";
   "polynomial" = dontDistribute super."polynomial";
   "polynomials-bernstein" = dontDistribute super."polynomials-bernstein";
   "polyparse" = doDistribute super."polyparse_1_9";
@@ -7298,6 +7303,7 @@ self: super: assert super.ghc.name == "ghc-7.8.3"; {
   "sunroof-compiler" = dontDistribute super."sunroof-compiler";
   "sunroof-examples" = dontDistribute super."sunroof-examples";
   "sunroof-server" = dontDistribute super."sunroof-server";
+  "super-user-spark" = dontDistribute super."super-user-spark";
   "supercollider-ht" = dontDistribute super."supercollider-ht";
   "supercollider-midi" = dontDistribute super."supercollider-midi";
   "superdoc" = dontDistribute super."superdoc";
