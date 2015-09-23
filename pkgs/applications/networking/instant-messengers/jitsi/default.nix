@@ -37,11 +37,12 @@ stdenv.mkDerivation rec {
     patchShebangs $out
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://jitsi.org/;
     description = "Open Source Video Calls and Chat";
-    license = stdenv.lib.licenses.lgpl21Plus.shortName;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.khumba ];
   };
 
 }
