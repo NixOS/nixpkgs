@@ -15076,7 +15076,7 @@ aliases = with self; rec {
 };
 
 tweakAlias = _n: alias: with lib;
-  if !isDerivation alias && isAttrs alias then
+  if alias.recurseForDerivations or false then
     removeAttrs alias ["recurseForDerivations"]
   else alias;
 
