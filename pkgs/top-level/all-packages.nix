@@ -9567,6 +9567,8 @@ let
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
 
+  openiscsi = callPackage ../os-specific/linux/open-iscsi { };
+
   # -- Linux kernel expressions ------------------------------------------------
 
   linuxHeaders = linuxHeaders_3_12;
@@ -9746,8 +9748,6 @@ let
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
 
     openafsClient = callPackage ../servers/openafs-client { };
-
-    openiscsi = callPackage ../os-specific/linux/open-iscsi { };
 
     wis_go7007 = callPackage ../os-specific/linux/wis-go7007 { };
 
