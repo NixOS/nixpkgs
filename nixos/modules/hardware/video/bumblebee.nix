@@ -45,7 +45,7 @@ in
   config = mkIf config.hardware.bumblebee.enable {
     boot.blacklistedKernelModules = [ "nouveau" "nvidia" ];
     boot.kernelModules = [ "bbswitch" ];
-    boot.extraModulePackages = [ kernel.bbswitch kernel.nvidia_x11 ];
+    boot.extraModulePackages = [ kernel.bbswitch kernel.nvidia-drivers ];
 
     environment.systemPackages = [ bumblebee pkgs.primus ];
 

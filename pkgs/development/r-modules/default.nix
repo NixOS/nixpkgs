@@ -230,7 +230,7 @@ let
     cairoDevice = [ pkgs.gtk2 ];
     Cairo = [ pkgs.libtiff pkgs.libjpeg pkgs.cairo ];
     Cardinal = [ pkgs.which ];
-    CARramps = [ pkgs.linuxPackages.nvidia_x11 pkgs.liblapack ];
+    CARramps = [ pkgs.linuxPackages.nvidia-drivers pkgs.liblapack ];
     chebpol = [ pkgs.fftw ];
     ChemmineOB = [ pkgs.openbabel pkgs.pkgconfig ];
     cit = [ pkgs.gsl ];
@@ -311,7 +311,7 @@ let
     Rpoppler = [ pkgs.poppler ];
     RPostgreSQL = [ pkgs.postgresql ];
     RProtoBuf = [ pkgs.protobuf ];
-    rpud = [ pkgs.linuxPackages.nvidia_x11 ];
+    rpud = [ pkgs.linuxPackages.nvidia-drivers ];
     rPython = [ pkgs.python ];
     RSclient = [ pkgs.openssl ];
     Rserve = [ pkgs.openssl ];

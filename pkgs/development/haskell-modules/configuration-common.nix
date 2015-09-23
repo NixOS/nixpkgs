@@ -80,7 +80,7 @@ self: super: {
 
   # CUDA needs help finding the SDK headers and libraries.
   cuda = overrideCabal super.cuda (drv: {
-    extraLibraries = (drv.extraLibraries or []) ++ [pkgs.linuxPackages.nvidia_x11];
+    extraLibraries = (drv.extraLibraries or []) ++ [pkgs.linuxPackages.nvidia-drivers];
     configureFlags = (drv.configureFlags or []) ++
       pkgs.lib.optional pkgs.stdenv.is64bit "--extra-lib-dirs=${pkgs.cudatoolkit}/lib64" ++ [
       "--extra-lib-dirs=${pkgs.cudatoolkit}/lib"
