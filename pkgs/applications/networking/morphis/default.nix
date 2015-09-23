@@ -7,14 +7,15 @@ pythonPackages.buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://morph.is/v${version}/morphis-${version}.tar.xz";
-    sha256 = "1wpxh5fhj8nx4yx4cvmc087cnf4iqwxf7zd7rdh2ln3pgxrjfral";
+    sha256 = "0a6diff0lipd2lds4ix7syvdag134alfidw7g4infg9l6fx54dl9";
   };
 
   buildInputs = [ pythonPackages.pbr ];
 
   propagatedBuildInputs = with pythonPackages; [
       pycrypto
-      sqlalchemy
+      sqlalchemy9
+      cython
     ];
 
   meta = {
