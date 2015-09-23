@@ -13097,9 +13097,10 @@ let
 
   viewMtn = builderDefsPackage (import ../applications/version-management/viewmtn/0.10.nix)
   {
-    inherit monotone cheetahTemplate highlight ctags
+    inherit monotone highlight ctags
       makeWrapper graphviz which python;
     flup = pythonPackages.flup;
+    cheetahTemplate = pythonPackages.cheetah;
   };
 
   vim = callPackage ../applications/editors/vim {
