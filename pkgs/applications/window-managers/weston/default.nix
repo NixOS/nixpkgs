@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, wayland, mesa, libxkbcommon, cairo, libxcb
-, libXcursor, x11, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput
+, libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput
 , pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
 , libwebp ? null, xwayland ? null
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    wayland mesa libxkbcommon cairo libxcb libXcursor x11 udev libdrm mtdev
-    libjpeg pam dbus.libs libinput pango libunwind freerdp vaapi libva libwebp
+    wayland mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
+    mtdev libjpeg pam dbus.libs libinput pango libunwind freerdp vaapi libva
+    libwebp
   ];
 
   configureFlags = [

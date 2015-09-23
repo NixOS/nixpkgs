@@ -96,7 +96,16 @@ rec {
       sha256 = "1pa94gw2y0b6p8r81zbjzcjgi5nrx4dqrqr6mk98wj6jbi465sh2";
     };
 
-    buildInputs = [ optipng cairo fontforge pythonPackages.nototools pythonPackages.fonttools pkgconfig ];
+    buildInputs = with pythonPackages; [
+      optipng cairo fontforge python nototools fonttools pkgconfig
+    ];
+
+    #FIXME: perhaps use our pngquant instead
+    preConfigure = ''
+      for f in ./*.py ./third_party/pngquant/configure; do
+        patchShebangs "$f"
+      done
+    '';
 
     preBuild = ''
       export PYTHONPATH=$PYTHONPATH:$PWD

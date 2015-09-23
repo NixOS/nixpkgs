@@ -1,9 +1,9 @@
 { stdenv, fetchurl, perl, gnum4, ncurses, openssl
 , gnused, gawk, makeWrapper
 , odbcSupport ? false, unixODBC ? null
-, wxSupport ? false, mesa ? null, wxGTK ? null, xlibs ? null }:
+, wxSupport ? false, mesa ? null, wxGTK ? null, xorg ? null }:
 
-assert wxSupport -> mesa != null && wxGTK != null && xlibs != null;
+assert wxSupport -> mesa != null && wxGTK != null && xorg != null;
 assert odbcSupport -> unixODBC != null;
 
 with stdenv.lib;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ perl gnum4 ncurses openssl makeWrapper
-    ] ++ optional wxSupport [ mesa wxGTK xlibs.libX11 ]
+    ] ++ optional wxSupport [ mesa wxGTK xorg.libX11 ]
       ++ optional odbcSupport [ unixODBC ];
 
   patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';

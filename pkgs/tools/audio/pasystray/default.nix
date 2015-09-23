@@ -1,5 +1,5 @@
 {stdenv, fetchFromGitHub, autoconf, automake, makeWrapper, pkgconfig
-, gnome3, avahi, gtk3, libnotify, libpulseaudio, x11}:
+, gnome3, avahi, gtk3, libnotify, libpulseaudio, xlibsWrapper}:
 
 stdenv.mkDerivation rec {
   name = "pasystray-0.5.2";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ autoconf automake makeWrapper pkgconfig 
                   gnome3.defaultIconTheme
-                  avahi gtk3 libnotify libpulseaudio x11 ];
+                  avahi gtk3 libnotify libpulseaudio xlibsWrapper ];
 
   preConfigure = ''
     aclocal

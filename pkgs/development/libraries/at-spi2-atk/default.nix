@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, pkgconfig, popt, atk, libX11, libICE, xlibs, libXi
+{ stdenv, fetchurl, python, pkgconfig, popt, atk, libX11, libICE, xorg, libXi
 , intltool, dbus_glib, at_spi2_core, libSM }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xgkrnx04vaklbkzc7bzym9s0qhj8aiz4knqlxgx3vxnacsb6vaa";
   };
 
-  buildInputs = [ python pkgconfig popt atk libX11 libICE xlibs.libXtst libXi
+  buildInputs = [ python pkgconfig popt atk libX11 libICE xorg.libXtst libXi
                   intltool dbus_glib at_spi2_core libSM ];
 
   meta = with stdenv.lib; {

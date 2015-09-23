@@ -181,17 +181,6 @@ let
   path = ../..;
 
 
-  ### Symbolic names.
-
-  x11 = xlibsWrapper;
-
-  # `xlibs' is the set of X library components.  This used to be the
-  # old modular X libraries project (called `xlibs') but now it's just
-  # the set of packages in the modular X.org tree (which also includes
-  # non-library components like the server, drivers, fonts, etc.).
-  xlibs = xorg // {xlibs = xlibsWrapper;};
-
-
   ### Helper functions.
 
   inherit lib config stdenvAdapters;
@@ -813,6 +802,8 @@ let
   datamash = callPackage ../tools/misc/datamash { };
 
   ddate = callPackage ../tools/misc/ddate { };
+
+  deis = goPackages.deis.bin // { outputs = [ "bin" ]; };
 
   dfilemanager = callPackage ../applications/misc/dfilemanager { };
 
@@ -1585,6 +1576,8 @@ let
 
   gitfs = callPackage ../tools/filesystems/gitfs { };
 
+  gitinspector = callPackage ../applications/version-management/gitinspector { };
+
   gitlab = callPackage ../applications/version-management/gitlab {
     ruby = ruby_2_1_3;
   };
@@ -1674,7 +1667,7 @@ let
   graphviz = callPackage ../tools/graphics/graphviz { };
 
   graphviz-nox = callPackage ../tools/graphics/graphviz {
-    xlibs = null;
+    xorg = null;
     libdevil = libdevil-nox;
   };
 
@@ -1877,9 +1870,11 @@ let
 
   inetutils = callPackage ../tools/networking/inetutils { };
 
-  innoextract = callPackage ../tools/archivers/innoextract {};
+  innoextract = callPackage ../tools/archivers/innoextract { };
 
-  ioping = callPackage ../tools/system/ioping {};
+  ioping = callPackage ../tools/system/ioping { };
+
+  iops = callPackage ../tools/system/iops { };
 
   iodine = callPackage ../tools/networking/iodine { };
 
@@ -3410,8 +3405,10 @@ let
   uptimed = callPackage ../tools/system/uptimed { };
 
   urjtag = callPackage ../tools/misc/urjtag {
+    svfSupport = true;
+    bsdlSupport = true;
+    staplSupport = true;
     jedecSupport = true;
-    pythonBindings = true;
   };
 
   urlwatch = callPackage ../tools/networking/urlwatch { };
@@ -3900,7 +3897,7 @@ let
     inherit zip unzip zlib boehmgc gettext pkgconfig perl;
     inherit gtk;
     inherit (gnome) libart_lgpl;
-    inherit (xlibs) libX11 libXt libSM libICE libXtst libXi libXrender
+    inherit (xorg) libX11 libXt libSM libICE libXtst libXi libXrender
       libXrandr xproto renderproto xextproto inputproto randrproto;
   });
 
@@ -4671,10 +4668,12 @@ let
   rustPlatform = rustStable;
 
   rustStable = recurseIntoAttrs (makeRustPlatform rustc cargo rustStable);
-  rustUnstable = recurseIntoAttrs (makeRustPlatform rustcMaster cargo rustUnstable);
+  rustUnstable = recurseIntoAttrs (makeRustPlatform rustcMaster
+    (cargo.override { rustPlatform = rustUnstableCargoPlatform;  }) rustUnstable);
 
   # rust platform to build cargo itself (with cargoSnapshot)
   rustCargoPlatform = makeRustPlatform rustc cargoSnapshot.cargo rustCargoPlatform;
+  rustUnstableCargoPlatform = makeRustPlatform rustcMaster cargoSnapshot.cargo rustUnstableCargoPlatform;
 
   makeRustPlatform = rustc: cargo: self:
     let
@@ -5520,6 +5519,8 @@ let
 
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
+  gotty = goPackages.gotty.bin // { outputs = [ "bin" ]; };
+
   gradle = callPackage ../development/tools/build-managers/gradle { };
 
   gperf = callPackage ../development/tools/misc/gperf { };
@@ -6027,6 +6028,8 @@ let
   coredumper = callPackage ../development/libraries/coredumper { };
 
   ctl = callPackage ../development/libraries/ctl { };
+
+  ctpp2 = callPackage ../development/libraries/ctpp2 { };
 
   cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
 
@@ -8383,11 +8386,12 @@ let
 
   xercesc = callPackage ../development/libraries/xercesc {};
 
+  # Avoid using this. It isn't really a wrapper anymore, but we keep the name.
   xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper {
     packages = [
-      freetype fontconfig xlibs.xproto xlibs.libX11 xlibs.libXt
-      xlibs.libXft xlibs.libXext xlibs.libSM xlibs.libICE
-      xlibs.xextproto
+      freetype fontconfig xorg.xproto xorg.libX11 xorg.libXt
+      xorg.libXft xorg.libXext xorg.libSM xorg.libICE
+      xorg.xextproto
     ];
   };
 
@@ -9267,7 +9271,7 @@ let
     mesa = mesa_noglu;
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
-  });
+  } // { inherit xlibsWrapper; } );
 
   xorgReplacements = callPackage ../servers/x11/xorg/replacements.nix { };
 
@@ -9581,6 +9585,8 @@ let
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
 
+  openiscsi = callPackage ../os-specific/linux/open-iscsi { };
+
   # -- Linux kernel expressions ------------------------------------------------
 
   linuxHeaders = linuxHeaders_3_12;
@@ -9760,8 +9766,6 @@ let
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
 
     openafsClient = callPackage ../servers/openafs-client { };
-
-    openiscsi = callPackage ../os-specific/linux/open-iscsi { };
 
     wis_go7007 = callPackage ../os-specific/linux/wis-go7007 { };
 
@@ -10751,6 +10755,8 @@ let
 
   bristol = callPackage ../applications/audio/bristol { };
 
+  bs1770gain = callPackage ../applications/audio/bs1770gain { };
+
   bspwm = callPackage ../applications/window-managers/bspwm { };
 
   bvi = callPackage ../applications/editors/bvi { };
@@ -11008,7 +11014,7 @@ let
 
   emacs24 = callPackage ../applications/editors/emacs-24 {
     # use override to enable additional features
-    libXaw = xlibs.libXaw;
+    libXaw = xorg.libXaw;
     Xaw3d = null;
     gconf = null;
     alsaLib = null;
@@ -11589,7 +11595,7 @@ let
     inherit (gnome) gnome_python;
   };
 
-  hello = callPackage ../applications/misc/hello/ex-2 { };
+  hello = callPackage ../applications/misc/hello { };
 
   helmholtz = callPackage ../applications/audio/pd-plugins/helmholtz { };
 
@@ -13126,7 +13132,7 @@ let
           ++ lib.optional (cfg.enableBluejeans or false) bluejeans
          );
       libs = [ gstreamer gst_plugins_base ] ++ lib.optionals (cfg.enableQuakeLive or false)
-             (with xlibs; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
+             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
              ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
              ++ lib.optional (config.pulseaudio or false) libpulseaudio;
       gst_plugins = [ gst_plugins_base gst_plugins_good gst_plugins_bad gst_plugins_ugly gst_ffmpeg ];
@@ -14357,6 +14363,8 @@ let
             ocaml_mysql ocamlnet ulex08 camlzip ocaml_pcre;
   });
 
+  metis-prover = callPackage ../applications/science/logic/metis-prover { };
+
   minisat = callPackage ../applications/science/logic/minisat {};
 
   opensmt = callPackage ../applications/science/logic/opensmt { };
@@ -14910,7 +14918,7 @@ let
   vbam = callPackage ../misc/emulators/vbam {};
 
   vice = callPackage ../misc/emulators/vice {
-    libX11 = xlibs.libX11;
+    libX11 = xorg.libX11;
     giflib = giflib_4_1;
   };
 
@@ -15047,8 +15055,12 @@ let
 
   mg = callPackage ../applications/editors/mg { };
 
+}; # self_ =
 
-  # Attributes for backward compatibility.
+
+  ### Deprecated aliases - for backward compatibility
+
+aliases = with self; rec {
   adobeReader = adobe-reader;
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
@@ -15076,8 +15088,17 @@ let
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  x11 = xlibsWrapper; # added 2015-09
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
+  xlibs = xorg; # added 2015-09
   youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
   youtubeDL = youtube-dl;  # added 2014-10-26
+};
 
-}; in self; in pkgs
+tweakAlias = _n: alias: with lib;
+  if alias.recurseForDerivations or false then
+    removeAttrs alias ["recurseForDerivations"]
+  else alias;
+
+in lib.mapAttrs tweakAlias aliases // self; in pkgs
+

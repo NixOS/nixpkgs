@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, pcre }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, pcre }:
 
 stdenv.mkDerivation rec {
   name = "swig-${version}";
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
     # Licensing is a mess: http://www.swig.org/Release/LICENSE .
     license = "BSD-style";
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
 
-    maintainers = with stdenv.lib.maintainers; [ urkud ];
+    maintainers = [ lib.maintainers.urkud ];
   };
 }

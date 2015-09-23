@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "maim-${version}";
-  version = "3.3.41";
+  version = "3.4.46";
 
   src = fetchurl {
     url = "https://github.com/naelstrof/maim/archive/v${version}.tar.gz";
-    sha256 = "12p9zd4skxds26hicy6hrxkxnhbqv1c5ys1h6jchaypvwdggcgnc";
+    sha256 = "04gb858g0rrvdiva2dxwsfd7dmq62r67irnc8cpd0r02hr92dr6n";
   };
 
   buildInputs = [ cmake gengetopt imlib2 libXrandr libXfixes ]

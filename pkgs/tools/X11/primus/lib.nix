@@ -1,5 +1,5 @@
 { stdenv, fetchgit
-, x11, mesa
+, xlibsWrapper, mesa
 , nvidia
 }:
 let
@@ -15,6 +15,6 @@ stdenv.mkDerivation {
 
   inherit nvidia mesa;
 
-  buildInputs = [ x11 mesa ];
+  buildInputs = [ xlibsWrapper mesa ];
   builder = ./builder.sh;
 }

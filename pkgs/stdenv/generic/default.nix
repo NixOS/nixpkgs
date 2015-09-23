@@ -138,7 +138,7 @@ let
 
       outputs' =
         outputs ++
-        (if separateDebugInfo then [ "debug" ] else []);
+        (if separateDebugInfo then assert result.isLinux; [ "debug" ] else []);
 
       buildInputs' = buildInputs ++
         (if separateDebugInfo then [ ../../build-support/setup-hooks/separate-debug-info.sh ] else []);

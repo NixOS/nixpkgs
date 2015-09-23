@@ -389,6 +389,21 @@ in {
 
     destroyVM_simple;
 
+    sub removeUUIDs {
+      return join("\n", grep { $_ !~ /^UUID:/ } split(/\n/, $_[0]))."\n";
+    }
+
+    subtest "host-usb-permissions", sub {
+      my $userUSB = removeUUIDs vbm("list usbhost");
+      print STDERR $userUSB;
+      my $rootUSB = removeUUIDs $machine->succeed("VBoxManage list usbhost");
+      print STDERR $rootUSB;
+
+      die "USB host devices differ for root and normal user"
+        if $userUSB ne $rootUSB;
+      die "No USB host devices found" if $userUSB =~ /<none>/;
+    };
+
     subtest "systemd-detect-virt", sub {
       createVM_detectvirt;
       vbm("startvm detectvirt");

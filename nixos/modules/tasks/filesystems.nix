@@ -69,6 +69,8 @@ let
     config = {
       mountPoint = mkDefault name;
       device = mkIf (config.fsType == "tmpfs") (mkDefault config.fsType);
+      # The vboxsf filesystem doesn't support the relatime option:
+      options = mkIf (config.fsType == "vboxsf") (mkDefault "defaults");
     };
 
   };
@@ -141,7 +143,7 @@ in
 
     environment.etc.fstab.text =
       let
-        fsToSkipCheck = [ "none" "btrfs" "zfs" "tmpfs" "nfs" ];
+        fsToSkipCheck = [ "none" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" ];
         skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck;
       in ''
         # This is a generated file.  Do not edit!

@@ -32,7 +32,8 @@ in
 
     boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
 
-    boot.kernelModules = [ "vboxsf" ];
+    boot.supportedFilesystems = [ "vboxsf" ];
+    boot.initrd.supportedFilesystems = [ "vboxsf" ];
 
     users.extraGroups.vboxsf.gid = config.ids.gids.vboxsf;
 

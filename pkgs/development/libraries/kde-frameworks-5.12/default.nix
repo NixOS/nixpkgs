@@ -116,7 +116,7 @@ let
       {
         inherit acl cmake docbook_xml_dtd_45 docbook5_xsl epoxy fam gpgme
                 libgcrypt libgit2 modemmanager networkmanager perl
-                perlPackages qimageblitz xlibs zlib;
+                perlPackages qimageblitz xorg zlib;
         boost = boost155;
         gif = giflib;
         glib2 = glib;
@@ -154,7 +154,7 @@ let
     });
 
     frameworkintegration = extendDerivation super.frameworkintegration {
-      buildInputs = [ scope.xlibs.libXcursor ];
+      buildInputs = [ scope.xorg.libXcursor ];
     };
 
     kauth = extendDerivation super.kauth {
@@ -171,7 +171,7 @@ let
     };
 
     kdelibs4support = extendDerivation super.kdelibs4support {
-      buildInputs = [ scope.networkmanager scope.xlibs.libSM ];
+      buildInputs = [ scope.networkmanager scope.xorg.libSM ];
       cmakeFlags = [
         "-DDocBookXML4_DTD_DIR=${pkgs.docbook_xml_dtd_45}/xml/dtd/docbook"
         "-DDocBookXML4_DTD_VERSION=4.5"

@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  separateDebugInfo = true;
-
   meta = {
     description = "A program that produces a familiar, friendly greeting";
     longDescription = ''

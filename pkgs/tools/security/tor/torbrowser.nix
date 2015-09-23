@@ -1,5 +1,5 @@
 { stdenv, fetchurl, buildEnv
-, xlibs, alsaLib, dbus, dbus_glib, glib, gtk, atk, pango, freetype, fontconfig
+, xorg, alsaLib, dbus, dbus_glib, glib, gtk, atk, pango, freetype, fontconfig
 , gdk_pixbuf, cairo, zlib}:
 let
   bits = if stdenv.system == "x86_64-linux" then "64"
@@ -10,8 +10,8 @@ let
     name = "tor-env";
     paths = [
       stdenv.cc.cc zlib glib alsaLib dbus dbus_glib gtk atk pango freetype
-      fontconfig gdk_pixbuf cairo xlibs.libXrender xlibs.libX11 xlibs.libXext
-      xlibs.libXt
+      fontconfig gdk_pixbuf cairo xorg.libXrender xorg.libX11 xorg.libXext
+      xorg.libXt
     ];
   };
 

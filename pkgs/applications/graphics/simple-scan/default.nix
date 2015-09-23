@@ -1,13 +1,13 @@
 { stdenv, fetchurl, cairo, colord, glib, gtk3, gusb, intltool, itstool, libusb
 , libxml2, makeWrapper, packagekit, pkgconfig, saneBackends, systemd, vala }:
 
-let version = "3.17.92"; in
+let version = "3.18.0"; in
 stdenv.mkDerivation rec {
   name = "simple-scan-${version}";
 
   src = fetchurl {
-    sha256 = "0ax4rqqpwcz65nvw8l89npjc5v0g1ik1mb5w3025xlipm7djgybp";
-    url = "https://launchpad.net/simple-scan/3.17/${version}/+download/${name}.tar.xz";
+    sha256 = "09qki4h1px65fxwpr7jppzqsi5cfcb8168p13blp3wcfizjgb9gl";
+    url = "https://launchpad.net/simple-scan/3.18/${version}/+download/${name}.tar.xz";
   };
 
   buildInputs = [ cairo colord glib gusb gtk3 libusb libxml2 packagekit
