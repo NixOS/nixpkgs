@@ -25,11 +25,11 @@
 , libX11, glibc, glib, libbsd
 , makeWrapper, buildEnv, module_init_tools
 , xorg, xkeyboard_config
-, nvidia_x11, virtualgl
+, nvidia-drivers, virtualgl
 # The below should only be non-null in a x86_64 system. On a i686
-# system the above nvidia_x11 and virtualgl will be the i686 packages.
+# system the above nvidia-drivers and virtualgl will be the i686 packages.
 # TODO: Confusing. Perhaps use "SubArch" instead of i686?
-, nvidia_x11_i686 ? null
+, nvidia-drivers_i686 ? null
 , virtualgl_i686 ? null
 , useDisplayDevice ? false
 , extraDeviceOptions ? ""
@@ -60,7 +60,7 @@ let
   hostEnv = buildEnv {
     name = "bumblebee-x64-env";
     paths = [
-      nvidia_x11
+      nvidia-drivers
       virtualgl
     ];
   };
@@ -70,7 +70,7 @@ let
     then buildEnv {
       name = "bumblebee-i686-env";
       paths = [
-       nvidia_x11_i686
+       nvidia-drivers_i686
        virtualgl_i686
       ];
     }

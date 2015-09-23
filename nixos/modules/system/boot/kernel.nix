@@ -33,9 +33,9 @@ in
         (as a convenience), and returns an attribute set containing at
         the very least an attribute <varname>kernel</varname>.
         Additional attributes may be needed depending on your
-        configuration.  For instance, if you use the NVIDIA X driver,
+        configuration.  For instance, if you use the NVIDIA drivers,
         then it also needs to contain an attribute
-        <varname>nvidia_x11</varname>.
+        <varname>nvidia-drivers</varname>.
       '';
     };
 
@@ -65,7 +65,7 @@ in
     boot.extraModulePackages = mkOption {
       type = types.listOf types.path;
       default = [];
-      example = literalExample "[ pkgs.linuxPackages.nvidia_x11 ]";
+      example = literalExample "[ pkgs.linuxPackages.nvidia-drivers ]";
       description = "A list of additional packages supplying kernel modules.";
     };
 
