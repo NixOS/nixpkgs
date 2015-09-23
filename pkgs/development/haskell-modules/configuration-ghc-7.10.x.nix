@@ -41,7 +41,7 @@ self: super: {
   # Cabal_1_22_1_1 requires filepath >=1 && <1.4
   cabal-install = dontCheck (super.cabal-install.override { Cabal = null; });
 
-  # Don't use jailbreak built with Cabal 1.22.x because of https://github.com/peti/jailbreak-cabal/issues/9.
+  # Don't compile jailbreak-cabal with Cabal 1.22.x because of https://github.com/peti/jailbreak-cabal/issues/9.
   Cabal_1_23_0_0 = overrideCabal super.Cabal_1_22_4_0 (drv: {
     version = "1.23.0.0";
     src = pkgs.fetchFromGitHub {
@@ -54,24 +54,21 @@ self: super: {
     doHaddock = false;
     postUnpack = "sourceRoot+=/Cabal";
   });
-  jailbreak-cabal = overrideCabal super.jailbreak-cabal (drv: {
-    executableHaskellDepends = [ self.Cabal_1_23_0_0 ];
-    preConfigure = "sed -i -e 's/Cabal == 1.20\\.\\*/Cabal >= 1.23/' jailbreak-cabal.cabal";
-  });
+  jailbreak-cabal = super.jailbreak-cabal.override {
+    Cabal = self.Cabal_1_23_0_0;
+    mkDerivation = drv: self.mkDerivation (drv // {
+      preConfigure = "sed -i -e 's/Cabal == 1.20\\.\\*/Cabal >= 1.23/' jailbreak-cabal.cabal";
+    });
+  };
 
-  idris =
-    let idris' = overrideCabal super.idris (drv: {
-      # "idris" binary cannot find Idris library otherwise while building.
-      # After installing it's completely fine though. Seems like Nix-specific
-      # issue so not reported.
-      preBuild = "export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH";
-      # https://github.com/idris-lang/Idris-dev/issues/2499
-      librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
-    });
-    in idris'.overrideScope (self: super: {
-      # https://github.com/idris-lang/Idris-dev/issues/2500
-      zlib = self.zlib_0_5_4_2;
-    });
+  idris = overrideCabal super.idris (drv: {
+    # "idris" binary cannot find Idris library otherwise while building.
+    # After installing it's completely fine though. Seems like Nix-specific
+    # issue so not reported.
+    preBuild = "export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH";
+    # https://github.com/idris-lang/Idris-dev/issues/2499
+    librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
+  });
 
   Extra = appendPatch super.Extra (pkgs.fetchpatch {
     url = "https://github.com/seereason/sr-extra/commit/29787ad4c20c962924b823d02a7335da98143603.patch";
@@ -80,7 +77,7 @@ self: super: {
 
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
-  bytestring-builder = dontHaddock super.bytestring-builder;
+  bytestring-builder = dontHaddock (triggerRebuild super.bytestring-builder 1);
 
   # We have time 1.5
   aeson = disableCabalFlag super.aeson "old-locale";
@@ -178,22 +175,6 @@ self: super: {
             in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
                                           self.webkitgtk3-javascriptcore ];
 
-  # https://github.com/cartazio/arithmoi/issues/1
-  arithmoi = markBroken super.arithmoi;
-  NTRU = dontDistribute super.NTRU;
-  arith-encode = dontDistribute super.arith-encode;
-  barchart = dontDistribute super.barchart;
-  constructible = dontDistribute super.constructible;
-  cyclotomic = dontDistribute super.cyclotomic;
-  diagrams = dontDistribute super.diagrams;
-  diagrams-contrib = dontDistribute super.diagrams-contrib;
-  enumeration = dontDistribute super.enumeration;
-  ghci-diagrams = dontDistribute super.ghci-diagrams;
-  ihaskell-diagrams = dontDistribute super.ihaskell-diagrams;
-  nimber = dontDistribute super.nimber;
-  pell = dontDistribute super.pell;
-  quadratic-irrational = dontDistribute super.quadratic-irrational;
-
   # https://github.com/lymar/hastache/issues/47
   hastache = dontCheck super.hastache;
 
@@ -209,51 +190,11 @@ self: super: {
   # http://hub.darcs.net/ivanm/graphviz/issue/5
   graphviz = dontCheck (dontJailbreak (appendPatch super.graphviz ./patches/graphviz-fix-ghc710.patch));
 
-  # Broken with GHC 7.10.x.
-  aeson_0_7_0_6 = markBroken super.aeson_0_7_0_6;
-  Cabal_1_20_0_3 = markBroken super.Cabal_1_20_0_3;
-  cabal-install_1_18_1_0 = markBroken super.cabal-install_1_18_1_0;
-  containers_0_4_2_1 = markBroken super.containers_0_4_2_1;
-  control-monad-free_0_5_3 = markBroken super.control-monad-free_0_5_3;
-  haddock-api_2_15_0_2 = markBroken super.haddock-api_2_15_0_2;
-  QuickCheck_1_2_0_1 = markBroken super.QuickCheck_1_2_0_1;
-  seqid-streams_0_1_0 = markBroken super.seqid-streams_0_1_0;
-  vector_0_10_9_2 = markBroken super.vector_0_10_9_2;
-  hoopl_3_10_2_0 = markBroken super.hoopl_3_10_2_0;
-
   # https://github.com/HugoDaniel/RFC3339/issues/14
   timerep = dontCheck super.timerep;
 
-  # Upstream has no issue tracker.
-  llvm-base-types = markBroken super.llvm-base-types;
-  llvm-analysis = dontDistribute super.llvm-analysis;
-  llvm-data-interop = dontDistribute super.llvm-data-interop;
-  llvm-tools = dontDistribute super.llvm-tools;
-
-  # Upstream has no issue tracker.
-  MaybeT = markBroken super.MaybeT;
-  grammar-combinators = dontDistribute super.grammar-combinators;
-
   # Required to fix version 0.91.0.0.
   wx = dontHaddock (appendConfigureFlag super.wx "--ghc-option=-XFlexibleContexts");
-
-  # Upstream has no issue tracker.
-  Graphalyze = markBroken super.Graphalyze;
-  gbu = dontDistribute super.gbu;
-  SourceGraph = dontDistribute super.SourceGraph;
-
-  # Upstream has no issue tracker.
-  markBroken = super.protocol-buffers;
-  caffegraph = dontDistribute super.caffegraph;
-
-  # Deprecated: https://github.com/mikeizbicki/ConstraintKinds/issues/8
-  ConstraintKinds = markBroken super.ConstraintKinds;
-  HLearn-approximation = dontDistribute super.HLearn-approximation;
-  HLearn-distributions = dontDistribute super.HLearn-distributions;
-  HLearn-classification = dontDistribute super.HLearn-classification;
-
-  # Doesn't work with LLVM 3.5.
-  llvm-general = markBroken super.llvm-general;
 
   # Inexplicable haddock failure
   # https://github.com/gregwebs/aeson-applicative/issues/2
