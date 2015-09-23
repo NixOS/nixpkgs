@@ -1,4 +1,4 @@
-{ pkgs, stdenv, python, self, awscli }:
+{ pkgs, stdenv, python, self }:
 
 with pkgs.lib;
 
@@ -18198,7 +18198,7 @@ let
       md5 = "e81437360466216a41db6c78d9b46aae";
     };
 
-    propagatedBuildInputs = with self; [ awscli pygments six prompt_toolkit fuzzyfinder configobj click ]
+    propagatedBuildInputs = with self; [ pkgs.awscli pygments six prompt_toolkit fuzzyfinder configobj click ]
         ++ (optionals (pythonOlder "3.4") [ enum34 ])
         ++ (optionals (pythonOlder "2.7") [ ordereddict ]);
 
