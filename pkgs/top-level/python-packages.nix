@@ -9397,6 +9397,24 @@ let
     };
   });
 
+  numpydoc = buildPythonPackage rec {
+    name = "numpydoc-${version}";
+    version = "0.5";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/numpydoc/${name}.tar.gz";
+      sha256 = "0d4dnifaxkll50jx6czj05y8cb4ny60njd2wz299sj2jxfy51w4k";
+    };
+
+    buildInputs = [ self.nose ];
+    propagatedBuildInputs = [ self.sphinx self.matplotlib ];
+
+    meta = {
+      description = "Sphinx extension to support docstrings in Numpy format";
+      homepage = "https://github.com/numpy/numpydoc";
+      license = licenses.free;
+    };
+  };
 
   nwdiag = buildPythonPackage rec {
     name = "nwdiag-1.0.3";
