@@ -15064,9 +15064,9 @@ let
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
-  xlibs = xorg; # added 2015-09
-  xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   x11 = xlibsWrapper; # added 2015-09
+  xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
+  xlibs = xorg; # added 2015-09
   youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
   youtubeDL = youtube-dl;  # added 2014-10-26
 
