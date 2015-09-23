@@ -15035,8 +15035,12 @@ let
 
   mg = callPackage ../applications/editors/mg { };
 
+}; # self_ =
 
-  # Attributes for backward compatibility.
+
+  ### Deprecated aliases - for backward compatibility
+
+aliases = with self; rec {
   adobeReader = adobe-reader;
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
@@ -15069,5 +15073,12 @@ let
   xlibs = xorg; # added 2015-09
   youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
   youtubeDL = youtube-dl;  # added 2014-10-26
+};
 
-}; in self; in pkgs
+tweakAlias = _n: alias: with lib;
+  if !isDerivation alias && isAttrs alias then
+    removeAttrs alias ["recurseForDerivations"]
+  else alias;
+
+in lib.mapAttrs tweakAlias aliases // self; in pkgs
+
