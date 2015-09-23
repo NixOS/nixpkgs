@@ -2394,6 +2394,10 @@ let
     pythonPackages = python3Packages;
   };
 
+  morphis = callPackage ../applications/networking/morphis {
+    pythonPackages = python34Packages;
+  };
+
   nsjail = callPackage ../tools/security/nsjail {};
 
   nss_pam_ldapd = callPackage ../tools/networking/nss-pam-ldapd {};
