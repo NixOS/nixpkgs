@@ -1,5 +1,5 @@
 { stdenv, fetchurl, SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate
-, libvorbis, libxml2, makeWrapper, movit, pkgconfig, qt, sox
+, libvorbis, libxml2, makeWrapper, movit, pkgconfig, qt5, sox
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL ffmpeg frei0r libjack2 libdv libsamplerate libvorbis libxml2
-    makeWrapper movit pkgconfig qt sox
+    makeWrapper movit pkgconfig qt5.base qt5.svg sox
   ];
 
   # Mostly taken from:

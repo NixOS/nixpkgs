@@ -156,7 +156,7 @@ let
       accountsqt5 = accounts-qt.override { inherit qt5; };
       dbusmenuqt = libdbusmenu_qt;
       grantlee5 = grantlee5.override { inherit qt5; };
-      mlt = pkgs.mlt-qt5.override { inherit qt5; };
+      mlt = pkgs.mlt.override { inherit qt5; };
       phonon4qt5 = pkgs.phonon_qt5.override { inherit qt5; };
       qca-qt5 = qca-qt5.override { inherit qt5; };
       qt5script = qt5.script;
