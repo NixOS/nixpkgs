@@ -146,12 +146,9 @@ in rec {
 
     inherit sources;
 
-    buildInputs = [ libxml2 libxslt dblatex tetex ];
+    buildInputs = [ libxml2 libxslt dblatex dblatex.tex ];
 
     buildCommand = ''
-      # TeX needs a writable font cache.
-      export VARTEXFONTS=$TMPDIR/texfonts
-
       ${copySources}
 
       dst=$out/share/doc/nixos
@@ -162,7 +159,7 @@ in rec {
 
       mkdir -p $out/nix-support
       echo "doc-pdf manual $dst/manual.pdf" >> $out/nix-support/hydra-build-products
-    ''; # */
+    '';
   };
 
   # Generate the NixOS manpages.
