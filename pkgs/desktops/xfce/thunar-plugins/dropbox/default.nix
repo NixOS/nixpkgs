@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig
 , gtk
-, thunarx-2-dev, python2
+, thunar, python2
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig
     gtk
-    thunarx-2-dev python2
+    thunar python2
   ];
 
   configurePhase = "python2 waf configure --prefix=$out";
@@ -30,13 +30,12 @@ stdenv.mkDerivation rec {
 
   preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
 
-
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://softwarebakery.com/maato/thunar-dropbox.html;
     description = "A plugin for thunar that adds context-menu items from dropbox";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
   };
 }
