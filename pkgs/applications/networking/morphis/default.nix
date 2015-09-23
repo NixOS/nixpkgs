@@ -20,7 +20,7 @@ pythonPackages.buildPythonPackage rec {
   meta = {
     homepage = http://morph.is;
     description = "A distributed datastore";
-    maintainers = [ lib.maintainers.madjar ];
+    maintainers = [ "Florian Paul Schmidt <mista.tapas@gmx.net>" ];
     platforms = lib.platforms.all;
   };
 }
