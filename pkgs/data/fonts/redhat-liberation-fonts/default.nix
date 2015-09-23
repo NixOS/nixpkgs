@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Liberation Fonts, replacements for Times New Roman, Arial, and Courier New";
-
     longDescription = ''
       The Liberation Fonts are intended to be replacements for the three most
       commonly used fonts on Microsoft systems: Times New Roman, Arial, and
@@ -40,9 +39,7 @@ stdenv.mkDerivation rec {
 
     # See `License.txt' for details.
     license = stdenv.lib.licenses.gpl2Oss;
-
     homepage = https://fedorahosted.org/liberation-fonts/;
-
     maintainers = [
       stdenv.lib.maintainers.raskin
     ];

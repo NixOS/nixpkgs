@@ -42,7 +42,6 @@ stdenv.mkDerivation {
       the license is available in LICENSE.md" (From the GitHub page)
     */
     license = licenses.free;
-
     platforms = platforms.all;
     maintainers = with maintainers; [ nckx ];
   };

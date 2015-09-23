@@ -19,15 +19,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open Sans fonts";
-
     longDescription = ''
       Open Sans is a humanist sans serif typeface designed by Steve Matteson,
       Type Director of Ascender Corp.
     '';
-
     homepage = "http://en.wikipedia.org/wiki/Open_Sans";
     license = stdenv.lib.licenses.asl20;
-
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];
   };
