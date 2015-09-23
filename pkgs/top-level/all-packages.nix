@@ -2006,6 +2006,11 @@ let
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
+  nodejs-4_1 = callPackage ../development/web/nodejs/v4_1_0.nix {
+    libuv = libuvVersions.v1_7_5;
+    openssl = openssl_1_0_2;
+  };
+
   nodejs-0_12 = callPackage ../development/web/nodejs {
     libuv = libuvVersions.v1_6_1;
   };
@@ -2019,8 +2024,8 @@ let
   else
     nodejs-0_12;
 
+  nodePackages_4_1 = recurseIntoAttrs (callPackage ./node-packages.nix { self = nodePackages_4_1; nodejs = nodejs-4_1; });
   nodePackages_0_12 = callPackage ./node-packages.nix { self = nodePackages_0_12; nodejs = nodejs-0_12; };
-
   nodePackages_0_10 = callPackage ./node-packages.nix { self = nodePackages_0_10; nodejs = nodejs-0_10; };
 
   nodePackages = if stdenv.system == "armv5tel-linux" then
