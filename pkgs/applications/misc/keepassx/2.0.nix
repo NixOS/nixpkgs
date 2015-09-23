@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, libgcrypt, qt4, xlibs, ... }:
+{ stdenv, fetchurl, cmake, libgcrypt, qt4, xorg, ... }:
 
 stdenv.mkDerivation {
   name = "keepassx2-2.0beta1";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "1wnbk9laixz16lmchr1lnv8m9i6rkxv6slnx8f0fyczx90y97qdw";
   };
 
-  buildInputs = [ cmake libgcrypt qt4 xlibs.libXtst ];
+  buildInputs = [ cmake libgcrypt qt4 xorg.libXtst ];
 
   meta = {
     description = "Qt password manager compatible with its Win32 and Pocket PC versions";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, libjack2, pkgconfig, libpulseaudio, xlibs }:
+{ stdenv, fetchurl, alsaLib, libjack2, pkgconfig, libpulseaudio, xorg }:
 
 stdenv.mkDerivation  rec {
   name = "bristol-${version}";
@@ -10,8 +10,8 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs = [
-    alsaLib libjack2 pkgconfig libpulseaudio xlibs.libX11 xlibs.libXext
-    xlibs.xproto
+    alsaLib libjack2 pkgconfig libpulseaudio xorg.libX11 xorg.libXext
+    xorg.xproto
   ];
 
   preInstall = ''

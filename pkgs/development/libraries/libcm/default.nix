@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib, xlibs, mesa}:
+{stdenv, fetchurl, pkgconfig, glib, xorg, mesa}:
 
 stdenv.mkDerivation {
   name = "libcm-0.1.1";
@@ -7,8 +7,8 @@ stdenv.mkDerivation {
     sha256 = "11i5z8l5v5ffihif35k5j8igj0rahsk4jdmsj24xhdw2s0zx53kn";
   };
   buildInputs = [
-    pkgconfig glib xlibs.xlibs xlibs.libXdamage xlibs.libXcomposite
-    xlibs.libXtst xlibs.inputproto
+    pkgconfig glib xorg.xlibsWrapper xorg.libXdamage xorg.libXcomposite
+    xorg.libXtst xorg.inputproto
     # !!! inputproto should really be propagated by libXtst
   ];
   propagatedBuildInputs = [mesa];

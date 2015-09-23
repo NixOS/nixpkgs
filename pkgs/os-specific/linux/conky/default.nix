@@ -13,7 +13,7 @@
 #, ncursesSupport      ? true      , ncurses       ? null
 
 # optional features with extra dependencies
-, x11Support          ? true      , x11           ? null
+, x11Support          ? true      , xlibsWrapper           ? null
 , xdamageSupport      ? x11Support, libXdamage    ? null
 , imlib2Support       ? x11Support, imlib2        ? null
 , luaSupport          ? true      , lua           ? null
@@ -35,7 +35,7 @@
 
 #assert ncursesSupport      -> ncurses != null;
 
-assert x11Support          -> x11 != null;
+assert x11Support          -> xlibsWrapper != null;
 assert xdamageSupport      -> x11Support && libXdamage != null;
 assert imlib2Support       -> x11Support && imlib2     != null;
 assert luaSupport          -> lua != null;
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig glib ]
     ++ [ ncurses ]
     #++ optional  ncursesSupport     ncurses
-    ++ optional  x11Support         x11
+    ++ optional  x11Support         xlibsWrapper
     ++ optional  xdamageSupport     libXdamage
     ++ optional  imlib2Support      imlib2
     ++ optional  luaSupport         lua

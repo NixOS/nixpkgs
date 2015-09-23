@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, jdk, gcc, xlibs
+{ stdenv, fetchurl, makeWrapper, jre, jdk, gcc, xorg
 , chromedriver, chromeSupport ? true }:
 
 with stdenv.lib;
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
     ${jdk}/bin/jar xf $src launchers/launcher-linux-amd64
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${gcc.cc}/lib/:${gcc.cc}/lib64:${xlibs.libX11}/lib" \
+      --set-rpath "${gcc.cc}/lib/:${gcc.cc}/lib64:${xorg.libX11}/lib" \
       launchers/launcher-linux-${arch}
     ${jdk}/bin/jar uf $src launchers/launcher-linux-${arch}
   '';

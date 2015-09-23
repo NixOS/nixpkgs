@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype
-, xorg, fontconfig, xlibs, qt5, xkeyboard_config, alsaLib, libpulseaudio ? null
+, xorg, fontconfig, qt5, xkeyboard_config, alsaLib, libpulseaudio ? null
 , libredirect, quazip, less, which, unzip
 }:
 
@@ -12,7 +12,7 @@ let
   deps =
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
-      xlibs.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qt5.base libpulseaudio
+      xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qt5.base libpulseaudio
     ];
 
   desktopItem = makeDesktopItem {

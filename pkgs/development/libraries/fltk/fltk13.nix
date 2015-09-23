@@ -1,4 +1,4 @@
-{ composableDerivation, fetchurl, pkgconfig, x11, inputproto, libXi
+{ composableDerivation, fetchurl, pkgconfig, xlibsWrapper, inputproto, libXi
 , freeglut, mesa, libjpeg, zlib, libXinerama, libXft, libpng
 , cfg ? {}
 , automake, autoconf, libtool
@@ -21,7 +21,7 @@ composableDerivation.composableDerivation {} {
       --replace 'class Fl_XFont_On_Demand' 'class FL_EXPORT Fl_XFont_On_Demand'
   '';
 
-  propagatedBuildInputs = [ x11 inputproto libXi freeglut ];
+  propagatedBuildInputs = [ xlibsWrapper inputproto libXi freeglut ];
 
   enableParallelBilding = true;
 

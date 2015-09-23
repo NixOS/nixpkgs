@@ -7,7 +7,7 @@
 , threadSupport ? true
 , mysqlSupport ? false, mysql ? null
 , openglSupport ? false, mesa ? null, libXmu ? null
-, x11, xextproto, zlib, libjpeg, libpng, which
+, xlibsWrapper, xextproto, zlib, libjpeg, libpng, which
 }:
 
 assert xftSupport -> libXft != null;
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ which ];
-  propagatedBuildInputs = [libpng x11 libXft libXrender zlib libjpeg];
+  propagatedBuildInputs = [libpng xlibsWrapper libXft libXrender zlib libjpeg];
 
   configureFlags = "
     -v

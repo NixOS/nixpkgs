@@ -1,9 +1,9 @@
 { enableGUI ? true, enablePDFtoPPM ? true, useT1Lib ? false
-, stdenv, fetchurl, zlib, libpng, x11 ? null, motif ? null, freetype ? null, t1lib ? null
+, stdenv, fetchurl, zlib, libpng, xlibsWrapper ? null, motif ? null, freetype ? null, t1lib ? null
 , base14Fonts ? null
 }:
 
-assert enableGUI -> x11 != null && motif != null && freetype != null;
+assert enableGUI -> xlibsWrapper != null && motif != null && freetype != null;
 assert enablePDFtoPPM -> freetype != null;
 assert useT1Lib -> t1lib != null;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ zlib libpng ] ++
-    stdenv.lib.optionals enableGUI [x11 motif] ++
+    stdenv.lib.optionals enableGUI [xlibsWrapper motif] ++
     stdenv.lib.optional useT1Lib t1lib ++
     stdenv.lib.optional enablePDFtoPPM freetype;
 

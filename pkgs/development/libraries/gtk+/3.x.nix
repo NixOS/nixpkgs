@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, gettext, perl
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, gobjectIntrospection
-, xlibs, x11, wayland, libxkbcommon, epoxy
+, xorg, xlibsWrapper, wayland, libxkbcommon, epoxy
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
 }:
 
-assert xineramaSupport -> xlibs.libXinerama != null;
+assert xineramaSupport -> xorg.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 let
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
 
   buildInputs = [ libxkbcommon epoxy ];
-  propagatedBuildInputs = with xlibs; with stdenv.lib;
+  propagatedBuildInputs = with xorg; with stdenv.lib;
     [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk libXrandr libXrender libXcomposite libXi libXcursor ]
     ++ optionals stdenv.isLinux [ wayland ]
     ++ optional xineramaSupport libXinerama
