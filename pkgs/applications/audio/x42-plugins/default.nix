@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, ftgl, freefont_ttf, libjack2, mesa_glu, pkgconfig
+{ stdenv, fetchurl, fetchgit, xz, ftgl, freefont_ttf, libjack2, mesa_glu, pkgconfig
 , libltc, libsndfile, libsamplerate
 , lv2, mesa, gtk2, cairo, pango, fftwFloat, zita-convolver }:
 
