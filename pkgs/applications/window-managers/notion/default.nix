@@ -4,7 +4,7 @@
   stdenv, fetchurl,
   lua, gettext, groff,
   pkgconfig, busybox,
-  x11, libXinerama, libXrandr, libX11
+  xlibsWrapper, libXinerama, libXrandr, libX11
 }:
 
 assert enableXft -> libXft != null;
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   patches = patches ++ stdenv.lib.optional enableXft ./notion-xft_nixos.diff;
   postPatch = "substituteInPlace system-autodetect.mk --replace '#PRELOAD_MODULES=1' 'PRELOAD_MODULES=1'";
-  buildInputs = [x11 lua gettext groff pkgconfig busybox libXinerama libXrandr libX11] ++ stdenv.lib.optional enableXft libXft;
+  buildInputs = [xlibsWrapper lua gettext groff pkgconfig busybox libXinerama libXrandr libX11] ++ stdenv.lib.optional enableXft libXft;
 
   buildFlags = "LUA_DIR=${lua} X11_PREFIX=/no-such-path PREFIX=\${out}";
   installFlags = "PREFIX=\${out}";

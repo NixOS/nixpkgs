@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libjpeg, libpng12, xlibs, libX11, mesa, libdrm, python27 }:
+{ stdenv, fetchurl, pkgconfig, libjpeg, libpng12, xorg, libX11, mesa, libdrm, python27 }:
 stdenv.mkDerivation rec {
   name = "glmark2-${version}";
   version = "2014.03";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig libjpeg libpng12 xlibs.libxcb libX11 mesa libdrm python27
+    pkgconfig libjpeg libpng12 xorg.libxcb libX11 mesa libdrm python27
   ];
 
   buildPhase = ''

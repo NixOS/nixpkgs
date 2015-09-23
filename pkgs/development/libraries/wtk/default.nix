@@ -1,4 +1,4 @@
-{ stdenv, requireFile, unzip, xlibs }:
+{ stdenv, requireFile, unzip, xorg }:
 
 assert stdenv.system == "i686-linux";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unzip ];
 
-  libraries = [ xlibs.libXpm xlibs.libXt xlibs.libX11 xlibs.libICE xlibs.libSM stdenv.cc.cc ];
+  libraries = [ xorg.libXpm xorg.libXt xorg.libX11 xorg.libICE xorg.libSM stdenv.cc.cc ];
 
   meta = {
     homepage = http://java.sun.com/products/sjwtoolkit/download.html;

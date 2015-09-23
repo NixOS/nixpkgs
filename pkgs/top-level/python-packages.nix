@@ -10405,7 +10405,7 @@ let
     buildInputs = with self; [
       pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl nose ]
       ++ optionals (isPy26 || isPy27 || isPy33 || isPyPy) [ pkgs.lcms2 ]
-      ++ optionals (isPyPy) [ pkgs.tk pkgs.xlibs.libX11 ];
+      ++ optionals (isPyPy) [ pkgs.tk pkgs.xorg.libX11 ];
 
     # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
     preConfigure = ''
@@ -11335,7 +11335,7 @@ let
     };
 
     patchPhase = let
-      libs = [ pkgs.mesa pkgs.xlibs.libX11 pkgs.freetype pkgs.fontconfig ];
+      libs = [ pkgs.mesa pkgs.xorg.libX11 pkgs.freetype pkgs.fontconfig ];
       paths = concatStringsSep "," (map (l: "\"${l}/lib\"") libs);
     in "sed -i -e 's|directories\.extend.*lib[^]]*|&,${paths}|' pyglet/lib.py";
 
@@ -13345,7 +13345,7 @@ let
       sha256 = "0l70pqwg88imbylcd831vg8nj8ipy4zr331f6qjccss7vn56i2h5";
     };
 
-    buildInputs = with self; [pkgs.xlibs.libX11];
+    buildInputs = with self; [pkgs.xorg.libX11];
 
     # Recompiling x_ignore_nofocus.so as the original one dlopen's libX11.so.6 by some
     # absolute paths. Replaced by relative path so it is found when used in nix.
@@ -13359,7 +13359,7 @@ let
 
     patchPhase = ''
       cp "${x_ignore_nofocus}/cpp/linux-specific/"* .
-      substituteInPlace x_ignore_nofocus.c --replace "/usr/lib/libX11.so.6" "${pkgs.xlibs.libX11}/lib/libX11.so.6"
+      substituteInPlace x_ignore_nofocus.c --replace "/usr/lib/libX11.so.6" "${pkgs.xorg.libX11}/lib/libX11.so.6"
       gcc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
       gcc -shared \
         -Wl,${if stdenv.isDarwin then "-install_name" else "-soname"},x_ignore_nofocus.so \
@@ -13946,7 +13946,7 @@ let
     # error: invalid command 'test'
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ pkgs.xlibs.libX11 pkgs.pythonDBus pygobject ];
+    propagatedBuildInputs = with self; [ pkgs.xorg.libX11 pkgs.pythonDBus pygobject ];
 
     meta = {
       description = "High-level, platform independent Skype API wrapper for Python";
@@ -14573,7 +14573,7 @@ let
     # I don't know why I need to add these libraries. Shouldn't they
     # be part of wxPython?
     postInstall = ''
-      libspaths=${pkgs.xlibs.libSM}/lib:${pkgs.xlibs.libXScrnSaver}/lib
+      libspaths=${pkgs.xorg.libSM}/lib:${pkgs.xorg.libXScrnSaver}/lib
       wrapProgram $out/bin/taskcoach.py \
         --prefix LD_LIBRARY_PATH : $libspaths
     '';
@@ -15716,7 +15716,7 @@ let
     # Tests require `pyutil' so disable them to avoid circular references.
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ pkgs.xlibs.libX11 ];
+    propagatedBuildInputs = with self; [ pkgs.xorg.libX11 ];
 
     meta = {
       description = "Fully functional X client library for Python programs";

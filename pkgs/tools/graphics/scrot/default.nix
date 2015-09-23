@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, giblib, x11 }:
+{ stdenv, fetchurl, giblib, xlibsWrapper }:
 
 stdenv.mkDerivation rec {
   name = "scrot-0.8";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wll744rhb49lvr2zs6m93rdmiq59zm344jzqvijrdn24ksiqgb1";
   };
 
-  buildInputs = [ giblib x11 ];
+  buildInputs = [ giblib xlibsWrapper ];
 
   meta = {
     homepage = http://linuxbrit.co.uk/scrot/;
