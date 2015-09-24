@@ -13507,6 +13507,10 @@ let
 
   crrcsim = callPackage ../games/crrcsim {};
 
+  dfhack = callPackage_i686 ../games/dfhack {
+    inherit (pkgsi686Linux.perlPackages) XMLLibXML XMLLibXSLT;
+  };
+
   dhewm3 = callPackage ../games/dhewm3 {};
 
   drumkv1 = callPackage ../applications/audio/drumkv1 { };

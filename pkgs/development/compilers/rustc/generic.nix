@@ -115,7 +115,7 @@ stdenv.mkDerivation {
 
   configureFlags = configureFlags
                 ++ [ "--enable-local-rust" "--local-rust-root=$snapshot" "--enable-rpath" ]
-                ++ [ "--llvm-root=${llvmPackages_37.llvm}" "--jemalloc-root=${jemalloc}/lib" ]
+                ++ [ "--llvm-root=${llvmPackages_37.llvm}" ] #"--jemalloc-root=${jemalloc}/lib" ]
                 ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${stdenv.cc.binutils}/bin/ar" ]
                 ++ stdenv.lib.optional (stdenv.cc.cc ? isClang) "--enable-clang";
 
@@ -137,6 +137,11 @@ stdenv.mkDerivation {
     # Fix the configure script to not require curl as we won't use it
     sed -i configure \
       -e '/probe_need CFG_CURLORWGET/d'
+
+    # Fix the use of jemalloc prefixes which our jemalloc doesn't have
+    # TODO: reenable if we can figure out how to get our jemalloc to work
+    #[ -f src/liballoc_jemalloc/lib.rs ] && sed -i 's,je_,,g' src/liballoc_jemalloc/lib.rs
+    #[ -f src/liballoc/heap.rs ] && sed -i 's,je_,,g' src/liballoc/heap.rs # Remove for 1.4.0+
 
     # Useful debugging parameter
     #export VERBOSE=1
