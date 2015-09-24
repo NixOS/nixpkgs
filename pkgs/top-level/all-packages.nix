@@ -9580,6 +9580,8 @@ let
 
   openiscsi = callPackage ../os-specific/linux/open-iscsi { };
 
+  tgt = callPackage ../tools/networking/tgt { };
+
   # -- Linux kernel expressions ------------------------------------------------
 
   linuxHeaders = linuxHeaders_3_12;
