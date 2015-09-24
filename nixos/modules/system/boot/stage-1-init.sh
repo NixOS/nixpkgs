@@ -290,9 +290,22 @@ mountFS() {
         if [ -z "$fsType" ]; then fsType=auto; fi
     fi
 
-    echo "$device /mnt-root$mountPoint $fsType $options" >> /etc/fstab
+    # Filter out x- options, which busybox doesn't do yet.
+    local optionsFiltered="$(IFS=,; for i in $options; do if [ "${i:0:2}" != "x-" ]; then echo -n $i,; fi; done)"
+
+    echo "$device /mnt-root$mountPoint $fsType $optionsFiltered" >> /etc/fstab
 
     checkFS "$device" "$fsType"
+
+    # Optionally resize the filesystem.
+    case $options in
+        *x-nixos.autoresize*)
+            if [ "$fsType" = ext2 -o "$fsType" = ext3 -o "$fsType" = ext4 ]; then
+                echo "resizing $device..."
+                resize2fs "$device"
+            fi
+            ;;
+    esac
 
     # Create backing directories for unionfs-fuse.
     if [ "$fsType" = unionfs-fuse ]; then
