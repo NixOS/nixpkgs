@@ -26,8 +26,10 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   libxfcegui4     = callPackage ./core/libxfcegui4.nix { };
   thunar          = callPackage ./core/thunar.nix { };
   thunar_volman   = callPackage ./core/thunar-volman.nix { }; # ToDo: probably inside Thunar now
-  thunar_archive_plugin = callPackage ./core/thunar-archive-plugin.nix { };
-  thunar-dropbox-plugin = callPackage ./thunar-plugins/dropbox { };
+  thunar-archive-plugin 
+                  = callPackage ./thunar-plugins/archive { };
+  thunar-dropbox-plugin 
+                  = callPackage ./thunar-plugins/dropbox { };
   tumbler         = callPackage ./core/tumbler.nix { };
   xfce4panel      = callPackage ./core/xfce4-panel.nix { }; # ToDo: impure plugins from /run/current-system/sw/lib/xfce4
   xfce4session    = callPackage ./core/xfce4-session.nix { };
