@@ -6659,7 +6659,10 @@ let
   };
 
   glib = callPackage ../development/libraries/glib { };
-  glib-tested = glib.override { doCheck = true; }; # checked version separate to break cycles
+  glib-tested = glib.override { # checked version separate to break cycles
+    doCheck = true;
+    libffi = libffi.override { doCheck = true; };
+  };
   glibmm = callPackage ../development/libraries/glibmm { };
 
   glib_networking = callPackage ../development/libraries/glib-networking {};
