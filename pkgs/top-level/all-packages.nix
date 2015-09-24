@@ -3984,6 +3984,7 @@ let
   haskellPackages = haskell.packages.ghc7102.override {
     overrides = config.haskellPackageOverrides or (self: super: {});
   };
+  inherit (haskellPackages) ghc cabal-install;
 
   haxe = callPackage ../development/compilers/haxe {
     inherit (ocamlPackages) camlp4;
