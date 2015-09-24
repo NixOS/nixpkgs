@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ sqlite pkgconfig autoconf automake xapian
       glib gmime texinfo emacs guile libsoup icu ]
-    ++ stdenv.lib.optional withMug [ gtk3 webkit ];
+    ++ stdenv.lib.optionals withMug [ gtk3 webkit ];
 
   preConfigure = ''
     autoreconf -i
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     cp -v toys/mug/mug $out/bin/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A collection of utilties for indexing and searching Maildirs";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     homepage = "http://www.djcbsoftware.nl/code/mu/";
-    platforms = stdenv.lib.platforms.mesaPlatforms;
-    maintainers = with stdenv.lib.maintainers; [ antono the-kenny ];
+    platforms = platforms.mesaPlatforms;
+    maintainers = with maintainers; [ antono the-kenny ];
   };
 }
