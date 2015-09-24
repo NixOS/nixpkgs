@@ -135,10 +135,9 @@ fileSystems."/shiny" = {
 
 <listitem>
   <para>
-    Haskell packages can no longer be found by name, i.e. the commands
-    <literal>nix-env -qa cabal-install</literal> and <literal>nix-env -i
-    ghc</literal> will fail, even though we <emphasis>do</emphasis> ship
-    both <literal>cabal-install</literal> and <literal>ghc</literal>.
+    Haskell packages can no longer be found by name, except for
+    <literal>ghc</literal>, <literal>cabal-install</literal>, and
+    <literal>stack</literal>, even though we do package the whole Hackage.
     The reason for this inconvenience is the sheer size of the Haskell
     package set: name-based lookups such as these would become much
     slower than they are today if we'd add the entire Hackage database
