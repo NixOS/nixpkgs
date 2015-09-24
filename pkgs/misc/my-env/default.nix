@@ -64,7 +64,7 @@
 mkDerivation {
   # The setup.sh script from stdenv will expect the native build inputs in
   # the nativeBuildInputs environment variable.
-  nativeBuildInputs = [ ] ++ buildInputs;
+  nativeBuildInputs = stdenv.defaultNativeBuildInputs ++ buildInputs;
   # Trick to bypass the stdenv usual change of propagatedBuildInputs => propagatedNativeBuildInputs
   propagatedBuildInputs2 = propagatedBuildInputs;
 
@@ -89,7 +89,7 @@ mkDerivation {
         "$setupNew" > "$s"
     cat >> "$out/dev-envs/''${name/env-/}" << EOF
       nativeBuildInputs="$nativeBuildInputs"
-      propagatedBuildInputs="$propagatedBuildInputs2"
+      propagatedNativeBuildInputs="$propagatedBuildInputs2"
       # the setup-new script wants to write some data to a temp file.. so just let it do that and tidy up afterwards
       tmp="\$("${pkgs.coreutils}/bin/mktemp" -d)"
       NIX_BUILD_TOP="\$tmp"
