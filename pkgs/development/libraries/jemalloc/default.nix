@@ -8,11 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "1wiydkp8a4adwsgfsd688hpv2z7hjv5manhckchk96v6qdsbqk91";
   };
 
-  # Rust refers to jemalloc functions directly so make sure the prefix matchs.
-  configureFlags = [
-    "--with-jemalloc-prefix=je_"
-  ];
-
   meta = with stdenv.lib; {
     homepage = http://www.canonware.com/jemalloc/index.html;
     description = "a general purpose malloc(3) implementation that emphasizes fragmentation avoidance and scalable concurrency support";
