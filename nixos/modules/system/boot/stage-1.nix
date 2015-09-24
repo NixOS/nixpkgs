@@ -70,6 +70,12 @@ let
       copy_bin_and_libs ${pkgs.kmod}/bin/kmod
       ln -sf kmod $out/bin/modprobe
 
+      # Copy resize2fs if needed.
+      ${optionalString (any (fs: fs.autoResize) (attrValues config.fileSystems)) ''
+        # We need mke2fs in the initrd.
+        copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
+      ''}
+
       ${config.boot.initrd.extraUtilsCommands}
 
       # Copy ld manually since it isn't detected correctly
@@ -392,7 +398,6 @@ in
           + " Old \"x:y\" style is no longer supported.";
       }
     ];
-
 
     system.build.bootStage1 = bootStage1;
     system.build.initialRamdisk = initialRamdisk;
