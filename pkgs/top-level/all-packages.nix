@@ -9921,7 +9921,11 @@ let
 
   libcap_manpages = callPackage ../os-specific/linux/libcap/man.nix { };
 
-  libcap_ng = callPackage ../os-specific/linux/libcap-ng { };
+  libcap_ng = callPackage ../os-specific/linux/libcap-ng {
+    swig = null; # Currently not using the python2/3 bindings
+    python2 = null; # Currently not using the python2 bindings
+    python3 = null; # Currently not using the python3 bindings
+  };
 
   libnscd = callPackage ../os-specific/linux/libnscd { };
 
