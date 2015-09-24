@@ -41,7 +41,7 @@ let
       };
 
       options = mkOption {
-        default = "defaults,relatime";
+        default = "defaults";
         example = "data=journal";
         type = types.commas;
         description = "Options used to mount the file system.";
@@ -69,8 +69,6 @@ let
     config = {
       mountPoint = mkDefault name;
       device = mkIf (config.fsType == "tmpfs") (mkDefault config.fsType);
-      # The vboxsf filesystem doesn't support the relatime option:
-      options = mkIf (config.fsType == "vboxsf") (mkDefault "defaults");
     };
 
   };
