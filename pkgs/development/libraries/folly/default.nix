@@ -2,14 +2,14 @@
 , google-gflags, python, libiberty, openssl }:
 
 stdenv.mkDerivation rec {
-  version = "0.57.0";
+  version = "2015-09-17";
   name = "folly-${version}";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
-    rev = "v${version}";
-    sha256 = "12b9bkwmndfwmsknc209kpplxn9wqmwr3p2h0l2szrppq4qqyfq9";
+    rev = "e4527fb5d04f5fec823bd6a2402b620a6e1a64e3";
+    sha256 = "0iicq19yylafr7qs221xgk8pcwf6nnyx6srgsx9y9cyf72siadcb";
   };
 
   nativeBuildInputs = [ autoreconfHook python ];

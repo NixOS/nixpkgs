@@ -13,7 +13,7 @@ buildFHSUserEnv {
       pkgs.python
       pkgs.gnome2.zenity
       pkgs.xdg_utils
-      pkgs.xlibs.xrandr
+      pkgs.xorg.xrandr
       pkgs.which
     ]
     ++ lib.optional (config.steam.java or false) pkgs.jdk
@@ -28,23 +28,23 @@ buildFHSUserEnv {
       pkgs.pango
 
       pkgs.freetype
-      pkgs.xlibs.libICE
-      pkgs.xlibs.libSM
-      pkgs.xlibs.libX11
-      pkgs.xlibs.libXau
-      pkgs.xlibs.libxcb
-      pkgs.xlibs.libXcursor
-      pkgs.xlibs.libXdamage
-      pkgs.xlibs.libXdmcp
-      pkgs.xlibs.libXext
-      pkgs.xlibs.libXfixes
-      pkgs.xlibs.libXi
-      pkgs.xlibs.libXinerama
-      pkgs.xlibs.libXrandr
-      pkgs.xlibs.libXrender
-      pkgs.xlibs.libXScrnSaver
-      pkgs.xlibs.libXtst
-      pkgs.xlibs.libXxf86vm
+      pkgs.xorg.libICE
+      pkgs.xorg.libSM
+      pkgs.xorg.libX11
+      pkgs.xorg.libXau
+      pkgs.xorg.libxcb
+      pkgs.xorg.libXcursor
+      pkgs.xorg.libXdamage
+      pkgs.xorg.libXdmcp
+      pkgs.xorg.libXext
+      pkgs.xorg.libXfixes
+      pkgs.xorg.libXi
+      pkgs.xorg.libXinerama
+      pkgs.xorg.libXrandr
+      pkgs.xorg.libXrender
+      pkgs.xorg.libXScrnSaver
+      pkgs.xorg.libXtst
+      pkgs.xorg.libXxf86vm
 
       pkgs.ffmpeg
       pkgs.libpng12

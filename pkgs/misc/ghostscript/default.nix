@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, zlib, expat, openssl
 , libjpeg, libpng, libtiff, freetype, fontconfig, lcms2, libpaper, jbig2dec
 , libiconv
-, x11Support ? false, x11 ? null
+, x11Support ? false, xlibsWrapper ? null
 , cupsSupport ? false, cups ? null
 }:
 
-assert x11Support -> x11 != null;
+assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
 let
   version = "9.15";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       libjpeg libpng libtiff freetype fontconfig lcms2 libpaper jbig2dec
       libiconv
     ]
-    ++ stdenv.lib.optional x11Support x11
+    ++ stdenv.lib.optional x11Support xlibsWrapper
     ++ stdenv.lib.optional cupsSupport cups
     # [] # maybe sometimes jpeg2000 support
     ;

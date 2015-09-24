@@ -1,4 +1,4 @@
-{stdenv, fetchurl, xlibs, mesa}:
+{stdenv, fetchurl, xorg, mesa}:
 
 assert stdenv.system == "i686-linux";
 
@@ -17,7 +17,7 @@ let {
     name = raw.name;
     builder = ./make-wrapper.sh;
     inherit raw mesa;
-    inherit (xlibs) libX11 libXext;
+    inherit (xorg) libX11 libXext;
   };
 
 }

@@ -181,17 +181,6 @@ let
   path = ../..;
 
 
-  ### Symbolic names.
-
-  x11 = xlibsWrapper;
-
-  # `xlibs' is the set of X library components.  This used to be the
-  # old modular X libraries project (called `xlibs') but now it's just
-  # the set of packages in the modular X.org tree (which also includes
-  # non-library components like the server, drivers, fonts, etc.).
-  xlibs = xorg // {xlibs = xlibsWrapper;};
-
-
   ### Helper functions.
 
   inherit lib config stdenvAdapters;
@@ -269,7 +258,7 @@ let
   autonix = import ../build-support/autonix { inherit pkgs; };
 
   autoreconfHook = makeSetupHook
-    { substitutions = { inherit autoconf automake libtool gettext; }; }
+    { substitutions = { inherit autoconf automake gettext; libtool = realLibtool; }; }
     ../build-support/setup-hooks/autoreconf.sh;
 
   buildEnv = callPackage ../build-support/buildenv {};
@@ -1055,7 +1044,7 @@ let
   cksfv = callPackage ../tools/networking/cksfv { };
 
   clementine = callPackage ../applications/audio/clementine {
-    boost = boost156;
+    boost = boost155;
     gst_plugins = [ gst_plugins_base gst_plugins_good gst_plugins_ugly gst_ffmpeg ];
   };
 
@@ -1678,7 +1667,7 @@ let
   graphviz = callPackage ../tools/graphics/graphviz { };
 
   graphviz-nox = callPackage ../tools/graphics/graphviz {
-    xlibs = null;
+    xorg = null;
     libdevil = libdevil-nox;
   };
 
@@ -1706,7 +1695,7 @@ let
 
   calamares = callPackage ../tools/misc/calamares rec {
     python = python3;
-    boost = callPackage ../development/libraries/boost/1.57.nix { python=python3; };
+    boost = pkgs.boost.override { python=python3; };
     libyamlcpp = callPackage ../development/libraries/libyaml-cpp { makePIC=true; boost=boost; };
     inherit (kf5_stable) extra-cmake-modules kconfig ki18n kcoreaddons solid;
   };
@@ -1897,6 +1886,8 @@ let
   iperf3 = callPackage ../tools/networking/iperf/3.nix { };
   iperf = iperf3;
 
+  ipfs = goPackages.ipfs.bin // { outputs = [ "bin" ]; };
+
   ipmitool = callPackage ../tools/system/ipmitool {
     static = false;
   };
@@ -2019,10 +2010,9 @@ let
 
   nodejs-0_12 = callPackage ../development/web/nodejs {
     libuv = libuvVersions.v1_6_1;
-    libtool = darwin.cctools;
   };
+
   nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix {
-    libtool = darwin.cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices Carbon Foundation;
   };
 
@@ -3421,8 +3411,10 @@ let
   uptimed = callPackage ../tools/system/uptimed { };
 
   urjtag = callPackage ../tools/misc/urjtag {
+    svfSupport = true;
+    bsdlSupport = true;
+    staplSupport = true;
     jedecSupport = true;
-    pythonBindings = true;
   };
 
   urlwatch = callPackage ../tools/networking/urlwatch { };
@@ -3911,7 +3903,7 @@ let
     inherit zip unzip zlib boehmgc gettext pkgconfig perl;
     inherit gtk;
     inherit (gnome) libart_lgpl;
-    inherit (xlibs) libX11 libXt libSM libICE libXtst libXi libXrender
+    inherit (xorg) libX11 libXt libSM libICE libXtst libXi libXrender
       libXrandr xproto renderproto xextproto inputproto randrproto;
   });
 
@@ -4682,10 +4674,12 @@ let
   rustPlatform = rustStable;
 
   rustStable = recurseIntoAttrs (makeRustPlatform rustc cargo rustStable);
-  rustUnstable = recurseIntoAttrs (makeRustPlatform rustcMaster cargo rustUnstable);
+  rustUnstable = recurseIntoAttrs (makeRustPlatform rustcMaster
+    (cargo.override { rustPlatform = rustUnstableCargoPlatform;  }) rustUnstable);
 
   # rust platform to build cargo itself (with cargoSnapshot)
   rustCargoPlatform = makeRustPlatform rustc cargoSnapshot.cargo rustCargoPlatform;
+  rustUnstableCargoPlatform = makeRustPlatform rustcMaster cargoSnapshot.cargo rustUnstableCargoPlatform;
 
   makeRustPlatform = rustc: cargo: self:
     let
@@ -5529,6 +5523,8 @@ let
 
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
+  gotty = goPackages.gotty.bin // { outputs = [ "bin" ]; };
+
   gradle = callPackage ../development/tools/build-managers/gradle { };
 
   gperf = callPackage ../development/tools/misc/gperf { };
@@ -5585,7 +5581,11 @@ let
 
   lemon = callPackage ../development/tools/parsing/lemon { };
 
-  libtool = libtool_2;
+  libtool = if stdenv.isDarwin
+    then darwin.cctools
+    else realLibtool;
+
+  realLibtool = libtool_2;
 
   libtool_1_5 = callPackage ../development/tools/misc/libtool { };
 
@@ -5790,7 +5790,7 @@ let
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
   uhd = callPackage ../development/tools/misc/uhd {
-    boost = boost157;
+    boost = boost155;
   };
 
   uisp = callPackage ../development/tools/misc/uisp { };
@@ -5920,9 +5920,6 @@ let
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
   boost155 = callPackage ../development/libraries/boost/1.55.nix { };
-  boost156 = callPackage ../development/libraries/boost/1.56.nix { };
-  boost157 = callPackage ../development/libraries/boost/1.57.nix { };
-  boost158 = callPackage ../development/libraries/boost/1.58.nix { };
   boost159 = callPackage ../development/libraries/boost/1.59.nix { };
   boost = boost159;
 
@@ -6202,9 +6199,7 @@ let
 
   fontconfig-ultimate = callPackage ../development/libraries/fontconfig-ultimate {};
 
-  folly = callPackage ../development/libraries/folly {
-    boost = boost157;
-  };
+  folly = callPackage ../development/libraries/folly { };
 
   makeFontsConf = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
     callPackage ../development/libraries/fontconfig/make-fonts-conf.nix {
@@ -6406,7 +6401,7 @@ let
 
   qt_gstreamer = callPackage ../development/libraries/gstreamer/legacy/qt-gstreamer {};
 
-  qt_gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer { boost = boost156;};
+  qt_gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer { boost = boost155;};
 
   gnet = callPackage ../development/libraries/gnet { };
 
@@ -8393,11 +8388,12 @@ let
 
   xercesc = callPackage ../development/libraries/xercesc {};
 
+  # Avoid using this. It isn't really a wrapper anymore, but we keep the name.
   xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper {
     packages = [
-      freetype fontconfig xlibs.xproto xlibs.libX11 xlibs.libXt
-      xlibs.libXft xlibs.libXext xlibs.libSM xlibs.libICE
-      xlibs.xextproto
+      freetype fontconfig xorg.xproto xorg.libX11 xorg.libXt
+      xorg.libXft xorg.libXext xorg.libSM xorg.libICE
+      xorg.xextproto
     ];
   };
 
@@ -8537,7 +8533,7 @@ let
   lucene = callPackage ../development/libraries/java/lucene { };
 
   lucenepp = callPackage ../development/libraries/lucene++ {
-    boost = boost157;
+    boost = boost155;
   };
 
   mockobjects = callPackage ../development/libraries/java/mockobjects { };
@@ -9149,7 +9145,7 @@ let
   rethinkdb = callPackage ../servers/nosql/rethinkdb { };
 
   rippled = callPackage ../servers/rippled {
-    boost = boost157;
+    boost = boost155;
   };
 
   ripple-rest = callPackage ../servers/rippled/ripple-rest.nix { };
@@ -9263,11 +9259,16 @@ let
   quartz-wm = callPackage ../servers/x11/quartz-wm { stdenv = clangStdenv; };
 
   xorg = recurseIntoAttrs (lib.callPackagesWith pkgs ../servers/x11/xorg/default.nix {
+    inherit clangStdenv fetchurl fetchgit fetchpatch stdenv pkgconfig intltool freetype fontconfig
+      libxslt expat libpng zlib perl mesa_drivers spice_protocol
+      dbus libuuid openssl gperf m4 libevdev tradcpp libinput mcpp makeWrapper autoreconfHook
+      autoconf automake libtool xmlto asciidoc flex bison python mtdev pixman;
+    inherit (darwin) apple_sdk;
     bootstrap_cmds = if stdenv.isDarwin then darwin.bootstrap_cmds else null;
     mesa = mesa_noglu;
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
-  });
+  } // { inherit xlibsWrapper; } );
 
   xorgReplacements = callPackage ../servers/x11/xorg/replacements.nix { };
 
@@ -9581,6 +9582,8 @@ let
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
 
+  openiscsi = callPackage ../os-specific/linux/open-iscsi { };
+
   # -- Linux kernel expressions ------------------------------------------------
 
   linuxHeaders = linuxHeaders_3_12;
@@ -9760,8 +9763,6 @@ let
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
 
     openafsClient = callPackage ../servers/openafs-client { };
-
-    openiscsi = callPackage ../os-specific/linux/open-iscsi { };
 
     wis_go7007 = callPackage ../os-specific/linux/wis-go7007 { };
 
@@ -10661,7 +10662,7 @@ let
   schismtracker = callPackage ../applications/audio/schismtracker { };
 
   altcoins = recurseIntoAttrs ( callPackage ../applications/altcoins {
-    callPackage = newScope { boost = boost157; };
+    callPackage = newScope { boost = boost155; };
   } );
   bitcoin = altcoins.bitcoin;
   bitcoin-xt = altcoins.bitcoin-xt;
@@ -11010,13 +11011,15 @@ let
 
   emacs24 = callPackage ../applications/editors/emacs-24 {
     # use override to enable additional features
-    libXaw = xlibs.libXaw;
+    libXaw = xorg.libXaw;
     Xaw3d = null;
     gconf = null;
     alsaLib = null;
     imagemagick = null;
     acl = null;
     gpm = null;
+    inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
+    inherit (darwin) libobjc;
   };
 
   emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
@@ -11383,7 +11386,7 @@ let
   fomp = callPackage ../applications/audio/fomp { };
 
   freecad = callPackage ../applications/graphics/freecad {
-    boost = boost156;
+    boost = boost155;
     opencascade = opencascade_6_5;
     inherit (pythonPackages) matplotlib pycollada;
   };
@@ -11406,7 +11409,7 @@ let
   };
 
   freicoin = callPackage ../applications/misc/freicoin {
-    boost = boost157;
+    boost = boost155;
   };
 
   fuze = callPackage ../applications/networking/instant-messengers/fuze {};
@@ -11856,7 +11859,7 @@ let
 
   ledger2 = callPackage ../applications/office/ledger/2.6.3.nix { };
   ledger3 = callPackage ../applications/office/ledger {
-    boost = boost157;
+    boost = boost155;
   };
   ledger = ledger3;
 
@@ -13126,7 +13129,7 @@ let
           ++ lib.optional (cfg.enableBluejeans or false) bluejeans
          );
       libs = [ gstreamer gst_plugins_base ] ++ lib.optionals (cfg.enableQuakeLive or false)
-             (with xlibs; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
+             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
              ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
              ++ lib.optional (config.pulseaudio or false) libpulseaudio;
       gst_plugins = [ gst_plugins_base gst_plugins_good gst_plugins_bad gst_plugins_ugly gst_ffmpeg ];
@@ -13491,6 +13494,10 @@ let
   craftyFull = appendToName "full" (crafty.override { fullVariant = true; });
 
   crrcsim = callPackage ../games/crrcsim {};
+
+  dfhack = callPackage_i686 ../games/dfhack {
+    inherit (pkgsi686Linux.perlPackages) XMLLibXML XMLLibXSLT;
+  };
 
   dhewm3 = callPackage ../games/dhewm3 {};
 
@@ -13872,7 +13879,7 @@ let
       {
         libusb = libusb1;
         libcanberra = libcanberra_kde;
-        boost = boost156;
+        boost = boost155;
         kdelibs = kdeApps_stable.kdelibs;
       }
       ../desktops/kde-4.14;
@@ -13926,7 +13933,7 @@ let
           kdevelop = callPackage ../applications/editors/kdevelop { };
 
           kdevplatform = callPackage ../development/libraries/kdevplatform {
-            boost = boost156;
+            boost = boost155;
           };
 
           kdiff3 = callPackage ../tools/text/kdiff3 { };
@@ -13958,7 +13965,7 @@ let
           libalkimia = callPackage ../development/libraries/libalkimia { };
 
           libktorrent = callPackage ../development/libraries/libktorrent {
-            boost = boost156;
+            boost = boost155;
           };
 
           libkvkontakte = callPackage ../development/libraries/libkvkontakte { };
@@ -14912,7 +14919,7 @@ let
   vbam = callPackage ../misc/emulators/vbam {};
 
   vice = callPackage ../misc/emulators/vice {
-    libX11 = xlibs.libX11;
+    libX11 = xorg.libX11;
     giflib = giflib_4_1;
   };
 
@@ -15049,8 +15056,12 @@ let
 
   mg = callPackage ../applications/editors/mg { };
 
+}; # self_ =
 
-  # Attributes for backward compatibility.
+
+  ### Deprecated aliases - for backward compatibility
+
+aliases = with self; rec {
   adobeReader = adobe-reader;
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
@@ -15078,8 +15089,17 @@ let
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  x11 = xlibsWrapper; # added 2015-09
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
+  xlibs = xorg; # added 2015-09
   youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
   youtubeDL = youtube-dl;  # added 2014-10-26
+};
 
-}; in self; in pkgs
+tweakAlias = _n: alias: with lib;
+  if alias.recurseForDerivations or false then
+    removeAttrs alias ["recurseForDerivations"]
+  else alias;
+
+in lib.mapAttrs tweakAlias aliases // self; in pkgs
+

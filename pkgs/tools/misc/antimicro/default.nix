@@ -1,4 +1,4 @@
-{ stdenv, cmake, pkgconfig, SDL2, qt5, xlibs, fetchzip }:
+{ stdenv, cmake, pkgconfig, SDL2, qt5, xorg, fetchzip }:
 
 stdenv.mkDerivation rec {
   name = "antimicro-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    cmake pkgconfig SDL2 qt5.base qt5.tools xlibs.libXtst
+    cmake pkgconfig SDL2 qt5.base qt5.tools xorg.libXtst
   ];
 
   meta = with stdenv.lib; {

@@ -5,7 +5,7 @@
 # rewritten to /nix/store/<hash>/bin/python.  Interpreters that are
 # already in the store are left untouched.
 
-fixupOutputHooks+=('if [ -z "$dontPatchShebangs" ]; then patchShebangs "$prefix"; fi')
+fixupOutputHooks+=('if [ -z "$dontPatchShebangs" -a -e "$prefix" ]; then patchShebangs "$prefix"; fi')
 
 patchShebangs() {
     local dir="$1"

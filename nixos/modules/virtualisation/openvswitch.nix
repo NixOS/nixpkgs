@@ -19,6 +19,15 @@ in {
         '';
     };
 
+    resetOnStart = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to reset the Open vSwitch configuration database to a default
+        configuration on every start of the systemd <literal>ovsdb.service</literal>.
+        '';
+    };
+
     package = mkOption {
       type = types.package;
       default = pkgs.openvswitch;
@@ -75,6 +84,7 @@ in {
         mkdir -p ${runDir}
         mkdir -p /var/db/openvswitch
         chmod +w /var/db/openvswitch
+        ${optionalString cfg.resetOnStart "rm -f /var/db/openvswitch/conf.db"}
         if [[ ! -e /var/db/openvswitch/conf.db ]]; then
           ${cfg.package}/bin/ovsdb-tool create \
             "/var/db/openvswitch/conf.db" \
@@ -92,13 +102,11 @@ in {
             --bootstrap-ca-cert=db:Open_vSwitch,SSL,ca_cert \
             --unixctl=ovsdb.ctl.sock \
             --pidfile=/var/run/openvswitch/ovsdb.pid \
-            --detach \
             /var/db/openvswitch/conf.db
           '';
         Restart = "always";
         RestartSec = 3;
         PIDFile = "/var/run/openvswitch/ovsdb.pid";
-        Type = "forking";
       };
       postStart = ''
         ${cfg.package}/bin/ovs-vsctl --timeout 3 --retry --no-wait init
@@ -114,11 +122,9 @@ in {
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/ovs-vswitchd \
-          --pidfile=/var/run/openvswitch/ovs-vswitchd.pid \
-          --detach
+          --pidfile=/var/run/openvswitch/ovs-vswitchd.pid
         '';
         PIDFile = "/var/run/openvswitch/ovs-vswitchd.pid";
-        Type = "forking";
       };
     };
 
@@ -143,11 +149,10 @@ in {
           ${cfg.package}/bin/ovs-monitor-ipsec \
             --root-prefix ${runDir}/ipsec \
             --pidfile /var/run/openvswitch/ovs-monitor-ipsec.pid \
-            --monitor --detach \
+            --monitor \
             unix:/var/run/openvswitch/db.sock
         '';
         PIDFile = "/var/run/openvswitch/ovs-monitor-ipsec.pid";
-        Type = "forking";
       };
 
       preStart = ''

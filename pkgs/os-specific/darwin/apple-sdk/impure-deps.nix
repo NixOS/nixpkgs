@@ -6,7 +6,6 @@ rec {
   ];
   IOKit = [
     "/System/Library/Frameworks/IOKit.framework"
-    "/usr/lib/libenergytrace.dylib"
   ];
   DiskArbitration = [
     "/System/Library/Frameworks/DiskArbitration.framework"
@@ -31,8 +30,6 @@ rec {
     "/System/Library/PrivateFrameworks/DataDetectorsCore.framework/Versions/A/DataDetectorsCore"
     "/System/Library/PrivateFrameworks/TCC.framework/Versions/A/TCC"
     "/System/Library/PrivateFrameworks/LanguageModeling.framework/Versions/A/LanguageModeling"
-    "/usr/lib/libChineseTokenizer.dylib"
-    "/usr/lib/libmarisa.dylib"
     "/usr/lib/libmecabra.dylib"
     "/usr/lib/libcmph.dylib"
     "/usr/lib/libiconv.2.dylib"

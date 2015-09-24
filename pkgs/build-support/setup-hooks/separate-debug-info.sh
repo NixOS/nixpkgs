@@ -40,4 +40,5 @@ _separateDebugInfo() {
 # - Debug info may cause problems due to excessive memory usage during linking.
 #   Using -Wa,--compress-debug-sections should help with that;
 #   further interesting information: https://gcc.gnu.org/wiki/DebugFission
+# - Another related tool: https://fedoraproject.org/wiki/Features/DwarfCompressor
 

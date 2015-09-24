@@ -1,33 +1,27 @@
 { stdenv, callPackage }:
+
 callPackage ./generic.nix {
-  shortVersion = "1.2.0";
+  shortVersion = "1.3.0";
   isRelease = true;
-  srcSha = "1zq2nhgaxkv1ghi3z2qgff6cylqirn33nphvkjiczlkjfi0pyw16";
+  configureFlags = [ "--release-channel=stable" ];
+  srcSha = "14lhk40n9aslz8h8wj7fas5vsgyrb38b2r319q3hlvplgggdksg8";
 
   /* Rust is bootstrapped from an earlier built version. We need
   to fetch these earlier versions, which vary per platform.
   The shapshot info you want can be found at
   https://github.com/rust-lang/rust/blob/{$shortVersion}/src/snapshots.txt
-  with the set you want at the top.
+  with the set you want at the top. Make sure this is the latest snapshot
+  for the tagged release and not a snapshot in the current HEAD.
   */
 
-  # linux-i386
-  snapshotHashLinux686 = "a6f22e481eabf098cc65bda97bf7e434a1fcc20b";
+  snapshotHashLinux686 = "3459275cdf3896f678e225843fa56f0d9fdbabe8";
+  snapshotHashLinux64 = "e451e3bd6e5fcef71e41ae6f3da9fb1cf0e13a0c";
+  snapshotHashDarwin686 = "428944a7984c0988e77909d82ca2ef77d96a1fbd";
+  snapshotHashDarwin64 = "b0515bb7d2892b9a58282fc865fee11a885406d6";
+  snapshotDate = "2015-07-26";
+  snapshotRev = "a5c12f4";
 
-  # linux-x86_64
-  snapshotHashLinux64 = "5fd8698fdfe953e6c4d86cf4fa1d5f3a0053248c";
-
-  # macos-i386
-  snapshotHashDarwin686 = "9a273324a6b63a40f67a553029c0a9fb692ffd1f";
-
-  # macos-x86_64
-  snapshotHashDarwin64 = "e5b12cb7c179fc98fa905a3c84803645d946a6ae";
-
-  snapshotDate = "2015-05-24";
-  snapshotRev = "ba0e1cd";
-
-  patches = [
-    ./patches/stable.patch
-    ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
-  configureFlags = [ "--release-channel=stable" ];
+  # cc-ar-opts.patch should be removable in 1.4.0+
+  patches = [ ./patches/remove-uneeded-git.patch ./patches/cc-ar-opts.patch ]
+    ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
 }

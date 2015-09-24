@@ -36,7 +36,6 @@ in
 
     hardware.sane.configDir = mkOption {
       type = types.string;
-      default = "${saneConfig}/etc/sane.d";
       description = "The value of SANE_CONFIG_DIR.";
     };
 
@@ -46,6 +45,8 @@ in
   ###### implementation
 
   config = mkIf config.hardware.sane.enable {
+
+    hardware.sane.configDir = mkDefault "${saneConfig}/etc/sane.d";
 
     environment.systemPackages = backends;
     environment.sessionVariables = {

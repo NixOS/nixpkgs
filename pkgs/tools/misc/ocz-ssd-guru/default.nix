@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, xlibs, freetype, fontconfig, mesa, glibc, makeWrapper }:
+{ fetchurl, stdenv, xorg, freetype, fontconfig, mesa, glibc, makeWrapper }:
 
 let
   system = if stdenv.system == "x86_64-linux" then "linux64" else "linux32";
@@ -15,13 +15,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ];
 
   libPath = stdenv.lib.makeLibraryPath [
-      xlibs.libX11
-      xlibs.libxcb
+      xorg.libX11
+      xorg.libxcb
       freetype
       fontconfig
-      xlibs.libXext
-      xlibs.libXi
-      xlibs.libXrender
+      xorg.libXext
+      xorg.libXi
+      xorg.libXrender
       stdenv.cc.cc
       glibc
       mesa

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, xlibs, libvdpau }:
+{ stdenv, fetchurl, pkgconfig, xorg, libvdpau }:
 
 stdenv.mkDerivation rec {
   name = "vdpauinfo-1.0";

@@ -1,7 +1,10 @@
 { stdenv, fetchurl, ghostscript, texinfo, imagemagick, texi2html, guile
-, python, gettext, flex, perl, bison, pkgconfig, texLive, dblatex
+, python, gettext, flex, perl, bison, pkgconfig, dblatex
 , fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
 , fetchsvn, makeWrapper, t1utils
+, texlive, tex ? texlive.combine {
+    inherit (texlive) scheme-small lh metafont epsf;
+  }
 }:
 
 stdenv.mkDerivation rec{
@@ -34,17 +37,19 @@ stdenv.mkDerivation rec{
   configureFlags = [ "--disable-documentation" "--with-ncsb-dir=${urwfonts}"];
 
   buildInputs =
-    [ ghostscript texinfo imagemagick texi2html guile dblatex zip netpbm
-      python gettext flex perl bison pkgconfig texLive fontconfig freetype pango
+    [ ghostscript texinfo imagemagick texi2html guile dblatex tex zip netpbm
+      python gettext flex perl bison pkgconfig fontconfig freetype pango
       fontforge help2man groff makeWrapper t1utils
     ];
 
-  meta = {
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
     description = "Music typesetting system";
     homepage = http://lilypond.org/;
-    license = "GPL";
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.linux;
   };
 
   patches = [ ./findlib.patch ];

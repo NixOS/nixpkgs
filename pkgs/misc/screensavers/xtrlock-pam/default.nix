@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, python, pkgconfig, x11, pam }:
+{ stdenv, fetchgit, python, pkgconfig, xlibsWrapper, pam }:
 
 stdenv.mkDerivation {
   name = "xtrlock-pam-3.4-post-20150909";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "fa8aeedfa2a4e1d813f8cad562bafdd4e2c5130df0a7cde7b2f956a32044e9f8";
   };
 
-  buildInputs = [ python pkgconfig x11 pam ];
+  buildInputs = [ python pkgconfig xlibsWrapper pam ];
 
   configurePhase = ''
     substituteInPlace .config/options.py --replace /usr/include/security/pam_appl.h ${pam}/include/security/pam_appl.h

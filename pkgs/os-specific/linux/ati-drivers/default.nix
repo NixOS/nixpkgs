@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel ? null, xlibs, which, imake
+{ stdenv, fetchurl, kernel ? null, which, imake
 , mesa # for fgl_glxgears
 , libXxf86vm, xf86vidmodeproto # for fglrx_gamma
 , xorg, makeWrapper, glibc, patchelf
@@ -48,8 +48,8 @@ stdenv.mkDerivation {
   patchPhaseSamples = "patch -p2 < ${./patch-samples.patch}";
 
   buildInputs =
-    [ xlibs.libXext xlibs.libX11 xlibs.libXinerama
-      xlibs.libXrandr which imake makeWrapper
+    [ xorg.libXext xorg.libX11 xorg.libXinerama
+      xorg.libXrandr which imake makeWrapper
       patchelf
       unzip
       mesa

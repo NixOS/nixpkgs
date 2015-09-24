@@ -80,8 +80,9 @@ with lib;
             # can obtain it securely by parsing the output of
             # ec2-get-console-output.
             echo "-----BEGIN SSH HOST KEY FINGERPRINTS-----" > /dev/console
-            ${config.programs.ssh.package}/bin/ssh-keygen -l -f /etc/ssh/ssh_host_dsa_key.pub > /dev/console
-            ${config.programs.ssh.package}/bin/ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub > /dev/console
+            for i in /etc/ssh/ssh_host_*_key.pub; do
+                ${config.programs.ssh.package}/bin/ssh-keygen -l -f $i > /dev/console
+            done
             echo "-----END SSH HOST KEY FINGERPRINTS-----" > /dev/console
           '';
         serviceConfig.Type = "oneshot";

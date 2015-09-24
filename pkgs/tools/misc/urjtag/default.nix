@@ -1,31 +1,33 @@
 { stdenv, autoconf, automake, pkgconfig, gettext, intltool, libtool, bison
-, flex, fetchgit, makeWrapper
+, flex, which, subversion, fetchsvn, makeWrapper, libftdi, libusb, readline
+, python3
+, svfSupport ? false
+, bsdlSupport ? false
+, staplSupport ? false
 , jedecSupport ? false
-, pythonBindings ? false
-, python3 ? null
 }:
 
 stdenv.mkDerivation rec {
   version = "0.10";
   name = "urjtag-${version}";
 
-  src = fetchgit {
-    url = "git://git.code.sf.net/p/urjtag/git";
-    rev = "7ba12da7845af7601e014a2a107670edc5d6997d";
-    sha256 = "834401d851728c48f1c055d24dc83b6173c701bf352d3a964ec7ff1aff3abf6a";
+  src = fetchsvn {
+    url = "svn://svn.code.sf.net/p/urjtag/svn/trunk/urjtag";
+    rev = "2051";
+    sha256 = "0pyl0y27136nr8mmjdml7zjnfnpbjmgqzkjk99j3hvj38k10wq7f";
   };
 
-  buildInputs = [ gettext pkgconfig autoconf automake libtool makeWrapper ]
-    ++ stdenv.lib.optional pythonBindings python3;
+  buildInputs = [ gettext pkgconfig autoconf automake libtool bison flex which
+    subversion makeWrapper readline libftdi libusb python3 ];
 
   configureFlags = ''
-    --prefix=/
+    ${if svfSupport then "--enable-svf" else "--disable-svf"}
+    ${if bsdlSupport then "--enable-bsdl" else "--disable-bsdl"}
+    ${if staplSupport then "--enable-stapl" else "--disable-stapl"}
     ${if jedecSupport then "--enable-jedec-exp" else "--disable-jedec-exp"}
-    ${if pythonBindings then "--enable-python" else "--disable-python"}
   '';
-  preConfigure = "cd urjtag; ./autogen.sh";
 
-  makeFlags = [ "DESTDIR=$(out)" ];
+  preConfigure = "./autogen.sh";
 
   meta = {
     description = "Enhanced, modern tool for communicating over JTAG with flash chips, CPUs,and many more";

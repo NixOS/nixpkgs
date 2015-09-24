@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, x11, xlibs, dbus, imlib2, freetype }:
+{ stdenv, fetchurl, pkgconfig, xlibsWrapper, xorg, dbus, imlib2, freetype }:
 
 let version = "0.16.8.15"; in
   stdenv.mkDerivation {
@@ -10,7 +10,7 @@ let version = "0.16.8.15"; in
     };
 
     buildInputs = [pkgconfig imlib2 freetype 
-      xlibs.libX11 xlibs.libXt xlibs.libXext xlibs.libXrender xlibs.libXft ];
+      xorg.libX11 xorg.libXt xorg.libXext xorg.libXrender xorg.libXft ];
 
     meta = {
       description = "Desktop shell built on the Enlightenment Foundation Libraries";
