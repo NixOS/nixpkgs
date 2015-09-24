@@ -80,7 +80,6 @@ in
 
     services.nixosManual.browser = mkOption {
       type = types.path;
-      default = "${pkgs.w3m}/bin/w3m";
       description = ''
         Browser used to show the manual.
       '';
@@ -115,6 +114,8 @@ in
 
     services.mingetty.helpLine = mkIf cfg.showManual
       "\nPress <Alt-F${toString cfg.ttyNumber}> for the NixOS manual.";
+
+    services.nixosManual.browser = mkDefault "${pkgs.w3m}/bin/w3m";
 
   };
 

@@ -33,7 +33,7 @@ in
         type = types.str;
         description = "
           The Seeks server configuration. If it is not specified,
-          a default configuration is used (${seeks}/etc/seeks).
+          a default configuration is used.
         ";
       };
 
