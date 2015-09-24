@@ -1,13 +1,17 @@
-{ lib, pythonPackages, fetchurl }:
+{ lib, fetchFromGitHub, pythonPackages, fetchurl }:
 
 pythonPackages.buildPythonPackage rec {
   name = "morphis-${version}";
   version = "0.8";
   namePrefix = "";
 
-  src = fetchurl {
-    url = "https://morph.is/v${version}/morphis-${version}.tar.xz";
-    sha256 = "0a6diff0lipd2lds4ix7syvdag134alfidw7g4infg9l6fx54dl9";
+  enableParallelBuilding = true;
+
+  src = fetchFromGitHub {
+    owner = "fps";
+    repo = "morphis-mirror";
+    rev = "88259977d63492475cf28f0305ecaa508f4cefaa";
+    sha256 = "1vcx9qjbnnjvqmc3xwjvisc31wrs4hpcy27qd6icbdl6npls1vgd";
   };
 
   buildInputs = [ pythonPackages.pbr ];
