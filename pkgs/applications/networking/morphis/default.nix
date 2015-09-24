@@ -11,7 +11,7 @@ pythonPackages.buildPythonPackage rec {
     owner = "fps";
     repo = "morphis-mirror";
     rev = "88259977d63492475cf28f0305ecaa508f4cefaa";
-    sha256 = "1vcx9qjbnnjvqmc3xwjvisc31wrs4hpcy27qd6icbdl6npls1vgd";
+    sha256 = "15c8wpwz877y5gnqghwiq0cc544mshw8ipwla47i9nk9nmkwq0jr";
   };
 
   buildInputs = [ pythonPackages.pbr ];
