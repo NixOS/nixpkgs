@@ -11,14 +11,13 @@
     registered on
     <link xlink:href="http://hackage.haskell.org/">Hackage</link>, but
     strangely enough normal Nix package lookups don't seem to discover
-    any of them:
+    any of them, except for the default version of ghc, cabal-install, and stack:
   </para>
   <programlisting>
-$ nix-env -qa cabal-install
-error: selector ‘cabal-install’ matches no derivations
-
-$ nix-env -i ghc
-error: selector ‘ghc’ matches no derivations
+$ nix-env -i alex
+error: selector ‘alex’ matches no derivations
+$ nix-env -qa ghc
+ghc-7.10.2
 </programlisting>
   <para>
     The Haskell package set is not registered in the top-level namespace
