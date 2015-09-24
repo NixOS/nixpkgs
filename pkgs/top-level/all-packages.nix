@@ -2395,7 +2395,7 @@ let
   };
 
   morphis = callPackage ../applications/networking/morphis {
-    pythonPackages = python35Packages;
+    pythonPackages = python34Packages;
   };
 
   nsjail = callPackage ../tools/security/nsjail {};
