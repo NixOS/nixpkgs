@@ -129,7 +129,7 @@ let
       urlPrefix = args.urlPrefix or
         ("${mirror}/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive");
       # beware: standard mirrors http://mirror.ctan.org/ don't have releases
-      mirror = "ftp://tug.ctan.org"; # also works: ftp.math.utah.edu
+      mirror = "ftp://tug.ctan.org"; # also works: ftp.math.utah.edu but same IP
     in  ''
           tar -xf '${ fetchurl { inherit url md5; } }' \
             '--strip-components=${toString stripPrefix}' \
