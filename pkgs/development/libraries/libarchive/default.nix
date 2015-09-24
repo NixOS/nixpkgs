@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, acl, openssl, libxml2, attr, zlib, bzip2, e2fsprogs, xz
+{ fetchurl, stdenv, acl, openssl, libxml2, attr, zlib, bzip2, e2fsprogs, xz, lzo
 , sharutils }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       # ^ it's CVE-2015-2304 specific to libarchive
   ];
 
-  buildInputs = [ sharutils libxml2 zlib bzip2 openssl xz ] ++
+  buildInputs = [ sharutils libxml2 zlib bzip2 openssl xz lzo ] ++
     stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ];
 
   preBuild = if stdenv.isCygwin then ''
