@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, makeWrapper, pandoc
-, coreutils, iptables, nettools, openssh, procps,  python }:
+, coreutils, iptables, nettools, openssh, procps,  pythonPackages }:
   
 let version = "0.71"; in
 stdenv.mkDerivation rec {
@@ -28,20 +28,25 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ makeWrapper pandoc ];
-  buildInputs = [ coreutils iptables nettools openssh procps python ];
+  buildInputs =
+    [ coreutils iptables nettools openssh procps pythonPackages.python ];
+  pythonPaths = with pythonPackages; [ PyXAPI ];
 
   preConfigure = ''
     cd src
   '';
 
-  installPhase = ''
+  installPhase = let
+    mapPath = f: x: stdenv.lib.concatStringsSep ":" (map f x);
+  in ''
     mkdir -p $out/share/sshuttle
     cp -R sshuttle *.py compat $out/share/sshuttle
 
     mkdir -p $out/bin
     ln -s $out/share/sshuttle/sshuttle $out/bin
-    wrapProgram $out/bin/sshuttle --prefix PATH : \
-      "${stdenv.lib.concatStringsSep ":" (map (x: "${x}/bin") buildInputs)}"
+    wrapProgram $out/bin/sshuttle \
+      --prefix PATH : "${mapPath (x: "${x}/bin") buildInputs}" \
+      --prefix PYTHONPATH : "${mapPath (x: "$(toPythonPath ${x})") pythonPaths}"
 
     install -Dm644 sshuttle.8 $out/share/man/man8/sshuttle.8
   '';
