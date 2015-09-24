@@ -57,8 +57,8 @@ in
       type = types.attrsOf (types.listOf types.str);
       example = { PATH = [ "/bin" "/sbin" ]; MANPATH = [ "/man" "/share/man" ]; };
       description = ''
-	Attribute set of environment variable.  Each attribute maps to a list
-	of relative paths.  Each relative path is appended to the each profile
+        Attribute set of environment variable.  Each attribute maps to a list
+        of relative paths.  Each relative path is appended to the each profile
         of <option>environment.profiles</option> to form the content of the
         corresponding environment variable.
       '';
@@ -123,6 +123,7 @@ in
         "''${pkgs.dash}/bin/dash"
       '';
       type = types.path;
+      visible = false;
       description = ''
         The shell executable that is linked system-wide to
         <literal>/bin/sh</literal>. Please note that NixOS assumes all
