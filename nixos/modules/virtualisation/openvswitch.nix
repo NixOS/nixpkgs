@@ -102,11 +102,14 @@ in {
             --bootstrap-ca-cert=db:Open_vSwitch,SSL,ca_cert \
             --unixctl=ovsdb.ctl.sock \
             --pidfile=/var/run/openvswitch/ovsdb.pid \
+            --detach \
             /var/db/openvswitch/conf.db
           '';
         Restart = "always";
         RestartSec = 3;
         PIDFile = "/var/run/openvswitch/ovsdb.pid";
+        # Use service type 'forking' to correctly determine when ovsdb-server is ready.
+        Type = "forking";
       };
       postStart = ''
         ${cfg.package}/bin/ovs-vsctl --timeout 3 --retry --no-wait init
@@ -122,9 +125,12 @@ in {
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/ovs-vswitchd \
-          --pidfile=/var/run/openvswitch/ovs-vswitchd.pid
+          --pidfile=/var/run/openvswitch/ovs-vswitchd.pid \
+          --detach
         '';
         PIDFile = "/var/run/openvswitch/ovs-vswitchd.pid";
+        # Use service type 'forking' to correctly determine when vswitchd is ready.
+        Type = "forking";
       };
     };
 
@@ -149,10 +155,12 @@ in {
           ${cfg.package}/bin/ovs-monitor-ipsec \
             --root-prefix ${runDir}/ipsec \
             --pidfile /var/run/openvswitch/ovs-monitor-ipsec.pid \
-            --monitor \
+            --monitor --detach \
             unix:/var/run/openvswitch/db.sock
         '';
         PIDFile = "/var/run/openvswitch/ovs-monitor-ipsec.pid";
+        # Use service type 'forking' to correctly determine when ovs-monitor-ipsec is ready.
+        Type = "forking";
       };
 
       preStart = ''
