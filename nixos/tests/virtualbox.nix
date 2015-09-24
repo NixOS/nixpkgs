@@ -413,6 +413,7 @@ in {
       shutdownVM_detectvirt;
       my $result = $machine->succeed("cat '$detectvirt_sharepath/result'");
       chomp $result;
+      destroyVM_detectvirt;
       die "systemd-detect-virt returned \"$result\" instead of \"oracle\""
         if $result ne "oracle";
     };
