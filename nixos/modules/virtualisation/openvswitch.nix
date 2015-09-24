@@ -19,6 +19,15 @@ in {
         '';
     };
 
+    resetOnStart = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to reset the Open vSwitch configuration database to a default
+        configuration on every start of the systemd <literal>ovsdb.service</literal>.
+        '';
+    };
+
     package = mkOption {
       type = types.package;
       default = pkgs.openvswitch;
@@ -75,6 +84,7 @@ in {
         mkdir -p ${runDir}
         mkdir -p /var/db/openvswitch
         chmod +w /var/db/openvswitch
+        ${optionalString cfg.resetOnStart "rm -f /var/db/openvswitch/conf.db"}
         if [[ ! -e /var/db/openvswitch/conf.db ]]; then
           ${cfg.package}/bin/ovsdb-tool create \
             "/var/db/openvswitch/conf.db" \
