@@ -571,6 +571,26 @@ let self = _self // overrides;
     };
   };
 
+  find-file-in-project = melpaBuild rec {
+    pname = "find-file-in-project";
+    version = "3.5";
+    src = fetchFromGitHub {
+      owner  = "technomancy";
+      repo   = pname;
+      rev    = "53a8d8174f915d9dcf5ac6954b1c0cae61266177";
+      sha256 = "0wky8vqg08iw34prbz04bqmhfhj82y93swb8zkz6la2vf9da0gmd";
+    };
+    meta = {
+      description = "Quick access to project files in Emacs";
+      longDescription = ''
+        Find files in a project quickly.
+        This program provides a couple methods for quickly finding any file in a
+        given project. It depends on GNU find.
+      '';
+      license = gpl3Plus;
+    };
+  };
+
   flim = melpaBuild rec {
     pname = "flim";
     version = "1.14.9"; # 20141216
