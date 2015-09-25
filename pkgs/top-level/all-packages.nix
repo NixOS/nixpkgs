@@ -6000,6 +6000,10 @@ let
     cogl = cogl_1_20;
   };
 
+  clutter_1_24 = callPackage ../development/libraries/clutter/1.24.nix {
+    cogl = cogl_1_22;
+  };
+
   clutter-gst = callPackage ../development/libraries/clutter-gst { };
 
   clutter-gst_3_0 = callPackage ../development/libraries/clutter-gst/3.0.nix {
