@@ -3,16 +3,16 @@
   pango, atk, qrencode, ffmpeg, filter-audio, makeWrapper }:
 
 let
-  revision = "2f6b5e052f2a625d506e83f880c5d68b49118f95";
+  revision = "1673b43e26c853f6446f228fec083af166cbf446";
 in
 
 stdenv.mkDerivation rec {
-  name = "qtox-dev-20150821";
+  name = "qtox-dev-20150925";
 
   src = fetchgit {
       url = "https://github.com/tux3/qTox.git";
       rev = "${revision}";
-      md5 = "b2f9cf283136b6e558876ca2e6d128a3";
+      md5 = "785f5b305cdcdf777d93ee823a5b9f49";
   };
 
   buildInputs =
