@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "17bqykp604p7376wj3q2nmjdhrb6v1ny8q08zdwi7qvc02l9wrsi";
   };
 
+  patches =
+    [ ./cve-2015-3210.patch
+      ./cve-2015-5073.patch
+    ];
+
   outputs = [ "out" "doc" "man" ];
 
   configureFlags = ''
