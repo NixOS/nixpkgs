@@ -9146,6 +9146,8 @@ let
 
   s6 = callPackage ../servers/s6 { };
 
+  s6-rc = callPackage ../tools/system/s6-rc { };
+
   spamassassin = callPackage ../servers/mail/spamassassin {
     inherit (perlPackages) HTMLParser NetDNS NetAddrIP DBFile
       HTTPDate MailDKIM LWP IOSocketSSL;
