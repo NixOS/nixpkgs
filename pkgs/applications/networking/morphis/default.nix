@@ -10,8 +10,8 @@ pythonPackages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fps";
     repo = "morphis-mirror";
-    rev = "135ac9d8101d03c83a90e6b635640c3db68190c6";
-    sha256 = "15rhjx3zlxdpyc82gpkbp0dsafcf6p734q61nywj6yx68i8jsnjn";
+    rev = "f319b81bdb1f03aa30c220c759d48446d1a99009";
+    sha256 = "05ldvaqmqn7g7y4hzri94dwb4ghzrxc6b67qz8n8qp8frkskfsh6";
   };
 
   buildInputs = [ pythonPackages.pbr ];
