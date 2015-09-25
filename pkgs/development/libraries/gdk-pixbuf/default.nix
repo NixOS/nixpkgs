@@ -2,15 +2,15 @@
 , jasper, libintlOrEmpty, gobjectIntrospection }:
 
 let
-  ver_maj = "2.31";
-  ver_min = "6";
+  ver_maj = "2.32";
+  ver_min = "0";
 in
 stdenv.mkDerivation rec {
   name = "gdk-pixbuf-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdk-pixbuf/${ver_maj}/${name}.tar.xz";
-    sha256 = "062x2gqd7p6yxhxlib1ha4l3gk9ihcj080hrwwv9vmlmybb064hi";
+    sha256 = "537655ec3635740e949457bafe61ae44ce0e5642a2529a9ef7ee0bcd5e911b67";
   };
 
   setupHook = ./setup-hook.sh;
