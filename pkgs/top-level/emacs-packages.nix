@@ -1233,6 +1233,25 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  pyvenv = melpaBuild rec {
+    pname = "pyvenv";
+    version = "1.7";
+    src = fetchFromGitHub {
+      owner  = "jorgenschaefer";
+      repo   = pname;
+      rev    = "e4f2fa7a32cf480f34d628d8eb5b9b60374d0e8e";
+      sha256 = "1669id1p69kpq8zzldxj1p6iyz68701snn462g22k2acfzc2bfha";
+    };
+    meta = {
+      description = "Python virtual environment interface for Emacs";
+      longDescription = ''
+        This is a simple global minor mode which will replicate the changes done
+        by virtualenv activation inside Emacs.
+      '';
+      license = gpl2Plus;
+    };
+  };
+
   rainbow-delimiters = melpaBuild rec {
     pname = "rainbow-delimiters";
     version = "2.1.1";
