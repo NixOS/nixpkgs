@@ -849,6 +849,8 @@ let
 
   gmic = callPackage ../tools/graphics/gmic { };
 
+  heatseeker = callPackage ../tools/misc/heatseeker { };
+
   mathics = pythonPackages.mathics;
 
   mcrl = callPackage ../tools/misc/mcrl { };
