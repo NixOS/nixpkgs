@@ -18470,4 +18470,24 @@ let
     };
   };
 
+  importmagic = buildPythonPackage rec {
+    simpleName = "importmagic";
+    name = "${simpleName}-${version}";
+    version = "0.1.3";
+    doCheck = false;  # missing json file from tarball
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/${simpleName}/${name}.tar.gz";
+      sha256 = "194bl8l8sc2ibwi6g5kz6xydkbngdqpaj6r2gcsaw1fc73iswwrj";
+    };
+
+    propagatedBuildInputs = with self; [ six ];
+
+    meta = {
+      description = "Python Import Magic - automagically add, remove and manage imports";
+      homepage = http://github.com/alecthomas/importmagic;
+      license = "bsd";
+    };
+  };
+
 }; in pythonPackages
