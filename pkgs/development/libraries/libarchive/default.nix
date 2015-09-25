@@ -26,7 +26,9 @@ stdenv.mkDerivation rec {
   '' else null;
 
   preFixup = ''
-    sed 's|-lcrypto|-L${openssl}/lib -lcrypto|' -i $out/lib/libarchive.la
+    sed -i $out/lib/libarchive.la \
+      -e 's|-lcrypto|-L${openssl}/lib -lcrypto|' \
+      -e 's|-llzo2|-L${lzo}/lib -llzo2|'
   '';
 
   meta = {
