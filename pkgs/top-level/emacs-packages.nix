@@ -852,6 +852,30 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  highlight-indentation = melpaBuild rec {
+    pname = "highlight-indentation";
+    version = "0.7.0";
+    src = fetchFromGitHub {
+      owner = "antonj";
+      repo = "Highlight-Indentation-for-Emacs";
+      rev = "v${version}";
+      sha256 = "00l54k75qk24a0znzl4ij3s3nrnr2wy9ha3za8apphzlm98m907k";
+    };
+    meta = {
+      description = "Minor modes to highlight indentation guides in emacs";
+      longDescription = ''
+        Provides two minor modes highlight-indentation-mode and
+        highlight-indentation-current-column-mode
+
+        - highlight-indentation-mode displays guidelines indentation
+        (space indentation only).
+        - highlight-indentation-current-column-mode displays guidelines for the
+        current-point indentation (space indentation only).
+      '';
+      license = gpl2Plus;
+    };
+  };
+
   ibuffer-vc = melpaBuild rec {
     pname   = "ibuffer-vc";
     version = "0.10";
