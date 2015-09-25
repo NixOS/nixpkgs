@@ -4,7 +4,7 @@
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base, icu, libpng, jemalloc, libpulseaudio
-, enableGTK3 ? false, fetchpatch
+, enableGTK3 ? false
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
@@ -27,17 +27,6 @@ common = { pname, version, sha1 }: stdenv.mkDerivation rec {
       in "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${version}/source/firefox-${version}.source.tar.${ext}";
     inherit sha1;
   };
-
-  patches = if !enableGTK3 then null else [(fetchpatch {
-    name = "crash_OTMC+GTK3.patch";
-    # backported from 40.1
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1127752
-    # https://bugzilla.redhat.com/show_bug.cgi?id=1256875
-    url = "http://pkgs.fedoraproject.org/cgit/firefox.git/plain/"
-      + "mozilla-1127752.patch?id=571fefe2c8f741b92c865e9122af56f6258b3fc1";
-    sha256 = "04yq4lcq8ln2fmknz4c0zah77wxqp2mcgr8pjx860dmcmzvyi3p5";
-  })];
-  patchFlags = "-p2";
 
   buildInputs =
     [ pkgconfig gtk perl zip libIDL libjpeg zlib bzip2
