@@ -5720,6 +5720,34 @@ let
   };
 
 
+  hg-crecord = buildPythonPackage rec {
+    rev = "5cfaabfe9cb9f0a0d6837956d73127f290a213be";
+    name = "hg-crecord-${rev}";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://bitbucket.org/edgimar/crecord/get/${builtins.substring 0 12 rev}.tar.gz";
+      sha256 = "02003fa5620ec40a5ad0d7cede2e65c2cb398a7fe4e1ee26bd3396a87d63ad35";
+    };
+    
+    # crecord comes as just a bare directory
+    configurePhase = " ";
+    buildPhase = "${python.executable} -m compileall crecord";
+    installPhase = ''
+      mkdir -p $out/${python.sitePackages}
+      cp -Lr crecord $out/${python.sitePackages}/
+    '';
+
+    # there ain't none
+    doCheck = false;
+    
+    meta = {
+      description = "Mercurial extension for selecting graphically which files/hunk/lines to commit";
+      homepage = https://bitbucket.org/edgimar/crecord;
+    };
+  };
+
+
   docutils = buildPythonPackage rec {
     name = "docutils-0.12";
 
