@@ -9016,6 +9016,8 @@ let
 
   memcached = callPackage ../servers/memcached {};
 
+  meteor = callPackage ../servers/meteor/default.nix { };
+
   # Backwards compatibility.
   mod_dnssd = pkgs.apacheHttpdPackages.mod_dnssd;
   mod_evasive = pkgs.apacheHttpdPackages.mod_evasive;
