@@ -12,9 +12,6 @@ stdenv.mkDerivation rec {
     sha256 = "17bqykp604p7376wj3q2nmjdhrb6v1ny8q08zdwi7qvc02l9wrsi";
   };
 
-  # A bundle of fixes which should be removed for 8.38
-  patches = [ ./fixes.patch ];
-
   outputs = [ "out" "doc" "man" ];
 
   configureFlags = ''
