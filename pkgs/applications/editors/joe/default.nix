@@ -1,7 +1,8 @@
 { stdenv, fetchurl } :
 
 stdenv.mkDerivation rec {
-  name = "joe-4.1";
+  version = "4.1";
+  name = "joe-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/joe-editor/${name}.tar.gz";
