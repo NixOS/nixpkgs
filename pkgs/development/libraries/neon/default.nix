@@ -14,7 +14,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "neon-0.30.1";
+  version = "0.30.1";
+  name = "neon-${version}";
 
   src = fetchurl {
     url = "http://www.webdav.org/neon/${name}.tar.gz";
