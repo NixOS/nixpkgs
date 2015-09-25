@@ -424,11 +424,10 @@ in {
 
       vbm("startvm test1");
       waitForStartup_test1;
+      waitForVMBoot_test1;
 
       vbm("startvm test2");
       waitForStartup_test2;
-
-      waitForVMBoot_test1;
       waitForVMBoot_test2;
 
       $machine->screenshot("net_booted");
