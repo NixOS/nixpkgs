@@ -3,15 +3,15 @@
 }:
 
 let
-  ver_maj = "1.36";
-  ver_min = "8";
+  ver_maj = "1.38";
+  ver_min = "0";
 in
 stdenv.mkDerivation rec {
   name = "pango-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pango/${ver_maj}/${name}.tar.xz";
-    sha256 = "01rdzjh68w8l5zn0648yibyarj8p6g7yfn59nw5awaz1i8dvbnqq";
+    sha256 = "1d4e75974bad853ee9ac5fc5caee5e7ab235abbd945d51d01f3806e04e7c226c";
   };
 
   buildInputs = with stdenv.lib; [ gobjectIntrospection ]
