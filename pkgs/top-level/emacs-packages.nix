@@ -1506,6 +1506,29 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  yasnippet = melpaBuild rec {
+    pname = "yasnippet";
+    version = "0.8.1";
+    src = fetchFromGitHub {
+      owner  = "capitaomorte";
+      repo   = pname;
+      rev    = "01139a2deb9eda272b9b771fbbe15d096061efa4";
+      sha256 = "1b0bxzkmw7yd1yf6326zf52aq63n283vy57pysj8cc34d9bk6nnk";
+    };
+    meta = {
+      description = "A template system for Emacs";
+      longDescription = ''
+        YASnippet is a template system for Emacs.
+        It allows you to type an abbreviation and automatically expand it into
+        function templates. Bundled language templates include: C, C++, C#,
+        Perl, Python, Ruby, SQL, LaTeX, HTML, CSS and more.
+        The snippet syntax is inspired from TextMate's syntax, you can even import
+        most TextMate templates to YASnippet.
+      '';
+      license = gpl2Plus;
+    };
+  };
+
   zenburn-theme = melpaBuild rec {
     pname   = "zenburn-theme";
     version = "2.2";
