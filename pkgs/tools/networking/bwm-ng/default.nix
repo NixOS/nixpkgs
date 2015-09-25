@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "bwm-ng-0.6";
+  name = "bwm-ng-0.6.1";
   
   src = fetchurl {
     url = "http://www.gropp.org/bwm-ng/${name}.tar.gz";
-    sha256 = "1pgzc8y2y73n72qvbd2g0dkbkw5h0f83k5h9id1rsck8w9c464y1";
+    sha256 = "1w0dwpjjm9pqi613i8glxrgca3rdyqyp3xydzagzr5ndc34z6z02";
   };
 
   buildInputs = [ ncurses ];
