@@ -5095,7 +5095,7 @@ let
   bundlerEnv = callPackage ../development/interpreters/ruby/bundler-env { };
 
   ruby_1_8_7 = callPackage ../development/interpreters/ruby/ruby-1.8.7.nix { };
-  inherit (callPackages ../development/interpreters/ruby {})
+  inherit (callPackage ../development/interpreters/ruby {})
     # TODO: uncomment when ruby_1_8_7 doesn't need autoconf
     # ruby_1_8_7
     ruby_1_9_3
