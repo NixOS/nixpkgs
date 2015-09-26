@@ -10,130 +10,130 @@ let
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix { inherit fetchFromSavannah; };
 
-generic = { majorVersion, minorVersion, teenyVersion, patchLevel, sha256 }: let
-  versionNoPatch = "${majorVersion}.${minorVersion}.${teenyVersion}";
-  version = "${versionNoPatch}-p${patchLevel}";
-  fullVersionName = if patchLevel != "0" && stdenv.lib.versionOlder versionNoPatch "2.1"
-    then version
-    else versionNoPatch;
-  tag = "v" + stdenv.lib.replaceChars ["." "p" "-"] ["_" "_" ""] fullVersionName;
-  isRuby21 = majorVersion == "2" && minorVersion == "1";
-  isRuby18 = majorVersion == "1" && minorVersion == "8";
-  baseruby = self.override { useRailsExpress = false; };
-  self = lib.makeOverridable (
-    { stdenv, lib, fetchurl, fetchFromSavannah, fetchFromGitHub
-    , useRailsExpress ? true
-    , zlib, zlibSupport ? true
-    , openssl, opensslSupport ? true
-    , gdbm, gdbmSupport ? true
-    , ncurses, readline, cursesSupport ? true
-    , groff, docSupport ? false
-    , libyaml, yamlSupport ? true
-    , libffi, fiddleSupport ? true
-    , autoreconfHook, bison, autoconf
-    , darwin ? null
-    }:
-    stdenv.mkDerivation rec {
-      inherit version;
+  generic = { majorVersion, minorVersion, teenyVersion, patchLevel, sha256 }: let
+    versionNoPatch = "${majorVersion}.${minorVersion}.${teenyVersion}";
+    version = "${versionNoPatch}-p${patchLevel}";
+    fullVersionName = if patchLevel != "0" && stdenv.lib.versionOlder versionNoPatch "2.1"
+      then version
+      else versionNoPatch;
+    tag = "v" + stdenv.lib.replaceChars ["." "p" "-"] ["_" "_" ""] fullVersionName;
+    isRuby21 = majorVersion == "2" && minorVersion == "1";
+    isRuby18 = majorVersion == "1" && minorVersion == "8";
+    baseruby = self.override { useRailsExpress = false; };
+    self = lib.makeOverridable (
+      { stdenv, lib, fetchurl, fetchFromSavannah, fetchFromGitHub
+      , useRailsExpress ? true
+      , zlib, zlibSupport ? true
+      , openssl, opensslSupport ? true
+      , gdbm, gdbmSupport ? true
+      , ncurses, readline, cursesSupport ? true
+      , groff, docSupport ? false
+      , libyaml, yamlSupport ? true
+      , libffi, fiddleSupport ? true
+      , autoreconfHook, bison, autoconf
+      , darwin ? null
+      }:
+      stdenv.mkDerivation rec {
+        inherit version;
 
-      name = "ruby-${version}";
+        name = "ruby-${version}";
 
-      src = if useRailsExpress then fetchFromGitHub {
-        owner  = "ruby";
-        repo   = "ruby";
-        rev    = tag;
-        sha256 = sha256.git;
-      } else fetchurl {
-        url = "http://cache.ruby-lang.org/pub/ruby/${majorVersion}.${minorVersion}/ruby-${fullVersionName}.tar.gz";
-        sha256 = sha256.src;
-      };
+        src = if useRailsExpress then fetchFromGitHub {
+          owner  = "ruby";
+          repo   = "ruby";
+          rev    = tag;
+          sha256 = sha256.git;
+        } else fetchurl {
+          url = "http://cache.ruby-lang.org/pub/ruby/${majorVersion}.${minorVersion}/ruby-${fullVersionName}.tar.gz";
+          sha256 = sha256.src;
+        };
 
-      # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
-      NROFF = "${groff}/bin/nroff";
+        # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
+        NROFF = "${groff}/bin/nroff";
 
-      buildInputs = ops useRailsExpress [ autoreconfHook bison ]
-        ++ (op fiddleSupport libffi)
-        ++ (ops cursesSupport [ ncurses readline ])
-        ++ (op docSupport groff)
-        ++ (op zlibSupport zlib)
-        ++ (op opensslSupport openssl)
-        ++ (op gdbmSupport gdbm)
-        ++ (op yamlSupport libyaml)
-        # Looks like ruby fails to build on darwin without readline even if curses
-        # support is not enabled, so add readline to the build inputs if curses
-        # support is disabled (if it's enabled, we already have it) and we're
-        # running on darwin
-        ++ (op (!cursesSupport && stdenv.isDarwin) readline)
-        ++ (ops stdenv.isDarwin (with darwin; [ libiconv libobjc libunwind ]))
-        ++ op isRuby18 autoconf;
+        buildInputs = ops useRailsExpress [ autoreconfHook bison ]
+          ++ (op fiddleSupport libffi)
+          ++ (ops cursesSupport [ ncurses readline ])
+          ++ (op docSupport groff)
+          ++ (op zlibSupport zlib)
+          ++ (op opensslSupport openssl)
+          ++ (op gdbmSupport gdbm)
+          ++ (op yamlSupport libyaml)
+          # Looks like ruby fails to build on darwin without readline even if curses
+          # support is not enabled, so add readline to the build inputs if curses
+          # support is disabled (if it's enabled, we already have it) and we're
+          # running on darwin
+          ++ (op (!cursesSupport && stdenv.isDarwin) readline)
+          ++ (ops stdenv.isDarwin (with darwin; [ libiconv libobjc libunwind ]))
+          ++ op isRuby18 autoconf;
 
-      enableParallelBuilding = true;
+        enableParallelBuilding = true;
 
-      patches = (import ./patchsets.nix {
-        inherit patchSet useRailsExpress ops patchLevel;
-      })."${versionNoPatch}";
+        patches = (import ./patchsets.nix {
+          inherit patchSet useRailsExpress ops patchLevel;
+        })."${versionNoPatch}";
 
-      postUnpack = opString isRuby21 ''
-        rm "$sourceRoot/enc/unicode/name2ctype.h"
-      '';
+        postUnpack = opString isRuby21 ''
+          rm "$sourceRoot/enc/unicode/name2ctype.h"
+        '';
 
-      postPatch = opString (!isRuby18) (if isRuby21 then ''
-        rm tool/config_files.rb
-        cp ${config}/config.guess tool/
-        cp ${config}/config.sub tool/
-      '' else opString useRailsExpress ''
-        sed -i configure.in -e '/config.guess/d'
-        cp ${config}/config.guess tool/
-        cp ${config}/config.sub tool/
-      '');
+        postPatch = opString (!isRuby18) (if isRuby21 then ''
+          rm tool/config_files.rb
+          cp ${config}/config.guess tool/
+          cp ${config}/config.sub tool/
+        '' else opString useRailsExpress ''
+          sed -i configure.in -e '/config.guess/d'
+          cp ${config}/config.guess tool/
+          cp ${config}/config.sub tool/
+        '');
 
-      configureFlags = ["--enable-shared" "--enable-pthread"]
-        ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
-        ++ ops stdenv.isDarwin [
-          # on darwin, we have /usr/include/tk.h -- so the configure script detects
-          # that tk is installed
-          "--with-out-ext=tk"
-          # on yosemite, "generating encdb.h" will hang for a very long time without this flag
-          "--with-setjmp-type=setjmp"
-        ];
+        configureFlags = ["--enable-shared" "--enable-pthread"]
+          ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
+          ++ ops stdenv.isDarwin [
+            # on darwin, we have /usr/include/tk.h -- so the configure script detects
+            # that tk is installed
+            "--with-out-ext=tk"
+            # on yosemite, "generating encdb.h" will hang for a very long time without this flag
+            "--with-setjmp-type=setjmp"
+          ];
 
-      installFlags = stdenv.lib.optionalString docSupport "install-doc";
-      # Bundler tries to create this directory
-      postInstall = ''
+        installFlags = stdenv.lib.optionalString docSupport "install-doc";
         # Bundler tries to create this directory
-        mkdir -pv $out/${passthru.gemPath}
-        mkdir -p $out/nix-support
-        cat > $out/nix-support/setup-hook <<EOF
-        addGemPath() {
-          addToSearchPath GEM_PATH \$1/${passthru.gemPath}
-        }
+        postInstall = ''
+          # Bundler tries to create this directory
+          mkdir -pv $out/${passthru.gemPath}
+          mkdir -p $out/nix-support
+          cat > $out/nix-support/setup-hook <<EOF
+          addGemPath() {
+            addToSearchPath GEM_PATH \$1/${passthru.gemPath}
+          }
 
-        envHooks+=(addGemPath)
-        EOF
-      '' + opString useRailsExpress ''
-        rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
+          envHooks+=(addGemPath)
+          EOF
+        '' + opString useRailsExpress ''
+          rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
 
-        # Prevent the baseruby from being included in the closure.
-        sed -i '/^  CONFIG\["BASERUBY"\]/d' $rbConfig
-        sed -i "s|'--with-baseruby=${baseruby}/bin/ruby'||" $rbConfig
-      '';
+          # Prevent the baseruby from being included in the closure.
+          sed -i '/^  CONFIG\["BASERUBY"\]/d' $rbConfig
+          sed -i "s|'--with-baseruby=${baseruby}/bin/ruby'||" $rbConfig
+        '';
 
-      meta = {
-        license = stdenv.lib.licenses.ruby;
-        homepage = "http://www.ruby-lang.org/en/";
-        description = "The Ruby language";
-        platforms = stdenv.lib.platforms.all;
-      };
+        meta = {
+          license = stdenv.lib.licenses.ruby;
+          homepage = "http://www.ruby-lang.org/en/";
+          description = "The Ruby language";
+          platforms = stdenv.lib.platforms.all;
+        };
 
-      passthru = rec {
-        inherit majorVersion minorVersion teenyVersion patchLevel;
-        rubyEngine = "ruby";
-        baseRuby = baseruby;
-        libPath = "lib/${versionNoPatch}";
-        gemPath = "lib/${rubyEngine}/gems/${versionNoPatch}";
-      };
-    }
-  ) args; in self;
+        passthru = rec {
+          inherit majorVersion minorVersion teenyVersion patchLevel;
+          rubyEngine = "ruby";
+          baseRuby = baseruby;
+          libPath = "lib/${versionNoPatch}";
+          gemPath = "lib/${rubyEngine}/gems/${versionNoPatch}";
+        };
+      }
+    ) args; in self;
 
 in {
   ruby_1_8_7 = generic {
