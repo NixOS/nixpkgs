@@ -6839,6 +6839,8 @@ let
 
   libeatmydata = callPackage ../development/libraries/libeatmydata { };
 
+  libeb = callPackage ../development/libraries/libeb { };
+
   libebml = callPackage ../development/libraries/libebml { };
 
   libebur128 = callPackage ../development/libraries/libebur128 { };
