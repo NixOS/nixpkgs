@@ -3147,6 +3147,8 @@ let
 
   tmsu = callPackage ../tools/filesystems/tmsu { };
 
+  toilet = callPackage ../tools/misc/toilet { };
+
   tor = callPackage ../tools/security/tor { };
 
   tor-arm = callPackage ../tools/security/tor/tor-arm.nix { };
