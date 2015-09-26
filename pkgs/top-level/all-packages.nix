@@ -643,6 +643,8 @@ let
 
   apg = callPackage ../tools/security/apg { };
 
+  bonnie = callPackage ../tools/filesystems/bonnie { };
+
   grc = callPackage ../tools/misc/grc { };
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
