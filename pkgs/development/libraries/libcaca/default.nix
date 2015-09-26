@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses}:
+{ stdenv, fetchurl, ncurses, zlib }:
 
 stdenv.mkDerivation rec {
   name = "libcaca-0.99.beta19";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-x11 --disable-imlib2 --disable-doc";
 
-  propagatedBuildInputs = [ncurses];
+  propagatedBuildInputs = [ ncurses zlib ];
 
   meta = {
     homepage = http://libcaca.zoy.org/;
