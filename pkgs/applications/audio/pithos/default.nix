@@ -1,4 +1,5 @@
-{ fetchFromGitHub, stdenv, pythonPackages, gtk3, gobjectIntrospection, libnotify, gst_all_1 }:
+{ fetchFromGitHub, stdenv, pythonPackages, gtk3, gobjectIntrospection, libnotify
+, gst_all_1, wrapGAppsHook }:
 
 pythonPackages.buildPythonPackage rec {
   name = "pithos-${version}";
@@ -15,16 +16,12 @@ pythonPackages.buildPythonPackage rec {
     substituteInPlace setup.py --replace "/usr/share" "$out/share"
   '';
 
+  buildInputs = [ wrapGAppsHook ];
+
   propagatedBuildInputs =
     [ gtk3 gobjectIntrospection libnotify ] ++
     (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad ]) ++
     (with pythonPackages; [ pygobject3 pylast ]);
-
-  postInstall = ''
-    wrapProgram "$out/bin/pithos" \
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
-  '';
 
   meta = with stdenv.lib; {
     description = "Pandora Internet Radio player for GNOME";
