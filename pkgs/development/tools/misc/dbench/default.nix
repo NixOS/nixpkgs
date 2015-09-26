@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    cp -R loadfiles/* $out/share
+    cp -R loadfiles/ $out/share/
   '';
 
   meta = with stdenv.lib; {
