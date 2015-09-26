@@ -1,4 +1,4 @@
-{ fetchhg, stdenv
+{ fetchurl, stdenv
 , cmake, mesa
 , freetype, freeimage, zziplib, randrproto, libXrandr
 , libXaw, freeglut, libXt, libpng, boost, ois
@@ -10,10 +10,9 @@
 stdenv.mkDerivation {
   name = "ogre-1.9.0";
 
-  src = fetchhg {
-    url = "https://bitbucket.org/sinbad/ogre/src/";
-    rev = "v1-9-0";
-    sha256 = "06hnf4c2kpycm3mglwdyywvj931k8ym808c15xighpyd8h9j4xdi";
+  src = fetchurl {
+     url = "https://bitbucket.org/sinbad/ogre/get/v1-9-0.tar.gz";
+     sha256 = "0p8gyn293qn3iyiy1smfmjd9zpnjb8h2zgvff8778fwh0ylbmlpa";
   };
 
   cmakeFlags = [ "-DOGRE_INSTALL_SAMPLES=yes" ]
