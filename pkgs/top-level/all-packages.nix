@@ -13607,6 +13607,8 @@ let
 
   oilrush = callPackage ../games/oilrush { };
 
+  openmw = callPackage ../games/openmw { };
+
   openra = callPackage ../games/openra { lua = lua5_1; };
 
   openttd = callPackage ../games/openttd {
