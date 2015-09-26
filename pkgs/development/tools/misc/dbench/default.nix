@@ -1,7 +1,7 @@
 {stdenv, fetchgit, autoconf, popt, zlib}: 
 
 stdenv.mkDerivation rec {
-  name = "dbench-20101121";
+  name = "dbench-2013-01-01";
 
   buildInputs = [autoconf popt zlib];
 
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = git://git.samba.org/sahlberg/dbench.git;
-    rev = "8b5143bcc0f4409553392fdf12fd21c95a075fae";
-    sha256 = "607a62b7ff2e9b1393980777e0ba239215dd8145bc1a34649bcbe2b1e567006d";
+    rev = "65b19870ed8d25bff14cafa1c30beb33f1fb6597";
+    sha256 = "0hzn7xr58y7f01hp02d0ciy2n5awskypfbdc56ff1vkr1b12i2p9";
   };
 
   postInstall = ''
