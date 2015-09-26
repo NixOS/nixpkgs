@@ -5091,23 +5091,13 @@ let
   bundlerEnv = callPackage ../development/interpreters/ruby/bundler-env { };
 
   ruby_1_8_7 = callPackage ../development/interpreters/ruby/ruby-1.8.7.nix { };
-  ruby_1_9_3 = callPackage ../development/interpreters/ruby/ruby-1.9.3.nix {
-    inherit (darwin) libobjc;
-  };
-  ruby_2_0_0 = callPackage ../development/interpreters/ruby/ruby-2.0.0.nix { };
-  ruby_2_1_0 = callPackage ../development/interpreters/ruby/ruby-2.1.0.nix { };
-  ruby_2_1_1 = callPackage ../development/interpreters/ruby/ruby-2.1.1.nix { };
-  ruby_2_1_2 = callPackage ../development/interpreters/ruby/ruby-2.1.2.nix { };
-  ruby_2_1_3 = callPackage ../development/interpreters/ruby/ruby-2.1.3.nix { };
-  ruby_2_1_6 = callPackage ../development/interpreters/ruby/ruby-2.1.6.nix {
-    inherit (darwin) libobjc libunwind;
-  };
-  ruby_2_2_0 = callPackage ../development/interpreters/ruby/ruby-2.2.0.nix {
-    inherit (darwin) libobjc libunwind;
-  };
-  ruby_2_2_2 = callPackage ../development/interpreters/ruby/ruby-2.2.2.nix {
-    inherit (darwin) libobjc libunwind;
-  };
+  inherit (callPackages ../development/interpreters/ruby {})
+    # TODO: uncomment when ruby_1_8_7 doesn't need autoconf
+    # ruby_1_8_7
+    ruby_1_9_3
+    ruby_2_0_0
+    ruby_2_1_0 ruby_2_1_1 ruby_2_1_2 ruby_2_1_3 ruby_2_1_6
+    ruby_2_2_0 ruby_2_2_2;
 
   # Ruby aliases
   ruby = ruby_2_2;
