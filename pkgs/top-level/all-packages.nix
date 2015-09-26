@@ -13780,6 +13780,8 @@ let
     SDL_image = pkgsi686Linux.SDL_image.override {
       libpng = pkgsi686Linux.libpng12;
     };
+    inherit (pkgsi686Linux.perlPackages) XMLLibXML XMLLibXSLT;
+    enableDFHack = config.dwarfFortress.enableDFHack or false;
   };
 
   dwarf-therapist = callPackage ../games/dwarf-therapist { };
