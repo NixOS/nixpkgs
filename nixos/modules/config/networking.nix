@@ -39,6 +39,16 @@ in
       '';
     };
 
+    networking.extraResolvconfConf = lib.mkOption {
+      type = types.lines;
+      default = "";
+      example = "libc=NO";
+      description = ''
+        Extra configuration to append to <filename>resolvconf.conf</filename>.
+      '';
+    };
+
+
     networking.proxy = {
 
       default = lib.mkOption {
@@ -150,6 +160,7 @@ in
             '' + optionalString dnsmasqResolve ''
               dnsmasq_conf=/etc/dnsmasq-conf.conf
               dnsmasq_resolv=/etc/dnsmasq-resolv.conf
+            '' + cfg.extraResolvconfConf + ''
             '';
 
       } // (optionalAttrs config.services.resolved.enable (
