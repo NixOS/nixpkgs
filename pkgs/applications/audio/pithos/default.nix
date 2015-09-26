@@ -5,6 +5,8 @@ pythonPackages.buildPythonPackage rec {
   name = "pithos-${version}";
   version = "1.1.1";
 
+  namePrefix = "";
+
   src = fetchFromGitHub {
     owner = "pithos";
     repo  = "pithos";
