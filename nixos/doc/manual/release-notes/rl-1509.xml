@@ -104,18 +104,18 @@ which contains the latest Elm platform.</para></listitem>
 
   <para>Local printers are no longer shared or advertised by
   default. This behavior can be changed by enabling
-  <literal>services.printing.defaultShared</literal> or
-  <literal>services.printing.browsing</literal> respectively.</para>
+  <option>services.printing.defaultShared</option> or
+  <option>services.printing.browsing</option> respectively.</para>
 </listitem>
 
 <listitem>
   <para>
     The VirtualBox host and guest options have been named more
     consistently. They can now found in
-    <literal>virtualisation.virtualbox.host.*</literal> instead of
-    <literal>services.virtualboxHost.*</literal> and
-    <literal>virtualisation.virtualbox.guest.*</literal> instead of
-    <literal>services.virtualboxGuest.*</literal>.
+    <option>virtualisation.virtualbox.host.*</option> instead of
+    <option>services.virtualboxHost.*</option> and
+    <option>virtualisation.virtualbox.guest.*</option> instead of
+    <option>services.virtualboxGuest.*</option>.
   </para>
 </listitem>
 
@@ -203,7 +203,7 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.cabal-install
     The <literal>locate</literal> service no longer indexes the Nix store
     by default, preventing packages with potentially numerous versions from
     cluttering the output. Indexing the store can be activated by setting
-    <literal>services.locate.includeStore = true</literal>.
+    <option>services.locate.includeStore = true</option>.
   </para>
 </listitem>
 
@@ -239,7 +239,7 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.cabal-install
       discovered in the Diffie-Hellman key exchange</link> can now
       replace OpenSSH's default version with one they generated
       themselves using the new
-      <literal>services.openssh.moduliFile</literal> option.
+      <option>services.openssh.moduliFile</option> option.
       </para>
   </listitem>
 
