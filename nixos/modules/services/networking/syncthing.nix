@@ -54,12 +54,15 @@ in
         description = "Syncthing service";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        environment.STNORESTART = "placeholder";  # do not self-restart
+        environment.STNORESTART = "yes";  # do not self-restart
+        environment.STNOUPGRADE = "yes";
         serviceConfig = {
           User = "${cfg.user}";
           PermissionsStartOnly = true;
-          Restart = "always";
+          Restart = "on-failure";
           ExecStart = "${pkgs.syncthing}/bin/syncthing -no-browser -home=${cfg.dataDir}";
+          SuccessExitStatus = "2 3 4";
+          RestartForceExitStatus="3 4";
         };
       };
 
