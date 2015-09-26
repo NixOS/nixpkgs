@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "67e9dd9682ca8c181e84e66c76245a4a8f6205834f915a2c021cdfeb22049e3a";
   };
 
+  patches = [ ./proc_path.diff ];
+
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
