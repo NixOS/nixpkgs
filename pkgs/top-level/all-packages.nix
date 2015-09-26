@@ -9067,6 +9067,7 @@ let
   openresty = callPackage ../servers/http/openresty { };
 
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
+  opensmtpd-extras = callPackage ../servers/mail/opensmtpd/extras.nix { };
 
   openxpki = callPackage ../servers/openxpki { };
 
