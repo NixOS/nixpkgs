@@ -6112,6 +6112,8 @@ let
       pythonPackages = python3Packages;
   };
 
+  nexus = callPackage ../development/tools/repository-managers/nexus { };
+
   node_webkit = node_webkit_0_9;
 
   nwjs_0_12 = callPackage ../development/tools/node-webkit/nw12.nix {
