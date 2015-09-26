@@ -12406,6 +12406,8 @@ let
 
   opusTools = callPackage ../applications/audio/opus-tools { };
 
+  orpie = callPackage ../applications/misc/orpie { };
+
   osmo = callPackage ../applications/office/osmo { };
 
   pamixer = callPackage ../applications/audio/pamixer { };
