@@ -493,6 +493,8 @@ let
 
   aefs = callPackage ../tools/filesystems/aefs { };
 
+  bonnie = callPackage ../tools/filesystems/bonnie { };
+
   aegisub = callPackage ../applications/video/aegisub {
     wxGTK = wxGTK30;
     spellcheckSupport = config.aegisub.spellcheckSupport or true;
