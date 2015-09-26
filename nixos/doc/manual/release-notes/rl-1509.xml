@@ -117,6 +117,20 @@ which contains the latest Elm platform.</para></listitem>
     <option>virtualisation.virtualbox.guest.*</option> instead of
     <option>services.virtualboxGuest.*</option>.
   </para>
+
+  <para>
+    Also, there now is support for the <literal>vboxsf</literal> file
+    system using the <option>fileSystems</option> configuration
+    attribute. An example of how this can be used in a configuration:
+
+<programlisting>
+fileSystems."/shiny" = {
+  device = "myshinysharedfolder";
+  fsType = "vboxsf";
+};
+</programlisting>
+
+  </para>
 </listitem>
 
 <listitem>
