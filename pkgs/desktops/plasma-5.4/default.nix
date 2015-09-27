@@ -82,6 +82,6 @@ let
     systemsettings = callPackage ./systemsettings.nix {};
   };
 
-  newScope = scope: kdeApps.newScope (scope // { inherit mkDerivation; });
+  newScope = scope: kdeApps.newScope ({ inherit mkDerivation; } // scope);
 
 in lib.makeScope newScope addPackages
