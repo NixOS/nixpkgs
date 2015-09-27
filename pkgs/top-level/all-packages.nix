@@ -14132,6 +14132,7 @@ let
   plasma53 = recurseIntoAttrs (callPackage ../desktops/plasma-5.3 { });
   plasma5_latest = plasma53;
   plasma5_stable = plasma53;
+  plasma54 = recurseIntoAttrs (callPackage ../desktops/plasma-5.4 { inherit pkgs; });
 
   kde5 = kf5_stable // plasma5_stable // kdeApps_stable;
 
