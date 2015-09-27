@@ -6835,7 +6835,8 @@ let
   };
 
   libdbusmenu_qt = callPackage ../development/libraries/libdbusmenu-qt { };
-  libdbusmenu_qt5 = callPackage ../development/libraries/libdbusmenu-qt/qt5.nix { };
+
+  libdbusmenu_qt5 = callPackage ../development/libraries/libdbusmenu-qt/qt-5.4.nix { };
 
   libdc1394 = callPackage ../development/libraries/libdc1394 { };
 
@@ -7934,6 +7935,8 @@ let
   qt5 = qt54;
 
   qt5LibsFun = self: with self; {
+
+    libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
     phonon = callPackage ../development/libraries/phonon/qt5 { };
 
