@@ -11834,9 +11834,9 @@ let
 
   kermit = callPackage ../tools/misc/kermit { };
 
-  keyfinder = callPackage ../applications/audio/keyfinder { };
+  keyfinder = qt5Libs.callPackage ../applications/audio/keyfinder { };
 
-  keyfinder-cli = callPackage ../applications/audio/keyfinder-cli { };
+  keyfinder-cli = qt5Libs.callPackage ../applications/audio/keyfinder-cli { };
 
   keymon = callPackage ../applications/video/key-mon { };
 
