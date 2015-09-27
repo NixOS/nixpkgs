@@ -3685,3 +3685,6 @@ dont-distribute-packages:
   zsh-battery:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   ztail:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   Zwaluw:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
+  cabal-debian:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
+  HPi:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
+  servant-examples:                             [ i686-linux, x86_64-linux, x86_64-darwin ]

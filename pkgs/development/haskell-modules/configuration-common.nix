@@ -291,6 +291,8 @@ self: super: {
   wai-middleware-throttle = dontCheck super.wai-middleware-throttle; # https://github.com/creichert/wai-middleware-throttle/issues/1
   xkbcommon = dontCheck super.xkbcommon;
   xmlgen = dontCheck super.xmlgen;
+  hapistrano = dontCheck super.hapistrano;
+  HerbiePlugin = dontCheck super.HerbiePlugin;
 
   # These packages try to access the network.
   amqp-conduit = dontCheck super.amqp-conduit;
