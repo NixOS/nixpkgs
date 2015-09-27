@@ -11339,7 +11339,7 @@ let
 
   fluidsynth = callPackage ../applications/audio/fluidsynth { };
 
-  fmit = callPackage ../applications/audio/fmit { };
+  fmit = qt5Libs.callPackage ../applications/audio/fmit { };
 
   focuswriter = callPackage ../applications/editors/focuswriter { };
 
