@@ -12165,7 +12165,7 @@ let
     iceSupport = config.murmur.iceSupport or true;
   };
 
-  musescore = callPackage ../applications/audio/musescore { };
+  musescore = qt5Libs.callPackage ../applications/audio/musescore { };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
   mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt {
