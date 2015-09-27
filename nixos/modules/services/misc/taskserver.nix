@@ -16,6 +16,11 @@ in {
         description = "User for taskserver.";
       };
 
+      group = mkOption {
+        default = "taskd";
+        description = "Group for taskserver.";
+      };
+
       dataDir = mkOption {
         default = "/var/lib/taskserver/data/";
         description = "Data directory for taskserver.";
@@ -183,6 +188,18 @@ in {
 
     environment.systemPackages = [ pkgs.taskserver ];
 
+    users.users = optional (cfg.user == "taskd") {
+      name = "taskd";
+      uid = config.ids.uids.taskd;
+      description = "Taskserver user";
+      group = cfg.group;
+    };
+
+    users.groups = optional (cfg.group == "taskd") {
+      name = "taskd";
+      gid = config.ids.gids.taskd;
+    };
+
     systemd.services.taskserver = {
       description = "taskserver Service.";
       path = [ pkgs.taskserver ];
@@ -223,6 +240,7 @@ in {
         ExecStart = "${pkgs.taskserver}/bin/taskdctl start";
         ExecStop  = "${pkgs.taskserver}/bin/taskdctl stop";
         User = cfg.user;
+        Group = cfg.group;
       };
     };
   };
