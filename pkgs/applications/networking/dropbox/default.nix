@@ -124,5 +124,6 @@ in stdenv.mkDerivation {
     homepage = "http://www.dropbox.com";
     description = "Online stored folders (daemon version)";
     maintainers = with stdenv.lib.maintainers; [ ttuegel ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
