@@ -73,23 +73,6 @@ in {
         type = types.bool;
       };
 
-      log = mkOption {
-        default = "/tmp/taskd.log";
-        description = ''
-          Fully-qualified path name to the Taskserver log file.
-        '';
-        type = types.string;
-      };
-
-      pidFile = mkOption {
-        default = "/tmp/taskd.pid";
-        description = ''
-          Fully-qualified path name to the Taskserver PID file. This is used
-          by the 'taskdctl' script to start/stop the daemon.
-        '';
-        type = types.string;
-      };
-
       queueSize = mkOption {
         default = 10;
         description = ''
@@ -221,8 +204,6 @@ in {
               $file "${cfg.dataDir}/$file.pem"
           done
 
-          ${pkgs.taskserver}/bin/taskd config --force log "${cfg.log}"
-          ${pkgs.taskserver}/bin/taskd config --force pid.file "${cfg.pidFile}"
           ${pkgs.taskserver}/bin/taskd config --force server ${cfg.server.host}:${toString cfg.server.port}
 
           touch "${cfg.dataDir}/.is_initialized"
