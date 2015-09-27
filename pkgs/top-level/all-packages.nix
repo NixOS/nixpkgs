@@ -7974,6 +7974,7 @@ let
   };
 
   qt55Libs = lib.makeScope qt55.newScope qt5LibsFun;
+  qt5Libs = qt55Libs;
 
   qtEnv = callPackage ../development/libraries/qt-5/qt-env.nix {};
 
