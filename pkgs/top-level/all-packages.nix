@@ -14003,7 +14003,7 @@ let
 
           massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { };
 
-          networkmanagement = callPackage ../tools/networking/networkmanagement { };
+          networkmanagement = builtins.trace "`kde4.networkmanagement' is replaced by `kde4.plasma-nm', please update your configuration" plasma-nm;
 
           partitionManager = callPackage ../tools/misc/partition-manager { };
 
