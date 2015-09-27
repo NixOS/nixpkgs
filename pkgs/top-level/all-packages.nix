@@ -5843,9 +5843,9 @@ let
 
   accelio = callPackage ../development/libraries/accelio { stdenv = overrideCC stdenv gcc5; };
 
-  accounts-qt = callPackage ../development/libraries/accounts-qt { };
-
   accountsservice = callPackage ../development/libraries/accountsservice { };
+
+  accounts-qt = callPackage ../development/libraries/accounts-qt/old.nix {};
 
   acl = callPackage ../development/libraries/acl { };
 
@@ -7933,6 +7933,8 @@ let
   qt5 = qt54;
 
   qt5LibsFun = self: with self; {
+
+    accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
     libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
