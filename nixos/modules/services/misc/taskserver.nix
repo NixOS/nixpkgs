@@ -9,159 +9,175 @@ in {
   options = {
     services.taskserver = {
 
-      enable = mkEnableOption "Taskwarrior server.";
+      enable = mkEnableOption "the Taskwarrior server";
 
       user = mkOption {
+        type = types.str;
         default = "taskd";
-        description = "User for taskserver.";
+        description = "User for Taskserver.";
       };
 
       group = mkOption {
+        type = types.str;
         default = "taskd";
-        description = "Group for taskserver.";
+        description = "Group for Taskserver.";
       };
 
       dataDir = mkOption {
-        default = "/var/lib/taskserver/data/";
-        description = "Data directory for taskserver.";
         type = types.path;
+        default = "/var/lib/taskserver";
+        description = "Data directory for Taskserver.";
       };
 
       caCert = mkOption {
-        description = "Fully qualified path to the CA certificate. Optional.";
-        type = types.path;
+        type = types.nullOr types.path;
+        default = null;
+        description = "Fully qualified path to the CA certificate.";
       };
 
       ciphers = mkOption {
-        default = "NORMAL";
+        type = types.nullOr types.string;
+        default = null;
+        example = "NORMAL";
         description = ''
-          List of GnuTLS ciphers to use. See your
-          GnuTLS documentation for full details.
+          List of GnuTLS ciphers to use. See the GnuTLS documentation for full
+          details.
         '';
-        type = types.string;
       };
 
       confirmation = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Determines whether certain commands are confirmed.
         '';
-        type = types.bool;
       };
 
       debug = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Logs debugging information.
         '';
-        type = types.bool;
       };
 
       extensions = mkOption {
+        type = types.nullOr types.path;
+        default = null;
         description = ''
-          Fully qualified path of the Taskserver extension scripts.  Currently
-          there are none.
+          Fully qualified path of the Taskserver extension scripts.
+          Currently there are none.
         '';
-        type = types.path;
       };
 
       ipLog = mkOption {
-        default = true;
+        type = types.bool;
+        default = false;
         description = ''
           Logs the IP addresses of incoming requests.
         '';
-        type = types.bool;
       };
 
       queueSize = mkOption {
+        type = types.int;
         default = 10;
         description = ''
-          Size of the connection backlog.  See 'man listen'.
+          Size of the connection backlog, see <citerefentry>
+            <refentrytitle>listen</refentrytitle>
+            <manvolnum>2</manvolnum>
+          </citerefentry>.
         '';
-        type = types.int;
       };
 
       requestLimit = mkOption {
+        type = types.int;
         default = 1048576;
         description = ''
           Size limit of incoming requests, in bytes.
         '';
-        type = types.int;
       };
 
       client = {
 
         allow = mkOption {
-          default = [ "[Tt]ask [2-9]+" ];
-          description = ''
-             A comma-separated list of regular expressions that are matched
-             against the reported client id (such as "task 2.3.0").  The values
-             'all' or 'none' have special meaning. Overidden by any
-             'client.deny' entry.
-          '';
           type = types.listOf types.str;
+          default = [];
+          example = [ "[Tt]ask [2-9]+" ];
+          description = ''
+            A list of regular expressions that are matched against the reported
+            client id (such as <literal>task 2.3.0</literal>).
+
+            The values <literal>all</literal> or <literal>none</literal> have
+            special meaning. Overidden by any entry in the option
+            <option>services.taskserver.client.deny</option>.
+          '';
         };
 
         cert = mkOption {
+          type = types.nullOr types.path;
+          default = null;
           description = ''
-             Fully qualified path of the client cert.  This is used by the
-             'client' command.
+            Fully qualified path of the client cert. This is used by the
+            <command>client</command> command.
           '';
-          type = types.path;
         };
 
         deny = mkOption {
-          default = [ "[Tt]ask [2-9]+" ];
-          description = ''
-            A comma-separated list of regular expressions that are matched
-            against the reported client id (such as "task 2.3.0"). The values
-            'all' or 'none' have special meaning.  Any 'client.deny' entry
-            overrides any 'client.allow' entry.
-          '';
           type = types.listOf types.str;
+          default = [];
+          example = [ "[Tt]ask [2-9]+" ];
+          description = ''
+            A list of regular expressions that are matched against the reported
+            client id (such as <literal>task 2.3.0</literal>).
+
+            The values <literal>all</literal> or <literal>none</literal> have
+            special meaning. Any entry here overrides these in
+            <option>services.taskserver.client.allow</option>.
+          '';
         };
 
       };
 
       server = {
         host = mkOption {
+          type = types.string;
           default = "localhost";
           description = ''
             The address (IPv4, IPv6 or DNS) of the Taskserver.
           '';
-          type = types.string;
         };
 
         port = mkOption {
+          type = types.int;
           default = 53589;
           description = ''
-            Portnumber of the Taskserver.
+            Port number of the Taskserver.
           '';
-          type = types.int;
         };
 
         cert = mkOption {
+          type = types.nullOr types.path;
+          default = null;
           description = "Fully qualified path to the server certificate";
-          type = types.path;
         };
 
         crl = mkOption {
+          type = types.nullOr types.path;
+          default = null;
           description = ''
-            Fully qualified path to the server certificate
-            revocation list.
+            Fully qualified path to the server certificate revocation list.
           '';
-          type = types.path;
         };
 
         key = mkOption {
+          type = types.nullOr types.path;
+          default = null;
           description = ''
             Fully qualified path to the server key.
 
-            Note that sending the HUP signal to the Taskserver
-            causes a configuration file reload before the next
-            request is handled.
+            Note that reloading the <literal>taskserver.service</literal> causes
+            a configuration file reload before the next request is handled.
           '';
-          type = types.path;
         };
       };
     };
