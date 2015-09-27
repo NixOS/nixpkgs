@@ -7916,6 +7916,11 @@ let
 
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
+    vlc = callPackage ../applications/video/vlc {
+      qt4 = null;
+      withQt5 = true;
+    };
+
   };
 
   qt55Libs = lib.makeScope qt55.newScope qt5LibsFun;
@@ -13051,9 +13056,7 @@ let
     ffmpeg = ffmpeg_2;
   };
 
-  vlc_qt5 = vlc.override {
-    withQt5 = true;
-  };
+  vlc_qt5 = qt5Libs.vlc;
 
   vmpk = callPackage ../applications/audio/vmpk { };
 
