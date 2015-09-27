@@ -4,6 +4,60 @@ with lib;
 
 let
   cfg = config.services.taskserver;
+
+  taskd = "${pkgs.taskserver}/bin/taskd";
+
+  mkVal = val:
+    if val == true then "true"
+    else if val == false then "false"
+    else if isList val then concatStringsSep ", " val
+    else toString val;
+
+  mkConfLine = key: val: let
+    result = "${key} = ${mkVal val}";
+  in optionalString (val != null && val != []) result;
+
+  needToCreateCA = all isNull (with cfg; [
+    server.key server.cert server.crl caCert
+  ]);
+
+  configFile = pkgs.writeText "taskdrc" ''
+    # systemd related
+    daemon = false
+    log = -
+
+    # logging
+    ${mkConfLine "debug" cfg.debug}
+    ${mkConfLine "ip.log" cfg.ipLog}
+
+    # general
+    ${mkConfLine "ciphers" cfg.ciphers}
+    ${mkConfLine "confirmation" cfg.confirmation}
+    ${mkConfLine "extensions" cfg.extensions}
+    ${mkConfLine "queue.size" cfg.queueSize}
+    ${mkConfLine "request.limit" cfg.requestLimit}
+
+    # client
+    ${mkConfLine "client.cert" cfg.client.cert}
+    ${mkConfLine "client.allow" cfg.client.allow}
+    ${mkConfLine "client.deny" cfg.client.deny}
+
+    # server
+    server = ${cfg.server.host}:${toString cfg.server.port}
+    ${mkConfLine "server.crl" cfg.server.crl}
+
+    # certificates
+    ${if needToCreateCA then ''
+    ca.cert = ${cfg.dataDir}/keys/ca.cert
+    server.cert = ${cfg.dataDir}/keys/server.cert
+    server.key = ${cfg.dataDir}/keys/server.key
+    '' else ''
+    ca.cert = ${cfg.caCert}
+    server.cert = ${cfg.server.cert}
+    server.key = ${cfg.server.key}
+    ''}
+  '';
+
 in {
 
   options = {
@@ -199,43 +253,95 @@ in {
       gid = config.ids.gids.taskd;
     };
 
+    systemd.services.taskserver-ca = mkIf needToCreateCA {
+      requiredBy = [ "taskserver.service" ];
+      after = [ "taskserver-init.service" ];
+      description = "Initialize CA for TaskServer";
+      serviceConfig.Type = "oneshot";
+      serviceConfig.UMask = "0077";
+
+      script = ''
+        mkdir -m 0700 -p "${cfg.dataDir}/keys"
+        chown root:root "${cfg.dataDir}/keys"
+
+        if [ ! -e "${cfg.dataDir}/keys/ca.key" ]; then
+          ${pkgs.gnutls}/bin/certtool -p \
+            --bits 2048 \
+            --outfile "${cfg.dataDir}/keys/ca.key"
+          ${pkgs.gnutls}/bin/certtool -s \
+            --template "${pkgs.writeText "taskserver-ca.template" ''
+              cn = ${cfg.server.host}
+              cert_signing_key
+              ca
+            ''}" \
+            --load-privkey "${cfg.dataDir}/keys/ca.key" \
+            --outfile "${cfg.dataDir}/keys/ca.cert"
+
+          chgrp "${cfg.group}" "${cfg.dataDir}/keys/ca.cert"
+          chmod g+r "${cfg.dataDir}/keys/ca.cert"
+        fi
+
+        if [ ! -e "${cfg.dataDir}/keys/server.key" ]; then
+          ${pkgs.gnutls}/bin/certtool -p \
+            --bits 2048 \
+            --outfile "${cfg.dataDir}/keys/server.key"
+
+          ${pkgs.gnutls}/bin/certtool -s \
+            --template "${pkgs.writeText "taskserver-cert.template" ''
+              cn = ${cfg.server.host}
+              tls_www_server
+              encryption_key
+              signing_key
+            ''}" \
+            --load-ca-privkey "${cfg.dataDir}/keys/ca.key" \
+            --load-ca-certificate "${cfg.dataDir}/keys/ca.cert" \
+            --load-privkey "${cfg.dataDir}/keys/server.key" \
+            --outfile "${cfg.dataDir}/keys/server.cert"
+
+          chgrp "${cfg.group}" "${cfg.dataDir}/keys/server.key"
+          chmod g+r "${cfg.dataDir}/keys/server.key"
+          chmod a+r "${cfg.dataDir}/keys/server.cert"
+        fi
+
+        chmod go+x "${cfg.dataDir}/keys"
+      '';
+    };
+
+    systemd.services.taskserver-init = {
+      requiredBy = [ "taskserver.service" ];
+      description = "Initialize Taskserver Data Directory";
+
+      preStart = ''
+        mkdir -m 0770 -p "${cfg.dataDir}"
+        chown "${cfg.user}:${cfg.group}" "${cfg.dataDir}"
+      '';
+
+      script = ''
+        ${taskd} init
+        echo "include ${configFile}" > "${cfg.dataDir}/config"
+        touch "${cfg.dataDir}/.is_initialized"
+      '';
+
+      environment.TASKDDATA = cfg.dataDir;
+
+      unitConfig.ConditionPathExists = "!${cfg.dataDir}/.is_initialized";
+
+      serviceConfig.Type = "oneshot";
+      serviceConfig.User = cfg.user;
+      serviceConfig.Group = cfg.group;
+      serviceConfig.PermissionsStartOnly = true;
+    };
+
     systemd.services.taskserver = {
-      description = "taskserver Service.";
-      path = [ pkgs.taskserver ];
+      description = "Taskwarrior Server";
 
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      preStart = ''
-        mkdir -p "${cfg.dataDir}"
-
-        if [[ ! -e "${cfg.dataDir}/.is_initialized" ]]
-        then
-          ${pkgs.taskserver}/bin/taskd init
-          ${pkgs.taskserver}/pki/generate
-          for file in {{client,server}.{cert,key},server.crl,ca.cert}
-          do
-            cp $file.pem "${cfg.dataDir}/"
-            ${pkgs.taskserver}/bin/taskd config --force \
-              $file "${cfg.dataDir}/$file.pem"
-          done
-
-          ${pkgs.taskserver}/bin/taskd config --force server ${cfg.server.host}:${toString cfg.server.port}
-
-          touch "${cfg.dataDir}/.is_initialized"
-        else
-          # already initialized
-          echo "Taskd was initialized. Not initializing again"
-        fi
-      '';
-
-      environment = {
-        TASKDDATA = "${cfg.dataDir}";
-      };
+      environment.TASKDDATA = cfg.dataDir;
 
       serviceConfig = {
-        ExecStart = "${pkgs.taskserver}/bin/taskdctl start";
-        ExecStop  = "${pkgs.taskserver}/bin/taskdctl stop";
+        ExecStart = "@${taskd} taskd server";
         User = cfg.user;
         Group = cfg.group;
       };
