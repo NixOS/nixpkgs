@@ -7704,8 +7704,6 @@ let
 
   openbabel = callPackage ../development/libraries/openbabel { };
 
-  openbr = callPackage ../development/libraries/openbr { };
-
   opencascade = callPackage ../development/libraries/opencascade {
     tcl = tcl-8_5;
     tk = tk-8_5;
@@ -7939,6 +7937,8 @@ let
     libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
     libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
+
+    openbr = callPackage ../development/libraries/openbr { };
 
     phonon = callPackage ../development/libraries/phonon/qt5 { };
 
