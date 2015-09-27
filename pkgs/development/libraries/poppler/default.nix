@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, fetchpatch, pkgconfig, libiconv, libintlOrEmpty
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
-, minimal ? false, qt4Support ? false, qt4 ? null, qt5Support ? false, qt5 ? null
+, minimal ? false, qt4Support ? false, qt4 ? null, qt5Support ? false, qtbase ? null
 , utils ? false, suffix ? "glib"
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     [ zlib freetype fontconfig libjpeg lcms curl openjpeg ]
     ++ optional (!minimal) cairo
     ++ optional qt4Support qt4
-    ++ optional qt5Support qt5.base;
+    ++ optional qt5Support qtbase;
 
   nativeBuildInputs = [ pkgconfig libiconv ] ++ libintlOrEmpty;
 

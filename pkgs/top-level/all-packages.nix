@@ -7819,10 +7819,7 @@ let
     suffix = "qt4";
   };
 
-  poppler_qt5 = poppler.override {
-    qt5Support = true;
-    suffix = "qt5";
-  };
+  poppler_qt5 = qt5Libs.popplerQt;
 
   poppler_utils = poppler.override { suffix = "utils"; utils = true; };
 
@@ -7909,6 +7906,12 @@ let
 
     polkitQt = callPackage ../development/libraries/polkit-qt-1 {
       withQt5 = true;
+    };
+
+    popplerQt = callPackage ../development/libraries/poppler {
+      lcms = lcms2;
+      qt5Support = true;
+      suffix = "qt5";
     };
 
   };
