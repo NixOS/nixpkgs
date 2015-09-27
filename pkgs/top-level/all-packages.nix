@@ -7956,6 +7956,8 @@ let
 
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
+    signon = callPackage ../development/libraries/signon { };
+
     vlc = callPackage ../applications/video/vlc {
       qt4 = null;
       withQt5 = true;
@@ -8117,6 +8119,8 @@ let
 
   sfml = callPackage ../development/libraries/sfml { };
 
+  signon = callPackage ../development/libraries/signon/old.nix {};
+
   skalibs = callPackage ../development/libraries/skalibs { };
 
   slang = callPackage ../development/libraries/slang { };
@@ -8146,8 +8150,6 @@ let
   sord-svn = callPackage ../development/libraries/sord/sord-svn.nix {};
 
   soundtouch = callPackage ../development/libraries/soundtouch {};
-
-  signon = callPackage ../development/libraries/signon { };
 
   spandsp = callPackage ../development/libraries/spandsp {};
 

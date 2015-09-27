@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, doxygen, qtbase }:
+{ stdenv, fetchzip, doxygen, qt5 }:
 
 stdenv.mkDerivation rec {
   name = "signon-${version}";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0q1ncmp27jrwbjkqisf0l63zzpw6bcsx5i4y86xixh8wd5arj87a";
   };
 
-  buildInputs = [ qtbase ];
+  buildInputs = [ qt5.base ];
   nativeBuildInputs = [ doxygen ];
 
   configurePhase = ''
