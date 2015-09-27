@@ -6644,6 +6644,7 @@ let
   kf512 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.12 { });
   kf5_latest = kf512;
   kf5_stable = kf510;
+  kf513 = recurseIntoAttrs (import ../development/libraries/kde-frameworks-5.13 { inherit pkgs; });
 
   kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
 
