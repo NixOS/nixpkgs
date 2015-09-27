@@ -489,6 +489,7 @@
       radicale = 234;
       syncthing = 237;
       #mfi = 238; # unused
+      taskserver = 239;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
