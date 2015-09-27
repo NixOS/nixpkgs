@@ -17960,6 +17960,25 @@ let
     };
   };
 
+  ofxhome = buildPythonPackage rec {
+	name = "ofxhome-0.3.1";
+	src = pkgs.fetchurl {
+	  url = "https://pypi.python.org/packages/source/o/ofxhome/${name}.tar.gz";
+	  md5 = "98e8ef92ccd443ab750fcb0741efe816";
+	};
+
+	buildInputs = with self; [ nose ];
+
+	# ImportError: No module named tests
+	doCheck = false;
+
+    meta = {
+      homepage = "https://github.com/captin411/ofxhome";
+      description = "ofxhome.com financial institution lookup REST client";
+      license = licenses.mit;
+    };
+  };
+
   ofxparse = buildPythonPackage rec {
 	name = "ofxparse-0.14";
 	src = pkgs.fetchurl {
