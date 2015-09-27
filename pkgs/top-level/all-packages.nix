@@ -7604,7 +7604,7 @@ let
     qt = qt4;
   };
 
-  mlt-qt5 = callPackage ../development/libraries/mlt/qt5.nix { };
+  mlt-qt5 = callPackage ../development/libraries/mlt/qt-5.4.nix { };
 
   movit = callPackage ../development/libraries/movit { };
 
@@ -7937,6 +7937,8 @@ let
     libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
     libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
+
+    mlt = callPackage ../development/libraries/mlt/qt-5.5.nix {};
 
     openbr = callPackage ../development/libraries/openbr { };
 
