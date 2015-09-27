@@ -6276,6 +6276,8 @@ let
 
   libgit2 = callPackage ../development/libraries/git2 { };
 
+  libgit2_0_21 = callPackage ../development/libraries/git2/0.21.nix { };
+
   glew = callPackage ../development/libraries/glew { };
 
   glfw = glfw3;

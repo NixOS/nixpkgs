@@ -369,12 +369,13 @@ let
 
   gitg = callPackage ./misc/gitg { 
     webkitgtk = webkitgtk24x;
+    libgit2 = pkgs.libgit2_0_21;
   };
 
   libgda = callPackage ./misc/libgda { };
 
   libgit2-glib = callPackage ./misc/libgit2-glib {
-    libgit2 = pkgs.libgit2.override { libssh2 = null; };
+    libgit2 = pkgs.libgit2_0_21.override { libssh2 = null; };
   };
 
   libmediaart = callPackage ./misc/libmediaart { };
