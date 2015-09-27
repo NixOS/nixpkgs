@@ -14,8 +14,13 @@ stdenv.mkDerivation rec {
     --with-xkb-config-root=${xkeyboard_config}/etc/X11/xkb
   '';
 
+  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i 's/,--version-script=.*$//' Makefile
+  '';
+
   meta = {
     description = "A library to handle keyboard descriptions";
     homepage = http://xkbcommon.org;
   };
 }
+
