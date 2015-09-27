@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt5, cmake }:
+{ stdenv, fetchurl, qtbase, qtscript, cmake }:
 
 stdenv.mkDerivation rec {
   name = "grantlee-5.0.0";
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0qdifp1sg87j3869xva5ai2d6d5ph7z4b85wv1fypf2k5sljpwpa";
   };
 
-  buildInputs = [ cmake qt5.base qt5.script ];
+  buildInputs = [ qtbase qtscript ];
+  nativeBuildInputs = [ cmake ];
 
   meta = {
     description = "Qt5 port of Django template system";

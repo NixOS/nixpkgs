@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, kdelibs, kdepimlibs, boost }:
+{ stdenv, fetchurl, automoc4, cmake, perl, pkgconfig
+, kdelibs, kdepimlibs, boost }:
 
 stdenv.mkDerivation rec {
   name = "zanshin-0.2.1";
@@ -7,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "http://files.kde.org/zanshin/${name}.tar.bz2";
     sha256 = "155k72vk7kw0p0x9dhlky6q017kanzcbwvp4dpf1hcbr1dsr55fx";
   };
+
+  nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
 
   buildInputs = [ kdelibs kdepimlibs boost ];
 

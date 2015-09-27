@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, cmake, gettext, gtk2, gtk3, kdelibs
-, libxcb, libpthreadstubs, libXdmcp, pkgconfig, glib, gdk_pixbuf }:
+{ stdenv, fetchurl, automoc4, cmake, gettext, perl, pkgconfig
+, gtk2, gtk3, kdelibs, libxcb, libpthreadstubs, libXdmcp
+, glib, gdk_pixbuf
+}:
 
 stdenv.mkDerivation {
   name = "kde-gtk-config-2.2.1";
@@ -9,18 +11,10 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    cmake
-    gdk_pixbuf
-    gettext
-    glib
-    gtk2
-    gtk3
-    kdelibs
-    libxcb
-    libpthreadstubs
-    libXdmcp
-    pkgconfig
+    gdk_pixbuf glib gtk2 gtk3 kdelibs libxcb libpthreadstubs libXdmcp
   ];
+
+  nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig ];
 
   patches = [
     ./kde-gtk-config-2.2.1-install-paths.patch

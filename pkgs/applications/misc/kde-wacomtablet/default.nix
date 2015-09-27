@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, kdelibs, gettext, xf86_input_wacom }:
+{ stdenv, fetchurl, automoc4, cmake, gettext, perl, pkgconfig
+, kdelibs, xf86_input_wacom }:
 
 stdenv.mkDerivation rec {
   name = "wacomtablet-2.1.0";
@@ -10,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kdelibs xf86_input_wacom ];
 
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig ];
 
   meta = with stdenv.lib; {
     description = "KDE Wacom graphic tablet configuration tool";

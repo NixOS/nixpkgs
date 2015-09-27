@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, kdelibs, polkit_qt4, gettext }:
+{ stdenv, fetchurl, automoc4, cmake, gettext, perl, pkgconfig
+, kdelibs, polkit_qt4 }:
 
 stdenv.mkDerivation rec {
   name = "polkit-kde-agent-1-0.99.0";
@@ -10,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kdelibs polkit_qt4 ];
 
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig ];
 
   patchPhase = "sed -e s/KDE4_AUTOSTART/AUTOSTART/ -i CMakeLists.txt";
 

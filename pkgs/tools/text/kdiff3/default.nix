@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, cmake, kdelibs, gettext }:
+{ stdenv, fetchurl, automoc4, cmake, perl, pkgconfig
+, kdelibs, gettext
+}:
 
 stdenv.mkDerivation rec {
   name = "kdiff3-0.9.98";
@@ -8,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ kdelibs ];
-  nativeBuildInputs = [ cmake gettext ];
+  nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig ];
 
   meta = {
     homepage = http://kdiff3.sourceforge.net/;

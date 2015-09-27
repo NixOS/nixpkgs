@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, cmake, gettext, kdelibs, qimageblitz, kdepimlibs, gpgme }:
+{ stdenv, fetchurl, automoc4, cmake, gettext, perl, pkgconfig
+, kdelibs, qimageblitz, kdepimlibs, gpgme
+}:
 
 stdenv.mkDerivation rec {
   name = "basket-1.81";
@@ -12,8 +14,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kdelibs qimageblitz kdepimlibs gpgme ];
 
-  nativeBuildInputs = [ cmake gettext ];
-  
+  nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig ];
+
   meta = {
     description = "A multi-purpose note-taking application";
     homepage = http://basket.kde.org/;

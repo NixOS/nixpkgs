@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, qt5 }:
+{ stdenv, fetchFromGitHub, fftw, qtbase }:
 
 let version = "2.1"; in
 stdenv.mkDerivation {
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ fftw qt5.base ];
+  buildInputs = [ fftw qtbase ];
 
   postPatch = ''
     substituteInPlace LibKeyFinder.pro \

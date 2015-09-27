@@ -2,7 +2,7 @@
 , freeglut, freealut, mesa, libICE, libjpeg, openal, openscenegraph, plib
 , libSM, libunwind, libX11, xproto, libXext, xextproto, libXi, inputproto
 , libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
-, makeDesktopItem, qt5
+, makeDesktopItem, qtbase
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     freeglut freealut mesa libICE libjpeg openal openscenegraph plib
     libSM libunwind libX11 xproto libXext xextproto libXi inputproto
-    libXmu libXt simgear zlib boost cmake libpng udev fltk13 apr qt5.base
+    libXmu libXt simgear zlib boost cmake libpng udev fltk13 apr qtbase
   ];
 
   preConfigure = ''

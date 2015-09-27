@@ -1,4 +1,6 @@
-{stdenv, fetchurl, kdelibs, cmake, gettext }:
+{ stdenv, fetchurl, automoc4, cmake, gettext, perl, pkgconfig
+, shared_mime_info, kdelibs
+}:
 
 stdenv.mkDerivation rec {
   name = "kile-2.1.3";
@@ -8,7 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "18nfi37s46v9xav7vyki3phasddgcy4m7nywzxis198vr97yqqx0";
   };
 
-  nativeBuildInputs = [ cmake gettext ];
+  nativeBuildInputs = [
+    automoc4 cmake gettext perl pkgconfig shared_mime_info
+  ];
   buildInputs = [ kdelibs ];
 
   # for KDE 4.7 the nl translations fail since kile-2.1.2
