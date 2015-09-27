@@ -13908,7 +13908,7 @@ let
         libusb = libusb1;
         libcanberra = libcanberra_kde;
         boost = boost155;
-        kdelibs = kdeApps_stable.kdelibs;
+        kdelibs = kdeApps_15_08.kdelibs;
       }
       ../desktops/kde-4.14;
 
@@ -13933,10 +13933,7 @@ let
 
           colord-kde = callPackage ../tools/misc/colord-kde { };
 
-          digikam = if builtins.compareVersions "4.9" kde4.release == 1 then
-              callPackage ../applications/graphics/digikam/2.nix { }
-            else
-              callPackage ../applications/graphics/digikam { };
+          digikam = callPackage ../applications/graphics/digikam { };
 
           eventlist = callPackage ../applications/office/eventlist {};
 

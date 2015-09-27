@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kdelibs, imlib, cmake, pkgconfig, gettext }:
+{ stdenv, fetchurl, automoc4, kdelibs, imlib, cmake, pkgconfig, gettext }:
 
 stdenv.mkDerivation rec {
   name = "kuickshow-0.9.1";
@@ -10,5 +10,5 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kdelibs imlib ];
 
-  nativeBuildInputs = [ cmake gettext pkgconfig ];
+  nativeBuildInputs = [ automoc4 cmake gettext pkgconfig ];
 }

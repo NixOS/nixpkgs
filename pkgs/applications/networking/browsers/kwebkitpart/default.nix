@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, kdelibs }:
+{ stdenv, fetchgit, automoc4, cmake, perl, pkgconfig, kdelibs }:
 
 stdenv.mkDerivation rec {
   name = "kwebkitpart-${version}";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   patches = [ ./CVE-2014-8600.diff ];
 
   buildInputs = [ kdelibs ];
+
+  nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

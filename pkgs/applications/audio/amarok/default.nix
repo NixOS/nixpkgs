@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, lib, qtscriptgenerator, perl, gettext, curl
-, libxml2, mysql, taglib, taglib_extras, loudmouth , kdelibs
-, qca2, libmtp, liblastfm, libgpod, pkgconfig, automoc4, phonon
-, strigi, soprano, qjson, ffmpeg, libofa, nepomuk_core ? null }:
+{ stdenv, fetchurl, lib, automoc4, cmake, perl, pkgconfig
+, qtscriptgenerator, gettext, curl , libxml2, mysql, taglib
+, taglib_extras, loudmouth , kdelibs , qca2, libmtp, liblastfm, libgpod
+, phonon , strigi, soprano, qjson, ffmpeg, libofa, nepomuk_core ? null
+}:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -16,9 +17,13 @@ stdenv.mkDerivation rec {
 
   QT_PLUGIN_PATH="${qtscriptgenerator}/lib/qt4/plugins";
 
-  buildInputs = [ qtscriptgenerator stdenv.cc.libc gettext curl
-    libxml2 mysql.lib taglib taglib_extras loudmouth kdelibs automoc4 phonon strigi
-    soprano qca2 libmtp liblastfm libgpod pkgconfig qjson ffmpeg libofa nepomuk_core ];
+  nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
+
+  buildInputs = [
+    qtscriptgenerator stdenv.cc.libc gettext curl libxml2 mysql.lib
+    taglib taglib_extras loudmouth kdelibs phonon strigi soprano qca2
+    libmtp liblastfm libgpod qjson ffmpeg libofa nepomuk_core
+  ];
 
   cmakeFlags = "-DKDE4_BUILD_TESTS=OFF";
 
