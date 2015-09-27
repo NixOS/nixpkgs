@@ -7856,7 +7856,7 @@ let
 
   qca2 = callPackage ../development/libraries/qca2 { qt = qt4; };
 
-  qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
+  qca-qt5 = callPackage ../development/libraries/qca-qt5/old.nix { };
 
   qimageblitz = callPackage ../development/libraries/qimageblitz {};
 
@@ -7913,6 +7913,8 @@ let
       qt5Support = true;
       suffix = "qt5";
     };
+
+    qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, openssl, pkgconfig, qtbase }:
+{ stdenv, fetchgit, cmake, openssl, pkgconfig, qt5 }:
 
 let
   rev = "088ff642fc2990871e3555e73c94c9287e7514a9";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "fe1c7d5d6f38445a4032548ae3ea22c74d4327dfaf2dc88492a95facbca398f8";
   };
 
-  buildInputs = [ openssl qtbase ];
+  buildInputs = [ openssl qt5.base ];
   nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = with stdenv.lib; {
