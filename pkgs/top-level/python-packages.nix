@@ -17960,6 +17960,19 @@ let
     };
   };
 
+  ofxclient = buildPythonPackage rec {
+    name = "ofxclient-1.3.8";
+	src = pkgs.fetchurl {
+	  url = "https://pypi.python.org/packages/source/o/ofxclient/${name}.tar.gz";
+	  md5 = "a632e157f9c98524bf9302a0c6788174";
+	};
+
+	# ImportError: No module named tests
+	doCheck = false;
+
+	propagatedBuildInputs = with self; [ ofxhome ofxparse beautifulsoup keyring argparse ];
+  };
+
   ofxhome = buildPythonPackage rec {
 	name = "ofxhome-0.3.1";
 	src = pkgs.fetchurl {
