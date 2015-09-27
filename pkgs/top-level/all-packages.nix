@@ -1136,7 +1136,7 @@ let
 
   convmv = callPackage ../tools/misc/convmv { };
 
-  cool-retro-term = callPackage ../applications/misc/cool-retro-term { };
+  cool-retro-term = qt5Libs.callPackage ../applications/misc/cool-retro-term { };
 
   coreutils = callPackage ../tools/misc/coreutils {
     aclSupport = stdenv.isLinux;
