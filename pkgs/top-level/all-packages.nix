@@ -1285,7 +1285,10 @@ let
 
   di = callPackage ../tools/system/di { };
 
-  diffoscope = callPackage ../tools/misc/diffoscope { };
+  diffoscope = callPackage ../tools/misc/diffoscope {
+    pythonPackages = python3Packages;
+    rpm = rpm.override { python = python3; };
+  };
 
   diffstat = callPackage ../tools/text/diffstat { };
 
