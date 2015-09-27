@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, sbclBootstrap, clisp, which}:
+{ stdenv, fetchurl, sbclBootstrap, sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit", which }:
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
@@ -9,10 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l8nrf5qnr8c9hr6bn1kd86mnr2s37b493azh9rrk3v59f56wnnr";
   };
 
-  buildInputs = [ which ]
-    ++ (stdenv.lib.optional stdenv.isDarwin sbclBootstrap)
-    ++ (stdenv.lib.optional stdenv.isLinux clisp)
-    ;
+  buildInputs = [ which ];
 
   patchPhase = ''
     echo '"${version}.nixos"' > version.lisp-expr
@@ -22,7 +19,10 @@ stdenv.mkDerivation rec {
                (pushnew x features))
              (disable (x)
                (setf features (remove x features))))
-        (enable :sb-thread))) " > customize-target-features.lisp
+        #-arm
+        (enable :sb-thread)
+        #+arm
+        (enable :arm))) " > customize-target-features.lisp
 
     pwd
 
@@ -64,13 +64,9 @@ stdenv.mkDerivation rec {
     export HOME=$PWD/test-home
   '';
 
-  buildPhase = if stdenv.isLinux
-    then ''
-      sh make.sh clisp --prefix=$out
-    ''
-    else ''
-      sh make.sh --prefix=$out --xc-host='${sbclBootstrap}/bin/sbcl --core ${sbclBootstrap}/share/sbcl/sbcl.core --disable-debugger --no-userinit --no-sysinit'
-    '';
+  buildPhase = ''
+    sh make.sh --prefix=$out --xc-host="${sbclBootstrapHost}"
+  '';
 
   installPhase = ''
     INSTALL_ROOT=$out sh install.sh
