@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, libsndfile, qt5 }:
+{ stdenv, fetchFromGitHub, fftw, libsndfile, qtbase, qtmultimedia }:
 
 let
 
@@ -39,7 +39,7 @@ in stdenv.mkDerivation {
     owner = "gillesdegottex";
   };
 
-  buildInputs = [ fftw libsndfile qt5.base qt5.multimedia ];
+  buildInputs = [ fftw libsndfile qtbase qtmultimedia ];
 
   postPatch = ''
     substituteInPlace dfasma.pro --replace '$$DFASMAVERSIONGITPRO' '${version}'
@@ -52,6 +52,10 @@ in stdenv.mkDerivation {
   '';
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    wrapQtProgram "$out/bin/dfasma"
+  '';
 
   meta = with stdenv.lib; {
     inherit version;

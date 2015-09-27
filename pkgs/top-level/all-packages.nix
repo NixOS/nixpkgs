@@ -11002,7 +11002,7 @@ let
     plugins = [];
   };
 
-  dfasma = callPackage ../applications/audio/dfasma { };
+  dfasma = qt5Libs.callPackage ../applications/audio/dfasma { };
 
   dia = callPackage ../applications/graphics/dia {
     inherit (pkgs.gnome) libart_lgpl libgnomeui;
