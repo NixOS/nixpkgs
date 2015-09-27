@@ -7900,8 +7900,6 @@ let
 
   qjson = callPackage ../development/libraries/qjson { };
 
-  qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
-
   qoauth = callPackage ../development/libraries/qoauth { };
 
   quazip = callPackage ../development/libraries/quazip {
@@ -7955,6 +7953,8 @@ let
     };
 
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
+
+    qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
 
     signon = callPackage ../development/libraries/signon { };
 
