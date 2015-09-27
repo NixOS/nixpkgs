@@ -64,6 +64,6 @@ let
     print-manager = callPackage ./print-manager.nix {};
   };
 
-  newScope = scope: pkgs.kf513.newScope (scope // { inherit mkDerivation; });
+  newScope = scope: pkgs.kf513.newScope ({ inherit mkDerivation; } // scope);
 
 in lib.makeScope newScope packages
