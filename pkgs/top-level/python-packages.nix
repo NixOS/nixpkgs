@@ -17960,6 +17960,22 @@ let
     };
   };
 
+  ofxparse = buildPythonPackage rec {
+	name = "ofxparse-0.14";
+	src = pkgs.fetchurl {
+	  url = "https://pypi.python.org/packages/source/o/ofxparse/${name}.tar.gz";
+	  md5 = "4ad8a34e008d4893a61eadd593176f0f";
+	};
+
+	propagatedBuildInputs = with self; [ six beautifulsoup4 ];
+
+    meta = {
+      homepage = "http://sites.google.com/site/ofxparse";
+      description = "Tools for working with the OFX (Open Financial Exchange) file format";
+      license = licenses.mit;
+    };
+  };
+
   ofxtools = buildPythonPackage rec {
     name = "ofxtools-0.3.8";
 	src = pkgs.fetchurl {
