@@ -6646,6 +6646,38 @@ let
 
     k9copy = callPackage ../applications/video/k9copy {};
 
+    quassel = callPackage ../applications/networking/irc/quassel/qt-5.nix {
+      monolithic = true;
+      daemon = false;
+      client = false;
+      withKDE = true;
+      dconf = gnome3.dconf;
+      tag = "-kf5";
+    };
+
+    quasselClient = quassel.override {
+      monolithic = false;
+      client = true;
+      tag = "-client-kf5";
+    };
+
+    quassel_qt5 = quassel.override {
+      withKDE = false;
+      tag = "-qt5";
+    };
+
+    quasselClient_qt5 = quasselClient.override {
+      withKDE = false;
+      tag = "-client-qt5";
+    };
+
+    quasselDaemon = quassel.override {
+      monolithic = false;
+      daemon = true;
+      tag = "-daemon-qt5";
+      withKDE = false;
+    };
+
   };
 
   kf513Packages = lib.makeScope kf513.newScope kf5PackagesFun;
@@ -12444,47 +12476,6 @@ let
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
   qtractor = callPackage ../applications/audio/qtractor { };
-
-  quassel_qt5 = callPackage ../applications/networking/irc/quassel {
-    monolithic = true;
-    daemon = false;
-    client = false;
-    withKDE = false;
-    useQt5 = true;
-    qt = qt5;
-    dconf = gnome3.dconf;
-    tag = "-qt5";
-  };
-
-  quasselClient_qt5 = quassel_qt5.override {
-    monolithic = false;
-    client = true;
-    tag = "-client-qt5";
-  };
-
-  quasselDaemon_qt5 = quassel_qt5.override {
-    monolithic = false;
-    daemon = true;
-    tag = "-daemon-qt5";
-  };
-
-  quassel_kf5 = callPackage ../applications/networking/irc/quassel {
-    monolithic = true;
-    daemon = false;
-    client = false;
-    withKDE = true;
-    useQt5 = true;
-    qt = qt5;
-    kf5 = kf510;
-    dconf = gnome3.dconf;
-    tag = "-kf5";
-  };
-
-  quasselClient_kf5 = quassel_kf5.override {
-    monolithic = false;
-    client = true;
-    tag = "-client-kf5";
-  };
 
   quirc = callPackage ../tools/graphics/quirc {};
 
