@@ -13559,7 +13559,7 @@ let
 
   fairymax = callPackage ../games/fairymax {};
 
-  flightgear = callPackage ../games/flightgear { };
+  flightgear = qt5Libs.callPackage ../games/flightgear { };
 
   freecell-solver = callPackage ../games/freecell-solver { };
 
