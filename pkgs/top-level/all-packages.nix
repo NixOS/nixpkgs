@@ -6632,10 +6632,6 @@ let
     lua = lua5_1;
   };
 
-  k9copy = callPackage ../applications/video/k9copy {
-    kf5 = kf510;
-  };
-
   keybinder3 = callPackage ../development/libraries/keybinder3 {
     automake = automake111x;
   };
@@ -6645,6 +6641,14 @@ let
   kf5_latest = kf512;
   kf5_stable = kf510;
   kf513 = recurseIntoAttrs (import ../development/libraries/kde-frameworks-5.13 { inherit pkgs; });
+
+  kf5PackagesFun = self: with self; {
+
+    k9copy = callPackage ../applications/video/k9copy {};
+
+  };
+
+  kf513Packages = lib.makeScope kf513.newScope kf5PackagesFun;
 
   kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
 
