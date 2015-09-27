@@ -999,7 +999,7 @@ let
 
   davix = callPackage ../tools/networking/davix { };
 
-  cantata = callPackage ../applications/audio/cantata { };
+  cantata = qt5Libs.callPackage ../applications/audio/cantata { };
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
 
