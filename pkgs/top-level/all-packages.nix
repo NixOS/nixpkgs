@@ -7962,6 +7962,8 @@ let
 
     signon = callPackage ../development/libraries/signon { };
 
+    telepathy = callPackage ../development/libraries/telepathy/qt5 { };
+
     vlc = callPackage ../applications/video/vlc {
       qt4 = null;
       withQt5 = true;
@@ -8267,7 +8269,7 @@ let
 
   telepathy_qt = callPackage ../development/libraries/telepathy/qt { };
 
-  telepathy_qt5 = callPackage ../development/libraries/telepathy/qt5 { };
+  telepathy_qt5 = callPackage ../development/libraries/telepathy/qt5/old.nix {};
 
   tevent = callPackage ../development/libraries/tevent {
     python = python2;

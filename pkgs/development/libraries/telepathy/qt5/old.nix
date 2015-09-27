@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qtbase, pkgconfig, python, libxslt, dbus_glib, dbus_daemon
+{ stdenv, fetchurl, cmake, qt5, pkgconfig, python, libxslt, dbus_glib, dbus_daemon
 , telepathy_farstream, telepathy_glib, pythonDBus }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig python libxslt ];
-  propagatedBuildInputs = [ qtbase dbus_glib telepathy_farstream telepathy_glib pythonDBus ];
+  propagatedBuildInputs = [ qt5.base dbus_glib telepathy_farstream telepathy_glib pythonDBus ];
 
   cmakeFlags = [ "-DDESIRED_QT_VERSION=5" ];
 
