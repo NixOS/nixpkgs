@@ -7803,9 +7803,7 @@ let
 
   polkit_qt4 = callPackage ../development/libraries/polkit-qt-1 { };
 
-  polkit_qt5 = callPackage ../development/libraries/polkit-qt-1 {
-    withQt5 = true;
-  };
+  polkit_qt5 = callPackage ../development/libraries/polkit-qt-1/old.nix { withQt5 = true; };
 
   policykit = callPackage ../development/libraries/policykit { };
 
@@ -7908,6 +7906,10 @@ let
     phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt5 { };
 
     phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt5 { };
+
+    polkitQt = callPackage ../development/libraries/polkit-qt-1 {
+      withQt5 = true;
+    };
 
   };
 
