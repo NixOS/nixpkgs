@@ -191,7 +191,28 @@ in {
       after = [ "network.target" ];
 
       preStart = ''
-        mkdir -p ${cfg.dataDir}
+        mkdir -p "${cfg.dataDir}"
+
+        if [[ ! -e "${cfg.dataDir}/.is_initialized" ]]
+        then
+          ${pkgs.taskserver}/bin/taskd init
+          ${pkgs.taskserver}/pki/generate
+          for file in {{client,server}.{cert,key},server.crl,ca.cert}
+          do
+            cp $file.pem "${cfg.dataDir}/"
+            ${pkgs.taskserver}/bin/taskd config --force \
+              $file "${cfg.dataDir}/$file.pem"
+          done
+
+          ${pkgs.taskserver}/bin/taskd config --force log "${cfg.log}"
+          ${pkgs.taskserver}/bin/taskd config --force pid.file "${cfg.pidFile}"
+          ${pkgs.taskserver}/bin/taskd config --force server ${cfg.server.host}:${toString cfg.server.port}
+
+          touch "${cfg.dataDir}/.is_initialized"
+        else
+          # already initialized
+          echo "Taskd was initialized. Not initializing again"
+        fi
       '';
 
       environment = {
