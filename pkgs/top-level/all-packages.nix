@@ -7137,8 +7137,6 @@ let
 
   libkate = callPackage ../development/libraries/libkate { };
 
-  libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
-
   libksba = callPackage ../development/libraries/libksba { };
 
   libksi = callPackage ../development/libraries/libksi { };
@@ -7939,6 +7937,8 @@ let
     grantlee = callPackage ../development/libraries/grantlee/5.x.nix { };
 
     libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
+
+    libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
 
     phonon = callPackage ../development/libraries/phonon/qt5 { };
 
