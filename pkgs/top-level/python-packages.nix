@@ -17960,6 +17960,19 @@ let
     };
   };
 
+  ofxtools = buildPythonPackage rec {
+    name = "ofxtools-0.3.8";
+	src = pkgs.fetchurl {
+	  url = "https://pypi.python.org/packages/source/o/ofxtools/${name}.tar.gz";
+	  md5 = "4ac3c3f5223816bc2c48dd818fd434d8";
+	};
+    meta = {
+      homepage = "https://github.com/csingley/ofxtools";
+      description = "Library for working with Open Financial Exchange (OFX) formatted data used by financial institutions";
+      license = licenses.mit;
+    };
+  };
+
   basemap = buildPythonPackage rec {
     name = "basemap-1.0.7";
     disabled = ! isPy27;
