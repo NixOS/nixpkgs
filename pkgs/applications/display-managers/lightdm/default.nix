@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pam, pkgconfig, libxcb, glib, libXdmcp, itstool, libxml2
 , intltool, xlibsWrapper, libxklavier, libgcrypt, libaudit
-, qt4 ? null, qt5 ? null
+, qt4 ? null
+, withQt5 ? false, qtbase
 }:
 
 let
@@ -20,14 +21,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig pam libxcb glib libXdmcp itstool libxml2 intltool libxklavier libgcrypt
     qt4 libaudit
-  ] ++ stdenv.lib.optional (qt5 != null) qt5.base;
+  ] ++ stdenv.lib.optional withQt5 qtbase;
 
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--disable-tests"
   ] ++ stdenv.lib.optional (qt4 != null) "--enable-liblightdm-qt"
-    ++ stdenv.lib.optional ((qt5.base or null) != null) "--enable-liblightdm-qt5";
+    ++ stdenv.lib.optional withQt5 "--enable-liblightdm-qt5";
 
   installFlags = [
     "sysconfdir=\${out}/etc"

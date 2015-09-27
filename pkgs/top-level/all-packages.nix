@@ -12682,12 +12682,12 @@ let
 
   dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
 
-  lightdm = callPackage ../applications/display-managers/lightdm {
+  lightdm = qt5Libs.callPackage ../applications/display-managers/lightdm {
     qt4 = null;
-    qt5 = null;
+    withQt5 = false;
   };
 
-  lightdm_qt = lightdm.override { qt5 = qt5; };
+  lightdm_qt = lightdm.override { withQt5 = true; };
 
   lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm-gtk-greeter { };
 
