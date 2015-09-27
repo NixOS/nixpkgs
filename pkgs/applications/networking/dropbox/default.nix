@@ -1,6 +1,7 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper
 , dbus_libs, gcc, glib, libdrm, libffi, libICE, libSM
 , libX11, libXmu, ncurses, popt, qt5, zlib
+, qtbase, qtdeclarative, qtwebkit
 }:
 
 # this package contains the daemon version of dropbox
@@ -44,7 +45,7 @@ let
   ldpath = stdenv.lib.makeSearchPath "lib"
     [
       dbus_libs gcc glib libdrm libffi libICE libSM libX11
-      libXmu ncurses popt qt5.base qt5.declarative qt5.webkit
+      libXmu ncurses popt qtbase qtdeclarative qtwebkit
       zlib
     ];
 
