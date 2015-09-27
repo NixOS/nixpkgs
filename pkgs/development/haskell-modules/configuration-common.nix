@@ -900,4 +900,7 @@ self: super: {
   # https://github.com/haskell/cabal/issues/2661
   serversession-backend-acid-state_1_0_1 = dontCheck super.serversession-backend-acid-state_1_0_1;
 
+  # https://github.com/sol/hpack/issues/53
+  hpack = dontCheck super.hpack;
+
 }
