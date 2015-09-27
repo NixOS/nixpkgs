@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, cmake, mesa, pkgconfig, libpulseaudio
-, qtbase, qtquick1, qttools
-, debug ? false }:
+{ stdenv, fetchurl, cmake, mesa, pkgconfig, libpulseaudio, qt5, debug ? false }:
 
 with stdenv.lib;
 
@@ -16,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "05nshngk03ln90vsjz44dx8al576f4vd5fvhs1l0jmx13jb9q551";
   };
 
-  buildInputs = [ mesa qtbase qtquick1 qttools libpulseaudio ];
+  buildInputs = [ mesa qt5.base qt5.quick1 qt5.tools libpulseaudio ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 

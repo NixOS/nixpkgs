@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, gst_all_1, phonon, pkgconfig, qtbase, debug ? false }:
+{ stdenv, fetchurl, cmake, gst_all_1, phonon_qt5, pkgconfig, qt5, debug ? false }:
 
 with stdenv.lib;
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1q1ix6zsfnh6gfnpmwp67s376m7g7ahpjl1qp2fqakzb5cgzgq10";
   };
 
-  buildInputs = with gst_all_1; [ gstreamer gst-plugins-base phonon qtbase ];
+  buildInputs = with gst_all_1; [ gstreamer gst-plugins-base phonon_qt5 qt5.base ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
