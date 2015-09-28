@@ -32,7 +32,7 @@ let cfg = config.ec2; in
     boot.loader.grub.version = if cfg.hvm then 2 else 1;
     boot.loader.grub.device = if cfg.hvm then "/dev/xvda" else "nodev";
     boot.loader.grub.timeout = 0;
-    boot.loader.grub.extraPerEntryConfig = "root (hd0${lib.optionalString cfg.hvm ",0"})";
+    boot.loader.grub.extraPerEntryConfig = mkIf (!cfg.hvm) "root (hd0)";
 
     boot.initrd.postDeviceCommands =
       ''
