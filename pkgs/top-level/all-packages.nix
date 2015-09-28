@@ -11037,7 +11037,6 @@ let
   });
   emacs24Macport_24_5 = lowPrio (callPackage ../applications/editors/emacs-24/macport-24.5.nix {
     stdenv = pkgs.clangStdenv;
-    inherit (darwin.apple_sdk.frameworks) Carbon;
   });
   emacs24Macport = self.emacs24Macport_24_5;
 
