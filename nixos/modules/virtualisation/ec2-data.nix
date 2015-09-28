@@ -35,10 +35,8 @@ with lib;
                 mkdir -m 0700 -p /root/.ssh
                 $wget http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key > /root/key.pub
                 if [ $? -eq 0 -a -e /root/key.pub ]; then
-                    if ! grep -q -f /root/key.pub /root/.ssh/authorized_keys; then
-                        cat /root/key.pub >> /root/.ssh/authorized_keys
-                        echo "new key added to authorized_keys"
-                    fi
+                    cat /root/key.pub >> /root/.ssh/authorized_keys
+                    echo "new key added to authorized_keys"
                     chmod 600 /root/.ssh/authorized_keys
                     rm -f /root/key.pub
                 fi
