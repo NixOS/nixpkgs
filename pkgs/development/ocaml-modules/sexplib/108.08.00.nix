@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, typeconv, camlp4}:
+{stdenv, fetchurl, ocaml, findlib, type_conv, camlp4}:
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ocaml findlib];
-  propagatedBuildInputs = [typeconv camlp4];
+  propagatedBuildInputs = [type_conv camlp4];
 
   createFindlibDestdir = true;
 

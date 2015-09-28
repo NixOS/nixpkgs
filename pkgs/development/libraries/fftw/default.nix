@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ++ optional (precision != "double") "--enable-${precision}"
     # all x86_64 have sse2
     ++ optional stdenv.isx86_64 "--enable-sse2"
-    ++ optional (stdenv.cc.cc.isGNU or false) "--enable-openmp";
+    ++ optional stdenv.cc.isGNU "--enable-openmp";
 
   enableParallelBuilding = true;
 

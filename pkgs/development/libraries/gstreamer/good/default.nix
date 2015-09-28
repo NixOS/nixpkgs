@@ -3,9 +3,12 @@
 , libv4l, libdv, libavc1394, libiec61883
 , libvpx, speex, flac, taglib
 , cairo, gdk_pixbuf, aalib, libcaca
-, libsoup, pulseaudio
+, libsoup, libpulseaudio, libintlOrEmpty
 }:
 
+let
+  inherit (stdenv.lib) optionals optionalString;
+in
 stdenv.mkDerivation rec {
   name = "gst-plugins-good-1.4.5";
 
@@ -18,7 +21,7 @@ stdenv.mkDerivation rec {
       code, LGPL or LGPL-compatible for the supporting library).
     '';
     license     = licenses.lgpl2Plus;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ iyzsong ];
   };
 
@@ -31,9 +34,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gst-plugins-base orc bzip2
-    libv4l libdv libavc1394 libiec61883
-    libvpx speex flac taglib
+    libdv libvpx speex flac taglib
     cairo gdk_pixbuf aalib libcaca
-    libsoup pulseaudio
-  ];
+    libsoup
+  ]
+  ++ libintlOrEmpty
+  ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 ];
+
+  LDFLAGS = optionalString stdenv.isDarwin "-lintl";
 }

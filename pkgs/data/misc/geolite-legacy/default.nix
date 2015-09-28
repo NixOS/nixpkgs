@@ -1,37 +1,43 @@
 { stdenv, fetchurl }:
 
 let
-  fetchDB = name: sha256: fetchurl {
-    inherit sha256;
-    url = "https://geolite.maxmind.com/download/geoip/database/${name}";
+  fetchDB = src: name: sha256: fetchurl {
+    inherit name sha256;
+    url = "https://geolite.maxmind.com/download/geoip/database/${src}";
   };
 
   # Annoyingly, these files are updated without a change in URL. This means that
   # builds will start failing every month or so, until the hashes are updated.
-  version = "2015-05-07";
+  version = "2015-09-22";
 in
 stdenv.mkDerivation {
   name = "geolite-legacy-${version}";
 
-  srcGeoIP = fetchDB "GeoLiteCountry/GeoIP.dat.gz"
-    "15p8is7jml8xsy7a8afsjq7q20pkisbk5b7nj465ljaz5svq6rgv";
-  srcGeoIPv6 = fetchDB "GeoIPv6.dat.gz"
-    "0apiypf500k9k89x6zm1109gw6j9xs83c80iyl17rxlik1hhqf8g";
-  srcGeoLiteCity = fetchDB "GeoLiteCity.dat.xz"
-    "12j44586jmvk1jnxs345lgdgl9izn51xgh1m2jm7lklsyw13b2nk";
-  srcGeoLiteCityv6 = fetchDB "GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz"
-    "1jlxd60l7ic7md0d93fhiyd2vqms1fcirp6wkm0glh347j64srsb";
-  srcGeoIPASNum = fetchDB "asnum/GeoIPASNum.dat.gz"
-    "1y5b68s1giw01vw98c99qdhjiaxx6l4hrc2mx4rdaja46zic4maz";
-  srcGeoIPASNumv6 = fetchDB "asnum/GeoIPASNumv6.dat.gz"
-    "0crl31yc11w4jzgvbr9pgqd7x6ivpsgsip19s1g5xl71qbpmmjxm";
+  srcGeoIP = fetchDB
+    "GeoLiteCountry/GeoIP.dat.gz" "GeoIP.dat.gz"
+    "11xv6ws0gzyj9bf1j1g67cklkkl6s4wb6z6n7kxjcxnn2274nfy0";
+  srcGeoIPv6 = fetchDB
+    "GeoIPv6.dat.gz" "GeoIPv6.dat.gz"
+    "1q5vgk522wq5ybhbw86zk8njgg611kc46a22vkrp08vklbni3akz";
+  srcGeoLiteCity = fetchDB
+    "GeoLiteCity.dat.xz" "GeoIPCity.dat.xz"
+    "07hx9g6kif75icsblcdk64rq13w2knpns4lrxdbf63mmqbqxj29g";
+  srcGeoLiteCityv6 = fetchDB
+    "GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz" "GeoIPCityv6.dat.gz"
+    "0f3y1cpjfd4q55a2kvhzsklmmp6k19v9vsdsjxr4sapc8f5fgfc9";
+  srcGeoIPASNum = fetchDB
+    "asnum/GeoIPASNum.dat.gz" "GeoIPASNum.dat.gz"
+    "02vd80bg1hz458i7zfhvr50za1m97l6cqnwsabbby4v09pnlh50v";
+  srcGeoIPASNumv6 = fetchDB
+    "asnum/GeoIPASNumv6.dat.gz" "GeoIPASNumv6.dat.gz"
+    "1gs79avdx30is31mki82nz66l553ksaiwqcdbrd770ayy85v9pnj";
 
   meta = with stdenv.lib; {
     inherit version;
     description = "GeoLite Legacy IP geolocation databases";
     homepage = https://geolite.maxmind.com/download/geoip;
-    license = with licenses; cc-by-sa-30;
-    platforms = with platforms; linux;
+    license = licenses.cc-by-sa-30;
+    platforms = platforms.all;
     maintainers = with maintainers; [ nckx ];
   };
 

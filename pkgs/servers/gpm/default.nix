@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, automake, autoconf, libtool, flex, bison, ncurses, texinfo }:
+{ stdenv, fetchurl, automake, autoconf, libtool, flex, bison, texinfo
+
+# Optional Dependencies
+, ncurses ? null
+}:
 
 stdenv.mkDerivation rec {
   name = "gpm-1.20.7";
@@ -8,31 +12,29 @@ stdenv.mkDerivation rec {
     sha256 = "13d426a8h403ckpc8zyf7s2p5rql0lqbg2bv0454x0pvgbfbf4gh";
   };
 
-  buildInputs = [ automake autoconf libtool flex bison ncurses texinfo ];
+  nativeBuildInputs = [ automake autoconf libtool flex bison texinfo ];
+  buildInputs = [ ncurses ];
 
   preConfigure = ''
     ./autogen.sh
-    sed -e 's/[$](MKDIR)/mkdir -p /' -i doc/Makefile.in
   '';
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    (if ncurses == null then "--without-curses" else "--with-curses")
   ];
 
-  # Its configure script does not allow --disable-static
-  # Disabling this, we make cross-builds easier, because having
-  # cross-built static libraries we either have to disable stripping
-  # or fixing the gpm users, because there -lgpm will fail.
+  # Provide libgpm.so for compatability
   postInstall = ''
-    rm -f $out/lib/*.a
-    ln -s $out/lib/libgpm.so.2 $out/lib/libgpm.so
+    ln -sv $out/lib/libgpm.so.2 $out/lib/libgpm.so
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.nico.schottelius.org/software/gpm/;
     description = "A daemon that provides mouse support on the Linux console";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ eelco wkennington ];
   };
 }

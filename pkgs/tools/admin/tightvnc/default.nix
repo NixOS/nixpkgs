@@ -1,4 +1,5 @@
-{stdenv, fetchurl, x11, zlib, libjpeg, imake, gccmakedep, libXmu, libXaw, libXpm, libXp , perl, xauth, fontDirectories}:
+{ stdenv, fetchurl, xlibsWrapper, zlib, libjpeg, imake, gccmakedep, libXmu
+, libXaw, libXpm, libXp , perl, xauth, fontDirectories, openssh }:
 
 stdenv.mkDerivation {
   name = "tightvnc-1.3.10";
@@ -12,8 +13,50 @@ stdenv.mkDerivation {
   inherit xauth fontDirectories perl;
   gcc = stdenv.cc.cc;
 
-  buildInputs = [x11 zlib libjpeg imake gccmakedep libXmu libXaw libXpm libXp xauth];
-  builder = ./builder.sh;
+  buildInputs = [ xlibsWrapper zlib libjpeg imake gccmakedep libXmu libXaw
+                  libXpm libXp xauth openssh ];
+
+  patchPhase = ''
+    fontPath=
+    for i in $fontDirectories; do
+      for j in $(find $i -name fonts.dir); do
+        addToSearchPathWithCustomDelimiter "," fontPath $(dirname $j)
+      done
+    done
+
+    sed -i "s@/usr/bin/ssh@${openssh}/bin/ssh@g" vncviewer/vncviewer.h
+  '';
+
+  buildPhase = ''
+    xmkmf
+    make World
+    sed -e 's@/usr/bin/perl@${perl}/bin/perl@' \
+        -e 's@unix/:7100@'$fontPath'@' \
+        -i vncserver
+
+    cd Xvnc
+    sed -e 's@.* CppCmd .*@#define CppCmd		'$gcc'/bin/cpp@' -i config/cf/linux.cf
+    sed -e 's@.* CppCmd .*@#define CppCmd		'$gcc'/bin/cpp@' -i config/cf/Imake.tmpl
+    sed -i \
+        -e 's@"uname","xauth","Xvnc","vncpasswd"@"uname","Xvnc","vncpasswd"@g' \
+        -e "s@\<xauth\>@${xauth}/bin/xauth@g" \
+        ../vncserver
+    ./configure
+    make
+    cd ..
+  '';
+
+  installPhase = ''
+    mkdir -p $out/bin
+    mkdir -p $out/share/man/man1
+    ./vncinstall $out/bin $out/share/man
+
+    # fix HTTP client:
+    t=$out/share/tightvnc
+    mkdir -p $t
+    sed -i "s@/usr/local/vnc/classes@$out/vnc/classes@g" $out/bin/vncserver
+    cp -r classes $t
+  '';
 
   meta = {
     license = stdenv.lib.licenses.gpl2Plus;

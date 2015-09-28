@@ -14,8 +14,6 @@ rec {
     http://heanet.dl.sourceforge.net/sourceforge/
     http://surfnet.dl.sourceforge.net/sourceforge/
     http://dfn.dl.sourceforge.net/sourceforge/
-    http://mesh.dl.sourceforge.net/sourceforge/
-    http://ovh.dl.sourceforge.net/sourceforge/
     http://osdn.dl.sourceforge.net/sourceforge/
     http://kent.dl.sourceforge.net/sourceforge/
   ];
@@ -153,10 +151,14 @@ rec {
 
   # ImageMagick mirrors, see http://www.imagemagick.org/script/download.php.
   imagemagick = [
-    ftp://ftp.nluug.nl/pub/ImageMagick/
+    http://www.imagemagick.org/download/
+    ftp://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/ # also contains older versions removed from most mirrors
+    http://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/
     ftp://ftp.imagemagick.org/pub/ImageMagick/
-    ftp://ftp.imagemagick.net/pub/ImageMagick/
-    ftp://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/
+    http://ftp.fifi.org/ImageMagick/
+    ftp://ftp.fifi.org/ImageMagick/
+    http://imagemagick.mirrorcatalogs.com/
+    ftp://imagemagick.mirrorcatalogs.com/imagemagick
   ];
 
   # CPAN mirrors.
@@ -171,6 +173,7 @@ rec {
 
   # Debian.
   debian = [
+    http://httpredir.debian.org/debian/
     ftp://ftp.au.debian.org/debian/
     ftp://ftp.de.debian.org/debian/
     ftp://ftp.es.debian.org/debian/
@@ -278,6 +281,7 @@ rec {
     http://archive.apache.org/dist/ # fallback for old releases
     ftp://ftp.funet.fi/pub/mirrors/apache.org/
     http://apache.cs.uu.nl/dist/
+    http://apache.cs.utah.edu/
   ];
 
   postgresql = [
@@ -290,6 +294,21 @@ rec {
     ftp://mirrors.kernel.org/metalab/
     ftp://ftp.gwdg.de/pub/linux/metalab/
     ftp://ftp.xemacs.org/sites/metalab.unc.edu/
+  ];
+
+  # Bioconductor mirrors (from http://bioconductor.org/about/mirrors)
+  # The commented-out ones don't seem to allow direct package downloads;
+  # they serve error messages that result in hash mismatches instead.
+  bioc = [
+    # http://bioc.ism.ac.jp/3.2/bioc/
+    # http://bioc.openanalytics.eu/3.2/bioc/
+    # http://bioconductor.fmrp.usp.br/3.2/bioc/
+    # http://mirror.aarnet.edu.au/pub/bioconductor/3.2/bioc/
+    # http://watson.nci.nih.gov/bioc_mirror/3.2/bioc/
+    http://bioconductor.jp/packages/3.2/bioc/
+    http://bioconductor.statistik.tu-dortmund.de/packages/3.2/bioc/
+    http://mirrors.ebi.ac.uk/bioconductor/packages/3.2/bioc/
+    http://mirrors.ustc.edu.cn/bioc/3.2/bioc/
   ];
 
   # CRAN mirrors (from http://cran.r-project.org/mirrors.html)
@@ -339,7 +358,6 @@ rec {
     http://cran.hafro.is/
     http://ftp.iitm.ac.in/cran/
     http://cran.repo.bppt.go.id/
-    http://cran.unej.ac.id/
     http://cran.um.ac.ir/
     http://ftp.heanet.ie/mirrors/cran.r-project.org/
     http://cran.mirror.garr.it/mirrors/CRAN/

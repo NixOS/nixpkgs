@@ -2,18 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "pecita-${version}";
-  version = "1.1";
+  version = "5.2";
 
   src = fetchurl {
-    url = "http://pecita.eu/b/Pecita.otf";
-    sha256 = "07krzpbmc5yhfbf3aklv1f150i2g1spaan9girmg3189jsn6qw6p";
+    url = "http://archive.rycee.net/pecita/${name}.tar.xz";
+    sha256 = "0ryfvxdla5iinwwin4dc1k89hk1bjq2mfdrrv67q6fdgz41l0qf0";
   };
 
-  phases = ["installPhase"];
+  phases = ["unpackPhase" "installPhase"];
 
   installPhase = ''
     mkdir -p $out/share/fonts/opentype
-    cp -v ${src} $out/share/fonts/opentype/Pecita.otf
+    cp -v Pecita.otf $out/share/fonts/opentype/Pecita.otf
   '';
 
   meta = with stdenv.lib; {

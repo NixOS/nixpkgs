@@ -1,28 +1,34 @@
-{ fetchurl, stdenv, SDL, SDL_image, SDL_mixer, curl, gettext, libogg, libvorbis, mesa, openal }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, SDL2, SDL2_image, SDL2_mixer
+, curl, gettext, libogg, libvorbis, mesa, openal, physfs, boost, glew
+, libiconv }:
 
-let
-
-    version = "0.1.3";
-
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "supertux-${version}";
+  version = "0.3.5a";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/supertux.berlios/supertux-${version}.tar.bz2";
-    sha256 = "15xdq99jy4hayr96jpqcp15rbr9cs5iamjirafajcrkpa61mi4h0";
+  src = fetchFromGitHub {
+    owner = "SuperTux";
+    repo = "supertux";
+    rev = "v${version}";
+    sha256 = "0f522wsv0gx7v1h70x8xznklaqr5bm2l9h7ls9vjywy0z4iy1ahp";
   };
 
-  buildInputs = [ SDL SDL_image SDL_mixer curl gettext libogg libvorbis mesa openal ];
+  buildInputs = [ pkgconfig cmake SDL2 SDL2_image SDL2_mixer curl gettext
+                  libogg libvorbis mesa openal physfs boost glew libiconv ];
 
-  patches = [ ./g++4.patch ];
+  preConfigure = ''
+    patchShebangs configure
+  '';
 
-  meta = {
+  postInstall = ''
+    mkdir $out/bin
+    ln -s $out/games/supertux2 $out/bin
+  '';
+
+  meta = with stdenv.lib; {
     description = "Classic 2D jump'n run sidescroller game";
-
-    homepage = http://supertux.lethargik.org/index.html;
-
-    license = stdenv.lib.licenses.gpl2;
+    homepage = http://supertux.github.io/;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ pSub ];
   };
 }

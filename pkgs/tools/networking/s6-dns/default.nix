@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.0.0.2";
+  version = "2.0.0.4";
 
 in stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/s6-dns";
     rev = "refs/tags/v${version}";
-    sha256 = "0rsw19r9hwxb0xj9xs1rwb7fa21wwbsnfq3p2nfg4lf6cc64b39r";
+    sha256 = "0h2s0r0g0qi74aw04c0jap09yjzzprwc6ihknx8bqgbzv08yv03w";
   };
 
   dontDisableStatic = true;
@@ -32,6 +32,7 @@ in stdenv.mkDerivation rec {
     description = "A suite of DNS client programs and libraries for Unix systems";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
+    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
   };
 
 }

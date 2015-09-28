@@ -491,7 +491,7 @@ in
 
     services.journald.rateLimitBurst = mkOption {
       default = 100;
-      type = types.uniq types.int;
+      type = types.int;
       description = ''
         Configures the rate limiting burst limit (number of messages per
         interval) that is applied to all messages generated on the system.
@@ -639,14 +639,20 @@ in
     system.activationScripts.systemd = stringAfter [ "groups" ]
       ''
         mkdir -m 0755 -p /var/lib/udev
-        mkdir -p /var/log/journal
-        chmod 0755 /var/log/journal
 
-        # Make all journals readable to users in the wheel and adm
-        # groups, in addition to those in the systemd-journal group.
-        # Users can always read their own journals.
-        ${pkgs.acl}/bin/setfacl -nm g:wheel:rx,d:g:wheel:rx,g:adm:rx,d:g:adm:rx /var/log/journal || true
+        if ! [ -e /etc/machine-id ]; then
+          ${systemd}/bin/systemd-machine-id-setup
+        fi
+
+        # Keep a persistent journal. Note that systemd-tmpfiles will
+        # set proper ownership/permissions.
+        mkdir -m 0700 -p /var/log/journal
       '';
+
+    users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
+    users.extraGroups.systemd-network.gid = config.ids.gids.systemd-network;
+    users.extraUsers.systemd-resolve.uid = config.ids.uids.systemd-resolve;
+    users.extraGroups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
 
     # Target for ‘charon send-keys’ to hook into.
     users.extraGroups.keys.gid = config.ids.gids.keys;
@@ -711,6 +717,14 @@ in
         })
         (filterAttrs (name: service: service.startAt != "") cfg.services);
 
+    # Generate timer units for all services that have a ‘startAt’ value.
+    systemd.user.timers =
+      mapAttrs (name: service:
+        { wantedBy = [ "timers.target" ];
+          timerConfig.OnCalendar = service.startAt;
+        })
+        (filterAttrs (name: service: service.startAt != "") cfg.user.services);
+
     systemd.sockets.systemd-journal-gatewayd.wantedBy =
       optional config.services.journald.enableHttpGateway "sockets.target";
 
@@ -722,6 +736,7 @@ in
         startSession = true;
       };
 
+    environment.etc."tmpfiles.d/systemd.conf".source = "${systemd}/example/tmpfiles.d/systemd.conf";
     environment.etc."tmpfiles.d/x11.conf".source = "${systemd}/example/tmpfiles.d/x11.conf";
 
     environment.etc."tmpfiles.d/nixos.conf".text =
@@ -729,17 +744,25 @@ in
         # This file is created automatically and should not be modified.
         # Please change the option ‘systemd.tmpfiles.rules’ instead.
 
-        z /var/log/journal 2755 root systemd-journal - -
-        z /var/log/journal/%m 2755 root systemd-journal - -
-        z /var/log/journal/%m/* 0640 root systemd-journal - -
-
         ${concatStringsSep "\n" cfg.tmpfiles.rules}
       '';
 
+    # Some overrides to upstream units.
+    systemd.services."systemd-backlight@".restartIfChanged = false;
+    systemd.services."systemd-rfkill@".restartIfChanged = false;
     systemd.services."user@".restartIfChanged = false;
-
-    systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-journal-flush.restartIfChanged = false;
+    systemd.services.systemd-journald.restartIfChanged = false; # FIXME: shouldn't be necessary with systemd 219
+    systemd.services.systemd-random-seed.restartIfChanged = false;
+    systemd.services.systemd-remount-fs.restartIfChanged = false;
+    systemd.services.systemd-update-utmp.restartIfChanged = false;
+    systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
+    systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
+    systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
+
+    # Don't bother with certain units in containers.
+    systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
+    systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
 
   };
 

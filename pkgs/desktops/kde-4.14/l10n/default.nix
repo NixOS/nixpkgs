@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, kdelibs, gettext, release, branch, stable }:
+{ stdenv, fetchurl, automoc4, cmake, perl, pkgconfig
+, kdelibs, gettext, release, branch, stable
+}:
 
 let
 
@@ -18,7 +20,11 @@ let
 
       buildInputs = [ gettext kdelibs ];
 
-      cmakeFlags = "-Wno-dev";
+      nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
+
+      cmakeFlags = [
+        "-Wno-dev"
+      ];
 
       meta = {
         description = "KDE translation for ${lang}";

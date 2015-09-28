@@ -1,5 +1,7 @@
 { stdenv, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
+, langObjC ? stdenv.isDarwin
+, langObjCpp ? stdenv.isDarwin
 , langJava ? false
 , langAda ? false
 , langVhdl ? false
@@ -13,10 +15,12 @@
 , libelf                      # optional, for link-time optimizations (LTO)
 , cloog ? null, isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null, boehmgc ? null
-, zip ? null, unzip ? null, pkgconfig ? null, gtk ? null, libart_lgpl ? null
+, zip ? null, unzip ? null, pkgconfig ? null
+, gtk ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
 , libXrender ? null, xproto ? null, renderproto ? null, xextproto ? null
 , libXrandr ? null, libXi ? null, inputproto ? null, randrproto ? null
+, x11Support ? langJava
 , gnatboot ? null
 , enableMultilib ? false
 , enablePlugin ? true             # whether to support user-supplied plug-ins
@@ -52,7 +56,7 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "4.9.2";
+let version = "4.9.3";
 
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
@@ -60,13 +64,13 @@ let version = "4.9.2";
     enableParallelBuilding = true;
 
     patches = [ ]
-      ++ optional enableParallelBuilding ./parallel-bconfig.patch
-      ++ optional (cross != null) ./libstdc++-target.patch
-      # ++ optional noSysDirs ./no-sys-dirs.patch
+      ++ optionals enableParallelBuilding [ ../parallel-bconfig.patch ./parallel-strsignal.patch ]
+      ++ optional (cross != null) ../libstdc++-target.patch
+      ++ optional noSysDirs ../no-sys-dirs.patch
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
       # target libraries and tools.
-      ++ optional langAda ./gnat-cflags.patch
-      ++ optional langFortran ./gfortran-driving.patch;
+      ++ optional langAda ../gnat-cflags.patch
+      ++ optional langFortran ../gfortran-driving.patch;
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -80,8 +84,8 @@ let version = "4.9.2";
     # Antlr (optional) allows the Java `gjdoc' tool to be built.  We want a
     # binary distribution here to allow the whole chain to be bootstrapped.
     javaAntlr = fetchurl {
-      url = http://www.antlr.org/download/antlr-3.1.3.jar;
-      sha256 = "1f41j0y4kjydl71lqlvr73yagrs2jsg1fjymzjz66mjy7al5lh09";
+      url = http://www.antlr.org/download/antlr-4.4-complete.jar;
+      sha256 = "02lda2imivsvsis8rnzmbrbp8rh1kb8vmq4i67pqhkwz7lf8y6dz";
     };
 
     xlibs = [
@@ -89,7 +93,7 @@ let version = "4.9.2";
       xproto renderproto xextproto inputproto randrproto
     ];
 
-    javaAwtGtk = langJava && gtk != null;
+    javaAwtGtk = langJava && x11Support;
 
     /* Platform flags */
     platformFlags = let
@@ -156,6 +160,7 @@ let version = "4.9.2";
           " --disable-libgomp " +
           " --disable-libquadmath" +
           " --disable-shared" +
+          " --disable-libatomic " +  # libatomic requires libc
           " --disable-decimal-float" # libdecnumber requires libc
           else
           (if crossDarwin then " --with-sysroot=${libcCross}/share/sysroot"
@@ -196,16 +201,18 @@ let version = "4.9.2";
 in
 
 # We need all these X libraries when building AWT with GTK+.
-assert gtk != null -> (filter (x: x == null) xlibs) == [];
+assert x11Support -> (filter (x: x == null) ([ gtk libart_lgpl ] ++ xlibs)) == [];
 
 stdenv.mkDerivation ({
   name = "${name}${if stripped then "" else "-debug"}-${version}" + crossNameAddon;
 
-  builder = ./builder.sh;
+  builder = ../builder.sh;
+
+  outputs = [ "out" "info" ];
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
-    sha256 = "1pbjp4blk2ycaa6r3jmw4ky5f1s9ji3klbqgv8zs2sl5jn1cj810";
+    sha256 = "0zmnm00d2a1hsd41g34bhvxzvxisa2l584q3p447bd91lfjv4ci3";
   };
 
   inherit patches;
@@ -288,15 +295,21 @@ stdenv.mkDerivation ({
 
   NIX_LDFLAGS = stdenv.lib.optionalString  stdenv.isSunOS "-lm -ldl";
 
-  preConfigure = ''
-    ${stdenv.lib.optionalString (stdenv.isSunOS && stdenv.is64bit)
-      ''
-        export NIX_LDFLAGS=`echo $NIX_LDFLAGS | sed -e s~$prefix/lib~$prefix/lib/amd64~g`
-        export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
-        export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
-        export CFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CFLAGS_FOR_TARGET"
-      ''}
-    '';
+  preConfigure = stdenv.lib.optionalString (stdenv.isSunOS && stdenv.is64bit) ''
+    export NIX_LDFLAGS=`echo $NIX_LDFLAGS | sed -e s~$prefix/lib~$prefix/lib/amd64~g`
+    export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
+    export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
+    export CFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CFLAGS_FOR_TARGET"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    if SDKROOT=$(/usr/bin/xcrun --show-sdk-path); then
+      configureFlagsArray+=(--with-native-system-header-dir=$SDKROOT/usr/include)
+      makeFlagsArray+=( \
+       CFLAGS_FOR_BUILD=-F$SDKROOT/System/Library/Frameworks \
+       CFLAGS_FOR_TARGET=-F$SDKROOT/System/Library/Frameworks \
+       FLAGS_FOR_TARGET=-F$SDKROOT/System/Library/Frameworks \
+      )
+    fi
+  '';
 
   dontDisableStatic = true;
 
@@ -307,7 +320,7 @@ stdenv.mkDerivation ({
       " --with-gnu-as --without-gnu-ld "
       else ""}
     --enable-lto
-    ${if enableMultilib then "--disable-libquadmath" else "--disable-multilib"}
+    ${if enableMultilib then "--enable-multilib --disable-libquadmath" else "--disable-multilib"}
     ${if enableShared then "" else "--disable-shared"}
     ${if enablePlugin then "--enable-plugin" else "--disable-plugin"}
     ${optionalString (isl != null) "--with-isl=${isl}"}
@@ -338,6 +351,8 @@ stdenv.mkDerivation ({
         ++ optional langAda      "ada"
         ++ optional langVhdl     "vhdl"
         ++ optional langGo       "go"
+        ++ optional langObjC     "objc"
+        ++ optional langObjCpp   "obj-c++"
         ++ optionals crossDarwin [ "objc" "obj-c++" ]
         )
       )
@@ -475,9 +490,11 @@ stdenv.mkDerivation ({
     else null;
 
   passthru =
-    { inherit langC langCC langAda langFortran langVhdl langGo enableMultilib version; isGNU = true; };
+    { inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo version; isGNU = true; };
 
-  inherit enableParallelBuilding;
+  inherit enableParallelBuilding enableMultilib;
+
+  inherit (stdenv) is64bit;
 
   meta = {
     homepage = http://gcc.gnu.org/;
@@ -494,7 +511,7 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ viric shlevy simons ];
+    maintainers = with stdenv.lib.maintainers; [ viric simons ];
 
     # gnatboot is not available out of linux platforms, so we disable the darwin build
     # for the gnat (ada compiler).

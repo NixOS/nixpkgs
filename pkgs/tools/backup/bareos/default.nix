@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, libtool
+{ stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, libtool, flex
 , readline ? null, openssl ? null, python ? null, ncurses ? null
 , sqlite ? null, postgresql ? null, libmysql ? null, zlib ? null, lzo ? null
-, acl ? null, glusterfs ? null, libceph ? null, libcap ? null
+, jansson ? null, acl ? null, glusterfs ? null, libceph ? null, libcap ? null
 }:
 
 assert sqlite != null || postgresql != null || libmysql != null;
@@ -12,19 +12,20 @@ let
 in
 stdenv.mkDerivation rec {
   name = "bareos-${version}";
-  version = "14.2.4";
+  version = "15.2.1";
 
   src = fetchFromGitHub {
     owner = "bareos";
     repo = "bareos";
     rev = "Release/${version}";
     name = "${name}-src";
-    sha256 = "0shb91pawdgrn6rb4np3zyyxv36899nvwf8jaihkg0wvb01viqzr";
+    sha256 = "01vnqahzjj598jjk4y7qzfnq415jh227v40sgkrdl4qcpn76spxi";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig nettools gettext readline openssl python
-    ncurses sqlite postgresql libmysql zlib lzo acl glusterfs libceph libcap
+    nettools gettext readline openssl python flex ncurses sqlite postgresql
+    libmysql zlib lzo jansson acl glusterfs libceph libcap
   ];
 
   postPatch = ''
@@ -57,14 +58,18 @@ stdenv.mkDerivation rec {
     ++ optional (libmysql != null) "--with-mysql=${libmysql}"
     ++ optional (zlib != null) "--with-zlib=${zlib}"
     ++ optional (lzo != null) "--with-lzo=${lzo}"
+    ++ optional (jansson != null) "--with-jansson=${jansson}"
     ++ optional (acl != null) "--enable-acl"
     ++ optional (glusterfs != null) "--with-glusterfs=${glusterfs}"
     ++ optional (libceph != null) "--with-cephfs=${libceph}";
 
   installFlags = [
     "sysconfdir=\${out}/etc"
+    "confdir=\${out}/etc/bareos"
+    "scriptdir=\${out}/etc/bareos"
     "working_dir=\${TMPDIR}"
     "log_dir=\${TMPDIR}"
+    "sbindir=\${out}/bin"
   ];
 
   meta = with stdenv.lib; {

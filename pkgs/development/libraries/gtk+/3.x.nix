@@ -1,16 +1,16 @@
 { stdenv, fetchurl, pkgconfig, gettext, perl
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, gobjectIntrospection
-, xlibs, x11, wayland, libxkbcommon
+, xorg, xlibsWrapper, wayland, libxkbcommon, epoxy
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
 }:
 
-assert xineramaSupport -> xlibs.libXinerama != null;
+assert xineramaSupport -> xorg.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 let
-  ver_maj = "3.12";
-  ver_min = "2";
+  ver_maj = "3.16";
+  ver_min = "7";
   version = "${ver_maj}.${ver_min}";
 in
 stdenv.mkDerivation rec {
@@ -18,18 +18,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
-    sha256 = "1l45nd7ln2pnrf99vdki3l7an5wrzkbak11hnnj1w6r3fkm4xmv1";
+    sha256 = "1fkzdhqa1pjzb1qsh2ll3y2567ylyszks59qspx85lalvqa9ss0r";
   };
-
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
 
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
 
-  buildInputs = [ libxkbcommon ];
-  propagatedBuildInputs = with xlibs; with stdenv.lib;
+  buildInputs = [ libxkbcommon epoxy ];
+  propagatedBuildInputs = with xorg; with stdenv.lib;
     [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk libXrandr libXrender libXcomposite libXi libXcursor ]
     ++ optionals stdenv.isLinux [ wayland ]
-    ++ optional stdenv.isDarwin x11
     ++ optional xineramaSupport libXinerama
     ++ optional cupsSupport cups;
 
@@ -37,6 +34,8 @@ stdenv.mkDerivation rec {
   preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
 
   enableParallelBuilding = true;
+
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   postInstall = "rm -rf $out/share/gtk-doc";
 
@@ -47,7 +46,7 @@ stdenv.mkDerivation rec {
     ''; # workaround for bug of nix-mode for Emacs */ '';
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A multi-platform toolkit for creating graphical user interfaces";
 
     longDescription = ''
@@ -63,9 +62,9 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gtk.org/;
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ urkud raskin vcunat];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ urkud raskin vcunat lethalman ];
+    platforms = platforms.all;
   };
 }

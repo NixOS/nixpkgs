@@ -1,7 +1,7 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation {
-  name = "urxvt-perls";
+  name = "urxvt-perls-2015-03-28";
 
   src = fetchgit {
     url = "git://github.com/muennich/urxvt-perls";
@@ -21,6 +21,6 @@ stdenv.mkDerivation {
     description = "Perl extensions for the rxvt-unicode terminal emulator";
     homepage = "https://github.com/muennich/urxvt-perls";
     license = licenses.gpl2;
-    maintainers = maintainers.abbradar;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

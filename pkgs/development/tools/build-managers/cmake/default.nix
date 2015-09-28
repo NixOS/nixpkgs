@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, replace, curl, expat, zlib, bzip2, libarchive
-, useNcurses ? false, ncurses, useQt4 ? false, qt4, wantPS ? false, ps ? null
+{ stdenv, fetchurl
+, bzip2, curl, expat, libarchive, xz, zlib
+, useNcurses ? false, ncurses, useQt4 ? false, qt4
+, wantPS ? false, ps ? null
 }:
 
 with stdenv.lib;
@@ -8,8 +10,8 @@ assert wantPS -> (ps != null);
 
 let
   os = stdenv.lib.optionalString;
-  majorVersion = "2.8";
-  minorVersion = "12.2";
+  majorVersion = "3.3";
+  minorVersion = "2";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -20,32 +22,24 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    sha256 = "0phf295a9cby0v7zqdswr238v5aiy3rb2fs6dz39zjxbmzlp8rcc";
+    sha256 = "08pwy9ip9cgwgynhn5vrjw8drw29gijy1rmziq22n65zds6ifnp7";
   };
 
   enableParallelBuilding = true;
 
   patches =
-    [(fetchpatch { # see http://www.cmake.org/Bug/view.php?id=13959
-      name = "FindFreetype-2.5.patch";
-      url = "http://www.cmake.org/Bug/file_download.php?file_id=4660&type=bug";
-      sha256 = "136z63ff83hnwd247cq4m8m8164pklzyl5i2csf5h6wd8p01pdkj";
-    })] ++
     # Don't search in non-Nix locations such as /usr, but do search in
     # Nixpkgs' Glibc.
-    optional (stdenv ? glibc) ./search-path.patch ++
+    optional (stdenv ? glibc) ./search-path-3.2.patch ++
     optional (stdenv ? cross) (fetchurl {
       name = "fix-darwin-cross-compile.patch";
       url = "http://public.kitware.com/Bug/file_download.php?"
           + "file_id=4981&type=bug";
       sha256 = "16acmdr27adma7gs9rs0dxdiqppm15vl3vv3agy7y8s94wyh4ybv";
-    }) ++
-    # fix cmake detection of openssl libs
-    # see: http://public.kitware.com/Bug/bug_relationship_graph.php?bug_id=15386
-    #      and http://www.cmake.org/gitweb?p=cmake.git;a=commitdiff;h=c5d9a8283cfac15b4a5a07f18d5eb10c1f388505#patch1
-    [./cmake_find_openssl_for_openssl-1.0.1m_and_up.patch];
+    }) ++ stdenv.lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
-  buildInputs = [ curl expat zlib bzip2 libarchive ]
+  buildInputs =
+    [ bzip2 curl expat libarchive xz zlib ]
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
 
@@ -54,8 +48,14 @@ stdenv.mkDerivation rec {
   CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":" buildInputs;
 
   configureFlags =
-    "--docdir=/share/doc/${name} --mandir=/share/man --system-libs"
-    + stdenv.lib.optionalString useQt4 " --qt-gui";
+    [ "--docdir=/share/doc/${name}"
+      "--mandir=/share/man"
+      "--no-system-jsoncpp"
+    ]
+    ++ optional (!stdenv.isCygwin) "--system-libs"
+    ++ optional useQt4 "--qt-gui"
+    ++ ["--"]
+    ++ optional (!useNcurses) "-DBUILD_CursesDialog=OFF";
 
   setupHook = ./setup-hook.sh;
 
@@ -65,13 +65,14 @@ stdenv.mkDerivation rec {
     ''
       source $setupHook
       fixCmakeFiles .
-      substituteInPlace Modules/Platform/UnixPaths.cmake --subst-var-by glibc ${stdenv.glibc}
+      substituteInPlace Modules/Platform/UnixPaths.cmake \
+        --subst-var-by glibc ${stdenv.glibc}
     '';
 
   meta = {
     homepage = http://www.cmake.org/;
     description = "Cross-Platform Makefile Generator";
     platforms = if useQt4 then qt4.meta.platforms else stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ urkud mornfall ];
+    maintainers = with stdenv.lib.maintainers; [ urkud mornfall ttuegel ];
   };
 }

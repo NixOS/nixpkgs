@@ -11,7 +11,7 @@ assert enableGeoLocation -> geoclue2 != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.6.5";
+  version = "2.8.5";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -25,12 +25,16 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "14vmqq6hr3jzphay49984kj22vlqhpsjmwh1krdm9k57rqbq0rdi";
+    sha256 = "082dw0d8jxvsapx30ypmy5h2srzfzi42c3zr9pbkzx1m959hq7rx";
   };
 
   patches = [ ./finding-harfbuzz-icu.patch ];
 
   cmakeFlags = [ "-DPORT=GTK" ];
+
+  # XXX: WebKit2 missing include path for gst-plugins-base.
+  # Filled: https://bugs.webkit.org/show_bug.cgi?id=148894
+  NIX_CFLAGS_COMPILE = "-I${gst-plugins-base}/include/gstreamer-1.0";
 
   nativeBuildInputs = [
     cmake perl python ruby bison gperf sqlite
@@ -47,5 +51,5 @@ stdenv.mkDerivation rec {
     libsoup gtk3
   ];
 
-  # enableParallelBuilding = true; # build problems on Hydra
+  enableParallelBuilding = true; # build problems on Hydra
 }

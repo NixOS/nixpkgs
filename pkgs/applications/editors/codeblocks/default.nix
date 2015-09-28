@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-pch=no" ]
     ++ optional contribPlugins "--with-contrib-plugins";
 
+  # Fix boost 1.59 compat
+  # Try removing in the next version
+  CPPFLAGS = "-DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED";
+
   meta = with stdenv.lib; {
     maintainers = [ maintainers.linquize ];
     platforms = platforms.all;

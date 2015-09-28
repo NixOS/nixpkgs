@@ -8,15 +8,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ makeWrapper pkgconfig e19.efl python27 dbus ];
-  propagatedBuildInputs = [ python27Packages.pythonefl_1_13 python27Packages.dbus e19.elementary ];
+  propagatedBuildInputs = [ python27Packages.pythonefl_1_15 python27Packages.dbus e19.elementary ];
   postInstall = ''
-    wrapProgram $out/bin/econnman-bin --prefix PYTHONPATH : ${python27Packages.dbus}/lib/python2.7/site-packages:${python27Packages.pythonefl_1_13}/lib/python2.7/site-packages
+    wrapProgram $out/bin/econnman-bin --prefix PYTHONPATH : ${python27Packages.dbus}/lib/python2.7/site-packages:${python27Packages.pythonefl_1_15}/lib/python2.7/site-packages
   '';
 
   meta = {
     description = "A user interface for the connman network connection manager";
     homepage = http://enlightenment.org/;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ];
+    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl3;
   };

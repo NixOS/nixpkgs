@@ -1,7 +1,9 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, docbook2x
-, docbook_xml_dtd_45, systemd
-, libapparmor ? null, gnutls ? null, libseccomp ? null, cgmanager ? null
-, libnih ? null, dbus ? null, libcap ? null
+, docbook_xml_dtd_45, python3Packages
+
+# Optional Dependencies
+, libapparmor ? null, gnutls ? null, libselinux ? null, libseccomp ? null
+, cgmanager ? null, libnih ? null, dbus ? null, libcap ? null, systemd ? null
 }:
 
 let
@@ -9,18 +11,21 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lxc-1.1.1";
+  name = "lxc-1.1.3";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxc";
     rev = name;
-    sha256 = "04zpznd364862y3dwn97klvwfw9i2b6n1lh4fkci0z74c6z9svql";
+    sha256 = "109vpkxzkhixfvwfs6qphfbxb7pbk2qx22qc4zbk52d6gl78ygsb";
   };
 
+  nativeBuildInputs = [
+    autoreconfHook pkgconfig perl docbook2x python3Packages.wrapPython
+  ];
   buildInputs = [
-    autoreconfHook pkgconfig perl docbook2x systemd
-    libapparmor gnutls libseccomp cgmanager libnih dbus libcap
+    libapparmor gnutls libselinux libseccomp cgmanager libnih dbus libcap
+    python3Packages.python systemd
   ];
 
   patches = [ ./support-db2x.patch ];
@@ -30,28 +35,33 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
-    "--with-rootfs-path=/var/lib/lxc/rootfs"
+    "--enable-doc"
+    "--disable-api-docs"
   ] ++ optional (libapparmor != null) "--enable-apparmor"
-    ++ optional (gnutls != null) "--enable-gnutls"
+    ++ optional (libselinux != null) "--enable-selinux"
     ++ optional (libseccomp != null) "--enable-seccomp"
-    ++ optional (enableCgmanager) "--enable-cgmanager"
     ++ optional (libcap != null) "--enable-capabilities"
     ++ [
-    "--enable-doc"
-    "--enable-tests"
+    "--disable-examples"
+    "--enable-python"
+    "--disable-lua"
+    "--enable-bash"
+    (if doCheck then "--enable-tests" else "--disable-tests")
+    "--with-rootfs-path=/var/lib/lxc/rootfs"
   ];
 
-  installFlags = [ "DESTDIR=\${out}" ];
+  doCheck = false;
+
+  installFlags = [
+    "localstatedir=\${TMPDIR}"
+    "sysconfdir=\${out}/etc"
+    "sysconfigdir=\${out}/etc/default"
+    "READMEdir=\${TMPDIR}/var/lib/lxc/rootfs"
+    "LXCPATH=\${TMPDIR}/var/lib/lxc"
+  ];
 
   postInstall = ''
-    mv $out/$out/* $out
-    DIR=$out/$out
-    while rmdir $DIR 2>/dev/null; do
-      DIR="$(dirname "$DIR")"
-    done
-
-    # Remove the unneeded var/lib directories
-    rm -rf $out/var
+    wrapPythonPrograms
   '';
 
   meta = {
@@ -68,6 +78,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.linux;
-    maintainers = with maintainers; [ simons wkennington ];
+    maintainers = with maintainers; [ simons wkennington globin ];
   };
 }

@@ -1,4 +1,4 @@
-args : with args; 
+args @ { libxml2, perl, intltool, libtool, pkgconfig, gtk, ... } : with args;
 let version = lib.attrByPath ["version"] "1.1.0" args; in
 rec {
   src = fetchurl {
@@ -17,7 +17,7 @@ rec {
   doPreBuild = fullDepEntry (''
     cp drgeo.desktop.in drgeo.desktop
   '') ["minInit" "doUnpack"];
-      
+
   name = "drgeo-" + version;
   meta = {
     description = "Interactive geometry program";

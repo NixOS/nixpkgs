@@ -42,13 +42,13 @@ in rec {
 
     requiredBy = mkOption {
       default = [];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       description = "Units that require (i.e. depend on and need to go down with) this unit.";
     };
 
     wantedBy = mkOption {
       default = [];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       description = "Units that want (i.e. depend on) this unit.";
     };
 

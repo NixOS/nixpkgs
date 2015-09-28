@@ -2,7 +2,7 @@
 
 let
   pname = "icu4c";
-  version = "53.1";
+  version = "55.1";
 in
 stdenv.mkDerivation {
   name = pname + "-" + version;
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "http://download.icu-project.org/files/${pname}/${version}/${pname}-"
       + (stdenv.lib.replaceChars ["."] ["_"] version) + "-src.tgz";
-    sha256 = "0a4sg9w054640zncb13lhrcjqn7yg1qilwd1mczc4w60maslz9vg";
+    sha256 = "0ys5f5spizg45qlaa31j2lhgry0jka2gfha527n4ndfxxz5j4sz1";
   };
 
   makeFlags = stdenv.lib.optionalString stdenv.isDarwin
@@ -31,6 +31,11 @@ stdenv.mkDerivation {
 
   configureFlags = "--disable-debug" +
     stdenv.lib.optionalString stdenv.isDarwin " --enable-rpath";
+
+  # remove dependency on bootstrap-tools in early stdenv build
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i 's/INSTALL_CMD=.*install/INSTALL_CMD=install/' $out/lib/icu/${version}/pkgdata.inc
+  '';
 
   enableParallelBuilding = true;
 

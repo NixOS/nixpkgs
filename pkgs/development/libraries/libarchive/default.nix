@@ -14,10 +14,20 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./CVE-2013-0211.patch # https://github.com/libarchive/libarchive/commit/22531545
+    ./CVE-2015-1197.patch # https://github.com/NixOS/nixpkgs/issues/6799
+      # ^ it's CVE-2015-2304 specific to libarchive
   ];
 
   buildInputs = [ sharutils libxml2 zlib bzip2 openssl xz ] ++
     stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ];
+
+  preBuild = if stdenv.isCygwin then ''
+    echo "#include <windows.h>" >> config.h
+  '' else null;
+
+  preFixup = ''
+    sed 's|-lcrypto|-L${openssl}/lib -lcrypto|' -i $out/lib/libarchive.la
+  '';
 
   meta = {
     description = "Multi-format archive and compression library";

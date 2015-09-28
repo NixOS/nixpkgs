@@ -12,7 +12,7 @@ rec {
 
     name    = "trivial-bootstrap-tools";
     builder = "/bin/sh";
-    args    = [ ./trivialBootstrap.sh ];
+    args    = [ ./trivial-bootstrap.sh ];
 
     mkdir   = "/bin/mkdir";
     ln      = "/bin/ln";
@@ -31,7 +31,7 @@ rec {
       shell        = "/bin/bash";
       initialPath  = [ bootstrapTools ];
       fetchurlBoot = fetchurl;
-      cc           = "/no-such-path";
+      cc           = null;
     };
   };
 
@@ -50,7 +50,11 @@ rec {
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
     xargsFlags=" "
     export MACOSX_DEPLOYMENT_TARGET=10.7
-    export SDKROOT=$(/usr/bin/xcrun --sdk macosx$(/usr/bin/xcrun --show-sdk-version) --show-sdk-path 2> /dev/null || echo /)
+    # Use the 10.9 SDK if we're running on 10.9, and 10.10 if we're
+    # running on 10.10. We need to use the 10.10 headers for functions
+    # like readlinkat() that are dynamically detected by configure
+    # scripts. Very impure, obviously.
+    export SDKROOT=$(/usr/bin/xcrun --sdk macosx"$(/usr/bin/sw_vers -productVersion | /usr/bin/cut -d. -f1,2)" --show-sdk-path 2> /dev/null || echo /)
     export NIX_CFLAGS_COMPILE+=" --sysroot=/var/empty -idirafter $SDKROOT/usr/include -F$SDKROOT/System/Library/Frameworks -Wno-multichar -Wno-deprecated-declarations"
     export NIX_LDFLAGS_AFTER+=" -L$SDKROOT/usr/lib"
     export CMAKE_OSX_ARCHITECTURES=x86_64
@@ -86,6 +90,7 @@ rec {
           cc      = "/usr";
           outPath = nativePrefix;
         };
+        isClang      = true;
       };
     };
     pkgs = allPackages {
@@ -101,7 +106,7 @@ rec {
       inherit system config;
       inherit (stage1.stdenv) shell fetchurlBoot preHook cc;
 
-      initialPath = [ stage1.pkgs.xz ] ++ stage1.stdenv.initialPath;
+      initialPath = [ stage1.pkgs.xz stage1.pkgs.gnused ] ++ stage1.stdenv.initialPath;
     };
     pkgs = allPackages {
       inherit system platform;
@@ -125,13 +130,14 @@ rec {
 
     cc = import ../../build-support/cc-wrapper {
       inherit stdenv;
-      nativeTools  = false;
-      nativeLibc   = true;
-      binutils  = pkgs.darwin.cctools;
-      cc        = pkgs.llvmPackages.clang-unwrapped;
-      coreutils = pkgs.coreutils;
-      shell     = "${pkgs.bash}/bin/bash";
+      nativeTools   = false;
+      nativeLibc    = true;
+      binutils      = pkgs.darwin.cctools;
+      cc            = pkgs.llvmPackages.clang-unwrapped;
+      coreutils     = pkgs.coreutils;
+      shell         = "${pkgs.bash}/bin/bash";
       extraPackages = [ pkgs.libcxx ];
+      isClang       = true;
     };
 
     shell = "${pkgs.bash}/bin/bash";

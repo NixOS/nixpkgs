@@ -2,19 +2,18 @@
 , google-gflags, python, libiberty, openssl }:
 
 stdenv.mkDerivation rec {
-  version = "0.32.0";
+  version = "2015-09-17";
   name = "folly-${version}";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
-    rev = "v${version}";
-    sha256 = "0yviih6b220bv6d1rg4lx1hqprqapnzfv4rv64cwjxbmz49ckmzh";
+    rev = "e4527fb5d04f5fec823bd6a2402b620a6e1a64e3";
+    sha256 = "0iicq19yylafr7qs221xgk8pcwf6nnyx6srgsx9y9cyf72siadcb";
   };
 
-  buildInputs = [ libiberty boost.lib libevent double_conversion glog google-gflags openssl ];
-
-  nativeBuildInputs = [ autoreconfHook python boost ];
+  nativeBuildInputs = [ autoreconfHook python ];
+  buildInputs = [ libiberty boost libevent double_conversion glog google-gflags openssl ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/folly";
   preBuild = ''
@@ -31,6 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103
     platforms = [ "x86_64-linux" ];
-    maintainers = maintainers.abbradar;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

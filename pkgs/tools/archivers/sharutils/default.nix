@@ -8,12 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "1mallg1gprimlggdisfzdmh1xi676jsfdlfyvanlcw72ny8fsj3g";
   };
 
-  preConfigure =
-    ''
-       # Fix for building on Glibc 2.16.  Won't be needed once the
-       # gnulib in sharutils is updated.
-       sed -i ${stdenv.lib.optionalString ((stdenv.isFreeBSD || stdenv.isOpenBSD || stdenv.isDarwin) && stdenv.cc.nativeTools) "''"} '/gets is a security hole/d' lib/stdio.in.h
-    '';
+  preConfigure = ''
+     # Fix for building on Glibc 2.16.  Won't be needed once the
+     # gnulib in sharutils is updated.
+     sed -i ${stdenv.lib.optionalString ((stdenv.isFreeBSD || stdenv.isOpenBSD) && stdenv.cc.nativeTools) "''"} '/gets is a security hole/d' lib/stdio.in.h
+  '';
 
   # GNU Gettext is needed on non-GNU platforms.
   buildInputs = [ gettext coreutils ];

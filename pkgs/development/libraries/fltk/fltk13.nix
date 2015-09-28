@@ -1,21 +1,27 @@
-{ composableDerivation, fetchurl, pkgconfig, x11, inputproto, libXi
+{ composableDerivation, fetchurl, pkgconfig, xlibsWrapper, inputproto, libXi
 , freeglut, mesa, libjpeg, zlib, libXinerama, libXft, libpng
-
+, cfg ? {}
 , automake, autoconf, libtool
 }:
 
 let inherit (composableDerivation) edf; in
 
-let version = "1.3.2"; in
+let version = "1.3.3"; in
 composableDerivation.composableDerivation {} {
   name = "fltk-${version}";
 
   src = fetchurl {
     url = "http://fltk.org/pub/fltk/${version}/fltk-${version}-source.tar.gz";
-    sha256 = "1974brlk723095vf8z72kazq1cbqr9a51kq6b0xda6zkjkgl8q0p";
+    sha256 = "15qd7lkz5d5ynz70xhxhigpz3wns39v9xcf7ggkl0792syc8sfgq";
   };
 
-  propagatedBuildInputs = [ x11 inputproto libXi freeglut ];
+  # http://www.fltk.org/str.php?L3156
+  postPatch = ''
+    substituteInPlace FL/x.H \
+      --replace 'class Fl_XFont_On_Demand' 'class FL_EXPORT Fl_XFont_On_Demand'
+  '';
+
+  propagatedBuildInputs = [ xlibsWrapper inputproto libXi freeglut ];
 
   enableParallelBilding = true;
 
@@ -48,7 +54,7 @@ composableDerivation.composableDerivation {} {
     localpngSupport = false;
     sharedSupport = true;
     threadsSupport = true;
-  };
+  } // cfg;
 
   meta = {
     description = "A C++ cross-platform light-weight GUI library binding";
@@ -56,9 +62,5 @@ composableDerivation.composableDerivation {} {
   };
 
   patches = [
-    # https://bugs.archlinux.org/task/36186
-    (fetchurl {
-    url = "https://bugs.archlinux.org/task/36186?getfile=10750";
-    sha256 = "1hpb1i87nc3zw6mgpgf3bfv557ci930bsn6rwlhaif51nlqd2wbj";
-  }) ];
+     ];
 }

@@ -1,37 +1,24 @@
-{ stdenv, fetchurl, binutils, popt, makeWrapper, gawk, which, gnugrep, zlib
-, pkgconfig
+{ stdenv, fetchurl, binutils, popt, zlib, pkgconfig
 , withGUI ? false , qt4 ? null}:
 
 # libX11 is needed because the Qt build stuff automatically adds `-lX11'.
 assert withGUI -> qt4 != null;
 
 stdenv.mkDerivation rec {
-  name = "oprofile-0.9.9";
+  name = "oprofile-1.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/oprofile/${name}.tar.gz";
-    sha256 = "15vm24jhw4xfd55pfw1rlpzfsh4bl1vyjsajs78bi9xbv8038lhy";
+    sha256 = "0nn4wfvwy4nii25y6lwlrnzx9ah4nz0r93yk7hswiy6wxjs10wc4";
   };
 
-  patchPhase = ''
-    sed -i "utils/opcontrol" \
-        -e "s|OPCONTROL=.*$|OPCONTROL=\"$out/bin/opcontrol\"|g ;
-            s|OPDIR=.*$|OPDIR=\"$out/bin\"|g ;
-            s|^PATH=.*$||g"
-  '';
-
-  buildInputs = [ binutils zlib popt makeWrapper gawk which gnugrep pkgconfig ]
+  buildInputs = [ binutils zlib popt pkgconfig ]
     ++ stdenv.lib.optionals withGUI [ qt4 ];
 
   configureFlags = [
       "--disable-shared"   # needed because only the static libbfd is available
     ]
     ++ stdenv.lib.optional withGUI "--with-qt-dir=${qt4} --enable-gui=qt4";
-
-  postInstall = ''
-    wrapProgram "$out/bin/opcontrol"					\
-       --prefix PATH : "$out/bin:${gawk}/bin:${which}/bin:${gnugrep}/bin"
-  '';
 
   meta = {
     description = "System-wide profiler for Linux";

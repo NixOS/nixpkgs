@@ -2,7 +2,7 @@ export NIX_CC=@out@
 
 addCVars () {
     if [ -d $1/include ]; then
-        export NIX_CFLAGS_COMPILE+=" -isystem $1/include"
+        export NIX_CFLAGS_COMPILE+=" ${ccIncludeFlag:--isystem} $1/include"
     fi
 
     if [ -d $1/lib64 -a ! -L $1/lib64 ]; then

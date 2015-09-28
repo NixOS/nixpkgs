@@ -72,19 +72,12 @@ in
 
   libxcb = attrs : attrs // {
     nativeBuildInputs = [ args.python ];
-    configureFlags = "--enable-xkb";
+    configureFlags = "--enable-xkb --enable-xinput";
+    outputs = [ "out" "doc" "man" ];
   };
 
   xcbproto = attrs : attrs // {
     nativeBuildInputs = [ args.python ];
-  };
-
-  libxkbfile = attrs: attrs // {
-    patches = lib.optional (stdenv.cc.cc.isClang or false) ./libxkbfile-clang36.patch;
-  };
-
-  libpciaccess = attrs : attrs // {
-    patches = [ ./libpciaccess-apple.patch ];
   };
 
   libX11 = attrs: attrs // {
@@ -97,6 +90,11 @@ in
         rm -rf $out/share/doc
       '';
     CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
+    outputs = [ "out" "man" ];
+  };
+
+  libAppleWM = attrs: attrs // {
+    propagatedBuildInputs = [ args.apple_sdk.frameworks.ApplicationServices ];
   };
 
   libXfont = attrs: attrs // {
@@ -106,7 +104,6 @@ in
       "CFLAGS=-O0"
     ];
   };
-
 
   libXxf86vm = attrs: attrs // {
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
@@ -126,6 +123,7 @@ in
     '';
     propagatedBuildInputs = [ xorg.libSM ];
     CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
+    outputs = [ "out" "doc" "man" ];
   };
 
   # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
@@ -173,6 +171,9 @@ in
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
   };
 
+  libXpresent = attrs: attrs
+    // { buildInputs = with xorg; attrs.buildInputs ++ [ libXext libXfixes libXrandr ]; };
+
   setxkbmap = attrs: attrs // {
     postInstall =
       ''
@@ -189,6 +190,10 @@ in
     buildInputs = attrs.buildInputs ++ [ args.freetype args.fontconfig ];
   };
 
+  xcbutilcursor = attrs: attrs // {
+    meta.maintainers = [ stdenv.lib.maintainers.lovek323 ];
+  };
+
   xf86inputevdev = attrs: attrs // {
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
     installFlags = "sdkdir=\${out}/include/xorg";
@@ -203,6 +208,11 @@ in
     installFlags = "sdkdir=\${out}/include/xorg";
   };
 
+  xf86inputlibinput = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ args.libinput ];
+    installFlags = "sdkdir=\${out}/include/xorg";
+  };
+
   xf86inputsynaptics = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [args.mtdev args.libevdev];
     installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d";
@@ -214,11 +224,6 @@ in
       "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d"
       "--with-udev-rules-dir=$(out)/lib/udev/rules.d"
     ];
-    patches = [( args.fetchpatch {
-      url = "http://cgit.freedesktop.org/xorg/driver/xf86-input-vmmouse/patch/"
-        + "?id=1cbbc03c4b37d57760c57bd2e0b0f89d744a5795";
-      sha256 = "1qkhwj2yal0cz15lv9557d10ylvxlq05ibq43pm2rrvqdg3mb6h4";
-    })];
   };
 
   xf86videoati = attrs: attrs // {
@@ -249,15 +254,14 @@ in
   };
 
   xkbcomp = attrs: attrs // {
-    configureFlags = "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb"; 
+    configureFlags = "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb";
   };
 
   xkeyboardconfig = attrs: attrs // {
 
     buildInputs = attrs.buildInputs ++ [args.intltool];
 
-    #TODO: resurrect patches for US_intl?
-    patches = [ ./xkeyboard-config-eo.patch ];
+    #TODO: resurrect patches for US_intl or Esperanto?
 
     # 1: compatibility for X11/xkb location
     # 2: I think pkgconfig/ is supposed to be in /lib/
@@ -279,15 +283,14 @@ in
         dmxproto /*libdmx not used*/ xf86vidmodeproto
         recordproto libXext pixman libXfont
         damageproto xcmiscproto  bigreqsproto
-        libpciaccess inputproto xextproto randrproto renderproto presentproto
+        inputproto xextproto randrproto renderproto presentproto
         dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
       ];
-      commonPatches = [ ./xorgserver-xkbcomp-path.patch ]
-                   ++ lib.optional isDarwin ./fix-clang.patch;
+      # fix_segfault: https://bugs.freedesktop.org/show_bug.cgi?id=91316
+      commonPatches = [ ./xorgserver-xkbcomp-path.patch ./fix_segfault.patch ];
       # XQuartz requires two compilations: the first to get X / XQuartz,
       # and the second to get Xvfb, Xnest, etc.
       darwinOtherX = overrideDerivation xorgserver (oldAttrs: {
-        stdenv = args.stdenv;
         configureFlags = oldAttrs.configureFlags ++ [
           "--disable-xquartz"
           "--enable-xorg"
@@ -301,7 +304,7 @@ in
       if (!isDarwin)
       then {
         buildInputs = [ makeWrapper ] ++ commonBuildInputs;
-        propagatedBuildInputs = commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
+        propagatedBuildInputs = [ libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           args.udev
         ];
         patches = commonPatches;
@@ -321,23 +324,19 @@ in
         '';
         passthru.version = version; # needed by virtualbox guest additions
       } else {
-        stdenv = args.clangStdenv;
-        name = "xorg-server-1.14.6";
-        src = args.fetchurl {
-          url = mirror://xorg/individual/xserver/xorg-server-1.14.6.tar.bz2;
-          sha256 = "0c57vp1z0p38dj5gfipkmlw6bvbz1mrr0sb3sbghdxxdyq4kzcz8";
-        };
-        buildInputs = commonBuildInputs ++ [ args.bootstrap_cmds ];
+        buildInputs = commonBuildInputs ++ [ args.bootstrap_cmds args.automake args.autoconf ];
         propagatedBuildInputs = commonPropagatedBuildInputs ++ [
           libAppleWM applewmproto
         ];
+        # Patches can be pulled from the server-*-apple branches of:
+        # http://cgit.freedesktop.org/~jeremyhu/xserver/
         patches = commonPatches ++ [
-          ./darwin/0001-XQuartz-Ensure-we-wait-for-the-server-thread-to-term.patch
-          ./darwin/5000-sdksyms.sh-Use-CPPFLAGS-not-CFLAGS.patch
-          ./darwin/5001-Workaround-the-GC-clipping-problem-in-miPaintWindow-.patch
-          ./darwin/5002-fb-Revert-fb-changes-that-broke-XQuartz.patch
-          ./darwin/5003-fb-Revert-fb-changes-that-broke-XQuartz.patch
-          ./darwin/5004-Use-old-miTrapezoids-and-miTriangles-routines.patch
+          ./darwin/0001-XQuartz-GLX-Use-__glXEnableExtension-to-build-extens.patch
+          ./darwin/0002-sdksyms.sh-Use-CPPFLAGS-not-CFLAGS.patch
+          ./darwin/0003-Workaround-the-GC-clipping-problem-in-miPaintWindow-.patch
+          ./darwin/0004-Use-old-miTrapezoids-and-miTriangles-routines.patch
+          ./darwin/0005-fb-Revert-fb-changes-that-broke-XQuartz.patch
+          ./darwin/0006-fb-Revert-fb-changes-that-broke-XQuartz.patch
           ./darwin/private-extern.patch
           ./darwin/bundle_main.patch
           ./darwin/stub.patch
@@ -408,9 +407,27 @@ in
 
   xf86videointel = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.libXfixes];
+    nativeBuildInputs = [args.autoreconfHook xorg.utilmacros];
   };
 
   xwd = attrs: attrs // {
     buildInputs = with xorg; attrs.buildInputs ++ [libXt libxkbfile];
   };
+
+  kbproto = attrs: attrs // {
+    outputs = [ "out" "doc" ];
+  };
+
+  xextproto = attrs: attrs // {
+    outputs = [ "out" "doc" ];
+  };
+
+  xproto = attrs: attrs // {
+    outputs = [ "out" "doc" ];
+  };
+
+  xrdb = attrs: attrs // {
+    configureFlags = "--with-cpp=${args.mcpp}/bin/mcpp";
+  };
+
 }

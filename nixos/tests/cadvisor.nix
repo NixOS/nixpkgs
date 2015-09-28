@@ -1,5 +1,8 @@
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ... } : {
   name = "cadvisor";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ offline ];
+  };
 
   nodes = {
     machine = { config, pkgs, ... }: {
@@ -27,4 +30,4 @@ import ./make-test.nix {
       $influxdb->waitForUnit("cadvisor.service");
       $influxdb->succeed("curl http://localhost:8080/containers/");
     '';
-}
+})

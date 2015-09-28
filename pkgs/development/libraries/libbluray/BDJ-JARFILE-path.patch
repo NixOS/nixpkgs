@@ -1,8 +1,7 @@
-diff --git a/configure.ac b/configure.ac
-index 3609d88..48c6bc6 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -227,6 +227,7 @@ if [[ $use_bdjava = "yes" ]]; then
+diff -ru3 libbluray-0.8.0/configure.ac libbluray-0.8.0-new/configure.ac
+--- libbluray-0.8.0/configure.ac	2015-04-10 09:48:23.000000000 +0300
++++ libbluray-0.8.0-new/configure.ac	2015-05-18 14:22:01.002075482 +0300
+@@ -231,6 +231,7 @@
    AC_DEFINE([USING_BDJAVA], [1], ["Define to 1 if using BD-Java"])
    AC_DEFINE_UNQUOTED([JAVA_ARCH], ["$java_arch"], ["Defines the architecture of the java vm."])
    AC_DEFINE_UNQUOTED([JDK_HOME], ["$JDK_HOME"], [""])
@@ -10,16 +9,14 @@ index 3609d88..48c6bc6 100644
  fi
  AM_CONDITIONAL([USING_BDJAVA], [ test $use_bdjava = "yes" ])
  
-diff --git a/src/libbluray/bdj/bdj.c b/src/libbluray/bdj/bdj.c
-index c622801..f4aab9b 100644
---- a/src/libbluray/bdj/bdj.c
-+++ b/src/libbluray/bdj/bdj.c
-@@ -210,7 +210,7 @@ static const char *_find_libbluray_jar(void)
+diff -ru3 libbluray-0.8.0/src/libbluray/bdj/bdj.c libbluray-0.8.0-new/src/libbluray/bdj/bdj.c
+--- libbluray-0.8.0/src/libbluray/bdj/bdj.c	2015-04-06 19:25:09.000000000 +0300
++++ libbluray-0.8.0-new/src/libbluray/bdj/bdj.c	2015-05-18 14:22:59.241312808 +0300
+@@ -228,6 +228,7 @@
  #ifdef _WIN32
          "" BDJ_JARFILE,
  #else
--        "/usr/share/java/" BDJ_JARFILE,
 +        JARDIR "/" BDJ_JARFILE,
+         "/usr/share/java/" BDJ_JARFILE,
+         "/usr/share/libbluray/lib/" BDJ_JARFILE,
  #endif
-     };
- 

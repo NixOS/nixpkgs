@@ -70,7 +70,7 @@ my @attrs = ();
 my @kernelModules = ();
 my @initrdKernelModules = ();
 my @modulePackages = ();
-my @imports = ("<nixpkgs/nixos/modules/installer/scan/not-detected.nix>");
+my @imports;
 
 
 sub debug {
@@ -235,7 +235,7 @@ chomp $virt;
 # Check if we're a VirtualBox guest.  If so, enable the guest
 # additions.
 if ($virt eq "oracle") {
-    push @attrs, "services.virtualboxGuest.enable = true;"
+    push @attrs, "virtualisation.virtualbox.guest.enable = true;"
 }
 
 
@@ -243,6 +243,18 @@ if ($virt eq "oracle") {
 if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
     push @imports, "<nixpkgs/nixos/modules/profiles/qemu-guest.nix>";
 }
+
+
+# Pull in NixOS configuration for containers.
+if ($virt eq "systemd-nspawn") {
+    push @attrs, "boot.isContainer = true;";
+}
+
+
+# Provide firmware for devices that are not detected by this script,
+# unless we're in a VM/container.
+push @imports, "<nixpkgs/nixos/modules/installer/scan/not-detected.nix>"
+    if $virt eq "none";
 
 
 # For a device name like /dev/sda1, find a more stable path like
@@ -311,9 +323,9 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
 
     # Maybe this is a bind-mount of a filesystem we saw earlier?
     if (defined $fsByDev{$fields[2]}) {
-        # Make sure this isn't a btrfs subvolume
-        my ($status, @msg) = runCommand("btrfs subvol show $rootDir$mountPoint");
-        if (join("", @msg) =~ /ERROR:/) {
+        # Make sure this isn't a btrfs subvolume.
+        my $msg = `btrfs subvol show $rootDir$mountPoint`;
+        if ($? != 0 || $msg =~ /ERROR:/s) {
             my $path = $fields[3]; $path = "" if $path eq "/";
             my $base = $fsByDev{$fields[2]};
             $base = "" if $base eq "/";
@@ -354,7 +366,7 @@ EOF
         if ($status != 0 || join("", @msg) =~ /ERROR:/) {
             die "Failed to retrieve subvolume info for $mountPoint\n";
         }
-        my @ids = join("", @id_info) =~ m/Object ID:[ \t\n]*([^ \t\n]*)/;
+        my @ids = join("", @id_info) =~ m/Subvolume ID:[ \t\n]*([^ \t\n]*)/;
         if ($#ids > 0) {
             die "Btrfs subvol name for $mountPoint listed multiple times in mount\n"
         } elsif ($#ids == 0) {
@@ -459,14 +471,14 @@ if ($showHardwareConfig) {
     if ($force || ! -e $fn) {
         print STDERR "writing $fn...\n";
 
-        my $bootloaderConfig;
+        my $bootloaderConfig = "";
         if (-e "/sys/firmware/efi/efivars") {
             $bootLoaderConfig = <<EOF;
   # Use the gummiboot efi boot loader.
   boot.loader.gummiboot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 EOF
-        } else {
+        } elsif ($virt ne "systemd-nspawn") {
             $bootLoaderConfig = <<EOF;
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
@@ -495,7 +507,7 @@ $bootLoaderConfig
 
   # Select internationalisation properties.
   # i18n = {
-  #   consoleFont = "lat9w-16";
+  #   consoleFont = "Lat2-Terminus16";
   #   consoleKeyMap = "us";
   #   defaultLocale = "en_US.UTF-8";
   # };
@@ -531,6 +543,9 @@ $bootLoaderConfig
   #   isNormalUser = true;
   #   uid = 1000;
   # };
+
+  # The NixOS release to be compatible with for stateful data such as databases.
+  system.stateVersion = "@nixosRelease@";
 
 }
 EOF

@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   '';
   preInstall = ''
     mkdir -p "$out"/{bin,lib,include}
-    find . -maxdepth 1 -type f -perm +111 -exec cp '{}' "$out"/bin ';'
+    find . -maxdepth 1 -type f -perm -0100 -exec cp '{}' "$out"/bin ';'
   '';
   makeFlags = "PREFIX=$(out)";
   meta = {

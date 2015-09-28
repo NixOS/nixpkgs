@@ -76,6 +76,9 @@ in
 , # If set, don't download the file, but write a list of all possible
   # URLs (resulting from resolving mirror:// URLs) to $out.
   showURLs ? false
+
+, # Meta information, if any.
+  meta ? {}
 }:
 
 assert builtins.isList urls;
@@ -120,4 +123,6 @@ if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${s
   # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that.
   preferLocalBuild = true;
+
+  inherit meta;
 }

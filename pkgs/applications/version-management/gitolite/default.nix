@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, perl, git }:
+{ stdenv, fetchurl, git, nettools, perl }:
 
 stdenv.mkDerivation rec {
   name = "gitolite-${version}";
-  version = "3.6.2";
+  version = "3.6.3";
 
   src = fetchurl {
     url = "https://github.com/sitaramc/gitolite/archive/v${version}.tar.gz";
-    sha256 = "1gsgzi9ayb4rablki3mqr11b0h8db4xg43df660marfpacmkfb01";
+    sha256 = "16cxifjxnri719qb6zzwkdf61x5y957acbdhcgqcan23x1mfn84v";
   };
 
-  buildInputs = [ perl git ];
+  buildInputs = [ git nettools perl ];
   buildPhase = "true";
 
   patchPhase = ''
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
       --replace /usr/bin/perl "${perl}/bin/perl"
     substituteInPlace src/lib/Gitolite/Hooks/Update.pm \
       --replace /usr/bin/perl "${perl}/bin/perl"
+    substituteInPlace src/lib/Gitolite/Setup.pm \
+      --replace hostname "${nettools}/bin/hostname"
   '';
 
   installPhase = ''
@@ -30,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage    = http://gitolite.com/gitolite/index.html;
     license     = licenses.gpl2;
     platforms   = platforms.unix;
-    maintainers = [ maintainers.thoughtpolice ];
+    maintainers = [ maintainers.thoughtpolice maintainers.lassulus ];
   };
 }

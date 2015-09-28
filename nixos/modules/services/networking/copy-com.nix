@@ -3,33 +3,33 @@
 with lib;
 
 let
-  
+
   cfg = config.services.copy-com;
 
-in 
+in
 
 {
   options = {
 
     services.copy-com = {
-	  
+
 	  enable = mkOption {
           default = false;
           description = "
-            Enable the copy.com client.
-
-            The first time copy.com is run, it needs to be configured. Before enabling run 
-            copy_console manually.
+            Enable the Copy.com client.
+            NOTE: before enabling the client for the first time, it must be
+            configured by first running CopyConsole (command line) or CopyAgent
+            (graphical) as the appropriate user.
           ";
       };
 
       user = mkOption {
-        description = "The user for which copy should run.";
+        description = "The user for which the Copy.com client should be run.";
       };
 
       debug = mkOption {
         default = false;
-        description = "Output more.";
+        description = "Output more (debugging) messages to the console.";
       };
 	  };
   };
@@ -38,11 +38,11 @@ in
     environment.systemPackages = [ pkgs.postfix ];
 
     systemd.services."copy-com-${cfg.user}" = {
-      description = "Copy.com Client";
+      description = "Copy.com client";
       after = [ "network.target" "local-fs.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.copy-com}/bin/copy_console ${if cfg.debug then "-consoleOutput -debugToConsole=dirwatch,path-watch,csm_path,csm -debug -console" else ""}";
+        ExecStart = "${pkgs.copy-com}/bin/CopyConsole ${if cfg.debug then "-consoleOutput -debugToConsole=dirwatch,path-watch,csm_path,csm -debug -console" else ""}";
         User = "${cfg.user}";
       };
 

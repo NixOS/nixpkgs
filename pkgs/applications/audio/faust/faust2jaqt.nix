@@ -1,5 +1,5 @@
 { faust
-, jack2
+, jack2Full
 , opencv
 , qt4
 }:
@@ -14,7 +14,7 @@ faust.wrapWithBuildEnv {
   ];
 
   propagatedBuildInputs = [
-    jack2
+    jack2Full
     opencv
     qt4
   ];

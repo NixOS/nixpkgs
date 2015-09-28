@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, json_c, hidapi, openssl, check }:
+{ stdenv, fetchurl, pkgconfig, json_c, openssl, check }:
 
 stdenv.mkDerivation rec {
-  name = "libu2f-server-0.0.0";
+  name = "libu2f-server-1.0.1";
 
   src = fetchurl {
-    url = "https://developers.yubico.com/libu2f-server/Releases/libu2f-server-0.0.0.tar.xz";
-    sha256 = "1vdl3qavzfpi6p6h48zw17md9wykfzpay5c4l1c08id46m560wp0";
+    url = "https://developers.yubico.com/libu2f-server/Releases/${name}.tar.xz";
+    sha256 = "0vhzixz1s629qv9dpdj6b7fxfyxnr5j2vx2cq9q6v790a68ga656";
   };
 
-  buildInputs = [ pkgconfig json_c hidapi openssl check ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ json_c openssl check ];
 
   meta = with stdenv.lib; {
     homepage = https://developers.yubico.com/libu2f-server/;

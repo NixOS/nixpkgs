@@ -6,6 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "http://www.katjaas.nl/helmholtz/helmholtz~.zip";
     name = "helmholtz.zip";
+    curlOpts = "--user-agent ''";
     sha256 = "0h1fj7lmvq9j6rmw33rb8k0byxb898bi2xhcwkqalb84avhywgvs";
   };
 

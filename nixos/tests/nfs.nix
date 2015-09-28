@@ -1,4 +1,4 @@
-import ./make-test.nix ({ version ? 4, ... }:
+import ./make-test.nix ({ pkgs, version ? 4, ... }:
 
 let
 
@@ -6,7 +6,7 @@ let
     { config, pkgs, ... }:
     { fileSystems = pkgs.lib.mkVMOverride
         [ { mountPoint = "/data";
-            device = "server:${if version == 4 then "/" else "/data"}";
+            device = "server:/data";
             fsType = "nfs";
             options = "vers=${toString version}";
           }
@@ -18,6 +18,9 @@ in
 
 {
   name = "nfs";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ eelco chaoflow wkennington ];
+  };
 
   nodes =
     { client1 = client;
@@ -83,5 +86,4 @@ in
       my $duration = time - $t1;
       die "shutdown took too long ($duration seconds)" if $duration > 30;
     '';
-
 })

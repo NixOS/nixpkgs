@@ -50,5 +50,7 @@ stdenv.mkDerivation rec {
 
     maintainers = [ stdenv.lib.maintainers.pierron ];
     platforms = stdenv.lib.platforms.all;
+
+    broken = true;
   };
 }

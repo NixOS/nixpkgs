@@ -10,13 +10,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [cyrus_sasl libevent];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A distributed memory object caching system";
     repositories.git = https://github.com/memcached/memcached.git;
     homepage = http://memcached.org/;
-    license = "bsd";
-    maintainers = [ stdenv.lib.maintainers.coconnor ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.coconnor ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
-

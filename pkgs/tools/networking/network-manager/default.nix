@@ -1,19 +1,22 @@
 { stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib, xz
 , udev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
-, libgcrypt, dnsmasq, avahi, bind, perl, bluez5, substituteAll
-, gobjectIntrospection, modemmanager, openresolv }:
+, libgcrypt, dnsmasq, avahi, bind, perl, bluez5, substituteAll, readline
+, gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup }:
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
-  version = "0.9.8.10";
+  version = "1.0.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/NetworkManager/0.9/NetworkManager-${version}.tar.xz";
-    sha256 = "0wn9qh8r56r8l19dqr68pdl1rv3zg1dv47rfy6fqa91q7li2fk86";
+    url = "mirror://gnome/sources/NetworkManager/1.0/NetworkManager-${version}.tar.xz";
+    sha256 = "1zq8jm1rc7n7amqa9xz1v93w2jnczg6942gyijsdpgllfiq8b4rm";
   };
 
   preConfigure = ''
     substituteInPlace tools/glib-mkenums --replace /usr/bin/perl ${perl}/bin/perl
+    substituteInPlace src/ppp-manager/nm-ppp-manager.c --replace /sbin/modprobe /run/current-system/sw/sbin/modprobe
+    substituteInPlace src/devices/nm-device.c --replace /sbin/modprobe /run/current-system/sw/sbin/modprobe
+    configureFlags="$configureFlags --with-udev-dir=$out/lib/udev"
   '';
 
   # Right now we hardcode quite a few paths at build time. Probably we should
@@ -21,12 +24,14 @@ stdenv.mkDerivation rec {
   # remove unneeded build-time dependencies.
   configureFlags = [
     "--with-distro=exherbo"
-    "--with-dhclient=${dhcp}/sbin/dhclient"
+    "--with-dhclient=${dhcp}/bin/dhclient"
+    "--with-dnsmasq=${dnsmasq}/bin/dnsmasq"
     # Upstream prefers dhclient, so don't add dhcpcd to the closure
     #"--with-dhcpcd=${dhcpcd}/sbin/dhcpcd"
     "--with-dhcpcd=no"
-    "--with-iptables=${iptables}/sbin/iptables"
-    "--with-udev-dir=\${out}/lib/udev"
+    "--with-pppd=${ppp}/bin/pppd"
+    "--with-iptables=${iptables}/bin/iptables"
+    #"--with-udev-dir=$(out)/lib/udev"
     "--with-resolvconf=${openresolv}/sbin/resolvconf"
     "--sysconfdir=/etc" "--localstatedir=/var"
     "--with-dbus-sys-dir=\${out}/etc/dbus-1/system.d"
@@ -35,22 +40,16 @@ stdenv.mkDerivation rec {
     "--with-kernel-firmware-dir=/run/current-system/firmware"
     "--with-session-tracking=systemd"
     "--with-modem-manager-1"
+    "--with-nmtui"
+    "--with-libsoup=yes"
   ];
 
-  buildInputs = [ wirelesstools udev libnl libuuid polkit ppp xz bluez5 gobjectIntrospection modemmanager ];
+  buildInputs = [ wirelesstools udev libnl libuuid polkit ppp libndp
+                  xz bluez5 gobjectIntrospection modemmanager readline newt libsoup ];
 
   propagatedBuildInputs = [ dbus_glib gnutls libgcrypt ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
-
-  patches =
-    [ ( substituteAll {
-        src = ./nixos-purity.patch;
-        inherit avahi dnsmasq ppp bind;
-        glibc = stdenv.cc.libc;
-      })
-      ./libnl-3.2.25.patch
-    ];
 
   preInstall =
     ''
@@ -66,7 +65,6 @@ stdenv.mkDerivation rec {
 
       # rename to network-manager to be in style
       mv $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/network-manager.service 
-      echo "Alias=NetworkManager.service" >> $out/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
 
       # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
       # aliases ourselves.

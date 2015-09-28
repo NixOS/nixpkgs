@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
     owner  = "ruby";
     repo   = "ruby";
     rev    = "v2_0_0_${passthru.patchLevel}";
-    sha256 = "07ccnxgiqxn5ycmq2wl7j3aqmndm4n358y35kzaivb488ayjg3pj";
+    sha256 = "14bnas1iif2shyaz4ylb0832x96y2mda52x0v0aglkvqmcz1cfxb";
   } else fetchurl {
-    url = "http://cache.ruby-lang.org/pub/ruby/2.0/${name}.tar.bz2";
-    sha256 = "1qnqccyfhx0fykxqbzlxq0yvyvq6q9v32givyfyr303dx7bxlqh7";
+    url = "https://cache.ruby-lang.org/pub/ruby/2.0/${name}.tar.bz2";
+    sha256 = "1sc36qxqhziqbrvp99z4qdx9j0f8r1xhcbb6scb3m4nb02cwzk9d";
   };
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
@@ -51,11 +51,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = ops useRailsExpress [
-    "${patchSet}/patches/ruby/2.0.0/p481/railsexpress/01-zero-broken-tests.patch"
-    "${patchSet}/patches/ruby/2.0.0/p481/railsexpress/02-railsexpress-gc.patch"
-    "${patchSet}/patches/ruby/2.0.0/p481/railsexpress/03-display-more-detailed-stack-trace.patch"
-    "${patchSet}/patches/ruby/2.0.0/p481/railsexpress/04-show-full-backtrace-on-stack-overflow.patch"
-    "${patchSet}/patches/ruby/2.0.0/p481/railsexpress/05-fix-missing-c-return-event.patch"
+    "${patchSet}/patches/ruby/2.0.0/p${passthru.patchLevel}/railsexpress/01-zero-broken-tests.patch"
+    "${patchSet}/patches/ruby/2.0.0/p${passthru.patchLevel}/railsexpress/02-railsexpress-gc.patch"
+    "${patchSet}/patches/ruby/2.0.0/p${passthru.patchLevel}/railsexpress/03-display-more-detailed-stack-trace.patch"
+    "${patchSet}/patches/ruby/2.0.0/p${passthru.patchLevel}/railsexpress/04-show-full-backtrace-on-stack-overflow.patch"
   ];
 
   configureFlags = ["--enable-shared" ]
@@ -96,7 +95,7 @@ stdenv.mkDerivation rec {
     majorVersion = "2";
     minorVersion = "0";
     teenyVersion = "0";
-    patchLevel = "481";
+    patchLevel = "645";
     rubyEngine = "ruby";
     libPath = "lib/${rubyEngine}/${majorVersion}.${minorVersion}.${teenyVersion}";
     gemPath = "lib/${rubyEngine}/gems/${majorVersion}.${minorVersion}.${teenyVersion}";

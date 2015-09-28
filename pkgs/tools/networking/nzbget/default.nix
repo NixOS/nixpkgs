@@ -1,22 +1,24 @@
 { stdenv, fetchurl, pkgconfig, libxml2, ncurses, libsigcxx, libpar2
-, gnutls, libgcrypt }:
+, gnutls, libgcrypt, zlib }:
 
+let
+  version = "15.0";
+in
 stdenv.mkDerivation rec {
-  name = "nzbget-14.2";
+  name = "nzbget-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nzbget/${name}.tar.gz";
-    sha256 = "0xs620hjxi9fkab6bmgy7zhwd0h035jpabf0wp2nc5y0gnsay95v";
+    url = "http://github.com/nzbget/nzbget/releases/download/v${version}/${name}-src.tar.gz";
+    sha256 = "02nclq97gqr4zwww4j1l9sds2rwrwwvwvh2gkjhwvr0pb4z3zw9y";
   };
 
-  buildInputs = [ pkgconfig libxml2 ncurses libsigcxx libpar2 gnutls libgcrypt ];
+  buildInputs = [ pkgconfig libxml2 ncurses libsigcxx libpar2 gnutls
+                  libgcrypt zlib ];
 
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = "-lz";
-
   meta = with stdenv.lib; {
-    homepage = http://nzbget.sourceforge.net/;
+    homepage = http://nzbget.net;
     license = licenses.gpl2Plus;
     description = "A command line tool for downloading files from news servers";
     maintainers = with maintainers; [ pSub ];

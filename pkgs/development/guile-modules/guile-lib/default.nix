@@ -1,6 +1,6 @@
 {stdenv, fetchurl, guile, texinfo}:
 
-assert stdenv ? cc && stdenv.cc.cc.isGNU or false;
+assert stdenv ? cc && stdenv.cc.isGNU;
 
 stdenv.mkDerivation rec {
   name = "guile-lib-0.2.2";

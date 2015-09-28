@@ -45,10 +45,10 @@ buildPythonPackage rec {
   # tests are currently _heavily_ broken upstream
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "https://fedoraproject.org/wiki/Blivet";
     description = "Module for management of a system's storage configuration";
-    license = [ "GPLv2+" "LGPLv2.1+" ];
-    platforms = stdenv.lib.platforms.linux;
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    platforms = platforms.linux;
   };
 }

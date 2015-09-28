@@ -22,5 +22,13 @@ mount --rbind /run $chrootenvDest/run
 # Bind mount the host system's /etc
 mount --bind /etc $chrootenvDest/host-etc
 
+# Bind mount the host system's /tmp
+mount --bind /tmp $chrootenvDest/host-tmp
+
 # Bind mount /tmp
 mount --bind /tmp/chrootenv-@name@ $chrootenvDest/tmp
+
+# Expose sockets in /tmp
+for i in /tmp/.*-unix; do
+  ln -s "/host-tmp/$(basename "$i")" "$chrootenvDest/$i"
+done

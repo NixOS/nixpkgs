@@ -4,10 +4,6 @@ with lib;
 
 let
   cfg = config.services.brltty;
-  
-  stateDir = "/run/brltty";
-
-  pidFile = "${stateDir}/brltty.pid";
 
 in {
 
@@ -24,14 +20,24 @@ in {
   config = mkIf cfg.enable {
 
     systemd.services.brltty = {
-      description = "Braille console driver";
-      preStart = ''
-        mkdir -p ${stateDir}
-      '';
+      description = "Braille Device Support";
+      unitConfig = {
+        Documentation = "http://mielke.cc/brltty/";
+        DefaultDependencies = "no";
+        RequiresMountsFor = "${pkgs.brltty}/var/lib/brltty";
+      };
       serviceConfig = {
-        ExecStart = "${pkgs.brltty}/bin/brltty --pid-file=${pidFile}";
-        Type = "forking";
-        PIDFile = pidFile;
+        ExecStart = "${pkgs.brltty}/bin/brltty --no-daemon";
+        Type = "simple";        # Change to notidy after next releae
+        TimeoutStartSec = 5;
+        TimeoutStopSec = 10;
+        Restart = "always";
+        RestartSec = 30;
+        Nice = -10;
+        OOMScoreAdjust = -900;
+        ProtectHome = "read-only";
+        ProtectSystem = "full";
+        SystemCallArchitectures = "native";
       };
       before = [ "sysinit.target" ];
       wantedBy = [ "sysinit.target" ];

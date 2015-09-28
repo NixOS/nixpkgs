@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "libtasn1-3.6";
+  name = "libtasn1-4.7";
 
   src = fetchurl {
     url = "mirror://gnu/libtasn1/${name}.tar.gz";
-    sha256 = "0c547qa1vfk1x2jzgjhf65izf4sfi86c6g46q7779g4aldk4gqqr";
+    sha256 = "1j8iixynchziw1y39lnibyl5h81m4p78w3i4f28q2vgwjgf801x4";
   };
 
   buildInputs = [ perl texinfo ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.lgpl2Plus;
 
-    maintainers = [ ];
+    maintainers = with stdenv.lib.maintainers; [ wkennington ];
     platforms = stdenv.lib.platforms.all;
   };
 }

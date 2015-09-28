@@ -17,7 +17,7 @@ let
 
 in {
   options.services.confd = {
-    enable = mkEnableOption "Whether to enable confd service.";
+    enable = mkEnableOption "confd service";
 
     backend = mkOption {
       description = "Confd config storage backend to use.";
@@ -63,7 +63,7 @@ in {
 
     package = mkOption {
       description = "Confd package to use.";
-      default = pkgs.goPackages.confd;
+      default = pkgs.confd;
       type = types.package;
     };
   };

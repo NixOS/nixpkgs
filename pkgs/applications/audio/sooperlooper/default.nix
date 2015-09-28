@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, liblo, libxml2, jack2, libsndfile, wxGTK, libsigcxx
+{ stdenv, fetchurl, liblo, libxml2, libjack2, libsndfile, wxGTK, libsigcxx
 ,libsamplerate, rubberband, pkgconfig, ncurses
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-   liblo libxml2 jack2 libsndfile wxGTK libsigcxx
+   liblo libxml2 libjack2 libsndfile wxGTK libsigcxx
    libsamplerate rubberband pkgconfig ncurses
   ];
 

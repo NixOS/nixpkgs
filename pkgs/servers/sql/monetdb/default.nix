@@ -4,7 +4,7 @@ let inherit (composableDerivation) edf; in
 
 composableDerivation.composableDerivation {} {
 
-  name = "monetdb-may-2009";
+  name = "monetdb-2009-05-01";
 
   src = fetchurl {
     url = http://monetdb.cwi.nl/downloads/sources/May2009-SP1/MonetDB-May2009-SuperBall-SP1.tar.bz2;

@@ -1,15 +1,14 @@
-{ stdenv, autoconf, automake, pkgconfig, SDL, SDL_mixer, SDL_net, fetchurl }:
+{ stdenv, autoreconfHook, pkgconfig, SDL, SDL_mixer, SDL_net, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "chocolate-doom-2.1.0";
+  name = "chocolate-doom-2.2.1";
   src = fetchurl {
     url = "https://github.com/chocolate-doom/chocolate-doom/archive/${name}.tar.gz";
-    sha256 = "1qwnc5j3n99jk35c487mxsij04m4kpkqzkbrb8qwqlsnqllyh1s1";
+    sha256 = "140xnz0vc14ypy30l6yxbb9s972g2ffwd4lbic54zp6ayd9414ma";
   };
-  buildInputs = [ autoconf automake pkgconfig SDL SDL_mixer SDL_net ];
+  buildInputs = [ autoreconfHook pkgconfig SDL SDL_mixer SDL_net ];
   patchPhase = ''
     sed -e 's#/games#/bin#g' -i src{,/setup}/Makefile.am
-    ./autogen.sh --prefix=$out
   '';
 
   enableParallelBuilding = true;

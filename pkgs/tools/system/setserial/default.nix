@@ -1,8 +1,8 @@
-a :  
-let 
+a @ { groff, ... } :
+let
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "2.17" a; 
+  version = a.lib.attrByPath ["version"] "2.17" a;
   buildInputs = with a; [
     groff
   ];
@@ -26,7 +26,7 @@ rec {
   '') ["minInit" "doUnpack" "doConfigure"];
 
   neededDirs = ["$out/bin" "$out/share/man/man8"];
-      
+
   name = "setserial-" + version;
   meta = {
     description = "Serial port configuration utility";

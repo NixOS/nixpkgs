@@ -9,11 +9,11 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "belle-sip-1.4.0";
+  name = "belle-sip-1.4.1";
 
   src = fetchurl {
     url = "mirror://savannah/linphone/belle-sip/${name}.tar.gz";
-    sha256 = "1lwxfvwvclbh0bfwf69jrknqzqh1igzm293wwwbmq4kn8c5fiypz";
+    sha256 = "0q1d3fqsrxi3kxcjcibr376js25h6in8c1hm7c53wz252jx6f42b";
   };
 
   nativeBuildInputs = [ jre ];

@@ -97,8 +97,8 @@ in
         description = ''
           Enabling this will add a line directly after pam_unix.so.
           Whenever a password is changed the samba password will be updated as well.
-          However you still yave to add the samba password once using smbpasswd -a user
-          If you don't want to maintain an extra pwd database you still can send plain text
+          However, you still have to add the samba password once, using smbpasswd -a user.
+          If you don't want to maintain an extra password database, you still can send plain text
           passwords which is not secure.
         '';
       };
@@ -137,7 +137,7 @@ in
 
       nsswins = mkOption {
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
         description = ''
           Whether to enable the WINS NSS (Name Service Switch) plug-in.
           Enabling it allows applications to resolve WINS/NetBIOS names (a.k.a.

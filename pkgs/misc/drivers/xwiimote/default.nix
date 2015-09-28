@@ -1,9 +1,9 @@
 { stdenv, udev, ncurses, pkgconfig, fetchurl, bluez }:
 
 stdenv.mkDerivation rec {
-  name = "xwiimote";
+  name = "xwiimote-2";
   src = fetchurl {
-    url = "https://github.com/dvdhrm/xwiimote/releases/download/xwiimote-2/xwiimote-2.tar.xz";
+    url = "https://github.com/dvdhrm/xwiimote/releases/download/${name}/${name}.tar.xz";
     sha256 = "1g9cbhblll47l300zr999xr51x2g98y49l222f77fhswd12kjzhd";
   };
 

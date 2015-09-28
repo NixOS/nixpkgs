@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, glibc }:
-stdenv.mkDerivation rec {
+{ stdenv, fetchurl }:
 
+stdenv.mkDerivation rec {
   name = "ustr-${version}";
   version = "1.0.4";
 
@@ -9,14 +9,30 @@ stdenv.mkDerivation rec {
     sha256 = "1i623ygdj7rkizj7985q9d6vj5amwg686aqb5j3ixpkqkyp6xbrx";
   };
 
-  prePatch = "substituteInPlace Makefile --replace /usr/include/ ${glibc}/include/";
+  # Fixes bogus warnings that failed libsemanage
+  patches = [ ./va_args.patch ];
 
-  patches = [ ./va_args.patch ]; # fixes bogus warnings that failed libsemanage
+  # Work around gcc5 switch to gnu11
+  NIX_CFLAGS_COMPILE = "-std=gnu89";
 
-  makeFlags = "DESTDIR=$(out) prefix= LDCONFIG=echo";
+  # Fix detection of stdint.h
+  postPatch = ''
+    sed -i 's,\(have_stdint_h\)=0,\1=1,g' Makefile
+    sed -i 's,\(USTR_CONF_HAVE_STDINT_H\) 0,\1 1,g' ustr-import.in
+  '';
 
-  configurePhase = "make ustr-import";
-  buildInputs = [ glibc ];
+  buildTargets = [ "all-shared" ];
+
+  preBuild = ''
+    makeFlagsArray+=("prefix=$out")
+    makeFlagsArray+=("LDCONFIG=echo")
+    makeFlagsArray+=("HIDE=")
+  '';
+
+  # Remove debug libraries
+  postInstall = ''
+    find $out/lib -name \*debug\* -delete
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.and.org/ustr/;

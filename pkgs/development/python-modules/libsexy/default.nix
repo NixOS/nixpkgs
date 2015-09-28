@@ -1,8 +1,8 @@
-a :  
-let 
+a @ { python, libsexy, pkgconfig, libxml2, pygtk, pango, gtk, glib, ... } :
+let
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "0.1.9" a; 
+  version = a.lib.attrByPath ["version"] "0.1.9" a;
   buildInputs = with a; [
     pkgconfig pygtk
   ];

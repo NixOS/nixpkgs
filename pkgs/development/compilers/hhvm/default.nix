@@ -1,6 +1,6 @@
 { stdenv, fetchgit, cmake, pkgconfig, boost, libunwind, libmemcached, pcre
 , libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php, re2c
-, expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog, krb5
+, expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog, libkrb5
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
 , libxslt, ocaml, freetype, gdb, git, perl, mariadb, gmp, libyaml, libedit
 , libvpx, imagemagick, fribidi
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     [ cmake pkgconfig boost libunwind mariadb libmemcached pcre gdb git perl
       libevent gd curl libxml2 icu flex bison openssl zlib php expat libcap
       oniguruma libdwarf libmcrypt tbb gperftools bzip2 openldap readline
-      libelf uwimap binutils cyrus_sasl pam glog libpng libxslt ocaml krb5
+      libelf uwimap binutils cyrus_sasl pam glog libpng libxslt ocaml libkrb5
       gmp libyaml libedit libvpx imagemagick fribidi
     ];
 
@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
       --replace /bin/bash ${stdenv.shell}
     substituteInPlace ./configure \
       --replace "/usr/bin/env bash" ${stdenv.shell}
+    sed '1i#include <vector>' \
+      -i ./third-party/mcrouter/mcrouter/lib/fibers/TimeoutController.h
   '';
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];

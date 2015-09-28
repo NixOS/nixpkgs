@@ -1,5 +1,8 @@
 import ./make-test.nix ({ pkgs, ... }: {
   name = "kde4";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ iElectric eelco chaoflow ];
+  };
 
   machine =
     { config, pkgs, ... }:
@@ -12,7 +15,7 @@ import ./make-test.nix ({ pkgs, ... }: {
 
       services.httpd.enable = true;
       services.httpd.adminAddr = "foo@example.org";
-      services.httpd.documentRoot = "${pkgs.valgrind}/share/doc/valgrind/html";
+      services.httpd.documentRoot = "${pkgs.valgrind.doc}/share/doc/valgrind/html";
 
       services.xserver.displayManager.kdm.enable = true;
       services.xserver.displayManager.kdm.extraConfig =

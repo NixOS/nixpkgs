@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, opencv, qt5 }:
+{ stdenv, fetchgit, cmake, opencv, qtbase, qtsvg }:
 
 stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "16b3mmsf9r1yqqaw89fx0c3bgfg86dz4phry89wqy2hw05szgda3";
   };
 
-  buildInputs = [ opencv qt5 ];
+  buildInputs = [ opencv qtbase qtsvg ];
 
   nativeBuildInputs = [ cmake ];
 

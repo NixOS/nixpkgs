@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "jemalloc-3.6.0";
+  name = "jemalloc-4.0.2";
 
   src = fetchurl {
     url = "http://www.canonware.com/download/jemalloc/${name}.tar.bz2";
-    sha256 = "1zl4vxxjvhg72bdl53sl0idz9wp18c6yzjdmqcnwm09wvmcj2v71";
+    sha256 = "04a6iw9wiwiknd7v3l3i7vpmc5nvv52islnb1hz9idmdk259r2hd";
   };
 
   meta = with stdenv.lib; {

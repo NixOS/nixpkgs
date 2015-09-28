@@ -6,12 +6,13 @@
 , gawk
 , bash
 , getopt
+, procps
 }:
 
 let
 
-  version = "2.0.14";
-  sha256 = "06vsv141dk5i5z47nh1glkqpscjl5fgynbhaxb4yjab9lskwv5jk";
+  version = "2.0.16";
+  sha256 = "1fpvgmakmxy1lnygccpc32q53pa36bwy0lqdvb6hsifkxymdw8y5";
 
 in
 
@@ -20,10 +21,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     inherit sha256;
-    url = "http://apache.cs.utah.edu/cassandra/${version}/apache-${name}-bin.tar.gz";
+    url = "mirror://apache/cassandra/${version}/apache-${name}-bin.tar.gz";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir $out
@@ -34,7 +35,8 @@ stdenv.mkDerivation rec {
         --set JAVA_HOME ${jre} \
         --prefix PATH : ${bash}/bin \
         --prefix PATH : ${getopt}/bin \
-        --prefix PATH : ${gawk}/bin
+        --prefix PATH : ${gawk}/bin \
+        --prefix PATH : ${procps}/bin
     done
 
     wrapProgram $out/bin/cqlsh --prefix PATH : ${python}/bin
@@ -44,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = http://cassandra.apache.org/;
     description = "A massively scalable open source NoSQL database";
     platforms = with platforms; all;
-    license = with licenses; asl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ nckx rushmorem ];
   };
 }

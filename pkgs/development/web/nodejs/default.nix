@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openssl, python, zlib, libuv, v8, utillinux, http-parser
-, pkgconfig, runCommand, which, unstableVersion ? false
+, pkgconfig, runCommand, which, libtool
 }:
 
 # nodejs 0.12 can't be built on armv5tel. Armv6 with FPU, minimum I think.
@@ -7,12 +7,7 @@
 assert stdenv.system != "armv5tel-linux";
 
 let
-  dtrace = runCommand "dtrace-native" {} ''
-    mkdir -p $out/bin
-    ln -sv /usr/sbin/dtrace $out/bin
-  '';
-
-  version = "0.12.0";
+  version = "4.1.0";
 
   deps = {
     inherit openssl zlib libuv;
@@ -36,25 +31,23 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "0cifd2qhpyrbxx71a4hsagzk24qas8m5zvwcyhx69cz9yhxf404p";
+    sha256 = "453005f64ee529f7dcf1237eb27ee2fa2415c49f5c9e7463e8b71fba61c5b408";
   };
 
-  configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);
-
+  configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps) ++ [ "--without-dtrace" ];
+  dontDisableStatic = true;
   prePatch = ''
-    sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i configure
+    patchShebangs .
   '';
 
-  patches = if stdenv.isDarwin then [ ./no-xcode.patch ] else null;
+  patches = stdenv.lib.optional stdenv.isDarwin ./no-xcode.patch;
 
-  postPatch = if stdenv.isDarwin then ''
-    (cd tools/gyp; patch -Np1 -i ${../../python-modules/gyp/no-darwin-cflags.patch})
-  '' else null;
-
-  buildInputs = [ python which ]
+  buildInputs = [ python which http-parser zlib libuv openssl python ]
     ++ (optional stdenv.isLinux utillinux)
-    ++ optionals stdenv.isDarwin [ pkgconfig openssl dtrace ];
+    ++ optionals stdenv.isDarwin [ pkgconfig openssl libtool ];
   setupHook = ./setup-hook.sh;
+
+  enableParallelBuilding = true;
 
   passthru.interpreterName = "nodejs";
 
@@ -62,7 +55,7 @@ in stdenv.mkDerivation {
     description = "Event-driven I/O framework for the V8 JavaScript engine";
     homepage = http://nodejs.org;
     license = licenses.mit;
-    maintainers = [ maintainers.goibhniu maintainers.shlevy ];
+    maintainers = [ maintainers.goibhniu maintainers.havvy ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

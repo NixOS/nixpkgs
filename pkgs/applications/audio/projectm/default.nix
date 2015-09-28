@@ -2,8 +2,8 @@
 , glew, ftgl, ttf_bitstream_vera
 , withQt ? true, qt4
 , withLibvisual ? false, libvisual, SDL
-, withJack ? false, jack2
-, withPulseAudio ? true, pulseaudio
+, withJack ? false, libjack2
+, withPulseAudio ? true, libpulseaudio
 }:
 
 assert withJack       -> withQt;
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     [ glew ftgl ]
     ++ optional withQt qt4
     ++ optionals withLibvisual [ libvisual SDL ]
-    ++ optional withJack jack2
-    ++ optional withPulseAudio pulseaudio
+    ++ optional withJack libjack2
+    ++ optional withPulseAudio libpulseaudio
     ;
 }

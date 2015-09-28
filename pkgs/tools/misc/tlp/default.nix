@@ -51,6 +51,10 @@ in stdenv.mkDerivation {
     for i in $out/lib/udev/rules.d/*; do
       sed -i "s,RUN+=\",\\0$out,g; s,/usr/sbin,/bin,g" "$i"
     done
+
+    for i in man/*; do
+      install -D $i $out/share/man/man''${i##*.}/$(basename $i)
+    done
   '';
 
   passthru = { inherit enableRDW; };

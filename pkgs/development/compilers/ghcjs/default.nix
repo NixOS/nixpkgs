@@ -29,7 +29,7 @@
 , lens
 , parallel, safe, shelly, split, stringsearch, syb
 , tar, terminfo
-, vector, yaml, fetchgit, Cabal
+, vector, yaml, fetchgit, fetchFromGitHub, Cabal
 , alex, happy, git, gnumake, autoconf, patch
 , automake, libtool
 , cryptohash
@@ -40,23 +40,27 @@
 let
   version = "0.1.0";
   ghcjsBoot = fetchgit {
-    url = git://github.com/ghcjs/ghcjs-boot.git;
-    rev = "ab8765edcb507b8b810e3c324fd5bd5af2b69d8f"; # 7.10 branch
-    sha256 = "63b69a1d131cf3c7088e0f28d14750c81361dcc276fa113ad80dcccf73df5343";
+    url = "git://github.com/ghcjs/ghcjs-boot.git";
+    rev = "ec9f795b42b40fd24933d1672db153df5a29cc00"; # master branch
+    sha256 = "0bkvqlsgb9n0faayi4k1dlkn9cbm99a66m9nnx1kykb44qcl40yg";
     fetchSubmodules = true;
   };
-  shims = fetchgit {
-    url = git://github.com/ghcjs/shims.git;
-    rev = "6ada4bf1a084d1b80b993303d35ed863d219b031"; # master branch
-    sha256 = "0dhfnjj3rxdbb2m1pbnjc2yp4xcgsfdrsinljgdmg0hpqkafp4vc";
+  shims = fetchFromGitHub {
+    owner = "ghcjs";
+    repo = "shims";
+    rev = "01e01dee31a4786b3d01092e72350b0859a9f8c9"; # master branch
+    sha256 = "01m1yhq6l71azx0zqbpzmqc6rxxf654hgjibc0lz2cg5942wh1hf";
   };
 in mkDerivation (rec {
   pname = "ghcjs";
   inherit version;
-  src = fetchgit {
-    url = git://github.com/ghcjs/ghcjs.git;
-    rev = "d4322c2ae4467420b28eca99f0c0abd00caf5d4a"; # master branch
-    sha256 = "12mvl4l1i993j86n9wkwcs567jm13javghbxapjjsc7493xpmya5";
+  # `src` is ghcjs's a3157072c2593debf2e45e751e9a8aa90b860b4d plus this
+  # additional dependency bump: https://github.com/ghcjs/ghcjs/pull/408
+  src = fetchFromGitHub {
+    owner = "k0001";
+    repo = "ghcjs";
+    rev = "1b767e0b3dabdd1561bd17314d472651bfd9b97c";
+    sha256 = "0j4vj47qljbcbrp3md3jwxwl2kz9k85visq6yi1x8wdch4wb2kgy";
   };
   isLibrary = true;
   isExecutable = true;
@@ -103,7 +107,7 @@ in mkDerivation (rec {
 
     # Make the patches be relative their corresponding package's directory.
     # See: https://github.com/ghcjs/ghcjs-boot/pull/12
-    for patch in $topDir/ghcjs-boot/patches/*.patch; do
+    for patch in "$topDir/ghcjs-boot/patches/"*.patch; do
       echo "fixing patch: $patch"
       sed -i -e 's@ \(a\|b\)/boot/[^/]\+@ \1@g' $patch
     done

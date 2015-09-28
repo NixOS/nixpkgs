@@ -1,8 +1,8 @@
 { stdenv, fetchurl, pkgconfig, audiofile, libcap
 , openglSupport ? false, mesa ? null
 , alsaSupport ? true, alsaLib ? null
-, x11Support ? true, x11 ? null, libXrandr ? null
-, pulseaudioSupport ? true, pulseaudio ? null
+, x11Support ? true, xlibsWrapper ? null, libXrandr ? null
+, pulseaudioSupport ? true, libpulseaudio ? null
 }:
 
 # OSS is no longer supported, for it's much crappier than ALSA and
@@ -10,10 +10,13 @@
 assert (stdenv.isLinux && !(stdenv ? cross)) -> alsaSupport || pulseaudioSupport;
 
 assert openglSupport -> (mesa != null && x11Support);
-assert x11Support -> (x11 != null && libXrandr != null);
+assert x11Support -> (xlibsWrapper != null && libXrandr != null);
 assert alsaSupport -> alsaLib != null;
-assert pulseaudioSupport -> pulseaudio != null;
+assert pulseaudioSupport -> libpulseaudio != null;
 
+let
+  inherit (stdenv.lib) optional optionals;
+in
 stdenv.mkDerivation rec {
   version = "1.2.15";
   name    = "SDL-${version}";
@@ -23,19 +26,21 @@ stdenv.mkDerivation rec {
     sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
 
+  outputs = [ "out" "man" ];
+
+  nativeBuildInputs = [ pkgconfig ];
+
   # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
-  propagatedNativeBuildInputs =
-    stdenv.lib.optionals x11Support [ x11 libXrandr ] ++
-    stdenv.lib.optional alsaSupport alsaLib ++
-    stdenv.lib.optional pulseaudioSupport pulseaudio;
+  propagatedBuildInputs =
+    optionals x11Support [ xlibsWrapper libXrandr ] ++
+    optional alsaSupport alsaLib ++
+    optional stdenv.isLinux libcap ++
+    optional openglSupport mesa ++
+    optional pulseaudioSupport libpulseaudio;
 
   buildInputs = let
     notMingw = !(stdenv ? cross) || stdenv.cross.libc != "msvcrt";
-  in stdenv.lib.optional stdenv.isLinux libcap
-    ++ (stdenv.lib.optional notMingw audiofile);
-
-  nativeBuildInputs = [ pkgconfig ] ++
-    stdenv.lib.optional openglSupport [ mesa ];
+  in optional notMingw audiofile;
 
   # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
   # we must arrange to add it to its RPATH; however, `patchelf' seems

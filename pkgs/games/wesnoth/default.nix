@@ -1,21 +1,23 @@
 { stdenv, fetchurl, cmake, SDL, SDL_image, SDL_mixer, SDL_net, SDL_ttf, pango
 , gettext, zlib, boost, freetype, libpng, pkgconfig, lua, dbus, fontconfig, libtool
-, fribidi, asciidoc }:
+, fribidi, asciidoc, libpthreadstubs, libXdmcp, libxshmfence, libvorbis }:
 
 stdenv.mkDerivation rec {
   pname = "wesnoth";
-  version = "1.10.7";
+  version = "1.12.4";
 
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/sourceforge/${pname}/${name}.tar.bz2";
-    sha256 = "0gi5fzij48hmhhqxc370jxvxig5q3d70jiz56rjn8yx514s5lfwa";
+    sha256 = "19qyylylaljhk45lk2ja0xp7cx9iy4hx07l65zkg20a2v9h50lmz";
   };
 
+  nativeBuildInputs = [ cmake pkgconfig ];
+
   buildInputs = [ SDL SDL_image SDL_mixer SDL_net SDL_ttf pango gettext zlib
-                  boost fribidi cmake freetype libpng pkgconfig lua
-                  dbus fontconfig libtool ];
+                  boost fribidi freetype libpng lua libpthreadstubs libXdmcp
+                  dbus fontconfig libtool libxshmfence libvorbis ];
 
   cmakeFlags = [ "-DENABLE_STRICT_COMPILATION=FALSE" ]; # newer gcc problems http://gna.org/bugs/?21030
 

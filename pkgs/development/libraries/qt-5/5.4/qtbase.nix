@@ -1,7 +1,7 @@
 { stdenv, substituteAll
 , srcs, version
 
-, xlibs, libX11, libxcb, libXcursor, libXext, libXrender, libXi
+, xorg, libX11, libxcb, libXcursor, libXext, libXrender, libXi
 , xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilwm, libxkbcommon
 , fontconfig, freetype, openssl, dbus, glib, udev, libxml2, libxslt, pcre
 , zlib, libjpeg, libpng, libtiff, sqlite, icu
@@ -20,9 +20,12 @@
 , buildTests ? false
 , developerBuild ? false
 , gtkStyle ? false, libgnomeui, GConf, gnome_vfs, gtk
+, decryptSslTraffic ? false
 }:
 
 with stdenv.lib;
+
+let system-x86_64 = elem stdenv.system platforms.x86_64; in
 
 stdenv.mkDerivation {
 
@@ -67,7 +70,10 @@ stdenv.mkDerivation {
       (substituteAll { src = ./0010-dlopen-libXcursor.patch; inherit libXcursor; })
       (substituteAll { src = ./0011-dlopen-openssl.patch; inherit openssl; })
       (substituteAll { src = ./0012-dlopen-dbus.patch; dbus_libs = dbus; })
-    ];
+      ./0013-xdg_config_dirs.patch
+    ] ++ optional mesaSupported
+      (substituteAll { src = ./0014-mkspecs-libgl.patch; inherit mesa; })
+    ++ (optional decryptSslTraffic ./0100-ssl.patch);
 
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/qtbase/lib:$PWD/qtbase/plugins/platforms:$PWD/qttools/lib:$LD_LIBRARY_PATH"
@@ -79,6 +85,7 @@ stdenv.mkDerivation {
     sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in"
 
     export configureFlags+="-plugindir $out/lib/qt5/plugins -importdir $out/lib/qt5/imports -qmldir $out/lib/qt5/qml"
+    export configureFlags+=" -docdir $out/share/doc/qt5"
   '';
 
   prefixKey = "-prefix ";
@@ -101,6 +108,7 @@ stdenv.mkDerivation {
     -strip
     -reduce-relocations
     -system-proxies
+    -pkg-config
 
     -gui
     -widgets
@@ -114,11 +122,22 @@ stdenv.mkDerivation {
     -xcb
     -qpa xcb
     -${optionalString (cups == null) "no-"}cups
+    -${optionalString (!gtkStyle) "no-"}gtkstyle
 
     -no-eglfs
     -no-directfb
     -no-linuxfb
     -no-kms
+
+    ${optionalString (!system-x86_64) "-no-sse2"}
+    -no-sse3
+    -no-ssse3
+    -no-sse4.1
+    -no-sse4.2
+    -no-avx
+    -no-avx2
+    -no-mips_dsp
+    -no-mips_dspr2
 
     -system-zlib
     -system-libpng
@@ -138,8 +157,13 @@ stdenv.mkDerivation {
     -${optionalString (buildTests == false) "no"}make tests
   '';
 
+  # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
+  # if dependency paths contain the string "pq", which can occur in the hash.
+  # To prevent these failures, we need to override PostgreSQL detection.
+  PSQL_LIBS = optionalString (postgresql != null) "-L${postgresql}/lib -lpq";
+
   propagatedBuildInputs = [
-    xlibs.libXcomposite libX11 libxcb libXext libXrender libXi
+    xorg.libXcomposite libX11 libxcb libXext libXrender libXi
     fontconfig freetype openssl dbus.libs glib udev libxml2 libxslt pcre
     zlib libjpeg libpng libtiff sqlite icu
     xcbutil xcbutilimage xcbutilkeysyms xcbutilwm libxkbcommon
@@ -149,9 +173,12 @@ stdenv.mkDerivation {
   ++ optionals mesaSupported [ mesa mesa_glu ]
   ++ optional (cups != null) cups
   ++ optional (mysql != null) mysql.lib
-  ++ optional (postgresql != null) postgresql;
+  ++ optional (postgresql != null) postgresql
+  ++ optionals gtkStyle [gnome_vfs libgnomeui gtk GConf];
 
-  buildInputs = [ gdb bison flex gperf ruby ];
+  buildInputs =
+    [ bison flex gperf ruby ]
+    ++ optional developerBuild gdb;
 
   nativeBuildInputs = [ python perl pkgconfig ];
 
@@ -166,11 +193,10 @@ stdenv.mkDerivation {
 
       # Don't retain build-time dependencies like gdb and ruby.
       sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $out/mkspecs/qconfig.pri
-
-      mkdir -p "$out/nix-support"
-      substitute ${./setup-hook.sh} "$out/nix-support/setup-hook" \
-        --subst-var out --subst-var-by lndir "${lndir}"
     '';
+
+  inherit lndir;
+  setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true; # often fails on Hydra, as well as qt4
 

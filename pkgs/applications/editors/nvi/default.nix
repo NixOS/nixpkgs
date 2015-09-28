@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
   # nvi tries to write to a usual tmp directory (/var/tmp),
   # so we will force it to use /tmp.
   patchPhase = ''
-    sed -i -e s/-lcurses/-lncurses/ \
+    sed -i build/configure \
       -e s@vi_cv_path_preserve=no@vi_cv_path_preserve=/tmp/vi.recover@ \
-      -e s@/var/tmp@@ build/configure
+      -e s@/var/tmp@@
   '';
 
   configurePhase = ''

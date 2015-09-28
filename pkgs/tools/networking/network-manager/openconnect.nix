@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, openconnect, intltool, pkgconfig, networkmanager
+{ stdenv, fetchurl, openconnect, intltool, pkgconfig, networkmanager, libsecret
 , withGnome ? true, gnome3, procps, module_init_tools }:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
   pname = "NetworkManager-openconnect";
-  version = "0.9.8.4";
+  version = networkmanager.version;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/0.9/${pname}-${version}.tar.xz";
-    sha256 = "1dl7wcmibrzf9qnpchgk9fxfhw0j2hzzzqmylkm2c41iv81xrd4r";
+    url = "mirror://gnome/sources/${pname}/1.0/${pname}-${version}.tar.xz";
+    sha256 = "03k05s3aaxcwrip3g3r13bx80wbg7vh5sssc7mvg27c4cdc0a2hj";
   };
 
-  buildInputs = [ openconnect networkmanager ]
+  buildInputs = [ openconnect networkmanager libsecret ]
     ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring gnome3.gconf ];
 
   nativeBuildInputs = [ intltool pkgconfig ];

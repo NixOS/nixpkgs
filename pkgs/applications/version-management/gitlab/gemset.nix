@@ -1121,11 +1121,11 @@
       "launchy"
     ];
   };
-  "libv8" = {
-    version = "3.16.14.3";
+  libv8 = {
+    version = "3.16.14.11";
     source = {
       type = "gem";
-      sha256 = "1arjjbmr9zxkyv6pdrihsz1p5cadzmx8308vgfvrhm380ccgridm";
+      sha256 = "000vbiy78wk5r1f6p7qncab8ldg7qw5pjz7bchn3lw700gpaacxp";
     };
   };
   "listen" = {

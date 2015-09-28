@@ -1,29 +1,31 @@
-{ stdenv, fetchFromGitHub, boost, fftw, qt5 }:
+{ stdenv, fetchFromGitHub, fftw, qtbase }:
 
-stdenv.mkDerivation rec {
-  version = "0.11.0-20141105";
+let version = "2.1"; in
+stdenv.mkDerivation {
   name = "libkeyfinder-${version}";
 
   src = fetchFromGitHub {
+    sha256 = "07kc0cl6kirgmpdgkgmp6r3yvyf7b1w569z01g8rfl1cig80qdc7";
+    rev = "v${version}";
     repo = "libKeyFinder";
     owner = "ibsh";
-    rev = "592ef1f3d3ada489f80814d5ccfbc8de6029dc9d";
-    sha256 = "0xcqpizwbn6wik3w7h9k1lvgrp3r3w6yyy55flvnwwwgvkry48as";
   };
 
   meta = with stdenv.lib; {
+    inherit version;
     description = "Musical key detection for digital audio (C++ library)";
     homepage = http://www.ibrahimshaath.co.uk/keyfinder/;
-    license = with licenses; gpl3Plus;
+    license = licenses.gpl3Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ fftw qt5 ];
-  propagatedBuildInputs = [ boost ];
+  buildInputs = [ fftw qtbase ];
 
-  patchPhase = ''
-    substituteInPlace LibKeyFinder.pro --replace "/usr/local" "$out"
+  postPatch = ''
+    substituteInPlace LibKeyFinder.pro \
+      --replace "/usr/local" "$out" \
+      --replace "-stdlib=libc++" ""
   '';
 
   configurePhase = ''
@@ -34,6 +36,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/include/keyfinder
-    cp *.h $out/include/keyfinder
+    install -m644 *.h $out/include/keyfinder
+    mkdir -p $out/lib
+    cp -a lib*.so* $out/lib
   '';
 }

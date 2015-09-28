@@ -56,6 +56,11 @@ stdenv.mkDerivation ({
          "/bin:/usr/bin", which is inappropriate on NixOS machines. This
          patch extends the search path by "/run/current-system/sw/bin". */
       ./fix_path_attribute_in_getconf.patch
+
+      ./security-4a28f4d5.patch
+      ./security-bdf1ff05.patch
+      ./cve-2014-8121.patch
+      ./cve-2015-1781.patch
     ];
 
   postPatch =
@@ -77,6 +82,12 @@ stdenv.mkDerivation ({
     + ''
       cat ${./glibc-remove-datetime-from-nscd.patch} \
         | sed "s,@out@,$out," | patch -p1
+    ''
+    # CVE-2014-8121, see https://bugzilla.redhat.com/show_bug.cgi?id=1165192
+    + ''
+      substituteInPlace ./nss/nss_files/files-XXX.c \
+        --replace 'status = internal_setent (stayopen);' \
+                  'status = internal_setent (1);'
     '';
 
   configureFlags =

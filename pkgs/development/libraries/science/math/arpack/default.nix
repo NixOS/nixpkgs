@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, gfortran, atlasWithLapack }:
+{ stdenv, fetchurl, gfortran, openblas }:
+
+with stdenv.lib;
 
 let
   version = "3.2.0";
@@ -10,16 +12,21 @@ stdenv.mkDerivation {
     sha256 = "1fwch6vipms1ispzg2djvbzv5wag36f1dmmr3xs3mbp6imfyhvff";
   };
 
-  buildInputs = [ gfortran atlasWithLapack ];
+  buildInputs = [ gfortran openblas ];
 
   # Auto-detection fails because gfortran brings in BLAS by default
-  configureFlags="--with-blas=-latlas --with-lapack=-latlas";
+  configureFlags = [
+    "--with-blas=-lopenblas"
+    "--with-lapack=-lopenblas"
+  ];
+
+  FFLAGS = optional openblas.blas64 "-fdefault-integer-8";
 
   meta = {
-    homepage = "http://forge.scilab.org/index.php/p/arpack-ng/";
+    homepage = "http://github.com/opencollab/arpack-ng";
     description = ''
       A collection of Fortran77 subroutines to solve large scale eigenvalue
-      problems
+      problems.
     '';
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.ttuegel ];

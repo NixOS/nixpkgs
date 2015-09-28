@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "119x7p1cqw40mpwj80xfq879l9m1dkc7vbc1f3bz3kvkf8bf6p16";
   };
 
+  patches = if stdenv.isCygwin then [ ./cygwin.patch ] else null;
+
   configureFlags =
     [ "--enable-cplusplus" ]
     ++ lib.optional enableLargeConfig "--enable-large-config";

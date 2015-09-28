@@ -1,22 +1,25 @@
---- tk8.5.15-orig/unix/Makefile.in	2014-01-25 08:57:45.626713122 +0800
-+++ tk8.5.15/unix/Makefile.in	2014-01-25 08:59:35.315341825 +0800
-@@ -995,7 +995,8 @@
+diff --git a/generic/tkWindow.c b/generic/tkWindow.c
+index b5cbbab..96b5501 100644
+--- a/generic/tkWindow.c
++++ b/generic/tkWindow.c
+@@ -988,6 +988,7 @@ TkCreateMainWindow(
+ 
+     Tcl_SetVar2(interp, "tk_patchLevel", NULL, TK_PATCH_LEVEL, TCL_GLOBAL_ONLY);
+     Tcl_SetVar2(interp, "tk_version",    NULL, TK_VERSION,     TCL_GLOBAL_ONLY);
++    Tcl_SetVar2(interp, "tk_library",    NULL, TK_LIBRARY,     TCL_GLOBAL_ONLY);
+ 
+     tsdPtr->numMainWindows++;
+     return tkwin;
+diff --git a/unix/Makefile.in b/unix/Makefile.in
+index f21fdbb..c61b0df 100644
+--- a/unix/Makefile.in
++++ b/unix/Makefile.in
+@@ -1029,7 +1029,7 @@ tkVisual.o: $(GENERIC_DIR)/tkVisual.c
  	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/tkVisual.c
  
  tkWindow.o: $(GENERIC_DIR)/tkWindow.c
 -	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/tkWindow.c
-+	$(CC) -c $(CC_SWITCHES) -DTK_LIBRARY=\"${TK_LIBRARY}\" \
-+	    $(GENERIC_DIR)/tkWindow.c
++	$(CC) -c $(CC_SWITCHES) -DTK_LIBRARY=\"${TK_LIBRARY}\" $(GENERIC_DIR)/tkWindow.c
  
  tkButton.o: $(GENERIC_DIR)/tkButton.c
  	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/tkButton.c
---- tk8.5.15-orig/generic/tkWindow.c	2014-01-25 10:10:03.964476436 +0800
-+++ tk8.5.15/generic/tkWindow.c	2014-01-25 10:08:06.020950933 +0800
-@@ -983,6 +983,7 @@
- 
-     Tcl_SetVar(interp, "tk_patchLevel", TK_PATCH_LEVEL, TCL_GLOBAL_ONLY);
-     Tcl_SetVar(interp, "tk_version",    TK_VERSION,     TCL_GLOBAL_ONLY);
-+    Tcl_SetVar(interp, "tk_library",    TK_LIBRARY,     TCL_GLOBAL_ONLY);
- 
-     tsdPtr->numMainWindows++;
-     return tkwin;

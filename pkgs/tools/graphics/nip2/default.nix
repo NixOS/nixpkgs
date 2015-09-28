@@ -2,11 +2,11 @@
 fftw, gsl, goffice_0_8, libgsf }:
 
 stdenv.mkDerivation rec {
-  name = "nip2-7.42.1";
+  name = "nip2-8.0";
 
   src = fetchurl {
     url = "http://www.vips.ecs.soton.ac.uk/supported/current/${name}.tar.gz";
-    sha256 = "14lfyn0azswrz8r81ign9lbpxzk7ibmnnp03a3l8wgxvm2j9a7jl";
+    sha256 = "10ybac0qrz63x1yk1d0gpv9z1vzpadyii2qhrai6lllplzw6jqx7";
   };
 
   buildInputs =

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, qt5 }:
+{ stdenv, fetchgit, qtbase, qtquick1 }:
 
 stdenv.mkDerivation rec {
   version = "0.1.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "19pz27jsdpa3pybj8sghmmd1zqgr73js1mp3875rhx158dav37nz";
   };
 
-  buildInputs = [ qt5 ];
+  buildInputs = [ qtbase qtquick1 ];
 
   patchPhase = ''
     substituteInPlace qmltermwidget.pro \
@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
   configurePhase = "qmake PREFIX=$out";
 
   installPhase=''make INSTALL_ROOT="$out" install'';
-  
+
   enableParallelBuilding = true;
 
   meta = {
     description = "A QML port of qtermwidget";
     homepage = "https://github.com/Swordifish90/qmltermwidget";
-    license = with stdenv.lib.licenses; [ gpl2 ];
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ skeidel ];
   };

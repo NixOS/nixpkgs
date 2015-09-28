@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, perl, glib, libintlOrEmpty, gobjectIntrospection }:
 
 let
-  ver_maj = "2.12";
+  ver_maj = "2.16";
   ver_min = "0";
 in
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/atk/${ver_maj}/${name}.tar.xz";
-    sha256 = "13zijfcmx7sda83qkryzsmr9hw0r3b73xkagq9cmm733fhcl7a28";
+    sha256 = "0qp5i91kfk6rhrlam3s8ha0cz88lkyp89vsyn4pb5856c1h9hpq9";
   };
 
   buildInputs = libintlOrEmpty;

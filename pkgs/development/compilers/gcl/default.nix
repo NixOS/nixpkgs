@@ -1,16 +1,18 @@
-a :  
-let 
+a @ { mpfr, m4, binutils, fetchcvs, emacs, zlib, which
+, texinfo, libX11, xproto, inputproto, libXi
+, libXext, xextproto, libXt, libXaw, libXmu, stdenv, ... } :
+let
   buildInputs = with a; [
     mpfr m4 binutils emacs gmp
-    libX11 xproto inputproto libXi 
+    libX11 xproto inputproto libXi
     libXext xextproto libXt libXaw libXmu
-    zlib which texinfo texLive
-  ]; 
+    zlib which texinfo
+  ];
 in
 
 (
 assert a.stdenv ? cc ;
-assert a.stdenv.cc.cc.isGNU or false ;
+assert a.stdenv.cc.isGNU ;
 assert a.stdenv.cc ? libc ;
 assert a.stdenv.cc.libc != null ;
 
@@ -40,7 +42,7 @@ rec {
   '') ["minInit" "doUnpack" "addInputs"];
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["setVars" "doUnpack" "preBuild" 
+  phaseNames = ["setVars" "doUnpack" "preBuild"
     "doConfigure" "doMakeInstall"];
 }) // {
   meta = {
@@ -48,7 +50,7 @@ rec {
     maintainers = [
       a.lib.maintainers.raskin
     ];
-    platforms = with a.lib.platforms; 
+    platforms = with a.lib.platforms;
       linux;
   };
 }

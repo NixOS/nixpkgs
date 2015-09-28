@@ -6,7 +6,6 @@ with {
   inherit (import ./default.nix) fold;
   inherit (import ./strings.nix) concatStringsSep;
   inherit (import ./lists.nix) concatMap concatLists all deepSeqList;
-  inherit (import ./misc.nix) maybeAttr;
 };
 
 rec {
@@ -76,8 +75,28 @@ rec {
        => { foo = 1; }
   */
   filterAttrs = pred: set:
-    listToAttrs (fold (n: ys: let v = set.${n}; in if pred n v then [(nameValuePair n v)] ++ ys else ys) [] (attrNames set));
+    listToAttrs (concatMap (name: let v = set.${name}; in if pred name v then [(nameValuePair name v)] else []) (attrNames set));
 
+
+  /* Filter an attribute set recursivelly by removing all attributes for
+     which the given predicate return false.
+
+     Example:
+       filterAttrsRecursive (n: v: v != null) { foo = { bar = null; }; }
+       => { foo = {}; }
+  */
+  filterAttrsRecursive = pred: set:
+    listToAttrs (
+      concatMap (name:
+        let v = set.${name}; in
+        if pred name v then [
+          (nameValuePair name (
+            if isAttrs v then filterAttrsRecursive pred v
+            else v
+          ))
+        ] else []
+      ) (attrNames set)
+    );
 
   /* foldAttrs: apply fold functions to values grouped by key. Eg accumulate values as list:
      foldAttrs (n: a: [n] ++ a) [] [{ a = 2; } { a = 3; }]
@@ -86,7 +105,7 @@ rec {
   foldAttrs = op: nul: list_of_attrs:
     fold (n: a:
         fold (name: o:
-          o // (listToAttrs [{inherit name; value = op n.${name} (maybeAttr name nul a); }])
+          o // (listToAttrs [{inherit name; value = op n.${name} (a.${name} or nul); }])
         ) a (attrNames n)
     ) {} list_of_attrs;
 
@@ -220,6 +239,16 @@ rec {
 
   /* Check whether the argument is a derivation. */
   isDerivation = x: isAttrs x && x ? type && x.type == "derivation";
+
+
+  /* Convert a store path to a fake derivation. */
+  toDerivation = path:
+    let path' = builtins.storePath path; in
+    { type = "derivation";
+      name = builtins.unsafeDiscardStringContext (builtins.substring 33 (-1) (baseNameOf path'));
+      outPath = path';
+      outputs = [ "out" ];
+    };
 
 
   /* If the Boolean `cond' is true, return the attribute set `as',

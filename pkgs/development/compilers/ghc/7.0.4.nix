@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     export NIX_LDFLAGS+=" -no_dtrace_dof"
   '';
 
-  configureFlags = if stdenv.isDarwin then "--with-gcc=${../../haskell-modules/gcc-clang-wrapper.sh}"
+  configureFlags = if stdenv.isDarwin then "--with-gcc=${./gcc-clang-wrapper.sh}"
                                       else "--with-gcc=${stdenv.cc}/bin/gcc";
 
   NIX_CFLAGS_COMPILE = "-fomit-frame-pointer";

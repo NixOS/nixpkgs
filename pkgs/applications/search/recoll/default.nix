@@ -1,17 +1,18 @@
 { stdenv, fetchurl
 , qt4, xapian, file, python
 , djvulibre, groff, libxslt, unzip, xpdf, antiword, catdoc, lyx
+, libwpd, unrtf, untex
 , ghostscript, gawk, gnugrep, gnused, gnutar, gzip, libiconv }:
 
 assert stdenv.system != "powerpc-linux";
 
 stdenv.mkDerivation rec {
-  ver = "1.18.1";
+  ver = "1.20.6";
   name = "recoll-${ver}";
 
   src = fetchurl {
     url = "http://www.lesbonscomptes.com/recoll/${name}.tar.gz";
-    sha256 = "0cyrkx5aza3485avb2kxc6cbsqqrb32l1kq8ravr9d828331v84f";
+    sha256 = "0ympk2w21cxfvysyx96p0npsa54csfc84cicpi8nsj1qp824zxwq";
   };
 
   configureFlags = [ "--with-inotify" ];
@@ -40,22 +41,21 @@ stdenv.mkDerivation rec {
       substituteInPlace  $f --replace unzip         ${unzip}/bin/unzip
       substituteInPlace  $f --replace xls2csv       ${catdoc}/bin/xls2csv
       substituteInPlace  $f --replace xsltproc      ${libxslt}/bin/xsltproc
+      substituteInPlace  $f --replace unrtf         ${unrtf}/bin/unrtf
+      substituteInPlace  $f --replace untex         ${untex}/bin/untex
+      substituteInPlace  $f --replace wpd2html      ${libwpd}/bin/wpd2html
     done
   '';
-    # TODO:
-    #substituteInPlace  $f --replace unrtf         ${unrtf}/bin/unrtf 
-    #substituteInPlace  $f --replace untex         ${untex}/bin/untex
-    #substituteInPlace  $f --replace wpd2html      ${wpd2html}/bin/wpd2html
 
-  meta = {
-    description = "finds keywords inside documents as well as file names";
+  meta = with stdenv.lib; {
+    description = "A full-text search tool";
     longDescription = ''
       Recoll is an Xapian frontend that can search through files, archive
       members, email attachments. 
     '';
     homepage = http://www.lesbonscomptes.com/recoll/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ jcumming ];
   };
 }

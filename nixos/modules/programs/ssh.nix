@@ -18,6 +18,14 @@ let
       exec ${askPassword}
     '';
 
+  knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
+
+  knownHostsText = flip (concatMapStringsSep "\n") knownHosts
+    (h: assert h.hostNames != [];
+      concatStringsSep "," h.hostNames + " "
+      + (if h.publicKey != null then h.publicKey else readFile h.publicKeyFile)
+    );
+
 in
 {
   ###### interface
@@ -27,8 +35,7 @@ in
     programs.ssh = {
 
       askPassword = mkOption {
-        type = types.string;
-        default = "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
+        type = types.str;
         description = ''Program used by SSH to ask for passwords.'';
       };
 
@@ -77,7 +84,7 @@ in
       };
 
       agentTimeout = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = null;
         example = "1h";
         description = ''
@@ -92,31 +99,93 @@ in
         '';
       };
 
+      knownHosts = mkOption {
+        default = {};
+        type = types.loaOf (types.submodule ({ name, ... }: {
+          options = {
+            hostNames = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              description = ''
+                A list of host names and/or IP numbers used for accessing
+                the host's ssh service.
+              '';
+            };
+            publicKey = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              example = "ecdsa-sha2-nistp521 AAAAE2VjZHN...UEPg==";
+              description = ''
+                The public key data for the host. You can fetch a public key
+                from a running SSH server with the <command>ssh-keyscan</command>
+                command. The public key should not include any host names, only
+                the key type and the key itself.
+              '';
+            };
+            publicKeyFile = mkOption {
+              default = null;
+              type = types.nullOr types.path;
+              description = ''
+                The path to the public key file for the host. The public
+                key file is read at build time and saved in the Nix store.
+                You can fetch a public key file from a running SSH server
+                with the <command>ssh-keyscan</command> command. The content
+                of the file should follow the same format as described for
+                the <literal>publicKey</literal> option.
+              '';
+            };
+          };
+          config = {
+            hostNames = mkDefault [ name ];
+          };
+        }));
+        description = ''
+          The set of system-wide known SSH hosts.
+        '';
+        example = [
+          {
+            hostNames = [ "myhost" "myhost.mydomain.com" "10.10.1.4" ];
+            publicKeyFile = literalExample "./pubkeys/myhost_ssh_host_dsa_key.pub";
+          }
+          {
+            hostNames = [ "myhost2" ];
+            publicKeyFile = literalExample "./pubkeys/myhost2_ssh_host_dsa_key.pub";
+          }
+        ];
+      };
+
     };
 
   };
 
   config = {
 
-    assertions = singleton
-      { assertion = cfg.forwardX11 -> cfg.setXAuthLocation;
-        message = "cannot enable X11 forwarding without setting XAuth location";
-      };
-
-    environment.etc =
-      [ { # SSH configuration.  Slight duplication of the sshd_config
-          # generation in the sshd service.
-          source = pkgs.writeText "ssh_config" ''
-            AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
-            ${optionalString cfg.setXAuthLocation ''
-              XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
-            ''}
-            ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}
-            ${cfg.extraConfig}
-          '';
-          target = "ssh/ssh_config";
+    assertions =
+      [ { assertion = cfg.forwardX11 -> cfg.setXAuthLocation;
+          message = "cannot enable X11 forwarding without setting XAuth location";
         }
-      ];
+      ] ++ flip mapAttrsToList cfg.knownHosts (name: data: {
+        assertion = (data.publicKey == null && data.publicKeyFile != null) ||
+                    (data.publicKey != null && data.publicKeyFile == null);
+        message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
+      });
+
+    # SSH configuration. Slight duplication of the sshd_config
+    # generation in the sshd service.
+    environment.etc."ssh/ssh_config".text =
+      ''
+        AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
+
+        ${optionalString cfg.setXAuthLocation ''
+          XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
+        ''}
+
+        ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}
+
+        ${cfg.extraConfig}
+      '';
+
+    environment.etc."ssh/ssh_known_hosts".text = knownHostsText;
 
     # FIXME: this should really be socket-activated for über-awesomeness.
     systemd.user.services.ssh-agent =
@@ -152,6 +221,8 @@ in
       ''
         export SSH_ASKPASS=${askPassword}
       '';
+
+    programs.ssh.askPassword = mkDefault "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
 
   };
 }

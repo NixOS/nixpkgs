@@ -16,7 +16,7 @@ let
   sourceInfo = rec {
     baseName="allegro";
     folderSuffix = "-unstable";
-    version = "5.1.10";
+    version = "5.1.11";
     name="${baseName}-${version}";
     project="alleg";
     url="mirror://sourceforge/project/${project}/${baseName}${folderSuffix}/${version}/${name}.tar.gz";
@@ -26,7 +26,7 @@ in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = "13dfs007pyh908bm1hg7hz71y8fr9fj51byh5w149h8dsq2dds78";
+    sha256 = "0zz07gdyc6xflpvkknwgzsyyyh9qiwd69j42rm9cw1ciwcsic1vs";
   };
 
   inherit (sourceInfo) name version;

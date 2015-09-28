@@ -23,8 +23,14 @@ stdenv.mkDerivation {
   # Clang generates warnings in Boost's header files
   # -Werror causes these warnings to be interpreted as errors
   # Simplest solution: disable -Werror
-  configureFlags = if (stdenv.cc.cc.isClang or false)
+  configureFlags = if stdenv.cc.isClang
     then [ "--disable-werror" ] else null;
+
+  # Fix an issue with boost 1.59
+  # This is fixed upstream so please remove this when updating
+  postPatch = ''
+    sed -i 's,-DLIBREVENGE_BUILD,\0 -DBOOST_ERROR_CODE_HEADER_ONLY,g' src/lib/Makefile.in
+  '';
 
   meta = {
     inherit (s) version;

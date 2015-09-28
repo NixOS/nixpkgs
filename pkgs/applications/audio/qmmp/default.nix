@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, cmake, qt4, pkgconfig, x11
+{ stdenv, fetchurl, cmake, qt4, pkgconfig, xlibsWrapper
 # transports
 , curl, libmms
 # input plugins
 , libmad, taglib, libvorbis, libogg, flac, libmpcdec, libmodplug, libsndfile
 , libcdio, cdparanoia, libcddb, faad2, ffmpeg, wildmidi
 # output plugins
-, alsaLib, pulseaudio
+, alsaLib, libpulseaudio
 # effect plugins
 , libsamplerate
 }:
@@ -37,14 +37,14 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ # basic requirements
-      cmake qt4 pkgconfig x11
+      cmake qt4 pkgconfig xlibsWrapper
       # transports
       curl libmms
       # input plugins
       libmad taglib libvorbis libogg flac libmpcdec libmodplug libsndfile
       libcdio cdparanoia libcddb faad2 ffmpeg wildmidi
       # output plugins
-      alsaLib pulseaudio
+      alsaLib libpulseaudio
       # effect plugins
       libsamplerate
     ];

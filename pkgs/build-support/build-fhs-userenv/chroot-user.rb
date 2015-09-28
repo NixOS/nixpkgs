@@ -7,14 +7,11 @@ mounts = [ ['/nix/store', nil],
            ['/proc', nil],
            ['/sys', nil],
            ['/etc', 'host-etc'],
+           ['/tmp', 'host-tmp'],
            ['/home', nil],
            ['/var', nil],
            ['/run', nil],
            ['/root', nil],
-         ]
-
-# Create directories
-mkdirs = ['tmp',
          ]
 
 # Propagate environment variables
@@ -98,9 +95,6 @@ if $cpid == 0
   end
   write_file '/proc/self/uid_map', "#{uid} #{uid} 1"
   write_file '/proc/self/gid_map', "#{gid} #{gid} 1"
-
-  # Do mkdirs
-  mkdirs.each { |x| FileUtils.mkdir_p "#{root}/#{x}" }
 
   # Do rbind mounts.
   mounts.each do |x|

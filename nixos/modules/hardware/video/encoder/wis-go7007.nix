@@ -5,11 +5,11 @@ let
 in
 
 {
-  boot.extraModulePackages = [wis_go7007];
+  boot.extraModulePackages = [ wis_go7007 ];
 
-  environment.systemPackages = [wis_go7007];
+  environment.systemPackages = [ wis_go7007 ];
 
-  hardware.firmware = ["${wis_go7007}/firmware"];
+  hardware.firmware = [ wis_go7007 ];
 
-  services.udev.packages = [wis_go7007];
+  services.udev.packages = [ wis_go7007 ];
 }

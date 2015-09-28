@@ -2,13 +2,17 @@
 
 let wrappedGhc = ghcWithPackages (hpkgs: with hpkgs; [shuffle hashable mtl network uhc-util uulib] );
 in stdenv.mkDerivation rec {
-  version = "1.1.9.0";
+  # Important:
+  # The commits "Fixate/tag v..." are the released versions.
+  # Ignore the "bumped version to ...." commits, they do not
+  # correspond to releases.
+  version = "1.1.9.1.20150611";
   name = "uhc-${version}";
 
   src = fetchgit {
     url = "https://github.com/UU-ComputerScience/uhc.git";
-    rev = "0363bbcf4cf8c47d30c3a188e3e53b3f8454bbe4";
-    sha256 = "0sa9b341mm5ggmbydc33ja3h7k9w65qnki9gsaagb06gkvvqc7c2";
+    rev = "b80098e07d12900f098ea964b1d2b3f38e5c9900";
+    sha256 = "14qg1fd9pgbczcmn5ggkd9674qadx1izmz8363ps7c207dg94f9x";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/EHC";
@@ -46,5 +50,6 @@ in stdenv.mkDerivation rec {
     # On Darwin, the GNU libtool is used, which does not
     # support the -static flag and thus breaks the build.
     platforms = ["x86_64-linux"];
+    broken = true; # https://github.com/UU-ComputerScience/uhc/issues/60
   };
 }

@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unzip ] ++ stdenv.lib.optional stdenv.isLinux libunwind;
 
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile.am --replace stdc++ c++
+    substituteInPlace Makefile.in --replace stdc++ c++
+    substituteInPlace libtool --replace stdc++ c++
+  '';
+
   # some packages want to link to the static tcmalloc_minimal
   # to drop the runtime dependency on gperftools
   dontDisableStatic = true;

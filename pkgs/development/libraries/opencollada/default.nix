@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkgconfig, libxml2, pcre }:
 
 # The exact revision specified by Blender's install_deps.sh script.
-let rev = "18da7f4109a8eafaa290a33f5550501cc4c8bae8"; in
+let rev = "3335ac164e68b2512a40914b14c74db260e6ff7d"; in
 
 stdenv.mkDerivation {
   name = "opencollada-1.3-${rev}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     owner = "KhronosGroup";
     repo = "OpenCOLLADA";
     inherit rev;
-    sha256 = "0ach32ws95mh0ijd8sr22kxka3riq72bb9ng46vs3615dxn7h18d";
+    sha256 = "0s2m8crbg1kf09hpscrplv65a45dlg157b9c20chrv7wy0qizbw5";
   };
 
   buildInputs = [ cmake pkgconfig ];

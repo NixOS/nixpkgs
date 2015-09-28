@@ -83,7 +83,7 @@ in
       };
 
       extraParams = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [ ];
         example = [ "-m 0" ];
         description = ''

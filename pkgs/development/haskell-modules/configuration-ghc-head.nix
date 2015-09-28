@@ -33,25 +33,43 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # We have Cabal 1.22.x.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
-
-  # GHC 7.10.x's Haddock binary cannot generate hoogle files.
-  # https://ghc.haskell.org/trac/ghc/ticket/9921
-  mkDerivation = drv: super.mkDerivation (drv // { doHoogle = false; });
+  # Don't use jailbreak built with Cabal 1.22.x because of https://github.com/peti/jailbreak-cabal/issues/9.
+  Cabal_1_23_0_0 = overrideCabal super.Cabal_1_22_4_0 (drv: {
+    version = "1.23.0.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "haskell";
+      repo = "cabal";
+      rev = "fe7b8784ac0a5848974066bdab76ce376ba67277";
+      sha256 = "1d70ryz1l49pkr70g8r9ysqyg1rnx84wwzx8hsg6vwnmg0l5am7s";
+    };
+    jailbreak = false;
+    doHaddock = false;
+    postUnpack = "sourceRoot+=/Cabal";
+  });
+  jailbreak-cabal = overrideCabal super.jailbreak-cabal (drv: {
+    executableHaskellDepends = [ self.Cabal_1_23_0_0 ];
+    preConfigure = "sed -i -e 's/Cabal == 1.20\\.\\*/Cabal >= 1.23/' jailbreak-cabal.cabal";
+  });
 
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
+  bytestring-builder = dontHaddock super.bytestring-builder;
+
+  alex = dontCheck super.alex;
 
   # We have time 1.5
   aeson = disableCabalFlag super.aeson "old-locale";
 
+  # Show works differently for record syntax now, breaking haskell-src-exts' parser tests
+  # https://github.com/haskell-suite/haskell-src-exts/issues/224
+  haskell-src-exts = dontCheck super.haskell-src-exts;
+
   # Setup: At least the following dependencies are missing: base <4.8
   hspec-expectations = overrideCabal super.hspec-expectations (drv: {
-    patchPhase = "sed -i -e 's|base < 4.8|base|' hspec-expectations.cabal";
+    postPatch = "sed -i -e 's|base < 4.8|base|' hspec-expectations.cabal";
   });
   utf8-string = overrideCabal super.utf8-string (drv: {
-    patchPhase = "sed -i -e 's|base >= 3 && < 4.8|base|' utf8-string.cabal";
+    postPatch = "sed -i -e 's|base >= 3 && < 4.8|base|' utf8-string.cabal";
   });
 
   # bos/attoparsec#92
@@ -80,5 +98,8 @@ self: super: {
 
   # The compat library is empty in the presence of mtl 2.2.x.
   mtl-compat = dontHaddock super.mtl-compat;
+
+  # Won't work with LLVM 3.5.
+  llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
 
 }

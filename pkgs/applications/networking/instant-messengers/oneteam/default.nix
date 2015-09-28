@@ -1,6 +1,6 @@
 x@{builderDefsPackage
   , fetchgit, perl, xulrunner, cmake, perlPackages, zip, unzip, pkgconfig
-  , pulseaudio, glib, gtk, pixman, nspr, nss, libXScrnSaver, scrnsaverproto
+  , libpulseaudio, glib, gtk, pixman, nspr, nss, libXScrnSaver, scrnsaverproto
   , ...}:
 builderDefsPackage
 (a :  

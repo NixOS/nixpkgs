@@ -1,17 +1,18 @@
-{ stdenv, fetchFromGitHub, libav_0_8, libkeyfinder, qt5, taglib }:
+{ stdenv, fetchFromGitHub, libav_0_8, libkeyfinder, qtbase, qtxmlpatterns, taglib }:
 
-stdenv.mkDerivation rec {
-  version = "1.25-17-gf670607";
+let version = "2.00"; in
+stdenv.mkDerivation {
   name = "keyfinder-${version}";
 
   src = fetchFromGitHub {
+    sha256 = "16gyvvws93fyvx5qb2x9qhsg4bn710kgdh6q9sl2dwfsx6npkh9m";
+    rev = version;
     repo = "is_KeyFinder";
     owner = "ibsh";
-    rev = "f6706074435ac14c5238ee3f0dd22ac22d72af9c";
-    sha256 = "1sfnywc6jdpm03344i6i4pz13mqa4i5agagj4k6252m63cqmjkrc";
   };
 
   meta = with stdenv.lib; {
+    inherit version;
     description = "Musical key detection for digital audio (graphical UI)";
     longDescription = ''
       KeyFinder is an open source key detection tool, for DJs interested in
@@ -23,18 +24,22 @@ stdenv.mkDerivation rec {
       efficient workflow tool.
     '';
     homepage = http://www.ibrahimshaath.co.uk/keyfinder/;
-    license = with licenses; gpl3Plus;
+    license = licenses.gpl3Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };
 
   # TODO: upgrade libav when "Audio sample format conversion failed" is fixed
-  buildInputs = [ libav_0_8 libkeyfinder qt5 taglib ];
+  buildInputs = [ libav_0_8 libkeyfinder qtbase qtxmlpatterns taglib ];
 
-  configurePhase = ''
+  postPatch = ''
     substituteInPlace is_KeyFinder.pro \
        --replace "keyfinder.0" "keyfinder" \
-       --replace '$$[QT_INSTALL_PREFIX]' "$out"
+       --replace '$$[QT_INSTALL_PREFIX]' "$out" \
+       --replace "-stdlib=libc++" ""
+  '';
+
+  configurePhase = ''
     qmake
   '';
 

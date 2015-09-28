@@ -1,71 +1,62 @@
-{stdenv, fetchurl, unzip}:
+{ stdenv, fetchurl, bc, dtc
+, toolsOnly ? false
+, defconfig ? "allnoconfig"
+, targetPlatforms
+, filesToInstall
+}:
 
 let
   platform = stdenv.platform;
-  configureFun = ubootConfig :
+  crossPlatform = stdenv.cross.platform;
+  makeTarget = if toolsOnly then "tools NO_SDL=1" else "all";
+  installDir = if toolsOnly then "$out/bin" else "$out";
+  buildFun = kernelArch:
     ''
-      make mrproper
-      make ${ubootConfig} NBOOT=1 LE=1
-    '';
-
-  buildFun = kernelArch :
-    ''
-      unset src
       if test -z "$crossConfig"; then
-          make clean all
+          make ${makeTarget}
       else
-          make clean all ARCH=${kernelArch} CROSS_COMPILE=$crossConfig-
+          make ${makeTarget} ARCH=${kernelArch} CROSS_COMPILE=$crossConfig-
       fi
     '';
 in
 
-stdenv.mkDerivation {
-  name = "uboot-2012.07";
-   
+stdenv.mkDerivation rec {
+  name = "uboot-${defconfig}-${version}";
+  version = "2015.07";
+
   src = fetchurl {
-    url = "ftp://ftp.denx.de/pub/u-boot/u-boot-2012.07.tar.bz2";
-    sha256 = "15nli6h9a127ldizsck3g4ysy5j4m910wawspgpadz4vjyk213p0";
+    url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
+    sha256 = "1nclmyii5a1igvgjc4kxvi1fk2y82hp2iy4iywp34b3zf6ywjj0b";
   };
 
-  nativeBuildInputs = [ unzip ];
+  patches = [ ./vexpress-Use-config_distro_bootcmd.patch ];
 
-  dontStrip = true;
+  nativeBuildInputs = [ bc dtc ];
 
-  installPhase = ''
-    mkdir -p $out
-    cp u-boot.bin $out
-    cp u-boot u-boot.map $out
-
-    mkdir -p $out/bin
-    cp tools/{envcrc,mkimage} $out/bin
+  configurePhase = ''
+    make ${defconfig}
   '';
-
-  # They have 'errno.h' included by a "-idirafter". As the gcc
-  # wrappers add the glibc include as "-idirafter", the only way
-  # we can make the glibc take priority is to -include errno.h.
-  postPatch = if stdenv ? glibc && stdenv.glibc != null then ''
-    sed -i 's,$(HOSTCPPFLAGS),-include ${stdenv.glibc}/include/errno.h $(HOSTCPPFLAGS),' config.mk
-  '' else "";
-
-  patches = [ ./sheevaplug-sdio.patch ./sheevaplug-config.patch ];
-
-  configurePhase =
-    assert platform ? uboot && platform.uboot != null;
-    assert (platform ? ubootConfig);
-      configureFun platform.ubootConfig;
 
   buildPhase = assert (platform ? kernelArch);
     buildFun platform.kernelArch;
 
-  crossAttrs = let
-      cp = stdenv.cross.platform;
-    in
-    assert cp ? uboot && cp.uboot != null;
-    {
-      configurePhase = assert (cp ? ubootConfig);
-        configureFun cp.ubootConfig;
+  installPhase = ''
+    mkdir -p ${installDir}
+    cp ${stdenv.lib.concatStringsSep " " filesToInstall} ${installDir}
+  '';
 
-      buildPhase = assert (cp ? kernelArch);
-        buildFun cp.kernelArch;
-    };
+  dontStrip = !toolsOnly;
+
+  crossAttrs = {
+    buildPhase = assert (crossPlatform ? kernelArch);
+      buildFun crossPlatform.kernelArch;
+  };
+
+  meta = with stdenv.lib; {
+    homepage = "http://www.denx.de/wiki/U-Boot/";
+    description = "Boot loader for embedded systems";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.dezgeg ];
+    platforms = targetPlatforms;
+  };
 }

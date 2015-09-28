@@ -1,16 +1,23 @@
-{ pkgs, fetchurl, stdenv }:
+{ stdenv, fetchurl, pkgconfig, libu2f-host, libu2f-server, pam }:
+
 stdenv.mkDerivation rec {
   name    = "pam_u2f-${version}";
-  version = "0.0.1";
+  version = "1.0.1";
+
   src     = fetchurl {
     url = "https://developers.yubico.com/pam-u2f/Releases/${name}.tar.gz";
-    sha256 = "0p1wia4nfw5h0pmy1lcgwsbrlm7z39v1n37692lgqfzyg1kmpv7l";
+    sha256 = "08lmc2il877k7djkjmza3k0n6ij8b4hx4x9dl6wwfdjqsr8d2zfp";
   };
-  buildInputs = with pkgs; [ asciidoc autoconf automake docbook_xml_dtd_45 libtool libu2f-host libu2f-server libxml2 libxslt pkgconfig pam ];
 
-  installFlags = [
-    "PAMDIR=$(out)/lib/security"
-  ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libu2f-host libu2f-server pam ];
+
+  # Fix the broken include in 1.0.1
+  CFLAGS = "-I${libu2f-host}/include/u2f-host";
+
+  preConfigure = ''
+    configureFlagsArray+=("--with-pam-dir=$out/lib/security")
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://developers.yubico.com/pam-u2f/;

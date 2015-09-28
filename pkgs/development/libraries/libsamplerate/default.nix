@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, fftw, libsndfile }:
+{ stdenv, fetchurl, pkgconfig
+, fftw, libsndfile
+}:
 
 stdenv.mkDerivation rec {
   name = "libsamplerate-0.1.8";
@@ -8,8 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "01hw5xjbjavh412y63brcslj5hi9wdgkjd3h9csx5rnm8vglpdck";
   };
 
-  buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ fftw libsndfile ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fftw libsndfile ];
 
   # maybe interesting configure flags:
   #--disable-fftw          disable usage of FFTW
@@ -31,7 +33,7 @@ stdenv.mkDerivation rec {
     # GPL or a commercial-use license (available at
     # http://www.mega-nerd.com/SRC/libsamplerate-cul.pdf)
     licenses    = with licenses; [ gpl3.shortName unfree ];
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [ lovek323 wkennington ];
     platforms   = platforms.all;
   };
 }

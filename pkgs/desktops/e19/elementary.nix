@@ -1,20 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, e19, libcap, gdbm }:
+{ stdenv, fetchurl, pkgconfig, e19, libcap, automake, autoconf, libdrm, gdbm }:
 stdenv.mkDerivation rec {
   name = "elementary-${version}";
-  version = "1.13.2";
+  version = "1.15.0";
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/elementary/${name}.tar.gz";
-    sha256 = "0f8hz60aj4ar8lqnc63nlxkpf3b51scjalgy1iphgjc27hzxcb9i";
+    sha256 = "085s2xw3dhv8xiy7ikaaim5gil423g08wclhk0psi76g0vavgd32";
   };
-  buildInputs = [ pkgconfig e19.efl gdbm ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE="-I${e19.efl}/include/ethumb-1 -I${e19.efl}/include/efl-1 $NIX_CFLAGS_COMPILE"
-  '';
+  buildInputs = [ pkgconfig e19.efl libdrm gdbm automake autoconf ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
+  NIX_CFLAGS_COMPILE = [ "-I${libdrm}/include/libdrm" ];
+  patches = [ ./elementary.patch ];
   enableParallelBuilding = true;
   meta = {
     description = "Widget set/toolkit";
     homepage = http://enlightenment.org/;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ];
+    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl2;
   };

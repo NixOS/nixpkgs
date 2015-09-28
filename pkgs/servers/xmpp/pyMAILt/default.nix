@@ -1,5 +1,5 @@
-a :  
-let 
+a @ { xmpppy, python, makeWrapper, fetchcvs, ... } :
+let
   fetchurl = a.fetchurl;
 
   buildInputs = with a; [
@@ -32,7 +32,7 @@ rec {
     echo "./mail.py \"$@\"" >> $out/bin/pyMAILt
     chmod a+rx  $out/bin/pyMAILt $out/share/${name}/mail.py
   '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
-      
+
   name = "pyMAILt-20090101";
   meta = {
     description = "Email transport module for XMPP";

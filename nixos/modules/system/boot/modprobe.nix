@@ -35,6 +35,7 @@ with lib;
             fi
 
           '';
+        meta.priority = 4;
       };
       description = ''
         Wrapper around modprobe that sets the path to the modules
@@ -84,11 +85,7 @@ with lib;
         '')}
         ${config.boot.extraModprobeConfig}
       '';
-    environment.etc."modprobe.d/usb-load-ehci-first.conf".text =
-      ''
-        softdep uhci_hcd pre: ehci_hcd
-        softdep ohci_hcd pre: ehci_hcd
-      '';
+    environment.etc."modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
 
     environment.systemPackages = [ config.system.sbin.modprobe pkgs.kmod ];
 
@@ -101,7 +98,7 @@ with lib;
         echo ${config.system.sbin.modprobe}/sbin/modprobe > /proc/sys/kernel/modprobe
       '';
 
-    environment.variables.MODULE_DIR = "/run/current-system/kernel-modules/lib/modules";
+    environment.sessionVariables.MODULE_DIR = "/run/current-system/kernel-modules/lib/modules";
 
   };
 

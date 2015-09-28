@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.1.3";
+  version = "2.1.4";
   name = "lyx-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.lyx.org/pub/lyx/stable/2.1.x/${name}.tar.xz";
-    sha256 = "10jnqz7ilxppv60h0hpkq7wgc3fbcm3z19xhnqz9hwp3brz2xm9g";
+    sha256 = "0apkir1rw3msdpps0y0c8skr293h6c4l48c1vx0w4brz337lhdfi";
   };
 
   configureFlags = [

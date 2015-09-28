@@ -11,11 +11,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.19";
+  version = "3.20";
 
   src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_19_RTM/src/${name}.tar.gz";
-    sha256 = "989ebdf79374f24181f060d332445b1a4baf3df39d08514c4349ba8573cefa9b";
+    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_20_RTM/src/${name}.tar.gz";
+    sha256 = "5e38d4b9837ca338af966b97fc91c07f67ad647fb38dc4af3cfd0d84e477d15c";
   };
 
   buildInputs = [ nspr perl zlib sqlite ];
@@ -82,5 +82,6 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = https://developer.mozilla.org/en-US/docs/NSS;
     description = "A set of libraries for development of security-enabled client and server applications";
+    platforms = stdenv.lib.platforms.all;
   };
 }

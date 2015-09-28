@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchgit, fetchFromGitHub
+{ stdenv, lib, fetchurl, fetchFromSavannah, fetchFromGitHub
 , zlib, zlibSupport ? true
 , openssl, opensslSupport ? true
 , gdbm, gdbmSupport ? true
@@ -13,7 +13,7 @@ let
   op = stdenv.lib.optional;
   ops = stdenv.lib.optionals;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
-  config = import ./config.nix fetchgit;
+  config = import ./config.nix { inherit fetchFromSavannah; };
   baseruby = ruby_2_1_3.override { useRailsExpress = false; };
 in
 

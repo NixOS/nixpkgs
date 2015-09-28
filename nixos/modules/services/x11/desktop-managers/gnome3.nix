@@ -21,7 +21,25 @@ let
     destination = "/share/applications/mimeapps.list";
     text = ''
       [Default Applications]
-      inode/directory=nautilus.desktop
+      inode/directory=nautilus.desktop;org.gnome.Nautilus.desktop
+    '';
+  };
+
+  nixos-gsettings-desktop-schemas = pkgs.stdenv.mkDerivation {
+    name = "nixos-gsettings-desktop-schemas";
+    buildInputs = [ pkgs.nixos-artwork ];
+    buildCommand = ''
+     mkdir -p $out/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas
+     cp -rf ${gnome3.gsettings_desktop_schemas}/share/gsettings-schemas/gsettings-desktop-schemas*/glib-2.0 $out/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas/
+     chmod -R a+w $out/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas
+     cat - > $out/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
+       [org.gnome.desktop.background]
+       picture-uri='${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png'
+
+       [org.gnome.desktop.screensaver]
+       picture-uri='${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png'
+     EOF
+     ${pkgs.glib}/bin/glib-compile-schemas $out/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas/glib-2.0/schemas/
     '';
   };
 
@@ -40,12 +58,12 @@ in {
       example = literalExample "[ pkgs.gnome3.gpaste ]";
       description = "Additional list of packages to be added to the session search path.
                      Useful for gnome shell extensions or gsettings-conditionated autostart.";
-      apply = list: list ++ [ gnome3.gnome_shell ]; 
+      apply = list: list ++ [ gnome3.gnome_shell gnome3.gnome-shell-extensions ];
     };
 
     environment.gnome3.packageSet = mkOption {
       default = null;
-      example = literalExample "pkgs.gnome3_12";
+      example = literalExample "pkgs.gnome3_16";
       description = "Which GNOME 3 package set to use.";
       apply = p: if p == null then pkgs.gnome3 else p;
     };
@@ -80,6 +98,7 @@ in {
     services.telepathy.enable = mkDefault true;
     networking.networkmanager.enable = mkDefault true;
     services.upower.enable = config.powerManagement.enable;
+    hardware.bluetooth.enable = mkDefault true;
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
 
@@ -108,8 +127,8 @@ in {
           # Override default mimeapps
           export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${mimeAppsList}/share
 
-          # Let gnome-control-center find gnome-shell search providers
-          export GNOME_SEARCH_PROVIDERS_DIR=${config.system.path}/share/gnome-shell/search-providers/
+          # Override gsettings-desktop-schema
+          export XDG_DATA_DIRS=${nixos-gsettings-desktop-schemas}/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas''${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS
 
           # Let nautilus find extensions
           export NAUTILUS_EXTENSION_DIR=${config.system.path}/lib/nautilus/extensions-3.0/
@@ -120,6 +139,9 @@ in {
           # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
           ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
 
+          # Find the mouse
+          export XCURSOR_PATH=~/.icons:${config.system.path}/share/icons
+
           ${gnome3.gnome_session}/bin/gnome-session&
           waitPID=$!
         '';
@@ -128,52 +150,15 @@ in {
     environment.variables.GIO_EXTRA_MODULES = [ "${gnome3.dconf}/lib/gio/modules"
                                                 "${gnome3.glib_networking}/lib/gio/modules"
                                                 "${gnome3.gvfs}/lib/gio/modules" ];
-    environment.systemPackages =
-      [ pkgs.desktop_file_utils
-        gnome3.glib_networking
-        gnome3.gtk3 # for gtk-update-icon-cache
-        pkgs.ibus
-        pkgs.shared_mime_info # for update-mime-database
-        gnome3.gvfs
-        gnome3.dconf
-        gnome3.gnome-backgrounds
-        gnome3.gnome_control_center
-        gnome3.gnome_icon_theme
-        gnome3.gnome-menus
-        gnome3.gnome_settings_daemon
-        gnome3.gnome_shell
-        gnome3.gnome_themes_standard
-      ] ++ cfg.sessionPath ++ (removePackagesByName [
-        gnome3.baobab
-        gnome3.empathy
-        gnome3.eog
-        gnome3.epiphany
-        gnome3.evince
-        gnome3.gucharmap
-        gnome3.nautilus
-        gnome3.totem
-        gnome3.vino
-        gnome3.yelp
-        gnome3.gnome-calculator
-        gnome3.gnome-contacts
-        gnome3.gnome-font-viewer
-        gnome3.gnome-screenshot
-        gnome3.gnome-shell-extensions
-        gnome3.gnome-system-log
-        gnome3.gnome-system-monitor
-        gnome3.gnome_terminal
-        gnome3.gnome-user-docs
+    environment.systemPackages = gnome3.corePackages ++ cfg.sessionPath
+      ++ (removePackagesByName gnome3.optionalPackages config.environment.gnome3.excludePackages);
 
-        gnome3.bijiben
-        gnome3.evolution
-        gnome3.file-roller
-        gnome3.gedit
-        gnome3.gnome-clocks
-        gnome3.gnome-music
-        gnome3.gnome-tweak-tool
-        gnome3.gnome-photos
-        gnome3.nautilus-sendto
-      ] config.environment.gnome3.excludePackages);
+    # Use the correct gnome3 packageSet
+    networking.networkmanager.basePackages =
+      { inherit (pkgs) networkmanager modemmanager wpa_supplicant;
+        inherit (gnome3) networkmanager_openvpn networkmanager_vpnc
+                         networkmanager_openconnect networkmanager_pptp
+                         networkmanager_l2tp; };
 
     # Needed for themes and backgrounds
     environment.pathsToLink = [ "/share" ];

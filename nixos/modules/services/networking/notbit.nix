@@ -31,7 +31,7 @@ with lib;
     services.notbit = {
 
       enable = mkOption {
-        type = types.uniq types.bool;
+        type = types.bool;
         default = false;
         description = ''
           Enables the notbit daemon and provides a sendmail binary named `notbit-system-sendmail` for sending mail over the system instance of notbit. Users must be in the notbit group in order to send mail over the system notbit instance. Currently mail recipt is not supported.
@@ -39,13 +39,13 @@ with lib;
       };
 
       port = mkOption {
-        type = types.uniq types.int;
+        type = types.int;
         default = 8444;
         description = "The port which the daemon listens for other bitmessage clients";
       };
 
       nice = mkOption {
-        type = types.uniq types.int;
+        type = types.int;
         default = 10;
         description = "Set the nice level for the notbit daemon";
       };
@@ -65,19 +65,19 @@ with lib;
       };
 
       specifiedPeersOnly = mkOption {
-        type = types.uniq types.bool;
+        type = types.bool;
         default = false;
         description = "If true, notbit will only connect to peers specified by the peers option.";
       };
 
       allowPrivateAddresses = mkOption {
-        type = types.uniq types.bool;
+        type = types.bool;
         default = false;
         description = "If true, notbit will allow connections to to RFC 1918 addresses.";
       };
 
       noBootstrap = mkOption {
-        type = types.uniq types.bool;
+        type = types.bool;
         default = false;
         description = "If true, notbit will not bootstrap an initial peerlist from bitmessage.org servers";
       };

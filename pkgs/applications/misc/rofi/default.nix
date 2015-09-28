@@ -1,17 +1,15 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, pkgconfig
+{ stdenv, fetchurl, autoconf, automake, pkgconfig
 , libX11, libXinerama, libXft, pango
 , i3Support ? false, i3
 }:
 
 stdenv.mkDerivation rec {
   name = "rofi-${version}";
-  version = "0.15.2";
+  version = "0.15.8";
 
-  src = fetchFromGitHub {
-    repo = "rofi";
-    owner = "DaveDavenport";
-    rev = "${version}";
-    sha256 = "0b8k5g2fpqrz1yac09kmfk4caxcc107qq4yhncnl159xdxw66vz8";
+  src = fetchurl {
+    url = "https://github.com/DaveDavenport/rofi/archive/${version}.tar.gz";
+    sha256 = "1qhj8xrxfnzy16g577w0zxg1cy885rbqydlbbxgfk0dpjvq70lq6";
   };
 
   buildInputs = [ autoconf automake pkgconfig libX11 libXinerama libXft pango
@@ -25,5 +23,6 @@ stdenv.mkDerivation rec {
       description = "Window switcher, run dialog and dmenu replacement";
       homepage = https://davedavenport.github.io/rofi;
       license = stdenv.lib.licenses.mit;
+      maintainers = [ stdenv.lib.maintainers.mbakke ];
   };
 }

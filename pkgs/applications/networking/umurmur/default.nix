@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
   
   buildInputs = [ autoreconfHook openssl protobufc libconfig ];
 
-  configureFlags = "--with-ssl=openssl";
+  configureFlags = [
+    "--with-ssl=openssl"
+    "--enable-shmapi"
+  ];
 
   meta = with stdenv.lib; {
     description = "Minimalistic Murmur (Mumble server)";

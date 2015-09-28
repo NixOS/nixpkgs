@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="golly";
-    version="2.6";
+    version="2.7";
     name="${baseName}-${version}";
-    hash="1n1k3yf23ymlwq4k6p4v2g04qd29pg2rabr4l7m9bj2b2j1zkqhz";
-    url="mirror://sourceforge/project/golly/golly/golly-2.6/golly-2.6-src.tar.gz";
-    sha256="1n1k3yf23ymlwq4k6p4v2g04qd29pg2rabr4l7m9bj2b2j1zkqhz";
+    hash="0wfr9dhdbwg2cbcl7g2s1h9pmsm1lkjncbs9m0df82bcw516xs2f";
+    url="mirror://sourceforge/project/golly/golly/golly-2.7/golly-2.7-src.tar.gz";
+    sha256="0wfr9dhdbwg2cbcl7g2s1h9pmsm1lkjncbs9m0df82bcw516xs2f";
   };
   buildInputs = [
     wxGTK perl python zlib

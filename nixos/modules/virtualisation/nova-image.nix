@@ -46,15 +46,19 @@ with lib;
 
           # Register the paths in the Nix database.
           printRegistration=1 perl ${pkgs.pathsFromGraph} /tmp/xchg/closure | \
-              chroot /mnt ${config.nix.package}/bin/nix-store --load-db
+              chroot /mnt ${config.nix.package}/bin/nix-store --load-db --option build-users-group ""
 
           # Create the system profile to allow nixos-rebuild to work.
-          chroot /mnt ${config.nix.package}/bin/nix-env \
+          chroot /mnt ${config.nix.package}/bin/nix-env --option build-users-group "" \
               -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel}
 
           # `nixos-rebuild' requires an /etc/NIXOS.
           mkdir -p /mnt/etc
           touch /mnt/etc/NIXOS
+
+          # `switch-to-configuration' requires a /bin/sh
+          mkdir -p /mnt/bin
+          ln -s ${config.system.build.binsh}/bin/sh /mnt/bin/sh
 
           # Install a configuration.nix.
           mkdir -p /mnt/etc/nixos
@@ -103,10 +107,6 @@ with lib;
 
     boot.initrd.supportedFilesystems = [ "unionfs-fuse" ];
     */
-
-  # Since Nova allows VNC access to instances, it's nice to start to
-  # start a few virtual consoles.
-  services.mingetty.ttys = [ "tty1" "tty2" ];
 
   # Allow root logins only using the SSH key that the user specified
   # at instance creation time.

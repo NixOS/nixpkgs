@@ -2,11 +2,11 @@
 
 let
 
-  version = "5.0.7";
+  version = "5.1.1";
 
   documentation = fetchurl {
-    url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.bz2";
-    sha256 = "1wgw16r7z6k3mbr94mwfc8f13yc4ds2d9qk41hvsiv6rm5dnds23";
+    url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.gz";
+    sha256 = "0p99dr7kck0a6im1w9qiiz2ai78mgy53gbbn87bam9ya2885gf05";
   };
 
 in
@@ -15,8 +15,8 @@ stdenv.mkDerivation {
   name = "zsh-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/zsh/zsh-${version}.tar.bz2";
-    sha256 = "1cq4cz7ngvmbg399dva3g6njcz5d92gprmyi2swqc0klh7g2fkjl";
+    url = "mirror://sourceforge/zsh/zsh-${version}.tar.gz";
+    sha256 = "11shllzhq53fg8ngy3bgbmpf09fn2czifg7hsb41nxi3410mpvcl";
   };
 
   buildInputs = [ ncurses coreutils pcre ];
@@ -24,6 +24,10 @@ stdenv.mkDerivation {
   preConfigure = ''
     configureFlags="--enable-maildir-support --enable-multibyte --enable-zprofile=$out/etc/zprofile --with-tcsetpgrp --enable-pcre"
   '';
+
+  # Some tests fail on hydra, see
+  # http://hydra.nixos.org/build/25637689/nixlog/1
+  doCheck = false;
 
   # XXX: think/discuss about this, also with respect to nixos vs nix-on-X
   postInstall = ''
@@ -69,7 +73,7 @@ EOF
     '';
     license = "MIT-like";
     homepage = "http://www.zsh.org/";
-    maintainers = with stdenv.lib.maintainers; [ chaoflow ];
+    maintainers = with stdenv.lib.maintainers; [ chaoflow pSub ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

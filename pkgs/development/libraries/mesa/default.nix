@@ -1,10 +1,9 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, intltool, flex, bison, autoreconfHook, substituteAll
-, python, libxml2Python, file, expat, makedepend
-, libdrm, xorg, wayland, udev, llvm, libffi
-, libvdpau, libelf
+, python, libxml2Python, file, expat, makedepend, pythonPackages
+, libdrm, xorg, wayland, udev, llvmPackages, libffi, libomxil-bellagio
+, libvdpau, libelf, libva
 , grsecEnabled
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
-, enableExtraFeatures ? false # not maintained
 }:
 
 if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
@@ -23,7 +22,7 @@ else
 */
 
 let
-  version = "10.4.5";
+  version = "10.6.8";
   # this is the default search path for DRI drivers
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
@@ -34,10 +33,10 @@ stdenv.mkDerivation {
 
   src =  fetchurl {
     urls = [
-      "https://launchpad.net/mesa/trunk/${version}/+download/MesaLib-${version}.tar.bz2"
-      "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2"
+      "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
+      "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "bf60000700a9d58e3aca2bfeee7e781053b0d839e61a95b1883e05a2dee247a0";
+    sha256 = "e36ee5ceeadb3966fb5ce5b4cf18322dbb76a4f075558ae49c3bba94f57d58fd";
   };
 
   prePatch = "patchShebangs .";
@@ -60,60 +59,71 @@ stdenv.mkDerivation {
   outputs = ["out" "drivers" "osmesa"];
 
   configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
     "--with-dri-driverdir=$(drivers)/lib/dri"
     "--with-dri-searchpath=${driverLink}/lib/dri"
 
+    "--enable-gles1"
+    "--enable-gles2"
     "--enable-dri"
-    "--enable-glx-tls"
-    "--enable-shared-glapi"
-    "--enable-driglx-direct" # seems enabled anyway
-    "--enable-gallium-llvm" "--enable-llvm-shared-libs"
+  ] ++ optional stdenv.isLinux "--enable-dri3"
+    ++ [
+    "--enable-glx"
+    "--enable-gallium-osmesa" # used by wine
+    "--enable-egl"
     "--enable-xa" # used in vmware driver
-    "--enable-gles1" "--enable-gles2"
+    "--enable-gbm"
+  ] ++ optional stdenv.isLinux "--enable-nine" # Direct3D in Wine
+    ++ [
+    "--enable-xvmc"
     "--enable-vdpau"
-    "--enable-osmesa" # used by wine
+    #"--enable-omx"
+    #"--enable-va"
 
-    "--with-dri-drivers=i965,r200,radeon"
-    "--with-gallium-drivers=i915,nouveau,r300,r600,svga,swrast,radeonsi"
-    "--with-egl-platforms=x11,wayland,drm" "--enable-gbm"
-  ]
-    ++ optional enableTextureFloats "--enable-texture-float"
-    ++ optionals enableExtraFeatures [
-      "--enable-openvg" "--enable-gallium-egl" # not needed for EGL in Gallium, but OpenVG might be useful
-      #"--enable-xvmc" # tests segfault with 9.1.{1,2,3}
-      #"--enable-opencl" # ToDo: opencl seems to need libclc for clover
-    ]
+    # TODO: Figure out how to enable opencl without having a runtime dependency on clang
+    "--disable-opencl"
+
+    "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,freedreno,swrast"
+    "--enable-shared-glapi"
+    "--enable-sysfs"
+    "--enable-driglx-direct" # seems enabled anyway
+    "--enable-glx-tls"
+    "--with-dri-drivers=i915,i965,nouveau,radeon,r200,swrast"
+    "--with-egl-platforms=x11,wayland,drm"
+
+    "--enable-gallium-llvm"
+    "--enable-llvm-shared-libs"
+  ] ++ optional enableTextureFloats "--enable-texture-float"
     ++ optional grsecEnabled "--enable-glx-rts"; # slight performance degradation, enable only for grsec
 
-  nativeBuildInputs = [ pkgconfig python makedepend file flex bison ];
+  nativeBuildInputs = [ pkgconfig python makedepend file flex bison pythonPackages.Mako ];
 
   propagatedBuildInputs = with xorg; [ libXdamage libXxf86vm ]
-    ++ optionals stdenv.isLinux [libdrm]
-    ;
+    ++ optionals stdenv.isLinux [ libdrm ];
+
   buildInputs = with xorg; [
-    autoreconfHook intltool expat libxml2Python llvm
+    autoreconfHook intltool expat libxml2Python llvmPackages.llvm
     glproto dri2proto dri3proto presentproto
     libX11 libXext libxcb libXt libXfixes libxshmfence
-    libffi wayland libvdpau libelf
-  ] ++ optionals enableExtraFeatures [ /*libXvMC*/ ]
-    ++ optional stdenv.isLinux udev
-    ;
+    libffi wayland libvdpau libelf libXvMC /* libomxil-bellagio libva */
+  ] ++ optional stdenv.isLinux udev;
 
   enableParallelBuilding = true;
   doCheck = false;
+
+  installFlags = [
+    "sysconfdir=\${out}/etc"
+    "localstatedir=\${TMPDIR}"
+  ];
 
   # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM;
   #   also move libOSMesa to $osmesa, as it's relatively big
   # ToDo: probably not all .la files are completely fixed, but it shouldn't matter
   postInstall = with stdenv.lib; ''
     mv -t "$drivers/lib/" \
-  '' + optionalString enableExtraFeatures ''
-      `#$out/lib/libXvMC*` \
-      $out/lib/gbm $out/lib/libgbm* \
-  '' + ''
-      $out/lib/gallium-pipe \
-      $out/lib/libdricore* \
-      $out/lib/libgallium* \
+      $out/lib/libXvMC* \
+      $out/lib/d3d \
       $out/lib/vdpau \
       $out/lib/libxatracker*
 
@@ -128,18 +138,6 @@ stdenv.mkDerivation {
       $out/lib/pkgconfig/osmesa.pc
 
   '' + /* now fix references in .la files */ ''
-    sed "/^libdir=/s,$out,$drivers," -i \
-  '' + optionalString enableExtraFeatures ''
-      `#$drivers/lib/libXvMC*.la` \
-  '' + ''
-      $drivers/lib/gallium-pipe/*.la \
-      $drivers/lib/libgallium.la \
-      $drivers/lib/vdpau/*.la \
-      $drivers/lib/libdricore*.la
-
-    sed "s,$out\(/lib/\(libdricore[0-9\.]*\|libgallium\).la\),$drivers\1,g" \
-      -i $drivers/lib/*.la $drivers/lib/*/*.la
-
     sed "/^libdir=/s,$out,$osmesa," -i \
       $osmesa/lib/libOSMesa*.la
 

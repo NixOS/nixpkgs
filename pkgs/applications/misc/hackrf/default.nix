@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "hackrf-${version}";
-  version = "2014.08.1";
+  version = "2015.07.2";
 
   src = fetchgit {
     url = "git://github.com/mossmann/hackrf";
     rev = "refs/tags/v${version}";
-    sha256 = "1f3mmzyn6qqbl02h6dkz0zybppihqgpdxjgqmkb1pn3i0d98ydb3";
+    sha256 = "0wa4m0kdq8q2ib724w8ry8shmmm1liaaawhjygrjx6zxz9jxr3vm";
   };
 
   buildInputs = [
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = http://greatscottgadgets.com/hackrf/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.sjmackenzie ];
+    maintainers = with maintainers; [ sjmackenzie the-kenny ];
   };
 }

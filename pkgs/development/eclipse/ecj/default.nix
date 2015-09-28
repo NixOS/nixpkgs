@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, ant, jdk, makeWrapper }:
+{ stdenv, fetchurl, unzip, ant, jdk7, makeWrapper }:
 
 let
   version = "3.7.2";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0swyysbyfmv068x8q1c5jqpwk5zb4xahg17aypx5rwb660f8fpbm";
   };
 
-  buildInputs = [ unzip ant jdk makeWrapper ];
+  buildInputs = [ unzip ant jdk7 makeWrapper ];
 
   unpackPhase = ''
     mkdir "${name}"
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cp -v *.jar $out/share/java
 
     mkdir -pv $out/bin
-    makeWrapper ${jdk.jre}/bin/java $out/bin/ecj \
+    makeWrapper ${jdk7.jre}/bin/java $out/bin/ecj \
       --add-flags "-cp $out/share/java/ecj.jar org.eclipse.jdt.internal.compiler.batch.Main"
 
     # Add a setup hook that causes Ant to use the ECJ.

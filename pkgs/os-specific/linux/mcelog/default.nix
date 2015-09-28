@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub }:
 
-let version = "117"; in
+let version = "126"; in
 stdenv.mkDerivation {
   name = "mcelog-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "0szc5s0bag16ypna336spwb5fagwbxaparn0h78w73wv05kcvwqw";
+    sha256 = "13vf3qrar9j4pp6zpspgsff0kbp7zj21mq33ywqa7ljq4v3szi8x";
     rev = "v${version}";
     repo = "mcelog";
     owner = "andikleen";
@@ -22,9 +22,18 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     inherit version;
-    description = "Log machine checks (memory, IO, and CPU hardware errors)";
+    description = "Log x86 machine checks: memory, IO, and CPU hardware errors";
+    longDescription = ''
+      The mcelog daemon accounts memory and some other errors in various ways
+      on modern x86 Linux systems. The daemon can be queried and/or execute
+      triggers when configurable error thresholds are exceeded. This is used to
+      implement a range of automatic predictive failure analysis algorithms,
+      including bad page offlining and automatic cache error handling. All
+      errors are logged to /var/log/mcelog or syslog or the journal.
+    '';
     homepage = http://mcelog.org/;
-    license = with licenses; gpl2;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 }

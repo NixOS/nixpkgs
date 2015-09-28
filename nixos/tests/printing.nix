@@ -2,6 +2,9 @@
 
 import ./make-test.nix ({pkgs, ... }: {
   name = "printing";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ iElectric eelco chaoflow jgeerds ];
+  };
 
   nodes = {
 
@@ -34,6 +37,7 @@ import ./make-test.nix ({pkgs, ... }: {
       # Make sure that cups is up on both sides.
       $server->waitForUnit("cups.service");
       $client->waitForUnit("cups.service");
+      $client->sleep(10); # wait until cups is fully initialized
       $client->succeed("lpstat -r") =~ /scheduler is running/ or die;
       $client->succeed("lpstat -H") =~ "/var/run/cups/cups.sock" or die;
       $client->succeed("curl --fail http://localhost:631/");
@@ -56,10 +60,10 @@ import ./make-test.nix ({pkgs, ... }: {
       $client->succeed("lpq") =~ /DeskjetRemote is ready.*no entries/s or die;
 
       # Test printing various file types.
-      foreach my $file ("${pkgs.groff}/share/doc/*/examples/mom/penguin.pdf",
-                        "${pkgs.groff}/share/doc/*/meref.ps",
+      foreach my $file ("${pkgs.groff.doc}/share/doc/*/examples/mom/penguin.pdf",
+                        "${pkgs.groff.doc}/share/doc/*/meref.ps",
                         "${pkgs.cups}/share/doc/cups/images/cups.png",
-                        "${pkgs.pcre}/share/doc/pcre/pcre.txt")
+                        "${pkgs.pcre.doc}/share/doc/pcre/pcre.txt")
       {
           $file =~ /([^\/]*)$/; my $fn = $1;
 
@@ -67,6 +71,7 @@ import ./make-test.nix ({pkgs, ... }: {
 
               # Print the file on the client.
               $client->succeed("lp $file");
+              $client->sleep(10);
               $client->succeed("lpq") =~ /active.*root.*$fn/ or die;
 
               # Ensure that a raw PCL file appeared in the server's queue
@@ -74,11 +79,13 @@ import ./make-test.nix ({pkgs, ... }: {
               # course, since there is no actual USB printer attached, the
               # file will stay in the queue forever.
               $server->waitForFile("/var/spool/cups/d00001-001");
+              $server->sleep(10);
               $server->succeed("lpq -a") =~ /$fn/ or die;
 
               # Delete the job on the client.  It should disappear on the
               # server as well.
               $client->succeed("lprm");
+              $client->sleep(10);
               $client->succeed("lpq -a") =~ /no entries/;
               Machine::retry sub {
                 return 1 if $server->succeed("lpq -a") =~ /no entries/;
@@ -86,5 +93,4 @@ import ./make-test.nix ({pkgs, ... }: {
           };
       }
     '';
-
 })

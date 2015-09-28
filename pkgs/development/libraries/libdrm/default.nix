@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, udev }:
+{ stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, udev, valgrind }:
 
 stdenv.mkDerivation rec {
-  name = "libdrm-2.4.60";
+  name = "libdrm-2.4.65";
 
   src = fetchurl {
     url = "http://dri.freedesktop.org/libdrm/${name}.tar.bz2";
-    sha256 = "12cqnmssi6mbr93n29mm84k8wix5nx6zs82k7wcmj7z3r335ymwr";
+    sha256 = "71960ac8bde7d710992b1bc8879935e8300a870c36bd06f22412d0447e3d96c4";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin
     "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
 
-  configureFlags = stdenv.lib.optional stdenv.isLinux "--enable-udev"
+  configureFlags = [ "--enable-freedreno" "--disable-valgrind" ]
+    ++ stdenv.lib.optional stdenv.isLinux "--enable-udev"
     ++ stdenv.lib.optional stdenv.isDarwin "-C";
 
   crossAttrs.configureFlags = configureFlags ++ [ "--disable-intel" ];

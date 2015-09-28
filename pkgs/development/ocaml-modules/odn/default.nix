@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, ocaml_typeconv, ounit, camlp4}:
+{stdenv, fetchurl, ocaml, findlib, type_conv, ounit, camlp4}:
 
 stdenv.mkDerivation {
   name = "ocaml-data-notation-0.0.11";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "09a8zdyifpc2nl4hdvg9206142y31cq95ajgij011s1qcg3z93lj";
   };
 
-  buildInputs = [ocaml findlib ocaml_typeconv ounit camlp4];
+  buildInputs = [ocaml findlib type_conv ounit camlp4];
 
   createFindlibDestdir = true;
 

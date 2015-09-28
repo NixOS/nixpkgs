@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ nasm ];
 
-  buildFlags = [ arch ];
+  buildFlags = [ arch ]
+    ++ stdenv.lib.optionals stdenv.cc.isClang [ "CC=clang" "LD=clang" ];
 
   installPhase = ''
     mkdir -p $out/bin

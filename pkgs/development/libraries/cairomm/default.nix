@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, cairo, x11, fontconfig, freetype, libsigcxx }:
+{ fetchurl, stdenv, pkgconfig, cairo, xlibsWrapper, fontconfig, freetype, libsigcxx }:
 
 stdenv.mkDerivation rec {
   name = "cairomm-1.11.2";
@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ cairo x11 fontconfig freetype libsigcxx ];
+  propagatedBuildInputs = [ cairo xlibsWrapper fontconfig freetype libsigcxx ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A 2D graphics library with support for multiple output devices";
 
     longDescription = ''
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://cairographics.org/;
 
-    license = [ "LGPLv2+" "MPLv1" ];
+    license = with licenses; [ lgpl2Plus mpl10 ];
   };
 }

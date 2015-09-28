@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "double-conversion-${version}";
 
   src = fetchFromGitHub {
-    owner = "floitsch";
+    owner = "google";
     repo = "double-conversion";
     rev = "v${version}";
     sha256 = "05x5rdwndgp1vdq2z1bpvng0dd8pn93kw4vhl6nsvv9vsara2q4b";
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Binary-decimal and decimal-binary routines for IEEE doubles";
-    homepage = https://github.com/floitsch/double-conversion;
+    homepage = https://github.com/google/double-conversion;
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = maintainers.abbradar;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

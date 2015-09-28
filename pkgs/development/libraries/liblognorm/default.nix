@@ -1,14 +1,15 @@
 { stdenv, fetchurl, pkgconfig, libestr, json_c, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "liblognorm-1.1.1";
+  name = "liblognorm-1.1.2";
   
   src = fetchurl {
     url = "http://www.liblognorm.com/files/download/${name}.tar.gz";
-    sha256 = "1wi28n5ahajvl64wfn7jpvnskccd6837i0cyq8w8cvrm362b6pd7";
+    sha256 = "0v2k5awr6vsbp36gybrys3zfkl675sywhsh4lnm7f21inlpi2nlk";
   };
 
-  buildInputs = [ pkgconfig libestr json_c pcre ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libestr json_c pcre ];
   
   configureFlags = [ "--enable-regexp" ];
 

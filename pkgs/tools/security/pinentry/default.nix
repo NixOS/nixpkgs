@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig
-, libcap ? null, ncurses ? null, gtk2 ? null, qt4 ? null
+, libgpgerror, libassuan, libcap ? null, ncurses ? null, gtk2 ? null, qt4 ? null
 }:
 
 let
@@ -10,14 +10,24 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "pinentry-0.9.1";
+  name = "pinentry-0.9.5";
 
   src = fetchurl {
     url = "mirror://gnupg/pinentry/${name}.tar.bz2";
-    sha256 = "15cn7q6wg3k433l9ks48pz4dbikp7ysp0h8jqynz6p9rdf2qxl4w";
+    sha256 = "1338hj1h3sh34897120y30x12b64wyj3xjzzk5asm2hdzhxgsmva";
   };
 
-  buildInputs = [ libcap gtk2 ncurses qt4 ];
+  buildInputs = [ libgpgerror libassuan libcap gtk2 ncurses qt4 ];
+
+  prePatch = ''
+    substituteInPlace pinentry/pinentry-curses.c --replace ncursesw ncurses
+  '';
+
+  # configure cannot find moc on its own
+  preConfigure = stdenv.lib.optionalString (qt4 != null) ''
+    export QTDIR="${qt4}"
+    export MOC="${qt4}/bin/moc"
+  '';
 
   configureFlags = [
     (mkWith   (libcap != null)  "libcap")
@@ -36,8 +46,9 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.all;
     longDescription = ''
-      Pinentry provides a console and a GTK+ GUI that allows users to
-      enter a passphrase when `gpg' or `gpg2' is run and needs it.
+      Pinentry provides a console and (optional) GTK+ and Qt GUIs allowing users
+      to enter a passphrase when `gpg' or `gpg2' is run and needs it.
     '';
+    maintainers = [ stdenv.lib.maintainers.ttuegel ];
   };
 }

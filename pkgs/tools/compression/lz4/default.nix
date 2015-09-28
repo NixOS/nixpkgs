@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, valgrind }:
 
-let version = "128"; in
+let version = "131"; in
 stdenv.mkDerivation rec {
   name = "lz4-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "00jrnic2jddj81av8jjipf4rdkx6x6cdf8zpsz3mp5kbmqzd0h9a";
+    sha256 = "1bhvcq8fxxsqnpg5qa6k3nsyhq0nl0iarh08sqzclww27hlpyay2";
     rev = "r${version}";
     repo = "lz4";
     owner = "Cyan4973";
@@ -17,9 +17,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = "PREFIX=$(out)";
 
-  doCheck = true;
+  doCheck = false; # tests take a very long time
   checkTarget = "test";
-  checkFlags = "-j1"; # required since version 128
 
   meta = with stdenv.lib; {
     description = "Extremely fast compression algorithm";

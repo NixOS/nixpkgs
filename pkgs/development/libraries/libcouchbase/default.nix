@@ -1,23 +1,16 @@
-{ stdenv, fetchgit, autoconf, automake, libtool,
-pkgconfig, perl, git, libevent, openssl}:
+{ stdenv, fetchurl, cmake, pkgconfig, libevent, openssl}:
 
 stdenv.mkDerivation {
-  name = "libcouchbase-2.4.4";
-  src = fetchgit {
-    url = "https://github.com/couchbase/libcouchbase.git";
-    rev = "4410eebcd813844b6cd6f9c7eeb4ab3dfa2ab8ac";
-    sha256 = "02lzv5l6fvnqr2l9bqfha0pzkzlzjfddn3w5zcbjz36kw4p2p4h9";
-    leaveDotGit = true;
+  name = "libcouchbase-2.5.2";
+  src = fetchurl {
+    url = "https://github.com/couchbase/libcouchbase/archive/2.5.2.tar.gz";
+    sha256 = "0ka1hix38a2kdhxz6n8frssyznf78ra0irga9d8lr5683y73xw24";
   };
 
-  preConfigure = ''
-    patchShebangs ./config/
-    ./config/autorun.sh
-  '';
+  cmakeFlags = "-DLCB_NO_MOCK=ON";
 
-  configureFlags = "--disable-couchbasemock";
-
-  buildInputs = [ autoconf automake libtool pkgconfig perl git libevent openssl];
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ libevent openssl];
 
   meta = {
     description = "C client library for Couchbase";

@@ -1,11 +1,11 @@
 {stdenv, fetchurlBoot, openssl, zlib}:
 
 stdenv.mkDerivation rec {
-  name = "libssh2-1.4.3";
+  name = "libssh2-1.6.0";
 
   src = fetchurlBoot {
     url = "${meta.homepage}/download/${name}.tar.gz";
-    sha256 = "eac6f85f9df9db2e6386906a6227eb2cd7b3245739561cad7d6dc1d5d021b96d";
+    sha256 = "05c2is69c50lyikkh29nk6zhghjk4i7hjx0zqfhq47aald1jj82s";
   };
 
   buildInputs = [ openssl zlib ];

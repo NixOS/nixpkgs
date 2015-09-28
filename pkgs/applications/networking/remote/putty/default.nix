@@ -1,20 +1,20 @@
 { stdenv, fetchurl, ncurses, gtk, pkgconfig, autoconf, automake, perl, halibut, libtool }:
 
 stdenv.mkDerivation rec {
-  version = "0.64";
+  version = "0.65";
   name = "putty-${version}";
 
   src = fetchurl {
     url = "http://the.earth.li/~sgtatham/putty/latest/${name}.tar.gz";
-    sha256 = "089qbzd7w51sc9grm2x3lcbj61jdqsnakb4j4gnf6i2131xcjiia";
+    sha256 = "180ccrsyh775hdmxqdnbclfbvsfdp2zk3gsadpa53sj497yw2hym";
   };
 
   preConfigure = ''
     perl mkfiles.pl
     ( cd doc ; make );
-    sed '/AM_PATH_GTK(/d' -i unix/configure.ac
-    sed '/AC_OUTPUT/iAM_PROG_CC_C_O' -i unix/configure.ac
-    sed '/AC_OUTPUT/iAM_PROG_AR' -i unix/configure.ac
+    sed -e '/AM_PATH_GTK(/d' \
+        -e '/AC_OUTPUT/iAM_PROG_CC_C_O' \
+        -e '/AC_OUTPUT/iAM_PROG_AR' -i configure.ac
     ./mkauto.sh
     cd unix
   '';

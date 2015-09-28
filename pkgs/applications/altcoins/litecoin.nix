@@ -8,11 +8,11 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "litecoin" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "0.9.3-preview5";
+  version = "0.10.2.2";
 
   src = fetchurl {
     url = "https://github.com/litecoin-project/litecoin/archive/v${version}.tar.gz";
-    sha256 = "0nnfz4s2g28jb5fqy6cabsryp3h2amzlyslr6g6k8r1vmzvx5ym6";
+    sha256 = "1p1h2654b7f2lyrmihcjmpmx6sjpkgsifcm2ixxb2g9jh6qq8b4m";
   };
 
   buildInputs = [ pkgconfig autoreconfHook openssl

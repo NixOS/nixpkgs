@@ -4,12 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "udisks-2.1.4";
+  name = "udisks-2.1.6";
 
   src = fetchurl {
     url = "http://udisks.freedesktop.org/releases/${name}.tar.bz2";
-    sha256 = "1fqrwmdyn5vc5r7wixh2f013ca1qf3kwy4ia8mh9282a7bfliqd4";
+    sha256 = "0spl155k0g2l2hvqf8xyjv08i68gfyhzpjva6cwlzxx0bz4gbify";
   };
+
+  outputs = [ "out" "doc" ];
 
   patches = [ ./force-path.patch ];
 

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url    = "http://frama-c.com/download/frama-c-${slang}-${version}.tar.gz";
-    sha256 = "0wackacnnpxnh3612ld68bal8b1dm9cdsi180lw42bsyks03h5mn";
+    sha256 = "0zask160vj8bxgc07dzxj5hqbdp6gz5g00j6za5397961imxhxaq";
   };
 
   why2 = fetchurl {

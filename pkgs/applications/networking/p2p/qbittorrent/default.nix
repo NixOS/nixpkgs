@@ -10,11 +10,11 @@ assert guiSupport -> (dbus_libs != null);
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "qbittorrent-${version}";
-  version = "3.1.11";
+  version = "3.2.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/qbittorrent/${name}.tar.xz";
-    sha256 = "0qvz8ifk01b9sw9x5yh3b5kmssx5yi026zvgvabdvfaqkvcmw43i";
+    sha256 = "05590ak4nnqkah8dy71cxf7mqv6phw0ih1719dm761mxf8vrz9w6";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
     ++ optional guiSupport dbus_libs;
 
   configureFlags = [
-    "--with-libboost-lib=${boost.lib}/lib"
-    "--with-libboost-inc=${boost.dev}/include"
+    "--with-boost-libdir=${boost.lib}/lib"
+    "--with-boost=${boost.dev}"
     (if guiSupport then "" else "--disable-gui")
     (if webuiSupport then "" else "--disable-webui")
   ] ++ optional debugSupport "--enable-debug";

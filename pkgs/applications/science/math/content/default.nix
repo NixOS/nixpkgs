@@ -1,10 +1,10 @@
-a :  
-let 
+a @ { mesa, lesstif, libX11, libXaw, xproto, libXt, libSM, libICE, libXmu, libXext, libXcursor, ... } :
+let
   fetchurl = a.fetchurl;
 
-  version = "1.5"; 
+  version = "1.5";
   buildInputs = with a; [
-    mesa lesstif libX11 libXaw xproto libXt libSM libICE 
+    mesa lesstif libX11 libXaw xproto libXt libSM libICE
       libXmu libXext libXcursor
   ];
 in
@@ -28,9 +28,9 @@ rec {
   configureFlags = [];
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["unpackTarballs" 
+  phaseNames = ["unpackTarballs"
     "setPlatform" "extraVars"
-    "buildVibrant" "buildContent" 
+    "buildVibrant" "buildContent"
     "install"];
 
   unpackTarballs = a.fullDepEntry (''
@@ -42,10 +42,10 @@ rec {
     sed -e s/SGI=/SGI=no/ -i content/makefile_v
   '') ["minInit"];
 
-  platformTLAContent = if a.stdenv.isLinux then "LIN" else 
+  platformTLAContent = if a.stdenv.isLinux then "LIN" else
     throw "Three-letter code for the platform is not known";
 
-  platformTLAVibrant = if a.stdenv.isLinux then "lnx" else 
+  platformTLAVibrant = if a.stdenv.isLinux then "lnx" else
     throw "Three-letter code for the platform is not known";
 
   setPlatform = a.fullDepEntry (''
@@ -82,7 +82,7 @@ rec {
     find . -name '*.so' -exec cp '{}' $out/lib ';'
     find . -name '*.txt' -exec cp '{}' $out/share/${name}/doc ';'
     find . -name '*.hlp' -exec cp '{}' $out/share/${name}/doc ';'
-    find . -perm +111 -a ! -name '*.*' -exec cp '{}' $out/bin ';'
+    find . -perm -0100 -a ! -name '*.*' -exec cp '{}' $out/bin ';'
     cp -r . $out/share/${name}/build-snapshot
   '') ["buildContent" "defEnsureDir" "minInit"];
       

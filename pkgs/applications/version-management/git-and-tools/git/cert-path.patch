@@ -5,7 +5,7 @@ diff -ru -x '*~' git-1.9.2-orig/git-send-email.perl git-1.9.2/git-send-email.per
  		return;
  	}
  
-+	$smtp_ssl_cert_path //= $ENV{'OPENSSL_X509_CERT_FILE'};
++	$smtp_ssl_cert_path //= $ENV{'SSL_CERT_FILE'};
 +
  	if (!defined $smtp_ssl_cert_path) {
  		# use the OpenSSL defaults

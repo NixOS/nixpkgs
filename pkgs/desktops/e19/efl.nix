@@ -1,23 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, freetype, fontconfig, fribidi, SDL2, SDL, mesa, giflib, libpng, libtiff, glib, gst_all_1, pulseaudio, libsndfile, xlibs, libdrm, libxkbcommon, udev, utillinuxCurses, dbus, bullet, luajit, python27Packages, openjpeg, doxygen, expat, lua5_2, harfbuzz, jbig2dec, librsvg, dbus_libs, alsaLib, poppler, libraw, libspectre, xineLib, vlc, libwebp, curl, libinput }:
+{ stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, freetype, fontconfig, fribidi, SDL2, SDL, mesa, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio, libsndfile, xorg, libdrm, libxkbcommon, udev, utillinuxCurses, dbus, bullet, luajit, python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg, dbus_libs, alsaLib, poppler, libraw, libspectre, xineLib, vlc, libwebp, curl, libinput }:
 
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = "1.13.2";
+  version = "1.15.0";
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.gz";
-    sha256 = "196293zf4pbyd5acs4nzb818yql9r67709ccfj7k3siyws6lsh4q";
+    sha256 = "1x5n2afy5z1akam5y187ajk52mq2k9lwmz7nlrxp92rvx1jf6li5";
   };
 
   buildInputs = [ pkgconfig openssl zlib freetype fontconfig fribidi SDL2 SDL mesa
     giflib libpng libtiff glib gst_all_1.gstreamer gst_all_1.gst-plugins-base
-    gst_all_1.gst-libav pulseaudio libsndfile xlibs.libXcursor xlibs.printproto
-    xlibs.libX11 udev utillinuxCurses luajit ];
+    gst_all_1.gst-libav libpulseaudio libsndfile xorg.libXcursor xorg.printproto
+    xorg.libX11 udev utillinuxCurses ];
 
-  propagatedBuildInputs = [ libxkbcommon python27Packages.dbus dbus libjpeg xlibs.libXcomposite
-    xlibs.libXdamage xlibs.libXinerama xlibs.libXp xlibs.libXtst xlibs.libXi xlibs.libXext
-    bullet xlibs.libXScrnSaver xlibs.libXrender xlibs.libXfixes xlibs.libXrandr
-    xlibs.libxkbfile xlibs.libxcb xlibs.xcbutilkeysyms openjpeg doxygen expat lua5_2
+  propagatedBuildInputs = [ libxkbcommon python27Packages.dbus dbus libjpeg xorg.libXcomposite
+    xorg.libXdamage xorg.libXinerama xorg.libXp xorg.libXtst xorg.libXi xorg.libXext
+    bullet xorg.libXScrnSaver xorg.libXrender xorg.libXfixes xorg.libXrandr
+    xorg.libxkbfile xorg.libxcb xorg.xcbutilkeysyms openjpeg doxygen expat luajit
     harfbuzz jbig2dec librsvg dbus_libs alsaLib poppler libraw libspectre xineLib vlc libwebp curl libdrm
     libinput ];
 
@@ -25,23 +25,31 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-tests=none" "--enable-sdl" "--enable-drm" "--with-opengl=full"
     "--enable-image-loader-jp2k" "--enable-xinput22" "--enable-multisense" "--enable-systemd"
     "--enable-image-loader-webp" "--enable-harfbuzz" "--enable-xine" "--enable-fb"
-    "--disable-tslib" "--with-systemdunitdir=$out/systemd/user" "--enable-lua-old"
+    "--disable-tslib" "--with-systemdunitdir=$out/systemd/user"
     "ac_ct_CXX=foo" ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${xlibs.libXtst}" "-I${dbus_libs}/include/dbus-1.0" "-I${dbus_libs}/lib/dbus-1.0/include" ];
+  NIX_CFLAGS_COMPILE = [ "-I${xorg.libXtst}" "-I${dbus_libs}/include/dbus-1.0" "-I${dbus_libs}/lib/dbus-1.0/include" ];
+
+  patches = [ ./efl-elua.patch ];
 
   preConfigure = ''
     export PKG_CONFIG_PATH="${gst_all_1.gst-plugins-base}/lib/pkgconfig/gstreamer-video-0.10.pc:$PKG_CONFIG_PATH"
+    export LD_LIBRARY_PATH="$(pwd)/src/lib/eina/.libs:$LD_LIBRARY_PATH"
+  '';
+
+  postInstall = ''
+    substituteInPlace "$out/share/elua/core/util.lua" --replace '$out' "$out"
+    modules=$(for i in "$out/include/"*/; do printf ' -I''${includedir}/'`basename $i`; done)
+    substituteInPlace "$out/lib/pkgconfig/efl.pc" --replace 'Cflags: -I''${includedir}/efl-1' \
+      'Cflags: -I''${includedir}/eina-1/eina'"$modules"
   '';
 
   enableParallelBuilding = true;
 
-  setupHook = ./efl-setup-hook.sh;
-
   meta = {
     description = "Enlightenment Core libraries";
     homepage = http://enlightenment.org/;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ];
+    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl3;
   };

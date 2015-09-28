@@ -51,15 +51,15 @@ stdenv.mkDerivation rec {
         mv $out/src/utils/* $out/bin
         '';
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = https://code.google.com/p/kippo;
       description = "SSH Honeypot";
       longDescription = ''
         Default port is 2222. Recommend using something like this for port redirection to default SSH port:
         networking.firewall.extraCommands = '''
         iptables -t nat -A PREROUTING -i IN_IFACE -p tcp --dport 22 -j REDIRECT --to-port 2222''' '';
-      license = stdenv.lib.licenses.bsd3;
-      platforms = pkgs.stdenv.lib.platforms.linux;
-      maintainers = pkgs.stdenv.lib.maintainers.tomberek;
+      license = licenses.bsd3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ tomberek ];
     };
 }

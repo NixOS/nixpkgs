@@ -1,20 +1,16 @@
-{ stdenv, fetchurl, alsaLib, bash, help2man, pkgconfig, x11, python3 }:
+{ stdenv, fetchurl, alsaLib, bash, help2man, pkgconfig, xlibsWrapper, python3, libxslt }:
 
 stdenv.mkDerivation rec {
-  name = "lirc-0.9.2a";
+  name = "lirc-0.9.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/lirc/${name}.tar.bz2";
-    sha256 = "011nwpxm5d12rsapljg3pjf9pgb0j8ngmc3zg69q4kv61hkx2zim";
+    sha256 = "19c6ldjsdnk1md66q3nb035ja1xj217k8iabhxpsb8rs10a6kwi6";
   };
-
-  patchPhase = ''
-    sed -e 's|^#!/usr/bin/env python3$|#!${python3}/bin/python3|g' -i tools/*.py
-  '';
 
   preBuild = "patchShebangs .";
 
-  buildInputs = [ alsaLib help2man pkgconfig x11 python3 ];
+  buildInputs = [ alsaLib help2man pkgconfig xlibsWrapper python3 libxslt ];
 
   configureFlags = [
     "--with-driver=devinput"

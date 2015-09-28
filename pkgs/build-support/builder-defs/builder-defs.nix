@@ -1,26 +1,26 @@
-args: with args; with stringsWithDeps; with lib;
+args @ {stringsWithDeps, lib, stdenv, writeScript, fetchurl, fetchmtn, fetchgit, ...}: with args; with stringsWithDeps; with lib;
 let inherit (builtins) head tail trace; in
 (rec
 {
-        inherit writeScript; 
+        inherit writeScript;
 
         src = attrByPath ["src"] "" args;
 
         addSbinPath = attrByPath ["addSbinPath"] false args;
 
         forceShare = if args ? forceShare then args.forceShare else ["man" "doc" "info"];
-        forceCopy = ["COPYING" "LICENSE" "DISTRIBUTION" "LEGAL" 
-          "README" "AUTHORS" "ChangeLog" "CHANGES" "LICENCE" "COPYRIGHT"] ++ 
-          (optional (attrByPath ["forceCopyDoc"] true args) "doc"); 
+        forceCopy = ["COPYING" "LICENSE" "DISTRIBUTION" "LEGAL"
+          "README" "AUTHORS" "ChangeLog" "CHANGES" "LICENCE" "COPYRIGHT"] ++
+          (optional (attrByPath ["forceCopyDoc"] true args) "doc");
 
         hasSuffixHack = a: b: hasSuffix (a+(substring 0 0 b)) ((substring 0 0 a)+b);
-        
-        archiveType = s: 
+
+        archiveType = s:
                 (if hasSuffixHack ".tar" s then "tar"
-                else if (hasSuffixHack ".tar.gz" s) || (hasSuffixHack ".tgz" s) then "tgz" 
-                else if (hasSuffixHack ".tar.bz2" s) || (hasSuffixHack ".tbz2" s) || 
+                else if (hasSuffixHack ".tar.gz" s) || (hasSuffixHack ".tgz" s) then "tgz"
+                else if (hasSuffixHack ".tar.bz2" s) || (hasSuffixHack ".tbz2" s) ||
 			(hasSuffixHack ".tbz" s) then "tbz2"
-                else if hasSuffixHack ".tar.Z" s then "tZ" 
+                else if hasSuffixHack ".tar.Z" s then "tZ"
                 else if hasSuffixHack ".tar.lzma" s then "tar.lzma"
                 else if hasSuffixHack ".tar.xz" s then "tar.xz"
                 else if hasSuffixHack ".rar" s then "rar"
@@ -569,7 +569,7 @@ let inherit (builtins) head tail trace; in
      # Interpreters that are already in the store are left untouched.
          echo "patching script interpreter paths"
          local f
-         for f in $(find "${dir}" -xtype f -perm +0100); do
+         for f in $(find "${dir}" -xtype f -perm -0100); do
              local oldPath=$(sed -ne '1 s,^#![ ]*\([^ ]*\).*$,\1,p' "$f")
              if test -n "$oldPath" -a "''${oldPath:0:''${#NIX_STORE}}" != "$NIX_STORE"; then
                  local newPath=$(type -P $(basename $oldPath) || true)

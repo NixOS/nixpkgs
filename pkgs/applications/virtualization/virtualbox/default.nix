@@ -1,11 +1,11 @@
 { stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
 , libXcursor, libXmu, qt4, libIDL, SDL, libcap, zlib, libpng, glib, kernel, lvm2
-, which, alsaLib, curl, libvpx, gawk, nettools
+, which, alsaLib, curl, libvpx, gawk, nettools, dbus
 , xorriso, makeself, perl, pkgconfig, nukeReferences
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python ? null
 , enableExtensionPack ? false, requireFile ? null, patchelf ? null, fakeroot ? null
-, pulseSupport ? false, pulseaudio ? null
+, pulseSupport ? false, libpulseaudio ? null
 , enableHardening ? false
 }:
 
@@ -14,7 +14,11 @@ with stdenv.lib;
 let
   buildType = "release";
 
-  version = "4.3.26"; # changes ./guest-additions as well
+  # When changing this, update ./guest-additions and the extpack
+  # revision/hash as well. See
+  # http://download.virtualbox.org/virtualbox/${version}/SHA256SUMS
+  # for hashes.
+  version = "5.0.4";
 
   forEachModule = action: ''
     for mod in \
@@ -35,13 +39,12 @@ let
   '';
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
-  extpackRevision = "98988";
+  extpackRevision = "102546";
   extensionPack = requireFile rec {
     name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}.vbox-extpack";
     # IMPORTANT: Hash must be base16 encoded because it's used as an input to
     # VBoxExtPackHelperApp!
-    # Tip: see http://dlc.sun.com.edgesuite.net/virtualbox/4.3.10/SHA256SUMS
-    sha256 = "4e39a6d0da23799a31c3f6a4022b144ef3ddfe30c523e51b21bf7d9ebade62ce";
+    sha256 = "e4618e7847eff7c31426f4639bcd83c37bd817147081d3218f21c8e7b6bc7cfa";
     message = ''
       In order to use the extension pack, you need to comply with the VirtualBox Personal Use
       and Evaluation License (PUEL) by downloading the related binaries from:
@@ -60,7 +63,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "e2949c250a1de30997e658de9e3d8545e71318a9844d80536137d76db4f08961";
+    sha256 = "b19e23fc8e71f38aef7c059f44e59fcbff3bb2ce85baa8de81f1629b85f68fcf";
   };
 
   buildInputs =
@@ -69,7 +72,7 @@ in stdenv.mkDerivation {
       pkgconfig which libXmu nukeReferences ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python
-    ++ optional pulseSupport pulseaudio;
+    ++ optional pulseSupport libpulseaudio;
 
   prePatch = ''
     set -x
@@ -81,7 +84,15 @@ in stdenv.mkDerivation {
     ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2
     find . -type f -iname '*makefile*' -exec sed -i -e 's/depmod -a/:/g' {} +
-    sed -e 's@"libasound.so.2"@"${alsaLib}/lib/libasound.so.2"@g' -i src/VBox/Main/xml/Settings.cpp src/VBox/Devices/Audio/alsa_stubs.c
+    sed -i -e '
+      s@"libdbus-1\.so\.3"@"${dbus}/lib/libdbus-1.so.3"@g
+      s@"libasound\.so\.2"@"${alsaLib}/lib/libasound.so.2"@g
+      ${optionalString pulseSupport ''
+      s@"libpulse\.so\.0"@"${libpulseaudio}/lib/libpulse.so.0"@g
+      ''}
+    ' src/VBox/Main/xml/Settings.cpp \
+      src/VBox/Devices/Audio/{alsa,pulse}_stubs.c \
+      include/VBox/dbus-calls.h
     export USER=nix
     set +x
   '';
@@ -93,7 +104,10 @@ in stdenv.mkDerivation {
       src/apps/adpctl/VBoxNetAdpCtl.cpp
   '';
 
+  # first line: ugly hack, and it isn't yet clear why it's a problem
   configurePhase = ''
+    NIX_CFLAGS_COMPILE=$(echo "$NIX_CFLAGS_COMPILE" | sed 's,\-isystem ${stdenv.cc.libc}/include,,g')
+
     cat >> LocalConfig.kmk <<LOCAL_CONFIG
     VBOX_WITH_TESTCASES            :=
     VBOX_WITH_TESTSUITE            :=

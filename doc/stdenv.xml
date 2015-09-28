@@ -15,7 +15,8 @@ environment does everything automatically.  If
 can easily customise or override the various build phases.</para>
 
 
-<section><title>Using <literal>stdenv</literal></title>
+<section xml:id="sec-using-stdenv"><title>Using
+<literal>stdenv</literal></title>
 
 <para>To build a package with the standard environment, you use the
 function <varname>stdenv.mkDerivation</varname>, instead of the
@@ -58,7 +59,7 @@ build.  To make this easier, the standard environment breaks the
 package build into a number of <emphasis>phases</emphasis>, all of
 which can be overridden or modified individually: unpacking the
 sources, applying patches, configuring, building, and installing.
-(There are some others; see <xref linkend="ssec-stdenv-phases"/>.)
+(There are some others; see <xref linkend="sec-stdenv-phases"/>.)
 For instance, a package that doesn’t supply a makefile but instead has
 to be compiled “manually” could be handled like this:
 
@@ -124,7 +125,8 @@ genericBuild
 </section>
 
 
-<section><title>Tools provided by <literal>stdenv</literal></title>
+<section xml:id="sec-tools-of-stdenv"><title>Tools provided by
+<literal>stdenv</literal></title>
 
 <para>The standard environment provides the following packages:
 
@@ -225,7 +227,7 @@ genericBuild
 </section>
 
 
-<section xml:id="ssec-stdenv-phases"><title>Phases</title>
+<section xml:id="sec-stdenv-phases"><title>Phases</title>
 
 <para>The generic builder has a number of <emphasis>phases</emphasis>.
 Package builds are split into phases to make it easier to override
@@ -243,7 +245,8 @@ is convenient to override a phase from the derivation, while the
 latter is convenient from a build script.</para>
 
 
-<section><title>Controlling phases</title>
+<section xml:id="ssec-controlling-phases"><title>Controlling
+phases</title>
 
 <para>There are a number of variables that control what phases are
 executed and in what order:
@@ -327,7 +330,7 @@ executed and in what order:
 </section>
 
 
-<section><title>The unpack phase</title>
+<section xml:id="ssec-unpack-phase"><title>The unpack phase</title>
 
 <para>The unpack phase is responsible for unpacking the source code of
 the package.  The default implementation of
@@ -434,7 +437,7 @@ Additional file types can be supported by setting the
 </section>
 
 
-<section><title>The patch phase</title>
+<section xml:id="ssec-patch-phase"><title>The patch phase</title>
 
 <para>The patch phase applies the list of patches defined in the
 <varname>patches</varname> variable.</para>
@@ -477,7 +480,7 @@ Additional file types can be supported by setting the
 </section>
 
 
-<section><title>The configure phase</title>
+<section xml:id="ssec-configure-phase"><title>The configure phase</title>
 
 <para>The configure phase prepares the source tree for building.  The
 default <function>configurePhase</function> runs
@@ -573,7 +576,7 @@ script) if it exists.</para>
 </section>
 
 
-<section><title>The build phase</title>
+<section xml:id="build-phase"><title>The build phase</title>
 
 <para>The build phase is responsible for actually building the package
 (e.g. compiling it).  The default <function>buildPhase</function>
@@ -657,7 +660,7 @@ called, respectively.</para>
 </section>
 
 
-<section><title>The check phase</title>
+<section xml:id="ssec-check-phase"><title>The check phase</title>
 
 <para>The check phase checks whether the package was built correctly
 by running its test suite.  The default
@@ -717,7 +720,7 @@ doCheck = true;</programlisting>
 </section>
 
 
-<section><title>The install phase</title>
+<section xml:id="ssec-install-phase"><title>The install phase</title>
 
 <para>The install phase is responsible for installing the package in
 the Nix store under <envar>out</envar>.  The default
@@ -772,7 +775,7 @@ installTargets = "install-bin install-doc";</programlisting>
 </section>
 
 
-<section><title>The fixup phase</title>
+<section xml:id="ssec-fixup-phase"><title>The fixup phase</title>
 
 <para>The fixup phase performs some (Nix-specific) post-processing
 actions on the files installed under <filename>$out</filename> by the
@@ -811,6 +814,12 @@ following:
     <term><varname>dontStrip</varname></term>
     <listitem><para>If set, libraries and executables are not
     stripped.  By default, they are.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>dontMoveSbin</varname></term>
+    <listitem><para>If set, files in <filename>$out/sbin</filename> are not moved
+    to <filename>$out/bin</filename>. By default, they are.</para></listitem>
   </varlistentry>
 
   <varlistentry>
@@ -890,12 +899,41 @@ following:
     phase.</para></listitem>
   </varlistentry>
 
+  <varlistentry>
+    <term><varname>separateDebugInfo</varname></term>
+    <listitem><para>If set to <literal>true</literal>, the standard
+    environment will enable debug information in C/C++ builds. After
+    installation, the debug information will be separated from the
+    executables and stored in the output named
+    <literal>debug</literal>. (This output is enabled automatically;
+    you don’t need to set the <varname>outputs</varname> attribute
+    explicitly.) To be precise, the debug information is stored in
+    <filename><replaceable>debug</replaceable>/lib/debug/.build-id/<replaceable>XX</replaceable>/<replaceable>YYYY…</replaceable></filename>,
+    where <replaceable>XXYYYY…</replaceable> is the <replaceable>build
+    ID</replaceable> of the binary — a SHA-1 hash of the contents of
+    the binary. Debuggers like GDB use the build ID to look up the
+    separated debug information.</para>
+
+    <para>For example, with GDB, you can add
+
+<programlisting>
+set debug-file-directory ~/.nix-profile/lib/debug
+</programlisting>
+
+    to <filename>~/.gdbinit</filename>. GDB will then be able to find
+    debug information installed via <literal>nix-env
+    -i</literal>.</para>
+
+    </listitem>
+  </varlistentry>
+
 </variablelist>
 
 </section>
 
 
-<section><title>The distribution phase</title>
+<section xml:id="ssec-distribution-phase"><title>The distribution
+phase</title>
 
 <para>The distribution phase is intended to produce a source
 distribution of the package.  The default
@@ -1166,7 +1204,7 @@ echo @foo@
   </varlistentry>
 
   <varlistentry>
-    <term>Qt</term>
+    <term>Qt 4</term>
     <listitem><para>Sets the <envar>QTDIR</envar> environment variable
     to Qt’s path.</para></listitem>
   </varlistentry>
@@ -1199,7 +1237,7 @@ echo @foo@
 </section>
 
 
-<section><title>Purity in Nixpkgs</title>
+<section xml:id="sec-purity-in-nixpkgs"><title>Purity in Nixpkgs</title>
 
 <para>[measures taken to prevent dependencies on packages outside the
 store, and what you can do to prevent them]</para>

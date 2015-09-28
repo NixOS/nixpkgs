@@ -1,13 +1,10 @@
-args: with args;
+args @ {texLive, unzip, ...}: with args;
 rec {
-  version = "0.8";
+  version = "0.9";
   name = "moderntimeline-${version}";
   src = fetchurl {
-    urls = [
-      "http://www.ctan.org/tex-archive/macros/latex/contrib/moderntimeline.zip"
-      "http://mirror.ctan.org/macros/latex/contrib/moderntimeline.zip"
-    ];
-    sha256 = "0y2m0qd0izrfjcwrmf3nvzkqmrhkdhzbv29s4c0knksdnfgcchc8";
+    url = "https://github.com/raphink/moderntimeline/archive/v0.9.zip";
+    sha256 = "1h1sfdh0whb74y6f999hs80flwpdbs2n4n2b9c450rvs1y7abcml";
   };
 
   buildInputs = [texLive unzip];
@@ -15,7 +12,7 @@ rec {
   doCopy = fullDepEntry (''
     mkdir -p $out/texmf-dist/tex/latex/moderntimeline $out/texmf-dist/doc/moderntimeline $out/share
     mv *.dtx *.ins $out/texmf-dist/tex/latex/moderntimeline/
-    mv *.pdf $out/texmf-dist/doc/moderntimeline/
+    mv *.md $out/texmf-dist/doc/moderntimeline/
     ln -s $out/texmf* $out/share/
   '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
 

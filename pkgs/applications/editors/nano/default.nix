@@ -11,10 +11,10 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "nano-${version}";
-  version = "2.4.1";
+  version = "2.4.2";
   src = fetchurl {
     url = "mirror://gnu/nano/${name}.tar.gz";
-    sha256 = "1li99ycnva40hiavm9lf34gjny74mj469x6ismrfm6wv3dgfn33a";
+    sha256 = "1fb5gzdm3jdx1f2vyanjvdmppaz082lf4kinyffnssgmzhc7zkf8";
   };
   buildInputs = [ ncurses ] ++ optional enableNls gettext;
   configureFlags = ''

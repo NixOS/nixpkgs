@@ -1,11 +1,9 @@
-{ stdenv, fetchgit, alsaLib, aubio, boost, cairomm, curl, dbus, fftw
-, fftwSinglePrec, flac, glibc, glibmm, gtk, gtkmm, jack2
+{ stdenv, fetchFromGitHub, alsaLib, aubio, boost, cairomm, curl, doxygen, dbus, fftw
+, fftwSinglePrec, flac, glibc, glibmm, graphviz, gtk, gtkmm, libjack2
 , libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
-, libusb, libuuid, libxml2, libxslt, lilv, lv2, makeWrapper, pango
-, perl, pkgconfig, python, rubberband, serd, sord, sratom, suil, taglib
-, vampSDK
-}:
+, libusb, libuuid, libxml2, libxslt, lilv-svn, lv2, makeWrapper, pango
+, perl, pkgconfig, python, rubberband, serd, sord-svn, sratom, suil, taglib, vampSDK }:
 
 let
 
@@ -17,50 +15,40 @@ let
   # "git describe" when _not_ on an annotated tag(!): MAJOR.MINOR-REV-HASH.
 
   # Version to build.
-  tag = "4.0";
-
-  # Version info that is built into the binary. Keep in sync with 'tag'. The
-  # last 8 digits is a (fake) commit id.
-  revision = "4.0-e1aa66cb3f";
+  tag = "4.2";
 
 in
 
 stdenv.mkDerivation rec {
   name = "ardour-${tag}";
 
-  src = fetchgit {
-    url = git://git.ardour.org/ardour/ardour.git;
-    rev = "e1aa66cb3f";
-    sha256 = "396668fb9116a68f5079f0d880930e890fd0cdf7ee5f3b97fcf44b88cf840b4c";
+  src = fetchFromGitHub {
+    owner = "Ardour";
+    repo = "ardour";
+    rev = "fe672c827cb2c08c94b1fa7e527d884c522a1af7";
+    sha256 = "12yfy9l5mnl96ix4s2qicp3m2zscli1a4bd50nk9v035pgf77s3f";
   };
 
-  buildInputs = [
-    alsaLib aubio boost cairomm curl dbus fftw fftwSinglePrec flac
-    glibc glibmm gtk gtkmm jack2 libgnomecanvas libgnomecanvasmm liblo
-    libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
-    libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2
-    makeWrapper pango perl pkgconfig python rubberband serd sord
-    sratom suil taglib vampSDK
-  ];
+  buildInputs =
+    [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac glibc
+      glibmm graphviz gtk gtkmm libjack2 libgnomecanvas libgnomecanvasmm liblo
+      libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
+      libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv-svn lv2
+      makeWrapper pango perl pkgconfig python rubberband serd sord-svn sratom suil taglib vampSDK
+    ];
 
   patchPhase = ''
-    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${revision}\"; }\n' > libs/ardour/revision.cc
+    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${tag}-${builtins.substring 0 8 src.rev}\"; }\n' > libs/ardour/revision.cc
     sed 's|/usr/include/libintl.h|${glibc}/include/libintl.h|' -i wscript
-    sed -e 's|^#!/usr/bin/perl.*$|#!${perl}/bin/perl|g' -i tools/fmt-bindings
-    sed -e 's|^#!/usr/bin/env.*$|#!${perl}/bin/perl|g' -i tools/*.pl
+    patchShebangs ./tools/
   '';
 
-  configurePhase = "python waf configure --with-backend=alsa,jack --optimize --prefix=$out";
+  configurePhase = "python waf configure --optimize --docs --with-backends=jack,alsa --prefix=$out";
 
   buildPhase = "python waf";
 
-  # For the custom ardour clearlooks gtk-engine to work, it must be
-  # moved to a directory called "engines" and added to GTK_PATH
   installPhase = ''
     python waf install
-    mkdir -pv $out/gtk2/engines
-    cp build/libs/clearlooks-newer/libclearlooks.so $out/gtk2/engines/
-    wrapProgram $out/bin/ardour4 --prefix GTK_PATH : $out/gtk2
 
     # Install desktop file
     mkdir -p "$out/share/applications"

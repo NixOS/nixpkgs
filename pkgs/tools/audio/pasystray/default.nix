@@ -1,14 +1,19 @@
-{stdenv, fetchurl, unzip, autoconf, automake, makeWrapper, pkgconfig, gnome_icon_theme, avahi, gtk3, libnotify, pulseaudio, x11}:
+{stdenv, fetchFromGitHub, autoconf, automake, makeWrapper, pkgconfig
+, gnome3, avahi, gtk3, libnotify, libpulseaudio, xlibsWrapper}:
 
 stdenv.mkDerivation rec {
-  name = "pasystray-0.4.0";
+  name = "pasystray-0.5.2";
 
-  src = fetchurl {
-    url = "https://github.com/christophgysin/pasystray/archive/${name}.zip";
-    sha256 = "1gpb7yqcxqglv50iqbkg2lg3r0z07jm4ir2zqmvns6sgddks590w";
+  src = fetchFromGitHub {
+    owner = "christophgysin";
+    repo = "pasystray";
+    rev = "6709fc1e9f792baf4f7b4507a887d5876b2cfa70";
+    sha256 = "1z21wassdiwfnlcrkpdqh8ylblpd1xxjxcmib5mwix9va2lykdfv";
   };
 
-  buildInputs = [ unzip autoconf automake makeWrapper pkgconfig gnome_icon_theme avahi gtk3 libnotify pulseaudio x11 ];
+  buildInputs = [ autoconf automake makeWrapper pkgconfig 
+                  gnome3.defaultIconTheme
+                  avahi gtk3 libnotify libpulseaudio xlibsWrapper ];
 
   preConfigure = ''
     aclocal
@@ -19,7 +24,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/bin/pasystray" \
-      --prefix XDG_DATA_DIRS : "${gnome_icon_theme}/share:$GSETTINGS_SCHEMAS_PATH"
+      --prefix XDG_DATA_DIRS : "${gnome3.defaultIconTheme}/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {

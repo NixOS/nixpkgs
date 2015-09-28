@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, kernel ? null, xlibs, zlib, perl
-, gtk, atk, pango, glib, gdk_pixbuf, cairo
+{ stdenv, fetchurl, kernel ? null, xorg, zlib, perl
+, gtk, atk, pango, glib, gdk_pixbuf, cairo, nukeReferences
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -43,16 +43,18 @@ stdenv.mkDerivation {
 
   dontStrip = true;
 
-  glPath      = makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr];
+  glPath      = makeLibraryPath [xorg.libXext xorg.libX11 xorg.libXrandr];
   cudaPath    = makeLibraryPath [zlib stdenv.cc.cc];
   openclPath  = makeLibraryPath [zlib];
-  allLibPath  = makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr zlib stdenv.cc.cc];
+  allLibPath  = makeLibraryPath [xorg.libXext xorg.libX11 xorg.libXrandr zlib stdenv.cc.cc];
 
   gtkPath = optionalString (!libsOnly) (makeLibraryPath
     [ gtk atk pango glib gdk_pixbuf cairo ] );
-  programPath = makeLibraryPath [ xlibs.libXv ];
+  programPath = makeLibraryPath [ xorg.libXv ];
 
-  buildInputs = [ perl ];
+  buildInputs = [ perl nukeReferences ];
+
+  disallowedReferences = if libsOnly then [] else [ kernel.dev ];
 
   meta = with stdenv.lib.meta; {
     homepage = http://www.nvidia.com/object/unix.html;

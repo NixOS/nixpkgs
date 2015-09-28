@@ -4,7 +4,7 @@
 , docbook_xml_dtd_45, docbook_xsl
 , sdlSupport ? true, SDL2 ? null
 , termSupport ? true , ncurses ? null
-, wxSupport ? false, wxGTK ? null # Warning! Broken
+, wxSupport ? true, wxGTK ? null
 # Optional, undocumented dependencies
 , wgetSupport ? false, wget ? null
 , curlSupport ? false, curl ? null
@@ -19,11 +19,11 @@ assert curlSupport -> (curl != null);
 stdenv.mkDerivation rec {
 
   name = "bochs-${version}";
-  version = "2.6.7";
+  version = "2.6.8";
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/project/bochs/bochs/${version}/${name}.tar.gz";
-    sha256 = "10l2pgzwnmng0rd44kqv7y46nwpcc18j53h3kf3dlqlnd7mlwdd4";
+    sha256 = "1kl5cmbz6qgg33j5vv9898nzdppp1rqgy24r5pv762aaj7q0ww3r";
   };
 
   # The huge list of configurable options

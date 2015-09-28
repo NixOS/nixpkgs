@@ -1,23 +1,24 @@
 { stdenv, fetchurl, cups, libssh, libXpm, nxproxy, openldap, makeWrapper, qt4 }:
 
-let version = "4.0.3.2"; in
+let version = "4.0.5.0"; in
 stdenv.mkDerivation rec {
   name = "x2goclient-${version}";
 
   src = fetchurl {
     url = "http://code.x2go.org/releases/source/x2goclient/${name}.tar.gz";
-    sha256 = "0vqcz9kmnbvlj8kns68zl60019fdz97rydz4wsgnsgdf7r370npn";
+    sha256 = "18a2pszh0nq2ir64a1ah1mlzddn4qcd12b339bv30n0y1ir92bi4";
   };
 
   meta = with stdenv.lib; {
     description = "Graphical NoMachine NX3 remote desktop client";
     homepage = http://x2go.org/;
-    license = with licenses; gpl2;
+    license = licenses.gpl2;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ cups libssh libXpm nxproxy openldap makeWrapper qt4 ];
+  buildInputs = [ cups libssh libXpm nxproxy openldap qt4 ];
+  nativeBuildInputs = [ makeWrapper ];
 
   patchPhase = ''
      substituteInPlace Makefile \

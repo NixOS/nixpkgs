@@ -1,13 +1,21 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "firmware-linux-nonfree-${version}";
-  version = "2015-03-20";
+  version = "2015-09-07";
 
-  src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
-    rev = "f404336ba808cbd57547196e13367079a23b822c";
-    sha256 = "0avz5vxax2b3s4gafib47vih1lbq78agdmpjcjnnnykw2kschkwa";
+  # This repo is built by merging the latest versions of
+  # http://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/
+  # and
+  # http://git.kernel.org/cgit/linux/kernel/git/iwlwifi/linux-firmware.git/
+  # for any given date. This gives us up to date iwlwifi firmware as well as
+  # the usual set of firmware. firmware/linux-firmware usually lags kernel releases
+  # so iwlwifi cards will fail to load on newly released kernels.
+  src = fetchFromGitHub {
+    owner = "wkennington";
+    repo = "linux-firmware";
+    rev = "0c3ac7434235f57967df4046ceafc0e4a08bb139";
+    sha256 = "1jhcgf0anjfi2998nzplr9l1q0b1yi306a2w1k2r4civsmfgm08r";
   };
 
   preInstall = ''
@@ -22,6 +30,7 @@ stdenv.mkDerivation rec {
     license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];
+    priority = 6; # give precedence to kernel firmware
   };
 
   passthru = { inherit version; };

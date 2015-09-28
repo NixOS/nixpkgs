@@ -6,30 +6,29 @@
 assert stdenv.isLinux;
 assert stdenv.cc.cc.isGNU or false;
 
+with import ./util.nix { inherit lib; };
+
 stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   builder = buildScript;
-}) // {
+}) // rec {
   inherit name src configureFlags;
 
-  buildInputs = lib.concatLists (map (pkgs: (with pkgs; [
-    pkgconfig alsaLib ncurses libpng libjpeg lcms2 fontforge libxml2 libxslt
-    openssl gnutls cups makeWrapper flex bison mesa mesa_noglu.osmesa
-  ]) ++ (with pkgs.xlibs; [
-    xlibs libXi libXcursor libXinerama libXrandr libXrender libXxf86vm libXcomposite
-  ])) pkgArches);
+  buildInputs = toBuildInputs pkgArches (pkgs: with pkgs; [
+    pkgconfig alsaLib lcms2 fontforge libxml2 libxslt makeWrapper flex bison
+  ]);
+
+  nativeBuildInputs = toBuildInputs pkgArches (pkgs: (with pkgs; [
+    freetype fontconfig mesa mesa_noglu.osmesa libdrm libpng libjpeg openssl gnutls cups ncurses
+  ]) ++ (with pkgs.xorg; [
+    xlibsWrapper libXi libXcursor libXinerama libXrandr libXrender libXxf86vm libXcomposite
+  ]));
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
   # them to the RPATH so that the user doesn't have to set them in
   # LD_LIBRARY_PATH.
-  NIX_LDFLAGS = map (path: "-rpath ${path}/lib") ([
-    stdenv.cc.cc
-  ] ++ (lib.concatLists (map (pkgs:
-        (with pkgs; [
-    freetype fontconfig mesa mesa_noglu.osmesa libdrm
-    libpng libjpeg openssl gnutls cups ncurses
-  ]) ++ (with pkgs.xlibs; [
-    libXinerama libXrender libXrandr libXcursor libXcomposite
-  ])) pkgArches)));
+  NIX_LDFLAGS = map
+    (path: "-rpath ${path}/lib")
+    ([ stdenv.cc.cc ] ++ nativeBuildInputs);
 
   # Don't shrink the ELF RPATHs in order to keep the extra RPATH
   # elements specified above.
@@ -51,6 +50,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   
   enableParallelBuilding = true;
 
+  passthru = { inherit pkgArches; };
   meta = {
     inherit version platforms;
     homepage = "http://www.winehq.org/";

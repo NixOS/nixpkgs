@@ -1,11 +1,11 @@
 { stdenv, fetchbzr, python, pyqt4, sip, rtmpdump, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "qarte-2.2.0";
+  name = "qarte-2.3.0";
   src = fetchbzr {
     url = http://bazaar.launchpad.net/~vincent-vandevyvre/qarte/trunk;
-    rev = "146";
-    sha256 = "0vqhxrzb3d7id81sr02h78hn0m7k2x0yxk9cl36pr5vx3vjnsyi9";
+    rev = "148";
+    sha256 = "0bp2qbl2g3dygmb31lwlarki9lybkb9zxixda4lwrlz628w93fxh";
   };
 
   buildInputs = [ makeWrapper ];

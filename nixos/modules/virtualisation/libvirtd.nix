@@ -57,6 +57,17 @@ in
           '';
       };
 
+    virtualisation.libvirtd.extraOptions =
+      mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "--verbose" ];
+        description =
+          ''
+            Extra command line arguments passed to libvirtd on startup.
+          '';
+      };
+
     virtualisation.libvirtd.onShutdown =
       mkOption {
         type = types.enum ["shutdown" "suspend" ];
@@ -140,7 +151,7 @@ in
             done
           ''; # */
 
-        serviceConfig.ExecStart = ''@${pkgs.libvirt}/sbin/libvirtd libvirtd --config "${configFile}" --daemon --verbose'';
+        serviceConfig.ExecStart = ''@${pkgs.libvirt}/sbin/libvirtd libvirtd --config "${configFile}" --daemon ${concatStringsSep " " cfg.extraOptions}'';
         serviceConfig.Type = "forking";
         serviceConfig.KillMode = "process"; # when stopping, leave the VMs alone
 

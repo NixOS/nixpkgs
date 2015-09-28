@@ -50,6 +50,9 @@ stdenv.mkDerivation rec {
       --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages"
   '';
 
+  # automatic moving fails, perhaps due to having two $out/lib*/pkgconfig
+  dontMoveLib64 = true;
+
   meta = {
     description = "Compoziting window manager";
     homepage = "http://launchpad.net/compiz/";

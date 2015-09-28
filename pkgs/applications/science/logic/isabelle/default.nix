@@ -12,11 +12,11 @@ stdenv.mkDerivation {
 
   src = if stdenv.isDarwin
     then fetchurl {
-      url = http://isabelle.in.tum.de/dist/Isabelle2014_macos.tar.gz;
+      url = http://isabelle.in.tum.de/website-Isabelle2014/dist/Isabelle2014_macos.tar.gz;
       sha256 = "1aa3vz2nnkkyd4mlsqbs69jqfxlll5h0k5fj9m1j9wqiddqwvwcf";
     }
     else fetchurl {
-      url = http://isabelle.in.tum.de/dist/Isabelle2014_linux.tar.gz;
+      url = http://isabelle.in.tum.de/website-Isabelle2014/dist/Isabelle2014_linux.tar.gz;
       sha256 = "0z81pwwllavka4r57fx6yi9kbpbb9xbanp8dsjix49qpyj2a72jy";
     };
 

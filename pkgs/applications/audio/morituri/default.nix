@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://thomas.apestaart.org/morituri/trac/;
     description = "A CD ripper aiming for accuracy over speed";
-    maintainers = [ maintainers.rycee ];
+    maintainers = with maintainers; [ rycee jgeerds ];
     license = licenses.gpl3Plus;
   };
 }

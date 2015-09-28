@@ -1,16 +1,16 @@
 { stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, libX11
-, jasper, libintlOrEmpty, gobjectIntrospection }:
+, jasper, libintlOrEmpty, gobjectIntrospection, doCheck ? false }:
 
 let
   ver_maj = "2.31";
-  ver_min = "3";
+  ver_min = "7";
 in
 stdenv.mkDerivation rec {
   name = "gdk-pixbuf-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdk-pixbuf/${ver_maj}/${name}.tar.xz";
-    sha256 = "ddd861747bb7c580acce7cfa3ce38c3f52a9516e66a6477988fd100c8fb9eabc";
+    sha256 = "046n9wz16kh3rpzxaiiwphf5bihxgj4g14cjn65wwmw82q4y0dj7";
   };
 
   setupHook = ./setup-hook.sh;
@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
     + stdenv.lib.optionalString (gobjectIntrospection != null) " --enable-introspection=yes"
     ;
 
-  doCheck = true;
+  # The tests take an excessive amount of time (> 1.5 hours) and memory (> 6 GB).
+  inherit (doCheck);
 
   postInstall = "rm -rf $out/share/gtk-doc";
 

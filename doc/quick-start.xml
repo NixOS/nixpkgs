@@ -55,18 +55,18 @@ $ git add pkgs/development/libraries/libfoo/default.nix</screen>
       <itemizedlist>
 
         <listitem>
-          <para>GNU cpio: <link
-          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/archivers/cpio/default.nix"><filename>pkgs/tools/archivers/cpio/default.nix</filename></link>.
-          The simplest possible package.  The generic builder in
-          <varname>stdenv</varname> does everything for you.  It has
-          no dependencies beyond <varname>stdenv</varname>.</para>
+          <para>GNU Hello: <link
+          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/misc/hello/default.nix"><filename>pkgs/applications/misc/hello/default.nix</filename></link>.
+          Trivial package, which specifies some <varname>meta</varname>
+          attributes which is good practice.</para>
         </listitem>
 
         <listitem>
-          <para>GNU Hello: <link
-          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/misc/hello/ex-2/default.nix"><filename>pkgs/applications/misc/hello/ex-2/default.nix</filename></link>.
-          Also trivial, but it specifies some <varname>meta</varname>
-          attributes which is good practice.</para>
+          <para>GNU cpio: <link
+          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/archivers/cpio/default.nix"><filename>pkgs/tools/archivers/cpio/default.nix</filename></link>.
+          Also a simple package. The generic builder in
+          <varname>stdenv</varname> does everything for you. It has
+          no dependencies beyond <varname>stdenv</varname>.</para>
         </listitem>
 
         <listitem>

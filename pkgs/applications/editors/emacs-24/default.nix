@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, ncurses, x11, libXaw, libXpm, Xaw3d
-, pkgconfig, gtk, libXft, dbus, libpng, libjpeg, libungif
+{ stdenv, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
+, pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
-, alsaLib, cairo
+, alsaLib, cairo, acl, gpm, AppKit, Foundation, libobjc
 , withX ? !stdenv.isDarwin
 , withGTK3 ? false, gtk3 ? null
 , withGTK2 ? true, gtk2
 }:
 
-assert (libXft != null) -> libpng != null;	# probably a bug
-assert stdenv.isDarwin -> libXaw != null;	# fails to link otherwise
+assert (libXft != null) -> libpng != null;      # probably a bug
+assert stdenv.isDarwin -> libXaw != null;       # fails to link otherwise
 assert withGTK2 -> withX || stdenv.isDarwin;
 assert withGTK3 -> withX || stdenv.isDarwin;
 assert withGTK2 -> !withGTK3 && gtk2 != null;
@@ -35,18 +35,30 @@ stdenv.mkDerivation rec {
     ./at-fdcwd.patch
   ];
 
+  postPatch = ''
+    sed -i 's|/usr/share/locale|${gettext}/share/locale|g' lisp/international/mule-cmds.el
+  '';
+
   buildInputs =
-    [ ncurses gconf libxml2 gnutls alsaLib pkgconfig texinfo ]
+    [ ncurses gconf libxml2 gnutls alsaLib pkgconfig texinfo acl gpm gettext ]
     ++ stdenv.lib.optional stdenv.isLinux dbus
     ++ stdenv.lib.optionals withX
-      [ x11 libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
+      [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
         imagemagick gconf ]
-    ++ stdenv.lib.optional (withX && withGTK2) [ gtk2 ]
-    ++ stdenv.lib.optional (withX && withGTK3) [ gtk3 ]
+    ++ stdenv.lib.optional (withX && withGTK2) gtk2
+    ++ stdenv.lib.optional (withX && withGTK3) gtk3
     ++ stdenv.lib.optional (stdenv.isDarwin && withX) cairo;
 
+  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ AppKit Foundation libobjc
+  ];
+
+  NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin
+    "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
+
   configureFlags =
-    if withX
+    if stdenv.isDarwin
+      then [ "--with-ns" "--disable-ns-self-contained" ]
+    else if withX
       then [ "--with-x-toolkit=${toolkit}" "--with-xft" ]
       else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
              "--with-gif=no" "--with-tiff=no" ];
@@ -57,6 +69,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/
     cp ${./site-start.el} $out/share/emacs/site-lisp/site-start.el
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv nextstep/Emacs.app $out/Applications
   '';
 
   doCheck = true;

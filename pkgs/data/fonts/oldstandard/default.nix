@@ -1,50 +1,29 @@
-x@{builderDefsPackage
-  , unzip
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchzip }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    version="2.2";
-    baseName="oldstandard";
-    name="${baseName}-${version}";
-    url="http://www.thessalonica.org.ru/downloads/${name}.otf.zip";
-    hash="0xhbksrh9mv1cs6dl2mc8l6sypialy9wirkjr54nf7s9bcynv1h6";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  name = "oldstandard-${version}";
+  version = "2.2";
+
+  src = fetchzip {
+    stripRoot = false;
+    url = "https://github.com/akryukov/oldstand/releases/download/v${version}/${name}.otf.zip";
+    sha256 = "1hl78jw5szdjq9dhbcv2ln75wpp2lzcxrnfc36z35v5wk4l7jc3h";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  phases = [ "unpackPhase" "installPhase" ];
 
-  phaseNames = ["doUnpack" "installFonts"];
+  installPhase = ''
+    mkdir -p $out/share/fonts/opentype
+    mkdir -p $out/share/doc/${name}
+    cp -v *.otf $out/share/fonts/opentype/
+    cp -v FONTLOG.txt $out/share/doc/${name}
+  '';
 
-  doUnpack = a.fullDepEntry ''
-    unzip ${src}
-  '' ["addInputs"];
-      
-  meta = {
-    description = "An old-style font";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      all;
+  meta = with stdenv.lib; {
+    homepage = https://github.com/akryukov/oldstand;
+    description = "An attempt to revive a specific type of Modern style of serif typefaces";
+    maintainers = with maintainers; [ raskin rycee ];
+    license = licenses.ofl;
+    platforms = platforms.all;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.thessalonica.org.ru/ru/fonts-download.html";
-    };
-  };
-}) x
-
+}

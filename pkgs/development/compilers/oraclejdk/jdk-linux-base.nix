@@ -13,7 +13,7 @@
 , requireFile
 , unzip
 , file
-, xlibs ? null
+, xorg ? null
 , installjdk ? true
 , pluginSupport ? true
 , installjce ? false
@@ -34,7 +34,7 @@
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
-assert swingSupport -> xlibs != null;
+assert swingSupport -> xorg != null;
 
 let
 
@@ -133,7 +133,7 @@ let result = stdenv.mkDerivation rec {
 
     if test -n "${jce}"; then
       unzip ${jce}
-      cp -v UnlimitedJCEPolicy/*.jar $jrePath/lib/security
+      cp -v UnlimitedJCEPolicy*/*.jar $jrePath/lib/security
     fi
 
     rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}/jli
@@ -142,7 +142,7 @@ let result = stdenv.mkDerivation rec {
     rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}
 
     # set all the dynamic linkers
-    find $out -type f -perm +100 \
+    find $out -type f -perm -0100 \
         -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "$rpath" {} \;
 
@@ -173,8 +173,8 @@ let result = stdenv.mkDerivation rec {
    * libXt is only needed on amd64
    */
   libraries =
-    [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu xlibs.libXxf86vm alsaLib fontconfig freetype gnome.pango gnome.gtk cairo gdk_pixbuf atk] ++
-    (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi xlibs.libXp xlibs.libXt xlibs.libXrender stdenv.cc.cc] else []);
+    [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu xorg.libXxf86vm alsaLib fontconfig freetype gnome.pango gnome.gtk cairo gdk_pixbuf atk] ++
+    (if swingSupport then [xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp xorg.libXt xorg.libXrender stdenv.cc.cc] else []);
 
   passthru.mozillaPlugin = if installjdk then "/jre/lib/${architecture}/plugins" else "/lib/${architecture}/plugins";
 
@@ -182,6 +182,9 @@ let result = stdenv.mkDerivation rec {
 
   passthru.home = result;
 
-  meta.license = stdenv.lib.licenses.unfree;
+  meta = with stdenv.lib; {
+    license = licenses.unfree;
+    platforms = [ "i686-linux" "x86_64-linux" ]; # some inherit jre.meta.platforms
+  };
 
 }; in result

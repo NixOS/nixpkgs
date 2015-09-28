@@ -18,7 +18,7 @@ stdenv.mkDerivation (rec {
 
   patches = [ ./deadlock.patch ]
     ++ map fetchurl (import ./debian-patches.nix)
-    ++ stdenv.lib.optional (stdenv.cc.cc.isClang or false) ./returnval.patch;
+    ++ stdenv.lib.optional stdenv.cc.isClang ./returnval.patch;
 
 
   meta = with stdenv.lib; {

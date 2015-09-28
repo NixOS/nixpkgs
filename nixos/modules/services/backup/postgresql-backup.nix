@@ -3,13 +3,13 @@
 with lib;
 
 let
-  inherit (pkgs) postgresql gzip;
+  inherit (pkgs) gzip;
 
-  location = config.services.postgresqlBackup.location ;
+  location = config.services.postgresqlBackup.location;
 
   postgresqlBackupCron = db:
     ''
-      ${config.services.postgresqlBackup.period} root ${postgresql}/bin/pg_dump ${db} | ${gzip}/bin/gzip -c > ${location}/${db}.gz
+      ${config.services.postgresqlBackup.period} root ${config.services.postgresql.package}/bin/pg_dump ${db} | ${gzip}/bin/gzip -c > ${location}/${db}.gz
     '';
 
 in

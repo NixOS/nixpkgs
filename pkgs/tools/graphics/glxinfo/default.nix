@@ -1,4 +1,4 @@
-{stdenv, fetchurl, x11, mesa}:
+{stdenv, fetchurl, xlibsWrapper, mesa}:
 
 let version = "8.1.0"; in
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0a58hw5850731p4smz4zqsbvyxvgjf7n5xdbs9l1wamk8q3gl0wp";
   };
 
-  buildInputs = [x11 mesa];
+  buildInputs = [xlibsWrapper mesa];
 
   configurePhase = "true";
 

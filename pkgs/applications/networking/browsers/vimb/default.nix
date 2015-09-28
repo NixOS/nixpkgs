@@ -11,11 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "0h9m5qfs09lb0dz8a79yccmm3a5rv6z8gi5pkyfh8fqkgkh2940p";
   };
 
-  # Nixos default ca bundle
-  patchPhase = ''
-    sed -i s,/etc/ssl/certs/ca-certificates.crt,/etc/ssl/certs/ca-bundle.crt, src/config.def.h
-  '';
-
   buildInputs = [ makeWrapper gtk libsoup pkgconfig webkit gsettings_desktop_schemas ];
 
   makeFlags = [ "PREFIX=$(out)" ];

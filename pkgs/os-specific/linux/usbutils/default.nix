@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
 
   postInstall =
     ''
-      rm $out/sbin/update-usbids.sh
       substituteInPlace $out/bin/lsusb.py \
         --replace /usr/share/usb.ids ${hwdata}/data/hwdata/usb.ids
     '';

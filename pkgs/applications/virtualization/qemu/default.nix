@@ -1,8 +1,8 @@
 { stdenv, fetchurl, python, zlib, pkgconfig, glib, ncurses, perl, pixman
 , attr, libcap, vde2, alsaLib, texinfo, libuuid, flex, bison, lzo, snappy
-, libseccomp, libaio, libcap_ng, gnutls
+, libseccomp, libaio, libcap_ng, gnutls, nettle
 , makeWrapper
-, pulseSupport ? true, pulseaudio
+, pulseSupport ? true, libpulseaudio
 , sdlSupport ? true, SDL
 , vncSupport ? true, libjpeg, libpng
 , spiceSupport ? true, spice, spice_protocol, usbredir
@@ -11,26 +11,26 @@
 
 with stdenv.lib;
 let
-  n = "qemu-2.2.1";
+  version = "2.4.0";
   audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
 in
 
 stdenv.mkDerivation rec {
-  name = n + (if x86Only then "-x86-only" else "");
+  name = "qemu-" + stdenv.lib.optionalString x86Only "x86-only-" + version;
 
   src = fetchurl {
-    url = "http://wiki.qemu.org/download/${n}.tar.bz2";
-    sha256 = "181m2ddsg3adw8y5dmimsi8x678imn9f6i5p20zbhi7pdr61a5s6";
+    url = "http://wiki.qemu.org/download/qemu-${version}.tar.bz2";
+    sha256 = "0836gqv5zcl0xswwjcns3mlkn18lyz2fiq8rl1ihcm6cpf8vkc3j";
   };
 
   buildInputs =
     [ python zlib pkgconfig glib ncurses perl pixman attr libcap
       vde2 texinfo libuuid flex bison makeWrapper lzo snappy libseccomp
-      libcap_ng gnutls
+      libcap_ng gnutls nettle
     ]
-    ++ optionals pulseSupport [ pulseaudio ]
+    ++ optionals pulseSupport [ libpulseaudio ]
     ++ optionals sdlSupport [ SDL ]
     ++ optionals vncSupport [ libjpeg libpng ]
     ++ optionals spiceSupport [ spice_protocol spice usbredir ]
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.qemu.org/;
     description = "A generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric shlevy eelco ];
+    maintainers = with maintainers; [ viric eelco ];
     platforms = platforms.linux;
   };
 }

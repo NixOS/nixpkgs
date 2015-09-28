@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   majorVersion = "0.3";
-  minorVersion = "0.1";
+  minorVersion = "1.3";
   name = "pantheon-terminal-${majorVersion}.${minorVersion}";
   src = fetchurl {
     url = "https://launchpad.net/pantheon-terminal/${majorVersion}.x/${majorVersion}.${minorVersion}/+download/${name}.tgz";
-    sha256 = "14wspqxp79myyyjngr1x7jg1kw15g3nm2pav2zffp8xs16s1i5za";
+    sha256 = "0bfrqxig26i9qhm15kk7h9lgmzgnqada5snbbwqkp0n0pnyyh4ss";
   };
 
   preConfigure = ''
@@ -16,11 +16,14 @@ stdenv.mkDerivation rec {
   preFixup = ''
     for f in $out/bin/*; do
       wrapProgram $f \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$XDG_ICON_DIRS:$out/share"
     done
   '';
 
-  buildInputs = [perl cmake vala pkgconfig glib gtk3 granite gnome3.vte gnome3.libgee libnotify gettext makeWrapper];
+  buildInputs = with gnome3; [
+    perl cmake vala pkgconfig glib gtk3 granite libnotify gettext makeWrapper
+    vte_290 libgee gsettings_desktop_schemas defaultIconTheme
+  ];
   meta = {
     description = "elementary OS's terminal";
     longDescription = "A super lightweight, beautiful, and simple terminal. It's designed to be setup with sane defaults and little to no configuration. It's just a terminal, nothing more, nothing less. Designed for elementary OS.";

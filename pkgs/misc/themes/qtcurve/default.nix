@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, cmake, gettext, pkgconfig # Build tools
+{ stdenv, fetchurl, automoc4, cmake, gettext, perl, pkgconfig
 , gtk2, kde_workspace, kdelibs # Toolkit dependencies
-, libpthreadstubs, libXdmcp, libxcb, xlibs # X11 dependencies
+, libpthreadstubs, libXdmcp, libxcb, xorg # X11 dependencies
 }:
 
 stdenv.mkDerivation {
@@ -10,9 +10,9 @@ stdenv.mkDerivation {
     sha256 = "19kk11hgi6md1cl0hr0pklcczbl66jczahlkf5fr8j59ljgpr6c5";
   };
 
+  nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig ];
+
   buildInputs = [
-    cmake
-    gettext
     gtk2
     kde_workspace
     kdelibs
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     libXdmcp
     libxcb
     pkgconfig
-    xlibs.libxshmfence
+    xorg.libxshmfence
   ];
 
   patches = [

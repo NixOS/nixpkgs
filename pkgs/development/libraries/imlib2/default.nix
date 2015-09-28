@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, x11, libjpeg, libtiff, giflib, libpng, bzip2, pkgconfig }:
+{ stdenv, fetchurl, xlibsWrapper, libjpeg, libtiff, giflib, libpng, bzip2, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "imlib2-1.4.6";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0x1j0ylpclkp8cfpwfpkjywqz124bqskyxbw8pvwzkv2gmrbwldg";
   };
 
-  buildInputs = [ x11 libjpeg libtiff giflib libpng bzip2 ];
+  buildInputs = [ xlibsWrapper libjpeg libtiff giflib libpng bzip2 ];
 
   nativeBuildInputs = [ pkgconfig ];
 

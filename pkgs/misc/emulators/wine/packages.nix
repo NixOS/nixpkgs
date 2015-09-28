@@ -27,7 +27,7 @@ let sources = with lib.getAttr wineRelease (import ./versions.nix); {
     inherit (sources) version;
 in {
   wine32 = import ./base.nix {
-    name = "wine32-${version}";
+    name = "wine-${version}";
     inherit (sources) version src;
     inherit (pkgsi686Linux) lib stdenv;
     pkgArches = [ pkgsi686Linux ];
@@ -46,7 +46,7 @@ in {
     platforms = [ "x86_64-linux" ];
   };
   wineWow = import ./base.nix {
-    name = "wineWow-${version}";
+    name = "wine-wow-${version}";
     inherit (sources) version src;
     inherit lib;
     stdenv = stdenv_32bit;

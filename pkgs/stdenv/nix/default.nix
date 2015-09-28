@@ -20,6 +20,7 @@ import ../generic rec {
     inherit stdenv;
     binutils = pkgs.binutils;
     cc = pkgs.gcc.cc;
+    isGNU = true;
     coreutils = pkgs.coreutils;
     shell = pkgs.bash + "/bin/sh";
   };

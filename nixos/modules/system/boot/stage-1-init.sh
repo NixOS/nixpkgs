@@ -182,9 +182,9 @@ if test -e /sys/power/resume -a -e /sys/power/disk; then
         for sd in @resumeDevices@; do
             # Try to detect resume device. According to Ubuntu bug:
             # https://bugs.launchpad.net/ubuntu/+source/pm-utils/+bug/923326/comments/1
-            # When there are multiple swap devices, we can't know where will hibernate
-            # image reside. We can check all of them for swsuspend blkid.
-            resumeInfo="$(udevadm info -q property "$sd" )"
+            # when there are multiple swap devices, we can't know where the hibernate
+            # image will reside. We can check all of them for swsuspend blkid.
+            resumeInfo="$(test -e "$sd" && udevadm info -q property "$sd")"
             if [ "$(echo "$resumeInfo" | sed -n 's/^ID_FS_TYPE=//p')" = "swsuspend" ]; then
                 resumeDev="$sd"
                 break
@@ -290,9 +290,22 @@ mountFS() {
         if [ -z "$fsType" ]; then fsType=auto; fi
     fi
 
-    echo "$device /mnt-root$mountPoint $fsType $options" >> /etc/fstab
+    # Filter out x- options, which busybox doesn't do yet.
+    local optionsFiltered="$(IFS=,; for i in $options; do if [ "${i:0:2}" != "x-" ]; then echo -n $i,; fi; done)"
+
+    echo "$device /mnt-root$mountPoint $fsType $optionsFiltered" >> /etc/fstab
 
     checkFS "$device" "$fsType"
+
+    # Optionally resize the filesystem.
+    case $options in
+        *x-nixos.autoresize*)
+            if [ "$fsType" = ext2 -o "$fsType" = ext3 -o "$fsType" = ext4 ]; then
+                echo "resizing $device..."
+                resize2fs "$device"
+            fi
+            ;;
+    esac
 
     # Create backing directories for unionfs-fuse.
     if [ "$fsType" = unionfs-fuse ]; then
@@ -317,7 +330,7 @@ mountFS() {
 
 
 # Try to find and mount the root device.
-mkdir /mnt-root
+mkdir -p $targetRoot
 
 exec 3< @fsInfo@
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, perl, python3, which
+{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, perl, python, which, makeWrapper
 , libX11, libxcb, qt5, mesa
 , ffmpeg
 , libchardet
@@ -13,36 +13,36 @@
 , libbluray
 , jackSupport ? false, jack ? null
 , portaudioSupport ? false, portaudio ? null
-, pulseSupport ? true, pulseaudio ? null
+, pulseSupport ? true, libpulseaudio ? null
 , cddaSupport ? false, libcdda ? null
+, youtubeSupport ? true, youtube-dl ? null
 }:
+
+with stdenv.lib;
 
 assert jackSupport -> jack != null;
 assert portaudioSupport -> portaudio != null;
-assert pulseSupport -> pulseaudio != null;
+assert pulseSupport -> libpulseaudio != null;
 assert cddaSupport -> libcdda != null;
+assert youtubeSupport -> youtube-dl != null;
 
-let
-  waf = fetchurl {
-    url = http://ftp.waf.io/pub/release/waf-1.8.4;
-    sha256 = "1a7skwgpl91adhcwlmdr76xzdpidh91hvcmj34zz6548bpx3a87h";
-  };
-
+let qtPath = makeSearchPath "lib/qt5/qml" [ qt5.declarative qt5.quickcontrols ];
 in
 
 stdenv.mkDerivation rec {
   name = "bomi-${version}";
-  version = "0.9.5";
+  version = "0.9.11";
 
   src = fetchFromGitHub {
     owner = "xylosper";
     repo = "bomi";
     rev = "v${version}";
-    sha256 = "1pf82dp7v18yd7knsjl853sfzhq4rqc3sq15jgqiw37096gp0sll";
+    sha256 = "0a7n46gn3n5098lxxvl3s29s8jlkzss6by9074jx94ncn9cayf2h";
   };
 
   buildInputs = with stdenv.lib;
-                [ libX11 libxcb qt5 mesa
+                [ libX11 libxcb mesa
+                  qt5.base qt5.x11extras
                   ffmpeg
                   libchardet
                   mpg123
@@ -58,19 +58,23 @@ stdenv.mkDerivation rec {
                 ]
                 ++ optional jackSupport jack
                 ++ optional portaudioSupport portaudio
-                ++ optional pulseSupport pulseaudio
+                ++ optional pulseSupport libpulseaudio
                 ++ optional cddaSupport libcdda
                 ;
 
   preConfigure = ''
     patchShebangs configure
-    # src/mpv/waf build-mpv; do
   '';
 
   preBuild = ''
+    patchShebangs src/mpv/waf
     patchShebangs build-mpv
-    install -m755 ${waf} src/mpv/waf
-    sed -i '1 s,.*,#!${python3.interpreter},' src/mpv/waf
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/bomi \
+      --set QML2_IMPORT_PATH ${qtPath} \
+      ${optionalString youtubeSupport "--prefix PATH ':' '${youtube-dl}/bin'"}
   '';
 
   configureFlags = with stdenv.lib;
@@ -81,7 +85,7 @@ stdenv.mkDerivation rec {
                    ++ optional cddaSupport "--enable-cdda"
                    ;
 
-  nativeBuildInputs = [ pkgconfig perl which ];
+  nativeBuildInputs = [ pkgconfig perl python which qt5.tools makeWrapper ];
 
   enableParallelBuilding = true;
 

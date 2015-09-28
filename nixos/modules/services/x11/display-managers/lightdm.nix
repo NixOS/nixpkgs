@@ -19,7 +19,7 @@ let
     '';
 
   theme = pkgs.gnome3.gnome_themes_standard;
-  icons = pkgs.gnome3.gnome_icon_theme;
+  icons = pkgs.gnome3.defaultIconTheme;
 
   # The default greeter provided with this expression is the GTK greeter.
   # Again, we need a few things in the environment for the greeter to run with
@@ -33,7 +33,7 @@ let
       makeWrapper ${pkgs.lightdm_gtk_greeter}/sbin/lightdm-gtk-greeter \
         $out/greeter \
         --prefix PATH : "${pkgs.glibc}/bin" \
-        --set GDK_PIXBUF_MODULE_FILE "$(find ${theme} -name loaders.cache)" \
+        --set GDK_PIXBUF_MODULE_FILE "${pkgs.gdk_pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" \
         --set GTK_PATH "${theme}:${pkgs.gtk3}" \
         --set GTK_EXE_PREFIX "${theme}" \
         --set GTK_DATA_PREFIX "${theme}" \
@@ -65,7 +65,7 @@ let
       greeters-directory = ${cfg.greeter.package}
       sessions-directory = ${dmcfg.session.desktops}
 
-      [SeatDefaults]
+      [Seat:*]
       xserver-command = ${xserverWrapper}
       session-wrapper = ${dmcfg.session.script}
       greeter-session = ${cfg.greeter.name}
@@ -104,7 +104,6 @@ in
       };
 
       background = mkOption {
-        default = "${pkgs.nixos-artwork}/gnome/Gnome_Dark.png";
         description = ''
           The background image or color to use.
         '';
@@ -143,8 +142,26 @@ in
     services.dbus.enable = true;
     services.dbus.packages = [ lightdm ];
 
-    security.pam.services.lightdm = { allowNullPassword = true; startSession = true; };
-    security.pam.services.lightdm-greeter = { allowNullPassword = true; startSession = true; };
+    security.pam.services.lightdm = {
+      allowNullPassword = true;
+      startSession = true;
+    };
+    security.pam.services.lightdm-greeter = {
+      allowNullPassword = true;
+      startSession = true;
+      text = ''
+        auth     required pam_env.so
+        auth     required pam_permit.so
+
+        account  required pam_permit.so
+
+        password required pam_deny.so
+
+        session  required pam_env.so envfile=${config.system.build.pamEnvironment}
+        session  required pam_unix.so
+        session  optional ${pkgs.systemd}/lib/security/pam_systemd.so
+      '';
+    };
 
     users.extraUsers.lightdm = {
       createHome = true;
@@ -154,5 +171,8 @@ in
     };
 
     users.extraGroups.lightdm.gid = config.ids.gids.lightdm;
+
+    services.xserver.displayManager.lightdm.background = mkDefault "${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png";
+
   };
 }

@@ -1,18 +1,24 @@
 {stdenv, fetchurl, ocaml, findlib, which, ocaml_react, ocaml_ssl,
-ocaml_lwt, ocamlnet, ocaml_pcre, cryptokit, tyxml, ocaml_ipaddr, zlib,
-libev, openssl, ocaml_sqlite3, tree, uutf}:
+ocaml_lwt, ocamlnet, ocaml_pcre, cryptokit, tyxml, ipaddr, zlib,
+libev, openssl, ocaml_sqlite3, tree, uutf, makeWrapper
+}:
+
+let mkpath = p: n:
+  let v = stdenv.lib.getVersion ocaml; in
+  "${p}/lib/ocaml/${v}/site-lib/${n}";
+in
 
 stdenv.mkDerivation {
   name = "ocsigenserver-2.5";
-  
+
   src = fetchurl {
     url = https://github.com/ocsigen/ocsigenserver/archive/2.5.tar.gz;
     sha256 = "0ayzlzjwg199va4sclsldlcp0dnwdj45ahhg9ckb51m28c2pw46r";
   };
 
   buildInputs = [ocaml which findlib ocaml_react ocaml_ssl ocaml_lwt
-  ocamlnet ocaml_pcre cryptokit tyxml ocaml_ipaddr zlib libev openssl
-  ocaml_sqlite3 tree uutf];
+  ocamlnet ocaml_pcre cryptokit tyxml ipaddr zlib libev openssl
+  ocaml_sqlite3 tree uutf makeWrapper ];
 
   configureFlags = "--root $(out) --prefix /";
 
@@ -20,9 +26,11 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  postFixup = 
+  postFixup =
   ''
   rm -rf $out/var/run
+  wrapProgram $out/bin/ocsigenserver \
+    --prefix CAML_LD_LIBRARY_PATH : "${mkpath ocaml_ssl "ssl"}:${mkpath ocaml_lwt "lwt"}:${mkpath ocamlnet "netsys"}:${mkpath ocamlnet "netstring"}:${mkpath ocaml_pcre "pcre"}:${mkpath cryptokit "cryptokit"}:${mkpath ocaml_sqlite3 "sqlite3"}"
   '';
 
   dontPatchShebangs = true;

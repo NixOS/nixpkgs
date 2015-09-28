@@ -2,8 +2,6 @@
 , cross ? null, gold ? true, bison ? null
 }:
 
-assert !stdenv.isDarwin;
-
 let basename = "binutils-2.23.1"; in
 
 with { inherit (stdenv.lib) optional optionals optionalString; };
@@ -56,10 +54,12 @@ stdenv.mkDerivation rec {
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = "-static-libgcc";
+  NIX_CFLAGS_COMPILE = if stdenv.isDarwin
+    then "-Wno-string-plus-int -Wno-deprecated-declarations"
+    else "-static-libgcc";
 
   configureFlags =
-    [ "--enable-shared" "--enable-deterministic-archives" ]
+    [ "--enable-shared" "--enable-deterministic-archives" "--disable-werror" ]
     ++ optional (stdenv.system == "mips64el-linux") "--enable-fix-loongson2f-nop"
     ++ optional (cross != null) "--target=${cross.config}"
     ++ optionals gold [ "--enable-gold" "--enable-plugins" ]

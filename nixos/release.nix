@@ -93,37 +93,7 @@ let
 
 in rec {
 
-  channel =
-    pkgs.releaseTools.makeSourceTarball {
-      name = "nixos-channel";
-
-      src = nixpkgs;
-
-      officialRelease = false; # FIXME: fix this in makeSourceTarball
-      inherit version versionSuffix;
-
-      buildInputs = [ pkgs.nixUnstable ];
-
-      expr = builtins.readFile lib/channel-expr.nix;
-
-      distPhase = ''
-        rm -rf .git
-        echo -n $VERSION_SUFFIX > .version-suffix
-        echo -n ${nixpkgs.rev or nixpkgs.shortRev} > .git-revision
-        releaseName=nixos-$VERSION$VERSION_SUFFIX
-        mkdir -p $out/tarballs
-        mkdir ../$releaseName
-        cp -prd . ../$releaseName/nixpkgs
-        chmod -R u+w ../$releaseName
-        ln -s nixpkgs/nixos ../$releaseName/nixos
-        echo "$expr" > ../$releaseName/default.nix
-        NIX_STATE_DIR=$TMPDIR nix-env -f ../$releaseName/default.nix -qaP --meta --xml \* > /dev/null
-        cd ..
-        chmod -R u+w $releaseName
-        tar cfJ $out/tarballs/$releaseName.tar.xz $releaseName
-      ''; # */
-    };
-
+  channel = import lib/make-channel.nix { inherit pkgs nixpkgs version versionSuffix; };
 
   manual = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manual);
   manualPDF = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manualPDF)).x86_64-linux;
@@ -206,10 +176,12 @@ in rec {
   # boot that system from uboot (like for the sheevaplug).
   # The pc variant helps preparing the expression for the system tarball
   # in a machine faster than the sheevpalug
+  /*
   system_tarball_pc = forAllSystems (system: makeSystemTarball {
     module = ./modules/installer/cd-dvd/system-tarball-pc.nix;
     inherit system;
   });
+  */
 
   # Provide container tarball for lxc, libvirt-lxc, docker-lxc, ...
   containerTarball = forAllSystems (system: makeSystemTarball {
@@ -247,16 +219,20 @@ in rec {
   tests.docker = hydraJob (import tests/docker.nix { system = "x86_64-linux"; });
   tests.dockerRegistry = hydraJob (import tests/docker-registry.nix { system = "x86_64-linux"; });
   tests.etcd = hydraJob (import tests/etcd.nix { system = "x86_64-linux"; });
+  tests.ec2-nixops = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-nixops;
+  tests.ec2-config = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-config;
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
   tests.fleet = hydraJob (import tests/fleet.nix { system = "x86_64-linux"; });
   #tests.gitlab = callTest tests/gitlab.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
+  tests.gnome3-gdm = callTest tests/gnome3-gdm.nix {};
   tests.i3wm = callTest tests/i3wm.nix {};
   tests.installer.grub1 = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).grub1.test);
   tests.installer.lvm = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).lvm.test);
-  tests.installer.rebuildCD = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).rebuildCD.test);
+  tests.installer.luksroot = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).luksroot.test);
   tests.installer.separateBoot = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).separateBoot.test);
+  tests.installer.separateBootFat = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).separateBootFat.test);
   tests.installer.simple = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).simple.test);
   tests.installer.simpleLabels = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).simpleLabels.test);
   tests.installer.simpleProvided = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).simpleProvided.test);
@@ -270,6 +246,7 @@ in rec {
   tests.kde4 = callTest tests/kde4.nix {};
   tests.kubernetes = hydraJob (import tests/kubernetes.nix { system = "x86_64-linux"; });
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
+  #tests.lightdm = callTest tests/lightdm.nix {};
   tests.login = callTest tests/login.nix {};
   #tests.logstash = callTest tests/logstash.nix {};
   tests.misc = callTest tests/misc.nix {};
@@ -356,7 +333,5 @@ in rec {
         services.postgresql.package = pkgs.postgresql93;
         environment.systemPackages = [ pkgs.php ];
       });
-
   };
-
 }

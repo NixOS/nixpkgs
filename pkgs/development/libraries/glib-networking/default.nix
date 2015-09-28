@@ -2,18 +2,18 @@
 , gsettings_desktop_schemas }:
 
 let
-  ver_maj = "2.42";
-  ver_min = "1";
+  ver_maj = "2.44";
+  ver_min = "0";
 in
 stdenv.mkDerivation rec {
   name = "glib-networking-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib-networking/${ver_maj}/${name}.tar.xz";
-    sha256 = "c06bf76da3353695fcc791b7b02e5d60c01c379e554f7841dc6cbca32f65f3a0";
+    sha256 = "8f8a340d3ba99bfdef38b653da929652ea6640e27969d29f7ac51fbbe11a4346";
   };
 
-  configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-bundle.crt";
+  configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt";
 
   preBuild = ''
     sed -e "s@${glib}/lib/gio/modules@$out/lib/gio/modules@g" -i $(find . -name Makefile)

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A simple library designed for decoding and generation of MPEG TS and DVB PSI tables according to standards ISO/IEC 13818 and ITU-T H.222.0";
     homepage = http://www.videolan.org/developers/libdvbpsi.html ;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.lgpl21;
   };
 

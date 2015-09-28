@@ -3,7 +3,7 @@
 chrootenvDest=/run/chrootenv/@name@
 
 # Create some mount points for stuff that must be bind mounted
-mkdir -p $chrootenvDest/{nix/store,dev,proc,sys,host-etc,home,var,run}
+mkdir -p $chrootenvDest/{nix/store,dev,proc,sys,host-etc,host-tmp,home,var,run}
 
 # Symlink the software that should be part of the chroot system profile
 for i in @chrootEnv@/*

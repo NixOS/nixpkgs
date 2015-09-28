@@ -392,7 +392,7 @@ in
 
         interfaces = mkOption {
           example = [ "eth0" "eth1" ];
-          type = types.listOf types.string;
+          type = types.listOf types.str;
           description =
             "The physical network interfaces connected by the bridge.";
         };
@@ -499,7 +499,7 @@ in
 
         interface = mkOption {
           example = "enp4s0";
-          type = types.string;
+          type = types.str;
           description = "The interface the macvlan will transmit packets through.";
         };
 
@@ -605,7 +605,7 @@ in
 
         interface = mkOption {
           example = "enp4s0";
-          type = types.string;
+          type = types.str;
           description = "The interface the vlan will transmit packets through.";
         };
 
@@ -708,11 +708,14 @@ in
         pkgs.iproute
         pkgs.iputils
         pkgs.nettools
-        pkgs.wirelesstools
+        pkgs.openresolv
+      ]
+      ++ optionals (!config.boot.isContainer) [
+        pkgs.wirelesstools # FIXME: obsolete?
         pkgs.iw
         pkgs.rfkill
-        pkgs.openresolv
-      ] ++ bridgeStp;
+      ]
+      ++ bridgeStp;
 
     systemd.targets."network-interfaces" =
       { description = "All Network Interfaces";

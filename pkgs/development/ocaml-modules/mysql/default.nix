@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, mysql}:
+{ stdenv, fetchurl, ocaml, findlib, mysql, camlp4 }:
 
 # TODO: la versione stabile da' un errore di compilazione dovuto a
 # qualche cambiamento negli header .h
@@ -23,11 +23,11 @@ stdenv.mkDerivation {
      "--libdir=$out/lib/ocaml/${ocaml_version}/site-lib/mysql"
   ];
 
-  buildInputs = [ocaml findlib mysql.lib ];
+  buildInputs = [ocaml findlib mysql.lib camlp4 ];
 
   createFindlibDestdir = true;
 
-  propagatedbuildInputs = [ mysql.lib ];
+  propagatedBuildInputs = [ mysql.lib ];
 
   preConfigure = ''
     export LDFLAGS="-L${mysql.lib}/lib/mysql"

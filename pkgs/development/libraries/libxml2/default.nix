@@ -16,11 +16,13 @@ stdenv.mkDerivation (rec {
     sha256 = "1g6mf03xcabmk5ing1lwqmasr803616gb2xhn7pll10x2l5w6y2i";
   };
 
+  outputs = [ "out" "doc" ];
+
   buildInputs = stdenv.lib.optional pythonSupport python
     # Libxml2 has an optional dependency on liblzma.  However, on impure
     # platforms, it may end up using that from /usr/lib, and thus lack a
     # RUNPATH for that, leading to undefined references for its users.
-    ++ (stdenv.lib.optional stdenv.isFreeBSD xz);
+    ++ stdenv.lib.optional stdenv.isFreeBSD xz;
 
   propagatedBuildInputs = [ zlib findXMLCatalogs ];
 

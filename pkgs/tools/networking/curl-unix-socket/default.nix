@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, go }:
 
 stdenv.mkDerivation {
-  name = "curl-unix-socket";
+  name = "curl-unix-socket-2014-09-01";
 
   src = fetchFromGitHub {
     owner = "Soulou";

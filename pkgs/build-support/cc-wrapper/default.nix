@@ -7,9 +7,9 @@
 
 { name ? "", stdenv, nativeTools, nativeLibc, nativePrefix ? ""
 , cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenv.shell
-, zlib ? null, extraPackages ? []
+, zlib ? null, extraPackages ? [], extraBuildCommands ? ""
 , dyld ? null # TODO: should this be a setup-hook on dyld?
-, setupHook ? ./setup-hook.sh
+, isGNU ? false, isClang ? cc.isClang or false
 }:
 
 with stdenv.lib;
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   # The wrapper scripts use 'cat', so we may need coreutils.
   coreutils = if nativeTools then null else coreutils;
 
-  passthru = { inherit nativeTools nativeLibc nativePrefix; };
+  passthru = { inherit nativeTools nativeLibc nativePrefix isGNU isClang; };
 
   buildCommand =
     ''
@@ -226,13 +226,14 @@ stdenv.mkDerivation {
     ''
 
     + ''
-      substituteAll ${setupHook} $out/nix-support/setup-hook.tmp
+      substituteAll ${./setup-hook.sh} $out/nix-support/setup-hook.tmp
       cat $out/nix-support/setup-hook.tmp >> $out/nix-support/setup-hook
       rm $out/nix-support/setup-hook.tmp
 
       substituteAll ${./add-flags} $out/nix-support/add-flags.sh
       cp -p ${./utils.sh} $out/nix-support/utils.sh
-    '';
+    ''
+    + extraBuildCommands;
 
   # The dynamic linker has different names on different Linux platforms.
   dynamicLinker =
@@ -243,7 +244,7 @@ stdenv.mkDerivation {
        if stdenv.isArm then "ld-linux*.so.3" else
        if stdenv.system == "powerpc-linux" then "ld.so.1" else
        if stdenv.system == "mips64el-linux" then "ld.so.1" else
-       if stdenv.system == "x86_64-darwin" then "${dyld}/lib/dyld" else
+       if stdenv.system == "x86_64-darwin" then "/usr/lib/dyld" else
        abort "Don't know the name of the dynamic linker for this platform.")
     else "";
 

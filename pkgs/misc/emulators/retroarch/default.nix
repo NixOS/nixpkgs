@@ -1,6 +1,6 @@
 { stdenv, fetchgit, pkgconfig, ffmpeg, mesa, nvidia_cg_toolkit
 , freetype, libxml2, libv4l, coreutils, python34, which, udev, alsaLib
-, libX11, libXext, libXxf86vm, libXdmcp, SDL, pulseaudio ? null }:
+, libX11, libXext, libXxf86vm, libXdmcp, SDL, libpulseaudio ? null }:
 
 stdenv.mkDerivation rec {
   name = "retroarch-bare-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig ffmpeg mesa nvidia_cg_toolkit freetype libxml2 libv4l coreutils
-                  python34 which udev alsaLib libX11 libXext libXxf86vm libXdmcp SDL pulseaudio ];
+                  python34 which udev alsaLib libX11 libXext libXxf86vm libXdmcp SDL libpulseaudio ];
 
   patchPhase = ''
     export GLOBAL_CONFIG_DIR=$out/etc

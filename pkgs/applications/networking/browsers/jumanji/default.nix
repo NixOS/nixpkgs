@@ -1,4 +1,5 @@
-{ stdenv, fetchgit, pkgconfig, girara, gtk, webkitgtk, glib_networking, makeWrapper }:
+{ stdenv, fetchgit, pkgconfig, girara, gtk, webkitgtk, glib_networking, makeWrapper
+, gsettings_desktop_schemas }:
 
 stdenv.mkDerivation rec {
   name = "jumanji-${version}";
@@ -10,13 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "1xq06iabr4y76faf4w1cx6fhwdksfsxggz1ndny7icniwjzk98h9";
   };
 
-  buildInputs = [ girara pkgconfig gtk webkitgtk makeWrapper ];
+  buildInputs = [ girara pkgconfig gtk webkitgtk makeWrapper gsettings_desktop_schemas ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
   preFixup=''
     wrapProgram "$out/bin/jumanji" \
-     --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules"
+     --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
+     --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {

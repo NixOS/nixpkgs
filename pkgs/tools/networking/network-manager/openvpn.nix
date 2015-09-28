@@ -1,24 +1,26 @@
-{ stdenv, fetchurl, openvpn, intltool, pkgconfig, networkmanager
+{ stdenv, fetchurl, openvpn, intltool, pkgconfig, networkmanager, libsecret
 , withGnome ? true, gnome3, procps, module_init_tools }:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
   pname = "NetworkManager-openvpn";
-  version = "0.9.8.4";
+  version = networkmanager.version;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/0.9/${pname}-${version}.tar.xz";
-    sha256 = "11v63s1f3bsa7pmkvr7x65rsigh48wfqzsnixrwc3wqslsv5535g";
+    url = "mirror://gnome/sources/${pname}/1.0/${pname}-${version}.tar.xz";
+    sha256 = "1c2b74xhkjifc3g6n53gr2aj4s98qf0vydmqvbhl5azxqx5q4hqn";
   };
 
-  buildInputs = [ openvpn networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring ];
+  buildInputs = [ openvpn networkmanager libsecret ]
+    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring
+                                        gnome3.networkmanagerapplet ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
   configureFlags = [
     "${if withGnome then "--with-gnome --with-gtkver=3" else "--without-gnome"}"
     "--disable-static"
+    "--localstatedir=/" # needed for the management socket under /run/NetworkManager
   ];
 
   preConfigure = ''

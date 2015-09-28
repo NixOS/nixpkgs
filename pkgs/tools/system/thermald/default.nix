@@ -1,13 +1,16 @@
-{ stdenv, fetchurl, unzip, autoconf, automake, libtool, pkgconfig, dbus_libs, dbus_glib, libxml2 }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, dbus_libs, dbus_glib, libxml2 }:
 
 stdenv.mkDerivation rec {
-  version = "1.3";
+  version = "1.4.3";
   name = "thermald-${version}";
-  src = fetchurl {
-    url = "https://github.com/01org/thermal_daemon/archive/v${version}.zip";
-    sha256 = "0jqxc8vvd4lx4z0kcdisk8lpdf823nysvjcfjxlr5wzla1xysqwc";
+  src = fetchFromGitHub {
+    owner = "01org";
+    repo = "thermal_daemon";
+    rev = "v${version}";
+    sha256 = "1wrbydmw1jc5dcjawhhsa52hilzajl9n849i09d2nfilv3qcqqi9";
   };
-  buildInputs = [ unzip autoconf automake libtool pkgconfig dbus_libs dbus_glib libxml2 ];
+
+  buildInputs = [ autoconf automake libtool pkgconfig dbus_libs dbus_glib libxml2 ];
 
   patchPhase = ''sed -e 's/upstartconfdir = \/etc\/init/upstartconfdir = $(out)\/etc\/init/' -i data/Makefile.am'';
 
@@ -25,12 +28,11 @@ stdenv.mkDerivation rec {
   preInstall = "sysconfdir=$out/etc";
 
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Thermal Daemon";
-    longDescription = ''
-         Thermal Daemon
-    '';
     homepage = https://01.org/linux-thermal-daemon;
-    license = stdenv.lib.licenses.gpl2;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

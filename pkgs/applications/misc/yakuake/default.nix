@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, kdelibs, gettext, konsole }:
+{ stdenv, fetchurl, automoc4, cmake, gettext, perl, pkgconfig
+, kdelibs, konsole }:
 
 let
   pname = "yakuake";
@@ -14,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ kdelibs ];
 
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig ];
 
   patchPhase = ''
     substituteInPlace app/terminal.cpp --replace \"konsolepart\" "\"${konsole}/lib/kde4/libkonsolepart.so\""

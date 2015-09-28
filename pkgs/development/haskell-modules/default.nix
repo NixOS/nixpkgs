@@ -1,9 +1,8 @@
 { pkgs, stdenv, ghc
+, compilerConfig ? (self: super: {})
 , packageSetConfig ? (self: super: {})
 , overrides ? (self: super: {})
 }:
-
-with ./lib.nix;
 
 let
 
@@ -42,23 +41,36 @@ let
       });
 
       callPackageWithScope = scope: drv: args: (stdenv.lib.callPackageWith scope drv args) // {
-        overrideScope = f: callPackageWithScope (fix (extend scope.__unfix__ f)) drv args;
+        overrideScope = f: callPackageWithScope (mkScope (fix (extend scope.__unfix__ f))) drv args;
       };
 
-      defaultScope = pkgs // pkgs.xlibs // pkgs.gnome // self;
+      mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome // scope;
+      defaultScope = mkScope self;
       callPackage = drv: args: callPackageWithScope defaultScope drv args;
+
+      withPackages = packages: callPackage ./with-packages-wrapper.nix {
+        inherit (self) llvmPackages;
+        haskellPackages = self;
+        inherit packages;
+      };
 
     in
       import ./hackage-packages.nix { inherit pkgs stdenv callPackage; } self // {
 
         inherit mkDerivation callPackage;
 
-        ghcWithPackages = pkgs: callPackage ./with-packages-wrapper.nix {
-          inherit (self) llvmPackages;
-          packages = pkgs self;
-        };
+        ghcWithPackages = selectFrom: withPackages (selectFrom self);
 
-        ghc = ghc // { withPackages = self.ghcWithPackages; };
+        ghcWithHoogle = selectFrom:
+          let
+            packages = selectFrom self;
+            hoogle = callPackage ./hoogle.nix { inherit packages; };
+          in withPackages (packages ++ [ hoogle ]);
+
+        ghc = ghc // {
+          withPackages = self.ghcWithPackages;
+          withHoogle = self.ghcWithHoogle;
+        };
 
       };
 
@@ -66,4 +78,4 @@ let
 
 in
 
-  fix (extend (extend (extend haskellPackages commonConfiguration) packageSetConfig) overrides)
+  fix (extend (extend (extend (extend haskellPackages commonConfiguration) compilerConfig) packageSetConfig) overrides)

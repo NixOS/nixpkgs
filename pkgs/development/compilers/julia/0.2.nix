@@ -1,6 +1,6 @@
 { stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, zlib
  , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
- , ncurses, libunistring, lighttpd, patchelf, openblas, liblapack
+ , ncurses, libunistring, lighttpd, patchelf, openblas
  , tcl, tk, xproto, libX11, git, mpfr
  } :
 let
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gfortran perl m4 gmp pcre llvm readline zlib
     fftw fftwSinglePrec libunwind suitesparse glpk ncurses libunistring patchelf
-    openblas liblapack tcl tk xproto libX11 git mpfr
+    openblas tcl tk xproto libX11 git mpfr
     ];
 
   configurePhase = ''
@@ -91,14 +91,13 @@ stdenv.mkDerivation rec {
     copy_kill_hash "${dsfmt_src}" deps/random
 
     ${if realGcc ==null then "" else 
-    ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk -lunistring -lz -lgmp -lmpfr"''}
+    ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -lopenblas -lm -lfftw3f -lfftw3 -lglpk -lunistring -lz -lgmp -lmpfr"''}
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC "
 
     export LDFLAGS="-L${suitesparse}/lib -L$out/lib/julia -Wl,-rpath,$out/lib/julia"
 
     export GLPK_PREFIX="${glpk}/include"
 
-    mkdir -p "$out/lib"
     sed -e "s@/usr/local/lib@$out/lib@g" -i deps/Makefile
     sed -e "s@/usr/lib@$out/lib@g" -i deps/Makefile
 
@@ -111,9 +110,12 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     mkdir -p usr/lib
-    
-    echo "$out"
+
     mkdir -p "$out/lib"
+    ln -s "${openblas}/lib/libopenblas.so" "$out/lib/libblas.so"
+    ln -s "${openblas}/lib/libopenblas.so" "$out/lib/liblapack.so"
+
+    echo "$out"
     (
     cd "$(mktemp -d)"
     for i in "${suitesparse}"/lib/lib*.a; do

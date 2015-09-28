@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libyaml, alsaLib, openssl, libuuid, pkgconfig, pulseaudio, libsamplerate
+{ stdenv, fetchurl, libyaml, alsaLib, openssl, libuuid, pkgconfig, libpulseaudio, libsamplerate
 , commoncpp2, ccrtp, libzrtpcpp, dbus, dbus_cplusplus, expat, pcre, gsm, speex, ilbc, libopus
 , autoconf, automake, libtool, gettext, perl
 , cmake, qt4
@@ -43,7 +43,7 @@ rec {
     configureFlags = "--with-expat --with-expat-inc=${expat}/include " +
       "--with-expat-lib=-lexpat --with-opus ";
 
-    buildInputs = [ libyaml alsaLib openssl libuuid pkgconfig pulseaudio libsamplerate 
+    buildInputs = [ libyaml alsaLib openssl libuuid pkgconfig libpulseaudio libsamplerate
       commoncpp2 ccrtp libzrtpcpp dbus dbus_cplusplus expat pcre gsm speex ilbc libopus
       autoconf automake libtool gettext perl ];
   };

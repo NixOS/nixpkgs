@@ -7,7 +7,7 @@ let
     self.ihaskell-display
   ] ++ packages self);
   ihaskellSh = writeScriptBin "ihaskell-notebook" ''
-    #!/bin/sh
+    #! ${stdenv.shell}
     export GHC_PACKAGE_PATH="$(echo ${ihaskellEnv}/lib/*/package.conf.d| tr ' ' ':'):$GHC_PACKAGE_PATH"
     export PATH="${ihaskell}/bin:${ihaskellEnv}/bin:${ipython}/bin"
     ${ihaskell}/bin/ihaskell install -l $(${ihaskellEnv}/bin/ghc --print-libdir) && ${ipython}/bin/ipython notebook --kernel=haskell

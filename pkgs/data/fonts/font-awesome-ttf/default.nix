@@ -1,11 +1,11 @@
 {stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation rec {
-  name = "font-awesome-4.3.0";
+  name = "font-awesome-4.4.0";
 
   src = fetchurl {
     url = "http://fortawesome.github.io/Font-Awesome/assets/${name}.zip";
-    sha256 = "018syfvkj01jym60mpys93xv84ky9l2x90gprnm9npzwkw5169jc";
+    sha256 = "1bmjh3j533awihdxihvlk2d1ypzs9q7azj0viqbm0df8jj2v4rwq";
   };
 
   buildCommand = ''
@@ -16,15 +16,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Font Awesome - TTF font";
-
     longDescription = ''
       Font Awesome gives you scalable vector icons that can instantly be customized.
       This package includes only the TTF font. For full CSS etc. see the project website.
     '';
-
     homepage = "http://fortawesome.github.io/Font-Awesome/";
     license = stdenv.lib.licenses.ofl;
-
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.abaldeau ];
   };

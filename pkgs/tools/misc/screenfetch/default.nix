@@ -1,5 +1,5 @@
 { stdenv, fetchgit, makeWrapper
-, coreutils, gawk, procps, gnused, findutils, xdpyinfo, xprop
+, coreutils, gawk, procps, gnused, findutils, xdpyinfo, xprop, gnugrep
 }:
 
 stdenv.mkDerivation {
@@ -28,6 +28,7 @@ stdenv.mkDerivation {
       --prefix PATH : "${findutils}/bin" \
       --prefix PATH : "${xdpyinfo}/bin" \
       --prefix PATH : "${xprop}/bin" \
+      --prefix PATH : "${gnugrep}/bin"
   '';
 
   meta = {

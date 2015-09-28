@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "v4l2loopback-${version}-${kernel.version}";
-  version = "0.8.0";
+  version = "0.9.1";
 
   src = fetchurl {
     url = "https://github.com/umlaeute/v4l2loopback/archive/v${version}.tar.gz";
-    sha256 = "1rhsgc4prrj8s6njixic7fs5m3gs94v9hhf3am6lnfh5yv6yab9h";
+    sha256 = "1crkhxlnskqrfj3f7jmiiyi5m75zmj7n0s26xz07wcwdzdf2p568";
   };
   
   preBuild = ''
@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
     export PATH=${kmod}/sbin:$PATH
   '';
 
-  patches = [ ./kernel-3.18-fix.patch ];
-  
   buildInputs = [ kmod ];
   
   makeFlags = [

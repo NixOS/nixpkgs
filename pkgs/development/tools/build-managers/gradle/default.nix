@@ -1,18 +1,18 @@
 { stdenv, fetchurl, unzip, jdk, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "gradle-2.2.1";
+  name = "gradle-2.6";
 
   src = fetchurl {
     url = "http://services.gradle.org/distributions/${name}-bin.zip";
-    sha256 = "420aa50738299327b611c10b8304b749e8d3a579407ee9e755b15921d95ff418";
+    sha256 = "10ww9vqyi5jkdw5bna14y63fjfhh40n81q7qsfhdycgj19b8ra8q";
   };
 
   installPhase = ''
-    mkdir -pv $out
-    cp -rv lib $out
+    mkdir -pv $out/gradle
+    cp -rv lib $out/gradle
 
-    gradle_launcher_jar=$(echo $out/lib/gradle-launcher-*.jar)
+    gradle_launcher_jar=$(echo $out/gradle/lib/gradle-launcher-*.jar)
     test -f $gradle_launcher_jar
     makeWrapper ${jdk}/bin/java $out/bin/gradle \
       --set JAVA_HOME ${jdk} \

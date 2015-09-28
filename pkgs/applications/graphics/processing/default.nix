@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ant, jre, makeWrapper, libXxf86vm, which }:
+{ fetchurl, stdenv, ant, jdk, makeWrapper, libXxf86vm, which }:
 
 stdenv.mkDerivation rec {
   name = "processing-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   # Stop it trying to download its own version of java
   patches = [ ./use-nixpkgs-jre.patch ];
 
-  buildInputs = [ ant jre makeWrapper libXxf86vm which ];
+  buildInputs = [ ant jdk makeWrapper libXxf86vm which ];
 
   buildPhase = "cd build && ant build";
 
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
    cp -r linux/work/* $out/${name}/
    makeWrapper $out/${name}/processing $out/bin/processing \
-     --prefix PATH : "${jre}/bin:${which}/bin" \
+     --prefix PATH : "${jdk}/bin:${which}/bin" \
      --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
    makeWrapper $out/${name}/processing-java $out/bin/processing-java \
-     --prefix PATH : "${jre}/bin:${which}/bin" \
+     --prefix PATH : "${jdk}/bin:${which}/bin" \
      --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
-   ln -s ${jre} $out/${name}/java
+   ln -s ${jdk} $out/${name}/java
   '';
 
   meta = with stdenv.lib; {

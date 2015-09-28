@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python
+{ stdenv, fetchurl, fetchpatch, patchutils, python
 , channel ? "stable"
 , useOpenSSL # XXX
 }:
@@ -14,11 +14,8 @@ let
     "s,^[^/]+(.*)$,$main\\1,"
     "s,$main/(build|tools)(/.*)?$,$out/\\1\\2,"
     "s,$main/third_party(/.*)?$,$bundled\\1,"
-    "s,$main/sandbox(/.*)?$,$sandbox\\1,"
     "s,^/,,"
   ]);
-
-  pre42 = versionOlder version "42.0.0.0";
 
 in stdenv.mkDerivation {
   name = "chromium-source-${version}";
@@ -28,7 +25,7 @@ in stdenv.mkDerivation {
   buildInputs = [ python ]; # cannot patch shebangs otherwise
 
   phases = [ "unpackPhase" "patchPhase" ];
-  outputs = [ "out" "sandbox" "bundled" "main" ];
+  outputs = [ "out" "bundled" "main" ];
 
   unpackPhase = ''
     tar xf "$src" -C / \
@@ -47,11 +44,11 @@ in stdenv.mkDerivation {
     done
   '';
 
-  patches = if pre42 then [
-    ./sandbox_userns_36.patch ./nix_plugin_paths.patch
-  ] else [
-    ./nix_plugin_paths_42.patch
-  ];
+  patches =
+    if versionOlder version "45.0.0.0"
+    then singleton ./nix_plugin_paths_44.patch
+    else singleton ./nix_plugin_paths_46.patch ++
+         optional (!versionOlder version "46.0.0.0") ./build_fixes_46.patch;
 
   patchPhase = let
     diffmod = sym: "/^${sym} /{s/^${sym} //;${transform ""};s/^/${sym} /}";
@@ -75,12 +72,7 @@ in stdenv.mkDerivation {
       "$out/build/common.gypi" "$main/chrome/chrome_tests.gypi"
   '' + optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d "$bundled/openssl/openssl"
-  '' + optionalString (!pre42) ''
-    sed -i -e '/LOG.*no_suid_error/d' \
-      "$main/content/browser/browser_main_loop.cc"
   '';
-
-  preferLocalBuild = true;
 
   passthru = {
     inherit version channel;

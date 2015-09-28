@@ -1,0 +1,912 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="users-guide-to-the-haskell-infrastructure">
+
+<title>User's Guide to the Haskell Infrastructure</title>
+
+<section xml:id="how-to-install-haskell-packages">
+  <title>How to install Haskell packages</title>
+  <para>
+    Nixpkgs distributes build instructions for all Haskell packages
+    registered on
+    <link xlink:href="http://hackage.haskell.org/">Hackage</link>, but
+    strangely enough normal Nix package lookups don't seem to discover
+    any of them, except for the default version of ghc, cabal-install, and stack:
+  </para>
+  <programlisting>
+$ nix-env -i alex
+error: selector ‘alex’ matches no derivations
+$ nix-env -qa ghc
+ghc-7.10.2
+</programlisting>
+  <para>
+    The Haskell package set is not registered in the top-level namespace
+    because it is <emphasis>huge</emphasis>. If all Haskell packages
+    were visible to these commands, then name-based search/install
+    operations would be much slower than they are now. We avoided that
+    by keeping all Haskell-related packages in a separate attribute set
+    called <literal>haskellPackages</literal>, which the following
+    command will list:
+  </para>
+  <programlisting>
+$ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qaP -A haskellPackages
+haskellPackages.a50         a50-0.5
+haskellPackages.abacate     haskell-abacate-0.0.0.0
+haskellPackages.abcBridge   haskell-abcBridge-0.12
+haskellPackages.afv         afv-0.1.1
+haskellPackages.alex        alex-3.1.4
+haskellPackages.Allure      Allure-0.4.101.1
+haskellPackages.alms        alms-0.6.7
+[... some 8000 entries omitted  ...]
+</programlisting>
+  <para>
+    To install any of those packages into your profile, refer to them by
+    their attribute path (first column):
+  </para>
+  <programlisting>
+$ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.Allure ...
+</programlisting>
+  <para>
+    The attribute path of any Haskell packages corresponds to the name
+    of that particular package on Hackage: the package
+    <literal>cabal-install</literal> has the attribute
+    <literal>haskellPackages.cabal-install</literal>, and so on.
+    (Actually, this convention causes trouble with packages like
+    <literal>3dmodels</literal> and <literal>4Blocks</literal>, because
+    these names are invalid identifiers in the Nix language. The issue
+    of how to deal with these rare corner cases is currently
+    unresolved.)
+  </para>
+  <para>
+    Haskell packages who's Nix name (second column) begins with a
+    <literal>haskell-</literal> prefix are packages that provide a
+    library whereas packages without that prefix provide just
+    executables. Libraries may provide executables too, though: the
+    package <literal>haskell-pandoc</literal>, for example, installs
+    both a library and an application. You can install and use Haskell
+    executables just like any other program in Nixpkgs, but using
+    Haskell libraries for development is a bit trickier and we'll
+    address that subject in great detail in section
+    <link linkend="how-to-create-a-development-environment">How to
+    create a development environment</link>.
+  </para>
+  <para>
+    Attribute paths are deterministic inside of Nixpkgs, but the path
+    necessary to reach Nixpkgs varies from system to system. We dodged
+    that problem by giving <literal>nix-env</literal> an explicit
+    <literal>-f &quot;&lt;nixpkgs&gt;&quot;</literal> parameter, but if
+    you call <literal>nix-env</literal> without that flag, then chances
+    are the invocation fails:
+  </para>
+  <programlisting>
+$ nix-env -iA haskellPackages.cabal-install
+error: attribute ‘haskellPackages’ in selection path
+       ‘haskellPackages.cabal-install’ not found
+</programlisting>
+  <para>
+    On NixOS, for example, Nixpkgs does <emphasis>not</emphasis> exist
+    in the top-level namespace by default. To figure out the proper
+    attribute path, it's easiest to query for the path of a well-known
+    Nixpkgs package, i.e.:
+  </para>
+  <programlisting>
+$ nix-env -qaP coreutils
+nixos.coreutils  coreutils-8.23
+</programlisting>
+  <para>
+    If your system responds like that (most NixOS installations will),
+    then the attribute path to <literal>haskellPackages</literal> is
+    <literal>nixos.haskellPackages</literal>. Thus, if you want to
+    use <literal>nix-env</literal> without giving an explicit
+    <literal>-f</literal> flag, then that's the way to do it:
+  </para>
+  <programlisting>
+$ nix-env -qaP -A nixos.haskellPackages
+$ nix-env -iA nixos.haskellPackages.cabal-install
+</programlisting>
+  <para>
+    Our current default compiler is GHC 7.10.x and the
+    <literal>haskellPackages</literal> set contains packages built with
+    that particular version. Nixpkgs contains the latest major release
+    of every GHC since 6.10.4, however, and there is a whole family of
+    package sets available that defines Hackage packages built with each
+    of those compilers, too:
+  </para>
+  <programlisting>
+$ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qaP -A haskell.packages.ghc6123
+$ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qaP -A haskell.packages.ghc763
+</programlisting>
+  <para>
+    The name <literal>haskellPackages</literal> is really just a synonym
+    for <literal>haskell.packages.ghc7102</literal>, because we prefer
+    that package set internally and recommend it to our users as their
+    default choice, but ultimately you are free to compile your Haskell
+    packages with any GHC version you please. The following command
+    displays the complete list of available compilers:
+  </para>
+  <programlisting>
+$ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qaP -A haskell.compiler
+haskell.compiler.ghc6104        ghc-6.10.4
+haskell.compiler.ghc6123        ghc-6.12.3
+haskell.compiler.ghc704         ghc-7.0.4
+haskell.compiler.ghc722         ghc-7.2.2
+haskell.compiler.ghc742         ghc-7.4.2
+haskell.compiler.ghc763         ghc-7.6.3
+haskell.compiler.ghc784         ghc-7.8.4
+haskell.compiler.ghc7102        ghc-7.10.2
+haskell.compiler.ghcHEAD        ghc-7.11.20150402
+haskell.compiler.ghcNokinds     ghc-nokinds-7.11.20150704
+haskell.compiler.ghcjs          ghcjs-0.1.0
+haskell.compiler.jhc            jhc-0.8.2
+haskell.compiler.uhc            uhc-1.1.9.0
+</programlisting>
+  <para>
+    We have no package sets for <literal>jhc</literal> or
+    <literal>uhc</literal> yet, unfortunately, but for every version of
+    GHC listed above, there exists a package set based on that compiler.
+    Also, the attributes <literal>haskell.compiler.ghcXYC</literal> and
+    <literal>haskell.packages.ghcXYC.ghc</literal> are synonymous for
+    the sake of convenience.
+  </para>
+</section>
+<section xml:id="how-to-create-a-development-environment">
+  <title>How to create a development environment</title>
+  <section xml:id="how-to-install-a-compiler">
+    <title>How to install a compiler</title>
+    <para>
+      A simple development environment consists of a Haskell compiler
+      and the tool <literal>cabal-install</literal>, and we saw in
+      section <link linkend="how-to-install-haskell-packages">How to
+      install Haskell packages</link> how you can install those programs
+      into your user profile:
+    </para>
+    <programlisting>
+$ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.ghc haskellPackages.cabal-install
+</programlisting>
+    <para>
+      Instead of the default package set
+      <literal>haskellPackages</literal>, you can also use the more
+      precise name <literal>haskell.compiler.ghc7102</literal>, which
+      has the advantage that it refers to the same GHC version
+      regardless of what Nixpkgs considers &quot;default&quot; at any
+      given time.
+    </para>
+    <para>
+      Once you've made those tools available in
+      <literal>$PATH</literal>, it's possible to build Hackage packages
+      the same way people without access to Nix do it all the time:
+    </para>
+    <programlisting>
+$ cabal get lens-4.11 &amp;&amp; cd lens-4.11
+$ cabal install -j --dependencies-only
+$ cabal configure
+$ cabal build
+</programlisting>
+    <para>
+      If you enjoy working with Cabal sandboxes, then that's entirely
+      possible too: just execute the command
+    </para>
+    <programlisting>
+$ cabal sandbox init
+</programlisting>
+    <para>
+      before installing the required dependencies.
+    </para>
+    <para>
+      The <literal>nix-shell</literal> utility makes it easy to switch
+      to a different compiler version; just enter the Nix shell
+      environment with the command
+    </para>
+    <programlisting>
+$ nix-shell -p haskell.compiler.ghc784
+</programlisting>
+    <para>
+      to bring GHC 7.8.4 into <literal>$PATH</literal>. Re-running
+      <literal>cabal configure</literal> switches your build to use that
+      compiler instead. If you're working on a project that doesn't
+      depend on any additional system libraries outside of GHC, then
+      it's sufficient even to run the <literal>cabal configure</literal>
+      command inside of the shell:
+    </para>
+    <programlisting>
+$ nix-shell -p haskell.compiler.ghc784 --command &quot;cabal configure&quot;
+</programlisting>
+    <para>
+      Afterwards, all other commands like <literal>cabal build</literal>
+      work just fine in any shell environment, because the configure
+      phase recorded the absolute paths to all required tools like GHC
+      in its build configuration inside of the <literal>dist/</literal>
+      directory. Please note, however, that
+      <literal>nix-collect-garbage</literal> can break such an
+      environment because the Nix store paths created by
+      <literal>nix-shell</literal> aren't &quot;alive&quot; anymore once
+      <literal>nix-shell</literal> has terminated. If you find that your
+      Haskell builds no longer work after garbage collection, then
+      you'll have to re-run <literal>cabal configure</literal> inside of
+      a new <literal>nix-shell</literal> environment.
+    </para>
+  </section>
+  <section xml:id="how-to-install-a-compiler-with-libraries">
+    <title>How to install a compiler with libraries</title>
+    <para>
+      GHC expects to find all installed libraries inside of its own
+      <literal>lib</literal> directory. This approach works fine on
+      traditional Unix systems, but it doesn't work for Nix, because
+      GHC's store path is immutable once it's built. We cannot install
+      additional libraries into that location. As a consequence, our
+      copies of GHC don't know any packages except their own core
+      libraries, like <literal>base</literal>,
+      <literal>containers</literal>, <literal>Cabal</literal>, etc.
+    </para>
+    <para>
+      We can register additional libraries to GHC, however, using a
+      special build function called <literal>ghcWithPackages</literal>.
+      That function expects one argument: a function that maps from an
+      attribute set of Haskell packages to a list of packages, which
+      determines the libraries known to that particular version of GHC.
+      For example, the Nix expression
+      <literal>ghcWithPackages (pkgs: [pkgs.mtl])</literal> generates a
+      copy of GHC that has the <literal>mtl</literal> library registered
+      in addition to its normal core packages:
+    </para>
+    <programlisting>
+$ nix-shell -p &quot;haskellPackages.ghcWithPackages (pkgs: [pkgs.mtl])&quot;
+
+[nix-shell:~]$ ghc-pkg list mtl
+/nix/store/zy79...-ghc-7.10.2/lib/ghc-7.10.2/package.conf.d:
+    mtl-2.2.1
+</programlisting>
+    <para>
+      This function allows users to define their own development
+      environment by means of an override. After adding the following
+      snippet to <literal>~/.nixpkgs/config.nix</literal>,
+    </para>
+    <programlisting>
+{
+  packageOverrides = super: let self = super.pkgs; in
+  {
+    myHaskellEnv = self.haskell.packages.ghc7102.ghcWithPackages
+                     (haskellPackages: with haskellPackages; [
+                       # libraries
+                       arrows async cgi criterion
+                       # tools
+                       cabal-install haskintex
+                     ]);
+  };
+}
+</programlisting>
+    <para>
+      it's possible to install that compiler with
+      <literal>nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA myHaskellEnv</literal>.
+      If you'd like to switch that development environment to a
+      different version of GHC, just replace the
+      <literal>ghc7102</literal> bit in the previous definition with the
+      appropriate name. Of course, it's also possible to define any
+      number of these development environments! (You can't install two
+      of them into the same profile at the same time, though, because
+      that would result in file conflicts.)
+    </para>
+    <para>
+      The generated <literal>ghc</literal> program is a wrapper script
+      that re-directs the real GHC executable to use a new
+      <literal>lib</literal> directory --- one that we specifically
+      constructed to contain all those packages the user requested:
+    </para>
+    <programlisting>
+$ cat $(type -p ghc)
+#! /nix/store/xlxj...-bash-4.3-p33/bin/bash -e
+export NIX_GHC=/nix/store/19sm...-ghc-7.10.2/bin/ghc
+export NIX_GHCPKG=/nix/store/19sm...-ghc-7.10.2/bin/ghc-pkg
+export NIX_GHC_DOCDIR=/nix/store/19sm...-ghc-7.10.2/share/doc/ghc/html
+export NIX_GHC_LIBDIR=/nix/store/19sm...-ghc-7.10.2/lib/ghc-7.10.2
+exec /nix/store/j50p...-ghc-7.10.2/bin/ghc &quot;-B$NIX_GHC_LIBDIR&quot; &quot;$@&quot;
+</programlisting>
+    <para>
+      The variables <literal>$NIX_GHC</literal>,
+      <literal>$NIX_GHCPKG</literal>, etc. point to the
+      <emphasis>new</emphasis> store path
+      <literal>ghcWithPackages</literal> constructed specifically for
+      this environment. The last line of the wrapper script then
+      executes the real <literal>ghc</literal>, but passes the path to
+      the new <literal>lib</literal> directory using GHC's
+      <literal>-B</literal> flag.
+    </para>
+    <para>
+      The purpose of those environment variables is to work around an
+      impurity in the popular
+      <link xlink:href="http://hackage.haskell.org/package/ghc-paths">ghc-paths</link>
+      library. That library promises to give its users access to GHC's
+      installation paths. Only, the library can't possible know that
+      path when it's compiled, because the path GHC considers its own is
+      determined only much later, when the user configures it through
+      <literal>ghcWithPackages</literal>. So we
+      <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/haskell-modules/ghc-paths-nix.patch">patched
+      ghc-paths</link> to return the paths found in those environment
+      variables at run-time rather than trying to guess them at
+      compile-time.
+    </para>
+    <para>
+      To make sure that mechanism works properly all the time, we
+      recommend that you set those variables to meaningful values in
+      your shell environment, too, i.e. by adding the following code to
+      your <literal>~/.bashrc</literal>:
+    </para>
+    <programlisting>
+if type &gt;/dev/null 2&gt;&amp;1 -p ghc; then
+  eval &quot;$(egrep ^export &quot;$(type -p ghc)&quot;)&quot;
+fi
+</programlisting>
+    <para>
+      If you are certain that you'll use only one GHC environment which
+      is located in your user profile, then you can use the following
+      code, too, which has the advantage that it doesn't contain any
+      paths from the Nix store, i.e. those settings always remain valid
+      even if a <literal>nix-env -u</literal> operation updates the GHC
+      environment in your profile:
+    </para>
+    <programlisting>
+if [ -e ~/.nix-profile/bin/ghc ]; then
+  export NIX_GHC=&quot;$HOME/.nix-profile/bin/ghc&quot;
+  export NIX_GHCPKG=&quot;$HOME/.nix-profile/bin/ghc-pkg&quot;
+  export NIX_GHC_DOCDIR=&quot;$HOME/.nix-profile/share/doc/ghc/html&quot;
+  export NIX_GHC_LIBDIR=&quot;$HOME/.nix-profile/lib/ghc-$($NIX_GHC --numeric-version)&quot;
+fi
+</programlisting>
+  </section>
+  <section xml:id="how-to-install-a-compiler-with-indexes">
+    <title>How to install a compiler with libraries, hoogle and documentation indexes</title>
+    <para>
+      If you plan to use your environment for interactive programming,
+      not just compiling random Haskell code, you might want to
+      replace <literal>ghcWithPackages</literal> in all the listings
+      above with <literal>ghcWithHoogle</literal>.
+    </para>
+    <para>
+      This environment generator not only produces an environment with
+      GHC and all the specified libraries, but also generates a
+      <literal>hoogle</literal> and <literal>haddock</literal> indexes
+      for all the packages, and provides a wrapper script around
+      <literal>hoogle</literal> binary that uses all those things. A
+      precise name for this thing would be
+      "<literal>ghcWithPackagesAndHoogleAndDocumentationIndexes</literal>",
+      which is, regrettably, too long and scary.
+    </para>
+    <para>
+      For example, installing the following environment
+    </para>
+    <programlisting>
+{
+  packageOverrides = super: let self = super.pkgs; in
+  {
+    myHaskellEnv = self.haskellPackages.ghcWithHoogle
+                     (haskellPackages: with haskellPackages; [
+                       # libraries
+                       arrows async cgi criterion
+                       # tools
+                       cabal-install haskintex
+                     ]);
+  };
+}
+</programlisting>
+    <para>
+      allows one to browse module documentation index <link
+      xlink:href="https://downloads.haskell.org/~ghc/latest/docs/html/libraries/index.html">not
+      too dissimilar to this</link> for all the specified packages and
+      their dependencies by directing a browser of choice to
+      <literal>~/.nix-profiles/share/doc/hoogle/index.html</literal>
+      (or
+      <literal>/run/current-system/sw/share/doc/hoogle/index.html</literal>
+      in case you put it in
+      <literal>environment.systemPackages</literal> in NixOS).
+    </para>
+    <para>
+      After you've marveled enough at that try adding the following to
+      your <literal>~/.ghc/ghci.conf</literal>
+    </para>
+    <programlisting>
+:def hoogle \s -> return $ ":! hoogle search -cl --count=15 \"" ++ s ++ "\""
+:def doc \s -> return $ ":! hoogle search -cl --info \"" ++ s ++ "\""
+</programlisting>
+    <para>
+      and test it by typing into <literal>ghci</literal>:
+    </para>
+    <programlisting>
+:hoogle a -> a
+:doc a -> a
+</programlisting>
+    <para>
+      Be sure to note the links to <literal>haddock</literal> files in
+      the output. With any modern and properly configured terminal
+      emulator you can just click those links to navigate there.
+    </para>
+    <para>
+      Finally, you can run
+    </para>
+    <programlisting>
+hoogle server -p 8080
+</programlisting>
+    <para>
+      and navigate to <link xlink:href="http://localhost:8080/"/> for
+      your own local <link
+      xlink:href="https://www.haskell.org/hoogle/">Hoogle</link>.
+      Note, however, that Firefox and possibly other browsers disallow
+      navigation from <literal>http:</literal> to
+      <literal>file:</literal> URIs for security reasons, which might
+      be quite an inconvenience. See <link
+      xlink:href="http://kb.mozillazine.org/Links_to_local_pages_do_not_work">this
+      page</link> for workarounds.
+    </para>
+  </section>
+  <section xml:id="how-to-create-ad-hoc-environments-for-nix-shell">
+    <title>How to create ad hoc environments for
+    <literal>nix-shell</literal></title>
+    <para>
+      The easiest way to create an ad hoc development environment is to
+      run <literal>nix-shell</literal> with the appropriate GHC
+      environment given on the command-line:
+    </para>
+    <programlisting>
+nix-shell -p &quot;haskellPackages.ghcWithPackages (pkgs: with pkgs; [mtl pandoc])&quot;
+</programlisting>
+    <para>
+      For more sophisticated use-cases, however, it's more convenient to
+      save the desired configuration in a file called
+      <literal>shell.nix</literal> that looks like this:
+    </para>
+    <programlisting>
+{ nixpkgs ? import &lt;nixpkgs&gt; {}, compiler ? &quot;ghc7102&quot; }:
+let
+  inherit (nixpkgs) pkgs;
+  ghc = pkgs.haskell.packages.${compiler}.ghcWithPackages (ps: with ps; [
+          monad-par mtl
+        ]);
+in
+pkgs.stdenv.mkDerivation {
+  name = &quot;my-haskell-env-0&quot;;
+  buildInputs = [ ghc ];
+  shellHook = &quot;eval $(egrep ^export ${ghc}/bin/ghc)&quot;;
+}
+</programlisting>
+    <para>
+      Now run <literal>nix-shell</literal> --- or even
+      <literal>nix-shell --pure</literal> --- to enter a shell
+      environment that has the appropriate compiler in
+      <literal>$PATH</literal>. If you use <literal>--pure</literal>,
+      then add all other packages that your development environment
+      needs into the <literal>buildInputs</literal> attribute. If you'd
+      like to switch to a different compiler version, then pass an
+      appropriate <literal>compiler</literal> argument to the
+      expression, i.e.
+      <literal>nix-shell --argstr compiler ghc784</literal>.
+    </para>
+    <para>
+      If you need such an environment because you'd like to compile a
+      Hackage package outside of Nix --- i.e. because you're hacking on
+      the latest version from Git ---, then the package set provides
+      suitable nix-shell environments for you already! Every Haskell
+      package has an <literal>env</literal> attribute that provides a
+      shell environment suitable for compiling that particular package.
+      If you'd like to hack the <literal>lens</literal> library, for
+      example, then you just have to check out the source code and enter
+      the appropriate environment:
+    </para>
+    <programlisting>
+  $ cabal get lens-4.11 &amp;&amp; cd lens-4.11
+  Downloading lens-4.11...
+  Unpacking to lens-4.11/
+
+  $ nix-shell &quot;&lt;nixpkgs&gt;&quot; -A haskellPackages.lens.env
+  [nix-shell:/tmp/lens-4.11]$
+</programlisting>
+    <para>
+      At point, you can run <literal>cabal configure</literal>,
+      <literal>cabal build</literal>, and all the other development
+      commands. Note that you need <literal>cabal-install</literal>
+      installed in your <literal>$PATH</literal> already to use it here
+      --- the <literal>nix-shell</literal> environment does not provide
+      it.
+    </para>
+  </section>
+</section>
+<section xml:id="how-to-create-nix-builds-for-your-own-private-haskell-packages">
+  <title>How to create Nix builds for your own private Haskell
+  packages</title>
+  <para>
+    If your own Haskell packages have build instructions for Cabal, then
+    you can convert those automatically into build instructions for Nix
+    using the <literal>cabal2nix</literal> utility, which you can
+    install into your profile by running
+    <literal>nix-env -i cabal2nix</literal>.
+  </para>
+  <section xml:id="how-to-build-a-stand-alone-project">
+    <title>How to build a stand-alone project</title>
+    <para>
+      For example, let's assume that you're working on a private project
+      called <literal>foo</literal>. To generate a Nix build expression
+      for it, change into the project's top-level directory and run the
+      command:
+    </para>
+    <programlisting>
+$ cabal2nix . &gt;foo.nix
+</programlisting>
+    <para>
+      Then write the following snippet into a file called
+      <literal>default.nix</literal>:
+    </para>
+    <programlisting>
+{ nixpkgs ? import &lt;nixpkgs&gt; {}, compiler ? &quot;ghc7102&quot; }:
+nixpkgs.pkgs.haskell.packages.${compiler}.callPackage ./foo.nix { }
+</programlisting>
+    <para>
+      Finally, store the following code in a file called
+      <literal>shell.nix</literal>:
+    </para>
+    <programlisting>
+{ nixpkgs ? import &lt;nixpkgs&gt; {}, compiler ? &quot;ghc7102&quot; }:
+(import ./default.nix { inherit nixpkgs compiler; }).env
+</programlisting>
+    <para>
+      At this point, you can run <literal>nix-build</literal> to have
+      Nix compile your project and install it into a Nix store path. The
+      local directory will contain a symlink called
+      <literal>result</literal> after <literal>nix-build</literal>
+      returns that points into that location. Of course, passing the
+      flag <literal>--argstr compiler ghc763</literal> allows switching
+      the build to any version of GHC currently supported.
+    </para>
+    <para>
+      Furthermore, you can call <literal>nix-shell</literal> to enter an
+      interactive development environment in which you can use
+      <literal>cabal configure</literal> and
+      <literal>cabal build</literal> to develop your code. That
+      environment will automatically contain a proper GHC derivation
+      with all the required libraries registered as well as all the
+      system-level libraries your package might need.
+    </para>
+    <para>
+      If your package does not depend on any system-level libraries,
+      then it's sufficient to run
+    </para>
+    <programlisting>
+$ nix-shell --command &quot;cabal configure&quot;
+</programlisting>
+    <para>
+      once to set up your build. <literal>cabal-install</literal>
+      determines the absolute paths to all resources required for the
+      build and writes them into a config file in the
+      <literal>dist/</literal> directory. Once that's done, you can run
+      <literal>cabal build</literal> and any other command for that
+      project even outside of the <literal>nix-shell</literal>
+      environment. This feature is particularly nice for those of us who
+      like to edit their code with an IDE, like Emacs'
+      <literal>haskell-mode</literal>, because it's not necessary to
+      start Emacs inside of nix-shell just to make it find out the
+      necessary settings for building the project;
+      <literal>cabal-install</literal> has already done that for us.
+    </para>
+    <para>
+      If you want to do some quick-and-dirty hacking and don't want to
+      bother setting up a <literal>default.nix</literal> and
+      <literal>shell.nix</literal> file manually, then you can use the
+      <literal>--shell</literal> flag offered by
+      <literal>cabal2nix</literal> to have it generate a stand-alone
+      <literal>nix-shell</literal> environment for you. With that
+      feature, running
+    </para>
+    <programlisting>
+$ cabal2nix --shell . &gt;shell.nix
+$ nix-shell --command &quot;cabal configure&quot;
+</programlisting>
+    <para>
+      is usually enough to set up a build environment for any given
+      Haskell package. You can even use that generated file to run
+      <literal>nix-build</literal>, too:
+    </para>
+    <programlisting>
+$ nix-build shell.nix
+</programlisting>
+  </section>
+  <section xml:id="how-to-build-projects-that-depend-on-each-other">
+    <title>How to build projects that depend on each other</title>
+    <para>
+      If you have multiple private Haskell packages that depend on each
+      other, then you'll have to register those packages in the Nixpkgs
+      set to make them visible for the dependency resolution performed
+      by <literal>callPackage</literal>. First of all, change into each
+      of your projects top-level directories and generate a
+      <literal>default.nix</literal> file with
+      <literal>cabal2nix</literal>:
+    </para>
+    <programlisting>
+$ cd ~/src/foo &amp;&amp; cabal2nix . &gt;default.nix
+$ cd ~/src/bar &amp;&amp; cabal2nix . &gt;default.nix
+</programlisting>
+    <para>
+      Then edit your <literal>~/.nixpkgs/config.nix</literal> file to
+      register those builds in the default Haskell package set:
+    </para>
+    <programlisting>
+  {
+    packageOverrides = super: let self = super.pkgs; in
+    {
+      haskellPackages = super.haskellPackages.override {
+        overrides = self: super: {
+          foo = self.callPackage ../src/foo {};
+          bar = self.callPackage ../src/bar {};
+        };
+      };
+    };
+  }
+</programlisting>
+    <para>
+      Once that's accomplished,
+      <literal>nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qA haskellPackages</literal>
+      will show your packages like any other package from Hackage, and
+      you can build them
+    </para>
+    <programlisting>
+$ nix-build &quot;&lt;nixpkgs&gt;&quot; -A haskellPackages.foo
+</programlisting>
+    <para>
+      or enter an interactive shell environment suitable for building
+      them:
+    </para>
+    <programlisting>
+$ nix-shell &quot;&lt;nixpkgs&gt;&quot; -A haskellPackages.bar.env
+</programlisting>
+  </section>
+</section>
+<section xml:id="miscellaneous-topics">
+  <title>Miscellaneous Topics</title>
+  <section xml:id="how-to-build-with-profiling-enabled">
+    <title>How to build with profiling enabled</title>
+    <para>
+      Every Haskell package set takes a function called
+      <literal>overrides</literal> that you can use to manipulate the
+      package as much as you please. One useful application of this
+      feature is to replace the default <literal>mkDerivation</literal>
+      function with one that enables library profiling for all packages.
+      To accomplish that, add configure the following snippet in your
+      <literal>~/.nixpkgs/config.nix</literal> file:
+    </para>
+    <programlisting>
+{
+  packageOverrides = super: let self = super.pkgs; in
+  {
+    profiledHaskellPackages = self.haskellPackages.override {
+      overrides = self: super: {
+        mkDerivation = args: super.mkDerivation (args // {
+          enableLibraryProfiling = true;
+        });
+      };
+    };
+  };
+}
+</programlisting>
+    <para>
+        Then, replace instances of <literal>haskellPackages</literal> in the
+        <literal>cabal2nix</literal>-generated <literal>default.nix</literal>
+        or <literal>shell.nix</literal> files with
+        <literal>profiledHaskellPackages</literal>.
+    </para>
+  </section>
+  <section xml:id="how-to-override-package-versions-in-a-compiler-specific-package-set">
+    <title>How to override package versions in a compiler-specific
+    package set</title>
+    <para>
+      Nixpkgs provides the latest version of
+      <link xlink:href="http://hackage.haskell.org/package/ghc-events"><literal>ghc-events</literal></link>,
+      which is 0.4.4.0 at the time of this writing. This is fine for
+      users of GHC 7.10.x, but GHC 7.8.4 cannot compile that binary.
+      Now, one way to solve that problem is to register an older version
+      of <literal>ghc-events</literal> in the 7.8.x-specific package
+      set. The first step is to generate Nix build instructions with
+      <literal>cabal2nix</literal>:
+    </para>
+    <programlisting>
+$ cabal2nix cabal://ghc-events-0.4.3.0 &gt;~/.nixpkgs/ghc-events-0.4.3.0.nix
+</programlisting>
+    <para>
+      Then add the override in <literal>~/.nixpkgs/config.nix</literal>:
+    </para>
+    <programlisting>
+{
+  packageOverrides = super: let self = super.pkgs; in
+  {
+    haskell = super.haskell // {
+      packages = super.haskell.packages // {
+        ghc784 = super.haskell.packages.ghc784.override {
+          overrides = self: super: {
+            ghc-events = self.callPackage ./ghc-events-0.4.3.0.nix {};
+          };
+        };
+      };
+    };
+  };
+}
+</programlisting>
+    <para>
+      This code is a little crazy, no doubt, but it's necessary because
+      the intuitive version
+    </para>
+    <programlisting>
+haskell.packages.ghc784 = super.haskell.packages.ghc784.override {
+  overrides = self: super: {
+    ghc-events = self.callPackage ./ghc-events-0.4.3.0.nix {};
+  };
+};
+</programlisting>
+    <para>
+      doesn't do what we want it to: that code replaces the
+      <literal>haskell</literal> package set in Nixpkgs with one that
+      contains only one entry,<literal>packages</literal>, which
+      contains only one entry <literal>ghc784</literal>. This override
+      loses the <literal>haskell.compiler</literal> set, and it loses
+      the <literal>haskell.packages.ghcXYZ</literal> sets for all
+      compilers but GHC 7.8.4. To avoid that problem, we have to perform
+      the convoluted little dance from above, iterating over each step
+      in hierarchy.
+    </para>
+    <para>
+      Once it's accomplished, however, we can install a variant of
+      <literal>ghc-events</literal> that's compiled with GHC 7.8.4:
+    </para>
+    <programlisting>
+nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskell.packages.ghc784.ghc-events
+</programlisting>
+    <para>
+      Unfortunately, it turns out that this build fails again while
+      executing the test suite! Apparently, the release archive on
+      Hackage is missing some data files that the test suite requires,
+      so we cannot run it. We accomplish that by re-generating the Nix
+      expression with the <literal>--no-check</literal> flag:
+    </para>
+    <programlisting>
+$ cabal2nix --no-check cabal://ghc-events-0.4.3.0 &gt;~/.nixpkgs/ghc-events-0.4.3.0.nix
+</programlisting>
+    <para>
+      Now the builds succeeds.
+    </para>
+    <para>
+      Of course, in the concrete example of
+      <literal>ghc-events</literal> this whole exercise is not an ideal
+      solution, because <literal>ghc-events</literal> can analyze the
+      output emitted by any version of GHC later than 6.12 regardless of
+      the compiler version that was used to build the `ghc-events'
+      executable, so strictly speaking there's no reason to prefer one
+      built with GHC 7.8.x in the first place. However, for users who
+      cannot use GHC 7.10.x at all for some reason, the approach of
+      downgrading to an older version might be useful.
+    </para>
+  </section>
+  <section xml:id="how-to-recover-from-ghcs-infamous-non-deterministic-library-id-bug">
+    <title>How to recover from GHC's infamous non-deterministic library
+    ID bug</title>
+    <para>
+      GHC and distributed build farms don't get along well:
+    </para>
+    <programlisting>
+https://ghc.haskell.org/trac/ghc/ticket/4012
+</programlisting>
+    <para>
+      When you see an error like this one
+    </para>
+    <programlisting>
+package foo-0.7.1.0 is broken due to missing package
+text-1.2.0.4-98506efb1b9ada233bb5c2b2db516d91
+</programlisting>
+    <para>
+      then you have to download and re-install <literal>foo</literal>
+      and all its dependents from scratch:
+    </para>
+    <programlisting>
+# nix-store -q --referrers /nix/store/*-haskell-text-1.2.0.4 \
+  | xargs -L 1 nix-store --repair-path --option binary-caches http://hydra.nixos.org
+</programlisting>
+    <para>
+      If you're using additional Hydra servers other than
+      <literal>hydra.nixos.org</literal>, then it might be necessary to
+      purge the local caches that store data from those machines to
+      disable these binary channels for the duration of the previous
+      command, i.e. by running:
+    </para>
+    <programlisting>
+rm /nix/var/nix/binary-cache-v3.sqlite
+rm /nix/var/nix/manifests/*
+rm /nix/var/nix/channel-cache/*
+</programlisting>
+  </section>
+  <section xml:id="builds-on-darwin-fail-with-math.h-not-found">
+    <title>Builds on Darwin fail with <literal>math.h</literal> not
+    found</title>
+    <para>
+      Users of GHC on Darwin have occasionally reported that builds
+      fail, because the compiler complains about a missing include file:
+    </para>
+    <programlisting>
+fatal error: 'math.h' file not found
+</programlisting>
+    <para>
+      The issue has been discussed at length in
+      <link xlink:href="https://github.com/NixOS/nixpkgs/issues/6390">ticket
+      6390</link>, and so far no good solution has been proposed. As a
+      work-around, users who run into this problem can configure the
+      environment variables
+    </para>
+    <programlisting>
+export NIX_CFLAGS_COMPILE=&quot;-idirafter /usr/include&quot;
+export NIX_CFLAGS_LINK=&quot;-L/usr/lib&quot;
+</programlisting>
+    <para>
+      in their <literal>~/.bashrc</literal> file to avoid the compiler
+      error.
+    </para>
+  </section>
+</section>
+
+<section xml:id="other-resources">
+  <title>Other resources</title>
+  <itemizedlist>
+    <listitem>
+      <para>
+        The Youtube video
+        <link xlink:href="https://www.youtube.com/watch?v=BsBhi_r-OeE">Nix
+        Loves Haskell</link> provides an introduction into Haskell NG
+        aimed at beginners. The slides are available at
+        http://cryp.to/nixos-meetup-3-slides.pdf and also -- in a form
+        ready for cut &amp; paste -- at
+        https://github.com/NixOS/cabal2nix/blob/master/doc/nixos-meetup-3-slides.md.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Another Youtube video is
+        <link xlink:href="https://www.youtube.com/watch?v=mQd3s57n_2Y">Escaping
+        Cabal Hell with Nix</link>, which discusses the subject of
+        Haskell development with Nix but also provides a basic
+        introduction to Nix as well, i.e. it's suitable for viewers with
+        almost no prior Nix experience.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Oliver Charles wrote a very nice
+        <link xlink:href="http://wiki.ocharles.org.uk/Nix">Tutorial how to
+        develop Haskell packages with Nix</link>.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        The <emphasis>Journey into the Haskell NG
+        infrastructure</emphasis> series of postings describe the new
+        Haskell infrastructure in great detail:
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            <link xlink:href="http://lists.science.uu.nl/pipermail/nix-dev/2015-January/015591.html">Part
+            1</link> explains the differences between the old and the
+            new code and gives instructions how to migrate to the new
+            setup.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <link xlink:href="http://lists.science.uu.nl/pipermail/nix-dev/2015-January/015608.html">Part
+            2</link> looks in-depth at how to tweak and configure your
+            setup by means of overrides.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <link xlink:href="http://lists.science.uu.nl/pipermail/nix-dev/2015-April/016912.html">Part
+            3</link> describes the infrastructure that keeps the
+            Haskell package set in Nixpkgs up-to-date.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </itemizedlist>
+</section>
+
+</chapter>

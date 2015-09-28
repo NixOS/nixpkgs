@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "120jkda2q58p0n68banh64vsfm3hgqnacagj425d218cr4ycdkyb";
   };
 
-  NIX_LDFLAGS = stdenv.lib.optionalString (stdenv.cc.cc.isGNU or false) "-lssp";
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.cc.isGNU "-lssp";
 
   doCheck = true;
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "A modern and easy-to-use crypto library";
     homepage = http://doc.libsodium.org/;
     license = licenses.isc;
-    maintainers = with maintainers; [ raskin viric ];
+    maintainers = with maintainers; [ raskin viric wkennington ];
     platforms = platforms.all;
   };
 }

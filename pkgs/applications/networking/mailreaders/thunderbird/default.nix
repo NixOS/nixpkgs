@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, which, m4, gtk, pango, perl, python, zip, libIDL
-, libjpeg, libpng, zlib, dbus, dbus_glib, bzip2, xlibs
+, libjpeg, libpng, zlib, dbus, dbus_glib, bzip2, xorg
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
@@ -13,24 +13,26 @@
   enableOfficialBranding ? false
 }:
 
-let version = "31.4.0"; in
+let version = "38.1.0"; in
 let verName = "${version}"; in
 
 stdenv.mkDerivation rec {
   name = "thunderbird-${verName}";
 
   src = fetchurl {
-    url = "ftp://ftp.mozilla.org/pub/thunderbird/releases/${verName}/source/thunderbird-${verName}.source.tar.bz2";
-    sha1 = "00b55e28f55b84e3cd257407d797e07a363aeef8";
+    url = "http://archive.mozilla.org/pub/thunderbird/releases/${verName}/source/thunderbird-${verName}.source.tar.bz2";
+
+    # https://archive.mozilla.org/pub/thunderbird/releases/${verName}/SHA1SUMS
+    sha1 = "7bb0c85e889e397e53dcbcbd36957dbd7c8c10bd";
   };
 
   buildInputs = # from firefox30Pkgs.xulrunner, but without gstreamer and libvpx
     [ pkgconfig which libpng gtk perl zip libIDL libjpeg zlib bzip2
-      python dbus dbus_glib pango freetype fontconfig xlibs.libXi
-      xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
-      alsaLib nspr nss libnotify xlibs.pixman yasm mesa
-      xlibs.libXScrnSaver xlibs.scrnsaverproto pysqlite
-      xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
+      python dbus dbus_glib pango freetype fontconfig xorg.libXi
+      xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
+      alsaLib nspr nss libnotify xorg.pixman yasm mesa
+      xorg.libXScrnSaver xorg.scrnsaverproto pysqlite
+      xorg.libXext xorg.xextproto sqlite unzip makeWrapper
       hunspell libevent libstartup_notification cairo icu
     ] ++ [ m4 ];
 
@@ -75,6 +77,10 @@ stdenv.mkDerivation rec {
     cd objdir
     echo '${stdenv.lib.concatMapStrings (s : "ac_add_options ${s}\n") configureFlags}' > .mozconfig
     echo 'ac_add_options --prefix="'"$out"'"' >> .mozconfig
+    # From version 38, we need to specify the source directory to build
+    # Thunderbird. Refer to mozilla/configure and search a line with
+    # "checking for application to build" and "# Support comm-central".
+    echo 'ac_add_options --with-external-source-dir="'`realpath ..`'"' >> .mozconfig
     echo 'mk_add_options MOZ_MAKE_FLAGS="-j'"$NIX_BUILD_CORES"'"' >> .mozconfig
     echo 'mk_add_options MOZ_OBJDIR="'`pwd`'"' >> .mozconfig
 
@@ -83,6 +89,8 @@ stdenv.mkDerivation rec {
     patchShebangs ../mozilla/mach
     ../mozilla/mach configure
   '';
+
+  enableParallelBuilding = true;
 
   buildPhase =  "../mozilla/mach build";
 

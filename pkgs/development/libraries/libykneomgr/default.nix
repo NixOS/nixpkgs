@@ -1,14 +1,15 @@
 { stdenv, fetchurl, pkgconfig, pcsclite, libzip, help2man }:
 
 stdenv.mkDerivation rec {
-  name = "libykneomgr-0.1.6";
+  name = "libykneomgr-0.1.7";
 
   src = fetchurl {
     url = "https://developers.yubico.com/libykneomgr/Releases/${name}.tar.gz";
-    sha256 = "15fa4sslbzhzmkf0xik36as9lsmys1apqwjxv8sx7qlpacmxy3bw";
+    sha256 = "0nlzl9g0gjb54h43gjhg8d25bq3m3s794cq671irpqkn94kj1knw";
   };
 
-  buildInputs = [ pkgconfig pcsclite libzip help2man ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ pcsclite libzip help2man ];
 
   configureFlags = [
     "--with-backend=pcsc"

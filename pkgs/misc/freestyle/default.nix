@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, libpng, lib3ds, freeglut, libXi, libQGLViewer
+{ stdenv, fetchurl, qt4, libpng, lib3ds, freeglut, libXi, libqglviewer
 , swig, python }:
 
 stdenv.mkDerivation {
@@ -9,9 +9,9 @@ stdenv.mkDerivation {
     sha256 = "1h4880fijmfy0x6dbl9hfri071rpj3lnwfzkxi1qyqhy7zyxy7ga";
  };
 
-  buildInputs = [ qt4 libpng lib3ds freeglut libXi libQGLViewer swig ];
+  buildInputs = [ qt4 libpng lib3ds freeglut libXi libqglviewer swig ];
   
-  inherit python freeglut libQGLViewer lib3ds; # if you want to use another adopt patch and Config.pri 
+  inherit python freeglut libqglviewer lib3ds; # if you want to use another adopt patch and Config.pri
 
   buildPhase = ''
     export PYTHON_VERSION=2.5

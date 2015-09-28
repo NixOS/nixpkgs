@@ -1,5 +1,8 @@
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ...} : {
   name = "mysql";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ eelco chaoflow shlevy ];
+  };
 
   nodes = {
     master =
@@ -20,4 +23,4 @@ import ./make-test.nix {
     $master->sleep(10); # Hopefully this is long enough!!
     $master->succeed("echo 'use testdb; select * from tests' | mysql -u root -N | grep 4");
   '';
-}
+})

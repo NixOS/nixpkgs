@@ -1,20 +1,17 @@
-{ stdenv, fetchgit, pandoc } :
+{ stdenv, fetchgit } :
 
 let
-  rev = "287af2b80e0829b08dc6329b4fe8d8e5594d64b0";
+  rev = "61ce53be996189e1c325916e45a7dc0aa89660e3";
 in
 stdenv.mkDerivation {
 
-  name = "fasd-1.0.1";
+  name = "fasd-git-2015-03-29";
 
   src = fetchgit {
     url = "https://github.com/clvv/fasd.git";
     inherit rev;
-    sha256 = "0kv9iyfdf916x0gab9fzs4vmsnkaqmb6kh4xna485nqij89xzkgs";
+    sha256 = "1fd36ff065ae73de2d6b1bae2131c18c8c4dea98ca63d96b0396e8b291072b5e";
   };
-
-  # seems to be needed non-deterministically (timestamps?)
-  nativeBuildInputs = [ pandoc ];
 
   installPhase = ''
     PREFIX=$out make install

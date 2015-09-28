@@ -18,5 +18,6 @@ fetchurl ({
         --strip=${toString stripLen} \
         --clean "$out" > "$tmpfile"
     mv "$tmpfile" "$out"
+    ${args.postFetch or ""}
   '';
 } // builtins.removeAttrs args ["stripLen"])

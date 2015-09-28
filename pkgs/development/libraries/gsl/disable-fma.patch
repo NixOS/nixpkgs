@@ -1,5 +1,5 @@
---- configure.ac        2011-09-22 16:13:22 +0000
-+++ configure.ac        2011-11-26 23:55:24 +0000
+--- a/configure.ac        2011-09-22 16:13:22 +0000
++++ b/configure.ac        2011-11-26 23:55:24 +0000
 @@ -381,6 +381,28 @@
  AC_SUBST(HAVE_DARWIN_IEEE_INTERFACE)
  AC_SUBST(HAVE_DARWIN86_IEEE_INTERFACE)

@@ -16,6 +16,7 @@ in
     ./i3.nix
     ./metacity.nix
     ./openbox.nix
+    ./notion.nix
     ./ratpoison.nix
     ./sawfish.nix
     ./stumpwm.nix
@@ -24,6 +25,7 @@ in
     ./windowmaker.nix
     ./wmii.nix
     ./xmonad.nix
+    ./qtile.nix
     ./none.nix ];
 
   options = {

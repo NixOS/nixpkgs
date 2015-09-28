@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     inherit version;
     description = "Report system-wide file access events";
     homepage = https://launchpad.net/fatrace/;
-    license = with licenses; gpl3Plus;
+    license = licenses.gpl3Plus;
     longDescription = ''
       fatrace reports file access events from all running processes.
       Its main purpose is to find processes which keep waking up the disk

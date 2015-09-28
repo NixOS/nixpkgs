@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchgit, fetchFromGitHub
+{ stdenv, lib, fetchurl, fetchFromSavannah, fetchFromGitHub
 , zlib, zlibSupport ? true
 , openssl, opensslSupport ? true
 , gdbm, gdbmSupport ? true
@@ -7,13 +7,14 @@
 , libyaml, yamlSupport ? true
 , libffi, fiddleSupport ? true
 , ruby_2_2_0, autoreconfHook, bison, useRailsExpress ? true
+, libiconv, libobjc, libunwind
 }:
 
 let
   op = stdenv.lib.optional;
   ops = stdenv.lib.optionals;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
-  config = import ./config.nix fetchgit;
+  config = import ./config.nix { inherit fetchFromSavannah; };
   baseruby = ruby_2_2_0.override { useRailsExpress = false; };
 in
 
@@ -47,7 +48,8 @@ stdenv.mkDerivation rec {
     # support is not enabled, so add readline to the build inputs if curses
     # support is disabled (if it's enabled, we already have it) and we're
     # running on darwin
-    ++ (op (!cursesSupport && stdenv.isDarwin) readline);
+    ++ (op (!cursesSupport && stdenv.isDarwin) readline)
+    ++ (ops stdenv.isDarwin [ libiconv libobjc libunwind ]);
 
   enableParallelBuilding = true;
 
@@ -59,9 +61,8 @@ stdenv.mkDerivation rec {
     "${patchSet}/patches/ruby/2.2.0/railsexpress/05-fix-packed-bitfield-compat-warning-for-older-gccs.patch"
   ];
 
-  # Ruby >= 2.1.0 tries to download config.{guess,sub}
-  postPatch = ''
-    rm tool/config_files.rb
+  postPatch = ops useRailsExpress ''
+    sed -i configure.in -e '/config.guess/d'
     cp ${config}/config.guess tool/
     cp ${config}/config.sub tool/
   '';

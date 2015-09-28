@@ -5,7 +5,8 @@ let pkg = import ./base.nix {
   pkgSha256 = "1rb3f7c08dxc02zrwrkfvq7qlzlmm0kd2ah1fhxj6ajiyshi8q4v";
 };
 in callPackage pkg {
-  buildInputs = [ glib gtk3 libxml2 gnuplot (callPackage ./libmirage.nix {}) makeWrapper gnome3.gnome_icon_theme_symbolic gnome3.gnome_icon_theme gdk_pixbuf librsvg ];
+  buildInputs = [ glib gtk3 libxml2 gnuplot (callPackage ./libmirage.nix {}) makeWrapper
+                  gnome3.defaultIconTheme gdk_pixbuf librsvg ];
   drvParams = {
     postFixup = ''
       wrapProgram $out/bin/image-analyzer \

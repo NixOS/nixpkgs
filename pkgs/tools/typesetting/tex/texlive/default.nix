@@ -1,6 +1,14 @@
-args : with args;
+args @ {
+builderDefs, zlib, bzip2, ncurses, libpng, ed, lesstif, ruby, potrace
+, gd, t1lib, freetype, icu, perl, expat, curl, xz, pkgconfig, zziplib, texinfo
+, libjpeg, bison, python, fontconfig, flex, poppler, libpaper, graphite2
+, makeWrapper, gmp, mpfr, xpdf, config
+, libXaw, libX11, xproto, libXt, libXpm
+, libXmu, libXext, xextproto, libSM, libICE
+, ... }: with args;
+
 rec {
-  src = fetchurl {
+  src = assert config.allowTexliveBuilds or true; fetchurl {
     url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2014.20140926.35254.orig.tar.xz;
     sha256 = "1c39x059jhn5jsy6i9j3akjbkm1kmmzssy1jyi1aw20rl2vp86w3";
   };
@@ -80,7 +88,7 @@ rec {
 
     PATH=$PATH:$out/bin mktexlsr $out/share/texmf*
 
-    HOME=. PATH=$PATH:$out/bin updmap-sys --syncwithtrees
+    yes | HOME=. PATH=$PATH:$out/bin updmap-sys --syncwithtrees || echo $?
 
     # Prebuild the format files, as it used to be done with TeXLive 2007.
     # Luatex currently fails this way:
@@ -147,5 +155,6 @@ rec {
     license     = stdenv.lib.licenses.gpl2;
     maintainers = with maintainers; [ lovek323 raskin jwiegley ];
     platforms   = platforms.unix;
+    hydraPlatforms = [];
   };
 }

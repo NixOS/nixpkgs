@@ -287,7 +287,7 @@ in
     };
 
     networking.firewall.trustedInterfaces = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       description =
         ''
           Traffic coming in from these interfaces will be accepted
@@ -379,7 +379,7 @@ in
     networking.firewall.connectionTrackingModules = mkOption {
       default = [ "ftp" ];
       example = [ "ftp" "irc" "sane" "sip" "tftp" "amanda" "h323" "netbios_sn" "pptp" "snmp" ];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       description =
         ''
           List of connection-tracking helpers that are auto-loaded.
@@ -420,6 +420,16 @@ in
         '';
     };
 
+    networking.firewall.extraPackages = mkOption {
+      default = [ ];
+      example = [ pkgs.ipset ];
+      description =
+        ''
+          Additional packages to be included in the environment of the system
+          as well as the path of networking.firewall.extraCommands.
+        '';
+    };
+
     networking.firewall.extraStopCommands = mkOption {
       type = types.lines;
       default = "";
@@ -443,7 +453,7 @@ in
 
     networking.firewall.trustedInterfaces = [ "lo" ];
 
-    environment.systemPackages = [ pkgs.iptables pkgs.ipset ];
+    environment.systemPackages = [ pkgs.iptables ] ++ cfg.extraPackages;
 
     boot.kernelModules = map (x: "nf_conntrack_${x}") cfg.connectionTrackingModules;
     boot.extraModprobeConfig = optionalString (!cfg.autoLoadConntrackHelpers) ''
@@ -462,7 +472,7 @@ in
       before = [ "network-pre.target" ];
       after = [ "systemd-modules-load.service" ];
 
-      path = [ pkgs.iptables pkgs.ipset ];
+      path = [ pkgs.iptables ] ++ cfg.extraPackages;
 
       # FIXME: this module may also try to load kernel modules, but
       # containers don't have CAP_SYS_MODULE. So the host system had

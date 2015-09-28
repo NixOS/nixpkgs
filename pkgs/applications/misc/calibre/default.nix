@@ -5,11 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "calibre-2.27.0";
+  name = "calibre-${version}";
+  version = "2.38.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/calibre/${name}.tar.xz";
-    sha256 = "13id1r2q6alw4wzb4z0njkyr6lsmzs2fjp3cflqavx3qk25darv5";
+    url = "https://github.com/kovidgoyal/calibre/releases/download/v${version}/${name}.tar.xz";
+    sha256 = "075axil53djss99fj9drfh5cvxdbjw6z5z5qk53vm13k5pw6bmhn";
   };
 
   inherit python;
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ python pyqt5 sip_4_16 poppler_utils libpng imagemagick libjpeg
-      fontconfig podofo qt5 pil chmlib icu sqlite libusb1 libmtp xdg_utils
+      fontconfig podofo qt5.base pil chmlib icu sqlite libusb1 libmtp xdg_utils
       pythonPackages.mechanize pythonPackages.lxml pythonPackages.dateutil
       pythonPackages.cssutils pythonPackages.beautifulsoup pythonPackages.pillow
       pythonPackages.sqlite3 pythonPackages.netifaces pythonPackages.apsw

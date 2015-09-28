@@ -118,7 +118,7 @@ in {
       preStart = "mkdir -p ${cfg.dataDir} && chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}";
       script = "exec mpd --no-daemon ${mpdConf}";
       serviceConfig = {
-        User = "mpd";
+        User = "${cfg.user}";
         PermissionsStartOnly = true;
       };
     };

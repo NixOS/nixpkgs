@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
     cp dog $out/bin
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://lwn.net/Articles/421072/";
-    description = "a cat replacement";
-    license="GPLv2+";
-    maintainers = with stdenv.lib.maintainers; [qknight];
-    platforms = with stdenv.lib.platforms; all;
+    description = "cat replacement";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ qknight ];
+    platforms = with platforms; all;
   };
 }

@@ -8,7 +8,7 @@
 , withGd ? false, gd ? null, libpng ? null
 }:
 
-assert stdenv.cc.cc.isGNU or false;
+assert stdenv.cc.isGNU;
 
 let
   build = import ./common.nix;
@@ -36,7 +36,8 @@ in
       if [ -f ${stdenv.cc.cc}/lib/libgcc_s.so.1 ]; then
           mkdir -p $out/lib
           cp ${stdenv.cc.cc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
-          ln -s libgcc_s.so.1 $out/lib/libgcc_s.so
+          # the .so It used to be a symlink, but now it is a script
+          cp -a ${stdenv.cc.cc}/lib/libgcc_s.so $out/lib/libgcc_s.so
       fi
     '';
 

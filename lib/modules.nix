@@ -17,6 +17,10 @@ rec {
      evalModules) and the less declarative the module set is. */
   evalModules = { modules
                 , prefix ? []
+                , # This should only be used for special arguments that need to be evaluated
+                  # when resolving module structure (like in imports). For everything else,
+                  # there's _module.args.
+                  specialArgs ? {}
                 , # This would be remove in the future, Prefer _module.args option instead.
                   args ? {}
                 , # This would be remove in the future, Prefer _module.check option instead.
@@ -39,7 +43,7 @@ rec {
           };
 
           _module.check = mkOption {
-            type = types.uniq types.bool;
+            type = types.bool;
             internal = true;
             default = check;
             description = "Whether to check whether all option definitions have matching declarations.";
@@ -51,7 +55,7 @@ rec {
         };
       };
 
-      closed = closeModules (modules ++ [ internalModule ]) { inherit config options; lib = import ./.; };
+      closed = closeModules (modules ++ [ internalModule ]) ({ inherit config options; lib = import ./.; } // specialArgs);
 
       # Note: the list of modules is reversed to maintain backward
       # compatibility with the old module system.  Not sure if this is
@@ -72,8 +76,8 @@ rec {
           else yieldConfig (prefix ++ [n]) v) set) ["_definedNames"];
         in
         if options._module.check.value && set ? _definedNames then
-          fold (m: res:
-            fold (name: res:
+          foldl' (res: m:
+            foldl' (res: name:
               if set ? ${name} then res else throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.")
               res m.names)
             res set._definedNames
@@ -87,9 +91,11 @@ rec {
     let
       toClosureList = file: parentKey: imap (n: x:
         if isAttrs x || isFunction x then
-          unifyModuleSyntax file "${parentKey}:anon-${toString n}" (unpackSubmodule applyIfFunction x args)
+          let key = "${parentKey}:anon-${toString n}"; in
+          unifyModuleSyntax file key (unpackSubmodule (applyIfFunction key) x args)
         else
-          unifyModuleSyntax (toString x) (toString x) (applyIfFunction (import x) args));
+          let file = toString x; key = toString x; in
+          unifyModuleSyntax file key (applyIfFunction key (import x) args));
     in
       builtins.genericClosure {
         startSet = toClosureList unknownModule "" modules;
@@ -118,7 +124,7 @@ rec {
         config = removeAttrs m ["key" "_file" "require" "imports"];
       };
 
-  applyIfFunction = f: arg@{ config, options, lib }: if isFunction f then
+  applyIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
     let
       # Module arguments are resolved in a strict manner when attribute set
       # deconstruction is used.  As the arguments are now defined with the
@@ -133,11 +139,18 @@ rec {
       # not their values.  The values are forwarding the result of the
       # evaluation of the option.
       requiredArgs = builtins.attrNames (builtins.functionArgs f);
+      context = name: ''while evaluating the module argument `${name}' in "${key}":'';
       extraArgs = builtins.listToAttrs (map (name: {
         inherit name;
-        value = config._module.args.${name};
+        value = addErrorContext (context name)
+          (args.${name} or config._module.args.${name});
       }) requiredArgs);
-    in f (extraArgs // arg)
+
+      # Note: we append in the opposite order such that we can add an error
+      # context on the explicited arguments of "args" too. This update
+      # operator is used to make the "args@{ ... }: with args.lib;" notation
+      # works.
+    in f (args // extraArgs)
   else
     f;
 
@@ -169,18 +182,18 @@ rec {
         let
           loc = prefix ++ [name];
           # Get all submodules that declare ‘name’.
-          decls = concatLists (map (m:
+          decls = concatMap (m:
             if m.options ? ${name}
               then [ { inherit (m) file; options = m.options.${name}; } ]
               else []
-            ) options);
+            ) options;
           # Get all submodules that define ‘name’.
-          defns = concatLists (map (m:
+          defns = concatMap (m:
             if m.config ? ${name}
               then map (config: { inherit (m) file; inherit config; })
                 (pushDownProperties m.config.${name})
               else []
-            ) configs);
+            ) configs;
           nrOptions = count (m: isOption m.options) decls;
           # Extract the definitions for this loc
           defns' = map (m: { inherit (m) file; value = m.config.${name}; })
@@ -212,7 +225,7 @@ rec {
      'opts' is a list of modules.  Each module has an options attribute which
      correspond to the definition of 'loc' in 'opt.file'. */
   mergeOptionDecls = loc: opts:
-    fold (opt: res:
+    foldl' (res: opt:
       if opt.options ? default && res ? default ||
          opt.options ? example && res ? example ||
          opt.options ? description && res ? description ||
@@ -238,7 +251,7 @@ rec {
             else if opt.options ? options then map (coerceOption opt.file) options' ++ res.options
             else res.options;
         in opt.options // res //
-          { declarations = [opt.file] ++ res.declarations;
+          { declarations = res.declarations ++ [opt.file];
             options = submodules;
           }
     ) { inherit loc; declarations = []; options = []; } opts;
@@ -248,58 +261,67 @@ rec {
   evalOptionValue = loc: opt: defs:
     let
       # Add in the default value for this option, if any.
-      defs' = (optional (opt ? default)
-        { file = head opt.declarations; value = mkOptionDefault opt.default; }) ++ defs;
+      defs' =
+          (optional (opt ? default)
+            { file = head opt.declarations; value = mkOptionDefault opt.default; }) ++ defs;
 
-      # Handle properties, check types, and merge everything together
-      inherit (mergeDefinitions loc opt.type defs') isDefined defsFinal mergedValue;
-      files = map (def: def.file) defsFinal;
-      merged =
-        if isDefined then mergedValue
-        else throw "The option `${showOption loc}' is used but not defined.";
+      # Handle properties, check types, and merge everything together.
+      res =
+        if opt.readOnly or false && length defs' > 1 then
+          throw "The option `${showOption loc}' is read-only, but it's set multiple times."
+        else
+          mergeDefinitions loc opt.type defs';
 
-      # Finally, apply the ‘apply’ function to the merged
-      # value.  This allows options to yield a value computed
-      # from the definitions.
-      value = (opt.apply or id) merged;
+      # Check whether the option is defined, and apply the ‘apply’
+      # function to the merged value.  This allows options to yield a
+      # value computed from the definitions.
+      value =
+        if !res.isDefined then
+          throw "The option `${showOption loc}' is used but not defined."
+        else if opt ? apply then
+          opt.apply res.mergedValue
+        else
+          res.mergedValue;
+
     in opt //
       { value = addErrorContext "while evaluating the option `${showOption loc}':" value;
-        definitions = map (def: def.value) defsFinal;
-        inherit isDefined files;
+        definitions = map (def: def.value) res.defsFinal;
+        files = map (def: def.file) res.defsFinal;
+        inherit (res) isDefined;
       };
 
-    # Merge definitions of a value of a given type
-    mergeDefinitions = loc: type: defs: rec {
-      defsFinal =
-        let
-          # Process mkMerge and mkIf properties
-          processIfAndMerge = defs: concatMap (m:
-            map (value: { inherit (m) file; inherit value; }) (dischargeProperties m.value)
-          ) defs;
+  # Merge definitions of a value of a given type.
+  mergeDefinitions = loc: type: defs: rec {
+    defsFinal =
+      let
+        # Process mkMerge and mkIf properties.
+        defs' = concatMap (m:
+          map (value: { inherit (m) file; inherit value; }) (dischargeProperties m.value)
+        ) defs;
 
-          # Process mkOverride properties
-          processOverride = defs: filterOverrides defs;
+        # Process mkOverride properties.
+        defs'' = filterOverrides defs';
 
-          # Sort mkOrder properties
-          processOrder = defs:
-            # Avoid sorting if we don't have to.
-            if any (def: def.value._type or "" == "order") defs
-            then sortProperties defs
-            else defs;
-        in
-          processOrder (processOverride (processIfAndMerge defs));
+        # Sort mkOrder properties.
+        defs''' =
+          # Avoid sorting if we don't have to.
+          if any (def: def.value._type or "" == "order") defs''
+          then sortProperties defs''
+          else defs'';
+      in defs''';
 
-        # Type-check the remaining definitions, and merge them
-        mergedValue = fold (def: res:
-          if type.check def.value then res
-          else throw "The option value `${showOption loc}' in `${def.file}' is not a ${type.name}.")
-          (type.merge loc defsFinal) defsFinal;
+    # Type-check the remaining definitions, and merge them.
+    mergedValue = foldl' (res: def:
+      if type.check def.value then res
+      else throw "The option value `${showOption loc}' in `${def.file}' is not a ${type.name}.")
+      (type.merge loc defsFinal) defsFinal;
 
-        isDefined = defsFinal != [];
-        optionalValue =
-          if isDefined then { value = mergedValue; }
-          else {};
-    };
+    isDefined = defsFinal != [];
+
+    optionalValue =
+      if isDefined then { value = mergedValue; }
+      else {};
+  };
 
   /* Given a config set, expand mkMerge properties, and push down the
      other properties into the children.  The result is a list of
@@ -370,8 +392,7 @@ rec {
     let
       defaultPrio = 100;
       getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultPrio;
-      min = x: y: if x < y then x else y;
-      highestPrio = fold (def: prio: min (getPrio def) prio) 9999 defs;
+      highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
       strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
     in concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
 

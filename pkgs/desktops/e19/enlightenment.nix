@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, e19, xlibs, libffi, pam, alsaLib, luajit, bzip2
+{ stdenv, fetchurl, pkgconfig, e19, xorg, libffi, pam, alsaLib, luajit, bzip2
 , libpthreadstubs, gdbm, libcap, mesa_glu, xkeyboard_config, set_freqset_setuid ? false }:
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.19.4";
+  version = "0.19.8";
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "0r3bad700cfx5sq8y61dbz3hxdx9n3nf5hzx40ryqld75yxzwxz7";
+    sha256 = "1y83jnq01k9i328adgjgpfwgpvvd2a1ixpm029pjcar8p1mvgadi";
   };
-  buildInputs = [ pkgconfig e19.efl e19.elementary xlibs.libXdmcp xlibs.libxcb
-    xlibs.xcbutilkeysyms xlibs.libXrandr libffi pam alsaLib luajit bzip2
+  buildInputs = [ pkgconfig e19.efl e19.elementary xorg.libXdmcp xorg.libxcb
+    xorg.xcbutilkeysyms xorg.libXrandr libffi pam alsaLib luajit bzip2
     libpthreadstubs gdbm ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
+  NIX_CFLAGS_COMPILE = [ "-I${e19.efl}/include/eo-1" "-I${e19.efl}/include/emile-1" ];
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="-I${e19.efl}/include/eo-1 -I${e19.efl}/include/ecore-imf-1 -I${e19.efl}/include/ethumb-client-1 -I${e19.efl}/include/elocation-1 -I${e19.efl}/include/ethumb-1 $NIX_CFLAGS_COMPILE"
     export USER_SESSION_DIR=$prefix/lib/systemd/user
 
     substituteInPlace src/modules/xkbswitch/e_mod_parse.c \
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The Compositing Window Manager and Desktop Shell";
     homepage = http://enlightenment.org/;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ];
+    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.bsd2;
   };

@@ -1,14 +1,13 @@
 { stdenv, fetchurl, flex, cracklib }:
 
 stdenv.mkDerivation rec {
-  name = "linux-pam-1.1.8";
+  name = "linux-pam-${version}";
+  version = "1.2.1";
 
   src = fetchurl {
-    url = http://www.linux-pam.org/library/Linux-PAM-1.1.8.tar.bz2;
-    sha256 = "0m8ygb40l1c13nsd4hkj1yh4p1ldawhhg8pyjqj9w5kd4cxg5cf4";
+    url = "http://www.linux-pam.org/library/Linux-PAM-${version}.tar.bz2";
+    sha256 = "1n9lnf9gjs72kbj1g354v1xhi2j27aqaah15vykh7cnkq08i4arl";
   };
-
-  patches = [ ./CVE-2014-2583.patch ];
 
   nativeBuildInputs = [ flex ];
 

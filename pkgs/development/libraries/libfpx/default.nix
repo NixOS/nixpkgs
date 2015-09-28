@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = if stdenv.isDarwin then "-D__unix" else null;
 
   # This dead code causes a duplicate symbol error in Clang so just remove it
-  postPatch = if (stdenv.cc.cc.isClang or false) then ''
+  postPatch = if stdenv.cc.isClang then ''
     substituteInPlace jpeg/ejpeg.h --replace "int No_JPEG_Header_Flag" ""
   '' else null;
 

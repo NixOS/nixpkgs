@@ -9,6 +9,10 @@ assert useX11 -> !stdenv.isArm && !stdenv.isMips;
 let
    useNativeCompilers = !stdenv.isMips;
    inherit (stdenv.lib) optionals optionalString;
+   patchOcamlBuild = fetchurl {
+     url = https://github.com/ocaml/ocaml/pull/117.patch;
+     sha256 = "0x2cdn2sgzq29qzqg5y2ial0jqy8gjg5a7jf8qqch55dc4vkyjw0";
+   };
 in
 
 stdenv.mkDerivation rec {
@@ -23,6 +27,8 @@ stdenv.mkDerivation rec {
     url = "http://caml.inria.fr/pub/distrib/ocaml-4.02/${name}.tar.xz";
     sha256 = "1p7lqvh64xpykh99014mz21q8fs3qyjym2qazhhbq8scwldv1i38";
   };
+
+  patches = [ patchOcamlBuild ];
 
   prefixKey = "-prefix ";
   configureFlags = optionals useX11 [ "-x11lib" x11lib
@@ -44,10 +50,13 @@ stdenv.mkDerivation rec {
     nativeCompilers = useNativeCompilers;
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://caml.inria.fr/ocaml;
     branch = "4.02";
-    license = [ "QPL" /* compiler */ "LGPLv2" /* library */ ];
+    license = with licenses; [
+      qpl /* compiler */
+      lgpl2 /* library */
+    ];
     description = "Most popular variant of the Caml language";
 
     longDescription =
@@ -69,7 +78,7 @@ stdenv.mkDerivation rec {
         and a documentation generator (ocamldoc).
       '';
 
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = with platforms; linux ++ darwin;
   };
 
 }

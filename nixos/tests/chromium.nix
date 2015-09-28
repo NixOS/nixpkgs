@@ -8,9 +8,14 @@ import ./make-test.nix (
 , ...
 }: rec {
   name = "chromium";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ aszlig ];
+  };
+
+  enableOCR = true;
 
   machine.imports = [ ./common/x11.nix ];
-  machine.virtualisation.memorySize = 1024;
+  machine.virtualisation.memorySize = 2047;
 
   startupHTML = pkgs.writeText "chromium-startup.html" ''
     <!DOCTYPE html>
@@ -39,6 +44,8 @@ import ./make-test.nix (
           search --onlyvisible --name "startup done"
           windowfocus --sync
           windowactivate --sync
+        ''}");
+        $machine->execute("${xdo "new-window" ''
           key Ctrl+n
         ''}");
       });
@@ -50,6 +57,8 @@ import ./make-test.nix (
           search --onlyvisible --name "new tab"
           windowfocus --sync
           windowactivate --sync
+        ''}");
+        $machine->execute("${xdo "close-window" ''
           key Ctrl+w
         ''}");
         for (1..20) {
@@ -106,15 +115,11 @@ import ./make-test.nix (
         "ulimit -c unlimited; ".
         "$pkg/bin/chromium $args \"$url\" & disown"
       );
+      $machine->waitForText(qr/Type to search or enter a URL to navigate/);
       $machine->waitUntilSucceeds("${xdo "check-startup" ''
         search --sync --onlyvisible --name "startup done"
         # close first start help popup
         key -delay 1000 Escape
-        # XXX: This is to make sure the popup is closed, but we better do
-        # screenshots to detect visual changes.
-        key -delay 2000 Escape
-        key -delay 3000 Escape
-        key -delay 4000 Escape
         windowfocus --sync
         windowactivate --sync
       ''}");
@@ -154,15 +159,18 @@ import ./make-test.nix (
           $machine->succeed("${xdo "submit-url" ''
             search --sync --onlyvisible --name "sandbox status"
             windowfocus --sync
+          ''}");
+          $machine->succeed("${xdo "submit-url" ''
             key --delay 1000 Ctrl+a Ctrl+c
           ''}");
 
           my $clipboard = $machine->succeed("${pkgs.xclip}/bin/xclip -o");
           die "sandbox not working properly: $clipboard"
-          unless $clipboard =~ /(?:suid|namespace) sandbox.*yes/mi
+          unless $clipboard =~ /namespace sandbox.*yes/mi
               && $clipboard =~ /pid namespaces.*yes/mi
               && $clipboard =~ /network namespaces.*yes/mi
-              && $clipboard =~ /seccomp.*sandbox.*yes/mi;
+              && $clipboard =~ /seccomp.*sandbox.*yes/mi
+              && $clipboard =~ /you are adequately sandboxed/mi;
         };
       };
     }

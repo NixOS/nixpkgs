@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, libestr, json_c, zlib, pythonPackages
-, krb5 ? null, systemd ? null, jemalloc ? null, libmysql ? null, postgresql ? null
+{ stdenv, fetchurl, pkgconfig, autoreconfHook, libestr, json_c, zlib, pythonPackages
+, libkrb5 ? null, systemd ? null, jemalloc ? null, libmysql ? null, postgresql ? null
 , libdbi ? null, net_snmp ? null, libuuid ? null, curl ? null, gnutls ? null
-, libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null
+, libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
 , libgt ? null, liblogging ? null, libnet ? null, hadoop ? null, rdkafka ? null
 , libmongo-client ? null, czmq ? null, rabbitmq-c ? null, hiredis ? null
 }:
@@ -11,18 +11,21 @@ let
   mkFlag = cond: name: if cond then "--enable-${name}" else "--disable-${name}";
 in
 stdenv.mkDerivation rec {
-  name = "rsyslog-8.9.0";
+  name = "rsyslog-8.12.0";
 
   src = fetchurl {
     url = "http://www.rsyslog.com/files/download/rsyslog/${name}.tar.gz";
-    sha256 = "1p3saxfs723479rbsdyvqwfrblcp0bw6mkz2ncrxvnccfn70xc7a";
+    sha256 = "083yrgv7s5j7pfbk254lav15yyxsk04qhachxghrvs4nhangwss6";
   };
 
+  patches = [ ./fix-gnutls-detection.patch ];
+
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
-    pkgconfig libestr json_c zlib pythonPackages.docutils
-    krb5 jemalloc libmysql postgresql libdbi net_snmp libuuid curl gnutls
-    libgcrypt liblognorm openssl librelp libgt liblogging libnet hadoop rdkafka
-    libmongo-client czmq rabbitmq-c hiredis
+    libestr json_c zlib pythonPackages.docutils libkrb5 jemalloc libmysql
+    postgresql libdbi net_snmp libuuid curl gnutls libgcrypt liblognorm openssl
+    librelp libgt libksi liblogging libnet hadoop rdkafka libmongo-client czmq
+    rabbitmq-c hiredis
   ] ++ stdenv.lib.optional stdenv.isLinux systemd;
 
   configureFlags = [
@@ -31,13 +34,18 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
     (mkFlag true                      "largefile")
     (mkFlag true                      "regexp")
-    (mkFlag (krb5 != null)            "gssapi-krb5")
+    (mkFlag (libkrb5 != null)         "gssapi-krb5")
     (mkFlag true                      "klog")
     (mkFlag true                      "kmsg")
     (mkFlag (systemd != null)         "imjournal")
     (mkFlag true                      "inet")
     (mkFlag (jemalloc != null)        "jemalloc")
     (mkFlag true                      "unlimited-select")
+    (mkFlag false                     "debug")
+    (mkFlag false                     "debug-symbols")
+    (mkFlag true                      "debugless")
+    (mkFlag false                     "valgrind")
+    (mkFlag false                     "diagtools")
     (mkFlag true                      "usertools")
     (mkFlag (libmysql != null)        "mysql")
     (mkFlag (postgresql != null)      "pgsql")
@@ -62,6 +70,7 @@ stdenv.mkDerivation rec {
     (mkFlag (openssl != null)         "mmrfc5424addhmac")
     (mkFlag (librelp != null)         "relp")
     (mkFlag (libgt != null)           "guardtime")
+    (mkFlag (libksi != null)          "gt-ksi")
     (mkFlag (liblogging != null)      "liblogging-stdlog")
     (mkFlag (liblogging != null)      "rfc3195")
     (mkFlag true                      "imfile")
@@ -89,6 +98,7 @@ stdenv.mkDerivation rec {
     (mkFlag (czmq != null)            "omczmq")
     (mkFlag (rabbitmq-c != null)      "omrabbitmq")
     (mkFlag (hiredis != null)         "omhiredis")
+    (mkFlag (curl != null)            "omhttpfs")
     (mkFlag true                      "generate-man-pages")
   ];
 

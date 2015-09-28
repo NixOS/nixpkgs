@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, cmake, llvmPackages_35 }:
+{ stdenv, fetchurl, cmake, llvmPackages_36 }:
 
-let version = "3.5"; in with llvmPackages_35;
-stdenv.mkDerivation rec {
+let
+  version = "0.4";
+  llvmPackages = llvmPackages_36;
+in stdenv.mkDerivation rec {
   name = "include-what-you-use-${version}";
 
   src = fetchurl {
-    sha256 = "1wfl78wkg8m2ssjnkb2rwcqy35nhc8fa63mk3sa60jrshpy7b15w";
+    sha256 = "19pwhgwvfr86n8ks099p9r02v7zh8d3qs7g7snzkhpdgq1azww85";
     url = "${meta.homepage}/downloads/${name}.src.tar.gz";
   };
 
@@ -19,14 +21,16 @@ stdenv.mkDerivation rec {
       actually needed for this file (for both .cc and .h files), and by
       replacing #includes with forward-declares when possible.
     '';
-    homepage = http://include-what-you-use.com;
-    license = with licenses; bsd3;
+    homepage = http://include-what-you-use.org;
+    license = licenses.bsd3;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ clang cmake llvm ];
+  buildInputs = with llvmPackages; [ clang llvm ];
+  nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ "-DLLVM_PATH=${llvm}" ];
+  cmakeFlags = "-DIWYU_LLVM_ROOT_PATH=${llvmPackages.clang-unwrapped}";
+
   enableParallelBuilding = true;
 }

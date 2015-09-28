@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, SDL, ffmpeg, frei0r, jack2, libdv, libsamplerate
+{ stdenv, fetchurl, SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate
 , libvorbis, libxml2, makeWrapper, movit, pkgconfig, qt, sox
 }:
 
 stdenv.mkDerivation rec {
   name = "mlt-${version}";
-  version = "0.9.2";
+  version = "0.9.6";
 
   src = fetchurl {
     url = "https://github.com/mltframework/mlt/archive/v${version}.tar.gz";
-    sha256 = "0vk1i2yrny6dbip4aha25ibgv4m2rdhpxmz6a74q9wz1cgzbb766";
+    sha256 = "0s8ypg0q50zfcmq527y8cbdvzxhiqidm1923k28ar8jqmjp45ssh";
   };
 
   buildInputs = [
-    SDL ffmpeg frei0r jack2 libdv libsamplerate libvorbis libxml2
+    SDL ffmpeg frei0r libjack2 libdv libsamplerate libvorbis libxml2
     makeWrapper movit pkgconfig qt sox
   ];
 

@@ -15,12 +15,13 @@
 
 stdenv.mkDerivation rec {
   name = "spectrwm-${version}";
-  version = "2.6.2";
+  version = "2.7.2";
 
   src = fetchurl {
-    url = "https://github.com/conformal/spectrwm/archive/SPECTRWM_2_6_2.tar.gz";
-    sha256 = "1pc9p3vwa4bsv76myqkqhp4cxspr72s5igi7cs9xrpd4xx6xc90s";
+    url = "https://github.com/conformal/spectrwm/archive/SPECTRWM_2_7_2.tar.gz";
+    sha256 = "1yssqnhxlfl1b60gziqp8c5pzs1lr8p6anrnp9ga1zfdql3b7993";
   };
+
 
   buildInputs = [
     libX11
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     xcbutilwm
   ];
 
-  sourceRoot = "spectrwm-SPECTRWM_2_6_2/linux";
+  sourceRoot = "spectrwm-SPECTRWM_2_7_2/linux";
   makeFlags="PREFIX=$(out)";
   installPhase = "PREFIX=$out make install";
 

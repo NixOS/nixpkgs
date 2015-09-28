@@ -21,19 +21,34 @@ in
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "perl-5.20.1";
+  name = "perl-5.20.2";
 
   src = fetchurl {
     url = "mirror://cpan/authors/id/S/SH/SHAY/${name}.tar.gz";
-    sha256 = "1dfl4v5fngnkd1c4278gcdjgcapsw7laxq0b34nxrx76z4805wgy";
+    sha256 = "17cvplgpxbm1hshxlkra2fldn4da1iap1lsnb04hdm8ply93k95i";
   };
+
+  outputs = [ "out" "man" ];
 
   patches =
     [ # Do not look in /usr etc. for dependencies.
       ./no-sys-dirs.patch
+      # Remove in 5.20.3
+      ./perl-5.20.2-gcc5_fixes-1.patch
     ]
     ++ optional stdenv.isSunOS ./ld-shared.patch
     ++ stdenv.lib.optional stdenv.isDarwin [ ./cpp-precomp.patch ./no-libutil.patch ] ;
+
+  # There's an annoying bug on sandboxed Darwin in Perl's Cwd.pm where it looks for pwd
+  # in /bin/pwd and /usr/bin/pwd and then falls back on just "pwd" if it can't get them
+  # while at the same time erasing the PATH environment variable so it unconditionally
+  # fails. The code in question is guarded by a check for Mac OS, but the patch below
+  # doesn't have any runtime effect on other platforms.
+  postPatch = stdenv.lib.optional (stdenv.isDarwin && !stdenv.cc.nativeLibc) ''
+    pwd="$(type -P pwd)"
+    substituteInPlace dist/PathTools/Cwd.pm \
+      --replace "pwd_cmd = 'pwd'" "pwd_cmd = '$pwd'"
+  '';
 
   # Build a thread-safe Perl with a dynamic libperls.o.  We need the
   # "installstyle" option to ensure that modules are put under

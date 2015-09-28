@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1504ds3ppqmpg84nb2gb74qndqysjwn3xw7n8xv19kd1pppnr10f";
   };
 
-  buildInputs = [ SDL frei0r gettext makeWrapper mlt pkgconfig qt5 ];
+  buildInputs = [ SDL frei0r gettext makeWrapper mlt pkgconfig qt5.base ];
 
   configurePhase = "qmake PREFIX=$out";
 

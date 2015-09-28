@@ -1,7 +1,7 @@
 { stdenv, callPackage, fetchurl, python27
-, pkgconfig, spidermonkey_24, boost, icu, libxml2, libpng
+, pkgconfig, spidermonkey_31, boost, icu, libxml2, libpng
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
-, openalSoft, mesa, xproto, libX11, libXcursor, nspr, SDL
+, openal, mesa, xproto, libX11, libXcursor, nspr, SDL
 , gloox, nvidia-texture-tools
 , withEditor ? true, wxGTK ? null
 }:
@@ -9,7 +9,7 @@
 assert withEditor -> wxGTK != null;
 
 let
-  version = "0.0.17";
+  version = "0.0.18";
 
   releaseType = "alpha";
 
@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-${releaseType}-unix-build.tar.xz";
-    sha256 = "ef144d44fe8a8abd29a4642999a58a596b8f0d0e1f310065f5ce1dfbe29c3aeb";
+    sha256 = "15q3mv5k3lqzf0wrby2r93fs194ym13790i68q8azscs4v9h8bxx";
   };
 
   buildInputs = [
-    zeroadData python27 pkgconfig spidermonkey_24 boost icu
+    zeroadData python27 pkgconfig spidermonkey_31 boost icu
     libxml2 libpng libjpeg zlib curl libogg libvorbis enet
-    miniupnpc openalSoft mesa xproto libX11 libXcursor nspr
+    miniupnpc openal mesa xproto libX11 libXcursor nspr
     SDL gloox nvidia-texture-tools
   ] ++ stdenv.lib.optional withEditor wxGTK;
 
@@ -40,6 +40,10 @@ stdenv.mkDerivation rec {
     "-I${libX11}/include/X11"
     "-I${libXcursor}/include/X11"
   ];
+
+  patchPhase = ''
+    sed -i 's/MOZJS_MINOR_VERSION/false \&\& MOZJS_MINOR_VERSION/' source/scriptinterface/ScriptTypes.h
+  '';
 
   configurePhase = ''
     # Delete shipped libraries which we don't need.
@@ -58,7 +62,7 @@ stdenv.mkDerivation rec {
       --with-system-nvtt \
       --with-system-enet \
       --with-system-miniupnpc \
-      --with-system-mozjs24 \
+      --with-system-mozjs31 \
       ${ if withEditor then "--atlas" else "" } \
       --collada \
       --bindir="$out"/bin \
@@ -112,10 +116,13 @@ stdenv.mkDerivation rec {
     done <build/resources/0ad.desktop >"$out"/share/applications/0ad.desktop
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A free, open-source game of ancient warfare";
     homepage = "http://wildfiregames.com/0ad/";
-    license = [ "GPLv2" "LGPLv2.1" "MIT" "CC BY-SA 3.0" "zlib" ];
+    license = with licenses; [
+      gpl2 lgpl21 mit cc-by-sa-30
+      licenses.zlib # otherwise masked by pkgs.zlib
+    ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

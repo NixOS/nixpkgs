@@ -2,17 +2,17 @@
 
 pythonPackages.buildPythonPackage rec {
   name = "nox-${version}";
-  version = "0.0.1";
+  version = "0.0.2";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://pypi.python.org/packages/source/n/nix-nox/nix-nox-${version}.tar.gz";
-    sha256 = "1s1jhickdhym70qrb5h4qxq1mvkpwgdppqpfb2jnpfaf1az6c207";
+    sha256 = "1wpxh5fhj8nx4yx4cvmc087cnf4iqwxf7zd7rdh2ln3pgxrjfral";
   };
 
   buildInputs = [ pythonPackages.pbr ];
 
-  pythonPath = with pythonPackages; [
+  propagatedBuildInputs = with pythonPackages; [
       dogpile_cache
       click
       requests2

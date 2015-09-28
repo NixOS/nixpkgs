@@ -6,46 +6,47 @@
 , version, revision ? null
 , sha256 ? null
 , src ? fetchurl { url = "mirror://hackage/${pname}-${version}.tar.gz"; inherit sha256; }
-, buildDepends ? []
+, buildDepends ? [], libraryHaskellDepends ? [], executableHaskellDepends ? []
 , buildTarget ? ""
-, buildTools ? []
+, buildTools ? [], libraryToolDepends ? [], executableToolDepends ? [], testToolDepends ? []
 , configureFlags ? []
 , description ? ""
 , doCheck ? stdenv.lib.versionOlder "7.4" ghc.version
 , doHoogle ? true
 , editedCabalFile ? null
 , enableLibraryProfiling ? false
+, enableExecutableProfiling ? false
 , enableSharedExecutables ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
 , enableSharedLibraries ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
 , enableSplitObjs ? !stdenv.isDarwin # http://hackage.haskell.org/trac/ghc/ticket/4013
 , enableStaticLibraries ? true
-, extraLibraries ? []
+, extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
 , homepage ? "http://hackage.haskell.org/package/${pname}"
-, hydraPlatforms ? ghc.meta.hydraPlatforms or ghc.meta.platforms
+, platforms ? ghc.meta.platforms
+, hydraPlatforms ? platforms
 , hyperlinkSource ? true
 , isExecutable ? false, isLibrary ? !isExecutable
 , jailbreak ? false
 , license
 , maintainers ? []
-, doHaddock ? true
+, doHaddock ? !stdenv.isDarwin || stdenv.lib.versionAtLeast ghc.version "7.8"
 , passthru ? {}
-, pkgconfigDepends ? []
-, platforms ? ghc.meta.platforms
-, testDepends ? []
+, pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? []
+, testDepends ? [], testHaskellDepends ? [], testSystemDepends ? []
 , testTarget ? ""
 , broken ? false
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
 , preConfigure ? "", postConfigure ? ""
 , preBuild ? "", postBuild ? ""
-, preInstall ? "", postInstall ? ""
+, installPhase ? "", preInstall ? "", postInstall ? ""
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , preFixup ? "", postFixup ? ""
+, shellHook ? ""
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
 } @ args:
 
-assert pkgconfigDepends != [] -> pkgconfig != null;
 assert editedCabalFile != null -> revision != null;
 
 let
@@ -72,7 +73,10 @@ let
 
   hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
 
-  enableParallelBuilding = versionOlder "7.10" ghc.version || (versionOlder "7.8" ghc.version && !hasActiveLibrary);
+  # We cannot enable -j<n> parallelism for libraries because GHC is far more
+  # likely to generate a non-determistic library ID in that case. Further
+  # details are at <https://github.com/peti/ghc-library-id-bug>.
+  enableParallelBuilding = versionOlder "7.8" ghc.version && !hasActiveLibrary;
 
   defaultConfigureFlags = [
     "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
@@ -81,9 +85,10 @@ let
     (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.name}/${pname}-${version}")
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding "--ghc-option=-j$NIX_BUILD_CORES")
-    (optionalString (useCpphs) "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
+    (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
     (enableFeature enableSplitObjs "split-objs")
     (enableFeature enableLibraryProfiling "library-profiling")
+    (enableFeature enableExecutableProfiling "executable-profiling")
     (enableFeature enableSharedLibraries "shared")
     (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature enableStaticLibraries "library-vanilla"))
     (optionalString (isGhcjs || versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
@@ -102,11 +107,14 @@ let
   isHaskellPkg = x: (x ? pname) && (x ? version) && (x ? env);
   isSystemPkg = x: !isHaskellPkg x;
 
-  propagatedBuildInputs = buildDepends;
-  otherBuildInputs = extraLibraries ++
-                     buildTools ++
-                     optionals (pkgconfigDepends != []) ([pkgconfig] ++ pkgconfigDepends) ++
-                     optionals doCheck testDepends;
+  allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
+                        optionals doCheck testPkgconfigDepends;
+
+  propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends;
+  otherBuildInputs = extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
+                     buildTools ++ libraryToolDepends ++ executableToolDepends ++
+                     optionals (allPkgconfigDepends != []) ([pkgconfig] ++ allPkgconfigDepends) ++
+                     optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testToolDepends);
   allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
 
   haskellBuildInputs = stdenv.lib.filter isHaskellPkg allBuildInputs;
@@ -119,8 +127,11 @@ let
   ghcCommandCaps = toUpper ghcCommand;
 
 in
+
+assert allPkgconfigDepends != [] -> pkgconfig != null;
+
 stdenv.mkDerivation ({
-  name = "${optionalString (hasActiveLibrary && pname != "ghcjs") "haskell-"}${pname}-${version}";
+  name = "${pname}-${version}";
 
   pos = builtins.unsafeGetAttrPos "pname" args;
 
@@ -244,7 +255,7 @@ stdenv.mkDerivation ({
       mv $packageConfFile $packageConfDir/$pkgId.conf
     ''}
 
-    ${optionalString (enableSharedExecutables && isExecutable && stdenv.isDarwin && stdenv.lib.versionOlder ghc.version "7.10") ''
+    ${optionalString (enableSharedExecutables && isExecutable && !isGhcjs && stdenv.isDarwin && stdenv.lib.versionOlder ghc.version "7.10") ''
       for exe in "$out/bin/"* ; do
         install_name_tool -add_rpath "$out/lib/ghc-${ghc.version}/${pname}-${version}" "$exe"
       done
@@ -260,7 +271,7 @@ stdenv.mkDerivation ({
     isHaskellLibrary = hasActiveLibrary;
 
     env = stdenv.mkDerivation {
-      name = "interactive-${optionalString (hasActiveLibrary && pname != "ghcjs") "haskell-"}${pname}-${version}-environment";
+      name = "interactive-${pname}-${version}-environment";
       nativeBuildInputs = [ ghcEnv systemBuildInputs ];
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
@@ -269,6 +280,7 @@ stdenv.mkDerivation ({
         export NIX_${ghcCommandCaps}PKG="${ghcEnv}/bin/${ghcCommand}-pkg"
         export NIX_${ghcCommandCaps}_DOCDIR="${ghcEnv}/share/doc/ghc/html"
         export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcEnv.name}"
+        ${shellHook}
       '';
     };
 
@@ -297,6 +309,7 @@ stdenv.mkDerivation ({
 // optionalAttrs (preCheck != "")       { inherit preCheck; }
 // optionalAttrs (postCheck != "")      { inherit postCheck; }
 // optionalAttrs (preInstall != "")     { inherit preInstall; }
+// optionalAttrs (installPhase != "")   { inherit installPhase; }
 // optionalAttrs (postInstall != "")    { inherit postInstall; }
 // optionalAttrs (preFixup != "")       { inherit preFixup; }
 // optionalAttrs (postFixup != "")      { inherit postFixup; }

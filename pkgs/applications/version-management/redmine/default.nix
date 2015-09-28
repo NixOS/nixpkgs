@@ -45,13 +45,7 @@ in stdenv.mkDerivation rec {
     mkdir -p vendor/cache
     ${stdenv.lib.concatStrings (map (gem: "ln -s ${gem} vendor/cache/${gem.name};") gemspec)}
 
-    bundle config build.nokogiri \
-      --use-system-libraries \
-      --with-iconv-dir=${libiconv} \
-      --with-xslt-dir=${libxslt} \
-      --with-xml2-dir=${libxml2} \
-      --with-pkg-config \
-      --with-pg-config=${postgresql}/bin/pg_config
+    bundle config build.nokogiri --use-system-libraries --with-iconv-dir="${libiconv}" --with-xslt-dir="${libxslt}" --with-xml2-dir="${libxml2}"
 
     bundle install --verbose --local --deployment
 

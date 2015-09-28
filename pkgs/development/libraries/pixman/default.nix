@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
 
   postInstall = glib.flattenInclude;
 
-  patches = stdenv.lib.optional (stdenv.cc.cc.isClang or false) ./fix-clang36.patch;
+  patches = stdenv.lib.optional stdenv.isDarwin ./fix-clang36.patch;
+
+  configureFlags = if stdenv.isArm then ["--disable-arm-iwmmxt"] else null;
 
   meta = {
     homepage = http://pixman.org;

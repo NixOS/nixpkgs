@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pcre, zlib, perl }:
 
-let version = "5.1.2";
+let version = "5.1.3";
 in
 stdenv.mkDerivation rec {
   name = "qpdf-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/qpdf/qpdf/${version}/${name}.tar.gz";
-    sha256 = "1zbvhrp0zjzbi6q2bnbxbg6399r47pq5gw3kspzph81j19fqvpg9";
+    sha256 = "1lq1v7xghvl6p4hgrwbps3a13ad6lh4ib3myimb83hxgsgd4n5nm";
   };
 
   nativeBuildInputs = [ perl ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = http://qpdf.sourceforge.net/; 
     description = "A C++ library and set of programs that inspect and manipulate the structure of PDF files";
     license = licenses.artistic2;
-    maintainers = maintainers.abbradar;
+    maintainers = with maintainers; [ abbradar ];
     platforms = platforms.all;
   };
 }

@@ -2,7 +2,7 @@
 , libXau, libXdmcp, xcbutil }:
 
 stdenv.mkDerivation {
-  name = "xss-lock-git";
+  name = "xss-lock-git-2014-03-02";
 
   src = fetchgit {
     url = https://bitbucket.org/raymonad/xss-lock.git;

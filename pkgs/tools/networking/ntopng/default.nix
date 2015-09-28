@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
   name = "ntopng-1.2.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/ntop/ntopng/${name}.tgz";
+    urls = [
+      "mirror://sourceforge/project/ntop/ntopng/old/${name}.tgz"
+      "mirror://sourceforge/project/ntop/ntopng/${name}.tgz"
+    ];
     sha256 = "1db83cd1v4ivl8hxzzdvvdcgk22ji7mwrfnd5nnwll6kb11i364v";
   };
 

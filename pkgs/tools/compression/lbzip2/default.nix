@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     homepage = http://lbzip2.org/;
     description = "parallel bzip2 compression utility";
     license = licenses.gpl3;
-    maintainers = maintainers.abbradar;
+    maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;
   };
 }

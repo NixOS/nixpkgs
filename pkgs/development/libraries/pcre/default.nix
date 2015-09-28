@@ -1,16 +1,25 @@
-{ stdenv, fetchurl, unicodeSupport ? true, cplusplusSupport ? true
+{ stdenv, fetchurl, autoreconfHook, unicodeSupport ? true, cplusplusSupport ? true
 , windows ? null
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "pcre-8.36";
+  name = "pcre-8.37";
 
   src = fetchurl {
     url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${name}.tar.bz2";
-    sha256 = "1fs5p1z67m9f4xnyil3s4lhgyld78f7m4d1yawpyhh0cvrbk90zg";
+    sha256 = "17bqykp604p7376wj3q2nmjdhrb6v1ny8q08zdwi7qvc02l9wrsi";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  # A bundle of fixes which should be removed for 8.38
+  patchPhase = ''
+    patch -p0 -i ${./fixes.patch}
+  '';
+
+  outputs = [ "out" "doc" "man" ];
 
   configureFlags = ''
     --enable-jit

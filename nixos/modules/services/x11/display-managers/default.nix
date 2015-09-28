@@ -50,13 +50,19 @@ let
         exec > ~/.xsession-errors 2>&1
       ''}
 
+      ${optionalString cfg.startDbusSession ''
+        if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+          exec ${pkgs.dbus.tools}/bin/dbus-launch --exit-with-session "$0" "$sessionType"
+        fi
+      ''}
+
       ${optionalString cfg.displayManager.desktopManagerHandlesLidAndPower ''
         # Stop systemd from handling the power button and lid switch,
         # since presumably the desktop environment will handle these.
         if [ -z "$_INHIBITION_LOCK_TAKEN" ]; then
           export _INHIBITION_LOCK_TAKEN=1
           if ! ${config.systemd.package}/bin/loginctl show-session $XDG_SESSION_ID | grep -q '^RemoteHost='; then
-            exec ${config.systemd.package}/bin/systemd-inhibit --what=handle-lid-switch:handle-power-key "$0" "$sessionType"
+            exec ${config.systemd.package}/bin/systemd-inhibit --what=handle-lid-switch:handle-power-key --why="Desktop environment handles power events" "$0" "$sessionType"
           fi
         fi
 
@@ -155,7 +161,11 @@ let
       exit 0
     '';
 
-  mkDesktops = names: pkgs.runCommand "desktops" {}
+  mkDesktops = names: pkgs.runCommand "desktops"
+    { # trivial derivation
+      preferLocalBuild = true;
+      allowSubstitutes = false;
+    }
     ''
       mkdir -p $out
       ${concatMapStrings (n: ''
@@ -165,6 +175,7 @@ let
         Type=XSession
         TryExec=${cfg.displayManager.session.script}
         Exec=${cfg.displayManager.session.script} '${n}'
+        X-GDM-BypassXsession=true
         Name=${n}
         Comment=
         EODESKTOP
@@ -218,7 +229,7 @@ in
 
       desktopManagerHandlesLidAndPower = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Whether the display manager should prevent systemd from handling
           lid and power events. This is normally handled by the desktop

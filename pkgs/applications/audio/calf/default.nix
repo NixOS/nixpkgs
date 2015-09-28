@@ -1,17 +1,17 @@
 { stdenv, fetchurl, cairo, expat, fftwSinglePrec, fluidsynth, glib
-, gtk, jack2, ladspaH , libglade, lv2, pkgconfig }:
+, gtk, libjack2, ladspaH , libglade, lv2, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "calf-${version}";
   version = "0.0.60";
 
   src = fetchurl {
-    url = "mirror://sourceforge/calf/${name}.tar.gz";
+    url = "http://calf-studio-gear.org/files/${name}.tar.gz";
     sha256 = "019fwg00jv217a5r767z7szh7vdrarybac0pr2sk26xp81kibrx9";
   };
 
   buildInputs = [ 
-    cairo expat fftwSinglePrec fluidsynth glib gtk jack2 ladspaH
+    cairo expat fftwSinglePrec fluidsynth glib gtk libjack2 ladspaH
     libglade lv2 pkgconfig
   ];
 

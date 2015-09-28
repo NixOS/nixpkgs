@@ -50,7 +50,7 @@ let
 
         ln -s ${config.system.build.initialRamdisk}/initrd $out/initrd
 
-        ln -s ${config.hardware.firmware} $out/firmware
+        ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
       ''}
 
       echo "$activationScript" > $out/activate
@@ -81,6 +81,8 @@ let
       substituteAll ${./switch-to-configuration.pl} $out/bin/switch-to-configuration
       chmod +x $out/bin/switch-to-configuration
 
+      echo -n "${toString config.system.extraDependencies}" > $out/extra-dependencies
+
       ${config.system.extraSystemBuilderCmds}
     '';
 
@@ -97,8 +99,11 @@ let
   # makes it bootable.
   baseSystem = showWarnings (
     if [] == failed then pkgs.stdenv.mkDerivation {
-      name = "nixos-${config.system.nixosVersion}";
+      name = let hn = config.networking.hostName;
+                 nn = if (hn != "") then hn else "unnamed";
+          in "nixos-system-${nn}-${config.system.nixosVersion}";
       preferLocalBuild = true;
+      allowSubstitutes = false;
       buildCommand = systemBuilder;
 
       inherit (pkgs) utillinux coreutils;
@@ -185,6 +190,16 @@ in
       default = "";
       description = ''
         This code will be added to the builder creating the system store path.
+      '';
+    };
+
+    system.extraDependencies = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      description = ''
+        A list of packages that should be included in the system
+        closure but not otherwise made available to users. This is
+        primarily used by the installation tests.
       '';
     };
 

@@ -1,8 +1,7 @@
-diff --git a/bin/elasticsearch b/bin/elasticsearch
-index c7c9263..0fcecf6 100755
---- a/bin/elasticsearch
-+++ b/bin/elasticsearch
-@@ -76,7 +76,10 @@ while [ -h "$SCRIPT" ] ; do
+diff -rupN a/bin/elasticsearch b/bin/elasticsearch
+--- a/bin/elasticsearch	2015-08-05 17:52:05.740819671 +0200
++++ b/bin/elasticsearch	2015-08-05 17:22:34.664657364 +0200
+@@ -83,7 +83,10 @@ while [ -h "$SCRIPT" ] ; do
  done
  
  # determine elasticsearch home
@@ -14,10 +13,9 @@ index c7c9263..0fcecf6 100755
  
  # make ELASTICSEARCH_HOME absolute
  ES_HOME=`cd "$ES_HOME"; pwd`
-diff --git a/bin/plugin b/bin/plugin
-index a8c796a..daf7b99 100755
---- a/bin/plugin
-+++ b/bin/plugin
+diff -rupN a/bin/plugin b/bin/plugin
+--- a/bin/plugin	2015-08-05 17:57:07.903088815 +0200
++++ b/bin/plugin	2015-08-05 17:57:38.979808139 +0200
 @@ -16,7 +16,10 @@ while [ -h "$SCRIPT" ] ; do
  done
  

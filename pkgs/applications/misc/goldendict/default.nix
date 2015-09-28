@@ -1,24 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, qt4, libXtst, libvorbis, phonon, hunspell }:
+{ stdenv, fetchFromGitHub, pkgconfig, qt4, libXtst, libvorbis, hunspell, libao, ffmpeg, libeb, lzo, xz, libtiff }:
 stdenv.mkDerivation rec {
-  name = "goldendict-1.0.1";
-  src = fetchurl {
-    url = "mirror://sourceforge/goldendict/${name}-src.tar.bz2";
-    sha256 = "19p99dd5jgs0k66sy30vck7ymqj6dv1lh6w8xw18zczdll2h9yxk";
+  name = "goldendict-1.5.0.20150801";
+  src = fetchFromGitHub {
+    owner = "goldendict";
+    repo = "goldendict";
+    rev = "b4bb1e9635c764aa602fbeaeee661f35e461d062";
+    sha256 = "0dhaa0nii226541al3i2d8x8h7cfh96w5vkw3pa3l74llgrj7yx2";
   };
-  buildInputs = [ pkgconfig qt4 libXtst libvorbis phonon hunspell ];
-  unpackPhase = ''
-    mkdir ${name}-src
-    cd ${name}-src
-    tar xf ${src}
-  '';
-  patches = [ ./goldendict-paths.diff ./gcc47.patch ];
-  patchFlags = "-p 0";
+
+  buildInputs = [ pkgconfig qt4 libXtst libvorbis hunspell libao ffmpeg libeb lzo xz libtiff ];
   configurePhase = ''
-    qmake
-  '';
-  installPhase = ''
-    make INSTALL_ROOT="$out" install
-    rm -rf "$out/share/app-install"
+    qmake PREFIX=$out 'CONFIG+=zim_support'
   '';
 
   meta = {

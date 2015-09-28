@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, cacert }:
+{ stdenv, fetchurl, pythonPackages }:
 
 stdenv.mkDerivation rec {
   version = "2.6";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1c6sj77h5f97qimjc14kr532kgc0jk3wq778xrkqi0pbh9qpk509";
   };
 
-  buildInputs = [ pythonPackages.python pythonPackages.wrapPython cacert ];
+  buildInputs = [ pythonPackages.python pythonPackages.wrapPython ];
 
   # Readline support is needed by bzrtools.
   pythonPath = [ pythonPackages.readline ];
@@ -19,9 +19,8 @@ stdenv.mkDerivation rec {
   patches = [ ./add_certificates.patch ];
   postPatch = ''
     substituteInPlace bzrlib/transport/http/_urllib2_wrappers.py \
-      --subst-var-by "certPath" "${cacert}/etc/ca-bundle.crt"
+      --subst-var-by certPath /etc/ssl/certs/ca-certificates.crt
   '';
-
 
   installPhase = ''
     python setup.py install --prefix=$out

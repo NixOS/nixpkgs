@@ -5,11 +5,11 @@ with stdenv.lib;
 stdenv.mkDerivation rec{
 
   name = "fs-uae-${version}";
-  version = "2.4.1";
+  version = "2.4.3";
 
   src = fetchurl {
     urls = [ "http://fs-uae.net/fs-uae/stable/${version}/${name}.tar.gz" ];
-    sha256 = "05gvnrkl1aclq1a6z57k6rmdnsg2ghyjcscwq0w5dhc5vcalv6f0";
+    sha256 = "05wngvpqj8kj4wzi5jzzhvs19iljb3m6ba1l2hk4rz68b400ndv6";
   };
 
   buildInputs = [ pkgconfig gettext gtk SDL zlib glib openal mesa lua freetype ];
@@ -33,3 +33,5 @@ stdenv.mkDerivation rec{
     maintainers = [ maintainers.AndersonTorres ];
   };
 }
+# TODO: testing and Python GUI support
+# TODO: SDL2 support

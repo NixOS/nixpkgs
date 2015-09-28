@@ -1,15 +1,15 @@
-*** xorg-server-X11R7.2-1.2.0-orig/xkb/xkbInit.c	2015-02-11 00:32:06.000000000 +0100
---- xorg-server-X11R7.2-1.2.0/xkb/xkbInit.c	2015-04-11 10:10:41.948438435 +0200
-***************
-*** 733,738 ****
---- 733,742 ----
-  int
-  XkbProcessArguments(int argc, char *argv[], int i)
-  {
-+     char *xkbBinDir = getenv("XKB_BINDIR");
-+     if (xkbBinDir)
-+         XkbBinDirectory = Xstrdup(xkbBinDir);
-+ 
-      if (strncmp(argv[i], "-xkbdir", 7) == 0) {
-          if (++i < argc) {
-  #if !defined(WIN32) && !defined(__CYGWIN__)
+diff --git a/os/utils.c b/os/utils.c
+index ed7581e..6593455 100644
+--- a/os/utils.c
++++ b/os/utils.c
+@@ -658,6 +658,10 @@ ProcessCommandLine(int argc, char *argv[])
+ 
+     defaultKeyboardControl.autoRepeat = TRUE;
+ 
++    char *xkbBinDir = getenv("XKB_BINDIR");
++    if (xkbBinDir)
++        XkbBinDirectory = Xstrdup(xkbBinDir);
++
+ #ifdef NO_PART_NET
+     PartialNetwork = FALSE;
+ #else

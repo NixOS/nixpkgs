@@ -16,12 +16,12 @@ rec {
     services.kippo = {
       enable = mkOption {
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
         description = ''Enable the kippo honeypot ssh server.'';
       };
       port = mkOption {
         default = 2222;
-        type = types.uniq types.int;
+        type = types.int;
         description = ''TCP port number for kippo to bind to.'';
       };
       hostname = mkOption {
@@ -86,8 +86,7 @@ rec {
       wantedBy = [ "multi-user.target" ];
       environment.PYTHONPATH = "${pkgs.kippo}/src/:${pkgs.pythonPackages.pycrypto}/lib/python2.7/site-packages/:${pkgs.pythonPackages.pyasn1}/lib/python2.7/site-packages/:${pkgs.pythonPackages.python}/lib/python2.7/site-packages/:${pkgs.pythonPackages.twisted}/lib/python2.7/site-packages/:.";
       preStart = ''
-        if [ ! -d ${cfg.varPath}/ ] ; then 
-            mkdir -p ${cfg.pidPath}
+        if [ ! -d ${cfg.varPath}/ ] ; then
             mkdir -p ${cfg.logPath}/tty
             mkdir -p ${cfg.logPath}/dl
             mkdir -p ${cfg.varPath}/keys
@@ -97,11 +96,14 @@ rec {
             cp ${pkgs.kippo}/src/txtcmds ${cfg.varPath} -r
 
             chmod u+rw ${cfg.varPath} -R
-            chmod u+rw ${cfg.pidPath}
             chown kippo.kippo ${cfg.varPath} -R
-            chown kippo.kippo ${cfg.pidPath}
             chown kippo.kippo ${cfg.logPath} -R
             chmod u+rw ${cfg.logPath} -R
+        fi
+        if [ ! -d ${cfg.pidPath}/ ] ; then
+            mkdir -p ${cfg.pidPath}
+            chmod u+rw ${cfg.pidPath}
+            chown kippo.kippo ${cfg.pidPath}
         fi
       '';
 

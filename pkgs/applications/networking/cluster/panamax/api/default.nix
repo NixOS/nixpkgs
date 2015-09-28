@@ -1,5 +1,5 @@
 { stdenv, buildEnv, fetchgit, fetchurl, makeWrapper, bundlerEnv, bundler_HEAD
-, ruby, libxslt, libxml2, sqlite, openssl, cacert, docker
+, ruby, libxslt, libxml2, sqlite, openssl, docker
 , dataDir ? "/var/lib/panamax-api" }:
 
 with stdenv.lib;
@@ -62,8 +62,7 @@ stdenv.mkDerivation rec {
       --prefix "PATH" : "$out/share/panamax-api/bin:${env.ruby}/bin:$PATH" \
       --prefix "HOME" : "$out/share/panamax-api" \
       --prefix "GEM_HOME" : "${env}/${env.ruby.gemPath}" \
-      --prefix "OPENSSL_X509_CERT_FILE" : "${cacert}/etc/ca-bundle.crt" \
-      --prefix "SSL_CERT_FILE" : "${cacert}/etc/ca-bundle.crt" \
+      --prefix "SSL_CERT_FILE" : /etc/ssl/certs/ca-certificates.crt \
       --prefix "GEM_PATH" : "$out/share/panamax-api:${bundler}/${env.ruby.gemPath}"
   '';
 

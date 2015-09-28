@@ -1,23 +1,29 @@
-{ stdenv, fetchurl }:
+{ stdenv, nss, curl, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "cacert-20140715";
+  name = "nss-cacert-${nss.version}";
 
-  src = fetchurl {
-    url = "http://tarballs.nixos.org/${name}.pem.bz2";
-    sha256 = "1l4j7z6ysnllx99isjzlc8zc34rbbgj4kzlg1y5sy9bgphc8cssl";
-  };
+  src = nss.src;
 
-  unpackPhase = "true";
+  postPatch = ''
+    unpackFile ${curl.src};
+  '';
 
-  installPhase =
-    ''
-      mkdir -p $out/etc
-      bunzip2 < $src > $out/etc/ca-bundle.crt
-    '';
+  nativeBuildInputs = [ perl perlPackages.LWP ];
 
-  meta = {
+  buildPhase = ''
+    perl curl-*/lib/mk-ca-bundle.pl -d "file://$(pwd)/nss/lib/ckfw/builtins/certdata.txt" ca-bundle.crt
+  '';
+
+  installPhase = ''
+    mkdir -pv $out/etc/ssl/certs
+    cp -v ca-bundle.crt $out/etc/ssl/certs
+  '';
+
+  meta = with stdenv.lib; {
     homepage = http://curl.haxx.se/docs/caextract.html;
     description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";
+    platforms = platforms.all;
+    maintainers = with maintainers; [ wkennington ];
   };
 }

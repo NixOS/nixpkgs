@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip, puredata }:
 
 stdenv.mkDerivation rec {
-  name = "puremapping";
+  name = "puremapping-1.01";
 
   src = fetchurl {
     url = "http://www.chnry.net/ch/IMG/zip/puremapping-libdir-generic.zip";

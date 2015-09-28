@@ -41,20 +41,7 @@ in
         strings.  The latter is concatenated, interspersed with colon
         characters.
       '';
-      type = types.attrsOf (mkOptionType {
-        name = "a string or a list of strings";
-        merge = loc: defs:
-          let
-            defs' = filterOverrides defs;
-            res = (head defs').value;
-          in
-          if isList res then concatLists (getValues defs')
-          else if lessThan 1 (length defs') then
-            throw "The option `${showOption loc}' is defined multiple times, in ${showFiles (getFiles defs)}."
-          else if !isString res then
-            throw "The option `${showOption loc}' does not have a string value, in ${showFiles (getFiles defs)}."
-          else res;
-      });
+      type = types.attrsOf (types.loeOf types.str);
       apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
     };
 
@@ -63,15 +50,15 @@ in
       description = ''
         A list of profiles used to setup the global environment.
       '';
-      type = types.listOf types.string;
+      type = types.listOf types.str;
     };
 
     environment.profileRelativeEnvVars = mkOption {
       type = types.attrsOf (types.listOf types.str);
       example = { PATH = [ "/bin" "/sbin" ]; MANPATH = [ "/man" "/share/man" ]; };
       description = ''
-	Attribute set of environment variable.  Each attribute maps to a list
-	of relative paths.  Each relative path is appended to the each profile
+        Attribute set of environment variable.  Each attribute maps to a list
+        of relative paths.  Each relative path is appended to the each profile
         of <option>environment.profiles</option> to form the content of the
         corresponding environment variable.
       '';
@@ -136,6 +123,7 @@ in
         "''${pkgs.dash}/bin/dash"
       '';
       type = types.path;
+      visible = false;
       description = ''
         The shell executable that is linked system-wide to
         <literal>/bin/sh</literal>. Please note that NixOS assumes all

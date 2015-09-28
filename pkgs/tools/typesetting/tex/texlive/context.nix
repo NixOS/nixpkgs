@@ -1,4 +1,4 @@
-args: with args;
+args @ { texLive, ... }: with args;
 rec {
   name = "context-2014.05.21";
   src = fetchurl {
@@ -22,4 +22,4 @@ rec {
   };
 
 }
- 
+

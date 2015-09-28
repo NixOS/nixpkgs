@@ -32,6 +32,7 @@ buildPerlPackage rec {
   doCheck = false;
 
   postInstall = ''
+    mkdir -p $out/share/spamassassin
     mv "rules/"* $out/share/spamassassin/
 
     for n in "$out/bin/"*; do

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, libpcap, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.718";
+  version = "3.0.719";
   name = "darkstat-${version}";
 
   src = fetchurl {
     url = "${meta.homepage}/${name}.tar.bz2";
-    sha256 = "1zxd4bxdfk1pjpcxhrcp54l991g0lljl4sr312nsd7p8yi9kwbv8";
+    sha256 = "1mzddlim6dhd7jhr4smh0n2fa511nvyjhlx76b03vx7phnar1bxf";
   };
 
   buildInputs = [ libpcap zlib ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       - Supports IPv6.
     '';
     homepage = http://unix4lyfe.org/darkstat;
-    license = with licenses; gpl2;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ nckx ];
   };
 }

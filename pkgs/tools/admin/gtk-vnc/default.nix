@@ -1,8 +1,8 @@
 { stdenv, fetchurl, gobjectIntrospection
 , python, gtk, pygtk, gnutls, cairo, libtool, glib, pkgconfig, libtasn1
-, libffi, cyrus_sasl, intltool, perl, perlPackages, pulseaudio
+, libffi, cyrus_sasl, intltool, perl, perlPackages, libpulseaudio
 , kbproto, libX11, libXext, xextproto, pygobject, libgcrypt, gtk3, vala
-, pygobject3, libogg, enableGTK3 ? false }:
+, pygobject3, libogg, enableGTK3 ? false, libgpgerror }:
 
 stdenv.mkDerivation rec {
   name = "gtk-vnc-${version}";
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     python gnutls cairo libtool pkgconfig glib libffi libgcrypt
-    intltool cyrus_sasl pulseaudio perl perlPackages.TextCSV
-    gobjectIntrospection libogg
+    intltool cyrus_sasl libpulseaudio perl perlPackages.TextCSV
+    gobjectIntrospection libogg libgpgerror
   ] ++ (if enableGTK3 then [ gtk3 vala pygobject3 ] else [ gtk pygtk pygobject ]);
 
   NIX_CFLAGS_COMPILE = "-fstack-protector-all";
@@ -28,6 +28,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = stdenv.lib.optionalString (!enableGTK3)
     "CODEGENDIR=${pygobject}/share/pygobject/2.0/codegen/ DEFSDIR=${pygtk}/share/pygtk/2.0/defs/";
+
+  # Fix broken .la files
+  preFixup = ''
+    sed 's,-lgpg-error,-L${libgpgerror}/lib -lgpg-error,' -i $out/lib/*.la
+  '';
 
   meta = with stdenv.lib; {
     description = "A GTK VNC widget";

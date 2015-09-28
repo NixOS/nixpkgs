@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i 's/^\(CFLAGS.*\)$/\1 -fPIC/' Makefile
-  '' + stdenv.lib.optionalString (stdenv.cc.cc.isClang or false) ''
+  '' + stdenv.lib.optionalString stdenv.cc.isClang ''
     substituteInPlace Makefile libjbig/Makefile pbmtools/Makefile \
       --replace "CC = gcc" "CC = clang"
   '';

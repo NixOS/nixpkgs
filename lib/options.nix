@@ -4,7 +4,6 @@ let lib = import ./default.nix; in
 
 with import ./trivial.nix;
 with import ./lists.nix;
-with import ./misc.nix;
 with import ./attrsets.nix;
 with import ./strings.nix;
 
@@ -20,6 +19,7 @@ rec {
     , apply ? null # Function that converts the option value to something else.
     , internal ? null # Whether the option is for NixOS developers only.
     , visible ? null # Whether the option shows up in the manual.
+    , readOnly ? null # Whether the option can be set only once
     , options ? null # Obsolete, used by types.optionSet.
     } @ attrs:
     attrs // { _type = "option"; };
@@ -53,31 +53,26 @@ rec {
     if length list == 1 then head list
     else if all isFunction list then x: mergeDefaultOption loc (map (f: f x) list)
     else if all isList list then concatLists list
-    else if all isAttrs list then fold lib.mergeAttrs {} list
-    else if all isBool list then fold lib.or false list
+    else if all isAttrs list then foldl' lib.mergeAttrs {} list
+    else if all isBool list then foldl' lib.or false list
     else if all isString list then lib.concatStrings list
     else if all isInt list && all (x: x == head list) list then head list
     else throw "Cannot merge definitions of `${showOption loc}' given in ${showFiles (getFiles defs)}.";
-
-  /* Obsolete, will remove soon.  Specify an option type or apply
-     function instead.  */
-  mergeTypedOption = typeName: predicate: merge: loc: list:
-    let list' = map (x: x.value) list; in
-    if all predicate list then merge list'
-    else throw "Expected a ${typeName}.";
-
-  mergeEnableOption = mergeTypedOption "boolean"
-    (x: true == x || false == x) (fold lib.or false);
-
-  mergeListOption = mergeTypedOption "list" isList concatLists;
-
-  mergeStringOption = mergeTypedOption "string" isString lib.concatStrings;
 
   mergeOneOption = loc: defs:
     if defs == [] then abort "This case should never happen."
     else if length defs != 1 then
       throw "The unique option `${showOption loc}' is defined multiple times, in ${showFiles (getFiles defs)}."
     else (head defs).value;
+
+  /* "Merge" option definitions by checking that they all have the same value. */
+  mergeEqualOption = loc: defs:
+    if defs == [] then abort "This case should never happen."
+    else foldl' (val: def:
+      if def.value != val then
+        throw "The option `${showOption loc}' has conflicting definitions, in ${showFiles (getFiles defs)}."
+      else
+        val) (head defs).value defs;
 
   getValues = map (x: x.value);
   getFiles = map (x: x.file);
@@ -88,7 +83,7 @@ rec {
   optionAttrSetToDocList = optionAttrSetToDocList' [];
 
   optionAttrSetToDocList' = prefix: options:
-    fold (opt: rest:
+    concatMap (opt:
       let
         docOption = rec {
           name = showOption opt.loc;
@@ -96,6 +91,7 @@ rec {
           declarations = filter (x: x != unknownModule) opt.declarations;
           internal = opt.internal or false;
           visible = opt.visible or true;
+          readOnly = opt.readOnly or false;
           type = opt.type.name or null;
         }
         // (if opt ? example then { example = scrubOptionValue opt.example; } else {})
@@ -106,8 +102,7 @@ rec {
           let ss = opt.type.getSubOptions opt.loc;
           in if ss != {} then optionAttrSetToDocList' opt.loc ss else [];
       in
-        # FIXME: expensive, O(n^2)
-        [ docOption ] ++ subOptions ++ rest) [] (collect isOption options);
+        [ docOption ] ++ subOptions) (collect isOption options);
 
 
   /* This function recursively removes all derivation attributes from

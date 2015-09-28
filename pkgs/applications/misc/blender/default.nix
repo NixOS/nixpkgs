@@ -2,30 +2,28 @@
 , ilmbase, libXi, libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg, python
 , zlib, fftw
-, jackaudioSupport ? false, jack2
-, cudaSupport ? false, cudatoolkit65
+, jackaudioSupport ? false, libjack2
+, cudaSupport ? false, cudatoolkit
 , colladaSupport ? true, opencollada
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "blender-2.74";
+  name = "blender-2.75a";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "178i19pz7jl79b4wn92869j6qymawsa0kaw1dxaprbjnqsvcx8qc";
+    sha256 = "09lxb2li70p6fg7hbakin9ffy3b3101c1gdjqi3pykks5q3h9sq4";
   };
-
-  patches = [ ./sm52.patch ];
 
   buildInputs =
     [ SDL boost cmake ffmpeg gettext glew ilmbase libXi
       libjpeg libpng libsamplerate libsndfile libtiff mesa openal
       opencolorio openexr openimageio /* openjpeg */ python zlib fftw
     ]
-    ++ optional jackaudioSupport jack2
-    ++ optional cudaSupport cudatoolkit65
+    ++ optional jackaudioSupport libjack2
+    ++ optional cudaSupport cudatoolkit
     ++ optional colladaSupport opencollada;
 
   postUnpack =

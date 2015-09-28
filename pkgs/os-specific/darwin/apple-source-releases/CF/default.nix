@@ -1,9 +1,21 @@
 { stdenv, appleDerivation, icu, dyld, libdispatch, launchd, libclosure }:
 
+# this project uses blocks, a clang-only extension
+assert stdenv.cc.isClang;
+
 appleDerivation {
   buildInputs = [ dyld icu libdispatch launchd libclosure ];
 
-  patches = [ ./add-cf-initialize.patch ./add-cfmachport.patch ];
+  patches = [ ./add-cf-initialize.patch ./add-cfmachport.patch ./cf-bridging.patch ];
+
+  # CFAttributedString.h is in the SDK only, not on opensource.apple.com or github
+  __propagatedImpureHostDeps = [
+    "/System/Library/Frameworks/CoreFoundation.framework"
+    "/usr/lib/libc++.1.dylib"
+    "/usr/lib/libc++abi.dylib"
+    "/usr/lib/libicucore.A.dylib"
+    "/usr/lib/libz.1.dylib"
+  ];
 
   preBuild = ''
     substituteInPlace Makefile \
@@ -35,6 +47,10 @@ appleDerivation {
   '';
 
   postInstall = ''
+    # gross! convince apple to release these as part of CF
+    cp /System/Library/Frameworks/CoreFoundation.framework/Headers/{CFAttributedString,CFNotificationCenter}.h \
+      "$out/System/Library/Frameworks/CoreFoundation.framework/Headers"
+
     mv $out/System/* $out
     rmdir $out/System
   '';

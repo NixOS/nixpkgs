@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "14sgsvjjalbcqpcayyv5cndc9hfm5bigkp684b6cr6virksmlk19";
   }) ./linux-4.0.patch];
 
+  outputs = [ "out" "doc" ];
+
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
   nativeBuildInputs = [ perl ];

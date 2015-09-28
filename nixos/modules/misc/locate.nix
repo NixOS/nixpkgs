@@ -35,7 +35,7 @@ in {
         type = types.listOf types.str;
         default = [ ];
         description = ''
-          Extra flags to append to <command>updatedb</command>.
+          Extra flags to pass to <command>updatedb</command>.
         '';
       };
 
@@ -56,6 +56,14 @@ in {
         '';
       };
 
+      includeStore = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to include <filename>/nix/store</filename> in the locate database.
+        '';
+      };
+
     };
 
   };
@@ -63,7 +71,6 @@ in {
   ###### implementation
 
   config = {
-
     systemd.services.update-locatedb =
       { description = "Update Locate Database";
         path  = [ pkgs.su ];
@@ -71,8 +78,9 @@ in {
           ''
             mkdir -m 0755 -p $(dirname ${toString cfg.output})
             exec updatedb \
-            --localuser=${cfg.localuser} \
-            --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
+              --localuser=${cfg.localuser} \
+              ${optionalString (!cfg.includeStore) "--prunepaths='/nix/store'"} \
+              --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
           '';
         serviceConfig.Nice = 19;
         serviceConfig.IOSchedulingClass = "idle";

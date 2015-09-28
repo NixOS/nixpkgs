@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, x11, SDL, mesa, openal, gcc46 }:
+{ lib, stdenv, fetchurl, xlibsWrapper, SDL, mesa, openal, gcc46 }:
 
 stdenv.mkDerivation {
   name = "ioquake3-1.36";
@@ -20,9 +20,12 @@ stdenv.mkDerivation {
     # Do an exit() instead of _exit().  This is nice for gcov.
     # Upstream also seems to do this.
     ./exit.patch
+
+    # No bots on amd64 without this patch.
+    ./botlib.patch
   ];
 
-  buildInputs = [ x11 SDL mesa openal gcc46 ];
+  buildInputs = [ xlibsWrapper SDL mesa openal gcc46 ];
 
   # Fix building on GCC 4.6.
   NIX_CFLAGS_COMPILE = "-Wno-error";

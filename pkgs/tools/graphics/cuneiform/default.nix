@@ -1,5 +1,5 @@
-a :  
-let 
+a @ { cmake, patchelf, imagemagick, ... } :
+let
   fetchurl = a.fetchurl;
 
   version = "1.1.0";
@@ -27,7 +27,7 @@ rec {
     export NIX_LDFLAGS="$NIX_LDFLAGS -ldl -L$out/lib"
     cmake .. -DCMAKE_BUILD_TYPE=debug -DCMAKE_INSTALL_PREFIX=$out -DDL_LIB=${libc}/lib
   '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
-      
+
   needLib64 = a.stdenv.system == "x86_64-linux";
 
   postInstall = a.fullDepEntry(''

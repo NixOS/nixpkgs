@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gettext libnl ncurses pciutils pkgconfig zlib ];
 
+  patchPhase = ''
+    substituteInPlace src/main.cpp --replace "/sbin/modprobe" "modprobe"
+  '';
+
   meta = {
     description = "Analyze power consumption on Intel-based laptops";
     license = stdenv.lib.licenses.gpl2;

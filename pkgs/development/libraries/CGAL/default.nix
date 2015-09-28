@@ -1,15 +1,17 @@
 { stdenv, fetchurl, cmake, boost, gmp, mpfr }:
 
 stdenv.mkDerivation rec {
-  version = "4.5";
+  version = "4.6.1";
 
   name = "cgal-${version}";
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/34139/CGAL-${version}.tar.xz";
-    sha256 = "00shds5yph4s09lqdrb6n60wnw9kpiwa25ghg9mbsgq3fnr8p7kr";
+    url = "https://github.com/CGAL/releases/archive/CGAL-${version}.tar.gz";
+    sha256 = "05vk4l62d7g6cz19q36h1an5krxdbgq1fbs5hi0x2l7blsja1z6g";
   };
 
+  # note: optional component libCGAL_ImageIO would need zlib and opengl;
+  #   there are also libCGAL_Qt{3,4} omitted ATM
   buildInputs = [ cmake boost gmp mpfr ];
 
   doCheck = false;

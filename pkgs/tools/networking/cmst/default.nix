@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "070rxv3kyn41ra7nnk1wbqvy6fjg38h7hrdv4dn71b201kmzd194";
   };
 
-  buildInputs = [ qt5 makeWrapper ];
+  buildInputs = [ qt5.base makeWrapper ];
 
   configurePhase = ''
     substituteInPlace ./cmst.pro \

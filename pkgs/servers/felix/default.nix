@@ -13,10 +13,10 @@ stdenv.mkDerivation {
     mkdir -p $out
     cp -av * $out
   '';
-  meta = {
+  meta = with stdenv.lib; {
     description = "An OSGi gateway";
     homepage = http://felix.apache.org;
-    license = "ASF";
-    maintainers = [ stdenv.lib.maintainers.sander ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.sander ];
   };
 }

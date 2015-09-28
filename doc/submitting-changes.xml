@@ -1,0 +1,283 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="chap-submitting-changes">
+
+<title>Submitting changes</title>
+
+<section>
+<title>Making patches</title>
+
+<itemizedlist>
+<listitem>
+<para>Read <link xlink:href="https://nixos.org/nixpkgs/manual/">Manual (How to write packages for Nix)</link>.</para>
+</listitem>
+
+<listitem>
+<para>Fork the repository on GitHub.</para>
+</listitem>
+
+<listitem>
+<para>Create a branch for your future fix.
+
+<itemizedlist>
+<listitem>
+<para>You can make branch from a commit of your local <command>nixos-version</command>. That will help you to avoid additional local compilations. Because you will receive packages from binary cache.
+
+<itemizedlist>
+<listitem>
+<para>For example: <command>nixos-version</command> returns <command>15.05.git.0998212 (Dingo)</command>. So you can do:</para>
+</listitem>
+</itemizedlist>
+
+<screen>
+$ git checkout 0998212
+$ git checkout -b 'fix/pkg-name-update'
+</screen>
+</para>
+</listitem>
+
+<listitem>
+<para>Please avoid working directly on the <command>master</command> branch.</para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+
+<listitem>
+<para>Make commits of logical units.
+
+<itemizedlist>
+<listitem>
+<para>If you removed pkgs, made some major NixOS changes etc., write about them in <command>nixos/doc/manual/release-notes/rl-unstable.xml</command>.</para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+
+<listitem>
+<para>Check for unnecessary whitespace with <command>git diff --check</command> before committing.</para>
+</listitem>
+
+<listitem>
+<para>Format the commit in a following way:</para>
+<programlisting>
+(pkg-name | service-name): (from -> to | init at version | refactor | etc)
+Additional information.
+</programlisting>
+
+<itemizedlist>
+<listitem>
+<para>Examples:
+
+<itemizedlist>
+<listitem>
+<para>
+<command>nginx: init at 2.0.1</command>
+</para>
+</listitem>
+
+<listitem>
+<para>
+<command>firefox: 3.0 -> 3.1.1</command>
+</para>
+</listitem>
+
+<listitem>
+<para>
+<command>hydra service: add bazBaz option</command>
+</para>
+</listitem>
+
+<listitem>
+<para>
+<command>nginx service: refactor config generation</command>
+</para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para>Test your changes. If you work with
+
+<itemizedlist>
+<listitem>
+<para>nixpkgs:
+
+<itemizedlist>
+<listitem>
+<para>update pkg ->
+
+<itemizedlist>
+<listitem>
+<para>
+<command>nix-env -i pkg-name -f &lt;path to your local nixpkgs folder&gt;</command>
+</para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+
+<listitem>
+<para>add pkg ->
+
+<itemizedlist>
+<listitem>
+<para>Make sure it's in <command>pkgs/top-level/all-packages.nix</command>
+</para>
+</listitem>
+
+<listitem>
+<para>
+<command>nix-env -i pkg-name -f &lt;path to your local nixpkgs folder&gt;</command>
+</para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+
+<listitem>
+<para>
+<emphasis>If you don't want to install pkg in you profile</emphasis>.
+
+<itemizedlist>
+<listitem>
+<para>
+<command>nix-build -A pkg-attribute-name &lt;path to your local nixpkgs folder&gt;/default.nix</command> and check results in the folder <command>result</command>. It will appear in the same directory where you did <command>nix-build</command>.</para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+
+<listitem>
+<para>If you did <command>nix-env -i pkg-name</command> you can do <command>nix-env -e pkg-name</command> to uninstall it from your system.</para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+
+<listitem>
+<para>NixOS and its modules:
+
+<itemizedlist>
+<listitem>
+<para>You can add new module to your NixOS configuration file (usually it's <command>/etc/nixos/configuration.nix</command>).
+            And do <command>sudo nixos-rebuild test -I nixpkgs=&lt;path to your local nixpkgs folder&gt; --fast</command>.</para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+
+<listitem>
+<para>If you have commits <command>pkg-name: oh, forgot to insert whitespace</command>: squash commits in this case. Use <command>git rebase -i</command>.</para>
+</listitem>
+
+<listitem>
+<para>Rebase you branch against current <command>master</command>.</para>
+</listitem>
+</itemizedlist>
+</section>
+
+<section>
+<title>Submitting changes</title>
+
+<itemizedlist>
+<listitem>
+<para>Push your changes to your fork of nixpkgs.</para>
+</listitem>
+
+<listitem>
+<para>Create pull request:
+
+<itemizedlist>
+<listitem>
+<para>Write the title in format <command>(pkg-name | service): improvement</command>.
+
+<itemizedlist>
+<listitem>
+<para>If you update the pkg, write versions <command>from -> to</command>.</para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+
+<listitem>
+<para>Write in comment if you have tested your patch. Do not rely much on <command>TravisCI</command>.</para>
+</listitem>
+
+<listitem>
+<para>If you make an improvement, write about your motivation.</para>
+</listitem>
+
+<listitem>
+<para>Notify maintainers of the package. For example add to the message: <command>cc @jagajaga @domenkozar</command>.</para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+</itemizedlist>
+</section>
+
+<section>
+<title>Hotfixing pull requests</title>
+
+<itemizedlist>
+<listitem>
+<para>Make the appropriate changes in you branch.</para>
+</listitem>
+
+<listitem>
+<para>Don't create additional commits, do
+
+<itemizedlist>
+<listitem>
+<para><command>git rebase -i</command></para>
+</listitem>
+<listitem>
+<para>
+<command>git push --force</command> to your branch.</para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+
+</itemizedlist>
+</section>
+
+<section>
+<title>Commit policy</title>
+
+<itemizedlist>
+<listitem>
+<para>Commits must be sufficiently tested before being merged, both for the master and staging branches.</para>
+</listitem>
+
+<listitem>
+<para>Hydra builds for master and staging should not be used as testing platform, it's a build farm for changes that have been already tested.</para>
+</listitem>
+
+<listitem>
+<para>Master should only see non-breaking commits that do not cause mass rebuilds.</para>
+</listitem>
+
+<listitem>
+<para>Staging should only see non-breaking mass-rebuild commits. That means it's not to be used for testing, and changes must have been well tested already. <link xlink:href="http://comments.gmane.org/gmane.linux.distributions.nixos/13447">Read policy here</link>.</para>
+</listitem>
+
+<listitem>
+<para>If staging is already in a broken state, please refrain from adding extra new breakages. Stabilize it for a few days, merge into master, then resume development on staging. <link xlink:href="http://hydra.nixos.org/jobset/nixpkgs/staging#tabs-evaluations">Keep an eye on the staging evaluations here</link>.</para>
+</listitem>
+
+<listitem>
+<para>When changing the bootloader installation process, extra care must be taken. Grub installations cannot be rolled back, hence changes may break people's installations forever. For any non-trivial change to the bootloader please file a PR asking for review, especially from @edolstra.</para>
+</listitem>
+</itemizedlist>
+
+</section>
+</chapter>
+

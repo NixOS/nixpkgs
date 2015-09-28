@@ -31,11 +31,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "racket-${version}";
-  version = "6.1.1";
+  version = "6.2.1";
 
   src = fetchurl {
     url = "http://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
-    sha256 = "090269522d20e7a5ce85d2251a126745746ebf5e87554c05efe03f3b7173da75";
+    sha256 = "0555j63k7fs10iv0icmivlxpzgp6s7gwcbfddmbwxlf2rk80qhq0";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     cd src/build
   '';
 
-  configureFlags = [ "--enable-shared" "--enable-lt=${libtool}/bin/libtool" ];
+  configureFlags = [ "--enable-shared" "--enable-lt=${libtool}/bin/libtool" "--disable-docs"];
 
   configureScript = "../configure";
 

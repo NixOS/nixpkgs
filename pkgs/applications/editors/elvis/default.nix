@@ -10,10 +10,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  patchPhase = ''
-    sed -i s/-lcurses/-lncurses/ configure
-  '';
-
   preConfigure = ''
     mkdir -p $out/share/man/man1
   '';

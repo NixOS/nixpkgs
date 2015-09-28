@@ -6,13 +6,15 @@
 stdenv.mkDerivation rec {
   p_name  = "thunar";
   ver_maj = "1.6";
-  ver_min = "6";
+  ver_min = "10";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/Thunar-${ver_maj}.${ver_min}.tar.bz2";
-    sha256 = "1cl9v3rdzipyyxml3pyrzspxfmmssz5h5snpj18irq4an42539dr";
+    sha256 = "7e9d24067268900e5e44d3325e60a1a2b2f8f556ec238ec12574fbea15fdee8a";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
+
+  patches = [ ./thunarx_plugins_directory.patch ];
 
   buildInputs = [
     pkgconfig intltool

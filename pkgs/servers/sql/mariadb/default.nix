@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, cmake, ncurses, openssl, pcre, boost, judy, bison, libxml2
+{ stdenv, fetchurl, cmake, ncurses, zlib, openssl, pcre, boost, judy, bison, libxml2
 , libaio, libevent, groff, jemalloc, perl, fixDarwinDylibNames
 }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "mariadb-${version}";
-  version = "10.0.18";
+  version = "10.0.21";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/interstitial/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "1xcs391cm0vnl9bvx1470v8z4d77zqv16n6iaqi12jm0ma8fwvv8";
+    sha256 = "0i9mzbn35f4lj4y1lqzgbavh5xyx18zfn0ks0nqzvppabkhk56jb";
   };
 
-  buildInputs = [ cmake ncurses openssl pcre libxml2 boost judy bison libevent ]
+  buildInputs = [ cmake ncurses openssl zlib pcre libxml2 boost judy bison libevent ]
     ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames ];
 
@@ -49,11 +49,13 @@ stdenv.mkDerivation rec {
     "-DWITH_PARTITION_STORAGE_ENGINE=1"
     "-DWITHOUT_EXAMPLE_STORAGE_ENGINE=1"
     "-DWITHOUT_FEDERATED_STORAGE_ENGINE=1"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "-DWITHOUT_OQGRAPH_STORAGE_ENGINE=1";
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "-DWITHOUT_OQGRAPH_STORAGE_ENGINE=1"
+    "-DWITHOUT_TOKUDB=1"
+  ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
-
-  enableParallelBuilding = true;
+  # fails to find lex_token.h sometimes
+  enableParallelBuilding = false;
 
   outputs = [ "out" "lib" ];
 
@@ -90,6 +92,11 @@ stdenv.mkDerivation rec {
     mv $out/lib $lib
     mv $out/include $lib
 
+    # Fix the mysql_config
+    sed -i $out/bin/mysql_config \
+      -e 's,-lz,-L${zlib}/lib -lz,g' \
+      -e 's,-lssl,-L${openssl}/lib -lssl,g'
+
     # Add mysql_config to libs since configure scripts use it
     mkdir -p $lib/bin
     cp $out/bin/mysql_config $lib/bin
@@ -98,6 +105,9 @@ stdenv.mkDerivation rec {
     # Make sure to propagate lib for compatability
     mkdir -p $out/nix-support
     echo "$lib" > $out/nix-support/propagated-native-build-inputs
+
+    # Don't install static libraries.
+    rm $lib/lib/libmysqlclient.a $lib/lib/libmysqld.a
   '';
 
   passthru.mysqlVersion = "5.6";
@@ -106,7 +116,7 @@ stdenv.mkDerivation rec {
     description = "An enhanced, drop-in replacement for MySQL";
     homepage    = https://mariadb.org/;
     license     = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ shlevy thoughtpolice wkennington ];
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice wkennington ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

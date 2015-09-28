@@ -160,6 +160,17 @@ in
         '';
       };
 
+      snmpConf = mkOption {
+        type = types.lines;
+        default = ''
+          Address @LOCAL
+        '';
+        description = ''
+          The contents of <filename>/etc/cups/snmp.conf</filename>. See "man
+          cups-snmp.conf" for a complete description.
+        '';
+      };
+
       drivers = mkOption {
         type = types.listOf types.path;
         example = literalExample "[ pkgs.splix ]";
@@ -199,6 +210,7 @@ in
     environment.etc."cups/cups-files.conf".text = cfg.cupsFilesConf;
     environment.etc."cups/cupsd.conf".text = cfg.cupsdConf;
     environment.etc."cups/cups-browsed.conf".text = cfg.browsedConf;
+    environment.etc."cups/snmp.conf".text = cfg.snmpConf;
 
     services.dbus.packages = [ cups ];
 
@@ -230,8 +242,8 @@ in
           ];
       };
 
-    systemd.services.cups-browsed =
-      { description = "Make remote CUPS printers available locally";
+    systemd.services.cups-browsed = mkIf config.services.avahi.enable
+      { description = "CUPS Remote Printer Discovery";
 
         wantedBy = [ "multi-user.target" ];
         wants = [ "cups.service" "avahi-daemon.service" ];

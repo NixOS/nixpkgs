@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "sassc-${version}";
-  version = "3.2.1";
+  version = "3.2.4";
 
   src = fetchurl {
     url = "https://github.com/sass/sassc/archive/${version}.tar.gz";
-    sha256 = "18pp7ylcwfvfagvnpw660cdvv7cjl7pl9v8x7xr05fp2l6133rxw";
+    sha256 = "0ksdfv9ff5smba4vbwr1wqf3bp908rnprkp6lfssj85h9ciqq896";
   };
 
   patchPhase = ''
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "A front-end for libsass";
     homepage = https://github.com/sass/sassc/;
     license = licenses.mit;
-    maintainers = with maintainers; [ pjones ];
+    maintainers = with maintainers; [ codyopel pjones ];
     platforms = platforms.unix;
   };
 }

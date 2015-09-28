@@ -1,25 +1,19 @@
 { stdenv, fetchurl, gmp }:
 
 stdenv.mkDerivation rec {
-  name = "mpfr-3.1.2";
+  name = "mpfr-3.1.3";
 
   src = fetchurl {
     url = "mirror://gnu/mpfr/${name}.tar.bz2";
-    sha256 = "0sqvpfkzamxdr87anzakf9dhkfh15lfmm5bsqajk02h1mxh3zivr";
+    sha256 = "1z8akfw9wbmq91vrx04bw86mmnxw2sw5qm5cr8ix5b3w2mcv8fzn";
   };
 
-  buildInputs = [ gmp ];
+  patches = [ ./upstream.patch ];
 
-  CFLAGS = "-I${gmp}/include";
-  LDFLAGS = if stdenv.isDarwin then "-L${gmp}/lib" else null;
+  # mpfr.h requires gmp.h
+  propagatedBuildInputs = [ gmp ];
 
   configureFlags =
-    /* Work around a FreeBSD bug that otherwise leads to segfaults in the test suite:
-          http://hydra.bordeaux.inria.fr/build/34862
-          http://websympa.loria.fr/wwsympa/arc/mpfr/2011-10/msg00015.html
-          http://www.freebsd.org/cgi/query-pr.cgi?pr=161344
-      */
-    stdenv.lib.optional (stdenv.isSunOS or stdenv.isFreeBSD) "--disable-thread-safe" ++
     stdenv.lib.optional stdenv.is64bit "--with-pic";
 
   doCheck = true;

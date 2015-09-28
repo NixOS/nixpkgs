@@ -1,4 +1,4 @@
-{stdenv, fetchurl, automake, vanilla ? false}:
+{stdenv, fetchurl, automake, libiconv, vanilla ? false}:
 
 stdenv.mkDerivation (rec {
   name = "pkg-config-0.28";
@@ -10,13 +10,15 @@ stdenv.mkDerivation (rec {
     sha256 = "0igqq5m204w71m11y0nipbdf5apx87hwfll6axs12hn4dqfb6vkb";
   };
 
+  buildInputs = stdenv.lib.optional (stdenv.isCygwin || stdenv.isDarwin) libiconv;
+
   configureFlags = [ "--with-internal-glib" ];
 
-  patches = if vanilla then [] else [
+  patches = (if vanilla then [] else [
     # Process Requires.private properly, see
     # http://bugs.freedesktop.org/show_bug.cgi?id=4738.
     ./requires-private.patch
-  ];
+  ]) ++ stdenv.lib.optional stdenv.isCygwin ./2.36.3-not-win32.patch;
 
   meta = {
     description = "A tool that allows packages to find out information about other packages";

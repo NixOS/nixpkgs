@@ -1,4 +1,4 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "can-utils-${version}";
@@ -6,17 +6,18 @@ stdenv.mkDerivation rec {
   # latest commit in git master as version number.
   version = "20140227";
 
-  src = fetchgit {
-    url = "https://git.gitorious.org/linux-can/can-utils.git";
+  src = fetchFromGitHub {
+    owner = "linux-can";
+    repo = "can-utils";
     rev = "67a2bdcd336e6becfa5784742e18c88dbeddc973";
-    sha256 = "0pnnjl141wf3kbf256m6qz9mxz0144z36qqb43skialzcnlhga38";
+    sha256 = "1v73b0nk1kb3kp5nbxp4xiygny6nfjgjnm7zgzrjgryvdrnws32z";
   };
 
   preConfigure = ''makeFlagsArray+=(PREFIX="$out")'';
 
   meta = with stdenv.lib; {
     description = "CAN userspace utilities and tools (for use with Linux SocketCAN)";
-    homepage = "https://gitorious.org/linux-can/can-utils";
+    homepage = "https://github.com/linux-can/can-utils";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

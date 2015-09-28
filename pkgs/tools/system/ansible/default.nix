@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, pythonPackages, python }:
+{ windowsSupport ? true, stdenv, fetchurl, pythonPackages, python }:
 
 pythonPackages.buildPythonPackage rec {
-  version = "1.8.4";
+  version = "1.9.3";
   name = "ansible-${version}";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://releases.ansible.com/ansible/ansible-${version}.tar.gz";
-    sha256 = "1hcy4f6l9c23aa05yi4mr0zbqp0c6v5zq4c3dim076yfmfrh8z6k";
+    sha256 = "1vgfsjqb5gbs30ymqgq3q2kxzn3fvh8680n14yj5c040zm1gd515";
   };
 
   prePatch = ''
@@ -21,7 +21,7 @@ pythonPackages.buildPythonPackage rec {
 
   propagatedBuildInputs = with pythonPackages; [
     paramiko jinja2 pyyaml httplib2 boto six
-  ];
+  ] ++ stdenv.lib.optional windowsSupport pywinrm;
 
   postFixup = ''
       wrapPythonProgramsIn $out/bin "$out $pythonPath"

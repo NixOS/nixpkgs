@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl, openssl, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "trousers-${version}";
@@ -9,14 +9,20 @@ stdenv.mkDerivation rec {
     sha256 = "1lvnla1c1ig2w3xvvrqg2w9qm7a1ygzy1j2gg8j7p8c87i58x45v";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl pkgconfig ];
 
   patches = [ ./allow-non-tss-config-file-owner.patch ];
 
   configureFlags = [ "--disable-usercheck" ];
 
-  NIX_CFLAGS_COMPILE = "-DALLOW_NON_TSS_CONFIG_FILE";
+  # Attempt to remove -std=gnu89 when updating if using gcc5
+  NIX_CFLAGS_COMPILE = "-std=gnu89 -DALLOW_NON_TSS_CONFIG_FILE";
   NIX_LDFLAGS = "-lgcc_s";
+
+  # Fix broken libtool file
+  preFixup = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    sed 's,-lcrypto,-L${openssl}/lib -lcrypto,' -i $out/lib/libtspi.la
+  '';
 
   meta = with stdenv.lib; {
     description = "Trusted computing software stack";

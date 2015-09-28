@@ -1,9 +1,9 @@
-{ stdenv, fetchgit, alsaLib, aubio, boost, cairomm, curl, fftw
-, fftwSinglePrec, flac, glibc, glibmm, gtk, gtkmm, jack2
+{ stdenv, fetchgit, alsaLib, aubio, boost, cairomm, curl, doxygen, dbus, fftw
+, fftwSinglePrec, flac, glibc, glibmm, graphviz, gtk, gtkmm, libjack2
 , libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
-, libusb, libuuid, libxml2, libxslt, lilv, lv2, makeWrapper, pango
-, perl, pkgconfig, python, serd, sord, sratom, suil }:
+, libusb, libuuid, libxml2, libxslt, lilv-svn, lv2, makeWrapper, pango
+, perl, pkgconfig, python, rubberband, serd, sord-svn, sratom, suil, taglib, vampSDK }:
 
 let
 
@@ -15,49 +15,49 @@ let
   # "git describe" when _not_ on an annotated tag(!): MAJOR.MINOR-REV-HASH.
 
   # Version to build.
-  tag = "3.5.403";
+  #tag = "3.5.403";
 
   # Version info that is built into the binary. Keep in sync with 'tag'. The
   # last 8 digits is a (fake) commit id.
-  revision = "3.5-403-00000000";
+  revision = "3.5-4539-g7024232";
 
+  # temporarily use a non tagged version, because 3.5.403 has a bug that
+  # causes loss of audio-files,  and it was decided that there won't be a
+  # hotfix release, and we should use 4.0 when it comes out.
+  # more info: http://comments.gmane.org/gmane.comp.audio.ardour.user/13665
+
+  version = "2015-02-20";
 in
 
 stdenv.mkDerivation rec {
-  name = "ardour-${tag}";
+  name = "ardour3-git-${version}";
 
   src = fetchgit {
     url = git://git.ardour.org/ardour/ardour.git;
-    rev = "refs/tags/${tag}";
-    sha256 = "0k1z8sbjf88dqn12kf9cykrqj38vkr879n2g6b4adk6cghn8wz3x";
+    rev = "7024232855d268633760674d34c096ce447b7240";
+    sha256 = "ede3730455c3c91b2fd612871fa7262bdacd3dff4ba77c5dfbc3c1f0de9b8a36";
   };
 
   buildInputs = 
-    [ alsaLib aubio boost cairomm curl fftw fftwSinglePrec flac glibc
-      glibmm gtk gtkmm jack2 libgnomecanvas libgnomecanvasmm liblo
+    [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac glibc
+      glibmm graphviz gtk gtkmm libjack2 libgnomecanvas libgnomecanvasmm liblo
       libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
-      libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2
-      makeWrapper pango perl pkgconfig python serd sord sratom suil
+      libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv-svn lv2
+      makeWrapper pango perl pkgconfig python rubberband serd sord-svn sratom suil taglib vampSDK
     ];
 
   patchPhase = ''
     printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${revision}\"; }\n' > libs/ardour/revision.cc
     sed 's|/usr/include/libintl.h|${glibc}/include/libintl.h|' -i wscript
-    sed -e 's|^#!/usr/bin/perl.*$|#!${perl}/bin/perl|g' -i tools/fmt-bindings
-    sed -e 's|^#!/usr/bin/env.*$|#!${perl}/bin/perl|g' -i tools/*.pl
+    patchShebangs ./tools/
   '';
 
-  configurePhase = "python waf configure --optimize --prefix=$out";
+  configurePhase = "python waf configure --optimize --docs --with-backends=jack,alsa --prefix=$out";
 
   buildPhase = "python waf";
 
-  # For the custom ardour clearlooks gtk-engine to work, it must be
-  # moved to a directory called "engines" and added to GTK_PATH
   installPhase = ''
     python waf install
-    mkdir -pv $out/gtk2/engines
-    cp build/libs/clearlooks-newer/libclearlooks.so $out/gtk2/engines/
-    wrapProgram $out/bin/ardour3 --prefix GTK_PATH : $out/gtk2
 
     # Install desktop file
     mkdir -p "$out/share/applications"

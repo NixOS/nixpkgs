@@ -1,19 +1,22 @@
-{ stdenv, fetchFromGitHub, wine, perl, autoconf, utillinux
-, pulseaudio, libtxc_dxtn }:
+{ stdenv, callPackage, lib, fetchFromGitHub, wine, libtxc_dxtn_Name }:
 
-let version = "1.7.42";
+with callPackage ./util.nix {};
+
+let v = (import ./versions.nix).staging;
+    inherit (v) version;
     patch = fetchFromGitHub {
+      inherit (v) sha256;
       owner = "wine-compholio";
       repo = "wine-staging";
       rev = "v${version}";
-      sha256 = "1qi1hf1w97n17vmj137p7da75g01ky84a3xvs50xrmxb7f62sm17";
     };
-
+    build-inputs = pkgNames: extra:
+      (mkBuildInputs wine.pkgArches pkgNames) ++ extra;
 in assert (builtins.parseDrvName wine.name).version == version;
 
 stdenv.lib.overrideDerivation wine (self: {
-  nativeBuildInputs = [ pulseaudio libtxc_dxtn ] ++ self.nativeBuildInputs;
-  buildInputs = [ perl utillinux autoconf ] ++ self.buildInputs;
+  nativeBuildInputs = build-inputs [ "libpulseaudio" libtxc_dxtn_Name ] self.nativeBuildInputs; 
+  buildInputs = build-inputs [ "perl" "utillinux" "autoconf" ] self.buildInputs;
 
   name = "${self.name}-staging";
 
@@ -23,7 +26,7 @@ stdenv.lib.overrideDerivation wine (self: {
     chmod +w patches
     cd patches
     patchShebangs gitapply.sh
-    ./patchinstall.sh DESTDIR=.. --all
+    ./patchinstall.sh DESTDIR="$TMP/$sourceRoot" --all
     cd ..
   '';
 })

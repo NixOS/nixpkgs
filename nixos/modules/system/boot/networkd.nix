@@ -641,9 +641,6 @@ in
     environment.etc."systemd/network".source =
       generateUnits "network" cfg.units [] [];
 
-    users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
-    users.extraGroups.systemd-network.gid = config.ids.gids.systemd-network;
-
     systemd.services.systemd-networkd = {
       wantedBy = [ "multi-user.target" ];
       before = [ "network-interfaces.target" ];

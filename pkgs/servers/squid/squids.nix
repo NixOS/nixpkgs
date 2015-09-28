@@ -1,4 +1,6 @@
-args: with args;
+args @ { fetchurl, stdenv, perl, lib, composableDerivation
+, openldap, pam, db, cyrus_sasl, kerberos, libcap, expat, libxml2, libtool
+, openssl, ... }: with args;
 let edf = composableDerivation.edf; in
 rec {
   squid30 = composableDerivation.composableDerivation {} {
@@ -11,7 +13,7 @@ rec {
       sha256 = "3e54ae3ad09870203862f0856c7d0cca16a85f62d5012085009003ee3d5467b4";
     };
 
-    configureFlags = ["--enable-ipv6" "--disable-strict-error-checking"];
+    configureFlags = ["--enable-ipv6" "--disable-strict-error-checking" "--disable-arch-native"];
 
     meta = {
       description = "http-proxy";

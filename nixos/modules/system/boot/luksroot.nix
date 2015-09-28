@@ -5,7 +5,7 @@ with lib;
 let
   luks = config.boot.initrd.luks;
 
-  openCommand = { name, device, keyFile, keyFileSize, allowDiscards, yubikey, ... }: ''
+  openCommand = { name, device, header, keyFile, keyFileSize, allowDiscards, yubikey, ... }: ''
     # Wait for luksRoot to appear, e.g. if on a usb drive.
     # XXX: copied and adapted from stage-1-init.sh - should be
     # available as a function.
@@ -33,6 +33,7 @@ let
 
     open_normally() {
         cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} \
+          ${optionalString (header != null) "--header=${header}"} \
           ${optionalString (keyFile != null) "--key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}"}
     }
 
@@ -211,7 +212,7 @@ in
     };
 
     boot.initrd.luks.cryptoModules = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default =
         [ "aes" "aes_generic" "blowfish" "twofish"
           "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"
@@ -241,20 +242,30 @@ in
 
         name = mkOption {
           example = "luksroot";
-          type = types.string;
+          type = types.str;
           description = "Named to be used for the generated device in /dev/mapper.";
         };
 
         device = mkOption {
           example = "/dev/sda2";
-          type = types.string;
+          type = types.str;
           description = "Path of the underlying block device.";
+        };
+
+        header = mkOption {
+          default = null;
+          example = "/root/header.img";
+          type = types.nullOr types.str;
+          description = ''
+            The name of the file or block device that
+            should be used as header for the encrypted device.
+          '';
         };
 
         keyFile = mkOption {
           default = null;
           example = "/dev/sdb1";
-          type = types.nullOr types.string;
+          type = types.nullOr types.str;
           description = ''
             The name of the file (can be a raw device or a partition) that
             should be used as the decryption key for the encrypted device. If
@@ -338,7 +349,7 @@ in
 
             ramfsMountPoint = mkOption {
               default = "/crypt-ramfs";
-              type = types.string;
+              type = types.str;
               description = "Path where the ramfs used to update the LUKS key will be mounted during early boot.";
             };
 
@@ -358,19 +369,19 @@ in
 
               fsType = mkOption {
                 default = "vfat";
-                type = types.string;
+                type = types.str;
                 description = "The filesystem of the unencrypted device.";
               };
 
               mountPoint = mkOption {
                 default = "/crypt-storage";
-                type = types.string;
+                type = types.str;
                 description = "Path where the unencrypted device will be mounted during early boot.";
               };
 
               path = mkOption {
                 default = "/crypt-storage/default";
-                type = types.string;
+                type = types.str;
                 description = ''
                   Absolute path of the salt on the unencrypted device with
                   that device's root directory as "/".

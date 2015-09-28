@@ -6,7 +6,6 @@ with lib;
 
 let
   cfg = config.virtualisation.xen;
-  xen = pkgs.xen;
 in
 
 {
@@ -48,13 +47,32 @@ in
           '';
       };
 
-    virtualisation.xen.bridge =
-      mkOption {
-        default = "xenbr0";
-        description =
-          ''
-            Create a bridge for the Xen domUs to connect to.
+    virtualisation.xen.bridge = {
+        name = mkOption {
+          default = "xenbr0";
+          description = ''
+              Name of bridge the Xen domUs connect to.
+            '';
+        };
+
+        address = mkOption {
+          type = types.str;
+          default = "172.16.0.1";
+          description = ''
+            IPv4 address of the bridge.
           '';
+        };
+
+        prefixLength = mkOption {
+          type = types.addCheck types.int (n: n >= 0 && n <= 32);
+          default = 16;
+          description = ''
+            Subnet mask of the bridge interface, specified as the number of
+            bits in the prefix (<literal>24</literal>).
+            A DHCP server will provide IP addresses for the whole, remaining
+            subnet.
+          '';
+        };
       };
 
     virtualisation.xen.stored =
@@ -88,9 +106,9 @@ in
       message = "Xen currently does not support EFI boot";
     } ];
 
-    virtualisation.xen.stored = mkDefault "${xen}/bin/oxenstored";
+    virtualisation.xen.stored = mkDefault "${pkgs.xen}/bin/oxenstored";
 
-    environment.systemPackages = [ xen ];
+    environment.systemPackages = [ pkgs.xen ];
 
     # Make sure Domain 0 gets the required configuration
     #boot.kernelPackages = pkgs.boot.kernelPackages.override { features={xen_dom0=true;}; };
@@ -103,6 +121,10 @@ in
         "xenfs"
       ];
 
+    # The xenfs module is needed in system.activationScripts.xen, but
+    # the modprobe command there fails silently. Include xenfs in the
+    # initrd as a work around.
+    boot.initrd.kernelModules = [ "xenfs" ];
 
     # The radeonfb kernel module causes the screen to go black as soon
     # as it's loaded, so don't load it.
@@ -122,7 +144,7 @@ in
 
     system.extraSystemBuilderCmds =
       ''
-        ln -s ${xen}/boot/xen.gz $out/xen.gz
+        ln -s ${pkgs.xen}/boot/xen.gz $out/xen.gz
         echo "${toString cfg.bootParams}" > $out/xen-params
       '';
 
@@ -158,13 +180,19 @@ in
 
 
     environment.etc =
-      [ { source = "${xen}/etc/xen/xl.conf";
+      [ { source = "${pkgs.xen}/etc/xen/xl.conf";
           target = "xen/xl.conf";
+        }
+        { source = "${pkgs.xen}/etc/xen/scripts";
+          target = "xen/scripts";
+        }
+        { source = "${pkgs.xen}/etc/default/xendomains";
+          target = "default/xendomains";
         }
       ];
 
     # Xen provides udev rules.
-    services.udev.packages = [ xen ];
+    services.udev.packages = [ pkgs.xen ];
 
     services.udev.path = [ pkgs.bridge-utils pkgs.iproute ];
 
@@ -178,7 +206,8 @@ in
         rm -f "$XENSTORED_ROOTDIR"/tdb* &>/dev/null
 
         mkdir -p /var/run
-        ${optionalString cfg.trace "mkdir -p /var/log/xen"}
+        mkdir -p /var/log/xen # Running xl requires /var/log/xen and /var/lib/xen,
+        mkdir -p /var/lib/xen # so we create them here unconditionally.
         grep -q control_d /proc/xen/capabilities
         '';
       serviceConfig.ExecStart = ''
@@ -259,16 +288,73 @@ in
       description = "Xen bridge";
       wantedBy = [ "multi-user.target" ];
       before = [ "xen-domains.service" ];
-      serviceConfig.RemainAfterExit = "yes";
-      serviceConfig.ExecStart = ''
-        ${pkgs.bridge-utils}/bin/brctl addbr ${cfg.bridge}
-        ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge} up
-        '';
-      serviceConfig.ExecStop = ''
-        ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge} down
-        ${pkgs.bridge-utils}/bin/brctl delbr ${cfg.bridge}
-        '';
+      preStart = ''
+        mkdir -p /var/run/xen
+        touch /var/run/xen/dnsmasq.pid
+        touch /var/run/xen/dnsmasq.etherfile
+        touch /var/run/xen/dnsmasq.leasefile
+
+        IFS='-' read -a data <<< `${pkgs.sipcalc}/bin/sipcalc ${cfg.bridge.address}/${toString cfg.bridge.prefixLength} | grep Usable\ range`
+        export XEN_BRIDGE_IP_RANGE_START="${"\${data[1]//[[:blank:]]/}"}"
+        export XEN_BRIDGE_IP_RANGE_END="${"\${data[2]//[[:blank:]]/}"}"
+
+        IFS='-' read -a data <<< `${pkgs.sipcalc}/bin/sipcalc ${cfg.bridge.address}/${toString cfg.bridge.prefixLength} | grep Network\ address`
+        export XEN_BRIDGE_NETWORK_ADDRESS="${"\${data[1]//[[:blank:]]/}"}"
+
+        echo "${cfg.bridge.address} host gw dns" > /var/run/xen/dnsmasq.hostsfile
+
+        cat <<EOF > /var/run/xen/dnsmasq.conf
+        no-daemon
+        pid-file=/var/run/xen/dnsmasq.pid
+        interface=${cfg.bridge.name}
+        except-interface=lo
+        bind-interfaces
+        auth-server=dns.xen.local,${cfg.bridge.name}
+        auth-zone=xen.local,$XEN_BRIDGE_NETWORK_ADDRESS/${toString cfg.bridge.prefixLength}
+        domain=xen.local
+        addn-hosts=/var/run/xen/dnsmasq.hostsfile
+        expand-hosts
+        strict-order
+        no-hosts
+        bogus-priv
+        no-resolv
+        no-poll
+        filterwin2k
+        clear-on-reload
+        domain-needed
+        dhcp-hostsfile=/var/run/xen/dnsmasq.etherfile
+        dhcp-authoritative
+        dhcp-range=$XEN_BRIDGE_IP_RANGE_START,$XEN_BRIDGE_IP_RANGE_END,$XEN_BRIDGE_NETWORK_ADDRESS
+        dhcp-no-override
+        no-ping
+        dhcp-leasefile=/var/run/xen/dnsmasq.leasefile
+        EOF
+
+        # DHCP
+        ${pkgs.iptables}/bin/iptables -I INPUT  -i ${cfg.bridge.name} -p tcp -s $XEN_BRIDGE_NETWORK_ADDRESS/${toString cfg.bridge.prefixLength} --sport 68 --dport 67 -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -I INPUT  -i ${cfg.bridge.name} -p udp -s $XEN_BRIDGE_NETWORK_ADDRESS/${toString cfg.bridge.prefixLength} --sport 68 --dport 67 -j ACCEPT
+        # DNS
+        ${pkgs.iptables}/bin/iptables -I INPUT  -i ${cfg.bridge.name} -p tcp -d ${cfg.bridge.address} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -I INPUT  -i ${cfg.bridge.name} -p udp -d ${cfg.bridge.address} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+        ${pkgs.bridge-utils}/bin/brctl addbr ${cfg.bridge.name}
+        ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge.name} ${cfg.bridge.address}
+        ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge.name} up
+      '';
+      serviceConfig.ExecStart = "${pkgs.dnsmasq}/bin/dnsmasq --conf-file=/var/run/xen/dnsmasq.conf";
+      postStop = ''
+        ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge.name} down
+        ${pkgs.bridge-utils}/bin/brctl delbr ${cfg.bridge.name}
+
+        # DNS
+        ${pkgs.iptables}/bin/iptables -D INPUT  -i ${cfg.bridge.name} -p udp -d ${cfg.bridge.address} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -D INPUT  -i ${cfg.bridge.name} -p tcp -d ${cfg.bridge.address} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+        # DHCP
+        ${pkgs.iptables}/bin/iptables -D INPUT  -i ${cfg.bridge.name} -p udp --sport 68 --dport 67 -j ACCEPT
+        ${pkgs.iptables}/bin/iptables -D INPUT  -i ${cfg.bridge.name} -p tcp --sport 68 --dport 67 -j ACCEPT
+      '';
     };
+
 
     systemd.services.xen-domains = {
       description = "Xen domains - automatically starts, saves and restores Xen domains";

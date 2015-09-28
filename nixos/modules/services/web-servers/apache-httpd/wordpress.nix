@@ -1,22 +1,12 @@
 { config, lib, pkgs, serverInfo, php, ... }:
+# http://codex.wordpress.org/Hardening_WordPress
 
 with lib;
 
 let
-  # https://wordpress.org/plugins/postgresql-for-wordpress/
-  # Wordpress plugin 'postgresql-for-wordpress' installation example
-  postgresqlForWordpressPlugin = pkgs.stdenv.mkDerivation {
-    name = "postgresql-for-wordpress-plugin";
-    # Download the theme from the wordpress site
-    src = pkgs.fetchurl {
-      url = https://downloads.wordpress.org/plugin/postgresql-for-wordpress.1.3.1.zip;
-      sha256 = "f11a5d76af884c7bec2bc653ed5bd29d3ede9a8657bd67ab7824e329e5d809e8";
-    };
-    # We need unzip to build this package
-    buildInputs = [ pkgs.unzip ];
-    # Installing simply means copying all files to the output directory
-    installPhase = "mkdir -p $out; cp -R * $out/";
-  };
+
+  version = "4.3";
+  fullversion = "${version}";
 
   # Our bare-bones wp-config.php file using the above settings
   wordpressConfig = pkgs.writeText "wp-config.php" ''
@@ -38,38 +28,79 @@ let
     <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule . /index.php [L]
+    RewriteRule ^index\.php$ - [L]
+
+    # add a trailing slash to /wp-admin
+    RewriteRule ^wp-admin$ wp-admin/ [R=301,L]
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+    RewriteRule ^(wp-(content|admin|includes).*) $1 [L]
+    RewriteRule ^(.*\.php)$ $1 [L]
+    RewriteRule . index.php [L]
     </IfModule>
+
+    ${config.extraHtaccess}
   '';
+
+  # WP translation can be found here:
+  #   https://github.com/nixcloud/wordpress-translations
+  supportedLanguages = {
+    en_GB = { revision="d6c005372a5318fd758b710b77a800c86518be13"; sha256="0qbbsi87k47q4rgczxx541xz4z4f4fr49hw4lnaxkdsf5maz8p9p"; };
+    de_DE = { revision="3c62955c27baaae98fd99feb35593d46562f4736"; sha256="1shndgd11dk836dakrjlg2arwv08vqx6j4xjh4jshvwmjab6ng6p"; };
+    zh_ZN = { revision="12b9f811e8cae4b6ee41de343d35deb0a8fdda6d"; sha256="1339ggsxh0g6lab37jmfxicsax4h702rc3fsvv5azs7mcznvwh47"; };
+    fr_FR = { revision="688c8b1543e3d38d9e8f57e0a6f2a2c3c8b588bd"; sha256="1j41iak0i6k7a4wzyav0yrllkdjjskvs45w53db8vfm8phq1n014"; };
+  };
+
+  downloadLanguagePack = language: revision: sha256s:
+    pkgs.stdenv.mkDerivation rec {
+      name = "wp_${language}";
+      src = pkgs.fetchFromGitHub {
+        owner = "nixcloud";
+        repo = "wordpress-translations";
+        rev = revision;
+        sha256 = sha256s;
+      };
+      installPhase = "mkdir -p $out; cp -R * $out/";
+    };
+
+  selectedLanguages = map (lang: downloadLanguagePack lang supportedLanguages.${lang}.revision supportedLanguages.${lang}.sha256) (config.languages);
 
   # The wordpress package itself
   wordpressRoot = pkgs.stdenv.mkDerivation rec {
     name = "wordpress";
-    # Fetch directly from the wordpress site, want to upgrade?
-    # Just change the version URL and update the hash
-    src = pkgs.fetchurl {
-      url = http://wordpress.org/wordpress-4.1.1.tar.gz;
-      sha256 = "1s9y0i9ms3m6dswb9gqrr95plnx6imahc07fyhvrp5g35f6c12k1";
+    src = pkgs.fetchFromGitHub {
+      owner = "WordPress";
+      repo = "WordPress";
+      rev = "${fullversion}";
+      sha256 = "0sz5jjhjpwqis8336gyq9a77cr4sf8zahd1y4pzmpvpzn9cn503y";
     };
     installPhase = ''
       mkdir -p $out
-      # Copy all the wordpress files we downloaded
+      # copy all the wordpress files we downloaded
       cp -R * $out/
-      # We'll symlink the wordpress config
+
+      # symlink the wordpress config
       ln -s ${wordpressConfig} $out/wp-config.php
-      # As well as our custom .htaccess
+      # symlink custom .htaccess
       ln -s ${htaccess} $out/.htaccess
-      # And the uploads directory
+      # symlink uploads directory
       ln -s ${config.wordpressUploads} $out/wp-content/uploads
-      # And the theme(s)
+
+      # remove bundled plugins(s) coming with wordpress
+      rm -Rf $out/wp-content/plugins/*
+      # remove bundled themes(s) coming with wordpress
+      rm -Rf $out/wp-content/themes/*
+
+      # symlink additional theme(s)
       ${concatMapStrings (theme: "ln -s ${theme} $out/wp-content/themes/${theme.name}\n") config.themes}
-      # And the plugin(s)
-      # remove bundled plugin(s) coming with wordpress
-      rm -Rf $out/wp-content/plugins/akismet
-      # install plugins
-      ${concatMapStrings (plugin: "ln -s ${plugin} $out/wp-content/plugins/${plugin.name}\n") (config.plugins ++ [ postgresqlForWordpressPlugin]) }
+      # symlink additional plugin(s)
+      ${concatMapStrings (plugin: "ln -s ${plugin} $out/wp-content/plugins/${plugin.name}\n") (config.plugins) }
+
+      # symlink additional translation(s) 
+      mkdir -p $out/wp-content/languages
+      ${concatMapStrings (language: "ln -s ${language}/*.mo ${language}/*.po $out/wp-content/languages/\n") (selectedLanguages) }
     '';
   };
 
@@ -102,12 +133,12 @@ in
     };
     dbUser = mkOption {
       default = "wordpress";
-      description = "The dbUser, read the username, for the database.";
+      description = "The dbUser, read: the username, for the database.";
       example = "wordpress";
     };
     dbPassword = mkOption {
       default = "wordpress";
-      description = "The password to the respective dbUser.";
+      description = "The mysql password to the respective dbUser.";
       example = "wordpress";
     };
     tablePrefix = mkOption {
@@ -127,7 +158,7 @@ in
       type = types.listOf types.path;
       description =
         ''
-          List of path(s) to respective plugin(s) which are symlinked from the 'plugins' directory. Note: These plugins need to be packaged before use.
+          List of path(s) to respective plugin(s) which are symlinked from the 'plugins' directory. Note: These plugins need to be packaged before use, see example.
         '';
       example = ''
         # Wordpress plugin 'akismet' installation example
@@ -153,7 +184,7 @@ in
       type = types.listOf types.path;
       description =
         ''
-          List of path(s) to respective theme(s) which are symlinked from the 'theme' directory. Note: These themes need to be packaged before use.
+          List of path(s) to respective theme(s) which are symlinked from the 'theme' directory. Note: These themes need to be packaged before use, see example.
         '';
       example = ''
         # For shits and giggles, let's package the responsive theme
@@ -174,6 +205,11 @@ in
           themes = [ responsiveTheme ];
       '';
     };
+    languages = mkOption {
+          default = [];
+          description = "Installs wordpress language packs based on the list, see wordpress.nix for possible translations.";
+          example = "[ \"en_GB\" \"de_DE\" ];";
+    };
     extraConfig = mkOption {
       default = "";
       example =
@@ -186,10 +222,22 @@ in
         settings, see <link xlink:href='http://codex.wordpress.org/Editing_wp-config.php'/>.
       '';
     };
-  }; 
+    extraHtaccess = mkOption {
+      default = "";
+      example =
+        ''
+          php_value upload_max_filesize 20M
+          php_value post_max_size 20M
+        '';
+      description = ''
+        Any additional text to be appended to Wordpress's .htaccess file.
+      '';
+    };
+  };
 
   documentRoot = wordpressRoot;
 
+  # FIXME adding the user has to be done manually for the time being
   startupScript = pkgs.writeScript "init-wordpress.sh" ''
     #!/bin/sh
     mkdir -p ${config.wordpressUploads}
@@ -198,12 +246,15 @@ in
     # we should use systemd dependencies here
     #waitForUnit("network-interfaces.target");
     if [ ! -d ${serverInfo.fullConfig.services.mysql.dataDir}/${config.dbName} ]; then
+      echo "Need to create the database '${config.dbName}' and grant permissions to user named '${config.dbUser}'."
       # Wait until MySQL is up
       while [ ! -e /var/run/mysql/mysqld.pid ]; do
         sleep 1
       done
       ${pkgs.mysql}/bin/mysql -e 'CREATE DATABASE ${config.dbName};'
       ${pkgs.mysql}/bin/mysql -e 'GRANT ALL ON ${config.dbName}.* TO ${config.dbUser}@localhost IDENTIFIED BY "${config.dbPassword}";'
+    else 
+      echo "Good, no need to do anything database related."
     fi
   '';
 }

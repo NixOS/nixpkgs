@@ -47,6 +47,8 @@ let
         ${optionalString cfg.requireSignedBinaryCaches ''
           signed-binary-caches = *
         ''}
+        trusted-users = ${toString cfg.trustedUsers}
+        allowed-users = ${toString cfg.allowedUsers}
         $extraOptions
         END
       '';
@@ -76,8 +78,8 @@ in
         description = ''
           This option defines the maximum number of jobs that Nix will try
           to build in parallel.  The default is 1.  You should generally
-          set it to the number of CPUs in your system (e.g., 2 on an Athlon
-          64 X2).
+          set it to the total number of logical cores in your system (e.g., 16
+          for two CPUs with 4 cores each and hyper-threading).
         '';
       };
 
@@ -141,7 +143,7 @@ in
         default = 0;
         description = ''
           Nix daemon process priority. This priority propagates to build processes.
-          0 is the default Unix process priority, 20 is the lowest.
+          0 is the default Unix process priority, 19 is the lowest.
         '';
       };
 
@@ -252,7 +254,7 @@ in
 
       requireSignedBinaryCaches = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = ''
           If enabled, Nix will only download binaries from binary
           caches if they are cryptographically signed with any of the
@@ -277,6 +279,50 @@ in
         '';
       };
 
+      trustedUsers = mkOption {
+        type = types.listOf types.str;
+        default = [ "root" ];
+        example = [ "root" "alice" "@wheel" ];
+        description = ''
+          A list of names of users that have additional rights when
+          connecting to the Nix daemon, such as the ability to specify
+          additional binary caches, or to import unsigned NARs. You
+          can also specify groups by prefixing them with
+          <literal>@</literal>; for instance,
+          <literal>@wheel</literal> means all users in the wheel
+          group.
+        '';
+      };
+
+      allowedUsers = mkOption {
+        type = types.listOf types.str;
+        default = [ "*" ];
+        example = [ "@wheel" "@builders" "alice" "bob" ];
+        description = ''
+          A list of names of users (separated by whitespace) that are
+          allowed to connect to the Nix daemon. As with
+          <option>nix.trustedUsers</option>, you can specify groups by
+          prefixing them with <literal>@</literal>. Also, you can
+          allow all users by specifying <literal>*</literal>. The
+          default is <literal>*</literal>. Note that trusted users are
+          always allowed to connect.
+        '';
+      };
+
+      nixPath = mkOption {
+        type = types.listOf types.str;
+        default =
+          [ "/nix/var/nix/profiles/per-user/root/channels/nixos"
+            "nixos-config=/etc/nixos/configuration.nix"
+            "/nix/var/nix/profiles/per-user/root/channels"
+          ];
+        description = ''
+          The default Nix expression search path, used by the Nix
+          evaluator to look up paths enclosed in angle brackets
+          (e.g. <literal>&lt;nixpkgs&gt;</literal>).
+        '';
+      };
+
     };
 
   };
@@ -296,14 +342,14 @@ in
       { enable = cfg.buildMachines != [];
         text =
           concatMapStrings (machine:
-            "${machine.sshUser}@${machine.hostName} "
-            + (if machine ? system then machine.system else concatStringsSep "," machine.systems)
-            + " ${machine.sshKey} ${toString machine.maxJobs} "
-            + (if machine ? speedFactor then toString machine.speedFactor else "1" )
+            "${if machine ? sshUser then "${machine.sshUser}@" else ""}${machine.hostName} "
+            + machine.system or (concatStringsSep "," machine.systems)
+            + " ${machine.sshKey or "-"} ${toString machine.maxJobs or 1} "
+            + toString (machine.speedFactor or 1)
             + " "
-            + (if machine ? supportedFeatures then concatStringsSep "," machine.supportedFeatures else "" )
+            + concatStringsSep "," (machine.mandatoryFeatures or [] ++ machine.supportedFeatures or [])
             + " "
-            + (if machine ? mandatoryFeatures then concatStringsSep "," machine.mandatoryFeatures else "" )
+            + concatStringsSep "," machine.mandatoryFeatures or []
             + "\n"
           ) cfg.buildMachines;
       };
@@ -313,7 +359,7 @@ in
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
     systemd.services.nix-daemon =
-      { path = [ nix pkgs.openssl pkgs.utillinux pkgs.openssh ]
+      { path = [ nix pkgs.openssl pkgs.utillinux config.programs.ssh.package ]
           ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
 
         environment = cfg.envVars
@@ -346,7 +392,9 @@ in
       };
 
     # Set up the environment variables for running Nix.
-    environment.sessionVariables = cfg.envVars;
+    environment.sessionVariables = cfg.envVars //
+      { NIX_PATH = concatStringsSep ":" cfg.nixPath;
+      };
 
     environment.extraInit =
       ''

@@ -20,17 +20,23 @@
 
 # options
 , developerBuild ? false
+, decryptSslTraffic ? false
 }:
 
 with autonix;
 with stdenv.lib;
 
 let
-  manifest =
-    importManifest ./manifest.nix { mirror = "http://download.qt.io"; };
-  srcs = mapAttrs (name: manifest: manifest.src) manifest;
+  srcs =
+    let
+      manifest = builtins.fromJSON (builtins.readFile ./manifest.json);
+      mirror = "http://download.qt.io";
+      fetch = src: fetchurl (src // { url = "${mirror}/${src.url}"; });
+      mkPair = pkg: nameValuePair (builtins.parseDrvName pkg.name).name (fetch pkg.src);
+      pairs = map mkPair manifest;
+    in listToAttrs pairs;
 
-  version = "5.4.0";
+  version = "5.4.2";
 
   callPackage = newScope (self // { inherit qtSubmodule; });
 
@@ -61,7 +67,7 @@ let
         # GNOME dependencies are not used unless gtkStyle == true
         inherit (gnome) libgnomeui GConf gnome_vfs;
         bison = bison2; # error: too few arguments to function 'int yylex(...
-        inherit developerBuild srcs version;
+        inherit developerBuild srcs version decryptSslTraffic;
       };
 
       connectivity = callPackage
@@ -146,15 +152,15 @@ let
 
       multimedia = callPackage
         (
-          { qtSubmodule, base, declarative
-          , alsaLib, gstreamer, gst_plugins_base, pulseaudio
+          { qtSubmodule, base, declarative, pkgconfig
+          , alsaLib, gstreamer, gst_plugins_base, libpulseaudio
           }:
 
           qtSubmodule {
             name = "qtmultimedia";
             qtInputs = [ base declarative ];
             buildInputs = [
-              alsaLib gstreamer gst_plugins_base pulseaudio
+              pkgconfig alsaLib gstreamer gst_plugins_base libpulseaudio
             ];
           }
         )

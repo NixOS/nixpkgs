@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "1bphz616dv1svc50kkm8xbgyszhg3ni2dqbij99sfvjycr7bgk7c";
   };
 
-  buildInputs = [ apr scons openssl aprutil zlib kerberos pkgconfig ];
+  buildInputs = [ apr scons openssl aprutil zlib ]
+    ++ stdenv.lib.optional (!stdenv.isCygwin) kerberos
+    ++ [ pkgconfig ];
 
   configurePhase = ''
     ${gnused}/bin/sed -e '/^env[.]Append(BUILDERS/ienv.Append(ENV={"PATH":os.environ["PATH"]})' -i SConstruct
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
         APU="$(echo "${aprutil}"/bin/*-config)" CC="${
           if stdenv.isDarwin then "clang" else "${stdenv.cc}/bin/gcc"
         }" ${
-          if stdenv.isDarwin then "" else "GSSAPI=\"${kerberos}\""
+          if (stdenv.isDarwin || stdenv.isCygwin) then "" else "GSSAPI=\"${kerberos}\""
         }
   '';
 

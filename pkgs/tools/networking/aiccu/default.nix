@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gnutls iproute makeWrapper ];
 
+  patches = [
+    (fetchurl {
+      url = "https://projects.archlinux.org/svntogit/community.git/plain/trunk/gnutls-3.4.0.patch?h=packages/aiccu&id=cc6decc4e734420e4c5d0cd28652077f6bd88d84";
+      sha256 = "1ni3lhwy3r54js124p7fhm1my82a703chvh07vrhslb4v4b71g5s";
+      name = "gnutls-3.4.0.patch";
+    })
+  ];
+
   configureFlags = "--prefix=$out";
   installPhase = ''
     install -D -m 755 unix-console/aiccu $out/bin/aiccu

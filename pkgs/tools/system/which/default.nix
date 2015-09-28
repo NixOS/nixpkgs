@@ -1,15 +1,16 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "which-2.20";
+stdenv.mkDerivation rec {
+  name = "which-2.21";
   
   src = fetchurl {
-    url = mirror://gnu/which/which-2.20.tar.gz;
-    sha256 = "1y2p50zadb36izzh2zw4dm5hvdiydqf3qa88l8kav20dcmfbc5yl";
+    url = "mirror://gnu/which/${name}.tar.gz";
+    sha256 = "1bgafvy3ypbhhfznwjv1lxmd6mci3x1byilnnkc7gcr486wlb8pl";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://ftp.gnu.org/gnu/which/;
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.gpl3;
   };
 }

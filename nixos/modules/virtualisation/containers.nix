@@ -12,6 +12,12 @@ let
     perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
     su = "${pkgs.shadow.su}/bin/su";
     inherit (pkgs) utillinux;
+
+    postInstall = ''
+      t=$out/etc/bash_completion.d
+      mkdir -p $t
+      cp ${./nixos-container-completion.sh} $t/nixos-container
+    '';
   };
 
   # The container's init script, a small wrapper around the regular
@@ -137,7 +143,7 @@ in
             };
 
             hostAddress = mkOption {
-              type = types.nullOr types.string;
+              type = types.nullOr types.str;
               default = null;
               example = "10.231.136.1";
               description = ''
@@ -146,12 +152,21 @@ in
             };
 
             localAddress = mkOption {
-              type = types.nullOr types.string;
+              type = types.nullOr types.str;
               default = null;
               example = "10.231.136.2";
               description = ''
                 The IPv4 address assigned to <literal>eth0</literal>
                 in the container.
+              '';
+            };
+
+            interfaces = mkOption {
+              type = types.listOf types.string;
+              default = [];
+              example = [ "eth1" "eth2" ];
+              description = ''
+                The list of interfaces to be moved into the container.
               '';
             };
 
@@ -268,6 +283,10 @@ in
               extraFlags+=" --network-veth"
             fi
 
+            for iface in $INTERFACES; do
+              extraFlags+=" --network-interface=$iface"
+            done
+
             for iface in $MACVLANS; do
               extraFlags+=" --network-macvlan=$iface"
             done
@@ -339,7 +358,7 @@ in
             ''
               #! ${pkgs.stdenv.shell} -e
               ${nixos-container}/bin/nixos-container run "$INSTANCE" -- \
-                bash --login -c "/nix/var/nix/profiles/system/bin/switch-to-configuration test"
+                bash --login -c "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/bin/switch-to-configuration test"
             '';
 
           SyslogIdentifier = "container %i";
@@ -384,10 +403,11 @@ in
                 LOCAL_ADDRESS=${cfg.localAddress}
               ''}
             ''}
-            ${optionalString cfg.autoStart ''
-              AUTO_START=1
-            ''}
-            EXTRA_NSPAWN_FLAGS="${mkBindFlags cfg.bindMounts}"
+             INTERFACES="${toString cfg.interfaces}"
+           ${optionalString cfg.autoStart ''
+             AUTO_START=1
+           ''}
+           EXTRA_NSPAWN_FLAGS="${mkBindFlags cfg.bindMounts}"
           '';
       }) config.containers;
 

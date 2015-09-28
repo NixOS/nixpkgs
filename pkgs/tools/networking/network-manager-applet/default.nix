@@ -1,13 +1,11 @@
 { stdenv, fetchurl, intltool, pkgconfig, libglade, networkmanager, gnome3
-, libnotify, libsecret, dbus_glib, polkit, isocodes, libgnome_keyring 
+, libnotify, libsecret, dbus_glib, polkit, isocodes
 , mobile_broadband_provider_info, glib_networking, gsettings_desktop_schemas
-, makeWrapper, networkmanager_openvpn, networkmanager_vpnc
-, networkmanager_openconnect, networkmanager_pptp, networkmanager_l2tp
-, udev, hicolor_icon_theme, dconf }:
+, makeWrapper, udev, hicolor_icon_theme }:
 
 let
   pn = "network-manager-applet";
-  major = "0.9";
+  major = "1.0";
   version = networkmanager.version;
 in
 
@@ -16,8 +14,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pn}/${major}/${name}.tar.xz";
-    sha256 = "1jz0vawfixzm892m6plrzhsybgdxwv96pfwld9p85lb7wshykzj6";
+    sha256 = "1afri2zln5p59660hqzbwm2r8phx9inrm2bgp5scynzs8ddzh2kn";
   };
+
+  configureFlags = [ "--sysconfdir=/etc" ];
 
   buildInputs = [
     gnome3.gtk libglade networkmanager libnotify libsecret dbus_glib gsettings_desktop_schemas
@@ -32,30 +32,14 @@ stdenv.mkDerivation rec {
     ''CFLAGS=-DMOBILE_BROADBAND_PROVIDER_INFO=\"${mobile_broadband_provider_info}/share/mobile-broadband-provider-info/serviceproviders.xml\"''
   ];
 
-  postInstall = ''
-    mkdir -p $out/etc/NetworkManager/VPN
-    ln -s ${networkmanager_openvpn}/etc/NetworkManager/VPN/nm-openvpn-service.name $out/etc/NetworkManager/VPN/nm-openvpn-service.name
-    ln -s ${networkmanager_vpnc}/etc/NetworkManager/VPN/nm-vpnc-service.name $out/etc/NetworkManager/VPN/nm-vpnc-service.name
-    ln -s ${networkmanager_openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name $out/etc/NetworkManager/VPN/nm-openconnect-service.name
-    ln -s ${networkmanager_pptp}/etc/NetworkManager/VPN/nm-pptp-service.name $out/etc/NetworkManager/VPN/nm-pptp-service.name
-    ln -s ${networkmanager_l2tp}/etc/NetworkManager/VPN/nm-l2tp-service.name $out/etc/NetworkManager/VPN/nm-l2tp-service.name
-    mkdir -p $out/lib/NetworkManager
-    ln -s ${networkmanager_openvpn}/lib/NetworkManager/* $out/lib/NetworkManager/
-    ln -s ${networkmanager_vpnc}/lib/NetworkManager/* $out/lib/NetworkManager/
-    ln -s ${networkmanager_openconnect}/lib/NetworkManager/* $out/lib/NetworkManager/
-    ln -s ${networkmanager_pptp}/lib/NetworkManager/* $out/lib/NetworkManager/
-    ln -s ${networkmanager_l2tp}/lib/NetworkManager/* $out/lib/NetworkManager/
-    mkdir -p $out/libexec
-    ln -s ${networkmanager_openvpn}/libexec/* $out/libexec/
-    ln -s ${networkmanager_vpnc}/libexec/* $out/libexec/
-    ln -s ${networkmanager_openconnect}/libexec/* $out/libexec/
-    ln -s ${networkmanager_pptp}/libexec/* $out/libexec/
-    ln -s ${networkmanager_l2tp}/libexec/* $out/libexec/
-  '';
+  preInstall =
+    ''
+      installFlagsArray=( "sysconfdir=$out/etc" )
+    '';
 
   preFixup = ''
     wrapProgram "$out/bin/nm-applet" \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules:${dconf}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules:${gnome3.dconf}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
       --set GCONF_CONFIG_SOURCE "xml::~/.gconf" \
       --prefix PATH ":" "${gnome3.gconf}/bin"

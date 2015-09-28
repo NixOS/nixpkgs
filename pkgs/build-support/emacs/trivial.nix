@@ -1,6 +1,6 @@
 # trivial builder for Emacs packages
 
-{ lib, ... }@envargs:
+{ lib, stdenv, texinfo, ... }@envargs:
 
 with lib;
 

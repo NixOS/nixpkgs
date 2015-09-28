@@ -1,13 +1,14 @@
-{stdenv, fetchurl, mysql, libxslt, zlib, autoreconfHook }:
+{ stdenv, fetchgit, libmysql, libxslt, zlib, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "sysbench-0.4.12";
+  name = "sysbench-2015-04-22";
 
-  buildInputs = [ autoreconfHook mysql.lib libxslt zlib ];
+  buildInputs = [ autoreconfHook libmysql libxslt zlib ];
 
-  src = fetchurl {
-    url = mirror://sourceforge/sysbench/sysbench-0.4.12.tar.gz;
-    sha256 = "17pa4cw7wxvlb4mba943lfs3b3jdi64mlnaf4n8jq09y35j79yl3";
+  src = fetchgit {
+    url = git://github.com/akopytov/sysbench.git;
+    rev = "2b3042883090c9cf8cb9be2b24d3590cdcee112f";
+    sha256 = "0di6jc9ybnqk3pqg45lks2c9003l74xz4g619haw36fvbi28aql6";
   };
 
   preAutoreconf = ''

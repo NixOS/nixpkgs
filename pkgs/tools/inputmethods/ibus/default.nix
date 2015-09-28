@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "ibus-${version}";
-  version = "1.5.5";
+  version = "1.5.10";
 
   src = fetchurl {
-    url = "http://ibus.googlecode.com/files/${name}.tar.gz";
-    sha256 = "1v4a9xv2k26g6ggk4282ynfvh68j2r5hg1cdpvnryfa8c2pkdaq2";
+    url = "https://github.com/ibus/ibus/releases/download/${version}/${name}.tar.gz";
+    sha256 = "152mdzi9hr246spnn7bkb4gy16x30082xwq460gmm1q2cs0bf08x";
   };
 
   configureFlags = "--disable-gconf --enable-dconf --disable-memconf --enable-ui --enable-python-library";
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
     libnotify isocodes gobjectIntrospection
   ];
 
-  preBuild = ''
-    patchShebangs ./scripts
-    substituteInPlace data/dconf/Makefile --replace "dconf update" "echo"
+  preConfigure = ''
+    substituteInPlace data/dconf/Makefile.in --replace "dconf update" "echo"
+    sed -i "s|PYTHON2_LIBDIR=.*|PYTHON2_LIBDIR=$out/lib/${python.libPrefix}|" configure
   '';
 
   preFixup = ''
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://code.google.com/p/ibus/;
+    homepage = https://github.com/ibus/ibus;
     description = "Intelligent Input Bus for Linux / Unix OS";
     platforms = stdenv.lib.platforms.linux;
   };

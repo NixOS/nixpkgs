@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "1lg1n3a6r41492r7in0fpvzc7909mc5ir9z0gd3qh2pz4yalmyal";
   };
 
-  buildInputs = [ pkgconfig ];
+  outputs = [ "out" "doc" ];
 
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ libogg ];
 
   doCheck = true;

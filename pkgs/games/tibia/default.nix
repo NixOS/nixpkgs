@@ -3,11 +3,11 @@
 with stdenv.lib;
 assert stdenv.isi686;
 stdenv.mkDerivation {
-  name = "tibia-10.77";
+  name = "tibia-10.81";
 
   src = fetchurl {
-    url = http://static.tibia.com/download/tibia1077.tgz;
-    sha256 = "1qz2a25irzhdwh4swwcfz4g37f1j3cxhm9c43yl763bvc718ikly";
+    url = http://static.tibia.com/download/tibia1081.tgz;
+    sha256 = "19p102fg31slrwg09q8dzhvz48qp8yrkpq69djn0jb9hrs7k7fpr";
   };
 
   shell = stdenv.shell;

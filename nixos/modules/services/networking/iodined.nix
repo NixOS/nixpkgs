@@ -20,13 +20,13 @@ in
     services.iodined = {
 
       enable = mkOption {
-        type = types.uniq types.bool;
+        type = types.bool;
         default = false;
         description = "Enable iodine, ip over dns daemon";
       };
 
       client = mkOption {
-        type = types.uniq types.bool;
+        type = types.bool;
         default = false;
         description = "Start iodine in client mode";
       };

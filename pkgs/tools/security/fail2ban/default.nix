@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, pythonPackages, unzip, systemd, gamin }:
+{ stdenv, fetchzip, python, pythonPackages, unzip, systemd, gamin }:
 
 let version = "0.9.1"; in
 
@@ -6,10 +6,10 @@ pythonPackages.buildPythonPackage {
   name = "fail2ban-${version}";
   namePrefix = "";
 
-  src = fetchurl {
-    url    = "https://github.com/fail2ban/fail2ban/zipball/${version}";
-    name   = "fail2ban-${version}.zip";
-    sha256 = "0lk720r212mbpk1654qihyxcj5wmglzkg7v4pyiy5qq9qy58jmyr";
+  src = fetchzip {
+    name   = "fail2ban-${version}-src";
+    url    = "https://github.com/fail2ban/fail2ban/archive/${version}.tar.gz";
+    sha256 = "111xvy2gxwn868kn0zy2fmdfa423z6fk57i7wsfrc0l74p1cdvs5";
   };
 
   buildInputs = [ unzip ];

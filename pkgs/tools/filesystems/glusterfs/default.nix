@@ -1,24 +1,31 @@
 {stdenv, fetchurl, fuse, bison, flex_2_5_35, openssl, python, ncurses, readline,
- autoconf, automake, libtool, pkgconfig, zlib, libaio, libxml2}:
+ autoconf, automake, libtool, pkgconfig, zlib, libaio, libxml2, acl, sqlite
+ , liburcu, attr
+}:
 let 
   s = # Generated upstream information 
   rec {
     baseName="glusterfs";
-    version="3.6.3";
+    version="3.7.3";
     name="${baseName}-${version}";
-    hash="084zkc1jd5ggkfl0f5d4s7lra5xgildnphyf6ywzxrb7g44vk0d4";
-    url="http://download.gluster.org/pub/gluster/glusterfs/3.6/3.6.3/glusterfs-3.6.3.tar.gz";
-    sha256="084zkc1jd5ggkfl0f5d4s7lra5xgildnphyf6ywzxrb7g44vk0d4";
+    hash="0xdzxprsi0gybv6jdp0ycfpsxzijwfrm3217fk3fnixcs92frshv";
+    url="http://download.gluster.org/pub/gluster/glusterfs/3.7/3.7.3/glusterfs-3.7.3.tar.gz";
+    sha256="0xdzxprsi0gybv6jdp0ycfpsxzijwfrm3217fk3fnixcs92frshv";
   };
   buildInputs = [
     fuse bison flex_2_5_35 openssl python ncurses readline
     autoconf automake libtool pkgconfig zlib libaio libxml2
+    acl sqlite liburcu attr
+  ];
+  # Some of the headers reference acl
+  propagatedBuildInputs = [
+    acl
   ];
 in
 stdenv.mkDerivation
 rec {
   inherit (s) name version;
-  inherit buildInputs;
+  inherit buildInputs propagatedBuildInputs;
 
   preConfigure = ''
     ./autogen.sh

@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "rocksdb-${version}";
-  version = "3.10";
+  version = "3.13.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
-    rev = "v${version}";
-    sha256 = "1px345x9cyaxyjlzsf3bcxixvfaxn9x3ysq7biajyfhk8wq1n4p0";
+    rev = "rocksdb-${version}";
+    sha256 = "1jw2sjvpixz565wvmgls4rly3wylcmyypka4pvd9mhxkq8d699h9";
   };
 
   buildInputs = [ snappy google-gflags zlib bzip2 lz4 numactl malloc ];
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   # Environment vars used for building certain configurations
   PORTABLE = "1";
   USE_SSE = "1";
+  CMAKE_CXX_FLAGS = "-std=gnu++11";
   JEMALLOC_LIB = stdenv.lib.optionalString (malloc == jemalloc) "-ljemalloc";
 
   buildFlags = [
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     homepage = http://rocksdb.org;
     description = "A library that provides an embeddable, persistent key-value store for fast storage";
     license = licenses.bsd3;
-    platforms = platforms.all;
+    platforms = platforms.allBut [ "i686-linux" ];
     maintainers = with maintainers; [ wkennington ];
   };
 }

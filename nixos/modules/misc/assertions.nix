@@ -21,7 +21,7 @@ with lib;
     warnings = mkOption {
       internal = true;
       default = [];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       example = [ "The `foo' service is deprecated and will go away soon!" ];
       description = ''
         This option allows modules to show warnings to users during
@@ -30,5 +30,5 @@ with lib;
     };
 
   };
-  # impl of assertions is in <nixos/modules/system/activation/top-level.nix>
+  # impl of assertions is in <nixpkgs/nixos/modules/system/activation/top-level.nix>
 }

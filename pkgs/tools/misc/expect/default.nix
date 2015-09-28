@@ -1,8 +1,7 @@
 { stdenv, fetchurl, tcl, makeWrapper }:
 
-let version = "5.45";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
+  version = "5.45";
   name = "expect-${version}";
 
   src = fetchurl {
@@ -13,37 +12,30 @@ stdenv.mkDerivation {
   buildInputs = [ tcl ];
   nativeBuildInputs = [ makeWrapper ];
 
-  #NIX_CFLAGS_COMPILE = "-DHAVE_UNISTD_H";
-
-  # http://wiki.linuxfromscratch.org/lfs/ticket/2126
-  #preBuild = ''
-  #  substituteInPlace exp_inter.c --replace tcl.h tclInt.h
-  #'';
-
   patchPhase = ''
-    substituteInPlace configure --replace /bin/stty "$(type -tP stty)"
-    sed -e '1i\#include <tclInt.h>' -i exp_inter.c
-    export NIX_LDFLAGS="-rpath $out/lib $NIX_LDFLAGS"
-  '' + stdenv.lib.optionalString stdenv.isFreeBSD ''
-    ln -s libexpect.so.1 libexpect545.so
+    sed -i "s,/bin/stty,$(type -p stty),g" configure
   '';
 
   configureFlags = [
     "--with-tcl=${tcl}/lib"
     "--with-tclinclude=${tcl}/include"
-    "--exec-prefix=$(out)"
+    "--exec-prefix=\${out}"
   ];
 
   postInstall = ''
     for i in $out/bin/*; do
       wrapProgram $i \
         --prefix PATH : "${tcl}/bin" \
-        --prefix TCLLIBPATH ' ' $out/lib/*
+        --prefix TCLLIBPATH ' ' $out/lib/* \
+        ${stdenv.lib.optionalString stdenv.isDarwin "--prefix DYLD_LIBRARY_PATH : $out/lib/expect${version}"}
     done
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A tool for automating interactive applications";
     homepage = http://expect.nist.gov/;
+    license = "Expect";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ wkennington ];
   };
 }

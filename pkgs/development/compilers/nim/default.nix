@@ -1,13 +1,13 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "nim-0.11.0";
+  name = "nim-0.11.2";
 
   buildInputs = [ unzip ];
 
   src = fetchurl {
     url = "http://nim-lang.org/download/${name}.zip";
-    sha256 = "0l19rrp6nhwhr2z33np4x32c35iba0hhv6w3qwj1sk8bjfpvz4cw";
+    sha256 = "0ay8gkd8fki3d8kbnw2px7rjdlr54kyqh5n1rjhq4vjmqs2wg5s4";
   };
 
   buildPhase   = "sh build.sh";

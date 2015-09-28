@@ -1,8 +1,8 @@
-{ pkgs, newScope, stdenv, isl, fetchurl, overrideCC, wrapCC }:
+{ newScope, stdenv, isl, fetchurl, overrideCC, wrapCC }:
 let
-  callPackage = newScope (self // { inherit isl version fetch; });
+  callPackage = newScope (self // { inherit stdenv isl version fetch; });
 
-  version = "3.6.0";
+  version = "3.6.2";
 
   fetch = fetch_v version;
   fetch_v = ver: name: sha256: fetchurl {
@@ -10,8 +10,8 @@ let
     inherit sha256;
   };
 
-  compiler-rt_src = fetch "compiler-rt" "04bbn946jninynkrjyp337xqs8ihn4fkz5xgvmywxkddwmwznjbz";
-  clang-tools-extra_src = fetch "clang-tools-extra" "04n83gsmy2ghvn7vp9hamsgn332rx2g7sa4paskr0d4ihax4ka9s";
+  compiler-rt_src = fetch "compiler-rt" "11qx8d3pbfqjaj2x207pvlvzihbs1z2xbw4crpz7aid6h1yz6bqg";
+  clang-tools-extra_src = fetch "clang-tools-extra" "1ssgs1108gnsggyx9wcl4hmq196f5ix0y1j7ygfh3xcqsckwc3ka";
 
   self = {
     llvm = callPackage ./llvm.nix {

@@ -1,30 +1,34 @@
-{ stdenv, fetchurl, bobcat, gcc49, icmake, yodl }:
+{ stdenv, fetchFromGitHub, bobcat, icmake, yodl }:
 
-let version = "2.02.00"; in
-stdenv.mkDerivation rec {
+let version = "2.03.00"; in
+stdenv.mkDerivation {
   name = "flexc++-${version}";
 
-  src = fetchurl {
-    sha256 = "0mz5d0axr4c8rrmn4iw7b5llmf6f3g9cnjzzz3kw02mfzwll79rz";
-    url = "mirror://sourceforge/flexcpp/${version}/flexc++_${version}.orig.tar.gz";
+  src = fetchFromGitHub {
+    sha256 = "1knb5h6l71n5zi9xzml5f6v7wspbk7vrcaiy2div8bnj7na3z717";
+    rev = version;
+    repo = "flexcpp";
+    owner = "fbb-git";
   };
 
   meta = with stdenv.lib; {
     inherit version;
-    description = "";
+    description = "C++ tool for generating lexical scanners";
     longDescription = ''
       Flexc++ was designed after `flex'. Flexc++ offers a cleaner class design
       and requires simpler specification files than offered by flex's C++
       option.
     '';
-    homepage = http://flexcpp.sourceforge.net/;
-    downloadPage = http://sourceforge.net/projects/flexcpp/files/;
-    license = with licenses; gpl3;
-    platforms = with platforms; linux;
+    homepage = https://fbb-git.github.io/flexcpp/;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ bobcat gcc49 icmake yodl ];
+  sourceRoot = "flexcpp-${version}-src/flexc++";
+
+  buildInputs = [ bobcat ];
+  nativeBuildInputs = [ icmake yodl ];
 
   postPatch = ''
     substituteInPlace INSTALL.im --replace /usr $out

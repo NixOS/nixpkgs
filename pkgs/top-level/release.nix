@@ -213,7 +213,8 @@ let
         gnome_vfs = linux;
       };
 
-      haskell.compiler = packagePlatforms pkgs.haskell-ng.compiler;
+      haskell.compiler = packagePlatforms pkgs.haskell.compiler;
+      haskellPackages = packagePlatforms pkgs.haskellPackages;
 
       strategoPackages = {
         sdf = linux;

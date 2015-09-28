@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gettext }:
 
 let version = "0.5.2"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "duff-${version}";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "elmindreda";
   };
 
-  buildInputs = [ autoreconfHook gettext ];
+  nativeBuildInputs = [ autoreconfHook gettext ];
 
   preAutoreconf = ''
     # duff is currently badly packaged, requiring us to do extra work here that
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Quickly find duplicate files";
     homepage = http://duff.dreda.org/;
-    license = with licenses; zlib;
+    license = licenses.zlib;
     longDescription = ''
       Duff is a Unix command-line utility for quickly finding duplicates in
       a given set of files.

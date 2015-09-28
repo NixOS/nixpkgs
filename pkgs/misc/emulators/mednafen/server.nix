@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   name = "mednafen-server-${version}";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/project/mednafen/Mednafen-Server/${version}/${name}.tar.gz";
-    sha256="0c5wvg938y3h4n5lb0dl8pvmjzphhkbba34r6ikpvdahq166ps4j";
+    sha256="06fal6hwrb8gw94yp7plhcz55109128cgp35m7zs5vvjf1zfhcs9";
   };
 
   postInstall = ''
