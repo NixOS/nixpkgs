@@ -19,6 +19,9 @@
   # /etc/nixos/configuration.nix.
   configFile ? null
 
+, # Shell code executed after the VM has finished.
+  postVM ? ""
+
 }:
 
 with lib;
@@ -35,6 +38,7 @@ pkgs.vmTools.runInLinuxVM (
       buildInputs = [ pkgs.utillinux pkgs.perl pkgs.e2fsprogs pkgs.parted ];
       exportReferencesGraph =
         [ "closure" config.system.build.toplevel ];
+      inherit postVM;
     }
     ''
       ${if partitioned then ''
@@ -68,6 +72,7 @@ pkgs.vmTools.runInLinuxVM (
 
       mkdir -p /mnt/nix/store
       echo "copying everything (will take a while)..."
+      set -f
       cp -prd $storePaths /mnt/nix/store/
 
       # Register the paths in the Nix database.
@@ -94,6 +99,7 @@ pkgs.vmTools.runInLinuxVM (
 
       # Generate the GRUB menu.
       ln -s vda /dev/xvda
+      ln -s vda /dev/sda
       chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
 
       umount /mnt/proc /mnt/dev /mnt/sys
