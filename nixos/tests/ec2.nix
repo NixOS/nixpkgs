@@ -13,6 +13,13 @@ let
         ../../nixos/modules/testing/test-instrumentation.nix
         { boot.initrd.kernelModules = [ "virtio" "virtio_blk" "virtio_pci" "virtio_ring" ];
           ec2.hvm = true;
+
+          # Hack to make the partition resizing work in QEMU.
+          boot.initrd.postDeviceCommands = mkBefore
+            ''
+              ln -s vda /dev/xvda
+              ln -s vda1 /dev/xvda1
+            '';
         }
       ];
     }).config.system.build.amazonImage;
@@ -40,6 +47,7 @@ let
           mkdir $imageDir, 0700;
           my $diskImage = "$imageDir/machine.qcow2";
           system("qemu-img create -f qcow2 -o backing_file=${image}/nixos.img $diskImage") == 0 or die;
+          system("qemu-img resize $diskImage 10G") == 0 or die;
 
           # Note: we use net=169.0.0.0/8 rather than
           # net=169.254.0.0/16 to prevent dhcpcd from getting horribly
@@ -100,7 +108,16 @@ in {
       $machine->succeed("echo localhost,127.0.0.1 ${snakeOilPublicKey} > ~/.ssh/known_hosts");
       $machine->succeed("ssh -o BatchMode=yes localhost exit");
 
+      # Test whether the root disk was resized.
+      my $blocks = $machine->succeed("stat -c %b -f /");
+      my $bsize = $machine->succeed("stat -c %S -f /");
+      my $size = $blocks * $bsize;
+      die "wrong free space $size" if $size < 9.7 * 1024 * 1024 * 1024 || $size > 10 * 1024 * 1024 * 1024;
+
+      # Just to make sure resizing is idempotent.
       $machine->shutdown;
+      $machine->start;
+      $machine->waitForFile("/root/user-data");
     '';
   };
 
