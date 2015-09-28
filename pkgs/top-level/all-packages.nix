@@ -14959,6 +14959,8 @@ let
 
   tvheadend = callPackage ../servers/tvheadend { };
 
+  urbit = callPackage ../misc/urbit { };
+
   utf8proc = callPackage ../development/libraries/utf8proc { };
 
   vault = goPackages.vault.bin // { outputs = [ "bin" ]; };
