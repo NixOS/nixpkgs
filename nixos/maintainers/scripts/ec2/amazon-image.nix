@@ -12,7 +12,7 @@ with lib;
   system.build.amazonImage = import ../../../lib/make-disk-image.nix {
     inherit pkgs lib config;
     partitioned = config.ec2.hvm;
-    diskSize = 8192;
+    diskSize = if config.ec2.hvm then 2048 else 8192;
     configFile = pkgs.writeText "configuration.nix"
       ''
         {
