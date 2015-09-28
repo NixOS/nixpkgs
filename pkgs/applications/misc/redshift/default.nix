@@ -19,10 +19,10 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ geoclue ]
-    ++ stdenv.lib.optional guiSupport [ python pygobject3 pyxdg ]
-    ++ stdenv.lib.optional drmSupport [ libdrm ]
-    ++ stdenv.lib.optional randrSupport [ libxcb ]
-    ++ stdenv.lib.optional vidModeSupport [ libX11 libXxf86vm ];
+    ++ stdenv.lib.optionals guiSupport [ python pygobject3 pyxdg ]
+    ++ stdenv.lib.optionals drmSupport [ libdrm ]
+    ++ stdenv.lib.optionals randrSupport [ libxcb ]
+    ++ stdenv.lib.optionals vidModeSupport [ libX11 libXxf86vm ];
   nativeBuildInputs = [ gettext intltool makeWrapper pkgconfig ];
 
   configureFlags = [
