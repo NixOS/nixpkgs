@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, alsaLib, libjack2-git, libpulseaudio }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.1";
+  version = "1.0.2";
   name = "libsoundio-${version}";
 
   src = fetchFromGitHub {
     owner = "andrewrk";
     repo = "libsoundio";
     rev = "${version}";
-    sha256 = "1nlsn517rqvhc1scfw96ky7ja6dj2l96j4qjrphb5z63zxxi06pf";
+    sha256 = "0zq8sy8m9zp2ji7qiwn932ivl5mw30kn97nip84ki8vc0lm7f8hx";
   };
 
   buildInputs = [ cmake alsaLib libjack2-git libpulseaudio ];
