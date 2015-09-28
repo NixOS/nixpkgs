@@ -1857,8 +1857,13 @@ let
   ifuse = callPackage ../tools/filesystems/ifuse/default.nix { };
 
   ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
-    inherit (pythonPackages) ipython;
     inherit (haskellPackages) ihaskell ghcWithPackages;
+
+    ipython = buildEnv {
+      name = "ipython-faux-environment";
+      paths = with pythonPackages; [ pythonFull ipykernel notebook ];
+    };
+
     packages = config.ihaskell.packages or (self: []);
   };
 
