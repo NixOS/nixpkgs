@@ -201,6 +201,7 @@
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
   ./services/misc/gpsd.nix
+  ./services/misc/heyefi.nix
   ./services/misc/ihaskell.nix
   ./services/misc/mbpfan.nix
   ./services/misc/mediatomb.nix
@@ -292,7 +293,6 @@
   ./services/networking/gogoclient.nix
   ./services/networking/gvpe.nix
   ./services/networking/haproxy.nix
-  ./services/networking/heyefi.nix
   ./services/networking/hostapd.nix
   ./services/networking/i2pd.nix
   ./services/networking/i2p.nix
