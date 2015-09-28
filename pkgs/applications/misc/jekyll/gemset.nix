@@ -1,4 +1,11 @@
 {
+  "RedCloth" = {
+    version = "4.2.9";
+    source = {
+      type = "gem";
+      sha256 = "06pahxyrckhgb7alsxwhhlx1ib2xsx33793finj01jk8i054bkxl";
+    };
+  };
   "blankslate" = {
     version = "2.1.2.4";
     source = {
