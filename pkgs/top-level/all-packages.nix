@@ -11034,6 +11034,11 @@ let
     enableX11 = config.unison.enableX11 or true;
   };
 
+  unison_2_48_3 = callPackage ../applications/networking/sync/unison/2.48.3.nix {
+    inherit (ocamlPackages) lablgtk;
+    enableX11 = config.unison.enableX11 or true;
+  };
+
   uucp = callPackage ../tools/misc/uucp { };
 
   uvccapture = callPackage ../applications/video/uvccapture { };
