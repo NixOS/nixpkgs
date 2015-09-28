@@ -47,19 +47,19 @@ let
       mountPoint = mkOption {
         example = "/mnt/usb";
         type = types.str;
-        description = "Mount point on the container file system";
+        description = "Mount point on the container file system.";
       };
       hostPath = mkOption {
         default = null;
         example = "/home/alice";
-        type = types.uniq (types.nullOr types.string);
-        description = "Location of the host path to be mounted";
+        type = types.nullOr types.str;
+        description = "Location of the host path to be mounted.";
       };
       isReadOnly = mkOption {
         default = true;
         example = true;
         type = types.bool;
-        description = "Determine whether the mounted path will be accessed in read-only mode";
+        description = "Determine whether the mounted path will be accessed in read-only mode.";
       };
     };
     
