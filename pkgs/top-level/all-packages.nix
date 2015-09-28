@@ -1859,9 +1859,8 @@ let
   ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
     inherit (haskellPackages) ihaskell ghcWithPackages;
 
-    ipython = buildEnv {
-      name = "ipython-faux-environment";
-      paths = with pythonPackages; [ pythonFull ipykernel notebook ];
+    ipython = pythonFull.buildEnv.override {
+      extraLibs = with pythonPackages; [ ipython ipykernel jupyter_client notebook ];
     };
 
     packages = config.ihaskell.packages or (self: []);
