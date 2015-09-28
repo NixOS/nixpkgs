@@ -83,12 +83,17 @@ stdenv.mkDerivation {
         };
         xdg-config-dirs = ./0008-xdg-config-dirs.patch;
         decrypt-ssl-traffic = ./0009-decrypt-ssl-traffic.patch;
+        mkspecs-libgl = substituteAll {
+          src = ./0014-mkspecs-libgl.patch;
+          inherit mesa;
+        };
     in [
       dlopen-resolv dlopen-gl tzdir dlopen-libXcursor dlopen-openssl
       dlopen-dbus xdg-config-dirs
     ]
     ++ optional gtkStyle dlopen-gtkstyle
-    ++ optional decryptSslTraffic decrypt-ssl-traffic;
+    ++ optional decryptSslTraffic decrypt-ssl-traffic
+    ++ optional mesaSupported mkspecs-libgl;
 
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/qtbase/lib:$PWD/qtbase/plugins/platforms:$PWD/qttools/lib:$LD_LIBRARY_PATH"
