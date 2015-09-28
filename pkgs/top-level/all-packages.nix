@@ -2021,6 +2021,7 @@ let
   };
 
   nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix {
+    libtool = darwin.cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices Carbon Foundation;
   };
 
