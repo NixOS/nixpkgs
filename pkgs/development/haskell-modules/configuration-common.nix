@@ -57,15 +57,6 @@ self: super: {
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
-  WordNet = pkgs.stdenv.lib.overrideDerivation super.WordNet (drv: {
-    src = ~/.dev/Haskell/WordNet-1.1.0;
-    postPatch = (drv.postPatch or "") + ''
-      substituteInPlace NLP/WordNet/Consts.hs \
-        --replace /usr/local/WordNet-2.0 ${pkgs.wordnet} \
-        --replace 'defined (MAC)' 0
-    '';
-  });
-
   # This package needs a little help compiling properly on Darwin. Furthermore,
   # Stackage compiles git-annex without the Assistant, supposedly because not
   # all required dependencies are part of Stackage. To comply with Stackage, we

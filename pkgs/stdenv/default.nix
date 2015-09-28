@@ -54,7 +54,7 @@ rec {
     if system == "armv7l-linux" then stdenvLinux else
     if system == "mips64el-linux" then stdenvLinux else
     if system == "powerpc-linux" then /* stdenvLinux */ stdenvNative else
-    if system == "x86_64-darwin" then stdenvDarwinPure else
+    if system == "x86_64-darwin" then stdenvDarwin else
     if system == "x86_64-solaris" then stdenvNix else
     if system == "i686-cygwin" then stdenvNative else
     if system == "x86_64-cygwin" then stdenvNative else
