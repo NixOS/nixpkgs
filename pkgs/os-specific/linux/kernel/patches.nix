@@ -68,6 +68,11 @@ rec {
       patch = ./ubuntu-fan-4.patch;
     };
 
+  ubuntu_unprivileged_overlayfs =
+    { name = "ubuntu-unprivileged-overlayfs";
+      patch = ./ubuntu-unprivileged-overlayfs.patch;
+    };
+
   tuxonice_3_10 = makeTuxonicePatch {
     version = "2013-11-07";
     kernelVersion = "3.10.18";
