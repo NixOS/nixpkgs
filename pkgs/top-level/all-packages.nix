@@ -258,7 +258,7 @@ let
   autonix = import ../build-support/autonix { inherit pkgs; };
 
   autoreconfHook = makeSetupHook
-    { substitutions = { inherit autoconf automake gettext; libtool = realLibtool; }; }
+    { substitutions = { inherit autoconf automake gettext libtool; }; }
     ../build-support/setup-hooks/autoreconf.sh;
 
   buildEnv = callPackage ../build-support/buildenv {};
@@ -5583,11 +5583,8 @@ let
 
   lemon = callPackage ../development/tools/parsing/lemon { };
 
-  libtool = if stdenv.isDarwin
-    then darwin.cctools
-    else realLibtool;
 
-  realLibtool = libtool_2;
+  libtool = libtool_2;
 
   libtool_1_5 = callPackage ../development/tools/misc/libtool { };
 
@@ -11121,6 +11118,7 @@ let
   });
   emacs24Macport_24_5 = lowPrio (callPackage ../applications/editors/emacs-24/macport-24.5.nix {
     stdenv = pkgs.clangStdenv;
+    inherit (darwin.apple_sdk.frameworks) Carbon;
   });
   emacs24Macport = self.emacs24Macport_24_5;
 
