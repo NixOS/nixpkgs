@@ -26,7 +26,9 @@ let cfg = config.ec2; in
 
     # Prevent the nouveau kernel module from being loaded, as it
     # interferes with the nvidia/nvidia-uvm modules needed for CUDA.
-    boot.blacklistedKernelModules = [ "nouveau" ];
+    # Also blacklist xen_fbfront to prevent a 30 second delay during
+    # boot.
+    boot.blacklistedKernelModules = [ "nouveau" "xen_fbfront" ];
 
     # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
     boot.loader.grub.version = if cfg.hvm then 2 else 1;
