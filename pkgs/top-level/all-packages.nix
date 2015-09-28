@@ -258,7 +258,7 @@ let
   autonix = import ../build-support/autonix { inherit pkgs; };
 
   autoreconfHook = makeSetupHook
-    { substitutions = { inherit autoconf automake gettext; libtool = realLibtool; }; }
+    { substitutions = { inherit autoconf automake gettext libtool; }; }
     ../build-support/setup-hooks/autoreconf.sh;
 
   buildEnv = callPackage ../build-support/buildenv {};
@@ -4857,9 +4857,7 @@ let
 
   guile_1_8 = callPackage ../development/interpreters/guile/1.8.nix { };
 
-  guile_2_0 = callPackage ../development/interpreters/guile {
-    libtool = realLibtool;
-  };
+  guile_2_0 = callPackage ../development/interpreters/guile { };
 
   guile = guile_2_0;
 
@@ -5572,11 +5570,8 @@ let
 
   lemon = callPackage ../development/tools/parsing/lemon { };
 
-  libtool = if stdenv.isDarwin
-    then darwin.cctools
-    else realLibtool;
 
-  realLibtool = libtool_2;
+  libtool = libtool_2;
 
   libtool_1_5 = callPackage ../development/tools/misc/libtool { };
 
@@ -6057,9 +6052,7 @@ let
   db6 = db60;
   db60 = callPackage ../development/libraries/db/db-6.0.nix { };
 
-  dbus = callPackage ../development/libraries/dbus {
-    libtool = realLibtool;
-  };
+  dbus = callPackage ../development/libraries/dbus { };
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
   dbus_glib       = callPackage ../development/libraries/dbus-glib { };
   dbus_java       = callPackage ../development/libraries/java/dbus-java { };
@@ -11044,6 +11037,7 @@ let
   });
   emacs24Macport_24_5 = lowPrio (callPackage ../applications/editors/emacs-24/macport-24.5.nix {
     stdenv = pkgs.clangStdenv;
+    inherit (darwin.apple_sdk.frameworks) Carbon;
   });
   emacs24Macport = self.emacs24Macport_24_5;
 
