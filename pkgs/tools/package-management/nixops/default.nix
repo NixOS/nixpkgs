@@ -1,28 +1,30 @@
 { lib, pythonPackages, fetchurl, libxslt, docbook5_xsl, openssh }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "nixops-1.3";
+  name = "nixops-1.2";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://nixos.org/releases/nixops/${name}/${name}.tar.bz2";
-    sha256 = "53a0ed75ceaa514dd46f670639df88390e79413ae015636d37e6cf430b40eaaf";
+    sha256 = "06cf54c62a810cac5013d57d31707f0a6381b409485503a94a57ce6d8a1ac12b";
   };
 
-  buildInputs = [ pythonPackages.nose pythonPackages.coverage ];
+  buildInputs = [ libxslt ];
 
-  propagatedBuildInputs =
+  pythonPath =
     [ pythonPackages.prettytable
       pythonPackages.boto
-      pythonPackages.hetzner
-      pythonPackages.libcloud
       pythonPackages.sqlite3
+      pythonPackages.hetzner
     ];
 
   doCheck = false;
 
   postInstall =
     ''
+      # Backward compatibility symlink.
+      ln -s nixops $out/bin/charon
+
       make -C doc/manual install nixops.1 docbookxsl=${docbook5_xsl}/xml/xsl/docbook \
         docdir=$out/share/doc/nixops mandir=$out/share/man
 
