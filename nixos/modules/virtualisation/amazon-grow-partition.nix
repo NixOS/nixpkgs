@@ -39,7 +39,10 @@ in
     '';
 
     boot.initrd.postDeviceCommands = ''
-      [ -e /dev/xvda ] && [ -e /dev/xvda1 ] && TMPDIR=/run sh $(type -P growpart) /dev/xvda 1
+      if [ -e /dev/xvda ] && [ -e /dev/xvda1 ]; then
+        TMPDIR=/run sh $(type -P growpart) /dev/xvda 1
+        udevadm settle
+      fi
     '';
 
   };
