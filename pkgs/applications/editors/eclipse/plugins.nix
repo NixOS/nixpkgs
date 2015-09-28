@@ -1,5 +1,44 @@
 { stdenv, fetchurl, fetchzip, unzip }:
 
+let
+
+  # A few shell functions and variables that are useful for installing
+  # Eclipse feature and plugin JARs.
+  installHelpers = ''
+    dropinDir="$out/eclipse/dropins/$name"
+
+    # Helper function that installs a feature JAR file.
+    installFeatureJar() {
+        local featureJar=$1
+        local featureName=$2
+
+        mkdir -p $dropinDir/features/$featureName
+        unzip $featureJar -d $dropinDir/features/$featureName
+    }
+
+    # Helper function that installs a plugin JAR file.
+    installPluginJar() {
+        local pluginJar=$1
+        local pluginName=$2
+
+        # A bundle should be unpacked if the manifest matches this
+        # pattern.
+        local unpackPat="Eclipse-BundleShape:\\s*dir"
+
+        manifest=$(unzip -p $pluginJar META-INF/MANIFEST.MF)
+
+        if [[ $manifest =~ $unpackPat ]] ; then
+            mkdir $dropinDir/plugins/$pluginName
+            unzip $pluginJar -d $dropinDir/plugins/$pluginName
+        else
+            mkdir -p $dropinDir/plugins
+            cp -v $pluginJar $dropinDir/plugins/$pluginName.jar
+        fi
+    }
+  '';
+
+in
+
 rec {
 
   # A primitive builder of Eclipse plugins. This function is intended
@@ -27,13 +66,15 @@ rec {
       phases = [ "installPhase" ];
 
       installPhase = ''
-        dropinDir="$out/eclipse/dropins/${name}"
+        ${installHelpers}
 
-        mkdir -p $dropinDir/features
-        unzip ${srcFeature} -d $dropinDir/features/
+        featureName=''${srcFeature%.jar}
+        featureName=''${featureName#*-}
+        installFeatureJar $srcFeature $featureName
 
-        mkdir -p $dropinDir/plugins
-        cp -v ${srcPlugin} $dropinDir/plugins/${name}.jar
+        pluginName=''${srcPlugin%.jar}
+        pluginName=''${pluginName#*-}
+        installPluginJar $srcPlugin $pluginName
       '';
 
     });
@@ -47,35 +88,19 @@ rec {
       phases = [ "unpackPhase" "installPhase" ];
 
       installPhase = ''
-        dropinDir="$out/eclipse/dropins/${name}"
+        ${installHelpers}
 
-        # Install features.
         cd features
         for feature in *.jar; do
           featureName=''${feature%.jar}
-          mkdir -p $dropinDir/features/$featureName
-          unzip $feature -d $dropinDir/features/$featureName
+          installFeatureJar $feature $featureName
         done
         cd ..
-
-        # Install plugins.
-        mkdir -p $dropinDir/plugins
-
-        # A bundle should be unpacked if the manifest matches this
-        # pattern.
-        unpackPat="Eclipse-BundleShape:\\s*dir"
 
         cd plugins
         for plugin in *.jar ; do
           pluginName=''${plugin%.jar}
-          manifest=$(unzip -p $plugin META-INF/MANIFEST.MF)
-
-          if [[ $manifest =~ $unpackPat ]] ; then
-            mkdir $dropinDir/plugins/$pluginName
-            unzip $plugin -d $dropinDir/plugins/$pluginName
-          else
-            cp -v $plugin $dropinDir/plugins/
-          fi
+          installPluginJar $plugin $pluginName
         done
         cd ..
       '';
