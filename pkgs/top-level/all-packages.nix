@@ -3510,6 +3510,7 @@ let
 
   wget = callPackage ../tools/networking/wget {
     inherit (perlPackages) LWP;
+    libpsl = null;
   };
 
   which = callPackage ../tools/system/which { };
