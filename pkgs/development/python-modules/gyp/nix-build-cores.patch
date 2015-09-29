@@ -1,0 +1,20 @@
+diff -Nru a/pylib/gyp/input.py b/pylib/gyp/input.py
+--- a/pylib/gyp/input.py	2015-09-29 23:41:05.000000000 +0300
++++ b/pylib/gyp/input.py	2015-09-29 23:42:31.000000000 +0300
+@@ -14,6 +14,7 @@
+ import gyp.simple_copy
+ import multiprocessing
+ import optparse
++import os
+ import os.path
+ import re
+ import shlex
+@@ -593,7 +594,7 @@
+         'multiple_toolsets': globals()['multiple_toolsets']}
+ 
+       if not parallel_state.pool:
+-        parallel_state.pool = multiprocessing.Pool(multiprocessing.cpu_count())
++        parallel_state.pool = multiprocessing.Pool(int(os.environ.get('NIX_BUILD_CORES') or '1'))
+       parallel_state.pool.apply_async(
+           CallLoadTargetBuildFile,
+           args = (global_flags, dependency,

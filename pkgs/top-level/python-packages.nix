@@ -6820,6 +6820,8 @@ let
 
     patches = optionals pkgs.stdenv.isDarwin [
       ../development/python-modules/gyp/no-darwin-cflags.patch
+      ../development/python-modules/gyp/no-xcode.patch
+      ../development/python-modules/gyp/nix-build-cores.patch
     ];
 
     meta = {
