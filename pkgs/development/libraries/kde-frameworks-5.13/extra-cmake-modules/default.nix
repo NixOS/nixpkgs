@@ -1,6 +1,6 @@
-{ mkDerivation, lib, stdenv, cmake, pkgconfig, qttools }:
+{ kdeFramework, lib, stdenv, cmake, pkgconfig, qttools }:
 
-mkDerivation {
+kdeFramework {
   name = "extra-cmake-modules";
   setupHook = ./setup-hook.sh;
   patches = [ ./0001-extra-cmake-modules-paths.patch ];

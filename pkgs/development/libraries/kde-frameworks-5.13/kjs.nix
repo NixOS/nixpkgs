@@ -1,9 +1,9 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kdoctools
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kjs";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   postInstall = ''

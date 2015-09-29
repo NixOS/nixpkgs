@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kconfigwidgets
 , ki18n
@@ -6,7 +6,7 @@
 , qtsvg
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kiconthemes";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kconfigwidgets ki18n kitemviews qtsvg ];

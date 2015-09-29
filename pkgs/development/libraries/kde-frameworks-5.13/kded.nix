@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kconfig
 , kcoreaddons
@@ -9,7 +9,7 @@
 , kservice
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kded";
   buildInputs = [ kconfig kcoreaddons kcrash kdbusaddons kinit kservice ];
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

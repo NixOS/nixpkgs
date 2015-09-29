@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kcoreaddons
 , ki18n
@@ -6,7 +6,7 @@
 , kservice
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kdesu";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kcoreaddons ki18n kservice ];

@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kcoreaddons
 , ki18n
@@ -8,7 +8,7 @@
 , qtdeclarative
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kpeople";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

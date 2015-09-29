@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , attica
 , kconfig
@@ -12,7 +12,7 @@
 , sonnet
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kxmlgui";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

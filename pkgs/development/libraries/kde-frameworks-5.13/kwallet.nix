@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kconfig
 , kcoreaddons
@@ -13,7 +13,7 @@
 , libgcrypt
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kwallet";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [

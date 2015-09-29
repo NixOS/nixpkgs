@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kconfigwidgets
 , kcoreaddons
@@ -11,7 +11,7 @@
 , kxmlgui
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kcmutils";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

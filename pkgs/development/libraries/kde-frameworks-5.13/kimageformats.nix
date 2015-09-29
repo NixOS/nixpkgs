@@ -1,9 +1,9 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , ilmbase
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kimageformats";
   nativeBuildInputs = [ extra-cmake-modules ];
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";

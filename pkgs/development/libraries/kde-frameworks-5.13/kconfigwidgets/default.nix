@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kauth
 , kcodecs
@@ -9,7 +9,7 @@
 , kwidgetsaddons
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kconfigwidgets";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ kguiaddons ki18n ];

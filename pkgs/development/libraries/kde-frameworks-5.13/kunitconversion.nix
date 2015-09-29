@@ -1,9 +1,9 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , ki18n
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kunitconversion";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ ki18n ];

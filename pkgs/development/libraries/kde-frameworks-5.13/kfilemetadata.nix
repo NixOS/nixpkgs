@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , attr
 , ebook_tools
@@ -11,7 +11,7 @@
 , taglib
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kfilemetadata";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ attr ebook_tools exiv2 ffmpeg karchive ki18n popplerQt taglib ];

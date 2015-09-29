@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kcodecs
 , kconfig
@@ -8,7 +8,7 @@
 , qtx11extras
 }:
 
-mkDerivation {
+kdeFramework {
   name = "knotifications";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

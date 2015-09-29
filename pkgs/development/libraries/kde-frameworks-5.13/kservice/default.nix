@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kconfig
 , kcoreaddons
@@ -9,7 +9,7 @@
 , kwindowsystem
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kservice";
   setupHook = ./setup-hook.sh;
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

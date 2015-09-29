@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kcompletion
 , kconfig
@@ -16,7 +16,7 @@
 , sonnet
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kdesignerplugin";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [

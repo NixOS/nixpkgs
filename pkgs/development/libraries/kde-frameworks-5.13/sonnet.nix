@@ -1,9 +1,9 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , hunspell
 }:
 
-mkDerivation {
+kdeFramework {
   name = "sonnet";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ hunspell ];

@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kbookmarks
 , kcompletion
@@ -13,7 +13,7 @@
 , qtx11extras
 }:
 
-mkDerivation {
+kdeFramework {
   name = "frameworkintegration";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , karchive
 , kconfig
@@ -7,7 +7,7 @@
 , ki18n
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kpackage";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ karchive kconfig ki18n ];

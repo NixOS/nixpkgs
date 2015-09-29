@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , karchive
 , kconfig
@@ -13,7 +13,7 @@
 , sonnet
 }:
 
-mkDerivation {
+kdeFramework {
   name = "ktexteditor";
   nativeBuildInputs = [ extra-cmake-modules perl ];
   buildInputs = [

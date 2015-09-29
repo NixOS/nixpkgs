@@ -1,8 +1,8 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kconfig";
   nativeBuildInputs = [ extra-cmake-modules ];
   postInstall = ''

@@ -1,8 +1,8 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 }:
 
-mkDerivation {
+kdeFramework {
   name = "attica";
   nativeBuildInputs = [ extra-cmake-modules ];
   meta = {

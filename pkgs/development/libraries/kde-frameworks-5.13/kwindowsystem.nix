@@ -1,9 +1,9 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , qtx11extras
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kwindowsystem";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qtx11extras ];

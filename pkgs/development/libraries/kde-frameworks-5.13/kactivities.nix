@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , boost
 , kcmutils
@@ -15,7 +15,7 @@
 , qtdeclarative
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kactivities";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

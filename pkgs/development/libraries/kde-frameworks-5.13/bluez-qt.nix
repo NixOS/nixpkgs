@@ -1,9 +1,9 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , qtdeclarative
 }:
 
-mkDerivation {
+kdeFramework {
   name = "bluez-qt";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qtdeclarative ];

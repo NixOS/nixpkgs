@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , giflib
 , karchive
@@ -21,7 +21,7 @@
 , sonnet
 }:
 
-mkDerivation {
+kdeFramework {
   name = "khtml";
   nativeBuildInputs = [ extra-cmake-modules perl ];
   buildInputs = [

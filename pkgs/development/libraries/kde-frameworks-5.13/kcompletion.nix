@@ -1,10 +1,10 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kconfig
 , kwidgetsaddons
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kcompletion";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kconfig kwidgetsaddons ];

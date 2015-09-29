@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kconfig
 , kcrash
@@ -13,7 +13,7 @@
 
 # TODO: setuid wrapper
 
-mkDerivation {
+kdeFramework {
   name = "kinit";
   nativeBuildInputs = [ extra-cmake-modules kdoctools libcap_progs ];
   buildInputs = [ kconfig kcrash ki18n kio kservice kwindowsystem libcap ];

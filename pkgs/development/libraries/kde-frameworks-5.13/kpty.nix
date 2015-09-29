@@ -1,10 +1,10 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kcoreaddons
 , ki18n
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kpty";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ ki18n ];

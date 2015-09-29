@@ -1,9 +1,9 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , avahi
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kdnssd";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ avahi ];

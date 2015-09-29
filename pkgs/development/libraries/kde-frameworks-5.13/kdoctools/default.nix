@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , docbook_xml_dtd_45
 , docbook5_xsl
@@ -8,7 +8,7 @@
 , perlPackages
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kdoctools";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ karchive ki18n ];

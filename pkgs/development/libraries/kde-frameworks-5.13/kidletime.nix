@@ -1,10 +1,10 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , qtbase
 , qtx11extras
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kidletime";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qtx11extras ];

@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kconfig
 , kcoreaddons
@@ -11,7 +11,7 @@
 , qtwebkit
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kdewebkit";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kconfig kcoreaddons ki18n kio kjobwidgets kparts kservice kwallet ];

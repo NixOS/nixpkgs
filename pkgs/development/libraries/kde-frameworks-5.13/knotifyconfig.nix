@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kcompletion
 , kconfig
@@ -7,7 +7,7 @@
 , phonon
 }:
 
-mkDerivation {
+kdeFramework {
   name = "knotifyconfig";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kcompletion kconfig ki18n kio phonon ];

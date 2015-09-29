@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , epoxy
 , kconfig
@@ -14,7 +14,7 @@
 , qtdeclarative
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kdeclarative";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

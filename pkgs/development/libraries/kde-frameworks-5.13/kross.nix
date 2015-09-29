@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kcompletion
 , kcoreaddons
@@ -12,7 +12,7 @@
 , qtscript
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kross";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ kcompletion kcoreaddons kxmlgui ];

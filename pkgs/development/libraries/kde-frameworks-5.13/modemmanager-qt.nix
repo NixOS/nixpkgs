@@ -1,9 +1,9 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , modemmanager
 }:
 
-mkDerivation {
+kdeFramework {
   name = "modemmanager-qt";
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [ modemmanager ];

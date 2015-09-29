@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , docbook_xml_dtd_45
 , kauth
@@ -35,7 +35,7 @@
 
 # TODO: debug docbook detection
 
-mkDerivation {
+kdeFramework {
   name = "kdelibs4support";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [

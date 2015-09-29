@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kconfig
 , kcoreaddons
@@ -11,7 +11,7 @@
 , threadweaver
 }:
 
-mkDerivation {
+kdeFramework {
   name = "krunner";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

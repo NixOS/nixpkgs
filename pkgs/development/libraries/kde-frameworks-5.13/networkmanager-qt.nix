@@ -1,9 +1,9 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , networkmanager
 }:
 
-mkDerivation {
+kdeFramework {
   name = "networkmanager-qt";
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [ networkmanager ];

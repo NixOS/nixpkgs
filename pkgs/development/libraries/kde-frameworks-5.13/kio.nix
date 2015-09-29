@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , acl
 , karchive
@@ -25,7 +25,7 @@
 , solid
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kio";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [

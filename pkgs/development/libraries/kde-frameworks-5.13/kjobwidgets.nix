@@ -1,11 +1,11 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kcoreaddons
 , kwidgetsaddons
 , qtx11extras
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kjobwidgets";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kcoreaddons kwidgetsaddons qtx11extras ];

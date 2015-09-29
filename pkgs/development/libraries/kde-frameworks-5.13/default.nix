@@ -9,17 +9,16 @@
 
 let
 
-  inherit (pkgs) lib;
+  inherit (pkgs) lib stdenv;
 
   mirror = "mirror://kde";
   srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
 
-  mkDerivation = args:
+  kdeFramework = args:
     let
       inherit (args) name;
       inherit (srcs."${name}") src version;
-      inherit (pkgs.stdenv) mkDerivation;
-    in mkDerivation (args // {
+    in stdenv.mkDerivation (args // {
       name = "${name}-${version}";
       inherit src;
 
@@ -108,6 +107,6 @@ let
     threadweaver = callPackage ./threadweaver.nix {};
   };
 
-  newScope = scope: pkgs.qt55Libs.newScope ({ inherit mkDerivation; } // scope);
+  newScope = scope: pkgs.qt55Libs.newScope ({ inherit kdeFramework; } // scope);
 
 in lib.makeScope newScope addPackages

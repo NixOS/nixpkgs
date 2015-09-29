@@ -1,9 +1,9 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , python
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kapidox";
   nativeBuildInputs = [ extra-cmake-modules python ];
   meta = {

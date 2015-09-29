@@ -1,10 +1,10 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kparts
 , kxmlgui
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kmediaplayer";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kxmlgui ];

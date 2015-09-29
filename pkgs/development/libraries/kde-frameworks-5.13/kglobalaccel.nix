@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kconfig
 , kcoreaddons
@@ -8,7 +8,7 @@
 , qtx11extras
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kglobalaccel";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kconfig kcoreaddons kcrash kdbusaddons kwindowsystem qtx11extras ];

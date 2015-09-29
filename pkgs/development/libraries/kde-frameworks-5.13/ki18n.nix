@@ -1,11 +1,11 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , gettext
 , python
 , qtscript
 }:
 
-mkDerivation {
+kdeFramework {
   name = "ki18n";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qtscript ];

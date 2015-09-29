@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kauth
 , kconfig
@@ -15,7 +15,7 @@
 , solid
 }:
 
-mkDerivation {
+kdeFramework {
   name = "baloo";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

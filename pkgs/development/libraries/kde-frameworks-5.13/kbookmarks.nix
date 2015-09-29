@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kcodecs
 , kconfig
@@ -8,7 +8,7 @@
 , kxmlgui
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kbookmarks";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

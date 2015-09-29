@@ -1,10 +1,10 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kcoreaddons
 , polkitQt
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kauth";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ polkitQt ];

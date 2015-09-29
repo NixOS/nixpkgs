@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kconfig
 , kcoreaddons
@@ -13,7 +13,7 @@
 , kxmlgui
 }:
 
-mkDerivation {
+kdeFramework {
   name = "kparts";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

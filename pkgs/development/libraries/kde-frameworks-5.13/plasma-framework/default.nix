@@ -1,4 +1,4 @@
-{ mkDerivation, lib
+{ kdeFramework, lib
 , extra-cmake-modules
 , kactivities
 , karchive
@@ -22,7 +22,7 @@
 , qtx11extras
 }:
 
-mkDerivation {
+kdeFramework {
   name = "plasma-framework";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
