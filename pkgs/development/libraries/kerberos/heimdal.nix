@@ -75,7 +75,10 @@ stdenv.mkDerivation rec {
     rmdir $out/libexec
   '';
 
-  enableParallelBuilding = true;
+  # Issues with hydra
+  #  In file included from hxtool.c:34:0:
+  #  hx_locl.h:67:25: fatal error: pkcs10_asn1.h: No such file or directory
+  #enableParallelBuilding = true;
 
   meta = {
     description = "An implementation of Kerberos 5 (and some more stuff)";
