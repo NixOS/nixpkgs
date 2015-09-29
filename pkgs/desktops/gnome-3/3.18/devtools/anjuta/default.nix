@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, flex, bison, libxml2, intltool,
   itstool, python, makeWrapper }:
 
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   enableParallelBuilding = true;
