@@ -20,6 +20,8 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace '"unknown"' '"${version}"'
   '';
 
+  enableParallelBuilding = true;
+
   installFlags = "DESTDIR=$(out) prefix= DOCDIR=/share/doc";
 
   meta = with stdenv.lib; {
