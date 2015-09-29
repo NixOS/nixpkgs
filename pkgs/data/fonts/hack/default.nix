@@ -1,6 +1,6 @@
 { stdenv, fetchurl, unzip }:
 
-let version = "2.013"; in
+let version = "2.015"; in
 stdenv.mkDerivation {
   name = "hack-font-${version}";
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     version_ = with stdenv.lib;
       concatStringsSep "_" (splitString "." version);
   in fetchurl {
-    sha256 = "16lap1796baiyn50fag3gszv7l1c5v62pvlr57ww501ka024gnnk";
+    sha256 = "0x0c3wwxiidl5a6axbcwizxny5q2yc6l4724smdj4gmn1xa137g5";
     url = "https://github.com/chrissimpkins/Hack/releases/download/v${version}/Hack-v${version_}-ttf.zip";
   };
 
