@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, kdelibs, automoc4, boost, pkgconfig, graphviz, gettext }:
+{ stdenv, fetchurl, automoc4, cmake, gettext, perl, pkgconfig
+, kdelibs, boost, graphviz
+}:
 
 stdenv.mkDerivation rec {
   name = "kgraphviewer-${version}";
@@ -9,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "13zhjs57xavzrj4nrlqs35n35ihvzij7hgbszf5fhlp2a4d4rrqs";
   };
 
-  buildInputs = [ kdelibs automoc4 boost pkgconfig graphviz gettext ];
+  buildInputs = [ kdelibs boost graphviz ];
+  nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig ];
 
   meta = with stdenv.lib; {
     description = "A Graphviz dot graph viewer for KDE";

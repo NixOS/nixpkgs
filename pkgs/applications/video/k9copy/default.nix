@@ -1,5 +1,9 @@
-{ stdenv, fetchurl, cmake, automoc4, qt5, kf5, dvdauthor, xineLib, libmpeg2, libav,
-libdvdread, libdvdnav, dvdplusrwtools, phonon_qt5 }:
+{ stdenv, fetchurl
+, cmake, automoc4
+, dvdauthor, xineLib, libmpeg2, libav, libdvdread, libdvdnav, dvdplusrwtools
+, phonon, qtx11extras
+, extra-cmake-modules, kio, kiconthemes, ki18n, kdesu, kdoctools, solid
+}:
 
 stdenv.mkDerivation rec {
   version = "3.0.3";
@@ -30,18 +34,17 @@ stdenv.mkDerivation rec {
     libdvdread
     libdvdnav
     dvdplusrwtools
-    automoc4
-    phonon_qt5
-  ] ++ (with kf5; [
+    #automoc4
+    phonon
     extra-cmake-modules
     kio
     solid
-    qt5.x11extras
+    qtx11extras
     kiconthemes
     ki18n
     kdesu
-    kdoctools
-  ]);
+  ];
+  nativeBuildInputs = [ kdoctools ];
 
   meta = {
     description = "DVD backup and DVD authoring program";

@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
       "--disable-installer"
       "--disable-updater"
       "--disable-pulseaudio"
+      "--disable-gconf"
     ]
     ++ (if debugBuild
         then [ "--enable-debug" "--enable-profiling"]

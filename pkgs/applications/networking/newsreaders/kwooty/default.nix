@@ -5,17 +5,17 @@
 , unrar, p7zip, par2cmdline, coreutils
 }:
 
-let version = "0.8.4";
+let version = "1.1.0";
     name = "kwooty-${version}";
 in stdenv.mkDerivation {
   inherit name;
-  
+
   src = fetchurl {
-    url = "mirror://sourceforge/kwooty/${name}.tar.gz";
-    sha256 = "0i3zmh7y52n5k0yn3xc6zjpjz75f48nly40n394i6sxy89psgfc2";
+    url = "http://kde-apps.org/CONTENT/content-files/114385-${name}.tar.gz";
+    sha256 = "10a9asjv6ja1xdjli2399dyka2rbia3qdm5bdpmcng6xdsbhx3ap";
   };
 
-  patches = [ ./searchPath.patch ];
+  patches = [ ./0001-search-paths.patch ];
 
   postPatch = ''
     echo "Changing paths to archive utilities to the nix store";
@@ -31,7 +31,7 @@ in stdenv.mkDerivation {
       kdelibs kdebase_workspace phonon
       libX11 libXext libXft
     ];
-                  
+
   meta = {
     description = "Binary news reader of KDE";
   };

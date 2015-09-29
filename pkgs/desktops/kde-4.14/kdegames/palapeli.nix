@@ -1,7 +1,9 @@
-{ kde, kdelibs, libkdegames }:
+{ kde, kdelibs, libkdegames, shared_mime_info }:
 kde {
 
 # TODO: package qvoronoi
+
+  nativeBuildInputs = [ shared_mime_info ];
 
   buildInputs = [ kdelibs libkdegames ];
 

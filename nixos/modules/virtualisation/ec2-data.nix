@@ -35,10 +35,8 @@ with lib;
                 mkdir -m 0700 -p /root/.ssh
                 $wget http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key > /root/key.pub
                 if [ $? -eq 0 -a -e /root/key.pub ]; then
-                    if ! grep -q -f /root/key.pub /root/.ssh/authorized_keys; then
-                        cat /root/key.pub >> /root/.ssh/authorized_keys
-                        echo "new key added to authorized_keys"
-                    fi
+                    cat /root/key.pub >> /root/.ssh/authorized_keys
+                    echo "new key added to authorized_keys"
                     chmod 600 /root/.ssh/authorized_keys
                     rm -f /root/key.pub
                 fi
@@ -80,8 +78,9 @@ with lib;
             # can obtain it securely by parsing the output of
             # ec2-get-console-output.
             echo "-----BEGIN SSH HOST KEY FINGERPRINTS-----" > /dev/console
-            ${config.programs.ssh.package}/bin/ssh-keygen -l -f /etc/ssh/ssh_host_dsa_key.pub > /dev/console
-            ${config.programs.ssh.package}/bin/ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub > /dev/console
+            for i in /etc/ssh/ssh_host_*_key.pub; do
+                ${config.programs.ssh.package}/bin/ssh-keygen -l -f $i > /dev/console
+            done
             echo "-----END SSH HOST KEY FINGERPRINTS-----" > /dev/console
           '';
         serviceConfig.Type = "oneshot";

@@ -104,7 +104,6 @@ in
       };
 
       background = mkOption {
-        default = "${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png";
         description = ''
           The background image or color to use.
         '';
@@ -172,5 +171,8 @@ in
     };
 
     users.extraGroups.lightdm.gid = config.ids.gids.lightdm;
+
+    services.xserver.displayManager.lightdm.background = mkDefault "${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png";
+
   };
 }

@@ -18,7 +18,7 @@ kde {
       kactivities
     ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  patches = [ ./files/ksysguard-0001-disable-signalplottertest.patch ];
 
   preConfigure =
    ''

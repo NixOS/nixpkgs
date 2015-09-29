@@ -141,6 +141,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     vmFlags = mkFlags ([
       "--uart1 0x3F8 4"
       "--uartmode1 client /run/virtualbox-log-${name}.sock"
+      "--memory 768"
     ] ++ (attrs.vmFlags or []));
 
     controllerFlags = mkFlags [
@@ -324,7 +325,7 @@ in {
       mkVMConf = name: val: val.machine // { key = "${name}-config"; };
       vmConfigs = mapAttrsToList mkVMConf vboxVMs;
     in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
-    virtualisation.memorySize = 1024;
+    virtualisation.memorySize = 2048;
     virtualisation.virtualbox.host.enable = true;
     users.extraUsers.alice.extraGroups = let
       inherit (config.virtualisation.virtualbox.host) enableHardening;
@@ -412,6 +413,7 @@ in {
       shutdownVM_detectvirt;
       my $result = $machine->succeed("cat '$detectvirt_sharepath/result'");
       chomp $result;
+      destroyVM_detectvirt;
       die "systemd-detect-virt returned \"$result\" instead of \"oracle\""
         if $result ne "oracle";
     };
@@ -422,11 +424,10 @@ in {
 
       vbm("startvm test1");
       waitForStartup_test1;
+      waitForVMBoot_test1;
 
       vbm("startvm test2");
       waitForStartup_test2;
-
-      waitForVMBoot_test1;
       waitForVMBoot_test2;
 
       $machine->screenshot("net_booted");

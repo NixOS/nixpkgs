@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, kde4, gettext, pkgconfig, shared_desktop_ontologies, qca2, qoauth }:
+{ stdenv, fetchurl, automoc4, cmake, gettext, perl, pkgconfig
+, kde4, shared_desktop_ontologies, qca2, qoauth }:
 
 assert builtins.compareVersions "4.8.3" kde4.release != 1; # https://bugs.kde.org/show_bug.cgi?id=306077
 
@@ -12,7 +13,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kde4.kdelibs qca2 qoauth ];
 
-  nativeBuildInputs = [ gettext pkgconfig shared_desktop_ontologies ];
+  nativeBuildInputs = [
+    automoc4 cmake gettext perl pkgconfig shared_desktop_ontologies
+  ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

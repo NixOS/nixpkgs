@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/dejavu/dejavu-fonts-${version}.tar.bz2";
     sha256 = "1xdbi4llrq1qbkd73352ibrfqcbz93dww8hab216qz5szd95yvv4";
   };
+
   buildFlags = "full-ttf";
+
   preBuild = ''
     sed -e s@/usr/bin/env@$(type -tP env)@ -i scripts/*
     sed -e s@/usr/bin/perl@$(type -tP perl)@ -i scripts/*
@@ -30,6 +32,7 @@ stdenv.mkDerivation rec {
     ln -s ${unicodeData} resources/UnicodeData.txt
     ln -s ${blocks} resources/Blocks.txt
   '';
+
   installPhase = ''
     mkdir -p $out/share/fonts/truetype
     for i in $(find build -name '*.ttf'); do

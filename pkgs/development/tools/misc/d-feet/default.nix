@@ -1,6 +1,5 @@
 { stdenv, pkgconfig, fetchurl, itstool, intltool, libxml2, glib, gtk3
-, pango, gdk_pixbuf, atk, pep8, python, makeWrapper, gnome3
-, pygobject3, gobjectIntrospection, libwnck3 }:
+, pep8, python, makeWrapper, gnome3, pygobject3, libwnck3 }:
 
 let
   version = "${major}.10";
@@ -17,8 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig libxml2 itstool intltool glib gtk3 pep8 python
-    gnome3.defaultIconTheme
-    makeWrapper pygobject3 libwnck3
+    gnome3.defaultIconTheme makeWrapper pygobject3 libwnck3
   ];
 
   preFixup =

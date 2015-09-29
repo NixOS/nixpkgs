@@ -1,10 +1,9 @@
-{ fetchurl, stdenv, gettext, intltool, pkgconfig, makeWrapper
-, geoclue, python, pygobject3, pyxdg
-, libdrm, libX11, libxcb, libXxf86vm
-, guiSupport ? true
-, drmSupport ? true
-, randrSupport ? true
-, vidModeSupport ? true
+{ fetchurl, stdenv, gettext, intltool, makeWrapper, pkgconfig
+, geoclue
+, guiSupport ? true, gtk3, python, pygobject3, pyxdg
+, drmSupport ? true, libdrm
+, randrSupport ? true, libxcb
+, vidModeSupport ? true, libX11, libXxf86vm
 }:
 
 let
@@ -19,10 +18,10 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ geoclue ]
-    ++ stdenv.lib.optional guiSupport [ python pygobject3 pyxdg ]
-    ++ stdenv.lib.optional drmSupport [ libdrm ]
-    ++ stdenv.lib.optional randrSupport [ libxcb ]
-    ++ stdenv.lib.optional vidModeSupport [ libX11 libXxf86vm ];
+    ++ stdenv.lib.optionals guiSupport [ gtk3 python pygobject3 pyxdg ]
+    ++ stdenv.lib.optionals drmSupport [ libdrm ]
+    ++ stdenv.lib.optionals randrSupport [ libxcb ]
+    ++ stdenv.lib.optionals vidModeSupport [ libX11 libXxf86vm ];
   nativeBuildInputs = [ gettext intltool makeWrapper pkgconfig ];
 
   configureFlags = [
@@ -33,12 +32,14 @@ stdenv.mkDerivation {
   ];
 
   preInstall = stdenv.lib.optionalString guiSupport ''
-    substituteInPlace src/redshift-gtk/redshift-gtk python \
+    substituteInPlace src/redshift-gtk/redshift-gtk \
       --replace "/usr/bin/env python3" "${python}/bin/${python.executable}"
   '';
 
   postInstall = stdenv.lib.optionalString guiSupport ''
-    wrapProgram "$out/bin/redshift-gtk" --prefix PYTHONPATH : "$PYTHONPATH"
+    wrapProgram "$out/bin/redshift-gtk" \
+      --prefix PYTHONPATH : "$PYTHONPATH" \
+      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
   '';
 
   meta = with stdenv.lib; {

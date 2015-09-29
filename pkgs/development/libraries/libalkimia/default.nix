@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, kdelibs, gmpxx }:
+{ stdenv, fetchurl, automoc4, cmake, perl, pkgconfig, kdelibs, gmpxx }:
 
 stdenv.mkDerivation rec {
   name = "libalkimia-4.3.2";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = "sed -e 's/KDE4_DATA_DIR/DATA_INSTALL_DIR/' -i CMakeLists.txt";
-  buildInputs = [ pkgconfig kdelibs gmpxx ];
+  nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
+  buildInputs = [ kdelibs gmpxx ];
 
   meta = {
     maintainers = [ stdenv.lib.maintainers.urkud ];

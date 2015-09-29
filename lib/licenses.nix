@@ -155,6 +155,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "GNU Free Documentation License v1.2";
   };
 
+  fdl13 = spdx {
+    spdxId = "GFDL-1.3";
+    fullName = "GNU Free Documentation License v1.2";
+  };
+
   free = {
     fullName = "Unspecified free software license";
   };

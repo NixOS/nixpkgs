@@ -35,6 +35,9 @@ in
     assertions = [ {
       assertion = cfg.defaultGatewayWindowSize == null;
       message = "networking.defaultGatewayWindowSize is not supported by networkd.";
+    } {
+      assertion = cfg.vswitches == {};
+      message = "networking.vswichtes are not supported by networkd.";
     } ] ++ flip mapAttrsToList cfg.bridges (n: { rstp, ... }: {
       assertion = !rstp;
       message = "networking.bridges.${n}.rstp is not supported by networkd.";

@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, cmake, gettext, kdelibs, networkmanager, libnm-qt }:
+{ stdenv, fetchurl, automoc4, cmake, gettext, perl, pkgconfig
+, kdelibs, networkmanager, libnm-qt }:
 
 let
   pname = "plasma-nm";
@@ -13,14 +14,9 @@ stdenv.mkDerivation {
     sha256 = "0xj14isvjq8ll70b6q66n8adm8ff4j9ng195ndk2gmavjf6bb751";
   };
 
-  buildInputs = [
-    cmake
-    pkgconfig
-    gettext
-    kdelibs
-    networkmanager
-    libnm-qt
-  ];
+  nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig ];
+
+  buildInputs = [ kdelibs networkmanager libnm-qt ];
 
   meta = with stdenv.lib; {
     homepage = "https://projects.kde.org/projects/kde/workspace/plasma-nm";

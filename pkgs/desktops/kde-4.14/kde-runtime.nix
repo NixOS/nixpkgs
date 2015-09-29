@@ -1,4 +1,4 @@
-{ kde, kdelibs, bzip2, libssh, exiv2, attica, qca2
+{ kde, kdelibs, bzip2, libssh, exiv2, attica, qca2, shared_mime_info
 , libcanberra, virtuoso, samba, libjpeg, ntrack, pkgconfig, xz, libpulseaudio
 , networkmanager, kactivities, kdepimlibs, openexr, ilmbase, gpgme
 }:
@@ -14,7 +14,7 @@ kde {
 #todo: gpgme can't be found because cmake module is provided by kdepimlibs which are found too late
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ shared_mime_info ];
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
 

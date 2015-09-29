@@ -1204,7 +1204,7 @@ echo @foo@
   </varlistentry>
 
   <varlistentry>
-    <term>Qt</term>
+    <term>Qt 4</term>
     <listitem><para>Sets the <envar>QTDIR</envar> environment variable
     to Qt’s path.</para></listitem>
   </varlistentry>
