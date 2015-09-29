@@ -1,5 +1,5 @@
 { fetchurl, stdenv, gettext, intltool, pkgconfig, makeWrapper
-, geoclue, python, pygobject3, pyxdg
+, geoclue, python, pygobject3, gtk3, pyxdg
 , libdrm, libX11, libxcb, libXxf86vm
 , guiSupport ? true
 , drmSupport ? true
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ geoclue ]
-    ++ stdenv.lib.optionals guiSupport [ python pygobject3 pyxdg ]
+    ++ stdenv.lib.optionals guiSupport [ gtk3 python pygobject3 pyxdg ]
     ++ stdenv.lib.optionals drmSupport [ libdrm ]
     ++ stdenv.lib.optionals randrSupport [ libxcb ]
     ++ stdenv.lib.optionals vidModeSupport [ libX11 libXxf86vm ];
@@ -38,7 +38,9 @@ stdenv.mkDerivation {
   '';
 
   postInstall = stdenv.lib.optionalString guiSupport ''
-    wrapProgram "$out/bin/redshift-gtk" --prefix PYTHONPATH : "$PYTHONPATH"
+    wrapProgram "$out/bin/redshift-gtk" \
+      --prefix PYTHONPATH : "$PYTHONPATH" \
+      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
   '';
 
   meta = with stdenv.lib; {
