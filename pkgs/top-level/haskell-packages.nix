@@ -61,7 +61,8 @@ rec {
 
   packages = {
 
-    ghc6104 = callPackage ../development/haskell-modules { ghc = compiler.ghc6104; };
+    # Support for this compiler is broken, because it can't deal with directory-based package databases.
+    # ghc6104 = callPackage ../development/haskell-modules { ghc = compiler.ghc6104; };
     ghc6123 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc6123;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-6.12.x.nix { };
