@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , bluez-qt
 , kcoreaddons
@@ -15,7 +15,7 @@
 , shared_mime_info
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "bluedevil";
   nativeBuildInputs = [ extra-cmake-modules shared_mime_info ];
   buildInputs = [

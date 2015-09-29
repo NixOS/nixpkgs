@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , kdoctools
 , kitemviews
@@ -14,7 +14,7 @@
 , khtml
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "systemsettings";
   nativeBuildInputs = [
     extra-cmake-modules

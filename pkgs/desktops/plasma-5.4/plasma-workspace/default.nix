@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , kdoctools
 , baloo
@@ -53,7 +53,7 @@
 , xsetroot
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "plasma-workspace";
   nativeBuildInputs = [
     extra-cmake-modules

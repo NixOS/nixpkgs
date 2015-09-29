@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , kdoctools
 , kcompletion
@@ -27,7 +27,7 @@
 , solid
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "plasma-nm";
   nativeBuildInputs = [
     extra-cmake-modules

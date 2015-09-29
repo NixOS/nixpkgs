@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , ki18n
 , kcmutils
@@ -13,7 +13,7 @@
 , qtx11extras
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "oxygen";
   nativeBuildInputs = [
     extra-cmake-modules

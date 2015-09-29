@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , glib
 , kconfigwidgets
@@ -10,7 +10,7 @@
 , plasma-framework
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "plasma-pa";
   nativeBuildInputs = [
     extra-cmake-modules

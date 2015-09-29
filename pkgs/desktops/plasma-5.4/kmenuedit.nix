@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , kdoctools
 , ki18n
@@ -10,7 +10,7 @@
 , kdelibs4support
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "kmenuedit";
   nativeBuildInputs = [
     extra-cmake-modules

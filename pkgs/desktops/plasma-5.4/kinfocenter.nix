@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , kdoctools
 , kcmutils
@@ -21,7 +21,7 @@
 , solid
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "kinfocenter";
   nativeBuildInputs = [
     extra-cmake-modules

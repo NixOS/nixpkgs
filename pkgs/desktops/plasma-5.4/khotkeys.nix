@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , kdoctools
 , kcmutils
@@ -13,7 +13,7 @@
 , qtx11extras
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "khotkeys";
   nativeBuildInputs = [
     extra-cmake-modules

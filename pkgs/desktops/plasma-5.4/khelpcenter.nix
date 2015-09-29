@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , kdoctools
 , kconfig
@@ -12,7 +12,7 @@
 , kservice
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "khelpcenter";
   nativeBuildInputs = [
     extra-cmake-modules

@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , kauth
 , kcompletion
@@ -16,7 +16,7 @@
 , kiconthemes
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "libksysguard";
   nativeBuildInputs = [
     extra-cmake-modules

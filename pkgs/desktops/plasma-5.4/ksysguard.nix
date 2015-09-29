@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , kdoctools
 , kconfig
@@ -11,7 +11,7 @@
 , libksysguard
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "ksysguard";
   nativeBuildInputs = [
     extra-cmake-modules

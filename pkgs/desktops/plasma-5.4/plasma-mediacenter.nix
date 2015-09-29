@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , baloo
 , kactivities
@@ -16,7 +16,7 @@
 , taglib
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "plasma-mediacenter";
   nativeBuildInputs = [
     extra-cmake-modules

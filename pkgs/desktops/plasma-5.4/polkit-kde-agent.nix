@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , ki18n
 , kwindowsystem
@@ -12,7 +12,7 @@
 , polkitQt
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "polkit-kde-agent";
   nativeBuildInputs = [
     extra-cmake-modules

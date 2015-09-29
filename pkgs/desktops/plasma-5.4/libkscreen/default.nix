@@ -1,10 +1,10 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , libXrandr
 , qtx11extras
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "libkscreen";
   nativeBuildInputs = [
     extra-cmake-modules

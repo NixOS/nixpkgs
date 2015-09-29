@@ -1,6 +1,6 @@
-{ mkDerivation, extra-cmake-modules }:
+{ plasmaPackage, extra-cmake-modules }:
 
-mkDerivation {
+plasmaPackage {
   name = "kdecoration";
   nativeBuildInputs = [ extra-cmake-modules ];
 }

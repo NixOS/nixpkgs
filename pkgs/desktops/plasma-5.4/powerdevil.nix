@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , kdoctools
 , kactivities
@@ -18,7 +18,7 @@
 , udev
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "powerdevil";
   nativeBuildInputs = [
     extra-cmake-modules

@@ -1,9 +1,9 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , wayland
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "kwayland";
   nativeBuildInputs = [
     extra-cmake-modules

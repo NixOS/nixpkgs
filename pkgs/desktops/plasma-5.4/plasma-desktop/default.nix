@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , substituteAll
 , extra-cmake-modules
 , kdoctools
@@ -43,7 +43,7 @@
 , utillinux
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "plasma-desktop";
   nativeBuildInputs = [
     extra-cmake-modules

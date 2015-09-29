@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , kdoctools
 , epoxy
@@ -36,7 +36,7 @@
 , xcb-util-cursor
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "kwin";
   nativeBuildInputs = [
     extra-cmake-modules

@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , frameworkintegration
 , kcmutils
@@ -11,7 +11,7 @@
 , qtx11extras
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "breeze-qt5";
   sname = "breeze";
   nativeBuildInputs = [

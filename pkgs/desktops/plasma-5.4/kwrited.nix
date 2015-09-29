@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , kcoreaddons
 , ki18n
@@ -7,7 +7,7 @@
 , kdbusaddons
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "kwrited";
   nativeBuildInputs = [
     extra-cmake-modules

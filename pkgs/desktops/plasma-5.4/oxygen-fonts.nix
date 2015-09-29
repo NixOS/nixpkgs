@@ -1,9 +1,9 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , fontforge
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "oxygen-fonts";
   nativeBuildInputs = [
     extra-cmake-modules

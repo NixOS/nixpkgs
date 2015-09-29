@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , kdoctools
 , kcoreaddons
@@ -7,7 +7,7 @@
 , kwidgetsaddons
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "ksshaskpass";
   nativeBuildInputs = [
     extra-cmake-modules

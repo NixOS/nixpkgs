@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , kconfig
 , kconfigwidgets
@@ -11,7 +11,7 @@
 , qtdeclarative
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "kscreen";
   nativeBuildInputs = [
     extra-cmake-modules

@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , kcmutils
 , kconfig
@@ -12,7 +12,7 @@
 , qtx11extras
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "kde-cli-tools";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [

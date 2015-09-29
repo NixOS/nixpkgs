@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , kdoctools
 , ibus
@@ -19,7 +19,7 @@
 , qtx11extras
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "kdeplasma-addons";
   nativeBuildInputs = [
     extra-cmake-modules

@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 , glib
 , gtk2
@@ -12,7 +12,7 @@
 , knewstuff
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "kde-gtk-config";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [

@@ -1,8 +1,8 @@
-{ mkDerivation
+{ plasmaPackage
 , extra-cmake-modules
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "plasma-workspace-wallpapers";
   nativeBuildInputs = [
     extra-cmake-modules

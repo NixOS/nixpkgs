@@ -1,4 +1,4 @@
-{ mkDerivation
+{ plasmaPackage
 , automoc4
 , cmake
 , perl
@@ -8,7 +8,7 @@
 , xproto
 }:
 
-mkDerivation {
+plasmaPackage {
   name = "breeze-qt4";
   sname = "breeze";
   buildInputs = [
