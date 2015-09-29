@@ -38,8 +38,7 @@ for type in hvm pv; do
         prevAmi=
         prevRegion=
 
-        #for region in eu-west-1 eu-central-1 us-east-1 us-west-1 us-west-2 ap-southeast-1 ap-southeast-2 ap-northeast-1 sa-east-1; do
-        for region in eu-west-1 us-east-1; do
+        for region in eu-west-1 eu-central-1 us-east-1 us-west-1 us-west-2 ap-southeast-1 ap-southeast-2 ap-northeast-1 sa-east-1; do
 
             name=nixos-$version-$arch-$type-$store
             description="NixOS $system $version ($type-$store)"
@@ -177,7 +176,6 @@ for type in hvm pv; do
                         extraFlags+=" --virtualization-type hvm"
                     fi
 
-                    set -x
                     ami=$(ec2-register \
                         -n "$name" \
                         -d "$description" \
