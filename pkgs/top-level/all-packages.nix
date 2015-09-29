@@ -2227,6 +2227,8 @@ let
 
   modemmanager = callPackage ../tools/networking/modemmanager {};
 
+  modsecurity_standalone = callPackage ../tools/security/modsecurity { };
+
   monit = callPackage ../tools/system/monit { };
 
   moreutils = callPackage ../tools/misc/moreutils {
