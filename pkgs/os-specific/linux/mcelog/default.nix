@@ -16,6 +16,8 @@ stdenv.mkDerivation {
       substituteInPlace $i --replace /etc $out/etc
     done
     touch mcelog.conf.5 # avoid regeneration requiring Python
+
+    substituteInPlace Makefile --replace '"unknown"' '"${version}"'
   '';
 
   installFlags = "DESTDIR=$(out) prefix= DOCDIR=/share/doc";
