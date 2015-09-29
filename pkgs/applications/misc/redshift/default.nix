@@ -39,7 +39,8 @@ stdenv.mkDerivation {
   postInstall = stdenv.lib.optionalString guiSupport ''
     wrapProgram "$out/bin/redshift-gtk" \
       --prefix PYTHONPATH : "$PYTHONPATH" \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
+      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
+      --prefix XDG_DATA_DIRS : "$out/share"
   '';
 
   meta = with stdenv.lib; {
