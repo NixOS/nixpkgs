@@ -1384,6 +1384,8 @@ let
 
   euca2ools = callPackage ../tools/virtualization/euca2ools { };
 
+  eventstat = callPackage ../os-specific/linux/eventstat { };
+
   evtest = callPackage ../applications/misc/evtest { };
 
   exempi = callPackage ../development/libraries/exempi { };
