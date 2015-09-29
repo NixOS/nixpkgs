@@ -1,4 +1,4 @@
-{ mkDerivation
+{ kdeApp
 , lib
 , extra-cmake-modules
 , kdoctools
@@ -11,7 +11,7 @@
 , kdelibs4support
 }:
 
-mkDerivation {
+kdeApp {
   name = "baloo-widgets";
   nativeBuildInputs = [
     extra-cmake-modules

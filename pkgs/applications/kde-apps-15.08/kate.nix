@@ -1,4 +1,4 @@
-{ mkDerivation
+{ kdeApp
 , lib
 , extra-cmake-modules
 , kdoctools
@@ -26,7 +26,7 @@
 , libgit2
 }:
 
-mkDerivation {
+kdeApp {
   name = "kate";
   nativeBuildInputs = [
     extra-cmake-modules

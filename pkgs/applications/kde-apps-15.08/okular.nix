@@ -1,4 +1,4 @@
-{ mkDerivation
+{ kdeApp
 , lib
 , automoc4
 , cmake
@@ -15,7 +15,7 @@
 , ebook_tools
 }:
 
-mkDerivation {
+kdeApp {
   name = "okular";
   nativeBuildInputs = [
     automoc4

@@ -21,13 +21,12 @@ let
   srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
   mirror = "mirror://kde";
 
-  mkDerivation = args:
+  kdeApp = args:
     let
-      inherit (stdenv) mkDerivation;
       inherit (args) name;
       sname = args.sname or name;
       inherit (srcs."${sname}") src version;
-    in mkDerivation (args // {
+    in stdenv.mkDerivation (args // {
       name = "${name}-${version}";
       inherit src;
 
@@ -64,6 +63,6 @@ let
     print-manager = callPackage ./print-manager.nix {};
   };
 
-  newScope = scope: pkgs.kf513.newScope ({ inherit mkDerivation; } // scope);
+  newScope = scope: pkgs.kf513.newScope ({ inherit kdeApp; } // scope);
 
 in lib.makeScope newScope packages

@@ -1,4 +1,4 @@
-{ mkDerivation, attica, attr, automoc4, avahi, bison, cmake
+{ kdeApp, attica, attr, automoc4, avahi, bison, cmake
 , docbook_xml_dtd_42, docbook_xsl, flex, giflib, herqq, ilmbase
 , libdbusmenu_qt, libjpeg, libxml2, libxslt, perl, phonon, pkgconfig
 , polkit_qt4, qca2, qt4, shared_desktop_ontologies, shared_mime_info
@@ -6,7 +6,7 @@
 , lib
 }:
 
-mkDerivation {
+kdeApp {
   name = "kdelibs";
 
   buildInputs = [

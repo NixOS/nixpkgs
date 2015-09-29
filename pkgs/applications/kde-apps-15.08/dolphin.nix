@@ -1,4 +1,4 @@
-{ mkDerivation
+{ kdeApp
 , lib
 , extra-cmake-modules
 , kdoctools
@@ -26,7 +26,7 @@
 , kdelibs4support
 }:
 
-mkDerivation {
+kdeApp {
   name = "dolphin";
   nativeBuildInputs = [
     extra-cmake-modules

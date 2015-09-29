@@ -1,4 +1,4 @@
-{ mkDerivation
+{ kdeApp
 , lib
 , extra-cmake-modules
 , kdoctools
@@ -13,7 +13,7 @@
 , qtx11extras
 }:
 
-mkDerivation {
+kdeApp {
   name = "gwenview";
   nativeBuildInputs = [
     extra-cmake-modules

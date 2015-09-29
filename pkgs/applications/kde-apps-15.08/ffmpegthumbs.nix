@@ -1,4 +1,4 @@
-{ mkDerivation
+{ kdeApp
 , lib
 , automoc4
 , cmake
@@ -8,7 +8,7 @@
 , ffmpeg
 }:
 
-mkDerivation {
+kdeApp {
   name = "ffmpegthumbs";
   nativeBuildInputs = [
     automoc4

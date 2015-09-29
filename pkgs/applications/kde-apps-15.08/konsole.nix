@@ -1,4 +1,4 @@
-{ mkDerivation
+{ kdeApp
 , lib
 , extra-cmake-modules
 , kdoctools
@@ -25,7 +25,7 @@
 , kxmlgui
 }:
 
-mkDerivation {
+kdeApp {
   name = "konsole";
   nativeBuildInputs = [
     extra-cmake-modules

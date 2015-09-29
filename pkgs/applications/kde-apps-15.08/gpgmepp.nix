@@ -1,11 +1,11 @@
-{ mkDerivation
+{ kdeApp
 , lib
 , extra-cmake-modules
 , boost
 , gpgme
 }:
 
-mkDerivation {
+kdeApp {
   name = "gpgmepp";
   nativeBuildInputs = [
     extra-cmake-modules

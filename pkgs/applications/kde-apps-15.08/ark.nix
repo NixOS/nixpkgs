@@ -1,4 +1,4 @@
-{ mkDerivation
+{ kdeApp
 , lib
 , extra-cmake-modules
 , kdoctools
@@ -16,7 +16,7 @@
 , libarchive
 }:
 
-mkDerivation {
+kdeApp {
   name = "ark";
   nativeBuildInputs = [
     extra-cmake-modules

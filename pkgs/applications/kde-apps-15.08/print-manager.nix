@@ -1,4 +1,4 @@
-{ mkDerivation
+{ kdeApp
 , lib
 , extra-cmake-modules
 , qtdeclarative
@@ -17,7 +17,7 @@
 , kitemviews
 }:
 
-mkDerivation {
+kdeApp {
   name = "print-manager";
   nativeBuildInputs = [
     extra-cmake-modules

@@ -1,4 +1,4 @@
-{ mkDerivation
+{ kdeApp
 , lib
 , automoc4
 , cmake
@@ -7,7 +7,7 @@
 , kdelibs
 }:
 
-mkDerivation {
+kdeApp {
   name = "libkipi";
   nativeBuildInputs = [
     automoc4

@@ -1,4 +1,4 @@
-{ mkDerivation
+{ kdeApp
 , lib
 , automoc4
 , cmake
@@ -10,7 +10,7 @@
 , kdepimlibs
 }:
 
-mkDerivation {
+kdeApp {
   name = "kgpg";
   nativeBuildInputs = [
     automoc4

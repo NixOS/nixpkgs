@@ -1,4 +1,4 @@
-{ mkDerivation
+{ kdeApp
 , lib
 , automoc4
 , cmake
@@ -9,7 +9,7 @@
 , libkdcraw
 }:
 
-mkDerivation {
+kdeApp {
   name = "kdegraphics-thumbnailers";
   nativeBuildInputs = [
     automoc4
