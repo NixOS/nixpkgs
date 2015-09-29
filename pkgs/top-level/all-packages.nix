@@ -9876,10 +9876,6 @@ let
       configFile = "kernel";
       inherit kernel;
     };
-    spl_git = callPackage ../os-specific/linux/spl/git.nix {
-      configFile = "kernel";
-      inherit kernel;
-    };
 
     sysdig = callPackage ../os-specific/linux/sysdig {};
 
@@ -9905,10 +9901,6 @@ let
     zfs = callPackage ../os-specific/linux/zfs {
       configFile = "kernel";
       inherit kernel spl;
-    };
-    zfs_git = callPackage ../os-specific/linux/zfs/git.nix {
-      configFile = "kernel";
-      inherit kernel spl_git;
     };
   };
 
@@ -10150,9 +10142,6 @@ let
   spl = callPackage ../os-specific/linux/spl {
     configFile = "user";
   };
-  spl_git = callPackage ../os-specific/linux/spl/git.nix {
-    configFile = "user";
-  };
 
   sysdig = callPackage ../os-specific/linux/sysdig {
     kernel = null;
@@ -10381,9 +10370,6 @@ let
   zd1211fw = callPackage ../os-specific/linux/firmware/zd1211 { };
 
   zfs = callPackage ../os-specific/linux/zfs {
-    configFile = "user";
-  };
-  zfs_git = callPackage ../os-specific/linux/zfs/git.nix {
     configFile = "user";
   };
 
