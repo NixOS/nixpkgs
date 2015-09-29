@@ -191,15 +191,17 @@ for type in hvm pv; do
                 ami=$(cat $amiFile)
             fi
 
-            echo "waiting for AMI..."
-            while true; do
-                status=$(ec2-describe-images "$ami" --region "$region" | head -n1 | cut -f 5)
-                if [ "$status" = available ]; then break; fi
-                sleep 10
-            done
+            if [ -z "$NO_WAIT" -o -z "$prevAmi" ]; then
+                echo "waiting for AMI..."
+                while true; do
+                    status=$(ec2-describe-images "$ami" --region "$region" | head -n1 | cut -f 5)
+                    if [ "$status" = available ]; then break; fi
+                    sleep 10
+                done
 
-            ec2-modify-image-attribute \
-                --region "$region" "$ami" -l -a all
+                ec2-modify-image-attribute \
+                    --region "$region" "$ami" -l -a all
+            fi
 
             echo "region = $region, type = $type, store = $store, ami = $ami"
             if [ -z "$prevAmi" ]; then
