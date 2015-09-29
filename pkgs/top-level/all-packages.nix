@@ -13906,6 +13906,10 @@ let
     guile = guile_1_8;
   };
 
+  macopix = callPackage ../games/macopix {
+    gtk = gtk2;
+  };
+
   mars = callPackage ../games/mars { };
 
   megaglest = callPackage ../games/megaglest {};
