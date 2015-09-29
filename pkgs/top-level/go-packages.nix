@@ -1108,6 +1108,28 @@ let
     propagatedBuildInputs = [ ugorji.go ];
   };
 
+  go-ethereum = buildGoPackage rec {
+    rev = "v1.1.3";
+    name = "go-ethereum-${rev}";
+    goPackagePath = "github.com/ethereum/go-ethereum";
+
+    src = fetchFromGitHub {
+      owner = "ethereum";
+      repo = "go-ethereum";
+      sha256 = "1afj9p0bg8b88pzngi7dm86q4rdp3byxs49pd6i3jks8pclq0x25";
+    };
+
+    preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
+    buildInputs = [ pkgs.gmp ];
+
+    meta = with stdenv.lib; {
+      description = "Official golang implementation of the Ethereum protocol";
+      license = licenses.lgpl3;
+      homepage = http://ethereum.github.io/go-ethereum;
+      maintainers = with maintainers; [ offline ];
+    };
+  };
+
   go-flags = buildFromGitHub {
     rev    = "1b89bf73cd2c3a911d7b2a279ab085c4a18cf539";
     owner  = "jessevdk";
