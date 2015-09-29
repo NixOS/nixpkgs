@@ -40,7 +40,7 @@ in stdenv.mkDerivation {
     patchShebangs .
   '';
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./no-xcode.patch;
+  patches = stdenv.lib.optional stdenv.isDarwin ./no-xcode-v41.patch;
 
   buildInputs = [ python which http-parser zlib libuv openssl python ]
     ++ (optional stdenv.isLinux utillinux)
