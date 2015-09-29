@@ -1,10 +1,9 @@
-{ fetchurl, stdenv, gettext, intltool, pkgconfig, makeWrapper
-, geoclue, python, pygobject3, gtk3, pyxdg
-, libdrm, libX11, libxcb, libXxf86vm
-, guiSupport ? true
-, drmSupport ? true
-, randrSupport ? true
-, vidModeSupport ? true
+{ fetchurl, stdenv, gettext, intltool, makeWrapper, pkgconfig
+, geoclue
+, guiSupport ? true, gtk3, python, pygobject3, pyxdg
+, drmSupport ? true, libdrm
+, randrSupport ? true, libxcb
+, vidModeSupport ? true, libX11, libXxf86vm
 }:
 
 let
@@ -33,7 +32,7 @@ stdenv.mkDerivation {
   ];
 
   preInstall = stdenv.lib.optionalString guiSupport ''
-    substituteInPlace src/redshift-gtk/redshift-gtk python \
+    substituteInPlace src/redshift-gtk/redshift-gtk \
       --replace "/usr/bin/env python3" "${python}/bin/${python.executable}"
   '';
 
