@@ -9042,6 +9042,8 @@ let
 
   myserver = callPackage ../servers/http/myserver { };
 
+  neard = callPackage ../servers/neard { };
+
   nginx = callPackage ../servers/http/nginx {
     rtmp        = true;
     fullWebDAV  = true;
