@@ -6,11 +6,6 @@ let
   cfg = config.services.transmission;
   apparmor = config.security.apparmor.enable;
 
-  homeDir = "/var/lib/transmission";
-  downloadDir = "${homeDir}/Downloads";
-  incompleteDir = "${homeDir}/.incomplete";
-  
-  settingsDir = "${homeDir}/.config/transmission-daemon";
   settingsFile = pkgs.writeText "settings.json" (builtins.toJSON fullSettings);
 
   # Strings must be quoted, ints and bools must not (for settings.json).
@@ -35,17 +30,41 @@ in
           Transmission daemon can be controlled via the RPC interface using
           transmission-remote or the WebUI (http://localhost:9091/ by default).
 
-          Torrents are downloaded to ${homeDir}/Downloads/ by default and are
+          Torrents are downloaded to ${cfg.homeDir}/Downloads/ by default and are
           accessible to users in the "transmission" group.
         '';
       };
+
+      homeDir = mkOption {
+        description = "Transmission home directory.";
+        default = "/var/lib/transmission";
+        type = types.path;
+      }
+
+      downloadDir = mkOption {
+        description = "Directory for downloaded torrents.";
+        default = "${cfg.homeDir}/Downloads";
+        type = types.path;
+      }
+
+      incompleteDir = mkOption {
+        description = "Directory for incomplete torrent downloads.";
+        default = "${cfg.homeDir}/.incomplete";
+        type = types.path;
+      }
+
+      settingsDir = mkOption {
+        description = "Directory for Transmission's settings.";
+        default = "${cfg.homeDir}/.config/transmission-daemon";
+        type = types.path;
+      }
 
       settings = mkOption {
         type = types.attrs;
         default =
           {
-            download-dir = downloadDir;
-            incomplete-dir = incompleteDir;
+            download-dir = ${cfg.downloadDir};
+            incomplete-dir = ${cfg.incompleteDir};
             incomplete-dir-enabled = true;
           };
         example =
@@ -83,7 +102,7 @@ in
       # 1) Only the "transmission" user and group have access to torrents.
       # 2) Optionally update/force specific fields into the configuration file.
       serviceConfig.ExecStartPre = ''
-          ${pkgs.stdenv.shell} -c "chmod 770 ${homeDir} && mkdir -p ${settingsDir} ${downloadDir} ${incompleteDir} && rm -f ${settingsDir}/settings.json && cp -f ${settingsFile} ${settingsDir}/settings.json"
+          ${pkgs.stdenv.shell} -c "chmod 770 ${cfg.homeDir} && mkdir -p ${cfg.settingsDir} ${cfg.downloadDir} ${cfg.incompleteDir} && rm -f ${cfg.settingsDir}/settings.json && cp -f ${settingsFile} ${cfg.settingsDir}/settings.json"
       '';
       serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port}";
       serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
@@ -100,7 +119,7 @@ in
       group = "transmission";
       uid = config.ids.uids.transmission;
       description = "Transmission BitTorrent user";
-      home = homeDir;
+      home = cfg.homeDir;
       createHome = true;
     };
 
@@ -130,7 +149,7 @@ in
 
           ${pkgs.transmission}/share/transmission/** r,
 
-          owner ${settingsDir}/** rw,
+          owner ${cfg.settingsDir}/** rw,
 
           ${fullSettings.download-dir}/** rw,
           ${optionalString fullSettings.incomplete-dir-enabled ''
