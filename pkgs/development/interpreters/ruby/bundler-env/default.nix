@@ -25,7 +25,7 @@ let
 
   fetchers.path = attrs: attrs.source.path;
   fetchers.gem = attrs: fetchurl {
-    url = "${attrs.source.source or "https://rubygems.org"}/downloads/${gemName attrs}";
+    url = "${attrs.source.source or "https://rubygems.org"}/gems/${gemName attrs}";
     inherit (attrs.source) sha256;
   };
   fetchers.git = attrs: fetchgit {

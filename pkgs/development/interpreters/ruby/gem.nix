@@ -25,7 +25,7 @@ stdenv.mkDerivation (attrs // {
   src = if attrs ? src
     then attrs.src
     else fetchurl {
-      url = "http://rubygems.org/downloads/${attrs.name}.gem";
+      url = "http://rubygems.org/gems/${attrs.name}.gem";
       inherit (attrs) sha256;
     };
 
