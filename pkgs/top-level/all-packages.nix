@@ -2007,6 +2007,7 @@ let
   ninka = callPackage ../development/tools/misc/ninka { };
 
   nodejs-4_1 = callPackage ../development/web/nodejs/v4_1_0.nix {
+    libtool = darwin.cctools;
     libuv = libuvVersions.v1_7_5;
     openssl = openssl_1_0_2;
   };
