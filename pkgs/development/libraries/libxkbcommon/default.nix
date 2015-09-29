@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, yacc, flex, xkeyboard_config, libxcb }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "libxkbcommon-0.5.0";
 
   src = fetchurl {
@@ -19,3 +19,12 @@ stdenv.mkDerivation rec {
     homepage = http://xkbcommon.org;
   };
 }
+
+// 
+
+# --version-script as an argument to `ld` is not supported on OS X
+stdenv.lib.optionalAttrs stdenv.isDarwin {
+  preBuild =  ''
+    sed -i 's/,--version-script=.*$//' Makefile
+  '';
+})
