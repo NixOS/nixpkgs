@@ -188,6 +188,9 @@ mkdir -m 0755 -p $mountPoint/bin
 ln -sf @shell@ $mountPoint/bin/sh
 
 
+# Build hooks likely won't function correctly in the minimal chroot; just disable them.
+unset NIX_BUILD_HOOK
+
 # Make the build below copy paths from the CD if possible.  Note that
 # /tmp/root in the chroot is the root of the CD.
 export NIX_OTHER_STORES=/tmp/root/nix:$NIX_OTHER_STORES
