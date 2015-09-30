@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub }:
 
-let version = "127"; in
+let version = "128"; in
 stdenv.mkDerivation {
   name = "mcelog-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "0ap00f283d1hhv0f6l2fwsbq7sd6b96lf3jwg5cyam03pj2l8qk1";
+    sha256 = "0hm1dmqyh36dig158iyb9fckmvqnd5sgpy1qzj59nsg40pb1vbjs";
     rev = "v${version}";
     repo = "mcelog";
     owner = "andikleen";
@@ -19,6 +19,8 @@ stdenv.mkDerivation {
 
     substituteInPlace Makefile --replace '"unknown"' '"${version}"'
   '';
+
+  enableParallelBuilding = true;
 
   installFlags = "DESTDIR=$(out) prefix= DOCDIR=/share/doc";
 

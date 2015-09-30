@@ -1,0 +1,11 @@
+--- a/netbeans/platform/lib/nbexec	2015-09-29 21:26:39.282600903 -0700
++++ b/netbeans/platform/lib/nbexec	2015-09-29 21:26:58.977697858 -0700
+@@ -198,7 +198,7 @@
+         SunOS*) awk=nawk ;;
+         *) awk=awk ;;
+     esac
+-    jdk_version=$("${jdkhome}/bin/java" -version 2>&1 | "/usr/bin/${awk}" -F '"' '/version/ {print substr($2, 1, 3)}')    
++    jdk_version=$("${jdkhome}/bin/java" -version 2>&1 | "@AWK@" -F '"' '/version/ {print substr($2, 1, 3)}')    
+     if [ "$jdk_version" = "1.7" ] ; then   
+         jargs="$jargs $launcher_args"
+     fi

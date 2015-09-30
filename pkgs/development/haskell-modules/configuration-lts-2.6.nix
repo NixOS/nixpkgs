@@ -1116,6 +1116,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "aeson-bson" = dontDistribute super."aeson-bson";
   "aeson-casing" = dontDistribute super."aeson-casing";
   "aeson-diff" = dontDistribute super."aeson-diff";
+  "aeson-extra" = dontDistribute super."aeson-extra";
   "aeson-lens" = dontDistribute super."aeson-lens";
   "aeson-native" = dontDistribute super."aeson-native";
   "aeson-qq" = doDistribute super."aeson-qq_0_7_4";
@@ -1247,6 +1248,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "anansi-hscolour" = dontDistribute super."anansi-hscolour";
   "anansi-pandoc" = dontDistribute super."anansi-pandoc";
   "anatomy" = dontDistribute super."anatomy";
+  "android" = dontDistribute super."android";
   "android-lint-summary" = dontDistribute super."android-lint-summary";
   "angel" = dontDistribute super."angel";
   "animalcase" = dontDistribute super."animalcase";
@@ -1644,6 +1646,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "blaze-html-hexpat" = dontDistribute super."blaze-html-hexpat";
   "blaze-html-truncate" = dontDistribute super."blaze-html-truncate";
   "blaze-json" = dontDistribute super."blaze-json";
+  "blaze-markup" = doDistribute super."blaze-markup_0_7_0_2";
   "blaze-shields" = dontDistribute super."blaze-shields";
   "blaze-textual" = doDistribute super."blaze-textual_0_2_0_9";
   "blaze-textual-native" = dontDistribute super."blaze-textual-native";
@@ -2540,11 +2543,16 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "distributed-process" = doDistribute super."distributed-process_0_5_3";
   "distributed-process-async" = doDistribute super."distributed-process-async_0_2_1";
   "distributed-process-azure" = dontDistribute super."distributed-process-azure";
+  "distributed-process-client-server" = doDistribute super."distributed-process-client-server_0_1_2";
+  "distributed-process-execution" = doDistribute super."distributed-process-execution_0_1_1";
+  "distributed-process-extras" = doDistribute super."distributed-process-extras_0_2_0";
   "distributed-process-monad-control" = dontDistribute super."distributed-process-monad-control";
   "distributed-process-p2p" = dontDistribute super."distributed-process-p2p";
   "distributed-process-platform" = dontDistribute super."distributed-process-platform";
   "distributed-process-registry" = dontDistribute super."distributed-process-registry";
   "distributed-process-simplelocalnet" = doDistribute super."distributed-process-simplelocalnet_0_2_2_0";
+  "distributed-process-supervisor" = doDistribute super."distributed-process-supervisor_0_1_2";
+  "distributed-process-task" = doDistribute super."distributed-process-task_0_1_1";
   "distributed-process-tests" = dontDistribute super."distributed-process-tests";
   "distributed-process-zookeeper" = dontDistribute super."distributed-process-zookeeper";
   "distributed-static" = doDistribute super."distributed-static_0_3_1_0";
@@ -5504,6 +5512,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "nikepub" = dontDistribute super."nikepub";
   "nimber" = dontDistribute super."nimber";
   "nitro" = dontDistribute super."nitro";
+  "nix-eval" = dontDistribute super."nix-eval";
   "nix-paths" = dontDistribute super."nix-paths";
   "nixfromnpm" = dontDistribute super."nixfromnpm";
   "nixos-types" = dontDistribute super."nixos-types";
@@ -5544,6 +5553,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "numbering" = dontDistribute super."numbering";
   "numerals" = dontDistribute super."numerals";
   "numerals-base" = dontDistribute super."numerals-base";
+  "numeric-extras" = doDistribute super."numeric-extras_0_0_3";
   "numeric-limits" = dontDistribute super."numeric-limits";
   "numeric-prelude" = dontDistribute super."numeric-prelude";
   "numeric-qq" = dontDistribute super."numeric-qq";
@@ -5593,6 +5603,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "opaleye" = doDistribute super."opaleye_0_3_1_2";
   "opaleye-classy" = dontDistribute super."opaleye-classy";
   "opaleye-sqlite" = dontDistribute super."opaleye-sqlite";
+  "opaleye-trans" = dontDistribute super."opaleye-trans";
   "open-browser" = dontDistribute super."open-browser";
   "open-pandoc" = dontDistribute super."open-pandoc";
   "open-symbology" = dontDistribute super."open-symbology";
@@ -5730,6 +5741,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "pasty" = dontDistribute super."pasty";
   "patch-combinators" = dontDistribute super."patch-combinators";
   "patch-image" = dontDistribute super."patch-image";
+  "patches-vector" = dontDistribute super."patches-vector";
   "path" = dontDistribute super."path";
   "pathfinding" = dontDistribute super."pathfinding";
   "pathfindingcore" = dontDistribute super."pathfindingcore";
@@ -7489,6 +7501,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "tuple-th" = dontDistribute super."tuple-th";
   "tupleinstances" = dontDistribute super."tupleinstances";
   "tuples-homogenous-h98" = dontDistribute super."tuples-homogenous-h98";
+  "turing" = dontDistribute super."turing";
   "turing-music" = dontDistribute super."turing-music";
   "turkish-deasciifier" = dontDistribute super."turkish-deasciifier";
   "turni" = dontDistribute super."turni";

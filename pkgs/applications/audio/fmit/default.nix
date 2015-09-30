@@ -19,9 +19,9 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ fftw freeglut qtbase qtmultimedia ]
-    ++ stdenv.lib.optional alsaSupport [ alsaLib ]
-    ++ stdenv.lib.optional jackSupport [ libjack2 ]
-    ++ stdenv.lib.optional portaudioSupport [ portaudio ];
+    ++ stdenv.lib.optionals alsaSupport [ alsaLib ]
+    ++ stdenv.lib.optionals jackSupport [ libjack2 ]
+    ++ stdenv.lib.optionals portaudioSupport [ portaudio ];
 
   configurePhase = ''
     mkdir build

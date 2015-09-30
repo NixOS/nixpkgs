@@ -4533,15 +4533,15 @@ let
   };
 
   pyramid = buildPythonPackage rec {
-    name = "pyramid-1.5.2";
+    name = "pyramid-1.5.7";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyramid/${name}.tar.gz";
-      md5 = "d56b140b41d42f818f4349d94d968c9a";
+      sha256 = "1d29fj86724z68zcj9ximl2nrn34pflrlr6v9mwyhcv8rdf2sc61";
     };
 
     preCheck = ''
-      # test is failing, see https://github.com/Pylons/pyramid/issues/1405
+      # this will be fixed for 1.6 release, see https://github.com/Pylons/pyramid/issues/1405
       rm pyramid/tests/test_response.py
     '';
 
@@ -10940,11 +10940,11 @@ let
   };
 
   pygit2 = buildPythonPackage rec {
-    name = "pygit2-0.21.2";
+    name = "pygit2-0.23.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pygit2/${name}.tar.gz";
-      sha256 = "0lya4v91d4y5fwrb55n8m8avgmz0l81jml2spvx6r7j1czcx3zic";
+      sha256 = "04201vcal7jq8lbpk9ylscrhjxdcf2aihiw25k4imjjqgfmvldf7";
     };
 
     preConfigure = ( if stdenv.isDarwin then ''
@@ -15600,12 +15600,12 @@ let
   };
 
   webob = buildPythonPackage rec {
-    version = "1.4";
+    version = "1.4.1";
     name = "webob-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/W/WebOb/WebOb-${version}.tar.gz";
-      md5 = "8437607c0cc00c35f658f972516ffb55";
+      sha256 = "1nz9m6ijf46wfn33zfza13c0k1n4kjnmn3icdlrlgz5yj21vky0j";
     };
 
     propagatedBuildInputs = with self; [ nose ];
@@ -16048,6 +16048,8 @@ let
       url = "https://pypi.python.org/packages/source/B/BTrees/${name}.tar.gz";
       sha256 = "1avvhkd7rvp3rzhw20v6ank8a8m9a1lmh99c4gjjsa1ry0zsri3y";
     };
+
+    patches = [ ../development/python-modules/btrees-py35.patch ];
 
     meta = {
       description = "scalable persistent components";

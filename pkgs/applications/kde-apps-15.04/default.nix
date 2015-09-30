@@ -289,6 +289,7 @@ let
       kde-wallpapers = kde4Package super.kde-wallpapers;
 
       kde-workspace = extendDerivation (kde4Package super.kde-workspace) {
+        patches = [ ./kde-workspace/ksysguard-0001-disable-signalplottertest.patch ];
         buildInputs = with scope.xorg; [
             libxkbfile libXcomposite xcbutilimage xcbutilkeysyms xcbutilrenderutil
         ];
