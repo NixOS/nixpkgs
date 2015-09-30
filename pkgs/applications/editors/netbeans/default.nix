@@ -11,10 +11,10 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "netbeans-7.4";
+  name = "netbeans-8.0.2";
   src = fetchurl {
-    url = http://download.netbeans.org/netbeans/7.4/final/zip/netbeans-7.4-201310111528.zip;
-    sha256 = "0nrnghnsdix5cmp86xi1gmvarhjk2k8mlbld3dfa9impm8gpv6mx";
+    url = http://download.netbeans.org/netbeans/8.0.2/final/zip/netbeans-8.0.2-201411181905.zip;
+    sha256 = "1h9cqpwsnrhcnn4fqz3rr4s5jln8cfwki8af9zikq9j6aza337xv";
   };
   buildCommand = ''
     # Unpack and copy the stuff
