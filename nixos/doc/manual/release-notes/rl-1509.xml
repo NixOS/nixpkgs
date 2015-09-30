@@ -349,13 +349,13 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.pandoc
 
 <listitem>
   <para>
-    Any use of module argument such as <varname>pkgs</varname> to access
+    Any use of module arguments such as <varname>pkgs</varname> to access
     library functions, or to define <literal>imports</literal> attributes
     will now lead to an infinite loop at the time of the evaluation.
   </para>
 
   <para>
-    In case of infinite loop, use the <command>--show-trace</command>
+    In case of an infinite loop, use the <command>--show-trace</command>
     command line argument and read the line just above the error message.
 
 <screen>
