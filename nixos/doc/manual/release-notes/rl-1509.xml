@@ -12,16 +12,25 @@ has the following highlights:</para>
 <itemizedlist>
 
   <listitem>
-    <para>The Haskell packages infrastructure has been re-designed
-    from the ground up.  NixOS now distributes the latest version of
-    every single package registered on <link
-    xlink:href="http://hackage.haskell.org/">Hackage</link>, i.e. well
-    over 8000 Haskell packages. Further information and usage
-    instructions for the improved infrastructure are available at
-    <link
-    xlink:href="https://nixos.org/wiki/Haskell">https://nixos.org/wiki/Haskell</link>.
-    Users migrating from an earlier release will also find helpful
-    information below, in the list of backwards-incompatible changes.</para>
+    <para>The <link xlink:href="http://haskell.org/">Haskell</link>
+    packages infrastructure has been re-designed from the ground up
+    (&quot;Haskell NG&quot;). NixOS now distributes the latest version
+    of every single package registered on <link
+    xlink:href="http://hackage.haskell.org/">Hackage</link> -- well in
+    excess of 8,000 Haskell packages. Detailed instructions on how to
+    use that infrastructure can be found in the <link
+    xlink:href="http://nixos.org/nixpkgs/manual/#users-guide-to-the-haskell-infrastructure">User's
+    Guide to the Haskell Infrastructure</link>. Users migrating from an
+    earlier release may find helpful information below, in the list of
+    backwards-incompatible changes. Furthermore, we distribute 51(!)
+    additional Haskell package sets that provide every single <link
+    xlink:href="http://www.stackage.org/">LTS Haskell</link> release
+    since version 0.0 as well as the most recent <link
+    xlink:href="http://www.stackage.org/">Stackage Nightly</link>
+    snapshot. The announcement <link
+    xlink:href="http://lists.science.uu.nl/pipermail/nix-dev/2015-September/018138.html">&quot;Full
+    Stackage Support in Nixpkgs&quot;</link> gives additional
+    details.</para>
   </listitem>
 
   <listitem>
@@ -135,38 +144,44 @@ fileSystems."/shiny" = {
 
 <listitem>
   <para>
-    Haskell packages can no longer be found by name, except for
-    <literal>ghc</literal>, <literal>cabal-install</literal>, and
-    <literal>stack</literal>, even though we do package the whole Hackage.
-    The reason for this inconvenience is the sheer size of the Haskell
-    package set: name-based lookups such as these would become much
-    slower than they are today if we'd add the entire Hackage database
-    into the top level attribute set. Instead, the list of Haskell
-    packages can be displayed by
+    &quot;<literal>nix-env -qa</literal>&quot; no longer discovers
+    Haskell packages by name. The only packages visible in the global
+    scope are <literal>ghc</literal>, <literal>cabal-install</literal>,
+    and <literal>stack</literal>, but all other packages are hidden. The
+    reason for this inconvenience is the sheer size of the Haskell
+    package set. Name-based lookups are expensive, and most
+    <literal>nix-env -qa</literal> operations would become much slower
+    if we'd add the entire Hackage database into the top level attribute
+    set. Instead, the list of Haskell packages can be displayed by
+    running:
   </para>
   <programlisting>
 nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qaP -A haskellPackages
 </programlisting>
   <para>
-    and packages can be installed with:
+    Executable programs written in Haskell can be installed with:
   </para>
   <programlisting>
-nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.cabal-install
+nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.pandoc
 </programlisting>
+  <para>
+    Installing Haskell <emphasis>libraries</emphasis> this way, however, is no
+    longer supported. See the next item for more details.
+  </para>
 </listitem>
 
 <listitem>
   <para>
     Previous versions of NixOS came with a feature called
-    <literal>ghc-wrapper</literal>, a small wrapper script that allows
-    GHC to transparently pick up on libraries installed in the user's
-    profile. This feature has been deprecated;
-    <literal>ghc-wrapper</literal> was removed from the distribution.
-    The proper way to register Haskell libraries with the compiler now
-    is the <literal>haskellPackages.ghcWithPackages</literal>
-    function.
-    <link xlink:href="https://nixos.org/wiki/Haskell">https://nixos.org/wiki/Haskell</link>
-    provides much information about this subject.
+    <literal>ghc-wrapper</literal>, a small script that allowed GHC to
+    transparently pick up on libraries installed in the user's profile. This
+    feature has been deprecated; <literal>ghc-wrapper</literal> was removed
+    from the distribution. The proper way to register Haskell libraries with
+    the compiler now is the <literal>haskellPackages.ghcWithPackages</literal>
+    function. The <link
+    xlink:href="http://nixos.org/nixpkgs/manual/#users-guide-to-the-haskell-infrastructure">User's
+    Guide to the Haskell Infrastructure</link> provides more information about
+    this subject.
   </para>
 </listitem>
 
