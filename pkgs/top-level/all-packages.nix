@@ -628,7 +628,9 @@ let
 
   inherit (androidenv) androidsdk_4_4 androidndk;
 
-  aria2 = callPackage ../tools/networking/aria2 { };
+  aria2 = callPackage ../tools/networking/aria2 {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   aria = aria2;
 
   at = callPackage ../tools/system/at { };
