@@ -7819,7 +7819,7 @@ let
 
   phonon_qt5 = callPackage ../development/libraries/phonon/qt5/old.nix {};
 
-  phonon_backend_gstreamer_qt5 = callPackage ../development/libraries/phonon-backend-gstreamer/qt5/old.nix {};
+  phonon_qt5_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt5/old.nix {};
 
   physfs = callPackage ../development/libraries/physfs { };
 
