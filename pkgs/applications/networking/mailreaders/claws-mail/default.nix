@@ -40,6 +40,7 @@ stdenv.mkDerivation {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.khumba ];
+    priority = 10;  # Resolve the conflict with the share/mime link we create.
   };
 
   src = fetchurl {
