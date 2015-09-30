@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   sources = sourceFilesBySuffices ./. [".xml"];
 
-  buildInputs = [ libxml2 libxslt ];
+  buildInputs = [ pandoc libxml2 libxslt ];
 
   xsltFlags = ''
     --param section.autolabel 1
@@ -19,6 +19,22 @@ stdenv.mkDerivation {
   '';
 
   buildCommand = ''
+    {
+      echo "<chapter xmlns=\"http://docbook.org/ns/docbook\""
+      echo "         xmlns:xlink=\"http://www.w3.org/1999/xlink\""
+      echo "         xml:id=\"users-guide-to-the-haskell-infrastructure\">"
+      echo ""
+      echo "<title>User's Guide to the Haskell Infrastructure</title>"
+      echo ""
+      pandoc ${./haskell-users-guide.md} -w docbook | \
+        sed -e 's|<ulink url=|<link xlink:href=|' \
+            -e 's|</ulink>|</link>|' \
+            -e 's|<sect. id=|<section xml:id=|' \
+            -e 's|</sect[0-9]>|</section>|'
+      echo ""
+      echo "</chapter>"
+    } >haskell-users-guide.xml
+
     ln -s "$sources/"*.xml .
 
     echo ${nixpkgsVersion} > .version
