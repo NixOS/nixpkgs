@@ -12,28 +12,6 @@ has the following highlights:</para>
 <itemizedlist>
 
   <listitem>
-    <para>Gnome has been upgraded to 3.16.
-    </para>
-  </listitem>
-
-  <listitem>
-    <para>Xfce has been upgraded to 4.12.
-    </para>
-  </listitem>
-
-  <listitem>
-    <para>KDE 5 has been upgraded to KDE Frameworks 5.10,
-      Plasma 5.3.2 and Applications 15.04.3.
-      KDE 4 has been updated to kdelibs-4.14.10.
-    </para>
-  </listitem>
-
-  <listitem>
-    <para>E19 has been upgraded to 0.16.8.15.
-    </para>
-  </listitem>
-
-  <listitem>
     <para>The <link xlink:href="http://haskell.org/">Haskell</link>
     packages infrastructure has been re-designed from the ground up
     (&quot;Haskell NG&quot;). NixOS now distributes the latest version
@@ -78,10 +56,32 @@ system.autoUpgrade.enable = true;
     3.18.</para>
   </listitem>
 
+  <listitem>
+    <para>Gnome has been upgraded to 3.16.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>Xfce has been upgraded to 4.12.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>KDE 5 has been upgraded to KDE Frameworks 5.10,
+      Plasma 5.3.2 and Applications 15.04.3.
+      KDE 4 has been updated to kdelibs-4.14.10.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>E19 has been upgraded to 0.16.8.15.
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 
-  <para>Following new services were added since the last release:
+<para>The following new services were added since the last release:
 
   <itemizedlist>
     <listitem><para><literal>services/mail/exim.nix</literal></para></listitem>
@@ -152,7 +152,7 @@ system.autoUpgrade.enable = true;
     <listitem><para><literal>virtualisation/vmware-guest.nix</literal></para></listitem>
     <listitem><para><literal>virtualisation/xen-dom0.nix</literal></para></listitem>
   </itemizedlist>
-  </para>
+</para>
 
 
 <para>When upgrading from a previous release, please be aware of the
