@@ -1,7 +1,7 @@
 { fetchurl, stdenv
-, curl, dbus, dbus_glib, enchant, gtk, gnutls, gnupg, gpgme, libarchive
-, libcanberra, libetpan, libnotify, libsoup, libxml2, networkmanager, openldap
-, perl, pkgconfig, poppler, python, shared_mime_info, webkitgtk2
+, curl, dbus, dbus_glib, enchant, gtk, gnutls, gnupg, gpgme, hicolor_icon_theme
+, libarchive, libcanberra, libetpan, libnotify, libsoup, libxml2, networkmanager
+, openldap , perl, pkgconfig, poppler, python, shared_mime_info, webkitgtk2
 
 # Build options
 # TODO: A flag to build the manual.
@@ -50,7 +50,9 @@ stdenv.mkDerivation {
   patches = [ ./mime.patch ];
 
   buildInputs =
-    [ curl dbus dbus_glib gtk gnutls libetpan perl pkgconfig python ]
+    [ curl dbus dbus_glib gtk gnutls hicolor_icon_theme
+      libetpan perl pkgconfig python
+    ]
     ++ optional enableSpellcheck enchant
     ++ optionals (enablePgp || enablePluginSmime) [ gnupg gpgme ]
     ++ optional enablePluginArchive libarchive
