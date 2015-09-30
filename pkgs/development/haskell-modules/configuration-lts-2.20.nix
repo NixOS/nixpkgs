@@ -2036,6 +2036,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "complex-integrate" = dontDistribute super."complex-integrate";
   "complexity" = dontDistribute super."complexity";
   "compose-trans" = dontDistribute super."compose-trans";
+  "composition" = doDistribute super."composition_1_0_1_1";
   "composition-extra" = dontDistribute super."composition-extra";
   "composition-tree" = dontDistribute super."composition-tree";
   "compression" = dontDistribute super."compression";
@@ -3579,6 +3580,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "haskell-rules" = dontDistribute super."haskell-rules";
   "haskell-spacegoo" = dontDistribute super."haskell-spacegoo";
   "haskell-src-exts-qq" = dontDistribute super."haskell-src-exts-qq";
+  "haskell-src-meta" = doDistribute super."haskell-src-meta_0_6_0_10";
   "haskell-src-meta-mwotton" = dontDistribute super."haskell-src-meta-mwotton";
   "haskell-token-utils" = dontDistribute super."haskell-token-utils";
   "haskell-type-exts" = dontDistribute super."haskell-type-exts";
@@ -5151,6 +5153,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "monad-gen" = dontDistribute super."monad-gen";
   "monad-interleave" = dontDistribute super."monad-interleave";
   "monad-levels" = dontDistribute super."monad-levels";
+  "monad-logger" = doDistribute super."monad-logger_0_3_13_2";
   "monad-loops-stm" = dontDistribute super."monad-loops-stm";
   "monad-lrs" = dontDistribute super."monad-lrs";
   "monad-memo" = dontDistribute super."monad-memo";
@@ -5828,6 +5831,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "poker-eval" = dontDistribute super."poker-eval";
   "pokitdok" = dontDistribute super."pokitdok";
   "polar" = dontDistribute super."polar";
+  "polar-configfile" = dontDistribute super."polar-configfile";
   "polar-shader" = dontDistribute super."polar-shader";
   "polh-lexicon" = dontDistribute super."polh-lexicon";
   "polimorf" = dontDistribute super."polimorf";
@@ -6438,6 +6442,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "sci-ratio" = dontDistribute super."sci-ratio";
   "science-constants" = dontDistribute super."science-constants";
   "science-constants-dimensional" = dontDistribute super."science-constants-dimensional";
+  "scientific" = doDistribute super."scientific_0_3_3_8";
   "scion" = dontDistribute super."scion";
   "scion-browser" = dontDistribute super."scion-browser";
   "scons2dot" = dontDistribute super."scons2dot";
@@ -7681,6 +7686,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "vty-ui" = dontDistribute super."vty-ui";
   "vty-ui-extras" = dontDistribute super."vty-ui-extras";
   "waddle" = dontDistribute super."waddle";
+  "wai" = doDistribute super."wai_3_0_3_0";
   "wai-app-file-cgi" = dontDistribute super."wai-app-file-cgi";
   "wai-app-static" = doDistribute super."wai-app-static_3_0_1_1";
   "wai-cors" = dontDistribute super."wai-cors";
@@ -7799,6 +7805,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "whitespace" = dontDistribute super."whitespace";
   "whois" = dontDistribute super."whois";
   "why3" = dontDistribute super."why3";
+  "wigner-symbols" = dontDistribute super."wigner-symbols";
   "wikipedia4epub" = dontDistribute super."wikipedia4epub";
   "win-hp-path" = dontDistribute super."win-hp-path";
   "windowslive" = dontDistribute super."windowslive";
@@ -7825,6 +7832,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "words" = dontDistribute super."words";
   "wordsearch" = dontDistribute super."wordsearch";
   "wordsetdiff" = dontDistribute super."wordsetdiff";
+  "workflow-osx" = dontDistribute super."workflow-osx";
   "wp-archivebot" = dontDistribute super."wp-archivebot";
   "wraparound" = dontDistribute super."wraparound";
   "wraxml" = dontDistribute super."wraxml";

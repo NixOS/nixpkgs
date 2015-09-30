@@ -1948,6 +1948,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "complex-integrate" = dontDistribute super."complex-integrate";
   "complexity" = dontDistribute super."complexity";
   "compose-trans" = dontDistribute super."compose-trans";
+  "composition" = doDistribute super."composition_1_0_1_1";
   "composition-extra" = doDistribute super."composition-extra_1_1_0";
   "composition-tree" = dontDistribute super."composition-tree";
   "compression" = dontDistribute super."compression";
@@ -2365,6 +2366,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "digestive-bootstrap" = dontDistribute super."digestive-bootstrap";
   "digestive-foundation-lucid" = dontDistribute super."digestive-foundation-lucid";
   "digestive-functors" = doDistribute super."digestive-functors_0_8_0_0";
+  "digestive-functors-aeson" = doDistribute super."digestive-functors-aeson_1_1_16";
   "digestive-functors-blaze" = dontDistribute super."digestive-functors-blaze";
   "digestive-functors-happstack" = dontDistribute super."digestive-functors-happstack";
   "digestive-functors-heist" = dontDistribute super."digestive-functors-heist";
@@ -3415,6 +3417,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "haskell-reflect" = dontDistribute super."haskell-reflect";
   "haskell-rules" = dontDistribute super."haskell-rules";
   "haskell-src-exts-qq" = dontDistribute super."haskell-src-exts-qq";
+  "haskell-src-meta" = doDistribute super."haskell-src-meta_0_6_0_10";
   "haskell-src-meta-mwotton" = dontDistribute super."haskell-src-meta-mwotton";
   "haskell-token-utils" = dontDistribute super."haskell-token-utils";
   "haskell-type-exts" = dontDistribute super."haskell-type-exts";
@@ -4724,6 +4727,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "mailbox-count" = dontDistribute super."mailbox-count";
   "mailchimp-subscribe" = dontDistribute super."mailchimp-subscribe";
   "mailgun" = dontDistribute super."mailgun";
+  "mainland-pretty" = doDistribute super."mainland-pretty_0_4_1_0";
   "majordomo" = dontDistribute super."majordomo";
   "majority" = dontDistribute super."majority";
   "make-hard-links" = dontDistribute super."make-hard-links";
@@ -4894,6 +4898,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "monad-gen" = dontDistribute super."monad-gen";
   "monad-interleave" = dontDistribute super."monad-interleave";
   "monad-levels" = dontDistribute super."monad-levels";
+  "monad-logger" = doDistribute super."monad-logger_0_3_13_2";
   "monad-loops-stm" = dontDistribute super."monad-loops-stm";
   "monad-lrs" = dontDistribute super."monad-lrs";
   "monad-memo" = dontDistribute super."monad-memo";
@@ -5530,6 +5535,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "poker-eval" = dontDistribute super."poker-eval";
   "pokitdok" = dontDistribute super."pokitdok";
   "polar" = dontDistribute super."polar";
+  "polar-configfile" = dontDistribute super."polar-configfile";
   "polar-shader" = dontDistribute super."polar-shader";
   "polh-lexicon" = dontDistribute super."polh-lexicon";
   "polimorf" = dontDistribute super."polimorf";
@@ -6118,6 +6124,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "sci-ratio" = dontDistribute super."sci-ratio";
   "science-constants" = dontDistribute super."science-constants";
   "science-constants-dimensional" = dontDistribute super."science-constants-dimensional";
+  "scientific" = doDistribute super."scientific_0_3_3_8";
   "scion" = dontDistribute super."scion";
   "scion-browser" = dontDistribute super."scion-browser";
   "scons2dot" = dontDistribute super."scons2dot";
@@ -7291,6 +7298,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "vty-ui" = dontDistribute super."vty-ui";
   "vty-ui-extras" = dontDistribute super."vty-ui-extras";
   "waddle" = dontDistribute super."waddle";
+  "wai" = doDistribute super."wai_3_0_3_0";
   "wai-app-file-cgi" = dontDistribute super."wai-app-file-cgi";
   "wai-digestive-functors" = dontDistribute super."wai-digestive-functors";
   "wai-dispatch" = dontDistribute super."wai-dispatch";
@@ -7339,6 +7347,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "waitfree" = dontDistribute super."waitfree";
   "waitra" = doDistribute super."waitra_0_0_3_0";
   "warc" = dontDistribute super."warc";
+  "warp" = doDistribute super."warp_3_1_3";
   "warp-dynamic" = dontDistribute super."warp-dynamic";
   "warp-static" = dontDistribute super."warp-static";
   "warp-tls" = doDistribute super."warp-tls_3_1_2";
@@ -7398,6 +7407,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "whitespace" = dontDistribute super."whitespace";
   "whois" = dontDistribute super."whois";
   "why3" = dontDistribute super."why3";
+  "wigner-symbols" = dontDistribute super."wigner-symbols";
   "wikipedia4epub" = dontDistribute super."wikipedia4epub";
   "win-hp-path" = dontDistribute super."win-hp-path";
   "windowslive" = dontDistribute super."windowslive";
@@ -7422,6 +7432,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "words" = dontDistribute super."words";
   "wordsearch" = dontDistribute super."wordsearch";
   "wordsetdiff" = dontDistribute super."wordsetdiff";
+  "workflow-osx" = dontDistribute super."workflow-osx";
   "wp-archivebot" = dontDistribute super."wp-archivebot";
   "wraparound" = dontDistribute super."wraparound";
   "wraxml" = dontDistribute super."wraxml";

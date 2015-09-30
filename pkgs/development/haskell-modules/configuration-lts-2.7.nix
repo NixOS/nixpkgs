@@ -5920,6 +5920,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "poker-eval" = dontDistribute super."poker-eval";
   "pokitdok" = dontDistribute super."pokitdok";
   "polar" = dontDistribute super."polar";
+  "polar-configfile" = dontDistribute super."polar-configfile";
   "polar-shader" = dontDistribute super."polar-shader";
   "polh-lexicon" = dontDistribute super."polh-lexicon";
   "polimorf" = dontDistribute super."polimorf";
@@ -6541,6 +6542,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "sci-ratio" = dontDistribute super."sci-ratio";
   "science-constants" = dontDistribute super."science-constants";
   "science-constants-dimensional" = dontDistribute super."science-constants-dimensional";
+  "scientific" = doDistribute super."scientific_0_3_3_8";
   "scion" = dontDistribute super."scion";
   "scion-browser" = dontDistribute super."scion-browser";
   "scons2dot" = dontDistribute super."scons2dot";
@@ -7928,6 +7930,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "whitespace" = dontDistribute super."whitespace";
   "whois" = dontDistribute super."whois";
   "why3" = dontDistribute super."why3";
+  "wigner-symbols" = dontDistribute super."wigner-symbols";
   "wikipedia4epub" = dontDistribute super."wikipedia4epub";
   "win-hp-path" = dontDistribute super."win-hp-path";
   "windowslive" = dontDistribute super."windowslive";
@@ -7956,6 +7959,7 @@ self: super: assert super.ghc.name == "ghc-7.8.4"; {
   "words" = dontDistribute super."words";
   "wordsearch" = dontDistribute super."wordsearch";
   "wordsetdiff" = dontDistribute super."wordsetdiff";
+  "workflow-osx" = dontDistribute super."workflow-osx";
   "wp-archivebot" = dontDistribute super."wp-archivebot";
   "wraparound" = dontDistribute super."wraparound";
   "wraxml" = dontDistribute super."wraxml";

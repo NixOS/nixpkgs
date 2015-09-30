@@ -1441,6 +1441,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "binary-generic" = dontDistribute super."binary-generic";
   "binary-indexed-tree" = dontDistribute super."binary-indexed-tree";
   "binary-literal-qq" = dontDistribute super."binary-literal-qq";
+  "binary-orphans" = doDistribute super."binary-orphans_0_1_1_0";
   "binary-protocol" = dontDistribute super."binary-protocol";
   "binary-protocol-zmq" = dontDistribute super."binary-protocol-zmq";
   "binary-shared" = dontDistribute super."binary-shared";
@@ -1923,6 +1924,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "complex-integrate" = dontDistribute super."complex-integrate";
   "complexity" = dontDistribute super."complexity";
   "compose-trans" = dontDistribute super."compose-trans";
+  "composition" = doDistribute super."composition_1_0_1_1";
   "composition-extra" = doDistribute super."composition-extra_1_1_0";
   "composition-tree" = dontDistribute super."composition-tree";
   "compression" = dontDistribute super."compression";
@@ -2306,16 +2308,20 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "dgs" = dontDistribute super."dgs";
   "dia-base" = dontDistribute super."dia-base";
   "dia-functions" = dontDistribute super."dia-functions";
+  "diagrams-cairo" = doDistribute super."diagrams-cairo_1_3_0_4";
   "diagrams-canvas" = dontDistribute super."diagrams-canvas";
   "diagrams-contrib" = doDistribute super."diagrams-contrib_1_3_0_6";
   "diagrams-graphviz" = dontDistribute super."diagrams-graphviz";
   "diagrams-gtk" = dontDistribute super."diagrams-gtk";
   "diagrams-hsqml" = dontDistribute super."diagrams-hsqml";
+  "diagrams-html5" = doDistribute super."diagrams-html5_1_3_0_3";
   "diagrams-pandoc" = dontDistribute super."diagrams-pandoc";
   "diagrams-pdf" = dontDistribute super."diagrams-pdf";
   "diagrams-pgf" = dontDistribute super."diagrams-pgf";
   "diagrams-qrcode" = dontDistribute super."diagrams-qrcode";
+  "diagrams-rasterific" = doDistribute super."diagrams-rasterific_1_3_1_4";
   "diagrams-rubiks-cube" = dontDistribute super."diagrams-rubiks-cube";
+  "diagrams-svg" = doDistribute super."diagrams-svg_1_3_1_5";
   "diagrams-tikz" = dontDistribute super."diagrams-tikz";
   "dice-entropy-conduit" = dontDistribute super."dice-entropy-conduit";
   "dicom" = dontDistribute super."dicom";
@@ -2330,6 +2336,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "digestive-bootstrap" = dontDistribute super."digestive-bootstrap";
   "digestive-foundation-lucid" = dontDistribute super."digestive-foundation-lucid";
   "digestive-functors" = doDistribute super."digestive-functors_0_8_0_0";
+  "digestive-functors-aeson" = doDistribute super."digestive-functors-aeson_1_1_16";
   "digestive-functors-blaze" = dontDistribute super."digestive-functors-blaze";
   "digestive-functors-happstack" = dontDistribute super."digestive-functors-happstack";
   "digestive-functors-heist" = dontDistribute super."digestive-functors-heist";
@@ -3365,6 +3372,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "haskell-reflect" = dontDistribute super."haskell-reflect";
   "haskell-rules" = dontDistribute super."haskell-rules";
   "haskell-src-exts-qq" = dontDistribute super."haskell-src-exts-qq";
+  "haskell-src-meta" = doDistribute super."haskell-src-meta_0_6_0_10";
   "haskell-src-meta-mwotton" = dontDistribute super."haskell-src-meta-mwotton";
   "haskell-token-utils" = dontDistribute super."haskell-token-utils";
   "haskell-type-exts" = dontDistribute super."haskell-type-exts";
@@ -4373,6 +4381,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "language-boogie" = dontDistribute super."language-boogie";
   "language-c-comments" = dontDistribute super."language-c-comments";
   "language-c-inline" = dontDistribute super."language-c-inline";
+  "language-c-quote" = doDistribute super."language-c-quote_0_11_0_1";
   "language-cil" = dontDistribute super."language-cil";
   "language-css" = dontDistribute super."language-css";
   "language-dot" = dontDistribute super."language-dot";
@@ -4656,6 +4665,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "mailbox-count" = dontDistribute super."mailbox-count";
   "mailchimp-subscribe" = dontDistribute super."mailchimp-subscribe";
   "mailgun" = dontDistribute super."mailgun";
+  "mainland-pretty" = doDistribute super."mainland-pretty_0_4_1_0";
   "majordomo" = dontDistribute super."majordomo";
   "majority" = dontDistribute super."majority";
   "make-hard-links" = dontDistribute super."make-hard-links";
@@ -4824,6 +4834,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "monad-gen" = dontDistribute super."monad-gen";
   "monad-interleave" = dontDistribute super."monad-interleave";
   "monad-levels" = dontDistribute super."monad-levels";
+  "monad-logger" = doDistribute super."monad-logger_0_3_13_2";
   "monad-loops-stm" = dontDistribute super."monad-loops-stm";
   "monad-lrs" = dontDistribute super."monad-lrs";
   "monad-memo" = dontDistribute super."monad-memo";
@@ -5448,6 +5459,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "poker-eval" = dontDistribute super."poker-eval";
   "pokitdok" = dontDistribute super."pokitdok";
   "polar" = dontDistribute super."polar";
+  "polar-configfile" = dontDistribute super."polar-configfile";
   "polar-shader" = dontDistribute super."polar-shader";
   "polh-lexicon" = dontDistribute super."polh-lexicon";
   "polimorf" = dontDistribute super."polimorf";
@@ -6026,6 +6038,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "sci-ratio" = dontDistribute super."sci-ratio";
   "science-constants" = dontDistribute super."science-constants";
   "science-constants-dimensional" = dontDistribute super."science-constants-dimensional";
+  "scientific" = doDistribute super."scientific_0_3_3_8";
   "scion" = dontDistribute super."scion";
   "scion-browser" = dontDistribute super."scion-browser";
   "scons2dot" = dontDistribute super."scons2dot";
@@ -7177,6 +7190,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "vty-ui" = dontDistribute super."vty-ui";
   "vty-ui-extras" = dontDistribute super."vty-ui-extras";
   "waddle" = dontDistribute super."waddle";
+  "wai" = doDistribute super."wai_3_0_3_0";
   "wai-app-file-cgi" = dontDistribute super."wai-app-file-cgi";
   "wai-digestive-functors" = dontDistribute super."wai-digestive-functors";
   "wai-dispatch" = dontDistribute super."wai-dispatch";
@@ -7222,6 +7236,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "wait-handle" = dontDistribute super."wait-handle";
   "waitfree" = dontDistribute super."waitfree";
   "warc" = dontDistribute super."warc";
+  "warp" = doDistribute super."warp_3_1_3";
   "warp-dynamic" = dontDistribute super."warp-dynamic";
   "warp-static" = dontDistribute super."warp-static";
   "warp-tls-uid" = dontDistribute super."warp-tls-uid";
@@ -7279,6 +7294,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "whitespace" = dontDistribute super."whitespace";
   "whois" = dontDistribute super."whois";
   "why3" = dontDistribute super."why3";
+  "wigner-symbols" = dontDistribute super."wigner-symbols";
   "wikipedia4epub" = dontDistribute super."wikipedia4epub";
   "win-hp-path" = dontDistribute super."win-hp-path";
   "windowslive" = dontDistribute super."windowslive";
@@ -7303,6 +7319,7 @@ self: super: assert super.ghc.name == "ghc-7.10.2"; {
   "words" = dontDistribute super."words";
   "wordsearch" = dontDistribute super."wordsearch";
   "wordsetdiff" = dontDistribute super."wordsetdiff";
+  "workflow-osx" = dontDistribute super."workflow-osx";
   "wp-archivebot" = dontDistribute super."wp-archivebot";
   "wraparound" = dontDistribute super."wraparound";
   "wraxml" = dontDistribute super."wraxml";
