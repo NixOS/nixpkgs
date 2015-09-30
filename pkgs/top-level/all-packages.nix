@@ -7658,6 +7658,8 @@ let
 
   ncurses = callPackage ../development/libraries/ncurses { };
 
+  neardal = callPackage ../development/libraries/neardal { };
+
   neon = callPackage ../development/libraries/neon {
     compressionSupport = true;
     sslSupport = true;
