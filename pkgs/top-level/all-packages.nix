@@ -2244,6 +2244,8 @@ let
 
   mpage = callPackage ../tools/text/mpage { };
 
+  mpw = callPackage ../tools/security/mpw { };
+
   mr = callPackage ../applications/version-management/mr { };
 
   mrtg = callPackage ../tools/misc/mrtg { };
