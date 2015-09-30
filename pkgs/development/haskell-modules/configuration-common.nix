@@ -633,8 +633,10 @@ self: super: {
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
 
+  # Supports only 3.4 for now, https://github.com/bscarlet/llvm-general/issues/144
+  llvm-general = super.llvm-general.override { llvm-config = pkgs.llvm_34; };
+
   # Needs help finding LLVM.
-  llvm-general = super.llvm-general.override { llvm-config = self.llvmPackages.llvm; };
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
 
   # Tries to run GUI in tests
