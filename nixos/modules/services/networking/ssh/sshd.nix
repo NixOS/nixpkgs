@@ -192,8 +192,8 @@ in
 
       authorizedKeysFiles = mkOption {
         type = types.listOf types.str;
-        default = [];
-        description = "Files from with authorized keys are read.";
+        default = [ ".ssh/authorized_keys" ".ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
+        description = "Files from which authorized keys are read.";
       };
 
       extraConfig = mkOption {
@@ -298,9 +298,6 @@ in
         showMotd = true;
         unixAuth = cfg.passwordAuthentication;
       };
-
-    services.openssh.authorizedKeysFiles =
-      [ ".ssh/authorized_keys" ".ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
 
     services.openssh.extraConfig =
       ''
