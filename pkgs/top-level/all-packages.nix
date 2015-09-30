@@ -11802,6 +11802,8 @@ let
 
   jackmeter = callPackage ../applications/audio/jackmeter { };
 
+  jackmix = callPackage ../applications/audio/jackmix { };
+
   jalv = callPackage ../applications/audio/jalv { };
 
   jedit = callPackage ../applications/editors/jedit { };
