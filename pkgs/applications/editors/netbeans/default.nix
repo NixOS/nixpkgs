@@ -1,4 +1,6 @@
-{stdenv, fetchurl, jdk, unzip, which, makeWrapper, makeDesktopItem}:
+{ stdenv, fetchurl, makeWrapper, makeDesktopItem
+, gawk, jdk, perl, python, unzip, which
+}:
 
 let
   desktopItem = makeDesktopItem {
@@ -16,14 +18,19 @@ stdenv.mkDerivation {
     url = http://download.netbeans.org/netbeans/8.0.2/final/zip/netbeans-8.0.2-201411181905.zip;
     sha256 = "1h9cqpwsnrhcnn4fqz3rr4s5jln8cfwki8af9zikq9j6aza337xv";
   };
+
   buildCommand = ''
-    # Unpack and copy the stuff
+    # Unpack and perform some path patching.
     unzip $src
-    mkdir -p $out
-    cp -a netbeans $out
-    
-    # Create a wrapper capable of starting it
+    patch -p1 <${./path.patch}
+    substituteInPlace netbeans/platform/lib/nbexec \
+        --subst-var-by AWK ${gawk}/bin/awk
+    patchShebangs .
+
+    # Copy to installation directory and create a wrapper capable of starting
+    # it.
     mkdir -p $out/bin
+    cp -a netbeans $out
     makeWrapper $out/netbeans/bin/netbeans $out/bin/netbeans \
       --prefix PATH : ${jdk}/bin:${which}/bin \
       --prefix JAVA_HOME : ${jdk.home} \
@@ -34,7 +41,7 @@ stdenv.mkDerivation {
     cp ${desktopItem}/share/applications/* $out/share/applications
   '';
   
-  buildInputs = [ unzip makeWrapper ];
+  buildInputs = [ makeWrapper perl python unzip ];
   
   meta = {
     description = "An integrated development environment for Java, C, C++ and PHP";
