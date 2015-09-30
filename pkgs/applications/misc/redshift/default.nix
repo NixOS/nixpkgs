@@ -1,6 +1,6 @@
 { fetchurl, stdenv, gettext, intltool, makeWrapper, pkgconfig
 , geoclue
-, guiSupport ? true, gtk3, python, pygobject3, pyxdg
+, guiSupport ? true, hicolor_icon_theme, gtk3, python, pygobject3, pyxdg
 , drmSupport ? true, libdrm
 , randrSupport ? true, libxcb
 , vidModeSupport ? true, libX11, libXxf86vm
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ geoclue ]
-    ++ stdenv.lib.optionals guiSupport [ gtk3 python pygobject3 pyxdg ]
+    ++ stdenv.lib.optionals guiSupport [ hicolor_icon_theme gtk3 python pygobject3 pyxdg ]
     ++ stdenv.lib.optionals drmSupport [ libdrm ]
     ++ stdenv.lib.optionals randrSupport [ libxcb ]
     ++ stdenv.lib.optionals vidModeSupport [ libX11 libXxf86vm ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     wrapProgram "$out/bin/redshift-gtk" \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix XDG_DATA_DIRS : "$out/share"
+      --prefix XDG_DATA_DIRS : "$out/share:${hicolor_icon_theme}/share"
   '';
 
   meta = with stdenv.lib; {
