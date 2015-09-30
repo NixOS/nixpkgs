@@ -4,12 +4,34 @@
          version="5.0"
          xml:id="sec-release-15.09">
 
-<title>Release 15.09 (“Dingo”, 2015/09/??)</title>
+<title>Release 15.09 (“Dingo”, 2015/09/30)</title>
 
 <para>In addition to numerous new and upgraded packages, this release
 has the following highlights:</para>
 
 <itemizedlist>
+
+  <listitem>
+    <para>Gnome has been upgraded to 3.16.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>Xfce has been upgraded to 4.12.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>KDE 5 has been upgraded to KDE Frameworks 5.10,
+      Plasma 5.3.2 and Applications 15.04.3.
+      KDE 4 has been updated to kdelibs-4.14.10.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>E19 has been upgraded to 0.16.8.15.
+    </para>
+  </listitem>
 
   <listitem>
     <para>The <link xlink:href="http://haskell.org/">Haskell</link>
@@ -57,6 +79,80 @@ system.autoUpgrade.enable = true;
   </listitem>
 
 </itemizedlist>
+
+
+  <para>Following new services were added since the last release:
+
+  <itemizedlist>
+    <listitem><para><literal>services/mail/exim.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/apache-kafka.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/canto-daemon.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/confd.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/devmon.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/gitit.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/ihaskell.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/mbpfan.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/mediatomb.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/mwlib.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/parsoid.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/plex.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/ripple-rest.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/ripple-data-api.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/subsonic.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/sundtek.nix</literal></para></listitem>
+    <listitem><para><literal>services/monitoring/cadvisor.nix</literal></para></listitem>
+    <listitem><para><literal>services/monitoring/das_watchdog.nix</literal></para></listitem>
+    <listitem><para><literal>services/monitoring/grafana.nix</literal></para></listitem>
+    <listitem><para><literal>services/monitoring/riemann-tools.nix</literal></para></listitem>
+    <listitem><para><literal>services/monitoring/teamviewer.nix</literal></para></listitem>
+    <listitem><para><literal>services/network-filesystems/u9fs.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/aiccu.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/asterisk.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/bird.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/charybdis.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/docker-registry-server.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/fan.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/firefox/sync-server.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/gateone.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/heyefi.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/i2p.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/lambdabot.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/mstpd.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/nix-serve.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/nylon.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/racoon.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/skydns.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/shout.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/softether.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/sslh.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/tinc.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/tlsdated.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/tox-bootstrapd.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/tvheadend.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/zerotierone.nix</literal></para></listitem>
+    <listitem><para><literal>services/scheduling/marathon.nix</literal></para></listitem>
+    <listitem><para><literal>services/security/fprintd.nix</literal></para></listitem>
+    <listitem><para><literal>services/security/hologram.nix</literal></para></listitem>
+    <listitem><para><literal>services/security/munge.nix</literal></para></listitem>
+    <listitem><para><literal>services/system/cloud-init.nix</literal></para></listitem>
+    <listitem><para><literal>services/web-servers/shellinabox.nix</literal></para></listitem>
+    <listitem><para><literal>services/web-servers/uwsgi.nix</literal></para></listitem>
+    <listitem><para><literal>services/x11/unclutter.nix</literal></para></listitem>
+    <listitem><para><literal>services/x11/display-managers/sddm.nix</literal></para></listitem>
+    <listitem><para><literal>system/boot/coredump.nix</literal></para></listitem>
+    <listitem><para><literal>system/boot/loader/loader.nix</literal></para></listitem>
+    <listitem><para><literal>system/boot/loader/generic-extlinux-compatible</literal></para></listitem>
+    <listitem><para><literal>system/boot/networkd.nix</literal></para></listitem>
+    <listitem><para><literal>system/boot/resolved.nix</literal></para></listitem>
+    <listitem><para><literal>system/boot/timesyncd.nix</literal></para></listitem>
+    <listitem><para><literal>tasks/filesystems/exfat.nix</literal></para></listitem>
+    <listitem><para><literal>tasks/filesystems/ntfs.nix</literal></para></listitem>
+    <listitem><para><literal>tasks/filesystems/vboxsf.nix</literal></para></listitem>
+    <listitem><para><literal>virtualisation/virtualbox-host.nix</literal></para></listitem>
+    <listitem><para><literal>virtualisation/vmware-guest.nix</literal></para></listitem>
+    <listitem><para><literal>virtualisation/xen-dom0.nix</literal></para></listitem>
+  </itemizedlist>
+  </para>
 
 
 <para>When upgrading from a previous release, please be aware of the
@@ -244,6 +340,13 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.pandoc
   </para>
 </listitem>
 
+<listitem>
+  <para>
+    Python 2.6 has been marked as broken (as it no longer recieves
+    security updates from upstream).
+  </para>
+</listitem>
+
 </itemizedlist>
 </para>
 
@@ -283,6 +386,10 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.pandoc
     until the next release.
   </para> </listitem>
 
+  <listitem><para>
+    <option>buildEnv.env</option> on all Python interpreters
+    is now available for nix-shell interoperability.
+  </para> </listitem>
 </itemizedlist>
 
 </para>
