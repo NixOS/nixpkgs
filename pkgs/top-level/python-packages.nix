@@ -10940,11 +10940,11 @@ let
   };
 
   pygit2 = buildPythonPackage rec {
-    name = "pygit2-0.21.2";
+    name = "pygit2-0.23.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pygit2/${name}.tar.gz";
-      sha256 = "0lya4v91d4y5fwrb55n8m8avgmz0l81jml2spvx6r7j1czcx3zic";
+      sha256 = "04201vcal7jq8lbpk9ylscrhjxdcf2aihiw25k4imjjqgfmvldf7";
     };
 
     preConfigure = ( if stdenv.isDarwin then ''
