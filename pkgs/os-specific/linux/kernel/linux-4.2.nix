@@ -14,12 +14,4 @@ import ./generic.nix (args // rec {
   features.needsCifsUtils = true;
   features.canDisableNetfilterConntrackHelpers = true;
   features.netfilterRPFilter = true;
-
-  # cherry-pick from upstream to resolve a licensing problem that prevents
-  # compiling the broadcom-sta wireless driver on kernels >= 4.2
-  # see: https://github.com/longsleep/bcmwl-ubuntu/issues/6
-  kernelPatches = [ {
-    name = "flush-workqueue-export";
-    patch = ./flush_workqueue-export.patch;
-  } ];
 } // (args.argsOverride or {}))
