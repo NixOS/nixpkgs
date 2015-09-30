@@ -245,7 +245,7 @@ rec {
 
   /* =============== simple script files ==================== */
 
-  # also have a look at enblendenfuse in all-packages.nix
+  # also have a look at enblend-enfuse in all-packages.nix
   exposureBlend = scriptDerivation {
     name = "exposure-blend";
     src = fetchurl {
