@@ -4701,9 +4701,7 @@ let
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
-  sbcl = callPackage ../development/compilers/sbcl {
-    clisp = clisp;
-  };
+  sbcl = callPackage ../development/compilers/sbcl {};
   # For StumpWM
   sbcl_1_2_5 = callPackage ../development/compilers/sbcl/1.2.5.nix {
     clisp = clisp;
