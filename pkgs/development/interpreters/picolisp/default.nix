@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     url = "http://www.software-lab.de/${name}.tgz";
     sha256 = "01kgyz0lkz36lxvibv07qd06gwdxvvbain9f9cnya7a12kq3009i";
   };
-  buildInputs = if stdenv.is64bit then [ jdk ] else [];
-  patchPhase = if stdenv.isArm then ''
+  buildInputs = optional stdenv.is64bit jdk;
+  patchPhase = optionalString stdenv.isArm ''
     sed -i s/-m32//g Makefile
     cat >>Makefile <<EOF
     ext.o: ext.c
@@ -17,8 +17,7 @@ stdenv.mkDerivation rec {
     ht.o: ht.c
     	\$(CC) \$(CFLAGS) -fPIC -D_OS='"\$(OS)"' \$*.c
     EOF
-  ''
-  else "";
+  '';
   sourceRoot = ''picoLisp/src${optionalString stdenv.is64bit "64"}'';
   installPhase = ''
     cd ..

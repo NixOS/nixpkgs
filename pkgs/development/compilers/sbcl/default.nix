@@ -72,12 +72,7 @@ stdenv.mkDerivation rec {
     INSTALL_ROOT=$out sh install.sh
   '';
 
-  meta = {
-    description = "Lisp compiler";
-    homepage = http://www.sbcl.org;
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.all;
+  meta = sbclBootstrap.meta // {
     inherit version;
     updateWalker = true;
   };

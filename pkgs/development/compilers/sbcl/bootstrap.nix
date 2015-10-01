@@ -46,15 +46,15 @@ stdenv.mkDerivation rec {
       --add-flags "--core $out/share/sbcl/sbcl.core"
   '';
 
-  postFixup = if stdenv.isArm then "" else ''
+  postFixup = stdenv.lib.optionalString (!stdenv.isArm) ''
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/share/sbcl/sbcl
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Lisp compiler";
     homepage = "http://www.sbcl.org";
-    license = "bsd";
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.publicDomain; # and FreeBSD
+    maintainers = [maintainers.raskin];
+    platforms = attrNames options;
   };
 }

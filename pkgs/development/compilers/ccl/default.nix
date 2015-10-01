@@ -1,11 +1,8 @@
 { stdenv, fetchsvn, gcc, glibc, m4, coreutils }:
 
-/* TODO: there are also MacOS, FreeBSD and Windows versions */
-assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux"
-  || stdenv.system == "armv7l-linux" || stdenv.system == "armv6l-linux";
-
 let
   options = rec {
+    /* TODO: there are also MacOS, FreeBSD and Windows versions */
     x86_64-linux = {
       arch = "linuxx86";
       sha256 = "04p77n18cw0bc8i66mp2vfrhlliahrx66lm004a3nw3h0mdk0gd8";
@@ -28,6 +25,9 @@ let
   };
   cfg = options.${stdenv.system};
 in
+
+assert builtins.hasAttr stdenv.system options;
+
 stdenv.mkDerivation rec {
   name     = "ccl-${version}";
   version  = "1.10";
@@ -70,11 +70,11 @@ stdenv.mkDerivation rec {
     chmod a+x "$out"/bin/"${CCL_RUNTIME}"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Clozure Common Lisp";
     homepage    = http://ccl.clozure.com/;
-    maintainers = with stdenv.lib.maintainers; [ raskin muflax ];
-    platforms   = stdenv.lib.platforms.linux;
-    license     = stdenv.lib.licenses.lgpl21;
+    maintainers = with maintainers; [ raskin muflax ];
+    platforms   = attrNames options;
+    license     = licenses.lgpl21;
   };
 }
