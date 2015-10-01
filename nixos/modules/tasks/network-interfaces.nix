@@ -46,6 +46,51 @@ let
     '';
   });
 
+  # Collect all interfaces that are defined for a device
+  # as device:interface key:value pairs.
+  wlanDeviceInterfaces =
+    let
+      allDevices = unique (mapAttrsToList (_: v: v.device) cfg.wlanInterfaces);
+      interfacesOfDevice = d: filterAttrs (_: v: v.device == d) cfg.wlanInterfaces;
+    in
+      genAttrs allDevices (d: interfacesOfDevice d);
+
+  # Convert device:interface key:value pairs into a list, and if it exists,
+  # place the interface which is named after the device at the beginning.
+  wlanListDeviceFirst = device: interfaces:
+    if hasAttr device interfaces
+    then [{"${device}"=interfaces.device; _iName=device;}] ++ mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n!=device) interfaces)
+    else mapAttrsToList (n: v: v // {_iName = n;}) interfaces;
+
+  # udev script that configures a physical wlan device and adds virtual interfaces
+  wlanDeviceUdevScript = device: interfaceList: pkgs.writeScript "wlan-${device}-udev-script" ''
+    #!${pkgs.stdenv.shell}
+
+    # Change the wireless phy device to a predictable name.
+    if [ -e "/sys/class/net/${device}/phy80211/name" ]; then
+      ${pkgs.iw}/bin/iw phy `${pkgs.coreutils}/bin/cat /sys/class/net/${device}/phy80211/name` set name ${device} || true
+    fi
+
+    # Crate new, virtual interfaces and configure them at the same time
+    ${flip concatMapStrings (drop 1 interfaceList) (i: ''
+    ${pkgs.iw}/bin/iw dev ${device} interface add ${i._iName} type ${i.type} \
+      ${optionalString (i.type == "mesh" && i.meshID != null) "mesh_id ${i.meshID}"} \
+      ${optionalString (i.type == "monitor" && i.flags != null) "flags ${i.flags}"} \
+      ${optionalString (i.type == "managed" && i.fourAddr != null) "4addr ${if i.fourAddr then "on" else "off"}"} \
+      ${optionalString (i.mac != null) "addr ${i.mac}"}
+    '')}
+
+    # Reconfigure and rename the default interface that already exists
+    ${flip concatMapStrings (take 1 interfaceList) (i: ''
+      ${pkgs.iw}/bin/iw dev ${device} set type ${i.type}
+      ${optionalString (i.type == "mesh" && i.meshID != null) "${pkgs.iw}/bin/iw dev ${device} set meshid ${i.meshID}"}
+      ${optionalString (i.type == "monitor" && i.flags != null) "${pkgs.iw}/bin/iw dev ${device} set monitor ${i.flags}"}
+      ${optionalString (i.type == "managed" && i.fourAddr != null) "${pkgs.iw}/bin/iw dev ${device} set 4addr ${if i.fourAddr then "on" else "off"}"}
+      ${optionalString (i.mac != null) "${pkgs.iproute}/bin/ip link set dev ${device} address ${i.mac}"}
+      ${optionalString (device != i._iName) "${pkgs.iproute}/bin/ip link set dev ${device} name ${i._iName}"}
+    '')}
+  '';
+
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface:
     "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
@@ -688,6 +733,110 @@ in
       };
     };
 
+    networking.wlanInterfaces = mkOption {
+      default = { };
+      example = {
+        "wlan-station0" = {
+            device = "wlp6s0";
+        };
+        "wlan-adhoc0" = {
+            type = "ibss";
+            device = "wlp6s0";
+            mac = "02:00:00:00:00:01";
+        };
+        "wlan-p2p0" = {
+            device = "wlp6s0";
+            mac = "02:00:00:00:00:02";
+        };
+        "wlan-ap0" = {
+            device = "wlp6s0";
+            mac = "02:00:00:00:00:03";
+        };
+      };
+      description =
+        ''
+          Creating multiple WLAN interfaces on top of one physical WLAN device (NIC).
+
+          The name of the WLAN interface corresponds to the name of the attribute.
+          A NIC is referenced by the persistent device name of the WLAN interface that
+          <literal>udev</literal> assigns to a NIC by default.
+          If a NIC supports multiple WLAN interfaces, then the one NIC can be used as
+          <literal>device</literal> for multiple WLAN interfaces.
+          If a NIC is used for creating WLAN interfaces, then the default WLAN interface
+          with a persistent device name form <literal>udev</literal> is not created.
+          A WLAN interface with the persistent name assigned from <literal>udev</literal>
+          would have to be created explicitly.
+        '';
+
+      type = types.attrsOf types.optionSet;
+
+      options = {
+
+        device = mkOption {
+          type = types.string;
+          example = "wlp6s0";
+          description = "The name of the underlying hardware WLAN device as assigned by <literal>udev</literal>.";
+        };
+
+        type = mkOption {
+          type = types.string;
+          default = "managed";
+          example = "ibss";
+          description = ''
+            The type of the WLAN interface. The type has to be either <literal>managed</literal>,
+            <literal>ibss</literal>, <literal>monitor</literal>, <literal>mesh</literal> or <literal>wds</literal>.
+            Also, the type has to be supported by the underlying hardware of the device.
+          '';
+        };
+
+        meshID = mkOption {
+          type = types.nullOr types.string;
+          default = null;
+          description = "MeshID of interface with type <literal>mesh</literal>.";
+        };
+
+        flags = mkOption {
+          type = types.nullOr types.string;
+          default = null;
+          example = "control";
+          description = ''
+            Flags for interface of type <literal>monitor</literal>. The valid flags are:
+            none:     no special flags
+            fcsfail:  show frames with FCS errors
+            control:  show control frames
+            otherbss: show frames from other BSSes
+            cook:     use cooked mode
+            active:   use active mode (ACK incoming unicast packets)
+          '';
+        };
+
+        fourAddr = mkOption {
+          type = types.nullOr types.bool;
+          default = null;
+          description = "Whether to enable <literal>4-address mode</literal> with type <literal>managed</literal>.";
+        };
+
+        mac = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "02:00:00:00:00:01";
+          description = ''
+            MAC address to use for the device. If <literal>null</literal>, then the MAC of the
+            underlying hardware WLAN device is used.
+
+            INFO: Locally administered MAC addresses are of the form:
+            <itemizedlist>
+            <listitem>x2:xx:xx:xx:xx:xx</listitem>
+            <listitem>x6:xx:xx:xx:xx:xx</listitem>
+            <listitem>xA:xx:xx:xx:xx:xx</listitem>
+            <listitem>xE:xx:xx:xx:xx:xx</listitem>
+            </itemizedlist>
+          '';
+        };
+
+      };
+    };
+
     networking.useDHCP = mkOption {
       type = types.bool;
       default = true;
@@ -843,6 +992,25 @@ in
     services.mstpd = mkIf needsMstpd { enable = true; };
 
     virtualisation.vswitch = mkIf (cfg.vswitches != { }) { enable = true; };
+
+    services.udev.packages = mkIf (cfg.wlanInterfaces != {}) [
+      (pkgs.writeTextFile {
+        name = "99-zzz-wlanInterfaces-last.rules";
+        destination = "/etc/udev/rules.d/99-zzz-wlanInterfaces-last.rules";
+        text = ''
+          # If persistent udev device name is not used for an interface, then do not
+          # call systemd for that udev device name and only execute the script that
+          # modifies or prepares the WLAN interfaces. All other commands that would
+          # otherwise be executed when the udev device is added, like, e.g., the calling
+          # of systemd-sysctl or the activation of wpa_supplicant is disabled when the
+          # persistend udev device name is not usef for an interface.
+          ${flip (concatMapStringsSep "\n") (attrNames wlanDeviceInterfaces) (device:
+          let script = wlanDeviceUdevScript device (wlanListDeviceFirst device wlanDeviceInterfaces."${device}"); in
+          if hasAttr device cfg.wlanInterfaces
+          then ''ACTION=="add", SUBSYSTEM=="net", NAME=="${device}", ENV{DEVTYPE}=="wlan", RUN+="${script}"''
+          else ''ACTION=="add", SUBSYSTEM=="net", NAME=="${device}", ENV{DEVTYPE}=="wlan", NAME="", TAG-="systemd", RUN:="${script}"'')}
+        '';
+      }) ];
 
   };
 
