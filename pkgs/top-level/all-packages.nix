@@ -3710,7 +3710,7 @@ let
 
   closurecompiler = callPackage ../development/compilers/closure { };
 
-  cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
+  cmucl_binary = callPackage_i686 ../development/compilers/cmucl/binary.nix { };
 
   compcert = callPackage ../development/compilers/compcert (
     if system == "x86_64-linux"
