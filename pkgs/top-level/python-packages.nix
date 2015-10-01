@@ -5826,7 +5826,8 @@ let
       url = "https://pypi.python.org/packages/source/e/elpy/${name}.tar.gz";
       md5 = "651f6f46767b7132e5c0f83d5ac3b1f7";
     };
-    propagatedBuildInputs = with self; [ flake8 ];
+    python2Deps = if isPy3k then [ ] else [ self.rope ];
+    propagatedBuildInputs = with self; [ flake8 autopep8 jedi importmagic ] ++ python2Deps;
 
     doCheck = false; # there are no tests
 
