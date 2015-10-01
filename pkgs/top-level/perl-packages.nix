@@ -715,15 +715,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   Cairo = buildPerlPackage rec {
-    name = "Cairo-1.105";
+    name = "Cairo-1.106";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "0im025wy1346w7b7hi6im08bfn6x4ma0cxmjz6xnk8riizm1s84q";
+      sha256 = "1i25kks408c54k2zxskvg54l5k3qadzm8n72ffga9jy7ic0h6j76";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.cairo ];
     meta = {
       homepage = http://gtk2-perl.sourceforge.net/;
-      description = "Perl interface to the cairo 2d vector graphics library";
+      description = "Perl interface to the cairo 2D vector graphics library";
       maintainers = with maintainers; [ nckx ];
       license = stdenv.lib.licenses.lgpl21Plus;
     };
