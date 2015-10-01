@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ jre ];
 
   installPhase = ''
-    sed -e 's@\(common_jvm_locations\)=.*@\1${jre}@' -i bin/openfire
+    sed -e 's@\(common_jvm_locations=\).*@\1${jre}@' -i bin/openfire
     cp -r . $out
     rm -r $out/logs
     mv $out/conf $out/conf.inst

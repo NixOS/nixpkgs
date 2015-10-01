@@ -3,8 +3,8 @@
 , makeWrapper }:
 
 let
-  major = "3.15";
-  minor = "92";
+  major = "3.16";
+  minor = "1";
   GST_PLUGIN_PATH = stdenv.lib.makeSearchPath "lib/gstreamer-1.0" [
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.gnome.org/sources/sound-juicer/${major}/${name}.tar.xz";
-    sha256 = "b1420f267a4c553f6ca242d3b6082b60682c3d7b431ac3c979bd1ccfbf2687dd";
+    sha256 = "0mx6n901vb97hsv0cwaafjffj75s1kcp8jsqay90dy3099849dyz";
   };
 
   buildInputs = [ pkgconfig gtk3 intltool itstool libxml2 brasero libcanberra_gtk3

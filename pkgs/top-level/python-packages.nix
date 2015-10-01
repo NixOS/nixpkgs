@@ -3015,6 +3015,40 @@ let
     };
   };
 
+  deskcon = self.buildPythonPackage rec {
+    name = "deskcon-0.3";
+    disabled = !isPy27;
+
+    src = pkgs.fetchFromGitHub {
+      owner= "screenfreeze";
+      repo = "deskcon-desktop";
+      rev = "267804122188fa79c37f2b21f54fe05c898610e6";
+      sha256 ="0i1dd85ls6n14m9q7lkympms1w3x0pqyaxvalq82s4xnjdv585j3";
+    };
+
+    phases = [ "unpackPhase" "installPhase" ];
+
+    pythonPath = [ self.pyopenssl pkgs.gtk3 ];
+
+    installPhase = ''
+      substituteInPlace server/deskcon-server --replace "python2" "python"
+
+      mkdir -p $out/bin
+      mkdir -p $out/lib/${python.libPrefix}/site-packages
+      cp -r server/* $out/lib/${python.libPrefix}/site-packages
+      mv $out/lib/${python.libPrefix}/site-packages/deskcon-server $out/bin/deskcon-server
+
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
+
+    meta = {
+      description = "integrates an Android device into a desktop";
+      homepage = https://github.com/screenfreeze/deskcon-desktop;
+      license = licenses.gpl3;
+    };
+  };
+
+
   dill = buildPythonPackage rec {
     name = "dill-${version}";
     version = "0.2.4";
@@ -5820,12 +5854,14 @@ let
 
 
   elpy = buildPythonPackage rec {
-    name = "elpy-1.0.1";
+    name = "elpy-${version}";
+    version = "1.9.0";
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/e/elpy/elpy-1.0.1.tar.gz";
-      md5 = "5453f085f7871ed8fc11d51f0b68c785";
+      url = "https://pypi.python.org/packages/source/e/elpy/${name}.tar.gz";
+      md5 = "651f6f46767b7132e5c0f83d5ac3b1f7";
     };
-    propagatedBuildInputs = with self; [ flake8 ];
+    python2Deps = if isPy3k then [ ] else [ self.rope ];
+    propagatedBuildInputs = with self; [ flake8 autopep8 jedi importmagic ] ++ python2Deps;
 
     doCheck = false; # there are no tests
 
@@ -18467,6 +18503,26 @@ let
       homepage = https://github.com/torchbox/Willow/;
       license = licenses.bsd2;
       maintainers = with maintainers; [ desiderius ];
+    };
+  };
+
+  importmagic = buildPythonPackage rec {
+    simpleName = "importmagic";
+    name = "${simpleName}-${version}";
+    version = "0.1.3";
+    doCheck = false;  # missing json file from tarball
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/${simpleName}/${name}.tar.gz";
+      sha256 = "194bl8l8sc2ibwi6g5kz6xydkbngdqpaj6r2gcsaw1fc73iswwrj";
+    };
+
+    propagatedBuildInputs = with self; [ six ];
+
+    meta = {
+      description = "Python Import Magic - automagically add, remove and manage imports";
+      homepage = http://github.com/alecthomas/importmagic;
+      license = "bsd";
     };
   };
 

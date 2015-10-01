@@ -1,7 +1,32 @@
 { stdenv, fetchsvn, gcc, glibc, m4, coreutils }:
 
-/* TODO: there are also MacOS, FreeBSD and Windows versions */
-assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
+let
+  options = rec {
+    /* TODO: there are also MacOS, FreeBSD and Windows versions */
+    x86_64-linux = {
+      arch = "linuxx86";
+      sha256 = "04p77n18cw0bc8i66mp2vfrhlliahrx66lm004a3nw3h0mdk0gd8";
+      runtime = "lx86cl64";
+      kernel = "linuxx8664";
+    };
+    i686-linux = {
+      arch = "linuxx86";
+      sha256 = x86_64-linux.sha256;
+      runtime = "lx86cl";
+      kernel = "linuxx8632";
+    };
+    armv7l-linux = {
+      arch = "linuxarm";
+      sha256 = "0xg9p1q1fpgyfhwjk2hh24vqzddzx5zqff04lycf0vml5qw1gnkv";
+      runtime = "armcl";
+      kernel = "linuxarm";
+    };
+    armv6l-linux = armv7l-linux;
+  };
+  cfg = options.${stdenv.system};
+in
+
+assert builtins.hasAttr stdenv.system options;
 
 stdenv.mkDerivation rec {
   name     = "ccl-${version}";
@@ -9,15 +34,15 @@ stdenv.mkDerivation rec {
   revision = "16313";
 
   src = fetchsvn {
-    url = http://svn.clozure.com/publicsvn/openmcl/release/1.10/linuxx86/ccl;
+    url = "http://svn.clozure.com/publicsvn/openmcl/release/${version}/${cfg.arch}/ccl";
     rev = revision;
-    sha256 = "04p77n18cw0bc8i66mp2vfrhlliahrx66lm004a3nw3h0mdk0gd8";
+    sha256 = cfg.sha256;
   };
 
   buildInputs = [ gcc glibc m4 ];
 
-  CCL_RUNTIME = if stdenv.system == "x86_64-linux" then "lx86cl64"   else "lx86cl";
-  CCL_KERNEL  = if stdenv.system == "x86_64-linux" then "linuxx8664" else "linuxx8632";
+  CCL_RUNTIME = cfg.runtime;
+  CCL_KERNEL = cfg.kernel;
 
   patchPhase = ''
     substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
@@ -45,11 +70,11 @@ stdenv.mkDerivation rec {
     chmod a+x "$out"/bin/"${CCL_RUNTIME}"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Clozure Common Lisp";
     homepage    = http://ccl.clozure.com/;
-    maintainers = with stdenv.lib.maintainers; [ raskin muflax ];
-    platforms   = stdenv.lib.platforms.linux;
-    license     = stdenv.lib.licenses.lgpl21;
+    maintainers = with maintainers; [ raskin muflax ];
+    platforms   = attrNames options;
+    license     = licenses.lgpl21;
   };
 }

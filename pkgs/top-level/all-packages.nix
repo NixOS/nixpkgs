@@ -2018,9 +2018,8 @@ let
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
-  nodejs-4_1 = callPackage ../development/web/nodejs/v4_1_0.nix {
+  nodejs-4_1 = callPackage ../development/web/nodejs {
     libtool = darwin.cctools;
-    libuv = libuvVersions.v1_7_5;
     openssl = openssl_1_0_2;
   };
 
@@ -4708,9 +4707,7 @@ let
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
-  sbcl = callPackage ../development/compilers/sbcl {
-    clisp = clisp;
-  };
+  sbcl = callPackage ../development/compilers/sbcl {};
   # For StumpWM
   sbcl_1_2_5 = callPackage ../development/compilers/sbcl/1.2.5.nix {
     clisp = clisp;
@@ -8352,7 +8349,6 @@ let
 
   v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
     inherit (pythonPackages) gyp;
-    stdenv = overrideCC stdenv gcc48;
   };
 
   v8_3_24_10 = callPackage ../development/libraries/v8/3.24.10.nix {
@@ -11123,8 +11119,9 @@ let
   emacs24Macport_24_4 = lowPrio (callPackage ../applications/editors/emacs-24/macport-24.4.nix {
     stdenv = pkgs.clangStdenv;
   });
-  emacs24Macport_24_5 = lowPrio (callPackage ../applications/editors/emacs-24/macport-24.5.nix {
+  emacs24Macport_24_5 = lowPrio (newScope darwin.apple_sdk.frameworks ../applications/editors/emacs-24/macport-24.5.nix {
     stdenv = pkgs.clangStdenv;
+    inherit (darwin) libobjc;
   });
   emacs24Macport = self.emacs24Macport_24_5;
 
@@ -11298,6 +11295,7 @@ let
 
     external = {
       inherit (haskellPackages) ghc-mod structured-haskell-mode Agda;
+      inherit (pythonPackages) elpy;
     };
   };
 

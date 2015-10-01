@@ -1,32 +1,64 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, makeWrapper }:
 
+let
+  options = rec {
+    x86_64-darwin = rec {
+      version = "1.1.8";
+      system = "x86-64-darwin";
+      sha256 = "006pr88053wclvbjfjdypnbiw8wymbzdzi7a6kbkpdfn4zf5943j";
+    };
+    x86_64-linux = rec {
+      version = "1.2.15";
+      system = "x86-64-linux";
+      sha256 = "1bpbfz9x2w73hy2kh8p0kd4m1p6pin90h2zycq52r3bbz8yv47aw";
+    };
+    i686-linux = rec {
+      version = "1.2.7";
+      system = "x86-linux";
+      sha256 = "07f3bz4br280qvn85i088vpzj9wcz8wmwrf665ypqx181pz2ai3j";
+    };
+    armv7l-linux = rec {
+      version = "1.2.14";
+      system = "armhf-linux";
+      sha256 = "0sp5445rbvms6qvzhld0kwwvydw51vq5iaf4kdqsf2d9jvaz3yx5";
+    };
+    armv6l-linux = armv7l-linux;
+  };
+  cfg = options.${stdenv.system};
+in
 stdenv.mkDerivation rec {
   name    = "sbcl-bootstrap-${version}";
-  version = "1.1.8";
+  version = cfg.version;
 
-  src = if stdenv.isDarwin
-    then fetchurl {
-      url = mirror://sourceforge/project/sbcl/sbcl/1.1.8/sbcl-1.1.8-x86-64-darwin-binary.tar.bz2;
-      sha256 = "006pr88053wclvbjfjdypnbiw8wymbzdzi7a6kbkpdfn4zf5943j";
-    }
-    else fetchurl {
-      url = mirror://sourceforge/project/sbcl/sbcl/1.1.8/sbcl-1.1.8-x86-64-linux-binary.tar.bz2;
-      sha256 = "0lh1jglxlfwk4cm6sgwk1jnb6ikhbrkx7p5aha2nbmkd6zl96prx";
-    };
+  src = fetchurl {
+    url = "mirror://sourceforge/project/sbcl/sbcl/${version}/sbcl-${version}-${cfg.system}-binary.tar.bz2";
+    sha256 = cfg.sha256;
+  };
+
+  buildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp -p src/runtime/sbcl $out/bin
     install_name_tool -change /usr/lib/libgcc_s.1.dylib ${stdenv.libc}/lib/libgcc_s.10.5.dylib $out/bin/sbcl
+
     mkdir -p $out/share/sbcl
+    cp -p src/runtime/sbcl $out/share/sbcl
     cp -p output/sbcl.core $out/share/sbcl
+    mkdir -p $out/bin
+    makeWrapper $out/share/sbcl/sbcl $out/bin/sbcl \
+      --add-flags "--core $out/share/sbcl/sbcl.core"
   '';
 
-  meta = {
+  postFixup = stdenv.lib.optionalString (!stdenv.isArm) ''
+    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/share/sbcl/sbcl
+  '';
+
+  meta = with stdenv.lib; {
     description = "Lisp compiler";
     homepage = "http://www.sbcl.org";
-    license = "bsd";
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.publicDomain; # and FreeBSD
+    maintainers = [maintainers.raskin];
+    platforms = attrNames options;
   };
 }
