@@ -2019,6 +2019,7 @@ let
   nodejs-4_1 = callPackage ../development/web/nodejs {
     libtool = darwin.cctools;
     openssl = openssl_1_0_2;
+    libtool = if stdenv.isDarwin then darwin.cctools else libtool;
   };
 
   nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix {
