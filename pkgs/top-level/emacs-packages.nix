@@ -442,7 +442,7 @@ let self = _self // overrides;
 
   elpy = melpaBuild rec {
     pname   = "elpy";
-    version = "1.9.0";
+    version = external.elpy.version;
     src = fetchFromGitHub {
       owner  = "jorgenschaefer";
       repo   = pname;
@@ -464,6 +464,8 @@ let self = _self // overrides;
     packageRequires = [
       company find-file-in-project highlight-indentation pyvenv yasnippet
     ];
+
+    propagatedUserEnvPkgs = [ external.elpy ] ++ packageRequires;
 
     meta = {
       description = "Emacs Python Development Environment";
