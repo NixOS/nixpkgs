@@ -3015,6 +3015,40 @@ let
     };
   };
 
+  deskcon = self.buildPythonPackage rec {
+    name = "deskcon-0.3";
+    disabled = !isPy27;
+
+    src = pkgs.fetchFromGitHub {
+      owner= "screenfreeze";
+      repo = "deskcon-desktop";
+      rev = "267804122188fa79c37f2b21f54fe05c898610e6";
+      sha256 ="0i1dd85ls6n14m9q7lkympms1w3x0pqyaxvalq82s4xnjdv585j3";
+    };
+
+    phases = [ "unpackPhase" "installPhase" ];
+
+    pythonPath = [ self.pyopenssl pkgs.gtk3 ];
+
+    installPhase = ''
+      substituteInPlace server/deskcon-server --replace "python2" "python"
+
+      mkdir -p $out/bin
+      mkdir -p $out/lib/${python.libPrefix}/site-packages
+      cp -r server/* $out/lib/${python.libPrefix}/site-packages
+      mv $out/lib/${python.libPrefix}/site-packages/deskcon-server $out/bin/deskcon-server
+
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
+
+    meta = {
+      description = "integrates an Android device into a desktop";
+      homepage = https://github.com/screenfreeze/deskcon-desktop;
+      license = licenses.gpl3;
+    };
+  };
+
+
   dill = buildPythonPackage rec {
     name = "dill-${version}";
     version = "0.2.4";
