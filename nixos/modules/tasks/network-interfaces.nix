@@ -826,10 +826,10 @@ in
 
             INFO: Locally administered MAC addresses are of the form:
             <itemizedlist>
-            <listitem>x2:xx:xx:xx:xx:xx</listitem>
-            <listitem>x6:xx:xx:xx:xx:xx</listitem>
-            <listitem>xA:xx:xx:xx:xx:xx</listitem>
-            <listitem>xE:xx:xx:xx:xx:xx</listitem>
+            <listitem><para>x2:xx:xx:xx:xx:xx</para></listitem>
+            <listitem><para>x6:xx:xx:xx:xx:xx</para></listitem>
+            <listitem><para>xA:xx:xx:xx:xx:xx</para></listitem>
+            <listitem><para>xE:xx:xx:xx:xx:xx</para></listitem>
             </itemizedlist>
           '';
         };
