@@ -5820,10 +5820,11 @@ let
 
 
   elpy = buildPythonPackage rec {
-    name = "elpy-1.0.1";
+    name = "elpy-${version}";
+    version = "1.9.0";
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/e/elpy/elpy-1.0.1.tar.gz";
-      md5 = "5453f085f7871ed8fc11d51f0b68c785";
+      url = "https://pypi.python.org/packages/source/e/elpy/${name}.tar.gz";
+      md5 = "651f6f46767b7132e5c0f83d5ac3b1f7";
     };
     propagatedBuildInputs = with self; [ flake8 ];
 
