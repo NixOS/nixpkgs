@@ -5820,12 +5820,14 @@ let
 
 
   elpy = buildPythonPackage rec {
-    name = "elpy-1.0.1";
+    name = "elpy-${version}";
+    version = "1.9.0";
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/e/elpy/elpy-1.0.1.tar.gz";
-      md5 = "5453f085f7871ed8fc11d51f0b68c785";
+      url = "https://pypi.python.org/packages/source/e/elpy/${name}.tar.gz";
+      md5 = "651f6f46767b7132e5c0f83d5ac3b1f7";
     };
-    propagatedBuildInputs = with self; [ flake8 ];
+    python2Deps = if isPy3k then [ ] else [ self.rope ];
+    propagatedBuildInputs = with self; [ flake8 autopep8 jedi importmagic ] ++ python2Deps;
 
     doCheck = false; # there are no tests
 
@@ -18467,6 +18469,26 @@ let
       homepage = https://github.com/torchbox/Willow/;
       license = licenses.bsd2;
       maintainers = with maintainers; [ desiderius ];
+    };
+  };
+
+  importmagic = buildPythonPackage rec {
+    simpleName = "importmagic";
+    name = "${simpleName}-${version}";
+    version = "0.1.3";
+    doCheck = false;  # missing json file from tarball
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/${simpleName}/${name}.tar.gz";
+      sha256 = "194bl8l8sc2ibwi6g5kz6xydkbngdqpaj6r2gcsaw1fc73iswwrj";
+    };
+
+    propagatedBuildInputs = with self; [ six ];
+
+    meta = {
+      description = "Python Import Magic - automagically add, remove and manage imports";
+      homepage = http://github.com/alecthomas/importmagic;
+      license = "bsd";
     };
   };
 
