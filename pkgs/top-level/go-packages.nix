@@ -818,11 +818,6 @@ let
 
     buildInputs = [ cli-go go manners go-bindata-assetfs go-multierror structs websocket hcl pty ];
 
-    postInstall = ''
-      mkdir $out/bin
-      ln -s go/bin/gotty $out/bin/
-    '';
-
     meta = with stdenv.lib; {
       description = "Share your terminal as a web application";
       homepage = "https://github.com/yudai/gotty";
@@ -1597,11 +1592,11 @@ let
   };
 
   ipfs = buildFromGitHub{
-    rev = "ff26c312000da12d395c9cdba05c43f29b68b456";
+    rev = "9c6ec296e396cc6be551c9807ae220fb50dd07d4";
+    date   = "2015-09-23";
     owner  = "ipfs";
     repo   = "go-ipfs";
-    sha256 = "0qj3rwq5i4aiwn0i09skpi1s3mzqm8ma9v1cpjl7rya2y6ypx8xg";
-    disabled = !isGo14;
+    sha256 = "0lmj2s9ihl1a5r8yn6w0lvb8z3n6c9b8wi1yvi77vgzm6b6lfl3a";
   };
 
   ldap = buildGoPackage rec {

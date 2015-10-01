@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkgconfig, intltool, autoreconfHook
 , json_c, libsndfile, libtool
-, xlibs, libcap, alsaLib, glib
+, xorg, libcap, alsaLib, glib
 , avahi, libjack2, libasyncns, lirc, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
 , speexdsp, systemd, webrtc-audio-processing, gconf ? null
@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation rec {
   name = "${if libOnly then "lib" else ""}pulseaudio-${version}";
-  version = "6.0";
+  version = "7.0";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    sha256 = "1xpnfxa0d8pgf6b4qdgnkcvrvdxbbbjd5ync19h0f5hbp3h401mm";
+    sha256 = "1yp8x8z4wigrzik131kjdyhn7hznazvbkbp2zz1vy9l9gqvy26na";
   };
 
   patches = [ ./caps-fix.patch ];
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing ]
       ++ lib.optional jackaudioSupport libjack2
-      ++ lib.optionals x11Support [ xlibs.xlibs xlibs.libXtst xlibs.libXi ]
+      ++ lib.optionals x11Support [ xorg.xlibsWrapper xorg.libXtst xorg.libXi ]
       ++ lib.optional useSystemd systemd
       ++ lib.optionals stdenv.isLinux [ alsaLib udev ]
       ++ lib.optional airtunesSupport openssl
@@ -88,6 +88,7 @@ stdenv.mkDerivation rec {
     [ "--localstatedir=/var"
       "--sysconfdir=/etc"
       "--with-access-group=audio"
+      "--with-bash-completion-dir=\${out}/share/bash-completions/completions"
     ]
     ++ lib.optional (jackaudioSupport && !libOnly) "--enable-jack"
     ++ lib.optional stdenv.isDarwin "--with-mac-sysroot=/"
@@ -109,7 +110,7 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString libOnly ''
     rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
-    sed 's|-lltdl|-L${libtool}/lib -lltdl|' -i $out/lib/libpulsecore-6.0.la
+    sed 's|-lltdl|-L${libtool}/lib -lltdl|' -i $out/lib/libpulsecore-${version}.la
   '';
 
   meta = {

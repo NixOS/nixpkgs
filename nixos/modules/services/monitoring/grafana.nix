@@ -200,7 +200,6 @@ in {
 
     staticRootPath = mkOption {
       description = "Root path for static assets.";
-      default = "${cfg.package.out}/share/go/src/github.com/grafana/grafana/public";
       type = types.str;
     };
 
@@ -311,7 +310,7 @@ in {
 
   config = mkIf cfg.enable {
     warnings = [
-      "Grafana passwords will be stored as plaintext in nix store!"
+      "Grafana passwords will be stored as plaintext in the Nix store!"
     ];
 
     systemd.services.grafana = {
@@ -331,5 +330,8 @@ in {
       home = cfg.dataDir;
       createHome = true;
     };
+
+    services.grafana.staticRootPath = mkDefault "${cfg.package.out}/share/go/src/github.com/grafana/grafana/public";
+
   };
 }

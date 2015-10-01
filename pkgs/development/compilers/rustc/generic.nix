@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchgit, fetchzip, which, file, perl, curl, python27
-, makeWrapper, tzdata, git, valgrind, procps, coreutils
+{ stdenv, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
+, llvmPackages_37, jemalloc, ncurses
 
 , shortVersion, isRelease
 , srcSha, srcRev ? ""
@@ -15,15 +15,12 @@ assert !stdenv.isFreeBSD;
 
 /* Rust's build process has a few quirks :
 
-- It requires some patched in llvm that haven't landed upstream, so it
-  compiles its own llvm. This might change in the future, so at some
-  point we may be able to switch to nix's llvm.
-
 - The Rust compiler is written is Rust, so it requires a bootstrap
   compiler, which is downloaded during the build. To make the build
   pure, we download it ourself before and put it where it is
   expected. Once the language is stable (1.0) , we might want to
-  switch it to use nix's packaged rust compiler.
+  switch it to use nix's packaged rust compiler. This might not be possible
+  as the compiler is highly coupled to the bootstrap.
 
 NOTE : some derivation depend on rust. When updating this, please make
 sure those derivations still compile. (racer, for example).
@@ -62,7 +59,7 @@ let version = if isRelease then
     meta = with stdenv.lib; {
       homepage = http://www.rust-lang.org/;
       description = "A safe, concurrent, practical language";
-      maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy ];
+      maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy wkennington ];
       license = [ licenses.mit licenses.asl20 ];
       platforms = platforms.linux;
     };
@@ -118,29 +115,48 @@ stdenv.mkDerivation {
 
   configureFlags = configureFlags
                 ++ [ "--enable-local-rust" "--local-rust-root=$snapshot" "--enable-rpath" ]
-                # TODO always include starting from 1.3.0, superseeding patch and substituteInPlace below
-                ++ stdenv.lib.optional (!isRelease) [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${stdenv.cc.binutils}/bin/ar" ]
+                ++ [ "--llvm-root=${llvmPackages_37.llvm}" ] #"--jemalloc-root=${jemalloc}/lib" ]
+                ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${stdenv.cc.binutils}/bin/ar" ]
                 ++ stdenv.lib.optional (stdenv.cc.cc ? isClang) "--enable-clang";
 
   inherit patches;
 
   postPatch = ''
     substituteInPlace src/rust-installer/gen-install-script.sh \
-      --replace /bin/echo "${coreutils}/bin/echo"
+      --replace /bin/echo "$(type -P echo)"
     substituteInPlace src/rust-installer/gen-installer.sh \
-      --replace /bin/echo "${coreutils}/bin/echo"
+      --replace /bin/echo "$(type -P echo)"
 
     # Workaround for NixOS/nixpkgs#8676
     substituteInPlace mk/rustllvm.mk \
       --replace "\$\$(subst  /,//," "\$\$(subst /,/,"
-    '' + stdenv.lib.optionalString (isRelease) ''
-    substituteInPlace src/librustc_back/target/mod.rs \
-      --subst-var-by "ccPath" "${stdenv.cc}/bin/cc" \
-      --subst-var-by "arPath" "${stdenv.cc.binutils}/bin/ar"
-    ''; # TODO remove in 1.3.0, superseeded by configure flags
 
-  buildInputs = [ which file perl curl python27 makeWrapper git ]
-    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ procps valgrind ];
+    # Fix dynamic linking against llvm
+    sed -i 's/, kind = \\"static\\"//g' src/etc/mklldeps.py
+
+    # Fix the configure script to not require curl as we won't use it
+    sed -i configure \
+      -e '/probe_need CFG_CURLORWGET/d'
+
+    # Fix the use of jemalloc prefixes which our jemalloc doesn't have
+    # TODO: reenable if we can figure out how to get our jemalloc to work
+    #[ -f src/liballoc_jemalloc/lib.rs ] && sed -i 's,je_,,g' src/liballoc_jemalloc/lib.rs
+    #[ -f src/liballoc/heap.rs ] && sed -i 's,je_,,g' src/liballoc/heap.rs # Remove for 1.4.0+
+
+    # Useful debugging parameter
+    #export VERBOSE=1
+  '';
+
+  preConfigure = ''
+    # Needed flags as the upstream configure script has a broken prefix substitution
+    configureFlagsArray+=("--datadir=$out/share")
+    configureFlagsArray+=("--infodir=$out/share/info")
+  '';
+
+  # Procps is needed for one of the test cases
+  nativeBuildInputs = [ file python2 ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ procps ];
+  buildInputs = [ llvmPackages_37.llvm ncurses ];
 
   enableParallelBuilding = true;
 

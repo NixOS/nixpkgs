@@ -1,6 +1,6 @@
 {stdenv, fetchurl
 , automake, autoconf, libtool, which, gtkdoc, gettext, pkgconfig, gobjectIntrospection, libxslt
-, glib, systemd, libusb1
+, glib, systemd, libusb1, vala
 }:
 stdenv.mkDerivation rec {
   name = "gusb-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig autoconf automake libtool which gtkdoc gettext gobjectIntrospection libxslt
-    systemd libusb1
+    systemd libusb1 vala
     glib
   ];
 

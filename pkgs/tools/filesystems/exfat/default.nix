@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, fuse }:
 
-let version = "1.2.0"; in
+let version = "1.2.1"; in
 stdenv.mkDerivation rec {
   name = "exfat-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "1fsm082g8phqcdg5md6yll06jijnbvqrdy0638psa8kr159h4dv8";
+    sha256 = "1k716civkxszkzpc7bcqqcmfik8lpwk3zwp2nl4v844b8g7r5xz9";
     rev = "v${version}";
     repo = "exfat";
     owner = "relan";
@@ -23,4 +23,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ nckx ];
   };
 }
-

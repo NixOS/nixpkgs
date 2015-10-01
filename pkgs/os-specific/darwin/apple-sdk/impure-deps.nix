@@ -6,7 +6,56 @@ rec {
   ];
   IOKit = [
     "/System/Library/Frameworks/IOKit.framework"
-    "/usr/lib/libenergytrace.dylib"
+  ];
+  JavaScriptCore = [
+    "/System/Library/Frameworks/JavaScriptCore.framework"
+  ];
+  QuickLook = [
+    "/System/Library/Frameworks/QuickLook.framework"
+  ];
+  Quartz = [
+    "/System/Library/Frameworks/Quartz.framework"
+    "/System/Library/PrivateFrameworks/AppleSystemInfo.framework/Versions/A/AppleSystemInfo"
+    "/System/Library/PrivateFrameworks/CorePDF.framework/Versions/A/CorePDF"
+    "/usr/lib/libspindump.dylib"
+  ];
+  ImageCaptureCore = [
+    "/System/Library/Frameworks/ImageCaptureCore.framework"
+  ];
+  VideoToolbox = [
+    "/System/Library/Frameworks/VideoToolbox.framework"
+    "/System/Library/PrivateFrameworks/AppleVA.framework/Versions/A/AppleVA"
+  ];
+  QuickTime = [
+    "/System/Library/Frameworks/QuickTime.framework"
+  ];
+  CoreMedia = [
+    "/System/Library/Frameworks/CoreMedia.framework"
+  ];
+  CoreMediaIO = [
+    "/System/Library/Frameworks/CoreMediaIO.framework"
+    "/System/Library/PrivateFrameworks/AppSandbox.framework/Versions/A/AppSandbox"
+    "/System/Library/PrivateFrameworks/AppContainer.framework/Versions/A/AppContainer"
+    "/System/Library/PrivateFrameworks/SecCodeWrapper.framework/Versions/A/SecCodeWrapper"
+    "/System/Library/PrivateFrameworks/XPCService.framework/Versions/A/XPCService"
+    "/usr/lib/libsandbox.1.dylib"
+    "/usr/lib/libMatch.1.dylib"
+  ];
+  MediaToolbox = [
+    "/System/Library/Frameworks/MediaToolbox.framework"
+    "/System/Library/PrivateFrameworks/CoreAUC.framework/Versions/A/CoreAUC"
+    "/System/Library/PrivateFrameworks/NetworkStatistics.framework/Versions/A/NetworkStatistics"
+  ];
+  QTKit = [
+    "/System/Library/Frameworks/QTKit.framework"
+    "/System/Library/PrivateFrameworks/CoreMediaAuthoring.framework/Versions/A/CoreMediaAuthoring"
+  ];
+  OSAKit = [
+    "/System/Library/Frameworks/OSAKit.framework"
+    "/usr/lib/libexslt.0.dylib"
+  ];
+  WebKit = [
+    "/System/Library/Frameworks/WebKit.framework"
   ];
   DiskArbitration = [
     "/System/Library/Frameworks/DiskArbitration.framework"
@@ -31,8 +80,6 @@ rec {
     "/System/Library/PrivateFrameworks/DataDetectorsCore.framework/Versions/A/DataDetectorsCore"
     "/System/Library/PrivateFrameworks/TCC.framework/Versions/A/TCC"
     "/System/Library/PrivateFrameworks/LanguageModeling.framework/Versions/A/LanguageModeling"
-    "/usr/lib/libChineseTokenizer.dylib"
-    "/usr/lib/libmarisa.dylib"
     "/usr/lib/libmecabra.dylib"
     "/usr/lib/libcmph.dylib"
     "/usr/lib/libiconv.2.dylib"

@@ -1,7 +1,7 @@
 { stdenv, lib, fetchgit, makeWrapper
 , pkgconfig, cmake, libxml2, vala, intltool, libmx, gnome3, gtk3, gtk_doc
 , keybinder3, clutter_gtk, libnotify
-, libxkbcommon, xlibs, udev
+, libxkbcommon, xorg, udev
 , bashInteractive
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   buildInputs = [
     pkgconfig cmake vala intltool gtk3 gnome3.gnome_common gnome3.libgee
     gtk_doc clutter_gtk libmx keybinder3 libxml2 libnotify makeWrapper
-    xlibs.libpthreadstubs xlibs.libXdmcp xlibs.libxshmfence
+    xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence
     libxkbcommon
   ] ++ lib.optionals stdenv.isLinux [
     udev

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xz, bzip2, perl, xlibs, libdvdnav, libbluray
+{ stdenv, fetchurl, xz, bzip2, perl, xorg, libdvdnav, libbluray
 , zlib, a52dec, libmad, faad2, ffmpeg, alsaLib
 , pkgconfig, dbus, fribidi, freefont_ttf, libebml, libmatroska
 , libvorbis, libtheora, speex, lua5, libgcrypt, libupnp
@@ -8,13 +8,14 @@
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 , libvdpau, libsamplerate
 , onlyLibVLC ? false
-, qt4 ? null, qt5 ? null, withQt5 ? false
+, qt4 ? null
+, withQt5 ? false, qtbase ? null
 , jackSupport ? false
 }:
 
 with stdenv.lib;
 
-assert (withQt5 -> qt5 != null);
+assert (withQt5 -> qtbase != null);
 assert (!withQt5 -> qt4 != null);
 
 stdenv.mkDerivation rec {
@@ -32,10 +33,10 @@ stdenv.mkDerivation rec {
       libupnp libcaca libpulseaudio flac schroedinger libxml2 librsvg mpeg2dec
       udev gnutls avahi libcddb SDL SDL_image libmtp unzip taglib
       libkate libtiger libv4l samba liboggz libass libdvbpsi libva
-      xlibs.xlibs xlibs.libXv xlibs.libXvMC xlibs.libXpm xlibs.xcbutilkeysyms
+      xorg.xlibsWrapper xorg.libXv xorg.libXvMC xorg.libXpm xorg.xcbutilkeysyms
       libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate
     ]
-    ++ (if withQt5 then with qt5; [ base ] else [qt4])
+    ++ [(if withQt5 then qtbase else qt4)]
     ++ optional jackSupport libjack2;
 
   nativeBuildInputs = [ pkgconfig ];

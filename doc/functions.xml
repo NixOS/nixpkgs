@@ -127,7 +127,7 @@ in ...</programlisting>
   <title>lib.makeOverridable</title>
 
   <para>
-    The function <varname>lib.makeOverridable</varname> is used make the result
+    The function <varname>lib.makeOverridable</varname> is used to make the result
     of a function easily customizable. This utility only makes sense for functions
     that accept an argument set and return an attribute set.
   </para>
@@ -248,7 +248,7 @@ c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
   targetPkgs = pkgs: (with pkgs;
     [ udev
       alsaLib
-    ]) ++ (with pkgs.xlibs;
+    ]) ++ (with pkgs.xorg;
     [ libX11
       libXcursor
       libXrandr

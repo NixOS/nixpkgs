@@ -174,10 +174,10 @@ let
               libvncserver libical networkmanager openal opencv
               openexr perl phonon pkgconfig polkit_qt4 prison python qca2
               qimageblitz qjson qt4 samba saneBackends soprano speechd
-              strigi taglib udev xlibs xplanet xscreensaver xz;
+              strigi taglib udev xorg xplanet xscreensaver xz;
       alsa = alsaLib;
       assuan = libassuan;
-      boost = boost156;
+      boost = boost155;
       canberra = libcanberra;
       eigen3 = eigen;
       epub = ebook_tools;
@@ -289,7 +289,8 @@ let
       kde-wallpapers = kde4Package super.kde-wallpapers;
 
       kde-workspace = extendDerivation (kde4Package super.kde-workspace) {
-        buildInputs = with scope.xlibs; [
+        patches = [ ./kde-workspace/ksysguard-0001-disable-signalplottertest.patch ];
+        buildInputs = with scope.xorg; [
             libxkbfile libXcomposite xcbutilimage xcbutilkeysyms xcbutilrenderutil
         ];
         nativeBuildInputs = [ scope.pkgconfig ];
@@ -385,7 +386,7 @@ let
       };
 
       kmousetool = extendDerivation (kde4Package super.kmousetool) {
-        buildInputs = with scope.xlibs; [ libXtst libXt ];
+        buildInputs = with scope.xorg; [ libXtst libXt ];
       };
 
       kmouth = kde4Package super.kmouth;
@@ -407,13 +408,13 @@ let
       krdc = kde4Package super.krdc;
 
       kremotecontrol = extendDerivation (kde4Package super.kremotecontrol) {
-        buildInputs = [ scope.xlibs.libXtst ];
+        buildInputs = [ scope.xorg.libXtst ];
       };
 
       kreversi = kde4Package super.kreversi;
 
       krfb = extendDerivation (kde4Package super.krfb) {
-        buildInputs = with scope; [ xlibs.libXtst ktp-common-internals ];
+        buildInputs = with scope; [ xorg.libXtst ktp-common-internals ];
       };
 
       ksaneplugin = kde4Package super.ksaneplugin;

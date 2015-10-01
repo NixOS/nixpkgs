@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, x11 }:
+{ stdenv, fetchurl, cmake, xlibsWrapper }:
 
 stdenv.mkDerivation rec {
   version = "18.10";
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   '';   
 
   enableParallelBuilding = true;
-  buildInputs = [ cmake x11 ];
-  propagatedBuildInputs = [ x11 ];
+  buildInputs = [ cmake xlibsWrapper ];
+  propagatedBuildInputs = [ xlibsWrapper ];
 
   meta = with stdenv.lib; {
     description = "A general purpose cross-platform C++ machine learning library";

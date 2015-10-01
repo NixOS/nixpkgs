@@ -1,5 +1,5 @@
 { stdenv, kde, kdelibs, soprano, shared_desktop_ontologies, exiv2, ffmpeg, taglib, poppler_qt4
-, pkgconfig, doxygen, ebook_tools
+, pkgconfig, doxygen, ebook_tools, automoc4, cmake, perl
 }:
 
 kde {
@@ -11,7 +11,7 @@ kde {
     poppler_qt4 ebook_tools
   ];
 
-  nativeBuildInputs = [ pkgconfig doxygen ];
+  nativeBuildInputs = [ automoc4 cmake perl pkgconfig doxygen ];
 
   meta = {
     description = "NEPOMUK core";

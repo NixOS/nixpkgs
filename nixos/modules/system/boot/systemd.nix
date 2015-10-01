@@ -444,6 +444,17 @@ in
       '';
     };
 
+    systemd.generators = mkOption {
+      type = types.attrsOf types.path;
+      default = {};
+      example = { "systemd-gpt-auto-generator" = "/dev/null"; };
+      description = ''
+        Definition of systemd generators.
+        For each <literal>NAME = VALUE</literal> pair of the attrSet, a link is generated from
+        <literal>/etc/systemd/system-generators/NAME</literal> to <literal>VALUE</literal>.
+      '';
+    };
+
     systemd.defaultUnit = mkOption {
       default = "multi-user.target";
       type = types.str;
@@ -600,20 +611,17 @@ in
 
     environment.systemPackages = [ systemd ];
 
-    environment.etc."systemd/system".source =
-      generateUnits "system" cfg.units upstreamSystemUnits upstreamSystemWants;
+    environment.etc = {
+      "systemd/system".source = generateUnits "system" cfg.units upstreamSystemUnits upstreamSystemWants;
 
-    environment.etc."systemd/user".source =
-      generateUnits "user" cfg.user.units upstreamUserUnits [];
+      "systemd/user".source = generateUnits "user" cfg.user.units upstreamUserUnits [];
 
-    environment.etc."systemd/system.conf".text =
-      ''
+      "systemd/system.conf".text = ''
         [Manager]
         ${config.systemd.extraConfig}
       '';
 
-    environment.etc."systemd/journald.conf".text =
-      ''
+      "systemd/journald.conf".text = ''
         [Journal]
         RateLimitInterval=${config.services.journald.rateLimitInterval}
         RateLimitBurst=${toString config.services.journald.rateLimitBurst}
@@ -624,16 +632,25 @@ in
         ${config.services.journald.extraConfig}
       '';
 
-    environment.etc."systemd/logind.conf".text =
-      ''
+      "systemd/logind.conf".text = ''
         [Login]
         ${config.services.logind.extraConfig}
       '';
 
-    environment.etc."systemd/sleep.conf".text =
-      ''
+      "systemd/sleep.conf".text = ''
         [Sleep]
       '';
+
+      "tmpfiles.d/systemd.conf".source = "${systemd}/example/tmpfiles.d/systemd.conf";
+      "tmpfiles.d/x11.conf".source = "${systemd}/example/tmpfiles.d/x11.conf";
+
+      "tmpfiles.d/nixos.conf".text = ''
+        # This file is created automatically and should not be modified.
+        # Please change the option ‘systemd.tmpfiles.rules’ instead.
+
+        ${concatStringsSep "\n" cfg.tmpfiles.rules}
+      '';
+    } // mapAttrs' (n: v: nameValuePair "systemd/system-generators/${n}" {"source"=v;}) cfg.generators;
 
     system.activationScripts.systemd = stringAfter [ "groups" ]
       ''
@@ -734,17 +751,6 @@ in
         # in systemd to provide XDG_RUNTIME_DIR.
         startSession = true;
       };
-
-    environment.etc."tmpfiles.d/systemd.conf".source = "${systemd}/example/tmpfiles.d/systemd.conf";
-    environment.etc."tmpfiles.d/x11.conf".source = "${systemd}/example/tmpfiles.d/x11.conf";
-
-    environment.etc."tmpfiles.d/nixos.conf".text =
-      ''
-        # This file is created automatically and should not be modified.
-        # Please change the option ‘systemd.tmpfiles.rules’ instead.
-
-        ${concatStringsSep "\n" cfg.tmpfiles.rules}
-      '';
 
     # Some overrides to upstream units.
     systemd.services."systemd-backlight@".restartIfChanged = false;

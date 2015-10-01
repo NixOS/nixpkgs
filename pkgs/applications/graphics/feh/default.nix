@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, fetchurl, x11, imlib2, libjpeg, libpng
+{ stdenv, makeWrapper, fetchurl, xlibsWrapper, imlib2, libjpeg, libpng
 , libXinerama, curl, libexif }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1059mflgw8hl398lwy55fj50a98xryvdf23wkpbn4s0z9388hl46";
   };
 
-  buildInputs = [ makeWrapper x11 imlib2 libjpeg libpng libXinerama curl libexif ];
+  buildInputs = [ makeWrapper xlibsWrapper imlib2 libjpeg libpng libXinerama curl libexif ];
 
   preBuild = ''
     makeFlags="PREFIX=$out exif=1"

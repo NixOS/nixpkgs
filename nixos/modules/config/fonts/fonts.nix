@@ -31,6 +31,7 @@ with lib;
         pkgs.xorg.fontbh100dpi
         pkgs.xorg.fontmiscmisc
         pkgs.xorg.fontcursormisc
+        pkgs.unifont
       ];
 
   };

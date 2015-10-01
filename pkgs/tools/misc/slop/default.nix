@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "slop-${version}";
-  version = "4.1.15";
+  version = "4.1.16";
 
   src = fetchurl {
     url = "https://github.com/naelstrof/slop/archive/v${version}.tar.gz";
-    sha256 = "e20fd47de898abcb537c8100faed859eef4955d7784dbc52470570dae403f02e";
+    sha256 = "0679ax0jr97x91hmp9qrspdka8cvl3xa77z92k4qgicbnb6hr7y2";
   };
 
   buildInputs = [ cmake gengetopt libX11 libXext ]

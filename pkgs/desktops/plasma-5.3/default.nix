@@ -128,8 +128,8 @@ let
               freetype glib gnugrep gnused gtk2 gtk3 libinput libssh
               modemmanager openconnect openexr pam pango qt4 samba
               socat substituteAll taglib utillinux wayland xapian
-              xkeyboard_config xlibs xorg;
-      boost = boost156;
+              xkeyboard_config xorg;
+      boost = boost155;
       canberra = libcanberra;
       epub = ebook_tools;
       fontforge_executable = fontforge;
@@ -157,7 +157,7 @@ let
 
         breeze-qt4 = overrideDerivation super.breeze (drv: {
           name = "breeze-qt4-${version}";
-          buildInputs = [ pkgs.xlibs.xproto pkgs.kde4.kdelibs pkgs.qt4 ];
+          buildInputs = [ pkgs.xorg.xproto pkgs.kde4.kdelibs pkgs.qt4 ];
           nativeBuildInputs = [ scope.cmake pkgs.pkgconfig ];
           cmakeFlags = [
             "-DUSE_KDE4=ON"
@@ -194,18 +194,18 @@ let
     };
 
     kwin = extendDerivation super.kwin {
-      buildInputs = with scope.xlibs; [ libICE libSM libXcursor ];
+      buildInputs = with scope.xorg; [ libICE libSM libXcursor ];
       patches = [ ./kwin/kwin-import-plugin-follow-symlinks.patch ];
     };
 
     libkscreen = extendDerivation super.libkscreen {
-      buildInputs = [ scope.xlibs.libXrandr];
+      buildInputs = [ scope.xorg.libXrandr];
     };
 
     plasma-desktop = extendDerivation super.plasma-desktop {
       buildInputs = with scope;
         [ canberra ]
-        ++ (with xlibs; [ libxkbfile libXcursor libXft ]);
+        ++ (with xorg; [ libxkbfile libXcursor libXft ]);
       patches = [
         (scope.substituteAll {
           src = ./plasma-desktop/plasma-desktop-hwclock.patch;
@@ -217,13 +217,13 @@ let
           xkb = scope.xkeyboard_config;
         })
       ];
-      NIX_CFLAGS_COMPILE = with scope.xlibs;
+      NIX_CFLAGS_COMPILE = with scope.xorg;
         lib.concatStringsSep " " [
           "-I${xf86inputsynaptics}/include/xorg"
           "-I${xf86inputevdev}/include/xorg"
           "-I${xorgserver}/include/xorg"
         ];
-      cmakeFlags = with scope.xlibs; [
+      cmakeFlags = with scope.xorg; [
         "-DEvdev_INCLUDE_DIRS=${xf86inputevdev}/include"
         "-DSynaptics_INCLUDE_DIRS=${xf86inputsynaptics}/include"
       ];
@@ -231,7 +231,7 @@ let
 
     plasma-workspace = extendDerivation super.plasma-workspace {
       patches = [ ./plasma-workspace/0001-startkde-NixOS-patches.patch ];
-      buildInputs = with scope.xlibs; [ libSM libXcursor scope.pam ];
+      buildInputs = with scope.xorg; [ libSM libXcursor scope.pam ];
 
       inherit (scope) bash coreutils gnused gnugrep socat;
       inherit (scope) kconfig kinit kservice qt5tools;
@@ -246,11 +246,11 @@ let
     };
 
     powerdevil = extendDerivation super.powerdevil {
-      buildInputs = [ scope.xlibs.libXrandr ];
+      buildInputs = [ scope.xorg.libXrandr ];
     };
 
     sddm-kcm = extendDerivation super.sddm-kcm {
-      buildInputs = [ scope.xlibs.libXcursor ];
+      buildInputs = [ scope.xorg.libXcursor ];
     };
 
   };

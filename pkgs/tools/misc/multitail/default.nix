@@ -1,11 +1,12 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "multitail-6.2.1";
+  version = "6.4.2";
+  name = "multitail-${version}";
 
   src = fetchurl {
     url = "http://www.vanheusden.com/multitail/${name}.tgz";
-    sha256 = "049fv5cyl5f7vcc8n2q3z3i5k0sqv2k715ic0s4q1nrw5kb6qn0y";
+    sha256 = "1zd1r89xkxngl1pdrvsc877838nwkfqkbcgfqm3vglwalxc587dg";
   };
 
   buildInputs = [ ncurses ];
@@ -20,5 +21,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.vanheusden.com/multitail/;
     description = "tail on Steroids";
+    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, qt4, x11, libpulseaudio, fftwSinglePrec
+{ stdenv, fetchurl, which, qt4, xlibsWrapper, libpulseaudio, fftwSinglePrec
 , lame, zlib, mesa, alsaLib, freetype, perl, pkgconfig
 , libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm, libXmu
 , yasm, libuuid, taglib, libtool, autoconf, automake, file
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   sourceRoot = "${name}/mythtv";
 
   buildInputs = [
-    freetype qt4 lame zlib x11 mesa perl alsaLib libpulseaudio fftwSinglePrec
+    freetype qt4 lame zlib xlibsWrapper mesa perl alsaLib libpulseaudio fftwSinglePrec
     libX11 libXv libXrandr libXvMC libXmu libXinerama libXxf86vm libXmu
     libuuid taglib
   ];

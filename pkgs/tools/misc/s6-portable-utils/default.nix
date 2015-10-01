@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.0.5.0";
+  version = "2.0.5.2";
 
 in stdenv.mkDerivation rec {
 
@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.skarnet.org/software/s6-portable-utils/${name}.tar.gz";
-    sha256 = "099c7isi5vynis4iaiz362rvr73w4rvjhv3c2f7ddxgfyvd2331l";
+    sha256 = "0d5dvqz61abr4m2n10by8hccvw51jdvyckvpbbq0c57viri54jzm";
   };
 
   dontDisableStatic = true;

@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "rofi-${version}";
-  version = "0.15.7";
+  version = "0.15.8";
 
   src = fetchurl {
     url = "https://github.com/DaveDavenport/rofi/archive/${version}.tar.gz";
-    sha256 = "0alygwc82shkg9lmy8r5vmgd84imx1f9pndrisjpisl8h28dw5dq";
+    sha256 = "1qhj8xrxfnzy16g577w0zxg1cy885rbqydlbbxgfk0dpjvq70lq6";
   };
 
   buildInputs = [ autoconf automake pkgconfig libX11 libXinerama libXft pango

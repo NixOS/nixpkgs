@@ -47,8 +47,15 @@ appleDerivation {
   '';
 
   postInstall = ''
-    # gross! convince apple to release this as part of CF
-    cp /System/Library/Frameworks/CoreFoundation.framework/Headers/CFAttributedString.h "$out/System/Library/Frameworks/CoreFoundation.framework/Headers"
+    # gross! convince apple to release these as part of CF
+    cp /System/Library/Frameworks/CoreFoundation.framework/Headers/{CFAttributedString,CFNotificationCenter}.h \
+      "$out/System/Library/Frameworks/CoreFoundation.framework/Headers"
+
+    cat >> $out/System/Library/Frameworks/CoreFoundation.framework/Headers/CoreFoundation.h <<EOF
+    /* extra private system files [IMPURE] */
+    #include <CoreFoundation/CFAttributedString.h>
+    #include <CoreFoundation/CFNotificationCenter.h>
+    EOF
 
     mv $out/System/* $out
     rmdir $out/System

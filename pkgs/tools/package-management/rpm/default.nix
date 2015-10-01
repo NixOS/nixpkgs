@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, cpio, zlib, bzip2, file, elfutils, nspr, nss, popt, db, xz, python }:
+{ stdenv, fetchurl, cpio, zlib, bzip2, file, elfutils, libarchive, nspr, nss, popt, db, xz, python }:
 
 stdenv.mkDerivation rec {
-  name = "rpm-4.11.2";
+  name = "rpm-4.12.0";
 
   src = fetchurl {
-    url = "http://rpm.org/releases/rpm-4.11.x/${name}.tar.bz2";
-    sha256 = "1m2859js0dwg26sg2mnbkpzhvx303b12kx26az74cf5k6bk8sgs0";
+    url = "http://rpm.org/releases/rpm-4.12.x/${name}.tar.bz2";
+    sha256 = "18hk47hc755nslvb7xkq4jb095z7va0nlcyxdpxayc4lmb8mq3bp";
   };
 
-  buildInputs = [ cpio zlib bzip2 file nspr nss popt db xz python ];
+  buildInputs = [ cpio zlib bzip2 file libarchive nspr nss popt db xz python ];
 
   # Note: we don't add elfutils to buildInputs, since it provides a
   # bad `ld' and other stuff.

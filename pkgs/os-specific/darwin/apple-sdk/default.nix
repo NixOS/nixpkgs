@@ -120,7 +120,7 @@ in rec {
       __propagatedImpureHostDeps = [ "/usr/lib/libXplugin.1.dylib" ];
 
       propagatedBuildInputs = with frameworks; [
-        OpenGL ApplicationServices Carbon IOKit CoreFoundation CoreGraphics CoreServices CoreText
+        OpenGL ApplicationServices Carbon IOKit CF CoreGraphics CoreServices CoreText
       ];
 
       installPhase = ''
@@ -144,9 +144,19 @@ in rec {
     };
   };
 
-  frameworks = (stdenv.lib.mapAttrs framework (import ./frameworks.nix { inherit frameworks libs; })) // {
-    CoreFoundation = CF;
+  overrides = super: {
+    QuartzCore = stdenv.lib.overrideDerivation super.QuartzCore (drv: {
+      installPhase = drv.installPhase + ''
+        f="$out/Library/Frameworks/QuartzCore.framework/Headers/CoreImage.h"
+        substituteInPlace "$f" \
+          --replace "QuartzCore/../Frameworks/CoreImage.framework/Headers" "CoreImage"
+      '';
+    });
   };
+
+  bareFrameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix { inherit frameworks libs CF; });
+
+  frameworks = bareFrameworks // overrides bareFrameworks;
 
   inherit sdk;
 }

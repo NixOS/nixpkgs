@@ -28,7 +28,8 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       $machine->succeed("su - alice -c 'DISPLAY=:0.0 gnome-terminal &'");
       $machine->waitForWindow(qr/Terminal/);
-      $machine->sleep(20);
+      $machine->mustSucceed("timeout 60 bash -c 'journalctl -f|grep -m 1 \"GNOME Shell started\"'");
+      $machine->sleep(10);
       $machine->screenshot("screen");
     '';
 })

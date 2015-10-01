@@ -17,14 +17,14 @@ assert saslSupport -> cyrus_sasl != null;
 assert gpgmeSupport -> gpgme != null;
 
 let
-  version = "1.5.23";
+  version = "1.5.24";
 in
 stdenv.mkDerivation rec {
   name = "mutt${stdenv.lib.optionalString withSidebar "-with-sidebar"}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mutt/mutt-${version}.tar.gz";
-    sha256 = "0dzx4qk50pjfsb6cs5jahng96a52k12f7pm0sc78iqdrawg71w1s";
+    url = "http://ftp.mutt.org/pub/mutt/mutt-${version}.tar.gz";
+    sha256 = "0012njrgxf1barjksqkx7ccid2l0xyikhna9mjs9vcfpbrvcm4m2";
   };
 
   buildInputs = with stdenv.lib;
@@ -59,11 +59,16 @@ stdenv.mkDerivation rec {
   ];
 
   # Adding the sidebar
-  patches = [] ++
-    (stdenv.lib.optional withSidebar (fetchurl {
-      url = http://lunar-linux.org/~tchan/mutt/patch-1.5.23.sidebar.20140412.txt;
-      sha256 = "1i2r7dj0pd1k0z3jjxn2szi6sf0k28i8dwhr4f65pn8r2lh3wisz";
-    }));
+  patches = stdenv.lib.optional withSidebar [
+    ./trash-folder.patch
+    ./sidebar.patch
+    ./sidebar-dotpathsep.patch
+    ./sidebar-utf8.patch
+    ./sidebar-newonly.patch
+    ./sidebar-delimnullwide.patch
+    ./sidebar-compose.patch
+    ./sidebar-new.patch
+  ];
 
   meta = with stdenv.lib; {
     description = "A small but very powerful text-based mail client";

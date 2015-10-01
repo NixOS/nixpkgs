@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, x11, libXmu, autoconf, automake, libtool }:
+{ stdenv, fetchsvn, xlibsWrapper, libXmu, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
   # The last release from 2012, 0.12, lacks '-targets'
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "autoreconf -vfi";
 
-  buildInputs = [ x11 libXmu autoconf automake libtool ];
+  buildInputs = [ xlibsWrapper libXmu autoconf automake libtool ];
 
   meta = { 
     description = "Tool to access the X clipboard from a console application";

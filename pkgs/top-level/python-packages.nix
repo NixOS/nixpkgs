@@ -4533,15 +4533,15 @@ let
   };
 
   pyramid = buildPythonPackage rec {
-    name = "pyramid-1.5.2";
+    name = "pyramid-1.5.7";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyramid/${name}.tar.gz";
-      md5 = "d56b140b41d42f818f4349d94d968c9a";
+      sha256 = "1d29fj86724z68zcj9ximl2nrn34pflrlr6v9mwyhcv8rdf2sc61";
     };
 
     preCheck = ''
-      # test is failing, see https://github.com/Pylons/pyramid/issues/1405
+      # this will be fixed for 1.6 release, see https://github.com/Pylons/pyramid/issues/1405
       rm pyramid/tests/test_response.py
     '';
 
@@ -5716,6 +5716,34 @@ let
       description = "Push and pull from a Git server using Mercurial";
       homepage = http://hg-git.github.com/;
       maintainers = with maintainers; [ koral ];
+    };
+  };
+
+
+  hg-crecord = buildPythonPackage rec {
+    rev = "5cfaabfe9cb9f0a0d6837956d73127f290a213be";
+    name = "hg-crecord-${rev}";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://bitbucket.org/edgimar/crecord/get/${builtins.substring 0 12 rev}.tar.gz";
+      sha256 = "02003fa5620ec40a5ad0d7cede2e65c2cb398a7fe4e1ee26bd3396a87d63ad35";
+    };
+    
+    # crecord comes as just a bare directory
+    configurePhase = " ";
+    buildPhase = "${python.executable} -m compileall crecord";
+    installPhase = ''
+      mkdir -p $out/${python.sitePackages}
+      cp -Lr crecord $out/${python.sitePackages}/
+    '';
+
+    # there ain't none
+    doCheck = false;
+    
+    meta = {
+      description = "Mercurial extension for selecting graphically which files/hunk/lines to commit";
+      homepage = https://bitbucket.org/edgimar/crecord;
     };
   };
 
@@ -7979,7 +8007,7 @@ let
       md5 = "f93d8462ff7646397a9f77a2fe602d17";
     };
 
-    buildInputs = with self; [ pkgs.swig pkgs.openssl ];
+    buildInputs = with self; [ pkgs.swig2 pkgs.openssl ];
 
     preBuild = "${python}/bin/${python.executable} setup.py build_ext --openssl=${pkgs.openssl}";
 
@@ -9397,6 +9425,24 @@ let
     };
   });
 
+  numpydoc = buildPythonPackage rec {
+    name = "numpydoc-${version}";
+    version = "0.5";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/numpydoc/${name}.tar.gz";
+      sha256 = "0d4dnifaxkll50jx6czj05y8cb4ny60njd2wz299sj2jxfy51w4k";
+    };
+
+    buildInputs = [ self.nose ];
+    propagatedBuildInputs = [ self.sphinx self.matplotlib ];
+
+    meta = {
+      description = "Sphinx extension to support docstrings in Numpy format";
+      homepage = "https://github.com/numpy/numpydoc";
+      license = licenses.free;
+    };
+  };
 
   nwdiag = buildPythonPackage rec {
     name = "nwdiag-1.0.3";
@@ -10405,7 +10451,7 @@ let
     buildInputs = with self; [
       pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl nose ]
       ++ optionals (isPy26 || isPy27 || isPy33 || isPyPy) [ pkgs.lcms2 ]
-      ++ optionals (isPyPy) [ pkgs.tk pkgs.xlibs.libX11 ];
+      ++ optionals (isPyPy) [ pkgs.tk pkgs.xorg.libX11 ];
 
     # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
     preConfigure = ''
@@ -10894,11 +10940,11 @@ let
   };
 
   pygit2 = buildPythonPackage rec {
-    name = "pygit2-0.21.2";
+    name = "pygit2-0.23.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pygit2/${name}.tar.gz";
-      sha256 = "0lya4v91d4y5fwrb55n8m8avgmz0l81jml2spvx6r7j1czcx3zic";
+      sha256 = "04201vcal7jq8lbpk9ylscrhjxdcf2aihiw25k4imjjqgfmvldf7";
     };
 
     preConfigure = ( if stdenv.isDarwin then ''
@@ -11335,7 +11381,7 @@ let
     };
 
     patchPhase = let
-      libs = [ pkgs.mesa pkgs.xlibs.libX11 pkgs.freetype pkgs.fontconfig ];
+      libs = [ pkgs.mesa pkgs.xorg.libX11 pkgs.freetype pkgs.fontconfig ];
       paths = concatStringsSep "," (map (l: "\"${l}/lib\"") libs);
     in "sed -i -e 's|directories\.extend.*lib[^]]*|&,${paths}|' pyglet/lib.py";
 
@@ -12251,12 +12297,12 @@ let
   });
 
 
-  pysvn = pkgs.stdenv.mkDerivation {
-    name = "pysvn-1.7.8";
+  pysvn = pkgs.stdenv.mkDerivation rec {
+    name = "pysvn-1.8.0";
 
     src = pkgs.fetchurl {
-      url = "http://pysvn.barrys-emacs.org/source_kits/pysvn-1.7.8.tar.gz";
-      sha256 = "1qk7af0laby1f79bd07l9p0dxn5xmcmfwlcb9l1hk29zwwq6x4v0";
+      url = "http://pysvn.barrys-emacs.org/source_kits/${name}.tar.gz";
+      sha256 = "0srjr2qgxfs69p65d9vvdib2lc142x10w8afbbdrqs7dhi46yn9r";
     };
 
     buildInputs = with self; [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
@@ -12411,6 +12457,43 @@ let
     };
   });
 
+  PyXAPI = stdenv.mkDerivation rec {
+    name = "PyXAPI-0.1";
+
+    src = pkgs.fetchurl {
+      url = "http://www.pps.univ-paris-diderot.fr/~ylg/PyXAPI/${name}.tar.gz";
+      sha256 = "19lblwfq24bgsgfy7hhqkxdf4bxl40chcxdlpma7a0wfa0ngbn26";
+    };
+
+    buildInputs = [ self.python ];
+
+    installPhase = ''
+      mkdir -p "$out/lib/${python.libPrefix}/site-packages"
+
+      export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+
+      ${python}/bin/${python.executable} setup.py install \
+        --install-lib=$out/lib/${python.libPrefix}/site-packages \
+        --prefix="$out"
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Python socket module extension & RFC3542 IPv6 Advanced Sockets API";
+      longDescription = ''
+        PyXAPI consists of two modules: `socket_ext' and `rfc3542'.
+        `socket_ext' extends the Python module `socket'. `socket' objects have
+        two new methods: `recvmsg' and `sendmsg'. It defines `ancillary data'
+        objects and some functions related to. `socket_ext' module also provides
+        functions to manage interfaces indexes defined in RFC3494 and not
+        available from standard Python module `socket'.
+        `rfc3542' is a full implementation of RFC3542 (Advanced Sockets
+        Application Program Interface (API) for IPv6).
+      '';
+      homepage = http://www.pps.univ-paris-diderot.fr/~ylg/PyXAPI/;
+      license = licenses.gpl2Plus;
+      maintainers = with maintainers; [ nckx ];
+    };
+  };
 
   pyxattr = buildPythonPackage (rec {
     name = "pyxattr-0.5.1";
@@ -13345,7 +13428,7 @@ let
       sha256 = "0l70pqwg88imbylcd831vg8nj8ipy4zr331f6qjccss7vn56i2h5";
     };
 
-    buildInputs = with self; [pkgs.xlibs.libX11];
+    buildInputs = with self; [pkgs.xorg.libX11];
 
     # Recompiling x_ignore_nofocus.so as the original one dlopen's libX11.so.6 by some
     # absolute paths. Replaced by relative path so it is found when used in nix.
@@ -13359,7 +13442,7 @@ let
 
     patchPhase = ''
       cp "${x_ignore_nofocus}/cpp/linux-specific/"* .
-      substituteInPlace x_ignore_nofocus.c --replace "/usr/lib/libX11.so.6" "${pkgs.xlibs.libX11}/lib/libX11.so.6"
+      substituteInPlace x_ignore_nofocus.c --replace "/usr/lib/libX11.so.6" "${pkgs.xorg.libX11}/lib/libX11.so.6"
       gcc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
       gcc -shared \
         -Wl,${if stdenv.isDarwin then "-install_name" else "-soname"},x_ignore_nofocus.so \
@@ -13946,7 +14029,7 @@ let
     # error: invalid command 'test'
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ pkgs.xlibs.libX11 pkgs.pythonDBus pygobject ];
+    propagatedBuildInputs = with self; [ pkgs.xorg.libX11 pkgs.pythonDBus pygobject ];
 
     meta = {
       description = "High-level, platform independent Skype API wrapper for Python";
@@ -14573,7 +14656,7 @@ let
     # I don't know why I need to add these libraries. Shouldn't they
     # be part of wxPython?
     postInstall = ''
-      libspaths=${pkgs.xlibs.libSM}/lib:${pkgs.xlibs.libXScrnSaver}/lib
+      libspaths=${pkgs.xorg.libSM}/lib:${pkgs.xorg.libXScrnSaver}/lib
       wrapProgram $out/bin/taskcoach.py \
         --prefix LD_LIBRARY_PATH : $libspaths
     '';
@@ -15517,12 +15600,12 @@ let
   };
 
   webob = buildPythonPackage rec {
-    version = "1.4";
+    version = "1.4.1";
     name = "webob-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/W/WebOb/WebOb-${version}.tar.gz";
-      md5 = "8437607c0cc00c35f658f972516ffb55";
+      sha256 = "1nz9m6ijf46wfn33zfza13c0k1n4kjnmn3icdlrlgz5yj21vky0j";
     };
 
     propagatedBuildInputs = with self; [ nose ];
@@ -15716,7 +15799,7 @@ let
     # Tests require `pyutil' so disable them to avoid circular references.
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ pkgs.xlibs.libX11 ];
+    propagatedBuildInputs = with self; [ pkgs.xorg.libX11 ];
 
     meta = {
       description = "Fully functional X client library for Python programs";
@@ -15965,6 +16048,8 @@ let
       url = "https://pypi.python.org/packages/source/B/BTrees/${name}.tar.gz";
       sha256 = "1avvhkd7rvp3rzhw20v6ank8a8m9a1lmh99c4gjjsa1ry0zsri3y";
     };
+
+    patches = [ ../development/python-modules/btrees-py35.patch ];
 
     meta = {
       description = "scalable persistent components";

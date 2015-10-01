@@ -1,10 +1,10 @@
 { lib, stdenv, fetchurl, pkgconfig, gtk, gtk3, pango, perl, python, zip, libIDL
-, libjpeg, zlib, dbus, dbus_glib, bzip2, xlibs
+, libjpeg, zlib, dbus, dbus_glib, bzip2, xorg
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base, icu, libpng, jemalloc, libpulseaudio
-, enableGTK3 ? false, fetchpatch
+, enableGTK3 ? false
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
@@ -22,28 +22,19 @@ common = { pname, version, sha1 }: stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${version}/source/firefox-${version}.source.tar.bz2";
+    url =
+      let ext = if lib.versionAtLeast version "41.0" then "xz" else "bz2";
+      in "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${version}/source/firefox-${version}.source.tar.${ext}";
     inherit sha1;
   };
 
-  patches = if !enableGTK3 then null else [(fetchpatch {
-    name = "crash_OTMC+GTK3.patch";
-    # backported from 40.1
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1127752
-    # https://bugzilla.redhat.com/show_bug.cgi?id=1256875
-    url = "http://pkgs.fedoraproject.org/cgit/firefox.git/plain/"
-      + "mozilla-1127752.patch?id=571fefe2c8f741b92c865e9122af56f6258b3fc1";
-    sha256 = "04yq4lcq8ln2fmknz4c0zah77wxqp2mcgr8pjx860dmcmzvyi3p5";
-  })];
-  patchFlags = "-p2";
-
   buildInputs =
     [ pkgconfig gtk perl zip libIDL libjpeg zlib bzip2
-      python dbus dbus_glib pango freetype fontconfig xlibs.libXi
-      xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
-      alsaLib nspr nss libnotify xlibs.pixman yasm mesa
-      xlibs.libXScrnSaver xlibs.scrnsaverproto pysqlite
-      xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
+      python dbus dbus_glib pango freetype fontconfig xorg.libXi
+      xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
+      alsaLib nspr nss libnotify xorg.pixman yasm mesa
+      xorg.libXScrnSaver xorg.scrnsaverproto pysqlite
+      xorg.libXext xorg.xextproto sqlite unzip makeWrapper
       hunspell libevent libstartup_notification libvpx /* cairo */
       gstreamer gst_plugins_base icu libpng jemalloc
       libpulseaudio # only headers are needed
@@ -77,6 +68,7 @@ common = { pname, version, sha1 }: stdenv.mkDerivation rec {
       "--disable-installer"
       "--disable-updater"
       "--enable-jemalloc"
+      "--disable-gconf"
     ]
     ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
@@ -137,14 +129,14 @@ in {
 
   firefox = common {
     pname = "firefox";
-    version = "40.0.3";
-    sha1 = "6ddda46bd6540ab3ae932fbb5ffec8e9a85cab13";
+    version = "41.0.1";
+    sha1 = "4f6bf34b7b286e033f401d7d4112ec6310577aae";
   };
 
   firefox-esr = common {
     pname = "firefox-esr";
-    version = "38.2.1esr";
-    sha1 = "c596174e7273be5079bf55aecde33ec191d99538";
+    version = "38.3.0esr";
+    sha1 = "57d2c255348ac13b6ffbb952c5e0d57757aa0290";
   };
 
 }

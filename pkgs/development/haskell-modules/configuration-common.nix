@@ -291,6 +291,8 @@ self: super: {
   wai-middleware-throttle = dontCheck super.wai-middleware-throttle; # https://github.com/creichert/wai-middleware-throttle/issues/1
   xkbcommon = dontCheck super.xkbcommon;
   xmlgen = dontCheck super.xmlgen;
+  hapistrano = dontCheck super.hapistrano;
+  HerbiePlugin = dontCheck super.HerbiePlugin;
 
   # These packages try to access the network.
   amqp-conduit = dontCheck super.amqp-conduit;
@@ -305,40 +307,7 @@ self: super: {
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
   hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
-  holy-project = dontCheck super.holy-project;          # http://hydra.cryp.to/build/502002/nixlog/1/raw
-  holy-project_0_1_1_1 = dontCheck super.holy-project_0_1_1_1;
-  holy-project_0_2_0_0   = dontCheck super.holy-project_0_2_0_0  ;
   hoogle = overrideCabal super.hoogle (drv: { testTarget = "--test-option=--no-net"; });
-  http-client_0_4_11_1 = dontCheck super.http-client_0_4_11_1;
-  http-client_0_4_11_2 = dontCheck super.http-client_0_4_11_2;
-  http-client_0_4_11_3 = dontCheck super.http-client_0_4_11_3;
-  http-client_0_4_11 = dontCheck super.http-client_0_4_11;
-  http-client_0_4_12 = dontCheck super.http-client_0_4_12;
-  http-client_0_4_13 = dontCheck super.http-client_0_4_13;
-  http-client_0_4_15 = dontCheck super.http-client_0_4_15;
-  http-client_0_4_16 = dontCheck super.http-client_0_4_16;
-  http-client_0_4_18_1 = dontCheck super.http-client_0_4_18_1;
-  http-client_0_4_19 = dontCheck super.http-client_0_4_19;
-  http-client_0_4_20 = dontCheck super.http-client_0_4_20;
-  http-client_0_4_21 = dontCheck super.http-client_0_4_21;
-  http-client_0_4_22 = dontCheck super.http-client_0_4_22;
-  http-client_0_4_6_1 = dontCheck super.http-client_0_4_6_1;
-  http-client_0_4_6_2 = dontCheck super.http-client_0_4_6_2;
-  http-client_0_4_6 = dontCheck super.http-client_0_4_6;
-  http-client_0_4_7_1 = dontCheck super.http-client_0_4_7_1;
-  http-client_0_4_7 = dontCheck super.http-client_0_4_7;
-  http-client_0_4_8_1 = dontCheck super.http-client_0_4_8_1;
-  http-client_0_4_8 = dontCheck super.http-client_0_4_8;
-  http-client_0_4_9 = dontCheck super.http-client_0_4_9;
-  http-client = dontCheck super.http-client;            # http://hydra.cryp.to/build/501430/nixlog/1/raw
-  http-conduit_2_1_5_1 = dontCheck super.http-conduit_2_1_5_1;
-  http-conduit_2_1_5 = dontCheck super.http-conduit_2_1_5;
-  http-conduit_2_1_7_1 = dontCheck super.http-conduit_2_1_7_1;
-  http-conduit_2_1_7_2 = dontCheck super.http-conduit_2_1_7_2;
-  http-conduit = dontCheck super.http-conduit;          # http://hydra.cryp.to/build/501966/nixlog/1/raw
-  js-jquery_1_11_1 = dontCheck super.js-jquery_1_11_1;
-  js-jquery_1_11_2 = dontCheck super.js-jquery_1_11_2;
-  js-jquery = dontCheck super.js-jquery;
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
   network-transport-tcp = dontCheck super.network-transport-tcp;
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
@@ -467,6 +436,7 @@ self: super: {
   pandoc-citeproc_0_6 = dontCheck super.pandoc-citeproc_0_6;
   pandoc-citeproc_0_6_0_1 = dontCheck super.pandoc-citeproc_0_6_0_1;
   pandoc-citeproc_0_7_3 = dontCheck super.pandoc-citeproc_0_7_3;
+  pandoc-citeproc_0_7_3_1 = dontCheck super.pandoc-citeproc_0_7_3;
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
@@ -932,5 +902,8 @@ self: super: {
   # https://github.com/yesodweb/serversession/issues/2
   # https://github.com/haskell/cabal/issues/2661
   serversession-backend-acid-state_1_0_1 = dontCheck super.serversession-backend-acid-state_1_0_1;
+
+  # https://github.com/sol/hpack/issues/53
+  hpack = dontCheck super.hpack;
 
 }
