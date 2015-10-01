@@ -5,11 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://users.teilar.gr/~g1951d/Symbola.zip";
-    sha256 = "07bczpl3vqdpg2gakfddhzzgpb6v2wpasv7rwqxkyg9yd9lmbr0s";
-  };
-  docs_pdf = fetchurl {
-    url = "http://users.teilar.gr/~g1951d/Symbola.pdf";
-    sha256 = "1zmq1ijl0k5hrc6vpa2xp9n1x2zrrd7ng3jwc9yf0qsi3pmkpk0p";
+    sha256 = "1lfs2j816332ysvpb5ibj2gwpmyqyispqdl7skkshf2gra18hmhd";
   };
 
   buildInputs = [ unzip ];
@@ -24,8 +20,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p "$out/doc/${name}"
     cp -v Symbola.docx "$out/doc/${name}/"
-    cp -v Symbola.htm "$out/doc/${name}/"
-    cp -v "$docs_pdf" "$out/doc/${name}/${docs_pdf.name}"
+    cp -v Symbola.pdf "$out/doc/${name}/"
   '';
 
   meta = {
