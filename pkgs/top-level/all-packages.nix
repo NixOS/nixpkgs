@@ -853,6 +853,8 @@ let
 
   gmic = callPackage ../tools/graphics/gmic { };
 
+  heatseeker = callPackage ../tools/misc/heatseeker { };
+
   mathics = pythonPackages.mathics;
 
   mcrl = callPackage ../tools/misc/mcrl { };
@@ -1368,7 +1370,7 @@ let
 
   emv = callPackage ../tools/misc/emv { };
 
-  enblendenfuse = callPackage ../tools/graphics/enblend-enfuse { };
+  enblend-enfuse = callPackage ../tools/graphics/enblend-enfuse { };
 
   encfs = callPackage ../tools/filesystems/encfs { };
 
@@ -7404,10 +7406,8 @@ let
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
 
   libunwind = if stdenv.isDarwin
-    then libunwindNative
+    then darwin.libunwind
     else callPackage ../development/libraries/libunwind { };
-
-  libunwindNative = callPackage ../development/libraries/libunwind/native.nix {};
 
   libuvVersions = recurseIntoAttrs (callPackage ../development/libraries/libuv {
     automake = automake113x; # fails with 14
@@ -9067,6 +9067,7 @@ let
   openresty = callPackage ../servers/http/openresty { };
 
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
+  opensmtpd-extras = callPackage ../servers/mail/opensmtpd/extras.nix { };
 
   openxpki = callPackage ../servers/openxpki { };
 
@@ -10011,6 +10012,10 @@ let
   mdadm = callPackage ../os-specific/linux/mdadm { };
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
+
+  miraclecast = callPackage ../os-specific/linux/miraclecast {
+    systemd = systemd.override { enableKDbus = true; };
+  };
 
   module_init_tools = callPackage ../os-specific/linux/module-init-tools { };
 
@@ -11787,6 +11792,8 @@ let
 
   iptraf = callPackage ../applications/networking/iptraf { };
 
+  iptraf-ng = callPackage ../applications/networking/iptraf-ng { };
+
   irssi = callPackage ../applications/networking/irc/irssi { };
 
   irssi_fish = callPackage ../applications/networking/irc/irssi/fish { };
@@ -11806,6 +11813,9 @@ let
   jack_rack = callPackage ../applications/audio/jack-rack { };
 
   jackmeter = callPackage ../applications/audio/jackmeter { };
+
+  jackmix = callPackage ../applications/audio/jackmix { };
+  jackmix_jack1 = jackmix.override { jack = jack1; };
 
   jalv = callPackage ../applications/audio/jalv { };
 
@@ -13935,6 +13945,7 @@ let
         libcanberra = libcanberra_kde;
         boost = boost155;
         kdelibs = kdeApps_15_08.kdelibs;
+        subversionClient = subversionClient.override { branch = "1.8"; };
       }
       ../desktops/kde-4.14;
 
@@ -14962,6 +14973,8 @@ let
 
   tvheadend = callPackage ../servers/tvheadend { };
 
+  urbit = callPackage ../misc/urbit { };
+
   utf8proc = callPackage ../development/libraries/utf8proc { };
 
   vault = goPackages.vault.bin // { outputs = [ "bin" ]; };
@@ -15121,6 +15134,7 @@ aliases = with self; rec {
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
   cool-old-term = cool-retro-term; # added 2015-01-31
   cv = progress; # added 2015-09-06
+  enblendenfuse = enblend-enfuse;	# 2015-09-30
   exfat-utils = exfat;                  # 2015-09-11
   firefoxWrapper = firefox-wrapper;
   fuse_exfat = exfat;                   # 2015-09-11

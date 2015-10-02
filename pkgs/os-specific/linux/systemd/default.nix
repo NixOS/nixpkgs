@@ -3,6 +3,7 @@
 , glib, kbd, libxslt, coreutils, libgcrypt
 , kexectools, libmicrohttpd, linuxHeaders
 , pythonPackages ? null, pythonSupport ? false
+, enableKDbus ? false
 }:
 
 assert stdenv.isLinux;
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
       "--with-sysvinit-path="
       "--with-sysvrcnd-path="
       "--with-rc-local-script-path-stop=/etc/halt.local"
-    ];
+    ] ++ stdenv.lib.optional enableKDbus "--enable-kdbus";
 
   preConfigure =
     ''
