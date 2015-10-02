@@ -1,12 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gettext }:
 
-let version = "0.5.2"; in
+# The last release (0.5.2) is more than 2 years old and lacks features like -D,
+# limiting its usefulness. Upstream appears comatose if not dead.
+let version = "2014-07-03"; in
 stdenv.mkDerivation {
   name = "duff-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "0yfm910wjj6z0f0cg68x59ykf4ql5m49apzy8sra00f8kv4lpn53";
-    rev = version;
+    sha256 = "1k2dx38pjzc5d624vw1cs5ipj9fprsm5vqv55agksc29m63lswnx";
+    rev = "f26d4837768b062a3f98fa075c791d9c8a0bb75c";
     repo = "duff";
     owner = "elmindreda";
   };
@@ -14,10 +16,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook gettext ];
 
   preAutoreconf = ''
-    # duff is currently badly packaged, requiring us to do extra work here that
-    # should be done upstream. If that is ever fixed, this entire phase can be
-    # removed along with all buildInputs.
-
     # gettexttize rightly refuses to run non-interactively:
     cp ${gettext}/bin/gettextize .
     substituteInPlace gettextize \
@@ -30,14 +28,15 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
+    inherit version;
     description = "Quickly find duplicate files";
-    homepage = http://duff.dreda.org/;
-    license = licenses.zlib;
     longDescription = ''
       Duff is a Unix command-line utility for quickly finding duplicates in
       a given set of files.
     '';
+    homepage = http://duff.dreda.org/;
+    license = licenses.zlib;
+    platforms = platforms.all;
     maintainers = with maintainers; [ nckx ];
-    platforms = with platforms; all;
   };
 }
