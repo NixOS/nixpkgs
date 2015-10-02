@@ -6640,9 +6640,9 @@ let
 
   kf510 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.10 { });
   kf512 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.12 { });
+  kf514 = recurseIntoAttrs (import ../development/libraries/kde-frameworks-5.14 { inherit pkgs; });
   kf5_latest = kf512;
   kf5_stable = kf510;
-  kf513 = recurseIntoAttrs (import ../development/libraries/kde-frameworks-5.13 { inherit pkgs; });
 
   kf5PackagesFun = self: with self; {
 
