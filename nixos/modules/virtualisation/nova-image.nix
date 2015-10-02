@@ -3,7 +3,7 @@
 with lib;
 
 {
-  imports = [ ../profiles/qemu-guest.nix ../profiles/headless.nix ./ec2-data.nix ];
+  imports = [ ../profiles/qemu-guest.nix ../profiles/headless.nix  ];
 
   system.build.novaImage =
     pkgs.vmTools.runInLinuxVM (
@@ -27,8 +27,7 @@ with lib;
           mknod /dev/vda1 b $MAJOR $MINOR
 
           # Create an empty filesystem and mount it.
-          ${pkgs.e2fsprogs}/sbin/mkfs.ext3 -L nixos /dev/vda1
-          ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda1
+          ${pkgs.xfsprogs}/sbin/mkfs.xfs -L nixos /dev/vda1
           mkdir /mnt
           mount /dev/vda1 /mnt
 
@@ -78,7 +77,7 @@ with lib;
 
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/vda";
-  boot.loader.grub.timeout = 0;
+  boot.loader.grub.timeout = 10;
 
   # Put /tmp and /var on /ephemeral0, which has a lot more space.
   # Unfortunately we can't do this with the `fileSystems' option

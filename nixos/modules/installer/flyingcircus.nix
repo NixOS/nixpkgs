@@ -12,7 +12,12 @@ with lib;
   # FIXME: UUID detection is currently broken
   boot.loader.grub.fsIdentifier = "provided";
 
-  # Allow mounting of shared folders.
-  users.extraUsers.demo.extraGroups = [ "vboxsf" ];
+  boot.loader.grub.gfxmodeBios = "text";
+  boot.kernelParams = [ "nosetmode" ];
+  boot.blacklistedKernelModules = ["bochs_drm"];  
+
+  boot.supportedFilesystems = [ "xfs" ];
+  boot.initrd.supportedFilesystems = [ "xfs" ];
+  environment.noXlibs = true;
 
 }
