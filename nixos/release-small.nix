@@ -49,7 +49,7 @@ in rec {
         inherit system;
         modules =
           [ versionModule
-            ./modules/installer/virtualbox-demo.nix
+            ./modules/installer/flyingcircus.nix
           ];
       }).config;
     in

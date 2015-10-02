@@ -127,12 +127,9 @@ in rec {
 
 
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
-  ova = forAllSystems (system:
-
-    with import nixpkgs { inherit system; };
-
+  ova =
+    with import nixpkgs { system = "x86_64-linux" };
     let
-
       config = (import lib/eval-config.nix {
         inherit system;
         modules =
@@ -154,9 +151,7 @@ in rec {
           mkdir -p $out/nix-support
           fn=$(echo $ova/*.ova)
           echo "file ova $fn" >> $out/nix-support/hydra-build-products
-        '') # */
-
-  );
+        '');
 
 
   # Ensure that all packages used by the minimal NixOS config end up in the channel.
