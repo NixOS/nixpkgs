@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgs }:
+{ stdenv, fetchurl, pkgs, jack ? pkgs.libjack2 }:
 
 stdenv.mkDerivation rec {
   name = "jackmix-0.5.2";
@@ -11,9 +11,8 @@ stdenv.mkDerivation rec {
     pkgs.pkgconfig
     pkgs.scons
     pkgs.kde4.qt4
-    pkgs.jack1
     pkgs.lash
-    pkgs.libuuid # should be a propagatedBuildInput on jack1
+    jack
   ];
 
   buildPhase = ''

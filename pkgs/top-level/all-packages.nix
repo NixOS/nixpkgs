@@ -11803,6 +11803,7 @@ let
   jackmeter = callPackage ../applications/audio/jackmeter { };
 
   jackmix = callPackage ../applications/audio/jackmix { };
+  jackmix_jack1 = jackmix.override { jack = jack1; };
 
   jalv = callPackage ../applications/audio/jalv { };
 
