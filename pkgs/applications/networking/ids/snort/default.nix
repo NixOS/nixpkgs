@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libpcap, pcre, libdnet, daq, zlib, flex, bison}:
+{stdenv, makeWrapper, fetchurl, libpcap, pcre, libdnet, daq, zlib, flex, bison}:
 
 stdenv.mkDerivation rec {
   version = "2.9.7.2";
@@ -11,6 +11,14 @@ stdenv.mkDerivation rec {
   };
   
   buildInputs = [ libpcap pcre libdnet daq zlib flex bison ];
+
+  enableParallelBuilding = true;
+
+  configureFlags = "--disable-static-daq --enable-control-socket --with-daq-includes=${daq}/includes --with-daq-libraries=${daq}/lib";
+
+  postInstall = ''
+    wrapProgram $out/bin/snort --add-flags "--daq-dir ${daq}/lib/daq"
+  '';
   
   meta = {
     description = "Network intrusion prevention and detection system (IDS/IPS)";
