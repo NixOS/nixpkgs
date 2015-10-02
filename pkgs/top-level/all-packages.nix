@@ -10006,6 +10006,10 @@ let
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
 
+  miraclecast = callPackage ../os-specific/linux/miraclecast {
+    systemd = systemd.override { enableKDbus = true; };
+  };
+
   module_init_tools = callPackage ../os-specific/linux/module-init-tools { };
 
   aggregateModules = modules:
