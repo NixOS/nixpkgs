@@ -3994,6 +3994,8 @@ let
 
   gforth = callPackage ../development/compilers/gforth {};
 
+  gtk-server = callPackage ../development/interpreters/gtk-server {};
+
   # Haskell and GHC
 
   haskell = callPackage ./haskell-packages.nix { };
