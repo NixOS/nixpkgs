@@ -628,7 +628,9 @@ let
 
   inherit (androidenv) androidsdk_4_4 androidndk;
 
-  aria2 = callPackage ../tools/networking/aria2 { };
+  aria2 = callPackage ../tools/networking/aria2 {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   aria = aria2;
 
   at = callPackage ../tools/system/at { };
@@ -2017,10 +2019,12 @@ let
   ninka = callPackage ../development/tools/misc/ninka { };
 
   nodejs-4_1 = callPackage ../development/web/nodejs {
+    libtool = darwin.cctools;
     openssl = openssl_1_0_2;
   };
 
   nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix {
+    libtool = darwin.cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices Carbon Foundation;
   };
 
@@ -2029,7 +2033,7 @@ let
   else
     nodejs-4_1;
 
-  nodePackages_4_1 = callPackage ./node-packages.nix { self = nodePackages_4_1; nodejs = nodejs-4_1; };
+  nodePackages_4_1 = recurseIntoAttrs (callPackage ./node-packages.nix { self = nodePackages_4_1; nodejs = nodejs-4_1; });
 
   nodePackages_0_10 = callPackage ./node-packages.nix { self = nodePackages_0_10; nodejs = nodejs-0_10; };
 
@@ -2243,6 +2247,8 @@ let
   motuclient = python27Packages.motuclient;
 
   mpage = callPackage ../tools/text/mpage { };
+
+  mpw = callPackage ../tools/security/mpw { };
 
   mr = callPackage ../applications/version-management/mr { };
 
@@ -5091,23 +5097,13 @@ let
   bundlerEnv = callPackage ../development/interpreters/ruby/bundler-env { };
 
   ruby_1_8_7 = callPackage ../development/interpreters/ruby/ruby-1.8.7.nix { };
-  ruby_1_9_3 = callPackage ../development/interpreters/ruby/ruby-1.9.3.nix {
-    inherit (darwin) libobjc;
-  };
-  ruby_2_0_0 = callPackage ../development/interpreters/ruby/ruby-2.0.0.nix { };
-  ruby_2_1_0 = callPackage ../development/interpreters/ruby/ruby-2.1.0.nix { };
-  ruby_2_1_1 = callPackage ../development/interpreters/ruby/ruby-2.1.1.nix { };
-  ruby_2_1_2 = callPackage ../development/interpreters/ruby/ruby-2.1.2.nix { };
-  ruby_2_1_3 = callPackage ../development/interpreters/ruby/ruby-2.1.3.nix { };
-  ruby_2_1_6 = callPackage ../development/interpreters/ruby/ruby-2.1.6.nix {
-    inherit (darwin) libobjc libunwind;
-  };
-  ruby_2_2_0 = callPackage ../development/interpreters/ruby/ruby-2.2.0.nix {
-    inherit (darwin) libobjc libunwind;
-  };
-  ruby_2_2_2 = callPackage ../development/interpreters/ruby/ruby-2.2.2.nix {
-    inherit (darwin) libobjc libunwind;
-  };
+  inherit (callPackage ../development/interpreters/ruby {})
+    # TODO: uncomment when ruby_1_8_7 doesn't need autoconf
+    # ruby_1_8_7
+    ruby_1_9_3
+    ruby_2_0_0
+    ruby_2_1_0 ruby_2_1_1 ruby_2_1_2 ruby_2_1_3 ruby_2_1_6
+    ruby_2_2_0 ruby_2_2_2;
 
   # Ruby aliases
   ruby = ruby_2_2;
@@ -5469,6 +5465,7 @@ let
 
   doxygen = callPackage ../development/tools/documentation/doxygen {
     qt4 = null;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
   doxygen_gui = lowPrio (doxygen.override { inherit qt4; });
@@ -6004,6 +6001,10 @@ let
     cogl = cogl_1_20;
   };
 
+  clutter_1_24 = callPackage ../development/libraries/clutter/1.24.nix {
+    cogl = cogl_1_22;
+  };
+
   clutter-gst = callPackage ../development/libraries/clutter-gst { };
 
   clutter-gst_3_0 = callPackage ../development/libraries/clutter-gst/3.0.nix {
@@ -6021,6 +6022,8 @@ let
   cogl = callPackage ../development/libraries/cogl { };
 
   cogl_1_20 = callPackage ../development/libraries/cogl/1.20.nix { };
+
+  cogl_1_22 = callPackage ../development/libraries/cogl/1.22.nix { };
 
   coin3d = callPackage ../development/libraries/coin3d { };
 
@@ -7132,7 +7135,7 @@ let
 
   libjpeg_original = callPackage ../development/libraries/libjpeg { };
   libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo { };
-  libjpeg = if (stdenv.isLinux) then libjpeg_turbo else libjpeg_original; # some problems, both on FreeBSD and Darwin
+  libjpeg = if stdenv.isLinux then libjpeg_turbo else libjpeg_original; # some problems, both on FreeBSD and Darwin
 
   libjpeg62 = callPackage ../development/libraries/libjpeg/62.nix {
     libtool = libtool_1_5;
@@ -8348,7 +8351,6 @@ let
 
   v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
     inherit (pythonPackages) gyp;
-    stdenv = overrideCC stdenv gcc48;
   };
 
   v8_3_24_10 = callPackage ../development/libraries/v8/3.24.10.nix {
@@ -9346,14 +9348,16 @@ let
   zookeeper_mt = callPackage ../development/libraries/zookeeper_mt { };
 
   xquartz = callPackage ../servers/x11/xquartz { };
-  quartz-wm = callPackage ../servers/x11/quartz-wm { stdenv = clangStdenv; };
+  quartz-wm = callPackage ../servers/x11/quartz-wm {
+    stdenv = clangStdenv;
+  };
 
   xorg = recurseIntoAttrs (lib.callPackagesWith pkgs ../servers/x11/xorg/default.nix {
     inherit clangStdenv fetchurl fetchgit fetchpatch stdenv pkgconfig intltool freetype fontconfig
       libxslt expat libpng zlib perl mesa_drivers spice_protocol
       dbus libuuid openssl gperf m4 libevdev tradcpp libinput mcpp makeWrapper autoreconfHook
       autoconf automake libtool xmlto asciidoc flex bison python mtdev pixman;
-    inherit (darwin) apple_sdk;
+    inherit (darwin) apple_sdk libobjc CF;
     bootstrap_cmds = if stdenv.isDarwin then darwin.bootstrap_cmds else null;
     mesa = mesa_noglu;
     udev = if stdenv.isLinux then udev else null;
@@ -9995,7 +9999,11 @@ let
 
   libcap_manpages = callPackage ../os-specific/linux/libcap/man.nix { };
 
-  libcap_ng = callPackage ../os-specific/linux/libcap-ng { };
+  libcap_ng = callPackage ../os-specific/linux/libcap-ng {
+    swig = null; # Currently not using the python2/3 bindings
+    python2 = null; # Currently not using the python2 bindings
+    python3 = null; # Currently not using the python3 bindings
+  };
 
   libnscd = callPackage ../os-specific/linux/libnscd { };
 
@@ -11287,6 +11295,7 @@ let
 
     external = {
       inherit (haskellPackages) ghc-mod structured-haskell-mode Agda;
+      inherit (pythonPackages) elpy;
     };
   };
 
@@ -13909,6 +13918,8 @@ let
   };
 
   gnome3_16 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.16 { });
+
+  gnome3_18 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.18 { });
 
   gnome3 = gnome3_16;
 

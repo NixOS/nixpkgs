@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ];
 
   installPhase = ''
+    mkdir -p $out/bin
+    cp -p src/runtime/sbcl $out/bin
+    install_name_tool -change /usr/lib/libgcc_s.1.dylib ${stdenv.libc}/lib/libgcc_s.10.5.dylib $out/bin/sbcl
+
     mkdir -p $out/share/sbcl
     cp -p src/runtime/sbcl $out/share/sbcl
     cp -p output/sbcl.core $out/share/sbcl

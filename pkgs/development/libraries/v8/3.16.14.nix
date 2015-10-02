@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "1gpf2xvhxfs5ll3m2jlslsx9jfjbmrbz55iq362plflrvf8mbxhj";
   };
 
+  postPatch = ''
+    sed -i 's/-Werror//' build/standalone.gypi build/common.gypi
+  '';
+
   configurePhase = stdenv.lib.optionalString stdenv.isDarwin ''
     ln -s /usr/bin/xcodebuild $TMPDIR
     export PATH=$TMPDIR:$PATH

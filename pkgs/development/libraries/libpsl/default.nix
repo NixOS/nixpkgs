@@ -28,6 +28,10 @@ in stdenv.mkDerivation {
   buildInputs = [ icu libxslt ];
   nativeBuildInputs = [ autoreconfHook docbook_xsl gtk_doc pkgconfig ];
 
+  postPatch = ''
+    substituteInPlace src/psl.c --replace bits/stat.h sys/stat.h
+  '';
+
   preAutoreconf = ''
     mkdir m4
     gtkdocize

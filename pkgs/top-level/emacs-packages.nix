@@ -440,6 +440,44 @@ let self = _self // overrides;
     };
   };
 
+  elpy = melpaBuild rec {
+    pname   = "elpy";
+    version = external.elpy.version;
+    src = fetchFromGitHub {
+      owner  = "jorgenschaefer";
+      repo   = pname;
+      rev    = "39ea47c73f040ce8dcc1c2d2639ebc0eb57ab8c8";
+      sha256 = "0q3av1qv4m6aj4bil608f688hjpr5px8zqnnrdqx784nz98rpjrs";
+    };
+
+    patchPhase = ''
+      for file in elpy.el elpy-pkg.el; do
+        substituteInPlace $file \
+            --replace "company \"0.8.2\"" "company \"${company.version}\"" \
+            --replace "find-file-in-project \"3.3\"" "find-file-in-project \"${find-file-in-project.version}\"" \
+            --replace "highlight-indentation \"0.5.0\"" "highlight-indentation \"${highlight-indentation.version}\"" \
+            --replace "pyvenv \"1.3\"" "pyvenv \"${pyvenv.version}\"" \
+            --replace "yasnippet \"0.8.0\"" "yasnippet \"${yasnippet.version}\""
+     done
+    '';
+
+    packageRequires = [
+      company find-file-in-project highlight-indentation pyvenv yasnippet
+    ];
+
+    propagatedUserEnvPkgs = [ external.elpy ] ++ packageRequires;
+
+    meta = {
+      description = "Emacs Python Development Environment";
+      longDescription = ''
+        Elpy is an Emacs package to bring powerful Python editing to Emacs.
+        It combines a number of other packages, both written in Emacs Lisp as
+        well as Python.
+      '';
+      license = gpl3Plus;
+    };
+  };
+
   engine-mode = melpaBuild rec {
     pname = "engine-mode";
     version = "1.0.0";
@@ -567,6 +605,26 @@ let self = _self // overrides;
     };
     meta = {
       description = "Increases the selected region by semantic units in Emacs";
+      license = gpl3Plus;
+    };
+  };
+
+  find-file-in-project = melpaBuild rec {
+    pname = "find-file-in-project";
+    version = "3.5";
+    src = fetchFromGitHub {
+      owner  = "technomancy";
+      repo   = pname;
+      rev    = "53a8d8174f915d9dcf5ac6954b1c0cae61266177";
+      sha256 = "0wky8vqg08iw34prbz04bqmhfhj82y93swb8zkz6la2vf9da0gmd";
+    };
+    meta = {
+      description = "Quick access to project files in Emacs";
+      longDescription = ''
+        Find files in a project quickly.
+        This program provides a couple methods for quickly finding any file in a
+        given project. It depends on GNU find.
+      '';
       license = gpl3Plus;
     };
   };
@@ -830,6 +888,30 @@ let self = _self // overrides;
       sha256 = "1s08sgbh5v59lqskd0s1dscs6dy7z5mkqqkabs3gd35agbfvbmlf";
     };
     meta = { license = gpl3Plus; };
+  };
+
+  highlight-indentation = melpaBuild rec {
+    pname = "highlight-indentation";
+    version = "0.7.0";
+    src = fetchFromGitHub {
+      owner = "antonj";
+      repo = "Highlight-Indentation-for-Emacs";
+      rev = "v${version}";
+      sha256 = "00l54k75qk24a0znzl4ij3s3nrnr2wy9ha3za8apphzlm98m907k";
+    };
+    meta = {
+      description = "Minor modes to highlight indentation guides in emacs";
+      longDescription = ''
+        Provides two minor modes highlight-indentation-mode and
+        highlight-indentation-current-column-mode
+
+        - highlight-indentation-mode displays guidelines indentation
+        (space indentation only).
+        - highlight-indentation-current-column-mode displays guidelines for the
+        current-point indentation (space indentation only).
+      '';
+      license = gpl2Plus;
+    };
   };
 
   ibuffer-vc = melpaBuild rec {
@@ -1189,6 +1271,25 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  pyvenv = melpaBuild rec {
+    pname = "pyvenv";
+    version = "1.7";
+    src = fetchFromGitHub {
+      owner  = "jorgenschaefer";
+      repo   = pname;
+      rev    = "e4f2fa7a32cf480f34d628d8eb5b9b60374d0e8e";
+      sha256 = "1669id1p69kpq8zzldxj1p6iyz68701snn462g22k2acfzc2bfha";
+    };
+    meta = {
+      description = "Python virtual environment interface for Emacs";
+      longDescription = ''
+        This is a simple global minor mode which will replicate the changes done
+        by virtualenv activation inside Emacs.
+      '';
+      license = gpl2Plus;
+    };
+  };
+
   rainbow-delimiters = melpaBuild rec {
     pname = "rainbow-delimiters";
     version = "2.1.1";
@@ -1504,6 +1605,29 @@ let self = _self // overrides;
       sha256 = "075z0glain0dp56d0cp468y5y88wn82ab26aapsrdzq8hmlshwn4";
     };
     meta = { license = gpl3Plus; };
+  };
+
+  yasnippet = melpaBuild rec {
+    pname = "yasnippet";
+    version = "0.8.1";
+    src = fetchFromGitHub {
+      owner  = "capitaomorte";
+      repo   = pname;
+      rev    = "01139a2deb9eda272b9b771fbbe15d096061efa4";
+      sha256 = "1b0bxzkmw7yd1yf6326zf52aq63n283vy57pysj8cc34d9bk6nnk";
+    };
+    meta = {
+      description = "A template system for Emacs";
+      longDescription = ''
+        YASnippet is a template system for Emacs.
+        It allows you to type an abbreviation and automatically expand it into
+        function templates. Bundled language templates include: C, C++, C#,
+        Perl, Python, Ruby, SQL, LaTeX, HTML, CSS and more.
+        The snippet syntax is inspired from TextMate's syntax, you can even import
+        most TextMate templates to YASnippet.
+      '';
+      license = gpl2Plus;
+    };
   };
 
   zenburn-theme = melpaBuild rec {
