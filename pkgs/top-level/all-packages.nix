@@ -4148,7 +4148,7 @@ let
   llvm_34 = llvmPackages_34.llvm;
   llvm_33 = callPackage ../development/compilers/llvm/3.3/llvm.nix { };
 
-  llvmPackages = recurseIntoAttrs llvmPackages_36;
+  llvmPackages = recurseIntoAttrs llvmPackages_37;
 
   llvmPackagesSelf = llvmPackages_34.override {
     stdenv = libcxxStdenv;
@@ -7555,7 +7555,6 @@ let
     # makes it slower, but during runtime we link against just mesa_drivers
     # through /run/opengl-driver*, which is overriden according to config.grsecurity
     grsecEnabled = true;
-    llvmPackages = llvmPackages_36;
   });
   mesa_glu =  mesaDarwinOr (callPackage ../development/libraries/mesa-glu { });
   mesa_drivers = mesaDarwinOr (
