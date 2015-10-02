@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1gmlrh9ygpd5h6nnrr4090wk5n2yq2yrvwi7q6xbm6lxj4rcamyv";
   };
   
-  buildInputs = [ libpcap pcre libdnet daq zlib flex bison ];
+  buildInputs = [ makeWrapper libpcap pcre libdnet daq zlib flex bison ];
 
   enableParallelBuilding = true;
 
