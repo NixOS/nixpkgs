@@ -17998,6 +17998,67 @@ let
     };
   };
 
+  ofxclient = buildPythonPackage rec {
+    name = "ofxclient-1.3.8";
+	src = pkgs.fetchurl {
+	  url = "https://pypi.python.org/packages/source/o/ofxclient/${name}.tar.gz";
+	  md5 = "a632e157f9c98524bf9302a0c6788174";
+	};
+
+	# ImportError: No module named tests
+	doCheck = false;
+
+	propagatedBuildInputs = with self; [ ofxhome ofxparse beautifulsoup keyring argparse ];
+  };
+
+  ofxhome = buildPythonPackage rec {
+	name = "ofxhome-0.3.1";
+	src = pkgs.fetchurl {
+	  url = "https://pypi.python.org/packages/source/o/ofxhome/${name}.tar.gz";
+	  md5 = "98e8ef92ccd443ab750fcb0741efe816";
+	};
+
+	buildInputs = with self; [ nose ];
+
+	# ImportError: No module named tests
+	doCheck = false;
+
+    meta = {
+      homepage = "https://github.com/captin411/ofxhome";
+      description = "ofxhome.com financial institution lookup REST client";
+      license = licenses.mit;
+    };
+  };
+
+  ofxparse = buildPythonPackage rec {
+	name = "ofxparse-0.14";
+	src = pkgs.fetchurl {
+	  url = "https://pypi.python.org/packages/source/o/ofxparse/${name}.tar.gz";
+	  md5 = "4ad8a34e008d4893a61eadd593176f0f";
+	};
+
+	propagatedBuildInputs = with self; [ six beautifulsoup4 ];
+
+    meta = {
+      homepage = "http://sites.google.com/site/ofxparse";
+      description = "Tools for working with the OFX (Open Financial Exchange) file format";
+      license = licenses.mit;
+    };
+  };
+
+  ofxtools = buildPythonPackage rec {
+    name = "ofxtools-0.3.8";
+	src = pkgs.fetchurl {
+	  url = "https://pypi.python.org/packages/source/o/ofxtools/${name}.tar.gz";
+	  md5 = "4ac3c3f5223816bc2c48dd818fd434d8";
+	};
+    meta = {
+      homepage = "https://github.com/csingley/ofxtools";
+      description = "Library for working with Open Financial Exchange (OFX) formatted data used by financial institutions";
+      license = licenses.mit;
+    };
+  };
+
   basemap = buildPythonPackage rec {
     name = "basemap-1.0.7";
     disabled = ! isPy27;
