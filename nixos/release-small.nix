@@ -41,7 +41,7 @@ in rec {
   # A bootable Flying Circus disk image (raw) that can be extracted onto
   # Ceph RBD volume.
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
-  ova =
+  flyingcircus_vm_image =
     with import <nixpkgs> { system = "x86_64-linux"; };
     with lib;
     let
@@ -54,17 +54,17 @@ in rec {
       }).config;
     in
       # Declare the OVA as a build product so that it shows up in Hydra.
-      hydraJob (runCommand "nixos-ova-${config.system.nixosVersion}-${system}"
+      hydraJob (runCommand "nixos-flyingcircus-vm-${config.system.nixosVersion}-${system}"
         { meta = {
-            description = "NixOS VirtualBox appliance (${system})";
-            maintainers = maintainers.eelco;
+            description = "NixOS Flying Circus VM base image (${system})";
+            maintainers = maintainers.theuni;
           };
-          ova = config.system.build.virtualBoxOVA;
+          image = config.system.build.novaImage;
         }
         ''
           mkdir -p $out/nix-support
-          fn=$(echo $ova/*.ova)
-          echo "file ova $fn" >> $out/nix-support/hydra-build-products
+          fn=$(echo $flyingcircus_vm_image/image)
+          echo "file $fn" >> $out/nix-support/hydra-build-products
         '');
 
   nixos = {
