@@ -6682,8 +6682,8 @@ let
 
   };
 
-  kf513Packages = lib.makeScope kf513.newScope kf5PackagesFun;
-  kf5Packages = kf513Packages;
+  kf514Packages = lib.makeScope kf514.newScope kf5PackagesFun;
+  kf5Packages = kf514Packages;
 
   kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
 
