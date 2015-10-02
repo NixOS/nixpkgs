@@ -5342,7 +5342,7 @@ let
     };
   };
 
-  django = self.django_1_7;
+  django = self.django_1_8;
 
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
