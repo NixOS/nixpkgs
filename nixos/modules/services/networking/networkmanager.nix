@@ -71,11 +71,10 @@ let
     ${coreutils}/bin/rm -f $tmp $tmp.ns
   '';
 
-  # pre-up and pre-down hooks were added in NM 0.9.10, but we still use 0.9.0
   dispatcherTypesSubdirMap = {
     "basic" = "";
-    /*"pre-up" = "pre-up.d/";
-    "pre-down" = "pre-down.d/";*/
+    "pre-up" = "pre-up.d/";
+    "pre-down" = "pre-down.d/";
   };
 
 in {

@@ -853,6 +853,8 @@ let
 
   gmic = callPackage ../tools/graphics/gmic { };
 
+  heatseeker = callPackage ../tools/misc/heatseeker { };
+
   mathics = pythonPackages.mathics;
 
   mcrl = callPackage ../tools/misc/mcrl { };
@@ -1368,7 +1370,7 @@ let
 
   emv = callPackage ../tools/misc/emv { };
 
-  enblendenfuse = callPackage ../tools/graphics/enblend-enfuse { };
+  enblend-enfuse = callPackage ../tools/graphics/enblend-enfuse { };
 
   encfs = callPackage ../tools/filesystems/encfs { };
 
@@ -3733,7 +3735,7 @@ let
 
   gambit = callPackage ../development/compilers/gambit { };
 
-  gcc = gcc49;
+  gcc = gcc5;
 
   gcc_multi =
     if system == "x86_64-linux" then lowPrio (
@@ -4985,8 +4987,7 @@ let
     fetchurl = fetchurlBoot;
   };
 
-  # Make perl522 the default once gnulib is updated to support it.
-  perl = perl520;
+  perl = perl522;
 
   php = php56;
 
@@ -5842,7 +5843,7 @@ let
 
   aalib = callPackage ../development/libraries/aalib { };
 
-  accelio = callPackage ../development/libraries/accelio { stdenv = overrideCC stdenv gcc5; };
+  accelio = callPackage ../development/libraries/accelio { };
 
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
@@ -6350,7 +6351,8 @@ let
 
   gmp4 = callPackage ../development/libraries/gmp/4.3.2.nix { }; # required by older GHC versions
   gmp5 = callPackage ../development/libraries/gmp/5.1.x.nix { };
-  gmp = gmp5;
+  gmp6 = callPackage ../development/libraries/gmp/6.x.nix { };
+  gmp = gmp6;
   gmpxx = appendToName "with-cxx" (gmp.override { cxx = true; });
 
   #GMP ex-satellite, so better keep it near gmp
@@ -7404,10 +7406,8 @@ let
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
 
   libunwind = if stdenv.isDarwin
-    then libunwindNative
+    then darwin.libunwind
     else callPackage ../development/libraries/libunwind { };
-
-  libunwindNative = callPackage ../development/libraries/libunwind/native.nix {};
 
   libuvVersions = recurseIntoAttrs (callPackage ../development/libraries/libuv {
     automake = automake113x; # fails with 14
@@ -7775,14 +7775,6 @@ let
   boringssl = callPackage ../development/libraries/boringssl { };
 
   openssl = callPackage ../development/libraries/openssl {
-    fetchurl = fetchurlBoot;
-    cryptodevHeaders = linuxPackages.cryptodev.override {
-      fetchurl = fetchurlBoot;
-      onlyHeaders = true;
-    };
-  };
-
-  openssl_1_0_2 = callPackage ../development/libraries/openssl/1.0.2.x.nix {
     fetchurl = fetchurlBoot;
     cryptodevHeaders = linuxPackages.cryptodev.override {
       fetchurl = fetchurlBoot;
@@ -9075,6 +9067,7 @@ let
   openresty = callPackage ../servers/http/openresty { };
 
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
+  opensmtpd-extras = callPackage ../servers/mail/opensmtpd/extras.nix { };
 
   openxpki = callPackage ../servers/openxpki { };
 
@@ -10020,6 +10013,10 @@ let
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
 
+  miraclecast = callPackage ../os-specific/linux/miraclecast {
+    systemd = systemd.override { enableKDbus = true; };
+  };
+
   module_init_tools = callPackage ../os-specific/linux/module-init-tools { };
 
   aggregateModules = modules:
@@ -10175,7 +10172,13 @@ let
 
   sysklogd = callPackage ../os-specific/linux/sysklogd { };
 
-  syslinux = callPackage ../os-specific/linux/syslinux { };
+  syslinux = callPackage ../os-specific/linux/syslinux {
+    # Using GCC5 with 6.03 creates a broken isolinux.bin
+    # Make sure to test booting the livecd on a bios system
+    # if changing this override.
+    # nixos.tests.bootBiosCdrom is useful for this.
+    stdenv = overrideCC stdenv gcc48;
+  };
 
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
@@ -11789,6 +11792,8 @@ let
 
   iptraf = callPackage ../applications/networking/iptraf { };
 
+  iptraf-ng = callPackage ../applications/networking/iptraf-ng { };
+
   irssi = callPackage ../applications/networking/irc/irssi { };
 
   irssi_fish = callPackage ../applications/networking/irc/irssi/fish { };
@@ -11808,6 +11813,9 @@ let
   jack_rack = callPackage ../applications/audio/jack-rack { };
 
   jackmeter = callPackage ../applications/audio/jackmeter { };
+
+  jackmix = callPackage ../applications/audio/jackmix { };
+  jackmix_jack1 = jackmix.override { jack = jack1; };
 
   jalv = callPackage ../applications/audio/jalv { };
 
@@ -13937,6 +13945,7 @@ let
         libcanberra = libcanberra_kde;
         boost = boost155;
         kdelibs = kdeApps_15_08.kdelibs;
+        subversionClient = subversionClient.override { branch = "1.8"; };
       }
       ../desktops/kde-4.14;
 
@@ -14964,6 +14973,8 @@ let
 
   tvheadend = callPackage ../servers/tvheadend { };
 
+  urbit = callPackage ../misc/urbit { };
+
   utf8proc = callPackage ../development/libraries/utf8proc { };
 
   vault = goPackages.vault.bin // { outputs = [ "bin" ]; };
@@ -15123,6 +15134,7 @@ aliases = with self; rec {
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
   cool-old-term = cool-retro-term; # added 2015-01-31
   cv = progress; # added 2015-09-06
+  enblendenfuse = enblend-enfuse;	# 2015-09-30
   exfat-utils = exfat;                  # 2015-09-11
   firefoxWrapper = firefox-wrapper;
   fuse_exfat = exfat;                   # 2015-09-11
