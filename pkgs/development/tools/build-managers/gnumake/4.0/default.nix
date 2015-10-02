@@ -1,12 +1,12 @@
 {stdenv, fetchurl}:
 
-let version = "4.0"; in
+let version = "4.1"; in
 stdenv.mkDerivation {
   name = "gnumake-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/make/make-${version}.tar.bz2";
-    sha256 = "1nyvn8mknw0mf7727lprva3lisl1y0n03lvar342rrpdmz3qc1p6";
+    sha256 = "19gwwhik3wdwn0r42b7xcihkbxvjl9r2bdal8nifc3k5i4rn3iqb";
   };
 
   /* On Darwin, there are 3 test failures that haven't been investigated
