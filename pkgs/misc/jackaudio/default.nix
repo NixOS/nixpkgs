@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, python, makeWrapper
-, bash, libsamplerate, libsndfile, readline
+, bash, libsamplerate, libsndfile, libuuid, readline
 
 # Optional Dependencies
 , dbus ? null, pythonDBus ? null, libffado ? null, alsaLib ? null
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
 
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
   ];
+  propagatedBuildInputs = [ libuuid ];
 
   prePatch = ''
     substituteInPlace svnversion_regenerate.sh --replace /bin/bash ${bash}/bin/bash
