@@ -2,7 +2,7 @@
 
 with import ./lib.nix { inherit pkgs; };
 
-self: super: assert super.ghc.name == "ghc-7.8.3"; {
+self: super: {
 
   # core libraries provided by the compiler
   Cabal = null;
@@ -3212,6 +3212,7 @@ self: super: assert super.ghc.name == "ghc-7.8.3"; {
   "gearbox" = dontDistribute super."gearbox";
   "geek" = dontDistribute super."geek";
   "geek-server" = dontDistribute super."geek-server";
+  "gelatin" = dontDistribute super."gelatin";
   "gemstone" = dontDistribute super."gemstone";
   "gencheck" = dontDistribute super."gencheck";
   "gender" = dontDistribute super."gender";
@@ -3387,6 +3388,7 @@ self: super: assert super.ghc.name == "ghc-7.8.3"; {
   "goatee" = dontDistribute super."goatee";
   "goatee-gtk" = dontDistribute super."goatee-gtk";
   "gofer-prelude" = dontDistribute super."gofer-prelude";
+  "gooey" = dontDistribute super."gooey";
   "google-cloud" = dontDistribute super."google-cloud";
   "google-dictionary" = dontDistribute super."google-dictionary";
   "google-drive" = dontDistribute super."google-drive";
@@ -7196,6 +7198,7 @@ self: super: assert super.ghc.name == "ghc-7.8.3"; {
   "stackage-types" = dontDistribute super."stackage-types";
   "stackage-update" = dontDistribute super."stackage-update";
   "stackage-upload" = dontDistribute super."stackage-upload";
+  "standalone-derive-topdown" = dontDistribute super."standalone-derive-topdown";
   "standalone-haddock" = dontDistribute super."standalone-haddock";
   "star-to-star" = dontDistribute super."star-to-star";
   "star-to-star-contra" = dontDistribute super."star-to-star-contra";
@@ -7374,6 +7377,7 @@ self: super: assert super.ghc.name == "ghc-7.8.3"; {
   "synthesizer-alsa" = dontDistribute super."synthesizer-alsa";
   "synthesizer-core" = dontDistribute super."synthesizer-core";
   "synthesizer-dimensional" = dontDistribute super."synthesizer-dimensional";
+  "synthesizer-filter" = dontDistribute super."synthesizer-filter";
   "synthesizer-inference" = dontDistribute super."synthesizer-inference";
   "synthesizer-llvm" = dontDistribute super."synthesizer-llvm";
   "synthesizer-midi" = dontDistribute super."synthesizer-midi";
@@ -7444,6 +7448,7 @@ self: super: assert super.ghc.name == "ghc-7.8.3"; {
   "tasty-laws" = dontDistribute super."tasty-laws";
   "tasty-lens" = dontDistribute super."tasty-lens";
   "tasty-program" = dontDistribute super."tasty-program";
+  "tasty-quickcheck" = doDistribute super."tasty-quickcheck_0_8_3_2";
   "tasty-rerun" = dontDistribute super."tasty-rerun";
   "tasty-silver" = dontDistribute super."tasty-silver";
   "tasty-tap" = dontDistribute super."tasty-tap";
