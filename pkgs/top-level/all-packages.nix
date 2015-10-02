@@ -10168,6 +10168,10 @@ let
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
 
+  miraclecast = callPackage ../os-specific/linux/miraclecast {
+    systemd = systemd.override { enableKDbus = true; };
+  };
+
   mkinitcpio-nfs-utils = callPackage ../os-specific/linux/mkinitcpio-nfs-utils { };
 
   module_init_tools = callPackage ../os-specific/linux/module-init-tools { };
