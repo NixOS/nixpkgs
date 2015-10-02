@@ -45,7 +45,7 @@ let
     owner = "openresty";
     repo = "headers-more-nginx-module";
     rev = "v0.26";
-    sha256 = "0y8yxkas6hi8qz2nk9hiagsmfxg1r4ny54l0jjg92ml2yh7lb3k4";
+    sha256 = "0zhr3ai4xf5yghxvlbrwv8n06fgx33f1n1d4a6gmsczdfjzf8g6g";
   };
 
   echo-ext = fetchFromGitHub {
@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
     ++ optional echo "--add-module=${echo-ext}"
     ++ optional ngx_lua "--add-module=${develkit-ext} --add-module=${lua-ext}"
     ++ optional set_misc "--add-module=${set-misc-ext}"
-    ++ optionals (elem stdenv.system (with platforms; linux ++ freebsd)) 
+    ++ optionals (elem stdenv.system (with platforms; linux ++ freebsd))
         [ "--with-file-aio" "--with-aio_module" ]
     ++ optional fluent "--add-module=${fluentd}"
     ++ (map (m: "--add-module=${m}") extraModules);
