@@ -4,7 +4,7 @@ with lib;
 
 {
   imports =
-    [ ../virtualisation/virtualbox-image.nix
+    [ ../virtualisation/nova-image.nix
       ../installer/cd-dvd/channel.nix
       ../profiles/clone-config.nix
     ];

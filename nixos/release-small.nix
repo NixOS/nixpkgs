@@ -63,8 +63,8 @@ in rec {
         }
         ''
           mkdir -p $out/nix-support
-          fn=$(echo $flyingcircus_vm_image/image)
-          echo "file $fn" >> $out/nix-support/hydra-build-products
+          fn=$(echo $image/image)
+          echo "file raw $fn" >> $out/nix-support/hydra-build-products
         '');
 
   nixos = {
