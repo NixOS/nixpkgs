@@ -45,7 +45,7 @@ let
     owner = "openresty";
     repo = "headers-more-nginx-module";
     rev = "v0.26";
-    sha256 = "01wkqhk8mk8jgmzi7jbzmg5kamffx3lmhj5yfwryvnvs6xqs74wn";
+    sha256 = "0y8yxkas6hi8qz2nk9hiagsmfxg1r4ny54l0jjg92ml2yh7lb3k4";
   };
 
   echo-ext = fetchFromGitHub {
