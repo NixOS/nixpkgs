@@ -3571,6 +3571,8 @@ let
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
 
+  zbackup = callPackage ../tools/backup/zbackup {};
+
   zbar = callPackage ../tools/graphics/zbar {
     pygtk = lib.overrideDerivation pygtk (x: {
       gtk = gtk2;
