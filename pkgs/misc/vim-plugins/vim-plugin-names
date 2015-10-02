@@ -2,7 +2,7 @@
 "CSApprox"
 "CheckAttach"
 "Gist"
-"Gundo"
+"github:sjl/gundo.vim"
 "Hoogle"
 "Solarized"
 "Supertab"
