@@ -54,6 +54,8 @@ in stdenv.mkDerivation {
   propagatedBuildInputs = optionals stdenv.isDarwin [ Carbon ];
   setupHook = ./setup-hook.sh;
 
+  enableParallelBuilding = true;
+
   passthru.interpreterName = "nodejs-0.10";
 
   meta = {

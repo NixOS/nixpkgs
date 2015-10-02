@@ -44,7 +44,7 @@ let
         overrideScope = f: callPackageWithScope (mkScope (fix (extend scope.__unfix__ f))) drv args;
       };
 
-      mkScope = scope: pkgs // pkgs.xlibs // pkgs.gnome // scope;
+      mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome // scope;
       defaultScope = mkScope self;
       callPackage = drv: args: callPackageWithScope defaultScope drv args;
 

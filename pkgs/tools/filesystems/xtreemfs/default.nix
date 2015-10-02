@@ -1,80 +1,65 @@
-x@{builderDefsPackage
-  , boost, fuse, openssl, cmake, attr, jdk, ant, which, python, file
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, boost, fuse, openssl, cmake, attr, jdk, ant, which, file, python
+, fetchurl, lib, valgrind, makeWrapper, fetchFromGitHub }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="XtreemFS";
-    version="1.4";
-    name="${baseName}-${version}";
-    url="http://xtreemfs.googlecode.com/files/${name}.tar.gz";
-    hash="1hzd6anplxdcl4cg6xwriqk9b34541r7ah1ab2xavv149a2ll25s";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  src = fetchFromGitHub {
+    # using unstable release because stable (v1.5.1) has broken repl java plugin
+    rev = "7ddcb081aa125b0cfb008dc98addd260b8353ab3";
+    owner = "xtreemfs";
+    repo = "xtreemfs";
+    sha256 = "1hjmd32pla27zf98ghzz6r5ml8ry86m9dsryv1z01kxv5l95b3m0";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  name = "XtreemFS-${version}";
+  version = "1.5.1.81";
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["setVars" "fixMakefile" "doMakeInstall" "fixInterpreterBin"
-    "fixInterpreterEtc"
-    "usrIsOut"];
+  buildInputs = [ which attr makeWrapper python ];
 
-  setVars = a.noDepEntry ''
-    export JAVA_HOME="${jdk}"
-    export ANT_HOME="${ant}"
-    export CMAKE_HOME=${cmake}
+  preConfigure = ''
+    export JAVA_HOME=${jdk}
+    export ANT_HOME=${ant}
+
+    export BOOST_INCLUDEDIR=${boost.dev}/include
+    export BOOST_LIBRARYDIR=${boost.lib}/lib
+    export OPENSSL_ROOT_DIR=${openssl}
+
+    substituteInPlace cpp/cmake/FindValgrind.cmake \
+      --replace "/usr/local" "${valgrind}"
+
+    substituteInPlace cpp/CMakeLists.txt \
+      --replace '"/lib64" "/usr/lib64"' '"${attr}/lib" "${fuse}/lib"'
+
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${fuse}/include"
+    export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -L${fuse}/lib"
+
+    export DESTDIR=$out
+
+    substituteInPlace Makefile \
+      --replace "/usr/share/" "/share/" \
+      --replace 'BIN_DIR=$(DESTDIR)/usr/bin' "BIN_DIR=$out/bin"
+
+    substituteInPlace etc/init.d/generate_initd_scripts.sh \
+      --replace "/bin/bash" "${stdenv.shell}"
+
+    # do not put cmake into buildInputs
+    export PATH="$PATH:${cmake}/bin"
   '';
 
-  fixMakefile = a.fullDepEntry ''
-    sed -e 's@DESTDIR)/usr@DESTDIR)@g' -i Makefile
+  preBuild = ''
+    substituteInPlace configure \
+    --replace "/usr/bin/file" "${file}/bin/file"
+  '';
 
-    sed -e 's@/usr/bin/@@g' -i cpp/thirdparty/protobuf-*/configure
-    sed -e 's@/usr/bin/@@g' -i cpp/thirdparty/protobuf-*/gtest/configure
-    sed -e 's@/usr/bin/@@g' -i cpp/thirdparty/gtest-*/configure
-  '' ["doUnpack" "minInit"];
+  doCheck = false;
 
-  fixInterpreterBin = a.doPatchShebangs "$out/bin";
-  fixInterpreterEtc = a.doPatchShebangs "$out/etc/xos/xtreemfs";
+  postInstall = ''
+    rm -r $out/sbin
+  '';
 
-  usrIsOut = a.fullDepEntry ''
-    sed -e "s@/usr/@$out/@g" -i \
-      "$out"/{bin/xtfs_*,etc/xos/xtreemfs/*.*,etc/xos/xtreemfs/*/*,etc/init.d/*}
-    sed -e "s@JAVA_HOME=/usr@JAVA_HOME=${jdk}@g" -i \
-      "$out"/{bin/xtfs_*,etc/init.d/*}
-  '' ["minInit"];
-
-  makeFlags = [
-    ''DESTDIR="$out"''
-    ''SHELL="${a.stdenv.shell}"''
-  ];
-      
   meta = {
     description = "A distributed filesystem";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.bsd3;
-    broken = true;
+    maintainers = with lib.maintainers; [ raskin matejc ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://xtreemfs.org/download_sources.php";
-    };
-  };
-}) x
-
+}

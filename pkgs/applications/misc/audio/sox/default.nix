@@ -6,6 +6,9 @@
 , enableLibogg ? true, libogg ? null, libvorbis ? null
 , enableFLAC ? true, flac ? null
 , enablePNG ? true, libpng ? null
+, enableLibsndfile ? true, libsndfile ? null
+# amrnb and amrwb are unfree, disabled by default
+, enableAMR ? false, amrnb ? null, amrwb ? null
 }:
 
 with stdenv.lib;
@@ -25,13 +28,15 @@ stdenv.mkDerivation rec {
     optional enableLibmad libmad ++
     optionals enableLibogg [ libogg libvorbis ] ++
     optional enableFLAC flac ++
-    optional enablePNG libpng;
+    optional enablePNG libpng ++
+    optional enableLibsndfile libsndfile ++
+    optionals enableAMR [ amrnb amrwb ];
 
   meta = {
     description = "Sample Rate Converter for audio";
     homepage = http://sox.sourceforge.net/;
     maintainers = [ lib.maintainers.marcweber ];
-    license = lib.licenses.gpl2Plus;
+    license = if enableAMR then lib.licenses.unfree else lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

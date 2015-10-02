@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
     homepage = http://memcached.org/;
     license = licenses.bsd3;
     maintainers = [ maintainers.coconnor ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
-

@@ -30,14 +30,14 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Medium contrast serif font";
     longDescription = ''
-    With short ascenders and a very high x-height, Poly is efficient in small
-    sizes. Thanks to its careful balance between the x-height and glyph widths,
-    it allows more economy and legibility than standard web serifs, even in
-    small sizes. The aglutinative language for which it was designed contains
-    very long words. The goal was to develop a typeface that would tolerate
-    cramped tracking and that would increase the number of letters on a single
-    line. Poly is a Unicode typeface family that supports Open Type features
-    and languages that use the Latin script and its variants.
+      With short ascenders and a very high x-height, Poly is efficient in small
+      sizes. Thanks to its careful balance between the x-height and glyph widths,
+      it allows more economy and legibility than standard web serifs, even in
+      small sizes. The aglutinative language for which it was designed contains
+      very long words. The goal was to develop a typeface that would tolerate
+      cramped tracking and that would increase the number of letters on a single
+      line. Poly is a Unicode typeface family that supports Open Type features
+      and languages that use the Latin script and its variants.
     '';
     homepage = http://www.fontsquirrel.com/fonts/poly;
     license = stdenv.lib.licenses.ofl;

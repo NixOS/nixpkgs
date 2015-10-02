@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, python, gstreamer, xlibs, alsaLib, cdparanoia
+{ fetchurl, stdenv, pkgconfig, python, gstreamer, xorg, alsaLib, cdparanoia
 , libogg, libtheora, libvorbis, freetype, pango, liboil, glib, cairo, orc
 , libintlOrEmpty
 , # Whether to build no plugins that have external dependencies
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     # can't build alsaLib on darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib
     ++ stdenv.lib.optionals (!minimalDeps)
-      [ xlibs.xlibs xlibs.libXv libogg libtheora libvorbis freetype pango
+      [ xorg.xlibsWrapper xorg.libXv libogg libtheora libvorbis freetype pango
         liboil ]
     # can't build cdparanoia on darwin
     ++ stdenv.lib.optional (!minimalDeps && !stdenv.isDarwin) cdparanoia

@@ -324,7 +324,9 @@ in
         '';
         passthru.version = version; # needed by virtualbox guest additions
       } else {
-        buildInputs = commonBuildInputs ++ [ args.bootstrap_cmds args.automake args.autoconf ];
+        buildInputs = commonBuildInputs ++ [
+          args.bootstrap_cmds args.automake args.autoconf
+        ];
         propagatedBuildInputs = commonPropagatedBuildInputs ++ [
           libAppleWM applewmproto
         ];
@@ -351,6 +353,9 @@ in
           "--with-bundle-id-prefix=org.nixos.xquartz"
           "--with-sha1=CommonCrypto"
         ];
+        __impureHostDeps = ["/System/Library" "/usr"];
+        NIX_CFLAGS_COMPILE = "-F/System/Library/Frameworks -I/usr/include";
+        NIX_CFLAGS_LINK = "-L/usr/lib";
         preConfigure = ''
           ensureDir $out/Applications
           export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error"

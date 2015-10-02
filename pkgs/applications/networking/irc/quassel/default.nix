@@ -3,15 +3,12 @@
 , client ? false # build Quassel client
 , previews ? false # enable webpage previews on hovering over URLs
 , tag ? "" # tag added to the package name
-, useQt5 ? false, phonon_qt5, libdbusmenu_qt5, qca-qt5
 , withKDE ? stdenv.isLinux # enable KDE integration
-, kf5 ? null, kdelibs ? null
+, kdelibs ? null
 
 , stdenv, fetchurl, cmake, makeWrapper, qt, automoc4, phonon, dconf, qca2 }:
 
-let useKF5 = useQt5 && withKDE;
-    useKDE4 = withKDE && !useQt5;
-    buildClient = monolithic || client;
+let buildClient = monolithic || client;
     buildCore = monolithic || daemon;
 in
 
@@ -19,8 +16,7 @@ assert stdenv.isLinux;
 
 assert monolithic -> !client && !daemon;
 assert client || daemon -> !monolithic;
-assert useKDE4 -> kdelibs != null;
-assert useKF5 -> kf5 != null;
+assert withKDE -> kdelibs != null;
 assert !buildClient -> !withKDE; # KDE is used by the client only
 
 let
@@ -39,20 +35,11 @@ in with stdenv; mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs =
-       [ cmake makeWrapper ]
-    ++ [(if useQt5 then qt.base else qt)]
-    ++ lib.optionals buildCore (if useQt5 then [qt.script qca-qt5] else [qca2])
-    ++ lib.optionals buildClient
-       (   lib.optionals (previews && useQt5) [qt.webkit qt.webkitwidgets]
-        ++ lib.optionals useQt5 [libdbusmenu_qt5 phonon_qt5]
-        ++ lib.optionals useKDE4 [automoc4 kdelibs phonon]
-        ++ lib.optionals useKF5
-           (with kf5; [
-             extra-cmake-modules kconfigwidgets kcoreaddons
-             knotifications knotifyconfig ktextwidgets kwidgetsaddons
-             kxmlgui
-           ])
-       );
+       [ cmake makeWrapper qt ]
+    ++ lib.optionals buildCore [qca2]
+    ++ lib.optionals withKDE [automoc4 kdelibs phonon];
+
+  NIX_CFLAGS_COMPILE = "-fPIC";
 
   cmakeFlags = [
     "-DEMBED_DATA=OFF"
@@ -61,8 +48,7 @@ in with stdenv; mkDerivation rec {
     ++ edf daemon "WANT_CORE"
     ++ edf client "WANT_QTCLIENT"
     ++ edf withKDE "WITH_KDE"
-    ++ edf previews "WITH_WEBKIT"
-    ++ edf useQt5 "USE_QT5";
+    ++ edf previews "WITH_WEBKIT";
 
   preFixup =
     lib.optionalString buildClient ''
@@ -83,6 +69,6 @@ in with stdenv; mkDerivation rec {
     license = stdenv.lib.licenses.gpl3;
     maintainers = with maintainers; [ phreedom ttuegel ];
     repositories.git = https://github.com/quassel/quassel.git;
-    inherit ((if useQt5 then qt.base else qt).meta) platforms;
+    inherit (qt.meta) platforms;
   };
 }

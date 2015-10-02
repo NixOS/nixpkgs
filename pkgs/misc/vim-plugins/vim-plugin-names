@@ -24,7 +24,7 @@
 "ghcmod"
 "github:JagaJaga/vim-addon-vim2nix"
 "github:ap/vim-css-color"
-"github:bitc/lushtags"
+"github:mkasa/lushtags"
 "github:bitc/vim-hdevtools"
 "github:christoomey/vim-tmux-navigator"
 "github:eagletmt/neco-ghc"

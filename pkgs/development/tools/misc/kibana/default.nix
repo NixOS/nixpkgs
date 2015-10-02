@@ -4,11 +4,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "kibana-${version}";
-  version = "4.2.0";
+  version = "4.1.2";
 
   src = fetchurl {
     url = "http://download.elastic.co/kibana/kibana-snapshot/kibana-4.2.0-snapshot-linux-x86.tar.gz";
-    sha256 = "01v35iwy8y6gpbl0v9gikvbx3zdxkrm60sxann76mkaq2al3pv0i";
+    sha256 = "1sa92laawxc05abiysvp12v5nzrqggmls592mkprwnbkkkbwsm5x";
   };
 
   buildInputs = [ makeWrapper ];

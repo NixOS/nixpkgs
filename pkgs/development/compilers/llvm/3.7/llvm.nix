@@ -39,6 +39,7 @@ in stdenv.mkDerivation rec {
 
   cmakeFlags = with stdenv; [
     "-DCMAKE_BUILD_TYPE=Release"
+    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"

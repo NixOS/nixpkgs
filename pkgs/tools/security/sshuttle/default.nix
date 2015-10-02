@@ -1,34 +1,66 @@
-{ stdenv, fetchurl, iptables, python, pythonPackages }:
+{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, pandoc
+, coreutils, iptables, nettools, openssh, procps,  pythonPackages }:
   
+let version = "0.71"; in
 stdenv.mkDerivation rec {
   name = "sshuttle-${version}";
-  version = "0.61";
 
-  src = fetchurl {
-    url = "https://github.com/apenwarr/sshuttle/archive/sshuttle-0.61.tar.gz";
-    sha256 = "1v2v1kbwnmx6ygzhbgqcmyafx914s2p7vjp7l0pf52sa7qkliy9b";
+  src = fetchFromGitHub {
+    sha256 = "0yr8nih97jg6azfj3k7064lfbh3g36l6vwyjlngl4ph6mgcki1cm";
+    rev = name;
+    repo = "sshuttle";
+    owner = "sshuttle";
   };
 
-  preBuild = ''
-   substituteInPlace Documentation/all.do --replace "/bin/ls" "$(type -tP ls)";
-   substituteInPlace Documentation/md2man.py --replace "/usr/bin/env python" "${python}/bin/python"
+  patches = [
+    (fetchpatch {
+      sha256 = "1yrjyvdz6k6zk020dmbagf8w49w8vhfbzgfpsq9jqdh2hbykv3m3";
+      url = https://github.com/sshuttle/sshuttle/commit/3cf5002b62650c26a50e18af8d8c5c91d754bab9.patch;
+    })
+    (fetchpatch {
+      sha256 = "091gg28cnmx200q46bcnxpp9ih9p5qlq0r3bxfm0f4qalg8rmp2g";
+      url = https://github.com/sshuttle/sshuttle/commit/d70b5f2b89e593506834cf8ea10785d96c801dfc.patch;
+    })
+    (fetchpatch {
+      sha256 = "17l9h8clqlbyxdkssavxqpb902j7b3yabrrdalybfpkhj69x8ghk";
+      url = https://github.com/sshuttle/sshuttle/commit/a38963301e9c29fbe3232f0a41ea080b642c5ad2.patch;
+    })
+  ];
+
+  nativeBuildInputs = [ makeWrapper pandoc ];
+  buildInputs =
+    [ coreutils iptables nettools openssh procps pythonPackages.python ];
+  pythonPaths = with pythonPackages; [ PyXAPI ];
+
+  preConfigure = ''
+    cd src
   '';
 
-  phases = "unpackPhase installPhase";
+  installPhase = let
+    mapPath = f: x: stdenv.lib.concatStringsSep ":" (map f x);
+  in ''
+    mkdir -p $out/share/sshuttle
+    cp -R sshuttle *.py compat $out/share/sshuttle
 
-  installPhase = ''
     mkdir -p $out/bin
-    cp -R . $out
-    ln -s $out/sshuttle $out/bin/sshuttle
+    ln -s $out/share/sshuttle/sshuttle $out/bin
+    wrapProgram $out/bin/sshuttle \
+      --prefix PATH : "${mapPath (x: "${x}/bin") buildInputs}" \
+      --prefix PYTHONPATH : "${mapPath (x: "$(toPythonPath ${x})") pythonPaths}"
+
+    install -Dm644 sshuttle.8 $out/share/man/man8/sshuttle.8
   '';
   
-
-  buildInputs = [ iptables python pythonPackages.markdown pythonPackages.beautifulsoup ];
-
   meta = with stdenv.lib; {
-    homepage = https://github.com/apenwarr/sshuttle;
+    inherit version;
+    inherit (src.meta) homepage;
     description = "Transparent proxy server that works as a poor man's VPN";
-    maintainers = with maintainers; [ iElectric ];
+    longDescription = ''
+      Forward connections over SSH, without requiring administrator access to the
+      target network (though it does require Python 2 at both ends).
+      Works with Linux and Mac OS and supports DNS tunneling.
+    '';
+    maintainers = with maintainers; [ iElectric nckx ];
     platforms = platforms.unix;
   };
 }

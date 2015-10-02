@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, autoreconfHook}:
 
 let
   version = "5.5.2";
@@ -6,6 +6,12 @@ in
 
 stdenv.mkDerivation {
   name = "polyml-${version}";
+
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure.ac --replace stdc++ c++
+  '';
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin autoreconfHook;
 
   src = fetchurl {
     url = "mirror://sourceforge/polyml/polyml.${version}.tar.gz";

@@ -136,7 +136,7 @@ in buildPythonPackage rec {
     runHook preCheck
 
     LANG=en_US.UTF-8 \
-    LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive \
+    LOCALE_ARCHIVE=${assert stdenv.isLinux; glibcLocales}/lib/locale/locale-archive \
     BEETS_TEST_SHELL="${testShell}" \
     BASH_COMPLETION_SCRIPT="${completion}" \
     HOME="$(mktemp -d)" \
@@ -168,5 +168,6 @@ in buildPythonPackage rec {
     homepage = http://beets.radbox.org;
     license = licenses.mit;
     maintainers = with maintainers; [ aszlig iElectric pjones ];
+    platforms = platforms.linux;
   };
 }

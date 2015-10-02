@@ -197,7 +197,7 @@
   ./services/misc/etcd.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
-  ./services/misc/gitit.nix
+  #./services/misc/gitit.nix
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
   ./services/misc/gpsd.nix
@@ -257,6 +257,7 @@
   ./services/network-filesystems/diod.nix
   ./services/network-filesystems/u9fs.nix
   ./services/network-filesystems/yandex-disk.nix
+  ./services/network-filesystems/xtreemfs.nix
   ./services/networking/aiccu.nix
   ./services/networking/amuled.nix
   ./services/networking/asterisk.nix
@@ -375,6 +376,7 @@
   ./services/security/haveged.nix
   ./services/security/hologram.nix
   ./services/security/munge.nix
+  ./services/security/physlock.nix
   ./services/security/torify.nix
   ./services/security/tor.nix
   ./services/security/torsocks.nix
@@ -471,6 +473,7 @@
   ./tasks/filesystems/ntfs.nix
   ./tasks/filesystems/reiserfs.nix
   ./tasks/filesystems/unionfs-fuse.nix
+  ./tasks/filesystems/vboxsf.nix
   ./tasks/filesystems/vfat.nix
   ./tasks/filesystems/xfs.nix
   ./tasks/filesystems/zfs.nix

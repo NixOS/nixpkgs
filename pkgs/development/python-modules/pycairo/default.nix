@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, python, pkgconfig, cairo, x11, isPyPy }:
+{ stdenv, fetchurl, fetchpatch, python, pkgconfig, cairo, xlibsWrapper, isPyPy }:
 
 if isPyPy then throw "pycairo not supported for interpreter ${python.executable}" else stdenv.mkDerivation rec {
   version = "1.10.0";
@@ -23,7 +23,7 @@ if isPyPy then throw "pycairo not supported for interpreter ${python.executable}
     sha256 = "0xfl1i9dips2nykyg91f5h5r3xpk2hp1js1gq5z0hwjr0in55id4";
   };
 
-  buildInputs = [ python pkgconfig cairo x11 ];
+  buildInputs = [ python pkgconfig cairo xlibsWrapper ];
 
   configurePhase = ''
     (

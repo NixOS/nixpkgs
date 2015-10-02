@@ -1,0 +1,13 @@
+--- gdm-3.14.2/daemon/gdm-slave.c.orig	2015-04-16 15:05:27.844353079 +0200
++++ gdm-3.14.2/daemon/gdm-slave.c	2015-04-16 15:05:40.240417915 +0200
+@@ -369,8 +369,9 @@
+                 gdm_error_trap_push ();
+ 
+                 for (i = 0; i < G_N_ELEMENTS (host_entries); i++) {
+-                        XAddHost (slave->priv->server_display, &host_entries[i]);
++                        //XAddHost (slave->priv->server_display, &host_entries[i]);
+                 }
++                XDisableAccessControl(slave->priv->server_display);
+ 
+                 XSync (slave->priv->server_display, False);
+                 if (gdm_error_trap_pop ()) {

@@ -77,7 +77,8 @@ let
       smtpd_tls_key_file = ${cfg.sslKey}
 
       smtpd_use_tls = yes
-
+    ''
+    + optionalString (cfg.recipientDelimiter != "") ''
       recipient_delimiter = ${cfg.recipientDelimiter}
     ''
     + optionalString (cfg.virtual != "") ''

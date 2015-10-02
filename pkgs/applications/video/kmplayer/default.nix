@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, cmake, pkgconfig, gettext, makeWrapper
+{ stdenv, fetchurl
+, automoc4, cmake, gettext, makeWrapper, perl, pkgconfig
 , kdelibs, cairo, dbus_glib, mplayer
 }:
 
@@ -11,10 +12,9 @@ stdenv.mkDerivation {
     sha256 = "1yvbkb1hh5y7fqfvixjf2rryzm0fm0fpkx4lmvhi7k7d0v4wpgky";
   };
 
-  buildInputs = [
-    cmake gettext pkgconfig makeWrapper
-    kdelibs cairo dbus_glib
-  ];
+  buildInputs = [ kdelibs cairo dbus_glib ];
+
+  nativeBuildInputs = [ automoc4 cmake gettext makeWrapper perl pkgconfig ];
 
   postInstall = ''
     wrapProgram $out/bin/kmplayer --suffix PATH : ${mplayer}/bin

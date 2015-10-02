@@ -1,11 +1,14 @@
 { stdenv, fetchurl, ncurses }:
 
+let
+  version = "0.6.1";
+in
 stdenv.mkDerivation rec {
-  name = "bwm-ng-0.6";
-  
+  name = "bwm-ng-${version}";
+
   src = fetchurl {
     url = "http://www.gropp.org/bwm-ng/${name}.tar.gz";
-    sha256 = "1pgzc8y2y73n72qvbd2g0dkbkw5h0f83k5h9id1rsck8w9c464y1";
+    sha256 = "1w0dwpjjm9pqi613i8glxrgca3rdyqyp3xydzagzr5ndc34z6z02";
   };
 
   buildInputs = [ ncurses ];
@@ -42,7 +45,7 @@ stdenv.mkDerivation rec {
         This was influenced by the old bwm util written by Barney (barney@freewill.tzo.com) which had some issues with faster interfaces and was very simple. Since i had almost all code done anyway for other projects, i decided to create my own version.
 
         I actually don't know if netstat input is useful at all. I saw this elsewhere, so i added it. Its target is "netstat 1.42 (2001-04-15)" linux or Free/Open/netBSD. If there are other formats i would be happy to add them.
-        
+
         (from homepage)
     '';
   };

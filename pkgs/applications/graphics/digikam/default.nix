@@ -1,8 +1,8 @@
 { stdenv, fetchurl, automoc4, boost, shared_desktop_ontologies, cmake
 , eigen, lcms, gettext, jasper, kdelibs, kdepimlibs, lensfun
 , libgphoto2, libjpeg, libkdcraw, libkexiv2, libkipi, libpgf, libtiff
-, libusb1, liblqr1, marble, mysql, opencv, phonon, pkgconfig, qca2
-, qimageblitz, qjson, qt4, soprano
+, libusb1, liblqr1, marble, mysql, opencv, perl, phonon, pkgconfig
+, qca2, qimageblitz, qjson, qt4, soprano
 }:
 
 stdenv.mkDerivation rec {
@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "081ldsaf3frf5khznjd3sxkjmi4dyp6w6nqnc2a0agkk0kxkl10m";
   };
 
-  nativeBuildInputs = [ cmake automoc4 pkgconfig ];
+  nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig ];
 
   buildInputs = [
-    boost eigen gettext jasper kdelibs kdepimlibs lcms lensfun
-    libgphoto2 libjpeg libkdcraw libkexiv2 libkipi liblqr1 libpgf
-    libtiff marble mysql.lib opencv phonon qca2 qimageblitz qjson qt4
+    boost eigen jasper kdelibs kdepimlibs lcms lensfun libgphoto2
+    libjpeg libkdcraw libkexiv2 libkipi liblqr1 libpgf libtiff marble
+    mysql.lib opencv phonon qca2 qimageblitz qjson qt4
     shared_desktop_ontologies soprano
   ];
 
@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
   KDEDIRS="${marble}:${qjson}";
 
   # Help digiKam find libusb, otherwise gphoto2 support is disabled
-  cmakeFlags = "-DLIBUSB_LIBRARIES=${libusb1}/lib -DLIBUSB_INCLUDE_DIR=${libusb1}/include/libusb-1.0 -DDIGIKAMSC_COMPILE_LIBKFACE=ON";
+  cmakeFlags = [
+    "-DLIBUSB_LIBRARIES=${libusb1}/lib"
+    "-DLIBUSB_INCLUDE_DIR=${libusb1}/include/libusb-1.0"
+    "-DDIGIKAMSC_COMPILE_LIBKFACE=ON"
+  ];
 
   enableParallelBuilding = true;
 

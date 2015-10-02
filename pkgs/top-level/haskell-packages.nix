@@ -61,7 +61,8 @@ rec {
 
   packages = {
 
-    ghc6104 = callPackage ../development/haskell-modules { ghc = compiler.ghc6104; };
+    # Support for this compiler is broken, because it can't deal with directory-based package databases.
+    # ghc6104 = callPackage ../development/haskell-modules { ghc = compiler.ghc6104; };
     ghc6123 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc6123;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-6.12.x.nix { };
@@ -309,6 +310,14 @@ rec {
 
     lts-3_5 = packages.ghc7102.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.5.nix { };
+    };
+
+    lts-3_6 = packages.ghc7102.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.6.nix { };
+    };
+
+    lts-3_7 = packages.ghc7102.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.7.nix { };
     };
 
   };

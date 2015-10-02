@@ -1,5 +1,5 @@
 { stdenv, fetchgit, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, mesa, openal, libvorbis, x11, sqlite, luajit, freetype
+, libjpeg, libXxf86vm, mesa, openal, libvorbis, xlibsWrapper, sqlite, luajit, freetype
 , gettext
 }:
 
@@ -31,7 +31,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     cmake irrlicht libpng bzip2 libjpeg curl libogg jsoncpp libXxf86vm mesa
-    openal libvorbis x11 sqlite luajit freetype gettext
+    openal libvorbis xlibsWrapper sqlite luajit freetype gettext
   ];
 
   postInstall = ''

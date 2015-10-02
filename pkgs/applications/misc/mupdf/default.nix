@@ -2,12 +2,12 @@
 , libX11, libXext }:
 
 stdenv.mkDerivation rec {
-  version = "1.7a";
+  version = "1.7";
   name = "mupdf-${version}";
 
   src = fetchurl {
     url = "http://mupdf.com/download/archive/${name}-source.tar.gz";
-    sha256 = "073xq6kczq331awycvznpc49b22idqzdlw4g9254zi0z07x5y0wc";
+    sha256 = "0hjn1ywxhblqgj63qkp8x7qqjnwsgid3viw8az5i2i26dijmrgfh";
   };
 
   buildInputs = [ pkgconfig zlib freetype libjpeg jbig2dec openjpeg libX11 libXext ];

@@ -56,7 +56,7 @@ $ git add pkgs/development/libraries/libfoo/default.nix</screen>
 
         <listitem>
           <para>GNU Hello: <link
-          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/misc/hello/ex-2/default.nix"><filename>pkgs/applications/misc/hello/ex-2/default.nix</filename></link>.
+          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/misc/hello/default.nix"><filename>pkgs/applications/misc/hello/default.nix</filename></link>.
           Trivial package, which specifies some <varname>meta</varname>
           attributes which is good practice.</para>
         </listitem>

@@ -61,7 +61,7 @@ $ nix-env -qa hello --meta --json
                 "i686-openbsd",
                 "x86_64-openbsd"
             ],
-            "position": "/home/user/dev/nixpkgs/pkgs/applications/misc/hello/ex-2/default.nix:14"
+            "position": "/home/user/dev/nixpkgs/pkgs/applications/misc/hello/default.nix:14"
         },
         "name": "hello-2.9",
         "system": "x86_64-linux"

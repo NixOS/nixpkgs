@@ -114,6 +114,10 @@ let
       rm -rf $HOME/.compose-cache
       mkdir $HOME/.compose-cache
 
+      # Work around KDE errors when a user first logs in and
+      # .local/share doesn't exist yet.
+      mkdir -p $HOME/.local/share
+
       ${cfg.displayManager.sessionCommands}
 
       # Allow the user to execute commands at the beginning of the X session.

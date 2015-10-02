@@ -16,15 +16,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Font Awesome - TTF font";
-
     longDescription = ''
       Font Awesome gives you scalable vector icons that can instantly be customized.
       This package includes only the TTF font. For full CSS etc. see the project website.
     '';
-
     homepage = "http://fortawesome.github.io/Font-Awesome/";
     license = stdenv.lib.licenses.ofl;
-
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.abaldeau ];
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, freeglut, qt5
+{ stdenv, fetchFromGitHub, fftw, freeglut, qtbase, qtmultimedia
 , alsaSupport ? true, alsaLib ? null
 , jackSupport ? false, libjack2 ? null
 , portaudioSupport ? false, portaudio ? null }:
@@ -18,10 +18,10 @@ stdenv.mkDerivation {
     owner = "gillesdegottex";
   };
 
-  buildInputs = [ fftw freeglut qt5.base qt5.multimedia ]
-    ++ stdenv.lib.optional alsaSupport [ alsaLib ]
-    ++ stdenv.lib.optional jackSupport [ libjack2 ]
-    ++ stdenv.lib.optional portaudioSupport [ portaudio ];
+  buildInputs = [ fftw freeglut qtbase qtmultimedia ]
+    ++ stdenv.lib.optionals alsaSupport [ alsaLib ]
+    ++ stdenv.lib.optionals jackSupport [ libjack2 ]
+    ++ stdenv.lib.optionals portaudioSupport [ portaudio ];
 
   configurePhase = ''
     mkdir build

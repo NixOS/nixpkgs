@@ -3,12 +3,12 @@
 , graphicsSupport ? false
 , mouseSupport ? false
 , ncurses, openssl ? null, boehmgc, gettext, zlib
-, imlib2 ? null, x11 ? null, fbcon ? null
+, imlib2 ? null, xlibsWrapper ? null, fbcon ? null
 , gpm-ncurses ? null
 }:
 
 assert sslSupport -> openssl != null;
-assert graphicsSupport -> imlib2 != null && (x11 != null || fbcon != null);
+assert graphicsSupport -> imlib2 != null && (xlibsWrapper != null || fbcon != null);
 assert mouseSupport -> gpm-ncurses != null;
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ncurses boehmgc gettext zlib]
     ++ stdenv.lib.optional sslSupport openssl
     ++ stdenv.lib.optional mouseSupport gpm-ncurses
-    ++ stdenv.lib.optionals graphicsSupport [imlib2 x11 fbcon];
+    ++ stdenv.lib.optionals graphicsSupport [imlib2 xlibsWrapper fbcon];
 
   configureFlags = "--with-ssl=${openssl} --with-gc=${boehmgc}"
     + stdenv.lib.optionalString graphicsSupport " --enable-image=x11,fb";

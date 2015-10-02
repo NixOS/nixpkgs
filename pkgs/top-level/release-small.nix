@@ -158,7 +158,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   sysvtools = linux;
   tcl = linux;
   tcpdump = linux;
-  tetex = linux;
   texLive = linux;
   texLiveBeamer = linux;
   texLiveExtra = linux;

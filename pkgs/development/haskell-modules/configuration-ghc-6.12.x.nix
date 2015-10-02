@@ -40,15 +40,17 @@ self: super: {
   time = null;
   unix = null;
 
-  # binary is not a core library for this compiler.
+  # These packages are core libraries in GHC 7.10.x, but not here.
   binary = self.binary_0_7_6_1;
-
-  # deepseq is not a core library for this compiler.
-  deepseq_1_3_0_1 = dontJailbreak super.deepseq_1_3_0_1;
   deepseq = self.deepseq_1_3_0_1;
-
-  # transformers is not a core library for this compiler.
+  haskeline = self.haskeline_0_7_2_1;
+  hoopl = self.hoopl_3_10_2_0;
+  terminfo = self.terminfo_0_4_0_1;
   transformers = self.transformers_0_4_3_0;
+  xhtml = self.xhtml_3000_2_1;
+
+  # The jailbreak is unnecessary in this package set.
+  deepseq_1_3_0_1 = dontJailbreak super.deepseq_1_3_0_1;
 
   # Newer versions don't compile.
   Cabal_1_18_1_6 = dontJailbreak super.Cabal_1_18_1_6;

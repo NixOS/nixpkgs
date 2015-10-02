@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon, soprano, shared_desktop_ontologies, kdemultimedia, taglib, glibc, gettext }:
+{ stdenv, fetchurl, automoc4, cmake, perl, pkgconfig
+, kdelibs, phonon, soprano, shared_desktop_ontologies
+, kdemultimedia, taglib, glibc, gettext
+}:
+
 stdenv.mkDerivation rec {
   name = "bangarang-2.1";
 
@@ -7,8 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "1g4pap79k8qaqi0py34xqvisxln1nc5hbvph692ah3af06n6cly1";
   };
 
-  buildInputs = [ kdelibs phonon soprano shared_desktop_ontologies kdemultimedia taglib gettext ];
-  nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    kdelibs phonon soprano shared_desktop_ontologies kdemultimedia
+    taglib gettext
+  ];
+
+  nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
 
   patches = [ ./gcc-4.7.patch ];
 

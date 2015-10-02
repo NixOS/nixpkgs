@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
+  patches = [ ./thunarx_plugins_directory.patch ];
+
   buildInputs = [
     pkgconfig intltool
     gtk dbus_glib libstartup_notification libnotify libexif pcre udev
