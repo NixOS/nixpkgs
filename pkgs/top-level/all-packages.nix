@@ -11775,6 +11775,8 @@ let
 
   iptraf = callPackage ../applications/networking/iptraf { };
 
+  iptraf-ng = callPackage ../applications/networking/iptraf-ng { };
+
   irssi = callPackage ../applications/networking/irc/irssi { };
 
   irssi_fish = callPackage ../applications/networking/irc/irssi/fish { };
