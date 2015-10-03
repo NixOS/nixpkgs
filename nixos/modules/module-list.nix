@@ -26,7 +26,6 @@
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
   ./config/zram.nix
-  ./flyingcircus/vm-image.nix
   ./hardware/all-firmware.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
