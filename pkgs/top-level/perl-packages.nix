@@ -10357,13 +10357,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TermCap = buildPerlPackage {
-    name = "Term-Cap-1.16";
+  TermCap = let version = "1.17"; in buildPerlPackage {
+    name = "Term-Cap-${version}";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JS/JSTOWE/Term-Cap-1.16.tar.gz;
-      sha256 = "b99728ac19b740b43e6a8d3c749c336f4a5d59ffd684c42c222681ee924e4a20";
+      url = "mirror://cpan/authors/id/J/JS/JSTOWE/Term-Cap-${version}.tar.gz";
+      sha256 = "0qyicyk4aikw6w3fm8c4y6hd7ff70crkl6bf64qmiakbgxy9p6p7";
     };
     meta = {
+      inherit version;
       description = "Perl termcap interface";
       license = "perl";
     };
