@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   };
 
   src = fetchurl {
-    url = "http://www.claws-mail.org/download.php?file=releases/claws-mail-3.12.0.tar.xz";
+    url = "http://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
     sha256 = "1jnnwivpcplv8x4w0ibb1qcnasl37fr53lbfybhgb936l2mdcai7";
   };
 
