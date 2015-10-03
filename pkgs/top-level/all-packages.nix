@@ -3170,7 +3170,9 @@ let
 
   torbutton = callPackage ../tools/security/torbutton { };
 
-  torbrowser = callPackage ../tools/security/tor/torbrowser.nix { };
+  torbrowser = callPackage ../tools/security/tor/torbrowser.nix {
+    stdenv = overrideCC stdenv gcc5;
+  };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
