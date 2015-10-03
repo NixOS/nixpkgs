@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls
+{ stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls, Carbon, Foundation,
+libobjc, Cocoa, WebKit, Quartz, ImageCaptureCore, OSAKit
 }:
 
 stdenv.mkDerivation rec {
   emacsName = "emacs-24.5";
-  name = "${emacsName}-mac-5.7";
+  name = "${emacsName}-mac-5.10";
 
   #builder = ./builder.sh;
 
@@ -14,10 +15,19 @@ stdenv.mkDerivation rec {
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${name}.tar.gz";
-    sha256 = "1a86l3556h24x9ml6r8n6xbrxymb9gr38sicny3f0m281myhlsvv";
+    sha256 = "0d4r4mgqxcdba715lbr7rk4bxz7yjxi6wv63kyh6gaqbfgql41vf";
   };
 
-  buildInputs = [ ncurses pkgconfig texinfo libxml2 gnutls ];
+  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
+  NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin
+    "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
+
+  enableParallelBuilding = true;
+
+  buildInputs = [
+    ncurses pkgconfig texinfo libxml2 gnutls Carbon Cocoa Foundation libobjc WebKit Quartz
+    ImageCaptureCore OSAKit
+  ];
 
   postUnpack = ''
     mv $emacsName $name

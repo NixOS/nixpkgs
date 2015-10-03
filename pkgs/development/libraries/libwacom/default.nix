@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, glib, pkgconfig, udev }:
+{ fetchurl, stdenv, glib, pkgconfig, udev, libgudev }:
 
 stdenv.mkDerivation rec {
   name = "libwacom-0.7.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1agdaa1bv5mp4l32qgsw63swnnv0p279jiy9madgw4y3d8d12dwm";
   };
 
-  buildInputs = [ glib pkgconfig udev ];
+  buildInputs = [ glib pkgconfig udev libgudev ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

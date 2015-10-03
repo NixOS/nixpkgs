@@ -30,7 +30,7 @@ in
               rm $out/disk.raw
               popd
             '';
-          diskImageBase = "nixos-${config.system.nixosVersion}-${pkgs.stdenv.system}.raw";
+          diskImageBase = "nixos-image-${config.system.nixosVersion}-${pkgs.stdenv.system}.raw";
           buildInputs = [ pkgs.utillinux pkgs.perl ];
           exportReferencesGraph =
             [ "closure" config.system.build.toplevel ];
@@ -137,40 +137,50 @@ in
       after = [ "network-online.target" "ip-up.target" ];
       wants = [ "network-online.target" "ip-up.target" ];
 
-      script = let wget = "${pkgs.wget}/bin/wget --retry-connrefused -t 15 --waitretry=10 --header='Metadata-Flavor: Google'"; in
+      script = let wget = "${pkgs.wget}/bin/wget --retry-connrefused -t 15 --waitretry=10 --header='Metadata-Flavor: Google'";
+                   mktemp = "mktemp --tmpdir=/run"; in
         ''
           # When dealing with cryptographic keys, we want to keep things private.
           umask 077
           # Don't download the SSH key if it has already been downloaded
-          if ! [ -e /root/.ssh/authorized_keys ]; then
-                echo "obtaining SSH key..."
-                mkdir -m 0700 -p /root/.ssh
-                ${wget} -O /root/authorized-keys-metadata http://metadata.google.internal/0.1/meta-data/authorized-keys
-                if [ $? -eq 0 -a -e /root/authorized-keys-metadata ]; then
-                    cat /root/authorized-keys-metadata | cut -d: -f2- > /root/key.pub
-                    if ! grep -q -f /root/key.pub /root/.ssh/authorized_keys; then
-                        cat /root/key.pub >> /root/.ssh/authorized_keys
-                        echo "new key added to authorized_keys"
-                    fi
-                    chmod 600 /root/.ssh/authorized_keys
-                fi
-                rm -f /root/key.pub /root/authorized-keys-metadata
+          if ! [ -s /root/.ssh/authorized_keys ]; then
+              echo "obtaining SSH key..."
+              mkdir -m 0700 -p /root/.ssh
+              AUTH_KEYS=$(${mktemp})
+              ${wget} -O $AUTH_KEYS http://metadata.google.internal/0.1/meta-data/authorized-keys
+              if [ -s $AUTH_KEYS ]; then
+                  KEY_PUB=$(${mktemp})
+                  cat $AUTH_KEYS | cut -d: -f2- > $KEY_PUB
+                  if ! grep -q -f $KEY_PUB /root/.ssh/authorized_keys; then
+                      cat $KEY_PUB >> /root/.ssh/authorized_keys
+                      echo "New key added to authorized_keys."
+                  fi
+                  chmod 600 /root/.ssh/authorized_keys
+                  rm -f $KEY_PUB
+              else
+                  echo "Downloading http://metadata.google.internal/0.1/meta-data/authorized-keys failed."
+                  false
+              fi
+              rm -f $AUTH_KEYS
           fi
 
           countKeys=0
           ${flip concatMapStrings config.services.openssh.hostKeys (k :
             let kName = baseNameOf k.path; in ''
+              PRIV_KEY=$(${mktemp})
               echo "trying to obtain SSH private host key ${kName}"
-              ${wget} -O /root/${kName} http://metadata.google.internal/0.1/meta-data/attributes/${kName} && :
-              if [ $? -eq 0 -a -e /root/${kName} ]; then
+              ${wget} -O $PRIV_KEY http://metadata.google.internal/0.1/meta-data/attributes/${kName} && :
+              if [ $? -eq 0 -a -s $PRIV_KEY ]; then
                   countKeys=$((countKeys+1))
-                  mv -f /root/${kName} ${k.path}
-                  echo "downloaded ${k.path}"
+                  mv -f $PRIV_KEY ${k.path}
+                  echo "Downloaded ${k.path}"
                   chmod 600 ${k.path}
                   ${config.programs.ssh.package}/bin/ssh-keygen -y -f ${k.path} > ${k.path}.pub
                   chmod 644 ${k.path}.pub
+              else
+                  echo "Downloading http://metadata.google.internal/0.1/meta-data/attributes/${kName} failed."
               fi
-              rm -f /root/${kName}
+              rm -f $PRIV_KEY
             ''
           )}
 

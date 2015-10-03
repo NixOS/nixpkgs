@@ -1,13 +1,13 @@
 { stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper }:
 
-let version = "1.17.25"; in
+let version = "1.18.2"; in
 
 stdenv.mkDerivation {
   name = "dpkg-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "1akblsdfblih7879gi5qagqpgy6zz866kcyvg5y11ywqmqw9s087";
+    sha256 = "192pqjd0c7i91kiqzn3cq2sqp5vivf0079i0wybdc9yhfcm4yj0i";
   };
 
   postPatch = ''
@@ -20,10 +20,10 @@ stdenv.mkDerivation {
   configureFlags = "--disable-dselect --with-admindir=/var/lib/dpkg PERL_LIBDIR=$(out)/${perl.libPrefix}";
 
   preConfigure = ''
-    # Nice: dpkg has a circular dependency on itself.  Its configure
+    # Nice: dpkg has a circular dependency on itself. Its configure
     # script calls scripts/dpkg-architecture, which calls "dpkg" in
-    # $PATH.  It doesn't actually use its result, but fails if it
-    # isn't present.  So make a dummy available.
+    # $PATH. It doesn't actually use its result, but fails if it
+    # isn't present, so make a dummy available.
     touch $TMPDIR/dpkg
     chmod +x $TMPDIR/dpkg
     PATH=$TMPDIR:$PATH
@@ -33,7 +33,8 @@ stdenv.mkDerivation {
     done
   '';
 
-  buildInputs = [ perl zlib bzip2 xz makeWrapper ];
+  buildInputs = [ perl zlib bzip2 xz ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postInstall =
     ''
@@ -50,7 +51,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "The Debian package manager";
     homepage = http://wiki.debian.org/Teams/Dpkg;
-    license = with licenses; gpl2Plus;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mornfall nckx ];
   };

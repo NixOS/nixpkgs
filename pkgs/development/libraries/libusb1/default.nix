@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, udev ? null }:
+{ stdenv, fetchurl, pkgconfig, udev ? null, libobjc, IOKit }:
 
 stdenv.mkDerivation rec {
   name = "libusb-1.0.19";
@@ -11,9 +11,15 @@ stdenv.mkDerivation rec {
   outputs = [ "dev" "out" ]; # get rid of propagating systemd closure
 
   buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = stdenv.lib.optional stdenv.isLinux udev;
+  propagatedBuildInputs =
+    stdenv.lib.optional stdenv.isLinux udev ++
+    stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+
+  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
+    sed 's,-ludev,-L${udev}/lib -ludev,' -i $out/lib/libusb-1.0.la
+  '';
 
   meta = {
     homepage = http://www.libusb.info;

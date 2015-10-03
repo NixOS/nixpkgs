@@ -1,5 +1,9 @@
-{ stdenv, fetchurl, perl, ghc, binary, zlib, utf8String, readline, fgl,
-  regexCompat, HsSyck, random }:
+{ stdenv, fetchurl, perl, ghcWithPackages }:
+
+let ghc = ghcWithPackages (hpkgs: with hpkgs; [
+            binary zlib utf8-string readline fgl regex-compat HsSyck random
+          ]);
+in
 
 stdenv.mkDerivation rec {
   name = "jhc-${version}";
@@ -10,10 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lrgg698mx6xlrqcylba9z4g1f053chrzc92ri881dmb1knf83bz";
   };
 
-  buildInputs =
-    [ perl ghc binary zlib utf8String
-      readline fgl regexCompat HsSyck random
-    ];
+  buildInputs = [ perl ghc ];
 
   meta = {
     description = "Whole-program, globally optimizing Haskell compiler";

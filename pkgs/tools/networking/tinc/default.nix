@@ -1,20 +1,20 @@
 {stdenv, fetchurl, lzo, openssl, zlib}:
 
 stdenv.mkDerivation rec {
-  version = "1.0.25";
+  version = "1.0.26";
   name = "tinc-${version}";
 
   src = fetchurl {
     url = "http://www.tinc-vpn.org/packages/tinc-${version}.tar.gz";
-    sha256 = "0cziyiwsfcvk12dahqwi5wh0q326yhayy8ijnrjp7mwlwmacbhf5";
+    sha256 = "08ds8s32cjslms1q227ihd6jz35583v378ij4pknfa5xngfijhrb";
   };
 
   buildInputs = [ lzo openssl zlib ];
 
-  configureFlags = ''
-    --localstatedir=/var
-    --sysconfdir=/etc
-  '';
+  configureFlags = [
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+  ];
 
   meta = { 
     description = "VPN daemon with full mesh routing";

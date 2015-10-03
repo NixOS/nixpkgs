@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "1f0l2cqp2g3llhr9jl6jj15k0wb5q8n29vqj99xy4p5hqs78jk8g";
   };
 
-  patches = [ ./header-order.patch ];
+  patches = [ ./header-order.patch ./public-buildproject.patch ];
 
   postPatch = ''
     cp campaigns/tutorial-part4.map{,.orig}

@@ -11,7 +11,7 @@ let
 in
 rec {
   src = fetchurl {
-    url = "ftp://ftp.debian.org/debian/pool/main/libd/libdecodeqr/libdecodeqr_${version}.orig.tar.gz";
+    url = "mirror://debian/pool/main/libd/libdecodeqr/libdecodeqr_${version}.orig.tar.gz";
     sha256 = "1kmljwx69h7zq6zlp2j19bbpz11px45z1abw03acrxjyzz5f1f13";
   };
 

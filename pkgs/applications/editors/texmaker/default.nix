@@ -2,20 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "texmaker";
-  version = "4.1.1";
+  version = "4.4.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://www.xm1math.net/texmaker/${name}.tar.bz2";
-    sha256 = "1h5rxdq6f05wk3lnlw96fxwrb14k77cx1mwy648127h2c8nsgw4z";
+    sha256 = "1d5lb4sibdhvzgfr0zi48j92b4acvvvdy2biqi3jzjdnzy9r94w0";
   };
 
   buildInputs = [ qt4 poppler_qt4 zlib ];
-
   nativeBuildInputs = [ pkgconfig poppler ];
+  NIX_CFLAGS_COMPILE="-I${poppler}/include/poppler";
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$(echo ${poppler}/include/poppler/) " # for poppler-config.h
     qmake PREFIX=$out DESKTOPDIR=$out/share/applications ICONDIR=$out/share/pixmaps texmaker.pro
   '';
 

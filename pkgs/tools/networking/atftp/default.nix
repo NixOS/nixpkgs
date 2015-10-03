@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, readline, tcp_wrappers, pcre, makeWrapper }:
 assert stdenv.isLinux;
-assert stdenv.cc.cc.isGNU or false;
+assert stdenv.cc.isGNU;
 let
 version = "0.7";
 debianPatch = fetchurl {
@@ -9,7 +9,7 @@ debianPatch = fetchurl {
 };
 in
 stdenv.mkDerivation {
-  name = "atftp";
+  name = "atftp-${version}";
   inherit version;
   src = fetchurl {
     url = "mirror://debian/pool/main/a/atftp/atftp_${version}.dfsg.orig.tar.gz";

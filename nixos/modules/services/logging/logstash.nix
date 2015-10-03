@@ -84,10 +84,10 @@ in
         type = types.lines;
         default = ''stdin { type => "example" }'';
         description = "Logstash input configuration.";
-        example = ''
+        example = literalExample ''
           # Read from journal
           pipe {
-            command => "${pkgs.systemd}/bin/journalctl -f -o json"
+            command => "''${pkgs.systemd}/bin/journalctl -f -o json"
             type => "syslog" codec => json {}
           }
         '';
@@ -132,6 +132,7 @@ in
       description = "Logstash Daemon";
       wantedBy = [ "multi-user.target" ];
       environment = { JAVA_HOME = jre; };
+      path = [ pkgs.bash ];
       serviceConfig = {
         ExecStart =
           "${cfg.package}/bin/logstash agent " +

@@ -1,28 +1,29 @@
-{ stdenv, fetchgit, libconfig, lua5_2, openssl, readline, zlib
+{ stdenv, fetchgit, bash, libconfig, libevent, openssl,
+  readline, zlib, lua5_2, python, pkgconfig, jansson
 }:
 
 stdenv.mkDerivation rec {
-  name = "telegram-cli";
+  name = "telegram-cli-2015-07-30";
 
   src = fetchgit {
     url = "https://github.com/vysheng/tg.git";
-    rev = "ac6079a00ac66bb37a3179a82af130b41ec39bc9";
-    sha256 = "1rpwnyzmqk7p97n5pd00m5c6rypc39mb3hs94qxxrdcpwpgcb73q";
+    sha256 = "0phn9nl0sf2fylzfwi427xq60cfrnpsvhh8bp55y1wcjkmp0fxsn";
+    rev = "2052f4b381337d75e783facdbfad56b04dec1a9c";
   };
 
-  buildInputs = [ libconfig lua5_2 openssl readline zlib ];
-
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations"; # CPPFunction
-
+  buildInputs = [
+    libconfig libevent openssl readline zlib
+    lua5_2 python pkgconfig jansson
+  ];
   installPhase = ''
     mkdir -p $out/bin
-    cp ./telegram $out/bin/telegram-wo-key
-    cp ./tg.pub $out/
-    cat > $out/bin/telegram <<EOF
-    #!/usr/bin/env bash
-    $out/bin/telegram-wo-key -k $out/tg.pub
+    cp ./bin/telegram-cli $out/bin/telegram-wo-key
+    cp ./tg-server.pub $out/
+    cat > $out/bin/telegram-cli <<EOF
+    #!${bash}/bin/sh
+    $out/bin/telegram-wo-key -k $out/tg-server.pub "\$@"
     EOF
-    chmod +x $out/bin/telegram
+    chmod +x $out/bin/telegram-cli
   '';
 
   meta = {
@@ -30,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage = https://telegram.org/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.jagajaga ];
   };
 }

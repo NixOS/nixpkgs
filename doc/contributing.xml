@@ -2,18 +2,19 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xml:id="chap-contributing">
 
-<title>Contributing</title>
+<title>Contributing to this documentation</title>
 
-<para>If you make modifications to the manual, it's important to build the manual before contributing:</para>
+<para>The DocBook sources of the Nixpkgs manual are in the <filename
+xlink:href="https://github.com/NixOS/nixpkgs/tree/master/doc">doc</filename>
+subdirectory of the Nixpkgs repository. If you make modifications to
+the manual, it's important to build it before committing. You can do that as follows:
 
-<orderedlist>
+<screen>
+$ cd /path/to/nixpkgs
+$ nix-build doc
+</screen>
 
-  <listitem><para><command>$ git clone git://github.com/NixOS/nixpkgs.git</command></para></listitem>
-
-  <listitem><para><command>$ nix-build -A manual nixpkgs/pkgs/top-level/release.nix</command></para></listitem>
-  
-  <listitem><para>Inside the built derivation you shall see <literal>manual/index.html</literal> file.</para></listitem>
-
-</orderedlist>
+If the build succeeds, the manual will be in
+<filename>./result/share/doc/nixpkgs/manual.html</filename>.</para>
 
 </chapter>

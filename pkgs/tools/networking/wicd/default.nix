@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     echo "wpa2-ttls" >> "$out/etc/encryption/templates/active"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://wicd.net/;
     description = "A wiredless and wired network manager";
     longDescription=''
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
       encryption types, such as WPA and WEP. Wicd will automatically
       connect at startup to any preferred network within range.
     '';
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
-    license="GPLv2";
+    maintainers = [ maintainers.roconnor ];
+    license = licenses.gpl2;
   };
 }

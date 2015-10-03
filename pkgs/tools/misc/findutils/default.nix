@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [coreutils];
 
-  patches = [ ./findutils-path.patch ./change_echo_path.patch ];
+  patches = [ ./findutils-path.patch ./change_echo_path.patch ./disable-test-canonicalize.patch ];
 
   outputs = [ "out" "info" ];
 
@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     # http://osdir.com/ml/bug-findutils-gnu/2009-08/msg00026.html
     configureFlags = [ "gl_cv_func_wcwidth_works=yes" ];
   };
+
+  preConfigure = if stdenv.isCygwin then ''
+    sed -i gnulib/lib/fpending.h -e '/include <stdio_ext.h>/d'
+  '' else null;
 
   meta = {
     homepage = http://www.gnu.org/software/findutils/;

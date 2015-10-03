@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cp -r --no-preserve=mode ${contrib} modules
+    substituteInPlace  head.lisp \
+      --replace 'run-shell-command "xdpyinfo' 'run-shell-command "${xdpyinfo}/bin/xdpyinfo'
   '';
 
   installPhase = ''
@@ -69,7 +71,7 @@ stdenv.mkDerivation rec {
     description = "A tiling window manager for X11";
     homepage    = https://github.com/stumpwm/;
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ _1126 the-kenny ];
+    maintainers = with maintainers; [ hiberno the-kenny ];
     platforms   = platforms.linux;
   };
 }

@@ -1,6 +1,7 @@
 { stdenv, fetchurl, perl, xz, gmp ? null
 , aclSupport ? false, acl ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
+, autoconf, automake114x, texinfo
 }:
 
 assert aclSupport -> acl != null;
@@ -11,16 +12,19 @@ with { inherit (stdenv.lib) optional optionals optionalString optionalAttrs; };
 
 let
   self = stdenv.mkDerivation rec {
-    name = "coreutils-8.23";
+    name = "coreutils-8.24";
 
     src = fetchurl {
       url = "mirror://gnu/coreutils/${name}.tar.xz";
-      sha256 = "0bdq6yggyl7nkc2pbl6pxhhyx15nyqhz3ds6rfn448n6rxdwlhzc";
+      sha256 = "0w11jw3fb5sslf0f72kxy7llxgk1ia3a6bcw0c9kmvxrlj355mx2";
     };
+
+    patches = if stdenv.isCygwin then [ ./coreutils-8.23-4.cygwin.patch ] else null;
 
     # The test tends to fail on btrfs and maybe other unusual filesystems.
     postPatch = stdenv.lib.optionalString (!stdenv.isDarwin) ''
       sed '2i echo Skipping dd sparse test && exit 0' -i ./tests/dd/sparse.sh
+      sed '2i echo Skipping cp sparse test && exit 0' -i ./tests/cp/sparse.sh
     '';
 
     outputs = [ "out" "info" ];
@@ -28,10 +32,11 @@ let
     nativeBuildInputs = [ perl xz.bin ];
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
+      ++ optionals stdenv.isCygwin [ autoconf automake114x texinfo ]   # due to patch
       ++ optionals selinuxSupport [ libselinux libsepol ];
 
     crossAttrs = {
-      buildInputs = [ gmp ]
+      buildInputs = [ gmp.crossDrv ]
         ++ optional aclSupport acl.crossDrv
         ++ optionals selinuxSupport [ libselinux.crossDrv libsepol.crossDrv ]
         ++ optional (stdenv.ccCross.libc ? libiconv)

@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "http://dev.haeleth.net/onscripter.shtml";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = maintainers.abbradar;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

@@ -1,12 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, fontconfig
-, withAACS ? false, libaacs ? null, jdk ? null, ant ? null
+{ stdenv, fetchurl, pkgconfig, fontconfig, autoreconfHook
+, withJava ? false, jdk ? null, ant ? null
+, withAACS ? false, libaacs ? null
+, withBDplus ? false, libbdplus ? null
 , withMetadata ? true, libxml2 ? null
 , withFonts ? true, freetype ? null
-# Need to run autoreconf hook after BDJ jarfile patch
-, autoreconfHook ? null
 }:
 
-assert withAACS -> jdk != null && ant != null && libaacs != null && autoreconfHook != null;
+with stdenv.lib;
+
+assert withJava -> jdk != null && ant != null;
+assert withAACS -> libaacs != null;
+assert withBDplus -> libbdplus != null;
 assert withMetadata -> libxml2 != null;
 assert withFonts -> freetype != null;
 
@@ -15,41 +19,40 @@ assert withFonts -> freetype != null;
 
 stdenv.mkDerivation rec {
   baseName = "libbluray";
-  version  = "0.7.0";
+  version  = "0.8.1";
   name = "${baseName}-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.videolan.org/pub/videolan/${baseName}/${version}/${name}.tar.bz2";
-    sha256 = "13dngs4b4cv29f6b825dq14n77mfhvk1kjb42axpq494pfgyp6zp";
+    sha256 = "13zvkrwy2fr877gkifgwnqfsb3krbz7hklfcwqfjbhmvqn0cdgnd";
   };
 
-  nativeBuildInputs = with stdenv.lib;
-                      [pkgconfig]
-                      ++ optional withAACS ant
+  nativeBuildInputs = [ pkgconfig autoreconfHook ]
+                      ++ optionals withJava [ ant ]
                       ;
 
-  buildInputs =  with stdenv.lib;
-                 [fontconfig]
-              ++ optionals withAACS [ jdk autoreconfHook ]
-              ++ optional withMetadata libxml2
-              ++ optional withFonts freetype
-              ;
+  buildInputs = [ fontconfig ]
+                ++ optional withJava jdk
+                ++ optional withMetadata libxml2
+                ++ optional withFonts freetype
+                ;
 
   propagatedBuildInputs = stdenv.lib.optional withAACS libaacs;
 
-  preConfigure = stdenv.lib.optionalString withAACS ''
-    export JDK_HOME=${jdk.home}
-    export LIBS="$LIBS -L${libaacs} -laacs"
+  preConfigure = ''
+    ${optionalString withJava ''export JDK_HOME="${jdk.home}"''}
+    ${optionalString withAACS ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${libaacs}/lib -laacs"''}
+    ${optionalString withBDplus ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${libbdplus}/lib -lbdplus"''}
   '';
 
   configureFlags =  with stdenv.lib;
-                    optional withAACS "--enable-bdjava"
+                    optional (! withJava) "--disable-bdjava"
                  ++ optional (! withMetadata) "--without-libxml2"
                  ++ optional (! withFonts) "--without-freetype"
                  ;
 
   # Fix search path for BDJ jarfile
-  patches = stdenv.lib.optional withAACS ./BDJ-JARFILE-path.patch;
+  patches = stdenv.lib.optional withJava ./BDJ-JARFILE-path.patch;
 
   meta = with stdenv.lib; {
     homepage = http://www.videolan.org/developers/libbluray.html;

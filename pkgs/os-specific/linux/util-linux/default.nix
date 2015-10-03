@@ -1,15 +1,16 @@
 { stdenv, fetchurl, pkgconfig, zlib, ncurses ? null, perl ? null, pam }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-2.26.1";
+  name = "util-linux-2.26.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v2.26/${name}.tar.xz";
-    sha256 = "0vmvk5khfwf71xbsnplvmk9ikwnlbhysc96mnkgwpqk2faairp12";
+    sha256 = "0rlnzmiqdannzf81fbh41541lrck63v9zhskm6h4i2jj8ahvsa8f";
   };
 
-  patches = [ ./rtcwake-search-PATH-for-shutdown.patch
-            ];
+  patches = [
+    ./rtcwake-search-PATH-for-shutdown.patch
+  ];
 
   outputs = [ "bin" "out" "man" ]; # TODO: $bin is kept the first for now
   # due to lots of ${utillinux}/bin occurences and headers being rather small
@@ -61,5 +62,6 @@ stdenv.mkDerivation rec {
     description = "A set of system utilities for Linux";
     license = licenses.gpl2; # also contains parts under more permissive licenses
     platforms = platforms.linux;
+    priority = 6; # lower priority than coreutils ("kill") and shadow ("login" etc.) packages
   };
 }

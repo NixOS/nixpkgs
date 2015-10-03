@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "ec2-ami-tools-${version}";
 
-  version = "1.5.6";
+  version = "1.5.7";
 
   buildInputs = [ unzip makeWrapper ];
 
   src = fetchurl {
     url = "http://s3.amazonaws.com/ec2-downloads/${name}.zip";
-    sha256 = "0227370qbm26qaqvscqxv6002bqwy2i5fdhbhpwfnbymh7jz59ks";
+    sha256 = "17xj7xmdbcwdbzalhfs6yyiwa64978mk3li39l949qfjjgrxjias";
   };
 
   # Amazon EC2 requires that disk images are writable.  If they're

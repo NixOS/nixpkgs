@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs = [pkgconfig];
 
   meta = { 
-    description = "LibParserUtils is a library for building efficient parsers, written in C";
+    description = "A library for building efficient parsers, written in C";
     homepage = http://www.netsurf-browser.org/projects/libparserutils/;
     license = stdenv.lib.licenses.mit;
     maintainers = [args.lib.maintainers.marcweber];

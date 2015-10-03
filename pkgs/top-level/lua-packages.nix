@@ -5,9 +5,10 @@
    for each package in a separate file: the call to the function would
    be almost as must code as the function itself. */
 
-{ fetchurl, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
+{ fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
-, perl, gtk, python, glib, gobjectIntrospection, libevent, zlib
+, perl, gtk, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
+, fetchFromGitHub
 }:
 
 let
@@ -33,8 +34,11 @@ let
       sha256 = "16fffbrgfcw40kskh2bn9q7m3gajffwd2f35rafynlnd7llwj1qj";
     };
 
+    buildFlags = stdenv.lib.optionalString stdenv.isDarwin "macosx";
+
     preBuild = ''
       makeFlagsArray=(
+        ${stdenv.lib.optionalString stdenv.cc.isClang "CC=$CC"}
         INCLUDES="-I${lua}/include"
         LUA="${lua}/bin/lua");
     '';
@@ -55,9 +59,9 @@ let
     name = "luaevent-${version}";
     disabled = isLua52;
 
-    src = fetchurl {
+    src = fetchzip {
       url = "https://github.com/harningt/luaevent/archive/v${version}.tar.gz";
-      sha256 = "1ifr949j9xaas0jk0nxpilb44dqvk4c5h4m7ccksz5da3iksfgls";
+      sha256 = "1c1n2zqx5rwfwkqaq1jj8gvx1vswvbihj2sy445w28icz1xfhpik";
     };
 
     preBuild = ''
@@ -107,9 +111,9 @@ let
 
   luafilesystem = buildLuaPackage rec {
     name = "filesystem-1.6.2";
-    src = fetchurl {
+    src = fetchzip {
       url = "https://github.com/keplerproject/luafilesystem/archive/v1_6_2.tar.gz";
-      sha256 = "1n8qdwa20ypbrny99vhkmx8q04zd2jjycdb5196xdhgvqzk10abz";
+      sha256 = "134azkxw84xp9g5qmzjsmcva629jm7plwcmjxkdzdg05vyd7kig1";
     };
     meta = {
       homepage = "https://github.com/keplerproject/luafilesystem";
@@ -142,11 +146,12 @@ let
   };
 
   luasec = buildLuaPackage rec {
-    version = "0.5";
-    name = "sec-${version}";
-    src = fetchurl {
-      url = "https://github.com/brunoos/luasec/archive/luasec-${version}.tar.gz";
-      sha256 = "08rm12cr1gjdnbv2jpk7xykby9l292qmz2v0dfdlgb4jfj7mk034";
+    name = "sec-0.6pre-2015-04-17";
+    src = fetchFromGitHub {
+      owner = "brunoos";
+      repo = "luasec";
+      rev = "12e1b1f1d9724974ecc6ca273a0661496d96b3e7";
+      sha256 = "0m917qgi54p6n2ak33m67q8sxcw3cdni99bm216phjjka9rg7qwd";
     };
 
     buildInputs = [ openssl ];
@@ -169,17 +174,17 @@ let
 
   luasocket = buildLuaPackage rec {
     name = "socket-${version}";
-    version = "2.0.2";
+    version = "3.0-rc1";
     src = fetchurl {
-      url = "http://files.luaforge.net/releases/luasocket/luasocket/luasocket-${version}/luasocket-${version}.tar.gz";
-      sha256 = "19ichkbc4rxv00ggz8gyf29jibvc2wq9pqjik0ll326rrxswgnag";
+      url = "https://github.com/diegonehab/luasocket/archive/v${version}.tar.gz";
+      sha256 = "0j8jx8bjicvp9khs26xjya8c495wrpb7parxfnabdqa5nnsxjrwb";
     };
-    disabled = isLua52;
+
     patchPhase = ''
-      sed -e "s,^INSTALL_TOP_SHARE.*,INSTALL_TOP_SHARE=$out/share/lua/${lua.luaversion}," \
-          -e "s,^INSTALL_TOP_LIB.*,INSTALL_TOP_LIB=$out/lib/lua/${lua.luaversion}," \
-          -i config
+      sed -e "s,^LUAPREFIX_linux.*,LUAPREFIX_linux=$out," \
+          -i src/makefile
     '';
+
     meta = {
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
       hydraPlatforms = stdenv.lib.platforms.linux;
@@ -190,9 +195,9 @@ let
   luazip = buildLuaPackage rec {
     name = "zip-${version}";
     version = "1.2.3";
-    src = fetchurl {
+    src = fetchzip {
       url = "https://github.com/luaforge/luazip/archive/0b8f5c958e170b1b49f05bc267bc0351ad4dfc44.zip";
-      sha256 = "beb9260d606fdd5304aa958d95f0d3c20be7ca0a2cff44e7b75281c138a76a50";
+      sha256 = "0zrrwhmzny5zbpx91bjbl77gzkvvdi3qhhviliggp0aj8w3faxsr";
     };
     buildInputs = [ unzip zziplib ];
     patches = [ ../development/lua-modules/zip.patch ];
@@ -209,9 +214,9 @@ let
     name = "zlib-${version}";
     version = "0.4";
 
-    src = fetchurl {
+    src = fetchzip {
       url = "https://github.com/brimworks/lua-zlib/archive/v${version}.tar.gz";
-      sha256 = "1l32nwyh8b4vicxvlhbv9qhkhklbhvjfn8wd72bjk7ac9kz172rd";
+      sha256 = "1pgxnjc0gvk25wsr69nsm60y5ad86z1nlq7mzj3ckygzkgi782dd";
     };
 
     buildInputs = [ zlib ];
@@ -238,11 +243,11 @@ let
 
   luastdlib = buildLuaPackage {
     name = "stdlib";
-    src = fetchurl {
+    src = fetchzip {
       url = "https://github.com/lua-stdlib/lua-stdlib/archive/release.zip";
-      sha256 = "1v3158g5050sdqfrqi6d2bjh0lmi1v01a6m2nwqpr527a2dqcf0c";
+      sha256 = "0636absdfjx8ybglwydmqxwfwmqz1c4b9s5mhxlgm4ci18lw3hms";
     };
-    buildInputs = [ unzip ];
+    buildInputs = [ autoreconfHook unzip ];
     meta = {
       homepage = "https://github.com/lua-stdlib/lua-stdlib/";
       hydraPlatforms = stdenv.lib.platforms.linux;
@@ -253,9 +258,9 @@ let
   lrexlib = buildLuaPackage rec {
     name = "lrexlib-${version}";
     version = "2.7.2";
-    src = fetchurl {
+    src = fetchzip {
       url = "https://github.com/rrthomas/lrexlib/archive/150c251be57c4e569da0f48bf6b01fbca97179fe.zip";
-      sha256 = "0i5brqbykc2nalp8snlq1r0wmf8y2wqp6drzr2xmq5phvj8913xh";
+      sha256 = "0acb3258681bjq61piz331r99bdff6cnkjaigq5phg3699iz5h75";
     };
     buildInputs = [ unzip luastdlib pcre luarocks oniguruma gnulib tre glibc ];
 
@@ -282,15 +287,16 @@ let
       homepage = "https://github.com/lua-stdlib/lua-stdlib/";
       hydraPlatforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
+      broken = true;
     };
   };
 
   luasqlite3 = buildLuaPackage rec {
     name = "sqlite3-${version}";
     version = "2.1.1";
-    src = fetchurl {
+    src = fetchzip {
       url = "https://github.com/LuaDist/luasql-sqlite3/archive/2acdb6cb256e63e5b5a0ddd72c4639d8c0feb52d.zip";
-      sha256 = "1yy1n1l1801j48rlf3bhxpxqfgx46ixrs8jxhhbf7x1hn1j4axlv";
+      sha256 = "17zsa0jzciildil9k4lb0rjn9s1nj80dy16pzx9bxqyi75pjf2d4";
     };
 
     buildInputs = [ unzip sqlite ];
@@ -356,9 +362,9 @@ let
   luaMessagePack = buildLuaPackage rec {
     name = "lua-MessagePack-${version}";
     version = "0.3.1";
-    src = fetchurl {
+    src = fetchzip {
       url = "https://github.com/fperrad/lua-MessagePack/archive/${version}.tar.gz";
-      sha256 = "185mrd6bagwwm94jxzanq01l72ama3x4hf160a7yw7hgim2y5h9c";
+      sha256 = "1xlif8fkwd8bb78wrvf2z309p7apms350lbg6qavylsvz57lkjm6";
     };
     buildInputs = [ unzip ];
 
@@ -373,9 +379,9 @@ let
     name = "lgi-${version}";
     version = "0.7.2";
 
-    src = fetchurl {
+    src = fetchzip {
       url    = "https://github.com/pavouk/lgi/archive/${version}.tar.gz";
-      sha256 = "0ihl7gg77b042vsfh0k7l53b7sl3d7mmrq8ns5lrsf71dzrr19bn";
+      sha256 = "10i2ssfs01d49fdmmriqzxc8pshys4rixhx30wzd9p1m1q47a5pn";
     };
 
     meta = with stdenv.lib; {
@@ -392,6 +398,31 @@ let
 
     preBuild = ''
       sed -i "s|/usr/local|$out|" lgi/Makefile
+    '';
+  };
+
+  vicious = stdenv.mkDerivation rec {
+    name = "vicious-${version}";
+    version = "2.1.3";
+
+    src = fetchzip {
+      url    = "http://git.sysphere.org/vicious/snapshot/vicious-${version}.tar.xz";
+      sha256 = "1c901siza5vpcbkgx99g1vkqiki5qgkzx2brnj4wrpbsbfzq0bcq";
+    };
+
+    meta = with stdenv.lib; {
+      description = "vicious widgets for window managers";
+      homepage    = http://git.sysphere.org/vicious/;
+      license     = licenses.gpl2;
+      maintainers = with maintainers; [ makefu ];
+      platforms   = platforms.linux;
+    };
+
+    buildInputs = [ lua ];
+    installPhase = ''
+      mkdir -p $out/lib/lua/${lua.luaversion}/
+      cp -r . $out/lib/lua/${lua.luaversion}/vicious/
+      printf "package.path = '$out/lib/lua/${lua.luaversion}/?/init.lua;' ..  package.path\nreturn require((...) .. '.init')\n" > $out/lib/lua/${lua.luaversion}/vicious.lua
     '';
   };
 

@@ -17,6 +17,12 @@ if test -z "$url"; then
     exit 1
 fi
 
+if test "$fetchSubrepos" == 1; then
+    subrepoClause=S
+else
+    subrepoClause=
+fi
+
 test -n "$rev" || rev="tip"
 
 
@@ -47,7 +53,7 @@ if test -z "$finalPath"; then
     else
       tmpClone=$url
     fi
-    hg archive -q -y -r "$rev" --cwd $tmpClone $tmpArchive
+    hg archive -q$subrepoClause -y -r "$rev" --cwd $tmpClone $tmpArchive
     rm -f $tmpArchive/.hg_archival.txt
 
     echo "hg revision is $(cd $tmpClone; hg id -r "$rev" -i)"

@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" "doc" ];
 
-  buildInputs = [ pkgconfig ];
 
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ libogg ];
 
   doCheck = true;

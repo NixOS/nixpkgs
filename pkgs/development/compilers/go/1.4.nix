@@ -1,31 +1,24 @@
-{ stdenv, lib, fetchurl, fetchgit, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc, perl, Security }:
+{ stdenv, lib, fetchurl, tzdata, iana_etc, libcCross
+, pkgconfig
+, pcre
+, Security }:
 
 let
-  loader386 = "${glibc.out}/lib/ld-linux.so.2";
-  loaderAmd64 = "${glibc.out}/lib/ld-linux-x86-64.so.2";
-  loaderArm = "${glibc.out}/lib/ld-linux.so.3";
-  srcs = {
-    golang = fetchurl {
-      url = https://github.com/golang/go/archive/go1.4.2.tar.gz;
-      sha256 = "3e5d07bc5214a1ffe187cf6406c5b5a80ee44f12f6bca97a5463db0afee2f6ac";
-    };
-    tools = fetchgit {
-      url = https://github.com/golang/tools.git;
-      rev = "c836fe615a448dbf9ff5448c1aa657479a0d0aeb";
-      sha256 = "0q9jnhmgmm3xzjss7ndsi6nyykmmb1y984n98118c2sipi183xp5";
-    };
-  };
+  libc = if stdenv ? "cross" then libcCross else stdenv.cc.libc;
 in
 
-stdenv.mkDerivation {
-  name = "go-1.4.2";
+stdenv.mkDerivation rec {
+  name = "go-${version}";
+  version = "1.4.2";
 
-  src = srcs.golang;
+  src = fetchurl {
+    url = "https://github.com/golang/go/archive/go${version}.tar.gz";
+    sha256 = "3e5d07bc5214a1ffe187cf6406c5b5a80ee44f12f6bca97a5463db0afee2f6ac";
+  };
 
-  # perl is used for testing go vet
-  buildInputs = [ bison bash makeWrapper perl ]
-             ++ lib.optionals stdenv.isLinux [ glibc ]
-             ++ lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ pcre ];
+  propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
 
   # I'm not sure what go wants from its 'src', but the go installation manual
   # describes an installation keeping the src.
@@ -41,9 +34,6 @@ stdenv.mkDerivation {
       mv * go
     fi
 
-    mkdir -p $out/share/go/src/golang.org/x
-    cp -r --no-preserve=mode,ownership ${srcs.tools} $out/share/go/src/golang.org/x/tools
-
     cd go
     patchShebangs ./ # replace /bin/bash
 
@@ -58,23 +48,43 @@ stdenv.mkDerivation {
     sed -i '/TestShutdownUnix/areturn' src/net/net_test.go
     # Disable the hostname test
     sed -i '/TestHostname/areturn' src/os/os_test.go
-    sed -i 's,/etc/protocols,${iana_etc}/etc/protocols,' src/net/lookup_unix.go
     # ParseInLocation fails the test
     sed -i '/TestParseInSydney/areturn' src/time/format_test.go
+
+    sed -i 's,/etc/protocols,${iana_etc}/etc/protocols,' src/net/lookup_unix.go
   '' + lib.optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
-    sed -i 's,/lib/ld-linux.so.3,${loaderArm},' src/cmd/5l/asm.c
-    sed -i 's,/lib64/ld-linux-x86-64.so.2,${loaderAmd64},' src/cmd/6l/asm.c
-    sed -i 's,/lib/ld-linux.so.2,${loader386},' src/cmd/8l/asm.c
+
+    # Find the loader dynamically
+    LOADER="$(find ${libc.out or libc}/lib -name ld-linux\* | head -n 1)"
+
+    # Replace references to the loader
+    find src/cmd -name asm.c -exec sed -i "s,/lib/ld-linux.*\.so\.[0-9],$LOADER," {} \;
+  '' + lib.optionalString stdenv.isDarwin ''
+    sed -i 's,"/etc","'"$TMPDIR"'",' src/os/os_test.go
+    sed -i 's,/_go_os_test,'"$TMPDIR"'/_go_os_test,' src/os/path_test.go
+    sed -i '/TestRead0/areturn' src/os/os_test.go
+    sed -i '/TestSystemRoots/areturn' src/crypto/x509/root_darwin_test.go
+    sed -i '/TestDialDualStackLocalhost/areturn' src/net/dial_test.go
+
+    # remove IP resolving tests, on darwin they can find fe80::1%lo while expecting ::1
+    sed -i '/TestResolveIPAddr/areturn' src/net/ipraw_test.go
+    sed -i '/TestResolveTCPAddr/areturn' src/net/tcp_test.go
+    sed -i '/TestResolveUDPAddr/areturn' src/net/udp_test.go
+
+    touch $TMPDIR/group $TMPDIR/hosts $TMPDIR/passwd
   '';
 
-  patches = [ ./cacert-1.4.patch ];
+  patches = [
+    ./cacert-1.4.patch
+    ./remove-tools-1.4.patch
+  ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"
            else if stdenv.system == "i686-linux" then "386"
            else if stdenv.system == "x86_64-linux" then "amd64"
-           else if stdenv.system == "armv5tel-linux" then "arm"
+           else if stdenv.isArm then "arm"
            else throw "Unsupported system";
   GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686
@@ -91,23 +101,16 @@ stdenv.mkDerivation {
     export PATH="$GOBIN:$PATH"
     cd ./src
     ./all.bash
-    cd -
-
-    # Build extra tooling
-    # TODO: Fix godoc tests
-    TOOL_ROOT=golang.org/x/tools/cmd
-    go install -v $TOOL_ROOT/cover $TOOL_ROOT/vet $TOOL_ROOT/godoc
-    go test -v    $TOOL_ROOT/cover $TOOL_ROOT/vet # $TOOL_ROOT/godoc
   '';
 
   setupHook = ./setup-hook.sh;
 
-  meta = {
+  meta = with stdenv.lib; {
     branch = "1.4";
     homepage = http://golang.org/;
     description = "The Go Programming language";
-    license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [ cstrahan ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ cstrahan wkennington ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

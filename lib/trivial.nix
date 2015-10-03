@@ -22,7 +22,7 @@ rec {
   inherit (builtins)
     pathExists readFile isBool isFunction
     isInt add sub lessThan
-    seq deepSeq;
+    seq deepSeq genericClosure;
 
   # Return the Nixpkgs version number.
   nixpkgsVersion =

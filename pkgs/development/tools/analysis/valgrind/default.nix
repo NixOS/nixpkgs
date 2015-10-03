@@ -1,19 +1,23 @@
 { stdenv, fetchurl, fetchpatch, perl, gdb }:
 
 stdenv.mkDerivation rec {
-  name = "valgrind-3.10.1";
+  name = "valgrind-3.11.0";
 
   src = fetchurl {
     url = "http://valgrind.org/downloads/${name}.tar.bz2";
-    sha256 = "15xrzhfnwwn7n1sfbkwvdbvs6zk0zx718n6zd5i1nrnvdp13s9gs";
+    sha256 = "0hiv871b9bk689mv42mkhp76za78l5773glszfkdbpf1m1qn4fbc";
   };
 
-  patches = [(fetchpatch {
-    name = "glibc-2.21.patch";
-    url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk"
-      + "/valgrind-3.9.0-glibc-2.21.patch?h=packages/valgrind&id=41e87313b69";
-    sha256 = "14sgsvjjalbcqpcayyv5cndc9hfm5bigkp684b6cr6virksmlk19";
-  }) ./linux-4.0.patch];
+  patches =
+    [ (fetchpatch {
+        name = "glibc-2.21.patch";
+        url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk"
+          + "/valgrind-3.9.0-glibc-2.21.patch?h=packages/valgrind&id=41e87313b69";
+        sha256 = "14sgsvjjalbcqpcayyv5cndc9hfm5bigkp684b6cr6virksmlk19";
+      })
+    ];
+
+  outputs = [ "out" "doc" ];
 
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.

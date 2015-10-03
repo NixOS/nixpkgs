@@ -1,23 +1,14 @@
 { stdenv, fetchurl, pkgconfig, zlib, kmod, which }:
 
-let
-  pciids = fetchurl {
-    # Obtained from http://pciids.sourceforge.net/v2.2/pci.ids.bz2.
-    url = http://tarballs.nixos.org/pci.ids.20131006.bz2;
-    sha256 = "1vmshcgxqminiyh52pdcak24lm24qlic49py9cmkp96y1s48lvsc";
-  };
-in
 stdenv.mkDerivation rec {
-  name = "pciutils-3.3.1"; # with database from 2015-04
+  name = "pciutils-3.4.0"; # with database from 2015-09
 
   src = fetchurl {
     url = "mirror://kernel/software/utils/pciutils/${name}.tar.xz";
-    sha256 = "1ag3skny1bamqil46dlppw8j1fp08spqa60fjygbxkg4fzdknjji";
+    sha256 = "15liffqvdwbpza210wfqy2y135dvg7sbyqr7gvhyjllgspv8z2gq";
   };
 
   buildInputs = [ pkgconfig zlib kmod which ];
-
-  #preBuild = "bunzip2 < ${pciids} > pci.ids";
 
   makeFlags = "SHARED=yes PREFIX=\${out}";
 

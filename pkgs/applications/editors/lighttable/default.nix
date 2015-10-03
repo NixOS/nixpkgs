@@ -1,14 +1,14 @@
 { stdenv, fetchurl, buildEnv, makeDesktopItem, makeWrapper, zlib, glib, alsaLib
 , dbus, gtk, atk, pango, freetype, fontconfig, libgnome_keyring3, gdk_pixbuf
-, cairo, cups, expat, libgpgerror, nspr, gnome3, nss, xlibs, udev
+, cairo, cups, expat, libgpgerror, nspr, gnome3, nss, xorg, udev
 }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
       stdenv.cc.cc zlib glib dbus gtk atk pango freetype libgnome_keyring3 nss
       fontconfig gdk_pixbuf cairo cups expat libgpgerror alsaLib nspr gnome3.gconf
-      xlibs.libXrender xlibs.libX11 xlibs.libXext xlibs.libXdamage xlibs.libXtst
-      xlibs.libXcomposite xlibs.libXi xlibs.libXfixes
+      xorg.libXrender xorg.libX11 xorg.libXext xorg.libXdamage xorg.libXtst
+      xorg.libXcomposite xorg.libXi xorg.libXfixes
 ];
 in
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "the next generation code editor";
     homepage = http://www.lighttable.com/;
-    license = [ licenses.gpl3 ];
+    license = licenses.gpl3;
   };
 }

@@ -1,12 +1,19 @@
-{ stdenv, fetchurl, fetchgit, telepathy_qt, kdelibs, kde_workspace, gettext, dbus_libs, farstream
-, pkgconfigUpstream , qt_gstreamer1, telepathy_glib, telepathy_logger, qjson, flex, bison, qca2 }:
+{ stdenv, fetchurl, fetchgit, automoc4, cmake, gettext, perl, pkgconfig
+, telepathy_qt, kdelibs, kde_workspace, dbus_glib, dbus_libs, farstream
+, qt_gstreamer1, telepathy_glib, telepathy_logger
+, qjson, flex, bison, qca2 }:
 
 let
-  pkgconfig = pkgconfigUpstream;
   version = "0.8.80";
   manifest = import (./. + "/${version}.nix");
 
   overrides = {
+    call_ui = x : x // {
+      NIX_CFLAGS_COMPILE =
+        "-I${telepathy_glib}/include/telepathy-1.0"
+        + " -I${dbus_glib}/include/dbus-1.0"
+        + " -I${dbus_libs}/include/dbus-1.0";
+    };
     telepathy_logger_qt = x : x // {
       NIX_CFLAGS_COMPILE = "-I${dbus_libs}/include/dbus-1.0";
     };
@@ -38,7 +45,9 @@ let
           inherit sha256;
         };
 
-        nativeBuildInputs = [ gettext pkgconfig ] ++ (stdenv.lib.attrByPath [ key ] [] extraNativeBuildInputs);
+        nativeBuildInputs =
+          [ automoc4 cmake gettext perl pkgconfig ]
+          ++ (stdenv.lib.attrByPath [ key ] [] extraNativeBuildInputs);
         buildInputs = [ kdelibs telepathy_qt ]
           ++ stdenv.lib.optional (name != "ktp-common-internals") ktp.common_internals
           ++ (stdenv.lib.attrByPath [ key ] [] extraBuildInputs);

@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "powerline-fonts-2014-12-27";
+  name = "powerline-fonts-2015-06-29";
 
   src = fetchFromGitHub {
     owner = "powerline";
     repo = "fonts";
-    rev = "39c99c02652f25290b64e24a7e9a7cfb8ce89a3e";
-    sha256 = "9c83a30f36dc980582c0a079bd2896f95d19e1cb0ba5afbd8cae936c944256dd";
+    rev = "97dc451724fb24e1dd9892c988642b239b5dc67c";
+    sha256 = "1m0a8k916s74iv2k0kk36dz7d2hfb2zgf8m0b9hg71w4yd3bmj4w";
   };
 
   buildPhase = "true";
@@ -23,11 +23,11 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = https://github.com/powerline/fonts;
-    description = "Patched fonts for Powerline users.";
+    description = "Patched fonts for Powerline users";
     longDescription = ''
       Pre-patched and adjusted fonts for usage with the Powerline plugin.
     '';
-    license = "asl20 free ofl";
+    license = with licenses; [ asl20 free ofl ];
     platforms = platforms.all;
     maintainer = with maintainers; [ malyn ];
   };

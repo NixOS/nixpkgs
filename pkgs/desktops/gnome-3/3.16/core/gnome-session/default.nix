@@ -14,18 +14,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = with gnome3;
     [ pkgconfig glib gnome_desktop gtk dbus_glib json_glib libxslt 
-      gnome3.gnome_settings_daemon xorg.xtrans
+      gnome3.gnome_settings_daemon xorg.xtrans gnome3.defaultIconTheme
       gsettings_desktop_schemas upower intltool gconf makeWrapper systemd ];
 
   preFixup = ''
     wrapProgram "$out/bin/gnome-session" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
+      --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = gnome3.maintainers;
   };
 
 }

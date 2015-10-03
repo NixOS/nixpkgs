@@ -1,6 +1,6 @@
 { fetchurl, stdenv, pkgconfig, gnome3, intltool, glib, libnotify, lcms2, libXtst
-, libxkbfile, pulseaudio, libcanberra_gtk3, upower, colord, libgweather, polkit
-, geoclue2, librsvg, xf86_input_wacom, udev, libwacom, libxslt, libtool, networkmanager
+, libxkbfile, libpulseaudio, libcanberra_gtk3, upower, colord, libgweather, polkit
+, geoclue2, librsvg, xf86_input_wacom, udev, libgudev, libwacom, libxslt, libtool, networkmanager
 , docbook_xsl, docbook_xsl_ns, makeWrapper, ibus, xkeyboard_config }:
 
 stdenv.mkDerivation rec {
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = with gnome3;
     [ intltool pkgconfig ibus gtk glib gsettings_desktop_schemas networkmanager
-      libnotify gnome_desktop lcms2 libXtst libxkbfile pulseaudio
+      libnotify gnome_desktop lcms2 libXtst libxkbfile libpulseaudio
       libcanberra_gtk3 upower colord libgweather xkeyboard_config
-      polkit geocode_glib geoclue2 librsvg xf86_input_wacom udev libwacom libxslt
+      polkit geocode_glib geoclue2 librsvg xf86_input_wacom udev libgudev libwacom libxslt
       libtool docbook_xsl docbook_xsl_ns makeWrapper gnome_themes_standard ];
 
   preFixup = ''
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = gnome3.maintainers;
   };
 
 }

@@ -1,7 +1,10 @@
 # This test runs gitlab and checks if it works
 
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ...} : {
   name = "gitlab";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ iElectric offline ];
+  };
 
   nodes = {
     gitlab = { config, pkgs, ... }: {
@@ -18,4 +21,4 @@ import ./make-test.nix {
     $gitlab->waitForUnit("gitlab-sidekiq.service");
     $gitlab->waitUntilSucceeds("curl http://localhost:8080/users/sign_in");
   '';
-}
+})

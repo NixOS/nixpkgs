@@ -1,20 +1,32 @@
 { stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull
-, libX11, graphicsmagick, pcre, liblapack, pkgconfig, mesa, fltk
-, fftw, fftwSinglePrec, zlib, curl, qrupdate
+, libX11, graphicsmagick, pcre, pkgconfig, mesa, fltk
+, fftw, fftwSinglePrec, zlib, curl, qrupdate, openblas
 , qt ? null, qscintilla ? null, ghostscript ? null, llvm ? null, hdf5 ? null,glpk ? null
 , suitesparse ? null, gnuplot ? null, jdk ? null, python ? null
 }:
 
+let
+  suitesparseOrig = suitesparse;
+  qrupdateOrig = qrupdate;
+in
+# integer width is determined by openblas, so all dependencies must be built
+# with exactly the same openblas
+let
+  suitesparse =
+    if suitesparseOrig != null then suitesparseOrig.override { inherit openblas; } else null;
+  qrupdate = if qrupdateOrig != null then qrupdateOrig.override { inherit openblas; } else null;
+in
+
 stdenv.mkDerivation rec {
-  version = "3.8.2";
+  version = "4.0.0";
   name = "octave-${version}";
   src = fetchurl {
-    url = "mirror://gnu/octave/${name}.tar.bz2";
-    sha256 = "83bbd701aab04e7e57d0d5b8373dd54719bebb64ce0a850e69bf3d7454f33bae";
+    url = "mirror://gnu/octave/${name}.tar.xz";
+    sha256 = "0x64b2lna4vrlm4wwx6h1qdlmki6s2b9q90yjxldlvvrqvxf4syg";
   };
 
   buildInputs = [ gfortran readline ncurses perl flex texinfo qhull libX11
-    graphicsmagick pcre liblapack pkgconfig mesa fltk zlib curl
+    graphicsmagick pcre pkgconfig mesa fltk zlib curl openblas
     fftw fftwSinglePrec qrupdate ]
     ++ (stdenv.lib.optional (qt != null) qt)
     ++ (stdenv.lib.optional (qscintilla != null) qscintilla)
@@ -34,7 +46,13 @@ stdenv.mkDerivation rec {
   # problems on Hydra
   enableParallelBuilding = false;
 
-  configureFlags = [ "--enable-readline" "--enable-dl" ];
+  configureFlags =
+    [ "--enable-readline"
+      "--enable-dl"
+      "--with-blas=openblas"
+      "--with-lapack=openblas"
+    ]
+    ++ stdenv.lib.optional openblas.blas64 "--enable-64";
 
   # Keep a copy of the octave tests detailed results in the output
   # derivation, because someone may care

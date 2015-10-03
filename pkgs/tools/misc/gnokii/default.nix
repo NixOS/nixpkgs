@@ -1,8 +1,8 @@
-a :  
-let 
+a @ { intltool, perl, gettext, libusb, pkgconfig, bluez, readline, pcsclite, libical, gtk, glib, libXpm, ... } :
+let
   fetchurl = a.fetchurl;
 
-  s = import ./src-for-default.nix; 
+  s = import ./src-for-default.nix;
   buildInputs = with a; [
     perl intltool gettext libusb
     glib gtk pkgconfig bluez readline

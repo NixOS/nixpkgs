@@ -1,6 +1,6 @@
 {fetchurl, stdenv, fontforge, perl, fontconfig, FontTTF}:
 
-let version = "2.34" ; in
+let version = "2.35" ; in
 
 stdenv.mkDerivation rec {
   name = "dejavu-fonts-${version}";
@@ -18,9 +18,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/dejavu/dejavu-fonts-${version}.tar.bz2";
-    sha256 = "09wh9c9kk82i4kwy73fcqa0779bvf0ncikciqw2gxa9m2rkrxjmm";
+    sha256 = "1xdbi4llrq1qbkd73352ibrfqcbz93dww8hab216qz5szd95yvv4";
   };
+
   buildFlags = "full-ttf";
+
   preBuild = ''
     sed -e s@/usr/bin/env@$(type -tP env)@ -i scripts/*
     sed -e s@/usr/bin/perl@$(type -tP perl)@ -i scripts/*
@@ -30,13 +32,12 @@ stdenv.mkDerivation rec {
     ln -s ${unicodeData} resources/UnicodeData.txt
     ln -s ${blocks} resources/Blocks.txt
   '';
-  installPhase = '' 
+
+  installPhase = ''
     mkdir -p $out/share/fonts/truetype
-    for i in $(find build -name '*.ttf'); do 
-        cp $i $out/share/fonts/truetype; 
+    for i in $(find build -name '*.ttf'); do
+        cp $i $out/share/fonts/truetype;
     done;
-    mkdir -p $out/share/dejavu-fonts
-    cp -r build/* $out/share/dejavu-fonts
   '';
 }
-  
+

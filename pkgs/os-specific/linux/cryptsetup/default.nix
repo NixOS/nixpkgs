@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, devicemapper, libgcrypt, libuuid, pkgconfig, popt
+{ stdenv, fetchurl, devicemapper, openssl, libuuid, pkgconfig, popt
 , enablePython ? false, python ? null
 }:
 
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "0878vwblazms1dac2ds7vyz8pgi1aac8870ccnl2s0v2sv428g62";
   };
 
-  configureFlags = [ "--enable-cryptsetup-reencrypt" ]
+  configureFlags = [ "--enable-cryptsetup-reencrypt" "--with-crypto_backend=openssl" ]
                 ++ stdenv.lib.optional enablePython "--enable-python";
 
-  buildInputs = [ devicemapper libgcrypt libuuid pkgconfig popt ]
+  buildInputs = [ devicemapper openssl libuuid pkgconfig popt ]
              ++ stdenv.lib.optional enablePython python;
 
   meta = {

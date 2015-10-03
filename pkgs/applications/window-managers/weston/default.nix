@@ -1,20 +1,22 @@
 { stdenv, fetchurl, pkgconfig, wayland, mesa, libxkbcommon, cairo, libxcb
-, libXcursor, x11, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput
+, libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput
 , pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
 , libwebp ? null, xwayland ? null
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
 }:
 
 stdenv.mkDerivation rec {
-  name = "weston-${wayland.version}";
+  name = "weston-${version}";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "1kb6a494j56sh7iy43xwkjlr3bh0nnkq4bkimwj6qirzbya12i8w";
+    sha256 = "1ks8mja6glzy2dkayi535hd6w5c5h021bqk7vzgv182g33rh66ww";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig wayland mesa libxkbcommon cairo libxcb libXcursor x11 udev libdrm
+    wayland mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
     mtdev libjpeg pam dbus.libs libinput pango libunwind freerdp vaapi libva
     libwebp
   ];

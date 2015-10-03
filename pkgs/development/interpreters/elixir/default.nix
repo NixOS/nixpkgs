@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, erlang, rebar, makeWrapper, coreutils, curl, bash, cacert }:
+{ stdenv, fetchurl, erlang, rebar, makeWrapper, coreutils, curl, bash }:
 
 let
-  version = "1.0.4";
+  version = "1.1.1";
 in
 stdenv.mkDerivation {
   name = "elixir-${version}";
 
   src = fetchurl {
     url = "https://github.com/elixir-lang/elixir/archive/v${version}.tar.gz";
-    sha256 = "1babp3ff6hajdm247zl9rc311k973cdnv6dqaai7l8817gg1yd3r";
+    sha256 = "0shh5brhcrvbvhl4bw0fs2y5llw7i97khkkglygx30ncvd7nwz9v";
   };
 
   buildInputs = [ erlang rebar makeWrapper ];
@@ -20,8 +20,6 @@ stdenv.mkDerivation {
 
     substituteInPlace Makefile \
       --replace "/usr/local" $out
-    substituteInPlace bin/mix \
-      --replace "/usr/bin/env elixir" "$out/bin/elixir"
   '';
 
   postFixup = ''
@@ -32,9 +30,12 @@ stdenv.mkDerivation {
      b=$(basename $f)
       if [ $b == "mix" ]; then continue; fi
       wrapProgram $f \
-      --prefix PATH ":" "${erlang}/bin:${coreutils}/bin:${curl}/bin:${bash}/bin" \
-      --set CURL_CA_BUNDLE "${cacert}/etc/ca-bundle.crt"
+        --prefix PATH ":" "${erlang}/bin:${coreutils}/bin:${curl}/bin:${bash}/bin" \
+        --set CURL_CA_BUNDLE /etc/ssl/certs/ca-certificates.crt
     done
+
+    substituteInPlace $out/bin/mix \
+          --replace "/usr/bin/env elixir" "${coreutils}/bin/env elixir"
   '';
 
   meta = with stdenv.lib; {
@@ -51,6 +52,6 @@ stdenv.mkDerivation {
 
     license = licenses.epl10;
     platforms = platforms.unix;
-    maintainers = [ maintainers.the-kenny ];
+    maintainers = [ maintainers.the-kenny maintainers.havvy ];
   };
 }

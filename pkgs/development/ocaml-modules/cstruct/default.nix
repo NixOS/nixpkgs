@@ -1,27 +1,29 @@
-{ stdenv, fetchzip, ocaml, findlib, sexplib, ocplib-endian, lwt, camlp4 }:
+{stdenv, writeText, fetchurl, ocaml, ocplib-endian, sexplib, findlib,
+ async ? null, lwt ? null, camlp4}:
 
-let version = "1.6.0"; in
+assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
 
 stdenv.mkDerivation {
-  name = "ocaml-cstruct-${version}";
+  name = "ocaml-cstruct-1.6.0";
 
-  src = fetchzip {
-    url = "https://github.com/mirage/ocaml-cstruct/archive/v${version}.tar.gz";
-    sha256 = "09qw3rhfiq2kkns6660p9cwm5610k72md52a04cy91gr6gsig6ic";
+  src = fetchurl {
+    url = https://github.com/mirage/ocaml-cstruct/archive/v1.6.0.tar.gz;
+    sha256 = "0f90a1b7a03091cf22a3ccb11a0cce03b6500f064ad3766b5ed81418ac008ece";
   };
 
-  buildInputs = [ ocaml findlib lwt camlp4 ];
-  propagatedBuildInputs = [ ocplib-endian sexplib ];
-
-  configureFlags = "--enable-lwt";
+  configureFlags = stdenv.lib.strings.concatStringsSep " " ((if lwt != null then ["--enable-lwt"] else []) ++
+                                          (if async != null then ["--enable-async"] else []));
+  buildInputs = [ocaml findlib camlp4];
+  propagatedBuildInputs = [ocplib-endian sexplib lwt async];
 
   createFindlibDestdir = true;
+  dontStrip = true;
 
-  meta = {
-    description = "Map OCaml arrays onto C-like structs";
+  meta = with stdenv.lib; {
     homepage = https://github.com/mirage/ocaml-cstruct;
+    description = "Map OCaml arrays onto C-like structs";
     license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    maintainers = [ maintainers.vbgl maintainers.ericbmerritt ];
     platforms = ocaml.meta.platforms;
   };
 }

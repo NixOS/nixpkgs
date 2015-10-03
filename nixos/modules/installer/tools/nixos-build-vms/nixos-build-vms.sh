@@ -53,5 +53,5 @@ fi
 
 # Build a network of VMs
 
-nix-build '<nixos/modules/installer/tools/nixos-build-vms/build-vms.nix>' \
+nix-build '<nixpkgs/nixos/modules/installer/tools/nixos-build-vms/build-vms.nix>' \
     --argstr networkExpr $networkExpr $noOutLinkArg $showTraceArg

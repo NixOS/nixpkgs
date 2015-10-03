@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, automake, libtool, bison
-, libasr, libevent, zlib, openssl, db, pam
+, libasr, libevent, zlib, openssl, db, pam, cacert
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "--with-sock-dir=/run"
     "--with-privsep-user=smtpd"
     "--with-queue-user=smtpq"
-    "--with-ca-file=/etc/ssl/certs/ca-bundle.crt"
+    "--with-ca-file=/etc/ssl/certs/ca-certificates.crt"
   ];
 
   installFlags = [

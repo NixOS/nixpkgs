@@ -1,4 +1,4 @@
-{ callPackage, pkgs, fetchurl, stdenv, useMupdf }:
+{ callPackage, lib, pkgs, fetchurl, stdenv, useMupdf }:
 
 rec {
   inherit stdenv;
@@ -40,7 +40,7 @@ rec {
 
     preferLocalBuild = true;
 
-    meta = {
+    meta = with lib; {
       homepage = http://pwmt.org/projects/zathura/;
       description = "A highly customizable and functional PDF viewer";
       longDescription = ''
@@ -49,9 +49,9 @@ rec {
         is an application that provides a minimalistic and space saving interface
         as well as an easy usage that mainly focuses on keyboard interaction.
       '';
-      license = stdenv.lib.licenses.zlib;
-      platforms = stdenv.lib.platforms.linux;
-      maintainers = [ stdenv.lib.maintainers.garbas stdenv.lib.maintainers.smironov ];
+      license = licenses.zlib;
+      platforms = platforms.linux;
+      maintainers = with maintainers;[ garbas smironov ];
     };
   };
 }

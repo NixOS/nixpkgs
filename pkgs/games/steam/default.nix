@@ -1,7 +1,7 @@
 {stdenv, fetchurl, traceDeps ? false}:
 
 stdenv.mkDerivation rec {
-  name = "${program}-${version}";
+  name = "${program}-original-${version}";
   program = "steam";
   version = "1.0.0.49";
 

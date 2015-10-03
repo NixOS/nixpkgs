@@ -1,12 +1,14 @@
 { stdenv, fetchurl, openssl, sslEnable ? false, libcap, pam }:
 
 stdenv.mkDerivation rec {
-  name = "vsftpd-3.0.2";
+  name = "vsftpd-3.0.3";
 
   src = fetchurl {
     url = "https://security.appspot.com/downloads/${name}.tar.gz";
-    sha256 = "0mjy345wszskz1vnk83360c1y37arwgap3gwz8hy13sjqpig0imy";
+    sha256 = "1xsyjn68k3fgm2incpb3lz2nikffl9by2safp994i272wvv2nkcx";
   };
+
+  patches = [ ./CVE-2015-1419.patch ];
 
   preConfigure = stdenv.lib.optionalString sslEnable ''
     echo "Will enable SSL"

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "SHELL=${stdenv.shell}"
     "INSTALL_ROOT=$(out)"
-  ] ++ optional (stdenv.cc.cc.isClang or false) "CC=clang";
+  ] ++ optional stdenv.cc.isClang "CC=clang";
 
   preInstall = "mkdir -p $out/{bin,lib,man/man1,man/man3,include/gsm}";
 

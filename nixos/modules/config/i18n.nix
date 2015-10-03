@@ -43,12 +43,21 @@ in
 
       consoleFont = mkOption {
         type = types.str;
-        default = "lat9w-16";
+        default = "Lat2-Terminus16";
         example = "LatArCyrHeb-16";
         description = ''
           The font used for the virtual consoles.  Leave empty to use
           whatever the <command>setfont</command> program considers the
           default font.
+        '';
+      };
+
+      consoleUseXkbConfig = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set, configure the console keymap from the xserver keyboard
+          settings.
         '';
       };
 
@@ -73,6 +82,13 @@ in
   ###### implementation
 
   config = {
+
+    i18n.consoleKeyMap = with config.services.xserver;
+      mkIf config.i18n.consoleUseXkbConfig
+        (pkgs.runCommand "xkb-console-keymap" { preferLocalBuild = true; } ''
+          '${pkgs.ckbcomp}/bin/ckbcomp' -model '${xkbModel}' -layout '${layout}' \
+            -option '${xkbOptions}' -variant '${xkbVariant}' > "$out"
+        '');
 
     environment.systemPackages =
       optional (config.i18n.supportedLocales != []) glibcLocales;

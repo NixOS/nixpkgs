@@ -17,11 +17,21 @@ in
     services.sabnzbd = {
       enable = mkOption {
         default = false;
-        description = "Whether to enable the sabnzbd FTP server.";
+        description = "Whether to enable the sabnzbd server.";
       };
       configFile = mkOption {
-        default = "/var/sabnzbd/sabnzbd.ini";
-        description = "Path to config file. (You need to create this file yourself!)";
+        default = "/var/lib/sabnzbd/sabnzbd.ini";
+        description = "Path to config file.";
+      };
+
+      user = mkOption {
+        default = "sabnzbd";
+        description = "User to run the service as";
+      };
+
+      group = mkOption {
+        default = "sabnzbd";
+        description = "Group to run the service as";
       };
     };
   };
@@ -31,23 +41,29 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers =
-      [ { name = "sabnzbd";
+    users.extraUsers.sabnzbd = {
           uid = config.ids.uids.sabnzbd;
+          group = "sabnzbd";
           description = "sabnzbd user";
-          home = "/homeless-shelter";
-        }
-      ];
+          home = "/var/lib/sabnzbd/";
+          createHome = true;
+    };
 
-    systemd.services.sabnzbd =
-      { description = "sabnzbd server";
+    users.extraGroups.sabnzbd = {
+      gid = config.ids.gids.sabnzbd;
+    };
+
+    systemd.services.sabnzbd = {
+        description = "sabnzbd server";
         wantedBy    = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig = {
           Type = "forking";
+          GuessMainPID = "no";
+          User = "${cfg.user}";
+          Group = "${cfg.group}";
           ExecStart = "${sabnzbd}/bin/sabnzbd -d -f ${cfg.configFile}";
         };
-      };
-
+    };
   };
 }

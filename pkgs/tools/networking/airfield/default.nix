@@ -29,7 +29,7 @@ in nodePackages.buildNodePackage rec {
   passthru.names = ["Airfield"];
 
   meta = {
-    description = "Airfield is a web-interface for hipache-proxy";
+    description = "A web-interface for hipache-proxy";
     license = licenses.mit;
     homepage = https://github.com/emblica/airfield;
     maintainers = with maintainers; [offline];

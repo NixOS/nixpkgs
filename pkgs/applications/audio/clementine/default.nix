@@ -1,24 +1,25 @@
 { stdenv, fetchurl, boost, cmake, gettext, gstreamer, gst_plugins_base
-, gst_plugins_good, gst_plugins_bad, gst_plugins_ugly, gst_ffmpeg
 , liblastfm, qt4, taglib, fftw, glew, qjson, sqlite, libgpod, libplist
-, usbmuxd, libmtp, gvfs, libcdio, protobuf, libspotify, qca2, pkgconfig
-, sparsehash, config, makeWrapper }:
+, usbmuxd, libmtp, gvfs, libcdio, libspotify, protobuf, qca2, pkgconfig
+, sparsehash, config, makeWrapper, runCommand, gst_plugins }:
 
-let withSpotify = config.clementine.spotify or false;
-in
-stdenv.mkDerivation {
-  name = "clementine-1.2.3";
+let
+  withSpotify = config.clementine.spotify or false;
+
+  version = "1.2.3";
+
+  exeName = "clementine";
 
   src = fetchurl {
     url = https://github.com/clementine-player/Clementine/archive/1.2.3.tar.gz;
     sha256 = "1gx1109i4pylz6x7gvp4rdzc6dvh0w6in6hfbygw01d08l26bxbx";
   };
 
-  patches =
-    [
-      ./clementine-1.2.1-include-paths.patch
-      ./clementine-dbus-namespace.patch
-    ];
+  patches = [
+    ./clementine-1.2.1-include-paths.patch
+    ./clementine-dbus-namespace.patch
+    ./clementine-spotify-blob.patch
+  ];
 
   buildInputs = [
     boost
@@ -27,9 +28,6 @@ stdenv.mkDerivation {
     gettext
     glew
     gst_plugins_base
-    gst_plugins_good
-    gst_plugins_ugly
-    gst_ffmpeg
     gstreamer
     gvfs
     libcdio
@@ -37,7 +35,6 @@ stdenv.mkDerivation {
     liblastfm
     libmtp
     libplist
-    makeWrapper
     pkgconfig
     protobuf
     qca2
@@ -47,22 +44,77 @@ stdenv.mkDerivation {
     sqlite
     taglib
     usbmuxd
-  ] ++ stdenv.lib.optional withSpotify libspotify;
+  ];
 
-  enableParallelBuilding = true;
+  free = stdenv.mkDerivation {
+    name = "clementine-free-${version}";
+    inherit patches src buildInputs;
+    enableParallelBuilding = true;
+    meta = with stdenv.lib; {
+      homepage = "http://www.clementine-player.org";
+      description = "A multiplatform music player";
+      license = licenses.gpl3Plus;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.ttuegel ];
+    };
+  };
 
-  postInstall = ''
-    wrapProgram $out/bin/clementine \
-      --set GST_PLUGIN_SYSTEM_PATH "$GST_PLUGIN_SYSTEM_PATH"
-  '';
+  # Spotify blob for Clementine
+  blob = stdenv.mkDerivation {
+    name = "clementine-blob-${version}";
+    # Use the same patches and sources as Clementine
+    inherit patches src;
+    buildInputs = buildInputs ++ [ libspotify ];
+    # Only build and install the Spotify blob
+    preBuild = ''
+      cd ext/clementine-spotifyblob
+    '';
+    postInstall = ''
+      mkdir -p $out/libexec/clementine
+      mv $out/bin/clementine-spotifyblob $out/libexec/clementine
+      rmdir $out/bin
+    '';
+    enableParallelBuilding = true;
+    meta = with stdenv.lib; {
+      homepage = "http://www.clementine-player.org";
+      description = "Spotify integration for Clementine";
+      # The blob itself is Apache-licensed, although libspotify is unfree.
+      license = licenses.asl20;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.ttuegel ];
+    };
+  };
 
-  meta = with stdenv.lib; {
+in
+
+with stdenv.lib;
+
+runCommand "clementine-${version}"
+{
+  inherit blob free;
+  buildInputs = [ makeWrapper ] ++ gst_plugins; # for the setup-hooks
+  dontPatchELF = true;
+  dontStrip = true;
+  meta = {
     homepage = "http://www.clementine-player.org";
-    description = "A multiplatform music player";
+    description = "A multiplatform music player"
+      + " (" + (optionalString withSpotify "with Spotify, ")
+      + "with gstreamer plugins: "
+      + concatStrings (intersperse ", " (map (x: x.name) gst_plugins))
+      + ")";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.ttuegel ];
-    # libspotify is unfree
-    hydraPlatforms = optionals (!withSpotify) platforms.linux;
   };
 }
+''
+  mkdir -p $out/bin
+  makeWrapper "$free/bin/${exeName}" "$out/bin/${exeName}" \
+      ${optionalString withSpotify "--set CLEMENTINE_SPOTIFYBLOB \"$blob/libexec/clementine\""} \
+      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
+
+  mkdir -p $out/share
+  for dir in applications icons kde4; do
+      ln -s "$free/share/$dir" "$out/share/$dir"
+  done
+''

@@ -1,0 +1,31 @@
+diff -up boost_1_57_0/boost/mpl/print.hpp\~ boost_1_57_0/boost/mpl/print.hpp
+--- boost_1_57_0/boost/mpl/print.hpp~	2014-07-09 23:12:31.000000000 +0200
++++ boost_1_57_0/boost/mpl/print.hpp	2015-01-20 12:44:59.621400948 +0100
+@@ -52,16 +52,15 @@ struct print
+     enum { n = sizeof(T) + -1 };
+ #elif defined(__MWERKS__)
+     void f(int);
+-#else 
+-    enum {
+-        n =
+-# if defined(__EDG_VERSION__)
+-           aux::dependent_unsigned<T>::value > -1
+-# else 
+-           sizeof(T) > -1
+-# endif 
+-        };
+-#endif 
++#elif defined(__EDG_VERSION__)
++    enum { n = aux::dependent_unsigned<T>::value > -1 };
++#elif defined(BOOST_GCC)
++    enum { n1 };
++    enum { n2 };
++    enum { n = n1 != n2 };
++#else
++    enum { n = sizeof(T) > -1 };
++#endif
+ };
+ 
+ #if defined(BOOST_MSVC)
+
+Diff finished.  Tue Jan 20 12:45:03 2015

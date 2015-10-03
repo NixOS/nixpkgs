@@ -11,6 +11,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ zlib imagemagick libpng pkgconfig glib freetype libjpeg libxml2 ];
 
+  patches = [
+    ./CVE-2006-3376.patch ./CVE-2009-1364.patch
+    ./CVE-2015-0848+4588+4695+4696.patch
+  ];
+
   meta = {
     description = "WMF library from wvWare";
   };

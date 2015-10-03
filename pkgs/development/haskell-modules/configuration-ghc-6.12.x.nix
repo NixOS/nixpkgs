@@ -40,21 +40,30 @@ self: super: {
   time = null;
   unix = null;
 
-  # binary is not a core library for this compiler.
-  binary = self.binary_0_7_4_0;
-
-  # deepseq is not a core library for this compiler.
-  deepseq_1_3_0_1 = dontJailbreak super.deepseq_1_3_0_1;
+  # These packages are core libraries in GHC 7.10.x, but not here.
+  binary = self.binary_0_7_6_1;
   deepseq = self.deepseq_1_3_0_1;
-
-  # transformers is not a core library for this compiler.
+  haskeline = self.haskeline_0_7_2_1;
+  hoopl = self.hoopl_3_10_2_0;
+  terminfo = self.terminfo_0_4_0_1;
   transformers = self.transformers_0_4_3_0;
+  xhtml = self.xhtml_3000_2_1;
+
+  # The jailbreak is unnecessary in this package set.
+  deepseq_1_3_0_1 = dontJailbreak super.deepseq_1_3_0_1;
+
+  # Newer versions don't compile.
+  Cabal_1_18_1_6 = dontJailbreak super.Cabal_1_18_1_6;
+
+  # We have no working cabal-install at the moment.
+  cabal-install_1_18_1_0 = markBroken super.cabal-install_1_18_1_0;
+  cabal-install = self.cabal-install_1_18_1_0;
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
 
   # Needs Cabal >= 1.18.x.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = dontJailbreak self.Cabal_1_18_1_6; };
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_18_1_6; };
 
   # Haddock chokes on the prologue from the cabal file.
   ChasingBottoms = dontHaddock super.ChasingBottoms;

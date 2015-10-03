@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "libc++-${version}";
 
-  src = fetch "libcxx" "1dzvhyrzj54v823biadag5lwxfz37gm8a65aq72pjsh8n211x719";
+  src = fetch "libcxx" "10cbgi1nfksjrlgvbsx8pkcqxsgkszdqy5cj2zgwj2c2yi9d9wsj";
 
   # instead of allowing libc++ to link with /usr/lib/libc++abi.dylib,
   # force it to link with our copy
@@ -29,13 +29,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  linkCxxAbi = stdenv.isLinux;
+
   setupHook = ./setup-hook.sh;
 
   meta = {
     homepage = http://libcxx.llvm.org/;
     description = "A new implementation of the C++ standard library, targeting C++11";
     license = "BSD";
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

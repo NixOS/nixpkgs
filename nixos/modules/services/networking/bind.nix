@@ -24,6 +24,8 @@ let
         pid-file "/var/run/named/named.pid";
       };
 
+      ${cfg.extraConfig}
+
       ${ concatMapStrings
           ({ name, file, master ? true, slaves ? [], masters ? [] }:
             ''
@@ -108,6 +110,13 @@ in
           masters = ["192.168.0.1"];
           slaves = [];
         }];
+      };
+
+      extraConfig = mkOption {
+        default = "";
+        description = "
+          Extra lines to be added verbatim to the generated named configuration file.
+        ";
       };
 
       configFile = mkOption {

@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./alt.patch
+    ./change-scroll-region.patch
     # CVE-2012-2738
     ./vte-0.28.2-limit-arguments.patch
   ];

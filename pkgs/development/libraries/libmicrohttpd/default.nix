@@ -1,14 +1,14 @@
-{stdenv, fetchurl, curl, libgcrypt}:
+{ lib, stdenv, fetchurl, libgcrypt }:
 
 stdenv.mkDerivation rec {
-  name = "libmicrohttpd-0.9.38";
+  name = "libmicrohttpd-0.9.43";
 
   src = fetchurl {
     url = "mirror://gnu/libmicrohttpd/${name}.tar.gz";
-    sha256 = "08g7p4l0p2fsjj8ayl68zq1bqgrn0pck19bm8yd7k61whvfv9wld";
+    sha256 = "17q6v5q0jpg57vylby6rx1qkil72bdx8gij1g9m694gxf5sb6js1";
   };
 
-  buildInputs = [ curl libgcrypt ];
+  buildInputs = [ libgcrypt ];
 
   preCheck =
     # Since `localhost' can't be resolved in a chroot, work around it.
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
       it easy to run an HTTP server as part of another application.
     '';
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
     homepage = http://www.gnu.org/software/libmicrohttpd/;
 
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.eelco ];
   };
 }

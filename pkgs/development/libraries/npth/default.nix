@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "npth-1.1";
+  name = "npth-1.2";
 
   src = fetchurl {
     url = "ftp://ftp.gnupg.org/gcrypt/npth/${name}.tar.bz2";
-    sha256 = "0zyzwmk4mp6pas87jz35zx0jvwdz7x5b13w225gs73gcn8g5cv49";
+    sha256 = "12n0nvhw4fzwp0k7gjv3rc6pdml0qiinbbfiz4ilg6pl5kdxvnvd";
   };
 
   meta = with stdenv.lib; {

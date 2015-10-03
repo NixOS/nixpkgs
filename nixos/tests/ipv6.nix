@@ -1,8 +1,11 @@
 # Test of IPv6 functionality in NixOS, including whether router
 # solicication/advertisement using radvd works.
 
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ...} : {
   name = "ipv6";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ eelco chaoflow ];
+  };
 
   nodes =
     { client = { config, pkgs, ... }: { };
@@ -73,5 +76,4 @@ import ./make-test.nix {
 
       # TODO: test reachability of a machine on another network.
     '';
-
-}
+})

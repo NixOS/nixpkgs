@@ -5,7 +5,7 @@
 # rewritten to /nix/store/<hash>/bin/python.  Interpreters that are
 # already in the store are left untouched.
 
-fixupOutputHooks+=('if [ -z "$dontPatchShebangs" ]; then patchShebangs "$prefix"; fi')
+fixupOutputHooks+=('if [ -z "$dontPatchShebangs" -a -e "$prefix" ]; then patchShebangs "$prefix"; fi')
 
 patchShebangs() {
     local dir="$1"
@@ -18,7 +18,7 @@ patchShebangs() {
     local oldInterpreterLine
     local newInterpreterLine
 
-    find "$dir" -type f -perm +0100 | while read f; do
+    find "$dir" -type f -perm -0100 | while read f; do
         if [ "$(head -1 "$f" | head -c +2)" != '#!' ]; then
             # missing shebang => not a script
             continue

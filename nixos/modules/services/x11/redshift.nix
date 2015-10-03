@@ -1,51 +1,90 @@
 { config, lib, pkgs, ... }:
+
 with lib;
+
 let
+
   cfg = config.services.redshift;
 
 in {
-  options = {
-    services.redshift.enable = mkOption {
+
+  options.services.redshift = {
+    enable = mkOption {
       type = types.bool;
       default = false;
       example = true;
-      description = "Enable Redshift to change your screen's colour temperature depending on the time of day";
+      description = ''
+        Enable Redshift to change your screen's colour temperature depending on
+        the time of day.
+      '';
     };
 
-    services.redshift.latitude = mkOption {
-      description = "Your current latitude";
-      type = types.uniq types.string;
+    latitude = mkOption {
+      type = types.str;
+      description = ''
+        Your current latitude.
+      '';
     };
 
-    services.redshift.longitude = mkOption {
-      description = "Your current longitude";
-      type = types.uniq types.string;
+    longitude = mkOption {
+      type = types.str;
+      description = ''
+        Your current longitude.
+      '';
     };
 
-    services.redshift.temperature = {
+    temperature = {
       day = mkOption {
-        description = "Colour temperature to use during day time";
+        type = types.int;
         default = 5500;
-        type = types.uniq types.int;
+        description = ''
+          Colour temperature to use during the day.
+        '';
       };
       night = mkOption {
-        description = "Colour temperature to use during night time";
+        type = types.int;
         default = 3700;
-        type = types.uniq types.int;
+        description = ''
+          Colour temperature to use at night.
+        '';
       };
     };
 
-    services.redshift.brightness = {
+    brightness = {
       day = mkOption {
-        description = "Screen brightness to apply during the day (between 0.1 and 1.0)";
+        type = types.str;
         default = "1";
-        type = types.uniq types.string;
+        description = ''
+          Screen brightness to apply during the day,
+          between <literal>0.1</literal> and <literal>1.0</literal>.
+        '';
       };
       night = mkOption {
-        description = "Screen brightness to apply during the night (between 0.1 and 1.0)";
+        type = types.str;
         default = "1";
-        type = types.uniq types.string;
+        description = ''
+          Screen brightness to apply during the night,
+          between <literal>0.1</literal> and <literal>1.0</literal>.
+        '';
       };
+    };
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.redshift;
+      description = ''
+        redshift derivation to use.
+      '';
+    };
+
+    extraOptions = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "-v" "-m randr" ];
+      description = ''
+        Additional command-line arguments to pass to
+        <command>redshift</command>.
+      '';
     };
   };
 
@@ -56,13 +95,15 @@ in {
       after = [ "display-manager.service" ];
       wantedBy = [ "graphical.target" ];
       serviceConfig.ExecStart = ''
-        ${pkgs.redshift}/bin/redshift \
+        ${cfg.package}/bin/redshift \
           -l ${cfg.latitude}:${cfg.longitude} \
           -t ${toString cfg.temperature.day}:${toString cfg.temperature.night} \
-          -b ${toString cfg.brightness.day}:${toString cfg.brightness.night}
+          -b ${toString cfg.brightness.day}:${toString cfg.brightness.night} \
+          ${lib.strings.concatStringsSep " " cfg.extraOptions}
       '';
       environment = { DISPLAY = ":0"; };
       serviceConfig.Restart = "always";
     };
   };
+
 }

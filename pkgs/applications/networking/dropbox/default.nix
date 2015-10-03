@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper
+{ stdenv, fetchurl, makeDesktopItem, makeWrapper, patchelf
 , dbus_libs, gcc, glib, libdrm, libffi, libICE, libSM
 , libX11, libXmu, ncurses, popt, qt5, zlib
+, qtbase, qtdeclarative, qtwebkit
 }:
 
 # this package contains the daemon version of dropbox
@@ -18,28 +19,27 @@
 # them with our own.
 
 let
-  arch = if stdenv.system == "x86_64-linux" then "x86_64"
-    else if stdenv.system == "i686-linux" then "x86"
-    else throw "Dropbox client for: ${stdenv.system} not supported!";
+  # NOTE: When updating, please also update in current stable, as older versions stop working
+  version = "3.8.9";
+  sha256 =
+    {
+      "x86_64-linux" = "1mdhf57bqi4vihbzv5lz8zk4n576c1qjm7hzcq4f5qvkdsmp5in2";
+      "i686-linux" = "0gighh782jjmlgqgbw2d00a3ri5h3inqdik7v70f1yygvkr7awy8";
+    }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
-  interpreter = if stdenv.system == "x86_64-linux" then "ld-linux-x86-64.so.2"
-    else if stdenv.system == "i686-linux" then "ld-linux.so.2"
-    else throw "Dropbox client for: ${stdenv.system} not supported!";
-
-  # NOTE: When updating, please also update in current stable, as older versions stop working  
-  version = "3.4.4";
-  sha256 = if stdenv.system == "x86_64-linux" then "05ncbxwkimq7cl3bad759qvda7zjdh07f5wh6aw12g472l4yqq98"
-    else if stdenv.system == "i686-linux" then "18089bh6i64yw75pswgn2vkcl1kf7ipxxncmssw3qhb6791qfhbk"
-    else throw "Dropbox client for: ${stdenv.system} not supported!";
+  arch =
+    {
+      "x86_64-linux" = "x86_64";
+      "i686-linux" = "x86";
+    }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   # relative location where the dropbox libraries are stored
   appdir = "opt/dropbox";
 
   ldpath = stdenv.lib.makeSearchPath "lib"
     [
-      dbus_libs gcc glib libdrm libffi libICE libSM libX11
-      libXmu ncurses popt qt5.base qt5.declarative qt5.webkit
-      zlib
+      dbus_libs gcc.cc glib libdrm libffi libICE libSM libX11 libXmu
+      ncurses popt qtbase qtdeclarative qtwebkit zlib
     ];
 
   desktopItem = makeDesktopItem {
@@ -52,24 +52,22 @@ let
   };
 
 in stdenv.mkDerivation {
-  name = "dropbox-${version}-bin";
+  name = "dropbox-${version}";
   src = fetchurl {
     name = "dropbox-${version}.tar.gz";
     url = "https://dl-web.dropbox.com/u/17/dropbox-lnx.${arch}-${version}.tar.gz";
     inherit sha256;
   };
 
-  sourceRoot = ".";
+  sourceRoot = ".dropbox-dist";
 
-  patchPhase = ''
-    rm -f .dropbox-dist/dropboxd
-  '';
-
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ makeWrapper patchelf ];
+  dontPatchELF = true; # patchelf invoked explicitly below
+  dontStrip = true; # already done
 
   installPhase = ''
     mkdir -p "$out/${appdir}"
-    cp -r ".dropbox-dist/dropbox-lnx.${arch}-${version}"/* "$out/${appdir}/"
+    cp -r "dropbox-lnx.${arch}-${version}"/* "$out/${appdir}/"
 
     rm "$out/${appdir}/libdrm.so.2"
     rm "$out/${appdir}/libffi.so.6"
@@ -95,25 +93,62 @@ in stdenv.mkDerivation {
     rm "$out/${appdir}/qt.conf"
     rm -fr "$out/${appdir}/plugins"
 
-    find "$out/${appdir}" -type f -a -perm +0100 \
-      -print -exec patchelf --set-interpreter ${stdenv.glibc.out}/lib/${interpreter} {} \;
-
-    RPATH=${ldpath}:${gcc.cc}/lib:$out/${appdir}
-    echo "updating rpaths to: $RPATH"
-    find "$out/${appdir}" -type f -a -perm +0100 \
-      -print -exec patchelf --force-rpath --set-rpath "$RPATH" {} \;
-
     mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications/"* $out/share/applications
 
+    mkdir -p "$out/share/icons"
+    ln -s "$out/${appdir}/images/hicolor" "$out/share/icons/hicolor"
+
     mkdir -p "$out/bin"
+    RPATH="${ldpath}:$out/${appdir}"
     makeWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
-      --prefix LD_LIBRARY_PATH : "${ldpath}"
+      --prefix LD_LIBRARY_PATH : "$RPATH"
+  '';
+
+  fixupPhase = ''
+    INTERP=$(cat $NIX_CC/nix-support/dynamic-linker)
+    RPATH="${ldpath}:$out/${appdir}"
+    getType='s/ *Type: *\([A-Z]*\) (.*/\1/'
+    find "$out/${appdir}" -type f -a -perm -0100 -print | while read obj; do
+        dynamic=$(readelf -S "$obj" 2>/dev/null | grep "DYNAMIC" || true)
+
+        if [[ -n "$dynamic" ]]; then
+            type=$(readelf -h "$obj" 2>/dev/null | grep 'Type:' | sed -e "$getType")
+
+            if [[ "$type" == "EXEC" ]]; then
+
+                echo "patching interpreter path in $type $obj"
+                patchelf --set-interpreter "$INTERP" "$obj"
+
+                echo "patching RPATH in $type $obj"
+                oldRPATH=$(patchelf --print-rpath "$obj")
+                patchelf --set-rpath "''${oldRPATH:+$oldRPATH:}$RPATH" "$obj"
+
+                echo "shrinking RPATH in $type $obj"
+                patchelf --shrink-rpath "$obj"
+
+            elif [[ "$type" == "DYN" ]]; then
+
+                echo "patching RPATH in $type $obj"
+                oldRPATH=$(patchelf --print-rpath "$obj")
+                patchelf --set-rpath "''${oldRPATH:+$oldRPATH:}$RPATH" "$obj"
+
+                echo "shrinking RPATH in $type $obj"
+                patchelf --shrink-rpath "$obj"
+
+            else
+
+                echo "unknown ELF type \"$type\"; not patching $obj"
+
+            fi
+        fi
+    done
   '';
 
   meta = {
     homepage = "http://www.dropbox.com";
     description = "Online stored folders (daemon version)";
     maintainers = with stdenv.lib.maintainers; [ ttuegel ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

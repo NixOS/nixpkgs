@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "mbedtls-1.3.10";
+  name = "mbedtls-1.3.11";
 
   src = fetchurl {
     url = "https://polarssl.org/download/${name}-gpl.tgz";
-    sha256 = "0zj0vdmam52hk7c6s3y81bdb4mqawi9fskkcqlgnj8v61j7dhvvl";
+    sha256 = "1js1lk6hvw9l3nhjhnhzfazfbnlcmk229hmnlm7jli3agc1979b7";
   };
 
   nativeBuildInputs = [ perl ];
@@ -21,13 +21,6 @@ stdenv.mkDerivation rec {
   installFlags = [
     "DESTDIR=\${out}"
   ];
-
-  postInstall = ''
-    rm $out/lib/lib{mbedtls.so.8,polarssl.{a,so}}
-    ln -s libmbedtls.so $out/lib/libmbedtls.so.8
-    ln -s libmbedtls.so $out/lib/libpolarssl.so
-    ln -s libmbedtls.a $out/lib/libpolarssl.a
-  '';
 
   doCheck = true;
 

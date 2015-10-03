@@ -5,15 +5,16 @@
 , syslog ? false
 , moreheaders ? false
 , echo ? false
-, ngx_lua ? false }:
+, ngx_lua ? false
+, withStream ? false }:
 
 with stdenv.lib;
 
 let
-  version = "1.7.11";
+  version = "1.9.4";
   mainSrc = fetchurl {
     url = "http://nginx.org/download/nginx-${version}.tar.gz";
-    sha256 = "15cnlrhiqklqfzwfspkp0i6g04zdhc092dh593yqnqqf450dgnfs";
+    sha256 = "1a1bixw2a4s5c3qzw3583s4a4y6i0sdzhihhlbab5rkyfh1hr6s7";
   };
 
   rtmp-ext = fetchFromGitHub {
@@ -61,8 +62,8 @@ let
   lua-ext = fetchFromGitHub {
     owner = "openresty";
     repo = "lua-nginx-module";
-    rev = "v0.9.12";
-    sha256 = "0r07q1n3nvi7m3l8zk7nfk0z9kjhqknav61ys9lshh2ylsmz1lf4";
+    rev = "v0.9.16";
+    sha256 = "0dvdam228jhsrayb22ishljdkgib08bakh8ygn84sq0c2xbidzlp";
   };
 
 in
@@ -109,6 +110,7 @@ stdenv.mkDerivation rec {
     ++ optional moreheaders "--add-module=${moreheaders-ext}"
     ++ optional echo "--add-module=${echo-ext}"
     ++ optional ngx_lua "--add-module=${develkit-ext} --add-module=${lua-ext}"
+    ++ optional withStream "--with-stream"
     ++ optional (elem stdenv.system (with platforms; linux ++ freebsd)) "--with-file-aio";
 
 

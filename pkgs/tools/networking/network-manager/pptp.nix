@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/1.0/${pname}-${version}.tar.xz";
-    sha256 = "0xpflw6vp1ahvpz7mnnldqvk455wz2j7dahd9lxqs95frmjmq390";
+    sha256 = "05r06f7f990z908jjnmmryrlshy28wcx7fbvnslmx9nicih7rjrp";
   };
 
   buildInputs = [ networkmanager pptp ppp libsecret ]

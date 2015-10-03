@@ -3,7 +3,7 @@
 , makeWrapper
 
 , xclip ? null, xdotool ? null, dmenu ? null
-, x11Support ? true
+, x11Support ? !stdenv.isDarwin
 }:
 
 assert x11Support -> xclip != null
@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     getopt
     git
     gnupg
+    pwgen
     tree
     which
   ] ++ ifEnable x11Support [ dmenu xclip xdotool ]);

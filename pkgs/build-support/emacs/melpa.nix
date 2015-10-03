@@ -31,7 +31,7 @@ let
   targets = concatStringsSep " " (if files == null then fileSpecs else files);
 
   defaultMeta = {
-    homepage = "http://melpa.org/#/${pname}";
+    homepage = args.src.meta.homepage or "http://melpa.org/#/${pname}";
   };
 
 in

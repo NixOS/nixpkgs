@@ -56,7 +56,7 @@ stdenv.mkDerivation {
     mkdir -p $out/etc/udev/rules.d
  
     makeFlagsArray=(KERNELSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source \
-        FIRMWARE_DIR=$out/firmware FXLOAD=${fxload}/sbin/fxload \
+        FIRMWARE_DIR=$out/lib/firmware FXLOAD=${fxload}/sbin/fxload \
         DESTDIR=$out SKIP_DEPMOD=1 \
         USE_UDEV=y)
   ''; # */

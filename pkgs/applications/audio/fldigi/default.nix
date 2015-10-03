@@ -1,5 +1,5 @@
 { stdenv, fetchurl, hamlib, fltk13, libjpeg, libpng, portaudio, libsndfile,
-  libsamplerate, pulseaudio, libXinerama, gettext, pkgconfig, alsaLib }:
+  libsamplerate, libpulseaudio, libXinerama, gettext, pkgconfig, alsaLib }:
 
 stdenv.mkDerivation rec {
   version = "3.22.02";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libXinerama gettext hamlib fltk13 libjpeg libpng portaudio
-                  libsndfile libsamplerate pulseaudio pkgconfig alsaLib ];
+                  libsndfile libsamplerate libpulseaudio pkgconfig alsaLib ];
 
   meta = {
     description = "Digital modem program";

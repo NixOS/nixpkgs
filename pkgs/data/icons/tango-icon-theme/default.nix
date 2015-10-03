@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, intltool, pkgconfig, iconnamingutils, imagemagick, librsvg }:
+{ stdenv, fetchurl, intltool, pkgconfig, iconnamingutils, imagemagick, librsvg
+, gtk/*any version*/
+}:
 
 stdenv.mkDerivation rec {
   name = "tango-icon-theme-0.8.90";
@@ -13,6 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool pkgconfig iconnamingutils imagemagick librsvg ];
 
   configureFlags = "--enable-png-creation";
+
+  postInstall = '''${gtk}/bin/gtk-update-icon-cache' "$out/share/icons/Tango" '';
 
   meta = {
     description = "A basic set of icons";

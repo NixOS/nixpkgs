@@ -47,11 +47,19 @@
 # Execute after shell hook
 , postShellHook ? ""
 
+# Additional arguments to pass to the makeWrapper function, which wraps
+# generated binaries.
+, makeWrapperArgs ? []
+
 , ... } @ attrs:
 
 
 # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-if disabled then throw "${name} not supported for interpreter ${python.executable}" else python.stdenv.mkDerivation (attrs // {
+if disabled
+then throw "${name} not supported for interpreter ${python.executable}"
+else
+
+python.stdenv.mkDerivation (attrs // {
   inherit doCheck;
 
   name = namePrefix + name;

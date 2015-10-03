@@ -1,18 +1,23 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gtk2, nssTools, pcsclite
 , pkgconfig }:
 
-let version = "4.1.2"; in
-stdenv.mkDerivation rec {
+let version = "4.1.6"; in
+stdenv.mkDerivation {
   name = "eid-mw-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "034ar1v2qamdyq71nklh1nvqbmw6ryz63jdwnnc873f639mf5w94";
+    sha256 = "006s7093wqmk36mrlakjv89bqddyh599rvmgv0zgsp15vf9160zi";
     rev = "v${version}";
     repo = "eid-mw";
     owner = "Fedict";
   };
 
-  buildInputs = [ autoreconfHook gtk2 pcsclite pkgconfig ];
+  buildInputs = [ gtk2 pcsclite ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  postPatch = ''
+    sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
+  '';
 
   enableParallelBuilding = true;
 
@@ -22,12 +27,15 @@ stdenv.mkDerivation rec {
     install -D ${./eid-nssdb.in} $out/bin/eid-nssdb
     substituteInPlace $out/bin/eid-nssdb \
       --replace "modutil" "${nssTools}/bin/modutil"
+
+    # Only provides a useless "about-eid-mw.desktop" that segfaults anyway:
+    rm -rf $out/share/applications $out/bin/about-eid-mw
   '';
 
   meta = with stdenv.lib; {
     description = "Belgian electronic identity card (eID) middleware";
     homepage = http://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/;
-    license = with licenses; lgpl3;
+    license = licenses.lgpl3;
     longDescription = ''
       Allows user authentication and digital signatures with Belgian ID cards.
       Also requires a running pcscd service and compatible card reader.
@@ -47,6 +55,6 @@ stdenv.mkDerivation rec {
       and remove all ~/.pki and/or /etc/pki directories no longer needed.
     '';
     maintainers = with maintainers; [ nckx ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

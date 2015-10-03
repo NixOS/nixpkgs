@@ -8,6 +8,7 @@ deepClone=$NIX_PREFETCH_GIT_DEEP_CLONE
 leaveDotGit=$NIX_PREFETCH_GIT_LEAVE_DOT_GIT
 fetchSubmodules=
 builder=
+branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
 
 if test -n "$deepClone"; then
     deepClone=true
@@ -31,6 +32,7 @@ for arg; do
             --url) argfun=set_url;;
             --rev) argfun=set_rev;;
             --hash) argfun=set_hashType;;
+            --branch-name) argfun=set_branchName;;
             --deepClone) deepClone=true;;
             --no-deepClone) deepClone=false;;
             --leave-dotGit) leaveDotGit=true;;
@@ -107,8 +109,8 @@ checkout_hash(){
         hash=$(hash_from_ref $ref)
     fi
 
-    git fetch ${builder:+--progress} origin || return 1
-    git checkout -b fetchgit $hash || return 1
+    git fetch -t ${builder:+--progress} origin || return 1
+    git checkout -b $branchName $hash || return 1
 }
 
 # Fetch only a branch/tag and checkout it.
@@ -131,7 +133,7 @@ checkout_ref(){
     if test -n "$ref"; then
         # --depth option is ignored on http repository.
         git fetch ${builder:+--progress} --depth 1 origin +"$ref" || return 1
-        git checkout -b fetchgit FETCH_HEAD || return 1
+        git checkout -b $branchName FETCH_HEAD || return 1
     else
         return 1
     fi
@@ -222,7 +224,7 @@ make_deterministic_repo(){
         fi
     done
 
-    # Do a full repack. Must run single-threaded, or else we loose determinism.
+    # Do a full repack. Must run single-threaded, or else we lose determinism.
     git config pack.threads 1
     git repack -A -d -f
     rm -f .git/config
@@ -251,7 +253,7 @@ clone_user_rev() {
             fi;;
     esac
 
-    local full_revision=$(cd $dir && (git rev-parse $rev 2> /dev/null || git rev-parse refs/heads/fetchgit) | tail -n1)
+    local full_revision=$(cd $dir && (git rev-parse $rev 2> /dev/null || git rev-parse refs/heads/$branchName) | tail -n1)
     echo "git revision is $full_revision"
     echo "git human-readable version is $(cd $dir && (git describe $full_revision 2> /dev/null || git describe --tags $full_revision 2> /dev/null || echo -- none --))" >&2
     echo "Commit date is $(cd $dir && git show --no-patch --pretty=%ci $full_revision)"
@@ -267,6 +269,10 @@ clone_user_rev() {
         done
     fi
 }
+
+if test -z "$branchName"; then
+    branchName=fetchgit
+fi
 
 if test -n "$builder"; then
     test -n "$out" -a -n "$url" -a -n "$rev" || usage

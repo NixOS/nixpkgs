@@ -34,7 +34,13 @@ in {
     enable = mkOption {
       description = "Whether to enable elasticsearch.";
       default = false;
-      type = types.uniq types.bool;
+      type = types.bool;
+    };
+
+    package = mkOption {
+      description = "Elasticsearch package to use.";
+      default = pkgs.elasticsearch;
+      type = types.package;
     };
 
     host = mkOption {
@@ -102,7 +108,7 @@ in {
     extraCmdLineOptions = mkOption {
       description = "Extra command line options for the elasticsearch launcher.";
       default = [];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       example = [ "-Djava.net.preferIPv4Stack=true" ];
     };
 
@@ -123,7 +129,7 @@ in {
       after = [ "network-interfaces.target" ];
       environment = { ES_HOME = cfg.dataDir; };
       serviceConfig = {
-        ExecStart = "${pkgs.elasticsearch}/bin/elasticsearch -Des.path.conf=${configDir} ${toString cfg.extraCmdLineOptions}";
+        ExecStart = "${cfg.package}/bin/elasticsearch -Des.path.conf=${configDir} ${toString cfg.extraCmdLineOptions}";
         User = "elasticsearch";
         PermissionsStartOnly = true;
       };
@@ -142,7 +148,7 @@ in {
       '';
     };
 
-    environment.systemPackages = [ pkgs.elasticsearch ];
+    environment.systemPackages = [ cfg.package ];
 
     users.extraUsers = singleton {
       name = "elasticsearch";

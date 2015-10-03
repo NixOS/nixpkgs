@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lnq0bgkmsixjwmfacb2ch9qfjqjxa8zkk1hiv3l29kgca0n3nal";
   };
 
-  patches = with stdenv.lib; optional selectTextPatch ./expose_select_text.0.38.0.patch;
+  patches = with stdenv.lib; optional selectTextPatch ./expose_select_text.0.40.0.patch;
 
   buildInputs = [ gobjectIntrospection intltool pkgconfig gnome3.glib 
                   gnome3.gtk3 ncurses vala libxml2 ];

@@ -14,7 +14,7 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "bossa";
+  name = "bossa-2014-08-18";
 
   src = fetchgit {
     url = https://github.com/shumatech/BOSSA;

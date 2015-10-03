@@ -1,4 +1,4 @@
-{ fetchurl, fetchhg, stdenv, xlibs, gcc46, makeWrapper }:
+{ fetchurl, fetchhg, stdenv, xorg, gcc46, makeWrapper }:
 
 stdenv.mkDerivation rec {
   # Inferno is a rolling release from a mercurial repository. For the verison number
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   # Fails with gcc48 due to inferno triggering an optimisation issue with floating point.
-  buildInputs = [ gcc46 xlibs.libX11 xlibs.libXpm xlibs.libXext xlibs.xextproto makeWrapper ];
+  buildInputs = [ gcc46 xorg.libX11 xorg.libXpm xorg.libXext xorg.xextproto makeWrapper ];
 
   infernoWrapper = ./inferno;
 

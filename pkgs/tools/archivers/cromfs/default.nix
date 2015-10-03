@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, fuse, perl }:
+{ stdenv, fetchurl, pkgconfig, fuse, perl, gcc48 }:
 
 stdenv.mkDerivation rec {
   name = "cromfs-1.5.10.2";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     install util/unmkcromfs $out/bin
   '';
 
-  buildInputs = [ pkgconfig fuse perl ];
+  buildInputs = [ pkgconfig fuse perl gcc48 ];
 
   meta = {
     description = "FUSE Compressed ROM filesystem with lzma";

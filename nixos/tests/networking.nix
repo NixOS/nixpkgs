@@ -1,4 +1,4 @@
-import ./make-test.nix ({ networkd, test, ... }:
+import ./make-test.nix ({ pkgs, networkd, test, ... }:
   let
     router = { config, pkgs, ... }:
       with pkgs.lib;
@@ -389,4 +389,7 @@ import ./make-test.nix ({ networkd, test, ... }:
     case = testCases.${test};
   in case // {
     name = "${case.name}-Networking-${if networkd then "Networkd" else "Scripted"}";
+    meta = with pkgs.stdenv.lib.maintainers; {
+      maintainers = [ wkennington ];
+    };
   })

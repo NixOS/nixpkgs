@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ... } @ args:
+{ stdenv, fetchurl, perl, buildLinux, ... } @ args:
 
 let
 
@@ -7,7 +7,7 @@ let
 in import ./generic.nix (args // rec {
   version = "3.18.y-${rev}";
 
-  modDirVersion = "3.18.7-v7";
+  modDirVersion = "3.18.7";
 
   src = fetchurl {
     url = "https://api.github.com/repos/raspberrypi/linux/tarball/${rev}";

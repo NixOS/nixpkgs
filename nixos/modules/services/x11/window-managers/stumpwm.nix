@@ -21,9 +21,10 @@ in
   config = mkIf cfg.enable {
     services.xserver.windowManager.session = singleton {
       name = "stumpwm";
-      start = "
-        ${pkgs.stumpwm}/bin/stumpwm
-      ";
+      start = ''
+        ${pkgs.stumpwm}/bin/stumpwm &
+        waitPID=$!
+      '';
     };
     environment.systemPackages = [ pkgs.stumpwm ];
   };

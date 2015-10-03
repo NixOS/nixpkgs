@@ -5,8 +5,6 @@ let
   diskSize = "4096";
 in
 {
-  imports = [ ../profiles/headless.nix ];
-
   system.build.azureImage =
     pkgs.vmTools.runInLinuxVM (
       pkgs.runCommand "azure-image"
@@ -24,12 +22,11 @@ in
 
           postVM =
             ''
-              echo Converting
               mkdir -p $out
               ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -O vpc $diskImage $out/disk.vhd
               rm $diskImage
             '';
-          diskImageBase = "nixos-${config.system.nixosVersion}-${pkgs.stdenv.system}.raw";
+          diskImageBase = "nixos-image-${config.system.nixosVersion}-${pkgs.stdenv.system}.raw";
           buildInputs = [ pkgs.utillinux pkgs.perl ];
           exportReferencesGraph =
             [ "closure" config.system.build.toplevel ];
@@ -93,33 +90,10 @@ in
         ''
     );
 
-  fileSystems."/".device = "/dev/disk/by-label/nixos";
+  imports = [ ./azure-common.nix ];
 
   # Azure metadata is available as a CD-ROM drive.
   fileSystems."/metadata".device = "/dev/sr0";
-
-  boot.kernelParams = [ "console=ttyS0" "earlyprintk=ttyS0" "rootdelay=300" "panic=1" "boot.panic_on_fail" ];
-  boot.initrd.kernelModules = [ "hv_vmbus" "hv_netvsc" "hv_utils" "hv_storvsc" ];
-
-  # Generate a GRUB menu. 
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.version = 2;
-  boot.loader.grub.timeout = 0;
-
-  # Don't put old configurations in the GRUB menu.  The user has no
-  # way to select them anyway.
-  boot.loader.grub.configurationLimit = 0;
-
-  # Allow root logins only using the SSH key that the user specified
-  # at instance creation time.
-  services.openssh.enable = true;
-  services.openssh.permitRootLogin = "without-password";
-
-  # Force getting the hostname from Azure
-  networking.hostName = mkDefault "";
-
-  # Always include cryptsetup so that NixOps can use it.
-  environment.systemPackages = [ pkgs.cryptsetup ];
 
   systemd.services.fetch-ssh-keys =
     { description = "Fetch host keys and authorized_keys for root user";
@@ -156,9 +130,5 @@ in
       serviceConfig.StandardError = "journal+console";
       serviceConfig.StandardOutput = "journal+console";
      };
-
-  networking.usePredictableInterfaceNames = false;
-
-  #users.extraUsers.root.openssh.authorizedKeys.keys = [ (builtins.readFile <ssh-pub-key>) ];
 
 }

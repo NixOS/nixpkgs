@@ -9,7 +9,7 @@ in stdenv.mkDerivation {
   name = "tuareg-mode-${version}";
   src = fetchzip {
     url = "https://github.com/ocaml/tuareg/releases/download/${version}/tuareg-${version}.tar.gz";
-    sha256 = "1rd7ai1wn476zfkkxv2xk72bbzi4d9c17gngd35882q4b5vzp756";
+    sha256 = "13rh5ddwvwwz5jf0n3wagc5m9zq4cbaylnsknzjalryyvipwfyh3";
   }; 
 
   buildInputs = [ emacs ];

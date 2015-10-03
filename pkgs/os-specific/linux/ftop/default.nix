@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Show progress of open files and file systems";
     homepage = https://code.google.com/p/ftop/;
-    license = with licenses; gpl3Plus;
+    license = licenses.gpl3Plus;
     longDescription = ''
       Ftop is to files what top is to processes. The progress of all open files
       and file systems can be monitored. If run as a regular user, the set of

@@ -1,5 +1,5 @@
 { stdenv, fetchgit, mercurial, makeWrapper,
-  asciidoc, xmlto, dbus, docbook_xsl, docbook_xml_dtd_45, libxslt, libxml2
+  asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libxml2
 }:
 
 stdenv.mkDerivation rec {
@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ mercurial.python mercurial makeWrapper
-    asciidoc xmlto dbus docbook_xsl docbook_xml_dtd_45 libxslt libxml2
+    asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt libxml2
   ];
 
   doCheck = false;
 
-  installFlags = "HOME=\${out}";
+  installFlags = "HOME=\${out} install-doc";
 
   postInstall = ''
     wrapProgram $out/bin/git-remote-hg \

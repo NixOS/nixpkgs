@@ -1,10 +1,10 @@
 {stdenv, fetchurl} :
 
 stdenv.mkDerivation {
-  name = "remind-3.1.13";
+  name = "remind-3.1.15";
   src = fetchurl {
-    url = http://www.roaringpenguin.com/files/download/remind-03.01.13.tar.gz;
-    sha256 = "0kzw1d53nlj90qfsibbs2gkzp1hamqqxpj57ip4kz1j1xgan69ng";
+    url = http://www.roaringpenguin.com/files/download/remind-03.01.15.tar.gz;
+    sha256 = "1hcfcxz5fjzl7606prlb7dgls5kr8z3wb51h48s6qm8ang0b9nla";
   };
 
   meta = {

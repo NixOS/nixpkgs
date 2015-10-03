@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     sha256 = "1zr3kadv35ii6liia0bpfgxpag27xcivp571ybckpbz4b10nnd14";
   };
 
+  patches = [ ./gcc-4.9.patch ];
+
   nativeBuildInputs = [ ]
     ++ optional nasmSupport nasm;
 
@@ -53,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "LAME is a high quality MPEG Audio Layer III (MP3) encoder";
+    description = "A high quality MPEG Audio Layer III (MP3) encoder";
     homepage    = http://lame.sourceforge.net;
     license     = licenses.lgpl2;
     maintainers = with maintainers; [ codyopel ];

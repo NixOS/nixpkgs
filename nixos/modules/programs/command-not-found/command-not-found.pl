@@ -30,11 +30,11 @@ The program ‘$program’ is currently not installed. It is provided by
 the package ‘$package’, which I will now install for you.
 EOF
         ;
-        exit 126 if system("nix-env", "-i", $package) == 0;
+        exit 126 if system("nix-env", "-iA", "nixos.$package") == 0;
     } else {
         print STDERR <<EOF;
 The program ‘$program’ is currently not installed. You can install it by typing:
-  nix-env -i $package
+  nix-env -iA nixos.$package
 EOF
     }
 } else {
@@ -42,7 +42,7 @@ EOF
 The program ‘$program’ is currently not installed. It is provided by
 several packages. You can install it by typing one of the following:
 EOF
-    print STDERR "  nix-env -i $_->{package}\n" foreach @$res;
+    print STDERR "  nix-env -iA nixos.$_->{package}\n" foreach @$res;
 }
 
 exit 127;

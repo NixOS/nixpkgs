@@ -59,7 +59,7 @@ in
     };
 
     nixpkgs.system = mkOption {
-      type = types.uniq types.str;
+      type = types.str;
       example = "i686-linux";
       description = ''
         Specifies the Nix platform type for which NixOS should be built.
@@ -72,7 +72,7 @@ in
   };
 
   config = {
-    _module.args.pkgs = import ../../lib/nixpkgs.nix {
+    _module.args.pkgs = import ../../.. {
       system = config.nixpkgs.system;
 
       inherit (config.nixpkgs) config;

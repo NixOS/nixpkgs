@@ -1,28 +1,51 @@
-{ stdenv, fetchurl, alsaLib, cmake, fftw, freeglut, jack2, libXmu, qt4 }:
+{ stdenv, fetchFromGitHub, fftw, freeglut, qtbase, qtmultimedia
+, alsaSupport ? true, alsaLib ? null
+, jackSupport ? false, libjack2 ? null
+, portaudioSupport ? false, portaudio ? null }:
 
-stdenv.mkDerivation rec {
-  version = "0.99.5";
+assert alsaSupport -> alsaLib != null;
+assert jackSupport -> libjack2 != null;
+assert portaudioSupport -> portaudio != null;
+
+let version = "1.0.8"; in
+stdenv.mkDerivation {
   name = "fmit-${version}";
 
-  src = fetchurl {
-    url = "http://download.gna.org/fmit/${name}-Source.tar.bz2";
-    sha256 = "1rc84gi27jmq2smhk0y0p2xyypmsz878vi053iqns21k848g1491";
+  src = fetchFromGitHub {
+    sha256 = "04s7xcgmi5g58lirr48vf203n1jwdxf981x1p6ysbax24qwhs2kd";
+    rev = "v${version}";
+    repo = "fmit";
+    owner = "gillesdegottex";
   };
 
-  # Also update longDescription when adding/removing sound libraries
-  buildInputs = [ alsaLib cmake fftw freeglut jack2 libXmu qt4 ];
+  buildInputs = [ fftw freeglut qtbase qtmultimedia ]
+    ++ stdenv.lib.optionals alsaSupport [ alsaLib ]
+    ++ stdenv.lib.optionals jackSupport [ libjack2 ]
+    ++ stdenv.lib.optionals portaudioSupport [ portaudio ];
+
+  configurePhase = ''
+    mkdir build
+    cd build
+    qmake \
+      CONFIG+=${stdenv.lib.optionalString alsaSupport "acs_alsa"} \
+      CONFIG+=${stdenv.lib.optionalString jackSupport "acs_jack"} \
+      CONFIG+=${stdenv.lib.optionalString portaudioSupport "acs_portaudio"} \
+      PREFIX="$out" PREFIXSHORTCUT="$out" \
+      ../fmit.pro
+  '';
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
+    inherit version;
     description = "Free Musical Instrument Tuner";
     longDescription = ''
-      Software for tuning musical instruments. Uses Qt as GUI library and
-      ALSA or JACK as sound input library.
+      FMIT is a graphical utility for tuning musical instruments, with error
+      and volume history, and advanced features.
     '';
-    homepage = http://home.gna.org/fmit/index.html;
-    license = with licenses; gpl3Plus;
-    platforms = with platforms; linux;
+    homepage = http://gillesdegottex.github.io/fmit/;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 }

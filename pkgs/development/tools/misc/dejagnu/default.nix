@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "${expect}/bin"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Framework for testing other programs";
 
     longDescription = ''
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.gnu.org/software/dejagnu/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ wkennington ];
   };
 }

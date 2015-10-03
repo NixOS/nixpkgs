@@ -20,6 +20,9 @@ in stdenv.mkDerivation {
     pixman
     pkgconfig
   ];
+  NIX_CFLAGS_COMPILE = "-F/System/Library/Frameworks -I/usr/include";
+  NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin
+    "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
   meta = with lib; {
     license = licenses.apsl20;
     platforms = platforms.darwin;

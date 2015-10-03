@@ -1,26 +1,31 @@
-{ stdenv, fetchurl, xz, libsigsegv, readline, interactive ? false }:
+{ stdenv, fetchurl, xz, libsigsegv, readline, interactive ? false
+, locale ? null }:
 
 let
   inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
-  name = "gawk-4.1.1";
+  name = "gawk-4.1.3";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/${name}.tar.xz";
-    sha256 = "1nz83vpss8xv7m475sv4qhhj40g74nvcw0y9kwq9ds8wzfmcdm7g";
+    sha256 = "09d6pmx6h3i2glafm0jd1v1iyrs03vcyv2rkz12jisii3vlmbkz3";
   };
 
   # When we do build separate interactive version, it makes sense to always include docs.
   outputs = [ "out" ] ++ stdenv.lib.optional (!interactive) "doc"; #ToDo
 
-  # Currently broken due to locale tests failing
-  #doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1
+  doCheck = !(
+       stdenv.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
+    || stdenv.isDarwin # XXX: `locale' segfaults
+  );
 
-  buildInputs = [ xz.bin libsigsegv ]
-    ++ optional interactive readline;
+  buildInputs = [ xz.bin ]
+    ++ stdenv.lib.optional (stdenv.system != "x86_64-cygwin") libsigsegv
+    ++ stdenv.lib.optional interactive readline
+    ++ stdenv.lib.optional stdenv.isDarwin locale;
 
-  configureFlags = [ "--with-libsigsegv-prefix=${libsigsegv}" ]
+  configureFlags = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") "--with-libsigsegv-prefix=${libsigsegv}"
     ++ [(if interactive then "--with-readline=${readline}" else "--without-readline")];
 
   postInstall = "rm $out/bin/gawk-*";

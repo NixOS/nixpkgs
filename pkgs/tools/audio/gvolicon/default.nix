@@ -1,7 +1,7 @@
-{ stdenv, makeWrapper, alsaLib, pkgconfig, fetchgit, gnome3, hicolor_icon_theme, gdk_pixbuf, librsvg }:
+{ stdenv, makeWrapper, alsaLib, pkgconfig, fetchgit, gnome3, gdk_pixbuf, librsvg }:
 
 stdenv.mkDerivation {
-  name = "gvolicon";
+  name = "gvolicon-2014-04-28";
   src = fetchgit {
     url = "https://github.com/Unia/gvolicon";
     rev = "c04cafb88124e1e5edc61dd52f76bf13381d5167";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ pkgconfig makeWrapper alsaLib gnome3.gtk ];
-  propagatedBuildInputs = [ gnome3.gnome_icon_theme gnome3.gnome_icon_theme_symbolic hicolor_icon_theme gdk_pixbuf librsvg ];
+  propagatedBuildInputs = [ gnome3.defaultIconTheme gdk_pixbuf librsvg ];
   installPhase = ''
     make install PREFIX=$out
     wrapProgram "$out/bin/gvolicon" \

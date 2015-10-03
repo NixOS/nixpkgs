@@ -30,8 +30,8 @@
 , nspr
 , nss
 , pango
-, heimdal
-, pulseaudio
+, libheimdal
+, libpulseaudio
 , systemd
 }:
 
@@ -102,8 +102,8 @@ stdenv.mkDerivation {
       nspr
       nss
       pango
-      heimdal
-      pulseaudio
+      libheimdal
+      libpulseaudio
       systemd
     ] + ":" + stdenv.lib.makeSearchPath "lib64" [
       stdenv.cc.cc

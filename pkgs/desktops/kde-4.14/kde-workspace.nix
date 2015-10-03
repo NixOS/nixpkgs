@@ -13,12 +13,12 @@ kde {
       xorg.libxkbfile xorg.libXcomposite  xorg.libXtst
       xorg.libXdamage xorg.libXft
 
-      python boost qjson lm_sensors gpsd libraw1394 pciutils udev
+      python boost qjson lm_sensors /* gpsd */ libraw1394 pciutils udev
       akonadi pam libusb1 libqalculate kdepimlibs  prison
       kactivities
     ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  patches = [ ./files/ksysguard-0001-disable-signalplottertest.patch ];
 
   preConfigure =
    ''

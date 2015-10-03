@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "vips-7.42.1";
+  name = "vips-8.0.2";
 
   src = fetchurl {
     url = "http://www.vips.ecs.soton.ac.uk/supported/current/${name}.tar.gz";
-    sha256 = "1gvazsyfa8w9wdwz89rpa1xmfpyk3b0cp4kkila1r9jc3sqp5qjy";
+    sha256 = "0fpshv71sxbkbycxgd2hvwn7fyq9rm0rsgq0b1zld1an88mi0v8y";
   };
 
   buildInputs =

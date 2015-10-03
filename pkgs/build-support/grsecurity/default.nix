@@ -33,7 +33,7 @@ let
 
     grKernel = if cfg.stable
                then mkKernel pkgs.linux_3_14 stable-patch
-               else mkKernel pkgs.linux_3_19 test-patch;
+               else mkKernel pkgs.linux_4_1 test-patch;
 
     ## -- grsecurity configuration ---------------------------------------------
 
@@ -85,7 +85,7 @@ let
       let boolToKernOpt = b: if b then "y" else "n";
           # Disable RANDSTRUCT under virtualbox, as it has some kind of
           # breakage with the vbox guest drivers
-          #randstruct = optionalString config.services.virtualboxGuest.enable
+          #randstruct = optionalString config.virtualisation.virtualbox.guest.enable
           #  "GRKERNSEC_RANDSTRUCT n";
 
           # Disable restricting links under the testing kernel, as something

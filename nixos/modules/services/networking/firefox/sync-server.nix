@@ -135,7 +135,7 @@ in
           echo >> ${cfg.privateConfig} "secret = $(head -c 20 /dev/urandom | sha1sum | tr -d ' -')"
         fi
       '';
-      serviceConfig.ExecStart = "paster serve ${syncServerIni}";
+      serviceConfig.ExecStart = "${pkgs.pythonPackages.pasteScript}/bin/paster serve ${syncServerIni}";
     };
 
   };

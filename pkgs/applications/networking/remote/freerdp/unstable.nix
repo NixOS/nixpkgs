@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, openssl, zlib, libX11, libXcursor
 , libXdamage, libXext, glib, alsaLib, ffmpeg, libxkbfile, libXinerama, libXv
 , substituteAll
-, pulseaudio ? null, cups ? null, pcsclite ? null
+, libpulseaudio ? null, cups ? null, pcsclite ? null
 , buildServer ? true, optimize ? true
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cmake pkgconfig openssl zlib libX11 libXcursor libXdamage libXext glib
-    alsaLib ffmpeg libxkbfile libXinerama libXv cups pulseaudio pcsclite
+    alsaLib ffmpeg libxkbfile libXinerama libXv cups libpulseaudio pcsclite
   ];
 
   doCheck = false;
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DWITH_CUNIT=OFF"
-  ] ++ stdenv.lib.optional (pulseaudio != null) "-DWITH_PULSE=ON"
+  ] ++ stdenv.lib.optional (libpulseaudio != null) "-DWITH_PULSE=ON"
     ++ stdenv.lib.optional (cups != null) "-DWITH_CUPS=ON"
     ++ stdenv.lib.optional (pcsclite != null) "-DWITH_PCSC=ON"
     ++ stdenv.lib.optional buildServer "-DWITH_SERVER=ON"

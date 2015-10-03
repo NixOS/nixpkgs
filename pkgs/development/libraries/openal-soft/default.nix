@@ -1,12 +1,12 @@
 { stdenv, fetchurl, cmake
 , alsaSupport ? true, alsaLib ? null
-, pulseSupport ? true, pulseaudio ? null
+, pulseSupport ? true, libpulseaudio ? null
 }:
 
 with stdenv.lib;
 
 assert alsaSupport -> alsaLib != null;
-assert pulseSupport -> pulseaudio != null;
+assert pulseSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
   version = "1.16.0";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake ]
     ++ optional alsaSupport alsaLib
-    ++ optional pulseSupport pulseaudio;
+    ++ optional pulseSupport libpulseaudio;
 
   NIX_LDFLAGS = []
     ++ optional alsaSupport "-lasound"

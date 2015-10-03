@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # Tests fail since gcc 4.8
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Rich and powerful protocol-independent mail framework";
 
     longDescription = ''
@@ -46,13 +46,16 @@ stdenv.mkDerivation rec {
       message handling system.
     '';
 
-    license = [ "LGPLv3+" /* libraries */  "GPLv3+" /* tools */ ];
+    license = with licenses; [
+      lgpl3Plus /* libraries */
+      gpl3Plus /* tools */
+    ];
 
     maintainers = [ ];
 
     homepage = http://www.gnu.org/software/mailutils/;
 
     # Some of the dependencies fail to build on {cyg,dar}win.
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = platforms.gnu;
   };
 }

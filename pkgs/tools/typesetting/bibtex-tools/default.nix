@@ -13,4 +13,5 @@ stdenv.mkDerivation {
     --with-hevea=${hevea}
     --with-latex=${tetex}";
   buildInputs = [aterm sdf strategoxt hevea];
+  meta.broken = true;
 }

@@ -3,7 +3,7 @@
 
 let
   name = "zed-${version}";
-  version = "1.0.0";
+  version = "1.1.0";
 
   # When upgrading node.nix / node packages:
   #   fetch package.json from Zed's repository
@@ -31,7 +31,7 @@ let
     src = fetchgit {
         url = "git://github.com/zedapp/zed";
         rev = "refs/tags/v${version}";
-        sha256 = "1kdvj9mvdwm4cswqw6nn9j6kgqvs4d7vycpsmmfha9a2rkryw9zh";
+        sha256 = "1zvlngv73h968jd2m42ylr9vfhf35n80wzy616cv2ic7gmr1fl9p";
       };
 
     buildInputs = [ makeWrapper zip ];
@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Zed is a fully offline-capable, open source, keyboard-focused, text and code editor for power users";
+    description = "A fully offline-capable, open source, keyboard-focused, text and code editor for power users";
     license = stdenv.lib.licenses.mit;
     homepage = http://zedapp.org/;
     maintainers = [ stdenv.lib.maintainers.matejc ];

@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "oiio-${version}";
-  version = "1.4.15";
+  name = "openimageio-${version}";
+  version = "1.4.16";
 
   src = fetchurl {
     url = "https://github.com/OpenImageIO/oiio/archive/Release-${version}.zip";
-    sha256 = "1fc5v3qmrzf9qx765fd15r2dc3ccrz4xf4f9q4cwsrspmaxqyqzs";
+    sha256 = "0f9gspsjhniz992c04dm4lvffzz7zjqn1n34nqn6c32r498kimcj";
   };
 
   buildInputs = [
@@ -20,10 +20,12 @@ stdenv.mkDerivation rec {
     "-DUSE_PYTHON=OFF"
   ];
 
-  buildPhase = ''
-    make ILMBASE_HOME=${ilmbase} OPENEXR_HOME=${openexr} USE_PYTHON=0 \
-      INSTALLDIR=$out dist_dir=
+  preBuild = ''
+    makeFlags="ILMBASE_HOME=${ilmbase} OPENEXR_HOME=${openexr} USE_PYTHON=0
+      INSTALLDIR=$out dist_dir="
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://www.openimageio.org;

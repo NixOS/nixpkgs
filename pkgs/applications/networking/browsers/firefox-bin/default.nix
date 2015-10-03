@@ -30,8 +30,8 @@
 , nspr
 , nss
 , pango
-, heimdal
-, pulseaudio
+, libheimdal
+, libpulseaudio
 , systemd
 }:
 
@@ -102,8 +102,8 @@ stdenv.mkDerivation {
       nspr
       nss
       pango
-      heimdal
-      pulseaudio
+      libheimdal
+      libpulseaudio
       systemd
     ] + ":" + stdenv.lib.makeSearchPath "lib64" [
       stdenv.cc.cc
@@ -129,13 +129,9 @@ stdenv.mkDerivation {
           "$out/usr/lib/firefox-bin-${version}/$executable"
       done
 
-      for executable in \
-        firefox firefox-bin plugin-container \
-        updater crashreporter webapprt-stub libxul.so
-      do
+      find . -executable -type f -exec \
         patchelf --set-rpath "$libPath" \
-          "$out/usr/lib/firefox-bin-${version}/$executable"
-      done
+          "$out/usr/lib/firefox-bin-${version}/{}" \;
 
       # Create a desktop item.
       mkdir -p $out/share/applications
@@ -143,7 +139,7 @@ stdenv.mkDerivation {
       [Desktop Entry]
       Type=Application
       Exec=$out/bin/firefox
-      Icon=$out/lib/firefox-bin-${version}/chrome/icons/default/default256.png
+      Icon=$out/usr/lib/firefox-bin-${version}/browser/icons/mozicon128.png
       Name=Firefox
       GenericName=Web Browser
       Categories=Application;Network;

@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dmidecode-2.12";
+  name = "dmidecode-3.0";
 
   src = fetchurl {
-    url = "mirror://savannah/dmidecode/${name}.tar.bz2";
-    sha256 = "122hgaw8mpqdfra159lfl6pyk3837giqx6vq42j64fjnbl2z6gwi";
+    url = "mirror://savannah/dmidecode/${name}.tar.xz";
+    sha256 = "0iby0xfk5x3cdr0x0gxj5888jjyjhafvaq0l79civ73jjfqmphvy";
   };
 
   makeFlags = "prefix=$(out)";

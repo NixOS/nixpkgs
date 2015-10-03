@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, zathura_core, girara, poppler }:
+{ stdenv, lib, fetchurl, pkgconfig, zathura_core, girara, poppler }:
 
 stdenv.mkDerivation rec {
   version = "0.2.5";
@@ -13,15 +13,15 @@ stdenv.mkDerivation rec {
 
   makeFlags = "PREFIX=$(out) PLUGINDIR=$(out)/lib";
 
-  meta = {
+  meta = with lib; {
     homepage = http://pwmt.org/projects/zathura/;
     description = "A zathura PDF plugin (poppler)";
     longDescription = ''
       The zathura-pdf-poppler plugin adds PDF support to zathura by 
       using the poppler rendering library.
     '';
-    license = stdenv.lib.licenses.zlib;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
+    license = licenses.zlib;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ cstrahan garbas ];
   };
 }

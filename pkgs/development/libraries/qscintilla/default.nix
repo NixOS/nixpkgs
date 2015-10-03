@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
     qmake qscintilla.pro
   '';
 
-  # TODO PyQt Support.
-
   meta = {
     description = "A Qt port of the Scintilla text editing library";
     longDescription = ''

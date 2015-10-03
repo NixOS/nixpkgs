@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
 
   setOutputFlags = false;
 
-  setOutputConfigureFlags = false;
-
   patches =
     [ # Do not look in /usr etc. for dependencies.
       ./no-sys-dirs.patch
@@ -30,6 +28,17 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional stdenv.isSunOS  ./ld-shared.patch
     ++ lib.optional stdenv.isDarwin [ ./cpp-precomp.patch ./no-libutil.patch ] ;
+
+  # There's an annoying bug on sandboxed Darwin in Perl's Cwd.pm where it looks for pwd
+  # in /bin/pwd and /usr/bin/pwd and then falls back on just "pwd" if it can't get them
+  # while at the same time erasing the PATH environment variable so it unconditionally
+  # fails. The code in question is guarded by a check for Mac OS, but the patch below
+  # doesn't have any runtime effect on other platforms.
+  postPatch = ''
+    pwd="$(type -P pwd)"
+    substituteInPlace dist/Cwd/Cwd.pm \
+      --replace "pwd_cmd = 'pwd'" "pwd_cmd = '$pwd'"
+  '';
 
   # Build a thread-safe Perl with a dynamic libperls.o.  We need the
   # "installstyle" option to ensure that modules are put under
@@ -41,8 +50,8 @@ stdenv.mkDerivation rec {
       "-Uinstallusrbinperl"
       "-Dinstallstyle=lib/perl5"
       "-Duseshrplib"
-      "-Dlocincpth=${libc}/include"
-      "-Dloclibpth=${libc.out}/lib"
+      "-Dlocincpth=${libc.dev or libc}/include"
+      "-Dloclibpth=${libc.out or libc}/lib"
     ]
     ++ lib.optional enableThreading "-Dusethreads";
 

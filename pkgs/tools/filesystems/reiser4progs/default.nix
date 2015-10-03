@@ -1,12 +1,12 @@
 {stdenv, fetchurl, libaal}:
 
-let version = "1.0.9"; in
+let version = "1.1.0"; in
 stdenv.mkDerivation rec {
   name = "reiser4progs-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/reiser4/reiser4-utils/${name}.tar.gz";
-    sha256 = "0d6djyd7wjvzbqj738b2z4jr5c2s30g8q8xygipyi0007g42gc7z";
+    sha256 = "18bgv0wd75q53642x5dsk4g0mil1hw1zrp7a4xkb0pxx4bzjlbqg";
   };
 
   buildInputs = [libaal];

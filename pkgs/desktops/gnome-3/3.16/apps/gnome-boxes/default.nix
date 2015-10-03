@@ -2,7 +2,8 @@
 , glib, gobjectIntrospection, libxml2, gtk3, gtkvnc, libvirt, spice_gtk
 , spice_protocol, libuuid, libsoup, libosinfo, systemd, tracker, vala
 , libcap_ng, libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg
-, hicolor_icon_theme, desktop_file_utils, mtools, cdrkit, libcdio
+, desktop_file_utils, mtools, cdrkit, libcdio
+, libusb, libarchive, acl
 }:
 
 # TODO: ovirt (optional)
@@ -23,8 +24,8 @@ stdenv.mkDerivation rec {
     makeWrapper pkgconfig intltool itstool libvirt-glib glib
     gobjectIntrospection libxml2 gtk3 gtkvnc libvirt spice_gtk spice_protocol
     libuuid libsoup libosinfo systemd tracker vala libcap_ng libcap yajl gmp
-    gdbm cyrus_sasl gnome3.adwaita-icon-theme
-    librsvg hicolor_icon_theme desktop_file_utils
+    gdbm cyrus_sasl gnome3.defaultIconTheme libusb libarchive
+    librsvg desktop_file_utils acl
   ];
 
   preFixup = ''

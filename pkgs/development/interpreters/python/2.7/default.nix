@@ -1,29 +1,32 @@
 { stdenv, fetchurl, self, callPackage
-, bzip2, openssl
+, bzip2, openssl, gettext
 
 , includeModules ? false
 
 , db, gdbm, ncurses, sqlite, readline
 
-, tcl ? null, tk ? null, x11 ? null, libX11 ? null, x11Support ? true
+, tcl ? null, tk ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? !stdenv.isCygwin
 , zlib ? null, zlibSupport ? true
+, expat, libffi
+
+, CF, configd
 }:
 
 assert zlibSupport -> zlib != null;
 assert x11Support -> tcl != null
                   && tk != null
-                  && x11 != null
+                  && xlibsWrapper != null
                   && libX11 != null;
 
 with stdenv.lib;
 
 let
   majorVersion = "2.7";
-  version = "${majorVersion}.9";
+  version = "${majorVersion}.10";
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
-    sha256 = "05j9in7yygfgl6nml0rixfvj1bbip982w3l54q05f0vyx8a7xllh";
+    sha256 = "1h7zbrf9pkj29hlm18b10548ch9757f75m64l47sy75rh43p7lqw";
   };
 
   patches =
@@ -39,6 +42,19 @@ let
       # patch python to put zero timestamp into pyc
       # if DETERMINISTIC_BUILD env var is set
       ./deterministic-build.patch
+
+      ./properly-detect-curses.patch
+    ] ++ optionals stdenv.isCygwin [
+      ./2.5.2-ctypes-util-find_library.patch
+      ./2.5.2-tkinter-x11.patch
+      ./2.6.2-ssl-threads.patch
+      ./2.6.5-export-PySignal_SetWakeupFd.patch
+      ./2.6.5-FD_SETSIZE.patch
+      ./2.6.5-ncurses-abi6.patch
+      ./2.7.3-dbm.patch
+      ./2.7.3-dylib.patch
+      ./2.7.3-getpath-exe-extension.patch
+      ./2.7.3-no-libm.patch
     ];
 
   preConfigure = ''
@@ -50,22 +66,40 @@ let
       for i in Lib/plat-*/regen; do
         substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc}/include/
       done
-    '' + optionalString stdenv.isCygwin ''
-      # On Cygwin, `make install' tries to read this Makefile.
-      mkdir -p $out/lib/python${majorVersion}/config
-      touch $out/lib/python${majorVersion}/config/Makefile
-      mkdir -p $out/include/python${majorVersion}
-      touch $out/include/python${majorVersion}/pyconfig.h
+    '' + optionalString stdenv.isDarwin ''
+      substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     '';
+
+  configureFlags = [
+    "--enable-shared"
+    "--with-threads"
+    "--enable-unicode=ucs4"
+  ] ++ optionals stdenv.isCygwin [
+    "--with-system-ffi"
+    "--with-system-expat"
+    "ac_cv_func_bind_textdomain_codeset=yes"
+  ] ++ optionals stdenv.isDarwin [
+    "--disable-toolbox-glue"
+  ];
+
+  postConfigure = if stdenv.isCygwin then ''
+    sed -i Makefile -e 's,PYTHONPATH="$(srcdir),PYTHONPATH="$(abs_srcdir),'
+  '' else null;
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
     [ bzip2 openssl ]
+    ++ optionals stdenv.isCygwin [ expat libffi ]
     ++ optionals includeModules (
         [ db gdbm ncurses sqlite readline
-        ] ++ optionals x11Support [ tcl tk x11 libX11 ]
+        ] ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
     )
-    ++ optional zlibSupport zlib;
+    ++ optional zlibSupport zlib
+
+    # depend on CF and configd only if purity is an issue
+    # the impure bootstrap compiler can't build CoreFoundation currently. it requires
+    # <mach-o/dyld.h> which is in our pure bootstrapTools, but not in the system headers.
+    ++ optionals (stdenv.isDarwin && !stdenv.cc.nativeLibc) [ CF configd ];
 
   mkPaths = paths: {
     C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p.dev or p}/include") paths);
@@ -78,12 +112,11 @@ let
     name = "python-${version}";
     pythonVersion = majorVersion;
 
-    inherit majorVersion version src patches buildInputs preConfigure;
+    inherit majorVersion version src patches buildInputs preConfigure
+            configureFlags;
 
     LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
-
-    configureFlags = "--enable-shared --with-threads --enable-unicode";
 
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
     DETERMINISTIC_BUILD = 1;
@@ -155,17 +188,21 @@ let
     if includeModules then null else stdenv.mkDerivation rec {
       name = "python-${moduleName}-${python.version}";
 
-      inherit src patches preConfigure;
+      inherit src patches preConfigure postConfigure configureFlags;
 
       buildInputs = [ python ] ++ deps;
 
       inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
-      buildPhase = ''
+      # non-python gdbm has a libintl dependency on i686-cygwin, not on x86_64-cygwin
+      buildPhase = (if (stdenv.system == "i686-cygwin" && moduleName == "gdbm") then ''
+          sed -i setup.py -e "s:libraries = \['gdbm'\]:libraries = ['gdbm', 'intl']:"
+      '' else '''') + ''
           substituteInPlace setup.py --replace 'self.extensions = extensions' \
             'self.extensions = [ext for ext in self.extensions if ext.name in ["${internalName}"]]'
 
           python ./setup.py build_ext
+          [ -z "$(find build -name '*_failed.so' -print)" ]
         '';
 
       installPhase =
@@ -199,13 +236,13 @@ let
     crypt = buildInternalPythonModule {
       moduleName = "crypt";
       internalName = "crypt";
-      deps = [ ];
+      deps = optional (stdenv ? glibc) stdenv.glibc;
     };
 
     gdbm = buildInternalPythonModule {
       moduleName = "gdbm";
       internalName = "gdbm";
-      deps = [ gdbm ];
+      deps = [ gdbm ] ++ stdenv.lib.optional stdenv.isCygwin gettext;
     };
 
     sqlite3 = buildInternalPythonModule {
@@ -215,10 +252,10 @@ let
 
   } // optionalAttrs x11Support {
 
-    tkinter = buildInternalPythonModule {
+    tkinter = if stdenv.isCygwin then null else (buildInternalPythonModule {
       moduleName = "tkinter";
-      deps = [ tcl tk x11 libX11 ];
-    };
+      deps = [ tcl tk xlibsWrapper libX11 ];
+    });
 
   } // {
 

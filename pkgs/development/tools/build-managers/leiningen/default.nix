@@ -3,18 +3,18 @@
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
-  version = "2.5.1";
+  version = "2.5.2";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://raw.github.com/technomancy/leiningen/${version}/bin/lein-pkg";
-    sha256 = "0pqqb2bh0a17426diwyhk5vbxcfz45rppbxmjydsmai94jm3cgix";
+    sha256 = "0pzs645315nvn981w3nj8fi30g6kq67cmj7hq7da658qlk0p6r7i";
   };
 
   jarsrc = fetchurl {
     # NOTE: This is actually a .jar, Github has issues
     url = "https://github.com/technomancy/leiningen/releases/download/${version}/${name}-standalone.zip";
-    sha256 = "1irl3w66xq1xbbs4g10dnw1vknfw8al70nhr744gfn2za27w0xdl";
+    sha256 = "0qhvgvii4x3p49bx494f6fc7dfvxx2crp2wbkldxx2brvh105iv4";
   };
 
   patches = [ ./lein-fix-jar-path.patch ];

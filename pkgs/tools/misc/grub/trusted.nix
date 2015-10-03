@@ -1,26 +1,92 @@
-{stdenv, fetchgit, autoconf, automake, buggyBiosCDSupport ? true}:
+{ stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
+, gettext, ncurses, libusb, freetype, qemu, devicemapper
+}:
 
-stdenv.mkDerivation {
-  name = "trustedGRUB-1.1.5";
+with stdenv.lib;
+let
+  pcSystems = {
+    "i686-linux".target = "i386";
+    "x86_64-linux".target = "i386";
+  };
+
+  inPCSystems = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) pcSystems);
+
+  version = "1.2.0";
+
+  unifont_bdf = fetchurl {
+    url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
+    sha256 = "0s0qfff6n6282q28nwwblp5x295zd6n71kl43xj40vgvdqxv0fxx";
+  };
+
+  po_src = fetchurl {
+    name = "grub-2.02-beta2.tar.gz";
+    url = "http://alpha.gnu.org/gnu/grub/grub-2.02~beta2.tar.gz";
+    sha256 = "1lr9h3xcx0wwrnkxdnkfjwy08j7g7mdlmmbdip2db4zfgi69h0rm";
+
+  };
+
+in (
+
+stdenv.mkDerivation rec {
+  name = "trustedGRUB2-${version}";
 
   src = fetchgit {
-     url = "https://github.com/ts468/TrustedGRUB";
-     rev = "954941c17e14c8f7b18e6cd3043ef5f946866f1c";
-     sha256 = "30c21765dc44f02275e66220d6724ec9cd45496226ca28c6db59a9147aa22685";
+    url = "https://github.com/Sirrix-AG/TrustedGRUB2";
+    rev = "1ff54a5fbe02ea01df5a7de59b1e0201e08d4f76";
+    sha256 = "8c17bd7e14dd96ae9c4e98723f4e18ec6b21d45ac486ecf771447649829d0b34";
   };
 
-  # Autoconf/automake required for the splashimage patch.
-  buildInputs = [autoconf automake];
+  nativeBuildInputs = [ autogen flex bison python autoconf automake ];
+  buildInputs = [ ncurses libusb freetype gettext devicemapper ]
+    ++ optional doCheck qemu;
 
-  preConfigure = ''
-    autoreconf
+  preConfigure =
+    '' for i in "tests/util/"*.in
+       do
+         sed -i "$i" -e's|/bin/bash|/bin/sh|g'
+       done
+
+       # Apparently, the QEMU executable is no longer called
+       # `qemu-system-i386', even on i386.
+       #
+       # In addition, use `-nodefaults' to avoid errors like:
+       #
+       #  chardev: opening backend "stdio" failed
+       #  qemu: could not open serial device 'stdio': Invalid argument
+       #
+       # See <http://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
+       sed -i "tests/util/grub-shell.in" \
+           -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
+    '';
+
+  prePatch =
+    '' tar zxf ${po_src} grub-2.02~beta2/po
+       rm -rf po
+       mv grub-2.02~beta2/po po
+       sh autogen.sh
+       gunzip < "${unifont_bdf}" > "unifont.bdf"
+       sed -i "configure" \
+           -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
+    '';
+
+  patches = [ ./fix-bash-completion.patch ];
+
+  # save target that grub is compiled for
+  grubTarget = if inPCSystems
+               then "${pcSystems.${stdenv.system}.target}-pc"
+               else "";
+
+  doCheck = false;
+  enableParallelBuilding = true;
+
+  postInstall = ''
+    paxmark pms $out/sbin/grub-{probe,bios-setup}
   '';
 
-  meta = {
-    homepage = "http://sourceforge.net/projects/trustedgrub/";
-    repositories.git = https://github.com/ts468/TrustedGRUB;
-    description = "Legacy GRUB bootloader extended with TCG support";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ tstrobel ];
+  meta = with stdenv.lib; {
+    description = "GRUB 2.0 extended with TCG (TPM) support for integrity measured boot process (trusted boot)";
+    homepage = https://github.com/Sirrix-AG/TrustedGRUB2;
+    license = licenses.gpl3Plus;
+    platforms = platforms.gnu;
   };
-}
+})

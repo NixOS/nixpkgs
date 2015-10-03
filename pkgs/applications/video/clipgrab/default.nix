@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, makeDesktopItem, qt4 }:
+{ stdenv, fetchurl, ffmpeg, makeDesktopItem, qt4 }:
 
-let version = "3.4.9"; in
+let version = "3.5.1"; in
 stdenv.mkDerivation rec {
   name = "clipgrab-${version}";
 
   src = fetchurl {
-    sha256 = "0valq3cgx7yz11zcscz1vdjmppwbicvg0id61dcar22pyp2zkap1";
-    url = "http://download.clipgrab.de/${name}.tar.bz2";
+    sha256 = "16hm7zv0yhxj7gdd8q462jcxy0jk6hicsk1mkhmarwrhifwsy4g9";
+    # The .tar.bz2 "Download" link is a binary blob, the source is .tar.gz!
+    url = "http://download.clipgrab.de/${name}.tar.gz";
   };
 
   meta = with stdenv.lib; {
@@ -18,12 +19,18 @@ stdenv.mkDerivation rec {
       videos to MPEG4, MP3 or other formats in just one easy step.
     '';
     homepage = http://clipgrab.org/;
-    license = with licenses; gpl3Plus;
-    platforms = with platforms; linux;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ qt4 ];
+  buildInputs = [ ffmpeg qt4 ];
+
+  postPatch = stdenv.lib.optionalString (ffmpeg != null) ''
+  substituteInPlace converter_ffmpeg.cpp \
+    --replace '"ffmpeg"' '"${ffmpeg}/bin/ffmpeg"' \
+    --replace '"ffmpeg ' '"${ffmpeg}/bin/ffmpeg '
+  '';
 
   configurePhase = ''
     qmake clipgrab.pro

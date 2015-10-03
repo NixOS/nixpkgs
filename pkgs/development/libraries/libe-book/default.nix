@@ -1,4 +1,7 @@
-{stdenv, fetchurl, gperf, pkgconfig, librevenge, libxml2, boost, icu, cppunit}:
+{ stdenv, fetchurl, gperf, pkgconfig, librevenge, libxml2, boost, icu
+, cppunit, zlib
+}:
+
 let
   s = # Generated upstream information
   rec {
@@ -10,12 +13,18 @@ let
     sha256="1v48pd32r2pfysr3a3igc4ivcf6vvb26jq4pdkcnq75p70alp2bz";
   };
   buildInputs = [
-    gperf pkgconfig librevenge libxml2 boost icu cppunit
+    gperf pkgconfig librevenge libxml2 boost icu cppunit zlib
   ];
+
+  # Boost 1.59 compatability fix
+  # Attempt removing when updating
+  postPatch = ''
+    sed -i 's,^CPPFLAGS.*,\0 -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED,' src/lib/Makefile.in
+  '';
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  inherit buildInputs;
+  inherit buildInputs postPatch;
   src = fetchurl {
     inherit (s) url sha256;
   };

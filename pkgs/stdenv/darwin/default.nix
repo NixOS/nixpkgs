@@ -31,7 +31,7 @@ rec {
       shell        = "/bin/bash";
       initialPath  = [ bootstrapTools ];
       fetchurlBoot = fetchurl;
-      cc           = "/no-such-path";
+      cc           = null;
     };
   };
 
@@ -58,6 +58,8 @@ rec {
     export NIX_CFLAGS_COMPILE+=" --sysroot=/var/empty -idirafter $SDKROOT/usr/include -F$SDKROOT/System/Library/Frameworks -Wno-multichar -Wno-deprecated-declarations"
     export NIX_LDFLAGS_AFTER+=" -L$SDKROOT/usr/lib"
     export CMAKE_OSX_ARCHITECTURES=x86_64
+    # Workaround for https://openradar.appspot.com/22671534 on 10.11.
+    export gl_cv_func_getcwd_abort_bug=no
   '';
 
   # A stdenv that wraps the Apple command-line tools and our other trivial symlinked bootstrap tools
@@ -90,6 +92,7 @@ rec {
           cc      = "/usr";
           outPath = nativePrefix;
         };
+        isClang      = true;
       };
     };
     pkgs = allPackages {
@@ -105,7 +108,7 @@ rec {
       inherit system config;
       inherit (stage1.stdenv) shell fetchurlBoot preHook cc;
 
-      initialPath = [ stage1.pkgs.xz ] ++ stage1.stdenv.initialPath;
+      initialPath = [ stage1.pkgs.xz stage1.pkgs.gnused ] ++ stage1.stdenv.initialPath;
     };
     pkgs = allPackages {
       inherit system platform;
@@ -129,13 +132,14 @@ rec {
 
     cc = import ../../build-support/cc-wrapper {
       inherit stdenv;
-      nativeTools  = false;
-      nativeLibc   = true;
-      binutils  = pkgs.darwin.cctools;
-      cc        = pkgs.llvmPackages.clang-unwrapped;
-      coreutils = pkgs.coreutils;
-      shell     = "${pkgs.bash}/bin/bash";
+      nativeTools   = false;
+      nativeLibc    = true;
+      binutils      = pkgs.darwin.cctools;
+      cc            = pkgs.llvmPackages.clang-unwrapped;
+      coreutils     = pkgs.coreutils;
+      shell         = "${pkgs.bash}/bin/bash";
       extraPackages = [ pkgs.libcxx ];
+      isClang       = true;
     };
 
     shell = "${pkgs.bash}/bin/bash";

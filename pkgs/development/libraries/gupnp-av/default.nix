@@ -1,20 +1,21 @@
-{ stdenv, fetchurl, gupnp, pkgconfig }:
+{ stdenv, fetchurl, pkgconfig, gupnp, glib, libxml2 }:
 
 stdenv.mkDerivation rec {
   name = "gupnp-av-${version}";
   majorVersion = "0.12";
-  version = "${majorVersion}.4";
+  version = "${majorVersion}.7";
+
   src = fetchurl {
-    url = "mirror://gnome/sources/gupnp-av/${majorVersion}/gupnp-av-${version}.tar.xz";
-    sha256 = "0nvsvpiyfslz54j4hjh2gsdjkbi2qj2f4k0aw8s7f05kibprr2jl";
+    url = "mirror://gnome/sources/gupnp-av/${majorVersion}/${name}.tar.xz";
+    sha256 = "35e775bc4f7801d65dcb710905a6b8420ce751a239b5651e6d830615dc906ea8";
   };
   
-  buildInputs = [ gupnp pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gupnp glib libxml2 ];
 
   meta = {
     homepage = http://gupnp.org/;
     description = "A collection of helpers for building AV (audio/video) applications using GUPnP";
-    longDescription = "GUPnP implements the UPnP specification: resource announcement and discovery, description, control, event notification, and presentation (GUPnP includes basic web server functionality through libsoup). GUPnP does not include helpers for construction or control of specific standardized resources (e.g. MediaServer); this is left for higher level libraries utilizing the GUPnP framework.";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

@@ -1,14 +1,16 @@
-{ fetchurl, stdenv, flex, bison, db, iptables, pkgconfig }:
+{ fetchurl, stdenv, lib, flex, bison, db, iptables, pkgconfig
+, enableFan ? false
+}:
 
 stdenv.mkDerivation rec {
-  name = "iproute2-3.19.0";
+  name = "iproute2-4.2.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
-    sha256 = "1c6pgysxfqs5qkd4kpwkbdhw3xydhjnskrz1q2k2nvqndv1ziyg2";
+    sha256 = "0c0gyf46ad3jlalm9a7c9iiwvpcrjr4gylrkyranp8qd7rs1w454";
   };
 
-  patch = [ ./vpnc.patch ];
+  patches = lib.optionals enableFan [ ./ubuntu-fan.patch ];
 
   preConfigure = ''
     patchShebangs ./configure
@@ -19,18 +21,22 @@ stdenv.mkDerivation rec {
     "DESTDIR="
     "LIBDIR=$(out)/lib"
     "SBINDIR=$(out)/sbin"
-    "CONFDIR=$(out)/etc"
-    "DOCDIR=$(out)/share/doc/${name}"
     "MANDIR=$(out)/share/man"
+    "DOCDIR=$(TMPDIR)/share/doc/${name}" # Don't install docs
+  ];
+
+  buildFlags = [
+    "CONFDIR=/etc/iproute2"
+  ];
+
+  installFlags = [
+    "CONFDIR=$(out)/etc/iproute2"
   ];
 
   buildInputs = [ db iptables ];
   nativeBuildInputs = [ bison flex pkgconfig ];
 
   enableParallelBuilding = true;
-
-  # Get rid of useless TeX/SGML docs.
-  postInstall = "rm -rf $out/share/doc";
 
   meta = with stdenv.lib; {
     homepage = http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2;

@@ -224,7 +224,7 @@ rec {
   keepDebugInfo = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         dontStrip = true;
-        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -g -O0";
+        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og";
       });
     };
 
@@ -232,7 +232,7 @@ rec {
   /* Modify a stdenv so that it uses the Gold linker. */
   useGoldLinker = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
-        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_COMPILE or "") + " -fuse-ld=gold";
+        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=gold";
       });
     };
 

@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ryz1gfgrxcj806cakcblxf0bcwq8p2mw8k86fs3f5wlwayawzkn";
   };
 
+  outputs = [ "out" "doc" ];
+
   # building memcpy_speed.log
   # ../test-driver: line 107:  4495 Segmentation fault      "$@" > $log_file 2>&1
   # FAIL: memcpy_speed

@@ -1,59 +1,50 @@
-{ stdenv, fetchurl, fetchgit
+{ stdenv, fetchurl, fetchgit, fetchNuGet
 , autoconf, automake, pkgconfig, shared_mime_info, intltool
 , glib, mono, gtk-sharp, gnome, gnome-sharp, unzip
+, dotnetPackages
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.7.0.660";
-  revision = "6a74f9bdb90d9415b597064d815c9be38b401fee";
+  version = "5.9.4.5";
+  revision = "8010a90f6e246b32364e3fb46ef2c9d1be9c9a2b";
   name = "monodevelop-${version}";
 
-  srcs = [
-    (fetchurl {
-      url = "http://download.mono-project.com/sources/monodevelop/${name}.tar.bz2";
-      sha256 = "0i9fpjkcys991dhxh02zf9imar3aj6fldk9ymy09vmr10f4d7vbf";
-    })
-    (fetchurl {
-      url = "https://launchpadlibrarian.net/153448659/NUnit-2.6.3.zip";
-      sha256 = "0vzbziq44zy7fyyhb44mf9ypfi7gvs17rxpg8c9d9lvvdpkshhcp";
-    })
-    (fetchurl {
-      url = "https://launchpadlibrarian.net/68057829/NUnit-2.5.10.11092.zip";
-      sha256 = "0k5h5bz1p2v3d0w0hpkpbpvdkcszgp8sr9ik498r1bs72w5qlwnc";
-    })
-    (fetchgit {
-      url = "https://github.com/mono/nuget-binary.git";
-      rev = "ecb27dd49384d70b6c861d28763906f2b25b7c8";
-      sha256 = "0dj0yglgwn07xw2crr66vl0vcgnr6m041pynyq0kdd0z8nlp92ki";
-    })
-  ];
+  src = fetchurl {
+    url = "http://download.mono-project.com/sources/monodevelop/${name}.tar.bz2";
+    sha256 = "0bim4bfv3zwijafl9g0cx3159zq43dlcv74mnyrda41j4p52w5ji";
+  };
 
-  sourceRoot = "monodevelop-5.7";
+  nunit2510 = fetchurl {
+    url = "http://launchpad.net/nunitv2/2.5/2.5.10/+download/NUnit-2.5.10.11092.zip";
+    sha256 = "0k5h5bz1p2v3d0w0hpkpbpvdkcszgp8sr9ik498r1bs72w5qlwnc";
+  };
 
   postPatch = ''
     # From https://bugzilla.xamarin.com/show_bug.cgi?id=23696#c19
 
-    # it seems parts of MonoDevelop 5.2+ need NUnit 2.6.4, which isn't included
-    # (?), so download it and put it in the right place in the tree
-    mkdir -v -p packages/NUnit.2.6.3/lib
-    cp -vfR ../NUnit-2.6.3/bin/framework/* packages/NUnit.2.6.3/lib
-    mkdir -v -p packages/NUnit.Runners.2.6.3/tools/lib
-    cp -vfR ../NUnit-2.6.3/bin/lib/* packages/NUnit.Runners.2.6.3/tools/lib
-
     # cecil needs NUnit 2.5.10 - this is also missing from the tar
-    cp -vfR ../NUnit-2.5.10.11092/bin/net-2.0/framework/* external/cecil/Test/libs/nunit-2.5.10
+    unzip -j ${nunit2510} -d external/cecil/Test/libs/nunit-2.5.10 NUnit-2.5.10.11092/bin/net-2.0/framework/\*
 
     # the tar doesn't include the nuget binary, so grab it from github and copy it
     # into the right place
-    cp -vfR ../nuget-binary-*/* external/nuget-binary/
-    '';
+    cp -vfR "$(dirname $(pkg-config NuGet.Core --variable=Libraries))"/* external/nuget-binary/
+  '';
+
+  # Revert this commit which broke the ability to use pkg-config to locate dlls
+  patchFlags = [ "-p2" ];
+  patches = [ ./git-revert-12d610fb3f6dce121df538e36f21d8c2eeb0a6e3.patch ];
 
   buildInputs = [
     autoconf automake pkgconfig shared_mime_info intltool
     mono gtk-sharp gnome-sharp unzip
+    pkgconfig
+    dotnetPackages.NUnit
+    dotnetPackages.NUnitRunners
+    dotnetPackages.Nuget
   ];
 
   preConfigure = "patchShebangs ./configure";
+
   preBuild = ''
     cat > ./buildinfo <<EOF
     Release ID: ${version}
@@ -72,6 +63,12 @@ stdenv.mkDerivation rec {
     > 
     EOF
     done
+
+    # Without this, you get a missing DLL error any time you install an addin..
+    ln -sv `pkg-config nunit.core --variable=Libraries` $out/lib/monodevelop/AddIns/NUnit
+    ln -sv `pkg-config nunit.core.interfaces --variable=Libraries` $out/lib/monodevelop/AddIns/NUnit
+    ln -sv `pkg-config nunit.framework --variable=Libraries` $out/lib/monodevelop/AddIns/NUnit
+    ln -sv `pkg-config nunit.util --variable=Libraries` $out/lib/monodevelop/AddIns/NUnit
   '';
 
   dontStrip = true;

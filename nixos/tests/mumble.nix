@@ -1,4 +1,4 @@
-import ./make-test.nix (
+import ./make-test.nix ({ pkgs, ...} : 
 
 let
   client = { config, pkgs, ... }: {
@@ -8,6 +8,9 @@ let
 in
 {
   name = "mumble";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ thoughtpolice eelco chaoflow ];
+  };
 
   nodes = {
     server = { config, pkgs, ... }: {

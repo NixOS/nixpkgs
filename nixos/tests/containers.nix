@@ -1,7 +1,10 @@
 # Test for NixOS' container support.
 
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ...} : {
   name = "containers";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ aristid aszlig eelco chaoflow ];
+  };
 
   machine =
     { config, pkgs, ... }:
@@ -43,7 +46,7 @@ import ./make-test.nix {
       $machine->fail("curl --fail --connect-timeout 2 http://$ip/ > /dev/null");
 
       # Make sure we have a NixOS tree (required by ‘nixos-container create’).
-      $machine->succeed("PAGER=cat nix-env -qa -A nixos.pkgs.hello >&2");
+      $machine->succeed("PAGER=cat nix-env -qa -A nixos.hello >&2");
 
       # Create some containers imperatively.
       my $id1 = $machine->succeed("nixos-container create foo --ensure-unique-name");
@@ -113,4 +116,4 @@ import ./make-test.nix {
       $machine->fail("nixos-container destroy webserver");
     '';
 
-}
+})

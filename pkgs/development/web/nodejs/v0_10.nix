@@ -1,13 +1,11 @@
 { stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares
-, pkgconfig, runCommand, which
+, pkgconfig, runCommand, which, libtool
+
+# apple frameworks
+, CoreServices, ApplicationServices, Carbon, Foundation
 }:
 
 let
-  dtrace = runCommand "dtrace-native" {} ''
-    mkdir -p $out/bin
-    ln -sv /usr/sbin/dtrace $out/bin
-  '';
-
   version = "0.10.38";
 
   # !!! Should we also do shared libuv?
@@ -37,22 +35,26 @@ in stdenv.mkDerivation {
     sha256 = "12xpa9jzry5g0j41908498qqs8v0q6miqkv6mggyzas8bvnshgai";
   };
 
-  configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);
+  configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps) ++
+    stdenv.lib.optional stdenv.isDarwin "--without-dtrace";
 
   prePatch = ''
-    sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i configure
+    patchShebangs .
   '';
 
-  patches = if stdenv.isDarwin then [ ./no-xcode.patch ] else null;
+  patches = stdenv.lib.optional stdenv.isDarwin ./no-xcode.patch;
 
-  postPatch = if stdenv.isDarwin then ''
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     (cd tools/gyp; patch -Np1 -i ${../../python-modules/gyp/no-darwin-cflags.patch})
-  '' else null;
+  '';
 
   buildInputs = [ python which ]
     ++ (optional stdenv.isLinux utillinux)
-    ++ optionals stdenv.isDarwin [ pkgconfig openssl dtrace ];
+    ++ optionals stdenv.isDarwin [ pkgconfig openssl libtool CoreServices ApplicationServices Foundation ];
+  propagatedBuildInputs = optionals stdenv.isDarwin [ Carbon ];
   setupHook = ./setup-hook.sh;
+
+  enableParallelBuilding = true;
 
   passthru.interpreterName = "nodejs-0.10";
 
@@ -60,7 +62,7 @@ in stdenv.mkDerivation {
     description = "Event-driven I/O framework for the V8 JavaScript engine";
     homepage = http://nodejs.org;
     license = licenses.mit;
-    maintainers = [ maintainers.goibhniu maintainers.shlevy ];
+    maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

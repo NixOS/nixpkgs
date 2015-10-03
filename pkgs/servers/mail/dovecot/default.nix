@@ -1,9 +1,9 @@
-{stdenv, fetchurl, openssl, pam, bzip2, zlib, inotifyTools, openldap}:
+{stdenv, fetchurl, openssl, pam, bzip2, zlib, inotify-tools, openldap}:
 
 stdenv.mkDerivation rec {
   name = "dovecot-2.1.17";
 
-  buildInputs = [openssl bzip2 zlib openldap] ++ stdenv.lib.optionals stdenv.isLinux [pam inotifyTools];
+  buildInputs = [openssl bzip2 zlib openldap] ++ stdenv.lib.optionals stdenv.isLinux [pam inotify-tools];
 
   src = fetchurl {
     url = "http://dovecot.org/releases/2.1/${name}.tar.gz";

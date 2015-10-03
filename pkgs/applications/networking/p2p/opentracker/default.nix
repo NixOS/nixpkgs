@@ -1,7 +1,7 @@
 { stdenv, fetchgit, libowfat, zlib }:
 
 stdenv.mkDerivation {
-  name = "opentracker";
+  name = "opentracker-2014-08-03";
   src = fetchgit {
     url = "https://github.com/masroore/opentracker.git";
     rev = "9a26b3d203755577879315ecc2b515d0e22793cb";

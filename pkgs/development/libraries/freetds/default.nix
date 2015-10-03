@@ -3,11 +3,11 @@
 
 assert odbcSupport -> unixODBC != null;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "freetds-0.91";
 
   src = fetchurl {
-    url = ftp://ftp.astron.com/pub/freetds/stable/freetds-stable.tgz;
+    url = "http://mirrors.ibiblio.org/freetds/stable/${name}.tar.gz";
     sha256 = "0r946axzxs0czsmr7283w7vmk5jx3jnxxc32d2ncxsrsh2yli0ba";
   };
 
@@ -30,4 +30,3 @@ stdenv.mkDerivation {
     platforms = stdenv.lib.platforms.all;
   };
 }
-

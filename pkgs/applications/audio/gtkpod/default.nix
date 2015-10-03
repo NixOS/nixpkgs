@@ -3,19 +3,19 @@
   libvorbis, hicolor_icon_theme, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
-  version = "2.1.4";
+  version = "2.1.5";
   name = "gtkpod-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/gtkpod/${name}.tar.gz";
-    sha256 = "ba12b35f3f24a155b68f0ffdaf4d3c5c7d1b8df04843a53306e1c83fc811dfaa";
+    sha256 = "0xisrpx069f7bjkyc8vqxb4k0480jmx1wscqxr6cpq1qj6pchzd5";
   };
 
   propagatedUserEnvPkgs = [ gnome.gnome_themes_standard ];
 
   buildInputs = [ pkgconfig makeWrapper intltool curl gettext perl perlXMLParser
     flex libgpod libid3tag flac libvorbis gtk3 gdk_pixbuf libglade gnome.anjuta
-    gnome.gdl gnome.gnome_icon_theme_symbolic gnome.gnome_icon_theme
+    gnome.gdl gnome.defaultIconTheme
     hicolor_icon_theme ];
 
   patchPhase = ''

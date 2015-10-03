@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, acl, openssl, libxml2, attr, zlib, bzip2, e2fsprogs, xz
+{ fetchurl, stdenv, acl, openssl, libxml2, attr, zlib, bzip2, e2fsprogs, xz, lzo
 , sharutils }:
 
 stdenv.mkDerivation rec {
@@ -14,10 +14,22 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./CVE-2013-0211.patch # https://github.com/libarchive/libarchive/commit/22531545
+    ./CVE-2015-1197.patch # https://github.com/NixOS/nixpkgs/issues/6799
+      # ^ it's CVE-2015-2304 specific to libarchive
   ];
 
-  buildInputs = [ sharutils libxml2 zlib bzip2 openssl xz ] ++
+  buildInputs = [ sharutils libxml2 zlib bzip2 openssl xz lzo ] ++
     stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ];
+
+  preBuild = if stdenv.isCygwin then ''
+    echo "#include <windows.h>" >> config.h
+  '' else null;
+
+  preFixup = ''
+    sed -i $out/lib/libarchive.la \
+      -e 's|-lcrypto|-L${openssl}/lib -lcrypto|' \
+      -e 's|-llzo2|-L${lzo}/lib -llzo2|'
+  '';
 
   meta = {
     description = "Multi-format archive and compression library";

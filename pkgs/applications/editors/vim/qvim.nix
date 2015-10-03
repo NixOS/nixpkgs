@@ -1,4 +1,7 @@
-args@{...}: with args;
+args@{ fetchgit, stdenv, ncurses, pkgconfig, gettext
+, composableDerivation, lib, config, python, perl, tcl, ruby, qt4
+, libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
+, libICE, ... }: with args;
 
 let tag = "20140827";
     sha256 = "02adf2212872db3c5d133642d2c12fbfc28b506e4c0c42552e3d079756f63f65";
@@ -118,6 +121,7 @@ composableDerivation {
   meta = with stdenv.lib; {
     description = "The most popular clone of the VI editor (Qt GUI fork)";
     homepage    = https://bitbucket.org/equalsraf/vim-qt/wiki/Home;
+    license = licenses.vim;
     maintainers = with maintainers; [ smironov ttuegel ];
     platforms   = platforms.linux;
   };

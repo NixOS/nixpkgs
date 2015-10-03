@@ -1,14 +1,13 @@
 { stdenv, fetchurl, cmake, python, boost, libuuid, ruby }:
 
 stdenv.mkDerivation rec {
-  name = "${project}-cpp-${version}";
+  name = "qpid-cpp-${version}";
 
-  project = "qpid";
-  version = "0.26";
+  version = "0.34";
 
   src = fetchurl {
-    url = "mirror://apache/${project}/${version}/${name}.tar.gz";
-    sha256 = "1c03yi19d5h5h78h37add9csmy0mzvvmvn7zkcalwszabdhsb5yk";
+    url = "mirror://apache/qpid/cpp/${version}/${name}.tar.gz";
+    sha256 = "07ibwvw5lm7xabv32zai5x03r7l9mxm0zk7h9lbfkzmav0f41w0w";
   };
 
   buildInputs = [ cmake python boost libuuid ruby ];

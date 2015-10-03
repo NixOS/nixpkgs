@@ -3,6 +3,6 @@ kde {
   buildInputs = [ kdelibs qt_gstreamer1 ];
 
   meta = {
-    description = "Artikulate is a pronunciation learning program for KDE.";
+    description = "A pronunciation learning program for KDE";
   };
 }

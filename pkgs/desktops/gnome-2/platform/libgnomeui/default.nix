@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, xlibs, glib, pango
+{ stdenv, fetchurl, pkgconfig, libxml2, xorg, glib, pango
 , intltool, libgnome, libgnomecanvas, libbonoboui, GConf, libtool
 , gnome_vfs, libgnome_keyring, libglade }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs =
-    [ xlibs.xlibs libxml2 GConf pango glib libgnome_keyring libglade libtool ];
+    [ xorg.xlibsWrapper libxml2 GConf pango glib libgnome_keyring libglade libtool ];
 
   propagatedBuildInputs = [ libgnome libbonoboui libgnomecanvas gnome_vfs ];
 }

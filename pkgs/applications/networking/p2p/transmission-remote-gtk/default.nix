@@ -1,15 +1,21 @@
-{ stdenv, makeWrapper, fetchurl, pkgconfig, intltool, gtk3, json_glib, curl }:
+{ stdenv, autoconf, automake, libtool, makeWrapper, fetchgit, pkgconfig
+, intltool, gtk3, json_glib, curl }:
 
 
 stdenv.mkDerivation rec {
-  name = "transmission-remote-gtk-1.1.1";
+  name = "transmission-remote-gtk-${version}";
+  version = "1.2";
 
-  src = fetchurl {
-    url = "http://transmission-remote-gtk.googlecode.com/files/${name}.tar.gz";
-    sha256 = "1jbh2pm4i740cmzqd2r7zxnqqipvv2v2ndmnmk53nqrxcbgc4nlz";
+  src = fetchgit {
+    url = "https://github.com/ajf8/transmission-remote-gtk.git";
+    rev = "aa4e0c7d836cfcc10d8effd10225abb050343fc8";
+    sha256 = "0qz0jzr5w5fik2awfps0q49blwm4z7diqca2405rr3fyhyjhx42b";
   };
 
-  buildInputs = [ makeWrapper pkgconfig intltool gtk3 json_glib curl ];
+  buildInputs = [ libtool autoconf automake makeWrapper pkgconfig intltool
+                  gtk3 json_glib curl ];
+
+  preConfigure = "sh autogen.sh";
 
   preFixup = ''
     wrapProgram "$out/bin/transmission-remote-gtk" \
@@ -19,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib;
     { description = "GTK remote control for the Transmission BitTorrent client";
-      homepage = http://code.google.com/p/transmission-remote-gtk/;
+      homepage = https://github.com/ajf8/transmission-remote-gtk;
       license = licenses.gpl2;
       maintainers = [ maintainers.emery ];
       platforms = platforms.linux;

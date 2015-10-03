@@ -1,5 +1,5 @@
 { stdenv, fetchgit, cmake, pkgconfig, boost, gnuradio, rtl-sdr, uhd
-, makeWrapper
+, makeWrapper, hackrf
 , pythonSupport ? true, python, swig
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    cmake pkgconfig boost gnuradio rtl-sdr uhd makeWrapper
+    cmake pkgconfig boost gnuradio rtl-sdr uhd makeWrapper hackrf
   ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
 
   postInstall = ''
@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = http://sdr.osmocom.org/trac/wiki/GrOsmoSDR;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor the-kenny ];
   };
 }

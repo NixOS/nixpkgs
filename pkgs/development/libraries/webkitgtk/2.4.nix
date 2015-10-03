@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, perl, python, ruby, bison, gperf, flex
+{ stdenv, fetchurl, perl, python, ruby, bison, gperf, flex
 , pkgconfig, which, gettext, gobjectIntrospection
 , gtk2, gtk3, wayland, libwebp, enchant, sqlite
 , libxml2, libsoup, libsecret, libxslt, harfbuzz
@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.4.8";
+  version = "2.4.9";
 
   meta = with stdenv.lib; {
     description = "Web content rendering engine, GTK+ port";
@@ -21,19 +21,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "08xxqsxpa63nzgbsz63vrdxdxgpysyiy7jdcjb57k1hprdcibwb8";
+    sha256 = "0r651ar3p0f8zwl7764kyimxk5hy88cwy116pv8cl5l8hbkjkpxg";
   };
-
-  patches = [ ./webkitgtk-2.4-gmutexlocker.patch ./bug140241.patch ];
 
   CC = "cc";
 
   prePatch = ''
     patchShebangs Tools/gtk
   '';
-
-  # patch *.in between autoreconf and configure
-  postAutoreconf = "patch -p1 < ${./webcore-svg-libxml-cflags.patch}";
+  patches = [ ./webcore-svg-libxml-cflags.patch ];
 
   configureFlags = with stdenv.lib; [
     "--disable-geolocation"
@@ -46,23 +42,22 @@ stdenv.mkDerivation rec {
   dontAddDisableDepTrack = true;
 
   nativeBuildInputs = [
-    autoreconfHook/*bug140241.patch*/ perl python ruby bison gperf flex
+    perl python ruby bison gperf flex
     pkgconfig which gettext gobjectIntrospection
   ];
 
   buildInputs = [
     gtk2 wayland libwebp enchant
-    libxml2 libsecret libxslt harfbuzz
+    libxml2 libsecret libxslt
     gst-plugins-base sqlite
   ];
 
   propagatedBuildInputs = [
-    libsoup
+    libsoup harfbuzz/*icu in *.la*/
     (if withGtk2 then gtk2 else gtk3)
   ];
 
-  # Probably OK now, see:
-  # https://bugs.webkit.org/show_bug.cgi?id=79498
-  enableParallelBuilding = true;
-}
+  # Still fails with transient errors in version 2.4.9.
+  enableParallelBuilding = false;
 
+}

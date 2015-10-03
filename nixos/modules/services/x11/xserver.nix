@@ -13,7 +13,6 @@ let
 
   # Map video driver names to driver packages. FIXME: move into card-specific modules.
   knownVideoDrivers = {
-    nouveau       = { modules = [ pkgs.xf86_video_nouveau ]; };
     unichrome    = { modules = [ pkgs.xorgVideoUnichrome ]; };
     virtualbox   = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
     ati = { modules = [ pkgs.xorg.xf86videoati pkgs.xorg.glamoregl ]; };
@@ -235,6 +234,14 @@ in
           remembers private keys for you so that you don't have to type in
           passphrases every time you make an SSH connection or sign/encrypt
           data.  Use <command>ssh-add</command> to add a key to the agent.
+        '';
+      };
+
+      startDbusSession = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to start a new DBus session when you log in with dbus-launch.
         '';
       };
 
@@ -468,6 +475,11 @@ in
 
     environment.pathsToLink =
       [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
+
+    # The default max inotify watches is 8192.
+    # Nowadays most apps require a good number of inotify watches,
+    # the value below is used by default on several other distros.
+    boot.kernel.sysctl."fs.inotify.max_user_watches" = mkDefault 524288;
 
     systemd.defaultUnit = mkIf cfg.autorun "graphical.target";
 

@@ -9,8 +9,10 @@ postInstall() {
     if test -n "$origPostInstall"; then eval "$origPostInstall"; fi
 
     local r p requires
-    requires=$(grep "Requires:" ${dev:-$out}/lib/pkgconfig/*.pc | \
+    set +o pipefail
+    requires=$(grep "Requires:" ${!outputDev}/lib/pkgconfig/*.pc | \
         sed "s/Requires://" | sed "s/,/ /g")
+    set -o pipefail
 
     echo "propagating requisites $requires"
 

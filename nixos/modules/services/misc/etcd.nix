@@ -122,14 +122,6 @@ in {
         mkdir -m 0700 -p ${cfg.dataDir}
         if [ "$(id -u)" = 0 ]; then chown etcd ${cfg.dataDir}; fi
       '';
-      postStart = ''
-        until ${pkgs.etcdctl}/bin/etcdctl set /nixos/state 'up'; do
-          sleep 1;
-        done
-        until ${pkgs.etcdctl}/bin/etcdctl get /nixos/state | grep up; do
-          sleep 1;
-        done
-      '';
     };
 
     environment.systemPackages = [ pkgs.etcdctl ];

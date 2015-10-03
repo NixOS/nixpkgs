@@ -13,20 +13,93 @@ rec {
       pathSafeName = lib.replaceChars ["@" ":" "\\"] ["-" "-" "-"] name;
     in
     if unit.enable then
-      pkgs.runCommand "unit-${pathSafeName}" { preferLocalBuild = true; inherit (unit) text; }
+      pkgs.runCommand "unit-${pathSafeName}"
+        { preferLocalBuild = true;
+          allowSubstitutes = false;
+          inherit (unit) text;
+        }
         ''
           mkdir -p $out
           echo -n "$text" > $out/${shellEscape name}
         ''
     else
-      pkgs.runCommand "unit-${pathSafeName}-disabled" { preferLocalBuild = true; }
+      pkgs.runCommand "unit-${pathSafeName}-disabled"
+        { preferLocalBuild = true;
+          allowSubstitutes = false;
+        }
         ''
           mkdir -p $out
           ln -s /dev/null $out/${shellEscape name}
         '';
 
+  boolValues = [true false "yes" "no"];
+
+  digits = map toString (range 0 9);
+
+  isByteFormat = s:
+    let
+      l = reverseList (stringToCharacters s);
+      suffix = head l;
+      nums = tail l;
+    in elem suffix (["K" "M" "G" "T"] ++ digits)
+      && all (num: elem num digits) nums;
+
+  assertByteFormat = name: group: attr:
+    optional (attr ? ${name} && ! isByteFormat attr.${name})
+      "Systemd ${group} field `${name}' must be in byte format [0-9]+[KMGT].";
+
+  hexChars = stringToCharacters "0123456789abcdefABCDEF";
+
+  isMacAddress = s: stringLength s == 17
+    && flip all (splitString ":" s) (bytes:
+      all (byte: elem byte hexChars) (stringToCharacters bytes)
+    );
+
+  assertMacAddress = name: group: attr:
+    optional (attr ? ${name} && ! isMacAddress attr.${name})
+      "Systemd ${group} field `${name}' must be a valid mac address.";
+
+
+  assertValueOneOf = name: values: group: attr:
+    optional (attr ? ${name} && !elem attr.${name} values)
+      "Systemd ${group} field `${name}' cannot have value `${attr.${name}}'.";
+
+  assertHasField = name: group: attr:
+    optional (!(attr ? ${name}))
+      "Systemd ${group} field `${name}' must exist.";
+
+  assertRange = name: min: max: group: attr:
+    optional (attr ? ${name} && !(min <= attr.${name} && max >= attr.${name}))
+      "Systemd ${group} field `${name}' is outside the range [${toString min},${toString max}]";
+
+  assertOnlyFields = fields: group: attr:
+    let badFields = filter (name: ! elem name fields) (attrNames attr); in
+    optional (badFields != [ ])
+      "Systemd ${group} has extra fields [${concatStringsSep " " badFields}].";
+
+  checkUnitConfig = group: checks: v:
+    let errors = concatMap (c: c group v) checks; in
+    if errors == [] then true
+      else builtins.trace (concatStringsSep "\n" errors) false;
+
+  toOption = x:
+    if x == true then "true"
+    else if x == false then "false"
+    else toString x;
+
+  attrsToSection = as:
+    concatStrings (concatLists (mapAttrsToList (name: value:
+      map (x: ''
+          ${name}=${toOption x}
+        '')
+        (if isList value then value else [value]))
+        as));
+
   generateUnits = type: units: upstreamUnits: upstreamWants:
-    pkgs.runCommand "${type}-units" { preferLocalBuild = true; } ''
+    pkgs.runCommand "${type}-units"
+      { preferLocalBuild = true;
+        allowSubstitutes = false;
+      } ''
       mkdir -p $out
 
       # Copy the upstream systemd units we're interested in.

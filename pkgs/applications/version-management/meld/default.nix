@@ -4,8 +4,8 @@
 
 
 let
-  minor = "3.12";
-  version = "${minor}.3";
+  minor = "3.14";
+  version = "${minor}.0";
 in
 
 buildPythonPackage rec {
@@ -14,12 +14,13 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/meld/${minor}/meld-${version}.tar.xz";
-    sha256 = "1zg6qhm53j0vxmjj3pcj2hwi8c12dxzmlh98zks0jnwhqv2p4dfv";
+    sha256 = "0g0h9wdr6nqdalqkz4r037569apw253cklwr17x0zjc7nwv2j3j3";
   };
 
   buildInputs = [
     python27 intltool makeWrapper itstool libxml2
     gnome3.gtksourceview gnome3.gsettings_desktop_schemas pycairo cairo
+    gnome3.defaultIconTheme
   ];
   propagatedBuildInputs = [ gobjectIntrospection pygobject3 gtk3 ];
 
@@ -39,18 +40,19 @@ buildPythonPackage rec {
   preFixup = ''
     wrapProgram $out/bin/meld \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:$out/share" \
+      --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules"
   '';
 
   patchPhase = ''
-    sed -e 's,#!.*,#!${python27}/bin/python27,' -i bin/meld
+    patchShebangs bin/meld
   '';
 
   pythonPath = [ gtk3 ];
 
   meta = with stdenv.lib; {
     description = "Visual diff and merge tool";
-    homepage = http://meld.sourceforge.net;
+    homepage = http://meldmerge.org/;
     license = stdenv.lib.licenses.gpl2;
     platforms = platforms.linux ++ stdenv.lib.platforms.darwin;
   };

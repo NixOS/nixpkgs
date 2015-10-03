@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 let version = "0.4.8"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "aha-${version}";
 
   src = fetchFromGitHub {
@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
       aha takes ANSI SGR-coloured input and produces W3C-conformant HTML code.
     '';
     homepage = https://github.com/theZiz/aha;
-    downloadPage = https://github.com/theZiz/aha/releases;
     license = with licenses; [ lgpl2Plus mpl11 ];
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];

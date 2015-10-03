@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Enterprise ready, Network Backup Tool";
     homepage    = http://bacula.org/;
-    license     = "GPLv2";
+    license     = licenses.gpl2;
     maintainers = with maintainers; [ iElectric lovek323 ];
-    platforms   = stdenv.lib.platforms.all;
+    platforms   = platforms.all;
   };
 }

@@ -1,26 +1,26 @@
-{ stdenv, fetchurl, jdk, gtk2, xulrunner, zip, pkgconfig, perl, npapi_sdk, bash }:
+{ stdenv, fetchurl, jdk, gtk2, xulrunner, zip, pkgconfig, perl, npapi_sdk, bash, bc }:
 
 stdenv.mkDerivation rec {
   name = "icedtea-web-${version}";
 
-  version = "1.5.2";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "http://icedtea.wildebeest.org/download/source/${name}.tar.gz";
-
-    sha256 = "1wrvl66qj0yhaqqhcq24005ci5sc3w005809cld55iiwagr8z7mj";
+    sha256 = "0869j9jn0z5b5pfspp4v5cj2ksmbqmmmjhqicn4kqc6wr6v6md59";
   };
 
-  buildInputs = [ gtk2 xulrunner zip pkgconfig npapi_sdk ];
+  nativeBuildInputs = [ pkgconfig bc perl ];
+  buildInputs = [ gtk2 xulrunner zip npapi_sdk ];
 
   preConfigure = ''
-    substituteInPlace javac.in --replace '#!/usr/bin/perl' '#!${perl}/bin/perl'
-
-    configureFlags="BIN_BASH=${bash}/bin/bash $configureFlags"
+    #patchShebangs javac.in
+    configureFlagsArray+=("BIN_BASH=${bash}/bin/bash")
   '';
 
   configureFlags = [
     "--with-jdk-home=${jdk.home}"
+    "--disable-docs"
   ];
 
   mozillaPlugin = "/lib";

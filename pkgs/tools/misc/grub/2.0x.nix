@@ -20,7 +20,7 @@ let
   canEfi = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) efiSystems);
   inPCSystems = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
-  version = "2.02-git-2015-04-24";
+  version = "2.x-2015-07-27";
 
   unifont_bdf = fetchurl {
     url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromSavannah {
     repo = "grub";
-    rev = "70b002de55abbfd6b2d2f2ea4408078d93c9e0de";
-    sha256 = "1bhm1yxjmckzn45v70lzmz0qpj5prhb4iyiyqqw8rvyykcixw5qk";
+    rev = "72fc110d95129410443b898e931ff7a1db75312e";
+    sha256 = "0l2hws8h1jhww5s0m8pkwdggacpqb7fvz2jx83syg7ynczpgzbxs";
   };
 
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];

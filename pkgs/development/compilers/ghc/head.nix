@@ -17,18 +17,20 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "7.11.20150402";
+  version = "7.11.20150828";
   name = "ghc-${version}";
-  rev = "47f821a1a24553dc29b9581b1a259a9b1394c955";
+  rev = "38c98e4f61a48084995a5347d76ddd024ce1a09c";
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
     inherit rev;
-    sha256 = "111a2z6bgn966g04a9n2ns9n2a401rd0zqgndznn2w4fv8a4qzgj";
+    sha256 = "0wnxrfzjpjcmsmd2i0zg30jg7zpw1rrfwz8r56g314l7xcns6yp1";
   };
 
   postUnpack = ''
     pushd ghc-${builtins.substring 0 7 rev}
+    echo ${version} >VERSION
+    echo ${rev} >GIT_COMMIT_ID
     patchShebangs .
     ./boot
     popd

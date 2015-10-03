@@ -1,13 +1,12 @@
 { stdenv, fetchurl, alsaLib, cmake }:
 
-let version = "1.7.411"; in
+let version = "1.16.0"; in
 stdenv.mkDerivation rec {
   name = "openal-${version}";
 
   src = fetchurl {
-    url = "http://connect.creativelabs.com/openal/Downloads/openal-soft-${version}.bz2";
-    sha256 = "1nbqvg08hy5p2cxy2i2mmh2szmbpsg2dcvhr61iplyisw04rwc8i";
-    name = "openal-soft-${version}.tar.bz2";
+    url = "http://kcat.strangesoft.net/openal-releases/openal-soft-${version}.tar.bz2";
+    sha256 = "0pqdykdclycfnk66v166srjrry936y39d1dz9wl92qz27wqwsg9g";
   };
 
   buildInputs = [ cmake ] ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
       is done from the perspective of the Listener.
     '';
 
-    homepage = http://www.openal.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = http://kcat.strangesoft.net/openal.html;
+    license = stdenv.lib.licenses.lgpl2Plus;
   };
 }

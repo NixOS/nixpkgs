@@ -7,6 +7,7 @@ use File::Path;
 use File::stat;
 use File::Copy;
 use File::Slurp;
+use File::Temp;
 require List::Compare;
 use POSIX;
 use Cwd;
@@ -54,24 +55,29 @@ my $defaultEntry = int(get("default"));
 my $fsIdentifier = get("fsIdentifier");
 my $grubEfi = get("grubEfi");
 my $grubTargetEfi = get("grubTargetEfi");
+my $bootPath = get("bootPath");
+my $storePath = get("storePath");
 my $canTouchEfiVariables = get("canTouchEfiVariables");
 my $efiSysMountPoint = get("efiSysMountPoint");
+my $gfxmodeEfi = get("gfxmodeEfi");
+my $gfxmodeBios = get("gfxmodeBios");
+my $bootloaderId = get("bootloaderId");
 $ENV{'PATH'} = get("path");
 
 die "unsupported GRUB version\n" if $grubVersion != 1 && $grubVersion != 2;
 
 print STDERR "updating GRUB $grubVersion menu...\n";
 
-mkpath("/boot/grub", 0, 0700);
+mkpath("$bootPath/grub", 0, 0700);
 
-# Discover whether /boot is on the same filesystem as / and
+# Discover whether the bootPath is on the same filesystem as / and
 # /nix/store.  If not, then all kernels and initrds must be copied to
-# /boot.
-if (stat("/boot")->dev != stat("/nix/store")->dev) {
+# the bootPath.
+if (stat($bootPath)->dev != stat("/nix/store")->dev) {
     $copyKernels = 1;
 }
 
-# Discover information about the location of /boot
+# Discover information about the location of the bootPath
 struct(Fs => {
     device => '$',
     type => '$',
@@ -180,7 +186,7 @@ sub GrubFs {
                 if ($status != 0) {
                     die "Failed to retrieve subvolume info for @{[$fs->mount]}\n";
                 }
-                my @ids = join("", @id_info) =~ m/Object ID:[ \t\n]*([^ \t\n]*)/;
+                my @ids = join("", @id_info) =~ m/Subvolume ID:[ \t\n]*([^ \t\n]*)/;
                 if ($#ids > 0) {
                     die "Btrfs subvol name for @{[$fs->device]} listed multiple times in mount\n"
                 } elsif ($#ids == 0) {
@@ -206,10 +212,10 @@ sub GrubFs {
     }
     return Grub->new(path => $path, search => $search);
 }
-my $grubBoot = GrubFs("/boot");
+my $grubBoot = GrubFs($bootPath);
 my $grubStore;
 if ($copyKernels == 0) {
-    $grubStore = GrubFs("/nix/store");
+    $grubStore = GrubFs($storePath);
 }
 
 # Generate the header.
@@ -221,7 +227,7 @@ if ($grubVersion == 1) {
         timeout $timeout
     ";
     if ($splashImage) {
-        copy $splashImage, "/boot/background.xpm.gz" or die "cannot copy $splashImage to /boot\n";
+        copy $splashImage, "$bootPath/background.xpm.gz" or die "cannot copy $splashImage to $bootPath\n";
         $conf .= "splashimage " . $grubBoot->path . "/background.xpm.gz\n";
     }
 }
@@ -231,6 +237,7 @@ else {
         $conf .= "
             " . $grubStore->search;
     }
+    # FIXME: should use grub-mkconfig.
     $conf .= "
         " . $grubBoot->search . "
         if [ -s \$prefix/grubenv ]; then
@@ -239,24 +246,35 @@ else {
 
         # ‘grub-reboot’ sets a one-time saved entry, which we process here and
         # then delete.
-        if [ \"\${saved_entry}\" ]; then
-          # The next line *has* to look exactly like this, otherwise KDM's
-          # reboot feature won't work properly with GRUB 2.
+        if [ \"\${next_entry}\" ]; then
+          # FIXME: KDM expects the next line to be present.
           set default=\"\${saved_entry}\"
-          set saved_entry=
-          set prev_saved_entry=
-          save_env saved_entry
-          save_env prev_saved_entry
+          set default=\"\${next_entry}\"
+          set next_entry=
+          save_env next_entry
           set timeout=1
         else
           set default=$defaultEntry
           set timeout=$timeout
         fi
 
-        if loadfont " . $grubBoot->path . "/grub/fonts/unicode.pf2; then
-          set gfxmode=640x480
-          insmod gfxterm
+        # Setup the graphics stack for bios and efi systems
+        if [ \"\${grub_platform}\" = \"efi\" ]; then
+          insmod efi_gop
+          insmod efi_uga
+        else
           insmod vbe
+        fi
+        insmod font
+        if loadfont " . $grubBoot->path . "/grub/fonts/unicode.pf2; then
+          insmod gfxterm
+          if [ \"\${grub_platform}\" = \"efi\" ]; then
+            set gfxmode=$gfxmodeEfi
+            set gfxpayload=keep
+          else
+            set gfxmode=$gfxmodeBios
+            set gfxpayload=text
+          fi
           terminal_output gfxterm
         fi
     ";
@@ -264,7 +282,7 @@ else {
     if ($splashImage) {
         # FIXME: GRUB 1.97 doesn't resize the background image if it
         # doesn't match the video resolution.
-        copy $splashImage, "/boot/background.png" or die "cannot copy $splashImage to /boot\n";
+        copy $splashImage, "$bootPath/background.png" or die "cannot copy $splashImage to $bootPath\n";
         $conf .= "
             insmod png
             if background_image " . $grubBoot->path . "/background.png; then
@@ -285,14 +303,14 @@ $conf .= "$extraConfig\n";
 $conf .= "\n";
 
 my %copied;
-mkpath("/boot/kernels", 0, 0755) if $copyKernels;
+mkpath("$bootPath/kernels", 0, 0755) if $copyKernels;
 
 sub copyToKernelsDir {
     my ($path) = @_;
     return $grubStore->path . substr($path, length("/nix/store")) unless $copyKernels;
     $path =~ /\/nix\/store\/(.*)/ or die;
     my $name = $1; $name =~ s/\//-/g;
-    my $dst = "/boot/kernels/$name";
+    my $dst = "$bootPath/kernels/$name";
     # Don't copy the file if $dst already exists.  This means that we
     # have to create $dst atomically to prevent partially copied
     # kernels or initrd if this script is ever interrupted.
@@ -396,14 +414,14 @@ if ($extraPrepareConfig ne "") {
 }
 
 # Atomically update the GRUB config.
-my $confFile = $grubVersion == 1 ? "/boot/grub/menu.lst" : "/boot/grub/grub.cfg";
+my $confFile = $grubVersion == 1 ? "$bootPath/grub/menu.lst" : "$bootPath/grub/grub.cfg";
 my $tmpFile = $confFile . ".tmp";
 writeFile($tmpFile, $conf);
 rename $tmpFile, $confFile or die "cannot rename $tmpFile to $confFile\n";
 
 
-# Remove obsolete files from /boot/kernels.
-foreach my $fn (glob "/boot/kernels/*") {
+# Remove obsolete files from $bootPath/kernels.
+foreach my $fn (glob "$bootPath/kernels/*") {
     next if defined $copied{$fn};
     print STDERR "removing obsolete file $fn\n";
     unlink $fn;
@@ -415,15 +433,18 @@ foreach my $fn (glob "/boot/kernels/*") {
 #
 
 struct(GrubState => {
+    name => '$',
     version => '$',
     efi => '$',
     devices => '$',
     efiMountPoint => '$',
 });
 sub readGrubState {
-    my $defaultGrubState = GrubState->new(version => "", efi => "", devices => "", efiMountPoint => "" );
-    open FILE, "</boot/grub/state" or return $defaultGrubState;
+    my $defaultGrubState = GrubState->new(name => "", version => "", efi => "", devices => "", efiMountPoint => "" );
+    open FILE, "<$bootPath/grub/state" or return $defaultGrubState;
     local $/ = "\n";
+    my $name = <FILE>;
+    chomp($name);
     my $version = <FILE>;
     chomp($version);
     my $efi = <FILE>;
@@ -433,7 +454,7 @@ sub readGrubState {
     my $efiMountPoint = <FILE>;
     chomp($efiMountPoint);
     close FILE;
-    my $grubState = GrubState->new(version => $version, efi => $efi, devices => $devices, efiMountPoint => $efiMountPoint );
+    my $grubState = GrubState->new(name => $name, version => $version, efi => $efi, devices => $devices, efiMountPoint => $efiMountPoint );
     return $grubState
 }
 
@@ -478,12 +499,16 @@ my $efiTarget = getEfiTarget();
 my $prevGrubState = readGrubState();
 my @prevDeviceTargets = split/:/, $prevGrubState->devices;
 
-my $devicesDiffer = scalar (List::Compare->new( '-u', '-a', \@deviceTargets, \@prevDeviceTargets)->get_symmetric_difference() );
-my $versionDiffer = (get("fullVersion") eq \$prevGrubState->version);
-my $efiDiffer = ($efiTarget eq \$prevGrubState->efi);
-my $efiMountPointDiffer = ($efiSysMountPoint eq \$prevGrubState->efiMountPoint);
-my $requireNewInstall = $devicesDiffer || $versionDiffer || $efiDiffer || $efiMountPointDiffer || (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1");
+my $devicesDiffer = scalar (List::Compare->new( '-u', '-a', \@deviceTargets, \@prevDeviceTargets)->get_symmetric_difference());
+my $nameDiffer = get("fullName") ne $prevGrubState->name;
+my $versionDiffer = get("fullVersion") ne $prevGrubState->version;
+my $efiDiffer = $efiTarget ne $prevGrubState->efi;
+my $efiMountPointDiffer = $efiSysMountPoint ne $prevGrubState->efiMountPoint;
+my $requireNewInstall = $devicesDiffer || $nameDiffer || $versionDiffer || $efiDiffer || $efiMountPointDiffer || (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1");
 
+# install a symlink so that grub can detect the boot drive
+my $tmpDir = File::Temp::tempdir(CLEANUP => 1) or die "Failed to create temporary space";
+symlink "$bootPath", "$tmpDir/boot" or die "Failed to symlink $tmpDir/boot";
 
 # install non-EFI GRUB
 if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
@@ -491,10 +516,10 @@ if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
         next if $dev eq "nodev";
         print STDERR "installing the GRUB $grubVersion boot loader on $dev...\n";
         if ($grubTarget eq "") {
-            system("$grub/sbin/grub-install", "--recheck", Cwd::abs_path($dev)) == 0
+            system("$grub/sbin/grub-install", "--recheck", "--root-directory=$tmpDir", Cwd::abs_path($dev)) == 0
                 or die "$0: installation of GRUB on $dev failed\n";
         } else {
-            system("$grub/sbin/grub-install", "--recheck", "--target=$grubTarget", Cwd::abs_path($dev)) == 0
+            system("$grub/sbin/grub-install", "--recheck", "--root-directory=$tmpDir", "--target=$grubTarget", Cwd::abs_path($dev)) == 0
                 or die "$0: installation of GRUB on $dev failed\n";
         }
     }
@@ -505,10 +530,10 @@ if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
 if (($requireNewInstall != 0) && ($efiTarget eq "only" || $efiTarget eq "both")) {
     print STDERR "installing the GRUB $grubVersion EFI boot loader into $efiSysMountPoint...\n";
     if ($canTouchEfiVariables eq "true") {
-        system("$grubEfi/sbin/grub-install", "--recheck", "--target=$grubTargetEfi", "--efi-directory=$efiSysMountPoint") == 0
+        system("$grubEfi/sbin/grub-install", "--recheck", "--target=$grubTargetEfi", "--boot-directory=$bootPath", "--efi-directory=$efiSysMountPoint", "--bootloader-id=$bootloaderId") == 0
                 or die "$0: installation of GRUB EFI into $efiSysMountPoint failed\n";
     } else {
-        system("$grubEfi/sbin/grub-install", "--recheck", "--target=$grubTargetEfi", "--efi-directory=$efiSysMountPoint", "--no-nvram") == 0
+        system("$grubEfi/sbin/grub-install", "--recheck", "--target=$grubTargetEfi", "--boot-directory=$bootPath", "--efi-directory=$efiSysMountPoint", "--no-nvram") == 0
                 or die "$0: installation of GRUB EFI into $efiSysMountPoint failed\n";
     }
 }
@@ -516,7 +541,8 @@ if (($requireNewInstall != 0) && ($efiTarget eq "only" || $efiTarget eq "both"))
 
 # update GRUB state file
 if ($requireNewInstall != 0) {
-    open FILE, ">/boot/grub/state" or die "cannot create /boot/grub/state: $!\n";
+    open FILE, ">$bootPath/grub/state" or die "cannot create $bootPath/grub/state: $!\n";
+    print FILE get("fullName"), "\n" or die;
     print FILE get("fullVersion"), "\n" or die;
     print FILE $efiTarget, "\n" or die;
     print FILE join( ":", @deviceTargets ), "\n" or die;

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, writeScript, glibcLocales
-, buildPythonPackage, pythonPackages, python
+, buildPythonPackage, pythonPackages, python, imagemagick
 
 , enableAcoustid   ? true
 , enableDiscogs    ? true
@@ -44,9 +44,10 @@ let
   pluginsWithoutDeps = [
     "bench" "bpd" "bpm" "bucket" "convert" "cue" "duplicates" "embedart"
     "filefilter" "freedesktop" "fromfilename" "ftintitle" "fuzzy" "ihate"
-    "importadded" "importfeeds" "info" "inline" "keyfinder" "lyrics"
-    "mbcollection" "mbsync" "missing" "permissions" "play" "plexupdate" "random"
-    "rewrite" "scrub" "smartplaylist" "spotify" "the" "types" "zero"
+    "importadded" "importfeeds" "info" "inline" "ipfs" "keyfinder" "lyrics"
+    "mbcollection" "mbsync" "metasync" "missing" "permissions" "play"
+    "plexupdate" "random" "rewrite" "scrub" "smartplaylist" "spotify" "the"
+    "types" "zero"
   ];
 
   enabledOptionalPlugins = attrNames (filterAttrs (_: id) optionalPlugins);
@@ -59,18 +60,19 @@ let
 
 in buildPythonPackage rec {
   name = "beets-${version}";
-  version = "1.3.11";
+  version = "1.3.14";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "sampsyo";
     repo = "beets";
     rev = "v${version}";
-    sha256 = "16jb1frds9vl40n9hy18x9xipxfzln3ym823vx8jymhv3by8p62m";
+    sha256 = "0bha101x1wdrl2hj31fhixm3hp7ahdm2064b9k5gg0ywm651128g";
   };
 
   propagatedBuildInputs = [
     pythonPackages.enum34
+    pythonPackages.jellyfish
     pythonPackages.munkres
     pythonPackages.musicbrainzngs
     pythonPackages.mutagen
@@ -91,13 +93,10 @@ in buildPythonPackage rec {
 
   buildInputs = with pythonPackages; [
     beautifulsoup4
-    flask
+    imagemagick
     mock
     nose
-    pyechonest
-    pylast
     rarfile
-    requests2
     responses
   ];
 
@@ -137,7 +136,7 @@ in buildPythonPackage rec {
     runHook preCheck
 
     LANG=en_US.UTF-8 \
-    LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive \
+    LOCALE_ARCHIVE=${assert stdenv.isLinux; glibcLocales}/lib/locale/locale-archive \
     BEETS_TEST_SHELL="${testShell}" \
     BASH_COMPLETION_SCRIPT="${completion}" \
     HOME="$(mktemp -d)" \
@@ -165,9 +164,10 @@ in buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = http://beets.radbox.org;
     description = "Music tagger and library organizer";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ iElectric aszlig pjones ];
+    homepage = http://beets.radbox.org;
+    license = licenses.mit;
+    maintainers = with maintainers; [ aszlig iElectric pjones ];
+    platforms = platforms.linux;
   };
 }

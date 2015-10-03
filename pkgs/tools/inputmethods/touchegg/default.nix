@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xlibs, xorgserver, qt4, mesa, geis  }:
+{ stdenv, fetchurl, xorg, xorgserver, qt4, mesa, geis  }:
 
 stdenv.mkDerivation rec {
   name = "touchegg-${version}";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "95734815c7219d9a71282f3144b3526f2542b4fa270a8e69d644722d024b4038";
   };
 
-  buildInputs = [ xorgserver mesa xlibs.libX11 xlibs.libXtst xlibs.libXext qt4 geis ];
+  buildInputs = [ xorgserver mesa xorg.libX11 xorg.libXtst xorg.libXext qt4 geis ];
 
   configurePhase = ''
     sed -e "s@/usr/@$out/@g" -i $(find . -name touchegg.pro)

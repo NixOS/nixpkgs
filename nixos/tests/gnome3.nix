@@ -1,5 +1,8 @@
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ...} : {
   name = "gnome3";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ iElectric eelco chaoflow lethalman ];
+  };
 
   machine =
     { config, pkgs, ... }:
@@ -25,8 +28,8 @@ import ./make-test.nix {
 
       $machine->succeed("su - alice -c 'DISPLAY=:0.0 gnome-terminal &'");
       $machine->waitForWindow(qr/Terminal/);
-      $machine->sleep(20);
+      $machine->mustSucceed("timeout 60 bash -c 'journalctl -f|grep -m 1 \"GNOME Shell started\"'");
+      $machine->sleep(10);
       $machine->screenshot("screen");
     '';
-
-}
+})

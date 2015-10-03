@@ -12,6 +12,7 @@ cd $out/bin
 ln -s $mkdir
 ln -s /bin/sh
 ln -s /bin/cp
+ln -s /bin/dd
 ln -s /bin/mv
 ln -s /bin/rm
 ln -s /bin/ls

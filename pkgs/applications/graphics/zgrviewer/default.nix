@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     # Quicker to unpack locally than load Hydra
     hydraPlatforms = [];
     maintainers = with stdenv.lib.maintainers; [raskin];
-    license = with stdenv.lib.licenses; lgpl21Plus;
+    license = stdenv.lib.licenses.lgpl21Plus;
     description = "GraphViz graph viewer/navigator";
   };
 }

@@ -1,26 +1,26 @@
 {
-  erubis = {
+  "erubis" = {
     version = "2.7.0";
     source = {
       type = "gem";
       sha256 = "1fj827xqjs91yqsydf0zmfyw9p4l2jz5yikg3mppz6d7fi8kyrb3";
     };
   };
-  multi_json = {
+  "multi_json" = {
     version = "1.3.6";
     source = {
       type = "gem";
       sha256 = "0q2zjfvd2ibds9g9nzf2p1b47fc1wqliwfywv5pw85w15lmy91yr";
     };
   };
-  rack = {
-    version = "1.5.2";
+  "rack" = {
+    version = "1.6.1";
     source = {
       type = "gem";
-      sha256 = "19szfw76cscrzjldvw30jp3461zl00w4xvw1x9lsmyp86h1g0jp6";
+      sha256 = "0f73v6phkwczl1sfv0wgdwsnlsg364bhialbnfkg2dnxhh57l0gl";
     };
   };
-  rack-protection = {
+  "rack-protection" = {
     version = "1.5.3";
     source = {
       type = "gem";
@@ -30,11 +30,11 @@
       "rack"
     ];
   };
-  riemann-dash = {
-    version = "0.2.9";
+  "riemann-dash" = {
+    version = "0.2.11";
     source = {
       type = "gem";
-      sha256 = "0ws5wmjbv8w9lcr3i2mdinj2qm91p6c85k6c067i67cf0p90jxq3";
+      sha256 = "1vzb75hf1xy7ssil7fp9z7z51vh79ba22x56ific7f1kcb21lzk7";
     };
     dependencies = [
       "erubis"
@@ -44,18 +44,18 @@
       "webrick"
     ];
   };
-  sass = {
-    version = "3.4.8";
+  "sass" = {
+    version = "3.4.14";
     source = {
       type = "gem";
-      sha256 = "1ianyj2figwk314h10fkzpjql2xxi5l4njv1h0w8iyzjda85rqlp";
+      sha256 = "0x2mg6pid87s4ddvv6xnxfzwgy72pjmkm461pav92ngqnngx2ggk";
     };
   };
-  sinatra = {
-    version = "1.4.5";
+  "sinatra" = {
+    version = "1.4.6";
     source = {
       type = "gem";
-      sha256 = "0qyna3wzlnvsz69d21lxcm3ixq7db08mi08l0a88011qi4qq701s";
+      sha256 = "1hhmwqc81ram7lfwwziv0z70jh92sj1m7h7s9fr0cn2xq8mmn8l7";
     };
     dependencies = [
       "rack"
@@ -63,14 +63,14 @@
       "tilt"
     ];
   };
-  tilt = {
-    version = "1.4.1";
+  "tilt" = {
+    version = "2.0.1";
     source = {
       type = "gem";
-      sha256 = "00sr3yy7sbqaq7cb2d2kpycajxqf1b1wr1yy33z4bnzmqii0b0ir";
+      sha256 = "1qc1k2r6whnb006m10751dyz3168cq72vj8mgp5m2hpys8n6xp3k";
     };
   };
-  webrick = {
+  "webrick" = {
     version = "1.3.1";
     source = {
       type = "gem";

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   preConfigure = "autoreconf -i";
   
   meta = with stdenv.lib; {
-    description = "A system for maintaining replicated state machines.";
+    description = "A system for maintaining replicated state machines";
     homepage = https://github.com/rescrv/Replicant;
     license = licenses.bsd3;
   };

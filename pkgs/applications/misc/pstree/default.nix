@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "pstree-2.36";
+  name = "pstree-2.39";
 
   src = fetchurl {
     url = "http://www.sfr-fresh.com/unix/misc/${name}.tar.gz";
-    sha256 = "1vx4fndmkkx3bmcv71rpzjjbn24hlfs10pl99dsfhbx16a2d41cx";
+    sha256 = "17s7v15c4gryjpi11y1xq75022nkg4ggzvjlq2dkmyg67ssc76vw";
   };
 
   unpackPhase = "unpackFile \$src; sourceRoot=.";

@@ -1,24 +1,16 @@
 {stdenv, fetchurl, pkgconfig, libdvdread}:
 
-stdenv.mkDerivation {
-  name = "libdvdnav-4.2.1";
-  
+stdenv.mkDerivation rec {
+  name = "libdvdnav-${version}";
+  version = "5.0.3";
+
   src = fetchurl {
-    url = http://dvdnav.mplayerhq.hu/releases/libdvdnav-4.2.1.tar.xz;
-    sha256 = "7fca272ecc3241b6de41bbbf7ac9a303ba25cb9e0c82aa23901d3104887f2372";
+    url = "http://download.videolan.org/pub/videolan/libdvdnav/${version}/libdvdnav-${version}.tar.bz2";
+    sha256 = "5097023e3d2b36944c763f1df707ee06b19dc639b2b68fb30113a5f2cbf60b6d";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [libdvdread];
-
-  configureScript = "./configure2"; # wtf?
-
-  preConfigure = ''
-    mkdir -p $out
-  '';
-
-  # From Handbrake
-  patches = [ ./A08-dvdnav-dup.patch ./P00-mingw-no-examples.patch ];
 
   meta = {
     homepage = http://dvdnav.mplayerhq.hu/;

@@ -15,11 +15,18 @@ stdenv.mkDerivation rec {
     sha256 = "0q9l9fr90pcb3s6crbxkj3wiwn7wp9zfpv7bdxkadj0hspd9zzkl";
   };
 
+  postPatch = ''
+    for file in "background" "screensaver"; do
+      substituteInPlace "schemas/org.gnome.desktop.$file.gschema.xml.in" \
+        --replace "@datadir@" "${gnome3.gnome-backgrounds}/share/"
+    done
+  '';
+
   buildInputs = [ glib gobjectIntrospection ];
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
   meta = with stdenv.lib; {
-    maintainers = [ maintainers.lethalman ];
+    maintainers = gnome3.maintainers;
   };
 }

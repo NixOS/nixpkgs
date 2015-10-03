@@ -28,7 +28,10 @@ let
   # Perform substitutions in all udev rules files.
   udevRules = stdenv.mkDerivation {
     name = "udev-rules";
+
     preferLocalBuild = true;
+    allowSubstitutes = false;
+
     buildCommand = ''
       mkdir -p $out
       shopt -s nullglob
@@ -168,25 +171,21 @@ in
     };
 
     hardware.firmware = mkOption {
-      type = types.listOf types.path;
+      type = types.listOf types.package;
       default = [];
       description = ''
-        List of directories containing firmware files.  Such files
+        List of packages containing firmware files.  Such files
         will be loaded automatically if the kernel asks for them
         (i.e., when it has detected specific hardware that requires
-        firmware to function).  If more than one path contains a
-        firmware file with the same name, the first path in the list
-        takes precedence.  Note that you must rebuild your system if
-        you add files to any of these directories.  For quick testing,
-        put firmware files in <filename>/root/test-firmware</filename>
-        and add that directory to the list.  Note that you can also
-        add firmware packages to this list as these are directories in
-        the nix store.
+        firmware to function).  If multiple packages contain firmware
+        files with the same name, the first package in the list takes
+        precedence.  Note that you must rebuild your system if you add
+        files to any of these directories.
       '';
       apply = list: pkgs.buildEnv {
         name = "firmware";
         paths = list;
-        pathsToLink = [ "/" ];
+        pathsToLink = [ "/lib/firmware" ];
         ignoreCollisions = true;
       };
     };
@@ -233,7 +232,7 @@ in
       (isYes "NET")
     ];
 
-    boot.extraModprobeConfig = "options firmware_class path=${config.hardware.firmware}";
+    boot.extraModprobeConfig = "options firmware_class path=${config.hardware.firmware}/lib/firmware";
 
     system.activationScripts.udevd =
       ''
@@ -251,7 +250,7 @@ in
 
         # Allow the kernel to find our firmware.
         if [ -e /sys/module/firmware_class/parameters/path ]; then
-          echo -n "${config.hardware.firmware}" > /sys/module/firmware_class/parameters/path
+          echo -n "${config.hardware.firmware}/lib/firmware" > /sys/module/firmware_class/parameters/path
         fi
       '';
 

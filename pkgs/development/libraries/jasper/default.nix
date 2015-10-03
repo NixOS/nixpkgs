@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, unzip, xlibs, libjpeg }:
+{ stdenv, fetchurl, unzip, libjpeg }:
 
 stdenv.mkDerivation rec {
   name = "jasper-1.900.1";
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     ./jasper-CVE-2014-9029.diff
   ];
 
+  # outputs TODO: why reconf
   nativeBuildInputs = [ unzip autoreconfHook ];
   propagatedBuildInputs = [ libjpeg ];
 

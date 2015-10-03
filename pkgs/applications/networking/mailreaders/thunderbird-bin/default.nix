@@ -19,7 +19,10 @@
 , kerberos
 , libX11
 , libXScrnSaver
+, libXcomposite
+, libXdamage
 , libXext
+, libXfixes
 , libXinerama
 , libXrender
 , libXt
@@ -88,7 +91,10 @@ stdenv.mkDerivation {
       kerberos
       libX11
       libXScrnSaver
+      libXcomposite
+      libXdamage
       libXext
+      libXfixes
       libXinerama
       libXrender
       libXt
@@ -112,20 +118,15 @@ stdenv.mkDerivation {
       ln -s "$prefix/usr/lib/thunderbird-bin-${version}/thunderbird" "$out/bin/"
 
       for executable in \
-        thunderbird mozilla-xremote-client thunderbird-bin plugin-container \
-        updater
+        thunderbird crashreporter thunderbird-bin plugin-container updater
       do
         patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           "$out/usr/lib/thunderbird-bin-${version}/$executable"
       done
 
-      for executable in \
-        thunderbird mozilla-xremote-client thunderbird-bin plugin-container \
-        updater libxul.so
-      do
+      find . -executable -type f -exec \
         patchelf --set-rpath "$libPath" \
-          "$out/usr/lib/thunderbird-bin-${version}/$executable"
-      done
+          "$out/usr/lib/thunderbird-bin-${version}/{}" \;
 
       # Create a desktop item.
       mkdir -p $out/share/applications
@@ -133,7 +134,7 @@ stdenv.mkDerivation {
       [Desktop Entry]
       Type=Application
       Exec=$out/bin/thunderbird
-      Icon=$out/lib/thunderbird-bin-${version}/chrome/icons/default/default256.png
+      Icon=$out/usr/lib/thunderbird-bin-${version}/chrome/icons/default/default256.png
       Name=Thunderbird
       GenericName=Mail Reader
       Categories=Application;Network;

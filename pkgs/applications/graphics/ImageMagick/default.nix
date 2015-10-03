@@ -1,97 +1,53 @@
-{ stdenv, fetchurl, pkgconfig, libtool
-, libcl ? null, perl ? null, jemalloc ? null, bzip2 ? null, zlib ? null
-, libX11 ? null, libXext ? null, libXt ? null, dejavu_fonts ? null, fftw ? null
-, libfpx ? null, djvulibre ? null, fontconfig ? null, freetype ? null
-, ghostscript ? null, graphviz ? null, jbigkit ? null, libjpeg ? null
-, lcms2 ? null, openjpeg ? null, liblqr1 ? null, xz ? null, openexr ? null
-, pango ? null, libpng ? null, librsvg ? null, libtiff ? null, libwebp ? null
-, libxml2 ? null
+{ lib, stdenv, fetchurl, pkgconfig, libtool
+, bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
+, lcms2, openexr, libpng, librsvg, libtiff, libxml2
 }:
 
 let
-
-  version = "6.9.1-0";
-
   arch =
     if stdenv.system == "i686-linux" then "i686"
     else if stdenv.system == "x86_64-linux" || stdenv.system == "x86_64-darwin" then "x86-64"
     else throw "ImageMagick is not supported on this platform.";
-
-  mkFlag = trueStr: falseStr: cond: val: "--${if cond then trueStr else falseStr}-${val}";
-  mkWith = mkFlag "with" "without";
-  mkEnable = mkFlag "enable" "disable";
-
-  hasX11 = libX11 != null && libXext != null && libXt != null;
-
 in
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "imagemagick-${version}";
+  version = "6.9.2-0";
 
   src = fetchurl {
     url = "mirror://imagemagick/releases/ImageMagick-${version}.tar.xz";
-    sha256 = "03lvj6rxv16xk0dpsbzvm2gq5bggkwff9wqbpkq0znihzijpax1j";
+    sha256 = "17ir8bw1j7g7srqmsz3rx780sgnc21zfn0kwyj78iazrywldx8h7";
   };
+
+  outputs = [ "out" "doc" ];
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    (mkEnable (libcl != null)        "opencl")
-    (mkWith   true                   "modules")
-    (mkWith   true                   "gcc-arch=${arch}")
-    #(mkEnable true                   "hdri") This breaks some dependencies
-    (mkWith   (perl != null)         "perl")
-    (mkWith   (jemalloc != null)     "jemalloc")
-    (mkWith   true                   "frozenpaths")
-    (mkWith   (bzip2 != null)        "bzlib")
-    (mkWith   hasX11                 "x")
-    (mkWith   (zlib != null)         "zlib")
-    (mkWith   false                  "dps")
-    (mkWith   (fftw != null)         "fftw")
-    (mkWith   (libfpx != null)       "fpx")
-    (mkWith   (djvulibre != null)    "djvu")
-    (mkWith   (fontconfig != null)   "fontconfig")
-    (mkWith   (freetype != null)     "freetype")
-    (mkWith   (ghostscript != null)  "gslib")
-    (mkWith   (graphviz != null)     "gvc")
-    (mkWith   (jbigkit != null)      "jbig")
-    (mkWith   (libjpeg != null)      "jpeg")
-    (mkWith   (lcms2 != null)        "lcms2")
-    (mkWith   false                  "lcms")
-    (mkWith   (openjpeg != null)     "openjp2")
-    (mkWith   (liblqr1 != null)      "lqr")
-    (mkWith   (xz != null)           "lzma")
-    (mkWith   (openexr != null)      "openexr")
-    (mkWith   (pango != null)        "pango")
-    (mkWith   (libpng != null)       "png")
-    (mkWith   (librsvg != null)      "rsvg")
-    (mkWith   (libtiff != null)      "tiff")
-    (mkWith   (libwebp != null)      "webp")
-    (mkWith   (libxml2 != null)      "xml")
-  ] ++ optional (dejavu_fonts != null) "--with-dejavu-font-dir=${dejavu_fonts}/share/fonts/truetype/"
-    ++ optional (ghostscript != null) "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts/";
+  configureFlags =
+    [ "--with-frozenpaths" ]
+    ++ [ "--with-gcc-arch=${arch}" ]
+    ++ lib.optional (librsvg != null) "--with-rsvg"
+    ++ lib.optionals (ghostscript != null)
+      [ "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
+        "--with-gslib"
+      ];
 
-  buildInputs = [
-    pkgconfig libtool libcl perl jemalloc bzip2 zlib libX11 libXext libXt fftw
-    libfpx djvulibre fontconfig freetype ghostscript graphviz jbigkit libjpeg
-    lcms2 openjpeg liblqr1 xz openexr pango libpng librsvg libtiff libwebp
+  buildInputs =
+    [ pkgconfig libtool zlib fontconfig freetype ghostscript libjpeg
+      openexr libpng librsvg libtiff libxml2
     libxml2 (stdenv.cc.cc.lib or null)
-  ];
+    ];
 
-  propagatedBuildInputs = []
-    ++ (stdenv.lib.optional (lcms2 != null) lcms2)
-    ++ (stdenv.lib.optional (liblqr1 != null) liblqr1)
-    ++ (stdenv.lib.optional (fftw != null) fftw)
-    ++ (stdenv.lib.optional (libtool != null) libtool)
-    ++ (stdenv.lib.optional (jemalloc != null) jemalloc)
-    ++ (stdenv.lib.optional (libXext != null) libXext)
-    ++ (stdenv.lib.optional (libX11 != null) libX11)
-    ++ (stdenv.lib.optional (libXt != null) libXt)
-    ++ (stdenv.lib.optional (bzip2 != null) bzip2)
-    ;
+  propagatedBuildInputs =
+    [ bzip2 freetype libjpeg libX11 libXext libXt lcms2 ];
 
-  postInstall = ''(cd "$out/include" && ln -s ImageMagick* ImageMagick)'';
+  postInstall = ''
+    (cd "$out/include" && ln -s ImageMagick* ImageMagick)
+  '' + lib.optionalString (ghostscript != null) ''
+    for la in $out/lib/*.la; do
+      sed 's|-lgs|-L${ghostscript}/lib -lgs|' -i $la
+    done
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.imagemagick.org/;

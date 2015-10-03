@@ -1,4 +1,4 @@
-args: with args;
+args @ { texLive, xz, ... }: with args;
 rec {
   name    = "texlive-extra-2014";
   version = "2014.20141024";

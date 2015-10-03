@@ -1,10 +1,10 @@
-{ fetchurl, stdenv, glib, xlibs, cairo, gtk, pango, makeWrapper, openssl, bzip2 }:
+{ fetchurl, stdenv, glib, xorg, cairo, gtk, pango, makeWrapper, openssl, bzip2 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
 let
   build = "3083";
-  libPath = stdenv.lib.makeLibraryPath [glib xlibs.libX11 gtk cairo pango];
+  libPath = stdenv.lib.makeLibraryPath [glib xorg.libX11 gtk cairo pango];
 in let
   # package with just the binaries
   sublime = stdenv.mkDerivation {

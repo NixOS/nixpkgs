@@ -13,8 +13,16 @@ stdenv.mkDerivation rec {
     sha256 = "039agw5rqvqny92cpkrfn243x2gd4xn13hs3xi6isk55d2vqqr9n";
   };
 
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure \
+      --replace '/usr/bin/libtool' 'ar' \
+      --replace 'AR="libtool"' 'AR="ar"' \
+      --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
+  '';
+
   outputs = [ "dev" "out" "static" "man" ];
   setOutputFlags = false;
+
 
   preConfigure = ''
     if test -n "$crossConfig"; then
@@ -54,8 +62,8 @@ stdenv.mkDerivation rec {
     makeFlags = [ "RANLIB=${stdenv.cross.config}-ranlib" ];
   };
 
-  # zlib doesn't like the automatic --disable-shared from the Cygwin stdenv.
-  cygwinConfigureEnableShared = true;
+  # CYGXXX: This is not needed anymore and non-functional, but left not to trigger rebuilds
+  cygwinConfigureEnableShared = if (!stdenv.isCygwin) then true else null;
 
   passthru.version = version;
 

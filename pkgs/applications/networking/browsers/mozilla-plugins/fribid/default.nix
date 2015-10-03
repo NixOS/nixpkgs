@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   passthru.mozillaPlugin = "/lib/mozilla/plugins";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A browser plugin to manage Swedish BankID:s";
     longDescription = ''
       FriBID is an open source software for the Swedish e-id system
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
       support.
     '';
     homepage = http://fribid.se;
-    license = [ "GPLv2" "MPLv1" ];
-    maintainers = [ stdenv.lib.maintainers.edwtjo ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = with licenses; [ gpl2 mpl10 ];
+    maintainers = [ maintainers.edwtjo ];
+    platforms = with platforms; linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, x11, motif, libXpm }:
+{ stdenv, fetchurl, xlibsWrapper, motif, libXpm }:
 
 assert stdenv.isLinux;
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "023hwpqc57mnzvg6p7jda6193afgjzxzajlhwhqvk3jq2kdv6zna";
   };
 
-  buildInputs = [ x11 motif libXpm ];
+  buildInputs = [ xlibsWrapper motif libXpm ];
 
   buildFlags = if stdenv.isLinux then "linux" else "";
 

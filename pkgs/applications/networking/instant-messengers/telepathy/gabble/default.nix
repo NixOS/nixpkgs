@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxml2 dbus_glib sqlite libsoup libnice telepathy_glib gnutls ]
     ++ stdenv.lib.optional doCheck dbus_daemon;
 
-  configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-bundle.crt";
+  configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt";
 
   enableParallelBuilding = true;
   doCheck = true;

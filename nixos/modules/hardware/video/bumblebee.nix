@@ -26,7 +26,7 @@ in
     hardware.bumblebee.group = mkOption {
       default = "wheel";
       example = "video";
-      type = types.uniq types.str;
+      type = types.str;
       description = ''Group for bumblebee socket'';
     };
     hardware.bumblebee.connectDisplay = mkOption {
@@ -52,9 +52,9 @@ in
     systemd.services.bumblebeed = {
       description = "Bumblebee Hybrid Graphics Switcher";
       wantedBy = [ "display-manager.service" ];
-      script = "bumblebeed --use-syslog -g ${config.hardware.bumblebee.group}";
       path = [ kernel.bbswitch bumblebee ];
       serviceConfig = {
+        ExecStart = "${bumblebee}/bin/bumblebeed --use-syslog -g ${config.hardware.bumblebee.group}";
         Restart = "always";
         RestartSec = 60;
         CPUSchedulingPolicy = "idle";

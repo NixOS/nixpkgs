@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig
+{ fetchzip, stdenv, pkgconfig
 , openssl, db48, boost, zlib, miniupnpc, qt4, qrencode, glib, protobuf
 , utillinux
 , withGui }:
@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
   name = "darkcoin" + (toString (optional (!withGui) "d")) + "-" + version;
   version = "0.10.99.99";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/darkcoin/darkcoin/archive/v${version}.tar.gz";
-    sha256 = "1a05a7l878klg4wqk9ykndkhyknrd7jp75v38k99qgk5fi8wa752";
+    sha256 = "0sigvimqwc1mvaq43a8c2aq7fjla2ncafrals08qfq3jd6in8b4f";
   };
 
   buildInputs = [ pkgconfig glib openssl db48 boost zlib miniupnpc ]

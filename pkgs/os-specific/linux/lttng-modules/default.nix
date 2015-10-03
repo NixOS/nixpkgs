@@ -1,16 +1,13 @@
-{ stdenv, fetchgit, kernel }:
-
-assert stdenv.lib.versionAtLeast kernel.version "3.4";  # fails on 3.2
+{ stdenv, fetchurl, kernel }:
 
 stdenv.mkDerivation rec {
   pname = "lttng-modules-${version}";
   name = "${pname}-${kernel.version}";
-  version = "2.6.0-5-g1b2a542";
+  version = "2.6.3";
 
-  src = fetchgit {
-    url = "https://github.com/lttng/lttng-modules.git";
-    rev = "1b2a5429de815c95643df2eadf91253909708728";
-    sha256 = "0zccaiadnk0xl6xrqaqlg9rpkwjgbq2fiyc3psylzqimnx0ydxc2";
+  src = fetchurl {
+    url = "http://lttng.org/files/lttng-modules/lttng-modules-${version}.tar.bz2";
+    sha256 = "0sk7cyjf5ylmxqrrrz5zmmw4c0dmxh1f98aj870gmcnxfa76y4mx";
   };
 
   preConfigure = ''

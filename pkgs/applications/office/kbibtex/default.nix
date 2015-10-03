@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, kdelibs, libxslt, poppler_qt4 }:
+{ stdenv, fetchurl, automoc4, cmake, perl, pkgconfig
+, kdelibs, libxslt, poppler_qt4
+}:
 
 stdenv.mkDerivation rec {
   pname = "kbibtex";
@@ -15,4 +17,5 @@ stdenv.mkDerivation rec {
     '';
 
   buildInputs = [ kdelibs libxslt poppler_qt4 ];
+  nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
 }

@@ -2,10 +2,8 @@
 
 appleDerivation {
   # Will override the name until we provide all of adv_cmds
-  name = "ps-${version}";
-
   buildPhase = ''
-    cd ps
+    pushd ps
     cc -Os -Wall -I. -c -o fmt.o fmt.c
     cc -Os -Wall -I. -c -o keyword.o keyword.c
     cc -Os -Wall -I. -c -o nlist.o nlist.c
@@ -13,13 +11,20 @@ appleDerivation {
     cc -Os -Wall -I. -c -o ps.o ps.c
     cc -Os -Wall -I. -c -o tasks.o tasks.c
     cc -o ps fmt.o keyword.o nlist.o print.o ps.o tasks.o
+    popd
+
+    pushd locale
+    c++ -o locale locale.cc
+    popd
   '';
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1
 
-    cp ps   $out/bin/ps
-    cp ps.1 $out/share/man/man1
+    cp ps/ps   $out/bin/ps
+    cp ps/ps.1 $out/share/man/man1
+    cp locale/locale   $out/bin/locale
+    cp locale/locale.1 $out/share/man/man1
   '';
 
 

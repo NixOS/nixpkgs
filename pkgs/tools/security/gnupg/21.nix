@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba, npth
+{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba, libiconv, npth
 , autoreconfHook, gettext, texinfo, pcsclite
 
 # Each of the dependencies below are optional.
@@ -13,21 +13,19 @@ with stdenv.lib;
 assert x11Support -> pinentry != null;
 
 stdenv.mkDerivation rec {
-  name = "gnupg-2.1.3";
+  name = "gnupg-2.1.8";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "1vf8fmwcq81abzw2mypz5j7m4xy0vl4z6lri5lxfbd2bsyq7ygi1";
+    sha256 = "18w14xp0ynzzwpklyplkzbrncds1hly4k2gjx115swch8qgd1f53";
   };
-
-  patches = [ ./socket-activate-2.1.1.patch ];
 
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   '';
 
   buildInputs = [
-    pkgconfig libgcrypt libassuan libksba npth
+    pkgconfig libgcrypt libassuan libksba libiconv npth
     autoreconfHook gettext texinfo
     readline libusb gnutls adns openldap zlib bzip2
   ];

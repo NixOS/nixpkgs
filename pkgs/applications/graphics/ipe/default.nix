@@ -1,12 +1,13 @@
 { stdenv, fetchurl, pkgconfig, zlib, qt4, freetype, cairo, lua5, texLive, ghostscriptX
+, libjpeg
 , makeWrapper }:
 let ghostscript = ghostscriptX; in
 stdenv.mkDerivation rec {
-  name = "ipe-7.1.2";
+  name = "ipe-7.1.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ipe7/ipe/7.1.0/${name}-src.tar.gz";
-    sha256 = "04fs5slci3bmpgz8d038h3hnzzdw57xykcpsmisdxci2xrkxx41k";
+    url = "http://github.com/otfried/ipe/raw/master/releases/7.1/${name}-src.tar.gz";
+    sha256 = "1zx6dyr1rb6m6rvawagg9f8bc2li9nbighv2dglzjbh11bxqsyva";
   };
 
   # changes taken from Gentoo portage
@@ -21,9 +22,10 @@ stdenv.mkDerivation rec {
 
   IPEPREFIX="$$out";
   URWFONTDIR="${texLive}/texmf-dist/fonts/type1/urw/";
+  LUA_PACKAGE = "lua";
 
   buildInputs = [
-    pkgconfig zlib qt4 freetype cairo lua5 texLive ghostscript makeWrapper
+    libjpeg pkgconfig zlib qt4 freetype cairo lua5 texLive ghostscript makeWrapper
   ];
 
   postInstall = ''
@@ -36,12 +38,14 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An editor for drawing figures";
-    homepage = http://ipe7.sourceforge.net;
+    homepage = http://ipe.otfried.org;
     license = stdenv.lib.licenses.gpl3Plus;
     longDescription = ''
       Ipe is an extensible drawing editor for creating figures in PDF and Postscript format.
       It supports making small figures for inclusion into LaTeX-documents
       as well as presentations in PDF.
     '';
+    maintainers = [ stdenv.lib.maintainers.ttuegel ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

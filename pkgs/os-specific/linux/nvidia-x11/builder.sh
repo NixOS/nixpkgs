@@ -20,9 +20,15 @@ buildPhase() {
         sysOut=$(echo $kernel/lib/modules/$kernelVersion/build)
         unset src # used by the nv makefile
         make SYSSRC=$sysSrc SYSOUT=$sysOut module
-        cd uvm
-        make SYSSRC=$sysSrc SYSOUT=$sysOut module
-        cd ..
+
+        # nvidia no longer provides uvm kernel module for 32-bit archs
+        # http://www.nvidia.com/download/driverResults.aspx/79722/en-us
+        if [[ "$system" = "x86_64-linux" ]]; then
+            cd uvm
+            make SYSSRC=$sysSrc SYSOUT=$sysOut module
+            cd ..
+        fi
+
         cd ..
     fi
 }
@@ -47,8 +53,10 @@ installPhase() {
 
         # Install the kernel module.
         mkdir -p $out/lib/modules/$kernelVersion/misc
-        cp kernel/nvidia.ko $out/lib/modules/$kernelVersion/misc
-        cp kernel/uvm/nvidia-uvm.ko $out/lib/modules/$kernelVersion/misc
+        for i in $(find ./kernel -name '*.ko'); do
+            nuke-refs $i
+            cp $i $out/lib/modules/$kernelVersion/misc/
+        done
     fi
 
     # All libs except GUI-only are in $out now, so fixup them.
@@ -59,6 +67,12 @@ installPhase() {
       patchelf --set-rpath "$out/lib:$allLibPath" "$libname"
 
       libname_short=`echo -n "$libname" | sed 's/so\..*/so/'`
+
+      # nvidia's EGL stack seems to expect libGLESv2.so.2 to be available
+      if [ $(basename "$libname_short") == "libGLESv2.so" ]; then
+          ln -srnf "$libname" "$libname_short.2"
+      fi
+
       ln -srnf "$libname" "$libname_short"
       ln -srnf "$libname" "$libname_short.1"
     done
@@ -108,6 +122,9 @@ installPhase() {
 
     # For simplicity and dependency reduction, don't support the gtk3 interface.
     rm $out/lib/libnvidia-gtk3.*
+
+    # we distribute these separately in `libvdpau`
+    rm "$out"/lib/libvdpau{.*,_trace.*}
 }
 
 

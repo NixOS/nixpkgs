@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, libuuid }:
+{ stdenv, fetchurl, libuuid, pkgconfig, libsodium }:
 
 stdenv.mkDerivation rec {
-  name = "zeromq-4.0.5";
+  name = "zeromq-4.1.3";
 
   src = fetchurl {
     url = "http://download.zeromq.org/${name}.tar.gz";
-    sha256 = "0arl8fy8d03xd5h0mgda1s5bajwg8iyh1kk4hd1420rpcxgkrj9v";
+    sha256 = "04gligbgr0phipjkwc0dyk1vr9306r6s4dbj85z7fxxk1n1ircv1";
   };
 
-  buildInputs = [ libuuid ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libuuid libsodium ];
 
   meta = with stdenv.lib; {
     branch = "4";

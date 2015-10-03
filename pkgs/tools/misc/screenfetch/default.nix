@@ -1,21 +1,34 @@
-{ stdenv, fetchgit, xdpyinfo, xprop }:
+{ stdenv, fetchgit, makeWrapper
+, coreutils, gawk, procps, gnused, findutils, xdpyinfo, xprop, gnugrep
+}:
 
-let
-  version = "3.6.2";
-in
 stdenv.mkDerivation {
-  name = "screenFetch-${version}";
-  pname = "screenfetch";
+  name = "screenFetch-2015-04-20";
 
   src = fetchgit {
     url = git://github.com/KittyKatt/screenFetch.git;
-    rev = "dec1cd6c2471defe4459967fbc8ae15b55714338";
-    sha256 = "138a7g0za5dq27jx7x8gqg7gjkgyq0017v0nbcg68ys7dqlxsdl3";
+    rev = "53e1c0cccacf648e846057938a68dda914f532a1";
+    sha256 = "1wyvy1sn7vnclwrzd32jqlq6iirjkhp2ak55brhkpp9rj1qxk3q6";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   installPhase = ''
-    install -Dm 0755 $pname-dev $out/bin/$pname
-    install -Dm 0644 $pname.1 $out/man/man1/$pname.1
+    install -Dm 0755 screenfetch-dev $out/bin/screenfetch
+    install -Dm 0644 screenfetch.1 $out/man/man1/screenfetch.1
+
+    # Fix all of the depedencies of screenfetch
+    patchShebangs $out/bin/screenfetch
+    wrapProgram "$out/bin/screenfetch" \
+      --set PATH : "" \
+      --prefix PATH : "${coreutils}/bin" \
+      --prefix PATH : "${gawk}/bin" \
+      --prefix PATH : "${procps}/bin" \
+      --prefix PATH : "${gnused}/bin" \
+      --prefix PATH : "${findutils}/bin" \
+      --prefix PATH : "${xdpyinfo}/bin" \
+      --prefix PATH : "${xprop}/bin" \
+      --prefix PATH : "${gnugrep}/bin"
   '';
 
   meta = {

@@ -126,6 +126,8 @@ in
       description = "Dynamic DNS Client";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+
+      environment.SSL_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
       serviceConfig = {
         # Uncomment this if too many problems occur:
         # Type = "forking";

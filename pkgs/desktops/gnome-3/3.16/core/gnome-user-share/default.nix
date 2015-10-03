@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, apacheHttpd_2_2, nautilus
-, pkgconfig, gtk3, glib, hicolor_icon_theme, libxml2, gnused
+, pkgconfig, gtk3, glib, libxml2, gnused
 , bash, makeWrapper, itstool, libnotify, libtool, mod_dnssd
 , gnome3, librsvg, gdk_pixbuf, file, libcanberra_gtk3 }:
 
@@ -27,8 +27,7 @@ in stdenv.mkDerivation rec {
                      "--with-nautilusdir=$(out)/lib/nautilus/extensions-3.0" ];
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool libxml2 libtool
-                  makeWrapper file gdk_pixbuf gnome3.adwaita-icon-theme librsvg
-                  hicolor_icon_theme gnome3.adwaita-icon-theme
+                  makeWrapper file gdk_pixbuf gnome3.defaultIconTheme librsvg
                   nautilus libnotify libcanberra_gtk3 ];
 
   postInstall = ''
@@ -38,7 +37,7 @@ in stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    wrapProgram "$out/libexec/gnome-user-share" \
+    wrapProgram "$out/libexec/gnome-user-share-webdav" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
@@ -46,7 +45,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://help.gnome.org/users/gnome-user-share/3.8;
     description = "Service that exports the contents of the Public folder in your home directory on the local network";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

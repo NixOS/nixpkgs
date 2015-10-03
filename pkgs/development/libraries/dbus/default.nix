@@ -7,8 +7,8 @@ assert x11Support -> libX11 != null
                   && libSM != null;
 
 let
-  version = "1.8.16";
-  sha256 = "01rba8mp8kqvmy6ibdmi806kjr3m14swnskqk02gyhykxxl54ybz";
+  version = "1.8.20";
+  sha256 = "0fkh3d5r57a659hw9lqnw4v0bc5556vx54fsf7l9c732ci6byksw";
 
   inherit (stdenv) lib;
 
@@ -76,7 +76,7 @@ let
     # (it just execs dbus-launch in dbus.tools), contrary to what the configure script demands.
     NIX_CFLAGS_COMPILE = "-DDBUS_ENABLE_X11_AUTOLAUNCH=1";
     buildInputs = [ systemdOrEmpty ];
-    meta.platforms = with stdenv.lib.platforms; allBut darwin;
+    meta.platforms = stdenv.lib.platforms.all;
   };
 
 

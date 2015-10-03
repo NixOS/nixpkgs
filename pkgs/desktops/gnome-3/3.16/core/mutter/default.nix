@@ -4,11 +4,11 @@
 
 
 stdenv.mkDerivation rec {
-  name = "mutter-${gnome3.version}.1.1";
+  name = "mutter-${gnome3.version}.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${gnome3.version}/${name}.tar.xz";
-    sha256 = "07059jmwhc7zf2gww2xw94hhy4csjj2v30ivyzllbas2nvv88l3r";
+    sha256 = "0qq7gpkljn1z45sg2sxvmia52krj4ck2541iar89z99s1cppaasa";
   };
 
   # fatal error: gio/gunixfdlist.h: No such file or directory
@@ -27,9 +27,11 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
+  patches = [ ./x86.patch ];
+
   meta = with stdenv.lib; {
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = gnome3.maintainers;
   };
 
 }

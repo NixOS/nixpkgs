@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, bzip2, curl, expat, jsoncpp, libarchive, xz, zlib
+, bzip2, curl, expat, libarchive, xz, zlib
 , useNcurses ? false, ncurses, useQt4 ? false, qt4
 , wantPS ? false, ps ? null
 }:
@@ -10,8 +10,8 @@ assert wantPS -> (ps != null);
 
 let
   os = stdenv.lib.optionalString;
-  majorVersion = "3.2";
-  minorVersion = "1";
+  majorVersion = "3.3";
+  minorVersion = "2";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    sha256 = "0b2hy4p0aa9zshlxyw9nmlh5q8q1lmnwmb594rvh6sx2n7v1r7vm";
+    sha256 = "08pwy9ip9cgwgynhn5vrjw8drw29gijy1rmziq22n65zds6ifnp7";
   };
 
   patches =
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       url = "http://public.kitware.com/Bug/file_download.php?"
           + "file_id=4981&type=bug";
       sha256 = "16acmdr27adma7gs9rs0dxdiqppm15vl3vv3agy7y8s94wyh4ybv";
-    });
+    }) ++ stdenv.lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
   outputs = [ "out" "doc" ];
   setOutputFlags = false;
@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ setupHook pkgconfig bzip2 curl expat libarchive xz zlib ]
-    ++ optional (jsoncpp != null) jsoncpp
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
 
@@ -58,11 +57,13 @@ stdenv.mkDerivation rec {
         --subst-var-by glibc_lib ${glibc.out or glibc}
     '';
   configureFlags =
-    [
-      "--system-libs"
+    [ "--docdir=/share/doc/${name}"
+      "--no-system-jsoncpp"
     ]
-    ++ optional (jsoncpp == null) "--no-system-jsoncpp"
-    ++ optional useQt4 "--qt-gui";
+    ++ optional (!stdenv.isCygwin) "--system-libs"
+    ++ optional useQt4 "--qt-gui"
+    ++ ["--"]
+    ++ optional (!useNcurses) "-DBUILD_CursesDialog=OFF";
 
   dontUseCmakeConfigure = true;
 

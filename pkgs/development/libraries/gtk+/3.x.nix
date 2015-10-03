@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gettext, perl
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, gobjectIntrospection
-, xlibs, x11, wayland, libxkbcommon
+, xlibs, x11, wayland, libxkbcommon, epoxy
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
 }:
@@ -9,8 +9,8 @@ assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 let
-  ver_maj = "3.12";
-  ver_min = "2";
+  ver_maj = "3.18";
+  ver_min = "0";
   version = "${ver_maj}.${ver_min}";
 in
 stdenv.mkDerivation rec {
@@ -18,20 +18,19 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
-    sha256 = "1l45nd7ln2pnrf99vdki3l7an5wrzkbak11hnnj1w6r3fkm4xmv1";
+    sha256 = "7fb8ae257403317d3852bad28d064d35f67e978b1fed8b71d5997e87204271b9";
   };
-
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
 
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
 
-  buildInputs = [ libxkbcommon ];
+  buildInputs = [ libxkbcommon epoxy ];
   propagatedBuildInputs = with xlibs; with stdenv.lib;
     [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk libXrandr libXrender libXcomposite libXi libXcursor ]
     ++ optionals stdenv.isLinux [ wayland ]
-    ++ optional stdenv.isDarwin x11
     ++ optional xineramaSupport libXinerama
     ++ optional cupsSupport cups;
+
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
 
   # demos fail to install, no idea where's the problem
   preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
@@ -65,7 +64,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.lgpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ urkud raskin vcunat];
+    maintainers = with stdenv.lib.maintainers; [ urkud raskin vcunat lethalman ];
     platforms = stdenv.lib.platforms.all;
   };
 }

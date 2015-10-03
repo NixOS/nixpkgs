@@ -1,4 +1,9 @@
-{ lib, stdenv, uclibc, fetchurl, enableStatic ? false, enableMinimal ? false, useUclibc ? false, extraConfig ? "" }:
+{ stdenv, fetchurl, musl
+, enableStatic ? false
+, enableMinimal ? false
+, useMusl ? false
+, extraConfig ? ""
+}:
 
 let
   configParser = ''
@@ -21,11 +26,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "busybox-1.22.1";
+  name = "busybox-1.23.2";
 
   src = fetchurl {
     url = "http://busybox.net/downloads/${name}.tar.bz2";
-    sha256 = "12v7nri79v8gns3inmz4k24q7pcnwi00hybs0wddfkcy1afh42xf";
+    sha256 = "16ii9sqracvh2r1gfzhmlypl269nnbkpvrwa7270k35d3bigk9h5";
   };
 
   patches = [ ./busybox-in-store.patch ];
@@ -41,7 +46,7 @@ stdenv.mkDerivation rec {
     CONFIG_PREFIX "$out"
     CONFIG_INSTALL_NO_USR y
 
-    ${lib.optionalString enableStatic ''
+    ${stdenv.lib.optionalString enableStatic ''
       CONFIG_STATIC y
     ''}
 
@@ -54,8 +59,8 @@ stdenv.mkDerivation rec {
     EOF
 
     make oldconfig
-  '' + lib.optionalString useUclibc ''
-    makeFlagsArray+=("CC=gcc -isystem ${uclibc}/include -B${uclibc.out}/lib -L${uclibc.out}/lib")
+  '' + stdenv.lib.optionalString useMusl ''
+    makeFlagsArray+=("CC=gcc -isystem ${musl}/include -B${musl}/lib -L${musl}/lib")
   '';
 
   crossAttrs = {
@@ -69,11 +74,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = http://busybox.net/;
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.viric ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ viric ];
+    platforms = platforms.linux;
   };
 }

@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     # On Linux, use patchelf to modify the executables so that they can
     # find editline/gmp.
     stdenv.lib.optionalString stdenv.isLinux ''
-      find . -type f -perm +100 \
+      find . -type f -perm -0100 \
           -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "${ncurses}/lib:${gmp}/lib" {} \;
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     ./configure --prefix=$out \
       --with-gmp-libraries=${gmp}/lib --with-gmp-includes=${gmp}/include \
-      ${stdenv.lib.optionalString stdenv.isDarwin "--with-gcc=${../../haskell-modules/gcc-clang-wrapper.sh}"}
+      ${stdenv.lib.optionalString stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"}
   '';
 
   # Stripping combined with patchelf breaks the executables (they die

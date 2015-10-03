@@ -1,34 +1,53 @@
-{ stdenv, fetchurl, substituteAll
-, atlasWithLapack, gfortran }:
+{ stdenv, fetchurl, gfortran, openblas }:
 
 let
-  name = "suitesparse-4.4.1";
+  version = "4.4.4";
+  name = "suitesparse-${version}";
+
+  int_t = if openblas.blas64 then "int64_t" else "int32_t";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = "http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-4.4.1.tar.gz";
-    sha256 = "0y8i6dizrr556xggpjyc7wijjv4jbizhssmjj4jv8n1s7zxy2z0n";
+    url = "http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${version}.tar.gz";
+    sha256 = "1zdn1y0ij6amj7smmcslkqgbqv9yy5cwmbyzqc9v6drzdzllgbpj";
   };
 
-  patches = [
-    ./0001-disable-metis.patch
-    ./0002-set-install-dir.patch
-    (substituteAll {
-      src = ./0003-blas-lapack-flags.patch;
-      blasFlags = "-lf77blas -latlas -lcblas -lgfortran";
-      lapackFlags= "-llapack -latlas -lcblas";
-    })
-  ];
-
   preConfigure = ''
-    substituteAllInPlace SuiteSparse_config/SuiteSparse_config.mk
     mkdir -p $out/lib
     mkdir -p $out/include
+
+    sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
+        -e 's/METIS .*$/METIS =/' \
+        -e 's/METIS_PATH .*$/METIS_PATH =/' \
+        -e '/CHOLMOD_CONFIG/ s/$/-DNPARTITION -DLONGBLAS=${int_t}/' \
+        -e '/UMFPACK_CONFIG/ s/$/-DLONGBLAS=${int_t}/'
   '';
 
+  makeFlags = [
+    "PREFIX=\"$(out)\""
+    "INSTALL_LIB=$(out)/lib"
+    "INSTALL_INCLUDE=$(out)/include"
+    "BLAS=-lopenblas"
+    "LAPACK="
+  ];
+
+  NIX_CFLAGS = "-fPIC";
+
   postInstall = ''
+    # Build and install shared library
+    (
+        cd "$(mktemp -d)"
+        for i in "$out"/lib/lib*.a; do
+          ar -x $i
+        done
+        gcc *.o --shared -o "$out/lib/libsuitesparse.so"
+    )
+    for i in umfpack cholmod amd camd colamd spqr; do
+      ln -s libsuitesparse.so "$out"/lib/lib$i.so;
+    done
+
     # Install documentation
     outdoc=$out/share/doc/${name}
     mkdir -p $outdoc
@@ -47,7 +66,7 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ gfortran ];
-  buildInputs = [ atlasWithLapack ];
+  buildInputs = [ openblas ];
 
   meta = with stdenv.lib; {
     homepage = http://faculty.cse.tamu.edu/davis/suitesparse.html;

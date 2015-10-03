@@ -1,5 +1,8 @@
 import ./make-test.nix ({ pkgs, ... }: with pkgs.pythonPackages; rec {
   name = "blivet";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ aszlig ];
+  };
 
   machine = {
     environment.systemPackages = [ pkgs.python blivet mock ];

@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/GSB
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Gratuitous Space Battles";
     longDescription = ''
       a strategy / management / simulation game that does away with all the
@@ -66,8 +66,8 @@ stdenv.mkDerivation rec {
       battle (or at least blow to bits in aesthetically pleasing ways).
     '';
     homepage = http://www.positech.co.uk/gratuitousspacebattles/index.html;
-    license = [ "unfree" ];
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ jcumming ];
     platforms = [ "x86_64-linux" "i686-linux" ] ;
   };
 

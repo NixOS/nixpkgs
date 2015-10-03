@@ -6,7 +6,7 @@ diff -ru -x '*~' WideLM_orig/src/Makefile.in WideLM/src/Makefile.in
  R_INCS := @R_INCL@ @RCPP_INCL@
  CC_ARGS := @CU_PARAMS@ -Xcompiler @R_CPIC@
 -CU_INCS := -I@CUDA_HOME@/include
-+CU_INCS := -I@CUDA_HOME@/usr_include
++CU_INCS := -I@CUDA_HOME@/include
  CU_ARCH := -gencode arch=compute_20,code=sm_20
  
  #linker options

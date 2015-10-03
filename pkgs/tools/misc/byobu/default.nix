@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ stdenv, fetchurl, ncurses, python, perl }:
 
 stdenv.mkDerivation rec {
   name = "byobu-5.87";
@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = true;
+
+  buildInputs = [ python perl ];
 
   meta = {
     homepage = https://launchpad.net/byobu/;

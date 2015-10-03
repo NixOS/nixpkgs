@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, nettools }:
 
 let version = "0.4.4"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "hans-${version}";
 
   src = fetchFromGitHub {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       allowed.
     '';
     homepage = http://code.gerade.org/hans/;
-    license = with licenses; gpl3Plus;
+    license = licenses.gpl3Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ nettools ];
 
   postPatch = ''
-    substituteInPlace src/tun.cpp --replace "/sbin/" "/${nettools}/bin/"
+    substituteInPlace src/tun.cpp --replace "/sbin/" "${nettools}/bin/"
   '';
 
   enableParallelBuilding = true;

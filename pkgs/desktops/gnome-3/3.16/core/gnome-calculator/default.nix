@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, pkgconfig, libxml2
-, bash, gtk3, glib, hicolor_icon_theme, makeWrapper
+, bash, gtk3, glib, makeWrapper
 , itstool, gnome3, librsvg, gdk_pixbuf, mpfr, gmp }:
 
 stdenv.mkDerivation rec {
@@ -16,8 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bash pkgconfig gtk3 glib intltool itstool
                   libxml2 gnome3.gtksourceview mpfr gmp
-                  gdk_pixbuf gnome3.adwaita-icon-theme librsvg
-                  hicolor_icon_theme gnome3.adwaita-icon-theme
+                  gdk_pixbuf gnome3.defaultIconTheme librsvg
                   gnome3.gsettings_desktop_schemas makeWrapper ];
 
   preFixup = ''
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/action/show/Apps/Calculator;
     description = "Application that solves mathematical equations and is suitable as a default application in a Desktop environment";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   name = "zim-${version}";
-  version = "0.62";
+  version = "0.63";
   namePrefix = "";
   
   src = fetchurl {
     url = "http://zim-wiki.org/downloads/${name}.tar.gz";
-    sha256 = "1hmx24jjazqvs3z6h10jl8wrqxyvvk0wc807v222vaf1sbmjmmhr";
+    sha256 = "077vf4h0hjmbk8bxj9l0z9rxcb3dw642n32lvfn6vjdna1qm910m";
   };
 
   propagatedBuildInputs = [ pythonPackages.sqlite3 pygtk /*pythonPackages.pyxdg*/ pygobject ];

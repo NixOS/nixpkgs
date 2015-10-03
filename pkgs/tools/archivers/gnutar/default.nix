@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optional stdenv.isDarwin ./gnutar-1.28-darwin.patch;
 
+  # avoid retaining reference to CF during stdenv bootstrap
+  configureFlags = stdenv.lib.optionals stdenv.isDarwin [
+    "gt_cv_func_CFPreferencesCopyAppValue=no"
+    "gt_cv_func_CFLocaleCopyCurrent=no"
+  ];
+
   # gnutar tries to call into gettext between `fork` and `exec`,
   # which is not safe on darwin.
   # see http://article.gmane.org/gmane.os.macosx.fink.devel/21882
@@ -26,6 +32,10 @@ stdenv.mkDerivation rec {
   # May have some issues with root compilation because the bootstrap tool
   # cannot be used as a login shell for now.
   FORCE_UNSAFE_CONFIGURE = stdenv.lib.optionalString (stdenv.system == "armv7l-linux" || stdenv.isSunOS) "1";
+
+  preConfigure = if stdenv.isCygwin then ''
+    sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'
+  '' else null;
 
   meta = {
     homepage = http://www.gnu.org/software/tar/;

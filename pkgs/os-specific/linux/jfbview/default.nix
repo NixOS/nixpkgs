@@ -1,12 +1,11 @@
-# FIXME: remove gcc49 when the default gcc supports C++1y
-{ stdenv, fetchFromGitHub, freetype, gcc49, imlib2, jbig2dec, libjpeg, libX11
+{ stdenv, fetchFromGitHub, freetype, imlib2, jbig2dec, libjpeg, libX11
 , mujs, mupdf, ncurses, openjpeg, openssl }:
 
 let
   version = "0.5.1";
   binaries = [ "jfbpdf" "jfbview" "jpdfcat" "jpdfgrep" ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "jfbview-${version}";
 
   src = fetchFromGitHub {
@@ -16,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "jichu4n";
   };
 
-  buildInputs = [ freetype gcc49 imlib2 jbig2dec libjpeg libX11 mujs mupdf
+  buildInputs = [ freetype imlib2 jbig2dec libjpeg libX11 mujs mupdf
     ncurses openjpeg openssl ];
 
   buildFlags = binaries;
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
       - Customizable multi-threaded caching
     '';
     homepage = http://seasonofcode.com/pages/jfbview.html;
-    license = with licenses; asl20;
+    license = licenses.asl20;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

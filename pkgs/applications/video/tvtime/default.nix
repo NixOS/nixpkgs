@@ -1,4 +1,4 @@
-{stdenv, fetchurl, xlibs, libX11, libXtst, libSM, libXext, libXv, libXxf86vm, libXau, 
+{stdenv, fetchurl, xorg, libX11, libXtst, libSM, libXext, libXv, libXxf86vm, libXau, 
    libXdmcp, zlib, libpng, libxml2, freetype, libICE, intltool, libXinerama, gettext, 
    pkgconfig, kernel, file, libXi}:
 
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = '' 
-    --x-includes=${xlibs.libX11}/include 
-    --x-libraries=${xlibs.libX11}/lib
+    --x-includes=${xorg.libX11}/include 
+    --x-libraries=${xorg.libX11}/lib
   '';
 
   buildInputs = [ libX11 libXtst libSM libXext libXv libXxf86vm libXau libXdmcp zlib libpng libxml2 freetype libICE intltool libXinerama gettext pkgconfig file libXi ];

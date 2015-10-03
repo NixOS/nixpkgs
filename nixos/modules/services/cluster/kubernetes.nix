@@ -73,14 +73,8 @@ in {
       };
 
       port = mkOption {
-        description = "Kubernets apiserver listening port.";
+        description = "Kubernetes apiserver listening port.";
         default = 8080;
-        type = types.int;
-      };
-
-      readOnlyPort = mkOption {
-        description = "Kubernets apiserver read-only port.";
-        default = 7080;
         type = types.int;
       };
 
@@ -102,10 +96,16 @@ in {
         type = types.str;
       };
 
+      clientCaFile = mkOption {
+        description = "Kubernetes apiserver CA file for client auth.";
+        default = "";
+        type = types.str;
+      };
+
       tokenAuth = mkOption {
         description = ''
           Kubernetes apiserver token authentication file. See
-          <link xlink:href="https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/authentication.md"/>
+          <link xlink:href="http://kubernetes.io/v1.0/docs/admin/authentication.html"/>
         '';
         default = {};
         example = literalExample ''
@@ -120,7 +120,7 @@ in {
       authorizationMode = mkOption {
         description = ''
           Kubernetes apiserver authorization mode (AlwaysAllow/AlwaysDeny/ABAC). See
-          <link xlink:href="https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/authorization.md"/>
+          <link xlink:href="http://kubernetes.io/v1.0/docs/admin/authorization.html"/>
         '';
         default = "AlwaysAllow";
         type = types.enum ["AlwaysAllow" "AlwaysDeny" "ABAC"];
@@ -129,7 +129,7 @@ in {
       authorizationPolicy = mkOption {
         description = ''
           Kubernetes apiserver authorization policy file. See
-          <link xlink:href="https://github.com/GoogleCloudPlatform/kubernetes/blob/master/docs/authorization.md"/>
+          <link xlink:href="http://kubernetes.io/v1.0/docs/admin/authorization.html"/>
         '';
         default = [];
         example = literalExample ''
@@ -158,6 +158,38 @@ in {
         type = types.str;
       };
 
+      runtimeConfig = mkOption {
+        description = ''
+          Api runtime configuration. See
+          <link xlink:href="http://kubernetes.io/v1.0/docs/admin/cluster-management.html"/>
+        '';
+        default = "";
+        example = "api/all=false,api/v1=true";
+        type = types.str;
+      };
+
+      admissionControl = mkOption {
+        description = ''
+          Kubernetes admission control plugins to use. See
+          <link xlink:href="http://kubernetes.io/v1.0/docs/admin/admission-controllers.html"/>
+        '';
+        default = ["AlwaysAdmit"];
+        example = [
+          "NamespaceLifecycle" "NamespaceExists" "LimitRanger"
+          "SecurityContextDeny" "ServiceAccount" "ResourceQuota"
+        ];
+        type = types.listOf types.str;
+      };
+
+      serviceAccountKey = mkOption {
+        description = ''
+          Kubernetes apiserver PEM-encoded x509 RSA private or public key file,
+          used to verify ServiceAccount tokens.
+        '';
+        default = null;
+        type = types.nullOr types.path;
+      };
+
       extraOpts = mkOption {
         description = "Kubernetes apiserver extra command line options.";
         default = "";
@@ -179,7 +211,7 @@ in {
       };
 
       port = mkOption {
-        description = "Kubernets scheduler listening port.";
+        description = "Kubernetes scheduler listening port.";
         default = 10251;
         type = types.int;
       };
@@ -211,7 +243,7 @@ in {
       };
 
       port = mkOption {
-        description = "Kubernets controller manager listening port.";
+        description = "Kubernetes controller manager listening port.";
         default = 10252;
         type = types.int;
       };
@@ -222,14 +254,26 @@ in {
         type = types.str;
       };
 
-      machines = mkOption {
-        description = "Kubernetes controller list of machines to schedule to schedule onto";
-        default = [config.networking.hostName];
-        type = types.listOf types.str;
+      serviceAccountPrivateKey = mkOption {
+        description = ''
+          Kubernetes controller manager PEM-encoded private RSA key file used to
+          sign service account tokens
+        '';
+        default = null;
+        type = types.nullOr types.path;
+      };
+
+      rootCaFile = mkOption {
+        description = ''
+          Kubernetes controller manager certificate authority file included in
+          service account's token secret.
+        '';
+        default = null;
+        type = types.nullOr types.path;
       };
 
       extraOpts = mkOption {
-        description = "Kubernetes controller extra command line options.";
+        description = "Kubernetes controller manager extra command line options.";
         default = "";
         type = types.str;
       };
@@ -242,6 +286,12 @@ in {
         type = types.bool;
       };
 
+      registerNode = mkOption {
+        description = "Whether to auto register kubelet with API server.";
+        default = true;
+        type = types.bool;
+      };
+
       address = mkOption {
         description = "Kubernetes kubelet info server listening address.";
         default = "0.0.0.0";
@@ -249,9 +299,23 @@ in {
       };
 
       port = mkOption {
-        description = "Kubernets kubelet info server listening port.";
+        description = "Kubernetes kubelet info server listening port.";
         default = 10250;
         type = types.int;
+      };
+
+      healthz = {
+        bind = mkOption {
+          description = "Kubernetes kubelet healthz listening address.";
+          default = "127.0.0.1";
+          type = types.str;
+        };
+
+        port = mkOption {
+          description = "Kubernetes kubelet healthz port.";
+          default = 10248;
+          type = types.int;
+        };
       };
 
       hostname = mkOption {
@@ -267,14 +331,17 @@ in {
       };
 
       apiServers = mkOption {
-        description = "Kubernetes kubelet list of Kubernetes API servers for publishing events, and reading pods and services.";
+        description = ''
+          Kubernetes kubelet list of Kubernetes API servers for publishing events,
+          and reading pods and services.
+        '';
         default = ["${cfg.apiserver.address}:${toString cfg.apiserver.port}"];
         type = types.listOf types.str;
       };
 
       cadvisorPort = mkOption {
         description = "Kubernetes kubelet local cadvisor port.";
-        default = config.services.cadvisor.port;
+        default = 4194;
         type = types.int;
       };
 
@@ -286,7 +353,7 @@ in {
 
       clusterDomain = mkOption {
         description = "Use alternative domain.";
-        default = "";
+        default = "kubernetes.io";
         type = types.str;
       };
 
@@ -322,13 +389,35 @@ in {
         type = types.str;
       };
     };
+
+    kube2sky = {
+      enable = mkEnableOption "Whether to enable kube2sky dns service.";
+
+      domain = mkOption  {
+        description = "Kuberntes kube2sky domain under which all DNS names will be hosted.";
+        default = cfg.kubelet.clusterDomain;
+        type = types.str;
+      };
+
+      master = mkOption {
+        description = "Kubernetes apiserver address";
+        default = "${cfg.apiserver.address}:${toString cfg.apiserver.port}";
+        type = types.str;
+      };
+
+      extraOpts = mkOption {
+        description = "Kubernetes kube2sky extra command line options.";
+        default = "";
+        type = types.str;
+      };
+    };
   };
 
   ###### implementation
 
   config = mkMerge [
     (mkIf cfg.apiserver.enable {
-      systemd.services.kubernetes-apiserver = {
+      systemd.services.kube-apiserver = {
         description = "Kubernetes Api Server";
         wantedBy = [ "multi-user.target" ];
         requires = ["kubernetes-setup.service"];
@@ -343,40 +432,40 @@ in {
                 (concatImapStringsSep "\n" (i: v: v + "," + (toString i))
                     (mapAttrsToList (name: token: token + "," + name) cfg.apiserver.tokenAuth));
           in ''${cfg.package}/bin/kube-apiserver \
-            --etcd_servers=${concatMapStringsSep "," (f: "http://${f}") cfg.etcdServers} \
-            --address=${cfg.apiserver.address} \
-            --port=${toString cfg.apiserver.port} \
-            --read_only_port=${toString cfg.apiserver.readOnlyPort} \
-            --public_address_override=${cfg.apiserver.publicAddress} \
-            --allow_privileged=${if cfg.apiserver.allowPrivileged then "true" else "false"} \
+            --etcd-servers=${concatMapStringsSep "," (f: "http://${f}") cfg.etcdServers} \
+            --insecure-bind-address=${cfg.apiserver.address} \
+            --insecure-port=${toString cfg.apiserver.port} \
+            --bind-address=${cfg.apiserver.publicAddress} \
+            --allow-privileged=${if cfg.apiserver.allowPrivileged then "true" else "false"} \
             ${optionalString (cfg.apiserver.tlsCertFile!="")
-              "--tls_cert_file=${cfg.apiserver.tlsCertFile}"} \
+              "--tls-cert-file=${cfg.apiserver.tlsCertFile}"} \
             ${optionalString (cfg.apiserver.tlsPrivateKeyFile!="")
-              "--tls_private_key_file=${cfg.apiserver.tlsPrivateKeyFile}"} \
+              "--tls-private-key-file=${cfg.apiserver.tlsPrivateKeyFile}"} \
             ${optionalString (cfg.apiserver.tokenAuth!=[])
-              "--token_auth_file=${tokenAuthFile}"} \
-            --authorization_mode=${cfg.apiserver.authorizationMode} \
+              "--token-auth-file=${tokenAuthFile}"} \
+            ${optionalString (cfg.apiserver.clientCaFile!="")
+              "--client-ca-file=${cfg.apiserver.clientCaFile}"} \
+            --authorization-mode=${cfg.apiserver.authorizationMode} \
             ${optionalString (cfg.apiserver.authorizationMode == "ABAC")
-              "--authorization_policy_file=${authorizationPolicyFile}"} \
-            --secure_port=${toString cfg.apiserver.securePort} \
-            --portal_net=${cfg.apiserver.portalNet} \
+              "--authorization-policy-file=${authorizationPolicyFile}"} \
+            --secure-port=${toString cfg.apiserver.securePort} \
+            --service-cluster-ip-range=${cfg.apiserver.portalNet} \
+            ${optionalString (cfg.apiserver.runtimeConfig!="")
+              "--runtime-config=${cfg.apiserver.runtimeConfig}"} \
+            --admission_control=${concatStringsSep "," cfg.apiserver.admissionControl} \
+            ${optionalString (cfg.apiserver.serviceAccountKey!=null)
+              "--service-account-key-file=${cfg.apiserver.serviceAccountKey}"} \
             --logtostderr=true \
-            --runtime_config=api/v1beta3 \
-            ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
+            ${optionalString cfg.verbose "--v=6 --log-flush-frequency=1s"} \
             ${cfg.apiserver.extraOpts}
           '';
           User = "kubernetes";
         };
-        postStart = ''
-          until ${pkgs.curl}/bin/curl -s -o /dev/null 'http://${cfg.apiserver.address}:${toString cfg.apiserver.port}/'; do
-            sleep 1;
-          done
-        '';
       };
     })
 
     (mkIf cfg.scheduler.enable {
-      systemd.services.kubernetes-scheduler = {
+      systemd.services.kube-scheduler = {
         description = "Kubernetes Scheduler Service";
         wantedBy = [ "multi-user.target" ];
         after = [ "network-interfaces.target" "kubernetes-apiserver.service" ];
@@ -386,7 +475,7 @@ in {
             --port=${toString cfg.scheduler.port} \
             --master=${cfg.scheduler.master} \
             --logtostderr=true \
-            ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
+            ${optionalString cfg.verbose "--v=6 --log-flush-frequency=1s"} \
             ${cfg.scheduler.extraOpts}
           '';
           User = "kubernetes";
@@ -395,7 +484,7 @@ in {
     })
 
     (mkIf cfg.controllerManager.enable {
-      systemd.services.kubernetes-controller-manager = {
+      systemd.services.kube-controller-manager = {
         description = "Kubernetes Controller Manager Service";
         wantedBy = [ "multi-user.target" ];
         after = [ "network-interfaces.target" "kubernetes-apiserver.service" ];
@@ -404,9 +493,12 @@ in {
             --address=${cfg.controllerManager.address} \
             --port=${toString cfg.controllerManager.port} \
             --master=${cfg.controllerManager.master} \
-            --machines=${concatStringsSep "," cfg.controllerManager.machines} \
+            ${optionalString (cfg.controllerManager.serviceAccountPrivateKey!=null)
+              "--service-account-private-key-file=${cfg.controllerManager.serviceAccountPrivateKey}"} \
+            ${optionalString (cfg.controllerManager.rootCaFile!=null)
+              "--root-ca-file=${cfg.controllerManager.rootCaFile}"} \
             --logtostderr=true \
-            ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
+            ${optionalString cfg.verbose "--v=6 --log-flush-frequency=1s"} \
             ${cfg.controllerManager.extraOpts}
           '';
           User = "kubernetes";
@@ -415,7 +507,7 @@ in {
     })
 
     (mkIf cfg.kubelet.enable {
-      systemd.services.kubernetes-kubelet = {
+      systemd.services.kubelet = {
         description = "Kubernetes Kubelet Service";
         wantedBy = [ "multi-user.target" ];
         requires = ["kubernetes-setup.service"];
@@ -423,17 +515,20 @@ in {
         script = ''
           export PATH="/bin:/sbin:/usr/bin:/usr/sbin:$PATH"
           exec ${cfg.package}/bin/kubelet \
-            --api_servers=${concatMapStringsSep "," (f: "http://${f}") cfg.kubelet.apiServers}  \
+            --api-servers=${concatMapStringsSep "," (f: "http://${f}") cfg.kubelet.apiServers}  \
+            --register-node=${if cfg.kubelet.registerNode then "true" else "false"} \
             --address=${cfg.kubelet.address} \
             --port=${toString cfg.kubelet.port} \
-            --hostname_override=${cfg.kubelet.hostname} \
-            --allow_privileged=${if cfg.kubelet.allowPrivileged then "true" else "false"} \
-            --root_dir=${cfg.dataDir} \
+            --healthz-bind-address=${cfg.kubelet.healthz.bind} \
+            --healthz-port=${toString cfg.kubelet.healthz.port} \
+            --hostname-override=${cfg.kubelet.hostname} \
+            --allow-privileged=${if cfg.kubelet.allowPrivileged then "true" else "false"} \
+            --root-dir=${cfg.dataDir} \
             --cadvisor_port=${toString cfg.kubelet.cadvisorPort} \
             ${optionalString (cfg.kubelet.clusterDns != "")
-                ''--cluster_dns=${cfg.kubelet.clusterDns}''} \
+                ''--cluster-dns=${cfg.kubelet.clusterDns}''} \
             ${optionalString (cfg.kubelet.clusterDomain != "")
-                ''--cluster_domain=${cfg.kubelet.clusterDomain}''} \
+                ''--cluster-domain=${cfg.kubelet.clusterDomain}''} \
             --logtostderr=true \
             ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
             ${cfg.kubelet.extraOpts}
@@ -443,18 +538,39 @@ in {
     })
 
     (mkIf cfg.proxy.enable {
-      systemd.services.kubernetes-proxy = {
+      systemd.services.kube-proxy = {
         description = "Kubernetes Proxy Service";
         wantedBy = [ "multi-user.target" ];
         after = [ "network-interfaces.target" "etcd.service" ];
         serviceConfig = {
           ExecStart = ''${cfg.package}/bin/kube-proxy \
             --master=${cfg.proxy.master} \
-            --bind_address=${cfg.proxy.address} \
+            --bind-address=${cfg.proxy.address} \
             --logtostderr=true \
-            ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
+            ${optionalString cfg.verbose "--v=6 --log-flush-frequency=1s"} \
             ${cfg.proxy.extraOpts}
           '';
+          Restart = "always"; # Retry connection
+          RestartSec = "5s";
+        };
+      };
+    })
+
+    (mkIf cfg.kube2sky.enable {
+      systemd.services.kube2sky = {
+        description = "Kubernetes Dns Bridge Service";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" "skydns.service" "etcd.service" "kubernetes-apiserver.service" ];
+        serviceConfig = {
+          ExecStart = ''${cfg.package}/bin/kube2sky \
+            -etcd-server=http://${head cfg.etcdServers} \
+            -domain=${cfg.kube2sky.domain} \
+            -kube_master_url=http://${cfg.kube2sky.master} \
+            -logtostderr=true \
+            ${optionalString cfg.verbose "--v=6 --log-flush-frequency=1s"} \
+            ${cfg.kube2sky.extraOpts}
+          '';
+          User = "kubernetes";
         };
       };
     })
@@ -463,18 +579,20 @@ in {
       services.kubernetes.apiserver.enable = mkDefault true;
       services.kubernetes.scheduler.enable = mkDefault true;
       services.kubernetes.controllerManager.enable = mkDefault true;
+      services.kubernetes.kube2sky.enable = mkDefault true;
     })
 
     (mkIf (any (el: el == "node") cfg.roles) {
       virtualisation.docker.enable = mkDefault true;
-      services.cadvisor.enable = mkDefault true;
-      services.cadvisor.port = mkDefault 4194;
       services.kubernetes.kubelet.enable = mkDefault true;
       services.kubernetes.proxy.enable = mkDefault true;
     })
 
     (mkIf (any (el: el == "node" || el == "master") cfg.roles) {
       services.etcd.enable = mkDefault true;
+
+      services.skydns.enable = mkDefault true;
+      services.skydns.domain = mkDefault cfg.kubelet.clusterDomain;
     })
 
     (mkIf (
@@ -489,8 +607,10 @@ in {
         serviceConfig.Type = "oneshot";
         script = ''
           mkdir -p /var/run/kubernetes
-          chown kubernetes /var/run/kubernetes
-          ln -fs ${pkgs.writeText "kubernetes-dockercfg" cfg.dockerCfg} /var/run/kubernetes/.dockercfg
+          chown kubernetes /var/lib/kubernetes
+
+          rm ${cfg.dataDir}/.dockercfg || true
+          ln -fs ${pkgs.writeText "kubernetes-dockercfg" cfg.dockerCfg} ${cfg.dataDir}/.dockercfg
         '';
       };
 

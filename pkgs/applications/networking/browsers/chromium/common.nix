@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ninja, which
 
 # default dependencies
-, bzip2, flac, speex, icu, libopus
+, bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libpng, libxml2, libxslt, libcap
 , xdg_utils, yasm, minizip, libwebp
@@ -21,12 +21,13 @@
 # package customization
 , enableSELinux ? false, libselinux ? null
 , enableNaCl ? false
+, enableHotwording ? false
 , useOpenSSL ? false, nss ? null, openssl ? null
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome_keyring3 ? null
 , proprietaryCodecs ? true
 , cupsSupport ? true
-, pulseSupport ? false, pulseaudio ? null
+, pulseSupport ? false, libpulseaudio ? null
 , hiDPISupport ? false
 
 , source
@@ -84,7 +85,7 @@ let
   };
 
   defaultDependencies = [
-    bzip2 flac speex icu opusWithCustomModes
+    bzip2 flac speex opusWithCustomModes
     libevent expat libjpeg snappy
     libpng libxml2 libxslt libcap
     xdg_utils yasm minizip libwebp
@@ -118,28 +119,18 @@ let
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optional enableSELinux libselinux
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport pulseaudio;
+      ++ optional pulseSupport libpulseaudio;
 
     # XXX: Wait for https://crbug.com/239107 and https://crbug.com/239181 to
     #      be fixed, then try again to unbundle everything into separate
     #      derivations.
     prePatch = ''
-      cp -dsr --no-preserve=mode "${source.main}"/* .
-      cp -dsr --no-preserve=mode "${source.sandbox}" sandbox
+      cp -dr --no-preserve=mode "${source.main}"/* .
       cp -dr "${source.bundled}" third_party
       chmod -R u+w third_party
-
-      # Hardcode source tree root in all gyp files
-      find -iname '*.gyp*' \( -type f -o -type l \) \
-        -exec sed -i -e 's|<(DEPTH)|'"$(pwd)"'|g' {} + \
-        -exec chmod u+w {} +
     '';
 
-    postPatch = optionalString (versionOlder version "42.0.0.0") ''
-      sed -i -e '/base::FilePath exe_dir/,/^ *} *$/c \
-        sandbox_binary = base::FilePath(getenv("CHROMIUM_SANDBOX_BINARY_PATH"));
-      ' sandbox/linux/suid/client/setuid_sandbox_client.cc
-    '' + ''
+    postPatch = ''
       sed -i -e '/module_path *=.*libexif.so/ {
         s|= [^;]*|= base::FilePath().AppendASCII("${libexif}/lib/libexif.so")|
       }' chrome/utility/media_galleries/image_metadata_extractor.cc
@@ -163,11 +154,10 @@ let
       use_pulseaudio = pulseSupport;
       linux_link_pulseaudio = pulseSupport;
       disable_nacl = !enableNaCl;
+      enable_hotwording = enableHotwording;
       use_openssl = useOpenSSL;
       selinux = enableSELinux;
       use_cups = cupsSupport;
-    } // optionalAttrs (versionOlder version "42.0.0.0") {
-      linux_sandbox_chrome_path="${libExecPath}/${packageName}";
     } // {
       werror = "";
       clang = false;
@@ -200,7 +190,7 @@ let
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
       python build/linux/unbundle/replace_gyp_files.py ${gypFlags}
-      python build/gyp_chromium -f ninja --depth "$(pwd)" ${gypFlags}
+      python build/gyp_chromium -f ninja --depth . ${gypFlags}
     '';
 
     buildPhase = let

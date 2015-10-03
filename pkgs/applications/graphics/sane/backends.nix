@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ba68m6bzni54axjk15i51rya7hfsdliwvqyan5msl7iaid0iir7";
   };
 
+  outputs = [ "out" "doc" "man" ];
+
   udevSupport = hotplugSupport;
 
   configureFlags = stdenv.lib.optional (libusb != null) "--enable-libusb_1_0";

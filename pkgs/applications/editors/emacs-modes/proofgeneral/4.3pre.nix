@@ -1,11 +1,11 @@
 { stdenv, fetchurl, emacs, texinfo, texLive, perl, which, automake, enableDoc ? false }:
 
 stdenv.mkDerivation (rec {
-  name = "ProofGeneral-4.3pre131011";
+  name = "ProofGeneral-4.3pre150313";
 
   src = fetchurl {
-    url = http://proofgeneral.inf.ed.ac.uk/releases/ProofGeneral-4.3pre131011.tgz;
-    sha256 = "0104iy2xik5npkdg9p2ir6zqyrmdc93azrgm3ayvg0z76vmnb816";
+    url = "http://proofgeneral.inf.ed.ac.uk/releases/${name}.tgz";
+    sha256 = "1jq5ykkk14xr5qcn4kyxmi5ls0fibr0y47gfygzm1mzrfvz9aw3f";
   };
 
   sourceRoot = name;

@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, kdelibs, kdebase_workspace, gettext }:
+{ stdenv, fetchurl, automoc4, cmake, gettext, perl, pkgconfig
+, kdelibs, kdebase_workspace }:
 
 let version = "0.11";
 in
@@ -10,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0g27aswh8iz5v67v1wkjny4p100vs2gm0lw0qzfkg6sw1pb4i519";
   };
 
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig ];
 
   buildInputs = [ kdelibs kdebase_workspace ];
 

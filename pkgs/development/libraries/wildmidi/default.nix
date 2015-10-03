@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, alsaLib, freepats }:
 
 stdenv.mkDerivation rec {
-  name = "wildmidi-0.3.6";
+  name = "wildmidi-0.3.8";
 
   src = fetchurl {
     url = "https://github.com/Mindwerks/wildmidi/archive/${name}.tar.gz";
-    sha256 = "0y8r812f8h9jqlajwbzni7f23k8kfcp4wxz3jdq75z902bsmdzpf";
+    sha256 = "1z324wkmkf0lapfammviiyclhc7i8in2x2gvgc2r6sq69lcwbn7g";
   };
 
   nativeBuildInputs = [ cmake ];

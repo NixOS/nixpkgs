@@ -1,19 +1,18 @@
-<part   xmlns="http://docbook.org/ns/docbook"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        xmlns:xi="http://www.w3.org/2001/XInclude"
-        version="5.0"
-        xml:id="ch-release-notes">
+<appendix xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          version="5.0"
+          xml:id="ch-release-notes">
 
 <title>Release Notes</title>
 
-<partintro>
 <para>This section lists the release notes for each stable version of NixOS
 and current unstable revision.</para>
-</partintro>
 
 <xi:include href="rl-unstable.xml" />
+<xi:include href="rl-1509.xml" />
 <xi:include href="rl-1412.xml" />
 <xi:include href="rl-1404.xml" />
 <xi:include href="rl-1310.xml" />
 
-</part>
+</appendix>

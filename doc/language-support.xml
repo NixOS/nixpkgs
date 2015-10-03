@@ -1,3 +1,4 @@
+
 <chapter xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xml:id="chap-language-support">
@@ -13,7 +14,7 @@ in Nixpkgs to easily build packages for other programming languages,
 such as Perl or Haskell.  These are described in this chapter.</para>
 
 
-<section xml:id="ssec-language-perl"><title>Perl</title>
+<section xml:id="sec-language-perl"><title>Perl</title>
 
 <para>Nixpkgs provides a function <varname>buildPerlPackage</varname>,
 a generic package builder function for any Perl package that has a
@@ -151,7 +152,7 @@ ClassC3Componentised = buildPerlPackage rec {
 
 </para>
 
-<section><title>Generation from CPAN</title>
+<section xml:id="ssec-generation-from-CPAN"><title>Generation from CPAN</title>
 
 <para>Nix expressions for Perl packages can be generated (almost)
 automatically from CPAN.  This is done by the program
@@ -191,7 +192,7 @@ you need it.</para>
 </section>
 
 
-<section xml:id="python"><title>Python</title>
+<section xml:id="sec-python"><title>Python</title>
 
 <para>
   Currently supported interpreters are <varname>python26</varname>, <varname>python27</varname>,
@@ -245,44 +246,44 @@ are provided with all modules included.</para>
         Name of the folder in <literal>${python}/lib/</literal> for corresponding interpreter.
     </para></listitem>
   </varlistentry>
-  
+
   <varlistentry>
     <term><varname>interpreter</varname></term>
     <listitem><para>
         Alias for <literal>${python}/bin/${executable}.</literal>
     </para></listitem>
   </varlistentry>
-  
+
   <varlistentry>
     <term><varname>buildEnv</varname></term>
     <listitem><para>
         Function to build python interpreter environments with extra packages bundled together.
-        See <xref linkend="python-build-env" /> for usage and documentation.
+        See <xref linkend="ssec-python-build-env" /> for usage and documentation.
     </para></listitem>
   </varlistentry>
-  
+
   <varlistentry>
     <term><varname>sitePackages</varname></term>
     <listitem><para>
       Alias for <literal>lib/${libPrefix}/site-packages</literal>.
     </para></listitem>
   </varlistentry>
-  
+
   <varlistentry>
     <term><varname>executable</varname></term>
     <listitem><para>
       Name of the interpreter executable, ie <literal>python3.4</literal>.
     </para></listitem>
   </varlistentry>
-  
+
 </variablelist>
-<section xml:id="build-python-package"><title><varname>buildPythonPackage</varname> function</title>
-  
+<section xml:id="ssec-build-python-package"><title><varname>buildPythonPackage</varname> function</title>
+
   <para>
   The function is implemented in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/python-modules/generic/default.nix">
   <filename>pkgs/development/python-modules/generic/default.nix</filename></link>.
   Example usage:
-  
+
 <programlisting language="nix">
 twisted = buildPythonPackage {
   name = "twisted-8.1.0";
@@ -308,27 +309,27 @@ twisted = buildPythonPackage {
   <varname>python27Packages</varname>, <varname>python32Packages</varname>, <varname>python33Packages</varname>,
   <varname>python34Packages</varname> and <varname>pypyPackages</varname>.
   </para>
-  
+
   <para>
     <function>buildPythonPackage</function> mainly does four things:
-      
+
     <orderedlist>
       <listitem><para>
         In the <varname>configurePhase</varname>, it patches
         <literal>setup.py</literal> to always include setuptools before
         distutils for monkeypatching machinery to take place.
       </para></listitem>
-    
+
       <listitem><para>
-        In the <varname>buildPhase</varname>, it calls 
+        In the <varname>buildPhase</varname>, it calls
         <literal>${python.interpreter} setup.py build ...</literal>
       </para></listitem>
-      
+
       <listitem><para>
-        In the <varname>installPhase</varname>, it calls 
+        In the <varname>installPhase</varname>, it calls
         <literal>${python.interpreter} setup.py install ...</literal>
       </para></listitem>
-      
+
       <listitem><para>
         In the <varname>postFixup</varname> phase, <literal>wrapPythonPrograms</literal>
         bash function is called to wrap all programs in <filename>$out/bin/*</filename>
@@ -337,23 +338,30 @@ twisted = buildPythonPackage {
       </para></listitem>
     </orderedlist>
   </para>
-  
-  <para>By default <varname>doCheck = true</varname> is set and tests are run with 
+
+  <para>By default <varname>doCheck = true</varname> is set and tests are run with
   <literal>${python.interpreter} setup.py test</literal> command in <varname>checkPhase</varname>.</para>
-  
-  <para><varname>propagatedBuildInputs</varname> packages are propagated to user environment.</para>
-    
+
+  <para>
+    As in Perl, dependencies on other Python packages can be specified in the
+    <varname>buildInputs</varname> and
+    <varname>propagatedBuildInputs</varname> attributes.  If something is
+    exclusively a build-time dependency, use
+    <varname>buildInputs</varname>; if it’s (also) a runtime dependency,
+    use <varname>propagatedBuildInputs</varname>.
+  </para>
+
   <para>
     By default <varname>meta.platforms</varname> is set to the same value
     as the interpreter unless overriden otherwise.
   </para>
-  
+
   <variablelist>
     <title>
       <varname>buildPythonPackage</varname> parameters
       (all parameters from <varname>mkDerivation</varname> function are still supported)
     </title>
-  
+
     <varlistentry>
       <term><varname>namePrefix</varname></term>
       <listitem><para>
@@ -363,7 +371,7 @@ twisted = buildPythonPackage {
         if you're packaging an application or a command line tool.
       </para></listitem>
     </varlistentry>
-  
+
     <varlistentry>
       <term><varname>disabled</varname></term>
       <listitem><para>
@@ -373,21 +381,21 @@ twisted = buildPythonPackage {
         for examples.
       </para></listitem>
     </varlistentry>
-      
+
     <varlistentry>
       <term><varname>setupPyInstallFlags</varname></term>
       <listitem><para>
         List of flags passed to <command>setup.py install</command> command.
       </para></listitem>
     </varlistentry>
-     
+
     <varlistentry>
       <term><varname>setupPyBuildFlags</varname></term>
       <listitem><para>
         List of flags passed to <command>setup.py build</command> command.
       </para></listitem>
     </varlistentry>
-     
+
     <varlistentry>
       <term><varname>pythonPath</varname></term>
       <listitem><para>
@@ -396,21 +404,21 @@ twisted = buildPythonPackage {
         (contrary to <varname>propagatedBuildInputs</varname>).
       </para></listitem>
     </varlistentry>
-     
+
     <varlistentry>
       <term><varname>preShellHook</varname></term>
       <listitem><para>
         Hook to execute commands before <varname>shellHook</varname>.
       </para></listitem>
     </varlistentry>
-    
+
     <varlistentry>
       <term><varname>postShellHook</varname></term>
       <listitem><para>
         Hook to execute commands after <varname>shellHook</varname>.
       </para></listitem>
     </varlistentry>
-    
+
     <varlistentry>
       <term><varname>distutilsExtraCfg</varname></term>
       <listitem><para>
@@ -419,15 +427,29 @@ twisted = buildPythonPackage {
         configuration).
       </para></listitem>
     </varlistentry>
-  
+
+    <varlistentry>
+      <term><varname>makeWrapperArgs</varname></term>
+      <listitem><para>
+        A list of strings. Arguments to be passed to
+        <varname>makeWrapper</varname>, which wraps generated binaries. By
+        default, the arguments to <varname>makeWrapper</varname> set
+        <varname>PATH</varname> and <varname>PYTHONPATH</varname> environment
+        variables before calling the binary. Additional arguments here can
+        allow a developer to set environment variables which will be
+        available when the binary is run. For example,
+        <varname>makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]</varname>.
+      </para></listitem>
+    </varlistentry>
+
   </variablelist>
-  
+
 </section>
 
-<section xml:id="python-build-env"><title><function>python.buildEnv</function> function</title>
+<section xml:id="ssec-python-build-env"><title><function>python.buildEnv</function> function</title>
   <para>
     Create Python environments using low-level <function>pkgs.buildEnv</function> function. Example <filename>default.nix</filename>:
-    
+
 <programlisting language="nix">
 <![CDATA[with import <nixpkgs> {};
 
@@ -436,31 +458,52 @@ python.buildEnv.override {
   ignoreCollisions = true;
 }]]>
 </programlisting>
-    
+
     Running <command>nix-build</command> will create
     <filename>/nix/store/cf1xhjwzmdki7fasgr4kz6di72ykicl5-python-2.7.8-env</filename>
     with wrapped binaries in <filename>bin/</filename>.
   </para>
-  
+
+  <para>
+  You can also use <varname>env</varname> attribute to create local
+  environments with needed packages installed (somewhat comparable to
+  <literal>virtualenv</literal>). For example, with the following
+  <filename>shell.nix</filename>:
+
+<programlisting language="nix">
+<![CDATA[with import <nixpkgs> {};
+
+(python3.buildEnv.override {
+  extraLibs = with python3Packages;
+    [ numpy
+      requests
+    ];
+}).env]]>
+</programlisting>
+
+  Running <command>nix-shell</command> will drop you into a shell where
+  <command>python</command> will have specified packages in its path.
+  </para>
+
   <variablelist>
     <title>
       <function>python.buildEnv</function> arguments
     </title>
-  
+
     <varlistentry>
       <term><varname>extraLibs</varname></term>
       <listitem><para>
         List of packages installed inside the environment.
       </para></listitem>
     </varlistentry>
-    
+
     <varlistentry>
       <term><varname>postBuild</varname></term>
       <listitem><para>
         Shell command executed after the build of environment.
       </para></listitem>
     </varlistentry>
-    
+
     <varlistentry>
       <term><varname>ignoreCollisions</varname></term>
       <listitem><para>
@@ -470,7 +513,7 @@ python.buildEnv.override {
   </variablelist>
 </section>
 
-<section xml:id="python-tools"><title>Tools</title>
+<section xml:id="ssec-python-tools"><title>Tools</title>
 
 <para>Packages inside nixpkgs are written by hand. However many tools
 exist in community to help save time. No tool is preferred at the moment.
@@ -497,20 +540,20 @@ exist in community to help save time. No tool is preferred at the moment.
 
 </section>
 
-<section xml:id="python-development"><title>Development</title>
+<section xml:id="ssec-python-development"><title>Development</title>
 
   <para>
     To develop Python packages <function>buildPythonPackage</function> has
     additional logic inside <varname>shellPhase</varname> to run
     <command>${python.interpreter} setup.py develop</command> for the package.
   </para>
-  
+
   <warning><para><varname>shellPhase</varname> is executed only if <filename>setup.py</filename>
   exists.</para></warning>
-  
+
   <para>
     Given a <filename>default.nix</filename>:
-    
+
 <programlisting language="nix">
 <![CDATA[with import <nixpkgs> {};
 
@@ -522,18 +565,18 @@ buildPythonPackage {
   src = ./.;
 }]]>
 </programlisting>
-    
+
     Running <command>nix-shell</command> with no arguments should give you
     the environment in which the package would be build with
     <command>nix-build</command>.
   </para>
-  
+
   <para>
     Shortcut to setup environments with C headers/libraries and python packages:
-    
+
     <programlisting language="bash">$ nix-shell -p pythonPackages.pyramid zlib libjpeg git</programlisting>
   </para>
-  
+
   <note><para>
     There is a boolean value <varname>lib.inNixShell</varname> set to
     <varname>true</varname> if nix-shell is invoked.
@@ -541,7 +584,7 @@ buildPythonPackage {
 
 </section>
 
-<section xml:id="python-faq"><title>FAQ</title>
+<section xml:id="ssec-python-faq"><title>FAQ</title>
 
 <variablelist>
 
@@ -562,18 +605,18 @@ buildPythonPackage {
       Known bug in setuptools <varname>install_data</varname> does not respect --prefix</link>. Example of
       such package using the feature is <filename>pkgs/tools/X11/xpra/default.nix</filename>. As workaround
       install it as an extra <varname>preInstall</varname> step:
-      
+
       <programlisting>${python.interpreter} setup.py install_data --install-dir=$out --root=$out
 sed -i '/ = data_files/d' setup.py</programlisting>
     </para></listitem>
   </varlistentry>
-  
+
   <varlistentry>
     <term>Rationale of non-existent global site-packages</term>
     <listitem><para>
       There is no need to have global site-packages in Nix. Each package has isolated
       dependency tree and installing any python package will only populate <varname>$PATH</varname>
-      inside user environment. See <xref linkend="python-build-env" /> to create self-contained
+      inside user environment. See <xref linkend="ssec-python-build-env" /> to create self-contained
       interpreter with a set of packages.
     </para></listitem>
   </varlistentry>
@@ -583,7 +626,7 @@ sed -i '/ = data_files/d' setup.py</programlisting>
 </section>
 
 
-<section xml:id="python-contrib"><title>Contributing guidelines</title>
+<section xml:id="ssec-python-contrib"><title>Contributing guidelines</title>
 <para>
   Following rules are desired to be respected:
 </para>
@@ -611,12 +654,12 @@ sed -i '/ = data_files/d' setup.py</programlisting>
 </section>
 
 
-<section xml:id="ssec-language-ruby"><title>Ruby</title>
+<section xml:id="sec-language-ruby"><title>Ruby</title>
   <para>There currently is support to bundle applications that are packaged as Ruby gems. The utility "bundix" allows you to write a <filename>Gemfile</filename>, let bundler create a <filename>Gemfile.lock</filename>, and then convert
   this into a nix expression that contains all Gem dependencies automatically.</para>
 
   <para>For example, to package sensu, we did:</para>
-  
+
 <screen>
 <![CDATA[$ cd pkgs/servers/monitoring
 $ mkdir sensu
@@ -624,7 +667,7 @@ $ cat > Gemfile
 source 'https://rubygems.org'
 gem 'sensu'
 $ bundler package --path /tmp/vendor/bundle
-$ $(nix-build '&nixpkgs>' -A bundix)/bin/bundix
+$ $(nix-build '<nixpkgs>' -A bundix)/bin/bundix
 $ cat > default.nix
 { lib, bundlerEnv, ruby }:
 
@@ -652,7 +695,7 @@ and scalable.";
 
 </section>
 
-<section xml:id="ssec-language-go"><title>Go</title>
+<section xml:id="sec-language-go"><title>Go</title>
 
 <para>The function <varname>buildGoPackage</varname> builds
 standard Go packages.
@@ -662,20 +705,19 @@ standard Go packages.
 <programlisting>
 net = buildGoPackage rec {
   name = "go.net-${rev}";
-  goPackagePath = "code.google.com/p/go.net"; <co xml:id='ex-buildGoPackage-1' />
+  goPackagePath = "golang.org/x/net"; <co xml:id='ex-buildGoPackage-1' />
   subPackages = [ "ipv4" "ipv6" ]; <co xml:id='ex-buildGoPackage-2' />
-  rev = "28ff664507e4";
-  src = fetchhg {
+  rev = "e0403b4e005";
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://${goPackagePath}";
-    sha256 = "1lkz4c9pyz3yz2yz18hiycvlfhgy3jxp68bs7mv7bcfpaj729qav";
+    owner = "golang";
+    repo = "net";
+    sha256 = "1g7cjzw4g4301a3yqpbk8n1d4s97sfby2aysl275x04g0zh8jxqp";
   };
-  renameImports = [ <co xml:id='ex-buildGoPackage-3' />
-    "code.google.com/p/go.crypto golang.org/x/crypto"
-    "code.google.com/p/goprotobuf github.com/golang/protobuf"
-  ];
+  goPackageAliases = [ "code.google.com/p/go.net" ]; <co xml:id='ex-buildGoPackage-3' />
   propagatedBuildInputs = [ goPackages.text ]; <co xml:id='ex-buildGoPackage-4' />
   buildFlags = "--tags release"; <co xml:id='ex-buildGoPackage-5' />
+  disabled = isGo13;<co xml:id='ex-buildGoPackage-6' />
 };
 </programlisting>
 </example>
@@ -703,17 +745,18 @@ the following arguments are of special significance to the function:
     </para>
   </callout>
 
-  <callout arearefs='ex-buildGoPackage-4'>
+  <callout arearefs='ex-buildGoPackage-3'>
     <para>
-      <varname>renameImports</varname> is a list of import paths to be renamed before
-      building the package. The path to be renamed can be a regular expression.
+      <varname>goPackageAliases</varname> is a list of alternative import paths
+      that are valid for this library.
+      Packages that depend on this library will automatically rename
+      import paths that match any of the aliases to <literal>goPackagePath</literal>.
     </para>
     <para>
       In this example imports will be renamed from
-      <literal>code.google.com/p/go.crypto</literal> to
-      <literal>golang.org/x/crypto</literal> and from
-      <literal>code.google.com/p/goprotobuf</literal> to
-      <literal>github.com/golang/protobuf</literal>.
+      <literal>code.google.com/p/go.net</literal> to
+      <literal>golang.org/x/net</literal> in every package that depend on the
+      <literal>go.net</literal> library.
     </para>
   </callout>
 
@@ -729,6 +772,18 @@ the following arguments are of special significance to the function:
   <callout arearefs='ex-buildGoPackage-5'>
     <para>
       <varname>buildFlags</varname> is a list of flags passed to the go build command.
+    </para>
+  </callout>
+
+  <callout arearefs='ex-buildGoPackage-6'>
+    <para>
+      If <varname>disabled</varname> is <literal>true</literal>,
+      nix will refuse to build this package.
+    </para>
+    <para>
+      In this example the package will not be built for go 1.3. The <literal>isGo13</literal>
+      is an utility function that returns <literal>true</literal> if go used to build the
+      package has version 1.3.x.
     </para>
   </callout>
 
@@ -761,7 +816,7 @@ done
 </section>
 
 
-<section xml:id="ssec-language-java"><title>Java</title>
+<section xml:id="sec-language-java"><title>Java</title>
 
 <para>Ant-based Java packages are typically built from source as follows:
 
@@ -842,7 +897,7 @@ Runtime) instead of the OpenJRE.</para>
 </section>
 
 
-<section xml:id="ssec-language-lua"><title>Lua</title>
+<section xml:id="sec-language-lua"><title>Lua</title>
 
 <para>
   Lua packages are built by the <varname>buildLuaPackage</varname> function.  This function is
@@ -850,7 +905,7 @@ Runtime) instead of the OpenJRE.</para>
   in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/lua-modules/generic/default.nix">
   <filename>pkgs/development/lua-modules/generic/default.nix</filename></link>
   and works similarly to <varname>buildPerlPackage</varname>. (See
-  <xref linkend="ssec-language-perl"/> for details.)
+  <xref linkend="sec-language-perl"/> for details.)
 </para>
 
 <para>
@@ -864,7 +919,7 @@ fileSystem = buildLuaPackage {
   src = fetchurl {
     url = "https://github.com/keplerproject/luafilesystem/archive/v1_6_2.tar.gz";
     sha256 = "1n8qdwa20ypbrny99vhkmx8q04zd2jjycdb5196xdhgvqzk10abz";
-  };  
+  };
   meta = {
     homepage = "https://github.com/keplerproject/luafilesystem";
     hydraPlatforms = stdenv.lib.platforms.linux;
@@ -875,7 +930,7 @@ fileSystem = buildLuaPackage {
 </para>
 
 <para>
-  Though, more complicated package should be placed in a seperate file in 
+  Though, more complicated package should be placed in a seperate file in
   <link
   xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/lua-modules"><filename>pkgs/development/lua-modules</filename></link>.
 </para>
@@ -889,7 +944,7 @@ fileSystem = buildLuaPackage {
 
 </section>
 
-<section xml:id="ssec-language-coq"><title>Coq</title>
+<section xml:id="sec-language-coq"><title>Coq</title>
   <para>
     Coq libraries should be installed in
     <literal>$(out)/lib/coq/${coq.coq-version}/user-contrib/</literal>.
@@ -924,6 +979,72 @@ stdenv.mkDerivation {
   installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
 }
 </programlisting>
+</section>
+
+<section xml:id="sec-language-qt"><title>Qt</title>
+
+<para>The information in this section applies to Qt 5.5 and later.</para>
+
+<para>Qt is an application development toolkit for C++. Although it is
+not a distinct programming language, there are special considerations
+for packaging Qt-based programs and libraries. A small set of tools
+and conventions has grown out of these considerations.</para>
+
+<section xml:id="ssec-qt-libraries"><title>Libraries</title>
+
+<para>Packages that provide libraries should be listed in
+<varname>qt5LibsFun</varname> so that the library is built with each
+Qt version. A set of packages is provided for each version of Qt; for
+example, <varname>qt5Libs</varname> always provides libraries built
+with the latest version, <varname>qt55Libs</varname> provides
+libraries built with Qt 5.5, and so on. To avoid version conflicts, no
+top-level attributes are created for these packages.</para>
+
+</section>
+
+<section xml:id="ssec-qt-programs"><title>Programs</title>
+
+<para>Application packages do not need to be built with every Qt
+version. To ensure consistency between the package's dependencies,
+call the package with <literal>qt5Libs.callPackage</literal> instead
+of the usual <literal>callPackage</literal>. An older version may be
+selected in case of incompatibility. For example, to build with Qt
+5.5, call the package with
+<literal>qt55Libs.callPackage</literal>.</para>
+
+<para>Several environment variables must be set at runtime for Qt
+applications to function correctly, including:</para>
+
+<itemizedlist>
+  <listitem><para><envar>QT_PLUGIN_PATH</envar></para></listitem>
+  <listitem><para><envar>QML_IMPORT_PATH</envar></para></listitem>
+  <listitem><para><envar>QML2_IMPORT_PATH</envar></para></listitem>
+  <listitem><para><envar>XDG_DATA_DIRS</envar></para></listitem>
+</itemizedlist>
+
+<para>To ensure that these are set correctly, the program must be wrapped by
+invoking <literal>wrapQtProgram <replaceable>program</replaceable></literal>
+during installation (for example, during
+<literal>fixupPhase</literal>). <literal>wrapQtProgram</literal>
+accepts the same options as <literal>makeWrapper</literal>.
+</para>
+
+</section>
+
+<section xml:id="ssec-qt-kde"><title>KDE</title>
+
+<para>Many of the considerations above also apply to KDE packages,
+especially the need to set the correct environment variables at
+runtime. To ensure that this is done, invoke <literal>wrapKDEProgram
+<replaceable>program</replaceable></literal> during
+installation. <literal>wrapKDEProgram</literal> also generates a
+<literal>ksycoca</literal> database so that required data and services
+can be found. Like its Qt counterpart,
+<literal>wrapKDEProgram</literal> accepts the same options as
+<literal>makeWrapper</literal>.</para>
+
+</section>
+
 </section>
 
 <!--

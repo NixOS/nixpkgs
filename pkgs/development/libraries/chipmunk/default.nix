@@ -1,39 +1,29 @@
-args :  
-let 
-  lib = args.lib;
-  fetchurl = args.fetchurl;
-  fullDepEntry = args.fullDepEntry;
+{ stdenv, fetchurl, cmake, freeglut, mesa, glfw2, glew, libX11, xproto
+, inputproto, libXi, libXmu
+}:
 
-  version = lib.attrByPath ["version"] "6.1.5" args;
-  majorVersion = lib.attrByPath ["majorVersion"] "6" args;
-  buildInputs = with args; [
-    cmake freeglut mesa
-    libX11 xproto inputproto libXi libXmu
-  ];
-in
-rec {
+stdenv.mkDerivation rec {
+  name = "chipmunk-${version}";
+  majorVersion = "7";
+  version = "${majorVersion}.0.0";
+
   src = fetchurl {
-    url = "http://files.slembcke.net/chipmunk/release/Chipmunk-${majorVersion}.x/Chipmunk-${version}.tgz";
-    sha256 = "0rhsgl32k6bja2ipzprf7iv3lscbl8h8s9il625rp966jvq6phy7";
+    url = "https://chipmunk-physics.net/release/Chipmunk-${majorVersion}.x/Chipmunk-${version}.tgz";
+    sha256 = "1kaii8wgvp0kgn2p22jm9smyqlws4p5dg8j23jaiasx9jq1kiaql";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
-  
-  /* doConfigure should be specified separately */
-  phaseNames = ["genMakefile" "doMakeInstall" "demoInstall"];
+  buildInputs =
+    [ cmake freeglut mesa glfw2 glew libX11 xproto inputproto libXi libXmu ];
 
-  genMakefile = fullDepEntry ''
-    cmake -D CMAKE_INSTALL_PREFIX=$out . 
-  '' ["minInit" "addInputs" "doUnpack"];
-
-  demoInstall = fullDepEntry(''
+  postInstall = ''
     mkdir -p $out/bin
-    cp Demo/chipmunk_demos $out/bin
-  '') ["doMakeInstall" "defEnsureDir"];
-      
-  name = "chipmunk-" + version;
-  meta = {
-    description = "2D physics engine";
+    cp demo/chipmunk_demos $out/bin
+  '';
+
+  meta = with stdenv.lib; {
+    description = "A fast and lightweight 2D game physics library";
+    homepage = http://chipmunk2d.net/;
+    license = licenses.mit;
+    platforms = platforms.unix; # supports Windows and MacOS as well, but those require more work
   };
 }

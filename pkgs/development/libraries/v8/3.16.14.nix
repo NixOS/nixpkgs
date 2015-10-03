@@ -8,13 +8,17 @@ in
 
 stdenv.mkDerivation rec {
   name = "v8-${version}";
-  version = "3.16.14";
+  version = "3.16.14.11";
 
   src = fetchurl {
     url = "https://commondatastorage.googleapis.com/chromium-browser-official/"
         + "${name}.tar.bz2";
-    sha256 = "073f33zcb7205jp9g5ha5d7j2hfa98zs0jql572nb552z0xw3rkz";
+    sha256 = "1gpf2xvhxfs5ll3m2jlslsx9jfjbmrbz55iq362plflrvf8mbxhj";
   };
+
+  postPatch = ''
+    sed -i 's/-Werror//' build/standalone.gypi build/common.gypi
+  '';
 
   configurePhase = stdenv.lib.optionalString stdenv.isDarwin ''
     ln -s /usr/bin/xcodebuild $TMPDIR

@@ -4,7 +4,7 @@ let inherit (composableDerivation) edf; in
 
 composableDerivation.composableDerivation {} {
 
-  name = "monetdb-may-2009";
+  name = "monetdb-2009-05-01";
 
   src = fetchurl {
     url = http://monetdb.cwi.nl/downloads/sources/May2009-SP1/MonetDB-May2009-SuperBall-SP1.tar.bz2;
@@ -34,7 +34,7 @@ composableDerivation.composableDerivation {} {
   '';
 
   meta = { 
-    description = "MonetDB is a open-source database system for high-performance applications in data mining, OLAP, GIS, XML Query, text and multimedia retrieval";
+    description = "A open-source database system for high-performance applications in data mining, OLAP, GIS, XML Query, text and multimedia retrieval";
     homepage = http://monetdb.cwi.nl/;
     license = "MonetDB Public License"; # very similar to Mozilla public license (MPL) Version see 1.1 http://monetdb.cwi.nl/Legal/MonetDBLicense-1.1.html 
   };

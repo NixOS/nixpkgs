@@ -132,7 +132,7 @@ let
   commonNetworkOptions = {
 
     enable = mkOption {
-      default = false;
+      default = true;
       type = types.bool;
       description = ''
         Whether to manage network configuration using <command>systemd-network</command>.
@@ -482,6 +482,11 @@ let
     };
   };
 
+  commonMatchText = def: ''
+    [Match]
+    ${attrsToSection def.matchConfig}
+  '';
+
   linkToUnit = name: def:
     { inherit (def) enable;
       text = commonMatchText def +
@@ -635,9 +640,6 @@ in
 
     environment.etc."systemd/network".source =
       generateUnits "network" cfg.units [] [];
-
-    users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
-    users.extraGroups.systemd-network.gid = config.ids.gids.systemd-network;
 
     systemd.services.systemd-networkd = {
       wantedBy = [ "multi-user.target" ];

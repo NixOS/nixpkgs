@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postInstall = "rm -rf $out/share/doc";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://tukaani.org/xz/;
     description = "XZ, general-purpose data compression software, successor of LZMA";
 
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
          bzip2.
       '';
 
-    license = [ "GPLv2+" "LGPLv2.1+" ];
-    maintainers = with stdenv.lib.maintainers; [ sander ];
-    platforms = stdenv.lib.platforms.all;
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    maintainers = with maintainers; [ sander ];
+    platforms = platforms.all;
   };
 }

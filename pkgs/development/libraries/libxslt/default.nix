@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "13029baw9kkyjgr7q3jccw2mz38amq7mmpr5p3bh775qawd1bisz";
   };
 
+  outputs = [ "out" "doc" ];
+
   buildInputs = [ libxml2 ];
 
   propagatedBuildInputs = [ findXMLCatalogs ];

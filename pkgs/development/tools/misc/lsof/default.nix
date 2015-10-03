@@ -1,11 +1,16 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "lsof-4.87";
+stdenv.mkDerivation rec {
+  name = "lsof-${version}";
+  version = "4.89";
 
   src = fetchurl {
-    url = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/lsof_4.87.tar.bz2;
-    sha256 = "0b6si72sml7gr9784ak491cxxbm9mx5bh174yg6rrirbv04kgpfz";
+    urls = map (
+      # the tarball is moved after new version is released
+      isOld: "ftp://sunsite.ualberta.ca/pub/Mirror/lsof/"
+      + "${stdenv.lib.optionalString isOld "OLD/"}lsof_${version}.tar.bz2"
+    ) [ false true ];
+    sha256 = "061p18v0mhzq517791xkjs8a5dfynq1418a1mwxpji69zp2jzb41";
   };
 
   unpackPhase = "tar xvjf $src; cd lsof_*; tar xvf lsof_*.tar; sourceRoot=$( echo lsof_*/); ";

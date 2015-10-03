@@ -44,15 +44,10 @@
     pkgs.zip
     pkgs.dar # disk archiver
     pkgs.cabextract
-
-    # Some editors.
-    pkgs.vim
-    pkgs.bvi # binary editor
-    pkgs.joe
   ];
 
   # Include support for various filesystems.
-  boot.supportedFilesystems = [ "btrfs" "reiserfs" "vfat" "f2fs" "zfs" "ntfs" "cifs" ];
+  boot.supportedFilesystems = [ "btrfs" "reiserfs" "vfat" "f2fs" "xfs" "zfs" "ntfs" "cifs" ];
 
   # Configure host id for ZFS to work
   networking.hostId = "8425e349";

@@ -1,5 +1,4 @@
-
-args : with args; 
+args @ { monotone, cheetahTemplate, highlight, ctags, makeWrapper, graphviz, which, python, ... }: with args;
 rec {
   src = fetchurl {
     url = http://viewmtn.1erlei.de/downloads/viewmtn-0.10.tgz;

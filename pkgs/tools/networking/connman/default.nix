@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "connman-${version}";
-  version = "1.28";
+  version = "1.30";
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/network/connman/connman.git";
     rev = "refs/tags/${version}";
-    sha256 = "13c374bfj7dzlx7zvnnigmk0ck5cy601aqi18n77mcrq9yyxw5y9";
+    sha256 = "715474351e22b52334d37c146fd5eb87d692be8501d8dac33a0e330437235295";
   };
 
   buildInputs = [ autoconf automake libtool pkgconfig openconnect polkit

@@ -95,7 +95,7 @@ in {
 
       port = mkOption {
         default = 35000;
-        type = types.uniq types.int;
+        type = types.int;
         description = ''
           Port for Almir web server to listen on.
         '';

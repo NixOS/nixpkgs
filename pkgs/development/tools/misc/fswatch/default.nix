@@ -1,7 +1,6 @@
 { stdenv
 , fetchFromGitHub
-, autoconf
-, automake
+, autoreconfHook
 , findutils                     # for xargs
 , gettext
 , libtool
@@ -9,26 +8,18 @@
 , texinfo
 }:
 
-let
-
- version = "1.4.6";
-
-in stdenv.mkDerivation {
-
+stdenv.mkDerivation rec {
   name = "fswatch-${version}";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "emcrisostomo";
     repo = "fswatch";
     rev = version;
-    sha256 = "0flq8baqzifhmf61zyiipdipvgy4h0kl551clxrhwa8gvzf75im4";
+    sha256 = "09np75m9df2nk7lc5y9wgq467ca6jsd2p5666d5rkzjvy6s0a51n";
   };
 
-  buildInputs = [ autoconf automake gettext libtool makeWrapper texinfo ];
-
-  preConfigure = ''
-    ./autogen.sh
-  '';
+  buildInputs = [ autoreconfHook gettext libtool makeWrapper texinfo ];
 
   postFixup = ''
     for prog in fswatch-run fswatch-run-bash; do

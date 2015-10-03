@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, dbus, dbus_glib, browser, x11
+{ stdenv, fetchurl, pkgconfig, glib, dbus, dbus_glib, browser, xlibsWrapper
 , GConf, gnome_mplayer, mplayer, gmtk
 }:
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "913fd39e70c564cb210c2544a88869f9d1a448184421f000b14b2bc5ba718b49";
   };
 
-  buildInputs = [ pkgconfig glib dbus dbus_glib browser x11 GConf browser gmtk ];
+  buildInputs = [ pkgconfig glib dbus dbus_glib browser xlibsWrapper GConf browser gmtk ];
 
   # !!! fix this
   preBuild =

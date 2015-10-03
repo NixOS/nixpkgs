@@ -4,15 +4,14 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "stella-${version}";
-  version = "4.6";
+  version = "4.6.1";
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/project/stella/stella/${version}/${name}-src.tar.gz";
-    sha256 = "03vg8cxr0hn99vrr2dcwhv610xi9vhlw08ypazpm0nny522a9j4d";
+    sha256 = "126jph21b70jlxapzmll8pq36i53lb304hbsiap25160vdqid4n1";
   };
 
-  buildInputs = with stdenv.lib;
-  [ pkgconfig SDL2 ];
+  buildInputs = [ pkgconfig SDL2 ];
 
   meta = {
     description = "An open-source Atari 2600 VCS emulator";

@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     homepage = http://fph.altervista.org/prog/bastet.html;
     license = licenses.gpl3;
     maintainers = [ maintainers.dezgeg ];
+    platforms = platforms.linux;
   };
 }

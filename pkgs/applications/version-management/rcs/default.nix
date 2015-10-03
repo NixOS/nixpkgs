@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  NIX_CFLAGS_COMPILE = if stdenv.isDarwin then "-std=gnu99" else null;
+
   meta = {
     homepage = http://www.gnu.org/software/rcs/;
     description = "Revision control system";

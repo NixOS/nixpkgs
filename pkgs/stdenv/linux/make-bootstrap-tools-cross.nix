@@ -34,7 +34,7 @@ let
     };
   };
   
-  beagleboneCrossSystem = {
+  armv7l-hf-multiplatform-crossSystem = {
     crossSystem = rec {
       config = "armv7l-unknown-linux-gnueabi";  
       bigEndian = false;
@@ -43,7 +43,7 @@ let
       fpu = "vfpv3-d16";
       withTLS = true;
       libc = "glibc";
-      platform = pkgsNoParams.platforms.beaglebone;
+      platform = pkgsNoParams.platforms.armv7l-hf-multiplatform;
       openssl.system = "linux-generic32";
       inherit (platform) gcc;
     };
@@ -52,7 +52,7 @@ let
   selectedCrossSystem =
     if toolsArch == "armv5tel" then sheevaplugCrossSystem else
     if toolsArch == "armv6l" then raspberrypiCrossSystem else
-    if toolsArch == "armv7l" then beagleboneCrossSystem else null;
+    if toolsArch == "armv7l" then armv7l-hf-multiplatform-crossSystem else null;
 
   pkgs = pkgsFun ({inherit system;} // selectedCrossSystem);
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, udev, utillinux, coreutils, enable_dmeventd ? false }:
 
 let
-  version = "2.02.118";
+  version = "2.02.132";
 in
 
 stdenv.mkDerivation {
@@ -9,15 +9,20 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "ftp://sources.redhat.com/pub/lvm2/releases/LVM2.${version}.tgz";
-    sha256 = "1ishsibxn1l5fymrrc5fd3z05x1z2zh0y8939wpvwz0qp9rwxazn";
+    sha256 = "0ac8izssflj371zzar16965zlia6a6zd97i0n00jxfxssnfa0fj1";
   };
 
-  configureFlags =
-    "--disable-readline --enable-udev_rules --enable-udev_sync --enable-pkgconfig --enable-applib --enable-cmdlib"
-      + (stdenv.lib.optionalString enable_dmeventd " --enable-dmeventd")
-      ;
+  configureFlags = [
+    "--disable-readline"
+    "--enable-udev_rules"
+    "--enable-udev_sync"
+    "--enable-pkgconfig"
+    "--enable-applib"
+    "--enable-cmdlib"
+  ] ++ stdenv.lib.optional enable_dmeventd " --enable-dmeventd";
 
-  buildInputs = [ pkgconfig udev ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ udev ];
 
   preConfigure =
     ''

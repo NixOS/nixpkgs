@@ -1,19 +1,29 @@
-{ stdenv, fetchhg, ncurses, gettext, pkgconfig }:
+{ stdenv, fetchFromGitHub, ncurses, gettext, pkgconfig
+
+# apple frameworks
+, CoreServices, CoreData, Cocoa, Foundation, libobjc }:
 
 stdenv.mkDerivation rec {
   name = "vim-${version}";
+  version = "7.4.827";
 
-  version = "7.4.683";
-
-  src = fetchhg {
-    url = "https://code.google.com/p/vim/";
-    rev = "v7-4-663";
-    sha256 = "1z0qarf6a2smab28g9dnxklhfayn85wx48bnddmyhb9kqzjgqgjc";
+  src = fetchFromGitHub {
+    owner = "vim";
+    repo = "vim";
+    rev = "v${version}";
+    sha256 = "1m34s2hsc5lcish6gmvn2iwaz0k7jc3kg9q4nf30fj9inl7gaybs";
   };
+
+  # this makes maintainers very sad
+  # open source CF doesn't have anything NSArray-related, causing linking errors. the
+  # missing symbol is in system CoreFoundation.
+  NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin
+    "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
 
   enableParallelBuilding = true;
 
-  buildInputs = [ ncurses pkgconfig ];
+  buildInputs = [ ncurses pkgconfig ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreData CoreServices Cocoa Foundation libobjc ];
   nativeBuildInputs = [ gettext ];
 
   configureFlags = [
@@ -49,6 +59,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "The most popular clone of the VI editor";
     homepage    = http://www.vim.org;
+    license = licenses.vim;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
   };

@@ -1,15 +1,15 @@
 { stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib, xz
-, udev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
+, udev, libgudev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
 , libgcrypt, dnsmasq, avahi, bind, perl, bluez5, substituteAll, readline
-, gobjectIntrospection, modemmanager, openresolv, libndp }:
+, gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup }:
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/1.0/NetworkManager-${version}.tar.xz";
-    sha256 = "0isrv1875whysnrf3fd1cz96xwd54nvj1rijk3fmx5qccznayris";
+    sha256 = "1zq8jm1rc7n7amqa9xz1v93w2jnczg6942gyijsdpgllfiq8b4rm";
   };
 
   preConfigure = ''
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-distro=exherbo"
     "--with-dhclient=${dhcp}/bin/dhclient"
+    "--with-dnsmasq=${dnsmasq}/bin/dnsmasq"
     # Upstream prefers dhclient, so don't add dhcpcd to the closure
     #"--with-dhcpcd=${dhcpcd}/sbin/dhcpcd"
     "--with-dhcpcd=no"
@@ -39,10 +40,12 @@ stdenv.mkDerivation rec {
     "--with-kernel-firmware-dir=/run/current-system/firmware"
     "--with-session-tracking=systemd"
     "--with-modem-manager-1"
+    "--with-nmtui"
+    "--with-libsoup=yes"
   ];
 
-  buildInputs = [ wirelesstools udev libnl libuuid polkit ppp libndp
-                  xz bluez5 gobjectIntrospection modemmanager readline ];
+  buildInputs = [ wirelesstools udev libgudev libnl libuuid polkit ppp libndp
+                  xz bluez5 gobjectIntrospection modemmanager readline newt libsoup ];
 
   propagatedBuildInputs = [ dbus_glib gnutls libgcrypt ];
 

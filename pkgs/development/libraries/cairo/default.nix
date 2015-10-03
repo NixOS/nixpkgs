@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, libiconv, libintlOrEmpty
-, expat, zlib, libpng, pixman, fontconfig, freetype, xlibs
+, expat, zlib, libpng, pixman, fontconfig, freetype, xorg
 , gobjectSupport ? true, glib
 , xcbSupport ? true # no longer experimental since 1.12
 , glSupport ? true, mesa_noglu ? null # mesa is no longer a big dependency
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig libiconv ] ++ libintlOrEmpty;
 
   propagatedBuildInputs =
-    with xlibs; [ xlibs.xlibs fontconfig expat freetype pixman zlib libpng ]
+    with xorg; [ xorg.xlibsWrapper fontconfig expat freetype pixman zlib libpng ]
     ++ optional (!stdenv.isDarwin) libXrender
     ++ optionals xcbSupport [ libxcb xcbutil ]
     ++ optional gobjectSupport glib
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   postInstall = stdenv.lib.optionalString stdenv.isDarwin glib.flattenInclude;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A 2D graphics library with support for multiple output devices";
 
     longDescription = ''
@@ -74,8 +74,8 @@ stdenv.mkDerivation rec {
 
     homepage = http://cairographics.org/;
 
-    license = [ "LGPLv2+" "MPLv1" ];
+    license = with licenses; [ lgpl2Plus mpl10 ];
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
   };
 }

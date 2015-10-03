@@ -12,7 +12,7 @@ evalConfig() {
     local attr=$1
     shift;
     local script="import ./default.nix { modules = [ $@ ];}"
-    nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only
+    nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only --show-trace
 }
 
 reportFailure() {
@@ -100,7 +100,15 @@ checkConfigOutput 'true' "$@" ./define-enable.nix ./define-loaOfSub-foo-if-enabl
 checkConfigOutput 'true' "$@" ./define-enable.nix ./define-loaOfSub-foo-enable-if.nix
 
 # Check _module.args.
-checkConfigOutput "true" config.enable ./declare-enable.nix ./custom-arg-define-enable.nix
+set -- config.enable ./declare-enable.nix ./define-enable-with-custom-arg.nix
+checkConfigError 'while evaluating the module argument .*custom.* in .*define-enable-with-custom-arg.nix.*:' "$@"
+checkConfigOutput "true" "$@" ./define-_module-args-custom.nix
+
+# Check that using _module.args on imports cause infinite recursions, with
+# the proper error context.
+set -- "$@" ./define-_module-args-custom.nix ./import-custom-arg.nix
+checkConfigError 'while evaluating the module argument .*custom.* in .*import-custom-arg.nix.*:' "$@"
+checkConfigError 'infinite recursion encountered' "$@"
 
 # Check _module.check.
 set -- config.enable ./declare-enable.nix ./define-enable.nix ./define-loaOfSub-foo.nix

@@ -48,7 +48,7 @@ in
 
   config = mkIf config.krb5.enable {
 
-    environment.systemPackages = [ pkgs.krb5 ];
+    environment.systemPackages = [ pkgs.krb5Full ];
 
     environment.etc."krb5.conf".text =
       ''

@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   p_name  = "exo";
   ver_maj = "0.10";
-  ver_min = "4";
+  ver_min = "7";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "cced5fdbc0b61a5d976210ff71ecdd81b89fcd15e5860a44f50da7b83fb2deaa";
+    sha256 = "521581481128af93e815f9690020998181f947ac9e9c2b232b1f144d76b1b35c";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
 
   preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://www.xfce.org/projects/${p_name}";
     description = "Application library for the Xfce desktop environment";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

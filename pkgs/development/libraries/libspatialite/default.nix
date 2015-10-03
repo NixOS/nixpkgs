@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "libspatialite-4.2.0";
 
   src = fetchurl {
-    url = "http://www.gaia-gis.it/gaia-sins/${name}.tar.gz";
+    url = "http://www.gaia-gis.it/gaia-sins/libspatialite-sources/${name}.tar.gz";
     sha256 = "0b9ipmp09y2ij7yajyjsh0zcwps8n5g88lzfzlkph33lail8l4wz";
   };
 

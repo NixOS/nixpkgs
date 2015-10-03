@@ -14,9 +14,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    automoc4 cmake frei0r gettext kdelibs libv4l makeWrapper mlt perl
-    phonon pkgconfig qimageblitz qjson qt4 shared_desktop_ontologies
-    shared_mime_info soprano
+    frei0r kdelibs libv4l mlt phonon qimageblitz qjson qt4
+    shared_desktop_ontologies soprano
+  ];
+
+  nativeBuildInputs = [
+    automoc4 cmake gettext makeWrapper perl pkgconfig shared_mime_info
   ];
 
   propagatedUserEnvPkgs = [ oxygen_icons ];

@@ -16,9 +16,6 @@ stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
-  # It doesn't build otherwise
-  dontDisableStatic = true;
-
   patches = stdenv.lib.optional (stdenv.system == "i686-cygwin")
               ./cygwin.patch;
 

@@ -7,11 +7,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "openresty-${version}";
-  version = "1.7.10.1";
+  version = "1.9.3.1";
 
   src = fetchurl {
     url = "http://openresty.org/download/ngx_openresty-${version}.tar.gz";
-    sha256 = "0yg6pkagkkga6ly6fgmfcf557r2b4m75gyn6a7p9qcamb4zdgl2g";
+    sha256 = "1fw8yxjndf5gsk44l4bsixm270fxv7f5cdiwzq9ps6j3hhgx5kyv";
   };
 
   buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip perl ];

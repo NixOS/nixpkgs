@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ bison flex makeWrapper ];
   propagatedBuildInputs = [ llvm gmp mpfr readline ];
 
+  postPatch = ''
+    for f in expr.cc matcher.cc printer.cc symtable.cc parserdefs.hh; do
+      sed -i '1i\#include <stddef.h>' $f
+    done
+  '';
+
   configureFlags = [ "--enable-release" ];
   doCheck = true;
   checkPhase = ''

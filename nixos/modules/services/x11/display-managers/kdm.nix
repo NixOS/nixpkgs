@@ -19,7 +19,7 @@ let
       ''}
 
       [X-*-Core]
-      Xrdb=${pkgs.xlibs.xrdb}/bin/xrdb
+      Xrdb=${pkgs.xorg.xrdb}/bin/xrdb
       SessionsDirs=${dmcfg.session.desktops}
       Session=${dmcfg.session.script}
       FailsafeClient=${pkgs.xterm}/bin/xterm

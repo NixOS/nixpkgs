@@ -38,13 +38,14 @@ let
       pkgs.nano
       pkgs.ncurses
       pkgs.netcat
-      pkgs.openssh
+      config.programs.ssh.package
       pkgs.perl
       pkgs.procps
       pkgs.rsync
       pkgs.strace
       pkgs.su
       pkgs.time
+      pkgs.texinfoInteractive
       pkgs.utillinux
       extraManpages
     ];
@@ -57,7 +58,7 @@ in
     environment = {
 
       systemPackages = mkOption {
-        type = types.listOf types.path;
+        type = types.listOf types.package;
         default = [];
         example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
@@ -102,15 +103,24 @@ in
       [ "/bin"
         "/etc/xdg"
         "/info"
-        "/lib"
+        "/lib" # FIXME: remove
+        #"/lib/debug/.build-id" # enables GDB to find separated debug info
         "/man"
         "/sbin"
+        "/share/applications"
+        "/share/desktop-directories"
+        "/share/doc"
         "/share/emacs"
-        "/share/vim-plugins"
-        "/share/org"
+        "/share/icons"
         "/share/info"
-        "/share/terminfo"
         "/share/man"
+        "/share/menus"
+        "/share/mime"
+        "/share/nano"
+        "/share/org"
+        "/share/terminfo"
+        "/share/themes"
+        "/share/vim-plugins"
       ];
 
     system.path = pkgs.buildEnv {
@@ -143,6 +153,13 @@ in
 
           if [ -x $out/bin/update-desktop-database -a -w $out/share/applications ]; then
               $out/bin/update-desktop-database $out/share/applications
+          fi
+
+          if [ -x $out/bin/install-info -a -w $out/share/info ]; then
+            shopt -s nullglob
+            for i in $out/share/info/*.info $out/share/info/*.info.gz; do
+                $out/bin/install-info $i $out/share/info/dir
+            done
           fi
         '';
     };

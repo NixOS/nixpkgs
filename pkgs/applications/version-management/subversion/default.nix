@@ -17,13 +17,13 @@ assert javahlBindings -> jdk != null && perl != null;
 
 stdenv.mkDerivation (rec {
 
-  version = "1.8.13";
+  version = "1.9.2";
 
   name = "subversion-${version}";
 
   src = fetchurl {
     url = "mirror://apache/subversion/${name}.tar.bz2";
-    sha1 = "aa0bd14ac6a8f0fb178cc9ff325387de01cd7452";
+    sha1 = "fb9db3b7ddf48ae37aa8785872301b59bfcc7017";
   };
 
   buildInputs = [ zlib apr aprutil sqlite ]
@@ -37,7 +37,7 @@ stdenv.mkDerivation (rec {
     ${if httpServer then "--with-apxs=${apacheHttpd}/bin/apxs" else "--without-apxs"}
     ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
-    ${if stdenv.isDarwin then "--enable-keychain" else "--disable-keychain"}
+    --disable-keychain
     ${if saslSupport then "--with-sasl=${sasl}" else "--without-sasl"}
     ${if httpSupport then "--with-serf=${serf}" else "--without-serf"}
     --with-zlib=${zlib}

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pulseaudio
+{ stdenv, fetchurl, pkgconfig, libpulseaudio
 , gtk2, libnotify
 , keybinder, xfconf
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pulseaudio gtk2
+    [ libpulseaudio gtk2
       keybinder xfconf libnotify
     ];
 

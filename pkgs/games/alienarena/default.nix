@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       --replace libGL.so.1 ${mesa}/lib/libGL.so.1
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A free, stand-alone first-person shooter computer game";
     longDescription = ''
       Do you like old school deathmatch with modern features? How
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://red.planetarena.org;
     # Engine is under GPLv2, everything else is under
-    license = [ "unfree-redistributable" ];
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ astsmtl ];
+    platforms = platforms.linux;
     hydraPlatforms = [];
   };
 }

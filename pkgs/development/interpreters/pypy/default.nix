@@ -1,12 +1,12 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
-, sqlite, openssl, ncurses, pythonFull, expat, tcl, tk, x11, libX11
+, sqlite, openssl, ncurses, pythonFull, expat, tcl, tk, xlibsWrapper, libX11
 , makeWrapper, callPackage, self }:
 
 assert zlibSupport -> zlib != null;
 
 let
 
-  majorVersion = "2.5";
+  majorVersion = "2.6";
   version = "${majorVersion}.0";
   libPrefix = "pypy${majorVersion}";
 
@@ -18,10 +18,10 @@ let
 
     src = fetchurl {
       url = "https://bitbucket.org/pypy/pypy/get/release-${version}.tar.bz2";
-      sha256 = "126zrsx6663n9w60018mii1z7cqb87iq9irnhp8z630mldallr4d";
+      sha256 = "0xympj874cnjpxj68xm5gllq2f8bbvz8hr0md8mh1yd6fgzzxibh";
     };
 
-    buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl x11 libX11 makeWrapper ]
+    buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper ]
       ++ stdenv.lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
 
@@ -49,15 +49,26 @@ let
         --replace "libraries=['curses']" "libraries=['ncurses']"
 
       # tkinter hints
-      substituteInPlace lib_pypy/_tkinter/tklib.py \
+      substituteInPlace lib_pypy/_tkinter/tklib_build.py \
         --replace "'/usr/include/tcl'" "'${tk}/include', '${tcl}/include'" \
-        --replace "linklibs=['tcl', 'tk']" "linklibs=['${tcl.libPrefix}', '${tk.libPrefix}']" \
+        --replace "linklibs = ['tcl' + _ver, 'tk' + _ver]" "linklibs=['${tcl.libPrefix}', '${tk.libPrefix}']" \
         --replace "libdirs = []" "libdirs = ['${tk}/lib', '${tcl}/lib']"
 
-      sed -i "s@libraries=\['sqlite3'\]\$@libraries=['sqlite3'], include_dirs=['${sqlite}/include'], library_dirs=['${sqlite}/lib']@" lib_pypy/_sqlite3.py
+      sed -i "s@libraries=\['sqlite3'\]\$@libraries=['sqlite3'], include_dirs=['${sqlite}/include'], library_dirs=['${sqlite}/lib']@" lib_pypy/_sqlite3_build.py
     '';
 
     setupHook = ./setup-hook.sh;
+
+    postBuild = ''
+      cd ./lib_pypy
+        ../pypy-c ./_audioop_build.py
+        ../pypy-c ./_curses_build.py
+        ../pypy-c ./_pwdgrp_build.py
+        ../pypy-c ./_sqlite3_build.py
+        ../pypy-c ./_syslog_build.py
+        ../pypy-c ./_tkinter/tklib_build.py
+      cd ..
+    '';
 
     doCheck = true;
     checkPhase = ''
@@ -89,7 +100,12 @@ let
        ln -s $out/pypy-c/include $out/include/${libPrefix}
        ln -s $out/pypy-c/lib-python/${pythonVersion} $out/lib/${libPrefix}
 
-       wrapProgram "$out/bin/pypy" \
+       # We must wrap the original, not the symlink.
+       # PyPy uses argv[0] to find its standard library, and while it knows
+       # how to follow symlinks, it doesn't know about wrappers. So, it
+       # will think the wrapper is the original. As long as the wrapper has
+       # the same path as the original, this is OK.
+       wrapProgram "$out/pypy-c/pypy-c" \
          --set LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$out/lib" \
          --set LIBRARY_PATH "${LIBRARY_PATH}:$out/lib"
 
@@ -103,6 +119,7 @@ let
       isPypy = true;
       buildEnv = callPackage ../python/wrapper.nix { python = self; };
       interpreter = "${self}/bin/${executable}";
+      sitePackages = "lib/${libPrefix}/site-packages";
     };
 
     enableParallelBuilding = true;  # almost no parallelization without STM

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Gucharmap;
     description = "GNOME Character Map, based on the Unicode Character Database";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

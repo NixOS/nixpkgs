@@ -4,9 +4,9 @@ stdenv.mkDerivation rec {
   name = "jetty-9.2.5";
 
   src = fetchurl {
-    url = "http://eclipse.org/downloads/download.php?file=/jetty/stable-9/dist/jetty-distribution-9.2.5.v20141112.tar.gz&r=1";
-    name = "jetty-distribution-9.2.5.v20141112.tar.gz";
-    sha256 = "1azqhvvqm9il5n07vms5vv27vr3qhmsy44nmqcgsaggq7p37swf1";
+    url = "http://eclipse.org/downloads/download.php?file=/jetty/stable-9/dist/jetty-distribution-9.2.11.v20150529.tar.gz&r=1";
+    name = "jetty-distribution-9.2.11.v20150529.tar.gz";
+    sha256 = "1d9s9l64b1l3x6vkx8qwgzfqwm55iq5g9xjjm2h2akf494yx1mrd";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
     description = "A Web server and javax.servlet container";
 
     homepage = http://www.eclipse.org/jetty/;
-
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
 
     platforms = stdenv.lib.platforms.all;
 

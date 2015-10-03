@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ xmlto docbook_xml_dtd_412 docbook_xsl libxml2 ];
   meta = {
-    description = "giflib is a library for reading and writing gif images";
+    description = "A library for reading and writing gif images";
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];

@@ -1,23 +1,22 @@
 { stdenv, fetchurl, pkgconfig, udev, dbus_libs, perl }:
 
 stdenv.mkDerivation rec {
-  name = "pcsclite-1.8.13";
+  name = "pcsclite-1.8.14";
 
   src = fetchurl {
-    url = "https://alioth.debian.org/frs/download.php/file/4126/pcsc-lite-1.8.13.tar.bz2";
-    sha256 = "0fxwzckbjsckfp1f01yp3x6y1wlaaivhy12a5hka6qwdh1z085gk";
+    url = "https://alioth.debian.org/frs/download.php/file/4138/pcsc-lite-1.8.14.tar.bz2";
+    sha256 = "0kik09dif6hih09vvprd7zvj31lnrclrbrh5y10mlca2c209f7xr";
   };
 
-  # The OS should care on preparing the drivers into this location
   configureFlags = [
+    # The OS should care on preparing the drivers into this location
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
-    "--with-systemdsystemunitdir=$out/etc/systemd/system"
-    "--enable-confdir=$out/etc"
+    "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
+    "--enable-confdir=/etc"
   ];
 
-  buildInputs = [ udev dbus_libs perl ];
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig perl ];
+  buildInputs = [ udev dbus_libs ];
 
   meta = with stdenv.lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";

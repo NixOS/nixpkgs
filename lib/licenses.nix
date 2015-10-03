@@ -85,6 +85,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Creative Commons Zero v1.0 Universal";
   };
 
+  cc-by-sa-25 = spdx {
+    spdxId = "CC-BY-SA-2.5";
+    fullName = "Creative Commons Attribution Share Alike 2.5";
+  };
+
   cc-by-30 = spdx {
     spdxId = "CC-BY-3.0";
     fullName = "Creative Commons Attribution 3.0";
@@ -147,6 +152,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
 
   fdl12 = spdx {
     spdxId = "GFDL-1.2";
+    fullName = "GNU Free Documentation License v1.2";
+  };
+
+  fdl13 = spdx {
+    spdxId = "GFDL-1.3";
     fullName = "GNU Free Documentation License v1.2";
   };
 
@@ -322,9 +332,19 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName  = "University of Illinois/NCSA Open Source License";
   };
 
+  notion_lgpl = {
+    url = "https://raw.githubusercontent.com/raboof/notion/master/LICENSE";
+    fullName = "Notion modified LGPL";
+  };
+  
   ofl = spdx {
     spdxId = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";
+  };
+
+  openldap = spdx {
+    spdxId = "OLDAP-2.8";
+    fullName = "Open LDAP Public License v2.8";
   };
 
   openssl = spdx {
@@ -401,6 +421,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   unlicense = spdx {
     spdxId = "Unlicense";
     fullName = "The Unlicense";
+  };
+
+  vim = spdx {
+    spdxId = "Vim";
+    fullName = "Vim License";
   };
 
   vsl10 = spdx {

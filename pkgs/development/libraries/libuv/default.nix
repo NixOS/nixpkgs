@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkgconfig }:
+{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkgconfig
+
+, ApplicationServices, CoreServices }:
 
 let
   stable = "stable";
@@ -59,7 +61,8 @@ let
   mkWithAutotools = stability: version: sha256: stdenv.mkDerivation {
     name = mkName stability version;
     src = mkSrc version sha256;
-    buildInputs = [ automake autoconf libtool pkgconfig ];
+    buildInputs = [ automake autoconf libtool pkgconfig ]
+      ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices CoreServices ];
     preConfigure = ''
       LIBTOOLIZE=libtoolize ./autogen.sh
     '';
@@ -104,6 +107,5 @@ in
   }
   //
   mapAttrs (v: h: mkWithAutotools stable (toVersion v) h) {
-    v1_2_0 = "1nbp8qpgw64gl9nrjzxw0ndv1m64cfms0cy5a2883vw6877kizmx";
-    v1_4_0 = "17k028gn07vb9in440wbf0ar0rdl8bi5v4shm8nhj22vfb18dhl5";
+    v1_7_5 = "18x6cy2xn31am97vn6jli7kmb2fbp4c8kmv7jm97vggh0x55flsc";
   }

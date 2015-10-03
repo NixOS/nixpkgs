@@ -54,7 +54,10 @@ releaseTools.sourceTarball rec {
         header "checking pkgs/top-level/all-packages.nix on $platform"
         NIXPKGS_ALLOW_BROKEN=1 nix-env -f pkgs/top-level/all-packages.nix \
             --show-trace --argstr system "$platform" \
-            -qa \* --drv-path --system-filter \* --system --meta --xml > /dev/null
+            -qa --drv-path --system-filter \* --system > /dev/null
+        NIXPKGS_ALLOW_BROKEN=1 nix-env -f pkgs/top-level/all-packages.nix \
+            --show-trace --argstr system "$platform" \
+            -qa --drv-path --system-filter \* --system --meta --xml > /dev/null
         stopNest
     done
 
@@ -71,7 +74,6 @@ releaseTools.sourceTarball rec {
     mkdir -p $out/tarballs
     mkdir ../$releaseName
     cp -prd . ../$releaseName
-    echo nixpkgs > ../$releaseName/channel-name
     (cd .. && tar cfa $out/tarballs/$releaseName.tar.xz $releaseName) || false
   '';
 

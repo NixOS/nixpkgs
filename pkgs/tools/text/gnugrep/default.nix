@@ -16,7 +16,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ pcre xz.bin libiconv ];
 
-  doCheck = !stdenv.isDarwin;
+  # cygwin: FAIL: multibyte-white-space
+  doCheck = !stdenv.isDarwin && !stdenv.isCygwin;
 
   # On Mac OS X, force use of mkdir -p, since Grep's fallback
   # (./install-sh) is broken.

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   buildInputs = [ unzip cmake boost ];
 
   meta = with stdenv.lib; {
-    description = "Open Asset Import Library is a library to import various 3D model formats";
+    description = "A library to import various 3D model formats";
     homepage = http://assimp.sourceforge.net/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ emery ];

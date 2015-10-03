@@ -1,15 +1,17 @@
-{stdenv, fetchurl, curl, dmd, gcc, unzip }:
+{ stdenv, fetchFromGitHub, curl, dmd, gcc }:
 
+let version = "0.9.24"; in
 stdenv.mkDerivation {
-  name = "dub-0.9.23";
+  name = "dub-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/D-Programming-Language/dub/archive/v0.9.23.tar.gz";
-    sha256 = "7ecbce89c0e48b43705d7c48003394f383556f33562c4b5d884a786cd85814d1";
+  src = fetchFromGitHub {
+    sha256 = "1j2cs2mvaj6bjjicabq6lh97nx0v4b2k6pj4cmywki7hf3i1p8yy";
+    rev = "v${version}";
+    repo = "dub";
+    owner = "D-Programming-Language";
   };
 
-  buildInputs = [ unzip curl ];
-
+  buildInputs = [ curl ];
   propagatedBuildInputs = [ gcc dmd ];
 
   buildPhase = ''
@@ -26,9 +28,10 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
+    inherit version;
     description = "Build tool for D projects";
     homepage = http://code.dlang.org/;
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
     platforms = platforms.unix;
   };
 }

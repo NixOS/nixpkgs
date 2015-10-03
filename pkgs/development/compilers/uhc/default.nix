@@ -1,22 +1,23 @@
-{ stdenv, coreutils, fetchgit, m4, libtool, clang, ghcWithPackages,
-  shuffle,
-  hashable, mtl, network, uhc-util, uulib
-}:
+{ stdenv, coreutils, fetchgit, m4, libtool, clang, ghcWithPackages }:
 
-let wrappedGhc = ghcWithPackages ( self: [hashable mtl network uhc-util uulib] );
+let wrappedGhc = ghcWithPackages (hpkgs: with hpkgs; [shuffle hashable mtl network uhc-util uulib] );
 in stdenv.mkDerivation rec {
-  version = "1.1.8.10";
+  # Important:
+  # The commits "Fixate/tag v..." are the released versions.
+  # Ignore the "bumped version to ...." commits, they do not
+  # correspond to releases.
+  version = "1.1.9.1.20150611";
   name = "uhc-${version}";
 
   src = fetchgit {
     url = "https://github.com/UU-ComputerScience/uhc.git";
-    rev = "449d9578e06af1362d7f746798f0aed57ab6ca88";
-    sha256 = "0f8abhl9idbc2qlnb7ynrb11yvm3y07vksyzs1yg6snjvlhfj5az";
+    rev = "b80098e07d12900f098ea964b1d2b3f38e5c9900";
+    sha256 = "14qg1fd9pgbczcmn5ggkd9674qadx1izmz8363ps7c207dg94f9x";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/EHC";
 
-  buildInputs = [ m4 wrappedGhc clang libtool shuffle ];
+  buildInputs = [ m4 wrappedGhc clang libtool ];
 
   configureFlags = [ "--with-gcc=${clang}/bin/clang" ];
 
@@ -25,8 +26,8 @@ in stdenv.mkDerivation rec {
   # want that, and hack the build process to use a temporary package
   # configuration file instead.
   preConfigure = ''
-    p=`pwd`/uhc-local-packages
-    echo '[]' > $p
+    p=`pwd`/uhc-local-packages/
+    ghc-pkg init $p
     sed -i "s|--user|--package-db=$p|g" mk/shared.mk.in
     sed -i "s|-fglasgow-exts|-fglasgow-exts -package-conf=$p|g" mk/shared.mk.in
     sed -i "s|/bin/date|${coreutils}/bin/date|g" mk/dist.mk
@@ -49,5 +50,6 @@ in stdenv.mkDerivation rec {
     # On Darwin, the GNU libtool is used, which does not
     # support the -static flag and thus breaks the build.
     platforms = ["x86_64-linux"];
+    broken = true; # https://github.com/UU-ComputerScience/uhc/issues/60
   };
 }

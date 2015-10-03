@@ -43,7 +43,6 @@ in rec {
         simple;
       installer = {
         inherit (nixos'.tests.installer)
-          grub1
           lvm
           separateBoot
           simple;
@@ -87,7 +86,10 @@ in rec {
     };
     constituents =
       let all = x: map (system: x.${system}) supportedSystems; in
-      [ nixpkgs.tarball ] ++ lib.collect lib.isDerivation nixos;
+      [ nixpkgs.tarball
+        (all nixpkgs.jdk)
+      ]
+      ++ lib.collect lib.isDerivation nixos;
   });
 
 }

@@ -3,10 +3,7 @@
 
 # Optional dependencies
 , libjack2 ? null, dbus ? null, dbus_cplusplus ? null, alsaLib ? null
-, pyqt4 ? null, xdg_utils ? null
-
-, glibmm
-, pythonDBus, qt4
+, pyqt4 ? null, pythonDBus ? null, xdg_utils ? null
 
 # Other Flags
 , prefix ? ""
@@ -23,6 +20,7 @@ let
   optDbus_cplusplus = shouldUsePkg dbus_cplusplus;
   optAlsaLib = shouldUsePkg alsaLib;
   optPyqt4 = shouldUsePkg pyqt4;
+  optPythonDBus = shouldUsePkg pythonDBus;
   optXdg_utils = shouldUsePkg xdg_utils;
 in
 stdenv.mkDerivation rec {
@@ -41,9 +39,6 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals (!libOnly) [
     optLibjack2 optDbus optDbus_cplusplus optAlsaLib optPyqt4
     optXdg_utils
-    # dbus dbus_cplusplus glibmm
-    # pyqt4
-    # python pythonDBus qt4
   ];
 
   patches = [ ./build-fix.patch ];
@@ -76,11 +71,12 @@ stdenv.mkDerivation rec {
       LIBDIR=$out/lib INCLUDEDIR=$out/include install
   '' else ''
     scons PREFIX=$out PYPKGDIR=$PYDIR UDEVDIR=$out/lib/udev/rules.d install
-
+  '' + stdenv.lib.optionalString (optPyqt4 != null && optPythonDBus != null) ''
     wrapProgram $out/bin/ffado-mixer --prefix PYTHONPATH : \
-      $PYTHONPATH:$PYDIR:${pyqt4}/$LIBSUFFIX:${pythonDBus}/$LIBSUFFIX:
+      $PYTHONPATH:$PYDIR:${optPyqt4}/$LIBSUFFIX:${optPythonDBus}/$LIBSUFFIX:
+
     wrapProgram $out/bin/ffado-diag --prefix PYTHONPATH : \
-      $PYTHONPATH:$PYDIR:$out/share/libffado/python:${pyqt4}/$LIBSUFFIX:${pythonDBus}/$LIBSUFFIX:
+      $PYTHONPATH:$PYDIR:$out/share/libffado/python:${optPyqt4}/$LIBSUFFIX:${optPythonDBus}/$LIBSUFFIX:
   '';
 
   meta = with stdenv.lib; {

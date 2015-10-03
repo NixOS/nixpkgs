@@ -61,6 +61,12 @@ by default because it’s not free software.  You can enable it as follows:
 <programlisting>
 services.xserver.videoDrivers = [ "nvidia" ];
 </programlisting>
+Or if you have an older card, you may have to use one of the legacy drivers:
+<programlisting>
+services.xserver.videoDrivers = [ "nvidiaLegacy340" ];
+services.xserver.videoDrivers = [ "nvidiaLegacy304" ];
+services.xserver.videoDrivers = [ "nvidiaLegacy173" ];
+</programlisting>
 You may need to reboot after enabling this driver to prevent a clash
 with other kernel modules.</para>
 

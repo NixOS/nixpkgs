@@ -154,7 +154,13 @@ in
 
   config = mkIf config.services.postgresql.enable {
 
-    services.postgresql.authentication =
+    services.postgresql.package =
+      # Note: when changing the default, make it conditional on
+      # ‘system.stateVersion’ to maintain compatibility with existing
+      # systems!
+      mkDefault pkgs.postgresql94;
+
+    services.postgresql.authentication = mkAfter
       ''
         # Generated file; do not edit!
         local all all              ident ${optionalString pre84 "sameuser"}
@@ -186,8 +192,9 @@ in
         preStart =
           ''
             # Initialise the database.
-            if ! test -e ${cfg.dataDir}; then
+            if ! test -e ${cfg.dataDir}/PG_VERSION; then
                 mkdir -m 0700 -p ${cfg.dataDir}
+                rm -f ${cfg.dataDir}/*.conf
                 if [ "$(id -u)" = 0 ]; then
                   chown -R postgres ${cfg.dataDir}
                   su -s ${pkgs.stdenv.shell} postgres -c 'initdb -U root'
@@ -195,8 +202,6 @@ in
                   # For non-root operation.
                   initdb
                 fi
-                rm -f ${cfg.dataDir}/*.conf
-                touch "${cfg.dataDir}/.first_startup"
             fi
 
             ln -sfn "${configFile}" "${cfg.dataDir}/postgresql.conf"
@@ -208,6 +213,7 @@ in
 
         serviceConfig =
           { ExecStart = "@${postgresql}/bin/postgres postgres ${toString flags}";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             User = "postgres";
             Group = "postgres";
             PermissionsStartOnly = true;

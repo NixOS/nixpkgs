@@ -1,11 +1,11 @@
 { stdenv, fetchurl, xz, zlib, pkgconfig, libxslt }:
 
 stdenv.mkDerivation rec {
-  name = "kmod-20";
+  name = "kmod-21";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kernel/kmod/${name}.tar.xz";
-    sha256 = "186sz8b82n02yykza6a1q8fk80fl5gx0nr42wpmzjc9w36ia3hc9";
+    sha256 = "1h4m1mkknxcshsz1qbg9riszmynix2ikg7q8inq7bkvlmx4982hn";
   };
 
   # Disable xz/zlib support to prevent needing them in the initrd.
@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.kernel.org/pub/linux/utils/kernel/kmod/;
     description = "Tools for loading and managing Linux kernel modules";
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

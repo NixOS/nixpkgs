@@ -57,12 +57,12 @@ in
 
     configureFlags = "--enable-agent";
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "An enterprise-class open source distributed monitoring solution (client-side agent)";
       homepage = http://www.zabbix.com/;
-      license = "GPL";
-      maintainers = [ stdenv.lib.maintainers.eelco ];
-      platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+      license = licenses.gpl2;
+      maintainers = [ maintainers.eelco ];
+      platforms = platforms.linux ++ platforms.darwin;
     };
   };
 

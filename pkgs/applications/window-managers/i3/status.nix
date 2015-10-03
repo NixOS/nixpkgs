@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   installFlags = "PREFIX=\${out}";
 
   meta = {
-    description = "i3 is a tiling window manager";
+    description = "A tiling window manager";
     homepage = http://i3wm.org;
     maintainers = [ stdenv.lib.maintainers.garbas ];
     license = stdenv.lib.licenses.bsd3;

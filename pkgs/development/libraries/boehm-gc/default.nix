@@ -7,6 +7,7 @@ stdenv.mkDerivation rec {
     url = http://www.hboehm.info/gc/gc_source/gc-7.2f.tar.gz;
     sha256 = "119x7p1cqw40mpwj80xfq879l9m1dkc7vbc1f3bz3kvkf8bf6p16";
   };
+  patches = if stdenv.isCygwin then [ ./cygwin.patch ] else null;
 
   outputs = [ "dev" "out" "doc" ];
 

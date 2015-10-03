@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "duply-1.9.1";
+  name = "duply-1.9.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/ftplicity/duply%20%28simple%20duplicity%29/1.9.x/duply_1.9.1.tgz";
-    sha256 = "1igg8nc0i1xn8k1xxmphsg019b1yx8ln86hhqm6f4pd565d1rwg5";
+    url = "mirror://sourceforge/project/ftplicity/duply%20%28simple%20duplicity%29/1.9.x/duply_1.9.2.tgz";
+    sha256 = "1ay50rsr90dcnjncjclzfckqmxxnizmi4jhb5rsybfn0xdj0kz1b";
   };
 
   buildInputs = [ txt2man makeWrapper ];

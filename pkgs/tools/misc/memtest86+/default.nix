@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  NIX_CFLAGS_COMPILE = "-I.";
+  NIX_CFLAGS_COMPILE = "-I. -std=gnu90";
 
   buildFlags = "memtest.bin";
 

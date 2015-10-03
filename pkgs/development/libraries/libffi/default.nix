@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, dejagnu }:
+{ fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "libffi-3.2.1";
@@ -8,16 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "0dya49bnhianl0r65m65xndz6ls2jn1xngyn72gd28ls3n7bnvnh";
   };
 
-  outputs = [ "dev" "out" "doc" ];
+  patches = if stdenv.isCygwin then [ ./3.2.1-cygwin.patch ] else null;
 
-  buildInputs = stdenv.lib.optional doCheck dejagnu;
+  outputs = [ "dev" "out" "doc" ];
 
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
     "--enable-pax_emutramp"
   ];
-
-  doCheck = stdenv.isLinux; # until we solve dejagnu problems on darwin and expect on BSD
 
   dontStrip = stdenv ? cross; # Don't run the native `strip' when cross-compiling.
 

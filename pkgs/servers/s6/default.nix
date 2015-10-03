@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.1.3.0";
+  version = "2.2.1.0";
 
 in stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/s6";
     rev = "refs/tags/v${version}";
-    sha256 = "0dnwkdxqjv5awdgwxci1spcx1s13y5s9wd8ccskwv1rymvpgn8b3";
+    sha256 = "1g8gr3znxj8lyqpwrmgzh47yb64zldrvvvgpp1m4pb37k5k11bj9";
   };
 
   dontDisableStatic = true;
@@ -38,6 +38,7 @@ in stdenv.mkDerivation rec {
     description = "skarnet.org's small & secure supervision software suite";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
+    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
   };
 
 }

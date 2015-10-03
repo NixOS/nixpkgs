@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Curses-based interface for MPD (music player daemon)";
     homepage    = http://www.musicpd.org/clients/ncmpc/;
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ _1126 ];
+    maintainers = with maintainers; [ hiberno ];
     platforms   = platforms.all;
   };
 }

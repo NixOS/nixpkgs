@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
-let version = "3.83"; in
+let version = "4.02"; in
 stdenv.mkDerivation rec {
   name = "man-pages-${version}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/docs/man-pages/${name}.tar.xz";
-    sha256 = "1wksxxfvn8avfl01qk0i61zzgkkay29lpmbfal26a542yahydz3j";
+    sha256 = "1lqdzw6n3rqhd097lk5w16jcjhwfqs5zvi42hsbk3p92smswpaj8";
   };
 
   makeFlags = "MANDIR=$(out)/share/man";

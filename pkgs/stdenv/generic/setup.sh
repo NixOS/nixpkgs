@@ -19,7 +19,7 @@ runHook() {
     if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
     eval "local -a dummy=(\"\${$var[@]}\")"
     for hook in "_callImplicitHook 0 $hookName" "${dummy[@]}"; do
-        if ! _eval "$hook" "$@"; then return 1; fi
+        _eval "$hook" "$@"
     done
     return 0
 }
@@ -73,6 +73,35 @@ _eval() {
 
 
 ######################################################################
+# Logging.
+
+nestingLevel=0
+
+startNest() {
+    nestingLevel=$(($nestingLevel + 1))
+    echo -en "\033[$1p"
+}
+
+stopNest() {
+    nestingLevel=$(($nestingLevel - 1))
+    echo -en "\033[q"
+}
+
+header() {
+    startNest "$2"
+    echo "$1"
+}
+
+# Make sure that even when we exit abnormally, the original nesting
+# level is properly restored.
+closeNest() {
+    while [ $nestingLevel -gt 0 ]; do
+        stopNest
+    done
+}
+
+
+######################################################################
 # Error handling.
 
 exitHandler() {
@@ -97,7 +126,7 @@ exitHandler() {
 
         # If the builder had a non-zero exit code and
         # $succeedOnFailure is set, create the file
-        # `$out/nix-support/failed' to signal failure, and exit
+        # ‘$out/nix-support/failed’ to signal failure, and exit
         # normally.  Otherwise, return the original exit code.
         if [ -n "$succeedOnFailure" ]; then
             echo "build failed with exit code $exitCode (ignored)"
@@ -202,7 +231,7 @@ runHook addInputsHook
 
 # Recursively find all build inputs.
 findInputs() {
-    local pkg=$1
+    local pkg="$1"
     local var=$2
     local propagatedBuildInputsFile=$3
 
@@ -214,17 +243,22 @@ findInputs() {
 
     eval $var="'${!var} $pkg '"
 
-    if [ -f $pkg ]; then
-        source $pkg
+    if ! [ -e "$pkg" ]; then
+        echo "build input $pkg does not exist" >&2
+        exit 1
     fi
 
-    if [ -f $pkg/nix-support/setup-hook ]; then
-        source $pkg/nix-support/setup-hook
+    if [ -f "$pkg" ]; then
+        source "$pkg"
     fi
 
-    if [ -f $pkg/nix-support/$propagatedBuildInputsFile ]; then
-        for i in $(cat $pkg/nix-support/$propagatedBuildInputsFile); do
-            findInputs $i $var $propagatedBuildInputsFile
+    if [ -f "$pkg/nix-support/setup-hook" ]; then
+        source "$pkg/nix-support/setup-hook"
+    fi
+
+    if [ -f "$pkg/nix-support/$propagatedBuildInputsFile" ]; then
+        for i in $(cat "$pkg/nix-support/$propagatedBuildInputsFile"); do
+            findInputs "$i" $var $propagatedBuildInputsFile
         done
     fi
 }
@@ -407,32 +441,6 @@ substituteAllInPlace() {
 
 ######################################################################
 # What follows is the generic builder.
-
-
-nestingLevel=0
-
-startNest() {
-    nestingLevel=$(($nestingLevel + 1))
-    echo -en "\033[$1p"
-}
-
-stopNest() {
-    nestingLevel=$(($nestingLevel - 1))
-    echo -en "\033[q"
-}
-
-header() {
-    startNest "$2"
-    echo "$1"
-}
-
-# Make sure that even when we exit abnormally, the original nesting
-# level is properly restored.
-closeNest() {
-    while [ $nestingLevel -gt 0 ]; do
-        stopNest
-    done
-}
 
 
 # This function is useful for debugging broken Nix builds.  It dumps

@@ -7,19 +7,9 @@
 with lib;
 
 {
-  options = {
-    ec2.metadata = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to allow access to EC2 metadata.
-      '';
-    };
-  };
-
   config = {
 
-    systemd.services."fetch-ec2-data" =
+    systemd.services.fetch-ec2-data =
       { description = "Fetch EC2 Data";
 
         wantedBy = [ "multi-user.target" "sshd.service" ];
@@ -31,12 +21,10 @@ with lib;
 
         script =
           ''
-            ip route del blackhole 169.254.169.254/32 || true
-
             wget="wget -q --retry-connrefused -O -"
 
-            echo "setting host name..."
             ${optionalString (config.networking.hostName == "") ''
+              echo "setting host name..."
               ${pkgs.nettools}/bin/hostname $($wget http://169.254.169.254/1.0/meta-data/hostname)
             ''}
 
@@ -47,10 +35,8 @@ with lib;
                 mkdir -m 0700 -p /root/.ssh
                 $wget http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key > /root/key.pub
                 if [ $? -eq 0 -a -e /root/key.pub ]; then
-                    if ! grep -q -f /root/key.pub /root/.ssh/authorized_keys; then
-                        cat /root/key.pub >> /root/.ssh/authorized_keys
-                        echo "new key added to authorized_keys"
-                    fi
+                    cat /root/key.pub >> /root/.ssh/authorized_keys
+                    echo "new key added to authorized_keys"
                     chmod 600 /root/.ssh/authorized_keys
                     rm -f /root/key.pub
                 fi
@@ -60,19 +46,22 @@ with lib;
             # the supplied user data, if available.  Otherwise sshd will
             # generate one normally.
             $wget http://169.254.169.254/2011-01-01/user-data > /root/user-data || true
+
+            mkdir -m 0755 -p /etc/ssh
+
             key="$(sed 's/|/\n/g; s/SSH_HOST_DSA_KEY://; t; d' /root/user-data)"
             key_pub="$(sed 's/SSH_HOST_DSA_KEY_PUB://; t; d' /root/user-data)"
             if [ -n "$key" -a -n "$key_pub" -a ! -e /etc/ssh/ssh_host_dsa_key ]; then
-                mkdir -m 0755 -p /etc/ssh
                 (umask 077; echo "$key" > /etc/ssh/ssh_host_dsa_key)
                 echo "$key_pub" > /etc/ssh/ssh_host_dsa_key.pub
             fi
 
-            ${optionalString (! config.ec2.metadata) ''
-            # Since the user data is sensitive, prevent it from being
-            # accessed from now on.
-            ip route add blackhole 169.254.169.254/32
-            ''}
+            key="$(sed 's/|/\n/g; s/SSH_HOST_ED25519_KEY://; t; d' /root/user-data)"
+            key_pub="$(sed 's/SSH_HOST_ED25519_KEY_PUB://; t; d' /root/user-data)"
+            if [ -n "$key" -a -n "$key_pub" -a ! -e /etc/ssh/ssh_host_ed25519_key ]; then
+                (umask 077; echo "$key" > /etc/ssh/ssh_host_ed25519_key)
+                echo "$key_pub" > /etc/ssh/ssh_host_ed25519_key.pub
+            fi
           '';
 
         serviceConfig.Type = "oneshot";
@@ -89,7 +78,9 @@ with lib;
             # can obtain it securely by parsing the output of
             # ec2-get-console-output.
             echo "-----BEGIN SSH HOST KEY FINGERPRINTS-----" > /dev/console
-            ${pkgs.openssh}/bin/ssh-keygen -l -f /etc/ssh/ssh_host_dsa_key.pub > /dev/console
+            for i in /etc/ssh/ssh_host_*_key.pub; do
+                ${config.programs.ssh.package}/bin/ssh-keygen -l -f $i > /dev/console
+            done
             echo "-----END SSH HOST KEY FINGERPRINTS-----" > /dev/console
           '';
         serviceConfig.Type = "oneshot";

@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xlibs
-, gdk_pixbuf, libintlOrEmpty, x11
+{ stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xorg
+, gdk_pixbuf, libintlOrEmpty, xlibsWrapper
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? true, cups ? null
 }:
 
-assert xineramaSupport -> xlibs.libXinerama != null;
+assert xineramaSupport -> xorg.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 stdenv.mkDerivation rec {
-  name = "gtk+-2.24.27";
+  name = "gtk+-2.24.28";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/2.24/${name}.tar.xz";
-    sha256 = "1x14rnjvqslpa1q19fp1qalz5sxds72amsgjk8m7769rwk511jr0";
+    sha256 = "0mj6xn40py9r9lvzg633fal81xfwfm89d9mvz7jk4lmwk0g49imj";
   };
 
   outputs = [ "dev" "out" "doc" ];
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ setupHook perl pkgconfig gettext ];
 
-  propagatedBuildInputs = with xlibs; with stdenv.lib;
+  propagatedBuildInputs = with xorg; with stdenv.lib;
     [ glib cairo pango gdk_pixbuf atk ]
     ++ optionals (stdenv.isLinux || stdenv.isDarwin) [
          libXrandr libXrender libXcomposite libXi libXcursor
        ]
-    ++ optionals stdenv.isDarwin [ x11 libXdamage ]
+    ++ optionals stdenv.isDarwin [ xlibsWrapper libXdamage ]
     ++ libintlOrEmpty
     ++ optional xineramaSupport libXinerama
     ++ optionals cupsSupport [ cups ];

@@ -50,14 +50,14 @@ in {
 
       port = mkOption {
         default = 8080;
-        type = types.uniq types.int;
+        type = types.int;
         description = ''
           Specifies port number on which the jenkins HTTP interface listens. The default is 8080.
         '';
       };
 
       packages = mkOption {
-        default = [ pkgs.stdenv pkgs.git pkgs.jdk pkgs.openssh pkgs.nix ];
+        default = [ pkgs.stdenv pkgs.git pkgs.jdk config.programs.ssh.package pkgs.nix ];
         type = types.listOf types.package;
         description = ''
           Packages to add to PATH for the jenkins process.

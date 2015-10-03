@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, cmake, qt4, qscintilla }:
+{ stdenv, fetchFromGitHub, cmake, qt4, qscintilla }:
 
 stdenv.mkDerivation rec {
-  name = "sqliteman";
-  version = "1.2.0-c41b89e1";
+  name = "sqliteman-${version}";
+  version = "1.2.0";
 
-  src = fetchurl {
-    url = https://github.com/pvanek/sqliteman/archive/1.2.0.tar.gz;
-    sha256 = "1x4ppwf01jdnz3a4ycia6vv5qf3w2smbqx690z1pnkwbvk337akm";
+  src = fetchFromGitHub {
+    repo = "sqliteman";
+    owner = "pvanek";
+    rev = version;
+    sha256 = "1blzyh1646955d580f71slgdvz0nqx0qacryx0jc9w02yrag17cs";
   };
 
   buildInputs = [ cmake qt4 qscintilla ];

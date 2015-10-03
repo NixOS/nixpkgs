@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libX11, libXpm, libXext, xextproto, byacc }:
 
 stdenv.mkDerivation {
-  name = "micropolis";
+  name = "micropolis-2010-12-18"; # version from the patch timestamp
 
   src = fetchurl {
     url = http://www.donhopkins.com/home/micropolis/micropolis-activity-source.tgz;
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   patches =
     [ (fetchurl {
         url = http://rmdir.de/~michael/micropolis_git.patch;
-        sha256 = "13419a4394242cd11d5cabd8b1b50787282ea16b55fdcfbeadf8505af46b0592";
+        sha256 = "0sjl61av7lab3a5vif1jpyicmdb2igvqq6nwaw0s3agg6dh69v1d";
       })
     ];
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
       chmod 755 $out/bin/micropolis
     '';
 
-  meta = { 
+  meta = {
     description = "GPL'ed version of S*m C*ty";
     homepage = http://www.donhopkins.com/home/micropolis/;
     license = "GPL";

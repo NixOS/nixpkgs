@@ -1,5 +1,8 @@
 { stdenv, fetchurl }:
 
+let
+  inherit (stdenv.lib) optional;
+in
 stdenv.mkDerivation rec{
   name = "iniparser-3.1";
 
@@ -10,12 +13,11 @@ stdenv.mkDerivation rec{
 
   patches = ./no-usr.patch;
 
-  buildFlags = "libiniparser.so";
+  # TODO: Build dylib on Darwin
+  buildFlags = (if stdenv.isDarwin then [ "libiniparser.a" ] else [ "libiniparser.so" ]) ++ [ "CC=cc" ];
 
   installPhase = ''
     mkdir -p $out/lib
-    cp libiniparser.so.0 $out/lib
-    ln -s libiniparser.so.0 $out/lib/libiniparser.so
 
     mkdir -p $out/include
     cp src/*.h $out/include
@@ -25,7 +27,13 @@ stdenv.mkDerivation rec{
       bzip2 -c -9 $i > $out/share/doc/${name}/$i.bz2;
     done;
     cp -r html $out/share/doc/${name}
-  '';
+
+  '' + (if stdenv.isDarwin then ''
+    cp libiniparser.a $out/lib
+  '' else ''
+    cp libiniparser.so.0 $out/lib
+    ln -s libiniparser.so.0 $out/lib/libiniparser.so
+  '');
 
   meta = {
     homepage = http://ndevilla.free.fr/iniparser;

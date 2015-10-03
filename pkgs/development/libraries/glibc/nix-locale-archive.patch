@@ -6,7 +6,7 @@ diff -ru glibc-2.16.0-orig/locale/loadarchive.c glibc-2.16.0/locale/loadarchive.
  
  
 +static int
-+open_locale_archive ()
++open_locale_archive (void)
 +{
 +  int fd = -1;
 +  char *path = getenv ("LOCALE_ARCHIVE_2_11");

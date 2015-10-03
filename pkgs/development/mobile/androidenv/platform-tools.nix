@@ -1,7 +1,7 @@
 {stdenv, stdenv_32bit, fetchurl, unzip}:
 
 let
-  version = "21";
+  version = "22";
 
 in
 
@@ -10,11 +10,11 @@ stdenv.mkDerivation {
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
       url = "https://dl-ssl.google.com/android/repository/platform-tools_r${version}-linux.zip";
-      sha256 = "35a1762b355451e000a816d97d9af640ca99ae6c5b5b406a3e680210af8106ad";
+      sha256 = "1kbp5fzfdas6c431n53a9w0z0182ihhadd1h8a64m1alkw0swr41";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
       url = "https://dl-ssl.google.com/android/repository/platform-tools_r${version}-macosx.zip";
-      sha256 = "30ae8724da3db772a776d616b4746516f24ae81330e84315a7ce0c49e0b0b3cb";
+      sha256 = "0r359xxicn7zw9z0jbrmsppx1372fijg09ck907gg8x1cvzj2ry0";
     }
     else throw "System ${stdenv.system} not supported!";
 

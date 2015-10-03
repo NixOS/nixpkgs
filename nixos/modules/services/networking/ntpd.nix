@@ -6,6 +6,8 @@ let
 
   inherit (pkgs) ntp;
 
+  cfg = config.services.ntp;
+
   stateDir = "/var/lib/ntp";
 
   ntpUser = "ntp";
@@ -16,10 +18,10 @@ let
     restrict 127.0.0.1
     restrict -6 ::1
 
-    ${toString (map (server: "server " + server + " iburst\n") config.services.ntp.servers)}
+    ${toString (map (server: "server " + server + " iburst\n") cfg.servers)}
   '';
 
-  ntpFlags = "-c ${configFile} -u ${ntpUser}:nogroup";
+  ntpFlags = "-c ${configFile} -u ${ntpUser}:nogroup ${toString cfg.extraFlags}";
 
 in
 
@@ -49,6 +51,12 @@ in
         description = ''
           The set of NTP servers from which to synchronise.
         '';
+      };
+
+      extraFlags = mkOption {
+        type = types.listOf types.str;
+        description = "Extra flags passed to the ntpd command.";
+        default = [];
       };
 
     };

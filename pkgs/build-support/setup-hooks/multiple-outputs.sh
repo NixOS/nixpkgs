@@ -96,10 +96,13 @@ _multioutDocs() {
     _moveToOutput share/man "${!outputMan}"
     _moveToOutput share/info "${!outputInfo}"
     _moveToOutput share/doc "${!outputDoc}"
+    # outputs TODO: perhaps have outputDevDoc for developer docs
+    # and maybe allow _moveToOutput move to "/dev/trash" or similar
+    _moveToOutput share/gtk-doc "${!outputDoc}"
 
     # Remove empty share directory.
     if [ -d "$out/share" ]; then
-        rmdir "$out/share" 2> /dev/null || true
+        rmdir "$out/share" --ignore-fail-on-non-empty
     fi
 }
 

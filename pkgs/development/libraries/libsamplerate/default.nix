@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "01hw5xjbjavh412y63brcslj5hi9wdgkjd3h9csx5rnm8vglpdck";
   };
 
-  buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ libsndfile ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libsndfile ];
 
   # maybe interesting configure flags:
   #--disable-fftw          disable usage of FFTW
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     # GPL or a commercial-use license (available at
     # http://www.mega-nerd.com/SRC/libsamplerate-cul.pdf)
     licenses    = with licenses; [ gpl3.shortName unfree ];
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [ lovek323 wkennington ];
     platforms   = platforms.all;
   };
 }

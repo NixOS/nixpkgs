@@ -1,44 +1,42 @@
-{ fetchurl, stdenv, libgpgerror }:
+{ lib, stdenv, fetchurl, libgpgerror, enableCapabilities ? false, libcap }:
 
-stdenv.mkDerivation (rec {
-  name = "libgcrypt-1.5.4";
+assert enableCapabilities -> stdenv.isLinux;
+
+stdenv.mkDerivation rec {
+  name = "libgcrypt-1.6.4";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha256 = "d5f88d9f41a46953dc250cdb8575129b37ee2208401b7fa338c897f667c7fb33";
+    sha256 = "09k06gs27gxfha07sa9rpf4xh6mvphj9sky7n09ymx75w9zjrg69";
   };
 
-  propagatedBuildInputs = [ libgpgerror ];
+  buildInputs =
+    [ libgpgerror ]
+    ++ lib.optional enableCapabilities libcap;
 
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-asm";
-
-  doCheck = stdenv.system != "i686-linux"; # "basic" test fails after stdenv+glibc-2.18
-
-  # For some reason the tests don't find `libgpg-error.so'.
-  checkPhase = ''
-    LD_LIBRARY_PATH="${libgpgerror}/lib:$LD_LIBRARY_PATH" \
-    make check
+  # Make sure libraries are correct for .pc and .la files
+  # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
+  postInstall = ''
+    sed -i 's,#include <gpg-error.h>,#include "${libgpgerror}/include/gpg-error.h",g' $out/include/gcrypt.h
+  '' + stdenv.lib.optionalString enableCapabilities ''
+    sed -i 's,\(-lcap\),-L${libcap}/lib \1,' $out/lib/libgcrypt.la
   '';
 
-  patches = [ ./no-build-timestamp.patch ];
+  # TODO: figure out why this is even necessary and why the missing dylib only crashes
+  # random instead of every test
+  preCheck = stdenv.lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/lib
+    cp src/.libs/libgcrypt.20.dylib $out/lib
+  '';
+
+  doCheck = true;
 
   meta = {
+    homepage = https://www.gnu.org/software/libgcrypt/;
     description = "General-pupose cryptographic library";
-
-    longDescription = ''
-      GNU Libgcrypt is a general purpose cryptographic library based on
-      the code from GnuPG.  It provides functions for all
-      cryptographic building blocks: symmetric ciphers, hash
-      algorithms, MACs, public key algorithms, large integer
-      functions, random numbers and a lot of supporting functions.
-    '';
-
-    license = stdenv.lib.licenses.lgpl2Plus;
-
-    homepage = http://gnupg.org/;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.wkennington ];
+    repositories.git = git://git.gnupg.org/libgcrypt.git;
   };
-} # old "as" problem, see #616 and http://gnupg.10057.n7.nabble.com/Fail-to-build-on-freebsd-7-3-td30245.html
-  // stdenv.lib.optionalAttrs (stdenv.isFreeBSD && stdenv.isi686)
-    { configureFlags = [ "--disable-aesni-support" ]; }
-)
+}

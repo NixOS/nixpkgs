@@ -1,13 +1,16 @@
 { stdenv, fetchurl, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt, expat
 , gd, geoip, luajit
+, curl, apr, aprutil, apacheHttpd, yajl, libcap, modsecurity_standalone
 , rtmp ? false
 , fullWebDAV ? false
 , syslog ? false
 , moreheaders ? false
 , echo ? false
-, ngx_lua ? false
+, modsecurity ? false
+, ngx_lua ? modsecurity || false
 , set_misc ? false
 , fluent ? false
+, extraModules ? []
 }:
 
 with stdenv.lib;
@@ -47,6 +50,8 @@ let
     sha256 = "01wkqhk8mk8jgmzi7jbzmg5kamffx3lmhj5yfwryvnvs6xqs74wn";
   };
 
+  modsecurity-ext = modsecurity_standalone.nginx;
+
   echo-ext = fetchFromGitHub {
     owner = "openresty";
     repo = "echo-nginx-module";
@@ -57,8 +62,8 @@ let
   lua-ext = fetchFromGitHub {
     owner = "openresty";
     repo = "lua-nginx-module";
-    rev = "v0.9.15";
-    sha256 = "0kicfs0gyfb5fhjmrwr6p09c5x6g0jwsh0wg5bsp3p209rnbq94q";
+    rev = "v0.9.16";
+    sha256 = "0dvdam228jhsrayb22ishljdkgib08bakh8ygn84sq0c2xbidzlp";
   };
 
   set-misc-ext = fetchFromGitHub {
@@ -92,7 +97,8 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ openssl zlib pcre libxml2 libxslt gd geoip
     ] ++ optional fullWebDAV expat
-      ++ optional ngx_lua luajit;
+      ++ optional ngx_lua luajit
+      ++ optionals modsecurity [ curl apr aprutil apacheHttpd yajl ];
 
   LUAJIT_LIB = if ngx_lua then "${luajit}/lib" else "";
   LUAJIT_INC = if ngx_lua then "${luajit}/include/luajit-2.0" else "";
@@ -102,9 +108,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-select_module"
     "--with-poll_module"
-    "--with-aio_module"
     "--with-threads"
-    "--with-file-aio"
     "--with-http_ssl_module"
     "--with-http_spdy_module"
     "--with-http_realip_module"
@@ -133,11 +137,16 @@ stdenv.mkDerivation rec {
     ++ optional echo "--add-module=${echo-ext}"
     ++ optional ngx_lua "--add-module=${develkit-ext} --add-module=${lua-ext}"
     ++ optional set_misc "--add-module=${set-misc-ext}"
-    ++ optional (elem stdenv.system (with platforms; linux ++ freebsd)) "--with-file-aio"
-    ++ optional fluent "--add-module=${fluentd}";
+    ++ optionals (elem stdenv.system (with platforms; linux ++ freebsd))
+        [ "--with-file-aio" "--with-aio_module" ]
+    ++ optional fluent "--add-module=${fluentd}"
+    ++ optional modsecurity "--add-module=${modsecurity-ext}/nginx/modsecurity"
+    ++ (map (m: "--add-module=${m}") extraModules);
 
 
   additionalFlags = optionalString stdenv.isDarwin "-Wno-error=deprecated-declarations -Wno-error=conditional-uninitialized";
+
+  NIX_CFLAGS_COMPILE = optionalString modsecurity "-I${aprutil}/include/apr-1 -I${apacheHttpd}/include -I${apr}/include/apr-1 -I${yajl}/include";
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2}/include/libxml2 $additionalFlags"

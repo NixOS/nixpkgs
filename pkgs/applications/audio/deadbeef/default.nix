@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig
+{ stdenv, fetchurl, intltool, pkgconfig, fetchpatch
 # deadbeef can use either gtk2 or gtk3
 , gtk2Support ? true, gtk2 ? null
 , gtk3Support ? false, gtk3 ? null, gsettings_desktop_schemas ? null, makeWrapper ? null
@@ -18,7 +18,7 @@
 , osdSupport ? true, dbus ? null
 # output plugins
 , alsaSupport ? true, alsaLib ? null
-, pulseSupport ? true, pulseaudio ? null
+, pulseSupport ? true, libpulseaudio ? null
 # effect plugins
 , resamplerSupport ? true, libsamplerate ? null
 , overloadSupport ? true, zlib ? null
@@ -41,7 +41,7 @@ assert artworkSupport -> imlib2 != null;
 assert hotkeysSupport -> libX11 != null;
 assert osdSupport -> dbus != null;
 assert alsaSupport -> alsaLib != null;
-assert pulseSupport -> pulseaudio != null;
+assert pulseSupport -> libpulseaudio != null;
 assert resamplerSupport -> libsamplerate != null;
 assert overloadSupport -> zlib != null;
 assert wavpackSupport -> wavpack != null;
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   name = "deadbeef-0.6.2";
 
   src = fetchurl {
-    url = "http://garr.dl.sourceforge.net/project/deadbeef/${name}.tar.bz2";
+    url = "mirror://sourceforge/project/deadbeef/${name}.tar.bz2";
     sha256 = "06jfsqyakpvq0xhah7dlyvdzh5ym3hhb4yfczczw11ijd1kbjcrl";
   };
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     ++ optional hotkeysSupport libX11
     ++ optional osdSupport dbus
     ++ optional alsaSupport alsaLib
-    ++ optional pulseSupport pulseaudio
+    ++ optional pulseSupport libpulseaudio
     ++ optional resamplerSupport libsamplerate
     ++ optional overloadSupport zlib
     ++ optional wavpackSupport wavpack
@@ -81,6 +81,12 @@ stdenv.mkDerivation rec {
     ++ optional gtk3Support makeWrapper;
 
   enableParallelBuilding = true;
+
+  patches = [ (fetchpatch {
+                url = "https://github.com/Alexey-Yakovenko/deadbeef/commit/e7725ea73fa1bd279a3651704870156bca8efea8.patch";
+                sha256 = "1530w968zyvcm9c8k57889n125k7a1kk3ydinjm398n07gypd599";
+              })
+            ];
 
   postInstall = if !gtk3Support then "" else ''
     wrapProgram "$out/bin/deadbeef" \

@@ -28,7 +28,7 @@ let
   result = {
     libav_0_8 = libavFun "0.8.17" "31ace2daeb8c105deed9cd3476df47318d417714";
     libav_9   = libavFun   "9.18" "e10cde4587c4d4d3bb11d30c7b47e953664cd714";
-    libav_11  = libavFun  "11.3"  "d9d4fd0ffeda7a244b31968c01d72f0042a56f7a";
+    libav_11  = libavFun  "11.4"  "c2ab12102de187f2675a56b828b4a5e9136ab747";
   };
 
   libavFun = version : sha1 : stdenv.mkDerivation rec {

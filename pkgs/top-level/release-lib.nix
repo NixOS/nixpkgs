@@ -1,4 +1,4 @@
-{ supportedSystems, packageSet ? (import ./all-packages.nix) }:
+{ supportedSystems, packageSet ? (import ./all-packages.nix), allowTexliveBuilds ? false }:
 
 with import ../../lib;
 
@@ -7,6 +7,8 @@ rec {
   # Ensure that we don't build packages marked as unfree.
   allPackages = args: packageSet (args // {
     config.allowUnfree = false;
+    config.allowTexliveBuilds = allowTexliveBuilds;
+    config.inHydra = true;
   });
 
   pkgs = pkgsFor "x86_64-linux";
@@ -22,6 +24,7 @@ rec {
     else if system == "x86_64-freebsd" then pkgs_x86_64_freebsd
     else if system == "i686-freebsd" then pkgs_i686_freebsd
     else if system == "i686-cygwin" then pkgs_i686_cygwin
+    else if system == "x86_64-cygwin" then pkgs_x86_64_cygwin
     else abort "unsupported system type: ${system}";
 
   pkgs_x86_64_linux = allPackages { system = "x86_64-linux"; };
@@ -30,6 +33,7 @@ rec {
   pkgs_x86_64_freebsd = allPackages { system = "x86_64-freebsd"; };
   pkgs_i686_freebsd = allPackages { system = "i686-freebsd"; };
   pkgs_i686_cygwin = allPackages { system = "i686-cygwin"; };
+  pkgs_x86_64_cygwin = allPackages { system = "x86_64-cygwin"; };
 
 
   /* The working or failing mails for cross builds will be sent only to

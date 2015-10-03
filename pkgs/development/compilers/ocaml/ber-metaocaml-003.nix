@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, x11 }:
+{ stdenv, fetchurl, ncurses, xlibsWrapper }:
 
 let
    useX11 = stdenv.isi686 || stdenv.isx86_64;
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
   patches = optionals stdenv.isDarwin [ ./gnused-on-osx-fix.patch ];
 
   prefixKey = "-prefix ";
-  configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" x11 ];
+  configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" xlibsWrapper ];
   buildFlags = "core coreboot all"; # "world" + optionalString useNativeCompilers " bootstrap world.opt";
-  buildInputs = [ncurses] ++ optionals useX11 [ x11 ];
+  buildInputs = [ncurses] ++ optionals useX11 [ xlibsWrapper ];
   installFlags = "-i";
   installTargets = "install"; # + optionalString useNativeCompilers " installopt";
   prePatch = ''
@@ -55,9 +55,16 @@ stdenv.mkDerivation rec {
     cd ..
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://okmij.org/ftp/ML/index.html#ber-metaocaml";
-    license = [ "QPL" /* compiler */ "LGPLv2" /* library */ ];
-    description = "A conservative extension of OCaml with the primitive type of code values, and three basic multi-stage expression forms: Brackets, Escape, and Run";
+    license = with licenses; [
+      qpl /* compiler */
+      lgpl2 /* library */
+    ];
+    description = "Conservative extension of OCaml";
+    longDescription = ''
+      A conservative extension of OCaml with the primitive type of code values,
+      and three basic multi-stage expression forms: Brackets, Escape, and Run
+    '';
   };
 }

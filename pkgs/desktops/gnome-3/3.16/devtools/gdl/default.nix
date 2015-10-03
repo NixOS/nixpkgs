@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.gnome.org/sources/gdl/${major}/${name}.tar.xz";
-    sha256 = "4b903c28a8894a82b997a1732a443c8b1d6a510304b3c3b511023339ff5d01db";
+    sha256 = "107zwvs913jr5hb59a4a8hsk19yinsicr2ma4vm216nzyl2f3jrl";
   };
 
   buildInputs = [ pkgconfig libxml2 gtk3 intltool ];
@@ -18,7 +18,8 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Gnome docking library";
     homepage = https://developer.gnome.org/gdl/;
-    license = [ licenses.gpl2 ];
+    maintainers = gnome3.maintainers;
+    license = licenses.gpl2;
     platforms = platforms.linux;
   };
 }

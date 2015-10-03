@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, dbus, zlib, openssl, readline, perl }:
+{ stdenv, gcc46, fetchurl, qt4, dbus, zlib, openssl, readline, perl }:
 
 stdenv.mkDerivation {
   name = "wvstreams-4.6.1";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     sed -e '1i#include <unistd.h>' -i $(find . -name '*.c' -o -name '*.cc')
   '';
 
-  buildInputs = [ qt4 dbus zlib openssl readline perl ];
+  buildInputs = [ gcc46 qt4 dbus zlib openssl readline perl ];
 
   meta = {
     description = "Network programming library in C++";

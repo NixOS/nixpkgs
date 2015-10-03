@@ -20,13 +20,19 @@ rec {
     }:
     runCommand name
       { inherit text executable;
+        passAsFile = [ "text" ];
         # Pointless to do this on a remote machine.
         preferLocalBuild = true;
+        allowSubstitutes = false;
       }
       ''
         n=$out${destination}
         mkdir -p "$(dirname "$n")"
-        echo -n "$text" > "$n"
+        if [ -e "$textPath" ]; then
+          mv "$textPath" "$n"
+        else
+          echo -n "$text" > "$n"
+        fi
         (test -n "$executable" && chmod +x "$n") || true
       '';
 
@@ -83,23 +89,33 @@ rec {
     (lib.concatMapStrings (x: "ln -s '${x.path}' '${x.name}';\n") entries));
 
   # Require file
-  requireFile = {name, sha256, url ? null, message ? null} :
+  requireFile = { name ? null
+                , sha256 ? null
+                , sha1 ? null
+                , url ? null
+                , message ? null
+                } :
     assert (message != null) || (url != null);
+    assert (sha256 != null) || (sha1 != null);
+    assert (name != null) || (url != null);
     let msg =
       if message != null then message
       else ''
-        Unfortunately, we may not download file ${name} automatically.
+        Unfortunately, we may not download file ${name_} automatically.
         Please, go to ${url}, download it yourself, and add it to the Nix store
         using either
-          nix-store --add-fixed sha256 ${name}
+          nix-store --add-fixed ${hashAlgo} ${name_}
         or
-          nix-prefetch-url file://path/to/${name}
+          nix-prefetch-url --type ${hashAlgo} file://path/to/${name_}
       '';
+      hashAlgo = if sha256 != null then "sha256" else "sha1";
+      hash = if sha256 != null then sha256 else sha1;
+      name_ = if name == null then baseNameOf (toString url) else name;
     in
     stdenv.mkDerivation {
-      inherit name;
-      outputHashAlgo = "sha256";
-      outputHash = sha256;
+      name = name_;
+      outputHashAlgo = hashAlgo;
+      outputHash = hash;
       builder = writeScript "restrict-message" ''
 source ${stdenv}/setup
 cat <<_EOF_

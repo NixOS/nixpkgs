@@ -11,10 +11,10 @@ let
   listCtl = domain: list: "${listDir domain list}/control";
   transport = domain: list: "${domain}--${list}@local.list.mlmmj mlmmj:${domain}/${list}";
   virtual = domain: list: "${list}@${domain} ${domain}--${list}@local.list.mlmmj";
-  alias = domain: list: "${list}: \"|${pkgs.mlmmj}/mlmmj-receive -L ${listDir domain list}/\"";
+  alias = domain: list: "${list}: \"|${pkgs.mlmmj}/bin/mlmmj-receive -L ${listDir domain list}/\"";
   subjectPrefix = list: "[${list}]";
   listAddress = domain: list: "${list}@${domain}";
-  customHeaders = list: domain: [ "List-Id: ${list}" "Reply-To: ${list}@${domain}" ];
+  customHeaders = domain: list: [ "List-Id: ${list}" "Reply-To: ${list}@${domain}" ];
   footer = domain: list: "To unsubscribe send a mail to ${list}+unsubscribe@${domain}";
   createList = d: l: ''
     ${pkgs.coreutils}/bin/mkdir -p ${listCtl d l}
@@ -90,14 +90,15 @@ in
       enable = true;
       recipientDelimiter= "+";
       extraMasterConf = ''
-        mlmmj unix - n n - - pipe flags=ORhu user=mlmmj argv=${pkgs.mlmmj}/bin/mlmmj-receive -F -L ${spoolDir}/$nextHop
+        mlmmj unix - n n - - pipe flags=ORhu user=mlmmj argv=${pkgs.mlmmj}/bin/mlmmj-receive -F -L ${spoolDir}/$nexthop
       '';
 
       extraAliases = concatMapStrings (alias cfg.listDomain) cfg.mailLists;
 
       extraConfig = ''
-        transport = hash:${stateDir}/transports
-        virtual = hash:${stateDir}/virtuals
+        transport_maps = hash:${stateDir}/transports
+        virtual_alias_maps = hash:${stateDir}/virtuals
+        propagate_unmatched_extensions = virtual
       '';
     };
 
@@ -108,9 +109,10 @@ in
           ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} ${spoolDir}
           ${lib.concatMapStrings (createList cfg.listDomain) cfg.mailLists}
           echo ${lib.concatMapStrings (virtual cfg.listDomain) cfg.mailLists} > ${stateDir}/virtuals
-          echo ${cfg.listDomain} mailman: > ${stateDir}/transports
-          echo ${lib.concatMapStrings (transport cfg.listDomain) cfg.mailLists} >> ${stateDir}/transports
-    '';
+          echo ${lib.concatMapStrings (transport cfg.listDomain) cfg.mailLists} > ${stateDir}/transports
+          ${pkgs.postfix}/bin/postmap ${stateDir}/virtuals
+          ${pkgs.postfix}/bin/postmap ${stateDir}/transports
+      '';
 
     systemd.services."mlmmj-maintd" = {
       description = "mlmmj maintenance daemon";

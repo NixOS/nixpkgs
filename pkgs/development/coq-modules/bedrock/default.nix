@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     make -j$NIX_BUILD_CORES -C src/reification
     make -j$NIX_BUILD_CORES -C src
+    make -j$NIX_BUILD_CORES -C src native
+    # make -j$NIX_BUILD_CORES -C platform
+    # make -j$NIX_BUILD_CORES -C platform -f Makefile.cito
   '';
 
   installPhase = ''
@@ -28,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://plv.csail.mit.edu/bedrock/;
-    description = "Bedrock is a library that turns Coq into a tool much like classical verification systems";
+    description = "A library that turns Coq into a tool much like classical verification systems";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;
   };

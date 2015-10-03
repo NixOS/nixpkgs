@@ -1,3 +1,6 @@
+# This module is deprecated, since you can just say ‘fonts.fonts = [
+# pkgs.corefonts ];’ instead.
+
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -9,6 +12,7 @@ with lib;
     fonts = {
 
       enableCoreFonts = mkOption {
+        visible = false;
         default = false;
         description = ''
           Whether to include Microsoft's proprietary Core Fonts.  These fonts

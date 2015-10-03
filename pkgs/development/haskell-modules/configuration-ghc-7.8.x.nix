@@ -37,6 +37,9 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # https://github.com/peti/jailbreak-cabal/issues/9
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = dontJailbreak self.Cabal_1_20_0_3; };
+
   # mtl 2.2.x needs the latest transformers.
   mtl_2_2_1 = super.mtl.override { transformers = self.transformers_0_4_3_0; };
 
@@ -48,28 +51,14 @@ self: super: {
   # haddock-api 2.16 requires ghc>=7.10
   haddock-api = super.haddock-api_2_15_0_2;
 
-  # Idris needs special version of some libraries
-  idris = let super1 = super; in overrideCabal (super.idris.overrideScope (self: super: {
-    annotated-wl-pprint = self.annotated-wl-pprint_0_5_3;
-    blaze-html = self.blaze-html_0_7_0_3;
-    blaze-markup = self.blaze-markup_0_6_2_0;
-    lens = self.lens_4_7_0_1;
-  })) (drv: {
-    patchPhase = "find . -name '*.hs' -exec sed -i -s 's|-Werror||' {} +";
-  });                           # warning: "Module ‘Control.Monad.Error’ is deprecated"
-
-  # Depends on time == 0.1.5, which we don't have.
-  HStringTemplate_0_8_3 = dontDistribute super.HStringTemplate_0_8_3;
-
   # This is part of bytestring in our compiler.
-  bytestring-builder = dontHaddock super.bytestring-builder;
+  bytestring-builder = triggerRebuild (dontHaddock super.bytestring-builder) 1;
 
   # Won't compile against mtl 2.1.x.
   imports = super.imports.override { mtl = self.mtl_2_2_1; };
 
   # Newer versions require mtl 2.2.x.
   mtl-prelude = self.mtl-prelude_1_0_3;
-  equivalence = super.equivalence_0_2_5;        # required by Agda
 
   # purescript requires mtl 2.2.x.
   purescript = overrideCabal (super.purescript.overrideScope (self: super: {
@@ -88,13 +77,16 @@ self: super: {
   ghc-exactprint = dontDistribute super.ghc-exactprint;
   ghc-typelits-natnormalise = dontDistribute super.ghc-typelits-natnormalise;
 
+  # Needs directory >= 1.2.2.0.
+  idris = markBroken super.idris;
+
   # Newer versions require transformers 0.4.x.
   seqid = super.seqid_0_1_0;
   seqid-streams = super.seqid-streams_0_1_0;
 
   # Need binary >= 0.7.2, but our compiler has only 0.7.1.0.
-  hosc = super.hosc.overrideScope (self: super: { binary = self.binary_0_7_4_0; });
-  tidal-midi = super.tidal-midi.overrideScope (self: super: { binary = self.binary_0_7_4_0; });
+  hosc = super.hosc.overrideScope (self: super: { binary = self.binary_0_7_6_1; });
+  tidal-midi = super.tidal-midi.overrideScope (self: super: { binary = self.binary_0_7_6_1; });
 
   # These packages need mtl 2.2.x directly or indirectly via dependencies.
   amazonka = markBroken super.amazonka;
@@ -123,13 +115,27 @@ self: super: {
             in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
                                           self.webkitgtk3-javascriptcore ];
 
-  # Fix evaluation in GHC >=7.8: https://github.com/lambdabot/lambdabot/issues/116
-  lambdabot = appendPatch super.lambdabot ./lambdabot-fix-ghc78.patch;
-
   # Needs hashable on pre 7.10.x compilers.
   nats = addBuildDepend super.nats self.hashable;
 
   # needs mtl-compat to build with mtl 2.1.x
   cgi = addBuildDepend super.cgi self.mtl-compat;
+
+  # https://github.com/magthe/sandi/issues/7
+  sandi = overrideCabal super.sandi (drv: {
+    postPatch = "sed -i -e 's|base ==4.8.*,|base,|' sandi.cabal";
+  });
+
+  # Overriding mtl 2.2.x is fine here because ghc-events is an stand-alone executable.
+  ghc-events = super.ghc-events.override { mtl = self.mtl_2_2_1; };
+
+  # The network library is required in configurations that don't have network-uri.
+  hxt = addBuildDepend super.hxt self.network;
+  hxt_9_3_1_7 = addBuildDepend super.hxt_9_3_1_7 self.network;
+  hxt_9_3_1_10 = addBuildDepend super.hxt_9_3_1_10 self.network;
+  hxt_9_3_1_12 = addBuildDepend super.hxt_9_3_1_12 self.network;
+  xss-sanitize = addBuildDepend super.xss-sanitize self.network;
+  xss-sanitize_0_3_5_4 = addBuildDepend super.xss-sanitize_0_3_5_4 self.network;
+  xss-sanitize_0_3_5_5 = addBuildDepend super.xss-sanitize_0_3_5_5 self.network;
 
 }

@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "notmuch-0.19";
+  name = "notmuch-0.20.2";
 
   passthru = {
     pythonSourceRoot = "${name}/bindings/python";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "1szf6c44g209pcjq5nvfhlp3nzcm3lrcwv4spsxmwy13hiaccvrr";
+    sha256 = "1v5dcnlg4km5hfaq0i0qywq5fn66fi0rq4aaibyqkwxz8mis4hgp";
   };
 
   buildInputs = [ bash emacs glib gmime gnupg pkgconfig talloc xapian sphinx python ]
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
     for src in \
       crypto.c \
+      notmuch-config.c \
       emacs/notmuch-crypto.el
     do
       substituteInPlace "$src" \

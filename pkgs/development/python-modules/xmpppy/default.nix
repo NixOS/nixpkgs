@@ -1,8 +1,8 @@
-a :  
-let 
+a @ {python, setuptools, ... } :
+let
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "0.5.0rc1" a; 
+  version = a.lib.attrByPath ["version"] "0.5.0rc1" a;
   buildInputs = with a; [
     python setuptools
   ];
@@ -22,7 +22,7 @@ rec {
     mkdir -p $out/bin $out/lib $out/share $(toPythonPath $out)
     export PYTHONPATH=$PYTHONPATH:$(toPythonPath $out)
   '') ["defEnsureDir" "addInputs"];
-      
+
   name = "xmpp.py-" + version;
   meta = {
     description = "XMPP python library";

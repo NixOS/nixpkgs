@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, automoc4, pulseaudio, qt4 }:
+{ stdenv, fetchurl, cmake, automoc4, libpulseaudio, qt4 }:
 
 with stdenv.lib;
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1l97h1jj3gvl1chx1qbipizfvjgqc05wrhdcflc76c2krlk03jmn";
   };
 
-  buildInputs = [ qt4 pulseaudio ];
+  buildInputs = [ qt4 libpulseaudio ];
 
   nativeBuildInputs = [ cmake automoc4 ];
 

@@ -17,8 +17,12 @@ stdenv.mkDerivation rec {
 
   LD_LIBRARY_PATH = "${expat}/lib"; # ugly hack for xgettext to work during build
 
+  # The config locking scheme relies on the binary being called "tilda",
+  # (`pgrep -C tilda`), so a simple `wrapProgram` won't suffice:
   postInstall = ''
-    wrapProgram "$out/bin/tilda" \
+    mkdir $out/bin/wrapped
+    mv "$out/bin/tilda" "$out/bin/wrapped/tilda"
+    makeWrapper "$out/bin/wrapped/tilda" "$out/bin/tilda" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 

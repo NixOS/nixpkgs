@@ -1,12 +1,12 @@
 { stdenv, fetchurl, cmake, ruby }:
 
 stdenv.mkDerivation rec {
-  name = "yajl-2.0.4";
+  name = "yajl-2.1.0";
 
   src = fetchurl {
-    url = http://github.com/lloyd/yajl/tarball/2.0.4;
+    url = http://github.com/lloyd/yajl/tarball/2.1.0;
     name = "${name}.tar.gz";
-    sha256 = "0661bfi4hfvwg3z2pf51wqbf5qd5kfn0dk83v5s2xwhmry8rd6y1";
+    sha256 = "0f6yrjc05aa26wfi7lqn2gslm19m6rm81b30ksllpkappvh162ji";
   };
 
   buildInputs = [ cmake ruby ];

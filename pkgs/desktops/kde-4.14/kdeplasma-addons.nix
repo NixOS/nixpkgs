@@ -1,7 +1,7 @@
 { kde, kdelibs, marble, shared_desktop_ontologies, pkgconfig
 , boost, eigen2, kde_workspace, attica, qca2, qimageblitz
 , kdepimlibs, libkexiv2, libqalculate, libXtst, libdbusmenu_qt
-, qjson, qoauth }:
+, qjson, qoauth, shared_mime_info }:
 
 kde {
 
@@ -14,7 +14,7 @@ kde {
                   shared_desktop_ontologies marble libkexiv2 libdbusmenu_qt
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ shared_mime_info ];
 
   meta = {
     description = "KDE Plasma Addons";

@@ -1,7 +1,7 @@
 { stdenv, fetchgit, autoreconfHook, pkgconfig, libfprint, gtk2 }:
 
 stdenv.mkDerivation rec {
-  name = "fprint_demo";
+  name = "fprint_demo-2008-03-03";
 
   src = fetchgit {
     url = "git://github.com/dsd/fprint_demo";

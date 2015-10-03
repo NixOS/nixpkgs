@@ -5,11 +5,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "mariadb-${version}";
-  version = "10.0.17";
+  version = "10.0.21";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/interstitial/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "04ckq67qgkghh7yzrbzwidk7wn7yjml15gzj2c5p1hs2k7lr9lww";
+    sha256 = "0i9mzbn35f4lj4y1lqzgbavh5xyx18zfn0ks0nqzvppabkhk56jb";
   };
 
   buildInputs = [ cmake ncurses openssl zlib pcre libxml2 boost judy bison libevent ]
@@ -49,11 +49,13 @@ stdenv.mkDerivation rec {
     "-DWITH_PARTITION_STORAGE_ENGINE=1"
     "-DWITHOUT_EXAMPLE_STORAGE_ENGINE=1"
     "-DWITHOUT_FEDERATED_STORAGE_ENGINE=1"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "-DWITHOUT_OQGRAPH_STORAGE_ENGINE=1";
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "-DWITHOUT_OQGRAPH_STORAGE_ENGINE=1"
+    "-DWITHOUT_TOKUDB=1"
+  ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
-
-  enableParallelBuilding = true;
+  # fails to find lex_token.h sometimes
+  enableParallelBuilding = false;
 
   outputs = [ "out" "lib" ];
   setOutputFlags = false;
@@ -105,6 +107,9 @@ stdenv.mkDerivation rec {
     # Make sure to propagate lib for compatability
     mkdir -p $out/nix-support
     echo "$lib" > $out/nix-support/propagated-native-build-inputs
+
+    # Don't install static libraries.
+    rm $lib/lib/libmysqlclient.a $lib/lib/libmysqld.a
   '';
 
   passthru.mysqlVersion = "5.6";
@@ -113,7 +118,7 @@ stdenv.mkDerivation rec {
     description = "An enhanced, drop-in replacement for MySQL";
     homepage    = https://mariadb.org/;
     license     = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ shlevy thoughtpolice wkennington ];
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice wkennington ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

@@ -1,23 +1,32 @@
 { stdenv, fetchurl, libiconv, xz }:
 
 stdenv.mkDerivation (rec {
-  name = "gettext-0.19.4";
+  name = "gettext-0.19.6";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${name}.tar.gz";
-    sha256 = "0gvz86m4cs8bdf3mwmwsyx6lrq4ydfxgadrgd9jlx32z3bnz3jca";
+    sha256 = "0pb9vp4ifymvdmc31ks3xxcnfqgzj8shll39czmk8c1splclqjzd";
   };
+
+  outputs = [ "out" "doc" ];
 
   LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
 
   configureFlags = [ "--disable-csharp" "--with-xz" ]
      ++ (stdenv.lib.optionals stdenv.isCygwin
-          [ # We have a static libiconv, so we can only build the static lib.
-            "--disable-shared" "--enable-static"
-
+          [ "--disable-java"
+            "--disable-native-java"
             # Share the cache among the various `configure' runs.
             "--config-cache"
-          ]);
+            "--with-included-gettext"
+            "--with-included-glib"
+            "--with-included-libcroco"
+          ])
+     # avoid retaining reference to CF during stdenv bootstrap
+     ++ (stdenv.lib.optionals stdenv.isDarwin [
+        "gt_cv_func_CFPreferencesCopyAppValue=no"
+        "gt_cv_func_CFLocaleCopyCurrent=no"
+      ]);
 
   # On cross building, gettext supposes that the wchar.h from libc
   # does not fulfill gettext needs, so it tries to work with its
@@ -28,6 +37,8 @@ stdenv.mkDerivation (rec {
       echo gl_cv_func_wcwidth_works=yes > cachefile
       configureFlags="$configureFlags --cache-file=`pwd`/cachefile"
     fi
+  '' + stdenv.lib.optionalString stdenv.isCygwin ''
+    sed -i -e "s/\(am_libgettextlib_la_OBJECTS = \)error.lo/\\1/" gettext-tools/gnulib-lib/Makefile.in
   '';
 
   buildInputs = [ xz xz.bin ] ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;

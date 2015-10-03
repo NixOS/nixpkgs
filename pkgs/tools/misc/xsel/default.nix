@@ -1,4 +1,4 @@
-{stdenv, fetchurl, x11}:
+{stdenv, fetchurl, xlibsWrapper}:
 
 stdenv.mkDerivation {
   name = "xsel-1.2.0";
@@ -7,5 +7,5 @@ stdenv.mkDerivation {
     sha256 = "070lbcpw77j143jrbkh0y1v10ppn1jwmjf92800w7x42vh4cw9xr";
   };
 
-  buildInputs = [x11];
+  buildInputs = [xlibsWrapper];
 }

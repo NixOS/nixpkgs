@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
 
   version = "0.9.0b";
-  name = "fritzing";
+  name = "fritzing-${version}";
 
   src = fetchurl {
     url = "http://fritzing.org/download/${version}/source-tarball/fritzing-${version}.source.tar_1.bz2";

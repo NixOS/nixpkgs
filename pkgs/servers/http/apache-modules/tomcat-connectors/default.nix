@@ -1,11 +1,11 @@
 { stdenv, fetchurl, apacheHttpd, jdk }:
 
 stdenv.mkDerivation rec {
-  name = "tomcat-connectors-1.2.40";
+  name = "tomcat-connectors-1.2.41-dev-1613051";
 
   src = fetchurl {
-    url = "http://www.apache.si/tomcat/tomcat-connectors/jk/${name}-src.tar.gz";
-    sha256 = "0pbh6s19ba5k2kahiiqgx8lz8v4fjllzn0w6hjd08x7z9my38pl9";
+    url = "http://people.apache.org/~rjung/mod_jk-dev/${name}-src.tar.gz";
+    sha256 = "11khipjpy3y84j1pp7yyx76y64jccvyhh3klwzqxylff49vjc2fc";
   };
 
   configureFlags = "--with-apxs=${apacheHttpd}/bin/apxs --with-java-home=${jdk}";

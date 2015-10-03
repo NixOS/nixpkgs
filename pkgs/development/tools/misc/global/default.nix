@@ -1,24 +1,29 @@
-{ fetchurl, stdenv, libtool, ncurses, ctags, sqlite
-, pythonPackages, makeWrapper }:
+{ fetchurl, stdenv, libtool, makeWrapper
+, coreutils, ctags, ncurses, pythonPackages, sqlite, pkgconfig
+}:
 
 stdenv.mkDerivation rec {
-  name = "global-6.4";
+  name = "global-6.5.1";
 
   src = fetchurl {
     url = "mirror://gnu/global/${name}.tar.gz";
-    sha256 = "13i4zwx6gaibc4j79wd0hgxysw8ibxz9c018zxhydnxlyadzcnri";
+    sha256 = "1y34nbazsw2p6r2jhv27z15qvm9mhy5xjchpz8pwps00shkm578f";
   };
 
-  buildInputs = [ libtool ncurses makeWrapper ];
+  nativeBuildInputs = [ libtool makeWrapper ];
+
+  buildInputs = [ ncurses ];
+
   propagatedBuildInputs = [ pythonPackages.pygments ];
 
-  configurePhase =
-    '' ./configure --prefix="$out" --disable-static ''
-    + ''--with-posix-sort=$(type -p sort) ''
-    + ''--with-ltdl-include=${libtool}/include --with-ltdl-lib=${libtool}/lib ''
-    + ''--with-ncurses=${ncurses} ''
-    + ''--with-sqlite3=${sqlite} ''
-    + ''--with-exuberant-ctags=${ctags}/bin/ctags'';
+  configureFlags = [
+    "--with-ltdl-include=${libtool}/include"
+    "--with-ltdl-lib=${libtool}/lib"
+    "--with-ncurses=${ncurses}"
+    "--with-sqlite3=${sqlite}"
+    "--with-exuberant-ctags=${ctags}/bin/ctags"
+    "--with-posix-sort=${coreutils}/bin/sort"
+  ];
 
   doCheck = true;
 
@@ -34,7 +39,6 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Source code tag system";
-
     longDescription = ''
       GNU GLOBAL is a source code tagging system that works the same way
       across diverse environments (Emacs, vi, less, Bash, web browser, etc).
@@ -45,11 +49,8 @@ stdenv.mkDerivation rec {
       independence of any editor.  It runs on a UNIX (POSIX) compatible
       operating system like GNU and BSD.
     '';
-
-    license = licenses.gpl3Plus;
-
     homepage = http://www.gnu.org/software/global/;
-
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.unix;
   };

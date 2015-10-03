@@ -1,18 +1,15 @@
-{ stdenv, fetchurl, sbclBootstrap, clisp, which}:
+{ stdenv, fetchurl, sbclBootstrap, sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit", which }:
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.2.10";
+  version = "1.2.15";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "11gn25knjk0zdyi3s6w0blcnrxjgyj4iifg5h07pv2r7hm83s92m";
+    sha256 = "0l8nrf5qnr8c9hr6bn1kd86mnr2s37b493azh9rrk3v59f56wnnr";
   };
 
-  buildInputs = [ which ]
-    ++ (stdenv.lib.optional stdenv.isDarwin sbclBootstrap)
-    ++ (stdenv.lib.optional stdenv.isLinux clisp)
-    ;
+  buildInputs = [ which ];
 
   patchPhase = ''
     echo '"${version}.nixos"' > version.lisp-expr
@@ -22,7 +19,10 @@ stdenv.mkDerivation rec {
                (pushnew x features))
              (disable (x)
                (setf features (remove x features))))
-        (enable :sb-thread))) " > customize-target-features.lisp
+        #-arm
+        (enable :sb-thread)
+        #+arm
+        (enable :arm))) " > customize-target-features.lisp
 
     pwd
 
@@ -64,24 +64,15 @@ stdenv.mkDerivation rec {
     export HOME=$PWD/test-home
   '';
 
-  buildPhase = if stdenv.isLinux
-    then ''
-      sh make.sh clisp --prefix=$out
-    ''
-    else ''
-      sh make.sh --prefix=$out --xc-host='${sbclBootstrap}/bin/sbcl --core ${sbclBootstrap}/share/sbcl/sbcl.core --disable-debugger --no-userinit --no-sysinit'
-    '';
+  buildPhase = ''
+    sh make.sh --prefix=$out --xc-host="${sbclBootstrapHost}"
+  '';
 
   installPhase = ''
     INSTALL_ROOT=$out sh install.sh
   '';
 
-  meta = {
-    description = "Lisp compiler";
-    homepage = http://www.sbcl.org;
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.all;
+  meta = sbclBootstrap.meta // {
     inherit version;
     updateWalker = true;
   };
