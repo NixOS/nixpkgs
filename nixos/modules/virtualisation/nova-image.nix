@@ -11,8 +11,8 @@ with lib;
         { preVM =
             ''
               mkdir $out
-              diskImage=$out/image
-              ${pkgs.vmTools.qemu}/bin/qemu-img create -f raw $diskImage "4G"
+              diskImage=$out/image.qcow2
+              ${pkgs.vmTools.qemu}/bin/qemu-img create -f qcow2 $diskImage "4G"
               mv closure xchg/
             '';
           buildInputs = [ pkgs.utillinux pkgs.perl ];
@@ -73,11 +73,11 @@ with lib;
 
   fileSystems."/".device = "/dev/disk/by-label/nixos";
 
-  boot.kernelParams = [ "console=ttyS0" ];
+  boot.kernelParams = [  ];
 
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/vda";
-  boot.loader.grub.timeout = 10;
+  boot.loader.grub.timeout = 3;
 
   # Put /tmp and /var on /ephemeral0, which has a lot more space.
   # Unfortunately we can't do this with the `fileSystems' option
