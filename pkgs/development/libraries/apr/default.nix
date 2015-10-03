@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./is-this-a-compiler-bug.patch ];
 
   outputs = [ "dev" "out" ];
+  outputBin = "dev";
 
   preConfigure =
     ''
@@ -24,17 +25,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall =
-    ''
-      mkdir $dev/bin $dev/lib
-      mv $out/bin/apr-1-config $dev/bin
-      mv $out/lib/pkgconfig $dev/lib
-    '';
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://apr.apache.org/;
     description = "The Apache Portable Runtime library";
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = platforms.all;
+    maintainers = [ maintainers.eelco ];
   };
 }
