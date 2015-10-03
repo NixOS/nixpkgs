@@ -12,13 +12,15 @@ mv mozart*linux/share/* $out/share
 patchShebangs $out
 
 for f in $out/bin/*; do
-  b=$(basename $f)
-  if [ $b == "ozemulator" ] || [ $b == "ozwish" ]; then
-     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-	 --set-rpath $libPath \
-	 $f
-    continue;
-  fi
-  wrapProgram $f \
-    --set OZHOME $out
+    b=$(basename $f)
+
+    if [ $b == "ozemulator" ] || [ $b == "ozwish" ]; then
+        patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+                 --set-rpath $libPath \
+                 $f
+        continue;
+    fi
+
+    wrapProgram $f --set OZHOME $out \
+                   --set TK_LIBRARY $TK_LIBRARY
 done
