@@ -1,7 +1,7 @@
 { stdenv, cmake, fetchurl, gnumake, pkgconfig
 , boost, gettext, tclap, wxGTK
 , freeglut, glew, libXi, libXmu, mesa
-, autopanosiftc, enblendenfuse, exiv2, ilmbase, lensfun, libpng, libtiff
+, autopanosiftc, enblend-enfuse, exiv2, ilmbase, lensfun, libpng, libtiff
 , openexr, panotools, perlPackages
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   # commandline tools needed by the hugin batch processor
   # you may have to tell hugin (in the preferences) where these binaries reside
-  propagatedUserEnvPackages = [ autopanosiftc enblendenfuse gnumake
+  propagatedUserEnvPackages = [ autopanosiftc enblend-enfuse gnumake
                                 perlPackages.ImageExifTool
                               ];
 
