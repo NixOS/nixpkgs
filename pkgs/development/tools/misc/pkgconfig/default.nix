@@ -14,17 +14,17 @@ stdenv.mkDerivation rec {
   };
     # Process Requires.private properly, see
     # http://bugs.freedesktop.org/show_bug.cgi?id=4738.
-  patches = optional (!vanilla) ./requires-private.patch;
+  patches = optional (!vanilla) ./requires-private.patch
+    ++ optional stdenv.isCygwin ./2.36.3-not-win32.patch;
+
+  buildInputs = optional (stdenv.isCygwin || stdenv.isDarwin) libiconv;
 
   preConfigure = stdenv.lib.optionalString (stdenv.system == "mips64el-linux")
     ''cp -v ${automake}/share/automake*/config.{sub,guess} .'';
 
-  buildInputs = optional (stdenv.isCygwin || stdenv.isDarwin) libiconv;
-
   configureFlags = [ "--with-internal-glib" ];
 
   postInstall = ''rm "$out"/bin/*-pkg-config''; # clean the duplicate file
-  patches = optional stdenv.isCygwin ./2.36.3-not-win32.patch;
 
   meta = {
     description = "A tool that allows packages to find out information about other packages";
