@@ -7658,6 +7658,11 @@ let
     sslSupport = true;
   };
 
+  neon_0_29 = callPackage ../development/libraries/neon/0.29.nix {
+    compressionSupport = true;
+    sslSupport = true;
+  };
+
   nethack = callPackage ../games/nethack { };
 
   nettle = callPackage ../development/libraries/nettle { };
