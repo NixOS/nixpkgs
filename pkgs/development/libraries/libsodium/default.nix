@@ -8,8 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "120jkda2q58p0n68banh64vsfm3hgqnacagj425d218cr4ycdkyb";
   };
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.cc.isGNU "-lssp";
-
   doCheck = true;
 
   meta = with stdenv.lib; {
