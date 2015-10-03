@@ -19,22 +19,9 @@ in
       enable = mkEnableOption "calibre-server";
 
       libraryDir = mkOption {
-        default = "/tmp/calibre-server";
         description = ''
           The directory where the Calibre library to serve is.
           '';
-      };
-
-      user = mkOption {
-        type = types.str;
-        default = "calibre-server";
-        description = "User account under which calibre-server runs.";
-      };
-
-      group = mkOption {
-        type = types.str;
-        default = "calibre-server";
-        description = "Group account under which calibre-server runs.";
       };
 
     };
@@ -48,11 +35,11 @@ in
 
     systemd.services.calibre-server =
       {
-        description = "calibre-server, an OPDS server for a Calibre library";
+        description = "Calibre Server";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          User = "${cfg.user}";
+          User = "calibre-server";
           Restart = "always";
           ExecStart = "${pkgs.calibre}/bin/calibre-server --with-library=${cfg.libraryDir}";
         };
@@ -61,16 +48,14 @@ in
 
     environment.systemPackages = [ pkgs.calibre ];
 
-    users.extraUsers = optionalAttrs (cfg.user == "calibre-server") (singleton
-      { name = "calibre-server";
-        group = cfg.group;
+    users.extraUsers.calibre-server = {
         uid = config.ids.uids.calibre-server;
-      });
+        group = "calibre-server";
+      };
 
-    users.extraGroups = optionalAttrs (cfg.group == "calibre-server") (singleton
-      { name = "calibre-server";
+    users.extraGroups.calibre-server = {
         gid = config.ids.gids.calibre-server;
-      });
+      };
 
   };
 
