@@ -48,6 +48,7 @@
 "github:LnL7/vim-nix"
 "github:lokaltog/vim-easymotion"
 "github:lyokha/vim-xkbswitch"
+"github:mhinz/vim-startify"
 "github:mkasa/lushtags"
 "github:nbouscal/vim-stylish-haskell"
 "github:osyo-manga/shabadou.vim"

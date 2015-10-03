@@ -635,6 +635,17 @@ rec {
     buildInputs = [ xkb_switch ];
   };
 
+  vim-startify = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-startify-2015-08-20";
+    src = fetchgit {
+      url = "git://github.com/mhinz/vim-startify";
+      rev = "6f886cdc48cf34c50eb723abca2f813a5de2c11b";
+      sha256 = "2614bee6a0cdb1a80aa6d3cfeba9e7521ac0be21d15ca4512a413cf192d93fd8";
+    };
+    dependencies = [];
+
+  };
+
   lushtags = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "lushtags-2015-06-06";
     src = fetchgit {
