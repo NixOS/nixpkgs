@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0dya49bnhianl0r65m65xndz6ls2jn1xngyn72gd28ls3n7bnvnh";
   };
 
-  patches = if stdenv.isCygwin then [ ./3.2.1-cygwin.patch ] else null;
+  patches = stdenv.lib.optional stdenv.isCygwin ./3.2.1-cygwin.patch;
 
   outputs = [ "dev" "out" "doc" ];
 
@@ -20,13 +20,15 @@ stdenv.mkDerivation rec {
   dontStrip = stdenv ? cross; # Don't run the native `strip' when cross-compiling.
 
   # Install headers and libs in the right places.
-  postInstall = ''
+  postFixup = ''
     mkdir -p "$dev/"
     mv "$out/lib/${name}/include" "$dev/include"
     rmdir "$out/lib/${name}"
+    substituteInPlace "$dev/lib/pkgconfig/libffi.pc" \
+      --replace 'includedir=''${libdir}/libffi-3.2.1' "includedir=$dev"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A foreign function call interface library";
     longDescription = ''
       The libffi library provides a portable, high level programming
@@ -44,8 +46,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://sourceware.org/libffi/;
     # See http://github.com/atgreen/libffi/blob/master/LICENSE .
-    license = stdenv.lib.licenses.free;
+    license = licenses.free;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
   };
 }
