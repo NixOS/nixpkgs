@@ -10008,14 +10008,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  SubExporterUtil = buildPerlPackage {
-    name = "Sub-Exporter-Util-0.984";
+  SubExporterUtil = let version = "0.987"; in buildPerlPackage {
+    name = "Sub-Exporter-Util-${version}";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-0.984.tar.gz;
-      sha256 = "190qly7nv7zf17c1v0gnqhyf25p6whhh2m132mh4xzs5mqadwq0f";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-${version}.tar.gz";
+      sha256 = "1ml3n1ck4ln9qjm2mcgkczj1jb5n1fkscz9c4x23v4db0glb4g2l";
     };
     propagatedBuildInputs = [ DataOptList ParamsUtil SubInstall ];
     meta = {
+      inherit version;
       homepage = https://github.com/rjbs/sub-exporter;
       description = "A sophisticated exporter for custom-built routines";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
