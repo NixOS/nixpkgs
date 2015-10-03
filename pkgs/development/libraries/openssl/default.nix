@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     "-DUSE_CRYPTODEV_DIGESTS"
   ];
 
+  makeFlags = [ "MANDIR=$(man)/share/man" ];
 
   # Parallel building is broken in OpenSSL.
   enableParallelBuilding = false;
@@ -54,24 +55,18 @@ stdenv.mkDerivation rec {
         rm "$out/lib/"*.a
     fi
 
-      mkdir -p $bin
-      mv $out/bin $bin/
+    mkdir -p $bin
+    mv $out/bin $bin/
 
-      rm -rf $out/etc/ssl/misc
-
-      mkdir $dev
-      mv $out/include $dev/
-
-      # OpenSSL installs readonly files, which otherwise we can't strip.
-      # FIXME: Can remove this after the next stdenv merge.
-      chmod -R +w $out
+    mkdir $dev
+    mv $out/include $dev/
 
     # remove dependency on Perl at runtime
-    rm -r $out/etc/ssl/misc $out/bin/c_rehash
+    rm -r $out/etc/ssl/misc
   '';
 
   postFixup = ''
-    # Check to make sure we don't depend on perl
+    # Check to make sure the main output doesn't depend on perl
     if grep -r '${perl}' $out; then
       echo "Found an erroneous dependency on perl ^^^" >&2
       exit 1
