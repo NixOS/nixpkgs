@@ -10188,7 +10188,11 @@ let
 
   systemd = callPackage ../os-specific/linux/systemd {
     linuxHeaders = linuxHeaders_3_18;
-  };
+  }
+    // {
+      udev.bin = systemd;     # ${systemd.udev.bin}/bin/udevadm
+      udev.lib = libudev.out; # ${systemd.udev.lib}/lib/libudev.*
+    };
 
   systemtap = callPackage ../development/tools/profiling/systemtap {
     inherit (gnome) libglademm;
@@ -10271,8 +10275,11 @@ let
     cross = assert crossSystem != null; crossSystem;
   });
 
+  # This hacky alias covers most use cases without mass-replace (build inputs)
+  # and causes an *evaluation* error if "${udev}" is attempted.
+  udev = [ libudev.dev libudev.out ];
+  libudev = callPackage ../os-specific/linux/systemd/libudev.nix { };
 
-  udev = pkgs.systemd; # headers are not in the libudev output
   eudev = callPackage ../os-specific/linux/eudev {};
 
   udisks1 = callPackage ../os-specific/linux/udisks/1-default.nix { };

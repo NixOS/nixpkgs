@@ -8,7 +8,7 @@
 , libusb1, libexif, pciutils
 
 , python, pythonPackages, perl, pkgconfig
-, nspr, udev, kerberos
+, nspr, libudev, kerberos
 , utillinux, alsaLib
 , bison, gperf
 , glib, gtk, dbus_glib
@@ -107,7 +107,7 @@ let
     buildInputs = defaultDependencies ++ [
       which
       python perl pkgconfig
-      nspr udev
+      nspr libudev
       (if useOpenSSL then openssl else nss)
       utillinux alsaLib
       bison gperf kerberos
@@ -135,7 +135,7 @@ let
         s|= [^;]*|= base::FilePath().AppendASCII("${libexif}/lib/libexif.so")|
       }' chrome/utility/media_galleries/image_metadata_extractor.cc
 
-      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${udev.libudev}/lib/\1!' \
+      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${libudev.out}/lib/\1!' \
         device/udev_linux/udev?_loader.cc
 
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \

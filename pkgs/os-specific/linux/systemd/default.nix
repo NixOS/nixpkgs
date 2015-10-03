@@ -22,10 +22,15 @@ stdenv.mkDerivation rec {
     sha256 = "07sc1x43j60d5jnps0d7bfka10fihnpgkdrfrh9iskgmc9qangjb";
   };
 
+  patches = [ ./hwdb-location.diff ];
+
+  /* gave up for now!
   outputs = [ "out" "libudev" "doc" ]; # TODO: "dev"
   # note: there are many references to ${systemd}/...
   outputDev = "out";
   propagatedOutputs = "libudev";
+  */
+  outputs = [ "out" "man" ];
 
   buildInputs =
     [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
@@ -88,24 +93,26 @@ stdenv.mkDerivation rec {
           --replace /sbin/fsck ${utillinux.bin}/sbin/fsck \
           --replace /bin/echo ${coreutils}/bin/echo \
           --replace /bin/cat ${coreutils}/bin/cat \
-          --replace /sbin/sulogin ${utillinux}/sbin/sulogin \
+          --replace /sbin/sulogin ${utillinux.bin}/sbin/sulogin \
           --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck
       done
 
       substituteInPlace src/journal/catalog.c \
         --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
 
-      export NIX_CFLAGS_LINK+=" -Wl,-rpath,$libudev/lib"
-
       configureFlagsArray+=("--with-ntp-servers=0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
+
+      #export NIX_CFLAGS_LINK+=" -Wl,-rpath,$libudev/lib"
     '';
 
+  /*
   makeFlags = [
     "udevlibexecdir=$(libudev)/lib/udev"
     # udev rules refer to $out, and anything but libs should probably go to $out
     "udevrulesdir=$(out)/lib/udev/rules.d"
     "udevhwdbdir=$(out)/lib/udev/hwdb.d"
   ];
+  */
 
 
   PYTHON_BINARY = "${coreutils}/bin/env python"; # don't want a build time dependency on Python
@@ -123,8 +130,6 @@ stdenv.mkDerivation rec {
 
       "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
     ];
-
-  enableParallelBuilding = true;
 
   installFlags =
     [ "localstatedir=$(TMPDIR)/var"
@@ -167,7 +172,8 @@ stdenv.mkDerivation rec {
 
       # "kernel-install" shouldn't be used on NixOS.
       find $out -name "*kernel-install*" -exec rm {} \;
-
+    ''; # */
+  /*
       # Move lib(g)udev to a separate output. TODO: maybe split them up
       #   to avoid libudev pulling glib
       mkdir -p "$libudev/lib"
@@ -179,8 +185,10 @@ stdenv.mkDerivation rec {
       for i in "$out"/lib/pkgconfig/{libudev,gudev-1.0}.pc; do
         substituteInPlace $i --replace "libdir=$out" "libdir=$libudev"
       done
-    ''; # */
+  */
 
+  enableParallelBuilding = true;
+  /*
   # some libs fail to link to liblzma and/or libffi
   postFixup = let extraLibs = stdenv.lib.makeLibraryPath [ xz.out libffi.out zlib.out ];
     in ''
@@ -188,6 +196,7 @@ stdenv.mkDerivation rec {
         patchelf --set-rpath `patchelf --print-rpath "$f"`':${extraLibs}' "$f"
       done
     '';
+  */
 
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is
@@ -204,5 +213,4 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.simons ];
   };
 }
-
 

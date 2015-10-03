@@ -10,7 +10,7 @@ let
     inherit stdenv fetchurl buildPythonPackage;
     inherit pykickstart pyparted pyblock cryptsetup multipath_tools;
     inherit useNixUdev udevSoMajor;
-    inherit (pkgs) lsof utillinux udev;
+    inherit (pkgs) lsof utillinux libudev;
     libselinux = pkgs.libselinux.override { enablePython = true; };
   };
 
@@ -27,12 +27,12 @@ let
 
   lvm2 = import ./lvm2.nix {
     inherit stdenv fetchurl;
-    inherit (pkgs) pkgconfig utillinux udev coreutils;
+    inherit (pkgs) pkgconfig utillinux libudev systemd coreutils;
   };
 
   multipath_tools = import ./multipath-tools.nix {
     inherit stdenv fetchurl lvm2;
-    inherit (pkgs) readline udev libaio gzip;
+    inherit (pkgs) readline systemd libaio gzip;
   };
 
   parted = import ./parted.nix {

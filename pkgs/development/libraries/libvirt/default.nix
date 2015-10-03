@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnutls, devicemapper, perl, python
-, iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext
+, iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, makeWrapper, pmutils, libcap_ng
 , dnsmasq, libnl, libpcap, libxslt, xhtml1
 , pythonPackages, perlPackages
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig libxml2 gnutls devicemapper perl python readline lvm2
-    utillinux udev libpciaccess gettext libtasn1 libgcrypt yajl makeWrapper
+    utillinux systemd.udev.lib libpciaccess gettext libtasn1 libgcrypt yajl makeWrapper
     libcap_ng libnl libxslt xhtml1 perlPackages.XMLXPath
   ];
 
   preConfigure = ''
-    PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${udev.out}/sbin:${dnsmasq}/bin:$PATH
+    PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${systemd.udev.bin}/sbin:${dnsmasq}/bin:$PATH
     patchShebangs . # fixes /usr/bin/python references
   '';
 

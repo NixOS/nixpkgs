@@ -11951,7 +11951,7 @@ let
 
     postPatch = ''
       sed -i -e '/udev_library_name/,/^ *libudev/ {
-        s|CDLL([^,]*|CDLL("${pkgs.udev.libudev}/lib/libudev.so.1"|p; d
+        s|CDLL([^,]*|CDLL("${pkgs.libudev.out}/lib/libudev.so.1"|p; d
       }' pyudev/_libudev.py
     '';
 

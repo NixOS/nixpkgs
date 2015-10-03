@@ -58,13 +58,13 @@ let
           --replace \"/bin/mount \"${pkgs.utillinux}/bin/mount
       done
 
-      echo -n "Checking that all programs called by relative paths in udev rules exist in ${pkgs.udev.out}/lib/udev... "
+      echo -n "Checking that all programs called by relative paths in udev rules exist in ${udev}/lib/udev... "
       import_progs=$(grep 'IMPORT{program}="[^/$]' $out/* |
         sed -e 's/.*IMPORT{program}="\([^ "]*\)[ "].*/\1/' | uniq)
       run_progs=$(grep -v '^[[:space:]]*#' $out/* | grep 'RUN+="[^/$]' |
         sed -e 's/.*RUN+="\([^ "]*\)[ "].*/\1/' | uniq)
       for i in $import_progs $run_progs; do
-        if [[ ! -x ${pkgs.udev.out}/lib/udev/$i && ! $i =~ socket:.* ]]; then
+        if [[ ! -x ${udev}/lib/udev/$i && ! $i =~ socket:.* ]]; then
           echo "FAIL"
           echo "$i is called in udev rules but not installed by udev"
           exit 1

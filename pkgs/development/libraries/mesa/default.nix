@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, intltool, autoreconfHook, substituteAll
-, file, expat, libdrm, xorg, wayland, udev, llvmPackages, libffi, libomxil-bellagio
+, file, expat, libdrm, xorg, wayland, libudev, llvmPackages, libffi, libomxil-bellagio
 , libvdpau, libelf, libva
 , grsecEnabled
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
   ] ++ optional stdenv.isLinux
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
-        inherit (udev) libudev;
+        libudev = libudev.out;
       });
 
   postPatch = ''
@@ -107,7 +107,7 @@ stdenv.mkDerivation {
     glproto dri2proto dri3proto presentproto
     libX11 libXext libxcb libXt libXfixes libxshmfence
     libffi wayland libvdpau libelf libXvMC /* libomxil-bellagio libva */
-  ] ++ optional stdenv.isLinux udev;
+  ] ++ optional stdenv.isLinux libudev;
 
   enableParallelBuilding = true;
   doCheck = false;

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, buildPythonPackage, pykickstart, pyparted, pyblock
 , libselinux, cryptsetup, multipath_tools, lsof, utillinux
-, useNixUdev ? true, udev ? null
+, useNixUdev ? true, libudev ? null
 # This is only used when useNixUdev is false
 , udevSoMajor ? 1
 }:
 
-assert useNixUdev -> udev != null;
+assert useNixUdev -> libudev != null;
 
 buildPythonPackage rec {
   name = "blivet-${version}";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     sed -i '/pvscan/s/, *"--cache"//' blivet/devicelibs/lvm.py
   '' + (if useNixUdev then ''
     sed -i -e '/find_library/,/find_library/ {
-      c libudev = "${udev.libudev}/lib/libudev.so.1"
+      c libudev = "${libudev.out}/lib/libudev.so.1"
     }' blivet/pyudev.py
   '' else ''
     sed -i \
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pykickstart pyparted pyblock libselinux cryptsetup
-  ] ++ stdenv.lib.optional useNixUdev udev;
+  ] ++ stdenv.lib.optional useNixUdev libudev;
 
   # tests are currently _heavily_ broken upstream
   doCheck = false;
