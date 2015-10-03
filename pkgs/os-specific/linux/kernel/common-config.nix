@@ -483,6 +483,10 @@ with stdenv.lib;
     FW_LOADER_USER_HELPER_FALLBACK y
   ''}
 
+  # Enable PCIe and USB for the brcmfmac driver
+  CONFIG_BRCMFAC_USB? y
+  CONFIG_BRCMFAC_PCIE? y
+
   ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}
 ''
