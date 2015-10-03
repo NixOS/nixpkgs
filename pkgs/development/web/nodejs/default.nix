@@ -44,9 +44,10 @@ in stdenv.mkDerivation {
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode.patch ./pkg-libpath.patch ];
 
   buildInputs = [ python zlib libuv openssl python ]
-    ++ optionals stdenv.isLinux [ utillinux http-parser ]
+    ++ optionals stdenv.isLinux [ utillinux http-parser ];
   nativeBuildInputs = [ pkgconfig ]
     ++ optional stdenv.isDarwin libtool;
+
   setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true;
