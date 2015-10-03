@@ -45,6 +45,7 @@
 "github:latex-box-team/latex-box"
 "github:lepture/vim-jinja"
 "github:lervag/vimtex"
+"github:LnL7/vim-nix"
 "github:lokaltog/vim-easymotion"
 "github:lyokha/vim-xkbswitch"
 "github:mkasa/lushtags"

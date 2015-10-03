@@ -334,6 +334,17 @@ rec {
 
   };
 
+  vim-nix = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-nix-2015-05-10";
+    src = fetchgit {
+      url = "git://github.com/LnL7/vim-nix";
+      rev = "39f5eb681f2ed2282ed562af2d6a2e40712d8429";
+      sha256 = "6f109b6949f773b2d7f06adeb45334fa61479c95750666b450265851cb24c761";
+    };
+    dependencies = [];
+
+  };
+
   vim-css-color = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-css-color-2015-10-03";
     src = fetchgit {
