@@ -484,8 +484,8 @@ with stdenv.lib;
   ''}
 
   # Enable PCIe and USB for the brcmfmac driver
-  CONFIG_BRCMFAC_USB? y
-  CONFIG_BRCMFAC_PCIE? y
+  BRCMFMAC_USB? y
+  BRCMFMAC_PCIE? y
 
   ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}
