@@ -94,6 +94,14 @@ in
         '';
       };
 
+      allowedTCPPorts = mkOption {
+        type = types.listOf types.int;
+        default = [];
+        description = ''
+          List of TCP ports to open in the firewall.
+        '';
+      };
+
       extraConfigFiles = mkOption {
         default = [ ];
         type = types.listOf types.str;
@@ -157,6 +165,8 @@ in
         etc."consul.d/dummy.json".text = "{ }";
         systemPackages = with pkgs; [ consul ];
       };
+
+      networking.firewall.allowedTCPPorts = cfg.allowedTCPPorts;
 
       systemd.services.consul = {
         wantedBy = [ "multi-user.target" ];
