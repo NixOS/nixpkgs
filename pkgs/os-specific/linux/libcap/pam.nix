@@ -12,6 +12,4 @@ stdenv.mkDerivation rec {
   preConfigure = "cd pam_cap";
 
   makeFlags = "${libcap.makeFlags} PAM_CAP=yes";
-
-  postInstall = libcap.postinst name;
 }

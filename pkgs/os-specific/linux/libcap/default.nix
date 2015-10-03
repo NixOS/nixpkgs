@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   makeFlags = "lib=lib prefix=$(out)";
 
   postInstall = ''
+    rm "$out"/lib/*.a
     mkdir -p "$dev/share/doc/${name}"
     cp ../License "$dev/share/doc/${name}/License"
   '';

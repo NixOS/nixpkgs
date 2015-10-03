@@ -21,5 +21,8 @@ stdenv.mkDerivation rec {
 
   installFlags = "RAISE_SETFCAP=no";
 
-  postInstall = libcap.postinst name;
+  postInstall = ''
+    mkdir -p "$out/share/doc/${name}"
+    cp ../License "$out/share/doc/${name}/"
+  '';
 }
