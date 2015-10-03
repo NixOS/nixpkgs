@@ -47,6 +47,7 @@ rec {
   colorsamplerpack    = Colour_Sampler_Pack;
   command_T           = command-t; # backwards compat, added 2014-10-18
   css_color_5056      = vim-css-color;
+  ctrlp               = ctrlp-vim;
   easy-align          = vim-easy-align;
   easymotion          = vim-easymotion;
   eighties            = vim-eighties;
@@ -54,6 +55,7 @@ rec {
   gist-vim            = Gist;
   gitgutter           = vim-gitgutter;
   gundo               = gundo-vim;
+  Gundo               = gundo-vim; # backwards compat, added 2015-10-03
   haskellConceal      = haskellconceal; # backwards compat, added 2014-10-18
   haskellconceal      = vim-haskellconceal;
   hier                = vim-hier;
@@ -86,6 +88,17 @@ rec {
   yankring            = YankRing;
 
     CSApprox = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "CSApprox-2013-07-26";
+    src = fetchgit {
+      url = "git://github.com/godlygeek/csapprox";
+      rev = "7981dac51d8b6776985aa08cb7b5ee98ea7f2ddd";
+      sha256 = "8ccb47eb79c7ab63109d32158388812bdca340985527af4f2a5489ff8683389f";
+    };
+    dependencies = [];
+
+  };
+
+  CSApprox = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "CSApprox-2013-07-26";
     src = fetchgit {
       url = "git://github.com/godlygeek/csapprox";
@@ -266,17 +279,6 @@ rec {
 
   };
 
-  ctrlp = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "ctrlp-2013-07-29";
-    src = fetchgit {
-      url = "git://github.com/kien/ctrlp.vim";
-      rev = "b5d3fe66a58a13d2ff8b6391f4387608496a030f";
-      sha256 = "41f7884973770552395b96f8693da70999dc815462d4018c560d3ff6be462e76";
-    };
-    dependencies = [];
-
-  };
-
   ctrlp-py-matcher = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "ctrlp-py-matcher-2015-07-18";
     src = fetchgit {
@@ -371,6 +373,17 @@ rec {
       url = "git://github.com/christoomey/vim-tmux-navigator";
       rev = "176452ead44118174ddad3502709a247d9c24bb4";
       sha256 = "789c8b24b971a3b307ac296234230f1048ff2928c89302700bd4e5fc2edd2d8a";
+    };
+    dependencies = [];
+
+  };
+
+  ctrlp-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "ctrlp-vim-2015-09-15";
+    src = fetchgit {
+      url = "git://github.com/ctrlpvim/ctrlp.vim";
+      rev = "58247bdf8550879e183c13860eefa03983959e4a";
+      sha256 = "1d4cf293a1e48564a491e00077794e23f5360827a72c2618fd3e99ee153ea6a8";
     };
     dependencies = [];
 
