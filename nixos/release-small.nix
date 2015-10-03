@@ -56,7 +56,7 @@ in rec {
       # Declare the OVA as a build product so that it shows up in Hydra.
       hydraJob (runCommand "nixos-flyingcircus-vm-${config.system.nixosVersion}-${system}"
         { meta = {
-            description = "NixOS Flying Circus VM base image (${system})";
+            description = "NixOS Flying Circus VM bootstrap image (${system})";
             maintainers = maintainers.theuni;
           };
           image = config.system.build.novaImage;
