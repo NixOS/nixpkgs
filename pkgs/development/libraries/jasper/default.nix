@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, libjpeg }:
+{ stdenv, fetchurl, unzip, libjpeg, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "jasper-1.900.1";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     ./jasper-CVE-2014-9029.diff
   ];
 
-  # outputs TODO: why reconf
+  # newer reconf to recognize a multiout flag
   nativeBuildInputs = [ unzip autoreconfHook ];
   propagatedBuildInputs = [ libjpeg ];
 
