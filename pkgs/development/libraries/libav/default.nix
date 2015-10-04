@@ -77,13 +77,11 @@ let
 
     enableParallelBuilding = true;
 
-    outputs = [ "dev" "out" "bin" ]; #TODO: re-check
+    outputs = [ "dev" "out" "bin" ];
+    setOutputFlags = false;
 
-    # move avplay to get rid of the SDL dependency in the main output
-    postInstall = ''
-      mkdir -p "$bin/bin"
-      mv "$out/bin/avplay" "$bin/bin"
-    '';
+    # move tools away to lighten runtime deps and size
+    postInstall = ''_moveToOutput bin "$bin" '';
 
     doInstallCheck = false; # fails randomly
     installCheckTarget = "check"; # tests need to be run *after* installation
