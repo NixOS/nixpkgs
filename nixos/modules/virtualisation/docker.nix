@@ -45,13 +45,12 @@ in
       };
     storageDriver =
       mkOption {
-        type = types.enum ["aufs" "btrfs" "devicemapper" "overlay" "zfs"];
+        type = types.nullOr (types.enum ["aufs" "btrfs" "devicemapper" "overlay" "zfs"]);
+        default = null;
         description =
           ''
-            This option determines which Docker storage driver to use.
-            It is required but lacks a default value as its most
-            suitable value will depend the filesystems available on the
-            host.
+            This option determines which Docker storage driver to use. If null,
+            let the docker daemon use its own default.
           '';
       };
     extraOptions =
@@ -96,7 +95,7 @@ in
         after = [ "network.target" "docker.socket" ];
         requires = [ "docker.socket" ];
         serviceConfig = {
-          ExecStart = "${pkgs.docker}/bin/docker daemon --host=fd:// --group=docker --storage-driver=${cfg.storageDriver} ${cfg.extraOptions}";
+          ExecStart = "${pkgs.docker}/bin/docker daemon --host=fd:// --group=docker ${optionalString (cfg.storageDriver != null) ''--storage-driver=${cfg.storageDriver}''} ${cfg.extraOptions}";
           #  I'm not sure if that limits aren't too high, but it's what
           #  goes in config bundled with docker itself
           LimitNOFILE = 1048576;
@@ -122,7 +121,7 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig = {
-          ExecStart = "${pkgs.docker}/bin/docker daemon --group=docker --storage-driver=${cfg.storageDriver} ${cfg.extraOptions}";
+          ExecStart = "${pkgs.docker}/bin/docker daemon --group=docker ${optionalString (cfg.storageDriver != null) ''--storage-driver=${cfg.storageDriver}''} ${cfg.extraOptions}";
           #  I'm not sure if that limits aren't too high, but it's what
           #  goes in config bundled with docker itself
           LimitNOFILE = 1048576;
