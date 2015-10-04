@@ -12124,6 +12124,8 @@ let
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
+  nload = callPackage ../applications/networking/nload { };
+
   normalize = callPackage ../applications/audio/normalize { };
 
   mplayer = callPackage ../applications/video/mplayer ({
