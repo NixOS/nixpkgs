@@ -46,12 +46,10 @@ in
     storageDriver =
       mkOption {
         type = types.enum ["aufs" "btrfs" "devicemapper" "overlay" "zfs"];
+        default = "devicemapper";
         description =
           ''
             This option determines which Docker storage driver to use.
-            It is required but lacks a default value as its most
-            suitable value will depend the filesystems available on the
-            host.
           '';
       };
     extraOptions =
