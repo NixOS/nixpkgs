@@ -18,6 +18,7 @@ self: super: {
   ghc-paths = appendPatch super.ghc-paths ./patches/ghc-paths-nix.patch;
 
   # Break infinite recursions.
+  clock = dontCheck super.clock;
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
   hspec_2_1_10 = super.hspec_2_1_10.override { stringbuilder = dontCheck super.stringbuilder; };
