@@ -90,6 +90,7 @@
   eikek = "Eike Kettner <eike.kettner@posteo.de>";
   ellis = "Ellis Whitehead <nixos@ellisw.net>";
   emery = "Emery Hemingway <emery@vfemail.net>";
+  enolan = "Echo Nolan <echo@echonolan.net>";
   epitrochoid = "Mabry Cervin <mpcervin@uncg.edu>";
   ericbmerritt = "Eric Merritt <eric@afiniate.com>";
   erikryb = "Erik Rybakken <erik.rybakken@math.ntnu.no>";
