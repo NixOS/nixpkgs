@@ -174,7 +174,7 @@ let
               libvncserver libical networkmanager openal opencv
               openexr perl phonon pkgconfig polkit_qt4 prison python qca2
               qimageblitz qjson qt4 samba saneBackends soprano speechd
-              strigi taglib udev xorg xplanet xscreensaver xz;
+              strigi taglib udev xorg xplanet xscreensaver xz pcre;
       alsa = alsaLib;
       assuan = libassuan;
       boost = boost155;
@@ -307,7 +307,7 @@ let
       kdegraphics-thumbnailers = kde4Package super.kdegraphics-thumbnailers;
 
       kdelibs = extendDerivation super.kdelibs {
-        buildInputs = with scope; [ attr polkit_qt4 xsltproc xz ];
+        buildInputs = with scope; [ attr polkit_qt4 xsltproc xz pcre ];
         propagatedBuildInputs = with scope; [ qt4 soprano phonon strigi ];
         nativeBuildInputs = [ scope.pkgconfig ];
         propagatedNativeBuildInputs = with scope; [

@@ -2,7 +2,7 @@
 , docbook_xml_dtd_42, docbook_xsl, flex, giflib, herqq, ilmbase
 , libdbusmenu_qt, libjpeg, libxml2, libxslt, perl, phonon, pkgconfig
 , polkit_qt4, qca2, qt4, shared_desktop_ontologies, shared_mime_info
-, soprano, strigi, udev, xz
+, soprano, strigi, udev, xz, pcre
 , lib
 }:
 
@@ -11,7 +11,7 @@ kdeApp {
 
   buildInputs = [
     attica attr avahi giflib herqq libdbusmenu_qt libjpeg libxml2
-    polkit_qt4 qca2 shared_desktop_ontologies udev xz
+    polkit_qt4 qca2 shared_desktop_ontologies udev xz pcre
   ];
   propagatedBuildInputs = [ qt4 soprano phonon strigi ];
   nativeBuildInputs = [
