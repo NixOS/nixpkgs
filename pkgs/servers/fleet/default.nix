@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "fleet-${version}";
-  version = "0.9.0";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "coreos";
     repo = "fleet";
     rev = "v${version}";
-    sha256 = "0gjminfprprs1nmg9y9a0qkyl9spixrk4pc2b7bl0lxdgpq2yiid";
+    sha256 = "00qkhbm9l1grchri80rmg7a9q4dbmxhkw50klmn3bwskxyzb04gr";
   };
 
   buildInputs = [ go ];
