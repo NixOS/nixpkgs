@@ -46,51 +46,6 @@ let
     '';
   });
 
-  # Collect all interfaces that are defined for a device
-  # as device:interface key:value pairs.
-  wlanDeviceInterfaces =
-    let
-      allDevices = unique (mapAttrsToList (_: v: v.device) cfg.wlanInterfaces);
-      interfacesOfDevice = d: filterAttrs (_: v: v.device == d) cfg.wlanInterfaces;
-    in
-      genAttrs allDevices (d: interfacesOfDevice d);
-
-  # Convert device:interface key:value pairs into a list, and if it exists,
-  # place the interface which is named after the device at the beginning.
-  wlanListDeviceFirst = device: interfaces:
-    if hasAttr device interfaces
-    then mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n==device) interfaces) ++ mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n!=device) interfaces)
-    else mapAttrsToList (n: v: v // {_iName = n;}) interfaces;
-
-  # udev script that configures a physical wlan device and adds virtual interfaces
-  wlanDeviceUdevScript = device: interfaceList: pkgs.writeScript "wlan-${device}-udev-script" ''
-    #!${pkgs.stdenv.shell}
-
-    # Change the wireless phy device to a predictable name.
-    if [ -e "/sys/class/net/${device}/phy80211/name" ]; then
-      ${pkgs.iw}/bin/iw phy `${pkgs.coreutils}/bin/cat /sys/class/net/${device}/phy80211/name` set name ${device} || true
-    fi
-
-    # Crate new, virtual interfaces and configure them at the same time
-    ${flip concatMapStrings (drop 1 interfaceList) (i: ''
-    ${pkgs.iw}/bin/iw dev ${device} interface add ${i._iName} type ${i.type} \
-      ${optionalString (i.type == "mesh" && i.meshID != null) "mesh_id ${i.meshID}"} \
-      ${optionalString (i.type == "monitor" && i.flags != null) "flags ${i.flags}"} \
-      ${optionalString (i.type == "managed" && i.fourAddr != null) "4addr ${if i.fourAddr then "on" else "off"}"} \
-      ${optionalString (i.mac != null) "addr ${i.mac}"}
-    '')}
-
-    # Reconfigure and rename the default interface that already exists
-    ${flip concatMapStrings (take 1 interfaceList) (i: ''
-      ${pkgs.iw}/bin/iw dev ${device} set type ${i.type}
-      ${optionalString (i.type == "mesh" && i.meshID != null) "${pkgs.iw}/bin/iw dev ${device} set meshid ${i.meshID}"}
-      ${optionalString (i.type == "monitor" && i.flags != null) "${pkgs.iw}/bin/iw dev ${device} set monitor ${i.flags}"}
-      ${optionalString (i.type == "managed" && i.fourAddr != null) "${pkgs.iw}/bin/iw dev ${device} set 4addr ${if i.fourAddr then "on" else "off"}"}
-      ${optionalString (i.mac != null) "${pkgs.iproute}/bin/ip link set dev ${device} address ${i.mac}"}
-      ${optionalString (device != i._iName) "${pkgs.iproute}/bin/ip link set dev ${device} name ${i._iName}"}
-    '')}
-  '';
-
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface:
     "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
@@ -997,19 +952,76 @@ in
       (pkgs.writeTextFile {
         name = "99-zzz-wlanInterfaces-last.rules";
         destination = "/etc/udev/rules.d/99-zzz-wlanInterfaces-last.rules";
-        text = ''
-          # If persistent udev device name is not used for an interface, then do not
-          # call systemd for that udev device name and only execute the script that
-          # modifies or prepares the WLAN interfaces. All other commands that would
-          # otherwise be executed when the udev device is added, like, e.g., the calling
-          # of systemd-sysctl or the activation of wpa_supplicant is disabled when the
-          # persistend udev device name is not usef for an interface.
-          ${flip (concatMapStringsSep "\n") (attrNames wlanDeviceInterfaces) (device:
-          let script = wlanDeviceUdevScript device (wlanListDeviceFirst device wlanDeviceInterfaces."${device}"); in
-          if hasAttr device cfg.wlanInterfaces
-          then ''ACTION=="add", SUBSYSTEM=="net", NAME=="${device}", ENV{DEVTYPE}=="wlan", RUN+="${script}"''
-          else ''ACTION=="add", SUBSYSTEM=="net", NAME=="${device}", ENV{DEVTYPE}=="wlan", NAME="", TAG-="systemd", RUN:="${script}"'')}
-        '';
+        text =
+          let
+            # Collect all interfaces that are defined for a device
+            # as device:interface key:value pairs.
+            wlanDeviceInterfaces =
+              let
+                allDevices = unique (mapAttrsToList (_: v: v.device) cfg.wlanInterfaces);
+                interfacesOfDevice = d: filterAttrs (_: v: v.device == d) cfg.wlanInterfaces;
+              in
+                genAttrs allDevices (d: interfacesOfDevice d);
+
+            # Convert device:interface key:value pairs into a list, and if it exists,
+            # place the interface which is named after the device at the beginning.
+            wlanListDeviceFirst = device: interfaces:
+              if hasAttr device interfaces
+              then mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n==device) interfaces) ++ mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n!=device) interfaces)
+              else mapAttrsToList (n: v: v // {_iName = n;}) interfaces;
+
+            # Udev script to execute for the default WLAN interface with the persistend udev name.
+            # The script creates the required, new WLAN interfaces interfaces and configures the
+            # existing, default interface.
+            curInterfaceScript = device: current: new: pkgs.writeScript "udev-run-script-wlan-interfaces-${device}.sh" ''
+              #!${pkgs.stdenv.shell}
+              # Change the wireless phy device to a predictable name.
+              ${pkgs.iw}/bin/iw phy `${pkgs.coreutils}/bin/cat /sys/class/net/$INTERFACE/phy80211/name` set name ${device}
+
+              # Add new WLAN interfaces
+              ${flip concatMapStrings new (i: ''
+              ${pkgs.iw}/bin/iw phy ${device} interface add ${i._iName} type managed
+              '')}
+
+              # Configure the current interface
+              ${pkgs.iw}/bin/iw dev ${device} set type ${current.type}
+              ${optionalString (current.type == "mesh" && current.meshID!=null) "${pkgs.iw}/bin/iw dev ${device} set meshid ${current.meshID}"}
+              ${optionalString (current.type == "monitor" && current.flags!=null) "${pkgs.iw}/bin/iw dev ${device} set monitor ${current.flags}"}
+              ${optionalString (current.type == "managed" && current.fourAddr!=null) "${pkgs.iw}/bin/iw dev ${device} set 4addr ${if current.fourAddr then "on" else "off"}"}
+              ${optionalString (current.mac != null) "${pkgs.iproute}/bin/ip link set dev ${device} address ${current.mac}"}
+            '';
+
+            # Udev script to execute for a new WLAN interface. The script configures the new WLAN interface.
+            newInterfaceScript = new: pkgs.writeScript "udev-run-script-wlan-interfaces-${new._iName}.sh" ''
+              #!${pkgs.stdenv.shell}
+              # Configure the new interface
+              ${pkgs.iw}/bin/iw dev ${new._iName} set type ${new.type}
+              ${optionalString (new.type == "mesh" && new.meshID!=null) "${pkgs.iw}/bin/iw dev ${device} set meshid ${new.meshID}"}
+              ${optionalString (new.type == "monitor" && new.flags!=null) "${pkgs.iw}/bin/iw dev ${device} set monitor ${new.flags}"}
+              ${optionalString (new.type == "managed" && new.fourAddr!=null) "${pkgs.iw}/bin/iw dev ${device} set 4addr ${if new.fourAddr then "on" else "off"}"}
+              ${optionalString (new.mac != null) "${pkgs.iproute}/bin/ip link set dev ${device} address ${new.mac}"}
+            '';
+
+            # Udev attributes for systemd to name the device and to create a .device target.
+            systemdAttrs = n: ''NAME:="${n}", ENV{INTERFACE}:="${n}", ENV{SYSTEMD_ALIAS}:="/sys/subsystem/net/devices/${n}", TAG+="systemd"'';
+          in
+          flip (concatMapStringsSep "\n") (attrNames wlanDeviceInterfaces) (device:
+            let
+              interfaces = wlanListDeviceFirst device wlanDeviceInterfaces."${device}";
+              curInterface = elemAt interfaces 0;
+              newInterfaces = drop 1 interfaces;
+            in ''
+            # It is important to have that rule first as overwriting the NAME attribute also prevents the
+            # next rules from matching.
+            ${flip (concatMapStringsSep "\n") (wlanListDeviceFirst device wlanDeviceInterfaces."${device}") (interface:
+            ''ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", ENV{INTERFACE}=="${interface._iName}", ${systemdAttrs interface._iName}, RUN+="${newInterfaceScript interface}"'')}
+
+            # Add the required, new WLAN interfaces to the default WLAN interface with the
+            # persistent, default name as assigned by udev.
+            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", NAME=="${device}", ${systemdAttrs curInterface._iName}, RUN+="${curInterfaceScript device curInterface newInterfaces}"
+            # Generate the same systemd events for both 'add' and 'move' udev events.
+            ACTION=="move", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", NAME=="${device}", ${systemdAttrs curInterface._iName}
+          '');
       }) ];
 
   };
