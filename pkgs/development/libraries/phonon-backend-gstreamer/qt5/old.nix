@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   ]
   ++ optional debug "-DCMAKE_BUILD_TYPE=Debug";
 
+  NIX_CFLAGS_COMPILE = "-fPIC";
+
   meta = with stdenv.lib; {
     homepage = http://phonon.kde.org/;
     description = "GStreamer backend for Phonon";
