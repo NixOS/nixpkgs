@@ -182,9 +182,9 @@ let
         lib.concatStringsSep " " [
           "-I${cairo}/include/cairo"
           "-I${gtk2}/include/gtk-2.0"
-          "-I${gtk2}/lib/gtk-2.0/include"
+          "-I${gtk2.out}/lib/gtk-2.0/include"
           "-I${glib}/include/glib-2.0"
-          "-I${glib}/lib/glib-2.0/include"
+          "-I${glib.out}/lib/glib-2.0/include"
           "-I${pango}/include/pango-1.0"
         ];
     };
