@@ -45,7 +45,8 @@ in
       };
     storageDriver =
       mkOption {
-        type = types.enum ["aufs" "btrfs" "devicemapper" "overlay" "zfs"];
+        type = types.nullOr (types.enum ["aufs" "btrfs" "devicemapper" "overlay" "zfs"]);
+        default = null;
         description =
           ''
             This option determines which Docker storage driver to use.
@@ -96,7 +97,7 @@ in
         after = [ "network.target" "docker.socket" ];
         requires = [ "docker.socket" ];
         serviceConfig = {
-          ExecStart = "${pkgs.docker}/bin/docker daemon --host=fd:// --group=docker --storage-driver=${cfg.storageDriver} ${cfg.extraOptions}";
+          ExecStart = "${pkgs.docker}/bin/docker daemon --host=fd:// --group=docker ${optionalString cfg.storageDriver!=null "--storage-driver=${cfg.storageDriver}"} ${cfg.extraOptions}";
           #  I'm not sure if that limits aren't too high, but it's what
           #  goes in config bundled with docker itself
           LimitNOFILE = 1048576;
