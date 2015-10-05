@@ -34,7 +34,7 @@ let
         $out/greeter \
         --prefix PATH : "${pkgs.glibc.bin}/bin" \
         --set GDK_PIXBUF_MODULE_FILE "${pkgs.gdk_pixbuf.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" \
-        --set GTK_PATH "${theme}:${pkgs.gtk3}" \
+        --set GTK_PATH "${theme}:${pkgs.gtk3.out}" \
         --set GTK_EXE_PREFIX "${theme}" \
         --set GTK_DATA_PREFIX "${theme}" \
         --set XDG_DATA_DIRS "${theme}/share:${icons}/share" \

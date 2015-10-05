@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     sha256 = "1gaakz24k6x5nc09rmpiq0xq20j1qdjc3szag8qwmyi4ky6ydmg1";
   };
 
-  # FIXME: Split off the cups client library.
+  # FIXME: the cups libraries contains some $out/share strings so can't be split.
   outputs = [ "dev" "out" "doc" "man" ];
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls avahi libpaper ]

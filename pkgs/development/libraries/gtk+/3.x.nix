@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
     sha256 = "7fb8ae257403317d3852bad28d064d35f67e978b1fed8b71d5997e87204271b9";
   };
 
+  outputs = [ "dev" "out" ];
+  outputBin = "dev";
+
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
 
   buildInputs = [ libxkbcommon epoxy ];

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     # by `g_file_info_get_content_type ()'.
     wrapProgram "$out/bin/evince" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:${shared_mime_info}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${shared_mime_info}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
 
   '';
 

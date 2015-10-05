@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram "$out/bin/shotwell" \
      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-     --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
+     --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
      --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules"
   '';
 

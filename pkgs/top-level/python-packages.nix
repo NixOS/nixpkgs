@@ -3841,7 +3841,7 @@ let
     preFixup = ''
         wrapProgram $out/bin/gtimelog \
           --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-          --prefix LD_LIBRARY_PATH ":" "${pkgs.gtk3}/lib" \
+          --prefix LD_LIBRARY_PATH ":" "${pkgs.gtk3.out}/lib" \
 
     '';
 

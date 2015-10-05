@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
                  gnome3.defaultIconTheme gnome3.gnome_themes_standard makeWrapper];
 
   postInstall = ''
-    wrapProgram "$out/bin/gupnp-av-cp" --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:${gnome3.defaultIconTheme}/share:$out/share"
-    wrapProgram "$out/bin/gupnp-universal-cp" --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:${gnome3.defaultIconTheme}/share:$out/share"
+    wrapProgram "$out/bin/gupnp-av-cp" --prefix XDG_DATA_DIRS : "${gtk3.out}/share:${gnome3.gnome_themes_standard}/share:${gnome3.defaultIconTheme}/share:$out/share"
+    wrapProgram "$out/bin/gupnp-universal-cp" --prefix XDG_DATA_DIRS : "${gtk3.out}/share:${gnome3.gnome_themes_standard}/share:${gnome3.defaultIconTheme}/share:$out/share"
   '';
 }

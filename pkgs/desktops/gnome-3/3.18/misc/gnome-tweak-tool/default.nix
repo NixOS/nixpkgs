@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram "$out/bin/gnome-tweak-tool" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --suffix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
+      --suffix XDG_DATA_DIRS : "${gtk3.out}/share:${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --prefix PYTHONPATH : "$PYTHONPATH:$(toPythonPath $out)"
   '';
