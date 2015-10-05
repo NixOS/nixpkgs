@@ -23,10 +23,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
 
-  # get rid of runtime dependency
+  # get rid of runtime dependencies on $dev outputs
   postInstall = ''
     substituteInPlace "$lib/lib/libunbound.la" \
-      --replace '-L${openssl.dev}/lib' ""
+      --replace '-L${openssl.dev}/lib' "" \
+      --replace '-L${libevent.dev}/lib' ""
   '';
 
   meta = with stdenv.lib; {
