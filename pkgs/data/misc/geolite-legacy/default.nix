@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     "0f3y1cpjfd4q55a2kvhzsklmmp6k19v9vsdsjxr4sapc8f5fgfc9";
   srcGeoIPASNum = fetchDB
     "asnum/GeoIPASNum.dat.gz" "GeoIPASNum.dat.gz"
-    "1b8rk3crnm94ndlkw99h7iyn9daznf7sirck1zs80ppg7c69gknp";
+    "05j2nygvb7xi4s636dik12vgrdi37q5fdv5k3liqgswf9z0msz81";
   srcGeoIPASNumv6 = fetchDB
     "asnum/GeoIPASNumv6.dat.gz" "GeoIPASNumv6.dat.gz"
     "17s7pcqmfd9xvq0hd7g7nh62sjayl24w04ifm39snrq2a32l667n";
