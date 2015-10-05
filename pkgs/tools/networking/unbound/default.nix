@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl expat libevent ];
 
   configureFlags = [
-    "--with-ssl=${openssl}"
+    "--with-ssl=${openssl.dev}"
     "--with-libexpat=${expat}"
-    "--with-libevent=${libevent}"
+    "--with-libevent=${libevent.dev}"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
   ];

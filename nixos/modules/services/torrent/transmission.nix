@@ -114,7 +114,7 @@ in
           #include <abstractions/nameservice>
 
           ${pkgs.glibc.out}/lib/*.so               mr,
-          ${pkgs.libevent}/lib/libevent*.so*   mr,
+          ${pkgs.libevent.out}/lib/libevent*.so*   mr,
           ${pkgs.curl}/lib/libcurl*.so*        mr,
           ${pkgs.openssl}/lib/libssl*.so*      mr,
           ${pkgs.openssl}/lib/libcrypto*.so*   mr,

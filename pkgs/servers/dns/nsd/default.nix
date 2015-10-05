@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
      ++ edf rootServer       "root-server"
      ++ edf rrtypes          "draft-rrtypes"
      ++ edf zoneStats        "zone-stats"
-     ++ [ "--with-ssl=${openssl}" "--with-libevent=${libevent}" ];
+     ++ [ "--with-ssl=${openssl.dev}" "--with-libevent=${libevent.dev}" ];
 
   meta = with stdenv.lib; {
     homepage = http://www.nlnetlabs.nl;
