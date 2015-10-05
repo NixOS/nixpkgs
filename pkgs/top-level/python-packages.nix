@@ -3855,12 +3855,12 @@ let
     };
   };
 
-  internetarchive = let ver = "0.8.3"; in buildPythonPackage rec {
+  internetarchive = let ver = "0.9.3"; in buildPythonPackage rec {
     name = "internetarchive-${ver}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/jjjake/internetarchive/archive/v${ver}.tar.gz";
-      sha256 = "0j3l13zvbx50j66l6pnf8y8y8m6gk1sc3yssvfd2scvmv4gnmm8n";
+      sha256 = "0camj5id9i2nw3zarykz1iaz4wsxv5s5774m0all70nq0f1z49wd";
     };
 
     # It is hardcoded to specific versions, I don't know why.
@@ -11674,11 +11674,11 @@ let
 
 
   pyyaml = buildPythonPackage (rec {
-    name = "PyYAML-3.10";
+    name = "PyYAML-3.11";
 
     src = pkgs.fetchurl {
       url = "http://pyyaml.org/download/pyyaml/${name}.zip";
-      sha256 = "1r127fa354ppb667f4acxlzwxixap1jgzjrr790bw8mcpxv2hqaa";
+      sha256 = "1jbagwfs5is9fb7c5sfxhrri6yn1sp3kfbd6hkd8v1zga31kmfqr";
     };
 
     buildInputs = with self; [ pkgs.pyrex ];
