@@ -68,8 +68,8 @@ stdenv.mkDerivation {
 
       ln -s ${openssl.out}/lib/libssl.so $libdir/libssl.so.1.0.0
       ln -s ${openssl.out}/lib/libcrypto.so $libdir/libcrypto.so.1.0.0
-      ln -s ${nspr}/lib/libnspr4.so $libdir/libnspr4.so
-      ln -s ${nspr}/lib/libplc4.so $libdir/libplc4.so
+      ln -s ${nspr.out}/lib/libnspr4.so $libdir/libnspr4.so
+      ln -s ${nspr.out}/lib/libplc4.so $libdir/libplc4.so
 
       mkdir -p $out/bin
 

@@ -7690,12 +7690,9 @@ let
   nspr = callPackage ../development/libraries/nspr { };
 
   nss = lowPrio (callPackage ../development/libraries/nss { });
+  nssTools = nss.tools;
 
   nss_wrapper = callPackage ../development/libraries/nss_wrapper { };
-
-  nssTools = callPackage ../development/libraries/nss {
-    includeTools = true;
-  };
 
   ntk = callPackage ../development/libraries/audio/ntk { };
 

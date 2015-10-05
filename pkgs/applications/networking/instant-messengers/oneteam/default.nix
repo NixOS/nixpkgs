@@ -43,7 +43,7 @@ rec {
   '' ["minInit" "doUnpack"];
 
   setVars=a.noDepEntry ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${nspr}/include/nspr"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${nspr.dev}/include/nspr"
   '';
 
   cmakeBuildDir="cmake-build";
