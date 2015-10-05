@@ -14354,6 +14354,8 @@ let
 
     coq = coq_8_5;
 
+    coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
+
     mathcomp = callPackage ../development/coq-modules/mathcomp { };
 
     ssreflect = callPackage ../development/coq-modules/ssreflect { };
