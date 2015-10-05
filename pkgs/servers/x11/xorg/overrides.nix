@@ -127,7 +127,7 @@ in
     '';
     propagatedBuildInputs = [ xorg.libSM ];
     CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
-    outputs = [ "out" "doc" "man" ];
+    outputs = [ "dev" "out" "doc" ]; # "dev-doc" only (incl. man pages)
   };
 
   # See https://bugs.freedesktop.org/show_bug.cgi?id=47792

@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 
-  inherit libXt;
+  libXt_dev = libXt.dev;
   inherit fontconfig;
 }
