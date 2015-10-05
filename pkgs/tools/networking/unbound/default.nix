@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1jly2apag4yg649w3flaq73wdrcfyxnhx5py9j73y7adxmswigbn";
   };
 
+  outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
+
   buildInputs = [ openssl expat libevent ];
 
   configureFlags = [
@@ -21,11 +23,17 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
 
-  meta = {
+  # get rid of runtime dependency
+  postInstall = ''
+    substituteInPlace "$lib/lib/libunbound.la" \
+      --replace '-L${openssl.dev}/lib' ""
+  '';
+
+  meta = with stdenv.lib; {
     description = "Validating, recursive, and caching DNS resolver";
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
     homepage = http://www.unbound.net;
-    maintainers = [ stdenv.lib.maintainers.emery ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ maintainers.emery ];
+    platforms = platforms.unix;
   };
 }
