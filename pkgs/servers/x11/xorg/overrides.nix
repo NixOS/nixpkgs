@@ -230,6 +230,10 @@ in
     buildInputs = attrs.buildInputs ++ [ args.freetype args.fontconfig ];
   };
 
+  xcbutil = attrs: attrs // {
+    outputs = [ "dev" "out" ];
+  };
+
   xcbutilcursor = attrs: attrs // {
     meta.maintainers = [ stdenv.lib.maintainers.lovek323 ];
   };
