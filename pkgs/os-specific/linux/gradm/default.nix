@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://grsecurity.net";
     license     = licenses.gpl2;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice wizeman ];
+    maintainers = with maintainers; [ thoughtpolice ];
   };
 }
