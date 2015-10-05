@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/gnuplot \
        --prefix PATH : '${gnused}/bin' \
        --prefix PATH : '${coreutils}/bin' \
-       --prefix PATH : '${fontconfig}/bin' \
+       --prefix PATH : '${fontconfig.bin}/bin' \
        --run '. ${./set-gdfontpath-from-fontconfig.sh}'
   '';
 

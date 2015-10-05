@@ -7,6 +7,8 @@
 }:
 {platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs?false, useGooglePlayServices?false}:
 
+with { inherit (stdenv.lib) makeLibraryPath; };
+
 stdenv.mkDerivation rec {
   name = "android-sdk-${version}";
   version = "24.1.2";
@@ -57,7 +59,7 @@ stdenv.mkDerivation rec {
       # The following wrapper ensures that they can be found:
       wrapProgram `pwd`/android \
         --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib
+        --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ glib gtk libXtst ]}
     
       # The emulators need additional libraries, which are dynamically loaded => let's wrap them
     
@@ -65,7 +67,7 @@ stdenv.mkDerivation rec {
       do
           wrapProgram `pwd`/$i \
             --prefix PATH : ${file}/bin \
-            --suffix LD_LIBRARY_PATH : `pwd`/lib:${libX11_32bit}/lib:${libxcb_32bit}/lib:${libXau_32bit}/lib:${libXdmcp_32bit}/lib:${libXext_32bit}/lib:${mesa_32bit}/lib
+            --suffix LD_LIBRARY_PATH : `pwd`/lib:${makeLibraryPath [ libX11_32bit libxcb_32bit libXau_32bit libXdmcp_32bit libXext_32bit mesa_32bit ]}
       done
       
       ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
@@ -73,7 +75,7 @@ stdenv.mkDerivation rec {
         do
             wrapProgram `pwd`/$i \
               --prefix PATH : ${file}/bin \
-              --suffix LD_LIBRARY_PATH : `pwd`/lib:${libX11}/lib:${libxcb}/lib:${libXau}/lib:${libXdmcp}/lib:${libXext}/lib:${mesa}/lib:${alsaLib}/lib
+              --suffix LD_LIBRARY_PATH : `pwd`/lib:${makeLibraryPath [ libX11 libxcb libXau libXdmcp libXext mesa alsaLib ]}
         done
       ''}
     ''}
@@ -86,10 +88,10 @@ stdenv.mkDerivation rec {
         
         cd lib/monitor-x86
         patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux.so.2 monitor
-        patchelf --set-rpath ${libX11}/lib:${libXext}/lib:${libXrender}/lib:${freetype}/lib:${fontconfig}/lib libcairo-swt.so
+        patchelf --set-rpath ${makeLibraryPath [ libX11 libXext libXrender freetype fontconfig ]} libcairo-swt.so
         
         wrapProgram `pwd`/monitor \
-          --prefix LD_LIBRARY_PATH : ${gtk}/lib:${atk}/lib:${stdenv.cc.cc}/lib:${libXtst}/lib
+          --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ gtk atk stdenv.cc.cc libXtst ]}
 
         cd ../..
       ''
@@ -99,10 +101,10 @@ stdenv.mkDerivation rec {
         
         cd lib/monitor-x86_64
         patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 monitor
-        patchelf --set-rpath ${libX11}/lib:${libXext}/lib:${libXrender}/lib:${freetype}/lib:${fontconfig}/lib libcairo-swt.so
+        patchelf --set-rpath ${makeLibraryPath [ libX11 libXext libXrender freetype fontconfig ]} libcairo-swt.so
         
         wrapProgram `pwd`/monitor \
-          --prefix LD_LIBRARY_PATH : ${gtk}/lib:${atk}/lib:${stdenv.cc.cc}/lib::${libXtst}/lib
+          --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ gtk atk stdenv.cc.cc libXtst ]}
 
         cd ../..
       ''

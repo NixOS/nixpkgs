@@ -48,5 +48,5 @@ stdenv.mkDerivation rec {
   };
 
   libXt_dev = libXt.dev;
-  inherit fontconfig;
+  fontconfig_dev = fontconfig.dev;
 }

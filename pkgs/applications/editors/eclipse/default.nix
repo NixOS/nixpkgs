@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper
+{ stdenv, lib, fetchurl, makeDesktopItem, makeWrapper
 , freetype, fontconfig, libX11, libXext, libXrender, zlib
 , glib, gtk, libXtst, jre
 , webkitgtk2 ? null  # for internal web browser
@@ -37,7 +37,7 @@ let
         interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
         libCairo=$out/eclipse/libcairo-swt.so
         patchelf --set-interpreter $interpreter $out/eclipse/eclipse
-        [ -f $libCairo ] && patchelf --set-rpath ${freetype}/lib:${fontconfig}/lib:${libX11}/lib:${libXrender}/lib:${zlib}/lib $libCairo
+        [ -f $libCairo ] && patchelf --set-rpath ${lib.makeLibraryPath [ freetype fontconfig libX11 libXrender zlib ]} "$libCairo"
 
         # Create wrapper script.  Pass -configuration to store
         # settings in ~/.eclipse/org.eclipse.platform_<version> rather
@@ -47,7 +47,7 @@ let
         
         makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
           --prefix PATH : ${jre}/bin \
-          --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib${stdenv.lib.optionalString (webkitgtk2 != null) ":${webkitgtk2}/lib"} \
+          --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk libXtst ] ++ lib.optional (webkitgtk2 != null) webkitgtk2)} \
           --add-flags "-configuration \$HOME/.eclipse/''${productId}_$productVersion/configuration"
 
         # Create desktop item.
