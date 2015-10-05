@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libtiff, libjpeg, zlib}:
+{ stdenv, fetchurl, libtiff, libjpeg, zlib }:
 
 stdenv.mkDerivation rec {
   name = "lcms2-2.7";
@@ -8,13 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "0lvaglcjsvnyglgj3cb3pjc22nq8fml1vlx5dmmmw66ywx526925";
   };
 
+  outputs = [ "dev" "out" "bin" ];
+
   propagatedBuildInputs = [ libtiff libjpeg zlib ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Color management engine";
     homepage = http://www.littlecms.com/;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    license = licenses.mit;
+    platforms = platforms.all;
   };
 }
