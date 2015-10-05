@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
     sha256 = "0q3jck7lna77z5r42f13c4xglc7azd19pxfrjrpgp2yf615w4lgm";
   };
 
-  patches = [ ./clang.patch ];
-
   configureFlags = [
     "--with-shared"
     "--with-cxx-shared"

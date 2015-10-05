@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
       configureFlagsArray+=("--build=$(./configfsf.guess)")
     '';
 
+  patches = [ ./l0m4_tmp.patch ];
+
   doCheck = true;
 
   dontDisableStatic = withStatic;
