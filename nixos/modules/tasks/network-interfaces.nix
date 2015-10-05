@@ -381,8 +381,8 @@ in
       description =
         ''
           This option allows you to define Open vSwitches that connect
-          physical networks together.  The value of this option is an
-          attribute set.  Each attribute specifies a vswitch, with the
+          physical networks together. The value of this option is an
+          attribute set. Each attribute specifies a vswitch, with the
           attribute name specifying the name of the vswitch's network
           interface.
         '';
@@ -396,16 +396,6 @@ in
           type = types.listOf types.str;
           description =
             "The physical network interfaces connected by the vSwitch.";
-        };
-
-        bindInterfaces = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            If true, then the interfaces of the vSwitch are brought 'up' and especially
-            also 'down' together with the vSwitch. That requires that every interfaces
-            is configured as a systemd network services.
-          '';
         };
 
         controllers = mkOption {
