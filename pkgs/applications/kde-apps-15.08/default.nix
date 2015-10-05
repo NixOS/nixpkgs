@@ -63,6 +63,6 @@ let
     print-manager = callPackage ./print-manager.nix {};
   };
 
-  newScope = scope: pkgs.kf513.newScope ({ inherit kdeApp; } // scope);
+  newScope = scope: pkgs.kf514.newScope ({ inherit kdeApp; } // scope);
 
 in lib.makeScope newScope packages

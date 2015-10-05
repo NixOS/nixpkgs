@@ -1,10 +1,10 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p coreutils findutils gawk gnused nix wget
+#! nix-shell -i bash -p coreutils findutils gnused nix wget
 
 set -x
 
 # The trailing slash at the end is necessary!
-RELEASE_URL="http://download.kde.org/stable/plasma/5.4.1/"
+RELEASE_URL="http://download.kde.org/stable/frameworks/5.14/"
 EXTRA_WGET_ARGS='-A *.tar.xz'
 
 mkdir tmp; cd tmp
