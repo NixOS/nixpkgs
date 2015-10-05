@@ -8000,8 +8000,7 @@ let
   };
 
   qt54 = recurseIntoAttrs (callPackage ../development/libraries/qt-5/5.4 {});
-  qt55 = lib.mapAttrs (_n: pkg: if lib.isDerivation pkg then lowPrio pkg else pkg)
-    (recurseIntoAttrs (import ../development/libraries/qt-5/5.5 { inherit pkgs; }));
+  qt55 = import ../development/libraries/qt-5/5.5 { inherit pkgs; };
 
 
   qt5 = qt54;
