@@ -378,6 +378,17 @@ in
         '';
       };
 
+      systemHasTPM = mkOption {
+        default = "";
+        example = "YES_TPM_is_activated";
+        type = types.string;
+        description = ''
+          Assertion that the target system has an activated TPM. It is a safety
+          check before allowing the activation of 'enableTrustedBoot'. TrustedBoot
+          WILL FAIL TO BOOT YOUR SYSTEM if no TPM is available.
+        '';
+      };
+
     };
 
   };
@@ -453,8 +464,8 @@ in
           message = "Trusted GRUB does not have ZFS support";
         }
         {
-          assertion = !cfg.enableTrustedBoot;
-          message = "Trusted GRUB can break your system. Remove assertion if you want to test trustedGRUB nevertheless.";
+          assertion = !cfg.enableTrustedBoot || cfg.systemHasTPM == "YES_TPM_is_activated";
+          message = "Trusted GRUB can break the system! Confirm that the system has an activated TPM by setting 'systemHasTPM'.";
         }
       ] ++ flip concatMap cfg.mirroredBoots (args: [
         {
