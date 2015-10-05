@@ -2361,15 +2361,16 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ Clone ];
   };
 
-  Curses = buildPerlPackage {
-    name = "Curses-1.32";
+  Curses = let version = "1.33"; in buildPerlPackage {
+    name = "Curses-${version}";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GI/GIRAFFED/Curses-1.32.tgz;
-      sha256 = "0l569g8saw20ka5z4h17xpn0mcwfxg3jnsg6cnbnv034g7yl9fjx";
+      url = "mirror://cpan/authors/id/G/GI/GIRAFFED/Curses-${version}.tar.gz";
+      sha256 = "126fhcyb822vqhszdrr7nmhrnshf06076shxdr7la0fwqzsfn7zb";
     };
     propagatedBuildInputs = [ pkgs.ncurses ];
     NIX_CFLAGS_LINK = "-lncurses";
     meta = {
+      inherit version;
       description = "Perl bindings to ncurses";
       license = stdenv.lib.licenses.artistic1;
     };
