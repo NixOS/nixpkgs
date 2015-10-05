@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     ln -s ${v8}/lib/libv8.so src/libs/libv8.so
-    ln -s ${icu}/lib/libicui18n.so src/libs/libicui18n.so
-    ln -s ${icu}/lib/libicuuc.so src/libs/libicuuc.so
+    ln -s ${icu.out}/lib/libicui18n.so src/libs/libicui18n.so
+    ln -s ${icu.out}/lib/libicuuc.so src/libs/libicuuc.so
 
     patchShebangs build.sh
     ./build.sh js1

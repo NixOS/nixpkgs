@@ -148,7 +148,7 @@ stdenv.mkDerivation {
 
   configureScript = "./bootstrap.sh";
   configureFlags = commonConfigureFlags ++ [
-    "--with-icu=${icu}"
+    "--with-icu=${icu.dev}"
     "--with-python=${python.interpreter}"
   ] ++ optional (toolset != null) "--with-toolset=${toolset}";
 

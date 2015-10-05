@@ -30,9 +30,9 @@ rec {
 
       cp -rL ${darwin.Libsystem}/include $out
       chmod -R u+w $out/include
-      cp -rL ${icu}/include*             $out/include
+      cp -rL ${icu.dev}/include*             $out/include
       cp -rL ${libiconv}/include/*       $out/include
-      cp -rL ${gnugrep.pcre}/include/*   $out/include
+      cp -rL ${gnugrep.pcre.dev}/include/*   $out/include
       mv $out/include $out/include-Libsystem
 
       # Copy coreutils, bash, etc.
@@ -49,20 +49,20 @@ rec {
       cp -d ${gawk}/bin/awk $out/bin
       cp ${gnutar}/bin/tar $out/bin
       cp ${gzip}/bin/gzip $out/bin
-      cp ${bzip2}/bin/bzip2 $out/bin
+      cp ${bzip2.bin}/bin/bzip2 $out/bin
       cp -d ${gnumake}/bin/* $out/bin
       cp -d ${patch}/bin/* $out/bin
-      cp -d ${xz}/bin/xz $out/bin
+      cp -d ${xz.bin}/bin/xz $out/bin
 
       # This used to be in-nixpkgs, but now is in the bundle
       # because I can't be bothered to make it partially static
       cp ${curl}/bin/curl $out/bin
       cp -d ${curl}/lib/libcurl*.dylib $out/lib
       cp -d ${libssh2}/lib/libssh*.dylib $out/lib
-      cp -d ${openssl}/lib/*.dylib $out/lib
+      cp -d ${openssl.out}/lib/*.dylib $out/lib
 
-      cp -d ${gnugrep.pcre}/lib/libpcre*.dylib $out/lib
-      cp -d ${libiconv}/lib/libiconv*.dylib $out/lib
+      cp -d ${gnugrep.pcre.out}/lib/libpcre*.dylib $out/lib
+      cp -d ${libiconv.lib}/lib/libiconv*.dylib $out/lib
       cp -d ${gettext}/lib/libintl*.dylib $out/lib
       chmod +x $out/lib/libintl*.dylib
 
@@ -79,10 +79,10 @@ rec {
       mkdir $out/include
       cp -rd ${libcxx}/include/c++     $out/include
 
-      cp -d ${icu}/lib/libicu*.dylib $out/lib
-      cp -d ${zlib}/lib/libz.*       $out/lib
+      cp -d ${icu.out}/lib/libicu*.dylib $out/lib
+      cp -d ${zlib.out}/lib/libz.*       $out/lib
       cp -d ${gmpxx}/lib/libgmp*.*   $out/lib
-      cp -d ${xz}/lib/liblzma*.*     $out/lib
+      cp -d ${xz.out}/lib/liblzma*.*     $out/lib
 
       # Copy binutils.
       for i in as ld ar ranlib nm strip otool install_name_tool dsymutil; do
