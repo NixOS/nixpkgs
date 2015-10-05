@@ -6563,12 +6563,6 @@ let
       sha256 = "0cds7yvwdlqmd590i59vzxaviwxk4js6dkhnmdxb3p1xac7wmq9s";
     };
 
-    patchPhase = ''
-      pushd libev
-      patch -p1 < ${../development/libraries/libev/noreturn.patch}
-      popd
-    '';
-
     buildInputs = with self; [ pkgs.libev ];
     propagatedBuildInputs = optionals (!isPyPy) [ self.greenlet ];
 
