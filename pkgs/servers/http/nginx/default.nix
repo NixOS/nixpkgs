@@ -149,7 +149,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = optionalString modsecurity "-I${aprutil}/include/apr-1 -I${apacheHttpd}/include -I${apr}/include/apr-1 -I${yajl}/include";
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2}/include/libxml2 $additionalFlags"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2.dev}/include/libxml2 $additionalFlags"
   '';
 
   meta = {

@@ -1558,7 +1558,7 @@ let
     });
 
     xml2 = old.xml2.overrideDerivation (attrs: {
-      preConfigure = "export LIBXML_INCDIR=${pkgs.libxml2}/include/libxml2";
+      preConfigure = "export LIBXML_INCDIR=${pkgs.libxml2.dev}/include/libxml2";
     });
 
     curl = old.curl.overrideDerivation (attrs: {

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/xmlto" \
-       --prefix PATH : "${libxslt}/bin:${libxml2}/bin:${getopt}/bin"
+       --prefix PATH : "${libxslt.bin}/bin:${libxml2.bin}/bin:${getopt}/bin"
 
     # `w3m' is needed for HTML to text conversions.
     substituteInPlace "$out/share/xmlto/format/docbook/txt" \

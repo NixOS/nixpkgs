@@ -82,8 +82,8 @@ in
   nokogiri = {
     buildInputs = [ libxml2 ];
     buildFlags =
-      [ "--with-xml2-dir=${libxml2} --with-xml2-include=${libxml2}/include/libxml2"
-        "--with-xslt-dir=${libxslt}  --use-system-libraries"
+      [ "--with-xml2-dir=${libxml2.out} --with-xml2-include=${libxml2.dev}/include/libxml2"
+        "--with-xslt-dir=${libxslt.out}  --use-system-libraries"
         libiconv
       ];
   };

@@ -7480,13 +7480,12 @@ let
 
   libxmi = callPackage ../development/libraries/libxmi { };
 
-  libxml2 = callPackage ../development/libraries/libxml2 {
-    pythonSupport = false;
+  libxml2 = callPackage ../development/libraries/libxml2 { };
+  libxml2Python = pkgs.buildEnv { # slightly hacky
+    name = "libxml2+py-${pkgs.libxml2.version}";
+    paths = with libxml2; [ dev bin py ];
+    inherit (pkgs.libxml2) passthru;
   };
-
-  libxml2Python = lowPrio (libxml2.override {
-    pythonSupport = true;
-  });
 
   libxmlxx = callPackage ../development/libraries/libxmlxx { };
 

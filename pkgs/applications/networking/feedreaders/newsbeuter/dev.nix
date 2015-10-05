@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_CFLAGS_COMPILE =
-    "-I${libxml2}/include/libxml2 -I${json-c-0-11}/include/json-c";
+    "-I${libxml2.dev}/include/libxml2 -I${json-c-0-11}/include/json-c";
 
   NIX_LDFLAGS = "-lsqlite3 -lcurl -lxml2 -lstfl -ljson";
 

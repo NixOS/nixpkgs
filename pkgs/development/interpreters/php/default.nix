@@ -67,7 +67,7 @@ let
 
         libxml2 = {
           configureFlags = [
-            "--with-libxml-dir=${libxml2}"
+            "--with-libxml-dir=${libxml2.dev}"
             ];
           buildInputs = [ libxml2 ];
         };

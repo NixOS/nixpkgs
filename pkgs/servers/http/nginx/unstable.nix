@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
   additionalFlags = optionalString stdenv.isDarwin "-Wno-error=deprecated-declarations";
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2}/include/libxml2 $additionalFlags"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2.dev}/include/libxml2 $additionalFlags"
   '';
 
   postInstall = ''

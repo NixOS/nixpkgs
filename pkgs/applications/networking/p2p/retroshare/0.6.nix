@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "189qndkfq9kgv3qi3wx8ivla4j8fxr4iv7c8y9rjrjaz8jwdkn5x";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include -I${libxml2}/include/libxml2 -I${sqlcipher}/include/sqlcipher";
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/glib-2.0 -I${glib.dev}/lib/glib-2.0/include -I${libxml2.dev}/include/libxml2 -I${sqlcipher}/include/sqlcipher";
 
   patchPhase = ''
     # Fix build error

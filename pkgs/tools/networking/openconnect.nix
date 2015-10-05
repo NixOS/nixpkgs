@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
       export PKG_CONFIG=${pkgconfig}/bin/pkg-config
-      export LIBXML2_CFLAGS="-I ${libxml2}/include/libxml2"
-      export LIBXML2_LIBS="-L${libxml2}/lib -lxml2"
+      export LIBXML2_CFLAGS="-I ${libxml2.dev}/include/libxml2"
+      export LIBXML2_LIBS="-L${libxml2.out}/lib -lxml2"
     '';
 
   configureFlags = [

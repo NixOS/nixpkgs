@@ -63,12 +63,12 @@ in
     buildFlags = [
       "--use-system-libraries"
       "--with-zlib-dir=${zlib}"
-      "--with-xml2-lib=${libxml2}/lib"
-      "--with-xml2-include=${libxml2}/include/libxml2"
-      "--with-xslt-lib=${libxslt}/lib"
-      "--with-xslt-include=${libxslt}/include"
-      "--with-exslt-lib=${libxslt}/lib"
-      "--with-exslt-include=${libxslt}/include"
+      "--with-xml2-lib=${libxml2.out}/lib"
+      "--with-xml2-include=${libxml2.dev}/include/libxml2"
+      "--with-xslt-lib=${libxslt.out}/lib"
+      "--with-xslt-include=${libxslt.dev}/include"
+      "--with-exslt-lib=${libxslt.out}/lib"
+      "--with-exslt-include=${libxslt.dev}/include"
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
     buildInputs = lib.optional stdenv.isDarwin darwin.libobjc;
   };

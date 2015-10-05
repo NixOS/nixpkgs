@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       substituteInPlace  $f --replace grep          ${gnugrep}/bin/grep
       substituteInPlace  $f --replace groff         ${groff}/bin/groff
       substituteInPlace  $f --replace gunzip        ${gzip}/bin/gunzip
-      substituteInPlace  $f --replace iconv         ${libiconv}/bin/iconv
+      substituteInPlace  $f --replace iconv         ${libiconv.bin}/bin/iconv
       substituteInPlace  $f --replace lyx           ${lyx}/bin/lyx
       substituteInPlace  $f --replace pdftotext     ${xpdf}/bin/pdftotext
       substituteInPlace  $f --replace pstotext      ${ghostscript}/bin/ps2ascii 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       substituteInPlace  $f --replace tar           ${gnutar}/bin/tar
       substituteInPlace  $f --replace unzip         ${unzip}/bin/unzip
       substituteInPlace  $f --replace xls2csv       ${catdoc}/bin/xls2csv
-      substituteInPlace  $f --replace xsltproc      ${libxslt}/bin/xsltproc
+      substituteInPlace  $f --replace xsltproc      ${libxslt.bin}/bin/xsltproc
       substituteInPlace  $f --replace unrtf         ${unrtf}/bin/unrtf
       substituteInPlace  $f --replace untex         ${untex}/bin/untex
       substituteInPlace  $f --replace wpd2html      ${libwpd}/bin/wpd2html

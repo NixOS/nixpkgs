@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = "DESTDIR=$(out)";
 
-  NIX_CFLAGS_COMPILE = [ "-I${libxml2}/include/libxml2" ];
+  NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ];
 
   # Probably a hack, but using DESTDIR and PREFIX makes everything work!
   postInstall = ''

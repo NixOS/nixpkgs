@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "13029baw9kkyjgr7q3jccw2mz38amq7mmpr5p3bh775qawd1bisz";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "dev" "out" "bin" "doc" ];
 
   buildInputs = [ libxml2 ];
 
@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
   patches = stdenv.lib.optionals stdenv.isSunOS [ ./patch-ah.patch ];
 
   configureFlags = [
-    "--with-libxml-prefix=${libxml2}"
     "--without-python"
     "--without-crypto"
     "--without-debug"
@@ -25,11 +24,17 @@ stdenv.mkDerivation rec {
     "--without-debugger"
   ];
 
-  meta = {
+  postFixup = ''
+    _moveToOutput bin/xslt-config "$dev"
+    _moveToOutput lib/xsltConf.sh "$dev"
+    _moveToOutput share/man/man1 "$bin"
+  '';
+
+  meta = with stdenv.lib; {
     homepage = http://xmlsoft.org/XSLT/;
     description = "A C library and tools to do XSL transformations";
     license = "bsd";
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.eelco ];
   };
 }
