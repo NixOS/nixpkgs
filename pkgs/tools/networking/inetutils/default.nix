@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses /* for `talk' */ ];
 
-  configureFlags = "--with-ncurses-include-dir=${ncurses}/include";
+  configureFlags = "--with-ncurses-include-dir=${ncurses.dev}/include";
 
   # Test fails with "UNIX socket name too long", probably because our
   # $TMPDIR is too long.

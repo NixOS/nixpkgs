@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     find $out/lib -type f | grep '\.\(la\|pc\)''$' | xargs sed -i \
-      -e 's,-lncurses[a-z]*,-L${ncurses}/lib -lncursesw,g'
+      -e 's,-lncurses[a-z]*,-L${ncurses.lib}/lib -lncursesw,g'
   '';
 
   configureFlags = [ "--enable-widec" ];

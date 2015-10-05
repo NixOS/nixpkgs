@@ -9,9 +9,10 @@ stdenv.mkDerivation rec {
 
   # Fix some wrong hardcoded paths
   preConfigure = ''
-    sed -i -e "s|/usr/lib/terminfo|${ncurses}/lib/terminfo|" configure
-    sed -i -e "s|/usr/lib/terminfo|${ncurses}/lib/terminfo|" src/sltermin.c
+    sed -i -e "s|/usr/lib/terminfo|${ncurses.out}/lib/terminfo|" configure
+    sed -i -e "s|/usr/lib/terminfo|${ncurses.out}/lib/terminfo|" src/sltermin.c
     sed -i -e "s|/bin/ln|ln|" src/Makefile.in
+    sed -i -e "s|-ltermcap|-lncurses|" ./configure
   '';
   configureFlags = "--with-png=${libpng} --with-z=${zlib} --with-pcre=${pcre} --with-readline=${readline}";
   buildInputs = [ncurses pcre libpng zlib readline];

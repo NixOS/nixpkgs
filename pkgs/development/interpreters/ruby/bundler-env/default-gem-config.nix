@@ -54,8 +54,8 @@ in
   ncursesw = attrs: {
     buildInputs = [ ncurses ];
     buildFlags = [
-      "--with-cflags=-I${ncurses}/include"
-      "--with-ldflags=-L${ncurses}/lib"
+      "--with-cflags=-I${ncurses.dev}/include"
+      "--with-ldflags=-L${ncurses.lib}/lib"
     ];
   };
 

@@ -10448,7 +10448,7 @@ let self = _self // overrides; _self = with self; {
     preConfigure =
       ''
         substituteInPlace Makefile.PL --replace '$Config{libpth}' \
-          "'${pkgs.ncurses}/lib'"
+          "'${pkgs.ncurses.lib}/lib'"
       '';
 
     # Tests don't work because they require /dev/tty.

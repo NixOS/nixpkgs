@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     # Further, we need to make sure that the -L option occurs before mention
     # of the library, so that it finds it within the Nix store.
     sed -i 's/tinfo ncurses/tinfo ncursesw/' configure
-    ncurseslib=$(echo ${ncurses}/lib | sed 's#/#\\/#g')
+    ncurseslib=$(echo ${ncurses.lib}/lib | sed 's#/#\\/#g')
     sed -i "s/OLIBS=\$LIBS/OLIBS=\"-L$ncurseslib \$LIBS\"/" configure
     sed -i 's/LIBS="\$LIBS_TERMCAP \$LIBS"/LIBS="\$LIBS \$LIBS_TERMCAP"/' configure
 
     configureFlagsArray=(
-      LDFLAGS=-L${ncurses}/lib
+      LDFLAGS=-L${ncurses.lib}/lib
       --with-xml2=yes
       --with-gnutls=yes
       --with-mac
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     )
     makeFlagsArray=(
       CFLAGS=-O3
-      LDFLAGS="-O3 -L${ncurses}/lib"
+      LDFLAGS="-O3 -L${ncurses.lib}/lib"
     );
   '';
 

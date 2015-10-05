@@ -34,7 +34,7 @@ let
 
             # GDB needs ncurses
             case "$file" in
-              *gdb) patchelf --set-rpath "${ncurses}/lib" "$file";;
+              *gdb) patchelf --set-rpath "${ncurses.lib}/lib" "$file";;
             esac
         done
 
