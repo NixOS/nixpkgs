@@ -4,7 +4,7 @@ libobjc, Cocoa, WebKit, Quartz, ImageCaptureCore, OSAKit
 
 stdenv.mkDerivation rec {
   emacsName = "emacs-24.5";
-  name = "${emacsName}-mac-5.10";
+  name = "${emacsName}-mac-5.11";
 
   #builder = ./builder.sh;
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${name}.tar.gz";
-    sha256 = "0d4r4mgqxcdba715lbr7rk4bxz7yjxi6wv63kyh6gaqbfgql41vf";
+    sha256 = "0p4jh6s1qi6jm6zr82grk65x33ix1hb0fbpih4vh3vnx6310iwsb";
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
