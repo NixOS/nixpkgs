@@ -50,6 +50,9 @@ let
 
     phases = [ "installPhase" "fixupPhase" ];
 
+    # because we copy files from the system
+    preferLocalBuild = true;
+
     installPhase = ''
       linkFramework() {
         local path="$1"

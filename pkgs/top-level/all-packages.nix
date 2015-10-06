@@ -9483,6 +9483,11 @@ let
 
     cctools = (callPackage ../os-specific/darwin/cctools/port.nix { inherit libobjc; }).native;
 
+    cf-private = callPackage ../os-specific/darwin/cf-private {
+      inherit (apple-source-releases) CF;
+      inherit osx_private_sdk;
+    };
+
     maloader = callPackage ../os-specific/darwin/maloader {
       inherit opencflite;
     };
@@ -13000,7 +13005,7 @@ let
 
   vim = callPackage ../applications/editors/vim {
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Foundation CoreData;
-    inherit (darwin) libobjc;
+    inherit (darwin) libobjc cf-private;
   };
 
   macvim = callPackage ../applications/editors/vim/macvim.nix { stdenv = clangStdenv; };
