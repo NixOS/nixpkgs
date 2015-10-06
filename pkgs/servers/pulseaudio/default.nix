@@ -110,7 +110,8 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString libOnly ''
     rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
-    sed 's|-lltdl|-L${libtool}/lib -lltdl|' -i $out/lib/libpulsecore-${version}.la
+    sed 's|-lltdl|-L${libtool.lib}/lib -lltdl|' -i $out/lib/libpulsecore-${version}.la
+    _moveToOutput lib/cmake "$dev"
   '';
 
   meta = {
