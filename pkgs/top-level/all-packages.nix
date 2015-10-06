@@ -6425,6 +6425,8 @@ let
     gnupg1 = gnupg1orig;
   };
 
+  gpgstats = callPackage ../tools/security/gpgstats { };
+
   grantlee = callPackage ../development/libraries/grantlee { };
 
   grantlee5 = callPackage ../development/libraries/grantlee/5.x-old.nix { };
