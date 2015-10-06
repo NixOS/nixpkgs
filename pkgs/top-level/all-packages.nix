@@ -278,8 +278,9 @@ let
   };
 
   buildFHSUserEnv = args: userFHSEnv {
-    env = buildFHSEnv (removeAttrs args [ "runScript" ]);
+    env = buildFHSEnv (removeAttrs args [ "runScript" "extraBindMounts" ]);
     runScript = args.runScript or "bash";
+    extraBindMounts = args.extraBindMounts or [];
   };
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
