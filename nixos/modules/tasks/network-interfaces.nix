@@ -940,8 +940,8 @@ in
 
     services.udev.packages = mkIf (cfg.wlanInterfaces != {}) [
       (pkgs.writeTextFile {
-        name = "99-zzz-wlanInterfaces-last.rules";
-        destination = "/etc/udev/rules.d/99-zzz-wlanInterfaces-last.rules";
+        name = "99-zzz-40-wlanInterfaces.rules";
+        destination = "/etc/udev/rules.d/99-zzz-40-wlanInterfaces.rules";
         text =
           let
             # Collect all interfaces that are defined for a device
