@@ -3571,6 +3571,8 @@ let
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
 
+  zbackup = callPackage ../tools/backup/zbackup {};
+
   zbar = callPackage ../tools/graphics/zbar {
     pygtk = lib.overrideDerivation pygtk (x: {
       gtk = gtk2;
@@ -11374,6 +11376,7 @@ let
   fvwm = callPackage ../applications/window-managers/fvwm { };
 
   geany = callPackage ../applications/editors/geany { };
+  geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
 
   gksu = callPackage ../applications/misc/gksu { };
 

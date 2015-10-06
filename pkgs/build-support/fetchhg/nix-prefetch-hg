@@ -1,4 +1,5 @@
-#! /bin/sh -e
+#! /usr/bin/env bash
+set -e
 
 url=$1
 rev=$2
