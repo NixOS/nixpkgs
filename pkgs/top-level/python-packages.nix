@@ -7378,6 +7378,25 @@ let
   };
 
 
+  ipywidgets = buildPythonPackage rec {
+    version = "4.0.2";
+    name = "ipywidgets-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/ipywidgets/${name}.tar.gz";
+      sha256 = "1afwddaslf62ba75679s059z36zfamcx454q2lgd97xqsp30hqmf";
+    };
+
+    propagatedBuildInputs = with self; [ipython ipykernel traitlets notebook];
+
+    meta = {
+      description = "IPython HTML widgets for Jupyter";
+      homepage = http://ipython.org/;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ fridh ];
+    };
+  };
+
   ipaddr = buildPythonPackage rec {
     name = "ipaddr-2.1.10";
     disabled = isPy3k;
