@@ -7,6 +7,8 @@ stdenv.mkDerivation rec {
     sha256 = "0jw6454gxjykmbnbh544axi8hzz9gmm4jz1y5gw1hdqnakg36gyw";
   };
 
+  outputs = [ "dev" "out" ]; # to deal with propagatedBuildInputs
+
   nativeBuildInputs = [ pkgconfig cmake ];
   propagatedBuildInputs = [ zlib ]
     # now some optional deps, but many more are possible
