@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
     sed -i -e "s|/usr/local|/non-existent|g" -e "s|/usr|/non-existent|g" configure Makefile.in */Makefile.in
   '';
 
+  # TODO: remove when updating the version of screen. Only a patch for 4.3.1
+  patches = stdenv.lib.optional stdenv.isDarwin (fetchurl {
+    url = "http://savannah.gnu.org/file/screen-utmp.patch\?file_id=34815";
+    sha256 = "192dsa8hm1zw8m638avzhwhnrddgizhyrwaxgwa96zr9vwai2nvc";
+  });
+
   buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isLinux pam;
 
   doCheck = true;
