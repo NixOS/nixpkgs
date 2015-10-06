@@ -9,11 +9,13 @@ stdenv.mkDerivation rec {
 
   patches = [ ./unused-variable.patch ];
 
-  buildInputs = [ autoreconfHook ]; # won't configure without it, no idea why
+  outputs = [ "dev" "out" ];
+
+  nativeBuildInputs = [ autoreconfHook ]; # won't configure without it, no idea why
 
   # compatibility hack (for mypaint at least)
   postInstall = ''
-    ln -s json-c.pc "$out/lib/pkgconfig/json.pc"
+    ln -s json-c.pc "$dev/lib/pkgconfig/json.pc"
   '';
 
   meta = with stdenv.lib; {
