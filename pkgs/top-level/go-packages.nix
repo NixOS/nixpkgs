@@ -1522,15 +1522,15 @@ let
   };
 
   hologram = buildGoPackage rec {
-    rev  = "2bf08f0edee49297358bd06a0c9bf44ba9051e9c";
+    rev  = "63014b81675e1228818bf36ef6ef0028bacad24b";
     name = "hologram-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/AdRoll/hologram";
 
     src = fetchFromGitHub {
       inherit rev;
-      owner  = "copumpkin";
+      owner  = "AdRoll";
       repo   = "hologram";
-      sha256 = "1ra6rdniqh3pi84fm29zam4irzv52a1dd2sppaqngk07f7rkkhi4";
+      sha256 = "0k8g7dwrkxdvmzs4aa8zz39qa8r2danc4x40hrblcgjhfcwzxrzr";
     };
     buildInputs = [ crypto protobuf goamz rgbterm go-bindata go-homedir ldap g2s gox ];
   };
