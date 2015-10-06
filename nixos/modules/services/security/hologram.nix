@@ -95,7 +95,7 @@ in {
       wantedBy    = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.goPackages.hologram}/bin/hologram-server --debug --conf ${cfgFile}";
+        ExecStart = "${pkgs.goPackages.hologram.bin}/bin/hologram-server --debug --conf ${cfgFile}";
       };
     };
   };
