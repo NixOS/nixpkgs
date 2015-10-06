@@ -8927,12 +8927,12 @@ let
   };
 
   nbformat = buildPythonPackage rec {
-    version = "4.0.0";
+    version = "4.0.1";
     name = "nbformat-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/nbformat/${name}.tar.gz";
-      sha256 = "daf9b990e96863d120aff123361156a316757757b81a8070eb6945e4a9774b2d";
+      sha256 = "5261c957589b9dfcd387c338d59375162ba9ca82c69e378961a1f4e641285db5";
     };
 
     propagatedBuildInputs = with self; [ipython_genutils traitlets jsonschema jupyter_core];
