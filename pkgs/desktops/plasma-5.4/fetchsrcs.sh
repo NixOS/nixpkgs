@@ -4,7 +4,7 @@
 set -x
 
 # The trailing slash at the end is necessary!
-RELEASE_URL="http://download.kde.org/stable/plasma/5.4.1/"
+RELEASE_URL="http://download.kde.org/stable/plasma/5.4.2/"
 EXTRA_WGET_ARGS='-A *.tar.xz'
 
 mkdir tmp; cd tmp
