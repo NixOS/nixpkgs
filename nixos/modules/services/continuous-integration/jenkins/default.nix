@@ -65,11 +65,14 @@ in {
       };
 
       environment = mkOption {
-        default = { NIX_REMOTE = "daemon"; };
+        default = { };
         type = with types; attrsOf str;
         description = ''
           Additional environment variables to be passed to the jenkins process.
-          The environment will always include JENKINS_HOME.
+          This setting will merge with everything in
+          <option>config.environment.sessionVariables</option>,
+          JENKINS_HOME and NIX_REMOTE. This option takes precedence and can
+          override any previously set environment variable.
         '';
       };
 
@@ -106,9 +109,12 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      environment = {
-        JENKINS_HOME = cfg.home;
-      } // cfg.environment;
+      environment =
+        config.environment.sessionVariables //
+        { JENKINS_HOME = cfg.home;
+          NIX_REMOTE = "daemon";
+        } //
+        cfg.environment;
 
       path = cfg.packages;
 
