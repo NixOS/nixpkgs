@@ -65,11 +65,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  AlgorithmDiff = buildPerlPackage rec {
-    name = "Algorithm-Diff-1.1902";
+  AlgorithmDiff = let version = "1.1903"; in buildPerlPackage {
+    name = "Algorithm-Diff-${version}";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TY/TYEMQ/Algorithm-Diff-1.1902.tar.gz;
-      sha256 = "0xc315h7xwq65n9n6nq8flv5d89z6kra69hspnyccw3782zhvd68";
+      url = "mirror://cpan/authors/id/T/TY/TYEMQ/Algorithm-Diff-${version}.tar.gz";
+      sha256 = "0l8pk7ziz72d022hsn4xldhhb9f5649j5cgpjdibch0xng24ms1h";
     };
     buildInputs = [ pkgs.unzip ];
   };
