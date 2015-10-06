@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       sed -i nova/flags.py \
         -e "/DEFINE.*'state_path'/ s|../|/var/lib/nova|"
 
-      substituteInPlace nova/virt/images.py --replace /usr/bin/curl ${curl}/bin/curl
+      substituteInPlace nova/virt/images.py --replace /usr/bin/curl ${curl.bin}/bin/curl
 
       substituteInPlace nova/api/ec2/cloud.py \
         --replace 'sh genrootca.sh' $out/libexec/nova/genrootca.sh

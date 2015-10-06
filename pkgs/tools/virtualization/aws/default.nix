@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   installPhase =
     ''
       mkdir -p $out/bin
-      sed 's|\[curl|[${curl}/bin/curl|g' $src > $out/bin/aws
+      sed 's|\[curl|[${curl.bin}/bin/curl|g' $src > $out/bin/aws
       chmod +x $out/bin/aws
     '';
 

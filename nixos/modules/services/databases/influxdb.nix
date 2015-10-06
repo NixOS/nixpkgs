@@ -225,7 +225,7 @@ in
         if [ "$(id -u)" = 0 ]; then chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}; fi
       '';
       postStart = mkBefore ''
-        until ${pkgs.curl}/bin/curl -s -o /dev/null 'http://${cfg.bindAddress}:${toString cfg.apiPort}/'; do
+        until ${pkgs.curl.bin}/bin/curl -s -o /dev/null 'http://${cfg.bindAddress}:${toString cfg.apiPort}/'; do
           sleep 1;
         done
       '';

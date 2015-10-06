@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, pkgconfig
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
 , zlibSupport ? false, zlib ? null
@@ -23,6 +23,9 @@ stdenv.mkDerivation rec {
     sha256 = "050q6i20lbh7dyyhva2sbp8dbyp6sghlkbpvq2bvcasqwsx4298y";
   };
 
+  outputs = [ "dev" "out" "bin" "doc" ]; # man3 is "dev-doc"
+
+  nativeBuildInputs = [ pkgconfig ];
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of
   # applications that use Curl.
@@ -58,6 +61,11 @@ stdenv.mkDerivation rec {
 
   CXX = "g++";
   CXXCPP = "g++ -E";
+
+  postInstall = ''
+    _moveToOutput bin/curl-config "$dev"
+    sed '/^dependency_libs/s|${libssh2.dev}|${libssh2.out}|' -i "$out"/lib/*.la
+  '';
 
   crossAttrs = {
     # We should refer to the cross built openssl

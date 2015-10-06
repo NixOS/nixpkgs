@@ -142,7 +142,7 @@ in {
         ln -s ${esPlugins}/plugins ${cfg.dataDir}/plugins
       '';
       postStart = mkBefore ''
-        until ${pkgs.curl}/bin/curl -s -o /dev/null ${cfg.host}:${toString cfg.port}; do
+        until ${pkgs.curl.bin}/bin/curl -s -o /dev/null ${cfg.host}:${toString cfg.port}; do
           sleep 1
         done
       '';

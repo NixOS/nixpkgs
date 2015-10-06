@@ -1562,7 +1562,7 @@ let
     });
 
     curl = old.curl.overrideDerivation (attrs: {
-      preConfigure = "export CURL_INCLUDES=${pkgs.curl}/include";
+      preConfigure = "export CURL_INCLUDES=${pkgs.curl.dev}/include";
     });
 
     iFes = old.iFes.overrideDerivation (attrs: {
