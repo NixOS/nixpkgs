@@ -6904,11 +6904,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ModuleInstall = buildPerlPackage {
-    name = "Module-Install-1.14";
+  ModuleInstall = let version = "1.16"; in buildPerlPackage {
+    name = "Module-Install-${version}";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/Module-Install-1.14.tar.gz;
-      sha256 = "3f02f0a33603aff2f5cf06d15f74d1a9be65e844ada99e1a9c2102330ffa0d49";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Module-Install-${version}.tar.gz";
+      sha256 = "0ph242hmz11wv41yh1g8k9zj1bgzkamg2kgq8hnq4kaz4mj15b5g";
     };
     buildInputs = [ YAMLTiny ];
     propagatedBuildInputs = [ FileRemove ModuleScanDeps YAMLTiny ];
