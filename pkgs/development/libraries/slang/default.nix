@@ -7,6 +7,8 @@ stdenv.mkDerivation rec {
     sha256 = "0aqd2cjabj6nhd4r3dc4vhqif2bf3dmqnrn2gj0xm4gqyfd177jy";
   };
 
+  outputs = [ "dev" "out" "doc" ];
+
   # Fix some wrong hardcoded paths
   preConfigure = ''
     sed -i -e "s|/usr/lib/terminfo|${ncurses.out}/lib/terminfo|" configure
@@ -15,13 +17,19 @@ stdenv.mkDerivation rec {
     sed -i -e "s|-ltermcap|-lncurses|" ./configure
   '';
   configureFlags = "--with-png=${libpng} --with-z=${zlib} --with-pcre=${pcre} --with-readline=${readline}";
-  buildInputs = [ncurses pcre libpng zlib readline];
+  buildInputs = [ pcre libpng zlib readline ];
+  propagatedBuildInputs = [ ncurses ];
 
-  meta = {
+  postInstall = ''
+    find "$out"/lib/ -name '*.so' -exec chmod +x "{}" \;
+    sed '/^Libs:/s/$/ -lncurses/' -i "$dev"/lib/pkgconfig/slang.pc
+  '';
+
+  meta = with stdenv.lib; {
     description = "A multi-platform programmer's library designed to allow a developer to create robust software";
     homepage = http://www.jedsoft.org/slang/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.fuuzetsu ];
   };
 }
