@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, xlibsWrapper, glib, cairo, libpng, harfbuzz
-, fontconfig, freetype, libintlOrEmpty, gobjectIntrospection
+{ stdenv, fetchurl, pkgconfig, libXft, cairo, harfbuzz
+, libintlOrEmpty, gobjectIntrospection
 }:
 
 let
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gobjectIntrospection ];
   nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ xlibsWrapper glib cairo libpng fontconfig freetype harfbuzz ] ++ libintlOrEmpty;
+  propagatedBuildInputs = [ cairo harfbuzz libXft ] ++ libintlOrEmpty;
 
   enableParallelBuilding = true;
 
