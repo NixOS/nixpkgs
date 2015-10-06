@@ -14,12 +14,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "0.30.1";
-  name = "neon-${version}";
+  name = "neon-0.29.6";
 
   src = fetchurl {
     url = "http://www.webdav.org/neon/${name}.tar.gz";
-    sha256 = "1pawhk02x728xn396a1kcivy9gqm94srmgad6ymr9l0qvk02dih0";
+    sha256 = "0hzbjqdx1z8zw0vmbknf159wjsxbcq8ii0wgwkqhxj3dimr0nr4w";
   };
 
   patches = optionals stdenv.isDarwin [ ./0.29.6-darwin-fix-configure.patch ];

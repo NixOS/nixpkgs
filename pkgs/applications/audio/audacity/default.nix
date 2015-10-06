@@ -1,6 +1,6 @@
 { stdenv, fetchurl, wxGTK, pkgconfig, gettext, gtk, glib, zlib, perl, intltool,
   libogg, libvorbis, libmad, alsaLib, libsndfile, soxr, flac, lame,
-  expat, libid3tag, ffmpeg, soundtouch /*, portaudio - given up fighting their portaudio.patch */
+  expat, libid3tag, ffmpeg /*, portaudio - given up fighting their portaudio.patch */
   }:
 
 stdenv.mkDerivation rec {
@@ -19,13 +19,11 @@ stdenv.mkDerivation rec {
     rm -r lib-src-rm/
   '';
 
-  configureFlags = "--with-libsamplerate";
-
   buildInputs = [
     pkgconfig gettext wxGTK gtk expat alsaLib
     libsndfile soxr libid3tag
-    ffmpeg libmad lame libvorbis flac soundtouch
-  ]; #ToDo: detach sbsms
+    ffmpeg libmad lame libvorbis flac
+  ]; #ToDo: soundtouch, detach sbsms
 
   dontDisableStatic = true;
   doCheck = true;

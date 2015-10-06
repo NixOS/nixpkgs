@@ -46,17 +46,6 @@ in {
           is left empty, the OpenSMTPD server will not start.
         '';
       };
-
-      procPackages = mkOption {
-        type = types.listOf types.path;
-        default = [];
-        description = ''
-          Packages to search for filters, tables, queues, and schedulers.
-
-          Add OpenSMTPD-extras here if you want to use the filters, etc. from
-          that package.
-        '';
-      };
     };
 
   };
@@ -83,19 +72,12 @@ in {
       };
     };
 
-    systemd.services.opensmtpd = let
-      procEnv = pkgs.buildEnv {
-        name = "opensmtpd-procs";
-        paths = [ opensmtpd ] ++ cfg.procPackages;
-        pathsToLink = [ "/libexec/opensmtpd" ];
-      };
-    in {
+    systemd.services.opensmtpd = {
       wantedBy = [ "multi-user.target" ];
       wants = [ "network.target" ];
       after = [ "network.target" ];
       preStart = "mkdir -p /var/spool";
       serviceConfig.ExecStart = "${opensmtpd}/sbin/smtpd -d -f ${conf} ${args}";
-      environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";
     };
 
     environment.systemPackages = [ (pkgs.runCommand "opensmtpd-sendmail" {} ''

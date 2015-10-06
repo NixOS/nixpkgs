@@ -679,26 +679,6 @@ let
     subPackages = [ "./" ];  # don't try to build test fixtures
   };
 
-  git-lfs = buildFromGitHub {
-    rev = "v1.0.0";
-    owner = "github";
-    repo = "git-lfs";
-    sha256 = "1zlg3rm5yxak6d88brffv1wpj0iq4qgzn6sgg8xn0pbnzxjd1284";
-
-    # Tests fail with 'lfstest-gitserver.go:46: main redeclared in this block'
-    excludedPackages = [ "test" ];
-
-    preBuild = ''
-      pushd go/src/github.com/github/git-lfs
-        go generate ./commands
-      popd
-    '';
-
-    postInstall = ''
-      rm -v $bin/bin/{man,script}
-    '';
-  };
-
   glide = buildFromGitHub {
     rev    = "0.5.0";
     owner  = "Masterminds";

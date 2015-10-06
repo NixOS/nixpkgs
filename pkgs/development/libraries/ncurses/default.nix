@@ -1,37 +1,38 @@
-{ lib, stdenv, fetchurl, pkgconfig, libtool
+{ lib, stdenv, fetchurl
 
 , mouseSupport ? false
 , unicode ? true
 
 , gpm
+
+# Extra Options
+, abiVersion ? "5"
 }:
 
 stdenv.mkDerivation rec {
-  name = "ncurses-6.0";
+  name = "ncurses-5.9";
 
   src = fetchurl {
     url = "mirror://gnu/ncurses/${name}.tar.gz";
-    sha256 = "0q3jck7lna77z5r42f13c4xglc7azd19pxfrjrpgp2yf615w4lgm";
+    sha256 = "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh";
   };
+
+  # gcc-5.patch should be removed after 5.9
+  patches = [ ./gcc-5.patch ];
 
   configureFlags = [
     "--with-shared"
-    "--with-cxx-shared"
-    "--with-libtool"
     "--without-debug"
-    "--enable-overwrite"  # Needed for proper header installation
     "--enable-pc-files"
     "--enable-symlinks"
   ] ++ lib.optional unicode "--enable-widec";
 
-  nativeBuildInputs = [ pkgconfig libtool ];
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
 
   preConfigure = ''
     configureFlagsArray+=("--includedir=$out/include")
     export PKG_CONFIG_LIBDIR="$out/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
-    configureFlagsArray+=("--with-pkg-config-libdir=$PKG_CONFIG_LIBDIR")
   '' + lib.optionalString stdenv.isCygwin ''
     sed -i -e 's,LIB_SUFFIX="t,LIB_SUFFIX=",' configure
   '';
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
         for dylibtype in so dll dylib; do
           if [ -e "$out/lib/lib''${lib}$suffix.$dylibtype" ]; then
             ln -svf lib''${lib}$suffix.$dylibtype $out/lib/lib$lib$newsuffix.$dylibtype
+            ln -svf lib''${lib}$suffix.$dylibtype.${abiVersion} $out/lib/lib$lib$newsuffix.$dylibtype.${abiVersion}
           fi
         done
         for statictype in a dll.a la; do
@@ -78,6 +80,10 @@ stdenv.mkDerivation rec {
         ln -svf ''${lib}$suffix.pc $out/lib/pkgconfig/$lib$newsuffix.pc
       done
     done
+  '';
+
+  preFixup = ''
+    rm $out/lib/*.a
   '';
 
   meta = {
@@ -106,6 +112,6 @@ stdenv.mkDerivation rec {
 
   passthru = {
     ldflags = "-lncurses";
-    inherit unicode;
+    inherit unicode abiVersion;
   };
 }

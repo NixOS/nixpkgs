@@ -666,27 +666,6 @@ to find out the store path of the system's zlib library. Now, you can
    The same thing applies to `cabal configure`, of course, if you're
    building with `cabal-install` instead of Stack.
 
-## Creating statically linked binaries
-
-There are two levels of static linking. The first option is to configure the
-build with the Cabal flag `--disable-executable-dynamic`. In Nix expressions,
-this can be achieved by setting the attribute:
-
-    enableSharedExecutables = false;
-
-That gives you a binary with statically linked Haskell libraries and
-dynamically linked system libraries.
-
-To link both Haskell libraries and system libraries statically, the additional
-flags `--ghc-option=-optl=-static --ghc-option=-optl=-pthread` need to be used.
-In Nix, this is accomplished with:
-
-    configureFlags = [ "--ghc-option=-optl=-static" "--ghc-option=-optl=-pthread" ];
-
-It's important to realize, however, that most system libraries in Nix are built
-as shared libraries only, i.e. there is just no static library available that
-Cabal could link!
-
 
 # Other resources
 

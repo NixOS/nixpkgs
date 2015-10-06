@@ -8,20 +8,17 @@ let
     stdenv.cross;
 in
 stdenv.mkDerivation rec {
-  name = "openssl-1.0.1p";
+  name = "openssl-1.0.2d";
 
   src = fetchurl {
     urls = [
       "http://www.openssl.org/source/${name}.tar.gz"
       "http://openssl.linux-mirror.org/source/${name}.tar.gz"
     ];
-    sha1 = "9d1977cc89242cd11471269ece2ed4650947c046";
+    sha1 = "d01d17b44663e8ffa6a33a5a30053779d9593c3d";
   };
 
-  outputs = [ "out" "man" ];
-
-  patches = optional stdenv.isCygwin ./1.0.1-cygwin64.patch
-    ++ optional (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem")) ./darwin-arch.patch;
+  patches = optional stdenv.isCygwin ./1.0.1-cygwin64.patch;
 
   nativeBuildInputs = [ perl ];
   buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
