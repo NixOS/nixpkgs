@@ -69,10 +69,11 @@ in {
         type = with types; attrsOf str;
         description = ''
           Additional environment variables to be passed to the jenkins process.
-          This setting will merge with everything in
-          <option>config.environment.sessionVariables</option>,
-          JENKINS_HOME and NIX_REMOTE. This option takes precedence and can
-          override any previously set environment variable.
+          As a base environment, jenkins receives NIX_PATH, SSL_CERT_FILE and
+          GIT_SSL_CAINFO from <option>environment.sessionVariables</option>,
+          NIX_REMOTE is set to "daemon" and JENKINS_HOME is set to
+          the value of <option>services.jenkins.home</option>. This option has
+          precedence and can be used to override those mentioned variables.
         '';
       };
 
@@ -110,11 +111,20 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       environment =
-        config.environment.sessionVariables //
-        { JENKINS_HOME = cfg.home;
-          NIX_REMOTE = "daemon";
-        } //
-        cfg.environment;
+        let
+          selectedSessionVars =
+            lib.filterAttrs (n: v: builtins.elem n
+                [ "NIX_PATH"
+                  "SSL_CERT_FILE"
+                  "GIT_SSL_CAINFO"
+                ])
+              config.environment.sessionVariables;
+        in
+          selectedSessionVars //
+          { JENKINS_HOME = cfg.home;
+            NIX_REMOTE = "daemon";
+          } //
+          cfg.environment;
 
       path = cfg.packages;
 
