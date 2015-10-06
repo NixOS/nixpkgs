@@ -9458,11 +9458,12 @@ let
       pkgName = "numpy";
     };
   in buildPythonPackage ( rec {
-    name = "numpy-1.9.2";
+    name = "numpy-${version}";
+    version = "1.10.1";
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/numpy/${name}.tar.gz";
-      sha256 = "0apgmsk9jlaphb2dp1zaxqzdxkf69h1y3iw2d1pcnkj31cmmypij";
+      sha256 = "8b9f453f29ce96a14e625100d3dcf8926301d36c5f622623bf8820e748510858";
     };
 
     disabled = isPyPy || isPy35;  # WIP
