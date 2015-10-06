@@ -7611,12 +7611,12 @@ let
   };
 
   jupyter_core = buildPythonPackage rec {
-    version = "4.0.4";
+    version = "4.0.6";
     name = "jupyter_core-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jupyter_core/${name}.tar.gz";
-      sha256 = "fcf45478025f34174943993947f51a41ad871ac998a14bf1cb87d8eb61e75c6d";
+      sha256 = "96a68a3b1d018ff7776270b26b7cb0cfd7a18a53ef2061421daff435707d198c";
     };
 
     propagatedBuildInputs = with self; [traitlets];
