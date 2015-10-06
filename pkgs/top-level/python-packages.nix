@@ -2789,11 +2789,11 @@ let
 
   datashape = buildPythonPackage rec {
     name = "datashape-${version}";
-    version = "0.4.6";
+    version = "0.4.7";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/D/DataShape/${name}.tar.gz";
-      sha256 = "0caa86a4347f1b0c45f3890d78d0b89662189c7dd6df3a8e5ff3532ae8bc434f";
+      sha256 = "14b2ef766d4c9652ab813182e866f493475e65e558bed0822e38bf07bba1a278";
     };
 
     propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
