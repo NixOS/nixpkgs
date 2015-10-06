@@ -7411,13 +7411,15 @@ let
   };
 
   ipdb = buildPythonPackage rec {
-    name = "ipdb-0.8";
+    name = "ipdb-${version}";
+    version = "0.8.1";
+
     disabled = isPyPy;  # setupterm: could not find terminfo database
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/i/ipdb/${name}.zip";
-      md5 = "96dca0712efa01aa5eaf6b22071dd3ed";
+      sha256 = "1763d1564113f5eb89df77879a8d3213273c4d7ff93dcb37a3070cdf0c34fd7c";
     };
-    propagatedBuildInputs = with self; [ self.ipython ];
+    propagatedBuildInputs = with self; [ ipython ];
   };
 
   ipdbplugin = buildPythonPackage {
