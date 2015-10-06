@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
   outputs = [ "dev" "out" "doc" ];
   outputBin = "dev"; # compilation tools
 
+  postInstall = ''
+    sed "/^toolsdir=/ctoolsdir=$dev/bin" -i "$dev"/lib/pkgconfig/orc*.pc
+  '';
+
   # building memcpy_speed.log
   # ../test-driver: line 107:  4495 Segmentation fault      "$@" > $log_file 2>&1
   # FAIL: memcpy_speed
