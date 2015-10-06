@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig libiconv ] ++ libintlOrEmpty;
 
   propagatedBuildInputs =
-    with xorg; [ xorg.xlibsWrapper fontconfig expat freetype pixman zlib libpng ]
+    with xorg; [ libXext fontconfig expat freetype pixman zlib libpng ]
     ++ optional (!stdenv.isDarwin) libXrender
     ++ optionals xcbSupport [ libxcb xcbutil ]
     ++ optional gobjectSupport glib
-    ++ optionals glSupport [ mesa_noglu ]
-    ;
+    ++ optional glSupport mesa_noglu
+    ; # TODO: maybe liblzo but what would it be for here?
 
   configureFlags = [ "--enable-tee" ]
     ++ optional xcbSupport "--enable-xcb"
@@ -38,14 +38,14 @@ stdenv.mkDerivation rec {
 
   preConfigure =
   # On FreeBSD, `-ldl' doesn't exist.
-    (stdenv.lib.optionalString stdenv.isFreeBSD
+    stdenv.lib.optionalString stdenv.isFreeBSD
        '' for i in "util/"*"/Makefile.in" boilerplate/Makefile.in
           do
             cat "$i" | sed -es/-ldl//g > t
             mv t "$i"
           done
-       '') 
-       +
+       ''
+    +
     ''
     # Work around broken `Requires.private' that prevents Freetype
     # `-I' flags to be propagated.
