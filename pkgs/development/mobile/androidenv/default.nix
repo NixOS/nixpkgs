@@ -167,7 +167,6 @@ rec {
     inherit (pkgs) coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
   };
-
   
   buildApp = import ./build-app.nix {
     inherit (pkgs) stdenv jdk ant gnumake gawk file which;
