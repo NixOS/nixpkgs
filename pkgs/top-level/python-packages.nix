@@ -8137,6 +8137,8 @@ let
       sha256 = "1hyrxnhxw35vn00k55hp9bkg8vg4dsphrpfg1yg4cn53y78rk1im";
     };
 
+    disabled = isPy3k;
+
     patches = [ ../development/python-modules/mathics/disable_console_tests.patch ];
 
     buildInputs = with self; [ pexpect ];
