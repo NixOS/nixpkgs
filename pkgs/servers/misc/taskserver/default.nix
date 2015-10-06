@@ -11,7 +11,23 @@ stdenv.mkDerivation rec {
     sha256 = "1d110q9vw8g5syzihxymik7hd27z1592wkpz55kya6lphzk8i13v";
   };
 
-  nativeBuildInputs = [ cmake libuuid gnutls ];
+  nativeBuildInputs = [ cmake libuuid ];
+
+  propagatedBuildInputs = [ gnutls ];
+
+  installPhase = ''
+    mkdir -p $out/bin
+    mkdir -p $out/bin/pki
+    mkdir -p $out/share
+
+    cp ../src/taskdctl src/taskd $out/bin/
+    cp ../pki/{generate{,.{ca,client,crl,server}},vars} $out/bin/pki/
+  '';
+
+  postFixup = ''
+    sed -i "s,^\./,$out/bin/pki/," $out/bin/pki/generate
+    sed -i "s,\./vars,$out/bin/pki/vars," $out/bin/pki/generate*
+  '';
 
   meta = {
     description = "Server for synchronising Taskwarrior clients";
