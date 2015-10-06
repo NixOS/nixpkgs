@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   patches = [ ./build-fix.patch ];
   postPatch = "sed '3i#include <stdint.h>' -i ./include/speex/speexdsp_config_types.h.in";
 
+  outputs = [ "dev" "out" "doc" ];
+
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ fftw ];
 
