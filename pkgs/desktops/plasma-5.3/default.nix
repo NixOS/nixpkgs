@@ -180,12 +180,12 @@ let
     kde-gtk-config = extendDerivation super.kde-gtk-config {
       NIX_CFLAGS_COMPILE = with scope;
         lib.concatStringsSep " " [
-          "-I${cairo}/include/cairo"
-          "-I${gtk2}/include/gtk-2.0"
+          "-I${cairo.dev}/include/cairo"
+          "-I${gtk2.dev}/include/gtk-2.0"
           "-I${gtk2.out}/lib/gtk-2.0/include"
-          "-I${glib}/include/glib-2.0"
+          "-I${glib.dev}/include/glib-2.0"
           "-I${glib.out}/lib/glib-2.0/include"
-          "-I${pango}/include/pango-1.0"
+          "-I${pango.dev}/include/pango-1.0"
         ];
     };
 

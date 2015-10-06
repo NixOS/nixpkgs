@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     ] ++ stdenv.lib.optionals (xorg != null) [ xorg.xlibsWrapper xorg.libXrender ]
     ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") gettext;
 
-  CPPFLAGS = stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") "-I${cairo}/include/cairo";
+  CPPFLAGS = stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") "-I${cairo.dev}/include/cairo";
 
   configureFlags =
     [ "--with-pngincludedir=${libpng}/include"

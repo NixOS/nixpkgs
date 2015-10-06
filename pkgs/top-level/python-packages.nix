@@ -17156,7 +17156,7 @@ let
       mock
     ];
 
-    LD_LIBRARY_PATH = "${pkgs.cairo}/lib";
+    LD_LIBRARY_PATH = "${pkgs.cairo.out}/lib";
 
     meta = {
       description = "Graphite-web, without the interface. Just the rendering HTTP API";

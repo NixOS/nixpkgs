@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, python27Packages, pkgs }:
+{ stdenv, lib, fetchFromGitHub, buildPythonPackage, python27Packages, pkgs }:
 
 buildPythonPackage rec {
   name = "qtile-${version}";
@@ -20,20 +20,18 @@ buildPythonPackage rec {
   buildInputs = [ pkgs.pkgconfig pkgs.glib pkgs.xorg.libxcb pkgs.cairo pkgs.pango python27Packages.xcffib ];
 
   cairocffi-xcffib = python27Packages.cairocffi.override {
-    LD_LIBRARY_PATH = "${pkgs.xorg.libxcb}/lib:${pkgs.cairo}/lib";
+    inherit LD_LIBRARY_PATH;
     pythonPath = [ python27Packages.xcffib ];
   };
 
   pythonPath = with python27Packages; [ xcffib cairocffi-xcffib trollius readline ];
 
-  LD_LIBRARY_PATH = "${pkgs.xorg.libxcb}/lib:${pkgs.cairo}/lib";
+  LD_LIBRARY_PATH = "${lib.makeLibraryPath [ pkgs.xorg.libxcb pkgs.cairo ]}";
 
   postInstall = ''
     wrapProgram $out/bin/qtile \
-      --prefix LD_LIBRARY_PATH : ${pkgs.xorg.libxcb}/lib \
-      --prefix LD_LIBRARY_PATH : ${pkgs.glib}/lib \
-      --prefix LD_LIBRARY_PATH : ${pkgs.cairo}/lib \
-      --prefix LD_LIBRARY_PATH : ${pkgs.pango}/lib
+      --prefix LD_LIBRARY_PATH : \
+        "${LD_LIBRARY_PATH}:${lib.makeLibraryPath [ pkgs.glib pkgs.pango ]}"
   '';
 
   meta = with stdenv.lib; {

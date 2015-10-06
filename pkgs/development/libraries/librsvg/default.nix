@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin "--disable-Bsymbolic";
 
   NIX_CFLAGS_COMPILE
-    = stdenv.lib.optionalString stdenv.isDarwin "-I${cairo}/include/cairo";
+    = stdenv.lib.optionalString stdenv.isDarwin "-I${cairo.dev}/include/cairo";
 
   # It wants to add loaders and update the loaders.cache in gdk-pixbuf
   # Patching the Makefiles to it creates rsvg specific loaders and the

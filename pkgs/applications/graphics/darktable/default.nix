@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
     ];
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gtk}/include/gtk-2.0"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gtk}/lib/gtk-2.0/include"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${cairo}/include/cairo"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${atk}/include/atk-1.0"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gtk.dev}/include/gtk-2.0"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gtk.out}/lib/gtk-2.0/include"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${cairo.dev}/include/cairo"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${atk.dev}/include/atk-1.0"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${ilmbase}/include/OpenEXR"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${openexr}/include/OpenEXR"
   '';
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
     "-DPTHREAD_LIBRARY=${stdenv.glibc.out}/lib/libpthread.so"
     "-DCMAKE_BUILD_TYPE=Release"
     "-DBINARY_PACKAGE_BUILD=1"
-    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib}/lib/glib-2.0/include"
-    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk}/lib/gtk-2.0/include"
+    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
+    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk.out}/lib/gtk-2.0/include"
     "-DBUILD_USERMANUAL=False"
   ];
 

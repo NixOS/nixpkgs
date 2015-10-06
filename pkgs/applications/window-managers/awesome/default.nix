@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   #cmakeFlags = "-DGENERATE_MANPAGES=ON";
 
   LD_LIBRARY_PATH = "${stdenv.lib.makeLibraryPath [ cairo pango gobjectIntrospection ]}";
-  GI_TYPELIB_PATH = "${pango}/lib/girepository-1.0";
+  GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";
   LUA_CPATH = "${lgi}/lib/lua/${lua.luaversion}/?.so";
   LUA_PATH  = "${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua";
 
