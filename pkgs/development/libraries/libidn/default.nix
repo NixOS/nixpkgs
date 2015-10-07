@@ -8,7 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "1xf4hphhahcjm2xwx147lfpsavjwv9l4c2gf6hx71zxywbz5lpds";
   };
 
+  outputs = [ "dev" "out" "bin" "info" "doc" ]; # $doc has just man3
+
   doCheck = ! stdenv.isDarwin;
+
+  postFixup = ''_moveToOutput share/man/man1 "$bin" '';
 
   meta = {
     homepage = http://www.gnu.org/software/libidn/;
