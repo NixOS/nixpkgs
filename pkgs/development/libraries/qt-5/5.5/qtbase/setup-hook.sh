@@ -19,21 +19,10 @@ addQtModule() {
         done
     fi
 
-    if [[ -d "$1/lib/qt5/plugins" ]]; then
-        addToSearchPath QT_PLUGIN_PATH "$1/lib/qt5/plugins"
-    fi
-
-    if [[ -d "$1/lib/qt5/imports" ]]; then
-        addToSearchPath QML_IMPORT_PATH "$1/lib/qt5/imports"
-    fi
-
-    if [[ -d "$1/lib/qt5/qml" ]]; then
-        addToSearchPath QML2_IMPORT_PATH "$1/lib/qt5/qml"
-    fi
-
-    if [[ -d "$1/share" ]]; then
-        addToSearchPath XDG_DATA_DIRS "$1/share"
-    fi
+    addToSearchPath QT_PLUGIN_PATH "$1/lib/qt5/plugins"
+    addToSearchPath QML_IMPORT_PATH "$1/lib/qt5/imports"
+    addToSearchPath QML2_IMPORT_PATH "$1/lib/qt5/qml"
+    addToSearchPath XDG_DATA_DIRS "$1/share"
 }
 
 rmQtModules() {
