@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
     "--enable-nls"
   ];
 
-  postInstall = "ln -s $out/bin/vim $out/bin/vi";
+  postInstall = ''
+    ln -s $out/bin/vim $out/bin/vi
+    # use cp if you want to edit the file
+    ln -s $out/share/vim/vim*/vimrc_example.vim $out/share/vim/vimrc
+  '';
 
   crossAttrs = {
     configureFlags = [
