@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gcc-4.9.patch ];
 
+  outputs = [ "out" "lib" "doc" ]; # a small single header
+  outputMan = "out";
+
   nativeBuildInputs = [ ]
     ++ optional nasmSupport nasm;
 
