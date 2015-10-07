@@ -88,10 +88,11 @@ Documentation = share/doc/qt5
 EOF
 
 export QMAKE="$qtOut/bin/qmake"
-addToSearchPath QT_PLUGIN_PATH "$out/lib/qt5/plugins"
-addToSearchPath QML_IMPORT_PATH "$out/lib/qt5/imports"
-addToSearchPath QML2_IMPORT_PATH "$out/lib/qt5/qml"
-addToSearchPath XDG_DATA_DIRS "$out/share"
+# cannot use addToSearchPath because these directories may not exist yet
+export QT_PLUGIN_PATH="$QT_PLUGIN_PATH${QT_PLUGIN_PATH:+:}$out/lib/qt5/plugins"
+export QML_IMPORT_PATH="$QML_IMPORT_PATH${QML_IMPORT_PATH:+:}$out/lib/qt5/imports"
+export QML2_IMPORT_PATH="$QML2_IMPORT_PATH${QML2_IMPORT_PATH:+:}$out/lib/qt5/qml"
+export XDG_DATA_DIRS="$XDG_DATA_DIRS${XDG_DATA_DIRS:+:}$out/share"
 
 envHooks+=(addQtModule)
 preConfigurePhases+=(setQMakePath)
