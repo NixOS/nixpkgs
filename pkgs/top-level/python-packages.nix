@@ -2288,11 +2288,11 @@ let
 
   cython = buildPythonPackage rec {
     name = "Cython-${version}";
-    version = "0.23.1";
+    version = "0.23.3";
 
     src = pkgs.fetchurl {
       url = "http://www.cython.org/release/${name}.tar.gz";
-      sha256 = "12h1g21xmp2jk8j3sw2i73ffxgfafakza6mw3fd4pqx2lbb15zdx";
+      sha256 = "590274ac8dbd1e62cc79d94eb2e2f4ae60cea91a9f8d50b8697d39aba451e82e";
     };
 
     setupPyBuildFlags = ["--build-base=$out"];
@@ -2789,11 +2789,11 @@ let
 
   datashape = buildPythonPackage rec {
     name = "datashape-${version}";
-    version = "0.4.6";
+    version = "0.4.7";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/D/DataShape/${name}.tar.gz";
-      sha256 = "0caa86a4347f1b0c45f3890d78d0b89662189c7dd6df3a8e5ff3532ae8bc434f";
+      sha256 = "14b2ef766d4c9652ab813182e866f493475e65e558bed0822e38bf07bba1a278";
     };
 
     propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
@@ -3322,12 +3322,13 @@ let
 
 
   dropbox = buildPythonPackage rec {
-    name = "dropbox-2.2.0";
+    name = "dropbox-${version}";
+    version = "3.37";
     doCheck = false; # python 2.7.9 does verify ssl certificates
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/d/dropbox/${name}.zip";
-      sha256 = "069jrwb67brqh0sics8fgqdf2mv5y5jl9k5729x8vf80pq2c9p36";
+      url = "https://pypi.python.org/packages/source/d/dropbox/${name}.tar.gz";
+      sha256 = "f65c12bd97f09e29a951bc7cb30a74e005fc4b2f8bb48778796be3f73866b173";
     };
 
     propagatedBuildInputs = with self; [ urllib3 mock setuptools ];
@@ -7429,13 +7430,15 @@ let
   };
 
   ipdb = buildPythonPackage rec {
-    name = "ipdb-0.8";
+    name = "ipdb-${version}";
+    version = "0.8.1";
+
     disabled = isPyPy;  # setupterm: could not find terminfo database
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/i/ipdb/${name}.zip";
-      md5 = "96dca0712efa01aa5eaf6b22071dd3ed";
+      sha256 = "1763d1564113f5eb89df77879a8d3213273c4d7ff93dcb37a3070cdf0c34fd7c";
     };
-    propagatedBuildInputs = with self; [ self.ipython ];
+    propagatedBuildInputs = with self; [ ipython ];
   };
 
   ipdbplugin = buildPythonPackage {
@@ -7627,12 +7630,12 @@ let
   };
 
   jupyter_core = buildPythonPackage rec {
-    version = "4.0.4";
+    version = "4.0.6";
     name = "jupyter_core-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jupyter_core/${name}.tar.gz";
-      sha256 = "fcf45478025f34174943993947f51a41ad871ac998a14bf1cb87d8eb61e75c6d";
+      sha256 = "96a68a3b1d018ff7776270b26b7cb0cfd7a18a53ef2061421daff435707d198c";
     };
 
     propagatedBuildInputs = with self; [traitlets];
@@ -8152,6 +8155,8 @@ let
       rev = "v${version}";
       sha256 = "1hyrxnhxw35vn00k55hp9bkg8vg4dsphrpfg1yg4cn53y78rk1im";
     };
+
+    disabled = isPy3k;
 
     patches = [ ../development/python-modules/mathics/disable_console_tests.patch ];
 
@@ -8943,12 +8948,12 @@ let
   };
 
   nbformat = buildPythonPackage rec {
-    version = "4.0.0";
+    version = "4.0.1";
     name = "nbformat-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/nbformat/${name}.tar.gz";
-      sha256 = "daf9b990e96863d120aff123361156a316757757b81a8070eb6945e4a9774b2d";
+      sha256 = "5261c957589b9dfcd387c338d59375162ba9ca82c69e378961a1f4e641285db5";
     };
 
     propagatedBuildInputs = with self; [ipython_genutils traitlets jsonschema jupyter_core];
@@ -9291,12 +9296,12 @@ let
   };
 
   notebook = buildPythonPackage rec {
-    version = "4.0.4";
+    version = "4.0.5";
     name = "notebook-${version}";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/n/notebook/${name}.tar.gz";
-      sha256 = "a57852514bce1b1cf41fa0311f6cf894960cf68b083b55e6c408316b598d5648";
+      url = "https://pypi.python.org/packages/source/n/notebook/${name}.tgz";
+      sha256 = "5ac716940cfd7612369ee177c0d7fc0eb888335b76dfcea17513cb5d5b4056a8";
     };
 
     buildInputs = with self; [nose]  ++ optionals isPy27 [mock];
@@ -13834,7 +13839,7 @@ let
 
   sympy = buildPythonPackage rec {
     name = "sympy-0.7.6";
-    disabled = isPy34 || isPyPy;  # some tests fail
+    disabled = isPy34 || isPy35 || isPyPy;  # some tests fail
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/s/sympy/${name}.tar.gz";
@@ -14949,11 +14954,11 @@ let
 
   toolz = buildPythonPackage rec{
     name = "toolz-${version}";
-    version = "0.7.2";
+    version = "0.7.4";
 
     src = pkgs.fetchurl{
       url = "https://pypi.python.org/packages/source/t/toolz/toolz-${version}.tar.gz";
-      md5 = "6f045541a9e7ee755b7b00fced4a7fde";
+      sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
     };
 
     meta = {
