@@ -10093,7 +10093,6 @@ let
       description = "A module wrapper for os.path";
       homepage = http://github.com/jaraco/path.py;
       license = licenses.mit;
-      platforms = platforms.linux;
     };
 
     # Test fails with python 2.7: TestUnicodePaths.test_walkdirs_with_unicode_name
