@@ -504,6 +504,17 @@ let
     };
   };
 
+  appnope = buildPythonPackage rec {
+    version = "0.1.0";
+    name = "appnope-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/appnope/${name}.tar.gz";
+      sha256 = "0wgdwp5v7r4g2bss8vbdxah12hsy2mvzxh3sil9s4iskjbz5z6cb";
+    };
+
+    meta.platforms = platforms.darwin;
+  };
 
   apsw = buildPythonPackage rec {
     name = "apsw-3.7.6.2-r1";
