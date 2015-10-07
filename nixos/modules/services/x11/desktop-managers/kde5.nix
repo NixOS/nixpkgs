@@ -37,9 +37,9 @@ let
 
   kf5 = pkgs.kf5_stable;
 
-  plasma5 = pkgs.plasma5_stable.override { inherit kf5; };
+  plasma5 = pkgs.plasma5_stable;
 
-  kdeApps = pkgs.kdeApps_stable.override { inherit kf5; };
+  kdeApps = pkgs.kdeApps_stable;
 
 in
 
@@ -93,13 +93,8 @@ in
       ++ [
         pkgs.qt4 # qtconfig is the only way to set Qt 4 theme
 
-        kdeApps.kde-baseapps
-        kdeApps.kde-base-artwork
-        kdeApps.kmix
+        kdeApps.dolphin
         kdeApps.konsole
-        kdeApps.oxygen-icons
-
-        kdeApps.kde-runtime
 
         pkgs.hicolor_icon_theme
 
