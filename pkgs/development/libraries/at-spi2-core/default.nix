@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xna0gnlqvzy6209klirywcm7ianazshg6pkk828g07bnrywgvhs";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "dev" "out" "doc" ];
 
   buildInputs = [
     python pkgconfig popt  intltool dbus_glib
