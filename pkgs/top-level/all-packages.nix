@@ -7794,6 +7794,8 @@ let
     };
   };
 
+  opensubdiv = callPackage ../development/libraries/opensubdiv { };
+
   openwsman = callPackage ../development/libraries/openwsman {};
 
   ortp = callPackage ../development/libraries/ortp { };
