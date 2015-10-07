@@ -9,6 +9,9 @@ stdenv.mkDerivation (rec {
 
   inherit src;
 
+  outputs = [ "dev" "out" ];
+  outputBin = "dev";
+
   buildInputs = [ gnum4 ];
   propagatedBuildInputs = [ gmp ];
 
