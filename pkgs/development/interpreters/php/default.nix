@@ -290,13 +290,13 @@ in {
   };
 
   php55 = generic {
-    version = "5.5.29";
-    sha256 = "0imr8c48ffjhc2zm96ndq92z3736xrm12hd5c1lssz67xiwybkpv";
+    version = "5.5.30";
+    sha256 = "0a9v7jq8mr15dcim23rzcfgpijc5k1rkc4qv9as1rpgc7iqjlcz7";
   };
 
   php56 = generic {
-    version = "5.6.13";
-    sha256 = "14zq40j229salk0wp7inl4jvj3xff03bz7g5xn8ipd5skiy86n33";
+    version = "5.6.14";
+    sha256 = "1c1f5dkfifhaxvl4c7cabv339lazd0znj3phbnd87ha12vqrbwin";
   };
 
   php70 = lib.lowPrio (generic {
