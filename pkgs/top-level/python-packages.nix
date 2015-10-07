@@ -13843,6 +13843,10 @@ let
 
     buildInputs = [ pkgs.glibcLocales ];
 
+    propagatedBuildInputs = with self; [
+      ipython
+    ];
+
     preCheck = ''
       export LANG="en_US.UTF-8"
     '';
