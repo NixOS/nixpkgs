@@ -8,6 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "1j8iixynchziw1y39lnibyl5h81m4p78w3i4f28q2vgwjgf801x4";
   };
 
+  outputs = [ "dev" "out" "doc" ]; # it's dev-doc only, lots of it
+  outputBin = "dev";
+
   buildInputs = [ perl texinfo ];
 
   doCheck = true;
