@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "09amr61srvl52nvxlqqgs9fzn33pc2gjv5hc83gxx43x6q2j19gg";
   };
 
+  patches = [ ./sddm-ignore-config-mtime.patch ];
+
   nativeBuildInputs = [ cmake pkgconfig qttools ];
 
   buildInputs = [ libxcb libpthreadstubs libXdmcp libXau qtbase qtdeclarative pam systemd ];
