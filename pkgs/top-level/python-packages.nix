@@ -7375,7 +7375,9 @@ let
 
     buildInputs = with self; [nose] ++ optionals isPy27 [mock];
 
-    propagatedBuildInputs = with self; [decorator pickleshare simplegeneric traitlets readline requests pexpect sqlite3];
+    propagatedBuildInputs = with self;
+      [decorator pickleshare simplegeneric traitlets readline requests pexpect sqlite3]
+      ++ optionals stdenv.isDarwin [appnope gnureadline];
 
     meta = {
       description = "IPython: Productive Interactive Computing";
