@@ -23,7 +23,7 @@ runCommand "${nameVersion.name}-multi-${nameVersion.version}"
     cp -rs $glibc64/bin $out
     chmod u+w $out/bin
     rm $out/bin/ldd
-    sed -e "s|^RTLDLIST=.*$|RTLDLIST=\"$out/lib/ld-2.19.so $out/lib/32/ld-linux.so.2\"|g" \
+    sed -e "s|^RTLDLIST=.*$|RTLDLIST=\"$out/lib/ld-linux-x86-64.so.2 $out/lib/32/ld-linux.so.2\"|g" \
         $glibc64/bin/ldd > $out/bin/ldd
     chmod 555 $out/bin/ldd
 
