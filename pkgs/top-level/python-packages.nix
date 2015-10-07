@@ -10369,6 +10369,26 @@ let
     propagatedBuildInputs = with self; [ unittest2 ];
   };
 
+  pylibconfig2 = buildPythonPackage rec {
+    name = "pylibconfig2-${version}";
+    version = "0.2.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pylibconfig2/${name}.tar.gz";
+      sha256 = "0kyg6gldj6hi2jhc5xhi834bb2mcaiy24dvfik963shnldqr7kqg";
+    };
+
+    doCheck = false;
+
+    propagatedBuildInputs = with self ; [ pyparsing ];
+
+    meta = {
+      homepage = https://github.com/heinzK1X/pylibconfig2;
+      description = "Pure python library for libconfig syntax";
+      license = licenses.gpl3;
+    };
+  };
+
   pysftp = buildPythonPackage rec {
     name = "pysftp-${version}";
     version = "0.2.8";
