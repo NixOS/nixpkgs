@@ -1,56 +1,13 @@
-{ plasmaPackage
-, extra-cmake-modules
-, kdoctools
-, baloo
-, kactivities
-, kcmutils
-, kcrash
-, kdbusaddons
-, kdeclarative
-, kdelibs4support
-, kdesu
-, kdewebkit
-, kglobalaccel
-, kidletime
-, kjsembed
-, knewstuff
-, knotifyconfig
-, kpackage
-, krunner
-, ktexteditor
-, ktextwidgets
-, kwallet
-, kwayland
-, kwin
-, kxmlrpcclient
-, libdbusmenu
-, libkscreen
-, libSM
-, libXcursor
-, networkmanager-qt
-, pam
-, phonon
-, plasma-framework
-, qtscript
-, qtx11extras
-, wayland
-, libksysguard
-, bash
-, coreutils
-, gnused
-, gnugrep
-, socat
-, kconfig
-, kinit
-, kservice
-, qttools
-, dbus_tools
-, mkfontdir
-, xmessage
-, xprop
-, xrdb
-, xset
-, xsetroot
+{ plasmaPackage, extra-cmake-modules, kdoctools, baloo
+, kactivities, kcmutils, kcrash, kdbusaddons, kdeclarative
+, kdelibs4support, kdesu, kdewebkit, kglobalaccel, kidletime
+, kjsembed, knewstuff, knotifyconfig, kpackage, krunner
+, ktexteditor, ktextwidgets, kwallet, kwayland, kwin, kxmlrpcclient
+, libdbusmenu, libkscreen, libSM, libXcursor, networkmanager-qt
+, pam, phonon, plasma-framework, qtquick1, qtscript, qtx11extras, wayland
+, libksysguard, bash, coreutils, gnused, gnugrep, socat, kconfig
+, kinit, kservice, qttools, dbus_tools, mkfontdir, xmessage, xprop
+, xrdb, xset, xsetroot, solid
 }:
 
 plasmaPackage {
@@ -60,39 +17,12 @@ plasmaPackage {
     kdoctools
   ];
   buildInputs = [
-    baloo
-    kactivities
-    kcmutils
-    kcrash
-    kdbusaddons
-    kdeclarative
-    kdelibs4support
-    kdesu
-    kdewebkit
-    kglobalaccel
-    kidletime
-    kjsembed
-    knewstuff
-    knotifyconfig
-    kpackage
-    krunner
-    ktexteditor
-    ktextwidgets
-    kwallet
-    kwayland
-    kwin
-    kxmlrpcclient
-    libdbusmenu
-    libkscreen
-    libSM
-    libXcursor
-    networkmanager-qt
-    pam
-    phonon
-    plasma-framework
-    qtscript
-    qtx11extras
-    wayland
+    baloo kactivities kcmutils kcrash kdbusaddons kdeclarative
+    kdelibs4support kdesu kdewebkit kglobalaccel kidletime kjsembed
+    knewstuff knotifyconfig kpackage krunner ktexteditor ktextwidgets
+    kwallet kwayland kwin kxmlrpcclient libdbusmenu libkscreen libSM
+    libXcursor networkmanager-qt pam phonon plasma-framework qtquick1
+    qtscript qtx11extras solid wayland
   ];
   propagatedBuildInputs = [
     libksysguard
