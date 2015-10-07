@@ -11,15 +11,17 @@ assert stdenv.isLinux;
 assert pythonSupport -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
-  version = "226";
+  version = "227";
   name = "systemd-${version}";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "16d61e9657b643cc25ff0538688eb870ce2dd4a5";
-    sha256 = "07sc1x43j60d5jnps0d7bfka10fihnpgkdrfrh9iskgmc9qangjb";
+    rev = "7d94d27801d20278103d8c146633fe81e06697d6";
+    sha256 = "0cvzsrazqgbia3zajb0z4ik8myfil4bdy2c29qs6w93d6yvrjfkj";
   };
+
+  outputs = [ "out" "man" "doc" ];
 
   buildInputs =
     [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
@@ -149,8 +151,6 @@ stdenv.mkDerivation rec {
       rm -rf $out/etc/rpm
 
       rm $out/lib/*.la
-
-      rm -rf $out/share/doc
 
       # "kernel-install" shouldn't be used on NixOS.
       find $out -name "*kernel-install*" -exec rm {} \;
