@@ -2989,6 +2989,8 @@ let
 
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
 
+  snabb = callPackage ../tools/networking/snabb { } ;
+
   snort = callPackage ../applications/networking/ids/snort { };
 
   solr = callPackage ../servers/search/solr { };
