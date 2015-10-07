@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   name = "youtube-dl-${version}";
-  version = "2015.08.28";
+  version = "2015.10.06.2";
 
   src = fetchurl {
     url = "http://youtube-dl.org/downloads/${version}/${name}.tar.gz";
-    sha256 = "0iahbynd6fw097a4cc57w26szlbqsmhb8v5ny6qrcil0d4wdqqvp";
+    sha256 = "0pxj1z5ay97iqh086qz7rxlp197py71f2mdmshz8rrhcjd6vw1sr";
   };
 
   buildInputs = [ makeWrapper zip pandoc ];
