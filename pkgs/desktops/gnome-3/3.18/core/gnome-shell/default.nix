@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${unzip}/bin" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --suffix XDG_DATA_DIRS : "${gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+      --prefix XDG_DATA_DIRS : "${gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS" \
+      --suffix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
 
     wrapProgram "$out/libexec/gnome-shell-calendar-server" \
       --prefix XDG_DATA_DIRS : "${evolution_data_server}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
