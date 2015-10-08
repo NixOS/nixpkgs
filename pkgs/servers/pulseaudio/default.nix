@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./caps-fix.patch ];
 
+  outputs = [ "dev" "out" ];
+
   nativeBuildInputs = [ pkgconfig intltool autoreconfHook ];
 
   propagatedBuildInputs =
@@ -111,8 +113,8 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString libOnly ''
     rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
     sed 's|-lltdl|-L${libtool.lib}/lib -lltdl|' -i $out/lib/libpulsecore-${version}.la
-    _moveToOutput lib/cmake "$dev"
-  '';
+  ''
+    + ''_moveToOutput lib/cmake "$dev" '';
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";

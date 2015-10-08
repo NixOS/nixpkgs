@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       for i in $out/bin/* $out/libexec/*; do
           wrapProgram $i \
               --set PYTHONPATH "$(toPythonPath $out):$PYTHONPATH" \
-              --set LD_LIBRARY_PATH "${libpulseaudio}/lib:" \
+              --set LD_LIBRARY_PATH "${libpulseaudio.out}/lib:" \
               --prefix PATH : ${xdg_utils}/bin
       done
 
