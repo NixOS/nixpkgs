@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     "--disable-osmesa-shared"
   ] ++ stdenv.lib.optionals (stdenv ? cross) ([
     "--without-x"
-  ] ++ stdenv.lib.optional alsaSupport "--with-alsa-prefix=${alsaLib}/lib");
+  ] ++ stdenv.lib.optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib");
 
   # Fix a build failure on OS X Mavericks
   # Ticket: https://bugzilla.libsdl.org/show_bug.cgi?id=2085

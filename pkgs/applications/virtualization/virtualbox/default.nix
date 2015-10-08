@@ -85,10 +85,10 @@ in stdenv.mkDerivation {
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2
     find . -type f -iname '*makefile*' -exec sed -i -e 's/depmod -a/:/g' {} +
     sed -i -e '
-      s@"libdbus-1\.so\.3"@"${dbus}/lib/libdbus-1.so.3"@g
-      s@"libasound\.so\.2"@"${alsaLib}/lib/libasound.so.2"@g
+      s@"libdbus-1\.so\.3"@"${dbus.out}/lib/libdbus-1.so.3"@g
+      s@"libasound\.so\.2"@"${alsaLib.out}/lib/libasound.so.2"@g
       ${optionalString pulseSupport ''
-      s@"libpulse\.so\.0"@"${libpulseaudio}/lib/libpulse.so.0"@g
+      s@"libpulse\.so\.0"@"${libpulseaudio.out}/lib/libpulse.so.0"@g
       ''}
     ' src/VBox/Main/xml/Settings.cpp \
       src/VBox/Devices/Audio/{alsa,pulse}_stubs.c \
