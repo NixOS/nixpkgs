@@ -88,21 +88,18 @@ in rec {
 
    nixStable = common rec {
      name = "nix-1.10";
-      src = fetchurl {
-        url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-        sha256 = "5612ca7a549dd1ee20b208123e041aaa95a414a0e8f650ea88c672dc023d10f6";
-      };
+     src = fetchurl {
+       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
+       sha256 = "5612ca7a549dd1ee20b208123e041aaa95a414a0e8f650ea88c672dc023d10f6";
+     };
    };
 
-   nixUnstable = nix;
-   /*
    nixUnstable = lib.lowPrio (common rec {
-     name = "nix-1.10pre4212_e12cf82";
-      src = fetchurl {
-        url = "http://hydra.nixos.org/build/24982847/download/4/${name}.tar.xz";
-        sha256 = "4165db0ea9bb6b5cd96d294348299f20ac045fc18db680104ff98fe9ac893f72";
-      };
+     name = "nix-1.11pre4243_2075ec8";
+     src = fetchurl {
+       url = "http://hydra.nixos.org/build/26679786/download/4/${name}.tar.xz";
+       sha256 = "19202fd309a4d78a16e920c13d1144b47bffc594c9147eb5ebbf02141e5c1cd3";
+     };
    });
-   */
 
 }
