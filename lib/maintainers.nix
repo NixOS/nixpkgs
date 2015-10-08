@@ -166,6 +166,7 @@
   lowfatcomputing = "Andreas Wagner <andreas.wagner@lowfatcomputing.org>";
   lsix = "Lancelot SIX <lsix@lancelotsix.com>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
+  lukego = "Luke Gorrie <luke@snabb.co>";
   madjar = "Georges Dubus <georges.dubus@compiletoi.net>";
   magnetophon = "Bart Brouns <bart@magnetophon.nl>";
   mahe = "Matthias Herrmann <matthias.mh.herrmann@gmail.com>";
