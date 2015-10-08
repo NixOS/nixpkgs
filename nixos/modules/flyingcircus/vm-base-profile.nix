@@ -3,35 +3,31 @@
 with lib;
 
 {
-  imports = [
-      ../profiles/qemu-guest.nix
-  ];
-
-  boot.blacklistedKernelModules = [ "bochs_drm" ];
-  boot.initrd.supportedFilesystems = [ "xfs" ];
-  boot.kernelParams = [ "panic=1" "boot.panic_on_fail" "console=ttyS0" "nosetmode" ];
-  boot.loader.grub.device = "/dev/vda";
-  boot.loader.grub.fsIdentifier = "provided";
-  boot.loader.grub.gfxmodeBios = "text";
-  boot.loader.grub.timeout = 3;
-  boot.loader.grub.version = 2;
-  boot.supportedFilesystems = [ "xfs" ];
-  boot.vesa = false;
-
   environment.noXlibs = true;
-
-  fileSystems."/".device = "/dev/disk/by-label/nixos";
-  fileSystems."/tmp".device = "/dev/vdc";
-
-  networking.useDHCP = true;
-
-  services.openssh.enable = true;
-  services.openssh.permitRootLogin = "without-password";
-
   sound.enable = false;
 
-  swapDevices = [ { device = "/dev/vdb"; } ];
+  environment.systemPackages = [
+      pkgs.cyrus_sasl
+      pkgs.db
+      pkgs.dstat
+      pkgs.gcc
+      pkgs.libxml2
+      pkgs.libxslt
+      pkgs.mercurial
+      pkgs.git
+      pkgs.openssl
+      pkgs.python27
+      pkgs.python27Packages.virtualenv
+      pkgs.vim
+      pkgs.zlib
+  ];
 
-  users.extraUsers.root.initialHashedPassword = "";
+  environment.pathsToLink = [ "/include" ];
+  environment.shellInit = ''
+   # help pip to find libz.so when building lxml
+   export LIBRARY_PATH=/var/run/current-system/sw/lib
+   # ditto for header files, e.g. sqlite
+   export C_INCLUDE_PATH=/var/run/current-system/sw/include:/var/run/current-system/sw/include/sasl
+  '';
 
 }
