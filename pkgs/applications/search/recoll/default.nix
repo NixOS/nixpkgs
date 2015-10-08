@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , qt4, xapian, file, python, perl
-, djvulibre, groff, libxslt, unzip, xpdf, antiword, catdoc, lyx
+, djvulibre, groff, libxslt, unzip, poppler_utils, antiword, catdoc, lyx
 , libwpd, unrtf, untex
 , ghostscript, gawk, gnugrep, gnused, gnutar, gzip, libiconv }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       substituteInPlace  $f --replace gunzip        ${gzip}/bin/gunzip
       substituteInPlace  $f --replace iconv         ${libiconv}/bin/iconv
       substituteInPlace  $f --replace lyx           ${lyx}/bin/lyx
-      substituteInPlace  $f --replace pdftotext     ${xpdf}/bin/pdftotext
+      substituteInPlace  $f --replace pdftotext     ${poppler_utils}/bin/pdftotext
       substituteInPlace  $f --replace pstotext      ${ghostscript}/bin/ps2ascii 
       substituteInPlace  $f --replace sed           ${gnused}/bin/sed
       substituteInPlace  $f --replace tar           ${gnutar}/bin/tar
