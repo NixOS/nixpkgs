@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, qt4, xapian, file, python
+, qt4, xapian, file, python, perl
 , djvulibre, groff, libxslt, unzip, xpdf, antiword, catdoc, lyx
 , libwpd, unrtf, untex
 , ghostscript, gawk, gnugrep, gnused, gnutar, gzip, libiconv }:
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
       substituteInPlace  $f --replace unrtf         ${unrtf}/bin/unrtf
       substituteInPlace  $f --replace untex         ${untex}/bin/untex
       substituteInPlace  $f --replace wpd2html      ${libwpd}/bin/wpd2html
+      substituteInPlace  $f --replace /usr/bin/perl ${perl}/bin/perl
     done
   '';
 
