@@ -11771,7 +11771,10 @@ let
   dmtx-utils = callPackage (callPackage ../tools/graphics/dmtx-utils) {
   };
 
-  docker = callPackage ../applications/virtualization/docker { go = go_1_4; };
+  docker = callPackage ../applications/virtualization/docker {
+    go = go_1_4;
+    clientOnly = stdenv.isDarwin;
+  };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
 
