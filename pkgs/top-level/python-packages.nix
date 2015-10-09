@@ -9333,7 +9333,7 @@ let
       license = licenses.lgpl21;
       description = "Exclude specific directories from nosetests runs";
       homepage = https://github.com/kgrandis/nose-exclude;
-      maintainers = [ fridh ];
+      maintainers = with maintainers; [ fridh ];
     };
 
   };
@@ -9989,14 +9989,15 @@ let
     inherit (pkgs.stdenv.lib) optional optionalString;
     inherit (pkgs.stdenv) isDarwin;
   in buildPythonPackage rec {
-    name = "pandas-0.16.2";
+    name = "pandas-${version}";
+    version = "0.17.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
-      sha256 = "10agmrkps8bi5948vwpipfxds5kj1d076m9i0nhaxwqiw7gm6670";
+      sha256 = "320d4fdf734b82adebc8fde9d8ca4b05fe155a72b6f7aa95d76242da8748d6a4";
     };
 
-    buildInputs = [ self.nose ] ++ optional isDarwin pkgs.libcxx;
+    buildInputs = with self; [ nose ] ++ optional isDarwin pkgs.libcxx;
     propagatedBuildInputs = with self; [
       dateutil
       numpy
@@ -10022,31 +10023,16 @@ let
                   "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
     '';
 
-    preCheck = ''
-      # Broken test, probably https://github.com/pydata/pandas/issues/10312:
-      rm pandas/io/tests/test_html.py
-
-      # Hitting https://github.com/pydata/pandas/pull/7362 on python
-      # 3.3 and 3.4, not sure why:
-      rm pandas/tseries/tests/test_daterange.py
-
-      # Need to skip this test; insert a line here... hacky but oh well.
-      badtest=pandas/tseries/tests/test_timezones.py
-      fixed=$TMPDIR/fixed_test_timezones.py
-      touch $fixed
-      head -n 602 $badtest > $fixed
-      echo '        raise nose.SkipTest("Not working")' >> $fixed
-      tail -n +603 $badtest >> $fixed
-      mv $fixed $badtest
-    '';
-
+    # The flag `-A 'not network'` will disable tests that use internet.
+    # The `-e` flag disables a few problematic tests.
+    # https://github.com/pydata/pandas/issues/11169
+    # https://github.com/pydata/pandas/issues/11287
     checkPhase = ''
       runHook preCheck
-
       # The flag `-A 'not network'` will disable tests that use internet.
       # The `-e` flag disables a few problematic tests.
       ${python.executable} setup.py nosetests -A 'not network' --stop \
-        -e 'test_clipboard|test_series' --verbosity=3
+        -e 'test_data|test_excel|test_html|test_json|test_frequencies|test_frame' --verbosity=3
 
       runHook postCheck
     '';
