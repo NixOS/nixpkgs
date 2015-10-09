@@ -40,7 +40,6 @@ in rec {
 
   # A bootable Flying Circus disk image (raw) that can be extracted onto
   # Ceph RBD volume.
-  # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   flyingcircus_vm_image =
     with import <nixpkgs> { system = "x86_64-linux"; };
     with lib;
