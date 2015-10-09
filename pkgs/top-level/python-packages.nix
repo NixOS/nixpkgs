@@ -6734,12 +6734,12 @@ let
   };
 
   goobook = buildPythonPackage rec {
-    name = "goobook-1.6";
+    name = "goobook-1.9";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/g/goobook/${name}.tar.gz";
-      sha256 = "05vpriy391l5i05ckl5ja5bswqyvl3rwrbmks9pi46w1813j7p5z";
+      sha256 = "02xmq8sjavza17av44ks510934wrshxnsm6lvhvazs45s92b671i";
     };
 
     buildInputs = with self; [ ];
@@ -6756,7 +6756,7 @@ let
       platforms   = platforms.unix;
     };
 
-    propagatedBuildInputs = with self; [ gdata hcs_utils keyring simplejson six];
+    propagatedBuildInputs = with self; [ oauth2client gdata simplejson httplib2 keyring six rsa ];
   };
 
   google_api_python_client = buildPythonPackage rec {
@@ -7054,11 +7054,11 @@ let
   };
 
   httplib2 = buildPythonPackage rec {
-    name = "httplib2-0.9";
+    name = "httplib2-0.9.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/h/httplib2/${name}.tar.gz";
-      sha256 = "1asi5wpncnc6ki3bz33mhb9xh2lrkb24y4qng8bmqnczdmm8rsir";
+      sha256 = "1xc3clbrf77r0600kja71j7hk1218sjiq0gfmb8vjdajka8kjqxw";
     };
 
     meta = {
@@ -9578,11 +9578,11 @@ let
   });
 
   oauth2client = pythonPackages.buildPythonPackage rec {
-    name = "oauth2client-1.4.7";
+    name = "oauth2client-1.4.12";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/o/oauth2client/oauth2client-1.4.7.tar.gz";
-      md5 = "62747643d5af57e57b09e176eda1c1dd";
+      url = "https://pypi.python.org/packages/source/o/oauth2client/${name}.tar.gz";
+      sha256 = "0phfk6s8bgpap5xihdk1xv2lakdk1pb3rg6hp2wsg94hxcxnrakl";
     };
 
     propagatedBuildInputs = with pythonPackages; [ httplib2 pyasn1 pyasn1-modules rsa ];
@@ -13237,11 +13237,11 @@ let
   };
 
   rsa = buildPythonPackage rec {
-    name = "rsa-3.1.2";
+    name = "rsa-3.1.4";
 
     src = pkgs.fetchurl {
-      url = "https://bitbucket.org/sybren/python-rsa/get/version-3.1.2.tar.bz2";
-      sha256 = "0ag2q4gaapi74x47q74xhcjzs4b7r2bb6zrj2an4sz5d3yd06cgf";
+      url = "https://pypi.python.org/packages/source/r/rsa/${name}.tar.gz";
+      sha256 = "1842ghkkimzf4fi3np4vwbwnsriv4d9malp1sbnv2xn26rcv1c72";
     };
 
     buildInputs = with self; [ self.pyasn1 ];
@@ -17320,12 +17320,12 @@ let
 
   gdata = buildPythonPackage rec {
     name = "gdata-${version}";
-    version = "2.0.17";
+    version = "2.0.18";
 
     src = pkgs.fetchurl {
       url = "https://gdata-python-client.googlecode.com/files/${name}.tar.gz";
       # sha1 = "d2d9f60699611f95dd8c328691a2555e76191c0c";
-      sha256 = "0bdaqmicpbj9v3p0swvyrqs7m35bzwdw1gy56d3k09np692jfwmd";
+      sha256 = "1dpxl5hwyyqd71avpm5vkvw8fhlvf9liizmhrq9jphhrx0nx5rsn";
     };
 
     # Fails with "error: invalid command 'test'"
