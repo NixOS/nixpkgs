@@ -29,8 +29,11 @@ stdenv.mkDerivation rec{
 
   postInstall = ''
     for f in "$out/bin/"*; do
+        # Override default argv[0] setting so LilyPond can find
+        # its Scheme libraries.
         wrapProgram "$f" --set GUILE_AUTO_COMPILE 0 \
-                         --set PATH "${ghostscript}/bin"
+                         --set PATH "${ghostscript}/bin" \
+                         --argv0 "$f"
     done
   '';
 
