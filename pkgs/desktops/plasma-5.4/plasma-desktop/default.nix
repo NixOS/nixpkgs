@@ -1,46 +1,12 @@
-{ plasmaPackage
-, substituteAll
-, extra-cmake-modules
-, kdoctools
-, attica
-, baloo
-, boost
-, fontconfig
-, kactivities
-, kauth
-, kcmutils
-, kdbusaddons
-, kdeclarative
-, kded
-, kdelibs4support
-, kemoticons
-, kglobalaccel
-, ki18n
-, kitemmodels
-, knewstuff
-, knotifications
-, knotifyconfig
-, kpeople
-, krunner
-, kwallet
-, kwin
-, phonon
-, plasma-framework
-, plasma-workspace
-, qtdeclarative
-, qtx11extras
-, qtsvg
-, libXcursor
-, libXft
-, libxkbfile
-, xf86inputevdev
-, xf86inputsynaptics
-, xinput
-, xkeyboard_config
-, xorgserver
-, libcanberra_kde
-, libpulseaudio
-, utillinux
+{ plasmaPackage, substituteAll, extra-cmake-modules, kdoctools
+, attica, baloo, boost, fontconfig, kactivities, kauth, kcmutils
+, kdbusaddons, kdeclarative, kded, kdelibs4support, kemoticons
+, kglobalaccel, ki18n, kitemmodels, knewstuff, knotifications
+, knotifyconfig, kpeople, krunner, kwallet, kwin, phonon
+, plasma-framework, plasma-workspace, qtdeclarative, qtx11extras
+, qtsvg, libXcursor, libXft, libxkbfile, xf86inputevdev
+, xf86inputsynaptics, xinput, xkeyboard_config, xorgserver
+, libcanberra_kde, libpulseaudio, utillinux
 }:
 
 plasmaPackage {
@@ -50,43 +16,13 @@ plasmaPackage {
     kdoctools
   ];
   buildInputs = [
-    attica
-    baloo
-    boost
-    fontconfig
-    kactivities
-    kauth
-    kcmutils
-    kdbusaddons
-    kdeclarative
-    kded
-    kdelibs4support
-    kemoticons
-    kglobalaccel
-    ki18n
-    kitemmodels
-    knewstuff
-    knotifications
-    knotifyconfig
-    kpeople
-    krunner
-    kwallet
-    kwin
-    libcanberra_kde
-    libXcursor
-    libpulseaudio
-    libXft
-    libxkbfile
-    phonon
-    plasma-framework
-    plasma-workspace
-    qtdeclarative
-    qtx11extras
-    qtsvg
-    xf86inputevdev
-    xf86inputsynaptics
-    xkeyboard_config
-    xinput
+    attica baloo boost fontconfig kactivities kauth kcmutils
+    kdbusaddons kdeclarative kded kdelibs4support kemoticons
+    kglobalaccel ki18n kitemmodels knewstuff knotifications
+    knotifyconfig kpeople krunner kwallet kwin libcanberra_kde
+    libXcursor libpulseaudio libXft libxkbfile phonon plasma-framework
+    plasma-workspace qtdeclarative qtx11extras qtsvg xf86inputevdev
+    xf86inputsynaptics xkeyboard_config xinput
   ];
   patches = [
     (substituteAll {
