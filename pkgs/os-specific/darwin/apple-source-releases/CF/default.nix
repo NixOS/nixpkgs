@@ -8,9 +8,8 @@ appleDerivation {
 
   patches = [ ./add-cf-initialize.patch ./add-cfmachport.patch ./cf-bridging.patch ];
 
-  # CFAttributedString.h is in the SDK only, not on opensource.apple.com or github
   __propagatedImpureHostDeps = [
-    "/System/Library/Frameworks/CoreFoundation.framework"
+    "/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation"
     "/usr/lib/libc++.1.dylib"
     "/usr/lib/libc++abi.dylib"
     "/usr/lib/libicucore.A.dylib"

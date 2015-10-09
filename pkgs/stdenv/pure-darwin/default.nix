@@ -8,14 +8,8 @@ let
   # libSystem and its transitive dependencies. Get used to this; it's a recurring theme in darwin land
   libSystemClosure = [
     "/usr/lib/libSystem.dylib"
-    "/usr/lib/libSystem.B.dylib"
-    "/usr/lib/libobjc.A.dylib"
+    "/usr/lib/system/libkxld.dylib"
     "/usr/lib/libobjc.dylib"
-    "/usr/lib/libauto.dylib"
-    "/usr/lib/libc++abi.dylib"
-    "/usr/lib/libc++.1.dylib"
-    "/usr/lib/libDiagnosticMessagesClient.dylib"
-    "/usr/lib/system"
   ];
 
   fetch = { file, sha256 }: derivation ((import <nix/fetchurl.nix> {
@@ -23,7 +17,7 @@ let
     inherit sha256;
     executable = true;
   }).drvAttrs // {
-    __impureHostDeps = libSystemClosure;
+    __impureHostDeps = [ "/usr/lib/libSystem.dylib" ];
   });
 
   bootstrapFiles = {
