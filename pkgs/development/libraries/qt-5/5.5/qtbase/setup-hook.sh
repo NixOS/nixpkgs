@@ -50,7 +50,21 @@ setQMakePath() {
 }
 
 wrapQtProgram() {
-    wrapProgram "$1" \
+    local prog="$1"
+    shift
+    wrapProgram "$prog" \
+        --set QT_PLUGIN_PATH "$QT_PLUGIN_PATH" \
+        --set QML_IMPORT_PATH "$QML_IMPORT_PATH" \
+        --set QML2_IMPORT_PATH "$QML2_IMPORT_PATH" \
+        "$@"
+}
+
+makeQtWrapper() {
+    local old="$1"
+    local new="$2"
+    shift
+    shift
+    makeWrapper "$old" "$new" \
         --set QT_PLUGIN_PATH "$QT_PLUGIN_PATH" \
         --set QML_IMPORT_PATH "$QML_IMPORT_PATH" \
         --set QML2_IMPORT_PATH "$QML2_IMPORT_PATH" \
