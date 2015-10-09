@@ -1,7 +1,7 @@
 { stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "sslcan-${version}";
+  name = "sslscan-${version}";
   version = "1.11.0";
 
   src = fetchurl {
