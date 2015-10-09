@@ -24,6 +24,10 @@ with lib;
   services.openssh.enable = true;
   services.openssh.permitRootLogin = "without-password";
 
+
+  fileSystems."/".device = "/dev/disk/by-label/nixos";
+  fileSystems."/tmp".device = "/dev/vdc";
+
   swapDevices = [ { device = "/dev/vdb"; } ];
 
   users.extraUsers.root.initialHashedPassword = "";
