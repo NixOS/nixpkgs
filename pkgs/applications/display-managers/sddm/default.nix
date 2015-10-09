@@ -20,7 +20,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxcb libpthreadstubs libXdmcp libXau qtbase qtdeclarative pam systemd ];
 
-  cmakeFlags = [ "-DCONFIG_FILE=/etc/sddm.conf" ];
+  cmakeFlags = [
+    "-DCONFIG_FILE=/etc/sddm.conf"
+    # Set UID_MIN and UID_MAX so that the build script won't try
+    # to read them from /etc/login.defs (fails in chroot).
+    # The values come from NixOS; they may not be appropriate
+    # for running SDDM outside NixOS, but that configuration is
+    # not supported anyway.
+    "-DUID_MIN=1000"
+    "-DUID_MAX=29999"
+  ];
 
   preConfigure = ''
     export cmakeFlags="$cmakeFlags -DQT_IMPORTS_DIR=$out/lib/qt5/qml -DCMAKE_INSTALL_SYSCONFDIR=$out/etc -DSYSTEMD_SYSTEM_UNIT_DIR=$out/lib/systemd/system"
