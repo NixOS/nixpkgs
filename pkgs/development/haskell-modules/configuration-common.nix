@@ -841,9 +841,6 @@ self: super: {
     ];
   });
 
-  # Old versions don't detect this library reliably.
-  freenect = appendConfigureFlag super.freenect "--extra-include-dirs=${pkgs.freenect}/include/libfreenect --extra-lib-dirs=${pkgs.freenect}/lib";
-
   # https://github.com/ivanperez-keera/hcwiid/pull/4
   hcwiid = overrideCabal super.hcwiid (drv: {
     configureFlags = (drv.configureFlags or []) ++ [
