@@ -4475,6 +4475,8 @@ let
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
+    nocrypto =  callPackage ../development/ocaml-modules/nocrypto { };
+
     ocaml_batteries = callPackage ../development/ocaml-modules/batteries { };
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
