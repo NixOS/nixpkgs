@@ -3050,6 +3050,8 @@ let
 
   sshpass = callPackage ../tools/networking/sshpass { };
 
+  sslscan = callPackage ../tools/security/sslscan { };
+
   ssmtp = callPackage ../tools/networking/ssmtp {
     tlsSupport = true;
   };
