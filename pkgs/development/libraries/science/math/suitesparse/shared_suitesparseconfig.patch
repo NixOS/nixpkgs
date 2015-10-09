@@ -1,0 +1,39 @@
+diff -ru3 SuiteSparse.old/SuiteSparse_config/Makefile SuiteSparse/SuiteSparse_config/Makefile
+--- SuiteSparse.old/SuiteSparse_config/Makefile	2015-08-27 23:15:02.905837087 +0300
++++ SuiteSparse/SuiteSparse_config/Makefile	2015-08-27 23:29:19.126448284 +0300
+@@ -8,17 +8,21 @@
+ 
+ include SuiteSparse_config.mk
+ 
+-ccode: libsuitesparseconfig.a
++ccode: libsuitesparseconfig.a libsuitesparseconfig.so
+ 
+-all: libsuitesparseconfig.a
++all: libsuitesparseconfig.a libsuitesparseconfig.so
+ 
+-library: libsuitesparseconfig.a
++library: libsuitesparseconfig.a libsuitesparseconfig.so
+ 
+-libsuitesparseconfig.a: SuiteSparse_config.c SuiteSparse_config.h
++SuiteSparse_config.o: SuiteSparse_config.c SuiteSparse_config.h
+ 	$(CC) $(CF) -c SuiteSparse_config.c
++
++libsuitesparseconfig.a: SuiteSparse_config.o
+ 	$(ARCHIVE) libsuitesparseconfig.a SuiteSparse_config.o
+ 	$(RANLIB) libsuitesparseconfig.a
+-	- $(RM) SuiteSparse_config.o
++
++libsuitesparseconfig.so: SuiteSparse_config.o
++	$(LD) -shared -o libsuitesparseconfig.so SuiteSparse_config.o
+ 
+ distclean: purge
+ 
+@@ -32,6 +36,8 @@
+ install:
+ 	$(CP) libsuitesparseconfig.a $(INSTALL_LIB)/libsuitesparseconfig.$(VERSION).a
+ 	( cd $(INSTALL_LIB) ; ln -sf libsuitesparseconfig.$(VERSION).a libsuitesparseconfig.a )
++	$(CP) libsuitesparseconfig.so $(INSTALL_LIB)/libsuitesparseconfig.$(VERSION).so
++	( cd $(INSTALL_LIB) ; ln -sf libsuitesparseconfig.$(VERSION).so libsuitesparseconfig.so )
+ 	$(CP) SuiteSparse_config.h $(INSTALL_INCLUDE)
+ 	chmod 644 $(INSTALL_LIB)/libsuitesparseconfig*.a
+ 	chmod 644 $(INSTALL_INCLUDE)/SuiteSparse_config.h

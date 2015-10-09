@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "utf8proc-${version}";
-  version = "v1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "JuliaLang";
     repo = "utf8proc";
-    rev = "${version}";
-    sha256 = "1ryjlcnpfm7fpkq6444ybi576hbnh2l0w7kjhbqady5lxwjyg3pf";
+    rev = "v${version}";
+    sha256 = "0z24pfdym2m0f92qyf2wc8rai91q5bv021jxhxankdhb3f8hmqf9";
   };
 
   makeFlags = [ "prefix=$(out)" ];

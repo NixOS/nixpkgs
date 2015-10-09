@@ -4145,6 +4145,9 @@ let
   julia03 = callPackage ../development/compilers/julia/0.3.nix {
     llvm = llvm_33;
   };
+
+  julia-dev = callPackage ../development/compilers/julia/dev.nix { };
+
   julia = julia03;
 
   lazarus = callPackage ../development/compilers/fpc/lazarus.nix {
@@ -7821,6 +7824,10 @@ let
   };
 
   pcre = callPackage ../development/libraries/pcre {
+    unicodeSupport = config.pcre.unicode or true;
+  };
+
+  pcre2 = callPackage ../development/libraries/pcre2 {
     unicodeSupport = config.pcre.unicode or true;
   };
 
@@ -14265,6 +14272,10 @@ let
   # A version of OpenBLAS using 32-bit integers on all platforms for compatibility with
   # standard BLAS and LAPACK.
   openblasCompat = openblas.override { blas64 = false; };
+
+  openlibm = callPackage ../development/libraries/science/math/openlibm { };
+
+  openspecfun = callPackage ../development/libraries/science/math/openspecfun { };
 
   mathematica = callPackage ../applications/science/math/mathematica { };
   mathematica9 = callPackage ../applications/science/math/mathematica/9.nix { };
