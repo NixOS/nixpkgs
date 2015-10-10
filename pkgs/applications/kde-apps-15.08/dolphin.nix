@@ -49,7 +49,6 @@ kdeApp {
     ktexteditor
     kwindowsystem
     knotifications
-    kactivities
     phonon
     baloo-widgets
     kfilemetadata
@@ -57,6 +56,7 @@ kdeApp {
   ];
   propagatedBuildInputs = [
     baloo
+    kactivities
   ];
   meta = {
     license = with lib.licenses; [ gpl2 fdl12 ];

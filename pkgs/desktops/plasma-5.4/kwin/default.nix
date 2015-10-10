@@ -1,39 +1,10 @@
-{ plasmaPackage
-, extra-cmake-modules
-, kdoctools
-, epoxy
-, kactivities
-, kcompletion
-, kcmutils
-, kconfig
-, kconfigwidgets
-, kcoreaddons
-, kcrash
-, kdeclarative
-, kdecoration
-, kglobalaccel
-, ki18n
-, kiconthemes
-, kinit
-, kio
-, knewstuff
-, knotifications
-, kpackage
-, kservice
-, kwayland
-, kwidgetsaddons
-, kwindowsystem
-, kxmlgui
-, libinput
-, libICE
-, libSM
-, plasma-framework
-, qtdeclarative
-, qtscript
-, qtx11extras
-, udev
-, wayland
-, xcb-util-cursor
+{ plasmaPackage, extra-cmake-modules, kdoctools, epoxy
+, kactivities, kcompletion, kcmutils, kconfig, kconfigwidgets
+, kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel
+, ki18n, kiconthemes, kinit, kio, knewstuff, knotifications
+, kpackage, kservice, kwayland, kwidgetsaddons, kwindowsystem
+, kxmlgui, libinput, libICE, libSM, plasma-framework, qtdeclarative
+, qtscript, qtx11extras, udev, wayland, xcb-util-cursor
 }:
 
 plasmaPackage {
@@ -43,40 +14,14 @@ plasmaPackage {
     kdoctools
   ];
   buildInputs = [
-    epoxy
-    kactivities
-    kcompletion
-    kcmutils
-    kconfig
-    kconfigwidgets
-    kcoreaddons
-    kcrash
-    kdeclarative
-    kdecoration
-    kglobalaccel
-    ki18n
-    kiconthemes
-    kinit
-    kio
-    knewstuff
-    knotifications
-    kpackage
-    kservice
-    kwayland
-    kwidgetsaddons
-    kwindowsystem
-    kxmlgui
-    libinput
-    libICE
-    libSM
-    plasma-framework
-    qtdeclarative
-    qtscript
-    qtx11extras
-    udev
-    wayland
+    epoxy kcompletion kcmutils kconfig kconfigwidgets kcoreaddons
+    kcrash kdeclarative kdecoration kglobalaccel ki18n kiconthemes
+    kinit kio knewstuff knotifications kpackage kservice kwayland
+    kwidgetsaddons kwindowsystem kxmlgui libinput libICE libSM
+    plasma-framework qtdeclarative qtscript qtx11extras udev wayland
     xcb-util-cursor
   ];
+  propagatedBuildInputs = [ kactivities ];
   patches = [ ./kwin-import-plugin-follow-symlinks.patch ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kwin_x11"
