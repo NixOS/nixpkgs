@@ -266,7 +266,7 @@
   telotortium = "Robert Irelan <rirelan@gmail.com>";
   thammers = "Tobias Hammerschmidt <jawr@gmx.de>";
   the-kenny = "Moritz Ulrich <moritz@tarn-vedra.de>";
-  nico202 = "Nicolò Balzarotti <anothersms@gmail.com>"
+  nico202 = "Nicolò Balzarotti <anothersms@gmail.com>";
   theuni = "Christian Theune <ct@flyingcircus.io>";
   thoughtpolice = "Austin Seipp <aseipp@pobox.com>";
   titanous = "Jonathan Rudenberg <jonathan@titanous.com>";
