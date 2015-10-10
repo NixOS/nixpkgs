@@ -10,10 +10,10 @@ kdeFramework {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     karchive kconfig kconfigwidgets kcoreaddons
-    kdbusaddons kdeclarative kglobalaccel kguiaddons ki18n kiconthemes
+    kdbusaddons kglobalaccel kguiaddons ki18n kiconthemes
     kio knotifications kwindowsystem kxmlgui qtscript qtx11extras
   ];
-  propagatedBuildInputs = [ kactivities kpackage kservice ];
+  propagatedBuildInputs = [ kactivities kdeclarative kpackage kservice ];
   postInstall = ''
     wrapKDEProgram "$out/bin/plasmapkg2"
   '';
