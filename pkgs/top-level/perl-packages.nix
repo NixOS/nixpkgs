@@ -1475,15 +1475,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ClassC3 = buildPerlPackage {
-    name = "Class-C3-0.26";
+  ClassC3 = buildPerlPackage rec {
+    name = "Class-C3-0.28";
     src = fetchurl {
-      url = mirror://cpan/authors/id/H/HA/HAARG/Class-C3-0.26.tar.gz;
-      sha256 = "008xg6gf5qp2fdjqzfpg0fzhw7f308ddkxwvzdcaa9zq59sg5x6s";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
+      sha256 = "084d2cvfff3mi2fjycdvbgx797wkv1wsz97w3v8i14j8vhmfv4bg";
     };
     propagatedBuildInputs = [ AlgorithmC3 ];
     meta = {
-      description = "A pragma to use the C3 method resolution order algortihm";
+      description = "A pragma to use the C3 method resolution order algorithm";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
