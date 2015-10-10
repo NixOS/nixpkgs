@@ -29,12 +29,14 @@ kdeApp {
     kdbusaddons
     ki18n
     kiconthemes
-    khtml
     kio
     kservice
     kpty
     kwidgetsaddons
     libarchive
+  ];
+  propagatedBuildInputs = [
+    khtml
   ];
   meta = {
     license = with lib.licenses; [ gpl2 lgpl3 ];
