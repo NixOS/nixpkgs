@@ -16,7 +16,7 @@ plasmaPackage {
     kdoctools
   ];
   buildInputs = [
-    attica baloo boost fontconfig kactivities kauth kcmutils
+    attica boost fontconfig kactivities kauth kcmutils
     kdbusaddons kdeclarative kded kdelibs4support kemoticons
     kglobalaccel ki18n kitemmodels knewstuff knotifications
     knotifyconfig kpeople krunner kwallet kwin libcanberra_kde
@@ -24,6 +24,7 @@ plasmaPackage {
     plasma-workspace qtdeclarative qtx11extras qtsvg xf86inputevdev
     xf86inputsynaptics xkeyboard_config xinput
   ];
+  propagatedBuildInputs = [ baloo ];
   patches = [
     (substituteAll {
       src = ./0001-hwclock.patch;
