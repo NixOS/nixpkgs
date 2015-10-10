@@ -44,7 +44,6 @@ kdeApp {
     kxmlgui
     kdbusaddons
     kwallet
-    plasma-framework
     kitemmodels
     knotifications
     threadweaver
@@ -57,6 +56,7 @@ kdeApp {
     kio
     ktexteditor
     kwindowsystem
+    plasma-framework
   ];
   meta = {
     license = with lib.licenses; [ gpl3 lgpl3 lgpl2 ];

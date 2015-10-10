@@ -17,11 +17,11 @@ plasmaPackage {
     epoxy kcompletion kcmutils kconfig kconfigwidgets kcoreaddons
     kcrash kdecoration kiconthemes kinit knewstuff knotifications
     kpackage kservice kwayland kwidgetsaddons kxmlgui libinput libICE
-    libSM plasma-framework qtscript udev wayland xcb-util-cursor
+    libSM qtscript udev wayland xcb-util-cursor
   ];
   propagatedBuildInputs = [
     kactivities kdeclarative kglobalaccel ki18n kio kwindowsystem
-    qtdeclarative qtx11extras
+    plasma-framework qtdeclarative qtx11extras
   ];
   patches = [ ./kwin-import-plugin-follow-symlinks.patch ];
   postInstall = ''
