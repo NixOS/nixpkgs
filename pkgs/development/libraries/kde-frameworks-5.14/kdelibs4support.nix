@@ -13,14 +13,14 @@ kdeFramework {
   name = "kdelibs4support";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    kcompletion kconfig kglobalaccel ki18n kio kservice kwidgetsaddons
+    kcompletion kconfig ki18n kio kservice kwidgetsaddons
     kxmlgui networkmanager qtsvg qtx11extras xlibs.libSM
   ];
   propagatedBuildInputs = [
     kauth karchive kconfigwidgets kcoreaddons kcrash kdbusaddons
-    kdesignerplugin kemoticons kguiaddons kiconthemes kitemmodels
-    kinit knotifications kparts ktextwidgets kunitconversion
-    kwindowsystem
+    kdesignerplugin kemoticons kglobalaccel kguiaddons kiconthemes
+    kitemmodels kinit knotifications kparts ktextwidgets
+    kunitconversion kwindowsystem
   ];
   cmakeFlags = [
     "-DDocBookXML4_DTD_DIR=${docbook_xml_dtd_45}/xml/dtd/docbook"

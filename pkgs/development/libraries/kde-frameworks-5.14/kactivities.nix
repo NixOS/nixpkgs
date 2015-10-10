@@ -7,10 +7,10 @@ kdeFramework {
   name = "kactivities";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    boost kcmutils kconfig kcoreaddons kdbusaddons kglobalaccel ki18n
-    kio kservice kwindowsystem kxmlgui
+    boost kcmutils kconfig kcoreaddons kdbusaddons ki18n kio kservice
+    kwindowsystem kxmlgui
   ];
-  propagatedBuildInputs = [ kdeclarative qtdeclarative ];
+  propagatedBuildInputs = [ kdeclarative kglobalaccel qtdeclarative ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kactivitymanagerd"
   '';
