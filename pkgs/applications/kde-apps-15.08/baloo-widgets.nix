@@ -23,10 +23,10 @@ kdeApp {
     ki18n
     kservice
     kfilemetadata
-    kdelibs4support
   ];
   propagatedBuildInputs = [
     baloo
+    kdelibs4support
   ];
   meta = {
     license = [ lib.licenses.lgpl21 ];
