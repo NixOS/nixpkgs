@@ -234,6 +234,7 @@
       #lxd = 210; # unused
       kibana = 211;
       xtreemfs = 212;
+      taskwarrior-web = 213;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 

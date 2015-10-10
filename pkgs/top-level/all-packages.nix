@@ -12867,6 +12867,10 @@ let
 
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
 
+  taskwarrior-web = callPackage ../applications/misc/taskwarrior-web {
+    ruby = ruby_2_0_0;
+ };
+
   taskserver = callPackage ../servers/misc/taskserver { };
 
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram-cli/default.nix { };

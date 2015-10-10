@@ -224,6 +224,7 @@
   ./services/misc/sundtek.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
+  ./services/misc/taskwarrior-web.nix
   ./services/misc/uhub.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
