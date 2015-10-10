@@ -12,9 +12,9 @@ plasmaPackage {
   ];
   buildInputs = [
     ibus kconfig kconfigwidgets kcoreaddons kcmutils
-    knewstuff krunner kservice kunitconversion plasma-framework
+    knewstuff kservice kunitconversion plasma-framework
   ];
   propagatedBuildInputs = [
-    kdelibs4support kio kross qtdeclarative qtx11extras
+    kdelibs4support kio kross krunner qtdeclarative qtx11extras
   ];
 }

@@ -17,14 +17,14 @@ plasmaPackage {
   ];
   buildInputs = [
     attica boost fontconfig kcmutils kdbusaddons kded kitemmodels
-    knewstuff knotifications knotifyconfig krunner kwallet kwin
+    knewstuff knotifications knotifyconfig kwallet kwin
     libcanberra_kde libXcursor libpulseaudio libXft libxkbfile phonon
     plasma-framework plasma-workspace qtdeclarative qtx11extras qtsvg
     xf86inputevdev xf86inputsynaptics xkeyboard_config xinput
   ];
   propagatedBuildInputs = [
     baloo kactivities kauth kdeclarative kdelibs4support kemoticons
-    kglobalaccel ki18n kpeople
+    kglobalaccel ki18n kpeople krunner
   ];
   patches = [
     (substituteAll {
