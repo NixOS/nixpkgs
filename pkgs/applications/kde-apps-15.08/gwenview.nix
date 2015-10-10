@@ -20,7 +20,6 @@ kdeApp {
     kdoctools
   ];
   buildInputs = [
-    baloo
     exiv2
     kactivities
     kdelibs4support
@@ -28,6 +27,9 @@ kdeApp {
     lcms2
     phonon
     qtsvg
+  ];
+  propagatedBuildInputs = [
+    baloo
     qtx11extras
   ];
   meta = {
