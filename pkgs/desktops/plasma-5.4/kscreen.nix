@@ -1,14 +1,6 @@
-{ plasmaPackage
-, extra-cmake-modules
-, kconfig
-, kconfigwidgets
-, kdbusaddons
-, kglobalaccel
-, ki18n
-, kwidgetsaddons
-, kxmlgui
-, libkscreen
-, qtdeclarative
+{ plasmaPackage, extra-cmake-modules, kconfig, kconfigwidgets
+, kdbusaddons, kglobalaccel, ki18n, kwidgetsaddons, kxmlgui
+, libkscreen, qtdeclarative
 }:
 
 plasmaPackage {
@@ -17,16 +9,10 @@ plasmaPackage {
     extra-cmake-modules
   ];
   buildInputs = [
-    kconfig
-    kconfigwidgets
-    kdbusaddons
-    kglobalaccel
-    ki18n
-    kwidgetsaddons
-    kxmlgui
+    kconfig kconfigwidgets kdbusaddons ki18n kwidgetsaddons kxmlgui
     libkscreen
-    qtdeclarative
   ];
+  propagatedBuildInputs = [ kglobalaccel qtdeclarative ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kscreen-console"
   '';

@@ -5,13 +5,10 @@
 
 plasmaPackage {
   name = "khotkeys";
-  nativeBuildInputs = [
-    extra-cmake-modules
-    kdoctools
-  ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    kcmutils kdbusaddons kglobalaccel ki18n kio kxmlgui
-    plasma-framework plasma-workspace
+    kcmutils kdbusaddons ki18n kio kxmlgui plasma-framework
+    plasma-workspace
   ];
-  propagatedBuildInputs = [ kdelibs4support qtx11extras ];
+  propagatedBuildInputs = [ kdelibs4support kglobalaccel qtx11extras ];
 }
