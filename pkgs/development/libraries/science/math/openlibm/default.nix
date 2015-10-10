@@ -7,10 +7,7 @@ stdenv.mkDerivation {
     sha256 = "0cwqqqlblj3kzp9aq1wnpfs1fl0qd1wp1xzm5shb09w06i4rh9nn";
   };
 
-  patches = [ ./openlibm-prefix.patch ];
-  postPatch = ''
-    substituteAllInPlace Make.inc
-  '';
+  makeFlags = [ "prefix=$(out)" ];
 
   meta = {
     description = "High quality system independent, portable, open source libm implementation";
