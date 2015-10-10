@@ -14271,6 +14271,8 @@ let
 
   openlibm = callPackage ../development/libraries/science/math/openlibm {};
 
+  openspecfun = callPackage ../development/libraries/science/math/openspecfun {};
+
   mathematica = callPackage ../applications/science/math/mathematica { };
   mathematica9 = callPackage ../applications/science/math/mathematica/9.nix { };
 
