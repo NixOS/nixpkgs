@@ -26,7 +26,9 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   libxfce4ui_gtk3 = libxfce4ui.override { withGtk3 = true; };
   libxfce4util    = callPackage ./core/libxfce4util.nix { };
   libxfcegui4     = callPackage ./core/libxfcegui4.nix { };
+  thunar-build    = callPackage ./core/thunar-build.nix { };
   thunar          = callPackage ./core/thunar.nix { };
+  thunarx-2-dev   = thunar-build; # Plugins need only the `thunarx-2` part of the package. Awaiting multiple outputs.
   thunar_volman   = callPackage ./core/thunar-volman.nix { }; # ToDo: probably inside Thunar now
   thunar-archive-plugin 
                   = callPackage ./thunar-plugins/archive { };
