@@ -2,7 +2,16 @@
 
 with lib;
 
+let
+    flavor_files =
+        if builtins.pathExists (builtins.toPath /etc/nixos/vagrant.nix)
+        then [./vagrant.nix]
+        else [./fcio.nix];
+in
 {
+  imports = [] ++
+      flavor_files;
+
   environment.noXlibs = true;
   sound.enable = false;
 
@@ -30,4 +39,11 @@ with lib;
    export C_INCLUDE_PATH=/var/run/current-system/sw/include:/var/run/current-system/sw/include/sasl
   '';
 
+
+  security.sudo.extraConfig =
+      ''
+      Defaults lecture = never
+      root   ALL=(ALL) SETENV: ALL
+      %wheel ALL=(ALL) NOPASSWD: ALL, SETENV: ALL
+      '';
 }
