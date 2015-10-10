@@ -11,12 +11,12 @@ kdeFramework {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     acl karchive kconfig kcoreaddons kdbusaddons kiconthemes
-    knotifications ktextwidgets kwallet kwidgetsaddons kwindowsystem
+    knotifications ktextwidgets kwallet kwidgetsaddons
     qtscript
   ];
   propagatedBuildInputs = [
     kbookmarks kcompletion kconfigwidgets ki18n kitemviews kjobwidgets
-    kservice kxmlgui solid qtx11extras
+    kservice kwindowsystem kxmlgui solid qtx11extras
   ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kcookiejar5"

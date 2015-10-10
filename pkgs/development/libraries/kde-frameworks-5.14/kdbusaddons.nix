@@ -6,7 +6,7 @@
 kdeFramework {
   name = "kdbusaddons";
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ qtx11extras ];
+  propagatedBuildInputs = [ qtx11extras ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kquitapp5"
   '';

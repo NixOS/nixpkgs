@@ -10,10 +10,10 @@ plasmaPackage {
     kdoctools
   ];
   buildInputs = [
-    kitemviews kcmutils kservice kiconthemes kwindowsystem
-    kxmlgui kdbusaddons kconfig
+    kitemviews kcmutils kservice kiconthemes kxmlgui kdbusaddons
+    kconfig
   ];
-  propagatedBuildInputs = [ khtml ki18n kio ];
+  propagatedBuildInputs = [ khtml ki18n kio kwindowsystem ];
   postInstall = ''
     wrapKDEProgram "$out/bin/systemsettings5"
   '';

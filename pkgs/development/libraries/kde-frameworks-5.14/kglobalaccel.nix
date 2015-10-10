@@ -11,7 +11,8 @@
 kdeFramework {
   name = "kglobalaccel";
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ kconfig kcoreaddons kcrash kdbusaddons kwindowsystem qtx11extras ];
+  buildInputs = [ kconfig kcoreaddons kcrash kdbusaddons ];
+  propagatedBuildInputs = [ kwindowsystem qtx11extras ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kglobalaccel5"
   '';

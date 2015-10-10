@@ -8,10 +8,10 @@ kdeFramework {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     boost kcmutils kconfig kcoreaddons kdbusaddons kservice
-    kwindowsystem kxmlgui
+    kxmlgui
   ];
   propagatedBuildInputs = [
-    kdeclarative kglobalaccel ki18n kio qtdeclarative
+    kdeclarative kglobalaccel ki18n kio kwindowsystem qtdeclarative
   ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kactivitymanagerd"

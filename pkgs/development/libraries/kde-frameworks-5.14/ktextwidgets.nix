@@ -7,9 +7,9 @@ kdeFramework {
   name = "ktextwidgets";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    kcompletion kconfig kconfigwidgets kiconthemes kservice kwindowsystem
+    kcompletion kconfig kconfigwidgets kiconthemes kservice
   ];
-  propagatedBuildInputs = [ ki18n sonnet ];
+  propagatedBuildInputs = [ ki18n kwindowsystem sonnet ];
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
   };

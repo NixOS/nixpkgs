@@ -32,12 +32,12 @@ kdeApp {
     knotifications
     plasma-framework
     kwidgetsaddons
-    kwindowsystem
     kitemviews
   ];
   propagatedBuildInputs = [
     ki18n
     kio
+    kwindowsystem
     qtdeclarative
   ];
   meta = {

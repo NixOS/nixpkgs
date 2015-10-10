@@ -8,8 +8,8 @@
 kdeFramework {
   name = "kinit";
   nativeBuildInputs = [ extra-cmake-modules kdoctools libcap_progs ];
-  buildInputs = [ kconfig kcrash kservice kwindowsystem libcap ];
-  propagatedBuildInputs = [ ki18n kio ];
+  buildInputs = [ kconfig kcrash kservice libcap ];
+  propagatedBuildInputs = [ ki18n kio kwindowsystem ];
   patches = [ ./0001-kinit-libpath.patch ];
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

@@ -49,12 +49,12 @@ kdeApp {
     kservice
     ktextwidgets
     kwidgetsaddons
-    kwindowsystem
     kxmlgui
   ];
   propagatedBuildInputs = [
     kdelibs4support
     ki18n
+    kwindowsystem
   ];
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];

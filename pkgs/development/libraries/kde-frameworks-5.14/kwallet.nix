@@ -8,9 +8,9 @@ kdeFramework {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kconfig kcoreaddons kdbusaddons kiconthemes knotifications
-    kservice kwidgetsaddons kwindowsystem libgcrypt
+    kservice kwidgetsaddons libgcrypt
   ];
-  propagatedBuildInputs = [ ki18n ];
+  propagatedBuildInputs = [ ki18n kwindowsystem ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kwalletd5"
     wrapKDEProgram "$out/bin/kwallet-query"
