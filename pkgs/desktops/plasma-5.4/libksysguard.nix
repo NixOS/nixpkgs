@@ -10,11 +10,11 @@ plasmaPackage {
     extra-cmake-modules
   ];
   buildInputs = [
-    kauth kcompletion kconfigwidgets kcoreaddons kservice
+    kcompletion kconfigwidgets kcoreaddons kservice
     kwidgetsaddons kwindowsystem plasma-framework qtscript qtwebkit
     qtx11extras
   ];
   propagatedBuildInputs = [
-    kconfig ki18n kiconthemes
+    kauth kconfig ki18n kiconthemes
   ];
 }

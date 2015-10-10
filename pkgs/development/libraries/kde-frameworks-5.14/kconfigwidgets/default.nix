@@ -1,12 +1,5 @@
-{ kdeFramework, lib
-, extra-cmake-modules
-, kauth
-, kcodecs
-, kconfig
-, kdoctools
-, kguiaddons
-, ki18n
-, kwidgetsaddons
+{ kdeFramework, lib, extra-cmake-modules, kauth, kcodecs, kconfig
+, kdoctools, kguiaddons, ki18n, kwidgetsaddons
 }:
 
 kdeFramework {

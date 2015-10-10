@@ -1,39 +1,16 @@
-{ kdeFramework, lib
-, extra-cmake-modules
-, kauth
-, kconfig
-, kcoreaddons
-, kcrash
-, kdbusaddons
-, kfilemetadata
-, ki18n
-, kidletime
-, kio
-, lmdb
-, qtbase
-, qtquick1
-, solid
+{ kdeFramework, lib, extra-cmake-modules, kauth, kconfig
+, kcoreaddons, kcrash, kdbusaddons, kfilemetadata, ki18n, kidletime
+, kio, lmdb, qtbase, qtquick1, solid
 }:
 
 kdeFramework {
   name = "baloo";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    kauth
-    kconfig
-    kcrash
-    kdbusaddons
-    ki18n
-    kidletime
-    kio
-    lmdb
-    qtquick1
-    solid
+    kconfig kcrash kdbusaddons ki18n kidletime kio lmdb qtquick1 solid
   ];
   propagatedBuildInputs = [
-    kcoreaddons
-    kfilemetadata
-    qtbase
+    kauth kcoreaddons kfilemetadata qtbase
   ];
   postInstall = ''
     wrapKDEProgram "$out/bin/baloo_file"
