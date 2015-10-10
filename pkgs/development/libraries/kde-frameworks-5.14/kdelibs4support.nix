@@ -1,36 +1,10 @@
-{ kdeFramework, lib
-, extra-cmake-modules
-, docbook_xml_dtd_45
-, kauth
-, karchive
-, kcompletion
-, kconfig
-, kconfigwidgets
-, kcoreaddons
-, kcrash
-, kdbusaddons
-, kdesignerplugin
-, kdoctools
-, kemoticons
-, kglobalaccel
-, kguiaddons
-, ki18n
-, kiconthemes
-, kio
-, kitemmodels
-, kinit
-, knotifications
-, kparts
-, kservice
-, ktextwidgets
-, kunitconversion
-, kwidgetsaddons
-, kwindowsystem
-, kxmlgui
-, networkmanager
-, qtsvg
-, qtx11extras
-, xlibs
+{ kdeFramework, lib, extra-cmake-modules, docbook_xml_dtd_45, kauth
+, karchive, kcompletion, kconfig, kconfigwidgets, kcoreaddons
+, kcrash, kdbusaddons, kdesignerplugin, kdoctools, kemoticons
+, kglobalaccel, kguiaddons, ki18n, kiconthemes, kio, kitemmodels
+, kinit, knotifications, kparts, kservice, ktextwidgets
+, kunitconversion, kwidgetsaddons, kwindowsystem, kxmlgui
+, networkmanager, qtsvg, qtx11extras, xlibs
 }:
 
 # TODO: debug docbook detection
