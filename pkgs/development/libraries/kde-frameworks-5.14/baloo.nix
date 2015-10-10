@@ -7,10 +7,10 @@ kdeFramework {
   name = "baloo";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    kconfig kcrash kdbusaddons kio lmdb qtquick1 solid
+    kconfig kcrash kdbusaddons lmdb qtquick1 solid
   ];
   propagatedBuildInputs = [
-    kauth kcoreaddons kfilemetadata ki18n kidletime qtbase
+    kauth kcoreaddons kfilemetadata ki18n kio kidletime qtbase
   ];
   postInstall = ''
     wrapKDEProgram "$out/bin/baloo_file"

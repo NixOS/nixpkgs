@@ -21,7 +21,6 @@ kdeApp {
   ];
   buildInputs = [
     exiv2
-    kio
     lcms2
     phonon
     qtsvg
@@ -30,6 +29,7 @@ kdeApp {
     baloo
     kactivities
     kdelibs4support
+    kio
     qtx11extras
   ];
   meta = {

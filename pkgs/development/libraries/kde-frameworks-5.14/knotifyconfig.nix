@@ -5,8 +5,8 @@
 kdeFramework {
   name = "knotifyconfig";
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ kcompletion kconfig kio phonon ];
-  propagatedBuildInputs = [ ki18n ];
+  buildInputs = [ kcompletion kconfig phonon ];
+  propagatedBuildInputs = [ ki18n kio ];
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
   };

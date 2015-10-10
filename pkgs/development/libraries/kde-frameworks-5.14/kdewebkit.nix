@@ -5,8 +5,8 @@
 kdeFramework {
   name = "kdewebkit";
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ kconfig kcoreaddons kio kjobwidgets kparts kservice kwallet ];
-  propagatedBuildInputs = [ ki18n qtwebkit ];
+  buildInputs = [ kconfig kcoreaddons kjobwidgets kparts kservice kwallet ];
+  propagatedBuildInputs = [ ki18n kio qtwebkit ];
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
   };

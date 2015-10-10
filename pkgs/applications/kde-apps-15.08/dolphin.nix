@@ -40,7 +40,6 @@ kdeApp {
     kdbusaddons
     kbookmarks
     kconfig
-    kio
     kparts
     solid
     kiconthemes
@@ -57,6 +56,7 @@ kdeApp {
     kdelibs4support
     kfilemetadata
     ki18n
+    kio
   ];
   meta = {
     license = with lib.licenses; [ gpl2 fdl12 ];

@@ -11,8 +11,8 @@ plasmaPackage {
     kdoctools
   ];
   buildInputs = [
-    ibus kconfig kconfigwidgets kcoreaddons kcmutils kio
+    ibus kconfig kconfigwidgets kcoreaddons kcmutils
     knewstuff kross krunner kservice kunitconversion plasma-framework
   ];
-  propagatedBuildInputs = [ kdelibs4support qtdeclarative qtx11extras ];
+  propagatedBuildInputs = [ kdelibs4support kio qtdeclarative qtx11extras ];
 }

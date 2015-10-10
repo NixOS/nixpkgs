@@ -21,9 +21,10 @@ kdeFramework {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kcompletion kconfig kconfigwidgets kcoreaddons kdewebkit
-    kiconthemes kio kitemviews kplotting ktextwidgets kwidgetsaddons
+    kiconthemes kitemviews kplotting ktextwidgets kwidgetsaddons
     kxmlgui sonnet
   ];
+  propagatedBuildInputs = [ kio ];
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
   };

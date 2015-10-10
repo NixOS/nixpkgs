@@ -12,10 +12,10 @@ plasmaPackage {
   ];
   buildInputs = [
     kcmutils kcompletion kconfig kconfigwidgets kcoreaddons
-    kdbusaddons kiconthemes kio kpackage kservice kwidgetsaddons
+    kdbusaddons kiconthemes kpackage kservice kwidgetsaddons
     kxmlgui libraw1394 pciutils solid
   ];
-  propagatedBuildInputs = [ kdeclarative kdelibs4support ki18n ];
+  propagatedBuildInputs = [ kdeclarative kdelibs4support ki18n kio ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kinfocenter"
   '';

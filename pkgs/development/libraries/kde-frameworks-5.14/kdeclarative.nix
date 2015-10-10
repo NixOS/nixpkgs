@@ -7,9 +7,9 @@ kdeFramework {
   name = "kdeclarative";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    epoxy kguiaddons kiconthemes kio kwidgetsaddons kwindowsystem
+    epoxy kguiaddons kiconthemes kwidgetsaddons kwindowsystem
   ];
-  propagatedBuildInputs = [ kconfig kglobalaccel ki18n kpackage qtdeclarative ];
+  propagatedBuildInputs = [ kconfig kglobalaccel ki18n kio kpackage qtdeclarative ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kpackagelauncherqml"
   '';
