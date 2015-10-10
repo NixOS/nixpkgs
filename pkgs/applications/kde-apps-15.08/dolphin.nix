@@ -52,11 +52,11 @@ kdeApp {
     phonon
     baloo-widgets
     kfilemetadata
-    kdelibs4support
   ];
   propagatedBuildInputs = [
     baloo
     kactivities
+    kdelibs4support
   ];
   meta = {
     license = with lib.licenses; [ gpl2 fdl12 ];

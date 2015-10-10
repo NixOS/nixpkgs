@@ -14,13 +14,13 @@ plasmaPackage {
     kdoctools
   ];
   buildInputs = [
-    kcompletion kconfigwidgets kcoreaddons kdbusaddons kdelibs4support
-    ki18n kiconthemes kinit kio kitemviews knotifications kservice
-    kwallet kwidgetsaddons kwindowsystem kxmlgui
+    kcompletion kconfigwidgets kcoreaddons kdbusaddons ki18n
+    kiconthemes kinit kio kitemviews knotifications kservice kwallet
+    kwidgetsaddons kwindowsystem kxmlgui
     mobile_broadband_provider_info modemmanager-qt networkmanager-qt
-    openconnect plasma-framework qtdeclarative solid
+    openconnect plasma-framework solid
   ];
-  propagatedBuildInputs = [ kdeclarative ];
+  propagatedBuildInputs = [ kdeclarative kdelibs4support qtdeclarative ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kde5-nm-connection-editor"
   '';

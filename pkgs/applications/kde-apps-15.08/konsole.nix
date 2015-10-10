@@ -42,7 +42,6 @@ kdeApp {
     ki18n
     kiconthemes
     kinit
-    kdelibs4support
     kio
     knotifications
     knotifyconfig
@@ -53,6 +52,9 @@ kdeApp {
     kwidgetsaddons
     kwindowsystem
     kxmlgui
+  ];
+  propagatedBuildInputs = [
+    kdelibs4support
   ];
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
