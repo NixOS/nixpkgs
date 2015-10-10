@@ -11,9 +11,10 @@ plasmaPackage {
   ];
   buildInputs = [
     kcompletion kconfigwidgets kcoreaddons kservice
-    kwidgetsaddons plasma-framework qtscript qtwebkit
+    kwidgetsaddons qtscript qtwebkit
   ];
   propagatedBuildInputs = [
-    kauth kconfig ki18n kiconthemes kwindowsystem qtx11extras
+    kauth kconfig ki18n kiconthemes kwindowsystem plasma-framework
+    qtx11extras
   ];
 }

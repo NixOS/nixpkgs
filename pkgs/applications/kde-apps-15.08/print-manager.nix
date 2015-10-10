@@ -30,7 +30,6 @@ kdeApp {
     kiconthemes
     kcmutils
     knotifications
-    plasma-framework
     kwidgetsaddons
     kitemviews
   ];
@@ -38,6 +37,7 @@ kdeApp {
     ki18n
     kio
     kwindowsystem
+    plasma-framework
     qtdeclarative
   ];
   meta = {

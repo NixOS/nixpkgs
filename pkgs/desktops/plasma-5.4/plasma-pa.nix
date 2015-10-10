@@ -9,7 +9,9 @@ plasmaPackage {
     extra-cmake-modules
   ];
   buildInputs = [
-    glib kconfigwidgets kcoreaddons libpulseaudio plasma-framework
+    glib kconfigwidgets kcoreaddons libpulseaudio
   ];
-  propagatedBuildInputs = [ kdeclarative kglobalaccel ki18n ];
+  propagatedBuildInputs = [
+    kdeclarative kglobalaccel ki18n plasma-framework
+  ];
 }
