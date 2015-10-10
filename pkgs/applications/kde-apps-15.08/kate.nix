@@ -34,7 +34,6 @@ kdeApp {
   ];
   buildInputs = [
     qtscript
-    kactivities
     kconfig
     kcrash
     kguiaddons
@@ -55,6 +54,9 @@ kdeApp {
     threadweaver
     knewstuff
     libgit2
+  ];
+  propagatedBuildInputs = [
+    kactivities
   ];
   meta = {
     license = with lib.licenses; [ gpl3 lgpl3 lgpl2 ];

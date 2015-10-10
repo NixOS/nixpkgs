@@ -21,7 +21,6 @@ kdeApp {
   ];
   buildInputs = [
     exiv2
-    kactivities
     kdelibs4support
     kio
     lcms2
@@ -30,6 +29,7 @@ kdeApp {
   ];
   propagatedBuildInputs = [
     baloo
+    kactivities
     qtx11extras
   ];
   meta = {
