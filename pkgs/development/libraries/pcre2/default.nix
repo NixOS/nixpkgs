@@ -7,6 +7,10 @@ stdenv.mkDerivation {
     sha256 = "0yj8mm9ll9zj3v47rvmmqmr1ybxk72rr2lym3rymdsf905qjhbik";
   };
 
+  configureFlags = [
+    "--enable-jit"
+  ];
+
   meta = {
     description = "Perl Compatible Regular Expressions";
     homepage = "http://www.pcre.org/";
