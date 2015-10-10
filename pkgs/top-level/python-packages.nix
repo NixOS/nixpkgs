@@ -18474,12 +18474,11 @@ let
 
     namePrefix = "";
     disabled = (!isPy34);
-    propagatedBuildInputs = with self ; [ aiodns slixmpp ];
+    propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr ];
 
-   patches =
-   let patch_base = ../development/python-modules/poezio ;
-   in [ "${patch_base}/make_default_config_writable.patch"
-      ];
+    patches =
+      let patch_base = ../development/python-modules/poezio;
+      in [ "${patch_base}/make_default_config_writable.patch" ];
 
     src = pkgs.fetchurl {
       url = "http://dev.louiz.org/attachments/download/91/${name}.tar.xz";
@@ -18491,6 +18490,25 @@ let
       homepage = http://poez.io;
       license = licenses.mit;
       maintainers = [ maintainers.lsix ];
+    };
+  };
+
+  potr = buildPythonPackage rec {
+    version = "1.0.1";
+    name = "potr-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-potr/python-${name}.zip";
+      sha256 = "1b3vjbv8hvynwj6amw3rg5zj8bagynbj0ipy09xwksf1mb0kz8m8";
+    };
+
+    propagatedBuildInputs = with self ; [ pycrypto ];
+
+    meta = {
+      description = "A pure Python OTR implementation";
+      homepage = "http://python-otr.pentabarf.de/";
+      license = licenses.lgpl3Plus;
+      maintainers = with maintainers; [ globin ];
     };
   };
 
