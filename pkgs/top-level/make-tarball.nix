@@ -35,8 +35,8 @@ releaseTools.sourceTarball rec {
     # Make sure that derivation paths do not depend on the Nixpkgs path.
     mkdir $TMPDIR/foo
     ln -s $(readlink -f .) $TMPDIR/foo/bar
-    p1=$(nix-instantiate pkgs/top-level/all-packages.nix --dry-run -A firefox)
-    p2=$(nix-instantiate $TMPDIR/foo/bar/pkgs/top-level/all-packages.nix --dry-run -A firefox)
+    p1=$(nix-instantiate pkgs/top-level/all-packages-wrapper.nix --dry-run -A firefox)
+    p2=$(nix-instantiate $TMPDIR/foo/bar/pkgs/top-level/all-packages-wrapper.nix --dry-run -A firefox)
     if [ "$p1" != "$p2" ]; then
         echo "Nixpkgs evaluation depends on Nixpkgs path ($p1 vs $p2)!"
         exit 1
@@ -49,13 +49,13 @@ releaseTools.sourceTarball rec {
         exit 1
     fi
 
-    # Check that all-packages.nix evaluates on a number of platforms.
+    # Check that all-packages-wrapper.nix evaluates on a number of platforms.
     for platform in i686-linux x86_64-linux x86_64-darwin; do
-        header "checking pkgs/top-level/all-packages.nix on $platform"
-        NIXPKGS_ALLOW_BROKEN=1 nix-env -f pkgs/top-level/all-packages.nix \
+        header "checking pkgs/top-level/all-packages-wrapper.nix on $platform"
+        NIXPKGS_ALLOW_BROKEN=1 nix-env -f pkgs/top-level/all-packages-wrapper.nix \
             --show-trace --argstr system "$platform" \
             -qa --drv-path --system-filter \* --system > /dev/null
-        NIXPKGS_ALLOW_BROKEN=1 nix-env -f pkgs/top-level/all-packages.nix \
+        NIXPKGS_ALLOW_BROKEN=1 nix-env -f pkgs/top-level/all-packages-wrapper.nix \
             --show-trace --argstr system "$platform" \
             -qa --drv-path --system-filter \* --system --meta --xml > /dev/null
         stopNest

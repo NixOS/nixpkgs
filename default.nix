@@ -4,4 +4,4 @@ if ! builtins ? nixVersion || builtins.compareVersions "1.8" builtins.nixVersion
 
 else
 
-  import ./pkgs/top-level/all-packages.nix
+  import ./pkgs/top-level/all-packages-wrapper.nix

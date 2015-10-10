@@ -1,4 +1,4 @@
-{ supportedSystems, packageSet ? (import ./all-packages.nix), allowTexliveBuilds ? false }:
+{ supportedSystems, packageSet ? (import ./all-packages-wrapper.nix), allowTexliveBuilds ? false }:
 
 with import ../../lib;
 
