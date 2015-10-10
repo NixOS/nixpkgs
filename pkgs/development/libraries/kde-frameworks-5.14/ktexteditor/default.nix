@@ -8,9 +8,9 @@ kdeFramework {
   nativeBuildInputs = [ extra-cmake-modules perl ];
   buildInputs = [
     karchive kconfig kguiaddons kiconthemes kparts qtscript
-    qtxmlpatterns sonnet
+    qtxmlpatterns
   ];
-  propagatedBuildInputs = [ ki18n kio ];
+  propagatedBuildInputs = [ ki18n kio sonnet ];
   patches = [ ./0001-no-qcoreapplication.patch ];
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
