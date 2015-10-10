@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
     cp src/snabb $out/bin
   '';
 
-meta = with stdenv.lib; {
-    homepage = "https://github.com/SnabbCo/snabbswitch";
+  meta = with stdenv.lib; {
+    homepage = https://github.com/SnabbCo/snabbswitch;
     description = "Simple and fast packet networking toolkit";
     longDescription = ''
       Snabb Switch is a LuaJIT-based toolkit for writing high-speed
@@ -26,7 +26,7 @@ meta = with stdenv.lib; {
     '';
     platforms = [ "x86_64-linux" ];
     license = licenses.asl20;
-    maintainers = maintainers.lukego;
+    maintainers = [ maintainers.lukego ];
   };
 }
 
