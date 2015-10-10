@@ -1,29 +1,9 @@
-{ plasmaPackage
-, extra-cmake-modules
-, kdoctools
-, kcompletion
-, kconfigwidgets
-, kcoreaddons
-, kdbusaddons
-, kdeclarative
-, kdelibs4support
-, ki18n
-, kiconthemes
-, kinit
-, kio
-, kitemviews
-, knotifications
-, kservice
-, kwallet
-, kwidgetsaddons
-, kwindowsystem
-, kxmlgui
-, mobile_broadband_provider_info
-, modemmanager-qt
-, networkmanager-qt
-, openconnect
-, plasma-framework
-, qtdeclarative
+{ plasmaPackage, extra-cmake-modules, kdoctools, kcompletion
+, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative
+, kdelibs4support, ki18n, kiconthemes, kinit, kio, kitemviews
+, knotifications, kservice, kwallet, kwidgetsaddons, kwindowsystem
+, kxmlgui, mobile_broadband_provider_info, modemmanager-qt
+, networkmanager-qt, openconnect, plasma-framework, qtdeclarative
 , solid
 }:
 
@@ -34,31 +14,13 @@ plasmaPackage {
     kdoctools
   ];
   buildInputs = [
-    kcompletion
-    kconfigwidgets
-    kcoreaddons
-    kdbusaddons
-    kdeclarative
-    kdelibs4support
-    ki18n
-    kiconthemes
-    kinit
-    kio
-    kitemviews
-    knotifications
-    kservice
-    kwallet
-    kwidgetsaddons
-    kwindowsystem
-    kxmlgui
-    mobile_broadband_provider_info
-    modemmanager-qt
-    networkmanager-qt
-    openconnect
-    plasma-framework
-    qtdeclarative
-    solid
+    kcompletion kconfigwidgets kcoreaddons kdbusaddons kdelibs4support
+    ki18n kiconthemes kinit kio kitemviews knotifications kservice
+    kwallet kwidgetsaddons kwindowsystem kxmlgui
+    mobile_broadband_provider_info modemmanager-qt networkmanager-qt
+    openconnect plasma-framework qtdeclarative solid
   ];
+  propagatedBuildInputs = [ kdeclarative ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kde5-nm-connection-editor"
   '';
