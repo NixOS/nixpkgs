@@ -10,10 +10,10 @@ plasmaPackage {
     extra-cmake-modules
   ];
   buildInputs = [
-    kcmutils kconfigwidgets kcoreaddons kdecoration kguiaddons ki18n
+    kcmutils kconfigwidgets kcoreaddons kdecoration kguiaddons
     kwindowsystem qtx11extras
   ];
-  propagatedBuildInputs = [ frameworkintegration ];
+  propagatedBuildInputs = [ frameworkintegration ki18n ];
   cmakeFlags = [ "-DUSE_KDE4=OFF" ];
   postInstall = ''
     wrapKDEProgram "$out/bin/breeze-settings5"

@@ -7,10 +7,10 @@ kdeFramework {
   name = "kxmlgui";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    attica kconfig kconfigwidgets ki18n kiconthemes kitemviews
+    attica kconfig kconfigwidgets kiconthemes kitemviews
     ktextwidgets kwindowsystem sonnet
   ];
-  propagatedBuildInputs = [ kglobalaccel ];
+  propagatedBuildInputs = [ kglobalaccel ki18n ];
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
   };

@@ -1,27 +1,8 @@
-{ kdeFramework, lib
-, extra-cmake-modules
-, acl
-, karchive
-, kbookmarks
-, kcompletion
-, kconfig
-, kconfigwidgets
-, kcoreaddons
-, kdbusaddons
-, kdoctools
-, ki18n
-, kiconthemes
-, kitemviews
-, kjobwidgets
-, knotifications
-, kservice
-, ktextwidgets
-, kwallet
-, kwidgetsaddons
-, kwindowsystem
-, kxmlgui
-, qtscript
-, qtx11extras
+{ kdeFramework, lib, extra-cmake-modules, acl, karchive
+, kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons
+, kdbusaddons, kdoctools, ki18n, kiconthemes, kitemviews
+, kjobwidgets, knotifications, kservice, ktextwidgets, kwallet
+, kwidgetsaddons, kwindowsystem, kxmlgui, qtscript, qtx11extras
 , solid
 }:
 
@@ -29,12 +10,13 @@ kdeFramework {
   name = "kio";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    acl karchive kconfig kcoreaddons kdbusaddons ki18n kiconthemes
+    acl karchive kconfig kcoreaddons kdbusaddons kiconthemes
     knotifications ktextwidgets kwallet kwidgetsaddons kwindowsystem
-    qtscript qtx11extras
+    qtscript
   ];
   propagatedBuildInputs = [
-    kbookmarks kcompletion kconfigwidgets kitemviews kjobwidgets kservice kxmlgui solid
+    kbookmarks kcompletion kconfigwidgets ki18n kitemviews kjobwidgets
+    kservice kxmlgui solid qtx11extras
   ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kcookiejar5"

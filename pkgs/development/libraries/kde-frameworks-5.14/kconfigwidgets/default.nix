@@ -5,8 +5,8 @@
 kdeFramework {
   name = "kconfigwidgets";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ kguiaddons ki18n ];
-  propagatedBuildInputs = [ kauth kconfig kcodecs kwidgetsaddons ];
+  buildInputs = [ kguiaddons ];
+  propagatedBuildInputs = [ kauth kconfig kcodecs ki18n kwidgetsaddons ];
   patches = [ ./kconfigwidgets-helpclient-follow-symlinks.patch ];
   postInstall = ''
     wrapKDEProgram "$out/bin/preparetips5"

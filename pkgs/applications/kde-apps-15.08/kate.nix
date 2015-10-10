@@ -38,7 +38,6 @@ kdeApp {
     kcrash
     kguiaddons
     kiconthemes
-    ki18n
     kinit
     kjobwidgets
     kio
@@ -57,6 +56,7 @@ kdeApp {
   ];
   propagatedBuildInputs = [
     kactivities
+    ki18n
   ];
   meta = {
     license = with lib.licenses; [ gpl3 lgpl3 lgpl2 ];

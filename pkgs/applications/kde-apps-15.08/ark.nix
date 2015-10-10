@@ -27,7 +27,6 @@ kdeApp {
     kconfig
     kcrash
     kdbusaddons
-    ki18n
     kiconthemes
     kio
     kservice
@@ -37,6 +36,7 @@ kdeApp {
   ];
   propagatedBuildInputs = [
     khtml
+    ki18n
   ];
   meta = {
     license = with lib.licenses; [ gpl2 lgpl3 ];

@@ -9,10 +9,10 @@ plasmaPackage {
     extra-cmake-modules
   ];
   buildInputs = [
-    ki18n kcmutils kconfig kdecoration kguiaddons kwidgetsaddons
+    kcmutils kconfig kdecoration kguiaddons kwidgetsaddons
     kservice kcompletion kwindowsystem qtx11extras
   ];
-  propagatedBuildInputs = [ frameworkintegration ];
+  propagatedBuildInputs = [ frameworkintegration ki18n ];
   postInstall = ''
     wrapKDEProgram "$out/bin/oxygen-demo5"
     wrapKDEProgram "$out/bin/oxygen-settings5"

@@ -13,13 +13,13 @@ kdeFramework {
   name = "kdelibs4support";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    kcompletion kconfig ki18n kio kservice kwidgetsaddons
+    kcompletion kconfig kio kservice kwidgetsaddons
     kxmlgui networkmanager qtsvg qtx11extras xlibs.libSM
   ];
   propagatedBuildInputs = [
     kauth karchive kconfigwidgets kcoreaddons kcrash kdbusaddons
-    kdesignerplugin kemoticons kglobalaccel kguiaddons kiconthemes
-    kitemmodels kinit knotifications kparts ktextwidgets
+    kdesignerplugin kemoticons kglobalaccel kguiaddons ki18n
+    kiconthemes kitemmodels kinit knotifications kparts ktextwidgets
     kunitconversion kwindowsystem
   ];
   cmakeFlags = [

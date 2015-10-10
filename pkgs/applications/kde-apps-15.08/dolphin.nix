@@ -37,7 +37,6 @@ kdeApp {
     kcmutils
     kcoreaddons
     knewstuff
-    ki18n
     kdbusaddons
     kbookmarks
     kconfig
@@ -57,6 +56,7 @@ kdeApp {
     kactivities
     kdelibs4support
     kfilemetadata
+    ki18n
   ];
   meta = {
     license = with lib.licenses; [ gpl2 fdl12 ];

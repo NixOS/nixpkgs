@@ -10,8 +10,10 @@ plasmaPackage {
     extra-cmake-modules
   ];
   buildInputs = [
-    kconfig kcoreaddons kguiaddons ki18n kio kservice plasma-framework
+    kconfig kcoreaddons kguiaddons kio kservice plasma-framework
     qtdeclarative qtmultimedia taglib
   ];
-  propagatedBuildInputs = [ baloo kactivities kdeclarative kfilemetadata ];
+  propagatedBuildInputs = [
+    baloo kactivities kdeclarative kfilemetadata ki18n
+  ];
 }

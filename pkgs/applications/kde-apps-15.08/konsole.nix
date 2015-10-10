@@ -39,7 +39,6 @@ kdeApp {
     kconfigwidgets
     kcoreaddons
     kguiaddons
-    ki18n
     kiconthemes
     kinit
     kio
@@ -55,6 +54,7 @@ kdeApp {
   ];
   propagatedBuildInputs = [
     kdelibs4support
+    ki18n
   ];
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];

@@ -10,10 +10,9 @@ plasmaPackage {
     kdoctools
   ];
   buildInputs = [
-    kconfig kcoreaddons ki18n kitemviews knewstuff kiconthemes
-    libksysguard
+    kconfig kcoreaddons kitemviews knewstuff kiconthemes libksysguard
   ];
-  propagatedBuildInputs = [ kdelibs4support ];
+  propagatedBuildInputs = [ kdelibs4support ki18n ];
   postInstall = ''
     wrapKDEProgram "$out/bin/ksysguardd"
     wrapKDEProgram "$out/bin/ksysguard"

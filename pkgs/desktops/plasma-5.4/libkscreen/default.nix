@@ -11,6 +11,8 @@ plasmaPackage {
   ];
   buildInputs = [
     libXrandr
+  ];
+  propagatedBuildInputs = [
     qtx11extras
   ];
 }
