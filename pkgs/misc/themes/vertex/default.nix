@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "theme-vertex-${version}";
-  version = "20150718";
+  version = "20150923";
 
   src = fetchFromGitHub {
     owner = "horst3180";
     repo = "Vertex-theme";
     rev = version;
-    sha256 = "19mmybfkx3mrbm9vr78c7xiyazmyzji1n6669466svjr3jy87546";
+    sha256 = "0jsdnrw7sgrb7s4byv80y9c782gd6vbq0xsrrhwkflfnxcldvz4r";
   };
 
   buildInputs = [ autoreconfHook gtk3 pkgconfig ];
