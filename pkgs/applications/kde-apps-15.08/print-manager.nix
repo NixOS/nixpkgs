@@ -29,7 +29,6 @@ kdeApp {
     kconfigwidgets
     kdbusaddons
     kiconthemes
-    ki18n
     kcmutils
     kio
     knotifications
@@ -37,6 +36,9 @@ kdeApp {
     kwidgetsaddons
     kwindowsystem
     kitemviews
+  ];
+  propagatedBuildInputs = [
+    ki18n
   ];
   meta = {
     license = [ lib.licenses.gpl2 ];

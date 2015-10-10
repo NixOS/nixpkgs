@@ -1,12 +1,5 @@
-{ kdeFramework, lib
-, extra-cmake-modules
-, kcompletion
-, kconfig
-, kconfigwidgets
-, ki18n
-, kiconthemes
-, kservice
-, kwindowsystem
+{ kdeFramework, lib, extra-cmake-modules, kcompletion, kconfig
+, kconfigwidgets, ki18n, kiconthemes, kservice, kwindowsystem
 , sonnet
 }:
 

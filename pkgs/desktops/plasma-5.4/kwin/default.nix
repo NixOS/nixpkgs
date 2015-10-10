@@ -15,13 +15,12 @@ plasmaPackage {
   ];
   buildInputs = [
     epoxy kcompletion kcmutils kconfig kconfigwidgets kcoreaddons
-    kcrash kdecoration ki18n kiconthemes kinit kio knewstuff
-    knotifications kpackage kservice kwayland kwidgetsaddons
-    kwindowsystem kxmlgui libinput libICE libSM plasma-framework
-    qtdeclarative qtscript qtx11extras udev wayland
-    xcb-util-cursor
+    kcrash kdecoration kiconthemes kinit kio knewstuff knotifications
+    kpackage kservice kwayland kwidgetsaddons kwindowsystem kxmlgui
+    libinput libICE libSM plasma-framework qtdeclarative qtscript
+    qtx11extras udev wayland xcb-util-cursor
   ];
-  propagatedBuildInputs = [ kactivities kdeclarative kglobalaccel ];
+  propagatedBuildInputs = [ kactivities kdeclarative kglobalaccel ki18n ];
   patches = [ ./kwin-import-plugin-follow-symlinks.patch ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kwin_x11"

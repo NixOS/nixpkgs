@@ -1,8 +1,4 @@
-{ kdeFramework, lib
-, extra-cmake-modules
-, kdoctools
-, ki18n
-, kjs
+{ kdeFramework, lib, extra-cmake-modules, kdoctools, ki18n, kjs
 , qtsvg
 }:
 

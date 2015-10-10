@@ -10,9 +10,9 @@ plasmaPackage {
     kdoctools
   ];
   buildInputs = [
-    kconfig kcoreaddons kdbusaddons ki18n kinit kcmutils kservice
+    kconfig kcoreaddons kdbusaddons kinit kcmutils kservice
   ];
-  propagatedBuildInputs = [ kdelibs4support khtml ];
+  propagatedBuildInputs = [ kdelibs4support khtml ki18n ];
   postInstall = ''
     wrapKDEProgram "$out/bin/khelpcenter"
   '';
