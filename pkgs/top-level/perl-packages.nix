@@ -1488,11 +1488,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ClassC3AdoptNEXT = buildPerlPackage {
-    name = "Class-C3-Adopt-NEXT-0.13";
+  ClassC3AdoptNEXT = buildPerlPackage rec {
+    name = "Class-C3-Adopt-NEXT-0.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FL/FLORA/Class-C3-Adopt-NEXT-0.13.tar.gz;
-      sha256 = "1rwgbx6dsy4rpas94p8wakzj7hrla1p15jnbm24kwhsv79gp91ld";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "1xsbydmiskpa1qbmnf6n39cb83nlb432xgkad9kfhxnvm8jn4rw5";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ ListMoreUtils MROCompat ];
