@@ -8,7 +8,8 @@
 kdeFramework {
   name = "kcrash";
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ kcoreaddons kwindowsystem qtx11extras ];
+  buildInputs = [ kcoreaddons ];
+  propagatedBuildInputs = [ kwindowsystem qtx11extras ];
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
   };

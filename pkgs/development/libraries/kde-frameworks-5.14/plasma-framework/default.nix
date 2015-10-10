@@ -10,10 +10,10 @@ kdeFramework {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     karchive kconfig kconfigwidgets kcoreaddons kdbusaddons kguiaddons
-    kiconthemes knotifications kwindowsystem kxmlgui qtscript
+    kiconthemes knotifications kxmlgui qtscript
   ];
   propagatedBuildInputs = [
-    kactivities kdeclarative kglobalaccel ki18n kio kpackage kservice
+    kactivities kdeclarative kglobalaccel ki18n kio kpackage kservice kwindowsystem
     qtx11extras
   ];
   postInstall = ''

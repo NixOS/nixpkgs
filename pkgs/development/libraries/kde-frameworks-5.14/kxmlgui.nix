@@ -8,9 +8,9 @@ kdeFramework {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     attica kconfig kconfigwidgets kiconthemes kitemviews
-    ktextwidgets kwindowsystem sonnet
+    ktextwidgets sonnet
   ];
-  propagatedBuildInputs = [ kglobalaccel ki18n ];
+  propagatedBuildInputs = [ kglobalaccel ki18n kwindowsystem ];
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
   };

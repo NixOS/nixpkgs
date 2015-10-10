@@ -44,7 +44,6 @@ kdeApp {
     solid
     kiconthemes
     kcompletion
-    kwindowsystem
     knotifications
     phonon
     baloo-widgets
@@ -57,6 +56,7 @@ kdeApp {
     ki18n
     kio
     ktexteditor
+    kwindowsystem
   ];
   meta = {
     license = with lib.licenses; [ gpl2 fdl12 ];

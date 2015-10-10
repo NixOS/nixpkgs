@@ -10,9 +10,9 @@ plasmaPackage {
   ];
   buildInputs = [
     kcmutils kconfig kdecoration kguiaddons kwidgetsaddons
-    kservice kcompletion kwindowsystem qtx11extras
+    kservice kcompletion
   ];
-  propagatedBuildInputs = [ frameworkintegration ki18n ];
+  propagatedBuildInputs = [ frameworkintegration ki18n kwindowsystem qtx11extras ];
   postInstall = ''
     wrapKDEProgram "$out/bin/oxygen-demo5"
     wrapKDEProgram "$out/bin/oxygen-settings5"
