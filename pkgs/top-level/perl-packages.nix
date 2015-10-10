@@ -655,10 +655,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CacheCache = buildPerlPackage rec {
-    name = "Cache-Cache-1.06";
+    name = "Cache-Cache-1.08";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Cache/${name}.tar.gz";
-      sha256 = "14s75bsm5irisp8wkbwl3ycw160srr1rks7x9jcbvcxh79wr6gbh";
+      sha256 = "1s6i670dc3yb6ngvdk48y6szdk5n1f4icdcjv2vi1l2xp9fzviyj";
     };
     propagatedBuildInputs = [ DigestSHA1 Error IPCShareLite ];
     doCheck = false; # randomly fails
