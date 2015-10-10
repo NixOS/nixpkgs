@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, python, librsync, ncftp, gnupg, boto, makeWrapper
-, lockfile, setuptools }:
+{ stdenv, fetchurl, python, librsync, ncftp, gnupg,
+boto, makeWrapper, paramiko, lockfile, setuptools, pycrypto, ecdsa }:
 
 let
   version = "0.7.02";
@@ -15,10 +15,10 @@ stdenv.mkDerivation {
   installPhase = ''
     python setup.py install --prefix=$out
     wrapProgram $out/bin/duplicity \
-      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})" \
+      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pycrypto}):$(toPythonPath ${ecdsa}):$(toPythonPath ${paramiko}):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})" \
       --prefix PATH : "${gnupg}/bin:${ncftp}/bin"
     wrapProgram $out/bin/rdiffdir \
-      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})" \
+      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pycrypto}):$(toPythonPath ${ecdsa}):$(toPythonPath ${paramiko}):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})"
   '';
 
   buildInputs = [ python librsync makeWrapper setuptools ];
