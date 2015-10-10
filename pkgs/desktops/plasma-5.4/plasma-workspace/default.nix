@@ -18,14 +18,14 @@ plasmaPackage {
   ];
   buildInputs = [
     kcmutils kcrash kdbusaddons kdesu kdewebkit kjsembed knewstuff
-    knotifyconfig kpackage ktexteditor ktextwidgets kwallet
+    knotifyconfig kpackage ktextwidgets kwallet
     kwayland kwin kxmlrpcclient libdbusmenu libkscreen libSM
     libXcursor networkmanager-qt pam phonon plasma-framework qtquick1
     qtscript qtx11extras solid wayland
   ];
   propagatedBuildInputs = [
     baloo kactivities kdeclarative kdelibs4support kglobalaccel
-    kidletime krunner libksysguard
+    kidletime krunner ktexteditor libksysguard
   ];
   patches = [ ./0001-startkde-NixOS-patches.patch ];
 

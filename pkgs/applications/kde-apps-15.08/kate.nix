@@ -41,7 +41,6 @@ kdeApp {
     kinit
     kjobwidgets
     kparts
-    ktexteditor
     kwindowsystem
     kxmlgui
     kdbusaddons
@@ -57,6 +56,7 @@ kdeApp {
     kactivities
     ki18n
     kio
+    ktexteditor
   ];
   meta = {
     license = with lib.licenses; [ gpl3 lgpl3 lgpl2 ];
