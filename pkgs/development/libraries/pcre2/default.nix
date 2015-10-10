@@ -8,6 +8,8 @@ stdenv.mkDerivation {
   };
 
   configureFlags = [
+    "--enable-pcre2-16"
+    "--enable-pcre2-32"
     "--enable-jit"
   ];
 
