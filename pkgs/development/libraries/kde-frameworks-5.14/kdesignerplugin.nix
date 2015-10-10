@@ -22,9 +22,9 @@ kdeFramework {
   buildInputs = [
     kcompletion kconfig kconfigwidgets kcoreaddons kdewebkit
     kiconthemes kitemviews kplotting ktextwidgets kwidgetsaddons
-    kxmlgui sonnet
+    kxmlgui
   ];
-  propagatedBuildInputs = [ kio ];
+  propagatedBuildInputs = [ kio sonnet ];
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
   };

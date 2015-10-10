@@ -9,10 +9,11 @@ kdeFramework {
   nativeBuildInputs = [ extra-cmake-modules perl ];
   buildInputs = [
     giflib karchive kiconthemes knotifications kwallet kwidgetsaddons
-    kxmlgui phonon qtx11extras sonnet
+    kxmlgui phonon
   ];
   propagatedBuildInputs = [
-    kcodecs kglobalaccel ki18n kio kjs kparts ktextwidgets kwindowsystem
+    kcodecs kglobalaccel ki18n kio kjs kparts ktextwidgets
+    kwindowsystem qtx11extras sonnet
   ];
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
