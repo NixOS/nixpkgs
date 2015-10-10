@@ -7,9 +7,9 @@ kdeFramework {
   name = "krunner";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    kconfig kcoreaddons kio kservice qtquick1 solid threadweaver
+    kconfig kcoreaddons kservice qtquick1 solid threadweaver
   ];
-  propagatedBuildInputs = [ ki18n plasma-framework ];
+  propagatedBuildInputs = [ ki18n kio plasma-framework ];
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
   };

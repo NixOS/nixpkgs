@@ -7,9 +7,9 @@ plasmaPackage {
   name = "kde-cli-tools";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    kcmutils kconfig kdesu ki18n kiconthemes kwindowsystem
+    kcmutils kconfig kdesu kiconthemes kwindowsystem
   ];
-  propagatedBuildInputs = [ kdelibs4support qtsvg qtx11extras ];
+  propagatedBuildInputs = [ kdelibs4support ki18n qtsvg qtx11extras ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kmimetypefinder5"
     wrapKDEProgram "$out/bin/ksvgtopng5"

@@ -9,9 +9,9 @@ plasmaPackage {
     kdoctools
   ];
   buildInputs = [
-    kxmlgui kdbusaddons kiconthemes kio sonnet
+    kxmlgui kdbusaddons kiconthemes sonnet
   ];
-  propagatedBuildInputs = [ kdelibs4support ki18n ];
+  propagatedBuildInputs = [ kdelibs4support ki18n kio ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kmenuedit"
   '';

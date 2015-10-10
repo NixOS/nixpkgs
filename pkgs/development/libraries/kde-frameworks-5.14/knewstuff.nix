@@ -7,10 +7,10 @@ kdeFramework {
   name = "knewstuff";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    karchive kcompletion kconfig kcoreaddons kiconthemes kio
+    karchive kcompletion kconfig kcoreaddons kiconthemes
     kitemviews ktextwidgets kwidgetsaddons
   ];
-  propagatedBuildInputs = [ attica ki18n kservice kxmlgui ];
+  propagatedBuildInputs = [ attica ki18n kio kservice kxmlgui ];
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
   };

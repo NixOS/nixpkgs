@@ -40,7 +40,6 @@ kdeApp {
     kiconthemes
     kinit
     kjobwidgets
-    kio
     kparts
     ktexteditor
     kwindowsystem
@@ -57,6 +56,7 @@ kdeApp {
   propagatedBuildInputs = [
     kactivities
     ki18n
+    kio
   ];
   meta = {
     license = with lib.licenses; [ gpl3 lgpl3 lgpl2 ];

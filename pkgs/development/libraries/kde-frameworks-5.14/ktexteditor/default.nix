@@ -7,10 +7,10 @@ kdeFramework {
   name = "ktexteditor";
   nativeBuildInputs = [ extra-cmake-modules perl ];
   buildInputs = [
-    karchive kconfig kguiaddons kiconthemes kio kparts qtscript
+    karchive kconfig kguiaddons kiconthemes kparts qtscript
     qtxmlpatterns sonnet
   ];
-  propagatedBuildInputs = [ ki18n ];
+  propagatedBuildInputs = [ ki18n kio ];
   patches = [ ./0001-no-qcoreapplication.patch ];
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

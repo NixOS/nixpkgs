@@ -23,14 +23,12 @@ kdeApp {
     extra-cmake-modules
   ];
   buildInputs = [
-    qtdeclarative
     cups
     kconfig
     kconfigwidgets
     kdbusaddons
     kiconthemes
     kcmutils
-    kio
     knotifications
     plasma-framework
     kwidgetsaddons
@@ -39,6 +37,8 @@ kdeApp {
   ];
   propagatedBuildInputs = [
     ki18n
+    kio
+    qtdeclarative
   ];
   meta = {
     license = [ lib.licenses.gpl2 ];
