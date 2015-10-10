@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0dzv5xf9qxc2bp4cyifmaghh3h464wbm73xiwcrvckf1ynqbgxv7";
   };
 
+  patches = [ ./remove-runtime-dep-on-openssl-headers.patch ];
+
   preConfigure = ''
     for i in "doc/texi2pod.pl" "util/rmold.pl"; do
       sed -i "$i" -e 's|/usr/bin.*perl|${perl}/bin/perl|g'
