@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchgit}:
+{ stdenv, fetchgit, pkgconfig, python2, cairo, libjpeg, ntk, libjack2, libsndfile, ladspaH, liblrdf, liblo, libsigcxx}:
 
 stdenv.mkDerivation rec {
   name = "non";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1v5lks2m27837p84x9ffrl6rgdgx1my29n2cq27ifd13w9y8694s";
   };
 
-    buildInputs = [ pkgs.pkgconfig pkgs.python2 pkgs.cairo pkgs.libjpeg pkgs.ntk pkgs.libjack2 pkgs.libsndfile pkgs.ladspaH pkgs.liblrdf pkgs.liblo pkgs.libsigcxx ];
+    buildInputs = [ pkgconfig python2 cairo libjpeg ntk libjack2 libsndfile ladspaH liblrdf liblo libsigcxx ];
     configurePhase = ''python waf configure --prefix=$out'';
     buildPhase = ''python waf build'';
     installPhase = ''python waf install'';
@@ -21,5 +21,6 @@ Workstation";
     homepage = "http://non.tuxfamily.org/";
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = stdenv.lib.maintainers.nico202;
   };
 }
