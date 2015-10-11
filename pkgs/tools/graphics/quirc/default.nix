@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     inherit (s) url sha256 rev;
   };
-  NIX_CFLAGS_COMPILE="-I${SDL}/include/SDL";
+  NIX_CFLAGS_COMPILE="-I${SDL.dev}/include/SDL";
   configurePhase = ''
     sed -e 's/-[og] root//g' -i Makefile
   '';

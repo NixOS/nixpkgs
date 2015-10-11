@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   patches = [ ./moderinze_cpp.patch ];
 
   preConfigure = ''
-    export CPPFLAGS="-I${SDL}/include -I${SDL}/include/SDL -I${SDL_mixer}/include"
+    export CPPFLAGS="-I${SDL.dev}/include -I${SDL.dev}/include/SDL -I${SDL_mixer}/include"
     autoreconf -i
   '';
   

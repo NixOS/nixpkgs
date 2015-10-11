@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   sourceRoot = srcs.df_unfuck.name;
 
   cmakeFlags = [
-    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib}/lib/glib-2.0/include"
-    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2}/lib/gtk-2.0/include"
+    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
+    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
   ];
 
   permission = ./df_permission;
@@ -85,7 +85,9 @@ stdenv.mkDerivation rec {
       done
 
       # now run Dwarf Fortress!
-      export LD_LIBRARY_PATH=\${stdenv.cc}/lib:${SDL}/lib:${SDL_image}/lib/:${SDL_ttf}/lib/:${gtk2}/lib/:${glib}/lib/:${mesa}/lib/:${openal}/lib/:${libsndfile}/lib:\$DF_DIR/df_linux/libs/
+      export LD_LIBRARY_PATH='${stdenv.lib.makeLibraryPath
+        [ stdenv.cc SDL SDL_image SDL_ttf gtk2 glib mesa openal libsndfile ]
+      }':\$DF_DIR/df_linux/libs/
 
       export SDL_DISABLE_LOCK_KEYS=1 # Work around for bug in Debian/Ubuntu SDL patch.
       #export SDL_VIDEO_CENTERED=1    # Centre the screen.  Messes up resizing.

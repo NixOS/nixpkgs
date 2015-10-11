@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   buildInputs = [python pil pygame SDL];
 
   configurePhase = ''
-		sed -e "/includes = /aincludes.append('${SDL}/include/SDL')" -i setup.py;
+		sed -e "/includes = /aincludes.append('${SDL.dev}/include/SDL')" -i setup.py;
 		sed -e "/includes = /aincludes.append('$(echo ${pygame}/include/python*)')" -i setup.py;
 		cat setup.py;
 		export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"

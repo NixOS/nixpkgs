@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ SDL SDL_image SDL_ttf SDL_mixer ];
 
-  NIX_CFLAGS_COMPILE = "-I${SDL}/include/SDL";
+  NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL";
   NIX_CFLAGS_LINK = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin
     "-framework CoreFoundation -framework OpenGL -framework Cocoa";

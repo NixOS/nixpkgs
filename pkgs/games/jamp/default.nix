@@ -16,7 +16,7 @@ rec {
   preBuild = a.fullDepEntry (''
     sed -e "s@/usr/games@$out/bin@g" -i Makefile
     sed -e "s@/usr/@$out/@g" -i Makefile
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${a.SDL}/include/SDL"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${a.SDL.dev}/include/SDL"
   '') ["minInit" "addInputs" "doUnpack"];
 
   /* doConfigure should be removed if not needed */

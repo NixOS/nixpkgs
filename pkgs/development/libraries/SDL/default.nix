@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
     sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [ "dev" "out" "man" ];
+  outputBin = "dev"; # sdl-config
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -63,6 +64,8 @@ stdenv.mkDerivation rec {
     url = "http://bugzilla-attachments.libsdl.org/attachment.cgi?id=1320";
     sha1 = "3137feb503a89a8d606405373905b92dcf7e293b";
   }) ];
+
+  postFixup = ''_moveToOutput share/aclocal "$dev" '';
 
   crossAttrs =stdenv.lib.optionalAttrs (stdenv.cross.libc == "libSystem") {
     patches = let

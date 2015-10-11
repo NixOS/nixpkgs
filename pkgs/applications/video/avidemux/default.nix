@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = "-DPTHREAD_INCLUDE_DIR=${stdenv.glibc.dev}/include" +
     " -DGETTEXT_INCLUDE_DIR=${gettext}/include" +
-    " -DSDL_INCLUDE_DIR=${SDL}/include/SDL";
+    " -DSDL_INCLUDE_DIR=${SDL.dev}/include/SDL";
 
   NIX_LDFLAGS="-lpthread";
 

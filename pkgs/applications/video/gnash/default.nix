@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     '' configureFlags="                                         \
-         --with-sdl-incl=${SDL}/include/SDL                     \
+         --with-sdl-incl=${SDL.dev}/include/SDL                     \
          --with-npapi-plugindir=$out/plugins                    \
          --enable-media=gst                                     \
          --without-gconf

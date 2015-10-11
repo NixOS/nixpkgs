@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   postUnpack = optionalString debug
     "mkdir -p $out/src; cp -R * $out/src ; cd $out/src";
 
-  NIX_CFLAGS_COMPILE = "-iquote ${SDL}/include/SDL";
+  NIX_CFLAGS_COMPILE = "-iquote ${SDL.dev}/include/SDL";
   configureFlags = optionalString debug "--enable-debug";
 
   patchPhase = ''

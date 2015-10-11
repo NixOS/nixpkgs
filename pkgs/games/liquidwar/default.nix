@@ -30,7 +30,7 @@ rec {
   phaseNames = ["setVars" "doConfigure" "doMakeInstall"];
 
   setVars = a.noDepEntry (''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${a.SDL}/include/SDL"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${a.SDL.dev}/include/SDL"
   '');
 
   meta = {
