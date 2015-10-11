@@ -18,10 +18,10 @@ stdenv.mkDerivation {
 
   preFixup=''
     wrapProgram "$out/bin/dwb" \
-     --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules:${dconf}/lib/gio/modules" \
+     --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules:${dconf}/lib/gio/modules" \
      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
     wrapProgram "$out/bin/dwbem" \
-     --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules"
+     --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules"
   '';
 
   meta = with stdenv.lib; {

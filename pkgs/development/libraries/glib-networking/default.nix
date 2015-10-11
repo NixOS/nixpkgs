@@ -13,10 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "8f8a340d3ba99bfdef38b653da929652ea6640e27969d29f7ac51fbbe11a4346";
   };
 
+  outputs = [ "dev" "out" ]; # to deal with propagatedBuildInputs
+
   configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt";
 
   preBuild = ''
-    sed -e "s@${glib}/lib/gio/modules@$out/lib/gio/modules@g" -i $(find . -name Makefile)
+    sed -e "s@${glib.out}/lib/gio/modules@$out/lib/gio/modules@g" -i $(find . -name Makefile)
   '';
 
   nativeBuildInputs = [ pkgconfig intltool ];
