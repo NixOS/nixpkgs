@@ -4137,10 +4137,6 @@ let
 
   jikes = callPackage ../development/compilers/jikes { };
 
-  julia03 = callPackage ../development/compilers/julia/0.3.nix {
-    llvm = llvm_33;
-  };
-
   julia = callPackage ../development/compilers/julia {
     gmp = gmp6;
     llvm = llvm_33;
