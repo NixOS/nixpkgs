@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   # The tests take an excessive amount of time (> 1.5 hours) and memory (> 6 GB).
   inherit (doCheck);
 
-  # propagate the bin output
+  # propagate the bin output TODO: use propagatedOutputs instead
   postPhases = "postPostFixup";
   postPostFixup = ''
     echo -n " $bin" >> "$dev"/nix-support/propagated-*build-inputs

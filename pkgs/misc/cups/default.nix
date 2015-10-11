@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   };
 
   # FIXME: the cups libraries contains some $out/share strings so can't be split.
-  outputs = [ "dev" "out" "doc" "man" ];
+  outputs = [ "dev" "out" "doc" "man" ]; # TODO: above
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls avahi libpaper ]
     ++ optionals stdenv.isLinux [ pam dbus.libs acl ];
