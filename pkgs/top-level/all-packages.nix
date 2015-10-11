@@ -3110,6 +3110,8 @@ let
 
   swaks = callPackage ../tools/networking/swaks { };
 
+  swiften = callPackage ../development/libraries/swiften { };
+
   t = callPackage ../tools/misc/t { };
 
   t1utils = callPackage ../tools/misc/t1utils { };
