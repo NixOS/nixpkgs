@@ -5960,7 +5960,7 @@ let
       url = "https://bitbucket.org/edgimar/crecord/get/${builtins.substring 0 12 rev}.tar.gz";
       sha256 = "02003fa5620ec40a5ad0d7cede2e65c2cb398a7fe4e1ee26bd3396a87d63ad35";
     };
-    
+
     # crecord comes as just a bare directory
     configurePhase = " ";
     buildPhase = "${python.executable} -m compileall crecord";
@@ -5971,7 +5971,7 @@ let
 
     # there ain't none
     doCheck = false;
-    
+
     meta = {
       description = "Mercurial extension for selecting graphically which files/hunk/lines to commit";
       homepage = https://bitbucket.org/edgimar/crecord;
@@ -8124,20 +8124,20 @@ let
       description = "A load testing tool";
     };
   };
-  
+
   llvmlite = buildPythonPackage rec {
     name = "llvmlite-${version}";
     version = "0.7.0";
-    
+
     disabled = isPyPy;
-    
-    src = pkgs.fetchurl { 
+
+    src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/l/llvmlite/${name}.tar.gz";
       sha256 = "6d780980da05d2d82465991bce42c1b4625018d67feae17c672c6a9d5ad0bb1a";
     };
 
     llvm = pkgs.llvm;
-    
+
     propagatedBuildInputs = with self; [ llvm ] ++ optional (!isPy34) enum34;
 
     # Disable static linking
@@ -8152,7 +8152,7 @@ let
     checkPhase = ''
       ${self.python.executable} runtests.py
     '';
-    
+
     meta = {
       description = "A lightweight LLVM python binding for writing JIT compilers";
       homepage = "http://llvmlite.pydata.org/";
@@ -8160,7 +8160,7 @@ let
       maintainers = with maintainers; [ fridh ];
     };
   };
-  
+
   lockfile = buildPythonPackage rec {
     name = "lockfile-0.9.1";
 
@@ -9614,12 +9614,12 @@ let
   numba = buildPythonPackage rec {
     version = "0.21.0";
     name = "numba-${version}";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/numba/${name}.tar.gz";
       sha256 = "1806d2f6ad49ad891e9ac6fed0cc0b0489cbfcd9ba2dc81081c1c30091e77604";
     };
-    
+
     propagatedBuildInputs = with self; [numpy llvmlite argparse] ++ optional (!isPy3k) funcsigs ++ optional (isPy27 || isPy33) singledispatch;
     # Future work: add Cuda support.
     #propagatedBuildInputs = with self; [numpy llvmlite argparse pkgs.cudatoolkit6];
@@ -9636,7 +9636,7 @@ let
       maintainers = with maintainers; [ fridh ];
     };
   };
-  
+
   numexpr = buildPythonPackage rec {
     version = "2.4.3";
     name = "numexpr-${version}";
