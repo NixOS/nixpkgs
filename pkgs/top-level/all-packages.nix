@@ -7693,6 +7693,8 @@ let
     nix = pkgs.nixUnstable;
   };
 
+  non = callPackage ../applications/audio/non { };
+
   nspr = callPackage ../development/libraries/nspr { };
 
   nss = lowPrio (callPackage ../development/libraries/nss { });
