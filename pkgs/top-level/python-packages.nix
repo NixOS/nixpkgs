@@ -9318,6 +9318,26 @@ let
     };
   };
 
+  nose-exclude = buildPythonPackage rec {
+    name = "nose-exclude-${version}";
+    version = "0.4.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/nose-exclude/${name}.tar.gz";
+      sha256 = "44466a9bcb56d2e568750f91504d1278c74eabb259a305b06e975b87b51635da";
+    };
+
+    propagatedBuildInputs = with self; [ nose ];
+
+    meta = {
+      license = licenses.lgpl21;
+      description = "Exclude specific directories from nosetests runs";
+      homepage = https://github.com/kgrandis/nose-exclude;
+      maintainers = [ fridh ];
+    };
+
+  };
+
   nose-selecttests = buildPythonPackage rec {
     version = "0.4";
     name = "nose-selecttests-${version}";
