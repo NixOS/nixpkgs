@@ -12,7 +12,7 @@ plasmaPackage {
     kwidgetsaddons
   ];
   propagatedBuildInputs = [
-    baloo bluez-qt ki18n kio kwindowsystem plasma-framework qtdeclarative
+    bluez-qt ki18n kio kwindowsystem plasma-framework qtdeclarative
   ];
   postInstall = ''
     wrapKDEProgram "$out/bin/bluedevil-wizard"
