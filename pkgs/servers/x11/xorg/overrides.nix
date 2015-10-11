@@ -214,6 +214,10 @@ in
   libXpresent = attrs: attrs
     // { buildInputs = with xorg; attrs.buildInputs ++ [ libXext libXfixes libXrandr ]; };
 
+  libxkbfile = attrs: attrs // {
+    outputs = [ "dev" "out" ]; # mainly to avoid propagation
+  };
+
   setxkbmap = attrs: attrs // {
     postInstall =
       ''
@@ -236,6 +240,10 @@ in
 
   xcbutilcursor = attrs: attrs // {
     meta.maintainers = [ stdenv.lib.maintainers.lovek323 ];
+  };
+
+  xcbutilkeysyms = attrs: attrs // {
+    outputs = [ "dev" "out" ]; # mainly to get rid of propagating others
   };
 
   xf86inputevdev = attrs: attrs // {
