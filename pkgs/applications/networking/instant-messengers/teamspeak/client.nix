@@ -6,7 +6,7 @@
 let
 
   arch = if stdenv.is64bit then "amd64" else "x86";
- 
+
   libDir = if stdenv.is64bit then "lib64" else "lib";
 
   deps =
@@ -30,7 +30,7 @@ in
 stdenv.mkDerivation rec {
   name = "teamspeak-client-${version}";
 
-  version = "3.0.16";
+  version = "3.0.18.1";
 
   src = fetchurl {
     urls = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       "http://teamspeak.gameserver.gamed.de/ts3/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
       "http://files.teamspeak-services.com/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
     ];
-    sha256 = if stdenv.is64bit 
+    sha256 = if stdenv.is64bit
                 then "0gvphrmrkyy1g2nprvdk7cvawznzlv4smw0mlvzd4b9mvynln0v2"
                 else "1b3nbvfpd8lx3dig8z5yk6zjkbmsy6y938dhj1f562wc8adixciz";
   };
@@ -96,8 +96,8 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
   dontPatchELF = true;
-  
-  meta = { 
+
+  meta = {
     description = "The TeamSpeak voice communication tool";
     homepage = http://teamspeak.com/;
     license = "http://www.teamspeak.com/?page=downloads&type=ts3_linux_client_latest";
