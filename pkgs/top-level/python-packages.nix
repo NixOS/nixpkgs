@@ -395,7 +395,7 @@ let
 
     postInstall = ''
       wrapProgram $out/bin/alot \
-        --prefix LD_LIBRARY_PATH : ${pkgs.notmuch}/lib:${pkgs.file}/lib:${pkgs.gpgme}/lib
+        --prefix LD_LIBRARY_PATH : '${lib.makeLibraryPath [ pkgs.notmuch pkgs.file pkgs.gpgme ]}'
     '';
 
     meta = {
