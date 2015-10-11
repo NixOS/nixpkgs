@@ -29,6 +29,10 @@
   # argument.  Otherwise, it's read from $NIXPKGS_CONFIG or
   # ~/.nixpkgs/config.nix.
   config
+
+, # These are used by overridePackages
+  mkOverrides
+, pkgsFun
 }:
 
 let
