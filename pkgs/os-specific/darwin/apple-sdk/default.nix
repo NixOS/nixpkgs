@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xar, gzip, cpio, CF }:
+{ stdenv, fetchurl, xar, gzip, cpio, CF, pkgs }:
 
 let
   # sadly needs to be exported because security_tool needs it
@@ -148,6 +148,10 @@ in rec {
   };
 
   overrides = super: {
+    AppKit = stdenv.lib.overrideDerivation super.AppKit (drv: {
+      propagatedNativeBuildInputs = drv.propagatedNativeBuildInputs ++ [ pkgs.darwin.cf-private ];
+    });
+
     QuartzCore = stdenv.lib.overrideDerivation super.QuartzCore (drv: {
       installPhase = drv.installPhase + ''
         f="$out/Library/Frameworks/QuartzCore.framework/Headers/CoreImage.h"
