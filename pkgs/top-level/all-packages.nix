@@ -2295,6 +2295,8 @@ let
 
   namazu = callPackage ../tools/text/namazu { };
 
+  nasty = callPackage ../tools/security/nasty { };
+
   nbd = callPackage ../tools/networking/nbd { };
 
   ndjbdns = callPackage ../tools/networking/ndjbdns { };
