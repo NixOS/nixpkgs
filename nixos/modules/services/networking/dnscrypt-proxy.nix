@@ -121,12 +121,12 @@ in
         network inet dgram,
         network inet6 dgram,
 
-        ${pkgs.gcc.cc}/lib/libssp.so.* mr,
-        ${pkgs.libsodium}/lib/libsodium.so.* mr,
+        ${pkgs.gcc.cc.lib}/lib/libssp.so.* mr,
+        ${pkgs.libsodium.out}/lib/libsodium.so.* mr,
         ${pkgs.systemd}/lib/libsystemd.so.* mr,
-        ${pkgs.xz}/lib/liblzma.so.* mr,
-        ${pkgs.libgcrypt}/lib/libgcrypt.so.* mr,
-        ${pkgs.libgpgerror}/lib/libgpg-error.so.* mr,
+        ${pkgs.xz.out}/lib/liblzma.so.* mr,
+        ${pkgs.libgcrypt.out}/lib/libgcrypt.so.* mr,
+        ${pkgs.libgpgerror.out}/lib/libgpg-error.so.* mr,
 
         ${resolverListFile} r,
       }
