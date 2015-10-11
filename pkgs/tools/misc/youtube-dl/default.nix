@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
   postInstall = stdenv.lib.optionalString (ffmpeg != null)
-    ''wrapProgram $out/bin/youtube-dl --prefix PATH : "${ffmpeg}/bin"'';
+    ''wrapProgram $out/bin/youtube-dl --prefix PATH : "${ffmpeg.bin}/bin"'';
 
   meta = with stdenv.lib; {
     homepage = "http://rg3.github.com/youtube-dl/";

@@ -12,7 +12,7 @@ buildPerlPackage {
     mkdir -p $out/bin
     cp get_iplayer $out/bin
     sed -i 's|^update_script|#update_script|' $out/bin/get_iplayer
-    wrapProgram $out/bin/get_iplayer --suffix PATH : ${ffmpeg}/bin:${flvstreamer}/bin:${vlc}/bin:${rtmpdump}/bin --prefix PERL5LIB : $PERL5LIB
+    wrapProgram $out/bin/get_iplayer --suffix PATH : ${ffmpeg.bin}/bin:${flvstreamer}/bin:${vlc}/bin:${rtmpdump}/bin --prefix PERL5LIB : $PERL5LIB
   '';  
   
   src = fetchurl {

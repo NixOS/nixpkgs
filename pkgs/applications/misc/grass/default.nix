@@ -106,14 +106,14 @@ a.composableDerivation.composableDerivation {} (fix: {
     name = "ffmpeg";
     enable = {
       configureFlags = [
-        "--with-ffmpeg-libs=${a.ffmpeg}/lib"
-        "--with-ffmpeg-includes=${a.ffmpeg}/include"
+        "--with-ffmpeg-libs=${a.ffmpeg.out}/lib"
+        "--with-ffmpeg-includes=${a.ffmpeg.dev}/include"
       ];
       # is there a nicer way to pass additional include directories?
       # this should work: --with-ffmpeg-includes=/usr/include/lib[av|sw]*
       # I did not try
       preConfigure = ''
-        for dir in ${a.ffmpeg}/include/*; do
+        for dir in ${a.ffmpeg.dev}/include/*; do
           if [ -d $dir ]; then
             NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$dir"
           fi

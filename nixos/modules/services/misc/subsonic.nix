@@ -153,7 +153,7 @@ in
 
     users.extraGroups.subsonic.gid = config.ids.gids.subsonic;
 
-    services.subsonic.transcoders = mkDefault [ "${pkgs.ffmpeg}/bin/ffmpeg" ];
+    services.subsonic.transcoders = mkDefault [ "${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
 
   };
 }
