@@ -48,8 +48,8 @@ stdenv.mkDerivation {
     substituteInPlace qtbase/configure --replace /bin/pwd pwd
     substituteInPlace qtbase/src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
     substituteInPlace qtbase/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
-        --replace /usr/share/X11/locale ${libX11}/share/X11/locale \
-        --replace /usr/lib/X11/locale ${libX11}/share/X11/locale
+        --replace /usr/share/X11/locale ${libX11.out}/share/X11/locale \
+        --replace /usr/lib/X11/locale ${libX11.out}/share/X11/locale
     sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i qtbase/mkspecs/*/*.conf
   '';
 
@@ -57,12 +57,14 @@ stdenv.mkDerivation {
     let dlopen-gtkstyle = substituteAll {
           src = ./0001-dlopen-gtkstyle.patch;
           # substituteAll ignores env vars starting with capital letter
-          gconf = GConf;
-          inherit gnome_vfs libgnomeui gtk;
+          gconf = GConf.out;
+          gtk = gtk.out;
+          libgnomeui = libgnomeui.out;
+          gnome_vfs = gnome_vfs.out;
         };
         dlopen-resolv = substituteAll {
           src = ./0002-dlopen-resolv.patch;
-          glibc = stdenv.cc.libc;
+          glibc = stdenv.cc.libc.out;
         };
         dlopen-gl = substituteAll {
           src = ./0003-dlopen-gl.patch;
@@ -71,21 +73,22 @@ stdenv.mkDerivation {
         tzdir = ./0004-tzdir.patch;
         dlopen-libXcursor = substituteAll {
           src = ./0005-dlopen-libXcursor.patch;
-          inherit libXcursor;
+          libXcursor = libXcursor.out;
         };
         dlopen-openssl = substituteAll {
           src = ./0006-dlopen-openssl.patch;
-          inherit openssl;
+          openssl = openssl.out;
         };
         dlopen-dbus = substituteAll {
           src = ./0007-dlopen-dbus.patch;
-          dbus_libs = dbus;
+          dbus_libs = dbus.libs.out;
         };
         xdg-config-dirs = ./0008-xdg-config-dirs.patch;
         decrypt-ssl-traffic = ./0009-decrypt-ssl-traffic.patch;
         mkspecs-libgl = substituteAll {
           src = ./0014-mkspecs-libgl.patch;
-          inherit mesa;
+          mesa_inc = mesa.dev;
+          mesa_lib = mesa.out;
         };
     in [
       dlopen-resolv dlopen-gl tzdir dlopen-libXcursor dlopen-openssl

@@ -15,6 +15,7 @@
 
 , bison2
 , mesa_noglu
+, libudev
 , cups
 , gnome
 
@@ -214,13 +215,18 @@ let
 
       serialport = callPackage
         (
-          { qtSubmodule, base }:
+          { qtSubmodule, base, substituteAll }:
 
           qtSubmodule {
             name = "qtserialport";
             qtInputs = [ base ];
             patchFlags = "-p2"; # patches originally for monolithic build
-            patches = [ ./0009-dlopen-serialport-udev.patch ];
+            patches = [
+              (substituteAll {
+                src = ./0009-dlopen-serialport-udev.patch;
+                libudev = libudev.out;
+              })
+            ];
           }
         )
         {};
@@ -268,7 +274,7 @@ let
         (
           { qtSubmodule, declarative, location, multimedia, sensors
           , fontconfig, gdk_pixbuf, gtk, libwebp, libxml2, libxslt
-          , sqlite, udev
+          , sqlite, libudev
           , bison2, flex, gdb, gperf, perl, pkgconfig, python, ruby
           , substituteAll
           , flashplayerFix ? false
@@ -287,21 +293,22 @@ let
                 (substituteAll
                   {
                     src = ./0002-dlopen-webkit-nsplugin.patch;
-                    inherit gtk gdk_pixbuf;
+                    gtk = gtk.out;
+                    gdk_pixbuf = gdk_pixbuf.out;
                   }
                 )
               ++ optional flashplayerFix
                 (substituteAll
                   {
                     src = ./0007-dlopen-webkit-gtk.patch;
-                    inherit gtk;
+                    gtk = gtk.out;
                   }
                 )
               ++ [
                 (substituteAll
                   {
                     src = ./0008-dlopen-webkit-udev.patch;
-                    inherit udev;
+                    libudev = libudev.out;
                   }
                 )
               ];

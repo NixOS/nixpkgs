@@ -44,8 +44,8 @@ stdenv.mkDerivation {
     substituteInPlace qtbase/configure --replace /bin/pwd pwd
     substituteInPlace qtbase/src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
     substituteInPlace qtbase/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
-        --replace /usr/share/X11/locale ${libX11}/share/X11/locale \
-        --replace /usr/lib/X11/locale ${libX11}/share/X11/locale
+        --replace /usr/share/X11/locale ${libX11.out}/share/X11/locale \
+        --replace /usr/lib/X11/locale ${libX11.out}/share/X11/locale
     sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i qtbase/mkspecs/*/*.conf
   '';
 
@@ -54,25 +54,27 @@ stdenv.mkDerivation {
       (substituteAll {
         src = ./0001-dlopen-gtkstyle.patch;
         # substituteAll ignores env vars starting with capital letter
-        gconf = GConf;
-        inherit gnome_vfs libgnomeui gtk;
+        gconf = GConf.out;
+        gtk = gtk.out;
+        libgnomeui = libgnomeui.out;
+        gnome_vfs = gnome_vfs.out;
       })
     ++ [
       (substituteAll {
         src = ./0004-dlopen-resolv.patch;
-        glibc = stdenv.cc.libc;
+        glibc = stdenv.cc.libc.out;
       })
       (substituteAll {
         src = ./0005-dlopen-gl.patch;
         openglDriver = if mesaSupported then mesa.driverLink else "/no-such-path";
       })
       ./0006-tzdir.patch
-      (substituteAll { src = ./0010-dlopen-libXcursor.patch; inherit libXcursor; })
-      (substituteAll { src = ./0011-dlopen-openssl.patch; inherit openssl; })
-      (substituteAll { src = ./0012-dlopen-dbus.patch; dbus_libs = dbus; })
+      (substituteAll { src = ./0010-dlopen-libXcursor.patch; libXcursor = libXcursor.out; })
+      (substituteAll { src = ./0011-dlopen-openssl.patch; openssl = openssl.out; })
+      (substituteAll { src = ./0012-dlopen-dbus.patch; dbus_libs = dbus.libs.out; })
       ./0013-xdg_config_dirs.patch
     ] ++ optional mesaSupported
-      (substituteAll { src = ./0014-mkspecs-libgl.patch; inherit mesa; })
+      (substituteAll { src = ./0014-mkspecs-libgl.patch; mesa_inc = mesa.dev; mesa_lib = mesa.out; })
     ++ (optional decryptSslTraffic ./0100-ssl.patch);
 
   preConfigure = ''
