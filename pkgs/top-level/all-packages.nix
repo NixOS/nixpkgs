@@ -4145,7 +4145,12 @@ let
   julia03 = callPackage ../development/compilers/julia/0.3.nix {
     llvm = llvm_33;
   };
-  julia = julia03;
+
+  julia = callPackage ../development/compilers/julia {
+    gmp = gmp6;
+    llvm = llvm_33;
+    openblas = openblasCompat;
+  };
 
   lazarus = callPackage ../development/compilers/fpc/lazarus.nix {
     fpc = fpc;
