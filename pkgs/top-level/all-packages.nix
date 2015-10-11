@@ -4137,11 +4137,6 @@ let
 
   jikes = callPackage ../development/compilers/jikes { };
 
-  julia02 = callPackage ../development/compilers/julia/0.2.nix {
-    llvm = llvm_33;
-    suitesparse = suitesparse_4_2;
-  };
-
   julia03 = callPackage ../development/compilers/julia/0.3.nix {
     llvm = llvm_33;
   };
