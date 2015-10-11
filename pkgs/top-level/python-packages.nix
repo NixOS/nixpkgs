@@ -6564,6 +6564,12 @@ let
       sha256 = "0cds7yvwdlqmd590i59vzxaviwxk4js6dkhnmdxb3p1xac7wmq9s";
     };
 
+    patchPhase = ''
+      substituteInPlace libev/ev.c --replace \
+        "ecb_inline void ecb_unreachable (void) ecb_noreturn" \
+        "ecb_inline ecb_noreturn void ecb_unreachable (void)"
+    '';
+
     buildInputs = with self; [ pkgs.libev ];
     propagatedBuildInputs = optionals (!isPyPy) [ self.greenlet ];
 
