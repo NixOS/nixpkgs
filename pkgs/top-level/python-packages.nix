@@ -18306,12 +18306,12 @@ let
   };
 
   neovim = buildPythonPackage rec {
-    version = "0.0.36";
+    version = "0.0.38";
     name = "neovim-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/neovim/${name}.tar.gz";
-      md5 = "8cdad23402e29c7c5a1e85770e976edf";
+      md5 = "8b723417d3bf15bab0b245d080d45298";
     };
 
     propagatedBuildInputs = with self; [ msgpack ]
