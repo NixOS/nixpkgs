@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 stdenv.mkDerivation rec {
   name= "owncloud-${version}";
-  version = "7.0.5";
+  version = "8.1.0";
 
   src = fetchurl {
     url = "https://download.owncloud.org/community/${name}.tar.bz2";
-    sha256 = "1j21b7ljvbhni9l0b1cpzlhsjy36scyas1l1j222mqdg2srfsi9y";
+    sha256 = "1vkly4xv1wdswvjss8pr6vxvfrmvsk663r6xpygwm0vh7lxqsc1x";
   };
 
   installPhase =
