@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
       "http://files.teamspeak-services.com/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
     ];
     sha256 = if stdenv.is64bit
-                then "0gvphrmrkyy1g2nprvdk7cvawznzlv4smw0mlvzd4b9mvynln0v2"
-                else "1b3nbvfpd8lx3dig8z5yk6zjkbmsy6y938dhj1f562wc8adixciz";
+                then "1bc9m2niagqmijmzlki8jmp48vhns041xdjlji9fyqay6l5mx5fw"
+                else "156dirxjys7pbximw19qs7j52my36p4kp98df3kgrsiiv8mz6v68";
   };
 
   # grab the plugin sdk for the desktop icon
