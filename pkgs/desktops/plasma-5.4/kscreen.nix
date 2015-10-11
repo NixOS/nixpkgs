@@ -10,9 +10,8 @@ plasmaPackage {
   ];
   buildInputs = [
     kconfig kconfigwidgets kdbusaddons kwidgetsaddons kxmlgui
-    libkscreen
   ];
-  propagatedBuildInputs = [ kglobalaccel ki18n qtdeclarative ];
+  propagatedBuildInputs = [ kglobalaccel ki18n libkscreen qtdeclarative ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kscreen-console"
   '';
