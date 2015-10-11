@@ -11,10 +11,10 @@ plasmaPackage {
     kdoctools
   ];
   buildInputs = [
-    kconfig kdbusaddons knotifyconfig plasma-workspace solid udev
+    kconfig kdbusaddons knotifyconfig solid udev
   ];
   propagatedBuildInputs = [
     kactivities kauth kdelibs4support kglobalaccel ki18n kio kidletime
-    libkscreen qtx11extras
+    libkscreen plasma-workspace qtx11extras
   ];
 }
