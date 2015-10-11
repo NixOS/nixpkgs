@@ -9,8 +9,9 @@ let
         else [./fcio.nix];
 in
 {
-  imports = [] ++
-      flavor_files;
+  imports =
+    flavor_files ++
+    [./roles/default.nix];
 
   environment.noXlibs = true;
   sound.enable = false;
