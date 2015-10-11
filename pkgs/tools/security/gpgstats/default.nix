@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.vanheusden.com/gpgstats/;
     license = licenses.gpl2;
-    maintainers = with maintainers; davidak;
+    maintainers = with maintainers; [ davidak ];
     platforms = with platforms; unix;
   };
 }
