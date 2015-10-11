@@ -1653,11 +1653,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ClassThrowable = buildPerlPackage {
-    name = "Class-Throwable-0.11";
+  ClassThrowable = buildPerlPackage rec {
+    name = "Class-Throwable-0.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KM/KMX/Class-Throwable-0.11.tar.gz;
-      sha256 = "1vjadr0kqmfi9s3wfxjbqqgc7fqrk87n6b1a5979sbxxk5yh8hyk";
+      url = "mirror://cpan/authors/id/K/KM/KMX/${name}.tar.gz";
+      sha256 = "1kmwzdxvp9ca2z44vl0ygkfygdbxqkilzjd8vqhc4vdmvbh136nw";
     };
   };
 
