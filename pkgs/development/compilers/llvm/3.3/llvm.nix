@@ -14,8 +14,16 @@ in stdenv.mkDerivation rec {
     ./no-rule-aarch64.patch          # http://llvm.org/bugs/show_bug.cgi?id=16625
     # Patch needed for Julia, backports fixes from LLVM 3.5
     (fetchurl {
-      url = "https://raw.githubusercontent.com/JuliaLang/julia/3bdda3750efc4ebf8ce7eda8a0888ffef3851605/deps/llvm-3.3.patch";
+      url = "https://raw.githubusercontent.com/JuliaLang/julia/release-0.4/deps/llvm-3.3.patch";
       sha256 = "0j6chyx4k8zr1qha5dks8lqlcraqrj4q1hwnk2kj3qi6cajsd8k3";
+    })
+    (fetchurl {
+      url = "https://raw.githubusercontent.com/JuliaLang/julia/release-0.4/deps/instcombine-llvm-3.3.patch";
+      sha256 = "161frq3wxrkxah78krb24hp4zkcnphzcgnvkwfq1abq2vjx3f8sn";
+    })
+    (fetchurl {
+      url = "https://raw.githubusercontent.com/JuliaLang/julia/release-0.4/deps/int128-vector.llvm-3.3.patch";
+      sha256 = "0lzkv6hvsdaalwsyf6sq0vdrf8x5nk58qg6nn5dlw7n3hxaxpm4m";
     })
   ];
 
