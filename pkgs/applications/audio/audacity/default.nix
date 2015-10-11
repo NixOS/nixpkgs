@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "0y9bvc3a3zxsk31yg7bha029mzkjiw5i9m86kbyj7x8ps0fm91z2";
   };
 
+  # fix with gcc-5 from http://lists.freebsd.org/pipermail/freebsd-ports-bugs/2012-December/245884.html
+  postPatch = ''
+    substituteInPlace lib-src/libnyquist/nyquist/ffts/src/fftlib.c \
+      --replace 'inline void' 'static inline void'
+  '';
+
   preConfigure = /* we prefer system-wide libs */ ''
     mv lib-src lib-src-rm
     mkdir lib-src
@@ -30,11 +36,11 @@ stdenv.mkDerivation rec {
   dontDisableStatic = true;
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Sound editor with graphical UI";
     homepage = http://audacity.sourceforge.net;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.the-kenny ];
   };
 }
