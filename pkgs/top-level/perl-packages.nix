@@ -1646,10 +1646,10 @@ let self = _self // overrides; _self = with self; {
   ClassMOP = Moose;
 
   ClassSingleton = buildPerlPackage rec {
-    name = "Class-Singleton-1.4";
+    name = "Class-Singleton-1.5";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AB/ABW/${name}.tar.gz";
-      sha256 = "0l4iwwk91wm2mrrh4irrn6ham9k12iah1ry33k0lzq22r3kwdbyg";
+      url = "mirror://cpan/authors/id/S/SH/SHAY/${name}.tar.gz";
+      sha256 = "0y7ngrjf551bjgmijp5rsidbkq6c8hb5lmy2jcqq0fify020s8iq";
     };
   };
 
