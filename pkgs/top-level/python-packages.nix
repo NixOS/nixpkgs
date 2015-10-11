@@ -2709,10 +2709,11 @@ let
   };
 
   cssselect = buildPythonPackage rec {
-    name = "cssselect-0.7.1";
+    name = "cssselect-${version}";
+    version = "0.9.1";
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/c/cssselect/cssselect-0.7.1.tar.gz";
-      md5 = "c6c5e9a2e7ca226ce03f6f67a771379c";
+      url = "http://pypi.python.org/packages/source/c/cssselect/${name}.tar.gz";
+      sha256 = "10h623qnp6dp1191jri7lvgmnd4yfkl36k9smqklp1qlf3iafd85";
     };
     # AttributeError: 'module' object has no attribute 'tests'
     doCheck = false;
