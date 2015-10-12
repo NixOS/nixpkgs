@@ -6233,11 +6233,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  locallib = buildPerlPackage {
-    name = "local-lib-2.000014";
+  locallib = buildPerlPackage rec {
+    name = "local-lib-2.000017";
     src = fetchurl {
-      url = mirror://cpan/authors/id/H/HA/HAARG/local-lib-2.000014.tar.gz;
-      sha256 = "ae63356ab780c5a3aa46287b48daea748a3dd021d9b52dff8bf480b43787fa2b";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
+      sha256 = "05607zxpb0jqvxn0cw064pnwsvbajw7k2pmzlisffadihg11m6ps";
     };
     meta = {
       description = "Create and use a local lib/ for perl modules with PERL5LIB";
