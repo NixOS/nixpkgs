@@ -1,4 +1,4 @@
-{stdenv, fetchurl, alsaLib, gettext, ncurses, libsamplerate, gnumake, pkgconfig, gtk}:
+{stdenv, fetchurl, alsaLib, gettext, ncurses, libsamplerate, gnumake, pkgconfig, gtk, fltk13, qt4}:
 
 stdenv.mkDerivation rec {
   name = "alsa-tools-${version}";
@@ -12,52 +12,31 @@ stdenv.mkDerivation rec {
     sha256 = "1lgvyb81md25s9ciswpdsbibmx9s030kvyylf0673w3kbamz1awl";
   };
 
-  phases = "unpackPhase configurePhase buildPhase fixupPhase installPhase";
+  phases = "unpackPhase patchPhase configurePhase buildPhase fixupPhase installPhase";
 
-  buildInputs = [ gettext alsaLib ncurses libsamplerate gnumake pkgconfig gtk ];
+  buildInputs = [ gettext alsaLib ncurses libsamplerate gnumake pkgconfig gtk fltk13 qt4 ];
+
+  patchPhase = ''
+    export tools="as10k1 hda-verb hdspmixer qlo10k1 seq usx2yloader echomixer hdajackretask hdspconf hwmixvolume mixartloader rmedigicontrol sscape_ctl vxloader envy24control hdajacksensetest hdsploader ld10k1 pcxhrloader sb16_csp us428control"
+  '';
 
   configurePhase = ''
-    cd envy24control; ./configure --prefix="$out"; cd -
+    for tool in $tools; do
+      cd "$tool"; ./configure --prefix="$out"; cd -
+    done
   '';
 
   buildPhase = ''
-    cd envy24control; make; cd -
+    for tool in $tools; do
+      cd "$tool"; make; cd -
+    done
   '';
 
   installPhase = ''
-    cd envy24control; make install; cd -
+    for tool in $tools; do
+      cd "$tool"; make install; cd -
+    done
   '';
-
-  
-  # patchPhase = "patchShebangs";
-  patchPhase = ''
-    patchShebangs gitcompile 
-    patchShebangs hdajackretask/gitcompile 
-    patchShebangs echomixer/gitcompile 
-    patchShebangs hwmixvolume/gitcompile 
-    patchShebangs usx2yloader/gitcompile 
-    patchShebangs sb16_csp/gitcompile 
-    patchShebangs pcxhrloader/gitcompile 
-    patchShebangs as10k1/gitcompile 
-    patchShebangs hdspconf/gitcompile 
-    patchShebangs sscape_ctl/gitcompile 
-    patchShebangs hdsploader/gitcompile 
-    patchShebangs rmedigicontrol/gitcompile 
-    patchShebangs vxloader/gitcompile 
-    patchShebangs us428control/gitcompile 
-    patchShebangs mixartloader/gitcompile 
-    patchShebangs hdspmixer/gitcompile 
-    patchShebangs seq/sbiload/gitcompile 
-    patchShebangs seq/gitcompile 
-    patchShebangs gitcompile qlo10k1/gitcompile 
-    patchShebangs ld10k1/gitcompile 
-    patchShebangs hda-verb/gitcompile 
-    patchShebangs envy24control/gitcompile
-  '';
-
-  # configureFlags = "--disable-xmlto --with-udev-rules-dir=$(out)/lib/udev/rules.d";
-
-  # installFlags = "ASOUND_STATE_DIR=$(TMPDIR)/dummy";
 
   meta = {
     homepage = http://www.alsa-project.org/;
