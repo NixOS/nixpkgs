@@ -496,11 +496,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  BFlags = buildPerlPackage {
-    name = "B-Flags-0.13";
+  BFlags = buildPerlPackage rec {
+    name = "B-Flags-0.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RU/RURBAN/B-Flags-0.13.tar.gz;
-      sha256 = "6d00f08681772d0abec3aeedb5584910a6df5ced230c1525403a1c7da42f1352";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/${name}.tar.gz";
+      sha256 = "07inzxvvf4bkl4iliys9rfdiz309nccpbr82a7g57bhcylj7qhzn";
     };
     meta = {
       description = "Friendlier flags for B";
