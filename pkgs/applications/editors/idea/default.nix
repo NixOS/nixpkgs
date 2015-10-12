@@ -212,14 +212,14 @@ in
 
   android-studio = buildAndroidStudio rec {
     name = "android-studio-${version}";
-    version = "1.2.2.0";
-    build = "141.1980579";
+    version = "1.4.0.10";
+    build = "141.2288178";
     description = "Android development environment based on IntelliJ IDEA";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
             "/android-studio-ide-${build}-linux.zip";
-      sha256 = "08bayp2kxxg0zdmd1rcfg89g80wmwxf56fzmk5xkz1qg6s9b98a6";
+      sha256 = "04zzzk6xlvzip6klxvs4zz2wyfyn3w9b5jwilzbqjidiz2d3va57";
     };
   };
 
