@@ -418,12 +418,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   Autodia = buildPerlPackage rec {
-    name = "Autodia-2.03";
+    name = "Autodia-2.14";
     src = fetchurl {
-      url = "http://www.aarontrevena.co.uk/opensource/autodia/download/${name}.tar.gz";
-      sha256 = "1pzp30lnqkip2yrmnyzrf62g08xwn751nf9gmwdxjc09daaihwaz";
+      url = "mirror://cpan/authors/id/T/TE/TEEJAY/${name}.tar.gz";
+      sha256 = "08pl5y18nsvy8ihfzdsbd8rz6a8al09wqfna07zdjfdyib42b0dc";
     };
-    propagatedBuildInputs = [ TemplateToolkit Inline InlineJava GraphViz ];
+    propagatedBuildInputs = [ TemplateToolkit Inline InlineJava GraphViz
+      XMLSimple DBI ];
 
     meta = {
       description = "AutoDia, create UML diagrams from source code";
