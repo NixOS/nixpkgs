@@ -1959,10 +1959,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ConvertASN1 = buildPerlPackage rec {
-    name = "Convert-ASN1-0.26";
+    name = "Convert-ASN1-0.27";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GB/GBARR/Convert-ASN1-0.26.tar.gz";
-      sha256 = "188wpjnp4j2m1l1zzw9ak9ymiba1g7hzysf8mc6bsdnhl0pvdf2x";
+      url = "mirror://cpan/authors/id/G/GB/GBARR/${name}.tar.gz";
+      sha256 = "12nmsca6hzgxq57sx7dp8yq6zxqhl41z5a6018877sf5w25ag93l";
     };
   };
 
