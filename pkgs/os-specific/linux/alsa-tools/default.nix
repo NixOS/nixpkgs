@@ -1,4 +1,4 @@
-{stdenv, fetchurl, alsaLib, gettext, ncurses, libsamplerate, gnumake, pkgconfig, gtk, fltk13, qt4}:
+{ stdenv, fetchurl, alsaLib, pkgconfig, gtk, gtk3, fltk13, qt }:
 
 stdenv.mkDerivation rec {
   name = "alsa-tools-${version}";
@@ -12,16 +12,20 @@ stdenv.mkDerivation rec {
     sha256 = "1lgvyb81md25s9ciswpdsbibmx9s030kvyylf0673w3kbamz1awl";
   };
 
+  enableParallelBuilding = true;
+
   phases = "unpackPhase patchPhase configurePhase buildPhase fixupPhase installPhase";
 
-  buildInputs = [ gettext alsaLib ncurses libsamplerate gnumake pkgconfig gtk fltk13 qt4 ];
+  buildInputs = [ alsaLib pkgconfig gtk gtk3 fltk13 qt ];
 
   patchPhase = ''
-    export tools="as10k1 hda-verb hdspmixer qlo10k1 seq usx2yloader echomixer hdajackretask hdspconf hwmixvolume mixartloader rmedigicontrol sscape_ctl vxloader envy24control hdajacksensetest hdsploader ld10k1 pcxhrloader sb16_csp us428control"
+    export tools="as10k1 hda-verb hdspmixer echomixer hdajackretask hdspconf hwmixvolume mixartloader rmedigicontrol sscape_ctl vxloader envy24control hdajacksensetest hdsploader ld10k1 pcxhrloader sb16_csp us428control"
+    # export tools="as10k1 hda-verb hdspmixer qlo10k1 seq usx2yloader echomixer hdajackretask hdspconf hwmixvolume mixartloader rmedigicontrol sscape_ctl vxloader envy24control hdajacksensetest hdsploader ld10k1 pcxhrloader sb16_csp us428control"
   '';
 
   configurePhase = ''
     for tool in $tools; do
+      echo "Tool: $tool:"
       cd "$tool"; ./configure --prefix="$out"; cd -
     done
   '';

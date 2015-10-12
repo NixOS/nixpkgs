@@ -9427,7 +9427,7 @@ let
 
   alsaUtils = callPackage ../os-specific/linux/alsa-utils { };
   alsaOss = callPackage ../os-specific/linux/alsa-oss { };
-  alsaTools = callPackage ../os-specific/linux/alsa-tools { };
+  alsaTools = callPackage ../os-specific/linux/alsa-tools { qt = qt4; };
 
   microcodeAmd = callPackage ../os-specific/linux/microcode/amd.nix { };
 
