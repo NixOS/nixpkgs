@@ -10445,6 +10445,8 @@ let
   coreclr = callPackage ../development/compilers/coreclr { };
 
   corefonts = callPackage ../data/fonts/corefonts { };
+  
+  culmus = callPackage ../data/fonts/culmus { };
 
   wrapFonts = paths : (callPackage ../data/fonts/fontWrap { inherit paths; });
 
