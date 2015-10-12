@@ -1948,13 +1948,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Connector = buildPerlPackage {
-    name = "Connector-1.15";
+  Connector = buildPerlPackage rec {
+    name = "Connector-1.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MR/MRSCOTTY/Connector-1.15.tar.gz;
-      sha256 = "1p64gnkrik7f21jj0x5di0inmb4s1p33g0mxyk5gvwchkf43pyn4";
+      url = "mirror://cpan/authors/id/M/MR/MRSCOTTY/${name}.tar.gz";
+      sha256 = "0rbx4n86y5sdkff37w8djw1ahxrg79bsfgbrph3kjhh4jzd20q09";
     };
-    doCheck = false;
+    buildInputs = [ Moose ConfigStd YAML PathClass DateTime Log4Perl
+      ConfigVersioned TemplateToolkit];
   };
 
   ConvertASN1 = buildPerlPackage rec {
