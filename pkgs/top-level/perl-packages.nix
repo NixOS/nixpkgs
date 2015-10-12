@@ -11716,11 +11716,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  threads = buildPerlPackage {
-    name = "threads-2.01";
+  threads = buildPerlPackage rec {
+    name = "threads-2.02";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JD/JDHEDDEN/threads-2.01.tar.gz;
-      sha256 = "429fea88757e0a347dac2cf9e414dfe8f06c8ca3c5445f6da4a95c2f883b6399";
+      url = "mirror://cpan/authors/id/J/JD/JDHEDDEN/${name}.tar.gz";
+      sha256 = "0vij8lagq4x6gv88x9gg23jd7i0s5fyyzs2wrxacih2ppj6kkiff";
     };
     meta = {
       description = "Perl interpreter-based threads";
