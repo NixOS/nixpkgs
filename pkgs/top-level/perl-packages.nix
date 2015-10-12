@@ -579,11 +579,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  boolean = buildPerlPackage {
-    name = "boolean-0.32";
+  boolean = buildPerlPackage rec {
+    name = "boolean-0.45";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IN/INGY/boolean-0.32.tar.gz;
-      sha256 = "1icihm1cib90klfjrk069s7031n1c7xk3fmkr2bfxrwqda4di7jg";
+      url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
+      sha256 = "18hrgldzwnhs0c0r8hxx6r05qvk9p7gwinjwcybixfs2h0n43ypj";
     };
     meta = {
       homepage = https://github.com/ingydotnet/boolean-pm/tree;
