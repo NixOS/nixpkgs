@@ -12650,11 +12650,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  YAMLSyck = buildPerlPackage {
-    name = "YAML-Syck-1.27";
+  YAMLSyck = buildPerlPackage rec {
+    name = "YAML-Syck-1.29";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.27.tar.gz;
-      sha256 = "1y9dw18fz3s8v4n80wf858cjq4jlaza25wvsgv60a6z2l0sfax6y";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/${name}.tar.gz";
+      sha256 = "0ff9rzb1gg12iiizjqv6bsxdxk39g3f6sa18znha4476acv7nmnk";
     };
     meta = {
       homepage = http://search.cpan.org/dist/YAML-Syck;
