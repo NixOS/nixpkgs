@@ -542,11 +542,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  bignum = buildPerlPackage {
-    name = "bignum-0.37";
+  bignum = buildPerlPackage rec {
+    name = "bignum-0.41";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PJ/PJACKLAM/bignum-0.37.tar.gz;
-      sha256 = "9d2e035222d8b00d062959cb5ae491cb6ce80b7ea0ea8c05e53c415022e4f871";
+      url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
+      sha256 = "19bwz2yi2qf5lrhkkk8c320b5ixn0wl8662gmvq3gqzarngxf76l";
     };
     meta = {
       description = "Transparent BigNumber support for Perl";
