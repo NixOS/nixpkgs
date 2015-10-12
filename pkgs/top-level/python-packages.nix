@@ -17961,7 +17961,6 @@ let
 
   termcolor = buildPythonPackage rec {
     name = "termcolor-1.1.0";
-    disabled = ! isPy27;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/termcolor/termcolor-1.1.0.tar.gz";
