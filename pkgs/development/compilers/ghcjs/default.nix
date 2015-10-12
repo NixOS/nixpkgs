@@ -41,26 +41,24 @@ let
   version = "0.1.0";
   ghcjsBoot = fetchgit {
     url = "git://github.com/ghcjs/ghcjs-boot.git";
-    rev = "ec9f795b42b40fd24933d1672db153df5a29cc00"; # master branch
-    sha256 = "0bkvqlsgb9n0faayi4k1dlkn9cbm99a66m9nnx1kykb44qcl40yg";
+    rev = "39cd58e12f02fa99f493387ba4c3708819a72294";
+    sha256 = "0s7hvg60piklrg9ypa7r44l4qzvpinrgsaffak6fr7gd3k08wn9d";
     fetchSubmodules = true;
   };
   shims = fetchFromGitHub {
     owner = "ghcjs";
     repo = "shims";
-    rev = "01e01dee31a4786b3d01092e72350b0859a9f8c9"; # master branch
-    sha256 = "01m1yhq6l71azx0zqbpzmqc6rxxf654hgjibc0lz2cg5942wh1hf";
+    rev = "f17d10cf47450fe4e00433e988db0bddddb35cc0";
+    sha256 = "1kgnkkz1khzkmb0dm0ssp8l17iy9d9n9phszcj6vg9vi7v9y7l05";
   };
 in mkDerivation (rec {
   pname = "ghcjs";
   inherit version;
-  # `src` is ghcjs's a3157072c2593debf2e45e751e9a8aa90b860b4d plus this
-  # additional dependency bump: https://github.com/ghcjs/ghcjs/pull/408
   src = fetchFromGitHub {
-    owner = "k0001";
+    owner = "ghcjs";
     repo = "ghcjs";
-    rev = "1b767e0b3dabdd1561bd17314d472651bfd9b97c";
-    sha256 = "0j4vj47qljbcbrp3md3jwxwl2kz9k85visq6yi1x8wdch4wb2kgy";
+    rev = "2ae1276a97c9f32c4b02080d1bb363cf0c2c553c";
+    sha256 = "18m1737w4bfn84cnwcf021gsy69c84dlkwxnyf4r5h97gly6jx7q";
   };
   isLibrary = true;
   isExecutable = true;

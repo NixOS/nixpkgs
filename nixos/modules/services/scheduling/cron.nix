@@ -100,7 +100,7 @@ in
       environment.systemPackages = [ cronNixosPkg ];
 
       environment.etc.crontab =
-        { source = pkgs.runCommand "crontabs" { inherit allFiles; }
+        { source = pkgs.runCommand "crontabs" { inherit allFiles; preferLocalBuild = true; }
             ''
               touch $out
               for i in $allFiles; do

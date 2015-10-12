@@ -47,10 +47,6 @@ appleDerivation {
   '';
 
   postInstall = ''
-    # gross! convince apple to release these as part of CF
-    cp /System/Library/Frameworks/CoreFoundation.framework/Headers/{CFAttributedString,CFNotificationCenter}.h \
-      "$out/System/Library/Frameworks/CoreFoundation.framework/Headers"
-
     mv $out/System/* $out
     rmdir $out/System
   '';

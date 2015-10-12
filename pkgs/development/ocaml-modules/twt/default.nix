@@ -1,11 +1,11 @@
-{stdenv, fetchurl, ocaml, findlib }:
+{ stdenv, fetchzip, ocaml, findlib }:
 
 stdenv.mkDerivation {
-  name = "ocaml-twt-0.93.2";
+  name = "ocaml-twt-0.94.0";
 
-  src = fetchurl {
-    url = https://github.com/mlin/twt/archive/v0.93.2.tar.gz;
-    sha256 = "aec091fbd1e6c4d252cf9664237418b4bc8c7d6b7a17475589be78365397e768";
+  src = fetchzip {
+    url = https://github.com/mlin/twt/archive/v0.94.0.tar.gz;
+    sha256 = "0298gdgzl4cifxnc1d8sbrvz1lkiq5r5ifkq1fparm6gvqywpf65";
   };
 
   buildInputs = [ ocaml findlib ];

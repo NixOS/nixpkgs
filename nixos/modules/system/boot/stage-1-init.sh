@@ -135,7 +135,7 @@ ln -s @modulesClosure@/lib/modules /lib/modules
 echo @extraUtils@/bin/modprobe > /proc/sys/kernel/modprobe
 for i in @kernelModules@; do
     echo "loading module $(basename $i)..."
-    modprobe $i || true
+    modprobe $i
 done
 
 
@@ -146,7 +146,7 @@ ln -sfn @udevRules@ /etc/udev/rules.d
 mkdir -p /dev/.mdadm
 systemd-udevd --daemon
 udevadm trigger --action=add
-udevadm settle || true
+udevadm settle
 
 
 # Load boot-time keymap before any LVM/LUKS initialization
@@ -316,7 +316,7 @@ mountFS() {
 
     echo "mounting $device on $mountPoint..."
 
-    mkdir -p "/mnt-root$mountPoint" || true
+    mkdir -p "/mnt-root$mountPoint"
 
     # For CIFS mounts, retry a few times before giving up.
     local n=0
@@ -388,7 +388,7 @@ while read -u 3 mountPoint; do
 
     # Wait once more for the udev queue to empty, just in case it's
     # doing something with $device right now.
-    udevadm settle || true
+    udevadm settle
 
     mountFS "$device" "$mountPoint" "$options" "$fsType"
 done
@@ -401,9 +401,9 @@ exec 3>&-
 
 # Emit a udev rule for /dev/root to prevent systemd from complaining.
 if [ -e /mnt-root/iso ]; then
-    eval $(udevadm info --export --export-prefix=ROOT_ --device-id-of-file=/mnt-root/iso || true)
+    eval $(udevadm info --export --export-prefix=ROOT_ --device-id-of-file=/mnt-root/iso)
 else
-    eval $(udevadm info --export --export-prefix=ROOT_ --device-id-of-file=$targetRoot || true)
+    eval $(udevadm info --export --export-prefix=ROOT_ --device-id-of-file=$targetRoot)
 fi
 if [ "$ROOT_MAJOR" -a "$ROOT_MINOR" -a "$ROOT_MAJOR" != 0 ]; then
     mkdir -p /run/udev/rules.d
@@ -412,7 +412,7 @@ fi
 
 
 # Stop udevd.
-udevadm control --exit || true
+udevadm control --exit
 
 # Kill any remaining processes, just to be sure we're not taking any
 # with us into stage 2. But keep storage daemons like unionfs-fuse.

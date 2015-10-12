@@ -70,7 +70,7 @@ let cfg = config.system.autoUpgrade; in
       path = [ pkgs.gnutar pkgs.xz config.nix.package ];
 
       script = ''
-        ${config.system.build.nixos-rebuild}/bin/nixos-rebuild test ${toString cfg.flags}
+        ${config.system.build.nixos-rebuild}/bin/nixos-rebuild switch ${toString cfg.flags}
       '';
 
       startAt = mkIf cfg.enable "04:40";

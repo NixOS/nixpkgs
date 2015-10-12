@@ -1,16 +1,19 @@
-{stdenv, fetchurl, unzip, ogre, cmake, ois, freetype, libuuid, boost, pkgconfig}:
+{stdenv, fetchFromGitHub, libX11, unzip, ogre, cmake, ois, freetype, libuuid, boost, pkgconfig}:
 
 stdenv.mkDerivation rec {
-  name = "mygui-3.2.0";
+  name = "mygui-${version}";
+  version = "3.2.2";
   
-  src = fetchurl {
-    url = mirror://sourceforge/my-gui/MyGUI_3.2.0.zip;
-    sha256 = "16m1xrhx13qbwnp9gds2amlwycq8q5npr0665hnknwsb6rph010p";
+  src = fetchFromGitHub {
+    owner = "MyGUI";
+    repo = "mygui";
+    rev = "MyGUI${version}";
+    sha256 = "1wk7jmwm55rhlqqcyvqsxdmwvl70bysl9azh4kd9n57qlmgk3zmw";
   };
 
   enableParallelBuilding = true;
 
-  buildInputs = [ unzip ogre cmake ois freetype libuuid boost pkgconfig ];
+  buildInputs = [ libX11 unzip ogre cmake ois freetype libuuid boost pkgconfig ];
 
   meta = {
     homepage = http://mygui.info/;

@@ -5,20 +5,20 @@
 , libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, mesa, alsaLib
 , freetype, fontconfig, glib, gtk, atk, file, jdk, coreutils
 }:
-{platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs?false, useGooglePlayServices?false}:
+{ platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs ? false, useGooglePlayServices ? false }:
 
 stdenv.mkDerivation rec {
   name = "android-sdk-${version}";
-  version = "24.1.2";
+  version = "24.3.4";
 
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
       url = "http://dl.google.com/android/android-sdk_r${version}-linux.tgz";
-      sha1 = "a46298bjpgzsnchhpcm1i86c4r50x638";
+      sha1 = "fb293d7bca42e05580be56b1adc22055d46603dd";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
       url = "http://dl.google.com/android/android-sdk_r${version}-macosx.zip";
-      sha1 = "as109624lgrn8krylmyvm33yapqkzr00";
+      sha1 = "128f10fba668ea490cc94a08e505a48a608879b9";
     }
     else throw "platform not ${stdenv.system} supported!";
 

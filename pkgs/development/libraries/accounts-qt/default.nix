@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkgconfig, qt5 }:
+{ stdenv, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkgconfig, qtbase }:
 
 let version = "1.13"; in
 stdenv.mkDerivation {
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ glib libaccounts-glib qt5.base ];
+  buildInputs = [ glib libaccounts-glib qtbase ];
   nativeBuildInputs = [ doxygen pkgconfig ];
 
   configurePhase = ''

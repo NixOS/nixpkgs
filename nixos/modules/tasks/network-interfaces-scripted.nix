@@ -220,6 +220,39 @@ in
             '';
           });
 
+        createVswitchDevice = n: v: nameValuePair "${n}-netdev"
+          (let
+            deps = map subsystemDevice v.interfaces;
+            ofRules = pkgs.writeText "vswitch-${n}-openFlowRules" v.openFlowRules;
+          in
+          { description = "Open vSwitch Interface ${n}";
+            wantedBy = [ "network.target" "vswitchd.service" ] ++ deps;
+            bindsTo =  [ "vswitchd.service" (subsystemDevice n) ] ++ deps;
+            partOf = [ "vswitchd.service" ];
+            after = [ "network-pre.target" "vswitchd.service" ] ++ deps;
+            before = [ "network-interfaces.target" ];
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.iproute config.virtualisation.vswitch.package ];
+            script = ''
+              echo "Removing old Open vSwitch ${n}..."
+              ovs-vsctl --if-exists del-br ${n}
+
+              echo "Adding Open vSwitch ${n}..."
+              ovs-vsctl -- add-br ${n} ${concatMapStrings (i: " -- add-port ${n} ${i}") v.interfaces} \
+                ${concatMapStrings (x: " -- set-controller ${n} " + x)  v.controllers} \
+                ${concatMapStrings (x: " -- " + x) (splitString "\n" v.extraOvsctlCmds)}
+
+              echo "Adding OpenFlow rules for Open vSwitch ${n}..."
+              ovs-ofctl add-flows ${n} ${ofRules}
+            '';
+            postStop = ''
+              ip link set ${n} down || true
+              ovs-ofctl del-flows ${n} || true
+              ovs-vsctl --if-exists del-br ${n}
+            '';
+          });
+
         createBondDevice = n: v: nameValuePair "${n}-netdev"
           (let
             deps = map subsystemDevice v.interfaces;
@@ -335,6 +368,7 @@ in
            map configureAddrs interfaces ++
            map createTunDevice (filter (i: i.virtual) interfaces))
          // mapAttrs' createBridgeDevice cfg.bridges
+         // mapAttrs' createVswitchDevice cfg.vswitches
          // mapAttrs' createBondDevice cfg.bonds
          // mapAttrs' createMacvlanDevice cfg.macvlans
          // mapAttrs' createSitDevice cfg.sits

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, perl, buildLinux, ... } @ args:
 
 import ./generic.nix (args // rec {
-  version = "4.2.1";
+  version = "4.2.3";
   extraMeta.branch = "4.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
-    sha256 = "1b4dpf3rhr1sb1hpz4qx3h1swlcr1xnbrh6sjybqmj2c6szkbpvz";
+    sha256 = "4ca6c783a0bc87573f5c95e49306cbe5f83dc1cd5afb44ecc9a1917f39e5ad66";
   };
 
   features.iwlwifi = true;
@@ -14,12 +14,4 @@ import ./generic.nix (args // rec {
   features.needsCifsUtils = true;
   features.canDisableNetfilterConntrackHelpers = true;
   features.netfilterRPFilter = true;
-
-  # cherry-pick from upstream to resolve a licensing problem that prevents
-  # compiling the broadcom-sta wireless driver on kernels >= 4.2
-  # see: https://github.com/longsleep/bcmwl-ubuntu/issues/6
-  kernelPatches = [ {
-    name = "flush-workqueue-export";
-    patch = ./flush_workqueue-export.patch;
-  } ];
 } // (args.argsOverride or {}))

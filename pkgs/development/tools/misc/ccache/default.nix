@@ -2,8 +2,8 @@
 
 let
   name = "ccache-${version}";
-  version = "3.2.3";
-  sha256 = "03k0fvblwqb80zwdgas8a5fjrwvghgsn587wp3lfr0jr8gy1817c";
+  version = "3.2.4";
+  sha256 = "0pga3hvd80f2p7mz88jmmbwzxh4vn5ihyjx5f6na8y2fclzsjg8w";
 
   ccache =
 stdenv.mkDerivation {

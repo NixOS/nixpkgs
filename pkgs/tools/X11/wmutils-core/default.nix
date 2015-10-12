@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "wmutils-core-${version}";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchurl {
     url = "https://github.com/wmutils/core/archive/v${version}.tar.gz";
-    sha256 = "10vn56rbrjykcrjr06ki4qc12sri1ywrcvm89nmxlqhkxx4i239p";
+    sha256 = "0aq95khs154j004b79w9rgm80vpggxfqynha5rckm2cx20d1fa5s";
   };
 
   buildInputs = [ libxcb ];

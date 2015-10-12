@@ -318,7 +318,7 @@ in {
       wantedBy = ["multi-user.target"];
       after = ["networking.target"];
       serviceConfig = {
-        ExecStart = "${cfg.package-backend}/bin/grafana --config ${cfgFile} web";
+        ExecStart = "${cfg.package}/bin/grafana --config ${cfgFile} web";
         WorkingDirectory = cfg.dataDir;
         User = "grafana";
       };

@@ -2,7 +2,7 @@
 
 { stdenv, fetchurl, alsaLib, bzip2, fftw, libjack2, libX11, liblo
 , libmad, libogg, librdf, librdf_raptor, librdf_rasqal, libsamplerate
-, libsndfile, pkgconfig, libpulseaudio, qt5, redland
+, libsndfile, pkgconfig, libpulseaudio, qtbase, redland
 , rubberband, serd, sord, vampSDK, fftwFloat
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ libsndfile qt5.base fftw fftwFloat bzip2 librdf rubberband
+    [ libsndfile qtbase fftw fftwFloat bzip2 librdf rubberband
       libsamplerate vampSDK alsaLib librdf_raptor librdf_rasqal redland
       serd
       sord
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/sonic-visualiser}
     cp sonic-visualiser $out/bin/
     cp -r samples $out/share/sonic-visualiser/
+    wrapQtProgram "$out/bin/sonic-visualiser"
   '';
 
   meta = with stdenv.lib; {

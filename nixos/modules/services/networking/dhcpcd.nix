@@ -18,6 +18,7 @@ let
     map (i: i.name) (filter (i: if i.useDHCP != null then !i.useDHCP else i.ip4 != [ ] || i.ipAddress != null) interfaces)
     ++ mapAttrsToList (i: _: i) config.networking.sits
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bridges))
+    ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.vswitches))
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bonds))
     ++ config.networking.dhcpcd.denyInterfaces;
 

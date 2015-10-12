@@ -79,12 +79,6 @@ self: super: {
   ghcjs-dom = overrideCabal super.ghcjs-dom (drv: {
     buildDepends = [ self.base self.mtl self.text self.ghcjs-base ];
     libraryHaskellDepends = [ ];
-    src = pkgs.fetchFromGitHub {
-      owner = "ghcjs";
-      repo = "ghcjs-dom";
-      rev = "8d77202b46cbf0aed77bb1f1e8d827f27dee90d7";
-      sha256 = "01npi286mwg7yr3h9qhxnylnjzbjb4lg5235v5lqfwy76hmmb9lp";
-    };
   });
 
   ghc-paths = overrideCabal super.ghc-paths (drv: {

@@ -1,4 +1,6 @@
-{stdenv, fetchurl, kdelibs}:
+{ stdenv, fetchurl, kdelibs
+, automoc4, cmake, perl, pkgconfig
+}:
 
 stdenv.mkDerivation {
   name = "ksshaskpass-0.5.3";
@@ -7,6 +9,8 @@ stdenv.mkDerivation {
     url = http://kde-apps.org/CONTENT/content-files/50971-ksshaskpass-0.5.3.tar.gz;
     sha256 = "0911i8jr0nzqah8xidb8wba55a2skaidj3klv3cw6bm5fjx7x953";
   };
+
+  nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
 
   buildInputs = [ kdelibs ];
 

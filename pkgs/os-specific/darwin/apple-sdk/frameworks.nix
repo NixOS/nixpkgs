@@ -80,7 +80,7 @@ with frameworks; with libs; {
   PreferencePanes         = [];
   PubSub                  = [];
   Python                  = [ ApplicationServices ];
-  QTKit                   = [ QuickTime ];
+  QTKit                   = [ CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox ];
   QuickLook               = [ ApplicationServices CF ];
   QuickTime               = [ ApplicationServices AudioUnit Carbon CoreAudio CoreServices OpenGL QuartzCore ];
   Ruby                    = [];
@@ -103,7 +103,7 @@ with frameworks; with libs; {
   Tk                      = [ ApplicationServices Carbon X11 ];
   VideoDecodeAcceleration = [ CF CoreVideo ];
   VideoToolbox            = [ CF CoreMedia CoreVideo ];
-  WebKit                  = [ ApplicationServices Carbon JavaScriptCore OpenGL X11 ];
+  WebKit                  = [ ApplicationServices Carbon JavaScriptCore OpenGL ];
 
   # Umbrellas
   Accelerate          = [ CoreWLAN IOBluetooth ];
@@ -114,6 +114,6 @@ with frameworks; with libs; {
   IOBluetooth         = [ IOKit ];
   JavaVM              = [];
   OpenDirectory       = [];
-  Quartz              = [ QuickLook ];
+  Quartz              = [ QuickLook QTKit ];
   QuartzCore          = [ ApplicationServices CF CoreVideo OpenCL ];
 }

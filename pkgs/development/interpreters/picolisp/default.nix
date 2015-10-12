@@ -3,12 +3,21 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "picoLisp-${version}";
-  version = "3.1.10";
+  version = "3.1.11";
   src = fetchurl {
     url = "http://www.software-lab.de/${name}.tgz";
-    sha256 = "1pn5c0d81rz1fazsdijhw4cqybaad2wn6qramdj2qqkzxa3vvll1";
+    sha256 = "01kgyz0lkz36lxvibv07qd06gwdxvvbain9f9cnya7a12kq3009i";
   };
-  buildInputs = [ jdk ];
+  buildInputs = optional stdenv.is64bit jdk;
+  patchPhase = optionalString stdenv.isArm ''
+    sed -i s/-m32//g Makefile
+    cat >>Makefile <<EOF
+    ext.o: ext.c
+    	\$(CC) \$(CFLAGS) -fPIC -D_OS='"\$(OS)"' \$*.c
+    ht.o: ht.c
+    	\$(CC) \$(CFLAGS) -fPIC -D_OS='"\$(OS)"' \$*.c
+    EOF
+  '';
   sourceRoot = ''picoLisp/src${optionalString stdenv.is64bit "64"}'';
   installPhase = ''
     cd ..
@@ -20,7 +29,7 @@ stdenv.mkDerivation rec {
 
     cat >"$out/bin/pil" <<EOF
     #! /bin/sh
-    $out/bin/picolisp $out/lib/picolisp/lib.l @lib/misc.l @lib/btree.l @lib/db.l @lib/pilog.l
+    exec $out/bin/picolisp $out/lib/picolisp/lib.l @lib/misc.l @lib/btree.l @lib/db.l @lib/pilog.l
     EOF
     chmod +x "$out/bin/pil"
 

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python, makeWrapper, docutils, unzip, hg-git, dulwich
-, guiSupport ? false, tk ? null, curses
-, ApplicationServices }:
+, guiSupport ? false, tk ? null, hg-crecord ? null, curses
+, ApplicationServices, cf-private }:
 
 let
   version = "3.5.1";
@@ -20,7 +20,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ python makeWrapper docutils unzip ];
 
-  propagatedBuildInputs = stdenv.lib.optional stdenv.isDarwin ApplicationServices;
+  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin
+    [ ApplicationServices cf-private ];
 
   makeFlags = "PREFIX=$(out)";
 
@@ -36,6 +37,13 @@ stdenv.mkDerivation {
       WRAP_TK=" --set TK_LIBRARY \"${tk}/lib/${tk.libPrefix}\"
                 --set HG \"$out/bin/hg\"
                 --prefix PATH : \"${tk}/bin\" "
+    '') + (stdenv.lib.optionalString (hg-crecord != null)
+    ''
+      mkdir -p $out/etc/mercurial
+      cat >> $out/etc/mercurial/hgrc << EOF
+      [extensions]
+      crecord=${hg-crecord}/${python.sitePackages}/crecord
+      EOF
     '') +
     ''
       for i in $(cd $out/bin && ls); do

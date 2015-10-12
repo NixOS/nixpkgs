@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, gettext, kdelibs, libXtst, libfakekey, makeWrapper, pkgconfig, qca2
-, qjson
+{ stdenv, fetchurl, automoc4, cmake, perl, pkgconfig
+, gettext, kdelibs, libXtst, libfakekey, makeWrapper, qca2, qjson
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1vrr047bq5skxvibv5pb9ch9dxh005zmar017jzbyb9hilxr8kg4";
   };
 
-  buildInputs = [ gettext kdelibs libXtst libfakekey makeWrapper pkgconfig qca2 qjson ];
+  buildInputs = [ gettext kdelibs libXtst libfakekey makeWrapper qca2 qjson ];
+
+  nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
 
   meta = with stdenv.lib; {
     description = "A tool to connect and sync your devices with KDE";

@@ -6,6 +6,8 @@
 
 with stdenv.lib;
 
+let blas64_ = blas64; in
+
 let local = config.openblas.preferLocalBuild or false;
     binary =
       { i686-linux = "32";
@@ -18,17 +20,19 @@ let local = config.openblas.preferLocalBuild or false;
       ];
     localFlags = config.openblas.flags or
       optionals (hasAttr "target" config.openblas) [ "TARGET=${config.openblas.target}" ];
-    blas64Orig = blas64;
-in
-stdenv.mkDerivation rec {
-  version = "0.2.14";
+    blas64 = if blas64_ != null then blas64_ else hasPrefix "x86_64" stdenv.system;
 
+    version = "0.2.14";
+in
+stdenv.mkDerivation {
   name = "openblas-${version}";
   src = fetchurl {
     url = "https://github.com/xianyi/OpenBLAS/tarball/v${version}";
     sha256 = "0av3pd96j8rx5i65f652xv9wqfkaqn0w4ma1gvbyz73i6j2hi9db";
     name = "openblas-${version}.tar.gz";
   };
+
+  inherit blas64;
 
   preBuild = "cp ${liblapack.src} lapack-${liblapack.meta.version}.tgz";
 
@@ -50,7 +54,8 @@ stdenv.mkDerivation rec {
       "INTERFACE64=${if blas64 then "1" else "0"}"
     ];
 
-  blas64 = if blas64Orig != null then blas64Orig else hasPrefix "x86_64" stdenv.system;
+  doCheck = true;
+  checkTarget = "tests";
 
   meta = with stdenv.lib; {
     description = "Basic Linear Algebra Subprograms";

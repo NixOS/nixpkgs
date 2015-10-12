@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, cmake, colord, libX11, libXrandr, lcms2, pkgconfig, kdelibs}:
+{ stdenv, fetchurl, automoc4, cmake, perl, pkgconfig
+, colord, libX11, libXrandr, lcms2, kdelibs
+}:
 
 stdenv.mkDerivation {
   name = "colord-kde-0.3.0";
@@ -8,7 +10,9 @@ stdenv.mkDerivation {
     sha256 = "ab3cdb7c8c98aa2ee8de32a92f87770e1fbd58eade6471f3f24d932b50b4cf09";
   };
 
-  buildInputs = [ cmake colord libX11 libXrandr lcms2 pkgconfig kdelibs ];
+  nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
+
+  buildInputs = [ colord libX11 libXrandr lcms2 kdelibs ];
 
   enableParallelBuilding = true;
 

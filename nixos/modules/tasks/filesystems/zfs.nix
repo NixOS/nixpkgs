@@ -21,9 +21,9 @@ let
 
   kernel = config.boot.kernelPackages;
 
-  splKernelPkg = if cfgZfs.useGit then kernel.spl_git else kernel.spl;
-  zfsKernelPkg = if cfgZfs.useGit then kernel.zfs_git else kernel.zfs;
-  zfsUserPkg = if cfgZfs.useGit then pkgs.zfs_git else pkgs.zfs;
+  splKernelPkg = kernel.spl;
+  zfsKernelPkg = kernel.zfs;
+  zfsUserPkg = pkgs.zfs;
 
   autosnapPkg = pkgs.zfstools.override {
     zfs = zfsUserPkg;
@@ -53,16 +53,6 @@ in
 
   options = {
     boot.zfs = {
-      useGit = mkOption {
-        type = types.bool;
-        default = false;
-        example = true;
-        description = ''
-          Use the git version of the SPL and ZFS packages.
-          Note that these are unreleased versions, with less testing, and therefore
-          may be more unstable.
-        '';
-      };
 
       extraPools = mkOption {
         type = types.listOf types.str;

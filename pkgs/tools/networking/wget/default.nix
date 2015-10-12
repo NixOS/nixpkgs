@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gettext, libidn, pkgconfig
 , perl, perlPackages, LWP, python3
-, libiconv, libpsl, gnutls ? null }:
+, libiconv, libpsl, openssl ? null }:
 
 stdenv.mkDerivation rec {
   name = "wget-1.16.3";
@@ -27,13 +27,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext pkgconfig ];
   buildInputs = [ libidn libiconv libpsl ]
     ++ stdenv.lib.optionals doCheck [ perl perlPackages.IOSocketSSL LWP python3 ]
-    ++ stdenv.lib.optional (gnutls != null) gnutls
+    ++ stdenv.lib.optional (openssl != null) openssl
     ++ stdenv.lib.optional stdenv.isDarwin perl;
 
   configureFlags =
-    if gnutls != null then "--with-ssl=gnutls" else "--without-ssl";
+    if openssl != null then "--with-ssl=openssl" else "--without-ssl";
 
-  doCheck = (perl != null && python3 != null && !stdenv.isDarwin);
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Tool for retrieving files using HTTP, HTTPS, and FTP";

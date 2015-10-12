@@ -2,14 +2,15 @@
 , libXinerama, curl, libexif }:
 
 stdenv.mkDerivation rec {
-  name = "feh-2.13.1";
+  name = "feh-2.14";
 
   src = fetchurl {
     url = "http://feh.finalrewind.org/${name}.tar.bz2";
-    sha256 = "1059mflgw8hl398lwy55fj50a98xryvdf23wkpbn4s0z9388hl46";
+    sha256 = "0j5wxpqccnd0hl74z2vwv25n7qnik1n2mcm2jn0c0z7cjn4wsa9q";
   };
 
-  buildInputs = [ makeWrapper xlibsWrapper imlib2 libjpeg libpng libXinerama curl libexif ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ xlibsWrapper imlib2 libjpeg libpng libXinerama curl libexif ];
 
   preBuild = ''
     makeFlags="PREFIX=$out exif=1"

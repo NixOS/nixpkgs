@@ -679,6 +679,26 @@ let
     subPackages = [ "./" ];  # don't try to build test fixtures
   };
 
+  git-lfs = buildFromGitHub {
+    rev = "v1.0.0";
+    owner = "github";
+    repo = "git-lfs";
+    sha256 = "1zlg3rm5yxak6d88brffv1wpj0iq4qgzn6sgg8xn0pbnzxjd1284";
+
+    # Tests fail with 'lfstest-gitserver.go:46: main redeclared in this block'
+    excludedPackages = [ "test" ];
+
+    preBuild = ''
+      pushd go/src/github.com/github/git-lfs
+        go generate ./commands
+      popd
+    '';
+
+    postInstall = ''
+      rm -v $bin/bin/{man,script}
+    '';
+  };
+
   glide = buildFromGitHub {
     rev    = "0.5.0";
     owner  = "Masterminds";
@@ -1502,15 +1522,15 @@ let
   };
 
   hologram = buildGoPackage rec {
-    rev  = "2bf08f0edee49297358bd06a0c9bf44ba9051e9c";
+    rev  = "63014b81675e1228818bf36ef6ef0028bacad24b";
     name = "hologram-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/AdRoll/hologram";
 
     src = fetchFromGitHub {
       inherit rev;
-      owner  = "copumpkin";
+      owner  = "AdRoll";
       repo   = "hologram";
-      sha256 = "1ra6rdniqh3pi84fm29zam4irzv52a1dd2sppaqngk07f7rkkhi4";
+      sha256 = "0k8g7dwrkxdvmzs4aa8zz39qa8r2danc4x40hrblcgjhfcwzxrzr";
     };
     buildInputs = [ crypto protobuf goamz rgbterm go-bindata go-homedir ldap g2s gox ];
   };

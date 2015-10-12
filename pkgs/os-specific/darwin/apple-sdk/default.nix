@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xar, gzip, cpio, CF }:
+{ stdenv, fetchurl, xar, gzip, cpio, CF, pkgs }:
 
 let
   # sadly needs to be exported because security_tool needs it
@@ -49,6 +49,9 @@ let
     name = "apple-framework-${name}";
 
     phases = [ "installPhase" "fixupPhase" ];
+
+    # because we copy files from the system
+    preferLocalBuild = true;
 
     installPhase = ''
       linkFramework() {
@@ -144,7 +147,23 @@ in rec {
     };
   };
 
-  frameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix { inherit frameworks libs CF; });
+  overrides = super: {
+    AppKit = stdenv.lib.overrideDerivation super.AppKit (drv: {
+      propagatedNativeBuildInputs = drv.propagatedNativeBuildInputs ++ [ pkgs.darwin.cf-private ];
+    });
+
+    QuartzCore = stdenv.lib.overrideDerivation super.QuartzCore (drv: {
+      installPhase = drv.installPhase + ''
+        f="$out/Library/Frameworks/QuartzCore.framework/Headers/CoreImage.h"
+        substituteInPlace "$f" \
+          --replace "QuartzCore/../Frameworks/CoreImage.framework/Headers" "CoreImage"
+      '';
+    });
+  };
+
+  bareFrameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix { inherit frameworks libs CF; });
+
+  frameworks = bareFrameworks // overrides bareFrameworks;
 
   inherit sdk;
 }

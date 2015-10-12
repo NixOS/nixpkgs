@@ -155,6 +155,12 @@ rec {
     useExtraSupportLibs = true;
     useGooglePlayServices = true;
   };
+  
+  androidsdk_6_0 = androidsdk {
+    platformVersions = [ "23" ];
+    abiVersions = [ "armeabi-v7a" "x86" "x86_64"];
+    useGoogleAPIs = true;
+  };
 
   androidndk = import ./androidndk.nix {
     inherit (pkgs) stdenv fetchurl zlib ncurses p7zip lib makeWrapper;
@@ -167,7 +173,6 @@ rec {
     inherit (pkgs) coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
   };
-
   
   buildApp = import ./build-app.nix {
     inherit (pkgs) stdenv jdk ant gnumake gawk file which;

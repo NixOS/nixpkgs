@@ -1,16 +1,10 @@
-{ stdenv, fetchurl, xz, vlc, cmake, pkgconfig, phonon_qt5, qt5 }:
+{ stdenv, fetchurl, xz, vlc, cmake, pkgconfig, phonon, qtbase }:
 
 with stdenv.lib;
 
 let
   pname = "phonon-backend-vlc";
   v = "0.8.2";
-  # Force same Qt version in phonon and VLC
-  vlc_ = vlc.override {
-    inherit qt5;
-    qt4 = null;
-    withQt5 = true;
-  };
 in
 
 stdenv.mkDerivation {
@@ -23,7 +17,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake pkgconfig xz ];
 
-  buildInputs = [ vlc_ phonon_qt5 qt5.base ];
+  buildInputs = [ vlc phonon qtbase ];
 
   cmakeFlags = ["-DPHONON_BUILD_PHONON4QT5=ON"];
 
