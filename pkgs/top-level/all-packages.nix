@@ -12197,7 +12197,6 @@ let
         withLibdnssdCompat = true;
       };
       qt5 = qt54; # Mumble is not compatible with qt55 yet
-      celt = celt_0_7;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
       pulseSupport = config.pulseaudio or false;

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, pkgconfig
-, qt4, qt5, avahi, boost, libopus, celt, libsndfile, protobuf, speex, libcap
+, qt4, qt5, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
 , alsaLib
 , jackSupport ? false, libjack2 ? null
 , speechdSupport ? false, speechd ? null
@@ -32,7 +32,7 @@ let
       "CONFIG+=packaged"
       "CONFIG+=no-update"
       "CONFIG+=no-embed-qt-translations"
-      "CONFIG+=no-bundled-celt"
+      "CONFIG+=bundled-celt"
       "CONFIG+=no-bundled-opus"
       "CONFIG+=no-bundled-speex"
     ] ++ optional (!speechdSupport) "CONFIG+=no-speechd"
@@ -65,10 +65,9 @@ let
 
   client = source: generic {
     type = "mumble";
-    NIX_CFLAGS_COMPILE = [ "-I${celt}/include/celt" ];
 
     nativeBuildInputs = optional (source.qtVersion == 5) qt5.tools;
-    buildInputs = [ libopus celt libsndfile speex ]
+    buildInputs = [ libopus libsndfile speex ]
       ++ optional (source.qtVersion == 5) qt5.svg
       ++ optional stdenv.isLinux alsaLib
       ++ optional jackSupport libjack2
