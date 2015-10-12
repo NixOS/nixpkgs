@@ -2353,6 +2353,19 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ PathClass TryTiny ];
   };
 
+  CryptX = buildPerlModule rec {
+    name = "CryptX-0.025";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
+      sha256 = "f8b7e3ec1713c8dfe3eef9d114f45f223b97e2340f81a20589b5605fa49cfe38";
+    };
+    propagatedBuildInputs = [ JSON ];
+    meta = {
+      description = "Crypto toolkit";
+      license = "perl";
+    };
+  };
+
   CSSDOM = buildPerlPackage rec {
     name = "CSS-DOM-0.15";
     src = fetchurl {
