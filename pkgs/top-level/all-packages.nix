@@ -5646,6 +5646,7 @@ let
   };
 
   noweb = callPackage ../development/tools/literate-programming/noweb { };
+  nuweb = callPackage ../development/tools/literate-programming/nuweb { tex = texlive.combined.scheme-small; };
 
   omake = callPackage ../development/tools/ocaml/omake { };
   omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
