@@ -1,4 +1,4 @@
-{stdenv, fetchurl, alsaLib, gettext, ncurses, libsamplerate}:
+{stdenv, fetchurl, alsaLib, gettext, ncurses, libsamplerate, gnumake, pkgconfig, gtk}:
 
 stdenv.mkDerivation rec {
   name = "alsa-tools-${version}";
@@ -9,10 +9,51 @@ stdenv.mkDerivation rec {
       "ftp://ftp.alsa-project.org/pub/tools/${name}.tar.bz2"
       "http://alsa.cybermirror.org/tools/${name}.tar.bz2"
     ];
-    sha256 = "16ryhgbapp4pxyvsjc258mcj14wk7x3xs6g9bpnkqj0l7s7haq2i";
+    sha256 = "1lgvyb81md25s9ciswpdsbibmx9s030kvyylf0673w3kbamz1awl";
   };
 
-  buildInputs = [ gettext alsaLib ncurses libsamplerate ];
+  phases = "unpackPhase configurePhase buildPhase fixupPhase installPhase";
+
+  buildInputs = [ gettext alsaLib ncurses libsamplerate gnumake pkgconfig gtk ];
+
+  configurePhase = ''
+    cd envy24control; ./configure --prefix="$out"; cd -
+  '';
+
+  buildPhase = ''
+    cd envy24control; make; cd -
+  '';
+
+  installPhase = ''
+    cd envy24control; make install; cd -
+  '';
+
+  
+  # patchPhase = "patchShebangs";
+  patchPhase = ''
+    patchShebangs gitcompile 
+    patchShebangs hdajackretask/gitcompile 
+    patchShebangs echomixer/gitcompile 
+    patchShebangs hwmixvolume/gitcompile 
+    patchShebangs usx2yloader/gitcompile 
+    patchShebangs sb16_csp/gitcompile 
+    patchShebangs pcxhrloader/gitcompile 
+    patchShebangs as10k1/gitcompile 
+    patchShebangs hdspconf/gitcompile 
+    patchShebangs sscape_ctl/gitcompile 
+    patchShebangs hdsploader/gitcompile 
+    patchShebangs rmedigicontrol/gitcompile 
+    patchShebangs vxloader/gitcompile 
+    patchShebangs us428control/gitcompile 
+    patchShebangs mixartloader/gitcompile 
+    patchShebangs hdspmixer/gitcompile 
+    patchShebangs seq/sbiload/gitcompile 
+    patchShebangs seq/gitcompile 
+    patchShebangs gitcompile qlo10k1/gitcompile 
+    patchShebangs ld10k1/gitcompile 
+    patchShebangs hda-verb/gitcompile 
+    patchShebangs envy24control/gitcompile
+  '';
 
   # configureFlags = "--disable-xmlto --with-udev-rules-dir=$(out)/lib/udev/rules.d";
 
@@ -28,6 +69,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
+    maintainers = [ "Florian Paul Schmidt <mista.tapas@gmx.net>" ];
   };
 }
