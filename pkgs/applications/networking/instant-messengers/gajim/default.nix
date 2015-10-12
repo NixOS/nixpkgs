@@ -7,7 +7,6 @@
 , enableRST ? true
 , enableSpelling ? true, gtkspell ? null
 , enableNotifications ? false
-, enableLaTeX ? false, texLive ? null
 }:
 
 assert enableJingle -> farstream != null && gst_plugins_bad != null
@@ -16,7 +15,6 @@ assert enableE2E -> pythonPackages.pycrypto != null;
 assert enableRST -> pythonPackages.docutils != null;
 assert enableSpelling -> gtkspell != null;
 assert enableNotifications -> pythonPackages.notify != null;
-assert enableLaTeX -> texLive != null;
 
 with stdenv.lib;
 
@@ -51,11 +49,6 @@ stdenv.mkDerivation rec {
   '' + optionalString enableSpelling ''
     sed -i -e 's|=.*find_lib.*|= "${gtkspell}/lib/libgtkspell.so"|'   \
       src/gtkspell.py
-  '' + optionalString enableLaTeX ''
-    sed -i -e "s|try_run(.'dvipng'|try_run(['${texLive}/bin/dvipng'|" \
-           -e "s|try_run(.'latex'|try_run(['${texLive}/bin/latex'|"   \
-           -e 's/tmpfd.close()/os.close(tmpfd)/'                      \
-           src/common/latex.py
   '';
 
   buildInputs = [
@@ -68,8 +61,7 @@ stdenv.mkDerivation rec {
   ] ++ optionals enableJingle [ farstream gst_plugins_bad libnice ]
     ++ optional enableE2E pythonPackages.pycrypto
     ++ optional enableRST pythonPackages.docutils
-    ++ optional enableNotifications pythonPackages.notify
-    ++ optional enableLaTeX texLive;
+    ++ optional enableNotifications pythonPackages.notify;
 
   postInstall = ''
     install -m 644 -t "$out/share/gajim/icons/hicolor" \
