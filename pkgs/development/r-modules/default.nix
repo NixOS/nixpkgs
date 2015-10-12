@@ -999,7 +999,6 @@ let
     "DESeq" # broken build
     "DESP" # broken build
     "destiny" # depends on broken package VIM-4.3.0
-    "devtools" # broken build
     "DEXSeq" # depends on broken package Rsamtools-1.21.8
     "dexus" # broken build
     "DFP" # broken build
@@ -1573,7 +1572,6 @@ let
     "npIntFactRep" # depends on broken package nlopt-2.4.2
     "NSM3" # broken build
     "nucleR" # depends on broken package Rsamtools-1.21.8
-    "oai" # depends on broken package r-xml2-0.1.2
     "OCplus" # broken build
     "OGSA" # broken build
     "oligoClasses" # depends on broken package affyio-1.37.0
@@ -1934,7 +1932,6 @@ let
     "RUVnormalize" # Build Is Broken
     "RUVSeq" # depends on broken package Rsamtools-1.21.8
     "RVAideMemoire" # depends on broken package nlopt-2.4.2
-    "rversions" # broken build
     "rvest" # broken build
     "RVFam" # depends on broken package nlopt-2.4.2
     "RVideoPoker" # depends on broken package rpanel-1.1-3
@@ -2153,7 +2150,6 @@ let
     "XDE" # broken build
     "x_ent" # broken build
     "xergm" # depends on broken package nlopt-2.4.2
-    "xml2" # broken build
     "xps" # build is broken
     "XVector" # broken build
     "yaqcaffy" # depends on broken package affyio-1.37.0
@@ -2177,7 +2173,10 @@ let
     });
 
     xml2 = old.xml2.overrideDerivation (attrs: {
-      preConfigure = "export LIBXML_INCDIR=${pkgs.libxml2}/include/libxml2";
+      preConfigure = ''
+        export LIBXML_INCDIR=${pkgs.libxml2}/include/libxml2
+        patchShebangs configure
+        '';
     });
 
     curl = old.curl.overrideDerivation (attrs: {
