@@ -1829,11 +1829,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ConfigGeneral = buildPerlPackage {
-    name = "Config-General-2.52";
+  ConfigGeneral = buildPerlPackage rec {
+    name = "Config-General-2.58";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TL/TLINDEN/Config-General-2.52.tar.gz;
-      sha256 = "07rmabdh21ljyc9yy6gpjg4w1y0lzwz8daljf0jv2g521hpdfdwr";
+      url = "mirror://cpan/authors/id/T/TL/TLINDEN/${name}.tar.gz";
+      sha256 = "1vrfp1c7ah2yqvh2gr4v79gbm183xxynm06v6vipva00qvsg6g6n";
     };
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
