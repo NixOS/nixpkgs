@@ -9779,11 +9779,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  strictures = buildPerlPackage {
-    name = "strictures-1.005004";
+  strictures = buildPerlPackage rec {
+    name = "strictures-2.000001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/H/HA/HAARG/strictures-1.005004.tar.gz;
-      sha256 = "0y9q0v68060x5r3wfprwnjry6si7x9x5rkqz7nrf8fkxng7ndw5v";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
+      sha256 = "1lr0br982xb49wxra5ywq9vk4jhjmq28670i8yscks1wss58lwqy";
     };
     meta = {
       homepage = http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=p5sagit/strictures.git;
