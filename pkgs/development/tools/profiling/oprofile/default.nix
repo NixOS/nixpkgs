@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, binutils, popt, zlib, pkgconfig
+{ stdenv, fetchurl, binutils, popt, zlib, pkgconfig, linuxPackages
 , withGUI ? false , qt4 ? null}:
 
 # libX11 is needed because the Qt build stuff automatically adds `-lX11'.
@@ -12,10 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "0nn4wfvwy4nii25y6lwlrnzx9ah4nz0r93yk7hswiy6wxjs10wc4";
   };
 
-  buildInputs = [ binutils zlib popt pkgconfig ]
+  buildInputs = [ binutils zlib popt pkgconfig linuxPackages.kernelHeaders ]
     ++ stdenv.lib.optionals withGUI [ qt4 ];
 
   configureFlags = [
+      "--build ${stdenv.system}"
+      "--host ${stdenv.system}"
+      "--target ${stdenv.system}"
+      "--with-kernel=${linuxPackages.kernelHeaders}"
       "--disable-shared"   # needed because only the static libbfd is available
     ]
     ++ stdenv.lib.optional withGUI "--with-qt-dir=${qt4} --enable-gui=qt4";
