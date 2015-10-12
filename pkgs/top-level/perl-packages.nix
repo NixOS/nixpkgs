@@ -1926,10 +1926,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ConfigTiny = buildPerlPackage rec {
-    name = "Config-Tiny-2.20";
+    name = "Config-Tiny-2.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RS/RSAVAGE/${name}.tgz";
-      sha256 = "0grgb7av1hwpl20xh91jipla1xi0h7vx6c538arxmvgm1f71cql2";
+      sha256 = "090kbff4wgjl4csdb3axl7nv41yy326yd1xyp2sx3crxfhl9gkli";
     };
   };
 
