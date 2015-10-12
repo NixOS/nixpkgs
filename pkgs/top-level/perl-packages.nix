@@ -1803,11 +1803,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ IOCompress ];
   };
 
-  ConfigAny = buildPerlPackage {
-    name = "Config-Any-0.24";
+  ConfigAny = buildPerlPackage rec {
+    name = "Config-Any-0.26";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BR/BRICAS/Config-Any-0.24.tar.gz;
-      sha256 = "710f8fc8f9414205cb58399bfbb4d9aaf7883f8ce046cee22913f6818795c61a";
+      url = "mirror://cpan/authors/id/B/BR/BRICAS/${name}.tar.gz";
+      sha256 = "155521bxiim3dv8d8f69fqd9zxm615fd4pfmv5fki17hq7ai5bpr";
     };
     propagatedBuildInputs = [ ModulePluggable ];
     meta = {
