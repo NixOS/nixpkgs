@@ -5656,7 +5656,9 @@ let
 
   openocd = callPackage ../development/tools/misc/openocd { };
 
-  oprofile = callPackage ../development/tools/profiling/oprofile { };
+  oprofile = callPackage ../development/tools/profiling/oprofile {
+    kernelHeaders = linuxHeaders;
+  };
 
   patchelf = callPackage ../development/tools/misc/patchelf { };
 
