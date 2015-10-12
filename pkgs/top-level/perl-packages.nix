@@ -462,11 +462,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  autovivification = buildPerlPackage {
-    name = "autovivification-0.12";
+  autovivification = buildPerlPackage rec {
+    name = "autovivification-0.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/V/VP/VPIT/autovivification-0.12.tar.gz;
-      sha256 = "6ef8686766c63571389880e5d87a0ca1d46f7d127982e8ef38aca7568c44840c";
+      url = "mirror://cpan/authors/id/V/VP/VPIT/${name}.tar.gz";
+      sha256 = "1422kw9fknv7rbjkgdfflg1q3mb69d3yryszp38dn0bgzkqhwkc1";
     };
     meta = {
       homepage = http://search.cpan.org/dist/autovivification/;
