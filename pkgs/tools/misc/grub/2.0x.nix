@@ -98,6 +98,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     paxmark pms $out/sbin/grub-{probe,bios-setup}
+
+    # Avoid a runtime reference to gcc
+    sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
   '';
 
   meta = with stdenv.lib; {
