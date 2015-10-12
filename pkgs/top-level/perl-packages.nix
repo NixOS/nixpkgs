@@ -1991,10 +1991,10 @@ let self = _self // overrides; _self = with self; {
   constantdefer = pkgs.perlPackages.constant-defer;
 
   constant-defer = buildPerlPackage rec {
-    name = "constant-defer-5";
+    name = "constant-defer-6";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KR/KRYDE/${name}.tar.gz";
-      sha256 = "05fjw2n6liwlillrj3bkfm5fzxw1mcfbxrnk9m18vibx6yzf8pwq";
+      sha256 = "1ykgk0rd05p7kyrdxbv047fj7r0b4ix9ibpkzxp6h8nak0qjc8bv";
     };
   };
 
