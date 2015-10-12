@@ -11381,6 +11381,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TextCharWidth = buildPerlPackage rec {
+    name = "Text-CharWidth-0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KU/KUBOTA/${name}.tar.gz";
+      sha256 = "abded5f4fdd9338e89fd2f1d8271c44989dae5bf50aece41b6179d8e230704f8";
+    };
+  };
+
   TextCSV = buildPerlPackage rec {
     name = "Text-CSV-1.33";
     src = fetchurl {
