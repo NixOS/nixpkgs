@@ -11321,6 +11321,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TextAspell = buildPerlPackage rec {
+    name = "Text-Aspell-0.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HA/HANK/${name}.tar.gz";
+      sha256 = "0r9g31rd55934mp6n45b96g934ck4qns8x9i7qckn9wfy44k5sib";
+    };
+    propagatedBuildInputs = [ pkgs.aspell ];
+    ASPELL_CONF = "dict-dir ${pkgs.aspellDicts.en}/lib/aspell";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.aspell}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.aspell}/lib -laspell";
+  };
+
   TextAutoformat = buildPerlPackage {
     name = "Text-Autoformat-1.72";
     src = fetchurl {
