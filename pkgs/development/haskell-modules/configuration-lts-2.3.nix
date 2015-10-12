@@ -2743,6 +2743,7 @@ self: super: {
   "elm-repl" = dontDistribute super."elm-repl";
   "elm-server" = dontDistribute super."elm-server";
   "elm-yesod" = dontDistribute super."elm-yesod";
+  "elo" = dontDistribute super."elo";
   "elocrypt" = dontDistribute super."elocrypt";
   "emacs-keys" = dontDistribute super."emacs-keys";
   "email" = dontDistribute super."email";
@@ -6331,6 +6332,7 @@ self: super: {
   "reflex-dom" = dontDistribute super."reflex-dom";
   "reflex-dom-contrib" = dontDistribute super."reflex-dom-contrib";
   "reflex-gloss" = dontDistribute super."reflex-gloss";
+  "reflex-transformers" = dontDistribute super."reflex-transformers";
   "reform" = dontDistribute super."reform";
   "reform-blaze" = dontDistribute super."reform-blaze";
   "reform-hamlet" = dontDistribute super."reform-hamlet";
@@ -6636,6 +6638,7 @@ self: super: {
   "secdh" = dontDistribute super."secdh";
   "seclib" = dontDistribute super."seclib";
   "second-transfer" = dontDistribute super."second-transfer";
+  "secp256k1" = dontDistribute super."secp256k1";
   "secret-santa" = dontDistribute super."secret-santa";
   "secret-sharing" = dontDistribute super."secret-sharing";
   "secrm" = dontDistribute super."secrm";
