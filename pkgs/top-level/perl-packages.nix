@@ -1967,11 +1967,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  constant = buildPerlPackage {
-    name = "constant-1.27";
+  constant = buildPerlPackage rec {
+    name = "constant-1.33";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SAPER/constant-1.27.tar.gz;
-      sha256 = "0ari0jggiifz3q7vxb8nlcsc3g6bj8c0c0drsrphv0079c956i3l";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "015my616h5l2fswh52x4dp3n007gk5lax83ww9q6cmzb610mv5kr";
     };
   };
 
