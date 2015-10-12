@@ -1816,10 +1816,10 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ConfigAutoConf = buildPerlPackage {
-    name = "Config-AutoConf-0.22";
+  ConfigAutoConf = buildPerlPackage rec {
+    name = "Config-AutoConf-0.311";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AM/AMBS/Config/Config-AutoConf-0.22.tar.gz;
+      url = "mirror://cpan/authors/id/A/AM/AMBS/${name}.tar.gz";
       sha256 = "1zk2xfvxd3yn3299i13vn5wm1c7jxgr7z3h0yh603xs2h9cg79wc";
     };
     propagatedBuildInputs = [ CaptureTiny ];
