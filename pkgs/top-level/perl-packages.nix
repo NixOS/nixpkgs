@@ -7923,13 +7923,13 @@ let self = _self // overrides; _self = with self; {
     doCheck = false; # Test performs network access.
   };
 
-  namespaceautoclean = buildPerlPackage {
-    name = "namespace-autoclean-0.20";
+  namespaceautoclean = buildPerlPackage rec {
+    name = "namespace-autoclean-0.27";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/namespace-autoclean-0.20.tar.gz;
-      sha256 = "42a199314d07b7a29044d6072529ca53037c75a43550193b1586bd19c690a05f";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "1m5p76hz2r6mysx6afs5xpjp9yqnbq1q1bv5zkyn3g979l4a3vbc";
     };
-    buildInputs = [ ModuleBuildTiny TestRequires ];
+    buildInputs = [ ModuleBuildTiny TestRequires Moose ];
     propagatedBuildInputs = [ BHooksEndOfScope SubIdentify namespaceclean ];
     meta = {
       homepage = https://github.com/moose/namespace-autoclean;
