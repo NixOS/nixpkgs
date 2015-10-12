@@ -17137,6 +17137,24 @@ let
 
   };
 
+  veryprettytable = pythonPackages.buildPythonPackage rec {
+    name = "veryprettytable-${version}";
+    version = "0.8.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/v/veryprettytable/${name}.tar.gz";
+      sha256 = "1k1rifz8x6qcicmx2is9vgxcj0qb2f5pvzrp7zhmvbmci3yack3f";
+    };
+
+    propagatedBuildInputs = [ self.termcolor self.colorama ];
+
+    meta = {
+      description = "A simple Python library for easily displaying tabular data in a visually appealing ASCII table format";
+      homepage = https://github.com/smeggingsmegger/VeryPrettyTable;
+      license = licenses.free;
+    };
+  };
+
   graphite_web = buildPythonPackage rec {
     name = "graphite-web-${version}";
     version = "0.9.12";
