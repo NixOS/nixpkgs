@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-DJOHN_SYSTEMWIDE=1";
 
   preConfigure = "cd src";
+  configureFlags = [ "--disable-native-macro" ];
 
   installPhase = ''
     mkdir -p "$out/share/john"
