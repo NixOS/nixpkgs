@@ -6751,9 +6751,9 @@ let
   };
 
   kf510 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.10 { });
-  kf514 = recurseIntoAttrs (import ../development/libraries/kde-frameworks-5.14 { inherit pkgs; });
+  kf515 = recurseIntoAttrs (import ../development/libraries/kde-frameworks-5.15 { inherit pkgs; });
   kf5_stable = kf510;
-  kf5_latest = kf514;
+  kf5_latest = kf515;
 
   kf5PackagesFun = self: with self; {
 
@@ -6793,8 +6793,8 @@ let
 
   };
 
-  kf514Packages = lib.makeScope kf514.newScope kf5PackagesFun;
-  kf5Packages = kf514Packages;
+  kf515Packages = lib.makeScope kf515.newScope kf5PackagesFun;
+  kf5Packages = kf515Packages;
 
   kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
 
