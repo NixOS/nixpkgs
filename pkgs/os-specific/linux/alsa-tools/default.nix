@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ "Florian Paul Schmidt <mista.tapas@gmx.net>" ];
+    maintainers = [ stdenv.lib.maintainers.fps ];
   };
 }
