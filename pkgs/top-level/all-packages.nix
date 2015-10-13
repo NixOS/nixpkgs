@@ -12437,8 +12437,6 @@ let
     texLive = texlive.combined.scheme-basic;
   };
 
-  pidginlatexSF = pidginlatex;
-
   pidginmsnpecan = callPackage ../applications/networking/instant-messengers/pidgin-plugins/msn-pecan { };
 
   pidgin-mra = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-mra { };
@@ -15203,6 +15201,7 @@ aliases = with self; rec {
   xlibs = xorg; # added 2015-09
   youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
   youtubeDL = youtube-dl;  # added 2014-10-26
+  pidginlatexSF = pidginlatex; # added 2014-11-02
 };
 
 tweakAlias = _n: alias: with lib;
