@@ -12067,11 +12067,11 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ pkgs.icu ];
   };
 
-  UnicodeLineBreak = buildPerlPackage {
-    name = "Unicode-LineBreak-2013.11";
+  UnicodeLineBreak = buildPerlPackage rec {
+    name = "Unicode-LineBreak-2015.07.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NE/NEZUMI/Unicode-LineBreak-2013.11.tar.gz;
-      sha256 = "8946b883ae687ff652e93d6185e23a936c7f337f2e115851fdfed72e1f73c7f9";
+      url = "mirror://cpan/authors/id/N/NE/NEZUMI/${name}.tar.gz";
+      sha256 = "0fycsfc3jhnalad7zvx47f13dpxihdh9c8fy8w7psjlyd5svs6sb";
     };
     propagatedBuildInputs = [ MIMECharset ];
     meta = {
