@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, pkgconfig, gtk, gtk3, fltk13, qt }:
+{ stdenv, fetchurl, alsaLib, pkgconfig, gtk, gtk3, fltk13, qt4 }:
 
 stdenv.mkDerivation rec {
   name = "alsa-tools-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   phases = "unpackPhase patchPhase configurePhase buildPhase fixupPhase installPhase";
 
-  buildInputs = [ alsaLib pkgconfig gtk gtk3 fltk13 qt ];
+  buildInputs = [ alsaLib pkgconfig gtk gtk3 fltk13 qt4 ];
 
   patchPhase = ''
     export tools="as10k1 hda-verb hdspmixer echomixer hdajackretask hdspconf hwmixvolume mixartloader rmedigicontrol sscape_ctl vxloader envy24control hdajacksensetest hdsploader ld10k1 pcxhrloader sb16_csp us428control"
