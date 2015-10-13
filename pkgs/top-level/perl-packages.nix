@@ -12404,11 +12404,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  XMLDOM = buildPerlPackage {
-    name = "XML-DOM-1.44";
+  XMLDOM = buildPerlPackage rec {
+    name = "XML-DOM-1.45";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TJ/TJMATHER/XML-DOM-1.44.tar.gz;
-      sha256 = "1r0ampc88ni3sjpzr583k86076qg399arfm9xirv3cw49k3k5bzn";
+      url = "mirror://cpan/authors/id/T/TJ/TJMATHER/${name}.tar.gz";
+      sha256 = "1jvqfi0jm8wh80rd5h9c3k72car8l7x1jywj8rck8w6rm1mlxldy";
     };
     propagatedBuildInputs = [XMLRegExp XMLParser LWP libxml_perl];
   };
