@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  phases = "unpackPhase patchPhase configurePhase buildPhase fixupPhase installPhase";
+  phases = "unpackPhase patchPhase configurePhase buildPhase installPhase fixupPhase";
 
   buildInputs = [ alsaLib pkgconfig gtk gtk3 fltk13 qt4 ];
 
