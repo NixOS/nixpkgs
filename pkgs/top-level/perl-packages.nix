@@ -12645,12 +12645,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  YAML = buildPerlPackage {
-    name = "YAML-0.90";
+  YAML = buildPerlPackage rec {
+    name = "YAML-1.15";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IN/INGY/YAML-0.90.tar.gz;
-      sha256 = "0kfsmhv1lmqw2g1038azpxkfb91valwkh4i4gfjvqrj2wsr2hzhq";
+      url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
+      sha256 = "06wx1pzc2sb7vidlp17g1x11rrz57ch8q68gjj8fbgd75wr9bx40";
     };
+
+    buildInputs = [ TestBase TestYAML ];
+
     meta = {
       homepage = https://github.com/ingydotnet/yaml-pm/tree;
       description = "YAML Ain't Markup Language (tm)";
