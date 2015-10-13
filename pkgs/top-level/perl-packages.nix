@@ -11890,7 +11890,7 @@ let self = _self // overrides; _self = with self; {
   TimeHiRes = buildPerlPackage rec {
     name = "Time-HiRes-1.9726";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Time/${name}.tar.gz";
+      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
       sha256 = "17hhd53p72z08l1riwz5f6rch6hngby1pympkla5miznn7cjlrpz";
     };
   };
