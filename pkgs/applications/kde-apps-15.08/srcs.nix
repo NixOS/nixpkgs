@@ -3,1979 +3,1979 @@
 
 {
   akonadi = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/akonadi-15.08.1.tar.xz";
-      sha256 = "19222mzvi34lqdaxavcpx0d1mxfnfynvhv5562rw3d7iqmhvbms6";
-      name = "akonadi-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/akonadi-15.08.2.tar.xz";
+      sha256 = "1fqv767396ymm57yaqzhvxxcv2rr07m14h41vh7y3xq8n880wx90";
+      name = "akonadi-15.08.2.tar.xz";
     };
   };
   akonadi-calendar = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/akonadi-calendar-15.08.1.tar.xz";
-      sha256 = "00iyv123s18157v46y3xdg56lyfr0w6f0zz8qsp6js7vn0fa468j";
-      name = "akonadi-calendar-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/akonadi-calendar-15.08.2.tar.xz";
+      sha256 = "0gl2i7qd16ibfg4m8vcvn6lkja1jn5ba7d0mpxmv3rx41i7ppcfi";
+      name = "akonadi-calendar-15.08.2.tar.xz";
     };
   };
   akonadi-search = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/akonadi-search-15.08.1.tar.xz";
-      sha256 = "0mzhil4ihs2b7k6dg29d5igpwsiwiv6awzvj6b5xn76i4xax1jk1";
-      name = "akonadi-search-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/akonadi-search-15.08.2.tar.xz";
+      sha256 = "1a0lzbiz2f2i35q6safmqkgi2pplmf9x20p8xvd6crfwgd1af2f8";
+      name = "akonadi-search-15.08.2.tar.xz";
     };
   };
   amor = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/amor-15.08.1.tar.xz";
-      sha256 = "125s9hsj4s3h21khgri9p52abkaa78a9yz7fnw5ij4i0ivhbks6a";
-      name = "amor-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/amor-15.08.2.tar.xz";
+      sha256 = "0ddv5b9an4hlgwbacga7xds1kdlbf9n9l7abxvz3nl2vhxnpfic6";
+      name = "amor-15.08.2.tar.xz";
     };
   };
   analitza = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/analitza-15.08.1.tar.xz";
-      sha256 = "0zxkpsccnp0m8r7z1p243h5vh4fz4dzq2dz932vfac8hs45lcaki";
-      name = "analitza-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/analitza-15.08.2.tar.xz";
+      sha256 = "11rcqaxynqrngzqb079901m0kkx90ixlabijf1yqwjwjwjm5dv70";
+      name = "analitza-15.08.2.tar.xz";
     };
   };
   ark = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ark-15.08.1.tar.xz";
-      sha256 = "0lmqi9qdf46v9yap6f7s5favx4y66w3sixhplby4q1cm085yg5hl";
-      name = "ark-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ark-15.08.2.tar.xz";
+      sha256 = "0569m5yldp5mgwixjg4l7vxgkm4q3n4skyf1ixb59zg40xxvmalv";
+      name = "ark-15.08.2.tar.xz";
     };
   };
   artikulate = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/artikulate-15.08.1.tar.xz";
-      sha256 = "0pz66hrnd89519ivk1cw8gzddjv6043x59nbkhmnlk8f5hvvkk2k";
-      name = "artikulate-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/artikulate-15.08.2.tar.xz";
+      sha256 = "1bqzqbj6qfacdqm4g7agv3zxdjd213yvbvk1p32726qif5fxd0qv";
+      name = "artikulate-15.08.2.tar.xz";
     };
   };
   audiocd-kio = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/audiocd-kio-15.08.1.tar.xz";
-      sha256 = "0sqh21x12za743xqmyfyd8h4z0wz0nzd2zjp6fzga76xfcryci5j";
-      name = "audiocd-kio-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/audiocd-kio-15.08.2.tar.xz";
+      sha256 = "1w8227sircqz61k6xgy9ccr387zra4plq2zx97l68ia4ynnwyrwh";
+      name = "audiocd-kio-15.08.2.tar.xz";
     };
   };
   baloo-widgets = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/baloo-widgets-15.08.1.tar.xz";
-      sha256 = "021lgivqmahad2b5mwdg4vngyyfi6gcsk3xgn9rbzkxg67k2ivbc";
-      name = "baloo-widgets-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/baloo-widgets-15.08.2.tar.xz";
+      sha256 = "1r9np98cf9mvmih0ixxzq8sv6c41lrw0mxca49k9g0gxcxgfk4zj";
+      name = "baloo-widgets-15.08.2.tar.xz";
     };
   };
   blinken = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/blinken-15.08.1.tar.xz";
-      sha256 = "0yh5ay2cpgb45y4any6sanzpwcngfxl98x3gnc5n81zl2kzb9y8m";
-      name = "blinken-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/blinken-15.08.2.tar.xz";
+      sha256 = "0b80kdkh1373z1qrcf18yp92w256jv2mlzchvv5smhhcwpl1ddrk";
+      name = "blinken-15.08.2.tar.xz";
     };
   };
   bomber = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/bomber-15.08.1.tar.xz";
-      sha256 = "08l8ksqzap8hyza7mmf1wwddj8xkl03hsrc0mwvxsvyp7h7v3rxq";
-      name = "bomber-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/bomber-15.08.2.tar.xz";
+      sha256 = "1x005q258v8p7d31prh2jy32qrxnw2yy14cn0dffbcnkk1vz1v9q";
+      name = "bomber-15.08.2.tar.xz";
     };
   };
   bovo = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/bovo-15.08.1.tar.xz";
-      sha256 = "1lj2hwjdwkn70gfgyk3v0r8wdrdlpqkx9n17fd15x0jm8xjxc7wj";
-      name = "bovo-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/bovo-15.08.2.tar.xz";
+      sha256 = "06cmfdha4cwc0kiy5spn7kq58mykwal9n21ak4pp2rqcv93zp5hk";
+      name = "bovo-15.08.2.tar.xz";
     };
   };
   cantor = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/cantor-15.08.1.tar.xz";
-      sha256 = "0qcx077khzzjs8gaz2m1dph1r4ql3gpfsq536626fd94cb5is83x";
-      name = "cantor-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/cantor-15.08.2.tar.xz";
+      sha256 = "08faiysviy0c1pr50001wpgz0xkkjjim9cl5ix81kvsqnnv2d1v5";
+      name = "cantor-15.08.2.tar.xz";
     };
   };
   cervisia = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/cervisia-15.08.1.tar.xz";
-      sha256 = "0cha7j0769ib8hc2jjgdxm1pv81cqwii721ww94dd4d614isv4pk";
-      name = "cervisia-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/cervisia-15.08.2.tar.xz";
+      sha256 = "0fgc6fvipbmaiza5vd0h7mihiwg2vyh3lb4k1ngxkl2p1vryyg25";
+      name = "cervisia-15.08.2.tar.xz";
     };
   };
   dolphin = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/dolphin-15.08.1.tar.xz";
-      sha256 = "09mr54zbyyq4kd3ddi054c86ji63b0k5fjd3y8x44vnd3id8jpjs";
-      name = "dolphin-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/dolphin-15.08.2.tar.xz";
+      sha256 = "1zd127k56zx80jqkr5j1rafnfccahj1wvggaia0l281d1jw6572d";
+      name = "dolphin-15.08.2.tar.xz";
     };
   };
   dolphin-plugins = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/dolphin-plugins-15.08.1.tar.xz";
-      sha256 = "1fpsbxcds2wzivcpc6vf6bqwi658mw4jrlpwd52w2nlsjpmgr31x";
-      name = "dolphin-plugins-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/dolphin-plugins-15.08.2.tar.xz";
+      sha256 = "16n9xnfj7kmhmj0xpggr64bvgqvz0ggprj9raxdyx0ijg7alsiy2";
+      name = "dolphin-plugins-15.08.2.tar.xz";
     };
   };
   dragon = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/dragon-15.08.1.tar.xz";
-      sha256 = "0ffb0jspckwp8alis70akhrv7kkjq69zba34y61axm67f65izh9l";
-      name = "dragon-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/dragon-15.08.2.tar.xz";
+      sha256 = "071pq9rysqm1n2cgkb1mrnpl4w6mpq5vrkbprh192qgjwl5yzbzf";
+      name = "dragon-15.08.2.tar.xz";
     };
   };
   ffmpegthumbs = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ffmpegthumbs-15.08.1.tar.xz";
-      sha256 = "00bk11zq5hkdkwxj7d4fydslh2gybhzxz2gyldjfdd8agjcl1rfm";
-      name = "ffmpegthumbs-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ffmpegthumbs-15.08.2.tar.xz";
+      sha256 = "1cszm4fszg8574xap2f8kp0ibarx65y7nc6grpba55y2yylq83ma";
+      name = "ffmpegthumbs-15.08.2.tar.xz";
     };
   };
   filelight = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/filelight-15.08.1.tar.xz";
-      sha256 = "085n071j5mpzh2yr4035bdxgfay782g4zx386lr2s03ywc5icsw2";
-      name = "filelight-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/filelight-15.08.2.tar.xz";
+      sha256 = "10chmx0kl0vhxwc84yghk3wb8sb8n623fwn0yayk4im3cnr50lan";
+      name = "filelight-15.08.2.tar.xz";
     };
   };
   gpgmepp = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/gpgmepp-15.08.1.tar.xz";
-      sha256 = "1nr4k3k34cmmvn4mznnr4kgvbi4raan96phbiqzgh6mzkq2rc8yr";
-      name = "gpgmepp-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/gpgmepp-15.08.2.tar.xz";
+      sha256 = "1d93vlkqzjyj2xmiq9l46qd6lbyhkl08y7gl1sq63n2dd1ix5209";
+      name = "gpgmepp-15.08.2.tar.xz";
     };
   };
   granatier = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/granatier-15.08.1.tar.xz";
-      sha256 = "1ngdjgf3imdbv1hmp88fhnpvpspjgl2zpaig3d96fjlhxh0bgng1";
-      name = "granatier-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/granatier-15.08.2.tar.xz";
+      sha256 = "12ckzd8yhxxz3jknz4xzhgw7ml40pqax3bkibqhw3clhwgbr5874";
+      name = "granatier-15.08.2.tar.xz";
     };
   };
   gwenview = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/gwenview-15.08.1.tar.xz";
-      sha256 = "0lks7chyd8bylz1m3nv3bfch5jcffkv52aawxv9r5www9wd7jq69";
-      name = "gwenview-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/gwenview-15.08.2.tar.xz";
+      sha256 = "0han5gz4rlv33wd6r3hjirjgigr6xlwwqfcpr98v906d09ra4mf3";
+      name = "gwenview-15.08.2.tar.xz";
     };
   };
   jovie = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/jovie-15.08.1.tar.xz";
-      sha256 = "021j7rxbbv5p2jjp4d7m7vsdy5117myng2min42bn6vfz4g6s5rx";
-      name = "jovie-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/jovie-15.08.2.tar.xz";
+      sha256 = "0mza97q8d34g9lr9z6d6hbwp5p3rd1v1hnlcgqcql9p6jiwkapm8";
+      name = "jovie-15.08.2.tar.xz";
     };
   };
   juk = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/juk-15.08.1.tar.xz";
-      sha256 = "0l6zq90jvhkhppjq0djmj1ij1c1yjjvhh5ss4czqn39bay33r2a7";
-      name = "juk-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/juk-15.08.2.tar.xz";
+      sha256 = "100wpi39jp243551ihfi062lpvskwczwbazjwpak6x7bgdy1dzac";
+      name = "juk-15.08.2.tar.xz";
     };
   };
   kaccessible = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kaccessible-15.08.1.tar.xz";
-      sha256 = "10crgqpiqkbrb0hil1660cy4dcywiljicqhnhr3nns0ncllvw2vi";
-      name = "kaccessible-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kaccessible-15.08.2.tar.xz";
+      sha256 = "0b3mk7xc1kmp9jczl669zrq1qr5bkmyylxaw5h46i49r0pkjy9m8";
+      name = "kaccessible-15.08.2.tar.xz";
     };
   };
   kaccounts-integration = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kaccounts-integration-15.08.1.tar.xz";
-      sha256 = "07kryp71xq2zwfdm05g8mcmkmxhlj2wb2l9fi2sxbhsr360z33mx";
-      name = "kaccounts-integration-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kaccounts-integration-15.08.2.tar.xz";
+      sha256 = "1i09w5xsnv6gny036d45nyh478550yh8h2ykz1gf9j8wddampnvm";
+      name = "kaccounts-integration-15.08.2.tar.xz";
     };
   };
   kaccounts-providers = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kaccounts-providers-15.08.1.tar.xz";
-      sha256 = "15sl3rwwpshqvzjrkfiray3gg3ja84awsyk3y5n9jbf97rw47v3k";
-      name = "kaccounts-providers-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kaccounts-providers-15.08.2.tar.xz";
+      sha256 = "1h7a4mvp6419rfvjkx0kpsv7iqvv0l4wq1w51jzf3xxa52hims25";
+      name = "kaccounts-providers-15.08.2.tar.xz";
     };
   };
   kajongg = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kajongg-15.08.1.tar.xz";
-      sha256 = "1ialza77fc0a6541yg71b8qbjvq78sww7l0g3s1rn30pj1j1r3rx";
-      name = "kajongg-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kajongg-15.08.2.tar.xz";
+      sha256 = "0p311pqp84lr0k9iy38a942f53yp60yxpxi616v689d8m9v5f88w";
+      name = "kajongg-15.08.2.tar.xz";
     };
   };
   kalarmcal = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kalarmcal-15.08.1.tar.xz";
-      sha256 = "02m2fd98jdacr7hm71dl6hsshil152c09p1daaa9b58yrgb9dqd9";
-      name = "kalarmcal-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kalarmcal-15.08.2.tar.xz";
+      sha256 = "1qiws5l2wl31mf51zhmxlf4h7gljwcbxbii53v8j8cmafi6v2jsy";
+      name = "kalarmcal-15.08.2.tar.xz";
     };
   };
   kalgebra = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kalgebra-15.08.1.tar.xz";
-      sha256 = "1an9lc9h1178d94pq2a60pnw9wadxdni3drbx40w1l1kfaa38ghy";
-      name = "kalgebra-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kalgebra-15.08.2.tar.xz";
+      sha256 = "1sna3bb6vp069k1d4a3z27bqz1j5akabwl34q8q3rfw8p2j57bjy";
+      name = "kalgebra-15.08.2.tar.xz";
     };
   };
   kalzium = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kalzium-15.08.1.tar.xz";
-      sha256 = "0jhfv5cw5vhgy13ld5km664r7ydqv52nwd4k450x2d62rvq63nfp";
-      name = "kalzium-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kalzium-15.08.2.tar.xz";
+      sha256 = "1a1vfz6bg7qcc9k7lgkr9768n2lrwava9hb7md8qlyn2gmigp43v";
+      name = "kalzium-15.08.2.tar.xz";
     };
   };
   kamera = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kamera-15.08.1.tar.xz";
-      sha256 = "0czpr3wb3irlbczrx0dczph6l9dwhz3wv9amrz2lvb8p9c8j4nmd";
-      name = "kamera-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kamera-15.08.2.tar.xz";
+      sha256 = "04c1r0aadnrjiadd57qg2xz42xy08wi14nbnpqpx3npcdlg7fvw4";
+      name = "kamera-15.08.2.tar.xz";
     };
   };
   kanagram = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kanagram-15.08.1.tar.xz";
-      sha256 = "0bchwvr87wj9p82v1vgdmfw0a8d1gax08ccq24lzigrny6ljlizr";
-      name = "kanagram-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kanagram-15.08.2.tar.xz";
+      sha256 = "0blrill882l4spl4abgvs6b4jbqcjk9dq0lz7x4li34d9yik6n34";
+      name = "kanagram-15.08.2.tar.xz";
     };
   };
   kapman = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kapman-15.08.1.tar.xz";
-      sha256 = "070zckasm7bm1g01rvp55gbilyzxqs5gsrp56zp3lyids0ycjfgz";
-      name = "kapman-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kapman-15.08.2.tar.xz";
+      sha256 = "19a36hicxndhra5vczv4p38dv30nyjr6c6v8kp64hm57wdw2r8y1";
+      name = "kapman-15.08.2.tar.xz";
     };
   };
   kapptemplate = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kapptemplate-15.08.1.tar.xz";
-      sha256 = "1pc3dq3h30lx7d51zan52mnz5zwb70g6r84cskkgc2dmws7mrl0k";
-      name = "kapptemplate-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kapptemplate-15.08.2.tar.xz";
+      sha256 = "1rl87ikk7qbscfzfk613ky5nz3sjv519laj1xkz4nww14m3j9d98";
+      name = "kapptemplate-15.08.2.tar.xz";
     };
   };
   kate = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kate-15.08.1.tar.xz";
-      sha256 = "0hrbr4lnmz0hgs856kfb966k85p8ccdzva8h4f6ifvacgxppb5iz";
-      name = "kate-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kate-15.08.2.tar.xz";
+      sha256 = "03s3j5f1clgiq2hl97s751pd6rixwbnx9sdwm9whg5k76rqfw168";
+      name = "kate-15.08.2.tar.xz";
     };
   };
   katomic = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/katomic-15.08.1.tar.xz";
-      sha256 = "0rj6sgh8v8x57fqbjvhik9xcw563nx0dvv8rin05nr22hlid8l9y";
-      name = "katomic-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/katomic-15.08.2.tar.xz";
+      sha256 = "0p6f28bs61pnabgyc6nnpqfcbr38akcv0gzbd2f2d196vnfrjk98";
+      name = "katomic-15.08.2.tar.xz";
     };
   };
   kblackbox = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kblackbox-15.08.1.tar.xz";
-      sha256 = "1hnxsjdp9gbjc0049jx7bnzx0cykyc7qf6f2z3mrir8knin0fmi5";
-      name = "kblackbox-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kblackbox-15.08.2.tar.xz";
+      sha256 = "05kx9k5bikqb81z4x2rp6lxm3iklw5b7zlsk8w4g166pp7fxmjwd";
+      name = "kblackbox-15.08.2.tar.xz";
     };
   };
   kblocks = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kblocks-15.08.1.tar.xz";
-      sha256 = "1vvlxna5dmnf7igr53p3m5z224zj1ni92qifjnnblwr55gqqwsva";
-      name = "kblocks-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kblocks-15.08.2.tar.xz";
+      sha256 = "1yaqwsjr4jy673vpkl574h95mzqbwjxi7mch74r2xxjz3mbwzi7s";
+      name = "kblocks-15.08.2.tar.xz";
     };
   };
   kblog = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kblog-15.08.1.tar.xz";
-      sha256 = "0a5ycnk0ljw8k4m5pm7cn37ijjq9x1p2hxf4k77jb7aw1apyqv15";
-      name = "kblog-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kblog-15.08.2.tar.xz";
+      sha256 = "0dpdkyks7q3fr1gwxz4q300n1k0asfa470rbh6j2fz50rnrc6fxp";
+      name = "kblog-15.08.2.tar.xz";
     };
   };
   kbounce = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kbounce-15.08.1.tar.xz";
-      sha256 = "127b7c4rpkz04nihqyl7d594k9vwjcvlq0758jfmkxijsgpjc334";
-      name = "kbounce-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kbounce-15.08.2.tar.xz";
+      sha256 = "0g9g7m0wizs3kpil6j13v4ixfyjnfdniwhv1bjdwyinarmq4dq47";
+      name = "kbounce-15.08.2.tar.xz";
     };
   };
   kbreakout = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kbreakout-15.08.1.tar.xz";
-      sha256 = "1l83iy6iad6npykl4dyh45s5z8pgamdp7aqi2r5c9r4awg16iq48";
-      name = "kbreakout-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kbreakout-15.08.2.tar.xz";
+      sha256 = "1sazg6qs0lr3z4b9mmw033wlpbzcgsm3451dy77c6wfmg0a3w2hs";
+      name = "kbreakout-15.08.2.tar.xz";
     };
   };
   kbruch = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kbruch-15.08.1.tar.xz";
-      sha256 = "1mdbrfj7g92v5yzpdi0cccmhf5vdy7y5blbnk50p56qaq8w8avm2";
-      name = "kbruch-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kbruch-15.08.2.tar.xz";
+      sha256 = "112dlaxp80m0hhsdjkh7514fhf24q805mxnilj3wv01w2z12i20k";
+      name = "kbruch-15.08.2.tar.xz";
     };
   };
   kcachegrind = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kcachegrind-15.08.1.tar.xz";
-      sha256 = "1nmyw0nld1qasd2zz8dg854br8nqn3kby2xd2afr9a8frhzzmiv2";
-      name = "kcachegrind-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kcachegrind-15.08.2.tar.xz";
+      sha256 = "04kvm1ylsjj8s8d740zz30csz18acw5pag9zvq72q844gshqzx4d";
+      name = "kcachegrind-15.08.2.tar.xz";
     };
   };
   kcalc = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kcalc-15.08.1.tar.xz";
-      sha256 = "02xj9n6zv3f3m35g38gsmqnrshbswqkya930sc5nqc0mlyflli6m";
-      name = "kcalc-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kcalc-15.08.2.tar.xz";
+      sha256 = "0qv55yp3bn88r6d3yhgalwzcfsnzp7glnb7qc7yf8qay4vj8mrc6";
+      name = "kcalc-15.08.2.tar.xz";
     };
   };
   kcalcore = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kcalcore-15.08.1.tar.xz";
-      sha256 = "0dpip8hbc5fb8yw876lig19kp2wi71dkwcb1mj8k49lph09k3460";
-      name = "kcalcore-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kcalcore-15.08.2.tar.xz";
+      sha256 = "1d7c7gprqszrdl9k1zy7ibk9bjafqrn612y72j78v8jpfasglz43";
+      name = "kcalcore-15.08.2.tar.xz";
     };
   };
   kcalutils = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kcalutils-15.08.1.tar.xz";
-      sha256 = "0l8kzz092wz93j58h52q4icpvhvl2djgagdbx12yl7qlwin7wnd3";
-      name = "kcalutils-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kcalutils-15.08.2.tar.xz";
+      sha256 = "008srl4y53mzq178nzn7k6jlfng6pafvhcbsfpijq6gax3dwx1gw";
+      name = "kcalutils-15.08.2.tar.xz";
     };
   };
   kcharselect = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kcharselect-15.08.1.tar.xz";
-      sha256 = "0g785ab5iclv1db2dwwlzf14a2l6n9yznw6pb8hx589za7yc46v2";
-      name = "kcharselect-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kcharselect-15.08.2.tar.xz";
+      sha256 = "0sqnr8h3kq4hg1dd3jd5ri53p1yqsmx2xp5d052pybn4fg40aaz7";
+      name = "kcharselect-15.08.2.tar.xz";
     };
   };
   kcolorchooser = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kcolorchooser-15.08.1.tar.xz";
-      sha256 = "1ig03dg4baf29hhim1m77bzwnm6mqqyzbmyhk6g92mj5883nnfb7";
-      name = "kcolorchooser-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kcolorchooser-15.08.2.tar.xz";
+      sha256 = "1mp0774jdpn647fkmlpds4379ac1pdwwp3anid5rbwg9vxzajbpa";
+      name = "kcolorchooser-15.08.2.tar.xz";
     };
   };
   kcontacts = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kcontacts-15.08.1.tar.xz";
-      sha256 = "1a9ww08m3k7sdqnkb2dpi2c0fpfihjschyzwx82kcp1z613agx1c";
-      name = "kcontacts-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kcontacts-15.08.2.tar.xz";
+      sha256 = "1bf60w2w360wbvmn3mhdmabfhixsrd8lrwy4djy6slssa5h312i1";
+      name = "kcontacts-15.08.2.tar.xz";
     };
   };
   kcron = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kcron-15.08.1.tar.xz";
-      sha256 = "1s90bmlfbhcfiq6iizp4sq0z3ds8nrqghckcx9zrbyyj852llh0f";
-      name = "kcron-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kcron-15.08.2.tar.xz";
+      sha256 = "0b3ryp3g6x449p31awh4w42w1np3x7b1bl3i7acgnyflid1l723x";
+      name = "kcron-15.08.2.tar.xz";
     };
   };
   kdeartwork = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdeartwork-15.08.1.tar.xz";
-      sha256 = "0j37pzih616fv1k6i3hll6qkxh42v9gkhy5vl57ancx7a5kxikyc";
-      name = "kdeartwork-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdeartwork-15.08.2.tar.xz";
+      sha256 = "0053mv2209rdmgb3vs4wfp1mfc3wgas3g5pm2aa5yghf4cwjjlsm";
+      name = "kdeartwork-15.08.2.tar.xz";
     };
   };
   kde-baseapps = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-baseapps-15.08.1.tar.xz";
-      sha256 = "1ngi571gs62qnpz1ph106ard13pfh9f1ljg4y4cyv77nv90x4a2k";
-      name = "kde-baseapps-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-baseapps-15.08.2.tar.xz";
+      sha256 = "00zrki5q9mkszv58vk0mj3wqrhxnsbmdy76px1gqlmrpchdlln2c";
+      name = "kde-baseapps-15.08.2.tar.xz";
     };
   };
   kde-base-artwork = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-base-artwork-15.08.1.tar.xz";
-      sha256 = "081mrc0s2lnbzwmmy9hwqas28cl6jzdycwxx3vfn4rvsgw4cgrp2";
-      name = "kde-base-artwork-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-base-artwork-15.08.2.tar.xz";
+      sha256 = "13dxl0fjf8zkwp1zv0dlsrvy659fmdgvgdjjcyahzcll6z8zlwaq";
+      name = "kde-base-artwork-15.08.2.tar.xz";
     };
   };
   kdebugsettings = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdebugsettings-15.08.1.tar.xz";
-      sha256 = "1h5wn6ilhkrygjacb592nmdv31791y9r0rx6m3l7xx3nbj9hy12c";
-      name = "kdebugsettings-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdebugsettings-15.08.2.tar.xz";
+      sha256 = "1rf4p593nqg8w5ax39hqciv4fhn6mrj2ycx4krfnc703fz18sxgg";
+      name = "kdebugsettings-15.08.2.tar.xz";
     };
   };
   kde-dev-scripts = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-dev-scripts-15.08.1.tar.xz";
-      sha256 = "01s13qwji4d2sgbg85kj0ggg4mnl2vggangi8fpvaps03fpq7571";
-      name = "kde-dev-scripts-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-dev-scripts-15.08.2.tar.xz";
+      sha256 = "06rjhix56nb36sx91nfgbahjym2s62zl9jiqi5hsmfkh4p3ijr7l";
+      name = "kde-dev-scripts-15.08.2.tar.xz";
     };
   };
   kde-dev-utils = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-dev-utils-15.08.1.tar.xz";
-      sha256 = "0jashpk1gjcf74b4vpkyrab2izp18ddwi0xky4v47micicl7wm5n";
-      name = "kde-dev-utils-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-dev-utils-15.08.2.tar.xz";
+      sha256 = "1vz6w2ypgl20yqglnvzgir9q8c16day52xzd33hq2f9asbhjjvm2";
+      name = "kde-dev-utils-15.08.2.tar.xz";
     };
   };
   kdeedu-data = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdeedu-data-15.08.1.tar.xz";
-      sha256 = "1yfx8526i753ifmcyh9r481cqiqzs4wh3xm1ys5x8pspg9rpn0wi";
-      name = "kdeedu-data-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdeedu-data-15.08.2.tar.xz";
+      sha256 = "08w0n6apm2rqcwph74lpfsdmfzfxhks01z3wp982vgj4dl47nk5x";
+      name = "kdeedu-data-15.08.2.tar.xz";
     };
   };
   kdegraphics-mobipocket = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdegraphics-mobipocket-15.08.1.tar.xz";
-      sha256 = "0fnrd2za98plc8aw2gmn83yar0m7ix5rg84lpfm0vnshkhrslqg6";
-      name = "kdegraphics-mobipocket-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdegraphics-mobipocket-15.08.2.tar.xz";
+      sha256 = "1i2d4m1vci78wnwrn1pxfp30pzlm72isjxb9lz0l7gk6fwzhf25f";
+      name = "kdegraphics-mobipocket-15.08.2.tar.xz";
     };
   };
   kdegraphics-strigi-analyzer = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdegraphics-strigi-analyzer-15.08.1.tar.xz";
-      sha256 = "12yby24k5crsyz6mhm2r0wnl306gp7422yj1nrl6yqi16wd37rbs";
-      name = "kdegraphics-strigi-analyzer-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdegraphics-strigi-analyzer-15.08.2.tar.xz";
+      sha256 = "192iprh66cp6dc9y14sk8022phdxcclliwv07i5hzby08c7p2llm";
+      name = "kdegraphics-strigi-analyzer-15.08.2.tar.xz";
     };
   };
   kdegraphics-thumbnailers = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdegraphics-thumbnailers-15.08.1.tar.xz";
-      sha256 = "1qavbvczjikad4kg28lq6zbb7dvllfw5nggilrs0s2qar7jqlrkw";
-      name = "kdegraphics-thumbnailers-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdegraphics-thumbnailers-15.08.2.tar.xz";
+      sha256 = "1126xlh064djl50i4sb4bgdv34ypijlf4hbdcsyq1jh2i4c1h0zq";
+      name = "kdegraphics-thumbnailers-15.08.2.tar.xz";
     };
   };
   kde-l10n-ar = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-ar-15.08.1.tar.xz";
-      sha256 = "101c1316wwxl3pf38fb9ch2h5nyra8h2cf79w9l1krdcp6s4776w";
-      name = "kde-l10n-ar-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-ar-15.08.2.tar.xz";
+      sha256 = "0dyylzwvnssg0nh0pk6ll7zilnn6543a29fcfrr0spfsr0z8b08w";
+      name = "kde-l10n-ar-15.08.2.tar.xz";
     };
   };
   kde-l10n-bg = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-bg-15.08.1.tar.xz";
-      sha256 = "1r515r3c03328ivwqkm7ijj2264l21liblzllgvjy6zmg7n8ilsp";
-      name = "kde-l10n-bg-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-bg-15.08.2.tar.xz";
+      sha256 = "081y0v23apsgbhfi2n4lfqa5868j8yl246z551crcmskwpdyhzd5";
+      name = "kde-l10n-bg-15.08.2.tar.xz";
     };
   };
   kde-l10n-bs = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-bs-15.08.1.tar.xz";
-      sha256 = "0wyk547g8k3j6lcl1wipw4jwd0wqi8zrnb2h59g55il9rj7782q3";
-      name = "kde-l10n-bs-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-bs-15.08.2.tar.xz";
+      sha256 = "1ybnayqkb543sm8ql7m6hj8d8jzxggsghw46q2zxajgcg2p7mlsl";
+      name = "kde-l10n-bs-15.08.2.tar.xz";
     };
   };
   kde-l10n-ca = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-ca-15.08.1.tar.xz";
-      sha256 = "0ql4b550wasf31vkvha1kjyv7d0svyxk7wc77v39fbly0agxwbap";
-      name = "kde-l10n-ca-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-ca-15.08.2.tar.xz";
+      sha256 = "13akidgwm90754i085r7nxm27fq7wyw6h2rzfz13wh9azqlv9xrr";
+      name = "kde-l10n-ca-15.08.2.tar.xz";
     };
   };
   kde-l10n-ca_valencia = {
-    version = "ca_valencia-15.08.1";
+    version = "ca_valencia-15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-ca@valencia-15.08.1.tar.xz";
-      sha256 = "075j5zbn9fy510bf278j3184niwf8dkdpzihvjsram8xrggl4whl";
-      name = "kde-l10n-ca_valencia-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-ca@valencia-15.08.2.tar.xz";
+      sha256 = "1fxxfsa857y689qxvv3bry8djah70wp3iympq4ki84sgs4sj1fr3";
+      name = "kde-l10n-ca_valencia-15.08.2.tar.xz";
     };
   };
   kde-l10n-cs = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-cs-15.08.1.tar.xz";
-      sha256 = "1lmln0q9r7cvkvs0qz2ky01rj8rjbrwl7g3vkz2zyr64gxgnjilz";
-      name = "kde-l10n-cs-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-cs-15.08.2.tar.xz";
+      sha256 = "031p9wdx762ysb0w29gbkhm2c4axdlk1kflhd0fzff9s5sxjlykh";
+      name = "kde-l10n-cs-15.08.2.tar.xz";
     };
   };
   kde-l10n-da = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-da-15.08.1.tar.xz";
-      sha256 = "10sxs45bvs5qw02pj2qhykymm3ddl6ij3gvwgxj7r1kl84lfkil6";
-      name = "kde-l10n-da-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-da-15.08.2.tar.xz";
+      sha256 = "1mvb3jdp2vi3plq2c5cpqydbfzhahwvfpw7rh0ysii1c9hj9gva7";
+      name = "kde-l10n-da-15.08.2.tar.xz";
     };
   };
   kde-l10n-de = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-de-15.08.1.tar.xz";
-      sha256 = "11ayw3n392qz1dyblw4gsw4pbdp3wll11z76cawhbmj2jscjd1yb";
-      name = "kde-l10n-de-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-de-15.08.2.tar.xz";
+      sha256 = "0pc2653wfmf3znfbqzgzzi9k7rwwv6hm3q2chhd6mc29y5q8ay4s";
+      name = "kde-l10n-de-15.08.2.tar.xz";
     };
   };
   kde-l10n-el = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-el-15.08.1.tar.xz";
-      sha256 = "0qznnbk6mgbdjz4mm7rpmr04b6i9fya1yjhnmv8hpwlicl8n9sd6";
-      name = "kde-l10n-el-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-el-15.08.2.tar.xz";
+      sha256 = "1k9wsrcw73dvnwj2kwg1aqcvvac4gbw7a6zb9cygkngrawl6llf7";
+      name = "kde-l10n-el-15.08.2.tar.xz";
     };
   };
   kde-l10n-en_GB = {
-    version = "en_GB-15.08.1";
+    version = "en_GB-15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-en_GB-15.08.1.tar.xz";
-      sha256 = "0rb4pjxds75x84ylc71ci2sj75l5p8vr2hmnrlddmj39j22c3mcj";
-      name = "kde-l10n-en_GB-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-en_GB-15.08.2.tar.xz";
+      sha256 = "0vgpl1kky8zbxq93sgrkwkky06s8ad0v5m2yvp72blkg04maja0q";
+      name = "kde-l10n-en_GB-15.08.2.tar.xz";
     };
   };
   kde-l10n-eo = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-eo-15.08.1.tar.xz";
-      sha256 = "07rns0a5bb2sq13hcndvq79zg451lc3rj2cldmdxdyj5axl0c955";
-      name = "kde-l10n-eo-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-eo-15.08.2.tar.xz";
+      sha256 = "0bfrqgmzxasfsh0n3rb5bbjlzv54hygk3vc796zlm89rygxf9lr5";
+      name = "kde-l10n-eo-15.08.2.tar.xz";
     };
   };
   kde-l10n-es = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-es-15.08.1.tar.xz";
-      sha256 = "1bb1vp8k6f323q2rjclxpja9yykfgm2di6wn0qhr787swr6qrxjb";
-      name = "kde-l10n-es-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-es-15.08.2.tar.xz";
+      sha256 = "172m68cbhg1nln99nzg5srzaf2givfdjhkbhkwv83l1gya9r0p1j";
+      name = "kde-l10n-es-15.08.2.tar.xz";
     };
   };
   kde-l10n-et = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-et-15.08.1.tar.xz";
-      sha256 = "027vpybfrm6zdmglwlhmyrh6157gmv8i5x1hx5d8f57m8jnh3nfq";
-      name = "kde-l10n-et-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-et-15.08.2.tar.xz";
+      sha256 = "1zwfs1vz75k980256x6kjxydhf3cvbhq9gyz1af20xmm11pmmzpl";
+      name = "kde-l10n-et-15.08.2.tar.xz";
     };
   };
   kde-l10n-eu = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-eu-15.08.1.tar.xz";
-      sha256 = "01jcykc8d7nzlsfjp2xcbf7bkld7skf7mmrig7dllgl0igdkx1qm";
-      name = "kde-l10n-eu-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-eu-15.08.2.tar.xz";
+      sha256 = "13ml8mja8fnrvamlrglg9gpv8afji91ayjk11w3iiknr4ml4ra38";
+      name = "kde-l10n-eu-15.08.2.tar.xz";
     };
   };
   kde-l10n-fa = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-fa-15.08.1.tar.xz";
-      sha256 = "1bai66j03khb6f6y8v72axan6aggdlbwgv3bi91mxwlzhy8ycjxx";
-      name = "kde-l10n-fa-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-fa-15.08.2.tar.xz";
+      sha256 = "11xgyk0jnv36vk4jd6l2dx9q5dydr9ldaq8fcmdgcwlcyi2ngbwd";
+      name = "kde-l10n-fa-15.08.2.tar.xz";
     };
   };
   kde-l10n-fi = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-fi-15.08.1.tar.xz";
-      sha256 = "0ajgy01p22h1c2dsarsq7ximwp3blvmxnf9217szikkf5yky2w9m";
-      name = "kde-l10n-fi-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-fi-15.08.2.tar.xz";
+      sha256 = "12v92y0sgw77l15vg61vmzdh4gx3455awaai8ywffvsxgl2plsbg";
+      name = "kde-l10n-fi-15.08.2.tar.xz";
     };
   };
   kde-l10n-fr = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-fr-15.08.1.tar.xz";
-      sha256 = "1mclsk410ir9y6xvy8j8dswpa3k7hmjng232annq05fzapw7bda6";
-      name = "kde-l10n-fr-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-fr-15.08.2.tar.xz";
+      sha256 = "1dqrd8vr3i1kdkckd6i6vai40i61l6pahg2rrjgxdxgq2vbd0hzm";
+      name = "kde-l10n-fr-15.08.2.tar.xz";
     };
   };
   kde-l10n-ga = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-ga-15.08.1.tar.xz";
-      sha256 = "06l39s9d6y33f4vvcxvry7cxw2m431xgvcz1wcmf6zhlpi5wwlmr";
-      name = "kde-l10n-ga-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-ga-15.08.2.tar.xz";
+      sha256 = "1jfbshfrqlsw6ai1iajkf3qy5cgw8glk928slw8j7mlnqpl0adjf";
+      name = "kde-l10n-ga-15.08.2.tar.xz";
     };
   };
   kde-l10n-gl = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-gl-15.08.1.tar.xz";
-      sha256 = "0fapj4gmm4pp5bf3gj6xwnzjxw9094mal7njb0nisshvdfbpgr37";
-      name = "kde-l10n-gl-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-gl-15.08.2.tar.xz";
+      sha256 = "198zb8v1bl2syypnk21hcdfk4a26rx3hc8clv01llyjh1x69ardb";
+      name = "kde-l10n-gl-15.08.2.tar.xz";
     };
   };
   kde-l10n-he = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-he-15.08.1.tar.xz";
-      sha256 = "1fgxnm6l45kcjrgjg19z2fg6fnsbpdy0agllj6rw0ffbcp68l863";
-      name = "kde-l10n-he-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-he-15.08.2.tar.xz";
+      sha256 = "0vv8hl400vsn0vdag4ya20gxdzj15lfg2jbmp7yphna0l54ac6cv";
+      name = "kde-l10n-he-15.08.2.tar.xz";
     };
   };
   kde-l10n-hi = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-hi-15.08.1.tar.xz";
-      sha256 = "0ys05gxcj6vkx4a8xjhwfym6faz6ifh50i5si175rynb6igyydnh";
-      name = "kde-l10n-hi-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-hi-15.08.2.tar.xz";
+      sha256 = "07p4f98p68cjmni5abvzks1jm7y00s392ysbjpfg9x5nbfswza08";
+      name = "kde-l10n-hi-15.08.2.tar.xz";
     };
   };
   kde-l10n-hr = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-hr-15.08.1.tar.xz";
-      sha256 = "0jlnig5rsmdxv3ng352hd8n0vqd020bf00xnjbdihcnvdwq625lv";
-      name = "kde-l10n-hr-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-hr-15.08.2.tar.xz";
+      sha256 = "04rq8m4cipnn9a88h8mfr0sphdqd7vrd1iywsrg2dcbimbjnq9jr";
+      name = "kde-l10n-hr-15.08.2.tar.xz";
     };
   };
   kde-l10n-hu = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-hu-15.08.1.tar.xz";
-      sha256 = "0jysfqb9pmhcw2kd48n6asmkci56mgk1jcsx8gxn9lcfrqnpc52g";
-      name = "kde-l10n-hu-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-hu-15.08.2.tar.xz";
+      sha256 = "12g79klwjn5vfv1hyb0ly2576cp79zhp68rxansy3mk1sdwywdcl";
+      name = "kde-l10n-hu-15.08.2.tar.xz";
     };
   };
   kde-l10n-ia = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-ia-15.08.1.tar.xz";
-      sha256 = "1mgzpzy1s45v6nf2wbqgsam7bdg1x0fkmggnwy8k8f7kx5yxfcw4";
-      name = "kde-l10n-ia-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-ia-15.08.2.tar.xz";
+      sha256 = "0b5hxrhp292hg0lhq9fqzhcdc045j7qzjg7j715b9r26c89n8g56";
+      name = "kde-l10n-ia-15.08.2.tar.xz";
     };
   };
   kde-l10n-id = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-id-15.08.1.tar.xz";
-      sha256 = "13lls8w18c8zrfrqfaz2yjn7jcjrv6dsax09l8wda5144xhbsxw3";
-      name = "kde-l10n-id-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-id-15.08.2.tar.xz";
+      sha256 = "1azmhrk42j1kk88v9i7343qpah39cfpqa9ikpzbnj7jzc269i951";
+      name = "kde-l10n-id-15.08.2.tar.xz";
     };
   };
   kde-l10n-is = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-is-15.08.1.tar.xz";
-      sha256 = "0n3ws9imns4jzvnnrkrm8dk8yzlfjcbxl7ip36m7a09lnnskc4zw";
-      name = "kde-l10n-is-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-is-15.08.2.tar.xz";
+      sha256 = "1l8nwzjqiqqa7l5w1d62simhrcgdvf0qg93wzsgp5ph8ycldkggh";
+      name = "kde-l10n-is-15.08.2.tar.xz";
     };
   };
   kde-l10n-it = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-it-15.08.1.tar.xz";
-      sha256 = "04blm19llvm2n885p9in4iicaj81ap9vvxsqmfnz7rwb93bsy4wl";
-      name = "kde-l10n-it-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-it-15.08.2.tar.xz";
+      sha256 = "0al6mv1kx2shpg7052p51kcccvpyzi8252k5c4hbab4jxhvbhcxm";
+      name = "kde-l10n-it-15.08.2.tar.xz";
     };
   };
   kde-l10n-ja = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-ja-15.08.1.tar.xz";
-      sha256 = "0ir82yc2jmy7ijn02y9f2vxnv1cd5a92pjji3fzriqfg6dlgyiw9";
-      name = "kde-l10n-ja-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-ja-15.08.2.tar.xz";
+      sha256 = "0z3lv3pv0mz9dgii3hv6fl4m22mc29qjrr6nann0y3yalsqhps01";
+      name = "kde-l10n-ja-15.08.2.tar.xz";
     };
   };
   kde-l10n-kk = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-kk-15.08.1.tar.xz";
-      sha256 = "13zi7yh9hsxmb8v6x2jqlyh4wdb4waj653py27g91rbznsp1fjzp";
-      name = "kde-l10n-kk-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-kk-15.08.2.tar.xz";
+      sha256 = "1x8j2a2cxck7shsr2l4yz8d4lanhl6y4x4xdv7c7l2pwchnki9by";
+      name = "kde-l10n-kk-15.08.2.tar.xz";
     };
   };
   kde-l10n-km = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-km-15.08.1.tar.xz";
-      sha256 = "1yjckfma9dj8li9whwfa6bid289z05vllxqigbsjfy12721ahrc6";
-      name = "kde-l10n-km-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-km-15.08.2.tar.xz";
+      sha256 = "0c450yfiavm7wy3yr01idczg6svhsrjsi1jnd10nnc79w5iw8k13";
+      name = "kde-l10n-km-15.08.2.tar.xz";
     };
   };
   kde-l10n-ko = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-ko-15.08.1.tar.xz";
-      sha256 = "19w7z4j7463lg0yzkf8ndfvf3664hk524qfcrdygf61f03hkp22l";
-      name = "kde-l10n-ko-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-ko-15.08.2.tar.xz";
+      sha256 = "0wkq67baydd17gn1zb7mi27grddgpxf9rfx6kcrkj50b610680wm";
+      name = "kde-l10n-ko-15.08.2.tar.xz";
     };
   };
   kde-l10n-lt = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-lt-15.08.1.tar.xz";
-      sha256 = "03g7l9yyw6wajjpkqss16kfyg6piv50xjrzdy8611asdfabhccjs";
-      name = "kde-l10n-lt-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-lt-15.08.2.tar.xz";
+      sha256 = "1zvsh03vmpyp63fg00gm46d4rpmi7lm6i2b3xl3i8k1zr8s1c99v";
+      name = "kde-l10n-lt-15.08.2.tar.xz";
     };
   };
   kde-l10n-lv = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-lv-15.08.1.tar.xz";
-      sha256 = "105lq8q97dg9y9j5p5zqf78gvk28qn4axr3ppk1j698576l1ihxl";
-      name = "kde-l10n-lv-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-lv-15.08.2.tar.xz";
+      sha256 = "0d84ljb9c2na1zfdq5qxk6bmdqfi0r6vqbsy8jz9qrnizqac3zg2";
+      name = "kde-l10n-lv-15.08.2.tar.xz";
     };
   };
   kde-l10n-mr = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-mr-15.08.1.tar.xz";
-      sha256 = "0ga55szsi9kbvjdcc2cjl8m15jzcfrpiryak1m78s46p056lfs7n";
-      name = "kde-l10n-mr-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-mr-15.08.2.tar.xz";
+      sha256 = "0w1lx06ncbvyvwl9mq33hafy0n94aahym80dcapbgb1mhvscac8v";
+      name = "kde-l10n-mr-15.08.2.tar.xz";
     };
   };
   kde-l10n-nb = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-nb-15.08.1.tar.xz";
-      sha256 = "1y51kdmgnirfjsc5ka75rjvbqjbxxchqj2j4430h8jncjgvjvw6d";
-      name = "kde-l10n-nb-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-nb-15.08.2.tar.xz";
+      sha256 = "1faynqp07nvz8q5m4pcvbh01xys9zfrxbrqj3l45ihjq04461zwi";
+      name = "kde-l10n-nb-15.08.2.tar.xz";
     };
   };
   kde-l10n-nds = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-nds-15.08.1.tar.xz";
-      sha256 = "0ifndqj0d58g6k71qw9n4xhd0a90fqba3xsk2qyd6yhnmygd48xd";
-      name = "kde-l10n-nds-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-nds-15.08.2.tar.xz";
+      sha256 = "1azap1ixrngri98my4ln9zva4xy6bhs9ybj6mwadwa8x97cpzawr";
+      name = "kde-l10n-nds-15.08.2.tar.xz";
     };
   };
   kde-l10n-nl = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-nl-15.08.1.tar.xz";
-      sha256 = "11jzaf5dbyl52s61031lygn8xf6qjjqaldlyqgljz1scpp13f75b";
-      name = "kde-l10n-nl-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-nl-15.08.2.tar.xz";
+      sha256 = "1gcgncmg6m0vc672sy9034cwd9mpgy9q0pxhc4wfgbf0r4phiy7c";
+      name = "kde-l10n-nl-15.08.2.tar.xz";
     };
   };
   kde-l10n-nn = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-nn-15.08.1.tar.xz";
-      sha256 = "01h9xysa8vghaghqpfp7gvps3rymiypb52ffz50srhrhjyh1zq0y";
-      name = "kde-l10n-nn-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-nn-15.08.2.tar.xz";
+      sha256 = "0fdd83a6xmxx2vixs1l4fcrndyhwjpjxvk3v6zcp0yih464d1dl9";
+      name = "kde-l10n-nn-15.08.2.tar.xz";
     };
   };
   kde-l10n-pa = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-pa-15.08.1.tar.xz";
-      sha256 = "05n9kaalsdx8nvn0p29wf33barhkhb64xxr3xg8cc0d3x21kmhx1";
-      name = "kde-l10n-pa-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-pa-15.08.2.tar.xz";
+      sha256 = "0dnni5k1gv7r7nd7pxd4dbhajw160z4g0wsjihijyxdg5j07lk3x";
+      name = "kde-l10n-pa-15.08.2.tar.xz";
     };
   };
   kde-l10n-pl = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-pl-15.08.1.tar.xz";
-      sha256 = "0ifjvbvzm5qks35z54i5mdz151347690zg4rn8y033lag81c7ir1";
-      name = "kde-l10n-pl-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-pl-15.08.2.tar.xz";
+      sha256 = "0b4x81pfk6448jirwj81nd4dh1kxj1k77xj566s6cwv2wym2wqhb";
+      name = "kde-l10n-pl-15.08.2.tar.xz";
     };
   };
   kde-l10n-pt = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-pt-15.08.1.tar.xz";
-      sha256 = "0z5lginm78i6wrxhcdarv660sszybjih02ra3j4wghflzhwrgrhw";
-      name = "kde-l10n-pt-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-pt-15.08.2.tar.xz";
+      sha256 = "0r5qw93lnghn69zji26dncpa0mc631jr67sk9hp5fnxjaayxll20";
+      name = "kde-l10n-pt-15.08.2.tar.xz";
     };
   };
   kde-l10n-pt_BR = {
-    version = "pt_BR-15.08.1";
+    version = "pt_BR-15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-pt_BR-15.08.1.tar.xz";
-      sha256 = "0dr0h5bxw462mpirzsnvxcy3s14nlk3a2gh5h9r2wis5fii364da";
-      name = "kde-l10n-pt_BR-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-pt_BR-15.08.2.tar.xz";
+      sha256 = "1svx6576dkn4md2vmvif7zngn32jqc5zk857qbfm7asz1dil80gi";
+      name = "kde-l10n-pt_BR-15.08.2.tar.xz";
     };
   };
   kde-l10n-ro = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-ro-15.08.1.tar.xz";
-      sha256 = "0j3qccfwarb9azsvm2pf0ikc12dsbywzfi7hv2xd244qcnjpp289";
-      name = "kde-l10n-ro-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-ro-15.08.2.tar.xz";
+      sha256 = "0swxxl92djdac9afr3yxn0y47jyljaaqqixd70krlx4fijzkrzg8";
+      name = "kde-l10n-ro-15.08.2.tar.xz";
     };
   };
   kde-l10n-ru = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-ru-15.08.1.tar.xz";
-      sha256 = "1qdgh3y8q7hnkhjfbid35fxy4xjl1hj800kljhif7q4kg4ish86m";
-      name = "kde-l10n-ru-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-ru-15.08.2.tar.xz";
+      sha256 = "1nawl89fygbyd6fyrja6syzc6i63sd29ixsyalm2n995m6vp73d6";
+      name = "kde-l10n-ru-15.08.2.tar.xz";
     };
   };
   kde-l10n-sk = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-sk-15.08.1.tar.xz";
-      sha256 = "13fcfrsdn0q7z0p2cxkcl54g597ix17327lyxz0ns4xn9ada198s";
-      name = "kde-l10n-sk-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-sk-15.08.2.tar.xz";
+      sha256 = "1bcbj359spx705zsc33mqzkj70r3afbp9inwslnz6irizif5bbd8";
+      name = "kde-l10n-sk-15.08.2.tar.xz";
     };
   };
   kde-l10n-sl = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-sl-15.08.1.tar.xz";
-      sha256 = "12gg889lhq6l1h5bv6hlcwsq2zkqdfxgicxhkjnm3i7ly5laij4f";
-      name = "kde-l10n-sl-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-sl-15.08.2.tar.xz";
+      sha256 = "16c9z7y54fm1w1r8x74wnamp1c1yxq6nkf9rjm4hqdi0nzk21l0c";
+      name = "kde-l10n-sl-15.08.2.tar.xz";
     };
   };
   kde-l10n-sr = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-sr-15.08.1.tar.xz";
-      sha256 = "1ag5fj3iy5kycwgwhxiwcp4xl19j1q1lbk07b6nz69jm12kpsy6i";
-      name = "kde-l10n-sr-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-sr-15.08.2.tar.xz";
+      sha256 = "0xq91qc979h0cp94hjkkn8r45da5z33c4isrxk0y70i068rxakq7";
+      name = "kde-l10n-sr-15.08.2.tar.xz";
     };
   };
   kde-l10n-sv = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-sv-15.08.1.tar.xz";
-      sha256 = "0dvgqf39xiz1fkfxvfn9232j454377d92c72dd0h3yl7mf9nndd7";
-      name = "kde-l10n-sv-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-sv-15.08.2.tar.xz";
+      sha256 = "0vh2kmw87likz3r4p7wjgg1yjpwm4c3qy4g45fbds028d7hlsjs5";
+      name = "kde-l10n-sv-15.08.2.tar.xz";
     };
   };
   kde-l10n-tr = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-tr-15.08.1.tar.xz";
-      sha256 = "1bca3scdg4ma6k6957pq45dmjxgp8hx3bm9jql2rqp0knqf9dwl8";
-      name = "kde-l10n-tr-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-tr-15.08.2.tar.xz";
+      sha256 = "08na2a7a4j74i15yayds21a53qbkkdq0jksam59ls6ckxnmqdpxn";
+      name = "kde-l10n-tr-15.08.2.tar.xz";
     };
   };
   kde-l10n-ug = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-ug-15.08.1.tar.xz";
-      sha256 = "1brnbjnpwqhh52g058s2hqh77a6p2c81sygdfsjgngc0griahl4q";
-      name = "kde-l10n-ug-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-ug-15.08.2.tar.xz";
+      sha256 = "1d0jzfm7y8abfxikls8v7pw50pzxyil23p3bacyi1v10mgzpl27g";
+      name = "kde-l10n-ug-15.08.2.tar.xz";
     };
   };
   kde-l10n-uk = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-uk-15.08.1.tar.xz";
-      sha256 = "00f6mjs7nalg8q87ix7h66kqicy7xb9pgkghldbhpal0rqgzscph";
-      name = "kde-l10n-uk-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-uk-15.08.2.tar.xz";
+      sha256 = "1c8vdj2m2j3zphvhxxv0w72p67iq56krisi172j92ryixpy8d9rp";
+      name = "kde-l10n-uk-15.08.2.tar.xz";
     };
   };
   kde-l10n-wa = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-wa-15.08.1.tar.xz";
-      sha256 = "0z9s118fc0wj2dg2ha7mv0rldvsa3rr8mhwjdgawkmfr9ns82w64";
-      name = "kde-l10n-wa-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-wa-15.08.2.tar.xz";
+      sha256 = "0q0a9lnbq30arpwzdn2qn294x660fcdjnh7mlya99bvmdlqgxqbk";
+      name = "kde-l10n-wa-15.08.2.tar.xz";
     };
   };
   kde-l10n-zh_CN = {
-    version = "zh_CN-15.08.1";
+    version = "zh_CN-15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-zh_CN-15.08.1.tar.xz";
-      sha256 = "0j88zjxihddgi4a53034i5br3jf8v61wp5mcbclci59i4p4cwrh7";
-      name = "kde-l10n-zh_CN-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-zh_CN-15.08.2.tar.xz";
+      sha256 = "0dkh2lw60ykc9p1dj2iqww9bhz90c3jichbfhsskk6gxzlvxnfsm";
+      name = "kde-l10n-zh_CN-15.08.2.tar.xz";
     };
   };
   kde-l10n-zh_TW = {
-    version = "zh_TW-15.08.1";
+    version = "zh_TW-15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-l10n/kde-l10n-zh_TW-15.08.1.tar.xz";
-      sha256 = "1w4f8wr9c132z4kmqcjknrgp1hh33s08qvyjxysns6ncj6izpaaz";
-      name = "kde-l10n-zh_TW-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-l10n/kde-l10n-zh_TW-15.08.2.tar.xz";
+      sha256 = "0lg0cx5h6jqa6rscp891chvazngf83y6q2chzb97ywgbz8w7qmx5";
+      name = "kde-l10n-zh_TW-15.08.2.tar.xz";
     };
   };
   kdelibs = {
-    version = "4.14.12";
+    version = "4.14.13";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdelibs-4.14.12.tar.xz";
-      sha256 = "1s4p3x5si0mx64rhfqplgpyqm04c84wj4mpmbmi86wxwyr5d65rg";
-      name = "kdelibs-4.14.12.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdelibs-4.14.13.tar.xz";
+      sha256 = "1ba0nbhqf5yin8n2fwf3cj5yvln72g5yprfgfrgdqd7ybk21l4v1";
+      name = "kdelibs-4.14.13.tar.xz";
     };
   };
   kdenetwork-filesharing = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdenetwork-filesharing-15.08.1.tar.xz";
-      sha256 = "03w78qf8sgwypzgwpyl5cfb5441787j6vzzhlddsbmkrl4vnhnff";
-      name = "kdenetwork-filesharing-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdenetwork-filesharing-15.08.2.tar.xz";
+      sha256 = "1rqihra8ssajqb6m596gf4dnvdm8p0wfdrj9krvslsijx58pm7wv";
+      name = "kdenetwork-filesharing-15.08.2.tar.xz";
     };
   };
   kdenetwork-strigi-analyzers = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdenetwork-strigi-analyzers-15.08.1.tar.xz";
-      sha256 = "0w3jlg9idsxi1pwxh97s9iawjyq8m2z51kz5mm0d0irwslkwaygk";
-      name = "kdenetwork-strigi-analyzers-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdenetwork-strigi-analyzers-15.08.2.tar.xz";
+      sha256 = "1a2hnpsm5842y2kra7lqc6v9hh0d6wn7kgnmahnb5sjw9n0xrry3";
+      name = "kdenetwork-strigi-analyzers-15.08.2.tar.xz";
     };
   };
   kdenlive = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdenlive-15.08.1.tar.xz";
-      sha256 = "03rbkl3jblzprwb6sd7wycizpnpk65551ji53i2h7rxwsns53hig";
-      name = "kdenlive-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdenlive-15.08.2.tar.xz";
+      sha256 = "1ykv8w0zhfbx3f3hcjc8qajv95bgjpr9965fjnzbmix8r7r76bwa";
+      name = "kdenlive-15.08.2.tar.xz";
     };
   };
   kdepim = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdepim-15.08.1.tar.xz";
-      sha256 = "06j6zmizkc8yg59dvnbcla82jb4csrwrvzzk3al18j6js0sdjnqr";
-      name = "kdepim-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdepim-15.08.2.tar.xz";
+      sha256 = "1i9f6q0a7si0wv9hdxfni07kvqvm587af5b1fcc100vwlambhqhl";
+      name = "kdepim-15.08.2.tar.xz";
     };
   };
   kdepimlibs = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdepimlibs-15.08.1.tar.xz";
-      sha256 = "0sjh4n2hgcfd3ngbvzk051yzglkchcjhx0nnn12li0lw2bg7l9w3";
-      name = "kdepimlibs-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdepimlibs-15.08.2.tar.xz";
+      sha256 = "1lg8l7a6lfphrlygvpq6cr13zw6gq6nf7hrdlx1qps54wksf5ak2";
+      name = "kdepimlibs-15.08.2.tar.xz";
     };
   };
   kdepim-runtime = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdepim-runtime-15.08.1.tar.xz";
-      sha256 = "1hcg900bnjryxii3f1c2yjj2nr3z4pn7yigdxclmwpfk6gvlkqm4";
-      name = "kdepim-runtime-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdepim-runtime-15.08.2.tar.xz";
+      sha256 = "15za5ggfha20ibiihjsh0qq51jgps65lw34a1bv2gwyhh8nw6n8x";
+      name = "kdepim-runtime-15.08.2.tar.xz";
     };
   };
   kde-runtime = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-runtime-15.08.1.tar.xz";
-      sha256 = "04vx2v9m5dz5jihvmqvcd6pvk312hdhgj7pkzv8q0lg3z81fqgyi";
-      name = "kde-runtime-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-runtime-15.08.2.tar.xz";
+      sha256 = "0inwb29y5r2641g4qgahizk9znf1bgvbbvv8j43wif894a7xcddv";
+      name = "kde-runtime-15.08.2.tar.xz";
     };
   };
   kdesdk-kioslaves = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdesdk-kioslaves-15.08.1.tar.xz";
-      sha256 = "161885bzayf804pdci5n1xh1n4zw3pddk2j53icn573gzpvczwla";
-      name = "kdesdk-kioslaves-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdesdk-kioslaves-15.08.2.tar.xz";
+      sha256 = "1pmkfkqpd61y8ydgbb0f12xqgz63z7pnxjrc11iig1hkm5qfggkq";
+      name = "kdesdk-kioslaves-15.08.2.tar.xz";
     };
   };
   kdesdk-strigi-analyzers = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdesdk-strigi-analyzers-15.08.1.tar.xz";
-      sha256 = "1g2c511ba42mxg955yyh8w45ga5313mvvpkdl7yvbz7ikb2z6ji5";
-      name = "kdesdk-strigi-analyzers-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdesdk-strigi-analyzers-15.08.2.tar.xz";
+      sha256 = "02ndnm19p71v678kb8357l3i8dmwy121pw6b7vxj35ymg9knbzil";
+      name = "kdesdk-strigi-analyzers-15.08.2.tar.xz";
     };
   };
   kdesdk-thumbnailers = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdesdk-thumbnailers-15.08.1.tar.xz";
-      sha256 = "0719qaw9whp1aa15cxcz7axfhmcm30iwwrr78xypzcy097f63q4v";
-      name = "kdesdk-thumbnailers-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdesdk-thumbnailers-15.08.2.tar.xz";
+      sha256 = "07cqfk0f64n2dk2rnfc6zmsvg29m7s1zvj4vhxa0w3di65zlcjlj";
+      name = "kdesdk-thumbnailers-15.08.2.tar.xz";
     };
   };
   kde-wallpapers = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kde-wallpapers-15.08.1.tar.xz";
-      sha256 = "01q5yh4q7kjjryab3jc8g4qwi4w18la6na0ra2mf0cf637xnlh83";
-      name = "kde-wallpapers-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kde-wallpapers-15.08.2.tar.xz";
+      sha256 = "0iz5j0xhwnyab8l6384mnd3a6v6mfcg84161aszi1qsvr4qlv3zl";
+      name = "kde-wallpapers-15.08.2.tar.xz";
     };
   };
   kdewebdev = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdewebdev-15.08.1.tar.xz";
-      sha256 = "00q25xp28m9sfgs7h4g89gyh34v36zwmliz1jvsq18aja45f5hpm";
-      name = "kdewebdev-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdewebdev-15.08.2.tar.xz";
+      sha256 = "0p7pwdzr0gjhjaabh4202r334xwmz0gxpncbgffydriwl9sckv88";
+      name = "kdewebdev-15.08.2.tar.xz";
     };
   };
   kdf = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdf-15.08.1.tar.xz";
-      sha256 = "062rz8syp7kxc9xyl4ldcqx66fdrjh5fhgdqgdjdgpn273n5v447";
-      name = "kdf-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdf-15.08.2.tar.xz";
+      sha256 = "124zsl1w93d5f4b5g01cv38ykj4k5w73lb464a65dk3v2sb1fm82";
+      name = "kdf-15.08.2.tar.xz";
     };
   };
   kdiamond = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kdiamond-15.08.1.tar.xz";
-      sha256 = "1f81l6pnwrpirb5v0npcd2452dkdh0llpmzh57gfd8cik0n1agzm";
-      name = "kdiamond-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kdiamond-15.08.2.tar.xz";
+      sha256 = "05waxcpri7qaik69fwbcmqqzskvic2jms8ja4s9x3a6s1fpzdgi8";
+      name = "kdiamond-15.08.2.tar.xz";
     };
   };
   kfloppy = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kfloppy-15.08.1.tar.xz";
-      sha256 = "0yg94p5gj9xazl9kk503mblawyndv2j6m0scf6na68xksgx0yplv";
-      name = "kfloppy-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kfloppy-15.08.2.tar.xz";
+      sha256 = "1vakzrky94j8z54b1m337m389s7ykm1vsqbfbqad1j2zajn2wms8";
+      name = "kfloppy-15.08.2.tar.xz";
     };
   };
   kfourinline = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kfourinline-15.08.1.tar.xz";
-      sha256 = "19rssc5mf8hn6fv9pm91pbhdcxp123z9c1wrmay1wmja7fmnyv9s";
-      name = "kfourinline-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kfourinline-15.08.2.tar.xz";
+      sha256 = "0xwgnnydbmcskqi289knnaq31l8bhw6r3h1dkfjfwhdmbwdfpmdc";
+      name = "kfourinline-15.08.2.tar.xz";
     };
   };
   kgeography = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kgeography-15.08.1.tar.xz";
-      sha256 = "1ilb9l6v8pf7aq9dzs29bbdqb60fzf7a0dwjjdfvjq8jbnhcxa9v";
-      name = "kgeography-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kgeography-15.08.2.tar.xz";
+      sha256 = "0p3i97qpny1gv0h97vh9n0cl2gr6q95wa7krpc99mk1dnvw7fsxm";
+      name = "kgeography-15.08.2.tar.xz";
     };
   };
   kget = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kget-15.08.1.tar.xz";
-      sha256 = "02npfzdk283930jywhjch6sscnj16w2n3nn4ik04bx8hxv74br74";
-      name = "kget-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kget-15.08.2.tar.xz";
+      sha256 = "11z7vxfx1f11k8izrmwnqfiqm3kbq3x009yv4klsga7fn73gbfzz";
+      name = "kget-15.08.2.tar.xz";
     };
   };
   kgoldrunner = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kgoldrunner-15.08.1.tar.xz";
-      sha256 = "18xs36g9gmhzlwyg2gl9cc3842dzwc196dpfp0xshja2f1rlr6fp";
-      name = "kgoldrunner-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kgoldrunner-15.08.2.tar.xz";
+      sha256 = "1al9fv62aj07mnv041g1dg1q46mkf996037g6xyxvnssbgqp5pn7";
+      name = "kgoldrunner-15.08.2.tar.xz";
     };
   };
   kgpg = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kgpg-15.08.1.tar.xz";
-      sha256 = "0728pb6d70qfrbmd1d16lwxshy3ifb8snx5bi8vp9rrs7ncy8r4a";
-      name = "kgpg-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kgpg-15.08.2.tar.xz";
+      sha256 = "0q32s1yk1z5cf0zn5wvc8js1ms4dbzbmmc1ykjfqc1wy5bl0rybk";
+      name = "kgpg-15.08.2.tar.xz";
     };
   };
   khangman = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/khangman-15.08.1.tar.xz";
-      sha256 = "1g60s028b08vd34l7n8m4sd7d9zl419kz8f1hvdgs2z9zacd5zqg";
-      name = "khangman-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/khangman-15.08.2.tar.xz";
+      sha256 = "14yrxs7wrlyi74da88mzlrxnnq7b4psk4y5q525f5rns3r46hjzc";
+      name = "khangman-15.08.2.tar.xz";
     };
   };
   kholidays = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kholidays-15.08.1.tar.xz";
-      sha256 = "1i875c7wpp5vlzjyw78bsxgyhmhv2y9846xbv6xi5y4b211iw6lf";
-      name = "kholidays-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kholidays-15.08.2.tar.xz";
+      sha256 = "0wgvrcic43ml8cdwsniqsx2f3livzc01zfwi14jnfmqrjq1l02w0";
+      name = "kholidays-15.08.2.tar.xz";
     };
   };
   kidentitymanagement = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kidentitymanagement-15.08.1.tar.xz";
-      sha256 = "0aslniqzp8bgayvvrxkdfb9ihvz57n6zf3rh99dsv34z20mfyc59";
-      name = "kidentitymanagement-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kidentitymanagement-15.08.2.tar.xz";
+      sha256 = "0sq6sjrk4rlyyzd7shyjx8w34mpiag01gnqg6966jh8qflm0ll6g";
+      name = "kidentitymanagement-15.08.2.tar.xz";
     };
   };
   kig = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kig-15.08.1.tar.xz";
-      sha256 = "0wyvqfsgr1101vmzmsixribvd9plys91dvrx6cj9ji7mf4k5875g";
-      name = "kig-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kig-15.08.2.tar.xz";
+      sha256 = "0wnnn4d1lam2fzqa5g791c86nmdkww60alqgq0qb1njnn53d4hrl";
+      name = "kig-15.08.2.tar.xz";
     };
   };
   kigo = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kigo-15.08.1.tar.xz";
-      sha256 = "1l1l0yxc6kz1y74pvr5nl5rdmynbzm5izrh412g30nzs30rj2hiw";
-      name = "kigo-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kigo-15.08.2.tar.xz";
+      sha256 = "08l5585sgyq6z8mwv7djfgijfzfz8v5jr7f8qd4l7915s51522g1";
+      name = "kigo-15.08.2.tar.xz";
     };
   };
   killbots = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/killbots-15.08.1.tar.xz";
-      sha256 = "1p7lxi3rh8ghashy04252wc086kxz1crdxgnisfw4dv4kr17qmb2";
-      name = "killbots-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/killbots-15.08.2.tar.xz";
+      sha256 = "01bv5vfiq6cnbb856akrikfg5fpaq4yvnafjj2j0g8wdq7pblghs";
+      name = "killbots-15.08.2.tar.xz";
     };
   };
   kimap = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kimap-15.08.1.tar.xz";
-      sha256 = "07q4z16jfddh17khdd39dzasjfmnvd2zgdnph24s171815c2x2ps";
-      name = "kimap-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kimap-15.08.2.tar.xz";
+      sha256 = "1dh90acl2ib6jyyg23nd2swp0mdbm32mfm7a7320r9v0nyx74m0h";
+      name = "kimap-15.08.2.tar.xz";
     };
   };
   kio-extras = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kio-extras-15.08.1.tar.xz";
-      sha256 = "06vnr10a3m4gs5bjz3dqx1bv1sqz3q69ihq1hlih4c8lyy9wd26q";
-      name = "kio-extras-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kio-extras-15.08.2.tar.xz";
+      sha256 = "0r90lb6823nrbq5mzdjxs53sgnj98bnz1fy80q5py3wwckmq715s";
+      name = "kio-extras-15.08.2.tar.xz";
     };
   };
   kiriki = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kiriki-15.08.1.tar.xz";
-      sha256 = "1ighd4bmvgn84misb7zldjg5z75k1i7z8l7yjb0qybh1cc2bw3b3";
-      name = "kiriki-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kiriki-15.08.2.tar.xz";
+      sha256 = "04524q3pnvasnvdfq0zn4aysliwwcq06kdd6233ql5pqr2fnzxgr";
+      name = "kiriki-15.08.2.tar.xz";
     };
   };
   kiten = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kiten-15.08.1.tar.xz";
-      sha256 = "1pz9frvf23hi2hy7g040prcgjvjssgv3yya2kvapafpmbwnd38dv";
-      name = "kiten-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kiten-15.08.2.tar.xz";
+      sha256 = "0d3jskqgjffsr3mkpviyhkp5wqfg44nf9scscl2d3hixda32bjf1";
+      name = "kiten-15.08.2.tar.xz";
     };
   };
   kjumpingcube = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kjumpingcube-15.08.1.tar.xz";
-      sha256 = "1b0mqf9rhbdz4dfd0gbps59zzjqdif30zz642v4yi6mqnc002yv9";
-      name = "kjumpingcube-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kjumpingcube-15.08.2.tar.xz";
+      sha256 = "1hp4xmdi6swsygqrpxchrkmj2q7xdykcp4maqkjpkwsb7iimldqc";
+      name = "kjumpingcube-15.08.2.tar.xz";
     };
   };
   kldap = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kldap-15.08.1.tar.xz";
-      sha256 = "13mn0zkyd8qkp2rlcd75g821k3xpvwrj6xwjwvllfn25zsng32yw";
-      name = "kldap-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kldap-15.08.2.tar.xz";
+      sha256 = "1pq3wcixnmizfk5zakn5dzc4nzyvqv7ixlj8mixp0aa3d06pcmg4";
+      name = "kldap-15.08.2.tar.xz";
     };
   };
   klettres = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/klettres-15.08.1.tar.xz";
-      sha256 = "0ykb5pfawiyby2xshfdq2gy7w66dw5vhqdd4vjkix6nyb87n703z";
-      name = "klettres-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/klettres-15.08.2.tar.xz";
+      sha256 = "1lqhyifrdwfymw69aj8pbimmw3qc6zly326gwrsg05xyk3qw2x6y";
+      name = "klettres-15.08.2.tar.xz";
     };
   };
   klickety = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/klickety-15.08.1.tar.xz";
-      sha256 = "1prbr2401jy4pifcyn8dy6q34f1nrhvhh8gm8p5jbr1jkzxmm1k1";
-      name = "klickety-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/klickety-15.08.2.tar.xz";
+      sha256 = "0dwzddygnhynib2qp8csbacdi2h0l3jsgscax2k0c4q67jlld59c";
+      name = "klickety-15.08.2.tar.xz";
     };
   };
   klines = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/klines-15.08.1.tar.xz";
-      sha256 = "17vnbk0qbiynyjycj5nda9w38ija5cvhlfhji1f580hq156qzsgl";
-      name = "klines-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/klines-15.08.2.tar.xz";
+      sha256 = "15gaz611vanz8jpp5hi57rg06q7l9hashs7izh5ffbixw1h8cnyv";
+      name = "klines-15.08.2.tar.xz";
     };
   };
   kmag = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kmag-15.08.1.tar.xz";
-      sha256 = "02bhjmmqb28qyacqzikrkxgh1zf4v1012kdjpdczsmnrgb1nmpgl";
-      name = "kmag-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kmag-15.08.2.tar.xz";
+      sha256 = "1zc8kjldvry96gm1334w27s0g579sfgxmxc1nxra56b1c6gvslgs";
+      name = "kmag-15.08.2.tar.xz";
     };
   };
   kmahjongg = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kmahjongg-15.08.1.tar.xz";
-      sha256 = "193ynx3da2nyaf2ixq7gc93nv8p9djslh8m666kdnqcxarlxd2qn";
-      name = "kmahjongg-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kmahjongg-15.08.2.tar.xz";
+      sha256 = "1v21zs6hb3r4ms8lfxxmfl0yhwkb8xks2813711gqs9fkff326sl";
+      name = "kmahjongg-15.08.2.tar.xz";
     };
   };
   kmailtransport = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kmailtransport-15.08.1.tar.xz";
-      sha256 = "18gnhw49df0f7j0n0nzfnr5v6wvl37mf82slwbsrjqvhj60b2xsg";
-      name = "kmailtransport-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kmailtransport-15.08.2.tar.xz";
+      sha256 = "1g235pv3lrwl2smwg4f3f4sbc6ail31b5f98kbipqlpcxg3rdx9d";
+      name = "kmailtransport-15.08.2.tar.xz";
     };
   };
   kmbox = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kmbox-15.08.1.tar.xz";
-      sha256 = "1b4b9kk99kvcz4krixnzwvwf7ydkpbsrzza74f8ljbl40ldn94jn";
-      name = "kmbox-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kmbox-15.08.2.tar.xz";
+      sha256 = "0csnbzi4xwrdzar060qgzl2w2rysil09asv5z4njh1rwhk8l8s4w";
+      name = "kmbox-15.08.2.tar.xz";
     };
   };
   kmime = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kmime-15.08.1.tar.xz";
-      sha256 = "1rz9nmx01rd4asv8iggh47m7snm0fdvlc9f59jpkbch1wxf70vqc";
-      name = "kmime-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kmime-15.08.2.tar.xz";
+      sha256 = "1skq9csf08bc7g0s145ga5z8amiaimvff8rnwg2f8mafh59hbdmk";
+      name = "kmime-15.08.2.tar.xz";
     };
   };
   kmines = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kmines-15.08.1.tar.xz";
-      sha256 = "12n4im9vqyym5jr0chs4g3wjlr2d2a3i35jhm52j8ibdx7fnpmw6";
-      name = "kmines-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kmines-15.08.2.tar.xz";
+      sha256 = "1jbgr0nmh3bw0qi29z5lff1n25rdnyi50kfxk542ld1wqp97nmij";
+      name = "kmines-15.08.2.tar.xz";
     };
   };
   kmix = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kmix-15.08.1.tar.xz";
-      sha256 = "1lpzghasljw07kq9a94lw61l4qlvhif6cd7jypg0vici65lz8k7d";
-      name = "kmix-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kmix-15.08.2.tar.xz";
+      sha256 = "0vaja9yw12gwif53vj6hsm11k2p7rj0ndkk6sfv5nlhrid3h541q";
+      name = "kmix-15.08.2.tar.xz";
     };
   };
   kmousetool = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kmousetool-15.08.1.tar.xz";
-      sha256 = "0snyqp2410bjkc5krxhkk08i3lyd5724513vs48lxdasv24jc0nz";
-      name = "kmousetool-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kmousetool-15.08.2.tar.xz";
+      sha256 = "0j1hlp7fk1j3g2p408wm3biy4ac6jfk7f107pyxspwqkcd0d2pb1";
+      name = "kmousetool-15.08.2.tar.xz";
     };
   };
   kmouth = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kmouth-15.08.1.tar.xz";
-      sha256 = "1w6jgs9skis1y8g07hdzwpdsa7dmzfi5dw82wx0wnnmdm076vg41";
-      name = "kmouth-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kmouth-15.08.2.tar.xz";
+      sha256 = "0vrpv1r88wqm66bakssnirn8c7pi0lndkp9lvv9wpxw1g3rkw652";
+      name = "kmouth-15.08.2.tar.xz";
     };
   };
   kmplot = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kmplot-15.08.1.tar.xz";
-      sha256 = "1a1b6vcxp1wkp6qfidwj42vqkh6wm4m64q0hm7zv6h01l10fzdm2";
-      name = "kmplot-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kmplot-15.08.2.tar.xz";
+      sha256 = "03q0691060a8x9kxwb33b44cac6difxs435r349jf1mcj34dz157";
+      name = "kmplot-15.08.2.tar.xz";
     };
   };
   knavalbattle = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/knavalbattle-15.08.1.tar.xz";
-      sha256 = "1j235kdnb0qx1dkq89gqcwk0qjj16m0iyf502d6p1mz8cskz7fkp";
-      name = "knavalbattle-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/knavalbattle-15.08.2.tar.xz";
+      sha256 = "1m8y094fymiiqninv7nvgibq96kpfa1srzqfka8j64a4zp0zw7m3";
+      name = "knavalbattle-15.08.2.tar.xz";
     };
   };
   knetwalk = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/knetwalk-15.08.1.tar.xz";
-      sha256 = "0biis3gz943s09dzdxxdpkpizy3qzp9csi72njbm3bapxwmcflr2";
-      name = "knetwalk-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/knetwalk-15.08.2.tar.xz";
+      sha256 = "0hz98w0animdcmrzwsv5qiajwm9i1agz3qmalispq7hxnsss36wm";
+      name = "knetwalk-15.08.2.tar.xz";
     };
   };
   kolf = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kolf-15.08.1.tar.xz";
-      sha256 = "05xldbfkbbvmq743029cksgdcsfn20xadn91sw1yp9146k0bd97h";
-      name = "kolf-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kolf-15.08.2.tar.xz";
+      sha256 = "0afqdsymsgp5gkhghlmdxvk4z2mxpcfyhlxcj92070w1idm537jd";
+      name = "kolf-15.08.2.tar.xz";
     };
   };
   kollision = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kollision-15.08.1.tar.xz";
-      sha256 = "03bm9ydrfq0kicf7j2bmrvjgcffciq7ys0fz0xpcllkwglidsnar";
-      name = "kollision-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kollision-15.08.2.tar.xz";
+      sha256 = "13zxmjhj8wf4qjp9nzgrc4i5hfdyh23y8hq29v2pycls9m5crv79";
+      name = "kollision-15.08.2.tar.xz";
     };
   };
   kolourpaint = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kolourpaint-15.08.1.tar.xz";
-      sha256 = "1m0dwv2wxf5nsisg4zc6h1cqbnzv4187il7y45rbkxli430jh43d";
-      name = "kolourpaint-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kolourpaint-15.08.2.tar.xz";
+      sha256 = "0m4vcjkaprlkv5lhvin88m3yfnnkd3vp839fz0m7f8nsrgr1lxsz";
+      name = "kolourpaint-15.08.2.tar.xz";
     };
   };
   kompare = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kompare-15.08.1.tar.xz";
-      sha256 = "0n474f1nvbkxj1ryyv2x0yqm9qg3crdzmr30l2fbagi2fxmjxkli";
-      name = "kompare-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kompare-15.08.2.tar.xz";
+      sha256 = "0s7w2x4j420vs7sqpm6i52c30wxwvmrz8skhlk8fnypz5mldbqda";
+      name = "kompare-15.08.2.tar.xz";
     };
   };
   konquest = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/konquest-15.08.1.tar.xz";
-      sha256 = "0ss7gvr8ihk7ip4dhxyps8h1137i5m20m6sf0rv10c2h0y9cy0zk";
-      name = "konquest-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/konquest-15.08.2.tar.xz";
+      sha256 = "1m6zd1a4s8593rsqk4six664ajlfn5izgc3n04xiyqsxyjq73gsr";
+      name = "konquest-15.08.2.tar.xz";
     };
   };
   konsole = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/konsole-15.08.1.tar.xz";
-      sha256 = "15d401xxqhd8sfjc6gpn7f1zcs5w8l6y2bjvjvidmpzmr24xky1j";
-      name = "konsole-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/konsole-15.08.2.tar.xz";
+      sha256 = "195m7is6lwhdh644isqcyfq57q78nslwb572jpyp77wp1vhvyl78";
+      name = "konsole-15.08.2.tar.xz";
     };
   };
   kontactinterface = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kontactinterface-15.08.1.tar.xz";
-      sha256 = "1axsixl5yvawrczpgfbrcyax9d9mmc8yjvkxi0hi26mq8zzxkxnm";
-      name = "kontactinterface-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kontactinterface-15.08.2.tar.xz";
+      sha256 = "0rdpncmb1jrsh3s4zc94b5sml6a1xj0pxfpb06zcvrn1cz90laap";
+      name = "kontactinterface-15.08.2.tar.xz";
     };
   };
   kopete = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kopete-15.08.1.tar.xz";
-      sha256 = "0949m4xw94hnw79c6ar8m9qjcx7r14qs6jww3pcnab7r0ax4xahb";
-      name = "kopete-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kopete-15.08.2.tar.xz";
+      sha256 = "0c4h2g22wiyw2qdpdr2d3wchcbd0n289v2jlw8qfblzr0xcb6wzk";
+      name = "kopete-15.08.2.tar.xz";
     };
   };
   kpat = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kpat-15.08.1.tar.xz";
-      sha256 = "0cw17agpx23fsmnnvwkjn3xvq59d6hpppgydalnhrqka9321qy2d";
-      name = "kpat-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kpat-15.08.2.tar.xz";
+      sha256 = "0jsvljvx8qf85gibxc8yb1p54z26yfixh04gx02sfkr66mz4jbrg";
+      name = "kpat-15.08.2.tar.xz";
     };
   };
   kpimtextedit = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kpimtextedit-15.08.1.tar.xz";
-      sha256 = "1djk0gyfdxsqjwhrqf4rnkjvy7hz1rysdm3idjqrnjhnlrjwsiwc";
-      name = "kpimtextedit-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kpimtextedit-15.08.2.tar.xz";
+      sha256 = "1yq8fg1fasfw7nsndav6yhd6ig885z6pm1l6yimlfig1z114047i";
+      name = "kpimtextedit-15.08.2.tar.xz";
     };
   };
   kppp = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kppp-15.08.1.tar.xz";
-      sha256 = "1v2dqb9bdi1yl4fpyn98iq8pg69r9pfy7z1wbq6b37nwlhlapva8";
-      name = "kppp-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kppp-15.08.2.tar.xz";
+      sha256 = "14svvk3nkxmj6rl6gz0204blh0m5j05glklan2ph179sd4x84sv0";
+      name = "kppp-15.08.2.tar.xz";
     };
   };
   kqtquickcharts = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kqtquickcharts-15.08.1.tar.xz";
-      sha256 = "0jjn8nrxqjpsg9cwfazqz7v4lacl99wxhdh9mclqxk4xy54ydxqc";
-      name = "kqtquickcharts-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kqtquickcharts-15.08.2.tar.xz";
+      sha256 = "0x946bc0zczxvc56ichbwb4ib2s7b222cmxq77f1dzyjpwi22jz1";
+      name = "kqtquickcharts-15.08.2.tar.xz";
     };
   };
   krdc = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/krdc-15.08.1.tar.xz";
-      sha256 = "1gx3vhl8w64ya71894lgy2i3kkggr84r1c5sx8nbwvapw5v4ngiz";
-      name = "krdc-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/krdc-15.08.2.tar.xz";
+      sha256 = "0ldjf77svdl8qfr9nm4g34jfzpg7nzsc3pc960q4c2k1jwzywh76";
+      name = "krdc-15.08.2.tar.xz";
     };
   };
   kremotecontrol = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kremotecontrol-15.08.1.tar.xz";
-      sha256 = "01fck27b3ilni2h78lmhq27aq4sw89060bh69xhw8z80iad2bxyy";
-      name = "kremotecontrol-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kremotecontrol-15.08.2.tar.xz";
+      sha256 = "08n63nj35x5vswaa61vdnlss27bqr3n979r79rrrmvnksjzpw1kx";
+      name = "kremotecontrol-15.08.2.tar.xz";
     };
   };
   kreversi = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kreversi-15.08.1.tar.xz";
-      sha256 = "0clxm23a0m5j8aj3cp1va5s38y0y5wr7akwmigpk37xjylzp1xdd";
-      name = "kreversi-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kreversi-15.08.2.tar.xz";
+      sha256 = "180qh06cjxf0nilhism9lkl1qk24hxpva8ikk68yzm3fajskaiy4";
+      name = "kreversi-15.08.2.tar.xz";
     };
   };
   krfb = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/krfb-15.08.1.tar.xz";
-      sha256 = "0cpypajr483iwch385240zi5l0vf4j28k0sng0kszhizspkhvp35";
-      name = "krfb-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/krfb-15.08.2.tar.xz";
+      sha256 = "0p8h6b5rz2mh38y8gfx70c2ga7hpz5dxs86fm8jk696g1g4knq7l";
+      name = "krfb-15.08.2.tar.xz";
     };
   };
   kross-interpreters = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kross-interpreters-15.08.1.tar.xz";
-      sha256 = "1lqkmxxw1kz23q4pmmvrwqgi9vkxp0pw6g3zpr0x4zkzsj62q2ff";
-      name = "kross-interpreters-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kross-interpreters-15.08.2.tar.xz";
+      sha256 = "19jnh25kzfi2bf85pm0wdy1wv6csgk55gm97ccc80306frncyman";
+      name = "kross-interpreters-15.08.2.tar.xz";
     };
   };
   kruler = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kruler-15.08.1.tar.xz";
-      sha256 = "06qlvdyd1cbw8vr2qcqs7q8jylj7kl0y218agp8b60h03nri9psj";
-      name = "kruler-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kruler-15.08.2.tar.xz";
+      sha256 = "1amn9h7fz3ywrw7xazrdxh0apsgn2gpql35wih8zpq4pznmcxs7j";
+      name = "kruler-15.08.2.tar.xz";
     };
   };
   ksaneplugin = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ksaneplugin-15.08.1.tar.xz";
-      sha256 = "0fx0y4js4nbbky342ly3aw59rbzz25mjb1da0hkykky9kxrcwnxk";
-      name = "ksaneplugin-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ksaneplugin-15.08.2.tar.xz";
+      sha256 = "1b0hcv3w2h7pqdi3liwvahfn2y853b74xnx6rq92scrsk4grlri2";
+      name = "ksaneplugin-15.08.2.tar.xz";
     };
   };
   kscd = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kscd-15.08.1.tar.xz";
-      sha256 = "0alf1088p32spwlpjjj91wpgk48ahzqphvag8adgvh9cp8ij7m7j";
-      name = "kscd-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kscd-15.08.2.tar.xz";
+      sha256 = "1n1l25a74kdrdz426gn3mk7kdwflg5xq1rjf9c0mfh7h6jqic4vx";
+      name = "kscd-15.08.2.tar.xz";
     };
   };
   kshisen = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kshisen-15.08.1.tar.xz";
-      sha256 = "1lrn5l4jscbn0ppppshpkh62plskzwy2km9dqp1hp5czpq5zvwk8";
-      name = "kshisen-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kshisen-15.08.2.tar.xz";
+      sha256 = "0fnjjaf6q04snd0la89hgvijcm3kckh3c47w9a7ih0524331jlkb";
+      name = "kshisen-15.08.2.tar.xz";
     };
   };
   ksirk = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ksirk-15.08.1.tar.xz";
-      sha256 = "00zlmjyxf31hl910kickgxcc3sh5g2j9grg2mlps8qxdv9m4g1d5";
-      name = "ksirk-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ksirk-15.08.2.tar.xz";
+      sha256 = "1934qwcbcmghz7iwjc2nimbyl0wv1lvpc8r45c8xwwdbsz0mvkwc";
+      name = "ksirk-15.08.2.tar.xz";
     };
   };
   ksnakeduel = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ksnakeduel-15.08.1.tar.xz";
-      sha256 = "1q0hcya6dl2lfahqnwx18hl6cwmibsvlyf25x41d42669f7vm1zz";
-      name = "ksnakeduel-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ksnakeduel-15.08.2.tar.xz";
+      sha256 = "1nx3ac1vjfck7nhnyx5rf42rhjlq4gp3sairxm9ad3lrm885wg3v";
+      name = "ksnakeduel-15.08.2.tar.xz";
     };
   };
   ksnapshot = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ksnapshot-15.08.1.tar.xz";
-      sha256 = "19z3rbvkn55waig6dm1lvan6wlndshhjbiqwwdlc9nh2wng8dcd0";
-      name = "ksnapshot-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ksnapshot-15.08.2.tar.xz";
+      sha256 = "1sf9sshqnpnszvzix76k7swxiwgik9gw7rkpahwgq9vyczyjq3v8";
+      name = "ksnapshot-15.08.2.tar.xz";
     };
   };
   kspaceduel = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kspaceduel-15.08.1.tar.xz";
-      sha256 = "0anviqhcmyfnyq9zz6hh8cka75hy5ydxq5yvz7q0g6c3flj34fq2";
-      name = "kspaceduel-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kspaceduel-15.08.2.tar.xz";
+      sha256 = "1k2nvlvm1s5hs4568h7f10mlc2yj3zdnnlzb8zff93j9ydh4rng8";
+      name = "kspaceduel-15.08.2.tar.xz";
     };
   };
   ksquares = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ksquares-15.08.1.tar.xz";
-      sha256 = "17qx89q594w22nd2qhqcmb1wc291b89zs22jh62xrm62yr6h9ijj";
-      name = "ksquares-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ksquares-15.08.2.tar.xz";
+      sha256 = "0ba95qjkv2wh3g74384lgvk5vq4xc8q59cdiv8vcxllgpgh6hk4p";
+      name = "ksquares-15.08.2.tar.xz";
     };
   };
   kstars = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kstars-15.08.1.tar.xz";
-      sha256 = "049pnbqn1ddmqd663vc181yh5z204klbs255w41k7p1z1vl5zszr";
-      name = "kstars-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kstars-15.08.2.tar.xz";
+      sha256 = "0x39djm78bafxxk1n36w7kp0a7jmwsxhbpap6k44awb9mdnd0410";
+      name = "kstars-15.08.2.tar.xz";
     };
   };
   ksudoku = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ksudoku-15.08.1.tar.xz";
-      sha256 = "1l6dgackab9k1rnzbwwz3rfpxlqvydp5q632ibpqs449c6pk3kww";
-      name = "ksudoku-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ksudoku-15.08.2.tar.xz";
+      sha256 = "1v0c1dflz8sj1fqkqca1dhs4cb4ijy4nyg9i7ngqqw4pp9pdb2ks";
+      name = "ksudoku-15.08.2.tar.xz";
     };
   };
   ksystemlog = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ksystemlog-15.08.1.tar.xz";
-      sha256 = "1v18f6dcirr6rayaxy8h85swj04g5giafs67h64g9flq5gacykji";
-      name = "ksystemlog-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ksystemlog-15.08.2.tar.xz";
+      sha256 = "1p5xlsll68jb02mg16fyy3jvfk20pf4nw6gn9ar0s7hvmk11p8zv";
+      name = "ksystemlog-15.08.2.tar.xz";
     };
   };
   kteatime = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kteatime-15.08.1.tar.xz";
-      sha256 = "0bsy22dgfpsibkpi0nv4245mxaf0xnh8rpaia8mzrh0d72gf2syb";
-      name = "kteatime-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kteatime-15.08.2.tar.xz";
+      sha256 = "1bgliai4y4b6ci8rr53yfdaw09am4db2zydf7v60qvc0lqaas8gx";
+      name = "kteatime-15.08.2.tar.xz";
     };
   };
   ktimer = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ktimer-15.08.1.tar.xz";
-      sha256 = "07882zpgalf2yzqplg3mzl6sxh84zfkbk1jwlw8kwkr7pr7lmfvv";
-      name = "ktimer-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ktimer-15.08.2.tar.xz";
+      sha256 = "05l46bbn7m67ncsm8bi283pdwixwqm85r51hi7fvqih6dwkc0143";
+      name = "ktimer-15.08.2.tar.xz";
     };
   };
   ktnef = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ktnef-15.08.1.tar.xz";
-      sha256 = "04jq60qpbgaclscgpwx3sj0l67sqzk9zr01zr6fx127apqzc2xmh";
-      name = "ktnef-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ktnef-15.08.2.tar.xz";
+      sha256 = "0wqhj8a496zf0nns7jsncm9d21pd4qibrmqi5lsnvc3dj20ijrxm";
+      name = "ktnef-15.08.2.tar.xz";
     };
   };
   ktouch = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ktouch-15.08.1.tar.xz";
-      sha256 = "1hlg1l1xpmpwvzz47vmif395pw9szjy93p8yxhqsdhkh1f4mdssq";
-      name = "ktouch-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ktouch-15.08.2.tar.xz";
+      sha256 = "1wwqq52mwc1bnia05zf5pmrqd1ii537n8z72f99jgbvgnq6xyph1";
+      name = "ktouch-15.08.2.tar.xz";
     };
   };
   ktp-accounts-kcm = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ktp-accounts-kcm-15.08.1.tar.xz";
-      sha256 = "1qk25v0ivxkv8cyq4y44ixz9rx28djfxk06zcvn2m1rwjqhrx204";
-      name = "ktp-accounts-kcm-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ktp-accounts-kcm-15.08.2.tar.xz";
+      sha256 = "1ikbaqgavah175s936n69j0na09jgmfk8vr0kb5g41zwabza58g8";
+      name = "ktp-accounts-kcm-15.08.2.tar.xz";
     };
   };
   ktp-approver = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ktp-approver-15.08.1.tar.xz";
-      sha256 = "0qdax2zby93xc694s3s6s21y4bfjbfxsd292ag544cwazcjz8zp5";
-      name = "ktp-approver-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ktp-approver-15.08.2.tar.xz";
+      sha256 = "0nib7c95aq2ij9sbpkf7rxynnqcdfk5ib9yrxqrh640cqb4ifbx6";
+      name = "ktp-approver-15.08.2.tar.xz";
     };
   };
   ktp-auth-handler = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ktp-auth-handler-15.08.1.tar.xz";
-      sha256 = "0dwpaw2pvigc0lyqa29gxq49fp6rp5hh2wg6ysr1d00s54lr2qgw";
-      name = "ktp-auth-handler-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ktp-auth-handler-15.08.2.tar.xz";
+      sha256 = "0b4vnvhxj2j8lmd7lglbhzibwqag0pf2clhv50mvyc3mrp5l80r4";
+      name = "ktp-auth-handler-15.08.2.tar.xz";
     };
   };
   ktp-common-internals = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ktp-common-internals-15.08.1.tar.xz";
-      sha256 = "13alrk7zn3vq6khackdbyqbk209ivvcfza9mpqaxxll8sg9r3i3k";
-      name = "ktp-common-internals-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ktp-common-internals-15.08.2.tar.xz";
+      sha256 = "0ny9z1xwprkn7ckx809i2zi4n1bjrniigif0wbyfdmbyp7dz7sgi";
+      name = "ktp-common-internals-15.08.2.tar.xz";
     };
   };
   ktp-contact-list = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ktp-contact-list-15.08.1.tar.xz";
-      sha256 = "0x8fvfqjjrhdnfaa9ybagf33lv1r21bywkipvkp2f81dalsd1sv0";
-      name = "ktp-contact-list-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ktp-contact-list-15.08.2.tar.xz";
+      sha256 = "03c0h801zwjqkb9d58v5nk5nmkkhq3517d170pppx9cxza87nzm9";
+      name = "ktp-contact-list-15.08.2.tar.xz";
     };
   };
   ktp-contact-runner = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ktp-contact-runner-15.08.1.tar.xz";
-      sha256 = "1m8jc39l9d394x3hqlqvc5msy7wi1aki9q8nd4bg6nmdz8v5dxz9";
-      name = "ktp-contact-runner-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ktp-contact-runner-15.08.2.tar.xz";
+      sha256 = "1pjc7sjiq4s96x0dyyc5kv7r00jmy1gi67y7y71vlxf9mccgi1fv";
+      name = "ktp-contact-runner-15.08.2.tar.xz";
     };
   };
   ktp-desktop-applets = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ktp-desktop-applets-15.08.1.tar.xz";
-      sha256 = "16nan7vb2gzpll2fnc4li23sjjxhgy7ijzfp6zcp5gc1bxn86jj4";
-      name = "ktp-desktop-applets-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ktp-desktop-applets-15.08.2.tar.xz";
+      sha256 = "0y1zm57smjr6ww89797bgwbrpm16yksscl3p5vhm0fapr0pw2g76";
+      name = "ktp-desktop-applets-15.08.2.tar.xz";
     };
   };
   ktp-filetransfer-handler = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ktp-filetransfer-handler-15.08.1.tar.xz";
-      sha256 = "135zpcl0g81xd9hljch05cjngs6x05cnzngzx5h5hsjf13fgz9cn";
-      name = "ktp-filetransfer-handler-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ktp-filetransfer-handler-15.08.2.tar.xz";
+      sha256 = "06s1ibbgplafca6kwn44fyf36w8ygn17hg6c8wighg3603m72n0z";
+      name = "ktp-filetransfer-handler-15.08.2.tar.xz";
     };
   };
   ktp-kded-module = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ktp-kded-module-15.08.1.tar.xz";
-      sha256 = "0l2s07z87q2j92q4w6n16rbvd7xm8k4zgchlk06djb5d9gwdgvl0";
-      name = "ktp-kded-module-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ktp-kded-module-15.08.2.tar.xz";
+      sha256 = "1hqrlb82fgsrdna1sinxl1dnx22dfb7j98bmrfvn6cxxkay866sq";
+      name = "ktp-kded-module-15.08.2.tar.xz";
     };
   };
   ktp-send-file = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ktp-send-file-15.08.1.tar.xz";
-      sha256 = "07pk6d1rzz0hwfsw7nk4grixvvjja219jvr56j50vpnlmlza29xs";
-      name = "ktp-send-file-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ktp-send-file-15.08.2.tar.xz";
+      sha256 = "0kwamr99aj78v816gxiyr3bxivl6sy6dc29q59x03bkpdqdnn87n";
+      name = "ktp-send-file-15.08.2.tar.xz";
     };
   };
   ktp-text-ui = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ktp-text-ui-15.08.1.tar.xz";
-      sha256 = "1f7r47rbcciq12c5531qb9wr7xqz7nvsy04jk8gaxwdsr9a97ayf";
-      name = "ktp-text-ui-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ktp-text-ui-15.08.2.tar.xz";
+      sha256 = "074cj52h2admwl8xpjj36jjjlpf199fpasylpga0xval6362vrln";
+      name = "ktp-text-ui-15.08.2.tar.xz";
     };
   };
   ktuberling = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ktuberling-15.08.1.tar.xz";
-      sha256 = "1y9ifgg2086zz45pj32xxjrgnbsgiq7ajbjl8cybjxcx624j66ic";
-      name = "ktuberling-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ktuberling-15.08.2.tar.xz";
+      sha256 = "136wnpn04zahmk4q8yymjqix5q6h4w5ibfgp19kr1b2qm721g0p4";
+      name = "ktuberling-15.08.2.tar.xz";
     };
   };
   kturtle = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kturtle-15.08.1.tar.xz";
-      sha256 = "0n6vbj2kvcby62cn8i65dq2rl5jv1zfp9xbg827s6vz681an2sqk";
-      name = "kturtle-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kturtle-15.08.2.tar.xz";
+      sha256 = "00wknl5z38jpvsh5zji4v4hf0077c6sl9fvwj5zyb0l033l3sqd4";
+      name = "kturtle-15.08.2.tar.xz";
     };
   };
   ktux = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/ktux-15.08.1.tar.xz";
-      sha256 = "1vw0ybkvrcqcng6sz0hw12bhsspig98m0wjn8phlyljfd5d8p4h3";
-      name = "ktux-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/ktux-15.08.2.tar.xz";
+      sha256 = "0y6brihalwm6v96lin3fbakljgbk5ns2wcwr2bliy3y3g322b5p0";
+      name = "ktux-15.08.2.tar.xz";
     };
   };
   kubrick = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kubrick-15.08.1.tar.xz";
-      sha256 = "1sanlaz70m1jpaxjwlx2gljh57gg4gdcz7y9g2w191667yk0kq8g";
-      name = "kubrick-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kubrick-15.08.2.tar.xz";
+      sha256 = "1h7idvf3dn68cfzlsgjbrn8yn1ykdyh9hp9400slb4m4d0qhhlk4";
+      name = "kubrick-15.08.2.tar.xz";
     };
   };
   kuser = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kuser-15.08.1.tar.xz";
-      sha256 = "0qgvjfh1r4ri227zbcb2v9dg7njg1wq3pi189y0l3jzgfa4h1aph";
-      name = "kuser-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kuser-15.08.2.tar.xz";
+      sha256 = "0cj60nhsvxqng6q32dzqb9ybns942wvqsa11r52f537v1z5csn6m";
+      name = "kuser-15.08.2.tar.xz";
     };
   };
   kwalletmanager = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kwalletmanager-15.08.1.tar.xz";
-      sha256 = "1ibfiaglwgqxnsmx1f8pcylv0kzywpd2mvyawcdhcl3yqdpyw4v7";
-      name = "kwalletmanager-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kwalletmanager-15.08.2.tar.xz";
+      sha256 = "0b7krm8g7r4wmm792rshmxpp2jx6ln323cnk1iqxy3dnfs0wb7zc";
+      name = "kwalletmanager-15.08.2.tar.xz";
     };
   };
   kwordquiz = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/kwordquiz-15.08.1.tar.xz";
-      sha256 = "0b20n7k8ging2gw6l0k09r71ww1dg0fh5y5lqzlzcl8vqhdwkwpp";
-      name = "kwordquiz-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/kwordquiz-15.08.2.tar.xz";
+      sha256 = "032lrfxq6izhxmlg9d1jwz6sakvy2nidgjhaznlzaspag96jhgzv";
+      name = "kwordquiz-15.08.2.tar.xz";
     };
   };
   libkcddb = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/libkcddb-15.08.1.tar.xz";
-      sha256 = "1x26dpr26d6xc73203dbk3vni7hcn1w6jdk94ffs0aaf3bmifal2";
-      name = "libkcddb-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/libkcddb-15.08.2.tar.xz";
+      sha256 = "0kmxxcbjvd2iw0vhypm686pw3whnw14hc3xz224md76cr6wwmizm";
+      name = "libkcddb-15.08.2.tar.xz";
     };
   };
   libkcompactdisc = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/libkcompactdisc-15.08.1.tar.xz";
-      sha256 = "19b6zjzdmjagz9d9x1bb46cc59r92qm9g0pbvim9br603crwsasd";
-      name = "libkcompactdisc-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/libkcompactdisc-15.08.2.tar.xz";
+      sha256 = "10ikmqjj9yjmd1knr7nq51fi3khp38p819qarszwlqj43kfbl61d";
+      name = "libkcompactdisc-15.08.2.tar.xz";
     };
   };
   libkdcraw = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/libkdcraw-15.08.1.tar.xz";
-      sha256 = "0kshhch81sqjlashbh3ww3nz9ahv99f1bsxlrly39rvfa8yg6vpv";
-      name = "libkdcraw-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/libkdcraw-15.08.2.tar.xz";
+      sha256 = "1msfcafj6dj4j2sxrwnlbs1lb4987cffpsqiiwg9imzfgq3c2nwy";
+      name = "libkdcraw-15.08.2.tar.xz";
     };
   };
   libkdeedu = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/libkdeedu-15.08.1.tar.xz";
-      sha256 = "09fv1fbxlf6n4k0fyiy49avykpnxbmvi833i6ibm90v9csrfv6hf";
-      name = "libkdeedu-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/libkdeedu-15.08.2.tar.xz";
+      sha256 = "1s1jn80i5jrdz1rpl6m5y3kq1hb51wynxh67garlfch056dlcyfp";
+      name = "libkdeedu-15.08.2.tar.xz";
     };
   };
   libkdegames = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/libkdegames-15.08.1.tar.xz";
-      sha256 = "0khr3rih3yv2vh9q2dkvdc2r1lpxhky5hmh7gachhyjh0296i9nq";
-      name = "libkdegames-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/libkdegames-15.08.2.tar.xz";
+      sha256 = "020m58lbjnh8h87jp3vdcd3w410d2sl1spc0j9amgjhaq6p5bpmr";
+      name = "libkdegames-15.08.2.tar.xz";
     };
   };
   libkeduvocdocument = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/libkeduvocdocument-15.08.1.tar.xz";
-      sha256 = "0fz8fkcai1zdmqhvcic689sbwm07zg69z7jw4m6wgk7yqls8mkvq";
-      name = "libkeduvocdocument-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/libkeduvocdocument-15.08.2.tar.xz";
+      sha256 = "0yql1yg550q6jcjjsywrg5a0wdd7cwaaci87az75jq6b9mxf5il2";
+      name = "libkeduvocdocument-15.08.2.tar.xz";
     };
   };
   libkexiv2 = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/libkexiv2-15.08.1.tar.xz";
-      sha256 = "0cgbh6g5kqi8lzlnidd19yxlyzid71pncpxikmhqfmnwhdgrqq2f";
-      name = "libkexiv2-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/libkexiv2-15.08.2.tar.xz";
+      sha256 = "03fcd7fk4jxnbadm0v59swvfm5cvsylvf4fgz8m6v1rqk5z5sw10";
+      name = "libkexiv2-15.08.2.tar.xz";
     };
   };
   libkface = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/libkface-15.08.1.tar.xz";
-      sha256 = "0k2rsmnzfyab1x1nyirlhs48c19b2i2f0x60w1igp7b66n6819kd";
-      name = "libkface-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/libkface-15.08.2.tar.xz";
+      sha256 = "1jnfg77nvppzvkas9bik5ciq57qdvjzqwxpk773zzx870bp6n3mi";
+      name = "libkface-15.08.2.tar.xz";
     };
   };
   libkgeomap = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/libkgeomap-15.08.1.tar.xz";
-      sha256 = "18y3pas4bx16ykf50jlwry7fbrx34cz1s0qflirxyrx6n8kh9lgm";
-      name = "libkgeomap-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/libkgeomap-15.08.2.tar.xz";
+      sha256 = "1qpkffs8hyz2ax7xhxy6r5mvm2kndzlis2vwwm2mca5ac5gi10hj";
+      name = "libkgeomap-15.08.2.tar.xz";
     };
   };
   libkipi = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/libkipi-15.08.1.tar.xz";
-      sha256 = "0mmk8zfwffns7gacdjhjh45ki762wpd21nwvgbjclf3rjzgbyxz8";
-      name = "libkipi-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/libkipi-15.08.2.tar.xz";
+      sha256 = "1ryck2mzzy5v50sbs3xzw5g8kxpcj444fizq2bjnn1ffijkrific";
+      name = "libkipi-15.08.2.tar.xz";
     };
   };
   libkmahjongg = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/libkmahjongg-15.08.1.tar.xz";
-      sha256 = "1jpcj2kj9wn6988gzz4csrwy4c2pwbnyi184iq6c39fmbvrv4f2r";
-      name = "libkmahjongg-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/libkmahjongg-15.08.2.tar.xz";
+      sha256 = "0hj9qk9pwqvmrrrs0qq053vz4xw3m9fszvlz9289mqla93xm9kx7";
+      name = "libkmahjongg-15.08.2.tar.xz";
     };
   };
   libkomparediff2 = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/libkomparediff2-15.08.1.tar.xz";
-      sha256 = "1g8j5idy18a4fnc2m9cjg3xzq6kck070yq5ki4l9lbjinrhl3jpr";
-      name = "libkomparediff2-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/libkomparediff2-15.08.2.tar.xz";
+      sha256 = "1myc4fa9nrrszjfl9mg5yxa26pmc0fk2bygbjmsm0glxbvj3yn32";
+      name = "libkomparediff2-15.08.2.tar.xz";
     };
   };
   libksane = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/libksane-15.08.1.tar.xz";
-      sha256 = "0ih4axq0pcpvmgs8x12ad22bxixcccqpkqs160vxl7a29327rbdm";
-      name = "libksane-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/libksane-15.08.2.tar.xz";
+      sha256 = "05c71hkivr14z1gmd2967d3d0r2cccgh7krqra209pyk83xnax7a";
+      name = "libksane-15.08.2.tar.xz";
     };
   };
   lokalize = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/lokalize-15.08.1.tar.xz";
-      sha256 = "15xsx430a9w3kr1abvlh4h3spn063992mc76rq17c7a8n1n7zr4b";
-      name = "lokalize-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/lokalize-15.08.2.tar.xz";
+      sha256 = "15jilc5z3rd6ivaaw1hibsdv367n9zy163xi0b0m9szij5yzbcwd";
+      name = "lokalize-15.08.2.tar.xz";
     };
   };
   lskat = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/lskat-15.08.1.tar.xz";
-      sha256 = "13vhfpi34qcv6q56qaxwk89apss8l921a59qvlmadmw999h7ms0s";
-      name = "lskat-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/lskat-15.08.2.tar.xz";
+      sha256 = "178yl7iwfv8j2kr89m3j4h9advr6sw4kb902hn62gdabp6p695s6";
+      name = "lskat-15.08.2.tar.xz";
     };
   };
   marble = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/marble-15.08.1.tar.xz";
-      sha256 = "0dx0r1hjcfn3mvmsw0wgaw57jkn42166aj97ky0zdhdavkqv4j3j";
-      name = "marble-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/marble-15.08.2.tar.xz";
+      sha256 = "00hv6vvwhw8d2z5zy19iqp2jniknjh75013wxraaz32rpw7n7i53";
+      name = "marble-15.08.2.tar.xz";
     };
   };
   mplayerthumbs = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/mplayerthumbs-15.08.1.tar.xz";
-      sha256 = "01l063iply1d4bfdb04agj11imha4fpnv131dcfd39ixi1icv8yb";
-      name = "mplayerthumbs-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/mplayerthumbs-15.08.2.tar.xz";
+      sha256 = "1i3aqfn8y8nwlwpyg0bi640p6ig4y9fk42m4x62cv8zw3gfq4fyc";
+      name = "mplayerthumbs-15.08.2.tar.xz";
     };
   };
   okteta = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/okteta-15.08.1.tar.xz";
-      sha256 = "14mbfqc61rw2g89shh0ad38ph24c6nrj76qx9g1diazvr3p9sf1j";
-      name = "okteta-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/okteta-15.08.2.tar.xz";
+      sha256 = "0c29linn7i8dx0cf1cr3l69h3galys50hh4fqyskr19c1c1l1nlb";
+      name = "okteta-15.08.2.tar.xz";
     };
   };
   okular = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/okular-15.08.1.tar.xz";
-      sha256 = "0nicpz25srpn9zmwjxrnz8h2ba597ixsqcyhymki465dv5hgx5x7";
-      name = "okular-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/okular-15.08.2.tar.xz";
+      sha256 = "15qn7wsqnc4b8klj1ld7j1xczdrhq66f1xwhcb87v3bccqn4b7zf";
+      name = "okular-15.08.2.tar.xz";
     };
   };
   palapeli = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/palapeli-15.08.1.tar.xz";
-      sha256 = "09sbyw25ngvcg6inhh7ig0x5yyhsi3gw2il1p98sfdabjk2f8736";
-      name = "palapeli-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/palapeli-15.08.2.tar.xz";
+      sha256 = "1izpy143zrzc19gsyl1bgvhxhy83b2cl38qqkrf1jxcynjwy7j33";
+      name = "palapeli-15.08.2.tar.xz";
     };
   };
   parley = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/parley-15.08.1.tar.xz";
-      sha256 = "0f88ia58f9lw8rpz1mgr21hslkmwnwwf2ac0affm81b17nxx8zpc";
-      name = "parley-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/parley-15.08.2.tar.xz";
+      sha256 = "18jmls6il3j7kxhd7zv02r6zk834m4avjq28k0z4j6z9k8paf2a4";
+      name = "parley-15.08.2.tar.xz";
     };
   };
   picmi = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/picmi-15.08.1.tar.xz";
-      sha256 = "16sa0w3bhxbj8f8nl0wh5b639gzi6y45167g3mh62a7di6llw1rm";
-      name = "picmi-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/picmi-15.08.2.tar.xz";
+      sha256 = "168vn7yjkg1cngqb7crfrqz1mjciz0zznd60w38gws0rfdrk2dkr";
+      name = "picmi-15.08.2.tar.xz";
     };
   };
   poxml = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/poxml-15.08.1.tar.xz";
-      sha256 = "076ksfa9pdjbs8xk38j5z1ysryqcq68fgk5zw157cmxjaxv4ahqm";
-      name = "poxml-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/poxml-15.08.2.tar.xz";
+      sha256 = "0ar61p52qikdv403nbfj0bpvzv17zbfskii25bxs3mq46basi6hx";
+      name = "poxml-15.08.2.tar.xz";
     };
   };
   print-manager = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/print-manager-15.08.1.tar.xz";
-      sha256 = "0cy5ga11kk11ca4nzpr6wjb4a342ziaflilc9pz6l3b7r8vhjv09";
-      name = "print-manager-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/print-manager-15.08.2.tar.xz";
+      sha256 = "02fr7h4nym7h6j6kvhcxl51g08fgbda678irx0i81a00i0qzqpph";
+      name = "print-manager-15.08.2.tar.xz";
     };
   };
   rocs = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/rocs-15.08.1.tar.xz";
-      sha256 = "1s3mdi9hqhajryax4yg074dn0h5yq9fq4a8j6ksgg7a2ggl4l8kv";
-      name = "rocs-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/rocs-15.08.2.tar.xz";
+      sha256 = "03h07f2c20gl9yyiqz1mf285dxmc74ifrvg60pp601xwavg4khcv";
+      name = "rocs-15.08.2.tar.xz";
     };
   };
   signon-kwallet-extension = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/signon-kwallet-extension-15.08.1.tar.xz";
-      sha256 = "1pb73zqs34kygvaphgrvvl08hj882znsws1nzwbyyskyn6gjsw2n";
-      name = "signon-kwallet-extension-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/signon-kwallet-extension-15.08.2.tar.xz";
+      sha256 = "1p22vqr5bgjvwjjc2n8xdw71ksvgw6cbykigh3i0cnz3l8sj6xf0";
+      name = "signon-kwallet-extension-15.08.2.tar.xz";
     };
   };
   step = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/step-15.08.1.tar.xz";
-      sha256 = "15capfa297s4shrr6xwbpg62rn8pimwpmjm11p160g6lqdspwacm";
-      name = "step-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/step-15.08.2.tar.xz";
+      sha256 = "1j9kb9mc7byqy3qq4bbcd7cx98dppvpq8k8j1gi4fm71q5jmdhdj";
+      name = "step-15.08.2.tar.xz";
     };
   };
   superkaramba = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/superkaramba-15.08.1.tar.xz";
-      sha256 = "0pk7kr2bcj2yasf9af3bdqg207pidkg5m2yafmvp83dz2anyxad9";
-      name = "superkaramba-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/superkaramba-15.08.2.tar.xz";
+      sha256 = "0xwf040xw0hnd4ky07xi59597mrwh10fkfcpygrb52ai1hjqm8yn";
+      name = "superkaramba-15.08.2.tar.xz";
     };
   };
   svgpart = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/svgpart-15.08.1.tar.xz";
-      sha256 = "10vvnsm7xlgy5fia8l8cz6cgj4xsjshiqkiiwkzlmyzzx081zi57";
-      name = "svgpart-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/svgpart-15.08.2.tar.xz";
+      sha256 = "10kqh2i74a7hyx2vj1bb0zk13sp0hn1jb95bp71gwszyfrg207ky";
+      name = "svgpart-15.08.2.tar.xz";
     };
   };
   sweeper = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/sweeper-15.08.1.tar.xz";
-      sha256 = "08vk9yq7py576irkg34d3rzkdrzi6bb6zhynbyziyx097sqj5khj";
-      name = "sweeper-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/sweeper-15.08.2.tar.xz";
+      sha256 = "1hzscn0d317a41z30qb04xpkgx6iramj2zinrjga53cdsmgjgpq7";
+      name = "sweeper-15.08.2.tar.xz";
     };
   };
   syndication = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/syndication-15.08.1.tar.xz";
-      sha256 = "1kklbw77iiiqfcv8sydy9jkc8g630xw551y6r1jp1wbvrdkjwq47";
-      name = "syndication-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/syndication-15.08.2.tar.xz";
+      sha256 = "07ivknrhc253pcngwqjv6rjixcxc2b3kgwp9nzyiylxd7yp2qlf8";
+      name = "syndication-15.08.2.tar.xz";
     };
   };
   umbrello = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/umbrello-15.08.1.tar.xz";
-      sha256 = "0pq2d4iz1dmxb7cdmcja65703qlsakp590v5yjvhjsnlasnk8anj";
-      name = "umbrello-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/umbrello-15.08.2.tar.xz";
+      sha256 = "15nqd5b340dn6lv1l6whr0bn5hjfw4bh77y7zvji3sgmlzim4vll";
+      name = "umbrello-15.08.2.tar.xz";
     };
   };
   zeroconf-ioslave = {
-    version = "15.08.1";
+    version = "15.08.2";
     src = fetchurl {
-      url = "${mirror}/stable/applications/15.08.1/src/zeroconf-ioslave-15.08.1.tar.xz";
-      sha256 = "1h8v78b6fb82brpxkhlwyphb830ndzlq4z5llgav1dy7i0v8pd7r";
-      name = "zeroconf-ioslave-15.08.1.tar.xz";
+      url = "${mirror}/stable/applications/15.08.2/src/zeroconf-ioslave-15.08.2.tar.xz";
+      sha256 = "1q16xd6k8ps7zjpsjygpfkx0nqzfplfmn58363598fbvmiq7wq79";
+      name = "zeroconf-ioslave-15.08.2.tar.xz";
     };
   };
 }
