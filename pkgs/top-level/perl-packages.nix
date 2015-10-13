@@ -12613,6 +12613,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/S/SA/SAMTREGAR/XML-Validator-Schema-1.10.tar.gz;
       sha256 = "6142679580150a891f7d32232b5e31e2b4e5e53e8a6fa9cbeecb5c23814f1422";
     };
+    buildInputs = [ FileSlurpTiny ];
     propagatedBuildInputs = [ TreeDAGNode XMLFilterBufferText XMLSAX ];
     meta = {
       description = "Validate XML against a subset of W3C XML Schema";
