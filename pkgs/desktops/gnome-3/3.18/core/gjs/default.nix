@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ spidermonkey_24 ];
 
   postInstall = ''
-    sed 's|-lreadline|-L${readline}/lib -lreadline|g' -i $out/lib/libgjs.la
+    sed 's|-lreadline|-L${readline.out}/lib -lreadline|g' -i $out/lib/libgjs.la
   '';
 
   meta = with stdenv.lib; {
