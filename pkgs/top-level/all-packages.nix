@@ -2401,6 +2401,10 @@ let
     pythonPackages = python3Packages;
   };
 
+  morphis = callPackage ../applications/networking/morphis {
+    pythonPackages = python34Packages;
+  };
+
   nsjail = callPackage ../tools/security/nsjail {};
 
   nss_pam_ldapd = callPackage ../tools/networking/nss-pam-ldapd {};
@@ -9424,6 +9428,7 @@ let
 
   alsaUtils = callPackage ../os-specific/linux/alsa-utils { };
   alsaOss = callPackage ../os-specific/linux/alsa-oss { };
+  alsaTools = callPackage ../os-specific/linux/alsa-tools { };
 
   microcodeAmd = callPackage ../os-specific/linux/microcode/amd.nix { };
 
