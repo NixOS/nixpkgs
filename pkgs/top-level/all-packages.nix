@@ -6073,8 +6073,8 @@ let
   };
 
   # Should we deprecate these? Currently there are many references.
-  dbus_tools = pkgs.dbus.tools;
-  dbus_libs = pkgs.dbus.libs;
+  dbus_tools = pkgs.dbus.out;
+  dbus_libs = pkgs.dbus;
   dbus_daemon = pkgs.dbus.daemon;
 
   dhex = callPackage ../applications/editors/dhex { };

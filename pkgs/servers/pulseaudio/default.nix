@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ json_c libsndfile speexdsp fftwFloat ]
-    ++ lib.optionals stdenv.isLinux [ glib dbus.libs ]
+    ++ lib.optionals stdenv.isLinux [ glib dbus ]
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing ]
       ++ lib.optional jackaudioSupport libjack2

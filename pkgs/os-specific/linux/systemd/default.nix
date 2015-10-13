@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, intltool, gperf, libcap, dbus, kmod
+{ stdenv, fetchFromGitHub, pkgconfig, intltool, gperf, libcap, kmod
 , zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt
 , kexectools, libmicrohttpd, linuxHeaders, libseccomp

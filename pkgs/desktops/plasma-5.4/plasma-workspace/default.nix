@@ -44,7 +44,7 @@
 , kinit
 , kservice
 , qttools
-, dbus_tools
+, dbus
 , mkfontdir
 , xmessage
 , xprop
@@ -101,7 +101,8 @@ plasmaPackage {
 
   inherit bash coreutils gnused gnugrep socat;
   inherit kconfig kinit kservice qttools;
-  inherit dbus_tools mkfontdir xmessage xprop xrdb xset xsetroot;
+  inherit mkfontdir xmessage xprop xrdb xset xsetroot;
+  inherit (dbus) dbus-launch;
   postPatch = ''
     substituteAllInPlace startkde/startkde.cmake
     substituteInPlace startkde/kstartupconfig/kstartupconfig.cpp \

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     [ pythonDBus pygobject pygobject3 recursivePthLoader ];
 
   buildInputs =
-    [ pkgconfig dbus.libs glib alsaLib python pythonPackages.wrapPython
+    [ pkgconfig dbus glib alsaLib python pythonPackages.wrapPython
       readline libsndfile udev libical
       # Disables GStreamer; not clear what it gains us other than a
       # zillion extra dependencies.

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "--disable-tslib" "--with-systemdunitdir=$out/systemd/user"
     "ac_ct_CXX=foo" ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${xorg.libXtst}" "-I${dbus_libs}/include/dbus-1.0" "-I${dbus_libs}/lib/dbus-1.0/include" ];
+  NIX_CFLAGS_COMPILE = [ "-I${xorg.libXtst}" "-I${dbus_libs.dev}/include/dbus-1.0" "-I${dbus_libs.lib}/lib/dbus-1.0/include" ];
 
   patches = [ ./efl-elua.patch ];
 

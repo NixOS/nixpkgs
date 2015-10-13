@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mpzj6fc42hhx77lki8cdycgfj9gjrm611rh0wsaqam4qq2c9a9c";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${dbus_glib.dev}/include/dbus-1.0 -I${dbus_libs}/include/dbus-1.0";
+  NIX_CFLAGS_COMPILE = "-I${dbus_glib.dev}/include/dbus-1.0 -I${dbus_libs.dev}/include/dbus-1.0";
 
   enableParallelBuilding = true;
 

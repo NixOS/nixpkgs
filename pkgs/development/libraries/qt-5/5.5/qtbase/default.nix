@@ -81,7 +81,7 @@ stdenv.mkDerivation {
         };
         dlopen-dbus = substituteAll {
           src = ./0007-dlopen-dbus.patch;
-          dbus_libs = dbus.libs.out;
+          dbus_libs = dbus.lib;
         };
         xdg-config-dirs = ./0008-xdg-config-dirs.patch;
         decrypt-ssl-traffic = ./0009-decrypt-ssl-traffic.patch;
@@ -187,7 +187,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     xlibs.libXcomposite libX11 libxcb libXext libXrender libXi
-    fontconfig freetype openssl dbus.libs glib udev libxml2 libxslt pcre
+    fontconfig freetype openssl dbus glib udev libxml2 libxslt pcre
     zlib libjpeg libpng libtiff sqlite icu
     xcbutil xcbutilimage xcbutilkeysyms xcbutilwm libxkbcommon
   ]

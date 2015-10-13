@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ expat libiconv ];
 
-  propagatedBuildInputs = [ dbus.libs glib ];
+  propagatedBuildInputs = [ dbus glib ];
 
   doCheck = true;
 

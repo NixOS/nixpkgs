@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ intltool autoreconfHook pkgconfig vala glib
-                  gtk3 gnome3.gnome_control_center dbus.libs
+                  gtk3 gnome3.gnome_control_center dbus
                   clutter pango appstream-glib makeWrapper ];
 
   preConfigure = "intltoolize -f";

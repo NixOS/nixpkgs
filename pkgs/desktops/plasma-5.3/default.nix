@@ -236,7 +236,7 @@ let
       inherit (scope) bash coreutils gnused gnugrep socat;
       inherit (scope) kconfig kinit kservice qt5tools;
       inherit (scope.xorg) mkfontdir xmessage xprop xrdb xset xsetroot;
-      dbus_tools = scope.dbus.tools;
+      inherit (scope.dbus) dbus-launch;
       kde_workspace = kdeApps.kde-workspace;
       postPatch = ''
         substituteInPlace startkde/kstartupconfig/kstartupconfig.cpp \

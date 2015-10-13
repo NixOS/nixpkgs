@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1i20dnibvnq9lnkkhajr5xx3kxlwf9q5c4jm19kyb0q1klzgzlb8";
   };
 
-  buildInputs = [ glib dbus.libs openobex bluez libical ];
+  buildInputs = [ glib dbus openobex bluez libical ];
 
   nativeBuildInputs = [ pkgconfig ];
 

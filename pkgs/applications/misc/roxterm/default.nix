@@ -25,8 +25,8 @@ in stdenv.mkDerivation rec {
     [ dbus_libs dbus_glib gdk_pixbuf gettext gsettings_desktop_schemas gtk2 gtk3 hicolor_icon_theme vte ];
 
   NIX_CFLAGS_COMPILE = [ "-I${dbus_glib.dev}/include/dbus-1.0"
-                         "-I${dbus_libs}/include/dbus-1.0"
-                         "-I${dbus_libs}/lib/dbus-1.0/include" ];
+                         "-I${dbus_libs.dev}/include/dbus-1.0"
+                         "-I${dbus_libs.lib}/lib/dbus-1.0/include" ];
 
   # Fix up python path so the lockfile library is on it.
   PYTHONPATH = stdenv.lib.makeSearchPath "lib/${pythonFull.libPrefix}/site-packages" [

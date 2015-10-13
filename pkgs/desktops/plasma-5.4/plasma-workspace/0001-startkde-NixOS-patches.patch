@@ -180,7 +180,7 @@ index cfbe227..999dd8f 100644
 +# Make sure that D-Bus is running
 +# D-Bus autolaunch is broken
 +if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
-+    eval `@dbus_tools@/bin/dbus-launch --sh-syntax --exit-with-session`
++    eval `@dbus-launch@ --sh-syntax --exit-with-session`
 +fi
 +if @qttools@/bin/qdbus >/dev/null 2>/dev/null; then
 +    : # ok

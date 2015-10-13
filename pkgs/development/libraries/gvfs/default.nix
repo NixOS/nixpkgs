@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool libtool ];
 
   buildInputs =
-    [ makeWrapper glib dbus.libs udev libgudev udisks2 libgcrypt
+    [ makeWrapper glib dbus udev libgudev udisks2 libgcrypt
       libgphoto2 avahi libarchive fuse libcdio
       libxml2 libxslt docbook_xsl samba libmtp
       # ToDo: a ligther version of libsoup to have FTP/HTTP support?

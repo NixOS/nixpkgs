@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs =
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes libXv libXi
-      libSM zlib libpng openssl dbus.libs freetype fontconfig glib ]
+      libSM zlib libpng openssl dbus freetype fontconfig glib ]
         # Qt doesn't directly need GLU (just GL), but many apps use, it's small and doesn't remain a runtime-dep if not used
     ++ optional mesaSupported mesa_glu
     ++ optional ((buildWebkit || buildMultimedia) && stdenv.isLinux ) alsaLib

@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   outputs = [ "dev" "out" "doc" "man" ]; # TODO: above
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls avahi libpaper ]
-    ++ optionals stdenv.isLinux [ pam dbus.libs acl ];
+    ++ optionals stdenv.isLinux [ pam dbus acl ];
 
   propagatedBuildInputs = [ gmp ];
 

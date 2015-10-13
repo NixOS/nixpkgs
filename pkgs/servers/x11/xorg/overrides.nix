@@ -328,7 +328,7 @@ in
       version = (builtins.parseDrvName attrs.name).version;
       commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
       commonPropagatedBuildInputs = [
-        args.zlib args.mesa args.dbus.libs
+        args.zlib args.mesa args.dbus
         xf86bigfontproto glproto xf86driproto
         compositeproto scrnsaverproto resourceproto
         xf86dgaproto

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     wayland mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
-    mtdev libjpeg pam dbus.libs libinput pango libunwind freerdp vaapi libva
+    mtdev libjpeg pam dbus libinput pango libunwind freerdp vaapi libva
     libwebp
   ];
 

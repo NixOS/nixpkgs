@@ -71,7 +71,7 @@ stdenv.mkDerivation {
       ./0006-tzdir.patch
       (substituteAll { src = ./0010-dlopen-libXcursor.patch; libXcursor = libXcursor.out; })
       (substituteAll { src = ./0011-dlopen-openssl.patch; openssl = openssl.out; })
-      (substituteAll { src = ./0012-dlopen-dbus.patch; dbus_libs = dbus.libs.out; })
+      (substituteAll { src = ./0012-dlopen-dbus.patch; dbus_libs = dbus.lib; })
       ./0013-xdg_config_dirs.patch
     ] ++ optional mesaSupported
       (substituteAll { src = ./0014-mkspecs-libgl.patch; mesa_inc = mesa.dev; mesa_lib = mesa.out; })
@@ -166,7 +166,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     xorg.libXcomposite libX11 libxcb libXext libXrender libXi
-    fontconfig freetype openssl dbus.libs glib udev libxml2 libxslt pcre
+    fontconfig freetype openssl dbus glib udev libxml2 libxslt pcre
     zlib libjpeg libpng libtiff sqlite icu
     xcbutil xcbutilimage xcbutilkeysyms xcbutilwm libxkbcommon
   ]
