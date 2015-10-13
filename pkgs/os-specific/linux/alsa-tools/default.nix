@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
     sha256 = "1lgvyb81md25s9ciswpdsbibmx9s030kvyylf0673w3kbamz1awl";
   };
 
-  enableParallelBuilding = true;
-
   buildInputs = [ alsaLib pkgconfig gtk gtk3 fltk13 ];
 
   patchPhase = ''
