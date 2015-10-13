@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-native-macro" ];
 
   buildInputs = [ openssl nss nspr kerberos gmp zlib libpcap re2 ];
+  enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE = [ "-DJOHN_SYSTEMWIDE=1" ];
 
