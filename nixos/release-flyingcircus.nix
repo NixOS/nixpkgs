@@ -38,6 +38,17 @@ let
 
 in rec {
 
+  backy = 
+    let
+        backy_build = pkgs.fetchhg {
+		url = https://bitbucket.org/flyingcircus/backy;
+		# master as of 2015-10-13
+		rev = "2789e170a93ab2479e3a3cd833e79ba1bf866c1f";
+		sha256 = "1kz9hgv7ih34d2rzaz1r2i0jiwvxf3qr9xgxww98nghv67c069lh";
+	    };
+        backy_release = import "${backy_build}/release.nix";
+    in backy_release;
+
   # A bootable Flying Circus disk image (raw) that can be extracted onto
   # Ceph RBD volume.
   flyingcircus_vm_image =
@@ -93,6 +104,7 @@ in rec {
     inherit (nixpkgs')
       apacheHttpd_2_2
       apacheHttpd_2_4
+      backy
       cmake
       cryptsetup
       emacs
