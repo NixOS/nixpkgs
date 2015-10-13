@@ -12039,11 +12039,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  UnicodeCollate = buildPerlPackage {
-    name = "Unicode-Collate-1.04";
+  UnicodeCollate = buildPerlPackage rec {
+    name = "Unicode-Collate-1.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SADAHIRO/Unicode-Collate-1.04.tar.gz;
-      sha256 = "4e3a2300b961d3aaf3789cdbfb95601edaaffb4109ed6cdb912a664d5c7bd706";
+      url = "mirror://cpan/authors/id/S/SA/SADAHIRO/${name}.tar.gz";
+      sha256 = "0ykncvhnwy8ync01ibv0524m0si9ya1ch2v8vx61s778nnrmp2k2";
     };
     meta = {
       description = "Unicode Collation Algorithm";
