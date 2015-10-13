@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./clang.patch ];
 
-  outputs = [ "dev" "lib" "out" ];
+  outputs = [ "dev" "lib" "out" "man" ];
   setOutputFlags = false; # some aren't supported
 
   configureFlags = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     "--enable-overwrite"  # Needed for proper header installation
     "--enable-pc-files"
     "--enable-symlinks"
-    "--libdir=$(lib)/lib" "--includedir=$(dev)/include" "--bindir=$(dev)/bin"
+    "--libdir=$(lib)/lib" "--includedir=$(dev)/include" "--bindir=$(dev)/bin" "--mandir=$(man)/share/man"
   ] ++ lib.optional unicode "--enable-widec";
 
   nativeBuildInputs = [ pkgconfig libtool ];
