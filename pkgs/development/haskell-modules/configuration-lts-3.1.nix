@@ -587,6 +587,7 @@ self: super: {
   "LambdaNet" = dontDistribute super."LambdaNet";
   "LambdaPrettyQuote" = dontDistribute super."LambdaPrettyQuote";
   "LambdaShell" = dontDistribute super."LambdaShell";
+  "Lambdaya" = dontDistribute super."Lambdaya";
   "LargeCardinalHierarchy" = dontDistribute super."LargeCardinalHierarchy";
   "Lastik" = dontDistribute super."Lastik";
   "Lattices" = dontDistribute super."Lattices";
@@ -2452,6 +2453,7 @@ self: super: {
   "djinn" = dontDistribute super."djinn";
   "djinn-th" = dontDistribute super."djinn-th";
   "dlist" = doDistribute super."dlist_0_7_1_1";
+  "dns" = doDistribute super."dns_2_0_0";
   "dnscache" = dontDistribute super."dnscache";
   "dnsrbl" = dontDistribute super."dnsrbl";
   "dnssd" = dontDistribute super."dnssd";
@@ -2804,6 +2806,7 @@ self: super: {
   "find-conduit" = dontDistribute super."find-conduit";
   "fingertree-tf" = dontDistribute super."fingertree-tf";
   "finite-field" = dontDistribute super."finite-field";
+  "first-and-last" = dontDistribute super."first-and-last";
   "first-class-patterns" = dontDistribute super."first-class-patterns";
   "firstify" = dontDistribute super."firstify";
   "fishfood" = dontDistribute super."fishfood";
@@ -3393,6 +3396,7 @@ self: super: {
   "happstack-lite" = dontDistribute super."happstack-lite";
   "happstack-monad-peel" = dontDistribute super."happstack-monad-peel";
   "happstack-plugins" = dontDistribute super."happstack-plugins";
+  "happstack-server" = doDistribute super."happstack-server_7_4_4";
   "happstack-server-tls" = dontDistribute super."happstack-server-tls";
   "happstack-server-tls-cryptonite" = dontDistribute super."happstack-server-tls-cryptonite";
   "happstack-state" = dontDistribute super."happstack-state";
@@ -4967,6 +4971,7 @@ self: super: {
   "monad-mersenne-random" = dontDistribute super."monad-mersenne-random";
   "monad-open" = dontDistribute super."monad-open";
   "monad-ox" = dontDistribute super."monad-ox";
+  "monad-parallel" = doDistribute super."monad-parallel_0_7_1_4";
   "monad-parallel-progressbar" = dontDistribute super."monad-parallel-progressbar";
   "monad-param" = dontDistribute super."monad-param";
   "monad-ran" = dontDistribute super."monad-ran";
@@ -6998,6 +7003,7 @@ self: super: {
   "time-w3c" = dontDistribute super."time-w3c";
   "timecalc" = dontDistribute super."timecalc";
   "timeconsole" = dontDistribute super."timeconsole";
+  "timeless" = dontDistribute super."timeless";
   "timeout" = dontDistribute super."timeout";
   "timeout-control" = dontDistribute super."timeout-control";
   "timeout-with-results" = dontDistribute super."timeout-with-results";
@@ -7158,6 +7164,7 @@ self: super: {
   "type-level-natural-number-operations" = dontDistribute super."type-level-natural-number-operations";
   "type-level-sets" = dontDistribute super."type-level-sets";
   "type-level-tf" = dontDistribute super."type-level-tf";
+  "type-list" = doDistribute super."type-list_0_2_0_0";
   "type-natural" = dontDistribute super."type-natural";
   "type-ord" = dontDistribute super."type-ord";
   "type-ord-spine-cereal" = dontDistribute super."type-ord-spine-cereal";
@@ -7250,6 +7257,7 @@ self: super: {
   "unix-memory" = dontDistribute super."unix-memory";
   "unix-process-conduit" = dontDistribute super."unix-process-conduit";
   "unix-pty-light" = dontDistribute super."unix-pty-light";
+  "unix-time" = doDistribute super."unix-time_0_3_5";
   "unlit" = dontDistribute super."unlit";
   "unm-hip" = dontDistribute super."unm-hip";
   "unordered-containers-rematch" = dontDistribute super."unordered-containers-rematch";
@@ -7363,6 +7371,7 @@ self: super: {
   "vector-space-opengl" = dontDistribute super."vector-space-opengl";
   "vector-static" = dontDistribute super."vector-static";
   "vector-strategies" = dontDistribute super."vector-strategies";
+  "vector-th-unbox" = doDistribute super."vector-th-unbox_0_2_1_2";
   "verbalexpressions" = dontDistribute super."verbalexpressions";
   "verbosity" = dontDistribute super."verbosity";
   "verilog" = dontDistribute super."verilog";
