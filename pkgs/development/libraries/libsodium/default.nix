@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "120jkda2q58p0n68banh64vsfm3hgqnacagj425d218cr4ycdkyb";
   };
 
+  outputs = [ "dev" "out" ];
+
+  enableParallelBuilding = true;
+
   doCheck = true;
 
   meta = with stdenv.lib; {
