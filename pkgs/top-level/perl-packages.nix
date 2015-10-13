@@ -4643,6 +4643,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  FileSlurpTiny = buildPerlPackage rec {
+    name = "File-Slurp-Tiny-0.004";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/${name}.tar.gz";
+      sha256 = "07kzfmibl43dq4c803f022g2rcfv4nkjgipxclz943mzxaz9aaa5";
+    };
+  };
+
   FileUtil = buildPerlPackage rec {
     name = "File-Util-4.132140";
     src = fetchurl {
