@@ -5,11 +5,11 @@
 assert withGUI -> qt4 != null;
 
 stdenv.mkDerivation rec {
-  name = "oprofile-1.0.0";
+  name = "oprofile-1.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/oprofile/${name}.tar.gz";
-    sha256 = "0nn4wfvwy4nii25y6lwlrnzx9ah4nz0r93yk7hswiy6wxjs10wc4";
+    sha256 = "0v1nn38h227bgxjwqf22rjp2iqgjm4ls3gckzifks0x6w5nrlxfg";
   };
 
   buildInputs = [ binutils zlib popt pkgconfig linuxHeaders ]
