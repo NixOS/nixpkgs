@@ -4,6 +4,7 @@
 
   imports =
     [
+     ./compat.nix
      ./haproxy.nix
      ./mysql.nix
      ./nginx.nix
