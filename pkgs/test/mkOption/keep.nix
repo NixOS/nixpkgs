@@ -1,5 +1,5 @@
 let
-  pkgs = import ../../top-level/all-packages.nix {};
+  pkgs = import ../../top-level/all-packages-wrapper.nix {};
   config = import ./declare.nix;
 in
   with (pkgs.lib);

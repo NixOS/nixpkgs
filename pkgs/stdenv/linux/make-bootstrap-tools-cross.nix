@@ -3,9 +3,9 @@
 let buildFor = toolsArch: (
 
 let
-  pkgsFun = import ../../top-level/all-packages.nix;
+  pkgsFun = import ../../top-level/all-packages-wrapper.nix;
   pkgsNoParams = pkgsFun {};
-  
+
   sheevaplugCrossSystem = {
     crossSystem = rec {
       config = "armv5tel-unknown-linux-gnueabi";
