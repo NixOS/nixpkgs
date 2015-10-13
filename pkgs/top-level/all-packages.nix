@@ -12433,7 +12433,9 @@ let
     plugins = [];
   };
 
-  pidginlatex = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex { };
+  pidginlatex = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex {
+    texLive = texlive.combined.scheme-basic;
+  };
 
   pidginlatexSF = pidginlatex;
 
