@@ -11939,13 +11939,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TreeSimple = buildPerlPackage {
-    name = "Tree-Simple-1.18";
+  TreeSimple = buildPerlPackage rec {
+    name = "Tree-Simple-1.25";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/ST/STEVAN/Tree-Simple-1.18.tar.gz;
-      sha256 = "0bb2hc8q5rwvz8a9n6f49kzx992cxczmrvq82d71757v087dzg6g";
+      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/${name}.tgz";
+      sha256 = "1xj1n70v4qbx7m9k01bj9aixk77yssliavgvfds3xj755hcan0nr";
     };
-    buildInputs = [ TestException ];
+    buildInputs = [ TestException TestMemoryCycle ];
     meta = {
       description = "A simple tree object";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
