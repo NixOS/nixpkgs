@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "17q6v5q0jpg57vylby6rx1qkil72bdx8gij1g9m694gxf5sb6js1";
   };
 
+  outputs = [ "dev" "out" "doc" ]; # dev-doc only, I think
+
   buildInputs = [ libgcrypt ];
 
   preCheck =
