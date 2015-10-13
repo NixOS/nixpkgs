@@ -13478,7 +13478,7 @@ let
 
     patchPhase = ''
       cp "${x_ignore_nofocus}/cpp/linux-specific/"* .
-      substituteInPlace x_ignore_nofocus.c --replace "/usr/lib/libX11.so.6" "${pkgs.xorg.libX11}/lib/libX11.so.6"
+      substituteInPlace x_ignore_nofocus.c --replace "/usr/lib/libX11.so.6" "${pkgs.xorg.libX11.out}/lib/libX11.so.6"
       gcc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
       gcc -shared \
         -Wl,${if stdenv.isDarwin then "-install_name" else "-soname"},x_ignore_nofocus.so \
@@ -14692,7 +14692,7 @@ let
     # I don't know why I need to add these libraries. Shouldn't they
     # be part of wxPython?
     postInstall = ''
-      libspaths=${pkgs.xorg.libSM}/lib:${pkgs.xorg.libXScrnSaver}/lib
+      libspaths=${with pkgs.xorg; lib.makeLibraryPath [ libSM libXScrnSaver ]}
       wrapProgram $out/bin/taskcoach.py \
         --prefix LD_LIBRARY_PATH : $libspaths
     '';

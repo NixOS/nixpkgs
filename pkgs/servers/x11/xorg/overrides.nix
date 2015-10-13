@@ -140,6 +140,10 @@ in
     propagatedBuildInputs = [ xorg.fixesproto ];
   };
 
+  libICE = attrs: attrs // {
+    outputs = [ "dev" "out" "doc" ];
+  };
+
   libXcomposite = attrs: attrs // {
     outputs = [ "dev" "out" "man" ];
     propagatedBuildInputs = [ xorg.libXfixes ];
@@ -196,8 +200,10 @@ in
     propagatedBuildInputs = [xorg.libXrender];
   };
 
-  libSM = attrs: attrs
-    // { propagatedBuildInputs = [ xorg.libICE ]; };
+  libSM = attrs: attrs // {
+    outputs = [ "dev" "out" "doc" ];
+    propagatedBuildInputs = [ xorg.libICE ];
+  };
 
   libXrender = attrs: attrs // {
     outputs = [ "dev" "out" "doc" ];
