@@ -18,6 +18,8 @@ stdenv.mkDerivation {
     patchShebangs libsoup/
   '';
 
+  outputs = [ "dev" "out" ];
+
   buildInputs = libintlOrEmpty ++ [ intltool python sqlite ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib libxml2 gobjectIntrospection ]

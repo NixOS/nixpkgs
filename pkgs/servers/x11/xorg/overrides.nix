@@ -106,6 +106,7 @@ in
   };
 
   libXfont = attrs: attrs // {
+    outputs = [ "dev" "out" ];
     propagatedBuildInputs = [ args.freetype ]; # propagate link reqs. like bzip2
     # prevents "misaligned_stack_error_entering_dyld_stub_binder"
     configureFlags = lib.optionals isDarwin [
@@ -150,6 +151,7 @@ in
   };
 
   libXaw = attrs: attrs // {
+    outputs = [ "dev" "out" "doc" ]; # just dev-doc
     propagatedBuildInputs = [ xorg.libXmu ];
   };
 
@@ -210,10 +212,19 @@ in
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
 
+  libXres = attrs: attrs // {
+    outputs = [ "dev" "out" "doc" ]; # just dev-doc
+  };
+
+  libXv = attrs: attrs // {
+    outputs = [ "dev" "out" "doc" ]; # just dev-doc
+  };
+
   libXvMC = attrs: attrs
     // { buildInputs = attrs.buildInputs ++ [xorg.renderproto]; };
 
   libXpm = attrs: attrs // {
+    outputs = [ "dev" "out" "bin" ]; # tiny man in $bin
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
   };
 
@@ -221,6 +232,10 @@ in
     // { buildInputs = with xorg; attrs.buildInputs ++ [ libXext libXfixes libXrandr ]; };
 
   libxkbfile = attrs: attrs // {
+    outputs = [ "dev" "out" ]; # mainly to avoid propagation
+  };
+
+  libxshmfence = attrs: attrs // {
     outputs = [ "dev" "out" ]; # mainly to avoid propagation
   };
 
@@ -248,7 +263,19 @@ in
     meta.maintainers = [ stdenv.lib.maintainers.lovek323 ];
   };
 
+  xcbutilimage = attrs: attrs // {
+    outputs = [ "dev" "out" ]; # mainly to get rid of propagating others
+  };
+
   xcbutilkeysyms = attrs: attrs // {
+    outputs = [ "dev" "out" ]; # mainly to get rid of propagating others
+  };
+
+  xcbutilrenderutil = attrs: attrs // {
+    outputs = [ "dev" "out" ]; # mainly to get rid of propagating others
+  };
+
+  xcbutilwm = attrs: attrs // {
     outputs = [ "dev" "out" ]; # mainly to get rid of propagating others
   };
 
@@ -361,6 +388,7 @@ in
     in
       if (!isDarwin)
       then {
+        outputs = [ "dev" "out" ];
         buildInputs = [ makeWrapper ] ++ commonBuildInputs;
         propagatedBuildInputs = [ libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           args.udev
