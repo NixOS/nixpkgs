@@ -22,7 +22,7 @@ with lib;
 
     config = mkIf config.flyingcircus.compat.gentoo.enable {
 
-        jobs.fcio-stubs-nginx = {
+        jobs.fcio-stubs-compat = {
             description = "Create FC IO stubs for gentoo compat.";
             task = true;
 
