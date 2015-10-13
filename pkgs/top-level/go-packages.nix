@@ -1163,7 +1163,8 @@ let
       rm -R example gtksourceview
     '';
     nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = [ pkgs.gtk3 pkgs.gtkspell3 ];
+    propagatedBuildInputs = [ pkgs.gtk3 ];
+    buildInputs = [ pkgs.gtkspell3 ];
   };
 
   go-gypsy = buildFromGitHub {
@@ -2153,9 +2154,9 @@ let
     repo = "pond";
     sha256 = "1dmgbg4ak3jkbgmxh0lr4hga1nl623mh7pvsgby1rxl4ivbzwkh4";
 
-    buildInputs = [ net crypto protobuf ed25519 pkgs.trousers go-gtk-agl ]
+    buildInputs = [ net crypto protobuf ed25519 pkgs.trousers ]
       ++ stdenv.lib.optional isx86_64 pkgs.dclxvi
-      ++ stdenv.lib.optional gui go-gtk-agl;
+      ++ stdenv.lib.optionals gui [ go-gtk-agl pkgs.wrapGAppsHook ];
     buildFlags = stdenv.lib.optionalString (!gui) "-tags nogui";
     excludedPackages = "\\(appengine\\|bn256cgo\\)";
     postPatch = stdenv.lib.optionalString isx86_64 ''
