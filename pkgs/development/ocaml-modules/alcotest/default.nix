@@ -1,18 +1,18 @@
-{stdenv, buildOcaml, fetchurl, ounit, re, cmdliner}:
+{ stdenv, buildOcaml, fetchzip, cmdliner, stringext }:
 
 buildOcaml rec {
   name = "alcotest";
-  version = "0.3.1";
+  version = "0.4.5";
 
-  src = fetchurl {
-    url = "https://github.com/samoht/alcotest/archive/${version}.tar.gz";
-    sha256 = "a0e6c9a33c59b206ecc949655fa6e17bdd1078c8b610b14d8f6f0f1b489b0b43";
+  src = fetchzip {
+    url = "https://github.com/mirage/alcotest/archive/${version}.tar.gz";
+    sha256 = "1wcn9hkjf4cbnrz99w940qfjpi0lvd8v63yxwpnafkff871dwk6k";
   };
 
-  propagatedBuildInputs = [ ounit re cmdliner ];
+  propagatedBuildInputs = [ cmdliner stringext ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/samoht/alcotest;
+    homepage = https://github.com/mirage/alcotest;
     description = "A lightweight and colourful test framework";
     license = stdenv.lib.licenses.isc;
     maintainers = [ maintainers.ericbmerritt ];
