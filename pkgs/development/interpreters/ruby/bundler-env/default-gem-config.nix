@@ -89,8 +89,8 @@ in
 
   sqlite3 = attrs: {
     buildFlags = [
-      "--with-sqlite3-include=${sqlite}/include"
-      "--with-sqlite3-lib=${sqlite}/lib"
+      "--with-sqlite3-include=${sqlite.dev}/include"
+      "--with-sqlite3-lib=${sqlite.out}/lib"
     ];
   };
 

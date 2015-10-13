@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
     "--with-pgsql_libdir=${postgresql}/lib"
   ] ++ optionals (sqlite != null) [
     "--with-sqlite3"
-    "--with-sqlite3-incdir=${sqlite}/include/sqlite"
-    "--with-sqlite3-libdir=${sqlite}/lib/sqlite"
+    "--with-sqlite3-incdir=${sqlite.dev}/include/sqlite"
+    "--with-sqlite3-libdir=${sqlite.out}/lib/sqlite"
   ];
 
   installFlags = [ "DESTDIR=\${out}" ];

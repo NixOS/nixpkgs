@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
     GOSQLITE=$GOPATH/src/code.google.com/p/gosqlite
     mkdir -p $GOSQLITE
     cp -R $srcGoSqlite/* $GOSQLITE/
-    export CGO_CFLAGS=-I${sqlite}/include
-    export CGO_LDFLAGS=-L${sqlite}/lib
-    go build -ldflags "-r ${sqlite}/lib" -o storebrowse
+    export CGO_CFLAGS=-I${sqlite.dev}/include
+    export CGO_LDFLAGS=-L${sqlite.out}/lib
+    go build -ldflags "-r ${sqlite.out}/lib" -o storebrowse
   '';
 
   installPhase = ''

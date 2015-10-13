@@ -8208,7 +8208,7 @@ let
 
   sqlite-amalgamation = callPackage ../development/libraries/sqlite-amalgamation { };
 
-  sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; });
+  sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; }).bin;
 
   sqlcipher = lowPrio (callPackage ../development/libraries/sqlcipher {
     readline = null;

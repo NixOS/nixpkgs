@@ -10,6 +10,8 @@ stdenv.mkDerivation {
     sha1 = "d0e22d7e361b6f50830a3cdeafe35311443f8f9a";
   };
 
+  outputs = [ "dev" "out" "bin" ];
+
   buildInputs = lib.optionals interactive [ readline ncurses ];
 
   configureFlags = [ "--enable-threadsafe" ];

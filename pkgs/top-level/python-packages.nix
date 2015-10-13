@@ -12294,8 +12294,8 @@ let
 
     patchPhase = ''
       substituteInPlace "setup.cfg"                                     \
-              --replace "/usr/local/include" "${pkgs.sqlite}/include"   \
-              --replace "/usr/local/lib" "${pkgs.sqlite}/lib"
+              --replace "/usr/local/include" "${pkgs.sqlite.dev}/include"   \
+              --replace "/usr/local/lib" "${pkgs.sqlite.out}/lib"
     '';
 
     # error: invalid command 'test'
