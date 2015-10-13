@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype
-, xorg, fontconfig, qt5, xkeyboard_config, alsaLib, libpulseaudio ? null
+, xorg, fontconfig, qt55, xkeyboard_config, alsaLib, libpulseaudio ? null
 , libredirect, quazip, less, which, unzip
 }:
 
@@ -12,7 +12,7 @@ let
   deps =
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
-      xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qt5.base libpulseaudio
+      xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qt55.qtbase libpulseaudio
     ];
 
   desktopItem = makeDesktopItem {
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   installPhase =
     ''
       # Delete unecessary libraries - these are provided by nixos.
-      rm *.so.*
+      rm *.so.* *.so
       rm qt.conf
 
       # Install files.
@@ -89,7 +89,8 @@ stdenv.mkDerivation rec {
       ln -s $out/lib/teamspeak/ts3client $out/bin/ts3client
 
       wrapProgram $out/bin/ts3client \
-        --set LD_PRELOAD "${libredirect}/lib/libredirect.so:${quazip}/lib/libquazip.so" \
+        --set LD_LIBRARY_PATH "${quazip}/lib" \
+        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
         --set QT_PLUGIN_PATH "$out/lib/teamspeak/platforms" \
         --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
     '';
