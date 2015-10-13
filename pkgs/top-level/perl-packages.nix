@@ -11933,13 +11933,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TreeDAGNode = buildPerlPackage {
-    name = "Tree-DAG_Node-1.09";
+  TreeDAGNode = buildPerlPackage rec {
+    name = "Tree-DAG_Node-1.27";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RS/RSAVAGE/Tree-DAG_Node-1.09.tgz;
-      sha256 = "1k2byyk7dnm8l6i1igagpfr58b02zsq5hwd9jcdp8yrlih7dzii3";
+      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/${name}.tgz";
+      sha256 = "1i2i445gh7720bvv06dz67szk2z6q1pi30kb5p2shsa806sj4vr2";
     };
-    buildInputs = [ TestPod ];
+    buildInputs = [ TestPod FileSlurpTiny ];
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "An N-ary tree";
