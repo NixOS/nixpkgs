@@ -7577,6 +7577,8 @@ let
     paths = [ mesa_noglu mesa_glu ];
   });
 
+  meterbridge = callPackage ../applications/audio/meterbridge { };
+
   metaEnvironment = recurseIntoAttrs (let callPackage = newScope pkgs.metaEnvironment; in rec {
     sdfLibrary    = callPackage ../development/libraries/sdf-library { aterm = aterm28; };
     toolbuslib    = callPackage ../development/libraries/toolbuslib { aterm = aterm28; inherit (windows) w32api; };
