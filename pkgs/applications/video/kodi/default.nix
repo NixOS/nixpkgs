@@ -110,6 +110,7 @@ in stdenv.mkDerivation rec {
           --prefix LD_LIBRARY_PATH ":" "${libvdpau}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${libcec}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${libcec_platform}/lib" \
+          --prefix LD_LIBRARY_PATH ":" "${libass}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${rtmpdump}/lib"
       done
     '';
