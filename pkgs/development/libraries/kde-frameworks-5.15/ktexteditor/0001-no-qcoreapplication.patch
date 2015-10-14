@@ -1,6 +1,6 @@
-From 71e28c7c6fdd1142f04c662f45cc8f779e457cda Mon Sep 17 00:00:00 2001
+From dc50fffdc72b76498384ce2f9065c3757b786d71 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@gmail.com>
-Date: Sun, 15 Feb 2015 19:09:17 -0600
+Date: Wed, 14 Oct 2015 09:08:59 -0500
 Subject: [PATCH] no qcoreapplication
 
 ---
@@ -8,16 +8,16 @@ Subject: [PATCH] no qcoreapplication
  1 file changed, 4 insertions(+), 7 deletions(-)
 
 diff --git a/src/syntax/data/katehighlightingindexer.cpp b/src/syntax/data/katehighlightingindexer.cpp
-index 3f02e8c..d1a865b 100644
+index 3c63140..e3d5efe 100644
 --- a/src/syntax/data/katehighlightingindexer.cpp
 +++ b/src/syntax/data/katehighlightingindexer.cpp
-@@ -49,19 +49,16 @@ QStringList readListing(const QString &fileName)
+@@ -51,19 +51,16 @@ QStringList readListing(const QString &fileName)
  
  int main(int argc, char *argv[])
  {
 -    // get app instance
 -    QCoreApplication app(argc, argv);
--    
+-
      // ensure enough arguments are passed
 -    if (app.arguments().size() < 3)
 +    if (argc < 3)
@@ -34,9 +34,9 @@ index 3f02e8c..d1a865b 100644
      if (hlFilenamesListing.isEmpty()) {
          return 1;
      }
-@@ -127,7 +124,7 @@ int main(int argc, char *argv[])
+@@ -147,7 +144,7 @@ int main(int argc, char *argv[])
          return anyError;
-     
+ 
      // create outfile, after all has worked!
 -    QFile outFile(app.arguments().at(1));
 +    QFile outFile(QString::fromLocal8Bit(argv[1]));
@@ -44,5 +44,5 @@ index 3f02e8c..d1a865b 100644
          return 7;
  
 -- 
-2.1.4
+2.5.2
 
