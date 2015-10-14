@@ -138,6 +138,7 @@ in rec {
       let all = x: map (system: x.${system}) supportedSystems; in
       [ nixpkgs.tarball
         (all nixpkgs.jdk)
+ 	flyingcircus_vm_image       
       ]
       ++ lib.collect lib.isDerivation nixos;
   });
