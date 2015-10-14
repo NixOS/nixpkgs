@@ -11161,11 +11161,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestTCP = buildPerlPackage {
-    name = "Test-TCP-1.18";
+  TestTCP = buildPerlPackage rec {
+    name = "Test-TCP-2.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TOKUHIROM/Test-TCP-1.18.tar.gz;
-      sha256 = "0flm7x0z7amppi9y6s8mxm0pkrgfihfpfjs0w4i6s80jiss1gfld";
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
+      sha256 = "00bxgm7qva4fd25phwl8fvv36h8h5k3jk89hz9302a288wv3ysmr";
     };
     propagatedBuildInputs = [ TestSharedFork ];
     meta = {
