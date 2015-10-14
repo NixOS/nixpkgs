@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
   PYTHON_BINARY = "${coreutils}/bin/env python"; # don't want a build time dependency on Python
 
   NIX_CFLAGS_COMPILE =
-    [ # Can't say ${polkit}/bin/pkttyagent here because that would
+    [ # Can't say ${polkit.bin}/bin/pkttyagent here because that would
       # lead to a cyclic dependency.
       "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
       "-fno-stack-protector"
