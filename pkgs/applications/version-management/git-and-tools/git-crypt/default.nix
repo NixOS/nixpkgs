@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     make install PREFIX=$out
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "https://www.agwa.name/projects/git-crypt";
     description = "transparent file encryption in git";
     longDescription = ''
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
       entire repository.
     '';
     downloadPage = "https://github.com/AGWA/git-crypt/releases";
-    license = stdenv.lib.licenses.gpl3;
+    license = licenses.gpl3;
     version = "0.5.0";
-    maintainers = [ "Desmond O. Chang <dochang@gmail.com>" ];
+    maintainers = [ maintainers.dochang ];
   };
 
 }
