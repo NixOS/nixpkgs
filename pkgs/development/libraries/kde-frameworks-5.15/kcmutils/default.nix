@@ -10,7 +10,7 @@ kdeFramework {
     kcoreaddons kiconthemes kitemviews kpackage kxmlgui
   ];
   propagatedBuildInputs = [ kconfigwidgets kdeclarative ki18n kservice ];
-  patches = [ ./kcmutils-pluginselector-follow-symlinks.patch ];
+  patches = [ ./0001-qdiriterator-follow-symlinks.patch ];
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
   };
