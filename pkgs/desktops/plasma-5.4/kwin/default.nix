@@ -23,7 +23,7 @@ plasmaPackage {
     kactivities kdeclarative kglobalaccel ki18n kio kwindowsystem
     plasma-framework qtdeclarative qtx11extras
   ];
-  patches = [ ./kwin-import-plugin-follow-symlinks.patch ];
+  patches = [ ./0001-qdiriterator-follow-symlinks.patch ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kwin_x11"
     wrapKDEProgram "$out/bin/kwin_wayland"
