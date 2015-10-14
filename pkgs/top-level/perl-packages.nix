@@ -11640,10 +11640,10 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestTrap = buildPerlPackage {
-    name = "Test-Trap-0.2.2";
+  TestTrap = buildPerlPackage rec {
+    name = "Test-Trap-0.3.2";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EB/EBHANSSEN/Test-Trap-v0.2.2.tar.gz;
+      url = "mirror://cpan/authors/id/E/EB/EBHANSSEN/${name}.tar.gz";
       sha256 = "1ci5ag9pm850ww55n2929skvw3avy6xcrwmmi2yyn0hifxx9dybs";
     };
     buildInputs = [ TestTester ];
