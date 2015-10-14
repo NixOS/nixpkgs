@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Ardour";
     repo = "ardour";
-    rev = "fe672c827cb2c08c94b1fa7e527d884c522a1af7";
-    sha256 = "12yfy9l5mnl96ix4s2qicp3m2zscli1a4bd50nk9v035pgf77s3f";
+    rev = "05e3a00b7e3a52a838bc5ec9ee7b3b9e6a271feb";
+    sha256 = "1j8zw0bvh16qwyy8qrqynpak9nghl9j3qhjjcdl7wh9raafjqc00";
   };
 
   buildInputs =
