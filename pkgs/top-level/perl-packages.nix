@@ -11045,11 +11045,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestRequires = buildPerlPackage {
-    name = "Test-Requires-0.06";
+  TestRequires = buildPerlPackage rec {
+    name = "Test-Requires-0.10";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TOKUHIROM/Test-Requires-0.06.tar.gz;
-      sha256 = "1ksyg4npzx5faf2sj80rm74qjra4q679750vfqfvw3kg1d69wvwv";
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
+      sha256 = "1d9f481lj12cw1ciil46xq9nq16p6a90nm7yrsalpf8asn8s6s17";
     };
     meta = {
       description = "Checks to see if the module can be loaded";
