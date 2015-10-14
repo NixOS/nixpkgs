@@ -12188,11 +12188,12 @@ let
 
 
   pyquery = buildPythonPackage rec {
-    name = "pyquery-1.2.4";
+    name = "pyquery-${version}";
+    version = "1.2.9";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/p/pyquery/${name}.tar.gz";
-      md5 = "268f08258738d21bc1920d7522f2a63b";
+      url = "http://pypi.python.org/packages/source/p/pyquery/${name}.zip";
+      sha256 = "00p6f1dfma65192hc72dxd506491lsq3g5wgxqafi1xpg2w1xia6";
     };
 
     propagatedBuildInputs = with self; [ cssselect lxml ];
