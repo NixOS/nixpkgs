@@ -1,3 +1,12 @@
+From 4f84780893d505b2d62a14633dd983baa8ec6e28 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Wed, 14 Oct 2015 06:47:01 -0500
+Subject: [PATCH] qdiriterator follow symlinks
+
+---
+ src/khelpclient.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
 diff --git a/src/khelpclient.cpp b/src/khelpclient.cpp
 index 53a331e..80fbb01 100644
 --- a/src/khelpclient.cpp
@@ -11,3 +20,6 @@ index 53a331e..80fbb01 100644
          while (it.hasNext()) {
              const QString desktopPath(it.next());
              KDesktopFile desktopFile(desktopPath);
+-- 
+2.5.2
+
