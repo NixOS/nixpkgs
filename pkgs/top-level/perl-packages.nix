@@ -11670,11 +11670,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestVersion = buildPerlPackage {
-    name = "Test-Version-1.002004";
+  TestVersion = buildPerlPackage rec {
+    name = "Test-Version-2.03";
     src = fetchurl {
-      url = mirror://cpan/authors/id/X/XE/XENO/Test-Version-1.002004.tar.gz;
-      sha256 = "1lvg1p6i159ssk5br5qb3gvrzdg59wchd97z7j44arnlkhfvwhgv";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/${name}.tar.gz";
+      sha256 = "02nbi7iqab1b0ngkiim9kbvnnr9bhi17bq54vm8hn9ridzgbj1vj";
     };
     buildInputs = [ TestException TestRequires TestTester ];
     propagatedBuildInputs = [ FileFindRulePerl ];
