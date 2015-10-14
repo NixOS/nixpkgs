@@ -9,8 +9,8 @@ kdeFramework {
   buildInputs = [ kcoreaddons kcrash kdbusaddons ];
   propagatedBuildInputs = [ kconfig ki18n kwindowsystem ];
   patches = [
-    ./kservice-kbuildsycoca-follow-symlinks.patch
-    ./kservice-kbuildsycoca-no-canonicalize-path.patch
+    ./0001-qdiriterator-follow-symlinks.patch
+    ./0002-no-canonicalize-path.patch
   ];
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
