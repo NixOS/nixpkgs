@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-   substituteInPlace configure --replace "\$LIBDIRS" "${openssl.out}/lib ${pcre.out}/lib ${libssh.out}/lib ${postgresql92}/lib"
+   substituteInPlace configure --replace "\$LIBDIRS" "${openssl.out}/lib ${pcre.out}/lib ${libssh.out}/lib ${postgresql92.lib}/lib"
    substituteInPlace configure --replace "\$INCDIRS" "${openssl.dev}/include ${pcre.dev}/include ${libssh.dev}/include ${postgresql92}/include"
   '';
 

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ] ++ optionals (postgresql != null) [
     "--with-pgsql"
     "--with-pgsql_incdir=${postgresql}/include"
-    "--with-pgsql_libdir=${postgresql}/lib"
+    "--with-pgsql_libdir=${postgresql.lib}/lib"
   ] ++ optionals (sqlite != null) [
     "--with-sqlite3"
     "--with-sqlite3-incdir=${sqlite.dev}/include/sqlite"

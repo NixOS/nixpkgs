@@ -162,7 +162,7 @@ stdenv.mkDerivation {
   # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
   # if dependency paths contain the string "pq", which can occur in the hash.
   # To prevent these failures, we need to override PostgreSQL detection.
-  PSQL_LIBS = optionalString (postgresql != null) "-L${postgresql}/lib -lpq";
+  PSQL_LIBS = optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
   propagatedBuildInputs = [
     xorg.libXcomposite libX11 libxcb libXext libXrender libXi

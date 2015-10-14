@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
     export CCARGS="-I$out/include \
                    -L${mysql.lib}/lib/mysql \
-                   -L${postgresql}/lib \
+                   -L${postgresql.lib}/lib \
                    -L${sqlite.out}/lib";
   '';
 

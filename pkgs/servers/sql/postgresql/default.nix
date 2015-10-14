@@ -10,7 +10,8 @@ let
       inherit sha256;
     };
 
-    outputs = [ "out" "doc" ];
+    outputs = [ "out" "lib" "doc" ];
+    setOutputFlags = false; # $out retains configureFlags :-/
 
     buildInputs =
       [ zlib readline openssl ]
@@ -20,8 +21,11 @@ let
 
     makeFlags = [ "world" ];
 
-    configureFlags =
-      [ "--with-openssl" ]
+    configureFlags = [
+      "--with-openssl"
+      "--sysconfdir=/etc"
+      "--libdir=$(lib)/lib"
+    ]
       ++ lib.optional (stdenv.isDarwin)  "--with-uuid=e2fs"
       ++ lib.optional (!stdenv.isDarwin) "--with-ossp-uuid";
 
@@ -36,8 +40,12 @@ let
 
     postInstall =
       ''
+        _moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
+        _moveToOutput "lib/*.a" "$out"
+        _moveToOutput "lib/libecpg*" "$out"
+
         # Prevent a retained dependency on gcc-wrapper.
-        substituteInPlace $out/lib/pgxs/src/Makefile.global --replace ${stdenv.cc}/bin/ld ld
+        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv.cc}/bin/ld ld
       '';
 
     disallowedReferences = [ stdenv.cc ];
