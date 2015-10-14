@@ -15,7 +15,8 @@ assert enableThreading -> (stdenv ? glibc);
 let
 
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
-
+  libcInc = libc.dev or libc;
+  libcLib = libc.out or libc;
 in
 
 with stdenv.lib;
@@ -28,9 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "0g5bl8sdpzx9gx2g5jq3py4bj07z2ylk7s1qn0fvsss2yl3hhs8c";
   };
 
-  # TODO: Add a "dev" output containing the header files.
-  outputs = [ "out" "man" ];
-
+  outputs = [ "out" "man" "docdev" ];
   setOutputFlags = false;
 
   patches =
@@ -51,8 +50,8 @@ stdenv.mkDerivation rec {
       "-Uinstallusrbinperl"
       "-Dinstallstyle=lib/perl5"
       "-Duseshrplib"
-      "-Dlocincpth=${libc.dev or libc}/include"
-      "-Dloclibpth=${libc.out or libc}/lib"
+      "-Dlocincpth=${libcInc}/include"
+      "-Dloclibpth=${libcLib}/lib"
     ]
     ++ optional enableThreading "-Dusethreads";
 
@@ -62,14 +61,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preConfigure =
-    ''
-
+  preConfigure = ''
       configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
-
-      ${optionalString stdenv.isArm ''
-        configureFlagsArray=(-Dldflags="-lm -lrt")
-      ''}
+    '' + optionalString stdenv.isArm ''
+      configureFlagsArray=(-Dldflags="-lm -lrt")
     '' + optionalString stdenv.isDarwin ''
       substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
     '' + optionalString (!enableThreading) ''
@@ -89,9 +84,9 @@ stdenv.mkDerivation rec {
 
   preCheck = ''
     # Try and setup a local hosts file
-    if [ -f "${libc}/lib/libnss_files.so" ]; then
+    if [ -f "${libcLib}/lib/libnss_files.so" ]; then
       mkdir $TMPDIR/fakelib
-      cp "${libc}/lib/libnss_files.so" $TMPDIR/fakelib
+      cp "${libcLib}/lib/libnss_files.so" $TMPDIR/fakelib
       sed -i 's,/etc/hosts,/dev/fd/3,g' $TMPDIR/fakelib/libnss_files.so
       export LD_LIBRARY_PATH=$TMPDIR/fakelib
     fi
@@ -101,15 +96,20 @@ stdenv.mkDerivation rec {
     unset LD_LIBRARY_PATH
   '';
 
+  # TODO: it seems like absolute paths to some coreutils is required.
   postInstall =
     ''
       # Remove dependency between "out" and "man" outputs.
-      rm $out/lib/perl5/*/*/.packlist
+      rm "$out"/lib/perl5/*/*/.packlist
 
-      # Remove dependencies on glibc.dev and coreutils.
-      substituteInPlace $out/lib/perl5/*/*/Config_heavy.pl \
-        --replace ${stdenv.glibc.dev or "/blabla"} /no-such-path \
-        --replace $man /no-such-path
+      # Remove dependencies on glibc and gcc
+      sed "/ *libpth =>/c    libpth => ' '," \
+        -i "$out"/lib/perl5/*/*/Config.pm
+      # TODO: removing those paths would be cleaner than overwriting with nonsense.
+      substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
+        --replace "${libcInc}" /no-such-path \
+        --replace "${stdenv.cc.cc or "/no-such-path"}" /no-such-path \
+        --replace "$man" /no-such-path
     ''; # */
 
   meta = {
