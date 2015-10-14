@@ -11113,11 +11113,11 @@ let self = _self // overrides; _self = with self; {
 
   TestSimple = null;
 
-  TestSpec = buildPerlPackage {
-    name = "Test-Spec-0.47";
+  TestSpec = buildPerlPackage rec {
+    name = "Test-Spec-0.51";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PH/PHILIP/Test-Spec-0.47.tar.gz;
-      sha256 = "e425c0b9efa3c7e21496d31a607d072a63e31988c3d298a8c1fd7d145cc0681e";
+      url = "mirror://cpan/authors/id/A/AN/ANDYJONES/${name}.tar.gz";
+      sha256 = "0n2pzc32q4fr1b9w292ld9gh3yn3saxib3hxrjx6jvcmy3k9jkbi";
     };
     propagatedBuildInputs = [ PackageStash TestDeep TestTrap TieIxHash ];
     meta = {
