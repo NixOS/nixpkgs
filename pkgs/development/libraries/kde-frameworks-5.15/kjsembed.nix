@@ -1,10 +1,10 @@
 { kdeFramework, lib, extra-cmake-modules, kdoctools, ki18n, kjs
-, qtsvg
+, makeKDEWrapper, qtsvg
 }:
 
 kdeFramework {
   name = "kjsembed";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools makeKDEWrapper ];
   buildInputs = [ qtsvg ];
   propagatedBuildInputs = [ ki18n kjs ];
   postInstall = ''

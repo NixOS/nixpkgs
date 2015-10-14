@@ -1,12 +1,13 @@
 { plasmaPackage, extra-cmake-modules, kconfig, kconfigwidgets
 , kdbusaddons, kglobalaccel, ki18n, kwidgetsaddons, kxmlgui
-, libkscreen, qtdeclarative
+, libkscreen, makeKDEWrapper, qtdeclarative
 }:
 
 plasmaPackage {
   name = "kscreen";
   nativeBuildInputs = [
     extra-cmake-modules
+    makeKDEWrapper
   ];
   buildInputs = [
     kconfig kconfigwidgets kdbusaddons kwidgetsaddons kxmlgui

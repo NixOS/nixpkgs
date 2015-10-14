@@ -1,10 +1,10 @@
 { plasmaPackage, extra-cmake-modules, kdoctools, kcoreaddons
-, ki18n, kwallet, kwidgetsaddons
+, ki18n, kwallet, kwidgetsaddons, makeKDEWrapper
 }:
 
 plasmaPackage {
   name = "ksshaskpass";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools makeKDEWrapper ];
   buildInputs = [ kcoreaddons kwallet kwidgetsaddons ];
   propagatedBuildInputs = [ ki18n ];
   postInstall = ''

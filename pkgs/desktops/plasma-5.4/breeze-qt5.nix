@@ -1,6 +1,6 @@
 { plasmaPackage, extra-cmake-modules, frameworkintegration
 , kcmutils, kconfigwidgets, kcoreaddons, kdecoration, kguiaddons
-, ki18n, kwindowsystem, qtx11extras
+, ki18n, kwindowsystem, makeKDEWrapper, qtx11extras
 }:
 
 plasmaPackage {
@@ -8,6 +8,7 @@ plasmaPackage {
   sname = "breeze";
   nativeBuildInputs = [
     extra-cmake-modules
+    makeKDEWrapper
   ];
   buildInputs = [
     kcmutils kconfigwidgets kcoreaddons kdecoration kguiaddons

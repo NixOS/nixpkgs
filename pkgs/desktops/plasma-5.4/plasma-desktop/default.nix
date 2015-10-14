@@ -6,7 +6,7 @@
 , plasma-framework, plasma-workspace, qtdeclarative, qtx11extras
 , qtsvg, libXcursor, libXft, libxkbfile, xf86inputevdev
 , xf86inputsynaptics, xinput, xkeyboard_config, xorgserver
-, libcanberra_kde, libpulseaudio, utillinux
+, libcanberra_kde, libpulseaudio, makeKDEWrapper, utillinux
 }:
 
 plasmaPackage {
@@ -14,6 +14,7 @@ plasmaPackage {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
+    makeKDEWrapper
   ];
   buildInputs = [
     attica boost fontconfig kcmutils kdbusaddons kded kitemmodels

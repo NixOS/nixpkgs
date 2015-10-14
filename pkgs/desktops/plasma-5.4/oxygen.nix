@@ -1,12 +1,12 @@
 { plasmaPackage, extra-cmake-modules, ki18n, kcmutils, kconfig
 , kdecoration, kguiaddons, kwidgetsaddons, kservice, kcompletion
-, frameworkintegration, kwindowsystem, qtx11extras
+, frameworkintegration, kwindowsystem, makeKDEWrapper, qtx11extras
 }:
 
 plasmaPackage {
   name = "oxygen";
   nativeBuildInputs = [
-    extra-cmake-modules
+    extra-cmake-modules makeKDEWrapper
   ];
   buildInputs = [
     kcmutils kconfig kdecoration kguiaddons kwidgetsaddons

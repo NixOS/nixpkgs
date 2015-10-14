@@ -2,13 +2,13 @@
 , kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons
 , kdbusaddons, kdoctools, ki18n, kiconthemes, kitemviews
 , kjobwidgets, knotifications, kservice, ktextwidgets, kwallet
-, kwidgetsaddons, kwindowsystem, kxmlgui, qtscript, qtx11extras
-, solid
+, kwidgetsaddons, kwindowsystem, kxmlgui, makeKDEWrapper
+, qtscript, qtx11extras, solid
 }:
 
 kdeFramework {
   name = "kio";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools makeKDEWrapper ];
   buildInputs = [
     acl karchive kconfig kcoreaddons kdbusaddons kiconthemes
     knotifications ktextwidgets kwallet kwidgetsaddons

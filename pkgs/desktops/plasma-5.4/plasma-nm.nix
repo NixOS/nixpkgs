@@ -2,9 +2,9 @@
 , kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative
 , kdelibs4support, ki18n, kiconthemes, kinit, kio, kitemviews
 , knotifications, kservice, kwallet, kwidgetsaddons, kwindowsystem
-, kxmlgui, mobile_broadband_provider_info, modemmanager-qt
-, networkmanager-qt, openconnect, plasma-framework, qtdeclarative
-, solid
+, kxmlgui, makeKDEWrapper, mobile_broadband_provider_info
+, modemmanager-qt, networkmanager-qt, openconnect, plasma-framework
+, qtdeclarative, solid
 }:
 
 plasmaPackage {
@@ -12,6 +12,7 @@ plasmaPackage {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
+    makeKDEWrapper
   ];
   buildInputs = [
     kcompletion kconfigwidgets kcoreaddons kdbusaddons kiconthemes

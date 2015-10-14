@@ -6,8 +6,8 @@
 , libdbusmenu, libkscreen, libSM, libXcursor, networkmanager-qt
 , pam, phonon, plasma-framework, qtquick1, qtscript, qtx11extras, wayland
 , libksysguard, bash, coreutils, gnused, gnugrep, socat, kconfig
-, kinit, kservice, qttools, dbus_tools, mkfontdir, xmessage, xprop
-, xrdb, xset, xsetroot, solid
+, kinit, kservice, makeKDEWrapper, qttools, dbus_tools, mkfontdir, xmessage
+, xprop, xrdb, xset, xsetroot, solid
 }:
 
 plasmaPackage {
@@ -15,6 +15,7 @@ plasmaPackage {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
+    makeKDEWrapper
   ];
   buildInputs = [
     kcmutils kcrash kdbusaddons kdesu kdewebkit kjsembed knewstuff
