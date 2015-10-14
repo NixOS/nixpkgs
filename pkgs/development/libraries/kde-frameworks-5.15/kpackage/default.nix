@@ -12,7 +12,10 @@ kdeFramework {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ karchive kconfig ];
   propagatedBuildInputs = [ kcoreaddons ki18n ];
-  patches = [ ./0001-allow-external-paths.patch ];
+  patches = [
+    ./0001-allow-external-paths.patch
+    ./0002-qdiriterator-follow-symlinks.patch
+  ];
   postInstall = ''
     wrapKDEProgram "$out/bin/kpackagetool5"
   '';
