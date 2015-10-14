@@ -18,7 +18,6 @@ kdeFramework {
     wrapKDEProgram "$out/bin/balooctl"
     wrapKDEProgram "$out/bin/baloosearch"
     wrapKDEProgram "$out/bin/balooshow"
-    wrapKDEProgram "$out/bin/baloo-monitor"
   '';
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
