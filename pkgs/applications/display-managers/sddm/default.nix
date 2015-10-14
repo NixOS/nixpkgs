@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, makeWrapper, fetchFromGitHub, cmake, pkgconfig, libxcb, libpthreadstubs
+{ stdenv, fetchpatch, makeQtWrapper, fetchFromGitHub, cmake, pkgconfig, libxcb, libpthreadstubs
 , libXdmcp, libXau, qtbase, qtdeclarative, qttools, pam, systemd }:
 
 let
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./sddm-ignore-config-mtime.patch ];
 
-  nativeBuildInputs = [ cmake pkgconfig qttools ];
+  nativeBuildInputs = [ cmake makeQtWrapper pkgconfig qttools ];
 
   buildInputs = [ libxcb libpthreadstubs libXdmcp libXau qtbase qtdeclarative pam systemd ];
 

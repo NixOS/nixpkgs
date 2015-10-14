@@ -18,11 +18,6 @@ addQtModule() {
             fi
         done
     fi
-
-    addToSearchPath QT_PLUGIN_PATH "$1/lib/qt5/plugins"
-    addToSearchPath QML_IMPORT_PATH "$1/lib/qt5/imports"
-    addToSearchPath QML2_IMPORT_PATH "$1/lib/qt5/qml"
-    addToSearchPath XDG_DATA_DIRS "$1/share"
 }
 
 rmQtModules() {
@@ -49,28 +44,6 @@ setQMakePath() {
     export PATH="$qtOut/bin${PATH:+:}$PATH"
 }
 
-wrapQtProgram() {
-    local prog="$1"
-    shift
-    wrapProgram "$prog" \
-        --set QT_PLUGIN_PATH "$QT_PLUGIN_PATH" \
-        --set QML_IMPORT_PATH "$QML_IMPORT_PATH" \
-        --set QML2_IMPORT_PATH "$QML2_IMPORT_PATH" \
-        "$@"
-}
-
-makeQtWrapper() {
-    local old="$1"
-    local new="$2"
-    shift
-    shift
-    makeWrapper "$old" "$new" \
-        --set QT_PLUGIN_PATH "$QT_PLUGIN_PATH" \
-        --set QML_IMPORT_PATH "$QML_IMPORT_PATH" \
-        --set QML2_IMPORT_PATH "$QML2_IMPORT_PATH" \
-        "$@"
-}
-
 qtOut=""
 if [[ -z "$NIX_QT_SUBMODULE" ]]; then
     qtOut="$PWD/qmake-$name"
@@ -91,11 +64,6 @@ Documentation = share/doc/qt5
 EOF
 
 export QMAKE="$qtOut/bin/qmake"
-# cannot use addToSearchPath because these directories may not exist yet
-export QT_PLUGIN_PATH="$QT_PLUGIN_PATH${QT_PLUGIN_PATH:+:}$out/lib/qt5/plugins"
-export QML_IMPORT_PATH="$QML_IMPORT_PATH${QML_IMPORT_PATH:+:}$out/lib/qt5/imports"
-export QML2_IMPORT_PATH="$QML2_IMPORT_PATH${QML2_IMPORT_PATH:+:}$out/lib/qt5/qml"
-export XDG_DATA_DIRS="$XDG_DATA_DIRS${XDG_DATA_DIRS:+:}$out/share"
 
 envHooks+=(addQtModule)
 preConfigurePhases+=(setQMakePath)

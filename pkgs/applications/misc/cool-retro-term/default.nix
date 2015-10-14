@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, makeWrapper, qtbase, qtquick1, qmltermwidget }:
+{ stdenv, fetchgit, makeQtWrapper, qtbase, qtquick1, qmltermwidget }:
 
 stdenv.mkDerivation rec {
   version = "1.0.0";
@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     sed -i -e '/qmltermwidget/d' cool-retro-term.pro
   '';
 
-  buildInputs = [ makeWrapper qtbase qtquick1 qmltermwidget ];
+  buildInputs = [ qtbase qtquick1 qmltermwidget ];
+  nativeBuildInputs = [ makeQtWrapper ];
 
   configurePhase = "qmake PREFIX=$out";
 
