@@ -51,7 +51,7 @@ in rec {
         (all nixos.tests.chromium)
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
-        (all nixos.tests.gnome3)
+        nixos.tests.gnome3.x86_64-linux # FIXME: i686-linux
         (all nixos.tests.installer.lvm)
         (all nixos.tests.installer.luksroot)
         (all nixos.tests.installer.separateBoot)
