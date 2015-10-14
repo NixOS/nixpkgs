@@ -6,6 +6,7 @@
 
 plasmaPackage {
   name = "libksysguard";
+  patches = [ ./0001-qdiriterator-follow-symlinks.patch ];
   nativeBuildInputs = [
     extra-cmake-modules
   ];
