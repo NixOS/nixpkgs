@@ -550,4 +550,8 @@ in {
 
   };
 
+  imports =
+    [ (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
+      (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
+    ];
 }
