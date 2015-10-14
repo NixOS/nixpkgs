@@ -11135,11 +11135,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ HookLexWrap ];
   };
 
-  TestSynopsis = buildPerlPackage {
-    name = "Test-Synopsis-0.10";
+  TestSynopsis = buildPerlPackage rec {
+    name = "Test-Synopsis-0.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/Z/ZO/ZOFFIX/Test-Synopsis-0.10.tar.gz;
-      sha256 = "0gbk4d2vwlldsj5shmbdar3a29vgrw84ldsvm26mflkr5ji34adv";
+      url = "mirror://cpan/authors/id/Z/ZO/ZOFFIX/${name}.tar.gz";
+      sha256 = "1jn3vna5r5fa9nv33n1x0bmgc434sk0ggar3jm78xx0zzy5jnsxv";
     };
     meta = {
       description = "Test your SYNOPSIS code";
