@@ -9,7 +9,7 @@
 
 let
 
-  inherit (pkgs) lib stdenv;
+  inherit (pkgs) lib makeSetupHook stdenv;
 
   mirror = "mirror://kde";
   srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
@@ -105,6 +105,7 @@ let
     solid = callPackage ./solid.nix {};
     sonnet = callPackage ./sonnet.nix {};
     threadweaver = callPackage ./threadweaver.nix {};
+    makeKDEWrapper = callPackage ./make-kde-wrapper.nix { inherit makeSetupHook; };
   };
 
   newScope = scope: pkgs.qt55Libs.newScope ({ inherit kdeFramework; } // scope);

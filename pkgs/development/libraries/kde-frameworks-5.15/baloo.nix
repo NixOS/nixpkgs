@@ -1,11 +1,11 @@
 { kdeFramework, lib, extra-cmake-modules, kauth, kconfig
 , kcoreaddons, kcrash, kdbusaddons, kfilemetadata, ki18n, kidletime
-, kio, lmdb, qtbase, qtquick1, solid
+, kio, lmdb, makeKDEWrapper, qtbase, qtquick1, solid
 }:
 
 kdeFramework {
   name = "baloo";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ extra-cmake-modules makeKDEWrapper ];
   buildInputs = [
     kconfig kcrash kdbusaddons lmdb qtquick1 solid
   ];

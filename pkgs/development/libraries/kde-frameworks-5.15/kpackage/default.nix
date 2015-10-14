@@ -5,11 +5,12 @@
 , kcoreaddons
 , kdoctools
 , ki18n
+, makeKDEWrapper
 }:
 
 kdeFramework {
   name = "kpackage";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools makeKDEWrapper ];
   buildInputs = [ karchive kconfig ];
   propagatedBuildInputs = [ kcoreaddons ki18n ];
   patches = [

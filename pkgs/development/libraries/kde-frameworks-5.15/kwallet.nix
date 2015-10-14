@@ -1,11 +1,11 @@
 { kdeFramework, lib, extra-cmake-modules, kconfig, kcoreaddons
 , kdbusaddons, kdoctools, ki18n, kiconthemes, knotifications
-, kservice, kwidgetsaddons, kwindowsystem, libgcrypt
+, kservice, kwidgetsaddons, kwindowsystem, libgcrypt, makeKDEWrapper
 }:
 
 kdeFramework {
   name = "kwallet";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools makeKDEWrapper ];
   buildInputs = [
     kconfig kcoreaddons kdbusaddons kiconthemes knotifications
     kservice kwidgetsaddons libgcrypt

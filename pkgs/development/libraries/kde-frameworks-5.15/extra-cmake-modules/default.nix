@@ -2,7 +2,6 @@
 
 kdeFramework {
   name = "extra-cmake-modules";
-  setupHook = ./setup-hook.sh;
   patches = [ ./0001-extra-cmake-modules-paths.patch ];
 
   # It is OK to propagate these inputs as long as

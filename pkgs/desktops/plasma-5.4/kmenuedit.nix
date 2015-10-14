@@ -1,5 +1,5 @@
 { plasmaPackage, extra-cmake-modules, kdoctools, ki18n, kxmlgui
-, kdbusaddons, kiconthemes, kio, sonnet, kdelibs4support
+, kdbusaddons, kiconthemes, kio, sonnet, kdelibs4support, makeKDEWrapper
 }:
 
 plasmaPackage {
@@ -7,6 +7,7 @@ plasmaPackage {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
+    makeKDEWrapper
   ];
   buildInputs = [
     kxmlgui kdbusaddons kiconthemes

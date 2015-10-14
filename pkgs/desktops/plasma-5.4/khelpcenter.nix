@@ -1,6 +1,6 @@
 { plasmaPackage, extra-cmake-modules, kdoctools, kconfig
 , kcoreaddons, kdbusaddons, ki18n, kinit, kcmutils, kdelibs4support
-, khtml, kservice
+, khtml, kservice, makeKDEWrapper
 }:
 
 plasmaPackage {
@@ -8,6 +8,7 @@ plasmaPackage {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
+    makeKDEWrapper
   ];
   buildInputs = [
     kconfig kcoreaddons kdbusaddons kinit kcmutils kservice

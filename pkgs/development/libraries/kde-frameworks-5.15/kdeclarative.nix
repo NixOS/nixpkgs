@@ -1,11 +1,12 @@
 { kdeFramework, lib, extra-cmake-modules, epoxy, kconfig
 , kglobalaccel, kguiaddons, ki18n, kiconthemes, kio, kpackage
-, kwidgetsaddons, kwindowsystem, pkgconfig, qtdeclarative
+, kwidgetsaddons, kwindowsystem, makeKDEWrapper, pkgconfig
+, qtdeclarative
 }:
 
 kdeFramework {
   name = "kdeclarative";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ extra-cmake-modules makeKDEWrapper ];
   buildInputs = [
     epoxy kguiaddons kiconthemes kwidgetsaddons
   ];
