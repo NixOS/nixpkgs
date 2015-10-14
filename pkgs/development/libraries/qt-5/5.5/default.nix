@@ -18,7 +18,7 @@
 , decryptSslTraffic ? false
 }:
 
-let inherit (pkgs) stdenv; in
+let inherit (pkgs) makeSetupHook makeWrapper stdenv; in
 
 with stdenv.lib;
 
@@ -100,6 +100,8 @@ let
       /* qtwinextras = not packaged */
       qtx11extras = callPackage ./qtx11extras.nix {};
       qtxmlpatterns = callPackage ./qtxmlpatterns.nix {};
+
+      makeQtWrapper = makeSetupHook { deps = [ makeWrapper ]; } ./make-qt-wrapper.sh;
 
     };
 
