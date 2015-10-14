@@ -1,15 +1,16 @@
 { stdenv, fetchurl, pkgconfig, glib, autoconf, automake, libtool, intltool }:
-
-stdenv.mkDerivation rec {
+let
   p_name  = "xfce4-dev-tools";
   ver_maj = "4.12";
   ver_min = "0";
+in
+stdenv.mkDerivation rec {
+  name = "${p_name}-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
     sha256 = "1jxmyp80pwbfgmqmwpjxs7z5dmm6pyf3qj62z20xy44izraadqz2";
   };
-  name = "${p_name}-${ver_maj}.${ver_min}";
 
   buildInputs = [ pkgconfig glib ];
 
@@ -22,3 +23,4 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
   };
 }
+
