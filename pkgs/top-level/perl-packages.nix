@@ -11097,11 +11097,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ ProbePerl IPCRun3 ];
   };
 
-  TestSharedFork = buildPerlPackage {
-    name = "Test-SharedFork-0.29";
+  TestSharedFork = buildPerlPackage rec {
+    name = "Test-SharedFork-0.34";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EX/EXODIST/Test-SharedFork-0.29.tar.gz;
-      sha256 = "63af7788cc35b9b7e6fa37c61220ca66abd6364d8bb90c20038e3d8241988a6e";
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
+      sha256 = "1yq4xzify3wqdc07zq33lwgh9gywp3qd8w6wzwrllbjw0hhkm4s8";
     };
     buildInputs = [ TestRequires ];
     meta = {
