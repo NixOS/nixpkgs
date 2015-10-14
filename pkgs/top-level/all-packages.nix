@@ -712,7 +712,7 @@ let
 
   bochs = callPackage ../applications/virtualization/bochs { };
 
-  borg = callPackage ../tools/backup/borg { };
+  borgbackup = callPackage ../tools/backup/borg { };
 
   boomerang = callPackage ../development/tools/boomerang { };
 
