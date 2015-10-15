@@ -10537,6 +10537,8 @@ let
 
   junicode = callPackage ../data/fonts/junicode { };
 
+  kawkab-mono-font = callPackage ../data/fonts/kawkab-mono {};
+
   kochi-substitute = callPackage ../data/fonts/kochi-substitute {};
 
   kochi-substitute-naga10 = callPackage ../data/fonts/kochi-substitute-naga10 {};
