@@ -25,6 +25,7 @@ _overrideFirst() {
 
 # Setup chains of sane default values with easy overridability.
 # The variables are global to be usable anywhere during the build.
+# Typical usage in package is defining outputBin = "dev";
 
 _overrideFirst outputDev "dev" "out"
 _overrideFirst outputBin "bin" "out"
@@ -35,6 +36,7 @@ _overrideFirst outputInclude "$outputDev"
 _overrideFirst outputLib "lib" "out"
 
 _overrideFirst outputDoc "doc" "out"
+_overrideFirst outputDocdev "docdev" "$outputDoc" # documentation for developers
 # man and info pages are small and often useful to distribute with binaries
 _overrideFirst outputMan "man" "doc" "$outputBin"
 _overrideFirst outputInfo "info" "doc" "$outputMan"
@@ -50,6 +52,7 @@ _multioutConfig() {
         --mandir=${!outputMan}/share/man --infodir=${!outputInfo}/share/info \
         --docdir=${!outputDoc}/share/doc \
         --libdir=${!outputLib}/lib --libexecdir=${!outputLib}/libexec \
+        --localedir=${!outputLib}/share/locale \
         $configureFlags"
 
     installFlags="\
@@ -64,7 +67,8 @@ NIX_NO_SELF_RPATH=1
 
 
 # Move subpaths that match pattern $1 from under any output/ to the $2 output/
-# Beware: only * ? [..] patterns are accepted.
+# Beware: only globbing patterns are accepted, e.g.: * ? {foo,bar}
+# TODO: maybe allow moving to "/dev/trash" or similar
 _moveToOutput() {
     local patt="$1"
     local dstOut="$2"
@@ -75,10 +79,14 @@ _moveToOutput() {
         for srcPath in ${!output}/$patt; do
             if [ ! -e "$srcPath" ]; then continue; fi
             local dstPath="$dstOut${srcPath#${!output}}"
-            echo "moving $srcPath to $dstPath"
+            echo "Moving $srcPath to $dstPath"
 
             if [ -d "$dstPath" ] && [ -d "$srcPath" ]
             then # attempt directory merge
+                # check the case of trying to move an empty directory
+                rmdir "$srcPath" --ignore-fail-on-non-empty
+                [ -d "$srcPath" ] || continue;
+
                 mv -t "$dstPath" "$srcPath"/*
                 rmdir "$srcPath"
             else # usual move
@@ -92,13 +100,13 @@ _moveToOutput() {
 # Move documentation to the desired outputs.
 _multioutDocs() {
     if [ "$outputs" = "out" ]; then return; fi;
-    echo "Looking for documentation to move between outputs"
-    _moveToOutput share/man "${!outputMan}"
     _moveToOutput share/info "${!outputInfo}"
     _moveToOutput share/doc "${!outputDoc}"
-    # outputs TODO: perhaps have outputDevDoc for developer docs
-    # and maybe allow _moveToOutput move to "/dev/trash" or similar
-    _moveToOutput share/gtk-doc "${!outputDoc}"
+    _moveToOutput share/gtk-doc "${!outputDocdev}"
+
+    # the default outputMan is in $bin
+    _moveToOutput share/man "${!outputMan}"
+    _moveToOutput share/man/man3 "${!outputDocdev}"
 
     # Remove empty share directory.
     if [ -d "$out/share" ]; then
@@ -109,13 +117,13 @@ _multioutDocs() {
 # Move development-only stuff to the desired outputs.
 _multioutDevs() {
     if [ "$outputs" = "out" ] || [ -z "${moveToDev-1}" ]; then return; fi;
-    echo "Looking for development-only stuff to move to $outputDev"
     _moveToOutput include "${!outputInclude}"
+    # these files are sometimes provided even without using the corresponding tool
     _moveToOutput lib/pkgconfig "${!outputDev}"
     _moveToOutput share/pkgconfig "${!outputDev}"
-
-    # don't move libtool files yet
-    #_moveToOutput "lib/*.la" "${!outputDev}"
+    _moveToOutput lib/cmake "${!outputDev}"
+    _moveToOutput share/aclocal "${!outputDev}"
+    # don't move *.la, as libtool needs them in the directory of the library
 
     for f in "${!outputDev}"/{lib,share}/pkgconfig/*.pc; do
         echo "Patching '$f' includedir to output ${!outputInclude}"
@@ -143,9 +151,11 @@ _multioutPropagateDev() {
             | tr -s ' ' '\n' | grep -v -F "$outputFirst" \
             | sort -u | tr '\n' ' ' `
         set -o pipefail
+    fi
 
-    elif [ -z "$propagatedOutputs" ]; then
-        return # variable was explicitly set to empty
+    # The variable was explicitly set to empty or we resolved it so
+    if [ -z "$propagatedOutputs" ]; then
+        return
     fi
 
     mkdir -p "${!outputFirst}"/nix-support
