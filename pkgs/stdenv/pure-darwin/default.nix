@@ -6,7 +6,8 @@
 
 let
   # libSystem and its transitive dependencies. Get used to this; it's a recurring theme in darwin land
-  libSystemClosure = [
+  libSystemClosure = if system == "x86_64-darwin"
+  then [
     "/usr/lib/libSystem.dylib"
     "/usr/lib/libSystem.B.dylib"
     "/usr/lib/libobjc.A.dylib"
@@ -16,7 +17,8 @@ let
     "/usr/lib/libc++.1.dylib"
     "/usr/lib/libDiagnosticMessagesClient.dylib"
     "/usr/lib/system"
-  ];
+  ]
+  else [];
 
   fetch = { file, sha256 }: derivation ((import <nix/fetchurl.nix> {
     url = "https://dl.dropboxusercontent.com/u/2857322/${file}";
