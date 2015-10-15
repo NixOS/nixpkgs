@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     ${if mysqlSupport then "-qt-sql-mysql -L${mysql.lib}/lib/mysql -I${mysql.lib}/include/mysql" else ""}
     ${if xftSupport then "-xft
       -L${libXft.out}/lib -I${libXft.dev}/include
-      -L${libXft.freetype.lib}/lib -I${libXft.freetype.dev}/include
+      -L${libXft.freetype.out}/lib -I${libXft.freetype.dev}/include
       -L${libXft.fontconfig.lib}/lib -I${libXft.fontconfig.dev}/include" else "-no-xft"}
   ";
 

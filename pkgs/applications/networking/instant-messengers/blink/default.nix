@@ -22,7 +22,7 @@ pythonPackages.buildPythonPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/blink \
-      --prefix LD_LIBRARY_PATH ":" ${gnutls.lib}/lib
+      --prefix LD_LIBRARY_PATH ":" ${gnutls.out}/lib
   '';
 
   meta = with stdenv.lib; {

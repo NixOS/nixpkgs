@@ -395,7 +395,7 @@ let
 
     postInstall = ''
       wrapProgram $out/bin/alot \
-        --prefix LD_LIBRARY_PATH : '${lib.makeLibraryPath [ pkgs.notmuch pkgs.file pkgs.gpgme ]}'
+        --prefix LD_LIBRARY_PATH : '${pkgs.lib.makeLibraryPath [ pkgs.notmuch pkgs.file pkgs.gpgme ]}'
     '';
 
     meta = {
@@ -14692,7 +14692,7 @@ let
     # I don't know why I need to add these libraries. Shouldn't they
     # be part of wxPython?
     postInstall = ''
-      libspaths=${with pkgs.xorg; lib.makeLibraryPath [ libSM libXScrnSaver ]}
+      libspaths=${with pkgs.xorg; pkgs.lib.makeLibraryPath [ libSM libXScrnSaver ]}
       wrapProgram $out/bin/taskcoach.py \
         --prefix LD_LIBRARY_PATH : $libspaths
     '';
