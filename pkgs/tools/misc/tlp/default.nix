@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, perl, systemd, iw, rfkill, hdparm, ethtool, inetutils, kmod
 , enableRDW ? true, networkmanager }:
 
-let version = "0.7";
+let version = "0.8";
 in stdenv.mkDerivation {
   inherit enableRDW;
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
         owner = "linrunner";
         repo = "TLP";
         rev = "${version}";
-        sha256 = "0vgx2jnk9gp41fw992l9dmv462jpcrnwqkzsa8z0lh0l77ax2jcg";
+        sha256 = "19fvk0xz6i2ryf41akk4jg1c4sb4rcyxdl9fr0w4lja7g76d5zww";
       };
 
   makeFlags = [ "DESTDIR=$(out)"

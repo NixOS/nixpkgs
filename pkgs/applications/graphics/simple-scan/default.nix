@@ -1,12 +1,12 @@
 { stdenv, fetchurl, cairo, colord, glib, gtk3, gusb, intltool, itstool, libusb
 , libxml2, makeWrapper, packagekit, pkgconfig, saneBackends, systemd, vala }:
 
-let version = "3.18.0"; in
+let version = "3.18.1"; in
 stdenv.mkDerivation rec {
   name = "simple-scan-${version}";
 
   src = fetchurl {
-    sha256 = "09qki4h1px65fxwpr7jppzqsi5cfcb8168p13blp3wcfizjgb9gl";
+    sha256 = "1i37j36kbn1h8yfzcvbis6f38xz2nj5512ls3gb0j5na0bvja2cw";
     url = "https://launchpad.net/simple-scan/3.18/${version}/+download/${name}.tar.xz";
   };
 

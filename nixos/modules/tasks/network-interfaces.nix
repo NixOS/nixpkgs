@@ -426,8 +426,8 @@ in
       description =
         ''
           This option allows you to define Open vSwitches that connect
-          physical networks together.  The value of this option is an
-          attribute set.  Each attribute specifies a vswitch, with the
+          physical networks together. The value of this option is an
+          attribute set. Each attribute specifies a vswitch, with the
           attribute name specifying the name of the vswitch's network
           interface.
         '';
@@ -441,16 +441,6 @@ in
           type = types.listOf types.str;
           description =
             "The physical network interfaces connected by the vSwitch.";
-        };
-
-        bindInterfaces = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            If true, then the interfaces of the vSwitch are brought 'up' and especially
-            also 'down' together with the vSwitch. That requires that every interfaces
-            is configured as a systemd network services.
-          '';
         };
 
         controllers = mkOption {
@@ -995,21 +985,78 @@ in
 
     services.udev.packages = mkIf (cfg.wlanInterfaces != {}) [
       (pkgs.writeTextFile {
-        name = "99-zzz-wlanInterfaces-last.rules";
-        destination = "/etc/udev/rules.d/99-zzz-wlanInterfaces-last.rules";
-        text = ''
-          # If persistent udev device name is not used for an interface, then do not
-          # call systemd for that udev device name and only execute the script that
-          # modifies or prepares the WLAN interfaces. All other commands that would
-          # otherwise be executed when the udev device is added, like, e.g., the calling
-          # of systemd-sysctl or the activation of wpa_supplicant is disabled when the
-          # persistend udev device name is not usef for an interface.
-          ${flip (concatMapStringsSep "\n") (attrNames wlanDeviceInterfaces) (device:
-          let script = wlanDeviceUdevScript device (wlanListDeviceFirst device wlanDeviceInterfaces."${device}"); in
-          if hasAttr device cfg.wlanInterfaces
-          then ''ACTION=="add", SUBSYSTEM=="net", NAME=="${device}", ENV{DEVTYPE}=="wlan", RUN+="${script}"''
-          else ''ACTION=="add", SUBSYSTEM=="net", NAME=="${device}", ENV{DEVTYPE}=="wlan", NAME="", TAG-="systemd", RUN:="${script}"'')}
-        '';
+        name = "99-zzz-40-wlanInterfaces.rules";
+        destination = "/etc/udev/rules.d/99-zzz-40-wlanInterfaces.rules";
+        text =
+          let
+            # Collect all interfaces that are defined for a device
+            # as device:interface key:value pairs.
+            wlanDeviceInterfaces =
+              let
+                allDevices = unique (mapAttrsToList (_: v: v.device) cfg.wlanInterfaces);
+                interfacesOfDevice = d: filterAttrs (_: v: v.device == d) cfg.wlanInterfaces;
+              in
+                genAttrs allDevices (d: interfacesOfDevice d);
+
+            # Convert device:interface key:value pairs into a list, and if it exists,
+            # place the interface which is named after the device at the beginning.
+            wlanListDeviceFirst = device: interfaces:
+              if hasAttr device interfaces
+              then mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n==device) interfaces) ++ mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n!=device) interfaces)
+              else mapAttrsToList (n: v: v // {_iName = n;}) interfaces;
+
+            # Udev script to execute for the default WLAN interface with the persistend udev name.
+            # The script creates the required, new WLAN interfaces interfaces and configures the
+            # existing, default interface.
+            curInterfaceScript = device: current: new: pkgs.writeScript "udev-run-script-wlan-interfaces-${device}.sh" ''
+              #!${pkgs.stdenv.shell}
+              # Change the wireless phy device to a predictable name.
+              ${pkgs.iw}/bin/iw phy `${pkgs.coreutils}/bin/cat /sys/class/net/$INTERFACE/phy80211/name` set name ${device}
+
+              # Add new WLAN interfaces
+              ${flip concatMapStrings new (i: ''
+              ${pkgs.iw}/bin/iw phy ${device} interface add ${i._iName} type managed
+              '')}
+
+              # Configure the current interface
+              ${pkgs.iw}/bin/iw dev ${device} set type ${current.type}
+              ${optionalString (current.type == "mesh" && current.meshID!=null) "${pkgs.iw}/bin/iw dev ${device} set meshid ${current.meshID}"}
+              ${optionalString (current.type == "monitor" && current.flags!=null) "${pkgs.iw}/bin/iw dev ${device} set monitor ${current.flags}"}
+              ${optionalString (current.type == "managed" && current.fourAddr!=null) "${pkgs.iw}/bin/iw dev ${device} set 4addr ${if current.fourAddr then "on" else "off"}"}
+              ${optionalString (current.mac != null) "${pkgs.iproute}/bin/ip link set dev ${device} address ${current.mac}"}
+            '';
+
+            # Udev script to execute for a new WLAN interface. The script configures the new WLAN interface.
+            newInterfaceScript = new: pkgs.writeScript "udev-run-script-wlan-interfaces-${new._iName}.sh" ''
+              #!${pkgs.stdenv.shell}
+              # Configure the new interface
+              ${pkgs.iw}/bin/iw dev ${new._iName} set type ${new.type}
+              ${optionalString (new.type == "mesh" && new.meshID!=null) "${pkgs.iw}/bin/iw dev ${device} set meshid ${new.meshID}"}
+              ${optionalString (new.type == "monitor" && new.flags!=null) "${pkgs.iw}/bin/iw dev ${device} set monitor ${new.flags}"}
+              ${optionalString (new.type == "managed" && new.fourAddr!=null) "${pkgs.iw}/bin/iw dev ${device} set 4addr ${if new.fourAddr then "on" else "off"}"}
+              ${optionalString (new.mac != null) "${pkgs.iproute}/bin/ip link set dev ${device} address ${new.mac}"}
+            '';
+
+            # Udev attributes for systemd to name the device and to create a .device target.
+            systemdAttrs = n: ''NAME:="${n}", ENV{INTERFACE}:="${n}", ENV{SYSTEMD_ALIAS}:="/sys/subsystem/net/devices/${n}", TAG+="systemd"'';
+          in
+          flip (concatMapStringsSep "\n") (attrNames wlanDeviceInterfaces) (device:
+            let
+              interfaces = wlanListDeviceFirst device wlanDeviceInterfaces."${device}";
+              curInterface = elemAt interfaces 0;
+              newInterfaces = drop 1 interfaces;
+            in ''
+            # It is important to have that rule first as overwriting the NAME attribute also prevents the
+            # next rules from matching.
+            ${flip (concatMapStringsSep "\n") (wlanListDeviceFirst device wlanDeviceInterfaces."${device}") (interface:
+            ''ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", ENV{INTERFACE}=="${interface._iName}", ${systemdAttrs interface._iName}, RUN+="${newInterfaceScript interface}"'')}
+
+            # Add the required, new WLAN interfaces to the default WLAN interface with the
+            # persistent, default name as assigned by udev.
+            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", NAME=="${device}", ${systemdAttrs curInterface._iName}, RUN+="${curInterfaceScript device curInterface newInterfaces}"
+            # Generate the same systemd events for both 'add' and 'move' udev events.
+            ACTION=="move", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", NAME=="${device}", ${systemdAttrs curInterface._iName}
+          '');
       }) ];
 
   };

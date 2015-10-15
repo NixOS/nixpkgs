@@ -1,20 +1,16 @@
-{stdenv, stdenv_32bit, fetchurl, unzip}:
+{stdenv, stdenv_32bit, zlib_32bit, fetchurl, unzip}:
 
-let
-  version = "22";
-
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
+  version = "23.0.1";
   name = "android-platform-tools-r${version}";
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
-      url = "https://dl-ssl.google.com/android/repository/platform-tools_r${version}-linux.zip";
-      sha256 = "1kbp5fzfdas6c431n53a9w0z0182ihhadd1h8a64m1alkw0swr41";
+      url = "https://dl.google.com/android/repository/platform-tools_r${version}-linux.zip";
+      sha1 = "94dcc5072b3d0d74cc69e4101958b6c2e227e738";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
-      url = "https://dl-ssl.google.com/android/repository/platform-tools_r${version}-macosx.zip";
-      sha256 = "0r359xxicn7zw9z0jbrmsppx1372fijg09ck907gg8x1cvzj2ry0";
+      url = "https://dl.google.com/android/repository/platform-tools_r${version}-macosx.zip";
+      sha1 = "c461d66f3ca9fbae8ea0fa1a49c203b3b6fd653f";
     }
     else throw "System ${stdenv.system} not supported!";
 
@@ -26,10 +22,16 @@ stdenv.mkDerivation {
     
     ${stdenv.lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
       ''
-        for i in adb fastboot
+        for i in adb dmtracedump fastboot hprof-conv sqlite3
         do
             patchelf --set-interpreter ${stdenv_32bit.cc.libc}/lib/ld-linux.so.2 $i
-            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib $i
+            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib:`pwd`/lib $i
+        done
+        
+        for i in etc1tool
+        do
+            patchelf --set-interpreter ${stdenv_32bit.cc.libc}/lib/ld-linux.so.2 $i
+            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib:${zlib_32bit}/lib:`pwd`/lib $i
         done
     ''}
 

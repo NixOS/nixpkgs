@@ -1080,10 +1080,10 @@ let
   };
 
   buttersink = buildPythonPackage rec {
-    name = "buttersink-0.6.6";
+    name = "buttersink-0.6.7";
 
     src = pkgs.fetchurl {
-      sha256 = "1vi0pz8r3d17bsn5g7clkyph7sc0rjzbzqk6rwglaxcah7sfj2mj";
+      sha256 = "1azd0g0p9qk9wp344jmvqp4wk5f3wpsz3lb750xvnmd7qzf6v377";
       url = "https://pypi.python.org/packages/source/b/buttersink/${name}.tar.gz";
     };
 
@@ -2288,11 +2288,11 @@ let
 
   cython = buildPythonPackage rec {
     name = "Cython-${version}";
-    version = "0.23.1";
+    version = "0.23.3";
 
     src = pkgs.fetchurl {
       url = "http://www.cython.org/release/${name}.tar.gz";
-      sha256 = "12h1g21xmp2jk8j3sw2i73ffxgfafakza6mw3fd4pqx2lbb15zdx";
+      sha256 = "590274ac8dbd1e62cc79d94eb2e2f4ae60cea91a9f8d50b8697d39aba451e82e";
     };
 
     setupPyBuildFlags = ["--build-base=$out"];
@@ -2789,11 +2789,11 @@ let
 
   datashape = buildPythonPackage rec {
     name = "datashape-${version}";
-    version = "0.4.6";
+    version = "0.4.7";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/D/DataShape/${name}.tar.gz";
-      sha256 = "0caa86a4347f1b0c45f3890d78d0b89662189c7dd6df3a8e5ff3532ae8bc434f";
+      sha256 = "14b2ef766d4c9652ab813182e866f493475e65e558bed0822e38bf07bba1a278";
     };
 
     propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
@@ -3322,12 +3322,13 @@ let
 
 
   dropbox = buildPythonPackage rec {
-    name = "dropbox-2.2.0";
+    name = "dropbox-${version}";
+    version = "3.37";
     doCheck = false; # python 2.7.9 does verify ssl certificates
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/d/dropbox/${name}.zip";
-      sha256 = "069jrwb67brqh0sics8fgqdf2mv5y5jl9k5729x8vf80pq2c9p36";
+      url = "https://pypi.python.org/packages/source/d/dropbox/${name}.tar.gz";
+      sha256 = "f65c12bd97f09e29a951bc7cb30a74e005fc4b2f8bb48778796be3f73866b173";
     };
 
     propagatedBuildInputs = with self; [ urllib3 mock setuptools ];
@@ -6564,9 +6565,9 @@ let
     };
 
     patchPhase = ''
-      pushd libev
-      patch -p1 < ${../development/libraries/libev/noreturn.patch}
-      popd
+      substituteInPlace libev/ev.c --replace \
+        "ecb_inline void ecb_unreachable (void) ecb_noreturn" \
+        "ecb_inline ecb_noreturn void ecb_unreachable (void)"
     '';
 
     buildInputs = with self; [ pkgs.libev ];
@@ -6734,12 +6735,12 @@ let
   };
 
   goobook = buildPythonPackage rec {
-    name = "goobook-1.6";
+    name = "goobook-1.9";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/g/goobook/${name}.tar.gz";
-      sha256 = "05vpriy391l5i05ckl5ja5bswqyvl3rwrbmks9pi46w1813j7p5z";
+      sha256 = "02xmq8sjavza17av44ks510934wrshxnsm6lvhvazs45s92b671i";
     };
 
     buildInputs = with self; [ ];
@@ -6756,7 +6757,7 @@ let
       platforms   = platforms.unix;
     };
 
-    propagatedBuildInputs = with self; [ gdata hcs_utils keyring simplejson six];
+    propagatedBuildInputs = with self; [ oauth2client gdata simplejson httplib2 keyring six rsa ];
   };
 
   google_api_python_client = buildPythonPackage rec {
@@ -7054,11 +7055,11 @@ let
   };
 
   httplib2 = buildPythonPackage rec {
-    name = "httplib2-0.9";
+    name = "httplib2-0.9.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/h/httplib2/${name}.tar.gz";
-      sha256 = "1asi5wpncnc6ki3bz33mhb9xh2lrkb24y4qng8bmqnczdmm8rsir";
+      sha256 = "1xc3clbrf77r0600kja71j7hk1218sjiq0gfmb8vjdajka8kjqxw";
     };
 
     meta = {
@@ -7357,7 +7358,7 @@ let
 
     buildInputs = with self; [nose] ++ optionals isPy27 [mock];
 
-    propagatedBuildInputs = with self; [decorator pickleshare simplegeneric traitlets requests pexpect sqlite3];
+    propagatedBuildInputs = with self; [decorator pickleshare simplegeneric traitlets readline requests pexpect sqlite3];
 
     meta = {
       description = "IPython: Productive Interactive Computing";
@@ -7383,6 +7384,25 @@ let
     };
   };
 
+
+  ipywidgets = buildPythonPackage rec {
+    version = "4.0.2";
+    name = "ipywidgets-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/ipywidgets/${name}.tar.gz";
+      sha256 = "1afwddaslf62ba75679s059z36zfamcx454q2lgd97xqsp30hqmf";
+    };
+
+    propagatedBuildInputs = with self; [ipython ipykernel traitlets notebook];
+
+    meta = {
+      description = "IPython HTML widgets for Jupyter";
+      homepage = http://ipython.org/;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ fridh ];
+    };
+  };
 
   ipaddr = buildPythonPackage rec {
     name = "ipaddr-2.1.10";
@@ -7416,13 +7436,15 @@ let
   };
 
   ipdb = buildPythonPackage rec {
-    name = "ipdb-0.8";
+    name = "ipdb-${version}";
+    version = "0.8.1";
+
     disabled = isPyPy;  # setupterm: could not find terminfo database
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/i/ipdb/${name}.zip";
-      md5 = "96dca0712efa01aa5eaf6b22071dd3ed";
+      sha256 = "1763d1564113f5eb89df77879a8d3213273c4d7ff93dcb37a3070cdf0c34fd7c";
     };
-    propagatedBuildInputs = with self; [ self.ipython ];
+    propagatedBuildInputs = with self; [ ipython ];
   };
 
   ipdbplugin = buildPythonPackage {
@@ -7614,12 +7636,12 @@ let
   };
 
   jupyter_core = buildPythonPackage rec {
-    version = "4.0.4";
+    version = "4.0.6";
     name = "jupyter_core-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jupyter_core/${name}.tar.gz";
-      sha256 = "fcf45478025f34174943993947f51a41ad871ac998a14bf1cb87d8eb61e75c6d";
+      sha256 = "96a68a3b1d018ff7776270b26b7cb0cfd7a18a53ef2061421daff435707d198c";
     };
 
     propagatedBuildInputs = with self; [traitlets];
@@ -8139,6 +8161,8 @@ let
       rev = "v${version}";
       sha256 = "1hyrxnhxw35vn00k55hp9bkg8vg4dsphrpfg1yg4cn53y78rk1im";
     };
+
+    disabled = isPy3k;
 
     patches = [ ../development/python-modules/mathics/disable_console_tests.patch ];
 
@@ -8930,12 +8954,12 @@ let
   };
 
   nbformat = buildPythonPackage rec {
-    version = "4.0.0";
+    version = "4.0.1";
     name = "nbformat-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/nbformat/${name}.tar.gz";
-      sha256 = "daf9b990e96863d120aff123361156a316757757b81a8070eb6945e4a9774b2d";
+      sha256 = "5261c957589b9dfcd387c338d59375162ba9ca82c69e378961a1f4e641285db5";
     };
 
     propagatedBuildInputs = with self; [ipython_genutils traitlets jsonschema jupyter_core];
@@ -9278,12 +9302,12 @@ let
   };
 
   notebook = buildPythonPackage rec {
-    version = "4.0.4";
+    version = "4.0.5";
     name = "notebook-${version}";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/n/notebook/${name}.tar.gz";
-      sha256 = "a57852514bce1b1cf41fa0311f6cf894960cf68b083b55e6c408316b598d5648";
+      url = "https://pypi.python.org/packages/source/n/notebook/${name}.tgz";
+      sha256 = "5ac716940cfd7612369ee177c0d7fc0eb888335b76dfcea17513cb5d5b4056a8";
     };
 
     buildInputs = with self; [nose]  ++ optionals isPy27 [mock];
@@ -9578,11 +9602,11 @@ let
   });
 
   oauth2client = pythonPackages.buildPythonPackage rec {
-    name = "oauth2client-1.4.7";
+    name = "oauth2client-1.4.12";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/o/oauth2client/oauth2client-1.4.7.tar.gz";
-      md5 = "62747643d5af57e57b09e176eda1c1dd";
+      url = "https://pypi.python.org/packages/source/o/oauth2client/${name}.tar.gz";
+      sha256 = "0phfk6s8bgpap5xihdk1xv2lakdk1pb3rg6hp2wsg94hxcxnrakl";
     };
 
     propagatedBuildInputs = with pythonPackages; [ httplib2 pyasn1 pyasn1-modules rsa ];
@@ -10367,6 +10391,26 @@ let
     buildInputs = with self; [ nose mock pyyaml ];
 
     propagatedBuildInputs = with self; [ unittest2 ];
+  };
+
+  pylibconfig2 = buildPythonPackage rec {
+    name = "pylibconfig2-${version}";
+    version = "0.2.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pylibconfig2/${name}.tar.gz";
+      sha256 = "0kyg6gldj6hi2jhc5xhi834bb2mcaiy24dvfik963shnldqr7kqg";
+    };
+
+    doCheck = false;
+
+    propagatedBuildInputs = with self ; [ pyparsing ];
+
+    meta = {
+      homepage = https://github.com/heinzK1X/pylibconfig2;
+      description = "Pure python library for libconfig syntax";
+      license = licenses.gpl3;
+    };
   };
 
   pysftp = buildPythonPackage rec {
@@ -13237,11 +13281,11 @@ let
   };
 
   rsa = buildPythonPackage rec {
-    name = "rsa-3.1.2";
+    name = "rsa-3.1.4";
 
     src = pkgs.fetchurl {
-      url = "https://bitbucket.org/sybren/python-rsa/get/version-3.1.2.tar.bz2";
-      sha256 = "0ag2q4gaapi74x47q74xhcjzs4b7r2bb6zrj2an4sz5d3yd06cgf";
+      url = "https://pypi.python.org/packages/source/r/rsa/${name}.tar.gz";
+      sha256 = "1842ghkkimzf4fi3np4vwbwnsriv4d9malp1sbnv2xn26rcv1c72";
     };
 
     buildInputs = with self; [ self.pyasn1 ];
@@ -13821,7 +13865,7 @@ let
 
   sympy = buildPythonPackage rec {
     name = "sympy-0.7.6";
-    disabled = isPy34 || isPyPy;  # some tests fail
+    disabled = isPy34 || isPy35 || isPyPy;  # some tests fail
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/s/sympy/${name}.tar.gz";
@@ -14936,11 +14980,11 @@ let
 
   toolz = buildPythonPackage rec{
     name = "toolz-${version}";
-    version = "0.7.2";
+    version = "0.7.4";
 
     src = pkgs.fetchurl{
       url = "https://pypi.python.org/packages/source/t/toolz/toolz-${version}.tar.gz";
-      md5 = "6f045541a9e7ee755b7b00fced4a7fde";
+      sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
     };
 
     meta = {
@@ -17093,6 +17137,24 @@ let
 
   };
 
+  veryprettytable = pythonPackages.buildPythonPackage rec {
+    name = "veryprettytable-${version}";
+    version = "0.8.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/v/veryprettytable/${name}.tar.gz";
+      sha256 = "1k1rifz8x6qcicmx2is9vgxcj0qb2f5pvzrp7zhmvbmci3yack3f";
+    };
+
+    propagatedBuildInputs = [ self.termcolor self.colorama ];
+
+    meta = {
+      description = "A simple Python library for easily displaying tabular data in a visually appealing ASCII table format";
+      homepage = https://github.com/smeggingsmegger/VeryPrettyTable;
+      license = licenses.free;
+    };
+  };
+
   graphite_web = buildPythonPackage rec {
     name = "graphite-web-${version}";
     version = "0.9.12";
@@ -17320,12 +17382,12 @@ let
 
   gdata = buildPythonPackage rec {
     name = "gdata-${version}";
-    version = "2.0.17";
+    version = "2.0.18";
 
     src = pkgs.fetchurl {
       url = "https://gdata-python-client.googlecode.com/files/${name}.tar.gz";
       # sha1 = "d2d9f60699611f95dd8c328691a2555e76191c0c";
-      sha256 = "0bdaqmicpbj9v3p0swvyrqs7m35bzwdw1gy56d3k09np692jfwmd";
+      sha256 = "1dpxl5hwyyqd71avpm5vkvw8fhlvf9liizmhrq9jphhrx0nx5rsn";
     };
 
     # Fails with "error: invalid command 'test'"
@@ -17917,7 +17979,6 @@ let
 
   termcolor = buildPythonPackage rec {
     name = "termcolor-1.1.0";
-    disabled = ! isPy27;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/termcolor/termcolor-1.1.0.tar.gz";
@@ -17995,6 +18056,67 @@ let
       homepage = "https://networkx.github.io/";
       description = "Library for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks";
       license = licenses.bsd3;
+    };
+  };
+
+  ofxclient = buildPythonPackage rec {
+    name = "ofxclient-1.3.8";
+	src = pkgs.fetchurl {
+	  url = "https://pypi.python.org/packages/source/o/ofxclient/${name}.tar.gz";
+	  md5 = "a632e157f9c98524bf9302a0c6788174";
+	};
+
+	# ImportError: No module named tests
+	doCheck = false;
+
+	propagatedBuildInputs = with self; [ ofxhome ofxparse beautifulsoup keyring argparse ];
+  };
+
+  ofxhome = buildPythonPackage rec {
+	name = "ofxhome-0.3.1";
+	src = pkgs.fetchurl {
+	  url = "https://pypi.python.org/packages/source/o/ofxhome/${name}.tar.gz";
+	  md5 = "98e8ef92ccd443ab750fcb0741efe816";
+	};
+
+	buildInputs = with self; [ nose ];
+
+	# ImportError: No module named tests
+	doCheck = false;
+
+    meta = {
+      homepage = "https://github.com/captin411/ofxhome";
+      description = "ofxhome.com financial institution lookup REST client";
+      license = licenses.mit;
+    };
+  };
+
+  ofxparse = buildPythonPackage rec {
+	name = "ofxparse-0.14";
+	src = pkgs.fetchurl {
+	  url = "https://pypi.python.org/packages/source/o/ofxparse/${name}.tar.gz";
+	  md5 = "4ad8a34e008d4893a61eadd593176f0f";
+	};
+
+	propagatedBuildInputs = with self; [ six beautifulsoup4 ];
+
+    meta = {
+      homepage = "http://sites.google.com/site/ofxparse";
+      description = "Tools for working with the OFX (Open Financial Exchange) file format";
+      license = licenses.mit;
+    };
+  };
+
+  ofxtools = buildPythonPackage rec {
+    name = "ofxtools-0.3.8";
+	src = pkgs.fetchurl {
+	  url = "https://pypi.python.org/packages/source/o/ofxtools/${name}.tar.gz";
+	  md5 = "4ac3c3f5223816bc2c48dd818fd434d8";
+	};
+    meta = {
+      homepage = "https://github.com/csingley/ofxtools";
+      description = "Library for working with Open Financial Exchange (OFX) formatted data used by financial institutions";
+      license = licenses.mit;
     };
   };
 
@@ -18201,12 +18323,12 @@ let
   };
 
   neovim = buildPythonPackage rec {
-    version = "0.0.36";
+    version = "0.0.38";
     name = "neovim-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/neovim/${name}.tar.gz";
-      md5 = "8cdad23402e29c7c5a1e85770e976edf";
+      md5 = "8b723417d3bf15bab0b245d080d45298";
     };
 
     propagatedBuildInputs = with self; [ msgpack ]
@@ -18523,6 +18645,146 @@ let
       description = "Python Import Magic - automagically add, remove and manage imports";
       homepage = http://github.com/alecthomas/importmagic;
       license = "bsd";
+    };
+  };
+
+  bepasty-server = buildPythonPackage rec {
+    name = "bepasty-server-${version}";
+    version = "0.4.0";
+    propagatedBuildInputs = with self;[
+      flask
+      pygments
+      xstatic
+      xstatic-bootbox
+      xstatic-bootstrap
+      xstatic-jquery
+      xstatic-jquery-file-upload
+      xstatic-jquery-ui
+      xstatic-pygments
+    ];
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/b/bepasty/bepasty-${version}.tar.gz";
+      sha256 = "0bs79pgrjlnkmjfyj2hllbx3rw757va5w2g2aghi9cydmsl7gyi4";
+    };
+
+    meta = {
+      homepage = http://github.com/bepasty/bepasty-server;
+      description = "binary pastebin server";
+      license = licenses.mit;
+      maintainers = [ maintainers.makefu ];
+    };
+  };
+
+  xstatic = buildPythonPackage rec {
+    name = "XStatic-${version}";
+    version = "1.0.1";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/X/XStatic/XStatic-${version}.tar.gz";
+      sha256 = "09npcsyf1ccygjs0qc8kdsv4qqy8gm1m6iv63g9y1fgbcry3vj8f";
+    };
+    meta = {
+      homepage = http://bitbucket.org/thomaswaldmann/xstatic;
+      description = "base packaged static files for python";
+      license = licenses.mit;
+      maintainers = [ maintainers.makefu ];
+    };
+  };
+
+  xstatic-bootbox = buildPythonPackage rec {
+    name = "XStatic-Bootbox-${version}";
+    version = "4.3.0.1";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/X/XStatic-Bootbox/XStatic-Bootbox-${version}.tar.gz";
+      sha256 = "0wks1lsqngn3gvlhzrvaan1zj8w4wr58xi0pfqhrzckbghvvr0gj";
+    };
+
+    meta = {
+      homepage =  http://bootboxjs.com;
+      description = "bootboxjs packaged static files for python";
+      license = licenses.mit;
+      maintainers = [ maintainers.makefu ];
+    };
+  };
+
+  xstatic-bootstrap = buildPythonPackage rec {
+    name = "XStatic-Bootstrap-${version}";
+    version = "3.3.5.1";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/X/XStatic-Bootstrap/XStatic-Bootstrap-${version}.tar.gz";
+      sha256 = "0jzjq3d4vp2shd2n20f9y53jnnk1cvphkj1v0awgrf18qsy2bmin";
+    };
+
+    meta = {
+      homepage =  http://getbootstrap.com;
+      description = "bootstrap packaged static files for python";
+      license = licenses.mit;
+      maintainers = [ maintainers.makefu ];
+    };
+  };
+
+  xstatic-jquery = buildPythonPackage rec {
+    name = "XStatic-jQuery-${version}";
+    version = "1.10.2.1";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/X/XStatic-jQuery/XStatic-jQuery-${version}.tar.gz";
+      sha256 = "018kx4zijflcq8081xx6kmiqf748bsjdq7adij2k91bfp1mnlhc3";
+    };
+
+    meta = {
+      homepage =  http://jquery.org;
+      description = "jquery packaged static files for python";
+      license = licenses.mit;
+      maintainers = [ maintainers.makefu ];
+    };
+  };
+
+  xstatic-jquery-file-upload = buildPythonPackage rec {
+    name = "XStatic-jQuery-File-Upload-${version}";
+    version = "9.7.0.1";
+    propagatedBuildInputs = with self;[ xstatic-jquery ];
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/X/XStatic-jQuery-File-Upload/XStatic-jQuery-File-Upload-${version}.tar.gz";
+      sha256 = "0d5za18lhzhb54baxq8z73wazq801n3qfj5vgcz7ri3ngx7nb0cg";
+    };
+
+    meta = {
+      homepage =  http://plugins.jquery.com/project/jQuery-File-Upload;
+      description = "jquery-file-upload packaged static files for python";
+      license = licenses.mit;
+      maintainers = [ maintainers.makefu ];
+    };
+  };
+
+  xstatic-jquery-ui = buildPythonPackage rec {
+    name = "XStatic-jquery-ui-${version}";
+    version = "1.11.0.1";
+    propagatedBuildInputs = with self; [ xstatic-jquery ];
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/X/XStatic-jquery-ui/XStatic-jquery-ui-${version}.tar.gz";
+      sha256 = "0n6sgg9jxrqfz4zg6iqdmx1isqx2aswadf7mk3fbi48dxcv1i6q9";
+    };
+
+    meta = {
+      homepage = http://jqueryui.com/;
+      description = "jquery-ui packaged static files for python";
+      license = licenses.mit;
+      maintainers = [ maintainers.makefu ];
+    };
+  };
+
+  xstatic-pygments = buildPythonPackage rec {
+    name = "XStatic-Pygments-${version}";
+    version = "1.6.0.1";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/X/XStatic-Pygments/XStatic-Pygments-${version}.tar.gz";
+      sha256 = "0fjqgg433wfdnswn7fad1g6k2x6mf24wfnay2j82j0fwgkdxrr7m";
+    };
+
+    meta = {
+      homepage = http://pygments.org;
+      description = "pygments packaged static files for python";
+      license = licenses.bsd2;
+      maintainers = [ maintainers.makefu ];
     };
   };
 

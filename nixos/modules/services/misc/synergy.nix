@@ -89,6 +89,7 @@ in
         wantedBy = optional cfgC.autoStart "multi-user.target";
         path = [ pkgs.synergy ];
         serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f ${optionalString (cfgC.screenName != "") "-n ${cfgC.screenName}"} ${cfgC.serverAddress}'';
+        serviceConfig.Restart = "on-failure";
       };
     })
     (mkIf cfgS.enable {
@@ -98,6 +99,7 @@ in
         wantedBy = optional cfgS.autoStart "multi-user.target";
         path = [ pkgs.synergy ];
         serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} -f ${optionalString (cfgS.address != "") "-a ${cfgS.address}"} ${optionalString (cfgS.screenName != "") "-n ${cfgS.screenName}" }'';
+        serviceConfig.Restart = "on-failure";
       };
     })
   ];

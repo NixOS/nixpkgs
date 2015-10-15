@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
   x11lib = x11env + "/lib";
   x11inc = x11env + "/include";
 
-  name = "ocaml-4.02.1";
+  name = "ocaml-4.02.3";
 
   src = fetchurl {
     url = "http://caml.inria.fr/pub/distrib/ocaml-4.02/${name}.tar.xz";
-    sha256 = "1p7lqvh64xpykh99014mz21q8fs3qyjym2qazhhbq8scwldv1i38";
+    sha256 = "1qwwvy8nzd87hk8rd9sm667nppakiapnx4ypdwcrlnav2dz6kil3";
   };
 
   patches = [ patchOcamlBuild ];

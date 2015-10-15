@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "6.10.1";
+  version = "6.11.2";
   name = "checkstyle-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/checkstyle/${name}-bin.tar.gz";
-    sha256 = "18axx444hzi1gcbqa7nyifdvyqsiab0asya4qwa7y6khiq7y3myb";
+    sha256 = "13ywwm24199c942w9ly2cvy6rjbs0sim50lrvjybc0sh6gbg44sc";
   };
 
   installPhase = ''

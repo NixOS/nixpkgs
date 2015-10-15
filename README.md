@@ -14,12 +14,12 @@ build daemon as so-called channels. To get channel information via git, add
 ```
 
 For stability and maximum binary package support, it is recommended to maintain
-custom changes on top of one of the channels, e.g. `nixos-14.12` for the latest
+custom changes on top of one of the channels, e.g. `nixos-15.09` for the latest
 release and `nixos-unstable` for the latest successful build of master:
 
 ```
 % git remote update channels
-% git rebase channels/nixos-14.12
+% git rebase channels/nixos-15.09
 ```
 
 For pull-requests, please rebase onto nixpkgs `master`.

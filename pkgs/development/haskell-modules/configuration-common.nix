@@ -18,6 +18,7 @@ self: super: {
   ghc-paths = appendPatch super.ghc-paths ./patches/ghc-paths-nix.patch;
 
   # Break infinite recursions.
+  clock = dontCheck super.clock;
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
   hspec_2_1_10 = super.hspec_2_1_10.override { stringbuilder = dontCheck super.stringbuilder; };
@@ -62,7 +63,7 @@ self: super: {
   # all required dependencies are part of Stackage. To comply with Stackage, we
   # make 'git-annex-without-assistant' our default version, but offer another
   # build which has the assistant to be used in the top-level.
-  git-annex_5_20150916 = (disableCabalFlag super.git-annex_5_20150916 "assistant").override {
+  git-annex_5_20150930 = (disableCabalFlag super.git-annex_5_20150930 "assistant").override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
@@ -547,7 +548,8 @@ self: super: {
   asn1-encoding = dontCheck super.asn1-encoding;
 
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
-  wxc = super.wxc.override { wxGTK = pkgs.wxGTK30; };
+  # http://hydra.cryp.to/build/1331287/log/raw
+  wxc = (addBuildDepend super.wxc self.split).override { wxGTK = pkgs.wxGTK30; };
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK30; };
 
   # Depends on QuickCheck 1.x.
@@ -633,8 +635,10 @@ self: super: {
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
 
+  # Supports only 3.5 for now, https://github.com/bscarlet/llvm-general/issues/142
+  llvm-general = super.llvm-general.override { llvm-config = pkgs.llvm_35; };
+
   # Needs help finding LLVM.
-  llvm-general = super.llvm-general.override { llvm-config = self.llvmPackages.llvm; };
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
 
   # Tries to run GUI in tests
@@ -838,9 +842,6 @@ self: super: {
     ];
   });
 
-  # Old versions don't detect this library reliably.
-  freenect = appendConfigureFlag super.freenect "--extra-include-dirs=${pkgs.freenect}/include/libfreenect --extra-lib-dirs=${pkgs.freenect}/lib";
-
   # https://github.com/ivanperez-keera/hcwiid/pull/4
   hcwiid = overrideCabal super.hcwiid (drv: {
     configureFlags = (drv.configureFlags or []) ++ [
@@ -905,5 +906,13 @@ self: super: {
 
   # https://github.com/sol/hpack/issues/53
   hpack = dontCheck super.hpack;
+
+  # https://github.com/deech/fltkhs/issues/16
+  fltkhs = overrideCabal super.fltkhs (drv: {
+    libraryToolDepends = (drv.libraryToolDepends or []) ++ [pkgs.autoconf];
+    librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.fltk13 pkgs.mesa_noglu pkgs.libjpeg];
+    broken = true;      # linking fails because the build doesn't pull in the mesa libraries
+  });
+  fltkhs-fluid-examples = dontDistribute super.fltkhs-fluid-examples;
 
 }

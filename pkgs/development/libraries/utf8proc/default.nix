@@ -1,14 +1,12 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "utf8proc-${version}";
-  version = "v1.2";
+  version = "1.3";
 
-  src = fetchFromGitHub {
-    owner = "JuliaLang";
-    repo = "utf8proc";
-    rev = "${version}";
-    sha256 = "1ryjlcnpfm7fpkq6444ybi576hbnh2l0w7kjhbqady5lxwjyg3pf";
+  src = fetchurl {
+    url = "https://github.com/JuliaLang/utf8proc/archive/v${version}.tar.gz";
+    sha256 = "07r7djkmd399wl9cn0s2iqjhmm7l5iifp5h1yf2in9s366mlhkkg";
   };
 
   makeFlags = [ "prefix=$(out)" ];

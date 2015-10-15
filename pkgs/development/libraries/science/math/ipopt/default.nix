@@ -1,12 +1,12 @@
 { stdenv, fetchurl, unzip, openblas, gfortran }:
 
 stdenv.mkDerivation rec {
-  version = "3.12.3";
+  version = "3.12.4";
   name = "ipopt-${version}";
 
   src = fetchurl {
     url = "http://www.coin-or.org/download/source/Ipopt/Ipopt-${version}.zip";
-    sha256 = "0h8qx3hq2m21qrg4v3n26v2qbhl6saxrpa7rbhnmkkcfj5s942yr";
+    sha256 = "0hxmpi3zx5zgv2ijscdvc40xf88hx5if0d9sgch155z70g15wx0l";
   };
 
   preConfigure = ''

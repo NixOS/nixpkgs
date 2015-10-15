@@ -1,18 +1,18 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype
-, xorg, fontconfig, qt5, xkeyboard_config, alsaLib, libpulseaudio ? null
+, xorg, fontconfig, qt55, xkeyboard_config, alsaLib, libpulseaudio ? null
 , libredirect, quazip, less, which, unzip
 }:
 
 let
 
   arch = if stdenv.is64bit then "amd64" else "x86";
- 
+
   libDir = if stdenv.is64bit then "lib64" else "lib";
 
   deps =
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
-      xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qt5.base libpulseaudio
+      xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qt55.qtbase libpulseaudio
     ];
 
   desktopItem = makeDesktopItem {
@@ -30,7 +30,7 @@ in
 stdenv.mkDerivation rec {
   name = "teamspeak-client-${version}";
 
-  version = "3.0.16";
+  version = "3.0.18.1";
 
   src = fetchurl {
     urls = [
@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
       "http://teamspeak.gameserver.gamed.de/ts3/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
       "http://files.teamspeak-services.com/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
     ];
-    sha256 = if stdenv.is64bit 
-                then "0gvphrmrkyy1g2nprvdk7cvawznzlv4smw0mlvzd4b9mvynln0v2"
-                else "1b3nbvfpd8lx3dig8z5yk6zjkbmsy6y938dhj1f562wc8adixciz";
+    sha256 = if stdenv.is64bit
+                then "1bc9m2niagqmijmzlki8jmp48vhns041xdjlji9fyqay6l5mx5fw"
+                else "156dirxjys7pbximw19qs7j52my36p4kp98df3kgrsiiv8mz6v68";
   };
 
   # grab the plugin sdk for the desktop icon
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   installPhase =
     ''
       # Delete unecessary libraries - these are provided by nixos.
-      rm *.so.*
+      rm *.so.* *.so
       rm qt.conf
 
       # Install files.
@@ -89,15 +89,16 @@ stdenv.mkDerivation rec {
       ln -s $out/lib/teamspeak/ts3client $out/bin/ts3client
 
       wrapProgram $out/bin/ts3client \
-        --set LD_PRELOAD "${libredirect}/lib/libredirect.so:${quazip}/lib/libquazip.so" \
+        --set LD_LIBRARY_PATH "${quazip}/lib" \
+        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
         --set QT_PLUGIN_PATH "$out/lib/teamspeak/platforms" \
         --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
     '';
 
   dontStrip = true;
   dontPatchELF = true;
-  
-  meta = { 
+
+  meta = {
     description = "The TeamSpeak voice communication tool";
     homepage = http://teamspeak.com/;
     license = "http://www.teamspeak.com/?page=downloads&type=ts3_linux_client_latest";

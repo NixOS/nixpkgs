@@ -1,11 +1,11 @@
 { fetchgit, stdenv, cmake, pkgconfig, SDL, SDL2, ncurses, docbook_xsl }:
 
 stdenv.mkDerivation rec {
-  name = "sdl-jstest-20150625";
+  name = "sdl-jstest-20150806";
   src = fetchgit {
     url = "https://github.com/Grumbel/sdl-jstest";
-    rev = "3f54b86ebe0d2f95e9c1d034bc4ed02d6d2b6409";
-    sha256 = "d33e0a2c66b551ecf333590f1a6e1730093af31cee1be8757748624d42e14df1";
+    rev = "7b792376178c9656c851ddf106c7d57b2495e8b9";
+    sha256 = "3aa9a002de9c9999bd7c6248b94148f15dba6106489e418b2a1a410324f75eb8";
   };
 
   buildInputs = [ SDL SDL2 ncurses ];

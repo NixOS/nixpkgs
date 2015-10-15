@@ -49,12 +49,20 @@ releaseTools.sourceTarball rec {
         exit 1
     fi
 
-    # Check that all-packages.nix evaluates on a number of platforms.
+    # Check that all-packages.nix evaluates on a number of platforms without any warnings.
     for platform in i686-linux x86_64-linux x86_64-darwin; do
         header "checking pkgs/top-level/all-packages.nix on $platform"
+
         NIXPKGS_ALLOW_BROKEN=1 nix-env -f pkgs/top-level/all-packages.nix \
             --show-trace --argstr system "$platform" \
-            -qa --drv-path --system-filter \* --system > /dev/null
+            -qa --drv-path --system-filter \* --system 2>&1 >/dev/null | tee eval-warnings.log
+
+        if [ -s eval-warnings.log ]; then
+            echo "pkgs/top-level/all-packages.nix on $platform evaluated with warnings, aborting"
+            exit 1
+        fi
+        rm eval-warnings.log
+
         NIXPKGS_ALLOW_BROKEN=1 nix-env -f pkgs/top-level/all-packages.nix \
             --show-trace --argstr system "$platform" \
             -qa --drv-path --system-filter \* --system --meta --xml > /dev/null

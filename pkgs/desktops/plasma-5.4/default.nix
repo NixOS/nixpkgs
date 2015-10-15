@@ -11,7 +11,7 @@ let
 
   inherit (pkgs) lib stdenv symlinkJoin;
 
-  kf5 = pkgs.kf513;
+  kf5 = pkgs.kf514;
   kdeApps = pkgs.kdeApps_15_08;
 
   srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };

@@ -171,12 +171,12 @@ rec {
 
   checkstyle = buildEclipseUpdateSite rec {
     name = "checkstyle-${version}";
-    version = "6.9.0.201508291549";
+    version = "6.11.0.201510052139";
 
     src = fetchzip {
       stripRoot = false;
-      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.9.0/net.sf.eclipsecs-updatesite_${version}-bin.zip";
-      sha256 = "0r6lfbyhqcwa628i6wjp9d6mfp4jnc46bmwp9j7v02m79f8wx74g";
+      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.11.0/net.sf.eclipsecs-updatesite_${version}-bin.zip";
+      sha256 = "166nasgv3zsys7rlafvfnldfb6hiwiq3vil3papd59prwvky75fz";
     };
 
     meta = with stdenv.lib; {
@@ -335,16 +335,16 @@ rec {
 
   testng = buildEclipsePlugin rec {
     name = "testng-${version}";
-    version = "6.9.5.201508210528";
+    version = "6.9.7.201510070420";
 
     srcFeature = fetchurl {
       url = "http://beust.com/eclipse/features/org.testng.eclipse_${version}.jar";
-      sha256 = "0xalm7pvj0vx61isgkjkgj073b4hlqlzx6xnkrnnnyi0r212a26j";
+      sha256 = "185m6zcz1havhl94qgwms9szcs7vhrrq8rckbrb1vz02208yyhpn";
     };
 
     srcPlugin = fetchurl {
       url = "http://beust.com/eclipse/plugins/org.testng.eclipse_${version}.jar";
-      sha256 = "07wmivfvfsq6cjw5zwciajdxkfa7drk108jsr44gf4i1bv9fj055";
+      sha256 = "1rw678cd9nm623dvaddncadaclif62zcb15jl7ryzcmck2y380l5";
     };
 
     meta = with stdenv.lib; {

@@ -37,6 +37,7 @@ buildPythonPackage rec {
       gsettings_desktop_schemas
       gnome3.defaultIconTheme
       wrapGAppsHook
+      dconf
     ];
 
   configurePhase = ''

@@ -1,14 +1,21 @@
-{stdenv, fetchgit, coq}:
+{ stdenv, fetchFromGitHub, coq }:
+
+let param =
+  if coq.coq-version == "8.4"
+  then { version = "0.9.0"; sha256 = "1n3bk003vvbghbrxkhal6drnc0l65jv9y77wd56is3jw9xgiif0w"; }
+  else { version = "1.0.0-beta2"; sha256 = "0rdh6jsag174576nvra6m2g44fvmlbz4am5wcashj45bq30021sa"; };
+in
 
 stdenv.mkDerivation rec {
 
-  name = "coq-ext-lib-${coq.coq-version}-${version}";
-  version = "c2c71a2a";
+  name = "coq${coq.coq-version}-coq-ext-lib-${version}";
+  inherit (param) version;
 
-  src = fetchgit {
-    url = git://github.com/coq-ext-lib/coq-ext-lib.git;
-    rev = "c2c71a2a90ac87f2ceb311a6da53a6796b916816";
-    sha256 = "01sihw3nmvvpc8viwyr01qnqifdcmlg016034xmrfmv863yp8c4g";
+  src = fetchFromGitHub {
+    owner = "coq-ext-lib";
+    repo = "coq-ext-lib";
+    rev = "v${param.version}";
+    inherit (param) sha256;
   };
 
   buildInputs = [ coq.ocaml coq.camlp5 ];

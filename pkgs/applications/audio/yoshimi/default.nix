@@ -6,11 +6,11 @@ assert stdenv ? glibc;
 
 stdenv.mkDerivation  rec {
   name = "yoshimi-${version}";
-  version = "1.3.5.2";
+  version = "1.3.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/yoshimi/${name}.tar.bz2";
-    sha256 = "001xvwknsm1sv5lvwz7f6dgf57b8djbpwbyk2gfxjy9rzl5q53qr";
+    sha256 = "0c2y59m945rrspnwdxmixk92z9nfiayxdxh582gf15nj8bvkh1l6";
   };
 
   buildInputs = [

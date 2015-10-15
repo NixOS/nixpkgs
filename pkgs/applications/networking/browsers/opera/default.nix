@@ -50,8 +50,9 @@ stdenv.mkDerivation rec {
 
   preFixup =
     ''
+    rm $out/bin/uninstall-opera
     find $out/lib/opera -type f | while read f; do
-      type=$(readelf -h "$f" 2>/dev/null | grep 'Type:' | sed -e 's/ *Type: *\([A-Z]*\) (.*/\1/')
+      type=$(readelf -h "$f" 2>/dev/null | sed -n 's/ *Type: *\([A-Z]*\).*/\1/p' || true)
       if [ -z "$type" ]; then
         :
       elif [ $type == "EXEC" ]; then

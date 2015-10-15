@@ -1,12 +1,14 @@
 { lib, stdenv, fetchurl, libgcrypt }:
 
 stdenv.mkDerivation rec {
-  name = "libmicrohttpd-0.9.43";
+  name = "libmicrohttpd-0.9.44";
 
   src = fetchurl {
     url = "mirror://gnu/libmicrohttpd/${name}.tar.gz";
-    sha256 = "17q6v5q0jpg57vylby6rx1qkil72bdx8gij1g9m694gxf5sb6js1";
+    sha256 = "07j1p21rvbrrfpxngk8xswzkmjkh94bp1971xfjh1p0ja709qwzj";
   };
+
+  outputs = [ "out" "info" ];
 
   buildInputs = [ libgcrypt ];
 

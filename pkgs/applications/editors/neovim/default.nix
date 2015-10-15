@@ -14,7 +14,7 @@ with stdenv.lib;
 
 let
 
-  version = "2015-06-09";
+  version = "2015-10-12";
 
   # Note: this is NOT the libvterm already in nixpkgs, but some NIH silliness:
   neovimLibvterm = let version = "2015-02-23"; in stdenv.mkDerivation {
@@ -58,8 +58,8 @@ let
     name = "neovim-${version}";
 
     src = fetchFromGitHub {
-      sha256 = "1lycql0lwi7ynrsaln4kxybwvxb9fvganiq3ba4pnpcfgl155k1j";
-      rev = "6270d431aaeed71e7a8782411f36409ab8e0ee35";
+      sha256 = "1rlybdldz708pz7k0qs2rpm0cjk8ywwyj5s38hyq4mzsswqszdsc";
+      rev = "a3f048ee06dea15490d7b874d295c3fc850cdc51";
       repo = "neovim";
       owner = "neovim";
     };
@@ -103,7 +103,7 @@ let
     '' + optionalString withPython ''
       ln -s ${pythonEnv}/bin/python $out/bin/nvim-python
     '' + optionalString withPython3 ''
-      ln -s ${python3Env}/bin/python $out/bin/nvim-python3
+      ln -s ${python3Env}/bin/python3 $out/bin/nvim-python3
     '' + optionalString (withPython || withPython3) ''
         wrapProgram $out/bin/nvim --add-flags "${
           (optionalString withPython

@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
   version = "4.1.2";
 
   src = fetchurl {
-    url = "http://download.elastic.co/kibana/kibana-snapshot/kibana-4.2.0-snapshot-linux-x86.tar.gz";
-    sha256 = "1sa92laawxc05abiysvp12v5nzrqggmls592mkprwnbkkkbwsm5x";
+    url = "http://download.elastic.co/kibana/kibana-snapshot/${name}-snapshot-linux-x86.tar.gz";
+    sha256 = "00ag4wnlw6h2j6zcz0irz6j1s51fr9ix2g1smrhrdw44z5gb6wrh";
   };
 
   buildInputs = [ makeWrapper ];

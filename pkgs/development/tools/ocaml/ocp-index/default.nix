@@ -2,7 +2,7 @@
 
 let inherit (stdenv.lib) getVersion versionAtLeast optional; in
 
-assert versionAtLeast (getVersion ocaml) "3.12.1";
+assert versionAtLeast (getVersion ocaml) "4";
 assert versionAtLeast (getVersion ocpBuild) "1.99.6-beta";
 assert versionAtLeast (getVersion ocpIndent) "1.4.2";
 

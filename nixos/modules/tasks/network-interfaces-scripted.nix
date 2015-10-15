@@ -222,21 +222,15 @@ in
 
         createVswitchDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            managedInterfaces = filter (x: hasAttr x cfg.interfaces) v.interfaces;
-            managedInterfaceServices = concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) managedInterfaces;
-            virtualInterfaces = filter (x: (hasAttr x cfg.interfaces) && cfg.interfaces.${x}.virtual) v.interfaces;
-            virtualInterfaceServices = concatMap (i: [ "${i}-netdev.service" ]) virtualInterfaces;
             deps = map subsystemDevice v.interfaces;
             ofRules = pkgs.writeText "vswitch-${n}-openFlowRules" v.openFlowRules;
           in
           { description = "Open vSwitch Interface ${n}";
-            wantedBy = [ "network.target" "vswitchd.service" (subsystemDevice n) ];
-            requires = optionals v.bindInterfaces (deps ++ managedInterfaceServices ++ virtualInterfaceServices);
-            requiredBy = optionals v.bindInterfaces (managedInterfaceServices ++ virtualInterfaceServices);
-            bindsTo = deps ++ [ "vswitchd.service" ];
+            wantedBy = [ "network.target" "vswitchd.service" ] ++ deps;
+            bindsTo =  [ "vswitchd.service" (subsystemDevice n) ] ++ deps;
             partOf = [ "vswitchd.service" ];
-            after = [ "network-pre.target" "vswitchd.service" ] ++ deps ++ managedInterfaceServices ++ virtualInterfaceServices;
-            before = [ "network-interfaces.target" (subsystemDevice n) ];
+            after = [ "network-pre.target" "vswitchd.service" ] ++ deps;
+            before = [ "network-interfaces.target" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute config.virtualisation.vswitch.package ];

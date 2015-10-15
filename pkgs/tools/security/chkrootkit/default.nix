@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "chkrootkit-0.50";
 
   src = fetchurl {
-    url = ftp://ftp.pangeia.com.br/pub/seg/pac/chkrootkit.tar.gz;
+    url = ftp://ftp.pangeia.com.br/pub/seg/pac/chkrootkit-0.50.tar.gz;
     sha256 = "1ivclp7ixndacjmf7xgj8lfa6h7ihx44mzzsapqdvf0c5f9gqj4m";
   };
 

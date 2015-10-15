@@ -39,6 +39,7 @@ pkgs.vmTools.runInLinuxVM (
       exportReferencesGraph =
         [ "closure" config.system.build.toplevel ];
       inherit postVM;
+      memSize = 1024;
     }
     ''
       ${if partitioned then ''

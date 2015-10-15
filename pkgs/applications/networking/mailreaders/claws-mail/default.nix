@@ -29,7 +29,7 @@
 
 with stdenv.lib;
 
-let version = "3.11.1"; in
+let version = "3.12.0"; in
 
 stdenv.mkDerivation {
   name = "claws-mail-${version}";
@@ -40,15 +40,19 @@ stdenv.mkDerivation {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.khumba ];
-    priority = 10;  # Resolve the conflict with the share/mime link we create.
   };
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/claws-mail/Claws%20Mail/${version}/claws-mail-${version}.tar.bz2";
-    sha256 = "0w13xzri9d3165qsxf1dig1f0gxn3ib4lysfc9pgi4zpyzd0zgrw";
+    url = "http://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
+    sha256 = "1jnnwivpcplv8x4w0ibb1qcnasl37fr53lbfybhgb936l2mdcai7";
   };
 
   patches = [ ./mime.patch ];
+
+  postPatch = ''
+    substituteInPlace src/procmime.c \
+        --subst-var-by MIMEROOTDIR ${shared_mime_info}/share
+  '';
 
   buildInputs =
     [ curl dbus dbus_glib gtk gnutls hicolor_icon_theme
@@ -90,7 +94,5 @@ stdenv.mkDerivation {
   postInstall = ''
     mkdir -p $out/share/applications
     cp claws-mail.desktop $out/share/applications
-
-    ln -sT ${shared_mime_info}/share/mime $out/share/mime
   '';
 }

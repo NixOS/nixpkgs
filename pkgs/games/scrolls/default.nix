@@ -2,7 +2,7 @@
 , mesa_glu, libX11, libXext, libXcursor, libpulseaudio
 }:
 stdenv.mkDerivation {
-  name = "scrolls-2014-03-08";
+  name = "scrolls-2015-10-13";
 
   meta = {
     description = "A strategy collectible card game";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.scrolls.com/client/linux.tar.gz";
-    sha256 = "164d13ce5b81b215a58bae5a0d024b4cf6e32c986ca57a2c9d4e80326edb5004";
+    sha256 = "ead1fd14988aa07041fedfa7f845c756cd5077a5a402d85bfb749cb669ececec";
   };
 
   libPath = stdenv.lib.makeLibraryPath [
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
       --set-rpath "$libPath" "$out/opt/Scrolls/Scrolls"
 
     mkdir "$out/bin"
-    ln -s "$out/opt/Scrolls/Scrolls" "$out/bin/Scrolls" 
+    ln -s "$out/opt/Scrolls/Scrolls" "$out/bin/Scrolls"
   '';
 
 }
