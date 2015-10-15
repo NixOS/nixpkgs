@@ -12447,9 +12447,8 @@ let
     sphinx = pythonPackages.sphinx;
   };
 
+  # Open Stack
   nova = callPackage ../applications/virtualization/nova { };
-
-  novaclient = callPackage ../applications/virtualization/nova/client.nix { };
 
   nova-filters =  callPackage ../applications/audio/nova-filters { };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs =
     [ eventlet greenlet gflags netaddr sqlalchemy carrot routes
-      paste_deploy m2crypto ipy twisted sqlalchemy_migrate
+      PasteDeploy m2crypto ipy twisted sqlalchemy_migrate
       distutils_extra simplejson readline glance cheetah lockfile httplib2
       urlgrabber virtinst pyGtkGlade pythonDBus gnome_python pygobject3
       libvirt libxml2Python ipaddr vte libosinfo

@@ -1,95 +1,63 @@
-{ stdenv, fetchurl, pythonPackages, intltool, libvirt, libxml2Python, curl, novaclient }:
+{ stdenv, fetchurl, pythonPackages, intltool, libvirt, curl, openssl, openssh }:
 
-with stdenv.lib;
-
-let version = "2011.2"; in
-
-stdenv.mkDerivation rec {
+pythonPackages.buildPythonPackage rec {
   name = "nova-${version}";
+  version = "12.0.0";
+  namePrefix = "";
+
+  PBR_VERSION = "${version}";
 
   src = fetchurl {
-    url = "http://launchpad.net/nova/cactus/${version}/+download/nova-${version}.tar.gz";
-    sha256 = "1s2w0rm332y9x34ngjz8sys9sbldg857rx9d6r3nb1ik979fx8p7";
+    url = "https://github.com/openstack/nova/archive/${version}.tar.gz";
+    sha256 = "175n1znvmy8f5vqvabc2fa4qy8y17685z4gzpq8984mdsdnpv21w";
   };
 
-  patches =
-    [ ./convert.patch ];
+  # https://github.com/openstack/nova/blob/stable/liberty/requirements.txt
+  propagatedBuildInputs = with pythonPackages; [
+    pbr sqlalchemy_1_0 boto decorator eventlet jinja2 lxml routes cryptography
+    webob greenlet PasteDeploy paste prettytable sqlalchemy_migrate netaddr
+    netifaces paramiko Babel iso8601 jsonschema keystoneclient requests2 six
+    stevedore websockify rfc3986 os-brick psutil_1 alembic psycopg2 pymysql
+    keystonemiddleware
 
-  pythonPath = with pythonPackages;
-    [ setuptools eventlet greenlet gflags netaddr sqlalchemy carrot routes
-      paste_deploy m2crypto ipy twisted sqlalchemy_migrate
-      distutils_extra simplejson readline glance cheetah lockfile httplib2
-      # !!! should libvirt be a build-time dependency?  Note that
-      # libxml2Python is a dependency of libvirt.py.
-      libvirt libxml2Python
-      novaclient
-    ];
+    # oslo components
+    oslo-rootwrap oslo-reports oslo-utils oslo-i18n oslo-config oslo-context
+    oslo-log oslo-serialization oslo-middleware oslo-db oslo-service oslo-messaging
+    oslo-concurrency oslo-versionedobjects
 
-  buildInputs =
-    [ pythonPackages.python
-      pythonPackages.wrapPython
-      pythonPackages.mox
-      intltool
-    ] ++ pythonPath;
+    # clients
+    cinderclient neutronclient glanceclient
+  ];
 
-  PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
+  buildInputs = with pythonPackages; [
+    coverage fixtures mock mox3 subunit requests-mock pillow oslosphinx
+    oslotest testrepository testresources testtools tempest-lib bandit
+    oslo-vmware pep8 barbicanclient ironicclient openssl openssh
+  ];
 
-  preConfigure =
-    ''
-      # Set the built-in state location to something sensible.
-      sed -i nova/flags.py \
-        -e "/DEFINE.*'state_path'/ s|../|/var/lib/nova|"
+  postInstall = ''
+    cp -prvd etc $out/etc
 
-      substituteInPlace nova/virt/images.py --replace /usr/bin/curl ${curl}/bin/curl
+    # check all binaries don't crash
+    for i in $out/bin/*; do
+      case "$i" in
+      *nova-dhcpbridge*)
+         :
+         ;;
+      *nova-rootwrap*)
+         :
+         ;;
+      *)
+         $i --help
+         ;;
+      esac
+    done
+  '';
 
-      substituteInPlace nova/api/ec2/cloud.py \
-        --replace 'sh genrootca.sh' $out/libexec/nova/genrootca.sh
-    '';
-
-  buildPhase = "python setup.py build";
-
-  installPhase =
-    ''
-      p=$(toPythonPath $out)
-      export PYTHONPATH=$p:$PYTHONPATH
-      mkdir -p $p
-      python setup.py install --prefix=$out
-
-      # Nova doesn't like to be called ".nova-foo-wrapped" because it
-      # computes some stuff from its own argv[0].  So put the wrapped
-      # programs in $out/libexec under their original names.
-      mkdir -p $out/libexec/nova
-
-      wrapProgram() {
-          local prog="$1"
-          local hidden=$out/libexec/nova/$(basename "$prog")
-          mv $prog $hidden
-          makeWrapper $hidden $prog "$@"
-      }
-
-      wrapPythonPrograms
-
-      cp -prvd etc $out/etc
-
-      # Nova makes some weird assumptions about where to find its own
-      # programs relative to the Python directory.
-      ln -sfn $out/bin $out/lib/${pythonPackages.python.libPrefix}/site-packages/bin
-
-      # Install the certificate generation script.
-      cp nova/CA/genrootca.sh $out/libexec/nova/
-      cp nova/CA/openssl.cnf.tmpl $out/libexec/nova/
-
-      # Allow nova-manage etc. to find the proper configuration file.
-      ln -s /etc/nova/nova.conf $out/libexec/nova/nova.conf
-    '';
-
-  doCheck = false; # !!! fix
-
-  checkPhase = "python setup.py test";
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://nova.openstack.org/;
     description = "OpenStack Compute (a.k.a. Nova), a cloud computing fabric controller";
-    broken = true;
+    license = stdenv.lib.licenses.asl20;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
