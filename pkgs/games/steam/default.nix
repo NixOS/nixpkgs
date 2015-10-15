@@ -8,6 +8,7 @@ let
     steam-runtime-wrapped = callPackage ./runtime-wrapped.nix { };
     steam = callPackage ./steam.nix { };
     steam-chrootenv = callPackage ./chrootenv.nix { };
+    steam-fonts = callPackage ./fonts.nix { };
   };
 
 in self
