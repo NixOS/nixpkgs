@@ -14,8 +14,10 @@ buildFHSUserEnv {
       # Games' dependencies
       xlibs.xrandr
       which
-      # needed by gdialog, including in the steam-runtime
+      # Needed by gdialog, including in the steam-runtime
       perl
+      # Problems with text visibility in some games
+      corefonts
     ]
     ++ lib.optional withJava   jdk
     ++ lib.optional withPrimus primus
