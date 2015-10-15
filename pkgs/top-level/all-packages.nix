@@ -13175,6 +13175,7 @@ let
     dconf = gnome3.dconf;
     gtkvnc = gtkvnc.override { enableGTK3 = true; };
     spice_gtk = spice_gtk.override { enableGTK3 = true; };
+    system-libvirt = libvirt;
   };
 
   virtinst = callPackage ../applications/virtualization/virtinst {};
