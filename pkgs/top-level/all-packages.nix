@@ -6152,10 +6152,11 @@ let
   ffmpeg_2_2 = callPackage ../development/libraries/ffmpeg/2.2.nix { };
   ffmpeg_2_6 = callPackage ../development/libraries/ffmpeg/2.6.nix { };
   ffmpeg_2_7 = callPackage ../development/libraries/ffmpeg/2.7.nix { };
+  ffmpeg_2_8 = callPackage ../development/libraries/ffmpeg/2.8.nix { };
   # Aliases
   ffmpeg_0 = ffmpeg_0_10;
   ffmpeg_1 = ffmpeg_1_2;
-  ffmpeg_2 = ffmpeg_2_7;
+  ffmpeg_2 = ffmpeg_2_8;
   ffmpeg = ffmpeg_2;
 
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
