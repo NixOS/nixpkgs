@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
       --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
-  outputs = [ "dev" "out" "static" "man" ];
+  outputs = [ "dev" "out" "static" ];
   setOutputFlags = false;
+  outputDoc = "dev"; # single tiny man3 page
 
 
   preConfigure = ''
