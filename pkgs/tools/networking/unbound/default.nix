@@ -24,11 +24,10 @@ stdenv.mkDerivation rec {
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
 
   # get rid of runtime dependencies on $dev outputs
-  postInstall = ''
-    substituteInPlace "$lib/lib/libunbound.la" \
-      --replace '-L${openssl.dev}/lib' "" \
-      --replace '-L${libevent.dev}/lib' ""
-  '';
+  postInstall = ''substituteInPlace "$lib/lib/libunbound.la" ''
+    + stdenv.lib.concatMapStrings
+      (pkg: " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' ")
+      [ openssl expat libevent ];
 
   meta = with stdenv.lib; {
     description = "Validating, recursive, and caching DNS resolver";

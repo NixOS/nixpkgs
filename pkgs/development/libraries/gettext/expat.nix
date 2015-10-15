@@ -5,6 +5,6 @@ runCommand "gettext-expat-${gettext.name}" { buildInputs = [ makeWrapper ]; } ''
   cp -rf ${gettext}/* $out/
   chmod a+w $out/bin
   for p in $out/bin/*; do
-    wrapProgram $p --prefix LD_LIBRARY_PATH : ${expat}/lib
+    wrapProgram $p --prefix LD_LIBRARY_PATH : ${expat.out}/lib
   done
 ''

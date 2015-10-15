@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   buildPhase = ''
     # Fix up the LD_LIBRARY_PATH so that expat is on it
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${expat}/lib"
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${expat.out}/lib"
 
     python mscript.py configure --prefix="$out"
     python mscript.py build

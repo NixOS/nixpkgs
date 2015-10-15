@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./CVE-2015-1283.patch ];
 
+  outputs = [ "dev" "out" ]; # TODO: fix referrers
+  outputBin = "dev";
+  outputMan = "dev"; # tiny page for a dev tool
+
   meta = with stdenv.lib; {
     homepage = http://www.libexpat.org/;
     description = "A stream-oriented XML parser library written in C";

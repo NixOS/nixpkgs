@@ -64,8 +64,8 @@ let
   ] ++ optional (variant == "release") "debug-symbols=off";
 
   nativeB2Flags = [
-    "-sEXPAT_INCLUDE=${expat}/include"
-    "-sEXPAT_LIBPATH=${expat}/lib"
+    "-sEXPAT_INCLUDE=${expat.dev}/include"
+    "-sEXPAT_LIBPATH=${expat.out}/lib"
   ] ++ optional (toolset != null) "toolset=${toolset}"
     ++ optional (mpi != null) "--user-config=user-config.jam";
   nativeB2Args = concatStringsSep " " (genericB2Flags ++ nativeB2Flags);
