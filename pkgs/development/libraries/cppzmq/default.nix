@@ -1,12 +1,12 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
-  name = "cppzmq-2015-07-06";
+  name = "cppzmq-20150926";
 
   src = fetchgit {
     url = "https://github.com/zeromq/cppzmq";
-    rev = "a88bf3e0b0bc6ed5f5b25a58f8997a1dae374c8b";
-    sha256 = "75a6630b870c1f0d5b9d6a0ba03e83ceee47aaa2a253894e75a8a93a6d65d3aa";
+    rev = "fa2f2c67a79c31d73bfef6862cc8ce12a98dd022";
+    sha256 = "7b46712b5fa7e59cd0ffae190674046c71d5762c064003c125d6cd7a3da19b71";
   };
 
   installPhase = ''

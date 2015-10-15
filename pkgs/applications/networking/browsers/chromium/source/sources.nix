@@ -7,15 +7,15 @@
     sha256bin64 = "1ycdp37ikdc9w4hp9qgpzjp47zh37g01ax8x4ack202vrv0dxhsh";
   };
   beta = {
-    version = "46.0.2490.52";
-    sha256 = "00sgb1pnp3fcijwdwpngnnddmn5nrbljsqz7f6dlnd63qfc91xjw";
-    sha256bin32 = "10jgcxc2zwffg8lxi55zl9apql6pyxh1g1n3z46gcb6j6am4y5m5";
-    sha256bin64 = "0i839ir4qcjl9llpqnwy793hvbdfh898x1izc5k93h7nm6i34ry9";
+    version = "46.0.2490.64";
+    sha256 = "1k2zir4rbs7hwdasbjpwyjr4ibis2vm6lx45bfm2r2f469mf3y2g";
+    sha256bin32 = "0j1xncws0r5z2rvvjsi0gxxmnslfcbiasaxr6bjhbxnzjv7chrd4";
+    sha256bin64 = "1m8vv3qh79an3719afz7n2ijqanf4cyxz2q4bzm512x52z5zipl7";
   };
   stable = {
-    version = "45.0.2454.101";
-    sha256 = "1yw5xlgy5hd3iwcyf0sillq5p367fcpvp4mizpmv52cwmv52ss0v";
-    sha256bin32 = "1ll8lmkmx7v74naz1vcnrwk5ighh0skfcb66jkq4kgxrb5fjgwm5";
-    sha256bin64 = "1cwbd3n77dnbfnrfr8g0qng9xkgvz6y7mx489gpx1wsamgi42bzj";
+    version = "46.0.2490.71";
+    sha256 = "1dnwhwvn39x8lm1jszjn8y7vy478zy75gm696rr2dvk4kqj1hjyd";
+    sha256bin32 = "1v1acg32dzmkydzy7sh6xjbzqar052iw8x8hql2yjz5kxznir4sf";
+    sha256bin64 = "15ladhxiym760mid5zq09vp73irzwlp31br9yqslzgv4460ma3np";
   };
 }

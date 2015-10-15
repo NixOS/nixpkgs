@@ -39,7 +39,8 @@ in
 
     systemd.services."copy-com-${cfg.user}" = {
       description = "Copy.com client";
-      after = [ "network.target" "local-fs.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" "local-fs.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.copy-com}/bin/CopyConsole ${if cfg.debug then "-consoleOutput -debugToConsole=dirwatch,path-watch,csm_path,csm -debug -console" else ""}";

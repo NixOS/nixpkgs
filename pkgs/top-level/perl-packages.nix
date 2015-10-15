@@ -2353,6 +2353,19 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ PathClass TryTiny ];
   };
 
+  CryptX = buildPerlModule rec {
+    name = "CryptX-0.025";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
+      sha256 = "f8b7e3ec1713c8dfe3eef9d114f45f223b97e2340f81a20589b5605fa49cfe38";
+    };
+    propagatedBuildInputs = [ JSON ];
+    meta = {
+      description = "Crypto toolkit";
+      license = "perl";
+    };
+  };
+
   CSSDOM = buildPerlPackage rec {
     name = "CSS-DOM-0.15";
     src = fetchurl {
@@ -10983,11 +10996,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ PerlCritic ];
   };
 
-  TestPod = buildPerlPackage {
-    name = "Test-Pod-1.48";
+  TestPod = buildPerlPackage rec {
+    name = "Test-Pod-1.51";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DW/DWHEELER/Test-Pod-1.48.tar.gz;
-      sha256 = "1hmwwhabyng4jrnll926b4ab73r40w3pfchlrvs0yx6kh6kwwy14";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "1yvy5mc4j3s2h4aizryvark2nm58g2c6zhw9mlx9wmsavz7d78f1";
     };
     meta = {
       homepage = http://search.cpan.org/dist/Test-Pod/;
@@ -11032,11 +11045,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestRequires = buildPerlPackage {
-    name = "Test-Requires-0.06";
+  TestRequires = buildPerlPackage rec {
+    name = "Test-Requires-0.10";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TOKUHIROM/Test-Requires-0.06.tar.gz;
-      sha256 = "1ksyg4npzx5faf2sj80rm74qjra4q679750vfqfvw3kg1d69wvwv";
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
+      sha256 = "1d9f481lj12cw1ciil46xq9nq16p6a90nm7yrsalpf8asn8s6s17";
     };
     meta = {
       description = "Checks to see if the module can be loaded";
@@ -11084,11 +11097,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ ProbePerl IPCRun3 ];
   };
 
-  TestSharedFork = buildPerlPackage {
-    name = "Test-SharedFork-0.29";
+  TestSharedFork = buildPerlPackage rec {
+    name = "Test-SharedFork-0.34";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EX/EXODIST/Test-SharedFork-0.29.tar.gz;
-      sha256 = "63af7788cc35b9b7e6fa37c61220ca66abd6364d8bb90c20038e3d8241988a6e";
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
+      sha256 = "1yq4xzify3wqdc07zq33lwgh9gywp3qd8w6wzwrllbjw0hhkm4s8";
     };
     buildInputs = [ TestRequires ];
     meta = {
@@ -11100,11 +11113,11 @@ let self = _self // overrides; _self = with self; {
 
   TestSimple = null;
 
-  TestSpec = buildPerlPackage {
-    name = "Test-Spec-0.47";
+  TestSpec = buildPerlPackage rec {
+    name = "Test-Spec-0.51";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PH/PHILIP/Test-Spec-0.47.tar.gz;
-      sha256 = "e425c0b9efa3c7e21496d31a607d072a63e31988c3d298a8c1fd7d145cc0681e";
+      url = "mirror://cpan/authors/id/A/AN/ANDYJONES/${name}.tar.gz";
+      sha256 = "0n2pzc32q4fr1b9w292ld9gh3yn3saxib3hxrjx6jvcmy3k9jkbi";
     };
     propagatedBuildInputs = [ PackageStash TestDeep TestTrap TieIxHash ];
     meta = {
@@ -11122,11 +11135,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ HookLexWrap ];
   };
 
-  TestSynopsis = buildPerlPackage {
-    name = "Test-Synopsis-0.10";
+  TestSynopsis = buildPerlPackage rec {
+    name = "Test-Synopsis-0.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/Z/ZO/ZOFFIX/Test-Synopsis-0.10.tar.gz;
-      sha256 = "0gbk4d2vwlldsj5shmbdar3a29vgrw84ldsvm26mflkr5ji34adv";
+      url = "mirror://cpan/authors/id/Z/ZO/ZOFFIX/${name}.tar.gz";
+      sha256 = "1jn3vna5r5fa9nv33n1x0bmgc434sk0ggar3jm78xx0zzy5jnsxv";
     };
     meta = {
       description = "Test your SYNOPSIS code";
@@ -11148,11 +11161,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestTCP = buildPerlPackage {
-    name = "Test-TCP-1.18";
+  TestTCP = buildPerlPackage rec {
+    name = "Test-TCP-2.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TOKUHIROM/Test-TCP-1.18.tar.gz;
-      sha256 = "0flm7x0z7amppi9y6s8mxm0pkrgfihfpfjs0w4i6s80jiss1gfld";
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
+      sha256 = "00bxgm7qva4fd25phwl8fvv36h8h5k3jk89hz9302a288wv3ysmr";
     };
     propagatedBuildInputs = [ TestSharedFork ];
     meta = {
@@ -11210,13 +11223,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestWarnings = buildPerlPackage {
-    name = "Test-Warnings-0.016";
+  TestWarnings = buildPerlPackage rec {
+    name = "Test-Warnings-0.021";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Test-Warnings-0.016.tar.gz;
-      sha256 = "09ebc9afa29eb4d1d44fbd974dfcd52e0a2d9ce7ec3e3ee7602394157831aba9";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "0i1crkhqfl5gs55i5nrvsw3xy946ajgnvp4gqrzvsn1x6cp1i2nr";
     };
-    buildInputs = [ TestTester if_ ];
+    buildInputs = [ TestTester if_ CPANMetaCheck ModuleMetadata ];
     meta = {
       homepage = https://github.com/karenetheridge/Test-Warnings;
       description = "Test for warnings and the lack of them";
@@ -11627,10 +11640,10 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestTrap = buildPerlPackage {
-    name = "Test-Trap-0.2.2";
+  TestTrap = buildPerlPackage rec {
+    name = "Test-Trap-0.3.2";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EB/EBHANSSEN/Test-Trap-v0.2.2.tar.gz;
+      url = "mirror://cpan/authors/id/E/EB/EBHANSSEN/${name}.tar.gz";
       sha256 = "1ci5ag9pm850ww55n2929skvw3avy6xcrwmmi2yyn0hifxx9dybs";
     };
     buildInputs = [ TestTester ];
@@ -11657,11 +11670,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestVersion = buildPerlPackage {
-    name = "Test-Version-1.002004";
+  TestVersion = buildPerlPackage rec {
+    name = "Test-Version-2.03";
     src = fetchurl {
-      url = mirror://cpan/authors/id/X/XE/XENO/Test-Version-1.002004.tar.gz;
-      sha256 = "1lvg1p6i159ssk5br5qb3gvrzdg59wchd97z7j44arnlkhfvwhgv";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/${name}.tar.gz";
+      sha256 = "02nbi7iqab1b0ngkiim9kbvnnr9bhi17bq54vm8hn9ridzgbj1vj";
     };
     buildInputs = [ TestException TestRequires TestTester ];
     propagatedBuildInputs = [ FileFindRulePerl ];
@@ -12320,10 +12333,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Wx = buildPerlPackage rec {
-    name = "Wx-0.9923";
+    name = "Wx-0.9927";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MD/MDOOTSON/${name}.tar.gz";
-      sha256 = "1ja2fkz0xabafyc6gnp3nnwsbkkjsf44kq9x5zz6cb5fsp3p9sck";
+      sha256 = "1fr23nn5cvzydl8nxfv0iljn10pvwbny0nvpjx31fn2md8dvsx51";
     };
     propagatedBuildInputs = [ ExtUtilsXSpp AlienWxWidgets ];
     # Testing requires an X server:
@@ -12378,10 +12391,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   X11XCB = buildPerlPackage rec {
-    name = "X11-XCB-0.12";
+    name = "X11-XCB-0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSTPLBG/${name}.tar.gz";
-      sha256 = "15jq55qcc27s5bn925pwry0vx2f4d42rlyz2hlfglnn2qnhsp37s";
+      sha256 = "11ff0a4nqbdj68mxdvyqdqvi573ha10vy67wpi7mklpxvlm011bn";
     };
     AUTOMATED_TESTING = false;
     buildInputs = [

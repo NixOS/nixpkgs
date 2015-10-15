@@ -73,4 +73,7 @@ self: super: {
   # Newer versions require bytestring >=0.10.
   tar = super.tar_0_4_1_0;
 
+  # Needs void on pre 7.10.x compilers.
+  conduit = addBuildDepend super.conduit self.void;
+
 }

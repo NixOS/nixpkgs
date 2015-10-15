@@ -53,12 +53,21 @@ stdenv.mkDerivation rec {
         done
       ''}
       
-      # The android script used SWT and wants to dynamically load some GTK+ stuff.
-      # The following wrapper ensures that they can be found:
+      # The following scripts used SWT and wants to dynamically load some GTK+ stuff.
+      # Creating these wrappers ensure that they can be found:
+      
       wrapProgram `pwd`/android \
         --prefix PATH : ${jdk}/bin \
         --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib
     
+      wrapProgram `pwd`/uiautomatorviewer \
+        --prefix PATH : ${jdk}/bin \
+        --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib
+    
+      wrapProgram `pwd`/hierarchyviewer \
+        --prefix PATH : ${jdk}/bin \
+        --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib
+      
       # The emulators need additional libraries, which are dynamically loaded => let's wrap them
     
       for i in emulator emulator-arm emulator-mips emulator-x86
