@@ -1231,6 +1231,8 @@ let
     gtk = gtk3;
   };
 
+  dex = callPackage ../tools/X11/dex { };
+
   ddccontrol = callPackage ../tools/misc/ddccontrol { };
 
   ddccontrol-db = callPackage ../data/misc/ddccontrol-db { };
