@@ -34,12 +34,14 @@
 }:
 
 runCommand name
-  { inherit manifest ignoreCollisions passthru pathsToLink extraPrefix postBuild buildInputs;
-    pkgs = builtins.toJSON (map (drv: {
-      paths = [ drv ]; # FIXME: handle multiple outputs
-      priority = drv.meta.priority or 5;
-    }) paths);
-    preferLocalBuild = true;
+  rec { inherit manifest ignoreCollisions passthru pathsToLink extraPrefix postBuild buildInputs;
+        pkgs = builtins.toJSON (map (drv: {
+          paths = [ drv ]; # FIXME: handle multiple outputs
+          priority = drv.meta.priority or 5;
+        }) paths);
+        preferLocalBuild = true;
+        # XXX: The size is somewhat arbitrary
+        passAsFile = if builtins.stringLength pkgs >= 128*1024 then [ "pkgs" ] else null;
   }
   ''
     ${perl}/bin/perl -w ${./builder.pl}
