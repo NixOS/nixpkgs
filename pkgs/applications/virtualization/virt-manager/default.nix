@@ -22,7 +22,7 @@ buildPythonPackage rec {
       paste_deploy m2crypto ipy twisted sqlalchemy_migrate
       distutils_extra simplejson readline glance cheetah lockfile httplib2
       urlgrabber virtinst pyGtkGlade pythonDBus gnome_python pygobject3
-      libxml2Python ipaddr vte libosinfo
+      libvirt libxml2Python ipaddr vte libosinfo
     ] ++ optional spiceSupport spice_gtk;
 
   buildInputs =
