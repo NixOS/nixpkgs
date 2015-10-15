@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
       makeWrapper pango perl pkgconfig python rubberband serd sord-svn sratom suil taglib vampSDK
     ];
 
+  # ardour's wscript has a "tarball" target but that required the git revision
+  # be available. Since this is an unzipped tarball fetched from github we 
+  # have to do that ourself.
   patchPhase = ''
     printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${tag}-${builtins.substring 0 8 src.rev}\"; }\n' > libs/ardour/revision.cc
     sed 's|/usr/include/libintl.h|${glibc}/include/libintl.h|' -i wscript
