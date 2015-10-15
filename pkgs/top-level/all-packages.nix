@@ -10330,6 +10330,8 @@ in
 
   seyren = callPackage ../servers/monitoring/seyren { };
 
+  ruby-zoom = callPackage ../tools/text/ruby-zoom { };
+
   sensu = callPackage ../servers/monitoring/sensu {
     ruby = ruby_2_1;
   };
