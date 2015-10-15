@@ -1,4 +1,4 @@
-{stdenv, stdenv_32bit, fetchurl, unzip}:
+{stdenv, stdenv_32bit, zlib_32bit, fetchurl, unzip}:
 
 stdenv.mkDerivation rec {
   version = "23.0.1";
@@ -22,10 +22,16 @@ stdenv.mkDerivation rec {
     
     ${stdenv.lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
       ''
-        for i in adb fastboot
+        for i in adb dmtracedump fastboot hprof-conv sqlite3
         do
             patchelf --set-interpreter ${stdenv_32bit.cc.libc}/lib/ld-linux.so.2 $i
-            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib $i
+            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib:`pwd`/lib $i
+        done
+        
+        for i in etc1tool
+        do
+            patchelf --set-interpreter ${stdenv_32bit.cc.libc}/lib/ld-linux.so.2 $i
+            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib:${zlib_32bit}/lib:`pwd`/lib $i
         done
     ''}
 

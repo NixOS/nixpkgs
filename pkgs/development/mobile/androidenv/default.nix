@@ -4,12 +4,14 @@ rec {
   platformTools = import ./platform-tools.nix {
     inherit (pkgs) stdenv fetchurl unzip;
     stdenv_32bit = pkgs_i686.stdenv;
+    zlib_32bit = pkgs_i686.zlib;
   };
   
   buildTools = import ./build-tools.nix {
     inherit (pkgs) stdenv fetchurl unzip;
     stdenv_32bit = pkgs_i686.stdenv;
     zlib_32bit = pkgs_i686.zlib;
+    ncurses_32bit = pkgs_i686.ncurses;
   };
   
   support = import ./support.nix {
