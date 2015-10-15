@@ -10588,6 +10588,10 @@ let
 
   pecita = callPackage ../data/fonts/pecita {};
 
+  paratype-pt-mono = callPackage ../data/fonts/paratype-pt/mono.nix {};
+  paratype-pt-sans = callPackage ../data/fonts/paratype-pt/sans.nix {};
+  paratype-pt-serif = callPackage ../data/fonts/paratype-pt/serif.nix {};
+
   poly = callPackage ../data/fonts/poly { };
 
   posix_man_pages = callPackage ../data/documentation/man-pages-posix { };
