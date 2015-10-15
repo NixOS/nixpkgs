@@ -47,7 +47,7 @@ let
 in
 if paths == [] && !withLLVM then ghc else
 buildEnv {
-  inherit (ghc) name;
+  name = "ghc-with-packages-${ghc.version}";
   paths = paths ++ [ghc];
   inherit ignoreCollisions;
   postBuild = ''
