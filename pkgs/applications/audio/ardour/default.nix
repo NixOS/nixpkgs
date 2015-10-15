@@ -15,7 +15,7 @@ let
   # "git describe" when _not_ on an annotated tag(!): MAJOR.MINOR-REV-HASH.
 
   # Version to build.
-  tag = "4.2";
+  tag = "4.3";
 
 in
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Ardour";
     repo = "ardour";
-    rev = "fe672c827cb2c08c94b1fa7e527d884c522a1af7";
-    sha256 = "12yfy9l5mnl96ix4s2qicp3m2zscli1a4bd50nk9v035pgf77s3f";
+    rev = "8d46cc99fe2778c5658b659f4f1fe6ac828bb9e9";
+    sha256 = "0rr55s3rirlfq455x0xzx8w09kji1fac2n8cx9p6p57qsfvxxblp";
   };
 
   buildInputs =
@@ -80,6 +80,6 @@ stdenv.mkDerivation rec {
     homepage = http://ardour.org/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ maintainers.goibhniu maintainers.fps ];
   };
 }
