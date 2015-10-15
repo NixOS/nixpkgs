@@ -24,5 +24,5 @@ stdenv.mkDerivation {
     install *.el *.elc $out/share/emacs/site-lisp
   '';
 
-  meta.license = stdenv.lib.license.gpl3Plus;
+  meta.license = stdenv.lib.licenses.gpl3Plus;
 }
