@@ -161,6 +161,8 @@ self: super: {
   "CarneadesIntoDung" = dontDistribute super."CarneadesIntoDung";
   "Cascade" = dontDistribute super."Cascade";
   "Catana" = dontDistribute super."Catana";
+  "Chart" = doDistribute super."Chart_1_5_3";
+  "Chart-diagrams" = doDistribute super."Chart-diagrams_1_5_1";
   "Chart-gtk" = dontDistribute super."Chart-gtk";
   "Chart-simple" = dontDistribute super."Chart-simple";
   "CheatSheet" = dontDistribute super."CheatSheet";
@@ -1018,6 +1020,7 @@ self: super: {
   "accelerate-fourier" = dontDistribute super."accelerate-fourier";
   "accelerate-fourier-benchmark" = dontDistribute super."accelerate-fourier-benchmark";
   "accelerate-io" = dontDistribute super."accelerate-io";
+  "accelerate-random" = dontDistribute super."accelerate-random";
   "accelerate-utility" = dontDistribute super."accelerate-utility";
   "accentuateus" = dontDistribute super."accentuateus";
   "access-time" = dontDistribute super."access-time";
@@ -1321,6 +1324,7 @@ self: super: {
   "atom-basic" = dontDistribute super."atom-basic";
   "atom-conduit" = dontDistribute super."atom-conduit";
   "atom-msp430" = dontDistribute super."atom-msp430";
+  "atomic-primops" = doDistribute super."atomic-primops_0_8";
   "atomic-primops-foreign" = dontDistribute super."atomic-primops-foreign";
   "atomic-primops-vector" = dontDistribute super."atomic-primops-vector";
   "atomic-write" = dontDistribute super."atomic-write";
@@ -4352,6 +4356,7 @@ self: super: {
   "jonathanscard" = dontDistribute super."jonathanscard";
   "jort" = dontDistribute super."jort";
   "jose" = dontDistribute super."jose";
+  "jose-jwt" = doDistribute super."jose-jwt_0_6_2";
   "jpeg" = dontDistribute super."jpeg";
   "js-good-parts" = dontDistribute super."js-good-parts";
   "jsaddle" = dontDistribute super."jsaddle";
@@ -4997,6 +5002,7 @@ self: super: {
   "monitor" = dontDistribute super."monitor";
   "mono-foldable" = dontDistribute super."mono-foldable";
   "mono-traversable" = doDistribute super."mono-traversable_0_9_2_1";
+  "monoid-absorbing" = dontDistribute super."monoid-absorbing";
   "monoid-extras" = doDistribute super."monoid-extras_0_4_0_1";
   "monoid-owns" = dontDistribute super."monoid-owns";
   "monoid-record" = dontDistribute super."monoid-record";
@@ -5316,6 +5322,7 @@ self: super: {
   "opendatatable" = dontDistribute super."opendatatable";
   "openexchangerates" = dontDistribute super."openexchangerates";
   "openflow" = dontDistribute super."openflow";
+  "opengl-dlp-stereo" = dontDistribute super."opengl-dlp-stereo";
   "opengles" = dontDistribute super."opengles";
   "openid" = dontDistribute super."openid";
   "openpgp" = dontDistribute super."openpgp";
@@ -5797,6 +5804,7 @@ self: super: {
   "qd-vec" = dontDistribute super."qd-vec";
   "qhull-simple" = dontDistribute super."qhull-simple";
   "qrcode" = dontDistribute super."qrcode";
+  "qt" = dontDistribute super."qt";
   "quadratic-irrational" = dontDistribute super."quadratic-irrational";
   "quantfin" = dontDistribute super."quantfin";
   "quantities" = dontDistribute super."quantities";
@@ -5857,6 +5865,7 @@ self: super: {
   "random-extras" = dontDistribute super."random-extras";
   "random-hypergeometric" = dontDistribute super."random-hypergeometric";
   "random-stream" = dontDistribute super."random-stream";
+  "random-variates" = dontDistribute super."random-variates";
   "randomgen" = dontDistribute super."randomgen";
   "randproc" = dontDistribute super."randproc";
   "randsolid" = dontDistribute super."randsolid";
@@ -5936,6 +5945,7 @@ self: super: {
   "reflection-extras" = dontDistribute super."reflection-extras";
   "reflection-without-remorse" = dontDistribute super."reflection-without-remorse";
   "reflex" = dontDistribute super."reflex";
+  "reflex-animation" = dontDistribute super."reflex-animation";
   "reflex-dom" = dontDistribute super."reflex-dom";
   "reflex-dom-contrib" = dontDistribute super."reflex-dom-contrib";
   "reflex-gloss" = dontDistribute super."reflex-gloss";
@@ -6466,6 +6476,7 @@ self: super: {
   "snaplet-coffee" = dontDistribute super."snaplet-coffee";
   "snaplet-css-min" = dontDistribute super."snaplet-css-min";
   "snaplet-environments" = dontDistribute super."snaplet-environments";
+  "snaplet-ghcjs" = dontDistribute super."snaplet-ghcjs";
   "snaplet-hasql" = dontDistribute super."snaplet-hasql";
   "snaplet-haxl" = dontDistribute super."snaplet-haxl";
   "snaplet-hdbc" = dontDistribute super."snaplet-hdbc";
@@ -7506,6 +7517,7 @@ self: super: {
   "winio" = dontDistribute super."winio";
   "wiring" = dontDistribute super."wiring";
   "withdependencies" = dontDistribute super."withdependencies";
+  "witherable" = doDistribute super."witherable_0_1_3";
   "witness" = dontDistribute super."witness";
   "witty" = dontDistribute super."witty";
   "wkt" = dontDistribute super."wkt";

@@ -1052,6 +1052,7 @@ self: super: {
   "accelerate-fourier" = dontDistribute super."accelerate-fourier";
   "accelerate-fourier-benchmark" = dontDistribute super."accelerate-fourier-benchmark";
   "accelerate-io" = dontDistribute super."accelerate-io";
+  "accelerate-random" = dontDistribute super."accelerate-random";
   "accelerate-utility" = dontDistribute super."accelerate-utility";
   "accentuateus" = dontDistribute super."accentuateus";
   "access-time" = dontDistribute super."access-time";
@@ -1382,6 +1383,7 @@ self: super: {
   "atomic-write" = dontDistribute super."atomic-write";
   "atomo" = dontDistribute super."atomo";
   "attempt" = dontDistribute super."attempt";
+  "atto-lisp" = doDistribute super."atto-lisp_0_2_2";
   "attoparsec" = doDistribute super."attoparsec_0_12_1_6";
   "attoparsec-arff" = dontDistribute super."attoparsec-arff";
   "attoparsec-binary" = dontDistribute super."attoparsec-binary";
@@ -5072,6 +5074,7 @@ self: super: {
   "marionetta" = dontDistribute super."marionetta";
   "markdown-kate" = dontDistribute super."markdown-kate";
   "markdown-pap" = dontDistribute super."markdown-pap";
+  "markdown-unlit" = doDistribute super."markdown-unlit_0_2_0_1";
   "markdown2svg" = dontDistribute super."markdown2svg";
   "marked-pretty" = dontDistribute super."marked-pretty";
   "markov" = dontDistribute super."markov";
@@ -5272,6 +5275,7 @@ self: super: {
   "monitor" = dontDistribute super."monitor";
   "mono-foldable" = dontDistribute super."mono-foldable";
   "mono-traversable" = doDistribute super."mono-traversable_0_9_2_1";
+  "monoid-absorbing" = dontDistribute super."monoid-absorbing";
   "monoid-extras" = doDistribute super."monoid-extras_0_3_3_5";
   "monoid-owns" = dontDistribute super."monoid-owns";
   "monoid-record" = dontDistribute super."monoid-record";
@@ -5609,6 +5613,7 @@ self: super: {
   "opendatatable" = dontDistribute super."opendatatable";
   "openexchangerates" = dontDistribute super."openexchangerates";
   "openflow" = dontDistribute super."openflow";
+  "opengl-dlp-stereo" = dontDistribute super."opengl-dlp-stereo";
   "opengles" = dontDistribute super."opengles";
   "openid" = dontDistribute super."openid";
   "openpgp" = dontDistribute super."openpgp";
@@ -6119,6 +6124,7 @@ self: super: {
   "qd-vec" = dontDistribute super."qd-vec";
   "qhull-simple" = dontDistribute super."qhull-simple";
   "qrcode" = dontDistribute super."qrcode";
+  "qt" = dontDistribute super."qt";
   "quadratic-irrational" = dontDistribute super."quadratic-irrational";
   "quantfin" = dontDistribute super."quantfin";
   "quantities" = dontDistribute super."quantities";
@@ -6181,6 +6187,7 @@ self: super: {
   "random-extras" = dontDistribute super."random-extras";
   "random-hypergeometric" = dontDistribute super."random-hypergeometric";
   "random-stream" = dontDistribute super."random-stream";
+  "random-variates" = dontDistribute super."random-variates";
   "randomgen" = dontDistribute super."randomgen";
   "randproc" = dontDistribute super."randproc";
   "randsolid" = dontDistribute super."randsolid";
@@ -6266,6 +6273,7 @@ self: super: {
   "reflection-extras" = dontDistribute super."reflection-extras";
   "reflection-without-remorse" = dontDistribute super."reflection-without-remorse";
   "reflex" = dontDistribute super."reflex";
+  "reflex-animation" = dontDistribute super."reflex-animation";
   "reflex-dom" = dontDistribute super."reflex-dom";
   "reflex-dom-contrib" = dontDistribute super."reflex-dom-contrib";
   "reflex-gloss" = dontDistribute super."reflex-gloss";
@@ -6824,6 +6832,7 @@ self: super: {
   "snaplet-css-min" = dontDistribute super."snaplet-css-min";
   "snaplet-environments" = dontDistribute super."snaplet-environments";
   "snaplet-fay" = doDistribute super."snaplet-fay_0_3_3_11";
+  "snaplet-ghcjs" = dontDistribute super."snaplet-ghcjs";
   "snaplet-hasql" = dontDistribute super."snaplet-hasql";
   "snaplet-haxl" = dontDistribute super."snaplet-haxl";
   "snaplet-hdbc" = dontDistribute super."snaplet-hdbc";
