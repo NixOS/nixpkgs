@@ -5486,6 +5486,8 @@ let
 
   drush = callPackage ../development/tools/misc/drush { };
 
+  editorconfig-core-c = callPackage ../development/tools/misc/editorconfig-core-c { };
+
   eggdbus = callPackage ../development/tools/misc/eggdbus { };
 
   egypt = callPackage ../development/tools/analysis/egypt { };
