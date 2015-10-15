@@ -13,7 +13,8 @@ stdenv.mkDerivation {
 
   inherit src patches postPatch;
 
-  outputs = [ "dev" "out" "bin" "man" ];
+  outputs = [ "dev" "out" "bin" "man" "docdev" ];
+  outputInfo = "docdev";
 
   configureFlags =
     # FIXME: perhaps use $SSL_CERT_FILE instead
@@ -44,7 +45,7 @@ stdenv.mkDerivation {
   preFixup = lib.optionalString (!stdenv.isDarwin) ''
     sed ${lib.optionalString tpmSupport "-e 's,-ltspi,-L${trousers}/lib -ltspi,'"} \
         -e 's,-lz,-L${zlib.out}/lib -lz,' \
-        -e 's,-lgmp,-L${gmp}/lib -lgmp,' \
+        -e 's,-L${gmp.dev}/lib,-L${gmp.out}/lib,' \
         -i "$out/lib/libgnutls.la" "$dev/lib/pkgconfig/gnutls.pc"
   '';
 

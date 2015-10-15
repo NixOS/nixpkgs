@@ -14,8 +14,8 @@ stdenv.mkDerivation (rec {
   enableParallelBuilding = true;
 
   buildMK = ''
-    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"
-    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp}/include"
+    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp.out}/lib"
+    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp.dev}/include"
     libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-includes="${ncurses.dev}/include"
     libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-libraries="${ncurses.lib}/lib"
     DYNAMIC_BY_DEFAULT = NO

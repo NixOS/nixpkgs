@@ -64,5 +64,5 @@ stdenv.lib.optionalAttrs stdenv.isSunOS {
   # /usr/include/mp.h from OpenSolaris.  See
   # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
   # for details.
-  configureFlags = [ "--with-include-path=${gmp}/include" ];
+  configureFlags = [ "--with-include-path=${gmp.dev}/include" ];
 })

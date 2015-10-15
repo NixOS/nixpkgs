@@ -2,7 +2,7 @@
 
 with { inherit (stdenv.lib) optional optionalString; };
 
-stdenv.mkDerivation rec {
+let self = stdenv.mkDerivation rec {
   name = "gmp-6.0.0a";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bwsfmf0vrx3rwl4xmi5jhhy3v1qx1xj0m7p9hb0fvcw9f09m3kz";
   };
 
+  passthru.static = self.out;
   nativeBuildInputs = [ m4 ];
 
   configureFlags =
@@ -69,4 +70,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = [ maintainers.simons ];
   };
-}
+};
+  in self

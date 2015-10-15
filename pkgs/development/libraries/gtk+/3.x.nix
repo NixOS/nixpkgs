@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gettext, perl
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, gobjectIntrospection
-, xlibs, x11, wayland, libxkbcommon, epoxy
+, xorg, wayland, epoxy, json_glib, libxkbcommon, gmp
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
 }:
@@ -40,7 +40,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = "rm -rf $out/share/gtk-doc";
+  postInstall = ''
+    rm -rf $out/share/gtk-doc
+    substituteInPlace "$out/lib/gtk-3.0/3.0.0/printbackends/libprintbackend-cups.la" \
+      --replace '-L${gmp.dev}/lib' '-L${gmp.out}/lib'
+  '';
 
   passthru = {
     gtkExeEnvPostBuild = ''

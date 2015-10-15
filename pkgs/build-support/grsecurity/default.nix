@@ -126,9 +126,9 @@ let
       buildInputs = args.buildInputs ++ [ pkgs.gmp ];
       preConfigure = ''
         ${args.preConfigure or ""}
-        sed -i 's|-I|-I${pkgs.gmp}/include -I|' scripts/gcc-plugin.sh
-        sed -i 's|HOST_EXTRACFLAGS +=|HOST_EXTRACFLAGS += -I${pkgs.gmp}/include|' tools/gcc/Makefile
-        sed -i 's|HOST_EXTRACXXFLAGS +=|HOST_EXTRACXXFLAGS += -I${pkgs.gmp}/include|' tools/gcc/Makefile
+        sed -i 's|-I|-I${pkgs.gmp.dev}/include -I|' scripts/gcc-plugin.sh
+        sed -i 's|HOST_EXTRACFLAGS +=|HOST_EXTRACFLAGS += -I${pkgs.gmp.dev}/include|' tools/gcc/Makefile
+        sed -i 's|HOST_EXTRACXXFLAGS +=|HOST_EXTRACXXFLAGS += -I${pkgs.gmp.dev}/include|' tools/gcc/Makefile
         rm localversion-grsec
         echo ${localver grkern} > localversion-grsec
       '';

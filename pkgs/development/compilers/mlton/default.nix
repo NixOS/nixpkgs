@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     chmod u+x $(pwd)/../${usr_prefix}/bin/mlton
 
     # So the builder runs the binary compiler with gmp.
-    export LD_LIBRARY_PATH=${gmp}/lib:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=${gmp.out}/lib:$LD_LIBRARY_PATH
 
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     # Patch ELF interpreter.
@@ -92,10 +92,10 @@ stdenv.mkDerivation rec {
     substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace '/${usr_prefix}/lib/mlton' $out/lib/mlton
 
     # Path to libgmp.
-    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace "-link-opt '-lm -lgmp'" "-link-opt '-lm -lgmp -L${gmp}/lib'"
+    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace "-link-opt '-lm -lgmp'" "-link-opt '-lm -lgmp -L${gmp.out}/lib'"
 
     # Path to gmp.h.
-    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace "-cc-opt '-O1 -fno-common'" "-cc-opt '-O1 -fno-common -I${gmp}/include'"
+    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace "-cc-opt '-O1 -fno-common'" "-cc-opt '-O1 -fno-common -I${gmp.dev}/include'"
 
     # Path to the same cc used in the build; needed at runtime.
     substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace "gcc='gcc'" "gcc='"$(type -p cc)"'"

@@ -2193,8 +2193,8 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0f5gdprcql4kwzgxl2s6ngcfg1jl45lzcqh7dkv5bkwlwmxa9rsi";
     };
     buildInputs = [ DevelChecklib TestRequires pkgs.gmp ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.gmp}/lib -lgmp";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
   };
 
   CryptEksblowfish = buildPerlPackage rec {
@@ -6546,8 +6546,8 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ pkgs.gmp ];
     doCheck = false;
-    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.gmp}/lib -lgmp";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
   };
 
   MathBigRat = buildPerlPackage rec {

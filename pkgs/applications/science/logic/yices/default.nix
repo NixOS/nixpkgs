@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1da70n0cah0dh3pk7fcrvjkszx9qmhc0csgl15jqa7bdh707k2zs";
   };
 
-  configureFlags = [ "--with-static-gmp=${gmp}/lib/libgmp.a"
-                     "--with-static-gmp-include-dir=${gmp}/include"
+  configureFlags = [ "--with-static-gmp=${gmp.static}/lib/libgmp.a"
+                     "--with-static-gmp-include-dir=${gmp.dev}/include"
                    ];
   buildInputs = [ gmp gperf autoreconfHook ];
 

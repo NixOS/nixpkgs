@@ -113,12 +113,12 @@ in mkDerivation (rec {
     done
   '';
   postInstall = ''
-    PATH=$out/bin:$PATH LD_LIBRARY_PATH=${gmp}/lib:${stdenv.cc}/lib64:$LD_LIBRARY_PATH \
+    PATH=$out/bin:$PATH LD_LIBRARY_PATH=${gmp.out}/lib:${stdenv.cc}/lib64:$LD_LIBRARY_PATH \
       env -u GHC_PACKAGE_PATH $out/bin/ghcjs-boot \
         --dev \
         --with-cabal ${cabal-install}/bin/cabal \
-        --with-gmp-includes ${gmp}/include \
-        --with-gmp-libraries ${gmp}/lib
+        --with-gmp-includes ${gmp.dev}/include \
+        --with-gmp-libraries ${gmp.out}/lib
   '';
   passthru = {
     isGhcjs = true;
