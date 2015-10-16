@@ -23,13 +23,17 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin otool;
   propagatedBuildInputs = [ libffi glib ];
 
-  # Tests depend on cairo, which is undesirable (it pulls in lots of
-  # other dependencies).
-  configureFlags = [ "--disable-tests" ];
-
   preConfigure = ''
     sed 's|/usr/bin/env ||' -i tools/g-ir-tool-template.in
   '';
+  configureFlags = [
+    # Tests depend on cairo, which is undesirable (it pulls in lots of
+    # other dependencies).
+    "--disable-tests"
+  ];
+
+  # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
+  # by pygobject3 (and maybe others), but it's only searched in $out
 
   setupHook = ./setup-hook.sh;
 
