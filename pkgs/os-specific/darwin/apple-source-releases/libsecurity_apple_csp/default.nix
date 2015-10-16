@@ -19,7 +19,7 @@ appleDerivation {
     for file in lib/castContext.h lib/gladmanContext.h lib/desContext.h lib/rc4Context.h; do
       substituteInPlace ''$file --replace \
         '/usr/local/include/CommonCrypto/CommonCryptorSPI.h' \
-        '${osx_private_sdk}/usr/include/CommonCrypto/CommonCryptorSPI.h'
+        '${osx_private_sdk}/PrivateSDK10.9.sparse.sdk/usr/include/CommonCrypto/CommonCryptorSPI.h'
     done
     
     substituteInPlace lib/opensshWrap.cpp --replace RSA_DSA_Keys.h RSA_DSA_keys.h

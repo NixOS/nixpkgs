@@ -148,7 +148,7 @@ in rec {
   };
 
   overrides = super: {
-    AppKit = stdenv.lib.overrideDerivation super.AppKit (drv: {
+    CoreText = stdenv.lib.overrideDerivation super.CoreText (drv: {
       propagatedNativeBuildInputs = drv.propagatedNativeBuildInputs ++ [ pkgs.darwin.cf-private ];
     });
 

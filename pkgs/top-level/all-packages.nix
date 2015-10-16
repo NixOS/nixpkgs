@@ -9527,7 +9527,9 @@ let
     osx_sdk = callPackage ../os-specific/darwin/osx-sdk {};
     osx_private_sdk = callPackage ../os-specific/darwin/osx-private-sdk {};
 
-    security_tool = (newScope (darwin.apple_sdk.frameworks // darwin)) ../os-specific/darwin/security-tool { };
+    security_tool = (newScope (darwin.apple_sdk.frameworks // darwin)) ../os-specific/darwin/security-tool {
+      Security-framework = darwin.apple_sdk.frameworks.Security;
+    };
 
     binutils = callPackage ../os-specific/darwin/binutils { inherit cctools; };
 
