@@ -1539,6 +1539,8 @@ let
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
 
   fuse_zip = callPackage ../tools/filesystems/fuse-zip { };
+  
+  fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
   exfat = callPackage ../tools/filesystems/exfat { };
 
