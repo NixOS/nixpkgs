@@ -79,7 +79,7 @@ in
         ${cfg.extraConfig}
       ''; #TODO: validation on compilation (at least against typos)
 
-    services.dbus.packages = [ pkgs.polkit ];
+    services.dbus.packages = [ pkgs.polkit.out ];
 
     security.pam.services.polkit-1 = {};
 
