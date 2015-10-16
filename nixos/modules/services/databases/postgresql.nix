@@ -198,6 +198,7 @@ in
                 if [ "$(id -u)" = 0 ]; then
                   chown -R postgres ${cfg.dataDir}
                   su -s ${pkgs.stdenv.shell} postgres -c 'initdb -U root'
+                  touch "${cfg.dataDir}/.first_startup"
                 else
                   # For non-root operation.
                   initdb

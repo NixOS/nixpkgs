@@ -280,6 +280,7 @@ in rec {
   tests.openssh = callTest tests/openssh.nix {};
   tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
   tests.peerflix = callTest tests/peerflix.nix {};
+  tests.postgresql.init = callTest tests/postgresql-init.nix {};
   tests.printing = callTest tests/printing.nix {};
   tests.proxy = callTest tests/proxy.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
