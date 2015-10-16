@@ -12499,6 +12499,8 @@ let
 
   ponymix = callPackage ../applications/audio/ponymix { };
 
+  portecle = callPackage ../applications/misc/portecle { };
+
   potrace = callPackage ../applications/graphics/potrace {};
 
   posterazor = callPackage ../applications/misc/posterazor { };
