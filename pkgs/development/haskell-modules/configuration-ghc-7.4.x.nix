@@ -34,8 +34,11 @@ self: super: {
   time = null;
   unix = null;
 
-  # transformers is not a core library for this compiler.
+  # These packages are core libraries in GHC 7.10.x, but not here.
+  haskeline = self.haskeline_0_7_2_1;
+  terminfo = self.terminfo_0_4_0_1;
   transformers = self.transformers_0_4_3_0;
+  xhtml = self.xhtml_3000_2_1;
 
   # https://github.com/haskell/cabal/issues/2322
   Cabal_1_22_4_0 = super.Cabal_1_22_4_0.override { binary = dontCheck self.binary_0_7_6_1; };
