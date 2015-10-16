@@ -6,8 +6,7 @@
 
 let
   # libSystem and its transitive dependencies. Get used to this; it's a recurring theme in darwin land
-  libSystemClosure = if system == "x86_64-darwin"
-  then [
+  libSystemClosure = [
     "/usr/lib/libSystem.dylib"
     "/usr/lib/libSystem.B.dylib"
     "/usr/lib/libobjc.A.dylib"
@@ -17,16 +16,18 @@ let
     "/usr/lib/libc++.1.dylib"
     "/usr/lib/libDiagnosticMessagesClient.dylib"
     "/usr/lib/system"
-  ]
-  else [];
+  ];
 
-  fetch = { file, sha256 }: derivation ((import <nix/fetchurl.nix> {
+  fetch = { file, sha256 }: let drv = import <nix/fetchurl.nix> {
     url = "https://dl.dropboxusercontent.com/u/2857322/${file}";
     inherit sha256;
     executable = true;
-  }).drvAttrs // {
-    __impureHostDeps = libSystemClosure;
-  });
+  }; in
+  if drv.drvAttrs.system == "x86_64-darwin"
+    then derivation (drv.drvAttrs // {
+      __impureHostDeps = libSystemClosure;
+    })
+    else drv;
 
   bootstrapFiles = {
     sh    = fetch { file = "sh";    sha256 = "1qakpg37vl61jnkplz13m3g1csqr85cg8ybp6jwiv6apmg26isnm"; };
