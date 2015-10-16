@@ -1,16 +1,13 @@
 { callPackage, fetchgit, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "9.0.3";
+  version = "9.1.0";
 
   src = fetchgit {
     url = "https://github.com/ceph/ceph.git";
     rev = "refs/tags/v${version}";
-    sha256 = "08ccy735srzmi505qlrpqdh5js40mpd5k1vdhnysknra0vqlpmdx";
+    sha256 = "1f8z0dxl945370ifz2ila9bc55d81h41bmdq241y9z4pvaynl6pz";
   };
 
-  patches = [
-    ./fix-pythonpath.patch
-    ./9.0.3-i686-fix.patch
-  ];
+  patches = [ ./fix-pythonpath.patch ];
 })
