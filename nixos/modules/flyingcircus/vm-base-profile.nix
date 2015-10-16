@@ -25,6 +25,7 @@ in
       pkgs.libxslt
       pkgs.mercurial
       pkgs.git
+      pkgs.openldap
       pkgs.openssl
       pkgs.python27
       pkgs.python27Packages.virtualenv
