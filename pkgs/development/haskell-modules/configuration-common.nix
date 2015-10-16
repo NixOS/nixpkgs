@@ -906,4 +906,9 @@ self: super: {
   # https://github.com/sol/hpack/issues/53
   hpack = dontCheck super.hpack;
 
+  # https://github.com/skogsbaer/hscurses/pull/26
+  hscurses = overrideCabal super.hscurses (drv: {
+    librarySystemDepends = (drv.librarySystemDepends or []) ++ [ pkgs.ncurses ];
+  });
+
 }
