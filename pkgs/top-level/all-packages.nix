@@ -5930,6 +5930,8 @@ let
 
   babl = callPackage ../development/libraries/babl { };
 
+  bcprov = callPackage ../development/libraries/java/bcprov { };
+
   beecrypt = callPackage ../development/libraries/beecrypt { };
 
   belle-sip = callPackage ../development/libraries/belle-sip { };
