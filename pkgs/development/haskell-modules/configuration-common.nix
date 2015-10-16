@@ -915,4 +915,9 @@ self: super: {
   });
   fltkhs-fluid-examples = dontDistribute super.fltkhs-fluid-examples;
 
+  # https://github.com/skogsbaer/hscurses/pull/26
+  hscurses = overrideCabal super.hscurses (drv: {
+    librarySystemDepends = (drv.librarySystemDepends or []) ++ [ pkgs.ncurses ];
+  });
+
 }
