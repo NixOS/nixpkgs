@@ -43,7 +43,7 @@ in
     # so that we don't need to know its device.
     fileSystems = [ ];
 
-    # boot.initrd.availableKernelModules = [ "mvsdio" "mmc_block" "reiserfs" "ext3" "ext4" ];
+    # boot.initrd.availableKernelModules = [ "mvsdio" "reiserfs" "ext3" "ext4" ];
 
     # boot.initrd.kernelModules = [ "rtc_mv" ];
 

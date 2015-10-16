@@ -86,8 +86,7 @@ in
   system.boot.loader.kernelFile = "uImage";
 
   boot.initrd.availableKernelModules =
-    [ "mvsdio" "mmc_block" "reiserfs" "ext3" "ums-cypress" "rtc_mv"
-      "ext4" ];
+    [ "mvsdio" "reiserfs" "ext3" "ums-cypress" "rtc_mv" "ext4" ];
 
   boot.postBootCommands =
     ''
