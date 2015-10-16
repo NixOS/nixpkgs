@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
 
   # Give apr1 access to sed for runtime invocations
   postInstall = ''
+    substituteInPlace $out/lib/libaprutil-1.la --replace "${expat}/lib" "${expat.out}/lib"
     wrapProgram $out/bin/apu-1-config --prefix PATH : "${gnused}/bin"
   '';
 
