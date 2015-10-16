@@ -478,6 +478,8 @@ let
 
   abduco = callPackage ../tools/misc/abduco { };
 
+  android-backup-extractor = callPackage ../tools/backup/android-backup-extractor { };
+
   acct = callPackage ../tools/system/acct { };
 
   acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
