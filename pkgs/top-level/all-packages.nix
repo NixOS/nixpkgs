@@ -2057,6 +2057,8 @@ let
 
   leafpad = callPackage ../applications/editors/leafpad { };
 
+  leela = callPackage ../tools/graphics/leela { };
+
   lftp = callPackage ../tools/networking/lftp { };
 
   libconfig = callPackage ../development/libraries/libconfig { };
