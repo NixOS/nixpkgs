@@ -21,10 +21,10 @@ in
       pkgs.db
       pkgs.dstat
       pkgs.gcc
+      pkgs.git
       pkgs.libxml2
       pkgs.libxslt
       pkgs.mercurial
-      pkgs.git
       pkgs.openldap
       pkgs.openssl
       pkgs.python27
