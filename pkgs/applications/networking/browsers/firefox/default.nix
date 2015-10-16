@@ -129,8 +129,8 @@ in {
 
   firefox = common {
     pname = "firefox";
-    version = "41.0.1";
-    sha1 = "4f6bf34b7b286e033f401d7d4112ec6310577aae";
+    version = "41.0.2";
+    sha1 = "5e8243cbbd3ea306bd1e5f1b16079bdcc9af95a4";
   };
 
   firefox-esr = common {
