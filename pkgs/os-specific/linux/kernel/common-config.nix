@@ -41,6 +41,9 @@ with stdenv.lib;
     PM_RUNTIME y
   ''}
   PM_ADVANCED_DEBUG y
+  ${optionalString (versionAtLeast version "3.11") ''
+    X86_INTEL_LPSS y
+  ''}
   ${optionalString (versionAtLeast version "3.10") ''
     X86_INTEL_PSTATE y
   ''}
@@ -316,6 +319,9 @@ with stdenv.lib;
   MOUSE_PS2_ELANTECH y # Elantech PS/2 protocol extension
   MTRR_SANITIZER y
   NET_FC y # Fibre Channel driver support
+  ${optionalString (versionAtLeast version "3.11") ''
+    PINCTRL_BAYTRAIL y # GPIO on Intel Bay Trail, for some Chromebook internal eMMC disks
+  ''}
   PPP_MULTILINK y # PPP multilink support
   PPP_FILTER y
   REGULATOR y # Voltage and Current Regulator Support
