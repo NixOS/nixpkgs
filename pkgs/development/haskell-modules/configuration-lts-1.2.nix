@@ -529,6 +529,7 @@ self: super: {
   "HiggsSet" = dontDistribute super."HiggsSet";
   "Hipmunk" = dontDistribute super."Hipmunk";
   "HipmunkPlayground" = dontDistribute super."HipmunkPlayground";
+  "Hish" = dontDistribute super."Hish";
   "Histogram" = dontDistribute super."Histogram";
   "Hmpf" = dontDistribute super."Hmpf";
   "Hoed" = dontDistribute super."Hoed";
@@ -1631,6 +1632,7 @@ self: super: {
   "bindings-svm" = dontDistribute super."bindings-svm";
   "bindings-uname" = dontDistribute super."bindings-uname";
   "bindings-yices" = dontDistribute super."bindings-yices";
+  "bindynamic" = dontDistribute super."bindynamic";
   "binembed" = dontDistribute super."binembed";
   "binembed-example" = dontDistribute super."binembed-example";
   "bio" = dontDistribute super."bio";
@@ -5470,6 +5472,7 @@ self: super: {
   "msgpack-aeson" = dontDistribute super."msgpack-aeson";
   "msgpack-idl" = dontDistribute super."msgpack-idl";
   "msgpack-rpc" = dontDistribute super."msgpack-rpc";
+  "msh" = dontDistribute super."msh";
   "msi-kb-backlit" = dontDistribute super."msi-kb-backlit";
   "mstate" = dontDistribute super."mstate";
   "msu" = dontDistribute super."msu";
@@ -5924,6 +5927,7 @@ self: super: {
   "pathfinding" = dontDistribute super."pathfinding";
   "pathfindingcore" = dontDistribute super."pathfindingcore";
   "pathtype" = dontDistribute super."pathtype";
+  "pathwalk" = dontDistribute super."pathwalk";
   "patronscraper" = dontDistribute super."patronscraper";
   "pattern-arrows" = dontDistribute super."pattern-arrows";
   "patterns" = dontDistribute super."patterns";
@@ -6474,6 +6478,7 @@ self: super: {
   "reflex-dom" = dontDistribute super."reflex-dom";
   "reflex-dom-contrib" = dontDistribute super."reflex-dom-contrib";
   "reflex-gloss" = dontDistribute super."reflex-gloss";
+  "reflex-gloss-scene" = dontDistribute super."reflex-gloss-scene";
   "reflex-transformers" = dontDistribute super."reflex-transformers";
   "reform" = dontDistribute super."reform";
   "reform-blaze" = dontDistribute super."reform-blaze";

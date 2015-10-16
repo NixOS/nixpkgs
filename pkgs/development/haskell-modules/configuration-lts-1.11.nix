@@ -528,6 +528,7 @@ self: super: {
   "HiggsSet" = dontDistribute super."HiggsSet";
   "Hipmunk" = dontDistribute super."Hipmunk";
   "HipmunkPlayground" = dontDistribute super."HipmunkPlayground";
+  "Hish" = dontDistribute super."Hish";
   "Histogram" = dontDistribute super."Histogram";
   "Hmpf" = dontDistribute super."Hmpf";
   "Hoed" = dontDistribute super."Hoed";
@@ -1630,6 +1631,7 @@ self: super: {
   "bindings-svm" = dontDistribute super."bindings-svm";
   "bindings-uname" = dontDistribute super."bindings-uname";
   "bindings-yices" = dontDistribute super."bindings-yices";
+  "bindynamic" = dontDistribute super."bindynamic";
   "binembed" = dontDistribute super."binembed";
   "binembed-example" = dontDistribute super."binembed-example";
   "bio" = dontDistribute super."bio";
@@ -4012,6 +4014,7 @@ self: super: {
   "hmatrix-banded" = dontDistribute super."hmatrix-banded";
   "hmatrix-csv" = dontDistribute super."hmatrix-csv";
   "hmatrix-glpk" = dontDistribute super."hmatrix-glpk";
+  "hmatrix-gsl" = doDistribute super."hmatrix-gsl_0_16_0_3";
   "hmatrix-gsl-stats" = dontDistribute super."hmatrix-gsl-stats";
   "hmatrix-mmap" = dontDistribute super."hmatrix-mmap";
   "hmatrix-nipals" = dontDistribute super."hmatrix-nipals";
@@ -5445,6 +5448,7 @@ self: super: {
   "msgpack-aeson" = dontDistribute super."msgpack-aeson";
   "msgpack-idl" = dontDistribute super."msgpack-idl";
   "msgpack-rpc" = dontDistribute super."msgpack-rpc";
+  "msh" = dontDistribute super."msh";
   "msi-kb-backlit" = dontDistribute super."msi-kb-backlit";
   "mstate" = dontDistribute super."mstate";
   "msu" = dontDistribute super."msu";
@@ -5896,6 +5900,7 @@ self: super: {
   "pathfinding" = dontDistribute super."pathfinding";
   "pathfindingcore" = dontDistribute super."pathfindingcore";
   "pathtype" = dontDistribute super."pathtype";
+  "pathwalk" = dontDistribute super."pathwalk";
   "patronscraper" = dontDistribute super."patronscraper";
   "pattern-arrows" = dontDistribute super."pattern-arrows";
   "patterns" = dontDistribute super."patterns";
@@ -6172,6 +6177,7 @@ self: super: {
   "pretty-error" = dontDistribute super."pretty-error";
   "pretty-hex" = dontDistribute super."pretty-hex";
   "pretty-ncols" = dontDistribute super."pretty-ncols";
+  "pretty-show" = doDistribute super."pretty-show_1_6_8_2";
   "pretty-sop" = dontDistribute super."pretty-sop";
   "pretty-tree" = dontDistribute super."pretty-tree";
   "prettyFunctionComposing" = dontDistribute super."prettyFunctionComposing";
@@ -6443,6 +6449,7 @@ self: super: {
   "reflex-dom" = dontDistribute super."reflex-dom";
   "reflex-dom-contrib" = dontDistribute super."reflex-dom-contrib";
   "reflex-gloss" = dontDistribute super."reflex-gloss";
+  "reflex-gloss-scene" = dontDistribute super."reflex-gloss-scene";
   "reflex-transformers" = dontDistribute super."reflex-transformers";
   "reform" = dontDistribute super."reform";
   "reform-blaze" = dontDistribute super."reform-blaze";
