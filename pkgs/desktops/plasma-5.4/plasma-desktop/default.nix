@@ -9,7 +9,7 @@
 , libcanberra_kde, libpulseaudio, makeKDEWrapper, utillinux
 }:
 
-plasmaPackage {
+plasmaPackage rec {
   name = "plasma-desktop";
   nativeBuildInputs = [
     extra-cmake-modules
@@ -28,6 +28,9 @@ plasmaPackage {
     kglobalaccel ki18n kpeople krunner kwin plasma-framework
     plasma-workspace qtdeclarative qtx11extras
   ];
+  # All propagatedBuildInputs should be present in the profile because
+  # wrappers cannot be used here.
+  propagatedUserEnvPkgs = propagatedBuildInputs;
   patches = [
     (substituteAll {
       src = ./0001-hwclock.patch;
