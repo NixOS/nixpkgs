@@ -35,9 +35,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://matt.ucc.asn.au/dropbear/dropbear.html;
     description = "An small footprint implementation of the SSH 2 protocol";
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
+    maintainers = with maintainers; [ abbradar ];
+    platforms = platforms.unix;
   };
 }
