@@ -322,7 +322,7 @@ in
 
   config = {
 
-    services.xserver.displayManager.xserverBin = "${xorg.xorgserver}/bin/X";
+    services.xserver.displayManager.xserverBin = "${xorg.xorgserver.out}/bin/X";
 
   };
 

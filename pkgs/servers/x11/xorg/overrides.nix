@@ -485,7 +485,7 @@ in
     stdenv = if isDarwin then args.clangStdenv else stdenv;
     buildInputs = attrs.buildInputs ++ lib.optional isDarwin args.bootstrap_cmds;
     configureFlags = [
-      "--with-xserver=${xorg.xorgserver}/bin/X"
+      "--with-xserver=${xorg.xorgserver.out}/bin/X"
     ] ++ lib.optionals isDarwin [
       "--with-bundle-id-prefix=org.nixos.xquartz"
       "--with-launchdaemons-dir=\${out}/LaunchDaemons"

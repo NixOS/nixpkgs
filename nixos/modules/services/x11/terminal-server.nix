@@ -17,7 +17,7 @@ let
       #! ${pkgs.stdenv.shell}
       export XKB_BINDIR=${pkgs.xorg.xkbcomp}/bin
       export XORG_DRI_DRIVER_PATH=${pkgs.mesa}/lib/dri
-      exec ${pkgs.xorg.xorgserver}/bin/Xvfb "$@" -xkbdir ${pkgs.xkeyboard_config}/etc/X11/xkb
+      exec ${pkgs.xorg.xorgserver.out}/bin/Xvfb "$@" -xkbdir ${pkgs.xkeyboard_config}/etc/X11/xkb
     '';
 
 in
