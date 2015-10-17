@@ -7,11 +7,11 @@ stdenv.mkDerivation rec {
 
   name = "refind-${version}";
   srcName = "refind-src-${version}";
-  version = "0.8.4";
+  version = "0.9.2";
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/project/refind/${version}/${srcName}.zip";
-    sha256 = "09g6x41fc7vvwv2y9kggjmazyhdvkn8qr02v769x33f20bfiz2zc";
+    sha256 = "0ai150rzx20sfl92j6y1p6qnyy0wbmazrlp2fg19acs98qyxl8lh";
   };
 
   buildInputs = [ unzip gnu-efi efibootmgr dosfstools imagemagick ];
