@@ -478,6 +478,8 @@ let
 
   abduco = callPackage ../tools/misc/abduco { };
 
+  android-backup-extractor = callPackage ../tools/backup/android-backup-extractor { };
+
   acct = callPackage ../tools/system/acct { };
 
   acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
@@ -5931,6 +5933,10 @@ let
   audiofile = callPackage ../development/libraries/audiofile { };
 
   babl = callPackage ../development/libraries/babl { };
+
+  bcpkix = callPackage ../development/libraries/java/bcpkix { };
+
+  bcprov = callPackage ../development/libraries/java/bcprov { };
 
   beecrypt = callPackage ../development/libraries/beecrypt { };
 
@@ -12494,6 +12500,8 @@ let
   pond = goPackages.pond.bin // { outputs = [ "bin" ]; };
 
   ponymix = callPackage ../applications/audio/ponymix { };
+
+  portecle = callPackage ../applications/misc/portecle { };
 
   potrace = callPackage ../applications/graphics/potrace {};
 

@@ -1,0 +1,54 @@
+diff --git a/build.xml b/build.xml
+index 5517939..b67bb8b 100644
+--- a/build.xml
++++ b/build.xml
+@@ -26,7 +26,7 @@
+ 
+   <property name="bcprov.jar" value="${lib}/bcprov-jdk15on-152.jar" />
+   <property name="bcpkix.jar" value="${lib}/bcpkix-jdk15on-152.jar" />
+-  <property name="pack200.jar" value="${lib}/deployment-ant-pack200-1.0.jar"/>
++ <!-- <property name="pack200.jar" value="${lib}/deployment-ant-pack200-1.0.jar"/> -->
+ 
+   <property name="build.debug" value="true" />
+   <property name="build.debuglevel" value="lines,source" />
+@@ -45,8 +45,8 @@
+     <pathelement location="${bcpkix.jar}" />
+   </path>
+ 
+-  <typedef resource="org/jdesktop/deployment/ant/pack200/antlib.xml"
+-           classpath="${pack200.jar}"/>
++<!--  <typedef resource="org/jdesktop/deployment/ant/pack200/antlib.xml"
++           classpath="${pack200.jar}"/> -->
+ 
+   <presetdef name="signjar" uri="urn:net.sf.portecle">
+     <signjar
+@@ -58,9 +58,9 @@
+       sigfile="PORTECLE"/>
+   </presetdef>
+ 
+-  <presetdef name="pack200" uri="urn:net.sf.portecle">
++<!--  <presetdef name="pack200" uri="urn:net.sf.portecle">
+     <pack200 effort="9"/>
+-  </presetdef>
++  </presetdef> -->
+ 
+   <presetdef name="zip" uri="urn:net.sf.portecle">
+     <zip level="9"/>
+@@ -138,7 +138,7 @@
+     </jar>
+   </target>
+ 
+-  <target name="webstart" depends="jar" description="Builds Java Web Start dir">
++ <!-- <target name="webstart" depends="jar" description="Builds Java Web Start dir">
+     <mkdir dir="${build}/webstart"/>
+ 
+     <copy todir="${build}/webstart" flatten="true" preservelastmodified="true">
+@@ -198,7 +198,7 @@
+     </copy>
+     <xmlvalidate file="${build}/webstart/portecle.jnlp"/>
+ 
+-  </target>
++  </target> -->
+ 
+   <target name="javadoc">
+     <mkdir dir="${build}/api" />
