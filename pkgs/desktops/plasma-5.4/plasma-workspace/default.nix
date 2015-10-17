@@ -7,7 +7,7 @@
 , pam, phonon, plasma-framework, qtquick1, qtscript, qtx11extras, wayland
 , libksysguard, bash, coreutils, gnused, gnugrep, socat, kconfig
 , kinit, kservice, makeKDEWrapper, qttools, dbus_tools, mkfontdir, xmessage
-, xprop, xrdb, xset, xsetroot, solid
+, xprop, xrdb, xset, xsetroot, solid, qtquickcontrols
 }:
 
 plasmaPackage {
@@ -20,13 +20,13 @@ plasmaPackage {
   buildInputs = [
     kcmutils kcrash kdbusaddons kdesu kdewebkit kjsembed knewstuff
     knotifyconfig kpackage ktextwidgets kwallet kwayland kxmlrpcclient
-    libdbusmenu libSM libXcursor networkmanager-qt pam phonon qtquick1
-    qtscript qtx11extras solid wayland
+    libdbusmenu libSM libXcursor networkmanager-qt pam phonon
+    qtscript wayland
   ];
   propagatedBuildInputs = [
     baloo kactivities kdeclarative kdelibs4support kglobalaccel
     kidletime krunner ktexteditor kwin libkscreen libksysguard
-    plasma-framework
+    plasma-framework qtquick1 qtquickcontrols qtx11extras solid
   ];
   patches = [ ./0001-startkde-NixOS-patches.patch ];
 
@@ -39,6 +39,7 @@ plasmaPackage {
       --replace kdostartupconfig5 $out/bin/kdostartupconfig5
   '';
   postInstall = ''
+    export QT_WRAPPER_IMPURE=1
     wrapKDEProgram "$out/bin/ksmserver"
     wrapKDEProgram "$out/bin/plasmawindowed"
     wrapKDEProgram "$out/bin/kcminit_startup"
