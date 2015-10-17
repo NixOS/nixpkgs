@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, cmake, ncurses, zlib, openssl, pcre, boost, judy, bison, libxml2
-, libaio, libevent, groff, jemalloc, perl, fixDarwinDylibNames
+{ stdenv, fetchurl, cmake, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
+, openssl, pcre, boost, judy, bison, libxml2
+, libaio, libevent, groff, jemalloc, cracklib, systemd, numactl, perl
+, fixDarwinDylibNames
 }:
 
 with stdenv.lib;
@@ -12,8 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "1yiv0161rkgll1yd9r1cb1wdx55rwynj8i623p6wjvda9536mgvw";
   };
 
-  buildInputs = [ cmake ncurses openssl zlib pcre libxml2 boost judy bison libevent ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio ]
+  buildInputs = [
+    cmake ncurses openssl zlib xz lzo lz4 bzip2 snappy
+    pcre libxml2 boost judy bison libevent cracklib
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio systemd numactl ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames ];
 
   patches = stdenv.lib.optional stdenv.isDarwin ./my_context_asm.patch;
@@ -49,6 +53,8 @@ stdenv.mkDerivation rec {
     "-DWITH_PARTITION_STORAGE_ENGINE=1"
     "-DWITHOUT_EXAMPLE_STORAGE_ENGINE=1"
     "-DWITHOUT_FEDERATED_STORAGE_ENGINE=1"
+    "-DSECURITY_HARDENED=ON"
+    "-DWITH_WSREP=ON"
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "-DWITHOUT_OQGRAPH_STORAGE_ENGINE=1"
     "-DWITHOUT_TOKUDB=1"
