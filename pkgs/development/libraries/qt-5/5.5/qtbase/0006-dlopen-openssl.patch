@@ -1,7 +1,7 @@
-From 4c4b1f2a35644014da79d089d3860e518fa9a27d Mon Sep 17 00:00:00 2001
+From 2d7e4e21291238e2b41d0e173f918cd3530c8ade Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@gmail.com>
 Date: Sun, 23 Aug 2015 08:52:04 -0500
-Subject: [PATCH 6/9] dlopen openssl
+Subject: [PATCH 06/11] dlopen openssl
 
 ---
  qtbase/src/network/ssl/qsslsocket_openssl_symbols.cpp | 8 ++++----
@@ -34,5 +34,5 @@ index e2700df..a7ccf88 100644
          // libssl.so.0 and libcrypto.so.0 found
          return pair;
 -- 
-2.5.0
+2.5.2
 
