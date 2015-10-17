@@ -45,10 +45,11 @@ in stdenv.mkDerivation {
   '';
 
   patches =
-    if versionOlder version "45.0.0.0"
-    then singleton ./nix_plugin_paths_44.patch
-    else singleton ./nix_plugin_paths_46.patch ++
-         optional (!versionOlder version "46.0.0.0") ./build_fixes_46.patch;
+    (if versionOlder version "45.0.0.0"
+     then singleton ./nix_plugin_paths_44.patch
+     else singleton ./nix_plugin_paths_46.patch ++
+          optional (!versionOlder version "46.0.0.0") ./build_fixes_46.patch) ++
+    singleton ./widevine.patch;
 
   patchPhase = let
     diffmod = sym: "/^${sym} /{s/^${sym} //;${transform ""};s/^/${sym} /}";
