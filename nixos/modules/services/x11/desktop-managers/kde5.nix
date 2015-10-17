@@ -36,9 +36,7 @@ let
     (name: attrByPath [name] (throw "unknown phonon backend `${name}'") phononBackends);
 
   kf5 = pkgs.kf5_stable;
-
   plasma5 = pkgs.plasma5_stable;
-
   kdeApps = pkgs.kdeApps_stable;
 
 in
@@ -88,18 +86,47 @@ in
     };
 
     environment.systemPackages =
-      filter isDerivation (builtins.attrValues plasma5)
-      ++ filter isDerivation (builtins.attrValues kf5)
-      ++ [
+      [
         pkgs.qt4 # qtconfig is the only way to set Qt 4 theme
+
+        kf5.kinit
+        kf5.kglobalaccel
+
+        plasma5.breeze
+        plasma5.kde-cli-tools
+        plasma5.kdeplasma-addons
+        plasma5.kgamma5
+        plasma5.khelpcenter
+        plasma5.khotkeys
+        plasma5.kinfocenter
+        plasma5.kmenuedit
+        plasma5.kscreen
+        plasma5.ksysguard
+        plasma5.kwayland
+        plasma5.kwin
+        plasma5.kwrited
+        plasma5.milou
+        plasma5.oxygen
+        plasma5.polkit-kde-agent
+        plasma5.systemsettings
+
+        plasma5.plasma-desktop
+        plasma5.plasma-workspace
+        plasma5.plasma-workspace-wallpapers
 
         kdeApps.dolphin
         kdeApps.konsole
 
         pkgs.hicolor_icon_theme
 
+        plasma5.kde-gtk-config
         pkgs.orion # GTK theme, nearly identical to Breeze
-      ] ++ phononBackendPackages;
+      ]
+      ++ lib.optional config.hardware.bluetooth.enable plasma5.bluedevil
+      ++ lib.optional config.networking.networkmanager.enable plasma5.plasma-nm
+      ++ lib.optional config.hardware.pulseaudio.enable plasma5.plasma-pa
+      ++ lib.optional config.powerManagement.enable plasma5.powerdevil
+      ++ phononBackendPackages;
 
     environment.pathsToLink = [ "/share" ];
 
