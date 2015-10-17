@@ -10,7 +10,7 @@
 , xprop, xrdb, xset, xsetroot, solid, qtquickcontrols
 }:
 
-plasmaPackage {
+plasmaPackage rec {
   name = "plasma-workspace";
   nativeBuildInputs = [
     extra-cmake-modules
@@ -28,6 +28,9 @@ plasmaPackage {
     kidletime krunner ktexteditor kwin libkscreen libksysguard
     plasma-framework qtquick1 qtquickcontrols qtx11extras solid
   ];
+  # All propagatedBuildInputs should be present in the profile because
+  # impure wrappers are used below.
+  propagatedUserEnvPkgs = propagatedBuildInputs;
   patches = [ ./0001-startkde-NixOS-patches.patch ];
 
   inherit bash coreutils gnused gnugrep socat;

@@ -73,7 +73,6 @@ in
         pkgs.qt4 # qtconfig is the only way to set Qt 4 theme
 
         kf5.kinit
-        kf5.kglobalaccel
 
         plasma5.breeze
         plasma5.kde-cli-tools
