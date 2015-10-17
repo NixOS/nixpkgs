@@ -10548,6 +10548,8 @@ let
 
   hicolor_icon_theme = callPackage ../data/icons/hicolor-icon-theme { };
 
+  hanazono = callPackage ../data/fonts/hanazono { };
+
   inconsolata = callPackage ../data/fonts/inconsolata {};
   inconsolata-lgc = callPackage ../data/fonts/inconsolata/lgc.nix {};
 
