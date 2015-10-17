@@ -83,7 +83,7 @@ let
       qtmultimedia = callPackage ./qtmultimedia.nix {
         inherit (pkgs.gst_all_1) gstreamer gst-plugins-base;
       };
-      qtquick1 = callPackage ./qtquick1.nix {};
+      qtquick1 = callPackage ./qtquick1 {};
       qtquickcontrols = callPackage ./qtquickcontrols.nix {};
       qtscript = callPackage ./qtscript {};
       qtsensors = callPackage ./qtsensors.nix {};
