@@ -183,12 +183,12 @@ let self = _self // overrides;
 
   async = melpaBuild rec {
     pname   = "async";
-    version = "1.2";
+    version = "1.5";
     src = fetchFromGitHub {
       owner  = "jwiegley";
       repo   = "emacs-async";
       rev    = "v${version}";
-      sha256 = "1j6mbvvbnm2m1gpsy9ipxiv76b684nn57yssbqdyiwyy499cma6q";
+      sha256 = "1yq1aby4n5k3caasynhxhakng01qp4099zjbsm633d351ib3h20g";
     };
     meta = {
       description = "Asynchronous processing in Emacs";
@@ -241,6 +241,18 @@ let self = _self // overrides;
     };
     files = [ "autotetris-mode.el" ];
     meta =  { license = unlicense; };
+  };
+
+  avy = melpaBuild rec {
+    pname   = "avy";
+    version = "0.3.0";
+    src = fetchFromGitHub {
+      owner  = "abo-abo";
+      repo   = pname;
+      rev    = version;
+      sha256 = "15xfgmsy4sqs3cmk7dwmj21g3r9dqb3fra7n7ly306bwgzh4vm8k";
+    };
+    meta = { license = gpl3Plus; };
   };
 
   bind-key = melpaBuild {
@@ -914,6 +926,18 @@ let self = _self // overrides;
     };
   };
 
+  hydra = melpaBuild rec {
+    pname   = "hydra";
+    version = "0.13.3";
+    src = fetchFromGitHub {
+      owner  = "abo-abo";
+      repo   = pname;
+      rev    = version;
+      sha256 = "08iw95lyizcyf6cjl37fm8wvay0vsk9758pk9gq9f2xiafcchl7f";
+    };
+    meta = { license = gpl3Plus; };
+  };
+
   ibuffer-vc = melpaBuild rec {
     pname   = "ibuffer-vc";
     version = "0.10";
@@ -1009,12 +1033,12 @@ let self = _self // overrides;
 
   magit = melpaBuild rec {
     pname   = "magit";
-    version = "2.1.0";
+    version = "2.2.2";
     src = fetchFromGitHub {
       owner  = pname;
       repo   = pname;
       rev    = version;
-      sha256 = "0pyqa79km1y58phsf4sq2a25rx9lw0di1hb6a5y17xisa8li7sfl";
+      sha256 = "1niajikvhj22saz68y0zcazh9imji76g48rc5rs20nlp76hybifc";
     };
     packageRequires = [ dash git-commit magit-popup with-editor ];
     fileSpecs = [ "lisp/magit-utils.el"
@@ -1063,7 +1087,7 @@ let self = _self // overrides;
     pname = "with-editor";
     version = magit.version;
     src = magit.src;
-    packageRequires = [ dash ];
+    packageRequires = [ async dash ];
     fileSpecs = [ "Documentation/with-editor.texi" "lisp/with-editor.el" ];
     meta = { license = gpl3Plus; };
   };
@@ -1455,12 +1479,12 @@ let self = _self // overrides;
 
   swiper = melpaBuild rec {
     pname   = "swiper";
-    version = "0.5.0";
+    version = "0.6.0";
     src = fetchFromGitHub {
       owner  = "abo-abo";
       repo   = pname;
       rev    = version;
-      sha256 = "1a28vignwpcn62xk46w5p5wjfrbcmvs0gz1jgn4ba7ibmn4cmnnm";
+      sha256 = "18madh4hvrk8sxrll84ry13n1l3ad1gnp3prj828sszrbbdp20ly";
     };
     fileSpecs = [ "swiper.el" "ivy.el" "colir.el" "counsel.el" ];
     meta = { license = gpl3Plus; };
@@ -1499,7 +1523,7 @@ let self = _self // overrides;
       owner  = "ocaml";
       repo   = pname;
       rev    = version;
-      sha256 = "1j2smhqrwy0zydhbyjkpnwzq05fgfa85kc0d9kzwq0mppdndspp4";
+      sha256 = "0jpcjy2a77mywba2vm61knj26pgylsmv5a21cdp80q40bac4i6bb";
     };
     packageRequires = [ caml ];
     meta = { license = gpl3Plus; };
