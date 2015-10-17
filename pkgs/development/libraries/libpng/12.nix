@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "02jwfqk1ahqfvbs9gdyb5v0123by9ws6m7jnfvainig7i7v4jpml";
   };
 
+  outputs = [ "dev" "out" "man" ];
+
   propagatedBuildInputs = [ zlib ];
 
   passthru = { inherit zlib; };
@@ -20,6 +22,8 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = "--enable-static";
+
+  postInstall = ''mv "$out/bin" "$dev/bin"'';
 
   meta = {
     description = "The official reference implementation for the PNG file format";
