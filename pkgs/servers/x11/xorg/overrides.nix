@@ -220,8 +220,10 @@ in
     outputs = [ "dev" "out" "doc" ]; # just dev-doc
   };
 
-  libXvMC = attrs: attrs
-    // { buildInputs = attrs.buildInputs ++ [xorg.renderproto]; };
+  libXvMC = attrs: attrs // {
+    outputs = [ "dev" "out" "doc" ];
+    buildInputs = attrs.buildInputs ++ [xorg.renderproto];
+  };
 
   libXpm = attrs: attrs // {
     outputs = [ "dev" "out" "bin" ]; # tiny man in $bin
