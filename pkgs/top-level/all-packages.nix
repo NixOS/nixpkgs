@@ -4723,6 +4723,8 @@ let
     ocaml = ocaml_3_08_0;
   };
 
+  rtags = callPackage ../development/tools/rtags/default.nix {};
+
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
   rustc = callPackage ../development/compilers/rustc {};
 
@@ -11395,6 +11397,7 @@ let
     external = {
       inherit (haskellPackages) ghc-mod structured-haskell-mode Agda;
       inherit (pythonPackages) elpy;
+      inherit rtags;
     };
   };
 
