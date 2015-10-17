@@ -10413,6 +10413,25 @@ let
     };
   };
 
+  pymetar = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "pymetar";
+    version = "0.20";
+
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/${pname}/${name}.tar.gz";
+      sha256 = "1rxyg9465cp6nc47pqxqf092wmbvv2zhffzvaf2w74laal43pgxw";
+    };
+
+    meta = {
+      description = "A command-line tool to show the weather report by a given station ID";
+      homepage = http://www.schwarzvogel.de/software/pymetar.html;
+      license = licenses.gpl2;
+    };
+  };
+
   pysftp = buildPythonPackage rec {
     name = "pysftp-${version}";
     version = "0.2.8";
