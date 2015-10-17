@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     copyScript "svn" ${../../../build-support/fetchsvn/nix-prefetch-svn} ${subversion}
     copyScript "bzr" ${../../../build-support/fetchbzr/nix-prefetch-bzr} ${bazaar}
     copyScript "cvs" ${../../../build-support/fetchcvs/nix-prefetch-cvs} ${cvs}
-    copyScript "zip" ${../../../build-support/fetchzip/nix-prefetch-zip} ${unzip} ${curl}
+    copyScript "zip" ${../../../build-support/fetchzip/nix-prefetch-zip} ${unzip} ${curl.bin}
   '';
 
   meta = with stdenv.lib; {
