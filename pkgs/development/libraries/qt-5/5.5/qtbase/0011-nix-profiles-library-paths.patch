@@ -1,0 +1,38 @@
+From 2da5e660c4b470444e756f2ec88cb520a124bc99 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Sat, 17 Oct 2015 09:20:35 -0500
+Subject: [PATCH] nix profiles library paths
+
+---
+ qtbase/src/corelib/kernel/qcoreapplication.cpp | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/qtbase/src/corelib/kernel/qcoreapplication.cpp b/qtbase/src/corelib/kernel/qcoreapplication.cpp
+index ecafe91..96e3eb5 100644
+--- a/qtbase/src/corelib/kernel/qcoreapplication.cpp
++++ b/qtbase/src/corelib/kernel/qcoreapplication.cpp
+@@ -2496,6 +2496,21 @@ QStringList QCoreApplication::libraryPaths()
+                 }
+             }
+         }
++
++        // Add library paths derived from NIX_PROFILES.
++        const QByteArray nixProfilesEnv = qgetenv("NIX_PROFILES");
++        if (!nixProfilesEnv.isEmpty()) {
++            QLatin1Char pathSep(' ');
++            QStringList paths = QFile::decodeName(nixProfilesEnv).split(pathSep, QString::SkipEmptyParts);
++            for (QStringList::iterator it = paths.begin(); it != paths.end(); ++it) {
++                it->append("/lib/qt5/plugins");
++                QString canonicalPath = QDir(*it).canonicalPath();
++                if (!canonicalPath.isEmpty()
++                    && !app_libpaths->contains(canonicalPath)) {
++                    app_libpaths->append(canonicalPath);
++                }
++            }
++        }
+     }
+     return *(coreappdata()->app_libpaths);
+ }
+-- 
+2.5.2
+

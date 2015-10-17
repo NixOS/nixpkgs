@@ -1,7 +1,7 @@
-From a7dc6209542ef8aa54191c0e17fbb9b41cbad67f Mon Sep 17 00:00:00 2001
+From 253c0829d4bc30da0152a22114a949449796ec7d Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@gmail.com>
 Date: Sun, 23 Aug 2015 08:52:57 -0500
-Subject: [PATCH 8/9] xdg config dirs
+Subject: [PATCH 08/11] xdg config dirs
 
 ---
  qtbase/src/corelib/io/qsettings.cpp | 18 ++++++++++++++++++
@@ -51,5 +51,5 @@ index 93d63fd..160b197 100644
          SandboxConfFile = 0,
          NumConfFiles = 1
 -- 
-2.5.0
+2.5.2
 

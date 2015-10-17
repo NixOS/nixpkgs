@@ -1,7 +1,7 @@
-From d3224286c647f1d1e7dac485bbeee5bc8286e6c6 Mon Sep 17 00:00:00 2001
+From 5334f7d5d3e7be31ea25c3553dfb60f283a14669 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@gmail.com>
 Date: Mon, 1 Dec 2014 17:21:58 -0600
-Subject: [PATCH 1/9] dlopen-gtkstyle
+Subject: [PATCH 01/11] dlopen-gtkstyle
 
 ---
  qtbase/src/widgets/styles/qgtk2painter.cpp |  2 +-
@@ -59,5 +59,5 @@ index 0e119a1..ad6caa1 100644
      return (QGtkStylePrivate::gconf_client_get_default !=0);
  }
 -- 
-2.5.0
+2.5.2
 

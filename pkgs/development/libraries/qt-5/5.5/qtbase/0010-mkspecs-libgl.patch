@@ -1,0 +1,27 @@
+From 5113406661f06afa01da48ebc0567a4d0f69051c Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Sat, 17 Oct 2015 09:12:46 -0500
+Subject: [PATCH 10/11] mkspecs libgl
+
+---
+ qtbase/mkspecs/common/linux.conf | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/qtbase/mkspecs/common/linux.conf b/qtbase/mkspecs/common/linux.conf
+index 8d6fb6f..0ff9181 100644
+--- a/qtbase/mkspecs/common/linux.conf
++++ b/qtbase/mkspecs/common/linux.conf
+@@ -12,8 +12,8 @@ QMAKE_INCDIR            =
+ QMAKE_LIBDIR            =
+ QMAKE_INCDIR_X11        =
+ QMAKE_LIBDIR_X11        =
+-QMAKE_INCDIR_OPENGL     =
+-QMAKE_LIBDIR_OPENGL     =
++QMAKE_INCDIR_OPENGL     = @mesa@/include
++QMAKE_LIBDIR_OPENGL     = @mesa@/lib
+ QMAKE_INCDIR_OPENGL_ES2 = $$QMAKE_INCDIR_OPENGL
+ QMAKE_LIBDIR_OPENGL_ES2 = $$QMAKE_LIBDIR_OPENGL
+ QMAKE_INCDIR_EGL        =
+-- 
+2.5.2
+
