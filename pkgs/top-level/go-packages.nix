@@ -700,10 +700,10 @@ let
   };
 
   glide = buildFromGitHub {
-    rev    = "0.5.0";
+    rev    = "0.6.1";
     owner  = "Masterminds";
     repo   = "glide";
-    sha256 = "10jg3h1zprx2ylmmcvmy94k4pw7lc9a6xfgr2ld8rih642sqg9wh";
+    sha256 = "1v66c2igm8lmljqrrsyq3cl416162yc5l597582bqsnhshj2kk4m";
     buildInputs = [ cookoo cli-go go-gypsy vcs ];
   };
 
@@ -2994,10 +2994,10 @@ let
   };
 
   vcs = buildFromGitHub {
-    rev    = "c709a4244b817af98a8ecb495ca4ab0b11f27ecd";
+    rev    = "1.0.0";
     owner  = "Masterminds";
     repo   = "vcs";
-    sha256 = "04gw4pp1f9wp36nvp9y234bmp267c4ajwcc39wa975cd89zhlhn4";
+    sha256 = "1qav4lf4ln5gs81714876q2cy9gfaxblbvawg3hxznbwakd9zmd8";
   };
 
   vulcand = buildGoPackage rec {
