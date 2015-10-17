@@ -3,16 +3,18 @@
 stdenv.mkDerivation rec {
   name = "libmtp-1.1.9";
 
-  propagatedBuildInputs = [ libusb1 ];
-  buildInputs = [ pkgconfig ];
-
-  # tried to install files to /lib/udev, hopefully OK
-  configureFlags = [ "--with-udev=$$out/lib/udev" ];
-
   src = fetchurl {
     url = "mirror://sourceforge/libmtp/${name}.tar.gz";
     sha256 = "12dinqic0ljnhrwx3rc61jc7q24ybr0mckc2ya5kh1s1np0d7w93";
   };
+
+  outputs = [ "dev" "bin" "out" ];
+
+  propagatedBuildInputs = [ libusb1 ];
+  buildInputs = [ pkgconfig ];
+
+  # tried to install files to /lib/udev, hopefully OK
+  configureFlags = [ "--with-udev=$$bin/lib/udev" ];
 
   meta = {
     homepage = http://libmtp.sourceforge.net;
