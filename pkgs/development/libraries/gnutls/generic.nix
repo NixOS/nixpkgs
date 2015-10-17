@@ -46,7 +46,8 @@ stdenv.mkDerivation {
     sed ${lib.optionalString tpmSupport "-e 's,-ltspi,-L${trousers}/lib -ltspi,'"} \
         -e 's,-lz,-L${zlib.out}/lib -lz,' \
         -e 's,-L${gmp.dev}/lib,-L${gmp.out}/lib,' \
-        -i "$out/lib/libgnutls.la" "$dev/lib/pkgconfig/gnutls.pc"
+        -e 's,-lgmp,-L${gmp.out}/lib -lgmp,' \
+        -i $out/lib/*.la "$dev/lib/pkgconfig/gnutls.pc"
   '';
 
   meta = with lib; {
