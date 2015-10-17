@@ -4161,6 +4161,11 @@ let
 
   lessc = callPackage ../development/compilers/lessc { };
 
+  lld = llvmPackages.lld;
+
+  lld_35 = llvmPackages_35.lld;
+  lld_34 = llvmPackages_34.lld;
+
   llvm = llvmPackages.llvm;
 
   llvm_37 = llvmPackages_37.llvm;

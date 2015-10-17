@@ -27,4 +27,5 @@ stdenv.mkDerivation {
     license     = stdenv.lib.licenses.bsd3;
     platforms   = stdenv.lib.platforms.all;
   };
+  broken = true;
 }
