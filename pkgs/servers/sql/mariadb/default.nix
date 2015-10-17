@@ -5,11 +5,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "mariadb-${version}";
-  version = "10.0.21";
+  version = "10.1.8";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/interstitial/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "0i9mzbn35f4lj4y1lqzgbavh5xyx18zfn0ks0nqzvppabkhk56jb";
+    sha256 = "1yiv0161rkgll1yd9r1cb1wdx55rwynj8i623p6wjvda9536mgvw";
   };
 
   buildInputs = [ cmake ncurses openssl zlib pcre libxml2 boost judy bison libevent ]
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   # fails to find lex_token.h sometimes
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   outputs = [ "out" "lib" ];
 
