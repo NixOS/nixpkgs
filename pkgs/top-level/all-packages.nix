@@ -802,6 +802,8 @@ let
     tileMode = false;
   };
 
+  create_ap = callPackage ../applications/misc/create_ap { };
+
   contacts = callPackage ../tools/misc/contacts { };
 
   datamash = callPackage ../tools/misc/datamash { };
