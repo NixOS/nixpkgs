@@ -40,6 +40,7 @@ plasmaPackage {
   '';
   postInstall = ''
     export QT_WRAPPER_IMPURE=1
+    export KDE_WRAPPER_IMPURE=1
     wrapKDEProgram "$out/bin/ksmserver"
     wrapKDEProgram "$out/bin/plasmawindowed"
     wrapKDEProgram "$out/bin/kcminit_startup"
