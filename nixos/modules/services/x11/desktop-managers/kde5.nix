@@ -8,33 +8,6 @@ let
   cfg = xcfg.desktopManager.kde5;
   xorg = pkgs.xorg;
 
-  phononBackends = {
-    gstreamer = [
-      pkgs.phonon_backend_gstreamer
-      pkgs.gst_all.gstreamer
-      pkgs.gst_all.gstPluginsBase
-      pkgs.gst_all.gstPluginsGood
-      pkgs.gst_all.gstPluginsUgly
-      pkgs.gst_all.gstPluginsBad
-      pkgs.gst_all.gstFfmpeg # for mp3 playback
-      pkgs.phonon_qt5_backend_gstreamer
-      pkgs.gst_all_1.gstreamer
-      pkgs.gst_all_1.gst-plugins-base
-      pkgs.gst_all_1.gst-plugins-good
-      pkgs.gst_all_1.gst-plugins-ugly
-      pkgs.gst_all_1.gst-plugins-bad
-      pkgs.gst_all_1.gst-libav # for mp3 playback
-    ];
-
-    vlc = [
-      pkgs.phonon_qt5_backend_vlc
-      pkgs.phonon_backend_vlc
-    ];
-  };
-
-  phononBackendPackages = flip concatMap cfg.phononBackends
-    (name: attrByPath [name] (throw "unknown phonon backend `${name}'") phononBackends);
-
   kf5 = pkgs.kf5_stable;
   plasma5 = pkgs.plasma5_stable;
   kdeApps = pkgs.kdeApps_stable;
@@ -51,14 +24,24 @@ in
         description = "Enable the Plasma 5 (KDE 5) desktop environment.";
       };
 
-      phononBackends = mkOption {
-        type = types.listOf types.str;
-        default = ["gstreamer"];
-        example = ["gstreamer" "vlc"];
-        description = ''
-          Phonon backends to use in KDE. Only the VLC and GStreamer backends are
-          available. The GStreamer backend is preferred by upstream.
-        '';
+      phonon = {
+
+        gstreamer = {
+          enable = mkOption {
+            type = types.bool;
+            default = true;
+            description = "Enable the GStreamer Phonon backend (recommended).";
+          };
+        };
+
+        vlc = {
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Enable the VLC Phonon backend.";
+          };
+        };
+
       };
 
     };
@@ -126,7 +109,28 @@ in
       ++ lib.optional config.networking.networkmanager.enable plasma5.plasma-nm
       ++ lib.optional config.hardware.pulseaudio.enable plasma5.plasma-pa
       ++ lib.optional config.powerManagement.enable plasma5.powerdevil
-      ++ phononBackendPackages;
+      ++ lib.optionals cfg.phonon.gstreamer.enable
+        [
+          pkgs.phonon_backend_gstreamer
+          pkgs.gst_all.gstreamer
+          pkgs.gst_all.gstPluginsBase
+          pkgs.gst_all.gstPluginsGood
+          pkgs.gst_all.gstPluginsUgly
+          pkgs.gst_all.gstPluginsBad
+          pkgs.gst_all.gstFfmpeg # for mp3 playback
+          pkgs.phonon_qt5_backend_gstreamer
+          pkgs.gst_all_1.gstreamer
+          pkgs.gst_all_1.gst-plugins-base
+          pkgs.gst_all_1.gst-plugins-good
+          pkgs.gst_all_1.gst-plugins-ugly
+          pkgs.gst_all_1.gst-plugins-bad
+          pkgs.gst_all_1.gst-libav # for mp3 playback
+        ]
+      ++ lib.optionals cfg.phonon.vlc.enable
+        [
+          pkgs.phonon_qt5_backend_vlc
+          pkgs.phonon_backend_vlc
+        ];
 
     environment.pathsToLink = [ "/share" ];
 
@@ -136,7 +140,7 @@ in
     };
 
     environment.profileRelativeEnvVars =
-      mkIf (lib.elem "gstreamer" cfg.phononBackends)
+      mkIf cfg.phonon.gstreamer.enable
       {
         GST_PLUGIN_SYSTEM_PATH = [ "/lib/gstreamer-0.10" ];
         GST_PLUGIN_SYSTEM_PATH_1_0 = [ "/lib/gstreamer-1.0" ];
