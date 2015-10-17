@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig
 
 # Optinal Dependencies
-, openssl ? null, libev ? null, zlib ? null, jansson ? null, boost ? null
+, libssl ? null, libev ? null, zlib ? null, jansson ? null, boost ? null
 , libxml2 ? null, jemalloc ? null
 
 # Extra argument
@@ -20,7 +20,7 @@ let
 
   isLib = prefix == "lib";
 
-  optOpenssl = if isLib then null else shouldUsePkg openssl;
+  optOpenssl = if isLib then null else shouldUsePkg libssl;
   optLibev = if isLib then null else shouldUsePkg libev;
   optZlib = if isLib then null else shouldUsePkg zlib;
 

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, includeModules ? false
-, sqlite, tcl, tk, xlibsWrapper, openssl, readline, db, ncurses, gdbm, self, callPackage }:
+, sqlite, tcl, tk, xlibsWrapper, libssl, readline, db, ncurses, gdbm, self, callPackage }:
 
 assert zlibSupport -> zlib != null;
 
@@ -49,7 +49,7 @@ let
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
-    [ bzip2 openssl ]++ optionals includeModules [ db openssl ncurses gdbm readline xlibsWrapper tcl tk sqlite ]
+    [ bzip2 libssl ]++ optionals includeModules [ db libssl ncurses gdbm readline xlibsWrapper tcl tk sqlite ]
     ++ optional zlibSupport zlib;
 
 

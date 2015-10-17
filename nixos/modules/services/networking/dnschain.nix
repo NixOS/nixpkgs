@@ -80,7 +80,7 @@ in
         description = "Dnschain Daemon";
         after = [ "namecoind.target" ];
         wantedBy = [ "multi-user.target" ];
-        path = [ pkgs.openssl ];
+        path = [ pkgs.libssl ];
         preStart = ''
           # Link configuration file into dnschain HOME directory
           if [ "$(${pkgs.coreutils}/bin/realpath /var/lib/dnschain/.dnschain.conf)" != "${dnschainConf}" ]; then

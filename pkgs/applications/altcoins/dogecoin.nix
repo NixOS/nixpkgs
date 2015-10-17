@@ -1,6 +1,6 @@
 { stdenv , fetchurl
 , pkgconfig, autoreconfHook
-, db5, openssl, boost, zlib, miniupnpc
+, db5, libssl, boost, zlib, miniupnpc
 , glib, protobuf, utillinux, qt4, qrencode
 , withGui }:
 
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "17jxsxsrsz3qy2hxdpw78vcbnnd0nq614iy42ypzhw4pdpz0s1l7";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig openssl
-                  db5 openssl utillinux protobuf boost zlib miniupnpc ]
+  buildInputs = [ autoreconfHook pkgconfig libssl
+                  db5 utillinux protobuf boost zlib miniupnpc ]
                   ++ optionals withGui [ qt4 qrencode ];
 
   # BSD DB5 location

@@ -3,7 +3,7 @@
 , libxml2, db, sablotron, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis
-, openssl, gperf, cppunit, GConf, ORBit2, poppler
+, libssl, gperf, cppunit, GConf, ORBit2, poppler
 , librsvg, gnome_vfs, mesa, bsh, CoinMP, libwps, libabw
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus_glib, glibc, qt4, kde4, clucene_core, libcdr, lcms, vigra
@@ -219,7 +219,7 @@ in stdenv.mkDerivation rec {
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
       libXdmcp libpthreadstubs mesa mythes gst_all_1.gstreamer
       gst_all_1.gst-plugins-base
-      neon nspr nss openldap openssl ORBit2 pam perl pkgconfigUpstream poppler
+      neon nspr nss openldap libssl ORBit2 pam perl pkgconfigUpstream poppler
       python3 sablotron saneBackends tcsh unzip vigra which zip zlib
       mdds bluez5 glibc libcmis libwps libabw
       libxshmfence libatomic_ops graphite2 harfbuzz

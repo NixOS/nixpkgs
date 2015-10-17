@@ -1,5 +1,5 @@
 { stdenv, fetchurl, m4, perl, gfortran, texLive, ffmpeg, tk
-, imagemagick, liblapack, python, openssl, libpng
+, imagemagick, liblapack, python, libssl, libpng
 , which
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ m4 perl gfortran texLive ffmpeg tk imagemagick liblapack
-                  python openssl libpng which];
+                  python libssl libpng which];
 
   patches = [ ./spkg-singular.patch ./spkg-python.patch ./spkg-git.patch ];
 

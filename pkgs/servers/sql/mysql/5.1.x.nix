@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ps, ncurses, zlib, perl, openssl }:
+{ stdenv, fetchurl, ps, ncurses, zlib, perl, libssl }:
 
 # Note: zlib is not required; MySQL can use an internal zlib.
 
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "1dfwi4ck0vq6sdci6gz0031s7zz5lc3pddqlgm0292s00l9y5sq5";
   };
 
-  buildInputs = [ ncurses zlib perl openssl ] ++ stdenv.lib.optional stdenv.isLinux ps;
+  buildInputs = [ ncurses zlib perl libssl ] ++ stdenv.lib.optional stdenv.isLinux ps;
 
   configureFlags = [
     "--enable-thread-safe-client"
-    "--with-ssl=${openssl}"
+    "--with-ssl=${libssl}"
     "--with-embedded-server"
     "--with-plugins=max-no-ndb"
     "--with-unix-socket-path=/run/mysqld/mysqld.sock"

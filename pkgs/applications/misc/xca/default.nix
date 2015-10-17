@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, which, openssl, qt4, libtool, gcc, makeWrapper }:
+{ stdenv, fetchurl, pkgconfig, which, libssl, qt4, libtool, gcc, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "xca-${version}";
@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/xca" \
-      --prefix LD_LIBRARY_PATH : "${qt4}/lib:${gcc.cc}/lib:${gcc.cc}/lib64:${openssl}/lib:${libtool}/lib"
+      --prefix LD_LIBRARY_PATH : "${qt4}/lib:${gcc.cc}/lib:${gcc.cc}/lib64:${libssl}/lib:${libtool}/lib"
   '';
 
-  buildInputs = [ openssl qt4 libtool gcc makeWrapper ];
+  buildInputs = [ libssl qt4 libtool gcc makeWrapper ];
   nativeBuildInputs = [ pkgconfig ];
 
   meta = with stdenv.lib; {

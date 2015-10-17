@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, getopt, ip2location-c, openssl, perl
+{ stdenv, fetchurl, getopt, ip2location-c, libssl, perl
 , geoip ? null, geolite-legacy ? null
 , ip2location-database ? null }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0a0xpai14y969hp6l10r2wcd16sqf3v40fq5h97m4a69hcpmvg5h";
   };
 
-  buildInputs = [ geoip geolite-legacy getopt ip2location-c openssl ];
+  buildInputs = [ geoip geolite-legacy getopt ip2location-c libssl ];
   nativeBuildInputs = [ perl ];
 
   patchPhase = ''

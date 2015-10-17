@@ -59,7 +59,7 @@ rec {
       cp ${curl}/bin/curl $out/bin
       cp -d ${curl}/lib/libcurl*.dylib $out/lib
       cp -d ${libssh2}/lib/libssh*.dylib $out/lib
-      cp -d ${openssl}/lib/*.dylib $out/lib
+      cp -d ${libssl}/lib/*.dylib $out/lib
 
       cp -d ${gnugrep.pcre}/lib/libpcre*.dylib $out/lib
       cp -d ${libiconv}/lib/libiconv*.dylib $out/lib

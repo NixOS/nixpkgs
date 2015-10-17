@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, pkgconfig, scons, utillinux, fuse, libevent, openssl, zlib }:
+{ stdenv, fetchurl, boost, pkgconfig, scons, utillinux, fuse, libevent, libssl, zlib }:
 
 stdenv.mkDerivation rec {
   version = "0.8.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ 
-    boost pkgconfig scons utillinux fuse libevent openssl zlib
+    boost pkgconfig scons utillinux fuse libevent libssl zlib
   ];
 
   buildPhase = ''

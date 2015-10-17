@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, curl, coreutils, gawk, bash, which }:
+{ stdenv, fetchurl, libssl, curl, coreutils, gawk, bash, which }:
 
 stdenv.mkDerivation {
   name = "esniper-2.31.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0xn6gdyr0c18khwcsi2brp49wkancrsrxxca7hvbawhbf263glih";
   };
 
-  buildInputs = [ openssl curl ];
+  buildInputs = [ libssl curl ];
 
   # Add support for CURL_CA_BUNDLE variable.
   # Fix <http://sourceforge.net/p/esniper/bugs/648/>.

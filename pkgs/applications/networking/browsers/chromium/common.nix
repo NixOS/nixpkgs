@@ -22,7 +22,7 @@
 , enableSELinux ? false, libselinux ? null
 , enableNaCl ? false
 , enableHotwording ? false
-, useOpenSSL ? false, nss ? null, openssl ? null
+, useOpenSSL ? false, nss ? null, libssl ? null
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome_keyring3 ? null
 , proprietaryCodecs ? true
@@ -108,7 +108,7 @@ let
       which
       python perl pkgconfig
       nspr udev
-      (if useOpenSSL then openssl else nss)
+      (if useOpenSSL then libssl else nss)
       utillinux alsaLib
       bison gperf kerberos
       glib gtk dbus_glib

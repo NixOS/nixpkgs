@@ -1,4 +1,4 @@
-{fetchurl, stdenv, unixODBC, glibc, libtool, openssl, zlib, postgresql, mysql, sqlite}:
+{fetchurl, stdenv, unixODBC, glibc, libtool, libssl, zlib, postgresql, mysql, sqlite}:
 # each attr contains the name deriv referencing the derivation and ini which
 # evaluates to a string which can be appended to the global unix odbc ini file
 # to register the driver
@@ -32,7 +32,7 @@
  psql = rec {
    deriv = stdenv.mkDerivation rec {
     name = "psqlodbc-09.03.0100";
-    buildInputs = [ unixODBC libtool postgresql openssl ];
+    buildInputs = [ unixODBC libtool postgresql libssl ];
     preConfigure="
       export CPPFLAGS=-I${unixODBC}/include
       export LDFLAGS='-L${unixODBC}/lib -lltdl'

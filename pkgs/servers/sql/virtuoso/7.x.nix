@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, openssl, readline, gawk }:
+{ stdenv, fetchurl, libxml2, libssl, readline, gawk }:
 
 stdenv.mkDerivation rec {
   name = "virtuoso-opensource-7.0.0";
@@ -8,14 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "1z0jdzayv45y57jj8kii6csqfjhswcs8s2krqqfhab54xy6gynbl";
   };
 
-  buildInputs = [ libxml2 openssl readline gawk ];
+  buildInputs = [ libxml2 libssl readline gawk ];
 
   CPP = "${stdenv.cc}/bin/gcc -E";
 
   configureFlags = "
     --enable-shared --disable-all-vads --with-readline=${readline}
     --disable-hslookup --disable-wbxml2 --without-iodbc
-    --enable-openssl=${openssl}
+    --enable-openssl=${libssl}
     ";
 
   postInstall=''

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libosip, openssl, pkgconfig }:
+{stdenv, fetchurl, libosip, libssl, pkgconfig }:
 
 stdenv.mkDerivation rec {
   version = "4.0.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   };
   name = "libexosip2-${version}";
 
-  buildInputs = [ libosip openssl pkgconfig ];
+  buildInputs = [ libosip libssl pkgconfig ];
       
   meta = {
     license = stdenv.lib.licenses.gpl2Plus;

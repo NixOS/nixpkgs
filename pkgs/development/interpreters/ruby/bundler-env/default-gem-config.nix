@@ -20,7 +20,7 @@
 { lib, fetchurl, writeScript, ruby, libxml2, libxslt, python, stdenv, which
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
-, cmake, libssh2, openssl, mysql, darwin
+, cmake, libssh2, libssl, mysql, darwin
 }:
 
 let
@@ -48,7 +48,7 @@ in
   };
 
   mysql2 = attrs: {
-    buildInputs = [ mysql.lib zlib openssl ];
+    buildInputs = [ mysql.lib zlib libssl ];
   };
 
   ncursesw = attrs: {
@@ -84,7 +84,7 @@ in
   };
 
   rugged = attrs: {
-    buildInputs = [ cmake pkgconfig openssl libssh2 zlib ];
+    buildInputs = [ cmake pkgconfig libssl libssh2 zlib ];
   };
 
   sqlite3 = attrs: {

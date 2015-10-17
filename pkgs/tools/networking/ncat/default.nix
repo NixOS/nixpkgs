@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl}:
+{stdenv, fetchurl, libssl}:
 
 stdenv.mkDerivation {
   name = "ncat-0.10rc3";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   patches = [./ncat-0.10rc3.patch];
 
-  buildInputs = [openssl];
+  buildInputs = [libssl];
 
   CFLAGS = "-g";
 

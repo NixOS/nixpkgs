@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, zlib, ncurses }:
+{ stdenv, fetchurl, libssl, zlib, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "polygraph-4.3.2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fv9jpcicfsgsmghkykqif6l6w7nwvk5xbdmpv72jbrwzx44845h";
   };
 
-  buildInputs = [ openssl zlib ncurses ];
+  buildInputs = [ libssl zlib ncurses ];
   
   patches = [ ./fix_build.patch ];
 

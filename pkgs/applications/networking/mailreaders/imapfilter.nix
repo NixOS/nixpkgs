@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, lua, pcre }:
+{ stdenv, fetchurl, libssl, lua, pcre }:
 
 stdenv.mkDerivation rec {
   name = "imapfilter-2.5.7";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   makeFlagsArray = "PREFIX=$(out)";
-  propagatedBuildInputs = [ openssl pcre lua ];
+  propagatedBuildInputs = [ libssl pcre lua ];
 
   meta = {
     homepage = "https://github.com/lefcha/imapfilter";

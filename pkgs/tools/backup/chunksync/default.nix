@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, perl }:
+{ stdenv, fetchurl, libssl, perl }:
 
 stdenv.mkDerivation rec {
   version = "0.3";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "e0c27f925c5cf811798466312a56772864b633728c433fb2fcce23c8712b52fc";
   };
 
-  buildInputs = [openssl perl];
+  buildInputs = [libssl perl];
 
   NIX_LDFLAGS = "-lgcc_s";
 

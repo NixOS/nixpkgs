@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, openssl, glib, libX11, gtk2, gettext, intltool }:
+{ stdenv, fetchurl, pkgconfig, libssl, glib, libX11, gtk2, gettext, intltool }:
 
 stdenv.mkDerivation rec {
   name = "fribid-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "a679f3a0534d5f05fac10b16b49630a898c0b721cfa24d2c827fa45485476649";
   };
 
-  buildInputs = [ pkgconfig openssl libX11 gtk2 glib gettext intltool ];
+  buildInputs = [ pkgconfig libssl libX11 gtk2 glib gettext intltool ];
   patches = [
     ./translation-xgettext-to-intltool.patch
     ./plugin-linkfix.patch

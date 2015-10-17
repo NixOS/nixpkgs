@@ -1,5 +1,5 @@
 { stdenv, fetchurl, composableDerivation, unzip, libjpeg, libtiff, zlib
-, postgresql, mysql, libgeotiff, python, pythonPackages, proj, geos, openssl
+, postgresql, mysql, libgeotiff, python, pythonPackages, proj, geos, libssl
 , libpng }:
 
 composableDerivation.composableDerivation {} (fixed: rec {
@@ -11,7 +11,7 @@ composableDerivation.composableDerivation {} (fixed: rec {
     sha256 = "66bc8192d24e314a66ed69285186d46e6999beb44fc97eeb9c76d82a117c0845";
   };
 
-  buildInputs = [ unzip libjpeg libtiff libpng python pythonPackages.numpy proj openssl ];
+  buildInputs = [ unzip libjpeg libtiff libpng python pythonPackages.numpy proj libssl ];
 
   patches = [
     # This ensures that the python package is installed into gdal's prefix,

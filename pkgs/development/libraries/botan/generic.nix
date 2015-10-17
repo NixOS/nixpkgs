@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, bzip2, zlib, gmp, openssl, boost
+{ stdenv, fetchurl, python, bzip2, zlib, gmp, libssl, boost
 # Passed by version specific builders
 , baseVersion, revision, sha256
 , extraConfigureFlags ? ""
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [ python bzip2 zlib gmp openssl boost ];
+  buildInputs = [ python bzip2 zlib gmp libssl boost ];
 
   configurePhase = ''
-    python configure.py --prefix=$out --with-bzip2 --with-zlib ${if openssl != null then "--with-openssl" else ""} ${extraConfigureFlags}${if stdenv.cc.isClang then " --cc=clang" else "" }
+    python configure.py --prefix=$out --with-bzip2 --with-zlib ${if libssl != null then "--with-openssl" else ""} ${extraConfigureFlags}${if stdenv.cc.isClang then " --cc=clang" else "" }
   '';
 
   enableParallelBuilding = true;

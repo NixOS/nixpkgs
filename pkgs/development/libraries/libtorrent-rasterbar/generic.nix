@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, automake, autoconf, boost, openssl, lib, libtool, pkgconfig, zlib, python, libiconv, geoip
+{ stdenv, fetchurl, automake, autoconf, boost, libssl, lib, libtool, pkgconfig, zlib, python, libiconv, geoip
 # Version specific options
 , version, sha256
 , ... }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [automake autoconf libtool ];
 
-  buildInputs = [ boost pkgconfig openssl zlib python libiconv geoip ];
+  buildInputs = [ boost pkgconfig libssl zlib python libiconv geoip ];
 
   preConfigure = "./autotool.sh";
 

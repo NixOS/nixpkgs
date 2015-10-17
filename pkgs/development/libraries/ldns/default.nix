@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl, perl}:
+{stdenv, fetchurl, libssl, perl}:
 
 stdenv.mkDerivation rec {
   name = "ldns-1.6.17";
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ perl ];
-  buildInputs = [ openssl ];
+  buildInputs = [ libssl ];
 
-  configureFlags = [ "--with-ssl=${openssl}" "--with-drill" ];
+  configureFlags = [ "--with-ssl=${libssl}" "--with-drill" ];
 
   meta = with stdenv.lib; {
     description = "Library with the aim of simplifying DNS programming in C";

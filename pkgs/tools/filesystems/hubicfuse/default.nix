@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, curl, openssl, fuse, libxml2, json_c, file }:
+{ stdenv, fetchurl, pkgconfig, curl, libssl, fuse, libxml2, json_c, file }:
 
 stdenv.mkDerivation rec {
   name = "hubicfuse-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mnijcwac6k3f6xknvdrsbmkkizpwbayqkb5l6jic15ymxv1fs7d";
   };
 
-  buildInputs = [ pkgconfig curl openssl fuse libxml2 json_c file ];
+  buildInputs = [ pkgconfig curl libssl fuse libxml2 json_c file ];
   postInstall = ''
     install hubic_token $out/bin
     mkdir -p $out/sbin

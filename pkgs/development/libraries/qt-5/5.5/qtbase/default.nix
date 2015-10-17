@@ -3,7 +3,7 @@
 
 , xlibs, libX11, libxcb, libXcursor, libXext, libXrender, libXi
 , xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilwm, libxkbcommon
-, fontconfig, freetype, openssl, dbus, glib, udev, libxml2, libxslt, pcre
+, fontconfig, freetype, libssl, dbus, glib, udev, libxml2, libxslt, pcre
 , zlib, libjpeg, libpng, libtiff, sqlite, icu
 
 , coreutils, bison, flex, gdb, gperf, lndir, ruby
@@ -75,7 +75,7 @@ stdenv.mkDerivation {
         };
         dlopen-openssl = substituteAll {
           src = ./0006-dlopen-openssl.patch;
-          inherit openssl;
+          inherit libssl;
         };
         dlopen-dbus = substituteAll {
           src = ./0007-dlopen-dbus.patch;
@@ -184,7 +184,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     xlibs.libXcomposite libX11 libxcb libXext libXrender libXi
-    fontconfig freetype openssl dbus.libs glib udev libxml2 libxslt pcre
+    fontconfig freetype libssl dbus.libs glib udev libxml2 libxslt pcre
     zlib libjpeg libpng libtiff sqlite icu
     xcbutil xcbutilimage xcbutilkeysyms xcbutilwm libxkbcommon
   ]

@@ -1,5 +1,5 @@
 { fetchzip, stdenv, pkgconfig
-, openssl, db48, boost, zlib, miniupnpc, qt4, qrencode, glib, protobuf
+, libssl, db48, boost, zlib, miniupnpc, qt4, qrencode, glib, protobuf
 , utillinux
 , withGui }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sigvimqwc1mvaq43a8c2aq7fjla2ncafrals08qfq3jd6in8b4f";
   };
 
-  buildInputs = [ pkgconfig glib openssl db48 boost zlib miniupnpc ]
+  buildInputs = [ pkgconfig glib libssl db48 boost zlib miniupnpc ]
                   ++ optionals withGui [ qt4 qrencode ];
 
   configurePhase = optional withGui "qmake";

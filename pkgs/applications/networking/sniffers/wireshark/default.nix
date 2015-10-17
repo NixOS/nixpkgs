@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, perl, flex, bison, libpcap, libnl, c-ares
-, gnutls, libgcrypt, geoip, openssl, lua5, makeDesktopItem, python, libcap, glib
+, gnutls, libgcrypt, geoip, libssl, lua5, makeDesktopItem, python, libcap, glib
 , withGtk ? false, gtk ? null
 , withQt ? false, qt4 ? null
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    bison flex perl pkgconfig libpcap lua5 openssl libgcrypt gnutls
+    bison flex perl pkgconfig libpcap lua5 libssl libgcrypt gnutls
     geoip libnl c-ares python libcap glib
   ] ++ optional withQt qt4
     ++ optional withGtk gtk;

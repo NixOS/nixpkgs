@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, lzo, zlib, gcc, iproute }:
+{ stdenv, fetchurl, libssl, lzo, zlib, gcc, iproute }:
 
 with stdenv.lib;
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
           --replace '/sbin/ip' "${iproute}/bin/ip"
   '';
 
-  buildInputs = [ openssl lzo zlib gcc iproute ];
+  buildInputs = [ libssl lzo zlib gcc iproute ];
 
   installPhase = ''
     installBin zerotier-one

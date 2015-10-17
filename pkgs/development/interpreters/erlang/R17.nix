@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, gnum4, ncurses, openssl
+{ stdenv, fetchurl, perl, gnum4, ncurses, libssl
 , gnused, gawk, makeWrapper
 , odbcSupport ? false, unixODBC ? null
 , wxSupport ? true, mesa ? null, wxGTK ? null, xorg ? null, wxmac ? null
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ perl gnum4 ncurses openssl makeWrapper
+    [ perl gnum4 ncurses libssl makeWrapper
     ] ++ optional wxSupport (if stdenv.isDarwin then [ wxmac ] else [ mesa wxGTK xorg.libX11 ])
       ++ optional odbcSupport [ unixODBC ]
       ++ optional javacSupport [ openjdk ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags= [
-    "--with-ssl=${openssl}"
+    "--with-ssl=${libssl}"
   ] ++ optional enableHipe "--enable-hipe"
     ++ optional wxSupport "--enable-wx"
     ++ optional odbcSupport "--with-odbc=${unixODBC}"

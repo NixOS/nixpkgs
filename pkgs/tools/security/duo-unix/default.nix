@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pam, openssl, zlib }:
+{ stdenv, fetchurl, pam, libssl, zlib }:
 
 stdenv.mkDerivation rec {
   name = "duo-unix-${version}";
@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "0747avzmzzz1gaisahgjlpxyxxbrn04w1mip90lfj9wp2x6a9jgm";
   };
 
-  buildInputs = [ pam openssl zlib ];
+  buildInputs = [ pam libssl zlib ];
   configureFlags =
     [ "--with-pam=$(out)/lib/security"
       "--prefix=$(out)"
       "--sysconfdir=$(out)/etc/duo"
-      "--with-openssl=${openssl}"
+      "--with-openssl=${libssl}"
       "--enable-lib64=no"
     ];
 

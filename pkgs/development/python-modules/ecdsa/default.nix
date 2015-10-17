@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, openssl }:
+{ stdenv, fetchurl, buildPythonPackage, libssl }:
 
 buildPythonPackage rec {
   name = "ecdsa-0.11";
@@ -8,7 +8,7 @@ buildPythonPackage rec {
     sha256 = "134mbq5xsvx54k9xm7zrizvh9imxmcz1w9mhyfr99p4i7wcnqfwf";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libssl ];
 
   meta = {
     homepage = "http://github.com/warner/python-ecdsa";

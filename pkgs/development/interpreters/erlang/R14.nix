@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, gnum4, ncurses, openssl
+{ stdenv, fetchurl, perl, gnum4, ncurses, libssl
 , makeWrapper, gnused, gawk }:
 
 let version = "14B04"; in
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0vlvjlg8vzcy6inb4vj00bnj0aarvpchzxwhmi492nv31s8kb6q9";
   };
 
-  buildInputs = [ perl gnum4 ncurses openssl makeWrapper ];
+  buildInputs = [ perl gnum4 ncurses libssl makeWrapper ];
 
   patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     sed -e s@/bin/pwd@pwd@g -i otp_build
   '';
 
-  configureFlags = "--with-ssl=${openssl}";
+  configureFlags = "--with-ssl=${libssl}";
 
   postInstall = let
     manpages = fetchurl {

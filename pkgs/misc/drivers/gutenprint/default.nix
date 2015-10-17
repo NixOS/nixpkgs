@@ -1,6 +1,6 @@
 # this package was called gimp-print in the past
 { fetchurl, stdenv, pkgconfig, composableDerivation, cups
-, libtiff, libpng, makeWrapper, openssl, gimp }:
+, libtiff, libpng, makeWrapper, libssl, gimp }:
 
 let
    version = "5.2.10";
@@ -16,7 +16,7 @@ composableDerivation.composableDerivation {} {
   };
 
   # gimp, gui is still not working (TODO)
-  buildInputs = [ makeWrapper openssl pkgconfig ];
+  buildInputs = [ makeWrapper libssl pkgconfig ];
 
   configureFlags = ["--enable-static-genppd"];
   NIX_CFLAGS_COMPILE="-include stdio.h";

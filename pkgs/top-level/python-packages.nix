@@ -2352,7 +2352,7 @@ let
       sha256 = "008hq9s4z7y17yjxh1aycvddas320hfbl9vj8gydg4fpfzz04711";
     };
 
-    buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
+    buildInputs = [ pkgs.libssl self.pretend self.cryptography_vectors
                     self.iso8601 self.pyasn1 self.pytest self.py ];
     propagatedBuildInputs = [ self.six self.idna self.ipaddress ]
      ++ optional (!isPyPy) self.cffi
@@ -3640,7 +3640,7 @@ let
       repo = "GateOne";
       sha256 ="0zp9vfs6sqbx4d0g45kkjinfmsl9zqwa6bhp3xd81wx3ph9yr1hq";
     };
-    propagatedBuildInputs = with pkgs.pythonPackages; [tornado futures html5lib readline pkgs.openssl];
+    propagatedBuildInputs = with pkgs.pythonPackages; [tornado futures html5lib readline pkgs.libssl];
     meta = {
       homepage = https://liftoffsoftware.com/;
       description = "GateOne is a web-based terminal emulator and SSH client";
@@ -5844,7 +5844,7 @@ let
     };
 
     # Only needed for tests
-    buildInputs = with self; [ pkgs.openssl ];
+    buildInputs = with self; [ pkgs.libssl ];
 
     meta = {
       description = "ECDSA cryptographic signature library";
@@ -8066,9 +8066,9 @@ let
       md5 = "f93d8462ff7646397a9f77a2fe602d17";
     };
 
-    buildInputs = with self; [ pkgs.swig2 pkgs.openssl ];
+    buildInputs = with self; [ pkgs.swig2 pkgs.libssl ];
 
-    preBuild = "${python}/bin/${python.executable} setup.py build_ext --openssl=${pkgs.openssl}";
+    preBuild = "${python}/bin/${python.executable} setup.py build_ext --openssl=${pkgs.libssl}";
 
     doCheck = false; # another test that depends on the network.
 
@@ -8848,7 +8848,7 @@ let
       sha256 = "0x0c2jg0bb3pp84njaqiic050qkyd7ymwhfvhipnimg58yv40441";
     };
 
-    buildInputs = with self; [ nose pkgs.openssl ];
+    buildInputs = with self; [ nose pkgs.libssl ];
 
     propagatedBuildInputs = with self; [ pkgs.mysql.lib pkgs.zlib ];
 
@@ -11289,7 +11289,7 @@ let
       sha256 = "0hqsap82zklhi5fxhc69kxrwzb0g9566f7sdpz7f9gyxkmyam839";
     };
 
-    propagatedBuildInputs = with self; [ pkgs.curl pkgs.openssl ];
+    propagatedBuildInputs = with self; [ pkgs.curl pkgs.libssl ];
 
     # error: invalid command 'test'
     doCheck = false;
@@ -12075,7 +12075,7 @@ let
     };
 
     NIX_CFLAGS_COMPILE = "-I${pkgs.cyrus_sasl}/include/sasl";
-    propagatedBuildInputs = with self; [pkgs.openldap pkgs.cyrus_sasl pkgs.openssl];
+    propagatedBuildInputs = with self; [pkgs.openldap pkgs.cyrus_sasl pkgs.libssl];
   };
 
   ptyprocess = buildPythonPackage rec {
@@ -12406,7 +12406,7 @@ let
       sha256 = "0srjr2qgxfs69p65d9vvdib2lc142x10w8afbbdrqs7dhi46yn9r";
     };
 
-    buildInputs = with self; [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
+    buildInputs = with self; [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.libssl ]
       ++ (if stdenv.isLinux then [pkgs.e2fsprogs] else []);
 
     # There seems to be no way to pass that path to configure.
@@ -14084,7 +14084,7 @@ let
       sha256 = "0vpy2vss8667c0kp1k8vybl38nxp7kr2v2wa8sngrgzd65m6ww5p";
     };
 
-    propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml ];
+    propagatedBuildInputs = with self; [ cython pkgs.libssl dns dateutil xcaplib msrplib lxml ];
 
     buildInputs = with pkgs; [ alsaLib ffmpeg libv4l pkgconfig sqlite libvpx ];
 

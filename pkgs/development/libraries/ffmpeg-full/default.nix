@@ -107,7 +107,7 @@
 , openglExtlib ? false, mesa ? null # OpenGL rendering
 #, openh264 ? null # H.264/AVC encoder
 , openjpeg_1 ? null # JPEG 2000 de/encoder
-, opensslExtlib ? false, openssl ? null
+, opensslExtlib ? false, libssl ? null
 , libpulseaudio ? null # Pulseaudio input support
 , rtmpdump ? null # RTMP[E] support
 #, libquvi ? null # Quvi input support
@@ -226,7 +226,7 @@ assert libxcbshmExtlib -> libxcb != null;
 assert libxcbxfixesExtlib -> libxcb != null;
 assert libxcbshapeExtlib -> libxcb != null;
 assert openglExtlib -> mesa != null;
-assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
+assert opensslExtlib -> gnutls == null && libssl != null && nonfreeLicensing;
 assert x11grabExtlib -> libX11 != null && libXv != null;
 
 stdenv.mkDerivation rec {
@@ -360,7 +360,7 @@ stdenv.mkDerivation rec {
     (enableFeature openglExtlib "opengl")
     #(enableFeature (openh264 != null) "openh264")
     (enableFeature (openjpeg_1 != null) "libopenjpeg")
-    (enableFeature (opensslExtlib && gplLicensing) "openssl")
+    (enableFeature (opensslExtlib && gplLicensing) "libssl")
     (enableFeature (libpulseaudio != null) "libpulse")
     #(enableFeature quvi "libquvi")
     (enableFeature (rtmpdump != null) "librtmp")
@@ -403,7 +403,7 @@ stdenv.mkDerivation rec {
     samba SDL soxr speex vid-stab wavpack x264 x265 xavs xvidcore zeromq4 zlib
   ] ++ optional openglExtlib mesa
     ++ optionals x11grabExtlib [ libXext libXfixes ]
-    ++ optionals nonfreeLicensing [ faac fdk_aac openssl ]
+    ++ optionals nonfreeLicensing [ faac fdk_aac libssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ];
 

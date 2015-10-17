@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, libcap ? null, openssl ? null }:
+{ stdenv, fetchurl, autoreconfHook, libcap ? null, libssl ? null }:
 
 assert stdenv.isLinux -> libcap != null;
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional (libcap != null) "--enable-linuxcaps";
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libcap openssl ];
+  buildInputs = [ libcap libssl ];
 
   postInstall = ''
     rm -rf $out/share/doc

@@ -1,4 +1,4 @@
-{ stdenv, boost, fuse, openssl, cmake, attr, jdk, ant, which, file, python
+{ stdenv, boost, fuse, libssl, cmake, attr, jdk, ant, which, file, python
 , fetchurl, lib, valgrind, makeWrapper, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
     export BOOST_INCLUDEDIR=${boost.dev}/include
     export BOOST_LIBRARYDIR=${boost.lib}/lib
-    export OPENSSL_ROOT_DIR=${openssl}
+    export OPENSSL_ROOT_DIR=${libssl}
 
     substituteInPlace cpp/cmake/FindValgrind.cmake \
       --replace "/usr/local" "${valgrind}"

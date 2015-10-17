@@ -2051,7 +2051,7 @@ let
     sha256 = "1033c9vgv9lf8ks0qjy0ylsmx1hizqxa6izalma8vi30np6ka6zn";
     goPackageAliases = [ "github.com/spacemonkeygo/openssl" ];
     nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = [ pkgs.openssl ];
+    buildInputs = [ pkgs.libssl ];
     propagatedBuildInputs = [ spacelog ];
 
     preBuild = ''

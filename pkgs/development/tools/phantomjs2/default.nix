@@ -1,5 +1,5 @@
 { stdenv, fetchurl,
-  bison2, flex, fontconfig, freetype, gperf, icu, openssl, libjpeg, libpng, perl, python, ruby, sqlite
+  bison2, flex, fontconfig, freetype, gperf, icu, libssl, libjpeg, libpng, perl, python, ruby, sqlite
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "18h37bxxg25lacry9k3vb5yim057bqcxmsifw97jrjp7gzfx56v5";
   };
 
-  buildInputs = [ bison2 flex fontconfig freetype gperf icu openssl libjpeg libpng perl python ruby sqlite ];
+  buildInputs = [ bison2 flex fontconfig freetype gperf icu libssl libjpeg libpng perl python ruby sqlite ];
 
   patchPhase = ''
     patchShebangs .

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, jansson, libxml2, libxslt, ncurses, openssl, sqlite, utillinux }:
+{ stdenv, fetchurl, fetchgit, jansson, libxml2, libxslt, ncurses, libssl, sqlite, utillinux }:
 
 stdenv.mkDerivation rec {
   name = "asterisk-${version}";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
   # TODO: Sounds for other languages could be added here
 
-  buildInputs = [ jansson libxml2 libxslt ncurses openssl sqlite utillinux ];
+  buildInputs = [ jansson libxml2 libxslt ncurses libssl sqlite utillinux ];
 
   patches = [
     # Disable downloading of sound files (we will fetch them

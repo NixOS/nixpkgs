@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, openssl, libpcap}:
+{stdenv, fetchFromGitHub, libssl, libpcap}:
 
 stdenv.mkDerivation rec {
   name = "bully-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     repo = "bully";
     owner = "Lrs121";
   };
-  buildInputs = [ openssl libpcap ];
+  buildInputs = [ libssl libpcap ];
 
   buildPhase = ''
     cd src

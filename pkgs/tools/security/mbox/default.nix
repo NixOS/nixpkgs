@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, which }:
+{ stdenv, fetchFromGitHub, libssl, which }:
 
 stdenv.mkDerivation {
   name = "mbox-20140526";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "06qggqxnzcxnc34m6sbafxwr2p64x65m9zm5wp7pwyarcckhh2hd";
   };
 
-  buildInputs = [ openssl which ];
+  buildInputs = [ libssl which ];
 
   preConfigure = ''
     cd src

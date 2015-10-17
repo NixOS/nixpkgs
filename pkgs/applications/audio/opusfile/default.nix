@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, openssl, libogg, libopus}:
+{stdenv, fetchurl, pkgconfig, libssl, libogg, libopus}:
 
 stdenv.mkDerivation rec {
   name = "opusfile-0.6";
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     sha256 = "19iys2kld75k0210b807i4illrdmj3cmmnrgxlc9y4vf6mxp2a14";
   };
 
-  buildInputs = [ pkgconfig openssl libogg libopus ];
+  buildInputs = [ pkgconfig libssl libogg libopus ];
 
   meta = {
     description = "High-level API for decoding and seeking in .opus files";

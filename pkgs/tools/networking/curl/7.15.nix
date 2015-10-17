@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , zlibSupport ? false, zlib ? null
-, sslSupport ? false, openssl ? null
+, sslSupport ? false, libssl ? null
 , scpSupport ? false, libssh2 ? null
 , gssSupport ? false, gss ? null
 , c-aresSupport ? false, c-ares ? null
@@ -8,7 +8,7 @@
 }:
 
 assert zlibSupport -> zlib != null;
-assert sslSupport -> openssl != null;
+assert sslSupport -> libssl != null;
 assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     optional zlibSupport zlib ++
     optional gssSupport gss ++
     optional c-aresSupport c-ares ++
-    optional sslSupport openssl;
+    optional sslSupport libssl;
 
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-      ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
+      ( if sslSupport then "--with-ssl=${libssl}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     # We should refer to the cross built openssl
     # For the 'urandom', maybe it should be a cross-system option
     configureFlags = [
-        ( if sslSupport then "--with-ssl=${openssl.crossDrv}" else "--without-ssl" )
+        ( if sslSupport then "--with-ssl=${libssl.crossDrv}" else "--without-ssl" )
         "--with-random /dev/urandom"
       ]
       ++ stdenv.lib.optionals linkStatic [ "--enable-static" "--disable-shared" ]
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    inherit sslSupport openssl;
+    inherit sslSupport libssl;
   };
 
   meta = {

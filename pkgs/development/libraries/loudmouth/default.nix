@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, libidn, glib, pkgconfig, zlib }:
+{ stdenv, fetchurl, libssl, libidn, glib, pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
   name = "loudmouth-1.4.3";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-ssl=openssl";
 
-  propagatedBuildInputs = [ openssl libidn glib zlib ];
+  propagatedBuildInputs = [ libssl libidn glib zlib ];
 
   buildInputs = [ pkgconfig ];
 

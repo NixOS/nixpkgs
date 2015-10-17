@@ -1,4 +1,4 @@
-{avahi, dbus, fetchurl, git, gzip, libav, libiconv, openssl, pkgconfig, python
+{avahi, dbus, fetchurl, git, gzip, libav, libiconv, libssl, pkgconfig, python
 , stdenv, which, zlib}:
 
 let version = "4.0.4";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-dvbscan" ];
 
-  buildInputs = [ avahi dbus git gzip libav libiconv openssl pkgconfig python
+  buildInputs = [ avahi dbus git gzip libav libiconv libssl pkgconfig python
     which zlib ];
 
   preConfigure = "patchShebangs ./configure";

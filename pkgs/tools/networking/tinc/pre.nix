@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl }:
+{ stdenv, fetchgit, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, libssl }:
 
 stdenv.mkDerivation rec {
   name = "tinc-1.1pre-2015-09-25";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook texinfo ];
-  buildInputs = [ ncurses readline zlib lzo openssl ];
+  buildInputs = [ ncurses readline zlib lzo libssl ];
 
   configureFlags = [
     "--sysconfdir=/etc"

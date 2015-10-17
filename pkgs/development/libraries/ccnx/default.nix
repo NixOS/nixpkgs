@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, expat, libpcap }:
+{ stdenv, fetchurl, libssl, expat, libpcap }:
 let
   version = "0.8.2";
 in
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     url = "https://github.com/ProjectCCNx/ccnx/archive/ccnx-${version}.tar.gz";
     sha256 = "1jyk7i8529821aassxbvzlxnvl5ly0na1qcn3v1jpxhdd0qqpg00";
   };
-  buildInputs = [ openssl expat libpcap ];
+  buildInputs = [ libssl expat libpcap ];
   preConfigure = ''
     mkdir -p $out/include
     mkdir -p $out/lib

@@ -1,5 +1,5 @@
 { stdenv, autoconf, automake, cppunit, curl, fetchFromGitHub
-, fetchurl, libsigcxx, libtool, libtorrent-git, ncurses, openssl
+, fetchurl, libsigcxx, libtool, libtorrent-git, ncurses, libssl
 , pkgconfig, zlib, xmlrpc_c
 , colorSupport ? false
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     libtool
     curl
     zlib
-    openssl
+    libssl
     xmlrpc_c
   ];
 

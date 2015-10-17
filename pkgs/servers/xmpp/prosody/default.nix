@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libidn, openssl, makeWrapper, fetchhg
+{ stdenv, fetchurl, libidn, libssl, makeWrapper, fetchhg
 , lua5, luasocket, luasec, luaexpat, luafilesystem, luabitop, luaevent ? null, luazlib ? null
 , withLibevent ? true, withZlib ? true }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     sha256 = "0010x2rl9f9ihy2nwqan2jdlz25433srj2zna1xh10490mc28hij";
   };
 
-  buildInputs = [ lua5 luasocket luasec luaexpat luabitop libidn openssl makeWrapper ]
+  buildInputs = [ lua5 luasocket luasec luaexpat luabitop libidn libssl makeWrapper ]
                 ++ optional withLibevent luaevent
                 ++ optional withZlib luazlib;
 

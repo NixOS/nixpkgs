@@ -1,4 +1,4 @@
-args @ { fetchurl, stdenv, pkgconfig, perl, perlXMLParser, libxml2, openssl, nss
+args @ { fetchurl, stdenv, pkgconfig, perl, perlXMLParser, libxml2, libssl, nss
 , gtkspell, aspell, gettext, ncurses, avahi, dbus, dbus_glib, python
 , libtool, automake, autoconf, gstreamer
 , gtk, glib
@@ -19,7 +19,7 @@ rec {
 
   buildInputs = [gtkspell aspell
     gstreamer startupnotification
-    libxml2 openssl nss
+    libxml2 libssl nss
     libXScrnSaver ncurses scrnsaverproto
     libX11 xproto kbproto GConf avahi
     dbus dbus_glib glib python

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, perl, yacc, bootstrap_cmds
-, openssl, openldap, libedit
+, libssl, openldap, libedit
 
 # Extra Arguments
 , type ? ""
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig perl yacc ]
     # Provides the mig command used by the build scripts
     ++ stdenv.lib.optional stdenv.isDarwin bootstrap_cmds;
-  buildInputs = [ openssl ]
+  buildInputs = [ libssl ]
     ++ optionals (!libOnly) [ openldap libedit ];
 
   unpackPhase = ''

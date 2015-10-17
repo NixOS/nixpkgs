@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libtorrent, ncurses, pkgconfig, libsigcxx, curl
-, zlib, openssl, xmlrpc_c
+, zlib, libssl, xmlrpc_c
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "03jvzw9pi2mhcm913h8qg0qw9gwjqc6lhwynb1yz1y163x7w4s8y";
   };
 
-  buildInputs = [ libtorrent ncurses pkgconfig libsigcxx curl zlib openssl xmlrpc_c ];
+  buildInputs = [ libtorrent ncurses pkgconfig libsigcxx curl zlib libssl xmlrpc_c ];
   configureFlags = "--with-xmlrpc-c";
 
   # postInstall = ''

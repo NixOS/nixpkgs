@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gtk, perl, python, gettext
 , libtool, pciutils, dbus_glib, libcanberra, libproxy
-, libsexy, enchant, libnotify, openssl, intltool
+, libsexy, enchant, libnotify, libssl, intltool
 , desktop_file_utils, hicolor_icon_theme
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig gtk perl python gettext
     libtool pciutils dbus_glib libcanberra libproxy
-    libsexy libnotify openssl intltool
+    libsexy libnotify libssl intltool
     desktop_file_utils hicolor_icon_theme
   ];
 

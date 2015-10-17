@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, neon, libusb, openssl, udev, avahi, freeipmi
+{ stdenv, fetchurl, pkgconfig, neon, libusb, libssl, udev, avahi, freeipmi
 , libtool, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1667n9h8jcz7k6h24fn615khqahlq5z22zxs4s0q046rsqxdg9ki";
   };
 
-  buildInputs = [ neon libusb openssl udev avahi freeipmi libtool ];
+  buildInputs = [ neon libusb libssl udev avahi freeipmi libtool ];
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, libjpeg, e2fsprogs, zlib, openssl, libuuid, ntfs3g }:
+{ stdenv, fetchurl, ncurses, libjpeg, e2fsprogs, zlib, libssl, libuuid, ntfs3g }:
 
 stdenv.mkDerivation {
   name = "testdisk-6.14";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0v1jap83f5h99zv01v3qmqm160d36n4ysi0gyq7xzb3mqgmw75x5";
   };
 
-  buildInputs = [ ncurses libjpeg e2fsprogs zlib openssl libuuid ntfs3g ];
+  buildInputs = [ ncurses libjpeg e2fsprogs zlib libssl libuuid ntfs3g ];
 
   enableParallelBuilding = true;
 

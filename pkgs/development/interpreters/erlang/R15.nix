@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, gnum4, ncurses, openssl
+{ stdenv, fetchurl, perl, gnum4, ncurses, libssl
 , makeWrapper, gnused, gawk
 , wxSupport ? false, mesa ? null, wxGTK ? null, xorg ? null }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ perl gnum4 ncurses openssl
+    [ perl gnum4 ncurses libssl
       makeWrapper
     ] ++ stdenv.lib.optional wxSupport [ mesa wxGTK xorg.libX11 ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     sed -e s@/bin/pwd@pwd@g -i otp_build
   '';
 
-  configureFlags = "--with-ssl=${openssl}";
+  configureFlags = "--with-ssl=${libssl}";
 
   postInstall = let
     manpages = fetchurl {

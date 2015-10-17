@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, zlib }:
+{ stdenv, fetchurl, libssl, zlib }:
 
 stdenv.mkDerivation {
   name = "ircd-hybrid-8.2.2";
@@ -8,10 +8,10 @@ stdenv.mkDerivation {
     sha256 = "0k9w2mxgi03cpnmagshcr5v6qjgnmyidf966b50dd6yn1fgqcibm";
   };
 
-  buildInputs = [ openssl zlib ];
+  buildInputs = [ libssl zlib ];
 
   configureFlags =
-    "--with-nicklen=100 --with-topiclen=360 --enable-openssl=${openssl}";
+    "--with-nicklen=100 --with-topiclen=360 --enable-openssl=${libssl}";
 
   postInstall = "echo postinstall; mkdir -p \${out}/ ; rm -rf \${out}/logs ; ln -s /home/ircd \${out}/logs;";
 

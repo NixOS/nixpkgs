@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, lzo, zlib, yacc, flex }:
+{ stdenv, fetchurl, libssl, lzo, zlib, yacc, flex }:
 
 stdenv.mkDerivation rec {
   name = "vtun-3.0.3";
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
     sed -i -e 's/-m 755//' -e 's/-o root -g 0//' Makefile.in
     sed -i '/strip/d' Makefile.in
   '';
-  buildInputs = [ lzo openssl zlib yacc flex ];
+  buildInputs = [ lzo libssl zlib yacc flex ];
 
   configureFlags = ''
     --with-lzo-headers=${lzo}/include/lzo
-    --with-ssl-headers=${openssl}/include/openssl
-    --with-blowfish-headers=${openssl}/include/openssl'';
+    --with-ssl-headers=${libssl}/include/openssl
+    --with-blowfish-headers=${libssl}/include/openssl'';
 
   meta = with stdenv.lib; {
       description = "Virtual Tunnels over TCP/IP with traffic shaping, compression and encryption";

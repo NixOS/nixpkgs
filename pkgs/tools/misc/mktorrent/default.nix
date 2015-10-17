@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl}:
+{stdenv, fetchurl, libssl}:
 
 stdenv.mkDerivation {
   name = "mktorrent-1.0";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     installFlags=PREFIX=$out
   '';
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libssl ];
 
   meta = {
     homepage = http://mktorrent.sourceforge.net/;

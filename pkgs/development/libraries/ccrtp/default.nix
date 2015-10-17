@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, ucommon, openssl, libgcrypt }:
+{ stdenv, fetchurl, pkgconfig, ucommon, libssl, libgcrypt }:
 
 stdenv.mkDerivation rec {
   name = "ccrtp-2.1.2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ ucommon openssl libgcrypt ];
+  propagatedBuildInputs = [ ucommon libssl libgcrypt ];
 
   configureFlags = [
     "--disable-demos"

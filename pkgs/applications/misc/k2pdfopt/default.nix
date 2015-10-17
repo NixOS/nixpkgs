@@ -1,7 +1,7 @@
 # Build procedure lifted from https://aur.archlinux.org/packages/k2/k2pdfopt/PKGBUILD
 { stdenv, fetchzip, fetchurl, writeScript, libX11, libXext, autoconf, automake, libtool
       , leptonica, libpng, libtiff, zlib, openjpeg, freetype, jbig2dec, djvulibre
-      , openssl }:
+      , libssl }:
 
 let
   mupdf_src = fetchurl {
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libX11 libXext autoconf automake libtool leptonica libpng libtiff zlib
-                    openjpeg freetype jbig2dec djvulibre openssl ];
+                    openjpeg freetype jbig2dec djvulibre libssl ];
   NIX_LDFLAGS = "-lX11 -lXext";
 
   k2_pa = ./k2pdfopt.patch;

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pam, openssl, db}:
+{stdenv, fetchurl, pam, libssl, db}:
 
 stdenv.mkDerivation {
   name = "pam_ccreds-10";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sed 's/-o root -g root//' -i Makefile.in
   '';
 
-  buildInputs = [pam openssl db];
+  buildInputs = [pam libssl db];
   meta = {
     homepage = "http://www.padl.com/OSS/pam_ccreds.html";
     description = "PAM module to locally authenticate using an enterprise identity when the network is unavailable";

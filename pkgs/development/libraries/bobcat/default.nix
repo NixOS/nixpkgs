@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, icmake, libmilter, libX11, openssl, readline
+{ stdenv, fetchFromGitHub, icmake, libmilter, libX11, libssl, readline
 , utillinux, yodl }:
 
 let version = "4.00.00"; in
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ libmilter libX11 openssl readline utillinux ];
+  buildInputs = [ libmilter libX11 libssl readline utillinux ];
   nativeBuildInputs = [ icmake yodl ];
 
   sourceRoot = "bobcat-${version}-src/bobcat";

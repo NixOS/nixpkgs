@@ -1,6 +1,6 @@
 { stdenv, fetchurl, alsaLib, cmake, gtk, libjack2, libgnomecanvas
 , libpthreadstubs, libsamplerate, libsndfile, libtool, libxml2
-, pkgconfig, openssl }:
+, pkgconfig, libssl }:
 
 stdenv.mkDerivation  rec {
   name = "petri-foo-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation  rec {
 
   buildInputs =
    [ alsaLib cmake  gtk libjack2 libgnomecanvas libpthreadstubs
-     libsamplerate libsndfile libtool libxml2 pkgconfig openssl
+     libsamplerate libsndfile libtool libxml2 pkgconfig libssl
    ];
 
   meta = with stdenv.lib; {

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ncurses, curl, pkgconfig, gnutls, readline, openssl, perl, libjpeg
+{ fetchurl, stdenv, ncurses, curl, pkgconfig, gnutls, readline, libssl, perl, libjpeg
 , libzrtpcpp, gcc48 }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kfvn5f75c6r6yp18almjz9p6llvpm66gpbxcjswrg3ddgbkzg0k";
   };
 
-  buildInputs = [ ncurses curl pkgconfig gnutls readline openssl perl libjpeg
+  buildInputs = [ ncurses curl pkgconfig gnutls readline libssl perl libjpeg
     libzrtpcpp gcc48 ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=cpp";

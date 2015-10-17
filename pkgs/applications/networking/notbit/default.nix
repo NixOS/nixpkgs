@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, automake, pkgconfig, openssl }:
+{ stdenv, fetchgit, autoconf, automake, pkgconfig, libssl }:
 
 stdenv.mkDerivation rec {
   name = "notbit-git-6f1ca59";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0h9nzm248pw9wrdsfkr580ghiqvh6mk6vx7r2r752awrc13wvgis";
   };
 
-  buildInputs = [ autoconf automake pkgconfig openssl ];
+  buildInputs = [ autoconf automake pkgconfig libssl ];
 
   preConfigure = "autoreconf -vfi";
 

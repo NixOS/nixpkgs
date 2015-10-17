@@ -1,5 +1,5 @@
 { stdenv, fetchgit, cmake, pkgconfig, boost, libunwind, libmemcached, pcre
-, libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php, re2c
+, libevent, gd, curl, libxml2, icu, flex, bison, libssl, zlib, php, re2c
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog, libkrb5
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
 , libxslt, ocaml, freetype, gdb, git, perl, mariadb, gmp, libyaml, libedit
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ cmake pkgconfig boost libunwind mariadb libmemcached pcre gdb git perl
-      libevent gd curl libxml2 icu flex bison openssl zlib php expat libcap
+      libevent gd curl libxml2 icu flex bison libssl zlib php expat libcap
       oniguruma libdwarf libmcrypt tbb gperftools bzip2 openldap readline
       libelf uwimap binutils cyrus_sasl pam glog libpng libxslt ocaml libkrb5
       gmp libyaml libedit libvpx imagemagick fribidi

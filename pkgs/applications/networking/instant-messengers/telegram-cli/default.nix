@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, bash, libconfig, libevent, openssl,
+{ stdenv, fetchgit, bash, libconfig, libevent, libssl,
   readline, zlib, lua5_2, python, pkgconfig, jansson
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libconfig libevent openssl readline zlib
+    libconfig libevent libssl readline zlib
     lua5_2 python pkgconfig jansson
   ];
   installPhase = ''

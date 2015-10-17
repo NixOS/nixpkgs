@@ -1,5 +1,5 @@
 { stdenv, buildEnv, fetchgit, fetchurl, makeWrapper, bundlerEnv, bundler_HEAD
-, ruby, libxslt, libxml2, sqlite, openssl, docker
+, ruby, libxslt, libxml2, sqlite, libssl, docker
 , dataDir ? "/var/lib/panamax-api" }:
 
 with stdenv.lib;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     gemset = ./gemset.nix;
     gemfile = ./Gemfile;
     lockfile = ./Gemfile.lock;
-    buildInputs = [ openssl ];
+    buildInputs = [ libssl ];
   };
   bundler = bundler_HEAD.override { inherit ruby; };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     sha256 = "1g75y25asj33gcczpb9iwnk6f7afm1xjqyw803rr3y2h7dm6jivy";
   };
 
-  buildInputs = [ makeWrapper sqlite openssl env.ruby bundler ];
+  buildInputs = [ makeWrapper sqlite libssl env.ruby bundler ];
 
   setSourceRoot = ''
     mkdir -p $out/share

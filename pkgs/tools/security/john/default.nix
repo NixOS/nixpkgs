@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, nss, nspr, kerberos, gmp, zlib, libpcap, re2
+{ stdenv, fetchurl, libssl, nss, nspr, kerberos, gmp, zlib, libpcap, re2
 , writeText
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   preConfigure = "cd src";
   configureFlags = [ "--disable-native-macro" ];
 
-  buildInputs = [ openssl nss nspr kerberos gmp zlib libpcap re2 ];
+  buildInputs = [ libssl nss nspr kerberos gmp zlib libpcap re2 ];
   enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE = [ "-DJOHN_SYSTEMWIDE=1" ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, bzip2, openssl }:
+{ stdenv, fetchurl, zlib, bzip2, libssl }:
 
 stdenv.mkDerivation rec {
   name = "dmg2img-1.6.5";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "021ka05vq7lsdngsglmv93r2j0vfakrkx964xslzhaybwp5ic2j0";
   };
 
-  buildInputs = [zlib bzip2 openssl];
+  buildInputs = [zlib bzip2 libssl];
 
   installPhase = ''
     mkdir -p $out/bin

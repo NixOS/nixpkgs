@@ -1,5 +1,5 @@
 { stdenv, fetchurl, zlib, boost, protobuf, ncurses, pkgconfig, IOTty
-, makeWrapper, perl, openssl }:
+, makeWrapper, perl, libssl }:
 
 stdenv.mkDerivation rec {
   name = "mosh-1.2.5";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qsb0y882yfgwnpy6f98pi5xqm6kykdsrxzvaal37hs7szjhky0s";
   };
 
-  buildInputs = [ boost protobuf ncurses zlib pkgconfig IOTty makeWrapper perl openssl ];
+  buildInputs = [ boost protobuf ncurses zlib pkgconfig IOTty makeWrapper perl libssl ];
 
   postInstall = ''
       wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB

@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pkgconfig
-, openssl ? null, zlib ? null, gnutls ? null
+, libssl ? null, zlib ? null, gnutls ? null
 }:
 
 let
   xor = a: b: (a || b) && (!(a && b));
 in
 
-assert xor (openssl != null) (gnutls != null);
-assert !(xor (openssl != null) (zlib != null));
+assert xor (libssl != null) (gnutls != null);
+assert !(xor (libssl != null) (zlib != null));
 
 stdenv.mkDerivation rec {
   name = "ucommon-6.3.1";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig ];
 
   # ucommon.pc has link time depdendencies on -lssl, -lcrypto, -lz, -lgnutls
-  propagatedBuildInputs = [ openssl zlib gnutls ];
+  propagatedBuildInputs = [ libssl zlib gnutls ];
 
   doCheck = true;
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, sslEnable ? false, libcap, pam }:
+{ stdenv, fetchurl, libssl, sslEnable ? false, libcap, pam }:
 
 stdenv.mkDerivation rec {
   name = "vsftpd-3.0.3";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   # It won't link without this flag, used in CFLAGS
 
-  buildInputs = [ openssl libcap pam ];
+  buildInputs = [ libssl libcap pam ];
 
   installPhase = ''
     mkdir -pv $out/sbin

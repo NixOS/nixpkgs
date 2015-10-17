@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, openssl, curl, libxml2, libxslt, asciidoc, docbook_xsl }:
+{ stdenv, lib, fetchFromGitHub, pkgconfig, libssl, curl, libxml2, libxslt, asciidoc, docbook_xsl }:
 
 stdenv.mkDerivation rec {
   name = "lastpass-cli-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    openssl curl libxml2 pkgconfig asciidoc docbook_xsl libxslt
+    libssl curl libxml2 pkgconfig asciidoc docbook_xsl libxslt
   ];
 
   makeFlags = "PREFIX=$(out)";

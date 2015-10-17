@@ -1,5 +1,5 @@
 { stdenv, fetchzip, autoconf, automake114x, perl, pkgconfig, libbson, libtool
-, openssl, which
+, libssl, which
 }:
 
 let
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ libbson ];
-  buildInputs = [ autoconf automake114x libtool openssl perl pkgconfig which ];
+  buildInputs = [ autoconf automake114x libtool libssl perl pkgconfig which ];
 
   meta = with stdenv.lib; {
     description = "The official C client library for MongoDB";

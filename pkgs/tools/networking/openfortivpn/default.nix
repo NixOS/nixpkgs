@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, openssl, ppp }:
+{ stdenv, fetchFromGitHub, automake, autoconf, libssl, ppp }:
 
 with stdenv.lib;
 
@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
     sha256 = "0kwl8hv3nydd34xp1489jpjdj4bmknfl9xrgynij0vf5qx29xv7m";
   };
 
-  buildInputs = [ openssl automake autoconf ppp ];
+  buildInputs = [ libssl automake autoconf ppp ];
 
   preConfigure = ''
     aclocal

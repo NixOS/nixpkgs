@@ -1,4 +1,4 @@
-{stdenv, fetchurl, expat, erlang, zlib, openssl, pam, lib}:
+{stdenv, fetchurl, expat, erlang, zlib, libssl, pam, lib}:
 
 stdenv.mkDerivation rec {
   version = "2.1.13";
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     url = "http://www.process-one.net/downloads/ejabberd/${version}/${name}.tgz";
     sha256 = "0vf8mfrx7vr3c5h3nfp3qcgwf2kmzq20rjv1h9sk3nimwir1q3d8";
   };
-  buildInputs = [ expat erlang zlib openssl pam ];
+  buildInputs = [ expat erlang zlib libssl pam ];
   patchPhase = ''
     sed -i \
       -e "s|erl \\\|${erlang}/bin/erl \\\|" \

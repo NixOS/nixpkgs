@@ -1,5 +1,5 @@
 { stdenv, fetchgit, fetchurl, trousers, leveldb, unzip, scons, pkgconfig
-, glib, dbus_cplusplus, dbus, protobuf, openssl, snappy, pam }:
+, glib, dbus_cplusplus, dbus, protobuf, libssl, snappy, pam }:
 
 let
   src_chromebase = fetchgit {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip scons pkgconfig ];
 
-  buildInputs = [ trousers glib dbus_cplusplus dbus protobuf openssl snappy leveldb pam ];
+  buildInputs = [ trousers glib dbus_cplusplus dbus protobuf libssl snappy leveldb pam ];
 
   buildPhase = ''
     make build

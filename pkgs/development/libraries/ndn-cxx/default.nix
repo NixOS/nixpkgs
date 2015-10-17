@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, openssl, doxygen, boost, sqlite, cryptopp, pkgconfig, python, pythonPackages }:
+{ stdenv, fetchgit, libssl, doxygen, boost, sqlite, cryptopp, pkgconfig, python, pythonPackages }:
 let
   version = "4c32e7";
 in
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     rev = "4c32e748863d5165cc0e3d6b54a8383f4836cdf1";
     sha256 = "18s18inf14wmkfh1z6w087w7l3bqszd0nkhr09j73hqpz90b06hz";
   };
-  buildInputs = [ openssl doxygen boost sqlite cryptopp pkgconfig python pythonPackages.sphinx];
+  buildInputs = [ libssl doxygen boost sqlite cryptopp pkgconfig python pythonPackages.sphinx];
   preConfigure = ''
     patchShebangs waf
     ./waf configure \

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl, libsamplerate}:
+{stdenv, fetchurl, libssl, libsamplerate}:
 
 stdenv.mkDerivation rec {
   name = "pjsip-2.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     md5 = "310eb63638dac93095f6a1fc8ee1f578";
   };
 
-  buildInputs = [ openssl libsamplerate ];
+  buildInputs = [ libssl libsamplerate ];
 
   postInstall = ''
     mkdir -p $out/bin

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, composableDerivation, unzip, libjpeg, libtiff, zlib
-, postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
+, postgresql, mysql, libgeotiff, pythonPackages, proj, geos, libssl
 , libpng }:
 
 composableDerivation.composableDerivation {} (fixed: rec {
@@ -11,7 +11,7 @@ composableDerivation.composableDerivation {} (fixed: rec {
     sha256 = "53761563ff53c5bf27bff7c4d6cab8bb1634baccefda05348e0f3b7acaf4c9e6";
   };
 
-  buildInputs = [ unzip libjpeg libtiff libpng proj openssl ]
+  buildInputs = [ unzip libjpeg libtiff libpng proj libssl ]
   ++ (with pythonPackages; [ python numpy wrapPython ]);
 
   patches = [

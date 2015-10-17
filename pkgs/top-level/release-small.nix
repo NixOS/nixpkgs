@@ -122,7 +122,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   ntfs3g = linux;
   ntp = linux;
   openssh = linux;
-  openssl = all;
+  libssl = all;
   pan = gtkSupported;
   par2cmdline = all;
   pciutils = linux;

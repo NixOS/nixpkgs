@@ -39,7 +39,7 @@ let
     withTLS = true;
     platform = pkgs.platforms.sheevaplug;
     libc = "glibc";
-    openssl.system = "linux-generic32";
+    libssl.system = "linux-generic32";
   };
 
 in {
@@ -60,7 +60,7 @@ let
     withTLS = true;
     platform = pkgs.platforms.sheevaplug;
     libc = "uclibc";
-    openssl.system = "linux-generic32";
+    libssl.system = "linux-generic32";
     uclibc.extraConfig = ''
       CONFIG_ARM_OABI n
       CONFIG_ARM_EABI y
@@ -98,7 +98,7 @@ let
       kernelAutoModules = false;
       kernelTarget = "vmlinux";
     };
-    openssl.system = "linux-generic32";
+    libssl.system = "linux-generic32";
     uclibc.extraConfig = ''
       ARCH_BIG_ENDIAN n
       ARCH_WANTS_BIG_ENDIAN n
@@ -132,7 +132,7 @@ let
         kernelTarget = "zImage";
         uboot = null;
     };
-    openssl.system = "linux64-sparcv9";
+    libssl.system = "linux64-sparcv9";
     gcc.cpu = "ultrasparc";
   };
 in {
@@ -192,7 +192,7 @@ let
     withTLS = true;
     platform = pkgs.platforms.pc32;
     libc = "glibc";
-    openssl.system = "hurd-x86";  # Nix depends on OpenSSL.
+    libssl.system = "hurd-x86";  # Nix depends on libssl.
   };
 in {
   crossGNU = mapTestOnCross crossSystem {
@@ -221,7 +221,7 @@ in {
     libunistring.crossDrv = nativePlatforms;
     lsh.crossDrv = nativePlatforms;
     nixUnstable.crossDrv = nativePlatforms;
-    openssl.crossDrv = nativePlatforms;            # dependency of Nix
+    libssl.crossDrv = nativePlatforms;            # dependency of Nix
     patch.crossDrv = nativePlatforms;
     samba_light.crossDrv = nativePlatforms;      # needed for `runInGenericVM'
     zile.crossDrv = nativePlatforms;
@@ -247,7 +247,7 @@ let
       kernelAutoModules = false;
       kernelTarget = "vmlinux";
     };
-    openssl.system = "linux-generic32";
+    libssl.system = "linux-generic32";
     gcc = {
       arch = "loongson2f";
       abi = "n32";
@@ -295,7 +295,7 @@ let
         MIPS_FPU_EMU y
       '';
     };
-    openssl.system = "linux-generic32";
+    libssl.system = "linux-generic32";
     perl.arch = "mipsel-unknown";
     uclibc.extraConfig = ''
       CONFIG_MIPS_ISA_1 n
@@ -346,7 +346,7 @@ let
     withTLS = true;
     libc = "glibc";
     platform = pkgs.platforms.raspberrypi;
-    openssl.system = "linux-generic32";
+    libssl.system = "linux-generic32";
     gcc = {
       arch = "armv6";
       fpu = "vfp";

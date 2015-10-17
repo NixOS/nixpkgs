@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl, zlib, apr, aprutil, pcre
 , proxySupport ? true
-, sslSupport ? true, openssl
+, sslSupport ? true, libssl
 , ldapSupport ? true, openldap
 , libxml2Support ? true, libxml2
 , luaSupport ? false, lua5
@@ -10,7 +10,7 @@ let optional       = stdenv.lib.optional;
     optionalString = stdenv.lib.optionalString;
 in
 
-assert sslSupport -> aprutil.sslSupport && openssl != null;
+assert sslSupport -> aprutil.sslSupport && libssl != null;
 assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 
 stdenv.mkDerivation rec {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     --enable-imagemap
     --enable-cgi
     ${optionalString proxySupport "--enable-proxy"}
-    ${optionalString sslSupport "--enable-ssl --with-ssl=${openssl}"}
+    ${optionalString sslSupport "--enable-ssl --with-ssl=${libssl}"}
     ${optionalString luaSupport "--enable-lua --with-lua=${lua5}"}
     ${optionalString libxml2Support "--with-libxml2=${libxml2}/include/libxml2"}
   '';

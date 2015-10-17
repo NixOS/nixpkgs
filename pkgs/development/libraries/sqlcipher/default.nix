@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, tcl, readline ? null, ncurses ? null }:
+{ stdenv, fetchurl, libssl, tcl, readline ? null, ncurses ? null }:
 
 assert readline != null -> ncurses != null;
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1h54hsl7g6ra955aaqid5wxm93fklx2pxz8abcdwf9md3bpfcn18";
   };
 
-  buildInputs = [ readline ncurses openssl tcl ];
+  buildInputs = [ readline ncurses libssl tcl ];
 
   configureFlags = "--enable-threadsafe --disable-tcl";
 

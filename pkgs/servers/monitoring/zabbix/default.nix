@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib }:
+{ stdenv, fetchurl, pkgconfig, postgresql, curl, libssl, zlib }:
 
 let
 
@@ -29,7 +29,7 @@ in
 
     configureFlags = "--enable-agent --enable-server --with-pgsql --with-libcurl";
 
-    buildInputs = [ pkgconfig postgresql curl openssl zlib ];
+    buildInputs = [ pkgconfig postgresql curl libssl zlib ];
 
     postInstall =
       ''

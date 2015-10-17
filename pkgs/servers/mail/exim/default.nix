@@ -1,4 +1,4 @@
-{ coreutils, fetchurl, db, openssl, pcre, perl, pkgconfig, stdenv }:
+{ coreutils, fetchurl, db, libssl, pcre, perl, pkgconfig, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "exim-4.86";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mn4bxih9slrmll5262ayhf41ji43pjf1rv0y6xpy6x55v7g5k7i";
   };
 
-  buildInputs = [ coreutils db openssl pcre perl pkgconfig ];
+  buildInputs = [ coreutils db libssl pcre perl pkgconfig ];
 
   preBuild = ''
     sed '

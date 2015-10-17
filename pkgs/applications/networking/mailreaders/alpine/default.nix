@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, tcl, openssl, pam, pkgconfig, gettext, kerberos
+{stdenv, fetchurl, ncurses, tcl, libssl, pam, pkgconfig, gettext, kerberos
 , openldap
 }:
 let
@@ -11,7 +11,7 @@ let
     name = "${baseName}-${version}";
   };
   buildInputs = [
-    ncurses tcl openssl pam kerberos openldap
+    ncurses tcl libssl pam kerberos openldap
   ];
 in
 stdenv.mkDerivation {
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     inherit (s) url sha256;
   };
   configureFlags = [
-    "--with-ssl-include-dir=${openssl}/include/openssl"
+    "--with-ssl-include-dir=${libssl}/include/openssl"
     "--with-tcl-lib=${tcl.libPrefix}"
     ];
   preConfigure = ''

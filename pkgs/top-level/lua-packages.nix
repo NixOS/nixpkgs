@@ -6,7 +6,7 @@
    be almost as must code as the function itself. */
 
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
-, pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
+, pcre, oniguruma, gnulib, tre, glibc, sqlite, libssl, expat, cairo
 , perl, gtk, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
 , fetchFromGitHub
 }:
@@ -154,7 +154,7 @@ let
       sha256 = "0m917qgi54p6n2ak33m67q8sxcw3cdni99bm216phjjka9rg7qwd";
     };
 
-    buildInputs = [ openssl ];
+    buildInputs = [ libssl ];
 
     preBuild = ''
       makeFlagsArray=(

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, libidn, ncurses, pcre, libssh, postgresql92 }:
+{ stdenv, fetchurl, libssl, libidn, ncurses, pcre, libssh, postgresql92 }:
 
 with stdenv.lib;
 
@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-   substituteInPlace configure --replace "\$LIBDIRS" "${openssl}/lib ${pcre}/lib ${libssh}/lib ${postgresql92}/lib"
-   substituteInPlace configure --replace "\$INCDIRS" "${openssl}/include ${pcre}/include ${libssh}/include ${postgresql92}/include"
+   substituteInPlace configure --replace "\$LIBDIRS" "${libssl}/lib ${pcre}/lib ${libssh}/lib ${postgresql92}/lib"
+   substituteInPlace configure --replace "\$INCDIRS" "${libssl}/include ${pcre}/include ${libssh}/include ${postgresql92}/include"
   '';
 
-  buildInputs = [ openssl libidn ncurses pcre libssh ];
+  buildInputs = [ libssl libidn ncurses pcre libssh ];
 
   meta = {
     description = "A very fast network logon cracker which support many different services";

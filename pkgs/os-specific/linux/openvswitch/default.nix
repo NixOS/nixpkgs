@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper
-, openssl, python27, iproute, perl, kernel ? null }:
+, libssl, python27, iproute, perl, kernel ? null }:
 
 with stdenv.lib;
 
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
 
   kernel = optional (_kernel != null) _kernel.dev;
 
-  buildInputs = [ makeWrapper openssl python27 perl ];
+  buildInputs = [ makeWrapper libssl python27 perl ];
 
   configureFlags = [
     "--localstatedir=/var"

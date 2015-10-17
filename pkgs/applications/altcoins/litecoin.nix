@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , pkgconfig, autoreconfHook
-, openssl, db48, boost, zlib, miniupnpc
+, libssl, db48, boost, zlib, miniupnpc
 , glib, protobuf, utillinux, qt4, qrencode
 , withGui }:
 
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1p1h2654b7f2lyrmihcjmpmx6sjpkgsifcm2ixxb2g9jh6qq8b4m";
   };
 
-  buildInputs = [ pkgconfig autoreconfHook openssl
-                  openssl db48 boost zlib miniupnpc glib protobuf utillinux ]
+  buildInputs = [ pkgconfig autoreconfHook libssl
+                  db48 boost zlib miniupnpc glib protobuf utillinux ]
                   ++ optionals withGui [ qt4 qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.lib}/lib" ]

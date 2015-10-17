@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libnl, openssl, sqlite ? null }:
+{ stdenv, fetchurl, pkgconfig, libnl, libssl, sqlite ? null }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libnl openssl sqlite ];
+  buildInputs = [ libnl libssl sqlite ];
 
   extraConfig = ''
     CONFIG_DRIVER_WIRED=y

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, qt4, openssl, autoconf, automake, pkgconfig }:
+{ stdenv, fetchurl, lib, qt4, libssl, autoconf, automake, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "yate-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   # TODO zaptel ? postgres ?
-  buildInputs = [ qt4 openssl autoconf automake pkgconfig ];
+  buildInputs = [ qt4 libssl autoconf automake pkgconfig ];
 
   # /dev/null is used when linking which is a impure path for the wrapper
   preConfigure =

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libtool, openssl, pkgconfig}:
+{stdenv, fetchurl, libtool, libssl, pkgconfig}:
 
 stdenv.mkDerivation rec {
   name = "libp11-0.2.7";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kaz5qafaxm0ycywmajl166c29fh9cz89b8i043jqsbxlpzf4hdp";
   };
   
-  buildInputs = [ libtool openssl pkgconfig ];
+  buildInputs = [ libtool libssl pkgconfig ];
 
   meta = {
     homepage = http://www.opensc-project.org/libp11/;

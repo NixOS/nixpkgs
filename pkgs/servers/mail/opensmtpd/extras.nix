@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, libevent, libasr,
+{ stdenv, fetchurl, libssl, libevent, libasr,
   python2, pkgconfig, lua5, perl, mariadb, postgresql, sqlite, hiredis }:
 stdenv.mkDerivation rec {
   name = "opensmtpd-extras-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl libevent
+  buildInputs = [ libssl libevent
     libasr python2 lua5 perl mariadb postgresql sqlite hiredis ];
 
   configureFlags = [

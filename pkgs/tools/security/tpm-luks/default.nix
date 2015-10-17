@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, gawk, trousers, cryptsetup, openssl }:
+{ stdenv, fetchgit, autoreconfHook, gawk, trousers, cryptsetup, libssl }:
 
 stdenv.mkDerivation rec {
   name = "tpm-luks-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "fdd451caddb4e51ede3f2406245e1ace57389596e85aa402c9f2606303707539";
   };
 
-  buildInputs = [ autoreconfHook gawk trousers cryptsetup openssl ];
+  buildInputs = [ autoreconfHook gawk trousers cryptsetup libssl ];
 
   installPhase = ''
     mkdir -p $out

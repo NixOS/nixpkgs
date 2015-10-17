@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl, fuse}:
+{stdenv, fetchurl, libssl, fuse}:
 
 throw "It still does not build"
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "05wka9aq182li2r7gxcd8bb3rhpns7ads0k59v7w1jza60l57c74";
   };
 
-  buildInputs = [ fuse openssl ];
+  buildInputs = [ fuse libssl ];
 
   patchPhase = ''
     sed -i -e 's,CONFDIR=\(.*\),CONFDIR='$out/etc, \

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig, openssl, attr, keyutils, asciidoc, libxslt, docbook_xsl }:
+{ stdenv, fetchgit, autoreconfHook, pkgconfig, libssl, attr, keyutils, asciidoc, libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
   name = "ima-evm-utils-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "6f1ef4e84b9214448ea4a530a562a20ad1ba5a7cfefd7ddda90a56e2404f3a87";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig openssl attr keyutils asciidoc libxslt ];
+  buildInputs = [ autoreconfHook pkgconfig libssl attr keyutils asciidoc libxslt ];
 
   buildPhase = "make prefix=$out MANPAGE_DOCBOOK_XSL=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
 

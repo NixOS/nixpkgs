@@ -1,5 +1,5 @@
 { stdenv, fetchgit, fetchurl, automake, autoconf, libtool
-, zlib, openssl, zip, zimlib
+, zlib, libssl, zip, zimlib
 }:
 
 let
@@ -18,7 +18,7 @@ let
       url = "http://www.tntnet.org/download/tntnet-${version}.tar.gz";
       sha256 = "1dhs10yhpmdqyykyh8jc67m5xgsgm1wrpd58fdps2cp5g1gjf8w6";
     };
-    buildInputs = [ zlib cxxtools openssl zip ];
+    buildInputs = [ zlib cxxtools libssl zip ];
   };
 
 in stdenv.mkDerivation rec {

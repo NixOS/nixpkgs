@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, gnome3, libxml2
-, libsoup, json_glib, gmp, openssl, makeWrapper }:
+, libsoup, json_glib, gmp, libssl, makeWrapper }:
 
 let
   majVer = "3.14";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs = [ pkgconfig glib gnome3.libgdata libxml2 libsoup gmp openssl
+  buildInputs = [ pkgconfig glib gnome3.libgdata libxml2 libsoup gmp libssl
                   gnome3.grilo gnome3.libzapojit gnome3.grilo-plugins
                   gnome3.gnome_online_accounts makeWrapper gnome3.libmediaart
                   gnome3.tracker gnome3.gfbgraph json_glib gnome3.rest ];

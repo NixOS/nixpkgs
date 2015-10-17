@@ -1,4 +1,4 @@
-{stdenv, fetchurl, which, openssl, ocaml, findlib}:
+{stdenv, fetchurl, which, libssl, ocaml, findlib}:
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [which ocaml findlib];
 
-  propagatedBuildInputs = [openssl];
+  propagatedBuildInputs = [libssl];
 
   dontAddPrefix = true;
 

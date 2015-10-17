@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, zlib, freetype, libjpeg, libtiff, fontconfig
-, openssl, libpng, lua5 }:
+, libssl, libpng, lua5 }:
 
 stdenv.mkDerivation rec {
   name = "podofo-0.9.3";
@@ -9,13 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "1n12lbq9x15vqn7dc0hsccp56l5jdff1xrhvlfqlbklxx0qiw9pc";
   };
 
-  propagatedBuildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng ];
+  propagatedBuildInputs = [ zlib freetype libjpeg libtiff fontconfig libssl libpng ];
   nativeBuildInputs = [ cmake ];
   buildInputs = [ lua5 stdenv.cc.libc ];
 
   crossAttrs = {
     propagatedBuildInputs = [ zlib.crossDrv freetype.crossDrv libjpeg.crossDrv
-      libtiff.crossDrv fontconfig.crossDrv openssl.crossDrv libpng.crossDrv
+      libtiff.crossDrv fontconfig.crossDrv libssl.crossDrv libpng.crossDrv
       lua5.crossDrv stdenv.ccCross.libc ];
   };
 

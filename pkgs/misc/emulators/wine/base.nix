@@ -18,7 +18,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ]);
 
   nativeBuildInputs = toBuildInputs pkgArches (pkgs: (with pkgs; [
-    freetype fontconfig mesa mesa_noglu.osmesa libdrm libpng libjpeg openssl gnutls cups ncurses
+    freetype fontconfig mesa mesa_noglu.osmesa libdrm libpng libjpeg libssl gnutls cups ncurses
   ]) ++ (with pkgs.xorg; [
     xlibsWrapper libXi libXcursor libXinerama libXrandr libXrender libXxf86vm libXcomposite
   ]));

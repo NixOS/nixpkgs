@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, freetype, fontconfig, openssl, unzip }:
+{ stdenv, fetchurl, freetype, fontconfig, libssl, unzip }:
 
 assert stdenv.lib.elem stdenv.system [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildPhase = if stdenv.isDarwin then "" else ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${freetype}/lib:${fontconfig}/lib:${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib:${openssl}/lib" \
+      --set-rpath "${freetype}/lib:${fontconfig}/lib:${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib:${libssl}/lib" \
       bin/phantomjs
   '';
 

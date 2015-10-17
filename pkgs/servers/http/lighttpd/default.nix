@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, pcre, libxml2, zlib, attr, bzip2, which, file
-, openssl, enableMagnet ? false, lua5_1 ? null
+, libssl, enableMagnet ? false, lua5_1 ? null
 , enableMysql ? false, mysql ? null
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1gbri5avg1jv2g585wk0jp53mf9jjdz2py9774mxm8bwarh6ykl0";
   };
 
-  buildInputs = [ pkgconfig pcre libxml2 zlib attr bzip2 which file openssl ]
+  buildInputs = [ pkgconfig pcre libxml2 zlib attr bzip2 which file libssl ]
              ++ stdenv.lib.optional enableMagnet lua5_1
              ++ stdenv.lib.optional enableMysql mysql.lib;
 

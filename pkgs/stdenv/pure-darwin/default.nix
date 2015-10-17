@@ -168,7 +168,7 @@ in rec {
 
   persistent1 = orig: with stage1.pkgs; {
     inherit
-      zlib patchutils m4 scons flex perl bison unifdef unzip openssl icu python
+      zlib patchutils m4 scons flex perl bison unifdef unzip libssl icu python
       libxml2 gettext sharutils gmp libarchive ncurses pkg-config libedit groff
       openssh sqlite sed serf openldap db cyrus-sasl expat apr-util subversion xz
       findfreetype libssh curl cmake autoconf automake libtool ed cpio coreutils;
@@ -190,7 +190,7 @@ in rec {
 
   persistent2 = orig: with stage2.pkgs; {
     inherit
-      patchutils m4 scons flex perl bison unifdef unzip openssl python
+      patchutils m4 scons flex perl bison unifdef unzip libssl python
       gettext sharutils libarchive pkg-config groff bash subversion
       openssh sqlite sed serf openldap db cyrus-sasl expat apr-util
       findfreetype libssh curl cmake autoconf automake libtool cpio

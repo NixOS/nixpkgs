@@ -15,7 +15,7 @@ let
       withTLS = true;
       libc = "glibc";
       platform = pkgsNoParams.platforms.sheevaplug;
-      openssl.system = "linux-generic32";
+      libssl.system = "linux-generic32";
     };
   };
   
@@ -29,7 +29,7 @@ let
       withTLS = true;
       libc = "glibc";
       platform = pkgsNoParams.platforms.raspberrypi;
-      openssl.system = "linux-generic32";
+      libssl.system = "linux-generic32";
       inherit (platform) gcc;
     };
   };
@@ -44,7 +44,7 @@ let
       withTLS = true;
       libc = "glibc";
       platform = pkgsNoParams.platforms.armv7l-hf-multiplatform;
-      openssl.system = "linux-generic32";
+      libssl.system = "linux-generic32";
       inherit (platform) gcc;
     };
   };

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, cmake, openssl, sqlite, pkgconfig, systemd
+{ stdenv, fetchurl, cmake, libssl, sqlite, pkgconfig, systemd
 , tlsSupport ? false }:
 
-assert tlsSupport -> openssl != null;
+assert tlsSupport -> libssl != null;
 
 let version = "0.4.1"; in
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "1q0n74fb0h5w0k9fhfkznxb4r46qyfb8g2ss3wflivx4l0m1f9x2";
   };
 
-  buildInputs = [ cmake sqlite pkgconfig systemd ] ++ stdenv.lib.optional tlsSupport openssl;
+  buildInputs = [ cmake sqlite pkgconfig systemd ] ++ stdenv.lib.optional tlsSupport libssl;
 
   outputs = [ "out"
     "mod_example"

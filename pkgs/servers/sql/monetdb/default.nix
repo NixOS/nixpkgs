@@ -1,4 +1,4 @@
-{ composableDerivation, fetchurl, pcre, openssl, readline, libxml2, geos, apacheAnt, jdk5 }:
+{ composableDerivation, fetchurl, pcre, libssl, readline, libxml2, geos, apacheAnt, jdk5 }:
 
 let inherit (composableDerivation) edf; in
 
@@ -18,7 +18,7 @@ composableDerivation.composableDerivation {} {
           };
 
   buildInputs = [ (pcre.override { unicodeSupport = true; })
-                   openssl readline libxml2 ]; # optional python perl php java ?
+                   libssl readline libxml2 ]; # optional python perl php java ?
 
   cfg = {
     geomSupport = true;

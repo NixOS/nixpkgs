@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, libetpan, icu, cyrus_sasl, libctemplate
-, libuchardet, pkgconfig, glib, libtidy, libxml2, libuuid, openssl
+, libuchardet, pkgconfig, glib, libtidy, libxml2, libuuid, libssl
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libetpan cmake icu cyrus_sasl libctemplate libuchardet pkgconfig glib
-    libtidy libxml2 libuuid openssl
+    libtidy libxml2 libuuid libssl
   ];
 
   postPatch = ''

@@ -6,7 +6,7 @@ let
   inherit (pkgs) stdenv fetchgit fetchurl subversion;
 
   gitBase = lib.makeOverridable (import ./git) {
-    inherit fetchurl stdenv curl openssl zlib expat perl python gettext gnugrep
+    inherit fetchurl stdenv curl libssl zlib expat perl python gettext gnugrep
       asciidoc xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt cpio tcl
       tk makeWrapper subversionClient gzip libiconv;
     texinfo = texinfo5;

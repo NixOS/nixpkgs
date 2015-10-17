@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, irssi, gmp, automake, autoconf, libtool, openssl, glib, pkgconfig }:
+{ stdenv, fetchurl, irssi, gmp, automake, autoconf, libtool, libssl, glib, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "fish-irssi-20130413-e98156bebd";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp src/.libs/libfish.so $out/lib/irssi/modules
   '';
   
-  buildInputs = [ gmp automake autoconf libtool openssl glib pkgconfig ];
+  buildInputs = [ gmp automake autoconf libtool libssl glib pkgconfig ];
   
   meta = {
     homepage = https://github.com/falsovsky/FiSH-irssi;

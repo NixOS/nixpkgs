@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gtk
 
-, openssl ? null
+, libssl ? null
 , gpgme ? null
 , sslSupport ? true
 , gpgSupport ? true
@@ -8,7 +8,7 @@
 
 with stdenv.lib;
 
-assert sslSupport -> openssl != null;
+assert sslSupport -> libssl != null;
 assert gpgSupport -> gpgme != null;
 
 let version = "3.4.1"; in
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ pkgconfig gtk ]
-    ++ optional sslSupport openssl
+    ++ optional sslSupport libssl
     ++ optional gpgSupport gpgme;
 
   configureFlags = optional sslSupport "--enable-ssl"

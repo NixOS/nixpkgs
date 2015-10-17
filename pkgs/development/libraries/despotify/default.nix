@@ -1,5 +1,5 @@
 {
-  stdenv, fetchsvn, openssl, zlib, libvorbis, libpulseaudio, gstreamer, libao,
+  stdenv, fetchsvn, libssl, zlib, libvorbis, libpulseaudio, gstreamer, libao,
   libtool, ncurses, glibc
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    openssl zlib libvorbis libpulseaudio gstreamer libao libtool ncurses glibc
+    libssl zlib libvorbis libpulseaudio gstreamer libao libtool ncurses glibc
   ];
 
   configurePhase = "cd src";

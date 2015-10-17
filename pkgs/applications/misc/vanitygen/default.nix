@@ -1,4 +1,4 @@
-{ fetchgit, stdenv, openssl, pcre }:
+{ fetchgit, stdenv, libssl, pcre }:
 
 stdenv.mkDerivation rec {
   version = "0.21";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256  = "1vzfv74hhiyrrpvjca8paydx1ashgbgn5plzrx4swyzxy1xkamah";
   };
 
-  buildInputs = [ openssl pcre ];
+  buildInputs = [ libssl pcre ];
 
   installPhase = ''
     mkdir -p $out/bin

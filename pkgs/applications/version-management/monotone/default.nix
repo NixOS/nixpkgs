@@ -1,6 +1,6 @@
 { stdenv, fetchurl, boost, zlib, botan, libidn
 , lua, pcre, sqlite, perl, pkgconfig, expect
-, bzip2, gmp, openssl
+, bzip2, gmp, libssl
 }:
 
 let
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   patches = [ ];
 
   buildInputs = [ boost zlib botan libidn lua pcre sqlite pkgconfig expect 
-    openssl gmp bzip2 ];
+    libssl gmp bzip2 ];
 
   postInstall = ''
     mkdir -p $out/share/${name}

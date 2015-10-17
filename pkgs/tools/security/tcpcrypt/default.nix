@@ -1,5 +1,5 @@
 { fetchurl, stdenv, autoconf, automake, libtool, autoreconfHook
-, openssl, libcap, libnfnetlink, libnetfilter_queue
+, libssl, libcap, libnfnetlink, libnetfilter_queue
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  buildInputs = [ autoreconfHook autoconf automake libtool openssl libcap libnfnetlink libnetfilter_queue ];
+  buildInputs = [ autoreconfHook autoconf automake libtool libssl libcap libnfnetlink libnetfilter_queue ];
 
   postUnpack = ''
     mkdir $sourceRoot/m4

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake110x, libtool, pkgconfig, zlib, openssl, libevent, ncurses, cmake, ruby }:
+{ stdenv, fetchFromGitHub, autoconf, automake110x, libtool, pkgconfig, zlib, libssl, libevent, ncurses, cmake, ruby }:
 
 stdenv.mkDerivation rec {
   name = "tmate-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bd9mi8fx40608zlady9dbv21kbdwc3kqrgz012m529f6cbysmzc";
   };
 
-  buildInputs = [ autoconf automake110x pkgconfig libtool zlib openssl libevent ncurses cmake ruby ];
+  buildInputs = [ autoconf automake110x pkgconfig libtool zlib libssl libevent ncurses cmake ruby ];
 
   dontUseCmakeConfigure=true;
 

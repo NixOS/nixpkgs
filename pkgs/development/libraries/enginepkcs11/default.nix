@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libp11, pkgconfig, openssl}:
+{stdenv, fetchurl, libp11, pkgconfig, libssl}:
 
 stdenv.mkDerivation rec {
   name = "engine_pkcs11-0.1.8";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rd20rxy12rfx3kwwvk5sqvc1ll87z60rqak1ksfwbf4wx0pwzfy";
   };
   
-  buildInputs = [ libp11 pkgconfig openssl ];
+  buildInputs = [ libp11 pkgconfig libssl ];
 
   meta = {
     homepage = http://www.opensc-project.org/engine_pkcs11/;

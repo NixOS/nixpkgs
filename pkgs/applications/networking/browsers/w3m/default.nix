@@ -2,12 +2,12 @@
 , sslSupport ? true
 , graphicsSupport ? false
 , mouseSupport ? false
-, ncurses, openssl ? null, boehmgc, gettext, zlib
+, ncurses, libssl ? null, boehmgc, gettext, zlib
 , imlib2 ? null, xlibsWrapper ? null, fbcon ? null
 , gpm-ncurses ? null
 }:
 
-assert sslSupport -> openssl != null;
+assert sslSupport -> libssl != null;
 assert graphicsSupport -> imlib2 != null && (xlibsWrapper != null || fbcon != null);
 assert mouseSupport -> gpm-ncurses != null;
 
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isCygwin ./cygwin.patch;
 
   buildInputs = [ncurses boehmgc gettext zlib]
-    ++ stdenv.lib.optional sslSupport openssl
+    ++ stdenv.lib.optional sslSupport libssl
     ++ stdenv.lib.optional mouseSupport gpm-ncurses
     ++ stdenv.lib.optionals graphicsSupport [imlib2 xlibsWrapper fbcon];
 
-  configureFlags = "--with-ssl=${openssl} --with-gc=${boehmgc}"
+  configureFlags = "--with-ssl=${libssl} --with-gc=${boehmgc}"
     + stdenv.lib.optionalString graphicsSupport " --enable-image=x11,fb";
 
   preConfigure = ''

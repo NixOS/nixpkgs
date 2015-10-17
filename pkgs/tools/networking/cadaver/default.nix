@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl, libssl }:
 
 stdenv.mkDerivation rec {
   name = "cadaver-0.23.3";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jizq69ifrjbjvz5y79wh1ny94gsdby4gdxwjad4bfih6a5fck7x";
   };
 
-  buildInputs = [openssl];
+  buildInputs = [libssl];
   configureFlags = ["--with-ssl"];
 
   meta = with stdenv.lib; {

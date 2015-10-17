@@ -2,7 +2,7 @@
 , json_c, libsndfile, libtool
 , xorg, libcap, alsaLib, glib
 , avahi, libjack2, libasyncns, lirc, dbus
-, sbc, bluez5, udev, openssl, fftwFloat
+, sbc, bluez5, udev, libssl, fftwFloat
 , speexdsp, systemd, webrtc-audio-processing, gconf ? null
 
 # Database selection
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       ++ lib.optionals x11Support [ xorg.xlibsWrapper xorg.libXtst xorg.libXi ]
       ++ lib.optional useSystemd systemd
       ++ lib.optionals stdenv.isLinux [ alsaLib udev ]
-      ++ lib.optional airtunesSupport openssl
+      ++ lib.optional airtunesSupport libssl
       ++ lib.optional gconfSupport gconf
       ++ lib.optionals bluetoothSupport [ bluez5 sbc ]
       ++ lib.optional remoteControlSupport lirc

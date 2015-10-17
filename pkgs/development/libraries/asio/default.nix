@@ -1,4 +1,4 @@
-{stdenv, fetchurl, boost, openssl}:
+{stdenv, fetchurl, boost, libssl}:
 
 stdenv.mkDerivation rec {
   name = "asio-1.10.6";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ boost ];
-  buildInputs = [ openssl ];
+  buildInputs = [ libssl ];
 
   meta = {
     homepage = http://asio.sourceforge.net/;

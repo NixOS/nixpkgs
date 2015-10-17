@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, zlib, e2fsprogs }:
+{ stdenv, fetchurl, libssl, zlib, e2fsprogs }:
 
 let
   zshCompletion = fetchurl {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     install -m 444 -D ${zshCompletion} $out/share/zsh/site-functions/_tarsnap
   '';
 
-  buildInputs = [ openssl zlib e2fsprogs ];
+  buildInputs = [ libssl zlib e2fsprogs ];
 
   meta = {
     description = "Online backups for the truly paranoid";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, linuxHeaders, readline, openssl, flex, kerberos, pam }:
+{ stdenv, fetchurl, linuxHeaders, readline, libssl, flex, kerberos, pam }:
 
 # TODO: These tools are supposed to work under NetBSD and FreeBSD as
 # well, so I guess it's not appropriate to place this expression in
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0b9gfbz78k2nj0k7jdlm5kajig628ja9qm0z5yksiwz22s3v7dlf";
   };
 
-  buildInputs = [ readline openssl flex kerberos pam ];
+  buildInputs = [ readline libssl flex kerberos pam ];
 
   patches = [ ./dont-create-localstatedir-during-install.patch
               ./CVE-2015-4047.patch ];

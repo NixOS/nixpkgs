@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, xlibsWrapper, libX11, libXi, libXtst, libXrandr
-, xinput, curl, openssl, unzip }:
+, xinput, curl, libssl, unzip }:
 
 with stdenv.lib;
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    cmake xlibsWrapper libX11 libXi libXtst libXrandr xinput curl openssl
+    cmake xlibsWrapper libX11 libXi libXtst libXrandr xinput curl libssl
   ];
 
   installPhase = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, ncurses, glib, openssl, perl, libintlOrEmpty }:
+{ stdenv, fetchurl, pkgconfig, ncurses, glib, libssl, perl, libintlOrEmpty }:
 
 stdenv.mkDerivation rec {
   name = "irssi-0.8.17";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "01v82q2pfiimx6lh271kdvgp8hl4pahc3srg04fqzxgdsb5015iw";
   };
 
-  buildInputs = [ pkgconfig ncurses glib openssl perl libintlOrEmpty ];
+  buildInputs = [ pkgconfig ncurses glib libssl perl libintlOrEmpty ];
 
   NIX_LDFLAGS = ncurses.ldflags;
 

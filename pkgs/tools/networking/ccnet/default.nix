@@ -1,4 +1,4 @@
-{stdenv, fetchurl, which, automake, autoconf, pkgconfig, libtool, vala, python, libsearpc, libzdb, libuuid, libevent, sqlite, openssl}:
+{stdenv, fetchurl, which, automake, autoconf, pkgconfig, libtool, vala, python, libsearpc, libzdb, libuuid, libevent, sqlite, libssl}:
 
 stdenv.mkDerivation rec
 {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec
   };
 
   buildInputs = [ which automake autoconf pkgconfig libtool vala  python ];
-  propagatedBuildInputs = [ libsearpc libzdb libuuid libevent sqlite openssl ];
+  propagatedBuildInputs = [ libsearpc libzdb libuuid libevent sqlite libssl ];
 
   preConfigure = ''
   sed -ie 's|/bin/bash|/bin/sh|g' ./autogen.sh

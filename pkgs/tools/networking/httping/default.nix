@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, ncurses, openssl
+{ stdenv, fetchurl, gettext, ncurses, libssl
 , fftw ? null }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1110r3gpsj9xmybdw7w4zkhj3zmn5mnv2nq0ijbvrywbn019zdfs";
   };
 
-  buildInputs = [ fftw ncurses openssl ];
+  buildInputs = [ fftw ncurses libssl ];
   nativeBuildInputs = [ gettext ];
 
   makeFlags = [

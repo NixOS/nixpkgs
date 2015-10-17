@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, flex, autoconf, automake, openssl }:
+{ stdenv, fetchurl, bison, flex, autoconf, automake, libssl }:
 
 let
 
@@ -35,7 +35,7 @@ in stdenv.mkDerivation {
 
   configureFlags = [ "--disable-pie" ];
 
-  buildInputs = [ bison flex autoconf automake openssl ];
+  buildInputs = [ bison flex autoconf automake libssl ];
 
   meta = {
     description = "An IRC proxy (bouncer)";

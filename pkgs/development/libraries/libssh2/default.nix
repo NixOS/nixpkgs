@@ -1,4 +1,4 @@
-{stdenv, fetchurlBoot, openssl, zlib}:
+{stdenv, fetchurlBoot, libssl, zlib}:
 
 stdenv.mkDerivation rec {
   name = "libssh2-1.6.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "05c2is69c50lyikkh29nk6zhghjk4i7hjx0zqfhq47aald1jj82s";
   };
 
-  buildInputs = [ openssl zlib ];
+  buildInputs = [ libssl zlib ];
 
   meta = {
     description = "A client-side C library implementing the SSH2 protocol";

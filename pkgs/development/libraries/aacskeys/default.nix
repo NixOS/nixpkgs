@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl, jdk, premake3}:
+{stdenv, fetchurl, libssl, jdk, premake3}:
 
 # Info on how to use / obtain aacs keys:
 # http://vlc-bluray.whoknowsmy.name/
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     sha256 = "0d3zvwixpkixfkkc16wj37h2xbcq5hsqqhqngzqr6pslmqr67vnr";
   };
 
-  buildInputs = [openssl jdk premake3];
+  buildInputs = [libssl jdk premake3];
 
   installPhase = ''
     mkdir -p $out/{bin,lib,share/${baseName}}

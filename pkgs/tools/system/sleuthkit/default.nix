@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libewf, afflib, openssl, zlib }:
+{ stdenv, fetchurl, libewf, afflib, libssl, zlib }:
 
 stdenv.mkDerivation rec {
   version = "4.1.3";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ libewf afflib openssl zlib ];
+  buildInputs = [ libewf afflib libssl zlib ];
 
   # Hack to fix the RPATH.
   preFixup = "rm -rf */.libs";

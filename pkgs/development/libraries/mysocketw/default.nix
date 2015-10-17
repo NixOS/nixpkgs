@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl}:
+{stdenv, fetchurl, libssl}:
 
 stdenv.mkDerivation rec {
   name = "mysocketw-031026";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sed -i s,/usr/local,$out, Makefile.conf
   '';
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libssl ];
 
   meta = {
     description = "Cross platform (Linux/FreeBSD/Unix/Win32) streaming socket C++";

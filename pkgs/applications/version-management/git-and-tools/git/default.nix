@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio, gnugrep, gzip
+{ fetchurl, stdenv, curl, libssl, zlib, expat, perl, python, gettext, cpio, gnugrep, gzip
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     ./ssl-cert-file.patch
   ];
 
-  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv]
+  buildInputs = [curl libssl zlib expat gettext cpio makeWrapper libiconv]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ]
     ++ stdenv.lib.optionals guiSupport [tcl tk];

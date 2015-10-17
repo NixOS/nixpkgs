@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, pkgconfig, gnutls, gsasl, libidn }:
+{ stdenv, fetchurl, libssl, pkgconfig, gnutls, gsasl, libidn }:
 
 stdenv.mkDerivation rec {
   version = "1.6.2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "12c7ljahb06pgn8yvvw526xvr11vnr6d4nr0apylixddpxycsvig";
   };
 
-  buildInputs = [ openssl pkgconfig gnutls gsasl libidn ];
+  buildInputs = [ libssl pkgconfig gnutls gsasl libidn ];
 
   postInstall = ''
     cp scripts/msmtpq/msmtp-queue scripts/msmtpq/msmtpq $prefix/bin/

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, zlib, libjpeg, xorg, coreutils }:
+{ stdenv, fetchurl, libssl, zlib, libjpeg, xorg, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "x11vnc-0.9.13";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ xorg.libXfixes xorg.fixesproto openssl xorg.libXdamage
+    [ xorg.libXfixes xorg.fixesproto libssl xorg.libXdamage
       xorg.damageproto zlib xorg.libX11 xorg.xproto libjpeg
       xorg.libXtst xorg.libXinerama xorg.xineramaproto xorg.libXrandr
       xorg.randrproto xorg.libXext xorg.xextproto xorg.inputproto

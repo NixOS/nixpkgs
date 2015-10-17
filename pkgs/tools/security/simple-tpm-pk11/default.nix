@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, trousers, openssl, opencryptoki, automake, autoconf, libtool }:
+{ stdenv, fetchgit, trousers, libssl, opencryptoki, automake, autoconf, libtool }:
 
 stdenv.mkDerivation rec {
   name = "simple-tpm-pk11-2014-09-25";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "8c9501ceed0557113ce3facf7b22b8baf6f32ebb092008c089b80334ed03cec9";
   };
 
-  buildInputs = [ trousers openssl opencryptoki automake autoconf libtool ];
+  buildInputs = [ trousers libssl opencryptoki automake autoconf libtool ];
 
   preConfigure = "sh bootstrap.sh";
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, zlib, libevent, openssl, python, pkgconfig, bison
+{ stdenv, fetchurl, boost, zlib, libevent, libssl, python, pkgconfig, bison
 , flex
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   pythonPath = [];
 
   buildInputs = [
-    boost zlib libevent openssl python pkgconfig bison flex
+    boost zlib libevent libssl python pkgconfig bison flex
   ];
 
   preConfigure = "export PY_PREFIX=$out";

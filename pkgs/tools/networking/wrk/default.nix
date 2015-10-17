@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, openssl }:
+{ stdenv, fetchgit, libssl }:
 
 let
   version = "4.0.0";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0m8i5pk2rj40v28bzrskkzw54v9jqdby52dwfcypannhlhgqnhy2";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libssl ];
   
   installPhase = ''
     mkdir -p $out/bin

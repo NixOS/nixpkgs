@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, substituteAll
 , libXrender, libXinerama, libXcursor, libXmu, libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
-, libmng, which, mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
+, libmng, which, mesaSupported, mesa, mesa_glu, libssl, dbus, cups, pkgconfig
 , libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst_plugins_base
 , buildWebkit ? stdenv.isLinux
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs =
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes libXv libXi
-      libSM zlib libpng openssl dbus.libs freetype fontconfig glib ]
+      libSM zlib libpng libssl dbus.libs freetype fontconfig glib ]
         # Qt doesn't directly need GLU (just GL), but many apps use, it's small and doesn't remain a runtime-dep if not used
     ++ optional mesaSupported mesa_glu
     ++ optional ((buildWebkit || buildMultimedia) && stdenv.isLinux ) alsaLib

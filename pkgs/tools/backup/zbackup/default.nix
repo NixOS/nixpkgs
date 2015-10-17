@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, zlib, openssl, protobuf, protobufc, lzo, libunwind } :
+{ stdenv, fetchurl, cmake, zlib, libssl, protobuf, protobufc, lzo, libunwind } :
 stdenv.mkDerivation rec {
   name = "zbackup-${version}";
   version = "1.4.4";
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/zbackup/zbackup/archive/1.4.4.tar.gz";
     sha256 = "11csla7n44lg7x6yqg9frb21vnkr8cvnh6ardibr3nj5l39crk7g";
   };
-  buildInputs = [ zlib openssl protobuf lzo libunwind ];
+  buildInputs = [ zlib libssl protobuf lzo libunwind ];
   nativeBuildInputs = [ cmake protobufc ];
   meta = {
     description = "A versatile deduplicating backup tool";

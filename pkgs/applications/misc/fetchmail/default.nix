@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl, libssl }:
 
 let
   version = "6.3.26";
@@ -11,9 +11,9 @@ stdenv.mkDerivation {
     sha256 = "08rafrs1dlr11myr0p99kg4k80qyy0fa63gg3ac88zn49174lwhw";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libssl ];
 
-  configureFlags = "--with-ssl=${openssl}";
+  configureFlags = "--with-ssl=${libssl}";
 
   meta = {
     homepage = "http://www.fetchmail.info/";

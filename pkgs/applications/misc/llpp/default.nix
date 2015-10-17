@@ -1,5 +1,5 @@
 { stdenv, makeWrapper, fetchgit, pkgconfig, ninja, ocaml, findlib, mupdf, lablgl
-, gtk3, openjpeg, jbig2dec, mujs, xsel, openssl }:
+, gtk3, openjpeg, jbig2dec, mujs, xsel, libssl }:
 
 let ocamlVersion = (builtins.parseDrvName (ocaml.name)).version;
 in stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig ninja makeWrapper ocaml findlib mupdf lablgl
-                  gtk3 jbig2dec openjpeg mujs openssl ];
+                  gtk3 jbig2dec openjpeg mujs libssl ];
 
   configurePhase = ''
       sh configure.sh -O -F ${mupdf}

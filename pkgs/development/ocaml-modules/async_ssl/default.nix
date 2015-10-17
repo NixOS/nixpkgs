@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, async, comparelib, core, ctypes, openssl,
+{stdenv, buildOcaml, fetchurl, async, comparelib, core, ctypes, libssl,
  fieldslib, herelib, pa_bench, pa_ounit, pipebang, pa_test, sexplib}:
 
 buildOcaml rec {
@@ -14,7 +14,7 @@ buildOcaml rec {
 
   buildInputs = [ pa_bench pa_test ];
   propagatedBuildInputs = [ ctypes async comparelib core fieldslib pa_ounit
-                            herelib pipebang sexplib openssl ];
+                            herelib pipebang sexplib libssl ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/janestreet/async_ssl;

@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , cmake
-, openssl
+, libssl
 , printerSupport ? true, cups
 , pkgconfig
 , zlib
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cmake
-    openssl
+    libssl
     pkgconfig
     zlib
     libX11

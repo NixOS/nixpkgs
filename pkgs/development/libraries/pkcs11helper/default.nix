@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, openssl, autoconf, automake, libtool }:
+{ stdenv, fetchurl, pkgconfig, libssl, autoconf, automake, libtool }:
 
 let
   rev = "5d412bad60";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "autoreconf -vfi";
   
-  buildInputs = [ pkgconfig openssl autoconf automake libtool ];
+  buildInputs = [ pkgconfig libssl autoconf automake libtool ];
 
   meta = with stdenv.lib; {
     homepage = https://www.opensc-project.org/opensc/wiki/pkcs11-helper;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, gnum4, ncurses, openssl
+{ stdenv, fetchurl, perl, gnum4, ncurses, libssl
 , gnused, gawk, makeWrapper
 , odbcSupport ? false, unixODBC ? null
 , wxSupport ? false, mesa ? null, wxGTK ? null, xorg ? null }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ perl gnum4 ncurses openssl makeWrapper
+    [ perl gnum4 ncurses libssl makeWrapper
     ] ++ optional wxSupport [ mesa wxGTK xorg.libX11 ]
       ++ optional odbcSupport [ unixODBC ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     sed -e s@/bin/pwd@pwd@g -i otp_build
   '';
 
-  configureFlags= "--with-ssl=${openssl} ${optionalString odbcSupport "--with-odbc=${unixODBC}"} ${optionalString stdenv.isDarwin "--enable-darwin-64bit"}";
+  configureFlags= "--with-ssl=${libssl} ${optionalString odbcSupport "--with-odbc=${unixODBC}"} ${optionalString stdenv.isDarwin "--enable-darwin-64bit"}";
 
   postInstall = let
     manpages = fetchurl {

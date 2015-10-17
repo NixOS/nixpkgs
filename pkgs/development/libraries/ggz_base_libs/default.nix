@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , intltool, openssl, expat, libgcrypt
+  , intltool, libssl, expat, libgcrypt
   , ...}:
 builderDefsPackage
 (a :  
@@ -30,7 +30,7 @@ rec {
   phaseNames = ["doConfigure" "doMakeInstall"];
 
   configureFlags = [
-    "--with-ssl-dir=${a.openssl}/"
+    "--with-ssl-dir=${a.libssl}/"
     "--with-tls"
   ];
       

@@ -98,9 +98,9 @@ in
 
         startOn = "ip-up";
 
-        # `openssl' is required to generate the CA.  `openssh' is
+        # `libssl' is required to generate the CA.  `openssh' is
         # required to generate key pairs.
-        path = [ pkgs.openssl config.programs.ssh.package pkgs.bash ];
+        path = [ pkgs.libssl config.programs.ssh.package pkgs.bash ];
 
         respawn = false;
 

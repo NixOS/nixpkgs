@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, python, perl, yacc, flex
 , texinfo, perlPackages
-, openldap, libcap_ng, sqlite, openssl, db, libedit, pam
+, openldap, libcap_ng, sqlite, libssl, db, libedit, pam
 
 # Extra Args
 , type ? ""
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig python perl yacc flex ]
     ++ (with perlPackages; [ JSON ])
     ++ optional (!libOnly) texinfo;
-  buildInputs = [ libcap_ng sqlite openssl db libedit ]
+  buildInputs = [ libcap_ng sqlite libssl db libedit ]
     ++ optionals (!libOnly) [ openldap pam ];
 
   ## ugly, X should be made an option
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     "--with-sqlite3=${sqlite}"
     "--with-berkeley-db=${db}"
     "--with-libedit=${libedit}"
-    "--with-openssl=${openssl}"
+    "--with-openssl=${libssl}"
     "--without-x"
   ] ++ optionals (!libOnly) [
     "--with-openldap=${openldap}"

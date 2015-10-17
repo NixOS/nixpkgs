@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, db4, boost, openssl, miniupnpc, unzip }:
+{ stdenv, fetchurl, db4, boost, libssl, miniupnpc, unzip }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1755mqxpg91wg9hf0ibpj59sdzfmhh73yrpi7hfi2ipabkwmlpiz";
   };
 
-  buildInputs = [ db4 boost openssl unzip miniupnpc ];
+  buildInputs = [ db4 boost libssl unzip miniupnpc ];
 
   patchPhase = ''
     sed -e 's/-Wl,-Bstatic//g' -e 's/-l gthread-2.0//g' -e 's/-l z//g' -i src/Makefile

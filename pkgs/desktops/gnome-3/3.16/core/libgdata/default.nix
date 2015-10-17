@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, libxml2, glib, json_glib
-, gobjectIntrospection, liboauth, gnome3, p11_kit, openssl }:
+, gobjectIntrospection, liboauth, gnome3, p11_kit, libssl }:
 
 let
   majorVersion = "0.16";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with gnome3;
     [ pkgconfig libsoup intltool libxml2 glib gobjectIntrospection 
-      liboauth gcr gnome_online_accounts p11_kit openssl ];
+      liboauth gcr gnome_online_accounts p11_kit libssl ];
 
   propagatedBuildInputs = [ json_glib ];
       

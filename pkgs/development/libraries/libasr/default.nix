@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libevent, openssl }:
+{ stdenv, fetchurl, libevent, libssl }:
 
 stdenv.mkDerivation rec {
   name = "libasr-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0d4blm0kzdhb75fq8sbcpvkc25lv5dbjaxa2ldniaf39633d3xd6";
   };
 
-  buildInputs = [ libevent openssl ];
+  buildInputs = [ libevent libssl ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/OpenSMTPD/libasr;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, openssl, zlib, bzip2 }:
+{ stdenv, fetchurl, libxml2, libssl, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
   version = "1.5.2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rp3va6akzlh35yqrapfqnbxaxa0zi8wyr93swbapprwh215cpac";
   };
 
-  buildInputs = [ libxml2 openssl zlib bzip2 ];
+  buildInputs = [ libxml2 libssl zlib bzip2 ];
 
   meta = {
     homepage    = https://code.google.com/p/xar/;

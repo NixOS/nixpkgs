@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, openssl, libedit, flex, bison, qt4, makeWrapper
+{ stdenv, fetchurl, cmake, libssl, libedit, flex, bison, qt4, makeWrapper
 , gcc, nettools, iproute, linuxHeaders }:
 
 assert stdenv.isLinux;
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fhyr2psd93b0zf7yfb72q3nqnh65mymgq5jpjcsj9jv5kfr6l8y";
   };
 
-  buildInputs = [ cmake openssl libedit flex bison qt4 makeWrapper nettools iproute ];
+  buildInputs = [ cmake libssl libedit flex bison qt4 makeWrapper nettools iproute ];
 
   configurePhase = ''
     mkdir -p $out/{bin,sbin,lib}
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     make install
     for file in "$out"/bin/* "$out"/sbin/*; do
-        wrapProgram $file --prefix LD_LIBRARY_PATH ":" "$out/lib:${openssl}/lib:${gcc.cc}/lib:${stdenv.glibc}/lib::${gcc.cc}/lib64:${stdenv.glibc}/lib64:${libedit}/lib:${qt4}/lib"
+        wrapProgram $file --prefix LD_LIBRARY_PATH ":" "$out/lib:${libssl}/lib:${gcc.cc}/lib:${stdenv.glibc}/lib::${gcc.cc}/lib64:${stdenv.glibc}/lib64:${libedit}/lib:${qt4}/lib"
     done
   '';
 

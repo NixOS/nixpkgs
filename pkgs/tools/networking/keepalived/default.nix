@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, net_snmp, libnl }:
+{ stdenv, fetchurl, libssl, net_snmp, libnl }:
 
 stdenv.mkDerivation rec {
   name = "keepalived-1.2.19";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lrq963pxhgh74qmxjyy5hvxdfpm4r50v4vsrp559n0w5irsxyrj";
   };
 
-  buildInputs = [ openssl net_snmp libnl ];
+  buildInputs = [ libssl net_snmp libnl ];
 
   postPatch = ''
     sed -i 's,$(DESTDIR)/usr/share,$out/share,g' Makefile.in

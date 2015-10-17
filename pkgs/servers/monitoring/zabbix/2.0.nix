@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib, gettext
+{ stdenv, fetchurl, pkgconfig, postgresql, curl, libssl, zlib, gettext
 , enableJabber ? false, minmay ? null }:
 
 assert enableJabber -> minmay != null;
@@ -48,7 +48,7 @@ in
         -e 's/iks/mmay/g' -e 's/IKS/MMAY/g' src/libs/zbxmedia/jabber.c
     '';
 
-    buildInputs = [ pkgconfig postgresql curl openssl zlib ];
+    buildInputs = [ pkgconfig postgresql curl libssl zlib ];
 
     postInstall =
       ''

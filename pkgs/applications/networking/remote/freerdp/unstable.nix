@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, openssl, zlib, libX11, libXcursor
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, libssl, zlib, libX11, libXcursor
 , libXdamage, libXext, glib, alsaLib, ffmpeg, libxkbfile, libXinerama, libXv
 , substituteAll
 , libpulseaudio ? null, cups ? null, pcsclite ? null
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       });
 
   buildInputs = [
-    cmake pkgconfig openssl zlib libX11 libXcursor libXdamage libXext glib
+    cmake pkgconfig libssl zlib libX11 libXcursor libXdamage libXext glib
     alsaLib ffmpeg libxkbfile libXinerama libXv cups libpulseaudio pcsclite
   ];
 

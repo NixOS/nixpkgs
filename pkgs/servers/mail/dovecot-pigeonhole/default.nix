@@ -1,4 +1,4 @@
-{stdenv, fetchurl, dovecot22, openssl}:
+{stdenv, fetchurl, dovecot22, libssl}:
 
 stdenv.mkDerivation rec {
   name = "dovecot-pigeonhole-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mypnkc980s3kd1bmy4f93dliwg6n8jfsac8r51jrpvv0ymz94nn";
   };  
 
-  buildInputs = [ dovecot22 openssl ];
+  buildInputs = [ dovecot22 libssl ];
 
   preConfigure = ''
     substituteInPlace src/managesieve/managesieve-settings.c --replace \

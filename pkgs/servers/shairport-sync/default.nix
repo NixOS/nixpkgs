@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, openssl, avahi, alsaLib
+{ stdenv, fetchFromGitHub, autoreconfHook, libssl, avahi, alsaLib
 , libdaemon, popt, pkgconfig, libconfig, libpulseaudio, soxr }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     autoreconfHook
-    openssl
+    libssl
     avahi
     alsaLib
     libdaemon

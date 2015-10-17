@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mesa, libX11, openssl, libXext
+{ stdenv, fetchurl, mesa, libX11, libssl, libXext
 , libjpeg_turbo, cmake }:
 
 let
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     export makeFlags="prefix=$out"
   '';
 
-  buildInputs = [ cmake mesa libX11 openssl libXext libjpeg_turbo ];
+  buildInputs = [ cmake mesa libX11 libssl libXext libjpeg_turbo ];
 
   meta = {
     homepage = http://www.virtualgl.org/;

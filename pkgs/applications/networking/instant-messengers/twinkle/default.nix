@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, commoncpp2, ccrtp, openssl, boost
+{ stdenv, fetchurl, pkgconfig, autoreconfHook, commoncpp2, ccrtp, libssl, boost
 , libsndfile, libxml2, libjpeg, readline, qt3, perl, file
 , alsaLib, speex, libzrtpcpp, xorg }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--with-extra-includes=${libjpeg}/include";
 
   buildInputs =
-    [ pkgconfig autoreconfHook commoncpp2 openssl boost libsndfile
+    [ pkgconfig autoreconfHook commoncpp2 libssl boost libsndfile
       libxml2 libjpeg readline qt3 perl file ccrtp
       # optional ? :
       alsaLib speex
