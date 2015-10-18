@@ -28,9 +28,6 @@ plasmaPackage rec {
     kidletime krunner ktexteditor kwin libkscreen libksysguard
     plasma-framework qtquick1 qtquickcontrols qtx11extras solid
   ];
-  # All propagatedBuildInputs should be present in the profile because
-  # impure wrappers are used below.
-  propagatedUserEnvPkgs = propagatedBuildInputs;
   patches = [ ./0001-startkde-NixOS-patches.patch ];
 
   inherit bash coreutils gnused gnugrep socat;
@@ -42,7 +39,6 @@ plasmaPackage rec {
       --replace kdostartupconfig5 $out/bin/kdostartupconfig5
   '';
   postInstall = ''
-    export QT_WRAPPER_IMPURE=1
     wrapQtProgram "$out/bin/ksmserver"
     wrapQtProgram "$out/bin/plasmawindowed"
     wrapQtProgram "$out/bin/kcminit_startup"
