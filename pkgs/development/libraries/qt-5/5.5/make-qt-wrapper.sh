@@ -2,7 +2,6 @@ addQtDependency() {
     addToSearchPath QT_PLUGIN_PATH "$1/lib/qt5/plugins"
     addToSearchPath QML_IMPORT_PATH "$1/lib/qt5/imports"
     addToSearchPath QML2_IMPORT_PATH "$1/lib/qt5/qml"
-    addToSearchPath XDG_DATA_DIRS "$1/share"
 }
 
 wrapQtProgram() {
