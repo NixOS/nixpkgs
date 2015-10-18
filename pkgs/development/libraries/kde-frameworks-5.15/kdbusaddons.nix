@@ -1,15 +1,15 @@
 { kdeFramework, lib
 , extra-cmake-modules
-, makeKDEWrapper
+, makeQtWrapper
 , qtx11extras
 }:
 
 kdeFramework {
   name = "kdbusaddons";
-  nativeBuildInputs = [ extra-cmake-modules makeKDEWrapper ];
+  nativeBuildInputs = [ extra-cmake-modules makeQtWrapper ];
   propagatedBuildInputs = [ qtx11extras ];
   postInstall = ''
-    wrapKDEProgram "$out/bin/kquitapp5"
+    wrapQtProgram "$out/bin/kquitapp5"
   '';
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

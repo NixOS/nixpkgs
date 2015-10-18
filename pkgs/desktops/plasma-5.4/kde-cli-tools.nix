@@ -1,11 +1,11 @@
 { plasmaPackage, extra-cmake-modules, kcmutils, kconfig
 , kdelibs4support, kdesu, kdoctools, ki18n, kiconthemes
-, kwindowsystem, makeKDEWrapper, qtsvg, qtx11extras
+, kwindowsystem, makeQtWrapper, qtsvg, qtx11extras
 }:
 
 plasmaPackage {
   name = "kde-cli-tools";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools makeKDEWrapper ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools makeQtWrapper ];
   buildInputs = [
     kcmutils kconfig kdesu kiconthemes
   ];
@@ -13,15 +13,15 @@ plasmaPackage {
     kdelibs4support ki18n kwindowsystem qtsvg qtx11extras
   ];
   postInstall = ''
-    wrapKDEProgram "$out/bin/kmimetypefinder5"
-    wrapKDEProgram "$out/bin/ksvgtopng5"
-    wrapKDEProgram "$out/bin/ktraderclient5"
-    wrapKDEProgram "$out/bin/kioclient5"
-    wrapKDEProgram "$out/bin/kdecp5"
-    wrapKDEProgram "$out/bin/keditfiletype5"
-    wrapKDEProgram "$out/bin/kcmshell5"
-    wrapKDEProgram "$out/bin/kdemv5"
-    wrapKDEProgram "$out/bin/kstart5"
-    wrapKDEProgram "$out/bin/kde-open5"
+    wrapQtProgram "$out/bin/kmimetypefinder5"
+    wrapQtProgram "$out/bin/ksvgtopng5"
+    wrapQtProgram "$out/bin/ktraderclient5"
+    wrapQtProgram "$out/bin/kioclient5"
+    wrapQtProgram "$out/bin/kdecp5"
+    wrapQtProgram "$out/bin/keditfiletype5"
+    wrapQtProgram "$out/bin/kcmshell5"
+    wrapQtProgram "$out/bin/kdemv5"
+    wrapQtProgram "$out/bin/kstart5"
+    wrapQtProgram "$out/bin/kde-open5"
   '';
 }

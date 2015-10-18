@@ -6,7 +6,7 @@
 , plasma-framework, plasma-workspace, qtdeclarative, qtx11extras
 , qtsvg, libXcursor, libXft, libxkbfile, xf86inputevdev
 , xf86inputsynaptics, xinput, xkeyboard_config, xorgserver
-, libcanberra_kde, libpulseaudio, makeKDEWrapper, utillinux
+, libcanberra_kde, libpulseaudio, makeQtWrapper, utillinux
 }:
 
 plasmaPackage rec {
@@ -14,7 +14,7 @@ plasmaPackage rec {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
-    makeKDEWrapper
+    makeQtWrapper
   ];
   buildInputs = [
     attica boost fontconfig kcmutils kdbusaddons kded kitemmodels
@@ -52,13 +52,13 @@ plasmaPackage rec {
 
     cd "$NIX_BUILD_TOP"
 
-    wrapKDEProgram "$out/bin/kaccess"
-    wrapKDEProgram "$out/bin/solid-action-desktop-gen"
-    wrapKDEProgram "$out/bin/knetattach"
-    wrapKDEProgram "$out/bin/krdb"
-    wrapKDEProgram "$out/bin/kapplymousetheme"
-    wrapKDEProgram "$out/bin/kfontinst"
-    wrapKDEProgram "$out/bin/kcm-touchpad-list-devices"
-    wrapKDEProgram "$out/bin/kfontview"
+    wrapQtProgram "$out/bin/kaccess"
+    wrapQtProgram "$out/bin/solid-action-desktop-gen"
+    wrapQtProgram "$out/bin/knetattach"
+    wrapQtProgram "$out/bin/krdb"
+    wrapQtProgram "$out/bin/kapplymousetheme"
+    wrapQtProgram "$out/bin/kfontinst"
+    wrapQtProgram "$out/bin/kcm-touchpad-list-devices"
+    wrapQtProgram "$out/bin/kfontview"
   '';
 }

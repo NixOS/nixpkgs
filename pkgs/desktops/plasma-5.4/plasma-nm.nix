@@ -2,7 +2,7 @@
 , kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative
 , kdelibs4support, ki18n, kiconthemes, kinit, kio, kitemviews
 , knotifications, kservice, kwallet, kwidgetsaddons, kwindowsystem
-, kxmlgui, makeKDEWrapper, mobile_broadband_provider_info
+, kxmlgui, makeQtWrapper, mobile_broadband_provider_info
 , modemmanager-qt, networkmanager-qt, openconnect, plasma-framework
 , qtdeclarative, solid
 }:
@@ -12,7 +12,7 @@ plasmaPackage {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
-    makeKDEWrapper
+    makeQtWrapper
   ];
   buildInputs = [
     kcompletion kconfigwidgets kcoreaddons kdbusaddons kiconthemes
@@ -25,6 +25,6 @@ plasmaPackage {
     qtdeclarative
   ];
   postInstall = ''
-    wrapKDEProgram "$out/bin/kde5-nm-connection-editor"
+    wrapQtProgram "$out/bin/kde5-nm-connection-editor"
   '';
 }

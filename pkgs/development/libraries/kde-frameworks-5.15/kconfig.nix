@@ -1,14 +1,14 @@
 { kdeFramework, lib
 , extra-cmake-modules
-, makeKDEWrapper
+, makeQtWrapper
 }:
 
 kdeFramework {
   name = "kconfig";
-  nativeBuildInputs = [ extra-cmake-modules makeKDEWrapper ];
+  nativeBuildInputs = [ extra-cmake-modules makeQtWrapper ];
   postInstall = ''
-    wrapKDEProgram "$out/bin/kreadconfig5"
-    wrapKDEProgram "$out/bin/kwriteconfig5"
+    wrapQtProgram "$out/bin/kreadconfig5"
+    wrapQtProgram "$out/bin/kwriteconfig5"
   '';
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

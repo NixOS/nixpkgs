@@ -1,15 +1,15 @@
 { kdeFramework, lib
 , extra-cmake-modules
-, makeKDEWrapper
+, makeQtWrapper
 , qtdeclarative
 }:
 
 kdeFramework {
   name = "solid";
-  nativeBuildInputs = [ extra-cmake-modules makeKDEWrapper ];
+  nativeBuildInputs = [ extra-cmake-modules makeQtWrapper ];
   buildInputs = [ qtdeclarative ];
   postInstall = ''
-    wrapKDEProgram "$out/bin/solid-hardware5"
+    wrapQtProgram "$out/bin/solid-hardware5"
   '';
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
