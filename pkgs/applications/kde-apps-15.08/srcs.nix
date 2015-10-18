@@ -1866,6 +1866,14 @@
       name = "okular-15.08.2.tar.xz";
     };
   };
+  oxygen-icons = {
+    version = "15.04.3";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.3/src/oxygen-icons-15.04.3.tar.xz";
+      sha256 = "07npzyrbw2fn1qd04imnv7cz0sisk7yllrwr2y21yr2i1gbncfqk";
+      name = "oxygen-icons-15.04.3.tar.xz";
+    };
+  };
   palapeli = {
     version = "15.08.2";
     src = fetchurl {

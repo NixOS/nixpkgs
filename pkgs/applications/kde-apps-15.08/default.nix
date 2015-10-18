@@ -60,6 +60,7 @@ let
     libkexiv2 = callPackage ./libkexiv2.nix {};
     libkipi = callPackage ./libkipi.nix {};
     okular = callPackage ./okular.nix {};
+    oxygen-icons = callPackage ./oxygen-icons.nix {};
     print-manager = callPackage ./print-manager.nix {};
   };
 
