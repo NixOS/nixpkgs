@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
   # Should be removed with >=2.4.43
   patches = [ ./CVE-2015-6908.patch ];
 
-  outputs = [ "out" "man" ];
+  # TODO: separate "out" and "bin"
+  outputs = [ "dev" "out" "man" "docdev" ];
 
   buildInputs = [ openssl cyrus_sasl db groff ];
 
@@ -23,8 +24,8 @@ stdenv.mkDerivation rec {
 
   # Fixup broken libtool
   preFixup = ''
-    sed -e 's,-lsasl2,-L${cyrus_sasl}/lib -lsasl2,' \
-        -e 's,-lssl,-L${openssl}/lib -lssl,' \
+    sed -e 's,-lsasl2,-L${cyrus_sasl.out}/lib -lsasl2,' \
+        -e 's,-lssl,-L${openssl.out}/lib -lssl,' \
         -i $out/lib/libldap.la -i $out/lib/libldap_r.la
   '';
 

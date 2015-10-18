@@ -28,10 +28,10 @@ in
         example = literalExample ''
           openldap.enable = true;
           openldap.extraConfig = '''
-            include ''${pkgs.openldap}/etc/openldap/schema/core.schema
-            include ''${pkgs.openldap}/etc/openldap/schema/cosine.schema
-            include ''${pkgs.openldap}/etc/openldap/schema/inetorgperson.schema
-            include ''${pkgs.openldap}/etc/openldap/schema/nis.schema
+            include ''${pkgs.openldap.out}/etc/openldap/schema/core.schema
+            include ''${pkgs.openldap.out}/etc/openldap/schema/cosine.schema
+            include ''${pkgs.openldap.out}/etc/openldap/schema/inetorgperson.schema
+            include ''${pkgs.openldap.out}/etc/openldap/schema/nis.schema
 
             database bdb 
             suffix dc=example,dc=org 
@@ -89,7 +89,7 @@ in
         mkdir -p ${cfg.dataDir}
         chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}
       '';
-      serviceConfig.ExecStart = "${openldap}/libexec/slapd -u ${cfg.user} -g ${cfg.group} -d 0 -f ${configFile}";
+      serviceConfig.ExecStart = "${openldap.out}/libexec/slapd -u ${cfg.user} -g ${cfg.group} -d 0 -f ${configFile}";
     };
 
     users.extraUsers.openldap =
