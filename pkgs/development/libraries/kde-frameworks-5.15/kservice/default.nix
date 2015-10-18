@@ -4,9 +4,11 @@
 
 kdeFramework {
   name = "kservice";
+  setupHook = ./setup-hook.sh;
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ kcoreaddons kcrash kdbusaddons ];
-  propagatedBuildInputs = [ kconfig ki18n kwindowsystem ];
+  buildInputs = [ kcrash kdbusaddons ];
+  propagatedBuildInputs = [ kconfig kcoreaddons ki18n kwindowsystem ];
+  propagatedUserEnvPkgs = [ kcoreaddons ];
   patches = [
     ./0001-qdiriterator-follow-symlinks.patch
     ./0002-no-canonicalize-path.patch
