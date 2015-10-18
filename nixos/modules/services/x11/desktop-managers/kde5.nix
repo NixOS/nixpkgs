@@ -99,6 +99,7 @@ in
         kdeApps.dolphin
         kdeApps.konsole
 
+        kdeApps.oxygen-icons
         pkgs.hicolor_icon_theme
 
         plasma5.kde-gtk-config
