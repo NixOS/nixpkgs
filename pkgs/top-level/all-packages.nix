@@ -16749,6 +16749,8 @@ in
 
   ums = callPackage ../servers/ums { };
 
+  unity3d = callPackage ../development/tools/unity3d { inherit (gnome) GConf; };
+
   urbit = callPackage ../misc/urbit { };
 
   utf8proc = callPackage ../development/libraries/utf8proc { };
