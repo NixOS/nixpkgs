@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "0bn81pfscy9yjvbmyx442svf43s6dhrdfcsnkpxz43fai5qk5kx6";
   };
 
+  outputs = [ "dev" "out" ];
+  outputBin = "dev";
+
   configureFlags = ''
     --with-apr=${apr} --with-expat=${expat}
     ${optionalString (!stdenv.isCygwin) "--with-crypto"}
@@ -37,8 +40,10 @@ stdenv.mkDerivation rec {
 
   # Give apr1 access to sed for runtime invocations
   postInstall = ''
-    substituteInPlace $out/lib/libaprutil-1.la --replace "${expat}/lib" "${expat.out}/lib"
-    wrapProgram $out/bin/apu-1-config --prefix PATH : "${gnused}/bin"
+    for f in $out/lib/*.la $out/lib/apr-util-1/*.la; do
+      substituteInPlace $f --replace "${expat.dev}/lib" "${expat.out}/lib"
+    done
+    wrapProgram $dev/bin/apu-1-config --prefix PATH : "${gnused}/bin"
   '';
 
   enableParallelBuilding = true;
