@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
     ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
       ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl";
 
-  dontPatchELF = 1; # !!!
-
   # Fixup broken libtool
   preFixup = ''
     sed -e 's,-lsasl2,-L${cyrus_sasl}/lib -lsasl2,' \
