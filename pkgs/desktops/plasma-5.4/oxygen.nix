@@ -1,12 +1,12 @@
 { plasmaPackage, extra-cmake-modules, ki18n, kcmutils, kconfig
 , kdecoration, kguiaddons, kwidgetsaddons, kservice, kcompletion
-, frameworkintegration, kwindowsystem, makeKDEWrapper, qtx11extras
+, frameworkintegration, kwindowsystem, makeQtWrapper, qtx11extras
 }:
 
 plasmaPackage {
   name = "oxygen";
   nativeBuildInputs = [
-    extra-cmake-modules makeKDEWrapper
+    extra-cmake-modules makeQtWrapper
   ];
   buildInputs = [
     kcmutils kconfig kdecoration kguiaddons kwidgetsaddons
@@ -14,7 +14,7 @@ plasmaPackage {
   ];
   propagatedBuildInputs = [ frameworkintegration ki18n kwindowsystem qtx11extras ];
   postInstall = ''
-    wrapKDEProgram "$out/bin/oxygen-demo5"
-    wrapKDEProgram "$out/bin/oxygen-settings5"
+    wrapQtProgram "$out/bin/oxygen-demo5"
+    wrapQtProgram "$out/bin/oxygen-settings5"
   '';
 }

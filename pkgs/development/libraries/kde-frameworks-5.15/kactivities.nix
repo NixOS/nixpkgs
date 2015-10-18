@@ -1,11 +1,11 @@
 { kdeFramework, lib, extra-cmake-modules, boost, kcmutils, kconfig
 , kcoreaddons, kdbusaddons, kdeclarative, kglobalaccel, ki18n
-, kio, kservice, kwindowsystem, kxmlgui, makeKDEWrapper, qtdeclarative
+, kio, kservice, kwindowsystem, kxmlgui, makeQtWrapper, qtdeclarative
 }:
 
 kdeFramework {
   name = "kactivities";
-  nativeBuildInputs = [ extra-cmake-modules makeKDEWrapper ];
+  nativeBuildInputs = [ extra-cmake-modules makeQtWrapper ];
   buildInputs = [
     boost kcmutils kconfig kcoreaddons kdbusaddons kservice
     kxmlgui
@@ -14,7 +14,7 @@ kdeFramework {
     kdeclarative kglobalaccel ki18n kio kwindowsystem qtdeclarative
   ];
   postInstall = ''
-    wrapKDEProgram "$out/bin/kactivitymanagerd"
+    wrapQtProgram "$out/bin/kactivitymanagerd"
   '';
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

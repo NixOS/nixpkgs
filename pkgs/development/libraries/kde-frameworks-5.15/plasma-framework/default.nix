@@ -2,12 +2,12 @@
 , kconfig, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative
 , kdoctools, kglobalaccel, kguiaddons, ki18n, kiconthemes, kio
 , knotifications, kpackage, kservice, kwindowsystem, kxmlgui
-, makeKDEWrapper, qtscript, qtx11extras
+, makeQtWrapper, qtscript, qtx11extras
 }:
 
 kdeFramework {
   name = "plasma-framework";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools makeKDEWrapper ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools makeQtWrapper ];
   buildInputs = [
     karchive kconfig kconfigwidgets kcoreaddons kdbusaddons kguiaddons
     kiconthemes knotifications kxmlgui qtscript
@@ -17,7 +17,7 @@ kdeFramework {
     qtx11extras
   ];
   postInstall = ''
-    wrapKDEProgram "$out/bin/plasmapkg2"
+    wrapQtProgram "$out/bin/plasmapkg2"
   '';
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

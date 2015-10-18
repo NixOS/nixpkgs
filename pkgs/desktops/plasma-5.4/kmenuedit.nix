@@ -1,5 +1,5 @@
 { plasmaPackage, extra-cmake-modules, kdoctools, ki18n, kxmlgui
-, kdbusaddons, kiconthemes, kio, sonnet, kdelibs4support, makeKDEWrapper
+, kdbusaddons, kiconthemes, kio, sonnet, kdelibs4support, makeQtWrapper
 }:
 
 plasmaPackage {
@@ -7,13 +7,13 @@ plasmaPackage {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
-    makeKDEWrapper
+    makeQtWrapper
   ];
   buildInputs = [
     kxmlgui kdbusaddons kiconthemes
   ];
   propagatedBuildInputs = [ kdelibs4support ki18n kio sonnet ];
   postInstall = ''
-    wrapKDEProgram "$out/bin/kmenuedit"
+    wrapQtProgram "$out/bin/kmenuedit"
   '';
 }

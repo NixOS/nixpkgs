@@ -1,14 +1,14 @@
 { kdeFramework, lib
 , extra-cmake-modules
 , kdoctools
-, makeKDEWrapper
+, makeQtWrapper
 }:
 
 kdeFramework {
   name = "kjs";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools makeKDEWrapper ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools makeQtWrapper ];
   postInstall = ''
-    wrapKDEProgram "$out/bin/kjs5"
+    wrapQtProgram "$out/bin/kjs5"
   '';
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

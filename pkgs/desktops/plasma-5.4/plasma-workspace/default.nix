@@ -6,7 +6,7 @@
 , libdbusmenu, libkscreen, libSM, libXcursor, networkmanager-qt
 , pam, phonon, plasma-framework, qtquick1, qtscript, qtx11extras, wayland
 , libksysguard, bash, coreutils, gnused, gnugrep, socat, kconfig
-, kinit, kservice, makeKDEWrapper, qttools, dbus_tools, mkfontdir, xmessage
+, kinit, kservice, makeQtWrapper, qttools, dbus_tools, mkfontdir, xmessage
 , xprop, xrdb, xset, xsetroot, solid, qtquickcontrols
 }:
 
@@ -15,7 +15,7 @@ plasmaPackage rec {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
-    makeKDEWrapper
+    makeQtWrapper
   ];
   buildInputs = [
     kcmutils kcrash kdbusaddons kdesu kdewebkit kjsembed knewstuff
@@ -43,19 +43,18 @@ plasmaPackage rec {
   '';
   postInstall = ''
     export QT_WRAPPER_IMPURE=1
-    export KDE_WRAPPER_IMPURE=1
-    wrapKDEProgram "$out/bin/ksmserver"
-    wrapKDEProgram "$out/bin/plasmawindowed"
-    wrapKDEProgram "$out/bin/kcminit_startup"
-    wrapKDEProgram "$out/bin/ksplashqml"
-    wrapKDEProgram "$out/bin/kcheckrunning"
-    wrapKDEProgram "$out/bin/systemmonitor"
-    wrapKDEProgram "$out/bin/kstartupconfig5"
-    wrapKDEProgram "$out/bin/startplasmacompositor"
-    wrapKDEProgram "$out/bin/kdostartupconfig5"
-    wrapKDEProgram "$out/bin/klipper"
-    wrapKDEProgram "$out/bin/kuiserver5"
-    wrapKDEProgram "$out/bin/krunner"
-    wrapKDEProgram "$out/bin/plasmashell"
+    wrapQtProgram "$out/bin/ksmserver"
+    wrapQtProgram "$out/bin/plasmawindowed"
+    wrapQtProgram "$out/bin/kcminit_startup"
+    wrapQtProgram "$out/bin/ksplashqml"
+    wrapQtProgram "$out/bin/kcheckrunning"
+    wrapQtProgram "$out/bin/systemmonitor"
+    wrapQtProgram "$out/bin/kstartupconfig5"
+    wrapQtProgram "$out/bin/startplasmacompositor"
+    wrapQtProgram "$out/bin/kdostartupconfig5"
+    wrapQtProgram "$out/bin/klipper"
+    wrapQtProgram "$out/bin/kuiserver5"
+    wrapQtProgram "$out/bin/krunner"
+    wrapQtProgram "$out/bin/plasmashell"
   '';
 }

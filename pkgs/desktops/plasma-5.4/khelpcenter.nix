@@ -1,6 +1,6 @@
 { plasmaPackage, extra-cmake-modules, kdoctools, kconfig
 , kcoreaddons, kdbusaddons, ki18n, kinit, kcmutils, kdelibs4support
-, khtml, kservice, makeKDEWrapper
+, khtml, kservice, makeQtWrapper
 }:
 
 plasmaPackage {
@@ -8,13 +8,13 @@ plasmaPackage {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
-    makeKDEWrapper
+    makeQtWrapper
   ];
   buildInputs = [
     kconfig kcoreaddons kdbusaddons kinit kcmutils kservice
   ];
   propagatedBuildInputs = [ kdelibs4support khtml ki18n ];
   postInstall = ''
-    wrapKDEProgram "$out/bin/khelpcenter"
+    wrapQtProgram "$out/bin/khelpcenter"
   '';
 }
