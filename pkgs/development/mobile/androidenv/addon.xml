@@ -1019,11 +1019,11 @@ August 15, 2011
     <!-- EXTRAS VENDOR=ANDROID ........................ -->
 
     <sdk:extra>
-        <!-- Generated at Thu Sep  3 11:26:43 2015 from git_mnc-sdk-release @ 2221987 -->
+        <!-- Generated at Tue Oct 13 17:53:10 2015 from git_mnc-supportlib-release @ 2337128 -->
         <sdk:revision>
             <sdk:major>23</sdk:major>
-            <sdk:minor>0</sdk:minor>
-            <sdk:micro>1</sdk:micro>
+            <sdk:minor>1</sdk:minor>
+            <sdk:micro>0</sdk:micro>
         </sdk:revision>
         <sdk:vendor-display>Android</sdk:vendor-display>
         <sdk:vendor-id>android</sdk:vendor-id>
@@ -1032,18 +1032,18 @@ August 15, 2011
         <sdk:old-paths>compatibility</sdk:old-paths>
         <sdk:archives>
             <sdk:archive>
-                <sdk:size>9553739</sdk:size>
-                <sdk:checksum type="sha1">fbe529716943053d0ce0d7f058d79f1a848cdff9</sdk:checksum>
-                <sdk:url>support_r23.0.1.zip</sdk:url>
+                <sdk:size>10217600</sdk:size>
+                <sdk:checksum type="sha1">c43a56fcd1c2aa620f6178a0ef529623ed77b3c7</sdk:checksum>
+                <sdk:url>support_r23.1.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
     </sdk:extra>
 
     <sdk:extra>
-        <!-- Manually picked up at Fri Oct  2 13:50:00 2015 from ub-support-test-release @ 2304053 -->
+        <!-- Generated at Thu Oct 15 13:57:59 2015 from git_mnc-supportlib-release @ 2343687 -->
         <sdk:revision>
-            <sdk:major>21</sdk:major>
+            <sdk:major>24</sdk:major>
         </sdk:revision>
         <sdk:vendor-display>Android</sdk:vendor-display>
         <sdk:vendor-id>android</sdk:vendor-id>
@@ -1052,9 +1052,9 @@ August 15, 2011
         <sdk:path>m2repository</sdk:path>
         <sdk:archives>
             <sdk:archive>
-                <sdk:size>142136028</sdk:size>
-                <sdk:checksum type="sha1">acb915c5d2c730bf98303c0cd0122bedb2954cb3</sdk:checksum>
-                <sdk:url>android_m2repository_r21.zip</sdk:url>
+                <sdk:size>149070460</sdk:size>
+                <sdk:checksum type="sha1">5b6d328a572172ec51dc25c3514392760e49bb81</sdk:checksum>
+                <sdk:url>android_m2repository_r24.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
