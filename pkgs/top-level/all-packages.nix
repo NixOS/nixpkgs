@@ -10642,6 +10642,8 @@ let
 
   shared_desktop_ontologies = callPackage ../data/misc/shared-desktop-ontologies { };
 
+  signwriting = callPackage ../data/fonts/signwriting { };
+
   stdmanpages = callPackage ../data/documentation/std-man-pages { };
 
   stix-otf = callPackage ../data/fonts/stix-otf { };
