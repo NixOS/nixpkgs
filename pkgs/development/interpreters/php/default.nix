@@ -42,7 +42,13 @@ let
         };
 
         ldap = {
-          configureFlags = ["--with-ldap=${openldap}"];
+          configureFlags = [
+            "--with-ldap"
+            "LDAP_DIR=${openldap.dev}"
+            "LDAP_INCDIR=${openldap.dev}/include"
+            "LDAP_LIBDIR=${openldap.out}/lib"
+            "--with-ldap-sasl=${cyrus_sasl.dev}"
+            ];
           buildInputs = [openldap cyrus_sasl openssl];
         };
 
