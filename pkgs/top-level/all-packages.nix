@@ -10691,6 +10691,8 @@ let
 
   unifont = callPackage ../data/fonts/unifont { };
 
+  unifont_upper = callPackage ../data/fonts/unifont_upper { };
+
   vistafonts = callPackage ../data/fonts/vista-fonts { };
 
   wqy_microhei = callPackage ../data/fonts/wqy-microhei { };
