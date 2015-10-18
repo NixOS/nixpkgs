@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
     copyScript "hg" ${../../../build-support/fetchhg/nix-prefetch-hg} ${mercurial}
     copyScript "git" ${../../../build-support/fetchgit/nix-prefetch-git} ${git}
-    copyScript "svn" ${../../../build-support/fetchsvn/nix-prefetch-svn} ${subversion}
+    copyScript "svn" ${../../../build-support/fetchsvn/nix-prefetch-svn} ${subversion.out}
     copyScript "bzr" ${../../../build-support/fetchbzr/nix-prefetch-bzr} ${bazaar}
     copyScript "cvs" ${../../../build-support/fetchcvs/nix-prefetch-cvs} ${cvs}
     copyScript "zip" ${../../../build-support/fetchzip/nix-prefetch-zip} ${unzip} ${curl.bin}
