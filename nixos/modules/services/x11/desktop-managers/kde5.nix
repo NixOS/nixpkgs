@@ -72,6 +72,7 @@ in
       [
         pkgs.qt4 # qtconfig is the only way to set Qt 4 theme
 
+        kf5.frameworkintegration
         kf5.kinit
 
         plasma5.breeze
