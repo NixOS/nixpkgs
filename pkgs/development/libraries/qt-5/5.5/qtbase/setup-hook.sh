@@ -20,6 +20,25 @@ addQtModule() {
     fi
 }
 
+propagateRuntimeDeps() {
+    local propagated
+    for dir in "lib/qt5/plugins" "lib/qt5/qml" "lib/qt5/imports"; do
+        if [[ -d "$1/$dir" ]]; then
+            propagated=
+            for pkg in $propagatedBuildInputs; do
+                if [[ "z$pkg" == "z$1" ]]; then
+                    propagated=1
+                    break
+                fi
+            done
+            if [[ -z $propagated ]]; then
+                propagatedBuildInputs="$propagatedBuildInputs $1"
+            fi
+            break
+        fi
+    done
+}
+
 rmQtModules() {
     cat "$out/nix-support/qt-inputs" | while read file; do
       if [[ -h "$out/$file" ]]; then
@@ -65,7 +84,7 @@ EOF
 
 export QMAKE="$qtOut/bin/qmake"
 
-envHooks+=(addQtModule)
+envHooks+=(addQtModule propagateRuntimeDeps)
 preConfigurePhases+=(setQMakePath)
 
 if [[ -n "$NIX_QT_SUBMODULE" ]]; then
