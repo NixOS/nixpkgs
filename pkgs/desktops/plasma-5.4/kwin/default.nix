@@ -4,7 +4,8 @@
 , ki18n, kiconthemes, kinit, kio, knewstuff, knotifications
 , kpackage, kservice, kwayland, kwidgetsaddons, kwindowsystem
 , kxmlgui, libinput, libICE, libSM, plasma-framework, qtdeclarative
-, qtscript, qtx11extras, udev, wayland, xcb-util-cursor, makeQtWrapper
+, qtmultimedia, qtscript, qtx11extras, udev, wayland, xcb-util-cursor
+, makeQtWrapper
 }:
 
 plasmaPackage {
@@ -22,7 +23,7 @@ plasmaPackage {
   ];
   propagatedBuildInputs = [
     kactivities kdeclarative kglobalaccel ki18n kio kwindowsystem
-    plasma-framework qtdeclarative qtx11extras
+    plasma-framework qtdeclarative qtmultimedia qtx11extras
   ];
   patches = [ ./0001-qdiriterator-follow-symlinks.patch ];
   postInstall = ''
