@@ -1518,11 +1518,11 @@ let
   }) // {inherit fontsproto libpciaccess xextproto xorgserver xproto ;};
 
   xf86videoast = (mkDerivation "xf86videoast" {
-    name = "xf86-video-ast-0.98.0";
+    name = "xf86-video-ast-1.1.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-ast-0.98.0.tar.bz2;
-      sha256 = "188nv73w0p5xhfxz2dffli44yzyn1qhhq3qkwc8wva9dhg25n8lh";
+      url = mirror://xorg/individual/driver/xf86-video-ast-1.1.5.tar.bz2;
+      sha256 = "1pm2cy81ma7ldsw0yfk28b33h9z2hcj5rccrxhfxfgvxsiavrnqy";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
