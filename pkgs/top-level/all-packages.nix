@@ -1819,18 +1819,18 @@ let
     mpi = null;
   };
 
-  hdf5-mpi = hdf5.override {
+  hdf5-mpi = appendToName "mpi" (hdf5.override {
     szip = null;
     mpi = pkgs.openmpi;
-  };
+  });
 
-  hdf5-cpp = hdf5.override {
+  hdf5-cpp = appendToName "cpp" (hdf5.override {
     cpp = true;
-  };
+  });
 
-  hdf5-fortran = hdf5.override {
+  hdf5-fortran = appendToName "fortran" (hdf5.override {
     inherit gfortran;
-  };
+  });
 
   heimdall = callPackage ../tools/misc/heimdall { };
 
