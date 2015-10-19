@@ -1,14 +1,14 @@
-From d34575dc1edb9fcc8e7608e82e63c6c9d20f37ea Mon Sep 17 00:00:00 2001
+From 3d837f48853987d5adaf69a9498c4cf116368a18 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@gmail.com>
 Date: Thu, 27 Aug 2015 20:36:39 -0500
-Subject: [PATCH] startkde NixOS patches
+Subject: [PATCH 1/2] startkde NixOS patches
 
 ---
  startkde/startkde.cmake | 219 ++++++++++++++++++++----------------------------
  1 file changed, 89 insertions(+), 130 deletions(-)
 
 diff --git a/startkde/startkde.cmake b/startkde/startkde.cmake
-index cfbe227..999dd8f 100644
+index 2c4c315..d418253 100644
 --- a/startkde/startkde.cmake
 +++ b/startkde/startkde.cmake
 @@ -1,8 +1,31 @@
@@ -400,5 +400,5 @@ index cfbe227..999dd8f 100644
  
  echo 'startkde: Done.'  1>&2
 -- 
-2.5.0
+2.5.2
 
