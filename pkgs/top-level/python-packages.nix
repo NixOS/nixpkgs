@@ -9143,8 +9143,13 @@ let
 
     # Test does not work on Py3k because it calls 'python'.
     # https://github.com/nipy/nibabel/issues/341
+
+    # Test fails with numpy 1.10.1: ERROR: nibabel.tests.test_proxy_api.TestPARRECAPI.test_proxy_slicing
+    # See https://github.com/nipy/nibabel/pull/358
+    # and https://github.com/numpy/numpy/issues/6491
     preCheck = ''
       rm nisext/tests/test_testers.py
+      rm nibabel/tests/test_proxy_api.py
     '';
 
     meta = {
