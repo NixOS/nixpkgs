@@ -153,7 +153,7 @@
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   koral = "Koral <koral@mailoo.org>";
   kovirobi = "Kovacsics Robert <kovirobi@gmail.com>";
-  kragniz = "Louis Taylor <kragniz@gmail.com>";
+  kragniz = "Louis Taylor <louis@kragniz.eu>";
   ktosiek = "Tomasz Kontusz <tomasz.kontusz@gmail.com>";
   lassulus = "Lassulus <lassulus@gmail.com>";
   layus = "Guillaume Maudoux <layus.on@gmail.com>";

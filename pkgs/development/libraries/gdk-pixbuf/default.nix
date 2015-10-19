@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib libtiff libjpeg libpng jasper ];
 
+  # on darwin, tests don't link
+  preBuild = stdenv.lib.optionalString (stdenv.isDarwin && !doCheck) ''
+    substituteInPlace Makefile --replace "docs tests" "docs"
+  '';
+
   configureFlags = "--with-libjasper --with-x11"
     + stdenv.lib.optionalString (gobjectIntrospection != null) " --enable-introspection=yes"
     ;

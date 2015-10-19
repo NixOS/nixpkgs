@@ -15,7 +15,7 @@ let
   # "git describe" when _not_ on an annotated tag(!): MAJOR.MINOR-REV-HASH.
 
   # Version to build.
-  tag = "4.2";
+  tag = "4.4";
 
 in
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Ardour";
     repo = "ardour";
-    rev = "05e3a00b7e3a52a838bc5ec9ee7b3b9e6a271feb";
-    sha256 = "1j8zw0bvh16qwyy8qrqynpak9nghl9j3qhjjcdl7wh9raafjqc00";
+    rev = "b00d75adf63db155ef2873bd9d259dc8ca256be6";
+    sha256 = "1gnrcnq2ksnh7fsa301v1c4p5dqrbqpjylf02rg3za3ab58wxi7l";
   };
 
   buildInputs =
@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
       makeWrapper pango perl pkgconfig python rubberband serd sord-svn sratom suil taglib vampSDK
     ];
 
+  # ardour's wscript has a "tarball" target but that required the git revision
+  # be available. Since this is an unzipped tarball fetched from github we 
+  # have to do that ourself.
   patchPhase = ''
     printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${tag}-${builtins.substring 0 8 src.rev}\"; }\n' > libs/ardour/revision.cc
     sed 's|/usr/include/libintl.h|${glibc}/include/libintl.h|' -i wscript
@@ -80,6 +83,6 @@ stdenv.mkDerivation rec {
     homepage = http://ardour.org/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ maintainers.goibhniu maintainers.fps ];
   };
 }

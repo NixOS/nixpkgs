@@ -259,8 +259,8 @@ in
   android_support_extra = buildGoogleApis {
     name = "android_support_extra";
     src = fetchurl {
-      url = https://dl.google.com/android/repository/support_r23.0.1.zip;
-      sha1 = "fbe529716943053d0ce0d7f058d79f1a848cdff9";
+      url = https://dl.google.com/android/repository/support_r23.1.zip;
+      sha1 = "c43a56fcd1c2aa620f6178a0ef529623ed77b3c7";
     };
     meta = {
       description = "Android Support Library";

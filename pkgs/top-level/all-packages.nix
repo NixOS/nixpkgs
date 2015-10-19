@@ -1231,6 +1231,8 @@ let
     gtk = gtk3;
   };
 
+  dex = callPackage ../tools/X11/dex { };
+
   ddccontrol = callPackage ../tools/misc/ddccontrol { };
 
   ddccontrol-db = callPackage ../data/misc/ddccontrol-db { };
@@ -1536,6 +1538,8 @@ let
 
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
 
+  fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
+
   fuse_zip = callPackage ../tools/filesystems/fuse-zip { };
 
   exfat = callPackage ../tools/filesystems/exfat { };
@@ -1728,6 +1732,10 @@ let
 
   grub2_light = grub2_full.override {
     zfsSupport = false;
+  };
+
+  grub4dos = callPackage ../tools/misc/grub4dos {
+    stdenv = stdenv_32bit;
   };
 
   sbsigntool = callPackage ../tools/security/sbsigntool { };
@@ -2054,6 +2062,8 @@ let
   ldns = callPackage ../development/libraries/ldns { };
 
   leafpad = callPackage ../applications/editors/leafpad { };
+
+  leela = callPackage ../tools/graphics/leela { };
 
   lftp = callPackage ../tools/networking/lftp { };
 
@@ -2421,6 +2431,8 @@ let
   };
 
   numdiff = callPackage ../tools/text/numdiff { };
+
+  numlockx = callPackage ../tools/X11/numlockx { };
 
   nssmdns = callPackage ../tools/networking/nss-mdns { };
 
@@ -4463,6 +4475,10 @@ let
       then callPackage ../development/ocaml-modules/lambda-term { }
       else lambdaTerm-1_6;
 
+    llvm = callPackage ../development/ocaml-modules/llvm {
+      llvm = pkgs.llvm_37;
+    };
+
     macaque = callPackage ../development/ocaml-modules/macaque { };
 
     magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
@@ -4645,6 +4661,8 @@ let
     variantslib = callPackage ../development/ocaml-modules/variantslib { };
 
     vg = callPackage ../development/ocaml-modules/vg { };
+
+    x509 = callPackage ../development/ocaml-modules/x509 { };
 
     xmlm = callPackage ../development/ocaml-modules/xmlm { };
 
@@ -9374,7 +9392,7 @@ let
 
   xorg = recurseIntoAttrs (lib.callPackagesWith pkgs ../servers/x11/xorg/default.nix {
     inherit clangStdenv fetchurl fetchgit fetchpatch stdenv pkgconfig intltool freetype fontconfig
-      libxslt expat libpng zlib perl mesa_drivers spice_protocol
+      libxslt expat libpng zlib perl mesa_drivers spice_protocol libunwind
       dbus libuuid openssl gperf m4 libevdev tradcpp libinput mcpp makeWrapper autoreconfHook
       autoconf automake libtool xmlto asciidoc flex bison python mtdev pixman;
     inherit (darwin) apple_sdk;
@@ -9525,7 +9543,9 @@ let
     osx_sdk = callPackage ../os-specific/darwin/osx-sdk {};
     osx_private_sdk = callPackage ../os-specific/darwin/osx-private-sdk {};
 
-    security_tool = (newScope (darwin.apple_sdk.frameworks // darwin)) ../os-specific/darwin/security-tool { };
+    security_tool = (newScope (darwin.apple_sdk.frameworks // darwin)) ../os-specific/darwin/security-tool {
+      Security-framework = darwin.apple_sdk.frameworks.Security;
+    };
 
     binutils = callPackage ../os-specific/darwin/binutils { inherit cctools; };
 
@@ -10100,6 +10120,8 @@ let
 
   pam_mount = callPackage ../os-specific/linux/pam_mount { };
 
+  pam_pgsql = callPackage ../os-specific/linux/pam_pgsql { };
+
   pam_ssh_agent_auth = callPackage ../os-specific/linux/pam_ssh_agent_auth { };
 
   pam_u2f = callPackage ../os-specific/linux/pam_u2f { };
@@ -10451,7 +10473,7 @@ let
   coreclr = callPackage ../development/compilers/coreclr { };
 
   corefonts = callPackage ../data/fonts/corefonts { };
-  
+
   culmus = callPackage ../data/fonts/culmus { };
 
   wrapFonts = paths : (callPackage ../data/fonts/fontWrap { inherit paths; });
@@ -10528,12 +10550,16 @@ let
 
   hicolor_icon_theme = callPackage ../data/icons/hicolor-icon-theme { };
 
+  hanazono = callPackage ../data/fonts/hanazono { };
+
   inconsolata = callPackage ../data/fonts/inconsolata {};
   inconsolata-lgc = callPackage ../data/fonts/inconsolata/lgc.nix {};
 
   ipafont = callPackage ../data/fonts/ipafont {};
 
   junicode = callPackage ../data/fonts/junicode { };
+
+  kawkab-mono-font = callPackage ../data/fonts/kawkab-mono {};
 
   kochi-substitute = callPackage ../data/fonts/kochi-substitute {};
 
@@ -10553,7 +10579,13 @@ let
 
   lobster-two = callPackage ../data/fonts/lobster-two {};
 
-  lohit-fonts = callPackage ../data/fonts/lohit-fonts { };
+  # lohit-fonts.assamese lohit-fonts.bengali lohit-fonts.devanagari lohit-fonts.gujarati lohit-fonts.gurmukhi
+  # lohit-fonts.kannada lohit-fonts.malayalam lohit-fonts.marathi lohit-fonts.nepali lohit-fonts.odia
+  # lohit-fonts.tamil-classical lohit-fonts.tamil lohit-fonts.telugu
+  # lohit-fonts.kashmiri lohit-fonts.konkani lohit-fonts.maithili lohit-fonts.sindhi
+  lohit-fonts = recurseIntoAttrs ( callPackages ../data/fonts/lohit-fonts { } );
+
+  marathi-cursive = callPackage ../data/fonts/marathi-cursive { };
 
   manpages = callPackage ../data/documentation/man-pages { };
 
@@ -10569,6 +10601,8 @@ let
 
   mplus-outline-fonts = callPackage ../data/fonts/mplus-outline-fonts { };
 
+  mro-unicode = callPackage ../data/fonts/mro-unicode { };
+
   nafees = callPackage ../data/fonts/nafees { };
 
   inherit (callPackages ../data/fonts/noto-fonts {})
@@ -10580,11 +10614,17 @@ let
 
   oldstandard = callPackage ../data/fonts/oldstandard { };
 
+  oldsindhi = callPackage ../data/fonts/oldsindhi { };
+
   open-dyslexic = callPackage ../data/fonts/open-dyslexic { };
 
   opensans-ttf = callPackage ../data/fonts/opensans-ttf { };
 
   pecita = callPackage ../data/fonts/pecita {};
+
+  paratype-pt-mono = callPackage ../data/fonts/paratype-pt/mono.nix {};
+  paratype-pt-sans = callPackage ../data/fonts/paratype-pt/sans.nix {};
+  paratype-pt-serif = callPackage ../data/fonts/paratype-pt/serif.nix {};
 
   poly = callPackage ../data/fonts/poly { };
 
@@ -10598,15 +10638,20 @@ let
     perl = perl516; # syntax error at troffprepro line 49, near "do subst("
   };
 
+  sampradaya = callPackage ../data/fonts/sampradaya { };
+
   shared_mime_info = callPackage ../data/misc/shared-mime-info { };
 
   shared_desktop_ontologies = callPackage ../data/misc/shared-desktop-ontologies { };
+
+  signwriting = callPackage ../data/fonts/signwriting { };
 
   stdmanpages = callPackage ../data/documentation/std-man-pages { };
 
   stix-otf = callPackage ../data/fonts/stix-otf { };
 
-  symbola = callPackage ../data/fonts/symbola { };
+  inherit (callPackages ../data/fonts/gdouros { })
+    aegean textfonts symbola aegyptus akkadian anatolian maya unidings musica analecta;
 
   iana_etc = callPackage ../data/misc/iana-etc { };
 
@@ -10638,6 +10683,8 @@ let
   source-han-sans-simplified-chinese = sourceHanSansPackages.simplified-chinese;
   source-han-sans-traditional-chinese = sourceHanSansPackages.traditional-chinese;
 
+  inherit (callPackages ../data/fonts/tai-languages { }) tai-ahom;
+
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme { };
 
   themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) {};
@@ -10661,6 +10708,8 @@ let
   uni-vga = callPackage ../data/fonts/uni-vga { };
 
   unifont = callPackage ../data/fonts/unifont { };
+
+  unifont_upper = callPackage ../data/fonts/unifont_upper { };
 
   vistafonts = callPackage ../data/fonts/vista-fonts { };
 
@@ -11241,6 +11290,8 @@ let
     loremIpsum = callPackage ../applications/editors/emacs-modes/lorem-ipsum { };
 
     magit = callPackage ../applications/editors/emacs-modes/magit { };
+
+    markdownMode = callPackage ../applications/editors/emacs-modes/markdown-mode { };
 
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
 
@@ -12390,7 +12441,7 @@ let
 
   pencil = callPackage ../applications/graphics/pencil { };
 
-  perseus = callPackage ../applications/science/math/perseus {};  
+  perseus = callPackage ../applications/science/math/perseus {};
 
   petrifoo = callPackage ../applications/audio/petrifoo {
     inherit (gnome) libgnomecanvas;
@@ -12429,9 +12480,9 @@ let
     plugins = [];
   };
 
-  pidginlatex = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex { };
-
-  pidginlatexSF = pidginlatex;
+  pidginlatex = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex {
+    texLive = texlive.combined.scheme-basic;
+  };
 
   pidginmsnpecan = callPackage ../applications/networking/instant-messengers/pidgin-plugins/msn-pecan { };
 
@@ -13078,6 +13129,7 @@ let
     dconf = gnome3.dconf;
     gtkvnc = gtkvnc.override { enableGTK3 = true; };
     spice_gtk = spice_gtk.override { enableGTK3 = true; };
+    system-libvirt = libvirt;
   };
 
   virtinst = callPackage ../applications/virtualization/virtinst {};
@@ -15197,6 +15249,7 @@ aliases = with self; rec {
   xlibs = xorg; # added 2015-09
   youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
   youtubeDL = youtube-dl;  # added 2014-10-26
+  pidginlatexSF = pidginlatex; # added 2014-11-02
 };
 
 tweakAlias = _n: alias: with lib;
@@ -15205,4 +15258,3 @@ tweakAlias = _n: alias: with lib;
   else alias;
 
 in lib.mapAttrs tweakAlias aliases // self; in pkgs
-

@@ -1080,10 +1080,10 @@ let
   };
 
   buttersink = buildPythonPackage rec {
-    name = "buttersink-0.6.6";
+    name = "buttersink-0.6.7";
 
     src = pkgs.fetchurl {
-      sha256 = "1vi0pz8r3d17bsn5g7clkyph7sc0rjzbzqk6rwglaxcah7sfj2mj";
+      sha256 = "1azd0g0p9qk9wp344jmvqp4wk5f3wpsz3lb750xvnmd7qzf6v377";
       url = "https://pypi.python.org/packages/source/b/buttersink/${name}.tar.gz";
     };
 
@@ -2709,10 +2709,11 @@ let
   };
 
   cssselect = buildPythonPackage rec {
-    name = "cssselect-0.7.1";
+    name = "cssselect-${version}";
+    version = "0.9.1";
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/c/cssselect/cssselect-0.7.1.tar.gz";
-      md5 = "c6c5e9a2e7ca226ce03f6f67a771379c";
+      url = "http://pypi.python.org/packages/source/c/cssselect/${name}.tar.gz";
+      sha256 = "10h623qnp6dp1191jri7lvgmnd4yfkl36k9smqklp1qlf3iafd85";
     };
     # AttributeError: 'module' object has no attribute 'tests'
     doCheck = false;
@@ -4753,11 +4754,11 @@ let
   radicale = buildPythonPackage rec {
     name = "radicale-${version}";
     namePrefix = "";
-    version = "0.10";
+    version = "1.0.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/R/Radicale/Radicale-${version}.tar.gz";
-      sha256 = "0r1x23h9raadpdmxnanvhajvkk0ix377mv94jlazr18nfpsj4r8c";
+      sha256 = "0q0vxqg32lp9bzbqn06x7igwq3a9hcmpspvj3icyf0rlg786i2p1";
     };
 
     propagatedBuildInputs = with self; [
@@ -10413,6 +10414,25 @@ let
     };
   };
 
+  pymetar = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "pymetar";
+    version = "0.20";
+
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/${pname}/${name}.tar.gz";
+      sha256 = "1rxyg9465cp6nc47pqxqf092wmbvv2zhffzvaf2w74laal43pgxw";
+    };
+
+    meta = {
+      description = "A command-line tool to show the weather report by a given station ID";
+      homepage = http://www.schwarzvogel.de/software/pymetar.html;
+      license = licenses.gpl2;
+    };
+  };
+
   pysftp = buildPythonPackage rec {
     name = "pysftp-${version}";
     version = "0.2.8";
@@ -12188,11 +12208,12 @@ let
 
 
   pyquery = buildPythonPackage rec {
-    name = "pyquery-1.2.4";
+    name = "pyquery-${version}";
+    version = "1.2.9";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/p/pyquery/${name}.tar.gz";
-      md5 = "268f08258738d21bc1920d7522f2a63b";
+      url = "http://pypi.python.org/packages/source/p/pyquery/${name}.zip";
+      sha256 = "00p6f1dfma65192hc72dxd506491lsq3g5wgxqafi1xpg2w1xia6";
     };
 
     propagatedBuildInputs = with self; [ cssselect lxml ];
@@ -18473,12 +18494,11 @@ let
 
     namePrefix = "";
     disabled = (!isPy34);
-    propagatedBuildInputs = with self ; [ aiodns slixmpp ];
+    propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr ];
 
-   patches =
-   let patch_base = ../development/python-modules/poezio ;
-   in [ "${patch_base}/make_default_config_writable.patch"
-      ];
+    patches =
+      let patch_base = ../development/python-modules/poezio;
+      in [ "${patch_base}/make_default_config_writable.patch" ];
 
     src = pkgs.fetchurl {
       url = "http://dev.louiz.org/attachments/download/91/${name}.tar.xz";
@@ -18490,6 +18510,25 @@ let
       homepage = http://poez.io;
       license = licenses.mit;
       maintainers = [ maintainers.lsix ];
+    };
+  };
+
+  potr = buildPythonPackage rec {
+    version = "1.0.1";
+    name = "potr-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-potr/python-${name}.zip";
+      sha256 = "1b3vjbv8hvynwj6amw3rg5zj8bagynbj0ipy09xwksf1mb0kz8m8";
+    };
+
+    propagatedBuildInputs = with self ; [ pycrypto ];
+
+    meta = {
+      description = "A pure Python OTR implementation";
+      homepage = "http://python-otr.pentabarf.de/";
+      license = licenses.lgpl3Plus;
+      maintainers = with maintainers; [ globin ];
     };
   };
 

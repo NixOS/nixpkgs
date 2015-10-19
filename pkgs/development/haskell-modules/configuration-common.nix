@@ -433,11 +433,6 @@ self: super: {
   openpgp = dontCheck super.openpgp;
   optional = dontCheck super.optional;
   os-release = dontCheck super.os-release;
-  pandoc-citeproc = dontCheck super.pandoc-citeproc;
-  pandoc-citeproc_0_6 = dontCheck super.pandoc-citeproc_0_6;
-  pandoc-citeproc_0_6_0_1 = dontCheck super.pandoc-citeproc_0_6_0_1;
-  pandoc-citeproc_0_7_3 = dontCheck super.pandoc-citeproc_0_7_3;
-  pandoc-citeproc_0_7_3_1 = dontCheck super.pandoc-citeproc_0_7_3;
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
@@ -914,5 +909,10 @@ self: super: {
     broken = true;      # linking fails because the build doesn't pull in the mesa libraries
   });
   fltkhs-fluid-examples = dontDistribute super.fltkhs-fluid-examples;
+
+  # https://github.com/skogsbaer/hscurses/pull/26
+  hscurses = overrideCabal super.hscurses (drv: {
+    librarySystemDepends = (drv.librarySystemDepends or []) ++ [ pkgs.ncurses ];
+  });
 
 }

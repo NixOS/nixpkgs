@@ -129,7 +129,7 @@ let
           inherit majorVersion minorVersion teenyVersion patchLevel;
           rubyEngine = "ruby";
           baseRuby = baseruby;
-          libPath = "lib/${versionNoPatch}";
+          libPath = "lib/${rubyEngine}/${versionNoPatch}";
           gemPath = "lib/${rubyEngine}/gems/${versionNoPatch}";
         };
       }

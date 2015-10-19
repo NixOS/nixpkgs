@@ -1191,6 +1191,17 @@ rec {
     '';
   };
 
+  tlib = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "tlib-2015-08-05";
+    src = fetchgit {
+      url = "git://github.com/tomtom/tlib_vim";
+      rev = "4c128ee2fee6d97cc5c6089e7797b4ad536de2a4";
+      sha256 = "9cd0fc23bb332d5ae939019929d989b636b891c894f350c38234eaf084e0656c";
+    };
+    dependencies = [];
+
+  };
+
   undotree = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "undotree-2015-08-19";
     src = fetchgit {
@@ -1199,6 +1210,17 @@ rec {
       sha256 = "9c166cb812be486350a3e71eed273a630545d91e3198a214e3dce13b131aeb1d";
     };
     dependencies = [];
+
+  };
+
+  vim-addon-actions = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-addon-actions-2014-09-22";
+    src = fetchgit {
+      url = "git://github.com/MarcWeber/vim-addon-actions";
+      rev = "a5d20500fb8812958540cf17862bd73e7af64936";
+      sha256 = "d2c3eb7a1f29e7233c6fcf3b02d07efebe8252d404ee593419ad399a5fdf6383";
+    };
+    dependencies = ["vim-addon-mw-utils" "tlib"];
 
   };
 
@@ -1230,6 +1252,28 @@ rec {
       url = "git://github.com/MarcWeber/vim-addon-completion";
       rev = "021c449a5ce1ce4ac0af5955e05b0279c1cc0e75";
       sha256 = "969a474749edf7e4443d2540eaf12e891cc0a3f5533e62e081d32408f403a0ea";
+    };
+    dependencies = ["tlib"];
+
+  };
+
+  vim-addon-errorformats = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-addon-errorformats-2014-11-05";
+    src = fetchgit {
+      url = "git://github.com/MarcWeber/vim-addon-errorformats";
+      rev = "dcbb203ad5f56e47e75fdee35bc92e2ba69e1d28";
+      sha256 = "a1260206545d5ae17f2e6b3319f5cf1808b74e792979b1c6667d75974cc53f95";
+    };
+    dependencies = [];
+
+  };
+
+  vim-addon-goto-thing-at-cursor = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-addon-goto-thing-at-cursor-2012-01-11";
+    src = fetchgit {
+      url = "git://github.com/MarcWeber/vim-addon-goto-thing-at-cursor";
+      rev = "f052e094bdb351829bf72ae3435af9042e09a6e4";
+      sha256 = "34658ac99d9a630db9c544b3dfcd2c3df69afa5209e27558cc022b7afc2078ea";
     };
     dependencies = ["tlib"];
 

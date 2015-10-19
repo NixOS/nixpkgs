@@ -91,4 +91,7 @@ self: super: {
   # Needs hashable on pre 7.10.x compilers.
   nats = addBuildDepend super.nats self.hashable;
 
+  # Needs void on pre 7.10.x compilers.
+  conduit = addBuildDepend super.conduit self.void;
+
 }

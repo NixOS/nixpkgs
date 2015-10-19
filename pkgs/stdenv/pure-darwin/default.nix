@@ -20,7 +20,7 @@ let
 
   fetch = { file, sha256 }: derivation ((import <nix/fetchurl.nix> {
     url = "https://dl.dropboxusercontent.com/u/2857322/${file}";
-    inherit sha256;
+    inherit sha256 system;
     executable = true;
   }).drvAttrs // {
     __impureHostDeps = libSystemClosure;
