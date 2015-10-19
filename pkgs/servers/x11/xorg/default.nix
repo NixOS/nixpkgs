@@ -1748,11 +1748,11 @@ let
   }) // {inherit fontsproto libpciaccess videoproto xextproto xorgserver xproto ;};
 
   xf86videosis = (mkDerivation "xf86videosis" {
-    name = "xf86-video-sis-0.10.7";
+    name = "xf86-video-sis-0.10.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-sis-0.10.7.tar.bz2;
-      sha256 = "1l0w84x39gq4y9j81dny9r6rma1xkqvxpsavpkd8h7h8panbcbmy";
+      url = mirror://xorg/individual/driver/xf86-video-sis-0.10.8.tar.bz2;
+      sha256 = "1znkqwdyd6am23xbsfjzamq125j5rrylg5mzqky4scv9gxbz5wy8";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xineramaproto xorgserver xproto ];
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xineramaproto xorgserver xproto ;};
