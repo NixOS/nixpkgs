@@ -28,7 +28,10 @@ plasmaPackage rec {
     kidletime krunner ktexteditor kwin libkscreen libksysguard
     plasma-framework qtquick1 qtquickcontrols qtx11extras solid
   ];
-  patches = [ ./0001-startkde-NixOS-patches.patch ];
+  patches = [
+    ./0001-startkde-NixOS-patches.patch
+    ./0002-qt-5.5-QML-import-paths.patch
+  ];
 
   inherit bash coreutils gnused gnugrep socat;
   inherit kconfig kinit kservice qttools;

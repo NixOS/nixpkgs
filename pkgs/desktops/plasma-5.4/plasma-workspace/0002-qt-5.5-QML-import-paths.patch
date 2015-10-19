@@ -1,0 +1,123 @@
+From 709fe8bff26c9680de13be5e8e5bc587c25a9b2e Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Mon, 19 Oct 2015 18:55:36 -0500
+Subject: [PATCH 2/2] qt-5.5 QML import paths
+
+---
+ applets/analog-clock/contents/ui/analogclock.qml                     | 2 +-
+ applets/batterymonitor/package/contents/ui/BatteryItem.qml           | 2 +-
+ applets/batterymonitor/package/contents/ui/CompactRepresentation.qml | 2 +-
+ applets/batterymonitor/package/contents/ui/PopupDialog.qml           | 2 +-
+ applets/batterymonitor/package/contents/ui/batterymonitor.qml        | 2 +-
+ applets/lock_logout/contents/ui/lockout.qml                          | 2 +-
+ applets/notifications/package/contents/ui/main.qml                   | 2 +-
+ applets/systemtray/package/contents/ui/main.qml                      | 2 +-
+ 8 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/applets/analog-clock/contents/ui/analogclock.qml b/applets/analog-clock/contents/ui/analogclock.qml
+index edb3af9..7eb839d 100644
+--- a/applets/analog-clock/contents/ui/analogclock.qml
++++ b/applets/analog-clock/contents/ui/analogclock.qml
+@@ -25,7 +25,7 @@ import org.kde.plasma.calendar 2.0 as PlasmaCalendar
+ import QtQuick.Layouts 1.1
+ 
+ import org.kde.plasma.core 2.0 as PlasmaCore
+-import "logic.js" as Logic
++import "../code/logic.js" as Logic
+ 
+ Item {
+     id: analogclock
+diff --git a/applets/batterymonitor/package/contents/ui/BatteryItem.qml b/applets/batterymonitor/package/contents/ui/BatteryItem.qml
+index 8d43797..3322369 100644
+--- a/applets/batterymonitor/package/contents/ui/BatteryItem.qml
++++ b/applets/batterymonitor/package/contents/ui/BatteryItem.qml
+@@ -26,7 +26,7 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
+ import org.kde.plasma.extras 2.0 as PlasmaExtras
+ import org.kde.plasma.workspace.components 2.0
+ import org.kde.kcoreaddons 1.0 as KCoreAddons
+-import "logic.js" as Logic
++import "../code/logic.js" as Logic
+ 
+ Item {
+     id: batteryItem
+diff --git a/applets/batterymonitor/package/contents/ui/CompactRepresentation.qml b/applets/batterymonitor/package/contents/ui/CompactRepresentation.qml
+index b4059cb..ae8eeaf 100755
+--- a/applets/batterymonitor/package/contents/ui/CompactRepresentation.qml
++++ b/applets/batterymonitor/package/contents/ui/CompactRepresentation.qml
+@@ -24,7 +24,7 @@ import QtQuick.Layouts 1.1
+ import org.kde.plasma.core 2.0 as PlasmaCore
+ import org.kde.plasma.components 2.0 as Components
+ import org.kde.plasma.workspace.components 2.0
+-import "logic.js" as Logic
++import "../code/logic.js" as Logic
+ 
+ MouseArea {
+     id: root
+diff --git a/applets/batterymonitor/package/contents/ui/PopupDialog.qml b/applets/batterymonitor/package/contents/ui/PopupDialog.qml
+index d4952c6..2b6586d 100644
+--- a/applets/batterymonitor/package/contents/ui/PopupDialog.qml
++++ b/applets/batterymonitor/package/contents/ui/PopupDialog.qml
+@@ -23,7 +23,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
+ import org.kde.plasma.components 2.0 as Components
+ import org.kde.plasma.extras 2.0 as PlasmaExtras
+ import org.kde.kquickcontrolsaddons 2.0
+-import "logic.js" as Logic
++import "../code/logic.js" as Logic
+ 
+ FocusScope {
+     id: dialog
+diff --git a/applets/batterymonitor/package/contents/ui/batterymonitor.qml b/applets/batterymonitor/package/contents/ui/batterymonitor.qml
+index a086581..6e1e8be 100755
+--- a/applets/batterymonitor/package/contents/ui/batterymonitor.qml
++++ b/applets/batterymonitor/package/contents/ui/batterymonitor.qml
+@@ -25,7 +25,7 @@ import org.kde.plasma.plasmoid 2.0
+ import org.kde.plasma.core 2.0 as PlasmaCore
+ import org.kde.kcoreaddons 1.0 as KCoreAddons
+ import org.kde.kquickcontrolsaddons 2.0
+-import "logic.js" as Logic
++import "../code/logic.js" as Logic
+ 
+ Item {
+     id: batterymonitor
+diff --git a/applets/lock_logout/contents/ui/lockout.qml b/applets/lock_logout/contents/ui/lockout.qml
+index d243796..86475df 100644
+--- a/applets/lock_logout/contents/ui/lockout.qml
++++ b/applets/lock_logout/contents/ui/lockout.qml
+@@ -23,7 +23,7 @@ import org.kde.plasma.plasmoid 2.0
+ import org.kde.plasma.core 2.0 as PlasmaCore
+ import org.kde.plasma.components 2.0
+ import org.kde.kquickcontrolsaddons 2.0
+-import "data.js" as Data
++import "../code/data.js" as Data
+ 
+ Flow {
+     id: lockout
+diff --git a/applets/notifications/package/contents/ui/main.qml b/applets/notifications/package/contents/ui/main.qml
+index 2871cdb..3f50856 100644
+--- a/applets/notifications/package/contents/ui/main.qml
++++ b/applets/notifications/package/contents/ui/main.qml
+@@ -28,7 +28,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
+ 
+ import org.kde.plasma.private.notifications 1.0
+ 
+-import "uiproperties.js" as UiProperties
++import "../code/uiproperties.js" as UiProperties
+ 
+ MouseEventListener {
+     id: notificationsApplet
+diff --git a/applets/systemtray/package/contents/ui/main.qml b/applets/systemtray/package/contents/ui/main.qml
+index 2e26455..864c9c5 100644
+--- a/applets/systemtray/package/contents/ui/main.qml
++++ b/applets/systemtray/package/contents/ui/main.qml
+@@ -25,7 +25,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
+ // import org.kde.plasma.extras 2.0 as PlasmaExtras
+ 
+ import org.kde.private.systemtray 2.0 as SystemTray
+-import "Layout.js" as LayoutManager
++import "../code/Layout.js" as LayoutManager
+ 
+ Item {
+     id: root
+-- 
+2.5.2
+
