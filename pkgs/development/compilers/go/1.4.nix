@@ -72,6 +72,8 @@ stdenv.mkDerivation rec {
     sed -i '/TestResolveTCPAddr/areturn' src/net/tcp_test.go
     sed -i '/TestResolveUDPAddr/areturn' src/net/udp_test.go
 
+    sed -i '/TestCgoExternalThreadSIGPROF/areturn' src/runtime/crash_cgo_test.go
+
     touch $TMPDIR/group $TMPDIR/hosts $TMPDIR/passwd
   '';
 

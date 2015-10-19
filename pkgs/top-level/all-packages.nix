@@ -4053,12 +4053,10 @@ let
   };
 
   go_1_5 = callPackage ../development/compilers/go/1.5.nix {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
-  go = if stdenv.isDarwin
-    then go_1_4 # missing DWARF files during go-1.5 build
-    else go_1_5;
+  go = go_1_5;
 
   go-repo-root = goPackages.go-repo-root.bin // { outputs = [ "bin" ]; };
 
