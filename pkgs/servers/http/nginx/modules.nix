@@ -98,4 +98,14 @@
       sha256 = "1ycb5zd9sw60ra53jpak1m73zwrjikwhrrh9q6266h1mlyns7zxm";
     };
   };
+
+  pam = {
+    src = fetchFromGitHub {
+      owner = "stogh";
+      repo = "ngx_http_auth_pam_module";
+      rev = "v1.4";
+      sha256 = "068zwyrc1dji55rlaj2kx6n0v2n5rpj7nz26ipvz26ida712md35";
+    };
+    inputs = [ pkgs.pam ];
+  };
 }
