@@ -131,6 +131,7 @@ mirror://xorg/individual/driver/xf86-video-ast-1.1.5.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ati-7.5.0.tar.bz2
 mirror://xorg/individual/driver/glamor-egl-0.6.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-nouveau-1.0.11.tar.bz2
+mirror://xorg/individual/driver/xf86-video-chips-1.2.6.tar.bz2
 mirror://xorg/individual/driver/xf86-video-cirrus-1.5.3.tar.bz2
 mirror://xorg/individual/driver/xf86-video-dummy-0.3.7.tar.bz2
 mirror://xorg/individual/driver/xf86-video-fbdev-0.4.4.tar.bz2
@@ -149,6 +150,7 @@ mirror://xorg/X11R7.7/src/everything/xf86-video-newport-0.2.4.tar.bz2
 mirror://xorg/individual/driver/xf86-video-nv-2.1.20.tar.bz2
 mirror://xorg/individual/driver/xf86-video-openchrome-0.3.3.tar.bz2
 mirror://xorg/individual/driver/xf86-video-r128-6.10.0.tar.bz2
+mirror://xorg/individual/driver/xf86-video-s3virge-1.10.7.tar.bz2
 mirror://xorg/individual/driver/xf86-video-savage-2.3.8.tar.bz2
 mirror://xorg/individual/driver/xf86-video-siliconmotion-1.7.8.tar.bz2
 mirror://xorg/individual/driver/xf86-video-sis-0.10.8.tar.bz2
@@ -163,6 +165,7 @@ mirror://xorg/individual/driver/xf86-video-vmware-13.1.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-voodoo-1.2.5.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86-video-wsfb-0.4.0.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86vidmodeproto-2.3.1.tar.bz2
+mirror://xorg/individual/driver/xf86-video-xgi-1.6.1.tar.bz2
 mirror://xorg/individual/app/xgamma-1.0.6.tar.bz2
 mirror://xorg/individual/app/xgc-1.0.5.tar.bz2
 mirror://xorg/individual/app/xhost-1.0.7.tar.bz2

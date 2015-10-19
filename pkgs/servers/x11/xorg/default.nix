@@ -1537,6 +1537,16 @@ let
     buildInputs = [pkgconfig fontsproto glamoregl libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
   }) // {inherit fontsproto glamoregl libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
+  xf86videochips = (mkDerivation "xf86videochips" {
+    name = "xf86-video-chips-1.2.6";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/driver/xf86-video-chips-1.2.6.tar.bz2;
+      sha256 = "073bcdsvvsg19mb963sa5v7x2zs19y0q6javmgpiwfaqkz7zbblr";
+    };
+    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
+
   xf86videocirrus = (mkDerivation "xf86videocirrus" {
     name = "xf86-video-cirrus-1.5.3";
     builder = ./builder.sh;
@@ -1727,6 +1737,16 @@ let
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xorgserver xproto ];
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xorgserver xproto ;};
 
+  xf86videos3virge = (mkDerivation "xf86videos3virge" {
+    name = "xf86-video-s3virge-1.10.7";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/driver/xf86-video-s3virge-1.10.7.tar.bz2;
+      sha256 = "1nm4cngjbw226q63rdacw6nx5lgxv7l7rsa8vhpr0gs80pg6igjx";
+    };
+    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
+
   xf86videosavage = (mkDerivation "xf86videosavage" {
     name = "xf86-video-savage-2.3.8";
     builder = ./builder.sh;
@@ -1856,6 +1876,16 @@ let
     };
     buildInputs = [pkgconfig xorgserver xproto ];
   }) // {inherit xorgserver xproto ;};
+
+  xf86videoxgi = (mkDerivation "xf86videoxgi" {
+    name = "xf86-video-xgi-1.6.1";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/driver/xf86-video-xgi-1.6.1.tar.bz2;
+      sha256 = "10xd2vah0pnpw5spn40n4p95mpmgvdkly4i1cz51imnlfsw7g8si";
+    };
+    buildInputs = [pkgconfig fontsproto glproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xineramaproto xorgserver xproto ];
+  }) // {inherit fontsproto glproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xineramaproto xorgserver xproto ;};
 
   xf86vidmodeproto = (mkDerivation "xf86vidmodeproto" {
     name = "xf86vidmodeproto-2.3.1";
