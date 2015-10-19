@@ -37,6 +37,7 @@ plasmaPackage rec {
       hwclock = "${utillinux}/sbin/hwclock";
     })
     ./0002-zoneinfo.patch
+    ./0003-qt-5.5-QML-import-paths.patch
   ];
   NIX_CFLAGS_COMPILE = [ "-I${xorgserver}/include/xorg" ];
   cmakeFlags = [

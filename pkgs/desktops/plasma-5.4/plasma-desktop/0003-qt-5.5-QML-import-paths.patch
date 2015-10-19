@@ -1,0 +1,39 @@
+From d640d060109e552b333578abc80a36b47e521d4c Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Mon, 19 Oct 2015 18:45:36 -0500
+Subject: [PATCH 3/3] qt-5.5 QML import paths
+
+---
+ containments/desktop/package/contents/ui/main.qml | 2 +-
+ containments/panel/contents/ui/main.qml           | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/containments/desktop/package/contents/ui/main.qml b/containments/desktop/package/contents/ui/main.qml
+index 8c42706..fc74433 100644
+--- a/containments/desktop/package/contents/ui/main.qml
++++ b/containments/desktop/package/contents/ui/main.qml
+@@ -28,7 +28,7 @@ import org.kde.draganddrop 2.0 as DragDrop
+ 
+ import org.kde.private.desktopcontainment.desktop 0.1 as Desktop
+ 
+-import "LayoutManager.js" as LayoutManager
++import "../code/LayoutManager.js" as LayoutManager
+ 
+ DragDrop.DropArea {
+     id: root
+diff --git a/containments/panel/contents/ui/main.qml b/containments/panel/contents/ui/main.qml
+index 6a6f364..edba48e 100644
+--- a/containments/panel/contents/ui/main.qml
++++ b/containments/panel/contents/ui/main.qml
+@@ -25,7 +25,7 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
+ import org.kde.kquickcontrolsaddons 2.0
+ import org.kde.draganddrop 2.0 as DragDrop
+ 
+-import "LayoutManager.js" as LayoutManager
++import "../code/LayoutManager.js" as LayoutManager
+ 
+ DragDrop.DropArea {
+     id: root
+-- 
+2.5.2
+
