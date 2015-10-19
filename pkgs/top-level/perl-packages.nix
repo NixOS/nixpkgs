@@ -11427,6 +11427,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TextCSVEncoded = buildPerlPackage rec {
+    name = "Text-CSV-Encoded-0.24";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZA/ZARQUON/${name}.tar.gz";
+      sha256 = "ce8f307dabdcb623cfc385c175152b0f465096d449b9c828efbe6611efcab0d5";
+    };
+    propagatedBuildInputs = [ TextCSV ];
+    meta = {
+      description = "Encoding aware Text::CSV";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   TextCSV_XS = buildPerlPackage {
     name = "Text-CSV_XS-1.19.tgz";
     src = fetchurl {
