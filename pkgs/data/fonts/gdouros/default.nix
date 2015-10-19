@@ -9,7 +9,7 @@ let
                 description = "Basic Latin, Greek, Cyrillic and many Symbol blocks of Unicode"; };
     aegyptus = { version = "6.00"; file = "Aegyptus.zip"; sha256 = "092vci45wp9x0yky6dcfky4bs4avaxn6xpai3bs74gxskd2j9s3q";
                  description = "Egyptian Hieroglyphs, Coptic, Meroitic"; };
-    akkadian = { version = "7.13"; file = "Akkadian.zip"; sha256 = "1xwlify1jdsjfgbpl48gcdv7m2apa9avsyxy17q2zg6lngx1ic8a";
+    akkadian = { version = "7.13"; file = "Akkadian.zip"; sha256 = "1jd2fb6jnwpdwgkidsi2pnw0nk2cpya8k85299w591sqslfkxyij";
                  description = "Sumero-Akkadian Cuneiform"; };
     anatolian = { version = "5.02"; file = "Anatolian.zip"; sha256 = "0arm58sijzk0bqmfb70k1sjvq79wgw16hx3j2g4l8qz4sv05bp8l";
                   description = "Anatolian Hieroglyphs"; };
