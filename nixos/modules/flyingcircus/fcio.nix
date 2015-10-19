@@ -33,4 +33,7 @@ with lib;
 
   users.extraUsers.root.initialHashedPassword = "";
 
+  networking.firewall.allowPing = true;
+  networking.firewall.rejectPackets = true;
+
 }
