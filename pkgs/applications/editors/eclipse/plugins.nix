@@ -298,12 +298,12 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.5";
+    version = "4.5.1";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5-201506032000/org.eclipse.jdt-4.5.zip";
-      sha256 = "0zrdn26f7qsms2xfiyc049bhhh0czsbf989pgyq736b8hfmmh9iy";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5.1-201509040015/org.eclipse.jdt-4.5.1.zip";
+      sha256 = "0nxi552vvpjalnsqhc0zi6fgaj9p22amxsiczpv7za4kr7m47x73";
     };
 
     meta = with stdenv.lib; {
