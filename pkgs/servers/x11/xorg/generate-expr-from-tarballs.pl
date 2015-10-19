@@ -61,7 +61,7 @@ while (<>) {
       #next unless $pkg eq "xcbutil";
     }
 
-    $tarball =~ /\/([^\/]*)\.tar\.bz2$/;
+    $tarball =~ /\/([^\/]*)\.tar\.(bz2|gz|xz)$/;
     my $pkgName = $1;
 
     print "  $pkg $pkgName\n";
@@ -82,7 +82,7 @@ while (<>) {
     print "\nunpacking $path\n";
     system "rm -rf '$tmpDir'";
     mkdir $tmpDir, 0700;
-    system "cd '$tmpDir' && tar xfj '$path'";
+    system "cd '$tmpDir' && tar xf '$path'";
     die "cannot unpack `$path'" if $? != 0;
     print "\n";
 
