@@ -1,6 +1,6 @@
 {stdenv, fetchurl,
-  libtool, libjpeg, openssl, libX11, libXdamage, xproto, damageproto, 
-  xextproto, libXext, fixesproto, libXfixes, xineramaproto, libXinerama, 
+  libtool, libjpeg, libssl, libX11, libXdamage, xproto, damageproto,
+  xextproto, libXext, fixesproto, libXfixes, xineramaproto, libXinerama,
   libXrandr, randrproto, libXtst, zlib
 }:
 
@@ -17,7 +17,7 @@ let
     sha256="1y83z31wbjivbxs60kj8a8mmjmdkgxlvr2x15yz95yy24lshs1ng";
   };
   buildInputs = [
-    libtool libjpeg openssl libX11 libXdamage xproto damageproto
+    libtool libjpeg libssl libX11 libXdamage xproto damageproto
     xextproto libXext fixesproto libXfixes xineramaproto libXinerama
     libXrandr randrproto libXtst zlib
   ];

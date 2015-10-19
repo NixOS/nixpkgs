@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl, libssl }:
 
 stdenv.mkDerivation rec {
   name = "socat-1.7.3.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "011ydc0x8camplf8l6mshs3v5fswarld8v0wf7grz6rjq18fhrq7";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libssl ];
 
   patches = [ ./enable-ecdhe.patch ];
 

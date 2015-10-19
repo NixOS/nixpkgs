@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, zlib, expat, openssl
+{ stdenv, fetchurl, pkgconfig, zlib, expat, libssl
 , libjpeg, libpng, libtiff, freetype, fontconfig, lcms2, libpaper, jbig2dec
 , libiconv
 , x11Support ? false, xlibsWrapper ? null
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs =
-    [ pkgconfig zlib expat openssl
+    [ pkgconfig zlib expat libssl
       libjpeg libpng libtiff freetype fontconfig lcms2 libpaper jbig2dec
       libiconv
     ]

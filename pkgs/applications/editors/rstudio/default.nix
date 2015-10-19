@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, boost155, zlib, openssl, R, qt4, libuuid, hunspellDicts, unzip, ant, jdk }:
+{ stdenv, fetchurl, cmake, boost155, zlib, libssl, R, qt4, libuuid, hunspellDicts, unzip, ant, jdk }:
 
 let
   version = "0.98.110";
@@ -8,7 +8,7 @@ in
 stdenv.mkDerivation {
   name = "RStudio-${version}";
 
-  buildInputs = [ cmake boost155 zlib openssl R qt4 libuuid unzip ant jdk ];
+  buildInputs = [ cmake boost155 zlib libssl R qt4 libuuid unzip ant jdk ];
 
   src = fetchurl {
     url = "https://github.com/rstudio/rstudio/archive/v${version}.tar.gz";

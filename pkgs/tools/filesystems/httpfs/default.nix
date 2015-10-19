@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, fuse, openssl, asciidoc
+{ fetchurl, stdenv, pkgconfig, fuse, libssl, asciidoc
 , docbook_xml_dtd_45, docbook_xsl , libxml2, libxslt }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig fuse openssl
+    [ pkgconfig fuse libssl
       asciidoc docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
     ];
 

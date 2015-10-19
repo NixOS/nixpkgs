@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, openssl, readline }:
+{ stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, libssl, readline }:
 
 stdenv.mkDerivation rec {
   name = "bacula-5.2.13";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1n3sc0kd7r0afpyi708y3md0a24rbldnfcdz0syqj600pxcd9gm4";
   };
 
-  buildInputs = [ postgresql sqlite zlib ncurses openssl readline ]
+  buildInputs = [ postgresql sqlite zlib ncurses libssl readline ]
     # acl relies on attr, which I can't get to build on darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) acl;
 

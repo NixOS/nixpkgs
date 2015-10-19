@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl, libssl }:
 
 stdenv.mkDerivation rec {
   name = "socat-2.0.0-b8";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1slkv1hhcp9a6c88h6yl5cs0z9g60fp2ja6865s6kywqp6fmf168";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libssl ];
 
   configureFlags = stdenv.lib.optionalString stdenv.isDarwin "--disable-ip6";
 

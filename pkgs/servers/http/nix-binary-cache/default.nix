@@ -1,5 +1,5 @@
 {stdenv, fetchurl
-, coreutils, findutils, nix, xz, bzip2, gnused, gnugrep, openssl
+, coreutils, findutils, nix, xz, bzip2, gnused, gnugrep, libssl
 , lighttpd, iproute }:
 stdenv.mkDerivation rec {
   version = "2014-06-29-1";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       --replace @bzip2@ "${bzip2}/bin" \
       --replace @gnused@ "${gnused}/bin" \
       --replace @gnugrep@ "${gnugrep}/bin" \
-      --replace @openssl@ "${openssl}/bin" \
+      --replace @openssl@ "${libssl}/bin" \
       --replace @lighttpd@ "${lighttpd}/sbin" \
       --replace @iproute@ "${iproute}/sbin" \
       --replace "xXxXx" "xXxXx"
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       --replace @bzip2@ "${bzip2}/bin" \
       --replace @gnused@ "${gnused}/bin" \
       --replace @gnugrep@ "${gnugrep}/bin" \
-      --replace @openssl@ "${openssl}/bin" \
+      --replace @openssl@ "${libssl}/bin" \
       --replace @lighttpd@ "${lighttpd}/sbin" \
       --replace @iproute@ "${iproute}/sbin" \
       --replace "xXxXx" "xXxXx"

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, makeWrapper, autoconf, automake,
-  libmspack, openssl, pam, xercesc, icu, libdnet, procps, 
+  libmspack, libssl, pam, xercesc, icu, libdnet, procps,
   xlibsWrapper, libXinerama, libXi, libXrender, libXrandr, libXtst,
   pkgconfig, glib, gtk, gtkmm }:
 
@@ -16,8 +16,8 @@ in stdenv.mkDerivation {
     sha256 = "15lwayrz9bpx4z12fj616hsn25m997y72licwwz7kms4sx9ssip1";
   };
 
-  buildInputs = 
-    [ autoconf automake makeWrapper libmspack openssl pam xercesc icu libdnet procps
+  buildInputs =
+    [ autoconf automake makeWrapper libmspack libssl pam xercesc icu libdnet procps
       pkgconfig glib gtk gtkmm xlibsWrapper libXinerama libXi libXrender libXrandr libXtst ];
 
   patchPhase = ''

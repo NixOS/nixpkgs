@@ -1,4 +1,4 @@
-{ stdenv, fetchurl,  openssl }:
+{ stdenv, fetchurl, libssl }:
 
 stdenv.mkDerivation rec {
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1g48cd74sqhl496wmljhq44iyfpghaz363a1ip8nyhpjz7d57f03";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libssl ];
 
   patches = [
     ./fix-mail-spool-path.patch

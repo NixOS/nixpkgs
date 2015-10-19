@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pam, openssl, perl }:
+{ stdenv, fetchurl, pam, libssl, perl }:
 
 stdenv.mkDerivation rec {
   name = "pam_ssh_agent_auth-0.9.5";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
       ./multiple-key-files.patch
     ];
 
-  buildInputs = [ pam openssl perl ];
+  buildInputs = [ pam libssl perl ];
 
   enableParallelBuilding = true;
 

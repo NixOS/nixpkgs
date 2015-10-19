@@ -1,4 +1,4 @@
-{ stdenv, fetchhg, cmake, SDL, mesa, fmod42416, openssl, sqlite, sqlite-amalgamation }:
+{ stdenv, fetchhg, cmake, SDL, mesa, fmod42416, libssl, sqlite, sqlite-amalgamation }:
 
 stdenv.mkDerivation {
   name = "zandronum-2.1.2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   phases = [ "unpackPhase" "configurePhase" "buildPhase" "installPhase" ];
 
-  buildInputs = [ cmake SDL mesa fmod42416 openssl sqlite sqlite-amalgamation ];
+  buildInputs = [ cmake SDL mesa fmod42416 libssl sqlite sqlite-amalgamation ];
 
   preConfigure = ''
     cp ${sqlite-amalgamation}/* sqlite/

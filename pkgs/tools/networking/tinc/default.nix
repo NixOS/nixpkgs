@@ -1,4 +1,4 @@
-{stdenv, fetchurl, lzo, openssl, zlib}:
+{stdenv, fetchurl, lzo, libssl, zlib}:
 
 stdenv.mkDerivation rec {
   version = "1.0.26";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "08ds8s32cjslms1q227ihd6jz35583v378ij4pknfa5xngfijhrb";
   };
 
-  buildInputs = [ lzo openssl zlib ];
+  buildInputs = [ lzo libssl zlib ];
 
   configureFlags = [
     "--localstatedir=/var"

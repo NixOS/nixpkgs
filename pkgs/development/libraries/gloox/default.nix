@@ -1,11 +1,11 @@
 { stdenv, fetchurl
 , zlibSupport ? true, zlib ? null
-, sslSupport ? true, openssl ? null
+, sslSupport ? true, libssl ? null
 , idnSupport ? true, libidn ? null
 }:
 
 assert zlibSupport -> zlib != null;
-assert sslSupport -> openssl != null;
+assert sslSupport -> libssl != null;
 assert idnSupport -> libidn != null;
 
 let
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ]
     ++ stdenv.lib.optional zlibSupport zlib
-    ++ stdenv.lib.optional sslSupport openssl
+    ++ stdenv.lib.optional sslSupport libssl
     ++ stdenv.lib.optional idnSupport libidn;
 
   meta = {

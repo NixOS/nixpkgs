@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig
-, openssl ? null, libpcap ? null
+, libssl ? null, libpcap ? null
 }:
 
 with stdenv.lib;
@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig ];
 
   # libsrtp.pc references -lcrypto -lpcap without -L
-  propagatedBuildInputs = [ openssl libpcap ];
+  propagatedBuildInputs = [ libssl libpcap ];
 
   configureFlags = [
     "--disable-debug"
-  ] ++ optional (openssl != null) "--enable-openssl";
+  ] ++ optional (libssl != null) "--enable-openssl";
 
   postInstall = ''
     rmdir $out/bin

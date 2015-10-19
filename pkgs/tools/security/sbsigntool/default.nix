@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, automake, utillinux, openssl, libuuid, gnu-efi
+{ stdenv, fetchgit, autoconf, automake, utillinux, libssl, libuuid, gnu-efi
 , binutils, pkgconfig, help2man }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   prePatch = "patchShebangs .";
 
-  buildInputs = [ autoconf automake utillinux openssl libuuid gnu-efi binutils pkgconfig help2man ];
+  buildInputs = [ autoconf automake utillinux libssl libuuid gnu-efi binutils pkgconfig help2man ];
 
   configurePhase = ''
     substituteInPlace configure.ac --replace "@@NIX_GNUEFI@@" "${gnu-efi}"

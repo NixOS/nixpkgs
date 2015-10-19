@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, ptlib, srtp, libtheora, speex
-, ffmpeg, x264, cyrus_sasl, openldap, openssl, expat, unixODBC }:
+, ffmpeg, x264, cyrus_sasl, openldap, libssl, expat, unixODBC }:
 
 stdenv.mkDerivation rec {
   name = "opal-3.10.10";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig ptlib srtp libtheora speex
-                  ffmpeg x264 cyrus_sasl openldap openssl expat unixODBC ];
+                  ffmpeg x264 cyrus_sasl openldap libssl expat unixODBC ];
   propagatedBuildInputs = [ speex ]; 
 
   configureFlags = [ "--enable-h323" ];

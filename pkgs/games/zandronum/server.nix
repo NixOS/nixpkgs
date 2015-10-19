@@ -1,4 +1,4 @@
-{ stdenv, fetchhg, cmake, openssl, sqlite, sqlite-amalgamation, SDL }:
+{ stdenv, fetchhg, cmake, libssl, sqlite, sqlite-amalgamation, SDL }:
 
 stdenv.mkDerivation {
   name = "zandronum-server-2.1.2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   phases = [ "unpackPhase" "configurePhase" "buildPhase" "installPhase" ];
 
-  buildInputs = [ cmake openssl sqlite sqlite-amalgamation SDL ];
+  buildInputs = [ cmake libssl sqlite sqlite-amalgamation SDL ];
 
   preConfigure = ''
     cp ${sqlite-amalgamation}/* sqlite/

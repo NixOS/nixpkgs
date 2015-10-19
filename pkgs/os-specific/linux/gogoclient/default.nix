@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl, nettools, iproute, procps}:
+{stdenv, fetchurl, libssl, nettools, iproute, procps}:
 
 let baseName = "gogoclient";
     version  = "1.2";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   makeFlags = ["target=linux"];
   installFlags = ["installdir=$(out)"];
 
-  buildInputs = [openssl];
+  buildInputs = [libssl];
 
   preFixup = ''
     mkdir -p $out/share/${name}

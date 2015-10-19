@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl, curl, ncurses, libjpeg
+{stdenv, fetchurl, libssl, curl, ncurses, libjpeg
 , withGpg ? true, gpgme ? null}:
 
 stdenv.mkDerivation rec {
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "18iz3hkvr31jsyznryvyldxm9ckyrpy9sczxikrnw2i2r1xyfj8m";
   };
 
-  buildInputs = [ openssl curl ncurses libjpeg ]
+  buildInputs = [ libssl curl ncurses libjpeg ]
     ++ stdenv.lib.optional withGpg gpgme;
 
-  configureFlags = [ "--with-openssl=${openssl}" ];
+  configureFlags = [ "--with-openssl=${libssl}" ];
 
   meta = {
     homepage = http://www.centerim.org/;

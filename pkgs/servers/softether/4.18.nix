@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, openssl, readline, ncurses, zlib }:
+, libssl, readline, ncurses, zlib }:
 
 let
   os = if stdenv.isLinux then "1"
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "585d61e524d3cad90806cbeb52ebe54b5144359e6c44676e8e7fb5683ffd4574";
   };
 
-  buildInputs = [ openssl readline ncurses zlib ];
+  buildInputs = [ libssl readline ncurses zlib ];
 
   preConfigure = ''
       echo "${os}

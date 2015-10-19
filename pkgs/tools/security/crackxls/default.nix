@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, autoconf, automake, openssl, libgsf, gmp }:
+{ stdenv, fetchgit, pkgconfig, autoconf, automake, libssl, libgsf, gmp }:
 
 stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0q5jl7hcds3f0rhly3iy4fhhbyh9cdrfaw7zdrazzf1wswwhyssz";
   };
 
-  buildInputs = [ pkgconfig autoconf automake openssl libgsf gmp ];
+  buildInputs = [ pkgconfig autoconf automake libssl libgsf gmp ];
 
   patchPhase = ''
     substituteInPlace Makefile.in \

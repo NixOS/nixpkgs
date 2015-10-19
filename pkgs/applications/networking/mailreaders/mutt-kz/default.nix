@@ -5,13 +5,13 @@
 , saslSupport ? true
 , gpgmeSupport ? true
 , gdbm ? null
-, openssl ? null
+, libssl ? null
 , cyrus_sasl ? null
 , gpgme ? null
 }:
 
 assert headerCache -> gdbm != null;
-assert sslSupport -> openssl != null;
+assert sslSupport -> libssl != null;
 assert saslSupport -> cyrus_sasl != null;
 assert gpgmeSupport -> gpgme != null;
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = with stdenv.lib;
     [ ncurses which perl autoreconfHook autoconf automake notmuch]
     ++ optional headerCache gdbm
-    ++ optional sslSupport openssl
+    ++ optional sslSupport libssl
     ++ optional saslSupport cyrus_sasl
     ++ optional gpgmeSupport gpgme;
 

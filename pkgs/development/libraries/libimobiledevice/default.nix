@@ -1,12 +1,12 @@
 { stdenv, fetchurl, python, pkgconfig, usbmuxd, glib, libgcrypt,
-  libtasn1, libplist, readline, libusbmuxd, openssl }:
+  libtasn1, libplist, readline, libusbmuxd, libssl }:
 
 stdenv.mkDerivation rec {
   name = "libimobiledevice-1.2.0";
 
   nativeBuildInputs = [ python libplist.swig pkgconfig ];
   buildInputs = [ readline ];
-  propagatedBuildInputs = [ libusbmuxd glib libgcrypt libtasn1 libplist openssl ];
+  propagatedBuildInputs = [ libusbmuxd glib libgcrypt libtasn1 libplist libssl ];
 
   patchPhase = ''sed -e 's@1\.3\.21@@' -i configure'';
   passthru.swig = libplist.swig;

@@ -2,7 +2,7 @@
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
 , zlibSupport ? false, zlib ? null
-, sslSupport ? false, openssl ? null
+, sslSupport ? false, libssl ? null
 , scpSupport ? false, libssh2 ? null
 , gssSupport ? false, gss ? null
 , c-aresSupport ? false, c-ares ? null
@@ -11,7 +11,7 @@
 assert idnSupport -> libidn != null;
 assert ldapSupport -> openldap != null;
 assert zlibSupport -> zlib != null;
-assert sslSupport -> openssl != null;
+assert sslSupport -> libssl != null;
 assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     optional zlibSupport zlib ++
     optional gssSupport gss ++
     optional c-aresSupport c-ares ++
-    optional sslSupport openssl ++
+    optional sslSupport libssl ++
     optional scpSupport libssh2;
 
   # for the second line see http://curl.haxx.se/mail/tracker-2014-03/0087.html
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-      ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
+      ( if sslSupport then "--with-ssl=${libssl}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
       ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
       ( if ldapSupport then "--enable-ldaps" else "--disable-ldaps" )
@@ -63,13 +63,13 @@ stdenv.mkDerivation rec {
     # We should refer to the cross built openssl
     # For the 'urandom', maybe it should be a cross-system option
     configureFlags = [
-        ( if sslSupport then "--with-ssl=${openssl.crossDrv}" else "--without-ssl" )
+        ( if sslSupport then "--with-ssl=${libssl.crossDrv}" else "--without-ssl" )
         "--with-random /dev/urandom"
       ];
   };
 
   passthru = {
-    inherit sslSupport openssl;
+    inherit sslSupport libssl;
   };
 
   meta = with stdenv.lib; {

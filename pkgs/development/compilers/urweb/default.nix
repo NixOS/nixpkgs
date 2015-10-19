@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, file, openssl, mlton
+{ stdenv, fetchurl, file, libssl, mlton
 , mysql, postgresql, sqlite
 }:
 
@@ -11,13 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "0gpdlq3aazx121k3ia94qfa4dyv04q7478x2p6hvcjamn18vk56n";
   };
 
-  buildInputs = [ openssl mlton mysql postgresql sqlite ];
+  buildInputs = [ libssl mlton mysql postgresql sqlite ];
 
   prePatch = ''
     sed -e 's@/usr/bin/file@${file}/bin/file@g' -i configure
   '';
 
-  configureFlags = "--with-openssl=${openssl}";
+  configureFlags = "--with-openssl=${libssl}";
 
   preConfigure = ''
     export PGHEADER="${postgresql}/include/libpq-fe.h";

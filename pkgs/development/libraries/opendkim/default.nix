@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl, libmilter}:
+{stdenv, fetchurl, libssl, libmilter}:
 
 stdenv.mkDerivation rec {
   name = "opendkim-2.4.3";
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     sha256 = "01h97h012gcp8rimjbc9mrv4759cnw4flb42ddiady1bmb2p7vy3";
   };
 
-  configureFlags="--with-openssl=${openssl} --with-milter=${libmilter}";
+  configureFlags="--with-openssl=${libssl} --with-milter=${libmilter}";
 
-  buildInputs = [openssl libmilter];
+  buildInputs = [libssl libmilter];
 }

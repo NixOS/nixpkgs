@@ -1,4 +1,4 @@
-{ stdenv, buildPerlPackage, fetchgit, perl, openssl, perlPackages, gettext, python34Packages
+{ stdenv, buildPerlPackage, fetchgit, perl, libssl, perlPackages, gettext, python34Packages
 # TODO: Remove extra dependencies once it is clear that they are NOT needed somewhere.
 , extraDependencies1 ? false, extraDependencies2 ? false, extraDependencies3 ? false }:
 
@@ -11,7 +11,7 @@ buildPerlPackage {
     sha256 = "7c93bdce7a205c58b08c91c249e566e885ed08f9d43cc2ac652c705c1f7e4490";
   };
 
-  buildInputs = [ perl openssl gettext python34Packages.sphinx ];
+  buildInputs = [ perl libssl gettext python34Packages.sphinx ];
   propagatedBuildInputs = with perlPackages;
     [ # dependencies from Makefile.PL
       libintlperl ConfigVersioned LWP TestSimple ClassAccessorChained IOSocketSSL ClassStd
@@ -50,7 +50,7 @@ buildPerlPackage {
       lib libapreq2 libnet podlators threads threadsshared version ];
 
   preConfigure = ''
-    export OPENSSL_PREFIX=${openssl}
+    export OPENSSL_PREFIX=${libssl}
     substituteInPlace tools/vergen --replace "#!/usr/bin/perl" "#!${perl}/bin/perl"
     cp ${./vergen_revision_state} .vergen_revision_state
     cd core/server

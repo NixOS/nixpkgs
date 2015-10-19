@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl, openssl }:
+{ stdenv, fetchurl, tcl, libssl }:
 
 stdenv.mkDerivation rec {
   name = "tcltls-${version}";
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-tcl=" + tcl + "/lib "
                  + "--with-tclinclude=" + tcl + "/include "
-                 + "--with-ssl-dir=" + openssl;
+                 + "--with-ssl-dir=" + libssl;
 
   preConfigure = ''
     configureFlags="--exec_prefix=$prefix $configureFlags"
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     libPrefix = "tls${version}";
   };
 
-  buildInputs = [ tcl openssl ];
+  buildInputs = [ tcl libssl ];
 
   meta = {
     homepage = "http://tls.sourceforge.net/";

@@ -2,7 +2,7 @@
 , pkgconfig, cmake, gnumake, yasm, pythonFull
 , boost, avahi, libdvdcss, lame, autoreconfHook
 , gettext, pcre, yajl, fribidi, which
-, openssl, gperf, tinyxml2, taglib, libssh, swig, jre
+, libssl, gperf, tinyxml2, taglib, libssh, swig, jre
 , libX11, xproto, inputproto, libxml2
 , libXt, libXmu, libXext, xextproto
 , libXinerama, libXrandr, randrproto
@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
       pkgconfig cmake gnumake yasm pythonFull
       boost libmicrohttpd autoreconfHook
       gettext pcre yajl fribidi libva
-      openssl gperf tinyxml2 taglib libssh swig jre
+      libssl gperf tinyxml2 taglib libssh swig jre
       libX11 xproto inputproto which
       libXt libXmu libXext xextproto
       libXinerama libXrandr randrproto

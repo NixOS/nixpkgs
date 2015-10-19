@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, python3Packages, openssl, acl }:
+{ stdenv, fetchzip, python3Packages, libssl, acl }:
 
 python3Packages.buildPythonPackage rec {
   name = "attic-${version}";
@@ -12,10 +12,10 @@ python3Packages.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with python3Packages;
-    [ cython msgpack openssl acl llfuse ];
+    [ cython msgpack libssl acl llfuse ];
 
   preConfigure = ''
-    export ATTIC_OPENSSL_PREFIX="${openssl}"
+    export ATTIC_OPENSSL_PREFIX="${libssl}"
   '';
 
   meta = with stdenv.lib; {

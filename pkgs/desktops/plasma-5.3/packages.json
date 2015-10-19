@@ -96,7 +96,7 @@
             "modemmanager",
             "networkmanager",
             "openconnect",
-            "openssl",
+            "libssl",
             "qt5",
             "qt5core",
             "qt5dbus",

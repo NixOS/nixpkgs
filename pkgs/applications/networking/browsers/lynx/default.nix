@@ -1,8 +1,8 @@
 { stdenv, fetchurl, ncurses, gzip
-, sslSupport ? true, openssl ? null
+, sslSupport ? true, libssl ? null
 }:
 
-assert sslSupport -> openssl != null;
+assert sslSupport -> libssl != null;
 
 stdenv.mkDerivation {
   name = "lynx-2.8.8";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "1rxysl08acqll5b87368f04kckl8sggy1qhnq59gsxyny1ffg039";
   };
   
-  configureFlags = if sslSupport then "--with-ssl=${openssl}" else "";
+  configureFlags = if sslSupport then "--with-ssl=${libssl}" else "";
   
   buildInputs = [ ncurses gzip ];
   nativeBuildInputs = [ ncurses ];

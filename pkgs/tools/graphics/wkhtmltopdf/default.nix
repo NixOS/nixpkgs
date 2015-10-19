@@ -1,5 +1,5 @@
 { stdenv, fetchgit, qt4, fontconfig, freetype, libpng, zlib, libjpeg
-, openssl, libX11, libXext, libXrender, overrideDerivation }:
+, libssl, libX11, libXext, libXrender, overrideDerivation }:
 
 stdenv.mkDerivation rec {
   version = "0.12.1";
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       '';
   });
 
-  buildInputs = [ wkQt fontconfig freetype libpng zlib libjpeg openssl
+  buildInputs = [ wkQt fontconfig freetype libpng zlib libjpeg libssl
     libX11 libXext libXrender
     ];
 

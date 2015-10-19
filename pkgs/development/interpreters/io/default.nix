@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, zlib, sqlite, gmp, libffi, cairo, ncurses,
   freetype, mesa, libpng, libtiff, libjpeg, readline, libsndfile, libxml2,
   freeglut, libsamplerate, pcre, libevent, libedit, yajl,
-  python, openssl, glfw
+  python, libssl, glfw
 }:
 
 stdenv.mkDerivation {

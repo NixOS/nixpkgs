@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, pkgconfig, libtool, trousers, openssl, libxml2, libuuid, gettext, perl }:
+{ stdenv, fetchurl, autoconf, automake, pkgconfig, libtool, trousers, libssl, libxml2, libuuid, gettext, perl }:
 
 stdenv.mkDerivation rec {
   name = "openpts-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   # patches from https://apps.fedoraproject.org/packages/openpts/sources/patches/
   patches = [ ./bugs.patch ./zlib.patch ./tboot.patch ./ptsc.patch ];
 
-  buildInputs = [ autoconf automake pkgconfig libtool trousers openssl libxml2 libuuid gettext ];
+  buildInputs = [ autoconf automake pkgconfig libtool trousers libssl libxml2 libuuid gettext ];
 
   preConfigure = ''
     substituteInPlace include/Makefile.am --replace "./cvs2msg.pl" "${perl}/bin/perl cvs2msg.pl";

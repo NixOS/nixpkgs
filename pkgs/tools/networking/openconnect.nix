@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, vpnc, openssl ? null, gnutls ? null, libxml2, zlib } :
+{ stdenv, fetchurl, pkgconfig, vpnc, libssl ? null, gnutls ? null, libxml2, zlib } :
 
 let
   xor = a: b: (a || b) && (!(a && b));
 in
 
-assert xor (openssl != null) (gnutls != null);
+assert xor (libssl != null) (gnutls != null);
 
 stdenv.mkDerivation rec {
   name = "openconnect-7.06";
@@ -29,5 +29,5 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ vpnc openssl gnutls libxml2 zlib ];
+  propagatedBuildInputs = [ vpnc libssl gnutls libxml2 zlib ];
 }

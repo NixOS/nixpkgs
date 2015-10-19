@@ -1,8 +1,8 @@
 { stdenv, fetchurl
-  , openssl, tdb, zlib, flex, bison
+  , libssl, tdb, zlib, flex, bison
   }:
 let 
-  buildInputs = [ openssl tdb zlib flex bison ];
+  buildInputs = [ libssl tdb zlib flex bison ];
   sourceInfo = rec {
     baseName="fdm";
     version = "1.8";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, expat, libevent }:
+{ stdenv, fetchurl, libssl, expat, libevent }:
 
 stdenv.mkDerivation rec {
   name = "unbound-${version}";
@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1jly2apag4yg649w3flaq73wdrcfyxnhx5py9j73y7adxmswigbn";
   };
 
-  buildInputs = [ openssl expat libevent ];
+  buildInputs = [ libssl expat libevent ];
 
   configureFlags = [
-    "--with-ssl=${openssl}"
+    "--with-ssl=${libssl}"
     "--with-libexpat=${expat}"
     "--with-libevent=${libevent}"
     "--localstatedir=/var"

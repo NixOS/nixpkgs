@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, libtool, flex
-, readline ? null, openssl ? null, python ? null, ncurses ? null
+, readline ? null, libssl ? null, python ? null, ncurses ? null
 , sqlite ? null, postgresql ? null, libmysql ? null, zlib ? null, lzo ? null
 , jansson ? null, acl ? null, glusterfs ? null, libceph ? null, libcap ? null
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    nettools gettext readline openssl python flex ncurses sqlite postgresql
+    nettools gettext readline libssl python flex ncurses sqlite postgresql
     libmysql zlib lzo jansson acl glusterfs libceph libcap
   ];
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     "--enable-scsi-crypto"
   ] ++ optionals (readline != null) [ "--disable-conio" "--enable-readline" "--with-readline=${readline}" ]
     ++ optional (python != null) "--with-python=${python}"
-    ++ optional (openssl != null) "--with-openssl=${openssl}"
+    ++ optional (libssl != null) "--with-openssl=${libssl}"
     ++ optional (sqlite != null) "--with-sqlite3=${sqlite}"
     ++ optional (postgresql != null) "--with-postgresql=${postgresql}"
     ++ optional (libmysql != null) "--with-mysql=${libmysql}"

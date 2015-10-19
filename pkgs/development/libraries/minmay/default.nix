@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, openssl }:
+{ stdenv, fetchurl, cmake, libssl }:
 
 stdenv.mkDerivation rec {
   name = "minmay-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1amycxvhbd0lv6j5zsvxiwrx29jvndcy856j3b3bisys24h95zw2";
   };
 
-  buildInputs = [ cmake openssl ];
+  buildInputs = [ cmake libssl ];
 
   meta = {
     homepage = "https://github.com/mazhe/minmay";

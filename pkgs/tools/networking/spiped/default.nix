@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, coreutils }:
+{ stdenv, fetchurl, libssl, coreutils }:
 
 stdenv.mkDerivation rec {
   name    = "spiped-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mxcbxifr3bnj6ga8lz88y4bhff016i6kjdzwbb3gzb2zcs4pxxj";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libssl ];
 
   patchPhase = ''
     substituteInPlace libcperciva/cpusupport/Build/cpusupport.sh \

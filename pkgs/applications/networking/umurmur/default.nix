@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, openssl, protobufc, libconfig }:
+{ stdenv, fetchFromGitHub, autoreconfHook, libssl, protobufc, libconfig }:
 
 stdenv.mkDerivation rec {
   name = "umurmur-${version}";
@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "0njvdqvjda13v1a2yyjn47mb0l0cdfb2bfvb5s13wpgwy2xxk0px";
   };
   
-  buildInputs = [ autoreconfHook openssl protobufc libconfig ];
+  buildInputs = [ autoreconfHook libssl protobufc libconfig ];
 
   configureFlags = [
-    "--with-ssl=openssl"
+    "--with-ssl=libssl"
     "--enable-shmapi"
   ];
 

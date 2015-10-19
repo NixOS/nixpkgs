@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, scons, pkgconfig, openssl, protobuf, boost, zlib}:
+{ stdenv, fetchFromGitHub, scons, pkgconfig, libssl, protobuf, boost, zlib}:
 
 stdenv.mkDerivation rec {
   name = "rippled-${version}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s@ENV = dict.*@ENV = os.environ@g" SConstruct
   '';
 
-  buildInputs = [ scons pkgconfig openssl protobuf boost zlib ];
+  buildInputs = [ scons pkgconfig libssl protobuf boost zlib ];
 
   buildPhase = "scons";
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, openssl, perl, python, aspell, gnutls
+{ stdenv, fetchurl, ncurses, libssl, perl, python, aspell, gnutls
 , zlib, curl , pkgconfig, libgcrypt, ruby, lua5, tcl, guile
 , pythonPackages, cmake, makeWrapper, libobjc, libiconv
 , extraBuildInputs ? [] }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     "-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib";
 
   buildInputs = 
-    [ ncurses perl python openssl aspell gnutls zlib curl pkgconfig
+    [ ncurses perl python libssl aspell gnutls zlib curl pkgconfig
       libgcrypt ruby lua5 tcl guile pythonPackages.pycrypto makeWrapper
       cmake ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ pythonPackages.pync libobjc ]

@@ -1,10 +1,10 @@
-{ stdenv, python, fetchurl, openssl, boost }:
+{ stdenv, python, fetchurl, libssl, boost }:
 stdenv.mkDerivation rec {
   name    = "swiften-${version}";
   version = "3.0beta2";
 
   buildInputs           = [ python ];
-  propagatedBuildInputs = [ openssl boost ];
+  propagatedBuildInputs = [ libssl boost ];
 
   src = fetchurl {
     url    = "http://swift.im/downloads/releases/swift-${version}/swift-${version}.tar.gz";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
   
   buildPhase = ''
-    ./scons openssl=${openssl} \
+    ./scons openssl=${libssl} \
             boost_includedir=${boost.dev}/include \
             boost_libdir=${boost.lib}/lib \
             boost_bundled_enable=false \

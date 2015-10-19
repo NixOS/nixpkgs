@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, openssl, curl }:
+{ stdenv, fetchFromGitHub, autoreconfHook, libssl, curl }:
 
 stdenv.mkDerivation rec {
   name = "libksi-2015-07-03";
@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
   };
   
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ openssl curl ];
+  buildInputs = [ libssl curl ];
 
   configureFlags = [
-    "--with-openssl=${openssl}"
+    "--with-openssl=${libssl}"
     "--with-cafile=/etc/ssl/certs/ca-certificates.crt"
   ];
 

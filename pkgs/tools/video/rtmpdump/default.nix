@@ -1,12 +1,12 @@
 { stdenv, fetchgit, zlib
 , gnutlsSupport ? false, gnutls ? null, nettle ? null
-, opensslSupport ? true, openssl ? null
+, opensslSupport ? true, libssl ? null
 }:
 
 # Must have an ssl library enabled
 assert (gnutlsSupport || opensslSupport);
 assert gnutlsSupport -> gnutlsSupport != null && nettle != null && !opensslSupport;
-assert opensslSupport -> openssl != null && !gnutlsSupport;
+assert opensslSupport -> libssl != null && !gnutlsSupport;
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib ]
     ++ optionals gnutlsSupport [ gnutls nettle ]
-    ++ optional opensslSupport openssl;
+    ++ optional opensslSupport libssl;
 
   meta = {
     description = "Toolkit for RTMP streams";

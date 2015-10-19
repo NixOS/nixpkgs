@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, file, openssl, perl, unzip }:
+{ stdenv, fetchurl, autoreconfHook, file, libssl, perl, unzip }:
 
 stdenv.mkDerivation rec {
   name = "net-snmp-5.7.3";
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
       "--with-sys-contact=root@unknown"
       "--with-logfile=/var/log/net-snmpd.log"
       "--with-persistent-directory=/var/lib/net-snmp"
-      "--with-openssl=${openssl}"
+      "--with-openssl=${libssl}"
     ];
 
-  buildInputs = [ autoreconfHook file perl unzip openssl ];
+  buildInputs = [ autoreconfHook file perl unzip libssl ];
 
   enableParallelBuilding = true;
 

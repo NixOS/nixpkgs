@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, openssl}:
+{stdenv, fetchurl, cmake, libssl}:
 
 stdenv.mkDerivation rec {
   name = "libmsn-4.2.1";
@@ -7,5 +7,5 @@ stdenv.mkDerivation rec {
     sha256 = "338369c7455b123e84b9a7a858ac0ed2b1dc32e6529f460fdc01d28869a20fde";
   };
   patches = [ ./fix-ftbfs-gcc4.7.diff ];
-  buildInputs = [ cmake openssl ];
+  buildInputs = [ cmake libssl ];
 }

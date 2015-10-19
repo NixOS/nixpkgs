@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, neon, zlib, openssl, autoreconfHook }:
+{ stdenv, fetchurl, neon, zlib, libssl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "sitecopy-0.16.6";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./neon-29.patch ];
 
-  buildInputs = [ openssl neon zlib autoreconfHook ]; 
+  buildInputs = [ libssl neon zlib autoreconfHook ];
 
   configureFlags= "--with-ssl=openssl"; 
 }

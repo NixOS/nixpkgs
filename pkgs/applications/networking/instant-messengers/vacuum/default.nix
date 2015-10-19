@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , qt4, openssl
+  , qt4, libssl
   , xproto, libX11, libXScrnSaver, scrnsaverproto
   , xz
   , ...}:

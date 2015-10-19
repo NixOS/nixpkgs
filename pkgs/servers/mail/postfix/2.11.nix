@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, coreutils
+{ stdenv, fetchurl, makeWrapper, gnused, db, libssl, cyrus_sasl, coreutils
 , findutils, gnugrep, gawk
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./postfix-2.11.0.patch ];
 
-  buildInputs = [ makeWrapper gnused db openssl cyrus_sasl ];
+  buildInputs = [ makeWrapper gnused db libssl cyrus_sasl ];
 
   preBuild = ''
     sed -e '/^PATH=/d' -i postfix-install

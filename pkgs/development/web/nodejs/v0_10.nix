@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares
+{ stdenv, fetchurl, libssl, python, zlib, v8, utillinux, http-parser, c-ares
 , pkgconfig, runCommand, which, libtool
 
 # apple frameworks
@@ -10,7 +10,7 @@ let
 
   # !!! Should we also do shared libuv?
   deps = {
-    inherit openssl zlib;
+    inherit libssl zlib;
 
     # disabled system v8 because v8 3.14 no longer receives security fixes
     # we fall back to nodejs' internal v8 copy which receives backports for now
@@ -50,7 +50,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [ python which ]
     ++ (optional stdenv.isLinux utillinux)
-    ++ optionals stdenv.isDarwin [ pkgconfig openssl libtool CoreServices ApplicationServices Foundation ];
+    ++ optionals stdenv.isDarwin [ pkgconfig libssl libtool CoreServices ApplicationServices Foundation ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ Carbon ];
   setupHook = ./setup-hook.sh;
 

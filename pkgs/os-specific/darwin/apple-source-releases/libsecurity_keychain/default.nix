@@ -1,4 +1,4 @@
-{ CF, Security, appleDerivation, apple_sdk, libsecurity_asn1, libsecurity_cdsa_client, libsecurity_cdsa_utilities, libsecurity_cdsa_utils, libsecurity_ocspd, libsecurity_pkcs12, libsecurity_utilities, libsecurityd, openssl, osx_private_sdk, security_dotmac_tp }:
+{ CF, Security, appleDerivation, apple_sdk, libsecurity_asn1, libsecurity_cdsa_client, libsecurity_cdsa_utilities, libsecurity_cdsa_utils, libsecurity_ocspd, libsecurity_pkcs12, libsecurity_utilities, libsecurityd, libssl, osx_private_sdk, security_dotmac_tp }:
 appleDerivation {
   buildInputs = [
     libsecurity_utilities
@@ -9,7 +9,7 @@ appleDerivation {
     libsecurity_asn1
     libsecurity_pkcs12
     libsecurity_cdsa_utils
-    openssl
+    libssl
     libsecurity_ocspd
     security_dotmac_tp
   ];

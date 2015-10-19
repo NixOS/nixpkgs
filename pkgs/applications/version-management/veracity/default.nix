@@ -1,6 +1,6 @@
 x@{builderDefsPackage
   , cmake, curl, patch, zlib, icu, sqlite, libuuid
-  , readline, openssl, spidermonkey_1_8_0rc1
+  , readline, libssl, spidermonkey_1_8_0rc1
   , nspr, nss
   , unzip, glibcLocales
   , runTests ? false

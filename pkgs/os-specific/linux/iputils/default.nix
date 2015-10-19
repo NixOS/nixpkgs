@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libsysfs, gnutls, openssl, libcap, sp, docbook_sgml_dtd_31
+{ stdenv, fetchurl, libsysfs, gnutls, libssl, libcap, sp, docbook_sgml_dtd_31
 , SGMLSpm }:
 
 assert stdenv ? glibc;
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = "USE_GNUTLS=no";
 
-  buildInputs = [ libsysfs openssl libcap sp docbook_sgml_dtd_31 SGMLSpm ];
+  buildInputs = [ libsysfs libssl libcap sp docbook_sgml_dtd_31 SGMLSpm ];
 
   buildFlags = "man all ninfod";
 

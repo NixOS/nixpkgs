@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ppp, libevent, openssl }:
+{ stdenv, fetchurl, ppp, libevent, libssl }:
 
 stdenv.mkDerivation rec {
   name = "sstp-client-${version}";
@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
     '';
 
   configureFlags = [
-    "--with-openssl=${openssl}"
+    "--with-openssl=${libssl}"
     "--with-runtime-dir=/run/sstpc"
     "--with-pppd-plugin-dir=$(out)/lib/pppd"
   ];
 
-  buildInputs = [ libevent openssl ppp ];
+  buildInputs = [ libevent libssl ppp ];
 
   meta = {
     description = "SSTP client for Linux";

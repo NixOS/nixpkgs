@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, openssl, pkgconfig }:
+{ stdenv, fetchurl, glib, libssl, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "sofia-sip-1.12.11";
@@ -8,6 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "10bwsdfijpbk9ahlfpk94kzdapxiahl9mljpgwghvq1630pbq09b";
   };
 
-  buildInputs = [ glib openssl ];
+  buildInputs = [ glib libssl ];
   nativeBuildInputs = [ pkgconfig ];
 }

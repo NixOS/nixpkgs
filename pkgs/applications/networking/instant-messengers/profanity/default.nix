@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, automake, autoconf, pkgconfig, glib, openssl, expat
+{ stdenv, fetchurl, automake, autoconf, pkgconfig, glib, libssl, expat
 , ncurses, libotr, curl, libstrophe, readline, libuuid
 
 , autoAwaySupport ? false, libXScrnSaver ? null, libX11 ? null
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     automake autoconf pkgconfig readline libuuid
-    glib openssl expat ncurses libotr curl libstrophe
+    glib libssl expat ncurses libotr curl libstrophe
   ] ++ optionals autoAwaySupport [ libXScrnSaver libX11 ]
     ++ optionals notifySupport   [ libnotify gdk_pixbuf ];
 

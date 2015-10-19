@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, postgresql, openssl, pam ? null, libmemcached ? null }:
+{ stdenv, fetchurl, postgresql, libssl, pam ? null, libmemcached ? null }:
 
 stdenv.mkDerivation rec {
   name = "pgpool-II-3.4.2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lf3fvwc2ib4md25a3hnv822nhy9ac06vg0ndw8q9bry66hzwcfh";
   };
 
-  buildInputs = [ postgresql openssl pam libmemcached ];
+  buildInputs = [ postgresql libssl pam libmemcached ];
 
   configureFlags = [
     "--sysconfdir=/etc"

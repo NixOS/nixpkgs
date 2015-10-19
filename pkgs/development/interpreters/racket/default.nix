@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeFontsConf, makeWrapper
 , cairo, coreutils, fontconfig, freefont_ttf
 , glib, gmp, gtk, libffi, libjpeg, libpng
-, libtool, mpfr, openssl, pango, poppler
+, libtool, mpfr, libssl, pango, poppler
 , readline, sqlite
 }:
 
@@ -20,7 +20,7 @@ let
     libjpeg
     libpng
     mpfr
-    openssl
+    libssl
     pango
     poppler
     readline

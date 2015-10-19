@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, json_c, openssl, check }:
+{ stdenv, fetchurl, pkgconfig, json_c, libssl, check }:
 
 stdenv.mkDerivation rec {
   name = "libu2f-server-1.0.1";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ json_c openssl check ];
+  buildInputs = [ json_c libssl check ];
 
   meta = with stdenv.lib; {
     homepage = https://developers.yubico.com/libu2f-server/;

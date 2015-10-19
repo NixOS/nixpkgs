@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, openssl }:
+{ stdenv, pkgs, fetchurl, libssl }:
 
 stdenv.mkDerivation rec {
   majorVersion = "1.5";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "16cg1jmy2d8mq2ypwifsvhbyp4pyrj0zm0r818sx0r4hchwdsrcm";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libssl ];
 
   # TODO: make it work on darwin/bsd as well
   preConfigure = ''

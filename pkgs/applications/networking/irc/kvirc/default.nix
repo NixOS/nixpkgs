@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qt4, perl, gettext, kdelibs, openssl, zlib}:
+{ stdenv, fetchurl, cmake, qt4, perl, gettext, kdelibs, libssl, zlib}:
 
 let
   pn = "kvirc";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "9a547d52d804e39c9635c8dc58bccaf4d34341ef16a9a652a5eb5568d4d762cb";
   };
 
-  buildInputs = [ cmake qt4 perl gettext kdelibs openssl zlib ];
+  buildInputs = [ cmake qt4 perl gettext kdelibs libssl zlib ];
 
   meta = with stdenv.lib; {
     description = "Graphic IRC client with Qt";

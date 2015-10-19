@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib, readline, libossp_uuid, openssl }:
+{ lib, stdenv, fetchurl, zlib, readline, libossp_uuid, libssl }:
 
 let
 
@@ -13,7 +13,7 @@ let
     outputs = [ "out" "doc" ];
 
     buildInputs =
-      [ zlib readline openssl ]
+      [ zlib readline libssl ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
     enableParallelBuilding = true;

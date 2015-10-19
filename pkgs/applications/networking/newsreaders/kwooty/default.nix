@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, qt4, gettext
 , kdelibs, kdebase_workspace, perl
-, openssl, phonon, automoc4
+, libssl, phonon, automoc4
 , libX11, libXext, libXft
 , unrar, p7zip, par2cmdline, coreutils
 }:
@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
   '';
 
   buildInputs =
-    [ stdenv perl cmake qt4 gettext automoc4 openssl
+    [ stdenv perl cmake qt4 gettext automoc4 libssl
       kdelibs kdebase_workspace phonon
       libX11 libXext libXft
     ];

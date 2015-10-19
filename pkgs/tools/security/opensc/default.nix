@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, zlib, readline, openssl
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, zlib, readline, libssl
 , libiconv, pcsclite, libassuan, libXt
 , docbook_xsl, libxslt, docbook_xml_dtd_412
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    autoreconfHook pkgconfig zlib readline openssl pcsclite libassuan
+    autoreconfHook pkgconfig zlib readline libssl pcsclite libassuan
     libXt libxslt libiconv docbook_xml_dtd_412
   ];
 

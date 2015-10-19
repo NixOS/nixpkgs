@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, openssl, libsigcxx, zlib }:
+{ stdenv, fetchurl, pkgconfig, libssl, libsigcxx, zlib }:
 
 stdenv.mkDerivation rec {
   name = "libtorrent-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "012s1nwcvz5m5r4d2z9klgy2n34kpgn9kgwgzxm97zgdjs6a0f18";
   };
 
-  buildInputs = [ pkgconfig openssl libsigcxx zlib ];
+  buildInputs = [ pkgconfig libssl libsigcxx zlib ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/rakshasa/libtorrent/;

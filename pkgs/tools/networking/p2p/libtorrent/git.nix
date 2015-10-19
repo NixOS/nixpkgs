@@ -1,4 +1,4 @@
-{ stdenv, autoconf, automake, cppunit, fetchFromGitHub, pkgconfig, openssl, libsigcxx, libtool, zlib }:
+{ stdenv, autoconf, automake, cppunit, fetchFromGitHub, pkgconfig, libssl, libsigcxx, libtool, zlib }:
 
 stdenv.mkDerivation {
   name = "libtorrent-git-2014-08-20";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1x78g5yd4q0ksdsw91awz2a1ax8zyfy5b53gbbil4fpjy96vb577";
   };
   
-  buildInputs = [ autoconf automake cppunit pkgconfig openssl libsigcxx libtool zlib ];
+  buildInputs = [ autoconf automake cppunit pkgconfig libssl libsigcxx libtool zlib ];
 
   configureFlags = "--disable-dependency-tracking --enable-aligned";
 

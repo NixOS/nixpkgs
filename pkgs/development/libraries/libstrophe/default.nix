@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool, openssl, expat, pkgconfig, check }:
+{ stdenv, fetchFromGitHub, automake, autoconf, libtool, libssl, expat, pkgconfig, check }:
 
 stdenv.mkDerivation rec {
   name = "libstrophe-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1iic8xbcxh21dzns8m9kkz0cj5f3ppn414gnhyh4y2wcjsz6hp8l";
   };
 
-  buildInputs = [ automake autoconf openssl expat libtool pkgconfig check ];
+  buildInputs = [ automake autoconf libssl expat libtool pkgconfig check ];
 
   dontDisableStatic = true;
 

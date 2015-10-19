@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, openssl, libevent }:
+{ stdenv, fetchFromGitHub, cmake, libssl, libevent }:
 
 stdenv.mkDerivation rec {
   name = "libevhtp-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0z5cxa65zp89vkaj286gp6fpmc5fylr8bmd17g3j1rgc42nysm6a";
   };
 
-  buildInputs = [ cmake openssl libevent ];
+  buildInputs = [ cmake libssl libevent ];
 
   buildPhase = "cmake";
 

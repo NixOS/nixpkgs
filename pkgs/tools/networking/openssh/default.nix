@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, openssl, perl, libedit, pkgconfig, pam
+{ stdenv, fetchurl, zlib, libssl, perl, libedit, pkgconfig, pam
 , etcDir ? null
 , hpnSupport ? false
 , withKerberos ? false
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./locale_archive.patch ./openssh-6.9p1-security-7.0.patch];
 
-  buildInputs = [ zlib openssl libedit pkgconfig pam ]
+  buildInputs = [ zlib libssl libedit pkgconfig pam ]
     ++ optional withKerberos [ kerberos ];
 
   # I set --disable-strip because later we strip anyway. And it fails to strip

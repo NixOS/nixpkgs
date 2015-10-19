@@ -12,7 +12,7 @@
 , libjpeg_turbo
 , mesa_glu
 , mesa_noglu
-, openssl
+, libssl
 , pango
 , SDL
 , zlib
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     libjpeg_turbo
     mesa_glu
     mesa_noglu
-    openssl
+    libssl
     pango
     SDL
     stdenv.cc.cc

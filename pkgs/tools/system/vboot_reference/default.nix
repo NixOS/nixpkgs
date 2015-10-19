@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, libuuid, openssl }:
+{ stdenv, fetchgit, pkgconfig, libuuid, libssl }:
 
 stdenv.mkDerivation rec {
   version = "20130507";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "00qhwhh5ygrcfm9is8hrk1spqdvfs6aa744h10jbr03zics5bvac";
   };
 
-  buildInputs = [ pkgconfig openssl ] ++
+  buildInputs = [ pkgconfig libssl ] ++
                 (if libuuid == null
                  then []
                  else [ (stdenv.lib.overrideDerivation libuuid

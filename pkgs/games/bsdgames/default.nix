@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, openssl, flex, bison, less, miscfiles}:
+{stdenv, fetchurl, ncurses, libssl, flex, bison, less, miscfiles}:
 
 stdenv.mkDerivation {
   name = "bsd-games-2.17";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0q7zdyyfvn15y0w4g54kq3gza89h61py727m8slmw73cxx594vq6";
   };
 
-  buildInputs = [ ncurses openssl flex bison ];
+  buildInputs = [ ncurses libssl flex bison ];
 
   patches = [
     (fetchurl {

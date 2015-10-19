@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, wget, libpcap, gdbm, zlib, openssl, rrdtool
+{ stdenv, fetchurl, autoconf, automake, libtool, wget, libpcap, gdbm, zlib, libssl, rrdtool
 , python, geoip }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     cp ${libtool}/share/aclocal/libtool.m4 libtool.m4.in
   '';
 
-  nativeBuildInputs = [ autoconf automake libtool wget libpcap gdbm zlib openssl rrdtool
+  nativeBuildInputs = [ autoconf automake libtool wget libpcap gdbm zlib libssl rrdtool
     python geoip ];
 
   meta = {

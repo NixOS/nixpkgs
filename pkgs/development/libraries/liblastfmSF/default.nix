@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, curl, openssl }:
+{ stdenv, fetchurl, pkgconfig, curl, libssl }:
 
 stdenv.mkDerivation rec {
   name = "liblastfm-SF-0.3.2";
 
   buildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ curl openssl ];
+  propagatedBuildInputs = [ curl libssl ];
 
   src = fetchurl {
     url = "mirror://sourceforge/liblastfm/liblastfm-0.3.2.tar.gz";

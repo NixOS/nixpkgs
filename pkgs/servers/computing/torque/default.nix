@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, flex, bison, pkgconfig, groff, libxml2, utillinux
+{ stdenv, fetchurl, libssl, flex, bison, pkgconfig, groff, libxml2, utillinux
 , file, libtool, which }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qpsk3bla6b6m7m0i1xpr183yj79liy3p34xhnz1grgq0776wg5l";
   };
 
-  buildInputs = [ openssl flex bison pkgconfig groff libxml2 utillinux libtool
+  buildInputs = [ libssl flex bison pkgconfig groff libxml2 utillinux libtool
                   which ];
 
   enableParallelBuilding = true;

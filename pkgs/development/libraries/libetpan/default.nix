@@ -1,4 +1,4 @@
-{ autoconf, automake, fetchgit, libtool, stdenv, openssl }:
+{ autoconf, automake, fetchgit, libtool, stdenv, libssl }:
 
 let version = "1.6"; in
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "12n0vd0bwdyjcmwmpv1hdq5l04mqy6qfyy8mhsblddqaa1ah9qy8";
   };
 
-  buildInputs = [ autoconf automake libtool openssl ];
+  buildInputs = [ autoconf automake libtool libssl ];
 
   configureScript = "./autogen.sh";
 

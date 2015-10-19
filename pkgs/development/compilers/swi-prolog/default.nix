@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp, readline, openssl, libjpeg, unixODBC, zlib
+{ stdenv, fetchurl, gmp, readline, libssl, libjpeg, unixODBC, zlib
 , libXinerama, libXft, libXpm, libSM, libXt, freetype, pkgconfig
 , fontconfig
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "0vcrfskm2hyhv30lxr6v261myb815jc3bgmcn1lgsc9g9qkvp04z";
   };
 
-  buildInputs = [ gmp readline openssl libjpeg unixODBC libXinerama
+  buildInputs = [ gmp readline libssl libjpeg unixODBC libXinerama
     libXft libXpm libSM libXt zlib freetype pkgconfig fontconfig ];
 
   configureFlags = "--with-world --enable-gmp --enable-shared";

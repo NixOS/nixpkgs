@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, postgresql, wxGTK, libxml2, libxslt, openssl }:
+{ stdenv, fetchurl, postgresql, wxGTK, libxml2, libxslt, libssl }:
 
 stdenv.mkDerivation rec {
   name = "pgadmin3-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "133bcbx9a322adldd1498h8bn2wfk45v1sbj9269jylwda1dfwq7";
   };
 
-  buildInputs = [ postgresql wxGTK libxml2 libxslt openssl ];
+  buildInputs = [ postgresql wxGTK libxml2 libxslt libssl ];
 
   preConfigure = ''
     substituteInPlace pgadmin/ver_svn.sh --replace "bin/bash" "$shell"

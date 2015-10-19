@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, libevent, openssl}:
+{ stdenv, fetchurl, cmake, pkgconfig, libevent, libssl}:
 
 stdenv.mkDerivation {
   name = "libcouchbase-2.5.2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   cmakeFlags = "-DLCB_NO_MOCK=ON";
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ libevent openssl];
+  buildInputs = [ libevent libssl];
 
   meta = {
     description = "C client library for Couchbase";

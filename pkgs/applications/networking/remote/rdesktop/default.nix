@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl, libX11} :
+{stdenv, fetchurl, libssl, libX11} :
 
 stdenv.mkDerivation (rec {
   pname = "rdesktop";
@@ -10,10 +10,10 @@ stdenv.mkDerivation (rec {
     sha256 = "1r7c1rjmw2xzq8fw0scyb453gy9z19774z1z8ldmzzsfndb03cl8";
   };
 
-  buildInputs = [openssl libX11];
+  buildInputs = [libssl libX11];
 
   configureFlags = [
-    "--with-openssl=${openssl}"
+    "--with-openssl=${libssl}"
     "--disable-credssp"
     "--disable-smartcard"
   ];

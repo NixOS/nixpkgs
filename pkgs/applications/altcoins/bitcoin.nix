@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, openssl, db48, boost
+{ stdenv, fetchurl, pkgconfig, autoreconfHook, libssl, db48, boost
 , zlib, miniupnpc, qt4, utillinux, protobuf, qrencode
 , withGui }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec{
     sha256 = "51ba1756addfa71567559e3f22331c1d908a63571891287689fff7113035d09f";
   };
 
-  buildInputs = [ pkgconfig autoreconfHook openssl db48 boost zlib
+  buildInputs = [ pkgconfig autoreconfHook libssl db48 boost zlib
                   miniupnpc utillinux protobuf ]
                   ++ optionals withGui [ qt4 qrencode ];
 

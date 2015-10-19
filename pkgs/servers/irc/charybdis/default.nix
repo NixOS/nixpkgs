@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, bison, flex, openssl }:
+{ stdenv, fetchgit, bison, flex, libssl }:
 
 stdenv.mkDerivation rec {
   name = "charybdis-3.5.0-rc1";
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-epoll"
     "--enable-ipv6"
-    "--enable-openssl=${openssl}"
+    "--enable-openssl=${libssl}"
     "--with-program-prefix=charybdis-"
   ];
 
-  buildInputs = [ bison flex openssl ];
+  buildInputs = [ bison flex libssl ];
 
   meta = {
     description = "An extremely scalable ircd with some cooperation with the ratbox and ircu guys";

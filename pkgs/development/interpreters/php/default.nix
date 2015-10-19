@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
-, openssl, pkgconfig, sqlite, config, libjpeg, libpng, freetype
+, libssl, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
 , uwimap, pam, gmp, apacheHttpd }:
 
@@ -38,12 +38,12 @@ let
             "--with-imap=${uwimap}"
             "--with-imap-ssl"
             ];
-          buildInputs = [ uwimap openssl pam ];
+          buildInputs = [ uwimap libssl pam ];
         };
 
         ldap = {
           configureFlags = ["--with-ldap=${openldap}"];
-          buildInputs = [openldap cyrus_sasl openssl];
+          buildInputs = [openldap cyrus_sasl libssl];
         };
 
         mhash = {
@@ -53,7 +53,7 @@ let
 
         curl = {
           configureFlags = ["--with-curl=${curl}"];
-          buildInputs = [curl openssl];
+          buildInputs = [curl libssl];
         };
 
         curlWrappers = {
@@ -146,8 +146,8 @@ let
         };
 
         openssl = {
-          configureFlags = ["--with-openssl=${openssl}"];
-          buildInputs = [openssl];
+          configureFlags = ["--with-openssl=${libssl}"];
+          buildInputs = [libssl];
         };
 
         mbstring = {

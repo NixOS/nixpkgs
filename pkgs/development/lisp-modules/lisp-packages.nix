@@ -431,7 +431,7 @@ let lispPackages = rec {
       sha256 = "6b99fc49ac38e49ee69a47ce5791606b8b811c01e5563bfd3164d393db6c4040";
       rev = ''f8695c5df48ebc3557f76a8a08dd96429bdf8df2'';
     };
-    propagatedBuildInputs = [pkgs.openssl];
+    propagatedBuildInputs = [pkgs.libssl];
   };
 
   flexi-streams = buildLispPackage rec {

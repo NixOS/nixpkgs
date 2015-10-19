@@ -1,4 +1,4 @@
-{stdenv, makeWrapper, fetchurl, perl, openssl, perlPackages }:
+{stdenv, makeWrapper, fetchurl, perl, libssl, perlPackages }:
 
 stdenv.mkDerivation rec {
   name = "imapsync-1.644";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = with perlPackages; [ perl openssl MailIMAPClient TermReadKey
+  buildInputs = with perlPackages; [ perl libssl MailIMAPClient TermReadKey
     IOSocketSSL DigestHMAC URI FileCopyRecursive IOTee UnicodeString ];
 
   meta = with stdenv.lib; {

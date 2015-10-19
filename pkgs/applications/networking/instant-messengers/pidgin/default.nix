@@ -3,7 +3,7 @@
 , perl, perlXMLParser, libxml2, nss, nspr, farsight2
 , libXScrnSaver, ncurses, avahi, dbus, dbus_glib, intltool, libidn
 , lib, python, libICE, libXext, libSM
-, openssl ? null
+, libssl ? null
 , gnutls ? null
 , libgcrypt ? null
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     avahi dbus dbus_glib intltool libidn
     libICE libXext libSM
   ]
-  ++ (lib.optional (openssl != null) openssl)
+  ++ (lib.optional (libssl != null) libssl)
   ++ (lib.optional (gnutls != null) gnutls)
   ++ (lib.optional (libgcrypt != null) libgcrypt);
 

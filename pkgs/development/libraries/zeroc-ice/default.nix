@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, mcpp, bzip2, expat, openssl, db5 }:
+{ stdenv, fetchFromGitHub, mcpp, bzip2, expat, libssl, db5 }:
 
 stdenv.mkDerivation rec {
   name = "zeroc-ice-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "044511zbhwiach1867r3xjz8i4931wn7c1l3nz4kcpgks16kqhhz";
   };
 
-  buildInputs = [ mcpp bzip2 expat openssl db5 ];
+  buildInputs = [ mcpp bzip2 expat libssl db5 ];
 
   buildPhase = ''
     cd cpp

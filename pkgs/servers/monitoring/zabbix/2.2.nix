@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib, gettext
+{ stdenv, fetchurl, pkgconfig, postgresql, curl, libssl, zlib, gettext
 , net_snmp , libssh2, openldap
 , enableJabber ? false, minmay ? null
 , enableSnmp ? false
@@ -57,7 +57,7 @@ in
         -e 's/iks/mmay/g' -e 's/IKS/MMAY/g' src/libs/zbxmedia/jabber.c
     '';
 
-    buildInputs = [ pkgconfig postgresql curl openssl zlib ]
+    buildInputs = [ pkgconfig postgresql curl libssl zlib ]
       ++ stdenv.lib.optional enableSnmp net_snmp
       ++ stdenv.lib.optional enableSsh libssh2
       ++ stdenv.lib.optional enableLdap openldap;

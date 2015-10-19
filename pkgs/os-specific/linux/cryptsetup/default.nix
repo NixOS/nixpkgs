@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, devicemapper, openssl, libuuid, pkgconfig, popt
+{ stdenv, fetchurl, devicemapper, libssl, libuuid, pkgconfig, popt
 , enablePython ? false, python ? null
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-cryptsetup-reencrypt" "--with-crypto_backend=openssl" ]
                 ++ stdenv.lib.optional enablePython "--enable-python";
 
-  buildInputs = [ devicemapper openssl libuuid pkgconfig popt ]
+  buildInputs = [ devicemapper libssl libuuid pkgconfig popt ]
              ++ stdenv.lib.optional enablePython python;
 
   meta = {

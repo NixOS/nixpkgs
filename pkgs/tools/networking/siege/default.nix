@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl, libssl }:
 
 stdenv.mkDerivation rec {
   name = "siege-3.0.8";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
-  configureFlags = [ "--with-ssl=${openssl}" ];
+  configureFlags = [ "--with-ssl=${libssl}" ];
 
   meta = with stdenv.lib; {
     description = "HTTP load tester";

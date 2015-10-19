@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, fetchFromGitHub
 , zlib, zlibSupport ? true
-, openssl, opensslSupport ? true
+, libssl, opensslSupport ? true
 , gdbm, gdbmSupport ? true
 , ncurses, readline, cursesSupport ? true
 , groff, docSupport ? false
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     ++ (ops cursesSupport [ ncurses readline ] )
     ++ (op docSupport groff )
     ++ (op zlibSupport zlib)
-    ++ (op opensslSupport openssl)
+    ++ (op opensslSupport libssl)
     ++ (op gdbmSupport gdbm);
 
   patches = ops useRailsExpress [

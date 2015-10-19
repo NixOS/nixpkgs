@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, spidermonkey_24, unzip, curl, pcre, readline, openssl }:
+{ stdenv, fetchurl, spidermonkey_24, unzip, curl, pcre, readline, libssl }:
 stdenv.mkDerivation rec {
   name = "edbrowse-${version}";
   version = "3.5.4.1";
 
   nativeBuildInputs = [ unzip ];
-  buildInputs = [ curl pcre readline openssl spidermonkey_24 ];
+  buildInputs = [ curl pcre readline libssl spidermonkey_24 ];
 
   patchPhase = ''
     substituteInPlace src/ebjs.c --replace \"edbrowse-js\" \"$out/bin/edbrowse-js\"

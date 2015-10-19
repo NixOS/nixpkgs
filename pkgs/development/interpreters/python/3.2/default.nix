@@ -4,7 +4,7 @@
 , gdbm
 , libX11, xproto
 , ncurses
-, openssl
+, libssl
 , readline
 , sqlite
 , tcl, tk
@@ -22,7 +22,7 @@ let
   version = "${majorVersion}.6";
 
   buildInputs = filter (p: p != null) [
-    zlib bzip2 gdbm sqlite db readline ncurses openssl tcl tk libX11 xproto
+    zlib bzip2 gdbm sqlite db readline ncurses libssl tcl tk libX11 xproto
   ];
 in
 stdenv.mkDerivation {
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
     dbSupport = db != null;
     buildEnv = callPackage ../wrapper.nix { python = self; };
     readlineSupport = readline != null;
-    opensslSupport = openssl != null;
+    opensslSupport = libssl != null;
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
     libPrefix = "python${majorVersion}";
     executable = "python3.2m";

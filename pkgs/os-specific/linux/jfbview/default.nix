@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, freetype, imlib2, jbig2dec, libjpeg, libX11
-, mujs, mupdf, ncurses, openjpeg, openssl }:
+, mujs, mupdf, ncurses, openjpeg, libssl }:
 
 let
   version = "0.5.1";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ freetype imlib2 jbig2dec libjpeg libX11 mujs mupdf
-    ncurses openjpeg openssl ];
+    ncurses openjpeg libssl ];
 
   buildFlags = binaries;
   enableParallelBuilding = true;

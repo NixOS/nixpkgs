@@ -242,7 +242,7 @@ let
     fftwtools = [ pkgs.fftw ];
     Formula = [ pkgs.gmp ];
     geoCount = [ pkgs.gsl ];
-    git2r = [ pkgs.zlib pkgs.openssl ];
+    git2r = [ pkgs.zlib pkgs.libssl ];
     GLAD = [ pkgs.gsl ];
     glpkAPI = [ pkgs.gmp pkgs.glpk ];
     gmp = [ pkgs.gmp ];
@@ -262,13 +262,13 @@ let
     ncdf4 = [ pkgs.netcdf ];
     ncdf = [ pkgs.netcdf ];
     nloptr = [ pkgs.nlopt ];
-    openssl = [ pkgs.openssl ];
+    openssl = [ pkgs.libssl ];
     outbreaker = [ pkgs.gsl ];
     pander = [ pkgs.pandoc pkgs.which ];
     pbdMPI = [ pkgs.openmpi ];
     pbdNCDF4 = [ pkgs.netcdf ];
     pbdPROF = [ pkgs.openmpi ];
-    PKI = [ pkgs.openssl ];
+    PKI = [ pkgs.libssl ];
     png = [ pkgs.libpng ];
     PopGenome = [ pkgs.zlib ];
     proj4 = [ pkgs.proj ];
@@ -313,8 +313,8 @@ let
     RProtoBuf = [ pkgs.protobuf ];
     rpud = [ pkgs.linuxPackages.nvidia_x11 ];
     rPython = [ pkgs.python ];
-    RSclient = [ pkgs.openssl ];
-    Rserve = [ pkgs.openssl ];
+    RSclient = [ pkgs.libssl ];
+    Rserve = [ pkgs.libssl ];
     Rssa = [ pkgs.fftw ];
     rtfbs = [ pkgs.zlib pkgs.pcre pkgs.bzip2 pkgs.gzip pkgs.readline ];
     rtiff = [ pkgs.libtiff ];
@@ -2312,7 +2312,7 @@ let
     });
 
     openssl = old.openssl.overrideDerivation (attrs: {
-      OPENSSL_INCLUDES = "${pkgs.openssl}/include";
+      OPENSSL_INCLUDES = "${pkgs.libssl}/include";
     });
 
     Rserve = old.Rserve.overrideDerivation (attrs: {

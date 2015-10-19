@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, ocaml, findlib, ocaml_pcre, camlzip, openssl, ocaml_ssl, cryptokit }:
+{stdenv, fetchurl, ncurses, ocaml, findlib, ocaml_pcre, camlzip, libssl, ocaml_ssl, cryptokit }:
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
@@ -12,9 +12,9 @@ stdenv.mkDerivation {
     sha256 = "02bnks9jshpq9nqva5lky5hl009yp19cgvf1izjca620hx54d3jv";
   };
 
-  buildInputs = [ncurses ocaml findlib ocaml_pcre camlzip openssl ocaml_ssl cryptokit];
+  buildInputs = [ncurses ocaml findlib ocaml_pcre camlzip libssl ocaml_ssl cryptokit];
 
-  propagatedbuildInputs = [ncurses ocaml_pcre camlzip openssl ocaml_ssl cryptokit];
+  propagatedbuildInputs = [ncurses ocaml_pcre camlzip libssl ocaml_ssl cryptokit];
 
   createFindlibDestdir = true;
 

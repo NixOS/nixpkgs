@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, m4, bison, flex, openssl, zlib }:
+{ stdenv, fetchurl, unzip, m4, bison, flex, libssl, zlib }:
 
 stdenv.mkDerivation rec {
   name = "gsoap-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "00lhhysa9f9ychkvn1ij0ngr54l1dl9ww801yrliwq5c05gql7a6";
   };
 
-  buildInputs = [ unzip m4 bison flex openssl zlib ];
+  buildInputs = [ unzip m4 bison flex libssl zlib ];
 
   meta = with stdenv.lib; {
     description = "C/C++ toolkit for SOAP web services and XML-based applications";

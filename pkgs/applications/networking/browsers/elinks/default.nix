@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, ncurses, xlibsWrapper, bzip2, zlib, openssl
+{ stdenv, fetchurl, perl, ncurses, xlibsWrapper, bzip2, zlib, libssl
 , spidermonkey, gpm
 , enableGuile ? false, guile ? null   # Incompatible licenses, LGPLv3 - GPLv2
 , enablePython ? false, python ? null
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gc-init.patch ];
 
-  buildInputs = [ perl ncurses xlibsWrapper bzip2 zlib openssl spidermonkey gpm ]
+  buildInputs = [ perl ncurses xlibsWrapper bzip2 zlib libssl spidermonkey gpm ]
     ++ stdenv.lib.optional enableGuile guile
     ++ stdenv.lib.optional enablePython python;
 
@@ -26,16 +26,16 @@ stdenv.mkDerivation rec {
       --enable-finger --enable-html-highlight
       --with-perl --enable-gopher --enable-cgi --enable-bittorrent
       --with-spidermonkey=${spidermonkey}
-      --enable-nntp --with-openssl=${openssl}
+      --enable-nntp --with-openssl=${libssl}
     '' + stdenv.lib.optionalString enableGuile " --with-guile"
     + stdenv.lib.optionalString enablePython " --with-python";
 
   crossAttrs = {
-    propagatedBuildInputs = [ ncurses.crossDrv zlib.crossDrv openssl.crossDrv ];
+    propagatedBuildInputs = [ ncurses.crossDrv zlib.crossDrv libssl.crossDrv ];
     configureFlags = ''
       --enable-finger --enable-html-highlight
       --enable-gopher --enable-cgi --enable-bittorrent --enable-nntp
-      --with-openssl=${openssl.crossDrv}
+      --with-openssl=${libssl.crossDrv}
       --with-bzip2=${bzip2.crossDrv}
     '';
   };

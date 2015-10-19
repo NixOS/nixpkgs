@@ -54,7 +54,7 @@ in
       { description = "Terminal Server";
 
         path =
-          [ xvfbWrapper pkgs.gawk pkgs.which pkgs.openssl pkgs.xorg.xauth
+          [ xvfbWrapper pkgs.gawk pkgs.which pkgs.libssl pkgs.xorg.xauth
             pkgs.nettools pkgs.shadow pkgs.procps pkgs.utillinux pkgs.bash
           ];
 

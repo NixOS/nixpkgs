@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, zlib, asciidoc, libxml2, libxslt
+{ stdenv, fetchurl, libssl, zlib, asciidoc, libxml2, libxslt
 , docbook_xml_xslt, pkgconfig, luajit
 , gzip, bzip2, xz
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    openssl zlib asciidoc libxml2 libxslt docbook_xml_xslt pkgconfig luajit
+    libssl zlib asciidoc libxml2 libxslt docbook_xml_xslt pkgconfig luajit
   ];
 
   postPatch = ''

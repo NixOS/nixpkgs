@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lua5, openssl }:
+{ stdenv, fetchurl, lua5, libssl }:
 
 stdenv.mkDerivation rec {
   version = "0.5";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "08rm12cr1gjdnbv2jpk7xykby9l292qmz2v0dfdlgb4jfj7mk034";
   };
 
-  buildInputs = [ lua5 openssl ];
+  buildInputs = [ lua5 libssl ];
 
   preBuild = ''
     makeFlagsArray=(

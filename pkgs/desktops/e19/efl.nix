@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, freetype, fontconfig, fribidi, SDL2, SDL, mesa, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio, libsndfile, xorg, libdrm, libxkbcommon, udev, utillinuxCurses, dbus, bullet, luajit, python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg, dbus_libs, alsaLib, poppler, libraw, libspectre, xineLib, vlc, libwebp, curl, libinput }:
+{ stdenv, fetchurl, pkgconfig, libssl, libjpeg, zlib, freetype, fontconfig, fribidi, SDL2, SDL, mesa, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio, libsndfile, xorg, libdrm, libxkbcommon, udev, utillinuxCurses, dbus, bullet, luajit, python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg, dbus_libs, alsaLib, poppler, libraw, libspectre, xineLib, vlc, libwebp, curl, libinput }:
 
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1x5n2afy5z1akam5y187ajk52mq2k9lwmz7nlrxp92rvx1jf6li5";
   };
 
-  buildInputs = [ pkgconfig openssl zlib freetype fontconfig fribidi SDL2 SDL mesa
+  buildInputs = [ pkgconfig libssl zlib freetype fontconfig fribidi SDL2 SDL mesa
     giflib libpng libtiff glib gst_all_1.gstreamer gst_all_1.gst-plugins-base
     gst_all_1.gst-libav libpulseaudio libsndfile xorg.libXcursor xorg.printproto
     xorg.libX11 udev utillinuxCurses ];

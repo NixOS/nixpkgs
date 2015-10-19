@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pixman, celt, alsaLib, openssl
+{ stdenv, fetchurl, pkgconfig, pixman, celt, alsaLib, libssl
 , libXrandr, libXfixes, libXext, libXrender, libXinerama, libjpeg, zlib
 , spice_protocol, python, pyparsing, glib, cyrus_sasl, lz4 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dk9hp78ldqb0a52kdlqq0scnk3drnhj7rsw8r7hmy2v2cqflj7i";
   };
 
-  buildInputs = [ pixman celt alsaLib openssl libjpeg zlib
+  buildInputs = [ pixman celt alsaLib libssl libjpeg zlib
                   libXrandr libXfixes libXrender libXext libXinerama
                   python pyparsing glib cyrus_sasl lz4 ];
 

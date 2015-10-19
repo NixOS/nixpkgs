@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, kerberos, db, gettext, pam, fixDarwinDylibNames }:
+{ lib, stdenv, fetchurl, libssl, kerberos, db, gettext, pam, fixDarwinDylibNames }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ openssl db gettext kerberos ]
+    [ libssl db gettext kerberos ]
     ++ lib.optional stdenv.isLinux pam
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   patchFlags = "-p0";
 
   configureFlags = [
-    "--with-openssl=${openssl}"
+    "--with-openssl=${libssl}"
   ];
 
   # Set this variable at build-time to make sure $out can be evaluated.

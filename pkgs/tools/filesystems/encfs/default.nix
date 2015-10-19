@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, boost, fuse, openssl, perl
+{ stdenv, fetchFromGitHub, autoreconfHook, boost, fuse, libssl, perl
 , pkgconfig, rlog }:
 
 let version = "1.8.1"; in
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "vgough";
   };
 
-  buildInputs = [ boost fuse openssl rlog ];
+  buildInputs = [ boost fuse libssl rlog ];
   nativeBuildInputs = [ autoreconfHook perl pkgconfig ];
 
   configureFlags = [

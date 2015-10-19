@@ -3,7 +3,7 @@
 
 , xorg, libX11, libxcb, libXcursor, libXext, libXrender, libXi
 , xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilwm, libxkbcommon
-, fontconfig, freetype, openssl, dbus, glib, udev, libxml2, libxslt, pcre
+, fontconfig, freetype, libssl, dbus, glib, udev, libxml2, libxslt, pcre
 , zlib, libjpeg, libpng, libtiff, sqlite, icu
 
 , coreutils, bison, flex, gdb, gperf, lndir, ruby
@@ -68,7 +68,7 @@ stdenv.mkDerivation {
       })
       ./0006-tzdir.patch
       (substituteAll { src = ./0010-dlopen-libXcursor.patch; inherit libXcursor; })
-      (substituteAll { src = ./0011-dlopen-openssl.patch; inherit openssl; })
+      (substituteAll { src = ./0011-dlopen-openssl.patch; inherit libssl; })
       (substituteAll { src = ./0012-dlopen-dbus.patch; dbus_libs = dbus; })
       ./0013-xdg_config_dirs.patch
     ] ++ optional mesaSupported
@@ -164,7 +164,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     xorg.libXcomposite libX11 libxcb libXext libXrender libXi
-    fontconfig freetype openssl dbus.libs glib udev libxml2 libxslt pcre
+    fontconfig freetype libssl dbus.libs glib udev libxml2 libxslt pcre
     zlib libjpeg libpng libtiff sqlite icu
     xcbutil xcbutilimage xcbutilkeysyms xcbutilwm libxkbcommon
   ]

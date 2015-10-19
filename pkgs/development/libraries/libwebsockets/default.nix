@@ -1,4 +1,4 @@
-{ fetchgit, stdenv, cmake, openssl, zlib }:
+{ fetchgit, stdenv, cmake, libssl, zlib }:
 
 stdenv.mkDerivation rec {
   name = "libwebsockets-1.4";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "fa4c81f86dfc39211b78c53c804efc19e15b81ccb05e72699220bbed27204c7d";
   };
 
-  buildInputs = [ cmake openssl zlib ];
+  buildInputs = [ cmake libssl zlib ];
 
   meta = {
     description = "Light, portable C library for websockets";

@@ -1,8 +1,8 @@
-a @ { openssl, gmp, nettools, iproute, zlib, ... } :
+a @ { libssl, gmp, nettools, iproute, zlib, ... } :
 let
   s = import ./src-for-default.nix;
   buildInputs = with a; [
-    openssl gmp zlib
+    libssl gmp zlib
   ];
 in
 rec {

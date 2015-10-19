@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, boost, openssl }:
+{ stdenv, fetchurl, cmake, boost, libssl }:
 
 let
   version = "0.11.2";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vwnp1jpvsdjaz7f7w55p7gw6hj7694nklmljcvphvkrhbw1g1q5";
   };
 
-  buildInputs = [ cmake boost openssl ];
+  buildInputs = [ cmake boost libssl ];
 
   cmakeFlags = [ "-DCPP-NETLIB_BUILD_SHARED_LIBS=ON" "-DCMAKE_BUILD_TYPE=RELEASE" ];
 

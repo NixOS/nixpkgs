@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl, libssl }:
 
 stdenv.mkDerivation rec {
   name = "scrypt-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1m39hpfby0fdjam842773i5w7pa0qaj7f0r22jnchxsj824vqm0p";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libssl ];
 
   patchPhase = ''
     substituteInPlace Makefile \

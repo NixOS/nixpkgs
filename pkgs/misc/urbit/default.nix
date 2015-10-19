@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, gcc, gmp, libsigsegv, openssl, automake, autoconf, ragel,
+{ stdenv, fetchgit, gcc, gmp, libsigsegv, libssl, automake, autoconf, ragel,
   cmake, re2c, libtool, ncurses, perl, zlib, python }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib; [
-    gcc gmp libsigsegv openssl automake autoconf ragel cmake re2c libtool
+    gcc gmp libsigsegv libssl automake autoconf ragel cmake re2c libtool
     ncurses perl zlib python
   ];
 

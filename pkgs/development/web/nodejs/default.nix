@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib, libuv, v8, utillinux, http-parser
+{ stdenv, fetchurl, libssl, python, zlib, libuv, v8, utillinux, http-parser
 , pkgconfig, runCommand, which, libtool
 }:
 
@@ -10,7 +10,9 @@ let
   version = "4.1.2";
 
   deps = {
-    inherit openssl zlib libuv;
+    inherit zlib libuv;
+
+    openssl = libssl;
 
     # disabled system v8 because v8 3.14 no longer receives security fixes
     # we fall back to nodejs' internal v8 copy which receives backports for now
@@ -43,9 +45,9 @@ in stdenv.mkDerivation {
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode.patch ./pkg-libpath.patch ];
 
-  buildInputs = [ python which zlib libuv openssl python ]
+  buildInputs = [ python which zlib libuv libssl python ]
     ++ optionals stdenv.isLinux [ utillinux http-parser ]
-    ++ optionals stdenv.isDarwin [ pkgconfig openssl libtool ];
+    ++ optionals stdenv.isDarwin [ pkgconfig libssl libtool ];
   setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true;

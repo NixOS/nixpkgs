@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt, expat
+{ stdenv, fetchurl, fetchFromGitHub, libssl, zlib, pcre, libxml2, libxslt, expat
 , gd, geoip, luajit
 , rtmp ? false
 , fullWebDAV ? false
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   src = mainSrc;
 
   buildInputs =
-    [ openssl zlib pcre libxml2 libxslt gd geoip
+    [ libssl zlib pcre libxml2 libxslt gd geoip
     ] ++ optional fullWebDAV expat
       ++ optional ngx_lua luajit;
 

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, boost, botan, snappy, libopus, libuuid, qt5
-, libXScrnSaver, openssl }:
+, libXScrnSaver, libssl }:
 
 stdenv.mkDerivation {
   name = "firestr-0.8";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ cmake boost botan snappy libopus libuuid qt5.base qt5.multimedia
-                  libXScrnSaver openssl ];
+                  libXScrnSaver libssl ];
 
   patches = ./return.patch;
 

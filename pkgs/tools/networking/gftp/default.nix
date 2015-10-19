@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk, readline, ncurses, gettext, openssl, pkgconfig }:
+{ stdenv, fetchurl, gtk, readline, ncurses, gettext, libssl, pkgconfig }:
 
 stdenv.mkDerivation {
   name = "gftp-2.0.19";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1z8b26n23k0sjbxgrix646b06cnpndpq7cbcj0ilsvvdx5ms81jk";
   };
 
-  buildInputs = [ gtk readline ncurses gettext openssl pkgconfig ];
+  buildInputs = [ gtk readline ncurses gettext libssl pkgconfig ];
 
   meta = { 
     description = "GTK+-based FTP client";

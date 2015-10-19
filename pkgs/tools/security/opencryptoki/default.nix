@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, trousers, automake, autoconf, libtool, bison, flex }:
+{ stdenv, fetchurl, libssl, trousers, automake, autoconf, libtool, bison, flex }:
 
 stdenv.mkDerivation rec {
   version = "3.2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "06r6zp299vxdspl6k65myzgjv0bihg7kc500v7s4jd3mcrkngd6h";
   };
 
-  buildInputs = [ automake autoconf libtool openssl trousers bison flex ];
+  buildInputs = [ automake autoconf libtool libssl trousers bison flex ];
 
   preConfigure = ''
     substituteInPlace configure.in --replace "chown" "true"

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, trousers, openssl, zlib }:
+{ stdenv, fetchurl, trousers, libssl, zlib }:
 
 stdenv.mkDerivation rec {
   name = "tboot-1.8.2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1l9ccm7ik9fs7kzg1bjc5cjh0pcf4v0k1c84dmyr51r084i7p31m";
   };
 
-  buildInputs = [ trousers openssl zlib ];
+  buildInputs = [ trousers libssl zlib ];
 
   patches = [ ./tboot-add-well-known-secret-option-to-lcp_writepol.patch ];
 

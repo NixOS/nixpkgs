@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl}:
+{stdenv, fetchurl, libssl}:
 let
   s = # Generated upstream information
   rec {
@@ -10,7 +10,7 @@ let
     sha256="1fjrb6q7y2dxx0qz7r0wlhqfkjqq1vfh7yb7jl77h5qi5kd5rm46";
   };
   buildInputs = [
-    openssl
+    libssl
   ];
 in
 stdenv.mkDerivation {
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     inherit (s) url sha256;
   };
   configureFlags = [
-    "--with-openssl=${openssl}"
+    "--with-openssl=${libssl}"
   ];
   meta = {
     inherit (s) version;

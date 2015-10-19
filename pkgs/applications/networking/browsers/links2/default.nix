@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, gpm, openssl, pkgconfig, libev # Misc.
+, gpm, libssl, pkgconfig, libev # Misc.
 , libpng, libjpeg, libtiff, librsvg # graphic formats
 , bzip2, zlib, xz # Transfer encodings
 , enableFB ? true
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ libev librsvg libpng libjpeg libtiff gpm openssl xz bzip2 zlib ]
+    [ libev librsvg libpng libjpeg libtiff gpm libssl xz bzip2 zlib ]
     ++ stdenv.lib.optionals enableX11 [ libX11 libXau libXt ]
     ++ stdenv.lib.optional enableDirectFB [ directfb ];
 

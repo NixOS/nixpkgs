@@ -1,6 +1,6 @@
 args @ { fetchurl, stdenv, perl, lib, composableDerivation
 , openldap, pam, db, cyrus_sasl, kerberos, libcap, expat, libxml2, libtool
-, openssl, ... }: with args;
+, libssl, ... }: with args;
 let edf = composableDerivation.edf; in
 rec {
   squid30 = composableDerivation.composableDerivation {} {
@@ -38,7 +38,7 @@ rec {
       sha256 = "0dafqv00dr3nyrm9k47d6r7gv2r3f9hjd1ykl3kkvjca11r4n54j";
     };
     buildInputs = [openldap pam db cyrus_sasl libcap expat libxml2
-      libtool openssl];
+      libtool libssl];
   };
 
   squid34 = squid30.merge rec {
@@ -48,7 +48,7 @@ rec {
       sha256 = "0p9dbsz541cpcc88albwpgq15jgpczv12j9b9g5xw6d3i977qm1h";
     };
     buildInputs = [openldap pam db cyrus_sasl libcap expat libxml2
-      libtool openssl];
+      libtool libssl];
     configureFlags = ["--enable-ssl" "--enable-ssl-crtd"];
   };
 
@@ -59,7 +59,7 @@ rec {
       sha256 = "0rfv1v5vkk7l08v4j16l0lz2grrzd8qf2n25i73qd7c8rgwd6a3x";
     };
     buildInputs = [openldap pam db cyrus_sasl libcap expat libxml2
-      libtool openssl];
+      libtool libssl];
     configureFlags = ["--with-openssl" "--enable-ssl-crtd"];
   };
 

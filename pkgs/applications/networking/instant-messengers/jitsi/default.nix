@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeDesktopItem, unzip, ant, jdk
 # Optional, Jitsi still runs without, but you may pass null:
-, alsaLib, dbus_libs, gtk2, libpulseaudio, openssl, xorg
+, alsaLib, dbus_libs, gtk2, libpulseaudio, libssl, xorg
 }:
 
 assert stdenv.isLinux;
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     dbus_libs
     gtk2
     libpulseaudio
-    openssl
+    libssl
   ] ++ lib.optionals (xorg != null) [
     xorg.libX11
     xorg.libXext

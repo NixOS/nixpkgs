@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, openssl, libxml2 }:
+{ stdenv, fetchurl, autoconf, automake, libssl, libxml2 }:
 
 let
   scrypt_src = fetchurl {
@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-I${libxml2}/include/libxml2";
 
-  buildInputs = [ autoconf automake openssl libxml2 ];
+  buildInputs = [ autoconf automake libssl libxml2 ];
 
   buildPhase = ''
     targets="mpw mpw-tests" ./build

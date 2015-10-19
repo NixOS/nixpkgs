@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, libusb, readline, libewf, perl, zlib, openssl,
+{stdenv, fetchurl, pkgconfig, libusb, readline, libewf, perl, zlib, libssl,
 gtk ? null, vte ? null, gtkdialog ? null,
 python ? null,
 ruby ? null,
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
 
-  buildInputs = [pkgconfig readline libusb libewf perl zlib openssl]
+  buildInputs = [pkgconfig readline libusb libewf perl zlib libssl]
     ++ optional useX11 [gtkdialog vte gtk]
     ++ optional rubyBindings [ruby]
     ++ optional pythonBindings [python]

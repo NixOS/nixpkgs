@@ -1,5 +1,5 @@
 { stdenv, fetchgit, which, perl, jdk
-, ocamlPackages, openssl
+, ocamlPackages, libssl
 , coreutils, zlib, ncurses, makeWrapper
 , gcc, binutils, gnumake, nodejs} :
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "-ocamlfind ${ocamlPackages.findlib}/bin/ocamlfind ";
 
-  buildInputs = [ which perl jdk openssl coreutils zlib ncurses
+  buildInputs = [ which perl jdk libssl coreutils zlib ncurses
     makeWrapper gcc binutils gnumake nodejs
   ] ++ (with ocamlPackages; [
     ocaml findlib ocaml_ssl cryptokit camlzip ulex ocamlgraph

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libtool, automake, autoconf
-, librdf_raptor, librdf_raptor2, ladspaH, openssl, zlib #, swh_lv2
+, librdf_raptor, librdf_raptor2, ladspaH, libssl, zlib #, swh_lv2
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   preConfigure = "rm m4/* && autoreconf -if";
 
   buildInputs = [
-    pkgconfig libtool automake autoconf ladspaH openssl zlib /*swh_lv2*/
+    pkgconfig libtool automake autoconf ladspaH libssl zlib /*swh_lv2*/
     #librdf_raptor 
   ];
 

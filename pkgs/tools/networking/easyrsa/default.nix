@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, automake111x, makeWrapper
-, gnugrep, openssl}:
+, gnugrep, libssl}:
 
 stdenv.mkDerivation rec {
   name = "easyrsa-2.2.0";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoconf makeWrapper automake111x ];
-  buildInputs = [ gnugrep openssl];
+  buildInputs = [ gnugrep libssl];
 
   # Make sane defaults and patch default config vars
   postInstall = ''
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     for prog in $(find "$out/share/easy-rsa" -executable -type f); do
       makeWrapper "$prog" "$out/bin/$(basename $prog)" \
         --set EASY_RSA "$out/share/easy-rsa" \
-        --set OPENSSL "${openssl}/bin/openssl" \
+        --set OPENSSL "${libssl}/bin/openssl" \
         --set GREP "${gnugrep}/bin/grep"
     done
     sed -i "/EASY_RSA=\|OPENSSL=\|GREP=/d" $out/share/easy-rsa/vars

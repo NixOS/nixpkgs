@@ -1,5 +1,5 @@
 { stdenv, fetchurl, self, callPackage
-, bzip2, openssl, gettext
+, bzip2, libssl, gettext
 
 , includeModules ? false
 
@@ -88,7 +88,7 @@ let
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
-    [ bzip2 openssl ]
+    [ bzip2 libssl ]
     ++ optionals stdenv.isCygwin [ expat libffi ]
     ++ optionals includeModules (
         [ db gdbm ncurses sqlite readline

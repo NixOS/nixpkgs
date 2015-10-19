@@ -6,7 +6,7 @@
 , llvmPackages_36
 , libunwind
 , gettext
-, openssl
+, libssl
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     llvmPackages_36.lldb
     libunwind
     gettext
-    openssl
+    libssl
   ];
 
   configurePhase = ''

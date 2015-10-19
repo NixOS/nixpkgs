@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook
-, openssl, c-ares, libxml2, sqlite, zlib, libssh2
+, libssl, c-ares, libxml2, sqlite, zlib, libssh2
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl c-ares libxml2 sqlite zlib libssh2 ];
+  buildInputs = [ libssl c-ares libxml2 sqlite zlib libssh2 ];
 
   configureFlags = [ "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt" ];
 

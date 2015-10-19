@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, openssl, static ? false }:
+{ fetchurl, stdenv, libssl, static ? false }:
 
 let
   pkgname = "ipmitool";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "0y6g8xg9p854n7xm3kds8m3d53jrsllnknp8lcr3jscf99j4x5ph";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libssl ];
 
   preConfigure = ''
     configureFlagsArray=(

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, zlib, openssl, libuuid, file, fuse }:
+{ fetchurl, stdenv, zlib, libssl, libuuid, file, fuse }:
 
 stdenv.mkDerivation rec {
   version = "20140608";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''sed -e 's@/usr/bin/file@file@g' -i configure'';
 
-  buildInputs = [ zlib openssl libuuid ];
+  buildInputs = [ zlib libssl libuuid ];
 
   meta = {
     description = "Library for support of the Expert Witness Compression Format";

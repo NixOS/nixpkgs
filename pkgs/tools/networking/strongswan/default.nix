@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gmp, pkgconfig, python, autoreconfHook
 , curl, trousers, sqlite, iptables, libxml2, openresolv
-, ldns, unbound, pcsclite, openssl
+, ldns, unbound, pcsclite, libssl
 , enableTNC ? false }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   buildInputs =
-    [ gmp pkgconfig python autoreconfHook iptables ldns unbound openssl pcsclite ]
+    [ gmp pkgconfig python autoreconfHook iptables ldns unbound libssl pcsclite ]
     ++ stdenv.lib.optionals enableTNC [ curl trousers sqlite libxml2 ];
 
   patches = [

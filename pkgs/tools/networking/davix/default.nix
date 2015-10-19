@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, openssl, libxml2, boost }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, libssl, libxml2, boost }:
 
 stdenv.mkDerivation rec {
   name = "davix-0.4.0";
-  buildInputs = [ stdenv pkgconfig cmake openssl libxml2 boost ];
+  buildInputs = [ stdenv pkgconfig cmake libssl libxml2 boost ];
 
   src = fetchFromGitHub {
     owner = "cern-it-sdc-id";

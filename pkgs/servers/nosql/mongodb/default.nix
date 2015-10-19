@@ -1,5 +1,5 @@
 { stdenv, fetchurl, scons, boost, gperftools, pcre, snappy
-, zlib, libyamlcpp, sasl, openssl, libpcap, wiredtiger
+, zlib, libyamlcpp, sasl, libssl, libpcap, wiredtiger
 }:
 
 with stdenv.lib;
@@ -17,7 +17,7 @@ let version = "3.0.7";
     ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
     buildInputs = [
       sasl boost gperftools pcre snappy
-      zlib libyamlcpp sasl openssl libpcap
+      zlib libyamlcpp sasl libssl libpcap
     ]; # ++ optional stdenv.is64bit wiredtiger;
 
     other-args = concatStringsSep " " ([

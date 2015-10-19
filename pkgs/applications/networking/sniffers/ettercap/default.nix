@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, libpcap, libnet, zlib, curl, pcre,
-  openssl, ncurses, glib, gtk, atk, pango, flex, bison }:
+  libssl, ncurses, glib, gtk, atk, pango, flex, bison }:
 
 stdenv.mkDerivation rec {
   name = "ettercap-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    cmake libpcap libnet zlib curl pcre openssl ncurses
+    cmake libpcap libnet zlib curl pcre libssl ncurses
     glib gtk atk pango flex bison
   ];
 

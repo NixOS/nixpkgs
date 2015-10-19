@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl, libssl }:
 
 stdenv.mkDerivation rec {
   name = "sslscan-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "19d6vpcihfqs35hni4vigcpqabbnd3sndr5wyvfsladgp40vz3b9";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libssl ];
 
   installFlags = [
     "BINPATH=$(out)/bin"

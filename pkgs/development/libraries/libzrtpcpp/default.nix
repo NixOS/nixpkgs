@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, openssl, pkgconfig, ccrtp }:
+{ stdenv, fetchurl, cmake, libssl, pkgconfig, ccrtp }:
 
 stdenv.mkDerivation rec {
   name = "libzrtpcpp-2.3.4";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ openssl ccrtp ];
+  buildInputs = [ libssl ccrtp ];
 
   meta = { 
     description = "GNU RTP stack for the zrtp protocol developed by Phil Zimmermann";

@@ -333,7 +333,7 @@ let
 
       'version' => '${pkgs.owncloud.version}',
 
-      'openssl' => '${pkgs.openssl}/bin/openssl'
+      'openssl' => '${pkgs.libssl}/bin/openssl'
 
       );
 

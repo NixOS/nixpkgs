@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl, libssl }:
 
 stdenv.mkDerivation rec {
   baseName = "ipmiutil";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "068mfxaay91m5qqs0lb4jwvsbxb665n2hgcp0g1k62zvicyiyk48";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libssl ];
 
   preBuild = ''
     sed -e "s@/usr@$out@g" -i Makefile */Makefile */*/Makefile

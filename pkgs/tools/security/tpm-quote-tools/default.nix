@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, trousers, openssl }:
+{ stdenv, fetchurl, trousers, libssl }:
 
 stdenv.mkDerivation {
   name = "tpm-quote-tools-1.0.2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "17bf9d1hiiaybx6rgl0sqcb0prjz6d2mv8fwp4bj1c0rsfw5dbk8";
   };
 
-  buildInputs = [ trousers openssl ];
+  buildInputs = [ trousers libssl ];
 
   meta = with stdenv.lib; {
     description = "A collection of programs that provide support for TPM based attestation using the TPM quote mechanism";

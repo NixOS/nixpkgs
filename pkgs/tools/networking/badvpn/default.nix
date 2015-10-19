@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, openssl, nss, pkgconfig, nspr, bash, debug ? false}:
+{stdenv, fetchurl, cmake, libssl, nss, pkgconfig, nspr, bash, debug ? false}:
 let
   s = # Generated upstream information
   rec {
@@ -10,7 +10,7 @@ let
     sha256="02b1fra43l75mljkhrq45vcrrqv0znicjn15g7nbqx3jppzbpm5z";
   };
   buildInputs = [
-    cmake openssl nss pkgconfig nspr
+    cmake libssl nss pkgconfig nspr
   ];
   compileFlags = "-O3 ${stdenv.lib.optionalString (!debug) "-DNDEBUG"}";
 in

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, erlang, icu, openssl, spidermonkey, curl, help2man, python
+{ stdenv, fetchurl, erlang, icu, libssl, spidermonkey, curl, help2man, python
 , sphinx, which, file, pkgconfig, getopt }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "09w6ijj9l5jzh81nvc3hrlqp345ajg3haj353g9kxkik6wbinq2s";
   };
 
-  buildInputs = [ erlang icu openssl spidermonkey curl help2man sphinx which
+  buildInputs = [ erlang icu libssl spidermonkey curl help2man sphinx which
     file pkgconfig ];
 
   /* This patch removes the `-Werror` flag as there are warnings due to

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, ncurses, pkgconfig, glib, loudmouth, libotr
+{ stdenv, fetchurl, libssl, ncurses, pkgconfig, glib, loudmouth, libotr
 , gpgme
 }:
 
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "0ckh2l5fbnykzbvdrqjwd1ppalaifb79nnizh8kra2sy76xbqxjl";
   };
 
-  buildInputs = [ openssl ncurses pkgconfig glib loudmouth libotr gpgme ];
+  buildInputs = [ libssl ncurses pkgconfig glib loudmouth libotr gpgme ];
 
-  configureFlags = "--with-openssl=${openssl} --enable-modules --enable-otr";
+  configureFlags = "--with-openssl=${libssl} --enable-modules --enable-otr";
 
   doCheck = true;
   

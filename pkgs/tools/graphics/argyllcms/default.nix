@@ -1,6 +1,6 @@
 { stdenv, fetchzip, jam, unzip, libX11, libXxf86vm, libXrandr, libXinerama
 , libXrender, libXext, libtiff, libjpeg, libpng, libXScrnSaver, writeText
-, libXdmcp, libXau, lib, openssl, zlib }:
+, libXdmcp, libXau, lib, libssl, zlib }:
 let
   version = "1.8.2";
  in
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libtiff libjpeg libpng libX11 libXxf86vm libXrandr libXinerama libXext
-    libXrender libXScrnSaver libXdmcp libXau openssl
+    libXrender libXScrnSaver libXdmcp libXau libssl
   ];
 
   buildFlags = "PREFIX=$(out) all";

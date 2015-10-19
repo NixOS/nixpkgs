@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, perl, zlib
+{ stdenv, fetchurl, libssl, perl, zlib
 , sslSupport, proxySupport ? true
 , apr, aprutil, pcre
 , ldapSupport ? true, openldap
@@ -7,7 +7,7 @@
   mpm ? "prefork"
 }:
 
-assert sslSupport -> openssl != null;
+assert sslSupport -> libssl != null;
 assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 assert mpm == "prefork" || mpm == "worker" || mpm == "event";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [perl apr aprutil pcre] ++
-    stdenv.lib.optional sslSupport openssl;
+    stdenv.lib.optional sslSupport libssl;
 
   # An apr-util header file includes an apr header file
   # through #include "" (quotes)
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     --enable-mods-shared=all
     --enable-authn-alias
     ${if proxySupport then "--enable-proxy" else ""}
-    ${if sslSupport then "--enable-ssl --with-ssl=${openssl}" else ""}
+    ${if sslSupport then "--enable-ssl --with-ssl=${libssl}" else ""}
     ${if ldapSupport then "--enable-ldap --enable-authnz-ldap" else ""}
     --with-mpm=${mpm}
     --enable-cache

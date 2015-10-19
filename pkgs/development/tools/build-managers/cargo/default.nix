@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, rustPlatform, file, curl, python, pkgconfig, openssl
+{ stdenv, fetchgit, rustPlatform, file, curl, python, pkgconfig, libssl
 , cmake, zlib }:
 
 with ((import ./common.nix) { inherit stdenv; version = "0.5.0"; });
@@ -17,7 +17,7 @@ buildRustPackage rec {
 
   depsSha256 = "1q92q63g9pz7fy9fhx8y0kqarsshmzv1dq18ki3hdd7d5pcbczna";
 
-  buildInputs = [ file curl pkgconfig python openssl cmake zlib ];
+  buildInputs = [ file curl pkgconfig python libssl cmake zlib ];
 
   configurePhase = ''
     ./configure --enable-optimize --prefix=$out --local-cargo=${cargo}/bin/cargo

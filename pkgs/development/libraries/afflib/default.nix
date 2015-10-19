@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, zlib, curl, expat, fuse, openssl
+{ stdenv, fetchgit, zlib, curl, expat, fuse, libssl
 , autoconf, automake, libtool, python
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     name = "afflib-${version}-checkout";
   };
 
-  buildInputs = [ zlib curl expat fuse openssl 
+  buildInputs = [ zlib curl expat fuse libssl
     libtool autoconf automake python
     ];
 

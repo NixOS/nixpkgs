@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl, zlib, libpcap, boost, cairo}:
+{stdenv, fetchurl, libssl, zlib, libpcap, boost, cairo}:
 let
   s = # Generated upstream information
   rec {
@@ -10,7 +10,7 @@ let
     sha256="0k2lxlvn1x8avkrijc22scrj4p2g5agfskbgfc2d0w9zgrg61xdn";
   };
   buildInputs = [
-    openssl zlib libpcap boost cairo
+    libssl zlib libpcap boost cairo
   ];
 in
 stdenv.mkDerivation {

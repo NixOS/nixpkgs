@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, zlib, pkgconfig, SDL, openssl
+{ stdenv, fetchurl, which, zlib, pkgconfig, SDL, libssl
 , libuuid, gettext, ncurses, dev86, iasl, pciutils, bzip2
 , lvm2, utillinux, procps, texinfo, perl, pythonPackages
 , glib, bridge-utils, xorg, pixman, iproute, udev, bison
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
   dontUseCmakeConfigure = true;
 
   buildInputs =
-    [ which zlib pkgconfig SDL openssl libuuid gettext ncurses
+    [ which zlib pkgconfig SDL libssl libuuid gettext ncurses
       dev86 iasl pciutils bzip2 xz texinfo perl yajl
       pythonPackages.python pythonPackages.wrapPython
       glib bridge-utils pixman iproute udev bison xorg.libX11

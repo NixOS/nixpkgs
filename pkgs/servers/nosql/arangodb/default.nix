@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, zlib, python, gyp, bash, go, readline }:
+{ stdenv, fetchFromGitHub, libssl, zlib, python, gyp, bash, go, readline }:
 
 stdenv.mkDerivation rec {
   version = "2.5.3";
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    openssl zlib python gyp go readline
+    libssl zlib python gyp go readline
   ];
 
-  configureFlagsArray = [ "--with-openssl-lib=${openssl}/lib" ];
+  configureFlagsArray = [ "--with-openssl-lib=${libssl}/lib" ];
 
   patchPhase = ''
     substituteInPlace 3rdParty/V8-3.31.74.1/build/gyp/gyp --replace /bin/bash ${bash}/bin/bash

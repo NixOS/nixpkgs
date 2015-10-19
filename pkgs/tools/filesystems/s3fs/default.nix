@@ -1,4 +1,4 @@
-{stdenv, fetchurl, autoconf, automake, pkgconfig, curl, openssl, libxml2, fuse}:
+{stdenv, fetchurl, autoconf, automake, pkgconfig, curl, libssl, libxml2, fuse}:
 
 stdenv.mkDerivation {
   name = "s3fs-fuse-1.79";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "0rmzkngzq040g020pv75qqx3jy34vdxzqvxz29k6q8yfb3wpkhb1";
   };
   preConfigure = "./autogen.sh";
-  buildInputs = [ autoconf automake pkgconfig curl openssl libxml2 fuse ];
+  buildInputs = [ autoconf automake pkgconfig curl libssl libxml2 fuse ];
 
   postInstall = ''
     ln -s $out/bin/s3fs $out/bin/mount.s3fs

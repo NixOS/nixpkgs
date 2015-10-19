@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, openssl, zlib, pcre, libxml2, libxslt, gd, geoip
+{ stdenv, fetchurl, fetchgit, libssl, zlib, pcre, libxml2, libxslt, gd, geoip
 , perl }:
 
 assert stdenv.isLinux;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fw8yxjndf5gsk44l4bsixm270fxv7f5cdiwzq9ps6j3hhgx5kyv";
   };
 
-  buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip perl ];
+  buildInputs = [ libssl zlib pcre libxml2 libxslt gd geoip perl ];
 
   configureFlags = [
     "--with-pcre-jit"

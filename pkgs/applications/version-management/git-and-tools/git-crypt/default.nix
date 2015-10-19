@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl }:
+{ stdenv, fetchFromGitHub, libssl }:
 
 stdenv.mkDerivation rec {
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     inherit name;
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libssl ];
 
   installPhase = ''
     make install PREFIX=$out

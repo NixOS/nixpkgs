@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, libuuid }:
+{ stdenv, fetchurl, libssl, libuuid }:
 
 stdenv.mkDerivation rec {
   pname = "mosquitto";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1imw5ps0cqda41b574k8hgz9gdr8yy58f76fg8gw14pdnvf3l7sr";
   };
 
-  buildInputs = [ openssl libuuid ];
+  buildInputs = [ libssl libuuid ];
 
   buildFlags = "mosquitto";
 

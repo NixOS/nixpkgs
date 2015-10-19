@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, cmake, zlib, openssl, libsodium }:
+{ stdenv, fetchurl, pkgconfig, cmake, zlib, libssl, libsodium }:
 
 stdenv.mkDerivation rec {
   name = "libssh-0.7.1";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sed -i 's,nacl/,sodium/,g' ./include/libssh/curve25519.h src/curve25519.c
   '';
 
-  buildInputs = [ zlib openssl libsodium ];
+  buildInputs = [ zlib libssl libsodium ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gettext, libidn, pkgconfig
 , perl, perlPackages, LWP, python3
-, libiconv, libpsl, openssl ? null }:
+, libiconv, libpsl, libssl ? null }:
 
 stdenv.mkDerivation rec {
   name = "wget-1.16.3";
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext pkgconfig ];
   buildInputs = [ libidn libiconv libpsl ]
     ++ stdenv.lib.optionals doCheck [ perl perlPackages.IOSocketSSL LWP python3 ]
-    ++ stdenv.lib.optional (openssl != null) openssl
+    ++ stdenv.lib.optional (libssl != null) libssl
     ++ stdenv.lib.optional stdenv.isDarwin perl;
 
   configureFlags =
-    if openssl != null then "--with-ssl=openssl" else "--without-ssl";
+    if libssl != null then "--with-ssl=openssl" else "--without-ssl";
 
   doCheck = false;
 

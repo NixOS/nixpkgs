@@ -4,7 +4,7 @@
 , libevent
 , libtool
 , pkgconfig
-, openssl
+, libssl
 }:
 
 stdenv.mkDerivation {
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     libevent
     libtool
     pkgconfig
-    openssl
+    libssl
   ];
 
   preConfigure = ''

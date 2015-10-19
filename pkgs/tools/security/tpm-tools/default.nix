@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, trousers, openssl, opencryptoki }:
+{ stdenv, fetchurl, trousers, libssl, opencryptoki }:
 
 let
   version = "1.3.8";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "10za1gi89vi9m2lmm7jfzs281h55x1sbbm2bdgdh692ljpq4zsv6";
   };
 
-  buildInputs = [ trousers openssl opencryptoki ];
+  buildInputs = [ trousers libssl opencryptoki ];
 
   meta = with stdenv.lib; {
     description = "Management tools for TPM hardware";

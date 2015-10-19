@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, cmake, curl, libyamlcpp, openssl, utillinux }:
+{ stdenv, fetchurl, boost, cmake, curl, libyamlcpp, libssl, utillinux }:
 
 stdenv.mkDerivation rec {
   name = "facter-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   libyamlcpp_ = libyamlcpp.override { makePIC = true; };
 
-  buildInputs = [ boost cmake curl libyamlcpp_ openssl utillinux ];
+  buildInputs = [ boost cmake curl libyamlcpp_ libssl utillinux ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/puppetlabs/facter;

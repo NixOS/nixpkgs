@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, cyrus_sasl, db, groff }:
+{ stdenv, fetchurl, libssl, cyrus_sasl, db, groff }:
 
 stdenv.mkDerivation rec {
   name = "openldap-2.4.42";
@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  buildInputs = [ openssl cyrus_sasl db groff ];
+  buildInputs = [ libssl cyrus_sasl db groff ];
 
   configureFlags =
     [ "--enable-overlays"
       "--disable-dependency-tracking"   # speeds up one-time build
-    ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
+    ] ++ stdenv.lib.optional (libssl == null) "--without-tls"
       ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl";
 
   dontPatchELF = 1; # !!!
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   # Fixup broken libtool
   preFixup = ''
     sed -e 's,-lsasl2,-L${cyrus_sasl}/lib -lsasl2,' \
-        -e 's,-lssl,-L${openssl}/lib -lssl,' \
+        -e 's,-lssl,-L${libssl}/lib -lssl,' \
         -i $out/lib/libldap.la -i $out/lib/libldap_r.la
   '';
 

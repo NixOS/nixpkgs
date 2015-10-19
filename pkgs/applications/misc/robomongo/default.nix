@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt5, openssl, boost, cmake, scons, python, pcre, bzip2 }:
+{ stdenv, fetchurl, qt5, libssl, boost, cmake, scons, python, pcre, bzip2 }:
 
 stdenv.mkDerivation {
   name = "robomongo-0.8.4";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
-  buildInputs = [ cmake boost scons qt5.base openssl python pcre bzip2 ];
+  buildInputs = [ cmake boost scons qt5.base libssl python pcre bzip2 ];
 
   meta = {
     homepage = "http://robomongo.org/";

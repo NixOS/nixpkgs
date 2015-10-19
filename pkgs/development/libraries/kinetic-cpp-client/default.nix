@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, cmake, protobuf, libunwind, openssl, glog
+{ stdenv, fetchgit, fetchurl, cmake, protobuf, libunwind, libssl, glog
 , google-gflags, gmock, gtest
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libunwind glog google-gflags gmock gtest ];
 
   # The headers and library include from these and there is no provided pc file
-  propagatedBuildInputs = [ protobuf openssl ];
+  propagatedBuildInputs = [ protobuf libssl ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=true"

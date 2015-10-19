@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, pkgconfig, libtool, pam, libHX, libxml2, pcre, perl, openssl, cryptsetup, utillinux }:
+{ stdenv, fetchurl, autoconf, automake, pkgconfig, libtool, pam, libHX, libxml2, pcre, perl, libssl, cryptsetup, utillinux }:
 
 stdenv.mkDerivation rec {
   name = "pam_mount-2.15";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "091aq5zyc60wh21m1ryanjwknwxlaj9nvlswn5vjrmcdir5gnkm5";
   };
 
-  buildInputs = [ autoconf automake pkgconfig libtool pam libHX utillinux libxml2 pcre perl openssl cryptsetup ];
+  buildInputs = [ autoconf automake pkgconfig libtool pam libHX utillinux libxml2 pcre perl libssl cryptsetup ];
 
   patches = [ ./insert_utillinux_path_hooks.patch ];
 
