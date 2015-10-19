@@ -1,6 +1,8 @@
 
 { stdenv
 , fetchurl
+, cpp ? false
+, gfortran ? null
 , zlib ? null
 , szip ? null
 , mpi ? null
@@ -20,6 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = []
+    ++ stdenv.lib.optional (gfortran != null) gfortran
     ++ stdenv.lib.optional (zlib != null) zlib
     ++ stdenv.lib.optional (szip != null) szip;
 
@@ -27,6 +30,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (mpi != null) mpi;
 
   configureFlags = "
+    ${if cpp then "--enable-cxx" else ""}
+    ${if gfortran != null then "--enable-fortran" else ""}
     ${if szip != null then "--with-szlib=${szip}" else ""}
     ${if mpi != null then "--enable-parallel" else ""}
     ${if enableShared then "--enable-shared" else ""}

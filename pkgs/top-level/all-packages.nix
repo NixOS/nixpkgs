@@ -1814,6 +1814,7 @@ let
   hddtemp = callPackage ../tools/misc/hddtemp { };
 
   hdf5 = callPackage ../tools/misc/hdf5 {
+    gfortran = null;
     szip = null;
     mpi = null;
   };
@@ -1821,6 +1822,14 @@ let
   hdf5-mpi = hdf5.override {
     szip = null;
     mpi = pkgs.openmpi;
+  };
+
+  hdf5-cpp = hdf5.override {
+    cpp = true;
+  };
+
+  hdf5-fortran = hdf5.override {
+    inherit gfortran;
   };
 
   heimdall = callPackage ../tools/misc/heimdall { };
