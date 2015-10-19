@@ -1,7 +1,7 @@
-From 2778186be31a8f949135ed99232eafee201a668d Mon Sep 17 00:00:00 2001
+From decdc77a7e89b6f1bb3d49268b08a43daf4a7147 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@gmail.com>
 Date: Fri, 28 Aug 2015 10:16:53 -0500
-Subject: [PATCH 2/2] zoneinfo
+Subject: [PATCH 2/3] zoneinfo
 
 ---
  kcms/dateandtime/helper.cpp | 7 ++++++-
@@ -26,5 +26,5 @@ index fc4a6b9..7b64d05 100644
      if (QFile::exists(tz)) { // make sure the new TZ really exists
          QFile::remove("/etc/localtime");
 -- 
-2.5.0
+2.5.2
 
