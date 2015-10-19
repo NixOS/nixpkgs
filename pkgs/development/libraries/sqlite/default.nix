@@ -3,11 +3,11 @@
 assert interactive -> readline != null && ncurses != null;
 
 stdenv.mkDerivation {
-  name = "sqlite-3.8.11.1";
+  name = "sqlite-3.9.1";
 
   src = fetchurl {
-    url = "http://sqlite.org/2015/sqlite-autoconf-3081101.tar.gz";
-    sha1 = "d0e22d7e361b6f50830a3cdeafe35311443f8f9a";
+    url = "http://sqlite.org/2015/sqlite-autoconf-3090100.tar.gz";
+    sha1 = "6b7d22c24c9695118a2706c8e026fb3c31780a30";
   };
 
   buildInputs = lib.optionals interactive [ readline ncurses ];
@@ -17,6 +17,7 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = [
     "-DSQLITE_ENABLE_COLUMN_METADATA"
     "-DSQLITE_ENABLE_DBSTAT_VTAB"
+    "-DSQLITE_ENABLE_JSON1"
     "-DSQLITE_ENABLE_FTS3"
     "-DSQLITE_ENABLE_FTS3_PARENTHESIS"
     "-DSQLITE_ENABLE_FTS4"
