@@ -121,7 +121,7 @@ mirror://xorg/X11R7.7/src/everything/xf86driproto-2.1.1.tar.bz2
 mirror://xorg/individual/driver/xf86-input-evdev-2.9.2.tar.bz2
 mirror://xorg/individual/driver/xf86-input-joystick-1.6.2.tar.bz2
 mirror://xorg/individual/driver/xf86-input-keyboard-1.8.1.tar.bz2
-mirror://xorg/individual/driver/xf86-input-libinput-0.12.0.tar.bz2
+mirror://xorg/individual/driver/xf86-input-libinput-0.14.0.tar.bz2
 mirror://xorg/individual/driver/xf86-input-mouse-1.9.1.tar.bz2
 mirror://xorg/individual/driver/xf86-input-synaptics-1.8.2.tar.bz2
 mirror://xorg/individual/driver/xf86-input-vmmouse-13.1.0.tar.bz2
