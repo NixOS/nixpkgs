@@ -9,11 +9,11 @@
 , enableShared ? true
 }:
 stdenv.mkDerivation rec {
-  version = "1.8.14";
+  version = "1.8.15-patch1";
   name = "hdf5-${version}";
   src = fetchurl {
     url = "http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-${version}/src/hdf5-${version}.tar.gz";
-    sha256 = "0f86gv32pjrrphvamgims1dd7f3bp46hjarbcdy8k4gmyzpgxghx";
+    sha256 = "19k39da6zzxyr0fnffn4iqlls9v1fsih877rznq8ypqy8mzf5dci";
  };
 
   passthru = {
