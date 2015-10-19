@@ -6,6 +6,7 @@ with lib;
 {
   imports = [
       ../profiles/qemu-guest.nix
+      ./base.nix
   ];
 
   boot.blacklistedKernelModules = [ "bochs_drm" ];
