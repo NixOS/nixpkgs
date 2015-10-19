@@ -299,6 +299,7 @@
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   schmitthenner = "Fabian Schmitthenner <development@schmitthenner.eu>";
   schristo = "Scott Christopher <schristopher@konputa.com>";
+  scolobb = "Sergiu Ivanov <sivanov@colimite.fr>";
   sepi = "Raffael Mancini <raffael@mancini.lu>";
   sheganinans = "Aistis Raulinaitis <sheganinans@gmail.com>";
   shell = "Shell Turner <cam.turn@gmail.com>";

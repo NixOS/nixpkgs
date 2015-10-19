@@ -2675,6 +2675,8 @@ let
     inherit (pythonPackages) sqlite3;
   };
 
+  oh-my-zsh = callPackage ../shells/oh-my-zsh { };
+
   opencryptoki = callPackage ../tools/security/opencryptoki { };
 
   opendbx = callPackage ../development/libraries/opendbx { };
