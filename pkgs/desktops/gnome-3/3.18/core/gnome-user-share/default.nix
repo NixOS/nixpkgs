@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     sed -e 's,^LoadModule dnssd_module.\+,LoadModule dnssd_module ${mod_dnssd}/modules/mod_dnssd.so,' -i data/dav_user_2.2.conf 
   '';
 
-  configureFlags = [ "--with-httpd=${apacheHttpd_2_2}/bin/httpd"
-                     "--with-modules-path=${apacheHttpd_2_2}/modules"
+  configureFlags = [ "--with-httpd=${apacheHttpd_2_2.out}/bin/httpd"
+                     "--with-modules-path=${apacheHttpd_2_2.out}/modules"
                      "--disable-bluetooth"
                      "--with-nautilusdir=$(out)/lib/nautilus/extensions-3.0" ];
 
