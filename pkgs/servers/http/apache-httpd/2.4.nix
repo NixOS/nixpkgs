@@ -22,10 +22,17 @@ stdenv.mkDerivation rec {
     sha256 = "0hrpy6gjwma0kba7p7m61vwh82qcnkf08123lrwpg257m93hnrmc";
   };
 
+  # FIXME: -dev depends on -doc
+  outputs = [ "dev" "out" "doc" ];
+
   buildInputs = [perl] ++
     optional sslSupport openssl ++
     optional ldapSupport openldap ++    # there is no --with-ldap flag
     optional libxml2Support libxml2;
+
+  patchPhase = ''
+    sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
+  '';
 
   # Required for ‘pthread_cancel’.
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
@@ -48,12 +55,14 @@ stdenv.mkDerivation rec {
     ${optionalString libxml2Support "--with-libxml2=${libxml2.dev}/include/libxml2"}
   '';
 
-  postInstall = ''
-    echo "removing manual"
-    rm -rf $out/manual
-  '';
-
   enableParallelBuilding = true;
+
+  postInstall = ''
+    mkdir -p $doc/share/doc/httpd
+    mv $out/manual $doc/share/doc/httpd
+    mkdir -p $dev/bin
+    mv $out/bin/apxs $dev/bin/apxs
+  '';
 
   passthru = {
     inherit apr aprutil sslSupport proxySupport ldapSupport;
