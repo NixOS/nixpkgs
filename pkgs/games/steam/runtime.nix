@@ -1,23 +1,21 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, writeText, python2, dpkg, binutils }:
 
 let arch = if stdenv.system == "x86_64-linux" then "amd64"
            else if stdenv.system == "i686-linux" then "i386"
            else abort "Unsupported platform";
 
-in stdenv.mkDerivation rec {
-  name = "steam-runtime-${version}";
-  version = "2014-04-15";
+    input = builtins.getAttr arch (import ./runtime-generated.nix { inherit fetchurl; });
 
-  phases = [ "unpackPhase" "installPhase" ];
+    inputFile = writeText "steam-runtime.json" (builtins.toJSON input);
 
-  src = fetchurl {
-    url = "http://media.steampowered.com/client/runtime/steam-runtime-release_${version}.tar.xz";
-    sha256 = "0i6xp81rjbfn4664h4mmvw0xjwlwvdp6k7cc53jfjadcblw5cf99";
-  };
+in stdenv.mkDerivation {
+  name = "steam-runtime-20151020";
 
-  installPhase = ''
+  nativeBuildInputs = [ python2 dpkg binutils ];
+
+  buildCommand = ''
     mkdir -p $out
-    mv ${arch}/* $out/
+    python2 ${./build-runtime.py} -i ${inputFile} -r $out
   '';
 
   passthru = rec {
@@ -34,8 +32,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "The official runtime used by Steam";
     homepage = https://github.com/ValveSoftware/steam-runtime;
-    license = licenses.mit;
-    maintainers = with maintainers; [ hrdinka ];
-    hydraPlatforms = [];
+    license = licenses.unfreeRedistributable; # Includes NVIDIA CG toolkit
+    maintainers = with maintainers; [ hrdinka abbradar ];
   };
 }
