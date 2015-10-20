@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   };
   
   buildPhase = ''
+    patchShebangs ./scons
     ./scons openssl=${openssl} \
             boost_includedir=${boost.dev}/include \
             boost_libdir=${boost.lib}/lib \
