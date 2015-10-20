@@ -7,6 +7,7 @@
 , qtsvg, libXcursor, libXft, libxkbfile, xf86inputevdev
 , xf86inputsynaptics, xinput, xkeyboard_config, xorgserver
 , libcanberra_kde, libpulseaudio, makeQtWrapper, utillinux
+, qtquick1, qtquickcontrols
 }:
 
 plasmaPackage rec {
@@ -26,7 +27,8 @@ plasmaPackage rec {
   propagatedBuildInputs = [
     baloo kactivities kauth kdeclarative kdelibs4support kemoticons
     kglobalaccel ki18n kpeople krunner kwin plasma-framework
-    plasma-workspace qtdeclarative qtx11extras
+    plasma-workspace qtdeclarative qtquick1 qtquickcontrols
+    qtx11extras
   ];
   # All propagatedBuildInputs should be present in the profile because
   # wrappers cannot be used here.
