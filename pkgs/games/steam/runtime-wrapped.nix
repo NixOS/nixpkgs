@@ -98,7 +98,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  builder = ./build-runtime.sh;
+  builder = ./build-wrapped.sh;
 
   installPhase = ''
     buildDir "${toString steam-runtime.libs}" "$allPkgs"
