@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b165zi7jrrlz5wmyy3b34lcs3dl4g0dymfb0qxwdnimylcrsbzk";
   };
 
+  # FIXME: -dev depends on -doc
   outputs = [ "dev" "out" "doc" ];
 
   buildInputs = [ pkgconfig perl apr aprutil pcre zlib ] ++
@@ -32,6 +33,10 @@ stdenv.mkDerivation rec {
 
   # Required for ‘pthread_cancel’.
   NIX_LDFLAGS = (if stdenv.isDarwin then "" else "-lgcc_s");
+
+  patchPhase = ''
+    sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
+  '';
 
   configureFlags = ''
     --with-z=${zlib}
@@ -48,11 +53,6 @@ stdenv.mkDerivation rec {
     --enable-mem-cache
   '';
 
-  preConfigure =
-    ''
-      makeFlagsArray+=("installbuilddir=$dev/share/build")
-    '';
-
   enableParallelBuilding = true;
 
   stripDebugList = "lib modules bin";
@@ -60,7 +60,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $doc/share/doc/httpd
     mv $out/manual $doc/share/doc/httpd
-    mkdir -p $out/share # FIXME, hack
+    mkdir -p $dev/bin
+    mv $out/sbin/apxs $dev/bin/apxs
   '';
 
   passthru = {
