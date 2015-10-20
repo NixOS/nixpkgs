@@ -9159,6 +9159,9 @@ let
     version = "0.10.0";
     name = "nipype-${version}";
 
+    # Uses python 2 print. Master seems to be Py3 compatible.
+    disabled = isPy3k;
+    
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/n/nipype/${name}.tar.gz";
       md5 = "480013709633a6d292e2ef668443e0c9";
@@ -18063,12 +18066,16 @@ let
   };
 
   networkx = buildPythonPackage rec {
-    name = "networkx-1.9.1";
-    disabled = ! isPy27;
+    version = "1.10";
+    name = "networkx-${version}";
 
+    # Currently broken on PyPy. 
+    # https://github.com/networkx/networkx/pull/1361
+    disabled = isPyPy;
+    
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/n/networkx/networkx-1.9.1.tar.gz";
-      sha256 = "6380eb38d0b5770d7e50813c8a48ff7c373b2187b4220339c1adce803df01c59";
+      url = "https://pypi.python.org/packages/source/n/networkx/${name}.tar.gz";
+      sha256 = "ced4095ab83b7451cec1172183eff419ed32e21397ea4e1971d92a5808ed6fb8";
     };
 
     propagatedBuildInputs = with self; [ nose decorator ];
