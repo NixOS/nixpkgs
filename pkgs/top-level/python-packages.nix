@@ -3122,7 +3122,7 @@ let
       md5 = "07a5f41fd3f8cc72d05deed628700e99";
     };
 
-    propagatedBuildInputs = with self; [ six requests websocket_client ];
+    propagatedBuildInputs = with self; [ six requests2 websocket_client ];
 
     # Version conflict
     doCheck = false;
@@ -7226,7 +7226,7 @@ let
     disabled = isPy3k;
 
     propagatedBuildInputs = with self; [
-      requests2 # Needs to be first, no idea why...
+      requests2
       cgroup-utils docker-custom docutils lti mock pygments
       pymongo pyyaml rpyc sh simpleldap sphinx_rtd_theme tidylib
       websocket_client watchdog webpy-custom
