@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     "--enable-overwrite"  # Needed for proper header installation
     "--enable-pc-files"
     "--enable-symlinks"
-    "--libdir=$(lib)/lib" "--includedir=$(dev)/include" "--bindir=$(dev)/bin" "--mandir=$(man)/share/man"
   ] ++ lib.optional unicode "--enable-widec";
 
   nativeBuildInputs = [ pkgconfig libtool ];
@@ -36,7 +35,13 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export PKG_CONFIG_LIBDIR="$dev/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
-    configureFlagsArray+=("--with-pkg-config-libdir=$PKG_CONFIG_LIBDIR")
+    configureFlagsArray+=(
+      "--libdir=$lib/lib"
+      "--includedir=$dev/include"
+      "--bindir=$dev/bin"
+      "--mandir=$man/share/man"
+      "--with-pkg-config-libdir=$PKG_CONFIG_LIBDIR"
+    )
   '' + lib.optionalString stdenv.isCygwin ''
     sed -i -e 's,LIB_SUFFIX="t,LIB_SUFFIX=",' configure
   '';
