@@ -18553,11 +18553,11 @@ let
 
   pafy = buildPythonPackage rec {
     name = "pafy-${version}";
-    version = "0.3.74";
+    version = "0.4.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pafy/${name}.tar.gz";
-      md5 = "fbf0e7f85914eaf35f87837232eec09c";
+      sha256 = "1zdlwwrwh04vszwgmhkmaah1ix24d2zicpv3zi7s8whh06g7pkkl";
     };
 
     propagatedBuildInputs = with self; [ youtube-dl ];
