@@ -6090,7 +6090,7 @@ let
     };
 
     buildInputs = with self; [ nose mock ];
-    propagatedBuildInputs = with self; [ pyflakes pep8 mccabe ];
+    propagatedBuildInputs = with self; [ pyflakes_0_8 pep8 mccabe ];
 
     # 3 failing tests
     #doCheck = false;
@@ -11441,6 +11441,29 @@ let
     };
   };
 
+  pyflakes_0_8 = buildPythonPackage rec {
+    # Pyflakes 0.8 is needed for flake8, which is needed for OpenStack Nova
+    # https://github.com/NixOS/nixpkgs/pull/10399
+    name = "pyflakes-${version}";
+    version = "0.8.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyflakes/${name}.tar.gz";
+      sha256 = "0sbpq6pqm1i9wqi41mlfrsc5rk92jv4mskvlyxmnhlbdnc80ma1z";
+    };
+
+    buildInputs = with self; [ unittest2 ];
+
+    doCheck = !isPyPy;
+
+    disabled = isPy35; # Not supported
+
+    meta = {
+      homepage = https://launchpad.net/pyflakes;
+      description = "A simple program which checks Python source files for errors";
+      license = licenses.mit;
+    };
+  };
 
   pygeoip = pythonPackages.buildPythonPackage rec {
     name = "pygeoip-0.3.2";
