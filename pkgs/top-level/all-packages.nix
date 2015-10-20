@@ -3590,6 +3590,8 @@ let
 
   xwinmosaic = callPackage ../tools/X11/xwinmosaic {};
 
+  yank = callPackage ../tools/misc/yank { };
+
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
 
