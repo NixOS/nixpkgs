@@ -11421,11 +11421,12 @@ let
   };
 
   pyflakes = buildPythonPackage rec {
-    name = "pyflakes-0.9.2";
+    name = "pyflakes-${version}";
+    version = "1.0.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyflakes/${name}.tar.gz";
-      sha256 = "0pvawddspdq0y22dbraq5gld9qr6rwa7zhmpfhl2b7v9rqiiqs82";
+      sha256 = "f39e33a4c03beead8774f005bd3ecf0c3f2f264fa0201de965fce0aff1d34263";
     };
 
     buildInputs = with self; [ unittest2 ];
