@@ -55,5 +55,9 @@ plasmaPackage rec {
     wrapQtProgram "$out/bin/kuiserver5"
     wrapQtProgram "$out/bin/krunner"
     wrapQtProgram "$out/bin/plasmashell"
+
+    wrapQtProgram "$out/lib/libexec/drkonqi"
+    wrapQtProgram "$out/lib/libexec/kscreenlocker_greet"
+    rm "$out/lib/libexec/startplasma"
   '';
 }
