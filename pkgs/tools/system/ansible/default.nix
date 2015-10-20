@@ -11,7 +11,7 @@ pythonPackages.buildPythonPackage rec {
   };
 
   prePatch = ''
-    sed -i "s,\/usr\/share\/ansible\/,$out/share/ansible," lib/ansible/constants.py
+    sed -i "s,/usr/,$out," lib/ansible/constants.py
   '';
 
   doCheck = false;
@@ -19,13 +19,9 @@ pythonPackages.buildPythonPackage rec {
   dontPatchELF = true;
   dontPatchShebangs = true;
 
-  propagatedBuildInputs = with pythonPackages; [
+  pythonPath = with pythonPackages; [
     paramiko jinja2 pyyaml httplib2 boto six
   ] ++ stdenv.lib.optional windowsSupport pywinrm;
-
-  postFixup = ''
-      wrapPythonProgramsIn $out/bin "$out $pythonPath"
-  '';
 
   meta = with stdenv.lib; {
     homepage = "http://www.ansible.com";
