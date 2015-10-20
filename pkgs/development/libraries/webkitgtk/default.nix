@@ -2,7 +2,7 @@
 , pkgconfig, gettext, gobjectIntrospection, libnotify
 , gtk2, gtk3, wayland, libwebp, enchant
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs
-, enableGeoLocation ? true, geoclue2, sqlite
+, enableGeoLocation ? true, geoclue2, sqlite, xorg
 , gst-plugins-base
 }:
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk2 wayland libwebp enchant libnotify
     libxml2 libsecret libxslt harfbuzz libpthreadstubs
-    gst-plugins-base
+    gst-plugins-base xorg.libXt
   ] ++ optional enableGeoLocation geoclue2;
 
   propagatedBuildInputs = [
