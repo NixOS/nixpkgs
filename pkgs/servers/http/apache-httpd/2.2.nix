@@ -26,11 +26,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig perl apr aprutil pcre zlib ] ++
     stdenv.lib.optional sslSupport openssl;
 
-  # An apr-util header file includes an apr header file
-  # through #include "" (quotes)
-  # passing simply CFLAGS did not help, then I go by NIX_CFLAGS_COMPILE
-  NIX_CFLAGS_COMPILE = "-iquote ${apr}/include/apr-1";
-
   # Required for ‘pthread_cancel’.
   NIX_LDFLAGS = (if stdenv.isDarwin then "" else "-lgcc_s");
 
