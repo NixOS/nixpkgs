@@ -45,14 +45,6 @@ plasmaPackage rec {
     "-DSynaptics_INCLUDE_DIRS=${xf86inputsynaptics}/include/xorg"
   ];
   postInstall = ''
-    # These files are installed in the wrong location.
-    cd "$out/share/plasma/plasmoids/org.kde.desktopcontainment/contents"
-    mv "code/LayoutManager.js" "ui/LayoutManager.js"
-    cd "$out/share/plasma/plasmoids/org.kde.panel/contents"
-    mv "code/LayoutManager.js" "ui/LayoutManager.js"
-
-    cd "$NIX_BUILD_TOP"
-
     wrapQtProgram "$out/bin/kaccess"
     wrapQtProgram "$out/bin/solid-action-desktop-gen"
     wrapQtProgram "$out/bin/knetattach"
