@@ -5089,6 +5089,7 @@ let
     self = python33;
   };
   python34 = hiPrio (callPackage ../development/interpreters/python/3.4 {
+    inherit (darwin) CF configd;
     self = python34;
   });
   python35 = hiPrio (callPackage ../development/interpreters/python/3.5 {
