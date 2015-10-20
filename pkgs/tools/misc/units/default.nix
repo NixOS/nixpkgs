@@ -1,10 +1,11 @@
 {stdenv, fetchurl}:
-stdenv.mkDerivation {
-  name = "units-2.11";
+stdenv.mkDerivation rec {
+  name = "units-${version}";
+  version = "2.12";
 
   src = fetchurl {
-    url = mirror://gnu/units/units-2.11.tar.gz;
-    sha256 = "1gjs3wc212aaiq4r76hx9nl1h3fa39n0ljwl9420d6ixl3rdmdjk";
+    url = "mirror://gnu/units/${name}.tar.gz";
+    sha256 = "1jxvjknz2jhq773jrwx9gc1df3gfy73yqmkjkygqxzpi318yls3q";
   };
 
   meta = {
