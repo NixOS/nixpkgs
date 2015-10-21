@@ -1,7 +1,8 @@
-{ fetchurl, stdenv
+{ fetchurl, stdenv, wrapGAppsHook
 , curl, dbus, dbus_glib, enchant, gtk, gnutls, gnupg, gpgme, hicolor_icon_theme
 , libarchive, libcanberra, libetpan, libnotify, libsoup, libxml2, networkmanager
 , openldap , perl, pkgconfig, poppler, python, shared_mime_info, webkitgtk2
+, glib_networking, gsettings_desktop_schemas
 
 # Build options
 # TODO: A flag to build the manual.
@@ -51,8 +52,8 @@ stdenv.mkDerivation {
   patches = [ ./mime.patch ];
 
   buildInputs =
-    [ curl dbus dbus_glib gtk gnutls hicolor_icon_theme
-      libetpan perl pkgconfig python
+    [ curl dbus dbus_glib gtk gnutls gsettings_desktop_schemas hicolor_icon_theme
+      libetpan perl pkgconfig python wrapGAppsHook
     ]
     ++ optional enableSpellcheck enchant
     ++ optionals (enablePgp || enablePluginSmime) [ gnupg gpgme ]
@@ -84,6 +85,9 @@ stdenv.mkDerivation {
     ++ optional (!enablePluginSpamReport) "--disable-spam_report-plugin"
     ++ optional (!enablePluginVcalendar) "--disable-vcalendar-plugin"
     ++ optional (!enableSpellcheck) "--disable-enchant";
+
+  wrapPrefixVariables = [ "GIO_EXTRA_MODULES" ];
+  GIO_EXTRA_MODULES = "${glib_networking}/lib/gio/modules";
 
   postInstall = ''
     mkdir -p $out/share/applications

@@ -11012,6 +11012,7 @@ let
   cinelerra = callPackage ../applications/video/cinelerra { };
 
   clawsMail = callPackage ../applications/networking/mailreaders/claws-mail {
+    inherit (gnome3) gsettings_desktop_schemas;
     enableNetworkManager = config.networking.networkmanager.enable or false;
   };
 
