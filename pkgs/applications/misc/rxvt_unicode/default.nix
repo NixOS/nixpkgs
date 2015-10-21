@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, perlSupport, libX11, libXt, libXft, ncurses, perl,
+{ stdenv, fetchurl, perlSupport, libX11, libXt, libXft, ncurses, perl,
   fontconfig, freetype, pkgconfig, libXrender, gdkPixbufSupport, gdk_pixbuf,
   unicode3Support }:
 
@@ -28,10 +28,6 @@ stdenv.mkDerivation (rec {
   patches = [
     ./rxvt-unicode-9.06-font-width.patch
     ./rxvt-unicode-256-color-resources.patch
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/mina86/urxvt-tabbedex/ad4f54c8b8d3a01fc17975fd3fd14aa674c07d2b/rxvt-unicode-scroll-bug-fix.patch";
-      sha256 = "1ild0r6y7jb800yiss5pgd4k60s7l9njv3nn3x280yvg1lx6ihpg";
-    })
   ]
   ++ stdenv.lib.optional stdenv.isDarwin ./rxvt-unicode-makefile-phony.patch;
 
