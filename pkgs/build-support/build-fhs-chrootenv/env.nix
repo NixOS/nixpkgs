@@ -98,6 +98,9 @@ let
       # symlink SSL certs
       mkdir -p ssl
       ln -s /host-etc/ssl/certs ssl/certs
+
+      # symlink /etc/mtab -> /proc/mounts (compat for old userspace progs)
+      ln -s /proc/mounts mtab
     '';
   };
 
