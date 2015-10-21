@@ -52,6 +52,14 @@ let
       gnutar gzip bzip2 xz glibcLocales
     ];
 
+  etcProfile = nixpkgs.writeText "profile" ''
+    export PS1='${name}-chrootenv:\u@\h:\w\$ '
+    export LOCALE_ARCHIVE='/usr/lib${if isMultiBuild then "64" else ""}/locale/locale-archive'
+    export LD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib:/lib:/lib64
+    export PATH='/usr/bin:/usr/sbin'
+    ${profile}
+  '';
+
   # Compose /etc for the chroot environment
   etcPkg = nixpkgs.stdenv.mkDerivation {
     name         = "${name}-chrootenv-etc";
@@ -60,13 +68,7 @@ let
       cd $out/etc
 
       # environment variables
-      cat >> profile <<EOF
-      export PS1='${name}-chrootenv:\u@\h:\w\$ '
-      export LOCALE_ARCHIVE='/usr/lib${if isMultiBuild then "64" else ""}/locale/locale-archive'
-      export LD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib:/lib:/lib64
-      export PATH='/usr/bin:/usr/sbin'
-      ${profile}
-      EOF
+      ln -s ${etcProfile} profile
 
       # compatibility with NixOS
       ln -s /host-etc/static static
