@@ -157,7 +157,7 @@ boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 60;
 fileSystems."/boot" =
   { device = "/dev/sda1";
     fsType = "ext4";
-    options = "rw,data=ordered,relatime";
+    options = [ "rw" "data=ordered" "relatime" ];
   };
 </programlisting>
       </para>
