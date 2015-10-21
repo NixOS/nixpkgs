@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "tmux-${version}";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchurl {
     url = "https://github.com/tmux/tmux/releases/download/${version}/${name}.tar.gz";
-    sha256 = "0qnkda8kb747vmbldjpb23ksv9pq3s65xhh1ja5rdsmh8r24npvr";
+    sha256 = "0xk1mylsb08sf0w597mdgj9s6hxxjvjvjd6bngpjvvxwyixlwmii";
   };
 
   nativeBuildInputs = [ pkgconfig ];
