@@ -706,6 +706,15 @@ let self = _self // overrides;
     meta = { license = bsd3; };
   };
 
+  rtags = melpaBuild rec {
+    pname = "rtags";
+    version = "2.0"; # really, it's some arbitrary git hash
+    src = external.rtags.src;
+    propagatedUserEnvPkgs = [ external.rtags ];
+    fileSpecs = [ "src/*.el" ];
+    inherit (external.rtags) meta;
+  };
+
   git-auto-commit-mode = melpaBuild rec {
     pname = "git-auto-commit-mode";
     version = "4.4.0";
