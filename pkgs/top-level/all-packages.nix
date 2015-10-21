@@ -862,6 +862,8 @@ let
 
   mcrl2 = callPackage ../tools/misc/mcrl2 { };
 
+  meson = callPackage ../development/tools/build-managers/meson { };
+
   mp3fs = callPackage ../tools/filesystems/mp3fs { };
 
   mpdcron = callPackage ../tools/audio/mpdcron { };
