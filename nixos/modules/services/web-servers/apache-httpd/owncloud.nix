@@ -345,13 +345,12 @@ rec {
 
   extraConfig =
     ''
-      ServerName ${config.siteName}
-      ServerAdmin ${config.adminAddr}
-      DocumentRoot ${documentRoot}
+      ${if config.urlPrefix != "" then "Alias ${config.urlPrefix} ${pkgs.owncloud}" else ''
 
-      RewriteEngine On
-      RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
-      RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
+        RewriteEngine On
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
+      ''}
 
       <Directory ${pkgs.owncloud}>
         ${builtins.readFile "${pkgs.owncloud}/.htaccess"}
@@ -362,11 +361,19 @@ rec {
     { name = "OC_CONFIG_PATH"; value = "${config.dataDir}/config/"; }
   ];
 
-  documentRoot = pkgs.owncloud;
+  documentRoot = if config.urlPrefix == "" then pkgs.owncloud else null;
 
   enablePHP = true;
 
   options = {
+
+    urlPrefix = mkOption {
+      default = "";
+      example = "/owncloud";
+      description = ''
+        The URL prefix under which the owncloud service appears.
+      '';
+    };
 
     id = mkOption {
       default = "main";
