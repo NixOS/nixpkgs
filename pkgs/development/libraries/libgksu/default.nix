@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
     # Fix some binary paths
     sed -i -e 's|/usr/bin/xauth|${xauth}/bin/xauth|g' libgksu/gksu-run-helper.c libgksu/libgksu.c
-    sed -i -e 's|/usr/bin/sudo|${sudo}/bin/sudo|g' libgksu/libgksu.c
+    sed -i -e 's|/usr/bin/sudo|/var/setuid-wrappers/sudo|g' libgksu/libgksu.c
     sed -i -e 's|/bin/su\([^d]\)|/var/setuid-wrappers/su\1|g' libgksu/libgksu.c
 
     touch NEWS README
