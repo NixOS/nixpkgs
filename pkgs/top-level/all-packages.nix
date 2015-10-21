@@ -12315,6 +12315,10 @@ let
 
   pig = callPackage ../applications/networking/cluster/pig { };
 
+  pijul = callPackage ../applications/version-management/pijul {
+    inherit (ocamlPackages) findlib cryptokit yojson;
+  };
+
   playonlinux = callPackage ../applications/misc/playonlinux { };
 
   shotcut = callPackage ../applications/video/shotcut { mlt = mlt-qt5; };
