@@ -1163,6 +1163,25 @@ let
     propagatedBuildInputs = with self; [ iowait psutil pyzmq tornado mock ];
   };
 
+  colour = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "colour";
+    version = "0.1.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/${pname}/${name}.tar.gz";
+      sha256 = "0w1j43l76zw10dvs2kk7jz7kqj2ss7gfgfdxyls27pckwin89gxb";
+    };
+
+    buildInputs = with self; [ d2to1 ];
+
+    meta = {
+      description = "Converts and manipulates common color representation (RGB, HSV, web, ...)";
+      homepage = https://github.com/vaab/colour;
+      license = licenses.bsd2;
+    };
+  };
+
   cornice = buildPythonPackage rec {
     name = "cornice-${version}";
     version = "0.17.0";
