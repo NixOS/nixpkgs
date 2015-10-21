@@ -218,6 +218,7 @@
   phreedom = "Evgeny Egorochkin <phreedom@yandex.ru>";
   pierron = "Nicolas B. Pierron <nixos@nbp.name>";
   piotr = "Piotr Pietraszkiewicz <ppietrasa@gmail.com>";
+  pjbarnoy = "Perry Barnoy <pjbarnoy@gmail.com>";
   pjones = "Peter Jones <pjones@devalot.com>";
   pkmx = "Chih-Mao Chen <pkmx.tw@gmail.com>";
   plcplc = "Philip Lykke Carlsen <plcplc@gmail.com>";
