@@ -5981,7 +5981,7 @@ let
 
   acl = callPackage ../development/libraries/acl { };
 
-  activemq = callPackage ../development/libraries/apache-activemq { };
+  activemq = callPackage ../development/libraries/apache-activemq/5.8.nix { };
 
   adns = callPackage ../development/libraries/adns { };
 
