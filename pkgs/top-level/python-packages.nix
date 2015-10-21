@@ -3811,6 +3811,34 @@ let
     propagatedBuildInputs = with self; [ gdata ];
   };
 
+  gplaycli = buildPythonPackage rec {
+    version = "0.1.2";
+    name = "gplaycli-${version}";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "matlink";
+      repo = "gplaycli";
+      rev = "${version}";
+      sha256 = "0yc09inzs3aggj0gw4irlhlzw5q562fsp0sks352y6z0vx31hcp3";
+    };
+
+   disabled = ! isPy27;
+
+   propagatedBuildInputs = with self; [ pkgs.libffi pyasn1 clint ndg-httpsclient protobuf requests args ];
+
+   preBuild = ''
+     substituteInPlace setup.py --replace "/etc" "$out/etc"
+     substituteInPlace gplaycli/gplaycli.py --replace "/etc" "$out/etc"
+   '';
+
+    meta = {
+      homepage = https://github.com/matlink/gplaycli;
+      description = "Google Play Downloader via Command line";
+      license = licenses.agl3Plus;
+      maintainers = with maintainers; [ DamienCassou ];
+    };
+  };
+
   gst-python = callPackage ../development/libraries/gstreamer/python {
     gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
   };
@@ -4294,6 +4322,27 @@ let
       url = git://github.com/etsy/logster;
       rev = "7475c53822";
       sha256 = "1ls007qmziwb50c5iikxhqin0xbn673gbd25m5k09861435cknvr";
+    };
+  };
+
+  ndg-httpsclient = buildPythonPackage rec {
+    version = "0.4.0";
+    name = "ndg-httpsclient-${version}";
+
+    propagatedBuildInputs = with self; [ pyopenssl ];
+
+    src = pkgs.fetchFromGitHub {
+      owner = "cedadev";
+      repo = "ndg_httpsclient";
+      rev = "v${version}";
+      sha256 = "1prv4j3wcy9kl5ndd5by543xp4cji9k35qncsl995w6sway34s1a";
+    };
+
+    meta = {
+      homepage = https://github.com/cedadev/ndg_httpsclient/;
+      description = "Provide enhanced HTTPS support for httplib and urllib2 using PyOpenSSL";
+      license = licenses.bsd;
+      maintainers = with maintainers; [ DamienCassou ];
     };
   };
 
