@@ -8424,6 +8424,10 @@ let
     inherit (pythonPackages) gyp;
   };
 
+  v8_4_5 = callPackage ../development/libraries/v8/4.5.nix {
+    inherit (pythonPackages) gyp;
+  };
+
   v8 = callPackage ../development/libraries/v8 {
     inherit (pythonPackages) gyp;
   };
