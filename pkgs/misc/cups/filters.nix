@@ -10,11 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "07wwlqcykfjfqcwj1bxk60ggahyaw7wcx32n5s104d1qkhham01i";
   };
 
-  patches = [(fetchpatch { # drop on update
-    name = "poppler-0.34.patch";
-    url = "https://bugs.linuxfoundation.org/attachment.cgi?id=493";
-    sha256 = "18za83q0b0n4hpvvw76jsv0hm89zmijvps2z5kg1srickqlxj891";
-  })];
+  patches = [
+    ./longer-shell-path.patch
+    (fetchpatch { # drop on update
+      name = "poppler-0.34.patch";
+      url = "https://bugs.linuxfoundation.org/attachment.cgi?id=493";
+      sha256 = "18za83q0b0n4hpvvw76jsv0hm89zmijvps2z5kg1srickqlxj891";
+    })
+  ];
 
   buildInputs = [
     pkgconfig cups poppler poppler_utils fontconfig libjpeg libpng perl

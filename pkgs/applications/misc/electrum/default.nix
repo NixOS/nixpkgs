@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   name = "electrum-${version}";
-  version = "2.4.3";
+  version = "2.5.1";
 
   src = fetchurl {
     url = "https://download.electrum.org/Electrum-${version}.tar.gz";
-    sha256 = "00z02rdlhasryccjsw1j7563xl76i6x40ah1lnn9asad1gp6520f";
+    sha256 = "0wjqf2ifw1ww6iyj0h0i63zjmy0yhmzl91sgc5hc4j2x5bd2c3am";
   };
 
   propagatedBuildInputs = with pythonPackages; [

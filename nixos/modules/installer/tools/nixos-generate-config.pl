@@ -233,8 +233,8 @@ foreach my $path (glob "/sys/bus/usb/devices/*") {
 }
 
 
-# Add the modules for all block devices.
-foreach my $path (glob "/sys/class/block/*") {
+# Add the modules for all block and MMC devices.
+foreach my $path (glob "/sys/class/{block,mmc_host}/*") {
     my $module;
     if (-e "$path/device/driver/module") {
         $module = basename `readlink -f $path/device/driver/module`;

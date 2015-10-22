@@ -152,7 +152,7 @@
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   koral = "Koral <koral@mailoo.org>";
   kovirobi = "Kovacsics Robert <kovirobi@gmail.com>";
-  kragniz = "Louis Taylor <kragniz@gmail.com>";
+  kragniz = "Louis Taylor <louis@kragniz.eu>";
   ktosiek = "Tomasz Kontusz <tomasz.kontusz@gmail.com>";
   lassulus = "Lassulus <lassulus@gmail.com>";
   layus = "Guillaume Maudoux <layus.on@gmail.com>";
@@ -216,6 +216,7 @@
   phreedom = "Evgeny Egorochkin <phreedom@yandex.ru>";
   pierron = "Nicolas B. Pierron <nixos@nbp.name>";
   piotr = "Piotr Pietraszkiewicz <ppietrasa@gmail.com>";
+  pjbarnoy = "Perry Barnoy <pjbarnoy@gmail.com>";
   pjones = "Peter Jones <pjones@devalot.com>";
   pkmx = "Chih-Mao Chen <pkmx.tw@gmail.com>";
   plcplc = "Philip Lykke Carlsen <plcplc@gmail.com>";

@@ -93,6 +93,7 @@ let
 
     preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
       export DYLD_LIBRARY_PATH=${jemalloc}/lib
+      substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '';
 
     postInstall = stdenv.lib.optionalString stdenv.isDarwin ''

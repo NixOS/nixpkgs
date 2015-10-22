@@ -4,10 +4,10 @@
 
 with stdenv.lib;
 
-let version = "3.0.6";
+let version = "3.0.7";
     system-libraries = [
       "pcre"
-      "wiredtiger"
+      #"wiredtiger"
       "boost"
       "snappy"
       "zlib"
@@ -18,7 +18,7 @@ let version = "3.0.6";
     buildInputs = [
       sasl boost gperftools pcre snappy
       zlib libyamlcpp sasl openssl libpcap
-    ] ++ optional stdenv.is64bit wiredtiger;
+    ]; # ++ optional stdenv.is64bit wiredtiger;
 
     other-args = concatStringsSep " " ([
       # these are opt-in, lol
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "0bc2khi36ck0y7dhppvjp8wy479hzyw34qs0965qj4gd2va6p7v0";
+    sha256 = "1rx7faqsq733vdriavdfmvx75nhjq9nm5bgwd3hw1cxzqgkvl99d";
   };
 
   nativeBuildInputs = [ scons ];

@@ -1,6 +1,8 @@
 { stdenv, fetchurl, python, buildPythonPackage
 # Propagated to blivet
-, useNixUdev ? true, udevSoMajor ? null
+, useNixUdev ? true
+# No longer needed, but kept for backwards-compatibility with older NixOps.
+, udevSoMajor ? null
 # Propagated dependencies
 , pkgs, urlgrabber
 }:
@@ -9,7 +11,7 @@ let
   blivet = import ./blivet.nix {
     inherit stdenv fetchurl buildPythonPackage;
     inherit pykickstart pyparted pyblock cryptsetup multipath_tools;
-    inherit useNixUdev udevSoMajor;
+    inherit useNixUdev;
     inherit (pkgs) lsof utillinux udev;
     libselinux = pkgs.libselinux.override { enablePython = true; };
   };

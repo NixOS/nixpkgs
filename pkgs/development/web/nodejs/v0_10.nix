@@ -56,6 +56,13 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  postFixup = ''
+    pushd $out/lib/node_modules/npm/node_modules/node-gyp
+    patch -p2 < ${./no-xcode.patch}
+    popd
+    sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' $out/lib/node_modules/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
+  '';
+
   passthru.interpreterName = "nodejs-0.10";
 
   meta = {

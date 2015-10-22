@@ -1,4 +1,10 @@
-{ CoreServices, Foundation, PCSC, Security, GSS, Kerberos, makeWrapper, apple_sdk, fetchurl, gnustep-make, libobjc, libsecurity_apple_csp, libsecurity_apple_cspdl, libsecurity_apple_file_dl, libsecurity_apple_x509_cl, libsecurity_apple_x509_tp, libsecurity_asn1, libsecurity_cdsa_client, libsecurity_cdsa_plugin, libsecurity_cdsa_utilities, libsecurity_cdsa_utils, libsecurity_cssm, libsecurity_filedb, libsecurity_keychain, libsecurity_mds, libsecurity_pkcs12, libsecurity_sd_cspdl, libsecurity_utilities, libsecurityd, osx_private_sdk, stdenv }:
+{ CoreServices, Foundation, PCSC, Security, GSS, Kerberos, makeWrapper, apple_sdk,
+fetchurl, gnustep-make, libobjc, libsecurity_apple_csp, libsecurity_apple_cspdl,
+libsecurity_apple_file_dl, libsecurity_apple_x509_cl, libsecurity_apple_x509_tp,
+libsecurity_asn1, libsecurity_cdsa_client, libsecurity_cdsa_plugin,
+libsecurity_cdsa_utilities, libsecurity_cdsa_utils, libsecurity_cssm, libsecurity_filedb,
+libsecurity_keychain, libsecurity_mds, libsecurity_pkcs12, libsecurity_sd_cspdl,
+libsecurity_utilities, libsecurityd, osx_private_sdk, Security-framework, stdenv }:
 
 stdenv.mkDerivation rec {
   version = "55115";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     # copied from libsecurity_generic
-    ln -s ${osx_private_sdk}/System/Library/Frameworks/Security.framework/Versions/A/PrivateHeaders Security
+    ln -s ${osx_private_sdk}/PrivateSDK10.9.sparse.sdk/System/Library/Frameworks/Security.framework/Versions/A/PrivateHeaders Security
 
     substituteInPlace cmsutil.c --replace \
       '<CoreServices/../Frameworks/CarbonCore.framework/Headers/MacErrors.h>' \
@@ -39,7 +45,7 @@ stdenv.mkDerivation rec {
     "security_INSTALL_DIR=\$(out)/bin"
   ];
 
-  propagatedBuildInputs = [ GSS Kerberos Security PCSC Foundation ];
+  propagatedBuildInputs = [ GSS Kerberos Security-framework PCSC Foundation ];
 
   __propagatedImpureHostDeps = [ "/System/Library/Keychains" ];
 

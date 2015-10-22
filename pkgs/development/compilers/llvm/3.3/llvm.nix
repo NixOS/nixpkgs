@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, groff, cmake, python, libffi, binutils }:
+{ stdenv, fetchurl, perl, groff, cmake, python, libffi, binutils, debugVersion ? false }:
 let
   version = "3.3";
 in stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
     in "export ${LD}_LIBRARY_PATH='$$${LD}_LIBRARY_PATH:'`pwd`/lib";
 
   cmakeFlags = with stdenv; [
-    "-DCMAKE_BUILD_TYPE=Release"
+    "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_BINUTILS_INCDIR=${binutils}/include"

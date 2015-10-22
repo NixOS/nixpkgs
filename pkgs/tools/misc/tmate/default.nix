@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace msgpack/bootstrap --replace glibtoolize libtoolize
+  '';
+
   meta = {
     homepage = http://tmate.io/;
     description = "Instant Terminal Sharing";

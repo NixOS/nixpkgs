@@ -910,6 +910,28 @@ let
     };
   };
 
+  basiciw = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    version = "0.2.2";
+    pname = "basiciw";
+    disabled = isPy26 || isPy27;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/b/${pname}/${name}.tar.gz";
+      sha256 = "1ajmflvvlkflrcmqmkrx0zaira84z8kv4ssb2jprfwvjh8vfkysb";
+    };
+
+    buildInputs = [ pkgs.gcc ];
+    propagatedBuildInputs = [ pkgs.wirelesstools ];
+
+    meta = {
+      description = "Get info about wireless interfaces using libiw";
+      homepage = http://github.com/enkore/basiciw;
+      platforms = platforms.linux;
+      license = licenses.gpl2;
+    };
+  };
+
   batinfo = buildPythonPackage rec {
     version = "0.2";
     name = "batinfo-${version}";
@@ -1139,6 +1161,25 @@ let
     doCheck = false; # weird error
 
     propagatedBuildInputs = with self; [ iowait psutil pyzmq tornado mock ];
+  };
+
+  colour = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "colour";
+    version = "0.1.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/${pname}/${name}.tar.gz";
+      sha256 = "0w1j43l76zw10dvs2kk7jz7kqj2ss7gfgfdxyls27pckwin89gxb";
+    };
+
+    buildInputs = with self; [ d2to1 ];
+
+    meta = {
+      description = "Converts and manipulates common color representation (RGB, HSV, web, ...)";
+      homepage = https://github.com/vaab/colour;
+      license = licenses.bsd2;
+    };
   };
 
   cornice = buildPythonPackage rec {
@@ -2709,10 +2750,11 @@ let
   };
 
   cssselect = buildPythonPackage rec {
-    name = "cssselect-0.7.1";
+    name = "cssselect-${version}";
+    version = "0.9.1";
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/c/cssselect/cssselect-0.7.1.tar.gz";
-      md5 = "c6c5e9a2e7ca226ce03f6f67a771379c";
+      url = "http://pypi.python.org/packages/source/c/cssselect/${name}.tar.gz";
+      sha256 = "10h623qnp6dp1191jri7lvgmnd4yfkl36k9smqklp1qlf3iafd85";
     };
     # AttributeError: 'module' object has no attribute 'tests'
     doCheck = false;
@@ -3121,7 +3163,7 @@ let
       md5 = "07a5f41fd3f8cc72d05deed628700e99";
     };
 
-    propagatedBuildInputs = with self; [ six requests websocket_client ];
+    propagatedBuildInputs = with self; [ six requests2 websocket_client ];
 
     # Version conflict
     doCheck = false;
@@ -3810,6 +3852,34 @@ let
     propagatedBuildInputs = with self; [ gdata ];
   };
 
+  gplaycli = buildPythonPackage rec {
+    version = "0.1.2";
+    name = "gplaycli-${version}";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "matlink";
+      repo = "gplaycli";
+      rev = "${version}";
+      sha256 = "0yc09inzs3aggj0gw4irlhlzw5q562fsp0sks352y6z0vx31hcp3";
+    };
+
+   disabled = ! isPy27;
+
+   propagatedBuildInputs = with self; [ pkgs.libffi pyasn1 clint ndg-httpsclient protobuf requests args ];
+
+   preBuild = ''
+     substituteInPlace setup.py --replace "/etc" "$out/etc"
+     substituteInPlace gplaycli/gplaycli.py --replace "/etc" "$out/etc"
+   '';
+
+    meta = {
+      homepage = https://github.com/matlink/gplaycli;
+      description = "Google Play Downloader via Command line";
+      license = licenses.agpl3Plus;
+      maintainers = with maintainers; [ DamienCassou ];
+    };
+  };
+
   gst-python = callPackage ../development/libraries/gstreamer/python {
     gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
   };
@@ -4296,6 +4366,27 @@ let
     };
   };
 
+  ndg-httpsclient = buildPythonPackage rec {
+    version = "0.4.0";
+    name = "ndg-httpsclient-${version}";
+
+    propagatedBuildInputs = with self; [ pyopenssl ];
+
+    src = pkgs.fetchFromGitHub {
+      owner = "cedadev";
+      repo = "ndg_httpsclient";
+      rev = "v${version}";
+      sha256 = "1prv4j3wcy9kl5ndd5by543xp4cji9k35qncsl995w6sway34s1a";
+    };
+
+    meta = {
+      homepage = https://github.com/cedadev/ndg_httpsclient/;
+      description = "Provide enhanced HTTPS support for httplib and urllib2 using PyOpenSSL";
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ DamienCassou ];
+    };
+  };
+
   netcdf4 = buildPythonPackage rec {
     name = "netCDF4-${version}";
     version = "1.1.8";
@@ -4753,11 +4844,11 @@ let
   radicale = buildPythonPackage rec {
     name = "radicale-${version}";
     namePrefix = "";
-    version = "0.10";
+    version = "1.0.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/R/Radicale/Radicale-${version}.tar.gz";
-      sha256 = "0r1x23h9raadpdmxnanvhajvkk0ix377mv94jlazr18nfpsj4r8c";
+      sha256 = "0q0vxqg32lp9bzbqn06x7igwq3a9hcmpspvj3icyf0rlg786i2p1";
     };
 
     propagatedBuildInputs = with self; [
@@ -6090,7 +6181,7 @@ let
     };
 
     buildInputs = with self; [ nose mock ];
-    propagatedBuildInputs = with self; [ pyflakes pep8 mccabe ];
+    propagatedBuildInputs = with self; [ pyflakes_0_8 pep8 mccabe ];
 
     # 3 failing tests
     #doCheck = false;
@@ -7225,7 +7316,7 @@ let
     disabled = isPy3k;
 
     propagatedBuildInputs = with self; [
-      requests2 # Needs to be first, no idea why...
+      requests2
       cgroup-utils docker-custom docutils lti mock pygments
       pymongo pyyaml rpyc sh simpleldap sphinx_rtd_theme tidylib
       websocket_client watchdog webpy-custom
@@ -9143,8 +9234,13 @@ let
 
     # Test does not work on Py3k because it calls 'python'.
     # https://github.com/nipy/nibabel/issues/341
+
+    # Test fails with numpy 1.10.1: ERROR: nibabel.tests.test_proxy_api.TestPARRECAPI.test_proxy_slicing
+    # See https://github.com/nipy/nibabel/pull/358
+    # and https://github.com/numpy/numpy/issues/6491
     preCheck = ''
       rm nisext/tests/test_testers.py
+      rm nibabel/tests/test_proxy_api.py
     '';
 
     meta = {
@@ -9158,6 +9254,9 @@ let
     version = "0.10.0";
     name = "nipype-${version}";
 
+    # Uses python 2 print. Master seems to be Py3 compatible.
+    disabled = isPy3k;
+    
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/n/nipype/${name}.tar.gz";
       md5 = "480013709633a6d292e2ef668443e0c9";
@@ -9458,14 +9557,15 @@ let
       pkgName = "numpy";
     };
   in buildPythonPackage ( rec {
-    name = "numpy-1.9.2";
+    name = "numpy-${version}";
+    version = "1.10.1";
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/numpy/${name}.tar.gz";
-      sha256 = "0apgmsk9jlaphb2dp1zaxqzdxkf69h1y3iw2d1pcnkj31cmmypij";
+      sha256 = "8b9f453f29ce96a14e625100d3dcf8926301d36c5f622623bf8820e748510858";
     };
 
-    disabled = isPyPy || isPy35;  # WIP
+    disabled = isPyPy;  # WIP
 
     preConfigure = ''
       sed -i 's/-faltivec//' numpy/distutils/system_info.py
@@ -10410,6 +10510,25 @@ let
       homepage = https://github.com/heinzK1X/pylibconfig2;
       description = "Pure python library for libconfig syntax";
       license = licenses.gpl3;
+    };
+  };
+
+  pymetar = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "pymetar";
+    version = "0.20";
+
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/${pname}/${name}.tar.gz";
+      sha256 = "1rxyg9465cp6nc47pqxqf092wmbvv2zhffzvaf2w74laal43pgxw";
+    };
+
+    meta = {
+      description = "A command-line tool to show the weather report by a given station ID";
+      homepage = http://www.schwarzvogel.de/software/pymetar.html;
+      license = licenses.gpl2;
     };
   };
 
@@ -11415,11 +11534,12 @@ let
   };
 
   pyflakes = buildPythonPackage rec {
-    name = "pyflakes-0.9.2";
+    name = "pyflakes-${version}";
+    version = "1.0.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyflakes/${name}.tar.gz";
-      sha256 = "0pvawddspdq0y22dbraq5gld9qr6rwa7zhmpfhl2b7v9rqiiqs82";
+      sha256 = "f39e33a4c03beead8774f005bd3ecf0c3f2f264fa0201de965fce0aff1d34263";
     };
 
     buildInputs = with self; [ unittest2 ];
@@ -11434,6 +11554,29 @@ let
     };
   };
 
+  pyflakes_0_8 = buildPythonPackage rec {
+    # Pyflakes 0.8 is needed for flake8, which is needed for OpenStack Nova
+    # https://github.com/NixOS/nixpkgs/pull/10399
+    name = "pyflakes-${version}";
+    version = "0.8.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyflakes/${name}.tar.gz";
+      sha256 = "0sbpq6pqm1i9wqi41mlfrsc5rk92jv4mskvlyxmnhlbdnc80ma1z";
+    };
+
+    buildInputs = with self; [ unittest2 ];
+
+    doCheck = !isPyPy;
+
+    disabled = isPy35; # Not supported
+
+    meta = {
+      homepage = https://launchpad.net/pyflakes;
+      description = "A simple program which checks Python source files for errors";
+      license = licenses.mit;
+    };
+  };
 
   pygeoip = pythonPackages.buildPythonPackage rec {
     name = "pygeoip-0.3.2";
@@ -12142,6 +12285,25 @@ let
     };
   };
 
+  pypdf2 = buildPythonPackage rec {
+    name = "PyPDF2-${version}";
+    version = "1.25.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/P/PyPDF2/${name}.tar.gz";
+      sha256 = "1sw225j9fgsvg1zm7lrij96fihfmq8pc1vg611dc55491zvj9ls3";
+    };
+
+    buildInputs = with self; [ ];
+
+    meta = {
+      description = "A Pure-Python library built as a PDF toolkit";
+      homepage = "http://mstamy2.github.com/PyPDF2/";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ desiderius ];
+    };
+  };
+
   pyopengl = buildPythonPackage rec {
     name = "pyopengl-${version}";
     version = "3.0.2";
@@ -12188,11 +12350,12 @@ let
 
 
   pyquery = buildPythonPackage rec {
-    name = "pyquery-1.2.4";
+    name = "pyquery-${version}";
+    version = "1.2.9";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/p/pyquery/${name}.tar.gz";
-      md5 = "268f08258738d21bc1920d7522f2a63b";
+      url = "http://pypi.python.org/packages/source/p/pyquery/${name}.zip";
+      sha256 = "00p6f1dfma65192hc72dxd506491lsq3g5wgxqafi1xpg2w1xia6";
     };
 
     propagatedBuildInputs = with self; [ cssselect lxml ];
@@ -13403,11 +13566,12 @@ let
       pkgName = "numpy";
     };
   in buildPythonPackage rec {
-    name = "scipy-0.15.1";
+    name = "scipy-${version}";
+    version = "0.16.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/scipy/${name}.tar.gz";
-      sha256 = "16i5iksaas3m0hgbxrxpgsyri4a9ncbwbiazlhx5d6lynz1wn4m2";
+      sha256 = "92592f40097098f3fdbe7f5855d535b29bb16719c2bb59c728bce5e7a28790e0";
     };
 
     buildInputs = [ pkgs.gfortran self.nose ];
@@ -13430,26 +13594,15 @@ let
 
   scikitlearn = buildPythonPackage rec {
     name = "scikit-learn-${version}";
-    version = "0.16.1";
+    version = "0.17b1";
 
     src = pkgs.fetchurl {
       url = "https://github.com/scikit-learn/scikit-learn/archive/${version}.tar.gz";
-      sha256 = "140skabifgc7lvvj873pnzlwx0ni6q8qkrsyad2ccjb3h8rxzkih";
+      sha256 = "b5965c888ae44fe3f5a1b15297e5d8e254a41d1848df99e00efc2fc643e6e8f2";
     };
 
     buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
     propagatedBuildInputs = with self; [ numpy scipy pkgs.openblas ];
-
-    patches = [
-      (pkgs.fetchurl {
-        url = "https://patch-diff.githubusercontent.com/raw/scikit-learn/scikit-learn/pull/5197.patch";
-        sha256 = "1b261wcvim6s0sqmd20jylwz09g5bh3xzhagjlslmv4q50qxpvkg";
-      })
-    ];
-
-    postPatch = optionalString stdenv.isi686 ''
-      sed -i -e "s|test_standard_scaler_numerical_stability|_skip_test_standard_scaler_numerical_stability|g" sklearn/preprocessing/tests/test_data.py
-    '';
 
     buildPhase = ''
       ${self.python.executable} setup.py build_ext -i --fcompiler='gnu95'
@@ -13464,7 +13617,7 @@ let
       homepage = http://scikit-learn.org;
       license = licenses.bsd3;
       maintainers = with maintainers; [ fridh ];
-    };
+    };  
   };
 
   scripttest = buildPythonPackage rec {
@@ -18042,12 +18195,16 @@ let
   };
 
   networkx = buildPythonPackage rec {
-    name = "networkx-1.9.1";
-    disabled = ! isPy27;
+    version = "1.10";
+    name = "networkx-${version}";
 
+    # Currently broken on PyPy. 
+    # https://github.com/networkx/networkx/pull/1361
+    disabled = isPyPy;
+    
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/n/networkx/networkx-1.9.1.tar.gz";
-      sha256 = "6380eb38d0b5770d7e50813c8a48ff7c373b2187b4220339c1adce803df01c59";
+      url = "https://pypi.python.org/packages/source/n/networkx/${name}.tar.gz";
+      sha256 = "ced4095ab83b7451cec1172183eff419ed32e21397ea4e1971d92a5808ed6fb8";
     };
 
     propagatedBuildInputs = with self; [ nose decorator ];
@@ -18473,12 +18630,11 @@ let
 
     namePrefix = "";
     disabled = (!isPy34);
-    propagatedBuildInputs = with self ; [ aiodns slixmpp ];
+    propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr ];
 
-   patches =
-   let patch_base = ../development/python-modules/poezio ;
-   in [ "${patch_base}/make_default_config_writable.patch"
-      ];
+    patches =
+      let patch_base = ../development/python-modules/poezio;
+      in [ "${patch_base}/make_default_config_writable.patch" ];
 
     src = pkgs.fetchurl {
       url = "http://dev.louiz.org/attachments/download/91/${name}.tar.xz";
@@ -18490,6 +18646,25 @@ let
       homepage = http://poez.io;
       license = licenses.mit;
       maintainers = [ maintainers.lsix ];
+    };
+  };
+
+  potr = buildPythonPackage rec {
+    version = "1.0.1";
+    name = "potr-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-potr/python-${name}.zip";
+      sha256 = "1b3vjbv8hvynwj6amw3rg5zj8bagynbj0ipy09xwksf1mb0kz8m8";
+    };
+
+    propagatedBuildInputs = with self ; [ pycrypto ];
+
+    meta = {
+      description = "A pure Python OTR implementation";
+      homepage = "http://python-otr.pentabarf.de/";
+      license = licenses.lgpl3Plus;
+      maintainers = with maintainers; [ globin ];
     };
   };
 
@@ -18514,11 +18689,11 @@ let
 
   pafy = buildPythonPackage rec {
     name = "pafy-${version}";
-    version = "0.3.74";
+    version = "0.4.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pafy/${name}.tar.gz";
-      md5 = "fbf0e7f85914eaf35f87837232eec09c";
+      sha256 = "1zdlwwrwh04vszwgmhkmaah1ix24d2zicpv3zi7s8whh06g7pkkl";
     };
 
     propagatedBuildInputs = with self; [ youtube-dl ];

@@ -35,6 +35,8 @@ let
       "arm7l-linux" = "arm32";
     }."${stdenv.system}" or (abort "Unsupported platform ${stdenv.system}");
 
+    platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" ];
+
 in
 
 stdenv.mkDerivation {
@@ -99,7 +101,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   postInstall =
-    (stdenv.lib.optionalString withPlugin
+    (stdenv.lib.optionalString (withPlugin && builtins.elem stdenv.system platforms)
     (let hplip_arch =
           if stdenv.system == "i686-linux" then "x86_32"
           else if stdenv.system == "x86_64-linux" then "x86_64"

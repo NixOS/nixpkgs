@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl, python
 , wrapGAppsHook, virtinst, pyGtkGlade, pythonDBus, gnome_python, gtkvnc, vte
 , gtk3, gobjectIntrospection, libvirt-glib, gsettings_desktop_schemas, glib
-, avahi, dconf, spiceSupport ? true, spice_gtk, libosinfo, gnome3
+, avahi, dconf, spiceSupport ? true, spice_gtk, libosinfo, gnome3, system-libvirt
 }:
 
 with stdenv.lib;
@@ -39,6 +39,10 @@ buildPythonPackage rec {
       wrapGAppsHook
       dconf
     ];
+
+  patchPhase = ''
+    sed -i 's|/usr/share/libvirt/cpu_map.xml|${system-libvirt}/share/libvirt/cpu_map.xml|g' virtinst/capabilities.py
+  '';
 
   configurePhase = ''
     sed -i 's/from distutils.core/from setuptools/g' setup.py

@@ -3,7 +3,12 @@
 args@{pkgs, source ? "default", fetchurl, fetchhg, stdenv, ncurses, pkgconfig, gettext
 , composableDerivation, lib, config, glib, gtk, python, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
-, libICE, ... }: with args;
+, libICE
+
+# apple frameworks
+, CoreServices, CoreData, Cocoa, Foundation, libobjc, cf-private
+
+, ... }: with args;
 
 
 let inherit (args.composableDerivation) composableDerivation edf;
@@ -88,7 +93,14 @@ composableDerivation {
           '';
         };
       }
-      // edf { name = "darwin"; } #Disable Darwin (Mac OS X) support.
+      // edf {
+        name = "darwin";
+        enable = {
+          nativeBuildInputs = [ CoreServices CoreData Cocoa Foundation libobjc cf-private ];
+          NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin
+            "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
+        };
+      } #Disable Darwin (Mac OS X) support.
       // edf { name = "xsmp"; } #Disable XSMP session management
       // edf { name = "xsmp_interact"; } #Disable XSMP interaction
       // edf { name = "mzscheme"; feat = "mzschemeinterp";} #Include MzScheme interpreter.

@@ -18,13 +18,11 @@ let
     "/usr/lib/system"
   ];
 
-  fetch = { file, sha256 }: derivation ((import <nix/fetchurl.nix> {
+  fetch = { file, sha256 }: import <nix/fetchurl.nix> {
     url = "https://dl.dropboxusercontent.com/u/2857322/${file}";
-    inherit sha256;
+    inherit sha256 system;
     executable = true;
-  }).drvAttrs // {
-    __impureHostDeps = libSystemClosure;
-  });
+  };
 
   bootstrapFiles = {
     sh    = fetch { file = "sh";    sha256 = "1qakpg37vl61jnkplz13m3g1csqr85cg8ybp6jwiv6apmg26isnm"; };

@@ -281,7 +281,7 @@ in
         compositeproto scrnsaverproto resourceproto
         xf86dgaproto
         dmxproto /*libdmx not used*/ xf86vidmodeproto
-        recordproto libXext pixman libXfont
+        recordproto libXext pixman libXfont libxshmfence args.libunwind
         damageproto xcmiscproto  bigreqsproto
         inputproto xextproto randrproto renderproto presentproto
         dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
