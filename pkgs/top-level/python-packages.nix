@@ -16080,11 +16080,11 @@ let
 
   xray = buildPythonPackage rec {
     name = "xray-${version}";
-    version = "0.6.0";
+    version = "0.6.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/x/xray/${name}.tar.gz";
-      sha256 = "c8c4aadb0d39662a81c259bd609f42708ff31c90012a9dd0a1f9ee56a798196f";
+      sha256 = "bfbc307203d5433b4da31c210773c8474c237ff97350874b6e436d452fb9dfc8";
     };
 
     buildInputs = with self; [nose];
