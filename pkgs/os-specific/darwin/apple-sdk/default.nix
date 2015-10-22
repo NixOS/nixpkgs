@@ -157,6 +157,13 @@ in rec {
         f="$out/Library/Frameworks/QuartzCore.framework/Headers/CoreImage.h"
         substituteInPlace "$f" \
           --replace "QuartzCore/../Frameworks/CoreImage.framework/Headers" "CoreImage"
+
+        # CoreImage.framework's location varies by OSX version
+        for linkedFile in "$out/Library/Frameworks/QuartzCore.framework/Frameworks/CoreImage.framework"/*; do
+          link=$(readlink "$linkedFile" | sed 's,//,/A/,')
+          rm "$linkedFile"
+          ln -s "$link" "$linkedFile"
+        done
       '';
     });
   };
