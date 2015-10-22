@@ -6181,7 +6181,7 @@ let
     };
 
     buildInputs = with self; [ nose mock ];
-    propagatedBuildInputs = with self; [ pyflakes pep8 mccabe ];
+    propagatedBuildInputs = with self; [ pyflakes_0_8 pep8 mccabe ];
 
     # 3 failing tests
     #doCheck = false;
@@ -9234,8 +9234,13 @@ let
 
     # Test does not work on Py3k because it calls 'python'.
     # https://github.com/nipy/nibabel/issues/341
+
+    # Test fails with numpy 1.10.1: ERROR: nibabel.tests.test_proxy_api.TestPARRECAPI.test_proxy_slicing
+    # See https://github.com/nipy/nibabel/pull/358
+    # and https://github.com/numpy/numpy/issues/6491
     preCheck = ''
       rm nisext/tests/test_testers.py
+      rm nibabel/tests/test_proxy_api.py
     '';
 
     meta = {
@@ -9552,14 +9557,15 @@ let
       pkgName = "numpy";
     };
   in buildPythonPackage ( rec {
-    name = "numpy-1.9.2";
+    name = "numpy-${version}";
+    version = "1.10.1";
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/numpy/${name}.tar.gz";
-      sha256 = "0apgmsk9jlaphb2dp1zaxqzdxkf69h1y3iw2d1pcnkj31cmmypij";
+      sha256 = "8b9f453f29ce96a14e625100d3dcf8926301d36c5f622623bf8820e748510858";
     };
 
-    disabled = isPyPy || isPy35;  # WIP
+    disabled = isPyPy;  # WIP
 
     preConfigure = ''
       sed -i 's/-faltivec//' numpy/distutils/system_info.py
@@ -11528,11 +11534,12 @@ let
   };
 
   pyflakes = buildPythonPackage rec {
-    name = "pyflakes-0.9.2";
+    name = "pyflakes-${version}";
+    version = "1.0.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyflakes/${name}.tar.gz";
-      sha256 = "0pvawddspdq0y22dbraq5gld9qr6rwa7zhmpfhl2b7v9rqiiqs82";
+      sha256 = "f39e33a4c03beead8774f005bd3ecf0c3f2f264fa0201de965fce0aff1d34263";
     };
 
     buildInputs = with self; [ unittest2 ];
@@ -11547,6 +11554,29 @@ let
     };
   };
 
+  pyflakes_0_8 = buildPythonPackage rec {
+    # Pyflakes 0.8 is needed for flake8, which is needed for OpenStack Nova
+    # https://github.com/NixOS/nixpkgs/pull/10399
+    name = "pyflakes-${version}";
+    version = "0.8.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyflakes/${name}.tar.gz";
+      sha256 = "0sbpq6pqm1i9wqi41mlfrsc5rk92jv4mskvlyxmnhlbdnc80ma1z";
+    };
+
+    buildInputs = with self; [ unittest2 ];
+
+    doCheck = !isPyPy;
+
+    disabled = isPy35; # Not supported
+
+    meta = {
+      homepage = https://launchpad.net/pyflakes;
+      description = "A simple program which checks Python source files for errors";
+      license = licenses.mit;
+    };
+  };
 
   pygeoip = pythonPackages.buildPythonPackage rec {
     name = "pygeoip-0.3.2";
@@ -13536,11 +13566,12 @@ let
       pkgName = "numpy";
     };
   in buildPythonPackage rec {
-    name = "scipy-0.15.1";
+    name = "scipy-${version}";
+    version = "0.16.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/scipy/${name}.tar.gz";
-      sha256 = "16i5iksaas3m0hgbxrxpgsyri4a9ncbwbiazlhx5d6lynz1wn4m2";
+      sha256 = "92592f40097098f3fdbe7f5855d535b29bb16719c2bb59c728bce5e7a28790e0";
     };
 
     buildInputs = [ pkgs.gfortran self.nose ];
@@ -13563,26 +13594,15 @@ let
 
   scikitlearn = buildPythonPackage rec {
     name = "scikit-learn-${version}";
-    version = "0.16.1";
+    version = "0.17b1";
 
     src = pkgs.fetchurl {
       url = "https://github.com/scikit-learn/scikit-learn/archive/${version}.tar.gz";
-      sha256 = "140skabifgc7lvvj873pnzlwx0ni6q8qkrsyad2ccjb3h8rxzkih";
+      sha256 = "b5965c888ae44fe3f5a1b15297e5d8e254a41d1848df99e00efc2fc643e6e8f2";
     };
 
     buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
     propagatedBuildInputs = with self; [ numpy scipy pkgs.openblas ];
-
-    patches = [
-      (pkgs.fetchurl {
-        url = "https://patch-diff.githubusercontent.com/raw/scikit-learn/scikit-learn/pull/5197.patch";
-        sha256 = "1b261wcvim6s0sqmd20jylwz09g5bh3xzhagjlslmv4q50qxpvkg";
-      })
-    ];
-
-    postPatch = optionalString stdenv.isi686 ''
-      sed -i -e "s|test_standard_scaler_numerical_stability|_skip_test_standard_scaler_numerical_stability|g" sklearn/preprocessing/tests/test_data.py
-    '';
 
     buildPhase = ''
       ${self.python.executable} setup.py build_ext -i --fcompiler='gnu95'
@@ -13597,7 +13617,7 @@ let
       homepage = http://scikit-learn.org;
       license = licenses.bsd3;
       maintainers = with maintainers; [ fridh ];
-    };
+    };  
   };
 
   scripttest = buildPythonPackage rec {
