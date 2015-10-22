@@ -366,6 +366,8 @@ in
           // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt"; }
           // config.networking.proxy.envVars;
 
+        unitConfig.RequiresMountsFor = "/nix/store";
+
         serviceConfig =
           { Nice = cfg.daemonNiceLevel;
             IOSchedulingPriority = cfg.daemonIONiceLevel;
