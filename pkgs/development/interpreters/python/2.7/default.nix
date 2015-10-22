@@ -80,6 +80,7 @@ let
     "ac_cv_func_bind_textdomain_codeset=yes"
   ] ++ optionals stdenv.isDarwin [
     "--disable-toolbox-glue"
+    "ac_cv_posix_semaphores_enabled=yes"
   ];
 
   postConfigure = if stdenv.isCygwin then ''
