@@ -261,12 +261,12 @@ while (my ($unit, $state) = each %{$activePrev}) {
 
 sub pathToUnitName {
     my ($path) = @_;
-    die unless substr($path, 0, 1) eq "/";
-    return "-" if $path eq "/";
-    $path = substr($path, 1);
-    $path =~ s/\//-/g;
-    # FIXME: handle - and unprintable characters.
-    return $path;
+    open my $cmd, "-|", "systemd-escape", "--suffix=mount", "-p", $path
+        or die "Unable to escape $path!\n";
+    my $escaped = join "", <$cmd>;
+    chomp $escaped;
+    close $cmd or die;
+    return $escaped;
 }
 
 sub unique {
@@ -290,7 +290,7 @@ my ($newFss, $newSwaps) = parseFstab "$out/etc/fstab";
 foreach my $mountPoint (keys %$prevFss) {
     my $prev = $prevFss->{$mountPoint};
     my $new = $newFss->{$mountPoint};
-    my $unit = pathToUnitName($mountPoint) . ".mount";
+    my $unit = pathToUnitName($mountPoint);
     if (!defined $new) {
         # Filesystem entry disappeared, so unmount it.
         $unitsToStop{$unit} = 1;
