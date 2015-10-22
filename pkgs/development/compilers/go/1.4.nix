@@ -63,9 +63,15 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.isDarwin ''
     sed -i 's,"/etc","'"$TMPDIR"'",' src/os/os_test.go
     sed -i 's,/_go_os_test,'"$TMPDIR"'/_go_os_test,' src/os/path_test.go
+    sed -i '/TestCgoLookupIP/areturn' src/net/cgo_unix_test.go
+    sed -i '/TestChdirAndGetwd/areturn' src/os/os_test.go
+    sed -i '/TestDialDualStackLocalhost/areturn' src/net/dial_test.go
     sed -i '/TestRead0/areturn' src/os/os_test.go
     sed -i '/TestSystemRoots/areturn' src/crypto/x509/root_darwin_test.go
-    sed -i '/TestDialDualStackLocalhost/areturn' src/net/dial_test.go
+
+    # fails when running inside tmux
+    sed -i '/TestNohup/areturn' src/os/signal/signal_test.go
+
 
     # remove IP resolving tests, on darwin they can find fe80::1%lo while expecting ::1
     sed -i '/TestResolveIPAddr/areturn' src/net/ipraw_test.go
