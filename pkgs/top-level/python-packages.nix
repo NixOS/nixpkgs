@@ -12255,6 +12255,25 @@ let
     };
   };
 
+  pypdf2 = buildPythonPackage rec {
+    name = "PyPDF2-${version}";
+    version = "1.25.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/P/PyPDF2/${name}.tar.gz";
+      sha256 = "1sw225j9fgsvg1zm7lrij96fihfmq8pc1vg611dc55491zvj9ls3";
+    };
+
+    buildInputs = with self; [ ];
+
+    meta = {
+      description = "A Pure-Python library built as a PDF toolkit";
+      homepage = "http://mstamy2.github.com/PyPDF2/";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ desiderius ];
+    };
+  };
+
   pyopengl = buildPythonPackage rec {
     name = "pyopengl-${version}";
     version = "3.0.2";
