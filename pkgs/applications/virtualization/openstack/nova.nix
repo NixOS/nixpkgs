@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, intltool, libvirt, curl, openssl, openssh }:
+{ stdenv, fetchurl, pythonPackages, openssl, openssh }:
 
 pythonPackages.buildPythonPackage rec {
   name = "nova-${version}";
