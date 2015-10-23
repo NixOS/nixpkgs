@@ -523,10 +523,15 @@ let
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/appnope/${name}.tar.gz";
-      sha256 = "0wgdwp5v7r4g2bss8vbdxah12hsy2mvzxh3sil9s4iskjbz5z6cb";
+      sha256 = "8b995ffe925347a2138d7ac0fe77155e4311a0ea6d6da4f5128fe4b3cbe5ed71";
     };
 
-    meta.platforms = platforms.darwin;
+    meta = {
+      description = "Disable App Nap on OS X";
+      homepage    = https://pypi.python.org/pypi/appnope;
+      platforms   = platforms.darwin;
+      license     = licenses.bsd3;
+    };
   };
 
   apsw = buildPythonPackage rec {
