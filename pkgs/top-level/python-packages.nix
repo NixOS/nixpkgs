@@ -17055,6 +17055,11 @@ let
     # # 1.0.0 and up create a circle dependency with traceback2/pbr
     doCheck = false;
 
+    # fixes a transient error when collecting tests, see https://bugs.launchpad.net/python-neutronclient/+bug/1508547
+    patchPhase = ''
+      sed -i '510i\        return None, False' unittest2/loader.py
+    ''; 
+
     propagatedBuildInputs = with self; [ six argparse traceback2 ];
 
     meta = {
