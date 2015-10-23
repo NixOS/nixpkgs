@@ -6,7 +6,13 @@
 assert readline != null;
 
 let
-  arch = if stdenv.is64bit then "x64" else "ia32";
+  arch = if stdenv.isArm
+         then if stdenv.is64bit
+              then"arm64"
+              else "arm"
+         else if stdenv.is64bit
+              then"x64"
+              else "ia32";
   git_url = "https://chromium.googlesource.com";
   clangFlag = if stdenv.isDarwin then "1" else "0";
 
