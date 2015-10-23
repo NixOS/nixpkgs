@@ -23,6 +23,5 @@ stdenv.mkDerivation {
     description = "Plasma applet written in QML for managing network connections";
     license = licenses.lgpl21;
     inherit (kdelibs.meta) platforms;
-    maintainers = with maintainers; [ jgeerds ];
   };
 }
