@@ -4528,12 +4528,38 @@ let
     };
   };
 
+  jupyter = buildPythonPackage rec {
+    version = "1.0.0";
+    name = "jupyter-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jupyter/${name}.tar.gz";
+      sha256 = "d9dc4b3318f310e34c82951ea5d6683f67bed7def4b259fafbfe4f1beb1d8e5f";
+    };
+
+    propagatedBuildInputs = with self; [
+      notebook
+      qtconsole
+      jupyter_console
+      nbconvert
+      ipykernel
+      ipywidgets
+    ];
+
+    meta = {
+      description = "Installs all the Jupyter components in one go";
+      homepage = "http://jupyter.org/";
+      license = licenses.bsd3;
+      platforms = platforms.all;
+    };
+  };
+
   jupyter_console = buildPythonPackage rec {
     version = "4.0.3";
     name = "jupyter_console-${version}";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/j/jupyter_console/jupyter_console-4.0.3.tar.gz";
+      url = "https://pypi.python.org/packages/source/j/jupyter_console/${name}.tar.gz";
       sha256 = "555be6963a8f6431fbe1d424c7ffefee90824758058e4c9a2ab3aa045948eb85";
     };
 
