@@ -60,9 +60,10 @@ rec {
       cp -d ${openssl}/lib/*.dylib $out/lib
 
       cp -d ${gnugrep.pcre}/lib/libpcre*.dylib $out/lib
-      cp -d ${libiconv}/lib/libiconv*.dylib $out/lib
+      cp -d ${libiconv}/lib/lib*.dylib $out/lib
       cp -d ${gettext}/lib/libintl*.dylib $out/lib
       chmod +x $out/lib/libintl*.dylib
+      cp -d ${ncurses}/lib/libncurses*.dylib $out/lib
 
       # Copy what we need of clang
       cp -d ${llvmPackages.clang-unwrapped}/bin/clang $out/bin
@@ -115,7 +116,7 @@ rec {
         fi
       done
 
-      for i in $out/bin/* $out/lib/*.dylib $out/lib/clang/3.5.0/lib/darwin/*.dylib $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation; do
+      for i in $out/bin/* $out/lib/*.dylib $out/lib/clang/*/lib/darwin/*.dylib $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation; do
         if test -x $i -a ! -L $i; then
           echo "Adding rpath to $i"
           rpathify $i
@@ -123,7 +124,7 @@ rec {
       done
 
       nuke-refs $out/lib/*
-      nuke-refs $out/lib/clang/3.5.0/lib/darwin/*
+      nuke-refs $out/lib/clang/*/lib/darwin/*
       nuke-refs $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
 
       set -x
