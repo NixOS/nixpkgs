@@ -3630,6 +3630,17 @@ let
     propagatedBuildInputs = with self; [ rpkg offtrac urlgrabber fedora_cert ];
   });
 
+  fixtures = buildPythonPackage rec {
+    name = "fixtures-1.3.1";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/f/fixtures/${name}.tar.gz";
+      md5 = "72959be66e26b09641a1e3902f631e62";
+    };
+    doCheck = true;
+    buildInputs = with self; [ pbr ] ++
+      stdenv.lib.optional doCheck [ testtools ];
+  };
+
   fudge = buildPythonPackage rec {
     name = "fudge-0.9.6";
     src = pkgs.fetchurl {
@@ -4182,6 +4193,21 @@ let
       homepage = "https://github.com/mitodl/pylti";
       license = licenses.bsdOriginal;
       maintainers = with maintainers; [ layus ];
+    };
+  };
+
+  linecache2 = buildPythonPackage rec {
+    name = "linecache2-1.0.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/linecache2/${name}.tar.gz";
+      md5 = "7b25d0289ec36bff1f9e63c4329ce65c";
+    };
+    doCheck = false;
+    buildInputs = with pythonPackages; [ pbr ] ++
+      stdenv.lib.optional doCheck [ unittest2 fixtures ];
+    meta = {
+      description = "Backports of the linecache module";
+      homepage =  https://github.com/testing-cabal/linecache2;
     };
   };
 
@@ -14992,13 +15018,15 @@ let
 
   testtools = buildPythonPackage rec {
     name = "testtools-${version}";
-    version = "0.9.34";
+    version = "1.8.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/testtools/${name}.tar.gz";
-      sha256 = "0s6sn9h26dif2c9sayf875x622kq8jb2f4qbc6if7gwh2sssgicn";
+      sha256 = "15yxz8d70iy1b1x6gd7spvblq0mjxjardl4vnaqasxafzc069zca";
     };
-
+    doCheck = false;
+    buildInputs = with self; [ pbr ] ++
+      stdenv.lib.optional doCheck [ traceback2 unittest2 ];
     propagatedBuildInputs = with self; [ self.python_mimeparse self.extras lxml ];
 
     meta = {
@@ -15192,6 +15220,22 @@ let
       description = "Enhanced wiki and issue tracking system for software development projects";
 
       license = "BSD";
+    };
+  };
+
+  traceback2 = buildPythonPackage rec {
+    name = "traceback2-1.4.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/traceback2/${name}.tar.gz";
+      md5 = "9e9723f4d70bfc6308fa992dd193c400";
+    };
+    doCheck = false;
+    buildInputs = with self; [ pbr pip ] ++
+      stdenv.lib.optional doCheck [ unittest2 testtools ];
+    propagatedBuildInputs = with self; [ linecache2 ];
+    meta = {
+      description = "Backports of the traceback module";
+      homepage = https://github.com/testing-cabal/traceback2;
     };
   };
 
@@ -15446,22 +15490,18 @@ let
   };
 
   unittest2 = buildPythonPackage rec {
-    version = "0.5.1";
+    version = "1.1.0";
     name = "unittest2-${version}";
 
-    src = if python.is_py3k or false
-       then pkgs.fetchurl {
-           url = "http://pypi.python.org/packages/source/u/unittest2py3k/unittest2py3k-${version}.tar.gz";
-           sha256 = "00yl6lskygcrddx5zspkhr0ibgvpknl4678kkm6s626539grq93q";
-         }
-       else pkgs.fetchurl {
-           url = "http://pypi.python.org/packages/source/u/unittest2/unittest2-${version}.tar.gz";
-           md5 = "a0af5cac92bbbfa0c3b0e99571390e0f";
-         };
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/u/unittest2/unittest2-${version}.tar.gz";
+      md5 = "f72dae5d44f091df36b6b513305ea000";
+     };
 
-    preConfigure = ''
-      sed -i 's/unittest2py3k/unittest2/' setup.py
-    '';
+#    preConfigure = ''
+#      sed -i 's/unittest2py3k/unittest2/' setup.py
+#    '';
+    buildInputs = with pythonPackages; [ traceback2 ];
 
     meta = {
       description = "A backport of the new features added to the unittest testing framework in Python 2.7";
