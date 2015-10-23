@@ -11146,6 +11146,8 @@ let
     enableXft = true;
   };
 
+  dmenu-wayland = callPackage ../applications/misc/dmenu/wayland.nix { };
+
   dmenu2 = callPackage ../applications/misc/dmenu2 { };
 
   dmtx = dmtx-utils;
@@ -11824,6 +11826,14 @@ let
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
+
+  wlc = callPackage ../development/libraries/wlc { };
+  orbment = callPackage ../applications/window-managers/orbment { };
+  sway = callPackage ../applications/window-managers/sway { };
+
+  swc = callPackage ../development/libraries/swc { };
+  wld = callPackage ../development/libraries/wld { };
+  velox = callPackage ../applications/window-managers/velox { };
 
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
@@ -12787,6 +12797,10 @@ let
   viber = callPackage ../applications/networking/instant-messengers/viber { };
 
   st = callPackage ../applications/misc/st {
+    conf = config.st.conf or null;
+  };
+
+  st-wayland = callPackage ../applications/misc/st/wayland.nix {
     conf = config.st.conf or null;
   };
 
