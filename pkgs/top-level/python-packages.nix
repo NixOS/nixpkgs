@@ -7932,6 +7932,10 @@ let
       sha256 = "2fd276c407fb0b29e5d4884a7029a2c27fef0a06fd7a34924cce69b7cc43f4da";
     };
 
+    prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace setup.py --replace "'gnureadline'" " "
+    '';
+
     buildInputs = with self; [nose] ++ optionals isPy27 [mock];
 
     propagatedBuildInputs = with self;
