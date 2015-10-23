@@ -1967,6 +1967,8 @@ let
 
   kalibrate-rtl = callPackage ../tools/misc/kalibrate-rtl { };
 
+  kbdd = callPackage ../applications/window-managers/kbdd { };
+
   kdbplus = callPackage_i686 ../applications/misc/kdbplus { };
 
   keepalived = callPackage ../tools/networking/keepalived { };
