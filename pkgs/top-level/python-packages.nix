@@ -4912,6 +4912,21 @@ let
   };
 
 
+  joblib = buildPythonPackage rec {
+    name = "joblib-${version}";
+    version = "0.9.0b4";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/j/joblib/joblib-0.9.0b4.tar.gz;
+      md5 = "e0d79a085d4773c7a61cd38b4fb6dad5";
+    };
+
+    buildInputs = with self; with pkgs;  [ ];
+
+    propagatedBuildInputs = with self; [ ];
+
+  };
+
+
   hypatia = buildPythonPackage rec {
     name = "hypatia-0.3";
 
