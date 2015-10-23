@@ -14988,6 +14988,8 @@ let
   sails = callPackage ../misc/sails { };
 
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
+  
+  mfcj470dw = callPackage_i686 ../misc/cups/drivers/mfcj470dw { };
 
   samsungUnifiedLinuxDriver = callPackage ../misc/cups/drivers/samsung {
     gcc = import ../development/compilers/gcc/4.4 {
