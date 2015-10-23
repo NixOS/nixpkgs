@@ -4528,6 +4528,29 @@ let
     };
   };
 
+  jupyter_console = buildPythonPackage rec {
+    version = "4.0.3";
+    name = "jupyter_console-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jupyter_console/jupyter_console-4.0.3.tar.gz";
+      sha256 = "555be6963a8f6431fbe1d424c7ffefee90824758058e4c9a2ab3aa045948eb85";
+    };
+
+    propagatedBuildInputs = with self; [
+      jupyter_client
+      ipython
+      ipykernel
+    ];
+
+    meta = {
+      description = "Jupyter terminal console";
+      homepage = "http://jupyter.org/";
+      license = licenses.bsd3;
+      platforms = platforms.all;
+    };
+  };
+
   lti = buildPythonPackage rec {
     version = "0.4.0";
     name = "PyLTI-${version}";
