@@ -156,7 +156,7 @@ rec {
     name = "stdenv-bootstrap-tools";
 
     buildCommand = ''
-      mkdir -p $out/hydra-build-products
+      mkdir -p $out/nix-support
       echo "file tarball ${build}/on-server/bootstrap-tools.cpio.bz2" >> $out/nix-support/hydra-build-products
       echo "file sh ${build}/on-server/sh" >> $out/nix-support/hydra-build-products
       echo "file cpio ${build}/on-server/cpio" >> $out/nix-support/hydra-build-products
