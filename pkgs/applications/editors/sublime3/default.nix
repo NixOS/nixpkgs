@@ -76,7 +76,7 @@ in stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Sophisticated text editor for code, markup and prose";
     homepage = https://www.sublimetext.com/;
-    maintainers = with maintainers; [ wmertens ];
+    maintainers = with maintainers; [ wmertens demin-dmitriy ];
     license = licenses.unfree;
     platforms = platforms.linux;
   };
