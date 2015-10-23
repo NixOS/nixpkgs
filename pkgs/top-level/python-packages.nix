@@ -5256,6 +5256,18 @@ let
     };
   };
 
+  pywatchman = buildPythonPackage rec {
+    name = "pywatchman-${version}";
+    version = "1.3.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pywatchman/pywatchman-${version}.tar.gz";
+      md5 = "852eab2b7d2f4f56580c3cfff4803350";
+    };
+    postPatch = ''
+      substituteInPlace pywatchman/__init__.py \
+        --replace "'watchman'" "'${pkgs.watchman}/bin/watchman'"
+    '';
+  };
 
   zope_tales = buildPythonPackage rec {
     name = "zope.tales-4.0.2";
