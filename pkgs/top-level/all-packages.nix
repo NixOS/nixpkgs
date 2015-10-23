@@ -1953,6 +1953,8 @@ let
 
   john = callPackage ../tools/security/john { };
 
+  jp2a = callPackage ../applications/misc/jp2a { };
+
   jq = callPackage ../development/tools/jq {};
 
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
