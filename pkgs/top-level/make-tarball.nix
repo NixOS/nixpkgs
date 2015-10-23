@@ -2,9 +2,9 @@
    also builds the documentation and tests whether the Nix expressions
    evaluate correctly. */
 
-{ nixpkgs, officialRelease }:
+{ pkgs, nixpkgs, officialRelease }:
 
-with import nixpkgs.outPath {};
+with pkgs;
 
 releaseTools.sourceTarball rec {
   name = "nixpkgs-tarball";

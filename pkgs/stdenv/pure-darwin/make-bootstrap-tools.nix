@@ -1,6 +1,4 @@
-{system ? builtins.currentSystem}:
-
-with import ../../top-level/all-packages.nix {inherit system;};
+with import ../../top-level/all-packages.nix { system = "x86_64-darwin"; };
 
 rec {
   # We want coreutils without ACL support.
@@ -9,7 +7,7 @@ rec {
   });
 
   build = stdenv.mkDerivation {
-    name = "build";
+    name = "stdenv-bootstrap-tools";
 
     buildInputs = [nukeReferences cpio];
 
@@ -128,45 +126,42 @@ rec {
       nuke-refs $out/lib/clang/3.5.0/lib/darwin/*
       nuke-refs $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
 
+      set -x
       mkdir $out/.pack
       mv $out/* $out/.pack
       mv $out/.pack $out/pack
 
       mkdir $out/on-server
-      (cd $out/pack && (find | cpio -o -H newc)) | bzip2 > $out/on-server/bootstrap-tools.cpio.bz2
+      cp ${stdenv.shell} $out/on-server/sh
+      cp ${cpio}/bin/cpio $out/on-server
+      cp ${coreutils_}/bin/mkdir $out/on-server
+      cp ${bzip2}/bin/bzip2 $out/on-server
 
-      mkdir $out/in-nixpkgs
-      cp ${stdenv.shell} $out/in-nixpkgs/sh
-      cp ${cpio}/bin/cpio $out/in-nixpkgs
-      cp ${coreutils_}/bin/mkdir $out/in-nixpkgs
-      cp ${bzip2}/bin/bzip2 $out/in-nixpkgs
+      chmod u+w $out/on-server/*
+      strip $out/on-server/*
+      nuke-refs $out/on-server/*
 
-      chmod u+w $out/in-nixpkgs/*
-      strip $out/in-nixpkgs/*
-      nuke-refs $out/in-nixpkgs/*
-
-      for i in $out/in-nixpkgs/*; do
+      for i in $out/on-server/*; do
         fix_dyld $i
       done
+
+      (cd $out/pack && (find | cpio -o -H newc)) | bzip2 > $out/on-server/bootstrap-tools.cpio.bz2
     '';
 
     allowedReferences = [];
   };
 
-  host = stdenv.mkDerivation {
-    name = "host";
+  dist = stdenv.mkDerivation {
+    name = "stdenv-bootstrap-tools";
 
     buildCommand = ''
-      mkdir -p $out/nix-support
-
-      for i in "${build}/on-server/"*; do
-        echo "file binary-dist $i" >> $out/nix-support/hydra-build-products
-      done
-
-      echo "darwin-bootstrap-tools-$(date +%Y.%m.%d)" >> $out/nix-support/hydra-release-name
+      mkdir -p $out/hydra-build-products
+      echo "file tarball ${build}/on-server/bootstrap-tools.cpio.bz2" >> $out/nix-support/hydra-build-products
+      echo "file sh ${build}/on-server/sh" >> $out/nix-support/hydra-build-products
+      echo "file cpio ${build}/on-server/cpio" >> $out/nix-support/hydra-build-products
+      echo "file mkdir ${build}/on-server/mkdir" >> $out/nix-support/hydra-build-products
+      echo "file bzip2 ${build}/on-server/bzip2" >> $out/nix-support/hydra-build-products
     '';
-
-    allowedReferences = [ build ];
   };
 
   unpack = stdenv.mkDerivation {
@@ -218,9 +213,9 @@ rec {
 
     tarball = "${build}/on-server/bootstrap-tools.cpio.bz2";
 
-    mkdir = "${build}/in-nixpkgs/mkdir";
-    bzip2 = "${build}/in-nixpkgs/bzip2";
-    cpio  = "${build}/in-nixpkgs/cpio";
+    mkdir = "${build}/on-server/mkdir";
+    bzip2 = "${build}/on-server/bzip2";
+    cpio  = "${build}/on-server/cpio";
 
     allowedReferences = [ "out" ];
   };
@@ -249,7 +244,7 @@ rec {
       # an SSL-capable curl
       curl --version | grep SSL
 
-      ${build}/in-nixpkgs/sh -c 'echo Hello World'
+      ${build}/on-server/sh -c 'echo Hello World'
 
       export flags="-idirafter ${unpack}/include-Libsystem --sysroot=${unpack} -L${unpack}/lib"
 
