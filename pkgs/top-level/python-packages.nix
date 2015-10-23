@@ -4926,6 +4926,31 @@ let
 
   };
 
+  samplerate = buildPythonPackage rec {
+    name = "scikits.samplerate-${version}";
+    version = "0.3.3";
+    src = pkgs.fetchgit {
+      url = https://github.com/ThomasLecocq/samplerate;
+      rev = "7edb22b23f5aa8e7342aea0b538bdd0434988510";
+      sha256 = "ec2a09819c38028283505090ee9839963d3557e73f6e8eb3348ff8884d0d67ed";
+      };
+    buildInputs = with self;  [ pkgs.libsamplerate ];
+
+    propagatedBuildInputs = with self; [ numpy ];
+
+
+    preConfigure = ''
+       cat > site.cfg << END
+       [samplerate]
+       library_dirs=${pkgs.libsamplerate}/lib
+       include_dirs=${pkgs.libsamplerate}/include
+       END
+    '';
+
+    doCheck = false;
+
+  };
+
 
   hypatia = buildPythonPackage rec {
     name = "hypatia-0.3";
