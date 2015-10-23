@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, zlib, apr, aprutil, pcre
+{ stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv
 , proxySupport ? true
 , sslSupport ? true, openssl
 , ldapSupport ? true, openldap
@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [perl] ++
     optional ldapSupport openldap ++    # there is no --with-ldap flag
-    optional libxml2Support libxml2;
+    optional libxml2Support libxml2 ++
+    optional stdenv.isDarwin libiconv;
 
   # Required for ‘pthread_cancel’.
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
