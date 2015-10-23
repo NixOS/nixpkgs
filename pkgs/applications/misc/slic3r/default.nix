@@ -3,13 +3,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.7";
+  version = "1.2.9";
   name = "slic3r-${version}";
 
   src = fetchgit {
     url = "git://github.com/alexrj/Slic3r";
     rev = "refs/tags/${version}";
-    sha256 = "1bybbl8b0lfh9wkn1k9cxd11hlc5064wzh0fk6zdmc9vnnay399i";
+    sha256 = "1xwl8ay5m6pwrrnhbmnmpwyh4wc8hsi4ldzgq98f4bh6szj6jh4z";
   };
 
   buildInputs = with perlPackages; [ perl makeWrapper which
