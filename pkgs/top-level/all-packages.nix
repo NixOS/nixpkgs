@@ -10775,6 +10775,12 @@ let
 
   aangifte2013 = callPackage_i686 ../applications/taxes/aangifte-2013 { };
 
+  aangifte2014 = callPackage_i686 ../applications/taxes/aangifte-2014 { };
+
+  aangifte2013wa = callPackage_i686 ../applications/taxes/aangifte-2013-wa { };
+
+  aangifte2014wa = callPackage_i686 ../applications/taxes/aangifte-2014-wa { };
+
   abcde = callPackage ../applications/audio/abcde {
     inherit (perlPackages) DigestSHA MusicBrainz MusicBrainzDiscID;
     inherit (pythonPackages) eyeD3;
