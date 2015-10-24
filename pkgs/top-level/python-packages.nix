@@ -4912,6 +4912,24 @@ let
   };
 
 
+
+  librosa = buildPythonPackage rec {
+    name = "librosa-${version}";
+    version = "0.4.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/librosa/librosa-0.4.0.tar.gz";
+      md5 = "8149a70a5a5783c3cceeb69de3e07458";
+    };
+
+    buildInputs = with self; with pkgs;
+      [ ];
+
+    propagatedBuildInputs = with self;
+      [ joblib matplotlib six scikitlearn decorator audioread samplerate ];
+
+  };
+
+
   joblib = buildPythonPackage rec {
     name = "joblib-${version}";
     version = "0.9.0b4";
