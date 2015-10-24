@@ -10165,6 +10165,8 @@ let
 
   perf-tools = callPackage ../os-specific/linux/perf-tools { };
 
+  pipes = callPackage ../misc/screensavers/pipes { };
+
   pipework = callPackage ../os-specific/linux/pipework { };
 
   plymouth = callPackage ../os-specific/linux/plymouth { };
