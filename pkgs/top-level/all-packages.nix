@@ -13630,6 +13630,8 @@ let
 
   anki = callPackage ../games/anki { };
 
+  armagetronad = callPackage ../games/armagetronad { };
+
   asc = callPackage ../games/asc {
     lua = lua5_1;
     libsigcxx = libsigcxx12;
