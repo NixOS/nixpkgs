@@ -832,6 +832,8 @@ let
 
   edac-utils = callPackage ../os-specific/linux/edac-utils { };
 
+  elementary-icon-theme = callPackage ../data/icons/elementary-icon-theme { };
+
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
   enca = callPackage ../tools/text/enca { };
