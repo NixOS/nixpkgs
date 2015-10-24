@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, ncurses, perl, xz, interactive ? false }:
+{ stdenv, fetchurl, ncurses, perl, xz, procps, interactive ? false }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "texinfo-5.2";
@@ -9,7 +11,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl xz ]
-    ++ stdenv.lib.optional interactive ncurses;
+    ++ optional interactive ncurses
+    ++ optional doCheck procps; # for tests
 
   preInstall = ''
     installFlags="TEXMF=$out/texmf-dist";
@@ -21,8 +24,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.gnu.org/software/texinfo/";
     description = "The GNU documentation system";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
 
     longDescription = ''
       Texinfo is the official documentation format of the GNU project.
