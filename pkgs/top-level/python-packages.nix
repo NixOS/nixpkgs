@@ -9244,15 +9244,16 @@ let
       modules.sqlite3
     ];
 
-    # Test does not work on Py3k because it calls 'python'.
-    # https://github.com/nipy/nibabel/issues/341
-
-    # Test fails with numpy 1.10.1: ERROR: nibabel.tests.test_proxy_api.TestPARRECAPI.test_proxy_slicing
-    # See https://github.com/nipy/nibabel/pull/358
-    # and https://github.com/numpy/numpy/issues/6491
     preCheck = ''
+      # Test does not work on Py3k because it calls 'python'.
+      # https://github.com/nipy/nibabel/issues/341
       rm nisext/tests/test_testers.py
+      # Test fails with numpy 1.10.1: ERROR: nibabel.tests.test_proxy_api.TestPARRECAPI.test_proxy_slicing
+      # See https://github.com/nipy/nibabel/pull/358
+      # and https://github.com/numpy/numpy/issues/6491
       rm nibabel/tests/test_proxy_api.py
+      # https://github.com/nipy/nibabel/issues/366
+      rm nisext/tests/test_doctest_markup.py
     '';
 
     meta = {
@@ -9268,7 +9269,7 @@ let
 
     # Uses python 2 print. Master seems to be Py3 compatible.
     disabled = isPy3k;
-    
+
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/n/nipype/${name}.tar.gz";
       md5 = "480013709633a6d292e2ef668443e0c9";
@@ -13635,7 +13636,7 @@ let
       homepage = http://scikit-learn.org;
       license = licenses.bsd3;
       maintainers = with maintainers; [ fridh ];
-    };  
+    };
   };
 
   scripttest = buildPythonPackage rec {
@@ -18216,10 +18217,10 @@ let
     version = "1.10";
     name = "networkx-${version}";
 
-    # Currently broken on PyPy. 
+    # Currently broken on PyPy.
     # https://github.com/networkx/networkx/pull/1361
     disabled = isPyPy;
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/networkx/${name}.tar.gz";
       sha256 = "ced4095ab83b7451cec1172183eff419ed32e21397ea4e1971d92a5808ed6fb8";
