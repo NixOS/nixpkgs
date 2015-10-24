@@ -2559,6 +2559,8 @@ let
 
   panomatic = callPackage ../tools/graphics/panomatic { };
 
+  paper-gtk-theme = callPackage ../misc/themes/gtk3/paper-gtk-theme { };
+
   par2cmdline = callPackage ../tools/networking/par2cmdline {
     automake = automake112x; # fails with 14
   };
