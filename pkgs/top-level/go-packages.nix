@@ -135,6 +135,7 @@ let
     allowGoReference = true;
   };
 
+
   ## THIRD PARTY
 
   airbrake-go = buildFromGitHub {
@@ -3064,4 +3065,28 @@ let
     sha256 = "07a7zj01d4a23xqp01m48jp2v5mw49islf4nbq2rj13sd5w4s6sc";
   };
 
+  ninefans = buildFromGitHub {
+    rev    = "65b8cf069318223b1e722b4b36e729e5e9bb9eab";
+    date   = "2015-10-24";
+    owner  = "9fans";
+    repo   = "go";
+    sha256 = "0kzyxhs2xf0339nlnbm9gc365b2svyyjxnr86rphx5m072r32ims";
+    goPackagePath = "9fans.net/go";
+    goPackageAliases = [
+      "github.com/9fans/go"
+    ];
+    excludedPackages = "\\(plan9/client/cat\\|acme/Watch\\)";
+    buildInputs = [ net ];
+  };
+
+  godef = buildFromGitHub {
+    rev    = "ea14e800fd7d16918be88dae9f0195f7bd688586";
+    date   = "2015-10-24";
+    owner  = "rogpeppe";
+    repo   = "godef";
+    sha256 = "1wkvsz8nqwyp36wbm8vcw4449sfs46894nskrfj9qbsrjijvamyc";
+    excludedPackages = "\\(go/printer/testdata\\)";
+    buildInputs = [ ninefans ];
+    subPackages = [ "./" ];
+  };
 }; in self
