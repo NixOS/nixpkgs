@@ -76,6 +76,7 @@
   dbohdan = "Danyil Bohdan <danyil.bohdan@gmail.com>";
   DerGuteMoritz = "Moritz Heidkamp <moritz@twoticketsplease.de>";
   deepfire = "Kosyrev Serge <_deepfire@feelingofgreen.ru>";
+  demin-dmitriy = "Dmitriy Demin <demindf@gmail.com>";
   desiderius = "Didier J. Devroye <didier@devroye.name>";
   devhell = "devhell <\"^\"@regexmail.net>";
   dezgeg = "Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>";
