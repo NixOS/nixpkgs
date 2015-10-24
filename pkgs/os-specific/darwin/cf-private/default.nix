@@ -2,11 +2,13 @@
 
 let
   headers = [
+    "CFAvailability.h"
     "CFAttributedString.h"
     "CFFileDescriptor.h"
     "CFFileSecurity.h"
     "CFNotificationCenter.h"
     "CFStringTokenizer.h"
+    "CFURL.h"
     "CFURLEnumerator.h"
     "CoreFoundation.h"
   ];
