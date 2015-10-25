@@ -13664,11 +13664,11 @@ let
     };
   in buildPythonPackage rec {
     name = "scipy-${version}";
-    version = "0.16.0";
+    version = "0.16.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/scipy/${name}.tar.gz";
-      sha256 = "92592f40097098f3fdbe7f5855d535b29bb16719c2bb59c728bce5e7a28790e0";
+      sha256 = "ecd1efbb1c038accb0516151d1e6679809c6010288765eb5da6051550bf52260";
     };
 
     buildInputs = [ pkgs.gfortran self.nose ];
