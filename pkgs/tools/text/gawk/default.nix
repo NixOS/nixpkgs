@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "09d6pmx6h3i2glafm0jd1v1iyrs03vcyv2rkz12jisii3vlmbkz3";
   };
 
-  # When we do build separate interactive version, it makes sense to always include docs.
-  outputs = [ "out" ] ++ stdenv.lib.optional (!interactive) "doc"; #ToDo
+  # When we do build separate interactive version, it makes sense to always include man.
+  outputs = [ "out" "info" ] ++ stdenv.lib.optional (!interactive) "man";
 
   doCheck = !(
        stdenv.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
