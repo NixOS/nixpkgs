@@ -4,11 +4,11 @@
   withLirc ? false, lirc ? null } :
 
 stdenv.mkDerivation (rec {
-  version = "14.12";
+  version = "15.08";
   name = "rosegarden-${version}";
   src = fetchurl {
     url  = "mirror://sourceforge/rosegarden/${name}.tar.bz2";
-    sha256 = "0zhlxr1njyy6837f09l6p75js0j5mxmls6m02bqafv9j32wgnxpq";
+    sha256 = "1pk24bhpsmvn6rkqgll31na44w03banra1y7kiqd0gajlnw7wlls";
   };
 
   QTDIR=qt4;
