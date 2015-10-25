@@ -8,7 +8,7 @@ kde {
 
   buildInputs = [
     kdelibs attica xz bzip2 libssh libjpeg exiv2 ntrack
-    qca2 samba libcanberra libpulseaudio gpgme glib
+    qca2 samba libcanberra libpulseaudio gpgme
     networkmanager kactivities kdepimlibs openexr
 #todo: add openslp
 #todo: gpgme can't be found because cmake module is provided by kdepimlibs which are found too late
@@ -16,7 +16,7 @@ kde {
 
   nativeBuildInputs = [ shared_mime_info ];
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
+  NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR -I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include";
 
   passthru.propagatedUserEnvPackages = [ virtuoso ];
 
