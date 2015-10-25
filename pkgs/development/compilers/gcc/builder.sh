@@ -211,16 +211,14 @@ preInstall() {
 
 postInstall() {
     # Move runtime libraries to $lib.
-    mkdir -p $lib/lib
-    ln -s lib $lib/lib64
-    mv -v $out/lib/lib*.so $out/lib/lib*.so.*[0-9] $out/lib/*.la $lib/lib/
-    for i in $lib/lib/*.la; do
-        substituteInPlace $i --replace $out $lib
-    done
+    _moveToOutput "lib/lib*.so*" "$lib"
+    _moveToOutput "lib/lib*.la"  "$lib"
+    ln -s lib "$lib/lib64" # for *.la
+    _moveToOutput "share/gcc-*/python" "$lib"
 
-    # Remove precompiled headers for now.  They are very big and
-    # probably not very useful yet.
-    find $out/include -name "*.gch" -exec rm -rf {} \; -prune
+    for i in "$lib"/lib/*.{la,py}; do
+        substituteInPlace "$i" --replace "$out" "$lib"
+    done
 
     # Remove `fixincl' to prevent a retained dependency on the
     # previous gcc.
@@ -266,6 +264,9 @@ postInstall() {
     paxmark r $out/libexec/gcc/*/*/{cc1,cc1plus}
 
     eval "$postInstallGhdl"
+
+    # Two identical man pages are shipped (moving and compressing is done later)
+    ln -sf gcc.1 "$out"/share/man/man1/g++.1
 }
 
 genericBuild

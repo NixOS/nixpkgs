@@ -140,7 +140,7 @@ stdenv.mkDerivation {
       # Propagate the wrapped cc so that if you install the wrapper,
       # you get tools like gcov, the manpages, etc. as well (including
       # for binutils and Glibc).
-      echo ${cc} ${binutils_bin} ${libc_bin} > $out/nix-support/propagated-user-env-packages
+      echo ${cc} ${cc.man or ""} ${binutils_bin} ${libc_bin} > $out/nix-support/propagated-user-env-packages
 
       echo ${toString extraPackages} > $out/nix-support/propagated-native-build-inputs
     ''
