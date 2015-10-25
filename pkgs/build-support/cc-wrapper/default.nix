@@ -29,6 +29,7 @@ let
   libc_bin = if nativeLibc then null else libc.bin or libc;
   libc_dev = if nativeLibc then null else libc.dev or libc;
   libc_lib = if nativeLibc then null else libc.out or libc;
+  cc_solib = cc.lib or cc;
   binutils_bin = if nativeTools then null else binutils.bin or binutils;
   # The wrapper scripts use 'cat', so we may need coreutils.
   coreutils_bin = if nativeTools then null else coreutils.bin or coreutils;
@@ -105,14 +106,14 @@ stdenv.mkDerivation {
       # $cc/lib64 (even though it does actually search there...)..
       # This confuses libtool.  So add it to the compiler tool search
       # path explicitly.
-      if [ -e "$cc/lib64" -a ! -L "$cc/lib64" ]; then
-        ccLDFlags+=" -L$cc/lib64"
-        ccCFlags+=" -B$cc/lib64"
+      if [ -e "${cc.out}/lib64" -a ! -L "${cc.out}/lib64" ]; then
+        ccLDFlags+=" -L${cc_solib}/lib64"
+        ccCFlags+=" -B${cc.out}/lib64"
       fi
-      ccLDFlags+=" -L$cc/lib"
+      ccLDFlags+=" -L${cc_solib}/lib"
 
       ${optionalString cc.langVhdl or false ''
-        ccLDFlags+=" -L${zlib}/lib"
+        ccLDFlags+=" -L${zlib.out}/lib"
       ''}
 
       # Find the gcc libraries path (may work only without multilib).
