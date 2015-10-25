@@ -5418,6 +5418,8 @@ let
 
   cfr = callPackage ../development/tools/java/cfr { };
 
+  checkstyle = callPackage ../development/tools/analysis/checkstyle { };
+
   chromedriver = callPackage ../development/tools/selenium/chromedriver { gconf = gnome.GConf; };
 
   chrpath = callPackage ../development/tools/misc/chrpath { };
@@ -5451,8 +5453,6 @@ let
   cmakeWithGui = cmakeCurses.override { useQt4 = true; };
 
   coccinelle = callPackage ../development/tools/misc/coccinelle { };
-
-  framac = callPackage ../development/tools/analysis/frama-c { };
 
   cpptest = callPackage ../development/libraries/cpptest { };
 
@@ -5537,9 +5537,11 @@ let
 
   elfutils = callPackage ../development/tools/misc/elfutils { };
 
+  emma = callPackage ../development/tools/analysis/emma { };
+
   epm = callPackage ../development/tools/misc/epm { };
 
-  emma = callPackage ../development/tools/analysis/emma { };
+  eweb = callPackage ../development/tools/literate-programming/eweb { };
 
   eztrace = callPackage ../development/tools/profiling/EZTrace { };
 
@@ -5547,15 +5549,17 @@ let
 
   flow = callPackage ../development/tools/analysis/flow { };
 
-  fswatch = callPackage ../development/tools/misc/fswatch { };
+  framac = callPackage ../development/tools/analysis/frama-c { };
 
   frame = callPackage ../development/libraries/frame { };
+
+  fswatch = callPackage ../development/tools/misc/fswatch { };
+
+  funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
 
   pmd = callPackage ../development/tools/analysis/pmd { };
 
   jdepend = callPackage ../development/tools/analysis/jdepend { };
-
-  checkstyle = callPackage ../development/tools/analysis/checkstyle { };
 
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
   flex_2_5_39 = callPackage ../development/tools/parsing/flex/2.5.39.nix { };
@@ -5692,13 +5696,8 @@ let
     gconf = pkgs.gnome.GConf;
   };
 
-  eweb = callPackage ../development/tools/literate-programming/eweb { };
-
   noweb = callPackage ../development/tools/literate-programming/noweb { };
   nuweb = callPackage ../development/tools/literate-programming/nuweb { tex = texlive.combined.scheme-small; };
-
-  funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
-
 
   omake = callPackage ../development/tools/ocaml/omake { };
   omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
@@ -15017,7 +15016,7 @@ let
   sails = callPackage ../misc/sails { };
 
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
-  
+
   mfcj470dw = callPackage_i686 ../misc/cups/drivers/mfcj470dw { };
 
   samsungUnifiedLinuxDriver = callPackage ../misc/cups/drivers/samsung {
