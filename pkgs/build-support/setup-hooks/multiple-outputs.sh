@@ -93,6 +93,13 @@ _moveToOutput() {
                 mkdir -p $(readlink -m "$dstPath/..") # create the parent for $dstPath
                 mv "$srcPath" "$dstPath"
             fi
+
+            # remove empty directories, printing iff at least one gets removed
+            local srcParent="$(readlink -m "$srcPath/..")"
+            if rmdir "$srcParent"; then
+                echo "Removing empty $srcParent/ and (possibly) its parents"
+                rmdir -p --ignore-fail-on-non-empty "$(readlink -m "$srcParent/..")"
+            fi
         done
     done
 }
@@ -107,11 +114,6 @@ _multioutDocs() {
     # the default outputMan is in $bin
     _moveToOutput share/man "${!outputMan}"
     _moveToOutput share/man/man3 "${!outputDocdev}"
-
-    # Remove empty share directory.
-    if [ -d "$out/share" ]; then
-        rmdir "$out/share" --ignore-fail-on-non-empty
-    fi
 }
 
 # Move development-only stuff to the desired outputs.
