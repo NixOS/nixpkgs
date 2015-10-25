@@ -73,7 +73,7 @@ in
   libxcb = attrs : attrs // {
     nativeBuildInputs = [ args.python ];
     configureFlags = "--enable-xkb --enable-xinput";
-    outputs = [ "dev" "out" "doc" "man" ];
+    outputs = [ "dev" "out" "doc" ];
   };
 
   xcbproto = attrs : attrs // {
@@ -98,7 +98,7 @@ in
   };
 
   libXau = attrs: attrs // {
-    outputs = [ "dev" "out" "man" ];
+    outputs = [ "dev" "out" ];
   };
 
   libXdmcp = attrs: attrs // {
@@ -115,7 +115,7 @@ in
   };
 
   libXxf86vm = attrs: attrs // {
-    outputs = [ "dev" "out" "man" ];
+    outputs = [ "dev" "out" ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
 
@@ -146,7 +146,7 @@ in
   };
 
   libXcomposite = attrs: attrs // {
-    outputs = [ "dev" "out" "man" ];
+    outputs = [ "dev" "out" ];
     propagatedBuildInputs = [ xorg.libXfixes ];
   };
 
@@ -156,7 +156,7 @@ in
   };
 
   libXcursor = attrs: attrs // {
-    outputs = [ "dev" "out" "man" ];
+    outputs = [ "dev" "out" ];
   };
 
   libXdamage = attrs: attrs // {
@@ -164,7 +164,7 @@ in
   };
 
   libXft = attrs: attrs // {
-    outputs = [ "dev" "out" "man" ];
+    outputs = [ "dev" "out" ];
     propagatedBuildInputs = [ xorg.libXrender args.freetype args.fontconfig ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
     # the include files need ft2build.h, and Requires.private isn't enough for us
@@ -174,21 +174,21 @@ in
   };
 
   libXext = attrs: attrs // {
-    outputs = [ "dev" "out" "man" "doc" ];
+    outputs = [ "dev" "out" "doc" ];
     propagatedBuildInputs = [ xorg.xproto xorg.libXau ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
 
   libXfixes = attrs: attrs // {
-    outputs = [ "dev" "out" "man" ];
+    outputs = [ "dev" "out" ];
   };
 
   libXi = attrs: attrs // {
-    outputs = [ "dev" "out" "man" "doc" ];
+    outputs = [ "dev" "out" "doc" ];
   };
 
   libXinerama = attrs: attrs // {
-    outputs = [ "dev" "out" "man" ];
+    outputs = [ "dev" "out" ];
   };
 
   libXmu = attrs: attrs // {
@@ -197,7 +197,7 @@ in
   };
 
   libXrandr = attrs: attrs // {
-    outputs = [ "dev" "out" "man" ];
+    outputs = [ "dev" "out" ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
     propagatedBuildInputs = [xorg.libXrender];
   };
