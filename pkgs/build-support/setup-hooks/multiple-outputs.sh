@@ -1,5 +1,4 @@
 # The base package for automatic multiple-output splitting. Used in stdenv as well.
-
 preConfigureHooks+=(_multioutConfig)
 preFixupHooks+=(_multioutDocs)
 preFixupHooks+=(_multioutDevs)
@@ -8,11 +7,13 @@ postFixupHooks+=(_multioutPropagateDev)
 # Assign the first string containing nonempty variable to the variable named $1
 _assignFirst() {
     local varName="$1"
+    local REMOVE=REMOVE # slightly hacky - we allow REMOVE (i.e. not a variable name)
     shift
     while [ $# -ge 1 ]; do
         if [ -n "${!1}" ]; then eval "${varName}"="$1"; return; fi
         shift
     done
+    echo "Error: _assignFirst found no valid variant!"
     return 1 # none found
 }
 # Same as _assignFirst, but only if "$1" = ""
@@ -36,7 +37,7 @@ _overrideFirst outputInclude "$outputDev"
 _overrideFirst outputLib "lib" "out"
 
 _overrideFirst outputDoc "doc" "out"
-_overrideFirst outputDocdev "docdev" "$outputDoc" # documentation for developers
+_overrideFirst outputDocdev "docdev" REMOVE # documentation for developers
 # man and info pages are small and often useful to distribute with binaries
 _overrideFirst outputMan "man" "doc" "$outputBin"
 _overrideFirst outputInfo "info" "doc" "$outputMan"
@@ -68,7 +69,7 @@ NIX_NO_SELF_RPATH=1
 
 # Move subpaths that match pattern $1 from under any output/ to the $2 output/
 # Beware: only globbing patterns are accepted, e.g.: * ? {foo,bar}
-# TODO: maybe allow moving to "/dev/trash" or similar
+# A special target "REMOVE" is allowed: _moveToOutput foo REMOVE
 _moveToOutput() {
     local patt="$1"
     local dstOut="$2"
@@ -76,29 +77,36 @@ _moveToOutput() {
     for output in $outputs; do
         if [ "${!output}" = "$dstOut" ]; then continue; fi
         local srcPath
-        for srcPath in ${!output}/$patt; do
+        for srcPath in "${!output}"/$patt; do
             if [ ! -e "$srcPath" ]; then continue; fi
-            local dstPath="$dstOut${srcPath#${!output}}"
-            echo "Moving $srcPath to $dstPath"
 
-            if [ -d "$dstPath" ] && [ -d "$srcPath" ]
-            then # attempt directory merge
-                # check the case of trying to move an empty directory
-                rmdir "$srcPath" --ignore-fail-on-non-empty
-                [ -d "$srcPath" ] || continue;
+            if [ "$dstOut" = REMOVE ]; then
+                echo "Removing $srcPath"
+                rm -r "$srcPath"
+            else
+                local dstPath="$dstOut${srcPath#${!output}}"
+                echo "Moving $srcPath to $dstPath"
 
-                mv -t "$dstPath" "$srcPath"/*
-                rmdir "$srcPath"
-            else # usual move
-                mkdir -p $(readlink -m "$dstPath/..") # create the parent for $dstPath
-                mv "$srcPath" "$dstPath"
+                if [ -d "$dstPath" ] && [ -d "$srcPath" ]
+                then # attempt directory merge
+                    # check the case of trying to move an empty directory
+                    rmdir "$srcPath" --ignore-fail-on-non-empty
+                    if [ -d "$srcPath" ]; then
+                      mv -t "$dstPath" "$srcPath"/*
+                      rmdir "$srcPath"
+                    fi
+                else # usual move
+                    mkdir -p "$(readlink -m "$dstPath/..")"
+                    mv "$srcPath" "$dstPath"
+                fi
             fi
 
             # remove empty directories, printing iff at least one gets removed
             local srcParent="$(readlink -m "$srcPath/..")"
             if rmdir "$srcParent"; then
                 echo "Removing empty $srcParent/ and (possibly) its parents"
-                rmdir -p --ignore-fail-on-non-empty "$(readlink -m "$srcParent/..")"
+                rmdir -p --ignore-fail-on-non-empty "$(readlink -m "$srcParent/..")" \
+                    > /dev/null || true # doesn't ignore failure for some reason
             fi
         done
     done
@@ -107,6 +115,8 @@ _moveToOutput() {
 # Move documentation to the desired outputs.
 _multioutDocs() {
     if [ "$outputs" = "out" ]; then return; fi;
+    local REMOVE=REMOVE # slightly hacky - we expand ${!outputFoo}
+
     _moveToOutput share/info "${!outputInfo}"
     _moveToOutput share/doc "${!outputDoc}"
     _moveToOutput share/gtk-doc "${!outputDocdev}"
