@@ -18075,19 +18075,24 @@ let
   };
 
 
-  thumbor = self.buildPythonPackage rec {
-    name = "thumbor-4.0.4";
+  thumbor = buildPythonPackage rec {
+    name = "thumbor-${version}";
+    version = "5.2.1";
+
     disabled = ! isPy27;
 
+    buildInputs = with self; [ statsd nose ];
+
     propagatedBuildInputs = with self; [
-      # Remove pythonPackages.tornado 3.x once thumbor is updated to 5.x
-      tornado_3
+      tornado
       pycrypto
       pycurl
       pillow
       derpconf
       python_magic
-      thumborPexif
+      # thumborPexif
+      pexif
+      libthumbor
       (pkgs.opencv.override {
         gtk = null;
         glib = null;
@@ -18095,11 +18100,11 @@ let
         gstreamer = null;
         ffmpeg = null;
       })
-    ];
+    ] ++ optionals (!isPy3k) [ futures ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/thumbor/${name}.tar.gz";
-      md5 = "cf639a1cc57ee287b299ace450444408";
+      sha256 = "57b0d7e261e792b2e2c53a79c3d8c722964003d1828331995dc3491dc67db7d8";
     };
 
     meta = {
