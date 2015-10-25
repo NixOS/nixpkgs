@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   name = "plex-${version}";
-  version = "0.9.12.11.1406";
-  vsnHash = "8403350";
+  version = "0.9.12.13.1464";
+  vsnHash = "4ccd2ca";
 
   src = fetchurl {
     url = "https://downloads.plex.tv/plex-media-server/${version}-${vsnHash}/plexmediaserver-${version}-${vsnHash}.x86_64.rpm";
-    sha256 = "295174b3617d699f11ecc22bc603a579e2291fe6ba55a536711acafd64455390";
+    sha256 = "1gzq3ik3b23pl6i85d4abh3aqq710z5x258mjm7xai8rpyhvdp26";
   };
 
   buildInputs = [ rpmextract glibc ];
