@@ -6401,6 +6401,13 @@ let
     buildInputs = with self; [ nose mock ];
     propagatedBuildInputs = with self; [ pyflakes pep8 mccabe ];
 
+    # tests fail due to outdated mock
+    doCheck = false;
+    # requires old pyflakes for no reason
+    preBuild = ''
+      sed -i 's/.*"pyflakes.*/   "pyflakes",/' setup.py
+    '';
+
     meta = {
       description = "Code checking using pep8 and pyflakes";
       homepage = http://pypi.python.org/pypi/flake8;
@@ -17058,7 +17065,7 @@ let
     # fixes a transient error when collecting tests, see https://bugs.launchpad.net/python-neutronclient/+bug/1508547
     patchPhase = ''
       sed -i '510i\        return None, False' unittest2/loader.py
-    ''; 
+    '';
 
     propagatedBuildInputs = with self; [ six argparse traceback2 ];
 
