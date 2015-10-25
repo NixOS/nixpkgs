@@ -3031,6 +3031,10 @@ let
 
   snabb = callPackage ../tools/networking/snabb { } ;
 
+  sng = callPackage ../tools/graphics/sng {
+    libpng = libpng12;
+  };
+
   snort = callPackage ../applications/networking/ids/snort { };
 
   solr = callPackage ../servers/search/solr { };
