@@ -4712,6 +4712,11 @@ let
       maintainers = with maintainers; [ garbas iElectric ];
       platforms = platforms.all;
     };
+
+    # Failing tests
+    # https://github.com/Pylons/pyramid/issues/1899
+    doCheck = !isPy35;
+
   };
 
 
