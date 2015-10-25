@@ -1,5 +1,8 @@
 { stdenv, fetchurl, libjpeg, libpng, libmng, lcms1, libtiff, openexr, mesa
-, libX11, pkgconfig }:
+, libX11, pkgconfig
+
+, OpenGL
+}:
 
 stdenv.mkDerivation rec {
 
@@ -11,7 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "1zd850nn7nvkkhasrv7kn17kzgslr5ry933v6db62s4lr0zzlbv8";
   };
 
-  buildInputs = [ libjpeg libpng libmng lcms1 libtiff openexr mesa libX11 ];
+  buildInputs = [ libjpeg libpng libmng lcms1 libtiff openexr mesa libX11 ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ OpenGL ];
   nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = [ "--enable-ILU" "--enable-ILUT" ];
