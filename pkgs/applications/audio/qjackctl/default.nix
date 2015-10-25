@@ -15,10 +15,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--enable-jack-version";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A Qt application to control the JACK sound server daemon";
     homepage = http://qjackctl.sourceforge.net/;
-    license = "GPL";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }
