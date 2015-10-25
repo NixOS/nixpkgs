@@ -10377,6 +10377,22 @@ let
     };
   };
 
+  pexif = buildPythonPackage rec {
+    name = "pexif-${version}";
+    version = "0.15";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pexif/pexif-0.15.tar.gz";
+      sha256 = "45a3be037c7ba8b64bbfc48f3586402cc17de55bb9d7357ef2bc99954a18da3f";
+    };
+
+    meta = {
+      description = "A module for editing JPEG EXIF data";
+      homepage = http://www.benno.id.au/code/pexif/;
+      license = licenses.mit;
+    };
+  };
+
 
   pexpect = buildPythonPackage rec {
     version = "3.3";
