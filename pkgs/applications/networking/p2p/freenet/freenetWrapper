@@ -1,0 +1,16 @@
+#! /usr/bin/env bash
+
+export FREENET_HOME="$HOME/.local/share/freenet"
+if [ -n "$XDG_DATA_HOME" ]
+  then export FREENET_HOME="$XDG_DATA_HOME/freenet"
+fi
+
+if [ ! -d $FREENET_HOME ]; then
+  mkdir -p $FREENET_HOME
+fi
+
+cp -u $FREENET_SEEDNODES $FREENET_HOME/seednodes.fref
+chmod u+rw $FREENET_HOME/seednodes.fref
+
+cd $FREENET_HOME
+exec $FREENET_ROOT/bin/freenet.wrapped "$@"
