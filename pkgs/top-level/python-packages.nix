@@ -16793,6 +16793,9 @@ let
       license = licenses.zpt20;
       maintainers = with maintainers; [ goibhniu ];
     };
+
+    # Python 3.5 is not yet supported.
+    disabled = isPy35;
   };
 
 
