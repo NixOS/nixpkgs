@@ -9331,7 +9331,9 @@ let
 
   qpid-cpp = callPackage ../servers/amqp/qpid-cpp { };
 
-  rabbitmq_server = callPackage ../servers/amqp/rabbitmq-server { };
+  rabbitmq_server = callPackage ../servers/amqp/rabbitmq-server {
+    inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
+  };
 
   radius = callPackage ../servers/radius { };
 
