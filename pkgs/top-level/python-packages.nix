@@ -4162,6 +4162,24 @@ let
     };
   };
 
+  libthumbor = buildPythonPackage rec {
+    name = "libthumbor-${version}";
+    version = "1.2.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/libthumbor/${name}.tar.gz";
+      sha256 = "09bbaf08124ee33ea4ef99881625bd20450b0b43ab90fd678479beba8c03f86e";
+    };
+
+    propagatedBuildInputs = with self; [ six pycrypto ];
+
+    meta = {
+      description = "libthumbor is the python extension to thumbor";
+      homepage = http://github.com/heynemann/libthumbor;
+      license = licenses.mit;
+    };
+
+  };
   lti = buildPythonPackage rec {
     version = "0.4.0";
     name = "PyLTI-${version}";
