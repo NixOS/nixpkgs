@@ -836,6 +836,8 @@ let
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
+  elementary-icon-theme = callPackage ../data/icons/elementary-icon-theme { };
+
   enca = callPackage ../tools/text/enca { };
 
   ent = callPackage ../tools/misc/ent { };
