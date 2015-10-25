@@ -4741,6 +4741,10 @@ let
 
   ocamlnat = newScope pkgs.ocamlPackages_3_12_1 ../development/ocaml-modules/ocamlnat { };
 
+  ponyc = callPackage ../development/compilers/ponyc {
+    llvm = llvm_36;
+  };
+
   qcmm = callPackage ../development/compilers/qcmm {
     lua   = lua4;
     ocaml = ocaml_3_08_0;
