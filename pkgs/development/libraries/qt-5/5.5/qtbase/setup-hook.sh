@@ -65,7 +65,7 @@ setQMakePath() {
 
 qtOut=""
 if [[ -z "$NIX_QT_SUBMODULE" ]]; then
-    qtOut="$PWD/qmake-$name"
+    qtOut=`mktemp -d`
 else
     qtOut=$out
 fi
