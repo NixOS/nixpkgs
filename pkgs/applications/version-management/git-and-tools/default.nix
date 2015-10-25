@@ -71,6 +71,8 @@ rec {
 
   tig = callPackage ./tig { };
 
+  transcrypt = callPackage ./transcrypt { };
+
   hub = import ./hub {
     inherit go;
     inherit stdenv fetchgit;
