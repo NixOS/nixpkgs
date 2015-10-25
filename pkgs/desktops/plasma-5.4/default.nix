@@ -72,7 +72,7 @@ let
     oxygen-fonts = callPackage ./oxygen-fonts.nix {};
     plasma-desktop = callPackage ./plasma-desktop {};
     plasma-mediacenter = callPackage ./plasma-mediacenter.nix {};
-    plasma-nm = callPackage ./plasma-nm.nix {};
+    plasma-nm = callPackage ./plasma-nm {};
     plasma-pa = callPackage ./plasma-pa.nix {};
     plasma-workspace = callPackage ./plasma-workspace {};
     plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix {};
