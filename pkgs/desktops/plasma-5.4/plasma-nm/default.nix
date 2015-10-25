@@ -1,5 +1,5 @@
-{ plasmaPackage, extra-cmake-modules, kdoctools, kcompletion
-, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative
+{ plasmaPackage, substituteAll, extra-cmake-modules, kdoctools
+, kcompletion, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative
 , kdelibs4support, ki18n, kiconthemes, kinit, kio, kitemviews
 , knotifications, kservice, kwallet, kwidgetsaddons, kwindowsystem
 , kxmlgui, makeQtWrapper, mobile_broadband_provider_info
@@ -9,6 +9,12 @@
 
 plasmaPackage {
   name = "plasma-nm";
+  patches = [
+    (substituteAll {
+      src = ./0001-mobile-broadband-provider-info-path.patch;
+      inherit mobile_broadband_provider_info;
+    })
+  ];
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
