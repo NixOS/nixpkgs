@@ -106,16 +106,16 @@ rec {
 
   anyedittools = buildEclipsePlugin rec {
     name = "anyedit-${version}";
-    version = "2.4.15.201504172030";
+    version = "2.5.0.201510241327";
 
     srcFeature = fetchurl {
       url = "http://andrei.gmxhome.de/eclipse/features/AnyEditTools_${version}.jar";
-      sha256 = "19hbwgqn02ghflbcp5cw3qy203mym5kwgzq4xrn0xcl8ckl5s2pp";
+      sha256 = "01qaxg1b4n7y7g1xdkx1bnmpwqydln270mk14l4pl35q3c88s5nc";
     };
 
     srcPlugin = fetchurl {
-      url = "http://dl.bintray.com/iloveeclipse/plugins/de.loskutov.anyedit.AnyEditTools_${version}.jar";
-      sha256 = "1i3ghf2mhdfhify30hlyxqmyqcp40pkd5zhsiyg6finn4w81sxv2";
+      url = "https://github.com/iloveeclipse/anyedittools/releases/download/2.5.0/de.loskutov.anyedit.AnyEditTools_${version}.jar";
+      sha256 = "0m4qxkscl5xih8x1znbrih4jh28wky4l62spfif9zw0s7mgl117c";
     };
 
     meta = with stdenv.lib; {
