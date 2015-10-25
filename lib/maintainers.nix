@@ -90,6 +90,7 @@
   edwtjo = "Edward Tjörnhammar <ed@cflags.cc>";
   eelco = "Eelco Dolstra <eelco.dolstra@logicblox.com>";
   eikek = "Eike Kettner <eike.kettner@posteo.de>";
+  elasticdog = "Aaron Bull Schaefer <aaron@elasticdog.com>";
   ellis = "Ellis Whitehead <nixos@ellisw.net>";
   emery = "Emery Hemingway <emery@vfemail.net>";
   enolan = "Echo Nolan <echo@echonolan.net>";
