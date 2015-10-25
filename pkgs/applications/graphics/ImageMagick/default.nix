@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig libtool zlib fontconfig freetype ghostscript libjpeg
       openexr libpng librsvg libtiff libxml2
-    libxml2 (stdenv.cc.cc.lib or null)
     ];
 
   propagatedBuildInputs =

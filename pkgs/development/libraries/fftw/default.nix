@@ -17,8 +17,6 @@ stdenv.mkDerivation rec {
   outputs = [ "dev" "out" "doc" ]; # it's dev-doc only
   outputBin = "dev"; # fftw-wisdom
 
-  buildInputs = [ (stdenv.cc.cc.lib or null) ];
-
   configureFlags =
     [ "--enable-shared" "--disable-static"
       "--enable-threads"
