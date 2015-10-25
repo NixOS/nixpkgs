@@ -4754,11 +4754,12 @@ let
 
 
   pyramid_jinja2 = buildPythonPackage rec {
-    name = "pyramid_jinja2-1.9";
+    name = "pyramid_jinja2-${version}";
+    version = "2.5";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/p/pyramid_jinja2/${name}.zip";
-      md5 = "a6728117cad24749ddb39d2827cd9033";
+      url = "http://pypi.python.org/packages/source/p/pyramid_jinja2/${name}.tar.gz";
+      sha256 = "93c86e3103b454301f4d66640191aba047f2ab85ba75647aa18667b7448396bd";
     };
 
     buildInputs = with self; [ webtest ];
