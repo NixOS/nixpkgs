@@ -16872,19 +16872,6 @@ let
     };
   };
 
-  # Remove tornado 3.x once pythonPackages.thumbor is updated to 5.x
-  tornado_3 = buildPythonPackage rec {
-    name = "tornado-3.2.2";
-
-    propagatedBuildInputs = with self; [ backports_ssl_match_hostname_3_4_0_2 ];
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
-      sha256 = "13mq6nx98999zql8p2zlg4sj2hr2sxq9w11mqzi7rjfjs0z2sn8i";
-    };
-
-    doCheck = false;
-  };
   tornado = buildPythonPackage rec {
     name = "tornado-${version}";
     version = "4.2.1";
