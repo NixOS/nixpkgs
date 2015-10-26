@@ -5936,7 +5936,7 @@ let
       url = "https://bitbucket.org/edgimar/crecord/get/${builtins.substring 0 12 rev}.tar.gz";
       sha256 = "02003fa5620ec40a5ad0d7cede2e65c2cb398a7fe4e1ee26bd3396a87d63ad35";
     };
-    
+
     # crecord comes as just a bare directory
     configurePhase = " ";
     buildPhase = "${python.executable} -m compileall crecord";
@@ -5947,7 +5947,7 @@ let
 
     # there ain't none
     doCheck = false;
-    
+
     meta = {
       description = "Mercurial extension for selecting graphically which files/hunk/lines to commit";
       homepage = https://bitbucket.org/edgimar/crecord;
@@ -8098,20 +8098,20 @@ let
       description = "A load testing tool";
     };
   };
-  
+
   llvmlite = buildPythonPackage rec {
     name = "llvmlite-${version}";
     version = "0.7.0";
-    
+
     disabled = isPyPy;
-    
-    src = pkgs.fetchurl { 
+
+    src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/l/llvmlite/${name}.tar.gz";
       sha256 = "6d780980da05d2d82465991bce42c1b4625018d67feae17c672c6a9d5ad0bb1a";
     };
 
     llvm = pkgs.llvm;
-    
+
     propagatedBuildInputs = with self; [ llvm ] ++ optional (!isPy34) enum34;
 
     # Disable static linking
@@ -8126,7 +8126,7 @@ let
     checkPhase = ''
       ${self.python.executable} runtests.py
     '';
-    
+
     meta = {
       description = "A lightweight LLVM python binding for writing JIT compilers";
       homepage = "http://llvmlite.pydata.org/";
@@ -8134,7 +8134,7 @@ let
       maintainers = with maintainers; [ fridh ];
     };
   };
-  
+
   lockfile = buildPythonPackage rec {
     name = "lockfile-0.9.1";
 
@@ -9313,15 +9313,16 @@ let
       modules.sqlite3
     ];
 
-    # Test does not work on Py3k because it calls 'python'.
-    # https://github.com/nipy/nibabel/issues/341
-
-    # Test fails with numpy 1.10.1: ERROR: nibabel.tests.test_proxy_api.TestPARRECAPI.test_proxy_slicing
-    # See https://github.com/nipy/nibabel/pull/358
-    # and https://github.com/numpy/numpy/issues/6491
     preCheck = ''
+      # Test does not work on Py3k because it calls 'python'.
+      # https://github.com/nipy/nibabel/issues/341
       rm nisext/tests/test_testers.py
+      # Test fails with numpy 1.10.1: ERROR: nibabel.tests.test_proxy_api.TestPARRECAPI.test_proxy_slicing
+      # See https://github.com/nipy/nibabel/pull/358
+      # and https://github.com/numpy/numpy/issues/6491
       rm nibabel/tests/test_proxy_api.py
+      # https://github.com/nipy/nibabel/issues/366
+      rm nisext/tests/test_doctest_markup.py
     '';
 
     meta = {
@@ -9337,7 +9338,7 @@ let
 
     # Uses python 2 print. Master seems to be Py3 compatible.
     disabled = isPy3k;
-    
+
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/n/nipype/${name}.tar.gz";
       md5 = "480013709633a6d292e2ef668443e0c9";
@@ -9385,6 +9386,26 @@ let
     meta = {
       description = "A unittest-based testing framework for python that makes writing and running tests easier";
     };
+  };
+
+  nose-exclude = buildPythonPackage rec {
+    name = "nose-exclude-${version}";
+    version = "0.4.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/nose-exclude/${name}.tar.gz";
+      sha256 = "44466a9bcb56d2e568750f91504d1278c74eabb259a305b06e975b87b51635da";
+    };
+
+    propagatedBuildInputs = with self; [ nose ];
+
+    meta = {
+      license = licenses.lgpl21;
+      description = "Exclude specific directories from nosetests runs";
+      homepage = https://github.com/kgrandis/nose-exclude;
+      maintainers = with maintainers; [ fridh ];
+    };
+
   };
 
   nose-selecttests = buildPythonPackage rec {
@@ -9568,12 +9589,12 @@ let
   numba = buildPythonPackage rec {
     version = "0.21.0";
     name = "numba-${version}";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/numba/${name}.tar.gz";
       sha256 = "1806d2f6ad49ad891e9ac6fed0cc0b0489cbfcd9ba2dc81081c1c30091e77604";
     };
-    
+
     propagatedBuildInputs = with self; [numpy llvmlite argparse] ++ optional (!isPy3k) funcsigs ++ optional (isPy27 || isPy33) singledispatch;
     # Future work: add Cuda support.
     #propagatedBuildInputs = with self; [numpy llvmlite argparse pkgs.cudatoolkit6];
@@ -9590,7 +9611,7 @@ let
       maintainers = with maintainers; [ fridh ];
     };
   };
-  
+
   numexpr = buildPythonPackage rec {
     version = "2.4.3";
     name = "numexpr-${version}";
@@ -10038,14 +10059,15 @@ let
     inherit (pkgs.stdenv.lib) optional optionalString;
     inherit (pkgs.stdenv) isDarwin;
   in buildPythonPackage rec {
-    name = "pandas-0.16.2";
+    name = "pandas-${version}";
+    version = "0.17.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
-      sha256 = "10agmrkps8bi5948vwpipfxds5kj1d076m9i0nhaxwqiw7gm6670";
+      sha256 = "320d4fdf734b82adebc8fde9d8ca4b05fe155a72b6f7aa95d76242da8748d6a4";
     };
 
-    buildInputs = [ self.nose ] ++ optional isDarwin pkgs.libcxx;
+    buildInputs = with self; [ nose ] ++ optional isDarwin pkgs.libcxx;
     propagatedBuildInputs = with self; [
       dateutil
       numpy
@@ -10071,31 +10093,16 @@ let
                   "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
     '';
 
-    preCheck = ''
-      # Broken test, probably https://github.com/pydata/pandas/issues/10312:
-      rm pandas/io/tests/test_html.py
-
-      # Hitting https://github.com/pydata/pandas/pull/7362 on python
-      # 3.3 and 3.4, not sure why:
-      rm pandas/tseries/tests/test_daterange.py
-
-      # Need to skip this test; insert a line here... hacky but oh well.
-      badtest=pandas/tseries/tests/test_timezones.py
-      fixed=$TMPDIR/fixed_test_timezones.py
-      touch $fixed
-      head -n 602 $badtest > $fixed
-      echo '        raise nose.SkipTest("Not working")' >> $fixed
-      tail -n +603 $badtest >> $fixed
-      mv $fixed $badtest
-    '';
-
+    # The flag `-A 'not network'` will disable tests that use internet.
+    # The `-e` flag disables a few problematic tests.
+    # https://github.com/pydata/pandas/issues/11169
+    # https://github.com/pydata/pandas/issues/11287
     checkPhase = ''
       runHook preCheck
-
       # The flag `-A 'not network'` will disable tests that use internet.
       # The `-e` flag disables a few problematic tests.
       ${python.executable} setup.py nosetests -A 'not network' --stop \
-        -e 'test_clipboard|test_series' --verbosity=3
+        -e 'test_data|test_excel|test_html|test_json|test_frequencies|test_frame' --verbosity=3
 
       runHook postCheck
     '';
@@ -13714,7 +13721,7 @@ let
       homepage = http://scikit-learn.org;
       license = licenses.bsd3;
       maintainers = with maintainers; [ fridh ];
-    };  
+    };
   };
 
   scripttest = buildPythonPackage rec {
@@ -16159,11 +16166,11 @@ let
 
   xray = buildPythonPackage rec {
     name = "xray-${version}";
-    version = "0.6.0";
+    version = "0.6.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/x/xray/${name}.tar.gz";
-      sha256 = "c8c4aadb0d39662a81c259bd609f42708ff31c90012a9dd0a1f9ee56a798196f";
+      sha256 = "bfbc307203d5433b4da31c210773c8474c237ff97350874b6e436d452fb9dfc8";
     };
 
     buildInputs = with self; [nose];
@@ -18290,10 +18297,10 @@ let
     version = "1.10";
     name = "networkx-${version}";
 
-    # Currently broken on PyPy. 
+    # Currently broken on PyPy.
     # https://github.com/networkx/networkx/pull/1361
     disabled = isPyPy;
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/networkx/${name}.tar.gz";
       sha256 = "ced4095ab83b7451cec1172183eff419ed32e21397ea4e1971d92a5808ed6fb8";
