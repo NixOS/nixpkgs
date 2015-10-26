@@ -11664,7 +11664,7 @@ let
 
   gitAndTools = recurseIntoAttrs (callPackage ../applications/version-management/git-and-tools {});
 
-  inherit (gitAndTools) git gitFull gitSVN git-cola svn2git git-radar;
+  inherit (gitAndTools) git gitFull gitSVN git-cola svn2git git-radar transcrypt;
 
   gitMinimal = git.override {
     withManual = false;
