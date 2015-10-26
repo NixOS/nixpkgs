@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   # gcc-5.patch should be removed after 5.9
-  patches = [ ./gcc-5.patch ];
+  patches = [ ./clang.patch ./gcc-5.patch ];
 
   configureFlags = [
     "--with-shared"
