@@ -487,6 +487,10 @@ with stdenv.lib;
   BRCMFMAC_USB? y
   BRCMFMAC_PCIE? y
 
+  # Support x2APIC (which requires IRQ remapping).
+  X86_X2APIC y
+  IRQ_REMAP y
+
   ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}
 ''
