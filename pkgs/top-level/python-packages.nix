@@ -7480,12 +7480,12 @@ let
   };
 
   ipykernel = buildPythonPackage rec {
-    version = "4.0.3";
+    version = "4.1.1";
     name = "ipykernel-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipykernel/${name}.tar.gz";
-      sha256 = "a4d7d2d35a0af432c8391872cb4dae727d77031212f32ca858b5c84cd0ea821f";
+      sha256 = "d8c5555386d0f18f1336dea9800f9f0fe96dcecc9757c0f980e11fdfadb661ff";
     };
 
     buildInputs = with self; [] ++ optionals isPy27 [mock];
@@ -7789,12 +7789,12 @@ let
   };
 
   jupyter_client = buildPythonPackage rec {
-    version = "4.0.0";
+    version = "4.1.1";
     name = "jupyter_client-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jupyter_client/${name}.tar.gz";
-      sha256 = "a39a4181ea2021daf6e821acae836999ef6e0fefe603813a7a7d4658d2ffa2ac";
+      sha256 = "ff1ef5c6c3031a62db46ec6329867b4cb1595e6102a7819b3b5252b0c524bdb8";
     };
 
     propagatedBuildInputs = with self; [traitlets jupyter_core pyzmq] ++ optional isPyPy py;
@@ -9503,12 +9503,12 @@ let
   };
 
   notebook = buildPythonPackage rec {
-    version = "4.0.5";
+    version = "4.0.6";
     name = "notebook-${version}";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/n/notebook/${name}.tgz";
-      sha256 = "5ac716940cfd7612369ee177c0d7fc0eb888335b76dfcea17513cb5d5b4056a8";
+      url = "https://pypi.python.org/packages/source/n/notebook/${name}.tar.gz";
+      sha256 = "f62e7a6afbc00bab3615b927595d27b1874cff3218bddcbab62f97f6dae567c3";
     };
 
     buildInputs = with self; [nose]  ++ optionals isPy27 [mock];
@@ -13089,12 +13089,12 @@ let
   };
 
   qtconsole = buildPythonPackage rec {
-    version = "4.0.1";
+    version = "4.0.3";
     name = "qtconsole-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/q/qtconsole/${name}.tar.gz";
-      sha256 = "7d2cf976bb960df11f413709b5b5b809365c48426110e946d0c12117e6ced3a5";
+      sha256 = "555be6963a8f6431fbe1d424c7ffefee90824758058e4c9a2ab3aa045948eb85";
     };
 
     buildInputs = with self; [] ++ optionals isPy27 [mock];
