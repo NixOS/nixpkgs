@@ -12,8 +12,7 @@ stdenv.mkDerivation rec {
   makefile = "Makefile.linux";
 
   installPhase = ''
-    mkdir -p $out/bin/
-    cp mp3val $out/bin/
+    install -Dv mp3val "$out/bin/mp3val"
   '';
 
   meta = {
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://mp3val.sourceforge.net/index.shtml;
     license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.devhell ];
   };
 }
