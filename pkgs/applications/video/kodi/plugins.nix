@@ -59,13 +59,13 @@ in
 
     plugin = "genesis";
     namespace = "plugin.video.genesis";
-    version = "4.0.1";
+    version = "5.1.3";
 
     src = fetchFromGitHub {
       owner = "lambda81";
       repo = "lambda-addons";
-      rev = "34af083980598177684eeb6e1e73da336b84575a";
-      sha256 = "1fh3j4ymkrx9flpvnlyjp1q4avfmjv5a6yfwl3cmqnslkkp6kn9n";
+      rev = "f2cd04f33af88d60e1330573bbf2ef9cee7f0a56";
+      sha256 = "0z0ldckqqif9v5nhnjr5n2495cm3z9grjmrh7czl4xlnq4bvviqq";
     };
 
     meta = with stdenv.lib; {
