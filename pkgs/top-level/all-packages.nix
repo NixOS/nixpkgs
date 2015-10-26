@@ -7580,6 +7580,8 @@ let
 
   liquidfun = callPackage ../development/libraries/liquidfun { };
 
+  live555 = callPackage ../development/libraries/live555 { };
+
   log4cpp = callPackage ../development/libraries/log4cpp { };
 
   log4cxx = callPackage ../development/libraries/log4cxx { };
