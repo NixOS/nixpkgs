@@ -1,6 +1,5 @@
 { stdenv, fetchurl, libX11, libXtst, libXext, libXdamage, libXfixes,
-wineUnstable, makeWrapper, libXau , bash, patchelf, config,
-acceptLicense ? false }:
+wineUnstable, makeWrapper, libXau , patchelf, config }:
 
 with stdenv.lib;
 
@@ -30,22 +29,23 @@ stdenv.mkDerivation {
     rm -R $out/share/teamviewer/tv_bin/wine/{bin,lib,share}
 
     cat > $out/bin/teamviewer << EOF
-    #!${bash}/bin/sh
+    #!${stdenv.shell}
     export LD_LIBRARY_PATH=${toldpath}\''${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}
     export PATH=${topath}\''${PATH:+:\$PATH}
     $out/share/teamviewer/tv_bin/script/teamviewer "\$@"
     EOF
     chmod +x $out/bin/teamviewer
 
-    patchelf --set-rpath "${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib:${libX11}/lib:${libXext}/lib:${libXau}/lib:${libXdamage}/lib:${libXfixes}/lib" $out/share/teamviewer/tv_bin/teamviewerd
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/teamviewer/tv_bin/teamviewerd
     ln -s $out/share/teamviewer/tv_bin/teamviewerd $out/bin/
-    ${optionalString acceptLicense "
-      cat > $out/share/teamviewer/config/global.conf << EOF
-      [int32] EulaAccepted = 1
-      [int32] EulaAcceptedRevision = 6
-      EOF
-    "}
+    rm -rf  $out/share/teamviewer/logfiles $out/share/teamviewer/config
+    ln -sv /var/tmp/teamviewer10/logs/ $out/share/teamviewer/logfiles
+    ln -sv /var/tmp/teamviewer10/config/ $out/share/teamviewer/config
+  '';
+
+  # the fixupPhase undoes the rpath patch
+  postFixup = ''
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/teamviewer/tv_bin/teamviewerd
+    patchelf --set-rpath "${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib:${libX11}/lib:${libXext}/lib:${libXau}/lib:${libXdamage}/lib:${libXfixes}/lib" $out/share/teamviewer/tv_bin/teamviewerd
   '';
 
   meta = {

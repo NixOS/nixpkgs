@@ -29,6 +29,7 @@ in
 
       wantedBy = [ "graphical.target" ];
       after = [ "NetworkManager-wait-online.service" "network.target" ];
+      preStart = "mkdir -pv /var/tmp/teamviewer10/{logs,config}";
 
       serviceConfig = {
         Type = "forking";
