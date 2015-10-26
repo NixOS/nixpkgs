@@ -714,7 +714,7 @@ let
 
   bc = callPackage ../tools/misc/bc { };
 
-  bdf2psf = callPackage ../tools/misc/bdf2psf { };  
+  bdf2psf = callPackage ../tools/misc/bdf2psf { };
 
   bcache-tools = callPackage ../tools/filesystems/bcache-tools { };
 
@@ -6283,8 +6283,8 @@ let
   freealut = callPackage ../development/libraries/freealut { };
 
   freeglut = callPackage ../development/libraries/freeglut { };
-  
-  freenect = callPackage ../development/libraries/freenect { 
+
+  freenect = callPackage ../development/libraries/freenect {
       inherit (xorg) libXi libXmu;
   };
 
@@ -10796,6 +10796,8 @@ let
   audacity = callPackage ../applications/audio/audacity {
     ffmpeg = ffmpeg_0;
   };
+
+  audio-recorder = callPackage ../applications/audio/audio-recorder { };
 
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
