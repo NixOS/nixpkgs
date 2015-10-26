@@ -6633,11 +6633,12 @@ let
   };
 
   futures = buildPythonPackage rec {
-    name = "futures-3.0.2";
+    name = "futures-${version}";
+    version = "3.0.3";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/f/futures/${name}.tar.gz";
-      md5 = "42aaf1e4de48d6e871d77dc1f9d96d5a";
+      sha256 = "2fe2342bb4fe8b8e217f0d21b5921cbe5408bf966d9f92025e707e881b198bed";
     };
 
     meta = with pkgs.stdenv.lib; {
@@ -6646,6 +6647,7 @@ let
       license = licenses.bsd2;
       maintainers = with maintainers; [ garbas ];
     };
+    disabled = isPy3k;
   };
 
   gcovr = buildPythonPackage rec {
