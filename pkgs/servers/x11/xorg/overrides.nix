@@ -409,6 +409,12 @@ in
           wrapProgram $out/bin/Xephyr \
             --set XKB_BINDIR "${xorg.xkbcomp}/bin" \
             --add-flags "-xkbdir ${xorg.xkeyboardconfig}/share/X11/xkb"
+          ( # assert() keeps runtime reference xorgserver-dev in xf86-video-intel and others
+            cd "$dev"
+            for f in include/xorg/*.h; do
+              sed "1i#line 1 \"${attrs.name}/$f\"" -i "$f"
+            done
+          )
         '';
         passthru.version = version; # needed by virtualbox guest additions
       } else {
