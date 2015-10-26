@@ -3093,6 +3093,8 @@ let
 
   sshpass = callPackage ../tools/networking/sshpass { };
 
+  sslmate = callPackage ../development/tools/sslmate { };
+
   ssmtp = callPackage ../tools/networking/ssmtp {
     tlsSupport = true;
   };
