@@ -5515,7 +5515,7 @@ let
     };
   };
 
-  django = self.django_1_7;
+  django = self.django_1_8;
 
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
@@ -5695,7 +5695,7 @@ let
     };
   };
 
-  django_evolution = buildPythonPackage rec {
+  django_evolution = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
     name = "django_evolution-0.6.9";
     disabled = isPy3k;
 
@@ -5704,16 +5704,16 @@ let
       md5 = "c0d7d10bc41898c88b14d434c48766ff";
     };
 
-    propagatedBuildInputs = with self; [ django_1_5 ];
+    propagatedBuildInputs = [ django ];
 
     meta = {
       description = "A database schema evolution tool for the Django web framework";
       homepage = http://code.google.com/p/django-evolution/;
     };
-  };
+  }) {};
 
 
-  django_tagging = buildPythonPackage rec {
+  django_tagging = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
     name = "django-tagging-0.3.1";
 
     src = pkgs.fetchurl {
@@ -5724,16 +5724,16 @@ let
     # error: invalid command 'test'
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ django_1_3 ];
+    propagatedBuildInputs = [ django ];
 
     meta = {
       description = "A generic tagging application for Django projects";
       homepage = http://code.google.com/p/django-tagging/;
     };
-  };
+  }) {};
 
 
-  django_classytags = buildPythonPackage rec {
+  django_classytags = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
     name = "django-classy-tags-${version}";
     version = "0.6.1";
 
@@ -5743,7 +5743,7 @@ let
       sha256 = "0wxvpmjdzk0aajk33y4himn3wqjx7k0aqlka9j8ay3yfav78bdq0";
     };
 
-    propagatedBuildInputs = with self; [ django_1_7 ];
+    propagatedBuildInputs = [ django ];
 
     # tests appear to be broken on 0.6.1 at least
     doCheck = ( version != "0.6.1" );
@@ -5753,7 +5753,7 @@ let
       homepage = https://github.com/ojii/django-classy-tags;
       license = licenses.bsd3;
     };
-  };
+  }) {};
 
   django_modelcluster = buildPythonPackage rec {
     name = "django-modelcluster-${version}";
@@ -5774,7 +5774,7 @@ let
     };
   };
 
-  djangorestframework = buildPythonPackage rec {
+  djangorestframework = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
     name = "djangorestframework-${version}";
     version = "3.2.3";
 
@@ -5783,7 +5783,7 @@ let
       sha256 = "06kp4hg3y4bqy2ixlb1q6bw81gwgsb86l4lanbav7bp1grrbbnj1";
     };
 
-    propagatedBuildInputs = with self; [ django ];
+    propagatedBuildInputs = [ django ];
 
     meta = {
       description = "Web APIs for Django, made easy";
@@ -5791,9 +5791,9 @@ let
       maintainers = with maintainers; [ desiderius ];
       license = licenses.bsd2;
     };
-  };
+  }) {};
 
-  django_reversion = buildPythonPackage rec {
+  django_reversion = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
     name = "django-reversion-${version}";
     version = "1.8.5";
 
@@ -5803,15 +5803,15 @@ let
       sha256 = "0z8fxvxgbxfnalr5br74rsw6g42nry2q656rx7rsgmicd8n42v2r";
     };
 
-    propagatedBuildInputs = with self; [ django_1_7 ] ++
-      (optionals (pythonOlder "2.7") [ importlib ordereddict ]);
+    propagatedBuildInputs = [ django ] ++
+      (with self; (optionals (pythonOlder "2.7") [ importlib ordereddict ]));
 
     meta = {
       description = "An extension to the Django web framework that provides comprehensive version control facilities";
       homepage = https://github.com/etianen/django-reversion;
       license = licenses.bsd3;
     };
-  };
+  }) {};
 
   django_taggit = buildPythonPackage rec {
     name = "django-taggit-${version}";
@@ -5831,7 +5831,7 @@ let
     };
   };
 
-  django_treebeard = buildPythonPackage rec {
+  django_treebeard = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
     name = "django-treebeard-${version}";
     version = "3.0";
 
@@ -5840,7 +5840,7 @@ let
       sha256 = "10p9rb2m1zccszg7590fjd0in6rabzsh86f5m7qm369mapc3b6dc";
     };
 
-    propagatedBuildInputs = with self; [ django pytest ];
+    propagatedBuildInputs = [ django self.pytest ];
 
     meta = {
       description = "Efficient tree implementations for Django 1.6+";
@@ -5848,9 +5848,9 @@ let
       maintainers = with maintainers; [ desiderius ];
       license = licenses.asl20;
     };
-  };
+  }) {};
 
-  django_pipeline = buildPythonPackage rec {
+  django_pipeline = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
     name = "django-pipeline-${version}";
     version = "1.5.1";
 
@@ -5860,17 +5860,17 @@ let
       sha256 = "1y49fa8jj7x9qjj5wzhns3zxwj0s73sggvkrv660cqw5qb7d8hha";
     };
 
-    propagatedBuildInputs = with self; [ django futures ];
+    propagatedBuildInputs = [ django self.futures ];
 
     meta = with stdenv.lib; {
       description = "Pipeline is an asset packaging library for Django.";
       homepage = https://github.com/cyberdelia/django-pipeline;
       license = stdenv.lib.licenses.mit;
     };
-  };
+  }) {};
 
 
-  djblets = buildPythonPackage rec {
+  djblets = makeOverridable ({ django ? self.django_1_3 }: buildPythonPackage rec {
     name = "Djblets-0.6.28";
 
     src = pkgs.fetchurl {
@@ -5878,13 +5878,13 @@ let
       sha256 = "11fsi911cqkjgv9j7646ljc2fgxsdfyq44kzmv01xhysm50fn6xx";
     };
 
-    propagatedBuildInputs = with self; [ pil django_1_3 feedparser ];
+    propagatedBuildInputs = [ django self.pil self.feedparser ];
 
     meta = {
       description = "A collection of useful extensions for Django";
       homepage = https://github.com/djblets/djblets;
     };
-  };
+  }) {};
 
 
   dulwich = buildPythonPackage rec {
@@ -13237,7 +13237,7 @@ let
 
     propagatedBuildInputs = with self;
       [ django_1_3 recaptcha_client pytz memcached dateutil_1_5 paramiko flup pygments
-        djblets django_evolution pycrypto modules.sqlite3
+        djblets (django_evolution.override { django = django_1_3; }) pycrypto modules.sqlite3
         pysvn pil psycopg2
       ];
   };
@@ -17411,7 +17411,7 @@ let
       md5 = "8edbb61f1ffe11c181bd2cb9ec977c72";
     };
 
-    propagatedBuildInputs = with self; [ django_1_3 django_tagging modules.sqlite3 whisper pkgs.pycairo ldap memcached ];
+    propagatedBuildInputs = with self; [ django_1_3 (django_tagging.override { django = django_1_3; }) modules.sqlite3 whisper pkgs.pycairo ldap memcached ];
 
     postInstall = ''
       wrapProgram $out/bin/run-graphite-devel-server.py \
