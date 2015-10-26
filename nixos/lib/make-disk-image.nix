@@ -110,7 +110,7 @@ pkgs.vmTools.runInLinuxVM (
       umount /mnt/proc /mnt/dev /mnt/sys
       umount /mnt
 
-      # Do an fsck to make sure resize2fs works.
+      # Do a fsck to make sure resize2fs works.
       fsck.${fsType} -f -y $rootDisk
     ''
 )
