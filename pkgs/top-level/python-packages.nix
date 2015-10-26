@@ -7789,12 +7789,12 @@ let
   };
 
   jupyter_client = buildPythonPackage rec {
-    version = "4.0.0";
+    version = "4.1.1";
     name = "jupyter_client-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jupyter_client/${name}.tar.gz";
-      sha256 = "a39a4181ea2021daf6e821acae836999ef6e0fefe603813a7a7d4658d2ffa2ac";
+      sha256 = "ff1ef5c6c3031a62db46ec6329867b4cb1595e6102a7819b3b5252b0c524bdb8";
     };
 
     propagatedBuildInputs = with self; [traitlets jupyter_core pyzmq] ++ optional isPyPy py;
