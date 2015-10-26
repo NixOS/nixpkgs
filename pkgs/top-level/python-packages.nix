@@ -6391,22 +6391,15 @@ let
   };
 
   flake8 = buildPythonPackage (rec {
-    name = "flake8-2.4.1";
+    name = "flake8-2.5.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/f/flake8/${name}.tar.gz";
-      sha256 = "0dvmrpv7x98xkzffjz1z7lqr90sp5zdz16bdwckfd1cckpjvnzif";
+      sha256 = "137qwipa4z6z8z7n0zg7kg6qi3348l8ck6zqa4yyjah9xv3ch5l2";
     };
 
     buildInputs = with self; [ nose mock ];
     propagatedBuildInputs = with self; [ pyflakes pep8 mccabe ];
-
-    # tests fail due to outdated mock
-    doCheck = false;
-    # requires old pyflakes for no reason
-    preBuild = ''
-      sed -i 's/.*"pyflakes.*/   "pyflakes",/' setup.py
-    '';
 
     meta = {
       description = "Code checking using pep8 and pyflakes";
