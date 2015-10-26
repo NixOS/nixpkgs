@@ -2,6 +2,7 @@
 , buildPythonPackage, pythonPackages, python, imagemagick
 
 , enableAcoustid   ? true
+, enableBadfiles   ? true, flac ? null, mp3val ? null
 , enableDiscogs    ? true
 , enableEchonest   ? true
 , enableFetchart   ? true
@@ -15,6 +16,7 @@
 }:
 
 assert enableAcoustid    -> pythonPackages.pyacoustid     != null;
+assert enableBadfiles    -> flac != null && mp3val != null;
 assert enableDiscogs     -> pythonPackages.discogs_client != null;
 assert enableEchonest    -> pythonPackages.pyechonest     != null;
 assert enableFetchart    -> pythonPackages.responses      != null;
@@ -28,6 +30,7 @@ with stdenv.lib;
 
 let
   optionalPlugins = {
+    badfiles = enableBadfiles;
     chroma = enableAcoustid;
     discogs = enableDiscogs;
     echonest = enableEchonest;
@@ -42,10 +45,10 @@ let
   };
 
   pluginsWithoutDeps = [
-    "badfiles" "bench" "bpd" "bpm" "bucket" "convert" "cue" "duplicates"
-    "embedart" "filefilter" "freedesktop" "fromfilename" "ftintitle" "fuzzy"
-    "ihate" "importadded" "importfeeds" "info" "inline" "ipfs" "keyfinder"
-    "lyrics" "mbcollection" "mbsync" "metasync" "missing" "permissions" "play"
+    "bench" "bpd" "bpm" "bucket" "convert" "cue" "duplicates" "embedart"
+    "filefilter" "freedesktop" "fromfilename" "ftintitle" "fuzzy" "ihate"
+    "importadded" "importfeeds" "info" "inline" "ipfs" "keyfinder" "lyrics"
+    "mbcollection" "mbsync" "metasync" "missing" "permissions" "play"
     "plexupdate" "random" "rewrite" "scrub" "smartplaylist" "spotify" "the"
     "types" "zero"
   ];
@@ -111,6 +114,11 @@ in buildPythonPackage rec {
     sed -i -e '/^BASH_COMPLETION_PATHS *=/,/^])$/ {
       /^])$/i u"${completion}"
     }' beets/ui/commands.py
+  '' + optionalString enableBadfiles ''
+    sed -i -e '/self\.run_command(\[/ {
+      s,"flac","${flac}/bin/flac",
+      s,"mp3val","${mp3val}/bin/mp3val",
+    }' beetsplug/badfiles.py
   '';
 
   doCheck = true;
