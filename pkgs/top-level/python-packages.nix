@@ -7480,12 +7480,12 @@ let
   };
 
   ipykernel = buildPythonPackage rec {
-    version = "4.0.3";
+    version = "4.1.1";
     name = "ipykernel-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipykernel/${name}.tar.gz";
-      sha256 = "a4d7d2d35a0af432c8391872cb4dae727d77031212f32ca858b5c84cd0ea821f";
+      sha256 = "d8c5555386d0f18f1336dea9800f9f0fe96dcecc9757c0f980e11fdfadb661ff";
     };
 
     buildInputs = with self; [] ++ optionals isPy27 [mock];
