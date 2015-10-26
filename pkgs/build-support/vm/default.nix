@@ -1837,6 +1837,7 @@ rec {
     "bzip2"
     "tar"
     "grep"
+    "mawk"
     "sed"
     "findutils"
     "g++"
