@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     sed -i 's|/bin/cat|cat|' ./src/repository.cpp
     qmake
-    make CXXFLAGS='-I${apr}/include/apr-1 -I${subversion}/include/subversion-1 -DVER="\"${src.rev}\""'
+    make CXXFLAGS='-I${apr}/include/apr-1 -I${subversion.dev}/include/subversion-1 -DVER="\"${src.rev}\""'
   '';
 
   installPhase = ''

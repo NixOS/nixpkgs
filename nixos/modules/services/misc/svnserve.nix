@@ -40,7 +40,7 @@ in
 
       preStart = "mkdir -p ${cfg.svnBaseDir}";
 
-      exec = "${pkgs.subversion}/bin/svnserve -r ${cfg.svnBaseDir} -d --foreground --pid-file=/var/run/svnserve.pid";
+      exec = "${pkgs.subversion.out}/bin/svnserve -r ${cfg.svnBaseDir} -d --foreground --pid-file=/var/run/svnserve.pid";
     };
   };
 }

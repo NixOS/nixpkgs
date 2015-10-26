@@ -12351,9 +12351,11 @@ let
       cd Source
       python setup.py backport
       python setup.py configure \
-        --apr-inc-dir=${pkgs.apr}/include/apr-1 \
-        --apu-inc-dir=${pkgs.aprutil}/include/apr-1 \
-        --apr-lib-dir=${pkgs.apr}/lib \
+        --apr-inc-dir=${pkgs.apr.dev}/include \
+        --apu-inc-dir=${pkgs.aprutil.dev}/include \
+        --apr-lib-dir=${pkgs.apr.out}/lib \
+        --svn-lib-dir=${pkgs.subversion.out}/lib \
+        --svn-bin-dir=${pkgs.subversion.out}/bin \
         --svn-root-dir=${pkgs.subversion}
     '' + (if !stdenv.isDarwin then "" else ''
       sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
