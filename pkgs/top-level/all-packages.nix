@@ -3096,6 +3096,8 @@ let
 
   sslscan = callPackage ../tools/security/sslscan { };
 
+  sslmate = callPackage ../development/tools/sslmate { };
+
   ssmtp = callPackage ../tools/networking/ssmtp {
     tlsSupport = true;
   };
