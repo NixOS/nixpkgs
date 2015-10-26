@@ -12257,6 +12257,8 @@ let
 
   mp3splt = callPackage ../applications/audio/mp3splt { };
 
+  mp3val = callPackage ../applications/audio/mp3val { };
+
   mpc123 = callPackage ../applications/audio/mpc123 { };
 
   mpg123 = callPackage ../applications/audio/mpg123 { };
