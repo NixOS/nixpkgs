@@ -59,11 +59,14 @@ let
         local dest="$out/Library/Frameworks/$path"
         local name="$(basename "$path" .framework)"
         local current="$(readlink "/System/Library/Frameworks/$path/Versions/Current")"
+        if [ -z "$current" ]; then
+          current=A
+        fi
 
         mkdir -p "$dest"
         pushd "$dest" >/dev/null
 
-        ln -s "${sdk}/Library/Frameworks/$path/Versions/$current/Headers"
+        cp -R "${sdk}/Library/Frameworks/$path/Versions/$current/Headers" .
         ln -s -L "/System/Library/Frameworks/$path/Versions/$current/$name"
         ln -s -L "/System/Library/Frameworks/$path/Versions/$current/Resources"
 
@@ -157,13 +160,6 @@ in rec {
         f="$out/Library/Frameworks/QuartzCore.framework/Headers/CoreImage.h"
         substituteInPlace "$f" \
           --replace "QuartzCore/../Frameworks/CoreImage.framework/Headers" "CoreImage"
-
-        # CoreImage.framework's location varies by OSX version
-        for linkedFile in "$out/Library/Frameworks/QuartzCore.framework/Frameworks/CoreImage.framework"/*; do
-          link=$(readlink "$linkedFile" | sed 's,//,/A/,')
-          rm "$linkedFile"
-          ln -s "$link" "$linkedFile"
-        done
       '';
     });
   };
