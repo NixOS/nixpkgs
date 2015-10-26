@@ -9482,12 +9482,12 @@ let
   };
 
   notebook = buildPythonPackage rec {
-    version = "4.0.5";
+    version = "4.0.6";
     name = "notebook-${version}";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/n/notebook/${name}.tgz";
-      sha256 = "5ac716940cfd7612369ee177c0d7fc0eb888335b76dfcea17513cb5d5b4056a8";
+      url = "https://pypi.python.org/packages/source/n/notebook/${name}.tar.gz";
+      sha256 = "f62e7a6afbc00bab3615b927595d27b1874cff3218bddcbab62f97f6dae567c3";
     };
 
     buildInputs = with self; [nose]  ++ optionals isPy27 [mock];
