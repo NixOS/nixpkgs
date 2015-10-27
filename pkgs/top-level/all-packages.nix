@@ -125,13 +125,7 @@ let
   # The package compositions.  Yes, this isn't properly indented.
   pkgsFun = pkgs: overrides:
     with helperFunctions;
-    let
-      # on darwin, put os-specific packages first so they can be overridden by the ones
-      # defined here (e.g. libiconv)
-      defaultScope = if pkgs.stdenv.isDarwin
-        then with pkgs.darwin; apple_sdk.frameworks // apple_sdk.libs // pkgs.darwin // pkgs // pkgs.xorg
-        else pkgs // pkgs.xorg;
-      self = self_ // overrides;
+    let defaultScope = pkgs // pkgs.xorg; self = self_ // overrides;
     self_ = with self; helperFunctions // {
 
   # Make some arguments passed to all-packages.nix available
@@ -2056,6 +2050,7 @@ let
 
   nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix {
     libtool = darwin.cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices Carbon Foundation;
   };
 
   nodejs = if stdenv.system == "armv5tel-linux" then
@@ -4078,9 +4073,13 @@ let
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
-  go_1_4 = callPackage ../development/compilers/go/1.4.nix {};
+  go_1_4 = callPackage ../development/compilers/go/1.4.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
-  go_1_5 = callPackage ../development/compilers/go/1.5.nix {};
+  go_1_5 = callPackage ../development/compilers/go/1.5.nix {
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  };
 
   go = go_1_5;
 
@@ -5093,6 +5092,7 @@ let
   };
   python27 = callPackage ../development/interpreters/python/2.7 {
     self = python27;
+    inherit (darwin) CF configd;
   };
   python32 = callPackage ../development/interpreters/python/3.2 {
     self = python32;
@@ -5101,9 +5101,11 @@ let
     self = python33;
   };
   python34 = hiPrio (callPackage ../development/interpreters/python/3.4 {
+    inherit (darwin) CF configd;
     self = python34;
   });
   python35 = hiPrio (callPackage ../development/interpreters/python/3.5 {
+    inherit (darwin) CF configd;
     self = python35;
   });
   pypy = callPackage ../development/interpreters/pypy {
@@ -6762,7 +6764,9 @@ let
 
   kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
 
-  krb5Full = callPackage ../development/libraries/kerberos/krb5.nix {};
+  krb5Full = callPackage ../development/libraries/kerberos/krb5.nix {
+    inherit (darwin) bootstrap_cmds;
+  };
   libkrb5 = krb5Full.override { type = "lib"; };
 
   LASzip = callPackage ../development/libraries/LASzip { };
@@ -6918,7 +6922,9 @@ let
 
   libdc1394avt = callPackage ../development/libraries/libdc1394avt { };
 
-  libdevil = callPackage ../development/libraries/libdevil {};
+  libdevil = callPackage ../development/libraries/libdevil {
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
+  };
 
   libdevil-nox = libdevil.override {
     libX11 = null;
@@ -7124,7 +7130,11 @@ let
   libmsgpack = callPackage ../development/libraries/libmsgpack { };
   libmsgpack_0_5 = callPackage ../development/libraries/libmsgpack/0.5.nix { };
 
-  libnatspec = callPackage ../development/libraries/libnatspec {};
+  libnatspec = callPackage ../development/libraries/libnatspec (
+    stdenv.lib.optionalAttrs stdenv.isDarwin {
+      inherit (darwin) libiconv;
+    }
+  );
 
   libndp = callPackage ../development/libraries/libndp { };
 
@@ -7461,7 +7471,9 @@ let
 
   libusb = callPackage ../development/libraries/libusb {};
 
-  libusb1 = callPackage ../development/libraries/libusb1 {};
+  libusb1 = callPackage ../development/libraries/libusb1 {
+    inherit (darwin) libobjc IOKit;
+  };
 
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
 
@@ -7471,6 +7483,7 @@ let
 
   libuvVersions = recurseIntoAttrs (callPackage ../development/libraries/libuv {
     automake = automake113x; # fails with 14
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   });
 
   libuv = libuvVersions.v1_7_5;
@@ -9427,6 +9440,9 @@ let
   xquartz = callPackage ../servers/x11/xquartz { };
   quartz-wm = callPackage ../servers/x11/quartz-wm {
     stdenv = clangStdenv;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+    inherit (darwin.apple_sdk.libs) Xplugin;
+    inherit (darwin) libobjc cf-private;
   };
 
   xorg = recurseIntoAttrs (lib.callPackagesWith pkgs ../servers/x11/xorg/default.nix {
@@ -9434,7 +9450,8 @@ let
       libxslt expat libpng zlib perl mesa_drivers spice_protocol libunwind
       dbus libuuid openssl gperf m4 libevdev tradcpp libinput mcpp makeWrapper autoreconfHook
       autoconf automake libtool xmlto asciidoc flex bison python mtdev pixman;
-    inherit (darwin) apple_sdk bootstrap_cmds cf-private libobjc;
+    inherit (darwin) apple_sdk cf-private libobjc;
+    bootstrap_cmds = if stdenv.isDarwin then darwin.bootstrap_cmds else null;
     mesa = mesa_noglu;
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
@@ -9555,9 +9572,7 @@ let
 
   darwin = let
     cmdline = callPackage ../os-specific/darwin/command-line-tools {};
-    apple-source-releases = import ../os-specific/darwin/apple-source-releases {
-      inherit stdenv fetchurl pkgs;
-    };
+    apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
   in apple-source-releases // rec {
     cctools_cross = callPackage (forceNativeDrv (callPackage ../os-specific/darwin/cctools/port.nix {}).cross) {
       cross = assert crossSystem != null; crossSystem;
@@ -9583,7 +9598,7 @@ let
     osx_sdk = callPackage ../os-specific/darwin/osx-sdk {};
     osx_private_sdk = callPackage ../os-specific/darwin/osx-private-sdk {};
 
-    security_tool = callPackage ../os-specific/darwin/security-tool {
+    security_tool = (newScope (darwin.apple_sdk.frameworks // darwin)) ../os-specific/darwin/security-tool {
       Security-framework = darwin.apple_sdk.frameworks.Security;
     };
 
@@ -9592,8 +9607,7 @@ let
     cmdline_sdk   = cmdline.sdk;
     cmdline_tools = cmdline.tools;
 
-    apple_sdk = import ../os-specific/darwin/apple-sdk {
-      inherit stdenv fetchurl xar gzip cpio pkgs;
+    apple_sdk = callPackage ../os-specific/darwin/apple-sdk {
       inherit (darwin) CF;
     };
 
@@ -9601,7 +9615,10 @@ let
   };
 
   gnustep-make = callPackage ../development/tools/build-managers/gnustep/make {};
-  gnustep-xcode = callPackage ../development/tools/build-managers/gnustep/xcode {};
+  gnustep-xcode = callPackage ../development/tools/build-managers/gnustep/xcode {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+    inherit (darwin) libobjc;
+  };
 
   devicemapper = lvm2;
 
@@ -11235,6 +11252,8 @@ let
     imagemagick = null;
     acl = null;
     gpm = null;
+    inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
+    inherit (darwin) libobjc;
   };
 
   emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
@@ -11249,8 +11268,9 @@ let
   emacs24Macport_24_4 = lowPrio (callPackage ../applications/editors/emacs-24/macport-24.4.nix {
     stdenv = pkgs.clangStdenv;
   });
-  emacs24Macport_24_5 = lowPrio (callPackage ../applications/editors/emacs-24/macport-24.5.nix {
+  emacs24Macport_24_5 = lowPrio (newScope darwin.apple_sdk.frameworks ../applications/editors/emacs-24/macport-24.5.nix {
     stdenv = pkgs.clangStdenv;
+    inherit (darwin) libobjc cf-private;
   });
   emacs24Macport = self.emacs24Macport_24_5;
 
@@ -12161,6 +12181,8 @@ let
 
   mercurial = callPackage ../applications/version-management/mercurial {
     inherit (pythonPackages) curses docutils hg-git dulwich;
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+    inherit (darwin) cf-private;
     guiSupport = false; # use mercurialFull to get hgk GUI
   };
 
@@ -13139,13 +13161,18 @@ let
     flup = pythonPackages.flup;
   };
 
-  vim = callPackage ../applications/editors/vim {};
+  vim = callPackage ../applications/editors/vim {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Foundation CoreData;
+    inherit (darwin) libobjc cf-private;
+  };
 
   macvim = callPackage ../applications/editors/vim/macvim.nix { stdenv = clangStdenv; };
 
   vimHugeX = vim_configurable;
 
   vim_configurable = vimUtils.makeCustomizable (callPackage ../applications/editors/vim/configurable.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Foundation CoreData;
+    inherit (darwin) libobjc cf-private;
 
     features = "huge"; # one of  tiny, small, normal, big or huge
     lua = pkgs.lua5_1;
@@ -13244,7 +13271,9 @@ let
     graphicsSupport = false;
   };
 
-  weechat = callPackage ../applications/networking/irc/weechat {};
+  weechat = callPackage ../applications/networking/irc/weechat {
+    inherit (darwin) libobjc;
+  };
 
   westonLite = callPackage ../applications/window-managers/weston {
     pango = null;
