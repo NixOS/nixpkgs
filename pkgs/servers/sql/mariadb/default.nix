@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    cmake ncurses openssl zlib xz lzo lz4 bzip2 snappy
+    cmake ncurses openssl zlib xz lzo lz4 bzip2
+    # temporary due to https://mariadb.atlassian.net/browse/MDEV-9000
+    (if stdenv.is64bit then snappy else null)
     pcre libxml2 boost judy bison libevent cracklib
   ] ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio systemd numactl ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames ];
