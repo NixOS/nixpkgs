@@ -327,7 +327,15 @@ in
         '';
         passthru.version = version; # needed by virtualbox guest additions
       } else {
-        buildInputs = commonBuildInputs ++ [ args.bootstrap_cmds args.automake args.autoconf ];
+        buildInputs = commonBuildInputs ++ [
+          args.bootstrap_cmds args.automake args.autoconf
+          args.apple_sdk.libs.Xplugin
+          args.apple_sdk.frameworks.Carbon
+          args.apple_sdk.frameworks.Cocoa
+          args.apple_sdk.frameworks.CoreGraphics
+          args.apple_sdk.frameworks.Foundation
+          args.cf-private args.libobjc
+        ];
         propagatedBuildInputs = commonPropagatedBuildInputs ++ [
           libAppleWM applewmproto
         ];
@@ -357,6 +365,7 @@ in
         preConfigure = ''
           ensureDir $out/Applications
           export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error"
+          substituteInPlace hw/xquartz/pbproxy/Makefile.in --replace -F/System -F${args.apple_sdk.frameworks.ApplicationServices}
         '';
         postInstall = ''
           rm -fr $out/share/X11/xkb/compiled

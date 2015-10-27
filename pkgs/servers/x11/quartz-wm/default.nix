@@ -19,8 +19,7 @@ in stdenv.mkDerivation {
     xorg.libXext
     pixman
     pkgconfig
-    Foundation libobjc Xplugin
-    cf-private
+    Foundation libobjc Xplugin cf-private
   ];
   meta = with lib; {
     license = licenses.apsl20;
