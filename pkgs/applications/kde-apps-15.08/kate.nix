@@ -58,6 +58,10 @@ kdeApp {
     kwindowsystem
     plasma-framework
   ];
+  postInstall = ''
+    wrapQtProgram "$out/bin/kate"
+    wrapQtProgram "$out/bin/kwrite"
+  '';
   meta = {
     license = with lib.licenses; [ gpl3 lgpl3 lgpl2 ];
     maintainers = [ lib.maintainers.ttuegel ];
