@@ -1,0 +1,14 @@
+intercept-commands-for-playback() {
+  local bin="$PWD/.record-playback/bin"
+  local dir
+
+  mkdir -p "$bin"
+
+  for dir in "$src"/.record-playback/*; do
+    ln -s @out@/bin/playback-command "$bin/$(basename "$dir")"
+  done
+
+  export PATH="$bin${PATH:+:}$PATH"
+}
+
+intercept-commands-for-playback

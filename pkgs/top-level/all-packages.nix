@@ -324,6 +324,10 @@ let
 
   fetchgitPrivate = callPackage ../build-support/fetchgit/private.nix { };
 
+  fetchgitRecord = callPackage ../build-support/fetchgit/record.nix { };
+
+  record-playback = callPackage ../build-support/record-playback { };
+
   fetchgitrevision = import ../build-support/fetchgitrevision runCommand git;
 
   fetchgitLocal = callPackage ../build-support/fetchgitlocal { };

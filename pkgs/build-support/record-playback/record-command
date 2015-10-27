@@ -1,0 +1,24 @@
+#! /bin/sh
+
+if [ "$1" = "--playback" ]; then
+  shift
+  PLAYBACK=1
+fi
+
+cmd="$1"; shift
+shortargs="$(printf %s "$*" | tr -d '[:space:]')"
+dir=".record-playback/$cmd/$shortargs"
+
+if [ -n "$PLAYBACK" ]; then
+  printf "playing back \`%s %s' from %s...\n" "$cmd" "$*" "$dir" >&2
+  (exec cat "$dir"/stdout) &
+  (exec cat "$dir"/stderr >&2) &
+  wait
+  exit "$(cat "$dir"/exitval)"
+else
+  printf "recording \`%s %s' in %s...\n" "$cmd" "$*" "$dir" >&2
+  mkdir -p "$dir"
+  exitval=0
+  "$cmd" "$@" 1>"$dir"/stdout 2>"$dir"/stderr || exitval="$?"
+  printf %s "$exitval" >"$dir"/exitval
+fi

@@ -1,0 +1,2 @@
+#! /bin/sh
+exec record-command --playback "$(basename "$0")" "$@"
