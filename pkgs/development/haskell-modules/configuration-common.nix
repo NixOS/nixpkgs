@@ -183,13 +183,17 @@ self: super: {
   # https://github.com/haskell/vector/issues/47
   vector = if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector;
 
+  halive = if pkgs.stdenv.isDarwin
+    then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
+    else super.halive;
+
   # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
   # on darwin: https://github.com/NixOS/cabal2nix/issues/146.
   hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;
 
   # hfsevents needs CoreServices in scope
   hfsevents = if pkgs.stdenv.isDarwin
-    then addBuildTool super.hfsevents pkgs.darwin.apple_sdk.frameworks.CoreServices
+    then with pkgs.darwin.apple_sdk.frameworks; addBuildTool (addBuildDepends super.hfsevents [Cocoa]) CoreServices
     else super.hfsevents;
 
   # FSEvents API is very buggy and tests are unreliable. See
