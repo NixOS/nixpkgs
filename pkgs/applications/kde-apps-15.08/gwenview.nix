@@ -2,6 +2,7 @@
 , lib
 , extra-cmake-modules
 , kdoctools
+, makeQtWrapper
 , baloo
 , exiv2
 , kactivities
@@ -18,6 +19,7 @@ kdeApp {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
+    makeQtWrapper
   ];
   buildInputs = [
     exiv2
@@ -32,6 +34,9 @@ kdeApp {
     kio
     qtx11extras
   ];
+  postInstall = ''
+    wrapQtProgram "$out/bin/gwenview"
+  '';
   meta = {
     license = with lib.licenses; [ gpl2 fdl12 ];
     maintainers = [ lib.maintainers.ttuegel ];
