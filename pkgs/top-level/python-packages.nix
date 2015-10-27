@@ -3546,11 +3546,11 @@ let
   };
 
   elasticsearch = buildPythonPackage (rec {
-    name = "elasticsearch-1.6.0";
+    name = "elasticsearch-1.9.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/e/elasticsearch/${name}.tar.gz";
-      sha256 = "1b0b5d1qp77r83r130kb2ikhd6am0d1389rdcllr1xsajrp5kj4h";
+      sha256 = "091s60ziwhyl9kjfm833i86rcpjx46v9h16jkgjgkk5441dln3gb";
     };
 
     # Check is disabled because running them destroy the content of the local cluster!
@@ -3561,6 +3561,7 @@ let
       description = "Official low-level client for Elasticsearch";
       homepage = https://github.com/elasticsearch/elasticsearch-py;
       license = licenses.asl20;
+      maintainers = with maintainers; [ desiderius ];
     };
   });
 
