@@ -69,7 +69,7 @@ let
     kguiaddons = callPackage ./kguiaddons.nix {};
     khtml = callPackage ./khtml.nix {};
     ki18n = callPackage ./ki18n.nix {};
-    kiconthemes = callPackage ./kiconthemes.nix {};
+    kiconthemes = callPackage ./kiconthemes {};
     kidletime = callPackage ./kidletime.nix {};
     kimageformats = callPackage ./kimageformats.nix {};
     kinit = callPackage ./kinit {};
