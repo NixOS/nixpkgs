@@ -6331,7 +6331,11 @@ let
 
   gettext = callPackage ../development/libraries/gettext { };
 
-  gettextWithExpat = callPackage ../development/libraries/gettext/expat.nix { };
+  gettextWithExpat = if stdenv.isDarwin
+    then gettext.overrideDerivation (drv: {
+      configureFlags = drv.configureFlags ++ [ "--with-libexpat-prefix=${expat}" ];
+    })
+    else callPackage ../development/libraries/gettext/expat.nix { };
 
   gd = callPackage ../development/libraries/gd { };
 
