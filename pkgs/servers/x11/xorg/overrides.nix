@@ -94,7 +94,10 @@ in
   };
 
   libAppleWM = attrs: attrs // {
-    propagatedBuildInputs = [ args.apple_sdk.frameworks.ApplicationServices ];
+    buildInputs = attrs.buildInputs ++ [ args.apple_sdk.frameworks.ApplicationServices ];
+    preConfigure = ''
+      substituteInPlace src/Makefile.in --replace -F/System -F${args.apple_sdk.frameworks.ApplicationServices}
+    '';
   };
 
   libXfont = attrs: attrs // {
