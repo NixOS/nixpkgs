@@ -12937,17 +12937,14 @@ let
   reportlab =
    let freetype = overrideDerivation pkgs.freetype (args: { configureFlags = "--enable-static --enable-shared"; });
    in buildPythonPackage rec {
-    name = "reportlab-3.1.8";
+    name = "reportlab-3.2.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/r/reportlab/${name}.tar.gz";
-      md5 = "820a9fda647078503597b85cdba7ed7f";
+      sha256 = "14v212cq2w3p0j5xydfr8rav8c8qas1q845r0xj7fm6q5dk8grkj";
     };
 
-    buildInputs = with self; [freetype];
-
-    # error: invalid command 'test'
-    doCheck = false;
+    buildInputs = with self; [ freetype pillow pip ];
 
     meta = {
       description = "An Open Source Python library for generating PDFs and graphics";
