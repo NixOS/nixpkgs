@@ -483,7 +483,7 @@ let
       md5 = "17e5668601a2322aff41548cb957e7c8";
     };
 
-    buildInputs = with self; [ ];
+    buildInputs = with self; [ pytest ];
 
     meta = {
       description = "namespace control and lazy-import mechanism";
@@ -1458,7 +1458,8 @@ let
       url = "http://github.com/jsocol/bleach/archive/${version}.tar.gz";
       sha256 = "19v0zhvchz89w179rwkc4ah3cj2gbcng9alwa2yla89691g8b0b0";
     };
-
+    
+    buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ six html5lib ];
 
     meta = {
@@ -10069,6 +10070,7 @@ let
       sha256 = "1g9imbg4sjfyv5sqg2s7h4svhdmbnvq16hvc1a8jpaqq8nc2vjj2";
     };
 
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ jdcal ];
 
     meta = {
@@ -11003,7 +11005,7 @@ let
     };
 
     buildInputs = with self; [
-      dns pycountry nose
+      dnspython3 pycountry nose
     ];
 
     preCheck = ''
@@ -11469,6 +11471,7 @@ let
       md5 = "7545518b413136ba8343dcebea07e5e2";
     };
 
+    buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [six numpy];
 
     meta = {
