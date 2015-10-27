@@ -13086,12 +13086,12 @@ let
   };
 
   qtconsole = buildPythonPackage rec {
-    version = "4.0.1";
+    version = "4.1.0";
     name = "qtconsole-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/q/qtconsole/${name}.tar.gz";
-      sha256 = "7d2cf976bb960df11f413709b5b5b809365c48426110e946d0c12117e6ced3a5";
+      sha256 = "61fb6e001dd2619a9fe8bd3a096d91c2c794cd9b2c7550a6df27ab6d5d03eb19";
     };
 
     buildInputs = with self; [] ++ optionals isPy27 [mock];
