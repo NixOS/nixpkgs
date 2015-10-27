@@ -20662,6 +20662,21 @@ let
     };
   };
 
+  xlsx2csv = buildPythonPackage rec {
+    name = "xlsx2csv-${version}";
+    version = "0.7.2";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/x/xlsx2csv/${name}.tar.gz";
+      md5 = "eea39d8ab08ff4503bb145171d0a46f6";
+    };
+    meta = {
+      homepage = https://github.com/bitprophet/alabaster;
+      description = "convert xlsx to csv";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ jb55 ];
+    };
+  };
+
   xstatic-bootbox = buildPythonPackage rec {
     name = "XStatic-Bootbox-${version}";
     version = "4.3.0.1";

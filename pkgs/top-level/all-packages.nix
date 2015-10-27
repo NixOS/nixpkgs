@@ -10781,6 +10781,8 @@ let
 
   xkeyboard_config = xorg.xkeyboardconfig;
 
+  xlsx2csv = pythonPackages.xlsx2csv;
+
   zeal = callPackage ../data/documentation/zeal { };
 
 
