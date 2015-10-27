@@ -4,7 +4,7 @@
 , imake, which, jdk, openblas, curl
 , tzdata
 , withRecommendedPackages ? true
-, Cocoa, Foundation, libobjc
+, Cocoa, Foundation, cf-private, libobjc
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     texLive xz zlib less texinfo graphviz icu pkgconfig bison imake
     which jdk openblas curl ]
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ tcl tk ]
-    ++ stdenv.lib.optionals stdenv.isDarwin (darwinFrameworks ++ [ Cocoa Foundation libobjc ]);
+    ++ stdenv.lib.optionals stdenv.isDarwin (darwinFrameworks ++ [ Cocoa Foundation cf-private libobjc ]);
 
   patches = [ ./no-usr-local-search-paths.patch ];
 
