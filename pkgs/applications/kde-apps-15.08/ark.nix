@@ -14,7 +14,16 @@
 , kpty
 , kwidgetsaddons
 , libarchive
+, p7zip
+, unrar
+, unzipNLS
+, zip
 }:
+
+let PATH = lib.makeSearchPath "bin" [
+      p7zip unrar unzipNLS zip
+    ];
+in
 
 kdeApp {
   name = "ark";
@@ -38,6 +47,10 @@ kdeApp {
     ki18n
     kio
   ];
+  postInstall = ''
+    wrapQtProgram "$out/bin/ark" \
+        --prefix PATH : "${PATH}"
+  '';
   meta = {
     license = with lib.licenses; [ gpl2 lgpl3 ];
     maintainers = [ lib.maintainers.ttuegel ];
