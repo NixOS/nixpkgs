@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }: with lib;
 
-let 
+let
 
     localConfig = if pathExists /etc/nginx/local
                   then "include ${/etc/nginx/local}/*.conf;"
@@ -92,7 +92,7 @@ let
         '';
 
 in
- 
+
 {
 
     options = {
@@ -114,13 +114,15 @@ in
         services.nginx.enable = true;
         services.nginx.appendConfig = baseConfig;
 
+        networking.firewall.allowedTCPPorts = [ 80 443 ];
+
         jobs.fcio-stubs-nginx = {
             description = "Create FC IO stubs for nginx";
             task = true;
 
             startOn = "started networking";
 
-            script = 
+            script =
                 ''
                     install -d -o vagrant /etc/nginx/local
                     install -d -o nginx /var/log/nginx

@@ -6,6 +6,7 @@ with lib;
 {
   imports = [
       ../profiles/qemu-guest.nix
+      ./base.nix
   ];
 
   boot.blacklistedKernelModules = [ "bochs_drm" ];
@@ -31,5 +32,8 @@ with lib;
   swapDevices = [ { device = "/dev/vdb"; } ];
 
   users.extraUsers.root.initialHashedPassword = "";
+
+  networking.firewall.allowPing = true;
+  networking.firewall.rejectPackets = true;
 
 }
