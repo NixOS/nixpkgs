@@ -1001,12 +1001,17 @@ let
   });
 
   beautifulsoup4 = buildPythonPackage (rec {
-    name = "beautifulsoup4-4.4.0";
+    name = "beautifulsoup4-4.4.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/b/beautifulsoup4/${name}.tar.gz";
-      sha256 = "1xhp57nr7aapn55wpk7i2kcv2cdamcn1parrm6dqnhv9iyl1vngs";
+      sha256 = "1d36lc4pfkvl74fmzdib2nqnvknm0jddgf2n9yd7im150qyh3m47";
     };
+
+    buildInputs = [ self.nose ];
+    checkPhase = ''
+      nosetests build/
+    '';
 
     meta = {
       homepage = http://crummy.com/software/BeautifulSoup/bs4/;
@@ -2307,6 +2312,8 @@ let
       sha256 = "0nrd817pzjw1haaz6gambgwf4jdjnh9kyxkgj6l8qgl6hdxga45w";
     };
 
+    # TypeError: __call__() takes 1 positional argument but 2 were given
+    doCheck = !isPy3k;
     buildInputs = with self; [ nose mock ];
 
     meta = {
@@ -2343,11 +2350,11 @@ let
 
   cython = buildPythonPackage rec {
     name = "Cython-${version}";
-    version = "0.23.3";
+    version = "0.23.4";
 
     src = pkgs.fetchurl {
       url = "http://www.cython.org/release/${name}.tar.gz";
-      sha256 = "590274ac8dbd1e62cc79d94eb2e2f4ae60cea91a9f8d50b8697d39aba451e82e";
+      sha256 = "13hdffhd37mx3gjby018xl179jaj957fy7kzi01crmimxvn2zi7y";
     };
 
     setupPyBuildFlags = ["--build-base=$out"];
@@ -5168,9 +5175,11 @@ let
       homepage = https://github.com/jsocol/pystatsd;
     };
 
-    # Failing test: ERROR: statsd.tests.test_ipv6_resolution_udp
     patchPhase = ''
-      sed -i '233,235d' statsd/tests.py
+      # Failing test: ERROR: statsd.tests.test_ipv6_resolution_udp
+      sed -i 's/test_ipv6_resolution_udp/noop/' statsd/tests.py
+      # well this is a noop, but so it was before
+      sed -i 's/assert_called_once()/called/' statsd/tests.py
     '';
 
   };
@@ -5315,6 +5324,9 @@ let
     };
 
     buildInputs = with self; [ mock ];
+    patchPhase = ''
+      sed -i 's/assert_call(/assert_called_with(/' substanced/workflow/tests/test_workflow.py
+    '';
 
     propagatedBuildInputs = with self; [
       pyramid
@@ -6305,7 +6317,7 @@ let
 
     checkPhase = ''
       ${python.interpreter} feedparsertest.py
-    ''; 
+    '';
 
     meta = {
       homepage = http://code.google.com/p/feedparser/;
@@ -9355,6 +9367,8 @@ let
       sha256 = "06dxjlbcicq7q3vqy8agq11ra01kvvd47j4mk6dmghjsyzyckxd1";
     };
 
+    LC_ALL = "en_US.UTF-8";
+    buildInputs = [ pkgs.glibcLocales ];
     doCheck = "${python.executable} runtests.py";
 
     meta = {
@@ -10170,11 +10184,11 @@ let
   });
 
   oslosphinx = buildPythonPackage rec {
-    name = "oslosphinx-3.1.0";
+    name = "oslosphinx-3.3.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/o/oslosphinx/${name}.tar.gz";
-      md5= "4fcac44bd6ef174586307a1508ff228f";
+      sha256 = "1rjiiahw2y7pg5rl15fvhmfyh26vm433000nwp7c94khx7w85w75";
     };
 
     doCheck = false;
@@ -10217,6 +10231,10 @@ let
       sha256 = "0474z0mxb7y3vfk4s097wf1mzji5d135vh27cvlh9q17rq3x9r3w";
     };
 
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
+
     # since tests depend on install results, let's do it so
     doInstallCheck = true;
     doCheck = false;
@@ -10241,6 +10259,9 @@ let
     propagatedBuildInputs = with self; [ pbr six pyyaml appdirs stevedore ];
     buildInputs = with self; [ beautifulsoup4 oslosphinx testtools testscenarios
                                testrepository fixtures mock ];
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
   };
 
   oslo-serialization = buildPythonPackage rec {
@@ -10251,6 +10272,10 @@ let
       url = "https://pypi.python.org/packages/source/o/oslo.serialization/${name}.tar.gz";
       sha256 = "15k8aql2rx5jzv3hfvmd48vsyw172qa64bs3fmsyx25p37zyfy8a";
     };
+
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
 
     propagatedBuildInputs = with self; [ pbr Babel six iso8601 pytz oslo-utils msgpack netaddr ];
     buildInputs = with self; [ oslotest mock coverage simplejson oslo-i18n ];
@@ -10307,6 +10332,9 @@ let
     propagatedBuildInputs = with self; [ pbr Babel six iso8601 pytz netaddr netifaces
                                          monotonic oslo-i18n wrapt debtcollector ];
     buildInputs = with self; [ oslotest mock coverage oslosphinx ];
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
   };
 
   oslo-middleware = buildPythonPackage rec {
@@ -11186,6 +11214,9 @@ let
       oslo-utils oslo-i18n oslo-config oslo-serialization oslo-context
     ];
     buildInputs = with self; [ oslotest oslosphinx ];
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
   };
 
   oslo-context = buildPythonPackage rec {
@@ -11199,6 +11230,9 @@ let
 
     propagatedBuildInputs = with self; [ pbr Babel ];
     buildInputs = with self; [ oslotest coverage oslosphinx ];
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
   };
 
   oslo-i18n = buildPythonPackage rec {
@@ -11212,6 +11246,9 @@ let
 
     propagatedBuildInputs = with self; [ pbr Babel six oslo-config ];
     buildInputs = with self; [ mock coverage oslotest ];
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
   };
 
   oslo-config = buildPythonPackage rec {
@@ -11239,6 +11276,10 @@ let
       sha256 = "17i92hymw1dwmmb5yv90m2gam2x21mc960q1pr7bly93x49h8666";
     };
 
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
+
     propagatedBuildInputs = with self; [ pbr fixtures subunit six testrepository
       testscenarios testtools mock mox3 oslo-config os-client-config ];
   };
@@ -11255,6 +11296,9 @@ let
     buildInputs = with self; [ pbr testtools testscenarios testrepository fixtures ];
     propagatedBuildInputs = with self; [ appdirs pyyaml keystoneauth1 ];
 
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
     # TODO: circular import on oslotest
     preCheck = ''
       rm os_client_config/tests/{test_config,test_cloud_config,test_environ}.py
@@ -11274,6 +11318,9 @@ let
                                pep8 fixtures mox3 requests-mock ];
     propagatedBuildInputs = with self; [ argparse iso8601 requests2 six stevedore
                                          webob oslo-config ];
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
   };
 
   requests-mock = buildPythonPackage rec {
@@ -11284,6 +11331,10 @@ let
       url = "https://pypi.python.org/packages/source/r/requests-mock/${name}.tar.gz";
       sha256 = "0gmd88c224y53b1ai8cfsrcxm9kw3gdqzysclmnaqspg7zjhxwd1";
     };
+
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
 
     buildInputs = with self; [ pbr testtools testrepository mock ];
     propagatedBuildInputs = with self; [ six requests2 ];
@@ -11298,6 +11349,10 @@ let
       sha256 = "09dkgki21v5zqrx575h1aazxsq5akkv0a90z644bk1ry9a4zg1pn";
     };
 
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
+
     buildInputs = with self; [ subunit testrepository testtools six ];
     propagatedBuildInputs = with self; [ pbr fixtures ];
   };
@@ -11310,6 +11365,9 @@ let
       url = "https://pypi.python.org/packages/source/d/debtcollector/${name}.tar.gz";
       sha256 = "1mvdxdrnwlgfqg26s5himkjq6f06r2khlrignx36kkbyaix6j9xb";
     };
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
 
     buildInputs = with self; [ pbr Babel six wrapt testtools testscenarios
       testrepository subunit coverage oslotest ];
@@ -13092,6 +13150,8 @@ let
       sha256 = "0lagrwifsgn0s8bzqahpr87p7gd38xja8f06akscinp6hj89283k";
     };
 
+    propagatedBuildInputs = with self; [ docutils ];
+
     meta = {
       homepage = http://pygments.org/;
       description = "A generic syntax highlighter";
@@ -13823,7 +13883,9 @@ let
       sha256 = "00p6f1dfma65192hc72dxd506491lsq3g5wgxqafi1xpg2w1xia6";
     };
 
-    propagatedBuildInputs = with self; [ cssselect lxml ];
+    propagatedBuildInputs = with self; [ cssselect lxml webob ];
+    # circular dependency on webtest
+    doCheck = false;
   };
 
   pyrax = buildPythonPackage rec {
@@ -14331,14 +14393,16 @@ let
 
   requests2 = buildPythonPackage rec {
     name = "requests-${version}";
-    version = "2.7.0";
+    version = "2.8.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
-      sha256 = "0gdr9dxm24amxpbyqpbh3lbwxc2i42hnqv50sigx568qssv3v2ir";
+      sha256 = "0ny2nr1sqr4hcn3903ghmh7w2yni8shlfv240a8c9p6wyidqvzl4";
     };
 
     buildInputs = [ self.pytest ];
+    # sadly, tests require networking
+    doCheck = false;
 
     meta = {
       description = "An Apache2 licensed HTTP library, written in Python, for human beings";
@@ -14569,14 +14633,15 @@ let
 
   restview = buildPythonPackage rec {
     name = "restview-${version}";
-    version = "2.2.1";
+    version = "2.5.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/r/restview/${name}.tar.gz";
-      sha256 = "070qx694bpk2n67grm82jvvar4nqvvfmmibbnv8snl4qn41jw66s";
+      sha256 = "0rda1py5fqzs5fkfjrdli74zf72wijxc9j3989mivhrbrslx3vjj";
     };
 
-    propagatedBuildInputs = with self; [ docutils mock pygments ];
+    propagatedBuildInputs = with self; [ docutils readme pygments ];
+    buildInputs = with self; [ mock ];
 
     meta = {
       description = "ReStructuredText viewer";
@@ -14587,6 +14652,27 @@ let
     };
   };
 
+  readme = buildPythonPackage rec {
+    name = "readme-${version}";
+    version = "0.6.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/readme/readme-${version}.tar.gz";
+      sha256 = "08j2w67nilczn1i5r7h22vag9673i6vnfhyq2rv27r1bdmi5a30m";
+    };
+
+    propagatedBuildInputs = with self; [
+      six docutils pygments bleach html5lib
+    ];
+    buildInputs = with self; [
+
+    ];
+
+    meta = with stdenv.lib; {
+      description = "readme";
+      homepage = "https://github.com/pypa/readme";
+    };
+  };
 
   reviewboard = buildPythonPackage rec {
     name = "ReviewBoard-1.6.16";
@@ -15904,10 +15990,19 @@ let
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/S/Sphinx/${name}.tar.gz";
-      md5 = "8786a194acf9673464c5455b11fd4332";
+      sha256 = "052i5c7cgvs5iv011dkq3r8d6jycg2gjjg3907ijsbdlq8q52vhs";
     };
 
-    propagatedBuildInputs = with self; [ docutils jinja2 pygments sphinx_rtd_theme alabaster Babel snowballstemmer  six ];
+    LC_ALL = "en_US.UTF-8";
+    checkPhase = ''
+      PYTHON=${python.executable} make test
+    '';
+
+    buildInputs = with self; [ mock pkgs.glibcLocales ];
+    propagatedBuildInputs = with self; [
+      docutils jinja2 pygments sphinx_rtd_theme
+      alabaster Babel snowballstemmer six nose
+    ];
 
     meta = {
       description = "A tool that makes it easy to create intelligent and beautiful documentation for Python projects";
@@ -16537,6 +16632,9 @@ let
         Babel argparse prettytable requests2 six iso8601 stevedore
         netaddr debtcollector bandit webob mock pycrypto ];
 
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
     doCheck = ''
       patchShebangs run_tests.sh
       ./run_tests.sh
@@ -16641,6 +16739,7 @@ let
 
     propagatedBuildInputs = with self; [ pbr python_mimeparse extras lxml unittest2 ];
     buildInputs = with self; [ traceback2 ];
+    patches = [ ../development/python-modules/testtools_support_unittest2.patch ];
 
     meta = {
       description = "A set of extensions to the Python standard library's unit testing framework";
@@ -17066,17 +17165,15 @@ let
   };
 
   unicodecsv = buildPythonPackage rec {
-    version = "0.12.0";
+    version = "0.14.1";
     name = "unicodecsv-${version}";
-    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/u/unicodecsv/${name}.tar.gz";
-      sha256 = "012yvwza38bq84z9p8xzlxn7bkz0gf5y2nm5js7cyn766cy53dxh";
+      sha256 = "1z7pdwkr6lpsa7xbyvaly7pq3akflbnz8gq62829lr28gl1hi301";
     };
 
     # ImportError: No module named runtests
-    #buildInputs = with self; [ unittest2 ];
     doCheck = false;
 
     meta = {
@@ -17645,18 +17742,19 @@ let
 
 
   wsgiproxy2 = buildPythonPackage rec {
-    name = "WSGIProxy2-0.1";
+    name = "WSGIProxy2-0.4.2";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/W/WSGIProxy2/${name}.tar.gz";
-      md5 = "157049212f1c81a8790efa31146fbabf";
+      url = "http://pypi.python.org/packages/source/W/WSGIProxy2/${name}.zip";
+      sha256 = "13kf9bdxrc95y9vriaz0viry3ah11nz4rlrykcfvb8nlqpx3dcm4";
     };
 
+    # circular dep on webtest
+    doCheck = false;
     propagatedBuildInputs = with self; [ six webob ];
 
     meta = {
-       maintainers = with maintainers; [ garbas iElectric ];
-      platforms = platforms.all;
+      maintainers = with maintainers; [ garbas iElectric ];
     };
   };
 
