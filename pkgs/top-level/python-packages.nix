@@ -2662,14 +2662,15 @@ let
   };
 
   cffi = buildPythonPackage rec {
-    name = "cffi-1.1.2";
+    name = "cffi-1.3.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/cffi/${name}.tar.gz";
-      md5 = "ca6e6c45b45caa87aee9adc7c796eaea";
+      sha256 = "1s9lcwmyhshrmvgcwy0vww70v23ncz7bgshhbk469kxmy2pm7alx";
     };
 
     propagatedBuildInputs = with self; [ pkgs.libffi pycparser ];
+    buildInputs = with self; [ pytest ];
 
     meta = {
       maintainers = with maintainers; [ iElectric ];
@@ -6295,12 +6296,16 @@ let
   });
 
   feedparser = buildPythonPackage (rec {
-    name = "feedparser-5.1.3";
+    name = "feedparser-5.2.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/f/feedparser/${name}.tar.gz";
-      md5 = "f2253de78085a1d5738f626fcc1d8f71";
+      sha256 = "1ycva69bqssalhqg45rbrfipz3l6hmycszy26k0351fhq990c0xx";
     };
+
+    checkPhase = ''
+      ${python.interpreter} feedparsertest.py
+    ''; 
 
     meta = {
       homepage = http://code.google.com/p/feedparser/;
@@ -8937,7 +8942,7 @@ let
       md5 = "84a117c9a75b86842b0fa5f5c9c767f3";
     };
 
-    buildInputs = [ pkgs.glibcLocales ];
+    buildInputs = [ pkgs.glibcLocales self.mock ];
 
     # some files in tests dir include unicode names
     preBuild = ''
@@ -16291,17 +16296,43 @@ let
 
 
   structlog = buildPythonPackage rec {
-    name = "structlog-0.4.2";
+    name = "structlog-15.3.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/structlog/${name}.tar.gz";
-      md5 = "062cda36069e8573e00c265f451f899e";
+      sha256 = "1h9qz4fsd7ph8rf80rqmlyj2q54xapgrmkpnyca01w1z8ww6f9w7";
     };
+
+    buildInputs = with self; [ pytest pretend freezegun ];
+
+    checkPhase = ''
+      py.test
+    '';
 
     meta = {
       description = "Painless structural logging";
       homepage = http://www.structlog.org/;
       license = licenses.asl20;
+    };
+  };
+
+  freezegun = buildPythonPackage rec {
+    name = "freezegun-${version}";
+    version = "0.3.5";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/f/freezegun/freezegun-${version}.tar.gz";
+      sha256 = "02ly89wwn0plcw8clkkzvxaw6zlpm8qyqpm9x2mfw4a0vppb4ngf";
+    };
+
+    propagatedBuildInputs = with self; [
+      dateutil six
+    ];
+    buildInputs = [ self.mock self.nose ];
+
+    meta = with stdenv.lib; {
+      description = "FreezeGun: Let your Python tests travel through time";
+      homepage = "https://github.com/spulec/freezegun";
     };
   };
 
