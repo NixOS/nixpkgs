@@ -1036,6 +1036,9 @@ let
       license = licenses.mit;
       maintainers = with maintainers; [ iElectric ];
     };
+
+    disabled = isPy3k;
+
   });
 
   beaker = buildPythonPackage rec {
@@ -2976,7 +2979,8 @@ let
       url = "https://pypi.python.org/packages/source/D/DataShape/${name}.tar.gz";
       sha256 = "14b2ef766d4c9652ab813182e866f493475e65e558bed0822e38bf07bba1a278";
     };
-
+    
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
 
     meta = {
@@ -6150,6 +6154,8 @@ let
       description = "Add options to doctest examples while they are running";
       homepage = http://pypi.python.org/pypi/dtopt;
     };
+    # Test contain Python 2 print
+    disabled = isPy3k;
   };
 
 
@@ -7700,6 +7706,8 @@ let
       url = "https://pypi.python.org/packages/source/i/ipython_genutils/${name}.tar.gz";
       sha256 = "3a0624a251a26463c9dfa0ffa635ec51c4265380980d9a50d65611c3c2bd82a6";
     };
+
+    buildInputs = with self; [ pytest ];
 
     meta = {
       description = "Vestigial utilities from IPython";
@@ -11768,6 +11776,7 @@ let
       url = "https://github.com/GreenSteam/pep257/archive/${version}.tar.gz";
       sha256 = "0v8aq0xzsa7clazszxl42904c3jpq69lg8a5hg754bqcqf72hfrn";
     };
+    buildInputs = with self; [ pytest ];
 
     meta = {
       homepage = https://github.com/GreenSteam/pep257/;
@@ -13114,7 +13123,7 @@ let
       md5 = "861664f8be3bed44820356539f2ea5b6";
     };
 
-    propagatedBuildInputs = with pythonPackages; [  ];
+    buildInputs = with self; [ nose ];
 
     meta = {
       description = "Pure Python GeoIP API";
@@ -14009,6 +14018,8 @@ let
       url = "http://pysphere.googlecode.com/files/${name}.zip";
       md5 = "c57cba33626ac4b1e3d1974923d59232";
     };
+
+    disabled = isPy3k;
 
     meta = {
       homepage    = "https://code.google.com/p/pysphere/";
@@ -16851,7 +16862,7 @@ let
       sha256 = "0skzrvhjnnacrz52jml4i050vdx5lfcd3np172srxjaghdgfxg9k";
     };
 
-    propagatedBuildInputs = with self; [ six ];
+    propagatedBuildInputs = with self; [ six pillow ];
 
     meta = {
       description = "Quick Response code generation for Python";
