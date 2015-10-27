@@ -6797,7 +6797,6 @@ let
       license = licenses.bsd2;
       maintainers = with maintainers; [ garbas ];
     };
-    disabled = isPy3k;
   };
 
   gcovr = buildPythonPackage rec {
