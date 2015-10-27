@@ -2,6 +2,7 @@
 , lib
 , extra-cmake-modules
 , kdoctools
+, makeQtWrapper
 , qtscript
 , kbookmarks
 , kcompletion
@@ -30,6 +31,7 @@ kdeApp {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
+    makeQtWrapper
   ];
   buildInputs = [
     qtscript
@@ -56,6 +58,9 @@ kdeApp {
     ki18n
     kwindowsystem
   ];
+  postInstall = ''
+    wrapQtProgram "$out/bin/konsole"
+  '';
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = [ lib.maintainers.ttuegel ];
