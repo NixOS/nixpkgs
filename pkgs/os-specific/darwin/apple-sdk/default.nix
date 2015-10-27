@@ -34,7 +34,7 @@ let
       cd Library/Frameworks/QuartzCore.framework/Versions/A/Headers
       for file in CI*.h; do
         rm $file
-        ln -s ../Frameworks/CoreImage.framework/Versions/A/Headers/$file
+        ln -s ../Frameworks/CoreImage.framework/Headers/$file
       done
     '';
 
@@ -151,10 +151,6 @@ in rec {
   };
 
   overrides = super: {
-    CoreText = stdenv.lib.overrideDerivation super.CoreText (drv: {
-      propagatedNativeBuildInputs = drv.propagatedNativeBuildInputs ++ [ pkgs.darwin.cf-private ];
-    });
-
     QuartzCore = stdenv.lib.overrideDerivation super.QuartzCore (drv: {
       installPhase = drv.installPhase + ''
         f="$out/Library/Frameworks/QuartzCore.framework/Headers/CoreImage.h"
