@@ -51,7 +51,7 @@ let
       let version = (builtins.parseDrvName breeze-qt5.name).version;
       in symlinkJoin "breeze-${version}" [ breeze-qt4 breeze-qt5 ];
     kde-cli-tools = callPackage ./kde-cli-tools.nix {};
-    kde-gtk-config = callPackage ./kde-gtk-config.nix {};
+    kde-gtk-config = callPackage ./kde-gtk-config {};
     kdecoration = callPackage ./kdecoration.nix {};
     kdeplasma-addons = callPackage ./kdeplasma-addons.nix {};
     kgamma5 = callPackage ./kgamma5.nix {};

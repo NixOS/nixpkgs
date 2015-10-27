@@ -14,6 +14,7 @@
 
 plasmaPackage {
   name = "kde-gtk-config";
+  patches = [ ./0001-follow-symlinks.patch ];
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     glib gtk2 gtk3 karchive kcmutils kconfigwidgets kiconthemes
