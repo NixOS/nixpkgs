@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cairo, colord, glib, gtk3, gusb, intltool, itstool, libusb
-, libxml2, makeWrapper, packagekit, pkgconfig, saneBackends, systemd, vala }:
+, libxml2, makeWrapper, pkgconfig, saneBackends, systemd, vala }:
 
 let version = "3.19.1"; in
 stdenv.mkDerivation rec {
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
     url = "https://launchpad.net/simple-scan/3.19/${version}/+download/${name}.tar.xz";
   };
 
-  buildInputs = [ cairo colord glib gusb gtk3 libusb libxml2 packagekit
-    saneBackends systemd vala ];
+  buildInputs = [ cairo colord glib gusb gtk3 libusb libxml2 saneBackends
+    systemd vala ];
   nativeBuildInputs = [ intltool itstool makeWrapper pkgconfig ];
 
   enableParallelBuilding = true;
