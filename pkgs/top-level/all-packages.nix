@@ -12447,9 +12447,11 @@ let
     sphinx = pythonPackages.sphinx;
   };
 
-  nova = callPackage ../applications/virtualization/nova { };
-
-  novaclient = callPackage ../applications/virtualization/nova/client.nix { };
+  # Open Stack
+  nova = callPackage ../applications/virtualization/openstack/nova.nix { };
+  keystone = callPackage ../applications/virtualization/openstack/keystone.nix { };
+  neutron = callPackage ../applications/virtualization/openstack/neutron.nix { };
+  glance = callPackage ../applications/virtualization/openstack/glance.nix { };
 
   nova-filters =  callPackage ../applications/audio/nova-filters { };
 
