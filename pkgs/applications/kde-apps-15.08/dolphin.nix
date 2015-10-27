@@ -2,6 +2,7 @@
 , lib
 , extra-cmake-modules
 , kdoctools
+, makeQtWrapper
 , kinit
 , kcmutils
 , kcoreaddons
@@ -31,6 +32,7 @@ kdeApp {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
+    makeQtWrapper
   ];
   buildInputs = [
     kinit
@@ -58,6 +60,9 @@ kdeApp {
     ktexteditor
     kwindowsystem
   ];
+  postInstall = ''
+    wrapQtProgram "$out/bin/dolphin"
+  '';
   meta = {
     license = with lib.licenses; [ gpl2 fdl12 ];
     maintainers = [ lib.maintainers.ttuegel ];
