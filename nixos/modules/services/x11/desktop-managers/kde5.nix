@@ -98,6 +98,7 @@ in
         plasma5.plasma-workspace-wallpapers
 
         kdeApps.dolphin
+        kdeApps.dolphin-plugins
         kdeApps.konsole
 
         kdeApps.oxygen-icons
