@@ -1344,14 +1344,13 @@ let
 
   billiard = buildPythonPackage rec {
     name = "billiard-${version}";
-    version = "3.3.0.19";
+    version = "3.3.0.21";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/billiard/${name}.tar.gz";
-      sha256 = "06bs1kl7dji6lwpj3dkfi61mmrfq2mi7wz3ka683i2avwk38wsvf";
-      md5 = "7e473b9da01956ce91a650f99fe8d4ad";
+      sha256 = "1sfsrkm5xv820wp2mz5zn2rnw6s0c9wal69v1fkr26wp1a7zf1cp";
     };
 
     buildInputs = with self; [ nose unittest2 mock ];
@@ -1894,14 +1893,13 @@ let
 
   celery = buildPythonPackage rec {
     name = "celery-${version}";
-    version = "3.1.17";
+    version = "3.1.19";
 
     disabled = pythonOlder "2.6";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/celery/${name}.tar.gz";
-      sha256 = "0qh38xnbgbj7awpjxxvjlddyafxyyy3fhxcas3i8dmcb4r9vdqng";
-      md5 = "e37f5d93b960bf68fc26c1325f30fd16";
+      sha256 = "0wbbsrg3vfq8v7y2nylal1gqmn3h4a5vqzbsjiwcybl21hlj2smx";
     };
 
     buildInputs = with self; [ mock nose unittest2 ];
@@ -8033,13 +8031,13 @@ let
 
   kombu = buildPythonPackage rec {
     name = "kombu-${version}";
-    version = "3.0.28";
+    version = "3.0.29";
 
     disabled = pythonOlder "2.6";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/k/kombu/${name}.tar.gz";
-      sha256 = "1c8sdgfbv1gscc5d14xa3r48qfpppb0vifc9nx0p9fvv9rfg6an2";
+      sha256 = "1a6wlr2bv6j2z07wrxc5g0w6h99n2ciamx3f7qy40s76cpn5a2lp";
     };
 
     buildInputs = with self; optionals (!isPy3k) [ anyjson mock unittest2 nose ];
