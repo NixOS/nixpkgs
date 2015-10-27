@@ -23,6 +23,23 @@ in
           If left at the default value, $HOME/.i3/config will be used.
         '';
       };
+
+      debug = mkOption {
+        default = false;
+        example = true;
+        type = types.bool;
+        description = "Enable debug/verbose logging (see -V option)";
+      };
+
+      logFile = mkOption {
+        default = null;
+        example = "$HOME/.i3/i3log";
+        type = types.string;
+        description = ''
+          Path to a logfile for i3.
+          If left at the default value, logs will appear in display-manager.service's logs.
+        '';
+      };
     };
   };
 
@@ -32,7 +49,11 @@ in
         name = "i3";
         start = ''
           ${pkgs.i3}/bin/i3 ${optionalString (cfg.configFile != null)
-            "-c \"${cfg.configFile}\""
+            ''-c "${cfg.configFile}"''
+          } ${optionalString cfg.debug
+            ''-V''
+          } ${optionalString (cfg.logFile != null)
+            ''>> "${cfg.logFile}"''
           } &
           waitPID=$!
         '';
