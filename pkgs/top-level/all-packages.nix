@@ -11295,7 +11295,7 @@ let
   });
   emacs24Macport_24_5 = lowPrio (newScope darwin.apple_sdk.frameworks ../applications/editors/emacs-24/macport-24.5.nix {
     stdenv = pkgs.clangStdenv;
-    inherit (darwin) libobjc;
+    inherit (darwin) libobjc cf-private;
   });
   emacs24Macport = self.emacs24Macport_24_5;
 
