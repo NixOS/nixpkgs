@@ -1,6 +1,6 @@
 { stdenv, fetchurl, buildEnv, makeDesktopItem, makeWrapper, zlib, glib, alsaLib
 , dbus, gtk, atk, pango, freetype, fontconfig, libgnome_keyring3, gdk_pixbuf
-, cairo, cups, expat, libgpgerror, nspr, gconf, nss, xorg, libcap, systemd
+, gvfs, cairo, cups, expat, libgpgerror, nspr, gconf, nss, xorg, libcap, systemd
 }:
 
 let
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     name = "${name}.deb";
   };
 
-  buildInputs = [ atomEnv makeWrapper ];
+  buildInputs = [ atomEnv gvfs makeWrapper ];
 
   phases = [ "installPhase" "fixupPhase" ];
 
@@ -41,7 +41,8 @@ in stdenv.mkDerivation rec {
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       $out/share/atom/resources/app/apm/bin/node
     wrapProgram $out/bin/atom \
-      --prefix "LD_LIBRARY_PATH" : "${atomEnv}/lib:${atomEnv}/lib64"
+      --prefix "LD_LIBRARY_PATH" : "${atomEnv}/lib:${atomEnv}/lib64" \
+      --prefix "PATH" : "${gvfs}/bin"
     wrapProgram $out/bin/apm \
       --prefix "LD_LIBRARY_PATH" : "${atomEnv}/lib:${atomEnv}/lib64"
   '';
