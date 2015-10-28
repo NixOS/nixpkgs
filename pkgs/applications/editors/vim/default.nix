@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ncurses, gettext, pkgconfig
 
 # apple frameworks
-, CoreServices, CoreData, Cocoa, Foundation, libobjc, cf-private }:
+, Carbon, Cocoa }:
 
 stdenv.mkDerivation rec {
   name = "vim-${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs = [ ncurses pkgconfig ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ cf-private CoreData CoreServices Cocoa Foundation libobjc ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
   nativeBuildInputs = [ gettext ];
 
   configureFlags = [
