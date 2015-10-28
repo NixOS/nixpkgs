@@ -9566,6 +9566,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/U/UM/UMEMOTO/${name}.tar.gz";
       sha256 = "1ads4k4vvq6pnxkdw0s8gaj03w4h9snxyw7zyikfzd20fy76yx6s";
     };
+    setOutputFlags = false;
     buildInputs = [ pkgs.which ];
   };
 
