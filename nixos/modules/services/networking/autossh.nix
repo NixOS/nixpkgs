@@ -16,14 +16,6 @@ in
 
     services.autossh = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable the AutoSSH, the SSH sessions manager
-        '';
-      };
-
       sessions = mkOption {
         type = types.listOf (types.submodule {
           options = {
@@ -54,8 +46,8 @@ in
                 Arguments to be passed to AutoSSH and retransmitted to SSH
                 process. Some meaningful options include -N (don't run remote
                 command), -D (open SOCKS proxy on local port), -R (forward
-                remote port), -L (forward local port), -v (Enable debug). Check
-                ssh manual for the complete list.
+                remote port), -L (forward local port), -v (Verbose mode).
+                Check ssh manual for the complete list.
               '';
             };
           };
@@ -83,7 +75,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf ((length cfg.sessions) > 0) {
 
     systemd.services =
 
