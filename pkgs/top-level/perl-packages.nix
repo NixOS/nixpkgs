@@ -3222,11 +3222,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DevelFindPerl = buildPerlPackage {
-    name = "Devel-FindPerl-0.012";
+  DevelFindPerl = buildPerlPackage rec {
+    name = "Devel-FindPerl-0.014";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEONT/Devel-FindPerl-0.012.tar.gz;
-      sha256 = "075p340m4pi761sjc3l0ymfsdwy4rrq48sqj38cyy80vg9scljh2";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/${name}.tar.gz";
+      sha256 = "0ns95dsgmr8s0f1dfwd1cyv32vmd22w0vs51ppnnzp5zyi499581";
     };
     buildInputs = [ CaptureTiny ];
     propagatedBuildInputs = [ ExtUtilsConfig ];
