@@ -588,12 +588,12 @@ let
   };
 
   apscheduler = buildPythonPackage rec {
-    name = "APScheduler-3.0.1";
+    name = "APScheduler-3.0.4";
     disabled = !isPy27;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/A/APScheduler/${name}.tar.gz";
-      md5 = "7c3687b3dcd645fe9df48e34eb7a7592";
+      sha256 = "1ljjhn6cv8b1pccsi3mgc887ypi2vim317r9p0zh0amd0bhkk6wb";
     };
 
     buildInputs = with self; [
@@ -1477,7 +1477,7 @@ let
       url = "http://github.com/jsocol/bleach/archive/${version}.tar.gz";
       sha256 = "19v0zhvchz89w179rwkc4ah3cj2gbcng9alwa2yla89691g8b0b0";
     };
-    
+
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ six html5lib ];
 
@@ -6348,9 +6348,8 @@ let
       sha256 = "1ycva69bqssalhqg45rbrfipz3l6hmycszy26k0351fhq990c0xx";
     };
 
-    checkPhase = ''
-      ${python.interpreter} feedparsertest.py
-    '';
+    # lots of networking failures
+    doCheck = false;
 
     meta = {
       homepage = http://code.google.com/p/feedparser/;
@@ -10272,6 +10271,7 @@ let
 
     patchPhase = ''
       sed -i 's@python@${python.interpreter}@' .testr.conf
+      sed -i 's@python@${python.interpreter}@' os_testr/tests/files/testr-conf
     '';
 
     # since tests depend on install results, let's do it so
@@ -10289,6 +10289,7 @@ let
   bandit = buildPythonPackage rec {
     name = "bandit-${version}";
     version = "0.14.1";
+    disabled = isPyPy; # a test fails
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/bandit/${name}.tar.gz";
@@ -10329,6 +10330,9 @@ let
       sha256 = "0yvzz7gp84qqdadbjdh9ch7dz4w19nmhwa704s9m11bljgp3hqmn";
     };
 
+    LC_ALL = "en_US.UTF-8";
+    buildInputs = [ pkgs.glibcLocales ];
+
     meta = with stdenv.lib; {
       description = "rfc3986";
       homepage = https://rfc3986.rtfd.org;
@@ -10352,6 +10356,10 @@ let
     buildInputs = with self; [
       oslosphinx testtools testrepository oslotest
     ];
+
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
 
     meta = with stdenv.lib; {
       homepage = https://launchpad.net/pycadf;
@@ -10392,7 +10400,8 @@ let
     buildInputs = with self; [
       coverage testtools oslosphinx oslotest
     ];
-    preBuild = ''
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
       sed -i '/ordereddict/d' requirements.txt
     '';
 
@@ -10427,6 +10436,7 @@ let
    cachetools = buildPythonPackage rec {
      name = "cachetools-${version}";
      version = "1.1.3";
+     disabled = isPyPy;  # a test fails
 
      src = pkgs.fetchurl {
        url = "https://pypi.python.org/packages/source/c/cachetools/${name}.tar.gz";
@@ -10501,7 +10511,7 @@ let
    ];
 
    checkPhase = ''
-     python -m subunit.run discover -t ./ .
+     ${python.interpreter} -m subunit.run discover -t ./ .
    '';
 
    meta = with stdenv.lib; {
@@ -10524,6 +10534,10 @@ let
     buildInputs = with self; [
       coverage greenlet eventlet oslosphinx oslotest
     ];
+
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
   };
 
   cinderclient = buildPythonPackage rec {
@@ -10541,6 +10555,9 @@ let
     buildInputs = with self; [
       testrepository requests-mock
     ];
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
 
     meta = with stdenv.lib; {
       description = "Python bindings to the OpenStack Cinder API";
@@ -10742,6 +10759,9 @@ let
     buildInputs = with self; [
       oslosphinx oslotest memcached pymongo
     ];
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
   };
 
   pecan = buildPythonPackage rec {
@@ -10823,6 +10843,8 @@ let
       rm tests/test_tg*
       # remove flask since we don't have flask-restful
       rm tests/test_flask*
+      # https://bugs.launchpad.net/wsme/+bug/1510823
+      ${if isPy3k then "rm tests/test_cornice.py" else ""}
 
       nosetests tests/
     '';
@@ -10911,6 +10933,10 @@ let
       testtools testrepository mock
     ];
 
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
+
     meta = with stdenv.lib; {
       description = "Python bindings to the OpenStack Object Storage API";
       homepage = "http://www.openstack.org/";
@@ -10982,6 +11008,9 @@ let
     buildInputs = with self; [
       testtools testscenarios testrepository
     ];
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
   };
 
   networking-hyperv = buildPythonPackage rec {
@@ -11002,6 +11031,7 @@ let
     ];
 
     patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
       # it has pinned pbr<1.0
       sed -i '/pbr/d' requirements.txt
       # https://github.com/openstack/networking-hyperv/commit/56d66fc012846620a60cb8f18df5a1c889fe0e26
@@ -11058,6 +11088,10 @@ let
     buildInputs = with self; [
       oslosphinx coverage mock subunit testrepository testtools
     ];
+
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
   };
 
   FormEncode = buildPythonPackage rec {
@@ -11347,6 +11381,7 @@ let
   keystoneauth1 = buildPythonPackage rec {
     name = "keystoneauth1-${version}";
     version = "1.1.0";
+    disabled = isPyPy; # a test fails
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/k/keystoneauth1/${name}.tar.gz";
@@ -15185,6 +15220,7 @@ let
   qpid-python = buildPythonPackage rec {
     name = "qpid-python-${version}";
     version = "0.32";
+    disabled = isPy3k;  # not supported
 
     src = pkgs.fetchurl {
       url = "http://www.us.apache.org/dist/qpid/${version}/${name}.tar.gz";
@@ -16233,11 +16269,12 @@ let
   };
 
   sqlalchemy_1_0 = self.sqlalchemy9.override rec {
-    name = "SQLAlchemy-1.0.6";
+    name = "SQLAlchemy-1.0.9";
+    doCheck = !isPyPy;  # lots of tests fail
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
-      sha256 = "1wv5kjf142m8g1dnbvgpbqxb8v8rm9lzgsafql2gg229xi5sba4r";
+      sha256 = "03mi79s8dcsqpwql98mlvaf6mf4xf5j3fjkv5m6dgibfwc0pbly3";
     };
   };
 
