@@ -2990,7 +2990,7 @@ let
       url = "https://pypi.python.org/packages/source/D/DataShape/${name}.tar.gz";
       sha256 = "14b2ef766d4c9652ab813182e866f493475e65e558bed0822e38bf07bba1a278";
     };
-    
+
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
 
@@ -11071,6 +11071,7 @@ let
   osprofiler = buildPythonPackage rec {
     name = "osprofiler-${version}";
     version = "0.3.0";
+    disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/o/osprofiler/${name}.tar.gz";
