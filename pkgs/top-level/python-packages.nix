@@ -11489,7 +11489,7 @@ let
       # The flag `-A 'not network'` will disable tests that use internet.
       # The `-e` flag disables a few problematic tests.
       ${python.executable} setup.py nosetests -A 'not network' --stop \
-        -e 'test_data|test_excel|test_html|test_json|test_frequencies|test_frame' --verbosity=3
+        -e 'test_data|test_excel|test_html|test_json|test_frequencies|test_frame|test_read_clipboard_infer_excel' --verbosity=3
 
       runHook postCheck
     '';
