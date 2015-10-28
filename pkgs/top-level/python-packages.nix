@@ -2431,10 +2431,15 @@ let
     };
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
-                    self.iso8601 self.pyasn1 self.pytest self.py ];
+                    self.iso8601 self.pyasn1 self.pytest self.py ]
+               ++ optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Security;
     propagatedBuildInputs = [ self.six self.idna self.ipaddress self.pyasn1 ]
      ++ optional (!isPyPy) self.cffi
      ++ optional (pythonOlder "3.4") self.enum34;
+
+    # IOKit's dependencies are inconsistent between OSX versions, so this is the best we
+    # can do until nix 1.11's release
+    __impureHostDeps = [ "/usr/lib" ];
   };
 
   cryptography_vectors = buildPythonPackage rec {
