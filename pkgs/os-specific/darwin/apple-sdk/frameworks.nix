@@ -21,7 +21,7 @@ with frameworks; with libs; {
   Automator               = [];
   CFNetwork               = [ CF ];
   CalendarStore           = [];
-  Cocoa                   = [ Foundation ];
+  Cocoa                   = [ AppKit ];
   Collaboration           = [];
   CoreAudio               = [ CF IOKit ];
   CoreAudioKit            = [ AudioUnit ];
