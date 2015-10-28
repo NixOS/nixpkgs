@@ -3300,11 +3300,11 @@ let
   };
 
   docker = buildPythonPackage rec {
-    name = "docker-py-1.3.1";
+    name = "docker-py-1.5.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/docker-py/${name}.tar.gz";
-      md5 = "07a5f41fd3f8cc72d05deed628700e99";
+      sha256 = "1l7q0179y4lmv24z4q12653141wc1b1zzgbfw46yzbs6mj7i4939";
     };
 
     propagatedBuildInputs = with self; [ six requests2 websocket_client ];
