@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib perl ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
+
   postPatch = ''
     patchShebangs .
   '';
