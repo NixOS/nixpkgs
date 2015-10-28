@@ -9256,6 +9256,36 @@ let
     preConfigure = "substituteInPlace setup.py --replace /usr/share usr/share";
   };
 
+  pygal = buildPythonPackage ( rec {
+    version = "2.0.8";
+    name = "pygal-${version}";
+
+    # Run tests in pygal dir and open files as unicode
+    patchPhase = ''
+      substituteInPlace setup.py \
+        --replace "self.test_args = []" \
+                  "self.test_args = ['-x', 'build/lib/pygal']"
+      substituteInPlace pygal/test/test_graph.py \
+        --replace "open(file_name)" \
+                  "open(file_name, encoding='utf-8')"
+    '';
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/Kozea/pygal/archive/${version}.tar.gz";
+      sha256 = "1lv8avn7pdlxks50sd58shpqnxybf3l79bggy32qnbqczk4j2s0b";
+    };
+
+    buildInputs = with self; [ cairosvg flask pyquery pytest ];
+    propagatedBuildInputs = with self; [ cairosvg tinycss cssselect ] ++ optionals (!isPyPy) [ lxml ];
+
+    meta = {
+      description = "Sexy and simple python charting";
+      homepage = http://www.pygal.org;
+      license = "LGPLv3";
+    };
+  });
+
+
   pymysql = buildPythonPackage rec {
     name = "pymysql-${version}";
     version = "0.6.6";
