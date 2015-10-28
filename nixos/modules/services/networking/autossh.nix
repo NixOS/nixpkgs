@@ -16,14 +16,6 @@ in
 
     services.autossh = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable the AutoSSH, the SSH sessions manager
-        '';
-      };
-
       sessions = mkOption {
         type = types.listOf (types.submodule {
           options = {
@@ -83,7 +75,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf (cfg.sessions != []) {
 
     systemd.services =
 
@@ -120,5 +112,3 @@ in
 
   };
 }
-
-
