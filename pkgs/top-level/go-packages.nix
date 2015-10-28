@@ -133,6 +133,14 @@ let
     # Do not copy this without a good reason for enabling
     # In this case tools is heavily coupled with go itself and embeds paths.
     allowGoReference = true;
+
+    # Set GOTOOLDIR for derivations adding this to buildInputs
+    postInstall = ''
+      mkdir -p $bin/nix-support
+      substituteAll ${../development/go-modules/tools/setup-hook.sh} $bin/nix-support/setup-hook.tmp
+      cat $bin/nix-support/setup-hook.tmp >> $bin/nix-support/setup-hook
+      rm $bin/nix-support/setup-hook.tmp
+    '';
   };
 
 
