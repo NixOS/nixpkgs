@@ -9274,6 +9274,50 @@ let
     preConfigure = "substituteInPlace setup.py --replace /usr/share usr/share";
   };
 
+  pygal = buildPythonPackage ( rec {
+    version = "2.0.8";
+    name = "pygal-${version}";
+
+    patchPhase = ''
+      # Run tests in pygal dir
+      substituteInPlace setup.py \
+        --replace "self.test_args = []" \
+                  "self.test_args = ['-x', 'build/lib/pygal']"
+      # Open unicode files during tests
+      substituteInPlace pygal/test/test_graph.py \
+        --replace "import sys" \
+                  "import sys, io"
+      substituteInPlace pygal/test/test_graph.py \
+        --replace "open(file_name)" \
+                  "io.open(file_name, encoding='utf-8')"
+      # Use explicit integers (for python 3.5)
+      substituteInPlace pygal/colors.py \
+        --replace "'#%x%x%x' % (r / 17, g / 17, b / 17)" \
+                  "'#%x%x%x' % (r // 17, g // 17, b // 17)"
+      substituteInPlace pygal/colors.py \
+        --replace "'#%x%x%x%x' % (r / 17, g / 17, b / 17, a * 15)" \
+                  "'#%x%x%x%x' % (r // 17, g // 17, b // 17, int(a * 15))"
+      substituteInPlace pygal/colors.py \
+        --replace "'#%02x%02x%02x%02x' % (r, g, b, a * 255)" \
+                  "'#%02x%02x%02x%02x' % (r, g, b, int(a * 255))"
+    '';
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/Kozea/pygal/archive/${version}.tar.gz";
+      sha256 = "1lv8avn7pdlxks50sd58shpqnxybf3l79bggy32qnbqczk4j2s0b";
+    };
+
+    buildInputs = with self; [ flask pyquery pytest ];
+    propagatedBuildInputs = with self; [ cairosvg tinycss cssselect ] ++ optionals (!isPyPy) [ lxml ];
+
+    meta = {
+      description = "Sexy and simple python charting";
+      homepage = http://www.pygal.org;
+      license = licenses.lgpl3;
+    };
+  });
+
+
   pymysql = buildPythonPackage rec {
     name = "pymysql-${version}";
     version = "0.6.6";
