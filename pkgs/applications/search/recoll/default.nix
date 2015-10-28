@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
       substituteInPlace  $f --replace antiword      ${antiword}/bin/antiword
       substituteInPlace  $f --replace awk           ${gawk}/bin/awk
       substituteInPlace  $f --replace catppt        ${catdoc}/bin/catppt
-      substituteInPlace  $f --replace djvused       ${djvulibre}/bin/djvused
-      substituteInPlace  $f --replace djvutxt       ${djvulibre}/bin/djvutxt
+      substituteInPlace  $f --replace djvused       ${djvulibre.bin}/bin/djvused
+      substituteInPlace  $f --replace djvutxt       ${djvulibre.bin}/bin/djvutxt
       substituteInPlace  $f --replace grep          ${gnugrep}/bin/grep
       substituteInPlace  $f --replace groff         ${groff}/bin/groff
       substituteInPlace  $f --replace gunzip        ${gzip}/bin/gunzip
