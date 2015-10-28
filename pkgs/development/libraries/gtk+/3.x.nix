@@ -5,7 +5,6 @@
 , cupsSupport ? stdenv.isLinux, cups ? null
 }:
 
-assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 let
@@ -26,14 +25,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
 
-  buildInputs = [ libxkbcommon epoxy ];
-  propagatedBuildInputs = with xlibs; with stdenv.lib;
-    [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk libXrandr libXrender libXcomposite libXi libXcursor ]
+  buildInputs = [ libxkbcommon epoxy json_glib ];
+  propagatedBuildInputs = with xorg; with stdenv.lib;
+    [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk
+      libXrandr libXrender libXcomposite libXi libXcursor libSM libICE ]
     ++ optionals stdenv.isLinux [ wayland ]
     ++ optional xineramaSupport libXinerama
     ++ optional cupsSupport cups;
+  #TODO: colord?
 
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   # demos fail to install, no idea where's the problem
   preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
@@ -41,7 +42,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    rm -rf $out/share/gtk-doc
     substituteInPlace "$out/lib/gtk-3.0/3.0.0/printbackends/libprintbackend-cups.la" \
       --replace '-L${gmp.dev}/lib' '-L${gmp.out}/lib'
   '';
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     ''; # workaround for bug of nix-mode for Emacs */ '';
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A multi-platform toolkit for creating graphical user interfaces";
 
     longDescription = ''
@@ -69,9 +69,9 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gtk.org/;
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ urkud raskin vcunat lethalman ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ urkud raskin vcunat lethalman ];
+    platforms = platforms.all;
   };
 }
