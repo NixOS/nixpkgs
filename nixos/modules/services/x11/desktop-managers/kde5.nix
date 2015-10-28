@@ -97,11 +97,17 @@ in
         plasma5.plasma-workspace
         plasma5.plasma-workspace-wallpapers
 
+        kdeApps.ark
         kdeApps.dolphin
         kdeApps.dolphin-plugins
+        kdeApps.ffmpegthumbs
+        kdeApps.gwenview
+        kdeApps.kate
+        kdeApps.kdegraphics-thumbnailers
         kdeApps.konsole
+        kdeApps.okular
+        kdeApps.print-manager
 
-        kdeApps.oxygen-icons
         pkgs.hicolor_icon_theme
 
         plasma5.kde-gtk-config
