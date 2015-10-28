@@ -2655,11 +2655,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DateTime = buildPerlModule {
-    name = "DateTime-1.19";
+  DateTime = buildPerlModule rec {
+    name = "DateTime-1.21";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-1.19.tar.gz;
-      sha256 = "07c8624a7827277e8eda35c77cfc6fd056bf2782238597f424ef6a6e33ed6009";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
+      sha256 = "1cgnscbh40f783znpq15rkvbfflfm8azdl0v6yqr7minmq6899d3";
     };
     buildInputs = [ TestFatal TestWarnings ];
     propagatedBuildInputs = [ DateTimeLocale DateTimeTimeZone ParamsValidate TryTiny ];
@@ -2669,11 +2669,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DateTimeEventICal = buildPerlPackage {
-    name = "DateTime-Event-ICal-0.11";
+  DateTimeEventICal = buildPerlPackage rec {
+    name = "DateTime-Event-ICal-0.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FG/FGLOCK/DateTime-Event-ICal-0.11.tar.gz;
-      sha256 = "6c3ca03c1810c996fa66943138f1f891bbc4baeb41ae2108a5f821040d78dd4c";
+      url = "mirror://cpan/authors/id/F/FG/FGLOCK/${name}.tar.gz";
+      sha256 = "1skmykxbrf98ldi72d5s1v6228gfdr5iy4y0gpl0xwswxy247njk";
     };
     propagatedBuildInputs = [ DateTime DateTimeEventRecurrence ];
     meta = {
@@ -2730,11 +2730,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DateTimeFormatHTTP = buildPerlPackage {
-    name = "DateTime-Format-HTTP-0.40";
+  DateTimeFormatHTTP = buildPerlPackage rec {
+    name = "DateTime-Format-HTTP-0.42";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CK/CKRAS/DateTime-Format-HTTP-0.40.tar.gz;
-      sha256 = "214e9e2e364090ebc5bc682b29709828944ae67f0bb4a989dd1e6d010845213f";
+      url = "mirror://cpan/authors/id/C/CK/CKRAS/${name}.tar.gz";
+      sha256 = "0h6qqdg1yzqkdxp7hqlp0qa7d1y64nilgimxs79dys2ryjfpcknh";
     };
     propagatedBuildInputs = [ DateTime HTTPDate ];
     meta = {
@@ -2837,11 +2837,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ DateTime DateTimeFormatBuilder ];
   };
 
-  DateTimeLocale = buildPerlPackage {
-    name = "DateTime-Locale-0.46";
+  DateTimeLocale = buildPerlPackage rec {
+    name = "DateTime-Locale-0.92";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Locale-0.46.tar.gz;
-      sha256 = "b4ceaa0dc0b89d4eb180eb970a927cf376e3d04ef42de98de2e034cd2021348d";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
+      sha256 = "1fq2wbpfvi5gy3jaild4974sz02vdvfkb98aahni9par4sgn469z";
     };
     buildInputs = [ DistCheckConflicts ];
     propagatedBuildInputs = [ ListMoreUtils ParamsValidate ];
@@ -2865,11 +2865,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DateTimeTimeZone = buildPerlPackage {
-    name = "DateTime-TimeZone-1.91";
+  DateTimeTimeZone = buildPerlPackage rec {
+    name = "DateTime-TimeZone-1.94";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-TimeZone-1.91.tar.gz;
-      sha256 = "0b0899a1b1a32ed3928397323a06692223688db2c3c050734e7ff4c7b231bd32";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
+      sha256 = "1crn4n6izzw2r0ymcb7px9b1bkis8hzczs48skk7szvs3svn3naz";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ ClassSingleton ListAllUtils ModuleRuntime ParamsValidate TryTiny ];
