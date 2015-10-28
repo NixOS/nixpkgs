@@ -2034,6 +2034,24 @@ let
     };
   };
 
+  click-log = buildPythonPackage rec {
+    version = "0.1.1";
+    name = "click-log-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/click-log/${name}.tar.gz";
+      sha256 = "1z3jdwjmwax159zrnyx830xa968rfqrpkm04ad5xqyh0269ydiqb";
+    };
+
+    propagatedBuildInputs = with self; [ click ];
+
+    meta = {
+      homepage = https://github.com/click-contrib/click-log/;
+      description = "Logging integration for Click";
+      license = licenses.mit;
+      maintainers = with maintainers; [ DamienCassou ];
+    };
+  };
   clepy = buildPythonPackage rec {
     name = "clepy-0.3.20";
 
