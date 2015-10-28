@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, libpcap, gnutls, libgcrypt, libxml2, glib
-, geoip, geolite-legacy, sqlite, which, autoreconfHook, subversion
-, pkgconfig, groff
+{ stdenv, fetchurl, libpcap,/* gnutls, libgcrypt,*/ libxml2, glib
+, geoip, geolite-legacy, sqlite, which, autoreconfHook, git
+, pkgconfig, groff, curl, json_c
 }:
 
 # ntopng includes LuaJIT, mongoose, rrdtool and zeromq in its third-party/
 # directory.
 
 stdenv.mkDerivation rec {
-  name = "ntopng-1.2.1";
+  name = "ntopng-2.0";
 
   src = fetchurl {
     urls = [
-      "mirror://sourceforge/project/ntop/ntopng/old/${name}.tgz"
-      "mirror://sourceforge/project/ntop/ntopng/${name}.tgz"
+      "mirror://sourceforge/project/ntop/ntopng/old/${name}.tar.gz"
+      "mirror://sourceforge/project/ntop/ntopng/${name}.tar.gz"
     ];
-    sha256 = "1db83cd1v4ivl8hxzzdvvdcgk22ji7mwrfnd5nnwll6kb11i364v";
+    sha256 = "0l82ivh05cmmqcvs26r6y69z849d28njipphqzvnakf43ggddgrw";
   };
 
   patches = [
@@ -22,25 +22,31 @@ stdenv.mkDerivation rec {
     ./0002-Remove-requirement-to-have-writeable-callback-dir.patch
   ];
 
-  buildInputs = [ libpcap gnutls libgcrypt libxml2 glib geoip geolite-legacy
-    sqlite which autoreconfHook subversion pkgconfig groff ];
+  buildInputs = [ libpcap/* gnutls libgcrypt*/ libxml2 glib geoip geolite-legacy
+    sqlite which autoreconfHook git pkgconfig groff curl json_c ];
+
+
+  autoreconfPhase = ''
+    substituteInPlace autogen.sh --replace "/bin/rm" "rm"
+    substituteInPlace nDPI/autogen.sh --replace "/bin/rm" "rm"
+    $shell autogen.sh
+  '';
 
   preConfigure = ''
-    find . -name Makefile.in | xargs sed -i "s|/bin/rm|rm|"
+    substituteInPlace Makefile.in --replace "/bin/rm" "rm"
   '';
 
   preBuild = ''
-    sed -e "s|/usr/local|$out|g" \
-        -i Ntop.cpp
+    substituteInPlace src/Ntop.cpp --replace "/usr/local" "$out"
 
     sed -e "s|\(#define CONST_DEFAULT_DATA_DIR\).*|\1 \"/var/lib/ntopng\"|g" \
         -e "s|\(#define CONST_DEFAULT_DOCS_DIR\).*|\1 \"$out/share/ntopng/httpdocs\"|g" \
         -e "s|\(#define CONST_DEFAULT_SCRIPTS_DIR\).*|\1 \"$out/share/ntopng/scripts\"|g" \
         -e "s|\(#define CONST_DEFAULT_CALLBACKS_DIR\).*|\1 \"$out/share/ntopng/scripts/callbacks\"|g" \
         -e "s|\(#define CONST_DEFAULT_INSTALL_DIR\).*|\1 \"$out/share/ntopng\"|g" \
-        -i ntop_defines.h
+        -i include/ntop_defines.h
 
-    rmdir httpdocs/geoip
+    rm -rf httpdocs/geoip
     ln -s ${geolite-legacy}/share/GeoIP httpdocs/geoip
   '';
 
