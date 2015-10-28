@@ -1,8 +1,14 @@
 rec {
+  AGL = [
+    "/System/Library/Frameworks/AGL.framework"
+  ];
   CFNetwork = [
     "/System/Library/Frameworks/CFNetwork.framework"
     "/usr/lib/libsqlite3.dylib"
     "/usr/lib/libxml2.2.dylib"
+  ];
+  Kernel = [
+    "/System/Library/Frameworks/Kernel.framework"
   ];
   IOKit = [
     "/System/Library/Frameworks/IOKit.framework"

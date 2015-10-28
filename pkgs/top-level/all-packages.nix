@@ -8528,7 +8528,10 @@ let
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
-  wxmac = callPackage ../development/libraries/wxmac { };
+  wxmac = callPackage ../development/libraries/wxmac {
+    inherit (darwin.apple_sdk.frameworks) AGL Cocoa Foundation Kernel QuickTime;
+    inherit (darwin) CF cf-private libobjc;
+  };
 
   wtk = callPackage ../development/libraries/wtk { };
 

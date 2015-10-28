@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, setfile, rez, derez,
-  expat, libiconv, libjpeg, libpng, libtiff, zlib
+{ stdenv, coreutils, fetchurl, setfile, rez, derez,
+  expat, libiconv, libjpeg, libpng, libtiff, zlib,
+  AGL, CF, Cocoa, Foundation, Kernel, QuickTime, cf-private, libobjc
 }:
 
 with stdenv.lib;
@@ -13,11 +14,18 @@ stdenv.mkDerivation rec {
     sha256 = "346879dc554f3ab8d6da2704f651ecb504a22e9d31c17ef5449b129ed711585d";
   };
 
-  patches = [ ./wx.patch ];
+  prePatch = ''
+    substituteInPlace configure --replace "-framework System" "-lSystem"
+    substituteInPlace configure --replace "/Developer/Tools/SetFile" "${coreutils}/bin/true"
+    substituteInPlace build/aclocal/bakefile.m4 --replace "/Developer/Tools/SetFile" "${coreutils}/bin/true"
+  '';
 
-  buildInputs = [ setfile rez derez expat libiconv libjpeg libpng libtiff zlib ];
+  patches = [ ./wx.patch ];
+  buildInputs = [ setfile rez derez expat libiconv libjpeg libpng libtiff zlib
+                  AGL Cocoa Foundation Kernel QuickTime cf-private libobjc ];
 
   configureFlags = [
+    "--with-macosx-version-min=10.7"
     "--enable-unicode"
     "--with-osx_cocoa"
     "--enable-std_string"
