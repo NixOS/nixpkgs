@@ -1888,6 +1888,25 @@ let
   };
 
 
+  cairosvg = buildPythonPackage rec {
+    version = "1.0.18";
+    name = "cairosvg-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/C/CairoSVG/CairoSVG-${version}.tar.gz";
+      sha256 = "01lpm38qp7xlnv8jv7qg48j44p5088dwfsrcllgs5fz355lrfds1";
+    };
+
+    propagatedBuildInputs = with self; [ cairocffi ];
+
+    meta = {
+      homepage = https://cairosvg.org;
+      license = licenses.lgpl3;
+      description = "SVG converter based on Cairo";
+    };
+  };
+
+
   carrot = buildPythonPackage rec {
     name = "carrot-0.10.7";
 
