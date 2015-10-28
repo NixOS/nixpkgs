@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, m4, cxx ? true, withStatic ? true }:
+{ stdenv, fetchurl, m4, cxx ? true, withStatic ? false }:
 
 with { inherit (stdenv.lib) optional optionalString; };
 
@@ -10,7 +10,12 @@ let self = stdenv.mkDerivation rec {
     sha256 = "1bwsfmf0vrx3rwl4xmi5jhhy3v1qx1xj0m7p9hb0fvcw9f09m3kz";
   };
 
+  #outputs TODO: split $cxx due to libstdc++ dependency; maybe port to gmp5;
+  # maybe let ghc use a version with *.so shared with rest of nixpkgs and *.a added
+  # - see #5855 for related discussion
+  outputs = [ "dev" "out" "info" ];
   passthru.static = self.out;
+
   nativeBuildInputs = [ m4 ];
 
   configureFlags =
