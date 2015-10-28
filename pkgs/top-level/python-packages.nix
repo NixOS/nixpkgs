@@ -517,6 +517,17 @@ let
     };
   };
 
+  appnope = buildPythonPackage rec {
+    version = "0.1.0";
+    name = "appnope-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/appnope/${name}.tar.gz";
+      sha256 = "0wgdwp5v7r4g2bss8vbdxah12hsy2mvzxh3sil9s4iskjbz5z6cb";
+    };
+
+    meta.platforms = platforms.darwin;
+  };
 
   apsw = buildPythonPackage rec {
     name = "apsw-3.7.6.2-r1";
@@ -3941,6 +3952,19 @@ let
       homepage = http://pypi.python.org/pypi/gmusicapi/;
       license = licenses.bsd3;
     };
+  };
+
+  gnureadline = buildPythonPackage rec {
+    version = "6.3.3";
+    name = "gnureadline-${version}";
+    disabled = isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gnureadline/${name}.tar.gz";
+      sha256 = "1ghck2zz4xbqa3wz73brgjhrqj55p9hc1fq6c9zb09dnyhwb0nd2";
+    };
+
+    buildInputs = [ pkgs.ncurses ];
   };
 
   gnutls = buildPythonPackage rec {
@@ -7688,7 +7712,9 @@ let
 
     buildInputs = with self; [nose] ++ optionals isPy27 [mock];
 
-    propagatedBuildInputs = with self; [decorator pickleshare simplegeneric traitlets readline requests pexpect sqlite3];
+    propagatedBuildInputs = with self;
+      [decorator pickleshare simplegeneric traitlets readline requests pexpect sqlite3]
+      ++ optionals stdenv.isDarwin [appnope gnureadline];
 
     meta = {
       description = "IPython: Productive Interactive Computing";
@@ -11675,7 +11701,6 @@ let
       description = "A module wrapper for os.path";
       homepage = http://github.com/jaraco/path.py;
       license = licenses.mit;
-      platforms = platforms.linux;
     };
 
     # Test fails with python 2.7: TestUnicodePaths.test_walkdirs_with_unicode_name
