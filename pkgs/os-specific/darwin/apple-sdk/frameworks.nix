@@ -10,7 +10,7 @@ with frameworks; with libs; {
   AVKit                   = [];
   Accounts                = [];
   AddressBook             = [ Carbon CF ];
-  AppKit                  = [ AudioToolbox QuartzCore ];
+  AppKit                  = [ AudioToolbox Foundation QuartzCore ];
   AppKitScripting         = [];
   AppleScriptKit          = [];
   AppleScriptObjC         = [];
@@ -46,7 +46,7 @@ with frameworks; with libs; {
   ExceptionHandling       = [];
   FWAUserLib              = [];
   ForceFeedback           = [ CF IOKit ];
-  Foundation              = [ CF libobjc Security ApplicationServices AppKit SystemConfiguration ];
+  Foundation              = [ CF libobjc Security ApplicationServices SystemConfiguration ];
   GLKit                   = [ CF ];
   GLUT                    = [ GL OpenGL ];
   GSS                     = [];
