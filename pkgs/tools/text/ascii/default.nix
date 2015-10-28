@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "Interactive ASCII name and synonym chart";
     homepage = "http://www.catb.org/~esr/ascii/";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
   };
 }
