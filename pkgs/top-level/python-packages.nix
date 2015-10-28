@@ -1873,7 +1873,12 @@ let
       md5 = "e26d06a8d8b16c7210414ce15d453636";
     };
 
-    propagatedBuildInputs = with self; [ cffi ];
+    propagatedBuildInputs = with self; [ pkgs.cairo cffi ];
+
+    patchPhase = ''
+      # Hardcode cairo library path
+      sed -e 's,ffi\.dlopen(,&"${pkgs.cairo}/lib/" + ,' -i cairocffi/__init__.py
+    '';
 
     meta = {
       homepage = https://github.com/SimonSapin/cairocffi;
