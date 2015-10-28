@@ -1,0 +1,64 @@
+diff -uNr munge-0.5.11-orig/src/munged/conf.c munge-0.5.11/src/munged/conf.c
+--- munge-0.5.11-orig/src/munged/conf.c	2013-08-27 20:35:31.000000000 +0200
++++ munge-0.5.11/src/munged/conf.c	2015-02-26 11:30:37.984101966 +0100
+@@ -64,11 +64,12 @@
+ #define OPT_NUM_THREADS         258
+ #define OPT_AUTH_SERVER         259
+ #define OPT_AUTH_CLIENT         260
+-#define OPT_BENCHMARK           264
+ #define OPT_GROUP_CHECK         261
+ #define OPT_GROUP_UPDATE        262
+ #define OPT_SYSLOG              263
+-#define OPT_LAST                265
++#define OPT_BENCHMARK           264
++#define OPT_PID_FILE_NAME       265
++#define OPT_LAST                266
+ 
+ const char * const short_opts = ":hLVfFMS:";
+ 
+@@ -92,6 +93,7 @@
+     { "group-check-mtime", required_argument, NULL, OPT_GROUP_CHECK  },
+     { "group-update-time", required_argument, NULL, OPT_GROUP_UPDATE },
+     { "syslog",            no_argument,       NULL, OPT_SYSLOG       },
++    { "pid-file",          required_argument, NULL, OPT_PID_FILE_NAME },
+     {  NULL,               0,                 NULL,  0               }
+ };
+ 
+@@ -363,6 +365,13 @@
+             case OPT_SYSLOG:
+                 conf->got_syslog = 1;
+                 break;
++            case OPT_PID_FILE_NAME:
++                if (conf->pidfile_name)
++                    free (conf->pidfile_name);
++                if (!(conf->pidfile_name = strdup (optarg)))
++                    log_errno (EMUNGE_NO_MEMORY, LOG_ERR,
++                        "Failed to copy pidfile name string");
++                break;
+             case '?':
+                 if (optopt > 0) {
+                     log_err (EMUNGE_SNAFU, LOG_ERR,
+@@ -479,6 +488,10 @@
+     printf ("  %*s %s\n", w, "--syslog",
+             "Redirect log messages to syslog");
+ 
++    printf ("  %*s %s [%s]\n", w, "--pid-file=file",
++            "Specify PID-file name", MUNGED_PIDFILE);
++
++
+     printf ("\n");
+     return;
+ }
+diff -uNr munge-0.5.11-orig/src/munged/munged.8.in munge-0.5.11/src/munged/munged.8.in
+--- munge-0.5.11-orig/src/munged/munged.8.in	2013-08-27 20:35:31.000000000 +0200
++++ munge-0.5.11/src/munged/munged.8.in	2015-02-26 11:20:13.056951223 +0100
+@@ -87,6 +87,9 @@
+ .BI "-S, --socket " path
+ Specify the local domain socket for communicating with clients.
+ .TP
++.BI "--pid-file " path
++Specifies the file that contains the process ID of the munged daemon.
++.TP
+ .BI "--auth-server-dir " directory
+ Specify an alternate directory in which the daemon will create the pipe used
+ to authenticate clients.  The recommended permissions for this directory

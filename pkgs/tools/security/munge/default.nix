@@ -4,9 +4,11 @@ stdenv.mkDerivation rec {
   name = "munge-0.5.11";
 
   src = fetchurl {
-    url = "http://munge.googlecode.com/files/${name}.tar.bz2";
+    url = "https://github.com/dun/munge/releases/download/${name}/${name}.tar.bz2";
     sha256 = "19aijdrjij2g0xpqgl198jh131j94p4gvam047gsdc0wz0a5c1wf";
   };
+
+  patches = [ ./add-pidfile-switch.patch ];
 
   buildInputs = [ gnused perl libgcrypt zlib bzip2 ];
 
@@ -25,6 +27,6 @@ stdenv.mkDerivation rec {
       An authentication service for creating and validating credentials
     '';
     maintainers = [ stdenv.lib.maintainers.rickynils ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
