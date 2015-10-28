@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xar, gzip, cpio, CF, pkgs }:
+{ stdenv, fetchurl, xar, gzip, cpio, pkgs }:
 
 let
   # sadly needs to be exported because security_tool needs it
@@ -126,7 +126,7 @@ in rec {
       __propagatedImpureHostDeps = [ "/usr/lib/libXplugin.1.dylib" ];
 
       propagatedBuildInputs = with frameworks; [
-        OpenGL ApplicationServices Carbon IOKit CF CoreGraphics CoreServices CoreText
+        OpenGL ApplicationServices Carbon IOKit pkgs.darwin.CF CoreGraphics CoreServices CoreText
       ];
 
       installPhase = ''
@@ -158,9 +158,16 @@ in rec {
           --replace "QuartzCore/../Frameworks/CoreImage.framework/Headers" "CoreImage"
       '';
     });
+
+    Security = stdenv.lib.overrideDerivation super.Security (drv: {
+      setupHook = ./security-setup-hook.sh;
+    });
   };
 
-  bareFrameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix { inherit frameworks libs CF; });
+  bareFrameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix {
+    inherit frameworks libs;
+    inherit (pkgs.darwin) CF cf-private libobjc;
+  });
 
   frameworks = bareFrameworks // overrides bareFrameworks;
 
