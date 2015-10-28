@@ -9372,6 +9372,7 @@ let
 
   netaddr = buildPythonPackage rec {
     name = "netaddr-0.7.18";
+    disabled = isPy35;  # https://github.com/drkjam/netaddr/issues/117
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/netaddr/${name}.tar.gz";
@@ -9380,7 +9381,6 @@ let
 
     LC_ALL = "en_US.UTF-8";
     buildInputs = [ pkgs.glibcLocales ];
-    doCheck = "${python.executable} runtests.py";
 
     meta = {
       homepage = https://github.com/drkjam/netaddr/;
