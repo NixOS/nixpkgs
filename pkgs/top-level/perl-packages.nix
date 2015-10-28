@@ -2669,11 +2669,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DateTimeEventICal = buildPerlPackage {
-    name = "DateTime-Event-ICal-0.11";
+  DateTimeEventICal = buildPerlPackage rec {
+    name = "DateTime-Event-ICal-0.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FG/FGLOCK/DateTime-Event-ICal-0.11.tar.gz;
-      sha256 = "6c3ca03c1810c996fa66943138f1f891bbc4baeb41ae2108a5f821040d78dd4c";
+      url = "mirror://cpan/authors/id/F/FG/FGLOCK/${name}.tar.gz";
+      sha256 = "1skmykxbrf98ldi72d5s1v6228gfdr5iy4y0gpl0xwswxy247njk";
     };
     propagatedBuildInputs = [ DateTime DateTimeEventRecurrence ];
     meta = {
