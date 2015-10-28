@@ -3236,11 +3236,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DevelGlobalDestruction = buildPerlPackage {
-    name = "Devel-GlobalDestruction-0.12";
+  DevelGlobalDestruction = buildPerlPackage rec {
+    name = "Devel-GlobalDestruction-0.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/H/HA/HAARG/Devel-GlobalDestruction-0.12.tar.gz;
-      sha256 = "0w4a4y9w4yldxlhks95nx8qaivpbzc40b1p8xg3y8467ixkbg9cq";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
+      sha256 = "0qn4iszgylnxjdkb6430f6a3ci7bcx9ih1az6bd5cbij1pf2965j";
     };
     propagatedBuildInputs = [ SubExporterProgressive ];
     meta = {
