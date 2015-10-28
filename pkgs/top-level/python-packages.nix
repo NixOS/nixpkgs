@@ -6024,11 +6024,11 @@ let
 
 
   djblets = buildPythonPackage rec {
-    name = "Djblets-0.6.28";
+    name = "Djblets-0.6.31";
 
     src = pkgs.fetchurl {
       url = "http://downloads.reviewboard.org/releases/Djblets/0.6/${name}.tar.gz";
-      sha256 = "11fsi911cqkjgv9j7646ljc2fgxsdfyq44kzmv01xhysm50fn6xx";
+      sha256 = "1yf0dnkj00yzzhbssw88j9gr58ngjfrd6r68p9asf6djishj9h45";
     };
 
     propagatedBuildInputs = with self; [ pil django_1_3 feedparser ];
@@ -14758,11 +14758,11 @@ let
   };
 
   reviewboard = buildPythonPackage rec {
-    name = "ReviewBoard-1.6.16";
+    name = "ReviewBoard-1.6.22";
 
     src = pkgs.fetchurl {
       url = "http://downloads.reviewboard.org/releases/ReviewBoard/1.6/${name}.tar.gz";
-      sha256 = "0vg3ypm57m43bscv8vswjdllv3d2j8lxqwwvpd65cl7jd1in0yr1";
+      sha256 = "09lc3ccazlyyd63ifxw3w4kzwd60ax2alk1a95ih6da4clg73mxf";
     };
 
     propagatedBuildInputs = with self;
