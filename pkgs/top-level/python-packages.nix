@@ -12733,6 +12733,11 @@ let
 
     propagatedBuildInputs = with self; [ dateutil ];
 
+    patchPhase = ''
+      # fails due to hash randomization
+      sed -i 's/RRULE:FREQ=MONTHLY;BYMONTHDAY=-1,-5/RRULE:FREQ=MONTHLY;BYMONTHDAY=.../' test_vobject.py
+    '';
+
     meta = {
       description = "Module for reading vCard and vCalendar files";
       homepage = http://vobject.skyhouseconsulting.com/;
