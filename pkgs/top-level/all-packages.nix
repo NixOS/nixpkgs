@@ -14474,7 +14474,9 @@ let
 
   why3 = callPackage ../applications/science/logic/why3 {};
 
-  yices = callPackage ../applications/science/logic/yices {};
+  yices = callPackage ../applications/science/logic/yices {
+    gmp-static = gmp.override { withStatic = true; };
+  };
 
   z3 = callPackage ../applications/science/logic/z3 {};
   z3_opt = callPackage ../applications/science/logic/z3_opt {};
