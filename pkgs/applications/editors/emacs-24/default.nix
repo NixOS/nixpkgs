@@ -48,10 +48,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (withX && withGTK2) gtk2
     ++ stdenv.lib.optional (withX && withGTK3) gtk3
     ++ stdenv.lib.optional (stdenv.isDarwin && withX) cairo
-    ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Foundation libobjc ];
-
-  NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin
-    "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
+    ++ stdenv.lib.optional stdenv.isDarwin AppKit;
 
   configureFlags =
     if stdenv.isDarwin
