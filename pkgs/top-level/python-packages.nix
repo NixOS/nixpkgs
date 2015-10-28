@@ -3957,6 +3957,9 @@ let
     };
 
     buildInputs = [ pkgs.ncurses ];
+    patchPhase = ''
+      substituteInPlace setup.py --replace "/bin/bash" "${pkgs.bash}/bin/bash"
+    '';
   };
 
   gnutls = buildPythonPackage rec {
