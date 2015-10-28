@@ -3285,21 +3285,12 @@ let
     name = "dnspython-${version}";
     version = "1.12.0";
 
-    src = pkgs.fetchurl {
-      url = "http://www.dnspython.org/kits/1.12.0/dnspython-1.12.0.tar.gz";
-      sha256 = "0kvjlkp96qzh3j31szpjlzqbp02brixh4j4clnpw80b0hspq5yq3";
-    };
-  };
-
-  dnspython3 = buildPythonPackage rec {
-    name = "dnspython3-${version}";
-    version = "1.12.0";
-
-    disabled = (!isPy3k);
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/d/dnspython3/${name}.zip";
+    src = if isPy3k then pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dnspython3/dnspython3-${version}.zip";
       sha256 = "138wxj702vx6zni9g2y8dbgbpin95v6hk23rh2kwfr3q4130jqz9";
+    } else pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dnspython/${name}.tar.gz";
+      sha256 = "0kvjlkp96qzh3j31szpjlzqbp02brixh4j4clnpw80b0hspq5yq3";
     };
 
     meta = {
@@ -9363,7 +9354,7 @@ let
 
     disabled = (!isPy3k);
 
-    propagatedBuildInputs = with self ; [ dnspython3 pyasn1 ];
+    propagatedBuildInputs = with self ; [ dns pyasn1 ];
 
     src = pkgs.fetchurl {
       url = "https://github.com/fritzy/SleekXMPP/archive/sleek-${version}.tar.gz";
@@ -11105,7 +11096,7 @@ let
     };
 
     buildInputs = with self; [
-      dnspython3 pycountry nose
+      dns pycountry nose
     ];
 
     preCheck = ''
