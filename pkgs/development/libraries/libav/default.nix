@@ -7,7 +7,7 @@
 , x264Support   ? false,  x264      ? null
 , xvidSupport   ? true,   xvidcore  ? null
 , faacSupport   ? false,  faac      ? null
-, vaapiSupport  ? false,  libva     ? null # ToDo: it has huge closure
+, vaapiSupport  ? true,   libva     ? null
 , vdpauSupport  ? true,   libvdpau  ? null
 , freetypeSupport ? true, freetype  ? null # it's small and almost everywhere
 , SDL # only for avplay in $bin, adds nontrivial closure to it

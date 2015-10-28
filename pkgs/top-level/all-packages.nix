@@ -6365,9 +6365,7 @@ let
 
   gperftools = callPackage ../development/libraries/gperftools { };
 
-  gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
-    callPackage = pkgs.newScope (pkgs // { inherit (pkgs) libav; });
-  });
+  gst_all_1 = recurseIntoAttrs (callPackage ../development/libraries/gstreamer { });
 
   gst_all = {
     inherit (pkgs) gstreamer gnonlin gst_python qt_gstreamer;
@@ -7430,6 +7428,7 @@ let
   });
 
   libva = callPackage ../development/libraries/libva { };
+  libva-full = libva.override { minimal = false; };
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
@@ -8350,9 +8349,13 @@ let
     inherit (pythonPackages) gyp;
   };
 
-  vaapiIntel = callPackage ../development/libraries/vaapi-intel { };
+  vaapiIntel = callPackage ../development/libraries/vaapi-intel {
+    libva = libva-full; # also wants libva-{x11,drm,wayland}
+  };
 
-  vaapiVdpau = callPackage ../development/libraries/vaapi-vdpau { };
+  vaapiVdpau = callPackage ../development/libraries/vaapi-vdpau {
+    libva = libva-full; # needs libva-{x11,glx}
+  };
 
   vamp = callPackage ../development/libraries/audio/vamp { };
 
@@ -13092,6 +13095,7 @@ let
 
   vlc = callPackage ../applications/video/vlc {
     ffmpeg = ffmpeg_2;
+    libva = libva-full; # also wants libva-x11
   };
 
   vlc_qt5 = qt5Libs.vlc;

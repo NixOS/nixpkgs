@@ -1,5 +1,6 @@
 { stdenv, fetchurl, libX11, pkgconfig, libXext, libdrm, libXfixes, wayland, libffi
-, mesa ? null
+, mesa_noglu
+, minimal ? true, libva
 }:
 
 stdenv.mkDerivation rec {
@@ -10,9 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "0bjfb5s8dk3lql843l91ffxzlq47isqks5sj19cxh7j3nhzw58kz";
   };
 
-  buildInputs = [ libX11 libXext pkgconfig libdrm libXfixes wayland libffi mesa ];
+  outputs = [ "dev" "out" "bin" ];
 
-  configureFlags = stdenv.lib.optional (mesa != null) "--enable-glx";
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ libdrm ]
+    ++ stdenv.lib.optionals (!minimal) [ libva libX11 libXext libXfixes wayland libffi mesa_noglu ];
+  # TODO: share libs between minimal and !minimal - perhaps just symlink them
+
+  #configureFlags = stdenv.lib.optional (mesa != null) "--enable-glx";
 
   meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/vaapi;
