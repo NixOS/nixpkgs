@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
 , pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
-, alsaLib, cairo, acl, gpm, AppKit, Foundation, libobjc
+, alsaLib, cairo, acl, gpm, AppKit, Foundation, libobjc, cf-private
 , withX ? !stdenv.isDarwin
 , withGTK3 ? false, gtk3 ? null
 , withGTK2 ? true, gtk2
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (withX && withGTK2) gtk2
     ++ stdenv.lib.optional (withX && withGTK3) gtk3
     ++ stdenv.lib.optional (stdenv.isDarwin && withX) cairo
-    ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Foundation libobjc ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Foundation libobjc cf-private ];
 
   NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin
     "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
