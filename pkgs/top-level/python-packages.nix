@@ -2999,6 +2999,24 @@ let
     };
   };
 
+
+  tinycss = buildPythonPackage rec {
+    name = "tinycss-${version}";
+    version = "0.3";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/t/tinycss/${name}.tar.gz";
+      sha256 = "1pichqra4wk86142hqgvy9s5x6c5k5zhy8l9qxr0620pqk8spbd4";
+    };
+
+    meta = {
+      description = "complete yet simple CSS parser for Python";
+      license = licenses.bsd3;
+      homepage = http://pythonhosted.org/tinycss/;
+    };
+  };
+
+
   cssselect = buildPythonPackage rec {
     name = "cssselect-${version}";
     version = "0.9.1";
