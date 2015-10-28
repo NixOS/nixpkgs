@@ -2052,6 +2052,26 @@ let
       maintainers = with maintainers; [ DamienCassou ];
     };
   };
+
+  click-threading = buildPythonPackage rec {
+    version = "0.1.2";
+    name = "click-threading-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/click-threading/${name}.tar.gz";
+      sha256 = "0jmrv4334lfxa2ss53c06dafdwqbk1pb3ihd26izn5igw1bm8145";
+    };
+
+    propagatedBuildInputs = with self; [ click ];
+
+    meta = {
+      homepage = https://github.com/click-contrib/click-threading/;
+      description = "Multithreaded Click apps made easy";
+      license = licenses.mit;
+      maintainers = with maintainers; [ DamienCassou ];
+    };
+  };
+
   clepy = buildPythonPackage rec {
     name = "clepy-0.3.20";
 
