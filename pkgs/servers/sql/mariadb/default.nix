@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, ncurses, zlib, openssl, pcre, boost, judy, bison, libxml2
-, libaio, libevent, groff, jemalloc, perl, fixDarwinDylibNames
+, libaio, libevent, groff, jemalloc, perl, fixDarwinDylibNames, cctools
 }:
 
 with stdenv.lib;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake ncurses openssl zlib pcre libxml2 boost judy bison libevent ]
     ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools ];
 
   patches = stdenv.lib.optional stdenv.isDarwin ./my_context_asm.patch;
 
@@ -52,10 +52,11 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "-DWITHOUT_OQGRAPH_STORAGE_ENGINE=1"
     "-DWITHOUT_TOKUDB=1"
+    "-DCURSES_LIBRARY=${ncurses}/lib/libncurses.dylib"
   ];
 
   # fails to find lex_token.h sometimes
-  enableParallelBuilding = false;
+  enableParallelBuilding = stdenv.isDarwin;
 
   outputs = [ "out" "lib" ];
 
