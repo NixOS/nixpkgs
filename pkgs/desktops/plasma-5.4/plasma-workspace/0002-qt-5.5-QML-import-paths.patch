@@ -1,4 +1,4 @@
-From 709fe8bff26c9680de13be5e8e5bc587c25a9b2e Mon Sep 17 00:00:00 2001
+From 033d3560d26ceabbd6da6310d326fec7a473df82 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@gmail.com>
 Date: Mon, 19 Oct 2015 18:55:36 -0500
 Subject: [PATCH 2/2] qt-5.5 QML import paths
@@ -119,5 +119,5 @@ index 2e26455..864c9c5 100644
  Item {
      id: root
 -- 
-2.5.2
+2.6.2
 
