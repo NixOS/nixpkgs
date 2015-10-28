@@ -47,8 +47,9 @@ stdenv.mkDerivation rec {
         imagemagick gconf ]
     ++ stdenv.lib.optional (withX && withGTK2) gtk2
     ++ stdenv.lib.optional (withX && withGTK3) gtk3
-    ++ stdenv.lib.optional (stdenv.isDarwin && withX) cairo
-    ++ stdenv.lib.optional stdenv.isDarwin AppKit;
+    ++ stdenv.lib.optional (stdenv.isDarwin && withX) cairo;
+
+  propagatedBuildInputs = stdenv.lib.optional stdenv.isDarwin AppKit;
 
   configureFlags =
     if stdenv.isDarwin
