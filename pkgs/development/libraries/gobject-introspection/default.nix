@@ -15,10 +15,13 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/gobject-introspection/${ver_maj}/${name}.tar.xz";
     sha256 = "6658bd3c2b8813eb3e2511ee153238d09ace9d309e4574af27443d87423e4233";
   };
+  patches = [ ./absolute_shlib_path.patch ];
 
-  outputs = [ "dev" "out" "doc" ];
+  outputs = [ "dev" "out" ];
+  outputBin = "dev";
+  outputMan = "dev"; # tiny pages
 
-  buildInputs = [ flex bison pkgconfig python ]
+  buildInputs = [ flex bison pkgconfig python setupHook/*move .gir*/ ]
     ++ libintlOrEmpty
     ++ stdenv.lib.optional stdenv.isDarwin otool;
   propagatedBuildInputs = [ libffi glib ];
@@ -36,8 +39,6 @@ stdenv.mkDerivation rec {
   # by pygobject3 (and maybe others), but it's only searched in $out
 
   setupHook = ./setup-hook.sh;
-
-  patches = [ ./absolute_shlib_path.patch ];
 
   meta = with stdenv.lib; {
     description = "A middleware layer between C libraries and language bindings";
