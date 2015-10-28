@@ -11255,7 +11255,7 @@ let
     acl = null;
     gpm = null;
     inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
-    inherit (darwin) libobjc;
+    inherit (darwin) libobjc cf-private;
   };
 
   emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
