@@ -11261,8 +11261,7 @@ let
     imagemagick = null;
     acl = null;
     gpm = null;
-    inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
-    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
   emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
