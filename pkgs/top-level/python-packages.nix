@@ -20570,8 +20570,10 @@ let
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/suds/suds-0.4.tar.gz";
-      md5 = "b7502de662341ed7275b673e6bd73191";
+      sha256 = "1w4s9051iv90c0gs73k80c3d51y2wbx1xgfdgg2hk7mv4gjlllnm";
     };
+
+    patches = [ ../development/python-modules/suds-0.4-CVE-2013-2217.patch ];
 
     meta = with stdenv.lib; {
       description = "Lightweight SOAP client";
