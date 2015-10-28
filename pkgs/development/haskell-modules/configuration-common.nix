@@ -217,12 +217,12 @@ self: super: {
 
   double-conversion = if !pkgs.stdenv.isDarwin
     then super.double-conversion
-    else overrideCabal super.double-conversion (drv:
+    else addBuildDepend (overrideCabal super.double-conversion (drv:
       {
         postPatch = ''
           substituteInPlace double-conversion.cabal --replace stdc++ c++
         '';
-      });
+      })) pkgs.libcxx;
 
   # tests don't compile for some odd reason
   jwt = dontCheck super.jwt;
