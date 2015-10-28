@@ -13,16 +13,17 @@ stdenv.mkDerivation rec {
     sha256 = "0rqvj5gcs2zfyyg9llm289b0xkj4mrhzxfjpjja0wx1m6vn5axjk";
   };
 
-  outputs = [ "dev" "out" "bin" "doc" ];
+  outputs = [ "dev" "out" "docdev" ];
+  outputBin = "dev";
 
   setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true;
 
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
-  buildInputs = [ libX11 libintlOrEmpty ];
+  buildInputs = [ libX11 gobjectIntrospection ] ++ libintlOrEmpty;
 
-  nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ glib libtiff libjpeg libpng jasper ];
 
@@ -33,16 +34,11 @@ stdenv.mkDerivation rec {
   # The tests take an excessive amount of time (> 1.5 hours) and memory (> 6 GB).
   inherit (doCheck);
 
-  # propagate the bin output TODO: use propagatedOutputs instead
-  postPhases = "postPostFixup";
-  postPostFixup = ''
-    echo -n " $bin" >> "$dev"/nix-support/propagated-*build-inputs
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "A library for image loading and manipulation";
     homepage = http://library.gnome.org/devel/gdk-pixbuf/;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ maintainers.eelco ];
+    platforms = platforms.unix;
   };
 }
+
