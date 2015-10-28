@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     ]
     ++ stdenv.lib.optional (xorg == null) "--without-x";
 
-  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace cmd/dot/Makefile.in --replace "-lstdc++" ""
-    substituteInPlace cmd/edgepaint/Makefile.in --replace "-lstdc++" ""
-    substituteInPlace cmd/mingle/Makefile.in --replace "-lstdc++" ""
-    substituteInPlace plugin/gdiplus/Makefile.in --replace "-lstdc++" ""
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    for foo in cmd/dot/Makefile.in cmd/edgepaint/Makefile.in \
+                    cmd/mingle/Makefile.in plugin/gdiplus/Makefile.in; do
+      substituteInPlace "$foo" --replace "-lstdc++" "-lc++"
+    done
   '';
 
   preBuild = ''
