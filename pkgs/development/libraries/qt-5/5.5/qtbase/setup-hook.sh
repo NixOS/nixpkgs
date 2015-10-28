@@ -22,7 +22,7 @@ addQtModule() {
 
 propagateRuntimeDeps() {
     local propagated
-    for dir in "lib/qt5/plugins" "lib/qt5/qml" "lib/qt5/imports"; do
+    for dir in "etc/xdg" "lib/qt5/plugins" "lib/qt5/qml" "lib/qt5/imports" "share"; do
         if [[ -d "$1/$dir" ]]; then
             propagated=
             for pkg in $propagatedBuildInputs; do
