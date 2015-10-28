@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     sha1 = "c8da68aa66ca0855b5d0ff552766d3e8679e1d24";
   };
 
-  outputs = [ "dev" "out" "bin" "doc" ];
+  outputs = [ "dev" "out" "docdev" ];
+  outputBin = "dev"; # very small
 
   nativeBuildInputs = [ pkgconfig libiconv ] ++ libintlOrEmpty;
 
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     # Work around broken `Requires.private' that prevents Freetype
     # `-I' flags to be propagated.
     sed -i "src/cairo.pc.in" \
-        -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype}/include/freetype2 -I${freetype}/include|g'
+        -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype.dev}/include/freetype2 -I${freetype.dev}/include|g'
     '';
 
   enableParallelBuilding = true;
