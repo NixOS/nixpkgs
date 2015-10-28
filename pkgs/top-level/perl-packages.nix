@@ -2837,11 +2837,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ DateTime DateTimeFormatBuilder ];
   };
 
-  DateTimeLocale = buildPerlPackage {
-    name = "DateTime-Locale-0.46";
+  DateTimeLocale = buildPerlPackage rec {
+    name = "DateTime-Locale-0.92";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Locale-0.46.tar.gz;
-      sha256 = "b4ceaa0dc0b89d4eb180eb970a927cf376e3d04ef42de98de2e034cd2021348d";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
+      sha256 = "1fq2wbpfvi5gy3jaild4974sz02vdvfkb98aahni9par4sgn469z";
     };
     buildInputs = [ DistCheckConflicts ];
     propagatedBuildInputs = [ ListMoreUtils ParamsValidate ];
