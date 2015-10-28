@@ -41,7 +41,7 @@ in
             };
             extraArguments = mkOption {
               type = types.string;
-              example = "-N -D4343 bill@socks.host.net";
+              example = "-N -D4343 bill@socks.example.net";
               description = ''
                 Arguments to be passed to AutoSSH and retransmitted to SSH
                 process. Some meaningful options include -N (don't run remote
