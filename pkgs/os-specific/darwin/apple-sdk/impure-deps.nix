@@ -249,4 +249,7 @@ rec {
   SecurityFoundation = [
     "/System/Library/Frameworks/SecurityFoundation.framework"
   ];
+  Kernel = [
+    "/System/Library/Frameworks/Kernel.framework"
+  ];
 }
