@@ -150,6 +150,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2}/include/libxml2 $additionalFlags"
+    configureFlagsArray=(
+      --with-cc-opt="-fPIE -fstack-protector-all --param ssp-buffer-size=4 -O2 -D_FORTIFY_SOURCE=2"
+      --with-ld-opt="-pie -Wl,-z,relro,-z,now"
+    )
   '';
 
   meta = {
