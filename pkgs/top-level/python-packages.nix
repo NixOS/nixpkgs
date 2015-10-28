@@ -1042,13 +1042,13 @@ let
   });
 
   beaker = buildPythonPackage rec {
-    name = "Beaker-1.6.4";
+    name = "Beaker-1.7.0";
 
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/B/Beaker/${name}.tar.gz";
-      md5 = "c2e102870ed4c53104dec48ceadf8e9d";
+      sha256 = "0vv4y22b3ly1212n9nnhgvc8yz32adlfl7w7s1wj0i5srpjcgvlq";
     };
 
     buildInputs =
