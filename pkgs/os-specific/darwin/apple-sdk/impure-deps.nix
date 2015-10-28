@@ -4,6 +4,9 @@ rec {
     "/usr/lib/libsqlite3.dylib"
     "/usr/lib/libxml2.2.dylib"
   ];
+  ForceFeedback = [
+    "/System/Library/Frameworks/ForceFeedback.framework"
+  ];
   IOKit = [
     "/System/Library/Frameworks/IOKit.framework"
   ];
