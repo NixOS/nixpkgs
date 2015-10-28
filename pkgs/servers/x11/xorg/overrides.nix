@@ -332,9 +332,6 @@ in
           args.apple_sdk.libs.Xplugin
           args.apple_sdk.frameworks.Carbon
           args.apple_sdk.frameworks.Cocoa
-          args.apple_sdk.frameworks.CoreGraphics
-          args.apple_sdk.frameworks.Foundation
-          args.cf-private args.libobjc
         ];
         propagatedBuildInputs = commonPropagatedBuildInputs ++ [
           libAppleWM applewmproto
