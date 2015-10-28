@@ -31,12 +31,12 @@ let
   # This is intended to be run in postInstall of any package
   # which has $out/include/ containing just some disjunct directories.
   flattenInclude = ''
-    for dir in "$out"/include/*; do
-      cp -r "$dir"/* "$out/include/"
+    for dir in "''${!outputInclude}"/include/*; do
+      cp -r "$dir"/* "''${!outputInclude}/include/"
       rm -r "$dir"
       ln -s . "$dir"
     done
-    ln -sr -t "$out/include/" "$out"/lib/*/include/* 2>/dev/null || true
+    ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
 
   ver_maj = "2.46";
@@ -53,20 +53,21 @@ stdenv.mkDerivation rec {
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch ++ optional doCheck ./skip-timer-test.patch;
 
-  outputs = [ "dev" "out" "doc" ];
+  outputs = [ "dev" "out" "docdev" ];
   outputBin = "dev";
 
   setupHook = ./setup-hook.sh;
 
-  buildInputs = [ libelf setupHook/*get the gtk-doc hook*/ ]
+  buildInputs = [ libelf setupHook pcre ]
     ++ optionals doCheck [ tzdata libxml2 desktop_file_utils shared_mime_info ];
 
   nativeBuildInputs = [ pkgconfig gettext perl python ];
 
-  propagatedBuildInputs = [ zlib libffi libiconv /*pcre*/ ]
+  propagatedBuildInputs = [ zlib libffi libiconv ]
     ++ libintlOrEmpty;
 
-  configureFlags = [ ] # [ "--with-pcre=system" ] # internal pcre only adds <200kB
+  # internal pcre would only add <200kB, but it's relatively common
+  configureFlags = [ "--with-pcre=system" ]
     ++ optional stdenv.isDarwin "--disable-compile-warnings"
     ++ optional stdenv.isSunOS "--disable-modular-tests";
 
