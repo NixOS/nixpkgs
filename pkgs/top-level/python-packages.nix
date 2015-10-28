@@ -15283,6 +15283,7 @@ let
   scikitlearn = buildPythonPackage rec {
     name = "scikit-learn-${version}";
     version = "0.17b1";
+    disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
     src = pkgs.fetchurl {
       url = "https://github.com/scikit-learn/scikit-learn/archive/${version}.tar.gz";
