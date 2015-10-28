@@ -2,7 +2,7 @@
 , python, libxml2Python, file, expat, makedepend, xorg, llvm, libffi, libvdpau
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
 , enableExtraFeatures ? false # not maintained
-, darwin
+, OpenGL, apple_sdk, Xplugin
 }:
 
 let
@@ -23,11 +23,7 @@ let
       presentproto
       libX11 libXext libxcb libXt libxshmfence
       libffi libvdpau
-    ] ++ stdenv.lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.OpenGL
-      darwin.apple_sdk.sdk
-      darwin.apple_sdk.libs.Xplugin
-    ];
+    ] ++ stdenv.lib.optionals stdenv.isDarwin [ OpenGL apple_sdk.sdk Xplugin ];
 
     postUnpack = ''
       ln -s darwin $sourceRoot/configs/current

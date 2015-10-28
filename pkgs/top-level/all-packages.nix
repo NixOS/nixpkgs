@@ -7623,7 +7623,11 @@ let
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
   mesaDarwinOr = alternative: if stdenv.isDarwin
-    then callPackage ../development/libraries/mesa-darwin { }
+    then callPackage ../development/libraries/mesa-darwin {
+      inherit (darwin.apple_sdk.frameworks) OpenGL;
+      inherit (darwin.apple_sdk.libs) Xplugin;
+      inherit (darwin) apple_sdk;
+    }
     else alternative;
   mesa_noglu = mesaDarwinOr (callPackage ../development/libraries/mesa {
     # makes it slower, but during runtime we link against just mesa_drivers
