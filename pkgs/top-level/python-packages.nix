@@ -16246,7 +16246,6 @@ let
 
   sqlalchemy9 = buildPythonPackage rec {
     name = "SQLAlchemy-0.9.9";
-    doCheck = !isPyPy;  # lots of tests fail
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
@@ -16259,7 +16258,7 @@ let
 
     # Test-only dependency pysqlite doesn't build on Python 3. This isn't an
     # acceptable reason to make all dependents unavailable on Python 3 as well
-    doCheck = !isPy3k || isPyPy;
+    doCheck = !(isPyPy || isPy3k);
 
     checkPhase = ''
       ${python.executable} sqla_nose.py
