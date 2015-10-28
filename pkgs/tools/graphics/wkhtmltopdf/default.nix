@@ -69,12 +69,12 @@ stdenv.mkDerivation rec {
     ];
 
   configurePhase = "qmake wkhtmltopdf.pro INSTALLBASE=$out";
-  
+
   patches = [ ./makefix.patch ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://wkhtmltopdf.org/;
     description = "Tools for rendering web pages to PDF or images";
     longDescription = ''
@@ -85,6 +85,7 @@ stdenv.mkDerivation rec {
 
       There is also a C library, if you're into that kind of thing.
     '';
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ jb55 ];
   };
 }
