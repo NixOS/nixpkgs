@@ -2730,11 +2730,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DateTimeFormatHTTP = buildPerlPackage {
-    name = "DateTime-Format-HTTP-0.40";
+  DateTimeFormatHTTP = buildPerlPackage rec {
+    name = "DateTime-Format-HTTP-0.42";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CK/CKRAS/DateTime-Format-HTTP-0.40.tar.gz;
-      sha256 = "214e9e2e364090ebc5bc682b29709828944ae67f0bb4a989dd1e6d010845213f";
+      url = "mirror://cpan/authors/id/C/CK/CKRAS/${name}.tar.gz";
+      sha256 = "0h6qqdg1yzqkdxp7hqlp0qa7d1y64nilgimxs79dys2ryjfpcknh";
     };
     propagatedBuildInputs = [ DateTime HTTPDate ];
     meta = {
