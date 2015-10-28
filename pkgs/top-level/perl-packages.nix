@@ -2655,11 +2655,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DateTime = buildPerlModule {
-    name = "DateTime-1.19";
+  DateTime = buildPerlModule rec {
+    name = "DateTime-1.21";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-1.19.tar.gz;
-      sha256 = "07c8624a7827277e8eda35c77cfc6fd056bf2782238597f424ef6a6e33ed6009";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
+      sha256 = "1cgnscbh40f783znpq15rkvbfflfm8azdl0v6yqr7minmq6899d3";
     };
     buildInputs = [ TestFatal TestWarnings ];
     propagatedBuildInputs = [ DateTimeLocale DateTimeTimeZone ParamsValidate TryTiny ];
