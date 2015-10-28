@@ -52,7 +52,7 @@ stdenv.mkDerivation rec{
     homepage = http://lilypond.org/;
     license = licenses.gpl3;
     maintainers = [ maintainers.marcweber ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 
   patches = [ ./findlib.patch ];
