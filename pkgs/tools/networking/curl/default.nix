@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "050q6i20lbh7dyyhva2sbp8dbyp6sghlkbpvq2bvcasqwsx4298y";
   };
 
-  outputs = [ "dev" "out" "bin" "doc" ]; # man3 is "dev-doc"
+  outputs = [ "dev" "out" "bin" "man" "docdev" ];
 
   nativeBuildInputs = [ pkgconfig ];
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains

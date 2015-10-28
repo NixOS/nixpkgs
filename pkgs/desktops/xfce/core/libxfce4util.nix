@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "07c8r3xwx5is298zk77m3r784gmr5y4mh8bbca5zdjqk5vxdwsw7";
   };
 
-  outputs = [ "dev" "out" "doc" ]; # just dev-doc
+  outputs = [ "dev" "out" "docdev" ];
 
   buildInputs = [ pkgconfig glib intltool ];
 

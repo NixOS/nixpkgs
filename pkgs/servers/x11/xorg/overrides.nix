@@ -128,7 +128,7 @@ in
     '';
     propagatedBuildInputs = [ xorg.libSM ];
     CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
-    outputs = [ "dev" "out" "doc" ]; # "dev-doc" only (incl. man pages)
+    outputs = [ "dev" "out" "docdev" ];
   };
 
   # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
@@ -151,7 +151,7 @@ in
   };
 
   libXaw = attrs: attrs // {
-    outputs = [ "dev" "out" "doc" ]; # just dev-doc
+    outputs = [ "dev" "out" "docdev" ];
     propagatedBuildInputs = [ xorg.libXmu ];
   };
 
@@ -213,11 +213,11 @@ in
   };
 
   libXres = attrs: attrs // {
-    outputs = [ "dev" "out" "doc" ]; # just dev-doc
+    outputs = [ "dev" "out" "docdev" ];
   };
 
   libXv = attrs: attrs // {
-    outputs = [ "dev" "out" "doc" ]; # just dev-doc
+    outputs = [ "dev" "out" "docdev" ];
   };
 
   libXvMC = attrs: attrs // {

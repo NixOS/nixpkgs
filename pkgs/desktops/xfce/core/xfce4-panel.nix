@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   patches = [ ./xfce4-panel-datadir.patch ];
   patchFlags = "-p1";
 
-  outputs = [ "dev" "out" "doc" ]; # just dev-doc
+  outputs = [ "dev" "out" "docdev" ];
 
   buildInputs =
     [ pkgconfig intltool gtk libxfce4util exo libwnck

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ryz1gfgrxcj806cakcblxf0bcwq8p2mw8k86fs3f5wlwayawzkn";
   };
 
-  outputs = [ "dev" "out" "doc" ];
+  outputs = [ "dev" "out" ];
   outputBin = "dev"; # compilation tools
 
   postInstall = ''

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  outputs = [ "dev" "out" "doc" ];
+  outputs = [ "dev" "out" ];
 
   buildInputs = libintlOrEmpty;
 

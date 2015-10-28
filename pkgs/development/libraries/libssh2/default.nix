@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "05c2is69c50lyikkh29nk6zhghjk4i7hjx0zqfhq47aald1jj82s";
   };
 
-  outputs = [ "dev" "out" "doc" ]; # it's dev-doc only
+  outputs = [ "dev" "out" "docdev" ];
 
   buildInputs = [ openssl zlib ];
 

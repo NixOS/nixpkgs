@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mj6xn40py9r9lvzg633fal81xfwfm89d9mvz7jk4lmwk0g49imj";
   };
 
-  outputs = [ "dev" "out" "doc" ];
+  outputs = [ "dev" "out" "docdev" ];
   outputBin = "dev";
 
   enableParallelBuilding = true;
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     else "--with-xinput=yes";
 
   postInstall = ''
-    _moveToOutput share/gtk-2.0/demo "$doc"
+    _moveToOutput share/gtk-2.0/demo "$docdev"
   '';
 
   passthru = {
