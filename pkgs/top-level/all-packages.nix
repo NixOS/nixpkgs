@@ -626,6 +626,8 @@ let
 
   inherit (androidenv) androidsdk_4_4 androidndk;
 
+  arc-gtk-theme = callPackage ../misc/themes/arc { };
+
   aria2 = callPackage ../tools/networking/aria2 { };
   aria = aria2;
 
