@@ -745,7 +745,7 @@ let self = _self // overrides;
 
   git-gutter = melpaBuild rec {
     pname = "git-gutter";
-    version = "0.83";
+    version = "20150930";
     src = fetchFromGitHub {
       owner  = "syohex";
       repo   = "emacs-git-gutter";
