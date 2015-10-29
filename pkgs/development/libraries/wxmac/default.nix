@@ -1,8 +1,15 @@
-{ stdenv, fetchurl, setfile, rez, derez,
+{ stdenv, fetchurl, writeScriptBin,
   expat, libiconv, libjpeg, libpng, libtiff, zlib
+, AGL, Cocoa, Kernel, QuickTime
 }:
 
 with stdenv.lib;
+
+let fake = name: writeScriptBin name ''
+  #!${stdenv.shell}
+  echo >&2 "Faking call to ${name} with arguments:"
+  echo >&2 "$@"
+''; in
 
 stdenv.mkDerivation rec {
   version = "3.0.2";
@@ -15,9 +22,19 @@ stdenv.mkDerivation rec {
 
   patches = [ ./wx.patch ];
 
-  buildInputs = [ setfile rez derez expat libiconv libjpeg libpng libtiff zlib ];
+  buildInputs = [
+    expat libiconv libjpeg libpng libtiff zlib
+    AGL Cocoa Kernel QuickTime
+    (fake "Rez") (fake "Setfile") (fake "DeRez") # not open source
+  ];
+
+  postPatch = ''
+    substituteInPlace configure --replace "-framework System" -lSystem
+  '';
 
   configureFlags = [
+    "wx_cv_std_libfullpath=/var/empty"
+    "--with-macosx-version-min=10.7"
     "--enable-unicode"
     "--with-osx_cocoa"
     "--enable-std_string"
@@ -43,6 +60,8 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     ./wx-config --libs
   '';
+
+  NIX_CFLAGS_COMPILE = "-Wno-undef";
 
   doCheck = true;
 

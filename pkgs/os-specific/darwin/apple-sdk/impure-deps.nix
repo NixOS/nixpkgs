@@ -7,6 +7,9 @@ rec {
   ForceFeedback = [
     "/System/Library/Frameworks/ForceFeedback.framework"
   ];
+  AGL = [
+    "/System/Library/Frameworks/AGL.framework"
+  ];
   IOKit = [
     "/System/Library/Frameworks/IOKit.framework"
   ];
@@ -15,6 +18,9 @@ rec {
   ];
   QuickLook = [
     "/System/Library/Frameworks/QuickLook.framework"
+  ];
+  Kernel = [
+    "/System/Library/Frameworks/Kernel.framework"
   ];
   Quartz = [
     "/System/Library/Frameworks/Quartz.framework"
