@@ -3138,6 +3138,5 @@ let
     sha256 = "1wkvsz8nqwyp36wbm8vcw4449sfs46894nskrfj9qbsrjijvamyc";
     excludedPackages = "\\(go/printer/testdata\\)";
     buildInputs = [ ninefans ];
-    subPackages = [ "./" ];
   };
 }; in self
