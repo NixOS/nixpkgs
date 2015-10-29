@@ -2525,6 +2525,10 @@ let
     buildInputs = with self; [
       oslosphinx oslotest requests-mock
     ];
+
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
   };
 
 
@@ -2573,6 +2577,10 @@ let
       substituteInPlace novaclient/tests/unit/v2/test_servers.py --replace "test_get_password" "noop"
     '';
 
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
+
     meta = {
       homepage = https://github.com/openstack/python-novaclient/;
       description = "Client library and command line tool for the OpenStack Nova API";
@@ -2598,6 +2606,9 @@ let
     buildInputs = with self; [
      requests-mock
     ];
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+    '';
 
     meta = with stdenv.lib; {
       homepage = "http://wiki.openstack.org/OpenStackClient";
@@ -10289,6 +10300,7 @@ let
 
     patchPhase = ''
       substituteInPlace tempest_lib/tests/cli/test_execute.py --replace "/bin/ls" "${pkgs.coreutils}/bin/ls"
+      sed -i 's@python@${python.interpreter}@' .testr.conf
     '';
 
     buildInputs = with self; [ testtools testrepository subunit oslotest ];
@@ -10620,6 +10632,12 @@ let
       tempest-lib mox3 oslotest requests-mock
     ];
 
+    patchPhase = ''
+      sed -i 's@python@${python.interpreter}@' .testr.conf
+      # test fails on py3k
+      ${if isPy3k then "substituteInPlace neutronclient/tests/unit/test_cli20_port.py --replace 'test_list_ports_with_fixed_ips_in_csv' 'noop'" else ""}
+    '';
+
     meta = with stdenv.lib; {
       description = "Python bindings to the Neutron API";
       homepage = "http://www.openstack.org/";
@@ -10721,7 +10739,7 @@ let
    ];
 
    checkPhase = ''
-     python -m subunit.run discover -t ./ .
+     ${python.interpreter} -m subunit.run discover -t ./ .
    '';
 
    meta = with stdenv.lib; {
@@ -11054,6 +11072,7 @@ let
   networking-hyperv = buildPythonPackage rec {
     name = "networking-hyperv-${version}";
     version = "2015.1.0";
+    disabled = isPy3k;  # failing tests
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/networking-hyperv/${name}.tar.gz";
@@ -14791,11 +14810,16 @@ let
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/r/restview/${name}.tar.gz";
-      sha256 = "0rda1py5fqzs5fkfjrdli74zf72wijxc9j3989mivhrbrslx3vjj";
+      sha256 = "18diqmh6vwz6imcmvwa7s2v4562y73n072d5d7az2r2ks0g2bzdb";
     };
 
     propagatedBuildInputs = with self; [ docutils readme pygments ];
     buildInputs = with self; [ mock ];
+
+    patchPhase = ''
+      # dict order breaking tests
+      sed -i 's@<a href="http://www.example.com" rel="nofollow">@...@' src/restview/tests.py
+    '';
 
     meta = {
       description = "ReStructuredText viewer";
