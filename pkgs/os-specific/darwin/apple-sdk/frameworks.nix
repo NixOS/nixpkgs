@@ -108,7 +108,7 @@ with frameworks; with libs; {
   # Umbrellas
   Accelerate          = [ CoreWLAN IOBluetooth ];
   ApplicationServices = [ CF CoreServices CoreText ImageIO ];
-  Carbon              = [ ApplicationServices CF CoreServices IOKit Security QuartzCore ];
+  Carbon              = [ ApplicationServices CF CoreServices Foundation IOKit Security QuartzCore ];
   CoreBluetooth       = [];
   CoreServices        = [ CFNetwork CoreAudio CoreData CF DiskArbitration Security NetFS OpenDirectory ServiceManagement ];
   IOBluetooth         = [ IOKit ];
