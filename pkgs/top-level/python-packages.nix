@@ -6400,8 +6400,8 @@ let
     doCheck = false;
 
     meta = {
-      homepage = http://www.fig.sh/;
-      description = "Fast, isolated development environments using Docker";
+      homepage = "https://docs.docker.com/compose/";
+      description = "Multi-container orchestration for Docker";
       license = licenses.asl20;
     };
   };
