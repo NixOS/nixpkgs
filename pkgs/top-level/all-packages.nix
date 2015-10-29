@@ -799,6 +799,8 @@ let
     tileMode = false;
   };
 
+  cuyo = callPackage ../games/cuyo { };
+
   contacts = callPackage ../tools/misc/contacts { };
 
   datamash = callPackage ../tools/misc/datamash { };
