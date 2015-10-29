@@ -1,10 +1,10 @@
 { stdenv, fetchurl, perl, gnum4, ncurses, openssl
 , gnused, gawk, makeWrapper
-, Carbon, Cocoa
 , odbcSupport ? false, unixODBC ? null
 , wxSupport ? true, mesa ? null, wxGTK ? null, xorg ? null, wxmac ? null
 , javacSupport ? false, openjdk ? null
 , enableHipe ? true
+, AGL, Cocoa
 }:
 
 assert wxSupport -> (if stdenv.isDarwin
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     ] ++ optionals wxSupport (if stdenv.isDarwin then [ wxmac ] else [ mesa wxGTK xorg.libX11 ])
       ++ optional odbcSupport unixODBC
       ++ optional javacSupport openjdk
-      ++ stdenv.lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
+      ++ stdenv.lib.optionals stdenv.isDarwin [ AGL Cocoa ];
 
   patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';
 
