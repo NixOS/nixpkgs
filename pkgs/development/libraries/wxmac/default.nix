@@ -1,15 +1,10 @@
-{ stdenv, fetchurl, writeScriptBin,
-  expat, libiconv, libjpeg, libpng, libtiff, zlib
+{ stdenv, fetchurl
+, expat, libiconv, libjpeg, libpng, libtiff, zlib
+, setfile, rez, derez
 , AGL, Cocoa, Kernel, QuickTime
 }:
 
 with stdenv.lib;
-
-let fake = name: writeScriptBin name ''
-  #!${stdenv.shell}
-  echo >&2 "Faking call to ${name} with arguments:"
-  echo >&2 "$@"
-''; in
 
 stdenv.mkDerivation rec {
   version = "3.0.2";
@@ -25,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     expat libiconv libjpeg libpng libtiff zlib
     AGL Cocoa Kernel QuickTime
-    (fake "Rez") (fake "Setfile") (fake "DeRez") # not open source
+    setfile rez derez
   ];
 
   postPatch = ''
