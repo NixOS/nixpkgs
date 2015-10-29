@@ -1565,4 +1565,25 @@ rec {
 
   };
 
+  vim-colorschemes = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-colorschemes-2015-07-25";
+    src = fetchgit {
+      url = "git://github.com/flazz/vim-colorschemes";
+      rev = "28a989b28457e38df620e4c7ab23e224aff70efe";
+      sha256 = "5308c874a34dc03256ece2e54ab7b92c8384ebb4137436582fd4aa6c38ad36e5";
+    };
+    dependencies = [];
+
+  };
+
+  vim-colorstepper = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-colorstepper-2015-08-04";
+    src = fetchgit {
+      url = "git://github.com/jonbri/vim-colorstepper";
+      rev = "5783c2567a193e7604780353d6f8ce445b2ab191";
+      sha256 = "a9ab0c724a827eba9c74d93dda118863656d27df7d5d26b971e0ac71c87f7e59";
+    };
+    dependencies = [];
+
+  };
 }
