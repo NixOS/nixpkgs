@@ -743,6 +743,19 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  git-gutter = melpaBuild rec {
+    pname = "git-gutter";
+    version = "0.83";
+    src = fetchFromGitHub {
+      owner  = "syohex";
+      repo   = "emacs-git-gutter";
+      rev    = "df7fb13481bea2b1476ca8a20bc958b17d1e06ae";
+      sha256 = "1xwdyjh13lp06yy9477013nj6idpsjr4ifg7hmyk5ai80axkgly7";
+    };
+    files = [ "git-gutter.el" ];
+    meta.license = gpl3Plus;
+  };
+
   git-rebase-mode = melpaBuild rec {
     pname = "git-rebase-mode";
     version = "1.0.0";
