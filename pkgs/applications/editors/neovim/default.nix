@@ -6,6 +6,7 @@
 , withPython3 ? true, python3Packages, extraPython3Packages ? []
 , withJemalloc ? true, jemalloc
 
+, withPyGUI ? false
 , vimAlias ? false
 , configure ? null
 }:
@@ -45,7 +46,11 @@ let
   };
 
   pythonEnv = pythonPackages.python.buildEnv.override {
-    extraLibs = [ pythonPackages.neovim ] ++ extraPythonPackages;
+    extraLibs = (
+        if withPyGUI
+          then [ pythonPackages.neovim_gui ]
+          else [ pythonPackages.neovim ]
+      ) ++ extraPythonPackages;
     ignoreCollisions = true;
   };
 
@@ -103,6 +108,8 @@ let
                 $out/bin/nvim
     '' + optionalString withPython ''
       ln -s ${pythonEnv}/bin/python $out/bin/nvim-python
+    '' + optionalString withPyGUI ''
+      ln -s ${pythonEnv}/bin/pynvim $out/bin/pynvim
     '' + optionalString withPython3 ''
       ln -s ${python3Env}/bin/python3 $out/bin/nvim-python3
     '' + optionalString (withPython || withPython3) ''

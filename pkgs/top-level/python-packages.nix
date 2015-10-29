@@ -20456,6 +20456,34 @@ let
     };
   };
 
+  neovim_gui = buildPythonPackage rec {
+    name = "neovim-gui-${self.neovim.version}";
+    disabled = !isPy27;
+
+    src = self.neovim.src;
+
+    propagatedBuildInputs = [
+      self.msgpack
+      self.greenlet
+      self.trollius
+      self.click
+      self.pygobject3
+      pkgs.gobjectIntrospection
+      pkgs.makeWrapper
+      pkgs.gtk3
+    ];
+
+    patchPhase = ''
+      sed -i -e "s|entry_points=entry_points,|entry_points=dict(console_scripts=['pynvim=neovim.ui.cli:main [GUI]']),|" setup.py
+    '';
+
+    postInstall = ''
+      wrapProgram $out/bin/pynvim \
+        --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
+        --prefix PYTHONPATH : "${self.pygobject3}/lib/python2.7/site-packages:$PYTHONPATH"
+    '';
+  };
+
   ghp-import = buildPythonPackage rec {
     version = "0.4.1";
     name = "ghp-import-${version}";
