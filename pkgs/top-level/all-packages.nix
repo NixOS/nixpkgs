@@ -8054,6 +8054,7 @@ let
     # GNOME dependencies are not used unless gtkStyle == true
     mesa = mesa_noglu;
     inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
+    inherit (darwin.apple_sdk.frameworks) AGL ApplicationServices Cocoa;
     cups = if stdenv.isLinux then cups else null;
   };
 

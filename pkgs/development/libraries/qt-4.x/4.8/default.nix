@@ -11,6 +11,7 @@
 , docs ? false
 , examples ? false
 , demos ? false
+, AGL, ApplicationServices, Cocoa, libcxx
 }:
 
 with stdenv.lib;
@@ -122,14 +123,19 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ cups # Qt dlopen's libcups instead of linking to it
       mysql.lib postgresql sqlite libjpeg libmng libtiff icu ]
-    ++ optionals gtkStyle [ gtk gdk_pixbuf ];
+    ++ optionals gtkStyle [ gtk gdk_pixbuf ]
+    ++ optionals stdenv.isDarwin [ AGL ApplicationServices Cocoa ];
 
   nativeBuildInputs = [ perl pkgconfig which ];
 
   enableParallelBuilding = false;
 
-  NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin
-    "-I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include";
+  NIX_CFLAGS_COMPILE = optionals stdenv.isDarwin [
+    "-mmacosx-version-min=10.7"
+    "-I${glib}/include/glib-2.0"
+    "-I${glib}/lib/glib-2.0/include"
+    "-I${libcxx}/include/c++/v1"
+  ];
 
   NIX_LDFLAGS = optionalString stdenv.isDarwin
     "-lglib-2.0";
