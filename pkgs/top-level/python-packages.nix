@@ -12727,12 +12727,14 @@ let
 
 
   vobject = buildPythonPackage rec {
-    version = "0.8.1c";
+    version = "0.8.1d";
     name = "vobject-${version}";
 
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/v/vobject/vobject-${version}.tar.gz";
-      sha256 = "1xanqn7rn96841s3lim5lnx5743gc4kyfg4ggj1ys5r0gw8i6har";
+    src = pkgs.fetchFromGitHub {
+      owner = "adieu";
+      repo = "vobject";
+      sha256 = "04fz8g9i9pvrksbpzmp2ci8z34gwjdr7j0f0cxr60v5sdv6v88l9";
+      rev = "ef870dfbb7642756d6b691ebf9f52285ec9e504f";
     };
 
     disabled = isPy3k || isPyPy;
@@ -12746,7 +12748,7 @@ let
 
     meta = {
       description = "Module for reading vCard and vCalendar files";
-      homepage = http://vobject.skyhouseconsulting.com/;
+      homepage = https://github.com/adieu/vobject/;
       license = licenses.asl20;
       maintainers = with maintainers; [ DamienCassou ];
     };
