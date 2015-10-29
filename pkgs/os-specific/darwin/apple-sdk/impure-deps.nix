@@ -19,9 +19,6 @@ rec {
   QuickLook = [
     "/System/Library/Frameworks/QuickLook.framework"
   ];
-  Kernel = [
-    "/System/Library/Frameworks/Kernel.framework"
-  ];
   Quartz = [
     "/System/Library/Frameworks/Quartz.framework"
     "/System/Library/PrivateFrameworks/AppleSystemInfo.framework/Versions/A/AppleSystemInfo"
