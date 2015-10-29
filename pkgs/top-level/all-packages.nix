@@ -4911,18 +4911,18 @@ let
   erlangR17_javac = callPackage ../development/interpreters/erlang/R17.nix { javacSupport = true; };
   erlangR17_odbc_javac = callPackage ../development/interpreters/erlang/R17.nix { javacSupport = true; odbcSupport = true; };
   erlangR18 = callPackage ../development/interpreters/erlang/R18.nix {
-    inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
   erlangR18_odbc = callPackage ../development/interpreters/erlang/R18.nix {
-    inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
     odbcSupport = true;
   };
   erlangR18_javac = callPackage ../development/interpreters/erlang/R18.nix {
-    inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
     javacSupport = true;
   };
   erlangR18_odbc_javac = callPackage ../development/interpreters/erlang/R18.nix {
-    inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
     javacSupport = true; odbcSupport = true;
   };
   erlang = erlangR18;
@@ -8532,16 +8532,19 @@ let
 
   wxGTK29 = callPackage ../development/libraries/wxGTK-2.9/default.nix {
     inherit (gnome) GConf;
+    inherit (darwin.stubs) setfile;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
   wxGTK30 = callPackage ../development/libraries/wxGTK-3.0/default.nix {
     inherit (gnome) GConf;
+    inherit (darwin.stubs) setfile;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
   wxmac = callPackage ../development/libraries/wxmac {
     inherit (darwin.apple_sdk.frameworks) AGL Cocoa Kernel QuickTime;
+    inherit (darwin.stubs) setfile rez derez;
   };
 
   wtk = callPackage ../development/libraries/wtk { };
@@ -9627,6 +9630,8 @@ let
     apple_sdk = callPackage ../os-specific/darwin/apple-sdk {};
 
     libobjc = apple-source-releases.objc4;
+
+    stubs = callPackages ../os-specific/darwin/stubs {};
   };
 
   gnustep-make = callPackage ../development/tools/build-managers/gnustep/make {};
