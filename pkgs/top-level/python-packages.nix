@@ -6426,14 +6426,14 @@ let
   };
 
   docker_compose = buildPythonPackage rec {
-    version = "1.4.0";
+    version = "1.4.2";
     name = "docker-compose-${version}";
     namePrefix = "";
     disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/docker-compose/${name}.tar.gz";
-      md5 = "a93e801ebe829c2f869cb23d0b606272";
+      sha256 = "4f5dae7685b60b70d5adc66a8572e08a97d45f26e279897d70e539277b5d9331";
     };
 
     propagatedBuildInputs = with self; [
