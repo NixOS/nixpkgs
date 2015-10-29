@@ -6113,6 +6113,8 @@ let
 
   ctpp2 = callPackage ../development/libraries/ctpp2 { };
 
+  ctpl = callPackage ../development/libraries/ctpl { };
+
   cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
 
   cppunit = callPackage ../development/libraries/cppunit { };
