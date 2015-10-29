@@ -9738,7 +9738,9 @@ let
     if stdenv.isLinux then
       callPackage ../os-specific/linux/htop { }
     else if stdenv.isDarwin then
-      callPackage ../os-specific/darwin/htop { }
+      callPackage ../os-specific/darwin/htop {
+        inherit (darwin.apple_sdk.frameworks) IOKit;
+      }
     else null;
 
   # GNU/Hurd core packages.

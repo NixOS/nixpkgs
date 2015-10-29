@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ncurses, autoconf, automake }:
+{ fetchurl, stdenv, ncurses, autoconf, automake, IOKit }:
 
 stdenv.mkDerivation rec {
   name = "htop-0.8.2.2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qxibadn2lfqn10a5jmkv8r5ljfs0vaaa4j6psd7ppxa2w6bx5li";
   };
 
-  buildInputs = [ autoconf automake ncurses ];
+  buildInputs = [ autoconf automake ncurses IOKit ];
 
   preConfigure = "./autogen.sh";
 
