@@ -1900,11 +1900,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ConfigMVPReaderINI = buildPerlPackage {
-    name = "Config-MVP-Reader-INI-2.101462";
+  ConfigMVPReaderINI = buildPerlPackage rec {
+    name = "Config-MVP-Reader-INI-2.101463";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Config-MVP-Reader-INI-2.101462.tar.gz;
-      sha256 = "cd113c3361cfb468655cfcd7b4747b50f990db2cb9452f5d8ffa409422d7df9f";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "0iflnsh0sgihff3ra8sr7awiiscmqvrp1anaskkwksqi6yzidab9";
     };
     propagatedBuildInputs = [ ConfigINI ConfigMVP Moose ];
     meta = {
