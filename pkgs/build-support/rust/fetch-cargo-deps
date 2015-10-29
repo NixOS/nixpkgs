@@ -1,5 +1,3 @@
-#! /bin/sh
-
 source $stdenv/setup
 
 set -euo pipefail
