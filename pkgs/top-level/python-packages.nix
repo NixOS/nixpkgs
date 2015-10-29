@@ -13162,6 +13162,22 @@ let
     };
   };
 
+  pyelasticsearch = buildPythonPackage (rec {
+    name = "pyelasticsearch-1.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyelasticsearch/${name}.tar.gz";
+      sha256 = "18wp6llfjv6hvyhr3f6i8dm9wc5rf46wiqsfxwpvnf6mdrvk6xr7";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "A clean, future-proof, high-scale API to elasticsearch.";
+      homepage = https://pyelasticsearch.readthedocs.org;
+      license = licenses.bsd3;
+    };
+  });
 
   pyenchant = pythonPackages.buildPythonPackage rec {
     name = "pyenchant-1.6.6";
