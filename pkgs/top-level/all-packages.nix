@@ -261,7 +261,7 @@ let
     { substitutions = { inherit autoconf automake gettext libtool; }; }
     ../build-support/setup-hooks/autoreconf.sh;
 
-  buildEnv = callPackage ../build-support/buildenv {};
+  buildEnv = callPackage ../build-support/buildenv { inherit lib; };
 
   buildFHSEnv = callPackage ../build-support/build-fhs-chrootenv/env.nix {
     nixpkgs      = pkgs;

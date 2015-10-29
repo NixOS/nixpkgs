@@ -2,9 +2,10 @@
 # a fork of the buildEnv in the Nix distribution.  Most changes should
 # eventually be merged back into the Nix distribution.
 
-{ perl, runCommand }:
+{ lib, perl, runCommand }:
 
-{ name
+args@ { 
+  name
 
 , # The manifest file (if any).  A symlink $out/manifest will be
   # created to it.
@@ -31,17 +32,34 @@
   buildInputs ? []
 
 , passthru ? {}
+
+, ...
 }:
 
-runCommand name
-  { inherit manifest ignoreCollisions passthru pathsToLink extraPrefix postBuild buildInputs;
-    pkgs = builtins.toJSON (map (drv: {
-      paths = [ drv ]; # FIXME: handle multiple outputs
-      priority = drv.meta.priority or 5;
-    }) paths);
-    preferLocalBuild = true;
-  }
-  ''
-    ${perl}/bin/perl -w ${./builder.pl}
-    eval "$postBuild"
-  ''
+with lib;
+
+let
+  fixedAttrs = [ "preferLocalBuild" "buildCommand" ];
+  handledAttrs = 
+    [ "manifest" "paths" "ignoreCollisions" "passthru"
+      "pathsToLink" "extraPrefix" "postBuild" "buildInputs" ];
+
+  additionalAttrsSet = removeAttrs args handledAttrs;
+  erroneousAttrs = filter (x: hasAttr x additionalAttrsSet) fixedAttrs;
+in
+
+if (0 != length erroneousAttrs) then
+  throw "Attributes: \{ ${concatStrings (intersperse "," erroneousAttrs)} \} should not be used as input."
+else 
+  runCommand name
+   ({ inherit manifest ignoreCollisions passthru pathsToLink extraPrefix postBuild buildInputs;
+      pkgs = builtins.toJSON (map (drv: {
+        paths = [ drv ]; # FIXME: handle multiple outputs
+        priority = drv.meta.priority or 5;
+      }) paths);
+      preferLocalBuild = true;
+    } // additionalAttrsSet)
+    ''
+      ${perl}/bin/perl -w ${./builder.pl}
+      eval "$postBuild"
+    ''
