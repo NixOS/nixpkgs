@@ -85,6 +85,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     _moveToOutput "share/glib-2.0" "$dev"
     substituteInPlace "$dev/bin/gdbus-codegen" --replace "$out" "$dev"
+    sed -i "$dev/bin/glib-gettextize" -e "s|^gettext_dir=.*|gettext_dir=$dev/share/glib-2.0/gettext|"
   '';
 
   inherit doCheck;
