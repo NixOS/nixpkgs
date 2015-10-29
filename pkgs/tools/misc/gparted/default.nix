@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, parted, gtk, glib, intltool, gettext, libuuid
-, pkgconfig, gtkmm, libxml2, hicolor_icon_theme
+{ stdenv, fetchurl, intltool, gettext, makeWrapper
+, parted, gtk, glib, libuuid, pkgconfig, gtkmm, libxml2, hicolor_icon_theme
+, utillinux
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,12 @@ stdenv.mkDerivation rec {
   configureFlags = "--disable-doc";
 
   buildInputs = [ parted gtk glib libuuid gtkmm libxml2 hicolor_icon_theme ];
-  nativeBuildInputs = [ intltool gettext pkgconfig ];
+  nativeBuildInputs = [ intltool gettext makeWrapper pkgconfig ];
+
+  postInstall = ''
+    wrapProgram $out/sbin/gpartedbin \
+      --prefix PATH : "${utillinux}/bin"
+  '';
 
   meta = with stdenv.lib; {
     description = "Graphical disk partitioning tool";
