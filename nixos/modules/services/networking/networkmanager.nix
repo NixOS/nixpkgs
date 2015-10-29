@@ -205,10 +205,16 @@ in {
 
     environment.systemPackages = cfg.packages;
 
-    users.extraGroups = singleton {
+    users.extraGroups = [{
       name = "networkmanager";
       gid = config.ids.gids.networkmanager;
-    };
+    }
+    {
+      name = "nm-openvpn";
+    }];
+    users.extraUsers = [{
+      name = "nm-openvpn";
+    }];
 
     systemd.packages = cfg.packages;
 
