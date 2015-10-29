@@ -19,9 +19,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat libiconv libjpeg libpng libtiff zlib
-    AGL Cocoa Kernel QuickTime
-    setfile rez derez
+    Cocoa Kernel QuickTime setfile rez derez
   ];
+
+  propagatedBuildInputs = [ AGL ];
 
   postPatch = ''
     substituteInPlace configure --replace "-framework System" -lSystem
