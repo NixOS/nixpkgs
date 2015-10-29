@@ -31,6 +31,7 @@ For pull-requests, please rebase onto nixpkgs `master`.
 * [Documentation (Nix Expression Language chapter)](https://nixos.org/nix/manual/#ch-expression-language)
 * [Manual (How to write packages for Nix)](https://nixos.org/nixpkgs/manual/)
 * [Manual (NixOS)](https://nixos.org/nixos/manual/)
+* [Nix Wiki](https://nixos.org/wiki/)
 * [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
 * [Continuous package builds for 14.12 release](https://hydra.nixos.org/jobset/nixos/release-14.12)
 * [Continuous package builds for 15.09 release](https://hydra.nixos.org/jobset/nixos/release-15.09)
