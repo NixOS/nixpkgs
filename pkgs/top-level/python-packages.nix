@@ -8294,7 +8294,7 @@ let
 
     llvm = pkgs.llvm;
 
-    propagatedBuildInputs = with self; [ llvm ] ++ optional (!isPy34) enum34;
+    propagatedBuildInputs = with self; [ llvm ] ++ optional (pythonOlder "3.4") enum34;
 
     # Disable static linking
     # https://github.com/numba/llvmlite/issues/93
