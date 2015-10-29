@@ -154,6 +154,7 @@ let
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     pythonDBus = self.dbus;
     pythonPackages = self;
+    inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
   pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix {
