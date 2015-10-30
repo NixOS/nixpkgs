@@ -20,7 +20,7 @@ pythonPackages.buildPythonPackage rec {
     pbr webob eventlet greenlet PasteDeploy paste routes cryptography six
     sqlalchemy_1_0 sqlalchemy_migrate stevedore passlib keystoneclient memcached
     keystonemiddleware oauthlib pysaml2 dogpile_cache jsonschema pycadf msgpack
-    xmlsec
+    xmlsec pymysql
 
     # oslo
     oslo-cache oslo-concurrency oslo-config oslo-context oslo-messaging oslo-db

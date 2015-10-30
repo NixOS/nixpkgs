@@ -18,7 +18,7 @@ pythonPackages.buildPythonPackage rec {
     webob greenlet PasteDeploy paste prettytable sqlalchemy_migrate netaddr
     netifaces paramiko Babel iso8601 jsonschema keystoneclient requests2 six
     stevedore websockify rfc3986 os-brick psutil_1 alembic psycopg2 pymysql
-    keystonemiddleware
+    keystonemiddleware pymysql
 
     # oslo components
     oslo-rootwrap oslo-reports oslo-utils oslo-i18n oslo-config oslo-context

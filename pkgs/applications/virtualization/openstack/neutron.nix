@@ -17,7 +17,7 @@ pythonPackages.buildPythonPackage rec {
   propagatedBuildInputs = with pythonPackages; [
    pbr paste PasteDeploy routes debtcollector eventlet greenlet httplib2 requests2
    jinja2 keystonemiddleware netaddr retrying sqlalchemy_1_0 webob alembic six
-   stevedore pecan ryu networking-hyperv
+   stevedore pecan ryu networking-hyperv pymysql
 
    # clients
    keystoneclient neutronclient novaclient
