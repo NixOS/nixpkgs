@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
 
-  name = "ocaml-csv-1.4.1";
+  name = "ocaml-csv-1.4.2";
 
   src = fetchzip {
-    url = https://github.com/Chris00/ocaml-csv/releases/download/1.4.1/csv-1.4.1.tar.gz;
-    sha256 = "1z38qy92lq8qh91bs70vsv868szainif53a2y6rf47ijdila25j4";
+    url = https://github.com/Chris00/ocaml-csv/releases/download/1.4.2/csv-1.4.2.tar.gz;
+    sha256 = "05s8py2qr3889c72g1q07r15pzch3j66xdphxi2sd93h5lvnpi4j";
   };
 
   buildInputs = [ ocaml findlib ];
