@@ -5,19 +5,32 @@ if [ "$1" = "--playback" ]; then
   PLAYBACK=1
 fi
 
+# setup-hook opens a file descriptor directing to stderr so that the
+# played-back stderr is not interfered with
+[ -n "${RECORD_PLAYBACK_LOG_FD:-}" ] || RECORD_PLAYBACK_LOG_FD=2
+
+warn() {
+  { printf "$@"; printf "\n"; } >&$RECORD_PLAYBACK_LOG_FD
+}
+
 cmd="$1"; shift
-shortargs="$(printf %s "$*" | tr -d '[:space:]')"
-dir=".record-playback/$cmd/$shortargs"
+dir=".record-playback/$cmd/$(printf %s "$*" | sha256sum | cut -d' ' -f1)"
 
 if [ -n "$PLAYBACK" ]; then
-  printf "playing back \`%s %s' from %s...\n" "$cmd" "$*" "$dir" >&2
+  if [ ! -d "$dir" ]; then
+    warn "failed to playback \`%s %s': %.28s...: no recorded output found" "$cmd" "$*" "$dir"
+    exit 100
+  fi
+
+  warn "playing back \`%s %s' from %.28s..." "$cmd" "$*" "$dir"
   (exec cat "$dir"/stdout) &
   (exec cat "$dir"/stderr >&2) &
   wait
   exit "$(cat "$dir"/exitval)"
 else
-  printf "recording \`%s %s' in %s...\n" "$cmd" "$*" "$dir" >&2
+  warn "recording \`%s %s' in %.28s..." "$cmd" "$*" "$dir"
   mkdir -p "$dir"
+  printf "%s" "$*" > "$dir"/args
   exitval=0
   "$cmd" "$@" 1>"$dir"/stdout 2>"$dir"/stderr || exitval="$?"
   printf %s "$exitval" >"$dir"/exitval

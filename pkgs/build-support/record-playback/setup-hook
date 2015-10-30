@@ -8,6 +8,8 @@ intercept-commands-for-playback() {
     ln -s @out@/bin/playback-command "$bin/$(basename "$dir")"
   done
 
+  exec {RECORD_PLAYBACK_LOG_FD}>&2
+  export RECORD_PLAYBACK_LOG_FD
   export PATH="$bin${PATH:+:}$PATH"
 }
 
