@@ -1,4 +1,4 @@
-let requiredVersion = "1.10"; in
+let requiredVersion = "1.8"; in
 
 if ! builtins ? nixVersion || builtins.compareVersions requiredVersion builtins.nixVersion == 1 then
 
