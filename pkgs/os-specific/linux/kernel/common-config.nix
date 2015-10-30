@@ -488,6 +488,9 @@ with stdenv.lib;
     IRQ_REMAP y
   ''}
 
+  # Disable the firmware helper fallback, udev doesn't implement it any more
+  FW_LOADER_USER_HELPER_FALLBACK? n
+
   ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}
 ''
