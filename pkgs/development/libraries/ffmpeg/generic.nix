@@ -144,7 +144,7 @@ stdenv.mkDerivation rec {
     ++ optionals (!isDarwin) [ libvpx libpulseaudio ] # Need to be fixed on Darwin
     ++ optional (isLinux || isFreeBSD) libva
     ++ optional isLinux alsaLib
-    ++ optionals isDarwin [ Cocoa ];
+    ++ optional isDarwin Cocoa;
 
   enableParallelBuilding = true;
 
