@@ -33,7 +33,7 @@ let
     meta.broken = broken;
   });
 
-  # Templates for generating Bioconductor and CRAN packages
+  # Templates for generating Bioconductor, CRAN and IRkernel packages
   # from the name, version, sha256, and optional per-package arguments above
   #
   deriveBioc = mkDerive {
@@ -46,6 +46,10 @@ let
       "mirror://cran/src/contrib/${name}_${version}.tar.gz"
       "mirror://cran/src/contrib/00Archive/${name}/${name}_${version}.tar.gz"
     ];
+  };
+  deriveIRkernel = mkDerive {
+    mkHomepage = name: "http://irkernel.github.io/";
+    mkUrls = {name, version}: [ "http://irkernel.github.io/src/contrib/${name}_${version}.tar.gz" ];
   };
 
   # Overrides package definitions with nativeBuildInputs.
@@ -206,7 +210,8 @@ let
   # packages in `_self` may depends on overridden packages.
   self = (defaultOverrides _self self) // overrides;
   _self = import ./bioc-packages.nix { inherit self; derive = deriveBioc; } //
-          import ./cran-packages.nix { inherit self; derive = deriveCran; };
+          import ./cran-packages.nix { inherit self; derive = deriveCran; } //
+          import ./irkernel-packages.nix { inherit self; derive = deriveIRkernel; };
 
   # tweaks for the individual packages and "in self" follow
 
