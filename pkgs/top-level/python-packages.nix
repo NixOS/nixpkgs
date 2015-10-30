@@ -16665,6 +16665,29 @@ let
   #   doCheck = false;
   # };
 
+  tabulate = buildPythonPackage rec {
+    version = "0.7.5";
+    name = "tabulate-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tabulate/${name}.tar.gz";
+      sha256 = "9071aacbd97a9a915096c1aaf0dc684ac2672904cd876db5904085d6dac9810e";
+    };
+
+    buildInputs = with self; [ nose ];
+
+    # Tests: cannot import common (relative import).
+    doCheck = false;
+
+    meta = {
+      description = "Pretty-print tabular data";
+      homepage = https://bitbucket.org/astanin/python-tabulate;
+      license = licenses.mit;
+      maintainer = with maintainers; [ fridh ];
+    };
+
+  };
+
   targetcli_fb = buildPythonPackage rec {
     version = "2.1.fb33";
     name = "targetcli-fb-${version}";
