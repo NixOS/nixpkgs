@@ -2159,6 +2159,9 @@ let
 
   otherOverrides = old: new: {
     stringi = old.stringi.overrideDerivation (attrs: {
+      preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+        substituteInPlace configure --replace "CPP_OK=0" "CPP_OK=1"
+      '';
       postInstall = let
         icuName = "icudt52l";
         icuSrc = pkgs.fetchzip {
