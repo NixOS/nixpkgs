@@ -13170,6 +13170,7 @@ let
       sha256 = "18wp6llfjv6hvyhr3f6i8dm9wc5rf46wiqsfxwpvnf6mdrvk6xr7";
     };
 
+    # Tests require a local instance of elasticsearch
     doCheck = false;
 
     meta = {
