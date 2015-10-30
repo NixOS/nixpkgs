@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, emacs, texinfo, gitModes, git, dash }:
 
 let
-  version = "2.2.1";
+  version = "2.3.0";
 in
 stdenv.mkDerivation {
   name = "magit-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     owner = "magit";
     repo = "magit";
     rev = version;
-    sha256 = "1bq26wrgm4wgif0hj16mkmiz0p1iilxs7dmdd1vq5df8nivmakjz";
+    sha256 = "1zbx1ky1481lkvfjr4k23q7jdrk9ji9v5ghj88qib36vbmzfwww8";
   };
 
   buildInputs = [ emacs texinfo git ];
@@ -28,14 +28,9 @@ stdenv.mkDerivation {
     cp lisp/magit-version.el .
   '';
 
-  doCheck = false;  # one out of 5 tests fails, not sure why
+  doCheck = false;  # 2 out of 15 tests fails, not sure why
   checkTarget = "test";
   preCheck = "export EMAIL='Joe Doe <joe.doe@example.org>'";
-
-  # postInstall = ''
-  #   mkdir -p $out/bin
-  #   mv "bin/"* $out/bin/
-  # '';
 
   meta = {
     homepage = "https://github.com/magit/magit";
