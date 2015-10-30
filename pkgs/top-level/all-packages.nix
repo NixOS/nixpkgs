@@ -266,7 +266,7 @@ let
     ../build-support/setup-hooks/autoreconf.sh;
 
   buildEnv = import ../build-support/buildenv {
-    inherit (pkgs) runCommand perl;
+    inherit (pkgs) runCommand perl lib;
   };
 
   buildFHSEnv = callPackage ../build-support/build-fhs-chrootenv/env.nix {
