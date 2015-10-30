@@ -2,7 +2,7 @@
 # a fork of the buildEnv in the Nix distribution.  Most changes should
 # eventually be merged back into the Nix distribution.
 
-{ perl, runCommand }:
+{ perl, runCommand, lib }:
 
 { name
 
@@ -21,6 +21,10 @@
   # directories in the list is not symlinked.
   pathsToLink ? ["/"]
 
+, # The package outputs to include. By default, only the default
+  # output is included.
+  outputsToLink ? []
+
 , # Root the result in directory "$out${extraPrefix}", e.g. "/share".
   extraPrefix ? ""
 
@@ -36,7 +40,9 @@
 runCommand name
   { inherit manifest ignoreCollisions passthru pathsToLink extraPrefix postBuild buildInputs;
     pkgs = builtins.toJSON (map (drv: {
-      paths = [ drv ]; # FIXME: handle multiple outputs
+      paths =
+        [ drv ]
+        ++ lib.concatMap (outputName: lib.optional (drv.${outputName}.outPath or null != null) drv.${outputName}) outputsToLink;
       priority = drv.meta.priority or 5;
     }) paths);
     preferLocalBuild = true;
