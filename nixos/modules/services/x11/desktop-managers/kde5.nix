@@ -108,6 +108,7 @@ in
         kdeApps.okular
         kdeApps.print-manager
 
+        kdeApps.oxygen-icons
         pkgs.hicolor_icon_theme
 
         plasma5.kde-gtk-config
