@@ -11,8 +11,6 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "https://launchpad.net/armagetronad/${versionMajor}/0.2.8.3.x/+download/armagetronad-${version}.src.tar.bz2";
     sha256 = "1s55irhg60fpmhy8wwxpdq7c45r1mqch6zpicyb2wf9ln60xgwnx";
-
-
   };
 
   NIX_LDFLAGS = "-lSDL_image";
@@ -22,8 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://armagetronad.org;
-    description = "An multiplayer networked arcade racing game in 3D similar to Tron.";
+    description = "An multiplayer networked arcade racing game in 3D similar to Tron";
     license = stdenv.lib.licenses.gpl2;
-
   };
 }
