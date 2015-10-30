@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, buildDotnetPackage, dotnetPackages, gtksharp }:
+{ stdenv, fetchFromGitHub, buildDotnetPackage, dotnetPackages, gtksharp,
+  gettext }:
 
 let
   mono-addins = dotnetPackages.MonoAddins;
@@ -9,7 +10,7 @@ buildDotnetPackage rec {
   baseName = "Pinta";
   version = "1.6";
   outputFiles = [ "bin/*" ];
-  buildInputs = [ gtksharp mono-addins ];
+  buildInputs = [ gtksharp mono-addins gettext ];
   xBuildFiles = [ "Pinta.sln" ];
 
   src = fetchFromGitHub {
@@ -45,13 +46,32 @@ buildDotnetPackage rec {
     map2 = f: listA: listB: concatMap (a: map (f a) listB) listA;
     concatMap2Strings = f: listA: listB: concatStrings (map2 f listA listB);
   in
-    concatMap2Strings stripVersion versionedNames csprojFiles;
+    concatMap2Strings stripVersion versionedNames csprojFiles
+    + ''
+      # For some reason there is no Microsoft.Common.tasks file
+      # in ''${mono}/lib/mono/3.5 .
+      substituteInPlace Pinta.Install.proj \
+        --replace 'ToolsVersion="3.5"' 'ToolsVersion="4.0"' \
+        --replace "/usr/local" "$out"
+    '';
 
   makeWrapperArgs = [
     ''--prefix MONO_GAC_PREFIX ':' "${gtksharp}"''
     ''--prefix LD_LIBRARY_PATH ':' "${gtksharp}/lib"''
     ''--prefix LD_LIBRARY_PATH ':' "${gtksharp.gtk}/lib"''
   ];
+
+  postInstall = ''
+    # Do automake's job manually
+    substitute xdg/pinta.desktop.in xdg/pinta.desktop \
+      --replace _Name Name \
+      --replace _Comment Comment \
+      --replace _GenericName GenericName \
+      --replace _X-GNOME-FullName X-GNOME-FullName
+
+    xbuild /target:CompileTranslations Pinta.Install.proj
+    xbuild /target:Install Pinta.Install.proj
+  '';
 
   meta = {
     homepage = http://www.pinta-project.com/;
