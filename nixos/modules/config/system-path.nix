@@ -71,8 +71,16 @@ in
         # to work.
         default = [];
         example = ["/"];
-        description = "List of directories to be symlinked in `/run/current-system/sw'.";
+        description = "List of directories to be symlinked in <filename>/run/current-system/sw</filename>.";
       };
+
+      outputsToLink = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "doc" ];
+        description = "List of package outputs to be symlinked into <filename>/run/current-system/sw</filename>.";
+      };
+
     };
 
     system = {
@@ -119,7 +127,7 @@ in
     system.path = pkgs.buildEnv {
       name = "system-path";
       paths = config.environment.systemPackages;
-      inherit (config.environment) pathsToLink;
+      inherit (config.environment) pathsToLink outputsToLink;
       ignoreCollisions = true;
       # !!! Hacky, should modularise.
       postBuild =
