@@ -61,9 +61,11 @@
   ./programs/command-not-found/command-not-found.nix
   ./programs/dconf.nix
   ./programs/environment.nix
+  ./programs/freetds.nix
   ./programs/ibus.nix
   ./programs/kbdlight.nix
   ./programs/light.nix
+  ./programs/man.nix
   ./programs/nano.nix
   ./programs/screen.nix
   ./programs/shadow.nix
@@ -73,7 +75,6 @@
   ./programs/uim.nix
   ./programs/venus.nix
   ./programs/wvdial.nix
-  ./programs/freetds.nix
   ./programs/xfs_quota.nix
   ./programs/zsh/zsh.nix
   ./rename.nix
