@@ -6750,9 +6750,8 @@ let
     automake = automake111x;
   };
 
-  kf510 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.10 { });
   kf515 = recurseIntoAttrs (import ../development/libraries/kde-frameworks-5.15 { inherit pkgs; });
-  kf5_stable = kf510;
+  kf5_stable = kf515;
   kf5_latest = kf515;
 
   kf5PackagesFun = self: with self; {
@@ -12042,9 +12041,8 @@ let
     boost = boost155;
   };
 
-  kdeApps_15_04 = recurseIntoAttrs (callPackage ../applications/kde-apps-15.04 {});
-  kdeApps_stable = kdeApps_15_04;
   kdeApps_15_08 = recurseIntoAttrs (import ../applications/kde-apps-15.08 { inherit pkgs; });
+  kdeApps_stable = kdeApps_15_08;
   kdeApps_latest = kdeApps_15_08;
 
   keepnote = callPackage ../applications/office/keepnote {
@@ -14373,9 +14371,8 @@ let
 
   numix-gtk-theme = callPackage ../misc/themes/gtk3/numix-gtk-theme { };
 
-  plasma53 = recurseIntoAttrs (callPackage ../desktops/plasma-5.3 { });
-  plasma5_stable = plasma53;
   plasma54 = recurseIntoAttrs (callPackage ../desktops/plasma-5.4 { inherit pkgs; });
+  plasma5_stable = plasma54;
   plasma5_latest = plasma54;
 
   kde5 = kf5_stable // plasma5_stable // kdeApps_stable;
