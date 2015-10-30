@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   emacsName = "emacs-24.5";
-  name = "${emacsName}-mac-5.11";
+  name = "${emacsName}-mac-5.12";
 
   #builder = ./builder.sh;
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${name}.tar.gz";
-    sha256 = "0p4jh6s1qi6jm6zr82grk65x33ix1hb0fbpih4vh3vnx6310iwsb";
+    sha256 = "1kryg4xw2jn2jwd9ilm2snjvgmnbbp392ry1skzl4d4xf7ff3vx1";
   };
 
   enableParallelBuilding = true;
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
       separately.
 
       This is "Mac port" addition to GNU Emacs 24. This provides a native
-      GUI support for Mac OS X 10.4 - 10.9. Note that Emacs 23 and later
+      GUI support for Mac OS X 10.4 - 10.11. Note that Emacs 23 and later
       already contain the official GUI support via the NS (Cocoa) port for
       Mac OS X 10.4 and later. So if it is good enough for you, then you
       don't need to try this.
