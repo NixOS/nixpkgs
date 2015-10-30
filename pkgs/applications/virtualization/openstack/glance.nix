@@ -27,7 +27,7 @@ pythonPackages.buildPythonPackage rec {
 
   buildInputs = with pythonPackages; [
     Babel coverage fixtures mox3 mock oslosphinx requests2 testrepository pep8
-    testresources testscenarios testtools psutil_1 oslotest psycopg2 pymysql
+    testresources testscenarios testtools psutil_1 oslotest psycopg2 MySQL_python
     sqlite which strace
   ];
 
