@@ -3140,4 +3140,13 @@ let
     buildInputs = [ ninefans ];
     subPackages = [ "./" ];
   };
+
+  godep = buildFromGitHub {
+    rev    = "5598a9815350896a2cdf9f4f1d0a3003ab9677fb";
+    date   = "2015-10-15";
+    owner  = "tools";
+    repo   = "godep";
+    sha256 = "0zc1ah5cvaqa3zw0ska89a40x445vwl1ixz8v42xi3zicx16ibwz";
+  };
+
 }; in self
