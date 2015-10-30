@@ -18789,12 +18789,13 @@ let
 
   cliapp = buildPythonPackage rec {
     name = "cliapp-${version}";
-    version = "1.20140719";
+    version = "1.20150305";
     disabled = isPy3k;
 
-    src = pkgs.fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_${version}.orig.tar.gz";
-      sha256 = "0kxl2q85n4ggvbw2m8crl11x8n637mx6y3a3b5ydw8nhlsiqijgp";
+    src = pkgs.fetchgit {
+        url = "http://git.liw.fi/cgi-bin/cgit/cgit.cgi/cliapp";
+        rev = "569df8a5959cd8ef46f78c9497461240a5aa1123";
+        sha256 = "882c5daf933e4cf089842995efc721e54361d98f64e0a075e7373b734cd899f3";
     };
 
     buildInputs = with self; [ sphinx ];
