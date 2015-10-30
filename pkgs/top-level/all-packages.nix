@@ -6227,11 +6227,21 @@ let
 
   fcgi = callPackage ../development/libraries/fcgi { };
 
-  ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix { };
-  ffmpeg_1_2 = callPackage ../development/libraries/ffmpeg/1.2.nix { };
-  ffmpeg_2_2 = callPackage ../development/libraries/ffmpeg/2.2.nix { };
-  ffmpeg_2_6 = callPackage ../development/libraries/ffmpeg/2.6.nix { };
-  ffmpeg_2_7 = callPackage ../development/libraries/ffmpeg/2.7.nix { };
+  ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+  ffmpeg_1_2 = callPackage ../development/libraries/ffmpeg/1.2.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+  ffmpeg_2_2 = callPackage ../development/libraries/ffmpeg/2.2.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+  ffmpeg_2_6 = callPackage ../development/libraries/ffmpeg/2.6.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+  ffmpeg_2_7 = callPackage ../development/libraries/ffmpeg/2.7.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
   # Aliases
   ffmpeg_0 = ffmpeg_0_10;
   ffmpeg_1 = ffmpeg_1_2;
