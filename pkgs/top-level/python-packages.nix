@@ -1253,6 +1253,25 @@ let
     };
   };
 
+  cycler = buildPythonPackage rec {
+    name = "cycler-${version}";
+    version = "0.9.0";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/C/Cycler/${name}.tar.gz";
+      sha256 = "96dc4ddf27ef62c09990c6196ac1167685e89168042ec0ae4db586de023355bc";
+    };
+
+    propagatedBuildInputs = with self; [ six ];
+
+    meta = {
+      description = "Composable style cycles";
+      homepage = http://github.com/matplotlib/cycler;
+      license = licenses.bsd3;
+      maintainer = with maintainers; [ fridh ];
+    };
+  };
+
   debian = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "python-debian";
