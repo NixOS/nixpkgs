@@ -4,6 +4,7 @@
 , kexectools, libmicrohttpd, linuxHeaders, libseccomp
 , autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , pythonPackages ? null, pythonSupport ? false
+, enableKDbus ? false
 }:
 
 assert stdenv.isLinux;
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
       "--with-sysvinit-path="
       "--with-sysvrcnd-path="
       "--with-rc-local-script-path-stop=/etc/halt.local"
-    ];
+    ] ++ stdenv.lib.optional enableKDbus "--enable-kdbus";
 
   preConfigure =
     ''

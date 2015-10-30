@@ -18,6 +18,7 @@ self: super: {
   ghc-paths = appendPatch super.ghc-paths ./patches/ghc-paths-nix.patch;
 
   # Break infinite recursions.
+  clock = dontCheck super.clock;
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
   hspec_2_1_10 = super.hspec_2_1_10.override { stringbuilder = dontCheck super.stringbuilder; };
@@ -62,7 +63,7 @@ self: super: {
   # all required dependencies are part of Stackage. To comply with Stackage, we
   # make 'git-annex-without-assistant' our default version, but offer another
   # build which has the assistant to be used in the top-level.
-  git-annex_5_20150916 = (disableCabalFlag super.git-annex_5_20150916 "assistant").override {
+  git-annex_5_20151019 = (disableCabalFlag super.git-annex_5_20151019 "assistant").override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
@@ -182,13 +183,17 @@ self: super: {
   # https://github.com/haskell/vector/issues/47
   vector = if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector;
 
+  halive = if pkgs.stdenv.isDarwin
+    then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
+    else super.halive;
+
   # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
   # on darwin: https://github.com/NixOS/cabal2nix/issues/146.
   hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;
 
   # hfsevents needs CoreServices in scope
   hfsevents = if pkgs.stdenv.isDarwin
-    then addBuildTool super.hfsevents pkgs.darwin.apple_sdk.frameworks.CoreServices
+    then with pkgs.darwin.apple_sdk.frameworks; addBuildTool (addBuildDepends super.hfsevents [Cocoa]) CoreServices
     else super.hfsevents;
 
   # FSEvents API is very buggy and tests are unreliable. See
@@ -212,12 +217,12 @@ self: super: {
 
   double-conversion = if !pkgs.stdenv.isDarwin
     then super.double-conversion
-    else overrideCabal super.double-conversion (drv:
+    else addBuildDepend (overrideCabal super.double-conversion (drv:
       {
         postPatch = ''
           substituteInPlace double-conversion.cabal --replace stdc++ c++
         '';
-      });
+      })) pkgs.libcxx;
 
   # tests don't compile for some odd reason
   jwt = dontCheck super.jwt;
@@ -432,11 +437,6 @@ self: super: {
   openpgp = dontCheck super.openpgp;
   optional = dontCheck super.optional;
   os-release = dontCheck super.os-release;
-  pandoc-citeproc = dontCheck super.pandoc-citeproc;
-  pandoc-citeproc_0_6 = dontCheck super.pandoc-citeproc_0_6;
-  pandoc-citeproc_0_6_0_1 = dontCheck super.pandoc-citeproc_0_6_0_1;
-  pandoc-citeproc_0_7_3 = dontCheck super.pandoc-citeproc_0_7_3;
-  pandoc-citeproc_0_7_3_1 = dontCheck super.pandoc-citeproc_0_7_3;
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
@@ -547,7 +547,8 @@ self: super: {
   asn1-encoding = dontCheck super.asn1-encoding;
 
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
-  wxc = super.wxc.override { wxGTK = pkgs.wxGTK30; };
+  # http://hydra.cryp.to/build/1331287/log/raw
+  wxc = (addBuildDepend super.wxc self.split).override { wxGTK = pkgs.wxGTK30; };
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK30; };
 
   # Depends on QuickCheck 1.x.
@@ -633,8 +634,10 @@ self: super: {
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
 
+  # Supports only 3.5 for now, https://github.com/bscarlet/llvm-general/issues/142
+  llvm-general = super.llvm-general.override { llvm-config = pkgs.llvm_35; };
+
   # Needs help finding LLVM.
-  llvm-general = super.llvm-general.override { llvm-config = self.llvmPackages.llvm; };
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
 
   # Tries to run GUI in tests
@@ -838,9 +841,6 @@ self: super: {
     ];
   });
 
-  # Old versions don't detect this library reliably.
-  freenect = appendConfigureFlag super.freenect "--extra-include-dirs=${pkgs.freenect}/include/libfreenect --extra-lib-dirs=${pkgs.freenect}/lib";
-
   # https://github.com/ivanperez-keera/hcwiid/pull/4
   hcwiid = overrideCabal super.hcwiid (drv: {
     configureFlags = (drv.configureFlags or []) ++ [
@@ -905,5 +905,18 @@ self: super: {
 
   # https://github.com/sol/hpack/issues/53
   hpack = dontCheck super.hpack;
+
+  # https://github.com/deech/fltkhs/issues/16
+  fltkhs = overrideCabal super.fltkhs (drv: {
+    libraryToolDepends = (drv.libraryToolDepends or []) ++ [pkgs.autoconf];
+    librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.fltk13 pkgs.mesa_noglu pkgs.libjpeg];
+    broken = true;      # linking fails because the build doesn't pull in the mesa libraries
+  });
+  fltkhs-fluid-examples = dontDistribute super.fltkhs-fluid-examples;
+
+  # https://github.com/skogsbaer/hscurses/pull/26
+  hscurses = overrideCabal super.hscurses (drv: {
+    librarySystemDepends = (drv.librarySystemDepends or []) ++ [ pkgs.ncurses ];
+  });
 
 }

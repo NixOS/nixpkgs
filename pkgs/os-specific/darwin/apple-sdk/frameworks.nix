@@ -2,7 +2,7 @@
 # Epic weird knot-tying happening here.
 # TODO: clean up the process for generating this and include it
 
-{ frameworks, libs, CF }:
+{ frameworks, libs, CF, libobjc, cf-private }:
 
 with frameworks; with libs; {
   AGL                     = [ Carbon OpenGL ];
@@ -10,7 +10,7 @@ with frameworks; with libs; {
   AVKit                   = [];
   Accounts                = [];
   AddressBook             = [ Carbon CF ];
-  AppKit                  = [ AudioToolbox QuartzCore ];
+  AppKit                  = [ AudioToolbox Foundation QuartzCore ];
   AppKitScripting         = [];
   AppleScriptKit          = [];
   AppleScriptObjC         = [];
@@ -21,7 +21,7 @@ with frameworks; with libs; {
   Automator               = [];
   CFNetwork               = [ CF ];
   CalendarStore           = [];
-  Cocoa                   = [];
+  Cocoa                   = [ AppKit ];
   Collaboration           = [];
   CoreAudio               = [ CF IOKit ];
   CoreAudioKit            = [ AudioUnit ];
@@ -32,7 +32,7 @@ with frameworks; with libs; {
   CoreMIDIServer          = [];
   CoreMedia               = [ ApplicationServices AudioToolbox CoreAudio CF CoreGraphics CoreVideo ];
   CoreMediaIO             = [ CF CoreMedia ];
-  CoreText                = [ CF CoreGraphics ];
+  CoreText                = [ CF CoreGraphics cf-private ];
   CoreVideo               = [ ApplicationServices CF CoreGraphics IOSurface OpenGL ];
   CoreWLAN                = [ SecurityFoundation ];
   DVComponentGlue         = [ CoreServices QuickTime ];
@@ -46,7 +46,7 @@ with frameworks; with libs; {
   ExceptionHandling       = [];
   FWAUserLib              = [];
   ForceFeedback           = [ CF IOKit ];
-  Foundation              = [ CF Security ApplicationServices AppKit SystemConfiguration ];
+  Foundation              = [ CF libobjc Security ApplicationServices SystemConfiguration ];
   GLKit                   = [ CF ];
   GLUT                    = [ GL OpenGL ];
   GSS                     = [];
@@ -108,7 +108,7 @@ with frameworks; with libs; {
   # Umbrellas
   Accelerate          = [ CoreWLAN IOBluetooth ];
   ApplicationServices = [ CF CoreServices CoreText ImageIO ];
-  Carbon              = [ ApplicationServices CF CoreServices IOKit Security QuartzCore ];
+  Carbon              = [ ApplicationServices CF CoreServices Foundation IOKit Security QuartzCore ];
   CoreBluetooth       = [];
   CoreServices        = [ CFNetwork CoreAudio CoreData CF DiskArbitration Security NetFS OpenDirectory ServiceManagement ];
   IOBluetooth         = [ IOKit ];

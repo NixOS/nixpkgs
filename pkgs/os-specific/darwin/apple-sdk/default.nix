@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xar, gzip, cpio, CF }:
+{ stdenv, fetchurl, xar, gzip, cpio, pkgs }:
 
 let
   # sadly needs to be exported because security_tool needs it
@@ -34,7 +34,7 @@ let
       cd Library/Frameworks/QuartzCore.framework/Versions/A/Headers
       for file in CI*.h; do
         rm $file
-        ln -s ../Frameworks/CoreImage.framework/Versions/A/Headers/$file
+        ln -s ../Frameworks/CoreImage.framework/Headers/$file
       done
     '';
 
@@ -50,17 +50,23 @@ let
 
     phases = [ "installPhase" "fixupPhase" ];
 
+    # because we copy files from the system
+    preferLocalBuild = true;
+
     installPhase = ''
       linkFramework() {
         local path="$1"
         local dest="$out/Library/Frameworks/$path"
         local name="$(basename "$path" .framework)"
         local current="$(readlink "/System/Library/Frameworks/$path/Versions/Current")"
+        if [ -z "$current" ]; then
+          current=A
+        fi
 
         mkdir -p "$dest"
         pushd "$dest" >/dev/null
 
-        ln -s "${sdk}/Library/Frameworks/$path/Versions/$current/Headers"
+        cp -R "${sdk}/Library/Frameworks/$path/Versions/$current/Headers" .
         ln -s -L "/System/Library/Frameworks/$path/Versions/$current/$name"
         ln -s -L "/System/Library/Frameworks/$path/Versions/$current/Resources"
 
@@ -120,7 +126,7 @@ in rec {
       __propagatedImpureHostDeps = [ "/usr/lib/libXplugin.1.dylib" ];
 
       propagatedBuildInputs = with frameworks; [
-        OpenGL ApplicationServices Carbon IOKit CF CoreGraphics CoreServices CoreText
+        OpenGL ApplicationServices Carbon IOKit pkgs.darwin.CF CoreGraphics CoreServices CoreText
       ];
 
       installPhase = ''
@@ -152,9 +158,16 @@ in rec {
           --replace "QuartzCore/../Frameworks/CoreImage.framework/Headers" "CoreImage"
       '';
     });
+
+    Security = stdenv.lib.overrideDerivation super.Security (drv: {
+      setupHook = ./security-setup-hook.sh;
+    });
   };
 
-  bareFrameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix { inherit frameworks libs CF; });
+  bareFrameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix {
+    inherit frameworks libs;
+    inherit (pkgs.darwin) CF cf-private libobjc;
+  });
 
   frameworks = bareFrameworks // overrides bareFrameworks;
 

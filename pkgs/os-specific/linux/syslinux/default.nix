@@ -13,13 +13,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ nasm perl libuuid ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false; # Fails very rarely with 'No rule to make target: ...'
 
   preBuild = ''
     substituteInPlace Makefile --replace /bin/pwd $(type -P pwd)
     substituteInPlace gpxe/src/Makefile.housekeeping --replace /bin/echo $(type -P echo)
     substituteInPlace gpxe/src/Makefile --replace /usr/bin/perl $(type -P perl)
   '';
+
+  stripDebugList = "bin sbin share/syslinux/com32";
 
   makeFlags = [
     "BINDIR=$(out)/bin"

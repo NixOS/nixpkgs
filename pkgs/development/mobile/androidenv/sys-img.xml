@@ -436,16 +436,16 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
     </sdk:system-image>
 
     <sdk:system-image>
-        <!-- Generated at Fri Mar 30 10:43:23 2012 from ics-mr1 @ 302030 -->
-        <sdk:revision>2</sdk:revision>
+        <!-- Generated at Tue Mar 10 10:46:44 2015 from git_ics-mr1 @ 1741834 -->
+        <sdk:revision>3</sdk:revision>
         <sdk:description>Android SDK Platform 4.0.3</sdk:description>
         <sdk:api-level>15</sdk:api-level>
         <sdk:abi>armeabi-v7a</sdk:abi>
         <sdk:archives>
             <sdk:archive>
-                <sdk:size>96227377</sdk:size>
-                <sdk:checksum type="sha1">1bf977d6cb4e0ad38dceac0c4863d1caa21f326e</sdk:checksum>
-                <sdk:url>sysimg_armv7a-15_r02.zip</sdk:url>
+                <sdk:size>96240395</sdk:size>
+                <sdk:checksum type="sha1">0a47f586e172b1cf3db2ada857a70c2bdec24ef8</sdk:checksum>
+                <sdk:url>sysimg_armv7a-15_r03.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
@@ -453,16 +453,16 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
     </sdk:system-image>
 
     <sdk:system-image>
-        <!-- Generated at Tue Oct  9 13:43:08 2012 from git_jb-dev @ 495790 -->
-        <sdk:revision>3</sdk:revision>
-        <sdk:description>Android SDK Platform 4.1</sdk:description>
+        <!-- Generated at Tue Mar 10 10:30:46 2015 from git_jb-dev @ 1741836 -->
+        <sdk:revision>4</sdk:revision>
+        <sdk:description>Android SDK Platform 4.1.2</sdk:description>
         <sdk:api-level>16</sdk:api-level>
         <sdk:abi>armeabi-v7a</sdk:abi>
         <sdk:archives>
             <sdk:archive>
-                <sdk:size>112528368</sdk:size>
-                <sdk:checksum type="sha1">d1cddb23f17aad5821a089c403d4cddad2cf9ef7</sdk:checksum>
-                <sdk:url>sysimg_armv7a-16_r03.zip</sdk:url>
+                <sdk:size>112608076</sdk:size>
+                <sdk:checksum type="sha1">39c093ea755098f0ee79f607be7df9e54ba4943f</sdk:checksum>
+                <sdk:url>sysimg_armv7a-16_r04.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
@@ -470,16 +470,16 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
     </sdk:system-image>
 
     <sdk:system-image>
-        <!-- Generated at Wed Feb 13 11:29:12 2013 from git_jb-mr1.1-dev @ 576024 -->
-        <sdk:revision>2</sdk:revision>
+        <!-- Generated at Mon Mar  9 18:24:53 2015 from git_jb-mr1.1-dev @ 1742939 -->
+        <sdk:revision>3</sdk:revision>
         <sdk:description>Android SDK Platform 4.2.2</sdk:description>
         <sdk:api-level>17</sdk:api-level>
         <sdk:abi>armeabi-v7a</sdk:abi>
         <sdk:archives>
             <sdk:archive>
-                <sdk:size>116553808</sdk:size>
-                <sdk:checksum type="sha1">1c321cda1af793b84d47d1a8d15f85444d265e3c</sdk:checksum>
-                <sdk:url>sysimg_armv7a-17_r02.zip</sdk:url>
+                <sdk:size>118663847</sdk:size>
+                <sdk:checksum type="sha1">97cfad22b51c8475e228b207dd36dbef1c18fa38</sdk:checksum>
+                <sdk:url>sysimg_armv7a-17_r03.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
@@ -487,16 +487,16 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
     </sdk:system-image>
 
     <sdk:system-image>
-        <!-- Generated at Mon Aug 12 12:43:28 2013 from git_jb-mr2-dev @ 774058 -->
-        <sdk:revision>2</sdk:revision>
-        <sdk:description>Android SDK Platform 4.3</sdk:description>
+        <!-- Generated at Mon Mar  9 17:40:24 2015 from git_jb-mr2-dev @ 1743067 -->
+        <sdk:revision>3</sdk:revision>
+        <sdk:description>Android SDK Platform 4.3.1</sdk:description>
         <sdk:api-level>18</sdk:api-level>
         <sdk:abi>armeabi-v7a</sdk:abi>
         <sdk:archives>
             <sdk:archive>
-                <sdk:size>125457135</sdk:size>
-                <sdk:checksum type="sha1">4a1a93200210d8c42793324362868846f67401ab</sdk:checksum>
-                <sdk:url>sysimg_armv7a-18_r02.zip</sdk:url>
+                <sdk:size>125503391</sdk:size>
+                <sdk:checksum type="sha1">2d7d51f4d2742744766511e5d6b491bd49161c51</sdk:checksum>
+                <sdk:url>sysimg_armv7a-18_r03.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
@@ -504,16 +504,16 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
     </sdk:system-image>
 
     <sdk:system-image>
-        <!-- Generated at Thu Dec  5 14:04:05 2013 from git_klp-dev @ 938007 -->
-        <sdk:revision>2</sdk:revision>
-        <sdk:description>Android SDK Platform 4.4.2</sdk:description>
+        <!-- Generated at Mon Mar  9 16:57:24 2015 from git_klp-dev @ 1743154 -->
+        <sdk:revision>3</sdk:revision>
+        <sdk:description>Android SDK Platform 4.4.4</sdk:description>
         <sdk:api-level>19</sdk:api-level>
         <sdk:abi>armeabi-v7a</sdk:abi>
         <sdk:archives>
             <sdk:archive>
-                <sdk:size>158478012</sdk:size>
-                <sdk:checksum type="sha1">e0d375397e28e3d5d9577a00132463a4696248e5</sdk:checksum>
-                <sdk:url>sysimg_armv7a-19_r02.zip</sdk:url>
+                <sdk:size>159399028</sdk:size>
+                <sdk:checksum type="sha1">5daf7718e3ab03d9bd8792b492dd305f386ef12f</sdk:checksum>
+                <sdk:url>sysimg_armv7a-19_r03.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
@@ -537,19 +537,36 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
         <sdk:uses-license ref="android-sdk-license"/>
     </sdk:system-image>
 
+    <sdk:system-image>
+        <!-- Generated at Mon Mar  2 11:01:02 2015 from git_lmp-mr1-sdk-release @ 1737576 -->
+        <sdk:revision>1</sdk:revision>
+        <sdk:description>Android SDK Platform 5.1</sdk:description>
+        <sdk:api-level>22</sdk:api-level>
+        <sdk:abi>armeabi-v7a</sdk:abi>
+        <sdk:tag-id>default</sdk:tag-id>
+        <sdk:archives>
+            <sdk:archive>
+                <sdk:size>193687339</sdk:size>
+                <sdk:checksum type="sha1">2aa6a887ee75dcf3ac34627853d561997792fcb8</sdk:checksum>
+                <sdk:url>sysimg_arm-22_r01.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:system-image>
+
     <!-- X86 SYSTEM IMAGES ........................ -->
 
     <sdk:system-image>
         <sdk:description>Android SDK Platform 2.3.7</sdk:description>
-        <sdk:revision>2</sdk:revision>
+        <sdk:revision>3</sdk:revision>
         <sdk:api-level>10</sdk:api-level>
         <sdk:abi>x86</sdk:abi>
         <sdk:uses-license ref="intel-android-sysimage-license"/>
         <sdk:archives>
             <sdk:archive>
-                <sdk:size>55463895</sdk:size>
-                <sdk:checksum type="sha1">34e2436f69606cdfe35d3ef9112f0c64e3ff021d</sdk:checksum>
-                <sdk:url>https://dl-ssl.google.com/android/repository/sys-img/android/sysimg_x86-10_r02.zip</sdk:url>
+                <sdk:size>66997702</sdk:size>
+                <sdk:checksum type="sha1">6b8539eaca9685d2d3289bf8e6d21d366d791326</sdk:checksum>
+                <sdk:url>sysimg_x86-10_r03.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:tag-id>default</sdk:tag-id>
@@ -557,15 +574,15 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
 
     <sdk:system-image>
         <sdk:description>Android SDK Platform 4.0.4</sdk:description>
-        <sdk:revision>1</sdk:revision>
+        <sdk:revision>2</sdk:revision>
         <sdk:api-level>15</sdk:api-level>
         <sdk:abi>x86</sdk:abi>
         <sdk:uses-license ref="intel-android-sysimage-license"/>
         <sdk:archives>
             <sdk:archive>
-                <sdk:size>112619605</sdk:size>
-                <sdk:checksum type="sha1">d540325952e0f097509622b9e685737584b83e40</sdk:checksum>
-                <sdk:url>https://dl-ssl.google.com/android/repository/sys-img/android/sysimg_x86-15_r01.zip</sdk:url>
+                <sdk:size>109019058</sdk:size>
+                <sdk:checksum type="sha1">56b8d4b3d0f6a8876bc78d654da186f3b7b7c44f</sdk:checksum>
+                <sdk:url>sysimg_x86-15_r02.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:tag-id>default</sdk:tag-id>
@@ -573,63 +590,65 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
 
     <sdk:system-image>
         <sdk:description>Android SDK Platform 4.1.1</sdk:description>
-        <sdk:revision>1</sdk:revision>
+        <sdk:revision>2</sdk:revision>
         <sdk:api-level>16</sdk:api-level>
         <sdk:abi>x86</sdk:abi>
         <sdk:uses-license ref="intel-android-sysimage-license"/>
         <sdk:archives>
             <sdk:archive>
-                <sdk:size>131840348</sdk:size>
-                <sdk:checksum type="sha1">9d35bcaa4f9b40443941f32b8a50337f413c021a</sdk:checksum>
-                <sdk:url>https://dl-ssl.google.com/android/repository/sys-img/android/sysimg_x86-16_r01.zip</sdk:url>
+                <sdk:size>135252264</sdk:size>
+                <sdk:checksum type="sha1">36c2a2e394bcb3290583ce09815eae7711d0b2c2</sdk:checksum>
+                <sdk:url>sysimg_x86-16_r02.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:tag-id>default</sdk:tag-id>
     </sdk:system-image>
 
     <sdk:system-image>
-        <sdk:description>Android SDK Platform 4.2</sdk:description>
-        <sdk:revision>1</sdk:revision>
+        <!-- Generated at Mon Mar  9 18:25:14 2015 from git_jb-mr1.1-dev @ 1742939 -->
+        <sdk:revision>2</sdk:revision>
+        <sdk:description>Android SDK Platform 4.2.2</sdk:description>
         <sdk:api-level>17</sdk:api-level>
         <sdk:abi>x86</sdk:abi>
-        <sdk:uses-license ref="intel-android-sysimage-license"/>
+        <sdk:uses-license ref="android-sdk-license"/>
         <sdk:archives>
             <sdk:archive>
-                <sdk:size>138799122</sdk:size>
-                <sdk:checksum type="sha1">ddb3313e8dcd07926003f7b828eafea1115ea35b</sdk:checksum>
-                <sdk:url>https://dl-ssl.google.com/android/repository/sys-img/android/sysimg_x86-17_r01.zip</sdk:url>
+                <sdk:size>136075512</sdk:size>
+                <sdk:checksum type="sha1">bd8c7c5411431af7e051cbe961be430fc31e773d</sdk:checksum>
+                <sdk:url>sysimg_x86-17_r02.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:tag-id>default</sdk:tag-id>
     </sdk:system-image>
 
     <sdk:system-image>
-        <sdk:description>Android SDK Platform 4.3</sdk:description>
-        <sdk:revision>1</sdk:revision>
+        <!-- Generated at Mon Mar  9 17:40:48 2015 from git_jb-mr2-dev @ 1743067 -->
+        <sdk:revision>2</sdk:revision>
+        <sdk:description>Android SDK Platform 4.3.1</sdk:description>
         <sdk:api-level>18</sdk:api-level>
         <sdk:abi>x86</sdk:abi>
-        <sdk:uses-license ref="intel-android-sysimage-license"/>
+        <sdk:uses-license ref="android-sdk-license"/>
         <sdk:archives>
             <sdk:archive>
-                <sdk:size>155656419</sdk:size>
-                <sdk:checksum type="sha1">f11bc9fccd3e7e46c07d8b26e112a8d0b45966c1</sdk:checksum>
-                <sdk:url>https://dl-ssl.google.com/android/repository/sys-img/android/sysimg_x86-18_r01.zip</sdk:url>
+                <sdk:size>143899902</sdk:size>
+                <sdk:checksum type="sha1">ab3de121a44fca43ac3aa83f7d68cc47fc643ee8</sdk:checksum>
+                <sdk:url>sysimg_x86-18_r02.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:tag-id>default</sdk:tag-id>
     </sdk:system-image>
 
     <sdk:system-image>
-        <!-- Generated at Thu Feb 20 15:52:49 2014 from git_klp-sdk-release @ 999428 -->
-        <sdk:revision>2</sdk:revision>
-        <sdk:description>Android SDK Platform 4.4.2</sdk:description>
+        <!-- Generated at Mon Mar  9 16:57:47 2015 from git_klp-dev @ 1743154 -->
+        <sdk:revision>3</sdk:revision>
+        <sdk:description>Android SDK Platform 4.4.4</sdk:description>
         <sdk:api-level>19</sdk:api-level>
         <sdk:abi>x86</sdk:abi>
         <sdk:archives>
             <sdk:archive>
-                <sdk:size>178922720</sdk:size>
-                <sdk:checksum type="sha1">8889cb418984a2a7916a359da7c429d2431ed060</sdk:checksum>
-                <sdk:url>sysimg_x86-19_r02.zip</sdk:url>
+                <sdk:size>180245668</sdk:size>
+                <sdk:checksum type="sha1">3782f3ebac5e54b3de454570add401989515ffca</sdk:checksum>
+                <sdk:url>sysimg_x86-19_r03.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
@@ -704,22 +723,6 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
         <sdk:uses-license ref="android-sdk-license"/>
     </sdk:system-image>
 
-    <sdk:system-image>
-        <!-- Generated at Mon Mar  2 11:01:02 2015 from git_lmp-mr1-sdk-release @ 1737576 -->
-        <sdk:revision>1</sdk:revision>
-        <sdk:description>Android SDK Platform 5.1</sdk:description>
-        <sdk:api-level>22</sdk:api-level>
-        <sdk:abi>armeabi-v7a</sdk:abi>
-        <sdk:tag-id>default</sdk:tag-id>
-        <sdk:archives>
-            <sdk:archive>
-                <sdk:size>193687339</sdk:size>
-                <sdk:checksum type="sha1">2aa6a887ee75dcf3ac34627853d561997792fcb8</sdk:checksum>
-                <sdk:url>sysimg_arm-22_r01.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-    </sdk:system-image>
     <!-- MIPS SYSTEM IMAGES ........................ -->
 
     <sdk:system-image>
@@ -776,4 +779,54 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
         <sdk:tag-id>default</sdk:tag-id>
     </sdk:system-image>
 
+    <sdk:system-image>
+        <!-- Generated at Fri Aug 14 15:40:56 2015 from git_mnc-release @ 2166767 -->
+        <sdk:revision>3</sdk:revision>
+        <sdk:description>Android SDK Platform 6.0</sdk:description>
+        <sdk:api-level>23</sdk:api-level>
+        <sdk:abi>x86</sdk:abi>
+        <sdk:tag-id>default</sdk:tag-id>
+        <sdk:archives>
+            <sdk:archive>
+                <sdk:size>240896796</sdk:size>
+                <sdk:checksum type="sha1">3cb2e8efb575c35a558b091eac7e1bc5843f5f12</sdk:checksum>
+                <sdk:url>sysimg_x86-23_r03.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:system-image>
+
+    <sdk:system-image>
+        <!-- Generated at Fri Aug 14 15:41:23 2015 from git_mnc-release @ 2166767 -->
+        <sdk:revision>3</sdk:revision>
+        <sdk:description>Android SDK Platform 6.0</sdk:description>
+        <sdk:api-level>23</sdk:api-level>
+        <sdk:abi>x86_64</sdk:abi>
+        <sdk:tag-id>default</sdk:tag-id>
+        <sdk:archives>
+            <sdk:archive>
+                <sdk:size>337897181</sdk:size>
+                <sdk:checksum type="sha1">226510856431bc4a73690540a8d7cbad974bedd3</sdk:checksum>
+                <sdk:url>sysimg_x86_64-23_r03.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:system-image>
+
+    <sdk:system-image>
+        <!-- Generated at Fri Aug 14 15:41:43 2015 from git_mnc-release @ 2166767 -->
+        <sdk:revision>3</sdk:revision>
+        <sdk:description>Android SDK Platform 6.0</sdk:description>
+        <sdk:api-level>23</sdk:api-level>
+        <sdk:abi>armeabi-v7a</sdk:abi>
+        <sdk:tag-id>default</sdk:tag-id>
+        <sdk:archives>
+            <sdk:archive>
+                <sdk:size>226879660</sdk:size>
+                <sdk:checksum type="sha1">7bb8768ec4333500192fd9627d4234f505fa98dc</sdk:checksum>
+                <sdk:url>sysimg_arm-23_r03.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:system-image>
 </sdk:sdk-sys-img>

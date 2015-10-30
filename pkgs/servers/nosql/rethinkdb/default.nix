@@ -1,5 +1,5 @@
 { stdenv, fetchurl, which, m4, python
-, protobuf, boost, zlib, curl, openssl, icu, jemalloc
+, protobuf, boost, zlib, curl, openssl, icu, jemalloc, libtool
 }:
 
 stdenv.mkDerivation rec {
@@ -11,17 +11,26 @@ stdenv.mkDerivation rec {
     sha256 = "03w9fq3wcvwy04b3x6zb3hvwar7b9jfbpq77rmxdlgh5w64vvgwd";
   };
 
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' external/v8_3.30.33.16/build/gyp/pylib/gyp/xcode_emulation.py
+
+    # very meta
+    substituteInPlace mk/support/pkg/re2.sh --replace "-i '''" "-i"
+  '';
+
   preConfigure = ''
     export ALLOW_WARNINGS=1
     patchShebangs .
   '';
 
-  configureFlags = [
+  configureFlags = stdenv.lib.optionals (!stdenv.isDarwin) [
     "--with-jemalloc"
     "--lib-path=${jemalloc}/lib"
   ];
 
-  buildInputs = [ protobuf boost zlib curl openssl icu jemalloc ];
+  buildInputs = [ protobuf boost zlib curl openssl icu ]
+    ++ stdenv.lib.optional (!stdenv.isDarwin) jemalloc
+    ++ stdenv.lib.optional stdenv.isDarwin libtool;
 
   nativeBuildInputs = [ which m4 python ];
 

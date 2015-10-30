@@ -40,7 +40,6 @@ let
     polkit.addRule(function(action, subject) {
       if (
         subject.isInGroup("networkmanager")
-        && subject.active
         && (action.id.indexOf("org.freedesktop.NetworkManager.") == 0
             || action.id.indexOf("org.freedesktop.ModemManager")  == 0
         ))
@@ -71,11 +70,10 @@ let
     ${coreutils}/bin/rm -f $tmp $tmp.ns
   '';
 
-  # pre-up and pre-down hooks were added in NM 0.9.10, but we still use 0.9.0
   dispatcherTypesSubdirMap = {
     "basic" = "";
-    /*"pre-up" = "pre-up.d/";
-    "pre-down" = "pre-down.d/";*/
+    "pre-up" = "pre-up.d/";
+    "pre-down" = "pre-down.d/";
   };
 
 in {
@@ -207,10 +205,16 @@ in {
 
     environment.systemPackages = cfg.packages;
 
-    users.extraGroups = singleton {
+    users.extraGroups = [{
       name = "networkmanager";
       gid = config.ids.gids.networkmanager;
-    };
+    }
+    {
+      name = "nm-openvpn";
+    }];
+    users.extraUsers = [{
+      name = "nm-openvpn";
+    }];
 
     systemd.packages = cfg.packages;
 

@@ -5,22 +5,18 @@ stdenv.mkDerivation rec {
   version = "0.13.9";
 
   src = fetchurl {
-    url = "http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/${version}/sbt-launch.jar";
-    sha256 = "04k411gcrq35ayd2xj79bcshczslyqkicwvhkf07hkyr4j3blxda";
+    url = "https://dl.bintray.com/sbt/native-packages/sbt/${version}/${name}.tgz";
+    sha256 = "148f2801f2993773de6f8859fe0e6520fcabe649d66bb316e13aff8b2fd7f504";
   };
 
-  phases = [ "installPhase" ];
+  patchPhase = ''
+    echo -java-home ${jre.home} >>conf/sbtopts
+  '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cat > $out/bin/sbt << EOF
-    #! ${stdenv.shell}
-    if [ ! -v JAVA_HOME ]; then
-        export JAVA_HOME="${jre.home}"
-    fi
-    ${jre}/bin/java \$SBT_OPTS -jar ${src} "\$@"
-    EOF
-    chmod +x $out/bin/sbt
+    mkdir -p $out/share/sbt $out/bin
+    cp -ra . $out/share/sbt
+    ln -s $out/share/sbt/bin/sbt $out/bin/
   '';
 
   meta = {

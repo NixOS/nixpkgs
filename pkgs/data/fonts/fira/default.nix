@@ -1,16 +1,16 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "fira-4.105";
+  name = "fira-4.106";
 
   src = fetchurl {
-    url = http://www.carrois.com/downloads/fira_4_1/FiraFonts4105.zip;
-    sha256 = "1857kpn7p7fc1xsmqx9589hk396ggwzd167yc3dmn1mh5dixibfz";
+    url = http://www.carrois.com/downloads/fira_4_1/FiraFonts4106.zip;
+    sha256 = "123xwd7abb96lsla1v579vfpvc7fwixhq78221qxrw4dv8mgf8id";
   };
 
   buildInputs = [unzip];
   phases = [ "unpackPhase" "installPhase" ];
-  sourceRoot = "FiraFonts4105";
+  sourceRoot = "FiraFonts4106";
 
   installPhase = ''
     mkdir -p $out/share/fonts/opentype

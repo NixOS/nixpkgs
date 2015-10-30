@@ -20,7 +20,7 @@
 { lib, fetchurl, writeScript, ruby, libxml2, libxslt, python, stdenv, which
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
-, cmake, libssh2, openssl, mysql
+, cmake, libssh2, openssl, mysql, darwin
 }:
 
 let
@@ -70,6 +70,7 @@ in
       "--with-exslt-lib=${libxslt}/lib"
       "--with-exslt-include=${libxslt}/include"
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
+    buildInputs = lib.optional stdenv.isDarwin darwin.libobjc;
   };
 
   pg = attrs: {
@@ -117,6 +118,10 @@ in
       substituteInPlace lib/tzinfo/zoneinfo_data_source.rb \
         --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
     '';
+  };
+
+  unf_ext = attrs: {
+    buildInputs = lib.optional stdenv.isDarwin darwin.libobjc;
   };
 
   xapian-ruby = attrs: {

@@ -1,18 +1,22 @@
 { stdenv, fetchurl, erlang, python, libxml2, libxslt, xmlto
-, docbook_xml_dtd_45, docbook_xsl, zip, unzip }:
+, docbook_xml_dtd_45, docbook_xsl, zip, unzip
+
+, AppKit, Carbon, Cocoa
+}:
 
 stdenv.mkDerivation rec {
   name = "rabbitmq-server-${version}";
 
-  version = "3.4.3";
+  version = "3.5.6";
 
   src = fetchurl {
     url = "http://www.rabbitmq.com/releases/rabbitmq-server/v${version}/${name}.tar.gz";
-    sha256 = "1mdma4bh6196ix9vhsigb3yav8l5gy2x78nsqxychm4hz5l2vjx6";
+    sha256 = "07v7c6ippngkq269jmrf3gji389czcmz6phc3qwxn4j14cri9gi4";
   };
 
   buildInputs =
-    [ erlang python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl zip unzip ];
+    [ erlang python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl zip unzip ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
 
   preBuild =
     ''

@@ -8,19 +8,19 @@ let
     name = "twister-html";
     src = fetchgit {
       url = "git://github.com/miguelfreitas/twister-html.git";
-      rev = "891f7bf24e1c3df7ec5e1db23c765df2d7c2d5a9";
-      sha256 = "0d96rfkpwxyiz32k2pd6a64r2kr3600qgp9v73ddcpq593wf11qb";
+      rev = "01e7f7ca9b7e42ed90f91bc42da2c909ca5c0b9b";
+      sha256 = "0scjbin6s1kmi0bqq0dx0qyjw4n5xgmj567n0156i39f9h0dabqy";
     };
   };
 
 in stdenv.mkDerivation rec {
   name = "twister-${version}";
-  version = "0.9.22";
+  version = "0.9.30";
 
   src = fetchurl {
     url = "https://github.com/miguelfreitas/twister-core/"
         + "archive/v${version}.tar.gz";
-    sha256 = "1haq0d7ypnazs599g4kcq1x914fslc04wazqj54rlvjdp7yx4j3f";
+    sha256 = "1i39iqq6z25rh869vi5k76g84rmyh30p05xid7z9sqjrqdfpyyzk";
   };
 
   configureFlags = [
@@ -29,6 +29,7 @@ in stdenv.mkDerivation rec {
     "--disable-deprecated-functions"
     "--enable-tests"
     "--enable-python-binding"
+    "--with-boost-libdir=${boost.lib}/lib"
   ];
 
   buildInputs = [

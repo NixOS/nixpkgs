@@ -42,7 +42,7 @@ in stdenv.mkDerivation {
     patchShebangs .
   '';
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./no-xcode.patch;
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./default-arch.patch ./no-xcode.patch ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     (cd tools/gyp; patch -Np1 -i ${../../python-modules/gyp/no-darwin-cflags.patch})
@@ -53,6 +53,15 @@ in stdenv.mkDerivation {
     ++ optionals stdenv.isDarwin [ pkgconfig openssl libtool CoreServices ApplicationServices Foundation ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ Carbon ];
   setupHook = ./setup-hook.sh;
+
+  enableParallelBuilding = true;
+
+  postFixup = ''
+    pushd $out/lib/node_modules/npm/node_modules/node-gyp
+    patch -p2 < ${./no-xcode.patch}
+    popd
+    sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' $out/lib/node_modules/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
+  '';
 
   passthru.interpreterName = "nodejs-0.10";
 

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "mlt-${version}";
-  version = "0.9.6";
+  version = "0.9.8";
 
   src = fetchurl {
     url = "https://github.com/mltframework/mlt/archive/v${version}.tar.gz";
-    sha256 = "0s8ypg0q50zfcmq527y8cbdvzxhiqidm1923k28ar8jqmjp45ssh";
+    sha256 = "0x0hsb05i7g70dh3jll41qlvcylailfgsr0y1dpx7hyigynxc50j";
   };
 
   buildInputs = [

@@ -3,6 +3,8 @@
   ipaddr, ocamlnet, ocaml_ssl, ocaml_pcre, ocaml_optcomp,
   reactivedata, opam}:
 
+assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4";
+
 stdenv.mkDerivation rec
 {
   pname = "eliom";

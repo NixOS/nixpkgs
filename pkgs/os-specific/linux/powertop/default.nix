@@ -10,7 +10,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gettext libnl ncurses pciutils pkgconfig zlib ];
 
-  patchPhase = ''
+  # Fix --auto-tune bug:
+  # https://lists.01.org/pipermail/powertop/2014-December/001727.html
+  patches = [ ./auto-tune.patch ];
+
+  postPatch = ''
     substituteInPlace src/main.cpp --replace "/sbin/modprobe" "modprobe"
   '';
 

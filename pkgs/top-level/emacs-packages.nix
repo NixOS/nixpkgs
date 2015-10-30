@@ -183,12 +183,12 @@ let self = _self // overrides;
 
   async = melpaBuild rec {
     pname   = "async";
-    version = "1.2";
+    version = "1.5";
     src = fetchFromGitHub {
       owner  = "jwiegley";
       repo   = "emacs-async";
       rev    = "v${version}";
-      sha256 = "1j6mbvvbnm2m1gpsy9ipxiv76b684nn57yssbqdyiwyy499cma6q";
+      sha256 = "1yq1aby4n5k3caasynhxhakng01qp4099zjbsm633d351ib3h20g";
     };
     meta = {
       description = "Asynchronous processing in Emacs";
@@ -241,6 +241,18 @@ let self = _self // overrides;
     };
     files = [ "autotetris-mode.el" ];
     meta =  { license = unlicense; };
+  };
+
+  avy = melpaBuild rec {
+    pname   = "avy";
+    version = "0.3.0";
+    src = fetchFromGitHub {
+      owner  = "abo-abo";
+      repo   = pname;
+      rev    = version;
+      sha256 = "15xfgmsy4sqs3cmk7dwmj21g3r9dqb3fra7n7ly306bwgzh4vm8k";
+    };
+    meta = { license = gpl3Plus; };
   };
 
   bind-key = melpaBuild {
@@ -372,12 +384,12 @@ let self = _self // overrides;
 
   dash = melpaBuild rec {
     pname   = "dash";
-    version = "2.11.0";
+    version = "2.12.1";
     src = fetchFromGitHub {
       owner  = "magnars";
       repo   = "${pname}.el";
       rev    = version;
-      sha256 = "02gfrcda7gj3j5yx71dz40xylrafl4pcaj7bgfajqi9by0w2nrnx";
+      sha256 = "1njv5adcm96kdch0jb941l8pm51yfdx7mlz83y0pq6jlzjs9mwaa";
     };
     meta = {
       description = "A modern list library for Emacs";
@@ -436,6 +448,44 @@ let self = _self // overrides;
     meta = {
       description = "Diminishes the amount of space taken on the mode-line by Emacs minor modes";
       homepage = http://www.eskimo.com/~seldon/;
+      license = gpl3Plus;
+    };
+  };
+
+  elpy = melpaBuild rec {
+    pname   = "elpy";
+    version = external.elpy.version;
+    src = fetchFromGitHub {
+      owner  = "jorgenschaefer";
+      repo   = pname;
+      rev    = "39ea47c73f040ce8dcc1c2d2639ebc0eb57ab8c8";
+      sha256 = "0q3av1qv4m6aj4bil608f688hjpr5px8zqnnrdqx784nz98rpjrs";
+    };
+
+    patchPhase = ''
+      for file in elpy.el elpy-pkg.el; do
+        substituteInPlace $file \
+            --replace "company \"0.8.2\"" "company \"${company.version}\"" \
+            --replace "find-file-in-project \"3.3\"" "find-file-in-project \"${find-file-in-project.version}\"" \
+            --replace "highlight-indentation \"0.5.0\"" "highlight-indentation \"${highlight-indentation.version}\"" \
+            --replace "pyvenv \"1.3\"" "pyvenv \"${pyvenv.version}\"" \
+            --replace "yasnippet \"0.8.0\"" "yasnippet \"${yasnippet.version}\""
+     done
+    '';
+
+    packageRequires = [
+      company find-file-in-project highlight-indentation pyvenv yasnippet
+    ];
+
+    propagatedUserEnvPkgs = [ external.elpy ] ++ packageRequires;
+
+    meta = {
+      description = "Emacs Python Development Environment";
+      longDescription = ''
+        Elpy is an Emacs package to bring powerful Python editing to Emacs.
+        It combines a number of other packages, both written in Emacs Lisp as
+        well as Python.
+      '';
       license = gpl3Plus;
     };
   };
@@ -571,6 +621,26 @@ let self = _self // overrides;
     };
   };
 
+  find-file-in-project = melpaBuild rec {
+    pname = "find-file-in-project";
+    version = "3.5";
+    src = fetchFromGitHub {
+      owner  = "technomancy";
+      repo   = pname;
+      rev    = "53a8d8174f915d9dcf5ac6954b1c0cae61266177";
+      sha256 = "0wky8vqg08iw34prbz04bqmhfhj82y93swb8zkz6la2vf9da0gmd";
+    };
+    meta = {
+      description = "Quick access to project files in Emacs";
+      longDescription = ''
+        Find files in a project quickly.
+        This program provides a couple methods for quickly finding any file in a
+        given project. It depends on GNU find.
+      '';
+      license = gpl3Plus;
+    };
+  };
+
   flim = melpaBuild rec {
     pname = "flim";
     version = "1.14.9"; # 20141216
@@ -636,6 +706,15 @@ let self = _self // overrides;
     meta = { license = bsd3; };
   };
 
+  rtags = melpaBuild rec {
+    pname = "rtags";
+    version = "2.0"; # really, it's some arbitrary git hash
+    src = external.rtags.src;
+    propagatedUserEnvPkgs = [ external.rtags ];
+    fileSpecs = [ "src/*.el" ];
+    inherit (external.rtags) meta;
+  };
+
   git-auto-commit-mode = melpaBuild rec {
     pname = "git-auto-commit-mode";
     version = "4.4.0";
@@ -662,6 +741,19 @@ let self = _self // overrides;
     };
     files = [ "git-commit-mode.el" ];
     meta = { license = gpl3Plus; };
+  };
+
+  git-gutter = melpaBuild rec {
+    pname = "git-gutter";
+    version = "20150930";
+    src = fetchFromGitHub {
+      owner  = "syohex";
+      repo   = "emacs-git-gutter";
+      rev    = "df7fb13481bea2b1476ca8a20bc958b17d1e06ae";
+      sha256 = "1xwdyjh13lp06yy9477013nj6idpsjr4ifg7hmyk5ai80axkgly7";
+    };
+    files = [ "git-gutter.el" ];
+    meta.license = gpl3Plus;
   };
 
   git-rebase-mode = melpaBuild rec {
@@ -832,6 +924,42 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  highlight-indentation = melpaBuild rec {
+    pname = "highlight-indentation";
+    version = "0.7.0";
+    src = fetchFromGitHub {
+      owner = "antonj";
+      repo = "Highlight-Indentation-for-Emacs";
+      rev = "v${version}";
+      sha256 = "00l54k75qk24a0znzl4ij3s3nrnr2wy9ha3za8apphzlm98m907k";
+    };
+    meta = {
+      description = "Minor modes to highlight indentation guides in emacs";
+      longDescription = ''
+        Provides two minor modes highlight-indentation-mode and
+        highlight-indentation-current-column-mode
+
+        - highlight-indentation-mode displays guidelines indentation
+        (space indentation only).
+        - highlight-indentation-current-column-mode displays guidelines for the
+        current-point indentation (space indentation only).
+      '';
+      license = gpl2Plus;
+    };
+  };
+
+  hydra = melpaBuild rec {
+    pname   = "hydra";
+    version = "0.13.3";
+    src = fetchFromGitHub {
+      owner  = "abo-abo";
+      repo   = pname;
+      rev    = version;
+      sha256 = "08iw95lyizcyf6cjl37fm8wvay0vsk9758pk9gq9f2xiafcchl7f";
+    };
+    meta = { license = gpl3Plus; };
+  };
+
   ibuffer-vc = melpaBuild rec {
     pname   = "ibuffer-vc";
     version = "0.10";
@@ -927,12 +1055,12 @@ let self = _self // overrides;
 
   magit = melpaBuild rec {
     pname   = "magit";
-    version = "2.1.0";
+    version = "2.3.0";
     src = fetchFromGitHub {
       owner  = pname;
       repo   = pname;
       rev    = version;
-      sha256 = "0pyqa79km1y58phsf4sq2a25rx9lw0di1hb6a5y17xisa8li7sfl";
+      sha256 = "1zbx1ky1481lkvfjr4k23q7jdrk9ji9v5ghj88qib36vbmzfwww8";
     };
     packageRequires = [ dash git-commit magit-popup with-editor ];
     fileSpecs = [ "lisp/magit-utils.el"
@@ -981,7 +1109,7 @@ let self = _self // overrides;
     pname = "with-editor";
     version = magit.version;
     src = magit.src;
-    packageRequires = [ dash ];
+    packageRequires = [ async dash ];
     fileSpecs = [ "Documentation/with-editor.texi" "lisp/with-editor.el" ];
     meta = { license = gpl3Plus; };
   };
@@ -1189,6 +1317,25 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  pyvenv = melpaBuild rec {
+    pname = "pyvenv";
+    version = "1.7";
+    src = fetchFromGitHub {
+      owner  = "jorgenschaefer";
+      repo   = pname;
+      rev    = "e4f2fa7a32cf480f34d628d8eb5b9b60374d0e8e";
+      sha256 = "1669id1p69kpq8zzldxj1p6iyz68701snn462g22k2acfzc2bfha";
+    };
+    meta = {
+      description = "Python virtual environment interface for Emacs";
+      longDescription = ''
+        This is a simple global minor mode which will replicate the changes done
+        by virtualenv activation inside Emacs.
+      '';
+      license = gpl2Plus;
+    };
+  };
+
   rainbow-delimiters = melpaBuild rec {
     pname = "rainbow-delimiters";
     version = "2.1.1";
@@ -1354,12 +1501,12 @@ let self = _self // overrides;
 
   swiper = melpaBuild rec {
     pname   = "swiper";
-    version = "0.5.0";
+    version = "0.6.0";
     src = fetchFromGitHub {
       owner  = "abo-abo";
       repo   = pname;
       rev    = version;
-      sha256 = "1a28vignwpcn62xk46w5p5wjfrbcmvs0gz1jgn4ba7ibmn4cmnnm";
+      sha256 = "18madh4hvrk8sxrll84ry13n1l3ad1gnp3prj828sszrbbdp20ly";
     };
     fileSpecs = [ "swiper.el" "ivy.el" "colir.el" "counsel.el" ];
     meta = { license = gpl3Plus; };
@@ -1398,7 +1545,7 @@ let self = _self // overrides;
       owner  = "ocaml";
       repo   = pname;
       rev    = version;
-      sha256 = "1j2smhqrwy0zydhbyjkpnwzq05fgfa85kc0d9kzwq0mppdndspp4";
+      sha256 = "0jpcjy2a77mywba2vm61knj26pgylsmv5a21cdp80q40bac4i6bb";
     };
     packageRequires = [ caml ];
     meta = { license = gpl3Plus; };
@@ -1504,6 +1651,29 @@ let self = _self // overrides;
       sha256 = "075z0glain0dp56d0cp468y5y88wn82ab26aapsrdzq8hmlshwn4";
     };
     meta = { license = gpl3Plus; };
+  };
+
+  yasnippet = melpaBuild rec {
+    pname = "yasnippet";
+    version = "0.8.1";
+    src = fetchFromGitHub {
+      owner  = "capitaomorte";
+      repo   = pname;
+      rev    = "01139a2deb9eda272b9b771fbbe15d096061efa4";
+      sha256 = "1b0bxzkmw7yd1yf6326zf52aq63n283vy57pysj8cc34d9bk6nnk";
+    };
+    meta = {
+      description = "A template system for Emacs";
+      longDescription = ''
+        YASnippet is a template system for Emacs.
+        It allows you to type an abbreviation and automatically expand it into
+        function templates. Bundled language templates include: C, C++, C#,
+        Perl, Python, Ruby, SQL, LaTeX, HTML, CSS and more.
+        The snippet syntax is inspired from TextMate's syntax, you can even import
+        most TextMate templates to YASnippet.
+      '';
+      license = gpl2Plus;
+    };
   };
 
   zenburn-theme = melpaBuild rec {

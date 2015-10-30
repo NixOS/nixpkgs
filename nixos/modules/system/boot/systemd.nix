@@ -770,4 +770,11 @@ in
 
   };
 
+  # FIXME: Remove these eventually.
+  imports =
+    [ (mkRenamedOptionModule [ "boot" "systemd" "sockets" ] [ "systemd" "sockets" ])
+      (mkRenamedOptionModule [ "boot" "systemd" "targets" ] [ "systemd" "targets" ])
+      (mkRenamedOptionModule [ "boot" "systemd" "services" ] [ "systemd" "services" ])
+    ];
+
 }

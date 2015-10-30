@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
     cat >"$out/bin/pil" <<EOF
     #! /bin/sh
-    $out/bin/picolisp $out/lib/picolisp/lib.l @lib/misc.l @lib/btree.l @lib/db.l @lib/pilog.l
+    exec $out/bin/picolisp $out/lib/picolisp/lib.l @lib/misc.l @lib/btree.l @lib/db.l @lib/pilog.l
     EOF
     chmod +x "$out/bin/pil"
 

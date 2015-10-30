@@ -7,7 +7,7 @@
 assert stdenv.system != "armv5tel-linux";
 
 let
-  version = "4.1.0";
+  version = "4.1.2";
 
   deps = {
     inherit openssl zlib libuv;
@@ -31,19 +31,20 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "453005f64ee529f7dcf1237eb27ee2fa2415c49f5c9e7463e8b71fba61c5b408";
+    sha256 = "0j9ca1fjgljzh4m9l9d8g81510j0ljvaf031qij9psiz79qc7gpy";
   };
 
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps) ++ [ "--without-dtrace" ];
   dontDisableStatic = true;
   prePatch = ''
     patchShebangs .
+    sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' tools/gyp/pylib/gyp/xcode_emulation.py
   '';
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./no-xcode.patch;
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode.patch ./pkg-libpath.patch ];
 
-  buildInputs = [ python which http-parser zlib libuv openssl python ]
-    ++ (optional stdenv.isLinux utillinux)
+  buildInputs = [ python which zlib libuv openssl python ]
+    ++ optionals stdenv.isLinux [ utillinux http-parser ]
     ++ optionals stdenv.isDarwin [ pkgconfig openssl libtool ];
   setupHook = ./setup-hook.sh;
 

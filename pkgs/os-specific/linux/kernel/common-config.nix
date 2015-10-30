@@ -478,11 +478,14 @@ with stdenv.lib;
   ''}
   ZRAM m
 
-  ${optionalString (versionAtLeast version "3.17") "NFC? n"}
+  # Enable PCIe and USB for the brcmfmac driver
+  BRCMFMAC_USB? y
+  BRCMFMAC_PCIE? y
 
-  # Enable firmware loading via udev (legacy).
-  ${optionalString (versionAtLeast version "3.17") ''
-    FW_LOADER_USER_HELPER_FALLBACK y
+  # Support x2APIC (which requires IRQ remapping).
+  ${optionalString (stdenv.system == "x86_64-linux") ''
+    X86_X2APIC y
+    IRQ_REMAP y
   ''}
 
   ${kernelPlatform.kernelExtraConfig or ""}

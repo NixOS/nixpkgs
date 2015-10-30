@@ -1,5 +1,5 @@
 From: Thomas Perl <m@thp.io>
-Description: Fix FTBFS
+Description: Fix FTBFS 
 Origin: upstream, http://repo.or.cz/w/tennix.git/commitdiff/6144cb7626dfdc0820a0036af83a531e8e68bae6
 Bug-Debian:  http://bugs.debian.org/664907
 
@@ -11,7 +11,7 @@ Bug-Debian:  http://bugs.debian.org/664907
  #include <stdlib.h>
 +#include <libgen.h>
  #include <sys/stat.h>
-
+ 
  #include "archive.hh"
 --- tennix-1.1.orig/game.c
 +++ tennix-1.1/game.c
@@ -29,37 +29,37 @@ Bug-Debian:  http://bugs.debian.org/664907
 +++ tennix-1.1/network.h
 @@ -103,19 +103,19 @@ void
  net_serialize_ball(const Ball* src, NetworkBall* dest);
-
+ 
  void
 -net_unserialize_ball(const NetworkBall* src, Ball* dest);
 +net_unserialize_ball(NetworkBall* src, Ball* dest);
-
+ 
  void
  net_serialize_player(const Player* src, NetworkPlayer* dest);
-
+ 
  void
 -net_unserialize_player(const NetworkPlayer* src, Player* dest);
 +net_unserialize_player(NetworkPlayer* src, Player* dest);
-
+ 
  void
  net_serialize_gamestate(const GameState* src, NetworkGameState* dest);
-
+ 
  void
 -net_unserialize_gamestate(const NetworkGameState* src, GameState* dest);
 +net_unserialize_gamestate(NetworkGameState* src, GameState* dest);
-
+ 
  #endif
-
+ 
 --- tennix-1.1.orig/locations.h
 +++ tennix-1.1/locations.h
 @@ -155,7 +155,7 @@ static Location locations[] = {
  #endif
-
+ 
      /* End marker */
 -    { NULL, NULL, NULL, 0, 0, NULL, 0, 0, 0, 0, false }
 +    { NULL, NULL, NULL, 0, 0, NULL, 0, 0, 0, 0, false, false, 0, 0 }
  };
-
+ 
  unsigned int location_count()
 --- tennix-1.1.orig/tennix.cc
 +++ tennix-1.1/tennix.cc
@@ -75,7 +75,7 @@ Bug-Debian:  http://bugs.debian.org/664907
 --- tennix-1.1.orig/SDL_rotozoom.c
 +++ tennix-1.1/SDL_rotozoom.c
 @@ -365,6 +365,9 @@ int zoomSurfaceRGBA(SDL_Surface * src, S
-
+ 
  int zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int flipy)
  {
 +    (void)flipx;
@@ -90,50 +90,50 @@ Bug-Debian:  http://bugs.debian.org/664907
      csax = sax;
 -    for (x = 0; x < dst->w; x++) {
 +    for (x = 0; x < (Uint32)dst->w; x++) {
-	csx += sx;
-	*csax = (csx >> 16);
-	csx &= 0xffff;
+ 	csx += sx;
+ 	*csax = (csx >> 16);
+ 	csx &= 0xffff;
 @@ -401,7 +404,7 @@ int zoomSurfaceY(SDL_Surface * src, SDL_
      }
      csy = 0;
      csay = say;
 -    for (y = 0; y < dst->h; y++) {
 +    for (y = 0; y < (Uint32)dst->h; y++) {
-	csy += sy;
-	*csay = (csy >> 16);
-	csy &= 0xffff;
+ 	csy += sy;
+ 	*csay = (csy >> 16);
+ 	csy &= 0xffff;
 @@ -410,13 +413,13 @@ int zoomSurfaceY(SDL_Surface * src, SDL_
-
+ 
      csx = 0;
      csax = sax;
 -    for (x = 0; x < dst->w; x++) {
 +    for (x = 0; x < (Uint32)dst->w; x++) {
-	csx += (*csax);
-	csax++;
+ 	csx += (*csax);
+ 	csax++;
      }
      csy = 0;
      csay = say;
 -    for (y = 0; y < dst->h; y++) {
 +    for (y = 0; y < (Uint32)dst->h; y++) {
-	csy += (*csay);
-	csay++;
+ 	csy += (*csay);
+ 	csay++;
      }
 @@ -432,10 +435,10 @@ int zoomSurfaceY(SDL_Surface * src, SDL_
-      * Draw
+      * Draw 
       */
      csay = say;
 -    for (y = 0; y < dst->h; y++) {
 +    for (y = 0; y < (Uint32)dst->h; y++) {
-	csax = sax;
-	sp = csp;
+ 	csax = sax;
+ 	sp = csp;
 -	for (x = 0; x < dst->w; x++) {
 +	for (x = 0; x < (Uint32)dst->w; x++) {
-	    /*
-	     * Draw
-	     */
+ 	    /*
+ 	     * Draw 
+ 	     */
 @@ -801,6 +804,8 @@ SDL_Surface* rotateSurface90Degrees(SDL_
- void rotozoomSurfaceSizeTrig(int width, int height, double angle, double zoomx, double zoomy, int *dstwidth, int *dstheight,
-			     double *canglezoom, double *sanglezoom)
+ void rotozoomSurfaceSizeTrig(int width, int height, double angle, double zoomx, double zoomy, int *dstwidth, int *dstheight, 
+ 			     double *canglezoom, double *sanglezoom)
  {
 +    (void)zoomy;
 +
@@ -144,7 +144,7 @@ Bug-Debian:  http://bugs.debian.org/664907
 +++ tennix-1.1/network.c
 @@ -183,7 +183,7 @@ net_serialize_ball(const Ball* src, Netw
  }
-
+ 
  void
 -net_unserialize_ball(const NetworkBall* src, Ball* dest)
 +net_unserialize_ball(NetworkBall* src, Ball* dest)
@@ -153,7 +153,7 @@ Bug-Debian:  http://bugs.debian.org/664907
      dest->x = unpack_float(SDLNet_Read32(&(src->x)), -WIDTH, WIDTH*2);
 @@ -213,7 +213,7 @@ net_serialize_player(const Player* src,
  }
-
+ 
  void
 -net_unserialize_player(const NetworkPlayer* src, Player* dest)
 +net_unserialize_player(NetworkPlayer* src, Player* dest)
@@ -171,36 +171,36 @@ Bug-Debian:  http://bugs.debian.org/664907
      dest->accelerate = unpack_float(SDLNet_Read32(&(src->accelerate)), 0, 200);
 @@ -250,7 +250,7 @@ net_serialize_gamestate(const GameState*
  }
-
+ 
  void
 -net_unserialize_gamestate(const NetworkGameState* src, GameState* dest)
 +net_unserialize_gamestate(NetworkGameState* src, GameState* dest)
  {
      int p;
-
+ 
 --- tennix-1.1.orig/makefile
 +++ tennix-1.1/makefile
 @@ -27,24 +27,23 @@ ifeq ($(MKCALLGRAPH),1)
    LD        =  nccld
  endif
-
+ 
 -RELEASE   =  1.1
 -
 -UNAME = $(shell uname)
 +RELEASE = 1.1.1
-
+ 
  PREFIX ?= /usr/local
  BINDIR ?= $(PREFIX)/bin
  DATAROOTDIR ?= $(PREFIX)/share
  DATADIR ?= $(DATAROOTDIR)/games
-
+ 
 -LIBS =
 -CFLAGS += -W -Wall -ansi -pedantic -Wcast-qual -Wwrite-strings -DVERSION=\"$(RELEASE)\" -O2 -DPREFIX=\"$(PREFIX)\" -g
 +CFLAGS += -W -Wall -DVERSION=\"$(RELEASE)\" -O2 -DPREFIX=\"$(PREFIX)\"
  CXXFLAGS += $(CFLAGS)
-
+ 
  USE_PYTHON ?= 1
-
+ 
  ifeq ($(USE_PYTHON),1)
 -  CFLAGS += `python-config --includes` -DTENNIX_PYTHON
 -  LIBS += `python-config --libs`
@@ -209,12 +209,12 @@ Bug-Debian:  http://bugs.debian.org/664907
 +  CFLAGS += $(PYTHON_INCLUDES) -DTENNIX_PYTHON
 +  LIBS += $(PYTHON_LIBS)
  endif
-
+ 
  ifeq ($(NONFREE_LOCATIONS),1)
 @@ -67,17 +66,14 @@ ifeq ($(MAEMO),1)
    CFLAGS += -DMAEMO
  endif
-
+ 
 -ifeq ($(UNAME),Darwin)
 -  SDLLIBS=$$(sdl-config --prefix)/lib
 -  LIBS += $$(sdl-config --static-libs) $(SDLLIBS)/libSDL_mixer.a $(SDLLIBS)/libSDL_image.a $(SDLLIBS)/libSDL_ttf.a $(SDLLIBS)/libSDL_net.a $$(freetype-config --prefix)/lib/libfreetype.a
@@ -228,7 +228,7 @@ Bug-Debian:  http://bugs.debian.org/664907
 +
 +LIBS += $(SDL_LIBS) -lSDL_mixer -lSDL_image -lSDL_ttf -lSDL_net
 +CFLAGS += $(SDL_CFLAGS)
-
+ 
 -SRC = tennix.cc game.c graphics.cc input.c util.c sound.cc animation.c network.c
  OBJ = tennix.o game.o graphics.o input.o util.o sound.o animation.o archive.o SDL_rotozoom.o network.o
 +
@@ -240,7 +240,7 @@ Bug-Debian:  http://bugs.debian.org/664907
 @@ -98,6 +98,13 @@ typedef struct {
      bool inhibit_gravity;
  } Ball;
-
+ 
 +enum PlayerDesire {
 +    DESIRE_NORMAL,
 +    DESIRE_TOPSPIN,
@@ -266,7 +266,7 @@ Bug-Debian:  http://bugs.debian.org/664907
 @@ -118,13 +125,6 @@ enum {
      PLAYER_TYPE_AI
  };
-
+ 
 -enum {
 -    DESIRE_NORMAL,
 -    DESIRE_TOPSPIN,
@@ -276,9 +276,9 @@ Bug-Debian:  http://bugs.debian.org/664907
 -
  /* wait 2 seconds before we score the game */
  #define SCORING_DELAY 1000
-
+ 
 @@ -161,7 +161,7 @@ enum {
-
+ 
  typedef struct {
      const Location* location;
 -    char current_location; /* index of loc. in global location table */

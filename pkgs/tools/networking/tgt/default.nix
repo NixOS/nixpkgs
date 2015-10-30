@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, libxslt, libaio, systemd, perl, perlPackages }:
+{ stdenv, fetchFromGitHub, libxslt, libaio, systemd, perl, perlPackages
+, docbook_xsl }:
 
 let
   version = "1.0.60";
@@ -11,7 +12,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1bf8rn3mavjrzkp5k23akqn5ilw43g8mpfr68z1bi8s9lr2gkf37";
   };
 
-  buildInputs = [ libxslt systemd libaio ];
+  buildInputs = [ libxslt systemd libaio docbook_xsl ];
 
   DESTDIR = "$(out)";
   PREFIX = "/";

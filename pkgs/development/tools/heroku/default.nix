@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  version = "3.32.0";
+  version = "3.42.20";
   name = "heroku-${version}";
 
   meta = {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/assets.heroku.com/heroku-client/heroku-client-${version}.tgz";
-    sha256 = "1596zmnlwshx15xiccfskm71syrlm87jf40y2x0y7wn0vfcyis5s";
+    sha256 = "1d472vm37lx5nyyaymjglavisb1mkyzbjglzjp5im7wjfifvsd29";
   };
 
   installPhase = ''

@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
-  version = "1.0.2";
+  version = "1.0.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/1.0/NetworkManager-${version}.tar.xz";
-    sha256 = "1zq8jm1rc7n7amqa9xz1v93w2jnczg6942gyijsdpgllfiq8b4rm";
+    sha256 = "38ea002403e3b884ffa9aae25aea431d2a8420f81f4919761c83fb92648254bd";
   };
 
   preConfigure = ''
@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ dbus_glib gnutls libgcrypt ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
+
+  patches = [ ./nm-platform.patch ];
 
   preInstall =
     ''

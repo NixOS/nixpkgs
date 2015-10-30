@@ -1,18 +1,21 @@
-{ stdenv, fetchurl, boost, libX11, mesa, liblo, libjack2, ladspaH, lv2, pkgconfig, rubberband, libsndfile }:
+{ stdenv, fetchgit , boost, libX11, mesa, liblo, libjack2, ladspaH, lv2, pkgconfig, rubberband, libsndfile }:
 
 stdenv.mkDerivation rec {
   name = "zam-plugins-${version}";
-  version = "3.5";
+  version = "3.6";
 
-  src = fetchurl {
-    url = "https://github.com/zamaudio/zam-plugins/archive/${version}.tar.gz";
-    sha256 = "0icdrs4vaaj8gqi76jkkx5yk9h3agipa11cyb5h52y814q6mx6vm";
+  src = fetchgit {
+    url = "https://github.com/zamaudio/zam-plugins.git";
+    deepClone = true;
+    rev = "91fe56931a3e57b80f18c740d2dde6b44f962aee";
+    sha256 = "17slpywjs04xbcylyqjg6kqbpqwqbigf843y437yfvj1ar6ir1jp";
   };
 
   buildInputs = [ boost libX11 mesa liblo libjack2 ladspaH lv2 pkgconfig rubberband libsndfile ];
 
   patchPhase = ''
-    patchShebangs ./libs/generate-ttl.sh
+    patchShebangs ./dpf/utils/generate-ttl.sh
+    substituteInPlace Makefile --replace "ZaMaximX2" "ZaMaximX2 ZamPiano ZamChild670"
   '';
 
   makeFlags = [

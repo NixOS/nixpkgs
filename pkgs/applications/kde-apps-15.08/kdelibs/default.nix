@@ -21,6 +21,7 @@ kdeApp {
   patches = [
     ./0001-old-kde4-cmake-policies.patch
     ./0002-polkit-install-path.patch
+    ./0003-remove_xdg_impurities.patch
   ];
 
   # cmake does not detect path to `ilmbase`

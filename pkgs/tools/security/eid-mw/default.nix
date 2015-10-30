@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gtk2, nssTools, pcsclite
 , pkgconfig }:
 
-let version = "4.1.6"; in
+let version = "4.1.8"; in
 stdenv.mkDerivation {
   name = "eid-mw-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "006s7093wqmk36mrlakjv89bqddyh599rvmgv0zgsp15vf9160zi";
+    sha256 = "1nmw4c2gvbpkrgjxyd2g0lbh85lb2czbgqplqrv69fr6azaddyyk";
     rev = "v${version}";
     repo = "eid-mw";
     owner = "Fedict";
@@ -29,10 +29,11 @@ stdenv.mkDerivation {
       --replace "modutil" "${nssTools}/bin/modutil"
 
     # Only provides a useless "about-eid-mw.desktop" that segfaults anyway:
-    rm -rf $out/share/applications $out/bin/about-eid-mw
+    rm -r $out/share/applications $out/bin/about-eid-mw
   '';
 
   meta = with stdenv.lib; {
+    inherit version;
     description = "Belgian electronic identity card (eID) middleware";
     homepage = http://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/;
     license = licenses.lgpl3;

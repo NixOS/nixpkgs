@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, cppcheck, libmrss }:
 
-let version = "2015-09-06"; in
+let version = "2.1"; in
 stdenv.mkDerivation rec {
   name = "rsstail-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "1rfzib5fzm0i8wf3njld1lvxgbci0hxxnvp2qx1k4bwpv744xkpx";
-    rev = "16636539e4cc75dafbfa7f05539769be7dad4b66";
+    sha256 = "12p69i3g1fwlw0bds9jqsdmzkid3k5a41w31d227i7vm12wcvjf6";
+    rev = "6f2436185372b3f945a4989406c4b6a934fe8a95";
     repo = "rsstail";
     owner = "flok99";
   };
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional doCheck cppcheck;
 
   postPatch = ''
-    substituteInPlace Makefile --replace -liconv ""
+    substituteInPlace Makefile --replace -liconv_hook ""
   '';
 
   makeFlags = "prefix=$(out)";

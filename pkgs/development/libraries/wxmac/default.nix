@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, setfile, rez, derez,
-  expat, libiconv, libjpeg, libpng, libtiff, zlib
+{ stdenv, fetchurl
+, expat, libiconv, libjpeg, libpng, libtiff, zlib
+, setfile, rez, derez
+, AGL, Cocoa, Kernel, QuickTime
 }:
 
 with stdenv.lib;
@@ -15,9 +17,20 @@ stdenv.mkDerivation rec {
 
   patches = [ ./wx.patch ];
 
-  buildInputs = [ setfile rez derez expat libiconv libjpeg libpng libtiff zlib ];
+  buildInputs = [
+    expat libiconv libjpeg libpng libtiff zlib
+    Cocoa Kernel QuickTime setfile rez derez
+  ];
+
+  propagatedBuildInputs = [ AGL ];
+
+  postPatch = ''
+    substituteInPlace configure --replace "-framework System" -lSystem
+  '';
 
   configureFlags = [
+    "wx_cv_std_libfullpath=/var/empty"
+    "--with-macosx-version-min=10.7"
     "--enable-unicode"
     "--with-osx_cocoa"
     "--enable-std_string"
@@ -43,6 +56,8 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     ./wx-config --libs
   '';
+
+  NIX_CFLAGS_COMPILE = "-Wno-undef";
 
   doCheck = true;
 

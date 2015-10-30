@@ -11,7 +11,7 @@
   sysimg_<xsl:value-of select="sdk:abi" />_<xsl:value-of select="sdk:api-level" /> = buildSystemImage {
     name = "sysimg-<xsl:value-of select="sdk:abi" />-<xsl:value-of select="sdk:api-level" />";
     src = fetchurl {
-      url = <xsl:if test="not(starts-with(sdk:archives/sdk:archive/sdk:url, 'https://'))">https://dl-ssl.google.com/android/repository/sys-img/android/</xsl:if><xsl:value-of select="sdk:archives/sdk:archive/sdk:url" />;
+      url = <xsl:if test="not(starts-with(sdk:archives/sdk:archive/sdk:url, 'https://'))">https://dl.google.com/android/repository/sys-img/android/</xsl:if><xsl:value-of select="sdk:archives/sdk:archive/sdk:url" />;
       sha1 = "<xsl:value-of select="sdk:archives/sdk:archive/sdk:checksum[@type='sha1']" />";
     };
   };

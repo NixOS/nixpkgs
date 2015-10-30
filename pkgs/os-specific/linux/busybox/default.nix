@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
     CONFIG_PREFIX "$out"
     CONFIG_INSTALL_NO_USR y
 
+    CONFIG_LFS y
+
     ${stdenv.lib.optionalString enableStatic ''
       CONFIG_STATIC y
     ''}

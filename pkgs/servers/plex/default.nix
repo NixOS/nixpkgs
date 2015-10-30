@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   name = "plex-${version}";
-  version = "0.9.11.16.958";
-  vsnHash = "80f1748";
+  version = "0.9.12.13.1464";
+  vsnHash = "4ccd2ca";
 
   src = fetchurl {
     url = "https://downloads.plex.tv/plex-media-server/${version}-${vsnHash}/plexmediaserver-${version}-${vsnHash}.x86_64.rpm";
-    sha256 = "1wrl654nk10i9p01cgy9fqiqalxyl718qhp4kjnxvcwafayxkp26";
+    sha256 = "1gzq3ik3b23pl6i85d4abh3aqq710z5x258mjm7xai8rpyhvdp26";
   };
 
   buildInputs = [ rpmextract glibc ];
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     find $out/usr/lib/plexmediaserver/Resources -type f -a -perm -0100 \
         -print -exec patchelf --set-interpreter "${glibc}/lib/ld-linux-x86-64.so.2" '{}' \;
 
+    # executables need libstdc++.so.6
+    ln -s "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}/libstdc++.so.6" "$out/usr/lib/plexmediaserver/libstdc++.so.6"
 
     # Our next problem is the "Resources" directory in /usr/lib/plexmediaserver.
     # This is ostensibly a skeleton directory, which contains files that Plex

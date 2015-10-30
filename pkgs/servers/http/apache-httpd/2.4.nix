@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, zlib, apr, aprutil, pcre
+{ stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv
 , proxySupport ? true
 , sslSupport ? true, openssl
 , ldapSupport ? true, openldap
@@ -14,17 +14,18 @@ assert sslSupport -> aprutil.sslSupport && openssl != null;
 assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 
 stdenv.mkDerivation rec {
-  version = "2.4.16";
+  version = "2.4.17";
   name = "apache-httpd-${version}";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "0hrpy6gjwma0kba7p7m61vwh82qcnkf08123lrwpg257m93hnrmc";
+    sha256 = "165p5qgwyk1dwjypgcx5vb47xadiszs3dw28n2axplw1xifh67ik";
   };
 
   buildInputs = [perl] ++
     optional ldapSupport openldap ++    # there is no --with-ldap flag
-    optional libxml2Support libxml2;
+    optional libxml2Support libxml2 ++
+    optional stdenv.isDarwin libiconv;
 
   # Required for ‘pthread_cancel’.
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";

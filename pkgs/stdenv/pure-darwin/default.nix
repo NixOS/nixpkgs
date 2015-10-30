@@ -18,21 +18,19 @@ let
     "/usr/lib/system"
   ];
 
-  fetch = { file, sha256 }: derivation ((import <nix/fetchurl.nix> {
-    url = "https://dl.dropboxusercontent.com/u/2857322/${file}";
-    inherit sha256;
-    executable = true;
-  }).drvAttrs // {
-    __impureHostDeps = libSystemClosure;
-  });
+  fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
+    url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/4f07c88d467216d9692fefc951deb5cd3c4cc722/${file}";
+    inherit sha256 system executable;
+  };
 
   bootstrapFiles = {
-    sh    = fetch { file = "sh";    sha256 = "1qakpg37vl61jnkplz13m3g1csqr85cg8ybp6jwiv6apmg26isnm"; };
-    bzip2 = fetch { file = "bzip2"; sha256 = "1gxa67255q9v00j1vn1mzyrnbwys2g1102cx02vpcyvvrl4vqxr0"; };
-    mkdir = fetch { file = "mkdir"; sha256 = "1yfl8w65ksji7fggrbvqxw8lp0gm02qilk11n9axj2jxay53ngvg"; };
-    cpio  = fetch { file = "cpio";  sha256 = "0nssyg19smgcblwq1mfcw4djbd85md84d2f093qcqkbigdjg484b"; };
+    sh    = fetch { file = "sh";    sha256 = "1siix3wakzil31r2cydmh3v8a1nyq4605dwiabqc5lx73j4xzrzi"; };
+    bzip2 = fetch { file = "bzip2"; sha256 = "0zvqm977k11b5cl4ixxb5h0ds24g6z0f8m28z4pqxzpa353lqbla"; };
+    mkdir = fetch { file = "mkdir"; sha256 = "13frk8lsfgzlb65p9l26cvxf06aag43yjk7vg9msn7ix3v8cmrg1"; };
+    cpio  = fetch { file = "cpio";  sha256 = "0ms5i9m1vdksj575sf1djwgm7zhnvfrrb44dxnfh9avr793rc2w4"; };
   };
-  tarball = fetch { file = "bootstrap-tools.9.cpio.bz2"; sha256 = "1xim0wm4ld45ysdmgpsa6b1f6srdnfj054ilv86k0pa5plvcmsf4"; };
+
+  tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "1lz1b0grl4642h6n635xvi6imf0yyy1zyzdr9ing5aphzz0z5iic"; executable = false; };
 in rec {
   allPackages = import ../../top-level/all-packages.nix;
 
@@ -43,6 +41,8 @@ in rec {
     export MACOSX_DEPLOYMENT_TARGET=10.7
     export SDKROOT=
     export CMAKE_OSX_ARCHITECTURES=x86_64
+    # Workaround for https://openradar.appspot.com/22671534 on 10.11.
+    export gl_cv_func_getcwd_abort_bug=no
   '';
 
   # The one dependency of /bin/sh :(

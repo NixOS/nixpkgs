@@ -25,7 +25,7 @@ in
   google_apis_<xsl:value-of select="sdk:api-level" /> = buildGoogleApis {
     name = "<xsl:value-of select="sdk:name-id" />-<xsl:value-of select="sdk:api-level" />";
       src = fetchurl {
-        url = https://dl-ssl.google.com/android/repository/<xsl:value-of select="sdk:archives/sdk:archive/sdk:url" />;
+        url = https://dl.google.com/android/repository/<xsl:value-of select="sdk:archives/sdk:archive/sdk:url" />;
         sha1 = "<xsl:value-of select="sdk:archives/sdk:archive/sdk:checksum[@type='sha1']" />";
       };
       meta = {
@@ -39,7 +39,7 @@ in
   android_support_extra = buildGoogleApis {
     name = "android_support_extra";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/<xsl:value-of select="sdk:archives/sdk:archive/sdk:url"/>;
+      url = https://dl.google.com/android/repository/<xsl:value-of select="sdk:archives/sdk:archive/sdk:url"/>;
       sha1 = "<xsl:value-of select="sdk:archives/sdk:archive/sdk:checksum[@type='sha1']" />";
     };
     meta = {
@@ -51,7 +51,7 @@ in
   google_play_services = buildGoogleApis {
     name = "google_play_services";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/<xsl:value-of select="sdk:archives/sdk:archive/sdk:url"/>;
+      url = https://dl.google.com/android/repository/<xsl:value-of select="sdk:archives/sdk:archive/sdk:url"/>;
       sha1 = "<xsl:value-of select="sdk:archives/sdk:archive/sdk:checksum[@type='sha1']" />";
     };
     meta = {

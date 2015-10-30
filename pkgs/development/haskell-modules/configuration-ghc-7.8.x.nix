@@ -84,10 +84,6 @@ self: super: {
   seqid = super.seqid_0_1_0;
   seqid-streams = super.seqid-streams_0_1_0;
 
-  # Need binary >= 0.7.2, but our compiler has only 0.7.1.0.
-  hosc = super.hosc.overrideScope (self: super: { binary = self.binary_0_7_6_1; });
-  tidal-midi = super.tidal-midi.overrideScope (self: super: { binary = self.binary_0_7_6_1; });
-
   # These packages need mtl 2.2.x directly or indirectly via dependencies.
   amazonka = markBroken super.amazonka;
   apiary-purescript = markBroken super.apiary-purescript;
@@ -137,5 +133,8 @@ self: super: {
   xss-sanitize = addBuildDepend super.xss-sanitize self.network;
   xss-sanitize_0_3_5_4 = addBuildDepend super.xss-sanitize_0_3_5_4 self.network;
   xss-sanitize_0_3_5_5 = addBuildDepend super.xss-sanitize_0_3_5_5 self.network;
+
+  # Needs void on pre 7.10.x compilers.
+  conduit = addBuildDepend super.conduit self.void;
 
 }
