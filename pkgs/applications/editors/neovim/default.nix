@@ -109,7 +109,8 @@ let
     '' + optionalString withPython ''
       ln -s ${pythonEnv}/bin/python $out/bin/nvim-python
     '' + optionalString withPyGUI ''
-      ln -s ${pythonEnv}/bin/pynvim $out/bin/pynvim
+      makeWrapper "${pythonEnv}/bin/pynvim" "$out/bin/pynvim" \
+        --prefix PATH : "$out/bin"
     '' + optionalString withPython3 ''
       ln -s ${python3Env}/bin/python3 $out/bin/nvim-python3
     '' + optionalString (withPython || withPython3) ''
