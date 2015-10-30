@@ -7,12 +7,6 @@ with lib;
 
 let
 
-  extraManpages = pkgs.runCommand "extra-manpages" { buildInputs = [ pkgs.help2man ]; }
-    ''
-      mkdir -p $out/share/man/man1
-      help2man ${pkgs.gnutar}/bin/tar > $out/share/man/man1/tar.1
-    '';
-
   requiredPackages =
     [ config.nix.package
       pkgs.acl
@@ -47,7 +41,6 @@ let
       pkgs.time
       pkgs.texinfoInteractive
       pkgs.utillinux
-      extraManpages
     ];
 
 in
