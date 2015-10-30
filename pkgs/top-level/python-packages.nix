@@ -9368,12 +9368,12 @@ let
   };
 
   nbconvert = buildPythonPackage rec {
-    version = "4.0.0";
+    version = "4.1.0";
     name = "nbconvert-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/nbconvert/${name}.tar.gz";
-      sha256 = "472ad15d1a71f1ef00c4094c11bb93638858fc89fb2c5838b3aa6b67d981b437";
+      sha256 = "e0296e45293dd127d028f678e3b6aba3f1db3283a134178bdb49eea402d4cf1c";
     };
 
     buildInputs = with self; [nose];
