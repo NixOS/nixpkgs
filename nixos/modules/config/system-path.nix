@@ -34,7 +34,6 @@ let
       pkgs.xz
       pkgs.less
       pkgs.libcap
-      pkgs.man
       pkgs.nano
       pkgs.ncurses
       pkgs.netcat
@@ -105,7 +104,6 @@ in
         "/info"
         "/lib" # FIXME: remove
         #"/lib/debug/.build-id" # enables GDB to find separated debug info
-        "/man"
         "/sbin"
         "/share/applications"
         "/share/desktop-directories"
@@ -113,7 +111,6 @@ in
         "/share/emacs"
         "/share/icons"
         "/share/info"
-        "/share/man"
         "/share/menus"
         "/share/mime"
         "/share/nano"
