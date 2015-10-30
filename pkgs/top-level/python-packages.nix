@@ -8916,7 +8916,6 @@ let
 
   mock = buildPythonPackage (rec {
     name = "mock-1.3.0";
-    disabled = isPy35;
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/m/mock/${name}.tar.gz";
