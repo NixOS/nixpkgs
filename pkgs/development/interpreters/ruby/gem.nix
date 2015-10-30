@@ -1,4 +1,4 @@
-{ lib, ruby, rubygemsFun, fetchurl, makeWrapper, git } @ defs:
+{ lib, ruby, rubygemsFun, fetchurl, makeWrapper } @ defs:
 
 lib.makeOverridable (
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation (attrs // {
   inherit ruby rubygems;
   inherit doCheck;
 
-  buildInputs = [ ruby rubygems makeWrapper git ] ++ buildInputs;
+  buildInputs = [ ruby rubygems makeWrapper ] ++ buildInputs;
 
   name = namePrefix + name;
 

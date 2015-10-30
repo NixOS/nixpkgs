@@ -9,8 +9,13 @@ fi
 # played-back stderr is not interfered with
 [ -n "${RECORD_PLAYBACK_LOG_FD:-}" ] || RECORD_PLAYBACK_LOG_FD=2
 
+# If someone can explain why wrapping the printfs in curly braces and
+# directing fd2 to /dev/null is necessary to avoid "Bad file
+# descriptor" error when invoked from buildRubyGems's 'gem build', I'd
+# much appreciate it. (Observed on darwin, so maybe that's to blame.)
 warn() {
-  { printf "$@"; printf "\n"; } >&$RECORD_PLAYBACK_LOG_FD
+  { printf "$@" >&$RECORD_PLAYBACK_LOG_FD; } 2>/dev/null
+  { printf "\n" >&$RECORD_PLAYBACK_LOG_FD; } 2>/dev/null
 }
 
 cmd="$1"; shift

@@ -262,7 +262,8 @@ clone_user_rev() {
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
     if test -z "$leaveDotGit"; then
         echo "removing \`.git'..." >&2
-        find $dir -name .git\* | xargs rm -rf
+        # don't remove .gitignore
+        find $dir -name .git | xargs rm -rf
     else
         find $dir -name .git | while read gitdir; do
             make_deterministic_repo "$(readlink -f "$gitdir/..")"
