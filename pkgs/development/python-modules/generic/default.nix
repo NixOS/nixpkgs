@@ -59,7 +59,7 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
-python.stdenv.mkDerivation (attrs // {
+python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
   inherit doCheck;
 
   name = namePrefix + name;
