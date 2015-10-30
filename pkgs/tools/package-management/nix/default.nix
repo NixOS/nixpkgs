@@ -43,6 +43,8 @@ let
 
     doInstallCheck = false;
 
+    separateDebugInfo = stdenv.isLinux;
+
     crossAttrs = {
       postUnpack =
         '' export CPATH="${bzip2.crossDrv}/include"

@@ -103,8 +103,7 @@ in
       [ "/bin"
         "/etc/xdg"
         "/info"
-        "/lib" # FIXME: remove
-        #"/lib/debug/.build-id" # enables GDB to find separated debug info
+        "/lib" # FIXME: remove and update debug-info.nix
         "/sbin"
         "/share/applications"
         "/share/desktop-directories"

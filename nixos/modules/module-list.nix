@@ -1,7 +1,8 @@
 [
+  ./config/debug-info.nix
   ./config/fonts/corefonts.nix
-  ./config/fonts/fontconfig.nix
   ./config/fonts/fontconfig-ultimate.nix
+  ./config/fonts/fontconfig.nix
   ./config/fonts/fontdir.nix
   ./config/fonts/fonts.nix
   ./config/fonts/ghostscript.nix
@@ -22,9 +23,9 @@
   ./config/system-environment.nix
   ./config/system-path.nix
   ./config/timezone.nix
-  ./config/vpnc.nix
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
+  ./config/vpnc.nix
   ./config/zram.nix
   ./hardware/all-firmware.nix
   ./hardware/cpu/amd-microcode.nix
