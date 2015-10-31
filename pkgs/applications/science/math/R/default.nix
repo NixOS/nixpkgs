@@ -55,9 +55,10 @@ stdenv.mkDerivation rec {
       R_SHELL="${stdenv.shell}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
       --without-tcltk
+      --without-aqua
       --disable-R-framework
       CC="clang"
-      CXX="clang"
+      CXX="clang++"
       OBJC="clang"
   '' + ''
     )
