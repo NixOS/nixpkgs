@@ -6830,6 +6830,8 @@ let
     libpng = libpng12;
   };
 
+  letsencrypt = callPackage ../tools/admin/letsencrypt { };
+
   lib3ds = callPackage ../development/libraries/lib3ds { };
 
   libaacs = callPackage ../development/libraries/libaacs { };

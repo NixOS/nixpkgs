@@ -6658,6 +6658,61 @@ let
     };
   });
 
+  python2-pythondialog = buildPythonPackage rec {
+    name = "python2-pythondialog-${version}";
+    version = "3.3.0";
+    disabled = !isPy27;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python2-pythondialog/python2-pythondialog-${version}.tar.gz";
+      sha256 = "1yhkagsh99bfi592ymczf8rnw8rk6n9hdqy3dd98m3yrx8zmjvry";
+    };
+
+    patchPhase = ''
+      substituteInPlace dialog.py ":/bin:/usr/bin" ":$out/bin"
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = "http://pythondialog.sourceforge.net/";
+    };
+  };
+
+  pyRFC3339 = buildPythonPackage rec {
+    name = "pyRFC3339-${version}";
+    version = "0.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyRFC3339/pyRFC3339-${version}.tar.gz";
+      sha256 = "1pp648xsjaw9h1xq2mgwzda5wis2ypjmzxlksc1a8grnrdmzy155";
+    };
+
+    propagatedBuildInputs = with self; [ pytz ];
+    buildInputs = with self; [ nose ];
+  };
+
+  ConfigArgParse = buildPythonPackage rec {
+    name = "ConfigArgParse-${version}";
+    version = "0.9.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/C/ConfigArgParse/ConfigArgParse-${version}.tar.gz";
+      sha256 = "0a984pvv7370yz7zbkl6s6i7yyl9myahx0m9jkjvg3hz5q8mf70l";
+    };
+
+    # no tests in tarball
+    doCheck = false;
+    propagatedBuildInputs = with self; [
+
+    ];
+    buildInputs = with self; [
+
+    ];
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/zorro3/ConfigArgParse";
+    };
+  };
+
   jsonschema = buildPythonPackage (rec {
     version = "2.4.0";
     name = "jsonschema-${version}";
@@ -14066,14 +14121,14 @@ let
 
   pyopenssl = buildPythonPackage rec {
     name = "pyopenssl-${version}";
-    version = "0.14";
+    version = "0.15.1";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-0.14.tar.gz";
-      sha256 = "0vpfqhng4cky7chliknkxv910iabqbfcxvkjiankh08jkkjvi7d9";
+      url = "https://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-${version}.tar.gz";
+      sha256 = "0wnnq15rhj7fhdcd8ycwiw6r6g3w9f9lcy6cigg8226vsrq618ph";
     };
 
-    # 17 tests failing
+    # 12 tests failing, 26 error out
     doCheck = false;
 
     propagatedBuildInputs = [ self.cryptography self.pyasn1 self.idna ];
