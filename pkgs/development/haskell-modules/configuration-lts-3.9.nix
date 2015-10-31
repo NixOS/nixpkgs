@@ -1862,6 +1862,9 @@ self: super: {
   "clash-vhdl" = doDistribute super."clash-vhdl_0_5_12";
   "classify" = dontDistribute super."classify";
   "classy-parallel" = dontDistribute super."classy-parallel";
+  "classy-prelude" = doDistribute super."classy-prelude_0_12_4";
+  "classy-prelude-conduit" = doDistribute super."classy-prelude-conduit_0_12_4";
+  "classy-prelude-yesod" = doDistribute super."classy-prelude-yesod_0_12_4";
   "clckwrks" = dontDistribute super."clckwrks";
   "clckwrks-cli" = dontDistribute super."clckwrks-cli";
   "clckwrks-dot-com" = dontDistribute super."clckwrks-dot-com";
@@ -2388,6 +2391,7 @@ self: super: {
   "digestive-functors-snap" = dontDistribute super."digestive-functors-snap";
   "digit" = dontDistribute super."digit";
   "digitalocean-kzs" = dontDistribute super."digitalocean-kzs";
+  "dimensional" = doDistribute super."dimensional_0_13_0_2";
   "dimensional-tf" = dontDistribute super."dimensional-tf";
   "dingo-core" = dontDistribute super."dingo-core";
   "dingo-example" = dontDistribute super."dingo-example";
@@ -3781,12 +3785,15 @@ self: super: {
   "hlatex" = dontDistribute super."hlatex";
   "hlbfgsb" = dontDistribute super."hlbfgsb";
   "hlcm" = dontDistribute super."hlcm";
+  "hledger" = doDistribute super."hledger_0_26";
   "hledger-chart" = dontDistribute super."hledger-chart";
   "hledger-diff" = dontDistribute super."hledger-diff";
   "hledger-interest" = dontDistribute super."hledger-interest";
   "hledger-irr" = dontDistribute super."hledger-irr";
+  "hledger-lib" = doDistribute super."hledger-lib_0_26";
   "hledger-ui" = dontDistribute super."hledger-ui";
   "hledger-vty" = dontDistribute super."hledger-vty";
+  "hledger-web" = doDistribute super."hledger-web_0_26";
   "hlibBladeRF" = dontDistribute super."hlibBladeRF";
   "hlibev" = dontDistribute super."hlibev";
   "hlibfam" = dontDistribute super."hlibfam";
@@ -4261,6 +4268,7 @@ self: super: {
   "imgurder" = dontDistribute super."imgurder";
   "imm" = dontDistribute super."imm";
   "imparse" = dontDistribute super."imparse";
+  "imperative-edsl-vhdl" = dontDistribute super."imperative-edsl-vhdl";
   "implicit" = dontDistribute super."implicit";
   "implicit-params" = dontDistribute super."implicit-params";
   "imports" = dontDistribute super."imports";
@@ -4784,6 +4792,7 @@ self: super: {
   "lojbanParser" = dontDistribute super."lojbanParser";
   "lojbanXiragan" = dontDistribute super."lojbanXiragan";
   "lojysamban" = dontDistribute super."lojysamban";
+  "lol" = dontDistribute super."lol";
   "loli" = dontDistribute super."loli";
   "lookup-tables" = dontDistribute super."lookup-tables";
   "loop" = doDistribute super."loop_0_2_0";

@@ -4643,6 +4643,7 @@ self: super: {
   "imgurder" = dontDistribute super."imgurder";
   "imm" = dontDistribute super."imm";
   "imparse" = dontDistribute super."imparse";
+  "imperative-edsl-vhdl" = dontDistribute super."imperative-edsl-vhdl";
   "implicit" = dontDistribute super."implicit";
   "implicit-params" = dontDistribute super."implicit-params";
   "imports" = dontDistribute super."imports";
@@ -5232,6 +5233,7 @@ self: super: {
   "lojbanParser" = dontDistribute super."lojbanParser";
   "lojbanXiragan" = dontDistribute super."lojbanXiragan";
   "lojysamban" = dontDistribute super."lojysamban";
+  "lol" = dontDistribute super."lol";
   "loli" = dontDistribute super."loli";
   "lookup-tables" = dontDistribute super."lookup-tables";
   "loop" = doDistribute super."loop_0_2_0";
