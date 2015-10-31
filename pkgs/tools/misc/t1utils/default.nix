@@ -1,11 +1,14 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "t1utils-1.39";
+  version = "1.39";
+  name = "t1utils-${version}";
 
-  src = fetchurl {
-    url = "http://www.lcdf.org/type/${name}.tar.gz";
-    sha256 = "1i6ln194ns2g4j5zjlj4bfzxpkfpnxvy37n9baq3hywjqkjz7bhg";
+  src = fetchFromGitHub {
+    owner = "kohler";
+    repo = "t1utils";
+    rev = "v${version}";
+    sha256 = "02n4dzxa8fz0dbxari7xh6cq66x3az6g55fq8ix2bfmww42s4v2r";
   };
 
   meta = with stdenv.lib; {
@@ -22,7 +25,7 @@ stdenv.mkDerivation rec {
     # README from tarball says "BSD-like" and points to non-existing LICENSE
     # file...
     license = "Click"; # MIT with extra clause, https://github.com/kohler/t1utils/blob/master/LICENSE
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
   };
 }
