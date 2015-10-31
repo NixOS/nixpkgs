@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libstrophe-${version}";
-  version = "0.8.7";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "strophe";
     repo = "libstrophe";
     rev = version;
-    sha256 = "1iic8xbcxh21dzns8m9kkz0cj5f3ppn414gnhyh4y2wcjsz6hp8l";
+    sha256 = "1xzyqqf99r0jfd0g3v0zwc68sac6y25v1d4m365zpc14l02midis";
   };
 
   buildInputs = [ automake autoconf openssl expat libtool pkgconfig check ];

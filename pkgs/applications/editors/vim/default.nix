@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ncurses, gettext, pkgconfig
 
 # apple frameworks
-, CoreServices, CoreData, Cocoa, Foundation, libobjc, cf-private }:
+, Carbon, Cocoa }:
 
 stdenv.mkDerivation rec {
   name = "vim-${version}";
@@ -14,16 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "1m34s2hsc5lcish6gmvn2iwaz0k7jc3kg9q4nf30fj9inl7gaybs";
   };
 
-  # this makes maintainers very sad
-  # open source CF doesn't have anything NSArray-related, causing linking errors. the
-  # missing symbol is in system CoreFoundation.
-  NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin
-    "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
-
   enableParallelBuilding = true;
 
   buildInputs = [ ncurses pkgconfig ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ cf-private CoreData CoreServices Cocoa Foundation libobjc ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
   nativeBuildInputs = [ gettext ];
 
   configureFlags = [

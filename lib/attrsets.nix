@@ -116,7 +116,7 @@ rec {
 
      Type:
        collect ::
-         (AttrSet -> Bool) -> AttrSet -> AttrSet
+         (AttrSet -> Bool) -> AttrSet -> [x]
 
      Example:
        collect isList { a = { b = ["b"]; }; c = [1]; }

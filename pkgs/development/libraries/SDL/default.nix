@@ -3,6 +3,7 @@
 , alsaSupport ? true, alsaLib ? null
 , x11Support ? true, xlibsWrapper ? null, libXrandr ? null
 , pulseaudioSupport ? true, libpulseaudio ? null
+, OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
 }:
 
 # OSS is no longer supported, for it's much crappier than ALSA and
@@ -40,7 +41,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = let
     notMingw = !(stdenv ? cross) || stdenv.cross.libc != "msvcrt";
-  in optional notMingw audiofile;
+  in optional notMingw audiofile
+  ++ optionals stdenv.isDarwin [ OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa ];
 
   # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
   # we must arrange to add it to its RPATH; however, `patchelf' seems

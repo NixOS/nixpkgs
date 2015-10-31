@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   shortName = "setuptools-${version}";
   name = "${python.executable}-${shortName}";
 
-  version = "18.2";
+  version = "18.2";  # 18.4 breaks python34Packages.characteristic and many others
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/s/setuptools/${shortName}.tar.gz";

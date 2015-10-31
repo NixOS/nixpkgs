@@ -133,7 +133,16 @@ let
     # Do not copy this without a good reason for enabling
     # In this case tools is heavily coupled with go itself and embeds paths.
     allowGoReference = true;
+
+    # Set GOTOOLDIR for derivations adding this to buildInputs
+    postInstall = ''
+      mkdir -p $bin/nix-support
+      substituteAll ${../development/go-modules/tools/setup-hook.sh} $bin/nix-support/setup-hook.tmp
+      cat $bin/nix-support/setup-hook.tmp >> $bin/nix-support/setup-hook
+      rm $bin/nix-support/setup-hook.tmp
+    '';
   };
+
 
   ## THIRD PARTY
 
@@ -349,10 +358,10 @@ let
   };
 
   command = buildFromGitHub {
-    rev    = "076a2ad5f3a7ec92179f2d57208728432280ec4e";
+    rev    = "91ca5ec5e9a1bc2668b1ccbe0967e04a349e3561";
     owner  = "odeke-em";
     repo   = "command";
-    sha256 = "093as4kxlabk3hrsd52kr9fhl6qafr4ghg89cjyglsva0mk0n7sb";
+    sha256 = "1ghckzr8h99ckagpmb15p61xazdjmf9mjmlym634hsr9vcj84v62";
   };
 
   copystructure = buildFromGitHub {
@@ -520,16 +529,59 @@ let
   };
 
   drive = buildFromGitHub {
-    rev = "4530cf8d59e1047cb1c005a6bd5b14ecb98b9e68";
+    rev = "6dc2f1e83032ea3911fa6147b846ee93f18dc544";
     owner = "odeke-em";
     repo = "drive";
-    sha256 = "1y4qlzvgg84mh8l6bhaazzy6bv6dwjcbpm0rxvvc5aknvvh581ps";
+    sha256 = "07s4nhfcr6vznf1amvl3a4wq2hn9zq871rcppfi4i6zs7iw2ay1v";
     subPackages = [ "cmd/drive" ];
     buildInputs = [
       pb go-isatty command dts odeke-em.log statos xon odeke-em.google-api-go-client
-      cli-spinner oauth2 text net
+      cli-spinner oauth2 text net pretty-words meddler open-golang extractor
+      exponential-backoff cache bolt
     ];
     disabled = !isGo14;
+  };
+
+  cache = buildFromGitHub {
+    rev = "b51b08cb6cf889deda6c941a5205baecfd16f3eb";
+    owner = "odeke-em";
+    repo = "cache";
+    sha256 = "1rmm1ky7irqypqjkk6qcd2n0xkzpaggdxql9dp9i9qci5rvvwwd4";
+  };
+
+  exponential-backoff = buildFromGitHub {
+    rev = "96e25d36ae36ad09ac02cbfe653b44c4043a8e09";
+    owner = "odeke-em";
+    repo = "exponential-backoff";
+    sha256 = "1as21p2jj8xpahvdxqwsw2i1s3fll14dlc9j192iq7xl1ybwpqs6";
+  };
+
+  extractor = buildFromGitHub {
+    rev = "801861aedb854c7ac5e1329e9713023e9dc2b4d4";
+    owner = "odeke-em";
+    repo = "extractor";
+    sha256 = "036zmnqxy48h6mxiwywgxix2p4fqvl4svlmcp734ri2rbq3cmxs1";
+  };
+
+  open-golang = buildFromGitHub {
+    rev = "c8748311a7528d0ba7330d302adbc5a677ef9c9e";
+    owner = "skratchdot";
+    repo = "open-golang";
+    sha256 = "0qhn2d00v3m9fiqk9z7swdm599clc6j7rnli983s8s1byyp0x3ac";
+  };
+
+  pretty-words = buildFromGitHub {
+    rev = "9d37a7fcb4ae6f94b288d371938482994458cecb";
+    owner = "odeke-em";
+    repo = "pretty-words";
+    sha256 = "1466wjhrg9lhqmzil1vf8qj16fxk32b5kxlcccyw2x6dybqa6pkl";
+  };
+  
+  meddler = buildFromGitHub {
+    rev = "d2b51d2b40e786ab5f810d85e65b96404cf33570";
+    owner = "odeke-em";
+    repo = "meddler";
+    sha256 = "0m0fqrn3kxy4swyk4ja1y42dn1i35rq9j85y11wb222qppy2342x";
   };
 
   dts = buildFromGitHub {
@@ -3042,6 +3094,39 @@ let
     owner  = "odeke-em";
     repo   = "xon";
     sha256 = "07a7zj01d4a23xqp01m48jp2v5mw49islf4nbq2rj13sd5w4s6sc";
+  };
+
+  ninefans = buildFromGitHub {
+    rev    = "65b8cf069318223b1e722b4b36e729e5e9bb9eab";
+    date   = "2015-10-24";
+    owner  = "9fans";
+    repo   = "go";
+    sha256 = "0kzyxhs2xf0339nlnbm9gc365b2svyyjxnr86rphx5m072r32ims";
+    goPackagePath = "9fans.net/go";
+    goPackageAliases = [
+      "github.com/9fans/go"
+    ];
+    excludedPackages = "\\(plan9/client/cat\\|acme/Watch\\)";
+    buildInputs = [ net ];
+  };
+
+  godef = buildFromGitHub {
+    rev    = "ea14e800fd7d16918be88dae9f0195f7bd688586";
+    date   = "2015-10-24";
+    owner  = "rogpeppe";
+    repo   = "godef";
+    sha256 = "1wkvsz8nqwyp36wbm8vcw4449sfs46894nskrfj9qbsrjijvamyc";
+    excludedPackages = "\\(go/printer/testdata\\)";
+    buildInputs = [ ninefans ];
+    subPackages = [ "./" ];
+  };
+
+  godep = buildFromGitHub {
+    rev    = "5598a9815350896a2cdf9f4f1d0a3003ab9677fb";
+    date   = "2015-10-15";
+    owner  = "tools";
+    repo   = "godep";
+    sha256 = "0zc1ah5cvaqa3zw0ska89a40x445vwl1ixz8v42xi3zicx16ibwz";
   };
 
 }; in self

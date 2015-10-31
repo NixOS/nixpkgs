@@ -384,12 +384,12 @@ let self = _self // overrides;
 
   dash = melpaBuild rec {
     pname   = "dash";
-    version = "2.11.0";
+    version = "2.12.1";
     src = fetchFromGitHub {
       owner  = "magnars";
       repo   = "${pname}.el";
       rev    = version;
-      sha256 = "02gfrcda7gj3j5yx71dz40xylrafl4pcaj7bgfajqi9by0w2nrnx";
+      sha256 = "1njv5adcm96kdch0jb941l8pm51yfdx7mlz83y0pq6jlzjs9mwaa";
     };
     meta = {
       description = "A modern list library for Emacs";
@@ -743,6 +743,19 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  git-gutter = melpaBuild rec {
+    pname = "git-gutter";
+    version = "20150930";
+    src = fetchFromGitHub {
+      owner  = "syohex";
+      repo   = "emacs-git-gutter";
+      rev    = "df7fb13481bea2b1476ca8a20bc958b17d1e06ae";
+      sha256 = "1xwdyjh13lp06yy9477013nj6idpsjr4ifg7hmyk5ai80axkgly7";
+    };
+    files = [ "git-gutter.el" ];
+    meta.license = gpl3Plus;
+  };
+
   git-rebase-mode = melpaBuild rec {
     pname = "git-rebase-mode";
     version = "1.0.0";
@@ -1042,12 +1055,12 @@ let self = _self // overrides;
 
   magit = melpaBuild rec {
     pname   = "magit";
-    version = "2.2.2";
+    version = "2.3.0";
     src = fetchFromGitHub {
       owner  = pname;
       repo   = pname;
       rev    = version;
-      sha256 = "1niajikvhj22saz68y0zcazh9imji76g48rc5rs20nlp76hybifc";
+      sha256 = "1zbx1ky1481lkvfjr4k23q7jdrk9ji9v5ghj88qib36vbmzfwww8";
     };
     packageRequires = [ dash git-commit magit-popup with-editor ];
     fileSpecs = [ "lisp/magit-utils.el"

@@ -94,7 +94,10 @@ in
   };
 
   libAppleWM = attrs: attrs // {
-    propagatedBuildInputs = [ args.apple_sdk.frameworks.ApplicationServices ];
+    buildInputs = attrs.buildInputs ++ [ args.apple_sdk.frameworks.ApplicationServices ];
+    preConfigure = ''
+      substituteInPlace src/Makefile.in --replace -F/System -F${args.apple_sdk.frameworks.ApplicationServices}
+    '';
   };
 
   libXfont = attrs: attrs // {
@@ -261,7 +264,8 @@ in
 
     buildInputs = attrs.buildInputs ++ [args.intltool];
 
-    #TODO: resurrect patches for US_intl or Esperanto?
+    #TODO: resurrect patches for US_intl?
+    patches = [ ./xkeyboard-config-eo.patch ];
 
     # 1: compatibility for X11/xkb location
     # 2: I think pkgconfig/ is supposed to be in /lib/
@@ -326,6 +330,9 @@ in
       } else {
         buildInputs = commonBuildInputs ++ [
           args.bootstrap_cmds args.automake args.autoconf
+          args.apple_sdk.libs.Xplugin
+          args.apple_sdk.frameworks.Carbon
+          args.apple_sdk.frameworks.Cocoa
         ];
         propagatedBuildInputs = commonPropagatedBuildInputs ++ [
           libAppleWM applewmproto
@@ -359,6 +366,7 @@ in
         preConfigure = ''
           ensureDir $out/Applications
           export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error"
+          substituteInPlace hw/xquartz/pbproxy/Makefile.in --replace -F/System -F${args.apple_sdk.frameworks.ApplicationServices}
         '';
         postInstall = ''
           rm -fr $out/share/X11/xkb/compiled

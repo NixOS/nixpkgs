@@ -1,17 +1,17 @@
 { stdenv, fetchurl, cairo, colord, glib, gtk3, gusb, intltool, itstool, libusb
-, libxml2, makeWrapper, packagekit, pkgconfig, saneBackends, systemd, vala }:
+, libxml2, makeWrapper, pkgconfig, saneBackends, systemd, vala }:
 
-let version = "3.18.1"; in
+let version = "3.19.1"; in
 stdenv.mkDerivation rec {
   name = "simple-scan-${version}";
 
   src = fetchurl {
-    sha256 = "1i37j36kbn1h8yfzcvbis6f38xz2nj5512ls3gb0j5na0bvja2cw";
-    url = "https://launchpad.net/simple-scan/3.18/${version}/+download/${name}.tar.xz";
+    sha256 = "1d2a8cncq36ly60jpz0fzdw1lgxynl6lyrlw0q66yijlxqn81ynr";
+    url = "https://launchpad.net/simple-scan/3.19/${version}/+download/${name}.tar.xz";
   };
 
-  buildInputs = [ cairo colord glib gusb gtk3 libusb libxml2 packagekit
-    saneBackends systemd vala ];
+  buildInputs = [ cairo colord glib gusb gtk3 libusb libxml2 saneBackends
+    systemd vala ];
   nativeBuildInputs = [ intltool itstool makeWrapper pkgconfig ];
 
   enableParallelBuilding = true;

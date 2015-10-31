@@ -1,5 +1,5 @@
 { stdenv, fetchurl, automoc4, cmake, gettext, perl, pkgconfig
-, kdelibs, networkmanager, libnm-qt }:
+, kdelibs, networkmanager, libnm-qt, glib }:
 
 let
   pname = "plasma-nm";
@@ -14,6 +14,8 @@ stdenv.mkDerivation {
     sha256 = "0xj14isvjq8ll70b6q66n8adm8ff4j9ng195ndk2gmavjf6bb751";
   };
 
+  NIX_CFLAGS_COMPILE = "-I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include";
+
   nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig ];
 
   buildInputs = [ kdelibs networkmanager libnm-qt ];
@@ -23,6 +25,5 @@ stdenv.mkDerivation {
     description = "Plasma applet written in QML for managing network connections";
     license = licenses.lgpl21;
     inherit (kdelibs.meta) platforms;
-    maintainers = with maintainers; [ jgeerds ];
   };
 }

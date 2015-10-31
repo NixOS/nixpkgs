@@ -1,19 +1,25 @@
-{ stdenv, fetchurl, parted, gtk, glib, intltool, gettext, libuuid
-, pkgconfig, gtkmm, libxml2, hicolor_icon_theme
+{ stdenv, fetchurl, intltool, gettext, makeWrapper
+, parted, gtk, glib, libuuid, pkgconfig, gtkmm, libxml2, hicolor_icon_theme
+, utillinux
 }:
 
 stdenv.mkDerivation rec {
-  name = "gparted-0.23.0";
+  name = "gparted-0.24.0";
 
   src = fetchurl {
-    sha256 = "0m57bni3nkbbqq920ydzvasy2qc5j6w6bdssyn12jk4157gxvlbz";
+    sha256 = "0q6d1s9f4qgdivj4vm9w87qmdfyq8s65jzkhv05rp9cl72rqlf82";
     url = "mirror://sourceforge/gparted/${name}.tar.bz2";
   };
 
   configureFlags = "--disable-doc";
 
   buildInputs = [ parted gtk glib libuuid gtkmm libxml2 hicolor_icon_theme ];
-  nativeBuildInputs = [ intltool gettext pkgconfig ];
+  nativeBuildInputs = [ intltool gettext makeWrapper pkgconfig ];
+
+  postInstall = ''
+    wrapProgram $out/sbin/gpartedbin \
+      --prefix PATH : "${utillinux}/bin"
+  '';
 
   meta = with stdenv.lib; {
     description = "Graphical disk partitioning tool";

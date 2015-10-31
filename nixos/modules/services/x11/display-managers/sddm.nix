@@ -35,6 +35,8 @@ let
     SessionCommand=${dmcfg.session.script}
     SessionDir=${dmcfg.session.desktops}
     XauthPath=${pkgs.xorg.xauth}/bin/xauth
+
+    ${cfg.extraConfig}
   '';
 
 in
@@ -47,6 +49,19 @@ in
         default = false;
         description = ''
           Whether to enable sddm as the display manager.
+        '';
+      };
+
+      extraConfig = mkOption {
+        type = types.str;
+        default = "";
+        example = ''
+          [Autologin]
+          User=john
+          Session=plasma.desktop
+        '';
+        description = ''
+          Extra lines appended to the configuration of SDDM.
         '';
       };
 

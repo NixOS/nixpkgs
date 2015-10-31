@@ -10,6 +10,8 @@
 , debugDeveloper ? false
 , optimizationsDeveloper ? true
 , extraWarningsDeveloper ? false
+# Darwin frameworks
+, Cocoa
 # Inherit generics
 , branch, sha256, version, ...
 }:
@@ -141,7 +143,8 @@ stdenv.mkDerivation rec {
   ] ++ optional openglSupport mesa
     ++ optionals (!isDarwin) [ libvpx libpulseaudio ] # Need to be fixed on Darwin
     ++ optional (isLinux || isFreeBSD) libva
-    ++ optional isLinux alsaLib;
+    ++ optional isLinux alsaLib
+    ++ optional isDarwin Cocoa;
 
   enableParallelBuilding = true;
 

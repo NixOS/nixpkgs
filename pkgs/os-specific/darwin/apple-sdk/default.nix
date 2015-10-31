@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xar, gzip, cpio, CF, pkgs }:
+{ stdenv, fetchurl, xar, gzip, cpio, pkgs }:
 
 let
   # sadly needs to be exported because security_tool needs it
@@ -34,7 +34,7 @@ let
       cd Library/Frameworks/QuartzCore.framework/Versions/A/Headers
       for file in CI*.h; do
         rm $file
-        ln -s ../Frameworks/CoreImage.framework/Versions/A/Headers/$file
+        ln -s ../Frameworks/CoreImage.framework/Headers/$file
       done
     '';
 
@@ -59,11 +59,14 @@ let
         local dest="$out/Library/Frameworks/$path"
         local name="$(basename "$path" .framework)"
         local current="$(readlink "/System/Library/Frameworks/$path/Versions/Current")"
+        if [ -z "$current" ]; then
+          current=A
+        fi
 
         mkdir -p "$dest"
         pushd "$dest" >/dev/null
 
-        ln -s "${sdk}/Library/Frameworks/$path/Versions/$current/Headers"
+        cp -R "${sdk}/Library/Frameworks/$path/Versions/$current/Headers" .
         ln -s -L "/System/Library/Frameworks/$path/Versions/$current/$name"
         ln -s -L "/System/Library/Frameworks/$path/Versions/$current/Resources"
 
@@ -123,7 +126,7 @@ in rec {
       __propagatedImpureHostDeps = [ "/usr/lib/libXplugin.1.dylib" ];
 
       propagatedBuildInputs = with frameworks; [
-        OpenGL ApplicationServices Carbon IOKit CF CoreGraphics CoreServices CoreText
+        OpenGL ApplicationServices Carbon IOKit pkgs.darwin.CF CoreGraphics CoreServices CoreText
       ];
 
       installPhase = ''
@@ -148,27 +151,23 @@ in rec {
   };
 
   overrides = super: {
-    CoreText = stdenv.lib.overrideDerivation super.CoreText (drv: {
-      propagatedNativeBuildInputs = drv.propagatedNativeBuildInputs ++ [ pkgs.darwin.cf-private ];
-    });
-
     QuartzCore = stdenv.lib.overrideDerivation super.QuartzCore (drv: {
       installPhase = drv.installPhase + ''
         f="$out/Library/Frameworks/QuartzCore.framework/Headers/CoreImage.h"
         substituteInPlace "$f" \
           --replace "QuartzCore/../Frameworks/CoreImage.framework/Headers" "CoreImage"
-
-        # CoreImage.framework's location varies by OSX version
-        for linkedFile in "$out/Library/Frameworks/QuartzCore.framework/Frameworks/CoreImage.framework"/*; do
-          link=$(readlink "$linkedFile" | sed 's,//,/A/,')
-          rm "$linkedFile"
-          ln -s "$link" "$linkedFile"
-        done
       '';
+    });
+
+    Security = stdenv.lib.overrideDerivation super.Security (drv: {
+      setupHook = ./security-setup-hook.sh;
     });
   };
 
-  bareFrameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix { inherit frameworks libs CF; });
+  bareFrameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix {
+    inherit frameworks libs;
+    inherit (pkgs.darwin) CF cf-private libobjc;
+  });
 
   frameworks = bareFrameworks // overrides bareFrameworks;
 

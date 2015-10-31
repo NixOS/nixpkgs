@@ -478,14 +478,18 @@ with stdenv.lib;
   ''}
   ZRAM m
 
-  # Enable firmware loading via udev (legacy).
-  ${optionalString (versionAtLeast version "3.17") ''
-    FW_LOADER_USER_HELPER_FALLBACK y
-  ''}
-
   # Enable PCIe and USB for the brcmfmac driver
   BRCMFMAC_USB? y
   BRCMFMAC_PCIE? y
+
+  # Support x2APIC (which requires IRQ remapping).
+  ${optionalString (stdenv.system == "x86_64-linux") ''
+    X86_X2APIC y
+    IRQ_REMAP y
+  ''}
+
+  # Disable the firmware helper fallback, udev doesn't implement it any more
+  FW_LOADER_USER_HELPER_FALLBACK? n
 
   ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}

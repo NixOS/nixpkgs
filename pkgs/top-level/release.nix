@@ -19,8 +19,10 @@ with import ./release-lib.nix { inherit supportedSystems; };
 
 let
 
+  lib = pkgs.lib;
+
   jobs =
-    { tarball = import ./make-tarball.nix { inherit nixpkgs officialRelease; };
+    { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
 
       manual = import ../../doc;
       lib-tests = import ../../lib/tests/release.nix { inherit nixpkgs; };
@@ -42,8 +44,17 @@ let
               jobs.thunderbird.i686-linux
               jobs.glib-tested.x86_64-linux # standard glib doesn't do checks
               jobs.glib-tested.i686-linux
-            ];
+            ] ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools;
         };
+
+      stdenvBootstrapTools.i686-linux =
+        { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "i686-linux"; }) dist test; };
+
+      stdenvBootstrapTools.x86_64-linux =
+        { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "x86_64-linux"; }) dist test; };
+
+      stdenvBootstrapTools.x86_64-darwin =
+        { inherit (import ../stdenv/pure-darwin/make-bootstrap-tools.nix) dist test; };
 
     } // (mapTestOn ((packagePlatforms pkgs) // rec {
 

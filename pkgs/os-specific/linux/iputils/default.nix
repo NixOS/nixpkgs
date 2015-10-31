@@ -24,9 +24,6 @@ stdenv.mkDerivation rec {
 
   buildFlags = "man all ninfod";
 
-  # Stdenv doesn't handle symlinks well for that
-  dontGzipMan = true;
-
   installPhase =
     ''
       mkdir -p $out/sbin $out/bin

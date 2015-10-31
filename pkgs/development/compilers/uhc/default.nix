@@ -50,5 +50,7 @@ in stdenv.mkDerivation rec {
     # On Darwin, the GNU libtool is used, which does not
     # support the -static flag and thus breaks the build.
     platforms = ["x86_64-linux"];
+
+    broken = true; # http://hydra.cryp.to/build/1344015/log/raw
   };
 }

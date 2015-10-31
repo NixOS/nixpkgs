@@ -59,13 +59,13 @@ in
 
     plugin = "genesis";
     namespace = "plugin.video.genesis";
-    version = "4.0.1";
+    version = "5.1.3";
 
     src = fetchFromGitHub {
       owner = "lambda81";
       repo = "lambda-addons";
-      rev = "34af083980598177684eeb6e1e73da336b84575a";
-      sha256 = "1fh3j4ymkrx9flpvnlyjp1q4avfmjv5a6yfwl3cmqnslkkp6kn9n";
+      rev = "f2cd04f33af88d60e1330573bbf2ef9cee7f0a56";
+      sha256 = "0z0ldckqqif9v5nhnjr5n2495cm3z9grjmrh7czl4xlnq4bvviqq";
     };
 
     meta = with stdenv.lib; {
@@ -81,13 +81,13 @@ in
 
     plugin = "svtplay";
     namespace = "plugin.video.svtplay";
-    version = "4.0.14";
+    version = "4.0.15";
 
     src = fetchFromGitHub {
       owner = "nilzen";
       repo = "xbmc-" + plugin;
-      rev = "a6041aa6cf8f8461c0ebb093d901320822539094";
-      sha256 = "1nxa2855i1if4vsflhb88i9s12flp2yzgan2wzdv2117cmll4pvd";
+      rev = "3b926898b7007827b469ecb1c27ede4238fd26f6";
+      sha256 = "1bx2c3z8rbkk75hykpmls956hfkwvsm4d8gvlrh53s8zimlwgv7k";
     };
 
     meta = with stdenv.lib; {

@@ -276,6 +276,12 @@ rec {
     lts-3_9 = packages.ghc7102.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.9.nix { };
     };
+    lts-3_10 = packages.ghc7102.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.10.nix { };
+    };
+    lts-3_11 = packages.ghc7102.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.11.nix { };
+    };
 
   };
 }
