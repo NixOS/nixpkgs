@@ -2171,6 +2171,8 @@ let
 
   mbox = callPackage ../tools/security/mbox { };
 
+  mbuffer = callPackage ../tools/misc/mbuffer { };
+
   memtest86 = callPackage ../tools/misc/memtest86 { };
 
   memtest86plus = callPackage ../tools/misc/memtest86+ { };
