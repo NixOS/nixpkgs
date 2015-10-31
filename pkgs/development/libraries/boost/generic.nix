@@ -130,7 +130,7 @@ stdenv.mkDerivation {
     NIX_LDFLAGS="$(echo $NIX_LDFLAGS | sed "s,$out,$lib,g")"
     if test -f tools/build/src/tools/clang-darwin.jam ; then
         substituteInPlace tools/build/src/tools/clang-darwin.jam \
-          --replace '$(<[1]:D=)' "$lib/lib/\$(<[1]:D=)";
+          --replace '@rpath/$(<[1]:D=)' "$lib/lib/\$(<[1]:D=)";
     fi;
   '' + optionalString (mpi != null) ''
     cat << EOF > user-config.jam
