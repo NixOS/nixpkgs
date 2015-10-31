@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, coq
+{ stdenv, fetchurl, coq, ncurses
 , graphviz, withDoc ? true
 , src, patches ? []
 }:
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   inherit src;
 
   nativeBuildInputs = stdenv.lib.optionals withDoc [ graphviz ];
-  buildInputs = [ coq.ocaml coq.camlp5 ];
+  buildInputs = [ coq.ocaml coq.camlp5 ncurses ];
   propagatedBuildInputs = [ coq ];
 
   enableParallelBuilding = true;
