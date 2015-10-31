@@ -2,11 +2,11 @@
 { stdenv, callPackage }:
 
 callPackage ./generic.nix {
-  shortVersion = "2015-10-17";
+  shortVersion = "2015-10-27";
   isRelease = false;
-  forceBundledLLVM = true;
-  srcRev = "20a6938c0";
-  srcSha = "18dalmwmyw2csnm72qwkkh37ixxbrn2i5lmwp2q0x9plh5qj5627";
+  forceBundledLLVM = false;
+  srcRev = "8ab8581f6921bc7a8e3fa4defffd2814372dcb15";
+  srcSha = "06sg327y95zx7w4jxl6i34j4x2g8mhhvri8gxk4qcfmar4cg8has";
 
   /* Rust is bootstrapped from an earlier built version. We need
   to fetch these earlier versions, which vary per platform.
