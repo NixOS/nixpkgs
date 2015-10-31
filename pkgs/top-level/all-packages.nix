@@ -488,8 +488,6 @@ let
 
   actkbd = callPackage ../tools/system/actkbd { };
 
-  adom = callPackage ../games/adom { };
-
   advancecomp = callPackage ../tools/compression/advancecomp {};
 
   aefs = callPackage ../tools/filesystems/aefs { };
@@ -659,13 +657,9 @@ let
 
   badvpn = callPackage ../tools/networking/badvpn {};
 
-  banner = callPackage ../games/banner {};
-
   barcode = callPackage ../tools/graphics/barcode {};
 
   bashmount = callPackage ../tools/filesystems/bashmount {};
-
-  bastet = callPackage ../games/bastet {};
 
   bc = callPackage ../tools/misc/bc { };
 
@@ -792,14 +786,6 @@ let
   };
 
   cpulimit = callPackage ../tools/misc/cpulimit { };
-
-  crawlTiles = callPackage ../games/crawl { };
-
-  crawl = callPackage ../games/crawl {
-    tileMode = false;
-  };
-
-  cuyo = callPackage ../games/cuyo { };
 
   contacts = callPackage ../tools/misc/contacts { };
 
@@ -1044,8 +1030,6 @@ let
   checkinstall = callPackage ../tools/package-management/checkinstall { };
 
   chkrootkit = callPackage ../tools/security/chkrootkit { };
-
-  chocolateDoom = callPackage ../games/chocolate-doom { };
 
   chrony = callPackage ../tools/networking/chrony { };
 
@@ -1393,8 +1377,6 @@ let
   eplot = callPackage ../tools/graphics/eplot { };
 
   ethtool = callPackage ../tools/misc/ethtool { };
-
-  eternity = callPackage ../games/eternity-engine { };
 
   ettercap = callPackage ../applications/networking/sniffers/ettercap { };
 
@@ -1808,8 +1790,6 @@ let
 
   haveged = callPackage ../tools/security/haveged { };
 
-  hawkthorne = callPackage ../games/hawkthorne { love = love_0_9; };
-
   hardlink = callPackage ../tools/system/hardlink { };
 
   hashcat = callPackage ../tools/security/hashcat { };
@@ -2020,8 +2000,6 @@ let
 
   kippo = callPackage ../servers/kippo { };
 
-  klavaro = callPackage ../games/klavaro {};
-
   kzipmix = callPackage_i686 ../tools/compression/kzipmix { };
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
@@ -2230,16 +2208,6 @@ let
   mfoc = callPackage ../tools/security/mfoc { };
 
   mgba = callPackage ../misc/emulators/mgba { };
-
-  minecraft = callPackage ../games/minecraft {
-    useAlsa = config.minecraft.alsa or false;
-  };
-
-  minecraft-server = callPackage ../games/minecraft-server { };
-
-  minetest = callPackage ../games/minetest {
-    libpng = libpng12;
-  };
 
   minissdpd = callPackage ../tools/networking/minissdpd { };
 
@@ -2482,17 +2450,11 @@ let
 
   odt2txt = callPackage ../tools/text/odt2txt { };
 
-  odamex = callPackage ../games/odamex { };
-
   offlineimap = callPackage ../tools/networking/offlineimap {
     inherit (pythonPackages) sqlite3;
   };
 
-  openarena = callPackage ../games/openarena { };
-
   opencryptoki = callPackage ../tools/security/opencryptoki { };
-
-  onscripter-en = callPackage ../games/onscripter-en { };
 
   opendbx = callPackage ../development/libraries/opendbx { };
 
@@ -2822,8 +2784,6 @@ let
 
   rawdog = callPackage ../applications/networking/feedreaders/rawdog { };
 
-  privateer = callPackage ../games/privateer { };
-
   read-edid = callPackage ../os-specific/linux/read-edid { };
 
   redmine = callPackage ../applications/version-management/redmine { };
@@ -2959,8 +2919,6 @@ let
   };
 
   scrot = callPackage ../tools/graphics/scrot { };
-
-  scrolls = callPackage ../games/scrolls { };
 
   scrypt = callPackage ../tools/security/scrypt { };
 
@@ -3165,8 +3123,6 @@ let
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
 
   tboot = callPackage ../tools/security/tboot { };
-
-  tcl2048 = callPackage ../games/tcl2048 { };
 
   tcpdump = callPackage ../tools/networking/tcpdump { };
 
@@ -6204,10 +6160,6 @@ let
 
   expat = callPackage ../development/libraries/expat { };
 
-  extremetuxracer = callPackage ../games/extremetuxracer {
-    libpng = libpng12;
-  };
-
   eventlog = callPackage ../development/libraries/eventlog { };
 
   facile = callPackage ../development/libraries/facile { };
@@ -6276,8 +6228,6 @@ let
 
   filter-audio = callPackage ../development/libraries/filter-audio {};
 
-  fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
-
   flann = callPackage ../development/libraries/flann { };
 
   flite = callPackage ../development/libraries/flite { };
@@ -6329,11 +6279,7 @@ let
 
   ganv = callPackage ../development/libraries/ganv { };
 
-  gav = callPackage ../games/gav { };
-
   gcab = callPackage ../development/libraries/gcab { };
-
-  gsb = callPackage ../games/gsb { };
 
   gdome2 = callPackage ../development/libraries/gdome2 {
     inherit (gnome) gtkdoc;
@@ -6709,8 +6655,6 @@ let
   isocodes = callPackage ../development/libraries/iso-codes { };
 
   itk = callPackage ../development/libraries/itk { };
-
-  jamp = builderDefsPackage (callPackage ../games/jamp) {};
 
   jasper = callPackage ../development/libraries/jasper { };
 
@@ -7621,10 +7565,6 @@ let
 
   liquidfun = callPackage ../development/libraries/liquidfun { };
 
-  liquidwar = builderDefsPackage (callPackage ../games/liquidwar) {
-    guile = guile_1_8;
-  };
-
   log4cpp = callPackage ../development/libraries/log4cpp { };
 
   log4cxx = callPackage ../development/libraries/log4cxx { };
@@ -7785,8 +7725,6 @@ let
     sslSupport = true;
   };
 
-  nethack = callPackage ../games/nethack { };
-
   nettle = callPackage ../development/libraries/nettle { };
 
   newt = callPackage ../development/libraries/newt { };
@@ -7867,8 +7805,6 @@ let
 
   openldap = callPackage ../development/libraries/openldap { };
 
-  openlierox = callPackage ../games/openlierox { };
-
   libopensc_dnie = callPackage ../development/libraries/libopensc-dnie { };
 
   opencolorio = callPackage ../development/libraries/opencolorio { };
@@ -7888,8 +7824,6 @@ let
     giflib = giflib_4_1;
     ffmpeg = ffmpeg_0;
   };
-
-  openspades = callPackage ../games/openspades {};
 
   libressl = callPackage ../development/libraries/libressl { };
 
@@ -8354,8 +8288,6 @@ let
 
   steghide = callPackage ../tools/security/steghide {};
 
-  stepmania = callPackage ../games/stepmania {};
-
   stlport = callPackage ../development/libraries/stlport { };
 
   strigi = callPackage ../development/libraries/strigi { clucene_core = clucene_core_2; };
@@ -8470,8 +8402,6 @@ let
     zlib = null;
     gnutls = gnutls;
   });
-
-  unnethack = callPackage ../games/unnethack { };
 
   v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
     inherit (pythonPackages) gyp;
@@ -8637,8 +8567,6 @@ let
   yubikey-personalization-gui = callPackage ../tools/misc/yubikey-personalization-gui {
     qt = qt4;
   };
-
-  zangband = builderDefsPackage (callPackage ../games/zangband) {};
 
   zeitgeist = callPackage ../development/libraries/zeitgeist { };
 
@@ -8836,8 +8764,6 @@ let
   perlArchiveCpio = perlPackages.ArchiveCpio;
 
   perlcritic = perlPackages.PerlCritic;
-
-  planetary_annihilation = callPackage ../games/planetaryannihilation { };
 
   sqitchPg = callPackage ../development/tools/misc/sqitch {
     name = "sqitch-pg";
@@ -9118,8 +9044,6 @@ let
   freepops = callPackage ../servers/mail/freepops { };
 
   freeswitch = callPackage ../servers/sip/freeswitch { };
-
-  ghostOne = callPackage ../servers/games/ghost-one { };
 
   groovebasin = callPackage ../applications/audio/groovebasin { };
 
@@ -9586,8 +9510,6 @@ let
   bluez = bluez4;
 
   inherit (pythonPackages) bedup;
-
-  beret = callPackage ../games/beret { };
 
   bridge-utils = callPackage ../os-specific/linux/bridge-utils { };
 
@@ -10186,8 +10108,6 @@ let
 
   nettools = callPackage ../os-specific/linux/net-tools { };
 
-  neverball = callPackage ../games/neverball { };
-
   nftables = callPackage ../os-specific/linux/nftables { };
 
   numactl = callPackage ../os-specific/linux/numactl { };
@@ -10362,11 +10282,6 @@ let
   # FIXME: `tcp-wrapper' is actually not OS-specific.
   tcp_wrappers = callPackage ../os-specific/linux/tcp-wrappers { };
 
-  trackballs = callPackage ../games/trackballs {
-    debug = false;
-    guile = guile_1_8;
-  };
-
   trinity = callPackage ../os-specific/linux/trinity { };
 
   tunctl = callPackage ../os-specific/linux/tunctl { };
@@ -10514,17 +10429,11 @@ let
     wxMSW = callPackage ../os-specific/windows/wxMSW-2.8 { };
   };
 
-  wesnoth = callPackage ../games/wesnoth {
-    lua = lua5;
-  };
-
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
 
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
 
   wpa_supplicant_gui = callPackage ../os-specific/linux/wpa_supplicant/gui.nix { };
-
-  xbomb = callPackage ../games/xbomb { };
 
   xf86_input_mtrack = callPackage ../os-specific/linux/xf86-input-mtrack { };
 
@@ -10535,13 +10444,7 @@ let
 
   xf86_video_nested = callPackage ../os-specific/linux/xf86-video-nested { };
 
-  xmoto = callPackage ../games/xmoto { };
-
   xorg_sys_opengl = callPackage ../os-specific/linux/opengl/xorg-sys { };
-
-  xpilot-ng = callPackage ../games/xpilot { };
-  bloodspilot-server = callPackage ../games/xpilot/bloodspilot-server.nix {};
-  bloodspilot-client = callPackage ../games/xpilot/bloodspilot-client.nix {};
 
   zd1211fw = callPackage ../os-specific/linux/firmware/zd1211 { };
 
@@ -12360,10 +12263,6 @@ let
 
   mrxvt = callPackage ../applications/misc/mrxvt { };
 
-  mudlet = qt5Libs.callPackage ../games/mudlet {
-    inherit (lua51Packages) luafilesystem lrexlib luazip luasqlite3;
-  };
-
   multimarkdown = callPackage ../tools/typesetting/multimarkdown { };
 
   multimon-ng = callPackage ../applications/misc/multimon-ng { };
@@ -13703,6 +13602,8 @@ let
 
   "2048-in-terminal" = callPackage ../games/2048-in-terminal { };
 
+  adom = callPackage ../games/adom { };
+
   airstrike = callPackage ../games/airstrike { };
 
   alienarena = callPackage ../games/alienarena { };
@@ -13710,6 +13611,8 @@ let
   andyetitmoves = if stdenv.isLinux then callPackage ../games/andyetitmoves {} else null;
 
   anki = callPackage ../games/anki { };
+
+  armagetronad = callPackage ../games/armagetronad { };
 
   asc = callPackage ../games/asc {
     lua = lua5_1;
@@ -13723,6 +13626,12 @@ let
   ballAndPaddle = callPackage ../games/ball-and-paddle {
     guile = guile_1_8;
   };
+
+  banner = callPackage ../games/banner {};
+
+  bastet = callPackage ../games/bastet {};
+
+  beret = callPackage ../games/beret { };
 
   bitsnbots = callPackage ../games/bitsnbots {
     lua = lua5;
@@ -13746,6 +13655,8 @@ let
 
   chessdb = callPackage ../games/chessdb { };
 
+  chocolateDoom = callPackage ../games/chocolate-doom { };
+
   cockatrice = qt5Libs.callPackage ../games/cockatrice {  };
 
   confd = goPackages.confd.bin // { outputs = [ "bin" ]; };
@@ -13764,7 +13675,15 @@ let
   crafty = callPackage ../games/crafty { };
   craftyFull = appendToName "full" (crafty.override { fullVariant = true; });
 
+  crawlTiles = callPackage ../games/crawl { };
+
+  crawl = callPackage ../games/crawl {
+    tileMode = false;
+  };
+
   crrcsim = callPackage ../games/crrcsim {};
+
+  cuyo = callPackage ../games/cuyo { };
 
   dfhack = callPackage_i686 ../games/dfhack {
     inherit (pkgsi686Linux.perlPackages) XMLLibXML XMLLibXSLT;
@@ -13792,9 +13711,17 @@ let
 
   egoboo = callPackage ../games/egoboo { };
 
+  eternity = callPackage ../games/eternity-engine { };
+
+  extremetuxracer = callPackage ../games/extremetuxracer {
+    libpng = libpng12;
+  };
+
   exult = callPackage ../games/exult { };
 
   fairymax = callPackage ../games/fairymax {};
+
+  fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
 
   flightgear = qt5Libs.callPackage ../games/flightgear { };
 
@@ -13813,7 +13740,11 @@ let
     wxGTK = wxGTK28.override { unicode = false; };
   };
 
+  gav = callPackage ../games/gav { };
+
   gemrb = callPackage ../games/gemrb { };
+
+  ghostOne = callPackage ../servers/games/ghost-one { };
 
   gl117 = callPackage ../games/gl-117 {};
 
@@ -13831,9 +13762,13 @@ let
 
   gnugo = callPackage ../games/gnugo { };
 
+  gsb = callPackage ../games/gsb { };
+
   gtypist = callPackage ../games/gtypist { };
 
   gzdoom = callPackage ../games/gzdoom { };
+
+  hawkthorne = callPackage ../games/hawkthorne { love = love_0_9; };
 
   hedgewars = callPackage ../games/hedgewars {
     inherit (haskellPackages) ghcWithPackages;
@@ -13851,6 +13786,10 @@ let
     lua = lua5;
   };
 
+  jamp = builderDefsPackage (callPackage ../games/jamp) {};
+
+  klavaro = callPackage ../games/klavaro {};
+
   kobodeluxe = callPackage ../games/kobodeluxe { };
 
   lgogdownloader = callPackage ../games/lgogdownloader { };
@@ -13859,19 +13798,41 @@ let
 
   lincity_ng = callPackage ../games/lincity/ng.nix {};
 
+  liquidwar = builderDefsPackage (callPackage ../games/liquidwar) {
+    guile = guile_1_8;
+  };
+
   mars = callPackage ../games/mars { };
 
   megaglest = callPackage ../games/megaglest {};
 
   micropolis = callPackage ../games/micropolis { };
 
+  minecraft = callPackage ../games/minecraft {
+    useAlsa = config.minecraft.alsa or false;
+  };
+
+  minecraft-server = callPackage ../games/minecraft-server { };
+
+  minetest = callPackage ../games/minetest {
+    libpng = libpng12;
+  };
+
   mnemosyne = callPackage ../games/mnemosyne {
     inherit (pythonPackages) matplotlib cherrypy sqlite3;
+  };
+
+  mudlet = qt5Libs.callPackage ../games/mudlet {
+    inherit (lua51Packages) luafilesystem lrexlib luazip luasqlite3;
   };
 
   n2048 = callPackage ../games/n2048 {};
 
   naev = callPackage ../games/naev { };
+
+  nethack = callPackage ../games/nethack { };
+
+  neverball = callPackage ../games/neverball { };
 
   nexuiz = callPackage ../games/nexuiz { };
 
@@ -13879,11 +13840,21 @@ let
 
   newtonwars = callPackage ../games/newtonwars { };
 
+  odamex = callPackage ../games/odamex { };
+
   oilrush = callPackage ../games/oilrush { };
+
+  onscripter-en = callPackage ../games/onscripter-en { };
+
+  openarena = callPackage ../games/openarena { };
+
+  openlierox = callPackage ../games/openlierox { };
 
   openmw = callPackage ../games/openmw { };
 
   openra = callPackage ../games/openra { lua = lua5_1; };
+
+  openspades = callPackage ../games/openspades {};
 
   openttd = callPackage ../games/openttd {
     zlib = zlibStatic;
@@ -13899,9 +13870,13 @@ let
 
   pioneers = callPackage ../games/pioneers { };
 
+  planetary_annihilation = callPackage ../games/planetaryannihilation { };
+
   pong3d = callPackage ../games/pong3d { };
 
   prboom = callPackage ../games/prboom { };
+
+  privateer = callPackage ../games/privateer { };
 
   qqwing = callPackage ../games/qqwing { };
 
@@ -13944,6 +13919,8 @@ let
 
   scorched3d = callPackage ../games/scorched3d { };
 
+  scrolls = callPackage ../games/scrolls { };
+
   sdlmame = callPackage ../games/sdlmame { };
 
   sgtpuzzles = callPackage (callPackage ../games/sgt-puzzles) { };
@@ -13975,6 +13952,8 @@ let
     withPrimus = config.steam.primus or false;
   };
 
+  stepmania = callPackage ../games/stepmania {};
+
   stuntrally = callPackage ../games/stuntrally { };
 
   superTux = callPackage ../games/super-tux { };
@@ -13982,6 +13961,8 @@ let
   superTuxKart = callPackage ../games/super-tux-kart { };
 
   synthv1 = callPackage ../applications/audio/synthv1 { };
+
+  tcl2048 = callPackage ../games/tcl2048 { };
 
   the-powder-toy = callPackage ../games/the-powder-toy {
     lua = lua5_1;
@@ -14002,6 +13983,11 @@ let
   tome4 = callPackage ../games/tome4 { };
 
   tpm = callPackage ../games/thePenguinMachine { };
+
+  trackballs = callPackage ../games/trackballs {
+    debug = false;
+    guile = guile_1_8;
+  };
 
   tremulous = callPackage ../games/tremulous { };
 
@@ -14031,6 +14017,8 @@ let
     lua = lua5;
   };
 
+  unnethack = callPackage ../games/unnethack { };
+
   unvanquished = callPackage ../games/unvanquished { };
 
   uqm = callPackage ../games/uqm { };
@@ -14059,6 +14047,10 @@ let
 
   warzone2100 = callPackage ../games/warzone2100 { };
 
+  wesnoth = callPackage ../games/wesnoth {
+    lua = lua5;
+  };
+
   widelands = callPackage ../games/widelands {
     lua = lua5_1;
   };
@@ -14071,6 +14063,8 @@ let
 
   xboard =  callPackage ../games/xboard { };
 
+  xbomb = callPackage ../games/xbomb { };
+
   xconq = callPackage ../games/xconq {
     tcl = tcl-8_5;
     tk = tk-8_5;
@@ -14079,7 +14073,13 @@ let
   # TODO: the corresponding nix file is missing
   # xracer = callPackage ../games/xracer { };
 
+  xmoto = callPackage ../games/xmoto { };
+
   xonotic = callPackage ../games/xonotic { };
+
+  xpilot-ng = callPackage ../games/xpilot { };
+  bloodspilot-server = callPackage ../games/xpilot/bloodspilot-server.nix {};
+  bloodspilot-client = callPackage ../games/xpilot/bloodspilot-client.nix {};
 
   xskat = callPackage ../games/xskat { };
 
@@ -14090,6 +14090,8 @@ let
   zandronum = callPackage ../games/zandronum { };
   zandronum-server = callPackage ../games/zandronum/server.nix { };
   zandronum-bin = callPackage ../games/zandronum/bin.nix { };
+
+  zangband = builderDefsPackage (callPackage ../games/zangband) {};
 
   zdoom = callPackage ../games/zdoom { };
 
