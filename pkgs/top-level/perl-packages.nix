@@ -1254,6 +1254,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  CatalystPluginStatusMessage = buildPerlPackage rec {
+    name = "Catalyst-Plugin-StatusMessage-1.002000";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HK/HKCLARK/${name}.tar.gz";
+      sha256 = "649c894ab16f9f48ada8f9cc599a7ecbb8891ab3761ff6fd510520c6de407c1f";
+    };
+    propagatedBuildInputs = [ CatalystRuntime SubName strictures ];
+    meta = {
+      description = "Handle passing of status messages between screens of a web application";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ stdenv.lib.maintainers.rycee ];
+    };
+  };
+
   CatalystViewDownload = buildPerlPackage rec {
     name = "Catalyst-View-Download-0.09";
     src = fetchurl {
