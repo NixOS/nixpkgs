@@ -1172,6 +1172,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  CatalystPluginSessionDynamicExpiry = buildPerlPackage rec {
+    name = "Catalyst-Plugin-Session-DynamicExpiry-0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
+      sha256 = "7707c56734cdb1512f733dc400fadf6f4c53cb217b58207857824dad6780a079";
+    };
+    propagatedBuildInputs = [ CatalystPluginSession CatalystRuntime MROCompat Moose namespaceautoclean ];
+    meta = {
+      description = "Per-session custom expiry times";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ stdenv.lib.maintainers.rycee ];
+    };
+  };
+
   CatalystPluginSessionStateCookie = buildPerlPackage rec {
     name = "Catalyst-Plugin-Session-State-Cookie-0.17";
     src = fetchurl {
