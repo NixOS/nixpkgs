@@ -45,6 +45,6 @@ in pythonPackages.buildPythonPackage rec {
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = platforms.unix;
     maintainers = [ maintainers.iElectric ];
-    license = licenses.apl20;
+    license = licenses.asl20;
   };
 }
