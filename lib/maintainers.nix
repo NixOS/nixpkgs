@@ -279,6 +279,7 @@
   theuni = "Christian Theune <ct@flyingcircus.io>";
   thoughtpolice = "Austin Seipp <aseipp@pobox.com>";
   titanous = "Jonathan Rudenberg <jonathan@titanous.com>";
+  tokudan = "Daniel Frank <git@danielfrank.net>";
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";
   travisbhartwell = "Travis B. Hartwell <nafai@travishartwell.net>";
   trino = "Hubert Mühlhans <muehlhans.hubert@ekodia.de>";
