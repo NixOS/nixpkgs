@@ -3,10 +3,11 @@
  } :
 
 stdenv.mkDerivation rec {
-  name = "mbuffer-20151012";
+  version = "20151002";
+  name = "mbuffer-${version}";
 
   src = fetchurl {
-    url = "http://www.maier-komor.de/software/mbuffer/mbuffer-20151002.tgz";
+    url = "http://www.maier-komor.de/software/mbuffer/mbuffer-${version}.tgz";
     sha256 = "04pz70jr7fkdyax7b67g9jr0msl6ff2i8s6fl8zginqz5rrxckqk";
   };
 
