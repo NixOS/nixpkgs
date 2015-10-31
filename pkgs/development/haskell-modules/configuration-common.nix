@@ -922,4 +922,7 @@ self: super: {
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [ pkgs.ncurses ];
   });
 
+  # Re-build this package to fix broken binaries on Hydra.
+  math-functions = triggerRebuild super.math-functions 1;
+
 }
