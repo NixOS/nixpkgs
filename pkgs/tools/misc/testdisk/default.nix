@@ -8,14 +8,15 @@ stdenv.mkDerivation {
     sha256 = "0v1jap83f5h99zv01v3qmqm160d36n4ysi0gyq7xzb3mqgmw75x5";
   };
 
-  buildInputs = [ ncurses libjpeg e2fsprogs zlib openssl libuuid ntfs3g ];
+  buildInputs = [ ncurses libjpeg zlib openssl libuuid ]
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ e2fsprogs ntfs3g ];
 
   enableParallelBuilding = true;
 
   meta = {
     homepage = http://www.cgsecurity.org/wiki/TestDisk;
     license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.eelco ];
     longDescription = ''
       TestDisk is a program for data recovery, primarily designed to
