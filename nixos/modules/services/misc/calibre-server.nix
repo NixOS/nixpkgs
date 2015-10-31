@@ -22,6 +22,7 @@ in
         description = ''
           The directory where the Calibre library to serve is.
           '';
+          type = types.path;
       };
 
     };
