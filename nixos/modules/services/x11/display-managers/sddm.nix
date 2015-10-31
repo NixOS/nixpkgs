@@ -36,8 +36,21 @@ let
     SessionDir=${dmcfg.session.desktops}
     XauthPath=${pkgs.xorg.xauth}/bin/xauth
 
+    ${optionalString cfg.autoLogin.enable ''
+    [Autologin]
+    User=${cfg.autoLogin.user}
+    Session=${defaultSessionName}.desktop
+    Relogin=${if cfg.autoLogin.relogin then "true" else "false"}
+    ''}
+
     ${cfg.extraConfig}
   '';
+
+  defaultSessionName =
+    let
+      dm = xcfg.desktopManager.default;
+      wm = xcfg.windowManager.default;
+    in dm + optionalString (wm != "none") (" + " + wm);
 
 in
 {
@@ -72,11 +85,61 @@ in
           Greeter theme to use.
         '';
       };
+
+      autoLogin = mkOption {
+        default = {};
+        description = ''
+          Configuration for automatic login.
+        '';
+
+        type = types.submodule {
+	  options = {
+            enable = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Automatically log in as the sepecified <option>autoLogin.user</option>.
+              '';
+            };
+
+            user = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = ''
+                User to be used for the autologin.
+              '';
+            };
+
+            relogin = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                If true automatic login will kick in again on session exit, otherwise it
+                will work only the first time.
+              '';
+            };
+	  };
+        };
+      };
+
     };
 
   };
 
   config = mkIf cfg.enable {
+
+    assertions = [
+      { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
+        message = "SDDM auto-login requires services.xserver.displayManager.sddm.autoLogin.user to be set";
+      }
+      { assertion = cfg.autoLogin.enable -> elem defaultSessionName dmcfg.session.names;
+        message = ''
+          SDDM auto-login requires that services.xserver.desktopManager.default and
+	  services.xserver.windowMananger.default are set to valid values. The current
+	  default session: ${defaultSessionName} is not valid.
+	'';
+      }
+    ];
 
     services.xserver.displayManager.slim.enable = false;
 
@@ -107,6 +170,18 @@ in
         session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so
+      '';
+
+      sddm-autologin.text = ''
+        auth     requisite pam_nologin.so
+        auth     required  pam_succeed_if.so uid >= 1000 quiet
+        auth     required  pam_permit.so
+
+        account  include   sddm
+
+        password include   sddm
+
+        session  include   sddm
       '';
     };
 
