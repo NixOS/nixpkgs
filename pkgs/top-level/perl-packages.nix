@@ -1144,6 +1144,20 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [CatalystRuntime HTMLWidget];
   };
 
+  CatalystPluginLogHandler = buildPerlPackage rec {
+    name = "Catalyst-Plugin-Log-Handler-0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEPE/${name}.tar.gz";
+      sha256 = "0db3c3a57b4ee3d789ba5129890e2858913fef00d8185bdc9c5d7fde31e043ef";
+    };
+    propagatedBuildInputs = [ ClassAccessor LogHandler MROCompat ];
+    meta = {
+      description = "Catalyst Plugin for Log::Handler";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ stdenv.lib.maintainers.rycee ];
+    };
+  };
+
   CatalystPluginSession = buildPerlPackage {
     name = "Catalyst-Plugin-Session-0.39";
     src = fetchurl {
