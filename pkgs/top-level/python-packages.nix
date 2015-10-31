@@ -4453,8 +4453,34 @@ let
       homepage = http://github.com/heynemann/libthumbor;
       license = licenses.mit;
     };
-
   };
+
+  lightning = buildPythonPackage rec {
+    version = "1.2.1";
+    name = "lightning-python-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/lightning-python/${name}.tar.gz";
+      sha256 = "3987d7d4a634bdb6db9bcf212cf4d2f72bab5bc039f4f6cbc02c9d01c4ade792";
+    };
+
+    buildInputs = with self; [ pytest ];
+
+    propagatedBuildInputs = with self; [
+      jinja2
+      matplotlib
+      numpy
+      requests
+      six
+    ];
+
+    meta = {
+      description = "A Python client library for the Lightning data visualization server";
+      homepage = http://lightning-viz.org;
+      license = licenses.mit;
+    };
+  };
+
   lti = buildPythonPackage rec {
     version = "0.4.0";
     name = "PyLTI-${version}";
