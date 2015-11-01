@@ -300,9 +300,9 @@ in {
   };
 
   php70 = lib.lowPrio (generic {
-    version = "7.0.0beta1";
-    url = "https://downloads.php.net/~ab/php-7.0.0beta1.tar.bz2";
-    sha256 = "1pj3ysfhswg2r370ivp33fv9zbcl3yvhmxgnc731k08hv6hmd984";
+    version = "7.0.0RC6";
+    url = "https://downloads.php.net/~ab/php-7.0.0RC6.tar.bz2";
+    sha256 = "0q8km0711chwj94d4mjrzdn999yw1vv4k695gj68pk791a6pcsyk";
   });
 
 }
