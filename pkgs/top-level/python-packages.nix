@@ -1873,12 +1873,36 @@ let
       md5 = "e26d06a8d8b16c7210414ce15d453636";
     };
 
-    propagatedBuildInputs = with self; [ cffi ];
+    propagatedBuildInputs = with self; [ pkgs.cairo cffi ];
+
+    patchPhase = ''
+      # Hardcode cairo library path
+      sed -e 's,ffi\.dlopen(,&"${pkgs.cairo}/lib/" + ,' -i cairocffi/__init__.py
+    '';
 
     meta = {
       homepage = https://github.com/SimonSapin/cairocffi;
       license = "bsd";
       description = "cffi-based cairo bindings for Python";
+    };
+  };
+
+
+  cairosvg = buildPythonPackage rec {
+    version = "1.0.18";
+    name = "cairosvg-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/C/CairoSVG/CairoSVG-${version}.tar.gz";
+      sha256 = "01lpm38qp7xlnv8jv7qg48j44p5088dwfsrcllgs5fz355lrfds1";
+    };
+
+    propagatedBuildInputs = with self; [ cairocffi ];
+
+    meta = {
+      homepage = https://cairosvg.org;
+      license = licenses.lgpl3;
+      description = "SVG converter based on Cairo";
     };
   };
 
@@ -2974,6 +2998,24 @@ let
       homepage = http://bitbucket.org/hpk42/pytest-xdist;
     };
   };
+
+
+  tinycss = buildPythonPackage rec {
+    name = "tinycss-${version}";
+    version = "0.3";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/t/tinycss/${name}.tar.gz";
+      sha256 = "1pichqra4wk86142hqgvy9s5x6c5k5zhy8l9qxr0620pqk8spbd4";
+    };
+
+    meta = {
+      description = "complete yet simple CSS parser for Python";
+      license = licenses.bsd3;
+      homepage = http://pythonhosted.org/tinycss/;
+    };
+  };
+
 
   cssselect = buildPythonPackage rec {
     name = "cssselect-${version}";
@@ -9312,6 +9354,50 @@ let
     propagatedBuildInputs = with self; [ wxPython pyserial xlib appdirs pkgs.wmctrl ];
     preConfigure = "substituteInPlace setup.py --replace /usr/share usr/share";
   };
+
+  pygal = buildPythonPackage ( rec {
+    version = "2.0.8";
+    name = "pygal-${version}";
+
+    patchPhase = ''
+      # Run tests in pygal dir
+      substituteInPlace setup.py \
+        --replace "self.test_args = []" \
+                  "self.test_args = ['-x', 'build/lib/pygal']"
+      # Open unicode files during tests
+      substituteInPlace pygal/test/test_graph.py \
+        --replace "import sys" \
+                  "import sys, io"
+      substituteInPlace pygal/test/test_graph.py \
+        --replace "open(file_name)" \
+                  "io.open(file_name, encoding='utf-8')"
+      # Use explicit integers (for python 3.5)
+      substituteInPlace pygal/colors.py \
+        --replace "'#%x%x%x' % (r / 17, g / 17, b / 17)" \
+                  "'#%x%x%x' % (r // 17, g // 17, b // 17)"
+      substituteInPlace pygal/colors.py \
+        --replace "'#%x%x%x%x' % (r / 17, g / 17, b / 17, a * 15)" \
+                  "'#%x%x%x%x' % (r // 17, g // 17, b // 17, int(a * 15))"
+      substituteInPlace pygal/colors.py \
+        --replace "'#%02x%02x%02x%02x' % (r, g, b, a * 255)" \
+                  "'#%02x%02x%02x%02x' % (r, g, b, int(a * 255))"
+    '';
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/Kozea/pygal/archive/${version}.tar.gz";
+      sha256 = "1lv8avn7pdlxks50sd58shpqnxybf3l79bggy32qnbqczk4j2s0b";
+    };
+
+    buildInputs = with self; [ flask pyquery pytest ];
+    propagatedBuildInputs = with self; [ cairosvg tinycss cssselect ] ++ optionals (!isPyPy) [ lxml ];
+
+    meta = {
+      description = "Sexy and simple python charting";
+      homepage = http://www.pygal.org;
+      license = licenses.lgpl3;
+    };
+  });
+
 
   pymysql = buildPythonPackage rec {
     name = "pymysql-${version}";
