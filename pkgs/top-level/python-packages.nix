@@ -6126,6 +6126,37 @@ let
     };
   };
 
+  django_silk = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
+    name = "django-silk-${version}";
+    version = "0.5.6";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/django-silk/${name}.tar.gz";
+      sha256 = "845abc688738858ce06e993c4b7dbbcfcecf33029e828f143463ff96f9a78947";
+    };
+
+    buildInputs = [ self.mock ];
+
+    propagatedBuildInputs = [ django ] ++
+      (with self; [
+        pygments
+        simplejson
+        dateutil
+        requests2
+        sqlparse
+        jinja2
+        autopep8
+        pytz
+        pillow
+      ]);
+
+    meta = {
+      description = "Silky smooth profiling for the Django Framework";
+      homepage = https://github.com/mtford90/silk;
+      license = licenses.mit;
+    };
+  }) {};
+
   django_taggit = buildPythonPackage rec {
     name = "django-taggit-${version}";
     version = "0.17.0";
