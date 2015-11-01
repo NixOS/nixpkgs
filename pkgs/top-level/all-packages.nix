@@ -11039,6 +11039,8 @@ let
 
   bluejeans = callPackage ../applications/networking/browsers/mozilla-plugins/bluejeans { };
 
+  brackets = callPackage ../applications/editors/brackets { gconf = gnome3.gconf; };
+
   bristol = callPackage ../applications/audio/bristol { };
 
   bs1770gain = callPackage ../applications/audio/bs1770gain { };
