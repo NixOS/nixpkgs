@@ -40,6 +40,20 @@ following incompatible changes:</para>
     will include the Gitit service configuration options.</para>
   </listitem>
 
+  <listitem>
+    <para><command>nginx</command> does not accept flags for enabling and
+    disabling modules anymore. Instead it accepts <literal>modules</literal>
+    argument, which is a list of modules to be built in. All modules now
+    reside in <literal>nginxModules</literal> set. Example configuration:
+
+<programlisting><![CDATA[
+nginx.override {
+  modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
+}
+]]></programlisting>
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 </section>
