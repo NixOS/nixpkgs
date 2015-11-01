@@ -11339,7 +11339,7 @@ let
 
     # tests take a long time to run and leave threads hanging
     doCheck = false;
-    ZOOKEEPER_PATH = "${pkgs.zookeeper}";
+    #ZOOKEEPER_PATH = "${pkgs.zookeeper}";
 
     meta = with stdenv.lib; {
       homepage = "https://kazoo.readthedocs.org";
