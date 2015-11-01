@@ -1679,11 +1679,11 @@ let
   };
 
   ipfs = buildFromGitHub{
-    rev = "9c6ec296e396cc6be551c9807ae220fb50dd07d4";
-    date   = "2015-09-23";
+    rev = "43622bd5eed1f62d53d364dc771bbb500939d9e6";
+    date   = "2015-10-30";
     owner  = "ipfs";
     repo   = "go-ipfs";
-    sha256 = "0lmj2s9ihl1a5r8yn6w0lvb8z3n6c9b8wi1yvi77vgzm6b6lfl3a";
+    sha256 = "0g80b65ysj995dj3mkh3lp4v616fzjl7bx2wf14mkxfri4gr5icb";
   };
 
   ldap = buildGoPackage rec {
