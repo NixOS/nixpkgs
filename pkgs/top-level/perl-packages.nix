@@ -6238,6 +6238,18 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
+  LinuxDistribution = buildPerlPackage {
+    name = "Linux-Distribution-0.23";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CH/CHORNY/Linux-Distribution-0.23.tar.gz;
+      sha256 = "603e27da607b3e872a669d7a66d75982f0969153eab2d4b20c341347b4ebda5f";
+    };
+    meta = {
+      description = "Perl extension to detect on which Linux distribution we are running";
+      license = "perl";
+    };
+  };
+
   LinuxInotify2 = buildPerlPackage rec {
     name = "Linux-Inotify2-1.22";
     src = fetchurl {
