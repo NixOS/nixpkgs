@@ -79,15 +79,13 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   xfce4_eyes_plugin        = callPackage ./panel-plugins/xfce4-eyes-plugin.nix        { };
   xfce4_fsguard_plugin     = callPackage ./panel-plugins/xfce4-fsguard-plugin.nix     { };
   xfce4_genmon_plugin      = callPackage ./panel-plugins/xfce4-genmon-plugin.nix      { };
-
   xfce4_netload_plugin     = callPackage ./panel-plugins/xfce4-netload-plugin.nix     { };
   xfce4_notes_plugin       = callPackage ./panel-plugins/xfce4-notes-plugin.nix       { };
   xfce4_systemload_plugin  = callPackage ./panel-plugins/xfce4-systemload-plugin.nix  { };
   xfce4_verve_plugin       = callPackage ./panel-plugins/xfce4-verve-plugin.nix       { };
   xfce4_xkb_plugin         = callPackage ./panel-plugins/xfce4-xkb-plugin.nix         { };
-
   xfce4_whiskermenu_plugin = callPackage ./panel-plugins/xfce4-whiskermenu-plugin.nix { };
-
+  xfce4_pulseaudio_plugin  = callPackage ./panel-plugins/xfce4-pulseaudio-plugin.nix  { };
 
 }; # xfce_self
 
