@@ -6013,6 +6013,31 @@ in modules // {
     };
   };
 
+  pypolicyd-spf = buildPythonPackage rec {
+    name = "pypolicyd-spf-${version}";
+    majorVersion = "1.3";
+    version = "${majorVersion}.2";
+
+    src = pkgs.fetchurl {
+      url = "https://launchpad.net/pypolicyd-spf/${majorVersion}/${version}/+download/${name}.tar.gz";
+      sha256 = "0ri9bdwn1k8xlyfhrgzns7wjvp5h08dq5fnxcq6mphy94rmc8x3i";
+    };
+
+    propagatedBuildInputs = with self; [ pyspf pydns ipaddr ];
+
+    preBuild = ''
+      substituteInPlace setup.py --replace "'/etc'" "'$out/etc'"
+    '';
+
+    meta = {
+      homepage = https://launchpad.net/pypolicyd-spf/;
+      description = "Postfix policy engine for Sender Policy Framework (SPF) checking.";
+      maintainers = with maintainers; [ abbradar ];
+      license = licenses.asl20;
+      platform = platforms.all;
+    };
+  };
+
   pyramid = buildPythonPackage rec {
     name = "pyramid-1.5.7";
 
