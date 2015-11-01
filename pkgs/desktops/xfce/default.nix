@@ -22,6 +22,7 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   garcon          = callPackage ./core/garcon.nix { };
   gtk_xfce_engine = callPackage ./core/gtk-xfce-engine.nix { }; # ToDo: when should be used?
   libxfce4ui      = callPackage ./core/libxfce4ui.nix { };
+  libxfce4ui_gtk3 = libxfce4ui.override { withGtk3 = true; };
   libxfce4util    = callPackage ./core/libxfce4util.nix { };
   libxfcegui4     = callPackage ./core/libxfcegui4.nix { };
   thunar          = callPackage ./core/thunar.nix { };
@@ -32,6 +33,7 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
                   = callPackage ./thunar-plugins/dropbox { };
   tumbler         = callPackage ./core/tumbler.nix { };
   xfce4panel      = callPackage ./core/xfce4-panel.nix { }; # ToDo: impure plugins from /run/current-system/sw/lib/xfce4
+  xfce4panel_gtk3 = xfce4panel.override { withGtk3 = true; };
   xfce4session    = callPackage ./core/xfce4-session.nix { };
   xfce4settings   = callPackage ./core/xfce4-settings.nix { };
   xfce4_power_manager = callPackage ./core/xfce4-power-manager.nix { };
@@ -66,7 +68,6 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   xfce4icontheme  = callPackage ./art/xfce4-icon-theme.nix { };
 
   #### PANEL PLUGINS        from "mirror://xfce/src/panel-plugins/${p_name}/${ver_maj}/${name}.tar.{bz2,gz}"
-
 
   xfce4_battery_plugin     = callPackage ./panel-plugins/xfce4-battery-plugin.nix     { };
   xfce4_clipman_plugin     = callPackage ./panel-plugins/xfce4-clipman-plugin.nix     { };
