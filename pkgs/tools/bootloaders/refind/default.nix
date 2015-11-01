@@ -5,12 +5,11 @@ assert (stdenv.system == "x86_64-linux" ||stdenv.system == "i686-linux");
 
 stdenv.mkDerivation rec {
 
-  name = "refind-${version}";
-  srcName = "refind-src-${version}";
-  version = "0.9.2";
+  name = "refind-${meta.version}";
+  srcName = "refind-src-${meta.version}";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/refind/${version}/${srcName}.zip";
+    url = "http://downloads.sourceforge.net/project/refind/${meta.version}/${srcName}.zip";
     sha256 = "0ai150rzx20sfl92j6y1p6qnyy0wbmazrlp2fg19acs98qyxl8lh";
   };
 
@@ -18,7 +17,8 @@ stdenv.mkDerivation rec {
 
   HOSTARCH =
     if stdenv.system == "x86_64-linux" then "x64"
-    else if stdenv.system == "i686-linux" then "ia32" else "null";
+    else if stdenv.system == "i686-linux" then "ia32"
+    else "null";
 
   patchPhase = ''
     sed -e 's|-DEFI_FUNCTION_WRAPPER|-DEFI_FUNCTION_WRAPPER -maccumulate-outgoing-args|g' -i Make.common
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       if stdenv.system == "x86_64-linux" then "elf_x86_64_efi.lds"
       else if stdenv.system == "i686-linux" then "elf_ia32_efi.lds" else "null";
     in ''
-      make prefix= EFIINC=${gnu-efi}/include/efi EFILIB=${gnu-efi}/lib GNUEFILIB=${gnu-efi}/lib  EFICRT0=${gnu-efi}/lib LDSCRIPT=${gnu-efi}/lib/${ldScript} gnuefi fs_gnuefi
+      make prefix= EFIINC=${gnu-efi}/include/efi EFILIB=${gnu-efi}/lib GNUEFILIB=${gnu-efi}/lib EFICRT0=${gnu-efi}/lib LDSCRIPT=${gnu-efi}/lib/${ldScript} gnuefi fs_gnuefi
     '';
 
   installPhase = ''
@@ -94,6 +94,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    version = "0.9.2";
     description = "A graphical {,U}EFI boot manager";
     longDescription = ''
       rEFInd is a graphical boot manager for EFI- and UEFI-based
@@ -116,4 +117,3 @@ stdenv.mkDerivation rec {
   };
 
 }
-# TODO: detect CPU host architecture (HOSTARCH can be ia32 or x64)
