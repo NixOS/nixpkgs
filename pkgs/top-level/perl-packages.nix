@@ -6514,6 +6514,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  LogLogLite = buildPerlPackage rec {
+    name = "Log-LogLite-0.82";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RA/RANI/${name}.tar.gz";
+      sha256 = "0sqsa4750wvhw4cjmxpxqg30i1jjcddadccflisrdb23qn5zn285";
+    };
+    propagatedBuildInputs = [ IOLockedFile ];
+    meta = {
+      description = "Helps us create simple logs for our application.";
+      license = "perl";
+    };
+  };
+
   LWP = buildPerlPackage rec {
     name = "libwww-perl-6.13";
     src = fetchurl {
