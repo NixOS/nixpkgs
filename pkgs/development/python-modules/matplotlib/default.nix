@@ -37,13 +37,12 @@ buildPythonPackage rec {
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin-stdenv.patch ];
 
-  patchPhase = ''
+  prePatch = ''
     # Failing test: ERROR: matplotlib.tests.test_style.test_use_url
     sed -i 's/test_use_url/fails/' lib/matplotlib/tests/test_style.py
     # Failing test: ERROR: test suite for <class 'matplotlib.sphinxext.tests.test_tinypages.TestTinyPages'>
     sed -i 's/TestTinyPages/fails/' lib/matplotlib/sphinxext/tests/test_tinypages.py
   '';
-
 
   meta = with stdenv.lib; {
     description = "python plotting library, making publication quality plots";

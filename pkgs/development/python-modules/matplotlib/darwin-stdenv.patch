@@ -1,11 +1,10 @@
---- a/src/_macosx.m	2015-06-30 12:18:48.000000000 +0300
-+++ b/src/_macosx.m	2015-06-30 12:19:12.000000000 +0300
-@@ -5,6 +5,8 @@
- #include "numpy/arrayobject.h"
- #include "path_cleanup.h"
+--- a/src/_macosx.m	2015-10-30 00:46:20.000000000 +0200
++++ b/src/_macosx.m	2015-11-01 14:52:25.000000000 +0200
+@@ -6264,6 +6264,7 @@
  
-+#define WITH_NEXT_FRAMEWORK 1
-+
- #if PY_MAJOR_VERSION >= 3
- #define PY3K 1
- #else
+ static bool verify_framework(void)
+ {
++    return true;  /* nixpkgs darwin stdenv */
+ #ifdef COMPILING_FOR_10_6
+     NSRunningApplication* app = [NSRunningApplication currentApplication];
+     NSApplicationActivationPolicy activationPolicy = [app activationPolicy];
