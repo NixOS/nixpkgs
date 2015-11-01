@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "svtplay-dl-${version}";
-  version = "0.20.2015.10.08";
+  version = "0.20.2015.10.25";
 
   src = fetchFromGitHub {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
-    sha256 = "0mf5w4js2q4ahhkv3k6vs88haf02krhyl217cy05nw7wgxlrr5fx";
+    sha256 = "0azai5clc96lhsx4kj5rvp5bhiq4bwgl51r49b9x4i5s1bhfaz40";
   };
 
   pythonPaths = [ pycrypto requests2 ];
