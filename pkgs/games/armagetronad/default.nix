@@ -22,5 +22,6 @@ stdenv.mkDerivation {
     homepage = http://armagetronad.org;
     description = "An multiplayer networked arcade racing game in 3D similar to Tron";
     license = stdenv.lib.licenses.gpl2;
+    platforms = platforms.linux;
   };
 }
