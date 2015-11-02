@@ -23,7 +23,7 @@ let
 
     src = fetchFromGitHub {
       sha256 = "0i2h74jrx4fy90sv57xj8g4lbjjg4nhrq2rv6rz576fmqfpllcc5";
-      rev = "v${version}";
+      rev = "20ad1396c178c72873aeeb2870bd726f847acb70";
       repo = "libvterm";
       owner = "neovim";
     };
@@ -64,7 +64,7 @@ let
 
     src = fetchFromGitHub {
       sha256 = "1704f3dqf5p6hicpzf0pi21n6ymylra9prsm4azvqp86allmvnfx";
-      rev = "c4826c300340a9e4df20964a14650caf64fc1b58";
+      rev = "v${version}";
       repo = "neovim";
       owner = "neovim";
     };
