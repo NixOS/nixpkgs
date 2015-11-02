@@ -1144,6 +1144,20 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [CatalystRuntime HTMLWidget];
   };
 
+  CatalystPluginLogHandler = buildPerlPackage rec {
+    name = "Catalyst-Plugin-Log-Handler-0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEPE/${name}.tar.gz";
+      sha256 = "0db3c3a57b4ee3d789ba5129890e2858913fef00d8185bdc9c5d7fde31e043ef";
+    };
+    propagatedBuildInputs = [ ClassAccessor LogHandler MROCompat ];
+    meta = {
+      description = "Catalyst Plugin for Log::Handler";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ stdenv.lib.maintainers.rycee ];
+    };
+  };
+
   CatalystPluginSession = buildPerlPackage {
     name = "Catalyst-Plugin-Session-0.39";
     src = fetchurl {
@@ -1155,6 +1169,20 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Generic Session plugin - ties together server side storage and client side state required to maintain session data";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  CatalystPluginSessionDynamicExpiry = buildPerlPackage rec {
+    name = "Catalyst-Plugin-Session-DynamicExpiry-0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
+      sha256 = "7707c56734cdb1512f733dc400fadf6f4c53cb217b58207857824dad6780a079";
+    };
+    propagatedBuildInputs = [ CatalystPluginSession CatalystRuntime MROCompat Moose namespaceautoclean ];
+    meta = {
+      description = "Per-session custom expiry times";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ stdenv.lib.maintainers.rycee ];
     };
   };
 
@@ -1184,6 +1212,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  CatalystPluginSessionStoreFile = buildPerlPackage rec {
+    name = "Catalyst-Plugin-Session-Store-File-0.18";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FL/FLORA/${name}.tar.gz";
+      sha256 = "54738e3ce76f8be8b66947092d28973c73d79d1ee19b5d92b057552f8ff09b4f";
+    };
+    propagatedBuildInputs = [ CacheCache CatalystPluginSession CatalystRuntime ClassDataInheritable MROCompat ];
+    meta = {
+      description = "File storage backend for session data";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ stdenv.lib.maintainers.rycee ];
+    };
+  };
+
   CatalystPluginStackTrace = buildPerlPackage {
     name = "Catalyst-Plugin-StackTrace-0.12";
     src = fetchurl {
@@ -1209,6 +1251,20 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Make serving static pages painless";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  CatalystPluginStatusMessage = buildPerlPackage rec {
+    name = "Catalyst-Plugin-StatusMessage-1.002000";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HK/HKCLARK/${name}.tar.gz";
+      sha256 = "649c894ab16f9f48ada8f9cc599a7ecbb8891ab3761ff6fd510520c6de407c1f";
+    };
+    propagatedBuildInputs = [ CatalystRuntime SubName strictures ];
+    meta = {
+      description = "Handle passing of status messages between screens of a web application";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ stdenv.lib.maintainers.rycee ];
     };
   };
 
@@ -12060,6 +12116,20 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Require() modules from a variable";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  UnicodeCaseFold = buildPerlModule rec {
+    name = "Unicode-CaseFold-1.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AR/ARODLAND/${name}.tar.gz";
+      sha256 = "c489b5a440e84b0554e866d3fe4077fa1956eeed473e203588e0c24acce1f016";
+    };
+    meta = {
+      homepage = http://metacpan.org/release/Unicode-CaseFold;
+      description = "Unicode case-folding for case-insensitive lookups";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ stdenv.lib.maintainers.rycee ];
     };
   };
 
