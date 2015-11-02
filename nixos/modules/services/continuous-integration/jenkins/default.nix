@@ -128,6 +128,11 @@ in {
 
       path = cfg.packages;
 
+      # Force .war (re)extraction, or else we might run stale Jenkins.
+      preStart = ''
+        rm -rf ${cfg.home}/war
+      '';
+
       script = ''
         ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins} --httpPort=${toString cfg.port} ${concatStringsSep " " cfg.extraOptions}
       '';
