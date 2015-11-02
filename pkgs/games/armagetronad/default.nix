@@ -18,10 +18,10 @@ stdenv.mkDerivation {
   configureFlags ="--disable-etc";
   buildInputs = [SDL SDL_image libxml2 libjpeg mesa zlib];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://armagetronad.org;
     description = "An multiplayer networked arcade racing game in 3D similar to Tron";
-    license = stdenv.lib.licenses.gpl2;
+    license = licenses.gpl2;
     platforms = platforms.linux;
   };
 }
