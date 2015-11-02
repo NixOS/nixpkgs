@@ -1428,11 +1428,11 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ DBFile ];
   };
 
-  CGISimple = buildPerlPackage {
-    name = "CGI-Simple-1.113";
+  CGISimple = buildPerlPackage rec {
+    name = "CGI-Simple-1.115";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AN/ANDYA/CGI-Simple-1.113.tar.gz;
-      sha256 = "0g8v0jd7dk310k6ncz47qa1cfrysi8yib1zwkhasv4zhswgqiqjj";
+      url = "mirror://cpan/authors/id/S/SZ/SZABGAB/${name}.tar.gz";
+      sha256 = "1nkyb1m1g5r47xykflf68dplanih5p15njv82frbgbsms34kp1sg";
     };
     propagatedBuildInputs = [ IOStringy ];
     meta = {
