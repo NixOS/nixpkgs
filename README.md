@@ -1,4 +1,4 @@
-[<img src="http://nixos.org/logo/nixos-hires.png" width="500px" alt="logo" />](https://nixos.org/nixos)
+[<img src="http://nixos.org/logo/nixos-logo-only-hires.png" width="500px" alt="logo" />](https://nixos.org/nixos)
 
 [![Build Status](https://travis-ci.org/NixOS/nixpkgs.svg?branch=master)](https://travis-ci.org/NixOS/nixpkgs)
 [![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/pr)](http://www.issuestats.com/github/nixos/nixpkgs)
