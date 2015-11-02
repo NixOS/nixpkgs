@@ -9189,6 +9189,10 @@ let
 
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot-pigeonhole { };
 
+  dspam = callPackage ../servers/mail/dspam {
+    inherit (perlPackages) NetSMTP;
+  };
+
   etcd = goPackages.etcd.bin // { outputs = [ "bin" ]; };
 
   ejabberd = callPackage ../servers/xmpp/ejabberd { };
