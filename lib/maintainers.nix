@@ -192,6 +192,7 @@
   mornfall = "Petr Ročkai <me@mornfall.net>";
   MP2E = "Cray Elliott <MP2E@archlinux.us>";
   msackman = "Matthew Sackman <matthew@wellquite.org>";
+  msteen = "Matthijs Steen <emailmatthijs@gmail.com>";
   mtreskin = "Max Treskin <zerthurd@gmail.com>";
   mudri = "James Wood <lamudri@gmail.com>";
   muflax = "Stefan Dorn <mail@muflax.com>";
