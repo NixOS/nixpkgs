@@ -182,7 +182,6 @@ let
 
 
   ### Helper functions.
-
   inherit lib config stdenvAdapters;
 
   inherit (lib) lowPrio hiPrio appendToName makeOverridable;
