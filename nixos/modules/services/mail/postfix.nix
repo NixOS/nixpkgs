@@ -158,6 +158,7 @@ in
     services.postfix = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Whether to run the Postfix mail server.";
       };
@@ -168,21 +169,25 @@ in
       };
 
       setSendmail = mkOption {
+        type = types.bool;
         default = true;
         description = "Whether to set the system sendmail to postfix's.";
       };
 
       user = mkOption {
+        type = types.str;
         default = "postfix";
         description = "What to call the Postfix user (must be used only for postfix).";
       };
 
       group = mkOption {
+        type = types.str;
         default = "postfix";
         description = "What to call the Postfix group (must be used only for postfix).";
       };
 
       setgidGroup = mkOption {
+        type = types.str;
         default = "postdrop";
         description = "
           How to call postfix setgid group (for postdrop). Should
@@ -191,6 +196,7 @@ in
       };
 
       networks = mkOption {
+        type = types.nullOr (types.listOf types.str);
         default = null;
         example = ["192.168.0.1/24"];
         description = "
@@ -201,6 +207,7 @@ in
       };
 
       networksStyle = mkOption {
+        type = types.str;
         default = "";
         description = "
           Name of standard way of trusted network specification to use,
@@ -210,6 +217,7 @@ in
       };
 
       hostname = mkOption {
+        type = types.str;
         default = "";
         description ="
           Hostname to use. Leave blank to use just the hostname of machine.
@@ -218,6 +226,7 @@ in
       };
 
       domain = mkOption {
+        type = types.str;
         default = "";
         description ="
           Domain to use. Leave blank to use hostname minus first component.
@@ -225,6 +234,7 @@ in
       };
 
       origin = mkOption {
+        type = types.str;
         default = "";
         description ="
           Origin to use in outgoing e-mail. Leave blank to use hostname.
@@ -232,6 +242,7 @@ in
       };
 
       destination = mkOption {
+        type = types.nullOr (types.listOf types.str);
         default = null;
         example = ["localhost"];
         description = "
@@ -241,6 +252,7 @@ in
       };
 
       relayDomains = mkOption {
+        type = types.nullOr (types.listOf types.str);
         default = null;
         example = ["localdomain"];
         description = "
@@ -249,6 +261,7 @@ in
       };
 
       relayHost = mkOption {
+        type = types.str;
         default = "";
         description = "
           Mail relay for outbound mail.
@@ -256,6 +269,7 @@ in
       };
 
       lookupMX = mkOption {
+        type = types.bool;
         default = false;
         description = "
           Whether relay specified is just domain whose MX must be used.
@@ -263,11 +277,13 @@ in
       };
 
       postmasterAlias = mkOption {
+        type = types.str;
         default = "root";
         description = "Who should receive postmaster e-mail.";
       };
 
       rootAlias = mkOption {
+        type = types.str;
         default = "";
         description = "
           Who should receive root e-mail. Blank for no redirection.
@@ -275,6 +291,7 @@ in
       };
 
       extraAliases = mkOption {
+        type = types.lines;
         default = "";
         description = "
           Additional entries to put verbatim into aliases file, cf. man-page aliases(8).
@@ -282,6 +299,7 @@ in
       };
 
       extraConfig = mkOption {
+        type = types.str;
         default = "";
         description = "
           Extra lines to be added verbatim to the main.cf configuration file.
@@ -289,21 +307,25 @@ in
       };
 
       sslCert = mkOption {
+        type = types.str;
         default = "";
         description = "SSL certificate to use.";
       };
 
       sslCACert = mkOption {
+        type = types.str;
         default = "";
         description = "SSL certificate of CA.";
       };
 
       sslKey = mkOption {
+        type = types.str;
         default = "";
         description = "SSL key to use.";
       };
 
       recipientDelimiter = mkOption {
+        type = types.str;
         default = "";
         example = "+";
         description = "
@@ -312,6 +334,7 @@ in
       };
 
       virtual = mkOption {
+        type = types.lines;
         default = "";
         description = "
           Entries for the virtual alias map, cf. man-page virtual(8).
@@ -326,6 +349,7 @@ in
       };
 
       extraMasterConf = mkOption {
+        type = types.lines;
         default = "";
         example = "submission inet n - n - - smtpd";
         description = "Extra lines to append to the generated master.cf file.";
