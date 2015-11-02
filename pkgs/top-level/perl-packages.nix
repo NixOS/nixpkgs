@@ -815,14 +815,15 @@ let self = _self // overrides; _self = with self; {
       [ CatalystRuntime HTTPRequestAsCGI DataVisitor MROCompat ];
   };
 
-  CatalystActionREST = buildPerlPackage {
-    name = "Catalyst-Action-REST-1.17";
+  CatalystActionREST = buildPerlPackage rec {
+    name = "Catalyst-Action-REST-1.19";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FR/FREW/Catalyst-Action-REST-1.17.tar.gz;
-      sha256 = "c833c6ba2150b035b0486ff568c1e5928c14bb53d6a70758271feb969aaedde6";
+      url = "mirror://cpan/authors/id/F/FR/FREW/${name}.tar.gz";
+      sha256 = "0qiw6b932a73prrg8vw9brpdvjqm37c6wmbliyxvmz0kij6pi2qd";
     };
     buildInputs = [ TestRequires ];
-    propagatedBuildInputs = [ CatalystRuntime ClassInspector LWP MROCompat ModulePluggable Moose ParamsValidate URIFind namespaceautoclean ];
+    propagatedBuildInputs = [ CatalystRuntime ClassInspector LWP MROCompat
+      ModulePluggable Moose ParamsValidate URIFind namespaceautoclean ];
     meta = {
       description = "Automated REST Method Dispatching";
       license = "perl";
