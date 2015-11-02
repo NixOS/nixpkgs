@@ -295,14 +295,14 @@ in {
   };
 
   php56 = generic {
-    version = "5.6.14";
-    sha256 = "1c1f5dkfifhaxvl4c7cabv339lazd0znj3phbnd87ha12vqrbwin";
+    version = "5.6.15";
+    sha256 = "0f0wplfnclr6ji6r2g5q0rdnp26xi7gxdq51dljrwx2b9mf6980i";
   };
 
   php70 = lib.lowPrio (generic {
-    version = "7.0.0beta1";
-    url = "https://downloads.php.net/~ab/php-7.0.0beta1.tar.bz2";
-    sha256 = "1pj3ysfhswg2r370ivp33fv9zbcl3yvhmxgnc731k08hv6hmd984";
+    version = "7.0.0RC6";
+    url = "https://downloads.php.net/~ab/php-7.0.0RC6.tar.bz2";
+    sha256 = "0q8km0711chwj94d4mjrzdn999yw1vv4k695gj68pk791a6pcsyk";
   });
 
 }
