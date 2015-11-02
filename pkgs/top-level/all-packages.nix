@@ -5126,9 +5126,9 @@ let
     ruby = ruby_2_1_3;
   };
   bundler = callPackage ../development/interpreters/ruby/bundler.nix { };
-  bundler_HEAD = callPackage ../development/interpreters/ruby/bundler-head.nix { };
-  #  inherit buildRubyGem coreutils fetchgit;
-  #};
+  bundler_HEAD = import ../development/interpreters/ruby/bundler-head.nix {
+    inherit buildRubyGem coreutils fetchgitRecord record-playback;
+  };
   defaultGemConfig = callPackage ../development/interpreters/ruby/bundler-env/default-gem-config.nix { };
   buildRubyGem = callPackage ../development/interpreters/ruby/gem.nix { };
   bundlerEnv = callPackage ../development/interpreters/ruby/bundler-env { };
