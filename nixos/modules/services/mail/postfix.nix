@@ -380,7 +380,7 @@ in
           ${pkgs.coreutils}/bin/chmod -R ug+rwX /var/postfix/queue
           ${pkgs.coreutils}/bin/chown root:root /var/spool/mail
           ${pkgs.coreutils}/bin/chmod a+rwxt /var/spool/mail
-          ${pkgs.coreutils}/bin/ln -sf /var/spool/mail /var/mail
+          ${pkgs.coreutils}/bin/ln -sf /var/spool/mail /var/
 
           ln -sf "${pkgs.postfix}/etc/postfix/"* /var/postfix/conf
 
