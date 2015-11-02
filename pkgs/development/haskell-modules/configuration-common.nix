@@ -407,7 +407,6 @@ self: super: {
   hs2048 = dontCheck super.hs2048;
   hsbencher = dontCheck super.hsbencher;
   hsexif = dontCheck super.hsexif;
-  hsparql = dontCheck super.hsparql; # https://github.com/robstewart57/hsparql/issues/15
   hspec-server = dontCheck super.hspec-server;
   HTF = dontCheck super.HTF;
   HTF_0_12_2_3 = dontCheck super.HTF_0_12_2_3;
@@ -448,7 +447,6 @@ self: super: {
   punycode = dontCheck super.punycode;
   pwstore-cli = dontCheck super.pwstore-cli;
   quantities = dontCheck super.quantities;
-  rdf4h = dontCheck super.rdf4h; # https://github.com/robstewart57/rdf4h/issues/32
   redis-io = dontCheck super.redis-io;
   rethinkdb = dontCheck super.rethinkdb;
   Rlang-QQ = dontCheck super.Rlang-QQ;
