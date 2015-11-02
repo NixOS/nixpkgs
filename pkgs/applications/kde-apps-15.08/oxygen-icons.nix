@@ -7,7 +7,7 @@ kdeApp {
   name = "oxygen-icons";
   nativeBuildInputs = [ cmake ];
   meta = {
-    license = lib.license.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ lib.maintainers.ttuegel ];
   };
 }
