@@ -86,4 +86,18 @@ in rec {
     filesToInstall = ["u-boot"];
     patches = [ ./vexpress-Use-config_distro_bootcmd.patch ];
   };
+
+  # Non-upstream U-Boots:
+  ubootUtilitePro = common rec {
+    defconfig = "cm_fx6_config";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["cm-fx6-firmware"];
+    patches = [ ./u-boot-enable-distro-defaults-mx6.patch ];
+
+    preInstall = ''
+      dd if=/dev/zero count=500 bs=1K | tr '\000' '\377' > cm-fx6-firmware
+      dd if=SPL of=cm-fx6-firmware bs=1K seek=1 conv=notrunc
+      dd if=u-boot.img of=cm-fx6-firmware bs=1K seek=64 conv=notrunc
+    '';
+  };
 }

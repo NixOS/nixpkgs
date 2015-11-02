@@ -1,0 +1,13 @@
+diff --git a/include/configs/cm_fx6.h b/include/configs/cm_fx6.h
+index 12734a1..a5236fe 100644
+--- a/include/configs/cm_fx6.h
++++ b/include/configs/cm_fx6.h
+@@ -13,6 +13,8 @@
+ 
+ #include "mx6_common.h"
+ 
++#include <config_distro_defaults.h>
++
+ /* Machine config */
+ #define CONFIG_SYS_LITTLE_ENDIAN
+ #define CONFIG_MACH_TYPE		4273

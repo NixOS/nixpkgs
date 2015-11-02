@@ -10365,9 +10365,9 @@ let
     ubootPcduino3Nano
     ubootRaspberryPi
     ubootVersatileExpressCA9
+    ubootUtilitePro
     ;
 
-  # Non-upstream U-Boots:
   ubootSheevaplug = callPackage ../misc/uboot/sheevaplug.nix { };
 
   ubootNanonote = callPackage ../misc/uboot/nanonote.nix { };
