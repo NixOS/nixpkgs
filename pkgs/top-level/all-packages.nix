@@ -15302,6 +15302,8 @@ let
 
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
 
+  yara = callPackage ../tools/security/yara { };
+
   zdfmediathk = callPackage ../applications/video/zdfmediathk { };
 
   zopfli = callPackage ../tools/compression/zopfli { };
