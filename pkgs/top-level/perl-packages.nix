@@ -394,12 +394,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   AuthenSASL = buildPerlPackage rec {
-    name = "Authen-SASL-2.1401";
+    name = "Authen-SASL-2.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GB/GBARR/${name}.tar.gz";
-      sha256 = "1vx97xnqj5jqlh767l04jbqmsiqd5qcbw2jnbd3qh7fhh0slff6d";
+      sha256 = "02afhlrdq5hh5g8b32fa79fqq5i76qzwfqqvfi9zi57h31szl536";
     };
-    propagatedBuildInputs = [DigestHMAC];
+    propagatedBuildInputs = [ DigestHMAC ];
   };
 
   autobox = pkgs.perlPackages.Autobox;
