@@ -172,3 +172,8 @@ done)
 # Remove unneeded outputs
 [[ ! -d $out/registry/src ]] || rm -rf $out/registry/src
 [[ ! -d $out/git/checkouts ]] || rm -rf $out/git/checkouts
+
+# XXX: provide some debugging output to see find out why we are seeing
+# sporadic hash mismatches
+find $out ! -type f
+find $out -type f -exec sha256sum {} +
