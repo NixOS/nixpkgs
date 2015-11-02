@@ -523,10 +523,15 @@ let
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/appnope/${name}.tar.gz";
-      sha256 = "0wgdwp5v7r4g2bss8vbdxah12hsy2mvzxh3sil9s4iskjbz5z6cb";
+      sha256 = "8b995ffe925347a2138d7ac0fe77155e4311a0ea6d6da4f5128fe4b3cbe5ed71";
     };
 
-    meta.platforms = platforms.darwin;
+    meta = {
+      description = "Disable App Nap on OS X";
+      homepage    = https://pypi.python.org/pypi/appnope;
+      platforms   = platforms.darwin;
+      license     = licenses.bsd3;
+    };
   };
 
   apsw = buildPythonPackage rec {
@@ -4523,6 +4528,55 @@ let
     };
   };
 
+  jupyter = buildPythonPackage rec {
+    version = "1.0.0";
+    name = "jupyter-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jupyter/${name}.tar.gz";
+      sha256 = "d9dc4b3318f310e34c82951ea5d6683f67bed7def4b259fafbfe4f1beb1d8e5f";
+    };
+
+    propagatedBuildInputs = with self; [
+      notebook
+      qtconsole
+      jupyter_console
+      nbconvert
+      ipykernel
+      ipywidgets
+    ];
+
+    meta = {
+      description = "Installs all the Jupyter components in one go";
+      homepage = "http://jupyter.org/";
+      license = licenses.bsd3;
+      platforms = platforms.all;
+    };
+  };
+
+  jupyter_console = buildPythonPackage rec {
+    version = "4.0.3";
+    name = "jupyter_console-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jupyter_console/${name}.tar.gz";
+      sha256 = "555be6963a8f6431fbe1d424c7ffefee90824758058e4c9a2ab3aa045948eb85";
+    };
+
+    propagatedBuildInputs = with self; [
+      jupyter_client
+      ipython
+      ipykernel
+    ];
+
+    meta = {
+      description = "Jupyter terminal console";
+      homepage = "http://jupyter.org/";
+      license = licenses.bsd3;
+      platforms = platforms.all;
+    };
+  };
+
   lti = buildPythonPackage rec {
     version = "0.4.0";
     name = "PyLTI-${version}";
@@ -7931,6 +7985,10 @@ let
       url = "https://pypi.python.org/packages/source/i/ipython/${name}.tar.gz";
       sha256 = "2fd276c407fb0b29e5d4884a7029a2c27fef0a06fd7a34924cce69b7cc43f4da";
     };
+
+    prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace setup.py --replace "'gnureadline'" " "
+    '';
 
     buildInputs = with self; [nose] ++ optionals isPy27 [mock];
 
