@@ -2,6 +2,7 @@
 , alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig, zlib
 , setJavaClassPath
 , minimal ? false
+, enableInfinality ? true # font rendering patch
 }:
 
 let
@@ -80,7 +81,10 @@ let
       ./fix-java-home-jdk8.patch
       ./read-truststore-from-env-jdk8.patch
       ./currency-date-range-jdk8.patch
-    ];
+    ] ++ (if enableInfinality then [
+      ./004_add-fontconfig.patch
+      ./005_enable-infinality.patch
+    ] else []);
 
     preConfigure = ''
       chmod +x configure
