@@ -1028,11 +1028,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CatalystPluginAuthentication = buildPerlPackage {
-    name = "Catalyst-Plugin-Authentication-0.10022";
+  CatalystPluginAuthentication = buildPerlPackage rec {
+    name = "Catalyst-Plugin-Authentication-0.10023";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Authentication-0.10022.tar.gz;
-      sha256 = "1yxx89j6q10ydmwwhv3zq68gwndcnh4vvdqiv7az5w2rf2w1nvip";
+      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
+      sha256 = "0v6hb4r1wv3djrnqvnjcn3xx1scgqzx8nyjdg9lfc1ybvamrl0rn";
     };
     buildInputs = [ ClassMOP Moose TestException ];
     propagatedBuildInputs = [ CatalystPluginSession CatalystRuntime ClassInspector Moose MooseXEmulateClassAccessorFast MROCompat namespaceautoclean StringRewritePrefix TryTiny ];
