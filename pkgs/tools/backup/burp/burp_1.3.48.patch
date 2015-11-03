@@ -1,13 +1,3 @@
-diff -Naur burp~/CHANGELOG burp/CHANGELOG
---- burp~/CHANGELOG	2015-11-01 21:14:52.621376413 +0000
-+++ burp/CHANGELOG	2015-11-01 21:31:44.718110435 +0000
-@@ -1,3 +1,6 @@
-+2015-11-01 NixOS Patch:
-+  * remove dependency on /var and use localstatedir instead
-+
- 2014-01-27 Changes in burp-1.3.48:
-   * Bug fix for restoring correct file times on Windows clients.
- 
 diff -Naur burp~/Makefile.in burp/Makefile.in
 --- burp~/Makefile.in	2015-11-01 21:14:52.621376413 +0000
 +++ burp/Makefile.in	2015-11-01 22:09:25.098997115 +0000
