@@ -903,18 +903,18 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystControllerHTMLFormFu = buildPerlPackage rec {
-    name = "Catalyst-Controller-HTML-FormFu-0.03007";
+    name = "Catalyst-Controller-HTML-FormFu-1.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CF/CFRANKS/${name}.tar.gz";
-      sha256 = "1vrd79d0nbqkana5q483fgsr41idlfgjhf7fpd3hc056z5nq8iyn";
+      sha256 = "0b7if9sz23i4qv0yl0nrv6myfb6db1a1ivm9qp9wdk8nfwl9ncl4";
     };
-    propagatedBuildInputs = [
-      CatalystRuntime CatalystActionRenderView CatalystViewTT
-      CatalystPluginConfigLoader ConfigGeneral
-      CatalystComponentInstancePerContext Moose
-      RegexpAssemble TestWWWMechanize
-      TestWWWMechanizeCatalyst HTMLFormFu
-    ];
+    buildInputs = [ CatalystActionRenderView CatalystPluginSession
+      CatalystPluginSessionStateCookie CatalystPluginSessionStoreFile
+      CatalystViewTT TemplateToolkit TestAggregate TestWWWMechanize
+      TestWWWMechanizeCatalyst ];
+    propagatedBuildInputs = [ CatalystComponentInstancePerContext CatalystRuntime
+      ConfigAny HTMLFormFu Moose MooseXAttributeChained RegexpAssemble TaskWeaken
+      namespaceautoclean ];
   };
 
   CatalystDevel = buildPerlPackage {
