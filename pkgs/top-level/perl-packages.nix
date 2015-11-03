@@ -970,11 +970,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CatalystManual = buildPerlPackage {
-    name = "Catalyst-Manual-5.9007";
+  CatalystManual = buildPerlPackage rec {
+    name = "Catalyst-Manual-5.9009";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Catalyst-Manual-5.9007.tar.gz;
-      sha256 = "140526pzzqc1vyxkk9fxvp9ds3kk2rncf8nf7iz0adlr219pkg3j";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "1z6l0vdjxzisqgb5w447m3m73sfvkhwm7qw2l1dpcdng3zaypllh";
     };
     meta = {
       description = "The Catalyst developer's manual";
