@@ -1,5 +1,5 @@
 { stdenv, fetchurl, zlib, boost, protobuf, ncurses, pkgconfig, IOTty
-, makeWrapper, perl, openssl }:
+, makeWrapper, perl, openssl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "mosh-1.2.5";
@@ -9,10 +9,19 @@ stdenv.mkDerivation rec {
     sha256 = "1qsb0y882yfgwnpy6f98pi5xqm6kykdsrxzvaal37hs7szjhky0s";
   };
 
-  buildInputs = [ boost protobuf ncurses zlib pkgconfig IOTty makeWrapper perl openssl ];
+  buildInputs = [
+    boost protobuf ncurses zlib pkgconfig IOTty makeWrapper perl openssl
+  ] ++ stdenv.lib.optional stdenv.isDarwin autoreconfHook;
+
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    # look for forkpty in libSystem, not libutil
+    substituteInPlace configure.ac \
+      --replace '[util]' '[System]' \
+      --replace 'LIBUTIL="-lutil"' 'LIBUTIL="-lSystem"'
+  '';
 
   postInstall = ''
-      wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
+    wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
   '';
 
   meta = {
