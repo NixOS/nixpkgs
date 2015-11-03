@@ -1112,10 +1112,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystPluginConfigLoader = buildPerlPackage rec {
-    name = "Catalyst-Plugin-ConfigLoader-0.33";
+    name = "Catalyst-Plugin-ConfigLoader-0.34";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
-      sha256 = "0m18yqcwx5fzz4lrd5db8x8wyir1061pclv5jb9g963wbg4zk43g";
+      sha256 = "19j7p4v7mbx6wrmpvmrnd974apx7hdl2s095ga3b9zcbdrl77h5q";
     };
     propagatedBuildInputs = [CatalystRuntime DataVisitor ConfigAny MROCompat];
   };
