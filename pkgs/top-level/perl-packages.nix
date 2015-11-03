@@ -933,11 +933,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CatalystDispatchTypeRegex = buildPerlModule {
-    name = "Catalyst-DispatchType-Regex-5.90033";
+  CatalystDispatchTypeRegex = buildPerlModule rec {
+    name = "Catalyst-DispatchType-Regex-5.90035";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MG/MGRIMES/Catalyst-DispatchType-Regex-5.90033.tar.gz;
-      sha256 = "0rdi8jxj9fz81l9pxl7q190v69vkgxgixcpals555xyiafnqk4vy";
+      url = "mirror://cpan/authors/id/M/MG/MGRIMES/${name}.tar.gz";
+      sha256 = "06jq1lmpq88rmp9zik5gqczg234xac0hiyc3l698iif7zsgcyb80";
     };
     propagatedBuildInputs = [ Moose TextSimpleTable ];
     meta = {
