@@ -237,25 +237,25 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "14.1.5";
-    build = "IC-141.2735.5";
+    version = "15.0";
+    build = "IC-143.381";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "196rijl2k24ysjihdsisfy8hjl21wcn98fn8wagvxsvjf7anyg9k";
+      sha256 = "0d39ipwji76gkc7w5bcl7a94kdz5cwmcnwmvq1lzm06v43jjq51s";
     };
   };
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "14.1.5";
-    build = "IU-141.2735.5";
+    version = "15.0";
+    build = "IU-143.381";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "0wxb7m0k3kbjnr42rwzsk4g09qxqsmnpsdj769azamvsr4p904k9";
+      sha256 = "1hw8hqpzkdlp0ilax6anzjybhmjb40s16jblyplqpah065pc8rja";
     };
   };
 
@@ -273,25 +273,25 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "4.5.4";
-    build = "141.2569";
+    version = "5.0";
+    build = "143.589";
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download-cf.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0a2208rjcvcm9dww317clwiil3ddza3qq9wqkvr0rrcfp1739pbb";
+      sha256 = "01q51m6rpyw296imiglbadzfr0r91wvyrxdid683yl7f5v73wzwh";
     };
   };
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "4.5.4";
-    build = "141.2569";
+    version = "5.0";
+    build = "143.589";
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download-cf.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1dy64myih92kxmi6h9y142dbmmwwphs2n3vswyg53881g5i0lfhd";
+      sha256 = "16lwg00dl03gwj4dqihdrn15p1fy8513srw2dslna1w1glfajv06";
     };
   };
 
