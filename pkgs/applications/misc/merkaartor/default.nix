@@ -1,4 +1,4 @@
-{stdenv, fetchurl, qt4, boost, proj, gdal_1_11_2}:
+{stdenv, fetchurl, qt4, boost, proj, gdal_1_11}:
 
 stdenv.mkDerivation rec {
   name = "merkaartor-0.18.1";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     qmake -makefile PREFIX=$out
   '';
 
-  buildInputs = [ qt4 boost proj gdal_1_11_2 ];
+  buildInputs = [ qt4 boost proj gdal_1_11 ];
 
   meta = {
     description = "An openstreetmap editor";
