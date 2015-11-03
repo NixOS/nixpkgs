@@ -10202,6 +10202,12 @@ let
     buildInputs = [ pkgs.gfortran self.nose ];
     propagatedBuildInputs = [ support.openblas ];
 
+    # This patch removes the test of large file support, which takes forever
+    # and can cause the machine to run out of disk space when run.
+    patchPhase = ''
+      patch -p0 < ${../development/python-modules/numpy-no-large-files.patch}
+    '';
+
     meta = {
       description = "Scientific tools for Python";
       homepage = "http://numpy.scipy.org/";
