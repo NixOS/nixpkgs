@@ -1,0 +1,22 @@
+diff -Naur burp~/CHANGELOG burp/CHANGELOG
+--- burp~/CHANGELOG	2015-11-01 21:14:52.621376413 +0000
++++ burp/CHANGELOG	2015-11-01 21:31:44.718110435 +0000
+@@ -1,3 +1,6 @@
++2015-11-01 NixOS Patch:
++  * remove dependency on /var and use localstatedir instead
++
+ 2014-01-27 Changes in burp-1.3.48:
+   * Bug fix for restoring correct file times on Windows clients.
+ 
+diff -Naur burp~/Makefile.in burp/Makefile.in
+--- burp~/Makefile.in	2015-11-01 21:14:52.621376413 +0000
++++ burp/Makefile.in	2015-11-01 22:09:25.098997115 +0000
+@@ -90,8 +90,6 @@
+ 	$(MKDIR) $(DESTDIR)$(sbindir)
+ 	$(MKDIR) $(DESTDIR)$(sysconfdir)
+ 	$(MKDIR) $(DESTDIR)$(sysconfdir)/CA-client
+-	$(MKDIR) $(DESTDIR)/var/run
+-	$(MKDIR) $(DESTDIR)/var/spool/burp
+ 	@if [ ! -d $(DESTDIR)$(sysconfdir)/clientconfdir ] ; then $(MKDIR) $(DESTDIR)$(sysconfdir)/clientconfdir ; cp configs/server/clientconfdir/testclient $(DESTDIR)$(sysconfdir)/clientconfdir/testclient ; fi
+ 	@if [ ! -d $(DESTDIR)$(sysconfdir)/clientconfdir/incexc ] ; then $(MKDIR) $(DESTDIR)$(sysconfdir)/clientconfdir/incexc ; cp configs/server/clientconfdir/incexc $(DESTDIR)$(sysconfdir)/clientconfdir/incexc/example ; fi
+ 	@if [ ! -d $(DESTDIR)$(sysconfdir)/autoupgrade/client ] ; then $(MKDIR) $(DESTDIR)$(sysconfdir)/autoupgrade/client ; fi
