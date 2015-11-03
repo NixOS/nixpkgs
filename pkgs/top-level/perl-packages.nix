@@ -10625,6 +10625,21 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ LogTrace ];
   };
 
+  TestAggregate = buildPerlPackage rec {
+    name = "Test-Aggregate-0.373";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RW/RWSTAUNER/${name}.tar.gz";
+      sha256 = "00d218daa7ba29d82bcf364b61d391d3a14356cf3bcb4b12144270108a14fd14";
+    };
+    buildInputs = [ TestMost TestTrap ];
+    propagatedBuildInputs = [ TestNoWarnings ];
+    meta = {
+      description = "Aggregate C<*.t> tests to make them run faster";
+      license = "perl";
+    };
+  };
+
+
   TestBase = buildPerlPackage rec {
     name = "Test-Base-0.88";
     src = fetchurl {
