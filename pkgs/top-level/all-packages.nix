@@ -1035,6 +1035,10 @@ let
     par2Support = (config.bup.par2Support or false);
   };
 
+  burp_1_3 = callPackage ../tools/backup/burp/1.3.48.nix { };
+
+  burp = callPackage ../tools/backup/burp { };
+
   byzanz = callPackage ../applications/video/byzanz {};
 
   ori = callPackage ../tools/backup/ori { };
