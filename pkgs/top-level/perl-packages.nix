@@ -1159,11 +1159,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CatalystPluginSession = buildPerlPackage {
-    name = "Catalyst-Plugin-Session-0.39";
+  CatalystPluginSession = buildPerlPackage rec {
+    name = "Catalyst-Plugin-Session-0.40";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Plugin-Session-0.39.tar.gz;
-      sha256 = "0m4a003qgz7848iyckwbigg2vw3kmfxggh1razrnzxrbz3n6x5gi";
+      url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK/${name}.tar.gz";
+      sha256 = "171vi9xcl775scjaw4fcfdmqvz0rb1nr0xxg2gb3ng6bjzpslhgv";
     };
     buildInputs = [ TestDeep TestException TestWWWMechanizePSGI ];
     propagatedBuildInputs = [ CatalystRuntime Moose MooseXEmulateClassAccessorFast MROCompat namespaceclean ObjectSignature ];
