@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     description = "Console-based network statistics utility for Linux";
     maintainers = with maintainers; [ nckx ];
+    platforms = platforms.linux;
   };
 }
