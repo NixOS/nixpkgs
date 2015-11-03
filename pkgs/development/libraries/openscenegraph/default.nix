@@ -1,6 +1,6 @@
 x@{builderDefsPackage
   , cmake, giflib, libjpeg, libtiff, lib3ds, freetype, libpng
-  , coin3d, jasper, gdal_1_11_2, xproto, libX11, libXmu, freeglut, mesa
+  , coin3d, jasper, gdal_1_11, xproto, libX11, libXmu, freeglut, mesa
   , doxygen, ffmpeg, xineLib, unzip, zlib, openal, libxml2
   , curl, a52dec, faad2, gdk_pixbuf, pkgconfig, kbproto, SDL
   , qt4, poppler, librsvg, gtk
