@@ -1043,12 +1043,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystPluginAuthorizationACL = buildPerlPackage rec {
-    name = "Catalyst-Plugin-Authorization-ACL-0.15";
+    name = "Catalyst-Plugin-Authorization-ACL-0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RK/RKITOVER/${name}.tar.gz";
-      sha256 = "12pj3c8hhm72jzyj83pjmxib0l48s3954spln97n3s0nsvliya98";
+      sha256 = "0z4328rr6l9xi45hyv6q9pwwamp0864q6skcp29jrz9f919ycdra";
     };
-    propagatedBuildInputs = [CatalystRuntime ClassThrowable];
+    propagatedBuildInputs = [ CatalystRuntime ClassThrowable ];
   };
 
   CatalystPluginAuthorizationRoles = buildPerlPackage {
