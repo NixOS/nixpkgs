@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0rb927zknk9kmhprd8rdr4azql4gn2dp75a36iazx2xhkbqhvind";
   };
 
+  patches = [ ./CVE-2015-7747.patch ];
+
   meta = with stdenv.lib; {
     description = "Library for reading and writing audio files in various formats";
     homepage    = http://www.68k.org/~michael/audiofile/; 
