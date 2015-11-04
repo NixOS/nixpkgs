@@ -1,0 +1,11 @@
+diff --git a/arch/arm/configs/bcm2709_defconfig b/arch/arm/configs/bcm2709_defconfig
+index 1413673..eb3d12b 100644
+--- a/arch/arm/configs/bcm2709_defconfig
++++ b/arch/arm/configs/bcm2709_defconfig
+@@ -1,6 +1,5 @@
+ # CONFIG_ARM_PATCH_PHYS_VIRT is not set
+ CONFIG_PHYS_OFFSET=0
+-CONFIG_LOCALVERSION="-v7"
+ # CONFIG_LOCALVERSION_AUTO is not set
+ CONFIG_SYSVIPC=y
+ CONFIG_POSIX_MQUEUE=y
