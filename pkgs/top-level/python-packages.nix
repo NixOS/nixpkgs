@@ -10438,13 +10438,13 @@ let
   };
 
   openpyxl = buildPythonPackage rec {
-    version = "2.2.4";
+    version = "2.2.6";
     name = "openpyxl-${version}";
 
     src = pkgs.fetchhg {
       url = "https://bitbucket.org/openpyxl/openpyxl";
       rev = "${version}";
-      sha256 = "1g9imbg4sjfyv5sqg2s7h4svhdmbnvq16hvc1a8jpaqq8nc2vjj2";
+      sha256 = "159cg3njsybjdmwr0458qc5k0m7hbq41h3fczxflc0wnh7ancrdf";
     };
 
     buildInputs = with self; [ pytest ];
