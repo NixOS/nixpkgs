@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pcre, libiconv }:
+{ stdenv, fetchurl, pcre, libiconv, perl }:
 
-let version = "2.21"; in
+let version = "2.22"; in
 
 stdenv.mkDerivation {
   name = "gnugrep-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/grep/grep-${version}.tar.xz";
-    sha256 = "1pp5n15qwxrw1pibwjhhgsibyv5cafhamf8lwzjygs6y00fa2i2j";
+    sha256 = "1srn321x7whlhs5ks36zlcrrmj4iahll8fxwsh1vbz3v04px54fa";
   };
 
-  patches = [ ./cve-2015-1345.patch ];
-
+  # Perl is needed for testing
+  nativeBuildInputs = [ perl ];
   buildInputs = [ pcre libiconv ];
 
   # cygwin: FAIL: multibyte-white-space
