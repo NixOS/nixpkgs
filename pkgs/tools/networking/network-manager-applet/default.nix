@@ -1,7 +1,7 @@
 { stdenv, fetchurl, intltool, pkgconfig, libglade, networkmanager, gnome3
 , libnotify, libsecret, dbus_glib, polkit, isocodes
 , mobile_broadband_provider_info, glib_networking, gsettings_desktop_schemas
-, makeWrapper, udev, hicolor_icon_theme }:
+, makeWrapper, udev, libgudev, hicolor_icon_theme }:
 
 let
   pn = "network-manager-applet";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gnome3.gtk libglade networkmanager libnotify libsecret dbus_glib gsettings_desktop_schemas
-    polkit isocodes makeWrapper udev gnome3.gconf gnome3.libgnome_keyring
+    polkit isocodes makeWrapper udev libgudev gnome3.gconf gnome3.libgnome_keyring
   ];
 
   nativeBuildInputs = [ intltool pkgconfig ];

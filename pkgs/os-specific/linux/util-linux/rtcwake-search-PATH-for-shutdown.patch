@@ -4,10 +4,10 @@ distros anyway).
 
   -- nckx <tobias.geerinckx.rice@gmail.com>
 
-diff -Naur a/include/pathnames.h b/include/pathnames.h
---- a/include/pathnames.h	2014-09-16 14:37:06.138551680 +0200
-+++ b/include/pathnames.h	2015-01-01 20:41:02.510948314 +0100
-@@ -43,7 +43,7 @@
+diff -ru util-linux-2.27-orig/include/pathnames.h util-linux-2.27/include/pathnames.h
+--- util-linux-2.27-orig/include/pathnames.h	2015-06-29 13:13:14.669847478 +0200
++++ util-linux-2.27/include/pathnames.h	2015-10-07 20:09:17.401022602 +0200
+@@ -54,7 +54,7 @@
  #define _PATH_INITTAB		"/etc/inittab"
  #define _PATH_RC		"/etc/rc"
  #define _PATH_REBOOT		"/sbin/reboot"
@@ -16,15 +16,15 @@ diff -Naur a/include/pathnames.h b/include/pathnames.h
  #define _PATH_SINGLE		"/etc/singleboot"
  #define _PATH_SHUTDOWN_CONF	"/etc/shutdown.conf"
  
-diff -Naur a/sys-utils/rtcwake.c b/sys-utils/rtcwake.c
---- a/sys-utils/rtcwake.c	2014-10-24 11:21:20.447389309 +0200
-+++ b/sys-utils/rtcwake.c	2015-01-01 20:57:59.398911209 +0100
-@@ -582,7 +582,7 @@
+diff -ru util-linux-2.27-orig/sys-utils/rtcwake.c util-linux-2.27/sys-utils/rtcwake.c
+--- util-linux-2.27-orig/sys-utils/rtcwake.c	2015-08-05 11:32:44.453821232 +0200
++++ util-linux-2.27/sys-utils/rtcwake.c	2015-10-07 20:09:37.834032536 +0200
+@@ -576,7 +576,7 @@
+ 		arg[i++] = "now";
  		arg[i]   = NULL;
- 
- 		if (!dryrun) {
+ 		if (!ctl.dryrun) {
 -			execv(arg[0], arg);
 +			execvp(arg[0], arg);
- 
  			warn(_("failed to execute %s"), _PATH_SHUTDOWN);
  			rc = EXIT_FAILURE;
+ 		}

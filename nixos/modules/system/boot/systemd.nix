@@ -69,6 +69,7 @@ let
       "systemd-journal-flush.service"
       "systemd-journal-gatewayd.socket"
       "systemd-journal-gatewayd.service"
+      "systemd-journald-audit.socket"
       "systemd-journald-dev-log.socket"
       "syslog.socket"
 
@@ -99,7 +100,7 @@ let
       # Maintaining state across reboots.
       "systemd-random-seed.service"
       "systemd-backlight@.service"
-      "systemd-rfkill@.service"
+      "systemd-rfkill.service"
 
       # Hibernate / suspend.
       "hibernate.target"
@@ -109,8 +110,6 @@ let
       "systemd-hibernate.service"
       "systemd-suspend.service"
       "systemd-hybrid-sleep.service"
-      "systemd-shutdownd.socket"
-      "systemd-shutdownd.service"
 
       # Reboot stuff.
       "reboot.target"
@@ -758,7 +757,6 @@ in
     systemd.services."systemd-rfkill@".restartIfChanged = false;
     systemd.services."user@".restartIfChanged = false;
     systemd.services.systemd-journal-flush.restartIfChanged = false;
-    systemd.services.systemd-journald.restartIfChanged = false; # FIXME: shouldn't be necessary with systemd 219
     systemd.services.systemd-random-seed.restartIfChanged = false;
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;

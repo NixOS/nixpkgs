@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, file, makeWrapper
-, openssl, curl, libevent, inotify-tools, systemd
+, openssl, curl, libevent, inotify-tools, systemd, zlib
 , enableGTK3 ? false, gtk3
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sxr1magqb5s26yvr5yhs1f7bmir8gl09niafg64lhgfnhv1kz59";
   };
 
-  buildInputs = [ pkgconfig intltool file openssl curl libevent inotify-tools ]
+  buildInputs = [ pkgconfig intltool file openssl curl libevent inotify-tools zlib ]
     ++ optionals enableGTK3 [ gtk3 makeWrapper ]
     ++ optional stdenv.isLinux systemd;
 
