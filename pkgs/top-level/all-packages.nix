@@ -14201,7 +14201,9 @@ let
 
           bluedevil = callPackage ../tools/bluetooth/bluedevil { };
 
-          calligra = callPackage ../applications/office/calligra { eigen = eigen2; };
+          calligra = callPackage ../applications/office/calligra {
+            vc = vc_0_7;
+          };
 
           choqok = callPackage ../applications/networking/instant-messengers/choqok { };
 
