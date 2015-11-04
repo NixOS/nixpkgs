@@ -16469,6 +16469,7 @@ let
       sha256 = "052i5c7cgvs5iv011dkq3r8d6jycg2gjjg3907ijsbdlq8q52vhs";
     };
 
+    patches = [ ../development/python-modules/sphinx-1.3.1-pr-1946.patch ];
     LC_ALL = "en_US.UTF-8";
     checkPhase = ''
       PYTHON=${python.executable} make test
