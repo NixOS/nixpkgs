@@ -1685,7 +1685,7 @@ let
     '';
 
     buildInputs = [ self.nose self.mock ];
-    propagatedBuildInputs = [ self.requests self.httpretty ];
+    propagatedBuildInputs = [ self.requests2 self.httpretty ];
 
     meta = {
       homepage = https://github.com/boto/boto;
@@ -7008,7 +7008,7 @@ let
       md5 = "50b02560a49fe928c90c53a49791f621";
     };
 
-    buildInputs = with self; [ tornado requests httplib2 sure nose coverage certifi ];
+    buildInputs = with self; [ tornado requests2 httplib2 sure nose coverage certifi ];
 
     propagatedBuildInputs = with self; [ urllib3 ];
 
