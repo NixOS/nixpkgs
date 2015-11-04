@@ -1261,7 +1261,7 @@ let
   cycler = buildPythonPackage rec {
     name = "cycler-${version}";
     version = "0.9.0";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/C/Cycler/${name}.tar.gz";
       sha256 = "96dc4ddf27ef62c09990c6196ac1167685e89168042ec0ae4db586de023355bc";
@@ -11826,7 +11826,8 @@ let
       bottleneck
       sqlalchemy9
       lxml
-      html5lib
+      # Disabling this because an upstream dependency, pep8, is broken on v3.5.
+      (if isPy35 then null else html5lib)
       modules.sqlite3
       beautifulsoup4
     ] ++ optional isDarwin pkgs.darwin.adv_cmds; # provides the locale command
@@ -11850,12 +11851,19 @@ let
     # The `-e` flag disables a few problematic tests.
     # https://github.com/pydata/pandas/issues/11169
     # https://github.com/pydata/pandas/issues/11287
-    checkPhase = ''
+    # The test_sql checks fail specifically on python 3.5; see here:
+    # https://github.com/pydata/pandas/issues/11112
+    checkPhase = let
+      testsToSkip = ["test_data" "test_excel" "test_html" "test_json"
+                     "test_frequencies" "test_frame"
+                     "test_read_clipboard_infer_excel"] ++
+                    optional isPy35 "test_sql";
+    in ''
       runHook preCheck
       # The flag `-A 'not network'` will disable tests that use internet.
       # The `-e` flag disables a few problematic tests.
       ${python.executable} setup.py nosetests -A 'not network' --stop \
-        -e 'test_data|test_excel|test_html|test_json|test_frequencies|test_frame|test_read_clipboard_infer_excel' --verbosity=3
+        -e '${concatStringsSep "|" testsToSkip}' --verbosity=3
 
       runHook postCheck
     '';
