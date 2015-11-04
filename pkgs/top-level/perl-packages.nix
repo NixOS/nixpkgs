@@ -1284,11 +1284,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CatalystViewJSON = buildPerlPackage {
-    name = "Catalyst-View-JSON-0.33";
+  CatalystViewJSON = buildPerlPackage rec {
+    name = "Catalyst-View-JSON-0.35";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Catalyst-View-JSON-0.33.tar.gz;
-      sha256 = "03yda9skcfnwkm4hf2a3y7g2rdjdia5hzfnll0h7z4wiyb8kxfii";
+      url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK//${name}.tar.gz";
+      sha256 = "184pyghlrkl7p387bnyvswi2d9myvdg4v3lax6xrd59shskvpmkm";
     };
     buildInputs = [ JSON ];
     propagatedBuildInputs = [ CatalystRuntime JSONAny MROCompat YAML ];
