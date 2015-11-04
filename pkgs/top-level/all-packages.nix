@@ -8433,6 +8433,10 @@ let
 
   vamp = callPackage ../development/libraries/audio/vamp { };
 
+  vc = callPackage ../development/libraries/vc { };
+
+  vc_0_7 = callPackage ../development/libraries/vc/0.7.nix { };
+
   vcdimager = callPackage ../development/libraries/vcdimager { };
 
   vid-stab = callPackage ../development/libraries/vid-stab { };
