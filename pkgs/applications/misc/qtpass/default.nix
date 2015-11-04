@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "qtpass-${version}";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchurl {
     url = "https://github.com/IJHack/qtpass/archive/v${version}.tar.gz";
-    sha256 = "a61a29ddd5a874fcdcb915dbc9d91e10787be22d794cc8ebb2ba3cff27030c67";
+    sha256 = "c6bcb1792f22c48844b49c5bd05f3bf5c1c2ebad249246797a273383c9f08f8c";
   };
 
   buildInputs = [ git gnupg makeWrapper pass qt5.base ];
