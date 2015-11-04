@@ -11,11 +11,11 @@ assert glSupport -> mesa_noglu != null;
 with { inherit (stdenv.lib) optional optionals; };
 
 stdenv.mkDerivation rec {
-  name = "cairo-1.14.2";
+  name = "cairo-1.14.4";
 
   src = fetchurl {
     url = "http://cairographics.org/releases/${name}.tar.xz";
-    sha1 = "c8da68aa66ca0855b5d0ff552766d3e8679e1d24";
+    sha256 = "05p75r914d809711yg9rapgmmi4hymzbarhd3w0yrfadhiy9rv7n";
   };
 
   nativeBuildInputs = [ pkgconfig libiconv ] ++ libintlOrEmpty;
