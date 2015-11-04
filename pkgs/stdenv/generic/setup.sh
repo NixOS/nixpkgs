@@ -450,7 +450,7 @@ substituteAllInPlace() {
 # the environment used for building.
 dumpVars() {
     if [ "$noDumpEnvVars" != 1 ]; then
-        export > "$NIX_BUILD_TOP/env-vars" || true
+        export > "$NIX_BUILD_TOP/env-vars"
     fi
 }
 
