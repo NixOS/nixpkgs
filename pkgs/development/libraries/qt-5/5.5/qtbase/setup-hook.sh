@@ -18,22 +18,25 @@ addQtModule() {
             fi
         done
     fi
+}
 
-    if [[ -d "$1/lib/qt5/plugins" ]]; then
-        addToSearchPath QT_PLUGIN_PATH "$1/lib/qt5/plugins"
-    fi
-
-    if [[ -d "$1/lib/qt5/imports" ]]; then
-        addToSearchPath QML_IMPORT_PATH "$1/lib/qt5/imports"
-    fi
-
-    if [[ -d "$1/lib/qt5/qml" ]]; then
-        addToSearchPath QML2_IMPORT_PATH "$1/lib/qt5/qml"
-    fi
-
-    if [[ -d "$1/share" ]]; then
-        addToSearchPath XDG_DATA_DIRS "$1/share"
-    fi
+propagateRuntimeDeps() {
+    local propagated
+    for dir in "etc/xdg" "lib/qt5/plugins" "lib/qt5/qml" "lib/qt5/imports" "share"; do
+        if [[ -d "$1/$dir" ]]; then
+            propagated=
+            for pkg in $propagatedBuildInputs; do
+                if [[ "z$pkg" == "z$1" ]]; then
+                    propagated=1
+                    break
+                fi
+            done
+            if [[ -z $propagated ]]; then
+                propagatedBuildInputs="$propagatedBuildInputs $1"
+            fi
+            break
+        fi
+    done
 }
 
 rmQtModules() {
@@ -60,17 +63,9 @@ setQMakePath() {
     export PATH="$qtOut/bin${PATH:+:}$PATH"
 }
 
-wrapQtProgram() {
-    wrapProgram "$1" \
-        --set QT_PLUGIN_PATH "$QT_PLUGIN_PATH" \
-        --set QML_IMPORT_PATH "$QML_IMPORT_PATH" \
-        --set QML2_IMPORT_PATH "$QML2_IMPORT_PATH" \
-        "$@"
-}
-
 qtOut=""
 if [[ -z "$NIX_QT_SUBMODULE" ]]; then
-    qtOut="$PWD/qmake-$name"
+    qtOut=`mktemp -d`
 else
     qtOut=$out
 fi
@@ -88,12 +83,8 @@ Documentation = share/doc/qt5
 EOF
 
 export QMAKE="$qtOut/bin/qmake"
-addToSearchPath QT_PLUGIN_PATH "$out/lib/qt5/plugins"
-addToSearchPath QML_IMPORT_PATH "$out/lib/qt5/imports"
-addToSearchPath QML2_IMPORT_PATH "$out/lib/qt5/qml"
-addToSearchPath XDG_DATA_DIRS "$out/share"
 
-envHooks+=(addQtModule)
+envHooks+=(addQtModule propagateRuntimeDeps)
 preConfigurePhases+=(setQMakePath)
 
 if [[ -n "$NIX_QT_SUBMODULE" ]]; then

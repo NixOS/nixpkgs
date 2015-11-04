@@ -21,25 +21,10 @@ let
   srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
   mirror = "mirror://kde";
 
-  kdeApp = args:
-    let
-      inherit (args) name;
-      sname = args.sname or name;
-      inherit (srcs."${sname}") src version;
-    in stdenv.mkDerivation (args // {
-      name = "${name}-${version}";
-      inherit src;
-
-      cmakeFlags =
-        (args.cmakeFlags or [])
-        ++ [ "-DBUILD_TESTING=OFF" ]
-        ++ lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";
-
-      meta = {
-        platforms = lib.platforms.linux;
-        homepage = "http://www.kde.org";
-      } // (args.meta or {});
-    });
+  kdeApp = import ./kde-app.nix {
+    inherit stdenv lib;
+    inherit debug srcs;
+  };
 
   packages = self: with self; {
     kdelibs = callPackage ./kdelibs { inherit (pkgs) attica phonon; };
@@ -60,9 +45,12 @@ let
     libkexiv2 = callPackage ./libkexiv2.nix {};
     libkipi = callPackage ./libkipi.nix {};
     okular = callPackage ./okular.nix {};
+    oxygen-icons = callPackage ./oxygen-icons.nix {};
     print-manager = callPackage ./print-manager.nix {};
+
+    l10n = pkgs.recurseIntoAttrs (import ./l10n.nix { inherit callPackage lib pkgs; });
   };
 
-  newScope = scope: pkgs.kf514.newScope ({ inherit kdeApp; } // scope);
+  newScope = scope: pkgs.kf515.newScope ({ inherit kdeApp; } // scope);
 
 in lib.makeScope newScope packages

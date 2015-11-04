@@ -17,10 +17,12 @@ kdeApp {
   ];
   buildInputs = [
     kxmlgui
+    dolphin
+  ];
+  propagatedBuildInputs = [
+    kdelibs4support
     ki18n
     kio
-    kdelibs4support
-    dolphin
   ];
   meta = {
     license = [ lib.licenses.gpl2 ];

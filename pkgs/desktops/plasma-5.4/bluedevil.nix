@@ -1,39 +1,23 @@
-{ plasmaPackage
-, extra-cmake-modules
-, bluez-qt
-, kcoreaddons
-, kdbusaddons
-, kded
-, ki18n
-, kiconthemes
-, kio
-, knotifications
-, kwidgetsaddons
-, kwindowsystem
-, plasma-framework
-, qtdeclarative
-, shared_mime_info
+{ plasmaPackage, extra-cmake-modules, bluez-qt, kcoreaddons
+, kdbusaddons, kded, ki18n, kiconthemes, kio, knotifications
+, kwidgetsaddons, kwindowsystem, makeQtWrapper, plasma-framework
+, qtdeclarative, shared_mime_info
 }:
 
 plasmaPackage {
   name = "bluedevil";
-  nativeBuildInputs = [ extra-cmake-modules shared_mime_info ];
+  nativeBuildInputs = [
+    extra-cmake-modules makeQtWrapper shared_mime_info
+  ];
   buildInputs = [
-    bluez-qt
-    kcoreaddons
-    kdbusaddons
-    kded
-    ki18n
-    kiconthemes
-    kio
-    knotifications
+    kcoreaddons kdbusaddons kded kiconthemes knotifications
     kwidgetsaddons
-    kwindowsystem
-    plasma-framework
-    qtdeclarative
+  ];
+  propagatedBuildInputs = [
+    bluez-qt ki18n kio kwindowsystem plasma-framework qtdeclarative
   ];
   postInstall = ''
-    wrapKDEProgram "$out/bin/bluedevil-wizard"
-    wrapKDEProgram "$out/bin/bluedevil-sendfile"
+    wrapQtProgram "$out/bin/bluedevil-wizard"
+    wrapQtProgram "$out/bin/bluedevil-sendfile"
   '';
 }

@@ -19,12 +19,14 @@ kdeApp {
   ];
   buildInputs = [
     kconfig
-    kio
-    ki18n
     kservice
-    kfilemetadata
+  ];
+  propagatedBuildInputs = [
     baloo
     kdelibs4support
+    kfilemetadata
+    ki18n
+    kio
   ];
   meta = {
     license = [ lib.licenses.lgpl21 ];
