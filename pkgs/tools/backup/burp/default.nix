@@ -1,10 +1,4 @@
-{ stdenv, fetchgit,
-	acl,
-	librsync,
-	ncurses,
-	openssl,
-	zlib
-}:
+{ stdenv, fetchgit, acl, librsync, ncurses, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   name = "burp-1.4.40";
@@ -22,11 +16,9 @@ stdenv.mkDerivation rec {
     # acl relies on attr, which I can't get to build on darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) acl;
 
-    configureFlags = [ 
-      "--sbindir=$out/bin" 
-    ];
-
-  #installPhase = ''make install'';
+  configureFlags = [
+    "--sbindir=$out/bin"
+  ];
 
   meta = with stdenv.lib; {
     description = "BURP - BackUp and Restore Program";
