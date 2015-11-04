@@ -5967,11 +5967,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  JSONMaybeXS = buildPerlPackage {
-    name = "JSON-MaybeXS-1.002005";
+  JSONMaybeXS = buildPerlPackage rec {
+    name = "JSON-MaybeXS-1.003005";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/JSON-MaybeXS-1.002005.tar.gz;
-      sha256 = "f576caf2b10bf3a8eedaf05c0d65e7d3deb52f9c5e1894579ff9ffe71207157f";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "02n8dkj3qpzikkqyki8gvdk1pfdqrs9qcrdr96fla42gar5nkd5x";
     };
     buildInputs = [ TestWithoutModule ];
     propagatedBuildInputs = [ JSONPP ];
