@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "pugixml-${version}";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchurl {
     url = "https://github.com/zeux/pugixml/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "1pnrdi8n9fdclmhxri3jwc6xwpgvblbjnqkk9ykycpnljv20ads7";
+    sha256 = "1jpml475kbhs1aqwa48g2cbfxlrb9qp115m2j9yryxhxyr30vqgv";
   };
 
   nativeBuildInputs = [ cmake ];
