@@ -1792,11 +1792,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Clone = buildPerlPackage {
-    name = "Clone-0.36";
+  Clone = buildPerlPackage rec {
+    name = "Clone-0.38";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GARU/Clone-0.36.tar.gz;
-      sha256 = "1i90l24l46dyadmdz82klyh3y1lhfn75wjjpfmgl1kbr4plgdph3";
+      url = "mirror://cpan/authors/id/G/GA/GARU/${name}.tar.gz";
+      sha256 = "1s5xrv9zlckqqzyhxi0l9lwj9m6na2bz5hqxrkva2v7gnx5m7c4z";
     };
     meta = {
       description = "Recursively copy Perl datatypes";
