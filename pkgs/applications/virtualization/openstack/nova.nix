@@ -12,6 +12,11 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "175n1znvmy8f5vqvabc2fa4qy8y17685z4gzpq8984mdsdnpv21w";
   };
 
+  # otherwise migrate.cfg is not installed
+  patchPhase = ''
+    echo "graft nova" >> MANIFEST.in
+  '';
+
   # https://github.com/openstack/nova/blob/stable/liberty/requirements.txt
   propagatedBuildInputs = with pythonPackages; [
     pbr sqlalchemy_1_0 boto decorator eventlet jinja2 lxml routes cryptography
