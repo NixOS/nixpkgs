@@ -11503,8 +11503,10 @@ let
   };
 
   gnuradio-with-packages = callPackage ../applications/misc/gnuradio/wrapper.nix {
-    extraPackages = [ gnuradio-osmosdr ];
+    extraPackages = [ gnuradio-nacl gnuradio-osmosdr ];
   };
+
+  gnuradio-nacl = callPackage ../applications/misc/gnuradio-nacl { };
 
   gnuradio-osmosdr = callPackage ../applications/misc/gnuradio-osmosdr { };
 
