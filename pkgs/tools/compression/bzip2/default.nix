@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, linkStatic ? false }:
+{ stdenv, fetchurl, libtool, autoconf, automake, gnum4, linkStatic ? false }:
 
 let version = "1.0.6"; in
 
@@ -13,14 +13,14 @@ stdenv.mkDerivation {
   };
 
   crossAttrs = {
-    patchPhase = ''
+    builder = (stdenv.mkDerivation { }).builder;  # reset to standard builder
+    args = (stdenv.mkDerivation { }).args;  # reset to standard args
+    buildInputs = [ libtool autoconf automake gnum4 ];
+    patches = [ ./bzip2-1.0.6-autoconfiscated.patch ];
+    postPatch = ''
       sed -i -e '/<sys\\stat\.h>/s|\\|/|' bzip2.c
-      sed -i -e 's/CC=gcc/CC=${stdenv.cross.config}-gcc/' \
-        -e 's/AR=ar/AR=${stdenv.cross.config}-ar/' \
-        -e 's/RANLIB=ranlib/RANLIB=${stdenv.cross.config}-ranlib/' \
-        -e 's/bzip2recover test/bzip2recover/' \
-        Makefile*
     '';
+    preConfigure = "sh ./autogen.sh";
   };
 
   sharedLibrary =

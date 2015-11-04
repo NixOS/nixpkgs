@@ -1,0 +1,286 @@
+diff -urN autogen.sh.orig autogen.sh
+--- a/autogen.orig	1970-01-01 01:00:00.000000000 +0100
++++ b/autogen.sh	2009-11-06 12:10:43.574602171 +0100
+@@ -0,0 +1,8 @@
++mv LICENSE COPYING
++mv CHANGES NEWS
++touch AUTHORS
++touch ChangeLog
++libtoolize --force
++aclocal
++automake --add-missing --gnu
++autoconf
+diff -urN README.autotools.orig README.autotools
+--- a/README.autotools.orig	1970-01-01 01:00:00.000000000 +0100
++++ b/README.autotools	2010-11-02 17:04:06.000000000 +0100
+@@ -0,0 +1,39 @@
++bzip2 autoconfiscated
++=====================
++
++Temporarily at http://ftp.suse.com/pub/people/sbrabec/bzip2/ expecting
++that it will become a new upstream version to prevent per-distribution
++shared library patching done by nearly each Linux vendor separately.
++
++Autoconfiscation brings standard ./configure ; make ; make install
++installation, seamless support of DESTDIR, automatic check for supported
++CFLAGS, standard shared library support, automatic large files CFLAGS
++check and all things that are supported by automake.
++
++It makes obsolete Makefile-libbz2_so and README.COMPILATION.PROBLEMS.
++Now configure should automatically detect correct build flags.
++
++In case of any problem or question with autotools support feel free to
++contact me: Stanislav Brabec <sbrabec@suse.cz>
++
++Autoconfiscated version binaries are exactly equal to
++bzip2-1.0.6.tar.gz. There are only few changes. See below.
++
++
++New features:
++
++Trivial link man pages for bzcat and bunzip2 added.
++
++bzip2.pc file for pkg-config. Packages can use it for checks.
++
++
++Incompatible changes:
++
++soname change. Libtool has no support for two parts name suffix (e. g.
++libbz2.so.1.0). It must be a single number (e. g. libbz2.so.1). That is
++why soname must change. But I see not a big problem with it. Several
++distributions already use the new number instead of the non-standard
++number from Makefile-libbz2_so.
++
++To be super-safe, I incremented minor number of the library file, so
++both instances of the shared library can live together.
+diff -urN bzip2-1.0.6.orig/configure.ac bzip2-1.0.6.autoconfiscated/configure.ac
+--- a/configure.ac.orig	1970-01-01 01:00:00.000000000 +0100
++++ b/configure.ac	2009-11-06 17:04:04.000000000 +0100
+@@ -0,0 +1,70 @@
++#                                               -*- Autoconf -*-
++# Process this file with autoconf to produce a configure script.
++
++AC_PREREQ([2.57])
++AC_INIT([bzip2], [1.0.6], [Julian Seward <jseward@bzip.org>])
++BZIP2_LT_CURRENT=1
++BZIP2_LT_REVISION=6
++BZIP2_LT_AGE=0
++AC_CONFIG_SRCDIR([bzlib.h])
++AC_CONFIG_MACRO_DIR([m4])
++
++AM_INIT_AUTOMAKE
++AM_MAINTAINER_MODE
++
++# Checks for programs.
++AC_PROG_AWK
++AC_PROG_CC
++AC_PROG_INSTALL
++AC_PROG_LN_S
++AC_PROG_MAKE_SET
++AC_PROG_LIBTOOL
++PKG_PROG_PKG_CONFIG
++
++# Checks for libraries.
++
++# Checks for header files.
++
++# Checks for typedefs, structures, and compiler characteristics.
++
++# Check for system features.
++AC_SYS_LARGEFILE
++
++AC_MSG_CHECKING([whether compiler understands -Wall])
++save_CFLAGS="$CFLAGS"
++CFLAGS="$CFLAGS -Wall"
++AC_TRY_COMPILE([], [], [
++	AC_MSG_RESULT([yes])
++], [
++	AC_MSG_RESULT([no])
++	CFLAGS="$save_CFLAGS"
++])
++
++AC_MSG_CHECKING([whether compiler understands -Winline])
++save_CFLAGS="$CFLAGS"
++CFLAGS="$CFLAGS -Winline"
++AC_TRY_COMPILE([], [], [
++	AC_MSG_RESULT([yes])
++], [
++	AC_MSG_RESULT([no])
++	CFLAGS="$save_CFLAGS"
++])
++
++AC_MSG_CHECKING([whether compiler understands -fno-strength-reduce])
++save_CFLAGS="$CFLAGS"
++CFLAGS="$CFLAGS -fno-strength-reduce"
++AC_TRY_COMPILE([], [], [
++	AC_MSG_RESULT([yes])
++], [
++	AC_MSG_RESULT([no])
++	CFLAGS="$save_CFLAGS"
++])
++
++# Checks for library functions.
++
++# Write the output.
++AC_SUBST([BZIP2_LT_CURRENT])
++AC_SUBST([BZIP2_LT_REVISION])
++AC_SUBST([BZIP2_LT_AGE])
++AC_CONFIG_FILES([Makefile bzip2.pc])
++AC_OUTPUT
+diff -urN Makefile.am.orig Makefile.am
+--- a/Makefile.am.orig	1970-01-01 01:00:00.000000000 +0100
++++ b/Makefile.am	2009-11-05 16:45:11.000000000 +0100
+@@ -0,0 +1,138 @@
++lib_LTLIBRARIES = libbz2.la
++
++libbz2_la_SOURCES = \
++	blocksort.c \
++	huffman.c \
++	crctable.c \
++	randtable.c \
++	compress.c \
++	decompress.c \
++	bzlib.c
++
++libbz2_la_LDFLAGS = \
++	-version-info $(BZIP2_LT_CURRENT):$(BZIP2_LT_REVISION):$(BZIP2_LT_AGE) \
++	-no-undefined
++
++include_HEADERS = bzlib.h
++
++noinst_HEADERS = bzlib_private.h
++
++bin_PROGRAMS = bzip2 bzip2recover
++
++bzip2_SOURCES = bzip2.c
++bzip2_LDADD = libbz2.la
++
++bzip2recover_SOURCES = bzip2recover.c
++bzip2recover_LDADD = libbz2.la
++
++bin_SCRIPTS = bzgrep bzmore bzdiff
++
++man_MANS = bzip2.1 bzgrep.1 bzmore.1 bzdiff.1
++
++pkgconfigdir = $(libdir)/pkgconfig
++pkgconfig_DATA = bzip2.pc
++
++$(pkgconfig_DATA): $(srcdir)/bzip2.pc.in config.status
++
++install-exec-hook:
++	rm -f $(DESTDIR)$(bindir)/`echo "bunzip2" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzcat" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzegrep" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzfgrep" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzless" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzcmp" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	$(LN_S) `echo "bzip2" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'` $(DESTDIR)$(bindir)/`echo "bunzip2" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	$(LN_S) `echo "bzip2" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'` $(DESTDIR)$(bindir)/`echo "bzcat" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	$(LN_S) `echo "$(srcdir)/bzgrep"` $(DESTDIR)$(bindir)/`echo "bzegrep"`
++	$(LN_S) `echo "$(srcdir)/bzgrep"` $(DESTDIR)$(bindir)/`echo "bzfgrep"`
++	$(LN_S) `echo "$(srcdir)/bzmore"` $(DESTDIR)$(bindir)/`echo "bzless"`
++	$(LN_S) `echo "$(srcdir)/bzdiff"` $(DESTDIR)$(bindir)/`echo "bzcmp"`
++
++install-data-hook:
++	echo ".so man1/`echo "bzip2" | sed 's,^.*/,,;$(transform)'`.1" >$(DESTDIR)$(mandir)/man1/`echo "bunzip2" | sed 's,^.*/,,;$(transform)'`.1
++	echo ".so man1/`echo "bzip2" | sed 's,^.*/,,;$(transform)'`.1" >$(DESTDIR)$(mandir)/man1/`echo "bzcat" | sed 's,^.*/,,;$(transform)'`.1
++	echo ".so man1/`echo "bzgrep" | sed 's,^.*/,,;$(transform)'`.1" >$(DESTDIR)$(mandir)/man1/`echo "bzegrep" | sed 's,^.*/,,;$(transform)'`.1
++	echo ".so man1/`echo "bzgrep" | sed 's,^.*/,,;$(transform)'`.1" >$(DESTDIR)$(mandir)/man1/`echo "bzfgrep" | sed 's,^.*/,,;$(transform)'`.1
++	echo ".so man1/`echo "bzmore" | sed 's,^.*/,,;$(transform)'`.1" >$(DESTDIR)$(mandir)/man1/`echo "bzless" | sed 's,^.*/,,;$(transform)'`.1
++	echo ".so man1/`echo "bzdiff" | sed 's,^.*/,,;$(transform)'`.1" >$(DESTDIR)$(mandir)/man1/`echo "bzcmp" | sed 's,^.*/,,;$(transform)'`.1
++
++uninstall-hook:
++	rm -f $(DESTDIR)$(bindir)/`echo "bunzip2" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzcat" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzegrep"`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzfgrep"`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzless"`
++	rm -f $(DESTDIR)$(bindir)/`echo "bzcmp"`
++	rm -f $(DESTDIR)$(mandir)/man1/`echo "bunzip2" | sed 's,^.*/,,;$(transform)'`.1
++	rm -f $(DESTDIR)$(mandir)/man1/`echo "bzcat" | sed 's,^.*/,,;$(transform)'`.1
++	rm -f $(DESTDIR)$(mandir)/man1/`echo "bzegrep" | sed 's,^.*/,,;$(transform)'`.1
++	rm -f $(DESTDIR)$(mandir)/man1/`echo "bzfgrep" | sed 's,^.*/,,;$(transform)'`.1
++	rm -f $(DESTDIR)$(mandir)/man1/`echo "bzless" | sed 's,^.*/,,;$(transform)'`.1
++	rm -f $(DESTDIR)$(mandir)/man1/`echo "bzcmp" | sed 's,^.*/,,;$(transform)'`.1
++
++test: bzip2
++	@cat $(srcdir)/words1
++	./bzip2 -1  <$(srcdir)/sample1.ref >sample1.rb2
++	./bzip2 -2  <$(srcdir)/sample2.ref >sample2.rb2
++	./bzip2 -3  <$(srcdir)/sample3.ref >sample3.rb2
++	./bzip2 -d  <$(srcdir)/sample1.bz2 >sample1.tst
++	./bzip2 -d  <$(srcdir)/sample2.bz2 >sample2.tst
++	./bzip2 -ds <$(srcdir)/sample3.bz2 >sample3.tst
++	cmp $(srcdir)/sample1.bz2 sample1.rb2
++	cmp $(srcdir)/sample2.bz2 sample2.rb2
++	cmp $(srcdir)/sample3.bz2 sample3.rb2
++	cmp sample1.tst $(srcdir)/sample1.ref
++	cmp sample2.tst $(srcdir)/sample2.ref
++	cmp sample3.tst $(srcdir)/sample3.ref
++	@cat $(srcdir)/words3
++
++manual: $(srcdir)/manual.html $(srcdir)/manual.ps $(srcdir)/manual.pdf
++
++manual.ps: $(MANUAL_SRCS)
++	cd $(srcdir); ./xmlproc.sh -ps manual.xml
++
++manual.pdf: $(MANUAL_SRCS)
++	cd $(srcdir); ./xmlproc.sh -pdf manual.xml
++
++manual.html: $(MANUAL_SRCS)
++	cd $(srcdir); ./xmlproc.sh -html manual.xml
++
++EXTRA_DIST = \
++	$(bin_SCRIPTS) \
++	$(man_MANS) \
++	README.autotools \
++	README.XML.STUFF \
++	bz-common.xsl \
++	bz-fo.xsl \
++	bz-html.xsl \
++	bzip.css \
++	bzip2.1.preformatted \
++	bzip2.pc.in \
++	bzip2.txt \
++	dlltest.c \
++	dlltest.dsp \
++	entities.xml \
++	format.pl \
++	libbz2.def \
++	libbz2.dsp \
++	makefile.msc \
++	manual.html \
++	manual.pdf \
++	manual.ps \
++	manual.xml \
++	mk251.c \
++	sample1.bz2 \
++	sample1.ref \
++	sample2.bz2 \
++	sample2.ref \
++	sample3.bz2 \
++	sample3.ref \
++	spewG.c \
++	unzcrash.c \
++	words0 \
++	words1 \
++	words2 \
++	words3 \
++	xmlproc.sh
++
++ACLOCAL_AMFLAGS = -I m4
+diff -urN bzip2.pc.in.orig bzip2.pc.in
+--- a/bzip2.pc.in.orig	1970-01-01 01:00:00.000000000 +0100
++++ b/bzip2.pc.in	2009-11-03 18:48:28.000000000 +0100
+@@ -0,0 +1,11 @@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++bindir=@bindir@
++libdir=@libdir@
++includedir=@includedir@
++
++Name: bzip2
++Description: Lossless, block-sorting data compression
++Version: @VERSION@
++Libs: -L${libdir} -lbz2
++Cflags: -I${includedir}
