@@ -16310,15 +16310,12 @@ let
 
 
   six = buildPythonPackage rec {
-    name = "six-1.9.0";
+    name = "six-1.10.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/six/${name}.tar.gz";
-      sha256 = "1mci5i8mjqmljmv33h0q3d4djc13zk1kfmb3fbvd3yy43x0m4h72";
+      sha256 = "0snmb8xffb3vsma0z67i0h0w2g2dy0p3gsgh9gi4i0kgc5l8spqh";
     };
-
-    # error: invalid command 'test'
-    doCheck = false;
 
     meta = {
       description = "A Python 2 and 3 compatibility library";
