@@ -5675,6 +5675,11 @@ let
     name = "watchdog-${version}";
     version = "0.8.3";
 
+    buildInputs = stdenv.lib.optionals stdenv.isDarwin [
+      pkgs.darwin.apple_sdk.frameworks.CoreServices
+      pkgs.darwin.cf-private
+    ];
+
     propagatedBuildInputs = with self; [ argh pathtools pyyaml ];
 
     buildInputs = stdenv.lib.optionals stdenv.isDarwin
@@ -16171,6 +16176,8 @@ let
       url = "http://pypi.python.org/packages/source/a/argh/${name}.tar.gz";
       sha256 = "1nqham81ihffc9xmw85dz3rg3v90rw7h0dp3dy0bh3qkp4n499q6";
     };
+
+    doCheck = !pkgs.stdenv.isDarwin;  # fails with UnicodeDecodeError
 
     checkPhase = ''
       export LANG="en_US.UTF-8"
