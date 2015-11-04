@@ -1299,11 +1299,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CatalystViewTT = buildPerlPackage {
-    name = "Catalyst-View-TT-0.41";
+  CatalystViewTT = buildPerlPackage rec {
+    name = "Catalyst-View-TT-0.44";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-View-TT-0.41.tar.gz;
-      sha256 = "1yrigxqapxj4k1qkykiiqy6a30ljb7hlkaw80d7n0n5mpm67j1nb";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "06d1zg4nbb6kcyjbnyxrkf8z4zlscxr8650d94f7187jygfl8rvh";
     };
     propagatedBuildInputs = [ CatalystRuntime ClassAccessor MROCompat PathClass TemplateToolkit TemplateTimer ];
     meta = {
