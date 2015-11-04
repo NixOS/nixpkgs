@@ -1535,10 +1535,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ClassC3 = buildPerlPackage rec {
-    name = "Class-C3-0.28";
+    name = "Class-C3-0.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
-      sha256 = "084d2cvfff3mi2fjycdvbgx797wkv1wsz97w3v8i14j8vhmfv4bg";
+      sha256 = "0lmgiqv46x9lx8ip23qr8qprips21wiwaks17yb6pk7igvbgdjnc";
     };
     propagatedBuildInputs = [ AlgorithmC3 ];
     meta = {
