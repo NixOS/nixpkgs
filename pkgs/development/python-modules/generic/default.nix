@@ -118,6 +118,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
     ${python}/bin/${python.executable} setup.py install \
       --install-lib=$out/lib/${python.libPrefix}/site-packages \
       --old-and-unmanageable \
+      --skip-build \
       --prefix="$out" ${lib.concatStringsSep " " setupPyInstallFlags}
 
     # --install-lib:
