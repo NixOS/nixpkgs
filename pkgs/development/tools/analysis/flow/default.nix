@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, libelf }:
+{ stdenv, fetchFromGitHub, ocaml, libelf, cf-private, CoreServices }:
 
 stdenv.mkDerivation rec {
   version = "0.17.0";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     cp bin/flow $out/bin/
   '';
 
-  buildInputs = [ ocaml libelf ];
+  buildInputs = [ ocaml libelf cf-private CoreServices ];
 
   meta = with stdenv.lib; {
     homepage = "http://flowtype.org/";

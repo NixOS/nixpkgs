@@ -68,6 +68,8 @@ let
       done
     '' + optionalString stdenv.isDarwin ''
       substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
+      substituteInPlace Lib/multiprocessing/__init__.py \
+        --replace 'os.popen(comm)' 'os.popen("nproc")'
     '';
 
   configureFlags = [
@@ -95,11 +97,7 @@ let
         ] ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
     )
     ++ optional zlibSupport zlib
-
-    # depend on CF and configd only if purity is an issue
-    # the impure bootstrap compiler can't build CoreFoundation currently. it requires
-    # <mach-o/dyld.h> which is in our pure bootstrapTools, but not in the system headers.
-    ++ optionals (stdenv.isDarwin && !stdenv.cc.nativeLibc) [ CF configd ];
+    ++ optionals stdenv.isDarwin [ CF configd ];
 
   # Build the basic Python interpreter without modules that have
   # external dependencies.

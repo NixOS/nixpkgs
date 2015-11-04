@@ -523,10 +523,15 @@ let
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/appnope/${name}.tar.gz";
-      sha256 = "0wgdwp5v7r4g2bss8vbdxah12hsy2mvzxh3sil9s4iskjbz5z6cb";
+      sha256 = "8b995ffe925347a2138d7ac0fe77155e4311a0ea6d6da4f5128fe4b3cbe5ed71";
     };
 
-    meta.platforms = platforms.darwin;
+    meta = {
+      description = "Disable App Nap on OS X";
+      homepage    = https://pypi.python.org/pypi/appnope;
+      platforms   = platforms.darwin;
+      license     = licenses.bsd3;
+    };
   };
 
   apsw = buildPythonPackage rec {
@@ -1873,12 +1878,36 @@ let
       md5 = "e26d06a8d8b16c7210414ce15d453636";
     };
 
-    propagatedBuildInputs = with self; [ cffi ];
+    propagatedBuildInputs = with self; [ pkgs.cairo cffi ];
+
+    patchPhase = ''
+      # Hardcode cairo library path
+      sed -e 's,ffi\.dlopen(,&"${pkgs.cairo}/lib/" + ,' -i cairocffi/__init__.py
+    '';
 
     meta = {
       homepage = https://github.com/SimonSapin/cairocffi;
       license = "bsd";
       description = "cffi-based cairo bindings for Python";
+    };
+  };
+
+
+  cairosvg = buildPythonPackage rec {
+    version = "1.0.18";
+    name = "cairosvg-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/C/CairoSVG/CairoSVG-${version}.tar.gz";
+      sha256 = "01lpm38qp7xlnv8jv7qg48j44p5088dwfsrcllgs5fz355lrfds1";
+    };
+
+    propagatedBuildInputs = with self; [ cairocffi ];
+
+    meta = {
+      homepage = https://cairosvg.org;
+      license = licenses.lgpl3;
+      description = "SVG converter based on Cairo";
     };
   };
 
@@ -2974,6 +3003,24 @@ let
       homepage = http://bitbucket.org/hpk42/pytest-xdist;
     };
   };
+
+
+  tinycss = buildPythonPackage rec {
+    name = "tinycss-${version}";
+    version = "0.3";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/t/tinycss/${name}.tar.gz";
+      sha256 = "1pichqra4wk86142hqgvy9s5x6c5k5zhy8l9qxr0620pqk8spbd4";
+    };
+
+    meta = {
+      description = "complete yet simple CSS parser for Python";
+      license = licenses.bsd3;
+      homepage = http://pythonhosted.org/tinycss/;
+    };
+  };
+
 
   cssselect = buildPythonPackage rec {
     name = "cssselect-${version}";
@@ -4453,8 +4500,83 @@ let
       homepage = http://github.com/heynemann/libthumbor;
       license = licenses.mit;
     };
-
   };
+
+  lightning = buildPythonPackage rec {
+    version = "1.2.1";
+    name = "lightning-python-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/lightning-python/${name}.tar.gz";
+      sha256 = "3987d7d4a634bdb6db9bcf212cf4d2f72bab5bc039f4f6cbc02c9d01c4ade792";
+    };
+
+    buildInputs = with self; [ pytest ];
+
+    propagatedBuildInputs = with self; [
+      jinja2
+      matplotlib
+      numpy
+      requests
+      six
+    ];
+
+    meta = {
+      description = "A Python client library for the Lightning data visualization server";
+      homepage = http://lightning-viz.org;
+      license = licenses.mit;
+    };
+  };
+
+  jupyter = buildPythonPackage rec {
+    version = "1.0.0";
+    name = "jupyter-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jupyter/${name}.tar.gz";
+      sha256 = "d9dc4b3318f310e34c82951ea5d6683f67bed7def4b259fafbfe4f1beb1d8e5f";
+    };
+
+    propagatedBuildInputs = with self; [
+      notebook
+      qtconsole
+      jupyter_console
+      nbconvert
+      ipykernel
+      ipywidgets
+    ];
+
+    meta = {
+      description = "Installs all the Jupyter components in one go";
+      homepage = "http://jupyter.org/";
+      license = licenses.bsd3;
+      platforms = platforms.all;
+    };
+  };
+
+  jupyter_console = buildPythonPackage rec {
+    version = "4.0.3";
+    name = "jupyter_console-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jupyter_console/${name}.tar.gz";
+      sha256 = "555be6963a8f6431fbe1d424c7ffefee90824758058e4c9a2ab3aa045948eb85";
+    };
+
+    propagatedBuildInputs = with self; [
+      jupyter_client
+      ipython
+      ipykernel
+    ];
+
+    meta = {
+      description = "Jupyter terminal console";
+      homepage = "http://jupyter.org/";
+      license = licenses.bsd3;
+      platforms = platforms.all;
+    };
+  };
+
   lti = buildPythonPackage rec {
     version = "0.4.0";
     name = "PyLTI-${version}";
@@ -5555,6 +5677,9 @@ let
 
     propagatedBuildInputs = with self; [ argh pathtools pyyaml ];
 
+    buildInputs = stdenv.lib.optionals stdenv.isDarwin
+      [ pkgs.darwin.apple_sdk.frameworks.CoreServices pkgs.darwin.cf-private ];
+
     doCheck = false;
 
     src = pkgs.fetchurl {
@@ -6057,6 +6182,37 @@ let
       license = licenses.bsd3;
     };
   };
+
+  django_silk = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
+    name = "django-silk-${version}";
+    version = "0.5.6";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/django-silk/${name}.tar.gz";
+      sha256 = "845abc688738858ce06e993c4b7dbbcfcecf33029e828f143463ff96f9a78947";
+    };
+
+    buildInputs = [ self.mock ];
+
+    propagatedBuildInputs = [ django ] ++
+      (with self; [
+        pygments
+        simplejson
+        dateutil
+        requests2
+        sqlparse
+        jinja2
+        autopep8
+        pytz
+        pillow
+      ]);
+
+    meta = {
+      description = "Silky smooth profiling for the Django Framework";
+      homepage = https://github.com/mtford90/silk;
+      license = licenses.mit;
+    };
+  }) {};
 
   django_taggit = buildPythonPackage rec {
     name = "django-taggit-${version}";
@@ -6657,6 +6813,61 @@ let
       maintainers = with maintainers; [ iElectric ];
     };
   });
+
+  python2-pythondialog = buildPythonPackage rec {
+    name = "python2-pythondialog-${version}";
+    version = "3.3.0";
+    disabled = !isPy27;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python2-pythondialog/python2-pythondialog-${version}.tar.gz";
+      sha256 = "1yhkagsh99bfi592ymczf8rnw8rk6n9hdqy3dd98m3yrx8zmjvry";
+    };
+
+    patchPhase = ''
+      substituteInPlace dialog.py ":/bin:/usr/bin" ":$out/bin"
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = "http://pythondialog.sourceforge.net/";
+    };
+  };
+
+  pyRFC3339 = buildPythonPackage rec {
+    name = "pyRFC3339-${version}";
+    version = "0.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyRFC3339/pyRFC3339-${version}.tar.gz";
+      sha256 = "1pp648xsjaw9h1xq2mgwzda5wis2ypjmzxlksc1a8grnrdmzy155";
+    };
+
+    propagatedBuildInputs = with self; [ pytz ];
+    buildInputs = with self; [ nose ];
+  };
+
+  ConfigArgParse = buildPythonPackage rec {
+    name = "ConfigArgParse-${version}";
+    version = "0.9.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/C/ConfigArgParse/ConfigArgParse-${version}.tar.gz";
+      sha256 = "0a984pvv7370yz7zbkl6s6i7yyl9myahx0m9jkjvg3hz5q8mf70l";
+    };
+
+    # no tests in tarball
+    doCheck = false;
+    propagatedBuildInputs = with self; [
+
+    ];
+    buildInputs = with self; [
+
+    ];
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/zorro3/ConfigArgParse";
+    };
+  };
 
   jsonschema = buildPythonPackage (rec {
     version = "2.4.0";
@@ -7777,6 +7988,10 @@ let
       url = "https://pypi.python.org/packages/source/i/ipython/${name}.tar.gz";
       sha256 = "2fd276c407fb0b29e5d4884a7029a2c27fef0a06fd7a34924cce69b7cc43f4da";
     };
+
+    prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace setup.py --replace "'gnureadline'" " "
+    '';
 
     buildInputs = with self; [nose] ++ optionals isPy27 [mock];
 
@@ -9232,6 +9447,50 @@ let
     preConfigure = "substituteInPlace setup.py --replace /usr/share usr/share";
   };
 
+  pygal = buildPythonPackage ( rec {
+    version = "2.0.8";
+    name = "pygal-${version}";
+
+    patchPhase = ''
+      # Run tests in pygal dir
+      substituteInPlace setup.py \
+        --replace "self.test_args = []" \
+                  "self.test_args = ['-x', 'build/lib/pygal']"
+      # Open unicode files during tests
+      substituteInPlace pygal/test/test_graph.py \
+        --replace "import sys" \
+                  "import sys, io"
+      substituteInPlace pygal/test/test_graph.py \
+        --replace "open(file_name)" \
+                  "io.open(file_name, encoding='utf-8')"
+      # Use explicit integers (for python 3.5)
+      substituteInPlace pygal/colors.py \
+        --replace "'#%x%x%x' % (r / 17, g / 17, b / 17)" \
+                  "'#%x%x%x' % (r // 17, g // 17, b // 17)"
+      substituteInPlace pygal/colors.py \
+        --replace "'#%x%x%x%x' % (r / 17, g / 17, b / 17, a * 15)" \
+                  "'#%x%x%x%x' % (r // 17, g // 17, b // 17, int(a * 15))"
+      substituteInPlace pygal/colors.py \
+        --replace "'#%02x%02x%02x%02x' % (r, g, b, a * 255)" \
+                  "'#%02x%02x%02x%02x' % (r, g, b, int(a * 255))"
+    '';
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/Kozea/pygal/archive/${version}.tar.gz";
+      sha256 = "1lv8avn7pdlxks50sd58shpqnxybf3l79bggy32qnbqczk4j2s0b";
+    };
+
+    buildInputs = with self; [ flask pyquery pytest ];
+    propagatedBuildInputs = with self; [ cairosvg tinycss cssselect ] ++ optionals (!isPyPy) [ lxml ];
+
+    meta = {
+      description = "Sexy and simple python charting";
+      homepage = http://www.pygal.org;
+      license = licenses.lgpl3;
+    };
+  });
+
+
   pymysql = buildPythonPackage rec {
     name = "pymysql-${version}";
     version = "0.6.6";
@@ -9368,12 +9627,12 @@ let
   };
 
   nbconvert = buildPythonPackage rec {
-    version = "4.0.0";
+    version = "4.1.0";
     name = "nbconvert-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/nbconvert/${name}.tar.gz";
-      sha256 = "472ad15d1a71f1ef00c4094c11bb93638858fc89fb2c5838b3aa6b67d981b437";
+      sha256 = "e0296e45293dd127d028f678e3b6aba3f1db3283a134178bdb49eea402d4cf1c";
     };
 
     buildInputs = with self; [nose];
@@ -11141,7 +11400,7 @@ let
 
     # tests take a long time to run and leave threads hanging
     doCheck = false;
-    ZOOKEEPER_PATH = "${pkgs.zookeeper}";
+    #ZOOKEEPER_PATH = "${pkgs.zookeeper}";
 
     meta = with stdenv.lib; {
       homepage = "https://kazoo.readthedocs.org";
@@ -11580,6 +11839,11 @@ let
       substituteInPlace setup.py \
         --replace "['pandas/src/klib', 'pandas/src']" \
                   "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
+
+      # disable clipboard tests since pbcopy/pbpaste are not open source
+      substituteInPlace pandas/io/tests/test_clipboard.py \
+        --replace pandas.util.clipboard no_such_module \
+        --replace OSError ImportError
     '';
 
     # The flag `-A 'not network'` will disable tests that use internet.
@@ -14066,14 +14330,14 @@ let
 
   pyopenssl = buildPythonPackage rec {
     name = "pyopenssl-${version}";
-    version = "0.14";
+    version = "0.15.1";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-0.14.tar.gz";
-      sha256 = "0vpfqhng4cky7chliknkxv910iabqbfcxvkjiankh08jkkjvi7d9";
+      url = "https://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-${version}.tar.gz";
+      sha256 = "0wnnq15rhj7fhdcd8ycwiw6r6g3w9f9lcy6cigg8226vsrq618ph";
     };
 
-    # 17 tests failing
+    # 12 tests failing, 26 error out
     doCheck = false;
 
     propagatedBuildInputs = [ self.cryptography self.pyasn1 self.idna ];
@@ -16664,6 +16928,29 @@ let
   #
   #   doCheck = false;
   # };
+
+  tabulate = buildPythonPackage rec {
+    version = "0.7.5";
+    name = "tabulate-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tabulate/${name}.tar.gz";
+      sha256 = "9071aacbd97a9a915096c1aaf0dc684ac2672904cd876db5904085d6dac9810e";
+    };
+
+    buildInputs = with self; [ nose ];
+
+    # Tests: cannot import common (relative import).
+    doCheck = false;
+
+    meta = {
+      description = "Pretty-print tabular data";
+      homepage = https://bitbucket.org/astanin/python-tabulate;
+      license = licenses.mit;
+      maintainer = with maintainers; [ fridh ];
+    };
+
+  };
 
   targetcli_fb = buildPythonPackage rec {
     version = "2.1.fb33";

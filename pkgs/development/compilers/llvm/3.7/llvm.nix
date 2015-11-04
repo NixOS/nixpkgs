@@ -11,8 +11,8 @@
 , ncurses
 , version
 , zlib
-, libcxxabi
 , compiler-rt_src
+, libcxxabi
 , debugVersion ? false
 }:
 

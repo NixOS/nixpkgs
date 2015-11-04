@@ -15,7 +15,7 @@ with stdenv.lib;
 
 let
 
-  version = "2015-10-12";
+  version = "0.1.0";
 
   # Note: this is NOT the libvterm already in nixpkgs, but some NIH silliness:
   neovimLibvterm = let version = "2015-02-23"; in stdenv.mkDerivation {
@@ -63,8 +63,8 @@ let
     name = "neovim-${version}";
 
     src = fetchFromGitHub {
-      sha256 = "1rlybdldz708pz7k0qs2rpm0cjk8ywwyj5s38hyq4mzsswqszdsc";
-      rev = "a3f048ee06dea15490d7b874d295c3fc850cdc51";
+      sha256 = "1704f3dqf5p6hicpzf0pi21n6ymylra9prsm4azvqp86allmvnfx";
+      rev = "v${version}";
       repo = "neovim";
       owner = "neovim";
     };

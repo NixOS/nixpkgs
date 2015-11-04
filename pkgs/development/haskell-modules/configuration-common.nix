@@ -48,6 +48,7 @@ self: super: {
   text_1_2_0_4 = dontCheck super.text_1_2_0_4;
   text_1_2_0_6 = dontCheck super.text_1_2_0_6;
   text = dontCheck super.text;
+  c2hs = if pkgs.stdenv.isDarwin then dontCheck super.c2hs else super.c2hs;
 
   # The package doesn't compile with ruby 1.9, which is our default at the moment.
   hruby = super.hruby.override { ruby = pkgs.ruby_2_1; };
@@ -918,5 +919,8 @@ self: super: {
   hscurses = overrideCabal super.hscurses (drv: {
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [ pkgs.ncurses ];
   });
+
+  # Re-build this package to fix broken binaries on Hydra.
+  math-functions = triggerRebuild super.math-functions 1;
 
 }

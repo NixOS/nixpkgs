@@ -3,12 +3,12 @@
 , libpng }:
 
 composableDerivation.composableDerivation {} (fixed: rec {
-  version = "2.0.0";
+  version = "2.0.1";
   name = "gdal-${version}";
 
   src = fetchurl {
     url = "http://download.osgeo.org/gdal/${version}/${name}.tar.gz";
-    sha256 = "53761563ff53c5bf27bff7c4d6cab8bb1634baccefda05348e0f3b7acaf4c9e6";
+    sha256 = "b55f794768e104a2fd0304eaa61bb8bda3dc7c4e14f2c9d0913baca3e55b83ab";
   };
 
   buildInputs = [ unzip libjpeg libtiff libpng proj openssl ]
