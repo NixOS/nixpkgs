@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, xmlsec, which }:
+{ stdenv, fetchurl, pythonPackages, xmlsec, which, openssl }:
 
 pythonPackages.buildPythonPackage rec {
   name = "keystone-${version}";
@@ -30,10 +30,16 @@ pythonPackages.buildPythonPackage rec {
 
   buildInputs = with pythonPackages; [
     coverage fixtures mock subunit tempest-lib testtools testrepository
-    ldap ldappool webtest requests2 oslotest pep8 pymongo which
+    ldap ldappool webtest requests2 oslotest pep8 pymongo which makeWrapper
   ];
 
+  makeWrapperArgs = ["--prefix PATH : '${openssl}/bin:$PATH'"];
+
   postInstall = ''
+    # install .ini files
+    mkdir -p $out/etc
+    cp etc/* $out/etc
+
     # check all binaries don't crash
     for i in $out/bin/*; do
       $i --help
