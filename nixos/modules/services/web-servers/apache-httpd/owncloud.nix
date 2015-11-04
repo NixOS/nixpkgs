@@ -573,7 +573,11 @@ rec {
       ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/psql -h "/tmp" -U postgres -d ${config.dbName} -Atw -c "$QUERY" || true
     fi
 
-    ${php}/bin/php ${pkgs.owncloud}/occ upgrade || true
+    if [ -e ${pkgs.owncloud}/config/ca-bundle.crt ]; then
+      cp -f ${pkgs.owncloud}/config/ca-bundle.crt ${config.dataDir}/config/
+    fi
+
+    ${php}/bin/php ${pkgs.owncloud}/occ upgrade >> ${config.dataDir}/upgrade.log || true
 
     chown wwwrun:wwwrun ${config.dataDir}/owncloud.log || true
 
