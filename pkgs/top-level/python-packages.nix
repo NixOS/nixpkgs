@@ -8653,11 +8653,11 @@ let
 
 
   python_magic = buildPythonPackage rec {
-    name = "python-magic-0.4.6";
+    name = "python-magic-0.4.10";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/python-magic/${name}.tar.gz";
-      md5 = "07e7a0fea78dd81ed609414c3484df58";
+      sha256 = "1hx2sjd4fdswswj3yydn2azxb59rjmi9b7jzh94lf1wnxijjizbr";
     };
 
     propagatedBuildInputs = with self; [ pkgs.file ];
