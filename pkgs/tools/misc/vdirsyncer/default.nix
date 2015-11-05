@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  version = "0.7.0";
+  version = "0.7.3";
   name = "vdirsyncer-${version}";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://pypi.python.org/packages/source/v/vdirsyncer/${name}.tar.gz";
-    sha256 = "0ahpi62yk6l06zjkpbhw1gp75x3qi9gcvm3yx6xcg5sz105y5yfx";
+    sha256 = "0ahi5ngqwsrv30bgziz35dx4gif7rbn9vqv340pigbzmywjxz1ry";
   };
 
   propagatedBuildInputs = with pythonPackages; [
