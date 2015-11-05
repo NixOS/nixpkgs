@@ -28,6 +28,11 @@ pythonPackages.buildPythonPackage rec {
    oslo-versionedobjects
   ];
 
+  # make sure we include migrations
+  patchPhase = ''
+    echo "graft neutron" >> MANIFEST.in
+  '';
+
   buildInputs = with pythonPackages; [
     cliff coverage fixtures mock subunit requests-mock oslosphinx testrepository
     testtools testresources testscenarios webtest oslotest os-testr tempest-lib
