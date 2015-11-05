@@ -2485,11 +2485,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ FileFindRule ];
   };
 
-  DataDump = buildPerlPackage {
-    name = "Data-Dump-1.22";
+  DataDump = buildPerlPackage rec {
+    name = "Data-Dump-1.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/Data-Dump-1.22.tar.gz;
-      sha256 = "1ciqlwsy1q35s94dry9bjy1pwanbq6b7q4rhxm9z8prgkzbslg2k";
+      url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
+      sha256 = "0r9ba52b7p8nnn6nw0ygm06lygi8g68piri78jmlqyrqy5gb0lxg";
     };
     meta = {
       description = "Pretty printing of data structures";
