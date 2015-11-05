@@ -2690,11 +2690,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DateManip = buildPerlPackage {
-    name = "Date-Manip-6.43";
+  DateManip = buildPerlPackage rec {
+    name = "Date-Manip-6.51";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.43.tar.gz;
-      sha256 = "0jwg87j31gw2fn8csm1zyfqxd0dxh8sbv940ma9idg6g7856zfrz";
+      url = "mirror://cpan/authors/id/S/SB/SBECK/${name}.tar.gz";
+      sha256 = "0afvr2q2hspd807d6wd7kmrr7ypxdlh8bcnqsqbfwcwd74qadg13";
     };
     propagatedBuildInputs = [ TestInter ];
     meta = {
