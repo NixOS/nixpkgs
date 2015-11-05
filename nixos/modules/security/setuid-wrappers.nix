@@ -107,6 +107,10 @@ in
             chmod 0000 ${wrapperDir}/${program} # to prevent races
             chown ${owner}.${group} ${wrapperDir}/${program}
             chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" ${wrapperDir}/${program}
+
+            # compatibility with systemd.services.*.path
+            mkdir -p ${wrapperDir}/bin
+            ln -fs ${wrapperDir}/${program} ${wrapperDir}/bin/${program}
           '';
 
       in stringAfter [ "users" ]
@@ -115,7 +119,7 @@ in
           # programs to be wrapped.
           SETUID_PATH=${config.system.path}/bin:${config.system.path}/sbin
 
-          rm -f ${wrapperDir}/* # */
+          rm -rf ${wrapperDir}/* # */
 
           ${concatMapStrings makeSetuidWrapper setuidPrograms}
         '';
