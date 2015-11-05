@@ -2506,10 +2506,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DataDumperConcise = buildPerlPackage rec {
-    name = "Data-Dumper-Concise-2.020";
+    name = "Data-Dumper-Concise-2.022";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Data/${name}.tar.gz";
-      sha256 = "0zb792d2dmpl0dnfmwcgh6wppb5h56hwycdbcf97wqxcgjk3k7hn";
+      sha256 = "0z7vxgk1f2kw2zpiimdsyf7jq9f4s5dhh3dlimq5yrirypnk03sc";
     };
   };
 
