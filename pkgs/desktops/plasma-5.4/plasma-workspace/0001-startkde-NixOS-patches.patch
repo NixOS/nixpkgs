@@ -1,14 +1,14 @@
-From d34575dc1edb9fcc8e7608e82e63c6c9d20f37ea Mon Sep 17 00:00:00 2001
+From 35efc2ce92ed698abb21a79aa6e6670e844ea776 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@gmail.com>
 Date: Thu, 27 Aug 2015 20:36:39 -0500
-Subject: [PATCH] startkde NixOS patches
+Subject: [PATCH 1/2] startkde NixOS patches
 
 ---
- startkde/startkde.cmake | 219 ++++++++++++++++++++----------------------------
- 1 file changed, 89 insertions(+), 130 deletions(-)
+ startkde/startkde.cmake | 217 ++++++++++++++++++++----------------------------
+ 1 file changed, 88 insertions(+), 129 deletions(-)
 
 diff --git a/startkde/startkde.cmake b/startkde/startkde.cmake
-index cfbe227..999dd8f 100644
+index 2c4c315..7733721 100644
 --- a/startkde/startkde.cmake
 +++ b/startkde/startkde.cmake
 @@ -1,8 +1,31 @@
@@ -94,7 +94,7 @@ index cfbe227..999dd8f 100644
  
  #This is basically setting defaults so we can use them with kstartupconfig5
  cat >$configDir/startupconfigkeys <<EOF
-@@ -101,55 +106,21 @@ XftSubPixel=none
+@@ -101,53 +106,19 @@ XftSubPixel=none
  EOF
  }
  
@@ -150,11 +150,8 @@ index cfbe227..999dd8f 100644
  if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" ; then
 -    @EXPORT_XCURSOR_PATH@
  
--    kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
-+    @out@/bin/kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
+     kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
      if test $? -eq 10; then
-         XCURSOR_THEME=breeze_cursors
-         export XCURSOR_THEME
 @@ -163,21 +134,39 @@ if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize"
      fi
  fi
@@ -400,5 +397,5 @@ index cfbe227..999dd8f 100644
  
  echo 'startkde: Done.'  1>&2
 -- 
-2.5.0
+2.6.2
 

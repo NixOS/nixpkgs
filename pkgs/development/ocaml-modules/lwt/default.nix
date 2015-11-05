@@ -1,4 +1,4 @@
-{stdenv, fetchzip, which, cryptopp, ocaml, findlib, ocaml_react, ocaml_ssl, libev, pkgconfig, ncurses, ocaml_oasis, ocaml_text, glib, camlp4}:
+{ stdenv, fetchzip, which, cryptopp, ocaml, findlib, ocaml_react, ocaml_ssl, libev, pkgconfig, ncurses, ocaml_oasis, ocaml_text, glib, camlp4, ppx_tools }:
 
 let
   version = "2.4.6";
@@ -16,11 +16,12 @@ stdenv.mkDerivation {
     sha256 = "0idci0zadpb8hmblszsrvg6yf36w5a9y6rsdwjc3jww71dgrw5d9";
   };
 
-  buildInputs = [ocaml_oasis pkgconfig which cryptopp ocaml findlib glib ncurses camlp4];
+  buildInputs = [ ocaml_oasis pkgconfig which cryptopp ocaml findlib glib ncurses camlp4 ppx_tools ];
 
   propagatedBuildInputs = [ ocaml_react ocaml_ssl ocaml_text libev ];
 
-  configureFlags = [ "--enable-react" "--enable-glib" "--enable-ssl" "--enable-text" "--disable-ppx" ]
+  configureFlags = [ "--enable-react" "--enable-glib" "--enable-ssl" "--enable-text" ]
+  ++ [ (if versionAtLeast ocaml_version "4.02" then "--enable-ppx" else "--disable-ppx") ]
   ++ optional (versionAtLeast ocaml_version "4.0" && ! versionAtLeast ocaml_version "4.02") "--enable-toplevel";
 
   createFindlibDestdir = true;

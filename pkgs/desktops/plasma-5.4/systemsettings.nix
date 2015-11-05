@@ -1,17 +1,6 @@
-{ plasmaPackage
-, extra-cmake-modules
-, kdoctools
-, kitemviews
-, kcmutils
-, ki18n
-, kio
-, kservice
-, kiconthemes
-, kwindowsystem
-, kxmlgui
-, kdbusaddons
-, kconfig
-, khtml
+{ plasmaPackage, extra-cmake-modules, kdoctools, kitemviews
+, kcmutils, ki18n, kio, kservice, kiconthemes, kwindowsystem
+, kxmlgui, kdbusaddons, kconfig, khtml, makeQtWrapper
 }:
 
 plasmaPackage {
@@ -19,21 +8,14 @@ plasmaPackage {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
+    makeQtWrapper
   ];
   buildInputs = [
-    kitemviews
-    kcmutils
-    ki18n
-    kio
-    kservice
-    kiconthemes
-    kwindowsystem
-    kxmlgui
-    kdbusaddons
+    kitemviews kcmutils kservice kiconthemes kxmlgui kdbusaddons
     kconfig
-    khtml
   ];
+  propagatedBuildInputs = [ khtml ki18n kio kwindowsystem ];
   postInstall = ''
-    wrapKDEProgram "$out/bin/systemsettings5"
+    wrapQtProgram "$out/bin/systemsettings5"
   '';
 }

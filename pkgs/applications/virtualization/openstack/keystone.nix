@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, xmlsec, which }:
+{ stdenv, fetchurl, pythonPackages, xmlsec, which, openssl }:
 
 pythonPackages.buildPythonPackage rec {
   name = "keystone-${version}";
@@ -33,7 +33,13 @@ pythonPackages.buildPythonPackage rec {
     ldap ldappool webtest requests2 oslotest pep8 pymongo which
   ];
 
+  makeWrapperArgs = ["--prefix PATH : '${openssl}/bin:$PATH'"];
+
   postInstall = ''
+    # install .ini files
+    mkdir -p $out/etc
+    cp etc/* $out/etc
+
     # check all binaries don't crash
     for i in $out/bin/*; do
       $i --help

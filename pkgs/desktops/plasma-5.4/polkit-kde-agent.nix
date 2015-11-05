@@ -18,8 +18,6 @@ plasmaPackage {
     extra-cmake-modules
   ];
   buildInputs = [
-    ki18n
-    kwindowsystem
     kdbusaddons
     kwidgetsaddons
     kcoreaddons
@@ -29,4 +27,5 @@ plasmaPackage {
     knotifications
     polkitQt
   ];
+  propagatedBuildInputs = [ ki18n kwindowsystem ];
 }

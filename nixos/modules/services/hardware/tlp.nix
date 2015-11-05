@@ -8,7 +8,16 @@ cfg = config.services.tlp;
 
 tlp = pkgs.tlp.override { kmod = config.system.sbin.modprobe; };
 
-confFile = pkgs.writeText "tlp" (builtins.readFile "${tlp}/etc/default/tlp" + cfg.extraConfig);
+# XXX: We can't use writeTextFile + readFile here because it triggers
+# TLP build to get the .drv (even on --dry-run).
+confFile = pkgs.runCommand "tlp"
+  { config = cfg.extraConfig;
+    passAsFile = [ "config" ];
+  }
+  ''
+    cat ${tlp}/etc/default/tlp > $out
+    cat $configPath >> $out
+  '';
 
 in
 

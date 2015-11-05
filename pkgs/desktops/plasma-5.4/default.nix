@@ -51,7 +51,7 @@ let
       let version = (builtins.parseDrvName breeze-qt5.name).version;
       in symlinkJoin "breeze-${version}" [ breeze-qt4 breeze-qt5 ];
     kde-cli-tools = callPackage ./kde-cli-tools.nix {};
-    kde-gtk-config = callPackage ./kde-gtk-config.nix {};
+    kde-gtk-config = callPackage ./kde-gtk-config {};
     kdecoration = callPackage ./kdecoration.nix {};
     kdeplasma-addons = callPackage ./kdeplasma-addons.nix {};
     kgamma5 = callPackage ./kgamma5.nix {};
@@ -66,13 +66,13 @@ let
     kwin = callPackage ./kwin {};
     kwrited = callPackage ./kwrited.nix {};
     libkscreen = callPackage ./libkscreen {};
-    libksysguard = callPackage ./libksysguard.nix {};
+    libksysguard = callPackage ./libksysguard {};
     milou = callPackage ./milou.nix {};
     oxygen = callPackage ./oxygen.nix {};
     oxygen-fonts = callPackage ./oxygen-fonts.nix {};
     plasma-desktop = callPackage ./plasma-desktop {};
     plasma-mediacenter = callPackage ./plasma-mediacenter.nix {};
-    plasma-nm = callPackage ./plasma-nm.nix {};
+    plasma-nm = callPackage ./plasma-nm {};
     plasma-pa = callPackage ./plasma-pa.nix {};
     plasma-workspace = callPackage ./plasma-workspace {};
     plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix {};

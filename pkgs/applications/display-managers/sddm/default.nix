@@ -1,8 +1,8 @@
-{ stdenv, fetchpatch, makeWrapper, fetchFromGitHub, cmake, pkgconfig, libxcb, libpthreadstubs
+{ stdenv, fetchpatch, makeQtWrapper, fetchFromGitHub, cmake, pkgconfig, libxcb, libpthreadstubs
 , libXdmcp, libXau, qtbase, qtdeclarative, qttools, pam, systemd }:
 
 let
-  version = "0.12.0";
+  version = "0.13.0";
 in
 stdenv.mkDerivation rec {
   name = "sddm-${version}";
@@ -11,12 +11,12 @@ stdenv.mkDerivation rec {
     owner = "sddm";
     repo = "sddm";
     rev = "v${version}";
-    sha256 = "09amr61srvl52nvxlqqgs9fzn33pc2gjv5hc83gxx43x6q2j19gg";
+    sha256 = "0c3q8lpb123m9k5x3i71mm8lmyzhknw77zxh89yfl8qmn6zd61i1";
   };
 
   patches = [ ./sddm-ignore-config-mtime.patch ];
 
-  nativeBuildInputs = [ cmake pkgconfig qttools ];
+  nativeBuildInputs = [ cmake makeQtWrapper pkgconfig qttools ];
 
   buildInputs = [ libxcb libpthreadstubs libXdmcp libXau qtbase qtdeclarative pam systemd ];
 

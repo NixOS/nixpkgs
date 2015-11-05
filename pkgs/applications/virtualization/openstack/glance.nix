@@ -56,6 +56,8 @@ pythonPackages.buildPythonPackage rec {
           $i --help
       esac
     done
+
+    cp etc/*-paste.ini $out/etc/
   '';
 
   meta = with stdenv.lib; {

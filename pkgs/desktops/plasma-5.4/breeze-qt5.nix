@@ -1,14 +1,6 @@
-{ plasmaPackage
-, extra-cmake-modules
-, frameworkintegration
-, kcmutils
-, kconfigwidgets
-, kcoreaddons
-, kdecoration
-, kguiaddons
-, ki18n
-, kwindowsystem
-, qtx11extras
+{ plasmaPackage, extra-cmake-modules, frameworkintegration
+, kcmutils, kconfigwidgets, kcoreaddons, kdecoration, kguiaddons
+, ki18n, kwindowsystem, makeQtWrapper, qtx11extras
 }:
 
 plasmaPackage {
@@ -16,20 +8,14 @@ plasmaPackage {
   sname = "breeze";
   nativeBuildInputs = [
     extra-cmake-modules
+    makeQtWrapper
   ];
   buildInputs = [
-    frameworkintegration
-    kcmutils
-    kconfigwidgets
-    kcoreaddons
-    kdecoration
-    kguiaddons
-    ki18n
-    kwindowsystem
-    qtx11extras
+    kcmutils kconfigwidgets kcoreaddons kdecoration kguiaddons
   ];
-  cmakeFlags = [ "-DUSE_KDE4=OFF" ];
+  propagatedBuildInputs = [ frameworkintegration ki18n kwindowsystem qtx11extras ];
+  cmakeFlags = [ "-DUSE_Qt4=OFF" ];
   postInstall = ''
-    wrapKDEProgram "$out/bin/breeze-settings5"
+    wrapQtProgram "$out/bin/breeze-settings5"
   '';
 }

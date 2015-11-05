@@ -1603,7 +1603,7 @@ let
     '';
 
     buildInputs = [ self.nose self.mock ];
-    propagatedBuildInputs = [ self.requests self.httpretty ];
+    propagatedBuildInputs = [ self.requests2 self.httpretty ];
 
     meta = {
       homepage = https://github.com/boto/boto;
@@ -7579,12 +7579,13 @@ let
 
   hetzner = buildPythonPackage rec {
     name = "hetzner-${version}";
-    version = "0.7.3";
+    version = "0.7.4";
 
-    src = pkgs.fetchurl {
-      url = "https://github.com/RedMoonStudios/hetzner/archive/"
-          + "v${version}.tar.gz";
-      sha256 = "1a0kcwqd1pj5giwh75m2m3jcnr1kd38v40hh64wgly2zp485nm5m";
+    src = pkgs.fetchFromGitHub {
+      repo = "hetzner";
+      owner = "RedMoonStudios";
+      rev = "v${version}";
+      sha256 = "04dlixczzvpimk48p87ix7j9q54jy46cwn4f05n2dlzsyc5vvxin";
     };
 
     # not there yet, but coming soon.
@@ -7731,7 +7732,7 @@ let
       sha256 = "0f295zj272plr9lhf80kgz19dxkargwv3ar83rwavrcy516mgg9n";
     };
 
-    buildInputs = with self; [ tornado requests httplib2 sure nose coverage certifi ];
+    buildInputs = with self; [ tornado requests2 httplib2 sure nose coverage certifi ];
 
     propagatedBuildInputs = with self; [ urllib3 ];
 
@@ -8652,17 +8653,17 @@ let
 
 
   python_magic = buildPythonPackage rec {
-    name = "python-magic-0.4.6";
+    name = "python-magic-0.4.10";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/python-magic/${name}.tar.gz";
-      md5 = "07e7a0fea78dd81ed609414c3484df58";
+      sha256 = "1hx2sjd4fdswswj3yydn2azxb59rjmi9b7jzh94lf1wnxijjizbr";
     };
 
     propagatedBuildInputs = with self; [ pkgs.file ];
 
     patchPhase = ''
-      substituteInPlace magic.py --replace "ctypes.CDLL(dll)" "ctypes.CDLL('${pkgs.file}/lib/libmagic.so')"
+      substituteInPlace magic.py --replace "ctypes.util.find_library('magic')" "'${pkgs.file}/lib/libmagic.so'"
     '';
 
     doCheck = false;
@@ -10437,13 +10438,13 @@ let
   };
 
   openpyxl = buildPythonPackage rec {
-    version = "2.2.4";
+    version = "2.2.6";
     name = "openpyxl-${version}";
 
     src = pkgs.fetchhg {
       url = "https://bitbucket.org/openpyxl/openpyxl";
       rev = "${version}";
-      sha256 = "1g9imbg4sjfyv5sqg2s7h4svhdmbnvq16hvc1a8jpaqq8nc2vjj2";
+      sha256 = "159cg3njsybjdmwr0458qc5k0m7hbq41h3fczxflc0wnh7ancrdf";
     };
 
     buildInputs = with self; [ pytest ];
@@ -10559,10 +10560,13 @@ let
 
     propagatedBuildInputs = with self; [
       pbr requests2
-        (sphinx.override {src = pkgs.fetchurl {
-          url = "https://pypi.python.org/packages/source/s/sphinx/sphinx-1.2.3.tar.gz";
-          sha256 = "94933b64e2fe0807da0612c574a021c0dac28c7bd3c4a23723ae5a39ea8f3d04";
-        };})
+        (sphinx.override {
+          src = pkgs.fetchurl {
+            url = "https://pypi.python.org/packages/source/s/sphinx/sphinx-1.2.3.tar.gz";
+            sha256 = "94933b64e2fe0807da0612c574a021c0dac28c7bd3c4a23723ae5a39ea8f3d04";
+            };
+          patches = [];
+        })
     ];
   };
 
@@ -16310,15 +16314,12 @@ let
 
 
   six = buildPythonPackage rec {
-    name = "six-1.9.0";
+    name = "six-1.10.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/six/${name}.tar.gz";
-      sha256 = "1mci5i8mjqmljmv33h0q3d4djc13zk1kfmb3fbvd3yy43x0m4h72";
+      sha256 = "0snmb8xffb3vsma0z67i0h0w2g2dy0p3gsgh9gi4i0kgc5l8spqh";
     };
-
-    # error: invalid command 'test'
-    doCheck = false;
 
     meta = {
       description = "A Python 2 and 3 compatibility library";
@@ -16472,6 +16473,7 @@ let
       sha256 = "052i5c7cgvs5iv011dkq3r8d6jycg2gjjg3907ijsbdlq8q52vhs";
     };
 
+    patches = [ ../development/python-modules/sphinx-1.3.1-pr-1946.patch ];
     LC_ALL = "en_US.UTF-8";
     checkPhase = ''
       PYTHON=${python.executable} make test

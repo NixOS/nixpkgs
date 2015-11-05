@@ -1,7 +1,7 @@
-From bce620c9dcb25a4e603b22ead5c004b053dae7bf Mon Sep 17 00:00:00 2001
+From 618d86f35b83ee9e57da12be9d0866e34e487b88 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@gmail.com>
 Date: Fri, 28 Aug 2015 10:16:38 -0500
-Subject: [PATCH 1/2] hwclock
+Subject: [PATCH 1/3] hwclock
 
 ---
  kcms/dateandtime/helper.cpp | 6 +-----
@@ -32,5 +32,5 @@ index cec5ab8..fc4a6b9 100644
          KProcess::execute(hwclock, QStringList() << "--systohc");
      }
 -- 
-2.5.0
+2.5.2
 
