@@ -8663,7 +8663,7 @@ let
     propagatedBuildInputs = with self; [ pkgs.file ];
 
     patchPhase = ''
-      substituteInPlace magic.py --replace "ctypes.CDLL(dll)" "ctypes.CDLL('${pkgs.file}/lib/libmagic.so')"
+      substituteInPlace magic.py --replace "ctypes.util.find_library('magic')" "'${pkgs.file}/lib/libmagic.so'"
     '';
 
     doCheck = false;
