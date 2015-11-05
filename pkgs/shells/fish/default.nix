@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     sed -e "s|bc|${bc}/bin/bc|" \
         -e "s|/usr/bin/seq|${coreutils}/bin/seq|" \
-        -i "$out/share/fish/functions/seq.fish"
+        -i "$out/share/fish/functions/seq.fish" \
+           "$out/share/fish/functions/math.fish"
     sed -i "s|which |${which}/bin/which |" "$out/share/fish/functions/type.fish"
     sed -i "s|nroff |${groff}/bin/nroff |" "$out/share/fish/functions/__fish_print_help.fish"
     sed -e "s|gettext |${gettext}/bin/gettext |" \
