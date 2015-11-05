@@ -11758,6 +11758,17 @@ let
     goffice = goffice_0_8;
   };
 
+  gnucash26 = lowPrio (callPackage ../applications/office/gnucash/2.6.nix {
+    inherit (gnome2) libgnomecanvas;
+    inherit (gnome3) dconf;
+    gconf = gnome2.GConf;
+    goffice = goffice_0_8;
+    webkit = webkitgtk2;
+    guile = guile_1_8;
+    slibGuile = slibGuile.override { scheme = guile_1_8; };
+    glib = glib;
+  });
+
   goffice = callPackage ../development/libraries/goffice { };
 
   goffice_0_8 = callPackage ../development/libraries/goffice/0.8.nix {
