@@ -2540,10 +2540,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DataInteger = buildPerlPackage rec {
-    name = "Data-Integer-0.004";
+    name = "Data-Integer-0.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
-      sha256 = "3a52f7717d1ebda3af40036d72cbcadd1984210737743997abdad141d620f67e";
+      sha256 = "1dk04jf78sv63lww1qzagxlywcc04cfd3cfvzz168d24db9cr5bz";
     };
   };
 
