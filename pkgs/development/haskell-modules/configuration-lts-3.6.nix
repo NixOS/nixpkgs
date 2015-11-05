@@ -1112,6 +1112,7 @@ self: super: {
   "afv" = dontDistribute super."afv";
   "agda-server" = dontDistribute super."agda-server";
   "agda-snippets" = dontDistribute super."agda-snippets";
+  "agda-snippets-hakyll" = dontDistribute super."agda-snippets-hakyll";
   "agum" = dontDistribute super."agum";
   "aig" = dontDistribute super."aig";
   "air" = dontDistribute super."air";
@@ -4676,6 +4677,7 @@ self: super: {
   "lat" = dontDistribute super."lat";
   "latest-npm-version" = dontDistribute super."latest-npm-version";
   "latex" = dontDistribute super."latex";
+  "latex-formulae-hakyll" = dontDistribute super."latex-formulae-hakyll";
   "latex-formulae-image" = dontDistribute super."latex-formulae-image";
   "latex-formulae-pandoc" = dontDistribute super."latex-formulae-pandoc";
   "lattices" = doDistribute super."lattices_1_3";
@@ -5273,6 +5275,7 @@ self: super: {
   "narc" = dontDistribute super."narc";
   "nat" = dontDistribute super."nat";
   "nationstates" = doDistribute super."nationstates_0_2_0_3";
+  "nats" = doDistribute super."nats_1";
   "nats-queue" = dontDistribute super."nats-queue";
   "natural-number" = dontDistribute super."natural-number";
   "natural-numbers" = dontDistribute super."natural-numbers";
@@ -5602,6 +5605,7 @@ self: super: {
   "patch-combinators" = dontDistribute super."patch-combinators";
   "patch-image" = dontDistribute super."patch-image";
   "patches-vector" = dontDistribute super."patches-vector";
+  "path-extra" = dontDistribute super."path-extra";
   "path-pieces" = doDistribute super."path-pieces_0_2_0";
   "pathfinding" = dontDistribute super."pathfinding";
   "pathfindingcore" = dontDistribute super."pathfindingcore";
@@ -5704,6 +5708,7 @@ self: super: {
   "pipeclip" = dontDistribute super."pipeclip";
   "pipes-async" = dontDistribute super."pipes-async";
   "pipes-attoparsec-streaming" = dontDistribute super."pipes-attoparsec-streaming";
+  "pipes-cacophony" = dontDistribute super."pipes-cacophony";
   "pipes-cellular" = dontDistribute super."pipes-cellular";
   "pipes-cellular-csv" = dontDistribute super."pipes-cellular-csv";
   "pipes-cereal" = dontDistribute super."pipes-cereal";
@@ -7900,6 +7905,9 @@ self: super: {
   "yesod-pure" = dontDistribute super."yesod-pure";
   "yesod-purescript" = dontDistribute super."yesod-purescript";
   "yesod-raml" = dontDistribute super."yesod-raml";
+  "yesod-raml-bin" = dontDistribute super."yesod-raml-bin";
+  "yesod-raml-docs" = dontDistribute super."yesod-raml-docs";
+  "yesod-raml-mock" = dontDistribute super."yesod-raml-mock";
   "yesod-recaptcha" = dontDistribute super."yesod-recaptcha";
   "yesod-routes" = dontDistribute super."yesod-routes";
   "yesod-routes-flow" = dontDistribute super."yesod-routes-flow";
