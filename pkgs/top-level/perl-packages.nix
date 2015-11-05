@@ -2641,10 +2641,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DataUUID = buildPerlPackage rec {
-    name = "Data-UUID-1.219";
+    name = "Data-UUID-1.220";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Data/${name}.tar.gz";
-      sha256 = "0a6s6qwc548c1ldf459i5z55fvxsrdi4rnc57d167wdbdydd6dn7";
+      sha256 = "0q7rfi7firwcvkhh9bym3c56hlm63badfli27m77139lwh33nlwr";
     };
   };
 
