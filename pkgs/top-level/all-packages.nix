@@ -13519,6 +13519,8 @@ let
 
   sound-juicer = callPackage ../applications/audio/sound-juicer { };
 
+  spice-vdagent = callPackage ../applications/virtualization/spice-vdagent { };
+
   spideroak = callPackage ../applications/networking/spideroak { };
 
   ssvnc = callPackage ../applications/networking/remote/ssvnc { };
