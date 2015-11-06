@@ -40,7 +40,7 @@ in
       ];
       description = ''
         Interfaces where to enable Wake-On-LAN, and how. Two methods available:
-        "magickey" and "password". The password has the shape of six bytes
+        "magicpacket" and "password". The password has the shape of six bytes
         in hexadecimal separated by a colon each. For more information,
         check the ethtool manual.
       '';
