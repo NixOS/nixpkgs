@@ -1897,6 +1897,8 @@ let
 
   imapsync = callPackage ../tools/networking/imapsync { };
 
+  imgur-screenshot = callPackage ../tools/graphics/imgur-screenshot { };
+
   imgurbash = callPackage ../tools/graphics/imgurbash { };
 
   inadyn = callPackage ../tools/networking/inadyn { };
