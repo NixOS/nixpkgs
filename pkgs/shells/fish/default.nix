@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, python, which, groff, gettext, man_db, bc, libiconv, coreutils }:
+{ stdenv, fetchurl, ncurses, nettools, python, which, groff, gettext, man_db, bc, libiconv, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "fish-${version}";
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
         -i "$out/share/fish/functions/seq.fish" \
            "$out/share/fish/functions/math.fish"
     sed -i "s|which |${which}/bin/which |" "$out/share/fish/functions/type.fish"
+    sed -i "s|(hostname\||(${nettools}/bin/hostname\||" "$out/share/fish/functions/fish_prompt.fish"
     sed -i "s|nroff |${groff}/bin/nroff |" "$out/share/fish/functions/__fish_print_help.fish"
     sed -e "s|gettext |${gettext}/bin/gettext |" \
         -e "s|which |${which}/bin/which |" \
