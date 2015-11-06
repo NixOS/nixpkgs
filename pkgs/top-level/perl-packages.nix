@@ -10650,11 +10650,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ Spiffy ];
   };
 
-  TestCheckDeps = buildPerlModule {
-    name = "Test-CheckDeps-0.006";
+  TestCheckDeps = buildPerlPackage rec {
+    name = "Test-CheckDeps-0.010";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEONT/Test-CheckDeps-0.006.tar.gz;
-      sha256 = "774c1455566d11746118fd95305d1dbd111af86eac78058918e72468c43d9bcb";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/${name}.tar.gz";
+      sha256 = "1vjinlixxdx6gfcw8y1dw2rla8bfhi8nmgcqr3nffc7kqskcrz36";
     };
     buildInputs = [ ModuleBuildTiny ModuleMetadata ];
     propagatedBuildInputs = [ CPANMetaCheck ];
