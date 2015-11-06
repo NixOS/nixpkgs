@@ -6163,6 +6163,30 @@ let
     };
   };
 
+  django_redis = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
+    name = "django-redis-${version}";
+    version = "4.2.0";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/d/django-redis/${name}.tar.gz";
+      sha256 = "9ad6b299458f7e6bfaefa8905f52560017369d82fb8fb0ed4b41adc048dbf11c";
+    };
+
+    buildInputs = [ self.mock ];
+
+    propagatedBuildInputs = [ django ] ++
+      (with self; [
+        redis
+        msgpack
+      ]);
+
+    meta = {
+      description = "Full featured redis cache backend for Django";
+      homepage = https://github.com/niwibe/django-redis;
+      license = licenses.bsd3;
+    };
+  }) {};
+
   django_reversion = buildPythonPackage rec {
     name = "django-reversion-${version}";
     version = "1.8.5";
