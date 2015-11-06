@@ -6661,6 +6661,9 @@ let
 
   incrtcl = callPackage ../development/libraries/incrtcl { };
 
+  indicator-application-gtk2 = callPackage ../development/libraries/indicator-application/gtk2.nix { };
+  indicator-application-gtk3 = callPackage ../development/libraries/indicator-application/gtk3.nix { };
+
   indilib = callPackage ../development/libraries/indilib { };
 
   iniparser = callPackage ../development/libraries/iniparser { };
@@ -6810,6 +6813,9 @@ let
 
   libantlr3c = callPackage ../development/libraries/libantlr3c {};
 
+  libappindicator-gtk2 = callPackage ../development/libraries/libappindicator { gtkVersion = "2"; };
+  libappindicator-gtk3 = callPackage ../development/libraries/libappindicator { gtkVersion = "3"; };
+
   libarchive = callPackage ../development/libraries/libarchive { };
 
   libasr = callPackage ../development/libraries/libasr { };
@@ -6912,6 +6918,10 @@ let
   libdbiDrivers = libdbiDriversBase.override {
     inherit sqlite libmysql;
   };
+
+  libdbusmenu-glib = callPackage ../development/libraries/libdbusmenu { };
+  libdbusmenu-gtk2 = callPackage ../development/libraries/libdbusmenu { gtkVersion = "2"; };
+  libdbusmenu-gtk3 = callPackage ../development/libraries/libdbusmenu { gtkVersion = "3"; };
 
   libdbusmenu_qt = callPackage ../development/libraries/libdbusmenu-qt { };
 
@@ -7095,6 +7105,12 @@ let
   libicns = callPackage ../development/libraries/libicns { };
 
   libimobiledevice = callPackage ../development/libraries/libimobiledevice { };
+
+  libindicate-gtk2 = callPackage ../development/libraries/libindicate { gtkVersion = "2"; };
+  libindicate-gtk3 = callPackage ../development/libraries/libindicate { gtkVersion = "3"; };
+
+  libindicator-gtk2 = callPackage ../development/libraries/libindicator { gtkVersion = "2"; };
+  libindicator-gtk3 = callPackage ../development/libraries/libindicator { gtkVersion = "3"; };
 
   libiodbc = callPackage ../development/libraries/libiodbc {
     useGTK = config.libiodbc.gtk or false;
