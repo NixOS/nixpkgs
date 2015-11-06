@@ -4992,16 +4992,17 @@ let
 
   pirate-get = pythonPackages.buildPythonPackage rec {
     name = "pirate-get-${version}";
-    version = "0.2.7";
+    version = "0.2.8";
 
     disabled = !isPy3k;
+    doCheck = false;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pirate-get/${name}.tar.gz";
-      sha256 = "0awjrmczvd6rwzj4fb7bhjlil5mx91amjs7fk5890h3in52clxg3";
+      sha256 = "033dwv0w9fx3dwrna3fzvmynsfhb2qjhx6f2i9sfv82ijvkm8ynz";
     };
 
-    propagatedBuildInputs = [ self.colorama ];
+    propagatedBuildInputs = with self; [ colorama veryprettytable pyquery ];
 
     meta = {
       description = "A command line interface for The Pirate Bay";
