@@ -9346,7 +9346,9 @@ let
 
   ripple-rest = callPackage ../servers/rippled/ripple-rest.nix { };
 
-  s6 = callPackage ../servers/s6 { };
+  s6 = callPackage ../tools/system/s6 { };
+
+  s6-rc = callPackage ../tools/system/s6-rc { };
 
   spamassassin = callPackage ../servers/mail/spamassassin {
     inherit (perlPackages) HTMLParser NetDNS NetAddrIP DBFile
