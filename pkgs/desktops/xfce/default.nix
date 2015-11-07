@@ -6,6 +6,7 @@ callPackage = newScope (deps // xfce_self);
 
 deps = { # xfce-global dependency overrides should be here
   inherit (pkgs.gnome) libglade libwnck vte gtksourceview;
+  inherit (pkgs.gnome3) dconf;
   inherit (pkgs.perlPackages) URI;
 };
 
