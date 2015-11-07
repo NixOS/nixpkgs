@@ -9065,11 +9065,11 @@ let
 
   rainbowstream = buildPythonPackage rec {
     name = "rainbowstream-${version}";
-    version = "1.2.7";
+    version = "1.3.1";
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/r/rainbowstream/${name}.tar.gz";
-      sha256 = "1jvv07w9n7ca251l92alm2yq9w82sb7lvxz6if3gc3nbqzc587rf";
+      sha256 = "0dhhgr0ww4x85pgl6mzp327sy4v6mv6hz3wvnsrwl0knkxknbadv";
     };
 
     doCheck = false;
@@ -9082,6 +9082,7 @@ let
       clib=$out/${python.sitePackages}/rainbowstream/image.so
       substituteInPlace rainbowstream/c_image.py \
         --replace @CLIB@ $clib
+      sed -i 's/requests.*"/requests"/' setup.py
     '';
 
     preBuild = ''
@@ -9099,7 +9100,7 @@ let
 
     buildInputs = with self; [
       pkgs.libjpeg pkgs.freetype pkgs.zlib pkgs.glibcLocales
-      pillow twitter pyfiglet requests arrow dateutil modules.readline pysocks
+      pillow twitter pyfiglet requests2 arrow dateutil modules.readline pysocks
     ];
 
     meta = {
