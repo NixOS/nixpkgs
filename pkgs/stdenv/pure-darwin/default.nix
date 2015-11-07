@@ -5,18 +5,7 @@
 }:
 
 let
-  # libSystem and its transitive dependencies. Get used to this; it's a recurring theme in darwin land
-  libSystemClosure = [
-    "/usr/lib/libSystem.dylib"
-    "/usr/lib/libSystem.B.dylib"
-    "/usr/lib/libobjc.A.dylib"
-    "/usr/lib/libobjc.dylib"
-    "/usr/lib/libauto.dylib"
-    "/usr/lib/libc++abi.dylib"
-    "/usr/lib/libc++.1.dylib"
-    "/usr/lib/libDiagnosticMessagesClient.dylib"
-    "/usr/lib/system"
-  ];
+  libSystemProfile = builtins.readFile ./standard-sandbox.sb;
 
   fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
     url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/4f07c88d467216d9692fefc951deb5cd3c4cc722/${file}";
@@ -46,7 +35,9 @@ in rec {
   '';
 
   # The one dependency of /bin/sh :(
-  binShClosure = [ "/usr/lib/libncurses.5.4.dylib" ];
+  binShClosure = ''
+    (allow file-read* (literal "/usr/lib/libncurses.5.4.dylib"))
+  '';
 
   bootstrapTools = derivation rec {
     inherit system tarball;
@@ -57,7 +48,7 @@ in rec {
 
     inherit (bootstrapFiles) mkdir bzip2 cpio;
 
-    __impureHostDeps  = binShClosure ++ libSystemClosure;
+    __sandboxProfile = binShClosure + libSystemProfile;
   };
 
   stageFun = step: last: {shell             ? "${bootstrapTools}/bin/sh",
@@ -100,8 +91,8 @@ in rec {
         };
 
         # The stdenvs themselves don't use mkDerivation, so I need to specify this here
-        __stdenvImpureHostDeps = binShClosure ++ libSystemClosure;
-        __extraImpureHostDeps  = binShClosure ++ libSystemClosure;
+        __stdenvSandboxProfile = binShClosure + libSystemProfile;
+        __extraSandboxProfile  = binShClosure + libSystemProfile;
 
         extraAttrs = { inherit platform; };
         overrides  = pkgs: (overrides pkgs) // { fetchurl = thisStdenv.fetchurlBoot; };
@@ -178,10 +169,14 @@ in rec {
   };
 
   stage2 = with stage1; stageFun 2 stage1 {
+    extraPreHook = ''
+      export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
+    '';
+
     allowedRequisites =
       [ bootstrapTools ] ++
       (with pkgs; [ xz libcxx libcxxabi icu ]) ++
-      (with pkgs.darwin; [ dyld Libsystem CF ]);
+      (with pkgs.darwin; [ dyld Libsystem CF locale ]);
 
     overrides = persistent1;
   };
@@ -196,7 +191,7 @@ in rec {
 
     darwin = orig.darwin // {
       inherit (darwin)
-        dyld Libsystem xnu configd libdispatch libclosure launchd libiconv;
+        dyld Libsystem xnu configd libdispatch libclosure launchd libiconv locale;
     };
   };
 
@@ -209,10 +204,14 @@ in rec {
     # patches our shebangs back to point at bootstrapTools. This makes sure bash comes first.
     extraInitialPath = [ pkgs.bash ];
 
+    extraPreHook = ''
+      export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
+    '';
+
     allowedRequisites =
       [ bootstrapTools ] ++
       (with pkgs; [ icu bash libcxx libcxxabi ]) ++
-      (with pkgs.darwin; [ dyld Libsystem ]);
+      (with pkgs.darwin; [ dyld Libsystem locale ]);
 
     overrides = persistent2;
   };
@@ -230,13 +229,16 @@ in rec {
     };
 
     darwin = orig.darwin // {
-      inherit (darwin) dyld Libsystem libiconv;
+      inherit (darwin) dyld Libsystem libiconv locale;
     };
   };
 
   stage4 = with stage3; stageFun 4 stage3 {
     shell = "${pkgs.bash}/bin/bash";
     extraInitialPath = [ pkgs.bash ];
+    extraPreHook = ''
+      export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
+    '';
     overrides = persistent3;
   };
 
@@ -263,8 +265,8 @@ in rec {
 
     preHook = commonPreHook;
 
-    __stdenvImpureHostDeps = binShClosure ++ libSystemClosure;
-    __extraImpureHostDeps  = binShClosure ++ libSystemClosure;
+    __stdenvSandboxProfile = binShClosure + libSystemProfile;
+    __extraSandboxProfile  = binShClosure + libSystemProfile;
 
     initialPath = import ../common-path.nix { inherit pkgs; };
     shell       = "${pkgs.bash}/bin/bash";

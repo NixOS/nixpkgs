@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     pwd="$(type -P pwd)"
     substituteInPlace dist/Cwd/Cwd.pm \
       --replace "pwd_cmd = 'pwd'" "pwd_cmd = '$pwd'"
+    grep -R /bin/pwd .
+    exit 1
   '';
 
   # Build a thread-safe Perl with a dynamic libperls.o.  We need the

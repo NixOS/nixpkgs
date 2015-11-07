@@ -1553,7 +1553,7 @@ let
   garmintools = callPackage ../development/libraries/garmintools {};
 
   gawk = callPackage ../tools/text/gawk {
-    locale = darwin.adv_cmds;
+    inherit (darwin) locale;
   };
 
   gawkInteractive = appendToName "interactive"
@@ -5486,7 +5486,7 @@ let
 
   cmake = callPackage ../development/tools/build-managers/cmake {
     wantPS = stdenv.isDarwin;
-    ps     = if stdenv.isDarwin then darwin.adv_cmds else null;
+    inherit (darwin) ps;
   };
 
   cmakeCurses = cmake.override { useNcurses = true; };

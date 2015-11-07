@@ -1,32 +1,55 @@
-{ stdenv, appleDerivation, version }:
+{ stdenv, appleDerivation, fetchzip, version, bsdmake, perl, flex, yacc, writeScriptBin
+}:
 
-appleDerivation {
-  # Will override the name until we provide all of adv_cmds
+let recentAdvCmds = fetchzip {
+  url = "http://opensource.apple.com/tarballs/adv_cmds/adv_cmds-158.tar.gz";
+  sha256 = "0z081kcprzg5jcvqivfnwvvv6wfxzkjg2jc2lagsf8c7j7vgm8nn";
+};
+
+in appleDerivation {
+  buildInputs = [ bsdmake perl yacc flex (writeScriptBin "lex" "exec ${flex}/bin/flex $@") ];
+
+  patchPhase = ''
+    substituteInPlace BSDMakefile \
+      --replace chgrp true \
+      --replace /Developer/Makefiles/bin/compress-man-pages.pl true \
+      --replace "ps.tproj" "" --replace "gencat.tproj" "" --replace "md.tproj" "" \
+      --replace "tabs.tproj" "" --replace "cap_mkdb.tproj" "" \
+      --replace "!= tconf --test TARGET_OS_EMBEDDED" "= NO"
+
+    substituteInPlace Makefile --replace perl true
+
+    substituteInPlace colldef.tproj/BSDmakefile --replace "-ll" "-lfl"
+
+    for subproject in colldef mklocale monetdef msgdef numericdef timedef; do
+      substituteInPlace usr-share-locale.tproj/$subproject/BSDmakefile \
+        --replace /usr/share/locale "" \
+        --replace '-o ''${BINOWN} -g ''${BINGRP}' "" \
+        --replace "rsync -a" "cp -r"
+    done
+  '';
+
   buildPhase = ''
-    pushd ps
-    cc -Os -Wall -I. -c -o fmt.o fmt.c
-    cc -Os -Wall -I. -c -o keyword.o keyword.c
-    cc -Os -Wall -I. -c -o nlist.o nlist.c
-    cc -Os -Wall -I. -c -o print.o print.c
-    cc -Os -Wall -I. -c -o ps.o ps.c
-    cc -Os -Wall -I. -c -o tasks.o tasks.c
-    cc -o ps fmt.o keyword.o nlist.o print.o ps.o tasks.o
-    popd
+    bsdmake -C colldef.tproj
+    bsdmake -C mklocale.tproj
+    bsdmake -C usr-share-locale.tproj
 
-    pushd locale
-    c++ -o locale locale.cc
-    popd
+    clang ${recentAdvCmds}/ps/*.c -o ps
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/man/man1
-
-    cp ps/ps   $out/bin/ps
-    cp ps/ps.1 $out/share/man/man1
-    cp locale/locale   $out/bin/locale
-    cp locale/locale.1 $out/share/man/man1
+    bsdmake -C usr-share-locale.tproj install DESTDIR="$locale/share/locale"
+    install -d 0755 $ps/bin
+    install ps $ps/bin/ps
   '';
 
+  outputs = [
+    "ps"
+    "locale"
+  ];
+
+  # ps uses this syscall to get process info
+  __propagatedSandboxProfile = stdenv.lib.sandbox.allow "mach-priv-task-port";
 
   meta = {
     platforms = stdenv.lib.platforms.darwin;

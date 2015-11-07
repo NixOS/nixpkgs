@@ -12,6 +12,8 @@ let lib = import ../../../lib; in lib.makeOverridable (
 , extraBuildInputs ? []
 , __stdenvImpureHostDeps ? []
 , __extraImpureHostDeps ? []
+, __stdenvSandboxProfile ? ""
+, __extraSandboxProfile ? ""
 }:
 
 let
@@ -100,6 +102,8 @@ let
     , outputs ? [ "out" ]
     , __impureHostDeps ? []
     , __propagatedImpureHostDeps ? []
+    , __sandboxProfile ? ""
+    , __propagatedSandboxProfile ? ""
     , ... } @ attrs:
     let
       pos' =
@@ -149,13 +153,14 @@ let
       lib.addPassthru (derivation (
         (removeAttrs attrs
           ["meta" "passthru" "crossAttrs" "pos"
-           "__impureHostDeps" "__propagatedImpureHostDeps"])
+           "__impureHostDeps" "__propagatedImpureHostDeps"
+           "__sandboxProfile" "__propagatedSandboxProfile"])
         // (let
           # TODO: remove lib.unique once nix has a list canonicalization primitive
-          computedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs));
-          computedPropagatedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs));
+          computedSandboxProfile =
+            lib.concatStrings (lib.unique (builtins.map (input: input.__propagatedSandboxProfile or "") (extraBuildInputs ++ buildInputs ++ nativeBuildInputs)));
+          computedPropagatedSandboxProfile =
+            lib.concatStrings (lib.unique (builtins.map (input: input.__propagatedSandboxProfile or "") (propagatedBuildInputs ++ propagatedNativeBuildInputs)));
         in
         {
           builder = attrs.realBuilder or shell;
@@ -173,13 +178,8 @@ let
           propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
             (if crossConfig == null then propagatedBuildInputs else []);
         } // ifDarwin {
-          __impureHostDeps = computedImpureHostDeps ++ computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps ++ __impureHostDeps ++ __extraImpureHostDeps ++ [
-            "/dev/zero"
-            "/dev/random"
-            "/dev/urandom"
-            "/bin/sh"
-          ];
-          __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
+          __sandboxProfile = computedSandboxProfile + computedPropagatedSandboxProfile + __propagatedSandboxProfile + __sandboxProfile + __extraSandboxProfile;
+          __propagatedSandboxProfile = computedPropagatedSandboxProfile + __propagatedSandboxProfile;
         } // (if outputs' != [ "out" ] then {
           outputs = outputs';
         } else { })))) (
@@ -216,7 +216,7 @@ let
       inherit preHook initialPath shell defaultNativeBuildInputs;
     }
     // ifDarwin {
-      __impureHostDeps = __stdenvImpureHostDeps;
+      __sandboxProfile = __stdenvSandboxProfile;
     })
 
     // rec {
