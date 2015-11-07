@@ -14,9 +14,10 @@ let
     plugins=keyfile
 
     [keyfile]
-    ${optionalString (config.networking.hostName != "") ''
-      hostname=${config.networking.hostName}
-    ''}
+    ${optionalString (config.networking.hostName != "")
+      ''hostname=${config.networking.hostName}''}
+    ${optionalString (cfg.unmanaged != [])
+      ''unmanaged-devices=${lib.concatStringsSep ";" cfg.unmanaged}''}
 
     [logging]
     level=WARN
@@ -94,6 +95,16 @@ in {
           configured. If enabled, a group <literal>networkmanager</literal>
           will be created. Add all users that should have permission
           to change network settings to this group.
+        '';
+      };
+
+      unmanaged = mkOption {
+        type = types.listOf types.string;
+        default = [];
+        description = ''
+          List of interfaces that will not be managed by NetworkManager.
+          Interface name can be specified here, but if you need more fidelity
+          see "Device List Format" in NetworkManager.conf man page.
         '';
       };
 
