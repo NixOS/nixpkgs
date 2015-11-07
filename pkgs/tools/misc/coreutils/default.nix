@@ -36,6 +36,8 @@ let
          touch -r src/stat.c src/tail.c
        '';
 
+    configureFlags = optionalString stdenv.isSunOS "ac_cv_func_inotify_init=no";
+
     nativeBuildInputs = [ perl ];
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
