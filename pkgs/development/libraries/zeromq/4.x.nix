@@ -8,6 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "04gligbgr0phipjkwc0dyk1vr9306r6s4dbj85z7fxxk1n1ircv1";
   };
 
+  # Fix zeromq-4.1.3 with libsodium-1.0.6
+  postPatch = ''
+    sed -i 's/libzmq_werror="yes"/libzmq_werror="no"/' configure
+  '';
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libuuid libsodium ];
 
