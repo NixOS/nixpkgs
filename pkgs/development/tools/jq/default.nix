@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, oniguruma}:
 let
   s = # Generated upstream information
   rec {
@@ -9,6 +9,7 @@ let
     sha256="0g29kyz4ykasdcrb0zmbrp2jqs9kv1wz9swx849i2d1ncknbzln4";
   };
   buildInputs = [
+    oniguruma
   ];
 in
 stdenv.mkDerivation {
