@@ -124,7 +124,7 @@ rec {
 
 
   # Appends string context from another string.
-  addContextFrom = a: b: substring 0 0 a + b;
+  addContextFrom = a: b: a + b;
 
 
   # Cut a string with a separator and produces a list of strings which
