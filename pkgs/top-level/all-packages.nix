@@ -13223,9 +13223,11 @@ let
     inherit (lua52Packages) lpeg luaMessagePack luabitop;
   };
 
-  neovim-qt = callPackage ../applications/editors/neovim-qt {
+  neovim-qt = callPackage ../applications/editors/neovim/qt.nix {
     qt5 = qt55;
   };
+
+  neovim-pygui = pythonPackages.neovim_gui;
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {
     gtkvnc = gtkvnc.override { enableGTK3 = true; };

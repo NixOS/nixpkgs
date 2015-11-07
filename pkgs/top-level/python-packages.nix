@@ -20830,7 +20830,7 @@ let
   };
 
   neovim_gui = buildPythonPackage rec {
-    name = "neovim-gui-${self.neovim.version}";
+    name = "neovim-pygui-${self.neovim.version}";
     disabled = !isPy27;
 
     src = self.neovim.src;
