@@ -16272,6 +16272,26 @@ let
     };
   };
 
+  sandboxlib = buildPythonPackage rec {
+    name = "sandboxlib-${version}";
+    version = "0.31";
+
+    disabled = isPy3k;
+
+    buildInputs = [ self.pbr ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sandboxlib/sandboxlib-0.3.1.tar.gz";
+      sha256 = "0csj8hbpylqdkxcpqkcfs73dfvdqkyj23axi8m9drqdi4dhxb41h";
+    };
+
+    meta = {
+      description = "Sandboxing Library for Python";
+      homepage = https://pypi.python.org/pypi/sandboxlib/0.3.1;
+      license = licenses.gpl2;
+    };
+  };
+
   semantic-version = buildPythonPackage rec {
     name = "semantic_version-2.4.2";
     src = pkgs.fetchurl {
