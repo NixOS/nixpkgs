@@ -10588,12 +10588,14 @@ let
 
     propagatedBuildInputs = with self; [
       pbr requests2
-        (sphinx.override {
+        (sphinx.override rec {
+          name = "sphinx-1.2.3";
           src = pkgs.fetchurl {
-            url = "https://pypi.python.org/packages/source/s/sphinx/sphinx-1.2.3.tar.gz";
+            url = "https://pypi.python.org/packages/source/s/sphinx/${name}.tar.gz";
             sha256 = "94933b64e2fe0807da0612c574a021c0dac28c7bd3c4a23723ae5a39ea8f3d04";
             };
           patches = [];
+          disabled = isPy35;
         })
     ];
   };
