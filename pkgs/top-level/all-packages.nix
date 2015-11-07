@@ -843,6 +843,8 @@ let
 
   fzf = goPackages.fzf.bin // { outputs = [ "bin" ]; };
 
+  gencfsm = callPackage ../tools/security/gencfsm { };
+
   gist = callPackage ../tools/text/gist { };
 
   gmic = callPackage ../tools/graphics/gmic { };
