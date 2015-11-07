@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "make-${version}";
+  name = "gnustep-make-${version}";
   version = "1.0";
 
   src = fetchurl {

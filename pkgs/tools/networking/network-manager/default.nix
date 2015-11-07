@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ wirelesstools udev libgudev libnl libuuid polkit ppp libndp
-                  xz bluez5 gobjectIntrospection modemmanager readline newt libsoup ];
+                  xz bluez5 dnsmasq gobjectIntrospection modemmanager readline newt libsoup ];
 
   propagatedBuildInputs = [ dbus_glib gnutls libgcrypt ];
 

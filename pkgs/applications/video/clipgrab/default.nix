@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ffmpeg, makeDesktopItem, qt4 }:
 
-let version = "3.5.1"; in
+let version = "3.5.2"; in
 stdenv.mkDerivation rec {
   name = "clipgrab-${version}";
 
   src = fetchurl {
-    sha256 = "16hm7zv0yhxj7gdd8q462jcxy0jk6hicsk1mkhmarwrhifwsy4g9";
-    # The .tar.bz2 "Download" link is a binary blob, the source is .tar.gz!
+    sha256 = "0prag5liwx2l1b2a5f7cp3jh50qw5iwkf2c07iws9m1j1np3lxgp";
+    # The .tar.bz2 "Download" link is a binary blob, the source is the .tar.gz!
     url = "http://download.clipgrab.de/${name}.tar.gz";
   };
 

@@ -176,6 +176,7 @@ let
   libcroco = callPackage ./core/libcroco {};
 
   libgee = callPackage ./core/libgee { };
+  libgee_1 = callPackage ./core/libgee/libgee-1.nix { };
 
   libgdata = callPackage ./core/libgdata { };
 

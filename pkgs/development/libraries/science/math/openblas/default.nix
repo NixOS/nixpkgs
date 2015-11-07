@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, perl, liblapack, config, coreutils
+{ stdenv, fetchurl, gfortran, perl, which, config, coreutils
 # Most packages depending on openblas expect integer width to match pointer width,
 # but some expect to use 32-bit integers always (for compatibility with reference BLAS).
 , blas64 ? null
@@ -34,9 +34,7 @@ stdenv.mkDerivation {
 
   inherit blas64;
 
-  preBuild = "cp ${liblapack.src} lapack-${liblapack.meta.version}.tgz";
-
-  nativeBuildInputs = optionals stdenv.isDarwin [coreutils] ++ [gfortran perl];
+  nativeBuildInputs = optionals stdenv.isDarwin [coreutils] ++ [gfortran perl which];
 
   makeFlags =
     (if local then localFlags else genericFlags)

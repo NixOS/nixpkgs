@@ -3619,7 +3619,10 @@ let
     checkPhase = ''
       # Not worth the trouble
       rm test/with_dummyserver/test_proxy_poolmanager.py
-      nosetests --cover-min-percentage 70 -v
+      # pypy: https://github.com/shazow/urllib3/issues/736
+      rm test/with_dummyserver/test_connectionpool.py
+
+      nosetests -v --cover-min-percentage 1
     '';
 
 
@@ -4992,16 +4995,17 @@ let
 
   pirate-get = pythonPackages.buildPythonPackage rec {
     name = "pirate-get-${version}";
-    version = "0.2.7";
+    version = "0.2.8";
 
     disabled = !isPy3k;
+    doCheck = false;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pirate-get/${name}.tar.gz";
-      sha256 = "0awjrmczvd6rwzj4fb7bhjlil5mx91amjs7fk5890h3in52clxg3";
+      sha256 = "033dwv0w9fx3dwrna3fzvmynsfhb2qjhx6f2i9sfv82ijvkm8ynz";
     };
 
-    propagatedBuildInputs = [ self.colorama ];
+    propagatedBuildInputs = with self; [ colorama veryprettytable pyquery ];
 
     meta = {
       description = "A command line interface for The Pirate Bay";
@@ -6162,6 +6166,30 @@ let
       license = licenses.bsd2;
     };
   };
+
+  django_redis = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
+    name = "django-redis-${version}";
+    version = "4.2.0";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/d/django-redis/${name}.tar.gz";
+      sha256 = "9ad6b299458f7e6bfaefa8905f52560017369d82fb8fb0ed4b41adc048dbf11c";
+    };
+
+    buildInputs = [ self.mock ];
+
+    propagatedBuildInputs = [ django ] ++
+      (with self; [
+        redis
+        msgpack
+      ]);
+
+    meta = {
+      description = "Full featured redis cache backend for Django";
+      homepage = https://github.com/niwibe/django-redis;
+      license = licenses.bsd3;
+    };
+  }) {};
 
   django_reversion = buildPythonPackage rec {
     name = "django-reversion-${version}";
@@ -9038,11 +9066,11 @@ let
 
   rainbowstream = buildPythonPackage rec {
     name = "rainbowstream-${version}";
-    version = "1.2.7";
+    version = "1.3.1";
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/r/rainbowstream/${name}.tar.gz";
-      sha256 = "1jvv07w9n7ca251l92alm2yq9w82sb7lvxz6if3gc3nbqzc587rf";
+      sha256 = "0dhhgr0ww4x85pgl6mzp327sy4v6mv6hz3wvnsrwl0knkxknbadv";
     };
 
     doCheck = false;
@@ -9055,6 +9083,7 @@ let
       clib=$out/${python.sitePackages}/rainbowstream/image.so
       substituteInPlace rainbowstream/c_image.py \
         --replace @CLIB@ $clib
+      sed -i 's/requests.*"/requests"/' setup.py
     '';
 
     preBuild = ''
@@ -9072,7 +9101,7 @@ let
 
     buildInputs = with self; [
       pkgs.libjpeg pkgs.freetype pkgs.zlib pkgs.glibcLocales
-      pillow twitter pyfiglet requests arrow dateutil modules.readline pysocks
+      pillow twitter pyfiglet requests2 arrow dateutil modules.readline pysocks
     ];
 
     meta = {
@@ -10561,12 +10590,14 @@ let
 
     propagatedBuildInputs = with self; [
       pbr requests2
-        (sphinx.override {
+        (sphinx.override rec {
+          name = "sphinx-1.2.3";
           src = pkgs.fetchurl {
-            url = "https://pypi.python.org/packages/source/s/sphinx/sphinx-1.2.3.tar.gz";
+            url = "https://pypi.python.org/packages/source/s/sphinx/${name}.tar.gz";
             sha256 = "94933b64e2fe0807da0612c574a021c0dac28c7bd3c4a23723ae5a39ea8f3d04";
             };
           patches = [];
+          disabled = isPy35;
         })
     ];
   };
@@ -16245,6 +16276,26 @@ let
     };
   };
 
+  sandboxlib = buildPythonPackage rec {
+    name = "sandboxlib-${version}";
+    version = "0.31";
+
+    disabled = isPy3k;
+
+    buildInputs = [ self.pbr ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sandboxlib/sandboxlib-0.3.1.tar.gz";
+      sha256 = "0csj8hbpylqdkxcpqkcfs73dfvdqkyj23axi8m9drqdi4dhxb41h";
+    };
+
+    meta = {
+      description = "Sandboxing Library for Python";
+      homepage = https://pypi.python.org/pypi/sandboxlib/0.3.1;
+      license = licenses.gpl2;
+    };
+  };
+
   semantic-version = buildPythonPackage rec {
     name = "semantic_version-2.4.2";
     src = pkgs.fetchurl {
@@ -20783,7 +20834,7 @@ let
   };
 
   neovim_gui = buildPythonPackage rec {
-    name = "neovim-gui-${self.neovim.version}";
+    name = "neovim-pygui-${self.neovim.version}";
     disabled = !isPy27;
 
     src = self.neovim.src;

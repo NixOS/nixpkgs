@@ -842,6 +842,8 @@ let
 
   fzf = goPackages.fzf.bin // { outputs = [ "bin" ]; };
 
+  gencfsm = callPackage ../tools/security/gencfsm { };
+
   gist = callPackage ../tools/text/gist { };
 
   gmic = callPackage ../tools/graphics/gmic { };
@@ -1877,6 +1879,8 @@ let
   imapproxy = callPackage ../tools/networking/imapproxy { };
 
   imapsync = callPackage ../tools/networking/imapsync { };
+
+  imgur-screenshot = callPackage ../tools/graphics/imgur-screenshot { };
 
   imgurbash = callPackage ../tools/graphics/imgurbash { };
 
@@ -4115,6 +4119,8 @@ let
 
   oraclejdk8 = pkgs.oraclejdk8distro true false;
 
+  oraclejdk8psu = pkgs.oraclejdk8psu_distro true false;
+
   oraclejre = lowPrio (pkgs.jdkdistro false false);
 
   oraclejre7 = lowPrio (pkgs.oraclejdk7distro false false);
@@ -4122,6 +4128,8 @@ let
   oraclejre7psu = lowPrio (pkgs.oraclejdk7psu_distro false false);
 
   oraclejre8 = lowPrio (pkgs.oraclejdk8distro false false);
+
+  oraclejre8psu = lowPrio (pkgs.oraclejdk8psu_distro false false);
 
   jrePlugin = lowPrio (pkgs.jdkdistro false true);
 
@@ -4148,6 +4156,11 @@ let
     assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
       (callPackage ../development/compilers/oraclejdk/jdk8-linux.nix { inherit installjdk; });
+
+  oraclejdk8psu_distro = installjdk: pluginSupport:
+    assert supportsJDK;
+    (if pluginSupport then appendToName "with-plugin" else x: x)
+      (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix { inherit installjdk; });
 
   jikes = callPackage ../development/compilers/jikes { };
 
@@ -5590,6 +5603,8 @@ let
 
   gradle = callPackage ../development/tools/build-managers/gradle { };
 
+  gradle25 = callPackage ../development/tools/build-managers/gradle/2.5.nix { };
+
   gperf = callPackage ../development/tools/misc/gperf { };
 
   grail = callPackage ../development/libraries/grail { };
@@ -6660,6 +6675,9 @@ let
 
   incrtcl = callPackage ../development/libraries/incrtcl { };
 
+  indicator-application-gtk2 = callPackage ../development/libraries/indicator-application/gtk2.nix { };
+  indicator-application-gtk3 = callPackage ../development/libraries/indicator-application/gtk3.nix { };
+
   indilib = callPackage ../development/libraries/indilib { };
 
   iniparser = callPackage ../development/libraries/iniparser { };
@@ -6809,6 +6827,9 @@ let
 
   libantlr3c = callPackage ../development/libraries/libantlr3c {};
 
+  libappindicator-gtk2 = callPackage ../development/libraries/libappindicator { gtkVersion = "2"; };
+  libappindicator-gtk3 = callPackage ../development/libraries/libappindicator { gtkVersion = "3"; };
+
   libarchive = callPackage ../development/libraries/libarchive { };
 
   libasr = callPackage ../development/libraries/libasr { };
@@ -6911,6 +6932,10 @@ let
   libdbiDrivers = libdbiDriversBase.override {
     inherit sqlite libmysql;
   };
+
+  libdbusmenu-glib = callPackage ../development/libraries/libdbusmenu { };
+  libdbusmenu-gtk2 = callPackage ../development/libraries/libdbusmenu { gtkVersion = "2"; };
+  libdbusmenu-gtk3 = callPackage ../development/libraries/libdbusmenu { gtkVersion = "3"; };
 
   libdbusmenu_qt = callPackage ../development/libraries/libdbusmenu-qt { };
 
@@ -7096,6 +7121,12 @@ let
   libicns = callPackage ../development/libraries/libicns { };
 
   libimobiledevice = callPackage ../development/libraries/libimobiledevice { };
+
+  libindicate-gtk2 = callPackage ../development/libraries/libindicate { gtkVersion = "2"; };
+  libindicate-gtk3 = callPackage ../development/libraries/libindicate { gtkVersion = "3"; };
+
+  libindicator-gtk2 = callPackage ../development/libraries/libindicator { gtkVersion = "2"; };
+  libindicator-gtk3 = callPackage ../development/libraries/libindicator { gtkVersion = "3"; };
 
   libiodbc = callPackage ../development/libraries/libiodbc {
     useGTK = config.libiodbc.gtk or false;
@@ -9309,7 +9340,9 @@ let
 
   pyMAILt = builderDefsPackage (callPackage ../servers/xmpp/pyMAILt) {};
 
-  qpid-cpp = callPackage ../servers/amqp/qpid-cpp { };
+  qpid-cpp = callPackage ../servers/amqp/qpid-cpp { 
+    boost = boost155;
+  };
 
   rabbitmq_server = callPackage ../servers/amqp/rabbitmq-server {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
@@ -9333,7 +9366,9 @@ let
 
   ripple-rest = callPackage ../servers/rippled/ripple-rest.nix { };
 
-  s6 = callPackage ../servers/s6 { };
+  s6 = callPackage ../tools/system/s6 { };
+
+  s6-rc = callPackage ../tools/system/s6-rc { };
 
   spamassassin = callPackage ../servers/mail/spamassassin {
     inherit (perlPackages) HTMLParser NetDNS NetAddrIP DBFile
@@ -11108,7 +11143,9 @@ let
     desktopName = "Conkeror";
   };
 
-  csdp = callPackage ../applications/science/math/csdp { };
+  csdp = callPackage ../applications/science/math/csdp {
+    liblapack = liblapackWithoutAtlas;
+  };
 
   cuneiform = builderDefsPackage (callPackage ../tools/graphics/cuneiform) {};
 
@@ -13181,6 +13218,12 @@ let
   neovim = callPackage ../applications/editors/neovim {
     inherit (lua52Packages) lpeg luaMessagePack luabitop;
   };
+
+  neovim-qt = callPackage ../applications/editors/neovim/qt.nix {
+    qt5 = qt55;
+  };
+
+  neovim-pygui = pythonPackages.neovim_gui;
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {
     gtkvnc = gtkvnc.override { enableGTK3 = true; };
