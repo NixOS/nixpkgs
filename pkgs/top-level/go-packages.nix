@@ -1686,6 +1686,7 @@ let
     owner  = "ipfs";
     repo   = "go-ipfs";
     sha256 = "0g80b65ysj995dj3mkh3lp4v616fzjl7bx2wf14mkxfri4gr5icb";
+    disabled = isGo14;
   };
 
   ldap = buildGoPackage rec {
