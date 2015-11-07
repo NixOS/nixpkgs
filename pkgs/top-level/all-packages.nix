@@ -9337,7 +9337,9 @@ let
 
   pyMAILt = builderDefsPackage (callPackage ../servers/xmpp/pyMAILt) {};
 
-  qpid-cpp = callPackage ../servers/amqp/qpid-cpp { };
+  qpid-cpp = callPackage ../servers/amqp/qpid-cpp { 
+    boost = boost155;
+  };
 
   rabbitmq_server = callPackage ../servers/amqp/rabbitmq-server {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
