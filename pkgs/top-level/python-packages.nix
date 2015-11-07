@@ -8626,6 +8626,8 @@ let
       ${self.python.executable} runtests.py
     '';
 
+    __impureHostDeps = optionals stdenv.isDarwin [ "/usr/lib/libm.dylib" ];
+
     meta = {
       description = "A lightweight LLVM python binding for writing JIT compilers";
       homepage = "http://llvmlite.pydata.org/";
