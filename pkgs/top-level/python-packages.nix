@@ -15994,6 +15994,26 @@ let
     };
   };
 
+  scikitimage = buildPythonPackage rec {
+    name = "scikit-image-${version}";
+    version = "0.11.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/scikit-image/${name}.tar.gz";
+      sha256 = "768e568f3299966c294b7eb8cd114fc648f7bfaef422ee9cc750dd8d9d09e44b";
+    };
+
+    buildInputs = with self; [ pkgs.cython nose numpy six ];
+
+    propagatedBuildInputs = with self; [ pillow matplotlib networkx scipy ];
+
+    meta = {
+      description = "Image processing routines for SciPy";
+      homepage = http://scikit-image.org;
+      license = licenses.bsd3;
+    };
+  };
+
 
   scikitlearn = buildPythonPackage rec {
     name = "scikit-learn-${version}";
