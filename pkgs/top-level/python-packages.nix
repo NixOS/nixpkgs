@@ -3622,7 +3622,7 @@ let
       # pypy: https://github.com/shazow/urllib3/issues/736
       rm test/with_dummyserver/test_connectionpool.py
 
-      nosetests -v
+      nosetests -v --cover-min-percentage 1
     '';
 
 
