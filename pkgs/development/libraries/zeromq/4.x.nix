@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libuuid libsodium ];
 
+  # https://github.com/zeromq/libzmq/commit/479db2113643e459c11db392e0fefd6400657c9e
+  patches = [ ./sodium_warning.patch ];
+
   meta = with stdenv.lib; {
     branch = "4";
     homepage = "http://www.zeromq.org";
