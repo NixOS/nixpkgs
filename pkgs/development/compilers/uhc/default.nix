@@ -6,13 +6,13 @@ in stdenv.mkDerivation rec {
   # The commits "Fixate/tag v..." are the released versions.
   # Ignore the "bumped version to ...." commits, they do not
   # correspond to releases.
-  version = "1.1.9.1";
+  version = "1.1.9.2";
   name = "uhc-${version}";
 
   src = fetchgit {
     url = "https://github.com/UU-ComputerScience/uhc.git";
-    rev = "ce93d01486972c994ea2bbbd3d43859911120c39";
-    sha256 = "1y670sc6ky74l3msayzqjlkjv1kpv3g35pirsq3q79klzvnpyj2x";
+    rev = "292d259113b98c32154a5be336875751caa5edbc";
+    sha256 = "1f462xq9ilkp9mnxm8hxhh1cdwps5d0hxysyibxryk32l7hh53cz";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/EHC";
@@ -51,6 +51,5 @@ in stdenv.mkDerivation rec {
     # support the -static flag and thus breaks the build.
     platforms = ["x86_64-linux"];
 
-    broken = true; # http://hydra.cryp.to/build/1344015/log/raw
   };
 }
