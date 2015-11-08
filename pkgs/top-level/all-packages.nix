@@ -1059,6 +1059,8 @@ let
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
+  citrix_receiver = callPackage ../applications/networking/remote/citrix-receiver { };
+
   cmst = callPackage ../tools/networking/cmst { };
 
   colord = callPackage ../tools/misc/colord { };
