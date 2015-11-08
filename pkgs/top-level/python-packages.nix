@@ -8224,12 +8224,11 @@ let
   };
 
   jinja2 = buildPythonPackage rec {
-    name = "Jinja2-2.7.3";
+    name = "Jinja2-2.8";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/J/Jinja2/${name}.tar.gz";
-      # md5 = "b9dffd2f3b43d673802fe857c8445b1a"; # provided by pypi website.
-      sha256 = "2e24ac5d004db5714976a04ac0e80c6df6e47e98c354cb2c0d82f8879d4f8fdb";
+      sha256 = "1x0v41lp5m1pjix3l46zx02b7lqp2hflgpnxwkywxynvi3zz47xw";
     };
 
     propagatedBuildInputs = with self; [ markupsafe ];
@@ -8244,7 +8243,7 @@ let
         an optional sandboxed environment.
       '';
       platforms = platforms.all;
-      maintainers = with maintainers; [ pierron garbas ];
+      maintainers = with maintainers; [ pierron garbas sjourdois ];
     };
   };
 
