@@ -65,9 +65,9 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
+      configureScript=$(pwd)/configure
       mkdir ../objdir
       cd ../objdir
-      configureScript=../mozilla-release/configure
     '';
 
   meta = {
