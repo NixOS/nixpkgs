@@ -3178,6 +3178,8 @@ let
 
   tmux = callPackage ../tools/misc/tmux { };
 
+  tmux-cssh = callPackage ../tools/misc/tmux-cssh { };
+
   tmuxinator = callPackage ../tools/misc/tmuxinator { };
 
   tmin = callPackage ../tools/security/tmin { };
