@@ -1,12 +1,12 @@
 { stdenv, fetchurl, automake, autoconf, libtool, pkgconfig }:
 
-let version = "0.4.31"; in
+let version = "0.4.32"; in
 
 stdenv.mkDerivation {
   name = "libzen-${version}";
   src = fetchurl {
     url = "http://mediaarea.net/download/source/libzen/${version}/libzen_${version}.tar.bz2";
-    sha256 = "1d54bn561dipf16ki1bfq5r72j5bmz1yyx4n1v85jv4qc4cfvl4z";
+    sha256 = "0rhbiaywij6jj8d7vkc4v7y21ic1kv9fbn9lk82mm12yjwzlhhyd";
   };
 
   buildInputs = [ automake autoconf libtool pkgconfig ];
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   sourceRoot = "./ZenLib/Project/GNU/Library/";
 
-  preConfigure = "sh autogen";
+  preConfigure = "sh autogen.sh";
 
   meta = {
     description = "Shared library for libmediainfo and mediainfo";
