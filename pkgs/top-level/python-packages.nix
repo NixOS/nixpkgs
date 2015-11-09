@@ -10263,6 +10263,26 @@ let
     };
   };
 
+  numtraits = buildPythonPackage rec {
+    name = "numtraits-${version}";
+    version = "0.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/numtraits/${name}.tar.gz";
+      sha256 = "2fca9a6c9334f7358ef1a3e2e64ccaa6a479fc99fc096910e0d5fbe8edcdfd7e";
+    };
+
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ numpy traitlets];
+
+    meta = {
+      description = "Numerical traits for Python objects";
+      license = licenses.bsd2;
+      maintainer = with maintainers; [ fridh ];
+      homepage = https://github.com/astrofrog/numtraits;
+    };
+  };
+
   nwdiag = buildPythonPackage rec {
     name = "nwdiag-1.0.3";
 
