@@ -1,4 +1,4 @@
-{ qtSubmodule, qtbase, qtdeclarative
+{ qtSubmodule, qtbase, qtdeclarative, pkgconfig
 , alsaLib, gstreamer, gst-plugins-base, libpulseaudio
 }:
 
@@ -6,6 +6,7 @@ qtSubmodule {
   name = "qtmultimedia";
   qtInputs = [ qtbase qtdeclarative ];
   buildInputs = [
-    alsaLib gstreamer gst-plugins-base libpulseaudio
+    pkgconfig alsaLib gstreamer gst-plugins-base libpulseaudio
   ];
+  configureFlags = "GST_VERSION=1.0";
 }
