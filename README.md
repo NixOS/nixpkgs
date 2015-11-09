@@ -5,7 +5,7 @@
 [![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/issue?style=flat)](http://www.issuestats.com/github/nixos/nixpkgs)
 
 Nixpkgs is a collection of packages for the [Nix](https://nixos.org/nix/) package
-manager. It is periodically built and tested by the [hydra](http://hydra.nixos.org/)
+manager. It is periodically built and tested by the [hydra](https://hydra.mayflower.de/)
 build daemon as so-called channels. To get channel information via git, add
 [nixpkgs-channels](https://github.com/NixOS/nixpkgs-channels.git) as a remote:
 
