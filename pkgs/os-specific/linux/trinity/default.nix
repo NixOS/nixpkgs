@@ -1,20 +1,21 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, linuxHeaders }:
 
 stdenv.mkDerivation rec {
   name = "trinity-${version}";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "kernelslacker";
     repo = "trinity";
     rev = "v${version}";
-    sha256 = "0diwkda6n7yw8plfanivncwangk2kv1acxv0kyk3ly5jhlajwc0s";
+    sha256 = "1jwgsjjbngn2dsnkflyigy3ajd0szksl30dlaiy02jc6mqi3nr0p";
   };
 
   patchPhase = ''
     patchShebangs ./configure.sh
     patchShebangs ./scripts/
     substituteInPlace Makefile --replace '/usr/bin/wc' 'wc'
+    substituteInPlace configure.sh --replace '/usr/include/linux' '${linuxHeaders}/include/linux'
   '';
 
   configurePhase = "./configure.sh";
