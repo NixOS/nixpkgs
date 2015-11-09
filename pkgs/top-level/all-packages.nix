@@ -11093,6 +11093,8 @@ let
     enableNetworkManager = config.networking.networkmanager.enable or false;
   };
 
+  clfswm = callPackage ../applications/window-managers/clfswm { };
+
   clipgrab = callPackage ../applications/video/clipgrab { };
 
   clipit = callPackage ../applications/misc/clipit { };
