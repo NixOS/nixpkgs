@@ -284,6 +284,31 @@ let
     };
   };
 
+
+  aiohttp = buildPythonPackage rec {
+    name = "aiohttp-${version}";
+    version = "0.18.3";
+    disabled = pythonOlder "3.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/aiohttp/${name}.tar.gz";
+      md5 = "9b0d7df0613a9dd68b40ddc1a36c4bec";
+      sha256 = "d3a0bb94538a496aaaa49ed647f36ab2d43f1867e018049badc941b7d6f34ade";
+    };
+
+    propagateBuildInputs = [ self.chardet ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = "http://github.com/KeepSafe/aiohttp";
+      license = licenses.asl20;
+      description = "http client/server for asyncio";
+      maintainers = with maintainers; [ ldesgoui ];
+    };
+  };
+
+
   alabaster = buildPythonPackage rec {
     name = "alabaster-0.7.3";
 
