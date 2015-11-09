@@ -1620,6 +1620,36 @@ let
     };
   };
 
+  boto3 = buildPythonPackage rec {
+    name = "boto3-${version}";
+    version = "1.1.4";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/boto/boto3/archive/${version}.zip";
+      sha256 = "11fdfbq8ann11wdzmbd0djnb1biyyhs1jcc8maxmkcj2q9fw6dk0";
+    };
+
+    propagatedBuildInputs = [ self.botocore
+                              self.futures_2_2
+                              self.jmespath
+                            ];
+    buildInputs = [ self.docutils ];
+
+    meta = {
+      homepage = https://github.com/boto3/boto;
+
+      license = stdenv.lib.licenses.asl20;
+
+      description = "AWS SDK for Python";
+
+      longDescription = ''
+        Boto3 is the Amazon Web Services (AWS) Software Development Kit (SDK) for
+        Python, which allows Python developers to write software that makes use of
+        services like Amazon S3 and Amazon EC2.
+      '';
+    };
+  };
+
   botocore = buildPythonPackage rec {
     version = "1.2.0";
     name = "botocore-${version}";
@@ -7184,6 +7214,23 @@ let
     disabled = isPy3k;
 
     meta = with pkgs.stdenv.lib; {
+      description = "Backport of the concurrent.futures package from Python 3.2";
+      homepage = "https://github.com/agronholm/pythonfutures";
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  futures_2_2 = buildPythonPackage rec {
+    version = "2.2.0";
+    name = "futures-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/f/futures/${name}.tar.gz";
+      sha256 = "1lqfzl3z3pkxakgbcrfy6x7x0fp3q18mj5lpz103ljj7fdqha70m";
+    };
+
+    meta = with stdenv.lib; {
       description = "Backport of the concurrent.futures package from Python 3.2";
       homepage = "https://github.com/agronholm/pythonfutures";
       license = licenses.bsd2;
