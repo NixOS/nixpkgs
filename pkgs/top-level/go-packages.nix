@@ -549,6 +549,15 @@ let
     sha256 = "1rmm1ky7irqypqjkk6qcd2n0xkzpaggdxql9dp9i9qci5rvvwwd4";
   };
 
+  exercism = buildFromGitHub {
+    rev = "v2.2.1";
+    name = "exercism";
+    owner = "exercism";
+    repo = "cli";
+    sha256 = "13kwcxd7m3xv42j50nlm9dd08865dxji41glfvnb4wwq9yicyn4g";
+    buildInputs = [ net cli-go osext ];
+  };
+
   exponential-backoff = buildFromGitHub {
     rev = "96e25d36ae36ad09ac02cbfe653b44c4043a8e09";
     owner = "odeke-em";

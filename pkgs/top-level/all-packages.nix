@@ -1399,8 +1399,6 @@ let
 
   execline = callPackage ../tools/misc/execline { };
 
-  exercism = callPackage ../development/tools/exercism { };
-
   exif = callPackage ../tools/graphics/exif { };
 
   exiftags = callPackage ../tools/graphics/exiftags { };
