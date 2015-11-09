@@ -5,7 +5,10 @@ stdenv.mkDerivation rec {
   name = "kexec-tools-${version}";
 
   src = fetchurl {
-    url = "http://horms.net/projects/kexec/kexec-tools/${name}.tar.xz";
+    urls = [
+      "mirror://kernel/linux/utils/kernel/kexec/${name}.tar.xz"
+      "http://horms.net/projects/kexec/kexec-tools/${name}.tar.xz"
+    ];
     sha256 = "18x134nj37j1rshn5hxbyhdcv9kk5sfshs72alkip1icf54l2gp2";
   };
 
