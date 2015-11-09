@@ -1621,6 +1621,33 @@ let
   };
 
   botocore = buildPythonPackage rec {
+    version = "1.2.0";
+    name = "botocore-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
+      sha256 = "0wj98fsiwqzy0i0zh86fx15sgdjkwqi6crxig6b4kvrckl8bkwjr";
+    };
+
+    propagatedBuildInputs =
+      [ self.dateutil
+        self.requests
+        self.jmespath
+      ];
+
+    buildInputs = [ self.docutils ];
+
+    meta = {
+      homepage = https://github.com/boto/botocore;
+
+      license = "bsd";
+
+      description = "A low-level interface to a growing number of Amazon Web Services";
+
+    };
+  };
+
+  botocore_1_1_10 = buildPythonPackage rec {
     version = "1.1.10";
     name = "botocore-${version}";
 
