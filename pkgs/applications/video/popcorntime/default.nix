@@ -44,6 +44,7 @@ in
       license = stdenv.lib.licenses.gpl3;
       platforms = platforms.linux;
       maintainers = with maintainers; [ bobvanderlinden ];
+      broken = true;  # popcorntime.io is dead
     };
   }
   ''
