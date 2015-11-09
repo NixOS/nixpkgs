@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, makeWrapper, perl, systemd, iw, rfkill, hdparm, ethtool, inetutils, kmod
-, enableRDW ? true, networkmanager }:
+, enableRDW ? true, networkmanager, pciutils, smartmontools }:
 
 let version = "0.8";
 in stdenv.mkDerivation {
@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
 
   paths = with stdenv.lib;
           concatMapStringsSep ":" (x: "${x}/bin")
-          ([ iw rfkill hdparm ethtool inetutils systemd kmod ]
+          ([ iw rfkill hdparm ethtool inetutils systemd kmod pciutils smartmontools ]
            ++ optional enableRDW networkmanager
           );
 
