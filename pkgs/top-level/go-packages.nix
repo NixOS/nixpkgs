@@ -2099,6 +2099,17 @@ let
     doCheck = false; # check this again
   };
 
+  oh = buildFromGitHub {
+    rev = "a99b5f1128247014fb2a83a775fa1813be14b67d";
+    date = "2015-11-21";
+    owner = "michaelmacinnis";
+    repo = "oh";
+    sha256 = "1srl3d1flqlh2k9q9pjss72rxw82msys108x22milfylmr75v03m";
+    goPackageAliases = [ "github.com/michaelmacinnis/oh" ];
+    buildInputs = [ adapted liner ];
+    disabled = isGo14;
+  };
+
   openssl = buildFromGitHub {
     rev = "4c6dbafa5ec35b3ffc6a1b1e1fe29c3eba2053ec";
     owner = "10gen";
