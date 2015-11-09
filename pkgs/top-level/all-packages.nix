@@ -13103,7 +13103,7 @@ let
   tla = callPackage ../applications/version-management/arch { };
 
   tlp = callPackage ../tools/misc/tlp {
-    enableRDW = config.networking.networkmanager.enable or false;
+    inherit (linuxPackages) x86_energy_perf_policy;
   };
 
   todo-txt-cli = callPackage ../applications/office/todo.txt-cli { };
