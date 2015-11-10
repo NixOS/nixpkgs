@@ -7214,17 +7214,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Moo = buildPerlPackage {
-    name = "Moo-1.006000";
+  Moo = buildPerlPackage rec {
+    name = "Moo-2.000002";
     src = fetchurl {
-      url = mirror://cpan/authors/id/H/HA/HAARG/Moo-1.006000.tar.gz;
-      sha256 = "0gjh6dyz825cwjibq2wlpx14drjqx4pxxh931p4x3jd2617hax17";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
+      sha256 = "fb4bfa751f0dd06bd70f2e06e811f85a640501f263c228a8efafbf6b26691fd4";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ ClassMethodModifiers DevelGlobalDestruction ImportInto ModuleRuntime RoleTiny strictures ];
+    propagatedBuildInputs = [ ClassMethodModifiers DevelGlobalDestruction ModuleRuntime RoleTiny ];
     meta = {
       description = "Minimalist Object Orientation (with Moose compatibility)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
