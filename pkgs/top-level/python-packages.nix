@@ -4153,13 +4153,13 @@ let
   };
 
   gitdb = buildPythonPackage rec {
-    name = "gitdb-0.5.4";
+    name = "gitdb-0.6.4";
     meta.maintainers = with maintainers; [ mornfall ];
     doCheck = false;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gitdb/${name}.tar.gz";
-      sha256 = "10rpmmlln59aq44cd5vkb77hslak5pa1rbmigg6ski5f1nn2spfy";
+      sha256 = "0n4n2c7rxph9vs2l6xlafyda5x1mdr8xy16r9s3jwnh3pqkvrsx3";
     };
 
     propagatedBuildInputs = with self; [ smmap async ];
