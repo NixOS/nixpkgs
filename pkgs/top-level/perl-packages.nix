@@ -1270,6 +1270,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  CatalystViewCSV = buildPerlPackage rec {
+    name = "Catalyst-View-CSV-1.7";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MC/MCB/${name}.tar.gz";
+      sha256 = "e41326b6099891f244b432921ed10096ac619f32b8c4f8b41633313bd54662db";
+    };
+    buildInputs = [ CatalystActionRenderView CatalystModelDBICSchema CatalystPluginConfigLoader CatalystRuntime CatalystXComponentTraits ConfigGeneral DBDSQLite DBIxClass Moose TestException ];
+    propagatedBuildInputs = [ CatalystRuntime TextCSV URI ];
+    meta = {
+      description = "CSV view class";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   CatalystViewDownload = buildPerlPackage rec {
     name = "Catalyst-View-Download-0.09";
     src = fetchurl {
