@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libevhtp-${version}";
-  version = "1.2.10";
+  version = "1.2.11";
 
   src = fetchFromGitHub {
     owner = "ellzey";
     repo = "libevhtp";
     rev = version;
-    sha256 = "0z5cxa65zp89vkaj286gp6fpmc5fylr8bmd17g3j1rgc42nysm6a";
+    sha256 = "1rlxdp8w4alcy5ryr7pmw5wi6hv7d64885wwbk1zxhvi64s4x4rg";
   };
 
   buildInputs = [ cmake openssl libevent ];
