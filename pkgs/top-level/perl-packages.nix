@@ -5717,6 +5717,21 @@ let self = _self // overrides; _self = with self; {
     doCheck = false; # tries to connect to facebook.com etc.
   };
 
+  IOSocketTimeout = buildPerlPackage rec {
+    name = "IO-Socket-Timeout-0.32";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAMS/${name}.tar.gz";
+      sha256 = "edf915d6cc66bee43503aa6dc2b373366f38eaff701582183dad10cb8adf2972";
+    };
+    buildInputs = [ ModuleBuildTiny TestTCP ];
+    propagatedBuildInputs = [ PerlIOviaTimeout ];
+    meta = {
+      description = "IO::Socket with read/write timeout";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   IOString = buildPerlPackage rec {
     name = "IO-String-1.08";
     src = fetchurl {
