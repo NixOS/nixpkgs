@@ -17560,13 +17560,15 @@ let
   };
 
   smmap = buildPythonPackage rec {
-    name = "smmap-0.8.2";
-    disabled = isPy3k || isPyPy;  # next release will have py3k/pypy support
+    name = "smmap-0.9.0";
+    disabled = isPyPy;  # This fails the tests if built with pypy
     meta.maintainers = with maintainers; [ mornfall ];
+
+    buildInputs = with self; [ nosexcover ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/smmap/${name}.tar.gz";
-      sha256 = "0vrdgr6npmajrv658fv8bij7zgm5jmz2yxkbv8kmbv25q1f9b8ny";
+      sha256 = "0qlx25f6n2n9ff37w9gg62f217fzj16xlbh0pkz0lpxxjys64aqf";
     };
   };
 
