@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, ncurses, zlib, openssl, pcre, boost, judy, bison, libxml2
-, libaio, libevent, groff, jemalloc, perl, fixDarwinDylibNames, cctools
+, libaio, libevent, groff, jemalloc, perl, fixDarwinDylibNames, cctools, CoreServices
 }:
 
 with stdenv.lib;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake ncurses openssl zlib pcre libxml2 boost judy bison libevent ]
     ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
 
   patches = stdenv.lib.optional stdenv.isDarwin ./my_context_asm.patch;
 
