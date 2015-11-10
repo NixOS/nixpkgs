@@ -760,6 +760,8 @@ let
 
   gcdemu = callPackage ../misc/emulators/cdemu/gui.nix { };
 
+  certificate-transparency = callPackage ../servers/certificate-transparency { };
+
   image-analyzer = callPackage ../misc/emulators/cdemu/analyzer.nix { };
 
   ccnet = callPackage ../tools/networking/ccnet { };
