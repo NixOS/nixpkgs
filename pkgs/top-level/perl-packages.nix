@@ -11532,7 +11532,12 @@ let self = _self // overrides; _self = with self; {
     name = "Text-CSV-1.33";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAKAMAKA/${name}.tar.gz";
-      sha256 = "05a1nayxv04n0hx7y3m8327ijm34k9nhngrbxl18zmgzpawqynww";
+      sha256 = "9c5b8fb9baffd58f02ed2b3f0b6d9a6454198f18a80e7f3a049680ddbdb24115";
+    };
+    meta = {
+      description = "Comma-separated values manipulator (using XS or PurePerl)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
