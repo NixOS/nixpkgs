@@ -14696,6 +14696,8 @@ let
 
   hologram = goPackages.hologram.bin // { outputs = [ "bin" ]; };
 
+  tini = callPackage ../applications/virtualization/tini {};
+
   isabelle = callPackage ../applications/science/logic/isabelle {
     inherit (pkgs.emacs24Packages) proofgeneral;
     java = if stdenv.isLinux then jre else jdk;
