@@ -9697,17 +9697,18 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ pkgs.which ];
   };
 
-  SoftwareLicense = buildPerlPackage {
-    name = "Software-License-0.103005";
+  SoftwareLicense = buildPerlPackage rec {
+    name = "Software-License-0.103010";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Software-License-0.103005.tar.gz;
-      sha256 = "050a14e0b3fb15763fd267fdd8ccc7ec8c459d8cc830b0bdc39ce09f5910f88c";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "929fbace96f69a0977a0380000820c93fc1af4e973a422c73e6cd254405fa47c";
     };
-    propagatedBuildInputs = [ DataSection SubInstall TextTemplate ];
+    propagatedBuildInputs = [ DataSection TextTemplate TryTiny ];
     meta = {
-      homepage = https://github.com/rjbs/software-license;
+      homepage = https://github.com/rjbs/Software-License;
       description = "Packages that provide templated software licenses";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
