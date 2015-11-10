@@ -4166,12 +4166,13 @@ let
   };
 
   GitPython = buildPythonPackage rec {
-    name = "GitPython-0.3.2";
+    version = "1.0.1";
+    name = "GitPython-${version}";
     meta.maintainers = with maintainers; [ mornfall ];
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/G/GitPython/GitPython-0.3.2.RC1.tar.gz";
-      sha256 = "1q4lc2ps12l517mmrxc8iq6gxyhj6d77bnk1p7mxf38d99l8crzx";
+      url = "https://pypi.python.org/packages/source/G/GitPython/GitPython-${version}.tar.gz";
+      sha256 = "0q7plxnbbkp5dd0k73736l7gf932a89yy920yrgl8amfpixw324w";
     };
 
     buildInputs = with self; [ nose ];
