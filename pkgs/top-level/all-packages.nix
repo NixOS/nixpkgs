@@ -1166,8 +1166,9 @@ let
   cudatoolkit65 = callPackage ../development/compilers/cudatoolkit/6.5.nix { };
 
   cudatoolkit7 = callPackage ../development/compilers/cudatoolkit/7.0.nix { };
+  cudatoolkit75 = callPackage ../development/compilers/cudatoolkit/7.5.nix { };
 
-  cudatoolkit = cudatoolkit7;
+  cudatoolkit = cudatoolkit75;
 
   curlFull = curl.override {
     idnSupport = true;
