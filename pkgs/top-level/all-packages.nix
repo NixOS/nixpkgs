@@ -10169,6 +10169,8 @@ let
     systemd = systemd.override { enableKDbus = true; };
   };
 
+  mkinitcpio-nfs-utils = callPackage ../os-specific/linux/mkinitcpio-nfs-utils { };
+
   module_init_tools = callPackage ../os-specific/linux/module-init-tools { };
 
   aggregateModules = modules:
