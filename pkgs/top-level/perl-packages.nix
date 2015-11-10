@@ -9470,16 +9470,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  RoleTiny = buildPerlPackage {
-    name = "Role-Tiny-1.003003";
+  RoleTiny = buildPerlPackage rec {
+    name = "Role-Tiny-2.000001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/H/HA/HAARG/Role-Tiny-1.003003.tar.gz;
-      sha256 = "1k823g4wnya18yx2v1xrfl73qqavqpzvaydyg1r7gdzcdvdwl4mp";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
+      sha256 = "31883410a7c85d6dc7501c718b1f83edba013a7b9bbccf0338a1033c391f296d";
     };
     buildInputs = [ TestFatal ];
     meta = {
-      description = "Roles, like a nouvelle cuisine portion size slice of Moose";
+      description = "Roles. Like a nouvelle cuisine portion size slice of Moose";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
