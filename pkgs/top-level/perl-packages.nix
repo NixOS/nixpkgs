@@ -9350,19 +9350,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Redis = buildPerlPackage {
-    name = "Redis-1.2001";
+  Redis = buildPerlPackage rec {
+    name = "Redis-1.981";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DP/DPAVLIN/Redis-1.2001.tar.gz;
-      sha256 = "1d16dr2qjmb3vswghrk5ygggcmz2rzw7qnw3g87prwi08z5ryih0";
+      url = "mirror://cpan/authors/id/D/DA/DAMS/${name}.tar.gz";
+      sha256 = "5eb65fb6fdfc43f143c7095ec9500f829724274a295eb43d3882ff8798fa3793";
     };
-    buildInputs = [ IOString TestDeep TestFatal ];
-    propagatedBuildInputs = [ TryTiny ];
+    buildInputs = [ IOString ModuleBuildTiny PodCoverageTrustPod TestCPANMeta TestDeep TestFatal TestSharedFork TestTCP ];
+    propagatedBuildInputs = [ IOSocketTimeout ];
     meta = {
-      homepage = http://metacpan.org/release/Redis/;
+      homepage = https://metacpan.org/pod/Redis;
       description = "Perl binding for Redis database";
       license = stdenv.lib.licenses.artistic2;
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ocharles rycee ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
