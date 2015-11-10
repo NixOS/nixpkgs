@@ -9719,17 +9719,18 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ IOStringy OLEStorageLight ];
   };
 
-  SQLAbstract = buildPerlPackage {
-    name = "SQL-Abstract-1.80";
+  SQLAbstract = buildPerlPackage rec {
+    name = "SQL-Abstract-1.81";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RI/RIBASUSHI/SQL-Abstract-1.80.tar.gz;
-      sha256 = "de4d0507fca0c6340c17867abca0632017bd56594443e67ea6ace826ba9a07a2";
+      url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/${name}.tar.gz";
+      sha256 = "5f4d5618ce2424d62bbfdb5228b382e8be0e0ccedbb273d6d850e25d07e64f9f";
     };
     buildInputs = [ TestDeep TestException TestWarn ];
     propagatedBuildInputs = [ HashMerge MROCompat Moo ];
     meta = {
       description = "Generate SQL from Perl data structures";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
