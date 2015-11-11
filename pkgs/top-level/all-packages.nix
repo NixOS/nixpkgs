@@ -2033,6 +2033,8 @@ let
   morituri = callPackage ../applications/audio/morituri { };
 
   most = callPackage ../tools/misc/most { };
+ 
+  mkcast = callPackage ../applications/video/mkcast { };
 
   multitail = callPackage ../tools/misc/multitail { };
 
