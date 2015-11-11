@@ -10226,6 +10226,8 @@ let
       sha256 = "1806d2f6ad49ad891e9ac6fed0cc0b0489cbfcd9ba2dc81081c1c30091e77604";
     };
 
+    NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${pkgs.libcxx}/include/c++/v1";
+
     propagatedBuildInputs = with self; [numpy llvmlite argparse] ++ optional (!isPy3k) funcsigs ++ optional (isPy27 || isPy33) singledispatch;
     # Future work: add Cuda support.
     #propagatedBuildInputs = with self; [numpy llvmlite argparse pkgs.cudatoolkit6];
