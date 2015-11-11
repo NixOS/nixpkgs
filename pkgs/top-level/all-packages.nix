@@ -12352,7 +12352,7 @@ let
       avahi = avahi.override {
         withLibdnssdCompat = true;
       };
-      qt5 = qt54; # Mumble is not compatible with qt55 yet
+      qt5 = qt55; # Mumble is not compatible with qt55 yet
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
       pulseSupport = config.pulseaudio or false;
