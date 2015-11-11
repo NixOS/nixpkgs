@@ -4153,25 +4153,26 @@ let
   };
 
   gitdb = buildPythonPackage rec {
-    name = "gitdb-0.5.4";
+    name = "gitdb-0.6.4";
     meta.maintainers = with maintainers; [ mornfall ];
     doCheck = false;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gitdb/${name}.tar.gz";
-      sha256 = "10rpmmlln59aq44cd5vkb77hslak5pa1rbmigg6ski5f1nn2spfy";
+      sha256 = "0n4n2c7rxph9vs2l6xlafyda5x1mdr8xy16r9s3jwnh3pqkvrsx3";
     };
 
     propagatedBuildInputs = with self; [ smmap async ];
   };
 
   GitPython = buildPythonPackage rec {
-    name = "GitPython-0.3.2";
+    version = "1.0.1";
+    name = "GitPython-${version}";
     meta.maintainers = with maintainers; [ mornfall ];
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/G/GitPython/GitPython-0.3.2.RC1.tar.gz";
-      sha256 = "1q4lc2ps12l517mmrxc8iq6gxyhj6d77bnk1p7mxf38d99l8crzx";
+      url = "https://pypi.python.org/packages/source/G/GitPython/GitPython-${version}.tar.gz";
+      sha256 = "0q7plxnbbkp5dd0k73736l7gf932a89yy920yrgl8amfpixw324w";
     };
 
     buildInputs = with self; [ nose ];
@@ -17559,13 +17560,15 @@ let
   };
 
   smmap = buildPythonPackage rec {
-    name = "smmap-0.8.2";
-    disabled = isPy3k || isPyPy;  # next release will have py3k/pypy support
+    name = "smmap-0.9.0";
+    disabled = isPyPy;  # This fails the tests if built with pypy
     meta.maintainers = with maintainers; [ mornfall ];
+
+    buildInputs = with self; [ nosexcover ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/smmap/${name}.tar.gz";
-      sha256 = "0vrdgr6npmajrv658fv8bij7zgm5jmz2yxkbv8kmbv25q1f9b8ny";
+      sha256 = "0qlx25f6n2n9ff37w9gg62f217fzj16xlbh0pkz0lpxxjys64aqf";
     };
   };
 
