@@ -7433,7 +7433,9 @@ let
   # To bootstrap SBCL, I need CLisp 2.44.1; it needs libsigsegv 2.5
   libsigsegv_25 = callPackage ../development/libraries/libsigsegv/2.5.nix { };
 
-  libsndfile = callPackage ../development/libraries/libsndfile { };
+  libsndfile = callPackage ../development/libraries/libsndfile {
+    inherit (darwin.apple_sdk.frameworks) Carbon;
+  };
 
   libsodium = callPackage ../development/libraries/libsodium { };
 

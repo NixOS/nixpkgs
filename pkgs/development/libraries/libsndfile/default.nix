@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, flac, libogg, libvorbis, pkgconfig }:
+{ stdenv, fetchurl, flac, libogg, libvorbis, pkgconfig
+, Carbon
+}:
 
 stdenv.mkDerivation rec {
   name = "libsndfile-1.0.25";
@@ -8,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "10j8mbb65xkyl0kfy0hpzpmrp0jkr12c7mfycqipxgka6ayns0ar";
   };
 
-  buildInputs = [ pkgconfig flac libogg libvorbis ];
+  buildInputs = [ pkgconfig flac libogg libvorbis ]
+    ++ stdenv.lib.optional stdenv.isDarwin Carbon;
 
   # need headers from the Carbon.framework in /System/Library/Frameworks to
   # compile this on darwin -- not sure how to handle
