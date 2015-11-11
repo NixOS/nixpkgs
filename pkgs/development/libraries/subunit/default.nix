@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "A streaming protocol for test results";
     homepage = https://launchpad.net/subunit;
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }
