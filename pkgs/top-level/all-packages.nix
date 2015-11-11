@@ -6049,7 +6049,9 @@ let
 
   cgui = callPackage ../development/libraries/cgui {};
 
-  check = callPackage ../development/libraries/check { };
+  check = callPackage ../development/libraries/check {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   chipmunk = callPackage ../development/libraries/chipmunk {};
 
