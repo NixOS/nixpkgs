@@ -1,4 +1,4 @@
-{ stdenv, callPackage, lib, fetchFromGitHub, wine, libtxc_dxtn_Name }:
+{ stdenv, callPackage, lib, fetchFromGitHub, wineUnstable, libtxc_dxtn_Name }:
 
 with callPackage ./util.nix {};
 
@@ -11,10 +11,10 @@ let v = (import ./versions.nix).staging;
       rev = "v${version}";
     };
     build-inputs = pkgNames: extra:
-      (mkBuildInputs wine.pkgArches pkgNames) ++ extra;
-in assert (builtins.parseDrvName wine.name).version == version;
+      (mkBuildInputs wineUnstable.pkgArches pkgNames) ++ extra;
+in assert (builtins.parseDrvName wineUnstable.name).version == version;
 
-stdenv.lib.overrideDerivation wine (self: {
+stdenv.lib.overrideDerivation wineUnstable (self: {
   nativeBuildInputs = build-inputs [ "libpulseaudio" libtxc_dxtn_Name ] self.nativeBuildInputs; 
   buildInputs = build-inputs [ "perl" "utillinux" "autoconf" ] self.buildInputs;
 
