@@ -477,7 +477,9 @@ let
 
   abduco = callPackage ../tools/misc/abduco { };
 
-  acct = callPackage ../tools/system/acct { };
+  acct = callPackage ../tools/system/acct {
+    inherit (darwin.apple_sdk.libs) utmp;
+  };
 
   acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
     ffmpeg = ffmpeg_1;
