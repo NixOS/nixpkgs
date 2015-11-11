@@ -10331,13 +10331,7 @@ let
 
   sysklogd = callPackage ../os-specific/linux/sysklogd { };
 
-  syslinux = callPackage ../os-specific/linux/syslinux {
-    # Using GCC5 with 6.03 creates a broken isolinux.bin
-    # Make sure to test booting the livecd on a bios system
-    # if changing this override.
-    # nixos.tests.bootBiosCdrom is useful for this.
-    stdenv = overrideCC stdenv gcc48;
-  };
+  syslinux = callPackage ../os-specific/linux/syslinux { };
 
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
