@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, perl }:
+{ stdenv, fetchurl, perl, stacktraceSupport ? true, libunwind }:
+
+let optional = stdenv.lib.optional;
+    optionalString = stdenv.lib.optionalString;
+in
+
+assert stacktraceSupport -> libunwind != null;
 
 stdenv.mkDerivation rec {
   name = "strace-4.10";
@@ -9,6 +15,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ perl ];
+
+  buildInputs = optional stacktraceSupport libunwind;
+
+  configureFlags = ''
+    ${optionalString stacktraceSupport "--with-libunwind"}
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://strace.sourceforge.net/;
