@@ -7,15 +7,15 @@ let
 
   pidFile = "/run/longview.pid";
 
-  apacheConf =  ''
-    #location http://127.0.0.1/server-status?auto
+  apacheConf = optionalString (cfg.apacheStatusUrl != "") ''
+    location ${cfg.apacheStatusUrl}?auto
   '';
-  mysqlConf = ''
-    #username root
-    #password example_password
+  mysqlConf = optionalString (cfg.mysqlUser != "") ''
+    username ${cfg.mysqlUser}
+    password ${cfg.mysqlPassword}
   '';
-  nginxConf = ''
-    #location http://127.0.0.1/nginx_status
+  nginxConf = optionalString (cfg.nginxStatusUrl != "") ''
+    location ${cfg.nginxStatusUrl}
   '';
 
 in
@@ -35,12 +35,51 @@ in
 
       apiKey = mkOption {
         type = types.str;
+        example = "01234567-89AB-CDEF-0123456789ABCDEF";
         description = ''
           Longview API key. To get this, look in Longview settings which
           are found at https://manager.linode.com/longview/.
         '';
       };
 
+      apacheStatusUrl = mkOption {
+        type = types.str;
+        default = "";
+        example = "http://127.0.0.1/server-status";
+        description = ''
+          The Apache status page URL. If provided, Longview will
+          gather statistics from this location. This requires Apache
+          mod_status to be loaded and enabled.
+        '';
+      };
+
+      nginxStatusUrl = mkOption {
+        type = types.str;
+        default = "";
+        example = "http://127.0.0.1/nginx_status";
+        description = ''
+          The Nginx status page URL. Longview will gather statistics
+          from this URL. This requires the Nginx stub_status module to
+          be enabled and configured at the given location.
+        '';
+      };
+
+      mysqlUser = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          The user for connecting to the MySQL database. If provided,
+          Longview will connect to MySQL and collect statistics about
+          queries, etc.
+        '';
+      };
+
+      mysqlPassword = mkOption {
+        type = types.str;
+        description = ''
+          The password corresponding to mysqlUser.
+        '';
+      };
     };
 
   };
