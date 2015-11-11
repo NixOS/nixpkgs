@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, utmp }:
 
 stdenv.mkDerivation rec {
   name = "acct-6.6.2";
@@ -7,6 +7,8 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/acct/${name}.tar.gz";
     sha256 = "0081hzkcxw9aslpsakridj15m0wbnkdhm210fzbg021vi4pppm4f";
   };
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin utmp;
 
   doCheck = true;
 
