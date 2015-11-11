@@ -17,9 +17,9 @@ let
     else
       throw "openjdk requires i686-linux or x86_64 linux";
 
-  update = "85";
+  update = "91";
 
-  build = "02";
+  build = "01";
 
   # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
   paxflags = if stdenv.isi686 then "msp" else "m";
@@ -33,31 +33,31 @@ let
   repover = "jdk7u${update}-b${build}";
   jdk7 = fetchurl {
     url = "${baseurl}/archive/${repover}.tar.gz";
-    sha256 = "1fs0vphf0z2hi51hzlw3ix80b9byah1mzhy5csh9j5f200q3ykk5";
+    sha256 = "08f7cbayyrryim3xbrs12cr12i1mczcikyc9rdlsyih0r4xvll28";
   };
   langtools = fetchurl {
     url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-    sha256 = "0n2cp0az2fyhaf34fmhiy57mdyp78596z7426alrww0jrv5491az";
+    sha256 = "0rmlzrgsacn60blpg1sp30k6p0sgzsml8wb41yc998km1bsnjxnh";
   };
   hotspot = fetchurl {
     url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-    sha256 = "1l38wniq69vqlfk2rz8bmwly9wxrvlizf95x3wm2d0m5fsqsxhri";
+    sha256 = "1w1n81y9jcvjzssl4049yzfc0gdfnh73ki6wg1d8pg22zlyhrrwv";
   };
   corba = fetchurl {
     url = "${baseurl}/corba/archive/${repover}.tar.gz";
-    sha256 = "0wys2zs1wvfiggvmqfmmgfamdqm5jln1sflc18w7bfzn4i77yy5j";
+    sha256 = "086yr927bxnlgljx7mw2cg6f6aip57hi4qpn1h35n6fsyvb4n67h";
   };
   jdk = fetchurl {
     url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-    sha256 = "094fdj3vlfgd6v8y0x03l6p5byvrskxcdw62xpp2bdp4z41ag79m";
+    sha256 = "14r39ylj3qa63arpqxl0h84baah1kjgnyp3v9d7d4vd0yagpn66b";
   };
   jaxws = fetchurl {
     url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-    sha256 = "0bh61mxxxj8pvg6yjs4w53an6zjyrg242b8j0w4mlsjldrrv1wy4";
+    sha256 = "1p1739gb5gx9m4sm3i4javfk9lk41wnz92k6gis6sq99dd1bj1l5";
   };
   jaxp = fetchurl {
     url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-    sha256 = "054qwx67z6ailrr5gx6zhp3090zc607bak7wlfpqbvvqr1dqqq5x";
+    sha256 = "1nl3kmbwqhhymcp25rnmf5mr3dn87lgdxvz9wgng7if6yqxlyakq";
   };
   openjdk = stdenv.mkDerivation rec {
     name = "openjdk-7u${update}b${build}";
