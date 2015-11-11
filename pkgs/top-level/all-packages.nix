@@ -10921,6 +10921,8 @@ let
     ffmpeg = ffmpeg_0;
   };
 
+  audio-recorder = callPackage ../applications/audio/audio-recorder { };
+
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
