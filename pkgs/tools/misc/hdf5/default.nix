@@ -1,4 +1,3 @@
-
 { stdenv
 , fetchurl
 , cpp ? false
@@ -8,6 +7,9 @@
 , mpi ? null
 , enableShared ? true
 }:
+
+with { inherit (stdenv.lib) optional; };
+
 stdenv.mkDerivation rec {
   version = "1.8.15-patch1";
   name = "hdf5-${version}";
@@ -22,23 +24,22 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = []
-    ++ stdenv.lib.optional (gfortran != null) gfortran
-    ++ stdenv.lib.optional (zlib != null) zlib
-    ++ stdenv.lib.optional (szip != null) szip;
+    ++ optional (gfortran != null) gfortran
+    ++ optional (zlib != null) zlib
+    ++ optional (szip != null) szip;
 
   propagatedBuildInputs = []
-    ++ stdenv.lib.optional (mpi != null) mpi;
+    ++ optional (mpi != null) mpi;
 
-  configureFlags = "
-    ${if cpp then "--enable-cxx" else ""}
-    ${if gfortran != null then "--enable-fortran" else ""}
-    ${if szip != null then "--with-szlib=${szip}" else ""}
-    ${if mpi != null then "--enable-parallel" else ""}
-    ${if enableShared then "--enable-shared" else ""}
-  ";
-  
+  configureFlags = []
+    ++ optional cpp "--enable-cxx"
+    ++ optional (gfortran != null) "--enable-fortran"
+    ++ optional (szip != null) "--with-szlib=${szip}"
+    ++ optional (mpi != null) "--enable-parallel"
+    ++ optional enableShared "--enable-shared";
+
   patches = [./bin-mv.patch];
-  
+
   meta = {
     description = "Data model, library, and file format for storing and managing data";
     longDescription = ''
