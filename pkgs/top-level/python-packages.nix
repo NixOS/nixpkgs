@@ -8244,21 +8244,20 @@ let
   };
 
   isort = buildPythonPackage rec {
-    name = "isort-3.9.6";
+    name = "isort-4.2.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/isort/${name}.tar.gz";
-      md5 = "c0f4a7b16fde265f2ff4842c3e1cdd05";
+      sha256 = "0xqxnkli3j69mj1m0i1r9n68bfkdxfcgxi602lqgy491m21q1rpj";
     };
 
     buildInputs = with self; [ mock pytest ];
-
-    propagatedBuildInputs = with self; [ natsort pies ];
 
     meta = {
       description = "A Python utility / library to sort Python imports";
       homepage = https://github.com/timothycrosley/isort;
       license = licenses.mit;
+      maintainers = with maintainers; [ couchemar ];
     };
   };
 
