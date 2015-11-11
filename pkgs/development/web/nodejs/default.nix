@@ -2,19 +2,17 @@
 , pkgconfig, runCommand, which, libtool
 }:
 
-# nodejs 0.12 can't be built on armv5tel. Armv6 with FPU, minimum I think.
+# nodejs >= 0.12 can't be built on armv5tel. Armv6 with FPU, minimum I think.
 # Related post: http://zo0ok.com/techfindings/archives/1820
 assert stdenv.system != "armv5tel-linux";
 
 let
-  version = "4.1.2";
+  version = "4.2.1";
 
   deps = {
     inherit openssl zlib libuv;
 
-    # disabled system v8 because v8 3.14 no longer receives security fixes
-    # we fall back to nodejs' internal v8 copy which receives backports for now
-    # inherit v8
+    # disabled system v8 because nodejs's version includes custom backports.
   } // (stdenv.lib.optionalAttrs (!stdenv.isDarwin) {
     inherit http-parser;
   });
@@ -31,7 +29,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "0j9ca1fjgljzh4m9l9d8g81510j0ljvaf031qij9psiz79qc7gpy";
+    sha256 = "0qr6cxdgkvk3vdj6q5zf0cnxdhrh0h6736m1rl7kinxlqgsbjqc8";
   };
 
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps) ++ [ "--without-dtrace" ];
