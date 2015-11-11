@@ -66,11 +66,18 @@ stdenv.mkDerivation rec {
   '';
 
   crossAttrs = {
+    # upstream patch: https://rt.openssl.org/Ticket/Display.html?id=2558
+    postPatch = ''
+       sed -i -e 's/[$][(]CROSS_COMPILE[)]windres/$(WINDRES)/' Makefile.shared
+    '';
     preConfigure=''
       # It's configure does not like --build or --host
       export configureFlags="${concatStringsSep " " (configureFlags ++ [ opensslCrossSystem ])}"
+      # WINDRES and RANLIB need to be prefixed when cross compiling;
+      # the openssl configure script doesn't do that for us
+      export WINDRES=${stdenv.cross.config}-windres
+      export RANLIB=${stdenv.cross.config}-ranlib
     '';
-
     configureScript = "./Configure";
   };
 

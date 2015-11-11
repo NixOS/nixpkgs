@@ -1628,11 +1628,11 @@ let
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videointel = (mkDerivation "xf86videointel" {
-    name = "xf86-video-intel-2015-07-22";
+    name = "xf86-video-intel-2015-11-10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/a29e765ec0c1d73ee7ef2dad3aa148214ec04335.tar.gz;
-      sha256 = "094qa8x0f7vgyirjbj9qdyak71nwxnmmsxml4zk49z59blq4l874";
+      url = http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/97786e99fbfb8f8ea3931c305f31e993de378fb2.tar.gz;
+      sha256 = "09rckmvg66yw13v9gbn34im7vjnj48skcj2kb85bfwk2c8q3dfgx";
     };
     buildInputs = [pkgconfig dri2proto dri3proto fontsproto libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXcursor libXdamage libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXtst libXvMC ];
   }) // {inherit dri2proto dri3proto fontsproto libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXcursor libXdamage libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXtst libXvMC ;};

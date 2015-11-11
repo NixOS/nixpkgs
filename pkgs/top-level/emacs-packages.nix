@@ -1238,6 +1238,21 @@ let self = _self // overrides;
     };
   };
 
+  paredit = trivialBuild rec {
+    pname = "paredit-${version}";
+    version = "25";
+    src = fetchgit {
+      url = http://mumble.net/~campbell/git/paredit.git/;
+      rev = "9a696fdcce87c9d9eec4569a9929d0300ac6ae5c";
+      sha256 = "13wjqimp2s6pwcqix8pmsrk76bq1cxlnwmj3m57bb5y60y67vp9l";
+    };
+    meta = {
+      homepage = http://www.emacswiki.org/emacs/ParEdit;
+      description = "Minor Emacs mode for structured editing of S-expression data";
+      license = gpl3Plus;
+    };
+  };
+
   perspective = melpaBuild rec {
     pname   = "perspective";
     version = "1.12";

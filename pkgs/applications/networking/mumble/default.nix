@@ -20,10 +20,10 @@ let
     patches = optional jackSupport ./mumble-jack-support.patch;
 
     nativeBuildInputs = [ pkgconfig ]
-      ++ { qt4 = [ qt4 ]; qt5 = [ qt5.base ]; }."qt${toString source.qtVersion}"
+      ++ { qt4 = [ qt4 ]; qt5 = [ qt5.qtbase ]; }."qt${toString source.qtVersion}"
       ++ (overrides.nativeBuildInputs or [ ]);
     buildInputs = [ boost protobuf avahi ]
-      ++ { qt4 = [ qt4 ]; qt5 = [ qt5.base ]; }."qt${toString source.qtVersion}"
+      ++ { qt4 = [ qt4 ]; qt5 = [ qt5.qtbase ]; }."qt${toString source.qtVersion}"
       ++ (overrides.buildInputs or [ ]);
 
     configureFlags = [
@@ -66,9 +66,9 @@ let
   client = source: generic {
     type = "mumble";
 
-    nativeBuildInputs = optional (source.qtVersion == 5) qt5.tools;
+    nativeBuildInputs = optional (source.qtVersion == 5) qt5.qttools;
     buildInputs = [ libopus libsndfile speex ]
-      ++ optional (source.qtVersion == 5) qt5.svg
+      ++ optional (source.qtVersion == 5) qt5.qtsvg
       ++ optional stdenv.isLinux alsaLib
       ++ optional jackSupport libjack2
       ++ optional speechdSupport speechd
@@ -116,13 +116,13 @@ let
   };
 
   gitSource = rec {
-    version = "1.3.0-git-2015-09-27";
+    version = "1.3.0-git-2015-11-08";
     qtVersion = 5;
 
     src = fetchgit {
       url = "https://github.com/mumble-voip/mumble";
-      rev = "13e494c60beb20748eeb8be126b27e1226d168c8";
-      sha256 = "1vihassis5i7hyljbb8qjihjj4y80n5l380x5dl0nwb55j2mylhg";
+      rev = "72038f6aa038f5964e2bba5a09d3d391d4680e5f";
+      sha256 = "03978b85f7y0bffl8vwkmakjnxxjqapfz3pn0b8zf3b1ppwjy9g4";
     };
 
     # TODO: Remove fetchgit as it requires git

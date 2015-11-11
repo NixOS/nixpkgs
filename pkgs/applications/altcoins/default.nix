@@ -8,8 +8,7 @@ rec {
   bitcoin-xt  = callPackage ./bitcoin-xt.nix { withGui = true; };
   bitcoind-xt = callPackage ./bitcoin-xt.nix { withGui = false; };
 
-  darkcoin  = callPackage ./darkcoin.nix { withGui = true; };
-  darkcoind = callPackage ./darkcoin.nix { withGui = false; };
+  dashpay = callPackage ./dashpay.nix { };
 
   dogecoin  = callPackage ./dogecoin.nix { withGui = true; };
   dogecoind = callPackage ./dogecoin.nix { withGui = false; };

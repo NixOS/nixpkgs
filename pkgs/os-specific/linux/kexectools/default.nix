@@ -1,12 +1,15 @@
 { stdenv, fetchurl, zlib }:
 
-let version = "2.0.10"; in
+let version = "2.0.11"; in
 stdenv.mkDerivation rec {
   name = "kexec-tools-${version}";
 
   src = fetchurl {
-    url = "http://horms.net/projects/kexec/kexec-tools/${name}.tar.xz";
-    sha256 = "18x134nj37j1rshn5hxbyhdcv9kk5sfshs72alkip1icf54l2gp2";
+    urls = [
+      "mirror://kernel/linux/utils/kernel/kexec/${name}.tar.xz"
+      "http://horms.net/projects/kexec/kexec-tools/${name}.tar.xz"
+    ];
+    sha256 = "1qrfka9xvy77k0rg3k0cf7xai0f9vpgsbs4l3bs8r4nvzy37j2di";
   };
 
   buildInputs = [ zlib ];

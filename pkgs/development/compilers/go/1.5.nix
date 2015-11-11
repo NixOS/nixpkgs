@@ -74,8 +74,13 @@ stdenv.mkDerivation rec {
     sed -i 's,strings.Contains(.*sysctl.*,true {,' src/cmd/dist/util.go
     sed -i 's,"/etc","'"$TMPDIR"'",' src/os/os_test.go
     sed -i 's,/_go_os_test,'"$TMPDIR"'/_go_os_test,' src/os/path_test.go
+    sed -i '/TestCgoLookupIP/areturn' src/net/cgo_unix_test.go
+    sed -i '/TestChdirAndGetwd/areturn' src/os/os_test.go
     sed -i '/TestRead0/areturn' src/os/os_test.go
     sed -i '/TestSystemRoots/areturn' src/crypto/x509/root_darwin_test.go
+
+    sed -i '/TestGoInstallRebuildsStalePackagesInOtherGOPATH/areturn' src/cmd/go/go_test.go
+    sed -i '/TestBuildDashIInstallsDependencies/areturn' src/cmd/go/go_test.go
 
     sed -i '/TestDisasmExtld/areturn' src/cmd/objdump/objdump_test.go
 

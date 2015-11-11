@@ -1,11 +1,11 @@
-{ stdenv, fetchzip, doxygen, qtbase }:
+{ stdenv, fetchurl, doxygen, qtbase }:
 
 stdenv.mkDerivation rec {
   name = "signon-${version}";
   version = "8.57";
-  src = fetchzip {
-    url = "http://signond.accounts-sso.googlecode.com/archive/${version}.zip";
-    sha256 = "0q1ncmp27jrwbjkqisf0l63zzpw6bcsx5i4y86xixh8wd5arj87a";
+  src = fetchurl {
+    url = "https://gitlab.com/accounts-sso/signond/repository/archive.tar.gz?ref=${version}";
+    sha256 = "1vqkxhmdjk3217k38l2s3wld8x7f4jrbbh6xbr036cn1r23ncni5";
   };
 
   buildInputs = [ qtbase ];

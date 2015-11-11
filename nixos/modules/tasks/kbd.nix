@@ -4,11 +4,13 @@ with lib;
 
 let
 
+  makeColor = n: value: "COLOR_${toString n}=${value}";
+
   vconsoleConf = pkgs.writeText "vconsole.conf"
     ''
       KEYMAP=${config.i18n.consoleKeyMap}
       FONT=${config.i18n.consoleFont}
-    '';
+    '' + concatImapStringsSep "\n" makeColor config.i18n.consoleColors;
 
 in
 

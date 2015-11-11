@@ -244,6 +244,7 @@
   rob = "Rob Vermaas <rob.vermaas@gmail.com>";
   robberer = "Longrin Wischnewski <robberer@freakmail.de>";
   robbinch = "Robbin C. <robbinch33@gmail.com>";
+  robgssp = "Rob Glossop <robgssp@gmail.com>";
   roconnor = "Russell O'Connor <roconnor@theorem.ca>";
   roelof = "Roelof Wobben <rwobben@hotmail.com>";
   romildo = "José Romildo Malaquias <malaquias@gmail.com>";
@@ -262,6 +263,7 @@
   simonvandel = "Simon Vandel Sillesen <simon.vandel@gmail.com>";
   sjagoe = "Simon Jagoe <simon@simonjagoe.com>";
   sjmackenzie = "Stewart Mackenzie <setori88@gmail.com>";
+  sjourdois = "Stéphane ‘kwisatz’ Jourdois <sjourdois@gmail.com>";
   skeidel = "Sven Keidel <svenkeidel@gmail.com>";
   smironov = "Sergey Mironov <ierton@gmail.com>";
   spacefrogg = "Michael Raitza <spacefrogg-nixos@meterriblecrew.net>";

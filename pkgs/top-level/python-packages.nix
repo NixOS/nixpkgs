@@ -1620,7 +1620,64 @@ let
     };
   };
 
+  boto3 = buildPythonPackage rec {
+    name = "boto3-${version}";
+    version = "1.1.4";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/boto/boto3/archive/${version}.zip";
+      sha256 = "11fdfbq8ann11wdzmbd0djnb1biyyhs1jcc8maxmkcj2q9fw6dk0";
+    };
+
+    propagatedBuildInputs = [ self.botocore
+                              self.futures_2_2
+                              self.jmespath
+                            ];
+    buildInputs = [ self.docutils ];
+
+    meta = {
+      homepage = https://github.com/boto3/boto;
+
+      license = stdenv.lib.licenses.asl20;
+
+      description = "AWS SDK for Python";
+
+      longDescription = ''
+        Boto3 is the Amazon Web Services (AWS) Software Development Kit (SDK) for
+        Python, which allows Python developers to write software that makes use of
+        services like Amazon S3 and Amazon EC2.
+      '';
+    };
+  };
+
   botocore = buildPythonPackage rec {
+    version = "1.2.0";
+    name = "botocore-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
+      sha256 = "0wj98fsiwqzy0i0zh86fx15sgdjkwqi6crxig6b4kvrckl8bkwjr";
+    };
+
+    propagatedBuildInputs =
+      [ self.dateutil
+        self.requests
+        self.jmespath
+      ];
+
+    buildInputs = [ self.docutils ];
+
+    meta = {
+      homepage = https://github.com/boto/botocore;
+
+      license = "bsd";
+
+      description = "A low-level interface to a growing number of Amazon Web Services";
+
+    };
+  };
+
+  botocore_1_1_10 = buildPythonPackage rec {
     version = "1.1.10";
     name = "botocore-${version}";
 
@@ -3693,11 +3750,11 @@ let
 
 
   elasticsearchdsl = buildPythonPackage (rec {
-    name = "elasticsearch-dsl-0.0.8";
+    name = "elasticsearch-dsl-0.0.9";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/e/elasticsearch-dsl/${name}.tar.gz";
-      sha256 = "0dd46s7g5l2b2jnjhcpcm721kcsnsqwngzik85jl5qbbcvnqqjzi";
+      sha256 = "1gdcdshk881vy18p0czcmbb3i4s5hl8llnfg6961b6x7jkvhihbj";
     };
 
     buildInputs = with self; [ covCore dateutil elasticsearch mock pytest pytestcov unittest2 urllib3 pytz ];
@@ -4096,25 +4153,26 @@ let
   };
 
   gitdb = buildPythonPackage rec {
-    name = "gitdb-0.5.4";
+    name = "gitdb-0.6.4";
     meta.maintainers = with maintainers; [ mornfall ];
     doCheck = false;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gitdb/${name}.tar.gz";
-      sha256 = "10rpmmlln59aq44cd5vkb77hslak5pa1rbmigg6ski5f1nn2spfy";
+      sha256 = "0n4n2c7rxph9vs2l6xlafyda5x1mdr8xy16r9s3jwnh3pqkvrsx3";
     };
 
     propagatedBuildInputs = with self; [ smmap async ];
   };
 
   GitPython = buildPythonPackage rec {
-    name = "GitPython-0.3.2";
+    version = "1.0.1";
+    name = "GitPython-${version}";
     meta.maintainers = with maintainers; [ mornfall ];
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/G/GitPython/GitPython-0.3.2.RC1.tar.gz";
-      sha256 = "1q4lc2ps12l517mmrxc8iq6gxyhj6d77bnk1p7mxf38d99l8crzx";
+      url = "https://pypi.python.org/packages/source/G/GitPython/GitPython-${version}.tar.gz";
+      sha256 = "0q7plxnbbkp5dd0k73736l7gf932a89yy920yrgl8amfpixw324w";
     };
 
     buildInputs = with self; [ nose ];
@@ -6532,6 +6590,33 @@ let
     };
   };
 
+  et_xmlfile = buildPythonPackage rec {
+    version = "1.0.1";
+    name = "et_xmlfile-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/e/et_xmlfile/${name}.tar.gz";
+      sha256="0nrkhcb6jdrlb6pwkvd4rycw34y3s931hjf409ij9xkjsli9fkb1";
+    };
+
+    meta = {
+      description = "An implementation of lxml.xmlfile for the standard library";
+      longDescription = ''
+        et_xmlfile is a low memory library for creating large XML files.
+
+        It is based upon the xmlfile module from lxml with the aim of allowing
+        code to be developed that will work with both libraries. It was developed
+        initially for the openpyxl project but is now a standalone module.
+
+        The code was written by Elias Rabel as part of the Python Düsseldorf
+        openpyxl sprint in September 2014.
+      '';
+      homepage = "https://pypi.python.org/pypi/et_xmlfile";
+      license = licenses.mit;
+      maintainers = with maintainers; [ sjourdois ];
+    };
+  };
+
   eventlet = buildPythonPackage rec {
     name = "eventlet-0.17.4";
 
@@ -7130,6 +7215,23 @@ let
     disabled = isPy3k;
 
     meta = with pkgs.stdenv.lib; {
+      description = "Backport of the concurrent.futures package from Python 3.2";
+      homepage = "https://github.com/agronholm/pythonfutures";
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  futures_2_2 = buildPythonPackage rec {
+    version = "2.2.0";
+    name = "futures-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/f/futures/${name}.tar.gz";
+      sha256 = "1lqfzl3z3pkxakgbcrfy6x7x0fp3q18mj5lpz103ljj7fdqha70m";
+    };
+
+    meta = with stdenv.lib; {
       description = "Backport of the concurrent.futures package from Python 3.2";
       homepage = "https://github.com/agronholm/pythonfutures";
       license = licenses.bsd2;
@@ -8143,21 +8245,20 @@ let
   };
 
   isort = buildPythonPackage rec {
-    name = "isort-3.9.6";
+    name = "isort-4.2.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/isort/${name}.tar.gz";
-      md5 = "c0f4a7b16fde265f2ff4842c3e1cdd05";
+      sha256 = "0xqxnkli3j69mj1m0i1r9n68bfkdxfcgxi602lqgy491m21q1rpj";
     };
 
     buildInputs = with self; [ mock pytest ];
-
-    propagatedBuildInputs = with self; [ natsort pies ];
 
     meta = {
       description = "A Python utility / library to sort Python imports";
       homepage = https://github.com/timothycrosley/isort;
       license = licenses.mit;
+      maintainers = with maintainers; [ couchemar ];
     };
   };
 
@@ -8224,12 +8325,11 @@ let
   };
 
   jinja2 = buildPythonPackage rec {
-    name = "Jinja2-2.7.3";
+    name = "Jinja2-2.8";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/J/Jinja2/${name}.tar.gz";
-      # md5 = "b9dffd2f3b43d673802fe857c8445b1a"; # provided by pypi website.
-      sha256 = "2e24ac5d004db5714976a04ac0e80c6df6e47e98c354cb2c0d82f8879d4f8fdb";
+      sha256 = "1x0v41lp5m1pjix3l46zx02b7lqp2hflgpnxwkywxynvi3zz47xw";
     };
 
     propagatedBuildInputs = with self; [ markupsafe ];
@@ -8244,7 +8344,7 @@ let
         an optional sandboxed environment.
       '';
       platforms = platforms.all;
-      maintainers = with maintainers; [ pierron garbas ];
+      maintainers = with maintainers; [ pierron garbas sjourdois ];
     };
   };
 
@@ -9478,37 +9578,17 @@ let
     preConfigure = "substituteInPlace setup.py --replace /usr/share usr/share";
   };
 
-  pygal = buildPythonPackage ( rec {
-    version = "2.0.8";
+  pygal = buildPythonPackage rec {
+    version = "2.0.10";
     name = "pygal-${version}";
 
-    patchPhase = ''
-      # Run tests in pygal dir
-      substituteInPlace setup.py \
-        --replace "self.test_args = []" \
-                  "self.test_args = ['-x', 'build/lib/pygal']"
-      # Open unicode files during tests
-      substituteInPlace pygal/test/test_graph.py \
-        --replace "import sys" \
-                  "import sys, io"
-      substituteInPlace pygal/test/test_graph.py \
-        --replace "open(file_name)" \
-                  "io.open(file_name, encoding='utf-8')"
-      # Use explicit integers (for python 3.5)
-      substituteInPlace pygal/colors.py \
-        --replace "'#%x%x%x' % (r / 17, g / 17, b / 17)" \
-                  "'#%x%x%x' % (r // 17, g // 17, b // 17)"
-      substituteInPlace pygal/colors.py \
-        --replace "'#%x%x%x%x' % (r / 17, g / 17, b / 17, a * 15)" \
-                  "'#%x%x%x%x' % (r // 17, g // 17, b // 17, int(a * 15))"
-      substituteInPlace pygal/colors.py \
-        --replace "'#%02x%02x%02x%02x' % (r, g, b, a * 255)" \
-                  "'#%02x%02x%02x%02x' % (r, g, b, int(a * 255))"
-    '';
+    doCheck = !isPyPy;  # one check fails with pypy
 
-    src = pkgs.fetchurl {
-      url = "https://github.com/Kozea/pygal/archive/${version}.tar.gz";
-      sha256 = "1lv8avn7pdlxks50sd58shpqnxybf3l79bggy32qnbqczk4j2s0b";
+    src = pkgs.fetchFromGitHub {
+      owner = "Kozea";
+      repo = "pygal";
+      rev = version;
+      sha256 = "1j7qjgraapvfc80yp8xcbddqrw8379gqi7pwkvfml3qcqm0z0d33";
     };
 
     buildInputs = with self; [ flask pyquery pytest ];
@@ -9518,9 +9598,9 @@ let
       description = "Sexy and simple python charting";
       homepage = http://www.pygal.org;
       license = licenses.lgpl3;
+      maintainers = with maintainers; [ sjourdois ];
     };
-  });
-
+  };
 
   pymysql = buildPythonPackage rec {
     name = "pymysql-${version}";
@@ -10258,6 +10338,26 @@ let
     };
   };
 
+  numtraits = buildPythonPackage rec {
+    name = "numtraits-${version}";
+    version = "0.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/numtraits/${name}.tar.gz";
+      sha256 = "2fca9a6c9334f7358ef1a3e2e64ccaa6a479fc99fc096910e0d5fbe8edcdfd7e";
+    };
+
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ numpy traitlets];
+
+    meta = {
+      description = "Numerical traits for Python objects";
+      license = licenses.bsd2;
+      maintainer = with maintainers; [ fridh ];
+      homepage = https://github.com/astrofrog/numtraits;
+    };
+  };
+
   nwdiag = buildPythonPackage rec {
     name = "nwdiag-1.0.3";
 
@@ -10468,23 +10568,23 @@ let
   };
 
   openpyxl = buildPythonPackage rec {
-    version = "2.2.6";
+    version = "2.3.0";
     name = "openpyxl-${version}";
 
     src = pkgs.fetchhg {
       url = "https://bitbucket.org/openpyxl/openpyxl";
       rev = "${version}";
-      sha256 = "159cg3njsybjdmwr0458qc5k0m7hbq41h3fczxflc0wnh7ancrdf";
+      sha256 = "1iisk6rfh9h5xb411kfyzkcab6fdnsx573i0d83wfn4csk4p3p4d";
     };
 
     buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ jdcal ];
+    propagatedBuildInputs = with self; [ jdcal et_xmlfile ];
 
     meta = {
       description = "A Python library to read/write Excel 2007 xlsx/xlsm files";
-      homepage = "https://openpyxl.readthedocs.org";
+      homepage = https://openpyxl.readthedocs.org;
       license = licenses.mit;
-      maintainers = with maintainers; [ lihop ];
+      maintainers = with maintainers; [ lihop sjourdois ];
       platforms = platforms.all;
     };
   };
@@ -17461,13 +17561,15 @@ let
   };
 
   smmap = buildPythonPackage rec {
-    name = "smmap-0.8.2";
-    disabled = isPy3k || isPyPy;  # next release will have py3k/pypy support
+    name = "smmap-0.9.0";
+    disabled = isPyPy;  # This fails the tests if built with pypy
     meta.maintainers = with maintainers; [ mornfall ];
+
+    buildInputs = with self; [ nosexcover ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/smmap/${name}.tar.gz";
-      sha256 = "0vrdgr6npmajrv658fv8bij7zgm5jmz2yxkbv8kmbv25q1f9b8ny";
+      sha256 = "0qlx25f6n2n9ff37w9gg62f217fzj16xlbh0pkz0lpxxjys64aqf";
     };
   };
 
@@ -19148,6 +19250,27 @@ let
       homepage = http://liw.fi/cliapp/;
       description = "Python framework for Unix command line programs";
       maintainers = with maintainers; [ rickynils ];
+    };
+  };
+
+  cmdtest = buildPythonPackage rec {
+    name = "cmdtest-${version}";
+    version = "0.18";
+    disabled = isPy3k || isPyPy;
+
+    propagatedBuildInputs = with self; [ cliapp ttystatus markdown ];
+
+    # TODO: cmdtest tests must be run before the buildPhase
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "http://code.liw.fi/debian/pool/main/c/cmdtest/cmdtest_0.18.orig.tar.xz";
+      sha256 = "068f24k8ad520hcf8g3gj7wvq1wspyd46ay0k9xa360jlb4dv2mn";
+    };
+
+    meta = {
+      homepage = http://liw.fi/cmdtest/;
+      description = "black box tests Unix command line tools";
     };
   };
 
