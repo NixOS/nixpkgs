@@ -7,6 +7,11 @@ let
         if builtins.pathExists (builtins.toPath /etc/nixos/vagrant.nix)
         then [./vagrant.nix]
         else [./fcio.nix];
+
+    enc =
+        if builtins.pathExists (builtins.toPath /etc/nixos/enc.json)
+        then builtins.fromJSON /etc/nixos/enc.json
+        else {};
 in
 {
   imports =
