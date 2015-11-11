@@ -6,7 +6,7 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "dash-${meta.version}";
+  name = "dashpay-${meta.version}";
 
   src = fetchzip {
     url = "https://github.com/dashpay/dash/archive/v${meta.version}.tar.gz";
