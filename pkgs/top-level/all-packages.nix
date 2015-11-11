@@ -6959,7 +6959,9 @@ let
 
   libdbusmenu_qt5 = callPackage ../development/libraries/libdbusmenu-qt/qt-5.4.nix { };
 
-  libdc1394 = callPackage ../development/libraries/libdc1394 { };
+  libdc1394 = callPackage ../development/libraries/libdc1394 {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   libdc1394avt = callPackage ../development/libraries/libdc1394avt { };
 
