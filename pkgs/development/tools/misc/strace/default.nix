@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ stdenv, fetchurl, perl, libunwind }:
 
 stdenv.mkDerivation rec {
   name = "strace-4.10";
@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ perl ];
+
+  buildInputs = [ libunwind ]; # support -k
 
   meta = with stdenv.lib; {
     homepage = http://strace.sourceforge.net/;
