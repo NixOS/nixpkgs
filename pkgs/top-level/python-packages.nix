@@ -10067,12 +10067,12 @@ let
   };
 
   numba = buildPythonPackage rec {
-    version = "0.21.0";
+    version = "0.22.1";
     name = "numba-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/numba/${name}.tar.gz";
-      sha256 = "1806d2f6ad49ad891e9ac6fed0cc0b0489cbfcd9ba2dc81081c1c30091e77604";
+      sha256 = "8194c41cdf96c16e3b3d246c0381daf4e587d1ada761f410efecb8315c2cdda3";
     };
 
     propagatedBuildInputs = with self; [numpy llvmlite argparse] ++ optional (!isPy3k) funcsigs ++ optional (isPy27 || isPy33) singledispatch;
