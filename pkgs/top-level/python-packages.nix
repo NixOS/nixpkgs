@@ -1467,22 +1467,26 @@ let
 
   blaze = buildPythonPackage rec {
     name = "blaze-${version}";
-    version = "0.8.2";
+    version = "0.8.3";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/blaze/${name}.tar.gz";
-      sha256 = "1abedabf2a1e62dd059e0942d60f27337763de26f5e3f61ed55baaf97723b624";
+      sha256 = "4f8ceb1248ba44f833f5a46a18b6ea44130a5999d5234324d0456b5f9ffe716b";
     };
 
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [
       numpy
       pandas
       datashape
       odo
       toolz
+      cytoolz
       multipledispatch
       sqlalchemy9 # sqlalchemy8 should also work
       psutil
+      numba
+      h5py
     ];
 
     meta = {
@@ -8778,13 +8782,13 @@ let
 
   llvmlite = buildPythonPackage rec {
     name = "llvmlite-${version}";
-    version = "0.7.0";
+    version = "0.8.0";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/l/llvmlite/${name}.tar.gz";
-      sha256 = "6d780980da05d2d82465991bce42c1b4625018d67feae17c672c6a9d5ad0bb1a";
+      sha256 = "a10d8d5e597c6a54ec418baddd31a51a0b7937a895d75b240d890aead946081c";
     };
 
     llvm = pkgs.llvm;
@@ -9215,6 +9219,22 @@ let
     meta = {
       description = "A minimalistic mocking library for python";
       homepage = https://pypi.python.org/pypi/MiniMock;
+    };
+  };
+
+  munch = buildPythonPackage rec {
+    name = "munch-${version}";
+    version = "2.0.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/m/munch/${name}.tar.gz";
+      sha256 = "1420683a94f3a2ffc77935ddd28aa9ccb540dd02b75e02ed7ea863db437ab8b2";
+    };
+
+    meta = {
+      description = "A dot-accessible dictionary (a la JavaScript objects)";
+      license = licenses.mit;
+      homepage = http://github.com/Infinidat/munch;
     };
   };
 
@@ -10296,12 +10316,12 @@ let
   };
 
   numba = buildPythonPackage rec {
-    version = "0.21.0";
+    version = "0.22.1";
     name = "numba-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/numba/${name}.tar.gz";
-      sha256 = "1806d2f6ad49ad891e9ac6fed0cc0b0489cbfcd9ba2dc81081c1c30091e77604";
+      sha256 = "8194c41cdf96c16e3b3d246c0381daf4e587d1ada761f410efecb8315c2cdda3";
     };
 
     propagatedBuildInputs = with self; [numpy llvmlite argparse] ++ optional (!isPy3k) funcsigs ++ optional (isPy27 || isPy33) singledispatch;
