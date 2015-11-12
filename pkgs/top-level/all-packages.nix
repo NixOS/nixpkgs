@@ -14129,8 +14129,6 @@ let
 
   ue4demos = recurseIntoAttrs (callPackage ../games/ue4demos { });
 
-  unnethack = callPackage ../games/unnethack { };
-
   ut2004demo = callPackage ../games/ut2004demo { };
 
   vdrift = callPackage ../games/vdrift { };
