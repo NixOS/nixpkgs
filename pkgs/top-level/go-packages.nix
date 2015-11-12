@@ -39,6 +39,14 @@ let
     sha256 = "1nr2q0vas0a2f395f4shjxqpas18mjsf8yhgndsav7svngpbbpg8";
   };
 
+  codesearch = buildFromGitHub {
+    rev    = "a45d81b686e85d01f2838439deaf72126ccd5a96";
+    date   = "2015-06-17";
+    owner  = "google";
+    repo   = "codesearch";
+    sha256 = "12bv3yz0l3bmsxbasfgv7scm9j719ch6pmlspv4bd4ix7wjpyhny";
+  };
+
   image = buildFromGitHub {
     rev = "8ab1ac6834edd43d91cbe24272897a87ce7e835e";
     date = "2015-08-23";
@@ -585,7 +593,7 @@ let
     repo = "pretty-words";
     sha256 = "1466wjhrg9lhqmzil1vf8qj16fxk32b5kxlcccyw2x6dybqa6pkl";
   };
-  
+
   meddler = buildFromGitHub {
     rev = "d2b51d2b40e786ab5f810d85e65b96404cf33570";
     owner = "odeke-em";
