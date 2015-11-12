@@ -8514,13 +8514,13 @@ let
 
   llvmlite = buildPythonPackage rec {
     name = "llvmlite-${version}";
-    version = "0.7.0";
+    version = "0.8.0";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/l/llvmlite/${name}.tar.gz";
-      sha256 = "6d780980da05d2d82465991bce42c1b4625018d67feae17c672c6a9d5ad0bb1a";
+      sha256 = "a10d8d5e597c6a54ec418baddd31a51a0b7937a895d75b240d890aead946081c";
     };
 
     llvm = pkgs.llvm;
