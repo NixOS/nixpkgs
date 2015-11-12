@@ -11013,6 +11013,8 @@ let
 
   bibletime = callPackage ../applications/misc/bibletime { };
 
+  binkplayer = callPackage_i686 ../applications/video/binkplayer { };
+
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
   bitlbee-plugins = callPackage ../applications/networking/instant-messengers/bitlbee/plugins.nix { };
 
