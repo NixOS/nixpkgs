@@ -792,6 +792,7 @@ let self = _self // overrides;
 
   #TODO git-gutter-fringe
 
+  # Deprecated in favor of git-rebase
   git-rebase-mode = melpaBuild rec {
     pname = "git-rebase-mode";
     version = "1.0.0";
@@ -802,7 +803,7 @@ let self = _self // overrides;
       sha256 = "12a1xs3w2dp1a55qhc01dwjkavklgfqnn3yw85dhi4jdz8r8j7m0";
     };
     files = [ "git-rebase-mode.el" ];
-    meta = { license = gpl3Plus; };
+    meta = git-rebase.meta;
   };
 
   git-timemachine = melpaBuild rec {
@@ -1172,7 +1173,6 @@ let self = _self // overrides;
                   "lisp/magit-blame.el"
                   "lisp/magit-ediff.el"
                   "lisp/magit-extras.el"
-                  "lisp/git-rebase.el"
                   "Documentation/magit.texi"
                   "Documentation/AUTHORS.md"
                   "COPYING"
@@ -1190,6 +1190,16 @@ let self = _self // overrides;
     fileSpecs = [ "lisp/git-commit.el" ];
     meta = magit.meta // {
       description = "Emacs mode for editig Git commit messages";
+    };
+  };
+  git-rebase = melpaBuild rec {
+    pname = "git-rebase";
+    version = magit.version;
+    src = magit.src;
+    packageRequires = [ dash with-editor magit ];
+    fileSpecs = [ "lisp/git-rebase.el" ];
+    meta = magit.meta // {
+      description = "Emacs major-mode which makes editing rebase scripts more fun";
     };
   };
   magit-popup = melpaBuild rec {
