@@ -2036,6 +2036,8 @@ let
 
   most = callPackage ../tools/misc/most { };
 
+  mkcast = callPackage ../applications/video/mkcast { };
+
   multitail = callPackage ../tools/misc/multitail { };
 
   netperf = callPackage ../applications/networking/netperf { };
