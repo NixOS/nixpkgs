@@ -9,6 +9,8 @@ buildFHSUserEnv {
   targetPkgs = pkgs: with pkgs; [
       steamPackages.steam
       steamPackages.steam-fonts
+      # License agreement
+      gnome3.zenity
       # Errors in output without those
       pciutils
       python2
