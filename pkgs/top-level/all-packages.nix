@@ -13942,6 +13942,12 @@ let
 
   njam = callPackage ../games/njam { };
 
+  nwn = callPackage ../games/nwn {
+    inherit (pkgsi686Linux.xlibs) libX11 libXcursor;
+    inherit (pkgsi686Linux) libelf SDL SDL_gfx mesa_glu;
+    stdenv = stdenv_32bit;
+  };
+
   newtonwars = callPackage ../games/newtonwars { };
 
   odamex = callPackage ../games/odamex { };
