@@ -8954,6 +8954,22 @@ let
     };
   };
 
+  munch = buildPythonPackage rec {
+    name = "munch-${version}";
+    version = "2.0.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/m/munch/${name}.tar.gz";
+      sha256 = "1420683a94f3a2ffc77935ddd28aa9ccb540dd02b75e02ed7ea863db437ab8b2";
+    };
+
+    meta = {
+      description = "A dot-accessible dictionary (a la JavaScript objects)";
+      license = licenses.mit;
+      homepage = http://github.com/Infinidat/munch;
+    };
+  };
+
   nototools = buildPythonPackage rec {
     version = "git-2015-09-16";
     name = "nototools-${version}";
