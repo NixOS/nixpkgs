@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib netcdf hdf5 ];
 
-  cmakeFlags = [ "-DBUILD_TESTING=${if doCheck then "ON" else "OFF"}" ];
+  cmakeFlags = [ "-DBUILD_TESTING=${if doCheck then "ON" else "OFF"}"
+                 "-DLIBMINC_MINC1_SUPPORT=ON" ];
 
   checkPhase = "ctest";
   doCheck = false;
