@@ -683,14 +683,14 @@ in
       };
 
       preStart = ''
+        ${pkgs.coreutils}/bin/rm -Rf "${stateDir}/private/"
+        ${pkgs.coreutils}/bin/rm -Rf "${stateDir}/tmp/"
+
         ${pkgs.coreutils}/bin/mkdir -m 0700 -p "${stateDir}/private"
         ${pkgs.coreutils}/bin/mkdir -m 0700 -p "${stateDir}/tmp"
         ${pkgs.coreutils}/bin/mkdir -m 0700 -p "${stateDir}/var"
 
         ${pkgs.coreutils}/bin/touch "${stateDir}/don't touch anything in here"
-
-        ${pkgs.coreutils}/bin/rm -f "${stateDir}/private/"*
-        ${pkgs.coreutils}/bin/rm -f "${stateDir}/tmp/"*
 
         ${pkgs.coreutils}/bin/chown nsd:nsd -R "${stateDir}/private"
         ${pkgs.coreutils}/bin/chown nsd:nsd -R "${stateDir}/tmp"
@@ -700,6 +700,27 @@ in
         ${pkgs.coreutils}/bin/cp -r  "${zoneFiles}" "${stateDir}/zones"
 
         ${copyKeys}
+
+
+        echo  "checking zone files"
+        pushd "${stateDir}/zones" > /dev/null
+
+        for zoneFile in *; do
+          ${nsdPkg}/sbin/nsd-checkzone "$zoneFile" "$zoneFile" || {
+            if grep -q \\\\\\$ "$zoneFile"; then
+              echo zone "$zoneFile" contains escaped dollar signes \\\$
+              echo Escaping them is not needed any more. Please make shure \
+                   to unescape them where they prefix a variable name
+            fi
+
+            exit 1
+          }
+        done
+
+        popd > /dev/null
+
+        echo "checking configuration files"
+        ${nsdPkg}/sbin/nsd-checkconf ${configFile}
       '';
     };
 
