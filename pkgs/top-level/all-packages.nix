@@ -15181,6 +15181,8 @@ let
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
 
+  minc_tools = callPackage ../applications/science/biology/minc-tools { };
+
   ncbi_tools = callPackage ../applications/science/biology/ncbi-tools { };
 
   paml = callPackage ../applications/science/biology/paml { };
