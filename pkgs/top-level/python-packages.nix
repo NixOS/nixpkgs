@@ -1462,22 +1462,26 @@ let
 
   blaze = buildPythonPackage rec {
     name = "blaze-${version}";
-    version = "0.8.2";
+    version = "0.8.3";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/blaze/${name}.tar.gz";
-      sha256 = "1abedabf2a1e62dd059e0942d60f27337763de26f5e3f61ed55baaf97723b624";
+      sha256 = "4f8ceb1248ba44f833f5a46a18b6ea44130a5999d5234324d0456b5f9ffe716b";
     };
 
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [
       numpy
       pandas
       datashape
       odo
       toolz
+      cytoolz
       multipledispatch
       sqlalchemy9 # sqlalchemy8 should also work
       psutil
+      numba
+      h5py
     ];
 
     meta = {
