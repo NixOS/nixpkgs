@@ -15226,6 +15226,8 @@ let
 
   slock = callPackage ../misc/screensavers/slock { };
 
+  snapraid = callPackage ../tools/filesystems/snapraid { };
+
   soundOfSorting = callPackage ../misc/sound-of-sorting { };
 
   sourceAndTags = callPackage ../misc/source-and-tags {
