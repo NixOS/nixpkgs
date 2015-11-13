@@ -7713,6 +7713,8 @@ let
     pgen          = callPackage ../development/libraries/pgen { aterm = aterm28; };
   });
 
+  mhddfs = callPackage ../tools/filesystems/mhddfs { };
+
   ming = callPackage ../development/libraries/ming { };
 
   minizip = callPackage ../development/libraries/minizip { };
