@@ -21278,11 +21278,11 @@ let
 
   pafy = buildPythonPackage rec {
     name = "pafy-${version}";
-    version = "0.4.1";
+    version = "0.4.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pafy/${name}.tar.gz";
-      sha256 = "1zdlwwrwh04vszwgmhkmaah1ix24d2zicpv3zi7s8whh06g7pkkl";
+      sha256 = "140nacvyv1a2frvgygbpbsdpxjh82ysfmgp7jf2apn4x2gnkip59";
     };
 
     propagatedBuildInputs = with self; [ youtube-dl ];
