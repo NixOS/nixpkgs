@@ -56,7 +56,9 @@ let
     bootstrap_cmds  = applePackage "bootstrap_cmds"    "86"          "0xr0296jm1r3q7kbam98h85g23qlfi763z54ahj563n636kyk2wb" {};
     bsdmake         = applePackage "bsdmake"           "24" "11a9kkhz5bfgi1i8kpdkis78lhc6b5vxmhd598fcdgra1jw4iac2" {};
     CarbonHeaders   = applePackage "CarbonHeaders"     "9A581"       "1hc0yijlpwq39x5bic6nnywqp2m1wj1f11j33m2q7p505h1h740c" {};
-    CF              = applePackage "CF"                "855.17"      "1sadmxi9fsvsmdyxvg2133sdzvkzwil5fvyyidxsyk1iyfzqsvln" {};
+    CF              = applePackage "CF"                "855.17"      "1sadmxi9fsvsmdyxvg2133sdzvkzwil5fvyyidxsyk1iyfzqsvln" {
+      inherit (pkgs.darwin.apple_sdk) generateFrameworkProfile;
+    };
     CommonCrypto    = applePackage "CommonCrypto"      "60049"       "1azin6w7cnzl0iv8kd2qzgwcp6a45zy64y5z1i6jysjcl6xmlw2h" {};
     configd         = applePackage "configd"           "453.19"      "1gxakahk8gallf16xmhxhprdxkh3prrmzxnmxfvj0slr0939mmr2" {};
     copyfile        = applePackage "copyfile"          "103.92.1"    "15i2hw5aqx0fklvmq6avin5s00adacvzqc740vviwc2y742vrdcd" {};

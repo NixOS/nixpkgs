@@ -5,7 +5,9 @@
 }:
 
 let
-  libSystemProfile = builtins.readFile ./standard-sandbox.sb;
+  libSystemProfile = ''
+    (import "${./standard-sandbox.sb}")
+  '';
 
   fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
     url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/4f07c88d467216d9692fefc951deb5cd3c4cc722/${file}";
@@ -253,7 +255,7 @@ in rec {
     };
 
     darwin = orig.darwin // {
-      inherit (darwin) dyld Libsystem cctools CF libiconv;
+      inherit (darwin) dyld Libsystem cctools libiconv;
     };
   };
 
@@ -263,7 +265,9 @@ in rec {
 
     name = "stdenv-darwin";
 
-    preHook = commonPreHook;
+    preHook = commonPreHook + ''
+      export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
+    '';
 
     __stdenvSandboxProfile = binShClosure + libSystemProfile;
     __extraSandboxProfile  = binShClosure + libSystemProfile;
@@ -294,7 +298,7 @@ in rec {
       coreutils ed diffutils gnutar gzip ncurses gnused bash gawk
       gnugrep llvmPackages.clang-unwrapped patch pcre binutils-raw binutils gettext
     ]) ++ (with pkgs.darwin; [
-      dyld Libsystem CF cctools libiconv
+      dyld Libsystem CF cctools libiconv locale
     ]);
 
     overrides = orig: persistent4 orig // {

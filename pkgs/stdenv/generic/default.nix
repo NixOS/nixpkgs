@@ -156,11 +156,10 @@ let
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "__sandboxProfile" "__propagatedSandboxProfile"])
         // (let
-          # TODO: remove lib.unique once nix has a list canonicalization primitive
           computedSandboxProfile =
-            lib.concatStrings (lib.unique (builtins.map (input: input.__propagatedSandboxProfile or "") (extraBuildInputs ++ buildInputs ++ nativeBuildInputs)));
+            lib.concatMap (input: input.__propagatedSandboxProfile or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs);
           computedPropagatedSandboxProfile =
-            lib.concatStrings (lib.unique (builtins.map (input: input.__propagatedSandboxProfile or "") (propagatedBuildInputs ++ propagatedNativeBuildInputs)));
+            lib.concatMap (input: input.__propagatedSandboxProfile or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs);
         in
         {
           builder = attrs.realBuilder or shell;
@@ -178,8 +177,12 @@ let
           propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
             (if crossConfig == null then propagatedBuildInputs else []);
         } // ifDarwin {
-          __sandboxProfile = computedSandboxProfile + computedPropagatedSandboxProfile + __propagatedSandboxProfile + __sandboxProfile + __extraSandboxProfile;
-          __propagatedSandboxProfile = computedPropagatedSandboxProfile + __propagatedSandboxProfile;
+          # TODO: remove lib.unique once nix has a list canonicalization primitive
+          __sandboxProfile =
+          let profiles = [ __extraSandboxProfile ] ++ computedSandboxProfile ++ computedPropagatedSandboxProfile ++ [ __propagatedSandboxProfile __sandboxProfile ];
+              final = lib.concatStringsSep "\n" (lib.filter (x: x != "") (lib.unique profiles));
+          in final;
+          __propagatedSandboxProfile = lib.unique (computedPropagatedSandboxProfile ++ [ __propagatedSandboxProfile ]);
         } // (if outputs' != [ "out" ] then {
           outputs = outputs';
         } else { })))) (

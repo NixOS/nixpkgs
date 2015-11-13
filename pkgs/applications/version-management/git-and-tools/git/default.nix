@@ -36,6 +36,9 @@ stdenv.mkDerivation {
   # required to support pthread_cancel()
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
+  # without this, git fails when trying to check for /etc/gitconfig existence
+  __propagatedSandboxProfile = stdenv.lib.sandbox.allowDirectoryList "/etc";
+
   makeFlags = "prefix=\${out} sysconfdir=/etc/ PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
       + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
       + (if stdenv.isSunOS then " INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "")

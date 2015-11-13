@@ -1,13 +1,22 @@
 { stdenv, appleDerivation, fetchzip, version, bsdmake, perl, flex, yacc, writeScriptBin
 }:
 
+# this derivation sucks
+# locale data was removed after adv_cmds-118, so our base is that because it's easier than
+# replicating the bizarre bsdmake file structure
+#
+# sadly adv_cmds-118 builds a mklocale and colldef that generate files that our libc can no
+# longer understand
+#
+# the more recent adv_cmds release is used for everything else in this package
+
 let recentAdvCmds = fetchzip {
   url = "http://opensource.apple.com/tarballs/adv_cmds/adv_cmds-158.tar.gz";
   sha256 = "0z081kcprzg5jcvqivfnwvvv6wfxzkjg2jc2lagsf8c7j7vgm8nn";
 };
 
 in appleDerivation {
-  buildInputs = [ bsdmake perl yacc flex (writeScriptBin "lex" "exec ${flex}/bin/flex $@") ];
+  buildInputs = [ bsdmake perl yacc flex ];
 
   patchPhase = ''
     substituteInPlace BSDMakefile \
@@ -19,8 +28,6 @@ in appleDerivation {
 
     substituteInPlace Makefile --replace perl true
 
-    substituteInPlace colldef.tproj/BSDmakefile --replace "-ll" "-lfl"
-
     for subproject in colldef mklocale monetdef msgdef numericdef timedef; do
       substituteInPlace usr-share-locale.tproj/$subproject/BSDmakefile \
         --replace /usr/share/locale "" \
@@ -29,9 +36,28 @@ in appleDerivation {
     done
   '';
 
+  preBuild = ''
+    cp -r --no-preserve=all ${recentAdvCmds}/colldef .
+    pushd colldef
+    mv locale/collate.h .
+    flex -t -8 -i scan.l > scan.c
+    yacc -d parse.y
+    clang *.c -o colldef -lfl
+    popd
+    mv colldef/colldef colldef.tproj/colldef
+
+    cp -r --no-preserve=all ${recentAdvCmds}/mklocale .
+    pushd mklocale
+    flex -t -8 -i lex.l > lex.c
+    yacc -d yacc.y
+    clang *.c -o mklocale -lfl
+    popd
+    mv mklocale/mklocale mklocale.tproj/mklocale
+  '';
+
   buildPhase = ''
-    bsdmake -C colldef.tproj
-    bsdmake -C mklocale.tproj
+    runHook preBuild
+
     bsdmake -C usr-share-locale.tproj
 
     clang ${recentAdvCmds}/ps/*.c -o ps
@@ -39,6 +65,12 @@ in appleDerivation {
 
   installPhase = ''
     bsdmake -C usr-share-locale.tproj install DESTDIR="$locale/share/locale"
+
+    # need to get rid of runtime dependency on flex
+    # install -d 0755 $locale/bin
+    # install -m 0755 colldef.tproj/colldef $locale/bin
+    # install -m 0755 mklocale.tproj/mklocale $locale/bin
+
     install -d 0755 $ps/bin
     install ps $ps/bin/ps
   '';

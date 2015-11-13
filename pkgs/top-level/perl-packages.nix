@@ -8266,6 +8266,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/E/ET/ETHER/Net-HTTP-6.09.tar.gz;
       sha256 = "52762b939d84806908ba544581c5708375f7938c3c0e496c128ca3fbc425e58d";
     };
+    __sandboxProfile = stdenv.lib.sandbox.allowNetworkLocal;
     propagatedBuildInputs = [ URI ];
     meta = {
       description = "Low-level HTTP connection (client)";

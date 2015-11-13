@@ -118,9 +118,7 @@ if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${s
 
   outputHashMode = if recursiveHash then "recursive" else "flat";
 
-  __sandboxProfile = ''
-    (allow network-outbound)
-  '';
+  __sandboxProfile = stdenv.lib.sandbox.allowNetworkOutbound;
 
   inherit curlOpts showURLs mirrorsFile impureEnvVars postFetch downloadToTemp;
 

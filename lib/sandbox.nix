@@ -17,11 +17,13 @@ let
 sexp = tokens: "(" + builtins.concatStringsSep " " tokens + ")";
 generateFileList = files:
   if builtins.isList files
-    then concatMapStringsSep " " (x: sexp [ "literal" x ]) files
-    else concatStringsSep " " (
-      (map (x: sexp [ "literal" ''"${x}"'' ]) (files.literal or [])) ++
-      (map (x: sexp [ "subpath" ''"${x}"'' ]) (files.subpath or []))
-    );
+    then concatMapStringsSep " " (x: sexp [ "literal" ''"${x}"'' ]) files
+    else if builtins.isString files
+      then generateFileList [ files ]
+      else concatStringsSep " " (
+        (map (x: sexp [ "literal" ''"${x}"'' ]) (files.literal or [])) ++
+        (map (x: sexp [ "subpath" ''"${x}"'' ]) (files.subpath or []))
+      );
 applyToFiles = f: act: files: f "${act} ${generateFileList files}";
 genActions = actionName: let
   action = feature: sexp [ actionName feature ];
@@ -30,11 +32,23 @@ genActions = actionName: let
     "${actionName}File" = applyToFiles action "file*";
     "${actionName}FileRead" = applyToFiles action "file-read*";
     "${actionName}FileReadMetadata" = applyToFiles action "file-read-metadata";
+    "${actionName}DirectoryList" = self."${actionName}FileReadMetadata";
     "${actionName}FileWrite" = applyToFiles action "file-write*";
     "${actionName}FileWriteMetadata" = applyToFiles action "file-write-metadata";
+    "${actionName}Network" = sexp [ actionName "network*" ];
+    "${actionName}NetworkBind" = sexp [ actionName "network-bind" ];
+    "${actionName}NetworkInbound" = sexp [ actionName "network-inbound" ];
+    "${actionName}NetworkOutbound" = sexp [ actionName "network-outbound" ];
+    "${actionName}NetworkLocal" = sexp [ actionName "network*" (sexp [ "local" "ip" ]) ];
+    "${actionName}NetworkInboundLocal" = sexp [ actionName "network-inbound" (sexp [ "local" "ip" ]) ];
+    "${actionName}NetworkOutboundLocal" = sexp [ actionName "network-outbound" (sexp [ "local" "ip" ]) ];
   };
   in self;
 
 in
 
-genActions "allow" // genActions "deny"
+genActions "allow" // genActions "deny" // {
+  importProfile = derivation: ''
+    (import "${derivation}")
+  '';
+}

@@ -924,4 +924,8 @@ self: super: {
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [ pkgs.ncurses ];
   });
 
+  streaming-commons = pkgs.stdenv.lib.overrideDerivation super.streaming-commons (drv: {
+    __sandboxProfile = drv.__sandboxProfile +
+      pkgs.stdenv.lib.sandbox.allowNetworkLocal;
+  });
 }
