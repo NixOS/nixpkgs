@@ -2751,17 +2751,20 @@ let
   };
 
   bcrypt = buildPythonPackage rec {
-    name = "bcrypt-1.0.2";
+    name = "bcrypt-2.0.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/b/bcrypt/${name}.tar.gz";
-      md5 = "c5df008669d17dd6eeb5e2042d5e136f";
+      sha256 = "8b2d197ef220d10eb74625dde7af3b10daa973ae9a1eadd6366f763fad4387fa";
     };
 
     buildInputs = with self; [ pycparser mock pytest py ] ++ optionals (!isPyPy) [ cffi ];
 
     meta = {
       maintainers = with maintainers; [ iElectric ];
+      description = "Modern password hashing for your software and your servers";
+      license = licenses.asl20;
+      homepage = https://github.com/pyca/bcrypt/;
     };
   };
 
