@@ -8217,7 +8217,9 @@ let
     openglSupport = mesaSupported;
     alsaSupport = stdenv.isLinux;
     x11Support = !stdenv.isCygwin;
-    pulseaudioSupport = stdenv.isLinux;
+    pulseaudioSupport = if (config ? pulseaudio)
+                        then config.pulseaudio
+                        else stdenv.isLinux;
     inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa;
   };
 
@@ -8239,7 +8241,7 @@ let
     openglSupport = mesaSupported;
     alsaSupport = stdenv.isLinux;
     x11Support = !stdenv.isCygwin;
-    pulseaudioSupport = false; # better go through ALSA
+    pulseaudioSupport = config.pulseaudio or false; # better go through ALSA
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
   };
 
