@@ -67,8 +67,3 @@
 (allow mach-lookup
        (global-name "com.apple.system.notification_center")
        (global-name "com.apple.system.opendirectoryd.libinfo"))
-
-; mute annoying failures
-(deny (with no-log) file-read-metadata (literal "/etc") (subpath "/usr/bin"))
-
-(deny process-exec* (literal "/usr/bin/arch") (literal "/usr/bin/hostinfo") (literal "/usr/bin/uname"))
