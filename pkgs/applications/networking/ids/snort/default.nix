@@ -1,4 +1,4 @@
-{stdenv, makeWrapper, fetchurl, libpcap, pcre, libdnet, daq, zlib, flex, bison}:
+{stdenv, fetchurl, libpcap, pcre, libdnet, daq, zlib, flex, bison, makeWrapper}:
 
 stdenv.mkDerivation rec {
   version = "2.9.7.2";

@@ -3,7 +3,7 @@
 , gdk_pixbuf, librsvg, libxkbfile, libnotify
 , libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk
 , cracklib, python, libkrb5, networkmanagerapplet, networkmanager
-, libwacom, samba, shared_mime_info, tzdata, icu, libtool, udev
+, libwacom, samba, shared_mime_info, tzdata, icu, libtool, udev, libgudev
 , docbook_xsl, docbook_xsl_ns, modemmanager, clutter, clutter_gtk
 , fontconfig, sound-theme-freedesktop }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       accountsservice libkrb5 networkmanagerapplet libwacom samba libnotify libxkbfile
       shared_mime_info icu libtool docbook_xsl docbook_xsl_ns gnome3.grilo
       gdk_pixbuf gnome3.defaultIconTheme librsvg clutter clutter_gtk
-      gnome3.vino udev libcanberra_gtk3
+      gnome3.vino udev libgudev libcanberra_gtk3
       networkmanager modemmanager makeWrapper gnome3.gnome-bluetooth ];
 
   preBuild = ''

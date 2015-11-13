@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
     mv compiler-rt-* $sourceRoot/projects/compiler-rt
   '';
 
-  buildInputs = [ perl groff cmake libxml2 python libffi ] /* ++ stdenv.lib.optional stdenv.isLinux valgrind */
+  buildInputs = [ perl groff cmake libxml2 python libffi ]
     ++ stdenv.lib.optional stdenv.isDarwin libcxxabi;
 
   propagatedBuildInputs = [ ncurses zlib ];
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DLLVM_BINUTILS_INCDIR=${binutils}/include"
   ] ++ stdenv.lib.optionals ( isDarwin) [
-    "-DCMAKE_CXX_FLAGS=-stdlib=libc++"
+    "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
   ];
 

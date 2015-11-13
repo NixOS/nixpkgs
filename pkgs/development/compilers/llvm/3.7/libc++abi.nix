@@ -27,7 +27,7 @@ stdenv.mkDerivation {
       done
       make install
       install -d 755 $out/include
-      install -m 644 ../include/cxxabi.h $out/include
+      install -m 644 ../include/*.h $out/include
     ''
     else ''
       install -d -m 755 $out/include $out/lib

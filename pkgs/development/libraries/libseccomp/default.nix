@@ -1,17 +1,16 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, getopt }:
+{ stdenv, fetchurl, getopt }:
+
+let version = "2.2.3"; in
 
 stdenv.mkDerivation rec {
-  name    = "libseccomp-${version}";
-  version = "2.2.3";
+  name = "libseccomp-${version}";
 
-  src = fetchFromGitHub {
-    owner = "seccomp";
-    repo = "libseccomp";
-    rev = "v${version}";
-    sha256 = "0pl827qjls5b6kjj8qxxdwcn6rviqbm5xjqf0hgx6b04c836mswx";
+  src = fetchurl {
+    url = "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
+    sha256 = "d9b400b703cab7bb04b84b9b6e52076a630b673819d7541757bcc16467b6d49e";
   };
 
-  buildInputs = [ autoreconfHook getopt ];
+  buildInputs = [ getopt ];
 
   patchPhase = ''
     patchShebangs .

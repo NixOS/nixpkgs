@@ -109,8 +109,7 @@ in stdenv.mkDerivation {
 
     cp ${installer} $out/bin/xquartz-install
 
-    rm -rf $out/LaunchAgents
-    rm -rf $out/LaunchDaemons
+    rm -rf $out/LaunchAgents $out/LaunchDaemons
 
     fontsConfPath=$out/etc/X11/fonts.conf
     cp ${fontsConf} $fontsConfPath

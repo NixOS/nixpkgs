@@ -27,8 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ optAlsaLib optDb optLibffado optCelt ];
-  propagatedBuildInputs = [ optLibuuid ];
+  buildInputs = [ optAlsaLib optDb optLibuuid optLibffado optCelt ];
   
   meta = with stdenv.lib; {
     description = "JACK audio connection kit";

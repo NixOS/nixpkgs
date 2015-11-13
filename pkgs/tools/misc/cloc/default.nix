@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, AlgorithmDiff, RegexpCommon }:
+{ stdenv, fetchurl, fetchpatch, perl, AlgorithmDiff, RegexpCommon }:
 
 stdenv.mkDerivation rec {
 
@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/cloc/cloc-${version}.tar.gz";
     sha256 = "1w3mz69h2i7pscvi9q7yp7wimds8g38c5ph78cj5pvjl5wa035rh";
   };
+
+  patches = [ (fetchpatch {
+    name = "perl-5.22.patch";
+    url = "https://bugs.archlinux.org/task/45494?getfile=13174";
+    sha256 = "1xxwqjy2q2fdza7kfp9ld0yzljkdsrgm8a9pwnmx5q4adigcjjsz";
+  }) ];
 
   buildInputs = [ perl AlgorithmDiff RegexpCommon ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, python, udev }:
+{ stdenv, fetchurl, pkgconfig, glib, python, udev, libgudev }:
 
 stdenv.mkDerivation rec {
   name = "libmbim-1.12.2";
@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  buildInputs = [ pkgconfig glib udev python ];
+  buildInputs = [ pkgconfig glib udev libgudev python ];
 
   meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/software/libmbim/;
-    description = "talking to WWAN modems and devices which speak the Mobile Interface Broadband Model (MBIM) protocol";
+    description = "Library for talking to WWAN modems and devices which speak the Mobile Interface Broadband Model (MBIM) protocol";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ wkennington ];

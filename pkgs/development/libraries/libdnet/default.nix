@@ -10,9 +10,9 @@ stdenv.mkDerivation {
     sha1 = "71302be302e84fc19b559e811951b5d600d976f8";
   };
 
-  buildInputs = [ automake autoconf libtool ];
+  configureFlags = [ "--enable-shared" ]; # shared libs required by hyenae
 
-  CFLAGS="-fPIC";
+  buildInputs = [ automake autoconf libtool ];
 
   # .so endings are missing (quick and dirty fix)
   postInstall = ''

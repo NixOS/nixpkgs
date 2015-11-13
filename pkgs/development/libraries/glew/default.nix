@@ -3,11 +3,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "glew-1.11.0";
+  name = "glew-1.13.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/glew/${name}.tgz";
-    sha256 = "1mhkllxz49l1x680dmzrv2i82qjrq017sykah3xc90f2d8qcxfv9";
+    sha256 = "1iwb2a6wfhkzv6fa7zx2gz1lkwa0iwnd9ka1im5vdc44xm4dq9da";
   };
 
   nativeBuildInputs = [ xlibsWrapper libXmu libXi ];
