@@ -138,6 +138,10 @@
 , optimizationsDeveloper ? true
 , extraWarningsDeveloper ? false
 , strippingDeveloper ? false
+/*
+ *  Darwin frameworks
+ */
+, Cocoa, CoreServices
 }:
 
 /* Maintainer notes:
@@ -405,7 +409,8 @@ stdenv.mkDerivation rec {
     ++ optionals x11grabExtlib [ libXext libXfixes ]
     ++ optionals nonfreeLicensing [ faac fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
-    ++ optionals isLinux [ alsaLib libraw1394 libv4l ];
+    ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
+    ++ optionals stdenv.isDarwin [ Cocoa CoreServices ];
 
   # Build qt-faststart executable
   buildPhase = optional qtFaststartProgram ''make tools/qt-faststart'';

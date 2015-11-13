@@ -8739,6 +8739,26 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  pcscperl = buildPerlPackage {
+    name = "pcsc-perl-1.4.13";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/W/WH/WHOM/pcsc-perl-1.4.13.tar.bz2;
+      sha256 = "a5f7dfb30be0346cfe80d47749994dab861592929d80786104693987b36e3684";
+    };
+    buildInputs = [ pkgs.pcsclite ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    NIX_CFLAGS_LINK = "-L${pkgs.pcsclite}/lib -lpcsclite";
+    # tests fail; look unfinished
+    doCheck = false;
+    meta = {
+      homepage = http://ludovic.rousseau.free.fr/softwares/pcsc-perl/;
+      description = "Communicate with a smart card using PC/SC";
+      license = stdenv.lib.licenses.gpl2Plus;
+      maintainers = with maintainers; [ abbradar ];
+      platforms = stdenv.lib.platforms.linux;
+    };
+  };
+
   Perl5lib = buildPerlPackage rec {
     name = "perl5lib-1.02";
     src = fetchurl {

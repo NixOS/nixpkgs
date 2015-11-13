@@ -97,6 +97,13 @@ FILE * fopen(const char * path, const char * mode)
     return fopen_real(rewrite(path, buf), mode);
 }
 
+FILE * fopen64(const char * path, const char * mode)
+{
+    FILE * (*fopen64_real) (const char *, const char *) = dlsym(RTLD_NEXT, "fopen64");
+    char buf[PATH_MAX];
+    return fopen64_real(rewrite(path, buf), mode);
+}
+
 int __xstat(int ver, const char * path, struct stat * st)
 {
     int (*__xstat_real) (int ver, const char *, struct stat *) = dlsym(RTLD_NEXT, "__xstat");

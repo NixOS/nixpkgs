@@ -1149,6 +1149,7 @@ self: super: {
   "aeson-filthy" = dontDistribute super."aeson-filthy";
   "aeson-lens" = dontDistribute super."aeson-lens";
   "aeson-native" = dontDistribute super."aeson-native";
+  "aeson-parsec-picky" = dontDistribute super."aeson-parsec-picky";
   "aeson-qq" = doDistribute super."aeson-qq_0_7_4";
   "aeson-schema" = dontDistribute super."aeson-schema";
   "aeson-serialize" = dontDistribute super."aeson-serialize";
@@ -1498,6 +1499,7 @@ self: super: {
   "bamboo-theme-mini-html5" = dontDistribute super."bamboo-theme-mini-html5";
   "bamse" = dontDistribute super."bamse";
   "bamstats" = dontDistribute super."bamstats";
+  "bank-holiday-usa" = dontDistribute super."bank-holiday-usa";
   "bank-holidays-england" = doDistribute super."bank-holidays-england_0_1_0_2";
   "banwords" = dontDistribute super."banwords";
   "barchart" = dontDistribute super."barchart";
@@ -3389,6 +3391,7 @@ self: super: {
   "glapp" = dontDistribute super."glapp";
   "glasso" = dontDistribute super."glasso";
   "glib" = doDistribute super."glib_0_13_1_0";
+  "glicko" = dontDistribute super."glicko";
   "glider-nlp" = dontDistribute super."glider-nlp";
   "glintcollider" = dontDistribute super."glintcollider";
   "gll" = dontDistribute super."gll";

@@ -28,6 +28,12 @@ stdenv.mkDerivation rec {
     inherit version;
     inherit (src.homepage);
     description = "A FUSE-based filesystem that uses the p7zip library";
+    longDescription = ''
+      fuse-7z-ng is a FUSE file system that uses the p7zip
+      library to access all archive formats supported by 7-zip.
+
+      This project is a fork of fuse-7z ( https://gitorious.org/fuse-7z/fuse-7z ).
+    '';
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
   };

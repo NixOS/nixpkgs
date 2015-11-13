@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "replicant-${version}";
-  version = "0.5.2";
+  version = "0.6.3";
 
   src = fetchurl {
-    url = "https://github.com/rescrv/Replicant/archive/releases/0.6.3.zip";
-    sha256 = "1fbagz0nbvinkqr5iw5y187dm4klkswrxnl5ysq8waglg2nj8zzi";
+    url = "https://github.com/rescrv/Replicant/archive/releases/${version}.zip";
+    sha256 = "1q3pdq2ndpj70yd1578bn4grlrp77gl8hv2fz34jpx34qmlalda4";
   };
   buildInputs = [
     autoconf

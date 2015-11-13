@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/rescrv/HyperDex/archive/releases/${version}.zip";
-    sha256 = "0s1capy2hj45f5rmdb4fk0wxy7vz69krplhba57f6wrkpcz1zb57";
+    sha256 = "0l7w3x6c4nslz5ijmj8xys0k1slwi3s4crxmi16ml1x32bqgzhj7";
   };
 
   buildInputs = [

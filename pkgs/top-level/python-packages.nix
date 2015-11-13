@@ -1261,7 +1261,7 @@ let
   cycler = buildPythonPackage rec {
     name = "cycler-${version}";
     version = "0.9.0";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/C/Cycler/${name}.tar.gz";
       sha256 = "96dc4ddf27ef62c09990c6196ac1167685e89168042ec0ae4db586de023355bc";
@@ -1467,22 +1467,26 @@ let
 
   blaze = buildPythonPackage rec {
     name = "blaze-${version}";
-    version = "0.8.2";
+    version = "0.8.3";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/blaze/${name}.tar.gz";
-      sha256 = "1abedabf2a1e62dd059e0942d60f27337763de26f5e3f61ed55baaf97723b624";
+      sha256 = "4f8ceb1248ba44f833f5a46a18b6ea44130a5999d5234324d0456b5f9ffe716b";
     };
 
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [
       numpy
       pandas
       datashape
       odo
       toolz
+      cytoolz
       multipledispatch
       sqlalchemy9 # sqlalchemy8 should also work
       psutil
+      numba
+      h5py
     ];
 
     meta = {
@@ -2813,17 +2817,20 @@ let
   };
 
   bcrypt = buildPythonPackage rec {
-    name = "bcrypt-1.0.2";
+    name = "bcrypt-2.0.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/b/bcrypt/${name}.tar.gz";
-      md5 = "c5df008669d17dd6eeb5e2042d5e136f";
+      sha256 = "8b2d197ef220d10eb74625dde7af3b10daa973ae9a1eadd6366f763fad4387fa";
     };
 
     buildInputs = with self; [ pycparser mock pytest py ] ++ optionals (!isPyPy) [ cffi ];
 
     meta = {
       maintainers = with maintainers; [ iElectric ];
+      description = "Modern password hashing for your software and your servers";
+      license = licenses.asl20;
+      homepage = https://github.com/pyca/bcrypt/;
     };
   };
 
@@ -4200,6 +4207,37 @@ let
     propagatedBuildInputs = with self; [ gdata ];
   };
 
+  googleplaydownloader = buildPythonPackage rec {
+    version = "1.8";
+    name = "googleplaydownloader-${version}";
+
+    src = pkgs.fetchurl {
+       url = "https://codingteam.net/project/googleplaydownloader/download/file/googleplaydownloader_${version}.orig.tar.gz";
+       sha256 = "1hxl4wdbiyq8ay6vnf3m7789jg0kc63kycjj01x1wm4gcm4qvbkx";
+     };
+
+    disabled = ! isPy27;
+
+    propagatedBuildInputs = with self; [ configparser pyasn1 ndg-httpsclient requests protobuf wxPython];
+
+    preBuild = ''
+      substituteInPlace googleplaydownloader/__init__.py --replace \
+        'open(os.path.join(HERE, "googleplaydownloader"' \
+        'open(os.path.join(HERE'
+    '';
+
+    postInstall = ''
+      cp -R googleplaydownloader/ext_libs $out/${python.sitePackages}/
+    '';
+
+    meta = {
+      homepage = https://codingteam.net/project/googleplaydownloader;
+      description = "Graphical software to download APKs from the Google Play store";
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ DamienCassou ];
+    };
+  };
+
   gplaycli = buildPythonPackage rec {
     version = "0.1.2";
     name = "gplaycli-${version}";
@@ -5395,6 +5433,53 @@ let
   };
 
 
+
+  librosa = buildPythonPackage rec {
+    name = "librosa-${version}";
+    version = "0.4.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/librosa/librosa-0.4.0.tar.gz";
+      md5 = "8149a70a5a5783c3cceeb69de3e07458";
+    };
+
+    propagatedBuildInputs = with self;
+      [ joblib matplotlib six scikitlearn decorator audioread samplerate ];
+  };
+
+  joblib = buildPythonPackage rec {
+    name = "joblib-${version}";
+    version = "0.9.0b4";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/j/joblib/joblib-0.9.0b4.tar.gz;
+      md5 = "e0d79a085d4773c7a61cd38b4fb6dad5";
+    };
+  };
+
+  samplerate = buildPythonPackage rec {
+    name = "scikits.samplerate-${version}";
+    version = "0.3.3";
+    src = pkgs.fetchgit {
+      url = https://github.com/ThomasLecocq/samplerate;
+      rev = "7edb22b23f5aa8e7342aea0b538bdd0434988510";
+      sha256 = "ec2a09819c38028283505090ee9839963d3557e73f6e8eb3348ff8884d0d67ed";
+      };
+    buildInputs = with self;  [ pkgs.libsamplerate ];
+
+    propagatedBuildInputs = with self; [ numpy ];
+
+
+    preConfigure = ''
+       cat > site.cfg << END
+       [samplerate]
+       library_dirs=${pkgs.libsamplerate}/lib
+       include_dirs=${pkgs.libsamplerate}/include
+       END
+    '';
+
+    doCheck = false;
+  };
+
+
   hypatia = buildPythonPackage rec {
     name = "hypatia-0.3";
 
@@ -6397,11 +6482,11 @@ let
 
   hg-git = buildPythonPackage rec {
     name = "hg-git-${version}";
-    version = "0.8.1";
+    version = "0.8.2";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/h/hg-git/${name}.tar.gz";
-      sha256 = "07a5p5wfs60hmzv3h64fysvm91ablhiaf5ccpv3f8q61insdzvff";
+      sha256 = "0hz0i6qgcn3ic292sny86mdl1psj1bnczcai1b1kzvwcla6z99py";
     };
 
     propagatedBuildInputs = with self; [ dulwich ];
@@ -8700,13 +8785,13 @@ let
 
   llvmlite = buildPythonPackage rec {
     name = "llvmlite-${version}";
-    version = "0.7.0";
+    version = "0.8.0";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/l/llvmlite/${name}.tar.gz";
-      sha256 = "6d780980da05d2d82465991bce42c1b4625018d67feae17c672c6a9d5ad0bb1a";
+      sha256 = "a10d8d5e597c6a54ec418baddd31a51a0b7937a895d75b240d890aead946081c";
     };
 
     llvm = pkgs.llvm;
@@ -9138,6 +9223,22 @@ let
     meta = {
       description = "A minimalistic mocking library for python";
       homepage = https://pypi.python.org/pypi/MiniMock;
+    };
+  };
+
+  munch = buildPythonPackage rec {
+    name = "munch-${version}";
+    version = "2.0.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/m/munch/${name}.tar.gz";
+      sha256 = "1420683a94f3a2ffc77935ddd28aa9ccb540dd02b75e02ed7ea863db437ab8b2";
+    };
+
+    meta = {
+      description = "A dot-accessible dictionary (a la JavaScript objects)";
+      license = licenses.mit;
+      homepage = http://github.com/Infinidat/munch;
     };
   };
 
@@ -10219,13 +10320,15 @@ let
   };
 
   numba = buildPythonPackage rec {
-    version = "0.21.0";
+    version = "0.22.1";
     name = "numba-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/numba/${name}.tar.gz";
-      sha256 = "1806d2f6ad49ad891e9ac6fed0cc0b0489cbfcd9ba2dc81081c1c30091e77604";
+      sha256 = "8194c41cdf96c16e3b3d246c0381daf4e587d1ada761f410efecb8315c2cdda3";
     };
+
+    NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${pkgs.libcxx}/include/c++/v1";
 
     propagatedBuildInputs = with self; [numpy llvmlite argparse] ++ optional (!isPy3k) funcsigs ++ optional (isPy27 || isPy33) singledispatch;
     # Future work: add Cuda support.
@@ -11962,7 +12065,8 @@ let
       bottleneck
       sqlalchemy9
       lxml
-      html5lib
+      # Disabling this because an upstream dependency, pep8, is broken on v3.5.
+      (if isPy35 then null else html5lib)
       modules.sqlite3
       beautifulsoup4
     ] ++ optional isDarwin pkgs.darwin.adv_cmds; # provides the locale command
@@ -11986,12 +12090,19 @@ let
     # The `-e` flag disables a few problematic tests.
     # https://github.com/pydata/pandas/issues/11169
     # https://github.com/pydata/pandas/issues/11287
-    checkPhase = ''
+    # The test_sql checks fail specifically on python 3.5; see here:
+    # https://github.com/pydata/pandas/issues/11112
+    checkPhase = let
+      testsToSkip = ["test_data" "test_excel" "test_html" "test_json"
+                     "test_frequencies" "test_frame"
+                     "test_read_clipboard_infer_excel"] ++
+                    optional isPy35 "test_sql";
+    in ''
       runHook preCheck
       # The flag `-A 'not network'` will disable tests that use internet.
       # The `-e` flag disables a few problematic tests.
       ${python.executable} setup.py nosetests -A 'not network' --stop \
-        -e 'test_data|test_excel|test_html|test_json|test_frequencies|test_frame|test_read_clipboard_infer_excel' --verbosity=3
+        -e '${concatStringsSep "|" testsToSkip}' --verbosity=3
 
       runHook postCheck
     '';
@@ -21173,11 +21284,11 @@ let
 
   pafy = buildPythonPackage rec {
     name = "pafy-${version}";
-    version = "0.4.1";
+    version = "0.4.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pafy/${name}.tar.gz";
-      sha256 = "1zdlwwrwh04vszwgmhkmaah1ix24d2zicpv3zi7s8whh06g7pkkl";
+      sha256 = "140nacvyv1a2frvgygbpbsdpxjh82ysfmgp7jf2apn4x2gnkip59";
     };
 
     propagatedBuildInputs = with self; [ youtube-dl ];

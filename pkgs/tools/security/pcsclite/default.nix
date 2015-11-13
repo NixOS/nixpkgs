@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, udev, dbus_libs, perl }:
+{ stdenv, fetchurl, pkgconfig, udev, dbus_libs, perl, python2 }:
 
 stdenv.mkDerivation rec {
   name = "pcsclite-1.8.14";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     "--enable-confdir=/etc"
   ];
 
-  nativeBuildInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ pkgconfig perl python2 ];
   buildInputs = [ udev dbus_libs ];
 
   meta = with stdenv.lib; {
