@@ -6260,18 +6260,16 @@ let
     # The following need to be fixed on Darwin
     frei0r = if stdenv.isDarwin then null else frei0r;
     game-music-emu = if stdenv.isDarwin then null else game-music-emu;
-    gsm = if stdenv.isDarwin then null else gsm;
     libjack2 = if stdenv.isDarwin then null else libjack2;
     libmodplug = if stdenv.isDarwin then null else libmodplug;
-    libssh = if stdenv.isDarwin then null else libssh;
     libvpx = if stdenv.isDarwin then null else libvpx;
     openal = if stdenv.isDarwin then null else openal;
-    openjpeg_1 = if stdenv.isDarwin then null else openjpeg_1;
     libpulseaudio = if stdenv.isDarwin then null else libpulseaudio;
     samba = if stdenv.isDarwin then null else samba;
     vid-stab = if stdenv.isDarwin then null else vid-stab;
     x265 = if stdenv.isDarwin then null else x265;
     xavs = if stdenv.isDarwin then null else xavs;
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices;
   };
 
   ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer { };
@@ -6965,7 +6963,9 @@ let
 
   libdbusmenu_qt5 = callPackage ../development/libraries/libdbusmenu-qt/qt-5.4.nix { };
 
-  libdc1394 = callPackage ../development/libraries/libdc1394 { };
+  libdc1394 = callPackage ../development/libraries/libdc1394 {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   libdc1394avt = callPackage ../development/libraries/libdc1394avt { };
 
@@ -7437,7 +7437,9 @@ let
   # To bootstrap SBCL, I need CLisp 2.44.1; it needs libsigsegv 2.5
   libsigsegv_25 = callPackage ../development/libraries/libsigsegv/2.5.nix { };
 
-  libsndfile = callPackage ../development/libraries/libsndfile { };
+  libsndfile = callPackage ../development/libraries/libsndfile {
+    inherit (darwin.apple_sdk.frameworks) Carbon;
+  };
 
   libsodium = callPackage ../development/libraries/libsodium { };
 
@@ -8529,7 +8531,9 @@ let
     libpng = libpng12;
   };
 
-  wavpack = callPackage ../development/libraries/wavpack { };
+  wavpack = callPackage ../development/libraries/wavpack {
+    inherit (darwin) libiconv;
+  };
 
   wayland = callPackage ../development/libraries/wayland {
     graphviz = graphviz-nox;
