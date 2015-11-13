@@ -2630,7 +2630,9 @@ let
 
   pcsclite = callPackage ../tools/security/pcsclite { };
 
-  pcsctools = callPackage ../tools/security/pcsctools { };
+  pcsctools = callPackage ../tools/security/pcsctools {
+    inherit (perlPackages) pcscperl Glib Gtk2 Pango;
+  };
 
   pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
 
