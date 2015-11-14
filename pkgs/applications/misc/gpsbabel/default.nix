@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     # extended precision fixes this problem.
     ++ stdenv.lib.optional stdenv.isi686 "CXXFLAGS=-ffloat-store";
 
+  enableParallelBuilding = true;
+
   doCheck = true;
   preCheck = ''
     patchShebangs testo
