@@ -44,7 +44,6 @@ let
     "mod_flv_streaming"
     "mod_magnet"
     "mod_mysql_vhost"
-    "mod_rewrite"
     "mod_scgi"
     "mod_setenv"
     "mod_trigger_b4_dl"
