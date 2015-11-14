@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "git-20150126";
+  version = "git-20151025";
   name = "physlock-${version}";
   src = fetchFromGitHub {
     owner  = "muennich";
     repo   = "physlock";
-    rev    = "b64dccc8c22710f8bf01eb5419590cdb0e65cabb";
-    sha256 = "1dapkwj3y6bb4j8q4glms7zsqm7drr37nrnr30sbahwq67rnvzcc";
+    rev    = "d47a885a1100a7ef2d949f7763f6249711efbb9e";
+    sha256 = "1ln5lpfzx4s7val921drm2db22g9klsinpg5lg8hccf689myhk0m";
   };
 
   preConfigure = ''
