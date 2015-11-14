@@ -411,7 +411,7 @@ rec {
   nixType = x:
       if isAttrs x then
           if x ? outPath then "derivation"
-          else "aattrs"
+          else "attrs"
       else if isFunction x then "function"
       else if isList x then "list"
       else if x == true then "bool"
