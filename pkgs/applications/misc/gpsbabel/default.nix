@@ -20,7 +20,10 @@ stdenv.mkDerivation rec {
     But FOP isn't packaged yet.  */
 
   preConfigure = "cd gpsbabel";
-  configureFlags = [ "--with-zlib=system" ];
+  configureFlags = [ "--with-zlib=system" ]
+    # Floating point behavior on i686 causes test failures. Preventing
+    # extended precision fixes this problem.
+    ++ stdenv.lib.optional stdenv.isi686 "CXXFLAGS=-ffloat-store";
 
   doCheck = true;
   preCheck = ''
