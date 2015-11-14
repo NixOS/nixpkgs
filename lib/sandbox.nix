@@ -35,13 +35,6 @@ genActions = actionName: let
     "${actionName}DirectoryList" = self."${actionName}FileReadMetadata";
     "${actionName}FileWrite" = applyToFiles action "file-write*";
     "${actionName}FileWriteMetadata" = applyToFiles action "file-write-metadata";
-    "${actionName}Network" = sexp [ actionName "network*" ];
-    "${actionName}NetworkBind" = sexp [ actionName "network-bind" ];
-    "${actionName}NetworkInbound" = sexp [ actionName "network-inbound" ];
-    "${actionName}NetworkOutbound" = sexp [ actionName "network-outbound" ];
-    "${actionName}NetworkLocal" = sexp [ actionName "network*" (sexp [ "local" "ip" ]) ];
-    "${actionName}NetworkInboundLocal" = sexp [ actionName "network-inbound" (sexp [ "local" "ip" ]) ];
-    "${actionName}NetworkOutboundLocal" = sexp [ actionName "network-outbound" (sexp [ "local" "ip" ]) ];
   };
   in self;
 

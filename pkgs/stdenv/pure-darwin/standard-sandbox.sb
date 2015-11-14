@@ -67,3 +67,6 @@
 (allow mach-lookup
        (global-name "com.apple.system.notification_center")
        (global-name "com.apple.system.opendirectoryd.libinfo"))
+
+; allow networking on localhost
+(allow network* (local ip) (remote unix-socket))
