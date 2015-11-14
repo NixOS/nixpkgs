@@ -15678,7 +15678,16 @@ let
   };
 
 
-  scikitlearn = buildPythonPackage rec {
+  scikitlearn = let
+    openblas = pkgs.openblas.overrideDerivation (oldAttrs: rec {
+      name = "openblas-${version}";
+      version = "0.2.14";
+      src = pkgs.fetchurl {
+        url = "https://github.com/xianyi/OpenBLAS/archive/v${version}.tar.gz";
+        sha256 = "2411c4f56f477b42dff54db2b7ffc0b7cf53bb9778d54982595c64cc69c40fc1";
+      };
+    });
+  in buildPythonPackage rec {
     name = "scikit-learn-${version}";
     version = "0.17";
     disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
@@ -15689,7 +15698,7 @@ let
     };
 
     buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
-    propagatedBuildInputs = with self; [ numpy scipy pkgs.openblas ];
+    propagatedBuildInputs = with self; [ numpy scipy openblas ];
 
     buildPhase = ''
       ${self.python.interpreter} setup.py build_ext -i --fcompiler='gnu95'
