@@ -100,13 +100,13 @@ let self = _self // overrides;
   };
 
   elisp-ffi = melpaBuild rec {
-    pname = "elisp-ffi-git";
-    version = "20141103";
+    pname = "elisp-ffi";
+    version = "1.0.0";
     src = fetchFromGitHub {
         owner = "skeeto";
         repo = "elisp-ffi";
-        rev = "eb3d826d68ace9f9a41515ab3820376c0d141634";
-        sha256 = "0w7r56qf2h8wgfs81fc9k8w8949kf2djyhsh8p12dk365nm11n2s";
+        rev = "${version}";
+        sha256 = "0z2n3h5l5fj8wl8i1ilfzv11l3zba14sgph6gz7dx7q12cnp9j22";
     };
     buildInputs = [ external.libffi ];
     preBuild = "make";

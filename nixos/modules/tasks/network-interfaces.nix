@@ -59,7 +59,7 @@ let
   # place the interface which is named after the device at the beginning.
   wlanListDeviceFirst = device: interfaces:
     if hasAttr device interfaces
-    then [{"${device}"=interfaces.device; _iName=device;}] ++ mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n!=device) interfaces)
+    then mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n==device) interfaces) ++ mapAttrsToList (n: v: v//{_iName=n;}) (filterAttrs (n: _: n!=device) interfaces)
     else mapAttrsToList (n: v: v // {_iName = n;}) interfaces;
 
   # udev script that configures a physical wlan device and adds virtual interfaces

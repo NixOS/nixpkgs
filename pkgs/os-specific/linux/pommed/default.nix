@@ -75,5 +75,6 @@ stdenv.mkDerivation rec {
     description = "A tool to handle hotkeys on Apple laptop keyboards";
     homepage = http://www.technologeek.org/projects/pommed/index.html;
     license = stdenv.lib.licenses.gpl2;
+    broken = true; # hash changed, and it's quite suspicious
   };
 }
