@@ -28,6 +28,8 @@ let
     postPatch = optionalString (!stdenv.isDarwin) ''
       sed '2i echo Skipping dd sparse test && exit 0' -i ./tests/dd/sparse.sh
       sed '2i echo Skipping cp sparse test && exit 0' -i ./tests/cp/sparse.sh
+      sed '2i echo Skipping rm deep-2 test && exit 0' -i ./tests/rm/deep-2.sh
+      sed '2i echo Skipping du long-from-unreadable test && exit 0' -i ./tests/du/long-from-unreadable.sh
     '';
 
     configureFlags = optionalString stdenv.isSunOS "ac_cv_func_inotify_init=no";
