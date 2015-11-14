@@ -7503,6 +7503,8 @@ let
 
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
 
+  libutempter = callPackage ../development/libraries/libutempter { };
+
   libunwind = if stdenv.isDarwin
     then darwin.libunwind
     else callPackage ../development/libraries/libunwind { };
@@ -11834,6 +11836,11 @@ let
 
   gtk2fontsel = callPackage ../applications/misc/gtk2fontsel {
     inherit (gnome2) gtk;
+  };
+
+  guake = callPackage ../applications/misc/guake {
+    gconf = gnome.GConf;
+    vte = gnome.vte.override { pythonSupport = true; };
   };
 
   guitone = callPackage ../applications/version-management/guitone {
