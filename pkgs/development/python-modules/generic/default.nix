@@ -162,15 +162,14 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
     '';
 
   shellHook = attrs.shellHook or ''
+    ${preShellHook}
     if test -e setup.py; then
-       tmp_path=/tmp/`pwd | md5sum | cut -f 1 -d " "`-$name
-       mkdir -p $tmp_path/lib/${python.libPrefix}/site-packages
-       ${preShellHook}
+       tmp_path=$(mktemp -d)
        export PATH="$tmp_path/bin:$PATH"
-       export PYTHONPATH="$tmp_path/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-       ${python}/bin/${python.executable} setup.py develop --prefix $tmp_path
-       ${postShellHook}
+       export PYTHONPATH="$tmp_path/${python.sitePackages}:$PYTHONPATH"
+       ${python.interpreter} setup.py develop --prefix $tmp_path
     fi
+    ${postShellHook}
   '';
 
   meta = with lib.maintainers; {
