@@ -3248,6 +3248,8 @@ let
 
   tty-clock = callPackage ../tools/misc/tty-clock { };
 
+  ttyrec = callPackage ../tools/misc/ttyrec { };
+
   ttysnoop = callPackage ../os-specific/linux/ttysnoop {};
 
   ttylog = callPackage ../tools/misc/ttylog { };
