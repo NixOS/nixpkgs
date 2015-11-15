@@ -40,30 +40,30 @@ let
 
     LABEL boot
     MENU LABEL NixOS ${config.system.nixosLabel}${config.isoImage.appendToMenuLabel}
-    LINUX /boot/bzImage
+    LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
-    INITRD /boot/initrd
+    INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with 'nomodeset'
     LABEL boot-nomodeset
     MENU LABEL NixOS ${config.system.nixosVersion}${config.isoImage.appendToMenuLabel} (nomodeset)
-    LINUX /boot/bzImage
+    LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} nomodeset
-    INITRD /boot/initrd
+    INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with 'copytoram'
     LABEL boot-copytoram
     MENU LABEL NixOS ${config.system.nixosVersion}${config.isoImage.appendToMenuLabel} (copytoram)
-    LINUX /boot/bzImage
+    LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} copytoram
-    INITRD /boot/initrd
+    INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with verbose logging to the console
     LABEL boot-nomodeset
     MENU LABEL NixOS ${config.system.nixosVersion}${config.isoImage.appendToMenuLabel} (debug)
-    LINUX /boot/bzImage
+    LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} loglevel=7
-    INITRD /boot/initrd
+    INITRD /boot/${config.system.boot.loader.initrdFile}
   '';
 
   isolinuxMemtest86Entry = ''
@@ -83,8 +83,8 @@ let
 
     cat << EOF > $out/loader/entries/nixos-iso.conf
     title NixOS ${config.system.nixosVersion}${config.isoImage.appendToMenuLabel}
-    linux /boot/bzImage
-    initrd /boot/initrd
+    linux /boot/${config.system.boot.loader.kernelFile}
+    initrd /boot/${config.system.boot.loader.initrdFile}
     options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
     EOF
 
@@ -92,8 +92,8 @@ let
     cat << EOF > $out/loader/entries/nixos-iso-nomodeset.conf
     title NixOS ${config.system.nixosVersion}${config.isoImage.appendToMenuLabel}
     version nomodeset
-    linux /boot/bzImage
-    initrd /boot/initrd
+    linux /boot/${config.system.boot.loader.kernelFile}
+    initrd /boot/${config.system.boot.loader.initrdFile}
     options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} nomodeset
     EOF
 
@@ -101,16 +101,16 @@ let
     cat << EOF > $out/loader/entries/nixos-iso-copytoram.conf
     title NixOS ${config.system.nixosVersion}${config.isoImage.appendToMenuLabel}
     version copytoram
-    linux /boot/bzImage
-    initrd /boot/initrd
+    linux /boot/${config.system.boot.loader.kernelFile}
+    initrd /boot/${config.system.boot.loader.initrdFile}
     options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} copytoram
     EOF
 
     # A variant to boot with verbose logging to the console
     cat << EOF > $out/loader/entries/nixos-iso-debug.conf
     title NixOS ${config.system.nixosVersion}${config.isoImage.appendToMenuLabel} (debug)
-    linux /boot/bzImage
-    initrd /boot/initrd
+    linux /boot/${config.system.boot.loader.kernelFile}
+    initrd /boot/${config.system.boot.loader.initrdFile}
     options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} loglevel=7
     EOF
 
@@ -127,8 +127,8 @@ let
       mkdir ./contents && cd ./contents
       cp -rp "${efiDir}"/* .
       mkdir ./boot
-      cp -p "${config.boot.kernelPackages.kernel}/bzImage" \
-        "${config.system.build.initialRamdisk}/initrd" ./boot/
+      cp -p "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}" \
+        "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}" ./boot/
       touch --date=@0 ./*
 
       usage_size=$(du -sb --apparent-size . | tr -cd '[:digit:]')
@@ -346,11 +346,11 @@ in
           };
           target = "/isolinux/isolinux.cfg";
         }
-        { source = config.boot.kernelPackages.kernel + "/bzImage";
-          target = "/boot/bzImage";
+        { source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;
+          target = "/boot/" + config.system.boot.loader.kernelFile;
         }
-        { source = config.system.build.initialRamdisk + "/initrd";
-          target = "/boot/initrd";
+        { source = config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile;
+          target = "/boot/" + config.system.boot.loader.initrdFile;
         }
         { source = config.system.build.squashfsStore;
           target = "/nix-store.squashfs";

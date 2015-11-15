@@ -30,6 +30,8 @@ let
     let
       kernelPath = "${config.boot.kernelPackages.kernel}/" +
         "${config.system.boot.loader.kernelFile}";
+      initrdPath = "${config.system.build.initialRamdisk}/" +
+        "${config.system.boot.loader.initrdFile}";
     in ''
       mkdir $out
 
@@ -50,7 +52,7 @@ let
 
         echo -n "$kernelParams" > $out/kernel-params
 
-        ln -s ${config.system.build.initialRamdisk}/initrd $out/initrd
+        ln -s ${initrdPath} $out/initrd
 
         ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
 
@@ -176,6 +178,15 @@ in
       type = types.str;
       description = ''
         Name of the kernel file to be passed to the bootloader.
+      '';
+    };
+
+    system.boot.loader.initrdFile = mkOption {
+      internal = true;
+      default = "initrd";
+      type = types.str;
+      description = ''
+        Name of the initrd file to be passed to the bootloader.
       '';
     };
 
