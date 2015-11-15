@@ -12907,6 +12907,8 @@ let
 
   viber = callPackage ../applications/networking/instant-messengers/viber { };
 
+  sonic-pi = callPackage ../applications/audio/sonic-pi { };
+
   st = callPackage ../applications/misc/st {
     conf = config.st.conf or null;
   };
