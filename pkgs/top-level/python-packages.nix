@@ -2821,17 +2821,18 @@ let
   };
 
   pycparser = buildPythonPackage rec {
-    name = "pycparser-2.10";
+    name = "pycparser-${version}";
+    version = "2.14";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pycparser/${name}.tar.gz";
-      md5 = "d87aed98c8a9f386aa56d365fe4d515f";
+      sha256 = "7959b4a74abdc27b312fed1c21e6caf9309ce0b29ea86b591fd2e99ecdf27f73";
     };
 
-    # ImportError: No module named test
-    doCheck = false;
-
     meta = {
+      description = "C parser in Python";
+      homepage = https://github.com/eliben/pycparser;
+      license = licenses.bsd3;
       maintainers = with maintainers; [ iElectric ];
     };
   };
