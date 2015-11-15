@@ -12368,6 +12368,32 @@ let
     };
   };
 
+  pysoundfile = buildPythonPackage rec {
+    name = "pysoundfile-${version}";
+    version = "0.8.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/P/PySoundFile/PySoundFile-${version}.tar.gz";
+      sha256 = "72c3e23b7c9998460ec78176084ea101e3439596ab29df476bc8508708df84df";
+    };
+
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ numpy pkgs.libsndfile cffi ];
+
+    meta = {
+      description = "An audio library based on libsndfile, CFFI and NumPy";
+      license = licenses.bsd3;
+      homepage = https://github.com/bastibe/PySoundFile;
+      maintainer = with maintainers; [ fridh ];
+    };
+
+    prePatch = ''
+      substituteInPlace soundfile.py --replace "'sndfile'" "'${pkgs.libsndfile}/lib/libsndfile.so'"
+    '';
+
+    disabled = isPyPy;
+  };
+
   python3pika = buildPythonPackage {
     name = "python3-pika-0.9.14";
     disabled = !isPy3k;
