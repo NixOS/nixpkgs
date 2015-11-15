@@ -5676,6 +5676,8 @@ let
 
   jenkins-job-builder = callPackage ../development/tools/continuous-integration/jenkins-job-builder { };
 
+  kcov = callPackage ../development/tools/analysis/kcov { };
+
   lcov = callPackage ../development/tools/analysis/lcov { };
 
   leiningen = callPackage ../development/tools/build-managers/leiningen { };
