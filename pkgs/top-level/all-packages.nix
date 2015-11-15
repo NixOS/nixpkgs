@@ -15351,6 +15351,8 @@ let
 
   wcalc = callPackage ../applications/misc/wcalc { };
 
+  webfs = callPackage ../servers/http/webfs { };
+
   wine = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
     wineBuild = config.wine.build or "wine32";
