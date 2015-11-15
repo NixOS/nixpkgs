@@ -8,8 +8,6 @@ bundlerEnv {
   lockfile = ./Gemfile.lock;
   gemset = ./gemset.nix;
 
-  buildInputs = [ curl ];
-
   meta = with lib; {
     description = "A data collector";
     homepage    = http://www.fluentd.org/;

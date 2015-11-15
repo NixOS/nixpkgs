@@ -20,7 +20,7 @@
 { lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python, stdenv, which
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
-, cmake, libssh2, openssl, mysql, darwin
+, cmake, libssh2, openssl, mysql, darwin, git, perl, gecode_3, curl
 }:
 
 let
@@ -32,6 +32,14 @@ in
     buildInputs = [ which icu zlib ];
   };
 
+  dep-selector-libgecode = attrs: {
+    USE_SYSTEM_GECODE = true;
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      sed -i $installPath/lib/dep-selector-libgecode.rb -e 's@VENDORED_GECODE_DIR =.*@VENDORED_GECODE_DIR = "${gecode_3}"@'
+    '';
+  };
+
   ffi = attrs: {
     buildInputs = [ libffi pkgconfig ];
   };
@@ -40,11 +48,12 @@ in
     buildInputs = [ gpgme ];
   };
 
+  # note that you need version >= v3.16.14.8,
+  # otherwise the gem will fail to link to the libv8 binary.
+  # see: https://github.com/cowboyd/libv8/pull/161
   libv8 = attrs: {
     buildInputs = [ which v8 python ];
-    buildFlags = [
-      "--with-system-v8=true"
-    ];
+    buildFlags = [ "--with-system-v8=true" ];
   };
 
   mysql2 = attrs: {
@@ -73,10 +82,18 @@ in
     buildInputs = lib.optional stdenv.isDarwin darwin.libobjc;
   };
 
+  patron = attrs: {
+    buildInputs = [ curl ];
+  };
+
   pg = attrs: {
     buildFlags = [
       "--with-pg-config=${postgresql}/bin/pg_config"
     ];
+  };
+
+  puma = attrs: {
+    buildInputs = [ openssl ];
   };
 
   rmagick = attrs: {
@@ -95,6 +112,7 @@ in
   };
 
   sup = attrs: {
+    dontBuild = false;
     # prevent sup from trying to dynamically install `xapian-ruby`.
     postPatch = ''
       cp ${./mkrf_conf_xapian.rb} ext/mkrf_conf_xapian.rb
@@ -118,6 +136,7 @@ in
   };
 
   tzinfo = attrs: {
+    dontBuild = false;
     postPatch = ''
       substituteInPlace lib/tzinfo/zoneinfo_data_source.rb \
         --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
@@ -130,6 +149,7 @@ in
 
   xapian-ruby = attrs: {
     # use the system xapian
+    dontBuild = false;
     buildInputs = [ xapian pkgconfig zlib ];
     postPatch = ''
       cp ${./xapian-Rakefile} Rakefile

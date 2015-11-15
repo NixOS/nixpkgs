@@ -5278,11 +5278,9 @@ let
     ruby = ruby_2_1_3;
   };
   bundler = callPackage ../development/interpreters/ruby/bundler.nix { };
-  bundler_HEAD = import ../development/interpreters/ruby/bundler-head.nix {
-    inherit buildRubyGem coreutils fetchgit;
-  };
-  defaultGemConfig = callPackage ../development/interpreters/ruby/bundler-env/default-gem-config.nix { };
-  buildRubyGem = callPackage ../development/interpreters/ruby/gem.nix { };
+  bundler_HEAD = bundler;
+  defaultGemConfig = callPackage ../development/interpreters/ruby/gemconfig/default.nix { };
+  buildRubyGem = callPackage ../development/interpreters/ruby/build-ruby-gem { };
   bundlerEnv = callPackage ../development/interpreters/ruby/bundler-env { };
 
   inherit (callPackage ../development/interpreters/ruby {})
@@ -5298,10 +5296,7 @@ let
   ruby_2_1 = ruby_2_1_7;
   ruby_2_2 = ruby_2_2_3;
 
-  rubygemsFun = ruby: builderDefsPackage (callPackage ../development/interpreters/ruby/rubygems.nix) {
-    inherit ruby;
-  };
-  rubygems = hiPrio (rubygemsFun ruby);
+  rubygems = hiPrio (callPackage ../development/interpreters/ruby/rubygems.nix {});
 
   rq = callPackage ../applications/networking/cluster/rq { };
 
@@ -6449,7 +6444,9 @@ let
 
   gdbm = callPackage ../development/libraries/gdbm { };
 
-  gecode = callPackage ../development/libraries/gecode { };
+  gecode_3 = callPackage ../development/libraries/gecode/3.nix { };
+  gecode_4 = callPackage ../development/libraries/gecode { };
+  gecode = gecode_4;
 
   gegl = callPackage ../development/libraries/gegl { };
 
