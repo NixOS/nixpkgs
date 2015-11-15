@@ -9277,6 +9277,7 @@ let
 
   mariadb = callPackage ../servers/sql/mariadb {
     inherit (darwin) cctools;
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
 
   mongodb = callPackage ../servers/nosql/mongodb {
