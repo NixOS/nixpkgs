@@ -17,11 +17,12 @@
 # };
 # This will rebuild glibc with your security patch, then copy over firefox
 # (and all of its dependencies) without rebuilding further.
-{ drv, oldDependency, newDependency }:
+{ drv, oldDependency, newDependency, verbose ? true }:
 
 with lib;
 
 let
+  warn = if verbose then builtins.trace else (x:y:y);
   references = import (runCommand "references.nix" { exportReferencesGraph = [ "graph" drv ]; } ''
     (echo {
     while read path
@@ -78,4 +79,6 @@ let
     (filter dependsOnOld (builtins.attrNames references))) // rewrittenDeps;
 
 in assert (stringLength (drvName (toString oldDependency)) == stringLength (drvName (toString newDependency)));
-getAttr (discard (toString drv)) rewriteMemo
+if hasAttr (discard (toString drv)) rewriteMemo
+then getAttr (discard (toString drv)) rewriteMemo
+else warn "replace-dependency.nix: derivation ${discard (toString drv)} does not depend on ${discard (toString oldDependency)}\n" drv
