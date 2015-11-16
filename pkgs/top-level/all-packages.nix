@@ -2774,6 +2774,8 @@ let
 
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
+  remarshal = (callPackage ../development/tools/remarshal { }).bin // { outputs = [ "bin" ]; };
+
   openmpi = callPackage ../development/libraries/openmpi { };
 
   openmodelica = callPackage ../applications/science/misc/openmodelica { };
@@ -9291,9 +9293,7 @@ let
   riak = callPackage ../servers/nosql/riak/1.3.1.nix { };
   riak2 = callPackage ../servers/nosql/riak/2.1.1.nix { };
 
-  influxdb = callPackage ../servers/nosql/influxdb { };
-
-  influxdb-backup = goPackages.influxdb-backup.bin // { outputs = [ "bin" ]; };
+  influxdb = (callPackage ../servers/nosql/influxdb { }).bin // { outputs = [ "bin" ]; };
 
   hyperdex = callPackage ../servers/nosql/hyperdex { };
 
@@ -9378,7 +9378,7 @@ let
 
   pyMAILt = builderDefsPackage (callPackage ../servers/xmpp/pyMAILt) {};
 
-  qpid-cpp = callPackage ../servers/amqp/qpid-cpp { 
+  qpid-cpp = callPackage ../servers/amqp/qpid-cpp {
     boost = boost155;
   };
 
