@@ -6258,6 +6258,9 @@ let
   ffmpeg_2_8 = callPackage ../development/libraries/ffmpeg/2.8.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
+  ffmpeg_2_8 = callPackage ../development/libraries/ffmpeg/2.8.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
   # Aliases
   ffmpeg_0 = ffmpeg_0_10;
   ffmpeg_1 = ffmpeg_1_2;
