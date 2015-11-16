@@ -9146,6 +9146,8 @@ let
 
   groovebasin = callPackage ../applications/audio/groovebasin { };
 
+  heapster = (callPackage ../servers/monitoring/heapster { }).bin // { outputs = ["bin"]; };
+
   hbase = callPackage ../servers/hbase {};
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
