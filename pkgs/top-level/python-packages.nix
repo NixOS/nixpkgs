@@ -2519,8 +2519,6 @@ let
       sha256 = "13hdffhd37mx3gjby018xl179jaj957fy7kzi01crmimxvn2zi7y";
     };
 
-    setupPyBuildFlags = ["--build-base=$out"];
-
     buildInputs = with self; [ pkgs.pkgconfig ];
 
     meta = {
