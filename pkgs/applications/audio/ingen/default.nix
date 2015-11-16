@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation  rec {
   name = "ingen-svn-${rev}";
-  rev = "5675";
+  rev = "5769";
 
   src = fetchsvn {
     url = "http://svn.drobilla.net/lad/trunk/ingen";
     rev = rev;
-    sha256 = "1dk56rzbc0rwlbzr90rv8bh5163xwld32nmkvcz7ajfchi4fnv86";
+    sha256 = "1d7kp2b0jsbfg6c3cs9fiyd0k3d8y0k4qwzp51pvwv8g0dgnkg6f";
   };
 
   buildInputs = [
