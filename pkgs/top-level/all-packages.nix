@@ -13559,6 +13559,8 @@ let
 
   xterm = callPackage ../applications/misc/xterm { };
 
+  x3270 = callPackage ../applications/misc/x3270 { };
+
   finalterm = callPackage ../applications/misc/finalterm { };
 
   roxterm = callPackage ../applications/misc/roxterm {

@@ -1,0 +1,22 @@
+From 5c89e4ad7ae080aea69e98c45233b3b2b7627d98 Mon Sep 17 00:00:00 2001
+From: Daniel Jour <Daniel.Oertwig@gmail.com>
+Date: Sat, 14 Nov 2015 19:55:46 +0100
+Subject: [PATCH] Repaired defect interpreter of m4man
+
+---
+ Common/m4man | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Common/m4man b/Common/m4man
+index 4b4e6dd..070d256 100755
+--- a/Common/m4man
++++ b/Common/m4man
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ # generate a man page or html man page from m4 source
+ function usage()
+ {
+-- 
+2.5.2
+
