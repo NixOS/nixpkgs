@@ -1,7 +1,12 @@
-{ stdenv, fetchFromGitHub, makeWrapper, go, lxc, sqlite, iproute, bridge-utils, devicemapper,
-btrfsProgs, iptables, bash, e2fsprogs, xz, utillinux}:
+{ stdenv, fetchFromGitHub, makeWrapper
+, go, sqlite, iproute, bridge-utils, devicemapper
+, btrfsProgs, iptables, e2fsprogs, xz, utillinux
+, enableLxc ? false, lxc
+}:
 
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
@@ -14,7 +19,10 @@ stdenv.mkDerivation rec {
     sha256 = "0nwd5wsw9f50jh4s5c5sfd6hnyh3g2kmxcrid36y1phabh30yrcz";
   };
 
-  buildInputs = [ makeWrapper go sqlite lxc iproute bridge-utils devicemapper btrfsProgs iptables e2fsprogs ];
+  buildInputs = [
+    makeWrapper go sqlite iproute bridge-utils devicemapper btrfsProgs
+    iptables e2fsprogs
+  ];
 
   dontStrip = true;
 
@@ -33,7 +41,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 ./bundles/${version}/dynbinary/docker-${version} $out/libexec/docker/docker
     install -Dm755 ./bundles/${version}/dynbinary/dockerinit-${version} $out/libexec/docker/dockerinit
-    makeWrapper $out/libexec/docker/docker $out/bin/docker --prefix PATH : "${iproute}/sbin:sbin:${lxc}/bin:${iptables}/sbin:${e2fsprogs}/sbin:${xz}/bin:${utillinux}/bin"
+    makeWrapper $out/libexec/docker/docker $out/bin/docker \
+      --prefix PATH : "${iproute}/sbin:sbin:${iptables}/sbin:${e2fsprogs}/sbin:${xz}/bin:${utillinux}/bin:${optionalString enableLxc "${lxc}/bin"}"
 
     # systemd
     install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
