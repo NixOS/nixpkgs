@@ -4986,14 +4986,14 @@ let
   ### LUA MODULES
 
   lua4 = callPackage ../development/interpreters/lua-4 { };
-  lua5_0 = callPackage ../development/interpreters/lua-5/5.0.3.nix { };
-  lua5_1 = callPackage ../development/interpreters/lua-5/5.1.nix { };
-  lua5_2 = callPackage ../development/interpreters/lua-5/5.2.nix { };
-  lua5_2_compat = callPackage ../development/interpreters/lua-5/5.2.nix {
+  lua5_0 = callPackage ../development/interpreters/lua-5/5.0.3 { };
+  lua5_1 = callPackage ../development/interpreters/lua-5/5.1 { };
+  lua5_2 = callPackage ../development/interpreters/lua-5/5.2 { };
+  lua5_2_compat = callPackage ../development/interpreters/lua-5/5.2 {
     compat = true;
   };
-  lua5_3 = callPackage ../development/interpreters/lua-5/5.3.nix { };
-  lua5_3_compat = callPackage ../development/interpreters/lua-5/5.3.nix {
+  lua5_3 = callPackage ../development/interpreters/lua-5/5.3 { };
+  lua5_3_compat = callPackage ../development/interpreters/lua-5/5.3 {
     compat = true;
   };
   lua5 = lua5_2_compat;
