@@ -11,7 +11,7 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 with { inherit (stdenv.lib) optional optionals optionalString optionalAttrs; };
 
 let
-  self = stdenv.mkDerivation rec {
+  self = rec {
     name = "coreutils-8.24";
 
     src = fetchurl {
@@ -35,6 +35,8 @@ let
        stdenv.lib.optionalString stdenv.isArm ''
          touch -r src/stat.c src/tail.c
        '';
+
+    configureFlags = optionalString stdenv.isSunOS "ac_cv_func_inotify_init=no";
 
     nativeBuildInputs = [ perl ];
     buildInputs = [ gmp ]
@@ -102,7 +104,7 @@ let
     };
   };
 in
-  self
+  stdenv.mkDerivation (self
   // stdenv.lib.optionalAttrs (stdenv.system == "armv7l-linux" || stdenv.isSunOS) {
     FORCE_UNSAFE_CONFIGURE = 1;
-  }
+  })

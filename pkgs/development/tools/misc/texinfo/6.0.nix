@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, perl, xz, interactive ? false }:
+{ stdenv, fetchurl, ncurses, perl, xz, libiconv, gawk, interactive ? false }:
 
 stdenv.mkDerivation rec {
   name = "texinfo-6.0";
@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl xz ]
+    ++ stdenv.lib.optional stdenv.isSunOS libiconv
     ++ stdenv.lib.optional interactive ncurses;
+
+  configureFlags = "AWK=${gawk}/bin/awk";
 
   preInstall = ''
     installFlags="TEXMF=$out/texmf-dist";
