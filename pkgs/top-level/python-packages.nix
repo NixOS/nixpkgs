@@ -13386,28 +13386,49 @@ let
 
 
   vobject = buildPythonPackage rec {
-    version = "0.8.1d";
+
+    # vobject has strict dependency on dateutil == 2.4.0
+    dateutil-2-4-0 = buildPythonPackage (rec {
+      name = "dateutil-${version}";
+      version = "2.4.0";
+
+      src = pkgs.fetchurl {
+        url = "http://pypi.python.org/packages/source/p/python-dateutil/python-${name}.tar.gz";
+        sha256 = "05zl366hq01h54py62z19bnd63mb1qwz6ra79y54gwbywhyg77a3";
+      };
+
+      propagatedBuildInputs = with self; [ self.six ];
+
+      meta = {
+        description = "Powerful extensions to the standard datetime module";
+        homepage = http://pypi.python.org/pypi/python-dateutil;
+        license = "BSD-style";
+      };
+    });
+
+    version = "0.8.3";
     name = "vobject-${version}";
 
     src = pkgs.fetchFromGitHub {
-      owner = "adieu";
+      owner = "tBaxter";
       repo = "vobject";
-      sha256 = "04fz8g9i9pvrksbpzmp2ci8z34gwjdr7j0f0cxr60v5sdv6v88l9";
-      rev = "ef870dfbb7642756d6b691ebf9f52285ec9e504f";
+      sha256 = "13ybchmkhkjwxgcvdb5jxar7fg4hklnkn8chs3ddjdy1gh6fpcyb";
+      rev = "${version}";
     };
 
-    disabled = isPy3k || isPyPy;
+    disabled = isPyPy;
 
-    propagatedBuildInputs = with self; [ dateutil ];
+    propagatedBuildInputs = [ dateutil-2-4-0 ];
 
-    patchPhase = ''
-      # fails due to hash randomization
-      sed -i 's/RRULE:FREQ=MONTHLY;BYMONTHDAY=-1,-5/RRULE:FREQ=MONTHLY;BYMONTHDAY=.../' test_vobject.py
+    # This is from .travis.yml. I reported an issue regarding the default
+    # checkPhase failure: https://github.com/tBaxter/vobject/issues/13
+    checkPhase = ''
+      ${python}/bin/${python.executable} tests.py
     '';
 
     meta = {
       description = "Module for reading vCard and vCalendar files";
-      homepage = https://github.com/adieu/vobject/;
+      homepage = https://github.com/tBaxter/vobject/;
       license = licenses.asl20;
       maintainers = with maintainers; [ DamienCassou ];
     };
