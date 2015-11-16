@@ -15122,6 +15122,7 @@ let
 
   requests = buildPythonPackage rec {
     name = "requests-1.2.3";
+    disabled = !pythonOlder "3.4";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
