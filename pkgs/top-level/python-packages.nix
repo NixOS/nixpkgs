@@ -1592,6 +1592,44 @@ let
      };
    };
 
+  bokeh = buildPythonPackage rec {
+    name = "bokeh-${version}";
+    version = "0.10.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/b/bokeh/${name}.tar.gz";
+      sha256 = "2d8bd8c98e2f62b2a28328d3cc95bfbe257742fa7efc9c382b4c8ae4a141df14";
+    };
+
+    disabled = isPyPy;
+
+    propagatedBuildInputs = with self; [
+      flask
+      jinja2
+      markupsafe
+      werkzeug
+      itsdangerous
+      dateutil
+      requests
+      six
+      pygments
+      pystache
+      markdown
+      pyyaml
+      pyzmq
+      tornado
+      colorama
+      ]
+      ++ optionals ( isPy26 ) [ argparse ]
+      ++ optionals ( !isPy3k && !isPyPy ) [ websocket_client ]
+      ++ optionals ( !isPyPy ) [ numpy pandas greenlet ];
+
+    meta = {
+      description = "Statistical and novel interactive HTML plots for Python";
+      homepage = "http://github.com/bokeh/bokeh";
+      license = licenses.bsd3;
+    };
+  };
 
   boto = buildPythonPackage rec {
     name = "boto-${version}";
