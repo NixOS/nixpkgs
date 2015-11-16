@@ -199,6 +199,8 @@ let
           { X-Restart-Triggers = toString config.restartTriggers; }
         // optionalAttrs (config.description != "") {
           Description = config.description;
+        } // optionalAttrs (config.onFailure != []) {
+          OnFailure = toString config.onFailure;
         };
     };
   };
