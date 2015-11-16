@@ -78,6 +78,6 @@ let
           })
     (filter dependsOnOld (builtins.attrNames references))) // rewrittenDeps;
 
-  attr = discard (toString drv);
+  drvHash = discard (toString drv);
 in assert (stringLength (drvName (toString oldDependency)) == stringLength (drvName (toString newDependency)));
-rewriteMemo.${attr} or (warn "replace-dependency.nix: Derivation ${attr} does not depend on ${discard (toString oldDependency)}\n" drv)
+rewriteMemo.${drvHash} or (warn "replace-dependency.nix: Derivation ${drvHash} does not depend on ${discard (toString oldDependency)}\n" drv)
