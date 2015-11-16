@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   # TODO: make it work on darwin/bsd as well
   preConfigure = ''
-    export makeFlags="TARGET=linux2628 PREFIX=$out USE_OPENSSL=yes"
+    export makeFlags="TARGET=${if stdenv.isSunOS then "solaris" else "linux2628"} PREFIX=$out USE_OPENSSL=yes"
   '';
 
   meta = {
