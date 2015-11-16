@@ -14845,6 +14845,8 @@ let
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
 
+  pcb = callPackage ../applications/science/electronics/pcb { };
+
   qucs = callPackage ../applications/science/electronics/qucs { };
 
   xoscope = callPackage ../applications/science/electronics/xoscope { };
