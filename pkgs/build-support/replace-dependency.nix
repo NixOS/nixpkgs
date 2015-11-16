@@ -48,7 +48,7 @@ let
 
   oldStorepath = builtins.storePath (discard (toString oldDependency));
 
-  referencesOf = drv: getAttr (discard (toString drv)) references;
+  referencesOf = drv: references.${discard (toString drv)};
 
   dependsOnOldMemo = listToAttrs (map
     (drv: { name = discard (toString drv);
@@ -56,7 +56,7 @@ let
                     any dependsOnOld (referencesOf drv);
           }) (builtins.attrNames references));
 
-  dependsOnOld = drv: getAttr (discard (toString drv)) dependsOnOldMemo;
+  dependsOnOld = drv: dependsOnOldMemo.${discard (toString drv)};
 
   drvName = drv:
     discard (substring 33 (stringLength (builtins.baseNameOf drv)) (builtins.baseNameOf drv));
@@ -78,7 +78,6 @@ let
           })
     (filter dependsOnOld (builtins.attrNames references))) // rewrittenDeps;
 
+  attr = discard (toString drv);
 in assert (stringLength (drvName (toString oldDependency)) == stringLength (drvName (toString newDependency)));
-if hasAttr (discard (toString drv)) rewriteMemo
-then getAttr (discard (toString drv)) rewriteMemo
-else warn "replace-dependency.nix: derivation ${discard (toString drv)} does not depend on ${discard (toString oldDependency)}\n" drv
+rewriteMemo.${attr} or (warn "replace-dependency.nix: Derivation ${attr} does not depend on ${discard (toString oldDependency)}\n" drv)
