@@ -1,0 +1,36 @@
+diff -Nru urllib3-1.12/test/with_dummyserver/test_https.py urllib3-1.12.patched/test/with_dummyserver/test_https.py
+--- urllib3-1.12/test/with_dummyserver/test_https.py	2015-09-06 20:40:19.000000000 +0200
++++ urllib3-1.12.patched/test/with_dummyserver/test_https.py	2015-11-16 02:38:10.137406412 +0100
+@@ -421,10 +421,6 @@
+     def setUp(self):
+         self._pool = HTTPSConnectionPool(self.host, self.port)
+ 
+-    def test_set_ssl_version_to_sslv3(self):
+-        self._pool.ssl_version = ssl.PROTOCOL_SSLv3
+-        self.assertRaises(SSLError, self._pool.request, 'GET', '/')
+-
+     def test_ssl_version_as_string(self):
+         self._pool.ssl_version = 'PROTOCOL_SSLv3'
+         self.assertRaises(SSLError, self._pool.request, 'GET', '/')
+diff -Nru urllib3-1.12/urllib3/util/ssl_.py urllib3-1.12.patched/urllib3/util/ssl_.py
+--- urllib3-1.12/urllib3/util/ssl_.py	2015-09-06 20:40:19.000000000 +0200
++++ urllib3-1.12.patched/urllib3/util/ssl_.py	2015-11-16 02:33:44.672821223 +0100
+@@ -169,11 +169,14 @@
+     if candidate is None:
+         return PROTOCOL_SSLv23
+ 
+-    if isinstance(candidate, str):
+-        res = getattr(ssl, candidate, None)
+-        if res is None:
+-            res = getattr(ssl, 'PROTOCOL_' + candidate)
+-        return res
++    try:
++        if isinstance(candidate, str):
++            res = getattr(ssl, candidate, None)
++            if res is None:
++                res = getattr(ssl, 'PROTOCOL_' + candidate)
++            return res
++    except AttributeError:
++        raise SSLError("TLS protocol version %s not supported!" % candidate)
+ 
+     return candidate

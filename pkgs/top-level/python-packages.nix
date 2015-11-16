@@ -5003,6 +5003,8 @@ in modules // {
 
     buildInputs = with self; [ coverage tornado mock nose ];
 
+    patches = [ ../development/python-modules/urllib3-fix-sslv3-test.patch ];
+
     meta = {
       description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
       homepage = https://www.dropbox.com/developers/core/docs;
