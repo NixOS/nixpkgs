@@ -10925,7 +10925,7 @@ let
   audacious = callPackage ../applications/audio/audacious { };
 
   audacity = callPackage ../applications/audio/audacity {
-    ffmpeg = ffmpeg_0;
+    ffmpeg = ffmpeg_2_2;
   };
 
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
