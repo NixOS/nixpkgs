@@ -70,14 +70,16 @@ in
         description = ''
           The user for connecting to the MySQL database. If provided,
           Longview will connect to MySQL and collect statistics about
-          queries, etc.
+          queries, etc. This user does not need to have been granted
+          any extra privileges.
         '';
       };
 
       mysqlPassword = mkOption {
         type = types.str;
         description = ''
-          The password corresponding to mysqlUser.
+          The password corresponding to mysqlUser.  Warning: this is
+          stored in cleartext in the Nix store!
         '';
       };
     };
