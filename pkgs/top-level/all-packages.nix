@@ -15245,6 +15245,8 @@ let
 
   saneFrontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
+  sct = callPackage ../tools/X11/sct {};
+
   seafile-shared = callPackage ../misc/seafile-shared { };
 
   slock = callPackage ../misc/screensavers/slock { };
