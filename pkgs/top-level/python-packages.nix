@@ -3495,7 +3495,7 @@ let
       md5 = "2cc57e1d134aa93404e779b9311676fa";
     };
 
-    propagatedBuildInputs = with self; [ oauth2 requests ];
+    propagatedBuildInputs = with self; [ oauth2 requests2 ];
 
     meta = {
       description = "Official Python API client for Discogs";
