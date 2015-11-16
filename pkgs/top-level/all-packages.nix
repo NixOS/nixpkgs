@@ -2048,6 +2048,11 @@ let
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
+  nodejs-5_0 = callPackage ../development/web/nodejs/v5_0.nix {
+    libtool = darwin.cctools;
+    openssl = openssl_1_0_2;
+  };
+
   nodejs-4_2 = callPackage ../development/web/nodejs {
     libtool = darwin.cctools;
     openssl = openssl_1_0_2;
