@@ -6447,10 +6447,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   Log4Perl = buildPerlPackage rec {
-    name = "Log-Log4perl-1.43";
+    name = "Log-Log4perl-1.46";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHILLI/${name}.tar.gz";
-      sha256 = "19rmm1nlcradfj74rrvkjwmfighmjj9fiisml2j23i248vyz4cay";
+      sha256 = "31011a17c04e78016e73eaa4865d0481d2ffc3dc22813c61065d90ad73c64e6f";
+    };
+    meta = {
+      homepage = https://mschilli.github.io/log4perl/;
+      description = "Log4j implementation for Perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
