@@ -1,6 +1,6 @@
 { stdenv, fetchurl, intltool, pkgconfig, dbus_glib
 , udev, libnl, libuuid, gnutls, dhcp
-, libgcrypt, perl }:
+, libgcrypt, perl, libgudev }:
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     "--disable-ppp"
   ];
 
-  buildInputs = [ udev libnl libuuid gnutls libgcrypt ];
+  buildInputs = [ udev libnl libuuid gnutls libgcrypt libgudev ];
 
   propagatedBuildInputs = [ dbus_glib ];
 
