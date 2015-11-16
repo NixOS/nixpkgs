@@ -525,6 +525,8 @@ let
     buildTools = androidenv.buildTools;
   };
 
+  apt-cacher-ng = callPackage ../servers/http/apt-cacher-ng { };
+
   apt-offline = callPackage ../tools/misc/apt-offline { };
 
   apulse = callPackage ../misc/apulse { };
