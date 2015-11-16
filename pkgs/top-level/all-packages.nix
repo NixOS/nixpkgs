@@ -11243,6 +11243,8 @@ let
 
   docker = callPackage ../applications/virtualization/docker { go = go_1_4; };
 
+  docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
+
   doodle = callPackage ../applications/search/doodle { };
 
   drumgizmo = callPackage ../applications/audio/drumgizmo { };
