@@ -18,7 +18,6 @@ let
       else versionNoPatch;
     tag = "v" + stdenv.lib.replaceChars ["." "p" "-"] ["_" "_" ""] fullVersionName;
     isRuby21 = majorVersion == "2" && minorVersion == "1";
-    isRuby18 = majorVersion == "1" && minorVersion == "8";
     baseruby = self.override { useRailsExpress = false; };
     self = lib.makeOverridable (
       { stdenv, lib, fetchurl, fetchFromSavannah, fetchFromGitHub
@@ -64,8 +63,7 @@ let
           # support is disabled (if it's enabled, we already have it) and we're
           # running on darwin
           ++ (op (!cursesSupport && stdenv.isDarwin) readline)
-          ++ (ops stdenv.isDarwin (with darwin; [ libiconv libobjc libunwind ]))
-          ++ op isRuby18 autoconf;
+          ++ (ops stdenv.isDarwin (with darwin; [ libiconv libobjc libunwind ]));
 
         enableParallelBuilding = true;
 
@@ -77,15 +75,16 @@ let
           rm "$sourceRoot/enc/unicode/name2ctype.h"
         '';
 
-        postPatch = opString (!isRuby18) (if isRuby21 then ''
+        postPatch = if isRuby21 then ''
           rm tool/config_files.rb
           cp ${config}/config.guess tool/
           cp ${config}/config.sub tool/
-        '' else opString useRailsExpress ''
+        ''
+        else opString useRailsExpress ''
           sed -i configure.in -e '/config.guess/d'
           cp ${config}/config.guess tool/
           cp ${config}/config.sub tool/
-        '');
+        '';
 
         configureFlags = ["--enable-shared" "--enable-pthread"]
           ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
@@ -136,17 +135,6 @@ let
     ) args; in self;
 
 in {
-  ruby_1_8_7 = generic {
-    majorVersion = "1";
-    minorVersion = "8";
-    teenyVersion = "7";
-    patchLevel = "374";
-    sha256 = {
-      src = "0v17cmm95f3xwa4kvza8xwbnfvfqcrym8cvqfvscn45bxsmfwvl7";
-      git = "1xddhxr0j26hpxfixvhqdscwk2ri846w2129fcfwfjzvy19igswx";
-    };
-  };
-
   ruby_1_9_3 = generic {
     majorVersion = "1";
     minorVersion = "9";
