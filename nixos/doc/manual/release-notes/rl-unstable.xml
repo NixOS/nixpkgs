@@ -82,6 +82,13 @@ nginx.override {
     </para>
   </listitem>
 
+  <listitem>
+    <para><command>ruby_1_8</command> has been removed as it's not
+    supported from upstream anymore and probably contains security
+    issues.
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 </section>
