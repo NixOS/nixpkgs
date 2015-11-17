@@ -1,12 +1,12 @@
-{ stdenv, fetchgit, autoconf, x11, bdftopcf, mkfontdir, ncurses, tcl,
+{ stdenv, fetchurl, autoconf, x11, bdftopcf, mkfontdir, ncurses, tcl,
   libXaw }:
 
 stdenv.mkDerivation {
   name = "x3270-3.4ga9";
-  src = fetchgit {
-    url = git://git.code.sf.net/p/x3270/code;
-    rev = "refs/tags/3.4ga9";
-    sha256 = "a9e0cf49862d9746e7a273e00a66bbd053cf38c3ed816d6ace19af597576743f";
+
+  src = fetchurl {
+    url = mirror://sourceforge/x3270/suite3270-3.4ga9-src.tgz;
+    sha256 = "07iwv4j4d2n7f6iffv2xfi1lyp4vr0m9qw40pidw15h1jczxgps9";
   };
 
   patches = [ ./repair-interpreter.patch ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ autoconf x11 bdftopcf mkfontdir ncurses tcl libXaw];
   
-  preConfigure = "make -f Makefile.aux prepare";
+  preConfigure = "make -f Makefile.aux prepare"; # TODO possibly unneeded with tarball
   configureFlags = "--enable-unix"; # TODO only build part of the tools
   preBuild = "make depend";
   installTargets = "install"; # TODO install.man target fails
