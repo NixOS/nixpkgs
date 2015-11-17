@@ -100,9 +100,10 @@ where the builder can do anything it wants, but typically starts with
 source $stdenv/setup
 </programlisting>
 
-to let <literal>stdenv</literal> set up the environment (e.g., process
-the <varname>buildInputs</varname>).  If you want, you can still use
-<literal>stdenv</literal>’s generic builder:
+to let <literal>stdenv</literal> set up the environment. If this is
+not the case, the <varname>buildInputs</varname> are not aviable.  If
+you want, you can still use <literal>stdenv</literal>’s generic
+builder:
 
 <programlisting>
 source $stdenv/setup
@@ -119,6 +120,11 @@ installPhase() {
 
 genericBuild
 </programlisting>
+
+Sometimes the generics builder does almost the right thing, but
+additional commands have to be run before or after the build. The
+<varname>preConfigure</varname> and <varname>postConfigure</varname>
+Hooks are convient ways to do that.
 
 </para>
 
