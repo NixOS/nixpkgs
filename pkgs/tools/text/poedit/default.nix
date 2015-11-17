@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     description = "Cross-platform gettext catalogs (.po files) editor";
     homepage = http://www.poedit.net/;
     license = licenses.mit;
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ iElectric ];
   };
 }

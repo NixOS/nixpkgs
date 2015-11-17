@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3;
     homepage = https://www.thc.org/thc-hydra/;
     maintainers = with maintainers; [offline];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
   };
 }

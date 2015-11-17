@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
     homepage = "https://github.com/xianyi/OpenBLAS";
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ ttuegel ];
   };
 }

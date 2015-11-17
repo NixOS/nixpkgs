@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     homepage = http://code.google.com/p/libnfc/;
     maintainers = with maintainers; [offline];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
   };
 }

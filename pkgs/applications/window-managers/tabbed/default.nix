@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "Simple generic tabbed fronted to xembed aware applications";
     license = licenses.mit;
     maintainers = with maintainers; [ viric ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

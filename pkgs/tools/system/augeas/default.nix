@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2;
     homepage = http://augeas.net/;
     maintainers = with maintainers; [offline];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
   };
 }

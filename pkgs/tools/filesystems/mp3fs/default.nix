@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://khenriks.github.io/mp3fs/;
     license = licenses.gpl3Plus;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 }

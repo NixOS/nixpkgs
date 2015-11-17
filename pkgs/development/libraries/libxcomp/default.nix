@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     description = "NX compression library";
     homepage = "http://wiki.x2go.org/doku.php/wiki:libs:nx-libs";
     license = licenses.gpl2;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 

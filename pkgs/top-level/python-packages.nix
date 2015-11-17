@@ -13500,7 +13500,7 @@ let
       homepage = https://pypi.python.org/pypi/pygit2;
       description = "A set of Python bindings to the libgit2 shared library";
       license = licenses.gpl2;
-      platforms = with platforms; all;
+      platforms = platforms.all;
     };
   };
 

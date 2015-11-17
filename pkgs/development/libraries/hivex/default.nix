@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2;
     homepage = https://github.com/libguestfs/hivex;
     maintainers = with maintainers; [offline];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

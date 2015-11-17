@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
         license = licenses.isc;
         description = "Allows programs to be run independently from its controlling terminal";
         maintainers = with maintainers; [ pSub ];
-        platforms = with platforms; linux;
+        platforms = platforms.linux;
     };
 
     src = fetchurl {

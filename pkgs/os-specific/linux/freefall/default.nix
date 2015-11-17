@@ -30,7 +30,7 @@ stdenv.mkDerivation {
       disk heads, and an accelerometer device. It has no effect on SSD devices!
     '';
     license = licenses.gpl2;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 }

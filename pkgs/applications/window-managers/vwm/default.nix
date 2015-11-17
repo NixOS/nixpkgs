@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Dynamic window manager for the console";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ viric ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     description = "Binary differential compression in VCDIFF (RFC 3284) format";
     homepage = http://xdelta.org/;
     license = licenses.gpl2Plus;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 }

@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     maintainers = with maintainers; [ cstrahan ];
-    platforms   = with platforms; darwin;
+    platforms   = platforms.darwin;
   };
 }

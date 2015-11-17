@@ -32,6 +32,6 @@ in nodePackages.buildNodePackage rec {
     license = licenses.mit;
     homepage = https://keybase.io/docs/command_line;
     maintainers = with maintainers; [manveru];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }
