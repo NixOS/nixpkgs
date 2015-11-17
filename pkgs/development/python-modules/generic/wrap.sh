@@ -46,7 +46,7 @@ wrapPythonProgramsIn() {
                 # (see pkgs/build-support/setup-hooks/make-wrapper.sh)
                 local wrap_args="$f \
                                  --prefix PYTHONPATH ':' $program_PYTHONPATH \
-                                 --prefix PATH ':' $program_PATH"
+                                 --prefix PATH ':' $program_PATH:$dir/bin"
 
                 # Add any additional arguments provided by makeWrapperArgs
                 # argument to buildPythonPackage.
