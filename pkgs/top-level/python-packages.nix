@@ -1277,6 +1277,25 @@ let
     };
   };
 
+  datadog = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "datadog";
+    version = "0.10.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/${pname}/${name}.tar.gz";
+      sha256 = "0y2if4jj43n5jis20imragvhhyhr840w4m1g7j7fxh9bn7h273zp";
+    };
+
+    buildInputs = with self; [ pillow tox mock six nose ];
+    propagatedBuildInputs = with self; [ requests2 decorator simplejson ];
+
+    meta = {
+      description = "The Datadog Python library ";
+      license = licenses.bsd;
+      homepage = https://github.com/DataDog/datadogpy;
+    };
+  };
+
   debian = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "python-debian";
@@ -17108,7 +17127,7 @@ let
       license = licenses.bsd3;
       maintainer = with maintainers; [ fridh ];
     };
-    
+
     # Many tests fail when using latest numpy and pandas.
     # See also https://github.com/statsmodels/statsmodels/issues/2602
     doCheck = false;
