@@ -1291,7 +1291,7 @@ let
 
     meta = {
       description = "The Datadog Python library ";
-      license = licenses.bsd;
+      license = licenses.bsd3;
       homepage = https://github.com/DataDog/datadogpy;
     };
   };
