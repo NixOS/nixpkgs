@@ -1537,20 +1537,6 @@ let
     };
   };
 
-  grafana = buildGoPackage rec {
-    version = "2.0.0-beta1";
-    name = "grafana-v${version}";
-    goPackagePath = "github.com/grafana/grafana";
-    preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
-    src = fetchFromGitHub {
-      rev = "v${version}";
-      owner = "grafana";
-      repo = "grafana";
-      sha256 = "1b263qj7n72xc5qn0hhrlivqrd0zc8746c9ic11kdxyf81nx4lza";
-    };
-    subPackages = [ "./" ];
-  };
-
   groupcache = buildFromGitHub {
     rev    = "604ed5785183e59ae2789449d89e73f3a2a77987";
     owner  = "golang";
