@@ -2031,6 +2031,7 @@ self: super: {
   "constructive-algebra" = dontDistribute super."constructive-algebra";
   "consul-haskell" = doDistribute super."consul-haskell_0_2_1";
   "consumers" = dontDistribute super."consumers";
+  "container" = dontDistribute super."container";
   "container-classes" = dontDistribute super."container-classes";
   "containers-benchmark" = dontDistribute super."containers-benchmark";
   "containers-deepseq" = dontDistribute super."containers-deepseq";
@@ -2213,6 +2214,7 @@ self: super: {
   "data-checked" = dontDistribute super."data-checked";
   "data-clist" = dontDistribute super."data-clist";
   "data-concurrent-queue" = dontDistribute super."data-concurrent-queue";
+  "data-construction" = dontDistribute super."data-construction";
   "data-cycle" = dontDistribute super."data-cycle";
   "data-default-generics" = dontDistribute super."data-default-generics";
   "data-dispersal" = dontDistribute super."data-dispersal";
@@ -2371,6 +2373,7 @@ self: super: {
   "diagrams-graphviz" = dontDistribute super."diagrams-graphviz";
   "diagrams-gtk" = dontDistribute super."diagrams-gtk";
   "diagrams-hsqml" = dontDistribute super."diagrams-hsqml";
+  "diagrams-lib" = doDistribute super."diagrams-lib_1_3_0_3";
   "diagrams-pandoc" = dontDistribute super."diagrams-pandoc";
   "diagrams-pdf" = dontDistribute super."diagrams-pdf";
   "diagrams-pgf" = dontDistribute super."diagrams-pgf";
@@ -2876,6 +2879,8 @@ self: super: {
   "formlets" = dontDistribute super."formlets";
   "formlets-hsp" = dontDistribute super."formlets-hsp";
   "forth-hll" = dontDistribute super."forth-hll";
+  "foscam-directory" = dontDistribute super."foscam-directory";
+  "foscam-filename" = dontDistribute super."foscam-filename";
   "fountain" = dontDistribute super."fountain";
   "fpco-api" = dontDistribute super."fpco-api";
   "fpipe" = dontDistribute super."fpipe";
@@ -2944,6 +2949,7 @@ self: super: {
   "functor-combo" = dontDistribute super."functor-combo";
   "functor-infix" = dontDistribute super."functor-infix";
   "functor-monadic" = dontDistribute super."functor-monadic";
+  "functor-utils" = dontDistribute super."functor-utils";
   "functorm" = dontDistribute super."functorm";
   "functors" = dontDistribute super."functors";
   "funion" = dontDistribute super."funion";
@@ -3567,6 +3573,7 @@ self: super: {
   "haskell-src-exts-qq" = dontDistribute super."haskell-src-exts-qq";
   "haskell-src-meta-mwotton" = dontDistribute super."haskell-src-meta-mwotton";
   "haskell-token-utils" = dontDistribute super."haskell-token-utils";
+  "haskell-tor" = dontDistribute super."haskell-tor";
   "haskell-type-exts" = dontDistribute super."haskell-type-exts";
   "haskell-typescript" = dontDistribute super."haskell-typescript";
   "haskell-tyrant" = dontDistribute super."haskell-tyrant";
@@ -4669,6 +4676,7 @@ self: super: {
   "lens-text-encoding" = dontDistribute super."lens-text-encoding";
   "lens-time" = dontDistribute super."lens-time";
   "lens-tutorial" = dontDistribute super."lens-tutorial";
+  "lens-utils" = dontDistribute super."lens-utils";
   "lenses" = dontDistribute super."lenses";
   "lensref" = dontDistribute super."lensref";
   "lentil" = dontDistribute super."lentil";
@@ -4731,6 +4739,7 @@ self: super: {
   "lindenmayer" = dontDistribute super."lindenmayer";
   "line-break" = dontDistribute super."line-break";
   "line2pdf" = dontDistribute super."line2pdf";
+  "linear" = doDistribute super."linear_1_19_1_3";
   "linear-algebra-cblas" = dontDistribute super."linear-algebra-cblas";
   "linear-circuit" = dontDistribute super."linear-circuit";
   "linear-grammar" = dontDistribute super."linear-grammar";
@@ -6366,6 +6375,7 @@ self: super: {
   "semaphore-plus" = dontDistribute super."semaphore-plus";
   "semi-iso" = dontDistribute super."semi-iso";
   "semigroupoids-syntax" = dontDistribute super."semigroupoids-syntax";
+  "semigroups" = doDistribute super."semigroups_0_16_2_2";
   "semigroups-actions" = dontDistribute super."semigroups-actions";
   "semiring" = dontDistribute super."semiring";
   "semiring-simple" = dontDistribute super."semiring-simple";
@@ -6940,6 +6950,7 @@ self: super: {
   "tasty-lens" = dontDistribute super."tasty-lens";
   "tasty-program" = dontDistribute super."tasty-program";
   "tasty-tap" = dontDistribute super."tasty-tap";
+  "tateti-tateti" = dontDistribute super."tateti-tateti";
   "tau" = dontDistribute super."tau";
   "tbox" = dontDistribute super."tbox";
   "tcache-AWS" = dontDistribute super."tcache-AWS";
@@ -7505,6 +7516,7 @@ self: super: {
   "wai-devel" = dontDistribute super."wai-devel";
   "wai-digestive-functors" = dontDistribute super."wai-digestive-functors";
   "wai-dispatch" = dontDistribute super."wai-dispatch";
+  "wai-extra" = doDistribute super."wai-extra_3_0_12";
   "wai-frontend-monadcgi" = dontDistribute super."wai-frontend-monadcgi";
   "wai-graceful" = dontDistribute super."wai-graceful";
   "wai-handler-devel" = dontDistribute super."wai-handler-devel";
