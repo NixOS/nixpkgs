@@ -60,6 +60,11 @@ stdenv.mkDerivation rec {
     sha256 = "00vyrf72l54j3majqmn6vykqvvb15vygsaby644nsb5vpma6b1cn";
   };
 
+  postPatch = ''
+    sed -i -e '/include.*CheckIncludeFile)/i include(CheckIncludeFiles)' \
+      cmake/ConkyPlatformChecks.cmake
+  '';
+
   NIX_LDFLAGS = "-lgcc_s";
 
   buildInputs = [ pkgconfig glib cmake ]
