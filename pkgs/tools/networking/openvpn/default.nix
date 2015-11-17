@@ -12,12 +12,14 @@ stdenv.mkDerivation rec {
 
   patches = optional stdenv.isLinux ./systemd-notify.patch;
 
-  buildInputs = [ iproute lzo openssl pam pkgconfig ] ++ optional stdenv.isLinux systemd;
+  buildInputs = [ lzo openssl pkgconfig ]
+                  ++ optionals stdenv.isLinux [ pam systemd iproute ];
 
   configureFlags = ''
     --enable-password-save
-    --enable-iproute2
+  '' + optionalString stdenv.isLinux ''
     --enable-systemd
+    --enable-iproute2
     IPROUTE=${iproute}/sbin/ip
   '';
 
