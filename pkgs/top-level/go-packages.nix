@@ -255,17 +255,6 @@ let
     sha256 = "193adhhsqdy0kyq1l1fi8pg2n6pwyrw4h607qm78qyi26f8i7vzf";
   };
 
-  bosun = buildFromGitHub {
-    rev = "0.3.0";
-    owner = "bosun-monitor";
-    repo = "bosun";
-    sha256 = "05qfhm5ipdry0figa0rhmg93c45dzh2lwpia73pfxp64l1daqa3a";
-    goPackagePath = "bosun.org";
-    # Todo: Split these derivations if worried about size on each machine
-    subPackages = [ "cmd/bosun" "cmd/scollector" ];
-    disabled = !isGo14;
-  };
-
   bufio = buildFromGitHub {
     rev    = "24e7e48f60fc2d9e99e43c07485d9fff42051e66";
     owner  = "vmihailenco";
