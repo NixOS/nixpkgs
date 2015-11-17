@@ -1,11 +1,13 @@
 { stdenv, fetchurl, linkStatic ? false }:
 
-let version = "1.0.6"; in
+let
+  version = "1.0.6";
 
-stdenv.mkDerivation {
+  sharedLibrary = !stdenv.isDarwin && !(stdenv ? isStatic)
+               && stdenv.system != "i686-cygwin" && !linkStatic;
+
+in stdenv.mkDerivation {
   name = "bzip2-${version}";
-
-  builder = ./builder.sh;
 
   src = fetchurl {
     url = "http://www.bzip.org/${version}/bzip2-${version}.tar.gz";
@@ -23,14 +25,36 @@ stdenv.mkDerivation {
     '';
   };
 
-  sharedLibrary =
-    !stdenv.isDarwin && !(stdenv ? isStatic) && stdenv.system != "i686-cygwin" && !linkStatic;
+  preBuild = stdenv.lib.optionalString sharedLibrary ''
+    make -f Makefile-libbz2_so
+  '';
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin "substituteInPlace Makefile --replace 'CC=gcc' 'CC=clang'";
+  preInstall = stdenv.lib.optionalString sharedLibrary ''
+    mkdir -p $out/lib
+    mv libbz2.so* $out/lib
+    ( cd $out/lib &&
+      ln -s libbz2.so.1.0.? libbz2.so &&
+      ln -s libbz2.so.1.0.? libbz2.so.1
+    )
+  '';
 
-  preConfigure = "substituteInPlace Makefile --replace '$(PREFIX)/man' '$(PREFIX)/share/man'";
+  installFlags = [ "PREFIX=$(out)" ];
 
-  makeFlags = if linkStatic then "LDFLAGS=-static" else "";
+  postInstall = ''
+    rm $out/bin/bunzip2* $out/bin/bzcat*
+    ln -s bzip2 $out/bin/bunzip2
+    ln -s bzip2 $out/bin/bzcat
+  '';
+
+  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile --replace 'CC=gcc' 'CC=clang'
+  '';
+
+  preConfigure = ''
+    substituteInPlace Makefile --replace '$(PREFIX)/man' '$(PREFIX)/share/man'
+  '';
+
+  makeFlags = stdenv.lib.optional linkStatic "LDFLAGS=-static";
 
   inherit linkStatic;
 
