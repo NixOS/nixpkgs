@@ -126,6 +126,8 @@ let
     mpi = pkgs.openmpi;
   };
 
+  bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
+
   nixpart = callPackage ../tools/filesystems/nixpart { };
 
   # This is used for NixOps to make sure we won't break it with the next major
@@ -3349,11 +3351,11 @@ let
 
   decorator = buildPythonPackage rec {
     name = "decorator-${version}";
-    version = "3.4.2";
+    version = "4.0.4";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/d/decorator/${name}.tar.gz";
-      sha256 = "7320002ce61dea6aa24adc945d9d7831b3669553158905cdd12f5d0027b54b44";
+      sha256 = "1qf3iiv401vhsdmf4bd08fwb3fq4xq769q2yl7zqqr1iml7w3l2s";
     };
 
     meta = {
@@ -10860,7 +10862,6 @@ let
       sha256 = "a39ce0e321e40e9758bf7b9128d316c71b35b80eabc84f13df492083bb6f1cc6";
     };
 
-    buildPhase = "${python}/bin/${python.executable} setup.py build";
     doCheck = false;
     postInstall = "ln -s $out/bin/osc-wrapper.py $out/bin/osc";
 
@@ -11109,6 +11110,10 @@ let
        url = "https://pypi.python.org/packages/source/f/futurist/${name}.tar.gz";
        sha256 = "0wf0k9xf5xzmi79418xq8zxwr7w7a4g4alv3dds9afb2l8bh9crg";
      };
+
+     patchPhase = ''
+       sed -i "s/test_gather_stats/noop/" futurist/tests/test_executors.py
+     '';
 
      propagatedBuildInputs = with self; [
        contextlib2 pbr six monotonic futures eventlet
@@ -12839,7 +12844,6 @@ let
     buildInputs = with self; [ python pkgs.libjpeg pkgs.zlib pkgs.freetype ];
 
     disabled = isPy3k;
-    doCheck = true;
 
     postInstall = "ln -s $out/lib/${python.libPrefix}/site-packages $out/lib/${python.libPrefix}/site-packages/PIL";
 
@@ -12857,7 +12861,6 @@ let
     '';
 
     checkPhase = "${python}/bin/${python.executable} selftest.py";
-    buildPhase = "${python}/bin/${python.executable} setup.py build_ext -i";
 
     meta = {
       homepage = http://www.pythonware.com/products/pil/;
@@ -15790,8 +15793,6 @@ let
 
     patches = [ ../development/python-modules/rpkg-buildfix.diff ];
 
-    # buildPhase = "python setup.py build";
-    # doCheck = false;
     propagatedBuildInputs = with self; [ pycurl pkgs.koji GitPython pkgs.git
                               pkgs.rpm pkgs.pyopenssl ];
 
@@ -18126,9 +18127,11 @@ let
     # # 1.0.0 and up create a circle dependency with traceback2/pbr
     doCheck = false;
 
-    # fixes a transient error when collecting tests, see https://bugs.launchpad.net/python-neutronclient/+bug/1508547
     patchPhase = ''
+      # # fixes a transient error when collecting tests, see https://bugs.launchpad.net/python-neutronclient/+bug/1508547
       sed -i '510i\        return None, False' unittest2/loader.py
+      # https://github.com/pypa/packaging/pull/36
+      sed -i 's/version=VERSION/version=str(VERSION)/' setup.py
     '';
 
     propagatedBuildInputs = with self; [ six argparse traceback2 ];
@@ -18204,7 +18207,7 @@ let
     name = "update_checker-0.11";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/u/update_checker/update_checker-0.11.tar.gz";
+      url = "https://pypi.python.org/packages/source/u/update_checker/${name}.tar.gz";
       md5 = "1daa54bac316be6624d7ee77373144bb";
     };
 
