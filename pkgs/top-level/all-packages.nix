@@ -10920,6 +10920,8 @@ let
 
   unifont_upper = callPackage ../data/fonts/unifont_upper { };
 
+  vanilla-dmz = callPackage ../data/icons/vanilla-dmz { };
+
   vistafonts = callPackage ../data/fonts/vista-fonts { };
 
   wqy_microhei = callPackage ../data/fonts/wqy-microhei { };
