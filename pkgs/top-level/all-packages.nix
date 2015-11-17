@@ -4773,23 +4773,27 @@ let
 
   rustPlatform = rustStable;
 
-  rustStable = recurseIntoAttrs (makeRustPlatform rustc cargo rustStable);
-  rustUnstable = recurseIntoAttrs (makeRustPlatform rustcMaster
-    (cargo.override { rustPlatform = rustUnstableCargoPlatform;  }) rustUnstable);
+  rustStable = recurseIntoAttrs (makeRustPlatform cargo rustStable);
+  rustUnstable = recurseIntoAttrs (makeRustPlatform
+    (cargo.override { rustPlatform = rustUnstableCargoPlatform; }) rustUnstable);
 
   # rust platform to build cargo itself (with cargoSnapshot)
-  rustCargoPlatform = makeRustPlatform rustc cargoSnapshot.cargo rustCargoPlatform;
-  rustUnstableCargoPlatform = makeRustPlatform rustcMaster cargoSnapshot.cargo rustUnstableCargoPlatform;
+  rustCargoPlatform = makeRustPlatform (cargoSnapshot rustc) rustCargoPlatform;
+  rustUnstableCargoPlatform = makeRustPlatform (cargoSnapshot rustcMaster) rustUnstableCargoPlatform;
 
-  makeRustPlatform = rustc: cargo: self:
+  makeRustPlatform = cargo: self:
     let
       callPackage = newScope self;
     in {
-      inherit rustc cargo;
+      inherit cargo;
+
+      rustc = cargo.rustc;
 
       rustRegistry = callPackage ./rust-packages.nix { };
 
-      buildRustPackage = callPackage ../build-support/rust { };
+      buildRustPackage = callPackage ../build-support/rust {
+        inherit cargo;
+      };
     };
 
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
@@ -5422,9 +5426,10 @@ let
     rustPlatform = rustCargoPlatform;
   };
 
-  cargoSnapshot = {
-    cargo = callPackage ../development/tools/build-managers/cargo/snapshot.nix { };
-  };
+  cargoSnapshot = rustc:
+    callPackage ../development/tools/build-managers/cargo/snapshot.nix {
+      inherit rustc;
+    };
 
   casperjs = callPackage ../development/tools/casperjs { };
 

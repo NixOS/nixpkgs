@@ -1,11 +1,14 @@
-{ stdenv, fetchurl, zlib }:
+{ stdenv, fetchurl, zlib, makeWrapper, rustc }:
 
 /* Cargo binary snapshot */
 
 let snapshotDate = "2015-06-17";
 in
 
-with ((import ./common.nix) { inherit stdenv; version = "snapshot-${snapshotDate}"; });
+with ((import ./common.nix) {
+  inherit stdenv rustc;
+  version = "snapshot-${snapshotDate}";
+});
 
 let snapshotHash = if stdenv.system == "i686-linux"
       then "g2h9l35123r72hqdwayd9h79kspfb4y9"
@@ -20,23 +23,23 @@ let snapshotHash = if stdenv.system == "i686-linux"
 in
 
 stdenv.mkDerivation {
-  inherit name version meta;
+  inherit name version meta passthru;
 
   src = fetchurl {
     url = "https://static-rust-lang-org.s3.amazonaws.com/cargo-dist/${snapshotDate}/${snapshotName}";
     sha1 = snapshotHash;
   };
 
+  buildInputs = [ makeWrapper ];
+
   dontStrip = true;
 
   installPhase = ''
     mkdir -p "$out"
     ./install.sh "--prefix=$out"
-
-    ${postInstall}
   '' + (if stdenv.isLinux then ''
     patchelf --interpreter "${stdenv.glibc}/lib/${stdenv.cc.dynamicLinker}" \
              --set-rpath "${stdenv.cc.cc}/lib/:${stdenv.cc.cc}/lib64/:${zlib}/lib" \
              "$out/bin/cargo"
-  '' else "");
+  '' else "") + postInstall;
 }
