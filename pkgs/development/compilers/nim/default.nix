@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
       homepage = http://nim-lang.org/;
       license = licenses.mit;
       maintainers = with maintainers; [ emery ];
-      platforms = platforms.linux; # arbitrary
+      platforms = platforms.linux ++ platforms.darwin; # arbitrary
     };
 }
