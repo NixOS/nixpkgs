@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, zlib, python, libssh2, openssl, http-parser}:
+{stdenv, fetchurl, pkgconfig, cmake, zlib, python, libssh2, openssl, http-parser}:
 
 stdenv.mkDerivation rec {
   version = "0.23.2";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = "-DTHREADSAFE=ON";
 
-  nativeBuildInputs = [ cmake python ];
+  nativeBuildInputs = [ cmake python pkgconfig ];
   buildInputs = [ zlib libssh2 openssl http-parser ];
 
   meta = {
