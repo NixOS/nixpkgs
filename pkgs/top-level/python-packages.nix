@@ -8852,7 +8852,7 @@ let
       sha256 = "a10d8d5e597c6a54ec418baddd31a51a0b7937a895d75b240d890aead946081c";
     };
 
-    llvm = pkgs.llvm;
+    llvm = pkgs.llvm_36;
 
     propagatedBuildInputs = with self; [ llvm ] ++ optional (pythonOlder "3.4") enum34;
 
