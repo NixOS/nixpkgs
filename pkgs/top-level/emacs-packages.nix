@@ -93,6 +93,24 @@ let self = _self // overrides;
     };
   };
 
+  pdf-tools = melpaBuild rec {
+    pname = "pdf-tools";
+    version = "0.70";
+    src = fetchFromGitHub {
+      owner = "politza";
+      repo = "pdf-tools";
+      rev = "v${version}";
+      sha256 = "19sy49r3ijh36m7hl4vspw5c4i8pnfqdn4ldm2sqchxigkw56ayl";
+    };
+    buildInputs = with external; [ autoconf automake libpng zlib poppler pkgconfig ] ++ [ tablist let-alist ];
+    preBuild = "make server/epdfinfo";
+    fileSpecs = [ "lisp/pdf-*.el" "server/epdfinfo" ];
+    meta = {
+      description = "Emacs support library for PDF files";
+      license = gpl3;
+    };
+  };
+
   ag = melpaBuild rec {
     pname   = "ag";
     version = "0.44";
