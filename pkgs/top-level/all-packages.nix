@@ -1663,6 +1663,8 @@ let
 
   gource = callPackage ../applications/version-management/gource { };
 
+  gpart = callPackage ../tools/filesystems/gpart { };
+
   gparted = callPackage ../tools/misc/gparted { };
 
   gpodder = callPackage ../applications/audio/gpodder { };
