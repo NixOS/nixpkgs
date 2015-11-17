@@ -15077,6 +15077,8 @@ let
 
   hatari = callPackage ../misc/emulators/hatari { };
 
+  helm = callPackage ../applications/audio/helm { };
+
   hplip = callPackage ../misc/drivers/hplip { };
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
