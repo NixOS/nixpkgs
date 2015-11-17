@@ -1622,30 +1622,12 @@ let
     goPackageAliases = [ "github.com/go-inf/inf" ];
   };
 
-  influxdb = buildFromGitHub {
-    rev = "v0.9.3";
-    owner = "influxdb";
-    repo = "influxdb";
-    sha256 = "0hsvm8ls1g12j1d5ap396vqfpvd0g72hymhczdqg6z96h3zi90bx";
-    propagatedBuildInputs = [ raft raft-boltdb snappy crypto gogo.protobuf pool pat toml gollectd statik liner ];
-    excludedPackages = "test";
-  };
-
   influxdb8-client = buildFromGitHub{
     rev = "v0.8.8";
     owner = "influxdb";
     repo = "influxdb";
     sha256 = "0xpigp76rlsxqj93apjzkbi98ha5g4678j584l6hg57p711gqsdv";
     subPackages = [ "client" ];
-  };
-
-  influxdb-backup = buildFromGitHub {
-    rev = "4556edbffa914a8c17fa1fa1564962a33c6c7596";
-    date = "2014-07-28";
-    owner = "eckardt";
-    repo = "influxdb-backup";
-    sha256 = "2928063e6dfe4be7b69c8e72e4d6a5fc557f0c75e9625fadf607d59b8e80e34b";
-    buildInputs = [ eckardt.influxdb-go ];
   };
 
   eckardt.influxdb-go = buildGoPackage rec {
