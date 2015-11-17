@@ -15115,7 +15115,7 @@ let
 
   nixopsUnstable = nixops;
 
-  nixui = callPackage ../tools/package-management/nixui { node_webkit = node_webkit_0_11; };
+  nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 
   nix-prefetch-scripts = callPackage ../tools/package-management/nix-prefetch-scripts { };
 
