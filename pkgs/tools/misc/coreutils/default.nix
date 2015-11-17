@@ -11,7 +11,7 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 with { inherit (stdenv.lib) optional optionals optionalString optionalAttrs; };
 
 let
-  self = rec {
+  self = stdenv.mkDerivation rec {
     name = "coreutils-8.24";
 
     src = fetchurl {
@@ -82,6 +82,7 @@ let
     enableParallelBuilding = false;
 
     NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
+    FORCE_UNSAFE_CONFIGURE = stdenv.lib.optionalString (stdenv.system == "armv7l-linux" || stdenv.isSunOS) "1";
 
     makeFlags = optionalString stdenv.isDarwin "CFLAGS=-D_FORTIFY_SOURCE=0";
 
@@ -104,7 +105,4 @@ let
     };
   };
 in
-  stdenv.mkDerivation (self
-  // stdenv.lib.optionalAttrs (stdenv.system == "armv7l-linux" || stdenv.isSunOS) {
-    FORCE_UNSAFE_CONFIGURE = 1;
-  })
+  self;
