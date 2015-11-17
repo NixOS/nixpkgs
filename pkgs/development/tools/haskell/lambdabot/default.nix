@@ -40,6 +40,4 @@ in haskell-lib.overrideCabal haskellPackages.lambdabot (self: {
     wrapProgram $out/bin/lambdabot \
       --prefix PATH ":" '${bins}'
   '';
-
-  broken = true;  # custom-config.patch doesn't apply to recent versions of lambdabot
 })
