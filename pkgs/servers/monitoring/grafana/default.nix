@@ -30,6 +30,6 @@ goPackages.buildGoPackage rec {
     license = licenses.asl20;
     homepage = http://grafana.org/;
     maintainers = with maintainers; [ offline ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

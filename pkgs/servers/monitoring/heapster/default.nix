@@ -22,6 +22,6 @@ goPackages.buildGoPackage rec {
     license = licenses.asl20;
     homepage = https://github.com/kubernetes/heapster;
     maintainers = with maintainers; [ offline ];
-    platforms = with platforms; docker.meta.platforms;
+    platforms = docker.meta.platforms;
   };
 }

@@ -24,6 +24,6 @@ goPackages.buildGoPackage rec {
     license = licenses.mit;
     homepage = https://influxdb.com/;
     maintainers = with maintainers; [ offline ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }
