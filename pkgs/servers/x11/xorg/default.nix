@@ -1958,11 +1958,11 @@ let
   }) // {inherit libX11 xproto ;};
 
   xinput = (mkDerivation "xinput" {
-    name = "xinput-1.6.1";
+    name = "xinput-1.6.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xinput-1.6.1.tar.bz2;
-      sha256 = "07w7zlpdhpwzzshg8q0y152cy3wl2fj7x1897glnp2la487jsqxp";
+      url = mirror://xorg/individual/app/xinput-1.6.2.tar.bz2;
+      sha256 = "1i75mviz9dyqyf7qigzmxq8vn31i86aybm662fzjz5c086dx551n";
     };
     buildInputs = [pkgconfig inputproto libX11 libXext libXi libXinerama libXrandr ];
   }) // {inherit inputproto libX11 libXext libXi libXinerama libXrandr ;};
