@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     homepage = https://github.com/magnumripper/JohnTheRipper/;
     maintainers = with maintainers; [ offline ];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
   };
 }

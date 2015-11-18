@@ -511,7 +511,6 @@ let
     "JGR"
     "KappaGUI"
     "likeLTD"
-    "loe"
     "logmult"
     "LS2Wstat"
     "MAR1"
@@ -893,7 +892,6 @@ let
     "chroGPS" # broken build
     "chromDraw" # broken build
     "ChromHeatMap" # depends on broken package Rsamtools-1.21.8
-    "Claddis" # broken build
     "classGraph" # broken build
     "ClassifyR" # broken build
     "cleanUpdTSeq" # depends on broken package Rsamtools-1.21.8
@@ -1561,7 +1559,6 @@ let
     "netresponse" # broken build
     "NetSAM" # broken build
     "nettools" # depends on broken package WGCNA-1.47
-    "netweavers" # broken build
     "NGScopy"
     "nhanesA" # broken build
     "NHPoisson" # depends on broken package nlopt-2.4.2
@@ -1666,7 +1663,6 @@ let
     "phreeqc" # broken build
     "phylocurve" # depends on broken package nlopt-2.4.2
     "phyloseq" # broken build
-    "phyloTop" # depends on broken package nlopt-2.4.2
     "phytools" # broken build
     "piano" # broken build
     "PICS" # depends on broken package Rsamtools-1.21.8
@@ -1689,7 +1685,6 @@ let
     "polyester" # broken build
     "Polyfit" # broken build
     "polynom" # broken build
-    "polytomous" # depends on broken package nlopt-2.4.2
     "pomp" # depends on broken package nlopt-2.4.2
     "ppiPre" # depends on broken package GOSemSim-1.27.3
     "ppiStats" # depends on broken package Category-2.35.1
@@ -1749,7 +1744,6 @@ let
     "r3Cseq" # depends on broken package Rsamtools-1.21.8
     "R453Plus1Toolbox" # depends on broken package Rsamtools-1.21.8
     "RADami" # broken build
-    "radiant" # depends on broken package nlopt-2.4.2
     "rain" # broken build
     "raincpc" # build is broken
     "rainfreq" # build is broken

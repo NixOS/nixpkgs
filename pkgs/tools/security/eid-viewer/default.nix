@@ -43,6 +43,6 @@ in stdenv.mkDerivation rec {
       which is required to actually use your eID for authentication or signing.
     '';
     maintainers = with maintainers; [ nckx ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "A parallel implementation of bzip2 for multi-core machines";
     license = licenses.bsd2;
     maintainers = with maintainers; [viric];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

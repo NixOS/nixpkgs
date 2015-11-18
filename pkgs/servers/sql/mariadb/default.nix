@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
 , openssl, pcre, boost, judy, bison, libxml2
 , libaio, libevent, groff, jemalloc, cracklib, systemd, numactl, perl
-, fixDarwinDylibNames, cctools
+, fixDarwinDylibNames, cctools, CoreServices
 }:
 
 with stdenv.lib;
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     (if stdenv.is64bit then snappy else null)
     pcre libxml2 boost judy bison libevent cracklib
   ] ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio systemd numactl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
 
   patches = stdenv.lib.optional stdenv.isDarwin ./my_context_asm.patch;
 

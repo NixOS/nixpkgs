@@ -39,6 +39,14 @@ let
     sha256 = "1nr2q0vas0a2f395f4shjxqpas18mjsf8yhgndsav7svngpbbpg8";
   };
 
+  codesearch = buildFromGitHub {
+    rev    = "a45d81b686e85d01f2838439deaf72126ccd5a96";
+    date   = "2015-06-17";
+    owner  = "google";
+    repo   = "codesearch";
+    sha256 = "12bv3yz0l3bmsxbasfgv7scm9j719ch6pmlspv4bd4ix7wjpyhny";
+  };
+
   image = buildFromGitHub {
     rev = "8ab1ac6834edd43d91cbe24272897a87ce7e835e";
     date = "2015-08-23";
@@ -245,17 +253,6 @@ let
     owner  = "boltdb";
     repo   = "bolt";
     sha256 = "193adhhsqdy0kyq1l1fi8pg2n6pwyrw4h607qm78qyi26f8i7vzf";
-  };
-
-  bosun = buildFromGitHub {
-    rev = "0.3.0";
-    owner = "bosun-monitor";
-    repo = "bosun";
-    sha256 = "05qfhm5ipdry0figa0rhmg93c45dzh2lwpia73pfxp64l1daqa3a";
-    goPackagePath = "bosun.org";
-    # Todo: Split these derivations if worried about size on each machine
-    subPackages = [ "cmd/bosun" "cmd/scollector" ];
-    disabled = !isGo14;
   };
 
   bufio = buildFromGitHub {
@@ -585,7 +582,7 @@ let
     repo = "pretty-words";
     sha256 = "1466wjhrg9lhqmzil1vf8qj16fxk32b5kxlcccyw2x6dybqa6pkl";
   };
-  
+
   meddler = buildFromGitHub {
     rev = "d2b51d2b40e786ab5f810d85e65b96404cf33570";
     owner = "odeke-em";
@@ -1529,20 +1526,6 @@ let
     };
   };
 
-  grafana = buildGoPackage rec {
-    version = "2.0.0-beta1";
-    name = "grafana-v${version}";
-    goPackagePath = "github.com/grafana/grafana";
-    preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
-    src = fetchFromGitHub {
-      rev = "v${version}";
-      owner = "grafana";
-      repo = "grafana";
-      sha256 = "1b263qj7n72xc5qn0hhrlivqrd0zc8746c9ic11kdxyf81nx4lza";
-    };
-    subPackages = [ "./" ];
-  };
-
   groupcache = buildFromGitHub {
     rev    = "604ed5785183e59ae2789449d89e73f3a2a77987";
     owner  = "golang";
@@ -1639,30 +1622,12 @@ let
     goPackageAliases = [ "github.com/go-inf/inf" ];
   };
 
-  influxdb = buildFromGitHub {
-    rev = "v0.9.3";
-    owner = "influxdb";
-    repo = "influxdb";
-    sha256 = "0hsvm8ls1g12j1d5ap396vqfpvd0g72hymhczdqg6z96h3zi90bx";
-    propagatedBuildInputs = [ raft raft-boltdb snappy crypto gogo.protobuf pool pat toml gollectd statik liner ];
-    excludedPackages = "test";
-  };
-
   influxdb8-client = buildFromGitHub{
     rev = "v0.8.8";
     owner = "influxdb";
     repo = "influxdb";
     sha256 = "0xpigp76rlsxqj93apjzkbi98ha5g4678j584l6hg57p711gqsdv";
     subPackages = [ "client" ];
-  };
-
-  influxdb-backup = buildFromGitHub {
-    rev = "4556edbffa914a8c17fa1fa1564962a33c6c7596";
-    date = "2014-07-28";
-    owner = "eckardt";
-    repo = "influxdb-backup";
-    sha256 = "2928063e6dfe4be7b69c8e72e4d6a5fc557f0c75e9625fadf607d59b8e80e34b";
-    buildInputs = [ eckardt.influxdb-go ];
   };
 
   eckardt.influxdb-go = buildGoPackage rec {

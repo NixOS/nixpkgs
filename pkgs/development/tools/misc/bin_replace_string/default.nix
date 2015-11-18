@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     homepage = http://ohnopub.net/~ohnobinki/bin_replace_string/;
     downloadPage = ftp://ohnopub.net/mirror/;
     license = licenses.gpl3Plus;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 

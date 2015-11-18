@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     '';
     homepage = http://code.gerade.org/hans/;
     license = licenses.gpl3Plus;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 

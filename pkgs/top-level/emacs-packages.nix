@@ -1581,6 +1581,22 @@ let self = _self // overrides;
     };
   };
 
+  rust-mode = melpaBuild rec {
+    pname = "rust-mode";
+    version = "20151026";
+
+    src = fetchFromGitHub {
+      owner = "rust-lang";
+      repo = pname;
+      rev = "1761a9c212cdbc46cab5377c0ce90f96e33b2fbb";
+      sha256 = "1wvjisi26lb4g5rjq80kq9jmf1r2m3isy47nwrnahfzxk886qfbq";
+      };
+    meta = {
+      description = "A major mode for editing rust code.";
+      license = asl20;
+    };
+  };
+
   s = melpaBuild rec {
     pname   = "s";
     version = "20140910";

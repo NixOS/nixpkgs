@@ -235,6 +235,7 @@
       kibana = 211;
       xtreemfs = 212;
       calibre-server = 213;
+      heapster = 214;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 

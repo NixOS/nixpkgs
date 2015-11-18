@@ -17,7 +17,7 @@ in rec {
     name = "nixui";
     src = [ tarball ];
     buildInputs = nodePackages.nativeDeps."nixui" or [];
-    deps = [ nodePackages.underscore nodePackages.nedb ];
+    deps = [ nodePackages.underscore nodePackages.nedb nodePackages.isnumber ];
     peerDependencies = [];
     passthru.names = [ "nixui" ];
   };

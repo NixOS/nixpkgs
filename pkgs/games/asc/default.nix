@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
 
     maintainers = with maintainers; [ viric ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

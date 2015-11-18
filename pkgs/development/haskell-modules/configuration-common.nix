@@ -708,6 +708,10 @@ self: super: {
     then addBuildDepend super.yesod-bin pkgs.darwin.apple_sdk.frameworks.Cocoa
     else super.yesod-bin;
 
+  hmatrix = if pkgs.stdenv.isDarwin
+    then addBuildDepend super.hmatrix pkgs.darwin.apple_sdk.frameworks.Accelerate
+    else super.hmatrix;
+
   # https://github.com/commercialhaskell/stack/issues/408
   # https://github.com/commercialhaskell/stack/issues/409
   stack = overrideCabal super.stack (drv: { preCheck = "export HOME=$TMPDIR"; doCheck = false; });

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     description = "Graphical NoMachine NX3 remote desktop client";
     homepage = http://x2go.org/;
     license = licenses.gpl2;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 

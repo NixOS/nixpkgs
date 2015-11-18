@@ -2,19 +2,19 @@
 
 pkgs.buildPythonPackage rec {
     name = "tortoisehg-${version}";
-    version = "3.4.2";
+    version = "3.6";
     namePrefix = "";
 
     src = pkgs.fetchurl {
       url = "https://bitbucket.org/tortoisehg/targz/downloads/${name}.tar.gz";
-      sha256 = "18a587c8fybfjxbcj8i2smypxy7vfzmmrzibs74n3zy6dlb949nj";
+      sha256 = "ec43d13f029bb23a12129d2a2c3b3b4daf3d8121cbb5c9c23e4872f7b0b75ad8";
     };
 
     pythonPath = [ pkgs.pyqt4 mercurial ]
        ++ (with pyPackages; [qscintilla iniparse]);
 
     propagatedBuildInputs = with pyPackages; [ qscintilla iniparse ];
-    
+
     doCheck = false;
 
     postUnpack = ''

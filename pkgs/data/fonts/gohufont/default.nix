@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
     homepage = http://font.gohu.org/;
     license = licenses.wtfpl;
     maintainers = with maintainers; [ epitrochoid ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

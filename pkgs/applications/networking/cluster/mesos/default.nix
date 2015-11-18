@@ -137,6 +137,6 @@ in stdenv.mkDerivation rec {
     license     = licenses.asl20;
     description = "A cluster manager that provides efficient resource isolation and sharing across distributed applications, or frameworks";
     maintainers = with maintainers; [ cstrahan offline rushmorem ];
-    platforms   = with platforms; linux;
+    platforms   = platforms.linux;
   };
 }

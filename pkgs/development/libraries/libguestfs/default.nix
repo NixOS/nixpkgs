@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     homepage = http://libguestfs.org/;
     maintainers = with maintainers; [offline];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     hydraPlatforms = [];
   };
 }

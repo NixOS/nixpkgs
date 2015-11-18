@@ -35,6 +35,6 @@ in stdenv.mkDerivation rec {
     homepage = http://ludovic.rousseau.free.fr/softwares/pcsc-tools/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ viric ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

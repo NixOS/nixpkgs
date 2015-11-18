@@ -17,10 +17,10 @@ let
     define('DB_HOST',     '${config.dbHost}');
     define('DB_CHARSET',  'utf8');
     $table_prefix  = '${config.tablePrefix}';
+    ${config.extraConfig}
     if ( !defined('ABSPATH') )
     	define('ABSPATH', dirname(__FILE__) . '/');
     require_once(ABSPATH . 'wp-settings.php');
-    ${config.extraConfig}
   '';
 
   # .htaccess to support pretty URLs

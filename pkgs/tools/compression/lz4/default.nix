@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://code.google.com/p/lz4/;
     license = with licenses; [ bsd2 gpl2Plus ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 }
