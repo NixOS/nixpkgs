@@ -103,6 +103,10 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
 
   postFixup = attrs.postFixup or ''
     wrapPythonPrograms
+
+    # check if we have two packagegs with the same name in closure and fail
+    # this shouldn't happen, something went wrong with dependencies specs
+    python ${./do_conflict.py}
   '';
 
   shellHook = attrs.shellHook or ''
