@@ -11543,7 +11543,7 @@ let
 
   freecad = callPackage ../applications/graphics/freecad {
     boost = boost156;
-    opencascade = opencascade_6_5;
+    opencascade = opencascade_oce;
     inherit (pythonPackages) matplotlib pycollada;
   };
 
