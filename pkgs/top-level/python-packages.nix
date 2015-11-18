@@ -2955,7 +2955,7 @@ let
     };
   };
 
-  cffi_0_8 = buildPythonPackage rec {
+  cffi_0_8 = if isPyPy then null else buildPythonPackage rec {
     name = "cffi-0.8.6";
 
     src = pkgs.fetchurl {
@@ -2970,7 +2970,7 @@ let
     };
   };
 
-  cffi = buildPythonPackage rec {
+  cffi = if isPyPy then null else buildPythonPackage rec {
     name = "cffi-1.3.0";
 
     src = pkgs.fetchurl {
@@ -4086,7 +4086,7 @@ let
     meta.maintainers = with maintainers; [ mornfall ];
 
     src = pkgs.fetchurl {
-      url = "https://fedorahosted.org/releases/f/e/fedpkg/fedpkg-1.14.tar.bz2";
+      url = "https://fedorahosted.org/releases/f/e/fedpkg/${name}.tar.bz2";
       sha256 = "0rj60525f2sv34g5llafnkmpvbwrfbmfajxjc14ldwzymp8clc02";
     };
 
@@ -9320,10 +9320,7 @@ let
     doCheck = false;
     # sed calls will be unecessary in v3.1.11+
     preConfigure = ''
-      sed -i 's/future == 0.9.0/future>=0.9.0/' setup.py
-      sed -i 's/tzlocal == 1.0/tzlocal>=1.0/' setup.py
-      sed -i 's/pep8==1.4.1/pep8>=1.4.1/' setup.py
-      sed -i 's/pyflakes==0.6.1/pyflakes>=0.6.1/' setup.py
+      sed -i 's/==/>=/' setup.py
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -10718,7 +10715,7 @@ let
       sha256 = "0phfk6s8bgpap5xihdk1xv2lakdk1pb3rg6hp2wsg94hxcxnrakl";
     };
 
-    propagatedBuildInputs = with pythonPackages; [ httplib2 pyasn1 pyasn1-modules rsa ];
+    propagatedBuildInputs = with pythonPackages; [ six httplib2 pyasn1 pyasn1-modules rsa ];
     doCheck = false;
 
     meta = {
@@ -14510,7 +14507,8 @@ let
       url = "https://pypi.python.org/packages/source/p/python-fedora/${name}.tar.gz";
       sha256 = "15m8lvbb5q4rg508i4ah8my872qrq5xjwgcgca4d3kzjv2x6fhim";
     };
-    propagatedBuildInputs = with self; [ kitchen requests bunch paver ];
+    propagatedBuildInputs = with self; [ kitchen requests bunch paver six munch urllib3
+      beautifulsoup4 ];
     doCheck = false;
 
     # https://github.com/fedora-infra/python-fedora/issues/140
@@ -17471,13 +17469,14 @@ let
 
     disabled = isPy3k;
 
-    propagatedBuildInputs = with self; [ pkgs.syncthing pygobject3 dateutil pkgs.gtk3 pyinotify pkgs.libnotify pkgs.psmisc ];
+    propagatedBuildInputs = with self; [ pkgs.syncthing dateutil pyinotify pkgs.libnotify pkgs.psmisc
+      pygobject3 pkgs.gtk3 ];
 
     patchPhase = ''
       substituteInPlace "scripts/syncthing-gtk" \
-              --replace "/usr/share" "$out/share"   \
+              --replace "/usr/share" "$out/share"
+      substituteInPlace setup.py --replace "version = get_version()" "version = '${version}'"
     '';
-
 
     meta = {
       description = " GTK3 & python based GUI for Syncthing ";
