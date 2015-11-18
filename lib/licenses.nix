@@ -402,6 +402,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "TCL/TK License";
   };
 
+  ufl = {
+    fullName = "Ubuntu Font License 1.0";
+    url = http://font.ubuntu.com/ufl/ubuntu-font-licence-1.0.txt;
+  };
+
   unfree = {
     fullName = "Unfree";
     free = false;
