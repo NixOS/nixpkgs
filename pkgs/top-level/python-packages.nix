@@ -5442,6 +5442,27 @@ let
     propagatedBuildInputs = with self; [ pyramid hawkauthlib tokenlib webtest ];
   };
 
+  python-snappy = buildPythonPackage rec {
+    name = "python-snappy-${version}";
+    version = "0.5";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-snappy/${name}.tar.gz";
+      sha256 = "c7fe37679ebfc73840c7cc83657a76bc1ac978efa286b8ac3569fd0630d2b80d";
+    };
+
+    buildInputs = with self; [
+      pkgs.snappy
+      pytestcov
+    ];
+
+    meta = {
+      description = "Python library for the snappy compression library from Google";
+      homepage = "http://code.google.com/p/snappy";
+      license = licenses.bsd3;
+    };
+  };
+
   radicale = buildPythonPackage rec {
     name = "radicale-${version}";
     namePrefix = "";
