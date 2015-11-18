@@ -100,33 +100,36 @@ let
   # ... pkgs.foo ...").
   pkgs = applyGlobalOverrides (config.packageOverrides or (pkgs: {}));
 
-  mkOverrides = pkgsOrig: overrides: overrides //
-        (lib.optionalAttrs (pkgsOrig.stdenv ? overrides && crossSystem == null) (pkgsOrig.stdenv.overrides pkgsOrig));
+  # We don't want stdenv overrides in the case of cross-building, or
+  # otherwise the basic overrided packages will not be built with the
+  # crossStdenv adapter.
+  mkOverrides = pkgsVanilla: overrides: overrides // (lib.optionalAttrs
+    (pkgsVanilla.stdenv ? overrides && crossSystem == null)
+    (pkgsVanilla.stdenv.overrides pkgsVanilla));
 
   # Return the complete set of packages, after applying the overrides
   # returned by the `overrider' function (see above).  Warning: this
   # function is very expensive!
   applyGlobalOverrides = overrider:
     let
-      # Call the overrider function.  We don't want stdenv overrides
-      # in the case of cross-building, or otherwise the basic
-      # overrided packages will not be built with the crossStdenv
-      # adapter.
-      overrides = mkOverrides pkgsOrig (overrider pkgsOrig);
+      # Call the overrider function.
+      overrides = mkOverrides pkgsVanilla (overrider pkgsOrig);
 
-      # The un-overriden packages, passed to `overrider'.
-      pkgsOrig = pkgsFun pkgs pkgsOrig;
+      # Absolutely un-overriden packages, used to define stdenv before pkg overridesx
+      pkgsVanilla = pkgsFun pkgsVanilla;
+
+      # The shallowly un-overriden packages, passed to `overrider'.
+      pkgsOrig = pkgsFun pkgs;
 
       # The overriden, final packages.
-      pkgs = pkgsFun pkgs pkgs // overrides;
+      pkgs = pkgsOrig // overrides;
     in pkgs;
 
-
   # The package compositions.  Yes, this isn't properly indented.
-  pkgsFun = pkgs: self: let
+  pkgsFun = pkgs: let
     defaultScope = pkgs // pkgs.xorg;
 
-    rawAliases = with self; rec {
+    rawAliases = with pkgs; rec {
       adobeReader = adobe-reader;
       arduino_core = arduino-core; # added 2015-02-04
       asciidocFull = asciidoc-full; # added 2014-06-22
@@ -175,7 +178,7 @@ let
 
     aliases = lib.mapAttrs tweakAlias rawAliases;
 
-  in with self; helperFunctions // aliases // {
+  in with pkgs; helperFunctions // aliases // {
 
   # Make some arguments passed to all-packages.nix available
   inherit system platform;
@@ -207,7 +210,7 @@ let
   # will use the new version.
   overridePackages = f:
     let
-      newpkgs = pkgsFun newpkgs newpkgs // overrides;
+      newpkgs = pkgsFun newpkgs // overrides;
       overrides = mkOverrides pkgs (f newpkgs pkgs);
     in newpkgs;
 
