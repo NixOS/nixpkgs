@@ -15,7 +15,9 @@ let
 
   callPackage = pkgs.newScope self;
 
-  buildPythonPackage = makeOverridable (callPackage ../development/python-modules/generic { });
+  buildPythonPackage = makeOverridable (callPackage ../development/python-modules/generic {
+    bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
+  });
 
   # Unique python version identifier
   pythonName =
@@ -125,8 +127,6 @@ let
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
-
-  bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
 
   nixpart = callPackage ../tools/filesystems/nixpart { };
 
