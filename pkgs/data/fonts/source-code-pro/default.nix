@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url="https://github.com/adobe-fonts/source-code-pro/archive/${version}R-ro/${version_italic}R-it.tar.gz";
-    sha256="12wijgxrdzqxpw2q420nsq9aj454vhg3rq6n81jbqvgzxhxjpf7w";
+    sha256="1y44p2i7hd1klq81xbh796y7n4rzjvn37jrqw0nz31k59v8a1r9y";
   };
 
   phases = "unpackPhase installPhase";
