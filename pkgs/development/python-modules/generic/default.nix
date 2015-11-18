@@ -50,7 +50,7 @@ then throw "${name} not supported for interpreter ${python.executable}"
 else
 
 let
-  setuppy = "import setuptools, tokenize;__file__='setup.py';exec(compile(getattr(tokenize, 'open', open)(__file__).read().replace('\\r\\n', '\\n'), __file__, 'exec'))";
+  setuppy = ./run_setup.py;
 in
 python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
   inherit doCheck;
@@ -75,16 +75,17 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
     runHook postConfigure
   '';
 
-  checkPhase = attrs.checkPhase or ''
-    runHook preCheck
-    ${python.interpreter} -c "${setuppy}" test
-    runHook postCheck
-  '';
-
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
-    ${python.interpreter} -c "${setuppy}" bdist_wheel
+    cp ${setuppy} nix_run_setup.py
+    ${python.interpreter} nix_run_setup.py build_ext ${lib.concatStringsSep " " setupPyBuildFlags} bdist_wheel
     runHook postBuild
+  '';
+
+  checkPhase = attrs.checkPhase or ''
+    runHook preCheck
+    ${python.interpreter} nix_run_setup.py test
+    runHook postCheck
   '';
 
   installPhase = attrs.installPhase or ''

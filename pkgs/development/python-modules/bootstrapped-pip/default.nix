@@ -25,15 +25,19 @@ in stdenv.mkDerivation rec {
     unzip -d $out/${python.sitePackages} ${wheel_source}
   '';
 
-  buildInputs = [ python makeWrapper unzip ];
-
-  installPhase = ''
+  patchPhase = ''
     mkdir -p $out/bin
 
     # patch pip to support "pip install --prefix"
+    # https://github.com/pypa/pip/pull/3252
     pushd $out/${python.sitePackages}/
     patch -p1 < ${./pip-7.0.1-prefix.patch}
     popd
+  '';
+
+  buildInputs = [ python makeWrapper unzip ];
+
+  installPhase = ''
 
     # install pip binary
     echo '${python.interpreter} -m pip "$@"' > $out/bin/pip
