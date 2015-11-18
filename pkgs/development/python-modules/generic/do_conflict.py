@@ -13,7 +13,7 @@ for f in sys.path:
             packages[req.project_name].append(req)
 
 
-for name, duplicates in packages.iteritems():
+for name, duplicates in packages.items():
     if len(duplicates) > 1:
         do_abort = True
         print("Found duplicated packages in closure for dependency '{}': ".format(name))
