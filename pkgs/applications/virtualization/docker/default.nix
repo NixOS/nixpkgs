@@ -10,13 +10,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "docker";
     rev = "v${version}";
-    sha256 = "0nwd5wsw9f50jh4s5c5sfd6hnyh3g2kmxcrid36y1phabh30yrcz";
+    sha256 = "1a1ss210i712fs9mp5hcljb8bdx93lss91sxj9zay0vrmdb84zn2";
   };
 
   buildInputs = [
@@ -26,15 +26,10 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  preConfigure = ''
-    mv vendor/src/github.com/opencontainers/runc/libcontainer/seccomp/{jump_amd64.go,jump_linux.go}
-    sed -i 's/,amd64//' vendor/src/github.com/opencontainers/runc/libcontainer/seccomp/jump_linux.go
-  '';
-
   buildPhase = ''
     patchShebangs .
     export AUTO_GOPATH=1
-    export DOCKER_GITCOMMIT="786b29d4"
+    export DOCKER_GITCOMMIT="76d6bc9a"
     ./hack/make.sh dynbinary
   '';
 
