@@ -16601,10 +16601,11 @@ let
     };
 
     checkPhase = ''
-      nosetests
+      ${python.interpreter} test_clint.py
     '';
 
-    buildInputs = with self; [ pillow nose_progressive nose mock blessings nose ];
+    buildInputs = with self; [ mock blessings nose nose_progressive ];
+    propagatedBuildInputs = with self; [ pillow blessings args ];
 
     meta = {
       maintainers = with maintainers; [ iElectric ];
