@@ -5253,6 +5253,39 @@ let
     };
   };
 
+  pykafka = buildPythonPackage rec {
+    name = "pykafka-${version}";
+    version = "2.0.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pykafka/${name}.tar.gz";
+      sha256 = "6c7b475d86a9c4867a88c1e5c3b0ea3af46b55b3ba2408378d161cb9b9ac73ea";
+    };
+
+    buildInputs = with self; [
+      mock
+      python-snappy
+      tabulate
+      unittest2
+      coverage
+      pytest
+      pytestcov
+    ];
+
+    propagatedBuildInputs = with self; [
+      kazoo
+    ];
+
+    meta = {
+      description = "Full-Featured Pure-Python Kafka Client";
+      homepage = "https://github.com/Parsely/pykafka";
+      license = licenses.asl20;
+    };
+
+    doCheck = false;
+  };
+
+
   pyramid = buildPythonPackage rec {
     name = "pyramid-1.5.7";
 
