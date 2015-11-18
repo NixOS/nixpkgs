@@ -264,7 +264,7 @@ with stdenv.lib;
   MICROCODE y
   MICROCODE_INTEL y
   MICROCODE_AMD y
-  ${optionalString (versionAtLeast version "3.11") ''
+  ${optionalString (versionAtLeast version "3.11" && versionOlder version "4.4") ''
     MICROCODE_EARLY y
     MICROCODE_INTEL_EARLY y
     MICROCODE_AMD_EARLY y
@@ -279,7 +279,9 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.3" && versionOlder version "3.13") ''
     AUDIT_LOGINUID_IMMUTABLE y
   ''}
-  B43_PCMCIA? y
+  ${optionalString (versionOlder version "4.4") ''
+    B43_PCMCIA? y
+  ''}
   BLK_DEV_CMD640_ENHANCED y # CMD640 enhanced support
   BLK_DEV_IDEACPI y # IDE ACPI support
   BLK_DEV_INTEGRITY y
