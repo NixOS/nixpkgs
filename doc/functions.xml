@@ -1,6 +1,6 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
-	 xmlns:xlink="http://www.w3.org/1999/xlink"
-	 xml:id="chap-functions">
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="chap-functions">
 
 <title>Functions reference</title>
 
@@ -31,13 +31,32 @@ in ...</programlisting>
   </para>
 
   <para>
+    It can be used multiple times in succession to "chain" overrides:
+
+    <programlisting>let
+  pkgs0 = import &lt;nixpkgs&gt; {};
+  pkgs1 = pkgs0.overridePackages (self: super: {
+    foo = null;
+  };
+  pkgs2 = pkgs1.overridePackages (self: super: {
+    foo = 1;
+    bar = super.foo;
+    baz = self.bar;
+  };
+  pkgs3 = pkgs2.overridePackages (self: super: {
+    bar = super.foo;
+  };
+in assert foo == 1; assert bar == 1; assert baz = 1; ...</programlisting>
+  </para>
+
+  <para>
     The resulting <varname>newpkgs</varname> will have the new <varname>foo</varname>
     expression, and all other expressions depending on <varname>foo</varname> will also
     use the new <varname>foo</varname> expression.
   </para>
 
   <para>
-    The behavior of this function is similar to <link 
+    The behavior of this function is similar to <link
     linkend="sec-modify-via-packageOverrides">config.packageOverrides</link>.
   </para>
 
@@ -49,7 +68,7 @@ in ...</programlisting>
 
   <para>
     The <varname>super</varname> parameter refers to the old package set.
-    It's equivalent to <varname>pkgs</varname> in the above example.
+    It's equivalent to <varname>pkgs</varname> in the first example.
   </para>
 
 </section>
@@ -91,7 +110,7 @@ in ...</programlisting>
   <para>
     The function <varname>overrideDerivation</varname> is usually available for all the
     derivations in the nixpkgs expression (<varname>pkgs</varname>).
-  </para> 
+  </para>
   <para>
     It is used to create a new derivation by overriding the attributes of
     the original derivation according to the given function.

@@ -98,32 +98,47 @@ let
   # (un-overriden) set of packages, allowing packageOverrides
   # attributes to refer to the original attributes (e.g. "foo =
   # ... pkgs.foo ...").
-  pkgs = applyGlobalOverrides (config.packageOverrides or (pkgs: {}));
-
-  # We don't want stdenv overrides in the case of cross-building, or
-  # otherwise the basic overrided packages will not be built with the
-  # crossStdenv adapter.
-  mkOverrides = pkgsVanilla: overrides: overrides // (lib.optionalAttrs
-    (pkgsVanilla.stdenv ? overrides && crossSystem == null)
-    (pkgsVanilla.stdenv.overrides pkgsVanilla));
-
-  # Return the complete set of packages, after applying the overrides
-  # returned by the `overrider' function (see above).  Warning: this
-  # function is very expensive!
-  applyGlobalOverrides = overrider:
-    let
-      # Call the overrider function.
-      overrides = mkOverrides pkgsVanilla (overrider pkgsOrig);
-
-      # Absolutely un-overriden packages, used to define stdenv before pkg overridesx
+  pkgs = let
+      # Absolutely un-overriden packages, used to define stdenv before pkg overrides
       pkgsVanilla = pkgsFun pkgsVanilla;
+    in overridePackages
+      pkgsVanilla
+      pkgsFun
+      # TODO: break compat and use self and super in config too.
+      (self: super: (config.packageOverrides or (pkgs: {})) super);
+
+
+  # Easily override this package set.
+  # Warning: this function is very expensive and must not be used
+  # from within the nixpkgs repository.
+  #
+  # See manual / XML for more documentation.
+  overridePackages = pkgsForStdenv: # pkgSet
+                     oldOverriders: # pkgSet -> pkgSet
+                     overrider:     # pkgSet -> pkgSet -> pkgSet
+    let
+      rawOverrides = overrider self super;
+
+      # We don't want stdenv overrides in the case of cross-building, or
+      # otherwise the basic overrided packages will not be built with the
+      # crossStdenv adapter.
+      overrides = rawOverrides // (lib.optionalAttrs
+        (pkgsForStdenv.stdenv ? overrides && crossSystem == null)
+        (pkgsForStdenv.stdenv.overrides pkgsForStdenv));
 
       # The shallowly un-overriden packages, passed to `overrider'.
-      pkgsOrig = pkgsFun pkgs;
+      super = oldOverriders self;
+
+      # Allow downstream overriding
+      overrideMore = nextOverrider: overridePackages
+        self
+        (self: ((overrider self) (oldOverriders self)))
+        nextOverrider;
 
       # The overriden, final packages.
-      pkgs = pkgsOrig // overrides;
-    in pkgs;
+      self = super // overrides // { overridePackages = overrideMore; };
+    in self;
+
 
   # The package compositions.  Yes, this isn't properly indented.
   pkgsFun = pkgs: let
@@ -196,23 +211,6 @@ let
   callPackages = lib.callPackagesWith defaultScope;
 
   newScope = extra: lib.callPackageWith (defaultScope // extra);
-
-  # Easily override this package set.
-  # Warning: this function is very expensive and must not be used
-  # from within the nixpkgs repository.
-  #
-  # Example:
-  #  pkgs.overridePackages (self: super: {
-  #    foo = super.foo.override { ... };
-  #  }
-  #
-  # The result is `pkgs' where all the derivations depending on `foo'
-  # will use the new version.
-  overridePackages = f:
-    let
-      newpkgs = pkgsFun newpkgs // overrides;
-      overrides = mkOverrides pkgs (f newpkgs pkgs);
-    in newpkgs;
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
   forceSystem = system: kernel: (import ./all-packages.nix) {
