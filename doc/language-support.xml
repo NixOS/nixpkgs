@@ -383,13 +383,6 @@ twisted = buildPythonPackage {
     </varlistentry>
 
     <varlistentry>
-      <term><varname>setupPyInstallFlags</varname></term>
-      <listitem><para>
-        List of flags passed to <command>setup.py install</command> command.
-      </para></listitem>
-    </varlistentry>
-
-    <varlistentry>
       <term><varname>setupPyBuildFlags</varname></term>
       <listitem><para>
         List of flags passed to <command>setup.py build</command> command.

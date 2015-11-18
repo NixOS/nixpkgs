@@ -3,7 +3,7 @@
 let version = "0.7.6";
 
 in pythonPackages.buildPythonPackage rec {
-  name = "cloud-init-0.7.6";
+  name = "cloud-init-${version}";
   namePrefix = "";
 
   src = fetchurl {
@@ -23,7 +23,7 @@ in pythonPackages.buildPythonPackage rec {
   pythonPath = with pythonPackages; [ cheetah jinja2 prettytable
     oauth pyserial configobj pyyaml argparse requests jsonpatch ];
 
-  setupPyInstallFlags = ["--init-system systemd"];
+  # TODO: --init-system systemd
 
   meta = {
     homepage = http://cloudinit.readthedocs.org;

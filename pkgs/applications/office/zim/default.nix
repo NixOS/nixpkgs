@@ -24,7 +24,7 @@ buildPythonPackage rec {
     export HOME="/tmp/home"
   '';
   
-  setupPyInstallFlags = ["--skip-xdg-cmd"];
+  setupPyBuildFlags = ["--skip-xdg-cmd"];
   
   #
   # Exactly identical to buildPythonPackage's version but for the
@@ -57,7 +57,7 @@ buildPythonPackage rec {
 
     ${python}/bin/${python.executable} setup.py install \
       --install-lib=$out/lib/${python.libPrefix}/site-packages \
-      --prefix="$out" ${lib.concatStringsSep " " setupPyInstallFlags}
+      --prefix="$out" ${lib.concatStringsSep " " setupPyBuildFlags}
 
     eapth="$out/lib/${python.libPrefix}"/site-packages/easy-install.pth
     if [ -e "$eapth" ]; then

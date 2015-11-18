@@ -20,7 +20,6 @@ buildPythonPackage rec {
       "--lzo=${lzo}"
       "--bzip2=${bzip2}"
     ];
-  setupPyInstallFlags = setupPyBuildFlags;
 
   # Run the test suite.
   # It requires the build path to be in the python search path.

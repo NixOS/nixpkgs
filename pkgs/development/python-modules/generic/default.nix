@@ -95,7 +95,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
     export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
 
     pushd dist
-    ${bootstrapped-pip}/bin/pip install *.whl --no-index --prefix=$out
+    ${bootstrapped-pip}/bin/pip install *.whl --no-index --prefix=$out --no-cache
     popd
 
     runHook postInstall
