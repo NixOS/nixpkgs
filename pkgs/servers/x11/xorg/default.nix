@@ -1448,11 +1448,11 @@ let
   }) // {inherit inputproto xorgserver xproto ;};
 
   xf86inputlibinput = (mkDerivation "xf86inputlibinput" {
-    name = "xf86-input-libinput-0.14.0";
+    name = "xf86-input-libinput-0.15.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-libinput-0.14.0.tar.bz2;
-      sha256 = "0r92fkpbnydhjgni35zqpkl8fm225rivn8qqkw6ymranlnc5gl78";
+      url = mirror://xorg/individual/driver/xf86-input-libinput-0.15.0.tar.bz2;
+      sha256 = "0hcs05zx9mpyi9wajsps9qsbyq4v0c9wysp2l48qnr4l8587qw18";
     };
     buildInputs = [pkgconfig inputproto xorgserver xproto ];
   }) // {inherit inputproto xorgserver xproto ;};
