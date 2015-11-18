@@ -667,6 +667,7 @@ let
     };
 
     doCheck = false;
+    propagatedBuildInputs = with self; [ dateutil ];
 
     meta = {
       description = "Twitter API library";
@@ -1966,6 +1967,7 @@ let
       inherit md5;
       url = "https://pypi.python.org/packages/source/z/zc.recipe.egg/zc.recipe.egg-${version}.tar.gz";
     };
+    meta.broken = true;  # https://bitbucket.org/pypa/setuptools/issues/462/pkg_resourcesfind_on_path-thinks-the
   };
   zc_recipe_egg_buildout171 = self.zc_recipe_egg_fun {
     buildout = self.zc_buildout171;
@@ -1974,8 +1976,8 @@ let
   };
   zc_recipe_egg_buildout2 = self.zc_recipe_egg_fun {
     buildout = self.zc_buildout2;
-    version = "2.0.1";
-    md5 = "5e81e9d4cc6200f5b1abcf7c653dd9e3";
+    version = "2.0.3";
+    md5 = "69a8ce276029390a36008150444aa0b4";
   };
 
   bunch = buildPythonPackage (rec {
@@ -2755,6 +2757,46 @@ let
     };
   };
 
+  tablib = buildPythonPackage rec {
+    name = "tablib-${version}";
+    version = "0.10.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tablib/tablib-${version}.tar.gz";
+      sha256 = "14wc8bmz60g35r6gsyhdzfvgfqpd3gw9lfkq49z5bxciykbxmhj1";
+    };
+
+    buildInputs = with self; [ pytest ];
+
+    meta = with stdenv.lib; {
+      description = "Tablib: format-agnostic tabular dataset library";
+      homepage = "http://python-tablib.org";
+    };
+  };
+
+
+  cliff-tablib = buildPythonPackage rec {
+    name = "cliff-tablib-${version}";
+    version = "1.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/cliff-tablib/cliff-tablib-${version}.tar.gz";
+      sha256 = "0fa1qw41lwda5ac3z822qhzbilp51y6p1wlp0h76vrvqcqgxi3ja";
+    };
+
+    propagatedBuildInputs = with self; [
+      argparse pyyaml pbr six cmd2 tablib unicodecsv prettytable stevedore pyparsing cliff
+    ];
+    buildInputs = with self; [
+
+    ];
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/dreamhost/cliff-tablib";
+    };
+  };
+
+
   openstackclient = buildPythonPackage rec {
     name = "openstackclient-${version}";
     version = "1.7.1";
@@ -2767,7 +2809,7 @@ let
     propagatedBuildInputs = with self; [
      pbr six Babel cliff os-client-config oslo-config oslo-i18n oslo-utils
      glanceclient keystoneclient novaclient cinderclient neutronclient requests2
-     stevedore
+     stevedore cliff-tablib
     ];
     buildInputs = with self; [
      requests-mock
@@ -3785,14 +3827,14 @@ let
   dropbox = buildPythonPackage rec {
     name = "dropbox-${version}";
     version = "3.37";
-    doCheck = false; # python 2.7.9 does verify ssl certificates
+    #doCheck = false; # python 2.7.9 does verify ssl certificates
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/dropbox/${name}.tar.gz";
       sha256 = "f65c12bd97f09e29a951bc7cb30a74e005fc4b2f8bb48778796be3f73866b173";
     };
 
-    propagatedBuildInputs = with self; [ urllib3 mock setuptools ];
+    propagatedBuildInputs = with self; [ requests2 urllib3 mock setuptools ];
 
     meta = {
       description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
@@ -3828,6 +3870,8 @@ let
     # Check is disabled because running them destroy the content of the local cluster!
     # https://github.com/elasticsearch/elasticsearch-py/tree/master/test_elasticsearch
     doCheck = false;
+    propagatedBuildInputs = with self; [ urllib3 pyaml requests2 pyyaml ];
+    buildInputs = with self; [ nosexcover mock ];
 
     meta = {
       description = "Official low-level client for Elasticsearch";
@@ -4089,6 +4133,22 @@ let
 
     meta = {
       homepage = http://docs.python.org/3/library/functools.html;
+    };
+  };
+
+  functools32 = buildPythonPackage rec {
+    name = "functools32-${version}";
+    version = "3.2.3-2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/f/functools32/functools32-${version}.tar.gz";
+      sha256 = "0v8ya0b58x47wp216n1zamimv4iw57cxz3xxhzix52jkw3xks9gn";
+    };
+
+
+    meta = with stdenv.lib; {
+      description = "This is a backport of the functools standard library module from";
+      homepage = "https://github.com/MiCHiLU/python-functools32";
     };
   };
 
@@ -4793,7 +4853,6 @@ let
   };
 
   mailchimp = buildPythonPackage rec {
-
     version = "2.0.9";
     name = "mailchimp-${version}";
 
@@ -4802,13 +4861,11 @@ let
       sha256 = "0351ai0jqv3dzx0xxm1138sa7mb42si6xfygl5ak8wnfc95ff770";
     };
 
-    # Test fails because specific version of docopt is searched
-    # (Possible fix: Needs upstream patching in the library)
-    doCheck = false;
-
     buildInputs = with self; [ docopt ];
-
     propagatedBuildInputs = with self; [ requests ];
+    patchPhase = ''
+      sed -i 's/==/>=/' setup.py
+    '';
 
     meta = {
       description = "A CLI client and Python API library for the MailChimp email platform";
@@ -5646,6 +5703,21 @@ let
     };
   };
 
+  multi_key_dict = buildPythonPackage rec {
+    name = "multi_key_dict-${version}";
+    version = "2.0.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/m/multi_key_dict/multi_key_dict-${version}.tar.gz";
+      sha256 = "17lkx4rf4waglwbhc31aak0f28c63zl3gx5k5i1iq2m3gb0xxsyy";
+    };
+
+    meta = with stdenv.lib; {
+      description = "multi_key_dict";
+      homepage = "https://github.com/formiaczek/multi_key_dict";
+    };
+  };
+
   pyramid_zodbconn = buildPythonPackage rec {
     name = "pyramid_zodbconn-0.7";
 
@@ -5657,8 +5729,8 @@ let
     # should be fixed in next release
     doCheck = false;
 
-    buildInputs = with self; [ pyramid mock ];
-    propagatedBuildInputs = with self; [ zodb zodburi ];
+    buildInputs = with self; [ mock ];
+    propagatedBuildInputs = with self; [ pyramid zodb zodburi ZEO ];
 
     meta = {
       maintainers = with maintainers; [ iElectric ];
@@ -6211,51 +6283,6 @@ let
     };
   };
 
-  django_1_4 = buildPythonPackage rec {
-    name = "Django-${version}";
-    version = "1.4.22";
-
-    src = pkgs.fetchurl {
-      url = "http://www.djangoproject.com/m/releases/1.4/${name}.tar.gz";
-      sha256 = "110p1mgdcf87kyr64mr2jgmyapyg27kha74yq3wjrazwfbbwkqnh";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    # patch only $out/bin to avoid problems with starter templates (see #3134)
-    postFixup = ''
-      wrapPythonProgramsIn $out/bin "$out $pythonPath"
-    '';
-
-    meta = {
-      description = "A high-level Python Web framework";
-      homepage = https://www.djangoproject.com/;
-    };
-  };
-
-  django_1_3 = buildPythonPackage rec {
-    name = "Django-1.3.7";
-
-    src = pkgs.fetchurl {
-      url = "http://www.djangoproject.com/m/releases/1.3/${name}.tar.gz";
-      sha256 = "12pv8y2x3fhrcrjayfm6z40r57iwchfi5r19ajs8q8z78i3z8l7f";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    # patch only $out/bin to avoid problems with starter templates (see #3134)
-    postFixup = ''
-      wrapPythonProgramsIn $out/bin "$out $pythonPath"
-    '';
-
-    meta = {
-      description = "A high-level Python Web framework";
-      homepage = https://www.djangoproject.com/;
-    };
-  };
-
   django_appconf = buildPythonPackage rec {
     name = "django-appconf-${version}";
     version = "1.0.1";
@@ -6323,7 +6350,7 @@ let
     # error: invalid command 'test'
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ django_1_3 ];
+    propagatedBuildInputs = with self; [ django_1_5 ];
 
     meta = {
       description = "A generic tagging application for Django projects";
@@ -6532,7 +6559,7 @@ let
       sha256 = "1yf0dnkj00yzzhbssw88j9gr58ngjfrd6r68p9asf6djishj9h45";
     };
 
-    propagatedBuildInputs = with self; [ pil django_1_3 feedparser ];
+    propagatedBuildInputs = with self; [ pil django_1_5 feedparser ];
 
     meta = {
       description = "A collection of useful extensions for Django";
@@ -6881,27 +6908,26 @@ let
   };
 
   docker_compose = buildPythonPackage rec {
-    version = "1.4.2";
+    version = "1.5.1";
     name = "docker-compose-${version}";
     namePrefix = "";
     disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/docker-compose/${name}.tar.gz";
-      sha256 = "4f5dae7685b60b70d5adc66a8572e08a97d45f26e279897d70e539277b5d9331";
+      sha256 = "0mdgpwkpss48zz36sw65crqjry87ba5p3mkl6ncbb8jqsxgqhpnz";
     };
 
-    propagatedBuildInputs = with self; [
-      six requests pyyaml texttable docopt docker dockerpty websocket_client
-      (requests2.override {
-        src = pkgs.fetchurl {
-          url = "https://pypi.python.org/packages/source/r/requests/requests-2.6.1.tar.gz";
-          md5 = "da6e487f89e6a531699b7fd97ff182af";
-        };
-      })
-    ];
-
+    # lots of networking and other fails
     doCheck = false;
+    buildInputs = with self; [ mock pytest nose ];
+    propagatedBuildInputs = with self; [
+      requests2 six pyyaml texttable docopt docker dockerpty websocket_client
+      enum34 jsonschema
+    ];
+    patchPhase = ''
+      sed -i "s/'requests >= 2.6.1, < 2.8'/'requests'/" setup.py
+    '';
 
     meta = {
       homepage = "https://docs.docker.com/compose/";
@@ -7150,15 +7176,16 @@ let
   };
 
   jsonschema = buildPythonPackage (rec {
-    version = "2.4.0";
+    version = "2.5.1";
     name = "jsonschema-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jsonschema/jsonschema-${version}.tar.gz";
-      md5 = "661f85c3d23094afbb9ac3c0673840bf";
+      sha256 = "0hddbqjm4jq63y8jf44nswina1crjs16l9snb6m3vvgyg31klrrn";
     };
 
-    buildInputs = with self; [ nose mock ];
+    buildInputs = with self; [ nose mock vcversioner ];
+    propagatedBuildInputs = with self; [ functools32 ];
 
     patchPhase = ''
       substituteInPlace jsonschema/tests/test_jsonschema_test_suite.py --replace "python" "${python}/bin/${python.executable}"
@@ -7175,6 +7202,20 @@ let
       maintainers = with maintainers; [ iElectric ];
     };
   });
+
+  vcversioner = buildPythonPackage rec {
+    name = "vcversioner-${version}";
+    version = "2.14.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/v/vcversioner/vcversioner-${version}.tar.gz";
+      sha256 = "11ivq1bm7v0yb4nsfbv9m7g7lyjn112gbvpjnjz8nv1fx633dm5c";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/habnabit/vcversioner";
+    };
+  };
 
   falcon = buildPythonPackage (rec {
     name = "falcon-0.3.0";
@@ -7277,6 +7318,8 @@ let
       sha256 = "144f4yn2nvnxh2vrnmiabpwx3s637np0d1j1w95zym790d66shir";
     };
 
+    propagatedBuildInputs = [ self.six ];
+
     meta = {
       description = "Filesystem abstraction";
       homepage    = http://pypi.python.org/pypi/fs;
@@ -7284,9 +7327,6 @@ let
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
     };
-
-    # Fails: "error: invalid command 'test'"
-    doCheck = false;
   };
 
   fuse = buildPythonPackage (rec {
@@ -8787,15 +8827,18 @@ let
   });
 
 
-  limnoria = buildPythonPackage (rec {
-    name = "limnoria-20130327";
+  limnoria = buildPythonPackage rec {
+    name = "limnoria-${version}";
+    version = "2015.10.04";
 
     src = pkgs.fetchurl {
-      url = https://pypi.python.org/packages/source/l/limnoria/limnoria-2013-06-01T10:32:51+0200.tar.gz;
-      name = "limnoria-2013-06-01.tar.gz";
-      sha256 = "1i8q9zzf43sr3n1q4h6h1z8nz31g4aa8dq94ywvfbh7hklmchq6n";
+      url = "https://pypi.python.org/packages/source/l/limnoria/${name}.tar.gz";
+      sha256 = "1hwwwr0z2vsirgwd92z17nbhnhsz0m25bpxn5sanqlbcjbwhyk9z";
     };
 
+    patchPhase = ''
+      sed -i 's/version=version/version="${version}"/' setup.py
+    '';
     buildInputs = with self; [ pkgs.git ];
     propagatedBuildInputs = with self; [ modules.sqlite3 ];
 
@@ -8807,7 +8850,7 @@ let
       license = licenses.bsd3;
       maintainers = with maintainers; [ goibhniu ];
     };
-  });
+  };
 
 
   linode = buildPythonPackage rec {
@@ -8930,6 +8973,26 @@ let
 
     propagatedBuildInputs = with self; [ unittest2 six ];
   };
+
+  logilab-constraint = buildPythonPackage rec {
+    name = "logilab-constraint-${version}";
+    version = "0.6.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/logilab-constraint/${name}.tar.gz";
+      sha256 = "1n0xim4ij1n4yvyqqvyc0wllhjs22szglsd5av0j8k2qmck4njcg";
+    };
+
+    propagatedBuildInputs = with self; [
+      logilab_common six
+    ];
+
+    meta = with stdenv.lib; {
+      description = "logilab-database provides some classes to make unified access to different";
+      homepage = "http://www.logilab.org/project/logilab-database";
+    };
+  };
+
 
   lxml = buildPythonPackage ( rec {
     name = "lxml-3.3.6";
@@ -10494,7 +10557,7 @@ let
 
     inherit (support) preBuild checkPhase;
 
-    setupPyBuildFlags = ["--fcompiler='gnu95'"];
+    setupPyBuildFlags = ["-i" "--fcompiler='gnu95'"];
 
     buildInputs = [ pkgs.gfortran self.nose ];
     propagatedBuildInputs = [ support.openblas ];
@@ -11208,7 +11271,7 @@ let
     };
 
     propagatedBuildInputs = with self; [
-      six Babel simplejson requests keystoneclient prettytable argparse pbr
+      six Babel simplejson requests2 keystoneclient prettytable argparse pbr
     ];
     buildInputs = with self; [
       testrepository requests-mock
@@ -12814,15 +12877,15 @@ let
 
   python-jenkins = buildPythonPackage rec {
     name = "python-jenkins-${version}";
-    version = "0.4.5";
+    version = "0.4.11";
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/python-jenkins/${name}.tar.gz";
-      md5 = "10f1c24d45afe9cadd43f8d60b37d04c";
+      sha256 = "153gm7pmmn0bymglsgcr2ya0752r2v1hajkx73gl1pk4jifb2gdf";
     };
 
-    buildInputs = with self; [ pbr pip ];
-    pythonPath = with self; [ pyyaml six ];
-    doCheck = false;
+    buildInputs = with self; [ mock ];
+    propagatedBuildInputs = with self; [ pbr pyyaml six multi_key_dict testtools
+     testscenarios testrepository ];
 
     meta = {
       description = "Python bindings for the remote Jenkins API";
@@ -13817,6 +13880,8 @@ let
 
     # Tests require a local instance of elasticsearch
     doCheck = false;
+    propagatedBuildInputs = with self; [ elasticsearch six simplejson certifi ];
+    buildInputs = with self; [ nose mock ];
 
     meta = {
       description = "A clean, future-proof, high-scale API to elasticsearch.";
@@ -15524,7 +15589,7 @@ let
     };
 
     propagatedBuildInputs = with self;
-      [ django_1_3 recaptcha_client pytz memcached dateutil_1_5 paramiko flup pygments
+      [ django_1_5 recaptcha_client pytz memcached dateutil_1_5 paramiko flup pygments
         djblets django_evolution pycrypto modules.sqlite3
         pysvn pil psycopg2
       ];
@@ -15542,7 +15607,7 @@ let
     # error: invalid command 'test'
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ isodate ];
+    propagatedBuildInputs = with self; [ isodate html5lib ];
 
     meta = {
       description = "A Python library for working with RDF, a simple yet powerful language for representing information";
@@ -16161,10 +16226,6 @@ let
 
     buildInputs = with self; [ pip ];
 
-    preBuild = ''
-      ${python.interpreter} setup.py egg_info
-    '';
-
     meta = with stdenv.lib; {
       homepage = https://bitbucket.org/pypa/setuptools_scm/;
       description = "Handles managing your python package versions in scm metadata";
@@ -16173,23 +16234,27 @@ let
     };
   };
 
-  setuptoolsDarcs = buildPythonPackage {
-    name = "setuptools-darcs-1.2.9";
+  setuptoolsDarcs = buildPythonPackage rec {
+    name = "setuptools_darcs-${version}";
+    version = "1.2.11";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/s/setuptools_darcs/setuptools_darcs-1.2.9.tar.gz";
-      sha256 = "d37ce11030addbd729284c441facd0869cdc6e5c888dc5fa0a6f1edfe3c3e617";
+      url = "http://pypi.python.org/packages/source/s/setuptools_darcs/${name}.tar.gz";
+      sha256 = "1wsh0g1fn10msqk87l5jrvzs0yj5mp6q9ld3gghz6zrhl9kqzdn1";
     };
 
     # In order to break the dependency on darcs -> ghc, we don't add
     # darcs as a propagated build input.
     propagatedBuildInputs = with self; [ darcsver ];
 
+    # ugly hack to specify version that should otherwise come from darcs
+    patchPhase = ''
+      substituteInPlace setup.py --replace "name=PKG" "name=PKG, version='${version}'"
+    '';
+
     meta = {
-      description = "setuptools plugin for the Darcs version control system";
-
+      description = "Setuptools plugin for the Darcs version control system";
       homepage = http://allmydata.org/trac/setuptools_darcs;
-
       license = "BSD";
     };
   };
@@ -16839,19 +16904,14 @@ let
 
     buildInputs = [ pkgs.bash ];
 
-    doCheck = !isPyPy;
-
     preConfigure = ''
       substituteInPlace test_subprocess32.py \
         --replace '/usr/' '${pkgs.bash}/'
     '';
 
-    checkPhase = ''
-      TMP_PREFIX=`pwd`/tmp/$name
-      TMP_INSTALL_DIR=$TMP_PREFIX/lib/${pythonPackages.python.libPrefix}/site-packages
-      PYTHONPATH="$TMP_INSTALL_DIR:$PYTHONPATH"
-      mkdir -p $TMP_INSTALL_DIR
-      python setup.py develop --prefix $TMP_PREFIX
+    doInstallCheck = !isPyPy;
+    doCheck = false;
+    installCheckPhase = ''
       python test_subprocess32.py
     '';
 
@@ -17737,11 +17797,11 @@ let
   };
 
   texttable = self.buildPythonPackage rec {
-    name = "texttable-0.8.1";
+    name = "texttable-0.8.4";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/texttable/${name}.tar.gz";
-      md5 = "4fe37704f16ecf424b91e122defedd7e";
+      sha256 = "0bkhs4dx9s6g7fpb969hygq56hyz4ncfamlynw72s0n6nqfbd1w5";
     };
 
     meta = {
@@ -18816,17 +18876,14 @@ let
     # Tests require `pyutil' so disable them to avoid circular references.
     doCheck = false;
 
-    buildInputs = with self; [ setuptoolsDarcs ];
+    propagatedBuildInputs = with self; [ setuptoolsDarcs ];
 
     meta = {
       description = "zbase32, a base32 encoder/decoder";
-
       homepage = http://pypi.python.org/pypi/zbase32;
-
       license = "BSD";
     };
   });
-
 
   zconfig = buildPythonPackage rec {
     name = "zconfig-${version}";
@@ -19487,18 +19544,18 @@ let
   };
 
   hgsvn = buildPythonPackage rec {
-    name = "hgsvn-0.3.5";
+    name = "hgsvn-0.3.11";
     src = pkgs.fetchurl rec {
-      url = "http://pypi.python.org/packages/source/h/hgsvn/${name}.zip";
-      sha256 = "043yvkjf9hgm0xzhmwj1qk3fsmbgwm39f4wsqkscib9wfvxs8wbg";
+      url = "https://pypi.python.org/packages/source/h/hgsvn/${name}-hotfix.zip";
+      sha256 = "0yvhwdh8xx8rvaqd3pnnyb99hfa0zjdciadlc933p27hp9rf880p";
     };
     disabled = isPy3k || isPyPy;
+    doCheck = false;  # too many assumptions
 
-    buildInputs = with self; [ pkgs.setuptools ];
-    doCheck = false;
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ hglib ];
 
-      meta = {
-      description = "HgSVN";
+    meta = {
       homepage = http://pypi.python.org/pypi/hgsvn;
     };
   };
@@ -19712,15 +19769,26 @@ let
     };
 
     doCheck = false;
+    buildInputs = [ self.testfixtures ];
     propagatedBuildInputs = with self; [ cornice mozsvc pybrowserid tokenlib ];
 
-    patchPhase = ''
-      sed -i "s|'testfixtures'||" setup.py
-    '';
-
     meta = {
-      maintainers = [ ];
       platforms = platforms.all;
+    };
+  };
+
+  testfixtures = buildPythonPackage rec {
+    name = "testfixtures-${version}";
+    version = "4.5.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/testfixtures/testfixtures-${version}.tar.gz";
+      sha256 = "0my8zq9d27mc7j78pz9971cn5wz6zi4vxlqa50szr2vq9j2xxkll";
+    };
+
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/Simplistix/testfixtures";
     };
   };
 
@@ -20041,7 +20109,7 @@ let
       md5 = "8edbb61f1ffe11c181bd2cb9ec977c72";
     };
 
-    propagatedBuildInputs = with self; [ django_1_3 django_tagging modules.sqlite3 whisper pkgs.pycairo ldap memcached ];
+    propagatedBuildInputs = with self; [ django_1_5 django_tagging modules.sqlite3 whisper pkgs.pycairo ldap memcached ];
 
     postInstall = ''
       wrapProgram $out/bin/run-graphite-devel-server.py \
@@ -20721,7 +20789,8 @@ let
   serversyncstorage = buildPythonPackage rec {
     name = "serversyncstorage-${version}";
     version = "1.5.11";
-    disabled = ! isPy27;
+    disabled = !isPy27;
+
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/server-syncstorage.git;
       rev = "refs/tags/${version}";
@@ -20730,11 +20799,32 @@ let
 
     propagatedBuildInputs = with self; [
       pyramid sqlalchemy9 simplejson mozsvc cornice pyramid_hawkauth pymysql
-      pymysqlsa umemcache wsgiproxy2 requests pybrowserid
+      pymysqlsa umemcache WSGIProxy requests pybrowserid
+    ];
+    buildInputs = with self; [ testfixtures unittest2  ];
+
+    #doCheck = false; # lazy packager
+  };
+
+  WSGIProxy = buildPythonPackage rec {
+    name = "WSGIProxy-${version}";
+    version = "0.2.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/W/WSGIProxy/WSGIProxy-${version}.tar.gz";
+      sha256 = "0wqz1q8cvb81a37gb4kkxxpv4w7k8192a08qzyz67rn68ln2wcig";
+    };
+
+    propagatedBuildInputs = with self; [
+      paste six
     ];
 
-    doCheck = false; # lazy packager
+    meta = with stdenv.lib; {
+      description = "WSGIProxy gives tools to proxy arbitrary(ish) WSGI requests to other";
+      homepage = "http://pythonpaste.org/wsgiproxy/";
+    };
   };
+
 
 
   thumbor = buildPythonPackage rec {
