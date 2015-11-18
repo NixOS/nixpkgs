@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/kovidgoyal/calibre/releases/download/v${meta.version}/${name}.tar.xz";
-    sha256 = "0d1sn2wc6h3c5girllsmnqg3jhmkal693ww3j6cj1mz2rraw45xr";
+    sha256 = "1ffqvnjqmplcpa398809gp4d4l7nqc6k8ky255mdkabfcdvf3kk3";
   };
 
   inherit python;
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    version = "2.44.0";
+    version = "2.44.1";
     description = "Comprehensive e-book software";
     homepage = http://calibre-ebook.com;
     license = licenses.gpl3;
