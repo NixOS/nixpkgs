@@ -1472,7 +1472,7 @@ let
     builder = ./builder.sh;
     src = fetchurl {
       url = mirror://xorg/individual/driver/xf86-input-synaptics-1.8.3.tar.bz2;
-      sha256 = "104cd67dqalp1a73jmi61kdpxwsr61w5x5cmqvh819h2pm71c3ka";
+      sha256 = "009zx199pilcvlaqm6fx4mg94q81d6vvl5rznmw3frzkfh6117yk";
     };
     buildInputs = [pkgconfig inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ];
   }) // {inherit inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ;};
@@ -1532,7 +1532,7 @@ let
     builder = ./builder.sh;
     src = fetchurl {
       url = mirror://xorg/individual/driver/xf86-video-ati-7.6.1.tar.bz2;
-      sha256 = "0dkrw036ikym8aacl43lnf04q0wbms5498xg5b3l16ngnq3aygpc";
+      sha256 = "0k6kw69mcarlmxlb4jlhz887jxqr94qx2pin04xcv2ysp3pdj5i5";
     };
     buildInputs = [pkgconfig fontsproto glamoregl libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
   }) // {inherit fontsproto glamoregl libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
