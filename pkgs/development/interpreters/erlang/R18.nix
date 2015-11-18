@@ -5,6 +5,7 @@
 , wxSupport ? true, mesa ? null, wxGTK ? null, xorg ? null, wxmac ? null
 , javacSupport ? false, openjdk ? null
 , enableHipe ? true
+, r18_0 ? false
 }:
 
 assert wxSupport -> (if stdenv.isDarwin
@@ -19,11 +20,17 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "erlang-" + version + "${optionalString odbcSupport "-odbc"}"
   + "${optionalString javacSupport "-javac"}";
-  version = "18.0";
+  version = if r18_0 then
+    "18.0"
+  else
+    "18.1";
 
   src = fetchurl {
     url = "http://www.erlang.org/download/otp_src_${version}.tar.gz";
-    sha256 = "1ahi865ii3iqzd00yyn3nrxjb9qa2by9d7ixssvqw8ag9firvdm0";
+    sha256 = if r18_0 then
+      "1ahi865ii3iqzd00yyn3nrxjb9qa2by9d7ixssvqw8ag9firvdm0"
+    else
+      "048giggdnfnrjdnlaibfrybls9dw7kxsvj05rq6sczvbi8i4g8g4";
   };
 
   buildInputs =
@@ -51,7 +58,10 @@ stdenv.mkDerivation rec {
   postInstall = let
     manpages = fetchurl {
       url = "http://www.erlang.org/download/otp_doc_man_${version}.tar.gz";
-      sha256 = "0wsnp7sp21ydinwkg3rkazyrs382pdzwra9apikkhs70dv1hwkz4";
+      sha256 = if r18_0 then
+        "0wsnp7sp21ydinwkg3rkazyrs382pdzwra9apikkhs70dv1hwkz4"
+      else
+        "1dn9wpb9zg5flwcxxr9q9ziiszgc5vhk5dh6v12xs9hbh9bfd070";
     };
   in ''
     ln -s $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call
