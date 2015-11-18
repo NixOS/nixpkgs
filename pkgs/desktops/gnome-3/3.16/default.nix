@@ -26,7 +26,7 @@ let
 
   optionalPackages = with gnome3; [ baobab empathy eog epiphany evince
     gucharmap nautilus totem vino yelp gnome-bluetooth
-    gnome-calculator gnome-contacts gnome-font-viewer gnome-screenshot
+    gnome-calculator gnome-contacts gnome-font-viewer
     gnome-system-log gnome-system-monitor
     gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
