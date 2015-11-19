@@ -10565,8 +10565,6 @@ let
 
     inherit (support) preBuild checkPhase;
 
-    setupPyBuildFlags = ["-i" "--fcompiler='gnu95'"];
-
     buildInputs = [ pkgs.gfortran self.nose ];
     propagatedBuildInputs = [ support.openblas ];
 
