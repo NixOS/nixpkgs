@@ -9,12 +9,18 @@
   supportedSystems ? [ "x86_64-linux" ]
 }:
 
+with import ../../lib;
 with import ./release-lib.nix {inherit supportedSystems; };
 
-(mapTestOn {
-  pypyPackages = packagePlatforms pkgs.pypyPackages;
-  pythonPackages = packagePlatforms pkgs.pythonPackages;
-  python33Packages = packagePlatforms pkgs.python33Packages;
-  python34Packages = packagePlatforms pkgs.python34Packages;
-  python35Packages = packagePlatforms pkgs.python35Packages;
-})
+let
+  packagePython = mapAttrs (name: value:
+    let res = builtins.tryEval (
+      if isDerivation value then
+        value.meta.isBuildPythonPackage or []
+      else if value.recurseForDerivations or false || value.recurseForRelease or false then
+        packagePython value
+      else
+        []);
+    in if res.success then res.value else []
+    );
+in (mapTestOn (packagePython pkgs))
