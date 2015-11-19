@@ -1025,13 +1025,10 @@ let
 
   cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
 
-  # Only ever add ceph LTS releases
-  # The default should always be symlinked to the latest LTS
-  # Dev should always point to the latest versioned release
   libceph = ceph.lib;
-  ceph-9 = callPackage ../tools/filesystems/ceph/9.nix { };
   ceph = callPackage ../tools/filesystems/ceph { };
-  ceph-dev = lowPrio (callPackage ../tools/filesystems/ceph/dev.nix { });
+  ceph-dev = ceph;
+  #ceph-dev = lowPrio (callPackage ../tools/filesystems/ceph/dev.nix { });
 
   cfdg = builderDefsPackage (callPackage ../tools/graphics/cfdg) {};
 
