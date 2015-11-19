@@ -12468,7 +12468,9 @@ let
 
   sxhkd = callPackage ../applications/window-managers/sxhkd { };
 
-  msmtp = callPackage ../applications/networking/msmtp { };
+  msmtp = callPackage ../applications/networking/msmtp {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   imapfilter = callPackage ../applications/networking/mailreaders/imapfilter.nix {
     lua = lua5;
