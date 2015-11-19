@@ -77,7 +77,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
     cp ${setuppy} nix_run_setup.py
-    ${python.interpreter} nix_run_setup.py build_ext ${lib.concatStringsSep " " setupPyBuildFlags} bdist_wheel
+    ${python.interpreter} nix_run_setup.py ${lib.optionalString (setupPyBuildFlags != []) ("build_ext " + (lib.concatStringsSep " " setupPyBuildFlags))} bdist_wheel
     runHook postBuild
   '';
 
