@@ -1,6 +1,6 @@
 { stdenv, fetchurl, intltool, gettext, makeWrapper
 , parted, gtk, glib, libuuid, pkgconfig, gtkmm, libxml2, hicolor_icon_theme
-, hdparm, utillinux
+, gpart, hdparm, utillinux
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/sbin/gpartedbin \
-      --prefix PATH : "${hdparm}/bin:${utillinux}/bin"
+      --prefix PATH : "${gpart}/bin:${hdparm}/bin:${utillinux}/bin"
   '';
 
   meta = with stdenv.lib; {
