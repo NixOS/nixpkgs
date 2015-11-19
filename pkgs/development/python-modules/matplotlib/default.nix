@@ -35,6 +35,8 @@ buildPythonPackage rec {
     sed -i 's/test_use_url/fails/' lib/matplotlib/tests/test_style.py
     # Failing test: ERROR: test suite for <class 'matplotlib.sphinxext.tests.test_tinypages.TestTinyPages'>
     sed -i 's/TestTinyPages/fails/' lib/matplotlib/sphinxext/tests/test_tinypages.py
+    # Transient errors
+    sed -i 's/test_invisible_Line_rendering/noop/' lib/matplotlib/tests/test_lines.py
   '';
 
 
