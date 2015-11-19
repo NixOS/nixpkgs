@@ -368,7 +368,7 @@ let
       self.pyramid_jinja2
       self.pyramid_tm
       self.pytz
-      self.sqlalchemy
+      self.sqlalchemy8
       self.transaction
       self.waitress
       self.webhelpers
@@ -1123,7 +1123,7 @@ let
     };
 
     buildInputs = with self; [ pkgs.btrfsProgs ];
-    propagatedBuildInputs = with self; [ contextlib2 sqlalchemy9 pyxdg pycparser alembic ]
+    propagatedBuildInputs = with self; [ contextlib2 pyxdg pycparser alembic ]
       ++ optionals (!isPyPy) [ cffi ];
 
     meta = {
@@ -2203,6 +2203,12 @@ let
       url = "https://pypi.python.org/packages/source/c/clf/${name}.tar.gz";
       sha256 = "04lqd2i4fjs606b0q075yi9xksk567m0sfph6v6j80za0hvzqyy5";
     };
+
+    patchPhase = ''
+      sed -i 's/==/>=/' requirements.txt
+    '';
+
+    propagatedBuildInputs = with self; [ docopt requests2 pygments ];
 
     # Error when running tests:
     # No local packages or download links found for requests
@@ -3807,6 +3813,7 @@ let
     checkPhase = ''
       # Not worth the trouble
       rm test/with_dummyserver/test_proxy_poolmanager.py
+      rm test/with_dummyserver/test_socketlevel.py
       # pypy: https://github.com/shazow/urllib3/issues/736
       rm test/with_dummyserver/test_connectionpool.py
 
@@ -9678,11 +9685,11 @@ let
 
   msrplib = buildPythonPackage rec {
     name = "python-msrplib-${version}";
-    version = "0.17.0";
+    version = "0.18.0";
 
     src = pkgs.fetchurl {
       url = "http://download.ag-projects.com/MSRP/${name}.tar.gz";
-      sha256 = "fe6ee541fbb4380a5708d08f378724dbc93438ff35c0cd0400e31b070fce73c4";
+      sha256 = "0vp9g5p015g3f67rl4vz0qnn6x7hciry6nmvwf82h9h5rx11r43j";
     };
 
     propagatedBuildInputs = with self; [ eventlib application gnutls ];
@@ -10757,6 +10764,10 @@ let
       sha256 = "16jb8x5hbs3g4dq10y6rqc1005bnffwnlws8x7j1d96n7k9mjn8h";
     };
 
+    patchPhase = ''
+      substituteInPlace setup.py --replace "version=versioneer.get_version()" "version='${version}'"
+    '';
+
     propagatedBuildInputs = with self;
       [ pyptlib argparse twisted pycrypto pyyaml ];
 
@@ -10917,7 +10928,7 @@ let
     disabled = isPy3k;
 
     src = pkgs.fetchgit {
-      url = git://gitorious.org/opensuse/osc.git;
+      url = https://github.com/openSUSE/osc;
       rev = "6cd541967ee2fca0b89e81470f18b97a3ffc23ce";
       sha256 = "a39ce0e321e40e9758bf7b9128d316c71b35b80eabc84f13df492083bb6f1cc6";
     };
@@ -12898,22 +12909,21 @@ let
 
     disabled = isPy3k;
 
-    postInstall = "ln -s $out/lib/${python.libPrefix}/site-packages $out/lib/${python.libPrefix}/site-packages/PIL";
+    postInstall = "ln -s $out/${python.sitePackages} $out/${python.sitePackages}/PIL";
 
     preConfigure = ''
       sed -i "setup.py" \
           -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = libinclude("${pkgs.freetype}")|g ;
               s|^JPEG_ROOT =.*$|JPEG_ROOT = libinclude("${pkgs.libjpeg}")|g ;
               s|^ZLIB_ROOT =.*$|ZLIB_ROOT = libinclude("${pkgs.zlib}")|g ;'
-    ''
-    # Remove impurities
-    + stdenv.lib.optionalString stdenv.isDarwin ''
+    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+      # Remove impurities
       substituteInPlace setup.py \
         --replace '"/Library/Frameworks",' "" \
         --replace '"/System/Library/Frameworks"' ""
     '';
 
-    checkPhase = "${python}/bin/${python.executable} selftest.py";
+    checkPhase = "${python.interpreter} selftest.py";
 
     meta = {
       homepage = http://www.pythonware.com/products/pil/;
@@ -13617,17 +13627,6 @@ let
         --replace '"/usr/lib"' '"${pkgs.binutils}/lib"'
     '';
 
-    # --old-and-unmanageable not supported by this setup.py
-    installPhase = ''
-      mkdir -p "$out/lib/${python.libPrefix}/site-packages"
-
-      export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-
-      ${python}/bin/${python.executable} setup.py install \
-        --install-lib=$out/lib/${python.libPrefix}/site-packages \
-        --prefix="$out"
-    '';
-
     meta = {
       homepage = https://github.com/Groundworkstech/pybfd;
       description = "A Python interface to the GNU Binary File Descriptor (BFD) library";
@@ -14239,8 +14238,7 @@ let
     propagatedBuildInputs = with self; [ urlgrabber ];
 
     checkPhase = ''
-      export PYTHONPATH="$PYTHONPATH:."
-      ${python}/bin/${python.executable} tests/baseclass.py -vv
+      ${python.interpreter} tests/baseclass.py -vv
     '';
 
     meta = {
@@ -14784,6 +14782,8 @@ let
       url = "http://pypi.python.org/packages/source/p/pyrax/${name}.tar.gz";
       sha256 = "0hvim60bhgfj91m7pp8jfmb49f087xqlgkqa505zw28r7yl0hcfp";
     };
+
+    propagatedBuildInputs = with self; [ requests2 ];
 
     meta = {
       homepage    = "https://github.com/rackspace/pyrax";
@@ -16749,18 +16749,13 @@ let
     version = "2.5.1";
     disabled = isPy3k;
 
-    configurePhase = "find -name 'configure' -exec chmod a+x {} \\; ; find -name 'aconfigure' -exec chmod a+x {} \\; ; ${python}/bin/${python.executable} setup.py build_ext --pjsip-clean-compile";
-
     src = pkgs.fetchurl {
       url = "http://download.ag-projects.com/SipClient/python-${name}.tar.gz";
       sha256 = "0vpy2vss8667c0kp1k8vybl38nxp7kr2v2wa8sngrgzd65m6ww5p";
     };
 
     propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml ];
-
     buildInputs = with pkgs; [ alsaLib ffmpeg libv4l pkgconfig sqlite libvpx ];
-
-    installPhase = "${python}/bin/${python.executable} setup.py install --prefix=$out";
 
     doCheck = false;
   };
@@ -21405,17 +21400,18 @@ let
   };
 
   jenkins-job-builder = buildPythonPackage rec {
-    name = "jenkins-job-builder-1.2.0";
+    name = "jenkins-job-builder-1.3.0";
     disabled = ! (isPy26 || isPy27);
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jenkins-job-builder/${name}.tar.gz";
-      md5 = "79e44ef0d3fffc19f415d8c0caac6b7b";
+      sha256 = "111vpf6hzzb2mcdqi0a9r1dkf28ln9w6sgfqri0qxwf1ffbdqx6x";
     };
 
-    # pbr required for jenkins-job-builder is <1.0.0 while many of the test
-    # dependencies require pbr>=1.1
-    doCheck = false;
+    patchPhase = ''
+      sed -i '/ordereddict/d' requirements.txt
+      export HOME=$TMPDIR
+    '';
 
     buildInputs = with self; [
       pip
@@ -21423,10 +21419,12 @@ let
 
     propagatedBuildInputs = with self; [
       pbr
+      mock
       python-jenkins
       pyyaml
       six
     ] ++ optionals isPy26 [
+      ordereddict
       argparse
       ordereddict
     ];
