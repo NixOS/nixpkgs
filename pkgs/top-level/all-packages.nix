@@ -13087,6 +13087,8 @@ let
 
   taskserver = callPackage ../servers/misc/taskserver { };
 
+  telegram = callPackage ../applications/networking/instant-messengers/telegram/default.nix { };
+
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram-cli/default.nix { };
 
   telepathy_gabble = callPackage ../applications/networking/instant-messengers/telepathy/gabble { };
