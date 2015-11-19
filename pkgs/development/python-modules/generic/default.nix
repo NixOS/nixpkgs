@@ -53,7 +53,6 @@ let
   setuppy = ./run_setup.py;
 in
 python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
-  inherit doCheck;
 
   name = namePrefix + name;
 
@@ -82,12 +81,6 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
     runHook postBuild
   '';
 
-  checkPhase = attrs.checkPhase or ''
-    runHook preCheck
-    ${python.interpreter} nix_run_setup.py test
-    runHook postCheck
-  '';
-
   installPhase = attrs.installPhase or ''
     runHook preInstall
 
@@ -101,12 +94,20 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
     runHook postInstall
   '';
 
+  doInstallCheck = doCheck;
+  doCheck = false;
+  installCheckPhase = attrs.checkPhase or ''
+    runHook preCheck
+    ${python.interpreter} nix_run_setup.py test
+    runHook postCheck
+  '';
+
   postFixup = attrs.postFixup or ''
     wrapPythonPrograms
 
     # check if we have two packagegs with the same name in closure and fail
     # this shouldn't happen, something went wrong with dependencies specs
-    ${python.interpreter} ${./do_conflict.py}
+    ${python.interpreter} ${./catch_conflicts.py}
   '';
 
   shellHook = attrs.shellHook or ''
