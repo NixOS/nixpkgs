@@ -11,11 +11,11 @@
 with { inherit (stdenv.lib) optional; };
 
 stdenv.mkDerivation rec {
-  version = "1.8.15-patch1";
+  version = "1.8.16";
   name = "hdf5-${version}";
   src = fetchurl {
-    url = "http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-${version}/src/hdf5-${version}.tar.gz";
-    sha256 = "19k39da6zzxyr0fnffn4iqlls9v1fsih877rznq8ypqy8mzf5dci";
+    url = "http://www.hdfgroup.org/ftp/HDF5/releases/${name}/src/${name}.tar.bz2";
+    sha256 = "1ilq8pn9lxbf2wj2rdzwqabxismznjj1d23iw6g78w0bl5dsxahk";
  };
 
   passthru = {
