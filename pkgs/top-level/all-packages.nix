@@ -1203,6 +1203,8 @@ let
 
   dar = callPackage ../tools/archivers/dar { };
 
+  darkhttpd = callPackage ../servers/http/darkhttpd { };
+
   darkstat = callPackage ../tools/networking/darkstat { };
 
   davfs2 = callPackage ../tools/filesystems/davfs2 {
