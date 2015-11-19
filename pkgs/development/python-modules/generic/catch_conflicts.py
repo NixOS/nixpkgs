@@ -8,7 +8,8 @@ packages = collections.defaultdict(list)
 for f in sys.path:
     for req in pkg_resources.find_distributions(f):
         if req not in packages[req.project_name]:
-            if req.project_name == 'setuptools':
+            # some exceptions inside buildPythonPackage
+            if req.project_name in ['setuptools', 'pip']:
                 continue
             packages[req.project_name].append(req)
 
