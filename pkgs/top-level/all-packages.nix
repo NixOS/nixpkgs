@@ -11694,7 +11694,7 @@ let
   fomp = callPackage ../applications/audio/fomp { };
 
   freecad = callPackage ../applications/graphics/freecad {
-    boost = boost156;
+    boost = boost155;
     opencascade = opencascade_oce;
     inherit (pythonPackages) matplotlib pycollada;
   };
