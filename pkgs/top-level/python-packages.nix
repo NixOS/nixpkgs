@@ -19679,11 +19679,11 @@ let
 
   zope_testrunner = buildPythonPackage rec {
     name = "zope.testrunner-${version}";
-    version = "4.4.3";
+    version = "4.4.10";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.testrunner/${name}.zip";
-      sha256 = "1dwk35kg0bmj2lzp4fd2bgp6dv64q5sda09bf0y8j63y53vqbsw8";
+      sha256 = "1w09wbqiqmq6hvrammi4fzc7fr129v63gdnzlk4qi2b1xy5qpqab";
     };
 
     propagatedBuildInputs = with self; [ zope_interface zope_exceptions zope_testing six ] ++ optional (!python.is_py3k or false) subunit;
