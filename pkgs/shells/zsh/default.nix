@@ -21,13 +21,19 @@ stdenv.mkDerivation {
 
   buildInputs = [ ncurses coreutils pcre ];
 
-  preConfigure = ''
-    configureFlags="--enable-maildir-support --enable-multibyte --enable-zprofile=$out/etc/zprofile --with-tcsetpgrp --enable-pcre"
-  '';
+  configureFlags = [
+    "--enable-maildir-support"
+    "--enable-multibyte"
+    "--enable-zprofile=$out/etc/zprofile"
+    "--with-tcsetpgrp"
+    "--enable-pcre"
+  ];
 
-  # Some tests fail on hydra, see
-  # http://hydra.nixos.org/build/25637689/nixlog/1
-  doCheck = false;
+  # the zsh/zpty module is not available on hydra
+  # so skip groups Y Z
+  checkFlagsArray = ''
+    (TESTNUM=A TESTNUM=B TESTNUM=C TESTNUM=D TESTNUM=E TESTNUM=V TESTNUM=W)
+  '';
 
   # XXX: think/discuss about this, also with respect to nixos vs nix-on-X
   postInstall = ''
