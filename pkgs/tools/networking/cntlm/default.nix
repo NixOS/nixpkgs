@@ -19,8 +19,12 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "NTLM/NTLMv2 authenticating HTTP proxy";
     homepage = http://cntlm.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.qknight stdenv.lib.maintainers.markWot ];
+    license = licenses.gpl2;
+    maintainers =
+      [
+        maintainers.qknight
+        maintainers.markWot
+      ];
     platforms = platforms.linux;
   };
 }
