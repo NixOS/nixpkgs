@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;
     platforms = platforms.linux;
+    broken = true;
   };
 }
