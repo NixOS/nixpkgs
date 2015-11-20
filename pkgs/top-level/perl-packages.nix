@@ -3817,17 +3817,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  EmailAbstract = buildPerlPackage {
-    name = "Email-Abstract-3.007";
+  EmailAbstract = buildPerlPackage rec {
+    name = "Email-Abstract-3.008";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Abstract-3.007.tar.gz;
-      sha256 = "10915aa3a558f6ba9c51a13ea1c135aed765e185a14cd2cfc9b434599cf5eaa8";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "fc7169acb6c43df7f005e7ef6ad08ee8ca6eb6796b5d1604593c997337cc8240";
     };
     propagatedBuildInputs = [ EmailSimple MROCompat ModulePluggable ];
     meta = {
       homepage = https://github.com/rjbs/Email-Abstract;
       description = "Unified interface to mail representations";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
