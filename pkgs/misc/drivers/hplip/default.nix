@@ -1,7 +1,9 @@
-{ stdenv, fetchurl, automake, pkgconfig
+{ stdenv, fetchurl, substituteAll
+, pkgconfig
 , cups, zlib, libjpeg, libusb1, pythonPackages, saneBackends, dbus, usbutils
-, polkit, qtSupport ? true, qt4, pyqt4, net_snmp
-, withPlugin ? false, substituteAll, makeWrapper
+, net_snmp, polkit
+, qtSupport ? true, qt4, pyqt4
+, withPlugin ? false
 }:
 
 let
