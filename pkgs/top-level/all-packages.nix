@@ -3652,6 +3652,8 @@ let
 
   zip = callPackage ../tools/archivers/zip { };
 
+  zkfuse = callPackage ../tools/filesystems/zkfuse { };
+
   zpaq = callPackage ../tools/archivers/zpaq { };
   zpaqd = callPackage ../tools/archivers/zpaq/zpaqd.nix { };
 
