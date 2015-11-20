@@ -146,7 +146,16 @@ in
 
           config = mkMerge
             [ (mkIf options.config.isDefined {
-                path = (import ../../lib/eval-config.nix {
+                # INFO: https://github.com/NixOS/nixpkgs/pull/2563
+                path = 
+                  let
+                    overrides = {
+                      nixPath = [ { prefix = "nixpkgs"; path = "/tmp/nixpkgs"; } ] ++ builtins.nixPath;
+                      import = fn: scopedImport overrides fn;
+                      scopedImport = attrs: fn: scopedImport (overrides // attrs) fn;
+                      builtins = builtins // overrides;
+                    };
+                  in (scopedImport overrides ../../lib/eval-config.nix {
                   inherit system;
                   modules =
                     let extraConfig =

@@ -14,7 +14,7 @@
   # be set modularly anyway.
   pkgs ? null
 , # !!! what do we gain by making this configurable?
-  baseModules ? import ../modules/module-list.nix
+  baseModules ? import <nixpkgs/nixos/modules/module-list.nix>
 , # !!! See comment about args in lib/modules.nix
   extraArgs ? {}
 , # !!! See comment about args in lib/modules.nix
