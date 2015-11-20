@@ -13592,9 +13592,9 @@ let
   xdotool = callPackage ../tools/X11/xdotool { };
 
   xen_4_5_0 = callPackage ../applications/virtualization/xen/4.5.0.nix { };
-  xen_4_5_1 = callPackage ../applications/virtualization/xen/4.5.1.nix { };
+  xen_4_5_2 = callPackage ../applications/virtualization/xen/4.5.2.nix { };
   xen_xenServer = callPackage ../applications/virtualization/xen/4.5.0.nix { xenserverPatched = true; };
-  xen = xen_4_5_1;
+  xen = xen_4_5_2;
 
   win-spice = callPackage ../applications/virtualization/driver/win-spice { };
   win-virtio = callPackage ../applications/virtualization/driver/win-virtio { };
