@@ -3948,16 +3948,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  EmailSimple = buildPerlPackage {
-    name = "Email-Simple-2.203";
+  EmailSimple = buildPerlPackage rec {
+    name = "Email-Simple-2.208";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Simple-2.203.tar.gz;
-      sha256 = "0hzbp8ay62d6jwrn4q7hqmhkaigf8lc0plz0g46yhwzp3x9xfa55";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "f13a83ecc41b4e72023066d865fc70dfbd85158d4e7722dca8249f54e0ec5be1";
     };
     propagatedBuildInputs = [ EmailDateFormat ];
     meta = {
-      homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
+      homepage = https://github.com/rjbs/Email-Simple;
+      description = "Simple parsing of RFC2822 message format and headers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
