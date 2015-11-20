@@ -2003,6 +2003,8 @@ let
 
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix { };
 
+  lnav = callPackage ../tools/misc/lnav { };
+
   lockfileProgs = callPackage ../tools/misc/lockfile-progs { };
 
   logstash = callPackage ../tools/misc/logstash { };
