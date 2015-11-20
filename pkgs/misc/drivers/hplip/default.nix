@@ -53,7 +53,10 @@ stdenv.mkDerivation {
     saneBackends
     dbus
     net_snmp
-  ] ++ stdenv.lib.optional qtSupport qt4;
+  ] ++ stdenv.lib.optionals qtSupport [
+    qt4
+  ];
+
   nativeBuildInputs = [
     pkgconfig
   ];
@@ -65,7 +68,9 @@ stdenv.mkDerivation {
     recursivePthLoader
     reportlab
     usbutils
-  ] ++ stdenv.lib.optional qtSupport pyqt4;
+  ] ++ stdenv.lib.optionals qtSupport [
+    pyqt4
+  ];
 
   prePatch = ''
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
