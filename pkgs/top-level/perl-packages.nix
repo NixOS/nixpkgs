@@ -3918,14 +3918,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   EmailSend = buildPerlPackage rec {
-    name = "Email-Send-2.198";
+    name = "Email-Send-2.201";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "0ffmpqys7yph5lb28m2xan0zd837vywg8c6gjjd9p80dahpqknyx";
+      sha256 = "4bbec933558d7cc9b8152bad86dd313de277a21a89b4ea83d84e61587e95dbc6";
     };
-    propagatedBuildInputs = [EmailSimple EmailAddress ModulePluggable ReturnValue];
+    propagatedBuildInputs = [ EmailAbstract EmailAddress EmailSimple ModulePluggable ReturnValue ];
     meta = {
-      platforms = stdenv.lib.platforms.linux;
+      homepage = https://github.com/rjbs/Email-Send;
+      description = "Simply Sending Email";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
