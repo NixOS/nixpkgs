@@ -8,7 +8,11 @@
 , enableShared ? true
 }:
 
-with { inherit (stdenv.lib) optional; };
+# cpp and mpi options are mutually exclusive
+# (--enable-unsupported could be used to force the build)
+assert !cpp || mpi == null;
+
+with { inherit (stdenv.lib) optional optionals; };
 
 stdenv.mkDerivation rec {
   version = "1.8.16";
@@ -35,7 +39,7 @@ stdenv.mkDerivation rec {
     ++ optional cpp "--enable-cxx"
     ++ optional (gfortran != null) "--enable-fortran"
     ++ optional (szip != null) "--with-szlib=${szip}"
-    ++ optional (mpi != null) "--enable-parallel"
+    ++ optionals (mpi != null) ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
     ++ optional enableShared "--enable-shared";
 
   patches = [./bin-mv.patch];
