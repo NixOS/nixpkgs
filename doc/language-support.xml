@@ -741,7 +741,7 @@ the following arguments are of special significance to the function:
     </para>
     <para>
       In this example only <literal>code.google.com/p/go.net/ipv4</literal> and
-      <literal>code.google.com/p/go.net/ipv4</literal> will be built.
+      <literal>code.google.com/p/go.net/ipv6</literal> will be built.
     </para>
   </callout>
 
@@ -764,7 +764,7 @@ the following arguments are of special significance to the function:
     <para>
       <varname>propagatedBuildInputs</varname> is where the dependencies of a Go library are
       listed. Only libraries should list <varname>propagatedBuildInputs</varname>. If a standalone
-      program is being build instead, use <varname>buildInputs</varname>. If a library's tests require
+      program is being built instead, use <varname>buildInputs</varname>. If a library's tests require
       additional dependencies that are not propagated, they should be listed in <varname>buildInputs</varname>.
     </para>
   </callout>
