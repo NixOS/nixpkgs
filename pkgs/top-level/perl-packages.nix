@@ -3844,15 +3844,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  EmailDateFormat = buildPerlPackage {
-    name = "Email-Date-Format-1.002";
+  EmailDateFormat = buildPerlPackage rec {
+    name = "Email-Date-Format-1.005";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Date-Format-1.002.tar.gz;
-      sha256 = "114fqcnmvzi0z100yx89j6rgwbicb0bslswhyr8z2pzsvwv3czqc";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "579c617e303b9d874411c7b61b46b59d36f815718625074ae6832e7bb9db5104";
     };
     meta = {
-      description = "Produce RFC 8822 date strings";
+      homepage = https://github.com/rjbs/Email-Date-Format;
+      description = "Produce RFC 2822 date strings";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
