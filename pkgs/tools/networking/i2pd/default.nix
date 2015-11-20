@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost zlib openssl ];
   installPhase = ''
-    install -D i2p $out/bin/i2pd
+    install -D i2p $out/bin/i2p
   '';
 
   meta = with stdenv.lib; {
