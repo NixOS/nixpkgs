@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ boost zlib openssl ];
+  makeFlags = "USE_AESNI=no";
   installPhase = ''
     install -D i2p $out/bin/i2p
   '';
