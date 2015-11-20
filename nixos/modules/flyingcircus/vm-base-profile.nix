@@ -8,10 +8,14 @@ let
         then [./vagrant.nix]
         else [./fcio.nix];
 
+    get_enc = path: default:
+        if builtins.pathExists path
+        then builtins.fromJSON (builtins.readFile path)
+        else default;
+
     enc =
-        if builtins.pathExists (builtins.toPath /etc/nixos/enc.json)
-        then builtins.fromJSON /etc/nixos/enc.json
-        else {};
+        get_enc /etc/nixos/enc.json
+        (get_enc /tmp/fc-data/enc.json {});
 in
 {
   imports =
