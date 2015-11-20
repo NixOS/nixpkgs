@@ -14153,7 +14153,7 @@ let
     withPrimus = config.steam.primus or false;
   };
 
-  stepmania = callPackage ../games/stepmania {};
+  stepmania = callPackage ../games/stepmania { };
 
   stuntrally = callPackage ../games/stuntrally { };
 
