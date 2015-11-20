@@ -29,15 +29,16 @@ let
         src = ./hplip.state;
       };
 
-  hplipArch =
+  hplipPlatforms =
     {
-      "i686-linux" = "x86_32";
+      "i686-linux"   = "x86_32";
       "x86_64-linux" = "x86_64";
-      "arm6l-linux" = "arm32";
-      "arm7l-linux" = "arm32";
-    }."${stdenv.system}" or (abort "Unsupported platform ${stdenv.system}");
+      "armv6l-linux" = "arm32";
+      "armv7l-linux" = "arm32";
+    };
 
-    platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" ];
+  hplipArch = hplipPlatforms."${stdenv.system}"
+    or (abort "Unsupported platform ${stdenv.system}");
 
 in
 
@@ -108,7 +109,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   postInstall =
-    (stdenv.lib.optionalString (withPlugin && builtins.elem stdenv.system platforms)
+    (stdenv.lib.optionalString (withPlugin && builtins.hasAttr stdenv.system hplipPlatforms)
     (let hplipArch =
           if stdenv.system == "i686-linux" then "x86_32"
           else if stdenv.system == "x86_64-linux" then "x86_64"
