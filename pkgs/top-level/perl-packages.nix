@@ -3932,19 +3932,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  EmailSender = buildPerlPackage {
-    name = "Email-Sender-1.300016";
+  EmailSender = buildPerlPackage rec {
+    name = "Email-Sender-1.300021";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Sender-1.300016.tar.gz;
-      sha256 = "00042de1b78fb26b2ff37bd92c0d61631810725a5235f4841e38a501a533a2a3";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "f565ef5805ff54c5a77400b0a512709137092d247321bbe5065f265e2a7b4fed";
     };
     buildInputs = [ CaptureTiny ];
-    propagatedBuildInputs = [ EmailAbstract EmailAddress EmailSimple ListMoreUtils ModuleRuntime Moo MooXTypesMooseLike SubExporter Throwable TryTiny ];
+    propagatedBuildInputs = [ EmailAbstract EmailAddress EmailSimple ListMoreUtils Moo MooXTypesMooseLike SubExporterUtil Throwable ];
     meta = {
       homepage = https://github.com/rjbs/Email-Sender;
       description = "A library for sending email";
-      license = "perl";
-      platforms = stdenv.lib.platforms.linux;
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
