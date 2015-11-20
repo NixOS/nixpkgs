@@ -3888,17 +3888,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  EmailMIMEContentType = buildPerlPackage {
-    name = "Email-MIME-ContentType-1.015";
+  EmailMIMEContentType = buildPerlPackage rec {
+    name = "Email-MIME-ContentType-1.018";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-ContentType-1.015.tar.gz;
-      sha256 = "1rlk3rxlw8ri4b7c68nhg6b3ykgc97rdaqb1dyam8f8k1z8cik0g";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "7508cd1227b8f150a403ca49658cb4a0892836dd8f01ff95f049957b2abf10f9";
     };
     meta = {
+      homepage = https://github.com/rjbs/Email-MIME-ContentType;
       description = "Parse a MIME Content-Type Header";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
-      platforms   = stdenv.lib.platforms.unix;
+      maintainers = with maintainers; [ ocharles rycee ];
     };
   };
 
