@@ -1,21 +1,22 @@
-{ stdenv, fetchurl, binutils, popt, zlib, pkgconfig
+{ stdenv, fetchurl, binutils, popt, zlib, pkgconfig, linuxHeaders
 , withGUI ? false , qt4 ? null}:
 
 # libX11 is needed because the Qt build stuff automatically adds `-lX11'.
 assert withGUI -> qt4 != null;
 
 stdenv.mkDerivation rec {
-  name = "oprofile-1.0.0";
+  name = "oprofile-1.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/oprofile/${name}.tar.gz";
-    sha256 = "0nn4wfvwy4nii25y6lwlrnzx9ah4nz0r93yk7hswiy6wxjs10wc4";
+    sha256 = "0v1nn38h227bgxjwqf22rjp2iqgjm4ls3gckzifks0x6w5nrlxfg";
   };
 
-  buildInputs = [ binutils zlib popt pkgconfig ]
+  buildInputs = [ binutils zlib popt pkgconfig linuxHeaders ]
     ++ stdenv.lib.optionals withGUI [ qt4 ];
 
   configureFlags = [
+      "--with-kernel=${linuxHeaders}"
       "--disable-shared"   # needed because only the static libbfd is available
     ]
     ++ stdenv.lib.optional withGUI "--with-qt-dir=${qt4} --enable-gui=qt4";

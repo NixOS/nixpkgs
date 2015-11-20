@@ -14,7 +14,16 @@
 , kpty
 , kwidgetsaddons
 , libarchive
+, p7zip
+, unrar
+, unzipNLS
+, zip
 }:
+
+let PATH = lib.makeSearchPath "bin" [
+      p7zip unrar unzipNLS zip
+    ];
+in
 
 kdeApp {
   name = "ark";
@@ -27,15 +36,21 @@ kdeApp {
     kconfig
     kcrash
     kdbusaddons
-    ki18n
     kiconthemes
-    khtml
-    kio
     kservice
     kpty
     kwidgetsaddons
     libarchive
   ];
+  propagatedBuildInputs = [
+    khtml
+    ki18n
+    kio
+  ];
+  postInstall = ''
+    wrapQtProgram "$out/bin/ark" \
+        --prefix PATH : "${PATH}"
+  '';
   meta = {
     license = with lib.licenses; [ gpl2 lgpl3 ];
     maintainers = [ lib.maintainers.ttuegel ];

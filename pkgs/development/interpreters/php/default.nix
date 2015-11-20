@@ -296,19 +296,19 @@ in {
   };
 
   php55 = generic {
-    version = "5.5.29";
-    sha256 = "0imr8c48ffjhc2zm96ndq92z3736xrm12hd5c1lssz67xiwybkpv";
+    version = "5.5.30";
+    sha256 = "0a9v7jq8mr15dcim23rzcfgpijc5k1rkc4qv9as1rpgc7iqjlcz7";
   };
 
   php56 = generic {
-    version = "5.6.13";
-    sha256 = "14zq40j229salk0wp7inl4jvj3xff03bz7g5xn8ipd5skiy86n33";
+    version = "5.6.15";
+    sha256 = "0f0wplfnclr6ji6r2g5q0rdnp26xi7gxdq51dljrwx2b9mf6980i";
   };
 
   php70 = lib.lowPrio (generic {
-    version = "7.0.0beta1";
-    url = "https://downloads.php.net/~ab/php-7.0.0beta1.tar.bz2";
-    sha256 = "1pj3ysfhswg2r370ivp33fv9zbcl3yvhmxgnc731k08hv6hmd984";
+    version = "7.0.0RC6";
+    url = "https://downloads.php.net/~ab/php-7.0.0RC6.tar.bz2";
+    sha256 = "0q8km0711chwj94d4mjrzdn999yw1vv4k695gj68pk791a6pcsyk";
   });
 
 }

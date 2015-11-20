@@ -7,11 +7,11 @@ assert stdenv ? glibc;
 assert faacSupport -> faac != null;
 
 stdenv.mkDerivation {
-  name = "avidemux-2.5.6";
+  name = "avidemux-2.6.9";
 
   src = fetchurl {
-    url = mirror://sourceforge/avidemux/avidemux_2.5.6.tar.gz;
-    sha256 = "12wvxz0n2g85f079d8mdkkp2zm279d34m9v7qgcqndh48cn7znnn";
+    url = mirror://sourceforge/avidemux/avidemux_2.6.9.tar.gz;
+    sha256 = "01jhgricd7m9hdhr22yrdjfrnl41zccm2yxw7gfb02mwcswvswy0";
   };
 
   buildInputs = [ cmake pkgconfig libxml2 qt4 gtk gettext SDL libXv
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://fixounet.free.fr/avidemux/;
     description = "Free video editor designed for simple video editing tasks";
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [ viric jagajaga ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

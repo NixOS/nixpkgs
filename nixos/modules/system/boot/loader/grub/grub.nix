@@ -378,6 +378,17 @@ in
         '';
       };
 
+      systemHasTPM = mkOption {
+        default = "";
+        example = "YES_TPM_is_activated";
+        type = types.string;
+        description = ''
+          Assertion that the target system has an activated TPM. It is a safety
+          check before allowing the activation of 'enableTrustedBoot'. TrustedBoot
+          WILL FAIL TO BOOT YOUR SYSTEM if no TPM is available.
+        '';
+      };
+
     };
 
   };
@@ -453,8 +464,8 @@ in
           message = "Trusted GRUB does not have ZFS support";
         }
         {
-          assertion = !cfg.enableTrustedBoot;
-          message = "Trusted GRUB can break your system. Remove assertion if you want to test trustedGRUB nevertheless.";
+          assertion = !cfg.enableTrustedBoot || cfg.systemHasTPM == "YES_TPM_is_activated";
+          message = "Trusted GRUB can break the system! Confirm that the system has an activated TPM by setting 'systemHasTPM'.";
         }
       ] ++ flip concatMap cfg.mirroredBoots (args: [
         {
@@ -476,5 +487,16 @@ in
     })
 
   ];
+
+
+  imports =
+    [ (mkRemovedOptionModule [ "boot" "loader" "grub" "bootDevice" ])
+      (mkRenamedOptionModule [ "boot" "copyKernels" ] [ "boot" "loader" "grub" "copyKernels" ])
+      (mkRenamedOptionModule [ "boot" "extraGrubEntries" ] [ "boot" "loader" "grub" "extraEntries" ])
+      (mkRenamedOptionModule [ "boot" "extraGrubEntriesBeforeNixos" ] [ "boot" "loader" "grub" "extraEntriesBeforeNixOS" ])
+      (mkRenamedOptionModule [ "boot" "grubDevice" ] [ "boot" "loader" "grub" "device" ])
+      (mkRenamedOptionModule [ "boot" "bootMount" ] [ "boot" "loader" "grub" "bootDevice" ])
+      (mkRenamedOptionModule [ "boot" "grubSplashImage" ] [ "boot" "loader" "grub" "splashImage" ])
+    ];
 
 }

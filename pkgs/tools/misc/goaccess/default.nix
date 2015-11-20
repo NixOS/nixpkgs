@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, geoip, ncurses, glib }:
+{ stdenv, fetchurl, pkgconfig, geoipWithDatabase, ncurses, glib }:
 
 let
-  version = "0.9";
+  version = "0.9.4";
   mainSrc = fetchurl {
     url = "http://tar.goaccess.io/goaccess-${version}.tar.gz";
-    sha256 = "1yi7bxrmhvd11ha405bqpz7q442l9bnnx317iy22xzxjl96frn29";
+    sha256 = "1kn5yvgzrzjlxd0zhr2d2gbjdin9j9vmfbk5gkrwqc4kd9zicvla";
   };
 in
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig
-    geoip
+    geoipWithDatabase
     ncurses
     glib
   ];

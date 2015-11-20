@@ -163,7 +163,7 @@ in
   platform_14 = buildPlatform {
     name = "android-platform-4.0";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/android-14_r04.zip;
+      url = https://dl.google.com/android/repository/android-14_r04.zip;
       sha1 = "d4f1d8fbca25225b5f0e7a0adf0d39c3d6e60b3c";
     };
     meta = {
@@ -175,7 +175,7 @@ in
   platform_15 = buildPlatform {
     name = "android-platform-4.0.3";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/android-15_r05.zip;
+      url = https://dl.google.com/android/repository/android-15_r05.zip;
       sha1 = "69ab4c443b37184b2883af1fd38cc20cbeffd0f3";
     };
     meta = {
@@ -187,7 +187,7 @@ in
   platform_16 = buildPlatform {
     name = "android-platform-4.1.2";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/android-16_r05.zip;
+      url = https://dl.google.com/android/repository/android-16_r05.zip;
       sha1 = "12a5ce6235a76bc30f62c26bda1b680e336abd07";
     };
     meta = {
@@ -199,7 +199,7 @@ in
   platform_17 = buildPlatform {
     name = "android-platform-4.2.2";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/android-17_r03.zip;
+      url = https://dl.google.com/android/repository/android-17_r03.zip;
       sha1 = "dbe14101c06e6cdb34e300393e64e64f8c92168a";
     };
     meta = {
@@ -211,7 +211,7 @@ in
   platform_18 = buildPlatform {
     name = "android-platform-4.3.1";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/android-18_r03.zip;
+      url = https://dl.google.com/android/repository/android-18_r03.zip;
       sha1 = "e6b09b3505754cbbeb4a5622008b907262ee91cb";
     };
     meta = {
@@ -223,7 +223,7 @@ in
   platform_19 = buildPlatform {
     name = "android-platform-4.4.2";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/android-19_r04.zip;
+      url = https://dl.google.com/android/repository/android-19_r04.zip;
       sha1 = "2ff20d89e68f2f5390981342e009db5a2d456aaa";
     };
     meta = {
@@ -235,7 +235,7 @@ in
   platform_20 = buildPlatform {
     name = "android-platform-4.4W.2";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/android-20_r02.zip;
+      url = https://dl.google.com/android/repository/android-20_r02.zip;
       sha1 = "a9251f8a3f313ab05834a07a963000927637e01d";
     };
     meta = {
@@ -247,7 +247,7 @@ in
   platform_21 = buildPlatform {
     name = "android-platform-5.0.1";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/android-21_r02.zip;
+      url = https://dl.google.com/android/repository/android-21_r02.zip;
       sha1 = "53536556059bb29ae82f414fd2e14bc335a4eb4c";
     };
     meta = {
@@ -259,11 +259,23 @@ in
   platform_22 = buildPlatform {
     name = "android-platform-5.1.1";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/android-22_r02.zip;
+      url = https://dl.google.com/android/repository/android-22_r02.zip;
       sha1 = "5d1bd10fea962b216a0dece1247070164760a9fc";
     };
     meta = {
       description = "Android SDK Platform 5.1.1";
+
+    };
+  };
+
+  platform_23 = buildPlatform {
+    name = "android-platform-6.0";
+    src = fetchurl {
+      url = https://dl.google.com/android/repository/android-23_r01.zip;
+      sha1 = "cbccca8d3127e894845556ce999b28281de541bd";
+    };
+    meta = {
+      description = "Android SDK Platform 6.0";
 
     };
   };

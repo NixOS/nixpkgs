@@ -1,35 +1,35 @@
-{ lib, stdenv, fetchurl, pkgconfig, libtool
+{ lib, stdenv, fetchurl
 
 , mouseSupport ? false
 , unicode ? true
 
 , gpm
+
+# Extra Options
+, abiVersion ? "5"
 }:
 
 stdenv.mkDerivation rec {
-  name = "ncurses-6.0";
+  name = "ncurses-5.9";
 
   src = fetchurl {
     url = "mirror://gnu/ncurses/${name}.tar.gz";
-    sha256 = "0q3jck7lna77z5r42f13c4xglc7azd19pxfrjrpgp2yf615w4lgm";
+    sha256 = "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh";
   };
 
-  patches = [ ./clang.patch ];
+  # gcc-5.patch should be removed after 5.9
+  patches = [ ./clang.patch ./gcc-5.patch ];
 
   outputs = [ "dev" "lib" "out" "man" ];
   setOutputFlags = false; # some aren't supported
 
   configureFlags = [
     "--with-shared"
-    "--with-cxx-shared"
-    "--with-libtool"
     "--without-debug"
-    "--enable-overwrite"  # Needed for proper header installation
     "--enable-pc-files"
     "--enable-symlinks"
   ] ++ lib.optional unicode "--enable-widec";
 
-  nativeBuildInputs = [ pkgconfig libtool ];
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
 
   preConfigure = ''
@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
         for dylibtype in so dll dylib; do
           if [ -e "$lib/lib/lib''${library}$suffix.$dylibtype" ]; then
             ln -svf lib''${library}$suffix.$dylibtype $lib/lib/lib$library$newsuffix.$dylibtype
+            ln -svf lib''${library}$suffix.$dylibtype.${abiVersion} $lib/lib/lib$library$newsuffix.$dylibtype.${abiVersion}
           fi
         done
         for statictype in a dll.a la; do
@@ -88,6 +89,10 @@ stdenv.mkDerivation rec {
         ln -svf ''${library}$suffix.pc $dev/lib/pkgconfig/$library$newsuffix.pc
       done
     done
+  '';
+
+  preFixup = ''
+    rm "$lib"/lib/*.a
   '';
 
   meta = {
@@ -116,6 +121,6 @@ stdenv.mkDerivation rec {
 
   passthru = {
     ldflags = "-lncurses";
-    inherit unicode;
+    inherit unicode abiVersion;
   };
 }

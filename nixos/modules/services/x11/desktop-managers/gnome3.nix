@@ -104,6 +104,7 @@ in {
 
     services.xserver.desktopManager.session = singleton
       { name = "gnome3";
+        bgSupport = true;
         start = ''
           # Set GTK_DATA_PREFIX so that GTK+ can find the themes
           export GTK_DATA_PREFIX=${config.system.path}

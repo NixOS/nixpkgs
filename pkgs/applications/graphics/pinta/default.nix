@@ -1,44 +1,83 @@
-{stdenv, fetchurl, mono, gtksharp, pkgconfig}:
+{ stdenv, fetchFromGitHub, buildDotnetPackage, dotnetPackages, gtksharp,
+  gettext }:
 
-stdenv.mkDerivation {
-  name = "pinta-1.4";
+let
+  mono-addins = dotnetPackages.MonoAddins;
+in
+buildDotnetPackage rec {
+  name = "pinta-1.6";
 
-  src = fetchurl {
-    url = "https://github.com/PintaProject/Pinta/tarball/3f7ccfa93d";
-    name = "pinta-1.4.tar.gz";
-    sha256 = "1kgb4gy5l6bd0akniwhiqqkvqayr5jgdsvn2pgg1038q9raafnpn";
+  baseName = "Pinta";
+  version = "1.6";
+  outputFiles = [ "bin/*" ];
+  buildInputs = [ gtksharp mono-addins gettext ];
+  xBuildFiles = [ "Pinta.sln" ];
+
+  src = fetchFromGitHub {
+    owner = "PintaProject";
+    repo = "Pinta";
+    rev = version;
+    sha256 = "0vgswy981c7ys4q7js5k85sky7bz8v32wsfq3br4j41vg92pw97d";
   };
 
-  buildInputs = [mono gtksharp pkgconfig];
+  # Remove version information from nodes <Reference Include="... Version=... ">
+  postPatch = with stdenv.lib; let
+    csprojFiles = [
+      "Pinta/Pinta.csproj"
+      "Pinta.Core/Pinta.Core.csproj"
+      "Pinta.Effects/Pinta.Effects.csproj"
+      "Pinta.Gui.Widgets/Pinta.Gui.Widgets.csproj"
+      "Pinta.Resources/Pinta.Resources.csproj"
+      "Pinta.Tools/Pinta.Tools.csproj"
+    ];
+    versionedNames = [
+      "Mono\\.Addins"
+      "Mono\\.Posix"
+      "Mono\\.Addins\\.Gui"
+      "Mono\\.Addins\\.Setup"
+    ];
 
-  buildPhase = ''
-    # xbuild understands pkgconfig, but gtksharp does not give .pc for gdk-sharp
-    # So we have to go the GAC-way
-    export MONO_GAC_PREFIX=${gtksharp}
-    xbuild Pinta.sln
+    stripVersion = name: file: let
+        match = ''<Reference Include="${name}([ ,][^"]*)?"'';
+        replace = ''<Reference Include="${name}"'';
+      in "sed -i -re 's/${match}/${replace}/g' ${file}\n";
+
+    # Map all possible pairs of two lists
+    map2 = f: listA: listB: concatMap (a: map (f a) listB) listA;
+    concatMap2Strings = f: listA: listB: concatStrings (map2 f listA listB);
+  in
+    concatMap2Strings stripVersion versionedNames csprojFiles
+    + ''
+      # For some reason there is no Microsoft.Common.tasks file
+      # in ''${mono}/lib/mono/3.5 .
+      substituteInPlace Pinta.Install.proj \
+        --replace 'ToolsVersion="3.5"' 'ToolsVersion="4.0"' \
+        --replace "/usr/local" "$out"
+    '';
+
+  makeWrapperArgs = [
+    ''--prefix MONO_GAC_PREFIX ':' "${gtksharp}"''
+    ''--prefix LD_LIBRARY_PATH ':' "${gtksharp}/lib"''
+    ''--prefix LD_LIBRARY_PATH ':' "${gtksharp.gtk}/lib"''
+  ];
+
+  postInstall = ''
+    # Do automake's job manually
+    substitute xdg/pinta.desktop.in xdg/pinta.desktop \
+      --replace _Name Name \
+      --replace _Comment Comment \
+      --replace _GenericName GenericName \
+      --replace _X-GNOME-FullName X-GNOME-FullName
+
+    xbuild /target:CompileTranslations Pinta.Install.proj
+    xbuild /target:Install Pinta.Install.proj
   '';
-
-  # Very ugly - I don't know enough Mono to improve this. Isn't there any rpath in binaries?
-  installPhase = ''
-    mkdir -p $out/lib/pinta $out/bin
-    cp bin/*.{dll,exe} $out/lib/pinta
-    cat > $out/bin/pinta << EOF
-    #!/bin/sh
-    export MONO_GAC_PREFIX=${gtksharp}:\$MONO_GAC_PREFIX
-    export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${gtksharp}/lib:${gtksharp.gtk}/lib:${mono}/lib
-    exec ${mono}/bin/mono $out/lib/pinta/Pinta.exe
-    EOF
-    chmod +x $out/bin/pinta
-  '';
-
-  # Always needed on Mono, otherwise nothing runs
-  dontStrip = true; 
 
   meta = {
     homepage = http://www.pinta-project.com/;
     description = "Drawing/editing program modeled after Paint.NET";
     license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [ viric ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

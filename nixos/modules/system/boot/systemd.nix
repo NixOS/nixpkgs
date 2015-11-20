@@ -100,7 +100,7 @@ let
       # Maintaining state across reboots.
       "systemd-random-seed.service"
       "systemd-backlight@.service"
-      "systemd-rfkill@.service"
+      "systemd-rfkill.service"
 
       # Hibernate / suspend.
       "hibernate.target"
@@ -769,5 +769,12 @@ in
     systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
 
   };
+
+  # FIXME: Remove these eventually.
+  imports =
+    [ (mkRenamedOptionModule [ "boot" "systemd" "sockets" ] [ "systemd" "sockets" ])
+      (mkRenamedOptionModule [ "boot" "systemd" "targets" ] [ "systemd" "targets" ])
+      (mkRenamedOptionModule [ "boot" "systemd" "services" ] [ "systemd" "services" ])
+    ];
 
 }

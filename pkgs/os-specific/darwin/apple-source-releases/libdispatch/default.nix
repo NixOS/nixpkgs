@@ -8,6 +8,6 @@ appleDerivation {
 
     cp -r dispatch/*.h $out/include/dispatch
     cp -r private/*.h  $out/include/dispatch
-    cp -r os/object.h  $out/include/os
+    cp -r os/object*.h  $out/include/os
   '';
 }

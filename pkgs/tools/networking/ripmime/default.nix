@@ -29,8 +29,8 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["fixTarget" "doMakeInstall"];
   fixTarget = a.fullDepEntry (''
-    sed -i Makefile -e "s@LOCATION=.*@LOCATION=$out@"
-    mkdir -p "$out/bin" "$out/man/man1"
+    sed -i Makefile -e "s@LOCATION=.*@LOCATION=$out@" -e "s@man/man1@share/&@"
+    mkdir -p "$out/bin" "$out/share/man/man1"
   '') ["doUnpack" "minInit" "defEnsureDir"];
       
   meta = {

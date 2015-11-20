@@ -302,13 +302,13 @@ rec {
      `run-vm' will be left behind in the temporary build directory
      that allows you to boot into the VM and debug it interactively. */
 
-  runInLinuxVM = drv: lib.overrideDerivation drv (attrs: {
+  runInLinuxVM = drv: lib.overrideDerivation drv ({ memSize ? 512, QEMU_OPTS ? "", args, builder, ... }: {
     requiredSystemFeatures = [ "kvm" ];
     builder = "${bash}/bin/sh";
     args = ["-e" (vmRunCommand qemuCommandLinux)];
-    origArgs = attrs.args;
-    origBuilder = attrs.builder;
-    QEMU_OPTS = "${attrs.QEMU_OPTS or ""} -m ${toString (attrs.memSize or 512)}";
+    origArgs = args;
+    origBuilder = builder;
+    QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize}";
   });
 
 
@@ -1688,44 +1688,44 @@ rec {
     debian70x86_64 = debian7x86_64;
 
     debian7i386 = {
-      name = "debian-7.8-wheezy-i386";
-      fullName = "Debian 7.8 Wheezy (i386)";
+      name = "debian-7.9-wheezy-i386";
+      fullName = "Debian 7.9 Wheezy (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-i386/Packages.bz2;
-        sha256 = "d86c28cb4f1aa178e678c253944c674a60991a367349e58a90d9a3e939e4e4bc";
+        sha256 = "a390176680327fd52d6aada6dd8eee051c94ce49d80f0a68dc90ef51b81c3169";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian7x86_64 = {
-      name = "debian-7.8-wheezy-amd64";
-      fullName = "Debian 7.8 Wheezy (amd64)";
+      name = "debian-7.9-wheezy-amd64";
+      fullName = "Debian 7.9 Wheezy (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.bz2;
-        sha256 = "c8257d74c9411e2f0b9891a21f5dbf5fb088b46d1df043907a4d390b32da2931";
+        sha256 = "818d78c648505f91cb99f269178d4f62b56d4209cd51bebbc9bf2bd31c8c7156";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian8i386 = {
-      name = "debian-8.1-jessie-i386";
-      fullName = "Debian 8.1 Jessie (i386)";
+      name = "debian-8.2-jessie-i386";
+      fullName = "Debian 8.2 Jessie (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-i386/Packages.xz;
-        sha256 = "e658c2aebc3c0bc529e89de3ad916a71372f0a80161111d86a7dab1026644507";
+        sha256 = "f7eda33a296d792d467b84ba608a33f00ff249cb9a385c005586925645d83778";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian8x86_64 = {
-      name = "debian-8.1-jessie-amd64";
-      fullName = "Debian 8.1 Jessie (amd64)";
+      name = "debian-8.2-jessie-amd64";
+      fullName = "Debian 8.2 Jessie (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
-        sha256 = "265907f3cb05aff5f653907e9babd4704902f78cd5e355d4cd4ae590e4d5b043";
+        sha256 = "ff1b82b4c767769e594fd482de4ef8f70bce8e9f01fa8ef2d6952def0b071ba0";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
@@ -1837,6 +1837,7 @@ rec {
     "bzip2"
     "tar"
     "grep"
+    "mawk"
     "sed"
     "findutils"
     "g++"

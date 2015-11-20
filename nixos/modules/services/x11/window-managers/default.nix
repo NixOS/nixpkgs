@@ -10,6 +10,7 @@ in
   imports = [
     ./afterstep.nix
     ./bspwm.nix
+    ./clfswm.nix
     ./compiz.nix
     ./fluxbox.nix
     ./herbstluftwm.nix

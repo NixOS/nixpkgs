@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, bash, makeWrapper, coreutils, emacs, tcl, tk, boost, gmp, cacert }:
-
-assert stdenv.isLinux;
+{ stdenv, fetchurl, boost, emacs, gmp, makeWrapper
+, tcl-8_5, tk-8_5
+}:
 
 let
+
   version = "2.0.0";
-in
-stdenv.mkDerivation {
+
+in stdenv.mkDerivation {
   name = "mozart-binary-${version}";
 
   src = fetchurl {
@@ -14,7 +15,15 @@ stdenv.mkDerivation {
   };
 
   libPath = stdenv.lib.makeLibraryPath
-    [stdenv.cc.cc emacs tk tcl boost gmp];
+    [ stdenv.cc.cc
+      boost
+      emacs
+      gmp
+      tcl-8_5
+      tk-8_5
+    ];
+
+  TK_LIBRARY = "${tk-8_5}/lib/tk8.5";
 
   builder = ./builder.sh;
 

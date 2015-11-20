@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/rescrv/po6/archive/releases/${version}.zip";
-    sha256 = "14g3ichshnc4wd0iq3q3ymgaq84gjsbqcyn6lri7c7djgkhqijjx";
+    sha256 = "17grzkh6aw1f68qvkhivbb6vwbm6jd41ysbfn88pypf5lczxrxly";
   };
   buildInputs = [ unzip autoconf automake libtool ];
   preConfigure = "autoreconf -i";

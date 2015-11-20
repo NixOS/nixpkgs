@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/rescrv/busybee/archive/releases/${version}.zip";
-    sha256 = "0gr5h2j9rzwarblgcgddnxj39i282rvgn9vqlrcd60dx8c4dkm29";
+    sha256 = "0b51h1kmkf0s3d9y7wjqgp1pk1rk9i7n8bcgyj01kflzdgafbl0b";
   };
   buildInputs = [
     autoconf

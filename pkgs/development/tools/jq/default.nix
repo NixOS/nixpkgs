@@ -1,15 +1,15 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, oniguruma}:
 let
   s = # Generated upstream information
   rec {
     baseName="jq";
-    version="1.4";
+    version="1.5";
     name="${baseName}-${version}";
-    hash="17dk17h7qj6xpnsbc09qwsqkm6r7jhqbfkjvwq246yxmpsx4334r";
-    url="http://stedolan.github.io/jq/download/source/jq-1.4.tar.gz";
-    sha256="17dk17h7qj6xpnsbc09qwsqkm6r7jhqbfkjvwq246yxmpsx4334r";
+    url="https://github.com/stedolan/jq/releases/download/jq-1.5/jq-1.5.tar.gz";
+    sha256="0g29kyz4ykasdcrb0zmbrp2jqs9kv1wz9swx849i2d1ncknbzln4";
   };
   buildInputs = [
+    oniguruma
   ];
 in
 stdenv.mkDerivation {

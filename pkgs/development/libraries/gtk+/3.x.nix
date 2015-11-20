@@ -9,7 +9,7 @@ assert cupsSupport -> cups != null;
 
 let
   ver_maj = "3.18";
-  ver_min = "0";
+  ver_min = "5";
   version = "${ver_maj}.${ver_min}";
 in
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
-    sha256 = "7fb8ae257403317d3852bad28d064d35f67e978b1fed8b71d5997e87204271b9";
+    sha256 = "107aeb9a4244ce3c044becdd6dffc32d83202595181597180d4c736302a71852";
   };
 
   outputs = [ "dev" "out" ];

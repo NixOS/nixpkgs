@@ -34,7 +34,7 @@ rec {
   build =
 
     stdenv.mkDerivation {
-      name = "build";
+      name = "stdenv-bootstrap-tools";
 
       buildInputs = [nukeReferences cpio];
 
@@ -154,9 +154,19 @@ rec {
       allowedReferences = [];
     };
 
+  dist = stdenv.mkDerivation {
+    name = "stdenv-bootstrap-tools";
+
+    buildCommand = ''
+      mkdir -p $out/nix-support
+      echo "file tarball ${build}/on-server/bootstrap-tools.tar.xz" >> $out/nix-support/hydra-build-products
+      echo "file busybox ${build}/on-server/busybox" >> $out/nix-support/hydra-build-products
+    '';
+  };
+
   test = ((import ./default.nix) {
     inherit system;
-    
+
     customBootstrapFiles = {
       busybox = "${build}/on-server/busybox";
       bootstrapTools = "${build}/on-server/bootstrap-tools.tar.xz";

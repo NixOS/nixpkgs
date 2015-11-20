@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "subunit-${version}";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "https://launchpad.net/subunit/trunk/${version}/+download/${name}.tar.gz";
-    sha256 = "1fnhrrwww90746an2nz2kn9qdf9pklmaf5lm22gssl6648f2rp2m";
+    sha256 = "0lcah7p66c05p7xpw6ns1is0i02lh0nq8gq51mv4wyvbr6zaasa8";
   };
 
   buildInputs = [ pkgconfig check cppunit perl pythonPackages.wrapPython ];
@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "A streaming protocol for test results";
     homepage = https://launchpad.net/subunit;
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

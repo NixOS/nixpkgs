@@ -420,60 +420,94 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  MonoDevelopFSharpBinding = buildDotnetPackage rec {
-    baseName = "MonoDevelop.FSharpBinding";
-    version = "git-a09c8185eb";
+  MonoAddins = buildDotnetPackage rec {
+    baseName = "Mono.Addins";
+    version = "1.2";
+
+    xBuildFiles = [
+      "Mono.Addins/Mono.Addins.csproj"
+      "Mono.Addins.Setup/Mono.Addins.Setup.csproj"
+      "Mono.Addins.Gui/Mono.Addins.Gui.csproj"
+      "Mono.Addins.CecilReflector/Mono.Addins.CecilReflector.csproj"
+    ];
+    outputFiles = [ "bin/*" ];
 
     src = fetchFromGitHub {
-      owner = "fsharp";
-      repo = "fsharpbinding";
-      rev = "a09c8185ebf23fe2f7d22b14b4af2e3268d4f011";
-      sha256 = "1zp5gig42s1h681kch0rw5ykbbj0mcsmdvpyz1319wy9s7n2ng91";
+      owner = "mono";
+      repo = "mono-addins";
+      rev = "mono-addins-${version}";
+      sha256 = "1hnn0a2qsjcjprsxas424bzvhsdwy0yc2jj5xbp698c0m9kfk24y";
     };
 
-    buildInputs = [
-      fsharp
-      monodevelop
-      pkgs.gtk-sharp
-      pkgs.gnome-sharp
-      dotnetPackages.ExtCore
-      dotnetPackages.FSharpCompilerService
-      dotnetPackages.FSharpCompilerCodeDom
-      dotnetPackages.FSharpAutoComplete
-      dotnetPackages.Fantomas
-    ];
-
-    patches = [
-      ../development/dotnet-modules/patches/monodevelop-fsharpbinding.references.patch
-      ../development/dotnet-modules/patches/monodevelop-fsharpbinding.addin-xml.patch
-    ];
-
-    preConfigure = ''
-      substituteInPlace monodevelop/configure.fsx --replace /usr/lib/monodevelop ${monodevelop}/lib/monodevelop
-      substituteInPlace monodevelop/configure.fsx --replace bin/MonoDevelop.exe ../../bin/monodevelop
-      (cd monodevelop; fsharpi ./configure.fsx)
-    '';
-
-    # This will not work as monodevelop probably looks in absolute nix store path rather than path
-    # relative to its executable. Need to ln -s /run/current-system/sw/lib/dotnet/MonoDevelop.FSharpBinding
-    # ~/.local/share/MonoDevelop-5.0/LocalInstall/Addins/ to install until we have a better way
-
-    # postInstall = ''
-    #   mkdir -p "$out/lib/monodevelop/AddIns"
-    #   ln -sv "$out/lib/dotnet/${baseName}" "$out/lib/monodevelop/AddIns"
-    # '';
-
-    xBuildFiles = [ "monodevelop/MonoDevelop.FSharpBinding/MonoDevelop.FSharp.mac-linux.fsproj" ];
-    outputFiles = [ "monodevelop/bin/mac-linux/Release/*" ];
+    buildInputs = [ pkgs.gtk-sharp ];
 
     meta = {
-      description = "F# addin for MonoDevelop 5.9";
-      homepage = "https://github.com/fsharp/fsharpbinding/tree/5.9";
-      license = stdenv.lib.licenses.asl20;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      description = "A generic framework for creating extensible applications";
+      homepage = http://www.mono-project.com/Mono.Addins;
+      longDescription = ''
+        A generic framework for creating extensible applications,
+        and for creating libraries which extend those applications.
+      '';
+      license = stdenv.lib.licenses.mit;
     };
   };
+
+  # MonoDevelopFSharpBinding = buildDotnetPackage rec {
+  #   baseName = "MonoDevelop.FSharpBinding";
+  #   version = "git-a09c8185eb";
+
+  #   broken = true;
+
+  #   src = fetchFromGitHub {
+  #     owner = "fsharp";
+  #     repo = "fsharpbinding";
+  #     rev = "a09c8185ebf23fe2f7d22b14b4af2e3268d4f011";
+  #     sha256 = "1zp5gig42s1h681kch0rw5ykbbj0mcsmdvpyz1319wy9s7n2ng91";
+  #   };
+
+  #   buildInputs = [
+  #     fsharp
+  #     monodevelop
+  #     pkgs.gtk-sharp
+  #     pkgs.gnome-sharp
+  #     dotnetPackages.ExtCore
+  #     dotnetPackages.FSharpCompilerService
+  #     dotnetPackages.FSharpCompilerCodeDom
+  #     dotnetPackages.FSharpAutoComplete
+  #     dotnetPackages.Fantomas
+  #   ];
+
+  #   patches = [
+  #     ../development/dotnet-modules/patches/monodevelop-fsharpbinding.references.patch
+  #     ../development/dotnet-modules/patches/monodevelop-fsharpbinding.addin-xml.patch
+  #   ];
+
+  #   preConfigure = ''
+  #     substituteInPlace monodevelop/configure.fsx --replace /usr/lib/monodevelop ${monodevelop}/lib/monodevelop
+  #     substituteInPlace monodevelop/configure.fsx --replace bin/MonoDevelop.exe ../../bin/monodevelop
+  #     (cd monodevelop; fsharpi ./configure.fsx)
+  #   '';
+
+  #   # This will not work as monodevelop probably looks in absolute nix store path rather than path
+  #   # relative to its executable. Need to ln -s /run/current-system/sw/lib/dotnet/MonoDevelop.FSharpBinding
+  #   # ~/.local/share/MonoDevelop-5.0/LocalInstall/Addins/ to install until we have a better way
+
+  #   # postInstall = ''
+  #   #   mkdir -p "$out/lib/monodevelop/AddIns"
+  #   #   ln -sv "$out/lib/dotnet/${baseName}" "$out/lib/monodevelop/AddIns"
+  #   # '';
+
+  #   xBuildFiles = [ "monodevelop/MonoDevelop.FSharpBinding/MonoDevelop.FSharp.mac-linux.fsproj" ];
+  #   outputFiles = [ "monodevelop/bin/mac-linux/Release/*" ];
+
+  #   meta = {
+  #     description = "F# addin for MonoDevelop 5.9";
+  #     homepage = "https://github.com/fsharp/fsharpbinding/tree/5.9";
+  #     license = stdenv.lib.licenses.asl20;
+  #     maintainers = with stdenv.lib.maintainers; [ obadz ];
+  #     platforms = with stdenv.lib.platforms; linux;
+  #   };
+  # };
 
   NDeskOptions = stdenv.mkDerivation rec {
     baseName = "NDesk.Options";

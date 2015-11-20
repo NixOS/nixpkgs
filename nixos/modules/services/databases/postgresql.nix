@@ -119,7 +119,7 @@ in
       extraPlugins = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExample "pkgs.postgis";
+        example = literalExample "[ (pkgs.postgis.override { postgresql = pkgs.postgresql94; }).v_2_1_4 ]";
         description = ''
           When this list contains elements a new store path is created.
           PostgreSQL and the elments are symlinked into it. Then pg_config,
@@ -202,6 +202,8 @@ in
                   # For non-root operation.
                   initdb
                 fi
+                # See postStart!
+                touch "${cfg.dataDir}/.first_startup"
             fi
 
             ln -sfn "${configFile}" "${cfg.dataDir}/postgresql.conf"

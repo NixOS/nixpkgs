@@ -36,6 +36,10 @@ let
 
     buildFlags = stdenv.lib.optionalString stdenv.isDarwin "macosx";
 
+    postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace Makefile --replace 10.4 10.5
+    '';
+
     preBuild = ''
       makeFlagsArray=(
         ${stdenv.lib.optionalString stdenv.cc.isClang "CC=$CC"}

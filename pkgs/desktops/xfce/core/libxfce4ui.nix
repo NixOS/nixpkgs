@@ -1,9 +1,12 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, libxfce4util, xfconf
-, libglade, libstartup_notification, hicolor_icon_theme }:
+, libglade, libstartup_notification, hicolor_icon_theme
+, withGtk3 ? false, gtk3
+}:
 let
   p_name  = "libxfce4ui";
   ver_maj = "4.12";
   ver_min = "1";
+  inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
@@ -18,13 +21,10 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig intltool gtk libxfce4util xfconf libglade
       libstartup_notification hicolor_icon_theme
-    ];
+    ] ++ optional withGtk3 gtk3;
 
-  #TODO: gladeui
-  # Install into our own prefix instead.
-  configureFlags = [
-    "--with-libglade-module-path=$(out)/lib/libglade/2.0"
-  ];
+  #TODO: glade?
+  configureFlags = optional withGtk3 "--enable-gtk3";
 
   enableParallelBuilding = true;
 

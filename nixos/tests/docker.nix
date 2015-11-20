@@ -11,6 +11,8 @@ import ./make-test.nix ({ pkgs, ...} : {
       { config, pkgs, ... }:
         {
           virtualisation.docker.enable = true;
+          # FIXME: The default "devicemapper" storageDriver fails in NixOS VM
+          # tests.
           virtualisation.docker.storageDriver = "overlay";
         };
     };

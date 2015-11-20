@@ -27,6 +27,5 @@ stdenv.mkDerivation {
     description = "Qt wrapper for ModemManager DBus API";
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = [ maintainers.jgeerds ];
   };
 }

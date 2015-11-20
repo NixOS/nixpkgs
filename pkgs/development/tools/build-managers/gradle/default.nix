@@ -1,11 +1,11 @@
 { stdenv, fetchurl, unzip, jdk, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "gradle-2.6";
+  name = "gradle-2.8";
 
   src = fetchurl {
     url = "http://services.gradle.org/distributions/${name}-bin.zip";
-    sha256 = "10ww9vqyi5jkdw5bna14y63fjfhh40n81q7qsfhdycgj19b8ra8q";
+    sha256 = "1jq3m6ihvcxyp37mwsg3i8li9hd6rpv8ri8ih2mgvph4y71bk3d8";
   };
 
   installPhase = ''

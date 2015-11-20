@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage    = "http://dev.gentoo.org/~vapier/dist/";
     license     = licenses.gpl2;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice wizeman ];
+    maintainers = with maintainers; [ thoughtpolice ];
   };
 }

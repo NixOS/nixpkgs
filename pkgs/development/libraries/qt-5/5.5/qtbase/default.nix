@@ -86,13 +86,14 @@ stdenv.mkDerivation {
         xdg-config-dirs = ./0008-xdg-config-dirs.patch;
         decrypt-ssl-traffic = ./0009-decrypt-ssl-traffic.patch;
         mkspecs-libgl = substituteAll {
-          src = ./0014-mkspecs-libgl.patch;
+          src = ./0010-mkspecs-libgl.patch;
           mesa_inc = mesa.dev;
           mesa_lib = mesa.out;
         };
+        nix-profiles-library-paths = ./0011-nix-profiles-library-paths.patch;
     in [
       dlopen-resolv dlopen-gl tzdir dlopen-libXcursor dlopen-openssl
-      dlopen-dbus xdg-config-dirs
+      dlopen-dbus xdg-config-dirs nix-profiles-library-paths
     ]
     ++ optional gtkStyle dlopen-gtkstyle
     ++ optional decryptSslTraffic decrypt-ssl-traffic

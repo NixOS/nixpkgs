@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     # README from tarball says "BSD-like" and points to non-existing LICENSE
     # file...
     license = "Click"; # MIT with extra clause, https://github.com/kohler/t1utils/blob/master/LICENSE
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
   };
 }

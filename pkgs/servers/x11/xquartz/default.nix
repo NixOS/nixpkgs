@@ -146,6 +146,13 @@ in stdenv.mkDerivation {
       --replace "@STARTX@"          "$defaultStartX" \
       --replace "@FONTCONFIG_FILE@" "$fontsConfPath"
 
+    mkdir -p $out/lib/X11/xinit/privileged_startx.d
+    cp ${./privileged} $out/lib/X11/xinit/privileged_startx.d/privileged
+    substituteInPlace $out/lib/X11/xinit/privileged_startx.d/privileged \
+      --replace "@PATH@"            "$out/bin:${env}" \
+      --replace "@FONTCONFIG_FILE@" "$fontsConfPath" \
+      --replace "@FONT_CACHE@"      "$out/bin/font_cache"
+
     cp ${./font_cache} $out/bin/font_cache
     substituteInPlace $out/bin/font_cache \
       --replace "@PATH@"            "$out/bin:${env}" \

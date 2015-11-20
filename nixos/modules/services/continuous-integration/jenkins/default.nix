@@ -65,11 +65,15 @@ in {
       };
 
       environment = mkOption {
-        default = { NIX_REMOTE = "daemon"; };
+        default = { };
         type = with types; attrsOf str;
         description = ''
           Additional environment variables to be passed to the jenkins process.
-          The environment will always include JENKINS_HOME.
+          As a base environment, jenkins receives NIX_PATH, SSL_CERT_FILE and
+          GIT_SSL_CAINFO from <option>environment.sessionVariables</option>,
+          NIX_REMOTE is set to "daemon" and JENKINS_HOME is set to
+          the value of <option>services.jenkins.home</option>. This option has
+          precedence and can be used to override those mentioned variables.
         '';
       };
 
@@ -106,11 +110,28 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      environment = {
-        JENKINS_HOME = cfg.home;
-      } // cfg.environment;
+      environment =
+        let
+          selectedSessionVars =
+            lib.filterAttrs (n: v: builtins.elem n
+                [ "NIX_PATH"
+                  "SSL_CERT_FILE"
+                  "GIT_SSL_CAINFO"
+                ])
+              config.environment.sessionVariables;
+        in
+          selectedSessionVars //
+          { JENKINS_HOME = cfg.home;
+            NIX_REMOTE = "daemon";
+          } //
+          cfg.environment;
 
       path = cfg.packages;
+
+      # Force .war (re)extraction, or else we might run stale Jenkins.
+      preStart = ''
+        rm -rf ${cfg.home}/war
+      '';
 
       script = ''
         ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins} --httpPort=${toString cfg.port} ${concatStringsSep " " cfg.extraOptions}

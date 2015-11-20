@@ -6,6 +6,7 @@
 , legacyGUI ? true, wxGTK ? null
 # For now both qt5 and wxwidgets gui's are enabled, if wxwidgets is disabled the
 # build system doesn't install desktop entries, icons, etc...
+, libiconv
 }:
 
 let
@@ -51,7 +52,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost expat file flac libebml libmatroska libogg libvorbis xdg_utils zlib
-  ] ++ optional withGUI qt5
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ]
+    ++ optional withGUI qt5
     ++ optional legacyGUI wxGTK;
 
   enableParallelBuilding = true;
@@ -69,6 +71,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.bunkus.org/videotools/mkvtoolnix/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ codyopel fuuzetsu ];
-    platforms = platforms.unix;
+    platforms = platforms.all;
   };
 }

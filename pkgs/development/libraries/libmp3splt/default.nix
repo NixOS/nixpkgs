@@ -1,14 +1,14 @@
-{stdenv, fetchurl, libtool, libmad }:
+{ stdenv, fetchurl, libtool, libmad, libid3tag }:
 
 stdenv.mkDerivation rec {
   name = "libmp3splt-0.9.1";
-  
+
   src = fetchurl {
     url = "http://prdownloads.sourceforge.net/mp3splt/${name}.tar.gz";
     sha256 = "17ar9d669cnirkz1kdrim687wzi36y8inapnj4svlsvr00vdzfxa";
   };
 
-  buildInputs = [ libtool libmad ];
+  buildInputs = [ libtool libmad libid3tag ];
 
   configureFlags = "--disable-pcre";
 

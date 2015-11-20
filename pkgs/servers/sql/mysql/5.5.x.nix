@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
   postInstall = ''
     sed -i -e "s|basedir=\"\"|basedir=\"$out\"|" $out/bin/mysql_install_db
-    rm -r $out/mysql-test $out/sql-bench $out/data
+    rm -r $out/mysql-test $out/sql-bench $out/data "$out"/lib/*.a
     rm $out/share/man/man1/mysql-test-run.pl.1
   '';
 

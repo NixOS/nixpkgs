@@ -14,6 +14,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pycrypto ];
 
   patchPhase = ''
+    sed -i '/build\//d' setup.py
     substituteInPlace setup.py --replace "/etc" "$out/etc"
     substituteInPlace knockknock.py --replace 'existsInPath("hping3")' '"${hping}/bin/hping3"'
   '';

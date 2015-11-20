@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "zeroc-ice-${version}";
-  version = "3.6.0";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "zeroc-ice";
     repo = "ice";
     rev = "v${version}";
-    sha256 = "192lhynf369bbrvbb9nldc49n09kyxp8vg8j9d7w5h2c1yxpjgjq";
+    sha256 = "044511zbhwiach1867r3xjz8i4931wn7c1l3nz4kcpgks16kqhhz";
   };
 
   buildInputs = [ mcpp bzip2 expat openssl db5 ];

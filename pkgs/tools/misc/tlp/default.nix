@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, makeWrapper, perl, systemd, iw, rfkill, hdparm, ethtool, inetutils, kmod
-, enableRDW ? true, networkmanager }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, perl, systemd, iw, rfkill, hdparm, ethtool, inetutils
+, kmod, pciutils, smartmontools, x86_energy_perf_policy
+, enableRDW ? false, networkmanager
+}:
 
-let version = "0.7";
+let version = "0.8";
 in stdenv.mkDerivation {
-  inherit enableRDW;
-
   name = "tlp-${version}";
 
   src = fetchFromGitHub {
         owner = "linrunner";
         repo = "TLP";
         rev = "${version}";
-        sha256 = "0vgx2jnk9gp41fw992l9dmv462jpcrnwqkzsa8z0lh0l77ax2jcg";
+        sha256 = "19fvk0xz6i2ryf41akk4jg1c4sb4rcyxdl9fr0w4lja7g76d5zww";
       };
 
   makeFlags = [ "DESTDIR=$(out)"
@@ -26,10 +26,11 @@ in stdenv.mkDerivation {
 
   buildInputs = [ perl ];
 
-  paths = with stdenv.lib;
-          concatMapStringsSep ":" (x: "${x}/bin")
-          ([ iw rfkill hdparm ethtool inetutils systemd kmod ]
-           ++ optional enableRDW networkmanager
+  paths = lib.makeSearchPath "bin"
+          ([ iw rfkill hdparm ethtool inetutils systemd kmod pciutils smartmontools
+             x86_energy_perf_policy
+           ]
+           ++ lib.optional enableRDW networkmanager
           );
 
   installTargets = [ "install-tlp" ] ++ stdenv.lib.optional enableRDW "install-rdw";
@@ -40,13 +41,6 @@ in stdenv.mkDerivation {
       wrapProgram "$i" \
         --prefix PATH : "$paths"
     done
-    if [ "$enableRDW" = "1" ]; then
-      for i in $out/etc/NetworkManager/dispatcher.d/*; do
-        sed -i "s,/usr/lib/,$out/lib/,g" "$i"
-        wrapProgram "$i" \
-          --prefix PATH : "$paths"
-      done
-    fi
 
     for i in $out/lib/udev/rules.d/*; do
       sed -i "s,RUN+=\",\\0$out,g; s,/usr/sbin,/bin,g" "$i"
@@ -55,9 +49,13 @@ in stdenv.mkDerivation {
     for i in man/*; do
       install -D $i $out/share/man/man''${i##*.}/$(basename $i)
     done
+  '' + lib.optionalString enableRDW ''
+    for i in $out/etc/NetworkManager/dispatcher.d/*; do
+      sed -i "s,/usr/lib/,$out/lib/,g" "$i"
+      wrapProgram "$i" \
+        --prefix PATH : "$paths"
+    done
   '';
-
-  passthru = { inherit enableRDW; };
 
   meta = with stdenv.lib; {
     description = "Advanced Power Management for Linux";

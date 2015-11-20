@@ -152,6 +152,22 @@ sub pciCheck {
         push @kernelModules, "wl";
      }
 
+    # broadcom FullMac driver
+    # list taken from
+    # https://wireless.wiki.kernel.org/en/users/Drivers/brcm80211#brcmfmac
+    if ($vendor eq "0x14e4" &&
+        ($device eq "0x43a3" || $device eq "0x43df" || $device eq "0x43ec" ||
+         $device eq "0x43d3" || $device eq "0x43d9" || $device eq "0x43e9" ||
+         $device eq "0x43ba" || $device eq "0x43bb" || $device eq "0x43bc" ||
+         $device eq "0xaa52" || $device eq "0x43ca" || $device eq "0x43cb" ||
+         $device eq "0x43cc" || $device eq "0x43c3" || $device eq "0x43c4" ||
+         $device eq "0x43c5"
+        ) )
+    {
+        # we need e.g. brcmfmac43602-pcie.bin
+        push @imports, "<nixos/modules/hardware/network/broadcom-43xx.nix>";
+    }
+
     # Can't rely on $module here, since the module may not be loaded
     # due to missing firmware.  Ideally we would check modules.pcimap
     # here.
@@ -217,8 +233,8 @@ foreach my $path (glob "/sys/bus/usb/devices/*") {
 }
 
 
-# Add the modules for all block devices.
-foreach my $path (glob "/sys/class/block/*") {
+# Add the modules for all block and MMC devices.
+foreach my $path (glob "/sys/class/{block,mmc_host}/*") {
     my $module;
     if (-e "$path/device/driver/module") {
         $module = basename `readlink -f $path/device/driver/module`;

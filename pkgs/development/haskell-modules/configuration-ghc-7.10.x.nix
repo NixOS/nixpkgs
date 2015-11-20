@@ -212,4 +212,7 @@ self: super: {
   # https://github.com/DanielG/cabal-helper/issues/10
   cabal-helper = dontCheck super.cabal-helper;
 
+  # Re-build this package to fix broken binaries on Hydra.
+  math-functions = triggerRebuild super.math-functions 2;
+
 }

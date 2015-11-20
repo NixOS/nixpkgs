@@ -8,14 +8,14 @@ let
     stdenv.cross;
 in
 stdenv.mkDerivation rec {
-  name = "openssl-1.0.2d";
+  name = "openssl-1.0.1p";
 
   src = fetchurl {
     urls = [
       "http://www.openssl.org/source/${name}.tar.gz"
       "http://openssl.linux-mirror.org/source/${name}.tar.gz"
     ];
-    sha256 = "671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8";
+    sha1 = "9d1977cc89242cd11471269ece2ed4650947c046";
   };
 
   patches = optional stdenv.isCygwin ./1.0.1-cygwin64.patch
@@ -74,11 +74,18 @@ stdenv.mkDerivation rec {
   '';
 
   crossAttrs = {
+    # upstream patch: https://rt.openssl.org/Ticket/Display.html?id=2558
+    postPatch = ''
+       sed -i -e 's/[$][(]CROSS_COMPILE[)]windres/$(WINDRES)/' Makefile.shared
+    '';
     preConfigure=''
       # It's configure does not like --build or --host
       export configureFlags="${concatStringsSep " " (configureFlags ++ [ opensslCrossSystem ])}"
+      # WINDRES and RANLIB need to be prefixed when cross compiling;
+      # the openssl configure script doesn't do that for us
+      export WINDRES=${stdenv.cross.config}-windres
+      export RANLIB=${stdenv.cross.config}-ranlib
     '';
-
     configureScript = "./Configure";
   };
 

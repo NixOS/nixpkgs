@@ -41,6 +41,9 @@ with stdenv.lib;
     PM_RUNTIME y
   ''}
   PM_ADVANCED_DEBUG y
+  ${optionalString (versionAtLeast version "3.11") ''
+    X86_INTEL_LPSS y
+  ''}
   ${optionalString (versionAtLeast version "3.10") ''
     X86_INTEL_PSTATE y
   ''}
@@ -316,6 +319,9 @@ with stdenv.lib;
   MOUSE_PS2_ELANTECH y # Elantech PS/2 protocol extension
   MTRR_SANITIZER y
   NET_FC y # Fibre Channel driver support
+  ${optionalString (versionAtLeast version "3.11") ''
+    PINCTRL_BAYTRAIL y # GPIO on Intel Bay Trail, for some Chromebook internal eMMC disks
+  ''}
   PPP_MULTILINK y # PPP multilink support
   PPP_FILTER y
   REGULATOR y # Voltage and Current Regulator Support
@@ -478,10 +484,18 @@ with stdenv.lib;
   ''}
   ZRAM m
 
-  # Enable firmware loading via udev (legacy).
-  ${optionalString (versionAtLeast version "3.17") ''
-    FW_LOADER_USER_HELPER_FALLBACK y
+  # Enable PCIe and USB for the brcmfmac driver
+  BRCMFMAC_USB? y
+  BRCMFMAC_PCIE? y
+
+  # Support x2APIC (which requires IRQ remapping).
+  ${optionalString (stdenv.system == "x86_64-linux") ''
+    X86_X2APIC y
+    IRQ_REMAP y
   ''}
+
+  # Disable the firmware helper fallback, udev doesn't implement it any more
+  FW_LOADER_USER_HELPER_FALLBACK? n
 
   ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}

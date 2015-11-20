@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub }:
 
-let version = "7.22.01"; in
+let version = "7.23.02"; in
 stdenv.mkDerivation {
   name = "icmake-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "1pgl8bami4v86ja40in4fsdx940f6q85l1s4b9k53zl29pm85v5k";
+    sha256 = "0gp2f8bw9i7vccsbz878mri0k6fls2x8hklbbr6mayag397gr928";
     rev = version;
     repo = "icmake";
     owner = "fbb-git";

@@ -34,6 +34,7 @@
 , stripped ? true
 , gnused ? null
 , binutils ? null
+, cloog # unused; just for compat with gcc4, as we override the parameter on some places
 }:
 
 assert langJava     -> zip != null && unzip != null

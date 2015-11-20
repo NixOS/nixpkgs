@@ -5,13 +5,13 @@
 stdenv.mkDerivation rec {
   name = "watchman-${version}";
 
-  version = "3.0.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     rev = "v${version}";
-    sha256 = "0sf0cp9p7savlgmzqj5m9fkpfa5a15pv98rkilxnbmx9wrjvypwk";
+    sha256 = "01ak2gsmc76baswpivzz00g22r547mpp8l7xfziwl5804nzszrcg";
   };
 
   buildInputs = [ autoconf automake pcre ];
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
       "--enable-lenient"
       "--enable-conffile=${if confFile == null then "no" else confFile}"
       "--with-pcre=yes"
+      "--disable-statedir"
   ];
 
   preConfigure = ''

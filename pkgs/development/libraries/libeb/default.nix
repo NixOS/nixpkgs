@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       common way to distribute electronic dictionaries in Japan.  It supports
       the EB, EBG, EBXA, EBXA-C, S-EBXA and EPWING formats.
     '';
-    licence = licenses.bsd3;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ gebner ];
   };
 }

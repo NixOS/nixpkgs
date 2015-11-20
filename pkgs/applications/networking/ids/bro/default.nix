@@ -2,11 +2,11 @@
 , geoip, gperftools }:
 
 stdenv.mkDerivation rec {
-  name = "bro-2.4";
+  name = "bro-2.4.1";
   
   src = fetchurl {
     url = "http://www.bro.org/downloads/release/${name}.tar.gz";
-    sha256 = "1ch8w8iakr2ajbigaad70b6mfv01s2sbdqgmrqm9q9zc1c5hs33l";
+    sha256 = "1xn8qwgnxihlr4lmg7kz2vqjk46aqgwc8878pbv30ih2lmrrdffq";
   };
   
   buildInputs = [ cmake flex bison openssl libpcap perl zlib file curl geoip

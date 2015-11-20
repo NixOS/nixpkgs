@@ -1,29 +1,30 @@
 { stdenv, fetchurl, pkgconfig, pixman, celt, alsaLib, openssl
 , libXrandr, libXfixes, libXext, libXrender, libXinerama, libjpeg, zlib
-, spice_protocol, python, pyparsing, glib }:
+, spice_protocol, python, pyparsing, glib, cyrus_sasl, lz4 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "spice-0.12.5";
+  name = "spice-0.12.6";
 
   src = fetchurl {
     url = "http://www.spice-space.org/download/releases/${name}.tar.bz2";
-    sha256 = "10gmqaanfg929aamf11n4si4r3d1g7z9qjdclsl9kjv7iw6s42a2";
+    sha256 = "1dk9hp78ldqb0a52kdlqq0scnk3drnhj7rsw8r7hmy2v2cqflj7i";
   };
 
   buildInputs = [ pixman celt alsaLib openssl libjpeg zlib
                   libXrandr libXfixes libXrender libXext libXinerama
-                  python pyparsing glib ];
+                  python pyparsing glib cyrus_sasl lz4 ];
 
   nativeBuildInputs = [ pkgconfig spice_protocol ];
 
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
   configureFlags = [
-    "--with-sasl=no"
+    "--with-sasl"
     "--disable-smartcard"
     "--enable-client"
+    "--enable-lz4"
   ];
 
   postInstall = ''

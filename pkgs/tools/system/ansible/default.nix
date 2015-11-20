@@ -1,13 +1,13 @@
 { windowsSupport ? true, stdenv, fetchurl, pythonPackages, python }:
 
 pythonPackages.buildPythonPackage rec {
-  version = "1.9.3";
+  version = "1.9.4";
   name = "ansible-${version}";
   namePrefix = "";
 
   src = fetchurl {
-    url = "http://releases.ansible.com/ansible/ansible-${version}.tar.gz";
-    sha256 = "1vgfsjqb5gbs30ymqgq3q2kxzn3fvh8680n14yj5c040zm1gd515";
+    url = "https://releases.ansible.com/ansible/${name}.tar.gz";
+    sha256 = "1qvgzb66nlyc2ncmgmqhzdk0x0p2px09967p1yypf5czwjn2yb4p";
   };
 
   prePatch = ''

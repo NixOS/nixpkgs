@@ -2,23 +2,17 @@
 
 let
   version = "1.0.6";
-  inherit (stdenv.lib) optionalString;
-  sharedLibrary = with stdenv;
-    !( isDarwin || (stdenv ? isStatic) || system == "i686-cygwin" || linkStatic );
-in
 
-stdenv.mkDerivation rec {
+  sharedLibrary = !stdenv.isDarwin && !(stdenv ? isStatic)
+               && stdenv.system != "i686-cygwin" && !linkStatic;
+
+in stdenv.mkDerivation {
   name = "bzip2-${version}";
 
   src = fetchurl {
     url = "http://www.bzip.org/${version}/bzip2-${version}.tar.gz";
     sha256 = "1kfrc7f0ja9fdn6j1y6yir6li818npy6217hvr3wzmnmzhs8z152";
   };
-
-  patchPhase = optionalString stdenv.isDarwin
-    "substituteInPlace Makefile --replace 'CC=gcc' 'CC=clang'";
-
-  outputs = [ "dev" "bin" "static" ] ++ stdenv.lib.optional sharedLibrary "out";
 
   crossAttrs = {
     patchPhase = ''
@@ -31,27 +25,43 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  preConfigure = "substituteInPlace Makefile --replace '$(PREFIX)/man' '$(PREFIX)/share/man'";
+  outputs = [ "dev" "bin" "static" ] ++ stdenv.lib.optional sharedLibrary "out";
 
-  preBuild = optionalString sharedLibrary "make -f Makefile-libbz2_so";
-  makeFlags = optionalString linkStatic "LDFLAGS=-static";
+  preBuild = stdenv.lib.optionalString sharedLibrary ''
+    make -f Makefile-libbz2_so
+  '';
 
-  installFlags = "PREFIX=$(bin)";
-
-  postInstall = optionalString sharedLibrary ''
+  preInstall = stdenv.lib.optionalString sharedLibrary ''
     mkdir -p $out/lib
     mv libbz2.so* $out/lib
-    ( cd $out/lib && ln -s libbz2.so.1.*.* libbz2.so && ln -s libbz2.so.1.*.* libbz2.so.1 )
-  '' + ''
-    mkdir -p "$static"
-    mv "$bin/lib" "$static/"
-    (
-      cd "$bin/bin"
-      rm {bunzip2,bzcat}*
-      ln -s bzip2 bunzip2
-      ln -s bzip2 bzcat
+    ( cd $out/lib &&
+      ln -s libbz2.so.1.0.? libbz2.so &&
+      ln -s libbz2.so.1.0.? libbz2.so.1
     )
   '';
+
+  installFlags = [ "PREFIX=$(bin)" ];
+
+  postInstall = ''
+    rm $bin/bin/bunzip2* $bin/bin/bzcat*
+    ln -s bzip2 $bin/bin/bunzip2
+    ln -s bzip2 $bin/bin/bzcat
+
+    mkdir "$static"
+    mv "$bin/lib" "$static/"
+  '';
+
+  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile --replace 'CC=gcc' 'CC=clang'
+  '';
+
+  preConfigure = ''
+    substituteInPlace Makefile --replace '$(PREFIX)/man' '$(PREFIX)/share/man'
+  '';
+
+  makeFlags = stdenv.lib.optional linkStatic "LDFLAGS=-static";
+
+  inherit linkStatic;
 
   meta = {
     homepage = "http://www.bzip.org";

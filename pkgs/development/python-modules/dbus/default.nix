@@ -15,6 +15,10 @@ if isPyPy then throw "dbus-python not supported for interpreter ${python.executa
 
   doCheck = false; # https://bugs.freedesktop.org/show_bug.cgi?id=57140
 
+  # Set empty pythonPath, so that the package is recognized as a python package
+  # for python.buildEnv
+  pythonPath = [];
+
   meta = {
     description = "Python DBus bindings";
     license = stdenv.lib.licenses.mit;

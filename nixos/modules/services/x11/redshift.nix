@@ -22,14 +22,16 @@ in {
     latitude = mkOption {
       type = types.str;
       description = ''
-        Your current latitude.
+        Your current latitude, between
+        <literal>-90.0</literal> and <literal>90.0</literal>.
       '';
     };
 
     longitude = mkOption {
       type = types.str;
       description = ''
-        Your current longitude.
+        Your current longitude, between
+        between <literal>-180.0</literal> and <literal>180.0</literal>.
       '';
     };
 
@@ -38,14 +40,16 @@ in {
         type = types.int;
         default = 5500;
         description = ''
-          Colour temperature to use during the day.
+          Colour temperature to use during the day, between
+          <literal>1000</literal> and <literal>25000</literal> K.
         '';
       };
       night = mkOption {
         type = types.int;
         default = 3700;
         description = ''
-          Colour temperature to use at night.
+          Colour temperature to use at night, between
+          <literal>1000</literal> and <literal>25000</literal> K.
         '';
       };
     };

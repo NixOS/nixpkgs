@@ -61,7 +61,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preConfigure = ''
+  postPatch = ''
+    pwd="$(type -P pwd)"
+    substituteInPlace dist/PathTools/Cwd.pm \
+      --replace "pwd_cmd = 'pwd'" "pwd_cmd = '$pwd'"
+  '';
+
+  preConfigure =
+    ''
       configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
     '' + optionalString stdenv.isArm ''
       configureFlagsArray=(-Dldflags="-lm -lrt")

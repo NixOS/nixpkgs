@@ -1,14 +1,15 @@
-{stdenv, fetchurl, utillinux}:
+{ stdenv, fetchurl, utillinux, libcap }:
 
 stdenv.mkDerivation rec {
-  name = "fakeroot-1.18.4";
+  version = "1.20.2";
+  name = "fakeroot-${version}";
 
   src = fetchurl {
-    url = https://launchpad.net/ubuntu/+archive/primary/+files/fakeroot_1.18.4.orig.tar.bz2;
-    sha256 = "18mydrz49n7ic7147pikkpdb96x00s9wisdk6hrc75ll7vx9wd8a";
+    url = "http://http.debian.net/debian/pool/main/f/fakeroot/fakeroot_${version}.orig.tar.bz2";
+    sha256 = "0313xb2j6a4wihrw9gfd4rnyqw7zzv6wf3rfh2gglgnv356ic2kw";
   };
 
-  buildInputs = [ utillinux /* provides getopt */ ];
+  buildInputs = [ utillinux /* provides getopt */ libcap ];
 
   postUnpack = ''
     for prog in getopt; do

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "ibus-${version}";
-  version = "1.5.10";
+  version = "1.5.11";
 
   src = fetchurl {
     url = "https://github.com/ibus/ibus/releases/download/${version}/${name}.tar.gz";
-    sha256 = "152mdzi9hr246spnn7bkb4gy16x30082xwq460gmm1q2cs0bf08x";
+    sha256 = "1g26llizd26h9sfz4xdq8krhz19hn08pirvfbkk3g89ri8lmm6a9";
   };
 
   configureFlags = "--disable-gconf --enable-dconf --disable-memconf --enable-ui --enable-python-library";

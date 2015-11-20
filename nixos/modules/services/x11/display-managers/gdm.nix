@@ -20,7 +20,9 @@ in
 
       enable = mkEnableOption ''
         GDM as the display manager.
-        <emphasis>GDM is very experimental and may render system unusable.</emphasis>
+        <emphasis>GDM in NixOS is not well-tested with desktops other
+        than GNOME, so use with caution, as it could render the
+        system unusable.</emphasis>
       '';
 
       debug = mkEnableOption ''

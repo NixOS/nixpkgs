@@ -8,7 +8,6 @@ appleDerivation {
 
   patches = [ ./add-cf-initialize.patch ./add-cfmachport.patch ./cf-bridging.patch ];
 
-  # CFAttributedString.h is in the SDK only, not on opensource.apple.com or github
   __propagatedImpureHostDeps = [
     "/System/Library/Frameworks/CoreFoundation.framework"
     "/usr/lib/libc++.1.dylib"
@@ -30,6 +29,10 @@ appleDerivation {
       --replace 'chown -RH -f root:wheel $(DSTBASE)/CoreFoundation.framework' "" \
       --replace 'chmod -RH' 'chmod -R'
 
+    # with this file present, CoreFoundation gets a _main symbol defined, which can
+    # interfere with linking other programs
+    rm plconvert.c
+
     replacement=''$'#define __PTK_FRAMEWORK_COREFOUNDATION_KEY5 55\n#define _pthread_getspecific_direct(key) pthread_getspecific((key))\n#define _pthread_setspecific_direct(key, val) pthread_setspecific((key), (val))'
 
     substituteInPlace CFPlatform.c --replace "#include <pthread/tsd_private.h>" "$replacement"
@@ -47,16 +50,6 @@ appleDerivation {
   '';
 
   postInstall = ''
-    # gross! convince apple to release these as part of CF
-    cp /System/Library/Frameworks/CoreFoundation.framework/Headers/{CFAttributedString,CFNotificationCenter}.h \
-      "$out/System/Library/Frameworks/CoreFoundation.framework/Headers"
-
-    cat >> $out/System/Library/Frameworks/CoreFoundation.framework/Headers/CoreFoundation.h <<EOF
-    /* extra private system files [IMPURE] */
-    #include <CoreFoundation/CFAttributedString.h>
-    #include <CoreFoundation/CFNotificationCenter.h>
-    EOF
-
     mv $out/System/* $out
     rmdir $out/System
   '';

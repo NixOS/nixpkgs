@@ -63,7 +63,7 @@ in
         });
         default = [
           {
-            host = "www.ptb.de";
+            host = "encrypted.google.com";
             port = 443;
             proxy = null;
           }

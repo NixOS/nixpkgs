@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, buildPythonPackage, zip, ffmpeg
+{ stdenv, fetchurl, buildPythonPackage, makeWrapper, ffmpeg, zip
 , pandoc ? null }:
 
 # Pandoc is required to build the package's man page. Release tarballs
@@ -9,12 +9,12 @@
 # the tool that doesn't have the formatted man page included.
 
 buildPythonPackage rec {
-  name = "youtube-dl-${version}";
-  version = "2015.08.28";
+
+  name = "youtube-dl-${meta.version}";
 
   src = fetchurl {
-    url = "http://youtube-dl.org/downloads/${version}/${name}.tar.gz";
-    sha256 = "0iahbynd6fw097a4cc57w26szlbqsmhb8v5ny6qrcil0d4wdqqvp";
+    url = "http://yt-dl.org/downloads/${meta.version}/${name}.tar.gz";
+    sha256 = "c5a34ecbcf27ff34e1aae7c17732095309012e33ea9d1d4def613ca73f47e6be";
   };
 
   buildInputs = [ makeWrapper zip pandoc ];
@@ -24,7 +24,8 @@ buildPythonPackage rec {
     ''wrapProgram $out/bin/youtube-dl --prefix PATH : "${ffmpeg.bin}/bin"'';
 
   meta = with stdenv.lib; {
-    homepage = "http://rg3.github.com/youtube-dl/";
+    version = "2015.11.10";
+    homepage = http://rg3.github.io/youtube-dl/;
     repositories.git = https://github.com/rg3/youtube-dl.git;
     description = "Command-line tool to download videos from YouTube.com and other sites";
     longDescription = ''

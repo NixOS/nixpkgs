@@ -1,15 +1,13 @@
 { stdenv, fetchurl, pkgconfig, libxml2, ncurses, libsigcxx, libpar2
 , gnutls, libgcrypt, zlib }:
 
-let
-  version = "15.0";
-in
 stdenv.mkDerivation rec {
   name = "nzbget-${version}";
+  version = "16.3";
 
   src = fetchurl {
     url = "http://github.com/nzbget/nzbget/releases/download/v${version}/${name}-src.tar.gz";
-    sha256 = "02nclq97gqr4zwww4j1l9sds2rwrwwvwvh2gkjhwvr0pb4z3zw9y";
+    sha256 = "03xzrvgqh90wx183sjrcyn7yilip92g2x5wffnw956ywxb3nsy2g";
   };
 
   buildInputs = [ pkgconfig libxml2 ncurses libsigcxx libpar2 gnutls

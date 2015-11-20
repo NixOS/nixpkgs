@@ -1,11 +1,11 @@
 {stdenv, fetchurl, ncurses, libpcap, automake}:
 
 stdenv.mkDerivation rec {
-  name = "iftop-0.17";
+  name = "iftop-1.0pre4";
 
   src = fetchurl {
-    url = http://ex-parrot.com/pdw/iftop/download/iftop-0.17.tar.gz;
-    sha256 = "1b0fis53280qx85gldhmqfcpgyiwplzg43gxyngia1w3f1y58cnh";
+    url = http://ex-parrot.com/pdw/iftop/download/iftop-1.0pre4.tar.gz;
+    sha256 = "15sgkdyijb7vbxpxjavh5qm5nvyii3fqcg9mzvw7fx8s6zmfwczp";
   };
 
   # Explicitly link against libgcc_s, to work around the infamous

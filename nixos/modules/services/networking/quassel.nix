@@ -23,11 +23,11 @@ in
         '';
       };
 
-      interface = mkOption {
-        default = "127.0.0.1";
+      interfaces = mkOption {
+        default = [ "127.0.0.1" ];
         description = ''
-          The interface the Quassel daemon will be listening to.  If `127.0.0.1',
-          only clients on the local host can connect to it; if `0.0.0.0', clients
+          The interfaces the Quassel daemon will be listening to.  If `[ 127.0.0.1 ]',
+          only clients on the local host can connect to it; if `[ 0.0.0.0 ]', clients
           can access it from any network interface.
         '';
       };
@@ -78,7 +78,8 @@ in
       { description = "Quassel IRC client daemon";
 
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+        after = [ "network.target" ] ++ optional config.services.postgresql.enable "postgresql.service"
+                                     ++ optional config.services.mysql.enable "mysql.service";
 
         preStart = ''
           mkdir -p ${cfg.dataDir}
@@ -87,7 +88,7 @@ in
 
         serviceConfig =
         {
-          ExecStart = "${quassel}/bin/quasselcore --listen=${cfg.interface} --port=${toString cfg.portNumber} --configdir=${cfg.dataDir}";
+          ExecStart = "${quassel}/bin/quasselcore --listen=${concatStringsSep '','' cfg.interfaces} --port=${toString cfg.portNumber} --configdir=${cfg.dataDir}";
           User = user;
           PermissionsStartOnly = true;
         };

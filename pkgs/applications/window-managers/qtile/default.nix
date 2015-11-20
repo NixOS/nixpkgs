@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   name = "qtile-${version}";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
     rev = "v${version}";
-    sha256 = "1g02lvk2cqy6w6y6nw6dnsmy4i9k4fyawyibpkf0a7a1nfrd6a99";
+    sha256 = "0dhdwjr4pdlzli68fa8glrnsjzxp6agdab9cnmpsqlwiwh97x9a6";
   };
 
   patches = [ ./restart_executable.patch ];

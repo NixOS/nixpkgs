@@ -106,16 +106,16 @@ rec {
 
   anyedittools = buildEclipsePlugin rec {
     name = "anyedit-${version}";
-    version = "2.4.15.201504172030";
+    version = "2.5.0.201510241327";
 
     srcFeature = fetchurl {
       url = "http://andrei.gmxhome.de/eclipse/features/AnyEditTools_${version}.jar";
-      sha256 = "19hbwgqn02ghflbcp5cw3qy203mym5kwgzq4xrn0xcl8ckl5s2pp";
+      sha256 = "01qaxg1b4n7y7g1xdkx1bnmpwqydln270mk14l4pl35q3c88s5nc";
     };
 
     srcPlugin = fetchurl {
-      url = "http://dl.bintray.com/iloveeclipse/plugins/de.loskutov.anyedit.AnyEditTools_${version}.jar";
-      sha256 = "1i3ghf2mhdfhify30hlyxqmyqcp40pkd5zhsiyg6finn4w81sxv2";
+      url = "https://github.com/iloveeclipse/anyedittools/releases/download/2.5.0/de.loskutov.anyedit.AnyEditTools_${version}.jar";
+      sha256 = "0m4qxkscl5xih8x1znbrih4jh28wky4l62spfif9zw0s7mgl117c";
     };
 
     meta = with stdenv.lib; {
@@ -171,12 +171,12 @@ rec {
 
   checkstyle = buildEclipseUpdateSite rec {
     name = "checkstyle-${version}";
-    version = "6.9.0.201508291549";
+    version = "6.11.1.201510102004";
 
     src = fetchzip {
       stripRoot = false;
-      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.9.0/net.sf.eclipsecs-updatesite_${version}-bin.zip";
-      sha256 = "0r6lfbyhqcwa628i6wjp9d6mfp4jnc46bmwp9j7v02m79f8wx74g";
+      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.11.1/net.sf.eclipsecs-updatesite_${version}-bin.zip";
+      sha256 = "0l9nfx7a3qdx1pvjgc6ck4rxh7yrvqsskr190yrxxwmpnyj9cjs4";
     };
 
     meta = with stdenv.lib; {
@@ -335,16 +335,16 @@ rec {
 
   testng = buildEclipsePlugin rec {
     name = "testng-${version}";
-    version = "6.9.5.201508210528";
+    version = "6.9.8.201510130443";
 
     srcFeature = fetchurl {
       url = "http://beust.com/eclipse/features/org.testng.eclipse_${version}.jar";
-      sha256 = "0xalm7pvj0vx61isgkjkgj073b4hlqlzx6xnkrnnnyi0r212a26j";
+      sha256 = "0g0dva1zpqk0rz0vgr025g2cfc47snr857fsqcrssmp9qmy8x0i0";
     };
 
     srcPlugin = fetchurl {
       url = "http://beust.com/eclipse/plugins/org.testng.eclipse_${version}.jar";
-      sha256 = "07wmivfvfsq6cjw5zwciajdxkfa7drk108jsr44gf4i1bv9fj055";
+      sha256 = "16mnvqkakixqp3bcnyx6x2iwkhnv3k4q561c97kssz98xsrr8f54";
     };
 
     meta = with stdenv.lib; {

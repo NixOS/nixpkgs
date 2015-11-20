@@ -10,7 +10,7 @@ let
     [gtk glib stdenv.cc.cc];
 
   rpathPlugin = makeLibraryPath
-    [ stdenv.cc.cc gtk glib xorg.libX11 gdk_pixbuf libXext libXfixes libXrender libXrandr libuuid libXcomposite libpulseaudio ];
+    ([ stdenv.cc.cc gtk glib xorg.libX11 gdk_pixbuf libXext libXfixes libXrender libXrandr libXcomposite libpulseaudio ] ++ optional (libuuid != null) libuuid);
 
 in
 

@@ -206,10 +206,10 @@ stdenv.mkDerivation {
   ] ++ optional (versionAtLeast version "9.0.2") [
     (mkWith   true                         "man-pages"            null)
     (mkWith   true                         "systemd-libexec-dir"  "\${out}/libexec")
-  ] ++ optional (versionOlder version "10.0.0") [
+  ] ++ optional (versionOlder version "9.1.0") [
     (mkWith   (optLibs3 != null)           "system-libs3"         null)
     (mkWith   true                         "rest-bench"           null)
-  ] ++ optional (versionAtLeast version "10.0.0") [
+  ] ++ optional (versionAtLeast version "9.1.0") [
     (mkWith   true                         "rgw-user"             "rgw")
     (mkWith   true                         "rgw-group"            "rgw")
     (mkWith   true                         "systemd-unit-dir"     "\${out}/etc/systemd/system")

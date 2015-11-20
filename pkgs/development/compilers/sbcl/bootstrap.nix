@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp -p src/runtime/sbcl $out/bin
-    install_name_tool -change /usr/lib/libgcc_s.1.dylib ${stdenv.libc}/lib/libgcc_s.10.5.dylib $out/bin/sbcl
 
     mkdir -p $out/share/sbcl
     cp -p src/runtime/sbcl $out/share/sbcl
@@ -50,7 +49,7 @@ stdenv.mkDerivation rec {
       --add-flags "--core $out/share/sbcl/sbcl.core"
   '';
 
-  postFixup = stdenv.lib.optionalString (!stdenv.isArm) ''
+  postFixup = stdenv.lib.optionalString (!stdenv.isArm && stdenv.isLinux) ''
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/share/sbcl/sbcl
   '';
 

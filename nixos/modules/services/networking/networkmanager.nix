@@ -6,16 +6,18 @@ with lib;
 let
   cfg = config.networking.networkmanager;
 
-  stateDirs = "/var/lib/NetworkManager /var/lib/dhclient";
+  # /var/lib/misc is for dnsmasq.leases.
+  stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
 
   configFile = writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
 
     [keyfile]
-    ${optionalString (config.networking.hostName != "") ''
-      hostname=${config.networking.hostName}
-    ''}
+    ${optionalString (config.networking.hostName != "")
+      ''hostname=${config.networking.hostName}''}
+    ${optionalString (cfg.unmanaged != [])
+      ''unmanaged-devices=${lib.concatStringsSep ";" cfg.unmanaged}''}
 
     [logging]
     level=WARN
@@ -40,7 +42,6 @@ let
     polkit.addRule(function(action, subject) {
       if (
         subject.isInGroup("networkmanager")
-        && subject.active
         && (action.id.indexOf("org.freedesktop.NetworkManager.") == 0
             || action.id.indexOf("org.freedesktop.ModemManager")  == 0
         ))
@@ -94,6 +95,16 @@ in {
           configured. If enabled, a group <literal>networkmanager</literal>
           will be created. Add all users that should have permission
           to change network settings to this group.
+        '';
+      };
+
+      unmanaged = mkOption {
+        type = types.listOf types.string;
+        default = [];
+        description = ''
+          List of interfaces that will not be managed by NetworkManager.
+          Interface name can be specified here, but if you need more fidelity
+          see "Device List Format" in NetworkManager.conf man page.
         '';
       };
 
@@ -206,10 +217,16 @@ in {
 
     environment.systemPackages = cfg.packages;
 
-    users.extraGroups = singleton {
+    users.extraGroups = [{
       name = "networkmanager";
       gid = config.ids.gids.networkmanager;
-    };
+    }
+    {
+      name = "nm-openvpn";
+    }];
+    users.extraUsers = [{
+      name = "nm-openvpn";
+    }];
 
     systemd.packages = cfg.packages;
 

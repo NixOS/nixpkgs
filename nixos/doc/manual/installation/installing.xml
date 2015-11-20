@@ -18,8 +18,8 @@
   <listitem><para>The NixOS manual is available on virtual console 8
   (press Alt+F8 to access).</para></listitem>
 
-  <listitem><para>Login as <literal>root</literal> and the empty
-  password.</para></listitem>
+  <listitem><para>You get logged in as <literal>root</literal>
+  (with empty password).</para></listitem>
 
   <listitem><para>If you downloaded the graphical ISO image, you can
   run <command>start display-manager</command> to start KDE.</para></listitem>

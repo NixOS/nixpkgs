@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   installPhase =
     ''
       mkdir $out
-      cp bin/ipxe.dsk bin/ipxe.usb bin/ipxe.iso bin/ipxe.lkrn $out
+      cp bin/ipxe.dsk bin/ipxe.usb bin/ipxe.iso bin/ipxe.lkrn bin/undionly.kpxe $out
     '';
 
   meta = with stdenv.lib;

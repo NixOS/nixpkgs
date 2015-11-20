@@ -12,6 +12,8 @@
 , zlib
 , callPackage
 , self
+
+, CF, configd
 }:
 
 assert readline != null -> ncurses != null;
@@ -33,12 +35,18 @@ stdenv.mkDerivation {
   pythonVersion = majorVersion;
   inherit majorVersion version;
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CF configd ];
+
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${fullVersion}.tar.xz";
     sha256 = "1f4nm4z08sy0kqwisvv95l02crv6dyysdmx44p1mz3bn6csrdcxm";
   };
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
+  '';
 
   preConfigure = ''
     for i in /usr /sw /opt /pkg; do	# improve purity

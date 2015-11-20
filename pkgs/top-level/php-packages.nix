@@ -139,4 +139,31 @@ let self = with self; {
       maintainers = with maintainers; [ globin offline ];
     };
   };
+
+  phpcs = pkgs.stdenv.mkDerivation rec {
+    name = "phpcs-${version}";
+    version = "2.3.4";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
+      sha256 = "ce11e02fba30a35a80b691b05be20415eb8b5dea585a4e6646803342b86abb8c";
+    };
+
+    phases = [ "installPhase" ];
+    buildInputs = [ pkgs.makeWrapper ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install -D $src $out/libexec/phpcs/phpcs.phar
+      makeWrapper ${php}/bin/php $out/bin/phpcs \
+        --add-flags "$out/libexec/phpcs/phpcs.phar"
+    '';
+
+    meta = with pkgs.lib; {
+      description = "PHP coding standard tool";
+      license = licenses.bsd3;
+      homepage = https://squizlabs.github.io/PHP_CodeSniffer/;
+      maintainers = with maintainers; [ javaguirre ];
+    };
+  };
 }; in self

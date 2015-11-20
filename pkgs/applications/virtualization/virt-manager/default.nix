@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl, python
 , wrapGAppsHook, virtinst, pyGtkGlade, pythonDBus, gnome_python, gtkvnc, vte
 , gtk3, gobjectIntrospection, libvirt-glib, gsettings_desktop_schemas, glib
-, avahi, dconf, spiceSupport ? true, spice_gtk, libosinfo, gnome3
+, avahi, dconf, spiceSupport ? true, spice_gtk, libosinfo, gnome3, system-libvirt
 }:
 
 with stdenv.lib;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs =
     [ eventlet greenlet gflags netaddr sqlalchemy carrot routes
-      paste_deploy m2crypto ipy twisted sqlalchemy_migrate
+      PasteDeploy m2crypto ipy twisted sqlalchemy_migrate
       distutils_extra simplejson readline glance cheetah lockfile httplib2
       urlgrabber virtinst pyGtkGlade pythonDBus gnome_python pygobject3
       libvirt libxml2Python ipaddr vte libosinfo
@@ -37,7 +37,12 @@ buildPythonPackage rec {
       gsettings_desktop_schemas
       gnome3.defaultIconTheme
       wrapGAppsHook
+      dconf
     ];
+
+  patchPhase = ''
+    sed -i 's|/usr/share/libvirt/cpu_map.xml|${system-libvirt}/share/libvirt/cpu_map.xml|g' virtinst/capabilities.py
+  '';
 
   configurePhase = ''
     sed -i 's/from distutils.core/from setuptools/g' setup.py

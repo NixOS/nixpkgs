@@ -1,7 +1,7 @@
 { stdenv, fetchgit, python, buildPythonPackage, qt5, pyqt5, jinja2, pygments, pyyaml, pypeg2,
   gst_plugins_base, gst_plugins_good, gst_ffmpeg }:
 
-let version = "0.4.0"; in
+let version = "0.4.1"; in
 
 buildPythonPackage {
   name = "qutebrowser-${version}";
@@ -9,8 +9,8 @@ buildPythonPackage {
 
   src = fetchgit {
     url = "https://github.com/The-Compiler/qutebrowser.git";
-    rev = "e11fcda240eaad1b83b26c7d6424c427d2ad3b96";
-    sha256 = "0hpd6fibzcl0s6jrsj60rs12dyliwr05r8h9wvngh19a3pmg8q74";
+    rev = "8d9e9851f1dcff5deb6363586ad0f1edec040b72";
+    sha256 = "1qsdad10swnk14qw4pfyvb94y6valhkscyvl46zbxxs7ck6llsm2";
   };
 
   # Needs tox
