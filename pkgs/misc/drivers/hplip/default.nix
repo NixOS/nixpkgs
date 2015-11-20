@@ -22,14 +22,14 @@ let
     sha256 = "1ahalw83xm8x0h6hljhnkknry1hny9flkrlzcymv8nmwgic0kjgs";
   };
 
-  hplip_state =
+  hplipState =
     substituteAll
       {
         inherit version;
         src = ./hplip.state;
       };
 
-  hplip_arch =
+  hplipArch =
     {
       "i686-linux" = "x86_32";
       "x86_64-linux" = "x86_64";
@@ -104,7 +104,7 @@ stdenv.mkDerivation {
 
   postInstall =
     (stdenv.lib.optionalString (withPlugin && builtins.elem stdenv.system platforms)
-    (let hplip_arch =
+    (let hplipArch =
           if stdenv.system == "i686-linux" then "x86_32"
           else if stdenv.system == "x86_64-linux" then "x86_64"
           else abort "Plugin platform must be i686-linux or x86_64-linux!";
@@ -123,20 +123,20 @@ stdenv.mkDerivation {
 
     mkdir -p $out/share/hplip/prnt/plugins
     for plugin in lj hbpl1; do
-      cp $plugin-${hplip_arch}.so $out/share/hplip/prnt/plugins
-      ln -s $out/share/hplip/prnt/plugins/$plugin-${hplip_arch}.so \
+      cp $plugin-${hplipArch}.so $out/share/hplip/prnt/plugins
+      ln -s $out/share/hplip/prnt/plugins/$plugin-${hplipArch}.so \
         $out/share/hplip/prnt/plugins/$plugin.so
     done
 
     mkdir -p $out/share/hplip/scan/plugins
     for plugin in bb_soap bb_marvell bb_soapht fax_marvell; do
-      cp $plugin-${hplip_arch}.so $out/share/hplip/scan/plugins
-      ln -s $out/share/hplip/scan/plugins/$plugin-${hplip_arch}.so \
+      cp $plugin-${hplipArch}.so $out/share/hplip/scan/plugins
+      ln -s $out/share/hplip/scan/plugins/$plugin-${hplipArch}.so \
         $out/share/hplip/scan/plugins/$plugin.so
     done
 
     mkdir -p $out/var/lib/hp
-    cp ${hplip_state} $out/var/lib/hp/hplip.state
+    cp ${hplipState} $out/var/lib/hp/hplip.state
 
     mkdir -p $out/etc/sane.d/dll.d
     mv $out/etc/sane.d/dll.conf $out/etc/sane.d/dll.d/hpaio.conf
