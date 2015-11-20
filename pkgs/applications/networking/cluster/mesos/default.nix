@@ -1,6 +1,6 @@
 { stdenv, lib, makeWrapper, fetchurl, curl, sasl, openssh, autoconf
 , automake114x, libtool, unzip, gnutar, jdk, maven, python, wrapPython
-, setuptools, distutils-cfg, boto, pythonProtobuf, apr, subversion
+, setuptools, boto, pythonProtobuf, apr, subversion
 , leveldb, glog, perf, utillinux, libnl, iproute
 }:
 
@@ -9,14 +9,14 @@ let
   soext = if stdenv.system == "x86_64-darwin" then "dylib" else "so";
 
 in stdenv.mkDerivation rec {
-  version = "0.23.0";
+  version = "0.23.1";
   name = "mesos-${version}";
 
   dontDisableStatic = true;
 
   src = fetchurl {
     url = "http://www.apache.org/dist/mesos/${version}/mesos-${version}.tar.gz";
-    sha256 = "1v5xpn4wal4vcrvcklchx9slkpa8xlwqkdbnxzy9zkzpq5g3arxr";
+    sha256 = "0ygvb0xm4m1ilwbfyjbq0dpsviicg2ab98zg96k2ypa2pa69mvpa";
   };
 
   patches = [
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     makeWrapper autoconf automake114x libtool curl sasl jdk maven
-    python wrapPython boto distutils-cfg setuptools leveldb
+    python wrapPython boto setuptools leveldb
     subversion apr glog
   ] ++ lib.optionals stdenv.isLinux [
     libnl

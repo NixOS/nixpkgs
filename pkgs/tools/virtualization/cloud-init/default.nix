@@ -11,19 +11,18 @@ in pythonPackages.buildPythonPackage rec {
     sha256 = "1mry5zdkfaq952kn1i06wiggc66cqgfp6qgnlpk0mr7nnwpd53wy";
   };
 
-  preBuild = ''
+  patchPhase = ''
     patchShebangs ./tools
 
     substituteInPlace setup.py \
       --replace /usr $out \
       --replace /etc $out/etc \
       --replace /lib/systemd $out/lib/systemd \
+      --replace 'self.init_system = ""' 'self.init_system = "systemd"'
     '';
 
-  pythonPath = with pythonPackages; [ cheetah jinja2 prettytable
+  propagatedBuildInputs = with pythonPackages; [ cheetah jinja2 prettytable
     oauth pyserial configobj pyyaml argparse requests jsonpatch ];
-
-  # TODO: --init-system systemd
 
   meta = {
     homepage = http://cloudinit.readthedocs.org;

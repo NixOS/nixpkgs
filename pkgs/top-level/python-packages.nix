@@ -42,13 +42,10 @@ let
 
   # helpers
 
-  # global distutils config used by buildPythonPackage
-  distutils-cfg = callPackage ../development/python-modules/distutils-cfg { };
-
   wrapPython = pkgs.makeSetupHook
     { deps = pkgs.makeWrapper;
       substitutions.libPrefix = python.libPrefix;
-      substitutions.executable = "${python}/bin/${python.executable}";
+      substitutions.executable = python.interpreter;
       substitutions.magicalSedExpression = let
         # Looks weird? Of course, it's between single quoted shell strings.
         # NOTE: Order DOES matter here, so single character quotes need to be
@@ -2539,7 +2536,7 @@ let
 
     # TypeError: __call__() takes 1 positional argument but 2 were given
     doCheck = !isPy3k;
-    buildInputs = with self; [ nose mock ];
+    buildInputs = with self; [ mock ];
 
     meta = {
       description = "Code coverage measurement for python";
@@ -9892,6 +9889,7 @@ let
   plover = pythonPackages.buildPythonPackage rec {
     name = "plover-${version}";
     version = "2.5.8";
+    disabled = !isPy27;
 
     meta = {
       description = "OpenSteno Plover stenography software";
@@ -10357,6 +10355,8 @@ let
       url = "http://pypi.python.org/packages/source/n/nose/${name}.tar.gz";
       sha256 = "00qymfgwg4iam4xi0w9bnv7lcb3fypq1hzfafzgs1rfmwaj67g3n";
     };
+
+    propagatedBuildInputs = [ self.coverage ];
 
     doCheck = false;  # lot's of transient errors, too much hassle
     checkPhase = if python.is_py3k or false then ''
@@ -17336,7 +17336,7 @@ let
   };
 
 
-  sqlalchemy_migrate = buildPythonPackage rec {
+  sqlalchemy_migrate_func = sqlalchemy: buildPythonPackage rec {
     name = "sqlalchemy-migrate-0.10.0";
 
     src = pkgs.fetchurl {
@@ -17345,7 +17345,7 @@ let
     };
 
     buildInputs = with self; [ unittest2 scripttest pytz pkgs.pylint tempest-lib mock testtools ];
-    propagatedBuildInputs = with self; [ pbr tempita decorator sqlalchemy_1_0 six sqlparse ];
+    propagatedBuildInputs = with self; [ pbr tempita decorator sqlalchemy six sqlparse ];
 
     checkPhase = ''
       export PATH=$PATH:$out/bin
@@ -17365,6 +17365,8 @@ let
     };
   };
 
+  sqlalchemy_migrate = self.sqlalchemy_migrate_func self.sqlalchemy_1_0;
+  sqlalchemy_migrate_0_7 = self.sqlalchemy_migrate_func self.sqlalchemy;
 
   sqlparse = buildPythonPackage rec {
     name = "sqlparse-${version}";
@@ -18301,16 +18303,12 @@ let
 
     meta = {
       homepage = http://twistedmatrix.com/;
-
       description = "Twisted, an event-driven networking engine written in Python";
-
       longDescription = ''
         Twisted is an event-driven networking engine written in Python
         and licensed under the MIT license.
       '';
-
       license = licenses.mit;
-
       maintainers = [ ];
     };
   };

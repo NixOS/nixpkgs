@@ -12,7 +12,7 @@ pythonPackages.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with pythonPackages; [
-    requests
+    requests2
     six
     praw
     kitchen

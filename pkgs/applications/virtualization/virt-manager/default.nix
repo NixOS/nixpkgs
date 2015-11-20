@@ -42,15 +42,12 @@ buildPythonPackage rec {
 
   patchPhase = ''
     sed -i 's|/usr/share/libvirt/cpu_map.xml|${system-libvirt}/share/libvirt/cpu_map.xml|g' virtinst/capabilities.py
+    rm setup.cfg
   '';
 
-  configurePhase = ''
-    sed -i 's/from distutils.core/from setuptools/g' setup.py
-    sed -i 's/from distutils.command.install/from setuptools.command.install/g' setup.py
-    python setup.py configure --prefix=$out
+  postConfigure = ''
+    ${python.interpreter} setup.py configure --prefix=$out
   '';
-
-  buildPhase = "true";
 
   postInstall = ''
     ${glib}/bin/glib-compile-schemas "$out"/share/glib-2.0/schemas

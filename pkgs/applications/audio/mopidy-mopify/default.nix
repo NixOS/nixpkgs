@@ -10,7 +10,7 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "0hhdss4i5436dj37pndxk81a4g3g8f6zqjyv04lhpqcww01290as";
   };
 
-  propagatedBuildInputs = [ mopidy ];
+  propagatedBuildInputs = with pythonPackages; [ mopidy configobj ];
 
   doCheck = false;
 

@@ -1,9 +1,9 @@
 { stdenv, pythonPackages, fetchgit }:
+
 pythonPackages.buildPythonPackage rec {
   name = "leo-editor-${version}";
-  version = "5.1";
-
   namePrefix = "";
+  version = "5.1";
 
   src = fetchgit {
     url = "https://github.com/leo-editor/leo-editor";
