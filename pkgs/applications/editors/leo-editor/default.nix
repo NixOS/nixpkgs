@@ -13,6 +13,11 @@ pythonPackages.buildPythonPackage rec {
 
   propagatedBuildInputs = with pythonPackages; [ pyqt4 sqlite3 ];
 
+
+  patchPhase = ''
+    rm setup.cfg
+  '';
+
   meta = {
     homepage = "http://leoeditor.com";
     description = "A powerful folding editor";
