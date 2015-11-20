@@ -4,7 +4,7 @@ with lib;
 
 let
     flavor_files =
-        if builtins.pathExists (builtins.toPath /etc/nixos/vagrant.nix)
+        if builtins.pathExists /etc/nixos/vagrant.nix
         then [./vagrant.nix]
         else [./fcio.nix];
 
