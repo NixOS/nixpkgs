@@ -22,6 +22,8 @@ in
     flavor_files ++
     [./roles/default.nix];
 
+  networking.hostName = if enc ? name then enc.name else "default";
+
   environment.noXlibs = true;
   sound.enable = false;
 
