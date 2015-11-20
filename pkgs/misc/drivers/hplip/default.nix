@@ -38,9 +38,14 @@ let
     };
 
   hplipArch = hplipPlatforms."${stdenv.system}"
-    or (abort "Unsupported platform ${stdenv.system}");
+    or (abort "HPLIP not supported on ${stdenv.system}");
+
+  pluginArches = [ "x86_32" "x86_64" ];
 
 in
+
+assert withPlugin -> builtins.elem hplipArch pluginArches
+  || abort "HPLIP plugin not supported on ${stdenv.system}";
 
 stdenv.mkDerivation {
   inherit name src;
@@ -108,13 +113,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  postInstall =
-    (stdenv.lib.optionalString (withPlugin && builtins.hasAttr stdenv.system hplipPlatforms)
-    (let hplipArch =
-          if stdenv.system == "i686-linux" then "x86_32"
-          else if stdenv.system == "x86_64-linux" then "x86_64"
-          else abort "Plugin platform must be i686-linux or x86_64-linux!";
-    in
+  postInstall = stdenv.lib.optionalString withPlugin
     ''
     sh ${plugin} --noexec --keep
     cd plugin_tmp
@@ -148,7 +147,7 @@ stdenv.mkDerivation {
     mv $out/etc/sane.d/dll.conf $out/etc/sane.d/dll.d/hpaio.conf
 
     rm $out/etc/udev/rules.d/56-hpmud.rules
-  ''));
+  '';
 
   fixupPhase = ''
     # Wrap the user-facing Python scripts in $out/bin without turning the
