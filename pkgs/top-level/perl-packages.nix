@@ -3902,16 +3902,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  EmailMIMEEncodings = buildPerlPackage {
-    name = "Email-MIME-Encodings-1.313";
+  EmailMIMEEncodings = buildPerlPackage rec {
+    name = "Email-MIME-Encodings-1.315";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-Encodings-1.313.tar.gz;
-      sha256 = "0fac34g44sn0l59wim68zrhih1mvlh1rxvyn3gc5pviaiz028lyy";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "4c71045507b31ec853dd60152b40e33ba3741779c0f49bb143b50cf8d243ab5c";
     };
+    buildInputs = [ CaptureTiny ];
     meta = {
+      homepage = https://github.com/rjbs/Email-MIME-Encodings;
+      description = "A unified interface to MIME encoding and decoding";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
-      platforms   = stdenv.lib.platforms.unix;
+      maintainers = with maintainers; [ ocharles rycee ];
     };
   };
 
