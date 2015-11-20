@@ -3874,17 +3874,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  EmailMIME = buildPerlPackage {
-    name = "Email-MIME-1.911";
+  EmailMIME = buildPerlPackage rec {
+    name = "Email-MIME-1.936";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-1.911.tar.gz;
-      sha256 = "0nkvps2k1gkr5vh12qbl0djdnjxnp7jdi52zgda6k67wrghm5ryd";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "4c0934284da84b8e9ed48ff1060c9719273fac18e776f4c8e888a47c863ee661";
     };
-    propagatedBuildInputs = [ EmailMessageID EmailMIMEContentType EmailMIMEEncodings EmailSimple MIMETypes ];
+    propagatedBuildInputs = [ EmailAddress EmailMIMEContentType EmailMIMEEncodings EmailMessageID EmailSimple MIMETypes ];
     meta = {
+      homepage = https://github.com/rjbs/Email-MIME;
+      description = "Easy MIME message handling";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
-      platforms   = stdenv.lib.platforms.unix;
+      maintainers = with maintainers; [ ocharles rycee ];
     };
   };
 
