@@ -32,7 +32,7 @@ in
       pkgs.mercurial
       pkgs.openldap
       pkgs.openssl
-      pkgs.python27
+      pkgs.python27Full
       pkgs.python27Packages.virtualenv
       pkgs.vim
       pkgs.zlib
