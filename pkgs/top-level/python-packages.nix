@@ -3808,6 +3808,7 @@ let
     doCheck = !isPy3k;  # lots of transient failures
     checkPhase = ''
       # Not worth the trouble
+      rm test/with_dummyserver/test_poolmanager.py
       rm test/with_dummyserver/test_proxy_poolmanager.py
       rm test/with_dummyserver/test_socketlevel.py
       # pypy: https://github.com/shazow/urllib3/issues/736
