@@ -4855,6 +4855,12 @@ let
 
   tinycc = callPackage ../development/compilers/tinycc { };
 
+  trv = callPackage ../development/tools/misc/trv {
+   inherit (ocamlPackages_4_02) findlib camlp4 core async async_unix 
+     async_extra sexplib async_shell core_extended async_find cohttp uri;
+    ocaml = ocaml_4_02;
+  };
+
   urweb = callPackage ../development/compilers/urweb { };
 
   vala = callPackage ../development/compilers/vala/default.nix { };
