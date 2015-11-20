@@ -10328,7 +10328,7 @@ let
 
     buildInputs = with self; [nose]  ++ optionals isPy27 [mock];
 
-    propagatedBuildInputs = with self; [jinja2 tornado ipython_genutils traitlets jupyter_core jupyter_client nbformat nbconvert ipykernel terminado requests pexpect];
+    propagatedBuildInputs = with self; [jinja2 tornado ipython_genutils traitlets jupyter_core jupyter_client nbformat nbconvert ipykernel terminado requests2 pexpect];
 
     meta = {
       description = "The Jupyter HTML notebook is a web-based notebook environment for interactive computing";
