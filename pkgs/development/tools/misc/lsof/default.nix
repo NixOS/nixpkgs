@@ -5,11 +5,13 @@ stdenv.mkDerivation rec {
   version = "4.89";
 
   src = fetchurl {
-    urls = map (
-      # the tarball is moved after new version is released
-      isOld: "ftp://sunsite.ualberta.ca/pub/Mirror/lsof/"
-      + "${stdenv.lib.optionalString isOld "OLD/"}lsof_${version}.tar.bz2"
-    ) [ false true ];
+    urls =
+      ["ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/lsof_${version}.tar.bz2"]
+      ++ map (
+        # the tarball is moved after new version is released
+        isOld: "ftp://sunsite.ualberta.ca/pub/Mirror/lsof/"
+        + "${stdenv.lib.optionalString isOld "OLD/"}lsof_${version}.tar.bz2"
+      ) [ false true ];
     sha256 = "061p18v0mhzq517791xkjs8a5dfynq1418a1mwxpji69zp2jzb41";
   };
 
