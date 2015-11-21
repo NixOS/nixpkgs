@@ -103,6 +103,18 @@ let
     goPackageAliases = [ "code.google.com/p/snappy-go/snappy" ];
   };
 
+  sys = buildFromGitHub {
+    rev    = "d9157a9621b69ad1d8d77a1933590c416593f24f";
+    date   = "2015-02-01";
+    owner  = "golang";
+    repo   = "sys";
+    sha256 = "1asdbp7rj1j1m1aar1a022wpcwbml6zih6cpbxaw7b2m8v8is931";
+    goPackagePath = "golang.org/x/sys";
+    goPackageAliases = [
+      "github.com/golang/sys"
+    ];
+  };
+
   text = buildFromGitHub {
     rev = "505f8b49cc14d790314b7535959a10b87b9161c7";
     date = "2015-08-27";
