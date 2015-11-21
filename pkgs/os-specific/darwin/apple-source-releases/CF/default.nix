@@ -8,7 +8,7 @@ appleDerivation {
 
   patches = [ ./add-cf-initialize.patch ./add-cfmachport.patch ./cf-bridging.patch ];
 
-  __propagatedSandboxProfile = stdenv.lib.sandbox.importProfile (generateFrameworkProfile "CoreFoundation");
+  _propagatedSandboxProfile = stdenv.lib.sandbox.importProfile (generateFrameworkProfile "CoreFoundation");
 
   preBuild = ''
     substituteInPlace Makefile \

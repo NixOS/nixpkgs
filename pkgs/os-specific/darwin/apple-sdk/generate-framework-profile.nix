@@ -14,7 +14,7 @@ let path = "/System/Library/Frameworks/${frameworkName}.framework";
 
 in runCommand "${frameworkName}-profile.sb" {
   # __noChroot lite
-  __sandboxProfile = ''
+  _sandboxProfile = ''
     (allow file* (subpath "/"))
   '';
 

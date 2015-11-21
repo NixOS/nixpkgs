@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       --replace "/bin/pwd" "$pwd"
   '';
 
-  __sandboxProfile = stdenv.lib.sandbox.allow "ipc-sysv-sem";
+  _sandboxProfile = stdenv.lib.sandbox.allow "ipc-sysv-sem";
 
   # Build a thread-safe Perl with a dynamic libperls.o.  We need the
   # "installstyle" option to ensure that modules are put under

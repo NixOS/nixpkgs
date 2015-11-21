@@ -97,11 +97,11 @@ let
     propagatedBuildInputs = deps;
 
     # allows building the symlink tree
-    __sandboxProfile = ''
+    _sandboxProfile = ''
       (allow file-read* (subpath "/System/Library/Frameworks/${name}.framework"))
     '';
 
-    __propagatedSandboxProfile = stdenv.lib.sandbox.importProfile (generateFrameworkProfile name);
+    _propagatedSandboxProfile = stdenv.lib.sandbox.importProfile (generateFrameworkProfile name);
 
     meta = with stdenv.lib; {
       description = "Apple SDK framework ${name}";
@@ -165,7 +165,7 @@ in rec {
     });
 
     CoreServices = stdenv.lib.overrideDerivation super.CoreServices (drv: {
-      __propagatedSandboxProfile = drv.__propagatedSandboxProfile ++ [''
+      _propagatedSandboxProfile = drv._propagatedSandboxProfile ++ [''
         (allow mach-lookup (global-name "com.apple.CoreServices.coreservicesd"))
       ''];
     });

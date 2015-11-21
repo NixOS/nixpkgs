@@ -50,7 +50,7 @@ in rec {
 
     inherit (bootstrapFiles) mkdir bzip2 cpio;
 
-    __sandboxProfile = binShClosure + libSystemProfile;
+    _sandboxProfile = binShClosure + libSystemProfile;
   };
 
   stageFun = step: last: {shell             ? "${bootstrapTools}/bin/sh",
@@ -93,8 +93,8 @@ in rec {
         };
 
         # The stdenvs themselves don't use mkDerivation, so I need to specify this here
-        __stdenvSandboxProfile = binShClosure + libSystemProfile;
-        __extraSandboxProfile  = binShClosure + libSystemProfile;
+        _stdenvSandboxProfile = binShClosure + libSystemProfile;
+        _extraSandboxProfile  = binShClosure + libSystemProfile;
 
         extraAttrs = { inherit platform; };
         overrides  = pkgs: (overrides pkgs) // { fetchurl = thisStdenv.fetchurlBoot; };
@@ -269,8 +269,8 @@ in rec {
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
 
-    __stdenvSandboxProfile = binShClosure + libSystemProfile;
-    __extraSandboxProfile  = binShClosure + libSystemProfile;
+    _stdenvSandboxProfile = binShClosure + libSystemProfile;
+    _extraSandboxProfile  = binShClosure + libSystemProfile;
 
     initialPath = import ../common-path.nix { inherit pkgs; };
     shell       = "${pkgs.bash}/bin/bash";
