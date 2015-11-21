@@ -100,7 +100,7 @@ let
       (allow file-read* (subpath "/System/Library/Frameworks/${name}.framework"))
     '';
 
-    __propagatedImpureHostDeps = [ "/System/Library/Frameworks/${name}.framework/${name}" ];
+    __propagatedImpureHostDeps = stdenv.lib.optional (name != "Kernel") "/System/Library/Frameworks/${name}.framework/${name}";
 
     meta = with stdenv.lib; {
       description = "Apple SDK framework ${name}";
