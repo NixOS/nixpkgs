@@ -39,9 +39,8 @@ in
   virtualisation.virtualbox.guest.enable = true;
 
   # Creates a "vagrant" users with password-less sudo access
-  users = {
-    extraGroups = [ { name = "vagrant"; } { name = "vboxsf"; } ];
-    extraUsers  = [
+  users.extraGroups = [ { name = "vagrant"; } { name = "vboxsf"; } ];
+  users.extraUsers  = [
       # Try to avoid ask password
       { name = "root"; password = "vagrant"; }
       {
@@ -58,7 +57,6 @@ in
         ];
       }
     ];
-  };
 
   security.sudo.extraConfig =
     ''

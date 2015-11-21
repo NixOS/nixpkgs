@@ -20,9 +20,23 @@ in
 {
   imports =
     flavor_files ++
-    [./roles/default.nix];
+    [./user.nix
+     ./roles/default.nix];
 
   networking.hostName = if enc ? name then enc.name else "default";
+
+  users.motd = ''
+      Welcome to the Flying Circus
+
+      Support:   support@flyingcircus.io or +49 345 219401-0
+      Status:    http://status.flyingcircus.io/
+      Docs:      http://flyingcircus.io/doc/
+      ChangeLog: http://flyingcircus.io/doc/reference/changes/XXX
+
+      Hostname:  ${enc.name}    Environment: ${enc.parameters.environment}    Location:  ${enc.parameters.location}
+      Services:  ${enc.parameters.service_description}
+
+    '';
 
   environment.noXlibs = true;
   sound.enable = false;
