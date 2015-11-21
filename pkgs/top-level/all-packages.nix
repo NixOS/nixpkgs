@@ -5607,8 +5607,7 @@ let
   jdepend = callPackage ../development/tools/analysis/jdepend { };
 
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
-  flex_2_5_39 = callPackage ../development/tools/parsing/flex/2.5.39.nix { };
-  flex = flex_2_5_39;
+  flex = callPackage ../development/tools/parsing/flex/default.nix { };
 
   flexcpp = callPackage ../development/tools/parsing/flexc++ { };
 
