@@ -74,6 +74,14 @@ nginx.override {
     </para>
   </listitem>
 
+  <listitem>
+    <para><command>s3sync</command> is removed, as it hasn't been
+    developed by upstream for 4 years and only runs with ruby 1.8.
+    For an actively-developer alternative look at
+    <command>tarsnap</command> and others.
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 </section>
