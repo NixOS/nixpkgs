@@ -2932,10 +2932,6 @@ let
 
   s3cmd = callPackage ../tools/networking/s3cmd { };
 
-  s3sync = callPackage ../tools/networking/s3sync {
-    ruby = ruby_1_8;
-  };
-
   s6Dns = callPackage ../tools/networking/s6-dns { };
 
   s6LinuxUtils = callPackage ../os-specific/linux/s6-linux-utils { };
