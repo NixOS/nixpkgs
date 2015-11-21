@@ -3,7 +3,7 @@
 let param =
   if coq.coq-version == "8.4"
   then { version = "0.9.0"; sha256 = "1n3bk003vvbghbrxkhal6drnc0l65jv9y77wd56is3jw9xgiif0w"; }
-  else { version = "1.0.0-beta2"; sha256 = "0rdh6jsag174576nvra6m2g44fvmlbz4am5wcashj45bq30021sa"; };
+  else { version = "0.9.0-beta3"; sha256 = "1dya0sqp5jjb2cl7cv2ry4gvcr359bkzzqcz0plknf3f1c5zrv0s"; };
 in
 
 stdenv.mkDerivation rec {
