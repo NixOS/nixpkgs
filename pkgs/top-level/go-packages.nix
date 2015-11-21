@@ -166,6 +166,15 @@ let
 
   ## THIRD PARTY
 
+  adapted = buildFromGitHub {
+    rev = "eaea06aaff855227a71b1c58b18bc6de822e3e77";
+    date = "2015-06-03";
+    owner = "michaelmacinnis";
+    repo = "adapted";
+    sha256 = "0f28sn5mj48087zhjdrph2sjcznff1i1lwnwplx32bc5ax8nx5xm";
+    propagatedBuildInputs = [ sys ];
+  };
+
   airbrake-go = buildFromGitHub {
     rev    = "5b5e269e1bc398d43f67e43dafff3414a59cd5a2";
     owner  = "tobi";
