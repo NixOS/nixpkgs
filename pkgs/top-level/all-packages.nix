@@ -12120,6 +12120,7 @@ let
   };
 
   kdeApps_15_08 = recurseIntoAttrs (import ../applications/kde-apps-15.08 { inherit pkgs; });
+  kdeApps_15_12 = recurseIntoAttrs (import ../applications/kde-apps-15.12 { inherit pkgs; });
   kdeApps_stable = kdeApps_15_08;
   kdeApps_latest = kdeApps_15_08;
 
