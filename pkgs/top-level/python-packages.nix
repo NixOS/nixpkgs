@@ -9221,19 +9221,18 @@ let
 
 
   memory_profiler = buildPythonPackage rec {
-    name = "memory_profiler-0.27";
+    name = "memory_profiler-${version}";
+    version = "0.39";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/m/memory_profiler/memory_profiler-0.27.tar.gz";
-      md5 = "212c0d7452dbaffb6b09474ac07b0668";
+      url = "https://pypi.python.org/packages/source/m/memory_profiler/${name}.tar.gz";
+      sha256 = "61021f2dade7edd6cc09d7924bfdccc453bd1949608412a3e021d44a410d3a23";
     };
-
-    # error: invalid command 'test'
-    doCheck = false;
 
     meta = {
       description = "A module for monitoring memory usage of a python program";
       homepage = http://pypi.python.org/pypi/memory_profiler;
+      license = licenses.bsd;
     };
   };
 
