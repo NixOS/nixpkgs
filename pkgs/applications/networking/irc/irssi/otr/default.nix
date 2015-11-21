@@ -1,16 +1,14 @@
 { stdenv, fetchurl, libotr, automake, autoconf, libtool, glib, pkgconfig, irssi }:
 
-let
-  rev = "640e98c74b";
-in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "irssi-otr-20131007-${rev}";
-  
+  name = "irssi-otr-${version}";
+  version = "1.0.0";
+
   src = fetchurl {
-    url = "https://github.com/cryptodotis/irssi-otr/tarball/${rev}";
+    url = "https://github.com/cryptodotis/irssi-otr/archive/v${version}.tar.gz";
     name = "${name}.tar.gz";
-    sha256 = "0d08ianzhy20w0ld8xx7hgrp9psg54l37619pcdpqyrnlzkkdalz";
+    sha256 = "bad09a2853ea6fb1a7af42c8f15868fd3ce45f973be90c78944ddf04f8ab517e";
   };
 
   patchPhase = ''
@@ -22,7 +20,7 @@ stdenv.mkDerivation rec {
   preConfigure = "sh ./bootstrap";
 
   buildInputs = [ libotr automake autoconf libtool glib pkgconfig irssi ];
-  
+
   meta = {
     homepage = https://github.com/cryptodotis/irssi-otr;
     license = stdenv.lib.licenses.gpl2Plus;
