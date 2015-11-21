@@ -12,8 +12,8 @@ let lib = import ../../../lib; in lib.makeOverridable (
 , extraBuildInputs ? []
 , __stdenvImpureHostDeps ? []
 , __extraImpureHostDeps ? []
-, _stdenvSandboxProfile ? ""
-, _extraSandboxProfile ? ""
+, stdenvSandboxProfile ? ""
+, extraSandboxProfile ? ""
 }:
 
 let
@@ -102,8 +102,8 @@ let
     , outputs ? [ "out" ]
     , __impureHostDeps ? []
     , __propagatedImpureHostDeps ? []
-    , _sandboxProfile ? ""
-    , _propagatedSandboxProfile ? ""
+    , sandboxProfile ? ""
+    , propagatedSandboxProfile ? ""
     , ... } @ attrs:
     let
       pos' =
@@ -154,12 +154,12 @@ let
         (removeAttrs attrs
           ["meta" "passthru" "crossAttrs" "pos"
            "__impureHostDeps" "__propagatedImpureHostDeps"
-           "_sandboxProfile" "_propagatedSandboxProfile"])
+           "sandboxProfile" "propagatedSandboxProfile"])
         // (let
           computedSandboxProfile =
-            lib.concatMap (input: input._propagatedSandboxProfile or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs);
+            lib.concatMap (input: input.__propagatedSandboxProfile or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs);
           computedPropagatedSandboxProfile =
-            lib.concatMap (input: input._propagatedSandboxProfile or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs);
+            lib.concatMap (input: input.__propagatedSandboxProfile or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs);
         in
         {
           builder = attrs.realBuilder or shell;
@@ -178,11 +178,11 @@ let
             (if crossConfig == null then propagatedBuildInputs else []);
         } // ifDarwin {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
-          _sandboxProfile =
-          let profiles = [ _extraSandboxProfile ] ++ computedSandboxProfile ++ computedPropagatedSandboxProfile ++ [ _propagatedSandboxProfile _sandboxProfile ];
+          __sandboxProfile =
+          let profiles = [ extraSandboxProfile ] ++ computedSandboxProfile ++ computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile sandboxProfile ];
               final = lib.concatStringsSep "\n" (lib.filter (x: x != "") (lib.unique profiles));
           in final;
-          _propagatedSandboxProfile = lib.unique (computedPropagatedSandboxProfile ++ [ _propagatedSandboxProfile ]);
+          __propagatedSandboxProfile = lib.unique (computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile ]);
         } // (if outputs' != [ "out" ] then {
           outputs = outputs';
         } else { })))) (
@@ -219,7 +219,7 @@ let
       inherit preHook initialPath shell defaultNativeBuildInputs;
     }
     // ifDarwin {
-      _sandboxProfile = _stdenvSandboxProfile;
+      __sandboxProfile = stdenvSandboxProfile;
     })
 
     // rec {

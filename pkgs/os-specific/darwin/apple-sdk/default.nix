@@ -1,7 +1,6 @@
 { stdenv, fetchurl, xar, gzip, cpio, pkgs }:
 
 let
-  generateFrameworkProfile = pkgs.callPackage ./generate-framework-profile.nix {};
   # sadly needs to be exported because security_tool needs it
   sdk = stdenv.mkDerivation rec {
     version = "10.9";
@@ -97,11 +96,11 @@ let
     propagatedBuildInputs = deps;
 
     # allows building the symlink tree
-    _sandboxProfile = ''
+    sandboxProfile = ''
       (allow file-read* (subpath "/System/Library/Frameworks/${name}.framework"))
     '';
 
-    _propagatedSandboxProfile = stdenv.lib.sandbox.importProfile (generateFrameworkProfile name);
+    __propagatedImpureHostDeps = "/System/Library/Frameworks/${name}.framework/${name}";
 
     meta = with stdenv.lib; {
       description = "Apple SDK framework ${name}";
@@ -165,7 +164,7 @@ in rec {
     });
 
     CoreServices = stdenv.lib.overrideDerivation super.CoreServices (drv: {
-      _propagatedSandboxProfile = drv._propagatedSandboxProfile ++ [''
+      __propagatedSandboxProfile = drv.__propagatedSandboxProfile ++ [''
         (allow mach-lookup (global-name "com.apple.CoreServices.coreservicesd"))
       ''];
     });
@@ -182,5 +181,5 @@ in rec {
 
   frameworks = bareFrameworks // overrides bareFrameworks;
 
-  inherit sdk generateFrameworkProfile;
+  inherit sdk;
 }

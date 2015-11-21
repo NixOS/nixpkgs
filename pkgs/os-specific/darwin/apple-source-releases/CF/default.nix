@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, icu, dyld, libdispatch, launchd, libclosure, generateFrameworkProfile }:
+{ stdenv, appleDerivation, icu, dyld, libdispatch, launchd, libclosure }:
 
 # this project uses blocks, a clang-only extension
 assert stdenv.cc.isClang;
@@ -8,7 +8,7 @@ appleDerivation {
 
   patches = [ ./add-cf-initialize.patch ./add-cfmachport.patch ./cf-bridging.patch ];
 
-  _propagatedSandboxProfile = stdenv.lib.sandbox.importProfile (generateFrameworkProfile "CoreFoundation");
+  __propagatedImpureHostDeps = "/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation";
 
   preBuild = ''
     substituteInPlace Makefile \

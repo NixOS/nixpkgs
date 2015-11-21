@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  _sandboxProfile = stdenv.lib.sandbox.allowFileRead "/dev/ptmx";
+  sandboxProfile = stdenv.lib.sandbox.allowFileRead "/dev/ptmx";
 
   # To fix the trouble in vim73, that it cannot cross-build with this patch
   # to bypass a configure script check that cannot be done cross-building.
