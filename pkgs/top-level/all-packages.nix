@@ -1203,6 +1203,8 @@ let
 
   dar = callPackage ../tools/archivers/dar { };
 
+  darkhttpd = callPackage ../servers/http/darkhttpd { };
+
   darkstat = callPackage ../tools/networking/darkstat { };
 
   davfs2 = callPackage ../tools/filesystems/davfs2 {
@@ -2000,6 +2002,8 @@ let
   less = callPackage ../tools/misc/less { };
 
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix { };
+
+  lnav = callPackage ../tools/misc/lnav { };
 
   lockfileProgs = callPackage ../tools/misc/lockfile-progs { };
 
@@ -3682,6 +3686,8 @@ let
 
   mksh = callPackage ../shells/mksh { };
 
+  pash = callPackage ../shells/pash { };
+
   tcsh = callPackage ../shells/tcsh { };
 
   rush = callPackage ../shells/rush { };
@@ -4850,6 +4856,12 @@ let
   };
 
   tinycc = callPackage ../development/compilers/tinycc { };
+
+  trv = callPackage ../development/tools/misc/trv {
+   inherit (ocamlPackages_4_02) findlib camlp4 core async async_unix 
+     async_extra sexplib async_shell core_extended async_find cohttp uri;
+    ocaml = ocaml_4_02;
+  };
 
   urweb = callPackage ../development/compilers/urweb { };
 
@@ -7682,7 +7694,6 @@ let
   mdds_0_7_1 = callPackage ../development/libraries/mdds/0.7.1.nix { };
   mdds = callPackage ../development/libraries/mdds { };
 
-  # failed to build
   mediastreamer = callPackage ../development/libraries/mediastreamer { };
 
   mediastreamer-openh264 = callPackage ../development/libraries/mediastreamer/msopenh264.nix { };
@@ -8408,6 +8419,7 @@ let
   t1lib = callPackage ../development/libraries/t1lib { };
 
   taglib = callPackage ../development/libraries/taglib { };
+  taglib_1_9 = callPackage ../development/libraries/taglib/1.9.nix { };
 
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
 
@@ -12688,7 +12700,10 @@ let
 
   pinfo = callPackage ../applications/misc/pinfo { };
 
-  pinpoint = callPackage ../applications/office/pinpoint {};
+  pinpoint = callPackage ../applications/office/pinpoint {
+    clutter = clutter_1_24;
+    clutter_gtk = clutter_gtk_1_6;
+  };
 
   pinta = callPackage ../applications/graphics/pinta {
     gtksharp = gtk-sharp;

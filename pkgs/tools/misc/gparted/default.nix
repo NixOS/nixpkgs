@@ -1,6 +1,6 @@
 { stdenv, fetchurl, intltool, gettext, makeWrapper
 , parted, gtk, glib, libuuid, pkgconfig, gtkmm, libxml2, hicolor_icon_theme
-, hdparm, utillinux
+, gpart, hdparm, procps, utillinux
 }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +17,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ intltool gettext makeWrapper pkgconfig ];
 
   postInstall = ''
+    wrapProgram $out/sbin/gparted \
+      --prefix PATH : "${procps}/bin"
     wrapProgram $out/sbin/gpartedbin \
-      --prefix PATH : "${hdparm}/bin:${utillinux}/bin"
+      --prefix PATH : "${gpart}/bin:${hdparm}/bin:${utillinux}/bin"
   '';
 
   meta = with stdenv.lib; {

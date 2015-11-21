@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   name = "retroarch-bare-${version}";
-  version = "20141224";
+  version = "2015-11-20";
 
   src = fetchgit {
-    url = git://github.com/libretro/RetroArch.git;
-    rev = "8b4176263988e750daf0c6d709fdceb4672e111e";
-    sha256 = "1l2iqgb7vlkh6kcwr4ggcn58ldyh63v9zvjmv26z8pxiqa1zr1xs";
+    url = https://github.com/libretro/RetroArch.git;
+    rev = "09dda14549fc13231311fd522a07a75e923889aa";
+    sha256 = "1f7w4i0idc4n0sqc5pcrsxsljk3f614sfdqhdgjb1l4xj16g37cg";
   };
 
   buildInputs = [ pkgconfig ffmpeg mesa nvidia_cg_toolkit freetype libxml2 libv4l coreutils
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Multi-platform emulator frontend for libretro cores";
     license = licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with maintainers; [ MP2E ];
+    maintainers = with maintainers; [ MP2E edwtjo ];
   };
 }

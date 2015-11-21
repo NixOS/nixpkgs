@@ -665,14 +665,18 @@ let
   };
 
   fzf = buildFromGitHub {
-    rev = "0.10.8";
+    rev = "0.11.0";
     owner = "junegunn";
     repo = "fzf";
-    sha256 = "0dkf2qb9k7x97lph6y45hmqqig4jkcg176c6jkf2r5866dydq549";
+    sha256 = "1jcvfdglmrsh7z6lasj2i7l3cwqd0ijhv5ywafmr7m1rn90nj1pf";
 
     buildInputs = [
       crypto ginkgo gomega junegunn.go-runewidth go-shellwords pkgs.ncurses text
     ];
+
+    postInstall= ''
+      cp $src/bin/fzf-tmux $bin/bin
+    '';
   };
 
   g2s = buildFromGitHub {
