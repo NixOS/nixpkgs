@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  makeWrapperArgs = ''
-    --set GDK_PIXBUF_MODULE_FILE ${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
+  preFixup = ''
+      export makeWrapperArgs="--set GDK_PIXBUF_MODULE_FILE $GDK_PIXBUF_MODULE_FILE"
   '';
 
   meta = with stdenv.lib; {
