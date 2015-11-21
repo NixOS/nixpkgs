@@ -923,5 +923,4 @@ self: super: {
   hscurses = overrideCabal super.hscurses (drv: {
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [ pkgs.ncurses ];
   });
-
 }

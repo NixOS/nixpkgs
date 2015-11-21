@@ -1555,7 +1555,7 @@ let
   garmintools = callPackage ../development/libraries/garmintools {};
 
   gawk = callPackage ../tools/text/gawk {
-    locale = darwin.adv_cmds;
+    inherit (darwin) locale;
   };
 
   gawkInteractive = appendToName "interactive"
@@ -5500,7 +5500,7 @@ let
 
   cmake = callPackage ../development/tools/build-managers/cmake {
     wantPS = stdenv.isDarwin;
-    ps     = if stdenv.isDarwin then darwin.adv_cmds else null;
+    inherit (darwin) ps;
   };
 
   cmakeCurses = cmake.override { useNcurses = true; };
@@ -5621,8 +5621,7 @@ let
   jdepend = callPackage ../development/tools/analysis/jdepend { };
 
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
-  flex_2_5_39 = callPackage ../development/tools/parsing/flex/2.5.39.nix { };
-  flex = flex_2_5_39;
+  flex = callPackage ../development/tools/parsing/flex/default.nix { };
 
   flexcpp = callPackage ../development/tools/parsing/flexc++ { };
 
@@ -11363,7 +11362,7 @@ let
     imagemagick = null;
     acl = null;
     gpm = null;
-    inherit (darwin.apple_sdk.frameworks) AppKit;
+    inherit (darwin.apple_sdk.frameworks) AppKit CoreWLAN GSS Kerberos ImageIO;
   };
 
   emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {

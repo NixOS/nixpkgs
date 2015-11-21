@@ -12,6 +12,8 @@ let lib = import ../../../lib; in lib.makeOverridable (
 , extraBuildInputs ? []
 , __stdenvImpureHostDeps ? []
 , __extraImpureHostDeps ? []
+, _stdenvSandboxProfile ? ""
+, _extraSandboxProfile ? ""
 }:
 
 let
@@ -100,6 +102,8 @@ let
     , outputs ? [ "out" ]
     , __impureHostDeps ? []
     , __propagatedImpureHostDeps ? []
+    , _sandboxProfile ? ""
+    , _propagatedSandboxProfile ? ""
     , ... } @ attrs:
     let
       pos' =
@@ -149,13 +153,13 @@ let
       lib.addPassthru (derivation (
         (removeAttrs attrs
           ["meta" "passthru" "crossAttrs" "pos"
-           "__impureHostDeps" "__propagatedImpureHostDeps"])
+           "__impureHostDeps" "__propagatedImpureHostDeps"
+           "_sandboxProfile" "_propagatedSandboxProfile"])
         // (let
-          # TODO: remove lib.unique once nix has a list canonicalization primitive
-          computedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs));
-          computedPropagatedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs));
+          computedSandboxProfile =
+            lib.concatMap (input: input._propagatedSandboxProfile or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs);
+          computedPropagatedSandboxProfile =
+            lib.concatMap (input: input._propagatedSandboxProfile or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs);
         in
         {
           builder = attrs.realBuilder or shell;
@@ -173,13 +177,12 @@ let
           propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
             (if crossConfig == null then propagatedBuildInputs else []);
         } // ifDarwin {
-          __impureHostDeps = computedImpureHostDeps ++ computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps ++ __impureHostDeps ++ __extraImpureHostDeps ++ [
-            "/dev/zero"
-            "/dev/random"
-            "/dev/urandom"
-            "/bin/sh"
-          ];
-          __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
+          # TODO: remove lib.unique once nix has a list canonicalization primitive
+          _sandboxProfile =
+          let profiles = [ _extraSandboxProfile ] ++ computedSandboxProfile ++ computedPropagatedSandboxProfile ++ [ _propagatedSandboxProfile _sandboxProfile ];
+              final = lib.concatStringsSep "\n" (lib.filter (x: x != "") (lib.unique profiles));
+          in final;
+          _propagatedSandboxProfile = lib.unique (computedPropagatedSandboxProfile ++ [ _propagatedSandboxProfile ]);
         } // (if outputs' != [ "out" ] then {
           outputs = outputs';
         } else { })))) (
@@ -216,7 +219,7 @@ let
       inherit preHook initialPath shell defaultNativeBuildInputs;
     }
     // ifDarwin {
-      __impureHostDeps = __stdenvImpureHostDeps;
+      _sandboxProfile = _stdenvSandboxProfile;
     })
 
     // rec {

@@ -291,7 +291,7 @@ in
         dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
       ];
       # fix_segfault: https://bugs.freedesktop.org/show_bug.cgi?id=91316
-      commonPatches = [ ./xorgserver-xkbcomp-path.patch ./fix_segfault.patch ];
+      commonPatches = [ ./xorgserver-xkbcomp-path.patch ];
       # XQuartz requires two compilations: the first to get X / XQuartz,
       # and the second to get Xvfb, Xnest, etc.
       darwinOtherX = overrideDerivation xorgserver (oldAttrs: {
