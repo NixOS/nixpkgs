@@ -6789,6 +6789,7 @@ let
   };
 
   kf515 = recurseIntoAttrs (import ../development/libraries/kde-frameworks-5.15 { inherit pkgs; });
+  kf516 = recurseIntoAttrs (import ../development/libraries/kde-frameworks-5.16 { inherit pkgs; });
   kf5_stable = kf515;
   kf5_latest = kf515;
 
