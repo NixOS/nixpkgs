@@ -1,12 +1,16 @@
-{ pkgs, fetchurl, stdenv, gtk3, udev, desktop_file_utils, shared_mime_info , intltool, pkgconfig, makeWrapper, ffmpegthumbnailer, jmtpfs, ifuse, lsof, udisks, hicolor_icon_theme, adwaita-icon-theme }:
+{ pkgs, fetchFromGitHub, stdenv, gtk3, udev, desktop_file_utils, shared_mime_info
+, intltool, pkgconfig, wrapGAppsHook, ffmpegthumbnailer, jmtpfs, ifuse, lsof, udisks
+, hicolor_icon_theme, adwaita-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "spacefm-${version}";
-  version = "1.0.1";
+  version = "1.0.4";
 
-  src = fetchurl {
-    url = "https://github.com/IgnorantGuru/spacefm/archive/${version}.tar.gz";
-    sha256 = "0mps6akwzr4mkljgywpimwgqf6ajnd7gq615877h20wyjf4h46vz";
+  src = fetchFromGitHub {
+    owner = "IgnorantGuru";
+    repo = "spacefm";
+    rev = "${version}";
+    sha256 = "1jywsb5yjrq4w9m94m4mbww36npd1jk6s0b59liz6965hv3xp2sy";
   };
 
   configureFlags = [
@@ -14,23 +18,22 @@ stdenv.mkDerivation rec {
     "--with-preferable-sudo=${pkgs.sudo}/bin/sudo"
   ];
 
-  buildInputs = [ gtk3 udev desktop_file_utils shared_mime_info intltool pkgconfig makeWrapper ffmpegthumbnailer jmtpfs ifuse lsof udisks ];
-
-  preFixup = ''
-    wrapProgram "$out/bin/spacefm" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+  preConfigure = ''
+    configureFlags="$configureFlags --sysconfdir=$out/etc"
   '';
+
+  buildInputs = [ gtk3 udev desktop_file_utils shared_mime_info intltool pkgconfig wrapGAppsHook ffmpegthumbnailer jmtpfs ifuse lsof udisks ];
 
   meta = with stdenv.lib;  {
     description = "A multi-panel tabbed file manager";
-    longDescription = "Multi-panel tabbed file and desktop manager for Linux
+    longDescription = ''
+      Multi-panel tabbed file and desktop manager for Linux
       with built-in VFS, udev- or HAL-based device manager,
       customizable menu system, and bash integration
-    ";
+    '';
     homepage = http://ignorantguru.github.io/spacefm/;
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = [ maintainers.jagajaga ];
+    maintainers = with maintainers; [ jagajaga obadz ];
   };
-
 }
