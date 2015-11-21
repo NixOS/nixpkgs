@@ -8,7 +8,7 @@ appleDerivation {
 
   patches = [ ./add-cf-initialize.patch ./add-cfmachport.patch ./cf-bridging.patch ];
 
-  __propagatedImpureHostDeps = "/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation";
+  __propagatedImpureHostDeps = [ "/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation" ];
 
   preBuild = ''
     substituteInPlace Makefile \

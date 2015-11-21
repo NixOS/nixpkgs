@@ -160,6 +160,10 @@ let
             lib.concatMap (input: input.__propagatedSandboxProfile or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs);
           computedPropagatedSandboxProfile =
             lib.concatMap (input: input.__propagatedSandboxProfile or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs);
+          computedImpureHostDeps =
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs));
+          computedPropagatedImpureHostDeps =
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs));
         in
         {
           builder = attrs.realBuilder or shell;
@@ -183,6 +187,13 @@ let
               final = lib.concatStringsSep "\n" (lib.filter (x: x != "") (lib.unique profiles));
           in final;
           __propagatedSandboxProfile = lib.unique (computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile ]);
+          __impureHostDeps = computedImpureHostDeps ++ computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps ++ __impureHostDeps ++ __extraImpureHostDeps ++ [
+            "/dev/zero"
+            "/dev/random"
+            "/dev/urandom"
+            "/bin/sh"
+          ];
+          __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
         } // (if outputs' != [ "out" ] then {
           outputs = outputs';
         } else { })))) (
@@ -220,6 +231,7 @@ let
     }
     // ifDarwin {
       __sandboxProfile = stdenvSandboxProfile;
+      __impureHostDeps = __stdenvImpureHostDeps;
     })
 
     // rec {
