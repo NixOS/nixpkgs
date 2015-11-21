@@ -17,8 +17,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   postInstall = ''
-      wrapProgram $out/bin/key-mon --prefix GDK_PIXBUF_MODULE_FILE : \
-      ${librsvg}/lib/gdk-pixbuf/loaders.cache
+      wrapProgram $out/bin/key-mon \
+          --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
     '';
 
   meta = with stdenv.lib; {
