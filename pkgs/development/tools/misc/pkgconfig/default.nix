@@ -13,7 +13,7 @@ stdenv.mkDerivation (rec {
   buildInputs = stdenv.lib.optional (stdenv.isCygwin || stdenv.isDarwin || stdenv.isSunOS) libiconv;
 
   configureFlags = [ "--with-internal-glib" ]
-    ++ stdenv.lib.optional (stdenv.isSunOS) "--with-libiconv=gnu";
+    ++ stdenv.lib.optional (stdenv.isSunOS) [ "--with-libiconv=gnu" "--with-system-library-path" "--with-system-include-path" "CFLAGS=-DENABLE_NLS" ];
 
   patches = (if vanilla then [] else [
     # Process Requires.private properly, see
