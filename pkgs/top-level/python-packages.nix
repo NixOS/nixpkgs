@@ -19119,11 +19119,11 @@ in modules // {
 
 
   werkzeug = buildPythonPackage rec {
-    name = "Werkzeug-0.9.6";
+    name = "Werkzeug-0.10.4";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/W/Werkzeug/${name}.tar.gz";
-      md5 = "f7afcadc03b0f2267bdc156c34586043";
+      sha256 = "9d2771e4c89be127bc4bac056ab7ceaf0e0064c723d6b6e195739c3af4fd5c1d";
     };
 
     propagatedBuildInputs = with self; [ itsdangerous ];
