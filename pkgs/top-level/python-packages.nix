@@ -3287,6 +3287,24 @@ let
     };
   });
 
+  howdoi = buildPythonPackage (rec {
+    name = "howdoi-${version}";
+    version = "1.1.7";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/h/howdoi/${name}.tar.gz";
+      sha256 = "df4e49a219872324875d588e7699a1a82174a267e8487505e86bfcb180aea9b7";
+    };
+
+    propagatedBuildInputs = with self; [ self.six requests-cache pygments pyquery ];
+
+    meta = {
+      description = "Instant coding answers via the command line";
+      homepage = http://pypi.python.org/pypi/howdoi;
+      license = licenses.mit;
+    };
+  });
+
   dateutil = buildPythonPackage (rec {
     name = "dateutil-${version}";
     version = "2.4.2";
