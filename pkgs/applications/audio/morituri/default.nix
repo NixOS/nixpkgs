@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   pythonPath = [
     pygobject gst_python pythonPackages.musicbrainzngs
     pythonPackages.pycdio pythonPackages.pyxdg setuptools
+    pythonPackages.CDDB
   ];
 
   buildInputs = [
