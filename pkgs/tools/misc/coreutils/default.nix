@@ -105,4 +105,4 @@ let
     };
   };
 in
-  self;
+  self
