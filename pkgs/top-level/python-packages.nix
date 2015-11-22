@@ -695,7 +695,6 @@ let
       url = "https://pypi.python.org/packages/source/a/atomiclong/atomiclong-${version}.tar.gz";
       sha256 = "1gjbc9lvpkgg8vj7dspif1gz9aq4flkhxia16qj6yvb7rp27h4yb";
     };
-
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ cffi ];
 
@@ -13049,7 +13048,7 @@ let
 
 
   praw = buildPythonPackage rec {
-    name = "praw-3.1.0";
+    name = "praw-3.3.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/praw/${name}.zip";
@@ -13057,6 +13056,7 @@ let
     };
 
     propagatedBuildInputs = with self; [
+      requests2
       decorator
       flake8
       mock
