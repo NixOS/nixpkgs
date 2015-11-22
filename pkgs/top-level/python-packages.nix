@@ -16323,12 +16323,12 @@ let
 
   scikitlearn = buildPythonPackage rec {
     name = "scikit-learn-${version}";
-    version = "0.17b1";
+    version = "0.17";
     disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
     src = pkgs.fetchurl {
       url = "https://github.com/scikit-learn/scikit-learn/archive/${version}.tar.gz";
-      sha256 = "b5965c888ae44fe3f5a1b15297e5d8e254a41d1848df99e00efc2fc643e6e8f2";
+      sha256 = "9946ab26bec8ba771a366c6c496514e37da88b9cb4cd05b3bb1c031eb1da1168";
     };
 
     buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
