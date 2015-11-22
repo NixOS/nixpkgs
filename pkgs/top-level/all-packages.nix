@@ -12655,6 +12655,8 @@ let
 
   photoqt = callPackage ../applications/graphics/photoqt { };
 
+  phototonic = callPackage ../applications/graphics/phototonic { };
+
   pianobar = callPackage ../applications/audio/pianobar { };
 
   pianobooster = callPackage ../applications/audio/pianobooster { };
