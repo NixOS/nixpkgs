@@ -16050,18 +16050,27 @@ let
   };
 
 
-  scikitlearn = buildPythonPackage rec {
+  scikitlearn = let
+    openblas = pkgs.openblas.overrideDerivation (oldAttrs: rec {
+      name = "openblas-${version}";
+      version = "0.2.14";
+      src = pkgs.fetchurl {
+        url = "https://github.com/xianyi/OpenBLAS/archive/v${version}.tar.gz";
+        sha256 = "2411c4f56f477b42dff54db2b7ffc0b7cf53bb9778d54982595c64cc69c40fc1";
+      };
+    });
+  in buildPythonPackage rec {
     name = "scikit-learn-${version}";
-    version = "0.17b1";
+    version = "0.17";
     disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
     src = pkgs.fetchurl {
       url = "https://github.com/scikit-learn/scikit-learn/archive/${version}.tar.gz";
-      sha256 = "b5965c888ae44fe3f5a1b15297e5d8e254a41d1848df99e00efc2fc643e6e8f2";
+      sha256 = "9946ab26bec8ba771a366c6c496514e37da88b9cb4cd05b3bb1c031eb1da1168";
     };
 
     buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
-    propagatedBuildInputs = with self; [ numpy scipy pkgs.openblas ];
+    propagatedBuildInputs = with self; [ numpy scipy openblas ];
 
     buildPhase = ''
       ${self.python.interpreter} setup.py build_ext -i --fcompiler='gnu95'

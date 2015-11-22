@@ -2,6 +2,7 @@
 # Most packages depending on openblas expect integer width to match pointer width,
 # but some expect to use 32-bit integers always (for compatibility with reference BLAS).
 , blas64 ? null
+, ...
 }:
 
 with stdenv.lib;
