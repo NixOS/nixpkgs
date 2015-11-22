@@ -11695,6 +11695,8 @@ let
 
   keepass = callPackage ../applications/misc/keepass { };
 
+  keepass-keefox = callPackage ../applications/misc/keepass-plugins/keefox { };
+
   exrdisplay = callPackage ../applications/graphics/exrdisplay {
     fltk = fltk20;
   };
