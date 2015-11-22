@@ -5648,9 +5648,9 @@ let
 
   gotty = goPackages.gotty.bin // { outputs = [ "bin" ]; };
 
-  gradle = callPackage ../development/tools/build-managers/gradle { };
-
-  gradle25 = callPackage ../development/tools/build-managers/gradle/2.5.nix { };
+  gradleGen = callPackage ../development/tools/build-managers/gradle { };
+  gradle = self.gradleGen.gradle28;
+  gradle25 = self.gradleGen.gradle25;
 
   gperf = callPackage ../development/tools/misc/gperf { };
 
