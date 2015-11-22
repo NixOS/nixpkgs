@@ -10128,6 +10128,38 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  libfile-stripnondeterminism = buildPerlPackage rec {
+    name = "libstrip-nondeterminism-${version}";
+    version = "0.014";
+
+    src = fetchurl {
+      url = "http://http.debian.net/debian/pool/main/s/strip-nondeterminism/strip-nondeterminism_${version}.orig.tar.gz";
+      sha256 = "0yiddi9r87iysa2msr6l5fc5631zmi5ldsy8m3sd9chrlhag361g";
+    };
+
+    buildInputs = [ ArchiveZip_1_53 pkgs.file ];
+  };
+
+
+  strip-nondeterminism = buildPerlPackage rec {
+    name = "strip-nondeterminism-${version}";
+    version = "0.014";
+
+    src = fetchurl {
+      url = "http://http.debian.net/debian/pool/main/s/strip-nondeterminism/strip-nondeterminism_${version}.orig.tar.gz";
+      sha256 = "0yiddi9r87iysa2msr6l5fc5631zmi5ldsy8m3sd9chrlhag361g";
+    };
+
+    buildInputs = [ ArchiveZip_1_53 libfile-stripnondeterminism pkgs.file ];
+
+    meta = with stdenv.lib; {
+      description = "A Perl module for stripping bits of non-deterministic information";
+      license = licenses.gpl3;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ pSub ];
+    };
+  };
+
   SubExporter = buildPerlPackage {
     name = "Sub-Exporter-0.984";
     src = fetchurl {
