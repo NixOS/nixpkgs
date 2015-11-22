@@ -3305,6 +3305,24 @@ let
     };
   });
 
+  nose-parameterized = buildPythonPackage (rec {
+    name = "nose-parameterized-${version}";
+    version = "0.5.0";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/n/nose-parameterized/${name}.tar.gz";
+      sha256 = "a11c41b0cf8218e7cdc19ab7a1bdf5c141d161cd2350daee819473cc63cd0685";
+    };
+
+    propagatedBuildInputs = with self; [ self.six ];
+
+    meta = {
+      description = "Parameterized testing with any Python test framework";
+      homepage = http://pypi.python.org/pypi/nose-parameterized;
+      license = licenses.bsd3;
+    };
+  });
+
   dateutil = buildPythonPackage (rec {
     name = "dateutil-${version}";
     version = "2.4.2";
