@@ -1,4 +1,4 @@
-{stdenv, fetchurl, bzip2}:
+{ stdenv, fetchurl, bzip2 }:
 
 let major = "1.1";
     version = "${major}.9";
@@ -12,15 +12,16 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ bzip2 ];
-  installPhase = ''
-      make install PREFIX=$out
-  '';
+
+  preBuild = "substituteInPlace Makefile --replace g++ c++";
+
+  installFlags = "PREFIX=$out";
 
   meta = with stdenv.lib; {
     homepage = http://compression.ca/pbzip2/;
     description = "A parallel implementation of bzip2 for multi-core machines";
     license = licenses.bsd2;
     maintainers = with maintainers; [viric];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
