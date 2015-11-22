@@ -9,10 +9,18 @@ stdenv.mkDerivation {
   phases = "installPhase fixupPhase";
   installPhase = ''
     mkdir -p $out/share/gdb/system-gdbinit
-    echo add-auto-load-safe-path ${lib.concatStringsSep ":" safePaths} > $out/share/gdb/system-gdbinit/safePaths.py
+    allSafePaths=${lib.concatStringsSep ":" safePaths}
+    for safePath in ${lib.concatStringsSep " " safePaths}; do
+      if [ -e $safePath/nix-support/propagated-user-env-packages ]; then
+        for package in $(cat $safePath/nix-support/propagated-user-env-packages); do
+          allSafePaths=$allSafePaths:$package
+        done
+      fi
+    done
+    echo add-auto-load-safe-path $allSafePaths > $out/share/gdb/system-gdbinit/safePaths
     makeWrapper "${gdb}/bin/gdb" \
       "$out/bin/gdb" \
-      --add-flags -x $out/share/gdb/system/gdbinit/safePaths.py
+      --add-flags "-x $out/share/gdb/system-gdbinit/safePaths"
     '';
   meta = gdb.meta;
 }
