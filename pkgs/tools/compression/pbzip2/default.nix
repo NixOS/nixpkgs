@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ bzip2 ];
+
+  preBuild = if !stdenv.cc.isGNU then ''substituteInPlace Makefile --replace g++ c++'' else '''';
+
   installPhase = ''
       make install PREFIX=$out
   '';
@@ -21,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "A parallel implementation of bzip2 for multi-core machines";
     license = licenses.bsd2;
     maintainers = with maintainers; [viric];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
