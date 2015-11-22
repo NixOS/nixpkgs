@@ -103,6 +103,18 @@ let
     goPackageAliases = [ "code.google.com/p/snappy-go/snappy" ];
   };
 
+  sys = buildFromGitHub {
+    rev    = "d9157a9621b69ad1d8d77a1933590c416593f24f";
+    date   = "2015-02-01";
+    owner  = "golang";
+    repo   = "sys";
+    sha256 = "1asdbp7rj1j1m1aar1a022wpcwbml6zih6cpbxaw7b2m8v8is931";
+    goPackagePath = "golang.org/x/sys";
+    goPackageAliases = [
+      "github.com/golang/sys"
+    ];
+  };
+
   text = buildFromGitHub {
     rev = "505f8b49cc14d790314b7535959a10b87b9161c7";
     date = "2015-08-27";
@@ -153,6 +165,15 @@ let
 
 
   ## THIRD PARTY
+
+  adapted = buildFromGitHub {
+    rev = "eaea06aaff855227a71b1c58b18bc6de822e3e77";
+    date = "2015-06-03";
+    owner = "michaelmacinnis";
+    repo = "adapted";
+    sha256 = "0f28sn5mj48087zhjdrph2sjcznff1i1lwnwplx32bc5ax8nx5xm";
+    propagatedBuildInputs = [ sys ];
+  };
 
   airbrake-go = buildFromGitHub {
     rev    = "5b5e269e1bc398d43f67e43dafff3414a59cd5a2";
@@ -2076,6 +2097,17 @@ let
     };
     buildInputs = [ oglemock oglematchers ];
     doCheck = false; # check this again
+  };
+
+  oh = buildFromGitHub {
+    rev = "a99b5f1128247014fb2a83a775fa1813be14b67d";
+    date = "2015-11-21";
+    owner = "michaelmacinnis";
+    repo = "oh";
+    sha256 = "1srl3d1flqlh2k9q9pjss72rxw82msys108x22milfylmr75v03m";
+    goPackageAliases = [ "github.com/michaelmacinnis/oh" ];
+    buildInputs = [ adapted liner ];
+    disabled = isGo14;
   };
 
   openssl = buildFromGitHub {
