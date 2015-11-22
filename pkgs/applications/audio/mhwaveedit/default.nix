@@ -1,5 +1,6 @@
 { stdenv, fetchurl, makeWrapper, SDL , alsaLib, gtk, libjack2, ladspaH
-, ladspaPlugins, libsamplerate, libsndfile, pkgconfig, libpulseaudio, lame }:
+, ladspaPlugins, libsamplerate, libsndfile, pkgconfig, libpulseaudio, lame
+, vorbisTools }:
 
 stdenv.mkDerivation  rec {
   name = "mhwaveedit-${version}";
@@ -17,7 +18,8 @@ stdenv.mkDerivation  rec {
 
   postInstall = ''
     wrapProgram $out/bin/mhwaveedit \
-      --prefix PATH : ${lame}/bin/
+      --prefix PATH : ${lame}/bin/ \
+      --prefix PATH : ${vorbisTools}/bin/
   '';
 
   meta = with stdenv.lib; {
