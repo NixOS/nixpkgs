@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://fortawesome.github.io/Font-Awesome/assets/${name}.zip";
-    sha256 = "1bmjh3j533awihdxihvlk2d1ypzs9q7azj0viqbm0df8jj2v4rwq";
+    sha256 = "1k7ff71pcp2qrnqj4yzrjg96m7yma9r58wdk68sqb93q2kq9fp3i";
   };
 
   buildCommand = ''
