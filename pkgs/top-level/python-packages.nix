@@ -8902,19 +8902,23 @@ let
   };
 
   lockfile = buildPythonPackage rec {
-    name = "lockfile-0.9.1";
-
+    name = "lockfile-${version}";
+    version = "0.10.2";
     src = pkgs.fetchurl {
-      url = "http://pylockfile.googlecode.com/files/${name}.tar.gz";
-      sha1 = "1eebaee375641c9f29aeb21768f917dd2b985752";
+      sha256 = "0zi7amj3y55lp6339w217zksn1a0ssfvscmv059g2wvnyjqi6f95";
+      url = "https://github.com/openstack/pylockfile/archive/${version}.tar.gz";
     };
 
-    # error: invalid command 'test'
-    doCheck = false;
+    doCheck = true;
+    OSLO_PACKAGE_VERSION = "${version}";
+    buildInputs = with self; [
+      pbr nose sphinx_1_2
+    ];
 
     meta = {
-      homepage = http://code.google.com/p/pylockfile/;
+      homepage = http://launchpad.net/pylockfile;
       description = "Platform-independent advisory file locking capability for Python applications";
+      license = licenses.asl20;
     };
   };
 
@@ -10879,16 +10883,7 @@ let
     doCheck = false;
 
     propagatedBuildInputs = with self; [
-      pbr requests2
-        (sphinx.override rec {
-          name = "sphinx-1.2.3";
-          src = pkgs.fetchurl {
-            url = "https://pypi.python.org/packages/source/s/sphinx/${name}.tar.gz";
-            sha256 = "94933b64e2fe0807da0612c574a021c0dac28c7bd3c4a23723ae5a39ea8f3d04";
-            };
-          patches = [];
-          disabled = isPy35;
-        })
+      pbr requests2 sphinx_1_2
     ];
   };
 
@@ -16890,6 +16885,15 @@ let
     };
   });
 
+  sphinx_1_2 = self.sphinx.override rec {
+    name = "sphinx-1.2.3";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sphinx/sphinx-1.2.3.tar.gz";
+      sha256 = "94933b64e2fe0807da0612c574a021c0dac28c7bd3c4a23723ae5a39ea8f3d04";
+    };
+    patches = [];
+    disabled = isPy35;
+  };
 
   sphinx_rtd_theme = buildPythonPackage (rec {
     name = "sphinx_rtd_theme-0.1.8";
