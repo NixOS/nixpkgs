@@ -3266,6 +3266,27 @@ let
     };
   };
 
+  requests-cache = buildPythonPackage (rec {
+    name = "requests-cache-${version}";
+    version = "0.4.10";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/r/requests-cache/${name}.tar.gz";
+      sha256 = "671969d00719fa3e80476b128dc9232025926884d0110d4d235abdd9c3508fc0";
+    };
+
+    buildInputs = with self; [ mock sqlite3 ];
+
+    propagatedBuildInputs = with self; [ self.six requests2 ];
+
+    meta = {
+      description = "Persistent cache for requests library";
+      homepage = http://pypi.python.org/pypi/requests-cache;
+      license = licenses.bsd3;
+    };
+  });
+
   dateutil = buildPythonPackage (rec {
     name = "dateutil-${version}";
     version = "2.4.2";
