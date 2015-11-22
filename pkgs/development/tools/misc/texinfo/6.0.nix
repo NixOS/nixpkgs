@@ -9,17 +9,17 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl xz ]
-    ++ stdenv.lib.optional stdenv.isSunOS libiconv
+    ++ stdenv.lib.optionals stdenv.isSunOS [ libiconv gawk ]
     ++ stdenv.lib.optional interactive ncurses;
 
-  configureFlags = "AWK=${gawk}/bin/awk";
+  configureFlags = stdenv.lib.optionalString stdenv.isSunOS "AWK=${gawk}/bin/awk";
 
   preInstall = ''
     installFlags="TEXMF=$out/texmf-dist";
     installTargets="install install-tex";
   '';
 
-  doCheck = !stdenv.isDarwin && !interactive;
+  doCheck = !stdenv.isDarwin && !interactive && !stdenv.isSunOS/*flaky*/;
 
   meta = {
     homepage = "http://www.gnu.org/software/texinfo/";
