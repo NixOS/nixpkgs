@@ -12983,6 +12983,27 @@ let
   };
 
 
+  polygon2 = pythonPackages.buildPythonPackage rec {
+    name = "polygon2-2.0.7";
+
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/P/Polygon2/Polygon2-2.0.7.zip";
+      sha256 = "091z8m333kfsb5r6frx0v1cnhk4w85n8jrsr39pmia2q4a7kfyd7";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Handles polygonal shapes in 2D";
+      homepage = http://www.j-raedler.de/projects/polygon;
+      # This package also includes a (modified) copy of 'gpc', which has its
+      # own license (free for non-commercial use), see homepage.
+      license = licenses.lgpl2;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   polylint = buildPythonPackage rec {
     name = "polylint-${version}";
     version = "158125c6ab";
@@ -17944,6 +17965,28 @@ let
        license = licenses.zpt20;
      };
    };
+
+
+  ttfquery = buildPythonPackage rec {
+    name = "ttfquery-${version}";
+    version = "1.0.5";
+
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/T/TTFQuery/TTFQuery-${version}.tar.gz";
+      sha256 = "0kbymjlxj0wmhsj3ckj84k8qcm53ivg2g7w1852pbqiyj1lx7f6m";
+    };
+
+    #propagatedBuildInputs = with pythonPackages; [  ];
+
+    meta = with stdenv.lib; {
+      description = "FontTools-based package for querying system fonts";
+      homepage = http://ttfquery.sourceforge.net/;
+      #license = unknown;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
 
 
   turses = buildPythonPackage (rec {
