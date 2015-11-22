@@ -1,0 +1,14 @@
+--- old/KeePass/Forms/MainForm.cs
++++ new/KeePass/Forms/MainForm.cs
+@@ -384,9 +384,$OUTPUT_LC$ @@ namespace KeePass.Forms
+ 			m_pluginManager.Initialize(m_pluginDefaultHost);
+ 
+ 			m_pluginManager.UnloadAllPlugins();
+-			if(AppPolicy.Current.Plugins)
+-				m_pluginManager.LoadAllPlugins(UrlUtil.GetFileDirectory(
+-					WinUtil.GetExecutable(), false, true));
++			if(AppPolicy.Current.Plugins) {
+$DO_LOADS$+			}
+ 
+ 			// Delete old files *after* loading plugins (when timestamps
+ 			// of loaded plugins have been updated already)
