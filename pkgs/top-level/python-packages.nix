@@ -3323,6 +3323,24 @@ let
     };
   });
 
+  jdatetime = buildPythonPackage (rec {
+    name = "jdatetime-${version}";
+    version = "1.7.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/j/jdatetime/${name}.tar.gz";
+      sha256 = "c08ba5791c2350b26e87ddf478bf223108146e241b6c949538221b54afd633ac";
+    };
+
+    propagatedBuildInputs = with self; [ self.six ];
+
+    meta = {
+      description = "Jalali datetime binding for python";
+      homepage = http://pypi.python.org/pypi/jdatetime;
+      license = licenses.psfl;
+    };
+  });
+
   dateutil = buildPythonPackage (rec {
     name = "dateutil-${version}";
     version = "2.4.2";
