@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl xz ]
-    ++ stdenv.lib.optional stdenv.isSunOS libiconv
+    ++ stdenv.lib.optional stdenv.isSunOS [ libiconv gawk ]
     ++ stdenv.lib.optional interactive ncurses;
 
-  configureFlags = "AWK=${gawk}/bin/awk";
+  configureFlags = stdenv.lib.optionalString stdenv.isSunOS "AWK=${gawk}/bin/awk";
 
   preInstall = ''
     installFlags="TEXMF=$out/texmf-dist";
