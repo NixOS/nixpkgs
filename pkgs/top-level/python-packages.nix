@@ -3341,6 +3341,27 @@ let
     };
   });
 
+  dateparser = buildPythonPackage (rec {
+    name = "dateparser-${version}";
+    version = "0.3.1";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/d/dateparser/${name}.tar.gz";
+      sha256 = "56c291a45398e9172d53201ac213226989295749191c1f02d8f3b593b6f88e48";
+    };
+
+    buildInputs = with self; [ nose nose-parameterized mock ];
+
+    propagatedBuildInputs = with self; [ self.six jdatetime pyyaml dateutil ];
+
+    meta = {
+      description = "Date parsing library designed to parse dates from HTML pages";
+      homepage = http://pypi.python.org/pypi/dateparser;
+      license = licenses.bsd3;
+    };
+  });
+
   dateutil = buildPythonPackage (rec {
     name = "dateutil-${version}";
     version = "2.4.2";
