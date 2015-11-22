@@ -11,6 +11,7 @@
   abaldeau = "Andreas Baldeau <andreas@baldeau.net>";
   abbradar = "Nikolay Amiantov <ab@fmap.me>";
   adev	   = "Adrien Devresse <adev@adev.name>";
+  afadhyatma = "Alexander Adhyatma <franksn@openmailbox.org>";
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
   aflatter = "Alexander Flatter <flatter@fastmail.fm>";
   aherrmann = "Andreas Herrmann <andreash87@gmx.ch>";

@@ -21,6 +21,7 @@ in
     ./ratpoison.nix
     ./sawfish.nix
     ./stumpwm.nix
+    ./swm.nix
     ./spectrwm.nix
     ./twm.nix
     ./windowmaker.nix
