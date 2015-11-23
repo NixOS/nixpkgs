@@ -260,10 +260,10 @@ executed and in what order:
       <para>Specifies the phases.  You can change the order in which
       phases are executed, or add new phases, by setting this
       variable.  If it’s not set, the default value is used, which is
-      <literal>$prePhases unpackPhase patchPhase $preConfigurePhases
-      configurePhase $preBuildPhases buildPhase checkPhase
-      $preInstallPhases installPhase fixupPhase $preDistPhases
-      distPhase $postPhases</literal>.
+      <literal>prePhases unpackPhase patchPhase preConfigurePhases
+      configurePhase preBuildPhases buildPhase checkPhase
+      preInstallPhases installPhase fixupPhase preDistPhases
+      distPhase postPhases</literal>.
       </para>
       
       <para>Usually, if you just want to add a few phases, it’s more
