@@ -27,12 +27,21 @@ stdenv.mkDerivation rec {
     "--enable-symlinks"
   ] ++ lib.optional unicode "--enable-widec";
 
+  # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
+  CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
+
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
 
   preConfigure = ''
     configureFlagsArray+=("--includedir=$out/include")
     export PKG_CONFIG_LIBDIR="$out/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
+  ''
+  + lib.optionalString stdenv.isSunOS ''
+    sed -i -e '/-D__EXTENSIONS__/ s/-D_XOPEN_SOURCE=\$cf_XOPEN_SOURCE//' \
+           -e '/CPPFLAGS="$CPPFLAGS/s/ -D_XOPEN_SOURCE_EXTENDED//' \
+        configure
+    CFLAGS=-D_XOPEN_SOURCE_EXTENDED
   '' + lib.optionalString stdenv.isCygwin ''
     sed -i -e 's,LIB_SUFFIX="t,LIB_SUFFIX=",' configure
   '';

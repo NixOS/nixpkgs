@@ -19,12 +19,12 @@ patchShebangs() {
     local newInterpreterLine
 
     find "$dir" -type f -perm -0100 | while read f; do
-        if [ "$(head -1 "$f" | head -c +2)" != '#!' ]; then
+        if [ "$(head -1 "$f" | head -c+2)" != '#!' ]; then
             # missing shebang => not a script
             continue
         fi
 
-        oldInterpreterLine=$(head -1 "$f" | tail -c +3)
+        oldInterpreterLine=$(head -1 "$f" | tail -c+3)
         read -r oldPath arg0 args <<< "$oldInterpreterLine"
 
         if $(echo "$oldPath" | grep -q "/bin/env$"); then
