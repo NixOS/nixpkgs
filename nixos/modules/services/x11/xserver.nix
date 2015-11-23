@@ -409,6 +409,16 @@ in
           if possible.
         '';
       };
+
+      enableCtrlAltBackspace = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to enable the DontZap option, which binds Ctrl+Alt+Backspace
+          to forcefully kill X. This can lead to data loss and is disabled
+          by default.
+        '';
+      };
     };
 
   };
@@ -533,6 +543,7 @@ in
       ''
         Section "ServerFlags"
           Option "AllowMouseOpenFail" "on"
+          Option "DontZap" "${if cfg.enableCtrlAltBackspace then "off" else "on"}"
           ${cfg.serverFlagsSection}
         EndSection
 
