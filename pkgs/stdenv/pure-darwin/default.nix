@@ -14,6 +14,7 @@ let
     "/usr/lib/libauto.dylib"
     "/usr/lib/libc++abi.dylib"
     "/usr/lib/libc++.1.dylib"
+    "/usr/lib/libstdc++.dylib"
     "/usr/lib/libDiagnosticMessagesClient.dylib"
     "/usr/lib/system"
   ];
