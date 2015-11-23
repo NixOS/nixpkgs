@@ -157,29 +157,25 @@ let
   setupLibDirs = if isTargetBuild then setupLibDirs_target
                                   else setupLibDirs_multi;
 
-  setupIncludeDir = ''
-    if [ -x "${staticUsrProfileTarget}/include" ]
-    then
-        ln -s "${staticUsrProfileTarget}/include"
-    fi
-  '';
-
   # the target profile is the actual profile that will be used for the chroot
   setupTargetProfile = ''
     mkdir -m0755 usr
     cd usr
     ${setupLibDirs}
-    ${setupIncludeDir}
     for i in bin sbin share include; do
-      cp -r "${staticUsrProfileTarget}/$i" $i
+      if [ -d "${staticUsrProfileTarget}/$i" ]; then
+        cp -r "${staticUsrProfileTarget}/$i" "$i"
+      fi
     done
     cd ..
     
     for i in var etc; do
-      cp -r "${staticUsrProfileTarget}/$i" "$i"
+      if [ -d "${staticUsrProfileTarget}/$i" ]; then
+        cp -r "${staticUsrProfileTarget}/$i" "$i"
+      fi
     done
     for i in usr/{bin,sbin,lib,lib32,lib64}; do
-      if [ -x "$i" ]; then
+      if [ -d "$i" ]; then
         ln -s "$i"
       fi
     done
