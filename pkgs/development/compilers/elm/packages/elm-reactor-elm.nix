@@ -13,6 +13,6 @@
   };
   "elm-lang/core" = {
     version = "3.0.0";
-    sha256 = "1bc4wibcmv6sxf3wq83avhzwj137wac1gf3zx52rfwnb5jm3lipm";
+    sha256 = "18pdsnz05pjhdv575l3bqzrjd7780zgpcklg4c6lvwwcanpg42pk";
   };
 }
