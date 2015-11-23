@@ -2902,7 +2902,7 @@ let
 
   rosegarden = callPackage ../applications/audio/rosegarden { };
 
-  rpPPPoE = builderDefsPackage (callPackage ../tools/networking/rp-pppoe) { };
+  rpPPPoE = callPackage ../tools/networking/rp-pppoe { };
 
   rpm = callPackage ../tools/package-management/rpm { };
 
