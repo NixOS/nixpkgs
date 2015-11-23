@@ -116,6 +116,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
        tmp_path=$(mktemp -d)
        export PATH="$tmp_path/bin:$PATH"
        export PYTHONPATH="$tmp_path/${python.sitePackages}:$PYTHONPATH"
+       mkdir -p $tmp_path/lib/${python.libPrefix}/site-packages
        ${bootstrapped-pip}/bin/pip install -e . --prefix $tmp_path
     fi
     ${postShellHook}
