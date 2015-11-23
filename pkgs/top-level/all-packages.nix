@@ -6789,8 +6789,9 @@ let
   };
 
   kf515 = recurseIntoAttrs (import ../development/libraries/kde-frameworks-5.15 { inherit pkgs; });
+  kf516 = recurseIntoAttrs (import ../development/libraries/kde-frameworks-5.16 { inherit pkgs; });
   kf5_stable = kf515;
-  kf5_latest = kf515;
+  kf5_latest = kf516;
 
   kf5PackagesFun = self: with self; {
 
@@ -12119,8 +12120,9 @@ let
   };
 
   kdeApps_15_08 = recurseIntoAttrs (import ../applications/kde-apps-15.08 { inherit pkgs; });
+  kdeApps_15_12 = recurseIntoAttrs (import ../applications/kde-apps-15.12 { inherit pkgs; });
   kdeApps_stable = kdeApps_15_08;
-  kdeApps_latest = kdeApps_15_08;
+  kdeApps_latest = kdeApps_15_12;
 
   keepnote = callPackage ../applications/office/keepnote {
     pygtk = pyGtkGlade;
@@ -14575,9 +14577,10 @@ let
 
   numix-gtk-theme = callPackage ../misc/themes/gtk3/numix-gtk-theme { };
 
-  plasma54 = recurseIntoAttrs (callPackage ../desktops/plasma-5.4 { inherit pkgs; });
+  plasma54 = recurseIntoAttrs (import ../desktops/plasma-5.4 { inherit pkgs; });
+  plasma55 = recurseIntoAttrs (import ../desktops/plasma-5.5 { inherit pkgs; });
   plasma5_stable = plasma54;
-  plasma5_latest = plasma54;
+  plasma5_latest = plasma55;
 
   kde5 = kf5_stable // plasma5_stable // kdeApps_stable;
 

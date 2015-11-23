@@ -108,7 +108,7 @@ in
         kdeApps.okular
         kdeApps.print-manager
 
-        kdeApps.oxygen-icons
+        (plasma5.oxygen-icons or kf5.oxygen-icons5)
         pkgs.hicolor_icon_theme
 
         plasma5.kde-gtk-config
@@ -155,7 +155,7 @@ in
         GST_PLUGIN_SYSTEM_PATH_1_0 = [ "/lib/gstreamer-1.0" ];
       };
 
-    fonts.fonts = [ plasma5.oxygen-fonts ];
+    fonts.fonts = [ (plasma5.oxygen-fonts or pkgs.noto-fonts) ];
 
     programs.ssh.askPassword = "${plasma5.ksshaskpass}/bin/ksshaskpass";
 
