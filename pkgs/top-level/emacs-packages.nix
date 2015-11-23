@@ -83,6 +83,16 @@ let self = _self // overrides;
     };
   };
 
+  tablist = melpaBuild rec {
+    pname = "tablist";
+    inherit (pdf-tools) src version;
+    fileSpecs = [ "lisp/tablist.el" "lisp/tablist-filter.el" ];
+    meta = {
+      description = "Extended tabulated-list-mode";
+      license = gpl3;
+    };
+  };
+
   ag = melpaBuild rec {
     pname   = "ag";
     version = "0.44";
