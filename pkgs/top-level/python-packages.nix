@@ -36,7 +36,7 @@ let
     crypt = null;
   };
 
-  pythonPackages = modules // {
+in modules // {
 
   inherit python isPy26 isPy27 isPy33 isPy34 isPy35 isPyPy isPy3k pythonName buildPythonPackage;
 
@@ -1369,7 +1369,7 @@ let
     };
   };
 
-  proboscis = pythonPackages.buildPythonPackage rec {
+  proboscis = buildPythonPackage rec {
     name = "proboscis-1.2.6.0";
 
     src = pkgs.fetchurl {
@@ -1377,7 +1377,7 @@ let
       md5 = "e4b36449ef7c18f70b8243f4c8bddbca";
     };
 
-    propagatedBuildInputs = with pythonPackages; [ nose ];
+    propagatedBuildInputs = with self; [ nose ];
     doCheck = false;
 
     meta = {
@@ -4165,7 +4165,7 @@ let
       repo = "GateOne";
       sha256 ="0zp9vfs6sqbx4d0g45kkjinfmsl9zqwa6bhp3xd81wx3ph9yr1hq";
     };
-    propagatedBuildInputs = with pkgs.pythonPackages; [tornado futures html5lib readline pkgs.openssl];
+    propagatedBuildInputs = with pkgs.self; [tornado futures html5lib readline pkgs.openssl];
     meta = {
       homepage = https://liftoffsoftware.com/;
       description = "GateOne is a web-based terminal emulator and SSH client";
@@ -4249,7 +4249,7 @@ let
     };
   };
 
-  gmusicapi = with pkgs; pythonPackages.buildPythonPackage rec {
+  gmusicapi = with pkgs; buildPythonPackage rec {
     name = "gmusicapi-4.0.0";
 
     src = pkgs.fetchurl {
@@ -4257,7 +4257,7 @@ let
       md5 = "12ba66607531978b349c7035c9bab311";
     };
 
-    propagatedBuildInputs = with pythonPackages; [
+    propagatedBuildInputs = with self; [
       validictory
       decorator
       mutagen
@@ -5214,7 +5214,7 @@ let
     };
   };
 
-  pies2overrides = pythonPackages.buildPythonPackage rec {
+  pies2overrides = buildPythonPackage rec {
     name = "pies2overrides-2.6.5";
     disabled = isPy3k;
 
@@ -5232,7 +5232,7 @@ let
     };
   };
 
-  pirate-get = pythonPackages.buildPythonPackage rec {
+  pirate-get = buildPythonPackage rec {
     name = "pirate-get-${version}";
     version = "0.2.8";
 
@@ -6041,7 +6041,7 @@ let
     };
   };
 
-  validictory = pythonPackages.buildPythonPackage rec {
+  validictory = buildPythonPackage rec {
     name = "validictory-1.0.0a2";
 
     src = pkgs.fetchurl {
@@ -6049,7 +6049,6 @@ let
       md5 = "54c206827931cc4ed8a9b1cc78e380c5";
     };
 
-    propagatedBuildInputs = with pythonPackages; [  ];
     doCheck = false;
 
     meta = {
@@ -8111,7 +8110,7 @@ let
     };
   };
 
-  hypothesis = pythonPackages.buildPythonPackage rec {
+  hypothesis = buildPythonPackage rec {
     name = "hypothesis-1.14.0";
 
     buildInputs = with self; [fake_factory django numpy pytz flake8 pytest ];
@@ -9887,7 +9886,7 @@ let
     };
   });
 
-  plover = pythonPackages.buildPythonPackage rec {
+  plover = buildPythonPackage rec {
     name = "plover-${version}";
     version = "2.5.8";
     disabled = !isPy27;
@@ -10812,7 +10811,7 @@ let
     };
   });
 
-  oauth2client = pythonPackages.buildPythonPackage rec {
+  oauth2client = buildPythonPackage rec {
     name = "oauth2client-1.4.12";
 
     src = pkgs.fetchurl {
@@ -10820,7 +10819,7 @@ let
       sha256 = "0phfk6s8bgpap5xihdk1xv2lakdk1pb3rg6hp2wsg94hxcxnrakl";
     };
 
-    propagatedBuildInputs = with pythonPackages; [ six httplib2 pyasn1 pyasn1-modules rsa ];
+    propagatedBuildInputs = with self; [ six httplib2 pyasn1 pyasn1-modules rsa ];
     doCheck = false;
 
     meta = {
@@ -13642,10 +13641,8 @@ let
     };
   };
 
-  pycosat = pythonPackages.buildPythonPackage rec {
+  pycosat = buildPythonPackage rec {
     name = "pycosat-0.6.0";
-
-    propagatedBuildInputs = with pythonPackages; [  ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pycosat/${name}.tar.gz";
@@ -13981,7 +13978,7 @@ let
     };
   });
 
-  pyenchant = pythonPackages.buildPythonPackage rec {
+  pyenchant = buildPythonPackage rec {
     name = "pyenchant-1.6.6";
 
     src = pkgs.fetchurl {
@@ -13989,7 +13986,7 @@ let
       md5 = "9f5acfd87d04432bf8df5f9710a17358";
     };
 
-    propagatedBuildInputs = with pythonPackages; [ pkgs.enchant ];
+    propagatedBuildInputs = [ pkgs.enchant ];
 
     patchPhase = let
       path_hack_script = "s|LoadLibrary(e_path)|LoadLibrary('${pkgs.enchant}/lib/' + e_path)|";
@@ -14090,7 +14087,7 @@ let
     };
   };
 
-  pygeoip = pythonPackages.buildPythonPackage rec {
+  pygeoip = buildPythonPackage rec {
     name = "pygeoip-0.3.2";
 
     src = pkgs.fetchurl {
@@ -18444,7 +18441,7 @@ let
       sha256 = "0f2lyi7xhvb60pvzx82dpc13ksdj5k92ww09czclkdz8k0dxa7hb";
     };
 
-    propagatedBuildInputs = with pythonPackages; [
+    propagatedBuildInputs = with self; [
       pyperclip
       urwid
     ];
@@ -18458,7 +18455,7 @@ let
     };
   };
 
-  update_checker = pythonPackages.buildPythonPackage rec {
+  update_checker = buildPythonPackage rec {
     name = "update_checker-0.11";
 
     src = pkgs.fetchurl {
@@ -18466,7 +18463,7 @@ let
       md5 = "1daa54bac316be6624d7ee77373144bb";
     };
 
-    propagatedBuildInputs = with pythonPackages; [ requests2 ];
+    propagatedBuildInputs = with self; [ requests2 ];
 
     doCheck = false;
 
@@ -18895,7 +18892,7 @@ let
 
 
 
-  willie = pythonPackages.buildPythonPackage rec {
+  willie = buildPythonPackage rec {
     name = "willie-5.2.0";
 
     src = pkgs.fetchurl {
@@ -18903,7 +18900,7 @@ let
       md5 = "a19f8c34e10e3c2d0d915c894224e521";
     };
 
-    propagatedBuildInputs = with pythonPackages; [ feedparser pytz lxml praw pyenchant pygeoip backports_ssl_match_hostname_3_4_0_2 ];
+    propagatedBuildInputs = with self; [ feedparser pytz lxml praw pyenchant pygeoip backports_ssl_match_hostname_3_4_0_2 ];
 
     meta = {
       description = "A simple, lightweight, open source, easy-to-use IRC utility bot, written in Python";
@@ -20280,7 +20277,7 @@ let
 
   };
 
-  veryprettytable = pythonPackages.buildPythonPackage rec {
+  veryprettytable = buildPythonPackage rec {
     name = "veryprettytable-${version}";
     version = "0.8.1";
 
@@ -21171,8 +21168,6 @@ let
       sha256 = "021pqcshxajhdy4whkawz95v98m8njv5lknzgac0sp8jzl01qls4";
     };
 
-    propagatedBuildInputs = with pythonPackages; [  ];
-
     meta = {
       homepage = https://github.com/Alir3z4/html2text/;
     };
@@ -22053,4 +22048,4 @@ let
     };
   };
 
-}; in pythonPackages
+}
