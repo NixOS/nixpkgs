@@ -164,14 +164,14 @@ let
     ${setupLibDirs}
     for i in bin sbin share include; do
       if [ -d "${staticUsrProfileTarget}/$i" ]; then
-        cp -r "${staticUsrProfileTarget}/$i" "$i"
+        cp -rsHf "${staticUsrProfileTarget}/$i" "$i"
       fi
     done
     cd ..
-    
+
     for i in var etc; do
       if [ -d "${staticUsrProfileTarget}/$i" ]; then
-        cp -r "${staticUsrProfileTarget}/$i" "$i"
+        cp -rsHf "${staticUsrProfileTarget}/$i" "$i"
       fi
     done
     for i in usr/{bin,sbin,lib,lib32,lib64}; do
