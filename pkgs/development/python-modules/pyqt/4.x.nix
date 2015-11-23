@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, python, pythonPackages, qt4, pythonDBus, pkgconfig, lndir, makeWrapper }:
+{ stdenv, fetchurl, python, pythonPackages, qt4, pythonDBus, pkgconfig, lndir, makeWrapper
+, ApplicationServices
+}:
 
 let version = "4.11.3";
 in
@@ -9,6 +11,14 @@ stdenv.mkDerivation {
     url = "mirror://sourceforge/pyqt/PyQt4/PyQt-${version}/PyQt-x11-gpl-${version}.tar.gz";
     sha256 = "11jnfjw79s0b0qdd9s6kd69w87vf16dhagbhbmwbmrp2vgf80dw5";
   };
+
+  NIX_CFLAGS_COMPILE =
+    stdenv.lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.7";
+
+  __impureHostDeps = stdenv.lib.optionals stdenv.isDarwin [
+    "/usr/lib/libiconv.dylib"
+    "/usr/lib/libiconv.2.4.0.dylib"
+  ];
 
   configurePhase = ''
     mkdir -p $out
@@ -28,7 +38,8 @@ stdenv.mkDerivation {
     ${python.executable} configure.py $configureFlags "''${configureFlagsArray[@]}"
   '';
 
-  buildInputs = [ python pkgconfig makeWrapper qt4 lndir ];
+  buildInputs = [ python pkgconfig makeWrapper qt4 lndir ]
+    ++  stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
   propagatedBuildInputs = [ pythonPackages.sip_4_16 ];
 
