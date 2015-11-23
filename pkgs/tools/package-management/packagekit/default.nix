@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     "--disable-portage"
     "--disable-ports"
     "--disable-katja"
-    "--disable-urmpi"
+    "--disable-urpmi"
     "--disable-yum"
     "--disable-zypp"
   ];
