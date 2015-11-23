@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "1qx9f0kprf92r1wxl3sacykla0g04qsi0idypzz24b7xy9ix5579";
   };
 
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isSunOS "-lsocket -lnsl";
+
   patches = [ ./glibc214.patch ]
     # Patch for the newer unstable boehm-gc 7.2alpha. Not all platforms use that
     # alpha. At the time of writing this, boehm-gc-7.1 is the last stable.
