@@ -38,14 +38,14 @@ let
     };
 
   hplipArch = hplipPlatforms."${stdenv.system}"
-    or (abort "HPLIP not supported on ${stdenv.system}");
+    or (throw "HPLIP not supported on ${stdenv.system}");
 
   pluginArches = [ "x86_32" "x86_64" ];
 
 in
 
 assert withPlugin -> builtins.elem hplipArch pluginArches
-  || abort "HPLIP plugin not supported on ${stdenv.system}";
+  || throw "HPLIP plugin not supported on ${stdenv.system}";
 
 stdenv.mkDerivation {
   inherit name src;
