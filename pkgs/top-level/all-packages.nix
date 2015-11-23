@@ -5493,7 +5493,7 @@ let
 
   cmake-2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix {
     wantPS = stdenv.isDarwin;
-    ps     = if stdenv.isDarwin then darwin.adv_cmds else null;
+    inherit (darwin) ps;
   };
 
   cmake = callPackage ../development/tools/build-managers/cmake {
