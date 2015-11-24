@@ -13,7 +13,7 @@ rec {
   mergeAttrs = x: y: x // y;
 
   # Compute the fixed point of the given function `f`, which is usually an
-  # attribute set that expects its final, non-recursive repsentation as an
+  # attribute set that expects its final, non-recursive representation as an
   # argument:
   #
   #     f = self: { foo = "foo"; bar = "bar"; foobar = self.foo + self.bar; }
@@ -29,7 +29,7 @@ rec {
   fix = f: let x = f x; in x;
 
   # A variant of `fix` that records the original recursive attribute set in the
-  # result. This is useful in combination with the `extend` function to
+  # result. This is useful in combination with the `extends` function to
   # implement deep overriding. See pkgs/development/haskell-modules/default.nix
   # for a concrete example.
   fix' = f: let x = f x // { __unfix__ = f; }; in x;
@@ -40,7 +40,7 @@ rec {
   #     g = self: super: { foo = super.foo + " + "; }
   #
   # that has access to the unmodified input (`super`) as well as the final
-  # non-recursive representation of the attribute set (`self`). This function
+  # non-recursive representation of the attribute set (`self`). `extends`
   # differs from the native `//` operator insofar as that it's applied *before*
   # references to `self` are resolved:
   #
@@ -48,7 +48,7 @@ rec {
   #     { bar = "bar"; foo = "foo + "; foobar = "foo + bar"; }
   #
   # The name of the function is inspired by object-oriented inheritance, i.e.
-  # think of it as an infix operator `g extends f` that mimicks the syntax from
+  # think of it as an infix operator `g extends f` that mimics the syntax from
   # Java. It may seem counter-intuitive to have the "base class" as the second
   # argument, but it's nice this way if several uses of `extends` are cascaded.
   extends = f: rattrs: self: let super = rattrs self; in super // f self super;
