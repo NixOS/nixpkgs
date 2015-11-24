@@ -300,120 +300,15 @@ rec {
   # The commented-out ones don't seem to allow direct package downloads;
   # they serve error messages that result in hash mismatches instead.
   bioc = [
-    # http://bioc.ism.ac.jp/3.2/bioc/
-    # http://bioc.openanalytics.eu/3.2/bioc/
-    # http://bioconductor.fmrp.usp.br/3.2/bioc/
-    # http://mirror.aarnet.edu.au/pub/bioconductor/3.2/bioc/
-    # http://watson.nci.nih.gov/bioc_mirror/3.2/bioc/
-    http://bioconductor.jp/packages/3.2/bioc/
-    http://bioconductor.statistik.tu-dortmund.de/packages/3.2/bioc/
-    http://mirrors.ebi.ac.uk/bioconductor/packages/3.2/bioc/
-    http://mirrors.ustc.edu.cn/bioc/3.2/bioc/
-  ];
-
-  # CRAN mirrors (from http://cran.r-project.org/mirrors.html)
-  cran = [
-    http://cran.r-project.org/
-    http://cran.rstudio.com/
-    http://cran.usthb.dz/
-    http://mirror.fcaglp.unlp.edu.ar/CRAN/
-    http://cran.csiro.au/
-    http://cran.ms.unimelb.edu.au/
-    http://cran.at.r-project.org/
-    http://www.freestatistics.org/cran/
-    http://nbcgib.uesc.br/mirrors/cran/
-    http://cran-r.c3sl.ufpr.br/
-    http://cran.fiocruz.br/
-    http://www.vps.fmvz.usp.br/CRAN/
-    http://brieger.esalq.usp.br/CRAN/
-    http://cran.stat.sfu.ca/
-    http://mirror.its.dal.ca/cran/
-    http://cran.utstat.utoronto.ca/
-    http://cran.skazkaforyou.com/
-    http://cran.parentingamerica.com/
-    http://dirichlet.mat.puc.cl/
-    http://ftp.ctex.org/mirrors/CRAN/
-    http://mirror.bjtu.edu.cn/cran
-    http://mirrors.ustc.edu.cn/CRAN/
-    http://mirrors.xmu.edu.cn/CRAN/
-    http://www.laqee.unal.edu.co/CRAN/
-    http://www.icesi.edu.co/CRAN/
-    http://mirrors.nic.cz/R/
-    http://mirrors.dotsrc.org/cran/
-    http://cran.espol.edu.ec/
-    http://cran.salud.gob.sv/
-    http://ftp.eenet.ee/pub/cran/
-    http://cran.univ-lyon1.fr/
-    http://mirror.ibcp.fr/pub/CRAN/
-    http://ftp.igh.cnrs.fr/pub/CRAN/
-    http://cran.irsn.fr/
-    http://cran.univ-paris1.fr/
-    http://cran.cardse.net/
-    http://mirrors.softliste.de/cran/
-    http://ftp5.gwdg.de/pub/misc/cran/
-    http://cran.sciserv.eu/
-    http://cran.uni-muenster.de/
-    http://cran.cc.uoc.gr/mirrors/CRAN/
-    http://cran.rapporter.net/
-    http://cran.hafro.is/
-    http://ftp.iitm.ac.in/cran/
-    http://cran.repo.bppt.go.id/
-    http://cran.um.ac.ir/
-    http://ftp.heanet.ie/mirrors/cran.r-project.org/
-    http://cran.mirror.garr.it/mirrors/CRAN/
-    http://cran.stat.unipd.it/
-    http://dssm.unipa.it/CRAN/
-    http://cran.ism.ac.jp/
-    http://cran.md.tsukuba.ac.jp/
-    http://cran.nexr.com/
-    http://healthstat.snu.ac.kr/CRAN/
-    http://cran.biodisk.org/
-    http://rmirror.lau.edu.lb/
-    http://cran.itam.mx/
-    http://www.est.colpos.mx/R-mirror/
-    http://cran.xl-mirror.nl/
-    http://cran-mirror.cs.uu.nl/
-    http://cran.stat.auckland.ac.nz/
-    http://cran.uib.no/
-    http://cran.stat.upd.edu.ph/
-    http://r.meteo.uni.wroc.pl/
-    http://cran.dcc.fc.up.pt/
-    http://cran.gis-lab.info/
-    http://cran.stat.nus.edu.sg/
-    http://cran.fyxm.net/
-    http://r.adu.org.za/
-    http://cran.mirror.ac.za/
-    http://ftp.cixug.es/CRAN/
-    http://cran.es.r-project.org/
-    http://ftp.sunet.se/pub/lang/CRAN/
-    http://stat.ethz.ch/CRAN/
-    http://ftp.yzu.edu.tw/CRAN/
-    http://cran.csie.ntu.edu.tw/
-    http://mirrors.psu.ac.th/pub/cran/
-    http://cran.pau.edu.tr/
-    http://www.stats.bris.ac.uk/R/
-    http://mirrors.ebi.ac.uk/CRAN/
-    http://cran.ma.imperial.ac.uk/
-    http://mirror.mdx.ac.uk/R/
-    http://star-www.st-andrews.ac.uk/cran/
-    http://cran.cnr.berkeley.edu/
-    http://cran.stat.ucla.edu/
-    http://streaming.stat.iastate.edu/CRAN/
-    http://ftp.ussg.iu.edu/CRAN/
-    http://rweb.quant.ku.edu/cran/
-    http://watson.nci.nih.gov/cran_mirror/
-    http://cran.mtu.edu/
-    http://cran.wustl.edu/
-    http://cran.case.edu/
-    http://ftp.osuosl.org/pub/cran/
-    http://lib.stat.cmu.edu/R/CRAN/
-    http://cran.mirrors.hoobly.com/
-    http://mirrors.nics.utk.edu/cran/
-    http://cran.revolutionanalytics.com/
-    http://cran.fhcrc.org/
-    http://cran.cs.wwu.edu/
-    http://camoruco.ing.uc.edu.ve/cran/
-    http://cran.vinastat.com/
+    # http://bioc.ism.ac.jp/
+    # http://bioc.openanalytics.eu/
+    # http://bioconductor.fmrp.usp.br/
+    # http://mirror.aarnet.edu.au/pub/bioconductor/
+    # http://watson.nci.nih.gov/bioc_mirror/
+    http://bioconductor.jp/packages/
+    http://bioconductor.statistik.tu-dortmund.de/packages/
+    http://mirrors.ebi.ac.uk/bioconductor/packages/
+    http://mirrors.ustc.edu.cn/bioc/
   ];
 
   # Hackage mirrors
