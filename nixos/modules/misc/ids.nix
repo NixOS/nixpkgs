@@ -236,6 +236,7 @@
       xtreemfs = 212;
       calibre-server = 213;
       heapster = 214;
+      bepasty = 215;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -449,6 +450,7 @@
       #kibana = 211;
       xtreemfs = 212;
       calibre-server = 213;
+      bepasty = 215;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
