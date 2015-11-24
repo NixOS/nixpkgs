@@ -11,7 +11,10 @@ let
   #
   # some packages, e.g. cncaGUI, require X running while installation,
   # so that we use xvfb-run if requireX is true.
-  mkDerive = {mkHomepage, mkUrls}: lib.makeOverridable ({
+  mkDerive = {mkHomepage, mkUrls}: args:
+      # XXX: not ideal ("2.2" would match "2.22") but sufficient
+      assert (!(args ? rVersion) || lib.hasPrefix args.rVersion (lib.getVersion R));
+      lib.makeOverridable ({
         name, version, sha256,
         depends ? [],
         doCheck ? true,
@@ -22,12 +25,12 @@ let
     name = "${name}-${version}";
     src = fetchurl {
       inherit sha256;
-      urls = mkUrls { inherit name version; };
+      urls = mkUrls (args // { inherit name version; });
     };
     inherit doCheck requireX;
     propagatedBuildInputs = depends;
     nativeBuildInputs = depends;
-    meta.homepage = mkHomepage name;
+    meta.homepage = mkHomepage (args // { inherit name; });
     meta.platforms = R.meta.platforms;
     meta.hydraPlatforms = hydraPlatforms;
     meta.broken = broken;
@@ -37,18 +40,15 @@ let
   # from the name, version, sha256, and optional per-package arguments above
   #
   deriveBioc = mkDerive {
-    mkHomepage = name: "http://cran.r-project.org/web/packages/${name}/";
-    mkUrls = {name, version}: [ "mirror://bioc/src/contrib/${name}_${version}.tar.gz" ];
+    mkHomepage = {name, rVersion}: "https://bioconductor.org/packages/${rVersion}/bioc/html/${name}.html";
+    mkUrls = {name, version, rVersion}: [ "mirror://bioc/${rVersion}/bioc/src/contrib/${name}_${version}.tar.gz" ];
   };
   deriveCran = mkDerive {
-    mkHomepage = name: "http://bioconductor.org/packages/release/bioc/html/${name}.html";
-    mkUrls = {name, version}: [
-      "mirror://cran/src/contrib/${name}_${version}.tar.gz"
-      "mirror://cran/src/contrib/00Archive/${name}/${name}_${version}.tar.gz"
-    ];
+    mkHomepage = {name, snapshot}: "http://mran.revolutionanalytics.com/snapshot/${snapshot}/web/packages/${name}/";
+    mkUrls = {name, version, snapshot}: [ "http://mran.revolutionanalytics.com/snapshot/${snapshot}/src/contrib/${name}_${version}.tar.gz" ];
   };
   deriveIRkernel = mkDerive {
-    mkHomepage = name: "http://irkernel.github.io/";
+    mkHomepage = {name}: "https://irkernel.github.io/";
     mkUrls = {name, version}: [ "http://irkernel.github.io/src/contrib/${name}_${version}.tar.gz" ];
   };
 
