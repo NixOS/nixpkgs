@@ -2723,6 +2723,10 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/S/SB/SBECK/${name}.tar.gz";
       sha256 = "0afvr2q2hspd807d6wd7kmrr7ypxdlh8bcnqsqbfwcwd74qadg13";
     };
+    # for some reason, parsing /etc/localtime does not work anymore - make sure that the fallback "/bin/date +%Z" will work
+    patchPhase = ''
+      sed -i "s#/bin/date#${pkgs.coreutils}/bin/date#" lib/Date/Manip/TZ.pm
+    '';
     propagatedBuildInputs = [ TestInter ];
     meta = {
       description = "Date manipulation routines";
