@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = http://picolisp.com/;
     license = licenses.mit;
     platform = platforms.all;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [ raskin tohl ];
   };
 
   passthru = {
