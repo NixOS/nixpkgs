@@ -1,17 +1,17 @@
 #!/usr/bin/env Rscript
-
 library(data.table)
 library(parallel)
 cl <- makeCluster(10)
 
 mirrorType <- commandArgs(trailingOnly=TRUE)[1]
-stopifnot(mirrorType %in% c("bioc","cran"))
+stopifnot(mirrorType %in% c("bioc","cran", "irkernel"))
 
 packagesFile <- paste(mirrorType, 'packages.nix', sep='-')
 readFormatted <- as.data.table(read.table(skip=6, sep='"', text=head(readLines(packagesFile), -1)))
 
 mirrorUrls <- list( bioc="http://bioconductor.statistik.tu-dortmund.de/packages/3.2/bioc/src/contrib/"
                   , cran="http://cran.r-project.org/src/contrib/"
+                  , irkernel="http://irkernel.github.io/src/contrib/"
                   )
 mirrorUrl <- mirrorUrls[mirrorType][[1]]
 knownPackages <- lapply(mirrorUrls, function(url) as.data.table(available.packages(url, filters=c("R_version", "OS_type", "duplicates"))))
