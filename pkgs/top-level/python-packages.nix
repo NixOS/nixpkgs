@@ -84,6 +84,8 @@ let
 
   # packages defined elsewhere
 
+  amazonGlacierCmdInterface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
+
   blivet = callPackage ../development/python-modules/blivet { };
 
   dbus = callPackage ../development/python-modules/dbus {
