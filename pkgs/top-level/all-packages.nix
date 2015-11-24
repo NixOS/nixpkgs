@@ -974,7 +974,7 @@ let
     inherit (pythonPackages) notify;
   };
 
-  bmrsa = builderDefsPackage (callPackage ../tools/security/bmrsa/11.nix) { };
+  bmrsa = callPackage ../tools/security/bmrsa/11.nix { };
 
   bogofilter = callPackage ../tools/misc/bogofilter { };
 
@@ -1034,7 +1034,7 @@ let
   ceph-dev = ceph;
   #ceph-dev = lowPrio (callPackage ../tools/filesystems/ceph/dev.nix { });
 
-  cfdg = builderDefsPackage (callPackage ../tools/graphics/cfdg) {};
+  cfdg = callPackage ../tools/graphics/cfdg { };
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
 
@@ -1780,7 +1780,7 @@ let
 
   gupnptools = callPackage ../tools/networking/gupnp-tools {};
 
-  gvpe = builderDefsPackage (callPackage ../tools/networking/gvpe) {};
+  gvpe = callPackage ../tools/networking/gvpe { };
 
   gvolicon = callPackage ../tools/audio/gvolicon {};
 
@@ -2294,7 +2294,7 @@ let
 
   mscgen = callPackage ../tools/graphics/mscgen { };
 
-  msf = builderDefsPackage (callPackage ../tools/security/metasploit/3.1.nix) { };
+  msf = callPackage ../tools/security/metasploit { };
 
   mssys = callPackage ../tools/misc/mssys { };
 
@@ -2780,7 +2780,7 @@ let
 
   pythonDBus = dbus_python;
 
-  pythonIRClib = builderDefsPackage (callPackage ../development/python-modules/irclib) { };
+  pythonIRClib = callPackage ../development/python-modules/irclib { };
 
   pythonSexy = builderDefsPackage (callPackage ../development/python-modules/libsexy) { };
 
@@ -2972,7 +2972,7 @@ let
 
   seccure = callPackage ../tools/security/seccure { };
 
-  setserial = builderDefsPackage (callPackage ../tools/system/setserial) { };
+  setserial = callPackage ../tools/system/setserial { };
 
   seqdiag = pythonPackages.seqdiag;
 
@@ -3342,7 +3342,11 @@ let
 
   vnc2flv = callPackage ../tools/video/vnc2flv {};
 
-  vncrec = builderDefsPackage (callPackage ../tools/video/vncrec) {};
+  vncrec = callPackage ../tools/video/vncrec {
+    inherit (xlibs) imake libX11 xproto gccmakedep libXt
+      libXmu libXaw libXext xextproto libSM libICE libXpm
+      libXp;
+  };
 
   vobcopy = callPackage ../tools/cd-dvd/vobcopy { };
 
@@ -3393,7 +3397,7 @@ let
 
   rcm = callPackage ../tools/misc/rcm {};
 
-  tftp_hpa = callPackage ../tools/networking/tftp-hpa {};
+  tftp-hpa = callPackage ../tools/networking/tftp-hpa {};
 
   tidy-html5 = callPackage ../tools/text/tidy-html5 { };
 
@@ -3607,7 +3611,7 @@ let
 
   xmltv = callPackage ../tools/misc/xmltv { };
 
-  xmpppy = builderDefsPackage (callPackage ../development/python-modules/xmpppy) {};
+  xmpppy = callPackage ../development/python-modules/xmpppy { };
 
   xorriso = callPackage ../tools/cd-dvd/xorriso { };
 
@@ -6354,7 +6358,9 @@ let
 
   freeglut = callPackage ../development/libraries/freeglut { };
 
-  freenect = callPackage ../development/libraries/freenect { };
+  freenect = callPackage ../development/libraries/freenect {
+      inherit (xlibs) libXi libXmu;
+  };
 
   freetype = callPackage ../development/libraries/freetype { };
 
@@ -7629,7 +7635,7 @@ let
 
   libwpg = callPackage ../development/libraries/libwpg { };
 
-  libx86 = builderDefsPackage ../development/libraries/libx86 {};
+  libx86 = callPackage ../development/libraries/libx86 {};
 
   libxdg_basedir = callPackage ../development/libraries/libxdg-basedir { };
 
@@ -7875,7 +7881,7 @@ let
 
   nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
 
-  ode = builderDefsPackage (callPackage ../development/libraries/ode) { };
+  ode = callPackage ../development/libraries/ode { };
 
   ogre = callPackage ../development/libraries/ogre {};
 
@@ -9736,7 +9742,9 @@ let
 
   dietlibc = callPackage ../os-specific/linux/dietlibc { };
 
-  directvnc = builderDefsPackage (callPackage ../os-specific/linux/directvnc) {};
+  directvnc = callPackage ../os-specific/linux/directvnc {
+    inherit (xlibs) xproto;
+  };
 
   dmraid = callPackage ../os-specific/linux/dmraid {
     devicemapper = devicemapper.override {enable_dmeventd = true;};
@@ -11880,7 +11888,7 @@ let
 
   gphoto2 = callPackage ../applications/misc/gphoto2 { };
 
-  gphoto2fs = builderDefsPackage (callPackage ../applications/misc/gphoto2/gphotofs.nix) {};
+  gphoto2fs = callPackage ../applications/misc/gphoto2/gphotofs.nix { };
 
   gramps = callPackage ../applications/misc/gramps { };
 
@@ -11900,7 +11908,7 @@ let
     java = if stdenv.isLinux then jre else jdk;
   };
 
-  qrdecode = builderDefsPackage (callPackage ../tools/graphics/qrdecode) {
+  qrdecode = callPackage ../tools/graphics/qrdecode {
     libpng = libpng12;
     opencv = opencv_2_1;
   };
@@ -13556,7 +13564,8 @@ let
 
   x42-plugins = callPackage ../applications/audio/x42-plugins { };
 
-  xaos = builderDefsPackage (callPackage ../applications/graphics/xaos) {
+  xaos = callPackage ../applications/graphics/xaos {
+    inherit (xlibs) libXt libX11 libXext xextproto xproto;
     libpng = libpng12;
   };
 
@@ -14286,7 +14295,9 @@ let
 
   xsnow = callPackage ../games/xsnow { };
 
-  xsokoban = builderDefsPackage (callPackage ../games/xsokoban) {};
+  xsokoban = callPackage ../games/xsokoban {
+    inherit (xlibs) libX11 xproto libXpm libXt;
+  };
 
   zandronum = callPackage ../games/zandronum { };
   zandronum-server = callPackage ../games/zandronum/server.nix { };
@@ -14599,7 +14610,7 @@ let
 
   ### SCIENCE/GEOMETRY
 
-  drgeo = builderDefsPackage (callPackage ../applications/science/geometry/drgeo) {
+  drgeo = callPackage ../applications/science/geometry/drgeo {
     inherit (gnome) libglade;
     guile = guile_1_8;
   };
@@ -14798,7 +14809,9 @@ let
   coqPackages = recurseIntoAttrs (mkCoqPackages_8_4 coqPackages);
   coqPackages_8_5 = recurseIntoAttrs (mkCoqPackages_8_5 coqPackages_8_5);
 
-  cvc3 = callPackage ../applications/science/logic/cvc3 {};
+  cvc3 = callPackage ../applications/science/logic/cvc3 {
+    gmp = lib.overrideDerivation gmp (a: { dontDisableStatic = true; });
+  };
   cvc4 = callPackage ../applications/science/logic/cvc4 {};
 
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {};
@@ -15604,6 +15617,7 @@ aliases = with self; rec {
   youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
   youtubeDL = youtube-dl;  # added 2014-10-26
   pidginlatexSF = pidginlatex; # added 2014-11-02
+  tftp_hpa = tftp-hpa; # added 2015-04-03
 };
 
 tweakAlias = _n: alias: with lib;
