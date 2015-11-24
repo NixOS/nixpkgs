@@ -1,13 +1,14 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
-let version = "1.9.20150430"; in
+let version = "24d54ba13af4e53aba19c23898a373feecb41bd0"; in
 stdenv.mkDerivation rec {
   name = "miniupnpc-${version}";
 
-  src = fetchurl {
-    url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
-    sha256 = "0ivnvzla0l2pzmy8s0j8ss0fnpsii7z9scvyl4a13g9k911hgmvn";
-    name = "${name}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "miniupnp";
+    repo = "miniupnp";
+    sha256 = "0j78dvlfh1a3a27zhvv001cb1d7vcgyv33bd1zr36drg64b6hrgw";
+    rev = version;
   };
 
   doCheck = true;

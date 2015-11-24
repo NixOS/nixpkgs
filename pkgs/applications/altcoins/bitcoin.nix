@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, openssl, db48, boost
-, zlib, miniupnpc, qt4, protobuf, qrencode
+, zlib, miniupnpc, qt4, utillinux, protobuf, qrencode
 , withGui }:
 
 with stdenv.lib;
