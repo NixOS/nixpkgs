@@ -5672,7 +5672,7 @@ let
     inherit (perlPackages) LocaleGettext;
   };
 
-  heroku = callPackage ../development/tools/heroku { };
+  heroku = goPackages.heroku.bin;
 
   hyenae = callPackage ../tools/networking/hyenae { };
 

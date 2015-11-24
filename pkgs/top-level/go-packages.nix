@@ -1608,6 +1608,21 @@ let
     };
   };
 
+  heroku = buildFromGitHub rec {
+    rev = "24f0282be5df12d343a4bbc4d868255227e46159";
+    owner = "heroku";
+    repo = "heroku-cli";
+    sha256 = "07bb6kw0c16kaz4x9lg26al9wkhhnj6ff7a7n3hnml35b0dnwnqr";
+    subPackages = [ "." ];
+    buildInputs = [ golock goreq netrc speakeasy crypto rollbar pkgs.makeWrapper ];
+    postInstall = ''
+      if [ -e $bin/bin/heroku-cli ]
+      then
+        wrapProgram $bin/bin/heroku-cli --set HEROKU_NODE_PATH ${pkgs.nodejs}/bin/node
+      fi
+    '';
+  };
+
   hologram = buildGoPackage rec {
     rev  = "63014b81675e1228818bf36ef6ef0028bacad24b";
     name = "hologram-${stdenv.lib.strings.substring 0 7 rev}";
@@ -3181,6 +3196,38 @@ let
       mkdir -p $out/bin
       ./build
     '';
+  };
+
+  rollbar = buildFromGitHub {
+    rev    = "d8cae2dd0eb0ce093eca83bfd2122f31e12694a0";
+    owner  = "stvp";
+    repo   = "rollbar";
+    sha256 = "0pdag6qylggy0hdlkcdkx58sgk7hnfwy470fqq6lw0q8g2d9i3w7";
+  };
+
+  speakeasy = buildFromGitHub {
+    rev    = "c3278227c0f70a2151ebbaef1a0dbbaa36be3be3";
+    owner  = "dickeyxxx";
+    repo   = "speakeasy";
+    sha256 = "1l90kwghn9si89spmjibx54cjdzapagr4zxz5n4ppmjjn7fq7ifi";
+    excludedPackages = ["example"];
+    goPackageAliases = [
+      "github.com/bgentry/speakeasy"
+    ];
+  };
+
+  netrc = buildFromGitHub {
+    rev = "3acf1b3de25d89c7688c63bb45f6b07f566555ec";
+    owner = "dickeyxxx";
+    repo = "netrc";
+    sha256 = "0xa9kb83lf9d33bfmz7ksw4i722l9pwc9cm4w5ipha2b4fpyz7wp";
+  };
+
+  golock = buildFromGitHub {
+    rev = "81cedee99bbcf74827e24f71084f3d36bca29cac";
+    owner = "dickeyxxx";
+    repo = "golock";
+    sha256 = "0bl03pm7l1ylqm1z6wjl4z9i49fajf0wgwpqmvskqbziznmhagzi";
   };
 
 }; in self
