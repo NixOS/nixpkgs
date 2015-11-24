@@ -6,9 +6,9 @@
 
 let
 
-  fix = f: let x = f x // { __unfix__ = f; }; in x;
+  fix = stdenv.lib.fix';
 
-  extend = rattrs: f: self: let super = rattrs self; in super // f self super;
+  extend = stdenv.lib.flip stdenv.lib.extends;
 
   haskellPackages = self:
     let
