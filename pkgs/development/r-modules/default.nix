@@ -392,7 +392,7 @@ let
     qtutils = [ pkgs.qt4 ];
     ecoretriever = [ pkgs.which ];
     tcltk2 = [ pkgs.tcl pkgs.tk ];
-    tikzDevice = [ pkgs.which pkgs.texLive ];
+    tikzDevice = [ pkgs.which pkgs.texlive.combined.scheme-medium ];
     rPython = [ pkgs.which ];
     CARramps = [ pkgs.which pkgs.cudatoolkit ];
     gridGraphics = [ pkgs.which ];
