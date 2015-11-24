@@ -6,37 +6,59 @@ let
   toInt = str:
     builtins.fromJSON str;
 
-
-  is_ipv4 = address_or_network:
-    builtins.length (lib.splitString "." address_or_network) > 1;
-
   get_prefix_length = network:
     toInt (builtins.elemAt (lib.splitString "/" network) 1);
 
-  _ipv4_configuration = network: ip_address:
+  is_ip4 = address_or_network:
+    builtins.length (lib.splitString "." address_or_network) > 1;
+
+  is_ip6 = address_or_network:
+    builtins.length (lib.splitString ":" address_or_network) > 1;
+
+
+  _ip_configuration = network: ip_address:
     {
       address = ip_address;
       prefixLength = get_prefix_length network;
     };
 
-  _ipv4_interface_configuration = networks: network:
-    map (_ipv4_configuration network) (builtins.getAttr network networks);
+  _ip_interface_configuration = networks: network:
+      map (_ip_configuration network) (builtins.getAttr network networks);
 
-  get_ipv4_configuration = networks:
+  get_ip_configuration = version_filter: networks:
     builtins.concatLists
-      (map
-        (_ipv4_interface_configuration networks)
-        (builtins.filter is_ipv4 (builtins.attrNames networks)));
+    (map
+      (_ip_interface_configuration networks)
+      (builtins.filter version_filter (builtins.attrNames networks)));
 
+
+  get_interface_ips = networks:
+    { ip4 = get_ip_configuration is_ip4 networks;
+      ip6 = get_ip_configuration is_ip6 networks;
+    };
 
   get_interface_configuration = interfaces: interface_name:
+    { name = "eth${interface_name}";
+      value = get_interface_ips (builtins.getAttr interface_name interfaces).networks;
+    };
+
+  get_network_configuration = interfaces:
+    builtins.listToAttrs
+      (map
+       (get_interface_configuration interfaces)
+       (builtins.attrNames interfaces));
+
+
+
+  # Configration for UDEV
+  get_udev_interface_configuration = interfaces: interface_name:
       ''
       KERNEL=="eth*", ATTR{address}=="${(builtins.getAttr interface_name interfaces).mac}", NAME="eth${interface_name}"
       '';
 
-  get_interfaces_configuration = interfaces:
+  get_udev_configuration = interfaces:
       map
-        (get_interface_configuration interfaces)
+        (get_udev_interface_configuration interfaces)
         (builtins.attrNames interfaces);
 
 
@@ -47,7 +69,7 @@ in
 
     services.udev.extraRules =
       toString
-      (get_interfaces_configuration config.enc.parameters.interfaces);
+      (get_udev_configuration config.enc.parameters.interfaces);
 
 
     networking.domain = "gocept.net";
@@ -69,30 +91,11 @@ in
   #    "gocept.net"
   #  ];
 
-  #  networking.interfaces.ethmgm = {
-  #    ip4 = [ { address = "172.20.1.51"; prefixLength = 24; } ];
-  #    ip6 = [ { address = "2a02:238:f030:1c1::105b"; prefixLength = 64;} ];
-  #  };
-  #
-  #  networking.interfaces.ethsrv = {
-  #    ip4 = [ { address = "172.20.3.33"; prefixLength = 24; } ];
-  #    ip6 = [ { address = "2a02:238:f030:1c3::105e"; prefixLength = 64;} ];
-  #  };
-  #
+  networking.interfaces =
+    if config.enc ? parameters
+    then get_network_configuration config.enc.parameters.interfaces
+    else {};
 
-  networking.interfaces.ethfe =
-    if config.enc.parameters.interfaces ? fe
-    then {
-        ip4 = get_ipv4_configuration config.enc.parameters.interfaces.fe.networks;
-        # ip6 = [ { address = "2a02:238:f030:1c2::106c"; prefixLength = 64;} ];
-    }
-    else null;
-
-  #
-  #  networking.interfaces.ethsto = {
-  #    ip4 = [ { address = "172.20.4.27"; prefixLength = 24;} ];
-  #    ip6 = [ { address = "2a02:238:f030:1c4::105b"; prefixLength = 64; } ];
-  #  };
   #
   #  networking.localCommands = ''
   #        ip rule flush
