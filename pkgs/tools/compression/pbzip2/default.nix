@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   preBuild = "substituteInPlace Makefile --replace g++ c++";
 
-  installFlags = "PREFIX=$out";
+  installFlags = "PREFIX=$(out)";
 
   meta = with stdenv.lib; {
     homepage = http://compression.ca/pbzip2/;
