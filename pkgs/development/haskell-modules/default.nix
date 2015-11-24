@@ -6,9 +6,7 @@
 
 let
 
-  fix = stdenv.lib.fix';
-
-  extend = stdenv.lib.flip stdenv.lib.extends;
+  inherit (stdenv.lib) fix' extends;
 
   haskellPackages = self:
     let
@@ -41,7 +39,7 @@ let
       });
 
       callPackageWithScope = scope: drv: args: (stdenv.lib.callPackageWith scope drv args) // {
-        overrideScope = f: callPackageWithScope (mkScope (fix (extend scope.__unfix__ f))) drv args;
+        overrideScope = f: callPackageWithScope (mkScope (fix' (extends f scope.__unfix__))) drv args;
       };
 
       mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome // scope;
@@ -78,4 +76,8 @@ let
 
 in
 
-  fix (extend (extend (extend (extend haskellPackages commonConfiguration) compilerConfig) packageSetConfig) overrides)
+  fix'
+    (extends overrides
+      (extends packageSetConfig
+        (extends compilerConfig
+          (extends commonConfiguration haskellPackages))))
