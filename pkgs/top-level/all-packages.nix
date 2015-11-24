@@ -2150,6 +2150,8 @@ let
 
   logstalgia = callPackage ../tools/graphics/logstalgia {};
 
+  longview = callPackage ../servers/monitoring/longview { };
+
   lout = callPackage ../tools/typesetting/lout { };
 
   lrzip = callPackage ../tools/compression/lrzip { };
