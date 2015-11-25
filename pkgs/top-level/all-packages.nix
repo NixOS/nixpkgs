@@ -1515,6 +1515,8 @@ let
 
   fcitx-chewing = callPackage ../tools/inputmethods/fcitx-engines/fcitx-chewing { };
 
+  fcitx-hangul = callPackage ../tools/inputmethods/fcitx-engines/fcitx-hangul { };
+
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
 
   fcitx-with-plugins = callPackage ../tools/inputmethods/fcitx/wrapper.nix {
