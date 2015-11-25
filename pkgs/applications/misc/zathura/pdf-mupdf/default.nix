@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, zathura_core, gtk, girara, mupdf, openssl, openjpeg, libjpeg, jbig2dec }:
+{ stdenv, lib, fetchurl, pkgconfig, zathura_core, gtk, girara, mupdf, openssl }:
 
 stdenv.mkDerivation rec {
   version = "0.2.8";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0439ls8xqnq6hqa53hd0wqxh1qf0xmccfi3pb0m4mlfs5iv952wz";
   };
 
-  buildInputs = [ pkgconfig zathura_core gtk girara openssl mupdf openjpeg libjpeg jbig2dec ];
+  buildInputs = [ pkgconfig zathura_core gtk girara openssl mupdf ];
 
   makeFlags = [ "PREFIX=$(out)" "PLUGINDIR=$(out)/lib" ];
 

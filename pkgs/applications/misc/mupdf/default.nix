@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "01n26cy41lc2fjri63s4js23ixxb4nd37aafry3hz4i4id6wd8x2";
   };
 
-  buildInputs = [ pkgconfig zlib freetype libjpeg jbig2dec openjpeg libX11 libXext ];
+  nativeBuildInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ openjpeg libjpeg jbig2dec ];
+  buildInputs = [ zlib freetype libX11 libXext ];
 
   enableParallelBuilding = true;
 
