@@ -458,7 +458,7 @@ in
         ]);
 
     environment.systemPackages =
-      [ xorg.xorgserver
+      [ xorg.xorgserver.out
         xorg.xrandr
         xorg.xrdb
         xorg.setxkbmap
@@ -525,7 +525,7 @@ in
 
     services.xserver.modules =
       concatLists (catAttrs "modules" cfg.drivers) ++
-      [ xorg.xorgserver
+      [ xorg.xorgserver.out
         xorg.xf86inputevdev
       ];
 
