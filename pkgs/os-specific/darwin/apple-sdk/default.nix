@@ -96,9 +96,7 @@ let
     propagatedBuildInputs = deps;
 
     # allows building the symlink tree
-    sandboxProfile = ''
-      (allow file-read* (subpath "/System/Library/Frameworks/${name}.framework"))
-    '';
+    __impureHostDeps = [ "/System/Library/Frameworks/${name}.framework" ];
 
     __propagatedImpureHostDeps = stdenv.lib.optional (name != "Kernel") "/System/Library/Frameworks/${name}.framework/${name}";
 
