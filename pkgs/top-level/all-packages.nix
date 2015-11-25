@@ -1513,6 +1513,8 @@ let
 
   fcitx-anthy = callPackage ../tools/inputmethods/fcitx-engines/fcitx-anthy { };
 
+  fcitx-chewing = callPackage ../tools/inputmethods/fcitx-engines/fcitx-chewing { };
+
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
 
   fcitx-with-plugins = callPackage ../tools/inputmethods/fcitx/wrapper.nix {
