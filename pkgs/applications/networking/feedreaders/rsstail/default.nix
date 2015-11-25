@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.vanheusden.com/rsstail/;
     license = licenses.gpl2Plus;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 }

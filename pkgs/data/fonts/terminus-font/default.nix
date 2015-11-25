@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.is-vn.bg/hamster/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ astsmtl ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

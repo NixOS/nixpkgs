@@ -3,9 +3,9 @@
 let
   src = fetchurl {
     url = "https://github.com/letsencrypt/letsencrypt/archive/v${version}.tar.gz";
-    sha256 = "1xr1ii2kfbhspyirwyqlk4vyx88irif92mw02jwfx9mnslk9gral";
+    sha256 = "00p94pmli4lr5l3vqi11374p9jxiqir1ygx89zgfm4db47srx41z";
   };
-  version = "0.0.0.dev20151030";
+  version = "0.0.0.dev20151123";
   acme = pythonPackages.buildPythonPackage rec {
     name = "acme-${version}";
     inherit src version;

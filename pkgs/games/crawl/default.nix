@@ -3,7 +3,7 @@
 , tileMode ? true
 }:
 
-let version = "0.16.2";
+let version = "0.17.0";
 in
 stdenv.mkDerivation rec {
   name = "crawl-${version}" + (if tileMode then "-tiles" else "");
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "crawl-ref";
     repo = "crawl-ref";
     rev = version;
-    sha256 = "08ns49if8941vsg6abywgw3mnjafgj5sga0cdvvvviq0qqzprhw9";
+    sha256 = "0igvgi3dgf73da4gznc2dcbiix79hn08qk9yalrc92d2c1xxdawh";
   };
 
   patches = [ ./crawl_purify.patch ];

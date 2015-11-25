@@ -1,18 +1,18 @@
 {
   "evancz/virtual-dom" = {
-    version = "1.2.3";
-    sha256 = "03iv9fpng3gvia00v3gl8rs83j5b112hx0vm36az13zjr378b1jr";
+    version = "2.1.0";
+    sha256 = "0x072vk2x9md5pxwc3f3v7gm738wr996d54avzzadfvj3qcjxpfs";
   };
   "evancz/elm-markdown" = {
-    version = "1.1.5";
-    sha256 = "01vdaz56i064lah7kd8485j0y33di8wa134sr4292wb3na990a8r";
+    version = "2.0.0";
+    sha256 = "1x1kvwag7idxif4gsznnx0lp1c49dl9pin3aj0dq21lzradggn3g";
   };
   "evancz/elm-html" = {
-    version = "3.0.0";
-    sha256 = "0a2iw45x3qwxkgibkc6qx1csfa06gpkfc9b04vkq1h7ynw2g5577";
+    version = "4.0.2";
+    sha256 = "05hzsnsqp2krd9s4xjwhmvyafpky4dc40bbk9sgsr301450cfgw6";
   };
   "elm-lang/core" = {
-    version = "2.1.0";
-    sha256 = "10fg7bcc310b5bwv6sq7gjhy9r5xzc98nbk4zhs4jqykn36i6l43";
+    version = "3.0.0";
+    sha256 = "18pdsnz05pjhdv575l3bqzrjd7780zgpcklg4c6lvwwcanpg42pk";
   };
 }

@@ -1,5 +1,6 @@
 { stdenv, intltool, fetchurl, wrapGAppsHook, gnome-video-effects, libcanberra_gtk3
-, pkgconfig, gtk3, glib, clutter_gtk, clutter-gst_2, udev, gst_all_1, itstool
+, pkgconfig, gtk3, glib, clutter_gtk, clutter-gst, udev, gst_all_1, itstool
+, libgudev
 , adwaita-icon-theme, librsvg, gdk_pixbuf, gnome3, gnome_desktop, libxml2 }:
 
 stdenv.mkDerivation rec {
@@ -8,8 +9,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig gtk3 glib intltool wrapGAppsHook gnome-video-effects itstool
                   gdk_pixbuf adwaita-icon-theme librsvg udev gst_all_1.gstreamer libxml2
                   gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gnome_desktop
-                  gst_all_1.gst-plugins-bad clutter_gtk clutter-gst_2
-                  libcanberra_gtk3 ];
+                  gst_all_1.gst-plugins-bad clutter_gtk clutter-gst
+                  libcanberra_gtk3 libgudev ];
 
   enableParallelBuilding = true;
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "snapraid";
+  name = "snapraid-${version}";
   version = "8.1";
 
   src = fetchurl {

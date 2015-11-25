@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://dashpay.io;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
   };
 }

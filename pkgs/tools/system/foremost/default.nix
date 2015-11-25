@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://foremost.sourceforge.net/;
     license = licenses.publicDomain;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 

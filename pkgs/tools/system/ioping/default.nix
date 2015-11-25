@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Disk I/O latency measuring tool";
     maintainers = with maintainers; [ raskin ];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
     license = licenses.gpl3Plus;
     homepage = https://github.com/koct9i/ioping;
   };

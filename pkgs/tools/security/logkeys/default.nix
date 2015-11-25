@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     homepage = https://github.com/kernc/logkeys;
     maintainers = with maintainers; [offline];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

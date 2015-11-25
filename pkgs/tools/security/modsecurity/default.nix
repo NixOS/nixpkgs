@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     homepage = https://www.modsecurity.org/;
     maintainers = with maintainers; [offline];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

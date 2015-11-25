@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   name = "wireshark-${variant}-${version}";
 
   src = fetchurl {
-    url = "http://www.wireshark.org/download/src/wireshark-${version}.tar.bz2";
+    url = "http://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.bz2";
     sha256 = "0b7rc1l1gvzcz7gfa6g7pcn32zrcfiqjx0rxm6cg3q1cwwa1qjn7";
   };
 

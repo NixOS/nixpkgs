@@ -1,12 +1,15 @@
 { stdenv, fetchgit, rustPlatform, file, curl, python, pkgconfig, openssl
-, cmake, zlib }:
-
-with ((import ./common.nix) { inherit stdenv; version = "0.6.0"; });
+, cmake, zlib, makeWrapper }:
 
 with rustPlatform;
 
+with ((import ./common.nix) {
+  inherit stdenv rustc;
+  version = "0.6.0";
+});
+
 buildRustPackage rec {
-  inherit name version meta;
+  inherit name version meta passthru;
 
   # Needs to use fetchgit instead of fetchFromGitHub to fetch submodules
   src = fetchgit {
@@ -17,7 +20,7 @@ buildRustPackage rec {
 
   depsSha256 = "1m045yywv67sx75idbsny59d3dzbqnhr07k41jial5n5zwp87mb9";
 
-  buildInputs = [ file curl pkgconfig python openssl cmake zlib ];
+  buildInputs = [ file curl pkgconfig python openssl cmake zlib makeWrapper ];
 
   configurePhase = ''
     ./configure --enable-optimize --prefix=$out --local-cargo=${cargo}/bin/cargo

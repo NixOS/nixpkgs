@@ -17,11 +17,12 @@
 # };
 # This will rebuild glibc with your security patch, then copy over firefox
 # (and all of its dependencies) without rebuilding further.
-{ drv, oldDependency, newDependency }:
+{ drv, oldDependency, newDependency, verbose ? true }:
 
 with lib;
 
 let
+  warn = if verbose then builtins.trace else (x:y:y);
   references = import (runCommand "references.nix" { exportReferencesGraph = [ "graph" drv ]; } ''
     (echo {
     while read path
@@ -47,7 +48,7 @@ let
 
   oldStorepath = builtins.storePath (discard (toString oldDependency));
 
-  referencesOf = drv: getAttr (discard (toString drv)) references;
+  referencesOf = drv: references.${discard (toString drv)};
 
   dependsOnOldMemo = listToAttrs (map
     (drv: { name = discard (toString drv);
@@ -55,7 +56,7 @@ let
                     any dependsOnOld (referencesOf drv);
           }) (builtins.attrNames references));
 
-  dependsOnOld = drv: getAttr (discard (toString drv)) dependsOnOldMemo;
+  dependsOnOld = drv: dependsOnOldMemo.${discard (toString drv)};
 
   drvName = drv:
     discard (substring 33 (stringLength (builtins.baseNameOf drv)) (builtins.baseNameOf drv));
@@ -77,5 +78,6 @@ let
           })
     (filter dependsOnOld (builtins.attrNames references))) // rewrittenDeps;
 
+  drvHash = discard (toString drv);
 in assert (stringLength (drvName (toString oldDependency)) == stringLength (drvName (toString newDependency)));
-getAttr (discard (toString drv)) rewriteMemo
+rewriteMemo.${drvHash} or (warn "replace-dependency.nix: Derivation ${drvHash} does not depend on ${discard (toString oldDependency)}" drv)

@@ -31,16 +31,11 @@ in
     socketActivation =
       mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description =
           ''
             This option enables docker with socket activation. I.e. docker will
             start when first called by client.
-
-            Note: This is false by default because systemd lower than 214 that
-            nixos uses so far, doesn't support SocketGroup option, so socket
-            created by docker has root group now. This will likely be changed
-            in future.  So set this option explicitly to false if you wish.
           '';
       };
     storageDriver =

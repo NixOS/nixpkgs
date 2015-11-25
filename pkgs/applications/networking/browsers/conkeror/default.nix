@@ -32,6 +32,6 @@ stdenv.mkDerivation {
     homepage = http://conkeror.org/;
     license = with licenses; [ mpl11 gpl2 lgpl21 ];
     maintainers = with maintainers; [ astsmtl chaoflow ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

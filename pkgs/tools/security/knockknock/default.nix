@@ -24,7 +24,7 @@ buildPythonPackage rec {
     homepage    = "http://www.thoughtcrime.org/software/knockknock/";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ copumpkin ];
-    platforms   = with platforms; linux;
+    platforms   = platforms.linux;
   };
 }
 

@@ -1,4 +1,4 @@
-{stdenv, version}:
+{stdenv, version, rustc}:
 
 {
   inherit version;
@@ -11,6 +11,8 @@
        "$out/lib/rustlib/rust-installer-version" \
        "$out/lib/rustlib/uninstall.sh" \
        "$out/lib/rustlib/manifest-cargo"
+
+     wrapProgram "$out/bin/cargo" --suffix PATH : "${rustc}/bin"
   '';
 
   platform = if stdenv.system == "i686-linux"
@@ -22,6 +24,8 @@
     else if stdenv.system == "x86_64-darwin"
     then "x86_64-apple-darwin"
     else throw "no snapshot to bootstrap for this platform (missing platform url suffix)";
+
+  passthru.rustc = rustc;
 
   meta = with stdenv.lib; {
     homepage = http://crates.io;

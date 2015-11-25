@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     '';
     homepage = http://netsniff-ng.org/;
     license = licenses.gpl2;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 }

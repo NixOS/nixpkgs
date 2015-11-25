@@ -370,9 +370,7 @@ let
 
   libgda = callPackage ./misc/libgda { };
 
-  libgit2-glib = callPackage ./misc/libgit2-glib {
-    libgit2 = pkgs.libgit2.override { libssh2 = null; };
-  };
+  libgit2-glib = callPackage ./misc/libgit2-glib { };
 
   libmediaart = callPackage ./misc/libmediaart { };
 

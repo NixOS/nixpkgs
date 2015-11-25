@@ -280,7 +280,7 @@ stdenv.mkDerivation {
     description = "Distributed storage system";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ ak wkennington ];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
   };
 
   passthru.version = version;

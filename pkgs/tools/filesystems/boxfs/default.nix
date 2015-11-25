@@ -55,7 +55,7 @@ in stdenv.mkDerivation {
     '';
     homepage = https://github.com/drotiro/boxfs2;
     license = licenses.gpl3;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 }

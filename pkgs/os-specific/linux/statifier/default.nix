@@ -20,6 +20,6 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Tool for creating static Linux binaries";
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

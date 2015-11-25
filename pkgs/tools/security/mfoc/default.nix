@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     homepage = http://code.google.com/p/mfoc/;
     maintainers = with maintainers; [ offline ];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
   };
 }

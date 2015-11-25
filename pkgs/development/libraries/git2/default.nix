@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = "-DTHREADSAFE=ON";
 
-  nativeBuildInputs = [ cmake pkgconfig python ];
+  nativeBuildInputs = [ cmake python pkgconfig ];
   buildInputs = [ zlib libssh2 openssl http-parser ];
 
   meta = {

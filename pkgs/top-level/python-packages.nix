@@ -695,7 +695,6 @@ let
       url = "https://pypi.python.org/packages/source/a/atomiclong/atomiclong-${version}.tar.gz";
       sha256 = "1gjbc9lvpkgg8vj7dspif1gz9aq4flkhxia16qj6yvb7rp27h4yb";
     };
-
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ cffi ];
 
@@ -1277,6 +1276,25 @@ let
     };
   };
 
+  datadog = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "datadog";
+    version = "0.10.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/${pname}/${name}.tar.gz";
+      sha256 = "0y2if4jj43n5jis20imragvhhyhr840w4m1g7j7fxh9bn7h273zp";
+    };
+
+    buildInputs = with self; [ pillow tox mock six nose ];
+    propagatedBuildInputs = with self; [ requests2 decorator simplejson ];
+
+    meta = {
+      description = "The Datadog Python library ";
+      license = licenses.bsd3;
+      homepage = https://github.com/DataDog/datadogpy;
+    };
+  };
+
   debian = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "python-debian";
@@ -1592,6 +1610,44 @@ let
      };
    };
 
+  bokeh = buildPythonPackage rec {
+    name = "bokeh-${version}";
+    version = "0.10.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/b/bokeh/${name}.tar.gz";
+      sha256 = "2d8bd8c98e2f62b2a28328d3cc95bfbe257742fa7efc9c382b4c8ae4a141df14";
+    };
+
+    disabled = isPyPy;
+
+    propagatedBuildInputs = with self; [
+      flask
+      jinja2
+      markupsafe
+      werkzeug
+      itsdangerous
+      dateutil
+      requests
+      six
+      pygments
+      pystache
+      markdown
+      pyyaml
+      pyzmq
+      tornado
+      colorama
+      ]
+      ++ optionals ( isPy26 ) [ argparse ]
+      ++ optionals ( !isPy3k && !isPyPy ) [ websocket_client ]
+      ++ optionals ( !isPyPy ) [ numpy pandas greenlet ];
+
+    meta = {
+      description = "Statistical and novel interactive HTML plots for Python";
+      homepage = "http://github.com/bokeh/bokeh";
+      license = licenses.bsd3;
+    };
+  };
 
   boto = buildPythonPackage rec {
     name = "boto-${version}";
@@ -2739,6 +2795,28 @@ let
     };
   };
 
+  mixpanel = buildPythonPackage rec {
+    version = "4.0.2";
+    name = "mixpanel-${version}";
+
+    src = pkgs.fetchzip {
+      url = "https://github.com/mixpanel/mixpanel-python/archive/${version}.zip";
+      sha256 = "0yq1bcsjzsz7yz4rp69izsdn47rvkld4wki2xmapp8gg2s9i8709";
+    };
+
+    buildInputs = with self; [ pytest mock ];
+    propagatedBuildInputs = with self; [ six ];
+    checkPhase = "py.test tests.py";
+
+    meta = {
+      homepage = https://github.com/mixpanel/mixpanel-python;
+      description = "This is the official Mixpanel Python library. This library
+                     allows for server-side integration of Mixpanel.";
+      license = stdenv.lib.licenses.asl20;
+    };
+  };
+
+
   pkginfo = buildPythonPackage rec {
     version = "1.2.1";
     name = "pkginfo-${version}";
@@ -2888,17 +2966,18 @@ let
   };
 
   pycparser = buildPythonPackage rec {
-    name = "pycparser-2.10";
+    name = "pycparser-${version}";
+    version = "2.14";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pycparser/${name}.tar.gz";
-      md5 = "d87aed98c8a9f386aa56d365fe4d515f";
+      sha256 = "7959b4a74abdc27b312fed1c21e6caf9309ce0b29ea86b591fd2e99ecdf27f73";
     };
 
-    # ImportError: No module named test
-    doCheck = false;
-
     meta = {
+      description = "C parser in Python";
+      homepage = https://github.com/eliben/pycparser;
+      license = licenses.bsd3;
       maintainers = with maintainers; [ iElectric ];
     };
   };
@@ -2945,10 +3024,12 @@ let
   };
 
   pytestflakes = buildPythonPackage rec {
-    name = "pytset-flakes-0.2";
+    name = "pytest-flakes-${version}";
+    version = "1.0.0";
+
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/pytest-flakes/pytest-flakes-0.2.zip";
-      sha256 = "0n4mc2kaqasxmj8jid7jlss7nwgz4qgglcwdyrqvh08dilnp354i";
+      url = "https://pypi.python.org/packages/source/p/pytest-flakes/${name}.tar.gz";
+      sha256 = "0vvfprga6k4v2zq1qsr3yq1bjl22vygfsnvyn3hh80cc2386dk6h";
     };
 
     propagatedBuildInputs = with self ; [ pytest pyflakes pytestcache ];
@@ -3454,7 +3535,7 @@ let
       md5 = "2cc57e1d134aa93404e779b9311676fa";
     };
 
-    propagatedBuildInputs = with self; [ oauth2 requests ];
+    propagatedBuildInputs = with self; [ oauth2 requests2 ];
 
     meta = {
       description = "Official Python API client for Discogs";
@@ -4159,21 +4240,33 @@ let
 
   gitdb = buildPythonPackage rec {
     name = "gitdb-0.6.4";
-    meta.maintainers = with maintainers; [ mornfall ];
-    doCheck = false;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gitdb/${name}.tar.gz";
       sha256 = "0n4n2c7rxph9vs2l6xlafyda5x1mdr8xy16r9s3jwnh3pqkvrsx3";
     };
 
-    propagatedBuildInputs = with self; [ smmap async ];
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ smmap ];
+
+    checkPhase = ''
+      nosetests
+    '';
+
+    doCheck = false; # Bunch of tests fail because they need an actual git repo
+
+    meta = {
+      description = "Git Object Database";
+      maintainers = with maintainers; [ mornfall ];
+      homepage = https://github.com/gitpython-developers/gitdb;
+      license = licenses.bsd3;
+    };
+
   };
 
   GitPython = buildPythonPackage rec {
     version = "1.0.1";
     name = "GitPython-${version}";
-    meta.maintainers = with maintainers; [ mornfall ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/G/GitPython/GitPython-${version}.tar.gz";
@@ -4182,6 +4275,13 @@ let
 
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ gitdb ];
+
+    meta = {
+      description = "Python Git Library";
+      maintainers = with maintainers; [ mornfall ];
+      homepage = https://github.com/gitpython-developers/GitPython;
+      license = licenses.bsd3;
+    };
   };
 
   googlecl = buildPythonPackage rec {
@@ -8210,7 +8310,7 @@ let
     buildInputs = with self; [nose] ++ optionals isPy27 [mock];
 
     propagatedBuildInputs = with self;
-      [decorator pickleshare simplegeneric traitlets readline requests pexpect sqlite3]
+      [decorator pickleshare simplegeneric traitlets readline requests2 pexpect sqlite3]
       ++ optionals stdenv.isDarwin [appnope gnureadline];
 
     meta = {
@@ -8792,7 +8892,7 @@ let
       sha256 = "a10d8d5e597c6a54ec418baddd31a51a0b7937a895d75b240d890aead946081c";
     };
 
-    llvm = pkgs.llvm;
+    llvm = pkgs.llvm_36;
 
     propagatedBuildInputs = with self; [ llvm ] ++ optional (pythonOlder "3.4") enum34;
 
@@ -8809,6 +8909,8 @@ let
       ${self.python.executable} runtests.py
     '';
 
+    __impureHostDeps = optionals stdenv.isDarwin [ "/usr/lib/libm.dylib" ];
+
     meta = {
       description = "A lightweight LLVM python binding for writing JIT compilers";
       homepage = "http://llvmlite.pydata.org/";
@@ -8818,19 +8920,23 @@ let
   };
 
   lockfile = buildPythonPackage rec {
-    name = "lockfile-0.9.1";
-
+    name = "lockfile-${version}";
+    version = "0.10.2";
     src = pkgs.fetchurl {
-      url = "http://pylockfile.googlecode.com/files/${name}.tar.gz";
-      sha1 = "1eebaee375641c9f29aeb21768f917dd2b985752";
+      sha256 = "0zi7amj3y55lp6339w217zksn1a0ssfvscmv059g2wvnyjqi6f95";
+      url = "https://github.com/openstack/pylockfile/archive/${version}.tar.gz";
     };
 
-    # error: invalid command 'test'
-    doCheck = false;
+    doCheck = true;
+    OSLO_PACKAGE_VERSION = "${version}";
+    buildInputs = with self; [
+      pbr nose sphinx_1_2
+    ];
 
     meta = {
-      homepage = http://code.google.com/p/pylockfile/;
+      homepage = http://launchpad.net/pylockfile;
       description = "Platform-independent advisory file locking capability for Python applications";
+      license = licenses.asl20;
     };
   };
 
@@ -9137,19 +9243,18 @@ let
 
 
   memory_profiler = buildPythonPackage rec {
-    name = "memory_profiler-0.27";
+    name = "memory_profiler-${version}";
+    version = "0.39";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/m/memory_profiler/memory_profiler-0.27.tar.gz";
-      md5 = "212c0d7452dbaffb6b09474ac07b0668";
+      url = "https://pypi.python.org/packages/source/m/memory_profiler/${name}.tar.gz";
+      sha256 = "61021f2dade7edd6cc09d7924bfdccc453bd1949608412a3e021d44a410d3a23";
     };
-
-    # error: invalid command 'test'
-    doCheck = false;
 
     meta = {
       description = "A module for monitoring memory usage of a python program";
       homepage = http://pypi.python.org/pypi/memory_profiler;
+      license = licenses.bsd3;
     };
   };
 
@@ -10093,7 +10198,7 @@ let
     meta = {
       homepage = http://nipy.org/nipype/;
       description = "Neuroimaging in Python: Pipelines and Interfaces";
-      license = "BSD";
+      license = licenses.bsd3;
     };
   };
 
@@ -10244,7 +10349,7 @@ let
 
     buildInputs = with self; [nose]  ++ optionals isPy27 [mock];
 
-    propagatedBuildInputs = with self; [jinja2 tornado ipython_genutils traitlets jupyter_core jupyter_client nbformat nbconvert ipykernel terminado requests pexpect];
+    propagatedBuildInputs = with self; [jinja2 tornado ipython_genutils traitlets jupyter_core jupyter_client nbformat nbconvert ipykernel terminado requests2 pexpect];
 
     meta = {
       description = "The Jupyter HTML notebook is a web-based notebook environment for interactive computing";
@@ -10413,6 +10518,12 @@ let
 
     buildInputs = [ pkgs.gfortran self.nose ];
     propagatedBuildInputs = [ support.openblas ];
+
+    # This patch removes the test of large file support, which takes forever
+    # and can cause the machine to run out of disk space when run.
+    patchPhase = ''
+      patch -p0 < ${../development/python-modules/numpy-no-large-files.patch}
+    '';
 
     meta = {
       description = "Scientific tools for Python";
@@ -10790,16 +10901,7 @@ let
     doCheck = false;
 
     propagatedBuildInputs = with self; [
-      pbr requests2
-        (sphinx.override rec {
-          name = "sphinx-1.2.3";
-          src = pkgs.fetchurl {
-            url = "https://pypi.python.org/packages/source/s/sphinx/${name}.tar.gz";
-            sha256 = "94933b64e2fe0807da0612c574a021c0dac28c7bd3c4a23723ae5a39ea8f3d04";
-            };
-          patches = [];
-          disabled = isPy35;
-        })
+      pbr requests2 sphinx_1_2
     ];
   };
 
@@ -12679,6 +12781,32 @@ let
     };
   };
 
+  pysoundfile = buildPythonPackage rec {
+    name = "pysoundfile-${version}";
+    version = "0.8.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/P/PySoundFile/PySoundFile-${version}.tar.gz";
+      sha256 = "72c3e23b7c9998460ec78176084ea101e3439596ab29df476bc8508708df84df";
+    };
+
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ numpy pkgs.libsndfile cffi ];
+
+    meta = {
+      description = "An audio library based on libsndfile, CFFI and NumPy";
+      license = licenses.bsd3;
+      homepage = https://github.com/bastibe/PySoundFile;
+      maintainer = with maintainers; [ fridh ];
+    };
+
+    prePatch = ''
+      substituteInPlace soundfile.py --replace "'sndfile'" "'${pkgs.libsndfile}/lib/libsndfile.so'"
+    '';
+
+    disabled = isPyPy;
+  };
+
   python3pika = buildPythonPackage {
     name = "python3-pika-0.9.14";
     disabled = !isPy3k;
@@ -12934,7 +13062,7 @@ let
 
 
   praw = buildPythonPackage rec {
-    name = "praw-3.1.0";
+    name = "praw-3.3.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/praw/${name}.zip";
@@ -12942,6 +13070,7 @@ let
     };
 
     propagatedBuildInputs = with self; [
+      requests2
       decorator
       flake8
       mock
@@ -13139,7 +13268,7 @@ let
       md5 = "b27c714d530300b917eb869726334226";
     };
 
-    propagatedBuildInputs = with self; [ requests audioread ];
+    propagatedBuildInputs = with self; [ requests2 audioread ];
 
     patches = [ ../development/python-modules/pyacoustid-py3.patch ];
 
@@ -13406,7 +13535,7 @@ let
       homepage = https://pypi.python.org/pypi/pygit2;
       description = "A set of Python bindings to the libgit2 shared library";
       license = licenses.gpl2;
-      platforms = with platforms; all;
+      platforms = platforms.all;
     };
   };
 
@@ -13425,7 +13554,7 @@ let
     meta = {
       homepage = http://babel.edgewall.org;
       description = "A collection of tools for internationalizing Python applications";
-      license = "BSD";
+      license = licenses.bsd3;
       maintainers = with maintainers; [ garbas ];
     };
   });
@@ -15097,6 +15226,7 @@ let
 
   requests = buildPythonPackage rec {
     name = "requests-1.2.3";
+    disabled = !pythonOlder "3.4";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
@@ -15917,6 +16047,26 @@ let
     meta = {
       description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering. ";
       homepage = http://www.scipy.org/;
+    };
+  };
+
+  scikitimage = buildPythonPackage rec {
+    name = "scikit-image-${version}";
+    version = "0.11.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/scikit-image/${name}.tar.gz";
+      sha256 = "768e568f3299966c294b7eb8cd114fc648f7bfaef422ee9cc750dd8d9d09e44b";
+    };
+
+    buildInputs = with self; [ pkgs.cython nose numpy six ];
+
+    propagatedBuildInputs = with self; [ pillow matplotlib networkx scipy ];
+
+    meta = {
+      description = "Image processing routines for SciPy";
+      homepage = http://scikit-image.org;
+      license = licenses.bsd3;
     };
   };
 
@@ -16756,6 +16906,15 @@ let
     };
   });
 
+  sphinx_1_2 = self.sphinx.override rec {
+    name = "sphinx-1.2.3";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sphinx/sphinx-1.2.3.tar.gz";
+      sha256 = "94933b64e2fe0807da0612c574a021c0dac28c7bd3c4a23723ae5a39ea8f3d04";
+    };
+    patches = [];
+    disabled = isPy35;
+  };
 
   sphinx_rtd_theme = buildPythonPackage (rec {
     name = "sphinx_rtd_theme-0.1.8";
@@ -16996,6 +17155,30 @@ let
     };
   };
 
+  statsmodels = buildPythonPackage rec {
+    name = "statsmodels-${version}";
+    version = "0.6.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/statsmodels/${name}.tar.gz";
+      sha256 = "be4e44374aec9e848b73e5a230dee190ac0c4519e1d40f69a5813190b13ec676";
+    };
+
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [numpy scipy pandas patsy cython matplotlib];
+
+    meta = {
+      description = "Statistical computations and models for use with SciPy";
+      homepage = "https://www.github.com/statsmodels/statsmodels";
+      license = licenses.bsd3;
+      maintainer = with maintainers; [ fridh ];
+    };
+
+    # Many tests fail when using latest numpy and pandas.
+    # See also https://github.com/statsmodels/statsmodels/issues/2602
+    doCheck = false;
+  };
+
   python_statsd = buildPythonPackage rec {
     name = "python-statsd-${version}";
     version = "1.6.0";
@@ -17012,6 +17195,7 @@ let
       description = "A client for Etsy's node-js statsd server";
       homepage = https://github.com/WoLpH/python-statsd;
       license = licenses.bsd3;
+      maintainers = with maintainers; [ fridh ];
     };
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, kodi }:
+{ stdenv, fetchFromGitHub, kodi, steam }:
 
 let
 
@@ -81,13 +81,13 @@ in
 
     plugin = "svtplay";
     namespace = "plugin.video.svtplay";
-    version = "4.0.15";
+    version = "4.0.18";
 
     src = fetchFromGitHub {
       owner = "nilzen";
       repo = "xbmc-" + plugin;
-      rev = "3b926898b7007827b469ecb1c27ede4238fd26f6";
-      sha256 = "1bx2c3z8rbkk75hykpmls956hfkwvsm4d8gvlrh53s8zimlwgv7k";
+      rev = "b60cc1164d0077451be935d0d1a26f2d29b0f589";
+      sha256 = "0rdmrgjlzhnrpmhgqvf2947i98s51r0pjbnwrhw67nnqkylss5dj";
     };
 
     meta = with stdenv.lib; {
@@ -103,6 +103,35 @@ in
       maintainers = with maintainers; [ edwtjo ];
     };
 
+  };
+
+  steam-launcher = (mkKodiPlugin rec {
+  
+    plugin = "steam-launcher";
+    namespace = "script.steam.launcher";
+    version = "3.1.1";
+
+    src = fetchFromGitHub rec {
+      owner = "teeedubb";
+      repo = owner + "-xbmc-repo";
+      rev = "bb66db7c4927619485373699ff865a9b00e253bb";
+      sha256 = "1skjkz0h6nkg04vylhl4zzavf5lba75j0qbgdhb9g7h0a98jz7s4";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "http://forum.kodi.tv/showthread.php?tid=157499";
+      description = "Launch Steam in Big Picture Mode from Kodi";
+      longDescription = ''
+        This add-on will close/minimise Kodi, launch Steam in Big
+        Picture Mode and when Steam BPM is exited (either by quitting
+        Steam or returning to the desktop) Kodi will
+        restart/maximise. Running pre/post Steam scripts can be
+        configured via the addon.
+      '';
+      maintainers = with maintainers; [ edwtjo ];
+    };
+  }).override {
+    propagatedBuildinputs = [ steam ];
   };
 
 }

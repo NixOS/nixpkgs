@@ -90,8 +90,8 @@ in
 
       promptInit = mkOption {
         default = ''
-          if test "$TERM" != "dumb"; then
-            # Provide a nice prompt.
+          # Provide a nice prompt if the terminal supports it.
+          if [ "$TERM" != "dumb" -o -n "$INSIDE_EMACS" ]; then
             PROMPT_COLOR="1;31m"
             let $UID && PROMPT_COLOR="1;32m"
             PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]\\$\[\033[0m\] "

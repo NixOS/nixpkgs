@@ -4,10 +4,12 @@
 let
   coreosImageRelease = "794.1.0";
   coreosImageSystemdVersion = "222";
-  stage1Flavour = "coreos";
+
+  # TODO: track https://github.com/coreos/rkt/issues/1758 to allow "host" flavor.
+  stage1Flavours = [ "coreos" ];
 
 in stdenv.mkDerivation rec {
-  version = "0.10.0";
+  version = "0.11.0";
   name = "rkt-${version}";
   BUILDDIR="build-${name}";
 
@@ -15,7 +17,7 @@ in stdenv.mkDerivation rec {
       rev = "v${version}";
       owner = "coreos";
       repo = "rkt";
-      sha256 = "1d9n00wkzib4v5mfl46f2mqc8zfpv33kqixifmv8p4azqv78cbxn";
+      sha256 = "0qdg3m99viymran9n7rxywwbqr3xqgk8r7hsk6nj3liwqsx6agiv";
   };
 
   stage1BaseImage = fetchurl {
@@ -28,10 +30,11 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     ./autogen.sh
     configureFlagsArray=(
-      --with-stage1=${stage1Flavour}
-      --with-stage1-image-path=$out/stage1-${stage1Flavour}.aci
+      --with-stage1-flavors=${builtins.concatStringsSep "," stage1Flavours}
+      ${if lib.findFirst (p: p == "coreos") null stage1Flavours != null then "
       --with-coreos-local-pxe-image-path=${stage1BaseImage}
       --with-coreos-local-pxe-image-systemd-version=v${coreosImageSystemdVersion}
+      " else "" }
     );
   '';
 

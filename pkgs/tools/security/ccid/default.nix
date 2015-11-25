@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = http://pcsclite.alioth.debian.org/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ viric wkennington ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

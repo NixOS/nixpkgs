@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.10.38";
+  version = "0.10.40";
 
   # !!! Should we also do shared libuv?
   deps = {
@@ -32,7 +32,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "12xpa9jzry5g0j41908498qqs8v0q6miqkv6mggyzas8bvnshgai";
+    sha256 = "17qlk4adjk1ls8ka4gbmvcl02xmvxdxhfdmg54bbxbjrv4prrrxs";
   };
 
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps) ++
@@ -69,7 +69,6 @@ in stdenv.mkDerivation {
     description = "Event-driven I/O framework for the V8 JavaScript engine";
     homepage = http://nodejs.org;
     license = licenses.mit;
-    maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -14,7 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "0c3q8lpb123m9k5x3i71mm8lmyzhknw77zxh89yfl8qmn6zd61i1";
   };
 
-  patches = [ ./sddm-ignore-config-mtime.patch ];
+  patches = [
+    ./0001-ignore-config-mtime.patch
+    ./0002-fix-ConfigReader-QStringList-corruption.patch
+  ];
 
   nativeBuildInputs = [ cmake makeQtWrapper pkgconfig qttools ];
 

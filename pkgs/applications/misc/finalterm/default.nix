@@ -58,6 +58,6 @@ stdenv.mkDerivation {
     '';
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cstrahan ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

@@ -3,11 +3,11 @@
 assert !(stdenv ? cross) -> zlib != null;
 
 stdenv.mkDerivation rec {
-  name = "libpng-1.2.53";
+  name = "libpng-1.2.54";
 
   src = fetchurl {
     url = "mirror://sourceforge/libpng/${name}.tar.xz";
-    sha256 = "02jwfqk1ahqfvbs9gdyb5v0123by9ws6m7jnfvainig7i7v4jpml";
+    sha256 = "0wnjy7gqn0f24qrlggs7kl0ij59by413j1xmqp12n3vqh9j531fg";
   };
 
   outputs = [ "dev" "out" "man" ];
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
 
   postInstall = ''mv "$out/bin" "$dev/bin"'';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "The official reference implementation for the PNG file format";
     homepage = http://www.libpng.org/pub/png/libpng.html;
-    license = stdenv.lib.licenses.libpng;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    license = licenses.libpng;
+    maintainers = [ maintainers.fuuzetsu ];
     branch = "1.2";
   };
 }

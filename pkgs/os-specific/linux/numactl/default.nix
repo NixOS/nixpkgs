@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     description = "Library and tools for non-uniform memory access (NUMA) machines";
     homepage = http://oss.sgi.com/projects/libnuma/;
     license = licenses.gpl2;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];
   };
 }

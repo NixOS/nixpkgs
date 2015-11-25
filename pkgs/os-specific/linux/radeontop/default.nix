@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, pkgconfig, gettext, ncurses, libdrm, libpciaccess }:
 
-let version = "2015-08-06"; in
+let version = "2015-11-24"; in
 stdenv.mkDerivation {
   name = "radeontop-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "01s0j28lk66wb46qymkk1nyk91iv22y3m56z4lqd16yaxmhl0v2f";
-    rev = "93c8ff2f07da8d4c204ee4872aed7eec834ff57d";
+    sha256 = "0irwq6rps5mnban8cxbrm59wpyv4j80q3xdjm9fxvfpiyys2g2hz";
+    rev = "0e82272f3e8f2287c1bc1d8a0c7bdbd5c4818b37";
     repo = "radeontop";
     owner = "clbr";
   };

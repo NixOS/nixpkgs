@@ -1,40 +1,22 @@
-x@{builderDefsPackage
-  , gawk, alsaLib, ncurses
-  , ...}:
-builderDefsPackage
-(a :
-let
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
-    [];
+{ stdenv, fetchurl, gawk, alsaLib, ncurses }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="speech_tools";
-    version="2.1";
-    name="${baseName}-${version}";
-    url="http://www.festvox.org/packed/festival/${version}/${name}-release.tar.gz";
-    hash="1s9bkfgdgyas8v2cr7x3dg0ck1xf9mn1q6a73gwy524sjb6nfqgz";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  name = "speech_tools-${version}";
+  version = "2.1";
+
+  src = fetchurl {
+    url = "http://www.festvox.org/packed/festival/${version}/${name}-release.tar.gz";
+    sha256 = "1s9bkfgdgyas8v2cr7x3dg0ck1xf9mn1q6a73gwy524sjb6nfqgz";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ alsaLib ncurses ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doUnpack" "killUsrBin" "doConfigure" "doMakeInstall" "doDeploy" "fixPaths"];
-
-  killUsrBin = a.fullDepEntry ''
+  preConfigure = ''
     sed -e s@/usr/bin/@@g -i $( grep -rl '/usr/bin/' . )
     sed -re 's@/bin/(rm|printf|uname)@\1@g' -i $( grep -rl '/bin/' . )
-  '' ["minInit" "doUnpack"];
+  '';
 
-  doDeploy = a.fullDepEntry ''
+  installPhase = ''
     mkdir -p "$out"/{bin,lib}
     for d in bin lib; do
       for i in ./$d/*; do
@@ -42,24 +24,21 @@ rec {
           cp -r "$(readlink -f $i)" "$out/$d"
       done
     done
-  '' ["doMakeInstall" "defEnsureDir"];
+  '';
 
-  fixPaths = a.doPatchShebangs "$out/bin";
-
-  meta = {
+  meta = with stdenv.lib; {
     broken = true;
     description = "Text-to-speech engine";
-    maintainers = with a.lib.maintainers;
+    maintainers = with maintainers;
     [
       raskin
     ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.free;
+    platforms = platforms.linux;
+    license = licenses.free;
   };
   passthru = {
     updateInfo = {
       downloadPage = "http://www.festvox.org/packed/festival/";
     };
   };
-}) x
+}

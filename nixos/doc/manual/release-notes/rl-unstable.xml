@@ -6,6 +6,26 @@
 
 <title>Unstable</title>
 
+<para>In addition to numerous new and upgraded packages, this release
+has the following highlights:</para>
+
+<itemizedlist>
+
+  <listitem>
+    <para>You can now pin a specific version of NixOS in your <filename>configuration.nix</filename>
+    by setting:
+
+<programlisting>
+nixos.path = ./nixpkgs-unstable-2015-12-06/nixos;
+</programlisting>
+
+    This will make NixOS re-evaluate your configuration with the modules of
+    the specified NixOS version at the given path.  For more details, see
+    <xref linkend="module-misc-nixos" /></para>
+  </listitem>
+
+</itemizedlist>
+
 <para>When upgrading from a previous release, please be aware of the
 following incompatible changes:</para>
 
@@ -51,6 +71,21 @@ nginx.override {
   modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
 }
 ]]></programlisting>
+    </para>
+  </listitem>
+
+  <listitem>
+    <para><command>s3sync</command> is removed, as it hasn't been
+    developed by upstream for 4 years and only runs with ruby 1.8.
+    For an actively-developer alternative look at
+    <command>tarsnap</command> and others.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para><command>ruby_1_8</command> has been removed as it's not
+    supported from upstream anymore and probably contains security
+    issues.
     </para>
   </listitem>
 

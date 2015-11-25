@@ -52,6 +52,7 @@
   ./misc/lib.nix
   ./misc/locate.nix
   ./misc/meta.nix
+  ./misc/nixos.nix
   ./misc/nixpkgs.nix
   ./misc/passthru.nix
   ./misc/version.nix
@@ -189,6 +190,7 @@
   ./services/mail/spamassassin.nix
   ./services/misc/apache-kafka.nix
   ./services/misc/autofs.nix
+  ./services/misc/bepasty.nix
   ./services/misc/canto-daemon.nix
   ./services/misc/calibre-server.nix
   ./services/misc/cpuminer-cryptonight.nix
@@ -238,6 +240,8 @@
   ./services/monitoring/dd-agent.nix
   ./services/monitoring/grafana.nix
   ./services/monitoring/graphite.nix
+  ./services/monitoring/heapster.nix
+  ./services/monitoring/longview.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix

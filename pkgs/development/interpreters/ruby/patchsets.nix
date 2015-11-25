@@ -1,25 +1,6 @@
 { patchSet, useRailsExpress, ops, patchLevel }:
 
 let self = rec {
-  "1.8.7" = [
-    "${patchSet}/patches/ruby/1.8.7/p${patchLevel}/railsexpress/01-ignore-generated-files.patch"
-    "${patchSet}/patches/ruby/1.8.7/p${patchLevel}/railsexpress/02-fix-tests-for-osx.patch"
-    "${patchSet}/patches/ruby/1.8.7/p${patchLevel}/railsexpress/03-sigvtalrm-fix.patch"
-    "${patchSet}/patches/ruby/1.8.7/p${patchLevel}/railsexpress/04-railsbench-gc-patch.patch"
-    "${patchSet}/patches/ruby/1.8.7/p${patchLevel}/railsexpress/05-display-full-stack-trace.patch"
-    "${patchSet}/patches/ruby/1.8.7/p${patchLevel}/railsexpress/06-better-source-file-tracing.patch"
-    "${patchSet}/patches/ruby/1.8.7/p${patchLevel}/railsexpress/07-heap-dump-support.patch"
-    "${patchSet}/patches/ruby/1.8.7/p${patchLevel}/railsexpress/08-fork-support-for-gc-logging.patch"
-    "${patchSet}/patches/ruby/1.8.7/p${patchLevel}/railsexpress/09-track-malloc-size.patch"
-    "${patchSet}/patches/ruby/1.8.7/p${patchLevel}/railsexpress/10-track-object-allocation.patch"
-    "${patchSet}/patches/ruby/1.8.7/p${patchLevel}/railsexpress/11-expose-heap-slots.patch"
-    "${patchSet}/patches/ruby/1.8.7/p${patchLevel}/railsexpress/12-fix-heap-size-growth-logic.patch"
-    "${patchSet}/patches/ruby/1.8.7/p${patchLevel}/railsexpress/13-heap-slot-size.patch"
-    "${patchSet}/patches/ruby/1.8.7/p${patchLevel}/railsexpress/14-add-trace-stats-enabled-methods.patch"
-    "${patchSet}/patches/ruby/1.8.7/p${patchLevel}/railsexpress/15-track-live-dataset-size.patch"
-    "${patchSet}/patches/ruby/1.8.7/p${patchLevel}/railsexpress/16-add-object-size-information-to-heap-dump.patch"
-    "${patchSet}/patches/ruby/1.8.7/p${patchLevel}/railsexpress/17-caller-for-all-threads.patch"
-  ];
   "1.9.3" = [
     ./ruby19-parallel-install.patch
     ./bitperfect-rdoc.patch

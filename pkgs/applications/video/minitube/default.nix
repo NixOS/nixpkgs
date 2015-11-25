@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     '';
     homepage = http://flavio.tordini.org/minitube;
     license = licenses.gpl3Plus;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 

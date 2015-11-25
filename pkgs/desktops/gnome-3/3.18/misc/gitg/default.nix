@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchgit, vala, intltool, libgit2, pkgconfig, gtk3, glib
 , json_glib, webkitgtk,  makeWrapper, libpeas, bash, gobjectIntrospection
-, gnome3, gtkspell3, shared_mime_info, libgee, libgit2-glib, librsvg }:
+, gnome3, gtkspell3, shared_mime_info, libgee, libgit2-glib, librsvg, libsecret }:
 
 # TODO: icons and theme still does not work
 # use packaged gnome3.adwaita-icon-theme 
@@ -19,8 +19,12 @@ stdenv.mkDerivation rec {
                             gnome3.gnome_themes_standard ];
 
   buildInputs = [ vala intltool libgit2 pkgconfig gtk3 glib json_glib webkitgtk libgee libpeas
-                  libgit2-glib gtkspell3 gnome3.gsettings_desktop_schemas gnome3.gtksourceview librsvg
+                  libgit2-glib gtkspell3 gnome3.gsettings_desktop_schemas gnome3.gtksourceview
+                  librsvg libsecret
                   gobjectIntrospection makeWrapper gnome3.adwaita-icon-theme ];
+
+  # https://bugzilla.gnome.org/show_bug.cgi?id=758240
+  preBuild = ''make -j$NIX_BUILD_CORES Gitg-1.0.gir'';
 
   preFixup = ''
     wrapProgram "$out/bin/gitg" \

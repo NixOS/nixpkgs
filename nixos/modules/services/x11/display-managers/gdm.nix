@@ -162,7 +162,7 @@ in
 
       gdm.text = ''
         auth     requisite      pam_nologin.so
-        auth     required       pam_env.so
+        auth     required       pam_env.so envfile=${config.system.build.pamEnvironment}
 
         auth     required       pam_succeed_if.so uid >= 1000 quiet
         auth     optional       ${gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so

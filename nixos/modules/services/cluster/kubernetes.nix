@@ -512,6 +512,7 @@ in {
         wantedBy = [ "multi-user.target" ];
         requires = ["kubernetes-setup.service"];
         after = [ "network-interfaces.target" "etcd.service" "docker.service" ];
+        path = [ pkgs.gitMinimal pkgs.openssh ];
         script = ''
           export PATH="/bin:/sbin:/usr/bin:/usr/sbin:$PATH"
           exec ${cfg.package}/bin/kubelet \

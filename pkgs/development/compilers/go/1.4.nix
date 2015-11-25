@@ -9,11 +9,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchurl {
     url = "https://github.com/golang/go/archive/go${version}.tar.gz";
-    sha256 = "3e5d07bc5214a1ffe187cf6406c5b5a80ee44f12f6bca97a5463db0afee2f6ac";
+    sha256 = "0rcrhb3r997dw3d02r37zp26ln4q9n77fqxbnvw04zs413md5s35";
   };
 
   nativeBuildInputs = [ pkgconfig ];

@@ -150,7 +150,7 @@ in
       allowNullPassword = true;
       startSession = true;
       text = ''
-        auth     required pam_env.so
+        auth     required pam_env.so envfile=${config.system.build.pamEnvironment}
         auth     required pam_permit.so
 
         account  required pam_permit.so

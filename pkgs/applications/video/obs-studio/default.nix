@@ -1,5 +1,5 @@
 { stdenv
-, fetchurl
+, fetchFromGitHub
 , cmake
 , ffmpeg
 , jansson
@@ -17,15 +17,19 @@ let
   optional = stdenv.lib.optional;
 in stdenv.mkDerivation rec {
   name = "obs-studio-${version}";
-  version = "0.12.0";
+  version = "0.12.1";
 
-  src = fetchurl {
-    url = "https://github.com/jp9000/obs-studio/archive/${version}.tar.gz";
-    sha256 = "0nkfzy9wzsy7y0r02vc0648gx2aa6f7ibahrv89hxqr4x6x8d7di";
+  src = fetchFromGitHub {
+    owner = "jp9000";
+    repo = "obs-studio";
+    rev = "${version}";
+    sha256 = "0n5bpjgdk3gi0xghfhphiyh5r1q1yksaz34as306i051y01shzl6";
   };
 
-  buildInputs = [ cmake
-                  curl
+  nativeBuildInputs = [ cmake
+                      ];
+
+  buildInputs = [ curl
                   ffmpeg
                   jansson
                   libv4l

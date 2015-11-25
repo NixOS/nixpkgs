@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     homepage = https://docs.saucelabs.com/reference/sauce-connect/;
     maintainers = with maintainers; [offline];
-    platforms = with platforms; platforms.linux;
+    platforms = platforms.linux;
   };
 }
