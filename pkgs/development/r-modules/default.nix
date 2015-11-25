@@ -235,7 +235,6 @@ let
     cairoDevice = [ pkgs.gtk2 ];
     Cairo = [ pkgs.libtiff pkgs.libjpeg pkgs.cairo ];
     Cardinal = [ pkgs.which ];
-    CARramps = [ pkgs.linuxPackages.nvidia_x11 pkgs.liblapack ];
     chebpol = [ pkgs.fftw ];
     ChemmineOB = [ pkgs.openbabel pkgs.pkgconfig ];
     cit = [ pkgs.gsl ];
@@ -285,7 +284,6 @@ let
     rapportools = [ pkgs.which ];
     rapport = [ pkgs.which ];
     rbamtools = [ pkgs.zlib ];
-    RCA = [ pkgs.gmp ];
     rcdd = [ pkgs.gmp ];
     RcppCNPy = [ pkgs.zlib ];
     RcppGSL = [ pkgs.gsl ];
@@ -316,7 +314,6 @@ let
     Rpoppler = [ pkgs.poppler ];
     RPostgreSQL = [ pkgs.postgresql ];
     RProtoBuf = [ pkgs.protobuf ];
-    rpud = [ pkgs.linuxPackages.nvidia_x11 ];
     rPython = [ pkgs.python ];
     RSclient = [ pkgs.openssl ];
     Rserve = [ pkgs.openssl ];
@@ -368,7 +365,6 @@ let
     qtpaint = [ pkgs.cmake ];
     qtbase = [ pkgs.cmake pkgs.perl ];
     gmatrix = [ pkgs.cudatoolkit ];
-    WideLM = [ pkgs.cudatoolkit ];
     RCurl = [ pkgs.curl ];
     R2SWF = [ pkgs.pkgconfig ];
     rggobi = [ pkgs.pkgconfig ];
@@ -394,10 +390,8 @@ let
     tcltk2 = [ pkgs.tcl pkgs.tk ];
     tikzDevice = [ pkgs.which pkgs.texlive.combined.scheme-medium ];
     rPython = [ pkgs.which ];
-    CARramps = [ pkgs.which pkgs.cudatoolkit ];
     gridGraphics = [ pkgs.which ];
     gputools = [ pkgs.which pkgs.cudatoolkit ];
-    rpud = [ pkgs.which pkgs.cudatoolkit ];
     adimpro = [ pkgs.which pkgs.xorg.xdpyinfo ];
     PET = [ pkgs.which pkgs.xorg.xdpyinfo pkgs.imagemagick ];
     dti = [ pkgs.which pkgs.xorg.xdpyinfo pkgs.imagemagick ];
@@ -805,6 +799,7 @@ let
     "bigmemoryExtras" # broken build
     "bioassayR" # broken build
     "Biobase" # broken build
+    "biobroom" # depends on broken package r-Biobase-2.30.0
     "BiocCaseStudies" # broken build
     "BiocCheck" # broken build
     "BiocGenerics" # broken build
@@ -929,6 +924,7 @@ let
     "CNORfeeder" # broken build
     "CNORfuzzy" # depends on broken package nlopt-2.4.2
     "CNORode" # broken build
+    "CNPBayes" # depends on broken package r-BiocGenerics-0.16.1
     "CNTools" # broken build
     "cnvGSA" # broken build
     "CNVPanelizer" # depends on broken cn.mops-1.15.1
@@ -988,12 +984,14 @@ let
     "dagbag" # build is broken
     "dagLogo" # depends on broken package Rsamtools-1.21.8
     "DAMisc" # depends on broken package nlopt-2.4.2
+    "DAPAR" # depends on broken package r-imputeLCMD-2.0
     "DASiR" # broken build
     "datafsm" # depends on broken package r-caret-6.0-52
     "DBChIP" # broken build
     "dbConnect" # broken build
     "DBKGrad" # depends on broken package rpanel-1.1-3
     "dcGOR" # broken build
+    "DChIPRep" # depends on broken package r-DESeq2-1.10.0
     "dcmle"
     "ddCt" # broken build
     "DDD" # depends on broken package r-phytools-0.5-00
@@ -1180,6 +1178,7 @@ let
     "gdtools" # broken build
     "gemtc"
     "GeneAnswers" # broken build
+    "GeneBreak" # depends on broken package r-CGHbase-1.30.0
     "GENE_E" # depends on broken package rhdf5-2.13.1
     "GeneExpressionSignature" # depends on broken package annaffy-1.41.1
     "genefilter" # broken build
@@ -1250,6 +1249,7 @@ let
     "goTools" # build is broken
     "GPC" # broken build
     "gplm" # depends on broken package nlopt-2.4.2
+    "gpuR" # depends on GPU-specific header files
     "gputools" # depends on broken package cudatoolkit-5.5.22
     "gQTLBase" # depends on broken package r-GenomicFiles-1.5.8
     "gQTLstats" # depends on broken package snpStats-1.19.0
@@ -1277,6 +1277,7 @@ let
     "GSRI" # broken build
     "GSVA" # broken build
     "GUIDE" # depends on broken package rpanel-1.1-3
+    "GUIDEseq" # depends on broken package r-BiocGenerics-0.16.1
     "GUIProfiler" # broken build
     "Guitar" # depends on broken package r-GenomicAlignments-1.5.18
     "Gviz" # depends on broken package Rsamtools-1.21.8
@@ -1331,15 +1332,16 @@ let
     "ibh" # build is broken
     "iBMQ" # broken build
     "iccbeta" # depends on broken package nlopt-2.4.2
+    "iCheck" # depends on broken package r-affy-1.48.0
     "IdeoViz" # depends on broken package Rsamtools-1.21.8
     "idiogram" # broken build
     "IdMappingAnalysis" # broken build
     "IdMappingRetrieval" # broken build
     "idm" # broken build
     "ifaTools" # depends on broken package r-OpenMx-2.2.6
-    "iFes" # depends on broken package cudatoolkit-5.5.22
     "imageHTS" # depends on broken package Category-2.35.1
     "imager" # broken build
+    "Imetagene" # depends on broken package r-metagene-2.2.0
     "immer" # depends on broken package r-sirt-1.8-9
     "immunoClust" # build is broken
     "imputeLCMD" # broken build
@@ -1456,6 +1458,7 @@ let
     "mcaGUI" # depends on broken package Rsamtools-1.21.8
     "MCRestimate" # build is broken
     "mdgsa" # build is broken
+    "MEAL" # depends on broken package r-Biobase-2.30.0
     "meboot" # depends on broken package nlopt-2.4.2
     "medflex" # depends on broken package r-car-2.1-0
     "mediation" # depends on broken package r-lme4-1.1-8
@@ -1477,6 +1480,7 @@ let
     "MetaDE" # broken build
     "metagear" # build is broken
     "metagene" # depends on broken package Rsamtools-1.21.8
+    "metagenomeFeatures" # depends on broken package r-Biobase-2.30.0
     "metagenomeSeq" # broken build
     "MetaLandSim" # broken build
     "metamisc"
@@ -1516,6 +1520,7 @@ let
     "MinimumDistance" # depends on broken package affyio-1.37.0
     "MiPP" # broken build
     "MiRaGE" # broken build
+    "miRcomp" # depends on broken package r-Biobase-2.30.0
     "mirIntegrator" # build is broken
     "miRLAB" # broken build
     "miRNAtap" # broken build
@@ -1590,7 +1595,9 @@ let
     "mzID" # broken build
     "mzR" # build is broken
     "NanoStringDiff" # broken build
+    "NanoStringNorm" # depends on broken package r-vsn-3.38.0
     "NanoStringQCPro" # build is broken
+    "NAPPA" # depends on broken package r-vsn-3.38.0
     "NarrowPeaks" # broken build
     "nCal" # depends on broken package nlopt-2.4.2
     "ncdfFlow" # build is broken
@@ -1699,7 +1706,6 @@ let
     "pepStat" # broken build
     "pequod" # depends on broken package nlopt-2.4.2
     "PerfMeas" # broken build
-    "permGPU" # build is broken
     "PGA" # depends on broken package Rsamtools-1.21.8
     "PGSEA" # depends on broken package annaffy-1.41.1
     "PharmacoGx"
@@ -1752,6 +1758,7 @@ let
     "PROMISE" # broken build
     "PROPER" # broken build
     "propOverlap" # broken build
+    "Prostar" # depends on broken package r-imputeLCMD-2.0
     "prot2D" # broken build
     "ProteomicsAnnotationHubData" # depends on broken package r-AnnotationHub-2.1.40
     "proteoQC" # depends on broken package affyio-1.37.0
@@ -1869,6 +1876,7 @@ let
     "RcppOctave" # build is broken
     "RcppRedis" # build is broken
     "rcrypt" # broken build
+    "RCy3" # depends on broken package r-graph-1.48.0
     "RCyjs" # broken build
     "RCytoscape" # Build Is Broken
     "RDAVIDWebService" # depends on broken package Category-2.35.1
@@ -1909,6 +1917,7 @@ let
     "rgsepd" # depends on broken package goseq-1.21.1
     "rhdf5" # build is broken
     "rHVDM" # depends on broken package affyio-1.37.0
+    "RiboProfiling" # depends on broken package r-BiocGenerics-0.16.1
     "riboSeqR" # broken build
     "Ringo" # depends on broken package affyio-1.37.0
     "RIPSeeker" # depends on broken package Rsamtools-1.21.8
@@ -2004,6 +2013,7 @@ let
     "sapFinder" # depends on broken package rTANDEM-1.9.0
     "saps" # broken build
     "SCAN_UPC" # depends on broken package affyio-1.37.0
+    "scholar" # depends on broken package r-rvest-0.3.1
     "ScISI" # depends on broken package apComplex-2.35.0
     "scmamp" # broken build
     "scsR" # broken build
@@ -2043,6 +2053,7 @@ let
     "ShortRead" # depends on broken package Rsamtools-1.21.8
     "Shrinkage" # depends on broken package r-multtest-2.25.2
     "SIBER"
+    "SICtools" # depends on broken package r-Biostrings-2.38.2
     "SID" # broken build
     "sigaR" # broken build
     "SigCheck" # broken build
@@ -2062,6 +2073,7 @@ let
     "SimReg" # broken build
     "simulatorZ" # broken build
     "sirt" # depends on broken package nlopt-2.4.2
+    "SISPA" # depends on broken package r-GSVA-1.18.0
     "SJava" # broken build
     "sjPlot" # depends on broken package nlopt-2.4.2
     "skewr" # depends on broken package affyio-1.37.0
@@ -2072,6 +2084,7 @@ let
     "snm" # depends on broken package nlopt-2.4.2
     "SNPchip" # depends on broken package affyio-1.37.0
     "snpEnrichment" # depends on broken package snpStats-1.19.0
+    "SNPhood" # depends on broken package r-BiocGenerics-0.16.1
     "snplist" # broken build
     "snpStats" # build is broken
     "snpStatsWriter" # depends on broken package snpStats-1.19.0
@@ -2123,6 +2136,7 @@ let
     "stringgaussnet" # build is broken
     "structSSI" # broken build
     "strum" # broken build
+    "subSeq" # depends on broken package r-Biobase-2.30.0
     "SummarizedExperiment" # broken build
     "superbiclust" # broken build
     "Surrogate" # depends on broken package nlopt-2.4.2
@@ -2132,9 +2146,9 @@ let
     "sybilSBML" # build is broken
     "synapter" # depends on broken package affyio-1.37.0
     "systemfit" # depends on broken package nlopt-2.4.2
-    "systemPipeRdata" # broken build
     "systemPipeR" # depends on broken package AnnotationForge-1.11.3
     "TargetSearch" # depends on broken package mzR-2.3.1
+    "TarSeqQC" # depends on broken package r-BiocGenerics-0.16.1
     "TCC" # broken build
     "TCGA2STAT" # broken build
     "TCGAbiolinks" # depends on broken package r-affy-1.47.1
@@ -2212,7 +2226,6 @@ let
     "wfe" # depends on broken package nlopt-2.4.2
     "WGCNA" # build is broken
     "wgsea" # depends on broken package snpStats-1.19.0
-    "WideLM" # depends on broken package cudatoolkit-5.5.22
     "wikipediatrend" # broken build
     "wordbankr" # depends on broken package r-RMySQL-0.10.7
     "XBSeq" # broken build
@@ -2254,10 +2267,6 @@ let
 
     curl = old.curl.overrideDerivation (attrs: {
       preConfigure = "patchShebangs configure";
-    });
-
-    iFes = old.iFes.overrideDerivation (attrs: {
-      CUDA_HOME = "${pkgs.cudatoolkit}";
     });
 
     RcppArmadillo = old.RcppArmadillo.overrideDerivation (attrs: {
@@ -2339,32 +2348,11 @@ let
       CUDA_HOME = "${pkgs.cudatoolkit}";
     });
 
-    # It seems that we cannot override meta attributes with overrideDerivation.
-    CARramps = (old.CARramps.override { hydraPlatforms = stdenv.lib.platforms.none; }).overrideDerivation (attrs: {
-      patches = [ ./patches/CARramps.patch ];
-      configureFlags = [
-        "--with-cuda-home=${pkgs.cudatoolkit}"
-      ];
-    });
-
     gmatrix = old.gmatrix.overrideDerivation (attrs: {
       patches = [ ./patches/gmatrix.patch ];
       CUDA_LIB_PATH = "${pkgs.cudatoolkit}/lib64";
       R_INC_PATH = "${pkgs.R}/lib/R/include";
       CUDA_INC_PATH = "${pkgs.cudatoolkit}/include";
-    });
-
-    # It seems that we cannot override meta attributes with overrideDerivation.
-    rpud = (old.rpud.override { hydraPlatforms = stdenv.lib.platforms.none; }).overrideDerivation (attrs: {
-      patches = [ ./patches/rpud.patch ];
-      CUDA_HOME = "${pkgs.cudatoolkit}";
-    });
-
-    WideLM = old.WideLM.overrideDerivation (attrs: {
-      patches = [ ./patches/WideLM.patch ];
-      configureFlags = [
-        "--with-cuda-home=${pkgs.cudatoolkit}"
-      ];
     });
 
     EMCluster = old.EMCluster.overrideDerivation (attrs: {
