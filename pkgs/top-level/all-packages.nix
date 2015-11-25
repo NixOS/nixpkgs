@@ -3343,7 +3343,7 @@ let
   vnc2flv = callPackage ../tools/video/vnc2flv {};
 
   vncrec = callPackage ../tools/video/vncrec {
-    inherit (xlibs) imake libX11 xproto gccmakedep libXt
+    inherit (xorg) imake libX11 xproto gccmakedep libXt
       libXmu libXaw libXext xextproto libSM libICE libXpm
       libXp;
   };
@@ -6359,7 +6359,7 @@ let
   freeglut = callPackage ../development/libraries/freeglut { };
 
   freenect = callPackage ../development/libraries/freenect {
-      inherit (xlibs) libXi libXmu;
+      inherit (xorg) libXi libXmu;
   };
 
   freetype = callPackage ../development/libraries/freetype { };
@@ -9747,7 +9747,7 @@ let
   dietlibc = callPackage ../os-specific/linux/dietlibc { };
 
   directvnc = callPackage ../os-specific/linux/directvnc {
-    inherit (xlibs) xproto;
+    inherit (xorg) xproto;
   };
 
   dmraid = callPackage ../os-specific/linux/dmraid {
@@ -13569,7 +13569,7 @@ let
   x42-plugins = callPackage ../applications/audio/x42-plugins { };
 
   xaos = callPackage ../applications/graphics/xaos {
-    inherit (xlibs) libXt libX11 libXext xextproto xproto;
+    inherit (xorg) libXt libX11 libXext xextproto xproto;
     libpng = libpng12;
   };
 
@@ -14300,7 +14300,7 @@ let
   xsnow = callPackage ../games/xsnow { };
 
   xsokoban = callPackage ../games/xsokoban {
-    inherit (xlibs) libX11 xproto libXpm libXt;
+    inherit (xorg) libX11 xproto libXpm libXt;
   };
 
   zandronum = callPackage ../games/zandronum { };
