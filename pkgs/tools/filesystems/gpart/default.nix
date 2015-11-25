@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
-let version = "0.2.2"; in
+let version = "0.3"; in
 stdenv.mkDerivation rec {
   name = "gpart-${version}";
 
   # GitHub repository 'collating patches for gpart from all distributions':
   src = fetchFromGitHub {
-    sha256 = "09lp8m4241mxq7rlg70z66km7pq5bq48ydgkz55gakwqvnvd1mi3";
-    rev = "v${version}";
+    sha256 = "1lsd9k876p944k9s6sxqk5yh9yr7m42nbw9vlsllin7pd4djl4ya";
+    rev = version;
     repo = "gpart";
     owner = "baruch";
   };
