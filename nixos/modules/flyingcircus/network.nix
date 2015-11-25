@@ -62,6 +62,58 @@ let
         (builtins.attrNames interfaces);
 
 
+  # Policy routing
+
+  routing_priorities = {
+    fe = 20;
+    srv = 30;
+  };
+
+  get_routing_priority = interface_name:
+    if builtins.hasAttr interface_name routing_priorities
+    then builtins.getAttr interface_name routing_priorities
+    else 100;
+
+  get_policy_routing_for_network = interfaces: interface_name: network:
+    ''
+    ip rule add priority ${builtins.toString (get_routing_priority interface_name)} from ${network} lookup ${interface_name}
+    ip route add default via ${builtins.getAttr network (builtins.getAttr interface_name interfaces).gateways} table ${interface_name} || true
+    '';
+
+  get_policy_routing_for_interface = interfaces: interface_name:
+    map
+    (get_policy_routing_for_network interfaces interface_name)
+    (builtins.attrNames
+      (builtins.getAttr interface_name interfaces).gateways);
+
+  get_policy_routing = interfaces:
+    builtins.concatLists
+      (map
+        (get_policy_routing_for_interface interfaces)
+        (builtins.attrNames interfaces));
+
+  rt_tables = builtins.toFile "rt_tables" ''
+    # reserved values
+    #
+    255 local
+    254 main
+    253 default
+    0 unspec
+    #
+    # local
+    #
+    1 mgm
+    2 fe
+    3 srv
+    4 sto
+    5 ws
+    6 tr
+    7 guest
+    8 stb
+
+    200 sdsl
+    '';
+
 in
 {
 
@@ -96,24 +148,21 @@ in
     then get_network_configuration config.enc.parameters.interfaces
     else {};
 
-  #
-  #  networking.localCommands = ''
-  #        ip rule flush
-  #
-  #    ip rule add priority 32766 lookup main
-  #    ip rule add priority 32767 lookup default
-  #
-  #    ip rule add priority 1 from 172.20.1.0/24 lookup 1
-  #        ip route add default via 172.20.1.1 table 1 || true
-  #
-  #    ip rule add priority 2 from 172.20.2.0/24 lookup 2
-  #        ip route add default via 172.20.2.1 table 2 || true
-  #
-  #    ip rule add priority 3 from 172.20.3.0/24 lookup 3
-  #        ip route add default via 172.20.3.1 table 3 || true
-  #
-  #    ip rule add priority 4 from 172.20.4.0/24 lookup 4
-  #        ip route add default via 172.20.4.1 table 4 || true
-  #  '';
+  networking.localCommands =
+    if config.enc ? parameters
+    then
+      ''
+        mkdir -p /etc/iproute2
+        ln -sf ${rt_tables} /etc/iproute2/rt_tables
+
+        ip rule flush
+
+        ip rule add priority 32766 lookup main
+        ip rule add priority 32767 lookup default
+
+        ${builtins.toString
+            (get_policy_routing config.enc.parameters.interfaces)}
+      ''
+      else "";
   };
 }
