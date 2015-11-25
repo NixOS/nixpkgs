@@ -3340,11 +3340,7 @@ let
 
   vnc2flv = callPackage ../tools/video/vnc2flv {};
 
-  vncrec = callPackage ../tools/video/vncrec {
-    inherit (xorg) imake libX11 xproto gccmakedep libXt
-      libXmu libXaw libXext xextproto libSM libICE libXpm
-      libXp;
-  };
+  vncrec = callPackage ../tools/video/vncrec { };
 
   vobcopy = callPackage ../tools/cd-dvd/vobcopy { };
 
@@ -3990,8 +3986,6 @@ let
     inherit zip unzip zlib boehmgc gettext pkgconfig perl;
     inherit gtk;
     inherit (gnome) libart_lgpl;
-    inherit (xorg) libX11 libXt libSM libICE libXtst libXi libXrender
-      libXrandr xproto renderproto xextproto inputproto randrproto;
   });
 
   gnat = gnat45; # failed to make 4.6 or 4.8 build
@@ -6352,9 +6346,7 @@ let
 
   freeglut = callPackage ../development/libraries/freeglut { };
 
-  freenect = callPackage ../development/libraries/freenect {
-      inherit (xorg) libXi libXmu;
-  };
+  freenect = callPackage ../development/libraries/freenect { };
 
   freetype = callPackage ../development/libraries/freetype { };
 
@@ -9740,9 +9732,7 @@ let
 
   dietlibc = callPackage ../os-specific/linux/dietlibc { };
 
-  directvnc = callPackage ../os-specific/linux/directvnc {
-    inherit (xorg) xproto;
-  };
+  directvnc = callPackage ../os-specific/linux/directvnc { };
 
   dmraid = callPackage ../os-specific/linux/dmraid {
     devicemapper = devicemapper.override {enable_dmeventd = true;};
@@ -13563,7 +13553,6 @@ let
   x42-plugins = callPackage ../applications/audio/x42-plugins { };
 
   xaos = callPackage ../applications/graphics/xaos {
-    inherit (xorg) libXt libX11 libXext xextproto xproto;
     libpng = libpng12;
   };
 
@@ -14295,9 +14284,7 @@ let
 
   xsnow = callPackage ../games/xsnow { };
 
-  xsokoban = callPackage ../games/xsokoban {
-    inherit (xorg) libX11 xproto libXpm libXt;
-  };
+  xsokoban = callPackage ../games/xsokoban { };
 
   zandronum = callPackage ../games/zandronum { };
   zandronum-server = callPackage ../games/zandronum/server.nix { };
