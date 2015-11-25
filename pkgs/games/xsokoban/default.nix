@@ -1,51 +1,46 @@
-a @ {libX11, xproto, libXpm, libXt, ...} :
-let
-  fetchurl = a.fetchurl;
+{ stdenv, fetchurl, libX11, xproto, libXpm, libXt }:
 
-  version = a.lib.attrByPath ["version"] "3.3c" a;
-  buildInputs = with a; [
-    a.libX11 a.xproto a.libXpm a.libXt
-  ];
-in
-rec {
+stdenv.mkDerivation rec {
+  name = "xsokoban-${version}";
+  version = "3.3c";
+
   src = fetchurl {
-    url = "http://www.cs.cornell.edu/andru/release/xsokoban-${version}.tar.gz";
+    url = "http://www.cs.cornell.edu/andru/release/${name}.tar.gz";
     sha256 = "006lp8y22b9pi81x1a9ldfgkl1fbmkdzfw0lqw5y9svmisbafbr9";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
+  buildInputs = [ libX11 xproto libXpm libXt ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["preConfigure" "doConfigure" "preBuild" "doMakeInstall"];
-
-  preConfigure = a.fullDepEntry (''
+  preConfigure = ''
     sed -e 's/getline/my_getline/' -i score.c
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${a.libXpm}/include/X11"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libXpm}/include/X11"
     for i in  $NIX_CFLAGS_COMPILE; do echo $i; ls ''${i#-I}; done
     chmod a+rw config.h
-    echo '#define HERE "@nixos-packaged"' >> config.h
-    echo '#define WWW 0' >> config.h
-    echo '#define OWNER "'$(whoami)'"' >> config.h
-    echo '#define ROOTDIR "'$out/lib/xsokoban'"' >> config.h
-    echo '#define ANYLEVEL 1' >> config.h
-    echo '#define SCOREFILE ".xsokoban-score"' >> config.h
-    echo '#define LOCKFILE ".xsokoban-score-lock"' >> config.h
+    cat >>config.h <<EOF
+    #define HERE "@nixos-packaged"
+    #define WWW 0
+    #define OWNER "'$(whoami)'"
+    #define ROOTDIR "'$out/lib/xsokoban'"
+    #define ANYLEVEL 1
+    #define SCOREFILE ".xsokoban-score"
+    #define LOCKFILE ".xsokoban-score-lock"
+    EOF
 
-    sed -e 's/getpass[(][^)]*[)]/PASSWORD/' -i main.c
-    sed -e '/if [(]owner[)]/iowner=1;' -i main.c
-  '') ["minInit" "doUnpack"];
+    sed -i main.c \
+      -e 's/getpass[(][^)]*[)]/PASSWORD/' \
+      -e '/if [(]owner[)]/iowner=1;'
+  '';
 
-  preBuild = a.fullDepEntry (''
-    sed -e "s@/usr/local/@$out/@" -i Makefile
-    sed -e "s@ /bin/@ @" -i Makefile
+  preBuild = ''
+    sed -i Makefile \
+      -e "s@/usr/local/@$out/@" \
+      -e "s@ /bin/@ @"
     mkdir -p $out/bin $out/share $out/man/man1 $out/lib
-  '') ["minInit" "doConfigure" "defEnsureDir"];
+  '';
 
-  name = "xsokoban-" + version;
-  meta = {
+  meta = with stdenv.lib; {
     description = "X sokoban";
-    license = a.stdenv.lib.licenses.publicDomain;
-    maintainers = [ a.stdenv.lib.maintainers.raskin ];
+    license = licenses.publicDomain;
+    maintainers = [ maintainers.raskin ];
   };
 }

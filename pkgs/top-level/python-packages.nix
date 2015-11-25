@@ -695,7 +695,6 @@ let
       url = "https://pypi.python.org/packages/source/a/atomiclong/atomiclong-${version}.tar.gz";
       sha256 = "1gjbc9lvpkgg8vj7dspif1gz9aq4flkhxia16qj6yvb7rp27h4yb";
     };
-
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ cffi ];
 
@@ -4241,21 +4240,33 @@ let
 
   gitdb = buildPythonPackage rec {
     name = "gitdb-0.6.4";
-    meta.maintainers = with maintainers; [ mornfall ];
-    doCheck = false;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gitdb/${name}.tar.gz";
       sha256 = "0n4n2c7rxph9vs2l6xlafyda5x1mdr8xy16r9s3jwnh3pqkvrsx3";
     };
 
-    propagatedBuildInputs = with self; [ smmap async ];
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ smmap ];
+
+    checkPhase = ''
+      nosetests
+    '';
+
+    doCheck = false; # Bunch of tests fail because they need an actual git repo
+
+    meta = {
+      description = "Git Object Database";
+      maintainers = with maintainers; [ mornfall ];
+      homepage = https://github.com/gitpython-developers/gitdb;
+      license = licenses.bsd3;
+    };
+
   };
 
   GitPython = buildPythonPackage rec {
     version = "1.0.1";
     name = "GitPython-${version}";
-    meta.maintainers = with maintainers; [ mornfall ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/G/GitPython/GitPython-${version}.tar.gz";
@@ -4264,6 +4275,13 @@ let
 
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ gitdb ];
+
+    meta = {
+      description = "Python Git Library";
+      maintainers = with maintainers; [ mornfall ];
+      homepage = https://github.com/gitpython-developers/GitPython;
+      license = licenses.bsd3;
+    };
   };
 
   googlecl = buildPythonPackage rec {
@@ -8902,19 +8920,23 @@ let
   };
 
   lockfile = buildPythonPackage rec {
-    name = "lockfile-0.9.1";
-
+    name = "lockfile-${version}";
+    version = "0.10.2";
     src = pkgs.fetchurl {
-      url = "http://pylockfile.googlecode.com/files/${name}.tar.gz";
-      sha1 = "1eebaee375641c9f29aeb21768f917dd2b985752";
+      sha256 = "0zi7amj3y55lp6339w217zksn1a0ssfvscmv059g2wvnyjqi6f95";
+      url = "https://github.com/openstack/pylockfile/archive/${version}.tar.gz";
     };
 
-    # error: invalid command 'test'
-    doCheck = false;
+    doCheck = true;
+    OSLO_PACKAGE_VERSION = "${version}";
+    buildInputs = with self; [
+      pbr nose sphinx_1_2
+    ];
 
     meta = {
-      homepage = http://code.google.com/p/pylockfile/;
+      homepage = http://launchpad.net/pylockfile;
       description = "Platform-independent advisory file locking capability for Python applications";
+      license = licenses.asl20;
     };
   };
 
@@ -10879,16 +10901,7 @@ let
     doCheck = false;
 
     propagatedBuildInputs = with self; [
-      pbr requests2
-        (sphinx.override rec {
-          name = "sphinx-1.2.3";
-          src = pkgs.fetchurl {
-            url = "https://pypi.python.org/packages/source/s/sphinx/${name}.tar.gz";
-            sha256 = "94933b64e2fe0807da0612c574a021c0dac28c7bd3c4a23723ae5a39ea8f3d04";
-            };
-          patches = [];
-          disabled = isPy35;
-        })
+      pbr requests2 sphinx_1_2
     ];
   };
 
@@ -13049,7 +13062,7 @@ let
 
 
   praw = buildPythonPackage rec {
-    name = "praw-3.1.0";
+    name = "praw-3.3.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/praw/${name}.zip";
@@ -13057,6 +13070,7 @@ let
     };
 
     propagatedBuildInputs = with self; [
+      requests2
       decorator
       flake8
       mock
@@ -16890,6 +16904,15 @@ let
     };
   });
 
+  sphinx_1_2 = self.sphinx.override rec {
+    name = "sphinx-1.2.3";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sphinx/sphinx-1.2.3.tar.gz";
+      sha256 = "94933b64e2fe0807da0612c574a021c0dac28c7bd3c4a23723ae5a39ea8f3d04";
+    };
+    patches = [];
+    disabled = isPy35;
+  };
 
   sphinx_rtd_theme = buildPythonPackage (rec {
     name = "sphinx_rtd_theme-0.1.8";

@@ -1,54 +1,37 @@
-x@{builderDefsPackage
-  , fetchgit, qt4, ecl, xorgserver
-  , xkbcomp, xkeyboard_config
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    ["fetchgit"];
+{ stdenv, fetchgit, qt4, ecl, xorgserver, xkbcomp, xkeyboard_config }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    method = "fetchgit";
+stdenv.mkDerivation rec {
+  version = src.rev;
+  name = "eql-git-${version}";
+  src = fetchgit {
     rev = "9097bf98446ee33c07bb155d800395775ce0d9b2";
-    url = "git://gitorious.org/eql/eql";
-    hash = "1fp88xmmk1sa0iqxahfiv818bp2sbf66vqrd4xq9jb731ybdvsb8";
-    version = rev;
-    name = "eql-git-${version}";
+    url = "https://gitlab.com/eql/eql.git";
+    sha256 = "1fp88xmmk1sa0iqxahfiv818bp2sbf66vqrd4xq9jb731ybdvsb8";
   };
-in
-rec {
-  srcDrv = a.fetchgit {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
-    rev = sourceInfo.rev;
-  };
-  src = srcDrv + "/";
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ ecl qt4 xorgserver xkbcomp xkeyboard_config ];
 
-  phaseNames = ["setVars" "fixPaths" "doQMake" "doMake" "doDeploy"];
+  NIX_CFLAGS_COMPILE = "-fPIC";
 
-  setVars = a.fullDepEntry (''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC"
-  '') [];
-
-  fixPaths = a.fullDepEntry (''
+  postPatch = ''
     sed -re 's@[(]in-home "gui/.command-history"[)]@(concatenate '"'"'string (ext:getenv "HOME") "/.eql-gui-command-history")@' -i gui/gui.lisp
-  '') ["minInit" "doUnpack"];
+  '';
 
-  doQMake = a.fullDepEntry (''
+  buildPhase = ''
+    cd src
+    ecl -shell make-eql-lib.lisp
+    qmake eql_lib.pro
+    make
+    cd ..
+
     cd src
     qmake eql_exe.pro
     make
     cd ..
     cd src
-  '') ["addInputs" "doUnpack" "buildEQLLib"];
+  '';
 
-  doDeploy = a.fullDepEntry (''
+  installPhase = ''
     cd ..
     mkdir -p $out/bin $out/lib/eql/ $out/include $out/include/gen $out/lib
     cp -r . $out/lib/eql/build-dir
@@ -56,35 +39,22 @@ rec {
     ln -s $out/lib/eql/build-dir/src/*.h $out/include
     ln -s $out/lib/eql/build-dir/src/gen/*.h $out/include/gen
     ln -s $out/lib/eql/build-dir/libeql*.so* $out/lib
-  '') ["minInit"];
+  '';
 
-  buildEQLLib = a.fullDepEntry (''
-    cd src
-    ecl -shell make-eql-lib.lisp
-    qmake eql_lib.pro
-    make
-    cd ..
-  '') ["doUnpack" "addInputs"];
-
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "Embedded Qt Lisp (ECL+Qt)";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    license = licenses.mit;
   };
+
   passthru = {
     updateInfo = {
       downloadPage = "http://password-taxi.at/EQL";
       method = "fetchgit";
-      rev = "370b7968fd73d5babc81e35913a37111a788487f";
-      url = "git://gitorious.org/eql/eql";
-      hash = "2370e111d86330d178f3ec95e8fed13607e51fed8859c6e95840df2a35381636";
+      rev = src.rev;
+      url = src.url;
+      hash = src.sha256;
     };
-    inherit srcDrv;
   };
-}) x
-
+}

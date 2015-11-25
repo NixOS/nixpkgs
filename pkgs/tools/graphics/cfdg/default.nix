@@ -1,38 +1,32 @@
-a @ {libpng, bison, flex, ffmpeg, fullDepEntry, ...} :  
-let 
-  s = import ./src-for-default.nix;
-  buildInputs = with a; [
-    libpng bison flex ffmpeg
-  ];
-in
-rec {
-  src = a.fetchUrlFromSrcInfo s;
+{ stdenv, fetchurl, libpng, bison, flex, ffmpeg }:
 
-  inherit (s) name;
-  inherit buildInputs;
-  configureFlags = [];
+stdenv.mkDerivation rec {
+  name = "cfdg-${version}";
+  version = "3.0.2";
+  src = fetchurl {
+    sha256 = "1pd1hjippbhad8l4s4lsglykh22i24qfrgmnxrsx71bvcqbr356p";
+    url = "http://www.contextfreeart.org/download/ContextFreeSource${version}.tgz";
+  };
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doFixInc" "doMake" "copyFiles"];
- 
-  doFixInc = a.fullDepEntry ''
+  buildInputs = [ libpng bison flex ffmpeg ];
+
+  postPatch = ''
     sed -e "/YY_NO_UNISTD/a#include <stdio.h>" -i src-common/cfdg.l
-  '' ["doUnpack" "minInit"];
- 
-  copyFiles = a.fullDepEntry ''
+  '';
+
+  installPhase = ''
     mkdir -p $out/bin
     cp cfdg $out/bin/
 
     mkdir -p $out/share/doc/${name}
     cp *.txt $out/share/doc/${name}
-  '' ["defEnsureDir" "doMake"];
-      
-  meta = {
+  '';
+
+  meta = with stdenv.lib; {
     description = "Context-free design grammar - a tool for graphics generation";
-    maintainers = [
-      a.lib.maintainers.raskin
-    ];
-    platforms = with a.lib.platforms; 
-      linux;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    homepage = http://contextfreeart.org/;
+    downloadPage = "http://contextfreeart.org/mediawiki/index.php/Download_page";
   };
 }

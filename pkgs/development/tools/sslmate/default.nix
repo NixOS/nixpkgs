@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://sslmate.com";
-    maintainers = maintainers.iElectric;
+    homepage = https://sslmate.com;
+    maintainers = [ maintainers.iElectric ];
     description = "Easy to buy, deploy, and manage your SSL certs";
     platforms = platforms.unix;
     license = licenses.mit; # X11

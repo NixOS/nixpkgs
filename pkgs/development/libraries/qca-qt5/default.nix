@@ -1,16 +1,11 @@
-{ stdenv, fetchgit, cmake, openssl, pkgconfig, qtbase }:
+{ stdenv, fetchurl, cmake, openssl, pkgconfig, qtbase }:
 
-let
-  rev = "088ff642fc2990871e3555e73c94c9287e7514a9";
-  shortrev = builtins.substring 0 7 rev;
-in
 stdenv.mkDerivation rec {
-  name = "qca-qt5-20150422-${shortrev}";
-  src = fetchgit {
-    url = "git://anongit.kde.org/qca.git";
-    branchName = "qt5";
-    inherit rev;
-    sha256 = "fe1c7d5d6f38445a4032548ae3ea22c74d4327dfaf2dc88492a95facbca398f8";
+  name = "qca-qt5-2.1.1";
+
+  src = fetchurl {
+    url = "http://download.kde.org/stable/qca/2.1.1/src/qca-2.1.1.tar.xz";
+    sha256 = "10z9icq28fww4qbzwra8d9z55ywbv74qk68nhiqfrydm21wkxplm";
   };
 
   buildInputs = [ openssl qtbase ];

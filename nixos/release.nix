@@ -285,6 +285,7 @@ in rec {
   tests.proxy = callTest tests/proxy.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
+  tests.sddm = callTest tests/sddm.nix {};
   tests.simple = callTest tests/simple.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};
