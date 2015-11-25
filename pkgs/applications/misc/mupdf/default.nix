@@ -2,12 +2,12 @@
 , libX11, libXext }:
 
 stdenv.mkDerivation rec {
-  version = "1.7";
+  version = "1.8";
   name = "mupdf-${version}";
 
   src = fetchurl {
     url = "http://mupdf.com/download/archive/${name}-source.tar.gz";
-    sha256 = "0hjn1ywxhblqgj63qkp8x7qqjnwsgid3viw8az5i2i26dijmrgfh";
+    sha256 = "01n26cy41lc2fjri63s4js23ixxb4nd37aafry3hz4i4id6wd8x2";
   };
 
   buildInputs = [ pkgconfig zlib freetype libjpeg jbig2dec openjpeg libX11 libXext ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     Name: mupdf
     Description: Library for rendering PDF documents
     Requires: freetype2 libopenjp2 libcrypto
-    Version: 1.3
+    Version: ${version}
     Libs: -L$out/lib -lmupdf
     Cflags: -I$out/include
     EOF
