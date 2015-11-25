@@ -1517,6 +1517,10 @@ let
 
   fcitx-hangul = callPackage ../tools/inputmethods/fcitx-engines/fcitx-hangul { };
 
+  fcitx-mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
+    inherit (pythonPackages) gyp;
+  };
+
   fcitx-table-other = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-other { };
 
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
