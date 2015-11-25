@@ -655,10 +655,28 @@ sed -i '/ = data_files/d' setup.py</programlisting>
 
 
 <section xml:id="sec-language-ruby"><title>Ruby</title>
-  <para>There currently is support to bundle applications that are packaged as Ruby gems. The utility "bundix" allows you to write a <filename>Gemfile</filename>, let bundler create a <filename>Gemfile.lock</filename>, and then convert
-  this into a nix expression that contains all Gem dependencies automatically.</para>
+<para>
+  Ruby gems can be built with <literal>buildRubyGem</literal> like so:
+</para>
 
-  <para>For example, to package sensu, we did:</para>
+<programlisting>
+buildRubyGem {
+  gemName = "some-gem";
+  version = "1.2.3";
+  sha256 = "1g7cjzw4g4301a3yqpbk8n1d4s97sfby2aysl275x04g0zh8jxqp";
+  gemPath = [
+    /* the gem's dependencies go here */
+  ];
+}
+</programlisting>
+
+<para>
+  Alternatively, there currently is support to bundle applications that are packaged as Ruby gems.
+  The utility "bundix" allows you to write a <filename>Gemfile</filename>, let bundler create a <filename>Gemfile.lock</filename>,
+  and then convert this into a nix expression that contains all Gem dependencies automatically.
+</para>
+
+<para>For example, to package sensu, we did:</para>
 
 <screen>
 <![CDATA[$ cd pkgs/servers/monitoring
@@ -666,7 +684,7 @@ $ mkdir sensu
 $ cat > Gemfile
 source 'https://rubygems.org'
 gem 'sensu'
-$ bundler package --path /tmp/vendor/bundle
+$ bundler lock
 $ $(nix-build '<nixpkgs>' -A bundix)/bin/bundix
 $ cat > default.nix
 { lib, bundlerEnv, ruby }:

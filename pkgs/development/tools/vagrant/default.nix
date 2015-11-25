@@ -7,7 +7,8 @@ let
   version = "1.7.4";
   rake = buildRubyGem {
     inherit ruby;
-    name = "rake-10.3.2";
+    gemName = "rake";
+    version = "10.3.2";
     sha256 = "0nvpkjrpsk8xxnij2wd1cdn6arja9q11sxx4aq4fz18bc6fss15m";
   };
 
