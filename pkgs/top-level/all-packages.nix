@@ -6791,6 +6791,8 @@ let
 
   kf5PackagesFun = self: with self; {
 
+    fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
+
     k9copy = callPackage ../applications/video/k9copy {};
 
     quassel = callPackage ../applications/networking/irc/quassel/qt-5.nix {
