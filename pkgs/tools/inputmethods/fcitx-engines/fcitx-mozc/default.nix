@@ -105,12 +105,13 @@ in clangStdenv.mkDerivation rec {
   '';
 
   meta = with clangStdenv.lib; {
-    description  = "Fcitx engine for Google japanese input method";
-    homepage     = http://code.google.com/p/mozc/;
-    downloadPage = "http://download.fcitx-im.org/fcitx-mozc/";
-    license      = licenses.free;
-    platforms    = platforms.linux;
-    maintainers  = [ maintainers.ericsagnes ];
+    isFcitxEngine = true;
+    description   = "Fcitx engine for Google japanese input method";
+    homepage      = http://code.google.com/p/mozc/;
+    downloadPage  = "http://download.fcitx-im.org/fcitx-mozc/";
+    license       = licenses.free;
+    platforms     = platforms.linux;
+    maintainers   = [ maintainers.ericsagnes ];
   };
 
 }

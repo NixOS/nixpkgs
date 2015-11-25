@@ -1511,17 +1511,21 @@ let
 
   fcitx = callPackage ../tools/inputmethods/fcitx { };
 
-  fcitx-anthy = callPackage ../tools/inputmethods/fcitx-engines/fcitx-anthy { };
+  fcitx-engines = {
 
-  fcitx-chewing = callPackage ../tools/inputmethods/fcitx-engines/fcitx-chewing { };
+    anthy = callPackage ../tools/inputmethods/fcitx-engines/fcitx-anthy { };
 
-  fcitx-hangul = callPackage ../tools/inputmethods/fcitx-engines/fcitx-hangul { };
+    chewing = callPackage ../tools/inputmethods/fcitx-engines/fcitx-chewing { };
 
-  fcitx-mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
-    inherit (pythonPackages) gyp;
+    hangul = callPackage ../tools/inputmethods/fcitx-engines/fcitx-hangul { };
+
+    mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
+      inherit (pythonPackages) gyp;
+    };
+
+    table-other = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-other { };
+
   };
-
-  fcitx-table-other = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-other { };
 
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
 

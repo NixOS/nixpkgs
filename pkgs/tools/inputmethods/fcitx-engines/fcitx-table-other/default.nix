@@ -17,12 +17,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage     = "https://github.com/fcitx/fcitx-table-other";
-    downloadPage = "http://download.fcitx-im.org/fcitx-table-other/";
-    description  = "Provides some other tables for Fcitx";
-    license      = licenses.gpl3Plus;
-    platforms    = platforms.linux;
-    maintainers  = with maintainers; [ ericsagnes ];
+    isFcitxEngine = true;
+    homepage      = "https://github.com/fcitx/fcitx-table-other";
+    downloadPage  = "http://download.fcitx-im.org/fcitx-table-other/";
+    description   = "Provides some other tables for Fcitx";
+    license       = licenses.gpl3Plus;
+    platforms     = platforms.linux;
+    maintainers   = with maintainers; [ ericsagnes ];
   };
 
 }

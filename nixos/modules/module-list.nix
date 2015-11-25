@@ -43,6 +43,7 @@
   ./hardware/video/nvidia.nix
   ./hardware/video/ati.nix
   ./hardware/video/webcam/facetimehd.nix
+  ./i18n/inputMethod/fcitx.nix
   ./installer/tools/auto-upgrade.nix
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix
