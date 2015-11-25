@@ -1617,6 +1617,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
+    ubuntu1510i386 = {
+      name = "ubuntu-15.10-wily-i386";
+      fullName = "Ubuntu 15.10 Wily (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/wily/main/binary-i386/Packages.bz2;
+            sha256 = "ac9821095c63436fd4286539592295dd5de99bc82300f628e7a74111bb5dc370";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/wily/universe/binary-i386/Packages.bz2;
+            sha256 = "8951294f36c0755e945e8c37fdd046319f50553a8987ead1b68b21ffa53c5f7f";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1510x86_64 = {
+      name = "ubuntu-15.10-wily-amd64";
+      fullName = "Ubuntu 15.10 Wily (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/wily/main/binary-amd64/Packages.bz2;
+            sha256 = "2877de7674c8c6a410c3ac479e46fec24164a4de250f22b3ff062073e3985013";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/wily/universe/binary-amd64/Packages.bz2;
+            sha256 = "714be7a2fd33b8bb577901c9223039dcc12c130c9244122648ee21a625e2a66d";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
