@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
   # without this, git fails when trying to check for /etc/gitconfig existence
-  __propagatedSandboxProfile = stdenv.lib.sandbox.allowDirectoryList "/etc";
+  propagatedSandboxProfile = stdenv.lib.sandbox.allowDirectoryList "/etc";
 
   makeFlags = "prefix=\${out} sysconfdir=/etc/ PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
       + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")

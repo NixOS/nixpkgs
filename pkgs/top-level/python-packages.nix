@@ -9232,7 +9232,7 @@ let
     meta = {
       description = "A module for monitoring memory usage of a python program";
       homepage = http://pypi.python.org/pypi/memory_profiler;
-      license = licenses.bsd;
+      license = licenses.bsd3;
     };
   };
 

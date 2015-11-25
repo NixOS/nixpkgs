@@ -7,7 +7,7 @@ appleDerivation {
 
   propagatedBuildInputs = [ Security ];
 
-  __propagatedSandboxProfile = ''
+  propagatedSandboxProfile = ''
     (allow mach-lookup (global-name "com.apple.SystemConfiguration.configd"))
   '';
 

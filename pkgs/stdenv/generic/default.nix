@@ -12,8 +12,8 @@ let lib = import ../../../lib; in lib.makeOverridable (
 , extraBuildInputs ? []
 , __stdenvImpureHostDeps ? []
 , __extraImpureHostDeps ? []
-, __stdenvSandboxProfile ? ""
-, __extraSandboxProfile ? ""
+, stdenvSandboxProfile ? ""
+, extraSandboxProfile ? ""
 }:
 
 let
@@ -102,8 +102,8 @@ let
     , outputs ? [ "out" ]
     , __impureHostDeps ? []
     , __propagatedImpureHostDeps ? []
-    , __sandboxProfile ? ""
-    , __propagatedSandboxProfile ? ""
+    , sandboxProfile ? ""
+    , propagatedSandboxProfile ? ""
     , ... } @ attrs:
     let
       pos' =
@@ -154,12 +154,16 @@ let
         (removeAttrs attrs
           ["meta" "passthru" "crossAttrs" "pos"
            "__impureHostDeps" "__propagatedImpureHostDeps"
-           "__sandboxProfile" "__propagatedSandboxProfile"])
+           "sandboxProfile" "propagatedSandboxProfile"])
         // (let
           computedSandboxProfile =
             lib.concatMap (input: input.__propagatedSandboxProfile or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs);
           computedPropagatedSandboxProfile =
             lib.concatMap (input: input.__propagatedSandboxProfile or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs);
+          computedImpureHostDeps =
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs));
+          computedPropagatedImpureHostDeps =
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs));
         in
         {
           builder = attrs.realBuilder or shell;
@@ -179,10 +183,17 @@ let
         } // ifDarwin {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =
-          let profiles = [ __extraSandboxProfile ] ++ computedSandboxProfile ++ computedPropagatedSandboxProfile ++ [ __propagatedSandboxProfile __sandboxProfile ];
+          let profiles = [ extraSandboxProfile ] ++ computedSandboxProfile ++ computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile sandboxProfile ];
               final = lib.concatStringsSep "\n" (lib.filter (x: x != "") (lib.unique profiles));
           in final;
-          __propagatedSandboxProfile = lib.unique (computedPropagatedSandboxProfile ++ [ __propagatedSandboxProfile ]);
+          __propagatedSandboxProfile = lib.unique (computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile ]);
+          __impureHostDeps = computedImpureHostDeps ++ computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps ++ __impureHostDeps ++ __extraImpureHostDeps ++ [
+            "/dev/zero"
+            "/dev/random"
+            "/dev/urandom"
+            "/bin/sh"
+          ];
+          __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
         } // (if outputs' != [ "out" ] then {
           outputs = outputs';
         } else { })))) (
@@ -219,7 +230,8 @@ let
       inherit preHook initialPath shell defaultNativeBuildInputs;
     }
     // ifDarwin {
-      __sandboxProfile = __stdenvSandboxProfile;
+      __sandboxProfile = stdenvSandboxProfile;
+      __impureHostDeps = __stdenvImpureHostDeps;
     })
 
     // rec {

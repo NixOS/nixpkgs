@@ -81,7 +81,7 @@ in appleDerivation {
   ];
 
   # ps uses this syscall to get process info
-  __propagatedSandboxProfile = stdenv.lib.sandbox.allow "mach-priv-task-port";
+  propagatedSandboxProfile = stdenv.lib.sandbox.allow "mach-priv-task-port";
 
   meta = {
     platforms = stdenv.lib.platforms.darwin;
