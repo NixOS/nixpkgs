@@ -43,6 +43,11 @@ stdenv.mkDerivation {
     cp -s '${sources-langs}'/* ./languages-frameworks
   ''
   + toDocbook {
+      inputFile = ./introduction.md;
+      outputFile = "introduction.xml";
+      useChapters = true;
+    }
+  + toDocbook {
       inputFile = ./haskell-users-guide.md;
       outputFile = "haskell-users-guide.xml";
       useChapters = true;
