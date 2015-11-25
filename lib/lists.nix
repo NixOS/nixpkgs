@@ -256,6 +256,86 @@ rec {
   reverseList = xs:
     let l = length xs; in genList (n: elemAt xs (l - n - 1)) l;
 
+  /* Depth-First Search (DFS) for lists `list != []`.
+
+     `before a b == true` means that `b` depends on `a` (there's an
+     edge from `b` to `a`).
+
+     Examples:
+
+         listDfs true hasPrefix [ "/home/user" "other" "/" "/home" ]
+           == { minimal = "/";                  # minimal element
+                visited = [ "/home/user" ];     # seen elements (in reverse order)
+                rest    = [ "/home" "other" ];  # everything else
+              }
+
+         listDfs true hasPrefix [ "/home/user" "other" "/" "/home" "/" ]
+           == { cycle   = "/";                  # cycle encountered at this element
+                loops   = [ "/" ];              # and continues to these elements
+                visited = [ "/" "/home/user" ]; # elements leading to the cycle (in reverse order)
+                rest    = [ "/home" "other" ];  # everything else
+
+   */
+
+  listDfs = stopOnCycles: before: list:
+    let
+      dfs' = us: visited: rest:
+        let
+          c = filter (x: before x us) visited;
+          b = partition (x: before x us) rest;
+        in if stopOnCycles && (length c > 0)
+           then { cycle = us; loops = c; inherit visited rest; }
+           else if length b.right == 0
+                then # nothing is before us
+                     { minimal = us; inherit visited rest; }
+                else # grab the first one before us and continue
+                     dfs' (head b.right)
+                          ([ us ] ++ visited)
+                          (tail b.right ++ b.wrong);
+    in dfs' (head list) [] (tail list);
+
+  /* Sort a list based on a partial ordering using DFS. This
+     implementation is O(N^2), if your ordering is linear, use `sort`
+     instead.
+
+     `before a b == true` means that `b` should be after `a`
+     in the result.
+
+     Examples:
+
+         toposort hasPrefix [ "/home/user" "other" "/" "/home" ]
+           == { result = [ "/" "/home" "/home/user" "other" ]; }
+
+         toposort hasPrefix [ "/home/user" "other" "/" "/home" "/" ]
+           == { cycle = [ "/home/user" "/" "/" ]; # path leading to a cycle
+                loops = [ "/" ]; }                # loops back to these elements
+
+         toposort hasPrefix [ "other" "/home/user" "/home" "/" ]
+           == { result = [ "other" "/" "/home" "/home/user" ]; }
+
+         toposort (a: b: a < b) [ 3 2 1 ] == { result = [ 1 2 3 ]; }
+
+   */
+
+  toposort = before: list:
+    let
+      dfsthis = listDfs true before list;
+      toporest = toposort before (dfsthis.visited ++ dfsthis.rest);
+    in
+      if length list < 2
+      then # finish
+           { result =  list; }
+      else if dfsthis ? "cycle"
+           then # there's a cycle, starting from the current vertex, return it
+                { cycle = reverseList ([ dfsthis.cycle ] ++ dfsthis.visited);
+                  inherit (dfsthis) loops; }
+           else if toporest ? "cycle"
+                then # there's a cycle somewhere else in the graph, return it
+                     toporest
+                # Slow, but short. Can be made a bit faster with an explicit stack.
+                else # there are no cycles
+                     { result = [ dfsthis.minimal ] ++ toporest.result; };
+
   /* Sort a list based on a comparator function which compares two
      elements and returns true if the first argument is strictly below
      the second argument.  The returned list is sorted in an increasing
