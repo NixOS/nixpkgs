@@ -3,7 +3,7 @@
 # the modules necessary to mount the root file system, then calls the
 # init in the root file system to start the second boot stage.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -21,6 +21,14 @@ let
     kernel = modulesTree;
     allowMissing = true;
   };
+
+
+  # The initrd only has to mount `/` or any FS marked as necessary for
+  # booting (such as the FS containing `/nix/store`, or an FS needed for
+  # mounting `/`, like `/` on a loopback).
+  fileSystems = filter
+    (fs: fs.neededForBoot || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ])
+    config.system.build.fileSystems;
 
 
   # Some additional utilities needed in stage 1, like mount, lvm, fsck
@@ -71,7 +79,7 @@ let
       ln -sf kmod $out/bin/modprobe
 
       # Copy resize2fs if needed.
-      ${optionalString (any (fs: fs.autoResize) (attrValues config.fileSystems)) ''
+      ${optionalString (any (fs: fs.autoResize) config.system.build.fileSystems) ''
         # We need mke2fs in the initrd.
         copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
       ''}
@@ -126,14 +134,6 @@ let
 
       ${config.boot.initrd.extraUtilsCommandsTest}
     ''; # */
-
-
-  # The initrd only has to mount / or any FS marked as necessary for
-  # booting (such as the FS containing /nix/store, or an FS needed for
-  # mounting /, like / on a loopback).
-  fileSystems = filter
-    (fs: fs.neededForBoot || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ])
-    (attrValues config.fileSystems);
 
 
   udevRules = pkgs.stdenv.mkDerivation {
@@ -398,9 +398,8 @@ in
   };
 
   config = mkIf (!config.boot.isContainer) {
-
     assertions = [
-      { assertion = any (fs: fs.mountPoint == "/") (attrValues config.fileSystems);
+      { assertion = any (fs: fs.mountPoint == "/") fileSystems;
         message = "The ‘fileSystems’ option does not specify your root file system.";
       }
       { assertion = let inherit (config.boot) resumeDevice; in

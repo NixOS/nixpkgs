@@ -36,7 +36,7 @@ let
 
   fsToPool = fs: datasetToPool fs.device;
 
-  zfsFilesystems = filter (x: x.fsType == "zfs") (attrValues config.fileSystems);
+  zfsFilesystems = filter (x: x.fsType == "zfs") config.system.build.fileSystems;
 
   isRoot = fs: fs.neededForBoot || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ];
 
@@ -277,7 +277,7 @@ in
 
       systemd.services = let
         getPoolFilesystems = pool:
-          filter (x: x.fsType == "zfs" && (fsToPool x) == pool) (attrValues config.fileSystems);
+          filter (x: x.fsType == "zfs" && (fsToPool x) == pool) config.system.build.fileSystems;
 
         getPoolMounts = pool:
           let
