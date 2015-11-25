@@ -1,16 +1,16 @@
 { stdenv, fetchurl, pkgconfig, cmake, intltool, gettext
 , libxml2, enchant, isocodes, icu, libpthreadstubs
 , pango, cairo, libxkbfile, libXau, libXdmcp
-, dbus, gtk2, gtk3, qt4
+, dbus, gtk2, gtk3, qt4, kde5
 }:
 
 stdenv.mkDerivation rec {
   name = "fcitx-${version}";
-  version = "4.2.8.5";
+  version = "4.2.9";
 
   src = fetchurl {
     url = "http://download.fcitx-im.org/fcitx/${name}_dict.tar.xz";
-    sha256 = "0whv7mnzig4l5v518r200psa1fp3dyl1jkr5z0q13ijzh1bnyggy";
+    sha256 = "0v7wdf3qf74vz8q090w8k574wvfcpj9ksfcfdw93nmzyk1q5p4rs";
   };
 
   patchPhase = ''
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = with stdenv.lib; [
     cmake enchant pango gettext libxml2 isocodes pkgconfig libxkbfile
     intltool cairo icu libpthreadstubs libXau libXdmcp
-    dbus gtk2 gtk3 qt4
+    dbus gtk2 gtk3 qt4 kde5.extra-cmake-modules
   ];
 
   cmakeFlags = ''
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     description = "A Flexible Input Method Framework";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [iyzsong];
+    maintainers = with stdenv.lib.maintainers; [iyzsong ericsagnes];
   };
 }
