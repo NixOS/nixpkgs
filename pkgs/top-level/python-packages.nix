@@ -4268,7 +4268,6 @@ let
   GitPython = buildPythonPackage rec {
     version = "1.0.1";
     name = "GitPython-${version}";
-    meta.maintainers = with maintainers; [ mornfall ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/G/GitPython/GitPython-${version}.tar.gz";
@@ -4277,6 +4276,13 @@ let
 
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ gitdb ];
+
+    meta = {
+      description = "Python Git Library";
+      maintainers = with maintainers; [ mornfall ];
+      homepage = https://github.com/gitpython-developers/GitPython;
+      license = licenses.bsd3;
+    };
   };
 
   googlecl = buildPythonPackage rec {
