@@ -51,6 +51,7 @@ let
 
 
   # Configration for UDEV
+
   get_udev_interface_configuration = interfaces: interface_name:
       ''
       KERNEL=="eth*", ATTR{address}=="${(builtins.getAttr interface_name interfaces).mac}", NAME="eth${interface_name}"
