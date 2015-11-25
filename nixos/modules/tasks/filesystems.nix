@@ -208,14 +208,15 @@ in
 
         formatDevice = fs:
           let
-            mountPoint' = escapeSystemdPath fs.mountPoint;
-            device' = escapeSystemdPath fs.device;
+            mountPoint' = "${escapeSystemdPath fs.mountPoint}.mount";
+            device'  = escapeSystemdPath fs.device;
+            device'' = "${device}.device";
           in nameValuePair "mkfs-${device'}"
           { description = "Initialisation of Filesystem ${fs.device}";
-            wantedBy = [ "${mountPoint'}.mount" ];
-            before = [ "${mountPoint'}.mount" "systemd-fsck@${device'}.service" ];
-            requires = [ "${device'}.device" ];
-            after = [ "${device'}.device" ];
+            wantedBy = [ mountPoint' ];
+            before = [ mountPoint' "systemd-fsck@${device'}.service" ];
+            requires = [ device'' ];
+            after = [ device'' ];
             path = [ pkgs.utillinux ] ++ config.system.fsPackages;
             script =
               ''
