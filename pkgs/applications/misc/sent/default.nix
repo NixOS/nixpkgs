@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libpng, libX11, libXft }:
 
 stdenv.mkDerivation rec {
-  name = "sent-0.1";
+  name = "sent-0.2";
 
   src = fetchurl {
     url = "http://dl.suckless.org/tools/${name}.tar.gz";
-    sha256 = "09fhq3qi0q6cn3skl2wd706wwa8wxffp0hrzm22bafzqxaxsaslz";
+    sha256 = "0xhh752hwaa26k4q6wvrb9jnpbnylss2aw6z11j7l9rav7wn3fak";
   };
 
   buildInputs = [ libpng libX11 libXft ];
