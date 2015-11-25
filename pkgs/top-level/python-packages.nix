@@ -4240,21 +4240,33 @@ let
 
   gitdb = buildPythonPackage rec {
     name = "gitdb-0.6.4";
-    meta.maintainers = with maintainers; [ mornfall ];
-    doCheck = false;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gitdb/${name}.tar.gz";
       sha256 = "0n4n2c7rxph9vs2l6xlafyda5x1mdr8xy16r9s3jwnh3pqkvrsx3";
     };
 
-    propagatedBuildInputs = with self; [ smmap async ];
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ smmap ];
+
+    checkPhase = ''
+      nosetests
+    '';
+
+    doCheck = false; # Bunch of tests fail because they need an actual git repo
+
+    meta = {
+      description = "Git Object Database";
+      maintainers = with maintainers; [ mornfall ];
+      homepage = https://github.com/gitpython-developers/gitdb;
+      license = licenses.bsd3;
+    };
+
   };
 
   GitPython = buildPythonPackage rec {
     version = "1.0.1";
     name = "GitPython-${version}";
-    meta.maintainers = with maintainers; [ mornfall ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/G/GitPython/GitPython-${version}.tar.gz";
@@ -4263,6 +4275,13 @@ let
 
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ gitdb ];
+
+    meta = {
+      description = "Python Git Library";
+      maintainers = with maintainers; [ mornfall ];
+      homepage = https://github.com/gitpython-developers/GitPython;
+      license = licenses.bsd3;
+    };
   };
 
   googlecl = buildPythonPackage rec {
