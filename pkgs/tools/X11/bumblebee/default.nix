@@ -100,6 +100,13 @@ in stdenv.mkDerivation {
 
   patches = [ ./xopts.patch ./nvidia-conf.patch];
 
+  # the have() function is deprecated and not available to bash completions the
+  # way they are currently loaded in NixOS, so use _have. See #10936
+  patchPhase = ''
+    substituteInPlace scripts/bash_completion/bumblebee \
+      --replace "have optirun" "_have optirun"
+  '';
+
   preConfigure = ''
     # Substitute the path to the actual modinfo program in module.c.
     # Note: module.c also calls rmmod and modprobe, but those just have to
