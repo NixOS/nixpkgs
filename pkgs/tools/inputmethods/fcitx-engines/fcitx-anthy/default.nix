@@ -1,24 +1,26 @@
-{ stdenv, fetchurl, cmake, fcitx, anthy }:
+{ stdenv, fetchurl, cmake, fcitx, anthy, gettext, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-anthy-0.2.1";
-
-  meta = with stdenv.lib; {
-    description = "Fcitx Wrapper for anthy";
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ iyzsong ];
-  };
+  name = "fcitx-anthy-${version}";
+  version = "0.2.2";
 
   src = fetchurl {
     url = "http://download.fcitx-im.org/fcitx-anthy/${name}.tar.xz";
-    sha256 = "13fpfhhxkzbq53h10i3hifa37nngm47jq361i70z22bgcrs8887x";
+    sha256 = "0ayrzfx95670k86y19bzl6i6w98haaln3x8dxpb39a5dwgz59pf8";
   };
 
-  buildInputs = [ cmake fcitx anthy ];
+  buildInputs = [ cmake fcitx anthy gettext pkgconfig ];
 
   preInstall = ''
     substituteInPlace src/cmake_install.cmake \
       --replace ${fcitx} $out
   '';
+
+  meta = with stdenv.lib; {
+    description = "Fcitx Wrapper for anthy";
+    license     = licenses.gpl2Plus;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ iyzsong ericsagnes ];
+  };
+
 }
