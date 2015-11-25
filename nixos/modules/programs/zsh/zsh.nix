@@ -25,7 +25,7 @@ in
       enable = mkOption {
         default = false;
         description = ''
-          Whenever to configure Zsh as an interactive shell.
+          Whether to configure zsh as an interactive shell.
         '';
         type = types.bool;
       };
@@ -73,6 +73,14 @@ in
         type = types.lines;
       };
 
+      enableCompletion = mkOption {
+        default = true;
+        description = ''
+          Enable zsh completion for all interactive zsh shells.
+        '';
+        type = types.bool;
+      };
+
     };
 
   };
@@ -101,6 +109,13 @@ in
         export HISTFILE=$HOME/.zsh_history
 
         setopt HIST_IGNORE_DUPS SHARE_HISTORY HIST_FCNTL_LOCK
+
+        # Tell zsh how to find installed completions
+        for p in ''${(z)NIX_PROFILES}; do
+          fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions)
+        done
+
+        ${if cfg.enableCompletion then "autoload -U compinit && compinit" else ""}
       '';
 
     };
@@ -161,7 +176,8 @@ in
 
     environment.etc."zinputrc".source = ./zinputrc;
 
-    environment.systemPackages = [ pkgs.zsh ];
+    environment.systemPackages = [ pkgs.zsh ]
+      ++ optional cfg.enableCompletion pkgs.nix-zsh-completions;
 
     #users.defaultUserShell = mkDefault "/run/current-system/sw/bin/zsh";
 

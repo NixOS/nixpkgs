@@ -3702,6 +3702,8 @@ let
 
   zsh = callPackage ../shells/zsh { };
 
+  nix-zsh-completions = callPackage ../shells/nix-zsh-completions { };
+
 
   ### DEVELOPMENT / COMPILERS
 
