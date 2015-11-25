@@ -14022,6 +14022,8 @@ let
 
   minecraft-server = callPackage ../games/minecraft-server { };
 
+  multimc = callPackage ../games/multimc { };
+
   minetest = callPackage ../games/minetest {
     libpng = libpng12;
   };
