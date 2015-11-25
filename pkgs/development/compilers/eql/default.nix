@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Embedded Qt Lisp (ECL+Qt)";
     maintainers = with maintainers; [ raskin ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     license = licenses.mit;
   };
 
