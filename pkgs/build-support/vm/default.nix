@@ -1083,6 +1083,32 @@ rec {
       unifiedSystemDir = true;
     };
 
+    fedora23i386 = {
+      name = "fedora-23-i386";
+      fullName = "Fedora 23 (i386)";
+      packagesList = fetchurl rec {
+        url = "mirror://fedora/linux/releases/23/Everything/i386/os/repodata/${sha256}-primary.xml.gz";
+        sha256 = "0d1012e6c1f1d694ab5354d95005791ce8de908016d07e5ed0b9dac9b9223492";
+      };
+      urlPrefix = mirror://fedora/linux/releases/23/Everything/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
+    fedora23x86_64 = {
+      name = "fedora-23-x86_64";
+      fullName = "Fedora 23 (x86_64)";
+      packagesList = fetchurl rec {
+        url = "mirror://fedora/linux/releases/23/Everything/x86_64/os/repodata/${sha256}-primary.xml.gz";
+        sha256 = "0fa09bb5f82e4a04890b91255f4b34360e38ede964fe8328f7377e36f06bad27";
+      };
+      urlPrefix = mirror://fedora/linux/releases/23/Everything/x86_64/os;
+      archs = ["noarch" "x86_64"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
     opensuse103i386 = {
       name = "opensuse-10.3-i586";
       fullName = "openSUSE 10.3 (i586)";
