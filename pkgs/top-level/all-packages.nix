@@ -6944,6 +6944,8 @@ let
 
   libchardet = callPackage ../development/libraries/libchardet { };
 
+  libchewing = callPackage ../development/libraries/libchewing { };
+
   libcrafter = callPackage ../development/libraries/libcrafter { };
 
   libuchardet = callPackage ../development/libraries/libuchardet { };
