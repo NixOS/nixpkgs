@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, sbclBootstrap, sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit", which }:
+{ stdenv, fetchurl, sbclBootstrap, sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit" }:
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
@@ -8,8 +8,6 @@ stdenv.mkDerivation rec {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
     sha256 = "1cwrmvbx8m7n7wkcm16yz7qwx221giz7jskzkvy42pj919may36n";
   };
-
-  buildInputs = [ which ];
 
   patchPhase = ''
     echo '"${version}.nixos"' > version.lisp-expr
@@ -40,7 +38,7 @@ stdenv.mkDerivation rec {
       '/date defaulted-source/i(or (and (= 2208988801 (file-write-date defaulted-source-truename)) (= 2208988801 (file-write-date defaulted-fasl-truename)))'
 
     # Fix software version retrieval
-    sed -e "s@/bin/uname@$(which uname)@g" -i src/code/*-os.lisp
+    sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp
 
     # Fix the tests
     sed -e '/deftest pwent/inil' -i contrib/sb-posix/posix-tests.lisp

@@ -8,9 +8,11 @@ buildPythonPackage rec {
     sha256 = "6a0b7b1fe2b046875456e14eda3e42430e493bf2251a64481cf4fd1a1e21a80e";
   };
 
-  buildInputs = [ pythonPackages.nose pythonPackages.minimock ];
+  buildInputs = with pythonPackages; [ nose minimock ];
 
-  checkPhase = "make test";
+  checkPhase = ''
+    nosetests
+  '';
 
   meta = {
     description = "A gpodder.net client library";

@@ -97,6 +97,7 @@
   enolan = "Echo Nolan <echo@echonolan.net>";
   epitrochoid = "Mabry Cervin <mpcervin@uncg.edu>";
   ericbmerritt = "Eric Merritt <eric@afiniate.com>";
+  ericsagnes = "Eric Sagnes <eric.sagnes@gmail.com>";
   erikryb = "Erik Rybakken <erik.rybakken@math.ntnu.no>";
   ertes = "Ertugrul Söylemez <ertesx@gmx.de>";
   exlevan = "Alexey Levan <exlevan@gmail.com>";
@@ -289,6 +290,7 @@
   theuni = "Christian Theune <ct@flyingcircus.io>";
   thoughtpolice = "Austin Seipp <aseipp@pobox.com>";
   titanous = "Jonathan Rudenberg <jonathan@titanous.com>";
+  tohl = "Tomas Hlavaty <tom@logand.com>";
   tokudan = "Daniel Frank <git@danielfrank.net>";
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";
   travisbhartwell = "Travis B. Hartwell <nafai@travishartwell.net>";

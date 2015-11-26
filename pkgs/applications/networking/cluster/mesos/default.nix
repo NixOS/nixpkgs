@@ -1,6 +1,6 @@
 { stdenv, lib, makeWrapper, fetchurl, curl, sasl, openssh, autoconf
 , automake114x, libtool, unzip, gnutar, jdk, maven, python, wrapPython
-, setuptools, distutils-cfg, boto, pythonProtobuf, apr, subversion
+, setuptools, boto, pythonProtobuf, apr, subversion
 , leveldb, glog, perf, utillinux, libnl, iproute
 }:
 
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   dontDisableStatic = true;
 
   src = fetchurl {
-    url = "http://www.apache.org/dist/mesos/${version}/mesos-${version}.tar.gz";
+    url = "http://archive.apache.org/dist/mesos/${version}/${name}.tar.gz";
     sha256 = "1v5xpn4wal4vcrvcklchx9slkpa8xlwqkdbnxzy9zkzpq5g3arxr";
   };
 
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     makeWrapper autoconf automake114x libtool curl sasl jdk maven
-    python wrapPython boto distutils-cfg setuptools leveldb
+    python wrapPython boto setuptools leveldb
     subversion apr glog
   ] ++ lib.optionals stdenv.isLinux [
     libnl

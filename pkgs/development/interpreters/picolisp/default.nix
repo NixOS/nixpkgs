@@ -3,10 +3,10 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "picoLisp-${version}";
-  version = "3.1.11";
+  version = "15.11";
   src = fetchurl {
     url = "http://www.software-lab.de/${name}.tgz";
-    sha256 = "01kgyz0lkz36lxvibv07qd06gwdxvvbain9f9cnya7a12kq3009i";
+    sha256 = "0gi1n7gl786wbz6sn0f0002h49f0zvfrzxlhabkghwlbva1rwp58";
   };
   buildInputs = optional stdenv.is64bit jdk;
   patchPhase = optionalString stdenv.isArm ''
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = http://picolisp.com/;
     license = licenses.mit;
     platform = platforms.all;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [ raskin tohl ];
   };
 
   passthru = {

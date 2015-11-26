@@ -11,89 +11,25 @@ buildPythonPackage rec {
   name = "zim-${version}";
   version = "0.63";
   namePrefix = "";
-  
+
   src = fetchurl {
     url = "http://zim-wiki.org/downloads/${name}.tar.gz";
     sha256 = "077vf4h0hjmbk8bxj9l0z9rxcb3dw642n32lvfn6vjdna1qm910m";
   };
 
-  propagatedBuildInputs = [ pythonPackages.sqlite3 pygtk /*pythonPackages.pyxdg*/ pygobject ];
+  propagatedBuildInputs = [ pythonPackages.sqlite3 pygtk pythonPackages.pyxdg pygobject ];
 
   preBuild = ''
     mkdir -p /tmp/home
     export HOME="/tmp/home"
-  '';
-  
-  setupPyInstallFlags = ["--skip-xdg-cmd"];
-  
-  #
-  # Exactly identical to buildPythonPackage's version but for the
-  # `--old-and-unmanagable`, which I removed. This was removed because
-  # this is a setuptools specific flag and as zim is overriding 
-  # the install step, setuptools could not perform its monkey
-  # patching trick for the command. Alternate solutions were to
-  #
-  #  -  Remove the custom install step (tested as working but
-  #	also remove the possibility of performing the xdg-cmd
-  #     stuff).
-  #  -  Explicitly replace distutils import(s) by their setuptools
-  #	equivalent (untested). 
-  #
-  # Both solutions were judged unsatisfactory as altering the code
-  # would be required.
-  #
-  # Note that a improved solution would be to expose the use of 
-  # the `--old-and-unmanagable` flag as an option of passed to the
-  # buildPythonPackage function.
-  #
-  # Also note that I stripped all comments.
-  #
-  installPhase = ''
-    runHook preInstall
 
-    mkdir -p "$out/lib/${python.libPrefix}/site-packages"
-
-    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-
-    ${python}/bin/${python.executable} setup.py install \
-      --install-lib=$out/lib/${python.libPrefix}/site-packages \
-      --prefix="$out" ${lib.concatStringsSep " " setupPyInstallFlags}
-
-    eapth="$out/lib/${python.libPrefix}"/site-packages/easy-install.pth
-    if [ -e "$eapth" ]; then
-	# move colliding easy_install.pth to specifically named one
-	mv "$eapth" $(dirname "$eapth")/${name}.pth
-    fi
-
-    rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
-
-    runHook postInstall
+    sed -i '/zim_install_class,/d' setup.py
   '';
 
-  # FIXME: this is quick and dirty hack, because zim expects the
-  # path to the executable in argv[0] therefore the wrapper is
-  # modified accordingly.
-  postFixup = ''
-    wrapProgram "$out/bin/zim" \
-      --prefix XDG_DATA_DIRS : "$out/share"
 
-    wrapPythonPrograms
-
-    sed -i "s#sys\.argv\[0\] = '.zim-wrapped'#sys.argv[0] = '$out/bin/zim'#g" \
-      $out/bin/..zim-wrapped-wrapped
-
-    if test -e $out/nix-support/propagated-build-inputs; then
-        ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
-    fi
-
-    createBuildInputsPth build-inputs "$buildInputStrings"
-    for inputsfile in propagated-build-inputs propagated-native-build-inputs; do
-      if test -e $out/nix-support/$inputsfile; then
-          createBuildInputsPth $inputsfile "$(cat $out/nix-support/$inputsfile)"
-      fi
-    done
+  preFixup = ''
+    export makeWrapperArgs="--prefix XDG_DATA_DIRS : $out/share --argv0 $out/bin/.zim-wrapped"
   '';
-  
   # Testing fails.
   doCheck = false;
 
