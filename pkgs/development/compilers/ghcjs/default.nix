@@ -40,7 +40,7 @@
 , ghcjsBoot ? import ./ghcjs-boot.nix { inherit fetchgit; }
 , shims ? import ./shims.nix { inherit fetchFromGitHub; }
 }:
-let version = "0.1.0"; in
+let version = "0.2.0"; in
 mkDerivation (rec {
   pname = "ghcjs";
   inherit version;
