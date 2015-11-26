@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p $out/bin
   '';
-  installFlags = "DESTDIR=$(out)";
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with stdenv.lib; {
     inherit version;

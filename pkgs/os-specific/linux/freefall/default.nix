@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     substituteInPlace freefall.c --replace "alarm(2)" "alarm(7)"
   '';
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Free-fall protection for spinning HP/Dell laptop hard drives";

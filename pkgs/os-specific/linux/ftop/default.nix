@@ -1,7 +1,8 @@
 { stdenv, fetchurl, ncurses }:
 
+let version = "1.0"; in
 stdenv.mkDerivation rec {
-  name = "ftop-1.0";
+  name = "ftop-${version}";
 
   src = fetchurl {
     url = "http://ftop.googlecode.com/files/${name}.tar.bz2";
@@ -14,18 +15,19 @@ stdenv.mkDerivation rec {
     ./ftop-fix_buffer_overflow.patch
     ./ftop-fix_printf_format.patch
   ];
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   postPatch = ''
     substituteInPlace configure --replace "curses" "ncurses"
   '';
 
   meta = with stdenv.lib; {
+    inherit version;
     description = "Show progress of open files and file systems";
     homepage = https://code.google.com/p/ftop/;
     license = licenses.gpl3Plus;
     longDescription = ''
-      Ftop is to files what top is to processes. The progress of all open files
+      ftop is to files what top is to processes. The progress of all open files
       and file systems can be monitored. If run as a regular user, the set of
       open files will be limited to those in that user's processes (which is
       generally all that is of interest to the user).

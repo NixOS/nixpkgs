@@ -41,7 +41,7 @@ in stdenv.mkDerivation {
     # The libpsl check phase requires the list's test scripts (tests/) as well
     cp -Rv "${listSources}"/* list
   '';
-  configureFlags = "--disable-static --enable-gtk-doc --enable-man";
+  configureFlags = [ "--disable-static" "--enable-gtk-doc" "--enable-man" ];
 
   enableParallelBuilding = true;
 
