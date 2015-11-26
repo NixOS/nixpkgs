@@ -13,10 +13,10 @@
 , buildInputs ? []
 
 # propagate build dependencies so in case we have A -> B -> C,
-# C can import propagated packages by A
+# C can import package A propagated by B 
 , propagatedBuildInputs ? []
 
-# passed to "python setup.py build"
+# passed to "python setup.py build_ext"
 # https://github.com/pypa/pip/issues/881
 , setupPyBuildFlags ? []
 
@@ -50,10 +50,13 @@ then throw "${name} not supported for interpreter ${python.executable}"
 else
 
 let
+  # use setuptools shim (so that setuptools is imported before distutils)
+  # pip does the same thing: https://github.com/pypa/pip/pull/3265
   setuppy = ./run_setup.py;
+  # For backwards compatibility, let's use an alias
+  doInstallCheck = doCheck;
 in
-python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
-
+python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] // {
   name = namePrefix + name;
 
   buildInputs = [ wrapPython bootstrapped-pip ] ++ buildInputs ++ pythonPath
@@ -61,8 +64,6 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
 
   # propagate python/setuptools to active setup-hook in nix-shell
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
-
-  pythonPath = pythonPath;
 
   configurePhase = attrs.configurePhase or ''
     runHook preConfigure
@@ -74,6 +75,8 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
     runHook postConfigure
   '';
 
+  # we copy nix_run_setup.py over so it's executed relative to the root of the source
+  # many project make that assumption
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
     cp ${setuppy} nix_run_setup.py
@@ -94,8 +97,10 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
     runHook postInstall
   '';
 
-  doInstallCheck = doCheck;
-  doCheck = false;
+  # We run all tests after software has been installed since that is
+  # a common idiom in Python
+  doInstallCheck = doInstallCheck;
+
   installCheckPhase = attrs.checkPhase or ''
     runHook preCheck
     ${python.interpreter} nix_run_setup.py test
