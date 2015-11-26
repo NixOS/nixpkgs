@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, libcap, readline, texinfo }:
+{ stdenv, fetchurl, pkgconfig, libcap, readline, texinfo, nss, nspr }:
 
 assert stdenv.isLinux -> libcap != null;
 
 stdenv.mkDerivation rec {
   name = "chrony-${version}";
 
-  version = "2.1.1";
-  
+  version = "2.2";
+
   src = fetchurl {
     url = "http://download.tuxfamily.org/chrony/${name}.tar.gz";
-    sha256 = "b0565148eaa38e971291281d76556c32f0138ec22e9784f8bceab9c65f7ad7d4";
+    sha256 = "1194maargy4hpl2a3vy5mbrrswzajjdn92p4w17gbb9vlq7q5zfk";
   };
-  
-  buildInputs = [ readline texinfo ] ++ stdenv.lib.optional stdenv.isLinux libcap;
+
+  buildInputs = [ readline texinfo nss nspr ] ++ stdenv.lib.optional stdenv.isLinux libcap;
+  nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = [
-    "--sysconfdir=$(out)/etc"
     "--chronyvardir=$(out)/var/lib/chrony"
   ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     repository.git = git://git.tuxfamily.org/gitroot/chrony/chrony.git;
     license = licenses.gpl2;
     platforms = with platforms; linux ++ freebsd ++ openbsd;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = with maintainers; [ rickynils fpletz ];
 
     longDescription = ''
       Chronyd is a daemon which runs in background on the system. It obtains measurements via the network of the system clock’s offset relative to time servers on other systems and adjusts the system time accordingly. For isolated systems, the user can periodically enter the correct time by hand (using Chronyc). In either case, Chronyd determines the rate at which the computer gains or loses time, and compensates for this. Chronyd implements the NTP protocol and can act as either a client or a server.
