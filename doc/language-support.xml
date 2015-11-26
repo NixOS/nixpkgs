@@ -332,7 +332,7 @@ twisted = buildPythonPackage {
       </para></listitem>
 
       <listitem><para>
-        In the <varname>installCheck/varname> phase, <literal>${python.interpreter} setup.py test</literal>
+        In the <varname>installCheck</varname> phase, <literal>${python.interpreter} setup.py test</literal>
         is ran.
       </para></listitem>
     </orderedlist>
