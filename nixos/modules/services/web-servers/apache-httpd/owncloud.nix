@@ -346,7 +346,6 @@ rec {
   extraConfig =
     ''
       ${if config.urlPrefix != "" then "Alias ${config.urlPrefix} ${config.package}" else ''
-
         RewriteEngine On
         RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
         RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
