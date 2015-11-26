@@ -70,7 +70,7 @@ let
       "proxyuserpwd" => "",
 
       /* List of trusted domains, to prevent host header poisoning ownCloud is only using these Host headers */
-      'trusted_domains' => array('${config.trustedDomain}'),
+      ${if config.trustedDomain != "" then "'trusted_domains' => array('${config.trustedDomain}')," else ""}
 
       /* Theme to use for ownCloud */
       "theme" => "",
