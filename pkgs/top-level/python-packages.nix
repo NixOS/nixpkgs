@@ -2344,6 +2344,23 @@ let
   };
 
 
+  CommonMark = buildPythonPackage rec {
+    name = "CommonMark-${version}";
+    version = "0.5.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/C/CommonMark/${name}.tar.gz";
+      sha256 = "34d73ec8085923c023930dfc0bcd1c4286e28a2a82de094bb72fabcc0281cbe5";
+    };
+
+    meta = {
+      description = "Python parser for the CommonMark Markdown spec";
+      homepage = https://github.com/rolandshoemaker/CommonMark-py;
+      license = licenses.bsd3;
+    };
+  };
+
+
   coilmq = buildPythonPackage (rec {
     name = "coilmq-0.6.1";
 
