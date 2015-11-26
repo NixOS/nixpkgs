@@ -59,9 +59,9 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.polkit ];
+    environment.systemPackages = [ pkgs.polkit.bin pkgs.polkit.out ];
 
-    systemd.packages = [ pkgs.polkit ];
+    systemd.packages = [ pkgs.polkit.out ];
 
     systemd.services.polkit.restartTriggers = [ config.system.path ];
     systemd.services.polkit.unitConfig.X-StopIfChanged = false;
