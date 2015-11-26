@@ -331,7 +331,7 @@ let
        */
       'share_folder' => '/',
 
-      'version' => '${pkgs.owncloud.version}',
+      'version' => '${config.package.version}',
 
       'openssl' => '${pkgs.openssl}/bin/openssl'
 
@@ -345,15 +345,15 @@ rec {
 
   extraConfig =
     ''
-      ${if config.urlPrefix != "" then "Alias ${config.urlPrefix} ${pkgs.owncloud}" else ''
+      ${if config.urlPrefix != "" then "Alias ${config.urlPrefix} ${config.package}" else ''
 
         RewriteEngine On
         RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
         RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
       ''}
 
-      <Directory ${pkgs.owncloud}>
-        ${builtins.readFile "${pkgs.owncloud}/.htaccess"}
+      <Directory ${config.package}>
+        ${builtins.readFile "${config.package}/.htaccess"}
       </Directory>
     '';
 
@@ -361,11 +361,20 @@ rec {
     { name = "OC_CONFIG_PATH"; value = "${config.dataDir}/config/"; }
   ];
 
-  documentRoot = if config.urlPrefix == "" then pkgs.owncloud else null;
+  documentRoot = if config.urlPrefix == "" then config.package else null;
 
   enablePHP = true;
 
   options = {
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.owncloud70;
+      example = literalExample "pkgs.owncloud70";
+      description = ''
+          PostgreSQL package to use.
+      '';
+    };
 
     urlPrefix = mkOption {
       default = "";
@@ -559,7 +568,7 @@ rec {
       cp ${owncloudConfig} ${config.dataDir}/config/config.php
       mkdir -p ${config.dataDir}/storage
       mkdir -p ${config.dataDir}/apps
-      cp -r ${pkgs.owncloud}/apps/* ${config.dataDir}/apps/
+      cp -r ${config.package}/apps/* ${config.dataDir}/apps/
       chmod -R ug+rw ${config.dataDir}
       chmod -R o-rwx ${config.dataDir}
       chown -R wwwrun:wwwrun ${config.dataDir}
@@ -573,11 +582,11 @@ rec {
       ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/psql -h "/tmp" -U postgres -d ${config.dbName} -Atw -c "$QUERY" || true
     fi
 
-    if [ -e ${pkgs.owncloud}/config/ca-bundle.crt ]; then
-      cp -f ${pkgs.owncloud}/config/ca-bundle.crt ${config.dataDir}/config/
+    if [ -e ${config.package}/config/ca-bundle.crt ]; then
+      cp -f ${config.package}/config/ca-bundle.crt ${config.dataDir}/config/
     fi
 
-    ${php}/bin/php ${pkgs.owncloud}/occ upgrade >> ${config.dataDir}/upgrade.log || true
+    ${php}/bin/php ${config.package}/occ upgrade >> ${config.dataDir}/upgrade.log || true
 
     chown wwwrun:wwwrun ${config.dataDir}/owncloud.log || true
 
