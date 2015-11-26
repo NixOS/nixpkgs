@@ -26,6 +26,13 @@ nixos.path = ./nixpkgs-unstable-2015-12-06/nixos;
 
 </itemizedlist>
 
+<para>The following new services were added since the last release:
+
+  <itemizedlist>
+    <listitem><para><literal>services/monitoring/longview.nix</literal></para></listitem>
+  </itemizedlist>
+</para>
+
 <para>When upgrading from a previous release, please be aware of the
 following incompatible changes:</para>
 
