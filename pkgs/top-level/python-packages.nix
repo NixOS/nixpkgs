@@ -15442,6 +15442,27 @@ let
     };
   };
 
+  recommonmark = buildPythonPackage rec {
+    name = "recommonmark-${version}";
+    version = "0.2.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/recommonmark/${name}.tar.gz";
+      sha256 = "28c0babc79c487280fc5bf5daf1f3f1d734e9e4293ba929a7617524ff6911fd7";
+    };
+
+    buildInputs = with self; [ pytest sphinx ];
+    propagatedBuildInputs = with self; [ CommonMark docutils ];
+
+    meta = {
+      description = "A docutils-compatibility bridge to CommonMark";
+      homepage = https://github.com/rtfd/recommonmark;
+      license = licenses.mit;
+      maintainer = with maintainers; [ fridh ];
+    };
+
+  };
+
   redis = buildPythonPackage rec {
     name = "redis-2.10.3";
 
