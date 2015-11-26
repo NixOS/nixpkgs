@@ -2,12 +2,8 @@
 
 let
 
-  # string -> int; well, I call this a hack.
-  toInt = str:
-    builtins.fromJSON str;
-
   get_prefix_length = network:
-    toInt (builtins.elemAt (lib.splitString "/" network) 1);
+    lib.toInt (builtins.elemAt (lib.splitString "/" network) 1);
 
   is_ip4 = address_or_network:
     builtins.length (lib.splitString "." address_or_network) > 1;
