@@ -20,10 +20,9 @@ let
        (builtins.getAttr network networks);
 
   get_ip_configuration = version_filter: networks:
-    builtins.concatLists
-    (map
+    lib.concatMap
       (_ip_interface_configuration networks)
-      (builtins.filter version_filter (builtins.attrNames networks)));
+      (builtins.filter version_filter (builtins.attrNames networks));
 
 
   get_interface_ips = networks:
