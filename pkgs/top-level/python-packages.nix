@@ -4181,7 +4181,7 @@ in modules // {
       repo = "GateOne";
       sha256 ="0zp9vfs6sqbx4d0g45kkjinfmsl9zqwa6bhp3xd81wx3ph9yr1hq";
     };
-    propagatedBuildInputs = with pkgs.self; [tornado futures html5lib readline pkgs.openssl];
+    propagatedBuildInputs = with self; [tornado futures html5lib readline pkgs.openssl];
     meta = {
       homepage = https://liftoffsoftware.com/;
       description = "GateOne is a web-based terminal emulator and SSH client";
