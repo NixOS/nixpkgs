@@ -42,18 +42,17 @@ let
        (builtins.attrNames interfaces));
 
 
-
   # Configration for UDEV
 
   get_udev_interface_configuration = interfaces: interface_name:
-      ''
-      KERNEL=="eth*", ATTR{address}=="${(builtins.getAttr interface_name interfaces).mac}", NAME="eth${interface_name}"
-      '';
+    ''
+    KERNEL=="eth*", ATTR{address}=="${(builtins.getAttr interface_name interfaces).mac}", NAME="eth${interface_name}"
+    '';
 
   get_udev_configuration = interfaces:
-      map
-        (get_udev_interface_configuration interfaces)
-        (builtins.attrNames interfaces);
+    map
+      (get_udev_interface_configuration interfaces)
+      (builtins.attrNames interfaces);
 
 
   # Policy routing
