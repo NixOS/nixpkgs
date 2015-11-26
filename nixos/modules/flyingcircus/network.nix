@@ -68,10 +68,12 @@ let
     else 100;
 
   get_policy_routing_for_network = interfaces: interface_name: network:
-    ''
-    ip rule add priority ${builtins.toString (get_routing_priority interface_name)} from ${network} lookup ${interface_name}
-    ip route add default via ${builtins.getAttr network (builtins.getAttr interface_name interfaces).gateways} table ${interface_name} || true
-    '';
+    {
+      priority = get_routing_priority interface_name;
+      network = network;
+      interface = interface_name;
+      gateway = builtins.getAttr network (builtins.getAttr interface_name interfaces).gateways;
+    };
 
   get_policy_routing_for_interface = interfaces: interface_name:
     map
@@ -79,9 +81,17 @@ let
     (builtins.attrNames
       (builtins.getAttr interface_name interfaces).gateways);
 
+
+  render_policy_routing_rule = ruleset:
+    ''
+    ip rule add priority ${builtins.toString (ruleset.priority)} from ${ruleset.network} lookup ${ruleset.interface}
+    ip route add default via ${ruleset.gateway} table ${ruleset.interface} || true
+    '';
+
   get_policy_routing = interfaces:
-    builtins.concatLists
-      (map
+    map
+      render_policy_routing_rule
+      (lib.concatMap
         (get_policy_routing_for_interface interfaces)
         (builtins.attrNames interfaces));
 
