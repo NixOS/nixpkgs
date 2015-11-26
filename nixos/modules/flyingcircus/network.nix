@@ -117,6 +117,19 @@ let
     200 sdsl
     '';
 
+
+  # default route.
+
+  get_default_gateway = version_filter: interfaces:
+    (builtins.head
+    (builtins.sort
+      (ruleset_a: ruleset_b: builtins.lessThan ruleset_a.priority ruleset_b.priority)
+      (builtins.filter
+        (ruleset: version_filter ruleset.network)
+        (lib.concatMap
+          (get_policy_routing_for_interface interfaces)
+          (builtins.attrNames interfaces))))).gateway;
+
 in
 {
 
@@ -134,8 +147,14 @@ in
       else "default";
 
 
-  #  networking.defaultGateway = "172.20.1.1";
-  #  networking.defaultGateway6 = "2a02:238:f030:1c1::1";
+  networking.defaultGateway =
+    if config.enc ? parameters
+    then get_default_gateway is_ip4 config.enc.parameters.interfaces
+    else null;
+  networking.defaultGateway6 =
+    if config.enc ? parameters
+    then get_default_gateway is_ip6 config.enc.parameters.interfaces
+    else null;
 
   #  networking.nameservers = [
   #    "172.20.2.38"
