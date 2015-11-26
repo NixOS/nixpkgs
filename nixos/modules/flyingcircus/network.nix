@@ -11,15 +11,13 @@ let
   is_ip6 = address_or_network:
     builtins.length (lib.splitString ":" address_or_network) > 1;
 
-
-  _ip_configuration = network: ip_address:
-    {
-      address = ip_address;
-      prefixLength = get_prefix_length network;
-    };
-
   _ip_interface_configuration = networks: network:
-      map (_ip_configuration network) (builtins.getAttr network networks);
+      map (
+        ip_address: {
+          address = ip_address;
+          prefixLength = get_prefix_length network;
+        })
+       (builtins.getAttr network networks);
 
   get_ip_configuration = version_filter: networks:
     builtins.concatLists
