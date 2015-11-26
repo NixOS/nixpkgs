@@ -3363,6 +3363,8 @@ let
 
   vtun = callPackage ../tools/networking/vtun { };
 
+  weather = callPackage ../applications/misc/weather { };
+
   wal_e = callPackage ../tools/backup/wal-e { };
 
   watchman = callPackage ../development/tools/watchman { };
