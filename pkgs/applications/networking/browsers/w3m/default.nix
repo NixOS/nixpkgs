@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isSunOS "-lsocket -lnsl";
 
-  patches = [ ./glibc214.patch ]
+  patches = [ ./glibc214.patch ./RAND_egd.libressl.patch ]
     # Patch for the newer unstable boehm-gc 7.2alpha. Not all platforms use that
     # alpha. At the time of writing this, boehm-gc-7.1 is the last stable.
     ++ optional (boehmgc.name != "boehm-gc-7.1") [ ./newgc.patch ]
