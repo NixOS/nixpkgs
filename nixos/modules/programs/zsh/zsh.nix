@@ -163,6 +163,8 @@ in
 
     environment.systemPackages = [ pkgs.zsh ];
 
+    environment.pathsToLink = optionals cfg.enableCompletion [ "/share/zsh" ];
+
     #users.defaultUserShell = mkDefault "/run/current-system/sw/bin/zsh";
 
     environment.shells =
