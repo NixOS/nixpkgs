@@ -29,9 +29,12 @@
 
 , crossSystem ? null
 , platform ? null
+, minver ? null
 }:
 
 
+if minver == true then import ../../minver.nix
+else
 let config_ = config; platform_ = platform; in # rename the function arguments
 
 let
