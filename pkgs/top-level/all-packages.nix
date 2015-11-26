@@ -8277,7 +8277,7 @@ let
 
   wolfssl = callPackage ../development/libraries/wolfssl { };
 
-  openssl = openssl_1_0_1;
+  openssl = libressl_2_3;
 
   inherit (callPackages ../development/libraries/openssl {
       fetchurl = fetchurlBoot;
