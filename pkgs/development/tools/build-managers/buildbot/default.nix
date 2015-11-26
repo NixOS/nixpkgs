@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchurl, twisted, dateutil, jinja2
-, sqlalchemy , sqlalchemy_migrate
+, sqlalchemy , sqlalchemy_migrate_0_7
 , enableDebugClient ? false, pygobject ? null, pyGtkGlade ? null
 }:
 
@@ -9,12 +9,12 @@
 assert enableDebugClient -> pygobject != null && pyGtkGlade != null;
 
 buildPythonPackage (rec {
-  name = "buildbot-0.8.10";
+  name = "buildbot-0.8.12";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://pypi.python.org/packages/source/b/buildbot/${name}.tar.gz";
-    sha256 = "1x5513mjvd3mwwadawk6v3ca2wh5mcmgnn5h9jhq1jw1plp4v5n4";
+    sha256 = "1mn4h04sp6smr3ahqfflys15cpn13q9mfkapcs2jc4ppvxv6kdn6";
   };
 
   patchPhase =
@@ -25,12 +25,12 @@ buildPythonPackage (rec {
          sed -i "$i" \
              -e "s|/usr/bin/python|$(type -P python)|g ; s|/usr/bin/||g"
        done
+
+      sed -i 's/==/>=/' setup.py
     '';
 
-  buildInputs = [ ];
-
   propagatedBuildInputs =
-    [ twisted dateutil jinja2 sqlalchemy sqlalchemy_migrate
+    [ twisted dateutil jinja2 sqlalchemy_migrate_0_7
     ] ++ stdenv.lib.optional enableDebugClient [ pygobject pyGtkGlade ];
 
   # What's up with this?! 'trial' should be 'test', no?
@@ -51,12 +51,9 @@ buildPythonPackage (rec {
 
   meta = with stdenv.lib; {
     homepage = http://buildbot.net/;
-
     license = stdenv.lib.licenses.gpl2Plus;
-
     # Of course, we don't really need that on NixOS.  :-)
     description = "Continuous integration system that automates the build/test cycle";
-
     longDescription =
       '' The BuildBot is a system to automate the compile/test cycle
          required by most software projects to validate code changes.  By
@@ -79,7 +76,6 @@ buildPythonPackage (rec {
          encouraging them to be more careful about testing before checking
          in code.
       '';
-
     maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.all;
   };
