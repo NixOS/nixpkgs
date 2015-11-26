@@ -27,8 +27,6 @@ rec {
 
     alias patch=gpatch # pcre relied on this for patching binary files
 
-    alias cc=clang37
-
     # we need GNU cp for --reflink, need to alias all of coreutils
     alias basename=gbasename
     alias cat=gcat
