@@ -10,12 +10,27 @@ rec {
     aclSupport = false;
   });
 
-  curlMinimal = curl.override {
+  # We use wolfssl rather than openssl as it is much smaller and does
+  # not bring in any extra dependencies, but we must enable extra
+  # features of wolfssl that are required by curl.
+  wolfsslExtra = wolfssl.overrideDerivation (oldAttrs: {
+    configureFlags = [
+      "--enable-sslv3" # wolfSSLv3_client_method
+      "--enable-sep"  # wolfSSL_get_peer_certificate wolfSSL_X509_get_der
+    ];
+  });
+
+  # Minimal version of curl, with https support via wolfssl.
+  curlMinimal = (curl.override {
     http2Support = false;
     zlibSupport = false;
     sslSupport = false;
     scpSupport = false;
-  };
+  }).overrideDerivation (oldAttrs: {
+    configureFlags = oldAttrs.configureFlags ++ [
+      "--with-cyassl=${wolfsslExtra}"
+    ];
+  });
 
   busyboxMinimal = busybox.override {
     useMusl = true;
@@ -85,9 +100,10 @@ rec {
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
         cp ${curlMinimal}/bin/curl $out/bin
-        cp -d ${curlMinimal}/lib/libcurl* $out/lib
+        cp -d ${curlMinimal}/lib/libcurl.so* $out/lib
 
         cp -d ${gnugrep.pcre}/lib/libpcre*.so* $out/lib # needed by grep
+        cp -d ${wolfsslExtra}/lib/libwolfssl.so* $out/lib # needed by curl
 
         # Copy what we need of GCC.
         cp -d ${gcc.cc}/bin/gcc $out/bin
