@@ -43,7 +43,7 @@ rec {
 
   preHook = ''
     export NIX_IGNORE_LD_THROUGH_GCC=1
-    export NIX_DONT_SET_RPATH=1
+    # export NIX_DONT_SET_RPATH=1
     export NIX_NO_SELF_RPATH=1
     dontFixLibtool=1
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
@@ -118,7 +118,7 @@ rec {
     cc = import ../../build-support/cc-wrapper {
       inherit stdenv;
       nativeTools   = true;
-      nativePrefix  = "/usr/local/bin";
+      nativePrefix  = "/usr/local";
       nativeLibc    = true;
       cc            = stage2.stdenv.cc; #pkgs.llvmPackages.clang-unwrapped; 
       isClang       = true;
