@@ -7948,6 +7948,8 @@ let
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
+  wolfssl = callPackage ../development/libraries/wolfssl { };
+
   openssl = callPackage ../development/libraries/openssl {
     fetchurl = fetchurlBoot;
     cryptodevHeaders = linuxPackages.cryptodev.override {
