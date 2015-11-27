@@ -25,9 +25,9 @@
       pruviloj = [ self.prelude self.base ];
     };
 
-    files = builtins.filter (n: n != null) (pkgs.lib.mapAttrsToList (name: type: let
+    files = builtins.filter (n: n != "default") (pkgs.lib.mapAttrsToList (name: type: let
       m = builtins.match "(.*)\.nix" name;
-    in if m == null then null else builtins.head m) (builtins.readDir ./.));
+    in if m == null then "default" else builtins.head m) (builtins.readDir ./.));
   in (builtins.listToAttrs (map (name: { inherit name; value = callPackage (./. + "/${name}.nix") {}; }) files)) // {
     inherit idris callPackage;
 
