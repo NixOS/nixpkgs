@@ -924,4 +924,7 @@ self: super: {
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [ pkgs.ncurses ];
   });
 
+  # https://github.com/fpco/stackage/issues/1004
+  gtk2hs-buildtools = super.gtk2hs-buildtools.override { alex = self.alex_3_1_4; };
+
 }
