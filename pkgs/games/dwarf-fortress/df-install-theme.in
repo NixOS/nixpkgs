@@ -1,0 +1,91 @@
+#!@stdenv_shell@
+
+set -e
+
+data_dir=${XDG_DATA_HOME:-$HOME/.local/share}/df_linux
+pkg_dir=@prefix@/share/df_linux
+
+function install_data_files() {
+  rm -rf $data_dir/data/config
+  if [[ -d "$pkg_dir/data/config" ]]; then
+    cp -r "$pkg_dir/data/config" "$data_dir/data/config"
+    chmod -R u+w "$data_dir/data/config"
+  fi
+  cp $pkg_dir/data/art/* $data_dir/data/art/
+  chmod -R u+w "$data_dir/data/art"
+}
+
+function install_init_files() {
+  for f in $(ls $data_dir/data/init/*.txt); do
+    if [[ ! -s "$f" ]]; then
+      rm "$f"
+    fi
+  done
+  rm -f $data_dir/data/init/*.old.txt
+
+  cp -rT $pkg_dir/data/init $data_dir/data/init
+  chmod -R u+rw $data_dir/data/init
+}
+
+function install_savegame_raws() {
+  if [ ! -d $data_dir/data/save ]; then
+    return
+  fi
+
+  for savegame in $data_dir/data/save/*; do
+    if [ -d "$savegame" -a "$(basename ${savegame})" != "current" ]; then
+      rm -rf $savegame/raw
+      cp -r "$pkg_dir/raw" "$savegame/raw"
+      chmod -R u+w "$savegame/raw"
+    fi
+  done
+}
+
+function install_theme() {
+  if [[ ! -d "$data_dir" ]]; then
+    echo "Dwarf Fortress data directory not found. Exiting."
+    exit 1
+  fi
+  install_data_files
+  install_init_files
+  install_savegame_raws
+}
+
+cat << EOF
+Installing the Dwarf Fortress theme.
+
+This will overwrite your init files and raw files for your saved games,
+among others.
+
+The directories that will be affected are:
+* ${data_dir}/data/init
+* ${data_dir}/data/save/*/raw
+* ${data_dir}/data/config
+* ${data_dir}/data/art
+
+Would you like to continue?
+EOF
+
+select choice in "Yes" "No"; do
+  case "$choice" in
+    "Yes")
+      install_theme
+      echo "Done."
+      exit 0
+    ;;
+    "No")
+      echo "Exiting."
+      exit 1
+    ;;
+    *)
+      if [ "warned" == "y" ]; then
+        echo "Invalid choice. Exiting."
+        exit 1
+      else
+        echo "Invalid choice."
+        warned="y"
+      fi
+    ;;
+  esac
+done
+

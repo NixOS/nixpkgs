@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, cmake, glew, ncurses
+{ stdenv, fetchgit, fetchurl, fetchzip, cmake, glew, ncurses
 , SDL, SDL_image, SDL_ttf, gtk2, glib
 , mesa, openal, pango, atk, gdk_pixbuf, glibc, libsndfile
 # begin dfhack-only parameters
@@ -8,11 +8,13 @@
 , zlib
 # end dfhack-only parameters
 , enableDFHack ? false
+, theme ? null
 }:
 
 let
   baseVersion = "40";
   patchVersion = "24";
+
   srcs = {
     df_unfuck = fetchgit {
       url = "https://github.com/svenstaro/dwarf_fortress_unfuck";
@@ -34,6 +36,17 @@ let
 
   dfHackWorksWithCurrentVersion = true;
   dfHackEnabled = dfHackWorksWithCurrentVersion && enableDFHack;
+
+  themePkg = if (theme != null)
+    then
+      import (./. + ("/themes/" + theme + ".nix")) {
+        dfBaseVersion = baseVersion;
+        dfPatchVersion = patchVersion;
+        inherit fetchzip;
+      }
+    else
+      {}
+    ;
 
 in
 
@@ -65,10 +78,13 @@ stdenv.mkDerivation rec {
     perl
     zlib
   ];
-  src = "${srcs.df_unfuck} ${srcs.df}" + stdenv.lib.optionalString dfHackEnabled " ${srcs.dfhack}";
+  src = "${srcs.df_unfuck} ${srcs.df}"
+      + (stdenv.lib.optionalString dfHackEnabled " ${srcs.dfhack}")
+      + (stdenv.lib.optionalString (themePkg ? src) " ${themePkg.src}");
 
   sourceRoot = srcs.df_unfuck.name;
   dfHackSourceRoot = srcs.dfhack.name;
+  themeSourceRoot = if (themePkg ? sourceRoot) then themePkg.sourceRoot else "";
 
   cmakeFlags = [
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib}/lib/glib-2.0/include"
@@ -84,6 +100,7 @@ stdenv.mkDerivation rec {
   installDfDataContentToHome = ./install-df-data-content-to-home.sh;
   exportLibsTemplate = ./export-libs.sh.in;
   exportWorkaround = ./export-workaround.sh;
+  dfInstallThemeTemplate = ./df-install-theme.in;
 
   postUnpack = stdenv.lib.optionalString dfHackEnabled ''
     if [ "$dontMakeSourcesWritable" != 1 ]; then
@@ -134,6 +151,11 @@ stdenv.mkDerivation rec {
     touch $out/share/df_linux/hash.md5.patched
     touch $out/share/df_linux/full-hash-patched.md5
 
+    substitute $dfInstallThemeTemplate $out/bin/df-install-theme \
+        --subst-var-by stdenv_shell ${stdenv.shell} \
+        --subst-var prefix
+    chmod 755 $out/bin/df-install-theme
+
     mkdir -p $out/share/df_linux/shell
     cp $installDfDataToHome $out/share/df_linux/shell/install-df-data-to-home.sh
     cp $installDfhackDataToHome $out/share/df_linux/shell/install-dfhack-data-to-home.sh
@@ -154,7 +176,6 @@ stdenv.mkDerivation rec {
     substitute $dwarfFortressTemplate $out/bin/dwarf-fortress \
         --subst-var-by stdenv_shell ${stdenv.shell} \
         --subst-var prefix
-
     chmod 755 $out/bin/dwarf-fortress
 
     popd
@@ -187,7 +208,7 @@ stdenv.mkDerivation rec {
 
     export sourceRoot=$originalSourceRoot
     unset originalSourceRoot
-  '';
+  '' + stdenv.lib.optionalString (themePkg ? installPhase) themePkg.installPhase;
 
   fixupPhase = ''
     # Fix rpath
