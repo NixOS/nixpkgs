@@ -3230,4 +3230,27 @@ let
     '';
   };
 
+  color = buildFromGitHub {
+    rev      = "9aae6aaa22315390f03959adca2c4d395b02fcef";
+    owner    = "fatih";
+    repo     = "color";
+    sha256   = "1vjcgx4xc0h4870qzz4mrh1l0f07wr79jm8pnbp6a2yd41rm8wjp";
+    propagatedBuildInputs = [ net go-isatty ];
+    buildInputs = [ ansicolor go-colorable ];
+  };
+
+  pup = buildFromGitHub {
+    rev      = "9693b292601dd24dab3c04bc628f9ae3fa72f831";
+    owner    = "EricChiang";
+    repo     = "pup";
+    sha256   = "04j3fy1vk6xap8ad7k3c05h9b5mg2n1vy9vcyg9rs02cb13d3sy0";
+    propagatedBuildInputs = [ net ];
+    buildInputs = [ go-colorable color ];
+    postPatch = ''
+      grep -sr github.com/ericchiang/pup/Godeps/_workspace/src/ |
+        cut -f 1 -d : |
+        sort -u |
+        xargs -d '\n' sed -i -e s,github.com/ericchiang/pup/Godeps/_workspace/src/,,g
+    '';
+  };
 }; in self
