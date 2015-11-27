@@ -75,7 +75,7 @@ in
 
       outputsToLink = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "doc" ];
         description = "List of package outputs to be symlinked into <filename>/run/current-system/sw</filename>.";
       };
@@ -120,18 +120,16 @@ in
         "/share/vim-plugins"
       ];
 
+    environment.outputsToLink = [ "bin" "lib" "out" ];
+
     system.path = pkgs.buildEnv {
       name = "system-path";
-      paths = let
-      inherit (config.environment) pathsToLink outputsToLink;
-        #outputs TODO: some code already merged by Eelco? make it user-customizable?
-        pkgOutputFun = pkg: lib.filter (p: p!=null) [
-          (pkg.bin or (pkg.out or pkg))
-          (pkg.man or null)
-          (pkg.info or null)
-          (pkg.doc or null)
-        ];
-        in lib.concatMap pkgOutputFun config.environment.systemPackages;
+      paths =
+        lib.filter (drv: drv != null && drv != (drv.dev or null))
+          (lib.concatMap (drv:
+            [ drv ] ++ map (outputName: drv.${outputName}.outPath or null) config.environment.outputsToLink)
+           config.environment.systemPackages);
+      inherit (config.environment) pathsToLink;
       ignoreCollisions = true;
       # !!! Hacky, should modularise.
       postBuild =
