@@ -343,6 +343,7 @@
   ./services/networking/searx.nix
   ./services/networking/seeks.nix
   ./services/networking/skydns.nix
+  ./services/networking/shairport-sync.nix
   ./services/networking/shout.nix
   ./services/networking/softether.nix
   ./services/networking/spiped.nix
