@@ -1,4 +1,4 @@
-{ idris, buildIdrisPackage }: name: deps: buildIdrisPackage (args: {
+{ idris, build-idris-package }: name: deps: build-idris-package (args: {
   inherit name;
 
   propagatedBuildInputs = deps;

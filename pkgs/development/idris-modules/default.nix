@@ -13,9 +13,7 @@
 
     callPackage = callPackageWithScope defaultScope;
 
-    buildBuiltinPackage = callPackage ./build-builtin-package.nix {};
-
-    builtins = pkgs.lib.mapAttrs buildBuiltinPackage {
+    builtins_ = pkgs.lib.mapAttrs self.build-builtin-package {
       prelude = [];
 
       base = [ self.prelude ];
@@ -26,13 +24,13 @@
 
       pruviloj = [ self.prelude self.base ];
     };
-  in {
-    inherit idris;
 
-    withPackages = callPackage ./with-packages-wrapper.nix {};
+    files = builtins.filter (n: n != null) (pkgs.lib.mapAttrsToList (name: type: let
+      m = builtins.match "(.*)\.nix" name;
+    in if m == null then null else builtins.head m) (builtins.readDir ./.));
+  in (builtins.listToAttrs (map (name: { inherit name; value = callPackage (./. + "/${name}.nix") {}; }) files)) // {
+    inherit idris callPackage;
 
-    buildIdrisPackage = callPackage ./build-idris-package.nix {};
-
-    builtins = pkgs.lib.mapAttrsToList (name: value: value) builtins;
-  } // builtins;
+    builtins = pkgs.lib.mapAttrsToList (name: value: value) builtins_;
+  } // builtins_;
 in fix' (extends overrides idrisPackages)
