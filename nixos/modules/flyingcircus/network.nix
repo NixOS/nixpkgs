@@ -130,6 +130,15 @@ let
           (get_policy_routing_for_interface interfaces)
           (builtins.attrNames interfaces))))).gateway;
 
+
+  ns_by_location = {
+    # ns.$location.gocept.net, ns2.$location.gocept.net
+    dev = ["2a02:238:f030:1c2::53" "2a02:238:f030:1c3::53"];
+    rzob = ["195.62.125.5" "2a02:248:101:62::32" "195.62.125.135" "2a02:248:101:63::53"];
+    rzrl1 = ["2a02:2028:1007:8002::53" "2a02:2028:1007:8003::53"];
+    whq = ["212.122.41.143" "2a02:238:f030:102::102a"  "212.122.41.169" "2a02:238:f030:103::53"];
+  };
+
 in
 {
 
@@ -156,10 +165,14 @@ in
     then get_default_gateway is_ip6 config.enc.parameters.interfaces
     else null;
 
-  #  networking.nameservers = [
-  #    "172.20.2.38"
-  #    "172.30.3.10"
-  #  ];
+  # Only set nameserver if there is an enc set.
+  networking.nameservers =
+  if config.enc ? parameters
+  then
+    if builtins.hasAttr config.enc.parameters.location ns_by_location
+    then builtins.getAttr config.enc.parameters.location ns_by_location
+    else []
+  else [];
 
   # If there is no enc data, we are probably not on FC platform.
   networking.search =
