@@ -160,10 +160,13 @@ in
   #    "172.20.2.38"
   #    "172.30.3.10"
   #  ];
-  #  networking.search = [
-  #    "dev.gocept.net"
-  #    "gocept.net"
-  #  ];
+
+  # If there is no enc data, we are probably not on FC platform.
+  networking.search =
+    if config.enc ? parameters
+    then ["${config.enc.parameters.location}.gocept.net"
+          "gocept.net"]
+    else [];
 
   networking.interfaces =
     if config.enc ? parameters
