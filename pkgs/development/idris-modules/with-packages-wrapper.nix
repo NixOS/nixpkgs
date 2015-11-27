@@ -1,7 +1,19 @@
-{ stdenv, idris, packages }: stdenv.mkDerivation {
+{ stdenv, idris }: buildInputs: stdenv.mkDerivation {
   inherit (idris) name;
 
-  inherit packages;
+  inherit buildInputs;
+
+  preHook = ''
+    mkdir -p $out/lib/${idris.name}
+
+    installIdrisLib () {
+      if [ -d $1/lib/${idris.name} ]; then
+        ln -sv $1/lib/${idris.name}/* $out/lib/${idris.name}
+      fi
+    }
+
+    envHooks+=(installIdrisLib)
+  '';
 
   unpackPhase = ''
     cat >idris.c <<EOF
@@ -24,12 +36,6 @@
   '';
 
   installPhase = ''
-    mkdir -p $out/lib/${idris.name}
-    for package in $packages
-    do
-      ln -sv $package/lib/${idris.name}/* $out/lib/${idris.name}
-    done
-
     mkdir -p $out/bin
     mv idris $out/bin
   '';

@@ -12,7 +12,27 @@
     defaultScope = mkScope self;
 
     callPackage = callPackageWithScope defaultScope;
+
+    buildBuiltinPackage = callPackage ./build-builtin-package.nix {};
+
+    builtins = pkgs.lib.mapAttrs buildBuiltinPackage {
+      prelude = [];
+
+      base = [ self.prelude ];
+
+      contrib = [ self.prelude self.base ];
+
+      effects = [ self.prelude self.base ];
+
+      pruviloj = [ self.prelude self.base ];
+    };
   in {
-    withPackages = packages: callPackage ./with-packages-wrapper.nix { inherit packages idris; };
-  };
+    inherit idris;
+
+    withPackages = callPackage ./with-packages-wrapper.nix {};
+
+    buildIdrisPackage = callPackage ./build-idris-package.nix {};
+
+    builtins = pkgs.lib.mapAttrsToList (name: value: value) builtins;
+  } // builtins;
 in fix' (extends overrides idrisPackages)
