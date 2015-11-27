@@ -776,11 +776,6 @@ let
         go generate ./commands
       popd
     '';
-
-    postInstall = ''
-      mkdir -p $bin/share
-      mv $bin/bin/{man,script} $bin/share
-    '';
   };
 
   glide = buildFromGitHub {
