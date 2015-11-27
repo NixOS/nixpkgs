@@ -1,7 +1,9 @@
-{ stdenv, idris }: buildInputs: stdenv.mkDerivation {
+# Build a version of idris with a set of packages visible
+# packages: The packages visible to idris
+{ stdenv, idris }: packages: stdenv.mkDerivation {
   inherit (idris) name;
 
-  inherit buildInputs;
+  buildInputs = packages;
 
   preHook = ''
     mkdir -p $out/lib/${idris.name}

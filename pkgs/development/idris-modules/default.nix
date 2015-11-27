@@ -28,9 +28,14 @@
     files = builtins.filter (n: n != "default") (pkgs.lib.mapAttrsToList (name: type: let
       m = builtins.match "(.*)\.nix" name;
     in if m == null then "default" else builtins.head m) (builtins.readDir ./.));
-  in (builtins.listToAttrs (map (name: { inherit name; value = callPackage (./. + "/${name}.nix") {}; }) files)) // {
+  in (builtins.listToAttrs (map (name: {
+    inherit name;
+
+    value = callPackage (./. + "/${name}.nix") {};
+  }) files)) // {
     inherit idris callPackage;
 
+    # A list of all of the libraries that come with idris
     builtins = pkgs.lib.mapAttrsToList (name: value: value) builtins_;
   } // builtins_;
 in fix' (extends overrides idrisPackages)

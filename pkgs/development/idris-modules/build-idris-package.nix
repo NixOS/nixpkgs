@@ -1,4 +1,8 @@
-{ stdenv, idris, gmp }: argf: let args = {
+# Build an idris package
+#
+# args: Additional arguments to pass to mkDerivation. Generally should include at least
+#       name and src.
+{ stdenv, idris, gmp }: args: stdenv.mkDerivation ({
   preHook = ''
     mkdir idris-libs
     export IDRIS_LIBRARY_PATH=$PWD/idris-libs
@@ -33,4 +37,4 @@
   '';
 
   buildInputs = [ gmp ];
-}; in stdenv.mkDerivation (args // (argf args))
+} // args)
