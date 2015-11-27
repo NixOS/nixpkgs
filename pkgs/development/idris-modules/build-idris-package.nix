@@ -1,4 +1,4 @@
-{ stdenv, idris }: argf: let args = {
+{ stdenv, idris, gmp }: argf: let args = {
   preHook = ''
     mkdir idris-libs
     export IDRIS_LIBRARY_PATH=$PWD/idris-libs
@@ -31,4 +31,6 @@
   installPhase = ''
     ${idris}/bin/idris --install *.ipkg
   '';
+
+  buildInputs = [ gmp ];
 }; in stdenv.mkDerivation (args // (argf args))
