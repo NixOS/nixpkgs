@@ -4121,6 +4121,8 @@ let
 
   icedtea_web = icedtea8_web;
 
+  idrisPackages = callPackage ../development/idris-modules { inherit (haskellPackages) idris; };
+
   ikarus = callPackage ../development/compilers/ikarus { };
 
   intercal = callPackage ../development/compilers/intercal { };
