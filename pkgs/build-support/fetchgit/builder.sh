@@ -6,10 +6,18 @@ source $stdenv/setup
 
 header "exporting $url (rev $rev) into $out"
 
-$fetcher --builder --url "$url" --out "$out" --rev "$rev" \
+success=`$fetcher --builder --url "$url" --out "$out" --rev "$rev" \
   ${leaveDotGit:+--leave-dotGit} \
   ${deepClone:+--deepClone} \
   ${fetchSubmodules:+--fetch-submodules} \
-  ${branchName:+--branch-name "$branchName"}
+  ${branchName:+--branch-name "$branchName"}`
+
+if [ success != 0 ]; then
+    export url=$url
+    export outputHash=$outputHash
+    export fetchType=$fetchType
+    source ../fetchurl/builder.sh
+    tryHashedMirrors
+fi
 
 stopNest
