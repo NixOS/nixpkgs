@@ -119,7 +119,11 @@ $xorriso -output $out/iso/$isoName
 
 if test -n "$usbBootable"; then
     echo "Making image hybrid..."
-    isohybrid --uefi $out/iso/$isoName
+    if test -n "$efiBootable"; then
+        isohybrid --uefi $out/iso/$isoName
+    else
+        isohybrid $out/iso/$isoName
+    fi
 fi
 
 if test -n "$compressImage"; then
