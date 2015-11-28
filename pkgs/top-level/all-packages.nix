@@ -1504,6 +1504,8 @@ let
 
   fdk_aac = callPackage ../development/libraries/fdk-aac { };
 
+  flameGraph = callPackage ../development/tools/flamegraph { };
+
   flvtool2 = callPackage ../tools/video/flvtool2 { };
 
   fontforge = lowPrio (callPackage ../tools/misc/fontforge { });
