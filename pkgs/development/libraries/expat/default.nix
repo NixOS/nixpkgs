@@ -11,7 +11,6 @@ stdenv.mkDerivation rec {
   patches = [ ./CVE-2015-1283.patch ];
 
   configureFlags = stdenv.lib.optionalString stdenv.isFreeBSD "--with-pic";
-  # NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.isFreeBSD) "-fPIC";
 
   meta = with stdenv.lib; {
     homepage = http://www.libexpat.org/;

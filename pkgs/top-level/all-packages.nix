@@ -6099,8 +6099,8 @@ let
 
   aprutil = callPackage ../development/libraries/apr-util {
     bdbSupport = true;
-    db = if stdenv.isFreeBSD then db44 else db;
-    # XXX: only the db_158 interface was available through
+    db = if stdenv.isFreeBSD then db47 else db;
+    # XXX: only the db_185 interface was available through
     #      apr with db58 on freebsd (nov 2015), for unknown reasons
   };
 
@@ -8163,6 +8163,9 @@ let
     mesa = mesa_noglu;
     inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
     cups = if stdenv.isLinux then cups else null;
+
+    # XXX: mariadb doesn't built on fbsd as of nov 2015
+    mysql = if (!stdenv.isFreeBSD) then mysql else null;
   };
 
   qt48Full = appendToName "full" (qt48.override {
@@ -9559,9 +9562,10 @@ let
     ruby = ruby_2_1;
   };
 
-  shishi = if stdenv.isFreeBSD
-  then callPackage ../servers/shishi { pam = null; }
-  else callPackage ../servers/shishi { };
+  shishi = callPackage ../servers/shishi {
+      pam = if stdenv.isLinux then pam else null;
+      # see also openssl, which has/had this same trick
+  };
 
   sipcmd = callPackage ../applications/networking/sipcmd { };
 

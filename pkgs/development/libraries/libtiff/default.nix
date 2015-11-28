@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.isFreeBSD;
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Library and utilities for working with the TIFF image file format";

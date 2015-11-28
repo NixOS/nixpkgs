@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256= "11a615225baa5f8bb686824423f50e4427acd3f70d394765bdff32801f0fd5b0";
   };
 
-  configureFlags = stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
+  configureFlags = stdenv.lib.optionalString stdenv.isFreeBSD "--with-pic";
 
   meta = with stdenv.lib; {
     homepage = http://www.ossp.org/pkg/lib/uuid/;

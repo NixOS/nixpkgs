@@ -7,6 +7,7 @@ stdenv.mkDerivation (rec {
   src = fetchsvn {
     url = svn://svn.code.sf.net/p/elftoolchain/code/trunk;
     rev = (stdenv.lib.strings.toInt version);
+    name = "elftoolchain-${version}";
   };
 
   buildInputs = [ gnum4 tet ];
