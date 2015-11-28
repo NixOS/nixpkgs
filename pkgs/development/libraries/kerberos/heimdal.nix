@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig python perl yacc flex ]
     ++ (with perlPackages; [ JSON ])
     ++ optional (!libOnly) texinfo;
-  buildInputs = [ libcap_ng sqlite openssl db libedit ]
+  buildInputs = (if (!stdenv.isFreeBSD) then [ libcap_ng db ] else []) ++ [ sqlite openssl libedit ]
     ++ optionals (!libOnly) [ openldap pam ];
 
   ## ugly, X should be made an option
@@ -31,14 +31,15 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--enable-hdb-openldap-module"
-    "--with-capng"
     "--with-sqlite3=${sqlite}"
-    "--with-berkeley-db=${db}"
     "--with-libedit=${libedit}"
     "--with-openssl=${openssl}"
     "--without-x"
   ] ++ optionals (!libOnly) [
     "--with-openldap=${openldap}"
+  ] ++ optionals (!stdenv.isFreeBSD) [
+    "--with-berkeley-db=${db}"
+    "--with-capng"
   ];
 
   buildPhase = optionalString libOnly ''
@@ -83,7 +84,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An implementation of Kerberos 5 (and some more stuff)";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.freebsd;
     maintainers = with maintainers; [ wkennington ];
   };
 

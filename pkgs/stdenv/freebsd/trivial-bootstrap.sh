@@ -3,7 +3,7 @@
 echo Building the trivial bootstrap environment...
 
 # needed FreeBSD packages:
-# findutils gcpio gawk gnugrep coreutils bash gsed gtar gmake xar binutils gpatch lbzip2
+# findutils gcpio gawk gnugrep coreutils bash gsed gtar gmake xar binutils gpatch lbzip2 diffutils
 
 $mkdir -p $out/bin
 
@@ -21,6 +21,12 @@ ln -s /bin/sh
 ln -s /usr/local/bin/gmake make
 
 ln -s /usr/local/bin/lbzip2
+
+ln -s /usr/local/bin/gdiff diff
+
+ln -s /usr/bin/locale
+
+ln -s /usr/bin/more
 
 ln -s /usr/bin/bzip2
 ln -s /usr/bin/bunzip2

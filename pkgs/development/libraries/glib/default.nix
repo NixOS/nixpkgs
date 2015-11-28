@@ -63,8 +63,12 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ pcre zlib libffi libiconv ]
     ++ libintlOrEmpty;
 
+  LIBELF_CFLAGS = optional stdenv.isFreeBSD "-I${libelf}";
+  LIBELF_LIBS = optional stdenv.isFreeBSD "-L${libelf} -lelf";
+
   configureFlags =
     optional stdenv.isDarwin "--disable-compile-warnings"
+    ++ optional stdenv.isFreeBSD "--with-libiconv=gnu"
     ++ optional stdenv.isSunOS ["--disable-modular-tests" "--with-libiconv"];
 
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl"

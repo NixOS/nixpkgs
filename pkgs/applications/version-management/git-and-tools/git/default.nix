@@ -34,7 +34,8 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optionals guiSupport [tcl tk];
 
   # required to support pthread_cancel()
-  NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
+  NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.cc.isClang) "-lgcc_s"
+              + stdenv.lib.optionalString (stdenv.isFreeBSD) "-lthr";
 
   # without this, git fails when trying to check for /etc/gitconfig existence
   propagatedSandboxProfile = stdenv.lib.sandbox.allowDirectoryList "/etc";

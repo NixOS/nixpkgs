@@ -6099,6 +6099,9 @@ let
 
   aprutil = callPackage ../development/libraries/apr-util {
     bdbSupport = true;
+    db = if stdenv.isFreeBSD then db44 else db;
+    # XXX: only the db_158 interface was available through
+    #      apr with db58 on freebsd (nov 2015), for unknown reasons
   };
 
   assimp = callPackage ../development/libraries/assimp { };
@@ -6277,7 +6280,9 @@ let
 
   cwiid = callPackage ../development/libraries/cwiid { };
 
-  cyrus_sasl = callPackage ../development/libraries/cyrus-sasl { };
+  cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
+    kerberos = if stdenv.isFreeBSD then libheimdal else kerberos;
+  };
 
   # Make bdb5 the default as it is the last release under the custom
   # bsd-like license
@@ -8526,6 +8531,8 @@ let
     python = python2;
   };
 
+  tet = callPackage ../development/tools/misc/tet { };
+
   thrift = callPackage ../development/libraries/thrift { };
 
   tidyp = callPackage ../development/libraries/tidyp { };
@@ -9552,7 +9559,9 @@ let
     ruby = ruby_2_1;
   };
 
-  shishi = callPackage ../servers/shishi { };
+  shishi = if stdenv.isFreeBSD
+  then callPackage ../servers/shishi { pam = null; }
+  else callPackage ../servers/shishi { };
 
   sipcmd = callPackage ../applications/networking/sipcmd { };
 

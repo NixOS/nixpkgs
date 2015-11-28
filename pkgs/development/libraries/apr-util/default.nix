@@ -3,6 +3,7 @@
 , bdbSupport ? false, db
 , ldapSupport ? !stdenv.isCygwin, openldap
 , libiconv
+, cyrus_sasl, autoreconfHook
 }:
 
 assert sslSupport -> openssl != null;
@@ -19,19 +20,24 @@ stdenv.mkDerivation rec {
     sha256 = "0bn81pfscy9yjvbmyx442svf43s6dhrdfcsnkpxz43fai5qk5kx6";
   };
 
+  patches = stdenv.lib.optionals stdenv.isFreeBSD [ ./include-static-dependencies.patch ];
+
+  buildInputs = stdenv.lib.optionals stdenv.isFreeBSD [ autoreconfHook ];
+
   configureFlags = ''
     --with-apr=${apr} --with-expat=${expat}
     ${optionalString (!stdenv.isCygwin) "--with-crypto"}
     ${stdenv.lib.optionalString sslSupport "--with-openssl=${openssl}"}
     ${stdenv.lib.optionalString bdbSupport "--with-berkeley-db=${db}"}
-    ${stdenv.lib.optionalString ldapSupport "--with-ldap"}${
+    ${stdenv.lib.optionalString ldapSupport "--with-ldap=ldap"}${
       optionalString stdenv.isCygwin "--without-pgsql --without-sqlite2 --without-sqlite3 --without-freetds --without-berkeley-db --without-crypto"}
   '';
 
   propagatedBuildInputs = [ makeWrapper apr expat libiconv ]
     ++ optional sslSupport openssl
     ++ optional bdbSupport db
-    ++ optional ldapSupport openldap;
+    ++ optional ldapSupport openldap
+    ++ optional stdenv.isFreeBSD cyrus_sasl;
 
   # Give apr1 access to sed for runtime invocations
   postInstall = ''
