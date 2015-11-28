@@ -21,7 +21,7 @@ in
         description = ''
           Whether to enable the Syncthing, self-hosted open-source alternative
           to Dropbox and BittorrentSync. Initial interface will be
-          available on http://127.0.0.1:8080/.
+          available on http://127.0.0.1:8384/.
         '';
       };
 

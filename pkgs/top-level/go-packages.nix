@@ -2910,12 +2910,11 @@ let
   };
 
   syncthing = buildFromGitHub rec {
-    version = "0.11.25";
+    version = "0.12.2";
     rev = "v${version}";
     owner = "syncthing";
     repo = "syncthing";
-    sha256 = "17phkj0dxzc1j755ddpf15rq34yp52pw2lx9kpg7gyc9qp0pzacl";
-    doCheck = false; # Tests are currently broken for 32-bit but they are benign
+    sha256 = "0jav0ccmin7xk61qj2lqa0jdpl6xsqsrfrm8inpc1y8r0j8pn01g";
     buildInputs = [
       go-lz4 du luhn xdr snappy ratelimit osext syncthing-protocol relaysrv
       goleveldb suture qart crypto net text
