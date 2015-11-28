@@ -88,10 +88,8 @@ let
               require 'rubygems/package'
               require 'fileutils'
 
-              if defined?(Encoding.default_internal)
-                Encoding.default_internal = Encoding::UTF_8
-                Encoding.default_external = Encoding::UTF_8
-              end
+              Encoding.default_internal = Encoding::UTF_8
+              Encoding.default_external = Encoding::UTF_8
 
               if Gem::VERSION < '2.0'
                 load "${./package-1.8.rb}"

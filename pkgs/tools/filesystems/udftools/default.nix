@@ -1,51 +1,24 @@
-x@{builderDefsPackage
-  , ncurses, readline
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, ncurses, readline }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="udftools";
-    version="1.0.0b3";
-    name="${baseName}-${version}";
-    project="linux-udf";
-    url="mirror://sourceforge/${project}/${baseName}/${version}/${name}.tar.gz";
-    hash="180414z7jblby64556i8p24rcaas937zwnyp1zg073jdin3rw1y5";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  name = "udftools-${version}";
+  version = "1.0.0b3";
+  src = fetchurl {
+    url = "mirror://sourceforge/linux-udf/udftools/${version}/${name}.tar.gz";
+    sha256 = "180414z7jblby64556i8p24rcaas937zwnyp1zg073jdin3rw1y5";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ ncurses readline ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["fixIncludes" "doConfigure" "doMakeInstall"];
-      
-  fixIncludes = a.fullDepEntry ''
+  preConfigure = ''
     sed -e '1i#include <limits.h>' -i cdrwtool/cdrwtool.c -i pktsetup/pktsetup.c
     sed -e 's@[(]char[*][)]spm [+]=@spm = ((char*) spm) + @' -i wrudf/wrudf.c
-  '' ["doUnpack" "minInit"];
+  '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "UDF tools";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
-  passthru = {
-  };
-}) x
-
+}

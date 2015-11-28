@@ -8,25 +8,9 @@ let
 
   stateDir = "/var/lib/chrony";
 
-  chronyUser = "chrony";
+  keyFile = "/etc/chrony.keys";
 
   cfg = config.services.chrony;
-
-  configFile = pkgs.writeText "chrony.conf" ''
-    ${toString (map (server: "server " + server + "\n") cfg.servers)}
-
-    ${optionalString cfg.initstepslew.enabled ''
-      initstepslew ${toString cfg.initstepslew.threshold} ${toString (map (server: server + " ") cfg.initstepslew.servers)}
-    ''}
-
-    driftfile ${stateDir}/chrony.drift
-
-    ${optionalString (!config.time.hardwareClockInLocalTime) "rtconutc"}
-
-    ${cfg.extraConfig}
-  '';
-
-  chronyFlags = "-m -f ${configFile} -u ${chronyUser}";
 
 in
 
@@ -47,12 +31,7 @@ in
       };
 
       servers = mkOption {
-        default = [
-          "0.nixos.pool.ntp.org"
-          "1.nixos.pool.ntp.org"
-          "2.nixos.pool.ntp.org"
-          "3.nixos.pool.ntp.org"
-        ];
+        default = config.services.ntp.servers;
         description = ''
           The set of NTP servers from which to synchronise.
         '';
@@ -90,28 +69,60 @@ in
     # Make chronyc available in the system path
     environment.systemPackages = [ pkgs.chrony ];
 
+    environment.etc."chrony.conf".text =
+      ''
+        ${concatMapStringsSep "\n" (server: "server " + server) cfg.servers}
+
+        ${optionalString
+          cfg.initstepslew.enabled
+          "initstepslew ${toString cfg.initstepslew.threshold} ${concatStringsSep " " cfg.initstepslew.servers}"
+        }
+
+        driftfile ${stateDir}/chrony.drift
+
+        keyfile ${keyFile}
+        generatecommandkey
+
+        ${optionalString (!config.time.hardwareClockInLocalTime) "rtconutc"}
+
+        ${cfg.extraConfig}
+      '';
+
+    users.extraGroups = singleton
+      { name = "chrony";
+        gid = config.ids.gids.chrony;
+      };
+
     users.extraUsers = singleton
-      { name = chronyUser;
+      { name = "chrony";
         uid = config.ids.uids.chrony;
+        group = "chrony";
         description = "chrony daemon user";
         home = stateDir;
       };
 
-    jobs.chronyd =
-      { description = "chrony daemon";
+    systemd.services.ntpd.enable = false;
+
+    systemd.services.chronyd =
+      { description = "chrony NTP daemon";
 
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
+        conflicts = [ "ntpd.service" "systemd-timesyncd.service" ];
 
-        path = [ chrony ];
+        path = [ pkgs.chrony ];
 
         preStart =
           ''
             mkdir -m 0755 -p ${stateDir}
-            chown ${chronyUser} ${stateDir}
+            touch ${keyFile}
+            chmod 0640 ${keyFile}
+            chown chrony:chrony ${stateDir} ${keyFile}
           '';
 
-        exec = "chronyd -n ${chronyFlags}";
+        serviceConfig =
+          { ExecStart = "${pkgs.chrony}/bin/chronyd -n -m -u chrony";
+          };
       };
 
   };

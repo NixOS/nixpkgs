@@ -32,7 +32,7 @@ let
     stable-patch = with pkgs.kernelPatches; grsecurity_stable;
 
     grKernel = if cfg.stable
-               then throw "Grsecurity stable no longer supported due to https://grsecurity.net/announce.php"
+               then mkKernel pkgs.linux_3_14 stable-patch
                else mkKernel pkgs.linux_4_2 test-patch;
 
     ## -- grsecurity configuration ---------------------------------------------

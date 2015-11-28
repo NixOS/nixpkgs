@@ -276,6 +276,7 @@ in rec {
   tests.networkingProxy = callTest tests/networking-proxy.nix {};
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
   tests.nfs4 = callTest tests/nfs.nix { version = 4; };
+  tests.nixosPinVersion = callTest tests/nixos-pin-version.nix {};
   tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};
   tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
@@ -284,6 +285,7 @@ in rec {
   tests.proxy = callTest tests/proxy.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
+  tests.sddm = callTest tests/sddm.nix {};
   tests.simple = callTest tests/simple.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};

@@ -1,39 +1,23 @@
-x@{builderDefsPackage
-  , imagemagickBig, pkgconfig, python, pygtk, perl, libX11, libv4l
-  , qt4, lzma, gtk2
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, imagemagickBig, pkgconfig, python, pygtk, perl
+, libX11, libv4l, qt4, lzma, gtk2
+}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="zbar";
-    version="0.10";
-    name="${baseName}-${version}";
-    pName="${baseName}";
-    url="mirror://sourceforge/project/${pName}/${baseName}/${version}/${name}.tar.bz2";
-    hash="1imdvf5k34g1x2zr6975basczkz3zdxg6xnci50yyp5yvcwznki3";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+  pname = "zbar";
+  version = "0.10";
+  src = fetchurl {
+    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${name}.tar.bz2";
+    sha256 = "1imdvf5k34g1x2zr6975basczkz3zdxg6xnci50yyp5yvcwznki3";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  buildInputs =
+    [ imagemagickBig pkgconfig python pygtk perl libX11
+      libv4l qt4 lzma gtk2 ];
 
   configureFlags = ["--disable-video"];
-      
-  meta = {
+
+  meta = with stdenv.lib; {
     description = "Bar code reader";
     longDescription = ''
       ZBar is an open source software suite for reading bar codes from various
@@ -42,18 +26,15 @@ rec {
       EAN-13/UPC-A, UPC-E, EAN-8, Code 128, Code 39, Interleaved 2 of 5 and QR
       Code.
     '';
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.lgpl21;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
+    homepage = http://zbar.sourceforge.net/;
   };
+
   passthru = {
     updateInfo = {
       downloadPage = "http://zbar.sourceforge.net/";
     };
   };
-}) x
-
+}

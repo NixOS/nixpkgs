@@ -1,10 +1,11 @@
-{ callPackage, runCommand, stdenv, fetchurl, qt4, cmake, automoc4, perl, pkgconfig
+{ callPackage, runCommand, stdenv, fetchurl, qt4, cmake-2_8, automoc4, perl, pkgconfig
 , release, branch, ignoreList, extraSubpkgs
 }:
 
 let
   inherit (stdenv.lib) filter fold;
   inherit (builtins) getAttr hasAttr remoteAttrs listToAttrs tail head;
+  cmake = cmake-2_8;
 in
 rec {
   manifest = import (./. + "/${release}.nix");

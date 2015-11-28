@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "http://yt-dl.org/downloads/${meta.version}/${name}.tar.gz";
-    sha256 = "02140awgwvspnq226xpbc4clijmqkk8hlmfqhmmzzbihvs2b4xfx";
+    sha256 = "cceeb606e723c0291de85eecb9a551ca887f3be4db786ad621011a9201a482b1";
   };
 
   buildInputs = [ makeWrapper zip pandoc ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     ''wrapProgram $out/bin/youtube-dl --prefix PATH : "${ffmpeg}/bin"'';
 
   meta = with stdenv.lib; {
-    version = "2015.11.13";
+    version = "2015.11.24";
     homepage = http://rg3.github.io/youtube-dl/;
     repositories.git = https://github.com/rg3/youtube-dl.git;
     description = "Command-line tool to download videos from YouTube.com and other sites";

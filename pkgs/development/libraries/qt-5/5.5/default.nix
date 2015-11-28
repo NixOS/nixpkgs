@@ -1,8 +1,8 @@
 # Maintainer's Notes:
 #
 # Minor updates:
-#  1. Edit ./manifest.sh to point to the updated URL.
-#  2. Run ./manifest.sh.
+#  1. Edit ./fetchsrcs.sh to point to the updated URL.
+#  2. Run ./fetchsrcs.sh.
 #  3. Build and enjoy.
 #
 # Major updates:

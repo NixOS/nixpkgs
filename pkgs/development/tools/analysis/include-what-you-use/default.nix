@@ -11,7 +11,15 @@ in stdenv.mkDerivation rec {
     url = "${meta.homepage}/downloads/${name}.src.tar.gz";
   };
 
+  buildInputs = with llvmPackages; [ clang llvm ];
+  nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [ "-DIWYU_LLVM_ROOT_PATH=${llvmPackages.clang-unwrapped}" ];
+
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
+    inherit version;
     description = "Analyze #includes in C/C++ source files with clang";
     longDescription = ''
       For every symbol (type, function variable, or macro) that you use in
@@ -26,11 +34,4 @@ in stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
-
-  buildInputs = with llvmPackages; [ clang llvm ];
-  nativeBuildInputs = [ cmake ];
-
-  cmakeFlags = "-DIWYU_LLVM_ROOT_PATH=${llvmPackages.clang-unwrapped}";
-
-  enableParallelBuilding = true;
 }

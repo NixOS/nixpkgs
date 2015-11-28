@@ -10,23 +10,59 @@ let
 
   extip = "EXTIP=\$(${pkgs.curl}/bin/curl -sf \"http://jsonip.com\" | ${pkgs.gawk}/bin/awk -F'\"' '{print $4}')";
 
-  i2pSh = pkgs.writeScriptBin "i2pd" ''
+  toOneZero = b: if b then "1" else "0";
+
+  i2pdConf = pkgs.writeText "i2pd.conf" ''
+      v6 = ${toOneZero cfg.enableIPv6}
+      unreachable = ${toOneZero cfg.unreachable}
+      floodfill = ${toOneZero cfg.floodfill}
+      ${if isNull cfg.port then "" else "port = ${toString cfg.port}"}
+      httpproxyport = ${toString cfg.proxy.httpPort}
+      socksproxyport = ${toString cfg.proxy.socksPort}
+      ircaddress = ${cfg.irc.host}
+      ircport = ${toString cfg.irc.port}
+      ircdest = ${cfg.irc.dest}
+      irckeys = ${cfg.irc.keyFile}
+      eepport = ${toString cfg.eep.port}
+      ${if isNull cfg.sam.port then "" else "--samport=${toString cfg.sam.port}"}
+      eephost = ${cfg.eep.host}
+      eepkeys = ${cfg.eep.keyFile}
+  '';
+
+  i2pdTunnelConf = pkgs.writeText "i2pd-tunnels.conf" ''
+  ${flip concatMapStrings
+    (collect (tun: tun ? port && tun ? destination) cfg.outTunnels)
+    (tun: let portStr = toString tun.port; in ''
+  [${tun.name}]
+  type = client
+  destination = ${tun.destination}
+  keys = ${tun.keys}
+  address = ${tun.address}
+  port = ${toString tun.port}
+  '')
+  }
+  ${flip concatMapStrings
+    (collect (tun: tun ? port && tun ? host) cfg.outTunnels)
+    (tun: let portStr = toString tun.port; in ''
+  [${tun.name}]
+  type = server
+  destination = ${tun.destination}
+  keys = ${tun.keys}
+  host = ${tun.address}
+  port = ${tun.port}
+  inport = ${tun.inPort}
+  accesslist = ${concatStringSep "," tun.accessList}
+  '')
+  }
+  '';
+
+  i2pdSh = pkgs.writeScriptBin "i2pd" ''
     #!/bin/sh
     ${if isNull cfg.extIp then extip else ""}
-    ${pkgs.i2pd}/bin/i2p --log=1 --daemon=0 --service=0 \
-      --v6=${if cfg.enableIPv6 then "1" else "0"} \
-      --unreachable=${if cfg.unreachable then "1" else "0"} \
+    ${pkgs.i2pd}/bin/i2pd --log=1 --daemon=0 --service=0 \
       --host=${if isNull cfg.extIp then "$EXTIP" else cfg.extIp} \
-      ${if isNull cfg.port then "" else "--port=${toString cfg.port}"} \
-      --httpproxyport=${toString cfg.proxy.httpPort} \
-      --socksproxyport=${toString cfg.proxy.socksPort} \
-      --ircport=${toString cfg.irc.port} \
-      --ircdest=${cfg.irc.dest} \
-      --irckeys=${cfg.irc.keyFile} \
-      --eepport=${toString cfg.eep.port} \
-      ${if isNull cfg.sam.port then "" else "--samport=${toString cfg.sam.port}"} \
-      --eephost=${cfg.eep.host} \
-      --eepkeys=${cfg.eep.keyFile}
+      --conf=${i2pdConf} \
+      --tunnelscfg=${i2pdTunnelConf}
   '';
 
 in
@@ -63,11 +99,19 @@ in
         '';
       };
 
+      floodfill = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If the router is declared to be unreachable and needs introduction nodes.
+        '';
+      };
+
       port = mkOption {
         type = with types; nullOr int;
         default = null;
         description = ''
-          I2P listen port. If no one is given the router will pick between 9111 and 30777.
+	        I2P listen port. If no one is given the router will pick between 9111 and 30777.
         '';
       };
 
@@ -107,6 +151,13 @@ in
       };
 
       irc = {
+        host = mkOption {
+          type = types.str;
+          default = "127.0.0.1";
+          description = ''
+            Address to forward incoming traffic to. 127.0.0.1 by default.
+          '';
+        };
         dest = mkOption {
           type = types.str;
           default = "irc.postman.i2p";
@@ -163,6 +214,94 @@ in
           '';
         };
       };
+
+      outTunnels = mkOption {
+        default = {};
+	      type = with types; loaOf optionSet;
+	      description = ''
+	      '';
+	      options = [ ({ name, config, ... }: {
+
+	        options = {
+	          name = mkOption {
+	            type = types.str;
+	            description = "The name of the tunnel.";
+	          };
+	          destination = mkOption {
+	            type = types.str;
+	            description = "Remote endpoint, I2P hostname or b32.i2p address.";
+	          };
+	          keys = mkOption {
+	            type = types.str;
+	            default = name + "-keys.dat";
+	            description = "Keyset used for tunnel identity.";
+	          };
+	          address = mkOption {
+	            type = types.str;
+	            default = "127.0.0.1";
+	            description = "Local bind address for tunnel.";
+	          };
+	          port = mkOption {
+	            type = types.int;
+	            default = 0;
+	            description = "Local tunnel listen port.";
+	          };
+	        };
+
+	        config = {
+	          name = mkDefault name;
+	        };
+
+	      }) ];
+      };
+
+      inTunnels = mkOption {
+        default = {};
+	      type = with types; loaOf optionSet;
+	      description = ''
+	      '';
+	      options = [ ({ name, config, ... }: {
+
+	        options = {
+
+	          name = mkOption {
+	            type = types.str;
+	            description = "The name of the tunnel.";
+	          };
+	          keys = mkOption {
+	            type = types.path;
+	            default = name + "-keys.dat";
+	            description = "Keyset used for tunnel identity.";
+	          };
+	          address = mkOption {
+	            type = types.str;
+	            default = "127.0.0.1";
+	            description = "Local service IP address.";
+	          };
+	          port = mkOption {
+	            type = types.int;
+	            default = 0;
+	            description = "Local tunnel listen port.";
+	          };
+	          inPort = mkOption {
+	            type = types.int;
+	            default = 0;
+	            description = "I2P service port. Default to the tunnel's listen port.";
+	          };
+	          accessList = mkOption {
+	            type = with types; listOf str;
+	            default = [];
+	            description = "I2P nodes that are allowed to connect to this service.";
+	          };
+
+	        };
+
+	        config = {
+	          name = mkDefault name;
+	        };
+
+	      }) ];
+      };
     };
   };
 
@@ -190,9 +329,8 @@ in
         User = "i2pd";
         WorkingDirectory = homeDir;
         Restart = "on-abort";
-        ExecStart = "${i2pSh}/bin/i2pd";
+        ExecStart = "${i2pdSh}/bin/i2pd";
       };
     };
   };
 }
-#

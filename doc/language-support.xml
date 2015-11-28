@@ -196,12 +196,12 @@ you need it.</para>
 
 <para>
   Currently supported interpreters are <varname>python26</varname>, <varname>python27</varname>,
-  <varname>python32</varname>, <varname>python33</varname>, <varname>python34</varname>
+  <varname>python33</varname>, <varname>python34</varname>, <varname>python35</varname>
   and <varname>pypy</varname>.
 </para>
 
 <para>
-  <varname>python</varname> is an alias of <varname>python27</varname> and <varname>python3</varname> is an alias of <varname>python34</varname>.
+  <varname>python</varname> is an alias to <varname>python27</varname> and <varname>python3</varname> is an alias to <varname>python34</varname>.
 </para>
 
 <para>
@@ -231,7 +231,7 @@ are provided with all modules included.</para>
 </para>
 
 <para>
- All packages depending on any Python interpreter get appended <varname>$out/${python.libPrefix}/site-packages</varname>
+ All packages depending on any Python interpreter get appended <varname>$out/${python.sitePackages}</varname>
  to <literal>$PYTHONPATH</literal> if such directory exists.
 </para>
 
@@ -306,7 +306,7 @@ twisted = buildPythonPackage {
   Most of Python packages that use <varname>buildPythonPackage</varname> are defined
   in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/python-packages.nix"><filename>pkgs/top-level/python-packages.nix</filename></link>
   and generated for each python interpreter separately into attribute sets <varname>python26Packages</varname>,
-  <varname>python27Packages</varname>, <varname>python32Packages</varname>, <varname>python33Packages</varname>,
+  <varname>python27Packages</varname>, <varname>python35Packages</varname>, <varname>python33Packages</varname>,
   <varname>python34Packages</varname> and <varname>pypyPackages</varname>.
   </para>
 
@@ -315,19 +315,13 @@ twisted = buildPythonPackage {
 
     <orderedlist>
       <listitem><para>
-        In the <varname>configurePhase</varname>, it patches
-        <literal>setup.py</literal> to always include setuptools before
-        distutils for monkeypatching machinery to take place.
-      </para></listitem>
-
-      <listitem><para>
         In the <varname>buildPhase</varname>, it calls
-        <literal>${python.interpreter} setup.py build ...</literal>
+        <literal>${python.interpreter} setup.py bdist_wheel</literal> to build a wheel binary zipfile.
       </para></listitem>
 
       <listitem><para>
-        In the <varname>installPhase</varname>, it calls
-        <literal>${python.interpreter} setup.py install ...</literal>
+        In the <varname>installPhase</varname>, it installs the wheel file using
+        <literal>pip install *.whl</literal>.
       </para></listitem>
 
       <listitem><para>
@@ -336,11 +330,15 @@ twisted = buildPythonPackage {
         directory to include <literal>$PYTHONPATH</literal> and <literal>$PATH</literal>
         environment variables.
       </para></listitem>
+
+      <listitem><para>
+        In the <varname>installCheck</varname> phase, <literal>${python.interpreter} setup.py test</literal>
+        is ran.
+      </para></listitem>
     </orderedlist>
   </para>
 
-  <para>By default <varname>doCheck = true</varname> is set and tests are run with
-  <literal>${python.interpreter} setup.py test</literal> command in <varname>checkPhase</varname>.</para>
+  <para>By default <varname>doCheck = true</varname> is set</para>
 
   <para>
     As in Perl, dependencies on other Python packages can be specified in the
@@ -383,16 +381,9 @@ twisted = buildPythonPackage {
     </varlistentry>
 
     <varlistentry>
-      <term><varname>setupPyInstallFlags</varname></term>
-      <listitem><para>
-        List of flags passed to <command>setup.py install</command> command.
-      </para></listitem>
-    </varlistentry>
-
-    <varlistentry>
       <term><varname>setupPyBuildFlags</varname></term>
       <listitem><para>
-        List of flags passed to <command>setup.py build</command> command.
+        List of flags passed to <command>setup.py build_ext</command> command.
       </para></listitem>
     </varlistentry>
 
@@ -400,7 +391,7 @@ twisted = buildPythonPackage {
       <term><varname>pythonPath</varname></term>
       <listitem><para>
         List of packages to be added into <literal>$PYTHONPATH</literal>.
-        Packages in <varname>pythonPath</varname> are not propagated into user environment
+        Packages in <varname>pythonPath</varname> are not propagated
         (contrary to <varname>propagatedBuildInputs</varname>).
       </para></listitem>
     </varlistentry>
@@ -416,15 +407,6 @@ twisted = buildPythonPackage {
       <term><varname>postShellHook</varname></term>
       <listitem><para>
         Hook to execute commands after <varname>shellHook</varname>.
-      </para></listitem>
-    </varlistentry>
-
-    <varlistentry>
-      <term><varname>distutilsExtraCfg</varname></term>
-      <listitem><para>
-        Extra lines passed to <varname>[easy_install]</varname> section of
-        <filename>distutils.cfg</filename> (acts as global setup.cfg
-        configuration).
       </para></listitem>
     </varlistentry>
 
@@ -545,7 +527,7 @@ exist in community to help save time. No tool is preferred at the moment.
   <para>
     To develop Python packages <function>buildPythonPackage</function> has
     additional logic inside <varname>shellPhase</varname> to run
-    <command>${python.interpreter} setup.py develop</command> for the package.
+    <command>pip install -e . --prefix $TMPDIR/</command> for the package.
   </para>
 
   <warning><para><varname>shellPhase</varname> is executed only if <filename>setup.py</filename>
@@ -741,7 +723,7 @@ the following arguments are of special significance to the function:
     </para>
     <para>
       In this example only <literal>code.google.com/p/go.net/ipv4</literal> and
-      <literal>code.google.com/p/go.net/ipv4</literal> will be built.
+      <literal>code.google.com/p/go.net/ipv6</literal> will be built.
     </para>
   </callout>
 
@@ -764,7 +746,7 @@ the following arguments are of special significance to the function:
     <para>
       <varname>propagatedBuildInputs</varname> is where the dependencies of a Go library are
       listed. Only libraries should list <varname>propagatedBuildInputs</varname>. If a standalone
-      program is being build instead, use <varname>buildInputs</varname>. If a library's tests require
+      program is being built instead, use <varname>buildInputs</varname>. If a library's tests require
       additional dependencies that are not propagated, they should be listed in <varname>buildInputs</varname>.
     </para>
   </callout>

@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -i 's, -std=gnu99,,g' configure
     sed -i 's,malloc.h,stdlib.h,g' src-ILU/ilur/ilur.c
+  '' + stdenv.lib.optionalString stdenv.cc.isClang ''
+    sed -i 's/libIL_la_CXXFLAGS = $(AM_CFLAGS)/libIL_la_CXXFLAGS =/g' lib/Makefile.in
   '';
 
   postConfigure = ''

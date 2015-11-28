@@ -39,7 +39,7 @@ in
 
       enable = mkOption {
         type = types.bool;
-        default = true;
+        example = true;
         description = "Whether to enable the Vixie cron daemon.";
       };
 

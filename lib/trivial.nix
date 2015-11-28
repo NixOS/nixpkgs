@@ -12,8 +12,46 @@ rec {
   and = x: y: x && y;
   mergeAttrs = x: y: x // y;
 
-  # Take a function and evaluate it with its own returned value.
-  fix = f: let result = f result; in result;
+  # Compute the fixed point of the given function `f`, which is usually an
+  # attribute set that expects its final, non-recursive representation as an
+  # argument:
+  #
+  #     f = self: { foo = "foo"; bar = "bar"; foobar = self.foo + self.bar; }
+  #
+  # Nix evaluates this recursion until all references to `self` have been
+  # resolved. At that point, the final result is returned and `f x = x` holds:
+  #
+  #     nix-repl> fix f
+  #     { bar = "bar"; foo = "foo"; foobar = "foobar"; }
+  #
+  # See https://en.wikipedia.org/wiki/Fixed-point_combinator for further
+  # details.
+  fix = f: let x = f x; in x;
+
+  # A variant of `fix` that records the original recursive attribute set in the
+  # result. This is useful in combination with the `extends` function to
+  # implement deep overriding. See pkgs/development/haskell-modules/default.nix
+  # for a concrete example.
+  fix' = f: let x = f x // { __unfix__ = f; }; in x;
+
+  # Modify the contents of an explicitly recursive attribute set in a way that
+  # honors `self`-references. This is accomplished with a function
+  #
+  #     g = self: super: { foo = super.foo + " + "; }
+  #
+  # that has access to the unmodified input (`super`) as well as the final
+  # non-recursive representation of the attribute set (`self`). `extends`
+  # differs from the native `//` operator insofar as that it's applied *before*
+  # references to `self` are resolved:
+  #
+  #     nix-repl> fix (extends g f)
+  #     { bar = "bar"; foo = "foo + "; foobar = "foo + bar"; }
+  #
+  # The name of the function is inspired by object-oriented inheritance, i.e.
+  # think of it as an infix operator `g extends f` that mimics the syntax from
+  # Java. It may seem counter-intuitive to have the "base class" as the second
+  # argument, but it's nice this way if several uses of `extends` are cascaded.
+  extends = f: rattrs: self: let super = rattrs self; in super // f self super;
 
   # Flip the order of the arguments of a binary function.
   flip = f: a: b: f b a;

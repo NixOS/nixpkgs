@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   # All files installed to /etc are just static data that can go in the store
-  makeFlags = "PREFIX=$(out) ETCDIR=$(out)/etc";
+  makeFlags = [ "PREFIX=$(out)" "ETCDIR=$(out)/etc" ];
 
   postInstall = ''
     ln -sv ${geolite-legacy}/share/GeoIP/GeoIP.dat		$out/etc/netsniff-ng/country4.dat

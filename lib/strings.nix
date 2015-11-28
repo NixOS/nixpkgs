@@ -223,4 +223,12 @@ rec {
   # Check whether a value is a store path.
   isStorePath = x: builtins.substring 0 1 (toString x) == "/" && dirOf (builtins.toPath x) == builtins.storeDir;
 
+  # Convert string to int
+  # Obviously, it is a bit hacky to use fromJSON that way.
+  toInt = str:
+    let may_be_int = builtins.fromJSON str; in
+    if builtins.isInt may_be_int
+    then may_be_int
+    else throw "Could not convert ${str} to int.";
+
 }

@@ -96,6 +96,7 @@
   enolan = "Echo Nolan <echo@echonolan.net>";
   epitrochoid = "Mabry Cervin <mpcervin@uncg.edu>";
   ericbmerritt = "Eric Merritt <eric@afiniate.com>";
+  ericsagnes = "Eric Sagnes <eric.sagnes@gmail.com>";
   erikryb = "Erik Rybakken <erik.rybakken@math.ntnu.no>";
   ertes = "Ertugrul Söylemez <ertesx@gmx.de>";
   exlevan = "Alexey Levan <exlevan@gmail.com>";
@@ -103,6 +104,7 @@
   flosse = "Markus Kohlhase <mail@markus-kohlhase.de>";
   fluffynukeit = "Daniel Austin <dan@fluffynukeit.com>";
   forkk = "Andrew Okin <forkk@forkk.net>";
+  fornever = "Friedrich von Never <friedrich@fornever.me>";
   fpletz = "Franz Pletz <fpletz@fnordicwalking.de>";
   fps = "Florian Paul Schmidt <mista.tapas@gmx.net>";
   fridh = "Frederik Rietdijk <fridh@fridh.nl>";
@@ -187,6 +189,7 @@
   matthiasbeyer = "Matthias Beyer <mail@beyermatthias.de>";
   mbakke = "Marius Bakke <ymse@tuta.io>";
   mbe = "Brandon Edens <brandonedens@gmail.com>";
+  mcmtroffaes = "Matthias C. M. Troffaes <matthias.troffaes@gmail.com>";
   meditans = "Carlo Nucera <meditans@gmail.com>";
   meisternu = "Matt Miemiec <meister@krutt.org>";
   michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
@@ -229,6 +232,7 @@
   pjones = "Peter Jones <pjones@devalot.com>";
   pkmx = "Chih-Mao Chen <pkmx.tw@gmail.com>";
   plcplc = "Philip Lykke Carlsen <plcplc@gmail.com>";
+  Phlogistique = "Noé Rubinstein <noe.rubinstein@gmail.com>";
   pmahoney = "Patrick Mahoney <pat@polycrystal.org>";
   pmiddend = "Philipp Middendorf <pmidden@secure.mailbox.org>";
   prikhi = "Pavan Rikhi <pavan.rikhi@gmail.com>";
@@ -254,6 +258,7 @@
   romildo = "José Romildo Malaquias <malaquias@gmail.com>";
   rszibele = "Richard Szibele <richard_szibele@hotmail.com>";
   rushmorem = "Rushmore Mushambi <rushmore@webenchanter.com>";
+  rvl = "Rodney Lorrimar <dev+nix@rodney.id.au>";
   rycee = "Robert Helgesson <robert@rycee.net>";
   samuelrivas = "Samuel Rivas <samuelrivas@gmail.com>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
@@ -286,6 +291,7 @@
   theuni = "Christian Theune <ct@flyingcircus.io>";
   thoughtpolice = "Austin Seipp <aseipp@pobox.com>";
   titanous = "Jonathan Rudenberg <jonathan@titanous.com>";
+  tohl = "Tomas Hlavaty <tom@logand.com>";
   tokudan = "Daniel Frank <git@danielfrank.net>";
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";
   travisbhartwell = "Travis B. Hartwell <nafai@travishartwell.net>";

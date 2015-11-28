@@ -9,7 +9,7 @@ let
   stdenv.lib.makeOverridable stdenv.mkDerivation rec {
 
     name = "libretro-${core}-${version}";
-    version = "20141224";
+    version = "2015-11-20";
     inherit src;
 
     buildInputs = [ makeWrapper retroarch zlib ] ++ a.extraBuildInputs or [];
@@ -33,7 +33,7 @@ let
       inherit description;
       homepage = "http://www.libretro.com/";
       license = licenses.gpl3Plus;
-      maintainers = [ maintainers.edwtjo maintainers.MP2E ];
+      maintainers = with maintainers; [ edwtjo MP2E ];
       platforms = platforms.linux;
     };
   } // a);
@@ -53,20 +53,20 @@ in
     core = "4do";
     src = fetchRetro {
       repo = core + "-libretro";
-      rev = "47fee1687d8946e84af2ef4d28a693f5f14199d3";
-      sha256 = "0bhn761akcb5623yvbndm79pbfackbhaqcaqhrqwvk0ja13pry4l";
+      rev = "cbd700e2bb95f08f241ca24330fa732aa6af8018";
+      sha256 = "1118iadkznppygq0mppirx1ycndmjp3fqlj8sshiby47j8sgly6h";
     };
     description = "Port of 4DO/libfreedo to libretro";
   }).override {
     buildPhase = "make";
   };
 
-  bsnes-mercury = (mkLibRetroCore rec {
-    core = "bsnes-mercury";
+  bsnes-mercury = let bname = "bsnes-mercury"; in (mkLibRetroCore rec {
+    core = bname + "-accuracy";
     src = fetchRetro {
-      repo = core;
-      rev = "6e08947a3eeee4c3ac0c33a5e6739cde02dbda3c";
-      sha256 = "1dkbjhm99r26fagypqlgdrp6v4dhs554cspzp1maryl3nrr57wf8";
+      repo = bname;
+      rev = "0bfe7f4f895af0927cec1c06dcae096b59416159";
+      sha256 = "0xsf10zkx7pnjpdb9n605663i0vqgnshdfjmb472hg84l9dr4gr5";
     };
     description = "Fork of bsnes with HLE DSP emulation restored";
   }).override {
@@ -77,30 +77,20 @@ in
     core = "desmume";
     src = fetchRetro {
       repo = core;
-      rev = "362fee2cc242082d73cd0f7260554e202dd80d78";
-      sha256 = "0n27kgjqam81q0cbmnmlq1dslyg9wbnz96r8pwjlbv7pp97rp7br";
+      rev = "cae5945149a72b1dc0b130d6e60e2690b88a925a";
+      sha256 = "1z4gzixkvxn2s5x5pn179ddwwh3blw7phdkp33qxv40kcv6g3h79";
     };
     description = "libretro wrapper for desmume NDS emulator";
   }).override {
     configurePhase = "cd desmume";
   };
 
-  fceumm = mkLibRetroCore rec {
-    core = "fceumm";
-    src = fetchRetro {
-      repo = "libretro-" + core;
-      rev = "b10d6d4600bfe6b0f2d793785d19a46479a4e7ef";
-      sha256 = "1nrs8hb5yb0iigz1nhzzamlmybjyhjcb41y07ckwx9kzx0w72sjz";
-    };
-    description = "FCEUmm libretro port";
-  };
-
   fba = (mkLibRetroCore rec {
     core = "fba";
     src = fetchRetro {
       repo = core + "-libretro";
-      rev = "55023b0466465f9d50ad82fd6f1549a89234bcab";
-      sha256 = "147a9if99mnv12fp70r4h3171m95gzmiq6rlf9axf4693h6kzb02";
+      rev = "b642e054a1f581fbac16c08f4b8df9ab6c474203";
+      sha256 = "0h2bk8m1hn2z76hachdmalgh2nv51jgfhmiqqhfkghf00rabinlx";
     };
     description = "Port of Final Burn Alpha to libretro";
   }).override {
@@ -111,12 +101,22 @@ in
     '';
   };
 
+  fceumm = mkLibRetroCore rec {
+    core = "fceumm";
+    src = fetchRetro {
+      repo = "libretro-" + core;
+      rev = "eb19d48804ebeb381b20e74db7033c321f6b6d04";
+      sha256 = "18wm6yzwshqfkd75kkcv035p1s2yhnchn98bcn9aj15aw5qyhvd4";
+    };
+    description = "FCEUmm libretro port";
+  };
+
   gambatte = (mkLibRetroCore rec {
     core = "gambatte";
     src = fetchRetro {
       repo = core + "-libretro";
-      rev = "6aa6a514b58671106352a525cbc9c39ce8633cdd";
-      sha256 = "0ai0l8wwi61rsq4cm3h5n039s78xrhrxvxn4nbav1mn70ynzijx7";
+      rev = "59fb6a652e0de3c3a3b29e58af5ac035958da37e";
+      sha256 = "0vgnn4dnxbw258s3vs1wzgy29cvcywlbfdrzddiwxbp7anclzxkv";
     };
     description = "Gambatte libretro port";
   }).override {
@@ -127,8 +127,8 @@ in
     core = "genesis-plus-gx";
     src = fetchRetro {
       repo = "Genesis-Plus-GX";
-      rev = "3b3eae18e742b99142ea2a412e80b9152933ab59";
-      sha256 = "01mn2m1wg026wy1ffcv36wv0pvm18xnin27v681vd7bma96dl7p0";
+      rev = "7d8d5f1026af8cfd00cdf32c67a999bd1e454a09";
+      sha256 = "16jm97h66bb2sqlimjlks31sapb23x4q8sr16wdqn1xgi670xw3c";
     };
     description = "Enhanced Genesis Plus libretro port";
   };
@@ -137,8 +137,8 @@ in
     core = "mednafen-pce-fast";
     src = fetchRetro {
       repo = "beetle-pce-fast-libretro";
-      rev = "0a389287025c0166e7b89bf0320ab1c6f8a5a561";
-      sha256 = "1s8l3pddgw060wb177wx6ysa040k45wy5vlvbjjvq1rj3352izk4";
+      rev = "6e2eaf75da2eb3dfcf2fd64413f471c8c90cf885";
+      sha256 = "1mxlvd3bcc6grryby2xn4k2gia3s49ngkwcvgxlj1fg3hkr5kcp8";
     };
     description = "Port of Mednafen's PC Engine core to libretro";
   }).override {
@@ -149,8 +149,8 @@ in
     core = "mupen64plus";
     src = fetchRetro {
       repo = core + "-libretro";
-      rev = "b97ce52e49d255cd3e87fd6dc44ddd9a596d0be4";
-      sha256 = "1disddd35c45ffp7irsgcf0y906f44d7rkjv96gxs6vvzwxifiih";
+      rev = "7db9296453629a44de806589f3ff64e824e775ad";
+      sha256 = "0gykkx8j0xlkr1dqz5k5hiyki2wsz9ys05df5zv3f2rpk2dkdwyp";
     };
     description = "Libretro port of Mupen64 Plus, GL only";
 
@@ -163,8 +163,8 @@ in
     core = "nestopia";
     src = fetchRetro {
       repo = core;
-      rev = "3b030c93edcc8f49e2f6323b1df7fc78759accd8";
-      sha256 = "0gr4s6p40j5qiyg94kpa8v3083cbp2ccdq5zp6kkpjskxzkdfhqg";
+      rev = "dcaed965760669161d6fd44755887545ea393041";
+      sha256 = "09fvk3ki9nw76kb1c4sw6c54wwn9y3ypsxnbzvhzsarmapkd9fa3";
     };
     description = "nestopia undead libretro port";
   }).override {
@@ -175,8 +175,8 @@ in
     core = "picodrive";
     src = fetchRetro {
       repo = core;
-      rev = "2babf3518e258cc3d6649f6e34a267e83dffd7d9";
-      sha256 = "13l9ppr8v33a7jmgjpg9hqwim30mybscnwqj2bch5v0w6h3qynzh";
+      rev = "e912fdf26376bfa5d7d6488055fe6fdbd13c2e49";
+      sha256 = "1jg9ig3vxbmna6cavz39hk6j9dpm4prfmmdpf7lzn1qvpqxs3ynx";
     };
     description = "Fast MegaDrive/MegaCD/32X emulator";
 
@@ -186,24 +186,12 @@ in
     configurePhase = "./configure";
   };
 
-  prboom = (mkLibRetroCore rec {
-    core = "prboom";
-    src = fetchRetro {
-      repo = "libretro-" + core;
-      rev = "437fd00bf58158bf3c5e2e49237d9344f320584a";
-      sha256 = "0g9dvmywph5r8ly20bn3xkm12271n726s5g9z0f2pd75pnv13q86";
-    };
-    description = "Prboom libretro port";
-  }).override {
-    buildPhase = "make";
-  };
-
   ppsspp = (mkLibRetroCore rec {
     core = "ppsspp";
     src = fetchRetro {
       repo = "libretro-" + core;
-      rev = "b82a36232f677f48e95d6f284184cb8c935d4ad2";
-      sha256 = "0bzqs9v37qyh6dl5jsrmm46iwy04h7ypgnibxajrxg1795ccb3rr";
+      rev = "ea17e27fcf16b9f875718b6550fe7145c6257c06";
+      sha256 = "0l6bzh50vh87j0g1s4144qfqa7vy7gry9ifd5vq1y5114fvbqdlb";
     };
     description = "ppsspp libretro port";
     extraBuildInputs = [ mesa ffmpeg ];
@@ -211,27 +199,38 @@ in
     buildPhase = "cd libretro && make";
   };
 
+  prboom = (mkLibRetroCore rec {
+    core = "prboom";
+    src = fetchRetro {
+      repo = "libretro-" + core;
+      rev = "90ad0db331c53e8851581e1547b7377fb9fffe5b";
+      sha256 = "0jk73nakrs9jxj3d0dmjs0csskjhddn8a4sky3mpk9vp30csx0ll";
+    };
+    description = "Prboom libretro port";
+  }).override {
+    buildPhase = "make";
+  };
+
   quicknes = (mkLibRetroCore rec {
     core = "quicknes";
     src = fetchRetro {
       repo = "QuickNES_Core";
-      rev = "0dab65e2a962640c517f23f2668b76315faf977e";
-      sha256 = "12cv2ph72y6c0clcqssdyma1jxn8yi7x2ifyf2g77rbaswxr26r4";
+      rev = "518638b8064c9d0cb1b5aa29d96419f8528c9de5";
+      sha256 = "0n6w8g0gklli9qs9vv17kljj83n9pky32ir25r7b202nl0292h53";
     };
     description = "QuickNES libretro port";
   }).override {
-    buildPhase = "cd libretro && make";
+    buildPhase = "make";
   };
 
   scummvm = (mkLibRetroCore rec {
     core = "scummvm";
     src = fetchRetro {
       repo = core;
-      rev = "bf30f7a146ab3d0ea5bcff43b1db489118b78cdf";
-      sha256 = "1xgl2vsssa5mxhavcyghxrbab4lfbp9gnpy6ckhrxdd0n08kvyys";
+      rev = "c3e719acc08c1873609bab3578939b7c9e606511";
+      sha256 = "08ab4gybp76la3z94dgg0jjzmajva9003p74256hgr7nnk2kwn4q";
     };
     description = "Libretro port of ScummVM";
-
     extraBuildInputs = [ fluidsynth libjpeg libvorbis mesa SDL ];
   }).override {
     buildPhase = "cd backends/platform/libretro/build && make";
@@ -241,10 +240,10 @@ in
     core = "snes9x";
     src = fetchRetro {
       repo = core;
-      rev = "e41b0a2832fdcacc30498f23ddadd193376f837f";
-      sha256 = "0k9zxc9g6hhkc18mdgskjp99ljgay8jqmqhir4aahsfqyxhwypgm";
+      rev = "ccf1ee2eae73ed1e4044c8dd9536dd4ac1be6d8b";
+      sha256 = "1bwjk817m8v69s13fc9kcj605ig6707rsj57wmz2ri2ggmydhvcb";
     };
-    description = " Port of SNES9x git to libretro";
+    description = "Port of SNES9x git to libretro";
   }).override {
     buildPhase = "cd libretro && make";
   };
@@ -253,8 +252,8 @@ in
     core = "snes9x-next";
     src = fetchRetro {
       repo = core;
-      rev = "c04566c04b1f07979f8a8f6d5bbcb844d7594aec";
-      sha256 = "0lmrbmjk7qnkgz7n7dm744nps8zgbv76kz62vcja2kl5bq24kaxc";
+      rev = "dfb7eef46d6bc2dbcc98f25e2bfadc9d2cff5cfd";
+      sha256 = "1naznsy1mhijcijysm9g8r95dxhr8rspixmf6r187rpcrvfd4zbl";
     };
     description = "Optimized port/rewrite of SNES9x 1.52+ to Libretro";
   };
@@ -263,33 +262,34 @@ in
     core = "stella";
     src = fetchRetro {
       repo = core + "-libretro";
-      rev = "4c8e93ce4b250b3b2d2743bae48eca25983f29db";
-      sha256 = "1r016r9a0vwdnlms9s9hnzvszvkhpshjiyi2zql0zs2c1jbja6ia";
+      rev = "ada5c57d632ace0ba915ce7a470d504a5d89ebcc";
+      sha256 = "1riwi6n9fj5vd5jcldwpwaxxvgxv3gs232l6zm9k26x3rngwcyfz";
     };
     description = "Port of Stella to libretro";
   }).override {
     buildPhase = "make";
   };
 
+  vba-next = mkLibRetroCore rec {
+    core = "vba-next";
+    src = fetchRetro {
+      repo = core;
+      rev = "0c20cd92bc8684340d7a1bcae14a603001ad5e4a";
+      sha256 = "09shkha7i7a226nk9wfxswsj3wwrxn7xwrsaaki1x8pvbyy5wjg9";
+    };
+    description = "VBA-M libretro port with modifications for speed";
+  };
+
   vba-m = (mkLibRetroCore rec {
     core = "vbam";
     src = fetchRetro {
       repo = core + "-libretro";
-      rev = "9baba21956add58fba7c411ddd752682f0d93270";
-      sha256 = "1dxshbkgv7xjg3lzv9lwsyhgxjmxzfsvd6xpwmdmh3pjllfrgy1p";
+      rev = "bedddba614bc4fcbcf5b0d8565f94619b094c20c";
+      sha256 = "1hvq4wsznb2vzg11iqmy5dnfjpiga368p1lmsx9d7ci7dcqyw7wy";
     };
     description = "vanilla VBA-M libretro port";
   }).override {
     buildPhase = "cd src/libretro && make";
   };
 
-  vba-next = mkLibRetroCore rec {
-    core = "vba-next";
-    src = fetchRetro {
-      repo = core;
-      rev = "54c37ea9e26c5480352eee92a80eb659c9b5cb39";
-      sha256 = "0hkd1n00i3kwr5ids7b2c034xvx3nskg2316nli99ky511yq5cfd";
-    };
-    description = "VBA-M libretro port with modifications for speed";
-  };
 }

@@ -1,0 +1,26 @@
+From 7a18f4cb77c567dec9ad924fcc76c50092de6ee7 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Mon, 23 Nov 2015 06:57:51 -0600
+Subject: [PATCH 2/2] fix ConfigReader QStringList corruption
+
+---
+ src/common/ConfigReader.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/common/ConfigReader.cpp b/src/common/ConfigReader.cpp
+index 5bf5a6a..34182e6 100644
+--- a/src/common/ConfigReader.cpp
++++ b/src/common/ConfigReader.cpp
+@@ -30,7 +30,8 @@
+ 
+ QTextStream &operator>>(QTextStream &str, QStringList &list)  {
+     list.clear();
+-    foreach(const QStringRef &s, str.readLine().splitRef(QLatin1Char(',')))
++    QString line = str.readLine();
++    foreach(const QStringRef &s, line.splitRef(QLatin1Char(',')))
+     {
+         QStringRef trimmed = s.trimmed();
+         if (!trimmed.isEmpty())
+-- 
+2.6.3
+

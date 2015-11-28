@@ -1,42 +1,21 @@
-x@{builderDefsPackage
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    version = "0.99";
-    baseName="barcode";
-    name="${baseName}-${version}";
-    url="mirror://gnu/${baseName}/${name}.tar.xz";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
+stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+  version = "0.99";
+  pname = "barcode";
+  src = fetchurl {
+    url = "mirror://gnu/${pname}/${name}.tar.xz";
     sha256 = "1indapql5fjz0bysyc88cmc54y8phqrbi7c76p71fgjp45jcyzp8";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  meta = {
+  meta = with stdenv.lib; {
     description = "GNU barcode generator";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms; allBut darwin;
+    maintainers = with maintainers; [ raskin ];
+    platforms = with platforms; allBut darwin;
     downloadPage = "http://ftp.gnu.org/gnu/barcode/";
     updateWalker = true;
     inherit version;
+    homepage = http://ftp.gnu.org/gnu/barcode/;
   };
-}) x
-
+}

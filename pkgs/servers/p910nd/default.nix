@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
     sed -e "s|/usr||g" -i Makefile
   '';
 
-  makeFlags = "DESTDIR=$(out) BINDIR=/bin";
+  makeFlags = [ "DESTDIR=$(out)" "BINDIR=/bin" ];
 
   postInstall = ''
     # Match the man page:

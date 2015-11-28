@@ -115,14 +115,18 @@ rm -rf $out/registry/index/*
 # Make git DBs deterministic
 # TODO: test with git submodules
 [[ ! -d $out/git/checkouts ]] || (cd $out/git/checkouts && for name in *; do
-    cd "$out/git/checkouts/$name"
     revs=""
-    for branch in *; do
-        cd "$branch"
+    cd "$out/git/checkouts/$name"
+    while read dir; do
+        # extract substring: [dir = "./xxx/yyy/.git"] => [branch = "xxx/yyy"]
+        branch="${dir:2:$((${#dir}-7))}"
+
+        cd "$out/git/checkouts/$name/$branch"
         rev="$(git rev-parse HEAD)"
         revs="$revs $rev"
-        cd ..
-    done
+    done < <(find . -type d -name .git -print)
+
+    echo "List of revs to keep for git db $name: $revs"
 
     (
         # The following code was adapted from nix-prefetch-git
