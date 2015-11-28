@@ -3323,6 +3323,102 @@ in modules // {
     };
   };
 
+  requests-cache = buildPythonPackage (rec {
+    name = "requests-cache-${version}";
+    version = "0.4.10";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/r/requests-cache/${name}.tar.gz";
+      sha256 = "671969d00719fa3e80476b128dc9232025926884d0110d4d235abdd9c3508fc0";
+    };
+
+    buildInputs = with self; [ mock sqlite3 ];
+
+    propagatedBuildInputs = with self; [ self.six requests2 ];
+
+    meta = {
+      description = "Persistent cache for requests library";
+      homepage = http://pypi.python.org/pypi/requests-cache;
+      license = licenses.bsd3;
+    };
+  });
+
+  howdoi = buildPythonPackage (rec {
+    name = "howdoi-${version}";
+    version = "1.1.7";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/h/howdoi/${name}.tar.gz";
+      sha256 = "df4e49a219872324875d588e7699a1a82174a267e8487505e86bfcb180aea9b7";
+    };
+
+    propagatedBuildInputs = with self; [ self.six requests-cache pygments pyquery ];
+
+    meta = {
+      description = "Instant coding answers via the command line";
+      homepage = http://pypi.python.org/pypi/howdoi;
+      license = licenses.mit;
+    };
+  });
+
+  nose-parameterized = buildPythonPackage (rec {
+    name = "nose-parameterized-${version}";
+    version = "0.5.0";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/n/nose-parameterized/${name}.tar.gz";
+      sha256 = "a11c41b0cf8218e7cdc19ab7a1bdf5c141d161cd2350daee819473cc63cd0685";
+    };
+
+    propagatedBuildInputs = with self; [ self.six ];
+
+    meta = {
+      description = "Parameterized testing with any Python test framework";
+      homepage = http://pypi.python.org/pypi/nose-parameterized;
+      license = licenses.bsd3;
+    };
+  });
+
+  jdatetime = buildPythonPackage (rec {
+    name = "jdatetime-${version}";
+    version = "1.7.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/j/jdatetime/${name}.tar.gz";
+      sha256 = "c08ba5791c2350b26e87ddf478bf223108146e241b6c949538221b54afd633ac";
+    };
+
+    propagatedBuildInputs = with self; [ self.six ];
+
+    meta = {
+      description = "Jalali datetime binding for python";
+      homepage = http://pypi.python.org/pypi/jdatetime;
+      license = licenses.psfl;
+    };
+  });
+
+  dateparser = buildPythonPackage (rec {
+    name = "dateparser-${version}";
+    version = "0.3.1";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/d/dateparser/${name}.tar.gz";
+      sha256 = "56c291a45398e9172d53201ac213226989295749191c1f02d8f3b593b6f88e48";
+    };
+
+    buildInputs = with self; [ nose nose-parameterized mock ];
+
+    propagatedBuildInputs = with self; [ self.six jdatetime pyyaml dateutil ];
+
+    meta = {
+      description = "Date parsing library designed to parse dates from HTML pages";
+      homepage = http://pypi.python.org/pypi/dateparser;
+      license = licenses.bsd3;
+    };
+  });
+
   dateutil = buildPythonPackage (rec {
     name = "dateutil-${version}";
     version = "2.4.2";
