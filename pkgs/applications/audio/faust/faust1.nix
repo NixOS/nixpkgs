@@ -1,26 +1,20 @@
 { stdenv
 , coreutils
-, fetchurl
+, fetchgit
 , makeWrapper
 , pkgconfig
-, clang
-, llvm
-, emscripten
-, openssl
-, libsndfile
-, libmicrohttpd
-, vim
 }:
 
 with stdenv.lib.strings;
 
 let
 
-  version = "2.0-a41";
+  version = "8-1-2015";
 
-  src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/faudiostream/faust-2.0.a41.tgz";
-    sha256 = "1cq4x1cax0lswrcqv0limx5mjdi3187zlmh7cj2pndr0xq6b96cm";
+  src = fetchgit {
+    url = git://git.code.sf.net/p/faudiostream/code;
+    rev = "4db76fdc02b6aec8d15a5af77fcd5283abe963ce";
+    sha256 = "f1ac92092ee173e4bcf6b2cb1ac385a7c390fb362a578a403b2b6edd5dc7d5d0";
   };
 
   meta = with stdenv.lib; {
@@ -37,22 +31,19 @@ let
 
     inherit src;
 
-    buildInputs = [ makeWrapper llvm emscripten openssl libsndfile pkgconfig libmicrohttpd vim ];
-
+    buildInputs = [ makeWrapper ];
 
     passthru = {
       inherit wrap wrapWithBuildEnv;
     };
 
-
     preConfigure = ''
-      makeFlags="$makeFlags prefix=$out LLVM_CONFIG='${llvm}/bin/llvm-config' world"
+      makeFlags="$makeFlags prefix=$out"
 
       # The faust makefiles use 'system ?= $(shell uname -s)' but nix
       # defines 'system' env var, so undefine that so faust detects the
       # correct system.
       unset system
-      sed -e "232s/LLVM_STATIC_LIBS/LLVMLIBS/" -i compiler/Makefile.unix
     '';
 
     # Remove most faust2appl scripts since they won't run properly

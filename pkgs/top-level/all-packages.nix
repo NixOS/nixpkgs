@@ -15110,7 +15110,11 @@ let
 
   fakenes = callPackage ../misc/emulators/fakenes { };
 
-  faust = callPackage ../applications/audio/faust { };
+  faust = faust2;
+
+  faust1 = callPackage ../applications/audio/faust/faust1.nix { };
+
+  faust2 = callPackage ../applications/audio/faust { };
 
   faust2alqt = callPackage ../applications/audio/faust/faust2alqt.nix { };
 
