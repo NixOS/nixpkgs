@@ -1,5 +1,5 @@
 { build-idris-package
-, fetchgit
+, fetchFromGitHub
 , prelude
 , base
 , lib
@@ -7,10 +7,11 @@
 }: build-idris-package {
   name = "wl-pprint";
 
-  src = fetchgit {
-    url = "git://github.com/shayan-najd/wl-pprint.git";
+  src = fetchFromGitHub {
+    owner = "shayan-najd";
+    repo = "wl-pprint";
     rev = "120f654b0b9838b57e10b163d3562d959439fb07";
-    sha256 = "b5d02a9191973dd8915279e84a9b4df430eb252f429327f45eb8a047d8bb954d";
+    sha256 = "1yymdl251zla6hv9rcg06x73gbp6xb0n6f6a02bsy5fqfmrfngcl";
   };
 
   propagatedBuildInputs = [ prelude base ];
