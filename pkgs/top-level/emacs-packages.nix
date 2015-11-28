@@ -954,6 +954,21 @@ let self = _self // overrides;
     };
   };
 
+  go-mode = melpaBuild rec {
+    pname = "go-mode";
+    version = "20150817";
+    src = fetchFromGitHub {
+      owner  = "dominikh";
+      repo   = "go-mode.el";
+      rev    = "5d53a13bd193653728e74102c81aa931b780c9a9";
+      sha256 = "0hvssmvzvn13j18282nsq8fclyjs0x103gj9bp6fhmzxmzl56l7g";
+    };
+    meta = {
+      description = "Go language support for Emacs";
+      license = bsd3;
+    };
+  };
+
   god-mode = melpaBuild rec {
     pname   = "god-mode";
     version = "20140811";
