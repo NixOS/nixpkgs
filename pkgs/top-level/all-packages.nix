@@ -6750,6 +6750,10 @@ let
 
   isocodes = callPackage ../development/libraries/iso-codes { };
 
+  ispc = callPackage ../development/compilers/ispc {
+    llvmPackages = llvmPackages_37;
+  };
+
   itk = callPackage ../development/libraries/itk { };
 
   jasper = callPackage ../development/libraries/jasper { };
