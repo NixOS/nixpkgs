@@ -924,6 +924,7 @@ let
 
   asciidoc = callPackage ../tools/typesetting/asciidoc {
     inherit (pythonPackages) matplotlib numpy aafigure recursivePthLoader;
+    w3m = w3m-batch;
     enableStandardFeatures = false;
   };
 
@@ -3143,7 +3144,9 @@ let
 
   stricat = callPackage ../tools/security/stricat { };
 
-  privoxy = callPackage ../tools/networking/privoxy { };
+  privoxy = callPackage ../tools/networking/privoxy {
+    w3m = w3m-batch;
+  };
 
   swaks = callPackage ../tools/networking/swaks { };
 
@@ -3597,7 +3600,7 @@ let
   xmlstarlet = callPackage ../tools/text/xml/xmlstarlet { };
 
   xmlto = callPackage ../tools/typesetting/xmlto {
-    w3m = w3m.override { graphicsSupport = false; };
+    w3m = w3m-batch;
   };
 
   xmltv = callPackage ../tools/misc/xmltv { };
@@ -13388,8 +13391,21 @@ let
 
   vym = callPackage ../applications/misc/vym { };
 
-  w3m = callPackage ../applications/networking/browsers/w3m {
+  w3m = callPackage ../applications/networking/browsers/w3m { };
+
+  # Should always be the version with the most features
+  w3m-full = w3m;
+
+  # Version without X11
+  w3m-nox = w3m.override {
+    x11Support = false;
+  };
+
+  # Version for batch text processing, not a good browser
+  w3m-batch = w3m.override {
     graphicsSupport = false;
+    x11Support = false;
+    mouseSupport = false;
   };
 
   weechat = callPackage ../applications/networking/irc/weechat {
@@ -13592,7 +13608,9 @@ let
 
   xdg-user-dirs = callPackage ../tools/X11/xdg-user-dirs { };
 
-  xdg_utils = callPackage ../tools/X11/xdg-utils { };
+  xdg_utils = callPackage ../tools/X11/xdg-utils {
+    w3m = w3m-batch;
+  };
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
