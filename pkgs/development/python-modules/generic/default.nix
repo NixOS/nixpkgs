@@ -65,6 +65,8 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
   # propagate python/setuptools to active setup-hook in nix-shell
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
 
+  pythonPath = pythonPath;
+
   configurePhase = attrs.configurePhase or ''
     runHook preConfigure
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/gparted/${name}.tar.bz2";
   };
 
-  configureFlags = "--disable-doc";
+  configureFlags = [ "--disable-doc" ];
 
   buildInputs = [ parted gtk glib libuuid gtkmm libxml2 hicolor_icon_theme ];
   nativeBuildInputs = [ intltool gettext makeWrapper pkgconfig ];

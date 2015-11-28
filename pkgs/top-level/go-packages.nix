@@ -778,8 +778,7 @@ let
     '';
 
     postInstall = ''
-      mkdir -p $bin/share
-      mv $bin/bin/{man,script} $bin/share
+      rm -v $bin/bin/{man,script}
     '';
   };
 

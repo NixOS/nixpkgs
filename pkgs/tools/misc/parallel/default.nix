@@ -8,13 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "0phn9dlkqlq3cq468ypxbbn78bsjcin743pyvf8ip4qg6jz662jm";
   };
 
-  nativeBuildInputs = [ makeWrapper perl ];
+  nativeBuildInputs = [ makeWrapper ];
 
   preFixup = ''
-    patchShebangs $out/bin
+    sed -i 's,#![ ]*/usr/bin/env[ ]*perl,#!${perl}/bin/perl,' $out/bin/*
 
     wrapProgram $out/bin/parallel \
-      ${if stdenv.isLinux then ("--prefix PATH \":\" ${procps}/bin") else ""}
+      ${if stdenv.isLinux then ("--prefix PATH \":\" ${procps}/bin") else ""} \
+      --prefix PATH : "${perl}/bin" \
   '';
 
   doCheck = true;

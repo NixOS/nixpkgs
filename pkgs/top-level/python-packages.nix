@@ -4181,7 +4181,7 @@ in modules // {
       repo = "GateOne";
       sha256 ="0zp9vfs6sqbx4d0g45kkjinfmsl9zqwa6bhp3xd81wx3ph9yr1hq";
     };
-    propagatedBuildInputs = with pkgs.self; [tornado futures html5lib readline pkgs.openssl];
+    propagatedBuildInputs = with self; [tornado futures html5lib readline pkgs.openssl];
     meta = {
       homepage = https://liftoffsoftware.com/;
       description = "GateOne is a web-based terminal emulator and SSH client";
@@ -9115,19 +9115,22 @@ in modules // {
 
 
   lxml = buildPythonPackage ( rec {
-    name = "lxml-3.3.6";
+    name = "lxml-3.4.4";
+    # Warning : as of nov. 9th, 2015, version 3.5.0b1 breaks a lot of things,
+    # more work is needed before upgrading
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/l/lxml/${name}.tar.gz";
-      md5 = "a804b36864c483fe7abdd7f493a0c379";
+      sha256 = "16a0fa97hym9ysdk3rmqz32xdjqmy4w34ld3rm3jf5viqjx65lxk";
     };
 
     buildInputs = with self; [ pkgs.libxml2 pkgs.libxslt ];
 
     meta = {
       description = "Pythonic binding for the libxml2 and libxslt libraries";
-      homepage = http://codespeak.net/lxml/index.html;
-      license = "BSD";
+      homepage = http://lxml.de;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ sjourdois ];
     };
   });
 
@@ -9318,6 +9321,8 @@ in modules // {
   matplotlib = callPackage ../development/python-modules/matplotlib/default.nix {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     enableGhostscript = true;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa Foundation CoreData;
+    inherit (pkgs.darwin) cf-private libobjc;
   };
 
 

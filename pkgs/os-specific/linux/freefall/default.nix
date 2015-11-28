@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
-let version = "4.2"; in
+let version = "4.3"; in
 stdenv.mkDerivation {
   name = "freefall-${version}";
 
   src = fetchurl {
-    sha256 = "1syv8n5hwzdbx69rsj4vayyzskfq1w5laalg5jjd523my52f086g";
+    sha256 = "1bpkr45i4yzp32p0vpnz8mlv9lk4q2q9awf1kg9khg4a9g42qqja";
     url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
   };
 
@@ -14,10 +14,10 @@ stdenv.mkDerivation {
 
     # Default time-out is a little low, probably because the AC/lid status
     # functions were never implemented. Because no-one still uses HDDs, right?
-    substituteInPlace freefall.c --replace "alarm(2)" "alarm(7)"
+    substituteInPlace freefall.c --replace "alarm(2)" "alarm(5)"
   '';
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Free-fall protection for spinning HP/Dell laptop hard drives";

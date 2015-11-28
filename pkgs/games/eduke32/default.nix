@@ -26,7 +26,11 @@ in stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${SDL2}/include/SDL";
   NIX_LDFLAGS = "-L${SDL2}/lib";
 
-  makeFlags = "LINKED_GTK=1 SDLCONFIG=${SDL2}/bin/sdl2-config VC_REV=${rev}";
+  makeFlags = [
+    "LINKED_GTK=1"
+    "SDLCONFIG=${SDL2}/bin/sdl2-config"
+    "VC_REV=${rev}"
+  ];
 
   desktopItem = makeDesktopItem {
     name = "eduke32";

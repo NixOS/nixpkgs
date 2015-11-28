@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lqdzw6n3rqhd097lk5w16jcjhwfqs5zvi42hsbk3p92smswpaj8";
   };
 
-  makeFlags = "MANDIR=$(out)/share/man";
+  makeFlags = [ "MANDIR=$(out)/share/man" ];
 
   meta = with stdenv.lib; {
     inherit version;

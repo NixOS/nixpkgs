@@ -4121,6 +4121,10 @@ let
 
   icedtea_web = icedtea8_web;
 
+  idrisPackages = callPackage ../development/idris-modules {
+    inherit (haskellPackages) idris;
+  };
+
   ikarus = callPackage ../development/compilers/ikarus { };
 
   intercal = callPackage ../development/compilers/intercal { };
@@ -7948,6 +7952,8 @@ let
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
+  wolfssl = callPackage ../development/libraries/wolfssl { };
+
   openssl = callPackage ../development/libraries/openssl {
     fetchurl = fetchurlBoot;
     cryptodevHeaders = linuxPackages.cryptodev.override {
@@ -8254,6 +8260,8 @@ let
   rubberband = callPackage ../development/libraries/rubberband {
     inherit (vamp) vampSDK;
   };
+  
+  sad = callPackage ../applications/science/logic/sad { };
 
   sbc = callPackage ../development/libraries/sbc { };
 
@@ -12975,6 +12983,10 @@ let
 
   stella = callPackage ../misc/emulators/stella { };
 
+  statsd = callPackage ../tools/networking/statsd {
+    nodejs = nodejs-0_10;
+  };
+
   linuxstopmotion = callPackage ../applications/video/linuxstopmotion { };
 
   sweethome3d = recurseIntoAttrs (  (callPackage ../applications/misc/sweethome3d { })
@@ -15158,6 +15170,10 @@ let
   hplip = callPackage ../misc/drivers/hplip { };
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
+
+  hplip_3_15_9 = callPackage ../misc/drivers/hplip/3.15.9.nix { };
+
+  hplipWithPlugin_3_15_9 = hplip_3_15_9.override { withPlugin = true; };
 
   # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };

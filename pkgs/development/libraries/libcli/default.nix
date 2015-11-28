@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Emulate a Cisco-style telnet command-line interface";

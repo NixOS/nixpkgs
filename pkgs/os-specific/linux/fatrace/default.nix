@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       --replace "'which'" "'${which}/bin/which'"
   '';
 
-  makeFlagsArray = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     inherit version;
