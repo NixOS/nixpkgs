@@ -41,8 +41,15 @@ let
   };
 
   carbonOpts = name: with config.ids; ''
-    --nodaemon --syslog --prefix=${name} --pidfile ${dataDir}/${name}.pid ${name}
+    --nodaemon --syslog --prefix=${name} --pidfile /run/${name}/${name}.pid ${name}
   '';
+
+  mkPidFileDir = name: ''
+    mkdir -p /run/${name}
+    chmod 0700 /run/${name}
+    chown -R graphite:graphite /run/${name}
+  '';
+
   carbonEnv = {
     PYTHONPATH = "${pkgs.python27Packages.carbon}/lib/python2.7/site-packages";
     GRAPHITE_ROOT = dataDir;
@@ -370,18 +377,20 @@ in {
 
   config = mkMerge [
     (mkIf cfg.carbon.enableCache {
-      systemd.services.carbonCache = {
+      systemd.services.carbonCache = let name = "carbon-cache"; in {
         description = "Graphite Data Storage Backend";
         wantedBy = [ "multi-user.target" ];
         after = [ "network-interfaces.target" ];
         environment = carbonEnv;
         serviceConfig = {
-          ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts "carbon-cache"}";
+          ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
           PermissionsStartOnly = true;
+          PIDFile="/run/${name}/${name}.pid";
         };
-        preStart = ''
+        preStart = mkPidFileDir name + ''
+
           mkdir -p ${cfg.dataDir}/whisper
           chmod 0700 ${cfg.dataDir}/whisper
           chown -R graphite:graphite ${cfg.dataDir}
@@ -390,31 +399,35 @@ in {
     })
 
     (mkIf cfg.carbon.enableAggregator {
-      systemd.services.carbonAggregator = {
+      systemd.services.carbonAggregator = let name = "carbon-aggregator"; in {
         enable = cfg.carbon.enableAggregator;
         description = "Carbon Data Aggregator";
         wantedBy = [ "multi-user.target" ];
         after = [ "network-interfaces.target" ];
         environment = carbonEnv;
         serviceConfig = {
-          ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts "carbon-aggregator"}";
+          ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
+          PIDFile="/run/${name}/${name}.pid";
         };
+        preStart = mkPidFileDir name;
       };
     })
 
     (mkIf cfg.carbon.enableRelay {
-      systemd.services.carbonRelay = {
+      systemd.services.carbonRelay = let name = "carbon-relay"; in {
         description = "Carbon Data Relay";
         wantedBy = [ "multi-user.target" ];
         after = [ "network-interfaces.target" ];
         environment = carbonEnv;
         serviceConfig = {
-          ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts "carbon-relay"}";
+          ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
+          PIDFile="/run/${name}/${name}.pid";
         };
+        preStart = mkPidFileDir name;
       };
     })
 
