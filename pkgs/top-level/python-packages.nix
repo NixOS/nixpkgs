@@ -2215,11 +2215,11 @@ in modules // {
   };
 
   click = buildPythonPackage rec {
-    name = "click-5.1";
+    name = "click-6.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/click/${name}.tar.gz";
-      sha256 = "0njsm0wn31l21bi118g5825ma5sa3rwn7v2x4wjd7yiiahkri337";
+      sha256 = "09mi68vazmlqd0f94kjvqqlpjig4m5xl996zprwnghj90cn32ncw";
     };
 
     meta = {
