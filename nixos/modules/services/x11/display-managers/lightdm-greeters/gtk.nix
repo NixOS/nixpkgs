@@ -10,8 +10,8 @@ let
 
   inherit (pkgs) stdenv lightdm writeScript writeText;
 
-  theme = pkgs.gnome3.gnome_themes_standard;
-  icons = pkgs.gnome3.defaultIconTheme;
+  theme = cfg.theme.package;
+  icons = cfg.iconTheme.package;
 
   # The default greeter provided with this expression is the GTK greeter.
   # Again, we need a few things in the environment for the greeter to run with
@@ -45,14 +45,15 @@ let
   gtkGreeterConf = writeText "lightdm-gtk-greeter.conf"
     ''
     [greeter]
-    theme-name = Adwaita
-    icon-theme-name = Adwaita
+    theme-name = ${cfg.theme.name}
+    icon-theme-name = ${cfg.iconTheme.name}
     background = ${ldmcfg.background}
     '';
 
 in
 {
   options = {
+
     services.xserver.displayManager.lightdm.greeters.gtk = {
 
       enable = mkOption {
@@ -63,7 +64,48 @@ in
         '';
       };
 
+      theme = {
+
+        package = mkOption {
+          type = types.path;
+          default = pkgs.gnome3.gnome_themes_standard;
+          description = ''
+            The package path that contains the theme given in the name option.
+          '';
+        };
+
+        name = mkOption {
+          type = types.str;
+          default = "Adwaita";
+          description = ''
+            Name of the theme to use for the lightdm-gtk-greeter.
+          '';
+        };
+
+      };
+
+      iconTheme = {
+
+        package = mkOption {
+          type = types.path;
+          default = pkgs.gnome3.defaultIconTheme;
+          description = ''
+            The package path that contains the icon theme given in the name option.
+          '';
+        };
+
+        name = mkOption {
+          type = types.str;
+          default = "Adwaita";
+          description = ''
+            Name of the icon theme to use for the lightdm-gtk-greeter.
+          '';
+        };
+
+      };
+
     };
+
   };
 
   config = mkIf cfg.enable {
