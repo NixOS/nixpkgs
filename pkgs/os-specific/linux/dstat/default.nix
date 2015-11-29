@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
            -e "s|/usr/share/dstat|$out/share/dstat|" dstat
   '';
 
-  makeFlags = "prefix=$(out)";
+  makeFlags = [ "prefix=$(out)" ];
 
   postInstall = ''
     wrapPythonProgramsIn $out/bin "$out $pythonPath"

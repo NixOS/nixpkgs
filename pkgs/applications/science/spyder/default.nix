@@ -9,25 +9,20 @@
 
 buildPythonPackage rec {
   name = "spyder-${version}";
-  version = "2.3.6";
+  version = "2.3.7";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://pypi.python.org/packages/source/s/spyder/${name}.zip";
-    sha256 = "0e6502e0d3f270ea8916d1a3d7ca29915801d31932db399582bc468c01d535e2";
+    sha256 = "0ywgvgcp9s64ys25nfscd2648f7di8544a21b5lb59d4f48z028h";
   };
 
-  buildInputs = [ unzip ];
+  # NOTE: sphinx makes the build fail with: ValueError: ZIP does not support timestamps before 1980
   propagatedBuildInputs =
-    [ pyside pyflakes rope sphinx numpy scipy matplotlib ipython pylint pep8 ];
+    [ pyside pyflakes rope  numpy scipy matplotlib ipython pylint pep8 ];
 
   # There is no test for spyder
   doCheck = false;
-
-  # Use setuptools instead of distutils.
-  preConfigure = ''
-    export USE_SETUPTOOLS=True
-  '';
 
   desktopItem = makeDesktopItem {
     name = "Spyder";
@@ -41,11 +36,9 @@ buildPythonPackage rec {
 
   # Create desktop item
   postInstall = ''
-    mkdir -p $out/share/applications
-    cp $desktopItem/share/applications/* $out/share/applications/
-
-    mkdir -p $out/share/icons
-    cp spyderlib/images/spyder.svg $out/share/icons/
+    mkdir -p $out/share/{applications,icons}
+    cp  $desktopItem/share/applications/* $out/share/applications/
+    cp  spyderlib/images/spyder.svg $out/share/icons/
   '';
 
   meta = with stdenv.lib; {

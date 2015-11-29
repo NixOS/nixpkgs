@@ -20,9 +20,10 @@ stdenv.mkDerivation {
     substituteInPlace getver.sh --replace ver=unknown ver=${version}
   '';
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
+    inherit version;
     description = "Top-like tool for viewing AMD Radeon GPU utilization";
     longDescription = ''
       View GPU utilization, both for the total activity percent and individual

@@ -5,11 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "calibre-${meta.version}";
+  version = "2.45.0";
+  name = "calibre-${version}";
 
   src = fetchurl {
-    url = "https://github.com/kovidgoyal/calibre/releases/download/v${meta.version}/${name}.tar.xz";
-    sha256 = "1ffqvnjqmplcpa398809gp4d4l7nqc6k8ky255mdkabfcdvf3kk3";
+    url = "http://download.calibre-ebook.com/${version}/${name}.tar.xz";
+    sha256 = "1s3wrrvp2d0mczs09g2xkkknvlk3max6ws7awpss5kkdpjvay6ma";
   };
 
   inherit python;
@@ -58,11 +59,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    version = "2.44.1";
     description = "Comprehensive e-book software";
     homepage = http://calibre-ebook.com;
     license = licenses.gpl3;
     maintainers = with maintainers; [ viric iElectric pSub AndersonTorres ];
     platforms = platforms.linux;
+    inherit version;
   };
 }

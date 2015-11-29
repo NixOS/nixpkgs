@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "TFTP tools - a lot of fixes on top of BSD TFTP";
     maintainers = with maintainers; [ raskin ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     license = licenses.bsd3;
     homepage = http://www.kernel.org/pub/software/network/tftp/;
   };

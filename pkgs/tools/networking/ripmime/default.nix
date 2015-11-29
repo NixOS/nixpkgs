@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "Attachment extractor for MIME messages";
     maintainers = with maintainers; [ raskin ];
     homepage = http://www.pldaniels.com/ripmime/;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 
   passthru = {

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Stand alone tray";
     maintainers = with maintainers; [ raskin ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 
   passthru = {

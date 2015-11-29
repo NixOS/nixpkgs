@@ -179,6 +179,8 @@ in
     environment.systemPackages = [ pkgs.zsh ]
       ++ optional cfg.enableCompletion pkgs.nix-zsh-completions;
 
+    environment.pathsToLink = optional cfg.enableCompletion "/share/zsh";
+
     #users.defaultUserShell = mkDefault "/run/current-system/sw/bin/zsh";
 
     environment.shells =

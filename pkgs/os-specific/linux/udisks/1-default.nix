@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wbg3jrv8limdgvcygf4dqin3y6d30y9pcmmk711vq571vmq5v7j";
   };
 
-  patches = [ ./purity.patch ./no-pci-db.patch ];
+  patches = [ ./purity.patch ./no-pci-db.patch ./glibc.patch ];
 
   preConfigure =
     ''

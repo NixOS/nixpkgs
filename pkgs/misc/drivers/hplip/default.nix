@@ -8,18 +8,18 @@
 
 let
 
-  version = "3.15.9";
+  version = "3.15.11";
 
   name = "hplip-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "0vcxz3gsqcamlzx61xm77h7c769ya8kdhzwafa9w2wvkf3l8zxd1";
+    sha256 = "0vbw815a3wffp6l5m7j6f78xwp9pl1vn43ppyf0lp8q4vqdp3i1k";
   };
 
   plugin = fetchurl {
     url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "1ahalw83xm8x0h6hljhnkknry1hny9flkrlzcymv8nmwgic0kjgs";
+    sha256 = "00ii36y3914jd8zz4h6rn3xrf1w8szh1z8fngbl2qvs3qr9cm1m9";
   };
 
   hplipState =

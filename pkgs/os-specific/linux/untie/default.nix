@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A tool to run processes untied from some of the namespaces";
     maintainers = with maintainers; [ raskin ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 
   passthru = {

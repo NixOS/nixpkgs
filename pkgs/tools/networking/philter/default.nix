@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Mail sorter for Maildirs";
     maintainers = with maintainers; [ raskin ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 
   passthru = {

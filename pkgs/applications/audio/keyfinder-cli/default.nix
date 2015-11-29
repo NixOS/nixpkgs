@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libav libkeyfinder ];
 
-  makeFlagsArray = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   enableParallelBuilding = true;
 

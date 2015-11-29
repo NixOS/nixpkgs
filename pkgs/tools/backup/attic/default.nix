@@ -16,6 +16,7 @@ python3Packages.buildPythonPackage rec {
 
   preConfigure = ''
     export ATTIC_OPENSSL_PREFIX="${openssl}"
+    substituteInPlace setup.py --replace "version=versioneer.get_version()" "version='${version}'"
   '';
 
   meta = with stdenv.lib; {

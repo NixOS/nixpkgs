@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       Code.
     '';
     maintainers = with maintainers; [ raskin ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     license = licenses.lgpl21;
     homepage = http://zbar.sourceforge.net/;
   };

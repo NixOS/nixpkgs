@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     homepage = https://common-lisp.net/project/mkcl/;
     license = stdenv.lib.licenses.lgpl2Plus;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [stdenv.lib.maintainers.tohl];
   };
 }
 

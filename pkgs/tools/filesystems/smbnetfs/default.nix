@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A FUSE FS for mounting Samba shares";
     maintainers = with maintainers; [ raskin ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     license = licenses.gpl2;
     downloadPage = "http://sourceforge.net/projects/smbnetfs/files/smbnetfs";
     updateWalker = true;

@@ -2822,6 +2822,8 @@ let
 
   quilt = callPackage ../development/tools/quilt { };
 
+  radamsa = callPackage ../tools/security/radamsa { };
+
   radvd = callPackage ../tools/networking/radvd { };
 
   ranger = callPackage ../applications/misc/ranger { };
@@ -3363,6 +3365,8 @@ let
 
   vtun = callPackage ../tools/networking/vtun { };
 
+  weather = callPackage ../applications/misc/weather { };
+
   wal_e = callPackage ../tools/backup/wal-e { };
 
   watchman = callPackage ../development/tools/watchman { };
@@ -3392,8 +3396,6 @@ let
   rcm = callPackage ../tools/misc/rcm {};
 
   tftp-hpa = callPackage ../tools/networking/tftp-hpa {};
-
-  tidy-html5 = callPackage ../tools/text/tidy-html5 { };
 
   tigervnc = callPackage ../tools/admin/tigervnc {
     fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc
@@ -4120,6 +4122,10 @@ let
   };
 
   icedtea_web = icedtea8_web;
+
+  idrisPackages = callPackage ../development/idris-modules {
+    inherit (haskellPackages) idris;
+  };
 
   ikarus = callPackage ../development/compilers/ikarus { };
 
@@ -4864,7 +4870,7 @@ let
   tinycc = callPackage ../development/compilers/tinycc { };
 
   trv = callPackage ../development/tools/misc/trv {
-   inherit (ocamlPackages_4_02) findlib camlp4 core async async_unix 
+   inherit (ocamlPackages_4_02) findlib camlp4 core async async_unix
      async_extra sexplib async_shell core_extended async_find cohttp uri;
     ocaml = ocaml_4_02;
   };
@@ -5054,7 +5060,7 @@ let
 
   mesos = callPackage ../applications/networking/cluster/mesos {
     sasl = cyrus_sasl;
-    inherit (pythonPackages) python boto setuptools distutils-cfg wrapPython;
+    inherit (pythonPackages) python boto setuptools wrapPython;
     pythonProtobuf = pythonPackages.protobuf2_5;
     perf = linuxPackages.perf;
   };
@@ -5419,7 +5425,7 @@ let
   };
 
   buildbot = callPackage ../development/tools/build-managers/buildbot {
-    inherit (pythonPackages) twisted jinja2 sqlalchemy sqlalchemy_migrate;
+    inherit (pythonPackages) twisted jinja2 sqlalchemy sqlalchemy_migrate_0_7;
     dateutil = pythonPackages.dateutil_1_5;
   };
 
@@ -5698,7 +5704,7 @@ let
 
   jenkins = callPackage ../development/tools/continuous-integration/jenkins { };
 
-  jenkins-job-builder = callPackage ../development/tools/continuous-integration/jenkins-job-builder { };
+  jenkins-job-builder = pythonPackages.jenkins-job-builder;
 
   kcov = callPackage ../development/tools/analysis/kcov { };
 
@@ -6747,6 +6753,10 @@ let
 
   isocodes = callPackage ../development/libraries/iso-codes { };
 
+  ispc = callPackage ../development/compilers/ispc {
+    llvmPackages = llvmPackages_37;
+  };
+
   itk = callPackage ../development/libraries/itk { };
 
   jasper = callPackage ../development/libraries/jasper { };
@@ -6793,6 +6803,8 @@ let
   kf5_latest = kf516;
 
   kf5PackagesFun = self: with self; {
+
+    fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
 
     k9copy = callPackage ../applications/video/k9copy {};
 
@@ -6946,6 +6958,8 @@ let
   };
 
   libchardet = callPackage ../development/libraries/libchardet { };
+
+  libchewing = callPackage ../development/libraries/libchewing { };
 
   libcrafter = callPackage ../development/libraries/libcrafter { };
 
@@ -7944,6 +7958,8 @@ let
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
+  wolfssl = callPackage ../development/libraries/wolfssl { };
+
   openssl = callPackage ../development/libraries/openssl {
     fetchurl = fetchurlBoot;
     cryptodevHeaders = linuxPackages.cryptodev.override {
@@ -8248,6 +8264,8 @@ let
   rubberband = callPackage ../development/libraries/rubberband {
     inherit (vamp) vampSDK;
   };
+  
+  sad = callPackage ../applications/science/logic/sad { };
 
   sbc = callPackage ../development/libraries/sbc { };
 
@@ -12113,9 +12131,7 @@ let
 
   joe = callPackage ../applications/editors/joe { };
 
-  jbrout = callPackage ../applications/graphics/jbrout {
-    inherit (pythonPackages) lxml;
-  };
+  jbrout = callPackage ../applications/graphics/jbrout { };
 
   jumanji = callPackage ../applications/networking/browsers/jumanji {
     webkitgtk = webkitgtk24x;
@@ -12981,6 +12997,10 @@ let
 
   stella = callPackage ../misc/emulators/stella { };
 
+  statsd = callPackage ../tools/networking/statsd {
+    nodejs = nodejs-0_10;
+  };
+
   linuxstopmotion = callPackage ../applications/video/linuxstopmotion { };
 
   sweethome3d = recurseIntoAttrs (  (callPackage ../applications/misc/sweethome3d { })
@@ -13112,8 +13132,8 @@ let
 
   symlinks = callPackage ../tools/system/symlinks { };
 
-  # syncthing is pinned to go1.4 until https://github.com/golang/go/issues/12301 is resolved
-  syncthing = go14Packages.syncthing.bin // { outputs = [ "bin" ]; };
+  syncthing = go15Packages.syncthing.bin // { outputs = [ "bin" ]; };
+  syncthing011 = go15Packages.syncthing011.bin // { outputs = [ "bin" ]; };
 
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
@@ -13131,7 +13151,7 @@ let
   tahoelafs = callPackage ../tools/networking/p2p/tahoe-lafs {
     inherit (pythonPackages) twisted foolscap simplejson nevow zfec
       pycryptopp sqlite3 darcsver setuptoolsTrial setuptoolsDarcs
-      numpy pyasn1 mock;
+      numpy pyasn1 mock zope_interface;
   };
 
   tailor = builderDefsPackage (callPackage ../applications/version-management/tailor) {};
@@ -15107,7 +15127,11 @@ let
 
   fakenes = callPackage ../misc/emulators/fakenes { };
 
-  faust = callPackage ../applications/audio/faust { };
+  faust = faust2;
+
+  faust1 = callPackage ../applications/audio/faust/faust1.nix { };
+
+  faust2 = callPackage ../applications/audio/faust { };
 
   faust2alqt = callPackage ../applications/audio/faust/faust2alqt.nix { };
 
@@ -15165,6 +15189,10 @@ let
   hplip = callPackage ../misc/drivers/hplip { };
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
+
+  hplip_3_15_9 = callPackage ../misc/drivers/hplip/3.15.9.nix { };
+
+  hplipWithPlugin_3_15_9 = hplip_3_15_9.override { withPlugin = true; };
 
   # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };

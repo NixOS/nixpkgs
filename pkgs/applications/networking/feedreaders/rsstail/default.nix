@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace -liconv_hook ""
   '';
 
-  makeFlags = "prefix=$(out)";
+  makeFlags = [ "prefix=$(out)" ];
   enableParallelBuilding = true;
 
   doCheck = true;

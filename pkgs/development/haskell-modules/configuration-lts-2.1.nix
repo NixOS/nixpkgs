@@ -1178,6 +1178,7 @@ self: super: {
   "al" = dontDistribute super."al";
   "alarmclock" = doDistribute super."alarmclock_0_2_0_5";
   "alea" = dontDistribute super."alea";
+  "alex" = doDistribute super."alex_3_1_4";
   "alex-meta" = dontDistribute super."alex-meta";
   "alfred" = dontDistribute super."alfred";
   "alga" = dontDistribute super."alga";
@@ -1574,6 +1575,7 @@ self: super: {
   "binary-list" = doDistribute super."binary-list_1_1_0_2";
   "binary-literal-qq" = dontDistribute super."binary-literal-qq";
   "binary-orphans" = dontDistribute super."binary-orphans";
+  "binary-parser" = dontDistribute super."binary-parser";
   "binary-protocol" = dontDistribute super."binary-protocol";
   "binary-protocol-zmq" = dontDistribute super."binary-protocol-zmq";
   "binary-search" = dontDistribute super."binary-search";
@@ -2178,6 +2180,7 @@ self: super: {
   "const-math-ghc-plugin" = dontDistribute super."const-math-ghc-plugin";
   "constrained-categories" = dontDistribute super."constrained-categories";
   "constrained-normal" = dontDistribute super."constrained-normal";
+  "constraints" = doDistribute super."constraints_0_4_1_3";
   "constructible" = dontDistribute super."constructible";
   "constructive-algebra" = dontDistribute super."constructive-algebra";
   "consul-haskell" = doDistribute super."consul-haskell_0_1";
@@ -2507,6 +2510,7 @@ self: super: {
   "delaunay" = dontDistribute super."delaunay";
   "delicious" = dontDistribute super."delicious";
   "delimited-text" = dontDistribute super."delimited-text";
+  "delimiter-separated" = dontDistribute super."delimiter-separated";
   "delta" = dontDistribute super."delta";
   "delta-h" = dontDistribute super."delta-h";
   "demarcate" = dontDistribute super."demarcate";
@@ -2937,6 +2941,7 @@ self: super: {
   "extensible-effects" = dontDistribute super."extensible-effects";
   "external-sort" = dontDistribute super."external-sort";
   "extra" = doDistribute super."extra_1_1";
+  "extract-dependencies" = dontDistribute super."extract-dependencies";
   "extractelf" = dontDistribute super."extractelf";
   "ez-couch" = dontDistribute super."ez-couch";
   "faceted" = dontDistribute super."faceted";
@@ -3018,6 +3023,7 @@ self: super: {
   "file-command-qq" = dontDistribute super."file-command-qq";
   "file-embed" = doDistribute super."file-embed_0_0_8_2";
   "file-location" = doDistribute super."file-location_0_4_7_1";
+  "file-modules" = dontDistribute super."file-modules";
   "filecache" = dontDistribute super."filecache";
   "filediff" = dontDistribute super."filediff";
   "filelock" = dontDistribute super."filelock";
@@ -4674,6 +4680,7 @@ self: super: {
   "indian-language-font-converter" = dontDistribute super."indian-language-font-converter";
   "indices" = dontDistribute super."indices";
   "indieweb-algorithms" = dontDistribute super."indieweb-algorithms";
+  "inf-interval" = dontDistribute super."inf-interval";
   "infer-upstream" = dontDistribute super."infer-upstream";
   "infernu" = dontDistribute super."infernu";
   "infinite-search" = dontDistribute super."infinite-search";
@@ -4994,6 +5001,7 @@ self: super: {
   "language-glsl" = doDistribute super."language-glsl_0_1_1";
   "language-go" = dontDistribute super."language-go";
   "language-guess" = dontDistribute super."language-guess";
+  "language-java" = doDistribute super."language-java_0_2_7";
   "language-java-classfile" = dontDistribute super."language-java-classfile";
   "language-javascript" = doDistribute super."language-javascript_0_5_13_3";
   "language-kort" = dontDistribute super."language-kort";
@@ -5376,6 +5384,7 @@ self: super: {
   "mcmc-synthesis" = dontDistribute super."mcmc-synthesis";
   "mcmc-types" = dontDistribute super."mcmc-types";
   "mcpi" = dontDistribute super."mcpi";
+  "mdapi" = dontDistribute super."mdapi";
   "mdcat" = dontDistribute super."mdcat";
   "mdo" = dontDistribute super."mdo";
   "mecab" = dontDistribute super."mecab";
@@ -5449,6 +5458,7 @@ self: super: {
   "minesweeper" = dontDistribute super."minesweeper";
   "miniball" = dontDistribute super."miniball";
   "miniforth" = dontDistribute super."miniforth";
+  "minilens" = dontDistribute super."minilens";
   "minimal-configuration" = dontDistribute super."minimal-configuration";
   "minimorph" = dontDistribute super."minimorph";
   "minimung" = dontDistribute super."minimung";
@@ -5953,6 +5963,7 @@ self: super: {
   "ottparse-pretty" = dontDistribute super."ottparse-pretty";
   "overture" = dontDistribute super."overture";
   "pack" = dontDistribute super."pack";
+  "package-description-remote" = dontDistribute super."package-description-remote";
   "package-o-tron" = dontDistribute super."package-o-tron";
   "package-vt" = dontDistribute super."package-vt";
   "packdeps" = dontDistribute super."packdeps";
@@ -5996,6 +6007,7 @@ self: super: {
   "parport" = dontDistribute super."parport";
   "parse-dimacs" = dontDistribute super."parse-dimacs";
   "parse-help" = dontDistribute super."parse-help";
+  "parseargs" = doDistribute super."parseargs_0_1_5_2";
   "parsec-extra" = dontDistribute super."parsec-extra";
   "parsec-numbers" = dontDistribute super."parsec-numbers";
   "parsec-parsers" = dontDistribute super."parsec-parsers";
@@ -6760,6 +6772,7 @@ self: super: {
   "rope" = dontDistribute super."rope";
   "rosa" = dontDistribute super."rosa";
   "rose-trees" = dontDistribute super."rose-trees";
+  "rose-trie" = dontDistribute super."rose-trie";
   "rosezipper" = dontDistribute super."rosezipper";
   "roshask" = dontDistribute super."roshask";
   "rosso" = dontDistribute super."rosso";
@@ -7311,6 +7324,7 @@ self: super: {
   "stack" = dontDistribute super."stack";
   "stack-hpc-coveralls" = dontDistribute super."stack-hpc-coveralls";
   "stack-prism" = dontDistribute super."stack-prism";
+  "stack-run-auto" = dontDistribute super."stack-run-auto";
   "stackage" = doDistribute super."stackage_0_6_0_1";
   "stackage-build-plan" = dontDistribute super."stackage-build-plan";
   "stackage-cabal" = dontDistribute super."stackage-cabal";
@@ -7573,6 +7587,7 @@ self: super: {
   "tasty-quickcheck" = doDistribute super."tasty-quickcheck_0_8_3_2";
   "tasty-rerun" = dontDistribute super."tasty-rerun";
   "tasty-silver" = dontDistribute super."tasty-silver";
+  "tasty-smallcheck" = doDistribute super."tasty-smallcheck_0_8_0_1";
   "tasty-tap" = dontDistribute super."tasty-tap";
   "tateti-tateti" = dontDistribute super."tateti-tateti";
   "tau" = dontDistribute super."tau";

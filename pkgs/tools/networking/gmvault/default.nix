@@ -12,19 +12,15 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = [
-    pythonPackages.gdata
-    pythonPackages.IMAPClient
-    pythonPackages.Logbook
-    pythonPackages.argparse
-  ];
+  propagatedBuildInputs = with pythonPackages; [ gdata IMAPClient Logbook
+    argparse ];
 
   startScript = ./gmvault.py;
 
   patchPhase = ''
     cat ${startScript} > etc/scripts/gmvault
     chmod +x etc/scripts/gmvault
-    substituteInPlace setup.py --replace "Logbook==0.4.1" "Logbook==0.4.2"
+    substituteInPlace setup.py --replace "==" ">="
   '';
 
   meta = {
