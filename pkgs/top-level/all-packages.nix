@@ -15530,6 +15530,10 @@ let
     };
   };
 
+  yabause = callPackage ../misc/emulators/yabause {
+    qt = qt4;
+  };
+
   yafc = callPackage ../applications/networking/yafc { };
 
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
