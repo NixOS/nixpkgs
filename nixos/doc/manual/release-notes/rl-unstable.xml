@@ -96,6 +96,14 @@ nginx.override {
     </para>
   </listitem>
 
+  <listitem>
+    <para><literal>tidy-html5</literal> package is removed.
+    Upstream only provided <literal>(lib)tidy5</literal> during development,
+    and now they went back to <literal>(lib)tidy</literal> to work as a drop-in
+    replacement of the original package that has been unmaintained for years.
+    You can (still) use the <literal>html-tidy</literal> package, which got updated
+    to a stable release from this new upstream.</para>
+  </listitem>
 </itemizedlist>
 
 </section>
