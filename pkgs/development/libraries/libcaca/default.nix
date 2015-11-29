@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, zlib }:
+{ stdenv, fetchurl, ncurses, zlib, imlib2, pkgconfig, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "libcaca-0.99.beta19";
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1x3j6yfyxl52adgnabycr0n38j9hx2j74la0hz0n8cnh9ry4d2qj";
   };
 
-  configureFlags = "--disable-x11 --disable-imlib2 --disable-doc";
+  configureFlags = "--disable-x11 --disable-doc";
 
-  propagatedBuildInputs = [ ncurses zlib ];
+  propagatedBuildInputs = [ ncurses zlib imlib2 pkgconfig libX11 ];
 
   meta = {
     homepage = http://libcaca.zoy.org/;
