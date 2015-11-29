@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     # Don't search in non-Nix locations such as /usr, but do search in
     # Nixpkgs' Glibc.
     optional (stdenv ? glibc) ./search-path-3.2.patch ++
-    optional (stdenv ? cross) (fetchurl {
+    optional (stdenv ? cross && stdenv.isDarwin) (fetchurl {
       name = "fix-darwin-cross-compile.patch";
       url = "http://public.kitware.com/Bug/file_download.php?"
           + "file_id=4981&type=bug";
