@@ -6781,6 +6781,8 @@ let
 
   jsoncpp = callPackage ../development/libraries/jsoncpp { };
 
+  jsonnet = callPackage ../development/compilers/jsonnet { };
+
   libjson = callPackage ../development/libraries/libjson { };
 
   judy = callPackage ../development/libraries/judy { };
