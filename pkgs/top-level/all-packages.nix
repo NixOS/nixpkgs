@@ -3397,8 +3397,6 @@ let
 
   tftp-hpa = callPackage ../tools/networking/tftp-hpa {};
 
-  tidy-html5 = callPackage ../tools/text/tidy-html5 { };
-
   tigervnc = callPackage ../tools/admin/tigervnc {
     fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc
       xorg.fontbhlucidatypewriter75dpi ];
