@@ -9451,6 +9451,8 @@ let
 
   psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
 
+  pumpio = callPackage ../servers/web-apps/pump.io { };
+
   pyIRCt = builderDefsPackage (callPackage ../servers/xmpp/pyIRCt) {};
 
   pyMAILt = builderDefsPackage (callPackage ../servers/xmpp/pyMAILt) {};
