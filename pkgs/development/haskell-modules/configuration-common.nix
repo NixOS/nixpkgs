@@ -662,9 +662,6 @@ self: super: {
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
 
-  # https://github.com/adamwalker/sdr/issues/1
-  sdr = dontCheck super.sdr;
-
   # https://github.com/bos/aeson/issues/253
   aeson = dontCheck super.aeson;
 
