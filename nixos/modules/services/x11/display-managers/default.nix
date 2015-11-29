@@ -37,7 +37,7 @@ let
   # file provided by services.xserver.displayManager.session.script
   xsession = wm: dm: pkgs.writeScript "xsession"
     ''
-      #! /bin/sh
+      #! ${pkgs.bash}/bin/bash
 
       . /etc/profile
       cd "$HOME"
