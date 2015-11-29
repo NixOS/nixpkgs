@@ -212,6 +212,17 @@ in {
     };
   };
 
+  ruby_2_1_7 = generic {
+    majorVersion = "2";
+    minorVersion = "1";
+    teenyVersion = "7";
+    patchLevel = "0";
+    sha256 = {
+      src = "10fxlqmpbq9407zgsx060q22yj4zq6c3czbf29h7xk1rmjb1b77m";
+      git = "c5ecad94558547b6a50cf64d379829fecd62f3ca175626827f435237a3c6be5c";
+    };
+  };
+
   ruby_2_2_0 = generic {
     majorVersion = "2";
     minorVersion = "2";
