@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1x3j6yfyxl52adgnabycr0n38j9hx2j74la0hz0n8cnh9ry4d2qj";
   };
 
-  configureFlags = "--disable-x11 --disable-doc";
+  configureFlags = "--disable-doc";
 
   propagatedBuildInputs = [ ncurses zlib imlib2 pkgconfig libX11 ];
 
