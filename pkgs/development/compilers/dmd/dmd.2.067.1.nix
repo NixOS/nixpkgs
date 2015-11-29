@@ -1,19 +1,15 @@
-{ stdenv, callPackage, fetchurl, unzip, which, makeWrapper, gcc }:
-
-let
-  bootstrap = callPackage ./dmd.2.067.1.nix { };
-in
+{ stdenv, fetchurl, unzip, makeWrapper, gcc }:
 
 stdenv.mkDerivation rec {
-  version = "2.069.1";
+  version = "2.067.1";
   name = "dmd-${version}";
 
   src = fetchurl {
     url = "http://downloads.dlang.org/releases/2015/dmd.${version}.zip";
-    sha256 = "1g1sff6zp8cnzrlffwjfh0ff2y2ijhd558nz5fhbwwffrjgz4wwc";
+    sha256 = "0ny99vfllvvgcl79pwisxcdnb3732i827k9zg8c0j4s0n79k5z94";
   };
 
-  buildInputs = [ unzip which makeWrapper ];
+  buildInputs = [ unzip makeWrapper ];
 
   # Allow to use "clang++", commented in Makefile
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -22,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
       cd src/dmd
-      make -f posix.mak INSTALL_DIR=$out HOST_DC=${bootstrap}/bin/dmd
+      make -f posix.mak INSTALL_DIR=$out
       export DMD=$PWD/dmd
       cd ../druntime
       make -f posix.mak INSTALL_DIR=$out DMD=$DMD
