@@ -200,6 +200,31 @@ in modules // {
     };
   };
 
+  acd_cli = buildPythonPackage rec {
+    name = pname + "-" + version;
+    pname = "acd_cli";
+    version = "0.3.1";
+
+    disabled = !isPy3k;
+    doCheck = !isPy3k;
+
+    src = pkgs.fetchFromGitHub {
+      owner = "yadayada";
+      repo = pname;
+      rev = version;
+      sha256 = "1ywimbisgb5g7xl9nrfwcm7dv3j8fsrjfp7bxb3l58zbsrzj6z2s";
+    };
+
+    propagatedBuildInputs = with self; [ appdirs colorama dateutil requests2 requests_toolbelt sqlalchemy ];
+
+    meta = {
+      description = "A command line interface and FUSE filesystem for Amazon Cloud Drive";
+      homepage = https://github.com/yadayada/acd_cli;
+      license = licenses.gpl2;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ edwtjo ];
+    };
+  };
 
   actdiag = buildPythonPackage rec {
     name = "actdiag-0.5.3";
