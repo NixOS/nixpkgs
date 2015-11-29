@@ -150,10 +150,10 @@ in {
     majorVersion = "2";
     minorVersion = "0";
     teenyVersion = "0";
-    patchLevel = "645";
+    patchLevel = "647";
     sha256 = {
-      src = "1azl3kbqqw3jvwfcsy6fdb7vmwz5w73fwpq1y1gblz79zzzqx7sy";
-      git = "14bnas1iif2shyaz4ylb0832x96y2mda52x0v0aglkvqmcz1cfxb";
+      src = "1v2vbvydarcx5801gx9lc6gr6dfi0i7qbzwhsavjqbn79rdsz2n8";
+      git = "bd9b6cc8ea984b38d245fb3be1b918ec677f29f394ede43bbf5cf00e88edd899";
     };
   };
 
