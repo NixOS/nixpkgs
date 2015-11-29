@@ -244,4 +244,15 @@ in {
       git = "08mw1ql2ghy483cp8xzzm78q17simn4l6phgm2gah7kjh9y3vbrn";
     };
   };
+
+  ruby_2_2_3 = generic {
+    majorVersion = "2";
+    minorVersion = "2";
+    teenyVersion = "3";
+    patchLevel = "0";
+    sha256 = {
+      src = "1kpdf7f8pw90n5bckpl2idzggk0nn0240ah92sj4a1w6k4pmyyfz";
+      git = "a62301ca31ef23c9ae88ca68c925df5c0cbf4319265befc3a2fa27a56213cb88";
+    };
+  };
 }
