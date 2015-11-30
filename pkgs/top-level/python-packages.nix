@@ -8573,12 +8573,12 @@ in modules // {
 
 
   ipywidgets = buildPythonPackage rec {
-    version = "4.0.2";
+    version = "4.1.1";
     name = "ipywidgets-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipywidgets/${name}.tar.gz";
-      sha256 = "1afwddaslf62ba75679s059z36zfamcx454q2lgd97xqsp30hqmf";
+      sha256 = "ceeb325e45ade9537c2d115fed9d522e5c6e90bb161592e2f0807375dc661028";
     };
 
     propagatedBuildInputs = with self; [ipython ipykernel traitlets notebook];
