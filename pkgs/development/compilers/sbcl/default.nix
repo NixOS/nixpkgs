@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    sh make.sh --prefix=$out --xc-host="${sbclBootstrapHost} --disable-debugger --no-userinit --no-sysinit"
+    sh make.sh --prefix=$out --xc-host="${sbclBootstrapHost}"
   '';
 
   installPhase = ''
