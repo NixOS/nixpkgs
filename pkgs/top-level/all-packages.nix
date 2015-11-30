@@ -6318,6 +6318,7 @@ let
   fftw = callPackage ../development/libraries/fftw { };
   fftwSinglePrec = fftw.override { precision = "single"; };
   fftwFloat = fftwSinglePrec; # the configure option is just an alias
+  fftwLongDouble = fftw.override { precision = "long-double"; };
 
   filter-audio = callPackage ../development/libraries/filter-audio {};
 
