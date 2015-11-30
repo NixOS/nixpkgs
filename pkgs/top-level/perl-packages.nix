@@ -5295,13 +5295,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  HTMLScrubber = buildPerlPackage {
-    name = "HTML-Scrubber-0.08";
+  HTMLScrubber = buildPerlPackage rec {
+    name = "HTML-Scrubber-0.15";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PO/PODMASTER/HTML-Scrubber-0.08.tar.gz;
+      url = "mirror://cpan/authors/id/P/PO/PODMASTER/${name}.tar.gz";
       sha256 = "0xb5zj67y2sjid9bs3yfm81rgi91fmn38wy1ryngssw6vd92ijh2";
     };
-    propagatedBuildInputs = [HTMLParser];
+    propagatedBuildInputs = [ HTMLParser ];
   };
 
   HTMLTableExtract = buildPerlPackage {
