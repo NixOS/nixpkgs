@@ -8487,12 +8487,12 @@ in modules // {
   };
 
   ipykernel = buildPythonPackage rec {
-    version = "4.1.1";
+    version = "4.2.0";
     name = "ipykernel-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipykernel/${name}.tar.gz";
-      sha256 = "d8c5555386d0f18f1336dea9800f9f0fe96dcecc9757c0f980e11fdfadb661ff";
+      sha256 = "723b3d4baac20f0c9cd91fc75c3e813636ecb6c6e303fb34d628c3df078985a7";
     };
 
     buildInputs = with self; [] ++ optionals isPy27 [mock];
