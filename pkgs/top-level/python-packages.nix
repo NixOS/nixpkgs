@@ -2884,6 +2884,7 @@ in modules // {
   mixpanel = buildPythonPackage rec {
     version = "4.0.2";
     name = "mixpanel-${version}";
+    disabled = isPy3k;
 
     src = pkgs.fetchzip {
       url = "https://github.com/mixpanel/mixpanel-python/archive/${version}.zip";
@@ -16228,6 +16229,7 @@ in modules // {
 
   rpkg = buildPythonPackage (rec {
     name = "rpkg-1.14";
+    disabled = !isPy27;
     meta.maintainers = with maintainers; [ mornfall ];
 
     src = pkgs.fetchurl {
