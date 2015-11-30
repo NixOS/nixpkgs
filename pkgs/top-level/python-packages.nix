@@ -9091,6 +9091,24 @@ in modules // {
     };
   };
 
+  line_profiler = buildPythonPackage rec{
+    version = "1.0";
+    name = "line_profiler-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/line_profiler/${name}.tar.gz";
+      sha256 = "a9e0c9ffa814f1215107c86c890afa8e63bec5a37d951f6f9d3668c1df2b1900";
+    };
+
+    buildInputs = with self; [ cython ];
+
+    meta = {
+      description = "Line-by-line profiler";
+      homepage = https://github.com/rkern/line_profiler;
+      license = licenses.bsd3;
+      maintainer = with maintainers; [ fridh ];
+    };
+  };
 
   linode = buildPythonPackage rec {
     name = "linode-${version}";
