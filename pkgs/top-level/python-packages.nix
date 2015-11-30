@@ -8515,12 +8515,12 @@ in modules // {
   };
 
   ipykernel = buildPythonPackage rec {
-    version = "4.1.1";
+    version = "4.2.0";
     name = "ipykernel-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipykernel/${name}.tar.gz";
-      sha256 = "d8c5555386d0f18f1336dea9800f9f0fe96dcecc9757c0f980e11fdfadb661ff";
+      sha256 = "723b3d4baac20f0c9cd91fc75c3e813636ecb6c6e303fb34d628c3df078985a7";
     };
 
     buildInputs = with self; [] ++ optionals isPy27 [mock];
@@ -8535,12 +8535,12 @@ in modules // {
   };
 
   ipyparallel = buildPythonPackage rec {
-    version = "4.0.2";
+    version = "4.1.0";
     name = "ipyparallel-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipyparallel/${name}.tar.gz";
-      sha256 = "6b9e09ca441a45e055b97cb8e3e1dd30de85b935fae3aa0d97f138352fd3089b";
+      sha256 = "c943f6b3bbabb9332336d15474969e2a7a73d5b583f9786f7b357c75e4b1709a";
     };
 
     propagatedBuildInputs = with self; [ipython_genutils decorator pyzmq ipython jupyter_client ipykernel];
@@ -8601,12 +8601,12 @@ in modules // {
 
 
   ipywidgets = buildPythonPackage rec {
-    version = "4.0.2";
+    version = "4.1.1";
     name = "ipywidgets-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipywidgets/${name}.tar.gz";
-      sha256 = "1afwddaslf62ba75679s059z36zfamcx454q2lgd97xqsp30hqmf";
+      sha256 = "ceeb325e45ade9537c2d115fed9d522e5c6e90bb161592e2f0807375dc661028";
     };
 
     propagatedBuildInputs = with self; [ipython ipykernel traitlets notebook];
@@ -10784,12 +10784,12 @@ in modules // {
   };
 
   numexpr = buildPythonPackage rec {
-    version = "2.4.3";
+    version = "2.4.6";
     name = "numexpr-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/numexpr/${name}.tar.gz";
-      sha256 = "3ae7191c89df40db6b0a8637a4dace7c5956bc910793a53225f985f3b443c722";
+      sha256 = "052397670dc56d7845ff894cd7d858e4f115491ecd93bcc0eda5cb83990c5da3";
     };
 
     # Tests fail with python 3. https://github.com/pydata/numexpr/issues/177
@@ -12478,11 +12478,11 @@ in modules // {
     inherit (pkgs.stdenv) isDarwin;
   in buildPythonPackage rec {
     name = "pandas-${version}";
-    version = "0.17.0";
+    version = "0.17.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
-      sha256 = "320d4fdf734b82adebc8fde9d8ca4b05fe155a72b6f7aa95d76242da8748d6a4";
+      sha256 = "cfd7214a7223703fe6999fbe34837749540efee1c985e6aee9933f30e3f72837";
     };
 
     buildInputs = with self; [ nose ] ++ optional isDarwin pkgs.libcxx;
@@ -16942,12 +16942,12 @@ in modules // {
   };
 
   sympy = buildPythonPackage rec {
-    name = "sympy-0.7.6";
+    name = "sympy-0.7.6.1";
     disabled = isPy34 || isPy35 || isPyPy;  # some tests fail
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/s/sympy/${name}.tar.gz";
-      sha256 = "19yp0gy4i7p4g6l3b8vaqkj9qj7yqb5kqy0qgbdagpzgkdz958yz";
+      sha256 = "1fc272b51091aabe7d07f1bf9f0a47f3e28657fb2bec52bf3ef0e8f159f5f564";
     };
 
     buildInputs = [ pkgs.glibcLocales ];
