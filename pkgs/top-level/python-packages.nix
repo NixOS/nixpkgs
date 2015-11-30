@@ -217,11 +217,7 @@ in modules // {
 
     propagatedBuildInputs = with self; [ appdirs colorama dateutil requests2 requests_toolbelt sqlalchemy ];
 
-    postInstall = ''
-      for prog in "$out/bin/"*; do
-        wrapProgram "$prog" --prefix LIBFUSE_PATH : "${pkgs.fuse}/lib/libfuse.so"
-      done
-    '';
+    makeWrapperArgs = [ "--prefix LIBFUSE_PATH : ${pkgs.fuse}/lib/libfuse.so" ];
 
     meta = {
       description = "A command line interface and FUSE filesystem for Amazon Cloud Drive";
