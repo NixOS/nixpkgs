@@ -657,6 +657,8 @@ let
 
   azureus = callPackage ../tools/networking/p2p/azureus { };
 
+  backup = callPackage ../tools/backup/backup { };
+
   basex = callPackage ../tools/text/xml/basex { };
 
   babeld = callPackage ../tools/networking/babeld { };
