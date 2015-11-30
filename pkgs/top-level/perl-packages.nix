@@ -5219,23 +5219,21 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTMLFormFu = buildPerlPackage rec {
-    name = "HTML-FormFu-0.09010";
+    name = "HTML-FormFu-2.01";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/HTML/${name}.tar.gz";
-      sha256 = "08hf6z35yhfd1521ip8x5hpwb7h09k643s9sqf6ddmi9yvqini1k";
+      sha256 = "0fvilng85wc65pna898x7mp4hx73mhahl7j2s10gj76avmxdizsw";
     };
-    buildInputs = [ CGISimple ];
-    propagatedBuildInputs =
-      [ ClassAccessorChained Clone ConfigAny
-        DateCalc ListMoreUtils EmailValid
-        DataVisitor DateTime DateTimeFormatBuilder
-        DateTimeFormatStrptime DateTimeFormatNatural
-        Readonly YAMLLibYAML NumberFormat HashFlatten
-        HTMLTokeParserSimple RegexpCommon
-        CaptchaReCAPTCHA HTMLScrubber FileShareDir
-        TemplateToolkit CryptCBC CryptDES PathClass
-        MooseXAttributeChained MooseXAliases MooseXSetOnce
-      ];
+    buildInputs = [ FileShareDirInstall TestAggregate TestException ];
+    propagatedBuildInputs = [ Clone ConfigAny DataVisitor DateTime
+      DateTimeFormatBuilder DateTimeFormatNatural DateTimeFormatStrptime
+      DateTimeLocale EmailValid FileShareDir HTMLScrubber HTMLTokeParserSimple
+      HTTPMessage HashFlatten ListMoreUtils ModulePluggable Moose MooseXAliases
+      NumberFormat PathClass Readonly RegexpCommon TaskWeaken YAMLLibYAML ];
+    meta = {
+      description = "HTML Form Creation, Rendering and Validation Framework";
+      license = "perl";
+    };
   };
 
   HTMLFormHandler = buildPerlPackage {
