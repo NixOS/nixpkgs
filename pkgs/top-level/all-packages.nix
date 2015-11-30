@@ -7740,6 +7740,7 @@ let
   mesa_drivers = mesaDarwinOr (
     let mo = mesa_noglu.override {
       grsecEnabled = config.grsecurity or false;
+      llvmPackages = llvmPackages_36;
     };
     in mo.drivers
   );
