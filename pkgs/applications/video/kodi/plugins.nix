@@ -1,8 +1,23 @@
-{ stdenv, fetchFromGitHub, kodi, steam }:
+{ stdenv, fetchFromGitHub, cmake, kodi, steam, libcec_platform, tinyxml }:
 
 let
 
-  pluginDir = "/lib/kodi/plugin";
+  pluginDir = "/share/kodi/addons";
+
+  kodi-platform = stdenv.mkDerivation rec {
+    project = "kodi-platform";
+    version = "15.2";
+    name = "${project}-${version}";
+
+    src = fetchFromGitHub {
+      owner = "xbmc";
+      repo = project;
+      rev = "45d6ad1984fdb1dc855076ff18484dbec33939d1";
+      sha256 = "1fai33mwyv5ab47b16i692g7a3vcnmxavx13xin2gh16y0qm62hi";
+    };
+
+    buildInputs = [ cmake kodi libcec_platform tinyxml ];
+  };
 
   mkKodiPlugin = { plugin, namespace, version, src, meta, ... }:
   stdenv.lib.makeOverridable stdenv.mkDerivation rec {
@@ -134,4 +149,36 @@ in
     propagatedBuildinputs = [ steam ];
   };
 
+  pvr-hts = (mkKodiPlugin rec {
+    plugin = "pvr-hts";
+    namespace = "pvr.hts";
+    version = "2.1.18";
+
+    src = fetchFromGitHub {
+      owner = "kodi-pvr";
+      repo = "pvr.hts";
+      rev = "016b0b3251d6d5bffaf68baf59010e4347759c4a";
+      sha256 = "03lhxipz03r516pycabqc9b89kd7wih3c2dr4p602bk64bsmpi0j";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/kodi-pvr/pvr.hts;
+      description = "Kodi's Tvheadend HTSP client addon";
+      platforms = platforms.all;
+      maintainers = with maintainers; [ page ];
+    };
+  }).override {
+    buildInputs = [ cmake kodi libcec_platform kodi-platform ];
+
+    # disables check ensuring install prefix is that of kodi
+    cmakeFlags = [ "-DOVERRIDE_PATHS=1" ];
+
+    # kodi checks for plugin .so libs existance in the addon folder (share/...)
+    # and the non-wrapped kodi lib/... folder before even trying to dlopen
+    # them. Symlinking .so, as setting LD_LIBRARY_PATH is of no use
+    installPhase = ''
+      make install
+      ln -s $out/lib/kodi/addons/pvr.hts/pvr.hts.so $out/share/kodi/addons/pvr.hts
+    '';
+  };
 }
