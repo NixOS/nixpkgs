@@ -5736,6 +5736,8 @@ let
 
   mk = callPackage ../development/tools/build-managers/mk { };
 
+  multi-ghc-travis = callPackage ../development/tools/haskell/multi-ghc-travis { };
+
   neoload = callPackage ../development/tools/neoload {
     licenseAccepted = (config.neoload.accept_license or false);
     fontsConf = makeFontsConf {
