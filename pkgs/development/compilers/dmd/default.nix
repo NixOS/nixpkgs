@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, unzip, which, makeWrapper, gcc }:
+{ stdenv, callPackage, fetchurl, unzip, curl, which, tzdata, makeWrapper, gcc }:
 
 let
   bootstrap = callPackage ./dmd.2.067.1.nix { };
@@ -13,22 +13,42 @@ stdenv.mkDerivation rec {
     sha256 = "1g1sff6zp8cnzrlffwjfh0ff2y2ijhd558nz5fhbwwffrjgz4wwc";
   };
 
-  buildInputs = [ unzip which makeWrapper ];
+  buildInputs = [ unzip curl which tzdata makeWrapper ];
+
+  prePatch = ''
+      #Ugly hack to fix the hardcoded path to zoneinfo in the source file.
+      substituteInPlace src/phobos/std/datetime.d --replace /usr/share/zoneinfo/ ${tzdata}/share/zoneinfo/
+      #Ugly hack so the dlopen call has a chance to succeed.
+      substituteInPlace src/phobos/std/net/curl.d --replace libcurl.so ${curl}/lib/libcurl.so
+  '';
 
   # Allow to use "clang++", commented in Makefile
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+      #I think this is not needed at all because the Makefile sets the proper compiler per OS.
+      #I need to check that theory on an OSX machine.
       substituteInPlace src/dmd/posix.mak --replace g++ clang++
   '';
 
   buildPhase = ''
       cd src/dmd
-      make -f posix.mak INSTALL_DIR=$out HOST_DC=${bootstrap}/bin/dmd
+      make -f posix.mak INSTALL_DIR=$out HOST_DC=${bootstrap}/bin/dmd BUILD=release
       export DMD=$PWD/dmd
       cd ../druntime
-      make -f posix.mak INSTALL_DIR=$out DMD=$DMD
+      make -f posix.mak INSTALL_DIR=$out DMD=$DMD BUILD=release
       cd ../phobos
-      make -f posix.mak INSTALL_DIR=$out DMD=$DMD
+      make -f posix.mak INSTALL_DIR=$out DMD=$DMD BUILD=release
       cd ../..
+  '';
+
+  doCheck = true;
+
+  checkPhase = ''
+    export DMD=$PWD/src/dmd/dmd
+    cd src/druntime
+    make -f posix.mak unittest DMD=$DMD BUILD=release
+    cd ../phobos
+    make -f posix.mak unittest DMD=$DMD BUILD=release
+    cd ../..
   '';
 
   installPhase = ''
