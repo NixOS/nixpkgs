@@ -3150,6 +3150,7 @@ let self = _self // overrides; _self = with self; {
     patches = [
       # Fix test error inside t/52leaks.t
       ../development/perl-modules/dbix-class-fix-52leaks.patch
+      ../development/perl-modules/DBIx-Class-0.082820-Adjust-view-dependency-tests-to-work-on-newer-libsql.patch
     ];
     meta = {
       homepage = http://www.dbix-class.org/;
