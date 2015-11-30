@@ -16895,12 +16895,12 @@ in modules // {
   };
 
   sympy = buildPythonPackage rec {
-    name = "sympy-0.7.6";
+    name = "sympy-0.7.6.1";
     disabled = isPy34 || isPy35 || isPyPy;  # some tests fail
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/s/sympy/${name}.tar.gz";
-      sha256 = "19yp0gy4i7p4g6l3b8vaqkj9qj7yqb5kqy0qgbdagpzgkdz958yz";
+      sha256 = "1fc272b51091aabe7d07f1bf9f0a47f3e28657fb2bec52bf3ef0e8f159f5f564";
     };
 
     buildInputs = [ pkgs.glibcLocales ];
