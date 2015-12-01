@@ -2543,6 +2543,25 @@ in modules // {
   };
 
 
+  consul = buildPythonPackage (rec {
+    name = "python-consul-0.4.7";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-consul/${name}.tar.gz";
+      sha256 = "1vb0hgl11n8krpk5n22bk90agm31004ipv4xnbcadzczj5xackg7";
+    };
+
+    buildInputs = with self; [ requests2 six pytest ];
+
+    meta = {
+      description = "Python client for Consul (http://www.consul.io/)";
+      homepage = https://github.com/cablehead/python-consul;
+      license = licenses.mit;
+      maintainers = with maintainers; [ desiderius ];
+    };
+  });
+
+
   contextlib2 = buildPythonPackage rec {
     name = "contextlib2-0.4.0";
 
