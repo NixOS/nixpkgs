@@ -5827,10 +5827,10 @@ in modules // {
   };
 
   py3status = buildPythonPackage rec {
-    name = "py3status-2.3";
+    name = "py3status-2.7";
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/py3status/${name}.tar.gz";
-      md5 = "89ad395268c7791ff5d36412b1efeeb9";
+      md5 = "6d65cec6bc69671afa9176963526af88";
     };
     propagatedBuildInputs = with self; [ requests2 ];
     meta = {
