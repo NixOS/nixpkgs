@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "tbb-4.2-u5";
+  name = "tbb-4.4-u2";
 
   src = fetchurl {
-    url = "https://www.threadingbuildingblocks.org/sites/default/files/software_releases/source/tbb42_20140601oss_src.tgz";
-    sha256 = "1zjh81hvfxvk1v1li27w1nm3bp6kqv913lxfb2pqa134dibw2pp7";
+    url = "https://www.threadingbuildingblocks.org/sites/default/files/software_releases/source/tbb44_20151115oss_src.tgz";
+    sha256 = "1fvprkjdxj7529hr1qkzkxkk18mx6zllrpiwglq4k3y1hpyc9m9x";
   };
 
   checkTarget = "test";

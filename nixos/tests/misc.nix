@@ -80,6 +80,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       };
 
       # Test whether systemd-udevd automatically loads modules for our hardware.
+      $machine->succeed("systemctl start systemd-udev-settle.service");
       subtest "udev-auto-load", sub {
           $machine->waitForUnit('systemd-udev-settle.service');
           $machine->succeed('lsmod | grep psmouse');

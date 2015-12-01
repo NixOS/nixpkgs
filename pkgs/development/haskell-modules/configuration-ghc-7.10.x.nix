@@ -118,9 +118,6 @@ self: super: {
   # Version 1.19.5 fails its test suite.
   happy = dontCheck super.happy;
 
-  # Test suite fails in "/tokens_bytestring_unicode.g.bin".
-  alex = dontCheck super.alex;
-
   # Upstream was notified about the over-specified constraint on 'base'
   # but refused to do anything about it because he "doesn't want to
   # support a moving target". Go figure.

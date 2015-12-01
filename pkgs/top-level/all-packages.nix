@@ -519,6 +519,8 @@ let
 
   airfield = callPackage ../tools/networking/airfield { };
 
+  aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
+
   analog = callPackage ../tools/admin/analog {};
 
   apktool = callPackage ../development/tools/apktool {
@@ -2822,6 +2824,8 @@ let
 
   quilt = callPackage ../development/tools/quilt { };
 
+  radamsa = callPackage ../tools/security/radamsa { };
+
   radvd = callPackage ../tools/networking/radvd { };
 
   ranger = callPackage ../applications/misc/ranger { };
@@ -3025,7 +3029,7 @@ let
 
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
 
-  snabb = callPackage ../tools/networking/snabb { } ;
+  snabbswitch = callPackage ../tools/networking/snabbswitch { } ;
 
   sng = callPackage ../tools/graphics/sng {
     libpng = libpng12;
@@ -3363,6 +3367,8 @@ let
 
   vtun = callPackage ../tools/networking/vtun { };
 
+  weather = callPackage ../applications/misc/weather { };
+
   wal_e = callPackage ../tools/backup/wal-e { };
 
   watchman = callPackage ../development/tools/watchman { };
@@ -3392,8 +3398,6 @@ let
   rcm = callPackage ../tools/misc/rcm {};
 
   tftp-hpa = callPackage ../tools/networking/tftp-hpa {};
-
-  tidy-html5 = callPackage ../tools/text/tidy-html5 { };
 
   tigervnc = callPackage ../tools/admin/tigervnc {
     fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc
@@ -4868,7 +4872,7 @@ let
   tinycc = callPackage ../development/compilers/tinycc { };
 
   trv = callPackage ../development/tools/misc/trv {
-   inherit (ocamlPackages_4_02) findlib camlp4 core async async_unix 
+   inherit (ocamlPackages_4_02) findlib camlp4 core async async_unix
      async_extra sexplib async_shell core_extended async_find cohttp uri;
     ocaml = ocaml_4_02;
   };
@@ -5733,6 +5737,8 @@ let
   maven3 = callPackage ../development/tools/build-managers/apache-maven { };
 
   mk = callPackage ../development/tools/build-managers/mk { };
+
+  multi-ghc-travis = callPackage ../development/tools/haskell/multi-ghc-travis { };
 
   neoload = callPackage ../development/tools/neoload {
     licenseAccepted = (config.neoload.accept_license or false);
@@ -6748,6 +6754,10 @@ let
 
   isocodes = callPackage ../development/libraries/iso-codes { };
 
+  ispc = callPackage ../development/compilers/ispc {
+    llvmPackages = llvmPackages_37;
+  };
+
   itk = callPackage ../development/libraries/itk { };
 
   jasper = callPackage ../development/libraries/jasper { };
@@ -6774,6 +6784,8 @@ let
   json_c = callPackage ../development/libraries/json-c { };
 
   jsoncpp = callPackage ../development/libraries/jsoncpp { };
+
+  jsonnet = callPackage ../development/compilers/jsonnet { };
 
   libjson = callPackage ../development/libraries/libjson { };
 
@@ -13120,8 +13132,8 @@ let
 
   symlinks = callPackage ../tools/system/symlinks { };
 
-  # syncthing is pinned to go1.4 until https://github.com/golang/go/issues/12301 is resolved
-  syncthing = go14Packages.syncthing.bin // { outputs = [ "bin" ]; };
+  syncthing = go15Packages.syncthing.bin // { outputs = [ "bin" ]; };
+  syncthing011 = go15Packages.syncthing011.bin // { outputs = [ "bin" ]; };
 
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
@@ -15112,7 +15124,11 @@ let
 
   fakenes = callPackage ../misc/emulators/fakenes { };
 
-  faust = callPackage ../applications/audio/faust { };
+  faust = faust2;
+
+  faust1 = callPackage ../applications/audio/faust/faust1.nix { };
+
+  faust2 = callPackage ../applications/audio/faust { };
 
   faust2alqt = callPackage ../applications/audio/faust/faust2alqt.nix { };
 
@@ -15520,6 +15536,10 @@ let
     bluez = pkgs.bluez5.override {
       enableWiimote = true;
     };
+  };
+
+  yabause = callPackage ../misc/emulators/yabause {
+    qt = qt4;
   };
 
   yafc = callPackage ../applications/networking/yafc { };

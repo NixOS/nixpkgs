@@ -33,7 +33,7 @@ the package.  The value of a meta-attribute must be a string.</para>
 command-line using <command>nix-env</command>:
 
 <screen>
-$ nix-env -qa hello --meta --json
+$ nix-env -qa hello --json
 {
     "hello": {
         "meta": {

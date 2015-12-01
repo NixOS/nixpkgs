@@ -1,4 +1,11 @@
-{ stdenv, fetchurl, openssl, shared_mime_info }:
+{ stdenv, fetchurl, openssl }:
+let
+  # Let's not pull the whole apache httpd package
+  mime_file = fetchurl {
+    url = https://raw.githubusercontent.com/apache/httpd/906e419c1f703360e2e8ec077b393347f993884f/docs/conf/mime.types;
+    sha256 = "ef972fc545cbff4c0daa2b2e6b440859693b3c10435ee90f10fa6fffad800c16";
+  };
+in
 stdenv.mkDerivation rec {
   name = "webfs-${version}";
   version = "1.21";
@@ -13,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ];
 
   makeFlags = [
-    "mimefile=${shared_mime_info}/share/mime/globs"
+    "mimefile=${mime_file}"
     "prefix=$(out)"
   ];
 

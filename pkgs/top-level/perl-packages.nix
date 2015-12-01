@@ -310,7 +310,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://metacpan.org/release/Attribute-Params-Validate;
       description = "Define validation through subroutine attributes";
-      license = "artistic_2";
+      license = stdenv.lib.licenses.artistic2;
     };
   };
 
@@ -587,7 +587,7 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       description = "Lists of reserved barewords and symbol names";
-      license = "unknown";
+      license = with stdenv.lib.licenses; [ artistic1 gpl2 ];
     };
   };
 
@@ -707,7 +707,7 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       description = "Perl client for B<memcached>, in C language";
-      license = "unknown";
+      license = "perl";
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
     };
@@ -1479,7 +1479,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestDeep ];
     meta = {
       description = "Build structures from CGI data";
-      license = "bsd";
+      license = stdenv.lib.licenses.bsd2;
     };
   };
 
@@ -2740,7 +2740,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "29a1926314ce1681a312d6155c29590c771ddacf91b7485873ce449ef209dd04";
     };
     meta = {
-      license = "unknown";
+      license = with stdenv.lib.licenses; [ artistic1 gpl2Plus ];
     };
   };
 
@@ -2767,7 +2767,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ DateTime DateTimeEventRecurrence ];
     meta = {
       description = "DateTime rfc2445 recurrences";
-      license = "unknown";
+      license = "perl";
     };
   };
 
@@ -2950,7 +2950,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ DateTime SetInfinite ];
     meta = {
       description = "DateTime set objects";
-      license = "unknown";
+      license = "perl";
     };
   };
 
@@ -3150,6 +3150,7 @@ let self = _self // overrides; _self = with self; {
     patches = [
       # Fix test error inside t/52leaks.t
       ../development/perl-modules/dbix-class-fix-52leaks.patch
+      ../development/perl-modules/DBIx-Class-0.082820-Adjust-view-dependency-tests-to-work-on-newer-libsql.patch
     ];
     meta = {
       homepage = http://www.dbix-class.org/;
@@ -4883,7 +4884,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ ClassXSAccessor ExceptionClass ListMoreUtils MooXlate ];
     meta = {
       description = "Verify solutions for solitaire games";
-      license = "mit";
+      license = stdenv.lib.licenses.mit;
     };
   };
 
@@ -5218,23 +5219,21 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTMLFormFu = buildPerlPackage rec {
-    name = "HTML-FormFu-0.09010";
+    name = "HTML-FormFu-2.01";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/HTML/${name}.tar.gz";
-      sha256 = "08hf6z35yhfd1521ip8x5hpwb7h09k643s9sqf6ddmi9yvqini1k";
+      sha256 = "0fvilng85wc65pna898x7mp4hx73mhahl7j2s10gj76avmxdizsw";
     };
-    buildInputs = [ CGISimple ];
-    propagatedBuildInputs =
-      [ ClassAccessorChained Clone ConfigAny
-        DateCalc ListMoreUtils EmailValid
-        DataVisitor DateTime DateTimeFormatBuilder
-        DateTimeFormatStrptime DateTimeFormatNatural
-        Readonly YAMLLibYAML NumberFormat HashFlatten
-        HTMLTokeParserSimple RegexpCommon
-        CaptchaReCAPTCHA HTMLScrubber FileShareDir
-        TemplateToolkit CryptCBC CryptDES PathClass
-        MooseXAttributeChained MooseXAliases MooseXSetOnce
-      ];
+    buildInputs = [ FileShareDirInstall TestAggregate TestException ];
+    propagatedBuildInputs = [ Clone ConfigAny DataVisitor DateTime
+      DateTimeFormatBuilder DateTimeFormatNatural DateTimeFormatStrptime
+      DateTimeLocale EmailValid FileShareDir HTMLScrubber HTMLTokeParserSimple
+      HTTPMessage HashFlatten ListMoreUtils ModulePluggable Moose MooseXAliases
+      NumberFormat PathClass Readonly RegexpCommon TaskWeaken YAMLLibYAML ];
+    meta = {
+      description = "HTML Form Creation, Rendering and Validation Framework";
+      license = "perl";
+    };
   };
 
   HTMLFormHandler = buildPerlPackage {
@@ -5296,13 +5295,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  HTMLScrubber = buildPerlPackage {
-    name = "HTML-Scrubber-0.08";
+  HTMLScrubber = buildPerlPackage rec {
+    name = "HTML-Scrubber-0.15";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PO/PODMASTER/HTML-Scrubber-0.08.tar.gz;
+      url = "mirror://cpan/authors/id/P/PO/PODMASTER/${name}.tar.gz";
       sha256 = "0xb5zj67y2sjid9bs3yfm81rgi91fmn38wy1ryngssw6vd92ijh2";
     };
-    propagatedBuildInputs = [HTMLParser];
+    propagatedBuildInputs = [ HTMLParser ];
   };
 
   HTMLTableExtract = buildPerlPackage {
@@ -6116,7 +6115,7 @@ let self = _self // overrides; _self = with self; {
       '';
     doCheck = false; # test would need to start apache httpd
     meta = {
-      license = "open_source";
+      license = stdenv.lib.licenses.asl20;
     };
   };
 
@@ -6789,7 +6788,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://search.cpan.org/dist/Math-Random-ISAAC;
       description = "Perl interface to the ISAAC PRNG algorithm";
-      license = "unrestricted";
+      license = with stdenv.lib.licenses; [ publicDomain mit artistic2 gpl3 ];
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
     };
@@ -7234,7 +7233,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ IPCRun ];
     meta = {
       description = "Module signature file manipulation";
-      license = "cc0";
+      license = stdenv.lib.licenses.cc0;
     };
   };
 
@@ -8041,7 +8040,7 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       description = "Mozilla's CA cert bundle in PEM format";
-      license = "unknown";
+      license = stdenv.lib.licenses.mpl20;
     };
   };
 
@@ -9290,7 +9289,7 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       description = "Modules for parsing/translating POD format documents";
-      license = "unknown";
+      license = stdenv.lib.licenses.artistic1;
     };
   };
 
@@ -9502,7 +9501,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://wiki.github.com/toddr/Regexp-Parser;
       description = "Base class for parsing regexes";
-      license = "unknown";
+      license = "perl";
     };
   };
 
@@ -9971,7 +9970,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "a566b792112bbba21131ec1d7a2bf78170c648484895283ae53c7f0c3dc2f0be";
     };
     meta = {
-      license = "unknown";
+      license = "perl";
     };
   };
 
@@ -10565,7 +10564,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ TemplateToolkit ];
     meta = {
       description = "Rudimentary profiling for Template Toolkit";
-      license = "null";
+      license = with stdenv.lib.licenses; [ artistic2 gpl3 ];
     };
   };
 
@@ -10901,7 +10900,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ CaptureTiny TextDiff ];
     meta = {
       description = "Test strings and data structures and show differences if not ok";
-      license = "unknown";
+      license = "perl";
     };
   };
 
@@ -11200,7 +11199,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "Make sure you didn't emit any warnings while testing";
-      license = "open_source";
+      license = stdenv.lib.licenses.lgpl21;
     };
   };
 
@@ -11857,7 +11856,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://www.shlomifish.org/open-source/projects/docmake/;
       description = "Organize Data in Tables";
-      license = "bsd";
+      license = stdenv.lib.licenses.isc;
       platforms = stdenv.lib.platforms.linux;
     };
   };

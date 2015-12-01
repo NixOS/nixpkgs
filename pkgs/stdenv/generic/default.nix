@@ -111,30 +111,41 @@ let
           builtins.unsafeGetAttrPos "name" attrs;
       pos'' = if pos' != null then "‘" + pos'.file + ":" + toString pos'.line + "’" else "«unknown-file»";
 
-      throwEvalHelp = unfreeOrBroken: whatIsWrong:
-        assert builtins.elem unfreeOrBroken ["Unfree" "Broken" "blacklisted"];
+      throwEvalHelp = { reason, errormsg }:
+        # uppercase the first character of string s
+        let up = s: with lib;
+          let cs = lib.stringToCharacters s;
+          in concatStrings (singleton (toUpper (head cs)) ++ tail cs);
+        in
+        assert builtins.elem reason ["unfree" "broken" "blacklisted"];
 
-        throw ("Package ‘${attrs.name or "«name-missing»"}’ in ${pos''} ${whatIsWrong}, refusing to evaluate."
-        + (lib.strings.optionalString (unfreeOrBroken != "blacklisted") ''
+        throw ("Package ‘${attrs.name or "«name-missing»"}’ in ${pos''} ${errormsg}, refusing to evaluate."
+        + (lib.strings.optionalString (reason != "blacklisted") ''
 
           For `nixos-rebuild` you can set
-            { nixpkgs.config.allow${unfreeOrBroken} = true; }
+            { nixpkgs.config.allow${up reason} = true; }
           in configuration.nix to override this.
           For `nix-env` you can add
-            { allow${unfreeOrBroken} = true; }
+            { allow${up reason} = true; }
           to ~/.nixpkgs/config.nix.
         ''));
 
-      licenseAllowed = attrs:
+      # Check if a derivation is valid, that is whether it passes checks for
+      # e.g brokenness or license.
+      #
+      # Return { valid: Bool } and additionally
+      # { reason: String; errormsg: String } if it is not valid, where
+      # reason is one of "unfree", "blacklisted" or "broken".
+      checkValidity = attrs:
         if hasDeniedUnfreeLicense attrs && !(hasWhitelistedLicense attrs) then
-          throwEvalHelp "Unfree" "has an unfree license (‘${showLicense attrs.meta.license}’)"
+          { valid = false; reason = "unfree"; errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)"; }
         else if hasBlacklistedLicense attrs then
-          throwEvalHelp "blacklisted" "has a blacklisted license (‘${showLicense attrs.meta.license}’)"
+          { valid = false; reason = "blacklisted"; errormsg = "has a blacklisted license (‘${showLicense attrs.meta.license}’)"; }
         else if !allowBroken && attrs.meta.broken or false then
-          throwEvalHelp "Broken" "is marked as broken"
+          { valid = false; reason = "broken"; errormsg = "is marked as broken"; }
         else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
-          throwEvalHelp "Broken" "is not supported on ‘${result.system}’"
-        else true;
+          { valid = false; reason = "broken"; errormsg = "is not supported on ‘${result.system}’"; }
+        else { valid = true; };
 
       outputs' =
         outputs ++
@@ -144,7 +155,12 @@ let
         (if separateDebugInfo then [ ../../build-support/setup-hooks/separate-debug-info.sh ] else []);
 
     in
-      assert licenseAllowed attrs;
+
+      # Throw an error if trying to evaluate an non-valid derivation
+      assert let v = checkValidity attrs;
+             in if !v.valid
+               then throwEvalHelp (removeAttrs v ["valid"])
+               else true;
 
       lib.addPassthru (derivation (
         (removeAttrs attrs

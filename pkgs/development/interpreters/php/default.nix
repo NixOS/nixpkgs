@@ -295,8 +295,8 @@ in {
   };
 
   php56 = generic {
-    version = "5.6.15";
-    sha256 = "0f0wplfnclr6ji6r2g5q0rdnp26xi7gxdq51dljrwx2b9mf6980i";
+    version = "5.6.16";
+    sha256 = "1bnjpj5vjj2sx80z3x452vhk7bfdl8hbli61byhapgy1ch4z9rjg";
   };
 
   php70 = lib.lowPrio (generic {
