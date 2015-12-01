@@ -21967,6 +21967,11 @@ in modules // {
       md5 = "fa13f3fee67c83016a1242982a7c8bda";
     };
 
+    patchPhase = ''
+      # Hardcode cairo library path
+      sed -e 's,ffi\.dlopen(,&"${pkgs.xorg.libxcb}/lib/" + ,' -i xcffib/__init__.py
+    '';
+
     propagatedBuildInputs = [ self.cffi self.six ];
 
     meta = {
