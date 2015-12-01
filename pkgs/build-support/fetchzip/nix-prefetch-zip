@@ -73,7 +73,15 @@ mkdir -p $unpackDirTmp
 unpackDir=$tmp/unpacked/$name
 mkdir -p $unpackDir
 
-downloadedFile=$tmp/$name
+case "$name" in
+    *.tar | *.tar.* | *.tgz | *.tbz2 | *.zip | *.tar.xz | *.tar.lzma)
+      downloadedFile=$tmp/$name
+      ;;
+    *)
+      # Cover cases, when $name is just like "nixpkgs-${rev}-src", but archive url contain proper suffix (as in github archive urls)
+      downloadedFile=$tmp/$(basename "$url")
+      ;;
+esac
 
 unpackFile() {
   local curSrc="$1"
