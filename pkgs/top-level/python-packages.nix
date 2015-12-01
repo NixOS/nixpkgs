@@ -15294,6 +15294,7 @@ in modules // {
     };
   };
 
+  pythonocc-core = callPackage ../development/python-modules/pythonocc-core { };
 
   pytz = buildPythonPackage rec {
     name = "pytz-${version}";
