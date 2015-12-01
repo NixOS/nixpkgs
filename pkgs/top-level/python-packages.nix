@@ -4014,7 +4014,7 @@ in modules // {
     # Check is disabled because running them destroy the content of the local cluster!
     # https://github.com/elasticsearch/elasticsearch-py/tree/master/test_elasticsearch
     doCheck = false;
-    propagatedBuildInputs = with self; [ urllib3 pyaml requests2 pyyaml ];
+    propagatedBuildInputs = with self; [ urllib3 requests2 ];
     buildInputs = with self; [ nosexcover mock ];
 
     meta = {
