@@ -317,11 +317,11 @@ rec {
 
   scala = buildEclipseUpdateSite rec {
     name = "scala-${version}";
-    version = "4.1.1.20150911";
+    version = "4.1.1.20151201";
 
     src = fetchzip {
       url = "http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/update-site.zip";
-      sha256 = "03g24sjivm7kzy64wwjs4ihf9vrb6703lb7bx3jafxzcwqm0pj1i";
+      sha256 = "19iqaha9c5n5hkyn83xj8znkvshm4823d65zigbj97fz8gzrr0la";
     };
 
     meta = with stdenv.lib; {
