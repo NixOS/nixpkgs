@@ -1,0 +1,67 @@
+From f299a0aa0eefcf16bb4990f00ac3946727f43ef3 Mon Sep 17 00:00:00 2001
+From: "Alexander V. Nikolaev" <avn@avnik.info>
+Date: Fri, 27 Nov 2015 10:49:48 +0200
+Subject: [PATCH 2/3] Restore PATH and PYTHONPATH
+
+---
+ bin/qtile         | 1 +
+ bin/qtile-run     | 1 +
+ bin/qtile-session | 2 ++
+ libqtile/utils.py | 7 +++++++
+ 4 files changed, 11 insertions(+)
+
+diff --git a/bin/qtile b/bin/qtile
+index 66034fe..ce3fcd1 100755
+--- a/bin/qtile
++++ b/bin/qtile
+@@ -131,6 +131,7 @@ def make_qtile():
+ 
+ 
+ if __name__ == "__main__":
++    __import__("importlib").import_module("libqtile.utils").restore_os_environment()
+     rename_process()
+     q = make_qtile()
+     try:
+diff --git a/bin/qtile-run b/bin/qtile-run
+index ccedb96..646a476 100755
+--- a/bin/qtile-run
++++ b/bin/qtile-run
+@@ -50,6 +50,7 @@ def main():
+     proc.wait()
+ 
+ if __name__ == "__main__":
++    __import__("importlib").import_module("libqtile.utils").restore_os_environment()
+     try:
+         main()
+     except KeyboardInterrupt:
+diff --git a/bin/qtile-session b/bin/qtile-session
+index 84f6a2d..da31b12 100755
+--- a/bin/qtile-session
++++ b/bin/qtile-session
+@@ -25,6 +25,8 @@
+ Qtile session manager.
+ """
+ 
++__import__("importlib").import_module("libqtile.utils").restore_os_environment()
++
+ from libqtile.log_utils import init_log
+ import logging
+ import os
+diff --git a/libqtile/utils.py b/libqtile/utils.py
+index d5f975b..0fdb080 100644
+--- a/libqtile/utils.py
++++ b/libqtile/utils.py
+@@ -208,3 +208,10 @@ def get_cache_dir():
+     if not os.path.exists(cache_directory):
+         os.makedirs(cache_directory)
+     return cache_directory
++
++def restore_os_environment():
++    pythonpath = os.environ.pop("QTILE_SAVED_PYTHONPATH", "")
++    os.environ["PYTHONPATH"] = pythonpath
++    path = os.environ.pop("QTILE_SAVED_PATH", None)
++    if path:
++        os.environ["PATH"] = path
+-- 
+2.6.3
+
