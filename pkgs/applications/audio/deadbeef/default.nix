@@ -9,6 +9,7 @@
 , wavSupport ? true, libsndfile ? null
 , cdaSupport ? true, libcdio ? null, libcddb ? null
 , aacSupport ? true, faad2 ? null
+, midiSupport ? false, wildmidi ? null
 , wavpackSupport ? false, wavpack ? null
 , ffmpegSupport ? false, ffmpeg ? null
 # misc plugins
@@ -44,6 +45,7 @@ assert alsaSupport -> alsaLib != null;
 assert pulseSupport -> libpulseaudio != null;
 assert resamplerSupport -> libsamplerate != null;
 assert overloadSupport -> zlib != null;
+assert midiSupport -> wildmidi != null;
 assert wavpackSupport -> wavpack != null;
 assert remoteSupport -> curl != null;
 
@@ -73,6 +75,7 @@ stdenv.mkDerivation rec {
     ++ optional pulseSupport libpulseaudio
     ++ optional resamplerSupport libsamplerate
     ++ optional overloadSupport zlib
+    ++ optional midiSupport wildmidi
     ++ optional wavpackSupport wavpack
     ++ optional remoteSupport curl
     ;
