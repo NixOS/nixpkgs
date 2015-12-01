@@ -145,9 +145,11 @@ in
   config = {
 
     services.udev.extraRules =
-      toString
-      (get_udev_configuration config.enc.parameters.interfaces);
-
+      if config.enc ? parameters
+      then
+        toString
+        (get_udev_configuration config.enc.parameters.interfaces)
+      else "";
 
     networking.domain = "gocept.net";
     networking.hostName =

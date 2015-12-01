@@ -44,6 +44,8 @@ in
         Docs:      http://flyingcircus.io/doc/
         ChangeLog: http://flyingcircus.io/doc/reference/changes/XXX
 
+      '' + lib.optionalString (enc ? name) ''
+
         Hostname:  ${enc.name}    Environment: ${enc.parameters.environment}    Location:  ${enc.parameters.location}
         Services:  ${enc.parameters.service_description}
 
