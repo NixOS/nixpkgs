@@ -5412,7 +5412,7 @@ in modules // {
     };
   };
 
-  plotly = pythonPackages.buildPythonPackage rec {
+  plotly = buildPythonPackage rec {
     name = "plotly-1.9.1";
     disabled = isPy3k;
 
