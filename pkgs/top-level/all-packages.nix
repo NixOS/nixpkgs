@@ -13269,6 +13269,8 @@ let
 
   github-release = callPackage ../development/tools/github/github-release { };
 
+  tudu = callPackage ../applications/office/tudu { };
+
   tuxguitar = callPackage ../applications/editors/music/tuxguitar { };
 
   twister = callPackage ../applications/networking/p2p/twister { };
