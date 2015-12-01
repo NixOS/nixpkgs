@@ -32,10 +32,10 @@ in
     version = "2.5.8";
 
     src = fetchFromGitHub {
-      owner = "Angelscry";
-      repo = namespace;
-      rev = "bb380b6e8b664246a791f553ddc856cbc60dae1f";
-      sha256 = "0g4kk68zjl5rf6mll4g4cywq70s267471dp5r1qp3bpfpzkn0vf2";
+      owner = "edwtjo";
+      repo = plugin;
+      rev = version;
+      sha256 = "142vvgs37asq5m54xqhjzqvgmb0xlirvm0kz6lxaqynp0vvgrkx2";
     };
 
     meta = with stdenv.lib; {
