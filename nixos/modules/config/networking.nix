@@ -11,6 +11,11 @@ let
                    config.services.dnsmasq.resolveLocalQueries;
   hasLocalResolver = config.services.bind.enable || dnsmasqResolve;
 
+  resolvconfOptions =
+    builtins.replaceStrings ["\n"] [" "]
+      (cfg.resolvconfOptions +
+      (optionalString cfg.dnsSingleRequest " single-request"));
+
 in
 
 {
@@ -36,6 +41,15 @@ in
         that 'getent hosts example.com' only returns ipv6 (or perhaps only ipv4) addresses. The
         workaround for this is to specify the option 'single-request' in
         /etc/resolv.conf. This option enables that.
+      '';
+    };
+
+    networking.resolvconfOptions = lib.mkOption {
+      type = types.lines;
+      default = "";
+      example = "ndots:1 rotate";
+      description = ''
+        Set the options in <filename>/etc/resolv.conf</filename>.
       '';
     };
 
@@ -141,9 +155,9 @@ in
               # Invalidate the nscd cache whenever resolv.conf is
               # regenerated.
               libc_restart='${pkgs.systemd}/bin/systemctl try-restart --no-block nscd.service 2> /dev/null'
-            '' + optionalString cfg.dnsSingleRequest ''
-              # only send one DNS request at a time
-              resolv_conf_options='single-request'
+            '' + optionalString ((stringLength resolvconfOptions) > 0) ''
+              # Options as described in resolv.conf(5)
+              resolv_conf_options='${resolvconfOptions}'
             '' + optionalString hasLocalResolver ''
               # This hosts runs a full-blown DNS resolver.
               name_servers='127.0.0.1'
