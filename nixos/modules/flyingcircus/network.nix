@@ -173,6 +173,7 @@ in
     then builtins.getAttr config.enc.parameters.location ns_by_location
     else []
   else [];
+  networking.resolvconfOptions = "ndots:1 timeout:1 attempts:4 rotate";
 
   # If there is no enc data, we are probably not on FC platform.
   networking.search =
