@@ -10835,6 +10835,8 @@ let
 
   signwriting = callPackage ../data/fonts/signwriting { };
 
+  soundfont-fluid = callPackage ../data/soundfonts/fluid { };
+
   stdmanpages = callPackage ../data/documentation/std-man-pages { };
 
   stix-otf = callPackage ../data/fonts/stix-otf { };
