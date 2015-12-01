@@ -5412,6 +5412,25 @@ in modules // {
     };
   };
 
+  plotly = pythonPackages.buildPythonPackage rec {
+    name = "plotly-1.9.1";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/plotly/${name}.tar.gz";
+      md5 = "84fe80b294b639357f12fa210ce09f95";
+    };
+
+    propagatedBuildInputs = with self; [ self.pytz self.six self.requests ];
+
+    meta = {
+      description = "Python plotting library for collaborative, interactive, publication-quality graphs";
+      homepage = https://plot.ly/python/;
+      license = licenses.mit;
+    };
+  };
+
+
   poppler-qt4 = buildPythonPackage rec {
     name = "poppler-qt4-${version}";
     version = "0.18.1";
