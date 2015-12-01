@@ -20475,6 +20475,26 @@ in modules // {
   };
 
 
+  BlinkStick = buildPythonPackage rec {
+    name = "BlinkStick-${version}";
+    version = "1.1.8";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/B/BlinkStick/${name}.tar.gz";
+      sha256 = "3edf4b83a3fa1a7bd953b452b76542d54285ff6f1145b6e19f9b5438120fa408";
+    };
+
+    propagatedBuildInputs = with self; [ pyusb ];
+
+    meta = {
+      description = "Python package to control BlinkStick USB devices";
+      homepage = http://pypi.python.org/pypi/BlinkStick/;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ np ];
+    };
+  };
+
+
   usbtmc = buildPythonPackage rec {
     name = "usbtmc-${version}";
     version = "0.6";
