@@ -85,6 +85,8 @@ in modules // {
 
   blivet = callPackage ../development/python-modules/blivet { };
 
+  pylint = callPackage ../development/python-modules/pylint { };
+
   dbus = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
   };
