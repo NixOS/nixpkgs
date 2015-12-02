@@ -360,6 +360,30 @@ in modules // {
     };
   };
 
+  python-gnupg = buildPythonPackage rec {
+    name    = "python-gnupg-${version}";
+    version = "0.3.8";
+
+    src = pkgs.fetchurl {
+      url    = "https://pypi.python.org/packages/source/p/python-gnupg/${name}.tar.gz";
+      sha256 = "0nkbs9c8f30lra7ca39kg91x8cyxn0jb61vih4qky839gpbwwwiq";
+    };
+
+    # Let's make the library default to our gpg binary
+    patchPhase = ''
+      substituteInPlace gnupg.py \
+        --replace "gpgbinary='gpg'" "gpgbinary='${pkgs.gnupg}/bin/gpg'"
+    '';
+
+    meta = {
+      description = "A wrapper for the Gnu Privacy Guard";
+      homepage    = "https://pypi.python.org/pypi/python-gnupg";
+      license     = licenses.bsd3;
+      maintainers = with maintainers; [ copumpkin ];
+      platforms   = platforms.unix;
+    };
+  };
+
   almir = buildPythonPackage rec {
     name = "almir-0.1.8";
 
