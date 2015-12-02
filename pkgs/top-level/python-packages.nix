@@ -13628,6 +13628,7 @@ in modules // {
       sha256 = "07ivzl7bq8bjcq5n90w4bsl29gjfm5l8yamw0paxh25si8r3zfi4";
     };
 
+    buildInputs = optional stdenv.isDarwin pkgs.openssl;
     propagatedBuildInputs = with self; [ pkgs.postgresql ];
 
     meta = {
