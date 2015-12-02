@@ -10834,10 +10834,6 @@ let
 
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
 
-  pthreadmanpages = callPackage ../data/documentation/pthread-man-pages {
-    perl = perl516; # syntax error at troffprepro line 49, near "do subst("
-  };
-
   sampradaya = callPackage ../data/fonts/sampradaya { };
 
   shared_mime_info = callPackage ../data/misc/shared-mime-info { };
