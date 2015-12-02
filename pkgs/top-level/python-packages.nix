@@ -13173,7 +13173,8 @@ in modules // {
       substituteInPlace soundfile.py --replace "'sndfile'" "'${pkgs.libsndfile}/lib/libsndfile.so'"
     '';
 
-    disabled = isPyPy;
+    # https://github.com/bastibe/PySoundFile/issues/157
+    disabled = isPyPy ||  stdenv.isi686;
   };
 
   python3pika = buildPythonPackage {
