@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
-    _moveToOutput bin/xslt-config "$dev"
-    _moveToOutput lib/xsltConf.sh "$dev"
-    _moveToOutput share/man/man1 "$bin"
+    moveToOutput bin/xslt-config "$dev"
+    moveToOutput lib/xsltConf.sh "$dev"
+    moveToOutput share/man/man1 "$bin"
   '';
 
   meta = with stdenv.lib; {

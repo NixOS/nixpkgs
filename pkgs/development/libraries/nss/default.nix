@@ -77,9 +77,9 @@ in stdenv.mkDerivation rec {
       LD_LIBRARY_PATH=$out/lib $out/bin/shlibsign -v -i "$libfile"
     done
 
-    _moveToOutput bin "$tools"
-    _moveToOutput bin/nss-config "$dev"
-    _moveToOutput lib/libcrmf.a "$dev" # needed by firefox, for example
+    moveToOutput bin "$tools"
+    moveToOutput bin/nss-config "$dev"
+    moveToOutput lib/libcrmf.a "$dev" # needed by firefox, for example
     rm "$out"/lib/*.a
   '';
 

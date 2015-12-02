@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "libudev" "doc" ]; # maybe: "dev"
   # note: there are many references to ${systemd}/...
   outputDev = "out";
-  propagatedOutputs = "libudev";
+  propagatedBuildOutputs = "libudev";
   */
   outputs = [ "out" "man" ];
 

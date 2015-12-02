@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     rm "$lib"/lib/*.a # halve the output size
-    _moveToOutput "bin/js*-config" "$dev" # break the cycle
+    moveToOutput "bin/js*-config" "$dev" # break the cycle
   '';
 
   meta = with stdenv.lib; {

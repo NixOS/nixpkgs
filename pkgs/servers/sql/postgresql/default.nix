@@ -40,9 +40,9 @@ let
 
     postInstall =
       ''
-        _moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
-        _moveToOutput "lib/*.a" "$out"
-        _moveToOutput "lib/libecpg*" "$out"
+        moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
+        moveToOutput "lib/*.a" "$out"
+        moveToOutput "lib/libecpg*" "$out"
 
         # Prevent a retained dependency on gcc-wrapper.
         substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv.cc}/bin/ld ld

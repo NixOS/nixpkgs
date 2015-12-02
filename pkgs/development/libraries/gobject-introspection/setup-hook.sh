@@ -14,7 +14,7 @@ make_gobject_introspection_find_gir_files() {
 envHooks+=(make_gobject_introspection_find_gir_files)
 
 _multioutMoveGlibGir() {
-  _moveToOutput share/gir-1.0 "${!outputDev}"
+  moveToOutput share/gir-1.0 "${!outputDev}"
 }
 
 preFixupHooks+=(_multioutMoveGlibGir)

@@ -69,8 +69,8 @@ NIX_NO_SELF_RPATH=1
 
 # Move subpaths that match pattern $1 from under any output/ to the $2 output/
 # Beware: only globbing patterns are accepted, e.g.: * ? {foo,bar}
-# A special target "REMOVE" is allowed: _moveToOutput foo REMOVE
-_moveToOutput() {
+# A special target "REMOVE" is allowed: moveToOutput foo REMOVE
+moveToOutput() {
     local patt="$1"
     local dstOut="$2"
     local output
@@ -117,24 +117,24 @@ _multioutDocs() {
     if [ "$outputs" = "out" ]; then return; fi;
     local REMOVE=REMOVE # slightly hacky - we expand ${!outputFoo}
 
-    _moveToOutput share/info "${!outputInfo}"
-    _moveToOutput share/doc "${!outputDoc}"
-    _moveToOutput share/gtk-doc "${!outputDocdev}"
+    moveToOutput share/info "${!outputInfo}"
+    moveToOutput share/doc "${!outputDoc}"
+    moveToOutput share/gtk-doc "${!outputDocdev}"
 
     # the default outputMan is in $bin
-    _moveToOutput share/man "${!outputMan}"
-    _moveToOutput share/man/man3 "${!outputDocdev}"
+    moveToOutput share/man "${!outputMan}"
+    moveToOutput share/man/man3 "${!outputDocdev}"
 }
 
 # Move development-only stuff to the desired outputs.
 _multioutDevs() {
     if [ "$outputs" = "out" ] || [ -z "${moveToDev-1}" ]; then return; fi;
-    _moveToOutput include "${!outputInclude}"
+    moveToOutput include "${!outputInclude}"
     # these files are sometimes provided even without using the corresponding tool
-    _moveToOutput lib/pkgconfig "${!outputDev}"
-    _moveToOutput share/pkgconfig "${!outputDev}"
-    _moveToOutput lib/cmake "${!outputDev}"
-    _moveToOutput share/aclocal "${!outputDev}"
+    moveToOutput lib/pkgconfig "${!outputDev}"
+    moveToOutput share/pkgconfig "${!outputDev}"
+    moveToOutput lib/cmake "${!outputDev}"
+    moveToOutput share/aclocal "${!outputDev}"
     # don't move *.la, as libtool needs them in the directory of the library
 
     for f in "${!outputDev}"/{lib,share}/pkgconfig/*.pc; do
@@ -156,22 +156,22 @@ _multioutPropagateDev() {
     done
 
     # Default value: propagate binaries, includes and libraries
-    if [ -z "${propagatedOutputs+1}" ]; then
+    if [ -z "${propagatedBuildOutputs+1}" ]; then
         local po_dirty="$outputBin $outputInclude $outputLib"
         set +o pipefail
-        propagatedOutputs=`echo "$po_dirty" \
+        propagatedBuildOutputs=`echo "$po_dirty" \
             | tr -s ' ' '\n' | grep -v -F "$outputFirst" \
             | sort -u | tr '\n' ' ' `
         set -o pipefail
     fi
 
     # The variable was explicitly set to empty or we resolved it so
-    if [ -z "$propagatedOutputs" ]; then
+    if [ -z "$propagatedBuildOutputs" ]; then
         return
     fi
 
     mkdir -p "${!outputFirst}"/nix-support
-    for output in $propagatedOutputs; do
+    for output in $propagatedBuildOutputs; do
         echo -n " ${!output}" >> "${!outputFirst}"/nix-support/propagated-native-build-inputs
     done
 }

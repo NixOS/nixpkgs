@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     sha1 = "3137feb503a89a8d606405373905b92dcf7e293b";
   }) ];
 
-  postFixup = ''_moveToOutput share/aclocal "$dev" '';
+  postFixup = ''moveToOutput share/aclocal "$dev" '';
 
   crossAttrs =stdenv.lib.optionalAttrs (stdenv.cross.libc == "libSystem") {
     patches = let

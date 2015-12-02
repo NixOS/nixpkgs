@@ -211,10 +211,10 @@ preInstall() {
 
 postInstall() {
     # Move runtime libraries to $lib.
-    _moveToOutput "lib/lib*.so*" "$lib"
-    _moveToOutput "lib/lib*.la"  "$lib"
+    moveToOutput "lib/lib*.so*" "$lib"
+    moveToOutput "lib/lib*.la"  "$lib"
     ln -s lib "$lib/lib64" # for *.la
-    _moveToOutput "share/gcc-*/python" "$lib"
+    moveToOutput "share/gcc-*/python" "$lib"
 
     for i in "$lib"/lib/*.{la,py}; do
         substituteInPlace "$i" --replace "$out" "$lib"

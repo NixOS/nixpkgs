@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
     sed 's|-lltdl|-L${libtool.lib}/lib -lltdl|' -i $out/lib/libpulsecore-${version}.la
   ''
-    + ''_moveToOutput lib/cmake "$dev" '';
+    + ''moveToOutput lib/cmake "$dev" '';
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     else "--with-xinput=yes";
 
   postInstall = ''
-    _moveToOutput share/gtk-2.0/demo "$docdev"
+    moveToOutput share/gtk-2.0/demo "$docdev"
   '';
 
   passthru = {

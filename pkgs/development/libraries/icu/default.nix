@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     sed -i 's/INSTALL_CMD=.*install/INSTALL_CMD=install/' $out/lib/icu/${version}/pkgdata.inc
   '';
 
-  postFixup = ''_moveToOutput lib/icu "$dev" '';
+  postFixup = ''moveToOutput lib/icu "$dev" '';
 
   enableParallelBuilding = true;
 

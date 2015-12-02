@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     find $out -name "*.a" -delete
-    _moveToOutput share "$dev" # just aclocal
+    moveToOutput share "$dev" # just aclocal
   '';
 
   enableParallelBuilding = true;

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "dev" "out" "bin" "doc" "py" ];
-  propagatedOutputs = "out bin py";
+  propagatedBuildOutputs = "out bin py";
 
   buildInputs = [ python ]
     # Libxml2 has an optional dependency on liblzma.  However, on impure
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
   installFlags = ''pythondir="$(py)/lib/${python.libPrefix}/site-packages"'';
 
   postFixup = ''
-    _moveToOutput bin/xml2-config "$dev"
-    _moveToOutput lib/xml2Conf.sh "$dev"
-    _moveToOutput share/man/man1 "$bin"
+    moveToOutput bin/xml2-config "$dev"
+    moveToOutput lib/xml2Conf.sh "$dev"
+    moveToOutput share/man/man1 "$bin"
   '';
 
   passthru = { inherit version; pythonSupport = true; };

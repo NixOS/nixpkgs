@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   configureFlags = stdenv.lib.optional (!static) "--shared";
 
   postInstall = ''
-    _moveToOutput lib/libz.a "$static"
+    moveToOutput lib/libz.a "$static"
   ''
     # jww (2015-01-06): Sometimes this library install as a .so, even on
     # Darwin; others time it installs as a .dylib.  I haven't yet figured out

@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   CXXCPP = "g++ -E";
 
   postInstall = ''
-    _moveToOutput bin/curl-config "$dev"
+    moveToOutput bin/curl-config "$dev"
     sed '/^dependency_libs/s|${libssh2.dev}|${libssh2.out}|' -i "$out"/lib/*.la
   '';
 

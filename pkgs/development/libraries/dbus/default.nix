@@ -65,7 +65,7 @@ self =  stdenv.mkDerivation {
 
     # it's executed from $lib by absolute path
     postFixup = ''
-      _moveToOutput bin/dbus-launch "$lib"
+      moveToOutput bin/dbus-launch "$lib"
       ln -s "$lib/bin/dbus-launch" "$out/bin/"
     '';
 

@@ -153,8 +153,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postFixup = ''
-    _moveToOutput bin "$bin"
-    _moveToOutput share/ffmpeg/examples "$doc"
+    moveToOutput bin "$bin"
+    moveToOutput share/ffmpeg/examples "$doc"
   '';
 
   /* Cross-compilation is untested, consider this an outline, more work

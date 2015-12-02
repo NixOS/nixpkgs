@@ -149,7 +149,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = ''_moveToOutput bin "$bin" '';
+  postInstall = ''moveToOutput bin "$bin" '';
 
   crossAttrs = let
     isCygwin = stdenv.cross.libc == "msvcrt";

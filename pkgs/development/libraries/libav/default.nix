@@ -81,7 +81,7 @@ let
     setOutputFlags = false;
 
     # move tools away to lighten runtime deps and size
-    postInstall = ''_moveToOutput bin "$bin" '';
+    postInstall = ''moveToOutput bin "$bin" '';
 
     doInstallCheck = false; # fails randomly
     installCheckTarget = "check"; # tests need to be run *after* installation

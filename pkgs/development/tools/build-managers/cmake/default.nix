@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   preInstall = ''mkdir "$doc" '';
 
-  postInstall = ''_moveToOutput "share/cmake-*/Help" "$doc" '';
+  postInstall = ''moveToOutput "share/cmake-*/Help" "$doc" '';
 
   meta = with stdenv.lib; {
     homepage = http://www.cmake.org/;
