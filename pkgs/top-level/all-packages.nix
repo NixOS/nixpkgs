@@ -5099,8 +5099,6 @@ let
 
   ocropus = callPackage ../applications/misc/ocropus { };
 
-  perl516 = callPackage ../development/interpreters/perl/5.16 { };
-
   perl520 = callPackage ../development/interpreters/perl/5.20 {
     fetchurl = fetchurlBoot;
   };
