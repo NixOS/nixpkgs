@@ -1151,6 +1151,8 @@ let
     aclSupport = stdenv.isLinux;
   };
 
+  coreutils-prefixed = coreutils.override { withPrefix = true; };
+
   cpio = callPackage ../tools/archivers/cpio { };
 
   crackxls = callPackage ../tools/security/crackxls { };

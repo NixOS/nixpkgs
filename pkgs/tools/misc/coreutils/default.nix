@@ -2,6 +2,7 @@
 , aclSupport ? false, acl ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
 , autoconf, automake114x, texinfo
+, withPrefix ? false
 }:
 
 assert aclSupport -> acl != null;
@@ -82,6 +83,17 @@ let
     NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
 
     makeFlags = optionalString stdenv.isDarwin "CFLAGS=-D_FORTIFY_SOURCE=0";
+
+    # e.g. ls -> gls; grep -> ggrep
+    postFixup = # feel free to simplify on a mass rebuild
+      if withPrefix then
+      ''
+        (
+          cd "$out/bin"
+          find * -type f -executable -exec mv {} g{} \;
+        )
+      ''
+      else null;
 
     meta = {
       homepage = http://www.gnu.org/software/coreutils/;
