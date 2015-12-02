@@ -17296,6 +17296,28 @@ in modules // {
   };
 
 
+  shortuuid = buildPythonPackage rec {
+    name = "shortuuid-${version}";
+    version = "0.4.2";
+
+    disabled = isPy26;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/shortuuid/${name}.tar.gz";
+      md5 = "142e3ae4e7cd32d41a71deb359db4cfe";
+    };
+
+    buildInputs = with self; [pep8];
+
+    meta = {
+      description = "A generator library for concise, unambiguous and URL-safe UUIDs.";
+      homepage = https://github.com/stochastic-technologies/shortuuid/;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ zagy ];
+    };
+  };
+
+
   simplejson = buildPythonPackage (rec {
     name = "simplejson-3.3.0";
 
