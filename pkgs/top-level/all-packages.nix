@@ -2573,7 +2573,14 @@ let
 
   otpw = callPackage ../os-specific/linux/otpw { };
 
-  owncloud = callPackage ../servers/owncloud { };
+  owncloud = owncloud70;
+
+  inherit (callPackages ../servers/owncloud { })
+    owncloud705
+    owncloud70
+    owncloud80
+    owncloud81
+    owncloud82;
 
   owncloudclient = callPackage ../applications/networking/owncloud-client { };
 
