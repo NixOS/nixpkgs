@@ -5075,6 +5075,27 @@ in modules // {
     };
   };
 
+  python-mapnik = buildPythonPackage {
+    name = "python-mapnik-fae6388";
+
+    src = pkgs.fetchgit {
+      url = https://github.com/mapnik/python-mapnik.git;
+      rev = "fae63881ed0945829e73f711d52740240b740936";
+      sha256 = "13i9zsy0dk9pa947vfq26a3nrn1ddknqliyb0ljcmi5w5x0z758k";
+    };
+
+    disabled = isPyPy;
+    doCheck = false; # doesn't find needed test data files
+    buildInputs = with pkgs; [ boost harfbuzz icu mapnik ];
+    propagatedBuildInputs = with self; [ pillow pycairo ];
+
+    meta = with stdenv.lib; {
+      description = "Python bindings for Mapnik";
+      homepage = http://mapnik.org;
+      license  = licenses.lgpl21;
+    };
+  };
+
   mwlib = buildPythonPackage rec {
     version = "0.15.15";
     name = "mwlib-${version}";
