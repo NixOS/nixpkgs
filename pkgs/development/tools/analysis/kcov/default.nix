@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, pkgconfig, libelf, zlib, curl, elfutils, python, libiberty, binutils}:
+{stdenv, fetchurl, cmake, pkgconfig, zlib, curl, elfutils, python, libiberty, binutils}:
 stdenv.mkDerivation rec {
   name = "kcov-${version}";
   version = "29";
@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0nspf1bfq8zv7zmcmvkbgg3c90k10qcd56gyg8ln5z64nadvha9d";
   };
 
-  buildInputs = [ cmake pkgconfig libelf zlib curl elfutils python libiberty binutils ];
+  preConfigure = "patchShebangs src/bin-to-c-source.py";
+  buildInputs = [ cmake pkgconfig zlib curl elfutils python libiberty binutils ];
   
   meta = with stdenv.lib; {
     description = "code coverage tester for compiled programs, Python scripts and shell scripts";
