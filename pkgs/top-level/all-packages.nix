@@ -7438,6 +7438,8 @@ let
 
   libstartup_notification = callPackage ../development/libraries/startup-notification { };
 
+  libstroke = callPackage ../development/libraries/libstroke { };
+
   libstrophe = callPackage ../development/libraries/libstrophe { };
 
   libspatialindex = callPackage ../development/libraries/libspatialindex { };
