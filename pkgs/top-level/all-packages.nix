@@ -14828,6 +14828,8 @@ let
 
     coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
 
+    flocq = callPackage ../development/coq-modules/flocq {};
+
     mathcomp = callPackage ../development/coq-modules/mathcomp { };
 
     ssreflect = callPackage ../development/coq-modules/ssreflect { };
