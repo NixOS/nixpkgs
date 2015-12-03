@@ -1730,11 +1730,13 @@ in modules // {
 
   boto3 = buildPythonPackage rec {
     name = "boto3-${version}";
-    version = "1.1.4";
+    version = "1.2.2";
 
-    src = pkgs.fetchurl {
-      url = "https://github.com/boto/boto3/archive/${version}.zip";
-      sha256 = "11fdfbq8ann11wdzmbd0djnb1biyyhs1jcc8maxmkcj2q9fw6dk0";
+    src = pkgs.fetchFromGitHub {
+      owner = "boto";
+      repo  = "boto3";
+      rev   = version;
+      sha256 = "1w53lhhdzi29d31qzhflb5mcwb24mfrj4frv70w6qyn8vmqznnjy";
     };
 
     propagatedBuildInputs = [ self.botocore
