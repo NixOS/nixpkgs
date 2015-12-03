@@ -273,13 +273,15 @@ let
   };
 
   buildFHSChrootEnv = args: chrootFHSEnv {
-    env = buildFHSEnv args;
+    env = buildFHSEnv (removeAttrs args [ "extraInstallCommands" ]);
+    extraInstallCommands = args.extraInstallCommands or "";
   };
 
   buildFHSUserEnv = args: userFHSEnv {
-    env = buildFHSEnv (removeAttrs args [ "runScript" "extraBindMounts" ]);
+    env = buildFHSEnv (removeAttrs args [ "runScript" "extraBindMounts" "extraInstallCommands" ]);
     runScript = args.runScript or "bash";
     extraBindMounts = args.extraBindMounts or [];
+    extraInstallCommands = args.extraInstallCommands or "";
   };
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
