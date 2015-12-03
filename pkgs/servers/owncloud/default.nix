@@ -37,8 +37,8 @@ in {
   };
 
   owncloud70 = common {
-    versiona = "7.0.10";
-    sha256 = "7e77f27137f37a721a8827b0436a9e71c100406d9745c4251c37c14bcaf31d0b";
+    versiona = "7.0.11";
+    sha256 = "21dd75de4ed832f16f577eb6763d04c663ef13251153ba2e8847e3f5799d2ad2";
   };
 
   owncloud80 = common {
