@@ -9834,6 +9834,24 @@ in modules // {
     };
   });
 
+  modestmaps = buildPythonPackage rec {
+    name = "ModestMaps-1.4.6";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/M/ModestMaps/${name}.tar.gz";
+      sha256 = "0vyi1m9q4pc34i6rq5agb4x3qicx5sjlbxwmxfk70k2l5mnbjca3";
+    };
+
+    disabled = !isPy27;
+    propagatedBuildInputs = with self; [ pillow ];
+
+    meta = {
+      description = "A library for building interactive maps";
+      homepage = http://modestmaps.com;
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
   moinmoin = buildPythonPackage (rec {
     name = "moinmoin-${ver}";
     disabled = isPy3k;
