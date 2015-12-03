@@ -324,6 +324,12 @@ in
 
     services.xserver.displayManager.xserverBin = "${xorg.xorgserver}/bin/X";
 
+
+    assertions = mkIf cfg.enable (singleton { 
+      assertion = cfg.displayManager.session.names != [];
+      message = "Please enable at least one desktop manager or window manager";
+    });
+
   };
 
 }
