@@ -6404,6 +6404,16 @@ in modules // {
 
   django = self.django_1_7;
 
+  django_gis = self.django.override rec {
+    patches = [
+      (pkgs.substituteAll {
+        src = ../development/python-modules/django/1.7.7-gis-libs.template.patch;
+        geos = pkgs.geos;
+        gdal = pkgs.gdal;
+      })
+    ];
+  };
+
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.8.4";
