@@ -13,7 +13,7 @@ pythonPackages.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    pythonPackages.botocore_1_1_10
+    pythonPackages.botocore
     pythonPackages.bcdoc
     pythonPackages.six
     pythonPackages.colorama
