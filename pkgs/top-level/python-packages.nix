@@ -1759,44 +1759,17 @@ in modules // {
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.2.0";
+    version = "1.3.6";
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      sha256 = "0wj98fsiwqzy0i0zh86fx15sgdjkwqi6crxig6b4kvrckl8bkwjr";
+      sha256 = "05a0ihv66fx77j16mjlm76d8zm7sd5wfzh1hx4nm3ilb9gz5h016";
     };
 
     propagatedBuildInputs =
       [ self.dateutil
-        self.requests
-        self.jmespath
-      ];
-
-    buildInputs = [ self.docutils ];
-
-    meta = {
-      homepage = https://github.com/boto/botocore;
-
-      license = "bsd";
-
-      description = "A low-level interface to a growing number of Amazon Web Services";
-
-    };
-  };
-
-  botocore_1_1_10 = buildPythonPackage rec {
-    version = "1.1.10";
-    name = "botocore-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      sha256 = "0syj0m0l7k4wa0n9h7h8ywayjv9fgpn5wyzpdriws0j417y1zlyc";
-    };
-
-    propagatedBuildInputs =
-      [ self.dateutil
-        self.requests
+        self.requests2
         self.jmespath
       ];
 
