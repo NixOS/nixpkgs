@@ -7963,29 +7963,6 @@ in modules // {
     };
   };
 
-  glance = buildPythonPackage rec {
-    name = "glance-0.1.7";
-
-    src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/g/glance/${name}.tar.gz";
-      md5 = "e733713ccd23e4a6253386a47971cfb5";
-    };
-
-    buildInputs = with self; [ nose mox ];
-
-    # tests fail for python2.6
-    doCheck = python.majorVersion != "2.6";
-
-    propagatedBuildInputs = with self; [ gflags sqlalchemy webob routes eventlet ];
-
-    PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
-
-    meta = {
-      homepage = https://launchpad.net/glance;
-      description = "Services for discovering, registering, and retrieving virtual machine images";
-    };
-  };
-
   glances = buildPythonPackage rec {
     name = "glances-${version}";
     version = "2.4.2";
