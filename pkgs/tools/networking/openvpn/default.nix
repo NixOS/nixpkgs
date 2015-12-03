@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
     --enable-systemd
     --enable-iproute2
     IPROUTE=${iproute}/sbin/ip
-  '' + optionalString stdenv.isDarwin ''
-    --disable-plugin-auth-pam
   '';
 
   postInstall = ''
