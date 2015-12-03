@@ -184,6 +184,14 @@ installBin() {
 # Initialisation.
 
 
+# Set a fallback default value for SOURCE_DATE_EPOCH, used by some
+# build tools to provide a deterministic substitute for the "current"
+# time. Note that 1 = 1970-01-01 00:00:01. We don't use 0 because it
+# confuses some applications.
+export SOURCE_DATE_EPOCH
+: ${SOURCE_DATE_EPOCH:=1}
+
+
 # Wildcard expansions that don't match should expand to an empty list.
 # This ensures that, for instance, "for i in *; do ...; done" does the
 # right thing.
