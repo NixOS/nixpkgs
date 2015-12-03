@@ -39,6 +39,9 @@ let
     certrequired=${if cfg.clientCertRequired then "true" else "false"}
     ${if cfg.sslCert == "" then "" else "sslCert="+cfg.sslCert}
     ${if cfg.sslKey  == "" then "" else "sslKey="+cfg.sslKey}
+    ${if cfg.sslCa   == "" then "" else "sslCA="+cfg.sslCa}
+    
+    ${cfg.extraConfig}
   '';
 in
 {
@@ -218,6 +221,18 @@ in
         type = types.str;
         default = "";
         description = "Path to your SSL key.";
+      };
+
+      sslCa = mkOption {
+        type = types.str;
+        default = "";
+        description = "Path to your SSL CA certificate.";
+      };
+
+      extraConfig = mkOption {
+        type = types.str;
+        default = "";
+        description = "Extra configuration to put into mumur.ini.";
       };
     };
   };
