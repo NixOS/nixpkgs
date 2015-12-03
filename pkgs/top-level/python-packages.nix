@@ -11721,6 +11721,13 @@ in modules // {
       sha256 = "1711rlmykizw675ihbaqmk3ph6ah0njbygxr9lrdnacy6yrlmbd5";
     };
 
+    # https://bugs.launchpad.net/oslo.rootwrap/+bug/1519839
+    patchPhase = ''
+     substituteInPlace oslo_rootwrap/filters.py \
+       --replace "/bin/cat" "${pkgs.coreutils}/bin/cat" \
+       --replace "/bin/kill" "${pkgs.coreutils}/bin/kill"
+    '';
+
     buildInputs = with self; [ eventlet mock oslotest ];
     propagatedBuildInputs = with self; [
       six pbr
