@@ -64,7 +64,8 @@ let version = "5.3.0";
 
     enableParallelBuilding = true;
 
-    patches = [ ]
+    patches =
+      [ ../use-source-date-epoch.patch ]
       ++ optional (cross != null) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
