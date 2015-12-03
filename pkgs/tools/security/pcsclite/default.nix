@@ -11,18 +11,18 @@ stdenv.mkDerivation rec {
   configureFlags = [
     # The OS should care on preparing the drivers into this location
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
-    "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
     "--enable-confdir=/etc"
-  ];
+  ] ++ stdenv.lib.optional stdenv.isLinux
+         "--with-systemdsystemunitdir=\${out}/etc/systemd/system";
 
   nativeBuildInputs = [ pkgconfig perl python2 ];
-  buildInputs = [ udev dbus_libs ];
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ udev dbus_libs ];
 
   meta = with stdenv.lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
     homepage = http://pcsclite.alioth.debian.org/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ viric wkennington ];
-    platforms = platforms.linux;
+    platforms = with platforms; unix;
   };
 }
