@@ -21,7 +21,6 @@ with lib;
   imports = [
     ../profiles/qemu-guest.nix
     ../profiles/headless.nix
-    ./ec2-data.nix
   ];
 
   fileSystems."/".device = "/dev/disk/by-label/nixos";
