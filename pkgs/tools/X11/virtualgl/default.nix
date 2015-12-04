@@ -1,33 +1,22 @@
-{ stdenv, fetchurl, mesa, libX11, openssl, libXext
-, libjpeg_turbo, cmake }:
+{ lib, buildEnv
+, virtualglLib
+, virtualglLib_i686 ? null
+}:
 
-let
-  version = "2.3.2";
-in
-stdenv.mkDerivation {
-  name = "virtualgl-${version}";
-  src = fetchurl {
-    url = "mirror://sourceforge/virtualgl/VirtualGL-${version}.tar.gz";
-    sha256 = "062lrhd8yr13ch4wpgzxdabqs92j4q7fcl3a0c3sdlav4arspqmy";
-  };
+buildEnv {
+  name = "virtualgl-${lib.getVersion virtualglLib}";
 
-  patches = [ ./xshm.patch ./fixturbopath.patch ];
+  paths = [ virtualglLib ];
 
-  prePatch = ''
-    sed -i s,LD_PRELOAD=lib,LD_PRELOAD=$out/lib/lib, server/vglrun
+  postBuild = lib.optionalString (virtualglLib_i686 != null) ''
+    rm $out/fakelib
+    # workaround for #4621
+    rm $out/bin
+    mkdir $out/bin
+    for i in ${virtualglLib}/bin/*; do
+      ln -s $i $out/bin
+    done
+    ln -s ${virtualglLib}/bin/.vglrun.vars64 $out/bin
+    ln -s ${virtualglLib_i686}/bin/.vglrun.vars32 $out/bin
   '';
-
-  cmakeFlags = [ "-DTJPEG_LIBRARY=${libjpeg_turbo}/lib/libturbojpeg.so" ];
-
-  preInstall = ''
-    export makeFlags="prefix=$out"
-  '';
-
-  buildInputs = [ cmake mesa libX11 openssl libXext libjpeg_turbo ];
-
-  meta = {
-    homepage = http://www.virtualgl.org/;
-    description = "X11 GL rendering in a remote computer with full 3D hw acceleration";
-    license = stdenv.lib.licenses.free; # many parts under different free licenses
-  };
 }

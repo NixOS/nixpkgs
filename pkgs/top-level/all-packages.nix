@@ -13385,8 +13385,15 @@ let
 
   virtinst = callPackage ../applications/virtualization/virtinst {};
 
-  virtualgl = callPackage ../tools/X11/virtualgl { };
+  virtualglLib = callPackage ../tools/X11/virtualgl/lib.nix {
+    fltk = fltk13;
+  };
 
+  virtualgl = callPackage ../tools/X11/virtualgl {
+    virtualglLib_i686 = if system == "x86_64-linux"
+      then pkgsi686Linux.virtualglLib
+      else null;
+  };
 
   primusLib = callPackage ../tools/X11/primus/lib.nix {
     nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
