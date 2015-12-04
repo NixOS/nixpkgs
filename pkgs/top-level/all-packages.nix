@@ -4074,6 +4074,8 @@ let
   };
   inherit (haskellPackages) ghc cabal-install stack;
 
+  halide = callPackage ../development/compilers/halide { };
+
   haxe = callPackage ../development/compilers/haxe {
     inherit (ocamlPackages) camlp4;
   };
