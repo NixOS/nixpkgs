@@ -213,11 +213,18 @@ rec {
         substSubModules = m: submodule m;
       };
 
-    enum = values: mkOptionType {
-      name = "one of ${concatStringsSep ", " values}";
-      check = flip elem values;
-      merge = mergeOneOption;
-    };
+    enum = values:
+      let
+        show = v:
+               if builtins.isString v then ''"${v}"''
+          else if builtins.isInt v then builtins.toString v
+          else ''<${builtins.typeOf v}>'';
+      in
+      mkOptionType {
+        name = "one of ${concatMapStringsSep ", " show values}";
+        check = flip elem values;
+        merge = mergeOneOption;
+      };
 
     either = t1: t2: mkOptionType {
       name = "${t1.name} or ${t2.name}";
