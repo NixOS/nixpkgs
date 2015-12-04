@@ -15478,7 +15478,7 @@ in modules // {
 
 
   reportlab =
-   let freetype = overrideDerivation pkgs.freetype (args: { configureFlags = "--enable-static --enable-shared"; });
+   let freetype = overrideDerivation pkgs.freetype (args: { dontDisableStatic = true; });
    in buildPythonPackage rec {
     name = "reportlab-3.2.0";
 
