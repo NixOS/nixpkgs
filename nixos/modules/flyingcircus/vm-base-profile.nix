@@ -4,18 +4,19 @@ with lib;
 
 let
     flavor_files =
-        if builtins.pathExists /etc/nixos/vagrant.nix
-        then [./vagrant.nix]
-        else [./fcio.nix];
+      if builtins.pathExists /etc/nixos/vagrant.nix
+      then [./vagrant.nix]
+      else [./fcio.nix];
 
     get_enc = path: default:
-        if builtins.pathExists path
-        then builtins.fromJSON (builtins.readFile path)
-        else default;
+      if builtins.pathExists path
+      then builtins.fromJSON (builtins.readFile path)
+      else default;
 
     enc =
-        get_enc /etc/nixos/enc.json
-        (get_enc /tmp/fc-data/enc.json {});
+      get_enc /etc/nixos/enc.json
+      (get_enc /tmp/fc-data/enc.json {});
+
 in
 {
 
