@@ -1,5 +1,6 @@
 {pkgs, lib, config, ...}:
 
+with lib;
 let
   inherit (lib) mkOption mkIf optionals literalExample;
   cfg = config.services.xserver.windowManager.xmonad;

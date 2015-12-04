@@ -9,6 +9,7 @@ in
   ###### interface
   options = {
     services.xserver.windowManager.fluxbox.enable = mkEnableOption "fluxbox";
+  };
 
   ###### implementation
   config = mkIf cfg.enable {

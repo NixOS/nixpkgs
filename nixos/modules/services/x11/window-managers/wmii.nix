@@ -1,5 +1,6 @@
 { config, lib, pkgs, options, modulesPath, ... }:
 
+with lib;
 let
   inherit (lib) mkOption mkIf singleton;
   cfg = config.services.xserver.windowManager.wmii;
