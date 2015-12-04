@@ -4222,6 +4222,8 @@ let
     openblas = openblasCompat;
   };
 
+  kotlin = callPackage ../development/compilers/kotlin { };
+
   lazarus = callPackage ../development/compilers/fpc/lazarus.nix {
     fpc = fpc;
   };
