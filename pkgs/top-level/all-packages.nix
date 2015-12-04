@@ -11290,6 +11290,8 @@ let
 
   cvs2svn = callPackage ../applications/version-management/cvs2svn { };
 
+  cwm = callPackage ../applications/window-managers/cwm { };
+
   cyclone = callPackage ../applications/audio/pd-plugins/cyclone  { };
 
   d4x = callPackage ../applications/misc/d4x { };
