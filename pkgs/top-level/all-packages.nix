@@ -5356,6 +5356,8 @@ let
 
   ansible = callPackage ../tools/system/ansible { };
 
+  ansible2 = callPackage ../tools/system/ansible/2.nix { };
+
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
 
   antlr3 = callPackage ../development/tools/parsing/antlr { };
