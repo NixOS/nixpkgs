@@ -193,9 +193,9 @@ rec {
 
     nullOr = elemType: mkOptionType {
       name = "null or ${elemType.name}";
-      check = x: builtins.isNull x || elemType.check x;
+      check = x: x == null || elemType.check x;
       merge = loc: defs:
-        let nrNulls = count (def: isNull def.value) defs; in
+        let nrNulls = count (def: def.value == null) defs; in
         if nrNulls == length defs then null
         else if nrNulls != 0 then
           throw "The option `${showOption loc}' is defined both null and not null, in ${showFiles (getFiles defs)}."
