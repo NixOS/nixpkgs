@@ -78,6 +78,7 @@ in
         pkgs.python27Packages.virtualenv
         pkgs.vim
         pkgs.zlib
+        pkgs.fcagent
     ];
 
     environment.pathsToLink = [ "/include" ];
@@ -96,5 +97,9 @@ in
         root   ALL=(ALL) SETENV: ALL
         %wheel ALL=(ALL) NOPASSWD: ALL, SETENV: ALL
         '';
+
+    environment.etc =
+      lib.optionalAttrs (lib.hasAttrByPath ["parameters" "directory_secret"] config.enc)
+      {"directory.secret".text = config.enc.parameters.directory_secret; };
   };
 }
