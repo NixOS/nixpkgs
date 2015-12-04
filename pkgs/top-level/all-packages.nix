@@ -1437,6 +1437,7 @@ let
   evemu = callPackage ../tools/system/evemu { };
 
   elasticsearch = callPackage ../servers/search/elasticsearch { };
+  elasticsearch2 = callPackage ../servers/search/elasticsearch/2.x.nix { };
 
   elasticsearchPlugins = recurseIntoAttrs (
     callPackage ../servers/search/elasticsearch/plugins.nix { }
