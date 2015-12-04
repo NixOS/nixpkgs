@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   # FIXME: -dev depends on -doc
   outputs = [ "dev" "out" "doc" ];
+  setOutputFlags = false; # it would move $out/modules, etc.
 
   buildInputs = [perl] ++
     optional sslSupport openssl ++
@@ -54,6 +55,8 @@ stdenv.mkDerivation rec {
     ${optionalString sslSupport "--enable-ssl"}
     ${optionalString luaSupport "--enable-lua --with-lua=${lua5}"}
     ${optionalString libxml2Support "--with-libxml2=${libxml2.dev}/include/libxml2"}
+    --includedir=$(dev)/include
+    --docdir=$(doc)/share/doc
   '';
 
   enableParallelBuilding = true;

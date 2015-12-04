@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   # FIXME: -dev depends on -doc
   outputs = [ "dev" "out" "doc" ];
+  setOutputFlags = false; # it would move $out/modules, etc.
 
   buildInputs = [ pkgconfig perl apr aprutil pcre zlib ] ++
     stdenv.lib.optional sslSupport openssl;
@@ -46,6 +47,8 @@ stdenv.mkDerivation rec {
     --enable-disk-cache
     --enable-file-cache
     --enable-mem-cache
+    --includedir=$(dev)/include
+    --docdir=$(doc)/share/doc
   '';
 
   enableParallelBuilding = true;
