@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, flex, bison }:
+{ stdenv, fetchurl, flex, bison
+, enableStatic ? false
+}:
 
 stdenv.mkDerivation rec {
   name = "libpcap-1.7.4";
@@ -13,9 +15,10 @@ stdenv.mkDerivation rec {
   # We need to force the autodetection because detection doesn't
   # work in pure build enviroments.
   configureFlags =
-    if stdenv.isLinux then [ "--with-pcap=linux" ]
-    else if stdenv.isDarwin then [ "--with-pcap=bpf" ]
-    else [];
+    (if stdenv.isLinux then [ "--with-pcap=linux" ]
+     else if stdenv.isDarwin then [ "--with-pcap=bpf" ]
+     else [])
+    ++ stdenv.lib.optional enableStatic "--enable-static";
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace " -arch i386" ""
