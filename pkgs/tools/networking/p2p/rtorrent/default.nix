@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libtorrent ncurses pkgconfig libsigcxx curl zlib openssl xmlrpc_c ];
-  configureFlags = "--with-xmlrpc-c";
+  configureFlags = [ "--with-xmlrpc-c" "--with-posix-fallocate" ];
 
   # postInstall = ''
   #   mkdir -p $out/share/man/man1 $out/share/rtorrent
