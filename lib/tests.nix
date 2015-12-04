@@ -120,4 +120,14 @@ runTests {
     expected = { success = false; value = false; };
   };
 
+  testHasAttrByPathTrue = {
+    expr = hasAttrByPath ["a" "b"] { a = { b = "yey"; }; };
+    expected = true;
+  };
+
+  testHasAttrByPathFalse = {
+    expr = hasAttrByPath ["a" "b"] { a = { c = "yey"; }; };
+    expected = false;
+  };
+
 }
