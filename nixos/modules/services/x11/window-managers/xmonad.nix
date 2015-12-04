@@ -13,12 +13,7 @@ in
 {
   options = {
     services.xserver.windowManager.xmonad = {
-      enable = mkOption {
-        default = false;
-        example = true;
-        description = "Enable the xmonad window manager.";
-      };
-
+      enable = mkEnableOption "xmonad";
       haskellPackages = mkOption {
         default = pkgs.haskellPackages;
         defaultText = "pkgs.haskellPackages";

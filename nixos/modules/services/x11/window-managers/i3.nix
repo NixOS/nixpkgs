@@ -9,11 +9,7 @@ in
 {
   options = {
     services.xserver.windowManager.i3 = {
-      enable = mkOption {
-        default = false;
-        example = true;
-        description = "Enable the i3 tiling window manager.";
-      };
+      enable = mkEnableOption "i3";
 
       configFile = mkOption {
         default = null;

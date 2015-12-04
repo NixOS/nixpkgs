@@ -7,14 +7,7 @@ in
 
 {
   options = {
-    services.xserver.windowManager.openbox = {
-      enable = mkOption {
-        default = false;
-        example = true;
-        description = "Enable the Openbox window manager.";
-      };
-    };
-  };
+    services.xserver.windowManager.openbox.enable = mkEnableOption "oroborus";
 
   config = mkIf cfg.enable {
     services.xserver.windowManager = {
