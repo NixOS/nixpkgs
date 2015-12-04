@@ -7658,6 +7658,11 @@ let
     name = "libxml2+py-${pkgs.libxml2.version}";
     paths = with libxml2; [ dev bin py ];
     inherit (pkgs.libxml2) passthru;
+    # the hook to find catalogs is hidden by buildEnv
+    postBuild = ''
+      mkdir "$out/nix-support"
+      cp '${libxml2.dev}/nix-support/propagated-native-build-inputs' "$out/nix-support/"
+    '';
   };
 
   libxmlxx = callPackage ../development/libraries/libxmlxx { };
