@@ -1461,6 +1461,21 @@ let self = _self // overrides;
     };
   };
 
+  parsebib = melpaBuild rec {
+    pname = "parsebib";
+    version = "20151006";
+    src = fetchFromGitHub {
+      owner = "joostkremers";
+      repo = pname;
+      rev = "9a1f60bed2814dfb5cec2b92efb5951a4b465cce";
+      sha256 = "0n91whyjnrdhb9bqfif01ygmwv5biwpz2pvjv5w5y1d4g0k1x9ml";
+    };
+    meta = {
+      description = "Emacs library for reading .bib files";
+      license = bsd3;
+    };
+  };
+
   perspective = melpaBuild rec {
     pname   = "perspective";
     version = "1.12";
