@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
-  '';
+  ''; #" fix Emacs syntax highlighting :-(
 
   buildInputs = [
     pkgconfig libgcrypt libassuan libksba libiconv npth
