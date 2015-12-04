@@ -1642,12 +1642,12 @@ let self = _self // overrides;
 
   s = melpaBuild rec {
     pname   = "s";
-    version = "20140910";
+    version = "20151023";
     src = fetchFromGitHub {
       owner  = "magnars";
       repo   = "${pname}.el";
-      rev    = "1f85b5112f3f68169ddaa2911fcfa030f979eb4d";
-      sha256 = "9d871ea84f98c51099528a03eddf47218cf70f1431d4c35c19c977d9e73d421f";
+      rev    = "372e94c1a28031686d75d6c52bfbe833a118a72a";
+      sha256 = "1zn8n3mv0iscs242dbkf5vmkkizfslq5haw9z0d0g3wknq18286h";
     };
     meta = {
       description = "String manipulation library for Emacs";
