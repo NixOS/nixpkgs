@@ -23,6 +23,7 @@ in
     flavor_files ++
     [./user.nix
      ./network.nix
+     ./packages/default.nix
      ./roles/default.nix];
 
   options = {
