@@ -1031,22 +1031,6 @@ let self = _self // overrides;
     };
   };
 
-  helm-swoop = melpaBuild rec {
-    pname   = "helm-swoop";
-    version = "20141224";
-    src = fetchFromGitHub {
-      owner  = "ShingoFukuyama";
-      repo   = pname;
-      rev    = "06a251f7d7fce2a5719e0862e5855972cd8ab1ae";
-      sha256 = "0nq33ldhbvfbm6jnsxqdf3vwaqrsr2gprkzll081gcyl2s1x0l2m";
-    };
-    packageRequires = [ helm ];
-    meta = {
-      description = "An Emacs mode which constructs an editable grep for a buffer";
-      license = gpl3Plus;
-    };
-  };
-
   helm = melpaBuild rec {
     pname   = "helm";
     version = "20150105";
@@ -1059,6 +1043,22 @@ let self = _self // overrides;
     packageRequires = [ async ];
     meta = {
       description = "An incremental completion and selection narrowing framework for Emacs";
+      license = gpl3Plus;
+    };
+  };
+
+  helm-swoop = melpaBuild rec {
+    pname   = "helm-swoop";
+    version = "20141224";
+    src = fetchFromGitHub {
+      owner  = "ShingoFukuyama";
+      repo   = pname;
+      rev    = "06a251f7d7fce2a5719e0862e5855972cd8ab1ae";
+      sha256 = "0nq33ldhbvfbm6jnsxqdf3vwaqrsr2gprkzll081gcyl2s1x0l2m";
+    };
+    packageRequires = [ helm ];
+    meta = {
+      description = "An Emacs mode which constructs an editable grep for a buffer";
       license = gpl3Plus;
     };
   };
