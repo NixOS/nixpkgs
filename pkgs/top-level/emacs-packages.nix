@@ -1047,6 +1047,22 @@ let self = _self // overrides;
     };
   };
 
+  helm-bibtex = melpaBuild rec {
+    pname = "helm-bibtex";
+    version = "20151125";
+    src = fetchFromGitHub {
+      owner = "tmalsburg";
+      repo = pname;
+      rev = "bfcd5064dcc7c0ac62c46985832b2a73082f96e0";
+      sha256 = "1nvc4ha9wj5j47qg7hdbv1xpjy8a8idc9vc2myl3xa33ywllwdwi";
+    };
+    packageRequires = [ dash f helm parsebib s ];
+    meta = {
+      description = "Bibliography Manager for Emacs";
+      license = gpl2;
+    };
+  };
+
   helm-swoop = melpaBuild rec {
     pname   = "helm-swoop";
     version = "20141224";
