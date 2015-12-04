@@ -145,7 +145,7 @@ in
   config = {
 
     services.udev.extraRules =
-      if config.enc ? parameters
+      if lib.hasAttrByPath ["parameters" "interfaces"] config.enc
       then
         toString
         (get_udev_configuration config.enc.parameters.interfaces)
@@ -159,17 +159,17 @@ in
 
 
   networking.defaultGateway =
-    if config.enc ? parameters
+    if lib.hasAttrByPath ["parameters" "interfaces"] config.enc
     then get_default_gateway is_ip4 config.enc.parameters.interfaces
     else null;
   networking.defaultGateway6 =
-    if config.enc ? parameters
+    if lib.hasAttrByPath ["parameters" "interfaces"] config.enc
     then get_default_gateway is_ip6 config.enc.parameters.interfaces
     else null;
 
   # Only set nameserver if there is an enc set.
   networking.nameservers =
-  if config.enc ? parameters
+  if lib.hasAttrByPath ["parameters" "location"] config.enc
   then
     if builtins.hasAttr config.enc.parameters.location ns_by_location
     then builtins.getAttr config.enc.parameters.location ns_by_location
@@ -179,18 +179,18 @@ in
 
   # If there is no enc data, we are probably not on FC platform.
   networking.search =
-    if config.enc ? parameters
+    if lib.hasAttrByPath ["parameters" "location"] config.enc
     then ["${config.enc.parameters.location}.gocept.net"
           "gocept.net"]
     else [];
 
   networking.interfaces =
-    if config.enc ? parameters
+    if lib.hasAttrByPath ["parameters" "interfaces"] config.enc
     then get_network_configuration config.enc.parameters.interfaces
     else {};
 
   networking.localCommands =
-    if config.enc ? parameters
+    if lib.hasAttrByPath ["parameters" "interfaces"] config.enc
     then
       ''
         mkdir -p /etc/iproute2
