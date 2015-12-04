@@ -160,7 +160,6 @@ let
       pmccabe = linux;
       ppl = all;
       procps = linux;
-      pthreadmanpages = linux;
       pygtk = linux;
       python = allBut cygwin;
       pythonFull = linux;
