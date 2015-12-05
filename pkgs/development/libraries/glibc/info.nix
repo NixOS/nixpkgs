@@ -8,6 +8,8 @@ build null {
 
   inherit fetchurl stdenv;
 
+  outputs = [ "out" ];
+
   configureFlags = [ "--enable-add-ons" ];
 
   buildInputs = [ texinfo perl ];
