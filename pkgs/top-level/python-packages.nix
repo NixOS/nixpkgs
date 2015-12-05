@@ -4667,11 +4667,11 @@ in modules // {
   };
 
   gmusicapi = with pkgs; buildPythonPackage rec {
-    name = "gmusicapi-4.0.0";
+    name = "gmusicapi-7.0.0";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/g/gmusicapi/gmusicapi-4.0.0.tar.gz";
-      md5 = "12ba66607531978b349c7035c9bab311";
+      url = "https://pypi.python.org/packages/source/g/gmusicapi/gmusicapi-7.0.0.tar.gz";
+      sha256 = "1zji4cgylyzz97cz69lywkbsn5nvvzrhk7iaqnpqpfvj9gwdchwn";
     };
 
     propagatedBuildInputs = with self; [
@@ -4680,14 +4680,16 @@ in modules // {
       mutagen
       protobuf
       setuptools
-      requests
+      requests2
       dateutil
       proboscis
       mock
       appdirs
       oauth2client
+      pyopenssl
+      gpsoauth
+      MechanicalSoup
     ];
-    doCheck = false;
 
     meta = {
       description = "An unofficial API for Google Play Music";
