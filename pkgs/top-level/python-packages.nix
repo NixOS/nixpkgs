@@ -2565,7 +2565,7 @@ in modules // {
 
     patchPhase = ''
       # Hardcode cairo library path
-      sed -e 's,ffi\.dlopen(,&"${pkgs.cairo}/lib/" + ,' -i cairocffi/__init__.py
+      sed -e 's,ffi\.dlopen(,&"${pkgs.cairo.out}/lib/" + ,' -i cairocffi/__init__.py
     '';
 
     meta = {
@@ -23731,7 +23731,7 @@ in modules // {
 
     patchPhase = ''
       # Hardcode cairo library path
-      sed -e 's,ffi\.dlopen(,&"${pkgs.xorg.libxcb}/lib/" + ,' -i xcffib/__init__.py
+      sed -e 's,ffi\.dlopen(,&"${pkgs.xorg.libxcb.out}/lib/" + ,' -i xcffib/__init__.py
     '';
 
     propagatedBuildInputs = [ self.cffi self.six ];
