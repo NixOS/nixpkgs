@@ -7,12 +7,12 @@ in
 assert hotplugSupport -> (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux");
 
 stdenv.mkDerivation {
-  name = "sane-backends-1.0.24.73-g6c4f6bc";
+  name = "sane-backends-1.0.25.177-g753d123";
 
   src = fetchgit {
     url = "git://alioth.debian.org/git/sane/sane-backends.git";
-    rev = "6c4f6bc58615755dc734281703b594cea3ebf848";
-    sha256 = "0f7lbv1rnr53n4rpihcd8dkfm01xvwfnx9i1nqaadrzbpvgkjrfa";
+    rev = "753d123f36d08cdb8047adac7c89a9fe015c4b25";
+    sha256 = "1f5b4606f9b1b65a312794726e8d5d06056510b7426f86845ebeb8ca1a9b2f1f";
   };
 
   udevSupport = hotplugSupport;
