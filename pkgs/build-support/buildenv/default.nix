@@ -35,10 +35,11 @@
   buildInputs ? []
 
 , passthru ? {}
+, meta ? {}
 }:
 
 runCommand name
-  rec { inherit manifest ignoreCollisions passthru pathsToLink extraPrefix postBuild buildInputs;
+  rec { inherit manifest ignoreCollisions passthru meta pathsToLink extraPrefix postBuild buildInputs;
     pkgs = builtins.toJSON (map (drv: {
       paths =
         [ drv ]

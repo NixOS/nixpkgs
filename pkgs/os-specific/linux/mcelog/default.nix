@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  installFlags = "DESTDIR=$(out) prefix= DOCDIR=/share/doc";
+  installFlags = [ "DESTDIR=$(out)" "prefix=" "DOCDIR=/share/doc" ];
 
   meta = with stdenv.lib; {
     inherit version;

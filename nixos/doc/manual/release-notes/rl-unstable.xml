@@ -26,6 +26,13 @@ nixos.path = ./nixpkgs-unstable-2015-12-06/nixos;
 
 </itemizedlist>
 
+<para>The following new services were added since the last release:
+
+  <itemizedlist>
+    <listitem><para><literal>services/monitoring/longview.nix</literal></para></listitem>
+  </itemizedlist>
+</para>
+
 <para>When upgrading from a previous release, please be aware of the
 following incompatible changes:</para>
 
@@ -74,6 +81,29 @@ nginx.override {
     </para>
   </listitem>
 
+  <listitem>
+    <para><command>s3sync</command> is removed, as it hasn't been
+    developed by upstream for 4 years and only runs with ruby 1.8.
+    For an actively-developer alternative look at
+    <command>tarsnap</command> and others.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para><command>ruby_1_8</command> has been removed as it's not
+    supported from upstream anymore and probably contains security
+    issues.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para><literal>tidy-html5</literal> package is removed.
+    Upstream only provided <literal>(lib)tidy5</literal> during development,
+    and now they went back to <literal>(lib)tidy</literal> to work as a drop-in
+    replacement of the original package that has been unmaintained for years.
+    You can (still) use the <literal>html-tidy</literal> package, which got updated
+    to a stable release from this new upstream.</para>
+  </listitem>
 </itemizedlist>
 
 </section>

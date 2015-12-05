@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "viking-${version}";
-  version = "1.6";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/viking/viking/viking-${version}.tar.bz2";
-    sha256 = "02ljnnc1in3cnafmld93qvzgx3j4qsgac2a53q18s6sp5hvvvw91";
+    sha256 = "0ic445f85z1sdx1ifgcijn379m7amr5mcjpg10343972sam4rz1s";
   };
 
   buildInputs = [ makeWrapper pkgconfig intltool gettext gtk expat curl gpsd bc file gnome_doc_utils

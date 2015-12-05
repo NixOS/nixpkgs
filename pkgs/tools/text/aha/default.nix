@@ -11,6 +11,10 @@ stdenv.mkDerivation {
     owner = "theZiz";
   };
 
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     inherit version;
     description = "ANSI HTML Adapter";
@@ -22,8 +26,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
-
-  makeFlags = "PREFIX=$(out)";
-
-  enableParallelBuilding = true;
 }

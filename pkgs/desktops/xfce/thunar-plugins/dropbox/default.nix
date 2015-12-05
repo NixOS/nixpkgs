@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig
 , gtk
-, thunar, python2
+, thunarx-2-dev, python2
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig
     gtk
-    thunar python2
+    thunarx-2-dev python2
   ];
 
   configurePhase = "python2 waf configure --prefix=$out";

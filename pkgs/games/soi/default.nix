@@ -1,56 +1,31 @@
-x@{builderDefsPackage
-  , mesa, SDL, cmake, eigen
-  , ...}:
-builderDefsPackage
-(a :
+{ stdenv, fetchurl, mesa, SDL, cmake, eigen }:
+
 let
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
-    [];
-
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="soi";
-    fileName="Spheres%20of%20Influence";
-    majorVersion="0.1";
-    minorVersion="1";
-    version="${majorVersion}.${minorVersion}";
-    name="${baseName}-${version}";
-    project="${baseName}";
-    url="mirror://sourceforge/project/${project}/${baseName}-${majorVersion}/${fileName}-${version}-Source.tar.gz";
-    hash="dfc59319d2962033709bb751c71728417888addc6c32cbec3da9679087732a81";
-  };
+  baseName = "soi";
+  majorVersion = "0.1";
+  minorVersion = "1";
+  version = "${majorVersion}.${minorVersion}";
+  name = "${baseName}-${version}";
 in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
-    name = "${sourceInfo.name}.tar.gz";
+
+stdenv.mkDerivation rec {
+  inherit name;
+  src = fetchurl {
+    url = "mirror://sourceforge/project/${baseName}/${baseName}-${majorVersion}/Spheres%20of%20Influence-${version}-Source.tar.gz";
+    inherit name;
+    sha256 = "dfc59319d2962033709bb751c71728417888addc6c32cbec3da9679087732a81";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ mesa SDL cmake eigen ];
 
-  phaseNames = ["setVars" "doCmake" "doMakeInstall"];
+  preConfigure = ''export EIGENDIR=${eigen}/include/eigen2'';
 
-  setVars = a.noDepEntry ''
-    export EIGENDIR=${a.eigen}/include/eigen2
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "A physics-based puzzle game";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.free;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    license = licenses.free;
     broken = true;
+    downloadPage = "http://sourceforge.net/projects/soi/files/";
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/soi/files/";
-    };
-  };
-}) x
+}

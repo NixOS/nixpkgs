@@ -1083,6 +1083,32 @@ rec {
       unifiedSystemDir = true;
     };
 
+    fedora23i386 = {
+      name = "fedora-23-i386";
+      fullName = "Fedora 23 (i386)";
+      packagesList = fetchurl rec {
+        url = "mirror://fedora/linux/releases/23/Everything/i386/os/repodata/${sha256}-primary.xml.gz";
+        sha256 = "0d1012e6c1f1d694ab5354d95005791ce8de908016d07e5ed0b9dac9b9223492";
+      };
+      urlPrefix = mirror://fedora/linux/releases/23/Everything/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
+    fedora23x86_64 = {
+      name = "fedora-23-x86_64";
+      fullName = "Fedora 23 (x86_64)";
+      packagesList = fetchurl rec {
+        url = "mirror://fedora/linux/releases/23/Everything/x86_64/os/repodata/${sha256}-primary.xml.gz";
+        sha256 = "0fa09bb5f82e4a04890b91255f4b34360e38ede964fe8328f7377e36f06bad27";
+      };
+      urlPrefix = mirror://fedora/linux/releases/23/Everything/x86_64/os;
+      archs = ["noarch" "x86_64"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
     opensuse103i386 = {
       name = "opensuse-10.3-i586";
       fullName = "openSUSE 10.3 (i586)";
@@ -1611,6 +1637,40 @@ rec {
           (fetchurl {
             url = mirror://ubuntu/dists/vivid/universe/binary-amd64/Packages.bz2;
             sha256 = "feb88768e245a63ee04b0f3bcfc8899a1f03b2f831646dc2a59e4e58884b5cb9";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1510i386 = {
+      name = "ubuntu-15.10-wily-i386";
+      fullName = "Ubuntu 15.10 Wily (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/wily/main/binary-i386/Packages.bz2;
+            sha256 = "ac9821095c63436fd4286539592295dd5de99bc82300f628e7a74111bb5dc370";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/wily/universe/binary-i386/Packages.bz2;
+            sha256 = "8951294f36c0755e945e8c37fdd046319f50553a8987ead1b68b21ffa53c5f7f";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1510x86_64 = {
+      name = "ubuntu-15.10-wily-amd64";
+      fullName = "Ubuntu 15.10 Wily (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/wily/main/binary-amd64/Packages.bz2;
+            sha256 = "2877de7674c8c6a410c3ac479e46fec24164a4de250f22b3ff062073e3985013";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/wily/universe/binary-amd64/Packages.bz2;
+            sha256 = "714be7a2fd33b8bb577901c9223039dcc12c130c9244122648ee21a625e2a66d";
           })
         ];
       urlPrefix = mirror://ubuntu;

@@ -27,7 +27,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.ibus ];
+    environment.systemPackages = [ pkgs.ibus pkgs.gnome3.dconf ];
 
     gtkPlugins = [ pkgs.ibus ];
     qtPlugins = [ pkgs.ibus-qt ];

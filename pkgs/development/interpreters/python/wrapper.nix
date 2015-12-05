@@ -6,10 +6,13 @@
 # Create a python executable that knows about additional packages.
 let
   recursivePthLoader = import ../../python-modules/recursive-pth-loader/default.nix { stdenv = stdenv; python = python; };
-  env = (buildEnv {
-    name = "${python.name}-env";
+  env = (
+  let
     paths = stdenv.lib.filter (x : x ? pythonPath) (stdenv.lib.closePropagation extraLibs) ++ [ python recursivePthLoader ];
+  in buildEnv {
+    name = "${python.name}-env";
 
+    inherit paths;
     inherit ignoreCollisions;
 
     postBuild = ''
@@ -20,10 +23,16 @@ let
       fi
       mkdir -p "$out/bin"
 
-      cd "${python}/bin"
-      for prg in *; do
-        rm -f "$out/bin/$prg"
-        makeWrapper "${python}/bin/$prg" "$out/bin/$prg" --set PYTHONHOME "$out"
+      for path in ${stdenv.lib.concatStringsSep " " paths}; do
+        if [ -d "$path/bin" ]; then
+          cd "$path/bin"
+          for prg in *; do
+            if [ -f "$prg" ]; then
+              rm -f "$out/bin/$prg"
+              makeWrapper "$path/bin/$prg" "$out/bin/$prg" --set PYTHONHOME "$out"
+            fi
+          done
+        fi
       done
     '' + postBuild;
 

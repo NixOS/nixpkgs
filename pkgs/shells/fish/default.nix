@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     sed -e "s|gettext |${gettext}/bin/gettext |" \
         -e "s|which |${which}/bin/which |" \
         -i "$out/share/fish/functions/_.fish"
+    substituteInPlace "$out/share/fish/functions/fish_default_key_bindings.fish" \
+      --replace "clear;" "${ncurses}/bin/clear;"
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     sed -i "s|Popen(\['manpath'|Popen(\['${man_db}/bin/manpath'|" "$out/share/fish/tools/create_manpage_completions.py"
   '' + ''

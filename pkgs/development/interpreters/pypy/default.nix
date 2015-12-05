@@ -6,8 +6,8 @@ assert zlibSupport -> zlib != null;
 
 let
 
-  majorVersion = "2.6";
-  version = "${majorVersion}.0";
+  majorVersion = "4.0";
+  version = "${majorVersion}.1";
   libPrefix = "pypy${majorVersion}";
 
   pypy = stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ let
 
     src = fetchurl {
       url = "https://bitbucket.org/pypy/pypy/get/release-${version}.tar.bz2";
-      sha256 = "0xympj874cnjpxj68xm5gllq2f8bbvz8hr0md8mh1yd6fgzzxibh";
+      sha256 = "1g7iipllgdfjgdkypsa1g2pzxgjw9agp40rh82hk31rsbak2hfbl";
     };
 
     buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper ]
@@ -119,7 +119,7 @@ let
       isPypy = true;
       buildEnv = callPackage ../python/wrapper.nix { python = self; };
       interpreter = "${self}/bin/${executable}";
-      sitePackages = "lib/${libPrefix}/site-packages";
+      sitePackages = "site-packages";
     };
 
     enableParallelBuilding = true;  # almost no parallelization without STM

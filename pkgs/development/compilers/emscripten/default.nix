@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/kripken/emscripten;
     description = "An LLVM-to-JavaScript Compiler";
+    platforms = platforms.all;
     maintainers = with maintainers; [ bosu ];
     license = licenses.ncsa;
   };

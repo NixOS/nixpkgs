@@ -1,47 +1,25 @@
-x@{builderDefsPackage
-  , automake, libtool, autoconf, intltool, perl
-  , gmpxx, flex, bison
-  , ...}:
-builderDefsPackage
-(a :
-let
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
-    [];
+{ stdenv, fetchurl, automake, libtool, autoconf, intltool, perl
+, gmpxx, flex, bison
+}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="opensmt";
-    version="20101017";
-    name="${baseName}-${version}";
-    filename="${baseName}_src_${version}";
-    url="http://${baseName}.googlecode.com/files/${filename}.tgz";
-    hash="0xrky7ixjaby5x026v7hn72xh7d401w9jhccxjn0khhn1x87p2w1";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  name = "opensmt-${version}";
+  version = "20101017";
+
+  src = fetchurl {
+    url = "http://opensmt.googlecode.com/files/opensmt_src_${version}.tgz";
+    sha256 = "0xrky7ixjaby5x026v7hn72xh7d401w9jhccxjn0khhn1x87p2w1";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ automake libtool autoconf intltool perl gmpxx flex bison ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doAutotools" "doConfigure" "doMakeInstall"];
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "A satisfiability modulo theory (SMT) solver";
-    maintainers = [ a.lib.maintainers.raskin ];
-    platforms = a.lib.platforms.linux;
-    license = a.stdenv.lib.licenses.gpl3;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = licenses.gpl3;
     homepage = "http://code.google.com/p/opensmt/";
     broken = true;
+    downloadPage = "http://code.google.com/p/opensmt/downloads/list";
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://code.google.com/p/opensmt/downloads/list";
-    };
-  };
-}) x
+}

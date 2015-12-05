@@ -106,16 +106,16 @@ rec {
 
   anyedittools = buildEclipsePlugin rec {
     name = "anyedit-${version}";
-    version = "2.5.0.201510241327";
+    version = "2.6.0.201511291145";
 
     srcFeature = fetchurl {
       url = "http://andrei.gmxhome.de/eclipse/features/AnyEditTools_${version}.jar";
-      sha256 = "01qaxg1b4n7y7g1xdkx1bnmpwqydln270mk14l4pl35q3c88s5nc";
+      sha256 = "1vllci75qcd28b6hn2jz29l6cabxx9ql5i6l9cwq9rxp49dhc96b";
     };
 
     srcPlugin = fetchurl {
-      url = "https://github.com/iloveeclipse/anyedittools/releases/download/2.5.0/de.loskutov.anyedit.AnyEditTools_${version}.jar";
-      sha256 = "0m4qxkscl5xih8x1znbrih4jh28wky4l62spfif9zw0s7mgl117c";
+      url = "https://github.com/iloveeclipse/anyedittools/releases/download/2.6.0/de.loskutov.anyedit.AnyEditTools_${version}.jar";
+      sha256 = "0mgq0ylfa7srjf7azyx0kbahlsjf0sdpazqphzx4f0bfn1l328s4";
     };
 
     meta = with stdenv.lib; {
@@ -317,11 +317,11 @@ rec {
 
   scala = buildEclipseUpdateSite rec {
     name = "scala-${version}";
-    version = "4.1.1.20150911";
+    version = "4.1.1.20151201";
 
     src = fetchzip {
       url = "http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/update-site.zip";
-      sha256 = "03g24sjivm7kzy64wwjs4ihf9vrb6703lb7bx3jafxzcwqm0pj1i";
+      sha256 = "19iqaha9c5n5hkyn83xj8znkvshm4823d65zigbj97fz8gzrr0la";
     };
 
     meta = with stdenv.lib; {
@@ -335,16 +335,16 @@ rec {
 
   testng = buildEclipsePlugin rec {
     name = "testng-${version}";
-    version = "6.9.8.201510130443";
+    version = "6.9.10.201511281504";
 
     srcFeature = fetchurl {
       url = "http://beust.com/eclipse/features/org.testng.eclipse_${version}.jar";
-      sha256 = "0g0dva1zpqk0rz0vgr025g2cfc47snr857fsqcrssmp9qmy8x0i0";
+      sha256 = "1kjaifa1fc16yh82bzp5xa5pn3kgrpgc5jq55lyvgz29vjj6ss97";
     };
 
     srcPlugin = fetchurl {
       url = "http://beust.com/eclipse/plugins/org.testng.eclipse_${version}.jar";
-      sha256 = "16mnvqkakixqp3bcnyx6x2iwkhnv3k4q561c97kssz98xsrr8f54";
+      sha256 = "1njz4ynjwnhjjbsszfgqyjn2ixxzjv8qvnc7dqz8jldrz3jrjf07";
     };
 
     meta = with stdenv.lib; {

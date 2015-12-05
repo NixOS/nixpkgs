@@ -13,33 +13,33 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ sqlite ];
   nativeBuildInputs = [ intltool pkgconfig ];
 
-  configureFlags = ''
-    --disable-static
-    --disable-python3
-    --disable-networkmanager
-    --disable-connman
-    --disable-systemd
-    --disable-bash-completion
-    --disable-browser-plugin
-    --disable-gstreamer-plugin
-    --disable-gtk-module
-    --disable-command-not-found
-    --disable-cron
-    --disable-daemon-tests
-    --disable-alpm
-    --disable-aptcc
-    --enable-dummy
-    --disable-entropy
-    --disable-hif
-    --disable-pisi
-    --disable-poldek
-    --disable-portage
-    --disable-ports
-    --disable-katja
-    --disable-urmpi
-    --disable-yum
-    --disable-zypp
-  '';
+  configureFlags = [
+    "--disable-static"
+    "--disable-python3"
+    "--disable-networkmanager"
+    "--disable-connman"
+    "--disable-systemd"
+    "--disable-bash-completion"
+    "--disable-browser-plugin"
+    "--disable-gstreamer-plugin"
+    "--disable-gtk-module"
+    "--disable-command-not-found"
+    "--disable-cron"
+    "--disable-daemon-tests"
+    "--disable-alpm"
+    "--disable-aptcc"
+    "--enable-dummy"
+    "--disable-entropy"
+    "--disable-hif"
+    "--disable-pisi"
+    "--disable-poldek"
+    "--disable-portage"
+    "--disable-ports"
+    "--disable-katja"
+    "--disable-urpmi"
+    "--disable-yum"
+    "--disable-zypp"
+  ];
 
   enableParallelBuilding = true;
 

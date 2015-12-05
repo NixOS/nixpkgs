@@ -17,7 +17,11 @@ stdenv.mkDerivation {
       --replace "stackprotectorstrong => 1" "stackprotectorstrong => 0"
   '';
 
-  configureFlags = "--disable-dselect --with-admindir=/var/lib/dpkg PERL_LIBDIR=$(out)/${perl.libPrefix}";
+  configureFlags = [
+    "--disable-dselect"
+    "--with-admindir=/var/lib/dpkg"
+    "PERL_LIBDIR=$(out)/${perl.libPrefix}"
+  ];
 
   preConfigure = ''
     # Nice: dpkg has a circular dependency on itself. Its configure

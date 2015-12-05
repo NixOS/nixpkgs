@@ -4,7 +4,7 @@
 set -x
 
 # The trailing slash at the end is necessary!
-RELEASE_URL="http://download.qt.io/official_releases/qt/5.5/5.5.0/submodules/"
+RELEASE_URL="http://download.qt.io/official_releases/qt/5.5/5.5.1/submodules/"
 EXTRA_WGET_ARGS='-A *.tar.xz'
 
 mkdir tmp; cd tmp

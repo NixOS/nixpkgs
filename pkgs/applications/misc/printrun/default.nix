@@ -16,10 +16,10 @@ python27Packages.buildPythonPackage rec {
 
   doCheck = false;
 
+  setupPyBuildFlags = ["-i"];
+
   postPatch = ''
     sed -i -r "s|/usr(/local)?/share/|$out/share/|g" printrun/utils.py
-    sed -i "s|distutils.core|setuptools|" setup.py
-    sed -i "s|distutils.command.install |setuptools.command.install |" setup.py
   '';
 
   postInstall = ''

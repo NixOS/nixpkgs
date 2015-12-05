@@ -18,6 +18,14 @@ in
       description = "Enable the Xfce desktop environment.";
     };
 
+    services.xserver.desktopManager.xfce.thunarPlugins = mkOption {
+      default = [];
+      type = types.listOf types.package;
+      example = literalExample "[ pkgs.xfce.thunar-archive-plugin ]";
+      description = ''
+        A list of plugin that should be installed with Thunar.
+      '';
+    };
   };
 
 
@@ -49,7 +57,7 @@ in
         pkgs.xfce.mousepad
         pkgs.xfce.ristretto
         pkgs.xfce.terminal
-        pkgs.xfce.thunar
+       (pkgs.xfce.thunar.override { thunarPlugins = cfg.thunarPlugins; })
         pkgs.xfce.xfce4icontheme
         pkgs.xfce.xfce4panel
         pkgs.xfce.xfce4session

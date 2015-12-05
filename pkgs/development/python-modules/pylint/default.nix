@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, astroid, buildPythonPackage }:
 
-pythonPackages.buildPythonPackage rec {
+buildPythonPackage rec {
   name = "pylint-1.4.1";
   namePrefix = "";
 
@@ -9,7 +9,7 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "0c7hw1pcp5sqmc0v86zygw21isfgzbsqdmlb1sywncnlxmh30f1y";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ astroid ];
+  propagatedBuildInputs = [ astroid ];
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp

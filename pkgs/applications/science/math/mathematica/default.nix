@@ -96,6 +96,8 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     echo "=== PatchElfing away ==="
+    # This code should be a bit forgiving of errors, unfortunately
+    set +e
     find $out/libexec/Mathematica/SystemFiles -type f -perm -0100 | while read f; do
       type=$(readelf -h "$f" 2>/dev/null | grep 'Type:' | sed -e 's/ *Type: *\([A-Z]*\) (.*/\1/')
       if [ -z "$type" ]; then

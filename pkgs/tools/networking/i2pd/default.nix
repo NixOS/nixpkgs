@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, boost, zlib, openssl }:
+{ stdenv, fetchFromGitHub, fetchpatch, boost, zlib, openssl }:
 
 stdenv.mkDerivation rec {
 
@@ -15,8 +15,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost zlib openssl ];
   makeFlags = "USE_AESNI=no";
+  patches = [ (fetchpatch {
+    url = https://github.com/PurpleI2P/i2pd/commit/4109ab1590791f3c1bf4e9eceec2d43be7b5ea47.patch;
+    sha256 = "17zg9iah59icy8nn1nwfnsnbzpafgrsasz1pmb2q4iywb7wbnkzi";
+  }) ];
+
   installPhase = ''
-    install -D i2p $out/bin/i2p
+    install -D i2p $out/bin/i2pd
   '';
 
   meta = with stdenv.lib; {

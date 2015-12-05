@@ -44,8 +44,6 @@ self: super: {
   nats = dontHaddock super.nats;
   bytestring-builder = dontHaddock super.bytestring-builder;
 
-  alex = dontCheck super.alex;
-
   # We have time 1.5
   aeson = disableCabalFlag super.aeson "old-locale";
 

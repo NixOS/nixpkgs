@@ -1,0 +1,25 @@
+From faf13c97ff1192a201843b9d52f4002dbd9022af Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Sun, 25 Oct 2015 09:09:27 -0500
+Subject: [PATCH] mobile-broadband-provider-info path
+
+---
+ libs/editor/mobileproviders.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libs/editor/mobileproviders.cpp b/libs/editor/mobileproviders.cpp
+index 568cb34..98a5992 100644
+--- a/libs/editor/mobileproviders.cpp
++++ b/libs/editor/mobileproviders.cpp
+@@ -26,7 +26,7 @@
+ 
+ #include <KLocale>
+ 
+-const QString MobileProviders::ProvidersFile = "/usr/share/mobile-broadband-provider-info/serviceproviders.xml";
++const QString MobileProviders::ProvidersFile = "@mobile_broadband_provider_info@/share/mobile-broadband-provider-info/serviceproviders.xml";
+ 
+ bool localeAwareCompare(const QString & one, const QString & two) {
+     return one.localeAwareCompare(two) < 0;
+-- 
+2.6.2
+

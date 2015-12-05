@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     description = "Lisp compiler";
     homepage = "http://www.sbcl.org";
     license = licenses.publicDomain; # and FreeBSD
-    maintainers = [maintainers.raskin];
+    maintainers = [maintainers.raskin maintainers.tohl];
     platforms = attrNames options;
   };
 }

@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ groff ];
   buildInputs = [ id3lib zlib ];
 
-  makeFlags = "PREFIX=$(out)";
-  buildFlags = "clean all";
+  makeFlags = [ "PREFIX=$(out)" ];
+  buildFlags = [ "clean" "all" ];
 
   preInstall = ''
     mkdir -p $out/{bin,share/man/man1}

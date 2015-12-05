@@ -83,6 +83,34 @@ let self = _self // overrides;
     };
   };
 
+  tablist = melpaBuild rec {
+    pname = "tablist";
+    inherit (pdf-tools) src version;
+    fileSpecs = [ "lisp/tablist.el" "lisp/tablist-filter.el" ];
+    meta = {
+      description = "Extended tabulated-list-mode";
+      license = gpl3;
+    };
+  };
+
+  pdf-tools = melpaBuild rec {
+    pname = "pdf-tools";
+    version = "0.70";
+    src = fetchFromGitHub {
+      owner = "politza";
+      repo = "pdf-tools";
+      rev = "v${version}";
+      sha256 = "19sy49r3ijh36m7hl4vspw5c4i8pnfqdn4ldm2sqchxigkw56ayl";
+    };
+    buildInputs = with external; [ autoconf automake libpng zlib poppler pkgconfig ] ++ [ tablist let-alist ];
+    preBuild = "make server/epdfinfo";
+    fileSpecs = [ "lisp/pdf-*.el" "server/epdfinfo" ];
+    meta = {
+      description = "Emacs support library for PDF files";
+      license = gpl3;
+    };
+  };
+
   ag = melpaBuild rec {
     pname   = "ag";
     version = "0.44";
@@ -923,6 +951,21 @@ let self = _self // overrides;
     meta = {
       description = "News and mail reader for Emacs";
       license = gpl3Plus;
+    };
+  };
+
+  go-mode = melpaBuild rec {
+    pname = "go-mode";
+    version = "20150817";
+    src = fetchFromGitHub {
+      owner  = "dominikh";
+      repo   = "go-mode.el";
+      rev    = "5d53a13bd193653728e74102c81aa931b780c9a9";
+      sha256 = "0hvssmvzvn13j18282nsq8fclyjs0x103gj9bp6fhmzxmzl56l7g";
+    };
+    meta = {
+      description = "Go language support for Emacs";
+      license = bsd3;
     };
   };
 
