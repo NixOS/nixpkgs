@@ -11234,7 +11234,12 @@ let
     pulseSupport = config.pulseaudio or true;
   };
 
-  cmus = callPackage ../applications/audio/cmus { };
+  cmus = callPackage ../applications/audio/cmus {
+    libjack = libjack2;
+    libcdio = libcdio082;
+
+    pulseaudioSupport = config.pulseaudio or false;
+  };
 
   CompBus = callPackage ../applications/audio/CompBus { };
 
