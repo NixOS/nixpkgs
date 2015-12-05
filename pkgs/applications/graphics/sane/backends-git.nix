@@ -40,7 +40,14 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = "http://www.sane-project.org/";
-    description = "Scanner Access Now Easy";
+    description = "SANE (Scanner Access Now Easy) backends";
+    longDescription = ''
+      Collection of open-source SANE backends (device drivers).
+      SANE is a universal scanner interface providing standardized access to
+      any raster image scanner hardware: flatbed scanners, hand-held scanners,
+      video- and still-cameras, frame-grabbers, etc. For a list of supported
+      scanners, see http://www.sane-project.org/sane-backends.html.
+    '';
     license = licenses.gpl2Plus;
 
     maintainers = with maintainers; [ nckx simons ];
