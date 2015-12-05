@@ -4848,6 +4848,38 @@ in modules // {
     };
   };
 
+  gpsoauth = buildPythonPackage rec {
+    version = "0.0.4";
+    name = "gpsoauth-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gpsoauth/${name}.tar.gz";
+      sha256 = "1mhd2lkl1f4fmia1cwxwik8gvqr5q16scjip7kfwzadh9a11n9kw";
+    };
+
+    propagatedBuildInputs = with self; [
+      cffi
+      cryptography
+      enum34
+      idna
+      ipaddress
+      ndg-httpsclient
+      pyopenssl
+      pyasn1
+      pycparser
+      pycrypto
+      requests2
+      six
+    ];
+
+    meta = {
+      description = "A python client library for Google Play Services OAuth.";
+      homepage = "https://github.com/simon-weber/gpsoauth";
+      license = licenses.mit;
+      maintainers = with maintainers; [ jgillich ];
+    };
+  };
+
   gst-python = callPackage ../development/libraries/gstreamer/python {
     gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
   };
