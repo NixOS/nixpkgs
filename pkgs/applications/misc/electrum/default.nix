@@ -1,6 +1,11 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages, slowaes }:
+{ stdenv, fetchurl, pythonPackages
+, enableTrezor ? false
+, enableQt4 ? true
+, enableTextUi ? false
+}:
 
-buildPythonPackage rec {
+pythonPackages.buildPythonPackage rec {
+  namePrefix = "";
   name = "electrum-${version}";
   version = "2.5.4";
 
@@ -17,17 +22,21 @@ buildPythonPackage rec {
     pyasn1
     pyasn1-modules
     pycrypto
-    pyqt4
     qrcode
     requests
     slowaes
     tlslite
-  ];
+  ]
+  ++ stdenv.lib.optional enableTrezor trezor
+  ++ stdenv.lib.optional (enableQt4 || enableTrezor) pyqt4
+  ++ stdenv.lib.optional enableTextUi python.modules.curses;
 
   preInstall = ''
     mkdir -p $out/share
-    sed -i 's@usr_share = .*@usr_share = os.getenv("out")+"/share"@' setup.py
-    pyrcc4 icons.qrc -o gui/qt/icons_rc.py
+    sed -i 's,\(usr_share\) = .*,\1 = os.getenv("out")+"/share",' setup.py
+    ${stdenv.lib.optionalString enableQt4 ''
+      pyrcc4 icons.qrc -o gui/qt/icons_rc.py
+    ''}
   '';
 
   meta = with stdenv.lib; {

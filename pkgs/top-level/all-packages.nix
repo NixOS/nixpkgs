@@ -8975,8 +8975,6 @@ let
 
   bsddb3 = callPackage ../development/python-modules/bsddb3 { };
 
-  ecdsa = callPackage ../development/python-modules/ecdsa { };
-
   numeric = callPackage ../development/python-modules/numeric { };
 
   pil = pythonPackages.pil;
@@ -9030,8 +9028,6 @@ let
   rbtools = callPackage ../development/python-modules/rbtools { };
 
   setuptools = pythonPackages.setuptools;
-
-  slowaes = callPackage ../development/python-modules/slowaes { };
 
   wxPython = pythonPackages.wxPython;
   wxPython28 = pythonPackages.wxPython28;
