@@ -600,6 +600,7 @@ self: super: {
   "KiCS-prophecy" = dontDistribute super."KiCS-prophecy";
   "Kleislify" = dontDistribute super."Kleislify";
   "Konf" = dontDistribute super."Konf";
+  "Kriens" = dontDistribute super."Kriens";
   "KyotoCabinet" = dontDistribute super."KyotoCabinet";
   "L-seed" = dontDistribute super."L-seed";
   "LDAP" = dontDistribute super."LDAP";
@@ -1781,6 +1782,7 @@ self: super: {
   "bytestring-rematch" = dontDistribute super."bytestring-rematch";
   "bytestring-short" = dontDistribute super."bytestring-short";
   "bytestring-show" = dontDistribute super."bytestring-show";
+  "bytestring-tree-builder" = dontDistribute super."bytestring-tree-builder";
   "bytestringparser" = dontDistribute super."bytestringparser";
   "bytestringparser-temporary" = dontDistribute super."bytestringparser-temporary";
   "bytestringreadp" = dontDistribute super."bytestringreadp";
@@ -3894,6 +3896,7 @@ self: super: {
   "hasql-backend" = doDistribute super."hasql-backend_0_4_1_1";
   "hasql-postgres" = doDistribute super."hasql-postgres_0_10_3_3";
   "hasql-postgres-options" = dontDistribute super."hasql-postgres-options";
+  "hasql-transaction" = dontDistribute super."hasql-transaction";
   "hastache-aeson" = dontDistribute super."hastache-aeson";
   "haste" = dontDistribute super."haste";
   "haste-compiler" = dontDistribute super."haste-compiler";
@@ -6086,6 +6089,7 @@ self: super: {
   "piki" = dontDistribute super."piki";
   "pinboard" = dontDistribute super."pinboard";
   "pinch" = dontDistribute super."pinch";
+  "pinchot" = dontDistribute super."pinchot";
   "pipe-enumerator" = dontDistribute super."pipe-enumerator";
   "pipeclip" = dontDistribute super."pipeclip";
   "pipes" = doDistribute super."pipes_4_1_5";
@@ -6786,6 +6790,7 @@ self: super: {
   "satchmo-toysat" = dontDistribute super."satchmo-toysat";
   "sbp" = dontDistribute super."sbp";
   "sbv" = doDistribute super."sbv_4_2";
+  "sbvPlugin" = dontDistribute super."sbvPlugin";
   "sc3-rdu" = dontDistribute super."sc3-rdu";
   "scalable-server" = dontDistribute super."scalable-server";
   "scaleimage" = dontDistribute super."scaleimage";
@@ -8340,6 +8345,9 @@ self: super: {
   "xml-pipe" = dontDistribute super."xml-pipe";
   "xml-prettify" = dontDistribute super."xml-prettify";
   "xml-push" = dontDistribute super."xml-push";
+  "xml-query" = dontDistribute super."xml-query";
+  "xml-query-xml-conduit" = dontDistribute super."xml-query-xml-conduit";
+  "xml-query-xml-types" = dontDistribute super."xml-query-xml-types";
   "xml2html" = dontDistribute super."xml2html";
   "xml2json" = dontDistribute super."xml2json";
   "xml2x" = dontDistribute super."xml2x";
