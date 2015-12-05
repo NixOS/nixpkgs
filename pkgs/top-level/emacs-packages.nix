@@ -315,12 +315,12 @@ let self = _self // overrides;
 
   bind-key = melpaBuild {
     pname   = "bind-key";
-    version = "20150317";
+    version = "20150321";
     src = fetchFromGitHub {
       owner  = "jwiegley";
       repo   = "use-package";
-      rev    = "b836266ddfbc835efdb327ecb389ff9e081d7c55";
-      sha256 = "187wnqqm5g43cg8b6a9rbd9ncqad5fhjb96wjszbinjh1mjxyh7i";
+      rev    = "77a77c8b03044f0279e00cadd6a6d1a7ae97b01";
+      sha256 = "14v6wzqn2jhjdbr7nwqilxy9l79m1f2rdrz2c6c6pcla5yjpd1k0";
     };
     files = [ "bind-key.el" ];
     meta = {
