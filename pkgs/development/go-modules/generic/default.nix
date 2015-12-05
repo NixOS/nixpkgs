@@ -168,6 +168,6 @@ go.stdenv.mkDerivation (
   } // meta // {
     # add an extra maintainer to every package
     maintainers = (meta.maintainers or []) ++
-                  [ lib.maintainers.emery lib.maintainers.lethalman ];
+                  [ lib.maintainers.ehmry lib.maintainers.lethalman ];
   };
 })

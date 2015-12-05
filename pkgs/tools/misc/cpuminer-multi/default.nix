@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Multi-algo CPUMiner";
     homepage = https://github.com/wolf9466/cpuminer-multi;
     license = licenses.gpl2;
-    maintainers = [ maintainers.emery ];
+    maintainers = [ maintainers.ehmry ];
   };
 }
