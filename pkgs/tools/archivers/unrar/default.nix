@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    installBin unrar
+    install -Dt "$out/bin" unrar
 
     mkdir -p $out/share/doc/unrar
     cp acknow.txt license.txt \

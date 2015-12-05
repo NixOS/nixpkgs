@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   checkTarget = "test-release"; # this would be the target
 
   installPhase = ''
-    installBin \
+    install -Dt "$out/bin/" \
         src/bitmonerod \
         src/connectivity_tool \
         src/simpleminer \

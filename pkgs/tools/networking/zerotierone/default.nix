@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl lzo zlib gcc iproute ];
 
   installPhase = ''
-    installBin zerotier-one
+    install -Dt "$out/bin/" zerotier-one
     ln -s $out/bin/zerotier-one $out/bin/zerotier-idtool
     ln -s $out/bin/zerotier-one $out/bin/zerotier-cli
   '';

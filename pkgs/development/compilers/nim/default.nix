@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildPhase   = "sh build.sh";
   installPhase =
     ''
-      installBin bin/nim
+      install -Dt "$out/bin" bin/nim
       substituteInPlace install.sh --replace '$1/nim' "$out"
       sh install.sh $out
     '';
