@@ -53,11 +53,13 @@ in
         default = false;
         description = ''
           Enable putting a wireless interface into infrastructure mode,
-          allowing other wireless devices to associate with the wireless interface and do
-          wireless networking. A simple access point will enable hostapd.wpa, and
-          hostapd.wpa_passphrase, hostapd.ssid, dhcpd on the wireless interface to
-          provide IP addresses to the associated stations, and nat (from the wireless
-          interface to an upstream interface). 
+          allowing other wireless devices to associate with the wireless
+          interface and do wireless networking. A simple access point will
+          <option>enable hostapd.wpa</option>,
+          <option>hostapd.wpaPassphrase</option>, and
+          <option>hostapd.ssid</option>, as well as DHCP on the wireless
+          interface to provide IP addresses to the associated stations, and
+          NAT (from the wireless interface to an upstream interface).
         '';
       };
 
@@ -73,7 +75,10 @@ in
         default = "nl80211";
         example = "hostapd";
         type = types.string;
-        description = "Which driver hostapd will use. Most things will probably use the default.";
+        description = ''
+          Which driver <command>hostapd</command> will use.
+          Most applications will probably use the default.
+        '';
       };
 
       ssid = mkOption {
@@ -87,7 +92,10 @@ in
         default = "b";
         example = "g";
         type = types.string;
-        description = "Operation mode (a = IEEE 802.11a, b = IEEE 802.11b, g = IEEE 802.11g";
+        description = ''
+          Operation mode.
+          (a = IEEE 802.11a, b = IEEE 802.11b, g = IEEE 802.11g).
+        '';
       };
 
       channel = mkOption { 
@@ -97,8 +105,9 @@ in
         description = 
           ''
           Channel number (IEEE 802.11)
-          Please note that some drivers do not use this value from hostapd and the
-          channel will need to be configured separately with iwconfig.
+          Please note that some drivers do not use this value from
+          <command>hostapd</command> and the channel will need to be configured
+          separately with <command>iwconfig</command>.
           '';
       };
 
@@ -106,12 +115,16 @@ in
         default = "wheel";
         example = "network";
         type = types.string;
-        description = "members of this group can control hostapd";
+        description = ''
+          Members of this group can control <command>hostapd</command>.
+        '';
       };
 
       wpa = mkOption {
         default = true;
-        description = "enable WPA (IEEE 802.11i/D3.0) to authenticate to the access point";
+        description = ''
+          Enable WPA (IEEE 802.11i/D3.0) to authenticate with the access point.
+        '';
       };
 
       wpaPassphrase = mkOption {
@@ -121,8 +134,9 @@ in
         description = 
           ''
           WPA-PSK (pre-shared-key) passphrase. Clients will need this
-          passphrase to associate with this access point. Warning: This passphrase will
-          get put into a world-readable file in the nix store. 
+          passphrase to associate with this access point.
+          Warning: This passphrase will get put into a world-readable file in
+          the Nix store!
           '';
       };
 
@@ -134,7 +148,7 @@ in
           ht_capab=[HT40-][SHORT-GI-40][DSSS_CCK-40]
           '';
         type = types.string;
-        description = "Extra configuration options to put in the hostapd.conf";
+        description = "Extra configuration options to put in hostapd.conf.";
       };
     };
   };
