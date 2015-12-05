@@ -218,6 +218,7 @@
   olcai = "Erik Timan <dev@timan.info>";
   orbitz = "Malcolm Matalka <mmatalka@gmail.com>";
   osener = "Ozan Sener <ozan@ozansener.com>";
+  oxij = "Jan Malakhovski <oxij@oxij.org>";
   page = "Carles Pagès <page@cubata.homelinux.net>";
   paholg = "Paho Lurie-Gregg <paho@paholg.com>";
   pakhfn = "Fedor Pakhomov <pakhfn@gmail.com>";
