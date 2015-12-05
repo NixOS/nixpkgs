@@ -8352,6 +8352,8 @@ let
 
   simgear = callPackage ../development/libraries/simgear { };
 
+  simp_le = callPackage ../tools/admin/simp_le { };
+
   sfml = callPackage ../development/libraries/sfml { };
 
   signon = callPackage ../development/libraries/signon/old.nix {};
