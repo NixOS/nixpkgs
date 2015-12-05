@@ -14,6 +14,9 @@ appleDerivation {
     substituteInPlace lib/debugging.cpp --replace PATH_MAX 1024
     substituteInPlace lib/superblob.h --replace 'result->at' 'result->template at'
     substituteInPlace lib/ccaudit.cpp --replace '<bsm/libbsm.h>' '"bsm/libbsm.h"'
+    substituteInPlace lib/powerwatch.h --replace \
+      '<IOKit/pwr_mgt/IOPMLibPrivate.h>' \
+      '"${osx_private_sdk}/PrivateSDK10.9.sparse.sdk/System/Library/Frameworks/IOKit.framework/Versions/A/PrivateHeaders/pwr_mgt/IOPMLibPrivate.h"'
 
     cp ${osx_private_sdk}/PrivateSDK10.9.sparse.sdk/usr/include/security_utilities/utilities_dtrace.h lib
     cp -R ${osx_private_sdk}/PrivateSDK10.9.sparse.sdk/usr/local/include/bsm lib

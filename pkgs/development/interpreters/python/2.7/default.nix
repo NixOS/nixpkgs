@@ -97,7 +97,9 @@ let
         ] ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
     )
     ++ optional zlibSupport zlib
-    ++ optionals stdenv.isDarwin [ CF configd ];
+    ++ optional stdenv.isDarwin CF;
+
+  propagatedBuildInputs = optional stdenv.isDarwin configd;
 
   # Build the basic Python interpreter without modules that have
   # external dependencies.
@@ -105,8 +107,8 @@ let
     name = "python-${version}";
     pythonVersion = majorVersion;
 
-    inherit majorVersion version src patches buildInputs preConfigure
-            configureFlags;
+    inherit majorVersion version src patches buildInputs propagatedBuildInputs
+            preConfigure configureFlags;
 
     LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);

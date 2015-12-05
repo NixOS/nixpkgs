@@ -10190,6 +10190,8 @@ in modules // {
   monotonic = buildPythonPackage rec {
     name = "monotonic-0.4";
 
+    __propagatedImpureHostDeps = stdenv.lib.optional stdenv.isDarwin "/usr/lib/libc.dylib";
+
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/m/monotonic/${name}.tar.gz";
       sha256 = "1diab6hfh3jpa1f0scpqaqrawk4g97ss4v7gkn2yw8znvdm6abw5";
@@ -12338,9 +12340,9 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; [
-      pbr Babel six iso8601 debtcollector pyinotify
+      pbr Babel six iso8601 debtcollector
       oslo-utils oslo-i18n oslo-config oslo-serialization oslo-context
-    ];
+    ] ++ stdenv.lib.optional stdenv.isLinux pyinotify;
     buildInputs = with self; [ oslotest oslosphinx ];
     patchPhase = ''
       sed -i 's@python@${python.interpreter}@' .testr.conf
