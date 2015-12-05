@@ -20,4 +20,6 @@ rec {
   gst-editing-services = callPackage ./ges { inherit gnonlin; };
 
   gst-vaapi = callPackage ./vaapi { inherit gst-plugins-base gstreamer gst-plugins-bad; };
+
+  gst-validate = callPackage ./validate { inherit gst-plugins-base; };
 }
