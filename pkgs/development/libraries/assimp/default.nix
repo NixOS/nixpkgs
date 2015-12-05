@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     description = "A library to import various 3D model formats";
     homepage = http://assimp.sourceforge.net/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ emery ];
+    maintainers = with maintainers; [ ehmry ];
     platfroms = platforms.linux;
     inherit version;
   };

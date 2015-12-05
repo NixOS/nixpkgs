@@ -39,6 +39,6 @@ buildPythonPackage rec {
     '';
     homepage = https://electrum.org;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ emery joachifm ];
+    maintainers = with maintainers; [ ehmry joachifm ];
   };
 }

@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "A fast incremental file transfer utility";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ simons emery ];
+    maintainers = with maintainers; [ simons ehmry ];
   };
 }

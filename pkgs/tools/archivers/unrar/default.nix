@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     description = "Utility for RAR archives";
     homepage = http://www.rarlab.com/;
     license = licenses.unfreeRedistributable;
-    maintainers = [ maintainers.emery ];
+    maintainers = [ maintainers.ehmry ];
     platforms = platforms.all;
   };
 }
