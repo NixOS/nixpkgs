@@ -1,26 +1,24 @@
 {stdenv, fetchurl, traceDeps ? false}:
 
-stdenv.mkDerivation rec {
-  name = "${program}-original-${version}";
-  program = "steam";
+let
+  traceLog = "/tmp/steam-trace-dependencies.log";
   version = "1.0.0.49";
 
+in stdenv.mkDerivation rec {
+  name = "steam-original-${version}";
+
   src = fetchurl {
-    url = "http://repo.steampowered.com/steam/pool/steam/s/steam/${program}_${version}.tar.gz";
+    url = "http://repo.steampowered.com/steam/pool/steam/s/steam/steam_${version}.tar.gz";
     sha256 = "1c1gl5pwvb5gnnnqf5d9hpcjnfjjgmn4lgx8v0fbx1am5xf3p2gx";
   };
 
-  traceLog = "/tmp/steam-trace-dependencies.log";
+  makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
-  installPhase = ''
-    make DESTDIR=$out install
-    mv $out/usr/* $out #*/
-    rmdir $out/usr
-
+  postInstall = ''
     rm $out/bin/steamdeps
     ${stdenv.lib.optionalString traceDeps ''
       cat > $out/bin/steamdeps <<EOF
-      #! /bin/bash
+      #!${stdenv.shell}
       echo \$1 >> ${traceLog}
       cat \$1 >> ${traceLog}
       echo >> ${traceLog}
@@ -32,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A digital distribution platform";
     homepage = http://store.steampowered.com/;
-    license = licenses.unfree;
+    license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ jagajaga ];
   };
 }

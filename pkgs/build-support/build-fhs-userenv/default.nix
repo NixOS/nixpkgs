@@ -1,4 +1,5 @@
-{ runCommand, lib, writeText, writeScriptBin, stdenv, ruby } : { env, runScript ? "bash", extraBindMounts ? [] } :
+{ runCommand, lib, writeText, writeScriptBin, stdenv, ruby } :
+{ env, runScript ? "bash", extraBindMounts ? [], extraInstallCommands ? "" } :
 
 let
   name = env.pname;
@@ -44,4 +45,5 @@ in runCommand name {
   exec ${chroot-user}/bin/chroot-user ${env} bash -l ${init runScript} "\$(pwd)" "\$@"
   EOF
   chmod +x $out/bin/${name}
+  ${extraInstallCommands}
 ''

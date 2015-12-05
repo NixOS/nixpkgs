@@ -2,18 +2,18 @@
 
 pythonPackages.buildPythonPackage rec {
   name = "awscli-${version}";
-  version = "1.7.47";
+  version = "1.9.6";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "1955y1ar2mqzqgfngpwp8pc78wphh1qdgwwy0gs6i352jaqzkvwi";
+    sha256 = "08qclasxf8zdxwmngvynq9n5vv4nwdy68ma7wn7ji40bxmls37g2";
   };
 
   propagatedBuildInputs = [
-    pythonPackages.botocore_1_1_10
+    pythonPackages.botocore
     pythonPackages.bcdoc
     pythonPackages.six
     pythonPackages.colorama

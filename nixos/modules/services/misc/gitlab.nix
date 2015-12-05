@@ -27,6 +27,7 @@ let
     http_settings:
       self_signed_cert: false
     repos_path: "${cfg.stateDir}/repositories"
+    secret_file: "${cfg.stateDir}/config/gitlab_shell_secret"
     log_file: "${cfg.stateDir}/log/gitlab-shell.log"
     redis:
       bin: ${pkgs.redis}/bin/redis-cli
@@ -142,7 +143,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ gitlab-runner pkgs.gitlab-shell ];
+    environment.systemPackages = [ pkgs.git gitlab-runner pkgs.gitlab-shell ];
 
     assertions = [
       { assertion = cfg.databasePassword != "";
@@ -154,7 +155,6 @@ in {
     services.redis.enable = mkDefault true;
     # We use postgres as the main data store.
     services.postgresql.enable = mkDefault true;
-    services.postgresql.package = mkDefault pkgs.postgresql;
     # Use postfix to send out mails.
     services.postfix.enable = mkDefault true;
 
@@ -209,6 +209,23 @@ in {
       };
     };
 
+    systemd.services.gitlab-git-http-server = {
+      after = [ "network.target" "gitlab.service" ];
+      wantedBy = [ "multi-user.target" ];
+      environment.HOME = "${cfg.stateDir}/home";
+      path = with pkgs; [
+        gitAndTools.git
+        openssh
+      ];
+      serviceConfig = {
+        Type = "simple";
+        User = "gitlab";
+        Group = "gitlab";
+        TimeoutSec = "300";
+        ExecStart = "${pkgs.gitlab-git-http-server}/bin/gitlab-git-http-server -listenUmask 0 -listenNetwork unix -listenAddr ${cfg.stateDir}/tmp/sockets/gitlab-git-http-server.socket -authBackend http://localhost:8080 ${cfg.stateDir}/repositories";
+      };
+    };
+
     systemd.services.gitlab = {
       after = [ "network.target" "postgresql.service" "redis.service" ];
       wantedBy = [ "multi-user.target" ];
@@ -219,6 +236,8 @@ in {
       environment.GITLAB_APPLICATION_LOG_PATH = "${cfg.stateDir}/log/application.log";
       environment.GITLAB_SATELLITES_PATH = "${cfg.stateDir}/satellites";
       environment.GITLAB_SHELL_PATH = "${pkgs.gitlab-shell}";
+      environment.GITLAB_SHELL_CONFIG_PATH = "${cfg.stateDir}/shell/config.yml";
+      environment.GITLAB_SHELL_SECRET_PATH = "${cfg.stateDir}/config/gitlab_shell_secret";
       environment.GITLAB_REPOSITORIES_PATH = "${cfg.stateDir}/repositories";
       environment.GITLAB_SHELL_HOOKS_PATH = "${cfg.stateDir}/shell/hooks";
       environment.BUNDLE_GEMFILE = "${pkgs.gitlab}/share/gitlab/Gemfile";
@@ -247,7 +266,7 @@ in {
         rm -rf ${cfg.stateDir}/config
         mkdir -p ${cfg.stateDir}/config
         # TODO: What exactly is gitlab-shell doing with the secret?
-        head -c 20 /dev/urandom > ${cfg.stateDir}/config/gitlab_shell_secret
+        tr -dc _A-Z-a-z-0-9 < /dev/urandom | head -c 20 > ${cfg.stateDir}/config/gitlab_shell_secret
         mkdir -p ${cfg.stateDir}/home/.ssh
         touch ${cfg.stateDir}/home/.ssh/authorized_keys
 
@@ -272,6 +291,7 @@ in {
           fi
         fi
 
+      ${bundler}/bin/bundle exec rake -f ${pkgs.gitlab}/share/gitlab/Rakefile db:migrate RAILS_ENV=production
       # Install the shell required to push repositories
       ln -fs ${pkgs.writeText "config.yml" gitlabShellYml} ${cfg.stateDir}/shell/config.yml
       export GITLAB_SHELL_CONFIG_PATH=""${cfg.stateDir}/shell/config.yml
@@ -296,5 +316,4 @@ in {
     };
 
   };
-
 }

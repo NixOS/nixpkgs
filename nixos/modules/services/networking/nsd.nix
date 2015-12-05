@@ -300,22 +300,8 @@ in
   options = {
     services.nsd = {
 
-      enable = mkOption {
-        type        = types.bool;
-        default     = false;
-        description = ''
-          Whether to enable the NSD authoritative domain name server.
-        '';
-      };
-
-      bind8Stats = mkOption {
-        type        = types.bool;
-        default     = false;
-        example     = true;
-        description = ''
-          Wheter to enable BIND8 like statisics.
-        '';
-      };
+      enable = mkEnableOption "NSD authoritative DNS server";
+      bind8Stats = mkEnableOption "BIND8 like statistics";
 
       rootServer = mkOption {
         type        = types.bool;
@@ -483,13 +469,7 @@ in
 
 
       ratelimit = {
-        enable = mkOption {
-          type        = types.bool;
-          default     = false;
-          description = ''
-            Enable ratelimit capabilities.
-          '';
-        };
+        enable = mkEnableOption "ratelimit capabilities";
 
         size = mkOption {
           type        = types.int;
@@ -548,13 +528,7 @@ in
 
 
       remoteControl = {
-        enable = mkOption {
-          type        = types.bool;
-          default     = false;
-          description = ''
-            Wheter to enable remote control via nsd-control(8).
-          '';
-        };
+        enable = mkEnableOption "remote control via nsd-control";
 
         interfaces = mkOption {
           type        = types.listOf types.str;

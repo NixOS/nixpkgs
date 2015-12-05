@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
 
   srcs = fetchgit {
     url = "https://gitlab.com/gitlab-org/gitlab-shell.git";
-    rev = "823aba63e444afa2f45477819770fec3cb5f0159";
-    sha256 = "0ppf547xs9pvmk49v4h043d0j93k5n4q0yx3b9ssrc4qf2smflgq";
+    rev = "ebbb9d80811c23d49a7d1b75d7a7d2b8ffe7437b";
+    sha256 = "fe69ab85d75a3871b4afa11ebc17f43008d135bbdbd6c581f6bebee2a4a3c75d";
   };
 
   buildInputs = [
@@ -31,16 +31,13 @@ stdenv.mkDerivation rec {
     substituteInPlace lib/gitlab_config.rb --replace\
        "File.join(ROOT_PATH, 'config.yml')"\
        "ENV['GITLAB_SHELL_CONFIG_PATH']"
-    substituteInPlace lib/gitlab_net.rb --replace\
-       "File.read File.join(ROOT_PATH, '.gitlab_shell_secret')"\
-       "File.read ENV['GITLAB_SHELL_SECRET_PATH']"
 
     # Note that we're running gitlab-shell from current-system/sw
     # because otherwise updating gitlab-shell won't be reflected in
     # the hardcoded path of the authorized-keys file:
     substituteInPlace lib/gitlab_keys.rb --replace\
-        "auth_line = \"command=\\\"#{ROOT_PATH}/bin/gitlab-shell"\
-        "auth_line = \"command=\\\"GITLAB_SHELL_CONFIG_PATH=#{ENV['GITLAB_SHELL_CONFIG_PATH']} GITLAB_SHELL_SECRET_PATH=#{ENV['GITLAB_SHELL_SECRET_PATH']} /run/current-system/sw/bin/gitlab-shell"
+        "\"#{ROOT_PATH}/bin/gitlab-shell"\
+        "\"GITLAB_SHELL_CONFIG_PATH=#{ENV['GITLAB_SHELL_CONFIG_PATH']} /run/current-system/sw/bin/gitlab-shell"
 
     # We're setting GITLAB_SHELL_CONFIG_PATH in the ssh authorized key
     # environment because we need it in gitlab_configrb

@@ -274,13 +274,15 @@ let
   };
 
   buildFHSChrootEnv = args: chrootFHSEnv {
-    env = buildFHSEnv args;
+    env = buildFHSEnv (removeAttrs args [ "extraInstallCommands" ]);
+    extraInstallCommands = args.extraInstallCommands or "";
   };
 
   buildFHSUserEnv = args: userFHSEnv {
-    env = buildFHSEnv (removeAttrs args [ "runScript" "extraBindMounts" ]);
+    env = buildFHSEnv (removeAttrs args [ "runScript" "extraBindMounts" "extraInstallCommands" ]);
     runScript = args.runScript or "bash";
     extraBindMounts = args.extraBindMounts or [];
+    extraInstallCommands = args.extraInstallCommands or "";
   };
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
@@ -673,9 +675,7 @@ let
 
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
 
-  bfr = callPackage ../tools/misc/bfr {
-    perl = perl516; # Docs fail to build with newer versions
-  };
+  bfr = callPackage ../tools/misc/bfr { };
 
   bibtool = callPackage ../tools/misc/bibtool { };
 
@@ -1155,6 +1155,8 @@ let
     aclSupport = stdenv.isLinux;
   };
 
+  coreutils-prefixed = coreutils.override { withPrefix = true; };
+
   cpio = callPackage ../tools/archivers/cpio { };
 
   crackxls = callPackage ../tools/security/crackxls { };
@@ -1602,12 +1604,14 @@ let
   gitinspector = callPackage ../applications/version-management/gitinspector { };
 
   gitlab = callPackage ../applications/version-management/gitlab {
-    ruby = ruby_2_1_3;
+    ruby = ruby_2_2_2;
   };
 
   gitlab-shell = callPackage ../applications/version-management/gitlab-shell {
-    ruby = ruby_2_1_3;
+    ruby = ruby_2_2_2;
   };
+
+  gitlab-git-http-server = callPackage ../applications/version-management/gitlab-git-http-server { };
 
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
@@ -2904,16 +2908,10 @@ let
   rng_tools = callPackage ../tools/security/rng-tools { };
 
   rsnapshot = callPackage ../tools/backup/rsnapshot {
-    perl = perl516; # fails to create docs: POD document had syntax errors
     # For the `logger' command, we can use either `utillinux' or
     # GNU Inetutils.  The latter is more portable.
-    logger = inetutils;
+    logger = if stdenv.isLinux then utillinux else inetutils;
   };
-  rsnapshotGit = lowPrio (callPackage ../tools/backup/rsnapshot/git.nix {
-    # For the `logger' command, we can use either `utillinux' or
-    # GNU Inetutils.  The latter is more portable.
-    logger = inetutils;
-  });
 
   rlwrap = callPackage ../tools/misc/rlwrap { };
 
@@ -3185,11 +3183,9 @@ let
 
   tcpflow = callPackage ../tools/networking/tcpflow { };
 
-  teamviewer = callPackage_i686 ../applications/networking/remote/teamviewer/10.nix { };
-
-  teamviewer8 = lowPrio (callPackage_i686 ../applications/networking/remote/teamviewer/8.nix { });
-
-  teamviewer9 = lowPrio (callPackage_i686 ../applications/networking/remote/teamviewer/9.nix { });
+  teamviewer = callPackage ../applications/networking/remote/teamviewer {
+    stdenv = stdenv_32bit;
+  };
 
   telnet = callPackage ../tools/networking/telnet { };
 
@@ -5115,8 +5111,6 @@ let
 
   ocropus = callPackage ../applications/misc/ocropus { };
 
-  perl516 = callPackage ../development/interpreters/perl/5.16 { };
-
   perl520 = callPackage ../development/interpreters/perl/5.20 {
     fetchurl = fetchurlBoot;
   };
@@ -5363,6 +5357,8 @@ let
   augeas = callPackage ../tools/system/augeas { };
 
   ansible = callPackage ../tools/system/ansible { };
+
+  ansible2 = callPackage ../tools/system/ansible/2.nix { };
 
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
 
@@ -8687,6 +8683,8 @@ let
   xapianBindings10 = callPackage ../development/libraries/xapian/bindings/1.0.x.nix {  # TODO perl php Java, tcl, C#, python
   };
 
+  xapian-omega = callPackage ../tools/misc/xapian-omega {};
+
   xavs = callPackage ../development/libraries/xavs { };
 
   Xaw3d = callPackage ../development/libraries/Xaw3d { };
@@ -9261,7 +9259,7 @@ let
 
   mpd = callPackage ../servers/mpd {
     aacSupport    = config.mpd.aacSupport or true;
-    clientSupport = config.mpd.clientSupport or false;
+    clientSupport = config.mpd.clientSupport or true;
     ffmpegSupport = config.mpd.ffmpegSupport or true;
     opusSupport   = config.mpd.opusSupport or true;
 
@@ -10840,10 +10838,6 @@ let
   powerline-fonts = callPackage ../data/fonts/powerline-fonts { };
 
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
-
-  pthreadmanpages = callPackage ../data/documentation/pthread-man-pages {
-    perl = perl516; # syntax error at troffprepro line 49, near "do subst("
-  };
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
 
@@ -12901,7 +12895,7 @@ let
     automake = automake114x;
   };
 
-  rofi-pass = callPackage ../applications/misc/rofi/pass.nix { };
+  rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };
 
   rstudio = callPackage ../applications/editors/rstudio { };
 
@@ -13400,17 +13394,23 @@ let
 
   virtinst = callPackage ../applications/virtualization/virtinst {};
 
-  virtualgl = callPackage ../tools/X11/virtualgl { };
+  virtualglLib = callPackage ../tools/X11/virtualgl/lib.nix {
+    fltk = fltk13;
+  };
+
+  virtualgl = callPackage ../tools/X11/virtualgl {
+    virtualglLib_i686 = if system == "x86_64-linux"
+      then pkgsi686Linux.virtualglLib
+      else null;
+  };
+
+  primusLib = callPackage ../tools/X11/primus/lib.nix {
+    nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
+  };
 
   primus = callPackage ../tools/X11/primus {
-    primusLib = callPackage ../tools/X11/primus/lib.nix {
-      nvidia = linuxPackages.nvidia_x11;
-    };
-
     primusLib_i686 = if system == "x86_64-linux"
-      then callPackage_i686 ../tools/X11/primus/lib.nix {
-             nvidia = pkgsi686Linux.linuxPackages.nvidia_x11.override { libsOnly = true; };
-           }
+      then pkgsi686Linux.primusLib
       else null;
   };
 
@@ -13419,15 +13419,9 @@ let
     nvidia_x11_i686 = if system == "x86_64-linux"
       then pkgsi686Linux.linuxPackages.nvidia_x11.override { libsOnly = true; }
       else null;
-    virtualgl = virtualgl;
-    virtualgl_i686 = if system == "x86_64-linux"
-      then pkgsi686Linux.virtualgl
+    primusLib_i686 = if system == "x86_64-linux"
+      then pkgsi686Linux.primusLib
       else null;
-  };
-
-  # use if you intend to connect the nvidia card to a monitor
-  bumblebee_display = bumblebee.override {
-    useDisplayDevice = true;
   };
 
   vkeybd = callPackage ../applications/audio/vkeybd {};
@@ -13596,6 +13590,7 @@ let
       ++ optional (config.kodi.enableGenesis or false) genesis
       ++ optional (config.kodi.enableSVTPlay or false) svtplay
       ++ optional (config.kodi.enableSteamLauncher or false) steam-launcher
+      ++ optional (config.kodi.enablePVRHTS or false) pvr-hts
       );
   };
 
@@ -14852,6 +14847,8 @@ let
 
     coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
 
+    flocq = callPackage ../development/coq-modules/flocq {};
+
     mathcomp = callPackage ../development/coq-modules/mathcomp { };
 
     ssreflect = callPackage ../development/coq-modules/ssreflect { };
@@ -15264,7 +15261,14 @@ let
 
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 
-  nix-prefetch-scripts = callPackage ../tools/package-management/nix-prefetch-scripts { };
+  inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
+    nix-prefetch-bzr
+    nix-prefetch-cvs
+    nix-prefetch-git
+    nix-prefetch-hg
+    nix-prefetch-svn
+    nix-prefetch-zip
+    nix-prefetch-scripts;
 
   nix-template-rpm = callPackage ../build-support/templaterpm { inherit (pythonPackages) python toposort; };
 

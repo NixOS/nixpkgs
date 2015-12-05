@@ -56,6 +56,8 @@ in
     # it has a restart trigger.
     systemd.services."systemd-vconsole-setup" =
       { wantedBy = [ "multi-user.target" ];
+        before = [ "display-manager.service" ];
+        after = [ "systemd-udev-settle.service" ];
         restartTriggers = [ vconsoleConf ];
       };
 

@@ -1110,6 +1110,7 @@ self: super: {
   "aeson-diff" = dontDistribute super."aeson-diff";
   "aeson-extra" = dontDistribute super."aeson-extra";
   "aeson-filthy" = dontDistribute super."aeson-filthy";
+  "aeson-iproute" = dontDistribute super."aeson-iproute";
   "aeson-lens" = dontDistribute super."aeson-lens";
   "aeson-native" = dontDistribute super."aeson-native";
   "aeson-parsec-picky" = dontDistribute super."aeson-parsec-picky";
@@ -1303,6 +1304,7 @@ self: super: {
   "archlinux-web" = dontDistribute super."archlinux-web";
   "archnews" = dontDistribute super."archnews";
   "arff" = dontDistribute super."arff";
+  "arghwxhaskell" = dontDistribute super."arghwxhaskell";
   "argon" = dontDistribute super."argon";
   "argparser" = dontDistribute super."argparser";
   "arguedit" = dontDistribute super."arguedit";
@@ -2484,6 +2486,7 @@ self: super: {
   "digit" = dontDistribute super."digit";
   "digitalocean-kzs" = dontDistribute super."digitalocean-kzs";
   "dimensional" = doDistribute super."dimensional_0_13_0_2";
+  "dimensional-codata" = dontDistribute super."dimensional-codata";
   "dimensional-tf" = dontDistribute super."dimensional-tf";
   "dingo-core" = dontDistribute super."dingo-core";
   "dingo-example" = dontDistribute super."dingo-example";
@@ -2742,6 +2745,7 @@ self: super: {
   "error-loc" = dontDistribute super."error-loc";
   "error-location" = dontDistribute super."error-location";
   "error-message" = dontDistribute super."error-message";
+  "error-util" = dontDistribute super."error-util";
   "errorcall-eq-instance" = dontDistribute super."errorcall-eq-instance";
   "errors" = doDistribute super."errors_2_0_0";
   "ersatz" = dontDistribute super."ersatz";
@@ -4527,6 +4531,7 @@ self: super: {
   "io-reactive" = dontDistribute super."io-reactive";
   "io-region" = dontDistribute super."io-region";
   "io-storage" = dontDistribute super."io-storage";
+  "io-streams" = doDistribute super."io-streams_1_3_2_0";
   "io-streams-http" = dontDistribute super."io-streams-http";
   "io-throttle" = dontDistribute super."io-throttle";
   "ioctl" = dontDistribute super."ioctl";
@@ -5815,6 +5820,7 @@ self: super: {
   "persistent-equivalence" = dontDistribute super."persistent-equivalence";
   "persistent-hssqlppp" = dontDistribute super."persistent-hssqlppp";
   "persistent-instances-iproute" = dontDistribute super."persistent-instances-iproute";
+  "persistent-iproute" = dontDistribute super."persistent-iproute";
   "persistent-map" = dontDistribute super."persistent-map";
   "persistent-mongoDB" = doDistribute super."persistent-mongoDB_2_1_2_2";
   "persistent-mysql" = doDistribute super."persistent-mysql_2_2";
@@ -6062,6 +6068,7 @@ self: super: {
   "prof2dot" = dontDistribute super."prof2dot";
   "prof2pretty" = dontDistribute super."prof2pretty";
   "profiteur" = dontDistribute super."profiteur";
+  "profunctors" = doDistribute super."profunctors_5_1_1";
   "progress" = dontDistribute super."progress";
   "progressbar" = dontDistribute super."progressbar";
   "progression" = dontDistribute super."progression";
@@ -6483,6 +6490,7 @@ self: super: {
   "rspp" = dontDistribute super."rspp";
   "rss" = dontDistribute super."rss";
   "rss2irc" = dontDistribute super."rss2irc";
+  "rtcm" = dontDistribute super."rtcm";
   "rtld" = dontDistribute super."rtld";
   "rtlsdr" = dontDistribute super."rtlsdr";
   "rtorrent-rpc" = dontDistribute super."rtorrent-rpc";

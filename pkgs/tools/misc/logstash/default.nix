@@ -16,9 +16,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out
-    cp -r {Gemfile*,vendor,lib} $out
-    cp bin/logstash $out/logstash
-    cp bin/plugin $out/logstash-plugin
+    cp -r {Gemfile*,vendor,lib,bin} $out
+    mv $out/bin/plugin $out/bin/logstash-plugin
   '';
 
   meta = with stdenv.lib; {

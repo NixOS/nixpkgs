@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "snabb-${version}";
-  version = "2015.11";
+  version = "2015.12";
 
   src = fetchurl {
     url = "https://github.com/SnabbCo/snabbswitch/archive/v${version}.tar.gz";
-    sha256 = "1llyqbjjmh2s23hnx154qj0y6pn5mpxk8qj1fxfpk7dnbq78q601";
+    sha256 = "1949a6d3hqdr2hdfmrr1na9gvjdwdahadbhmvz2pg7azmpq6ssmr";
   };
 
   installPhase = ''

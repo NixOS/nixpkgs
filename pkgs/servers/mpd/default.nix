@@ -21,7 +21,7 @@
 , jackSupport ? true, libjack2
 , gmeSupport ? true, game-music-emu
 , icuSupport ? true, icu
-, clientSupport ? false, mpd_clientlib
+, clientSupport ? true, mpd_clientlib
 , opusSupport ? true, libopus
 }:
 

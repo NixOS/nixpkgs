@@ -23,11 +23,12 @@ pythonPackages.buildPythonPackage rec {
      # oslo componenets
      oslo-config oslo-context oslo-concurrency oslo-service oslo-utils oslo-db
      oslo-i18n oslo-log oslo-messaging oslo-middleware oslo-policy oslo-serialization
+     MySQL_python
   ];
 
   buildInputs = with pythonPackages; [
     Babel coverage fixtures mox3 mock oslosphinx requests2 testrepository pep8
-    testresources testscenarios testtools psutil_1 oslotest psycopg2 MySQL_python
+    testresources testscenarios testtools psutil_1 oslotest psycopg2
     sqlite which strace
   ];
 

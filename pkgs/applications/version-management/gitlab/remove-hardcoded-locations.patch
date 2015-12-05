@@ -1,8 +1,8 @@
 diff --git a/config/environments/production.rb b/config/environments/production.rb
-index 78bf543..9b37122 100644
+index 3316ece..c34dec0 100644
 --- a/config/environments/production.rb
 +++ b/config/environments/production.rb
-@@ -66,10 +66,10 @@ Gitlab::Application.configure do
+@@ -67,10 +67,10 @@ Gitlab::Application.configure do
  
    config.action_mailer.delivery_method = :sendmail
    # Defaults to:
@@ -18,10 +18,10 @@ index 78bf543..9b37122 100644
    config.action_mailer.raise_delivery_errors = true
  
 diff --git a/config/gitlab.yml.example b/config/gitlab.yml.example
-index e7a8d08..834ecaf 100644
+index 15930fc..bdb423c 100644
 --- a/config/gitlab.yml.example
 +++ b/config/gitlab.yml.example
-@@ -17,8 +17,8 @@ production: &base
+@@ -29,8 +29,8 @@ production: &base
    ## GitLab settings
    gitlab:
      ## Web server settings (note: host is the FQDN, do not include http://)
@@ -32,21 +32,25 @@ index e7a8d08..834ecaf 100644
      https: false # Set to true if using HTTPS, see installation.md#using-https for additional HTTPS configuration details
  
      # Uncommment this line below if your ssh host is different from HTTP/HTTPS one
-@@ -31,11 +31,11 @@ production: &base
+@@ -43,7 +43,7 @@ production: &base
      # relative_url_root: /gitlab
  
      # Uncomment and customize if you can't use the default user to run GitLab (default: 'git')
 -    # user: git
 +    user: gitlab
  
-     ## Email settings
+     ## Date & Time settings
+     # Uncomment and customize if you want to change the default time zone of GitLab application.
+@@ -54,7 +54,7 @@ production: &base
+     # Uncomment and set to false if you need to disable email sending from GitLab (default: true)
+     # email_enabled: true
      # Email address used in the "From" field in mails sent by GitLab
 -    email_from: example@example.com
 +    email_from: <%= ENV['GITLAB_EMAIL_FROM'] %>
+     email_display_name: GitLab
+     email_reply_to: noreply@example.com
  
-     # Email server smtp settings are in [a separate file](initializers/smtp_settings.rb.sample).
- 
-@@ -230,12 +230,12 @@ production: &base
+@@ -298,12 +298,12 @@ production: &base
    # GitLab Satellites
    satellites:
      # Relative paths are relative to Rails.root (default: tmp/repo_satellites/)
@@ -58,10 +62,10 @@ index e7a8d08..834ecaf 100644
    backup:
 -    path: "tmp/backups"   # Relative paths are relative to Rails.root (default: tmp/backups/)
 +    path: <%= ENV['GITLAB_BACKUP_PATH'] %>
+     # archive_permissions: 0640 # Permissions for the resulting backup.tar file (default: 0600)
      # keep_time: 604800   # default: 0 (forever) (in seconds)
-     # upload:
-     #   # Fog storage connection settings, see http://fog.io/storage/ .
-@@ -249,11 +249,11 @@ production: &base
+     # pg_schema: public     # default: nil, it means that all schemas will be backed up
+@@ -322,15 +322,15 @@ production: &base
  
    ## GitLab Shell settings
    gitlab_shell:
@@ -74,9 +78,14 @@ index e7a8d08..834ecaf 100644
 +    repos_path: <%= ENV['GITLAB_REPOSITORIES_PATH'] %>
 +    hooks_path: <%= ENV['GITLAB_SHELL_HOOKS_PATH'] %>
  
+     # File that contains the secret key for verifying access for gitlab-shell.
+     # Default is '.gitlab_shell_secret' relative to Rails.root (i.e. root of the GitLab app).
+-    # secret_file: /home/git/gitlab/.gitlab_shell_secret
++    secret_file: <%= ENV['GITLAB_SHELL_SECRET_PATH'] %>
+ 
      # Git over HTTP
      upload_pack: true
-@@ -266,7 +266,7 @@ production: &base
+@@ -343,7 +343,7 @@ production: &base
    # CAUTION!
    # Use the default values unless you really know what you are doing
    git:
@@ -85,7 +94,7 @@ index e7a8d08..834ecaf 100644
      # The next value is the maximum memory size grit can use
      # Given in number of bytes per git object (e.g. a commit)
      # This value can be increased if you have very large commits
-@@ -299,7 +299,7 @@ test:
+@@ -388,7 +388,7 @@ test:
    gravatar:
      enabled: true
    gitlab:
@@ -95,14 +104,14 @@ index e7a8d08..834ecaf 100644
  
      # When you run tests we clone and setup gitlab-shell
 diff --git a/lib/gitlab/app_logger.rb b/lib/gitlab/app_logger.rb
-index 8e4717b..abfe2e4 100644
+index dddcb25..d61f10a 100644
 --- a/lib/gitlab/app_logger.rb
 +++ b/lib/gitlab/app_logger.rb
 @@ -1,7 +1,7 @@
  module Gitlab
    class AppLogger < Gitlab::Logger
-     def self.file_name
--      'application.log'
+     def self.file_name_noext
+-      'application'
 +      ENV["GITLAB_APPLICATION_LOG_PATH"]
      end
  

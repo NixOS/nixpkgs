@@ -2,10 +2,20 @@
 
 with lib;
 let
+  cfg = config.hardware.bumblebee;
+
   kernel = config.boot.kernelPackages;
-  bumblebee = if config.hardware.bumblebee.connectDisplay
-              then pkgs.bumblebee_display
-              else pkgs.bumblebee;
+
+  useNvidia = cfg.driver == "nvidia";
+
+  bumblebee = pkgs.bumblebee.override {
+    inherit useNvidia;
+    useDisplayDevice = cfg.connectDisplay;
+  };
+
+  primus = pkgs.primus.override {
+    inherit useNvidia;
+  };
 
 in
 
@@ -29,6 +39,7 @@ in
       type = types.str;
       description = ''Group for bumblebee socket'';
     };
+
     hardware.bumblebee.connectDisplay = mkOption {
       default = false;
       type = types.bool;
@@ -40,26 +51,30 @@ in
         Only nvidia driver is supported so far.
       '';
     };
+
+    hardware.bumblebee.driver = mkOption {
+      default = "nvidia";
+      type = types.enum [ "nvidia" "nouveau" ];
+      description = ''
+        Set driver used by bumblebeed. Supported are nouveau and nvidia.
+      '';
+    };
   };
 
   config = mkIf config.hardware.bumblebee.enable {
     boot.blacklistedKernelModules = [ "nouveau" "nvidia" ];
     boot.kernelModules = [ "bbswitch" ];
-    boot.extraModulePackages = [ kernel.bbswitch kernel.nvidia_x11 ];
+    boot.extraModulePackages = [ kernel.bbswitch ] ++ optional useNvidia kernel.nvidia_x11;
 
-    environment.systemPackages = [ bumblebee pkgs.primus ];
+    environment.systemPackages = [ bumblebee primus ];
 
     systemd.services.bumblebeed = {
       description = "Bumblebee Hybrid Graphics Switcher";
       wantedBy = [ "display-manager.service" ];
       path = [ kernel.bbswitch bumblebee ];
       serviceConfig = {
-        ExecStart = "${bumblebee}/bin/bumblebeed --use-syslog -g ${config.hardware.bumblebee.group}";
-        Restart = "always";
-        RestartSec = 60;
-        CPUSchedulingPolicy = "idle";
+        ExecStart = "${bumblebee}/bin/bumblebeed --use-syslog -g ${cfg.group} --driver ${cfg.driver}";
       };
-      environment.LD_LIBRARY_PATH="/run/opengl-driver/lib/";
       environment.MODULE_DIR="/run/current-system/kernel-modules/lib/modules/";
     };
   };

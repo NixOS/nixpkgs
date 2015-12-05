@@ -1730,11 +1730,13 @@ in modules // {
 
   boto3 = buildPythonPackage rec {
     name = "boto3-${version}";
-    version = "1.1.4";
+    version = "1.2.2";
 
-    src = pkgs.fetchurl {
-      url = "https://github.com/boto/boto3/archive/${version}.zip";
-      sha256 = "11fdfbq8ann11wdzmbd0djnb1biyyhs1jcc8maxmkcj2q9fw6dk0";
+    src = pkgs.fetchFromGitHub {
+      owner = "boto";
+      repo  = "boto3";
+      rev   = version;
+      sha256 = "1w53lhhdzi29d31qzhflb5mcwb24mfrj4frv70w6qyn8vmqznnjy";
     };
 
     propagatedBuildInputs = [ self.botocore
@@ -1759,44 +1761,17 @@ in modules // {
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.2.0";
+    version = "1.3.6";
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      sha256 = "0wj98fsiwqzy0i0zh86fx15sgdjkwqi6crxig6b4kvrckl8bkwjr";
+      sha256 = "05a0ihv66fx77j16mjlm76d8zm7sd5wfzh1hx4nm3ilb9gz5h016";
     };
 
     propagatedBuildInputs =
       [ self.dateutil
-        self.requests
-        self.jmespath
-      ];
-
-    buildInputs = [ self.docutils ];
-
-    meta = {
-      homepage = https://github.com/boto/botocore;
-
-      license = "bsd";
-
-      description = "A low-level interface to a growing number of Amazon Web Services";
-
-    };
-  };
-
-  botocore_1_1_10 = buildPythonPackage rec {
-    version = "1.1.10";
-    name = "botocore-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      sha256 = "0syj0m0l7k4wa0n9h7h8ywayjv9fgpn5wyzpdriws0j417y1zlyc";
-    };
-
-    propagatedBuildInputs =
-      [ self.dateutil
-        self.requests
+        self.requests2
         self.jmespath
       ];
 
@@ -6431,6 +6406,16 @@ in modules // {
 
   django = self.django_1_7;
 
+  django_gis = self.django.override rec {
+    patches = [
+      (pkgs.substituteAll {
+        src = ../development/python-modules/django/1.7.7-gis-libs.template.patch;
+        geos = pkgs.geos;
+        gdal = pkgs.gdal;
+      })
+    ];
+  };
+
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.8.4";
@@ -7960,29 +7945,6 @@ in modules // {
       homepage = http://gehrcke.de/gipc;
       license = licenses.mit;
       maintainers = with maintainers; [ nckx ];
-    };
-  };
-
-  glance = buildPythonPackage rec {
-    name = "glance-0.1.7";
-
-    src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/g/glance/${name}.tar.gz";
-      md5 = "e733713ccd23e4a6253386a47971cfb5";
-    };
-
-    buildInputs = with self; [ nose mox ];
-
-    # tests fail for python2.6
-    doCheck = python.majorVersion != "2.6";
-
-    propagatedBuildInputs = with self; [ gflags sqlalchemy webob routes eventlet ];
-
-    PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
-
-    meta = {
-      homepage = https://launchpad.net/glance;
-      description = "Services for discovering, registering, and retrieving virtual machine images";
     };
   };
 
@@ -11745,6 +11707,13 @@ in modules // {
       url = "https://pypi.python.org/packages/source/o/oslo.rootwrap/${name}.tar.gz";
       sha256 = "1711rlmykizw675ihbaqmk3ph6ah0njbygxr9lrdnacy6yrlmbd5";
     };
+
+    # https://bugs.launchpad.net/oslo.rootwrap/+bug/1519839
+    patchPhase = ''
+     substituteInPlace oslo_rootwrap/filters.py \
+       --replace "/bin/cat" "${pkgs.coreutils}/bin/cat" \
+       --replace "/bin/kill" "${pkgs.coreutils}/bin/kill"
+    '';
 
     buildInputs = with self; [ eventlet mock oslotest ];
     propagatedBuildInputs = with self; [

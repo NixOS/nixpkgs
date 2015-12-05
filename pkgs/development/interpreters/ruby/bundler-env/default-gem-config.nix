@@ -17,7 +17,7 @@
 # This seperates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{ lib, fetchurl, writeScript, ruby, libxml2, libxslt, python, stdenv, which
+{ lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python, stdenv, which
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin
@@ -103,6 +103,10 @@ in
         --replace 'which gpg2' \
                   '${which}/bin/which gpg2'
     '';
+  };
+
+  timfel-krb5-auth = attrs: {
+    buildInputs = [ kerberos ];
   };
 
   therubyracer = attrs: {
