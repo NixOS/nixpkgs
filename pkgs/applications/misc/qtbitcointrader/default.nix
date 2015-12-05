@@ -30,6 +30,6 @@ stdenv.mkDerivation {
       homepage = https://centrabit.com/;
       license = licenses.lgpl3;
       platforms = qt.meta.platforms;
-      maintainers = [ maintainers.emery ];
+      maintainers = [ maintainers.ehmry ];
     };
 }

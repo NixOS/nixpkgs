@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib;
     { homepage = https://github.com/ehmry/dir2opus;
-      maintainers = [ maintainers.emery ];
+      maintainers = [ maintainers.ehmry ];
       license = licenses.gpl2;
     };
 }
