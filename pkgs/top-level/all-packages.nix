@@ -13568,6 +13568,7 @@ let
       ++ optional (config.kodi.enableGenesis or false) genesis
       ++ optional (config.kodi.enableSVTPlay or false) svtplay
       ++ optional (config.kodi.enableSteamLauncher or false) steam-launcher
+      ++ optional (config.kodi.enablePVRHTS or false) pvr-hts
       );
   };
 
