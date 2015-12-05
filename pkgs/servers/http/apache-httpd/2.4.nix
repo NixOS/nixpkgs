@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
   # Required for ‘pthread_cancel’.
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
+  preConfigure = ''
+    configureFlags="$configureFlags --includedir=$dev/include"
+  '';
   configureFlags = ''
     --with-apr=${apr}
     --with-apr-util=${aprutil}
@@ -55,7 +58,6 @@ stdenv.mkDerivation rec {
     ${optionalString sslSupport "--enable-ssl"}
     ${optionalString luaSupport "--enable-lua --with-lua=${lua5}"}
     ${optionalString libxml2Support "--with-libxml2=${libxml2.dev}/include/libxml2"}
-    --includedir=$(dev)/include
     --docdir=$(doc)/share/doc
   '';
 

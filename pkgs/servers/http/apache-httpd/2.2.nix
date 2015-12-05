@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   outputs = [ "dev" "out" "doc" ];
   setOutputFlags = false; # it would move $out/modules, etc.
 
-  buildInputs = [ pkgconfig perl apr aprutil pcre zlib ] ++
+  propagatedBuildInputs = [ apr ]; # otherwise mod_* fail to find includes often
+  buildInputs = [ pkgconfig perl aprutil pcre zlib ] ++
     stdenv.lib.optional sslSupport openssl;
 
   # Required for ‘pthread_cancel’.
@@ -34,6 +35,9 @@ stdenv.mkDerivation rec {
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
   '';
 
+  preConfigure = ''
+    configureFlags="$configureFlags --includedir=$dev/include"
+  '';
   configureFlags = ''
     --with-z=${zlib}
     --with-pcre=${pcre}
@@ -47,7 +51,6 @@ stdenv.mkDerivation rec {
     --enable-disk-cache
     --enable-file-cache
     --enable-mem-cache
-    --includedir=$(dev)/include
     --docdir=$(doc)/share/doc
   '';
 
