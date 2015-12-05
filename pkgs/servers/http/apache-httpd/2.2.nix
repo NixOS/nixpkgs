@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     mkdir -p $doc/share/doc/httpd
     mv $out/manual $doc/share/doc/httpd
     mkdir -p $dev/bin
-    mv $out/sbin/apxs $dev/bin/apxs
+    mv $out/bin/apxs $dev/bin/apxs
   '';
 
   passthru = {
