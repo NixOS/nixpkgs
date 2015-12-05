@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "openttd-${version}";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchurl {
     url = "http://binaries.openttd.org/releases/${version}/${name}-source.tar.xz";
-    sha256 = "0a4zh66vvkipdrm45gql4mlqpf26mn4m6pl86f02cd1fap58xrk0";
+    sha256 = "0qxss5rxzac94z5k16xv84ll0n163sphs88xkgv3z7vwramagffq";
   };
 
   buildInputs = [ SDL libpng pkgconfig xz zlib freetype fontconfig ];
