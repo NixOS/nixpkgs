@@ -230,6 +230,21 @@ in modules // {
     };
   };
 
+  acme = buildPythonPackage rec {
+    inherit (pkgs.letsencrypt) src version;
+
+    name = "acme-${version}";
+
+    propagatedBuildInputs = with self; [
+      cryptography pyasn1 pyopenssl pyRFC3339 pytz requests2 six werkzeug mock
+      ndg-httpsclient
+    ];
+
+    buildInputs = with self; [ nose ];
+
+    sourceRoot = "letsencrypt-${version}/acme";
+  };
+
   actdiag = buildPythonPackage rec {
     name = "actdiag-0.5.3";
 
