@@ -14107,6 +14107,8 @@ let
 
   planetary_annihilation = callPackage ../games/planetaryannihilation { };
 
+  pokerth = callPackage ../games/pokerth { };
+
   pong3d = callPackage ../games/pong3d { };
 
   prboom = callPackage ../games/prboom { };
