@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
       " \${out}/share/sane/snapscan/your-firmwarefile.bin"
     else "";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://www.sane-project.org/";
     description = "Scanner Access Now Easy";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ nckx simons ];
+    platforms = platforms.linux;
   };
 }
