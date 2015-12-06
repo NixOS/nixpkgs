@@ -87,6 +87,7 @@
   ./security/apparmor-suid.nix
   ./security/audit.nix
   ./security/ca.nix
+  ./security/dhparams.nix
   ./security/duosec.nix
   ./security/grsecurity.nix
   ./security/oath.nix
