@@ -11622,6 +11622,10 @@ let
 
   emacs24PackagesNg = recurseIntoAttrs (emacsPackagesNgGen emacs24);
 
+  elpaPackages =
+    let imported = import ../applications/editors/emacs-modes/elpa-packages.nix pkgs;
+    in recurseIntoAttrs (imported.override (super: self: { inherit emacs; }));
+
   emacsWithPackages = callPackage ../build-support/emacs/wrapper.nix { };
   emacs24WithPackages = emacsWithPackages.override { emacs = emacs24; };
 
