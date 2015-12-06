@@ -91,6 +91,17 @@ let self = rec {
     "${patchSet}/patches/ruby/2.1.6/railsexpress/08-funny-falcon-method-cache.patch"
     "${patchSet}/patches/ruby/2.1.6/railsexpress/09-heap-dump-support.patch"
   ];
+  "2.1.7" = ops useRailsExpress [
+    "${patchSet}/patches/ruby/2.1.7/railsexpress/01-zero-broken-tests.patch"
+    "${patchSet}/patches/ruby/2.1.7/railsexpress/02-improve-gc-stats.patch"
+    "${patchSet}/patches/ruby/2.1.7/railsexpress/03-display-more-detailed-stack-trace.patch"
+    "${patchSet}/patches/ruby/2.1.7/railsexpress/04-show-full-backtrace-on-stack-overflow.patch"
+    "${patchSet}/patches/ruby/2.1.7/railsexpress/05-funny-falcon-stc-density.patch"
+    "${patchSet}/patches/ruby/2.1.7/railsexpress/06-funny-falcon-stc-pool-allocation.patch"
+    "${patchSet}/patches/ruby/2.1.7/railsexpress/07-aman-opt-aset-aref-str.patch"
+    "${patchSet}/patches/ruby/2.1.7/railsexpress/08-funny-falcon-method-cache.patch"
+    "${patchSet}/patches/ruby/2.1.7/railsexpress/09-heap-dump-support.patch"
+  ];
   "2.2.0" = ops useRailsExpress [
     "${patchSet}/patches/ruby/2.2.0/railsexpress/01-zero-broken-tests.patch"
     "${patchSet}/patches/ruby/2.2.0/railsexpress/02-improve-gc-stats.patch"
@@ -103,5 +114,10 @@ let self = rec {
     "${patchSet}/patches/ruby/2.2.2/railsexpress/02-improve-gc-stats.patch"
     "${patchSet}/patches/ruby/2.2.2/railsexpress/03-display-more-detailed-stack-trace.patch"
     "${patchSet}/patches/ruby/2.2.2/railsexpress/04-backported-bugfixes-222.patch"
+  ];
+  "2.2.3" = ops useRailsExpress [
+    "${patchSet}/patches/ruby/2.2.3/railsexpress/01-zero-broken-tests.patch"
+    "${patchSet}/patches/ruby/2.2.3/railsexpress/02-improve-gc-stats.patch"
+    "${patchSet}/patches/ruby/2.2.3/railsexpress/03-display-more-detailed-stack-trace.patch"
   ];
 }; in self
