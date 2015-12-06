@@ -2124,6 +2124,18 @@ let
     '';
   };
 
+  # reintroduced for gocrytpfs as I don't understand the 10gen/spacemonkey split
+  openssl-spacemonkey = buildFromGitHub rec {
+    rev = "71f9da2a482c2b7bc3507c3fabaf714d6bb8b75d";
+    name = "openssl-${stdenv.lib.strings.substring 0 7 rev}";
+    owner = "spacemonkeygo";
+    repo = "openssl";
+    sha256 = "1byxwiq4mcbsj0wgaxqmyndp6jjn5gm8fjlsxw9bg0f33a3kn5jk";
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [ pkgs.openssl ];
+    propagatedBuildInputs = [ spacelog ];
+  };
+
   opsgenie-go-sdk = buildFromGitHub {
     rev = "c6e1235dfed2126eb9b562c4d776baf55ccd23e3";
     date = "2015-08-24";
