@@ -846,6 +846,14 @@ let
     sha256 = "1nyg6sckwd0iafs9vcmgbga2k3hid2q0avhwj29qbdhj3l78xi47";
   };
 
+  gocryptfs = buildFromGitHub {
+    rev = "v0.5";
+    owner = "rfjakob";
+    repo = "gocryptfs";
+    sha256 = "0jsdz8y7a1fkyrfwg6353c9r959qbqnmf2cjh57hp26w1za5bymd";
+    buildInputs = [ crypto go-fuse openssl-spacemonkey ];
+  };
+
   gocheck = buildGoPackage rec {
     rev = "87";
     name = "gocheck-${rev}";
