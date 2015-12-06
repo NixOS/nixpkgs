@@ -479,6 +479,7 @@ let
 
   separateDebugInfo = makeSetupHook { } ../build-support/setup-hooks/separate-debug-info.sh;
 
+  generateDiffieHellman = callPackage ../build-support/dhparams.nix { };
 
   ### TOOLS
 
