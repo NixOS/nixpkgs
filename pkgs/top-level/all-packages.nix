@@ -2067,12 +2067,12 @@ let
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
-  nodejs-5_0 = callPackage ../development/web/nodejs/v5_0.nix {
+  nodejs-5_x = callPackage ../development/web/nodejs/v5.nix {
     libtool = darwin.cctools;
     openssl = openssl_1_0_2;
   };
 
-  nodejs-4_2 = callPackage ../development/web/nodejs {
+  nodejs-4_x = callPackage ../development/web/nodejs/v4.nix {
     libtool = darwin.cctools;
     openssl = openssl_1_0_2;
   };
@@ -2085,9 +2085,11 @@ let
   nodejs = if stdenv.system == "armv5tel-linux" then
     nodejs-0_10
   else
-    nodejs-4_2;
+    nodejs-4_x;
 
-  nodePackages_4_2 = recurseIntoAttrs (callPackage ./node-packages.nix { self = nodePackages_4_2; nodejs = nodejs-4_2; });
+  nodePackages_5_x = recurseIntoAttrs (callPackage ./node-packages.nix { self = nodePackages_5_x; nodejs = nodejs-5_x; });
+
+  nodePackages_4_x = recurseIntoAttrs (callPackage ./node-packages.nix { self = nodePackages_4_x; nodejs = nodejs-4_x; });
 
   nodePackages_0_10 = callPackage ./node-packages.nix { self = nodePackages_0_10; nodejs = nodejs-0_10; };
 
