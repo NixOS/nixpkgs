@@ -2096,7 +2096,7 @@ let
   nodePackages = if stdenv.system == "armv5tel-linux" then
     nodePackages_0_10
   else
-    nodePackages_4_2;
+    nodePackages_4_x;
 
   npm2nix = nodePackages.npm2nix;
 
