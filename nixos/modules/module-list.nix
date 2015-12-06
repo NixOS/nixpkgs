@@ -83,6 +83,7 @@
   ./security/apparmor.nix
   ./security/apparmor-suid.nix
   ./security/ca.nix
+  ./security/dhparams.nix
   ./security/duosec.nix
   ./security/grsecurity.nix
   ./security/pam.nix
