@@ -10296,6 +10296,10 @@ let
 
   gocode = goPackages.gocode.bin // { outputs = [ "bin" ]; };
 
+  kgocode = callPackage ../applications/misc/kgocode { 
+    inherit (pkgs.kde4) kdelibs;
+  };
+
   gotags = goPackages.gotags.bin // { outputs = [ "bin" ]; };
 
   golint = goPackages.lint.bin // { outputs = [ "bin" ]; };
