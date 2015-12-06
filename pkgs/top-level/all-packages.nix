@@ -2136,8 +2136,6 @@ let
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
-  libtorrent-git = callPackage ../tools/networking/p2p/libtorrent/git.nix { };
-
   libiberty = callPackage ../development/libraries/libiberty { };
 
   libibverbs = callPackage ../development/libraries/libibverbs { };
@@ -2930,8 +2928,6 @@ let
   rsstail = callPackage ../applications/networking/feedreaders/rsstail { };
 
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
-
-  rtorrent-git = callPackage ../tools/networking/p2p/rtorrent/git.nix { };
 
   rubber = callPackage ../tools/typesetting/rubber { };
 
