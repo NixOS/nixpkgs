@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/rebar/rebar3/archive/${version}.tar.gz";
-    sha256 = "1b7089248b3ea82ecd6525059aadd1e17d71b2e28f15986b1526133cca6cb240";
+    sha256 = "0px66scjdia9aaa5z36qzxb848r56m0k98g0bxw065a2narsh4xy";
   };
 
   buildInputs = [ erlang ];
