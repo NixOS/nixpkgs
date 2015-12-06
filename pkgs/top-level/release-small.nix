@@ -96,7 +96,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   lynx = linux;
   lzma = linux;
   man = linux;
-  manpages = linux;
+  man-pages = linux;
   mc = all;
   mcabber = linux;
   mcron = linux;

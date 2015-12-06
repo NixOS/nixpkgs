@@ -130,7 +130,7 @@ let
       lynx = linux;
       lzma = linux;
       man = linux;
-      manpages = linux;
+      man-pages = linux;
       maxima = linux;
       mc = linux;
       mcabber = linux;

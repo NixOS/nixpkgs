@@ -10806,7 +10806,7 @@ let
 
   marathi-cursive = callPackage ../data/fonts/marathi-cursive { };
 
-  manpages = callPackage ../data/documentation/man-pages { };
+  man-pages = callPackage ../data/documentation/man-pages { };
 
   meslo-lg = callPackage ../data/fonts/meslo-lg {};
 
@@ -15712,6 +15712,7 @@ aliases = with self; rec {
   youtubeDL = youtube-dl;  # added 2014-10-26
   pidginlatexSF = pidginlatex; # added 2014-11-02
   tftp_hpa = tftp-hpa; # added 2015-04-03
+  manpages = man-pages; # added 2015-12-06
 };
 
 tweakAlias = _n: alias: with lib;
