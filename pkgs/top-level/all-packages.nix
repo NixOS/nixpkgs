@@ -11603,7 +11603,7 @@ let
   emacsPackagesNgGen = emacs: callPackage ./emacs-packages.nix {
     overrides = (config.emacsPackageOverrides or (p: {})) pkgs;
 
-    inherit emacs;
+    inherit emacs elpaPackages;
 
     trivialBuild = callPackage ../build-support/emacs/trivial.nix {
       inherit emacs;
