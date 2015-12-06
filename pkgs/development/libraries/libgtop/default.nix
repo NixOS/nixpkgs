@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, pkgconfig, perl, intltool }:
+{ stdenv, fetchurl, glib, pkgconfig, perl, intltool, gobjectIntrospection }:
 stdenv.mkDerivation {
   name = "libgtop-2.28.5";
 
@@ -7,6 +7,6 @@ stdenv.mkDerivation {
     sha256 = "0hik1aklcn79irgw1xf7d6cfkw8hzmy46r9jyfhp32aawisc24n8";
   };
 
-  propagatedBuildInputs = [ glib ];
+  propagatedBuildInputs = [ glib gobjectIntrospection ];
   nativeBuildInputs = [ pkgconfig perl intltool ];
 }
