@@ -926,5 +926,4 @@ self: super: {
 
   # https://github.com/mainland/language-c-quote/issues/57
   language-c-quote = super.language-c-quote.override { alex = self.alex_3_1_4; };
-
 }

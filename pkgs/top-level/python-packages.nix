@@ -230,6 +230,21 @@ in modules // {
     };
   };
 
+  acme = buildPythonPackage rec {
+    inherit (pkgs.letsencrypt) src version;
+
+    name = "acme-${version}";
+
+    propagatedBuildInputs = with self; [
+      cryptography pyasn1 pyopenssl pyRFC3339 pytz requests2 six werkzeug mock
+      ndg-httpsclient
+    ];
+
+    buildInputs = with self; [ nose ];
+
+    sourceRoot = "letsencrypt-${version}/acme";
+  };
+
   actdiag = buildPythonPackage rec {
     name = "actdiag-0.5.3";
 
@@ -9834,6 +9849,24 @@ in modules // {
     };
   });
 
+  modestmaps = buildPythonPackage rec {
+    name = "ModestMaps-1.4.6";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/M/ModestMaps/${name}.tar.gz";
+      sha256 = "0vyi1m9q4pc34i6rq5agb4x3qicx5sjlbxwmxfk70k2l5mnbjca3";
+    };
+
+    disabled = !isPy27;
+    propagatedBuildInputs = with self; [ pillow ];
+
+    meta = {
+      description = "A library for building interactive maps";
+      homepage = http://modestmaps.com;
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
   moinmoin = buildPythonPackage (rec {
     name = "moinmoin-${ver}";
     disabled = isPy3k;
@@ -10189,6 +10222,8 @@ in modules // {
 
   monotonic = buildPythonPackage rec {
     name = "monotonic-0.4";
+
+    __propagatedImpureHostDeps = stdenv.lib.optional stdenv.isDarwin "/usr/lib/libc.dylib";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/m/monotonic/${name}.tar.gz";
@@ -12338,9 +12373,9 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; [
-      pbr Babel six iso8601 debtcollector pyinotify
+      pbr Babel six iso8601 debtcollector
       oslo-utils oslo-i18n oslo-config oslo-serialization oslo-context
-    ];
+    ] ++ stdenv.lib.optional stdenv.isLinux pyinotify;
     buildInputs = with self; [ oslotest oslosphinx ];
     patchPhase = ''
       sed -i 's@python@${python.interpreter}@' .testr.conf
@@ -12550,7 +12585,7 @@ in modules // {
       (if isPy35 then null else html5lib)
       modules.sqlite3
       beautifulsoup4
-    ] ++ optional isDarwin pkgs.darwin.adv_cmds; # provides the locale command
+    ] ++ optional isDarwin pkgs.darwin.locale; # provides the locale command
 
     # For OSX, we need to add a dependency on libcxx, which provides
     # `complex.h` and other libraries that pandas depends on to build.
@@ -21756,6 +21791,8 @@ in modules // {
       sed -i -e "s|test_open_unix_connection_error|skip_test_open_unix_connection_error|" tests/test_streams.py
       sed -i -e "s|test_open_unix_connection_no_loop_ssl|skip_test_open_unix_connection_no_loop_ssl|" tests/test_streams.py
       sed -i -e "s|test_open_unix_connection|skip_test_open_unix_connection|" tests/test_streams.py
+      sed -i -e "s|test_read_pty_output|skip_test_read_pty_output|" tests/test_events.py
+      sed -i -e "s|test_write_pty|skip_test_write_pty|" tests/test_events.py
       sed -i -e "s|test_start_unix_server|skip_test_start_unix_server|" tests/test_streams.py
       sed -i -e "s|test_unix_sock_client_ops|skip_test_unix_sock_client_ops|" tests/test_events.py
       sed -i -e "s|test_unix_sock_client_ops|skip_test_unix_sock_client_ops|" tests/test_events.py

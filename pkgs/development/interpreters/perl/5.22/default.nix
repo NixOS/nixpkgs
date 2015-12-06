@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
       "-Dlocincpth=${libc}/include"
       "-Dloclibpth=${libc}/lib"
     ]
+    ++ optional stdenv.isSunOS "-Dcc=gcc"
     ++ optional enableThreading "-Dusethreads";
 
   configureScript = "${stdenv.shell} ./Configure";

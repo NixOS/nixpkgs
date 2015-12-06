@@ -37,6 +37,8 @@ let
          touch -r src/stat.c src/tail.c
        '';
 
+    configureFlags = optionalString stdenv.isSunOS "ac_cv_func_inotify_init=no";
+
     nativeBuildInputs = [ perl ];
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
@@ -81,6 +83,7 @@ let
     enableParallelBuilding = false;
 
     NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
+    FORCE_UNSAFE_CONFIGURE = stdenv.lib.optionalString (stdenv.system == "armv7l-linux" || stdenv.isSunOS) "1";
 
     makeFlags = optionalString stdenv.isDarwin "CFLAGS=-D_FORTIFY_SOURCE=0";
 
@@ -115,6 +118,3 @@ let
   };
 in
   self
-  // stdenv.lib.optionalAttrs (stdenv.system == "armv7l-linux" || stdenv.isSunOS) {
-    FORCE_UNSAFE_CONFIGURE = 1;
-  }

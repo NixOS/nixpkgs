@@ -95,8 +95,10 @@ let
 
     propagatedBuildInputs = deps;
 
-    # Not going to bother being more precise than this...
-    __propagatedImpureHostDeps = (import ./impure-deps.nix).${name};
+    # allows building the symlink tree
+    __impureHostDeps = [ "/System/Library/Frameworks/${name}.framework" ];
+
+    __propagatedImpureHostDeps = stdenv.lib.optional (name != "Kernel") "/System/Library/Frameworks/${name}.framework/${name}";
 
     meta = with stdenv.lib; {
       description = "Apple SDK framework ${name}";
@@ -157,6 +159,12 @@ in rec {
         substituteInPlace "$f" \
           --replace "QuartzCore/../Frameworks/CoreImage.framework/Headers" "CoreImage"
       '';
+    });
+
+    CoreServices = stdenv.lib.overrideDerivation super.CoreServices (drv: {
+      __propagatedSandboxProfile = drv.__propagatedSandboxProfile ++ [''
+        (allow mach-lookup (global-name "com.apple.CoreServices.coreservicesd"))
+      ''];
     });
 
     Security = stdenv.lib.overrideDerivation super.Security (drv: {

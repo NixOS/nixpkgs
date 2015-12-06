@@ -69,7 +69,7 @@ stdenv.mkDerivation {
     { description = "Set of integrated tools for the R language";
       homepage = http://www.rstudio.com/;
       license = licenses.agpl3;
-      maintainers = [ maintainers.emery ];
+      maintainers = [ maintainers.ehmry ];
       platforms = platforms.linux;
     };
 }

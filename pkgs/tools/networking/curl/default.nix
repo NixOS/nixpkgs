@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
+      "--disable-manual"
       ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
       ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )

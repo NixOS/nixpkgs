@@ -10,9 +10,10 @@ stdenv.mkDerivation (rec {
     sha256 = "0sq09a39wj4cxf8l2jvkq067g08ywfma4v6nhprnf351s82pfl68";
   };
 
-  buildInputs = stdenv.lib.optional (stdenv.isCygwin || stdenv.isDarwin) libiconv;
+  buildInputs = stdenv.lib.optional (stdenv.isCygwin || stdenv.isDarwin || stdenv.isSunOS) libiconv;
 
-  configureFlags = [ "--with-internal-glib" ];
+  configureFlags = [ "--with-internal-glib" ]
+    ++ stdenv.lib.optional (stdenv.isSunOS) [ "--with-libiconv=gnu" "--with-system-library-path" "--with-system-include-path" "CFLAGS=-DENABLE_NLS" ];
 
   patches = (if vanilla then [] else [
     # Process Requires.private properly, see

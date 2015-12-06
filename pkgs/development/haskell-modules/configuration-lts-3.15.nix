@@ -2304,6 +2304,7 @@ self: super: {
   "dates" = dontDistribute super."dates";
   "datetime" = dontDistribute super."datetime";
   "datetime-sb" = dontDistribute super."datetime-sb";
+  "dawdle" = dontDistribute super."dawdle";
   "dawg" = dontDistribute super."dawg";
   "dbcleaner" = dontDistribute super."dbcleaner";
   "dbf" = dontDistribute super."dbf";
@@ -2910,6 +2911,7 @@ self: super: {
   "forml" = dontDistribute super."forml";
   "formlets" = dontDistribute super."formlets";
   "formlets-hsp" = dontDistribute super."formlets-hsp";
+  "formura" = dontDistribute super."formura";
   "forth-hll" = dontDistribute super."forth-hll";
   "foscam-directory" = dontDistribute super."foscam-directory";
   "foscam-filename" = dontDistribute super."foscam-filename";
@@ -4357,6 +4359,7 @@ self: super: {
   "inc-ref" = dontDistribute super."inc-ref";
   "inch" = dontDistribute super."inch";
   "incremental-computing" = dontDistribute super."incremental-computing";
+  "incremental-parser" = doDistribute super."incremental-parser_0_2_4";
   "incremental-sat-solver" = dontDistribute super."incremental-sat-solver";
   "increments" = dontDistribute super."increments";
   "indentation" = dontDistribute super."indentation";
@@ -5839,6 +5842,7 @@ self: super: {
   "postgresql-orm" = dontDistribute super."postgresql-orm";
   "postgresql-query" = dontDistribute super."postgresql-query";
   "postgresql-schema" = dontDistribute super."postgresql-schema";
+  "postgresql-simple" = doDistribute super."postgresql-simple_0_4_10_0";
   "postgresql-simple-migration" = dontDistribute super."postgresql-simple-migration";
   "postgresql-simple-sop" = dontDistribute super."postgresql-simple-sop";
   "postgresql-simple-typed" = dontDistribute super."postgresql-simple-typed";
@@ -6498,6 +6502,7 @@ self: super: {
   "set-cover" = dontDistribute super."set-cover";
   "set-with" = dontDistribute super."set-with";
   "setdown" = dontDistribute super."setdown";
+  "setgame" = dontDistribute super."setgame";
   "setops" = dontDistribute super."setops";
   "sets" = dontDistribute super."sets";
   "setters" = dontDistribute super."setters";
@@ -6621,6 +6626,7 @@ self: super: {
   "skeleton" = dontDistribute super."skeleton";
   "skeletons" = dontDistribute super."skeletons";
   "skell" = dontDistribute super."skell";
+  "skemmtun" = dontDistribute super."skemmtun";
   "skype4hs" = dontDistribute super."skype4hs";
   "skypelogexport" = dontDistribute super."skypelogexport";
   "slack" = dontDistribute super."slack";
@@ -6808,6 +6814,7 @@ self: super: {
   "stable-marriage" = dontDistribute super."stable-marriage";
   "stable-memo" = dontDistribute super."stable-memo";
   "stable-tree" = dontDistribute super."stable-tree";
+  "stack" = doDistribute super."stack_0_1_8_0";
   "stack-hpc-coveralls" = dontDistribute super."stack-hpc-coveralls";
   "stack-prism" = dontDistribute super."stack-prism";
   "stack-run-auto" = dontDistribute super."stack-run-auto";
@@ -7592,6 +7599,7 @@ self: super: {
   "vinyl-gl" = dontDistribute super."vinyl-gl";
   "vinyl-json" = dontDistribute super."vinyl-json";
   "vinyl-utils" = dontDistribute super."vinyl-utils";
+  "vinyl-vectors" = dontDistribute super."vinyl-vectors";
   "virthualenv" = dontDistribute super."virthualenv";
   "vision" = dontDistribute super."vision";
   "visual-graphrewrite" = dontDistribute super."visual-graphrewrite";

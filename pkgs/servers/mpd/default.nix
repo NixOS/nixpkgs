@@ -21,7 +21,7 @@
 , jackSupport ? true, libjack2
 , gmeSupport ? true, game-music-emu
 , icuSupport ? true, icu
-, clientSupport ? false, mpd_clientlib
+, clientSupport ? true, mpd_clientlib
 , opusSupport ? true, libopus
 }:
 
@@ -107,7 +107,7 @@ in stdenv.mkDerivation rec {
     description = "A flexible, powerful daemon for playing music";
     homepage    = http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ astsmtl fuuzetsu emery ];
+    maintainers = with maintainers; [ astsmtl fuuzetsu ehmry ];
     platforms   = platforms.unix;
 
     longDescription = ''

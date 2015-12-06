@@ -16,6 +16,7 @@
   # outside of the store.  Thus, GCC, GFortran, & co. must always look for
   # files in standard system directories (/usr/include, etc.)
   noSysDirs ? (system != "x86_64-freebsd" && system != "i686-freebsd"
+               && system != "x86_64-solaris"
                && system != "x86_64-kfreebsd-gnu")
 
   # More flags for the bootstrapping of stdenv.
@@ -656,6 +657,8 @@ let
 
   azureus = callPackage ../tools/networking/p2p/azureus { };
 
+  backup = callPackage ../tools/backup/backup { };
+
   basex = callPackage ../tools/text/xml/basex { };
 
   babeld = callPackage ../tools/networking/babeld { };
@@ -760,6 +763,8 @@ let
   };
 
   gcdemu = callPackage ../misc/emulators/cdemu/gui.nix { };
+
+  certificate-transparency = callPackage ../servers/certificate-transparency { };
 
   image-analyzer = callPackage ../misc/emulators/cdemu/analyzer.nix { };
 
@@ -929,6 +934,7 @@ let
 
   asciidoc = callPackage ../tools/typesetting/asciidoc {
     inherit (pythonPackages) matplotlib numpy aafigure recursivePthLoader;
+    w3m = w3m-batch;
     enableStandardFeatures = false;
   };
 
@@ -1565,7 +1571,7 @@ let
   garmintools = callPackage ../development/libraries/garmintools {};
 
   gawk = callPackage ../tools/text/gawk {
-    locale = darwin.adv_cmds;
+    inherit (darwin) locale;
   };
 
   gawkInteractive = appendToName "interactive"
@@ -3155,7 +3161,9 @@ let
 
   stricat = callPackage ../tools/security/stricat { };
 
-  privoxy = callPackage ../tools/networking/privoxy { };
+  privoxy = callPackage ../tools/networking/privoxy {
+    w3m = w3m-batch;
+  };
 
   swaks = callPackage ../tools/networking/swaks { };
 
@@ -3607,7 +3615,7 @@ let
   xmlstarlet = callPackage ../tools/text/xml/xmlstarlet { };
 
   xmlto = callPackage ../tools/typesetting/xmlto {
-    w3m = w3m.override { graphicsSupport = false; };
+    w3m = w3m-batch;
   };
 
   xmltv = callPackage ../tools/misc/xmltv { };
@@ -3920,7 +3928,7 @@ let
     inherit noSysDirs;
 
     # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+    profiledCompiler = with stdenv; (!isSunOS && !isDarwin && (isi686 || isx86_64));
 
     # When building `gcc.crossDrv' (a "Canadian cross", with host == target
     # and host != build), `cross' must be null but the cross-libc must still
@@ -4221,6 +4229,8 @@ let
     llvm = llvm_33;
     openblas = openblasCompat;
   };
+
+  kotlin = callPackage ../development/compilers/kotlin { };
 
   lazarus = callPackage ../development/compilers/fpc/lazarus.nix {
     fpc = fpc;
@@ -4786,7 +4796,11 @@ let
   rtags = callPackage ../development/tools/rtags/default.nix {};
 
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
-  rustc = callPackage ../development/compilers/rustc {};
+  rustc = callPackage ../development/compilers/rustc {
+    callPackage = newScope ({
+      procps = if stdenv.isDarwin then darwin.ps else procps;
+    });
+  };
 
   rustPlatform = rustStable;
 
@@ -5506,12 +5520,12 @@ let
 
   cmake-2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix {
     wantPS = stdenv.isDarwin;
-    ps     = if stdenv.isDarwin then darwin.adv_cmds else null;
+    inherit (darwin) ps;
   };
 
   cmake = callPackage ../development/tools/build-managers/cmake {
     wantPS = stdenv.isDarwin;
-    ps     = if stdenv.isDarwin then darwin.adv_cmds else null;
+    inherit (darwin) ps;
   };
 
   cmakeCurses = cmake.override { useNcurses = true; };
@@ -5632,8 +5646,7 @@ let
   jdepend = callPackage ../development/tools/analysis/jdepend { };
 
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
-  flex_2_5_39 = callPackage ../development/tools/parsing/flex/2.5.39.nix { };
-  flex = flex_2_5_39;
+  flex = callPackage ../development/tools/parsing/flex/default.nix { };
 
   flexcpp = callPackage ../development/tools/parsing/flexc++ { };
 
@@ -8341,6 +8354,8 @@ let
 
   simgear = callPackage ../development/libraries/simgear { };
 
+  simp_le = callPackage ../tools/admin/simp_le { };
+
   sfml = callPackage ../development/libraries/sfml { };
 
   signon = callPackage ../development/libraries/signon/old.nix {};
@@ -8673,6 +8688,8 @@ let
 
   xapianBindings10 = callPackage ../development/libraries/xapian/bindings/1.0.x.nix {  # TODO perl php Java, tcl, C#, python
   };
+
+  xapian-omega = callPackage ../tools/misc/xapian-omega {};
 
   xavs = callPackage ../development/libraries/xavs { };
 
@@ -9248,7 +9265,7 @@ let
 
   mpd = callPackage ../servers/mpd {
     aacSupport    = config.mpd.aacSupport or true;
-    clientSupport = config.mpd.clientSupport or false;
+    clientSupport = config.mpd.clientSupport or true;
     ffmpegSupport = config.mpd.ffmpegSupport or true;
     opusSupport   = config.mpd.opusSupport or true;
 
@@ -11227,7 +11244,12 @@ let
     pulseSupport = config.pulseaudio or true;
   };
 
-  cmus = callPackage ../applications/audio/cmus { };
+  cmus = callPackage ../applications/audio/cmus {
+    libjack = libjack2;
+    libcdio = libcdio082;
+
+    pulseaudioSupport = config.pulseaudio or false;
+  };
 
   CompBus = callPackage ../applications/audio/CompBus { };
 
@@ -11277,6 +11299,8 @@ let
   cvsps = callPackage ../applications/version-management/cvsps { };
 
   cvs2svn = callPackage ../applications/version-management/cvs2svn { };
+
+  cwm = callPackage ../applications/window-managers/cwm { };
 
   cyclone = callPackage ../applications/audio/pd-plugins/cyclone  { };
 
@@ -11401,7 +11425,7 @@ let
     imagemagick = null;
     acl = null;
     gpm = null;
-    inherit (darwin.apple_sdk.frameworks) AppKit;
+    inherit (darwin.apple_sdk.frameworks) AppKit CoreWLAN GSS Kerberos ImageIO;
   };
 
   emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
@@ -11826,6 +11850,10 @@ let
   };
 
   gitRepo = callPackage ../applications/version-management/git-repo {
+    python = python27;
+  };
+
+  git-review = callPackage ../applications/version-management/git-review {
     python = python27;
   };
 
@@ -13387,17 +13415,23 @@ let
 
   virtinst = callPackage ../applications/virtualization/virtinst {};
 
-  virtualgl = callPackage ../tools/X11/virtualgl { };
+  virtualglLib = callPackage ../tools/X11/virtualgl/lib.nix {
+    fltk = fltk13;
+  };
+
+  virtualgl = callPackage ../tools/X11/virtualgl {
+    virtualglLib_i686 = if system == "x86_64-linux"
+      then pkgsi686Linux.virtualglLib
+      else null;
+  };
+
+  primusLib = callPackage ../tools/X11/primus/lib.nix {
+    nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
+  };
 
   primus = callPackage ../tools/X11/primus {
-    primusLib = callPackage ../tools/X11/primus/lib.nix {
-      nvidia = linuxPackages.nvidia_x11;
-    };
-
     primusLib_i686 = if system == "x86_64-linux"
-      then callPackage_i686 ../tools/X11/primus/lib.nix {
-             nvidia = pkgsi686Linux.linuxPackages.nvidia_x11.override { libsOnly = true; };
-           }
+      then pkgsi686Linux.primusLib
       else null;
   };
 
@@ -13406,15 +13440,9 @@ let
     nvidia_x11_i686 = if system == "x86_64-linux"
       then pkgsi686Linux.linuxPackages.nvidia_x11.override { libsOnly = true; }
       else null;
-    virtualgl = virtualgl;
-    virtualgl_i686 = if system == "x86_64-linux"
-      then pkgsi686Linux.virtualgl
+    primusLib_i686 = if system == "x86_64-linux"
+      then pkgsi686Linux.primusLib
       else null;
-  };
-
-  # use if you intend to connect the nvidia card to a monitor
-  bumblebee_display = bumblebee.override {
-    useDisplayDevice = true;
   };
 
   vkeybd = callPackage ../applications/audio/vkeybd {};
@@ -13439,8 +13467,21 @@ let
 
   vym = callPackage ../applications/misc/vym { };
 
-  w3m = callPackage ../applications/networking/browsers/w3m {
+  w3m = callPackage ../applications/networking/browsers/w3m { };
+
+  # Should always be the version with the most features
+  w3m-full = w3m;
+
+  # Version without X11
+  w3m-nox = w3m.override {
+    x11Support = false;
+  };
+
+  # Version for batch text processing, not a good browser
+  w3m-batch = w3m.override {
     graphicsSupport = false;
+    x11Support = false;
+    mouseSupport = false;
   };
 
   weechat = callPackage ../applications/networking/irc/weechat {
@@ -13570,6 +13611,7 @@ let
       ++ optional (config.kodi.enableGenesis or false) genesis
       ++ optional (config.kodi.enableSVTPlay or false) svtplay
       ++ optional (config.kodi.enableSteamLauncher or false) steam-launcher
+      ++ optional (config.kodi.enablePVRHTS or false) pvr-hts
       );
   };
 
@@ -13644,7 +13686,9 @@ let
 
   xdg-user-dirs = callPackage ../tools/X11/xdg-user-dirs { };
 
-  xdg_utils = callPackage ../tools/X11/xdg-utils { };
+  xdg_utils = callPackage ../tools/X11/xdg-utils {
+    w3m = w3m-batch;
+  };
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
@@ -15459,6 +15503,8 @@ let
   tup = callPackage ../development/tools/build-managers/tup { };
 
   tvheadend = callPackage ../servers/tvheadend { };
+
+  ums = callPackage ../servers/ums { };
 
   urbit = callPackage ../misc/urbit { };
 
