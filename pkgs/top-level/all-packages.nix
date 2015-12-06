@@ -13046,6 +13046,8 @@ let
                                     })
                                  );
 
+  swingsane = callPackage ../applications/graphics/swingsane { };
+
   sxiv = callPackage ../applications/graphics/sxiv { };
 
   bittorrentSync = bittorrentSync14;
