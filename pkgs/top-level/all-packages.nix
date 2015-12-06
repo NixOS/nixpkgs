@@ -5019,6 +5019,7 @@ let
   erlang_odbc_javac = erlangR18_odbc_javac;
 
   rebar = callPackage ../development/tools/build-managers/rebar { };
+  rebar3 = callPackage ../development/tools/build-managers/rebar3 { };
 
   elixir = callPackage ../development/interpreters/elixir { };
 
