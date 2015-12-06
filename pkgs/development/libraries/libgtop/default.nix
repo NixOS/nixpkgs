@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, pkgconfig, perl, intltool }:
+{ stdenv, fetchurl, glib, pkgconfig, perl, intltool, gobjectIntrospection }:
 stdenv.mkDerivation {
   name = "libgtop-2.32.0";
 
