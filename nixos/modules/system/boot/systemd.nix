@@ -148,6 +148,12 @@ let
 
       # Misc.
       "systemd-sysctl.service"
+      "dbus-org.freedesktop.timedate1.service"
+      "dbus-org.freedesktop.locale1.service"
+      "dbus-org.freedesktop.hostname1.service"
+      "systemd-timedated.service"
+      "systemd-localed.service"
+      "systemd-hostnamed.service"
     ]
 
     ++ cfg.additionalUpstreamSystemUnits;
