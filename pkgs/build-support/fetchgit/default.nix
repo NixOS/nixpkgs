@@ -45,7 +45,7 @@ assert deepClone -> leaveDotGit;
 stdenv.mkDerivation {
   inherit name;
   builder = ./builder.sh;
-  fetcher = "${stdenv.shell} ${./nix-prefetch-git}";
+  fetcher = "${./nix-prefetch-git}";  # This must be a string to ensure it's called with bash.
   buildInputs = [git];
 
   outputHashAlgo = if sha256 == "" then "md5" else "sha256";
