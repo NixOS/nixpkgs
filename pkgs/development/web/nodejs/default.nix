@@ -7,7 +7,7 @@
 assert stdenv.system != "armv5tel-linux";
 
 let
-  version = "4.2.2";
+  version = "4.2.3";
 
   deps = {
     inherit openssl zlib libuv;
@@ -31,7 +31,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "1c8c45b39fg2mz1c88jl0q0yhpxixdr25rpmpfskdd1m6hshkrq0";
+    sha256 = "0ksmbln5qhrr7qhdz3npwmyz44y1vpznpxk3j7sqkc5lzvjss22h";
   };
 
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps) ++ [ "--without-dtrace" ];
