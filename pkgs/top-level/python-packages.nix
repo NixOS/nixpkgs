@@ -16780,6 +16780,25 @@ in modules // {
     };
   };
 
+  simp_le = buildPythonPackage rec {
+    version = "20151207";
+    name = "simplegeneric-${version}";
+
+    src = pkgs.fetchgit {
+      url = "https://github.com/kuba/simp_le";
+      rev = "ac836bc0af988cb14dc0a83dc2039e7fa541b677";
+      sha256 = "6c471b57e1964f68ee99558fcd57196061dfe50cebd66856a239a5511f0d558f";
+    };
+
+    propagatedBuildInputs = with self; [ acme ];
+
+    meta = {
+      description = "Simple Let's Encrypt Client";
+      homepage = https://github.com/kuba/simp_le;
+      license = licenses.gpl3;
+    };
+  };
+
   simplegeneric = buildPythonPackage rec {
     version = "0.8.1";
     name = "simplegeneric-${version}";
