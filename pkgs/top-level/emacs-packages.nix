@@ -35,7 +35,7 @@
 
 , lib, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
 
-, emacs
+, emacs, elpaPackages
 , trivialBuild
 , melpaBuild
 
@@ -44,9 +44,7 @@
 
 with lib.licenses;
 
-let self = _self // overrides;
-    callPackage = lib.callPackageWith (self // removeAttrs args ["overrides" "external"]);
-    _self = with self; {
+let packagesFun = super: self: with self; {
 
   inherit emacs;
 
@@ -2025,4 +2023,6 @@ let self = _self // overrides;
     };
   };
 
-}; in self
+};
+
+in elpaPackages.override packagesFun
