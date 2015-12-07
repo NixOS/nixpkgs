@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   meta = with stdenv.lib; {
-    homepage = src.homepage;
+    homepage = http://www.libtorrent.org/;
     description = "A BitTorrent library written in C++ for *nix, with focus on high performance and good code";
 
     platforms = platforms.unix;
