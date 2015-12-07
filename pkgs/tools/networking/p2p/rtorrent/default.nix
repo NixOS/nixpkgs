@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = src.homepage;
+    inherit (src.meta) homepage;
     description = "An ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
 
     platforms = platforms.unix;
