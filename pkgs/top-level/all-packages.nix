@@ -12131,7 +12131,7 @@ let
     lua = lua5;
   };
 
-  ipe = callPackage ../applications/graphics/ipe { };
+  ipe = qt5Libs.callPackage ../applications/graphics/ipe { };
 
   iptraf = callPackage ../applications/networking/iptraf { };
 
