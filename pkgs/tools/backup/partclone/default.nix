@@ -1,6 +1,6 @@
 {stdenv, fetchFromGitHub
 , pkgconfig, libuuid
-, e2fsprogs
+, e2fsprogs, automake, autoconf
 }:
 stdenv.mkDerivation {
   name = "partclone-stable";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "0q3brjmnldpr89nhbiajxg3gncz0nagc34n7q2723lpz7bn28w3z";
   };
 
-  buildInputs = [e2fsprogs pkgconfig libuuid];
+  buildInputs = [e2fsprogs pkgconfig libuuid automake autoconf];
 
   installPhase = ''make INSTPREFIX=$out install'';
 
