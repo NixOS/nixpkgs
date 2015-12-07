@@ -46,7 +46,7 @@ with lib.licenses;
 
 let packagesFun = super: self: with self; {
 
-  inherit emacs;
+  inherit emacs melpaBuild trivialBuild;
 
   ## START HERE
 
