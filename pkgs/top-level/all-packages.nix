@@ -7729,6 +7729,8 @@ let
 
   lzo = callPackage ../development/libraries/lzo { };
 
+  mapnik = callPackage ../development/libraries/mapnik { };
+
   matio = callPackage ../development/libraries/matio { };
 
   mbedtls = callPackage ../development/libraries/mbedtls { };
