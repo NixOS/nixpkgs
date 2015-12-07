@@ -1,4 +1,4 @@
-{stdenv, fetchurl
+{stdenv, fetchFromGitHub
 , pkgconfig, libuuid
 , e2fsprogs
 }:
@@ -6,10 +6,11 @@ stdenv.mkDerivation {
   name = "partclone-stable";
   enableParallelBuilding = true;
 
-  src = fetchurl {
-    url = https://codeload.github.com/Thomas-Tsai/partclone/legacy.tar.gz/stable;
-    sha256 = "12bnhljc4n4951p5c05gc7z5qwdsjpx867ad1npmgsm8d9w941sn";
-    name = "Thomas-Tsai-partclone-stable-20150722.tar.gz";
+  src = fetchFromGitHub {
+    owner = "Thomas-Tsai";
+    repo = "partclone";
+    rev = "stable";
+    sha256 = "0q3brjmnldpr89nhbiajxg3gncz0nagc34n7q2723lpz7bn28w3z";
   };
 
   buildInputs = [e2fsprogs pkgconfig libuuid];
