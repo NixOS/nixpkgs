@@ -15,6 +15,11 @@ with builtins; buildDotnetPackage rec {
     sha256 = "10bqxpq30gzfq2ip6dkmqlzzsh3bnfdb01jry5xhgxvlycq1lnsm";
   };
 
+  httpPlugin = fetchurl {
+    url = "https://raw.github.com/pfn/keepasshttp/master/KeePassHttp.plgx";
+    sha256 = "4803ea799962ec3e294691922d6255e63c5a96df36941f99ef633775829e7289";
+  };
+
   sourceRoot = ".";
 
   buildInputs = [ unzip makeWrapper ];
@@ -70,6 +75,8 @@ with builtins; buildDotnetPackage rec {
   postInstall = ''
     mkdir -p "$out/share/applications"
     cp ${desktopItem}/share/applications/* $out/share/applications
+    mkdir "$out/lib/dotnet/keepass/plugins"
+    cp ${httpPlugin} "$out/lib/dotnet/keepass/plugins/KeePassHttp.plgx"
     wrapProgram $out/bin/keepass --prefix PATH : "$binPaths"
   '';
 
