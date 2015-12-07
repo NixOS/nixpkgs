@@ -3,7 +3,7 @@
 , sslSupport ? true, openssl ? null
 , graphicsSupport ? true, imlib2 ? null
 , x11Support ? graphicsSupport, libX11 ? null
-, mouseSupport ? true, gpm-ncurses ? null
+, mouseSupport ? !stdenv.isDarwin, gpm-ncurses ? null
 }:
 
 assert sslSupport -> openssl != null;
