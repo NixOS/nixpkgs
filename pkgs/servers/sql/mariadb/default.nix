@@ -7,11 +7,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "mariadb-${version}";
-  version = "10.1.8";
+  version = "10.1.9";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/interstitial/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "1yiv0161rkgll1yd9r1cb1wdx55rwynj8i623p6wjvda9536mgvw";
+    sha256 = "0471vwg9c5c17m7679krjha16ib6d48fcsphkchb9v9cf8k5i74f";
   };
 
   buildInputs = [
