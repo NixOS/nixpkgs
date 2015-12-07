@@ -1,13 +1,13 @@
 { stdenv, fetchsvn, libxml2, gtk, curl, pkgconfig } :
 
 let
-  version = "30811";
+  version = "31801";
 in
 stdenv.mkDerivation {
   name = "gosmore-r${version}";
   src = fetchsvn {
     url = http://svn.openstreetmap.org/applications/rendering/gosmore;
-    sha256 = "0d8ddfa0nhz51ambwj9y5jjbizl9y9w44sviisk3ysqvn8q0phds";
+    sha256 = "0i6m3ikavsaqhfy18sykzq0cflw978nr4fhg18hawndcmr45v5zj";
     rev = "${version}";
   };
 
