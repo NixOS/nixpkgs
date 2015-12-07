@@ -3,10 +3,10 @@ let
   inherit (stdenv.lib) optional optionalString;
   s = rec {
     baseName="sysdig";
-    version = "0.1.102";
+    version = "0.2.0";
     name="${baseName}-${version}";
     url="https://github.com/draios/sysdig/archive/${version}.tar.gz";
-    sha256 = "0mrz14wvcb8m8idr4iqbr3jmxfs7dlmh06n0q9fcfph75wkc5fp0";
+    sha256 = "1si156i0ny7jk536c6jfvaivhss3nn0f1ka9f4bqzsgrjjgy1bgg";
   };
   buildInputs = [
     cmake zlib luajit ncurses
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     inherit (s) version;
     description = ''A tracepoint-based system tracing tool for Linux (with clients for other OSes)'';
     license = licenses.gpl2;
-    maintainers = [maintainers.raskin];
+    maintainers = with maintainers; [raskin offline];
     platforms = platforms.linux ++ platforms.darwin;
     downloadPage = "https://github.com/draios/sysdig/releases";
   };
