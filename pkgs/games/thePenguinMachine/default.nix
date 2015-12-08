@@ -6,6 +6,9 @@ stdenv.mkDerivation {
 		url = http://www.migniot.com/matrix/projects/thepenguinmachine/ThePenguinMachine.tar.gz;
 		sha256 = "09ljks8vj75g00h3azc83yllbfsrxwmv1c9g32gylcmsshik0dqv";
 	};
+  # Perhaps the following source works? See http://tpm.seul.org/
+  # url = http://tpm.seul.org/TPM.tar.bz2;
+  # sha256 = "8fc2f2961a54005cd7f349dd859823addf05b01d0e3b3e83928b5b75460930fa";
 
   broken = true; # Not found
 
