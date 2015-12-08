@@ -5083,7 +5083,7 @@ in modules // {
       sha256 = "1dnmnkc21zdfaypskbpvkwl0wpkpn0nagj1fc338w64mbxrk8ny7";
     };
 
-    commonDeps = with self;
+    propagatedBuildInputs = with self;
       [
         apipkg
         bottle
@@ -5099,19 +5099,7 @@ in modules // {
         simplejson
         sqlite3dbm
         timelib
-      ];
-
-    pythonPath = commonDeps ++
-      [
-        modules.sqlite3
-      ];
-
-    propagatedBuildInputs = commonDeps;
-
-    buildInputs = with self;
-      [
-        pil
-      ] ++ propagatedBuildInputs;
+      ] ++ optionals (!isPy3k) [ modules.sqlite3 ];
 
     meta = {
       description = "Library for parsing MediaWiki articles and converting them to different output formats";
