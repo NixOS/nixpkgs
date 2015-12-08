@@ -9015,8 +9015,8 @@ let
 
   bsddb3 = callPackage ../development/python-modules/bsddb3 { };
 
-  ecdsa = callPackage ../development/python-modules/ecdsa { };
 
+  ecdsa = pythonPackages.ecdsa;
 
   psyco = callPackage ../development/python-modules/psyco { };
 
