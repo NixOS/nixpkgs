@@ -8,7 +8,7 @@ let
     if stdenv.isLinux then "linux"
     # We probably want something different for Darwin
     else "unix";
-  userDir = "~/.local/nethack";
+  userDir = "~/.config/nethack";
 
 in stdenv.mkDerivation {
   name = "nethack-3.6.0";
@@ -53,28 +53,29 @@ in stdenv.mkDerivation {
 
     mkdir -p $out/bin
     cat <<EOF >$out/bin/nethack
-      #! ${stdenv.shell} -e
-      if [ ! -d ${userDir} ]; then
-        mkdir -p ${userDir}
-        cp -r $out/games/lib/nethackuserdir/* ${userDir}
-        chmod -R +w ${userDir}
-      fi
+    #! ${stdenv.shell} -e
 
-      RUNDIR=$(mktemp -d nethack)
+    if [ ! -d ${userDir} ]; then
+      mkdir -p ${userDir}
+      cp -r $out/games/lib/nethackuserdir/* ${userDir}
+      chmod -R +w ${userDir}
+    fi
 
-      cleanup() {
-        rm -rf $RUNDIR
-      }
-      trap cleanup EXIT
+    RUNDIR=\$(mktemp -td nethack.\$USER.XXXXX)
 
-      cd $RUNDIR
-      for i in ${userDir}/*; do
-        ln -s \$i \$(basename \$i)
-      done
-      for i in $out/games/lib/nethackdir/*; do
-        ln -s \$i \$(basename \$i)
-      done
-      $out/games/nethack
+    cleanup() {
+      rm -rf \$RUNDIR
+    }
+    trap cleanup EXIT
+
+    cd \$RUNDIR
+    for i in ${userDir}/*; do
+      ln -s \$i \$(basename \$i)
+    done
+    for i in $out/games/lib/nethackdir/*; do
+      ln -s \$i \$(basename \$i)
+    done
+    $out/games/nethack
     EOF
     chmod +x $out/bin/nethack
   '';
