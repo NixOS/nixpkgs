@@ -1,5 +1,5 @@
 { fetchurl, stdenv, python, makeWrapper, lib
-, xpdf, pil, pyopengl, pygame
+, xpdf, pillow, pyopengl, pygame
 , setuptools, mesa, freeglut }:
 
 let version = "0.10.5";
@@ -17,7 +17,7 @@ in
 
     # Note: We need to have `setuptools' in the path to be able to use
     # PyOpenGL.
-    buildInputs = [ makeWrapper xpdf pil pyopengl pygame ];
+    buildInputs = [ makeWrapper xpdf pillow pyopengl pygame ];
 
     configurePhase = ''
       sed -i "impressive.py" \
@@ -44,7 +44,7 @@ in
                   ${lib.concatStringsSep ":"
                      (map (path:
                             path + "/lib/${python.libPrefix}/site-packages")
-                          [ pil pyopengl pygame setuptools ])} \
+                          [ pillow pyopengl pygame setuptools ])} \
          --prefix LIBRARY_PATH ":" "${mesa}/lib:${freeglut}/lib"
     '';
 

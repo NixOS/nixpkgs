@@ -1,8 +1,8 @@
 { stdenv, fetchurl, buildPythonPackage, pythonPackages
 , python, cython, pkgconfig
-, xorg, gtk, glib, pango, cairo, gdk_pixbuf, pygtk, atk, pygobject, pycairo
+, xorg, gtk, glib, pango, cairo, gdk_pixbuf, atk, pycairo
 , makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf, xkeyboard_config
-, ffmpeg, x264, libvpx, pil, libwebp
+, ffmpeg, x264, libvpx, libwebp
 , libfakeXinerama }:
 
 buildPythonPackage rec {
@@ -29,8 +29,8 @@ buildPythonPackage rec {
     makeWrapper
   ];
 
-  propagatedBuildInputs = [
-    pil pygtk pygobject pythonPackages.rencode
+  propagatedBuildInputs = with pythonPackages; [
+    pillow pygtk pygobject
   ];
 
   postPatch = ''
