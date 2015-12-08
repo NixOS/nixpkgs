@@ -1159,6 +1159,8 @@ let
 
   coreutils-prefixed = coreutils.override { withPrefix = true; };
 
+  corkscrew = callPackage ../tools/networking/corkscrew { };
+
   cpio = callPackage ../tools/archivers/cpio { };
 
   crackxls = callPackage ../tools/security/crackxls { };
