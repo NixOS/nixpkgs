@@ -12082,6 +12082,7 @@ let
   impressive = callPackage ../applications/office/impressive {
     # XXX These are the PyOpenGL dependencies, which we need here.
     inherit (pythonPackages) pyopengl;
+    inherit (pythonPackages) pillow;
   };
 
   inferno = callPackage_i686 ../applications/inferno { };
