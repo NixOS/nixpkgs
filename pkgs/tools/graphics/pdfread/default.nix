@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, python, makeWrapper, ghostscript, pngnq, pil, djvulibre
+{stdenv, fetchurl, unzip, python, makeWrapper, ghostscript, pngnq, pillow, djvulibre
 , optipng, unrar}:
 
 stdenv.mkDerivation {
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     mkdir -p $PYDIR
     cp -R *.py pylrs $PYDIR
 
-    wrapProgram $out/bin/pdfread.py --prefix PYTHONPATH : $PYTHONPATH:${pil}/$LIBSUFFIX/PIL:$PYDIR \
+    wrapProgram $out/bin/pdfread.py --prefix PYTHONPATH : $PYTHONPATH:${pillow}/$LIBSUFFIX/PIL:$PYDIR \
       --prefix PATH : ${ghostscript}/bin:${pngnq}/bin:${djvulibre}/bin:${unrar}/bin:${optipng}/bin
   '';
 
