@@ -114,7 +114,24 @@ self: super: {
     preConfigure = "sed -i -e /extra-lib-dirs/d -e /include-dirs/d haskakafka.cabal";
     configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
     doCheck = false;
-   });
+  });
+
+  # Depends on broken "lss" package.
+  snaplet-lss = dontDistribute super.snaplet-lss;
+
+  # Depends on broken "NewBinary" package.
+  ASN1 = dontDistribute super.ASN1;
+
+  # Depends on broken "frame" package.
+  frame-markdown = dontDistribute super.frame-markdown;
+
+  # Depends on broken "Elm" package.
+  hakyll-elm = dontDistribute super.hakyll-elm;
+  haskelm = dontDistribute super.haskelm;
+  snap-elm = dontDistribute super.snap-elm;
+
+  # Depends on broken "hails" package.
+  hails-bin = dontDistribute super.hails-bin;
 
   # Foreign dependency name clashes with another Haskell package.
   libarchive-conduit = super.libarchive-conduit.override { archive = pkgs.libarchive; };
