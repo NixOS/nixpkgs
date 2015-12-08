@@ -312,6 +312,7 @@
   ./services/networking/lambdabot.nix
   ./services/networking/mailpile.nix
   ./services/networking/minidlna.nix
+  ./services/networking/miniupnpd.nix
   ./services/networking/mstpd.nix
   ./services/networking/murmur.nix
   ./services/networking/namecoind.nix
