@@ -97,7 +97,7 @@ in
   options = {
     services.simp_le = {
       directory = mkOption {
-        default = "/etc/ssl";
+        default = "/var/lib/simp_le";
         type = types.str;
         description = ''
           Directory where certs and other state will be stored by default.
