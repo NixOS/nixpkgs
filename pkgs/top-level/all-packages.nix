@@ -14223,7 +14223,9 @@ let
 
   tome4 = callPackage ../games/tome4 { };
 
-  tpm = callPackage ../games/thePenguinMachine { };
+  tpm = callPackage ../games/thePenguinMachine {
+    inherit (pythonPackages) pillow;
+  };
 
   trackballs = callPackage ../games/trackballs {
     debug = false;

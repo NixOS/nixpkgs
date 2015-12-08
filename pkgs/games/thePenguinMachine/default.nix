@@ -1,4 +1,4 @@
-{stdenv, fetchurl, python, pil, pygame, SDL} @ args: with args;
+{stdenv, fetchurl, python, pillow, pygame, SDL} @ args: with args;
 stdenv.mkDerivation {
   name = "thePenguinMachine";
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   broken = true; # Not found
 
-  buildInputs = [python pil pygame SDL];
+  buildInputs = [python pillow pygame SDL];
 
   configurePhase = ''
 		sed -e "/includes = /aincludes.append('${SDL}/include/SDL')" -i setup.py;
@@ -32,9 +32,9 @@ stdenv.mkDerivation {
 		cp -r .  "$out"/share/tpm/build-dir
 		mkdir -p "$out/bin"
 		echo "#! /bin/sh" >> "$out/bin/tpm"
-		echo "export PYTHONPATH=\"\$PYTHONPATH:$PYTHONPATH:$(echo ${pil}/lib/python*/site-packages/PIL)\"" >> "$out/bin/tpm"
+		echo "export PYTHONPATH=\"\$PYTHONPATH:$PYTHONPATH:$(echo ${pillow}/lib/python*/site-packages/PIL)\"" >> "$out/bin/tpm"
 		echo "cd \"$out/share/tpm/build-dir\"" >> "$out/bin/tpm"
-		echo "export PYTHONPATH=\"\$PYTHONPATH:$PYTHONPATH:$(echo ${pil}/lib/python*/site-packages/PIL)\"" >> "$out/bin/tpm"
+		echo "export PYTHONPATH=\"\$PYTHONPATH:$PYTHONPATH:$(echo ${pillow}/lib/python*/site-packages/PIL)\"" >> "$out/bin/tpm"
 		echo "${python}/bin/python \"$out\"/share/tpm/build-dir/ThePenguinMachine.py \"\$@\"" >> "$out/bin/tpm"
 		chmod a+x "$out/bin/tpm"
 		'';
