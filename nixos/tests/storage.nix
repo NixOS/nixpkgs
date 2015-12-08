@@ -4,7 +4,7 @@ with pkgs.lib;
 
 let
   mkConf = cfg: let
-    config = (import <nixpkgs/nixos/lib/eval-config.nix> {
+    config = (import ../lib/eval-config.nix {
       modules = singleton cfg;
     }).config;
   in pkgs.writeText "storage.xml" (builtins.toXML {
