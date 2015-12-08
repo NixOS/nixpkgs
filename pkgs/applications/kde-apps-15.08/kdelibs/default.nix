@@ -1,5 +1,5 @@
 { kdeApp, attica, attr, automoc4, avahi, bison, cmake
-, docbook_xml_dtd_42, docbook_xsl, flex, giflib, herqq, ilmbase
+, docbook_xml_dtd_42, docbook_xsl, flex, giflib, ilmbase
 , libdbusmenu_qt, libjpeg, libxml2, libxslt, perl, phonon, pkgconfig
 , polkit_qt4, qca2, qt4, shared_desktop_ontologies, shared_mime_info
 , soprano, strigi, udev, xz
@@ -10,7 +10,7 @@ kdeApp {
   name = "kdelibs";
 
   buildInputs = [
-    attica attr avahi giflib herqq libdbusmenu_qt libjpeg libxml2
+    attica attr avahi giflib libdbusmenu_qt libjpeg libxml2
     polkit_qt4 qca2 shared_desktop_ontologies udev xz
   ];
   propagatedBuildInputs = [ qt4 soprano phonon strigi ];
@@ -30,7 +30,6 @@ kdeApp {
   cmakeFlags = [
     "-DDOCBOOKXML_CURRENTDTD_DIR=${docbook_xml_dtd_42}/xml/dtd/docbook"
     "-DDOCBOOKXSL_DIR=${docbook_xsl}/xml/xsl/docbook"
-    "-DHUPNP_ENABLED=ON"
     "-DWITH_SOLID_UDISKS2=ON"
     "-DKDE_DEFAULT_HOME=.kde"
   ];
