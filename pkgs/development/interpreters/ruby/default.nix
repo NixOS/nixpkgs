@@ -153,7 +153,7 @@ in {
     patchLevel = "647";
     sha256 = {
       src = "1v2vbvydarcx5801gx9lc6gr6dfi0i7qbzwhsavjqbn79rdsz2n8";
-      git = "bd9b6cc8ea984b38d245fb3be1b918ec677f29f394ede43bbf5cf00e88edd899";
+      git = "186pf4q9xymzn4zn1sjppl1skrl5f0159ixz5cz8g72dmmynq3g3";
     };
   };
 
@@ -219,7 +219,7 @@ in {
     patchLevel = "0";
     sha256 = {
       src = "10fxlqmpbq9407zgsx060q22yj4zq6c3czbf29h7xk1rmjb1b77m";
-      git = "c5ecad94558547b6a50cf64d379829fecd62f3ca175626827f435237a3c6be5c";
+      git = "1fmbqd943akqjwsfbj9bg394ac46qmpavm8s0kv2w87rflrjcjfb";
     };
   };
 
@@ -252,7 +252,7 @@ in {
     patchLevel = "0";
     sha256 = {
       src = "1kpdf7f8pw90n5bckpl2idzggk0nn0240ah92sj4a1w6k4pmyyfz";
-      git = "a62301ca31ef23c9ae88ca68c925df5c0cbf4319265befc3a2fa27a56213cb88";
+      git = "1ssq3c23ay57ypfis47y2n817hfmb71w0xrdzp57j6bv12jqmgrx";
     };
   };
 }
