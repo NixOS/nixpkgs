@@ -15,6 +15,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ unzip python makeWrapper ];
 
+  broken = true; # Not found.
+
   phases = "unpackPhase patchPhase installPhase";
 
   unpackPhase = ''
