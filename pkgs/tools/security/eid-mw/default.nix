@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, gtk2, nssTools, pcsclite
+{ stdenv, fetchFromGitHub, autoreconfHook, gtk3, nssTools, pcsclite
 , pkgconfig }:
 
 let version = "4.1.9"; in
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "Fedict";
   };
 
-  buildInputs = [ gtk2 pcsclite ];
+  buildInputs = [ gtk3 pcsclite ];
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   postPatch = ''
