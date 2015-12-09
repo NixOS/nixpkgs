@@ -2,20 +2,18 @@
 
 let
 
+  # `list_users()`
   userdata_path = /etc/nixos/users.json;
-
   userdata =
     if builtins.pathExists userdata_path
     then builtins.fromJSON (builtins.readFile userdata_path)
     else [];
-
 
   get_primary_group = user:
     builtins.getAttr user.class {
       human = "users";
       service = "service";
     };
-
 
   # Data read from Directory (list) -> users.users structure (list)
   map_userdata = userdata:
