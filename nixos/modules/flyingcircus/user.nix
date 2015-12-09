@@ -35,6 +35,28 @@ let
       })
       userdata);
 
+  current_rg =
+    if lib.hasAttrByPath ["parameters" "resource_group"] config.enc
+    then config.enc.parameters.resource_group
+    else null;
+
+  get_group_memberships_for_user = user:
+    if current_rg != null && builtins.hasAttr current_rg user.permissions
+    then
+      lib.listToAttrs
+        (map
+          (perm: { name = perm; value = { members = [user.uid]; }; })
+          (builtins.getAttr current_rg user.permissions))
+    else {};
+
+  # user list from directory -> { groupname.members = [a b c], ...}
+  get_group_memberships = users:
+    if users == []
+    then {}
+    else
+      get_group_memberships_for_user (builtins.head users) //
+      get_group_memberships (builtins.tail users);
+
   # `list_permissions()`
   permissions_path = /etc/nixos/permissions.json;
   permissions =
@@ -67,12 +89,12 @@ in
     security.pam.services.sshd.showMotd = true;
     users = {
       motd = "Welcome to the Flying Circus";
-
+      mutableUsers = false;
       users = map_userdata userdata;
-
-      groups = {
-        service.gid = config.ids.gids.service;
-      } // get_permission_groups permissions;
+      groups =
+        get_permission_groups permissions
+        // { service.gid = config.ids.gids.service; }
+        // get_group_memberships userdata;
     };
   };
 }
