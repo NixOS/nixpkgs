@@ -9045,15 +9045,15 @@ let
 
   pyqt4 = pythonPackages.pyqt4;
 
-  pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
+  pysideApiextractor = pythonPackages.pysideApiextractor;
 
-  pysideGeneratorrunner = callPackage ../development/python-modules/pyside/generatorrunner.nix { };
+  pysideGeneratorrunner = pythonPackages.pysideGeneratorrunner;
 
-  pyside = callPackage ../development/python-modules/pyside { };
+  pyside = pythonPackages.pyside;
 
-  pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
+  pysideTools = pythonPackages.pysideTools;
 
-  pysideShiboken = callPackage ../development/python-modules/pyside/shiboken.nix { };
+  pysideShiboken = pythonpackages.pysideShiboken;
 
   pyxml = callPackage ../development/python-modules/pyxml { };
 

@@ -169,6 +169,16 @@ in modules // {
     qt5 = pkgs.qt5;
   };
 
+  pyside = callPackage ../development/python-modules/pyside { };
+
+  pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
+
+  pysideGeneratorrunner = callPackage ../development/python-modules/pyside/generatorrunner.nix { };
+
+  pysideShiboken = callPackage ../development/python-modules/pyside/shiboken.nix { };
+
+  pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
+
   sip = callPackage ../development/python-modules/sip { };
 
   sip_4_16 = callPackage ../development/python-modules/sip/4.16.nix { };

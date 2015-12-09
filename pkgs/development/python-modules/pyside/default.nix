@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pysideGeneratorrunner, pysideShiboken, qt4 }:
+{ stdenv, fetchurl, cmake, python, pysideGeneratorrunner, pysideShiboken, qt4 }:
 
 stdenv.mkDerivation rec {
   name = "${python.libPrefix}-pyside-${version}";
