@@ -23,6 +23,7 @@ kdeFramework {
     wrapQtProgram "$out/bin/ktelnetservice5"
     wrapQtProgram "$out/bin/ktrash5"
     wrapQtProgram "$out/bin/kmailservice5"
+    wrapQtProgram "$out/bin/protocoltojson"
   '';
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

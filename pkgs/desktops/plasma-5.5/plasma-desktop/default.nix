@@ -18,16 +18,46 @@ plasmaPackage rec {
     makeQtWrapper
   ];
   buildInputs = [
-    attica boost fontconfig kcmutils kdbusaddons kded kitemmodels
-    knewstuff knotifications knotifyconfig kwallet libcanberra_kde
-    libXcursor libpulseaudio libXft libxkbfile phonon
-    qtsvg xf86inputevdev xf86inputsynaptics
-    xkeyboard_config xinput
+    attica
+    boost
+    fontconfig
+    kcmutils
+    kdbusaddons
+    kded
+    kitemmodels
+    knewstuff
+    knotifications
+    knotifyconfig
+    kwallet
+    libcanberra_kde
+    libXcursor
+    libpulseaudio
+    libXft
+    libxkbfile
+    phonon
+    qtsvg
+    xf86inputevdev
+    xf86inputsynaptics
+    xkeyboard_config
+    xinput
   ];
   propagatedBuildInputs = [
-    baloo kactivities kauth kdeclarative kdelibs4support kemoticons
-    kglobalaccel ki18n kpeople krunner kwin plasma-framework
-    plasma-workspace qtdeclarative qtquick1 qtquickcontrols
+    baloo
+    kactivities
+    kauth
+    kdeclarative
+    kdelibs4support
+    kemoticons
+    kglobalaccel
+    ki18n
+    kpeople
+    krunner
+    kwin
+    plasma-framework
+    plasma-workspace
+    qtdeclarative
+    qtquick1
+    qtquickcontrols
     qtx11extras
   ];
   # All propagatedBuildInputs should be present in the profile because
