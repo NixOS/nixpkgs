@@ -49,6 +49,9 @@ stdenv.mkDerivation {
             ln -s ${gcc.cc}/bin/$executable $out/bin/$executable
           fi
         done
+        for file in $(ls ${gcc.cc} | grep -vw bin); do
+          ln -s ${gcc.cc}/$file $out/$file
+        done
       '');
   };
 
