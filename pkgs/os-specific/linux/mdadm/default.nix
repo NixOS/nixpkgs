@@ -19,22 +19,21 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-self-references.patch ];
 
+  makeFlags = [
+    "NIXOS=1" "INSTALL=install" "INSTALL_BINDIR=$(out)/sbin"
+    "MANDIR=$(out)/share/man" "RUN_DIR=/dev/.mdadm"
+  ] ++ stdenv.lib.optionals (stdenv ? cross) [
+    "CROSS_COMPILE=${stdenv.cross.config}-"
+  ];
+
   nativeBuildInputs = [ groff ];
 
   # Attempt removing if building with gcc5 when updating
   NIX_CFLAGS_COMPILE = "-std=gnu89";
 
-  preConfigure = "sed -e 's@/lib/udev@\${out}/lib/udev@' -e 's@ -Werror @ @' -i Makefile";
-
-  # Force mdadm to use /var/run/mdadm.map for its map file (or
-  # /dev/.mdadm/map as a fallback).
-  preBuild =
-    ''
-      makeFlagsArray=(NIXOS=1 INSTALL=install INSTALL_BINDIR=$out/sbin MANDIR=$out/share/man RUN_DIR=/dev/.mdadm)
-      if [[ -n "$crossConfig" ]]; then
-        makeFlagsArray+=(CROSS_COMPILE=$crossConfig-)
-      fi
-    '';
+  preConfigure = ''
+    sed -e 's@/lib/udev@''${out}/lib/udev@' -e 's@ -Werror @ @' -i Makefile
+  '';
 
   meta = {
     description = "Programs for managing RAID arrays under Linux";
