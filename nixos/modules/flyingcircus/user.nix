@@ -30,7 +30,7 @@ let
           group = get_primary_group user;
           hashedPassword = user.password;
           home = user.home_directory;
-          shell = user.login_shell;
+          shell = "/run/current-system/sw" + user.login_shell;
           uid = user.id;
           openssh.authorizedKeys.keys = user.ssh_pubkey;
         };
