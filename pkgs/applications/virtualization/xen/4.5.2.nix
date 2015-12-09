@@ -1,14 +1,14 @@
 { callPackage, fetchurl, fetchgit, ... } @ args:
 
 let
-  # Xen 4.5.1
-  xenConfig = {
-    name = "xen-4.5.1";
-    version = "4.5.1";
+  # Xen 4.5.2
+  xenConfig = rec {
+    version = "4.5.2";
+    name = "xen-${version}";
 
     src = fetchurl {
-      url = "http://bits.xensource.com/oss-xen/release/4.5.1/xen-4.5.1.tar.gz";
-      sha256 = "0w8kbqy7zixacrpbk3yj51xx7b3f6l8ghsg3551w8ym6zka13336";
+      url = "http://bits.xensource.com/oss-xen/release/${version}/${name}.tar.gz";
+      sha256 = "1s7702zrxpsmx4vqvll4x2s762cfdiss4vgpx5s4jj7a9sn5v7jc";
     };
 
     # Sources needed to build the xen tools and tools/firmware.
@@ -23,25 +23,25 @@ let
         }
         { git = { name = "ovmf";
                   url = git://xenbits.xen.org/ovmf.git;
-                  rev = "447d264115c476142f884af0be287622cd244423";
-                  sha256 = "7086f882495a8be1497d881074e8f1005dc283a5e1686aec06c1913c76a6319b";
+                  rev = "cb9a7ebabcd6b8a49dc0854b2f9592d732b5afbd";
+                  sha256 = "1ncb8dpqzaj3s8am44jvclhby40hwczljz0a1gd282h9yr4k4sk2";
                 };
         }
       ];
 
     toolsGits =
-      [ # tag qemu-xen-4.5.1
+      [ # tag qemu-xen-4.5.2
         { git = { name = "qemu-xen";
                   url = git://xenbits.xen.org/qemu-upstream-4.5-testing.git;
-                  rev = "d9552b0af21c27535cd3c8549bb31d26bbecd506";
-                  sha256 = "15dbz8j26wl4vs5jijhccwgd8c6wkmpj4mz899fa7i1bbh8yysfy";
+                  rev = "e5a1bb22cfb307db909dbd3404c48e5bbeb9e66d";
+                  sha256 = "1qflb3j8qcvipavybqhi0ql7m2bx51lhzgmf7pdbls8minpvdzg2";
                 };
         }
-        # tag xen-4.5.1
+        # tag xen-4.5.2
         { git = { name = "qemu-xen-traditional";
                   url = git://xenbits.xen.org/qemu-xen-4.5-testing.git;
-                  rev = "afaa35b4bc975b2b89ad44c481d0d7623e3d1c49";
-                  sha256 = "906b31cf32b52d29e521abaa76d641123bdf24f33fa53c6f109b6d7834e514be";
+                  rev = "dfe880e8d5fdc863ce6bbcdcaebaf918f8689cc0";
+                  sha256 = "14fxdsnkq729z5glkifdpz26idmn7fl38w1v97xj8cf6ifvk76cz";
                 };
         }
         { git = { name = "xen-libhvm";
@@ -64,4 +64,3 @@ let
   };
 
 in callPackage ./generic.nix (args // { xenConfig=xenConfig; })
-
