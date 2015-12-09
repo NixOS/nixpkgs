@@ -37,6 +37,26 @@ let
       })
       userdata);
 
+  # `list_permissions()`
+  permissions_path = /etc/nixos/permissions.json;
+  permissions =
+    if builtins.pathExists permissions_path
+    then builtins.fromJSON (builtins.readFile permissions_path)
+    else [];
+
+  get_permission_groups = permissions:
+    lib.listToAttrs
+      (builtins.filter
+        (group: group.name != "wheel")  # This group already exists
+        (map
+          (permission: {
+            name = permission.name;
+            value = {
+              gid = permission.id;
+            };
+          })
+          permissions));
+
 in
 {
   config = {
@@ -54,7 +74,7 @@ in
 
       groups = {
         service.gid = config.ids.gids.service;
-      };
+      } // get_permission_groups permissions;
     };
   };
 }
