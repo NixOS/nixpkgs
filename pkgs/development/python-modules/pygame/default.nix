@@ -1,5 +1,5 @@
 { stdenv, fetchurl, buildPythonPackage, pkgconfig, smpeg, libX11
-, SDL, SDL_image, SDL_mixer, SDL_ttf, libpng, libjpeg, portmidi
+, SDL, SDL_image, SDL_mixer, SDL_ttf, libpng, libjpeg, portmidi, isPy3k,
 }:
 
 buildPythonPackage {
@@ -14,6 +14,9 @@ buildPythonPackage {
     pkgconfig SDL SDL_image SDL_mixer SDL_ttf libpng libjpeg
     smpeg portmidi libX11
   ];
+
+  # /nix/store/94kswjlwqnc0k2bnwgx7ckx0w2kqzaxj-stdenv/setup: line 73: python: command not found
+  disabled = isPy3k;
 
   patches = [ ./pygame-v4l.patch ];
 

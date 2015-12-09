@@ -142,6 +142,8 @@ in modules // {
 
   pycrypto = callPackage ../development/python-modules/pycrypto { };
 
+  pygame = callPackage ../development/python-modules/pygame { };
+
   pygobject = callPackage ../development/python-modules/pygobject { };
 
   pygobject3 = callPackage ../development/python-modules/pygobject/3.nix { };
