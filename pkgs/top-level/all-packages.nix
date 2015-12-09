@@ -10751,6 +10751,8 @@ let
 
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
+  font-droid = callPackage ../data/fonts/droid { };
+
   freepats = callPackage ../data/misc/freepats { };
 
   gentium = callPackage ../data/fonts/gentium {};
