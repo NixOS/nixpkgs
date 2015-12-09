@@ -3,19 +3,14 @@
 stdenv.mkDerivation rec {
   name = "mdadm-3.3.4";
 
-  # WARNING -- WARNING -- WARNING -- WARNING -- WARNING -- WARNING -- WARNING
-  #  Do NOT update this if you're not ABSOLUTELY certain that it will work.
-  #  Please check the update using the NixOS VM test, BEFORE pushing:
-  #    nix-build nixos/release.nix -A tests.installer.swraid.x86_64-linux
-  # Discussion:
-  #   https://github.com/NixOS/nixpkgs/commit/7719f7f
-  #   https://github.com/NixOS/nixpkgs/commit/666cf99
-  #   https://github.com/NixOS/nixpkgs/pull/6006
-  # WARNING -- WARNING -- WARNING -- WARNING -- WARNING -- WARNING -- WARNING
   src = fetchurl {
     url = "mirror://kernel/linux/utils/raid/mdadm/${name}.tar.xz";
     sha256 = "0s6a4bq7v7zxiqzv6wn06fv9f6g502dp047lj471jwxq0r9z9rca";
   };
+
+  # This is to avoid self-references, which causes the initrd to explode
+  # in size and in turn prevents mdraid systems from booting.
+  allowedReferences = [ stdenv.glibc ];
 
   patches = [ ./no-self-references.patch ];
 
