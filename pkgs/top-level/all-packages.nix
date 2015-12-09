@@ -14524,7 +14524,9 @@ let
 
           kvirc = callPackage ../applications/networking/irc/kvirc { };
 
-          krename = callPackage ../applications/misc/krename { };
+          krename = callPackage ../applications/misc/krename {
+            taglib = taglib_1_9;
+          };
 
           krusader = callPackage ../applications/misc/krusader { };
 
