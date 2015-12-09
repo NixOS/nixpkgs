@@ -9045,7 +9045,7 @@ let
 
   rhpl = callPackage ../development/python-modules/rhpl { };
 
-  pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix { };
+  pyqt4 = pythonPackages.pyqt4;
 
   pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
 
