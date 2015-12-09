@@ -10749,6 +10749,8 @@ let
 
   font-awesome-ttf = callPackage ../data/fonts/font-awesome-ttf { };
 
+  font-roboto = callPackage ../data/fonts/roboto { };
+
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
   freepats = callPackage ../data/misc/freepats { };
