@@ -9059,7 +9059,7 @@ let
 
   pyxml = callPackage ../development/python-modules/pyxml { };
 
-  rbtools = callPackage ../development/python-modules/rbtools { };
+  rbtools = pythonPackages.rbtools;
 
   setuptools = pythonPackages.setuptools;
 

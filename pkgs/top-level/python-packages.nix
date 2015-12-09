@@ -15618,6 +15618,26 @@ in modules // {
     };
   };
 
+  rbtools = buildPythonPackage rec {
+    name = "rbtools-0.7.2";
+
+    src = pkgs.fetchurl {
+      url = "http://downloads.reviewboard.org/releases/RBTools/0.7/RBTools-0.7.2.tar.gz";
+      sha256 = "1ng8l8cx81cz23ls7fq9wz4ijs0zbbaqh4kj0mj6plzcqcf8na4i";
+    };
+
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ modules.sqlite3 six ];
+
+    checkPhase = "nosetests";
+
+    disabled = isPy3k;
+
+    meta = {
+      maintainers = with maintainers; [ iElectric ];
+    };
+  };
+
   rencode = buildPythonPackage rec {
     name = "rencode-${version}";
     version = "git20150810";
