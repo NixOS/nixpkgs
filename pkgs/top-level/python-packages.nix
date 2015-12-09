@@ -150,6 +150,8 @@ in modules // {
 
   pygtk = callPackage ../development/python-modules/pygtk { libglade = null; };
 
+  pygtksourceview = callPackage ../development/python-modules/pygtksourceview { };
+
   pyGtkGlade = self.pygtk.override {
     libglade = pkgs.gnome.libglade;
   };

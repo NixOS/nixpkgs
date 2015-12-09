@@ -9035,7 +9035,7 @@ let
 
   pygtk = pythonPackages.pygtk;
 
-  pygtksourceview = callPackage ../development/python-modules/pygtksourceview { };
+  pygtksourceview = pythonPackages.pygtksourceview;
 
   pyGtkGlade = pythonPackages.pyGtkGlade;
 
