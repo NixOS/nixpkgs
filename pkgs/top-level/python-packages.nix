@@ -12640,7 +12640,7 @@ let
     name = "shortuuid-${version}";
     version = "0.4.2";
 
-    disabled = isPy26 || isPy32;
+    disabled = isPy26;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/shortuuid/${name}.tar.gz";
