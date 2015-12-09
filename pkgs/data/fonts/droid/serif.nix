@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       http://www.fontsquirrel.com/fonts/list/foundry/google-android
       http://www.droidfonts.com/droidfonts
     ];
-    license = stdenv.lib.licenses.asf20;
+    license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.all;
     maintainers = [];
   };
