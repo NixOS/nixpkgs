@@ -14150,6 +14150,24 @@ in modules // {
     };
   });
 
+  pycups = buildPythonPackage rec {
+    name = "pycups-${version}";
+    version = "1.9.73";
+
+    src = pkgs.fetchurl {
+      url = "http://cyberelk.net/tim/data/pycups/pycups-${version}.tar.bz2";
+      sha256 = "c381be011889ca6f728598578c89c8ac9f7ab1e95b614474df9f2fa831ae5335";
+    };
+
+    buildInputs = [ pkgs.cups ];
+
+    meta = {
+      description = "Python bindings for libcups";
+      homepage = http://cyberelk.net/tim/software/pycups/;
+      license = with licenses; [ gpl2Plus ];
+    };
+
+  };
 
   pycurl = buildPythonPackage (rec {
     name = "pycurl-7.19.5";
