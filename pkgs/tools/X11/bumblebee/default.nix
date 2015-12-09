@@ -69,7 +69,7 @@ in stdenv.mkDerivation rec {
 
   # the have() function is deprecated and not available to bash completions the
   # way they are currently loaded in NixOS, so use _have. See #10936
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace scripts/bash_completion/bumblebee \
       --replace "have optirun" "_have optirun"
   '';
