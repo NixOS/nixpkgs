@@ -79,6 +79,7 @@ in
         pkgs.vim
         pkgs.zlib
         pkgs.fcagent
+        pkgs.zsh
     ];
 
     environment.pathsToLink = [ "/include" ];
