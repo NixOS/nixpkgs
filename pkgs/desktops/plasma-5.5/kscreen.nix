@@ -10,9 +10,21 @@ plasmaPackage {
     makeQtWrapper
   ];
   buildInputs = [
-    kconfig kconfigwidgets kdbusaddons kwidgetsaddons kxmlgui
+    kconfig
+    kconfigwidgets
+    kdbusaddons
+    kwidgetsaddons
+    kxmlgui
   ];
-  propagatedBuildInputs = [ kglobalaccel ki18n libkscreen qtdeclarative ];
+  propagatedBuildInputs = [
+    kglobalaccel
+    ki18n
+    libkscreen
+    qtdeclarative
+  ];
+  propagatedUserEnvPkgs = [
+    libkscreen  # D-Bus service
+  ];
   postInstall = ''
     wrapQtProgram "$out/bin/kscreen-console"
   '';
