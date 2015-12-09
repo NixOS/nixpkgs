@@ -24,7 +24,7 @@ containers.database =
 If you run <literal>nixos-rebuild switch</literal>, the container will
 be built. If the container was already running, it will be
 updated in place, without rebooting. Container can be configured to
-start automatically by setting <literal>autoStart = true</literal>
+start automatically by setting <literal>containers.database.autoStart = true</literal>
 in its configuration.</para>
 
 <para>By default, declarative containers share the network namespace
