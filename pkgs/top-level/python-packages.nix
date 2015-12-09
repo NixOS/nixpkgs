@@ -1673,6 +1673,32 @@ in modules // {
      };
    };
 
+  bsddb3 = buildPythonPackage rec {
+    name = "bsddb3-${version}";
+    version = "6.1.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/b/bsddb3/${name}.tar.gz";
+      sha256 = "05gx3rfgq1qrgdmpd6hri6y5l97bh1wczvb6x853jchwi7in6cdi";
+    };
+
+    buildInputs = [ pkgs.db ];
+
+    # Path to database need to be set.
+    # Somehow the setup.py flag is not propagated.
+    #setupPyBuildFlags = [ "--berkeley-db=${pkgs.db}" ];
+    # We can also use a variable
+    preConfigure = ''
+      export BERKELEYDB_DIR=${pkgs.db};
+    '';
+
+    meta = {
+      description = "Python bindings for Oracle Berkeley DB";
+      homepage = http://www.jcea.es/programacion/pybsddb.htm;
+      license = with licenses; [ agpl3 ]; # License changed from bsd3 to agpl3 since 6.x
+    };
+  };
+
   bokeh = buildPythonPackage rec {
     name = "bokeh-${version}";
     version = "0.10.0";
