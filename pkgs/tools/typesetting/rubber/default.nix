@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python, texinfo }:
+{ fetchurl, stdenv, python, pythonPackages, texinfo }:
 
 stdenv.mkDerivation rec {
   name = "rubber-1.3";
@@ -9,10 +9,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ python texinfo ];
+  nativeBuildInputs = [ pythonPackages.wrapPython ];
 
   patchPhase = ''
     substituteInPlace configure --replace which "type -P"
   '';
+
+  postInstall = "wrapPythonPrograms";
 
   meta = {
     description = "Wrapper for LaTeX and friends";
