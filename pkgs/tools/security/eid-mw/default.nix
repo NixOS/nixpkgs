@@ -19,6 +19,8 @@ stdenv.mkDerivation {
     sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
   '';
 
+  configureFlags = [ "--enable-dialogs=yes" ];
+
   enableParallelBuilding = true;
 
   doCheck = true;
