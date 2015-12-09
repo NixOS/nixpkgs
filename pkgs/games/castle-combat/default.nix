@@ -49,6 +49,8 @@ export LD_LIBRARY_PATH=\"$(cat ${stdenv.cc}/nix-support/orig-cc)/lib64\:"'${doll
   # No test suite.
   doCheck = false;
 
+  broken = true; # pygame.error: Unrecognized music format
+
   meta = {
     description = "Castle-Combat, a clone of the old arcade game Rampart";
 
