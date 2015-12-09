@@ -2810,7 +2810,7 @@ let
 
   pyatspi = callPackage ../development/python-modules/pyatspi { };
 
-  pycangjie = callPackage ../development/python-modules/pycangjie { };
+  pycangjie = pythonPackages.pycangjie;
 
   pydb = callPackage ../development/tools/pydb { };
 

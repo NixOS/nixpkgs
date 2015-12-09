@@ -140,6 +140,8 @@ in modules // {
   pycairo = callPackage ../development/python-modules/pycairo {
   };
 
+  pycangjie = if isPy3k then callPackage ../development/python-modules/pycangjie { } else throw "pycangjie not supported for interpreter ${python.executable}";
+
   pycrypto = callPackage ../development/python-modules/pycrypto { };
 
   pygame = callPackage ../development/python-modules/pygame { };
