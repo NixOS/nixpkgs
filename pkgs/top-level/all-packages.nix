@@ -9063,7 +9063,7 @@ let
 
   setuptools = pythonPackages.setuptools;
 
-  slowaes = callPackage ../development/python-modules/slowaes { };
+  slowaes = pythonPackages.slowaes;
 
   wxPython = pythonPackages.wxPython;
   wxPython28 = pythonPackages.wxPython28;
