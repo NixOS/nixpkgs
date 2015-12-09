@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Roboto is a neo-grotesque sans-serif typeface family developed 
     by Google as the system font for its mobile operating system Android.";
     homepage = https://www.google.com/design/spec/resources/roboto-noto-fonts.html;
-    license = stdenv.lib.licenses.asf20;
+    license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.all;
     maintainers = [];
   };
