@@ -9,6 +9,11 @@ let
   shortName = "bash43";
   baseConfigureFlags = if interactive then "--with-installed-readline" else "--disable-readline";
   sha256 = "1m14s1f61mf6bijfibcjm9y6pkyvz6gibyl8p4hxq90fisi8gimg";
+  patch42 = fetchurl {
+   url = "https://gist.githubusercontent.com/domenkozar/aa502519c9098080a4f8/raw/1ed579e06d21ca3a64fa75f9631261cd295b5f7c/gistfile1.txt";
+   name = "${shortName}-042";
+   sha256 = "1bwhssay66n75fy0pxcrwbm032s6fvfg7dblzbrzzn5k38a56nmp";
+  };
 in
 
 stdenv.mkDerivation rec {
@@ -40,7 +45,7 @@ stdenv.mkDerivation rec {
           inherit sha256;
         };
     in
-      import ./bash-4.3-patches.nix patch) 
+      import ./bash-4.3-patches.nix patch) ++ [patch42]
       ++ stdenv.lib.optional stdenv.isCygwin ./cygwin-bash-4.3.33-1.src.patch;
 
   crossAttrs = {
