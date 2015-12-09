@@ -1,22 +1,24 @@
-{ fetchurl, stdenv, python, texinfo }:
+{ fetchurl, stdenv, python, pythonPackages, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "rubber-1.1";
+  name = "rubber-1.3";
 
   src = fetchurl {
-    url = "http://ebeffara.free.fr/pub/${name}.tar.gz";
-    sha256 = "1xbkv8ll889933gyi2a5hj7hhh216k04gn8fwz5lfv5iz8s34gbq";
+    url = "https://launchpad.net/rubber/trunk/1.3/+download/rubber-1.3.tar.gz";
+    sha256 = "09715apfd6a0haz1mqsxgm8sj4rwzi38gcz2kz020zxk5rh0dksh";
   };
 
   buildInputs = [ python texinfo ];
+  nativeBuildInputs = [ pythonPackages.wrapPython ];
 
-  patchPhase = "substituteInPlace configure --replace which \"type -P\"";
+  patchPhase = ''
+    substituteInPlace configure --replace which "type -P"
+  '';
 
-  postInstall = "rm $out/share/rubber/modules/etex.rub";
+  postInstall = "wrapPythonPrograms";
 
   meta = {
     description = "Wrapper for LaTeX and friends";
-
     longDescription = ''
       Rubber is a program whose purpose is to handle all tasks related
       to the compilation of LaTeX documents.  This includes compiling
@@ -26,9 +28,8 @@ stdenv.mkDerivation rec {
       produce PostScript documents is also included, as well as usage
       of pdfLaTeX to produce PDF documents.
     '';
-
     license = stdenv.lib.licenses.gpl2Plus;
-
     homepage = http://www.pps.jussieu.fr/~beffara/soft/rubber/;
+    maintainers = [ stdenv.lib.maintainers.ttuegel ];
   };
 }
