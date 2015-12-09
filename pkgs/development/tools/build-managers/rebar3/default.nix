@@ -14,7 +14,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ erlang ];
 
-  buildPhase = "escript bootstrap";
+  buildPhase = ''
+    HOME=. escript bootstrap
+  '';
   installPhase = ''
     mkdir -p $out/bin
     cp rebar3 $out/bin/rebar3
