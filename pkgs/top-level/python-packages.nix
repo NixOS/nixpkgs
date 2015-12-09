@@ -9011,13 +9011,13 @@ in modules // {
 
   kombu = buildPythonPackage rec {
     name = "kombu-${version}";
-    version = "3.0.29";
+    version = "3.0.30";
 
     disabled = pythonOlder "2.6";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/k/kombu/${name}.tar.gz";
-      sha256 = "1a6wlr2bv6j2z07wrxc5g0w6h99n2ciamx3f7qy40s76cpn5a2lp";
+      sha256 = "0npq81ajiqmp8gjm7mq05n18y98xqpv7n4bbqb3p74d4irvgw0mr";
     };
 
     buildInputs = with self; optionals (!isPy3k) [ anyjson mock unittest2 nose ];
