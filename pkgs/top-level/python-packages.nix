@@ -3198,6 +3198,30 @@ in modules // {
      };
   };
 
+  pytest-raisesregexp = buildPythonPackage rec {
+    name = "pytest-raisesregexp-${version}";
+    version = "2.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pytest-raisesregexp/${name}.tar.gz";
+      sha256 = "0fde8aac1a54f9b56e5f9c61fda76727542ed24968c27c6e3688c6f1885f1e61";
+    };
+
+    buildInputs = with self; [ py pytest ];
+
+    # https://github.com/kissgyorgy/pytest-raisesregexp/pull/3
+    prePatch = ''
+      sed -i '3i\import io' setup.py
+      substituteInPlace setup.py --replace "long_description=open('README.rst').read()," "long_description=io.open('README.rst', encoding='utf-8').read(),"
+    '';
+
+    meta = {
+      description = "Simple pytest plugin to look for regex in Exceptions";
+      homepage = https://github.com/Walkman/pytest_raisesregexp;
+      license = with licenses; [ mit ];
+    };
+  };
+
   pytestrunner = buildPythonPackage rec {
     version = "2.6.2";
     name = "pytest-runner-${version}";
