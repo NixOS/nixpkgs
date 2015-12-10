@@ -1,10 +1,7 @@
-{ buildErlang, fetchgit }:
+{ buildHex }:
 
-buildErlang {
+buildHex {
   name = "meck";
-  version = "0.1";
-  src = fetchgit {
-    url = "git://github.com/eproxus/meck.git";
-    sha256 = "077p3v81mspy69247bz4apln3gp567m4xpmzxmdjd6pyh6m5ahpk";
-  };
+  version = "0.8.3";
+  sha256 = "1dh2rhks1xly4f49x89vbhsk8fgwkx5zqp0n98mnng8rs1rkigak";
 }
