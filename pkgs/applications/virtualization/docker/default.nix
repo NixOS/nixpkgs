@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     makeWrapper go sqlite iproute bridge-utils devicemapper btrfsProgs
-    iptables e2fsprogs
+    iptables e2fsprogs stdenv.glibc stdenv.glibc.static
   ];
 
   dontStrip = true;
