@@ -311,6 +311,29 @@ in modules // {
     };
   };
 
+  aiohttp = buildPythonPackage rec {
+    name = "aiohttp-${version}";
+    version = "0.19.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/aiohttp/${name}.tar.gz";
+      sha256 = "9bfb173baec179431a1c8f3566185e8ebbd1517cf4450217087d79e26e44c287";
+    };
+
+    disabled = pythonOlder "3.4";
+
+    doCheck = false; # Too many tests fail.
+
+    buildInputs = with self; [ pytest gunicorn pytest-raisesregexp ];
+    propagatedBuildInputs = with self; [ chardet ];
+
+    meta = {
+      description = "http client/server for asyncio";
+      license = with licenses; [ asl20 ];
+      homepage = https://github.com/KeepSafe/aiohttp/;
+    };
+  };
+
   alabaster = buildPythonPackage rec {
     name = "alabaster-0.7.3";
 
