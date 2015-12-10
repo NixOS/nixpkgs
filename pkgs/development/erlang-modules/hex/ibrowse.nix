@@ -1,10 +1,8 @@
-{ buildErlang, fetchgit }:
+{ buildHex }:
 
-buildErlang {
+buildHex {
   name = "ibrowse";
-  version = "0.1";
-  src = fetchgit {
-    url = "git://github.com/cmullaparthi/ibrowse.git";
-    sha256 = "1qvz4bmh307avjsxmhhdf35dd5wzmii0cbf6jyvvlhhkq4y0nmnj";
-  };
+  version = "4.2.2";
+  sha256 = "1bn0645n95j5zypdsns1w4kgd3q9lz8fj898hg355j5w89scn05q";
 }
+

@@ -1,6 +1,7 @@
 { stdenv, erlang, rebar3, openssl, libyaml, fetchurl }:
 
 { name, version, sha256
+, hexPkg ? name
 , buildInputs ? [], erlangDeps ? []
 , postPatch ? ""
 , ... }@attrs:
@@ -44,8 +45,8 @@ stdenv.mkDerivation (attrs // {
 
   buildPhase = ''
     runHook preBuild
-    DEBUG=1 HOME=. rebar3 update
-    DEBUG=1 HOME=. rebar3 compile
+    HOME=. rebar3 update
+    HOME=. rebar3 compile
     runHook postBuild
   '';
 
@@ -62,7 +63,7 @@ stdenv.mkDerivation (attrs // {
   '';
 
   src = fetchurl {
-    url = "https://s3.amazonaws.com/s3.hex.pm/tarballs/${name}-${version}.tar";
+    url = "https://s3.amazonaws.com/s3.hex.pm/tarballs/${hexPkg}-${version}.tar";
     sha256 = sha256;
   };
 
