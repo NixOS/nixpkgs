@@ -118,6 +118,9 @@ in
       # Plasma 5.5 and later has a Breeze GTK theme.
       # If it is not available, Orion is very similar to Breeze.
       ++ lib.optional (!(lib.hasAttr "breeze-gtk" plasma5)) pkgs.orion
+
+      # Install Breeze icons if available
+      ++ lib.optional (lib.hasAttr "breeze-icons" kf5) kf5.breeze-icons
       ++ lib.optional config.hardware.bluetooth.enable plasma5.bluedevil
       ++ lib.optional config.networking.networkmanager.enable plasma5.plasma-nm
       ++ lib.optional config.hardware.pulseaudio.enable plasma5.plasma-pa
