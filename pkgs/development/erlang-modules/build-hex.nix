@@ -22,11 +22,7 @@ stdenv.mkDerivation (attrs // {
 
     # TODO: figure out how to provide 'pc' plugin hermetically
     ${if compilePorts then ''
-    echo "{plugins, [pc]}.
-    {provider_hooks,
-    [{post,
-     [{compile, {pc, compile}},
-      {clean, {pc, clean}}]}]}." >> rebar.config
+    echo "{plugins, [pc]}." >> rebar.config
     '' else ''''}
 
     ${postPatch}
@@ -58,8 +54,8 @@ stdenv.mkDerivation (attrs // {
   # this hermetic
   buildPhase = ''
     runHook preBuild
-    HOME=. rebar3 update
-    HOME=. rebar3 compile
+    HOME=. rebar3 do update, compile
+    HOME=. rebar3 pc compile
     runHook postBuild
   '';
 
