@@ -1696,6 +1696,13 @@ let
     disabled = isGo14;
   };
 
+  json2csv = buildFromGitHub{
+    rev = "d82e60e6dc2a7d3bcf15314d1ecbebeffaacf0c6";
+    owner  = "jehiah";
+    repo   = "json2csv";
+    sha256 = "1fw0qqaz2wj9d4rj2jkfj7rb25ra106p4znfib69p4d3qibfjcsn";
+  };
+
   ldap = buildGoPackage rec {
     rev = "83e65426fd1c06626e88aa8a085e5bfed0208e29";
     name = "ldap-${stdenv.lib.strings.substring 0 7 rev}";
