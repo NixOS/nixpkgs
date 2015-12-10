@@ -108,6 +108,7 @@ in
         kdeApps.okular
         kdeApps.print-manager
 
+        # Oxygen icons moved to KDE Frameworks 5.16 and later.
         (kdeApps.oxygen-icons or kf5.oxygen-icons5)
         pkgs.hicolor_icon_theme
 
