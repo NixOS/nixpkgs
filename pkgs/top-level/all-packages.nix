@@ -9492,6 +9492,8 @@ let
 
   rspamd = callPackage ../servers/mail/rspamd { };
 
+  pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix { };
+
   pshs = callPackage ../servers/http/pshs { };
 
   libpulseaudio = callPackage ../servers/pulseaudio { libOnly = true; };
