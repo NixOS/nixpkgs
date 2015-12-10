@@ -2711,6 +2711,10 @@ let
     qt4 = null;
   };
 
+  pinentry_qt5 = qt55Libs.callPackage ../tools/security/pinentry/qt5.nix {
+    libcap = if stdenv.isDarwin then null else libcap;
+  };
+
   pius = callPackage ../tools/security/pius { };
 
   pk2cmd = callPackage ../tools/misc/pk2cmd { };
