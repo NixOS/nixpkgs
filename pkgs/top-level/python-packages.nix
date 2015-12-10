@@ -19151,7 +19151,25 @@ in modules // {
     };
   };
 
+  wheel = buildPythonPackage rec {
+    name = "wheel-${version}";
+    version = "0.26.0";
 
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/w/wheel/${name}.tar.gz";
+      sha256 = "eaad353805c180a47545a256e6508835b65a8e830ba1093ed8162f19a50a530c";
+    };
+
+    buildInputs = with self; [ pytest pytestcov coverage ];
+
+    propagatedBuildInputs = with self; [ jsonschema ];
+
+    meta = {
+      description = "A built-package format for Python";
+      license = with licenses; [ mit ];
+      homepage = https://bitbucket.org/pypa/wheel/;
+    };
+  };
 
   willie = buildPythonPackage rec {
     name = "willie-5.2.0";
