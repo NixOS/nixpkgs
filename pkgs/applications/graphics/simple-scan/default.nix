@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, cairo, colord, glib, gtk3, gusb, intltool, itstool, libusb
-, libxml2, pkgconfig, saneBackends, systemd, vala, wrapGAppsHook }:
+{ stdenv, fetchurl, cairo, colord, glib, gtk3, gusb, intltool, itstool
+, libusb, libxml2, pkgconfig, saneBackends, vala, wrapGAppsHook }:
 
 let version = "3.19.2"; in
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cairo colord glib gusb gtk3 libusb libxml2 saneBackends
-    systemd vala ];
+    vala ];
   nativeBuildInputs = [ intltool itstool pkgconfig wrapGAppsHook ];
 
   configureFlags = [ "--disable-packagekit" ];
