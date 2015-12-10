@@ -4,6 +4,7 @@
 , hexPkg ? name
 , buildInputs ? [], erlangDeps ? []
 , postPatch ? ""
+, compilePorts ? false
 , ... }@attrs:
 
 with stdenv.lib;
@@ -18,6 +19,16 @@ stdenv.mkDerivation (attrs // {
     if [ -e "src/${name}.app.src" ]; then
       sed -i -e 's/{ *vsn *,[^}]*}/{vsn, "${version}"}/' "src/${name}.app.src"
     fi
+
+    # TODO: figure out how to provide 'pc' plugin hermetically
+    ${if compilePorts then ''
+    echo "{plugins, [pc]}.
+    {provider_hooks,
+    [{post,
+     [{compile, {pc, compile}},
+      {clean, {pc, clean}}]}]}." >> rebar.config
+    '' else ''''}
+
     ${postPatch}
   '';
 
@@ -43,6 +54,8 @@ stdenv.mkDerivation (attrs // {
     runHook postConfigure
   '';
 
+  # TODO: figure out how to provide rebar3 a static registry snapshot to make
+  # this hermetic
   buildPhase = ''
     runHook preBuild
     HOME=. rebar3 update
