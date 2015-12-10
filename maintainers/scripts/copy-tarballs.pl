@@ -50,8 +50,6 @@ sub uploadFile {
 
     my $mainKey = "sha512/$sha512_16";
 
-    return if alreadyMirrored("sha512", $sha512_16);
-
     # Upload the file as sha512/<hash-in-base-16>.
     print STDERR "uploading $fn to $mainKey...\n";
     $bucket->add_key_filename($mainKey, $fn, { 'x-amz-meta-original-name' => $name })
