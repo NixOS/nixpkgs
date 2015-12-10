@@ -1,5 +1,5 @@
 { fetchurl, stdenv, gettext, intltool, makeWrapper, pkgconfig
-, geoclue
+, geoclue2
 , guiSupport ? true, hicolor_icon_theme, gtk3, python, pygobject3, pyxdg
 , drmSupport ? true, libdrm
 , randrSupport ? true, libxcb
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     url = "https://github.com/jonls/redshift/releases/download/v${version}/redshift-${version}.tar.xz";
   };
 
-  buildInputs = [ geoclue ]
+  buildInputs = [ geoclue2 ]
     ++ stdenv.lib.optionals guiSupport [ hicolor_icon_theme gtk3 python pygobject3 pyxdg ]
     ++ stdenv.lib.optionals drmSupport [ libdrm ]
     ++ stdenv.lib.optionals randrSupport [ libxcb ]

@@ -14655,7 +14655,6 @@ let
 
   redshift = callPackage ../applications/misc/redshift {
     inherit (python3Packages) python pygobject3 pyxdg;
-    geoclue = geoclue2;
   };
 
   orion = callPackage ../misc/themes/orion {};
