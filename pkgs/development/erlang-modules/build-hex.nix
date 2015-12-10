@@ -39,9 +39,6 @@ stdenv.mkDerivation (attrs // {
       ln -s "${dep}" "_build/default/lib/${dep.packageName}"
       stopNest
     '') recursiveDeps}
-    ls -laR
-    cat rebar.config || true
-    cat rebar.lock || true
     runHook postConfigure
   '';
 
@@ -53,7 +50,6 @@ stdenv.mkDerivation (attrs // {
   '';
 
   installPhase = ''
-    ls -laR
     runHook preInstall
     mkdir "$out"
     for reldir in src ebin priv include; do
