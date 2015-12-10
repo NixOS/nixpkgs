@@ -278,9 +278,9 @@ Additional information.
 </listitem>
 
 <listitem>
-<para>If you're cherry-picking and/or commit to a stable release branch, add a
-      clear description about the reason this needs to be included in the
-      release branch.
+<para>If you're cherry-picking and/or commit to a stable release branch always
+       use <command>git cherry-pick -x</command> add a clear description about
+       the reason why this needs to be included in the release branch.
 </para>
 <para>An example of a cherry-picked commit would look like this:</para>
 <screen>
