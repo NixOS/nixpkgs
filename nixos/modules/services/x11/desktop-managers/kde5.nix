@@ -121,10 +121,13 @@ in
 
       # Install Breeze icons if available
       ++ lib.optional (lib.hasAttr "breeze-icons" kf5) kf5.breeze-icons
+
+      # Optional hardware support features
       ++ lib.optional config.hardware.bluetooth.enable plasma5.bluedevil
       ++ lib.optional config.networking.networkmanager.enable plasma5.plasma-nm
       ++ lib.optional config.hardware.pulseaudio.enable plasma5.plasma-pa
       ++ lib.optional config.powerManagement.enable plasma5.powerdevil
+
       ++ lib.optionals cfg.phonon.gstreamer.enable
         [
           pkgs.phonon_backend_gstreamer
@@ -142,6 +145,7 @@ in
           pkgs.gst_all_1.gst-plugins-bad
           pkgs.gst_all_1.gst-libav # for mp3 playback
         ]
+
       ++ lib.optionals cfg.phonon.vlc.enable
         [
           pkgs.phonon_qt5_backend_vlc
