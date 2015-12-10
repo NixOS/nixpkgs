@@ -14,7 +14,7 @@ let
       else default;
 
     enc =
-      get_enc /etc/nixos/enc.json
+      get_enc config.fcio.enc_path
       (get_enc /tmp/fc-data/enc.json {});
 
 in
@@ -39,6 +39,12 @@ in
       default = true;
       type = types.bool;
       description = "Automatically load ENC data?";
+    };
+
+    fcio.enc_path = mkOption {
+      default = /etc/nixos/enc.json;
+      type = types.path;
+      description = "Where to find the ENC json file.";
     };
 
   };

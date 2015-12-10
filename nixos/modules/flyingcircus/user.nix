@@ -2,11 +2,9 @@
 
 let
 
-  # `list_users()`
-  userdata_path = /etc/nixos/users.json;
   userdata =
-    if builtins.pathExists userdata_path
-    then builtins.fromJSON (builtins.readFile userdata_path)
+    if builtins.pathExists config.fcio.userdata_path
+    then builtins.fromJSON (builtins.readFile config.fcio.userdata_path)
     else [];
 
   get_primary_group = user:
@@ -35,11 +33,10 @@ let
       })
       userdata);
 
-  # `lookup_resourcegroup('admins')
-  admins_group_path = /etc/nixos/admins.json;
+
   admins_group_data =
-    if builtins.pathExists admins_group_path
-    then builtins.fromJSON (builtins.readFile admins_group_path)
+    if builtins.pathExists config.fcio.admins_group_path
+    then builtins.fromJSON (builtins.readFile config.fcio.admins_group_path)
     else null;
   admins_group =
     if admins_group_data == null
@@ -70,11 +67,9 @@ let
       get_group_memberships_for_user (builtins.head users) //
       get_group_memberships (builtins.tail users);
 
-  # `list_permissions()`
-  permissions_path = /etc/nixos/permissions.json;
   permissions =
-    if builtins.pathExists permissions_path
-    then builtins.fromJSON (builtins.readFile permissions_path)
+    if builtins.pathExists config.fcio.permissions_path
+    then builtins.fromJSON (builtins.readFile config.fcio.permissions_path)
     else [];
 
   get_permission_groups = permissions:
@@ -93,7 +88,39 @@ let
 in
 {
 
+  options = {
 
+    fcio.userdata_path = lib.mkOption {
+      default = /etc/nixos/users.json;
+      type = lib.types.path;
+      description = ''
+        Where to find the user json file.
+
+        directory.list_users();
+      '';
+    };
+
+    fcio.admins_group_path = lib.mkOption {
+      default = /etc/nixos/admins.json;
+      type = lib.types.path;
+      description = ''
+        Where to find the admins group json file.
+
+        directory.lookup_resourcegroup('admins')
+      '';
+    };
+
+    fcio.permissions_path = lib.mkOption {
+      default = /etc/nixos/permissions.json;
+      type = lib.types.path;
+      description = ''
+        Where to find the permissions json file.
+
+        directory.list_permissions()
+      '';
+    };
+
+  };
 
 
   config = {
