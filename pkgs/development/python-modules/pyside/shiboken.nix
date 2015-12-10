@@ -1,11 +1,12 @@
 { stdenv, fetchurl, cmake, pysideApiextractor, pysideGeneratorrunner, python27, python27Packages, qt4 }:
 
-stdenv.mkDerivation {
-  name = "pyside-shiboken-1.2.2";
+stdenv.mkDerivation rec {
+  name = "${python.libPrefix}-pyside-shiboken-${version}";
+  version = "1.2.4";
 
   src = fetchurl {
-    url = "http://download.qt-project.org/official_releases/pyside/shiboken-1.2.2.tar.bz2";
-    sha256 = "1i75ziljl7rgb88nf26hz6cm8jf5kbs9r33b1j8zs4z33z7vn9bn";
+    url = "https://github.com/PySide/Shiboken/archive/${version}.tar.gz";
+    sha256 = "1536f73a3353296d97a25e24f9554edf3e6a48126886f8d21282c3645ecb96a4";
   };
 
   enableParallelBuilding = true;
