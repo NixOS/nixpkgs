@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, bash, makeWrapper, git, mariadb }:
+{ stdenv, lib, fetchurl, bash, makeWrapper, git, mariadb, diffutils }:
 
 stdenv.mkDerivation rec {
   name = "snabb-${version}";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp src/snabb $out/bin
 
-    wrapProgram $out/bin/snabb --prefix PATH : "${ lib.makeBinPath [ git mariadb ]}"
+    wrapProgram $out/bin/snabb --prefix PATH : "${ lib.makeBinPath [ git mariadb diffutils ]}"
   '';
 
   meta = with stdenv.lib; {
