@@ -1,12 +1,13 @@
 { fetchurl, stdenv, pkgconfig
-, libgpgerror, libassuan, libcap ? null, ncurses ? null, gtk2 ? null, qt4 ? null
+, libgpgerror, libassuan
+, qtbase
+, libcap ? null
 }:
 
 let
   mkFlag = pfxTrue: pfxFalse: cond: name: "--${if cond then pfxTrue else pfxFalse}-${name}";
   mkEnable = mkFlag "enable" "disable";
   mkWith = mkFlag "with" "without";
-  hasX = gtk2 != null || qt4 != null;
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -17,25 +18,17 @@ stdenv.mkDerivation rec {
     sha256 = "0rhyw1vk28kgasjp22myf7m2q8kycw82d65pr9kgh93z17lj849a";
   };
 
-  buildInputs = [ libgpgerror libassuan libcap gtk2 ncurses qt4 ];
-
-  prePatch = ''
-    substituteInPlace pinentry/pinentry-curses.c --replace ncursesw ncurses
-  '';
+  buildInputs = [ libgpgerror libassuan libcap qtbase ];
 
   # configure cannot find moc on its own
-  preConfigure = stdenv.lib.optionalString (qt4 != null) ''
-    export QTDIR="${qt4}"
-    export MOC="${qt4}/bin/moc"
+  preConfigure = ''
+    export QTDIR="${qtbase}"
+    export MOC="${qtbase}/bin/moc"
   '';
 
   configureFlags = [
     (mkWith   (libcap != null)  "libcap")
-    (mkWith   (hasX)            "x")
-    (mkEnable (ncurses != null) "pinentry-curses")
-    (mkEnable true              "pinentry-tty")
-    (mkEnable (gtk2 != null)    "pinentry-gtk2")
-    (mkEnable (qt4 != null)     "pinentry-qt4")
+    (mkEnable true "pinentry-qt")
   ];
 
   nativeBuildInputs = [ pkgconfig ];
