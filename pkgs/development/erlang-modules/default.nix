@@ -7,6 +7,7 @@ let
     buildErlang = callPackage ./build-erlang.nix {};
     buildHex = callPackage ./build-hex.nix {};
 
+    rebar3-pc = callPackage ./hex/rebar3-pc.nix {};
     esqlite = callPackage ./hex/esqlite.nix {};
     goldrush = callPackage ./hex/goldrush.nix {};
     ibrowse = callPackage ./hex/ibrowse.nix {};
