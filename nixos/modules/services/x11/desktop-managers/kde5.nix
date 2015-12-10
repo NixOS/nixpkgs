@@ -113,8 +113,11 @@ in
         pkgs.hicolor_icon_theme
 
         plasma5.kde-gtk-config
-        pkgs.orion # GTK theme, nearly identical to Breeze
       ]
+
+      # Plasma 5.5 and later has a Breeze GTK theme.
+      # If it is not available, Orion is very similar to Breeze.
+      ++ lib.optional (!(lib.hasAttr "breeze-gtk" plasma5)) pkgs.orion
       ++ lib.optional config.hardware.bluetooth.enable plasma5.bluedevil
       ++ lib.optional config.networking.networkmanager.enable plasma5.plasma-nm
       ++ lib.optional config.hardware.pulseaudio.enable plasma5.plasma-pa
