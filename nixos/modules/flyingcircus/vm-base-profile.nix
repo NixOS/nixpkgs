@@ -28,22 +28,24 @@ in
      ./roles/default.nix];
 
   options = {
-    enc = mkOption {
+
+    fcio.enc = mkOption {
       default = null;
       type = types.nullOr types.attrs;
       description = "Essential node configuration";
     };
 
-    load_enc = mkOption {
+    fcio.load_enc = mkOption {
       default = true;
       type = types.bool;
       description = "Automatically load ENC data?";
     };
+
   };
 
   config = {
 
-    enc = lib.optionalAttrs config.load_enc enc;
+    fcio.enc = lib.optionalAttrs config.fcio.load_enc enc;
 
     users.motd = ''
         Welcome to the Flying Circus
@@ -100,7 +102,9 @@ in
         '';
 
     environment.etc =
-      lib.optionalAttrs (lib.hasAttrByPath ["parameters" "directory_secret"] config.enc)
-      {"directory.secret".text = config.enc.parameters.directory_secret; };
+      lib.optionalAttrs (lib.hasAttrByPath ["parameters" "directory_secret"] config.fcio.enc)
+      { "directory.secret".text = config.fcio.enc.parameters.directory_secret;
+        "directory.secret".mode = "0600";
+      };
   };
 }

@@ -49,8 +49,8 @@ let
     };
 
   current_rg =
-    if lib.hasAttrByPath ["parameters" "resource_group"] config.enc
-    then config.enc.parameters.resource_group
+    if lib.hasAttrByPath ["parameters" "resource_group"] config.fcio.enc
+    then config.fcio.enc.parameters.resource_group
     else null;
 
   get_group_memberships_for_user = user:
@@ -92,6 +92,10 @@ let
 
 in
 {
+
+
+
+
   config = {
 
     ids.gids = {
