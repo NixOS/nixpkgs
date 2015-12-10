@@ -1,4 +1,4 @@
-{ stdenv, erlang, rebar3, openssl, libyaml, fetchurl }:
+{ stdenv, erlang, rebar3, openssl, libyaml, fetchurl, fetchFromGitHub }:
 
 { name, version, sha256
 , hexPkg ? name
@@ -14,7 +14,14 @@ stdenv.mkDerivation (attrs // {
 
   buildInputs = buildInputs ++ [ erlang rebar3 openssl libyaml ];
 
-  postPatch = ''
+  postPatch = let
+    registrySnapshot = fetchFromGitHub {
+      owner = "gleber";
+      repo = "hex-pm-registry-snapshots";
+      rev = "48147b0";
+      sha256 = "0ibfnhrhbka4n6wkhs99fpy3sjab54ip37jgvx2hcfhfr4pxhbxw";
+    };
+  in ''
     rm -f rebar rebar3
     if [ -e "src/${name}.app.src" ]; then
       sed -i -e 's/{ *vsn *,[^}]*}/{vsn, "${version}"}/' "src/${name}.app.src"
@@ -24,6 +31,9 @@ stdenv.mkDerivation (attrs // {
     ${if compilePorts then ''
     echo "{plugins, [pc]}." >> rebar.config
     '' else ''''}
+
+    mkdir -p _build/default/{lib,plugins}/ ./.cache/rebar3/hex/default/
+    zcat ${registrySnapshot}/registry.ets.gz > .cache/rebar3/hex/default/registry
 
     ${postPatch}
   '';
@@ -44,7 +54,6 @@ stdenv.mkDerivation (attrs // {
     };
   in ''
     runHook preConfigure
-    mkdir -p _build/default/{lib,plugins}/
     ${concatMapStrings (dep: ''
       header "linking erlang dependency ${dep}"
       ln -s "${dep}" "_build/default/lib/${dep.packageName}"
@@ -62,7 +71,7 @@ stdenv.mkDerivation (attrs // {
   # this hermetic
   buildPhase = ''
     runHook preBuild
-    HOME=. rebar3 do update, compile
+    HOME=. rebar3 compile
     ${if compilePorts then ''
     HOME=. rebar3 pc compile
     '' else ''''}
