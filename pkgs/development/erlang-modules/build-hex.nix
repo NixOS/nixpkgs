@@ -1,6 +1,6 @@
-{ stdenv, erlang, rebar3, openssl, libyaml }:
+{ stdenv, erlang, rebar3, openssl, libyaml, fetchurl }:
 
-{ name, version
+{ name, version, sha256
 , buildInputs ? [], erlangDeps ? []
 , postPatch ? ""
 , ... }@attrs:
@@ -20,12 +20,10 @@ stdenv.mkDerivation (attrs // {
     ${postPatch}
   '';
 
-  # unpackCmd = "(mkdir cron && cd cron && sh $curSrc)";
   unpackCmd = ''
     tar -xf $curSrc contents.tar.gz
     mkdir contents
     tar -C contents -xzf contents.tar.gz
-    # rm -rf CHECKSUM contents.tar.gz metadata.config VERSION
   '';
 
   configurePhase = let
@@ -41,9 +39,6 @@ stdenv.mkDerivation (attrs // {
       ln -s "${dep}" "_build/default/lib/${dep.packageName}"
       stopNest
     '') recursiveDeps}
-    ls -laR
-    cat rebar.config || true
-    cat rebar.lock || true
     runHook postConfigure
   '';
 
@@ -55,7 +50,6 @@ stdenv.mkDerivation (attrs // {
   '';
 
   installPhase = ''
-    ls -laR
     runHook preInstall
     mkdir "$out"
     for reldir in src ebin priv include; do
@@ -67,10 +61,10 @@ stdenv.mkDerivation (attrs // {
     runHook postInstall
   '';
 
-  # src = fetchurl {
-  #   url = "https://s3.amazonaws.com/s3.hex.pm/tarballs/${name}-${version}.tar";
-  #   sha256 = "1zjgbarclhh10cpgvfxikn9p2ay63rajq96q1sbz9r9w6v6p8jm9";
-  # };
+  src = fetchurl {
+    url = "https://s3.amazonaws.com/s3.hex.pm/tarballs/${name}-${version}.tar";
+    sha256 = sha256;
+  };
 
   passthru = {
     packageName = name;
