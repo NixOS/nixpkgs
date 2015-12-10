@@ -25,6 +25,10 @@ stdenv.mkDerivation (attrs // {
     echo "{plugins, [pc]}." >> rebar.config
     '' else ''''}
 
+    mkdir -p _build/default/{lib,plugins}/ ./.cache/rebar3/hex/default/
+    # TODO: replace with fetchFromGitHub
+    cp ${./registry.ets} .cache/rebar3/hex/default/registry
+
     ${postPatch}
   '';
 
@@ -44,7 +48,6 @@ stdenv.mkDerivation (attrs // {
     };
   in ''
     runHook preConfigure
-    mkdir -p _build/default/{lib,plugins}/
     ${concatMapStrings (dep: ''
       header "linking erlang dependency ${dep}"
       ln -s "${dep}" "_build/default/lib/${dep.packageName}"
@@ -62,7 +65,7 @@ stdenv.mkDerivation (attrs // {
   # this hermetic
   buildPhase = ''
     runHook preBuild
-    HOME=. rebar3 do update, compile
+    HOME=. rebar3 compile
     ${if compilePorts then ''
     HOME=. rebar3 pc compile
     '' else ''''}
