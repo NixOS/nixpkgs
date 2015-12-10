@@ -2,7 +2,7 @@
 
 { name, version, sha256
 , hexPkg ? name
-, buildInputs ? [], erlangDeps ? []
+, buildInputs ? [], erlangDeps ? [], pluginDeps ? []
 , postPatch ? ""
 , compilePorts ? false
 , ... }@attrs:
@@ -39,14 +39,22 @@ stdenv.mkDerivation (attrs // {
     recursiveDeps = uniqList {
        inputList = flatten (map getDeps erlangDeps);
     };
+    recursivePluginsDeps = uniqList {
+       inputList = flatten (map getDeps pluginDeps);
+    };
   in ''
     runHook preConfigure
-    mkdir -p _build/default/lib/
+    mkdir -p _build/default/{lib,plugins}/
     ${concatMapStrings (dep: ''
       header "linking erlang dependency ${dep}"
       ln -s "${dep}" "_build/default/lib/${dep.packageName}"
       stopNest
     '') recursiveDeps}
+    ${concatMapStrings (dep: ''
+      header "linking rebar3 plugins ${dep}"
+      ln -s "${dep}" "_build/default/plugins/${dep.packageName}"
+      stopNest
+    '') recursivePluginsDeps}
     runHook postConfigure
   '';
 
@@ -55,7 +63,9 @@ stdenv.mkDerivation (attrs // {
   buildPhase = ''
     runHook preBuild
     HOME=. rebar3 do update, compile
+    ${if compilePorts then ''
     HOME=. rebar3 pc compile
+    '' else ''''}
     runHook postBuild
   '';
 
