@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, lib, fetchurl, bash, makeWrapper, git, mariadb }:
 
 stdenv.mkDerivation rec {
   name = "snabb-${version}";
@@ -9,9 +9,22 @@ stdenv.mkDerivation rec {
     sha256 = "1949a6d3hqdr2hdfmrr1na9gvjdwdahadbhmvz2pg7azmpq6ssmr";
   };
 
+  buildInputs = [ makeWrapper ];
+
+  patchPhase = ''
+    patchShebangs .
+
+    # some hardcodeism
+    for f in $(find src/program/snabbnfv/ -type f); do
+      substituteInPlace $f --replace "/bin/bash" "${bash}/bin/bash"
+    done
+  '';
+
   installPhase = ''
     mkdir -p $out/bin
     cp src/snabb $out/bin
+
+    wrapProgram $out/bin/snabb --prefix PATH : "${ lib.makeBinPath [ git mariadb ]}"
   '';
 
   meta = with stdenv.lib; {
@@ -27,7 +40,7 @@ stdenv.mkDerivation rec {
     '';
     platforms = [ "x86_64-linux" ];
     license = licenses.asl20;
-    maintainers = [ maintainers.lukego ];
+    maintainers = [ maintainers.lukego maintainers.iElectric ];
   };
 }
 
