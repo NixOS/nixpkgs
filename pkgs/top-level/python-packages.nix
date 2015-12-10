@@ -21611,7 +21611,6 @@ in modules // {
 
   basemap = buildPythonPackage rec {
     name = "basemap-1.0.7";
-    disabled = ! isPy27;
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/project/matplotlib/matplotlib-toolkits/basemap-1.0.7/basemap-1.0.7.tar.gz";
