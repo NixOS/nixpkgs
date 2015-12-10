@@ -35,6 +35,19 @@ let
       })
       userdata);
 
+  # `lookup_resourcegroup('admins')
+  admins_group_path = /etc/nixos/admins.json;
+  admins_group_data =
+    if builtins.pathExists admins_group_path
+    then builtins.fromJSON (builtins.readFile admins_group_path)
+    else null;
+  admins_group =
+    if admins_group_data == null
+    then {}
+    else {
+      ${admins_group_data.name}.gid = admins_group_data.gid;
+    };
+
   current_rg =
     if lib.hasAttrByPath ["parameters" "resource_group"] config.enc
     then config.enc.parameters.resource_group
@@ -94,6 +107,7 @@ in
       groups =
         get_permission_groups permissions
         // { service.gid = config.ids.gids.service; }
+        // admins_group
         // get_group_memberships userdata;
     };
   };
