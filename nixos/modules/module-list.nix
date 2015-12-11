@@ -508,6 +508,7 @@
   ./virtualisation/amazon-options.nix
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
+  ./virtualisation/rkt.nix
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/virtualbox-host.nix
   ./virtualisation/vmware-guest.nix
