@@ -1511,6 +1511,8 @@ let
     withGTK = true;
   };
 
+  fontmatrix = callPackage ../applications/graphics/fontmatrix {};
+
   foremost = callPackage ../tools/system/foremost { };
 
   forktty = callPackage ../os-specific/linux/forktty {};
