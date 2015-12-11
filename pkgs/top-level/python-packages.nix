@@ -952,6 +952,44 @@ in modules // {
     };
   }));
 
+  awscli = buildPythonPackage rec {
+    name = "awscli-${version}";
+    version = "1.9.6";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "aws";
+      repo = "aws-cli";
+      rev = version;
+      sha256 = "08qclasxf8zdxwmngvynq9n5vv4nwdy68ma7wn7ji40bxmls37g2";
+    };
+
+    propagatedBuildInputs = with self; [
+      botocore
+      bcdoc
+      six
+      colorama
+      docutils
+      rsa
+      pyasn1
+      pkgs.groff
+    ];
+
+    postInstall = ''
+      mkdir -p $out/etc/bash_completion.d
+      echo "complete -C $out/bin/aws_completer aws" > $out/etc/bash_completion.d/awscli
+      mkdir -p $out/share/zsh/site-functions
+      mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
+      rm $out/bin/aws.cmd
+    '';
+
+    meta = {
+      homepage = https://aws.amazon.com/cli/;
+      description = "Unified tool to manage your AWS services";
+      license = stdenv.lib.licenses.asl20;
+      maintainers = with maintainers; [ muflax ];
+    };
+  };
+
   azure = buildPythonPackage rec {
     version = "0.11.0";
     name = "azure-${version}";

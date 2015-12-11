@@ -577,7 +577,7 @@ let
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
-  awscli = callPackage ../tools/admin/awscli { };
+  awscli = pythonPackages.aswcli;
 
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
