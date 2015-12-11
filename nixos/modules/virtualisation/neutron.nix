@@ -8,7 +8,7 @@ let
     [DEFAULT]
     # List of directories to load filter definitions from (separated by ',').
     # These directories MUST all be only writeable by root !
-    filters_path=${cfg.package}/etc/neutron/rootwrap.d
+    filters_path=${package_set}/etc/neutron/rootwrap.d
 
     # List of directories to search executables in, in case filters do not
     # explicitely specify a full path (separated by ',')
@@ -60,7 +60,7 @@ let
   '';
   neutronConf = pkgs.writeText "neutron.conf" ''
     [DEFAULT]
-    policy_file=${cfg.package}/etc/neutron/policy.json
+    policy_file=${package_set}/etc/neutron/policy.json
     core_plugin = ml2
     service_plugins =
     auth_strategy = keystone
@@ -81,7 +81,7 @@ let
     nova_admin_password = asdasd
     nova_admin_auth_url = http://localhost:35357/v2.0
 
-    api_paste_config = ${cfg.package}/etc/neutron/api-paste.ini
+    api_paste_config = ${package_set}/etc/neutron/api-paste.ini
 
     [nova]
     region_name = RegionOne
@@ -94,7 +94,7 @@ let
     auth_plugin = password
 
     [agent]
-    root_helper=/var/setuid-wrappers/sudo ${cfg.package}/bin/neutron-rootwrap ${rootwrapConf}
+    root_helper=/var/setuid-wrappers/sudo ${package_set}/bin/neutron-rootwrap ${rootwrapConf}
 
     [keystone_authtoken]
     auth_uri = http://localhost:5000
@@ -117,7 +117,11 @@ let
   '';
   utils_env = pkgs.buildEnv {
     name = "utils";
-    paths = with pkgs; [cfg.package ebtables bridge-utils iproute procps conntrack_tools iputils dnsmasq coreutils iptables ipset ];
+    paths = with pkgs; [package_set ebtables bridge-utils iproute procps conntrack_tools iputils dnsmasq coreutils iptables ipset ];
+  };
+  package_set = pkgs.python.buildEnv.override {
+    extraLibs = [ cfg.package ] ++ cfg.extraPackages;
+    ignoreCollisions = true;
   };
 in {
   options.virtualisation.neutron = {
@@ -126,6 +130,15 @@ in {
       example = literalExample "pkgs.neutron";
       description = ''
         Neutron package to use.
+      '';
+    };
+
+    extraPackages = mkOption {
+      type = types.listOf types.package;
+      example = literalExample "pkgs.snabb-neutron";
+      description = ''
+        List of extra Python packages to be installed in all
+        Neutron services. Useful for adding additional Neutron drivers.
       '';
     };
 
@@ -156,7 +169,7 @@ in {
     # See https://wiki.openstack.org/wiki/Rootwrap
     security.sudo.enable = true;
     security.sudo.extraConfig = ''
-      neutron ALL = (root) NOPASSWD: ${cfg.package}/bin/neutron-rootwrap ${rootwrapConf} *
+      neutron ALL = (root) NOPASSWD: ${package_set}/bin/neutron-rootwrap ${rootwrapConf} *
     '';
 
     users.extraUsers = [{
@@ -170,7 +183,7 @@ in {
     systemd.services.neutron-server = {
       description = "OpenStack Neutron Daemon";
       after = [ "rabbitmq.service" "mysql.service" "network.target"];
-      path = [ cfg.package pkgs.mysql ];
+      path = [ package_set pkgs.mysql ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         mkdir -p /var/lock/neutron /var/lib/neutron
@@ -182,11 +195,11 @@ in {
         mysql -u root -N -e "GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY 'neutron';"
 
         # Initialise the database
-        ${cfg.package}/bin/neutron-db-manage --config-file ${neutronConf} --config-file ${ml2PluginConf} upgrade head
+        ${package_set}/bin/neutron-db-manage --config-file ${neutronConf} --config-file ${ml2PluginConf} upgrade head
       '';
       serviceConfig = {
         TimeoutStartSec = "600"; # 10min for initial db migrations
-        ExecStart = "${cfg.package}/bin/neutron-server --config-file=${neutronConf} --config-file=${ml2PluginConf}";
+        ExecStart = "${package_set}/bin/neutron-server --config-file=${neutronConf} --config-file=${ml2PluginConf}";
       };
     };
 
@@ -198,19 +211,19 @@ in {
       serviceConfig = {
         User = "neutron";
         Group = "neutron";
-        ExecStart = "${cfg.package}/bin/neutron-dhcp-agent --config-file=${neutronConf} --config-file=${ml2PluginConf}";
+        ExecStart = "${package_set}/bin/neutron-dhcp-agent --config-file=${neutronConf} --config-file=${ml2PluginConf}";
       };
     };
 
     systemd.services.neutron-metadata-agent = {
       description = "OpenStack Neutron Metadata Agent";
       after = [ "rabbitmq.service" "neutron-server.service" "mysql.service" "network.target"];
-      path = [ cfg.package pkgs.mysql ];
+      path = [ package_set pkgs.mysql ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         User = "neutron";
         Group = "neutron";
-        ExecStart = "${cfg.package}/bin/neutron-metadata-agent --config-file=${neutronConf} --config-file=${ml2PluginConf}";
+        ExecStart = "${package_set}/bin/neutron-metadata-agent --config-file=${neutronConf} --config-file=${ml2PluginConf}";
       };
     };
 
@@ -222,7 +235,7 @@ in {
       serviceConfig = {
         User = "neutron";
         Group = "neutron";
-        ExecStart = "${cfg.package}/bin/neutron-linuxbridge-agent --config-file=${neutronConf} --config-file=${ml2PluginConf}";
+        ExecStart = "${package_set}/bin/neutron-linuxbridge-agent --config-file=${neutronConf} --config-file=${ml2PluginConf}";
       };
     };
 
