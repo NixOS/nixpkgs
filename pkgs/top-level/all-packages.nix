@@ -9017,8 +9017,6 @@ let
 
   ecdsa = pythonPackages.ecdsa;
 
-  psyco = callPackage ../development/python-modules/psyco { };
-
   pycairo = pythonPackages.pycairo;
 
   pycapnp = pythonPackages.pycapnp;
