@@ -177,6 +177,14 @@ in
     # Extra UDEV rules used by Solid
     services.udev.packages = [ pkgs.media-player-info ];
 
+    services.xserver.displayManager.sddm = {
+      theme = "breeze";
+      themes = [
+        plasma5.plasma-workspace
+        (kdeApps.oxygen-icons or kf5.oxygen-icons5)
+      ];
+    };
+
     security.pam.services.kde = { allowNullPassword = true; };
 
   };
