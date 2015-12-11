@@ -308,9 +308,10 @@ Additional information.
   <itemizedlist>
     <listitem>
       <para>
-        If you're cherry-picking and/or commit to a stable release branch always
-        use <command>git cherry-pick -x</command> add a clear description about
-        the reason why this needs to be included in the release branch.
+        If you're cherry-picking a commit to a stable release branch, always use
+        <command>git cherry-pick -xe</command> and ensure the message contains a
+        clear description about why this needs to be included in the stable
+        branch.
       </para>
       <para>An example of a cherry-picked commit would look like this:</para>
       <screen>
