@@ -49,7 +49,7 @@ let
       description = "QML based X11 display manager";
       homepage = https://github.com/sddm/sddm;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ abbradar ];
+      maintainers = with maintainers; [ abbradar ttuegel ];
     };
   };
 
