@@ -940,4 +940,8 @@ self: super: {
 
   # https://github.com/mainland/language-c-quote/issues/57
   language-c-quote = super.language-c-quote.override { alex = self.alex_3_1_4; };
+
+  # The package doesn't yet compile with new HSE: https://github.com/bmillwood/pointfree/pull/13
+  pointfree = super.pointfree.override { haskell-src-exts = self.haskell-src-exts_1_16_0_1; };
+
 }
