@@ -145,8 +145,12 @@ in
         serviceConfig = {
           Type = "oneshot";
           SuccessExitStatus = [ "0" "1" ];
+          PermissionsStartOnly = true;
+          User = data.user;
+          Group = data.group;
+          PrivateTmp = true;
         };
-        path = [ pkgs.simp_le pkgs.sudo ];
+        path = [ pkgs.simp_le ];
         preStart = ''
           mkdir -p '${cfg.directory}'
           if [ ! -d '${cpath}' ]; then
@@ -157,13 +161,16 @@ in
         script = ''
           cd '${cpath}'
           set +e
-          sudo -u '${data.user}' -- simp_le ${concatMapStringsSep " " (arg: escapeShellArg (toString arg)) cmdline}
+          simp_le ${concatMapStringsSep " " (arg: escapeShellArg (toString arg)) cmdline}
           EXITCODE=$?
           set -e
-          if [ "$EXITCODE" = "0" ]; then
+          echo "$EXITCODE" > /tmp/lastExitCode
+          exit "$EXITCODE"
+        '';
+        postStop = ''
+          if [ -e /tmp/lastExitCode ] && [ "$(cat /tmp/lastExitCode)" = "0" ]; then
+            echo "Executing postRun hook..."
             ${data.postRun}
-          else
-            exit "$EXITCODE"
           fi
         '';
       })
