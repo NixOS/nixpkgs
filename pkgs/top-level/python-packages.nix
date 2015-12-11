@@ -1856,12 +1856,12 @@ in modules // {
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.3.6";
+    version = "1.3.12";
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      sha256 = "05a0ihv66fx77j16mjlm76d8zm7sd5wfzh1hx4nm3ilb9gz5h016";
+      sha256 = "6f4f09234aca23db2e66c548b98a4fb14516241b31fb473c9c6f5b21270900c6";
     };
 
     propagatedBuildInputs =
