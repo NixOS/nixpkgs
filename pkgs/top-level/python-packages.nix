@@ -1675,11 +1675,11 @@ in modules // {
 
   bsddb3 = buildPythonPackage rec {
     name = "bsddb3-${version}";
-    version = "6.1.0";
+    version = "6.1.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/bsddb3/${name}.tar.gz";
-      sha256 = "05gx3rfgq1qrgdmpd6hri6y5l97bh1wczvb6x853jchwi7in6cdi";
+      sha256 = "6f21b0252125c07798d784c164ef135ad153d226c01b290258ee1c5b9e7c4dd3";
     };
 
     buildInputs = [ pkgs.db ];
