@@ -2632,8 +2632,10 @@ let
   parted = callPackage ../tools/misc/parted { hurd = null; };
 
   pitivi = callPackage ../applications/video/pitivi {
-    gst = gst_all_1;
-    clutter-gtk = clutter_gtk;
+    gst = gst_all_1 //
+      { gst-plugins-bad = gst_all_1.gst-plugins-bad.overrideDerivation
+          (attrs: { nativeBuildInputs = attrs.nativeBuildInputs ++ [ gtk3 ]; });
+      };
   };
 
   p0f = callPackage ../tools/security/p0f { };
@@ -6544,7 +6546,7 @@ let
   gperftools = callPackage ../development/libraries/gperftools { };
 
   gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
-    callPackage = pkgs.newScope (pkgs // { inherit (pkgs) libav; });
+    callPackage = pkgs.newScope (pkgs // { libav = pkgs.ffmpeg; });
   });
 
   gst_all = {
