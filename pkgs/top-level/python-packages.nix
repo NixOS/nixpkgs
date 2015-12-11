@@ -501,7 +501,6 @@ in modules // {
     };
   };
 
-
   anyjson = buildPythonPackage rec {
     name = "anyjson-0.3.3";
     disabled = isPy3k;
@@ -954,13 +953,11 @@ in modules // {
 
   awscli = buildPythonPackage rec {
     name = "awscli-${version}";
-    version = "1.9.6";
+    version = "1.9.12";
 
-    src = pkgs.fetchFromGitHub {
-      owner = "aws";
-      repo = "aws-cli";
-      rev = version;
-      sha256 = "08qclasxf8zdxwmngvynq9n5vv4nwdy68ma7wn7ji40bxmls37g2";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/awscli/${name}.tar.gz";
+      sha256 = "0b50de084c8de70adf45c0e938b6350344d9b6acde8b7cdee02cb32964bc58fd";
     };
 
     propagatedBuildInputs = with self; [
