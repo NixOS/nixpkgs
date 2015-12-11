@@ -5266,13 +5266,13 @@ in modules // {
 
   netcdf4 = buildPythonPackage rec {
     name = "netCDF4-${version}";
-    version = "1.1.8";
+    version = "1.2.1";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/netCDF4/${name}.tar.gz";
-      sha256 = "0y6s8g82rbij0brh9hz3aapyyq6apj8fpmhhlyibz1354as7rjq1";
+      sha256 = "0wzg73zyjjhns4209vrcvh71gs392d16ynz76x3pl1xg2by723iy";
     };
 
     propagatedBuildInputs = with self ; [
@@ -5284,13 +5284,12 @@ in modules // {
       pkgs.libjpeg
     ];
 
-    patchPhase = ''
-      export USE_NCCONFIG=0
-      export HDF5_DIR="${pkgs.hdf5}"
-      export NETCDF4_DIR="${pkgs.netcdf}"
-      export CURL_DIR="${pkgs.curl}"
-      export JPEG_DIR="${pkgs.libjpeg}"
-    '';
+    # Variables used to configure the build process
+    USE_NCCONFIG="0";
+    HDF5_DIR="${pkgs.hdf5}";
+    NETCDF4_DIR="${pkgs.netcdf}";
+    CURL_DIR="${pkgs.curl}";
+    JPEG_DIR="${pkgs.libjpeg}";
 
     meta = {
       description = "interface to netCDF library (versions 3 and 4)";
