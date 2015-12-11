@@ -556,6 +556,37 @@ in modules // {
     };
   };
 
+  ansible = buildPythonPackage rec {
+    version = "1.9.4";
+    name = "ansible-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://releases.ansible.com/ansible/${name}.tar.gz";
+      sha256 = "1qvgzb66nlyc2ncmgmqhzdk0x0p2px09967p1yypf5czwjn2yb4p";
+    };
+
+    prePatch = ''
+      sed -i "s,/usr/,$out," lib/ansible/constants.py
+    '';
+
+    doCheck = false;
+    dontStrip = true;
+    dontPatchELF = true;
+    dontPatchShebangs = true;
+    windowsSupport = true;
+
+    propagatedBuildInputs = with self; [
+      paramiko jinja2 pyyaml httplib2 boto six
+    ] ++ optional windowsSupport pywinrm;
+
+    meta = {
+      homepage = "http://www.ansible.com";
+      description = "A simple automation tool";
+      license = with licenses; [ gpl3] ;
+      maintainers = with maintainers; [ joamaki ];
+      platforms = with platforms; [ linux darwin ];
+    };
+  };
   apipkg = buildPythonPackage rec {
     name = "apipkg-1.4";
 
