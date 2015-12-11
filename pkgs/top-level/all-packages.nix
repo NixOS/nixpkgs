@@ -9984,6 +9984,10 @@ let
     kernelPatches = [ kernelPatches.bridge_stp_helper ];
   };
 
+  linux_odroid_xu4 = callPackage ../os-specific/linux/kernel/linux-odroid_xu4.nix {
+    kernelPatches = [ kernelPatches.bridge_stp_helper ];
+  };
+
   linux_3_10 = callPackage ../os-specific/linux/kernel/linux-3.10.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -10214,6 +10218,7 @@ let
 
   # Build the kernel modules for the some of the kernels.
   linuxPackages_rpi = linuxPackagesFor pkgs.linux_rpi linuxPackages_rpi;
+  linuxPackages_odroid_xu4 = linuxPackagesFor pkgs.linux_odroid_xu4 linuxPackages_odroid_xu4;
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
   linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
@@ -10537,7 +10542,7 @@ let
     targetPlatforms = ["armv6l-linux"];
     filesToInstall = ["u-boot.bin"];
   };
-
+  
   # Intended only for QEMU's vexpress-a9 emulation target!
   ubootVersatileExpressCA9 = callPackage ../misc/uboot {
     defconfig = "vexpress_ca9x4_defconfig";
@@ -10551,6 +10556,11 @@ let
   ubootNanonote = callPackage ../misc/uboot/nanonote.nix { };
 
   ubootGuruplug = callPackage ../misc/uboot/guruplug.nix { };
+  
+  ubootOdroidXU4 = callPackage ../misc/uboot/odroid_xu4.nix { 
+    bc = bc;
+    dtc = dtc;
+  };
 
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
