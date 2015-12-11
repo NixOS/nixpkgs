@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  cfg = config.services.simp_le;
+  cfg = config.security.acme;
 
   certOpts = { ... }: {
     options = {
@@ -40,13 +40,13 @@ let
       user = mkOption {
         type = types.str;
         default = "root";
-        description = "User under which simp_le would run.";
+        description = "User running the ACME client.";
       };
 
       group = mkOption {
         type = types.str;
         default = "root";
-        description = "Group under which simp_le would run.";
+        description = "Group running the ACME client.";
       };
 
       postRun = mkOption {
@@ -95,9 +95,9 @@ in
   ###### interface
 
   options = {
-    services.simp_le = {
+    security.acme = {
       directory = mkOption {
-        default = "/var/lib/simp_le";
+        default = "/var/lib/acme";
         type = types.str;
         description = ''
           Directory where certs and other state will be stored by default.
@@ -138,9 +138,9 @@ in
                   ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains);
 
       in nameValuePair
-      ("simp_le-${cert}")
+      ("acme-${cert}")
       ({
-        description = "simp_le cert renewal for ${cert}";
+        description = "ACME cert renewal for ${cert} using simp_le";
         after = [ "network.target" ];
         serviceConfig = {
           Type = "oneshot";
@@ -177,13 +177,13 @@ in
     );
 
     systemd.timers = flip mapAttrs' cfg.certs (cert: data: nameValuePair
-      ("simp_le-${cert}")
+      ("acme-${cert}")
       ({
-        description = "timer for simp_le cert renewal of ${cert}";
+        description = "timer for ACME cert renewal of ${cert}";
         wantedBy = [ "timers.target" ];
         timerConfig = {
           OnCalendar = data.renewInterval;
-          Unit = "simp_le-${cert}.service";
+          Unit = "acme-simp_le-${cert}.service";
         };
       })
     );

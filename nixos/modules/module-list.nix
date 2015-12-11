@@ -80,6 +80,7 @@
   ./programs/xfs_quota.nix
   ./programs/zsh/zsh.nix
   ./rename.nix
+  ./security/acme.nix
   ./security/apparmor.nix
   ./security/apparmor-suid.nix
   ./security/ca.nix
@@ -388,7 +389,6 @@
   ./services/security/hologram.nix
   ./services/security/munge.nix
   ./services/security/physlock.nix
-  ./services/security/simp_le.nix
   ./services/security/torify.nix
   ./services/security/tor.nix
   ./services/security/torsocks.nix
