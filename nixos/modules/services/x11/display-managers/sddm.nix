@@ -9,6 +9,8 @@ let
   cfg = dmcfg.sddm;
   xEnv = config.systemd.services."display-manager".environment;
 
+  sddm = pkgs.sddm.override { inherit (cfg) themes; };
+
   xserverWrapper = pkgs.writeScript "xserver-wrapper" ''
     #!/bin/sh
     ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
@@ -22,6 +24,8 @@ let
 
     [Theme]
     Current=${cfg.theme}
+    ThemeDir=${sddm}/share/sddm/themes
+    FacesDir=${sddm}/share/sddm/faces
 
     [Users]
     MaximumUid=${toString config.ids.uids.nixbld}
@@ -86,6 +90,14 @@ in
         '';
       };
 
+      themes = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        description = ''
+          Extra packages providing themes.
+        '';
+      };
+
       autoLogin = mkOption {
         default = {};
         description = ''
@@ -146,8 +158,7 @@ in
     services.xserver.displayManager.job = {
       logsXsession = true;
 
-      #execCmd = "${pkgs.sddm}/bin/sddm";
-      execCmd = "exec ${pkgs.sddm}/bin/sddm";
+      execCmd = "exec ${sddm}/bin/sddm";
     };
 
     security.pam.services = {

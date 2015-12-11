@@ -12,6 +12,7 @@ in
     ./bspwm.nix
     ./clfswm.nix
     ./compiz.nix
+    ./dwm.nix
     ./fluxbox.nix
     ./herbstluftwm.nix
     ./i3.nix

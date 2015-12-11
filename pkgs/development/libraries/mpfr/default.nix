@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gmp ];
 
   configureFlags =
+    stdenv.lib.optional stdenv.isSunOS "--disable-thread-safe" ++
     stdenv.lib.optional stdenv.is64bit "--with-pic";
 
   doCheck = true;

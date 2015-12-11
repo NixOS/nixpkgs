@@ -12,13 +12,7 @@ in
 
 {
   options = {
-
-    services.xserver.windowManager.metacity.enable = mkOption {
-      default = false;
-      example = true;
-      description = "Enable the metacity window manager.";
-    };
-
+    services.xserver.windowManager.metacity.enable = mkEnableOption "metacity";
   };
 
   config = mkIf cfg.enable {

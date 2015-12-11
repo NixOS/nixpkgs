@@ -1,9 +1,9 @@
 { stdenv, fetchurl, bash, autoconf, automake, libtool, pkgconfig, libcangjie
-, sqlite, python3, cython3
+, sqlite, python, cython
 }:
 
 stdenv.mkDerivation rec {
-  name = "pycangjie-${version}";
+  name = "${python.libPrefix}-pycangjie-${version}";
   version = "1.3_rev_${rev}";
   rev = "361bb413203fd43bab624d98edf6f7d20ce6bfd3";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    autoconf automake libtool pkgconfig libcangjie sqlite python3 cython3
+    autoconf automake libtool pkgconfig libcangjie sqlite python cython
   ];
 
   preConfigure = ''

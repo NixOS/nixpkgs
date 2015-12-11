@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     { description = "Plugin for browser to TREZOR device communication";
       homepage = https://mytrezor.com;
       license = licenses.unfree;
-      maintainers = with maintainers; [ emery ];
+      maintainers = with maintainers; [ ehmry ];
     };
 
 }

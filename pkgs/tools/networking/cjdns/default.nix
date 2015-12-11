@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     homepage = https://github.com/cjdelisle/cjdns;
     description = "Encrypted networking for regular people";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ viric emery ];
+    maintainers = with maintainers; [ viric ehmry ];
     platforms = platforms.unix;
   };
 }

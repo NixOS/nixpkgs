@@ -1,4 +1,4 @@
-{ stdenv } : { env } :
+{ stdenv } : { env, extraInstallCommands ? "" } :
 
 let
   # References to shell scripts that set up or tear down the environment
@@ -43,5 +43,6 @@ in stdenv.mkDerivation {
         -e "s|@name@|${name}|g" \
         ${destroySh} > destroy-${name}-chrootenv
     chmod +x destroy-${name}-chrootenv
+    ${extraInstallCommands}
   '';
 }

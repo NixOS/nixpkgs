@@ -1,5 +1,10 @@
 { stdenv, lib, fetchFromGitHub, buildPythonPackage, python27Packages, pkgs }:
 
+let cairocffi-xcffib = python27Packages.cairocffi.override {
+    pythonPath = [ python27Packages.xcffib ];
+  };
+in
+
 buildPythonPackage rec {
   name = "qtile-${version}";
   version = "0.10.2";
@@ -11,27 +16,28 @@ buildPythonPackage rec {
     sha256 = "0dhdwjr4pdlzli68fa8glrnsjzxp6agdab9cnmpsqlwiwh97x9a6";
   };
 
-  patches = [ ./restart_executable.patch ];
+  patches = [
+    ./0001-Substitution-vars-for-absolute-paths.patch
+    ./0002-Restore-PATH-and-PYTHONPATH.patch
+    ./0003-Restart-executable.patch
+  ];
 
   postPatch = ''
     substituteInPlace libqtile/manager.py --subst-var-by out $out
+    substituteInPlace libqtile/pangocffi.py --subst-var-by glib ${pkgs.glib}
+    substituteInPlace libqtile/pangocffi.py --subst-var-by pango ${pkgs.pango}
+    substituteInPlace libqtile/xcursors.py --subst-var-by xcb-cursor ${pkgs.xorg.xcbutilcursor}
   '';
 
   buildInputs = [ pkgs.pkgconfig pkgs.glib pkgs.xorg.libxcb pkgs.cairo pkgs.pango python27Packages.xcffib ];
 
-  cairocffi-xcffib = python27Packages.cairocffi.override {
-    inherit LD_LIBRARY_PATH;
-    pythonPath = [ python27Packages.xcffib ];
-  };
-
-  pythonPath = with python27Packages; [ xcffib cairocffi-xcffib trollius readline ];
-
-  LD_LIBRARY_PATH = "${lib.makeLibraryPath [ pkgs.xorg.libxcb pkgs.cairo ]}";
+  pythonPath = with python27Packages; [ xcffib cairocffi-xcffib trollius readline];
 
   postInstall = ''
     wrapProgram $out/bin/qtile \
-      --prefix LD_LIBRARY_PATH : \
-        "${LD_LIBRARY_PATH}:${lib.makeLibraryPath [ pkgs.glib pkgs.pango ]}"
+      --set QTILE_WRAPPER '"$0"' \
+      --set QTILE_SAVED_PYTHONPATH '"$PYTHONPATH"' \
+      --set QTILE_SAVED_PATH '"$PATH"'
   '';
 
   meta = with stdenv.lib; {

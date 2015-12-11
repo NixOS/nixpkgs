@@ -150,10 +150,10 @@ in {
     majorVersion = "2";
     minorVersion = "0";
     teenyVersion = "0";
-    patchLevel = "645";
+    patchLevel = "647";
     sha256 = {
-      src = "1azl3kbqqw3jvwfcsy6fdb7vmwz5w73fwpq1y1gblz79zzzqx7sy";
-      git = "14bnas1iif2shyaz4ylb0832x96y2mda52x0v0aglkvqmcz1cfxb";
+      src = "1v2vbvydarcx5801gx9lc6gr6dfi0i7qbzwhsavjqbn79rdsz2n8";
+      git = "186pf4q9xymzn4zn1sjppl1skrl5f0159ixz5cz8g72dmmynq3g3";
     };
   };
 
@@ -212,6 +212,17 @@ in {
     };
   };
 
+  ruby_2_1_7 = generic {
+    majorVersion = "2";
+    minorVersion = "1";
+    teenyVersion = "7";
+    patchLevel = "0";
+    sha256 = {
+      src = "10fxlqmpbq9407zgsx060q22yj4zq6c3czbf29h7xk1rmjb1b77m";
+      git = "1fmbqd943akqjwsfbj9bg394ac46qmpavm8s0kv2w87rflrjcjfb";
+    };
+  };
+
   ruby_2_2_0 = generic {
     majorVersion = "2";
     minorVersion = "2";
@@ -231,6 +242,17 @@ in {
     sha256 = {
       src = "0i4v7l8pnam0by2cza12zldlhrffqchwb2m9shlnp7j2gqqhzz2z";
       git = "08mw1ql2ghy483cp8xzzm78q17simn4l6phgm2gah7kjh9y3vbrn";
+    };
+  };
+
+  ruby_2_2_3 = generic {
+    majorVersion = "2";
+    minorVersion = "2";
+    teenyVersion = "3";
+    patchLevel = "0";
+    sha256 = {
+      src = "1kpdf7f8pw90n5bckpl2idzggk0nn0240ah92sj4a1w6k4pmyyfz";
+      git = "1ssq3c23ay57ypfis47y2n817hfmb71w0xrdzp57j6bv12jqmgrx";
     };
   };
 }

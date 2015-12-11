@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
     homepage = http://www.unbound.net;
-    maintainers = [ maintainers.emery ];
-    platforms = platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.ehmry ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -16,10 +16,11 @@ let patch = writeText "rsnapshot-config.patch" ''
 '';
 in
 stdenv.mkDerivation rec {
-  name = "rsnapshot-1.3.1";
+  name = "rsnapshot-1.4.1";
+
   src = fetchurl {
-    url = "mirror://sourceforge/rsnapshot/${name}.tar.gz";
-    sha256 = "0pn7vlg3yxl7xrvfwmp4zlrg3cckmlldq6qr5bs3b2b281zcgdll";
+    url = "http://rsnapshot.org/downloads/${name}.tar.gz";
+    sha256 = "1s28wkpqajgmwi88n3xs3qsa4b7yxd6lkl4zfi0mr06klwli2jpv";
   };
 
   propagatedBuildInputs = [perl openssh rsync logger];

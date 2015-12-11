@@ -1,6 +1,6 @@
-From 8e5cf662d55415a838ce8c53f854202257e9feb4 Mon Sep 17 00:00:00 2001
+From e5c11a5efc4f8e8ba4e89e0172220da921df38c6 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@gmail.com>
-Date: Sun, 22 Nov 2015 08:31:42 -0600
+Date: Wed, 9 Dec 2015 13:20:02 -0600
 Subject: [PATCH 2/2] startkde NixOS patches
 
 ---
@@ -8,7 +8,7 @@ Subject: [PATCH 2/2] startkde NixOS patches
  1 file changed, 89 insertions(+), 122 deletions(-)
 
 diff --git a/startkde/startkde.cmake b/startkde/startkde.cmake
-index 41a8975..130578e 100644
+index 37ab5cd..130578e 100644
 --- a/startkde/startkde.cmake
 +++ b/startkde/startkde.cmake
 @@ -1,8 +1,31 @@
@@ -121,7 +121,7 @@ index 41a8975..130578e 100644
 -    }
 -
 -    oxygenDir=$fontsDir/oxygen
--    prefixDir="@@KDE_INSTALL_FULL_DATADIR@/fonts/oxygen"
+-    prefixDir="@KDE_INSTALL_FULL_DATADIR@/fonts/oxygen"
 -
 -    # if the oxygen dir doesn't exist, create a symlink to be sure that the
 -    # Oxygen font is available to the user

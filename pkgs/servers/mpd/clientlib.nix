@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.musicpd.org/libs/libmpdclient/;
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ mornfall emery ];
+    maintainers = with maintainers; [ mornfall ehmry ];
   };
 }

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://xiph.org/ogg/;
     license = licenses.bsd3;
-    maintainers = [ maintainers.emery ];
+    maintainers = [ maintainers.ehmry ];
     platforms = platforms.all;
   };
 }

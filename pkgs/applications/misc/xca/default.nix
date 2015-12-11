@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "xca-${version}";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/xca/${name}.tar.gz";
-    sha256 = "10rxma0zm7vryzv69m0aqlvmbf82d261wa77kxni4h3lndwqvpf2";
+    sha256 = "1r2w9gpahjv221j963bd4vn0gj4cxmb9j42f3cd9qdn890hizw84";
   };
 
   postInstall = ''

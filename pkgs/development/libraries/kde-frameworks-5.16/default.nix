@@ -40,6 +40,7 @@ let
     attica = callPackage ./attica.nix {};
     baloo = callPackage ./baloo.nix {};
     bluez-qt = callPackage ./bluez-qt.nix {};
+    breeze-icons = callPackage ./breeze-icons.nix {};
     extra-cmake-modules = callPackage ./extra-cmake-modules {};
     frameworkintegration = callPackage ./frameworkintegration.nix {};
     kactivities = callPackage ./kactivities.nix {};

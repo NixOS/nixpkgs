@@ -8,16 +8,16 @@ let
   firmware = gt68xxFirmware { inherit fetchurl; };
 in
 stdenv.mkDerivation rec {
-  version = "1.0.24";
+  version = "1.0.25";
   name = "sane-backends-${version}";
 
   src = fetchurl {
     urls = [
-      "http://pkgs.fedoraproject.org/repo/pkgs/sane-backends/sane-backends-1.0.24.tar.gz/1ca68e536cd7c1852322822f5f6ac3a4/${name}.tar.gz"
-      "https://alioth.debian.org/frs/download.php/file/3958/${name}.tar.gz"
+      "http://pkgs.fedoraproject.org/repo/pkgs/sane-backends/sane-backends-1.0.25.tar.gz/f9ed5405b3c12f07c6ca51ee60225fe7/${name}.tar.gz"
+      "https://alioth.debian.org/frs/download.php/file/4146/${name}.tar.gz"
     ];
     curlOpts = "--insecure";
-    sha256 = "0ba68m6bzni54axjk15i51rya7hfsdliwvqyan5msl7iaid0iir7";
+    sha256 = "0b3fvhrxl4l82bf3v0j47ypjv6a0k5lqbgknrq1agpmjca6vmmx4";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -49,12 +49,19 @@ stdenv.mkDerivation rec {
       " \${out}/share/sane/snapscan/your-firmwarefile.bin"
     else "";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://www.sane-project.org/";
-    description = "Scanner Access Now Easy";
-    license = stdenv.lib.licenses.gpl2Plus;
+    description = "SANE (Scanner Access Now Easy) backends";
+    longDescription = ''
+      Collection of open-source SANE backends (device drivers).
+      SANE is a universal scanner interface providing standardized access to
+      any raster image scanner hardware: flatbed scanners, hand-held scanners,
+      video- and still-cameras, frame-grabbers, etc. For a list of supported
+      scanners, see http://www.sane-project.org/sane-backends.html.
+    '';
+    license = licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ nckx simons ];
+    platforms = platforms.linux;
   };
 }

@@ -96,6 +96,15 @@ in
         example = "http://127.0.0.1:3128";
       };
 
+      allProxy = lib.mkOption {
+        type = types.nullOr types.str;
+        default = cfg.proxy.default;
+        description = ''
+          This option specifies the all_proxy environment variable.
+        '';
+        example = "http://127.0.0.1:3128";
+      };
+
       noProxy = lib.mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -183,6 +192,8 @@ in
           rsync_proxy = cfg.proxy.rsyncProxy;
         } // optionalAttrs (cfg.proxy.ftpProxy != null) {
           ftp_proxy   = cfg.proxy.ftpProxy;
+        } // optionalAttrs (cfg.proxy.allProxy != null) {
+          all_proxy   = cfg.proxy.allProxy;
         } // optionalAttrs (cfg.proxy.noProxy != null) {
           no_proxy    = cfg.proxy.noProxy;
         };

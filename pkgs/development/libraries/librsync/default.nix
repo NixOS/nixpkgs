@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "librsync-${version}";
   version = "1.0.0";
-  
+
   src = fetchFromGitHub {
     owner = "librsync";
     repo = "librsync";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ autoreconfHook perl zlib bzip2 popt ];
 
   configureFlags = if stdenv.isCygwin then "--enable-static" else "--enable-shared";
+
+  CFLAGS = "-std=gnu89";
 
   crossAttrs = {
     dontStrip = true;

@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, openssl }:
+{ stdenv, pkgs, fetchurl, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   majorVersion = "1.5";
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "16cg1jmy2d8mq2ypwifsvhbyp4pyrj0zm0r818sx0r4hchwdsrcm";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl zlib ];
 
   # TODO: make it work on darwin/bsd as well
   preConfigure = ''
-    export makeFlags="TARGET=linux2628 PREFIX=$out USE_OPENSSL=yes"
+    export makeFlags="TARGET=${if stdenv.isSunOS then "solaris" else "linux2628"} PREFIX=$out USE_OPENSSL=yes USE_ZLIB=yes"
   '';
 
   meta = {

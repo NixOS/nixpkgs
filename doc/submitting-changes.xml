@@ -270,7 +270,7 @@ Additional information.
 </listitem>
 
 <listitem>
-<para>If staging is already in a broken state, please refrain from adding extra new breakages. Stabilize it for a few days, merge into master, then resume development on staging. <link xlink:href="http://hydra.nixos.org/jobset/nixpkgs/staging#tabs-evaluations">Keep an eye on the staging evaluations here</link>.</para>
+<para>If staging is already in a broken state, please refrain from adding extra new breakages. Stabilize it for a few days, merge into master, then resume development on staging. <link xlink:href="http://hydra.nixos.org/jobset/nixpkgs/staging#tabs-evaluations">Keep an eye on the staging evaluations here</link>. If any fixes for staging happen to be already in master, then master can be merged into staging.</para>
 </listitem>
 
 <listitem>

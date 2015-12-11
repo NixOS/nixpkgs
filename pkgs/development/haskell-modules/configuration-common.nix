@@ -114,7 +114,24 @@ self: super: {
     preConfigure = "sed -i -e /extra-lib-dirs/d -e /include-dirs/d haskakafka.cabal";
     configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
     doCheck = false;
-   });
+  });
+
+  # Depends on broken "lss" package.
+  snaplet-lss = dontDistribute super.snaplet-lss;
+
+  # Depends on broken "NewBinary" package.
+  ASN1 = dontDistribute super.ASN1;
+
+  # Depends on broken "frame" package.
+  frame-markdown = dontDistribute super.frame-markdown;
+
+  # Depends on broken "Elm" package.
+  hakyll-elm = dontDistribute super.hakyll-elm;
+  haskelm = dontDistribute super.haskelm;
+  snap-elm = dontDistribute super.snap-elm;
+
+  # Depends on broken "hails" package.
+  hails-bin = dontDistribute super.hails-bin;
 
   # Foreign dependency name clashes with another Haskell package.
   libarchive-conduit = super.libarchive-conduit.override { archive = pkgs.libarchive; };
@@ -662,9 +679,6 @@ self: super: {
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
 
-  # https://github.com/adamwalker/sdr/issues/1
-  sdr = dontCheck super.sdr;
-
   # https://github.com/bos/aeson/issues/253
   aeson = dontCheck super.aeson;
 
@@ -924,13 +938,6 @@ self: super: {
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [ pkgs.ncurses ];
   });
 
-  # https://github.com/fpco/stackage/issues/1004
-  gtk2hs-buildtools = super.gtk2hs-buildtools.override { alex = self.alex_3_1_4; };
-
-  # https://github.com/Gabriel439/Haskell-Morte-Library/issues/32
-  morte = super.morte.override { alex = self.alex_3_1_4; };
-
   # https://github.com/mainland/language-c-quote/issues/57
   language-c-quote = super.language-c-quote.override { alex = self.alex_3_1_4; };
-
 }

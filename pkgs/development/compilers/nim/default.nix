@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     { description = "Statically typed, imperative programming language";
       homepage = http://nim-lang.org/;
       license = licenses.mit;
-      maintainers = with maintainers; [ emery ];
+      maintainers = with maintainers; [ ehmry ];
       platforms = platforms.linux ++ platforms.darwin; # arbitrary
     };
 }

@@ -1,9 +1,9 @@
 { stdenv, fetchurl, pkgconfig, python, gobjectIntrospection
-, gnonlin, libxml2
+, gnonlin, libxml2, flex, perl
 }:
 
 stdenv.mkDerivation rec {
-  name = "gstreamer-editing-services-1.4.0";
+  name = "gstreamer-editing-services-1.6.1";
 
   meta = with stdenv.lib; {
     description = "Library for creation of audio/video non-linear editors";
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer-editing-services/${name}.tar.xz";
-    sha256 = "1cwbh244an6zsxsscvg6xjnb34ylci34g9zx59xjbv5wnw7vj86c";
+    sha256 = "1lkvkrsipn35341hwwkhwn44n90y49sjwra1r5pazbjgn1yykxzm";
   };
 
-  nativeBuildInputs = [ pkgconfig python gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig python gobjectIntrospection flex perl ];
 
   propagatedBuildInputs = [ gnonlin libxml2 ];
 }

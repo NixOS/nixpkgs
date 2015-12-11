@@ -1,27 +1,13 @@
 { stdenv, pythonPackages, fetchurl, dialog }:
 
-let
+pythonPackages.buildPythonPackage rec {
+  version = "0.1.0";
+  name = "letsencrypt-${version}";
+
   src = fetchurl {
     url = "https://github.com/letsencrypt/letsencrypt/archive/v${version}.tar.gz";
-    sha256 = "00p94pmli4lr5l3vqi11374p9jxiqir1ygx89zgfm4db47srx41z";
+    sha256 = "056y5bsmpc4ya5xxals4ypzsm927j6n5kwby3bjc03sy3sscf6hw";
   };
-  version = "0.0.0.dev20151123";
-  acme = pythonPackages.buildPythonPackage rec {
-    name = "acme-${version}";
-    inherit src version;
-
-    propagatedBuildInputs = with pythonPackages; [
-      cryptography pyasn1 pyopenssl pyRFC3339 pytz requests2 six werkzeug mock
-      ndg-httpsclient
-    ];
-
-    buildInputs = with pythonPackages; [ nose ];
-
-    sourceRoot = "letsencrypt-${version}/acme";
-  };
-in pythonPackages.buildPythonPackage rec {
-  name = "letsencrypt-${version}";
-  inherit src version;
 
   propagatedBuildInputs = with pythonPackages; [
     zope_interface zope_component six requests2 pytz pyopenssl psutil mock acme

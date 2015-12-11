@@ -1,5 +1,5 @@
 {stdenv, vim, vimPlugins, vim_configurable, buildEnv, writeText, writeScriptBin
-, nix-prefetch-scripts }:
+, nix-prefetch-hg, nix-prefetch-git }:
 
 /*
 
@@ -310,8 +310,8 @@ rec {
         echom repeat("=", 80)
       endif
       let opts = {}
-      let opts.nix_prefetch_git = "${nix-prefetch-scripts}/bin/nix-prefetch-git"
-      let opts.nix_prefetch_hg  = "${nix-prefetch-scripts}/bin/nix-prefetch-hg"
+      let opts.nix_prefetch_git = "${nix-prefetch-git}/bin/nix-prefetch-git"
+      let opts.nix_prefetch_hg  = "${nix-prefetch-hg}/bin/nix-prefetch-hg"
       let opts.cache_file = g:vim_addon_manager.plugin_root_dir.'/cache'
       let opts.plugin_dictionaries = []
       ${lib.concatMapStrings (file: "let opts.plugin_dictionaries += map(readfile(\"${file}\"), 'eval(v:val)')\n") namefiles }

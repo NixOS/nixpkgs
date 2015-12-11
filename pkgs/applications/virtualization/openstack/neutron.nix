@@ -1,5 +1,4 @@
-
-{ stdenv, fetchurl, pythonPackages, xmlsec, which }:
+{ stdenv, fetchurl, pythonPackages, xmlsec, which, dnsmasq }:
 
 pythonPackages.buildPythonPackage rec {
   name = "neutron-${version}";
@@ -29,9 +28,11 @@ pythonPackages.buildPythonPackage rec {
   ];
 
   # make sure we include migrations
-  patchPhase = ''
+  prePatch = ''
     echo "graft neutron" >> MANIFEST.in
+    substituteInPlace etc/neutron/rootwrap.d/dhcp.filters --replace "/sbin/dnsmasq" "${dnsmasq}/bin/dnsmasq"
   '';
+  patches = [ ./neutron-iproute-4.patch ];
 
   buildInputs = with pythonPackages; [
     cliff coverage fixtures mock subunit requests-mock oslosphinx testrepository

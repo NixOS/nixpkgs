@@ -4,10 +4,10 @@
 }:
 
 stdenv.mkDerivation {
-  name = "grass-7.0.1";
+  name = "grass-7.0.2";
   src = fetchurl {
-    url = http://grass.osgeo.org/grass70/source/grass-7.0.1.tar.gz;
-    sha256 = "0ps0xfsgls1hai8fx8x74ajh3560p1yjql2sg02lpqpx30bdv1q9";
+    url = http://grass.osgeo.org/grass70/source/grass-7.0.2.tar.gz;
+    sha256 = "02qrdgn46gxr60amxwax4b8fkkmhmjxi6qh4yfvpbii6ai6diarf";
   };
 
   buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite pkgconfig cairo

@@ -18,9 +18,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.five-ten-sg.com/libpst/;
     description = "A library to read PST (MS Outlook Personal Folders) files";
-    license = stdenv.lib.licenses.gpl2;
+    license = licenses.gpl2;
+    maintainers = [maintainers.tohl];
   };
 }

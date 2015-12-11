@@ -14,6 +14,7 @@
 , compiler-rt_src
 , libcxxabi
 , debugVersion ? false
+, enableSharedLibraries ? !stdenv.isDarwin
 }:
 
 let
@@ -46,10 +47,11 @@ in stdenv.mkDerivation rec {
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
-  ] ++ stdenv.lib.optionals (!isDarwin) [
+  ] ++ stdenv.lib.optional enableSharedLibraries
     "-DBUILD_SHARED_LIBS=ON"
+    ++ stdenv.lib.optional (!isDarwin)
     "-DLLVM_BINUTILS_INCDIR=${binutils}/include"
-  ] ++ stdenv.lib.optionals ( isDarwin) [
+    ++ stdenv.lib.optionals ( isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
   ];

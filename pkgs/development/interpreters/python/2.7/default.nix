@@ -22,11 +22,11 @@ with stdenv.lib;
 
 let
   majorVersion = "2.7";
-  version = "${majorVersion}.10";
+  version = "${majorVersion}.11";
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
-    sha256 = "1h7zbrf9pkj29hlm18b10548ch9757f75m64l47sy75rh43p7lqw";
+    sha256 = "0iiz844riiznsyhhyy962710pz228gmhv8qi3yk4w4jhmx2lqawn";
   };
 
   patches =
@@ -97,7 +97,9 @@ let
         ] ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
     )
     ++ optional zlibSupport zlib
-    ++ optionals stdenv.isDarwin [ CF configd ];
+    ++ optional stdenv.isDarwin CF;
+
+  propagatedBuildInputs = optional stdenv.isDarwin configd;
 
   mkPaths = paths: {
     C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p.dev or p}/include") paths);
@@ -110,8 +112,8 @@ let
     name = "python-${version}";
     pythonVersion = majorVersion;
 
-    inherit majorVersion version src patches buildInputs preConfigure
-            configureFlags;
+    inherit majorVersion version src patches buildInputs propagatedBuildInputs
+            preConfigure configureFlags;
 
     LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;

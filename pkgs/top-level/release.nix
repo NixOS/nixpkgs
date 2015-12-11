@@ -130,7 +130,7 @@ let
       lynx = linux;
       lzma = linux;
       man = linux;
-      manpages = linux;
+      man-pages = linux;
       maxima = linux;
       mc = linux;
       mcabber = linux;
@@ -160,7 +160,6 @@ let
       pmccabe = linux;
       ppl = all;
       procps = linux;
-      pthreadmanpages = linux;
       pygtk = linux;
       python = allBut cygwin;
       pythonFull = linux;

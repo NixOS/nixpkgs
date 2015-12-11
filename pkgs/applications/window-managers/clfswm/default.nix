@@ -24,6 +24,12 @@ stdenv.mkDerivation rec {
   # Stripping destroys the generated SBCL image
   dontStrip = true;
 
+  configurePhase = ''
+    substituteInPlace load.lisp --replace \
+      ";; (setf *contrib-dir* \"/usr/local/lib/clfswm/\")" \
+      "(setf *contrib-dir* \"$out/lib/clfswm/\")"
+  '';
+
   installPhase = ''
     mkdir -pv $out/bin
     make DESTDIR=$out install

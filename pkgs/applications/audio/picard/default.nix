@@ -35,7 +35,7 @@ buildPythonPackage {
   meta = with stdenv.lib; {
     homepage = "http://musicbrainz.org/doc/MusicBrainz_Picard";
     description = "The official MusicBrainz tagger";
-    maintainers = with maintainers; [ emery ];
+    maintainers = with maintainers; [ ehmry ];
     license = licenses.gpl2;
     platforms = platforms.all;
   };

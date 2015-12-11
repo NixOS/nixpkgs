@@ -6,7 +6,7 @@
 , mpeg2dec, udev, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, liboggz
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
-, libvdpau, libsamplerate, live555
+, libvdpau, libsamplerate, live555, fluidsynth
 , onlyLibVLC ? false
 , qt4 ? null
 , withQt5 ? false, qtbase ? null
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
       libkate libtiger libv4l samba liboggz libass libdvbpsi libva
       xorg.xlibsWrapper xorg.libXv xorg.libXvMC xorg.libXpm xorg.xcbutilkeysyms
       libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate live555
+      fluidsynth
     ]
     ++ [(if withQt5 then qtbase else qt4)]
     ++ optional jackSupport libjack2;

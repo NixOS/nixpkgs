@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
   patches = optional (!vanilla) ./requires-private.patch
     ++ optional stdenv.isCygwin ./2.36.3-not-win32.patch;
 
-  buildInputs = optional (stdenv.isCygwin || stdenv.isDarwin) libiconv;
-
   preConfigure = stdenv.lib.optionalString (stdenv.system == "mips64el-linux")
     ''cp -v ${automake}/share/automake*/config.{sub,guess} .'';
+  buildInputs = stdenv.lib.optional (stdenv.isCygwin || stdenv.isDarwin || stdenv.isSunOS) libiconv;
 
-  configureFlags = [ "--with-internal-glib" ];
+  configureFlags = [ "--with-internal-glib" ]
+    ++ stdenv.lib.optional (stdenv.isSunOS) [ "--with-libiconv=gnu" "--with-system-library-path" "--with-system-include-path" "CFLAGS=-DENABLE_NLS" ];
 
   postInstall = ''rm "$out"/bin/*-pkg-config''; # clean the duplicate file
 

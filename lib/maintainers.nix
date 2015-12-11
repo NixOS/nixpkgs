@@ -92,7 +92,7 @@
   eikek = "Eike Kettner <eike.kettner@posteo.de>";
   elasticdog = "Aaron Bull Schaefer <aaron@elasticdog.com>";
   ellis = "Ellis Whitehead <nixos@ellisw.net>";
-  emery = "Emery Hemingway <emery@vfemail.net>";
+  ehmry = "Emery Hemingway <emery@vfemail.net>";
   enolan = "Echo Nolan <echo@echonolan.net>";
   epitrochoid = "Mabry Cervin <mpcervin@uncg.edu>";
   ericbmerritt = "Eric Merritt <eric@afiniate.com>";
@@ -182,7 +182,7 @@
   malyn = "Michael Alyn Miller <malyn@strangeGizmo.com>";
   manveru = "Michael Fellinger <m.fellinger@gmail.com>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
-  markWot = "Markus Wotringer <markus@wotringer.de";
+  markWot = "Markus Wotringer <markus@wotringer.de>";
   maurer = "Matthew Maurer <matthew.r.maurer+nix@gmail.com>";
   matejc = "Matej Cotman <cotman.matej@gmail.com>";
   mathnerd314 = "Mathnerd314 <mathnerd314.gph+hs@gmail.com>";
@@ -207,6 +207,7 @@
   muflax = "Stefan Dorn <mail@muflax.com>";
   nathan-gs = "Nathan Bijnens <nathan@nathan.gs>";
   nckx = "Tobias Geerinckx-Rice <tobias.geerinckx.rice@gmail.com>";
+  nequissimus = "Tim Steinbach <tim@nequissimus.com>";
   nico202 = "Nicolò Balzarotti <anothersms@gmail.com>";
   notthemessiah = "Brian Cohen <brian.cohen.88@gmail.com>";
   np = "Nicolas Pouillard <np.nix@nicolaspouillard.fr>";
@@ -218,9 +219,11 @@
   olcai = "Erik Timan <dev@timan.info>";
   orbitz = "Malcolm Matalka <mmatalka@gmail.com>";
   osener = "Ozan Sener <ozan@ozansener.com>";
+  oxij = "Jan Malakhovski <oxij@oxij.org>";
   page = "Carles Pagès <page@cubata.homelinux.net>";
   paholg = "Paho Lurie-Gregg <paho@paholg.com>";
   pakhfn = "Fedor Pakhomov <pakhfn@gmail.com>";
+  palo = "Ingolf Wanger <palipalo9@googlemail.com>";
   pashev = "Igor Pashev <pashev.igor@gmail.com>";
   pesterhazy = "Paulus Esterhazy <pesterhazy@gmail.com>";
   phausmann = "Philipp Hausmann <nix@314.ch>";
@@ -286,6 +289,7 @@
   tailhook = "Paul Colomiets <paul@colomiets.name>";
   taktoa = "Remy Goldschmidt <taktoa@gmail.com>";
   telotortium = "Robert Irelan <rirelan@gmail.com>";
+  thall = "Niclas Thall <niclas.thall@gmail.com>";
   thammers = "Tobias Hammerschmidt <jawr@gmx.de>";
   the-kenny = "Moritz Ulrich <moritz@tarn-vedra.de>";
   theuni = "Christian Theune <ct@flyingcircus.io>";

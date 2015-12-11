@@ -37,6 +37,9 @@ rec {
     ghc7102 = callPackage ../development/compilers/ghc/7.10.2.nix ({ ghc = compiler.ghc784; inherit (packages.ghc784) hscolour; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
       libiconv = pkgs.darwin.libiconv;
     });
+    ghc7103 = callPackage ../development/compilers/ghc/7.10.3.nix ({ ghc = compiler.ghc784; inherit (packages.ghc784) hscolour; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+      libiconv = pkgs.darwin.libiconv;
+    });
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix ({ inherit (packages.ghc784) ghc alex happy; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
       libiconv = pkgs.darwin.libiconv;
     });
@@ -293,6 +296,9 @@ rec {
     };
     lts-3_15 = packages.ghc7102.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.15.nix { };
+    };
+    lts-3_16 = packages.ghc7102.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.16.nix { };
     };
 
   };

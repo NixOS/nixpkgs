@@ -47,11 +47,13 @@ stdenv.mkDerivation rec {
   # while at the same time erasing the PATH environment variable so it unconditionally
   # fails. The code in question is guarded by a check for Mac OS, but the patch below
   # doesn't have any runtime effect on other platforms.
-  postPatch = stdenv.lib.optional (stdenv.isDarwin && !stdenv.cc.nativeLibc) ''
+  postPatch = stdenv.lib.optional stdenv.isDarwin ''
     pwd="$(type -P pwd)"
     substituteInPlace dist/PathTools/Cwd.pm \
-      --replace "pwd_cmd = 'pwd'" "pwd_cmd = '$pwd'"
+      --replace "/bin/pwd" "$pwd"
   '';
+
+  sandboxProfile = stdenv.lib.sandbox.allow "ipc-sysv-sem";
 
   # Build a thread-safe Perl with a dynamic libperls.o.  We need the
   # "installstyle" option to ensure that modules are put under
@@ -67,6 +69,7 @@ stdenv.mkDerivation rec {
       "-Dlocincpth=${libc.dev or libc}/include"
       "-Dloclibpth=${libc.out or libc}/lib"
     ]
+    ++ optional stdenv.isSunOS "-Dcc=gcc"
     ++ optional enableThreading "-Dusethreads";
 
   configureScript = "${stdenv.shell} ./Configure";

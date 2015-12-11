@@ -1,12 +1,12 @@
 { stdenv, fetchurl, libewf, afflib, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "4.1.3";
+  version = "4.2.0";
   name = "sleuthkit-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/sleuthkit/${name}.tar.gz";
-    sha256 = "09q3ky4rpv18jasf5gc2hlivzadzl70jy4nnk23db1483aix5yb7";
+    sha256 = "08s7c1jwn2rjq2jm8859ywaiq12adrl02m61hc04iblqjzqqgcli";
   };
 
   enableParallelBuilding = true;

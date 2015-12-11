@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   # internal pcre would only add <200kB, but it's relatively common
   configureFlags = [ "--with-pcre=system" ]
     ++ optional stdenv.isDarwin "--disable-compile-warnings"
-    ++ optional stdenv.isSunOS "--disable-modular-tests";
+    ++ optional stdenv.isSunOS ["--disable-modular-tests" "--with-libiconv"];
 
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl"
     + optionalString stdenv.isSunOS " -DBSD_COMP";

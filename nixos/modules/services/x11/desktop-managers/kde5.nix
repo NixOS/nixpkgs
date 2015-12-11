@@ -108,16 +108,26 @@ in
         kdeApps.okular
         kdeApps.print-manager
 
+        # Oxygen icons moved to KDE Frameworks 5.16 and later.
         (kdeApps.oxygen-icons or kf5.oxygen-icons5)
         pkgs.hicolor_icon_theme
 
         plasma5.kde-gtk-config
-        pkgs.orion # GTK theme, nearly identical to Breeze
       ]
+
+      # Plasma 5.5 and later has a Breeze GTK theme.
+      # If it is not available, Orion is very similar to Breeze.
+      ++ lib.optional (!(lib.hasAttr "breeze-gtk" plasma5)) pkgs.orion
+
+      # Install Breeze icons if available
+      ++ lib.optional (lib.hasAttr "breeze-icons" kf5) kf5.breeze-icons
+
+      # Optional hardware support features
       ++ lib.optional config.hardware.bluetooth.enable plasma5.bluedevil
       ++ lib.optional config.networking.networkmanager.enable plasma5.plasma-nm
       ++ lib.optional config.hardware.pulseaudio.enable plasma5.plasma-pa
       ++ lib.optional config.powerManagement.enable plasma5.powerdevil
+
       ++ lib.optionals cfg.phonon.gstreamer.enable
         [
           pkgs.phonon_backend_gstreamer
@@ -135,6 +145,7 @@ in
           pkgs.gst_all_1.gst-plugins-bad
           pkgs.gst_all_1.gst-libav # for mp3 playback
         ]
+
       ++ lib.optionals cfg.phonon.vlc.enable
         [
           pkgs.phonon_qt5_backend_vlc
@@ -165,6 +176,14 @@ in
 
     # Extra UDEV rules used by Solid
     services.udev.packages = [ pkgs.media-player-info ];
+
+    services.xserver.displayManager.sddm = {
+      theme = "breeze";
+      themes = [
+        plasma5.plasma-workspace
+        (kdeApps.oxygen-icons or kf5.oxygen-icons5)
+      ];
+    };
 
     security.pam.services.kde = { allowNullPassword = true; };
 

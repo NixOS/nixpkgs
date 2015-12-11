@@ -113,21 +113,26 @@ in
           #include <abstractions/base>
           #include <abstractions/nameservice>
 
-          ${pkgs.glibc.out}/lib/*.so               mr,
-          ${pkgs.libevent.out}/lib/libevent*.so*   mr,
-          ${pkgs.curl.out}/lib/libcurl*.so*        mr,
-          ${pkgs.openssl.out}/lib/libssl*.so*      mr,
-          ${pkgs.openssl.out}/lib/libcrypto*.so*   mr,
-          ${pkgs.zlib.out}/lib/libz*.so*           mr,
-          ${pkgs.libssh2.out}/lib/libssh2*.so*     mr,
-          ${pkgs.systemd}/lib/libsystemd*.so*  mr,
-          ${pkgs.xz.out}/lib/liblzma*.so*          mr,
-          ${pkgs.libgcrypt.out}/lib/libgcrypt*.so* mr,
+          ${pkgs.glibc.out}/lib/*.so                    mr,
+          ${pkgs.libevent.out}/lib/libevent*.so*        mr,
+          ${pkgs.curl.out}/lib/libcurl*.so*             mr,
+          ${pkgs.openssl.out}/lib/libssl*.so*           mr,
+          ${pkgs.openssl.out}/lib/libcrypto*.so*        mr,
+          ${pkgs.zlib.out}/lib/libz*.so*                mr,
+          ${pkgs.libssh2.out}/lib/libssh2*.so*          mr,
+          ${pkgs.systemd}/lib/libsystemd*.so*       mr,
+          ${pkgs.xz.out}/lib/liblzma*.so*               mr,
+          ${pkgs.libgcrypt.out}/lib/libgcrypt*.so*      mr,
           ${pkgs.libgpgerror.out}/lib/libgpg-error*.so* mr,
+          ${pkgs.libnghttp2.out}/lib/libnghttp2*.so*    mr,
+          ${pkgs.c-ares.out}/lib/libcares*.so*          mr,
+          ${pkgs.libcap.out}/lib/libcap*.so*            mr,
+          ${pkgs.attr.out}/lib/libattr*.so*             mr,
 
           @{PROC}/sys/kernel/random/uuid   r,
           @{PROC}/sys/vm/overcommit_memory r,
 
+          ${pkgs.openssl}/etc/**                     r,
           ${pkgs.transmission}/share/transmission/** r,
 
           owner ${settingsDir}/** rw,

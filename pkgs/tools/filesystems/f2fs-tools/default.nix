@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "Userland tools for the f2fs filesystem";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ emery jagajaga ];
+    maintainers = with maintainers; [ ehmry jagajaga ];
   };
 }

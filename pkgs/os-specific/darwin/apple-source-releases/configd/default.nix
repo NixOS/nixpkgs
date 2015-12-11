@@ -7,6 +7,10 @@ appleDerivation {
 
   propagatedBuildInputs = [ Security ];
 
+  propagatedSandboxProfile = ''
+    (allow mach-lookup (global-name "com.apple.SystemConfiguration.configd"))
+  '';
+
   patchPhase = ''
     substituteInPlace SystemConfiguration.fproj/SCNetworkReachabilityInternal.h \
       --replace '#include <xpc/xpc.h>' ""

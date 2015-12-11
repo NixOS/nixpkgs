@@ -29,9 +29,15 @@ stdenv.mkDerivation rec {
     "LOCALEDIR=$(out)/share/locale"
   ];
 
+  postBuild = ''
+    make -C contrib/wrt
+  '';
+
   postInstall = ''
     install -Dm644 dbus/dnsmasq.conf $out/etc/dbus-1/system.d/dnsmasq.conf
     install -Dm644 trust-anchors.conf $out/share/dnsmasq/trust-anchors.conf
+    install -Dm755 contrib/wrt/dhcp_lease_time $out/bin/dhcp_lease_time
+    install -Dm755 contrib/wrt/dhcp_release $out/bin/dhcp_release
 
     mkdir -p $out/share/dbus-1/system-services
     cat <<END > $out/share/dbus-1/system-services/uk.org.thekelleys.dnsmasq.service

@@ -18,7 +18,7 @@ let
     password=${config.services.ddclient.password}
     protocol=${config.services.ddclient.protocol}
     server=${config.services.ddclient.server}
-    ssl=${if config.services.ddclient.ssl then "yes" else "yes"}
+    ssl=${if config.services.ddclient.ssl then "yes" else "no"}
     wildcard=YES
     ${config.services.ddclient.domain}
     ${config.services.ddclient.extraConfig}

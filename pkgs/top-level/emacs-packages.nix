@@ -35,7 +35,7 @@
 
 , lib, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
 
-, emacs
+, emacs, elpaPackages
 , trivialBuild
 , melpaBuild
 
@@ -44,11 +44,9 @@
 
 with lib.licenses;
 
-let self = _self // overrides;
-    callPackage = lib.callPackageWith (self // removeAttrs args ["overrides" "external"]);
-    _self = with self; {
+let packagesFun = super: self: with self; {
 
-  inherit emacs;
+  inherit emacs melpaBuild trivialBuild;
 
   ## START HERE
 
@@ -315,12 +313,12 @@ let self = _self // overrides;
 
   bind-key = melpaBuild {
     pname   = "bind-key";
-    version = "20150317";
+    version = "20150321";
     src = fetchFromGitHub {
       owner  = "jwiegley";
       repo   = "use-package";
-      rev    = "b836266ddfbc835efdb327ecb389ff9e081d7c55";
-      sha256 = "187wnqqm5g43cg8b6a9rbd9ncqad5fhjb96wjszbinjh1mjxyh7i";
+      rev    = "77a77c8b03044f0279e00cadd6a6d1a7ae97b01";
+      sha256 = "14v6wzqn2jhjdbr7nwqilxy9l79m1f2rdrz2c6c6pcla5yjpd1k0";
     };
     files = [ "bind-key.el" ];
     meta = {
@@ -691,6 +689,23 @@ let self = _self // overrides;
     };
   };
 
+  f = melpaBuild rec {
+    pname = "f";
+    version = "20151113";
+    src = fetchFromGitHub {
+      owner = "rejeep";
+      repo = "f.el";
+      rev = "e0259ee060ff9a3f12204adcc8630869080acd68";
+      sha256 = "0lzqfr5xgc3qvpbs6vf63yiw7pc2mybfvsrhczf9ghlmlawqa6k1";
+    };
+    fileSpecs = [ "f.el" ];
+    packageRequires = [ dash s ];
+    meta = {
+      description = "Emacs library for working with files and directories";
+      license = gpl3Plus;
+    };
+  };
+
   find-file-in-project = melpaBuild rec {
     pname = "find-file-in-project";
     version = "3.5";
@@ -1014,22 +1029,6 @@ let self = _self // overrides;
     };
   };
 
-  helm-swoop = melpaBuild rec {
-    pname   = "helm-swoop";
-    version = "20141224";
-    src = fetchFromGitHub {
-      owner  = "ShingoFukuyama";
-      repo   = pname;
-      rev    = "06a251f7d7fce2a5719e0862e5855972cd8ab1ae";
-      sha256 = "0nq33ldhbvfbm6jnsxqdf3vwaqrsr2gprkzll081gcyl2s1x0l2m";
-    };
-    packageRequires = [ helm ];
-    meta = {
-      description = "An Emacs mode which constructs an editable grep for a buffer";
-      license = gpl3Plus;
-    };
-  };
-
   helm = melpaBuild rec {
     pname   = "helm";
     version = "20150105";
@@ -1042,6 +1041,38 @@ let self = _self // overrides;
     packageRequires = [ async ];
     meta = {
       description = "An incremental completion and selection narrowing framework for Emacs";
+      license = gpl3Plus;
+    };
+  };
+
+  helm-bibtex = melpaBuild rec {
+    pname = "helm-bibtex";
+    version = "20151125";
+    src = fetchFromGitHub {
+      owner = "tmalsburg";
+      repo = pname;
+      rev = "bfcd5064dcc7c0ac62c46985832b2a73082f96e0";
+      sha256 = "1nvc4ha9wj5j47qg7hdbv1xpjy8a8idc9vc2myl3xa33ywllwdwi";
+    };
+    packageRequires = [ dash f helm parsebib s ];
+    meta = {
+      description = "Bibliography Manager for Emacs";
+      license = gpl2;
+    };
+  };
+
+  helm-swoop = melpaBuild rec {
+    pname   = "helm-swoop";
+    version = "20141224";
+    src = fetchFromGitHub {
+      owner  = "ShingoFukuyama";
+      repo   = pname;
+      rev    = "06a251f7d7fce2a5719e0862e5855972cd8ab1ae";
+      sha256 = "0nq33ldhbvfbm6jnsxqdf3vwaqrsr2gprkzll081gcyl2s1x0l2m";
+    };
+    packageRequires = [ helm ];
+    meta = {
+      description = "An Emacs mode which constructs an editable grep for a buffer";
       license = gpl3Plus;
     };
   };
@@ -1444,6 +1475,21 @@ let self = _self // overrides;
     };
   };
 
+  parsebib = melpaBuild rec {
+    pname = "parsebib";
+    version = "20151006";
+    src = fetchFromGitHub {
+      owner = "joostkremers";
+      repo = pname;
+      rev = "9a1f60bed2814dfb5cec2b92efb5951a4b465cce";
+      sha256 = "0n91whyjnrdhb9bqfif01ygmwv5biwpz2pvjv5w5y1d4g0k1x9ml";
+    };
+    meta = {
+      description = "Emacs library for reading .bib files";
+      license = bsd3;
+    };
+  };
+
   perspective = melpaBuild rec {
     pname   = "perspective";
     version = "1.12";
@@ -1642,12 +1688,12 @@ let self = _self // overrides;
 
   s = melpaBuild rec {
     pname   = "s";
-    version = "20140910";
+    version = "20151023";
     src = fetchFromGitHub {
       owner  = "magnars";
       repo   = "${pname}.el";
-      rev    = "1f85b5112f3f68169ddaa2911fcfa030f979eb4d";
-      sha256 = "9d871ea84f98c51099528a03eddf47218cf70f1431d4c35c19c977d9e73d421f";
+      rev    = "372e94c1a28031686d75d6c52bfbe833a118a72a";
+      sha256 = "1zn8n3mv0iscs242dbkf5vmkkizfslq5haw9z0d0g3wknq18286h";
     };
     meta = {
       description = "String manipulation library for Emacs";
@@ -1838,12 +1884,12 @@ let self = _self // overrides;
 
   use-package = melpaBuild rec {
     pname   = "use-package";
-    version = "20150317";
+    version = "20151112";
     src = fetchFromGitHub {
       owner  = "jwiegley";
       repo   = pname;
-      rev    = "b836266ddfbc835efdb327ecb389ff9e081d7c55";
-      sha256 = "187wnqqm5g43cg8b6a9rbd9ncqad5fhjb96wjszbinjh1mjxyh7i";
+      rev    = "77a77c8b03044f0279e00cadd6a6d1a7ae97b01";
+      sha256 = "14v6wzqn2jhjdbr7nwqilxy9l79m1f2rdrz2c6c6pcla5yjpd1k0";
     };
     packageRequires = [ bind-key diminish ];
     files = [ "use-package.el" ];
@@ -1977,4 +2023,6 @@ let self = _self // overrides;
     };
   };
 
-}; in self
+};
+
+in elpaPackages.override packagesFun

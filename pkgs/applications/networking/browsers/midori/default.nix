@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cmake pkgconfig intltool vala makeWrapper
-    webkitgtk librsvg libnotify sqlite
+    webkitgtk librsvg libnotify sqlite gsettings_desktop_schemas
     (libsoup.override {gnomeSupport = true;})
   ];
 

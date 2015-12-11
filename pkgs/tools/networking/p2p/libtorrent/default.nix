@@ -1,21 +1,27 @@
-{ stdenv, fetchurl, pkgconfig, openssl, libsigcxx, zlib }:
+{ stdenv, fetchFromGitHub, pkgconfig
+, libtool, autoconf, automake, cppunit
+, openssl, libsigcxx, zlib }:
 
 stdenv.mkDerivation rec {
   name = "libtorrent-${version}";
   version = "0.13.6";
 
-  src = fetchurl {
-    url = "http://rtorrent.net/downloads/${name}.tar.gz";
-    sha256 = "012s1nwcvz5m5r4d2z9klgy2n34kpgn9kgwgzxm97zgdjs6a0f18";
+  src = fetchFromGitHub rec {
+    owner = "rakshasa";
+    repo = "libtorrent";
+    rev = "${version}";
+    sha256 = "1rvrxgb131snv9r6ksgzmd74rd9z7q46bhky0zazz7dwqqywffcp";
   };
 
-  buildInputs = [ pkgconfig openssl libsigcxx zlib ];
+  buildInputs = [ pkgconfig libtool autoconf automake cppunit openssl libsigcxx zlib ];
+
+  preConfigure = "./autogen.sh";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/rakshasa/libtorrent/;
+    homepage = http://www.libtorrent.org/;
     description = "A BitTorrent library written in C++ for *nix, with focus on high performance and good code";
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ simons ebzzry ];
+    maintainers = with maintainers; [ simons ebzzry codyopel ];
   };
 }

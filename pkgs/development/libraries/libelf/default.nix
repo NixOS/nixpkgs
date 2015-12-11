@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   # FIXME: Eventually make Gettext a build input on all platforms.
   configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-nls";
 
+  buildInputs = [ gettext ];
+
   meta = {
     description = "ELF object file access library";
 

@@ -1,0 +1,109 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="chap-packageconfig">
+
+<title><filename>~/.nixpkgs/config.nix</filename>: global configuration</title>
+
+<para>Nix packages can be configured to allow or deny certain options.</para>
+
+<para>To apply the configuration edit
+<filename>~/.nixpkgs/config.nix</filename> and set it like
+
+<programlisting>
+{
+  allowUnfree = true;
+}
+</programlisting>
+
+and will allow the Nix package manager to install unfree licensed packages.</para>
+
+<para>The configuration as listed also applies to NixOS under
+<option>nixpkgs.config</option> set.</para>
+
+<itemizedlist>
+
+  <listitem>
+    <para>Allow installing of packages that are distributed under
+    unfree license by setting <programlisting>allowUnfree =
+    true;</programlisting> or deny them by setting it to
+    <literal>false</literal>.</para>
+
+    <para>Same can be achieved by setting the environment variable:
+
+<programlisting>
+$ export NIXPKGS_ALLOW_UNFREE=1
+</programlisting>
+
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>Whenever unfree packages are not allowed, single packages
+    can still be allowed by a predicate function that accepts package
+    as an argument and should return a boolean:
+
+<programlisting>
+allowUnfreePredicate = (pkg: ...);
+</programlisting>
+
+    Example to allow flash player only:
+
+<programlisting>
+allowUnfreePredicate = (pkg: pkgs.lib.hasPrefix "flashplayer-" pkg.name);
+</programlisting>
+
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>Whenever unfree packages are not allowed, packages can still
+    be whitelisted by their license:
+
+<programlisting>
+whitelistedLicenses = with stdenv.lib.licenses; [ amd wtfpl ];
+</programlisting>
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>In addition to whitelisting licenses which are denied by the
+    <literal>allowUnfree</literal> setting, you can also explicitely
+    deny installation of packages which have a certain license:
+
+<programlisting>
+blacklistedLicenses = with stdenv.lib.licenses; [ agpl3 gpl3 ];
+</programlisting>
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+<para>A complete list of licenses can be found in the file
+<filename>lib/licenses.nix</filename> of the nix package tree.</para>
+
+
+<!--============================================================-->
+
+<section xml:id="sec-modify-via-packageOverrides"><title>Modify
+packages via <literal>packageOverrides</literal></title>
+
+<para>You can define a function called
+<varname>packageOverrides</varname> in your local
+<filename>~/.nixpkgs/config</filename> to overide nix packages.  It
+must be a function that takes pkgs as an argument and return modified
+set of packages.
+
+<programlisting>
+{
+  packageOverrides = pkgs: rec {
+    foo = pkgs.foo.override { ... };
+  };
+}
+</programlisting>
+
+</para>
+
+</section>
+
+
+</chapter>

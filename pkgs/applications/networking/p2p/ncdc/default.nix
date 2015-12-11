@@ -18,6 +18,6 @@ stdenv.mkDerivation {
     homepage = http://dev.yorhel.nl/ncdc;
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux; # arbitrary
-    maintainers = [ stdenv.lib.maintainers.emery ];
+    maintainers = [ stdenv.lib.maintainers.ehmry ];
   };
 }

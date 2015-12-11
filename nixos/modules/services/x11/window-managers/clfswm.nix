@@ -8,14 +8,7 @@ in
 
 {
   options = {
-    services.xserver.windowManager.clfswm = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        example = true;
-        description = "Enable the clfswm tiling window manager.";
-      };
-    };
+    services.xserver.windowManager.clfswm.enable = mkEnableOption "clfswm";
   };
 
   config = mkIf cfg.enable {

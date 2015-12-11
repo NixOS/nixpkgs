@@ -8,12 +8,7 @@ in
 
 {
   options = {
-    services.xserver.windowManager.bspwm.enable = mkOption {
-      type = types.bool;
-      default = false;
-      example = true;
-      description = "Enable the bspwm window manager.";
-    };
+    services.xserver.windowManager.bspwm.enable = mkEnableOption "bspwm";
   };
 
   config = mkIf cfg.enable {

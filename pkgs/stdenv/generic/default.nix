@@ -12,6 +12,8 @@ let lib = import ../../../lib; in lib.makeOverridable (
 , extraBuildInputs ? []
 , __stdenvImpureHostDeps ? []
 , __extraImpureHostDeps ? []
+, stdenvSandboxProfile ? ""
+, extraSandboxProfile ? ""
 }:
 
 let
@@ -101,6 +103,8 @@ let
     , outputs ? [ "out" ]
     , __impureHostDeps ? []
     , __propagatedImpureHostDeps ? []
+    , sandboxProfile ? ""
+    , propagatedSandboxProfile ? ""
     , ... } @ attrs:
     let
       pos' =
@@ -123,10 +127,11 @@ let
         throw ("Package ‘${attrs.name or "«name-missing»"}’ in ${pos''} ${errormsg}, refusing to evaluate."
         + (lib.strings.optionalString (reason != "blacklisted") ''
 
-          For `nixos-rebuild` you can set
+          a) For `nixos-rebuild` you can set
             { nixpkgs.config.allow${up reason} = true; }
           in configuration.nix to override this.
-          For `nix-env` you can add
+
+          b) For `nix-env`, `nix-build` or any other Nix command you can add
             { allow${up reason} = true; }
           to ~/.nixpkgs/config.nix.
         ''));
@@ -166,9 +171,13 @@ let
       lib.addPassthru (derivation (
         (removeAttrs attrs
           ["meta" "passthru" "crossAttrs" "pos"
-           "__impureHostDeps" "__propagatedImpureHostDeps"])
+           "__impureHostDeps" "__propagatedImpureHostDeps"
+           "sandboxProfile" "propagatedSandboxProfile"])
         // (let
-          # TODO: remove lib.unique once nix has a list canonicalization primitive
+          computedSandboxProfile =
+            lib.concatMap (input: input.__propagatedSandboxProfile or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs);
+          computedPropagatedSandboxProfile =
+            lib.concatMap (input: input.__propagatedSandboxProfile or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs);
           computedImpureHostDeps =
             lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs));
           computedPropagatedImpureHostDeps =
@@ -190,6 +199,12 @@ let
           propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
             (if crossConfig == null then propagatedBuildInputs else []);
         } // ifDarwin {
+          # TODO: remove lib.unique once nix has a list canonicalization primitive
+          __sandboxProfile =
+          let profiles = [ extraSandboxProfile ] ++ computedSandboxProfile ++ computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile sandboxProfile ];
+              final = lib.concatStringsSep "\n" (lib.filter (x: x != "") (lib.unique profiles));
+          in final;
+          __propagatedSandboxProfile = lib.unique (computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile ]);
           __impureHostDeps = computedImpureHostDeps ++ computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps ++ __impureHostDeps ++ __extraImpureHostDeps ++ [
             "/dev/zero"
             "/dev/random"
@@ -233,6 +248,7 @@ let
       inherit preHook initialPath shell defaultNativeBuildInputs;
     }
     // ifDarwin {
+      __sandboxProfile = stdenvSandboxProfile;
       __impureHostDeps = __stdenvImpureHostDeps;
     })
 

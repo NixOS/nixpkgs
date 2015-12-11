@@ -312,6 +312,7 @@
   ./services/networking/lambdabot.nix
   ./services/networking/mailpile.nix
   ./services/networking/minidlna.nix
+  ./services/networking/miniupnpd.nix
   ./services/networking/mstpd.nix
   ./services/networking/murmur.nix
   ./services/networking/namecoind.nix
@@ -401,6 +402,7 @@
   ./services/ttys/agetty.nix
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix
+  ./services/web-apps/pump.io.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/jboss/default.nix
@@ -506,6 +508,7 @@
   ./virtualisation/amazon-options.nix
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
+  ./virtualisation/rkt.nix
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/virtualbox-host.nix
   ./virtualisation/vmware-guest.nix

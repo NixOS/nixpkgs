@@ -1,4 +1,4 @@
-{ lib, buildFHSUserEnv
+{ lib, buildFHSUserEnv, steam
 , withJava   ? false
 , withPrimus ? false
 }:
@@ -46,6 +46,13 @@ buildFHSUserEnv {
 
     ln -s ../lib64/steam-runtime steamrt/amd64
     ln -s ../lib32/steam-runtime steamrt/i386
+  '';
+
+  extraInstallCommands = ''
+    mkdir -p $out/share/applications
+    ln -s ${steam}/share/icons $out/share
+    ln -s ${steam}/share/pixmaps $out/share
+    sed "s,/usr/bin/steam,$out/bin/steam,g" ${steam}/share/applications/steam.desktop > $out/share/applications/steam.desktop
   '';
 
   profile = ''

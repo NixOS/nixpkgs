@@ -16,89 +16,63 @@
 #
 # To use at startup, see hardware.bumblebee options.
 
-# This nix expression supports for now only the native nvidia driver.
-# It should not be hard to generalize this approach to support the
-# nouveau driver as well (parameterize hostEnv, i686Env over the
-# module package, and parameterize the two wrappers as well)
-
-{ stdenv, fetchurl, pkgconfig, help2man
-, libX11, glibc, glib, libbsd
-, makeWrapper, buildEnv, module_init_tools
-, xorg, xkeyboard_config
-, nvidia_x11, virtualgl
+{ stdenv, lib, fetchurl, pkgconfig, help2man, makeWrapper
+, glib, libbsd
+, libX11, libXext, xorgserver, xkbcomp, module_init_tools, xkeyboard_config, xf86videonouveau
+, nvidia_x11, virtualgl, primusLib
 # The below should only be non-null in a x86_64 system. On a i686
 # system the above nvidia_x11 and virtualgl will be the i686 packages.
 # TODO: Confusing. Perhaps use "SubArch" instead of i686?
 , nvidia_x11_i686 ? null
-, virtualgl_i686 ? null
+, primusLib_i686 ? null
 , useDisplayDevice ? false
-, extraDeviceOptions ? ""
+, extraNvidiaDeviceOptions ? ""
+, extraNouveauDeviceOptions ? ""
+, useNvidia ? true
 }:
-with stdenv.lib;
+
 let
   version = "3.2.1";
+
+  primus = if useNvidia then primusLib else primusLib.override { nvidia_x11 = null; };
+  primus_i686 = if useNvidia then primusLib_i686 else primusLib_i686.override { nvidia_x11 = null; };
+
+  primusLibs = lib.makeLibraryPath ([primus] ++ lib.optional (primusLib_i686 != null) primus_i686);
+
+  nvidia_x11s = [nvidia_x11] ++ lib.optional (nvidia_x11_i686 != null) nvidia_x11_i686;
+
+  nvidiaLibs = lib.makeLibraryPath nvidia_x11s;
+
+  bbdPath = lib.makeSearchPath "bin" [ module_init_tools xorgserver ];
+  bbdLibs = lib.makeLibraryPath [ libX11 libXext ];
+
+  xmodules = lib.concatStringsSep "," (map (x: "${x}/lib/xorg/modules") ([ xorgserver ] ++ lib.optional (!useNvidia) xf86videonouveau));
+
+in stdenv.mkDerivation rec {
   name = "bumblebee-${version}";
-
-  # Isolated X11 environment without the acceleration driver module.
-  # Includes the rest of the components needed for bumblebeed and
-  # optirun to spawn the second X server and to connect to it.
-  x11Env = buildEnv {
-    name = "bumblebee-env";
-    paths = [
-      module_init_tools
-      xorg.xorgserver
-      xorg.xrandr
-      xorg.xrdb
-      xorg.setxkbmap
-      xorg.libX11
-      xorg.libXext
-      xorg.xf86inputevdev
-    ];
-  };
-
-  # The environment for the host architecture.
-  hostEnv = buildEnv {
-    name = "bumblebee-x64-env";
-    paths = [
-      nvidia_x11
-      virtualgl
-    ];
-  };
-
-  # The environment for the sub architecture, i686, if there is one
-  i686Env = if virtualgl_i686 != null
-    then buildEnv {
-      name = "bumblebee-i686-env";
-      paths = [
-       nvidia_x11_i686
-       virtualgl_i686
-      ];
-    }
-    else null;
-
-  allEnvs = [hostEnv] ++ optional (i686Env != null) i686Env;
-  ldPathString = makeLibraryPath allEnvs;
-
-  # By default we don't want to use a display device
-  deviceOptions = if useDisplayDevice
-                  then ""
-                  else ''
-
-                         #   Disable display device
-                             Option "UseEDID" "false"
-                             Option "UseDisplayDevice" "none"
-                       ''
-                  + extraDeviceOptions;
-
-in stdenv.mkDerivation {
-  inherit name deviceOptions;
 
   src = fetchurl {
     url = "http://bumblebee-project.org/${name}.tar.gz";
     sha256 = "03p3gvx99lwlavznrpg9l7jnl1yfg2adcj8jcjj0gxp20wxp060h";
   };
 
-  patches = [ ./xopts.patch ./nvidia-conf.patch];
+  patches = [ ./nixos.patch ];
+
+  # By default we don't want to use a display device
+  nvidiaDeviceOptions = lib.optionalString (!useDisplayDevice) ''
+    # Disable display device
+    Option "UseEDID" "false"
+    Option "UseDisplayDevice" "none"
+  '' + extraNvidiaDeviceOptions;
+
+  nouveauDeviceOptions = extraNouveauDeviceOptions;
+
+  # the have() function is deprecated and not available to bash completions the
+  # way they are currently loaded in NixOS, so use _have. See #10936
+  postPatch = ''
+    substituteInPlace scripts/bash_completion/bumblebee \
+      --replace "have optirun" "_have optirun"
+  '';
 
   preConfigure = ''
     # Substitute the path to the actual modinfo program in module.c.
@@ -114,12 +88,16 @@ in stdenv.mkDerivation {
 
     # Apply configuration options
     substituteInPlace conf/xorg.conf.nvidia \
-      --subst-var deviceOptions
+      --subst-var nvidiaDeviceOptions
+
+    substituteInPlace conf/xorg.conf.nouveau \
+      --subst-var nouveauDeviceOptions
   '';
 
   # Build-time dependencies of bumblebeed and optirun.
   # Note that it has several runtime dependencies.
-  buildInputs = [ stdenv makeWrapper pkgconfig help2man libX11 glib libbsd ];
+  buildInputs = [ libX11 glib libbsd ];
+  nativeBuildInputs = [ makeWrapper pkgconfig help2man ];
 
   # The order of LDPATH is very specific: First X11 then the host
   # environment then the optional sub architecture paths.
@@ -130,33 +108,33 @@ in stdenv.mkDerivation {
   # include the sub architecture components.
   configureFlags = [
     "--with-udev-rules=$out/lib/udev/rules.d"
-    "CONF_DRIVER=nvidia"
-    "CONF_DRIVER_MODULE_NVIDIA=nvidia"
-    "CONF_LDPATH_NVIDIA=${x11Env}/lib:${ldPathString}"
-    "CONF_MODPATH_NVIDIA=${hostEnv}/lib/xorg/modules,${x11Env}/lib/xorg/modules"
+    # see #10282
+    #"CONF_PRIMUS_LD_PATH=${primusLibs}"
+  ] ++ lib.optionals useNvidia [
+    "CONF_LDPATH_NVIDIA=${nvidiaLibs}"
+    "CONF_MODPATH_NVIDIA=${nvidia_x11}/lib/xorg/modules"
   ];
 
-  # create a wrapper environment for bumblebeed and optirun
+  CFLAGS = [
+    "-DX_MODULE_APPENDS=\\\"${xmodules}\\\""
+    "-DX_XKB_DIR=\\\"${xkeyboard_config}/etc/X11/xkb\\\""
+  ];
+
   postInstall = ''
     wrapProgram "$out/sbin/bumblebeed" \
-      --prefix PATH : "${x11Env}/sbin:${x11Env}/bin:${hostEnv}/bin:\$PATH" \
-      --prefix LD_LIBRARY_PATH : "${x11Env}/lib:${hostEnv}/lib:\$LD_LIBRARY_PATH" \
-      --set FONTCONFIG_FILE "/etc/fonts/fonts.conf" \
-      --set XKB_BINDIR "${xorg.xkbcomp}/bin" \
-      --set XKB_DIR "${xkeyboard_config}/etc/X11/xkb"
+      --set XKB_BINDIR "${xkbcomp}/bin" \
+      --prefix PATH : "${bbdPath}" \
+      --prefix LD_LIBRARY_PATH : "${bbdLibs}"
 
     wrapProgram "$out/bin/optirun" \
-      --prefix PATH : "${hostEnv}/bin"
-  '' + (if i686Env == null
-    then ""
-    else ''
-    makeWrapper "$out/bin/.optirun-wrapped" "$out/bin/optirun32" \
-      --prefix PATH : "${i686Env}/bin"
-  '');
+      --prefix PATH : "${virtualgl}/bin"
+  '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://github.com/Bumblebee-Project/Bumblebee;
     description = "Daemon for managing Optimus videocards (power-on/off, spawns xservers)";
-    license = stdenv.lib.licenses.gpl3;
+    platforms = platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

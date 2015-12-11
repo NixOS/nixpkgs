@@ -6,7 +6,7 @@ set -u
 # I've also tried adding -z direct and -z lazyload, but it gave too many problems with C++ exceptions :'(
 # Also made sure libgcc would not be lazy-loaded, as suggested here: https://www.illumos.org/issues/2534#note-3
 #   but still no success.
-cmd="@prog@ -z ignore"
+cmd="@ld@ -z ignore"
 
 args=("$@");
 

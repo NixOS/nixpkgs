@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, perl, systemd, iw, rfkill, hdparm, ethtool, inetutils
-, kmod, pciutils, smartmontools, x86_energy_perf_policy
+, module_init_tools, pciutils, smartmontools, x86_energy_perf_policy
 , enableRDW ? false, networkmanager
 }:
 
@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
   buildInputs = [ perl ];
 
   paths = lib.makeSearchPath "bin"
-          ([ iw rfkill hdparm ethtool inetutils systemd kmod pciutils smartmontools
+          ([ iw rfkill hdparm ethtool inetutils systemd module_init_tools pciutils smartmontools
              x86_energy_perf_policy
            ]
            ++ lib.optional enableRDW networkmanager
