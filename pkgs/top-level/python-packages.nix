@@ -13825,15 +13825,16 @@ in modules // {
 
 
   py = buildPythonPackage rec {
-    name = "py-1.4.30";
+    name = "py-${version}";
+    version = "1.4.31";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/py/${name}.tar.gz";
-      md5 = "a904aabfe4765cb754f2db84ec7bb03a";
+      sha256 = "a6501963c725fc2554dabfece8ae9a8fb5e149c0ac0a42fd2b02c5c1c57fc114";
     };
 
     # some weird errors with paths
-    doCheck = !isPy3k;
+    # doCheck = !isPy3k;
 
     meta = {
       description = "Library with cross-python path, ini-parsing, io, code, log facilities";
