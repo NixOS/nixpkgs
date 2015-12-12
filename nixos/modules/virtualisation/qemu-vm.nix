@@ -297,6 +297,7 @@ in
     virtualisation.qemu = {
       options =
         mkOption {
+          type = types.listOf types.unspecified;
           default = [];
           example = [ "-vga std" ];
           description = "Options passed to QEMU.";
