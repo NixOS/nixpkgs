@@ -131,67 +131,72 @@ in
   };
 
   ###### implementation
-  config = mkIf (cfg.certs != { }) {
+  config = mkMerge [
+    (mkIf (cfg.certs != { }) {
 
-    systemd.services = flip mapAttrs' cfg.certs (cert: data:
-      let
-        cpath = "${cfg.directory}/${cert}";
-        cmdline = [ "-v" "-d" cert "--default_root" data.webroot "--valid_min" cfg.validMin ]
-                  ++ optionals (data.email != null) [ "--email" data.email ]
-                  ++ concatMap (p: [ "-f" p ]) data.plugins
-                  ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains);
+      systemd.services = flip mapAttrs' cfg.certs (cert: data:
+        let
+          cpath = "${cfg.directory}/${cert}";
+          cmdline = [ "-v" "-d" cert "--default_root" data.webroot "--valid_min" cfg.validMin ]
+                    ++ optionals (data.email != null) [ "--email" data.email ]
+                    ++ concatMap (p: [ "-f" p ]) data.plugins
+                    ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains);
 
-      in nameValuePair
-      ("acme-${cert}")
-      ({
-        description = "ACME cert renewal for ${cert} using simp_le";
-        after = [ "network.target" ];
-        serviceConfig = {
-          Type = "oneshot";
-          SuccessExitStatus = [ "0" "1" ];
-          PermissionsStartOnly = true;
-          User = data.user;
-          Group = data.group;
-          PrivateTmp = true;
-        };
-        path = [ pkgs.simp_le ];
-        preStart = ''
-          mkdir -p '${cfg.directory}'
-          if [ ! -d '${cpath}' ]; then
-            mkdir -m 700 '${cpath}'
-            chown '${data.user}:${data.group}' '${cpath}'
-          fi
-        '';
-        script = ''
-          cd '${cpath}'
-          set +e
-          simp_le ${concatMapStringsSep " " (arg: escapeShellArg (toString arg)) cmdline}
-          EXITCODE=$?
-          set -e
-          echo "$EXITCODE" > /tmp/lastExitCode
-          exit "$EXITCODE"
-        '';
-        postStop = ''
-          if [ -e /tmp/lastExitCode ] && [ "$(cat /tmp/lastExitCode)" = "0" ]; then
-            echo "Executing postRun hook..."
-            ${data.postRun}
-          fi
-        '';
-      })
-    );
+        in nameValuePair
+        ("acme-${cert}")
+        ({
+          description = "ACME cert renewal for ${cert} using simp_le";
+          after = [ "network.target" ];
+          serviceConfig = {
+            Type = "oneshot";
+            SuccessExitStatus = [ "0" "1" ];
+            PermissionsStartOnly = true;
+            User = data.user;
+            Group = data.group;
+            PrivateTmp = true;
+          };
+          path = [ pkgs.simp_le ];
+          preStart = ''
+            mkdir -p '${cfg.directory}'
+            if [ ! -d '${cpath}' ]; then
+              mkdir -m 700 '${cpath}'
+              chown '${data.user}:${data.group}' '${cpath}'
+            fi
+          '';
+          script = ''
+            cd '${cpath}'
+            set +e
+            simp_le ${concatMapStringsSep " " (arg: escapeShellArg (toString arg)) cmdline}
+            EXITCODE=$?
+            set -e
+            echo "$EXITCODE" > /tmp/lastExitCode
+            exit "$EXITCODE"
+          '';
+          postStop = ''
+            if [ -e /tmp/lastExitCode ] && [ "$(cat /tmp/lastExitCode)" = "0" ]; then
+              echo "Executing postRun hook..."
+              ${data.postRun}
+            fi
+          '';
+        })
+      );
 
-    systemd.timers = flip mapAttrs' cfg.certs (cert: data: nameValuePair
-      ("acme-${cert}")
-      ({
-        description = "timer for ACME cert renewal of ${cert}";
-        wantedBy = [ "timers.target" ];
-        timerConfig = {
-          OnCalendar = cfg.renewInterval;
-          Unit = "acme-simp_le-${cert}.service";
-        };
-      })
-    );
+      systemd.timers = flip mapAttrs' cfg.certs (cert: data: nameValuePair
+        ("acme-${cert}")
+        ({
+          description = "timer for ACME cert renewal of ${cert}";
+          wantedBy = [ "timers.target" ];
+          timerConfig = {
+            OnCalendar = cfg.renewInterval;
+            Unit = "acme-simp_le-${cert}.service";
+          };
+        })
+      );
+    })
 
-  };
+    { meta.maintainers = with lib.maintainers; [ abbradar fpletz globin ];
+      meta.doc = ./acme.xml;
+    }
+  ];
 
 }
