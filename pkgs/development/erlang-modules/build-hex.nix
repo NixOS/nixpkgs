@@ -1,4 +1,5 @@
-{ stdenv, erlang, rebar3, openssl, libyaml, fetchurl, fetchFromGitHub }:
+{ stdenv, erlang, rebar3, openssl, libyaml, fetchurl, fetchFromGitHub,
+  rebar3-pc }:
 
 { name, version, sha256
 , hexPkg ? name
@@ -45,9 +46,10 @@ stdenv.mkDerivation (attrs // {
   '';
 
   configurePhase = let
+    plugins = pluginDeps ++ (if compilePorts then [rebar3-pc] else []);
     getDeps = drv: [drv] ++ (map getDeps drv.erlangDeps);
     recursiveDeps = unique (flatten (map getDeps erlangDeps));
-    recursivePluginsDeps = unique (flatten (map getDeps pluginDeps));
+    recursivePluginsDeps = unique (flatten (map getDeps plugins));
   in ''
     runHook preConfigure
     ${concatMapStrings (dep: ''
