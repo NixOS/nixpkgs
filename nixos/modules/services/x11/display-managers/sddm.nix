@@ -138,7 +138,7 @@ in
         '';
 
         type = types.submodule {
-	  options = {
+          options = {
             enable = mkOption {
               type = types.bool;
               default = false;
@@ -163,7 +163,7 @@ in
                 will work only the first time.
               '';
             };
-	  };
+          };
         };
       };
 
@@ -175,14 +175,16 @@ in
 
     assertions = [
       { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
-        message = "SDDM auto-login requires services.xserver.displayManager.sddm.autoLogin.user to be set";
+        message = ''
+          SDDM auto-login requires services.xserver.displayManager.sddm.autoLogin.user to be set
+        '';
       }
       { assertion = cfg.autoLogin.enable -> elem defaultSessionName dmcfg.session.names;
         message = ''
           SDDM auto-login requires that services.xserver.desktopManager.default and
-	  services.xserver.windowMananger.default are set to valid values. The current
-	  default session: ${defaultSessionName} is not valid.
-	'';
+          services.xserver.windowMananger.default are set to valid values. The current
+          default session: ${defaultSessionName} is not valid.
+        '';
       }
     ];
 
