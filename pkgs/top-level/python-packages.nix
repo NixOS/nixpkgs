@@ -3097,6 +3097,34 @@ in modules // {
     };
   };
 
+  mahotas = buildPythonPackage rec {
+    name = "python-mahotas-${version}";
+    version = "1.4.0";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/luispedro/mahotas/archive/release-${version}.tar.gz";
+      sha256 = "30c4b979e0d5f4c013860321766a79ffcabe56c1ad9088e5d0c6b36aec5f0415";
+    };
+
+    buildInputs = with self; [
+      nose
+      pillow
+      scipy
+    ];
+    propagatedBuildInputs = with self; [
+      numpy
+      imread
+    ];
+
+    meta = with stdenv.lib; {
+      description = "Computer vision package based on numpy";
+      homepage = https://readthedocs.org/projects/mahotas/;
+      maintainers = with maintainers; [ luispedro ];
+      license = licenses.mit;
+      platforms = platforms.linux;
+    };
+  };
+
   mixpanel = buildPythonPackage rec {
     version = "4.0.2";
     name = "mixpanel-${version}";
