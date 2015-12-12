@@ -8010,10 +8010,14 @@ let
     ffmpeg = ffmpeg_0;
   };
 
-  libressl_2_2 = callPackage ../development/libraries/libressl/2.2.nix { };
-  libressl_2_3 = callPackage ../development/libraries/libressl/2.3.nix { };
   # 2.3 breaks some backward-compability
   libressl = libressl_2_2;
+  libressl_2_2 = callPackage ../development/libraries/libressl/2.2.nix {
+    fetchurl = fetchurlBoot;
+  };
+  libressl_2_3 = callPackage ../development/libraries/libressl/2.3.nix {
+    fetchurl = fetchurlBoot;
+  };
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
