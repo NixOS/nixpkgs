@@ -6258,6 +6258,9 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/C/CH/CHORNY/Linux-Distribution-0.23.tar.gz;
       sha256 = "603e27da607b3e872a669d7a66d75982f0969153eab2d4b20c341347b4ebda5f";
     };
+    # The tests fail if the distro it's built on isn't in the supported list.
+    # This includes NixOS.
+    doCheck = false;
     meta = {
       description = "Perl extension to detect on which Linux distribution we are running";
       license = "perl";
