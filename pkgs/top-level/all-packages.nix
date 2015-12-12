@@ -3818,6 +3818,8 @@ let
 
   closurecompiler = callPackage ../development/compilers/closure { };
 
+  cmdstan = callPackage ../development/compilers/cmdstan { };
+
   cmucl_binary = callPackage_i686 ../development/compilers/cmucl/binary.nix { };
 
   compcert = callPackage ../development/compilers/compcert (
