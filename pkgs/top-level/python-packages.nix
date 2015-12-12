@@ -4940,6 +4940,33 @@ in modules // {
     };
   };
 
+  imread = buildPythonPackage rec {
+    name = "python-imread-${version}";
+    version = "0.5.1";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/luispedro/imread/archive/release-${version}.tar.gz";
+      sha256 = "12d7ba3523ba50d67d526e9797e041021dd9cd4acf9567a9bf73c8ae0b689d4a";
+    };
+
+    buildInputs = with self; [
+      nose
+      pkgs.libjpeg
+      pkgs.libpng
+      pkgs.libtiff
+      pkgs.libwebp
+    ];
+    propagatedBuildInputs = with self; [ numpy ];
+
+    meta = with stdenv.lib; {
+      description = "Python package to load images as numpy arrays";
+      homepage = https://readthedocs.org/projects/imread/;
+      maintainers = with maintainers; [ luispedro ];
+      license = licenses.mit;
+      platforms = platforms.linux;
+    };
+  };
+
   itsdangerous = buildPythonPackage rec {
     name = "itsdangerous-0.24";
 
