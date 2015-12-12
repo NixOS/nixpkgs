@@ -19,22 +19,6 @@ let
         '';
       };
 
-      validMin = mkOption {
-        type = types.int;
-        default = 30 * 24 * 3600;
-        description = "Minimum remaining validity before renewal in seconds.";
-      };
-
-      renewInterval = mkOption {
-        type = types.str;
-        default = "weekly";
-        description = ''
-          Systemd calendar expression when to check for renewal. See
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
-        '';
-      };
-
       email = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -108,6 +92,22 @@ in
         '';
       };
 
+      validMin = mkOption {
+        type = types.int;
+        default = 30 * 24 * 3600;
+        description = "Minimum remaining validity before renewal in seconds.";
+      };
+
+      renewInterval = mkOption {
+        type = types.str;
+        default = "weekly";
+        description = ''
+          Systemd calendar expression when to check for renewal. See
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry>.
+        '';
+      };
+
       certs = mkOption {
         default = { };
         type = types.loaOf types.optionSet;
@@ -136,7 +136,7 @@ in
     systemd.services = flip mapAttrs' cfg.certs (cert: data:
       let
         cpath = "${cfg.directory}/${cert}";
-        cmdline = [ "-v" "-d" cert "--default_root" data.webroot "--valid_min" data.validMin ]
+        cmdline = [ "-v" "-d" cert "--default_root" data.webroot "--valid_min" cfg.validMin ]
                   ++ optionals (data.email != null) [ "--email" data.email ]
                   ++ concatMap (p: [ "-f" p ]) data.plugins
                   ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains);
@@ -186,7 +186,7 @@ in
         description = "timer for ACME cert renewal of ${cert}";
         wantedBy = [ "timers.target" ];
         timerConfig = {
-          OnCalendar = data.renewInterval;
+          OnCalendar = cfg.renewInterval;
           Unit = "acme-simp_le-${cert}.service";
         };
       })
