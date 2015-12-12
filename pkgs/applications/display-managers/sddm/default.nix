@@ -45,6 +45,11 @@ let
 
     enableParallelBuilding = true;
 
+    postInstall = ''
+      # remove empty scripts
+      rm "$out/share/sddm/scripts/Xsetup" "$out/share/sddm/scripts/Xstop"
+    '';
+
     meta = with stdenv.lib; {
       description = "QML based X11 display manager";
       homepage = https://github.com/sddm/sddm;
