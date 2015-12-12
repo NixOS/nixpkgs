@@ -14421,8 +14421,15 @@ let
 
   xsokoban = callPackage ../games/xsokoban { };
 
-  zandronum = callPackage ../games/zandronum { };
-  zandronum-server = callPackage ../games/zandronum/server.nix { };
+  zandronum = callPackage ../games/zandronum {
+    fmod = fmod42416;
+    cmake = cmake-2_8;
+  };
+
+  zandronum-server = zandronum.override {
+    serverOnly = true;
+  };
+
   zandronum-bin = callPackage ../games/zandronum/bin.nix { };
 
   zangband = builderDefsPackage (callPackage ../games/zangband) {};
