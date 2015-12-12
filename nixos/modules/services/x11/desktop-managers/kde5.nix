@@ -166,6 +166,11 @@ in
         GST_PLUGIN_SYSTEM_PATH_1_0 = [ "/lib/gstreamer-1.0" ];
       };
 
+    # Enable GTK applications to load SVG icons
+    environment.variables = mkIf (lib.hasAttr "breeze-icons" kf5) {
+      GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
+    };
+
     fonts.fonts = [ (plasma5.oxygen-fonts or pkgs.noto-fonts) ];
 
     programs.ssh.askPassword = "${plasma5.ksshaskpass}/bin/ksshaskpass";
