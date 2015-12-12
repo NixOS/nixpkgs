@@ -49,6 +49,6 @@ let
     l10n = pkgs.recurseIntoAttrs (import ./l10n.nix { inherit callPackage lib pkgs; });
   };
 
-  newScope = scope: pkgs.kf516.newScope ({ inherit kdeApp; } // scope);
+  newScope = scope: pkgs.kf517.newScope ({ inherit kdeApp; } // scope);
 
 in lib.makeScope newScope packages
