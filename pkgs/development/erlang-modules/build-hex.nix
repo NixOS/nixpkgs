@@ -1,4 +1,4 @@
-{ stdenv, erlang, rebar3, openssl, libyaml, fetchurl }:
+{ stdenv, erlang, rebar3, openssl, libyaml, fetchurl, fetchFromGitHub }:
 
 { name, version, sha256
 , hexPkg ? name
@@ -14,7 +14,14 @@ stdenv.mkDerivation (attrs // {
 
   buildInputs = buildInputs ++ [ erlang rebar3 openssl libyaml ];
 
-  postPatch = ''
+  postPatch = let
+    registrySnapshot = fetchFromGitHub {
+      owner = "gleber";
+      repo = "hex-pm-registry-snapshots";
+      rev = "48147b0";
+      sha256 = "0ibfnhrhbka4n6wkhs99fpy3sjab54ip37jgvx2hcfhfr4pxhbxw";
+    };
+  in ''
     rm -f rebar rebar3
     if [ -e "src/${name}.app.src" ]; then
       sed -i -e 's/{ *vsn *,[^}]*}/{vsn, "${version}"}/' "src/${name}.app.src"
@@ -26,8 +33,7 @@ stdenv.mkDerivation (attrs // {
     '' else ''''}
 
     mkdir -p _build/default/{lib,plugins}/ ./.cache/rebar3/hex/default/
-    # TODO: replace with fetchFromGitHub
-    cp ${./registry.ets} .cache/rebar3/hex/default/registry
+    zcat ${registrySnapshot}/registry.ets.gz > .cache/rebar3/hex/default/registry
 
     ${postPatch}
   '';
