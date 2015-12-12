@@ -17,6 +17,16 @@ let
     exec ${dmcfg.xserverBin} ${dmcfg.xserverArgs} "$@"
   '';
 
+  Xsetup = pkgs.writeScript "Xsetup" ''
+    #!/bin/sh
+    ${cfg.setupScript}
+  '';
+
+  Xstop = pkgs.writeScript "Xstop" ''
+    #!/bin/sh
+    ${cfg.stopScript}
+  '';
+
   cfgFile = pkgs.writeText "sddm.conf" ''
     [General]
     HaltCommand=${pkgs.systemd}/bin/systemctl poweroff
@@ -39,6 +49,8 @@ let
     SessionCommand=${dmcfg.session.script}
     SessionDir=${dmcfg.session.desktops}
     XauthPath=${pkgs.xorg.xauth}/bin/xauth
+    DisplayCommand=${Xsetup}
+    DisplayStopCommand=${Xstop}
 
     ${optionalString cfg.autoLogin.enable ''
     [Autologin]
@@ -95,6 +107,27 @@ in
         default = [];
         description = ''
           Extra packages providing themes.
+        '';
+      };
+
+      setupScript = mkOption {
+        type = types.str;
+        default = "";
+        example = ''
+          # workaround for using NVIDIA Optimus without Bumblebee
+          xrandr --setprovideroutputsource modesetting NVIDIA-0
+          xrandr --auto
+        '';
+        description = ''
+          A script to execute when starting the display server.
+        '';
+      };
+
+      stopScript = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          A script to execute when stopping the display server.
         '';
       };
 
