@@ -1,0 +1,35 @@
+diff -rupN higan_v095-source.orig/GNUmakefile higan_v095-source/GNUmakefile
+--- higan_v095-source.orig/GNUmakefile	2015-11-04 10:28:26.173428178 +0100
++++ higan_v095-source/GNUmakefile	2015-11-04 10:28:31.752231593 +0100
+@@ -12,7 +12,8 @@ target := tomoko
+ # console := true
+ 
+ # compiler
+-flags += -I. -O3
++flags += -I. $(CXXFLAGS)
++link += $(LDFLAGS)
+ objects := libco
+ 
+ # profile-guided optimization mode
+@@ -43,7 +44,7 @@ ifeq ($(platform),windows)
+ else ifeq ($(platform),macosx)
+   flags += -march=native
+ else ifeq ($(platform),linux)
+-  flags += -march=native -fopenmp
++  flags += -fopenmp
+   link += -fopenmp
+   link += -Wl,-export-dynamic
+   link += -lX11 -lXext -ldl
+diff -rupN higan_v095-source.orig/icarus/GNUmakefile higan_v095-source/icarus/GNUmakefile
+--- higan_v095-source.orig/icarus/GNUmakefile	2015-11-04 10:28:26.186486119 +0100
++++ higan_v095-source/icarus/GNUmakefile	2015-11-04 10:28:48.755059317 +0100
+@@ -1,8 +1,8 @@
+ include ../nall/GNUmakefile
+ include ../hiro/GNUmakefile
+ 
+-flags += -I.. -O3
+-link +=
++flags += -I.. $(CXXFLAGS)
++link += $(LDFLAGS)
+ objects := obj/hiro.o obj/icarus.o
+ objects += $(if $(call streq,$(platform),windows),obj/resource.o)
