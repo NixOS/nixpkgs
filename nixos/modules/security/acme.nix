@@ -21,14 +21,18 @@ let
 
       validMin = mkOption {
         type = types.int;
-        default = 2592000;
+        default = 30 * 24 * 3600;
         description = "Minimum remaining validity before renewal in seconds.";
       };
 
       renewInterval = mkOption {
         type = types.str;
         default = "weekly";
-        description = "Systemd calendar expression when to check for renewal. See systemd.time(7).";
+        description = ''
+          Systemd calendar expression when to check for renewal. See
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry>.
+        '';
       };
 
       email = mkOption {
