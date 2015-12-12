@@ -45,10 +45,11 @@ let
   desktopItem = makeDesktopItem {
     name = "dropbox";
     exec = "dropbox";
-    comment = "Online directories";
+    comment = "Sync your files across computers and to the web";
     desktopName = "Dropbox";
-    genericName = "Online storage";
-    categories = "Application;Internet;";
+    genericName = "File Synchronizer";
+    categories = "Network;FileTransfer;";
+    startupNotify = "false";
   };
 
 in stdenv.mkDerivation {
