@@ -32,9 +32,9 @@ let
   '';
   ml2PluginConf = pkgs.writeText "ml2.conf" ''
     [ml2]
-    type_drivers = flat,vlan
+    type_drivers = flat,vlan,zone
     tenant_network_types =
-    mechanism_drivers = linuxbridge
+    mechanism_drivers = linuxbridge,snabb
     extension_drivers = port_security
 
     [ml2_type_flat]
