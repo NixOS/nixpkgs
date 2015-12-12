@@ -10209,6 +10209,25 @@ in modules // {
     };
   };
 
+  mpv = buildPythonPackage rec {
+    name = "mpv-0.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/m/mpv/${name}.tar.gz";
+      sha256 = "0b9kd70mshdr713f3l1lbnz1q0vlg2y76h5d8liy1bzqm7hjcgfw";
+    };
+    buildInputs = [ pkgs.mpv ];
+    patchPhase = "substituteInPlace mpv.py --replace libmpv.so ${pkgs.mpv}/lib/libmpv.so";
+
+    meta = with pkgs.stdenv.lib; {
+      description = "A python interface to the mpv media player";
+      homepage = "https://github.com/jaseg/python-mpv";
+      license = licenses.agpl3;
+    };
+
+  };
+
+
   mrbob = buildPythonPackage rec {
     name = "mrbob-${version}";
     version = "0.1.1";
