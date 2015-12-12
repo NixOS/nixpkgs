@@ -133,7 +133,7 @@ in
                 libvirt/nwfilter/*.xml );
             do
                 mkdir -p /etc/$(dirname $i) -m 755
-                cp -fpd ${pkgs.libvirt}/etc/$i /etc/$i
+                cp -npd ${pkgs.libvirt}/etc/$i /etc/$i
             done
 
             # libvirtd puts the full path of the emulator binary in the machine
