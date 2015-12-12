@@ -6837,6 +6837,8 @@ let
 
   libjson = callPackage ../development/libraries/libjson { };
 
+  libb64 = callPackage ../development/libraries/libb64 { };
+
   judy = callPackage ../development/libraries/judy { };
 
   keybinder = callPackage ../development/libraries/keybinder {
@@ -8329,7 +8331,7 @@ let
   rubberband = callPackage ../development/libraries/rubberband {
     inherit (vamp) vampSDK;
   };
-  
+
   sad = callPackage ../applications/science/logic/sad { };
 
   sbc = callPackage ../development/libraries/sbc { };
