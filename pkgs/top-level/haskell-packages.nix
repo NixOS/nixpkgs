@@ -62,7 +62,14 @@ rec {
 
   };
 
-  packages = {
+  packages = let mkProfiled = self: super: {
+                   mkDerivation = args: super.mkDerivation (args // {
+                     enableLibraryProfiling = true;
+                   });
+                 };
+             in with pkgs.lib.attrsets; mapAttrs (n: v: v // { profiled = v.override { overrides = mkProfiled; }; } ) packagesBase;
+
+  packagesBase = {
 
     # Support for this compiler is broken, because it can't deal with directory-based package databases.
     # ghc6104 = callPackage ../development/haskell-modules { ghc = compiler.ghc6104; };

@@ -472,27 +472,8 @@ or enter an interactive shell environment suitable for building them:
 
 ## How to build with profiling enabled
 
-Every Haskell package set takes a function called `overrides` that you can use
-to manipulate the package as much as you please. One useful application of this
-feature is to replace the default `mkDerivation` function with one that enables
-library profiling for all packages. To accomplish that, add configure the
-following snippet in your `~/.nixpkgs/config.nix` file:
-
-    {
-      packageOverrides = super: let self = super.pkgs; in
-      {
-        profiledHaskellPackages = self.haskellPackages.override {
-          overrides = self: super: {
-            mkDerivation = args: super.mkDerivation (args // {
-              enableLibraryProfiling = true;
-            });
-          };
-        };
-      };
-    }
-
-Then, replace instances of `haskellPackages` in the `cabal2nix`-generated
-`default.nix` or `shell.nix` files with `profiledHaskellPackages`.
+Use the `.profiled` attribute of any haskell package set. For example,
+replace usage of `haskell.packages.ghc7102` by `haskell.packages.ghc7102.profiled`
 
 ## How to override package versions in a compiler-specific package set
 
