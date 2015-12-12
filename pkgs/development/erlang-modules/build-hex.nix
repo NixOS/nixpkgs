@@ -6,6 +6,7 @@
 , buildInputs ? [], erlangDeps ? [], pluginDeps ? []
 , postPatch ? ""
 , compilePorts ? false
+, meta ? {}
 , ... }@attrs:
 
 with stdenv.lib;
@@ -87,6 +88,10 @@ stdenv.mkDerivation (attrs // {
     url = "https://s3.amazonaws.com/s3.hex.pm/tarballs/${hexPkg}-${version}.tar";
     sha256 = sha256;
   };
+
+  meta = {
+    inherit (erlang.meta) platforms;
+  } // meta;
 
   passthru = {
     packageName = name;

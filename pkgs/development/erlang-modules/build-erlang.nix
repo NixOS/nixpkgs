@@ -3,6 +3,7 @@
 { name, version
 , buildInputs ? [], erlangDeps ? []
 , postPatch ? ""
+, meta ? {}
 , ... }@attrs:
 
 with stdenv.lib;
@@ -52,6 +53,10 @@ stdenv.mkDerivation (attrs // {
     done
     runHook postInstall
   '';
+
+  meta = {
+    inherit (erlang.meta) platforms;
+  } // meta;
 
   passthru = {
     packageName = name;
