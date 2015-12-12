@@ -13,27 +13,27 @@ in
 
     services.clamav = {
       updater = {
-	enable = mkOption {
-	  default = false;
-	  description = ''
-	    Whether to enable automatic ClamAV virus definitions database updates.
-	  '';
-	};
+        enable = mkOption {
+        default = false;
+        description = ''
+            Whether to enable automatic ClamAV virus definitions database updates.
+          '';
+        };
 
-	frequency = mkOption {
-	  default = 12;
-	  description = ''
-	    Number of database checks per day.
-	  '';
-	};
+        frequency = mkOption {
+          default = 12;
+          description = ''
+            Number of database checks per day.
+          '';
+        };
 
-	config = mkOption {
-	  default = "";
-	  description = ''
-	    Extra configuration for freshclam. Contents will be added verbatim to the
-	    configuration file.
-	  '';
-	};
+        config = mkOption {
+          default = "";
+          description = ''
+            Extra configuration for freshclam. Contents will be added verbatim to the
+            configuration file.
+          '';
+        };
       };
     };
   };
@@ -63,15 +63,15 @@ in
 
     jobs = {
       clamav_updater = {
-	name = "clamav-updater";
-          startOn = "started network-interfaces";
-          stopOn = "stopping network-interfaces";
+	      name = "clamav-updater";
+        startOn = "started network-interfaces";
+        stopOn = "stopping network-interfaces";
 
-          preStart = ''
-            mkdir -m 0755 -p ${stateDir}
-            chown ${clamavUser}:${clamavGroup} ${stateDir}
+        preStart = ''
+          mkdir -m 0755 -p ${stateDir}
+          chown ${clamavUser}:${clamavGroup} ${stateDir}
           '';
-          exec = "${pkgs.clamav}/bin/freshclam --daemon --config-file=${pkgs.writeText "freshclam.conf" cfg.updater.config}";
+        exec = "${pkgs.clamav}/bin/freshclam --daemon --config-file=${pkgs.writeText "freshclam.conf" cfg.updater.config}";
       }; 
     };
 
