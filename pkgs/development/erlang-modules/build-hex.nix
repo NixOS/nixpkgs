@@ -16,12 +16,7 @@ stdenv.mkDerivation (attrs // {
   buildInputs = buildInputs ++ [ erlang rebar3 openssl libyaml ];
 
   postPatch = let
-    registrySnapshot = fetchFromGitHub {
-      owner = "gleber";
-      repo = "hex-pm-registry-snapshots";
-      rev = "48147b0";
-      sha256 = "0ibfnhrhbka4n6wkhs99fpy3sjab54ip37jgvx2hcfhfr4pxhbxw";
-    };
+    registrySnapshot = import ./registrySnapshot.nix { inherit fetchFromGitHub; };
   in ''
     rm -f rebar rebar3
     if [ -e "src/${name}.app.src" ]; then
