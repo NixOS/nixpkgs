@@ -3495,6 +3495,8 @@ let
 
   xbrightness = callPackage ../tools/X11/xbrightness { };
 
+  xprintidle-ng = callPackage ../tools/X11/xprintidle-ng {};
+
   xsettingsd = callPackage ../tools/X11/xsettingsd { };
 
   xsensors = callPackage ../os-specific/linux/xsensors { };
