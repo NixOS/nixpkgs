@@ -1287,6 +1287,24 @@ in modules // {
     };
   };
 
+  betamax = buildPythonPackage rec {
+    name = "betamax-0.5.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/b/betamax/${name}.tar.gz";
+      sha256 = "1glzigrbip9w2jr2gcmwa96rffhi9x9l1455dhbcx2gh3pmcykl6";
+    };
+
+    propagatedBuildInputs = [ self.requests2 ];
+
+    meta = with stdenv.lib; {
+      homepage = https://betamax.readthedocs.org/en/latest/;
+      description = "A VCR imitation for requests";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ pSub ];
+    };
+  };
+
   caldavclientlibrary-asynk = buildPythonPackage rec {
     version = "asynkdev";
     name = "caldavclientlibrary-asynk-${version}";
