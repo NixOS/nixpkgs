@@ -1,8 +1,13 @@
-{ stdenv, fetchurl, erlang }:
+{ stdenv, fetchurl, erlang, tree, fetchFromGitHub }:
 
 
 let
   version = "3.0.0-beta.4";
+  registrySnapshot = import ./registrySnapshot.nix { inherit fetchFromGitHub; };
+  setupRegistry = ''
+    mkdir -p _build/default/{lib,plugins,packages}/ ./.cache/rebar3/hex/default/
+    zcat ${registrySnapshot}/registry.ets.gz > .cache/rebar3/hex/default/registry
+  '';
 in
 stdenv.mkDerivation {
   name = "rebar3-${version}";
@@ -13,8 +18,11 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ erlang ];
+  inherit setupRegistry;
+
 
   buildPhase = ''
+    ${setupRegistry}
     HOME=. escript bootstrap
   '';
   installPhase = ''

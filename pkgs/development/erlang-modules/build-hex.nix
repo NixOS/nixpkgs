@@ -22,21 +22,17 @@ stdenv.mkDerivation (attrs // {
     inherit sha256;
   };
 
-  postPatch = let
-    registrySnapshot = import ./registrySnapshot.nix { inherit fetchFromGitHub; };
-  in ''
+  postPatch = ''
     rm -f rebar rebar3
     if [ -e "src/${name}.app.src" ]; then
       sed -i -e 's/{ *vsn *,[^}]*}/{vsn, "${version}"}/' "src/${name}.app.src"
     fi
 
-    # TODO: figure out how to provide 'pc' plugin hermetically
     ${if compilePorts then ''
     echo "{plugins, [pc]}." >> rebar.config
     '' else ''''}
 
-    mkdir -p _build/default/{lib,plugins}/ ./.cache/rebar3/hex/default/
-    zcat ${registrySnapshot}/registry.ets.gz > .cache/rebar3/hex/default/registry
+    ${rebar3.setupRegistry}
 
     ${postPatch}
   '';
@@ -61,8 +57,6 @@ stdenv.mkDerivation (attrs // {
     runHook postConfigure
   '';
 
-  # TODO: figure out how to provide rebar3 a static registry snapshot to make
-  # this hermetic
   buildPhase = ''
     runHook preBuild
     HOME=. rebar3 compile
