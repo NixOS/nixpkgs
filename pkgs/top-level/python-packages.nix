@@ -19073,6 +19073,23 @@ in modules // {
     };
   };
 
+  uritemplate_py = buildPythonPackage rec {
+    name = "uritemplate.py-${version}";
+    version = "0.3.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/u/uritemplate.py/${name}.tar.gz";
+      sha256 = "0xvvdiwnag2pdi96hjf7v8asdia98flk2rxcjqnwcs3rk99alygx";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/uri-templates/uritemplate-py;
+      description = "Python implementation of URI Template";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ pSub ];
+    };
+  };
+
   traceback2 = buildPythonPackage rec {
     version = "1.4.0";
     name = "traceback2-${version}";
