@@ -10570,6 +10570,11 @@ in modules // {
       url = "http://pypi.python.org/packages/source/m/monotonic/${name}.tar.gz";
       sha256 = "1diab6hfh3jpa1f0scpqaqrawk4g97ss4v7gkn2yw8znvdm6abw5";
     };
+
+    patchPhase = optionalString stdenv.isLinux ''
+      substituteInPlace monotonic.py --replace \
+        "ctypes.util.find_library('c')" "'${stdenv.glibc}/lib/libc.so.6'"
+    '';
   };
 
   MySQL_python = buildPythonPackage rec {
