@@ -1,6 +1,6 @@
 { stdenv, fetchurl, groff }:
 
-let version = "51"; in
+let version = "52"; in
 stdenv.mkDerivation {
   name = "mksh-${version}";
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
       "http://www.mirbsd.org/MirOS/dist/mir/mksh/mksh-R${version}.tgz"
       "http://pub.allbsd.org/MirOS/dist/mir/mksh/mksh-R${version}.tgz"
     ];
-    sha256 = "1pyscl3w4aw067a5hb8mczy3z545jz1dwx9n2b09k09xydgsmvlz";
+    sha256 = "13vnncwfx4zq3yi7llw3p6miw0px1bm5rrps3y1nlfn6sb6zbhj5";
   };
 
   buildInputs = [ groff ];
