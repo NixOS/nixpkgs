@@ -2317,7 +2317,7 @@ let
 
   msf = callPackage ../tools/security/metasploit { };
 
-  mssys = callPackage ../tools/misc/mssys { };
+  ms-sys = callPackage ../tools/misc/ms-sys { };
 
   mtdutils = callPackage ../tools/filesystems/mtdutils { };
 
@@ -15770,6 +15770,7 @@ aliases = with self; rec {
   pidginlatexSF = pidginlatex; # added 2014-11-02
   tftp_hpa = tftp-hpa; # added 2015-04-03
   manpages = man-pages; # added 2015-12-06
+  mssys = ms-sys; # added 2015-12-13
 };
 
 tweakAlias = _n: alias: with lib;
