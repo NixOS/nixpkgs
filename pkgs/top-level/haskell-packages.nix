@@ -307,6 +307,9 @@ rec {
     lts-3_17 = packages.ghc7102.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.17.nix { };
     };
+    lts-3_18 = packages.ghc7102.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.18.nix { };
+    };
 
   };
 }
