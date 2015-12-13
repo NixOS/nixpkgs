@@ -18,14 +18,6 @@ pythonPackages.buildPythonPackage {
     ++ [ python.modules.sqlite3 gamin ];
 
   preConfigure = ''
-    substituteInPlace setup.cfg \
-      --replace /usr $out
-
-    substituteInPlace setup.py \
-      --replace /usr $out \
-      --replace /etc $out/etc \
-      --replace /var $TMPDIR/var \
-
     for i in fail2ban-client fail2ban-regex fail2ban-server; do
       substituteInPlace $i \
         --replace /usr/share/fail2ban $out/share/fail2ban
@@ -39,6 +31,18 @@ pythonPackages.buildPythonPackage {
   '';
 
   doCheck = false;
+
+  preInstall = ''
+    # see https://github.com/NixOS/nixpkgs/issues/4968
+    ${python}/bin/${python.executable} setup.py install_data --install-dir=$out --root=$out
+  '';
+
+  postInstall = let
+    sitePackages = "$out/lib/${python.libPrefix}/site-packages";
+  in ''
+    # see https://github.com/NixOS/nixpkgs/issues/4968
+    rm -rf ${sitePackages}/etc ${sitePackages}/usr ${sitePackages}/var;
+  '';
 
   meta = with stdenv.lib; {
     homepage    = http://www.fail2ban.org/;
