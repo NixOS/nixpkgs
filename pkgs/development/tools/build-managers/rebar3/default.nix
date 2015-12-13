@@ -17,6 +17,8 @@ stdenv.mkDerivation {
     sha256 = "0px66scjdia9aaa5z36qzxb848r56m0k98g0bxw065a2narsh4xy";
   };
 
+  patches = [ ./hermetic-bootstrap.patch ];
+
   buildInputs = [ erlang ];
   inherit setupRegistry;
 
