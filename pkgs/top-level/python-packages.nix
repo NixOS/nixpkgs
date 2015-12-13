@@ -7534,12 +7534,12 @@ in modules // {
       md5 = "378670fe456957eb3c27ddaef60b2b24";
     };
 
-    propagatedBuildInputs = with self; [ werkzeug jinja2 ];
+    propagatedBuildInputs = with self; [ itsdangerous click werkzeug jinja2 ];
 
     meta = {
       homepage = http://flask.pocoo.org/;
       description = "A microframework based on Werkzeug, Jinja 2, and good intentions";
-      license = "BSD";
+      license = licenses.bsd3;
     };
   };
 
