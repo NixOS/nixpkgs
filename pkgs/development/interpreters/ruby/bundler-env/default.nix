@@ -1,6 +1,6 @@
 { stdenv, runCommand, writeText, writeScript, writeScriptBin, ruby, lib
 , callPackage, defaultGemConfig, fetchurl, fetchgit, buildRubyGem , bundler_HEAD
-, git
+, git, darwin
 }@defs:
 
 # This is a work-in-progress.
@@ -38,10 +38,15 @@ let
       src = (fetchers."${attrs.source.type}" attrs);
     };
 
-  applyGemConfigs = attrs:
-    if gemConfig ? "${attrs.name}"
-    then attrs // gemConfig."${attrs.name}" attrs
-    else attrs;
+  applyGemConfigs = oldAttrs:
+    let
+      attrs = {
+        buildInputs = lib.optional stdenv.isDarwin darwin.libobjc;
+      } // oldAttrs;
+    in
+      if gemConfig ? "${attrs.name}"
+      then attrs // gemConfig."${attrs.name}" attrs
+      else attrs;
 
   needsPatch = attrs:
     (attrs ? patches) || (attrs ? prePatch) || (attrs ? postPatch);
