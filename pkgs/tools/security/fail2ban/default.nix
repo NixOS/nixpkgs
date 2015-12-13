@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, python, pythonPackages, unzip, systemd, gamin }:
+{ stdenv, fetchzip, python, pythonPackages, unzip, gamin }:
 
 let version = "0.9.1"; in
 
@@ -14,8 +14,8 @@ pythonPackages.buildPythonPackage {
 
   buildInputs = [ unzip ];
 
-  pythonPath = (stdenv.lib.optional stdenv.isLinux systemd)
-    ++ [ python.modules.sqlite3 gamin ];
+  propagatedBuildInputs = [ python.modules.sqlite3 gamin ]
+    ++ (stdenv.lib.optional stdenv.isLinux pythonPackages.systemd);
 
   preConfigure = ''
     for i in fail2ban-client fail2ban-regex fail2ban-server; do
