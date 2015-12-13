@@ -95,6 +95,10 @@ stdenv.mkDerivation {
   wrapPrefixVariables = [ "GIO_EXTRA_MODULES" ];
   GIO_EXTRA_MODULES = "${glib_networking}/lib/gio/modules";
 
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared_mime_info}/share")
+  '';
+
   postInstall = ''
     mkdir -p $out/share/applications
     cp claws-mail.desktop $out/share/applications
