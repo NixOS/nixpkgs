@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "4.7.6";
 
   src = fetchurl {
-    url = "http://dl.ubnt.com/unifi/${version}/UniFi.unix.zip";
+    url = "https://www.ubnt.com/downloads/unifi/${version}/UniFi.unix.zip";
     sha256 = "0xinrxcbd5gb2jgcvrx3jcslad0f19qrbjzkiir9zjq59sn68gfn";
   };
 
