@@ -8225,6 +8225,36 @@ in modules // {
     };
   };
 
+  github3_py = buildPythonPackage rec {
+    name = "github3.py-${version}";
+    version = "1.0.0a2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/github3.py/${name}.tar.gz";
+      sha256 = "11xvwbzfy04vwbjnpc8wcrjjzghbrbdzffrdfk70v0zdnxqg8hc5";
+    };
+
+    buildInputs = with self; [ unittest2 pytest mock betamax betamax-matchers ];
+
+    propagatedBuildInputs = with self; [ requests2 pyopenssl uritemplate_py
+      ndg-httpsclient requests_toolbelt pyasn1 ];
+
+    postPatch = ''
+      sed -i -e 's/mock ==1.0.1/mock>=1.0.1/' setup.py
+      sed -i -e 's/unittest2 ==0.5.1/unittest2>=0.5.1/' setup.py
+    '';
+
+    # TODO: only disable the tests that require network
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      homepage = http://github3py.readthedocs.org/en/master/;
+      description = "A wrapper for the GitHub API written in python";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ pSub ];
+    };
+  };
+
   goobook = buildPythonPackage rec {
     name = "goobook-1.9";
     disabled = isPy3k;
