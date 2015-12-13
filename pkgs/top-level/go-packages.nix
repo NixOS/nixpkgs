@@ -686,10 +686,10 @@ let
   };
 
   fzf = buildFromGitHub {
-    rev = "0.11.0";
+    rev = "0.11.1";
     owner = "junegunn";
     repo = "fzf";
-    sha256 = "1jcvfdglmrsh7z6lasj2i7l3cwqd0ijhv5ywafmr7m1rn90nj1pf";
+    sha256 = "1zw1kq4d5sb1qia44q04i33yii9qwlwlwz8vxhln03d4631mhsra";
 
     buildInputs = [
       crypto ginkgo gomega junegunn.go-runewidth go-shellwords pkgs.ncurses text
