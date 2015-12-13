@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, zlib, freetype, cairo, lua5, texLive, ghostscriptX
+{ stdenv, fetchurl, pkgconfig, zlib, freetype, cairo, lua5, texlive, ghostscript
 , libjpeg, qtbase
-, makeWrapper }:
-let ghostscript = ghostscriptX; in
+, makeQtWrapper
+}:
+
 stdenv.mkDerivation rec {
   name = "ipe-7.1.10";
 
@@ -21,16 +22,18 @@ stdenv.mkDerivation rec {
   '';
 
   IPEPREFIX="$$out";
-  URWFONTDIR="${texLive}/texmf-dist/fonts/type1/urw/";
+  URWFONTDIR="${texlive}/texmf-dist/fonts/type1/urw/";
   LUA_PACKAGE = "lua";
 
   buildInputs = [
-    libjpeg pkgconfig zlib qtbase freetype cairo lua5 texLive ghostscript makeWrapper
+    libjpeg pkgconfig zlib qtbase freetype cairo lua5 texlive ghostscript
   ];
 
-  postInstall = ''
+  nativeBuildInputs = [ makeQtWrapper ];
+
+  postFixup = ''
     for prog in $out/bin/*; do
-      wrapProgram "$prog" --prefix PATH : "${texLive}/bin"
+      wrapQtProgram "$prog" --prefix PATH : "${texlive}/bin"
     done
   '';
 

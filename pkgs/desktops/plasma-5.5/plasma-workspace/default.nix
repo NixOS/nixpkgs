@@ -49,7 +49,6 @@ plasmaPackage rec {
     wrapQtProgram "$out/bin/kcheckrunning"
     wrapQtProgram "$out/bin/systemmonitor"
     wrapQtProgram "$out/bin/kstartupconfig5"
-    wrapQtProgram "$out/bin/startplasmacompositor"
     wrapQtProgram "$out/bin/kdostartupconfig5"
     wrapQtProgram "$out/bin/klipper"
     wrapQtProgram "$out/bin/kuiserver5"
@@ -57,6 +56,9 @@ plasmaPackage rec {
     wrapQtProgram "$out/bin/plasmashell"
 
     wrapQtProgram "$out/lib/libexec/drkonqi"
+
+    rm "$out/bin/startplasmacompositor"
     rm "$out/lib/libexec/startplasma"
+    rm -r "$out/share/wayland-sessions"
   '';
 }

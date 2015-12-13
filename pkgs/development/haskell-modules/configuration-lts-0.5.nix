@@ -4014,8 +4014,10 @@ self: super: {
   "haspell" = dontDistribute super."haspell";
   "hasql" = doDistribute super."hasql_0_4_1";
   "hasql-backend" = doDistribute super."hasql-backend_0_2_2";
+  "hasql-pool" = dontDistribute super."hasql-pool";
   "hasql-postgres" = doDistribute super."hasql-postgres_0_7_3";
   "hasql-postgres-options" = dontDistribute super."hasql-postgres-options";
+  "hasql-th" = dontDistribute super."hasql-th";
   "hasql-transaction" = dontDistribute super."hasql-transaction";
   "hastache" = doDistribute super."hastache_0_6_0";
   "hastache-aeson" = dontDistribute super."hastache-aeson";
@@ -5963,6 +5965,7 @@ self: super: {
   "nntp" = dontDistribute super."nntp";
   "no-buffering-workaround" = dontDistribute super."no-buffering-workaround";
   "no-role-annots" = dontDistribute super."no-role-annots";
+  "nofib-analyse" = dontDistribute super."nofib-analyse";
   "nofib-analyze" = dontDistribute super."nofib-analyze";
   "noise" = dontDistribute super."noise";
   "non-empty" = dontDistribute super."non-empty";
@@ -6143,6 +6146,7 @@ self: super: {
   "pandoc-citeproc-preamble" = dontDistribute super."pandoc-citeproc-preamble";
   "pandoc-crossref" = dontDistribute super."pandoc-crossref";
   "pandoc-csv2table" = dontDistribute super."pandoc-csv2table";
+  "pandoc-include" = dontDistribute super."pandoc-include";
   "pandoc-lens" = dontDistribute super."pandoc-lens";
   "pandoc-placetable" = dontDistribute super."pandoc-placetable";
   "pandoc-plantuml-diagrams" = dontDistribute super."pandoc-plantuml-diagrams";
@@ -7968,6 +7972,7 @@ self: super: {
   "timeconsole" = dontDistribute super."timeconsole";
   "timeit" = dontDistribute super."timeit";
   "timeless" = dontDistribute super."timeless";
+  "timemap" = dontDistribute super."timemap";
   "timeout" = dontDistribute super."timeout";
   "timeout-control" = dontDistribute super."timeout-control";
   "timeout-with-results" = dontDistribute super."timeout-with-results";
@@ -8028,6 +8033,7 @@ self: super: {
   "traced" = dontDistribute super."traced";
   "tracer" = dontDistribute super."tracer";
   "tracker" = dontDistribute super."tracker";
+  "tracy" = dontDistribute super."tracy";
   "trajectory" = dontDistribute super."trajectory";
   "transactional-events" = dontDistribute super."transactional-events";
   "transf" = dontDistribute super."transf";
@@ -8464,6 +8470,7 @@ self: super: {
   "wai-routes" = dontDistribute super."wai-routes";
   "wai-routing" = dontDistribute super."wai-routing";
   "wai-session" = dontDistribute super."wai-session";
+  "wai-session-alt" = dontDistribute super."wai-session-alt";
   "wai-session-clientsession" = dontDistribute super."wai-session-clientsession";
   "wai-session-postgresql" = dontDistribute super."wai-session-postgresql";
   "wai-session-tokyocabinet" = dontDistribute super."wai-session-tokyocabinet";

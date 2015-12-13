@@ -312,6 +312,7 @@
   ./services/networking/lambdabot.nix
   ./services/networking/mailpile.nix
   ./services/networking/minidlna.nix
+  ./services/networking/miniupnpd.nix
   ./services/networking/mstpd.nix
   ./services/networking/murmur.nix
   ./services/networking/namecoind.nix
@@ -342,6 +343,7 @@
   ./services/networking/searx.nix
   ./services/networking/seeks.nix
   ./services/networking/skydns.nix
+  ./services/networking/shairport-sync.nix
   ./services/networking/shout.nix
   ./services/networking/softether.nix
   ./services/networking/spiped.nix
@@ -507,6 +509,7 @@
   ./virtualisation/amazon-options.nix
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
+  ./virtualisation/rkt.nix
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/virtualbox-host.nix
   ./virtualisation/vmware-guest.nix

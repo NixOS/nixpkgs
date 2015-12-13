@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, curl, bzip2, sqlite, openssl ? null
+{ lib, stdenv, fetchurl, perl, curl, bzip2, sqlite, openssl ? null, xz
 , pkgconfig, boehmgc, perlPackages, libsodium
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
@@ -13,8 +13,8 @@ let
 
     nativeBuildInputs = [ perl pkgconfig ];
 
-    buildInputs = [ curl openssl sqlite ] ++
-      lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium;
+    buildInputs = [ curl openssl sqlite xz ]
+      ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium;
 
     propagatedBuildInputs = [ boehmgc ];
 
@@ -97,10 +97,10 @@ in rec {
    };
 
    nixUnstable = lib.lowPrio (common rec {
-     name = "nix-1.11pre4273_71039be";
+     name = "nix-1.11pre4334_7431932";
      src = fetchurl {
-       url = "http://hydra.nixos.org/build/27061065/download/4/${name}.tar.xz";
-       sha256 = "4a1bc541868c317708fc8b532e22f5ead8d9759eee6a2680719584841cf897af";
+       url = "http://hydra.nixos.org/build/28747184/download/4/${name}.tar.xz";
+       sha256 = "ccb0c5be03b9af1bf89e79758868b0cd62c79fd7a0f0791cdb99df86e4240fc4";
      };
    });
 

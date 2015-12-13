@@ -1,5 +1,5 @@
 { stdenv, fetchgit
-, pass, rofi, coreutils, utillinux, xdotool, gnugrep
+, pass, rofi, coreutils, utillinux, xdotool, gnugrep, pwgen, findutils
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -26,11 +26,13 @@ stdenv.mkDerivation rec {
 
   wrapperPath = with stdenv.lib; makeSearchPath "bin/" [
     coreutils
-    utillinux
-    rofi
-    pass
-    xdotool
+    findutils
     gnugrep
+    pass
+    pwgen
+    rofi
+    utillinux
+    xdotool
   ];
 
   fixupPhase = ''

@@ -470,7 +470,7 @@ in
       ] ++ flip concatMap cfg.mirroredBoots (args: [
         {
           assertion = args.devices != [ ];
-          message = "A boot path cannot have an empty devices string in ${arg.path}";
+          message = "A boot path cannot have an empty devices string in ${args.path}";
         }
         {
           assertion = hasPrefix "/" args.path;

@@ -44,11 +44,12 @@ let
 
   addPackages = self: with self; {
     bluedevil = callPackage ./bluedevil.nix {};
+    breeze-gtk = callPackage ./breeze-gtk.nix {};
     breeze-qt4 = callPackage ./breeze-qt4.nix {};
     breeze-qt5 = callPackage ./breeze-qt5.nix {};
     breeze =
       let version = (builtins.parseDrvName breeze-qt5.name).version;
-      in symlinkJoin "breeze-${version}" [ breeze-qt4 breeze-qt5 ];
+      in symlinkJoin "breeze-${version}" [ breeze-gtk breeze-qt4 breeze-qt5 ];
     kde-cli-tools = callPackage ./kde-cli-tools.nix {};
     kde-gtk-config = callPackage ./kde-gtk-config {};
     kdecoration = callPackage ./kdecoration.nix {};
