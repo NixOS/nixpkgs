@@ -1,4 +1,4 @@
-{ stdenv, erlang, rebar3, openssl, libyaml, fetchurl, fetchFromGitHub,
+{ stdenv, erlang, rebar3, openssl, libyaml, fetchHex, fetchFromGitHub,
   rebar3-pc }:
 
 { name, version, sha256
@@ -15,6 +15,12 @@ stdenv.mkDerivation (attrs // {
   name = "${name}-${version}";
 
   buildInputs = buildInputs ++ [ erlang rebar3 openssl libyaml ];
+
+  src = fetchHex {
+    pkg = hexPkg;
+    inherit version;
+    inherit sha256;
+  };
 
   postPatch = let
     registrySnapshot = import ./registrySnapshot.nix { inherit fetchFromGitHub; };
@@ -33,12 +39,6 @@ stdenv.mkDerivation (attrs // {
     zcat ${registrySnapshot}/registry.ets.gz > .cache/rebar3/hex/default/registry
 
     ${postPatch}
-  '';
-
-  unpackCmd = ''
-    tar -xf $curSrc contents.tar.gz
-    mkdir contents
-    tar -C contents -xzf contents.tar.gz
   '';
 
   configurePhase = let
@@ -83,11 +83,6 @@ stdenv.mkDerivation (attrs // {
     done
     runHook postInstall
   '';
-
-  src = fetchurl {
-    url = "https://s3.amazonaws.com/s3.hex.pm/tarballs/${hexPkg}-${version}.tar";
-    sha256 = sha256;
-  };
 
   meta = {
     inherit (erlang.meta) platforms;
