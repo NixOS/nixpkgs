@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://www.mirbsd.org/mksh.htm";
     license = licenses.free;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres nckx ];
     platforms = platforms.unix;
   };
 }
