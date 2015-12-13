@@ -12,6 +12,11 @@ fetchSubmodules=
 builder=
 branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
 
+# populated by clone_user_rev()
+fullRev=
+humanReadableRev=
+commitDate=
+
 if test -n "$deepClone"; then
     deepClone=true
 else
@@ -255,7 +260,7 @@ make_deterministic_repo(){
 }
 
 
-clone_user_rev() {
+_clone_user_rev() {
     local dir="$1"
     local url="$2"
     local rev="${3:-HEAD}"
@@ -273,10 +278,9 @@ clone_user_rev() {
             fi;;
     esac
 
-    local full_revision=$(cd $dir && (git rev-parse $rev 2> /dev/null || git rev-parse refs/heads/$branchName) | tail -n1)
-    echo "git revision is $full_revision"
-    echo "git human-readable version is $(cd $dir && (git describe $full_revision 2> /dev/null || git describe --tags $full_revision 2> /dev/null || echo -- none --))" >&2
-    echo "Commit date is $(cd $dir && git show --no-patch --pretty=%ci $full_revision)"
+    fullRev="$(cd $dir && (git rev-parse $rev 2> /dev/null || git rev-parse refs/heads/$branchName) | tail -n1)"
+    humanReadableRev="$(cd $dir && (git describe $fullRev 2> /dev/null || git describe --tags $fullRev 2> /dev/null || echo -- none --))"
+    commitDate="$(cd $dir && git show --no-patch --pretty=%ci $fullRev)"
 
     # Allow doing additional processing before .git removal
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
@@ -287,6 +291,44 @@ clone_user_rev() {
         find "$dir" -name .git | while read gitdir; do
             make_deterministic_repo "$(readlink -f "$gitdir/..")"
         done
+    fi
+}
+
+clone_user_rev() {
+    if ! test -n "$QUIET"; then
+        _clone_user_rev "$@"
+    else
+        errfile="$(mktemp "${TMPDIR:-/tmp}/git-checkout-err-XXXXXXXX")"
+        trap "rm -rf \"$errfile\"" EXIT
+        _clone_user_rev "$@" 2> "$errfile" || (
+            status="$?"
+            cat "$errfile" >&2
+            exit "$status"
+        )
+    fi
+}
+
+
+print_results() {
+    hash="$1"
+    if ! test -n "$QUIET"; then
+        echo "" >&2
+        echo "git revision is $fullRev" >&2
+        if test -n "$finalPath"; then
+            echo "path is $finalPath" >&2
+        fi
+        echo "git human-readable version is $humanReadableRev" >&2
+        echo "Commit date is $commitDate" >&2
+        if test -n "$hash"; then
+            echo "hash is $hash" >&2
+        fi
+    fi
+    if test -n "$hash"; then
+        echo "{"
+        echo "  url = \"$url\";"
+        echo "  rev = \"$fullRev\";"
+        echo "  $hashType = \"$hash\";"
+        echo "}"
     fi
 }
 
@@ -328,20 +370,18 @@ else
 
         # Compute the hash.
         hash=$(nix-hash --type $hashType --base32 $tmpFile)
-        if ! test -n "$QUIET"; then echo "hash is $hash" >&2; fi
 
         # Add the downloaded file to the Nix store.
         finalPath=$(nix-store --add-fixed --recursive "$hashType" "$tmpFile")
 
         if test -n "$expHash" -a "$expHash" != "$hash"; then
-            echo "hash mismatch for URL \`$url'"
+            print_metadata
+            echo "hash mismatch for URL \`$url'" >&2
             exit 1
         fi
     fi
 
-    if ! test -n "$QUIET"; then echo "path is $finalPath" >&2; fi
-
-    echo $hash
+    print_results "$hash"
 
     if test -n "$PRINT_PATH"; then
         echo $finalPath
