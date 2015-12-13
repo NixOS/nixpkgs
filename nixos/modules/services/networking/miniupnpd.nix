@@ -30,7 +30,7 @@ in
 
       internalIPs = mkOption {
         type = types.listOf types.str;
-        example = [ "192.168.1.0/24" ];
+        example = [ "192.168.1.1/24" "enp1s0" ];
         description = ''
           The IP address ranges to listen on.
         '';
@@ -57,13 +57,42 @@ in
   };
 
   config = mkIf cfg.enable {
+    # from miniupnpd/netfilter/iptables_init.sh
+    networking.firewall.extraCommands = ''
+      iptables -t nat -N MINIUPNPD
+      iptables -t nat -A PREROUTING -i ${cfg.externalInterface} -j MINIUPNPD
+      iptables -t mangle -N MINIUPNPD
+      iptables -t mangle -A PREROUTING -i ${cfg.externalInterface} -j MINIUPNPD
+      iptables -t filter -N MINIUPNPD
+      iptables -t filter -A FORWARD -i ${cfg.externalInterface} ! -o ${cfg.externalInterface} -j MINIUPNPD
+      iptables -t nat -N MINIUPNPD-PCP-PEER
+      iptables -t nat -A POSTROUTING -o ${cfg.externalInterface} -j MINIUPNPD-PCP-PEER
+    '';
+
+    # from miniupnpd/netfilter/iptables_removeall.sh
+    networking.firewall.extraStopCommands = ''
+      iptables -t nat -F MINIUPNPD
+      iptables -t nat -D PREROUTING -i ${cfg.externalInterface} -j MINIUPNPD
+      iptables -t nat -X MINIUPNPD
+      iptables -t mangle -F MINIUPNPD
+      iptables -t mangle -D PREROUTING -i ${cfg.externalInterface} -j MINIUPNPD
+      iptables -t mangle -X MINIUPNPD
+      iptables -t filter -F MINIUPNPD
+      iptables -t filter -D FORWARD -i ${cfg.externalInterface} ! -o ${cfg.externalInterface} -j MINIUPNPD
+      iptables -t filter -X MINIUPNPD
+      iptables -t nat -F MINIUPNPD-PCP-PEER
+      iptables -t nat -D POSTROUTING -o ${cfg.externalInterface} -j MINIUPNPD-PCP-PEER
+      iptables -t nat -X MINIUPNPD-PCP-PEER
+    '';
+
     systemd.services.miniupnpd = {
       description = "MiniUPnP daemon";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.miniupnpd ];
       serviceConfig = {
-        ExecStart = "${pkgs.miniupnpd}/bin/miniupnpd -d -f ${configFile}";
+        ExecStart = "${pkgs.miniupnpd}/bin/miniupnpd -f ${configFile}";
+        PIDFile = "/var/run/miniupnpd.pid";
+        Type = "forking";
       };
     };
   };
