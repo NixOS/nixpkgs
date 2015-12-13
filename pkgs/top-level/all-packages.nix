@@ -13971,6 +13971,8 @@ let
 
   chessdb = callPackage ../games/chessdb { };
 
+  chessx = callPackage ../games/chessx { };
+
   chocolateDoom = callPackage ../games/chocolate-doom { };
 
   cockatrice = qt5Libs.callPackage ../games/cockatrice {  };
