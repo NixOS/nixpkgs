@@ -1,11 +1,12 @@
 {stdenv, fetchurl, python, pythonPackages, cheetahTemplate, makeWrapper, par2cmdline, unzip, unrar}:
 
 stdenv.mkDerivation rec {
-  name = "sabnzbd-0.7.17";
+  version = "0.7.20";
+  name = "sabnzbd-${version}";
   
   src = fetchurl {
-    url = mirror://sourceforge/sabnzbdplus/SABnzbd-0.7.17-src.tar.gz;
-    sha256 = "02gbh3q3qnbwy4xn1hw4i4fyw4j5nkrqy4ak46mxwqgip9ym20d5";
+    url = "mirror://sourceforge/sabnzbdplus/SABnzbd-${version}-src.tar.gz";
+    sha256 = "0hl7mwgyvm4d68346s7vlv0qlibfh2p2idpyzpjfvk8f79hs9cr0";
   };
 
   buildInputs = [makeWrapper python sqlite3 cheetahTemplate];
