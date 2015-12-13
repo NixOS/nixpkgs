@@ -188,7 +188,7 @@ in
           wantedBy = [ "timers.target" ];
           timerConfig = {
             OnCalendar = cfg.renewInterval;
-            Unit = "acme-simp_le-${cert}.service";
+            Unit = "acme-${cert}.service";
           };
         })
       );
