@@ -20,6 +20,7 @@
 , atk
 , gdk_pixbuf
 , nss
+, unzip
 , debug ? false
 
 /* you have to add ~/mm.cfg :
@@ -35,45 +36,44 @@
 }:
 
 let
-  # -> http://get.adobe.com/flashplayer/
-  version = "11.2.202.554";
-
-  src =
-    if stdenv.system == "x86_64-linux" then
-      if debug then
-        # no plans to provide a x86_64 version:
-        # http://labs.adobe.com/technologies/flashplayer10/faq.html
-        throw "no x86_64 debugging version available"
-      else rec {
-        inherit version;
-        url = "http://fpdownload.adobe.com/get/flashplayer/pdc/${version}/install_flash_player_11_linux.x86_64.tar.gz";
-        sha256 = "15zziclffvsa0wpygkwzbh3v367n73pmzwsnkanhg75rv28dgl3x";
-      }
-    else if stdenv.system == "i686-linux" then
-      if debug then
-        throw "flash debugging version is outdated and probably broken" /* {
-        # The debug version also contains a player
-        version = "11.1";
-        url = http://fpdownload.adobe.com/pub/flashplayer/updaters/11/flashplayer_11_plugin_debug.i386.tar.gz;
-        sha256 = "0jn7klq2cyqasj6nxfka2l8nsf7sn7hi6443nv6dd2sb3g7m6x92";
-      }*/
-      else rec {
-        inherit version;
-        url = "http://fpdownload.adobe.com/get/flashplayer/pdc/${version}/install_flash_player_11_linux.i386.tar.gz";
-        sha256 = "1a26l6lz5l6qbx4lm7266pzk0zr77h6issbnayr6df9qj99bppyz";
-      }
+  arch =
+    if      stdenv.system == "x86_64-linux" then
+      if    debug then throw "no x86_64 debugging version available"
+      else  "64bit"
+    else if stdenv.system == "i686-linux"   then
+      if    debug then "32bit_debug"
+      else             "32bit"
     else throw "Flash Player is not supported on this platform";
-
 in
 
-stdenv.mkDerivation {
-  name = "flashplayer-${src.version}";
+stdenv.mkDerivation rec {
+  name = "flashplayer-${version}";
+  version = "11.2.202.554";
 
-  builder = ./builder.sh;
-
-  src = fetchurl { inherit (src) url sha256; };
+  # new versions for update can be found at https://helpx.adobe.com/flash-player/kb/archived-flash-player-versions.html
+  src = fetchurl { 
+    url = "https://fpdownload.macromedia.com/pub/flashplayer/installers/archive/fp_${version}_archive.zip";
+    sha256 = "0pjan07k419pk3lmfdl5vww0ipf5b76cxqhxwjrikb1fc4x993fi";
+  };
 
   inherit zlib alsaLib;
+
+  buildInputs = [ unzip ];
+
+  unpackPhase = ''
+    unzip $src
+    cd */*${arch}
+    tar -xzf flash-plugin*.tar.gz
+  '';
+
+  dontStrip    = true;
+  dontPatchELF = true;
+
+  installPhase = ''
+    mkdir -p $out/lib/mozilla/plugins
+    cp -pv libflashplayer.so $out/lib/mozilla/plugins
+    patchelf --set-rpath "$rpath" $out/lib/mozilla/plugins/libflashplayer.so
+  '';
 
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";
@@ -84,8 +84,6 @@ stdenv.mkDerivation {
       libXext libXrender libXcursor libXt gtk glib pango atk cairo gdk_pixbuf
       libvdpau nss
     ];
-
-  buildPhase = ":";
 
   meta = {
     description = "Adobe Flash Player browser plugin";
