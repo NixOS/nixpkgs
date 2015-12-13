@@ -235,4 +235,19 @@ rec {
     then may_be_int
     else throw "Could not convert ${str} to int.";
 
+  # Read a list of paths from `file', relative to the `rootPath'. Lines
+  # beginning with `#' are treated as comments and ignored. Whitespace
+  # is significant.
+  readPathsFromFile = rootPath: file:
+    let
+      root = toString rootPath;
+      lines =
+        builtins.map (lib.removeSuffix "\n")
+        (lib.splitString "\n" (builtins.readFile file));
+      removeComments = lib.filter (line: !(lib.hasPrefix "#" line));
+      relativePaths = removeComments lines;
+      absolutePaths = builtins.map (path: builtins.toPath (root + "/" + path)) relativePaths;
+    in
+      absolutePaths;
+
 }
