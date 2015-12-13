@@ -1,21 +1,20 @@
-{stdenv, fetchurl, gettext}:
+{ stdenv, fetchurl, gettext }:
 
+let version = "2.5.1"; in
 stdenv.mkDerivation rec {
   name = "ms-sys-${version}";
-  version = "2.4.1";
-  
+ 
   src = fetchurl {
     url = "mirror://sourceforge/ms-sys/${name}.tar.gz";
-    sha256 = "0qccv67fc2q97218b9wm6qpmx0nc0ssca391i0q15351y1na78nc";
+    sha256 = "1vw8yvcqb6iccs4x7rgk09mqrazkalmpxxxsxmvxn32jzdzl5b26";
   };
 
-  buildInputs = [gettext];
+  buildInputs = [ gettext ];
 
-  preBuild = ''
-    makeFlags=(PREFIX=$out)
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
+    inherit version;
     homepage = http://ms-sys.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2;
     description = "A program for writing Microsoft compatible boot records";
