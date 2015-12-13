@@ -1305,6 +1305,25 @@ in modules // {
     };
   };
 
+  betamax-matchers = buildPythonPackage rec {
+    name = "betamax-matchers-${version}";
+    version = "0.2.0";
+
+    src = pkgs.fetchurl {
+       url = "https://pypi.python.org/packages/source/b/betamax-matchers/${name}.tar.gz";
+      sha256 = "13n2dy8s2jx8x8bbx684bff3444584bnmg0zhkfxhxndpy18p4is";
+    };
+
+    buildInputs = with self; [ betamax requests_toolbelt ];
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/sigmavirus24/betamax_matchers;
+      description = "A group of experimental matchers for Betamax";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ pSub ];
+    };
+  };
+
   caldavclientlibrary-asynk = buildPythonPackage rec {
     version = "asynkdev";
     name = "caldavclientlibrary-asynk-${version}";
