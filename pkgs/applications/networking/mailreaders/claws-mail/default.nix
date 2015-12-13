@@ -57,7 +57,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ curl dbus dbus_glib gtk gnutls gsettings_desktop_schemas hicolor_icon_theme
-      libetpan perl pkgconfig python wrapGAppsHook
+      libetpan perl pkgconfig python wrapGAppsHook glib_networking
     ]
     ++ optional enableSpellcheck enchant
     ++ optionals (enablePgp || enablePluginSmime) [ gnupg gpgme ]
@@ -91,9 +91,6 @@ stdenv.mkDerivation {
     ++ optional (!enableSpellcheck) "--disable-enchant";
 
   enableParallelBuilding = true;
-
-  wrapPrefixVariables = [ "GIO_EXTRA_MODULES" ];
-  GIO_EXTRA_MODULES = "${glib_networking}/lib/gio/modules";
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared_mime_info}/share")
