@@ -52,6 +52,7 @@ for arg; do
             --hash) argfun=set_hashType;;
             --branch-name) argfun=set_branchName;;
             --deepClone) deepClone=true;;
+            --quiet) QUIET=true;;
             --no-deepClone) deepClone=false;;
             --leave-dotGit) leaveDotGit=true;;
             --fetch-submodules) fetchSubmodules=true;;
@@ -281,9 +282,9 @@ clone_user_rev() {
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
     if test -z "$leaveDotGit"; then
         echo "removing \`.git'..." >&2
-        find $dir -name .git\* | xargs rm -rf
+        find "$dir" -name .git\* -print0 | xargs -0 rm -rf
     else
-        find $dir -name .git | while read gitdir; do
+        find "$dir" -name .git | while read gitdir; do
             make_deterministic_repo "$(readlink -f "$gitdir/..")"
         done
     fi
