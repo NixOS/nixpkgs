@@ -80,6 +80,7 @@
   ./programs/xfs_quota.nix
   ./programs/zsh/zsh.nix
   ./rename.nix
+  ./security/acme.nix
   ./security/apparmor.nix
   ./security/apparmor-suid.nix
   ./security/ca.nix

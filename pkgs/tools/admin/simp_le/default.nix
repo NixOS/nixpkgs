@@ -1,16 +1,16 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "simp_le-20151205";
+  name = "simp_le-20151207";
 
   src = fetchFromGitHub {
     owner = "kuba";
     repo = "simp_le";
-    rev = "976a33830759e66610970f92f6ec1a656a2c8335";
-    sha256 = "0bfa5081rmjjg9sii6pn2dskd1wh0dgrf9ic9hpisawrk0y0739i";
+    rev = "ac836bc0af988cb14dc0a83dc2039e7fa541b677";
+    sha256 = "0r07mlis81n0pmj74wjcvjpi6i3lkzs6hz8iighhk8yymn1a8rbn";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ acme cryptography pytz requests2 ];
+  propagatedBuildInputs = with pythonPackages; [ acme ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/kuba/simp_le;
