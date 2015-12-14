@@ -3,7 +3,7 @@
    (http://pypi.python.org/pypi/setuptools/), which represents a large
    number of Python packages nowadays.  */
 
-{ python, setuptools, unzip, wrapPython, lib, bootstrapped-pip }:
+{ python, setuptools, unzip, which, wrapPython, lib, bootstrapped-pip }:
 
 { name
 
@@ -59,7 +59,7 @@ in
 python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] // {
   name = namePrefix + name;
 
-  buildInputs = [ wrapPython bootstrapped-pip ] ++ buildInputs ++ pythonPath
+  buildInputs = [ which wrapPython bootstrapped-pip ] ++ buildInputs ++ pythonPath
     ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip);
 
   # propagate python/setuptools to active setup-hook in nix-shell
@@ -103,9 +103,18 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
   # a common idiom in Python
   doInstallCheck = doInstallCheck;
 
+  # We check which test runner is available and run that one
   installCheckPhase = attrs.checkPhase or ''
     runHook preCheck
-    ${python.interpreter} nix_run_setup.py test
+
+    if which py.test; then
+        py.test
+    elif which nosetests; then
+        nosetests
+    else
+        ${python.interpreter} nix_run_setup.py test
+    fi
+
     runHook postCheck
   '';
 
