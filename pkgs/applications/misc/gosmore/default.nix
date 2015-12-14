@@ -5,10 +5,14 @@ let
 in
 stdenv.mkDerivation {
   name = "gosmore-r${version}";
+  # the gosmore svn repository does not lock revision numbers of its externals
+  # so we explicitly disable them to avoid breaking the hash
+  # especially as the externals appear to be unused
   src = fetchsvn {
     url = http://svn.openstreetmap.org/applications/rendering/gosmore;
-    sha256 = "0i6m3ikavsaqhfy18sykzq0cflw978nr4fhg18hawndcmr45v5zj";
+    sha256 = "0qsckpqx7i7f8gkqhkzdamr65250afk1rpnh3nbman35kdv3dsxi";
     rev = "${version}";
+    ignoreExternals = true;
   };
 
   buildInputs = [ libxml2 gtk curl ];
