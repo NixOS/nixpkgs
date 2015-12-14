@@ -14843,6 +14843,27 @@ in modules // {
     };
   };
 
+  pyrr = buildPythonPackage rec {
+    name = "pyrr-${version}";
+    version = "0.7.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyrr/pyrr-${version}.tar.gz";
+      sha256 = "ddfcd83394e9703138a3c668747df3548a81238d8ab36d4bf6a84d25ea90b2cd";
+    };
+
+    # ImportError: No module named tests
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ multipledispatch numpy ];
+
+    meta = {
+      description = "3D mathematical functions using NumPy";
+      homepage = https://github.com/adamlwgriffiths/Pyrr/;
+      license = licenses.bsd2;
+    };
+  };
+
   pyx = buildPythonPackage rec {
     name = "pyx-${version}";
     version = "0.14.1";
