@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, erlang, tree, fetchFromGitHub }:
+{ stdenv, fetchurl, fetchHex, erlang, tree, fetchFromGitHub }:
 
 
 let
@@ -8,6 +8,68 @@ let
     mkdir -p _build/default/{lib,plugins,packages}/ ./.cache/rebar3/hex/default/
     zcat ${registrySnapshot}/registry.ets.gz > .cache/rebar3/hex/default/registry
   '';
+  # TODO: all these below probably should go into nixpkgs.erlangModules.sources.*
+  # {erlware_commons,     "0.16.0"},
+  erlware_commons = fetchHex {
+    pkg = "erlware_commons";
+    version = "0.16.0";
+    sha256 = "0kh24d0001390wfx28d0xa874vrsfvjgj41g315vg4hac632krxx";
+  };
+  # {ssl_verify_hostname, "1.0.5"},
+  ssl_verify_hostname = fetchHex {
+    pkg = "ssl_verify_hostname";
+    version = "1.0.5";
+    sha256 = "1gzavzqzljywx4l59gvhkjbr1dip4kxzjjz1s4wsn42f2kk13jzj";
+  };
+  # {certifi,             "0.1.1"},
+  certifi = fetchHex {
+    pkg = "certifi";
+    version = "0.1.1";
+    sha256 = "0afylwqg74gprbg116asz0my2nipmki0512c8mdiq6xdiyjdvlg6";
+  };
+  # {providers,           "1.5.0"},
+  providers = fetchHex {
+    pkg = "providers";
+    version = "1.5.0";
+    sha256 = "1hc8sp2l1mmx9dfpmh1f8j9hayfg7541rmx05wb9cmvxvih7zyvf";
+  };
+  # {getopt,              "0.8.2"},
+  getopt = fetchHex {
+    pkg = "getopt";
+    version = "0.8.2";
+    sha256 = "1xw30h59zbw957cyjd8n50hf9y09jnv9dyry6x3avfwzcyrnsvkk";
+  };
+  # {bbmustache,          "1.0.4"},
+  bbmustache = fetchHex {
+    pkg = "bbmustache";
+    version = "1.0.4";
+    sha256 = "04lvwm7f78x8bys0js33higswjkyimbygp4n72cxz1kfnryx9c03";
+  };
+  # {relx,                "3.8.0"},
+  relx = fetchHex {
+    pkg = "relx";
+    version = "3.8.0";
+    sha256 = "0y89iirjz3kc1rzkdvc6p3ssmwcm2hqgkklhgm4pkbc14fcz57hq";
+  };
+  # {cf,                  "0.2.1"},
+  cf = fetchHex {
+    pkg = "cf";
+    version = "0.2.1";
+    sha256 = "19d0yvg8wwa57cqhn3vqfvw978nafw8j2rvb92s3ryidxjkrmvms";
+  };
+  # {cth_readable,        "1.1.0"},
+  cth_readable = fetchHex {
+    pkg = "cth_readable";
+    version = "1.0.1";
+    sha256 = "1cnc4fbypckqllfi5h73rdb24dz576k3177gzvp1kbymwkp1xcz1";
+  };
+  # {eunit_formatters,    "0.2.0"}
+  eunit_formatters = fetchHex {
+    pkg = "eunit_formatters";
+    version = "0.2.0";
+    sha256 = "03kiszlbgzscfd2ns7na6bzbfzmcqdb5cx3p6qy3657jk2fai332";
+  };
+
 in
 stdenv.mkDerivation {
   name = "rebar3-${version}";
@@ -19,12 +81,28 @@ stdenv.mkDerivation {
 
   patches = [ ./hermetic-bootstrap.patch ];
 
-  buildInputs = [ erlang ];
+  buildInputs = [ erlang
+                  tree
+                ];
   inherit setupRegistry;
 
+  postPatch = ''
+    echo postPatch
+    ${setupRegistry}
+    mkdir -p _build/default/lib/
+    cp --no-preserve=mode -R ${erlware_commons} _build/default/lib/erlware_commons
+    cp --no-preserve=mode -R ${providers} _build/default/lib/providers
+    cp --no-preserve=mode -R ${getopt} _build/default/lib/getopt
+    cp --no-preserve=mode -R ${bbmustache} _build/default/lib/bbmustache
+    cp --no-preserve=mode -R ${certifi} _build/default/lib/certifi
+    cp --no-preserve=mode -R ${cf} _build/default/lib/cf
+    cp --no-preserve=mode -R ${cth_readable} _build/default/lib/cth_readable
+    cp --no-preserve=mode -R ${eunit_formatters} _build/default/lib/eunit_formatters
+    cp --no-preserve=mode -R ${relx} _build/default/lib/relx
+    cp --no-preserve=mode -R ${ssl_verify_hostname} _build/default/lib/ssl_verify_hostname
+  '';
 
   buildPhase = ''
-    ${setupRegistry}
     HOME=. escript bootstrap
   '';
   installPhase = ''
