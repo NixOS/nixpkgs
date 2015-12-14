@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, fetchgit, libusb ? null, net_snmp ? null
+{ stdenv,  fetchurl, fetchgit
+, avahi ? null, libusb ? null, net_snmp ? null
 , gt68xxFirmware ? null, snapscanFirmware ? null
 , hotplugSupport ? true
 }:
@@ -19,8 +20,11 @@ stdenv.mkDerivation {
 
   udevSupport = hotplugSupport;
 
-  buildInputs = [ net_snmp ]
+  buildInputs = [ avahi net_snmp ]
     ++ stdenv.lib.optional (libusb != null) libusb;
+
+  configureFlags = []
+    ++ stdenv.lib.optional (avahi != null) "--enable-avahi";
 
   postInstall = ''
     if test "$udevSupport" = "1"; then

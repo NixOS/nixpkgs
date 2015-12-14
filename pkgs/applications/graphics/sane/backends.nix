@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, libusb ? null, libv4l ? null, net_snmp ? null
+{ stdenv, fetchurl
+, avahi ? null, libusb ? null, libv4l ? null, net_snmp ? null
 , pkgconfig ? null
 , gt68xxFirmware ? null, snapscanFirmware ? null
 , hotplugSupport ? true
@@ -26,9 +27,11 @@ stdenv.mkDerivation rec {
 
   udevSupport = hotplugSupport;
 
-  configureFlags = stdenv.lib.optional (libusb != null) "--enable-libusb_1_0";
+  configureFlags = []
+    ++ stdenv.lib.optional (avahi != null) "--enable-avahi"
+    ++ stdenv.lib.optional (libusb != null) "--enable-libusb_1_0";
 
-  buildInputs = [ net_snmp ]
+  buildInputs = [ avahi net_snmp ]
     ++ stdenv.lib.optional (libusb != null) libusb
     ++ stdenv.lib.optional (libv4l != null) libv4l
     ++ stdenv.lib.optional (pkgconfig != null) pkgconfig
