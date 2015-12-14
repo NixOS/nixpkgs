@@ -1,33 +1,31 @@
-{ mkDerivation, fetchurl, ghc, aeson, aeson-pretty, base, binary, bytestring
-, directory, filepath, HTF, HUnit, mtl, parsec, process, shelly
-, stdenv, text, transformers, unix, xdg-basedir
-, happy
+{ mkDerivation, aeson, aeson-pretty, base, binary, bytestring
+, directory, fetchgit, filepath, HTF, HUnit, mtl
+, optparse-applicative, parsec, process, shelly, stdenv, text
+, transformers, unix, zlib
 }:
-
-mkDerivation rec {
+mkDerivation {
   pname = "super-user-spark";
-  version = "0.1.0.0";
-
-  src = fetchurl {
-    url = "https://github.com/NorfairKing/super-user-spark/archive/v0.1.tar.gz";
-    sha256 = "90258cb2d38f35b03867fdf82dbd49500cdec04f3cf05d0eaa18592cb44fe13f";
+  version = "0.2.0.3";
+  src = fetchgit {
+    url = "https://github.com/NorfairKing/super-user-spark";
+    sha256 = "718b6760e76377aa37b145d0dff690b293325b510ce05d239c4fa28538420931";
+    rev = "a7d132f7631649c3a093ede286e66f78e9793fba";
   };
-
   isLibrary = false;
   isExecutable = true;
+  executableHaskellDepends = [
+    aeson aeson-pretty base binary bytestring directory filepath HTF
+    mtl optparse-applicative parsec process shelly text transformers
+    unix zlib
+  ];
+  testHaskellDepends = [
+    aeson aeson-pretty base binary bytestring directory filepath HTF
+    HUnit mtl optparse-applicative parsec process shelly text
+    transformers unix zlib
+  ];
   jailbreak = true;
-
-  buildDepends = [
-    aeson aeson-pretty base binary bytestring directory filepath HTF
-    mtl parsec process shelly text transformers unix xdg-basedir happy
-  ];
-  testDepends = [
-    aeson aeson-pretty base binary bytestring directory filepath HTF
-    HUnit mtl parsec process shelly text transformers unix xdg-basedir
-  ];
+  description = "Configure your dotfile deployment with a DSL";
   license = stdenv.lib.licenses.mit;
   homepage = "https://github.com/NorfairKing/super-user-spark";
-  description = "A safe way to never worry about your beautifully configured system again";
-  platforms = ghc.meta.platforms;
   maintainers = [ stdenv.lib.maintainers.badi ];
 }
