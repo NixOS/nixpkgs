@@ -55,6 +55,7 @@ let
   setuppy = ./run_setup.py;
   # For backwards compatibility, let's use an alias
   doInstallCheck = doCheck;
+
 in
 python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] // {
   name = namePrefix + name;
@@ -62,22 +63,22 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
   buildInputs = [ which wrapPython bootstrapped-pip ] ++ buildInputs ++ pythonPath
     ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip);
 
-  # propagate python/setuptools to active setup-hook in nix-shell
+  # Propagate python/setuptools to active setup-hook in nix-shell
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
 
   pythonPath = pythonPath;
 
+  # Patch python interpreter to write null timestamps when compiling python files
+  # this way python doesn't try to update them when we freeze timestamps in nix store
   configurePhase = attrs.configurePhase or ''
     runHook preConfigure
 
-    # patch python interpreter to write null timestamps when compiling python files
-    # this way python doesn't try to update them when we freeze timestamps in nix store
     export DETERMINISTIC_BUILD=1
 
     runHook postConfigure
   '';
 
-  # we copy nix_run_setup.py over so it's executed relative to the root of the source
+  # We copy nix_run_setup.py over so it's executed relative to the root of the source
   # many project make that assumption
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
@@ -118,11 +119,12 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
     runHook postCheck
   '';
 
+  # We check if we have two packages with the same name in the closure and fail
+  # This shouldn't happen, something went wrong with dependencies specs
   postFixup = attrs.postFixup or ''
     wrapPythonPrograms
 
-    # check if we have two packagegs with the same name in closure and fail
-    # this shouldn't happen, something went wrong with dependencies specs
+
     ${python.interpreter} ${./catch_conflicts.py}
   '';
 
