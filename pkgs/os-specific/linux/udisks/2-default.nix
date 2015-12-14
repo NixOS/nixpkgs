@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool
+{ stdenv, fetchurl, pkgconfig, intltool, gnused
 , expat, acl, systemd, glib, libatasmart, polkit
 , libxslt, docbook_xsl, utillinux, mdadm, libgudev
 }:
@@ -21,7 +21,11 @@ stdenv.mkDerivation rec {
     ''
       substituteInPlace src/main.c --replace \
         "@path@" \
-        "${utillinux}/bin:${mdadm}/sbin:/var/run/current-system/sw/bin:/var/run/current-system/sw/bin"
+        "${utillinux}/bin:${mdadm}/bin:/run/current-system/sw/bin"
+      substituteInPlace data/80-udisks2.rules \
+        --replace "/bin/sh" "${stdenv.shell}" \
+        --replace "/sbin/mdadm" "${mdadm}/bin/mdadm" \
+        --replace " sed " " ${gnused}/bin/sed "
     '';
 
   nativeBuildInputs = [ pkgconfig intltool ];
