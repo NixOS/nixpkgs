@@ -2288,9 +2288,9 @@ let
 
   mktorrent = callPackage ../tools/misc/mktorrent { };
 
-  modemmanager = callPackage ../tools/networking/modemmanager {};
-
-  modsecurity_standalone = callPackage ../tools/security/modsecurity { };
+  modemmanager = callPackage ../tools/networking/modemmanager {
+    polkitSupport = config.polkit or true;
+  };
 
   monit = callPackage ../tools/system/monit { };
 
@@ -2392,9 +2392,12 @@ let
   netselect = callPackage ../tools/networking/netselect { };
 
   # stripped down, needed by steam
+  # TODO: polkit
   networkmanager098 = callPackage ../tools/networking/network-manager/0.9.8.nix { };
 
-  networkmanager = callPackage ../tools/networking/network-manager { };
+  networkmanager = callPackage ../tools/networking/network-manager {
+    polkitSupport = config.polkit or true;
+  };
 
   networkmanager_openvpn = callPackage ../tools/networking/network-manager/openvpn.nix { };
 

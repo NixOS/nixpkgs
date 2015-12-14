@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, dbus_glib, glib, ORBit2, libxml2
-, polkit, intltool, dbus_libs, gtk ? null, withGtk ? false }:
+, polkit, intltool, dbus_libs, gtk ? null, withGtk ? false, polkitSupport ? true }:
 
 assert withGtk -> (gtk != null);
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   buildInputs = [ ORBit2 dbus_libs dbus_glib libxml2 ]
     # polkit requires pam, which requires shadow.h, which is not available on
     # darwin
-    ++ stdenv.lib.optional (!stdenv.isDarwin) polkit
+    ++ stdenv.lib.optional ((!stdenv.isDarwin) && polkitSupport) polkit
     ++ stdenv.lib.optional withGtk gtk;
 
   propagatedBuildInputs = [ glib ];
@@ -25,5 +25,6 @@ stdenv.mkDerivation {
 
   configureFlags = stdenv.lib.optional withGtk "--with-gtk=2.0"
     # fixes the "libgconfbackend-oldxml.so is not portable" error on darwin
-    ++ stdenv.lib.optional stdenv.isDarwin [ "--enable-static" ];
+    ++ stdenv.lib.optional stdenv.isDarwin [ "--enable-static" ]
+    ++ stdenv.lib.optional (!polkitSupport) "--disable-defaults-service";
 }

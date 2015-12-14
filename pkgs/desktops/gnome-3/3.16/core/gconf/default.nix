@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, dbus_glib, gnome3 ? null, glib, libxml2
-, intltool, polkit, orbit, withGtk ? false }:
+, intltool, polkit, orbit, withGtk ? false, polkitSupport ? true }:
 
 assert withGtk -> (gnome3 != null);
 
@@ -18,9 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "0k3q9nh53yhc9qxf1zaicz4sk8p3kzq4ndjdsgpaa2db0ccbj4hr";
   };
 
-  buildInputs = [ libxml2 polkit orbit ] ++ stdenv.lib.optional withGtk gnome3.gtk;
+  buildInputs = [ libxml2 orbit ] ++ stdenv.lib.optional withGtk gnome3.gtk
+                                  ++ stdenv.lib.optional polkitSupport polkit;
   propagatedBuildInputs = [ glib dbus_glib  ];
   nativeBuildInputs = [ pkgconfig intltool ];
+  configureFlags = stdenv.lib.optional (!polkitSupport) "--disable-defaults-service";
 
   # ToDo: ldap reported as not found but afterwards reported as supported
 

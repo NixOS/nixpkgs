@@ -1,5 +1,5 @@
 { callPackage, self, stdenv, gettext, gvfs, libunique, bison2
-, libstartup_notification, overrides ? {} }:
+, libstartup_notification, overrides ? {}, config }:
 
 let overridden = set // overrides; set = with overridden; {
   # Backward compatibility.
@@ -32,7 +32,9 @@ let overridden = set // overrides; set = with overridden; {
 
   libgtkhtml = callPackage ./platform/libgtkhtml { };
 
-  GConf = callPackage ./platform/GConf { };
+  GConf = callPackage ./platform/GConf {
+    polkitSupport = config.polkit or true;
+  };
 
   gconfmm = callPackage ./platform/gconfmm { };
 

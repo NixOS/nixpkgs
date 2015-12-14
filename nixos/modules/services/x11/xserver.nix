@@ -441,8 +441,8 @@ in
               choose between ‘programs.ssh.startAgent’ and ‘services.xserver.startGnuPGAgent’.
             '';
         }
-        { assertion = config.security.polkit.enable;
-          message = "X11 requires Polkit to be enabled (‘security.polkit.enable = true’).";
+        { assertion = if config.services.xserver.displayManager.desktopManagerHandlesLidAndPower then config.security.polkit.enable else true;
+          message = "services.xserver.displayManager.desktopManagerHandlesLidAndPower requires Polkit to be enabled to use systemd-inhibit in the X session script (‘security.polkit.enable = true’).";
         }
       ];
 

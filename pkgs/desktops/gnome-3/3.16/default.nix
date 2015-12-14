@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs, config }:
 
 let
 
@@ -87,7 +87,9 @@ let
 
   evolution_data_server = callPackage ./core/evolution-data-server { };
 
-  gconf = callPackage ./core/gconf { };
+  gconf = callPackage ./core/gconf {
+    polkitSupport = config.polkit or true;
+  };
 
   geocode_glib = callPackage ./core/geocode-glib { };
 

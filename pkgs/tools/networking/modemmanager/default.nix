@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, udev, libgudev, polkit, dbus_glib, ppp, intltool, pkgconfig, libmbim, libqmi }:
+{ stdenv, fetchurl, udev, polkit, libgudev, dbus_glib, ppp, intltool, pkgconfig, libmbim, libqmi, polkitSupport ? true, lib }:
 
 stdenv.mkDerivation rec {
   name = "ModemManager-${version}";
@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
-  buildInputs = [ udev libgudev polkit dbus_glib ppp libmbim libqmi ];
+  buildInputs = [ udev libgudev dbus_glib ppp libmbim libqmi ] ++ lib.optional polkitSupport polkit;
 
   configureFlags = [
-    "--with-polkit"
+    (lib.optional polkitSupport "--with-polkit")
     "--with-udev-base-dir=$(out)/lib/udev"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--sysconfdir=/etc"
