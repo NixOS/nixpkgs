@@ -1695,18 +1695,27 @@ in modules // {
 
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [
-      numpy
-      pandas
-      datashape
-      odo
-      toolz
       cytoolz
-      multipledispatch
-      sqlalchemy9 # sqlalchemy8 should also work
-      psutil
-      numba
+      datashape
+      flask
       h5py
+      multipledispatch
+      numba
+      numpy
+      odo
+      pandas
+      psutil
+      pymongo
+      pyyaml
+      requests2
+      sqlalchemy_1_0
+      tables
+      toolz
     ];
+
+    checkPhase = ''
+      py.test blaze/tests
+    '';
 
     meta = {
       homepage = https://github.com/ContinuumIO/blaze;
