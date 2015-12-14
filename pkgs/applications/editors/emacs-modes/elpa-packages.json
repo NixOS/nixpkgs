@@ -201,10 +201,10 @@
     "tiny": {
         "fetch": {
             "tag": "fetchurl",
-            "url": "http://elpa.gnu.org/packages/tiny-0.1.tar",
-            "sha256": "04iyidzjgnm4ka575wxqdak19h8j4dlni2ahf0bkq1q9by79xq1q"
+            "url": "http://elpa.gnu.org/packages/tiny-0.1.1.tar",
+            "sha256": "1nhg8375qdn457wj0xmfaj72s87xbabk2w1nl6q7rjvwxv08yyn7"
         },
-        "version": "0.1",
+        "version": "0.1.1",
         "deps": []
     },
     "coffee-mode": {
@@ -246,10 +246,10 @@
     "org": {
         "fetch": {
             "tag": "fetchurl",
-            "url": "http://elpa.gnu.org/packages/org-20151123.tar",
-            "sha256": "13ybzjg6k61paldfln6isc6149hvilwsgsnhyirig42bz1z0vjbb"
+            "url": "http://elpa.gnu.org/packages/org-20151214.tar",
+            "sha256": "15m9l7p7xfmcrxrcsxbvpp8bq5ajcapknvqblhmk77j7ca3jffi1"
         },
-        "version": "20151123",
+        "version": "20151214",
         "deps": []
     },
     "bug-hunter": {
@@ -594,10 +594,10 @@
     "hydra": {
         "fetch": {
             "tag": "fetchurl",
-            "url": "http://elpa.gnu.org/packages/hydra-0.13.3.tar",
-            "sha256": "1il0maxkxm2nxwz6y6v85zhf6a8f52gfq51h1filcnlzg10b5arm"
+            "url": "http://elpa.gnu.org/packages/hydra-0.13.4.tar",
+            "sha256": "11msy6n075iv00c2r9f85bzx3srnj403rhlga1rgsl6vsryf21fj"
         },
-        "version": "0.13.3",
+        "version": "0.13.4",
         "deps": [
             "cl-lib"
         ]
@@ -953,10 +953,10 @@
     "swiper": {
         "fetch": {
             "tag": "fetchurl",
-            "url": "http://elpa.gnu.org/packages/swiper-0.5.1.tar",
-            "sha256": "06kd6r90fnjz3lapm52pgsx4dhnd95mkzq9y4khkzqny59h0vmm6"
+            "url": "http://elpa.gnu.org/packages/swiper-0.7.0.tar",
+            "sha256": "1bzzx41zcf3yk6r6csqzlffwwrw9gyk8ab026r55l6416b6rcynx"
         },
-        "version": "0.5.1",
+        "version": "0.7.0",
         "deps": [
             "emacs"
         ]
@@ -1018,10 +1018,10 @@
     "transcribe": {
         "fetch": {
             "tag": "fetchurl",
-            "url": "http://elpa.gnu.org/packages/transcribe-0.5.0.el",
-            "sha256": "1wxfv96sjcxins8cyqijsb16fc3n0m13kvaw0hjam8x91wamcbxq"
+            "url": "http://elpa.gnu.org/packages/transcribe-1.0.2.el",
+            "sha256": "0b0qaq0b3l37h6wfs4j80csmfcbidcd8a8wk6mwn6p4cdi7msr15"
         },
-        "version": "0.5.0",
+        "version": "1.0.2",
         "deps": []
     },
     "websocket": {
