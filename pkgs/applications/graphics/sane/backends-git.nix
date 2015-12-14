@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, fetchgit, hotplugSupport ? true, libusb ? null
+{ stdenv, fetchurl, fetchgit, libusb ? null, net_snmp ? null
 , gt68xxFirmware ? null, snapscanFirmware ? null
+, hotplugSupport ? true
 }:
 let
   firmware = gt68xxFirmware { inherit fetchurl; };
@@ -18,7 +19,8 @@ stdenv.mkDerivation {
 
   udevSupport = hotplugSupport;
 
-  buildInputs = if libusb != null then [libusb] else [];
+  buildInputs = [ net_snmp ]
+    ++ stdenv.lib.optional (libusb != null) libusb;
 
   postInstall = ''
     if test "$udevSupport" = "1"; then

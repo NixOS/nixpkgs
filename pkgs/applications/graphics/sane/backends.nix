@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, hotplugSupport ? true, libusb ? null, libv4l ? null
-, pkgconfig ? null, gt68xxFirmware ? null, snapscanFirmware ? null
+{ stdenv, fetchurl, libusb ? null, libv4l ? null, net_snmp ? null
+, pkgconfig ? null
+, gt68xxFirmware ? null, snapscanFirmware ? null
+, hotplugSupport ? true
 }:
 
 assert hotplugSupport -> (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux");
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = stdenv.lib.optional (libusb != null) "--enable-libusb_1_0";
 
-  buildInputs = []
+  buildInputs = [ net_snmp ]
     ++ stdenv.lib.optional (libusb != null) libusb
     ++ stdenv.lib.optional (libv4l != null) libv4l
     ++ stdenv.lib.optional (pkgconfig != null) pkgconfig
