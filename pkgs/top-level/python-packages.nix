@@ -11427,14 +11427,19 @@ in modules // {
 
   odo = buildPythonPackage rec {
     name = "odo-${version}";
-    version= "0.3.3";
+    version= "0.3.4";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/o/odo/${name}.tar.gz";
-      sha256 = "2499ee86c26c74daa28f21ed235ca331911065950deea5169ebdb7d5dae6ebef";
+      sha256 = "77bdb372999ac0d9ef272927d7867a668108a4193e11eb8646bf770370a30725";
     };
 
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ datashape numpy pandas toolz multipledispatch networkx ];
+
+    checkPhase = ''
+      py.test odo/tests
+    '';
 
     meta = {
       homepage = https://github.com/ContinuumIO/odo;
