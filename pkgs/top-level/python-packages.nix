@@ -17929,12 +17929,12 @@ in modules // {
   };
 
   sqlalchemy_1_0 = self.sqlalchemy9.override rec {
-    name = "SQLAlchemy-1.0.9";
+    name = "SQLAlchemy-1.0.10";
     doCheck = !isPyPy;  # lots of tests fail
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
-      sha256 = "03mi79s8dcsqpwql98mlvaf6mf4xf5j3fjkv5m6dgibfwc0pbly3";
+      sha256 = "963415bf4ea4fa13698893464bc6917d291331e0e8202dddd0ebfed2864ef7e3";
     };
   };
 
