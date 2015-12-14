@@ -12834,7 +12834,7 @@ in modules // {
       pytz
       xlrd
       bottleneck
-      sqlalchemy9
+      sqlalchemy_1_0
       lxml
       # Disabling this because an upstream dependency, pep8, is broken on v3.5.
       (if isPy35 then null else html5lib)
