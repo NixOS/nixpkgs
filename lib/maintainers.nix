@@ -173,6 +173,7 @@
   lsix = "Lancelot SIX <lsix@lancelotsix.com>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   lukego = "Luke Gorrie <luke@snabb.co>";
+  luispedro = "Luis Pedro Coelho <luis@luispedro.org>";
   lw = "Sergey Sofeychuk <lw@fmap.me>";
   madjar = "Georges Dubus <georges.dubus@compiletoi.net>";
   magnetophon = "Bart Brouns <bart@magnetophon.nl>";
