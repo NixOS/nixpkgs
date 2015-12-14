@@ -109,11 +109,11 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
     runHook preCheck
 
     if which py.test; then
-        py.test
+      py.test
     elif which nosetests; then
-        nosetests
+      nosetests
     else
-        ${python.interpreter} nix_run_setup.py test
+      ${python.interpreter} nix_run_setup.py test
     fi
 
     runHook postCheck
@@ -131,11 +131,11 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
   shellHook = attrs.shellHook or ''
     ${preShellHook}
     if test -e setup.py; then
-       tmp_path=$(mktemp -d)
-       export PATH="$tmp_path/bin:$PATH"
-       export PYTHONPATH="$tmp_path/${python.sitePackages}:$PYTHONPATH"
-       mkdir -p $tmp_path/${python.sitePackages}
-       ${bootstrapped-pip}/bin/pip install -e . --prefix $tmp_path
+      tmp_path=$(mktemp -d)
+      export PATH="$tmp_path/bin:$PATH"
+      export PYTHONPATH="$tmp_path/${python.sitePackages}:$PYTHONPATH"
+      mkdir -p $tmp_path/${python.sitePackages}
+      ${bootstrapped-pip}/bin/pip install -e . --prefix $tmp_path
     fi
     ${postShellHook}
   '';
