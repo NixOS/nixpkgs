@@ -88,10 +88,6 @@ let kernel = config.boot.kernelPackages.kernel; in
 
     boot.consoleLogLevel = 7;
 
-    # Make sure we don't hit page allocation failures if the VM's memory is
-    # heavily fragmented.
-    boot.kernel.sysctl."vm.min_free_kbytes" = 16384;
-
     # Prevent tests from accessing the Internet.
     networking.defaultGateway = mkOverride 150 "";
     networking.nameservers = mkOverride 150 [ ];
