@@ -4696,10 +4696,6 @@ in modules // {
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ smmap ];
 
-    checkPhase = ''
-      nosetests
-    '';
-
     doCheck = false; # Bunch of tests fail because they need an actual git repo
 
     meta = {
@@ -7696,10 +7692,6 @@ in modules // {
       substituteInPlace jsonschema/tests/test_jsonschema_test_suite.py --replace "python" "${python}/bin/${python.executable}"
     '';
 
-    checkPhase = ''
-      nosetests
-    '';
-
     meta = {
       homepage = https://github.com/Julian/jsonschema;
       description = "An implementation of JSON Schema validation for Python";
@@ -8456,8 +8448,6 @@ in modules // {
     propagatedBuildInputs = with self; [
       six
     ] ++ optionals isPy26 [ ordereddict ];
-
-    checkPhase = "nosetests";
 
     meta = {
       homepage = https://github.com/html5lib/html5lib-python;
@@ -10383,10 +10373,6 @@ in modules // {
     };
 
     buildInputs = with self; [ nose minimock ];
-
-    checkPhase = ''
-      nosetests
-    '';
 
     disabled = isPy3k;
 
@@ -13591,10 +13577,6 @@ in modules // {
     # nosetests needs to be run explicitly.
     # Note that the distributed archive does not actually contain any tests.
     # https://github.com/matze/pkgconfig/issues/9
-    checkPhase = ''
-      nosetests
-    '';
-
   };
 
   plumbum = buildPythonPackage rec {
@@ -14327,9 +14309,8 @@ in modules // {
 
     # Run tests using nosetests but first need to install the binaries
     # to the root source directory where they can be found.
-    checkPhase = ''
+    preCheck = ''
       ./setup.py install_lib -d .
-      nosetests
     '';
 
     meta = {
@@ -15875,8 +15856,6 @@ in modules // {
 
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ modules.sqlite3 six ];
-
-    checkPhase = "nosetests";
 
     disabled = isPy3k;
 
@@ -17446,9 +17425,8 @@ in modules // {
       sha256 = "1nqham81ihffc9xmw85dz3rg3v90rw7h0dp3dy0bh3qkp4n499q6";
     };
 
-    checkPhase = ''
+    preCheck = ''
       export LANG="en_US.UTF-8"
-      py.test
     '';
 
     buildInputs = with self; [ pytest py mock pkgs.glibcLocales ];
@@ -18196,10 +18174,6 @@ in modules // {
     };
 
     buildInputs = with self; [ pytest pretend freezegun ];
-
-    checkPhase = ''
-      py.test
-    '';
 
     meta = {
       description = "Painless structural logging";
@@ -21011,8 +20985,6 @@ in modules // {
       sha256 = "41b90d5f35e99a020a6b1b77938690652521d1841b3165574fcfcee807ce4e6a";
     };
 
-    checkPhase = "nosetests";
-
     propagatedBuildInputs = with self; [
       flask
       flask_cache
@@ -21097,7 +21069,6 @@ in modules // {
     ];
 
     patchPhase = "> requirements.txt";
-    checkPhase = "nosetests";
 
     meta = {
       description = "A simple alerting application for Graphite metrics";
