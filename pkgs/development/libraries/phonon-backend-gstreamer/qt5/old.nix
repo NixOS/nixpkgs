@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [
     # This flag should be picked up through pkgconfig, but it isn't.
     "-I${gst_all_1.gstreamer}/lib/gstreamer-1.0/include"
+    "-fPIC"
   ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -31,8 +32,6 @@ stdenv.mkDerivation rec {
     "-DPHONON_BUILD_PHONON4QT5=ON"
   ]
   ++ optional debug "-DCMAKE_BUILD_TYPE=Debug";
-
-  NIX_CFLAGS_COMPILE = "-fPIC";
 
   meta = with stdenv.lib; {
     homepage = http://phonon.kde.org/;

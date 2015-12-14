@@ -9,6 +9,7 @@ kde {
 
   patches = [
     (fetchurl {
+      name = "kopete.patch";
       url = "https://bugs.kde.org/attachment.cgi?id=91567";
       sha256 = "0a44rjiqzn6v3sywm17d1741sygbvlfnbqadq7qbdj3amny014m1";
     })
