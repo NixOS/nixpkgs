@@ -14271,6 +14271,8 @@ let
 
   stardust = callPackage ../games/stardust {};
 
+  stockfish = callPackage ../games/stockfish { };
+
   steamPackages = callPackage ../games/steam { };
   steam = steamPackages.steam-chrootenv.override {
     # DEPRECATED
