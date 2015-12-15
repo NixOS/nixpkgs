@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pythonPackages, pygobject, gst_python
-, gst_plugins_good, gst_plugins_base
+, gst_plugins_good, gst_plugins_base, gst_plugins_ugly
 }:
 
 pythonPackages.buildPythonPackage rec {
@@ -13,7 +13,7 @@ pythonPackages.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with pythonPackages; [
-    gst_python pygobject pykka tornado requests2 gst_plugins_base gst_plugins_good
+    gst_python pygobject pykka tornado requests2 gst_plugins_base gst_plugins_good gst_plugins_ugly
   ];
 
   # There are no tests
