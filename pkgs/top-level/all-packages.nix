@@ -12507,6 +12507,8 @@ let
 
   mopidy-mopify = callPackage ../applications/audio/mopidy-mopify { };
 
+  mopidy-youtube = callPackage ../applications/audio/mopidy-youtube { };
+
   mozplugger = callPackage ../applications/networking/browsers/mozilla-plugins/mozplugger {};
 
   easytag = callPackage ../applications/audio/easytag { };
