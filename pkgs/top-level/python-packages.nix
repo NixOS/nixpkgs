@@ -4695,11 +4695,11 @@ in modules // {
   };
 
   gmusicapi = with pkgs; buildPythonPackage rec {
-    name = "gmusicapi-4.0.0";
+    name = "gmusicapi-7.0.0";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/g/gmusicapi/gmusicapi-4.0.0.tar.gz";
-      md5 = "12ba66607531978b349c7035c9bab311";
+      url = "https://pypi.python.org/packages/source/g/gmusicapi/gmusicapi-7.0.0.tar.gz";
+      sha256 = "1zji4cgylyzz97cz69lywkbsn5nvvzrhk7iaqnpqpfvj9gwdchwn";
     };
 
     propagatedBuildInputs = with self; [
@@ -4708,14 +4708,16 @@ in modules // {
       mutagen
       protobuf
       setuptools
-      requests
+      requests2
       dateutil
       proboscis
       mock
       appdirs
       oauth2client
+      pyopenssl
+      gpsoauth
+      MechanicalSoup
     ];
-    doCheck = false;
 
     meta = {
       description = "An unofficial API for Google Play Music";
@@ -4873,6 +4875,38 @@ in modules // {
       description = "Google Play Downloader via Command line";
       license = licenses.agpl3Plus;
       maintainers = with maintainers; [ DamienCassou ];
+    };
+  };
+
+  gpsoauth = buildPythonPackage rec {
+    version = "0.0.4";
+    name = "gpsoauth-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gpsoauth/${name}.tar.gz";
+      sha256 = "1mhd2lkl1f4fmia1cwxwik8gvqr5q16scjip7kfwzadh9a11n9kw";
+    };
+
+    propagatedBuildInputs = with self; [
+      cffi
+      cryptography
+      enum34
+      idna
+      ipaddress
+      ndg-httpsclient
+      pyopenssl
+      pyasn1
+      pycparser
+      pycrypto
+      requests2
+      six
+    ];
+
+    meta = {
+      description = "A python client library for Google Play Services OAuth.";
+      homepage = "https://github.com/simon-weber/gpsoauth";
+      license = licenses.mit;
+      maintainers = with maintainers; [ jgillich ];
     };
   };
 
@@ -9920,6 +9954,25 @@ in modules // {
       license = "BSD-style";
     };
   });
+
+  MechanicalSoup = buildPythonPackage rec {
+    name = "MechanicalSoup-${version}";
+    version = "0.4.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/M/MechanicalSoup/${name}.zip";
+      sha256 = "02jkwly4gw1jqm55l4wwn0j0ggnysx55inw9j96bif5l49z5cacd";
+    };
+
+    propagatedBuildInputs = with self; [ requests2 beautifulsoup4 six ];
+
+    meta = {
+      description = "A Python library for automating interaction with websites";
+      homepage = https://github.com/hickford/MechanicalSoup;
+      license = licenses.mit;
+      maintainers = with maintainers; [ jgillich ];
+    };
+  };
 
 
   meld3 = buildPythonPackage rec {
