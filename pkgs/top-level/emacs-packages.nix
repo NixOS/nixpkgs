@@ -33,9 +33,9 @@
 
 { overrides
 
-, lib, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
+, lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
 
-, emacs, elpaPackages
+, emacs, elpaPackages, melpaPackages, melpaStablePackages
 , trivialBuild
 , melpaBuild
 
@@ -44,7 +44,14 @@
 
 with lib.licenses;
 
-let packagesFun = super: self: with self; {
+let
+
+  addMelpaPackages = scope: scope.override (super: melpaPackages);
+  addMelpaStablePackages = scope: scope.override (super: melpaStablePackages);
+  addElpaPackages = scope: scope.override (super: elpaPackages);
+  addOverrides = scope: scope.override packagesFun;
+
+  packagesFun = super: self: with self; {
 
   inherit emacs melpaBuild trivialBuild;
 
@@ -2019,6 +2026,11 @@ let packagesFun = super: self: with self; {
     };
   };
 
-};
+  };
 
-in elpaPackages.override packagesFun
+in
+  addOverrides
+  (addElpaPackages
+  (addMelpaStablePackages
+  (addMelpaPackages
+  (lib.makeScope newScope (self: { inherit emacs; })))))

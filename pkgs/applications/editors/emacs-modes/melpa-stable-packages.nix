@@ -9,18 +9,23 @@ let
 
   mkPackage = self: name: recipe:
     let drv =
-          { melpaBuild, stdenv, fetchurl }:
-          let fetch = { inherit fetchurl; }."${recipe.fetch.tag}"
-                or (abort "emacs-${name}: unknown fetcher '${recipe.fetch.tag}'");
-              args = builtins.removeAttrs recipe.fetch [ "tag" ];
-              src = fetch args;
+          { melpaBuild, stdenv, fetchurl, fetchcvs, fetchgit, fetchhg }:
+          let
+            unknownFetcher =
+              abort "emacs-${name}: unknown fetcher '${recipe.fetch.tag}'";
+            fetch =
+              {
+                inherit fetchurl fetchcvs fetchgit fetchhg;
+              }."${recipe.fetch.tag}"
+              or unknownFetcher;
+            args = builtins.removeAttrs recipe.fetch [ "tag" ];
+            src = fetch args;
           in melpaBuild {
             pname = name;
             inherit (recipe) version;
             inherit src;
             deps =
-              let lookupDep = d:
-                    self."${d}" or (abort "emacs-${name}: missing dependency ${d}");
+              let lookupDep = d: self."${d}" or null;
               in map lookupDep recipe.deps;
             meta = {
               homepage = "http://stable.melpa.org/#/${name}";
@@ -29,14 +34,17 @@ let
           };
     in self.callPackage drv {};
 
-  packages = self:
-    let
-      melpaStablePackages = mapAttrs (mkPackage self) manifest;
+in
 
-      melpaBuild = import ../../../build-support/emacs/melpa.nix {
-        inherit (pkgs) lib stdenv fetchurl texinfo;
-        inherit (self) emacs;
-      };
-    in melpaStablePackages // { inherit melpaBuild melpaStablePackages; };
+self:
 
-in makeScope pkgs.newScope packages
+  let
+    super = mapAttrs (mkPackage self) manifest;
+
+    markBroken = pkg: pkg.override {
+      melpaBuild = args: self.melpaBuild (args // {
+        meta = (args.meta or {}) // { broken = true; };
+      });
+    };
+  in
+    super // { melpaStablePackages = super; }

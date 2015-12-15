@@ -10,17 +10,20 @@ let
   mkPackage = self: name: recipe:
     let drv =
           { elpaBuild, stdenv, fetchurl }:
-          let fetch = { inherit fetchurl; }."${recipe.fetch.tag}"
-                or (abort "emacs-${name}: unknown fetcher '${recipe.fetch.tag}'");
-              args = builtins.removeAttrs recipe.fetch [ "tag" ];
-              src = fetch args;
+          let
+            unknownFetcher =
+              abort "emacs-${name}: unknown fetcher '${recipe.fetch.tag}'";
+            fetch =
+              { inherit fetchurl; }."${recipe.fetch.tag}"
+              or unknownFetcher;
+            args = builtins.removeAttrs recipe.fetch [ "tag" ];
+            src = fetch args;
           in elpaBuild {
             pname = name;
             inherit (recipe) version;
             inherit src;
             deps =
-              let lookupDep = d:
-                    self."${d}" or (abort "emacs-${name}: missing dependency ${d}");
+              let lookupDep = d: self."${d}" or null;
               in map lookupDep recipe.deps;
             meta = {
               homepage = "http://elpa.gnu.org/packages/${name}.html";
@@ -29,14 +32,23 @@ let
           };
     in self.callPackage drv {};
 
-  packages = self:
-    let
-      elpaPackages = mapAttrs (mkPackage self) manifest;
+in
 
-      elpaBuild = import ../../../build-support/emacs/melpa.nix {
-        inherit (pkgs) lib stdenv fetchurl texinfo;
-        inherit (self) emacs;
-      };
-    in elpaPackages // { inherit elpaBuild elpaPackages; };
+self:
 
-in makeScope pkgs.newScope packages
+  let
+    super = mapAttrs (mkPackage self) manifest;
+
+    elpaBuild = import ../../../build-support/emacs/melpa.nix {
+      inherit (pkgs) lib stdenv fetchurl texinfo;
+      inherit (self) emacs;
+    };
+
+    builtin = null;
+
+    markBroken = pkg: pkg.override {
+      elpaBuild = args: self.elpaBuild (args // {
+        meta = (args.meta or {}) // { broken = true; };
+      });
+    };
+  in super // { inherit elpaBuild; elpaPackage = super; }

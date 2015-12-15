@@ -11627,7 +11627,8 @@ let
   emacsPackagesNgGen = emacs: callPackage ./emacs-packages.nix {
     overrides = (config.emacsPackageOverrides or (p: {})) pkgs;
 
-    inherit emacs elpaPackages;
+    inherit newScope;
+    inherit emacs elpaPackages melpaPackages melpaStablePackages;
 
     trivialBuild = callPackage ../build-support/emacs/trivial.nix {
       inherit emacs;
@@ -11647,8 +11648,13 @@ let
   emacs24PackagesNg = recurseIntoAttrs (emacsPackagesNgGen emacs24);
 
   elpaPackages =
-    let imported = import ../applications/editors/emacs-modes/elpa-packages.nix pkgs;
-    in recurseIntoAttrs (imported.override (super: self: { inherit emacs; }));
+    import ../applications/editors/emacs-modes/elpa-packages.nix pkgs;
+
+  melpaStablePackages =
+    import ../applications/editors/emacs-modes/melpa-stable-packages.nix pkgs;
+
+  melpaPackages =
+    import ../applications/editors/emacs-modes/melpa-packages.nix pkgs;
 
   emacsWithPackages = callPackage ../build-support/emacs/wrapper.nix { };
   emacs24WithPackages = emacsWithPackages.override { emacs = emacs24; };
