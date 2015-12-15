@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "slurm-llnl-${version}";
-  version = "14.11.5";
+  version = "14-11-5-1";
 
   src = fetchurl {
-    url = "http://www.schedmd.com/download/latest/slurm-${version}.tar.bz2";
-    sha256 = "0xx1q9ximsyyipl0xbj8r7ajsz4xrxik8xmhcb1z9nv0aza1rff2";
+    url = "https://github.com/SchedMD/slurm/archive/slurm-${version}.tar.gz";
+    sha256 = "0vn2jkj83zgc4j656vm24lihapg3w3sfnzpsmynlk4r0v9cy2vcw";
   };
 
   buildInputs = [ python munge perl pam openssl mysql.lib ];
