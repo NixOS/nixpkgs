@@ -41937,7 +41937,7 @@
     "matlab-mode": {
         "fetch": {
             "tag": "fetchcvs",
-            "url": ":pserver:anonymous@matlab-emacs.cvs.sourceforge.net:/cvsroot/matlab-emacs",
+            "cvsRoot": ":pserver:anonymous@matlab-emacs.cvs.sourceforge.net:/cvsroot/matlab-emacs",
             "module": "matlab-emacs",
             "sha256": "694652e361b9d15a3f1542d45b43c6516f20030dbaa8a058b5fdb4c833885465"
         },
