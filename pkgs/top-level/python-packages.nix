@@ -11444,11 +11444,11 @@ in modules // {
     };
   in buildPythonPackage ( rec {
     name = "numpy-${version}";
-    version = "1.10.1";
+    version = "1.10.2";
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/numpy/${name}.tar.gz";
-      sha256 = "8b9f453f29ce96a14e625100d3dcf8926301d36c5f622623bf8820e748510858";
+      sha256 = "23a3befdf955db4d616f8bb77b324680a80a323e0c42a7e8d7388ef578d8ffa9";
     };
 
     disabled = isPyPy;  # WIP
