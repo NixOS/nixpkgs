@@ -3637,6 +3637,8 @@ let
   zile = callPackage ../applications/editors/zile { };
 
   zinnia = callPackage ../tools/inputmethods/zinnia { };
+  zint = callPackage ../applications/misc/zint { };
+  
   tegaki-zinnia-japanese = callPackage ../tools/inputmethods/tegaki-zinnia-japanese { };
 
   zimreader = callPackage ../tools/text/zimreader { };
