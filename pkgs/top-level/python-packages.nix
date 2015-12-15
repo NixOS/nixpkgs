@@ -2199,6 +2199,25 @@ in modules // {
   buildout = self.zc_buildout;
   buildout152 = self.zc_buildout152;
 
+  check-manifest = buildPythonPackage rec {
+    name = "check-manifest";
+    version = "0.30";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/check-manifest/check-manifest-${version}.tar.gz";
+      md5 = "b18f7f0bcd02f52d40148c388ace9290";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = https://github.com/mgedmin/check-manifest;
+      description = "Check MANIFEST.in in a Python source package for completeness";
+      license = licenses.mit;
+      maintainers = with maintainers; [ lewo ];
+    };
+  };
+
   # A patched version of buildout, useful for buildout based development on Nix
   zc_buildout_nix = callPackage ../development/python-modules/buildout-nix { };
 
