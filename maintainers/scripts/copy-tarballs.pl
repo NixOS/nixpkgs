@@ -92,7 +92,7 @@ if ($op eq "--file") {
 elsif ($op eq "--expr") {
 
     # Evaluate find-tarballs.nix.
-    my $expr = $ARGV[1] // die "$0: --expr requires a Nix expression\n";
+    my $expr = $ARGV[0] // die "$0: --expr requires a Nix expression\n";
     my $pid = open(JSON, "-|", "nix-instantiate", "--eval-only", "--json", "--strict",
                    "<nixpkgs/maintainers/scripts/find-tarballs.nix>",
                    "--arg", "expr", $expr);
