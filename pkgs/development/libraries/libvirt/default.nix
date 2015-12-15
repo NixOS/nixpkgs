@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnutls, devicemapper, perl, python
 , iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, makeWrapper, pmutils, libcap_ng
-, dnsmasq, libnl, libpcap, libxslt, xhtml1
+, dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl
 , pythonPackages, perlPackages
 }:
 
@@ -20,11 +20,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig libxml2 gnutls devicemapper perl python readline lvm2
     utillinux udev libpciaccess gettext libtasn1 libgcrypt yajl makeWrapper
-    libcap_ng libnl libxslt xhtml1 perlPackages.XMLXPath
+    libcap_ng libnl libxslt xhtml1 perlPackages.XMLXPath numad numactl
   ];
 
   preConfigure = ''
     PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${udev}/sbin:${dnsmasq}/bin:$PATH
+    substituteInPlace configure --replace 'as_dummy="/bin:/usr/bin:/usr/sbin"' 'as_dummy="${numad}/bin"'
     patchShebangs . # fixes /usr/bin/python references
   '';
 
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
     "--with-macvtap"
     "--with-virtualport"
     "--with-libpcap"
+    "--with-numad"
   ];
 
   installFlags = [
@@ -47,7 +49,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace "$out/bin" "${gettext}/bin"
     wrapProgram $out/sbin/libvirtd \
-      --prefix PATH : ${iptables}/sbin:${iproute}/sbin:${pmutils}/bin
+      --prefix PATH : ${iptables}/sbin:${iproute}/sbin:${pmutils}/bin:${numad}/bin:${numactl}/bin
   '';
 
   enableParallelBuilding = true;
