@@ -5032,6 +5032,10 @@ let
   erlang_odbc_javac = erlangR18_odbc_javac;
 
   rebar = callPackage ../development/tools/build-managers/rebar { };
+  rebar3 = callPackage ../development/tools/build-managers/rebar3 { };
+  fetchHex = callPackage ../development/tools/build-managers/rebar3/fetch-hex.nix { };
+
+  erlangPackages = callPackage ../development/erlang-modules { };
 
   elixir = callPackage ../development/interpreters/elixir { };
 
