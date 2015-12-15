@@ -3835,6 +3835,8 @@ let
   cython = pythonPackages.cython;
   cython3 = python3Packages.cython;
 
+  devpi-client = callPackage ../development/tools/devpi-client {};
+
   ecl = callPackage ../development/compilers/ecl { };
 
   eql = callPackage ../development/compilers/eql {};
