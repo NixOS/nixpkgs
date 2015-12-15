@@ -43,12 +43,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.4.0";
+  version = "0.4.2";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "00k53hzbawpqvmkkyzcvbmf1d0ycshzdqk19nwsifv1rmiwjj7ss";
+    sha256 = "04i5kjji5553lkdxz3wgflg1mav5ivwy2dascjy8jprqpq33aknk";
   };
 
   prePatch = ''
