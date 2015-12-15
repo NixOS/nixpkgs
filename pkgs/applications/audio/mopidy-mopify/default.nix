@@ -3,11 +3,11 @@
 pythonPackages.buildPythonPackage rec {
   name = "mopidy-mopify-${version}";
 
-  version = "1.5.1";
+  version = "1.5.8";
 
   src = fetchurl {
     url = "https://github.com/dirkgroenen/mopidy-mopify/archive/${version}.tar.gz";
-    sha256 = "0hhdss4i5436dj37pndxk81a4g3g8f6zqjyv04lhpqcww01290as";
+    sha256 = "1gq88i5hbyskwhqf51myndqgmrndkyy6gs022sc387fy3dwxmvn0";
   };
 
   propagatedBuildInputs = with pythonPackages; [ mopidy configobj ];
