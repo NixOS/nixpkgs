@@ -14266,6 +14266,8 @@ let
 
   tennix = callPackage ../games/tennix { };
 
+  terraria-server = callPackage ../games/terraria-server/default.nix { };
+
   tibia = callPackage_i686 ../games/tibia { };
 
   tintin = callPackage ../games/tintin { };
