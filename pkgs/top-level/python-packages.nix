@@ -2218,6 +2218,25 @@ in modules // {
     };
   };
 
+  devpi-common = buildPythonPackage rec {
+    name = "devpi-common";
+    version = "2.0.8";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/devpi-common/devpi-common-${version}.tar.gz";
+      md5 = "3739af0f59151d1aaa67035fec8f97c6";
+    };
+
+    propagatedBuildInputs = [ self.requests2 self.py ];
+
+    meta = {
+      homepage = https://bitbucket.org/hpk42/devpi;
+      description = "Utilities jointly used by devpi-server and devpi-client";
+      license = licenses.mit;
+      maintainers = with maintainers; [ lewo ];
+    };
+  };
+
   # A patched version of buildout, useful for buildout based development on Nix
   zc_buildout_nix = callPackage ../development/python-modules/buildout-nix { };
 
