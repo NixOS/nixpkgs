@@ -607,7 +607,7 @@ in modules // {
       description = "A simple automation tool";
       license = with licenses; [ gpl3] ;
       maintainers = with maintainers; [ joamaki ];
-      platforms = with platforms; [ linux darwin ];
+      platforms = with platforms; linux ++ darwin;
     };
   };
 
@@ -639,7 +639,7 @@ in modules // {
       description = "A simple automation tool";
       license     = with licenses; [ gpl3 ];
       maintainers = with maintainers; [ copumpkin ];
-      platforms   = with platforms; [ linux darwin ];
+      platforms   = with platforms; linux ++ darwin;
     };
   };
 
@@ -10539,7 +10539,7 @@ in modules // {
       '';
       homepage = https://thp.io/2010/mygpoclient/;
       license = with licenses; [ gpl3 ];
-      platforms = with platforms; [ linux darwin ];
+      platforms = with platforms; linux ++ darwin;
       maintainers = with maintainers; [ skeidel ];
     };
   };
