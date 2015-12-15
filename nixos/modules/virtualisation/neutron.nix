@@ -57,6 +57,7 @@ let
     enable_security_group = True
     firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
 
+    ${cfg.extraML2Config}
   '';
   neutronConf = pkgs.writeText "neutron.conf" ''
     [DEFAULT]
@@ -139,6 +140,13 @@ in {
       description = ''
         List of extra Python packages to be installed in all
         Neutron services. Useful for adding additional Neutron drivers.
+      '';
+    };
+
+    extraML2Config = mkOption {
+      type = types.str;
+      default = "";
+      description = ''
       '';
     };
 
