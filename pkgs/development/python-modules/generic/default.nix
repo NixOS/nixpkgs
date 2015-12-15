@@ -3,7 +3,7 @@
    (http://pypi.python.org/pypi/setuptools/), which represents a large
    number of Python packages nowadays.  */
 
-{ python, setuptools, unzip, wrapPython, lib, bootstrapped-pip }:
+{ python, setuptools, unzip, which, wrapPython, lib, bootstrapped-pip }:
 
 { name
 
@@ -55,29 +55,30 @@ let
   setuppy = ./run_setup.py;
   # For backwards compatibility, let's use an alias
   doInstallCheck = doCheck;
+
 in
 python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] // {
   name = namePrefix + name;
 
-  buildInputs = [ wrapPython bootstrapped-pip ] ++ buildInputs ++ pythonPath
+  buildInputs = [ which wrapPython bootstrapped-pip ] ++ buildInputs ++ pythonPath
     ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip);
 
-  # propagate python/setuptools to active setup-hook in nix-shell
+  # Propagate python/setuptools to active setup-hook in nix-shell
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
 
   pythonPath = pythonPath;
 
+  # Patch python interpreter to write null timestamps when compiling python files
+  # this way python doesn't try to update them when we freeze timestamps in nix store
   configurePhase = attrs.configurePhase or ''
     runHook preConfigure
 
-    # patch python interpreter to write null timestamps when compiling python files
-    # this way python doesn't try to update them when we freeze timestamps in nix store
     export DETERMINISTIC_BUILD=1
 
     runHook postConfigure
   '';
 
-  # we copy nix_run_setup.py over so it's executed relative to the root of the source
+  # We copy nix_run_setup.py over so it's executed relative to the root of the source
   # many project make that assumption
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
@@ -103,28 +104,38 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
   # a common idiom in Python
   doInstallCheck = doInstallCheck;
 
+  # We check which test runner is available and run that one
   installCheckPhase = attrs.checkPhase or ''
     runHook preCheck
-    ${python.interpreter} nix_run_setup.py test
+
+    if which py.test; then
+      py.test
+    elif which nosetests; then
+      nosetests
+    else
+      ${python.interpreter} nix_run_setup.py test
+    fi
+
     runHook postCheck
   '';
 
+  # We check if we have two packages with the same name in the closure and fail
+  # This shouldn't happen, something went wrong with dependencies specs
   postFixup = attrs.postFixup or ''
     wrapPythonPrograms
 
-    # check if we have two packagegs with the same name in closure and fail
-    # this shouldn't happen, something went wrong with dependencies specs
+
     ${python.interpreter} ${./catch_conflicts.py}
   '';
 
   shellHook = attrs.shellHook or ''
     ${preShellHook}
     if test -e setup.py; then
-       tmp_path=$(mktemp -d)
-       export PATH="$tmp_path/bin:$PATH"
-       export PYTHONPATH="$tmp_path/${python.sitePackages}:$PYTHONPATH"
-       mkdir -p $tmp_path/${python.sitePackages}
-       ${bootstrapped-pip}/bin/pip install -e . --prefix $tmp_path
+      tmp_path=$(mktemp -d)
+      export PATH="$tmp_path/bin:$PATH"
+      export PYTHONPATH="$tmp_path/${python.sitePackages}:$PYTHONPATH"
+      mkdir -p $tmp_path/${python.sitePackages}
+      ${bootstrapped-pip}/bin/pip install -e . --prefix $tmp_path
     fi
     ${postShellHook}
   '';
