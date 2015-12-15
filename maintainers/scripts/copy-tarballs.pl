@@ -69,15 +69,24 @@ sub uploadFile {
     redirect "sha512/$sha512_32", $mainKey;
 }
 
-my $op = $ARGV[0] // "";
+my $op = shift @ARGV;
 
 if ($op eq "--file") {
-    my $fn = $ARGV[1] // die "$0: --file requires a file name\n";
-    if (alreadyMirrored("sha512", hashFile("sha512", 0, $fn))) {
-        print STDERR "$fn is already mirrored\n";
-    } else {
-        uploadFile($fn, basename $fn);
+    my $res = 0;
+    foreach my $fn (@ARGV) {
+	eval {
+	    if (alreadyMirrored("sha512", hashFile("sha512", 0, $fn))) {
+		print STDERR "$fn is already mirrored\n";
+	    } else {
+		uploadFile($fn, basename $fn);
+	    }
+	};
+	if ($@) {
+	    warn "$@\n";
+	    $res = 1;
+	}
     }
+    exit $res;
 }
 
 elsif ($op eq "--expr") {
@@ -138,5 +147,5 @@ elsif ($op eq "--expr") {
 }
 
 else {
-    die "Syntax: $0 --file FILENAME | --expr EXPR\n";
+    die "Syntax: $0 --file FILENAMES... | --expr EXPR\n";
 }
