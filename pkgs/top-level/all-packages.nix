@@ -4522,6 +4522,8 @@ let
 
     ipaddr = callPackage ../development/ocaml-modules/ipaddr { };
 
+    iso8601 = callPackage ../development/ocaml-modules/iso8601 { };
+
     javalib = callPackage ../development/ocaml-modules/javalib {
       extlib = ocaml_extlib_maximal;
     };
