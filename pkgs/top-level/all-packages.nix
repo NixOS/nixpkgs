@@ -4667,6 +4667,8 @@ let
 
     re2 = callPackage ../development/ocaml-modules/re2 { };
 
+    tuntap = callPackage ../development/ocaml-modules/tuntap { };
+
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
 
     ulex = callPackage ../development/ocaml-modules/ulex { };
