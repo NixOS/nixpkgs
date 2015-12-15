@@ -81,6 +81,11 @@ let
       ln -s /host-etc/resolv.conf resolv.conf
       ln -s /host-etc/nsswitch.conf nsswitch.conf
 
+      # symlink sudo and su stuff
+      ln -s /host-etc/login.defs login.defs
+      ln -s /host-etc/sudoers sudoers
+      ln -s /host-etc/sudoers.d sudoers.d
+
       # symlink other core stuff
       ln -s /host-etc/localtime localtime
       ln -s /host-etc/machine-id machine-id
