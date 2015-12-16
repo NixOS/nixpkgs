@@ -474,6 +474,8 @@ let
 
   ### TOOLS
 
+  _9pfs = callPackage ../tools/filesystems/9pfs { };
+
   "3dfsb" = callPackage ../applications/misc/3dfsb {
     glibc = glibc.override { debugSymbols = true; };
   };
