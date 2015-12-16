@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libvirt, glib, libxml2, intltool, libtool, yajl
-, nettle, libgcrypt, python, pygobject, gobjectIntrospection, libcap_ng
+, nettle, libgcrypt, python, pygobject, gobjectIntrospection, libcap_ng, numactl
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig libvirt glib libxml2 intltool libtool yajl nettle libgcrypt
-    python pygobject gobjectIntrospection libcap_ng
+    python pygobject gobjectIntrospection libcap_ng numactl
   ];
 
   # Compiler flag -fstack-protector-all fixes this build error:
