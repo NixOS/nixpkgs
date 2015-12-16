@@ -15,6 +15,11 @@ let
     ''}
   '';
 
+  docFixes = fetchurl {
+    url = "https://downloads.haskell.org/~ghc/7.10.3/ghc-7.10.3a.patch";
+    sha256 = "1j45z4kcd3w1rzm4hapap2xc16bbh942qnzzdbdjcwqznsccznf0";
+  };
+
 in
 
 stdenv.mkDerivation rec {
@@ -25,6 +30,10 @@ stdenv.mkDerivation rec {
     url = "https://downloads.haskell.org/~ghc/${version}/${name}-src.tar.xz";
     sha256 = "1vsgmic8csczl62ciz51iv8nhrkm72lyhbz7p7id13y2w7fcx46g";
   };
+
+  patches = [
+    docFixes
+  ];
 
   buildInputs = [ ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 hscolour ];
 
