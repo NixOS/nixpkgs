@@ -51,4 +51,25 @@ self:
         meta = (args.meta or {}) // { broken = true; };
       });
     };
-  in super // { inherit elpaBuild; elpaPackage = super; }
+
+    elpaPackages = super // {
+      ace-window = markBroken super.ace-window;
+      ada-mode = markBroken super.ada-mode;
+      beacon = markBroken super.beacon;
+      bug-hunter = markBroken super.bug-hunter;
+      company-math = markBroken super.company-math;
+      company-statistics = markBroken super.company-statistics;
+      context-coloring = markBroken super.context-coloring;
+      dict-tree = markBroken super.dict-tree;
+      el-search = markBroken super.el-search;
+      ergoemacs-mode = markBroken super.ergoemacs-mode;
+      exwm = markBroken super.exwm;
+      gnugo = markBroken super.gnugo;
+      iterators = markBroken super.iterators;
+      midi-kbd = markBroken super.mini-kbd;
+      stream = markBroken super.stream;
+      tNFA = markBroken super.tNFA;
+      trie = markBroken super.trie;
+      xelb = markBroken super.xelb;
+    };
+  in elpaPackages // { inherit elpaBuild elpaPackages; }
