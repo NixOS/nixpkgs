@@ -27,7 +27,7 @@ let
   };
 
   packages = self: with self; {
-    inherit (pkgs.kdeApps_15_08) kdelibs ksnapshot;
+    kdelibs = callPackage ./kdelibs { inherit (pkgs) attica phonon; };
 
     ark = callPackage ./ark.nix {};
     baloo-widgets = callPackage ./baloo-widgets.nix {};
