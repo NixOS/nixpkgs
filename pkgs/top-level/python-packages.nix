@@ -14898,16 +14898,14 @@ in modules // {
 
   pyrr = buildPythonPackage rec {
     name = "pyrr-${version}";
-    version = "0.7.0";
+    version = "0.7.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pyrr/pyrr-${version}.tar.gz";
-      sha256 = "ddfcd83394e9703138a3c668747df3548a81238d8ab36d4bf6a84d25ea90b2cd";
+      sha256 = "04a65a9fb5c746b41209f55b21abf47a0ef80a4271159d670ca9579d9be3b4fa";
     };
 
-    # ImportError: No module named tests
-    doCheck = false;
-
+    buildInputs = with self; [ setuptools ];
     propagatedBuildInputs = with self; [ multipledispatch numpy ];
 
     meta = {
