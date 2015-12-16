@@ -74,17 +74,17 @@ my $op = shift @ARGV;
 if ($op eq "--file") {
     my $res = 0;
     foreach my $fn (@ARGV) {
-	eval {
-	    if (alreadyMirrored("sha512", hashFile("sha512", 0, $fn))) {
-		print STDERR "$fn is already mirrored\n";
-	    } else {
-		uploadFile($fn, basename $fn);
-	    }
-	};
-	if ($@) {
-	    warn "$@\n";
-	    $res = 1;
-	}
+        eval {
+            if (alreadyMirrored("sha512", hashFile("sha512", 0, $fn))) {
+                print STDERR "$fn is already mirrored\n";
+            } else {
+                uploadFile($fn, basename $fn);
+            }
+        };
+        if ($@) {
+            warn "$@\n";
+            $res = 1;
+        }
     }
     exit $res;
 }
