@@ -14,7 +14,7 @@ releaseTools.sourceTarball rec {
   version = builtins.readFile ../../.version;
   versionSuffix = "pre${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
-  buildInputs = [ nix ];
+  buildInputs = [ nix jq ];
 
   configurePhase = ''
     eval "$preConfigure"
@@ -83,7 +83,15 @@ releaseTools.sourceTarball rec {
     stopNest
 
     header "checking find-tarballs.nix"
-    nix-instantiate --eval --strict --show-trace ./maintainers/scripts/find-tarballs.nix > /dev/null
+    nix-instantiate --eval --strict --show-trace --json \
+       ./maintainers/scripts/find-tarballs.nix \
+      --arg expr 'import ./maintainers/scripts/all-tarballs.nix' > $TMPDIR/tarballs.json
+    nrUrls=$(jq -r '.[].url' < $TMPDIR/tarballs.json | wc -l)
+    echo "found $nrUrls URLs"
+    if [ "$nrUrls" -lt 10000 ]; then
+      echo "suspiciously low number of URLs"
+      exit 1
+    fi
     stopNest
   '';
 

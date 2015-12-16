@@ -13,9 +13,10 @@
 , officialRelease ? false
 , # The platforms for which we build Nixpkgs.
   supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]
+, scrubJobs ? true
 }:
 
-with import ./release-lib.nix { inherit supportedSystems; };
+with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
 
 let
 

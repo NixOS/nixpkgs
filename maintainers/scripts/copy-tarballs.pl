@@ -93,7 +93,7 @@ elsif ($op eq "--expr") {
 
     # Evaluate find-tarballs.nix.
     my $expr = $ARGV[0] // die "$0: --expr requires a Nix expression\n";
-    my $pid = open(JSON, "-|", "nix-instantiate", "--eval-only", "--json", "--strict",
+    my $pid = open(JSON, "-|", "nix-instantiate", "--eval", "--json", "--strict",
                    "<nixpkgs/maintainers/scripts/find-tarballs.nix>",
                    "--arg", "expr", $expr);
     my $stdout = <JSON>;
@@ -112,6 +112,11 @@ elsif ($op eq "--expr") {
         my $url = $fetch->{url};
         my $algo = $fetch->{type};
         my $hash = $fetch->{hash};
+
+        if (defined $ENV{DEBUG}) {
+            print "$url $algo $hash\n";
+            next;
+        }
 
         if ($url !~ /^http:/ && $url !~ /^https:/ && $url !~ /^ftp:/ && $url !~ /^mirror:/) {
             print STDERR "skipping $url (unsupported scheme)\n";

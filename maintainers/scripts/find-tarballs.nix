@@ -1,10 +1,9 @@
-# This expression returns a list of all fetchurl calls used by all
-# packages reachable from release.nix.
+# This expression returns a list of all fetchurl calls used by ‘expr’.
 
 with import ../.. { };
 with lib;
 
-{ expr ? removeAttrs (import ../../pkgs/top-level/release.nix { }) [ "tarball" "unstable" ] }:
+{ expr }:
 
 let
 
