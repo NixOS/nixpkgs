@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://www.tuxera.com/community/;
-    description = "FUSE-base NTFS driver with full write support";
+    description = "FUSE-based NTFS driver with full write support";
     maintainers = [ maintainers.urkud ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus; # and (lib)fuse-lite under LGPL2+
