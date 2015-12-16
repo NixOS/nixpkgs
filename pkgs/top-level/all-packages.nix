@@ -11466,6 +11466,19 @@ let
   });
   emacs24Macport = self.emacs24Macport_24_5;
 
+  emacs25pre = callPackage ../applications/editors/emacs-25 {
+    # use override to enable additional features
+    libXaw = xorg.libXaw;
+    Xaw3d = null;
+    gconf = null;
+    alsaLib = null;
+    imagemagick = null;
+    acl = null;
+    gpm = null;
+    inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
+    inherit (darwin) libobjc;
+  };
+
   emacsPackagesGen = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
 
