@@ -1,5 +1,6 @@
---- nss-3.17.1/nss/config/Makefile
-+++ nss-3.17.1/nss/config/Makefile
+diff -urN a/nss/config/Makefile b/nss/config/Makefile
+--- a/nss/config/Makefile	1969-12-31 18:00:00.000000000 -0600
++++ b/nss/config/Makefile	2015-11-15 10:42:46.249578304 -0600
 @@ -0,0 +1,40 @@
 +CORE_DEPTH = ..
 +DEPTH      = ..
@@ -41,8 +42,9 @@
 +
 +dummy: all export libs
 +
---- nss-3.17.1/nss/config/nss-config.in
-+++ nss-3.17.1/nss/config/nss-config.in
+diff -urN a/nss/config/nss-config.in b/nss/config/nss-config.in
+--- a/nss/config/nss-config.in	1969-12-31 18:00:00.000000000 -0600
++++ b/nss/config/nss-config.in	2015-11-15 10:42:46.250578304 -0600
 @@ -0,0 +1,145 @@
 +#!/bin/sh
 +
@@ -189,8 +191,9 @@
 +      echo $libdirs
 +fi      
 +
---- nss-3.17.1/nss/config/nss.pc.in
-+++ nss-3.17.1/nss/config/nss.pc.in
+diff -urN a/nss/config/nss.pc.in b/nss/config/nss.pc.in
+--- a/nss/config/nss.pc.in	1969-12-31 18:00:00.000000000 -0600
++++ b/nss/config/nss.pc.in	2015-11-15 10:42:46.251578304 -0600
 @@ -0,0 +1,12 @@
 +prefix=@prefix@
 +exec_prefix=@exec_prefix@
@@ -201,12 +204,13 @@
 +Description: Network Security Services
 +Version: @NSS_MAJOR_VERSION@.@NSS_MINOR_VERSION@.@NSS_PATCH_VERSION@
 +Requires: nspr >= 4.8
-+Libs: -L${libdir} -lssl3 -lsmime3 -lnss3 -lnssutil3
++Libs: -lssl3 -lsmime3 -lnss3 -lnssutil3
 +Cflags: -I${includedir}
 +
---- nss-3.17.1/nss/Makefile
-+++ nss-3.17.1/nss/Makefile
-@@ -44,7 +44,7 @@
+diff -urN a/nss/Makefile b/nss/Makefile
+--- a/nss/Makefile	2015-11-15 09:25:06.410786060 -0600
++++ b/nss/Makefile	2015-11-15 10:42:46.252578304 -0600
+@@ -46,7 +46,7 @@
  # (7) Execute "local" rules. (OPTIONAL).                              #
  #######################################################################
  
@@ -215,7 +219,7 @@
  
  nss_clean_all: clobber_nspr clobber
  
-@@ -109,12 +109,6 @@
+@@ -115,12 +115,6 @@
  	--with-dist-prefix='$(NSPR_PREFIX)' \
  	--with-dist-includedir='$(NSPR_PREFIX)/include'
  
@@ -228,14 +232,12 @@
  build_docs:
  	$(MAKE) -C $(CORE_DEPTH)/doc
  
---- nss-3.17.1/nss/manifest.mn
-+++ nss-3.17.1/nss/manifest.mn
-@@ -10,7 +10,7 @@
+diff -urN a/nss/manifest.mn b/nss/manifest.mn
+--- a/nss/manifest.mn	2015-11-15 09:25:06.411786060 -0600
++++ b/nss/manifest.mn	2015-11-15 10:43:15.633576994 -0600
+@@ -10,4 +10,4 @@
  
  RELEASE = nss
  
--DIRS = coreconf lib cmd
+-DIRS = coreconf lib cmd external_tests
 +DIRS = coreconf lib cmd config
- 
- ifdef NSS_BUILD_GTESTS
- DIRS += external_tests
