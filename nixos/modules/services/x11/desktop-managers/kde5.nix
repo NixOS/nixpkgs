@@ -8,9 +8,7 @@ let
   cfg = xcfg.desktopManager.kde5;
   xorg = pkgs.xorg;
 
-  kf5 = pkgs.kf5_stable;
-  plasma5 = pkgs.plasma5_stable;
-  kdeApps = pkgs.kdeApps_stable;
+  kde5 = pkgs.kde5;
 
 in
 
@@ -57,12 +55,12 @@ in
     services.xserver.desktopManager.session = singleton {
       name = "kde5";
       bgSupport = true;
-      start = ''exec ${plasma5.plasma-workspace}/bin/startkde;'';
+      start = ''exec ${kde5.plasma-workspace}/bin/startkde;'';
     };
 
     security.setuidOwners = singleton {
       program = "kcheckpass";
-      source = "${plasma5.plasma-workspace}/lib/libexec/kcheckpass";
+      source = "${kde5.plasma-workspace}/lib/libexec/kcheckpass";
       owner = "root";
       group = "root";
       setuid = true;
@@ -72,61 +70,61 @@ in
       [
         pkgs.qt4 # qtconfig is the only way to set Qt 4 theme
 
-        kf5.frameworkintegration
-        kf5.kinit
+        kde5.frameworkintegration
+        kde5.kinit
 
-        plasma5.breeze
-        plasma5.kde-cli-tools
-        plasma5.kdeplasma-addons
-        plasma5.kgamma5
-        plasma5.khelpcenter
-        plasma5.khotkeys
-        plasma5.kinfocenter
-        plasma5.kmenuedit
-        plasma5.kscreen
-        plasma5.ksysguard
-        plasma5.kwayland
-        plasma5.kwin
-        plasma5.kwrited
-        plasma5.milou
-        plasma5.oxygen
-        plasma5.polkit-kde-agent
-        plasma5.systemsettings
+        kde5.breeze
+        kde5.kde-cli-tools
+        kde5.kdeplasma-addons
+        kde5.kgamma5
+        kde5.khelpcenter
+        kde5.khotkeys
+        kde5.kinfocenter
+        kde5.kmenuedit
+        kde5.kscreen
+        kde5.ksysguard
+        kde5.kwayland
+        kde5.kwin
+        kde5.kwrited
+        kde5.milou
+        kde5.oxygen
+        kde5.polkit-kde-agent
+        kde5.systemsettings
 
-        plasma5.plasma-desktop
-        plasma5.plasma-workspace
-        plasma5.plasma-workspace-wallpapers
+        kde5.plasma-desktop
+        kde5.plasma-workspace
+        kde5.plasma-workspace-wallpapers
 
-        kdeApps.ark
-        kdeApps.dolphin
-        kdeApps.dolphin-plugins
-        kdeApps.ffmpegthumbs
-        kdeApps.gwenview
-        kdeApps.kate
-        kdeApps.kdegraphics-thumbnailers
-        kdeApps.konsole
-        kdeApps.okular
-        kdeApps.print-manager
+        kde5.ark
+        kde5.dolphin
+        kde5.dolphin-plugins
+        kde5.ffmpegthumbs
+        kde5.gwenview
+        kde5.kate
+        kde5.kdegraphics-thumbnailers
+        kde5.konsole
+        kde5.okular
+        kde5.print-manager
 
         # Oxygen icons moved to KDE Frameworks 5.16 and later.
-        (kdeApps.oxygen-icons or kf5.oxygen-icons5)
+        (kde5.oxygen-icons or kde5.oxygen-icons5)
         pkgs.hicolor_icon_theme
 
-        plasma5.kde-gtk-config
+        kde5.kde-gtk-config
       ]
 
       # Plasma 5.5 and later has a Breeze GTK theme.
       # If it is not available, Orion is very similar to Breeze.
-      ++ lib.optional (!(lib.hasAttr "breeze-gtk" plasma5)) pkgs.orion
+      ++ lib.optional (!(lib.hasAttr "breeze-gtk" kde5)) pkgs.orion
 
       # Install Breeze icons if available
-      ++ lib.optional (lib.hasAttr "breeze-icons" kf5) kf5.breeze-icons
+      ++ lib.optional (lib.hasAttr "breeze-icons" kde5) kde5.breeze-icons
 
       # Optional hardware support features
-      ++ lib.optional config.hardware.bluetooth.enable plasma5.bluedevil
-      ++ lib.optional config.networking.networkmanager.enable plasma5.plasma-nm
-      ++ lib.optional config.hardware.pulseaudio.enable plasma5.plasma-pa
-      ++ lib.optional config.powerManagement.enable plasma5.powerdevil
+      ++ lib.optional config.hardware.bluetooth.enable kde5.bluedevil
+      ++ lib.optional config.networking.networkmanager.enable kde5.plasma-nm
+      ++ lib.optional config.hardware.pulseaudio.enable kde5.plasma-pa
+      ++ lib.optional config.powerManagement.enable kde5.powerdevil
 
       ++ lib.optionals cfg.phonon.gstreamer.enable
         [
@@ -167,13 +165,13 @@ in
       };
 
     # Enable GTK applications to load SVG icons
-    environment.variables = mkIf (lib.hasAttr "breeze-icons" kf5) {
+    environment.variables = mkIf (lib.hasAttr "breeze-icons" kde5) {
       GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
     };
 
-    fonts.fonts = [ (plasma5.oxygen-fonts or pkgs.noto-fonts) ];
+    fonts.fonts = [ (kde5.oxygen-fonts or pkgs.noto-fonts) ];
 
-    programs.ssh.askPassword = "${plasma5.ksshaskpass}/bin/ksshaskpass";
+    programs.ssh.askPassword = "${kde5.ksshaskpass}/bin/ksshaskpass";
 
     # Enable helpful DBus services.
     services.udisks2.enable = true;
@@ -185,8 +183,8 @@ in
     services.xserver.displayManager.sddm = {
       theme = "breeze";
       themes = [
-        plasma5.plasma-workspace
-        (kdeApps.oxygen-icons or kf5.oxygen-icons5)
+        kde5.plasma-workspace
+        (kde5.oxygen-icons or kde5.oxygen-icons5)
       ];
     };
 

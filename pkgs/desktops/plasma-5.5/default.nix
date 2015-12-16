@@ -16,33 +16,33 @@ let
   srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
   mirror = "mirror://kde";
 
-  plasmaPackage = args:
-    let
-      inherit (args) name;
-      sname = args.sname or name;
-      inherit (srcs."${sname}") src version;
-    in stdenv.mkDerivation (args // {
-      name = "${name}-${version}";
-      inherit src;
+  packages = self: with self; {
+    plasmaPackage = args:
+      let
+        inherit (args) name;
+        sname = args.sname or name;
+        inherit (srcs."${sname}") src version;
+      in stdenv.mkDerivation (args // {
+        name = "${name}-${version}";
+        inherit src;
 
-      setupHook = args.setupHook or ./setup-hook.sh;
+        setupHook = args.setupHook or ./setup-hook.sh;
 
-      cmakeFlags =
-        (args.cmakeFlags or [])
-        ++ [ "-DBUILD_TESTING=OFF" ]
-        ++ lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";
+        cmakeFlags =
+          (args.cmakeFlags or [])
+          ++ [ "-DBUILD_TESTING=OFF" ]
+          ++ lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";
 
-      meta = {
-        license = with lib.licenses; [
-          lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
-        ];
-        platforms = lib.platforms.linux;
-        maintainers = with lib.maintainers; [ ttuegel ];
-        homepage = "http://www.kde.org";
-      } // (args.meta or {});
-    });
+        meta = {
+          license = with lib.licenses; [
+            lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
+          ];
+          platforms = lib.platforms.linux;
+          maintainers = with lib.maintainers; [ ttuegel ];
+          homepage = "http://www.kde.org";
+        } // (args.meta or {});
+      });
 
-  addPackages = self: with self; {
     bluedevil = callPackage ./bluedevil.nix {};
     breeze-gtk = callPackage ./breeze-gtk.nix {};
     breeze-qt4 = callPackage ./breeze-qt4.nix {};
@@ -81,6 +81,4 @@ let
     systemsettings = callPackage ./systemsettings.nix {};
   };
 
-  newScope = scope: kdeApps.newScope ({ inherit plasmaPackage; } // scope);
-
-in lib.makeScope newScope addPackages
+in packages

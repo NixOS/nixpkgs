@@ -21,12 +21,13 @@ let
   srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
   mirror = "mirror://kde";
 
-  kdeApp = import ./kde-app.nix {
-    inherit stdenv lib;
-    inherit debug srcs;
-  };
-
   packages = self: with self; {
+
+    kdeApp = import ./kde-app.nix {
+      inherit stdenv lib;
+      inherit debug srcs;
+    };
+
     kdelibs = callPackage ./kdelibs { inherit (pkgs) attica phonon; };
 
     ark = callPackage ./ark.nix {};
@@ -49,6 +50,4 @@ let
     l10n = pkgs.recurseIntoAttrs (import ./l10n.nix { inherit callPackage lib pkgs; });
   };
 
-  newScope = scope: pkgs.kf517.newScope ({ inherit kdeApp; } // scope);
-
-in lib.makeScope newScope packages
+in packages
