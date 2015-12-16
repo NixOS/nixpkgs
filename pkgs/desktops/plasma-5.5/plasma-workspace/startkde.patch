@@ -1,16 +1,7 @@
-From e5c11a5efc4f8e8ba4e89e0172220da921df38c6 Mon Sep 17 00:00:00 2001
-From: Thomas Tuegel <ttuegel@gmail.com>
-Date: Wed, 9 Dec 2015 13:20:02 -0600
-Subject: [PATCH 2/2] startkde NixOS patches
-
----
- startkde/startkde.cmake | 211 ++++++++++++++++++++----------------------------
- 1 file changed, 89 insertions(+), 122 deletions(-)
-
-diff --git a/startkde/startkde.cmake b/startkde/startkde.cmake
-index 37ab5cd..130578e 100644
---- a/startkde/startkde.cmake
-+++ b/startkde/startkde.cmake
+Index: plasma-workspace-5.5.1/startkde/startkde.cmake
+===================================================================
+--- plasma-workspace-5.5.1.orig/startkde/startkde.cmake
++++ plasma-workspace-5.5.1/startkde/startkde.cmake
 @@ -1,8 +1,31 @@
 -#!/bin/sh
 +#!@bash@/bin/bash
@@ -44,7 +35,7 @@ index 37ab5cd..130578e 100644
  if test "x$1" = x--failsafe; then
      KDE_FAILSAFE=1 # General failsafe flag
      KWIN_COMPOSE=N # Disable KWin's compositing
-@@ -16,29 +39,16 @@ trap 'echo GOT SIGHUP' HUP
+@@ -17,29 +40,16 @@ trap 'echo GOT SIGHUP' HUP
  # we have to unset this for Darwin since it will screw up KDE's dynamic-loading
  unset DYLD_FORCE_FLAT_NAMESPACE
  
@@ -78,7 +69,7 @@ index 37ab5cd..130578e 100644
  fi
  
  # Boot sequence:
-@@ -56,13 +66,8 @@ fi
+@@ -57,13 +67,8 @@ fi
  # * Then ksmserver is started which takes control of the rest of the startup sequence
  
  # We need to create config folder so we can write startupconfigkeys
@@ -94,7 +85,7 @@ index 37ab5cd..130578e 100644
  
  #This is basically setting defaults so we can use them with kstartupconfig5
  cat >$configDir/startupconfigkeys <<EOF
-@@ -101,42 +106,10 @@ XftSubPixel=none
+@@ -102,42 +107,10 @@ XftSubPixel=none
  EOF
  }
  
@@ -139,7 +130,7 @@ index 37ab5cd..130578e 100644
      exit 1
  fi
  [ -r $configDir/startupconfig ] && . $configDir/startupconfig
-@@ -145,9 +118,11 @@ if test "$kdeglobals_kscreen_scalefactor" -ne 1; then
+@@ -146,9 +119,11 @@ if test "$kdeglobals_kscreen_scalefactor
      export QT_DEVICE_PIXEL_RATIO=$kdeglobals_kscreen_scalefactor
  fi
  
@@ -152,7 +143,7 @@ index 37ab5cd..130578e 100644
  
      kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
      if test $? -eq 10; then
-@@ -163,21 +138,39 @@ if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize"
+@@ -164,21 +139,39 @@ if test -n "$kcminputrc_mouse_cursorthem
      fi
  fi
  
@@ -198,7 +189,7 @@ index 37ab5cd..130578e 100644
        ;;
      None)
        ;;
-@@ -200,8 +193,7 @@ fi
+@@ -201,8 +194,7 @@ fi
  # For anything else (that doesn't set env vars, or that needs a window manager),
  # better use the Autostart folder.
  
@@ -208,7 +199,7 @@ index 37ab5cd..130578e 100644
  
  # Add /env/ to the directory to locate the scripts to be sourced
  for prefix in `echo $scriptpath`; do
-@@ -231,7 +223,7 @@ usr_odir=$HOME/.fonts/kde-override
+@@ -232,7 +224,7 @@ usr_odir=$HOME/.fonts/kde-override
  usr_fdir=$HOME/.fonts
  
  if test -n "$KDEDIRS"; then
@@ -217,7 +208,7 @@ index 37ab5cd..130578e 100644
    sys_odir=$kdedirs_first/share/fonts/override
    sys_fdir=$kdedirs_first/share/fonts
  else
-@@ -244,23 +236,13 @@ fi
+@@ -245,23 +237,13 @@ fi
  # add the user's dirs to the font path, as they might simply have been made
  # read-only by the administrator, for whatever reason.
  
@@ -246,7 +237,7 @@ index 37ab5cd..130578e 100644
  
  # Get Ghostscript to look into user's KDE fonts dir for additional Fontmap
  if test -n "$GS_LIB" ; then
-@@ -273,26 +255,6 @@ fi
+@@ -274,26 +256,6 @@ fi
  
  echo 'startkde: Starting up...'  1>&2
  
@@ -273,7 +264,7 @@ index 37ab5cd..130578e 100644
  # Mark that full KDE session is running (e.g. Konqueror preloading works only
  # with full KDE running). The KDE_FULL_SESSION property can be detected by
  # any X client connected to the same X session, even if not launched
-@@ -317,11 +279,11 @@ fi
+@@ -318,11 +280,11 @@ fi
  #
  KDE_FULL_SESSION=true
  export KDE_FULL_SESSION
@@ -287,7 +278,7 @@ index 37ab5cd..130578e 100644
  
  KDE_SESSION_UID=`id -ru`
  export KDE_SESSION_UID
-@@ -331,11 +293,11 @@ export XDG_CURRENT_DESKTOP
+@@ -332,11 +294,11 @@ export XDG_CURRENT_DESKTOP
  
  # At this point all the environment is ready, let's send it to kwalletd if running
  if test -n "$PAM_KWALLET_LOGIN" ; then
@@ -301,7 +292,7 @@ index 37ab5cd..130578e 100644
  fi
  
  # At this point all environment variables are set, let's send it to the DBus session server to update the activation environment
-@@ -348,21 +310,26 @@ if test $? -ne 0; then
+@@ -349,21 +311,26 @@ if test $? -ne 0; then
    # Startup error
    echo 'startkde: Could not sync environment to dbus.'  1>&2
    test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
@@ -331,7 +322,7 @@ index 37ab5cd..130578e 100644
  # finally, give the session control to the session manager
  # see kdebase/ksmserver for the description of the rest of the startup sequence
  # if the KDEWM environment variable has been set, then it will be used as KDE's
-@@ -378,27 +345,27 @@ test -n "$KDEWM" && KDEWM="--windowmanager $KDEWM"
+@@ -379,27 +346,27 @@ test -n "$KDEWM" && KDEWM="--windowmanag
  # lock now and do the rest of the KDE startup underneath the locker.
  KSMSERVEROPTIONS=""
  test -n "$dl" && KSMSERVEROPTIONS=" --lockscreen"
@@ -366,22 +357,12 @@ index 37ab5cd..130578e 100644
              done
              break
          fi
-@@ -410,21 +377,21 @@ echo 'startkde: Shutting down...'  1>&2
+@@ -411,12 +378,12 @@ echo 'startkde: Shutting down...'  1>&2
  test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
  
  # Clean up
 -kdeinit5_shutdown
 +@kinit@/bin/kdeinit5_shutdown
- 
- echo 'startkde: Running shutdown scripts...'  1>&2
- 
- # Run scripts found in <config locations>/plasma-workspace/shutdown
- for prefix in `echo "$scriptpath"`; do
--  for file in `ls "$prefix"/shutdown 2> /dev/null | egrep -v '(~|\.bak)$'`; do
-+  for file in `ls "$prefix"/shutdown 2> /dev/null | @gnugrep@/bin/egrep -v '(~|\.bak)$'`; do
-     test -x "$prefix/shutdown/$file" && "$prefix/shutdown/$file"
-   done
- done
  
  unset KDE_FULL_SESSION
 -xprop -root -remove KDE_FULL_SESSION
@@ -392,6 +373,3 @@ index 37ab5cd..130578e 100644
  unset KDE_SESSION_UID
  
  echo 'startkde: Done.'  1>&2
--- 
-2.6.3
-
