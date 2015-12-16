@@ -48,7 +48,7 @@ diff -ru nss-3.16-orig/nss/lib/util/secload.c nss-3.16/nss/lib/util/secload.c
 +    if (!c) { /* referencePath doesn't contain a / means that dladdr gave us argv[0]
 +               * and program was called from $PATH. Hack to get libs from NIX_NSS_LIBDIR */
 +        referencePath = NIX_NSS_LIBDIR;
-+        c = &referencePath[sizeof(NIX_NSS_LIBDIR) - 1]; /* last / */
++        c = (char*) &referencePath[sizeof(NIX_NSS_LIBDIR) - 1]; /* last / */
 +    }
      if (c) {
          size_t referencePathSize = 1 + c - referencePath;
