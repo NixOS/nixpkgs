@@ -66,11 +66,13 @@ self: super: {
   # build which has the assistant to be used in the top-level.
   git-annex_5_20150727 = (disableCabalFlag super.git-annex_5_20150727 "assistant").override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
+    lsof = if pkgs.stdenv.isLinux then self.lsof else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
   git-annex = (disableCabalFlag super.git-annex "assistant").override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
+    lsof = if pkgs.stdenv.isLinux then self.lsof else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
