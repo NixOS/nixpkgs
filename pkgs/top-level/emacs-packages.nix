@@ -46,12 +46,7 @@ with lib.licenses;
 
 let
 
-  addMelpaPackages = scope: scope.override (super: melpaPackages);
-  addMelpaStablePackages = scope: scope.override (super: melpaStablePackages);
-  addElpaPackages = scope: scope.override (super: elpaPackages);
-  addOverrides = scope: scope.override packagesFun;
-
-  packagesFun = super: self: with self; {
+  packagesFun = self: with self; {
 
   inherit emacs melpaBuild trivialBuild;
 
@@ -2029,8 +2024,10 @@ let
   };
 
 in
-  addOverrides
-  (addElpaPackages
-  (addMelpaStablePackages
-  (addMelpaPackages
-  (lib.makeScope newScope (self: { inherit emacs; })))))
+  lib.makeScope newScope (self:
+    {}
+    // melpaPackages self
+    // melpaStablePackages self
+    // elpaPackages self
+    // packagesFun self
+  )
