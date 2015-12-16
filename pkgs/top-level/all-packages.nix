@@ -7752,6 +7752,8 @@ let
 
   lightning = callPackage ../development/libraries/lightning { };
 
+  lightlocker = callPackage ../misc/screensavers/light-locker { };
+
   lirc = callPackage ../development/libraries/lirc { };
 
   liquidfun = callPackage ../development/libraries/liquidfun { };

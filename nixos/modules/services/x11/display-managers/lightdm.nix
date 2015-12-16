@@ -13,9 +13,16 @@ let
   # lightdm runs with clearenv(), but we need a few things in the enviornment for X to startup
   xserverWrapper = writeScript "xserver-wrapper"
     ''
-      #! /bin/sh
+      #! ${pkgs.bash}/bin/bash
       ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
-      exec ${dmcfg.xserverBin} ${dmcfg.xserverArgs}
+
+      display=$(echo "$@" | xargs -n 1 | grep -P ^:\\d\$ | head -n 1 | sed s/^://)
+      if [ -z "$display" ]
+      then additionalArgs=":0 -logfile /var/log/X.0.log"
+      else additionalArgs="-logfile /var/log/X.$display.log"
+      fi
+
+      exec ${dmcfg.xserverBin} ${dmcfg.xserverArgs} $additionalArgs "$@"
     '';
 
   usersConf = writeText "users.conf"
@@ -39,7 +46,6 @@ let
       greeter-session = ${cfg.greeter.name}
       ${cfg.extraSeatDefaults}
     '';
-
 in
 {
   # Note: the order in which lightdm greeter modules are imported
@@ -98,7 +104,6 @@ in
   };
 
   config = mkIf cfg.enable {
-
     services.xserver.displayManager.slim.enable = false;
 
     services.xserver.displayManager.job = {
@@ -149,5 +154,7 @@ in
 
     services.xserver.displayManager.lightdm.background = mkDefault "${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png";
 
+    services.xserver.tty     = null; # We might start multiple X servers so let the tty increment themselves..
+    services.xserver.display = null; # We specify our own display (and logfile) in xserver-wrapper up there
   };
 }
