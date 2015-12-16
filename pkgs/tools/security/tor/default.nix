@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
   # Note: torsocks is specified as a dependency, as the distributed
   # 'torify' wrapper attempts to use it; although there is no
   # ./configure time check for any of this.
-  buildInputs = [ libevent openssl zlib torsocks libseccomp ];
+  buildInputs = [ libevent openssl zlib torsocks ] ++
+    stdenv.lib.optional stdenv.isLinux libseccomp;
 
   NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
