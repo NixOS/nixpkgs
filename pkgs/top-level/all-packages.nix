@@ -11347,11 +11347,12 @@ let
   cutecom = callPackage ../tools/misc/cutecom { };
 
   cutegram =
-    let f = ../applications/networking/instant-messengers/telegram;
-        cp = qt5Libs.callPackage;
-    in cp "${f}/cutegram" rec {
-      libqtelegram-aseman-edition = cp "${f}/libqtelegram-aseman-edition" { };
-      telegram-qml = cp "${f}/telegram-qml" { inherit libqtelegram-aseman-edition; };
+    let cp = qt5Libs.callPackage;
+    in cp ../applications/networking/instant-messengers/telegram/cutegram rec {
+      libqtelegram-aseman-edition = cp ../applications/networking/instant-messengers/telegram/libqtelegram-aseman-edition { };
+      telegram-qml = cp ../applications/networking/instant-messengers/telegram/telegram-qml {
+        inherit libqtelegram-aseman-edition;
+      };
     };
 
   cvs = callPackage ../applications/version-management/cvs { };
