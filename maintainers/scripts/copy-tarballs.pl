@@ -63,12 +63,6 @@ sub uploadFile {
 
     my $mainKey = "sha512/$sha512_16";
 
-    # Upload the file as sha512/<hash-in-base-16>.
-    print STDERR "uploading $fn to $mainKey...\n";
-    $bucket->add_key_filename($mainKey, $fn, { 'x-amz-meta-original-name' => $name })
-        or die "failed to upload $fn to $mainKey\n";
-    $cache{$mainKey} = 1;
-
     # Create redirects from the other hash types.
     sub redirect {
         my ($name, $dest) = @_;
@@ -82,6 +76,12 @@ sub uploadFile {
     redirect "sha256/$sha256_32", $mainKey;
     redirect "sha256/$sha256_16", $mainKey;
     redirect "sha512/$sha512_32", $mainKey;
+
+    # Upload the file as sha512/<hash-in-base-16>.
+    print STDERR "uploading $fn to $mainKey...\n";
+    $bucket->add_key_filename($mainKey, $fn, { 'x-amz-meta-original-name' => $name })
+        or die "failed to upload $fn to $mainKey\n";
+    $cache{$mainKey} = 1;
 }
 
 my $op = shift @ARGV;
