@@ -6859,53 +6859,9 @@ let
   };
 
   kf515 = recurseIntoAttrs (import ../development/libraries/kde-frameworks-5.15 { inherit pkgs; });
-  kf517 = recurseIntoAttrs (import ../development/libraries/kde-frameworks-5.17 { inherit pkgs; });
+  kf517 = import ../development/libraries/kde-frameworks-5.17 { inherit pkgs; };
   kf5_stable = kf515;
   kf5_latest = kf517;
-
-  kf5PackagesFun = self: with self; {
-
-    fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
-
-    k9copy = callPackage ../applications/video/k9copy {};
-
-    quassel = callPackage ../applications/networking/irc/quassel/qt-5.nix {
-      monolithic = true;
-      daemon = false;
-      client = false;
-      withKDE = true;
-      dconf = gnome3.dconf;
-      tag = "-kf5";
-    };
-
-    quasselClient = quassel.override {
-      monolithic = false;
-      client = true;
-      tag = "-client-kf5";
-    };
-
-    quassel_qt5 = quassel.override {
-      withKDE = false;
-      tag = "-qt5";
-    };
-
-    quasselClient_qt5 = quasselClient.override {
-      withKDE = false;
-      tag = "-client-qt5";
-    };
-
-    quasselDaemon = quassel.override {
-      monolithic = false;
-      daemon = true;
-      tag = "-daemon-qt5";
-      withKDE = false;
-    };
-
-  };
-
-  kf515Packages = lib.makeScope kf515.newScope kf5PackagesFun;
-  kf517Packages = lib.makeScope kf517.newScope kf5PackagesFun;
-  kf5Packages = kf515Packages;
 
   kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
 
@@ -12250,7 +12206,7 @@ let
   };
 
   kdeApps_15_08 = recurseIntoAttrs (import ../applications/kde-apps-15.08 { inherit pkgs; });
-  kdeApps_15_12 = recurseIntoAttrs (import ../applications/kde-apps-15.12 { inherit pkgs; });
+  kdeApps_15_12 = import ../applications/kde-apps-15.12 { inherit pkgs; };
   kdeApps_stable = kdeApps_15_08;
   kdeApps_latest = kdeApps_15_12;
 
@@ -14756,11 +14712,56 @@ let
   numix-gtk-theme = callPackage ../misc/themes/gtk3/numix-gtk-theme { };
 
   plasma54 = recurseIntoAttrs (import ../desktops/plasma-5.4 { inherit pkgs; });
-  plasma55 = recurseIntoAttrs (import ../desktops/plasma-5.5 { inherit pkgs; });
+  plasma55 = import ../desktops/plasma-5.5 { inherit pkgs; };
   plasma5_stable = plasma54;
   plasma5_latest = plasma55;
 
-  kde5 = kf5_stable // plasma5_stable // kdeApps_stable;
+  kde5PackagesFun = self: with self; {
+
+    fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
+
+    k9copy = callPackage ../applications/video/k9copy {};
+
+    quassel = callPackage ../applications/networking/irc/quassel/qt-5.nix {
+      monolithic = true;
+      daemon = false;
+      client = false;
+      withKDE = true;
+      dconf = gnome3.dconf;
+      tag = "-kf5";
+    };
+
+    quasselClient = quassel.override {
+      monolithic = false;
+      client = true;
+      tag = "-client-kf5";
+    };
+
+    quassel_qt5 = quassel.override {
+      withKDE = false;
+      tag = "-qt5";
+    };
+
+    quasselClient_qt5 = quasselClient.override {
+      withKDE = false;
+      tag = "-client-qt5";
+    };
+
+    quasselDaemon = quassel.override {
+      monolithic = false;
+      daemon = true;
+      tag = "-daemon-qt5";
+      withKDE = false;
+    };
+
+  };
+
+  kde5 = kf5_stable // plasma5_stable // kdeApps_stable // kde5PackagesFun kde5;
+
+  kde5_latest =
+    recurseIntoAttrs
+    (lib.makeScope qt55Libs.newScope (self:
+      kf5_latest self // plasma5_latest self // kdeApps_latest self // kde5PackagesFun self));
 
   theme-vertex = callPackage ../misc/themes/vertex { };
 
@@ -15784,11 +15785,11 @@ aliases = with self; rec {
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
   nfsUtils = nfs-utils;  # added 2014-12-06
-  quassel_qt5 = kf5Packages.quassel_qt5; # added 2015-09-30
-  quasselClient_qt5 = kf5Packages.quasselClient_qt5; # added 2015-09-30
-  quasselDaemon_qt5 = kf5Packages.quasselDaemon; # added 2015-09-30
-  quassel_kf5 = kf5Packages.quassel; # added 2015-09-30
-  quasselClient_kf5 = kf5Packages.quasselClient; # added 2015-09-30
+  quassel_qt5 = kde5.quassel_qt5; # added 2015-09-30
+  quasselClient_qt5 = kde5.quasselClient_qt5; # added 2015-09-30
+  quasselDaemon_qt5 = kde5.quasselDaemon; # added 2015-09-30
+  quassel_kf5 = kde5.quassel; # added 2015-09-30
+  quasselClient_kf5 = kde5.quasselClient; # added 2015-09-30
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rssglx = rss-glx; #added 2015-03-25
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
