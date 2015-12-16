@@ -88,13 +88,13 @@ let
 in {
 
   subversion18 = common {
-    version = "1.8.14";
-    sha1 = "0698efc58373e7657f6dd3ce13cab7b002ffb497";
+    version = "1.8.15";
+    sha1 = "680acf88f0db978fbbeac89ed63776d805b918ef";
   };
 
   subversion19 = common {
-    version = "1.9.2";
-    sha1 = "fb9db3b7ddf48ae37aa8785872301b59bfcc7017";
+    version = "1.9.3";
+    sha1 = "27e8df191c92095f48314a415194ec37c682cbcf";
   };
 
 }
