@@ -11092,6 +11092,8 @@ let
   };
   awesome = awesome-3-5;
 
+  awesomebump = callPackage ../applications/graphics/awesomebump { };
+
   inherit (gnome3) baobab;
 
   backintime-common = callPackage ../applications/networking/sync/backintime/common.nix { };
