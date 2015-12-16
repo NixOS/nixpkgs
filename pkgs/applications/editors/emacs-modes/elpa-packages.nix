@@ -66,7 +66,7 @@ self:
       exwm = markBroken super.exwm;
       gnugo = markBroken super.gnugo;
       iterators = markBroken super.iterators;
-      midi-kbd = markBroken super.mini-kbd;
+      midi-kbd = markBroken super.midi-kbd;
       stream = markBroken super.stream;
       tNFA = markBroken super.tNFA;
       trie = markBroken super.trie;
