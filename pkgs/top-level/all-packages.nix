@@ -11624,10 +11624,11 @@ let
 
   emacs24Packages = recurseIntoAttrs (emacsPackagesGen emacs24 pkgs.emacs24Packages);
 
-  emacsPackagesNgGen = emacs: callPackage ./emacs-packages.nix {
+  emacsPackagesNgGen = emacs: import ./emacs-packages.nix {
     overrides = (config.emacsPackageOverrides or (p: {})) pkgs;
 
-    inherit newScope;
+    inherit lib newScope stdenv;
+    inherit fetchFromGitHub fetchgit fetchhg fetchurl;
     inherit emacs elpaPackages melpaPackages melpaStablePackages;
 
     trivialBuild = callPackage ../build-support/emacs/trivial.nix {
