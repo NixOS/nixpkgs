@@ -862,8 +862,80 @@ let
       md5 = "5499efd85c54c757c0e757b5407ee47f";
     };
 
-    propagatedBuildInputs = with self; [ dateutil futures pyopenssl requests ];
+    propagatedBuildInputs = with self; [ dateutil futures pyopenssl requests2 ];
 
+    meta = {
+      description = "Microsoft Azure SDK for Python";
+      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ olcai ];
+    };
+  };
+
+  azure-nspkg = buildPythonPackage rec {
+    version = "1.0.0";
+    name = "azure-nspkg-${version}";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/a/azure-nspkg/azure-nspkg-1.0.0.zip;
+      sha256 = "1xqvc8by1lbd7j9dxyly03jz3rgbmnsiqnqgydhkf4pa2mn2hgr9";
+    };
+    meta = {
+      description = "Microsoft Azure SDK for Python";
+      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ olcai ];
+    };
+  };
+
+  azure-common = buildPythonPackage rec {
+    version = "1.0.0";
+    name = "azure-common-${version}";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/a/azure-common/azure-common-1.0.0.zip;
+      sha256 = "074rwwy8zzs7zw3nww5q2wg5lxgdc4rmypp2gfc9mwsz0gb70491";
+    };
+    propagatedBuildInputs = with self; [ azure-nspkg ];
+    postInstall = ''
+      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
+    '';
+    meta = {
+      description = "Microsoft Azure SDK for Python";
+      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ olcai ];
+    };
+  };
+
+  azure-storage = buildPythonPackage rec {
+    version = "0.20.3";
+    name = "azure-storage-${version}";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/a/azure-storage/azure-storage-0.20.3.zip;
+      sha256 = "06bmw6k2000kln5jwk5r9bgcalqbyvqirmdh9gq4s6nb4fv3c0jb";
+    };
+    propagatedBuildInputs = with self; [ azure-common futures dateutil requests2 ];
+    postInstall = ''
+      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
+    '';
+    meta = {
+      description = "Microsoft Azure SDK for Python";
+      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ olcai ];
+    };
+  };
+
+  azure-servicemanagement-legacy = buildPythonPackage rec {
+    version = "0.20.1";
+    name = "azure-servicemanagement-legacy-${version}";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/a/azure-servicemanagement-legacy/azure-servicemanagement-legacy-0.20.1.zip;
+      sha256 = "17dwrp99sx5x9cm4vldkaxhki9gbd6dlafa0lpr2n92xhh2838zs";
+    };
+    propagatedBuildInputs = with self; [ azure-common requests2 ];
+    postInstall = ''
+      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
+    '';
     meta = {
       description = "Microsoft Azure SDK for Python";
       homepage = "http://azure.microsoft.com/en-us/develop/python/";
