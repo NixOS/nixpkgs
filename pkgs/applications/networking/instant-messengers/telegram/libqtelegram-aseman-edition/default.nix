@@ -2,7 +2,7 @@
 , qtbase, qtmultimedia, qtquick1 }:
 
 stdenv.mkDerivation rec {
-  name = "libqtelegram-aseman-edition-v${version}";
+  name = "libqtelegram-aseman-edition-${version}";
   version = "6.0";
 
   src = fetchFromGitHub {
