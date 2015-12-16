@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i perl -p perl perlPackages.NetAmazonS3 nixUnstable
+#! nix-shell -i perl -p perl perlPackages.NetAmazonS3 perlPackages.FileSlurp nixUnstable
 
 # This command uploads tarballs to tarballs.nixos.org, the
 # content-addressed cache used by fetchurl as a fallback for when
@@ -17,6 +17,7 @@ use strict;
 use warnings;
 use File::Basename;
 use File::Path;
+use File::Slurp;
 use JSON;
 use Net::Amazon::S3;
 use Nix::Store;
@@ -33,9 +34,21 @@ my $s3 = Net::Amazon::S3->new(
 
 my $bucket = $s3->bucket("nixpkgs-tarballs") or die;
 
+my $cacheFile = "/tmp/copy-tarballs-cache";
+my %cache;
+$cache{$_} = 1 foreach read_file($cacheFile, err_mode => 'quiet', chomp => 1);
+
+END() {
+    write_file($cacheFile, map { "$_\n" } keys %cache);
+}
+
 sub alreadyMirrored {
     my ($algo, $hash) = @_;
-    return defined $bucket->get_key("$algo/$hash");
+    my $key = "$algo/$hash";
+    return 1 if defined $cache{$key};
+    my $res = defined $bucket->get_key($key);
+    $cache{$key} = 1 if $res;
+    return $res;
 }
 
 sub uploadFile {
@@ -54,6 +67,7 @@ sub uploadFile {
     print STDERR "uploading $fn to $mainKey...\n";
     $bucket->add_key_filename($mainKey, $fn, { 'x-amz-meta-original-name' => $name })
         or die "failed to upload $fn to $mainKey\n";
+    $cache{$mainKey} = 1;
 
     # Create redirects from the other hash types.
     sub redirect {
@@ -61,6 +75,7 @@ sub uploadFile {
         #print STDERR "linking $name to $dest...\n";
         $bucket->add_key($name, "", { 'x-amz-website-redirect-location' => "/" . $dest })
             or die "failed to create redirect from $name to $dest\n";
+        $cache{$name} = 1;
     }
     redirect "md5/$md5_16", $mainKey;
     redirect "sha1/$sha1_16", $mainKey;
