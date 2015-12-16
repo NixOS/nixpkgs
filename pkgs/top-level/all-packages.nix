@@ -15091,6 +15091,8 @@ let
 
   geda = callPackage ../applications/science/electronics/geda { };
 
+  gerbv = callPackage ../applications/science/electronics/gerbv { };
+
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
 
   kicad = callPackage ../applications/science/electronics/kicad {
