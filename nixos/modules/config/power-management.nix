@@ -71,7 +71,7 @@ in
 
     # FIXME: Implement powersave governor for sandy bridge or later Intel CPUs
     powerManagement.cpuFreqGovernor = mkDefault "ondemand";
-    powerManagement.scsiLinkPolicy = mkDefault "min_power";
+    powerManagement.scsiLinkPolicy = mkDefault "max_performance";
 
     systemd.targets.post-resume = {
       description = "Post-Resume Actions";
