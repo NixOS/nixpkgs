@@ -248,9 +248,13 @@ self: super: {
   jwt = dontCheck super.jwt;
 
   # https://github.com/NixOS/cabal2nix/issues/136
-  glib = addBuildDepends super.glib [pkgs.pkgconfig pkgs.glib];
+  gio = addPkgconfigDepend super.gio pkgs.glib;
+  gio_0_13_0_3 = addPkgconfigDepend super.gio_0_13_0_3 pkgs.glib;
+  gio_0_13_0_4 = addPkgconfigDepend super.gio_0_13_0_4 pkgs.glib;
+  gio_0_13_1_0 = addPkgconfigDepend super.gio_0_13_1_0 pkgs.glib;
+  glib = addPkgconfigDepend super.glib pkgs.glib;
   gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
-  gtk = addBuildDepends super.gtk [pkgs.pkgconfig pkgs.gtk];
+  gtk = addPkgconfigDepend super.gtk pkgs.gtk;
   gtksourceview3 = super.gtksourceview3.override { inherit (pkgs.gnome3) gtksourceview; };
 
   # Need WebkitGTK, not just webkit.
