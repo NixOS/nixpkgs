@@ -519,9 +519,9 @@ in
         "-terminate"
         "-config ${configFile}"
         "-xkbdir" "${pkgs.xkeyboard_config}/etc/X11/xkb"
-      ] ++ optional (cfg.display != null) ":${tostring cfg.display}"
+      ] ++ optional (cfg.display != null) ":${toString cfg.display}"
         ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
-        ++ optional (cfg.display != null) [ "-logfile" "/var/log/X.${toString cfg.display}.log" ]
+        ++ optionals (cfg.display != null) [ "-logfile" "/var/log/X.${toString cfg.display}.log" ]
         ++ optional (!cfg.enableTCP) "-nolisten tcp";
 
     services.xserver.modules =
