@@ -3,7 +3,7 @@
 , libqtelegram-aseman-edition }:
 
 stdenv.mkDerivation rec {
-  name = "telegram-qml-v${version}";
+  name = "telegram-qml-${version}";
   version = "0.9.1-stable";
 
   src = fetchFromGitHub {

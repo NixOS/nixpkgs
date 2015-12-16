@@ -3,7 +3,7 @@
 , telegram-qml, libqtelegram-aseman-edition }:
 
 stdenv.mkDerivation rec {
-  name = "cutegram-v${version}";
+  name = "cutegram-${version}";
   version = "2.7.0-stable";
 
   src = fetchFromGitHub {
