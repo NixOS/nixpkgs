@@ -11344,6 +11344,14 @@ let
 
   cutecom = callPackage ../tools/misc/cutecom { };
 
+  cutegram =
+    let f = ../applications/networking/instant-messengers/telegram;
+        cp = qt5Libs.callPackage;
+    in cp "${f}/cutegram" rec {
+      libqtelegram-aseman-edition = cp "${f}/libqtelegram-aseman-edition" { };
+      telegram-qml = cp "${f}/telegram-qml" { inherit libqtelegram-aseman-edition; };
+    };
+
   cvs = callPackage ../applications/version-management/cvs { };
 
   cvsps = callPackage ../applications/version-management/cvsps { };
@@ -13275,7 +13283,7 @@ let
 
   taskserver = callPackage ../servers/misc/taskserver { };
 
-  telegram-cli = callPackage ../applications/networking/instant-messengers/telegram-cli/default.nix { };
+  telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli/default.nix { };
 
   telepathy_gabble = callPackage ../applications/networking/instant-messengers/telepathy/gabble { };
 
