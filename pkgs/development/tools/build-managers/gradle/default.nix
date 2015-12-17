@@ -8,7 +8,7 @@ rec {
       mkdir -pv $out/lib/gradle/
       cp -rv lib/ $out/lib/gradle/
 
-      gradle_launcher_jar=$(echo $out/gradle/lib/gradle-launcher-*.jar)
+      gradle_launcher_jar=$(echo $out/lib/gradle/lib/gradle-launcher-*.jar)
       test -f $gradle_launcher_jar
       makeWrapper ${jdk}/bin/java $out/bin/gradle \
         --set JAVA_HOME ${jdk} \
