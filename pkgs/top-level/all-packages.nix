@@ -11629,7 +11629,7 @@ let
 
     inherit lib newScope stdenv;
     inherit fetchFromGitHub fetchgit fetchhg fetchurl;
-    inherit emacs elpaPackages melpaPackages melpaStablePackages;
+    inherit emacs texinfo;
 
     trivialBuild = callPackage ../build-support/emacs/trivial.nix {
       inherit emacs;
@@ -11647,18 +11647,6 @@ let
   };
 
   emacs24PackagesNg = recurseIntoAttrs (emacsPackagesNgGen emacs24);
-
-  elpaPackages = import ../applications/editors/emacs-modes/elpa-packages.nix {
-    inherit fetchurl lib stdenv texinfo;
-  };
-
-  melpaStablePackages = import ../applications/editors/emacs-modes/melpa-stable-packages.nix {
-    inherit lib;
-  };
-
-  melpaPackages = import ../applications/editors/emacs-modes/melpa-packages.nix {
-    inherit lib;
-  };
 
   emacsWithPackages = callPackage ../build-support/emacs/wrapper.nix { };
   emacs24WithPackages = emacsWithPackages.override { emacs = emacs24; };

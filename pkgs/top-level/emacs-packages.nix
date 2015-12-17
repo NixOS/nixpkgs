@@ -35,7 +35,7 @@
 
 , lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
 
-, emacs, elpaPackages, melpaPackages, melpaStablePackages
+, emacs, texinfo
 , trivialBuild
 , melpaBuild
 
@@ -45,6 +45,18 @@
 with lib.licenses;
 
 let
+
+  elpaPackages = import ../applications/editors/emacs-modes/elpa-packages.nix {
+    inherit fetchurl lib stdenv texinfo;
+  };
+
+  melpaStablePackages = import ../applications/editors/emacs-modes/melpa-stable-packages.nix {
+    inherit lib;
+  };
+
+  melpaPackages = import ../applications/editors/emacs-modes/melpa-packages.nix {
+    inherit lib;
+  };
 
   packagesFun = self: with self; {
 
