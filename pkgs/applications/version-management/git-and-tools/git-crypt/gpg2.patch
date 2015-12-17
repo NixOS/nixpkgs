@@ -1,0 +1,132 @@
+From eeced1c621ec41012d36d0eb5dcd2044502d36bf Mon Sep 17 00:00:00 2001
+From: Igor Pashev <pashev.igor@gmail.com>
+Date: Tue, 15 Dec 2015 20:31:00 +0300
+Subject: [PATCH] Use gpg2 instead of old gpg1
+
+---
+ README       |  2 +-
+ README.md    |  2 +-
+ commands.cpp |  2 +-
+ gpg.cpp      | 24 ++++++++++++------------
+ 4 files changed, 15 insertions(+), 15 deletions(-)
+
+diff --git a/README b/README
+index fd982ac..238b510 100644
+--- a/README
++++ b/README
+@@ -44,7 +44,7 @@ Share the repository with others (or with yourself) using GPG:
+ 
+ USER_ID can be a key ID, a full fingerprint, an email address, or anything
+ else that uniquely identifies a public key to GPG (see "HOW TO SPECIFY
+-A USER ID" in the gpg man page).  Note: `git-crypt add-gpg-user` will
++A USER ID" in the gpg2 man page).  Note: `git-crypt add-gpg-user` will
+ add and commit a GPG-encrypted key file in the .git-crypt directory of
+ the root of your repository.
+ 
+diff --git a/README.md b/README.md
+index 1aeccc8..39f8904 100644
+--- a/README.md
++++ b/README.md
+@@ -45,7 +45,7 @@ Share the repository with others (or with yourself) using GPG:
+ 
+ `USER_ID` can be a key ID, a full fingerprint, an email address, or
+ anything else that uniquely identifies a public key to GPG (see "HOW TO
+-SPECIFY A USER ID" in the gpg man page).  Note: `git-crypt add-gpg-user`
++SPECIFY A USER ID" in the gpg2 man page).  Note: `git-crypt add-gpg-user`
+ will add and commit a GPG-encrypted key file in the .git-crypt directory
+ of the root of your repository.
+ 
+diff --git a/commands.cpp b/commands.cpp
+index 06f42da..d83bfe5 100644
+--- a/commands.cpp
++++ b/commands.cpp
+@@ -1286,7 +1286,7 @@ int ls_gpg_users (int argc, const char** argv) // TODO
+ 	//  0x4E386D9C9C61702F ???
+ 	// ====
+ 	// To resolve a long hex ID, use a command like this:
+-	//  gpg --options /dev/null --fixed-list-mode --batch --with-colons --list-keys 0x143DE9B3F7316900
++	//  gpg2 --options /dev/null --fixed-list-mode --batch --with-colons --list-keys 0x143DE9B3F7316900
+ 
+ 	std::clog << "Error: ls-gpg-users is not yet implemented." << std::endl;
+ 	return 1;
+diff --git a/gpg.cpp b/gpg.cpp
+index 04f3f60..d779a05 100644
+--- a/gpg.cpp
++++ b/gpg.cpp
+@@ -39,7 +39,7 @@ static std::string gpg_nth_column (const std::string& line, unsigned int col)
+ 	for (unsigned int i = 0; i < col; ++i) {
+ 		pos = line.find_first_of(':', pos);
+ 		if (pos == std::string::npos) {
+-			throw Gpg_error("Malformed output from gpg");
++			throw Gpg_error("Malformed output from gpg2");
+ 		}
+ 		pos = pos + 1;
+ 	}
+@@ -60,9 +60,9 @@ std::string gpg_shorten_fingerprint (const std::string& fingerprint)
+ // given a key fingerprint, return the key's UID (e.g. "John Smith <jsmith@example.com>")
+ std::string gpg_get_uid (const std::string& fingerprint)
+ {
+-	// gpg --batch --with-colons --fixed-list-mode --list-keys 0x7A399B2DB06D039020CD1CE1D0F3702D61489532
++	// gpg2 --batch --with-colons --fixed-list-mode --list-keys 0x7A399B2DB06D039020CD1CE1D0F3702D61489532
+ 	std::vector<std::string>	command;
+-	command.push_back("gpg");
++	command.push_back("gpg2");
+ 	command.push_back("--batch");
+ 	command.push_back("--with-colons");
+ 	command.push_back("--fixed-list-mode");
+@@ -92,9 +92,9 @@ std::vector<std::string> gpg_lookup_key (const std::string& query)
+ {
+ 	std::vector<std::string>	fingerprints;
+ 
+-	// gpg --batch --with-colons --fingerprint --list-keys jsmith@example.com
++	// gpg2 --batch --with-colons --fingerprint --list-keys jsmith@example.com
+ 	std::vector<std::string>	command;
+-	command.push_back("gpg");
++	command.push_back("gpg2");
+ 	command.push_back("--batch");
+ 	command.push_back("--with-colons");
+ 	command.push_back("--fingerprint");
+@@ -123,16 +123,16 @@ std::vector<std::string> gpg_lookup_key (const std::string& query)
+ 
+ std::vector<std::string> gpg_list_secret_keys ()
+ {
+-	// gpg --batch --with-colons --list-secret-keys --fingerprint
++	// gpg2 --batch --with-colons --list-secret-keys --fingerprint
+ 	std::vector<std::string>	command;
+-	command.push_back("gpg");
++	command.push_back("gpg2");
+ 	command.push_back("--batch");
+ 	command.push_back("--with-colons");
+ 	command.push_back("--list-secret-keys");
+ 	command.push_back("--fingerprint");
+ 	std::stringstream		command_output;
+ 	if (!successful_exit(exec_command(command, command_output))) {
+-		throw Gpg_error("gpg --list-secret-keys failed");
++		throw Gpg_error("gpg2 --list-secret-keys failed");
+ 	}
+ 
+ 	std::vector<std::string>	secret_keys;
+@@ -152,9 +152,9 @@ std::vector<std::string> gpg_list_secret_keys ()
+ 
+ void gpg_encrypt_to_file (const std::string& filename, const std::string& recipient_fingerprint, bool key_is_trusted, const char* p, size_t len)
+ {
+-	// gpg --batch -o FILENAME -r RECIPIENT -e
++	// gpg2 --batch -o FILENAME -r RECIPIENT -e
+ 	std::vector<std::string>	command;
+-	command.push_back("gpg");
++	command.push_back("gpg2");
+ 	command.push_back("--batch");
+ 	if (key_is_trusted) {
+ 		command.push_back("--trust-model");
+@@ -172,9 +172,9 @@ void gpg_encrypt_to_file (const std::string& filename, const std::string& recipi
+ 
+ void gpg_decrypt_from_file (const std::string& filename, std::ostream& output)
+ {
+-	// gpg -q -d FILENAME
++	// gpg2 -q -d FILENAME
+ 	std::vector<std::string>	command;
+-	command.push_back("gpg");
++	command.push_back("gpg2");
+ 	command.push_back("-q");
+ 	command.push_back("-d");
+ 	command.push_back(filename);

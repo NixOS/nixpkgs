@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl }:
+{ stdenv, fetchFromGitHub, openssl, gnupg, makeWrapper }:
 
 stdenv.mkDerivation rec {
 
@@ -12,10 +12,14 @@ stdenv.mkDerivation rec {
     inherit name;
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl makeWrapper ];
+  patches = [
+    ./gpg2.patch
+  ];
 
   installPhase = ''
     make install PREFIX=$out
+    wrapProgram $out/bin/* --prefix PATH : ${gnupg}/bin
   '';
 
   meta = with stdenv.lib; {
