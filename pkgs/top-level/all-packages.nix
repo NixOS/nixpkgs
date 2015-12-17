@@ -10547,6 +10547,8 @@ let
 
   udisks_glue = callPackage ../os-specific/linux/udisks-glue { };
 
+  uksmtools = callPackage ../os-specific/linux/uksmtools { };
+
   untie = callPackage ../os-specific/linux/untie { };
 
   upower = callPackage ../os-specific/linux/upower { };
