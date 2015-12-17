@@ -1732,13 +1732,6 @@ let
     ghostscript = null;
   };
 
-  calamares = callPackage ../tools/misc/calamares rec {
-    python = python3;
-    boost = pkgs.boost.override { python=python3; };
-    libyamlcpp = callPackage ../development/libraries/libyaml-cpp { makePIC=true; boost=boost; };
-    inherit (kf5_stable) extra-cmake-modules kconfig ki18n kcoreaddons solid;
-  };
-
   grub = callPackage_i686 ../tools/misc/grub {
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
     automake = automake112x; # fails with 13 and 14
@@ -6860,10 +6853,6 @@ let
     automake = automake111x;
   };
 
-  kf517 = import ../development/libraries/kde-frameworks-5.17 { inherit pkgs; };
-  kf5_stable = kf517;
-  kf5_latest = kf517;
-
   kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
 
   krb5Full = callPackage ../development/libraries/kerberos/krb5.nix {
@@ -8069,8 +8058,6 @@ let
   };
 
   polkit_qt4 = callPackage ../development/libraries/polkit-qt-1 { };
-
-  polkit_qt5 = callPackage ../development/libraries/polkit-qt-1/old.nix { withQt5 = true; };
 
   policykit = callPackage ../development/libraries/policykit { };
 
@@ -12221,10 +12208,6 @@ let
     boost = boost155;
   };
 
-  kdeApps_15_12 = import ../applications/kde-apps-15.12 { inherit pkgs; };
-  kdeApps_stable = kdeApps_15_12;
-  kdeApps_latest = kdeApps_15_12;
-
   keepnote = callPackage ../applications/office/keepnote {
     pygtk = pyGtkGlade;
   };
@@ -14724,11 +14707,13 @@ let
 
   numix-gtk-theme = callPackage ../misc/themes/gtk3/numix-gtk-theme { };
 
-  plasma55 = import ../desktops/plasma-5.5 { inherit pkgs; };
-  plasma5_stable = plasma55;
-  plasma5_latest = plasma55;
-
   kde5PackagesFun = self: with self; {
+
+    calamares = callPackage ../tools/misc/calamares rec {
+      python = python3;
+      boost = pkgs.boost.override { python=python3; };
+      libyamlcpp = callPackage ../development/libraries/libyaml-cpp { makePIC=true; boost=boost; };
+    };
 
     fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
 
@@ -14769,14 +14754,22 @@ let
   };
 
   kde5 =
-    recurseIntoAttrs
-    (lib.makeScope qt55Libs.newScope (self:
-      kf5_stable self // plasma5_stable self // kdeApps_stable self // kde5PackagesFun self));
+    let
+      frameworks = import ../development/libraries/kde-frameworks-5.17 { inherit pkgs; };
+      plasma = import ../desktops/plasma-5.5 { inherit pkgs; };
+      apps = import ../applications/kde-apps-15.12 { inherit pkgs; };
+      merged = self: frameworks self // plasma self // apps self // kde5PackagesFun self;
+    in
+      recurseIntoAttrs (lib.makeScope qt55Libs.newScope merged);
 
   kde5_latest =
-    recurseIntoAttrs
-    (lib.makeScope qt55Libs.newScope (self:
-      kf5_latest self // plasma5_latest self // kdeApps_latest self // kde5PackagesFun self));
+    let
+      frameworks = import ../development/libraries/kde-frameworks-5.17 { inherit pkgs; };
+      plasma = import ../desktops/plasma-5.5 { inherit pkgs; };
+      apps = import ../applications/kde-apps-15.12 { inherit pkgs; };
+      merged = self: frameworks self // plasma self // apps self // kde5PackagesFun self;
+    in
+      recurseIntoAttrs (lib.makeScope qt55Libs.newScope merged);
 
   theme-vertex = callPackage ../misc/themes/vertex { };
 
