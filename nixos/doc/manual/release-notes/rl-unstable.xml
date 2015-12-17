@@ -113,6 +113,14 @@ nginx.override {
     extra X11 options for nvidia and nouveau drivers, respectively.
     </para>
   </listitem>
+
+  <listitem>
+    <para>The <literal>Ctrl+Alt+Backspace</literal> key combination
+    no longer kills the X server by default.
+    There's a new option <option>services.xserver.enableCtrlAltBackspace</option>
+    allowing to enable the combination again.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
