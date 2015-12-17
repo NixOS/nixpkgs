@@ -2,12 +2,10 @@
 
 ## FOR USERS
 #
-# Recommended way: simply use `emacsWithPackages` from
-# `all-packages.nix` with the packages you want.
+# Recommended: simply use `emacsWithPackages` with the packages you want.
 #
-# Possible way: use `emacs` from `all-packages.nix`, install
-# everything to a system or user profile and then add this at the
-# start your `init.el`:
+# Alterative: use `emacs`, install everything to a system or user profile
+# and then add this at the start your `init.el`:
 /*
   (require 'package)
 
