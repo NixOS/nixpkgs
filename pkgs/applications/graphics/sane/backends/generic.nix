@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, avahi, libusb, libv4l, net_snmp
+, avahi, libusb1, libv4l, net_snmp
 , gettext, pkgconfig
 , gt68xxFirmware ? null, snapscanFirmware ? null
 , hotplugSupport ? true
@@ -23,9 +23,10 @@ stdenv.mkDerivation {
 
   configureFlags = []
     ++ stdenv.lib.optional (avahi != null) "--enable-avahi"
-    ++ stdenv.lib.optional (libusb != null) "--enable-libusb_1_0";
+    ++ stdenv.lib.optional (libusb1 != null) "--enable-libusb_1_0"
+    ;
 
-  buildInputs = [ avahi libusb libv4l net_snmp ];
+  buildInputs = [ avahi libusb1 libv4l net_snmp ];
   nativeBuildInputs = [ gettext pkgconfig ];
 
   postInstall = ''
