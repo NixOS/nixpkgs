@@ -3,7 +3,7 @@
 let
   version = "5.4.2";
 in stdenv.mkDerivation {
-  name = "PyQt-${version}";
+  name = "${python.libPrefix}-PyQt-${version}";
 
   meta = with stdenv.lib; {
     description = "Python bindings for Qt5";

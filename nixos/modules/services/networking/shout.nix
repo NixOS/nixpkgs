@@ -57,7 +57,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      preStart = if isNull cfg.configFile then null
+      preStart = if isNull cfg.configFile then ""
                  else ''
                    ln -sf ${pkgs.writeText "config.js" cfg.configFile} \
                           ${shoutHome}/config.js

@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     description = "Grass computing platform";
     homepage = http://firestr.com/;
     license = licenses.gpl3;
-    maintainers = [ maintainers.emery ];
+    maintainers = [ maintainers.ehmry ];
     platforms = platforms.linux;
   };
 }

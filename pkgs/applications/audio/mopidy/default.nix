@@ -5,15 +5,15 @@
 pythonPackages.buildPythonPackage rec {
   name = "mopidy-${version}";
 
-  version = "1.0.5";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "https://github.com/mopidy/mopidy/archive/v${version}.tar.gz";
-    sha256 = "0lhmm2w2djf6mb3acw1yq1k4j74v1lf4kgx24dsdnpkgsycrv5q6";
+    sha256 = "1xfyg8xqgnrb98wx7a4fzr4vlzkffjhkc1s36ka63rwmx86vqhyw";
   };
 
   propagatedBuildInputs = with pythonPackages; [
-    gst_python pygobject pykka tornado gst_plugins_base gst_plugins_good
+    gst_python pygobject pykka tornado requests2 gst_plugins_base gst_plugins_good
   ];
 
   # There are no tests

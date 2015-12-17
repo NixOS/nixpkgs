@@ -21,6 +21,8 @@ let
 
       buildInputs = [ flex bison pkgconfig ];
 
+      configureFlags = ["EXTENSION_DIR=$(out)/lib/php/extensions"];
+
       flags = {
 
         # much left to do here...

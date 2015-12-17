@@ -1,5 +1,5 @@
 { stdenv, fetchurl, dpkg, curl, libarchive, openssl, ruby, buildRubyGem, libiconv
-, libxml2, libxslt }:
+, libxml2, libxslt, makeWrapper }:
 
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lovek323 globin jgeerds ];
     platforms   = platforms.linux;
   };
+
+  buildInputs = [ makeWrapper ];
 
   unpackPhase = ''
     ${dpkg}/bin/dpkg-deb -x ${src} .
@@ -89,6 +91,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"
     cp -r opt "$out"
     cp -r usr/bin "$out"
+    wrapProgram $out/bin/vagrant --prefix LD_LIBRARY_PATH : $out/opt/vagrant/embedded/lib
   '';
 
   preFixup = ''

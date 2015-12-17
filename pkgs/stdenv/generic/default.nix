@@ -126,10 +126,11 @@ let
         throw ("Package ‘${attrs.name or "«name-missing»"}’ in ${pos''} ${errormsg}, refusing to evaluate."
         + (lib.strings.optionalString (reason != "blacklisted") ''
 
-          For `nixos-rebuild` you can set
+          a) For `nixos-rebuild` you can set
             { nixpkgs.config.allow${up reason} = true; }
           in configuration.nix to override this.
-          For `nix-env` you can add
+
+          b) For `nix-env`, `nix-build` or any other Nix command you can add
             { allow${up reason} = true; }
           to ~/.nixpkgs/config.nix.
         ''));

@@ -9,10 +9,22 @@ let
   cfg = dmcfg.sddm;
   xEnv = config.systemd.services."display-manager".environment;
 
+  sddm = pkgs.sddm.override { inherit (cfg) themes; };
+
   xserverWrapper = pkgs.writeScript "xserver-wrapper" ''
     #!/bin/sh
     ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
     exec ${dmcfg.xserverBin} ${dmcfg.xserverArgs} "$@"
+  '';
+
+  Xsetup = pkgs.writeScript "Xsetup" ''
+    #!/bin/sh
+    ${cfg.setupScript}
+  '';
+
+  Xstop = pkgs.writeScript "Xstop" ''
+    #!/bin/sh
+    ${cfg.stopScript}
   '';
 
   cfgFile = pkgs.writeText "sddm.conf" ''
@@ -22,6 +34,8 @@ let
 
     [Theme]
     Current=${cfg.theme}
+    ThemeDir=${sddm}/share/sddm/themes
+    FacesDir=${sddm}/share/sddm/faces
 
     [Users]
     MaximumUid=${toString config.ids.uids.nixbld}
@@ -35,6 +49,8 @@ let
     SessionCommand=${dmcfg.session.script}
     SessionDir=${dmcfg.session.desktops}
     XauthPath=${pkgs.xorg.xauth}/bin/xauth
+    DisplayCommand=${Xsetup}
+    DisplayStopCommand=${Xstop}
 
     ${optionalString cfg.autoLogin.enable ''
     [Autologin]
@@ -86,6 +102,35 @@ in
         '';
       };
 
+      themes = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        description = ''
+          Extra packages providing themes.
+        '';
+      };
+
+      setupScript = mkOption {
+        type = types.str;
+        default = "";
+        example = ''
+          # workaround for using NVIDIA Optimus without Bumblebee
+          xrandr --setprovideroutputsource modesetting NVIDIA-0
+          xrandr --auto
+        '';
+        description = ''
+          A script to execute when starting the display server.
+        '';
+      };
+
+      stopScript = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          A script to execute when stopping the display server.
+        '';
+      };
+
       autoLogin = mkOption {
         default = {};
         description = ''
@@ -93,7 +138,7 @@ in
         '';
 
         type = types.submodule {
-	  options = {
+          options = {
             enable = mkOption {
               type = types.bool;
               default = false;
@@ -118,7 +163,7 @@ in
                 will work only the first time.
               '';
             };
-	  };
+          };
         };
       };
 
@@ -130,14 +175,16 @@ in
 
     assertions = [
       { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
-        message = "SDDM auto-login requires services.xserver.displayManager.sddm.autoLogin.user to be set";
+        message = ''
+          SDDM auto-login requires services.xserver.displayManager.sddm.autoLogin.user to be set
+        '';
       }
       { assertion = cfg.autoLogin.enable -> elem defaultSessionName dmcfg.session.names;
         message = ''
           SDDM auto-login requires that services.xserver.desktopManager.default and
-	  services.xserver.windowMananger.default are set to valid values. The current
-	  default session: ${defaultSessionName} is not valid.
-	'';
+          services.xserver.windowMananger.default are set to valid values. The current
+          default session: ${defaultSessionName} is not valid.
+        '';
       }
     ];
 
@@ -146,8 +193,7 @@ in
     services.xserver.displayManager.job = {
       logsXsession = true;
 
-      #execCmd = "${pkgs.sddm}/bin/sddm";
-      execCmd = "exec ${pkgs.sddm}/bin/sddm";
+      execCmd = "exec ${sddm}/bin/sddm";
     };
 
     security.pam.services = {

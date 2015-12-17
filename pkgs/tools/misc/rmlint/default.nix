@@ -4,11 +4,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "rmlint-${version}";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "https://github.com/sahib/rmlint/archive/v${version}.tar.gz";
-    sha256 = "1ja73r6ijklvw34yv0fgflc1ps58xnd559rjnxkqfmi33xjwx7f0";
+    sha256 = "0rfgzamrw89z67jxg8b5jqjmvql00304n0ai4a81bfl90gybyncf";
   };
 
   configurePhase = "scons config";

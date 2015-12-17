@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, nasm, perl, python, libuuid }:
+{ stdenv, fetchFromGitHub, nasm, perl, python, libuuid, mtools, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "syslinux-2015-11-09";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   patches = [ ./perl-deps.patch ];
 
   nativeBuildInputs = [ nasm perl python ];
-  buildInputs = [ libuuid ];
+  buildInputs = [ libuuid makeWrapper ];
 
   enableParallelBuilding = false; # Fails very rarely with 'No rule to make target: ...'
 
@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
     "PERL=perl"
     "bios"
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/syslinux \
+      --prefix PATH : "${mtools}/bin"
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.syslinux.org/;

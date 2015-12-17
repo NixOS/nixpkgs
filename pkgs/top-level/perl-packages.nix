@@ -5304,11 +5304,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ HTMLParser ];
   };
 
-  HTMLTableExtract = buildPerlPackage {
-    name = "HTML-TableExtract-2.11";
+  HTMLTableExtract = buildPerlPackage rec {
+    name = "HTML-TableExtract-2.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSISK/HTML-TableExtract-2.11.tar.gz;
-      sha256 = "1861d55a2aa1728ef56ea2d08d630b9a008456f1106994e4e49e76f56e4955ee";
+      url = "mirror://cpan/authors/id/M/MS/MSISK/${name}.tar.gz";
+      sha256 = "01jimmss3q68a89696wmclvqwb2ybz6xgabpnbp6mm6jcni82z8a";
     };
     propagatedBuildInputs = [ HTMLElementExtended HTMLParser ];
   };
@@ -6258,6 +6258,9 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/C/CH/CHORNY/Linux-Distribution-0.23.tar.gz;
       sha256 = "603e27da607b3e872a669d7a66d75982f0969153eab2d4b20c341347b4ebda5f";
     };
+    # The tests fail if the distro it's built on isn't in the supported list.
+    # This includes NixOS.
+    doCheck = false;
     meta = {
       description = "Perl extension to detect on which Linux distribution we are running";
       license = "perl";

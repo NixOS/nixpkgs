@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "sassc-${version}";
-  version = "3.2.4";
+  version = "3.3.2";
 
   src = fetchurl {
     url = "https://github.com/sass/sassc/archive/${version}.tar.gz";
-    sha256 = "0ksdfv9ff5smba4vbwr1wqf3bp908rnprkp6lfssj85h9ciqq896";
+    sha256 = "15a2b2698639dfdc7bd6a5ba7a9ecdaf8ebb9f15503fb04dea1be3133308e41d";
   };
 
   patchPhase = ''

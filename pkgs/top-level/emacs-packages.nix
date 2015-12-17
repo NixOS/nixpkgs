@@ -35,7 +35,7 @@
 
 , lib, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
 
-, emacs
+, emacs, elpaPackages
 , trivialBuild
 , melpaBuild
 
@@ -44,11 +44,9 @@
 
 with lib.licenses;
 
-let self = _self // overrides;
-    callPackage = lib.callPackageWith (self // removeAttrs args ["overrides" "external"]);
-    _self = with self; {
+let packagesFun = super: self: with self; {
 
-  inherit emacs;
+  inherit emacs melpaBuild trivialBuild;
 
   ## START HERE
 
@@ -315,12 +313,12 @@ let self = _self // overrides;
 
   bind-key = melpaBuild {
     pname   = "bind-key";
-    version = "20150317";
+    version = "20150321";
     src = fetchFromGitHub {
       owner  = "jwiegley";
       repo   = "use-package";
-      rev    = "b836266ddfbc835efdb327ecb389ff9e081d7c55";
-      sha256 = "187wnqqm5g43cg8b6a9rbd9ncqad5fhjb96wjszbinjh1mjxyh7i";
+      rev    = "77a77c8b03044f0279e00cadd6a6d1a7ae97b01";
+      sha256 = "14v6wzqn2jhjdbr7nwqilxy9l79m1f2rdrz2c6c6pcla5yjpd1k0";
     };
     files = [ "bind-key.el" ];
     meta = {
@@ -394,15 +392,15 @@ let self = _self // overrides;
 
   circe = melpaBuild rec {
     pname   = "circe";
-    version = "1.5";
+    version = "2.1";
     src = fetchFromGitHub {
       owner  = "jorgenschaefer";
       repo   = "circe";
       rev    = "v${version}";
-      sha256 = "08dsv1dzgb9jx076ia7xbpyjpaxn1w87h6rzlb349spaydq7ih24";
+      sha256 = "0q3rv6lk37yybkbswmn4pgzca0nfhvf4h3ac395fr16k5ixybc5q";
     };
     packageRequires = [ lcs lui ];
-    fileSpecs = [ "lisp/circe*.el" ];
+    fileSpecs = [ "circe*.el" "irc.el" "make-tls-process.el" ];
     meta = {
       description = "IRC client for Emacs";
       license = gpl3Plus;
@@ -678,12 +676,12 @@ let self = _self // overrides;
 
   expand-region = melpaBuild rec {
     pname   = "expand-region";
-    version = "20141012";
+    version = "20150902";
     src = fetchFromGitHub {
       owner  = "magnars";
       repo   = "${pname}.el";
-      rev    = "fa413e07c97997d950c92d6012f5442b5c3cee78";
-      sha256 = "04k0518wfy72wpzsswmncnhd372fxa0r8nbfhmbyfmns8n7sr045";
+      rev    = "59f67115263676de5345581216640019975c4fda";
+      sha256 = "0qqqv0pp25xg1zh72i6fsb7l9vi14nd96rx0qdj1f3pdwfidqms1";
     };
     meta = {
       description = "Increases the selected region by semantic units in Emacs";
@@ -746,14 +744,14 @@ let self = _self // overrides;
 
   flycheck = melpaBuild rec {
     pname   = "flycheck";
-    version = "0.23";
+    version = "0.25.1";
     src = fetchFromGitHub {
       owner  = pname;
       repo   = pname;
       rev    = version;
-      sha256 = "1ydk1wa7h7z9qw7prfvszxrmy2dyzsdij3xdy10rq197xnrw94wz";
+      sha256 = "19mnx2zm71qrf7qf3mk5kriv5vgq0nl67lj029n63wqd8jcjb5fi";
     };
-    packageRequires = [ dash let-alist pkg-info ];
+    packageRequires = [ dash let-alist pkg-info seq ];
     meta = {
       description = "On-the-fly syntax checking, intended as replacement for the older Flymake which is part of Emacs";
       license = gpl3Plus;
@@ -1018,12 +1016,12 @@ let self = _self // overrides;
 
   haskell-mode = melpaBuild rec {
     pname   = "haskell-mode";
-    version = "13.14";
+    version = "13.16";
     src = fetchFromGitHub {
       owner  = "haskell";
       repo   = pname;
       rev    = "v${version}";
-      sha256 = "1mxr2cflgafcr8wkvgbq8l3wmc9qhhb7bn9zl1bkf10zspw9m58z";
+      sha256 = "1gmpmfkr54sfzrif87zf92a1i13wx75bhp66h1rxhflg216m62yv";
     };
     meta = {
       description = "Haskell language support for Emacs";
@@ -1079,6 +1077,7 @@ let self = _self // overrides;
     };
   };
 
+  # deprecated, part of haskell-mode now
   hi2 = melpaBuild rec {
     pname   = "hi2";
     version = "1.0";
@@ -1181,14 +1180,9 @@ let self = _self // overrides;
 
   lcs = melpaBuild rec {
     pname   = "lcs";
-    version = "1.5";
-    src = fetchFromGitHub {
-      owner  = "jorgenschaefer";
-      repo   = "circe";
-      rev    = "v${version}";
-      sha256 = "08dsv1dzgb9jx076ia7xbpyjpaxn1w87h6rzlb349spaydq7ih24";
-    };
-    fileSpecs = [ "lisp/lcs*.el" ];
+    version = circe.version;
+    src     = circe.src;
+    fileSpecs = [ "lcs.el" ];
     meta = {
       description = "Longest Common Sequence (LCS) library for Emacs";
       license = gpl3Plus;
@@ -1229,15 +1223,10 @@ let self = _self // overrides;
 
   lui = melpaBuild rec {
     pname   = "lui";
-    version = "1.5";
-    src = fetchFromGitHub {
-      owner  = "jorgenschaefer";
-      repo   = "circe";
-      rev    = "v${version}";
-      sha256 = "08dsv1dzgb9jx076ia7xbpyjpaxn1w87h6rzlb349spaydq7ih24";
-    };
+    version = circe.version;
+    src     = circe.src;
     packageRequires = [ tracking ];
-    fileSpecs = [ "lisp/lui*.el" ];
+    fileSpecs = [ "lui*.el" ];
     meta = {
       description = "User interface library for Emacs";
       license = gpl3Plus;
@@ -1246,12 +1235,12 @@ let self = _self // overrides;
 
   magit = melpaBuild rec {
     pname   = "magit";
-    version = "2.3.0";
+    version = "2.3.1";
     src = fetchFromGitHub {
       owner  = pname;
       repo   = pname;
       rev    = version;
-      sha256 = "1zbx1ky1481lkvfjr4k23q7jdrk9ji9v5ghj88qib36vbmzfwww8";
+      sha256 = "01x9kahr3szzc00wlfrihl4x28yrq065fq4rpzx9dxiksayk24pd";
     };
     packageRequires = [ dash git-commit magit-popup with-editor ];
     fileSpecs = [ "lisp/magit-utils.el"
@@ -1540,12 +1529,12 @@ let self = _self // overrides;
 
   projectile = melpaBuild rec {
     pname   = "projectile";
-    version = "0.12.0";
+    version = "0.13.0";
     src = fetchFromGitHub {
       owner  = "bbatsov";
       repo   = pname;
       rev    = "v${version}";
-      sha256 = "1bl5wpkyv9xlf5v5hzkj8si1z4hjn3yywrjs1mx0g4irmq3mk29m";
+      sha256 = "1rl6n6v9f4m7m969frx8b51a4lzfix2bxx6rfcfbh6kzhc00qnxf";
     };
     fileSpecs = [ "projectile.el" ];
     packageRequires = [ dash helm pkg-info ];
@@ -1719,16 +1708,26 @@ let self = _self // overrides;
     };
   };
 
+  seq = melpaBuild rec {
+    pname = "seq";
+    version = "1.11";
+    src = fetchFromGitHub {
+      owner  = "NicolasPetton";
+      repo   = "${pname}.el";
+      rev    = version;
+      sha256 = "18ydaz2y5n7h4wr0dx2k9qbxl0mc50qfwk52ma4amk8nmm1bjwgc";
+    };
+    meta = {
+      description = "Sequence manipulation library for Emacs";
+      license = gpl3Plus; # probably
+    };
+  };
+
   shorten = melpaBuild rec {
     pname   = "shorten";
-    version = "1.5";
-    src = fetchFromGitHub {
-      owner  = "jorgenschaefer";
-      repo   = "circe";
-      rev    = "v${version}";
-      sha256 = "08dsv1dzgb9jx076ia7xbpyjpaxn1w87h6rzlb349spaydq7ih24";
-    };
-    fileSpecs = [ "lisp/shorten*.el" ];
+    version = circe.version;
+    src     = circe.src;
+    fileSpecs = [ "shorten.el" ];
     meta = {
       description = "String shortening to unique prefix library for Emacs";
       license = gpl3Plus;
@@ -1753,12 +1752,12 @@ let self = _self // overrides;
 
   smartparens = melpaBuild rec {
     pname   = "smartparens";
-    version = "1.6.2";
+    version = "20151025";
     src = fetchFromGitHub {
       owner  = "Fuco1";
       repo   = pname;
-      rev    = version;
-      sha256 = "16pzd740vd1r3qfmxia2ibiarinm6xpja0mjv3nni5dis5s4r9gc";
+      rev    = "85583f9570be58f17ccd68388d9d4e58234d8ae9";
+      sha256 = "1pvzcrnzvksx1rzrr19256x1qhidr2acz6yipijlfx2zfjx2gxa7";
     };
     packageRequires = [ dash ];
     meta = {
@@ -1805,12 +1804,12 @@ let self = _self // overrides;
 
   swiper = melpaBuild rec {
     pname   = "swiper";
-    version = "0.6.0";
+    version = "0.7.0";
     src = fetchFromGitHub {
       owner  = "abo-abo";
       repo   = pname;
       rev    = version;
-      sha256 = "18madh4hvrk8sxrll84ry13n1l3ad1gnp3prj828sszrbbdp20ly";
+      sha256 = "1kahl3h18vsjkbqvd84fb2w45s4srsiydn6jiv49vvg1yaxzxcbm";
     };
     fileSpecs = [ "swiper.el" "ivy.el" "colir.el" "counsel.el" ];
     meta = {
@@ -1839,15 +1838,10 @@ let self = _self // overrides;
 
   tracking = melpaBuild rec {
     pname   = "tracking";
-    version = "1.5";
-    src = fetchFromGitHub {
-      owner  = "jorgenschaefer";
-      repo   = "circe";
-      rev    = "v${version}";
-      sha256 = "08dsv1dzgb9jx076ia7xbpyjpaxn1w87h6rzlb349spaydq7ih24";
-    };
+    version = circe.version;
+    src     = circe.src;
     packageRequires = [ shorten ];
-    fileSpecs = [ "lisp/tracking*.el" ];
+    fileSpecs = [ "tracking.el" ];
     meta = {
       description = "Register buffers for user review library for Emacs";
       license = gpl3Plus;
@@ -1886,12 +1880,12 @@ let self = _self // overrides;
 
   use-package = melpaBuild rec {
     pname   = "use-package";
-    version = "20150317";
+    version = "20151112";
     src = fetchFromGitHub {
       owner  = "jwiegley";
       repo   = pname;
-      rev    = "b836266ddfbc835efdb327ecb389ff9e081d7c55";
-      sha256 = "187wnqqm5g43cg8b6a9rbd9ncqad5fhjb96wjszbinjh1mjxyh7i";
+      rev    = "77a77c8b03044f0279e00cadd6a6d1a7ae97b01";
+      sha256 = "14v6wzqn2jhjdbr7nwqilxy9l79m1f2rdrz2c6c6pcla5yjpd1k0";
     };
     packageRequires = [ bind-key diminish ];
     files = [ "use-package.el" ];
@@ -2025,4 +2019,6 @@ let self = _self // overrides;
     };
   };
 
-}; in self
+};
+
+in elpaPackages.override packagesFun

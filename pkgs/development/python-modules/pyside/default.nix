@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, cmake, pysideGeneratorrunner, pysideShiboken, qt4 }:
+{ stdenv, fetchurl, cmake, python, pysideGeneratorrunner, pysideShiboken, qt4 }:
 
-stdenv.mkDerivation {
-  name = "pyside-1.2.2";
+stdenv.mkDerivation rec {
+  name = "${python.libPrefix}-pyside-${version}";
+  version = "1.2.4";
 
   src = fetchurl {
-    url = "http://download.qt-project.org/official_releases/pyside/pyside-qt4.8+1.2.2.tar.bz2";
-    sha256 = "1qbahpcjwl8d7zvvnc18nxpk1lbifpvjk8pi24ifbvvqcdsdzad1";
+    url = "https://github.com/PySide/PySide/archive/${version}.tar.gz";
+    sha256 = "90f2d736e2192ac69e5a2ac798fce2b5f7bf179269daa2ec262986d488c3b0f7";
   };
 
   enableParallelBuilding = true;

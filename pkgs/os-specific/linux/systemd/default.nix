@@ -12,14 +12,14 @@ assert stdenv.isLinux;
 assert pythonSupport -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
-  version = "227";
+  version = "228";
   name = "systemd-${version}";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "7d94d27801d20278103d8c146633fe81e06697d6";
-    sha256 = "0cvzsrazqgbia3zajb0z4ik8myfil4bdy2c29qs6w93d6yvrjfkj";
+    rev = "e9a321e25fe31f0fd2ec0cc28088172ebf819c7e";
+    sha256 = "0cgdnzq60ji7kk27xk4scsjkghgzcms7qlqkz3k1cx3r9c8gszz9";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -48,13 +48,13 @@ stdenv.mkDerivation rec {
       "--enable-compat-libs" # get rid of this eventually
       "--disable-tests"
 
-      "--disable-hostnamed"
+      "--enable-hostnamed"
       "--enable-networkd"
       "--disable-sysusers"
-      "--disable-timedated"
+      "--enable-timedated"
       "--enable-timesyncd"
       "--disable-firstboot"
-      "--disable-localed"
+      "--enable-localed"
       "--enable-resolved"
       "--disable-split-usr"
       "--disable-libcurl"

@@ -13,7 +13,7 @@
 #         python requires python
 , enableLdap ? false
 , enableNetworkManager ? false
-, enablePgp ? false
+, enablePgp ? true
 , enablePluginArchive ? false
 , enablePluginFancy ? false
 , enablePluginNotificationDialogs ? true
@@ -57,7 +57,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ curl dbus dbus_glib gtk gnutls gsettings_desktop_schemas hicolor_icon_theme
-      libetpan perl pkgconfig python wrapGAppsHook
+      libetpan perl pkgconfig python wrapGAppsHook glib_networking
     ]
     ++ optional enableSpellcheck enchant
     ++ optionals (enablePgp || enablePluginSmime) [ gnupg gpgme ]
@@ -92,8 +92,9 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  wrapPrefixVariables = [ "GIO_EXTRA_MODULES" ];
-  GIO_EXTRA_MODULES = "${glib_networking}/lib/gio/modules";
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared_mime_info}/share")
+  '';
 
   postInstall = ''
     mkdir -p $out/share/applications

@@ -22,7 +22,7 @@
   mp4v2, mpeg2dec, x264, libmkv,
   fontconfig, freetype,
   glib, gtk, webkitgtk, intltool, libnotify,
-  gst_all_1, dbus_glib, udev,
+  gst_all_1, dbus_glib, udev, libgudev,
   useGtk ? true,
   useWebKitGtk ? false # This prevents ghb from starting in my tests
 }:
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   buildInputsX = stdenv.lib.optionals useGtk [
     glib gtk intltool libnotify
     gst_all_1.gstreamer gst_all_1.gst-plugins-base dbus_glib udev
+    libgudev
   ] ++ stdenv.lib.optionals useWebKitGtk [ webkitgtk ];
 
   # Did not test compiling with it

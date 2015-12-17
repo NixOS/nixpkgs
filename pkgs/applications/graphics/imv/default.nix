@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "imv-${version}";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "eXeC64";
     repo  = "imv";
-    rev = "f2ce793d628e88825eff3364b293104cb0bdb582";
-    sha256 = "1xqaqbfjgksbjmy1yy7q4sv5bak7w8va60xa426jzscy9cib2sgh";
+    rev = "4d1a6d581b70b25d9533c5c788aab6900ebf82bb";
+    sha256 = "1c5r4pqqypir8ymicxyn2k7mhq8nl88b3x6giaafd77ssjn0vz9r";
   };
 
   buildInputs = [ SDL2 freeimage ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A command line image viewer for tiling window managers";
     homepage    = https://github.com/eXeC64/imv; 
-    license     = licenses.mit;
+    license     = licenses.gpl2;
     maintainers = with maintainers; [ rnhmjoj ];
     platforms   = platforms.unix;
   };

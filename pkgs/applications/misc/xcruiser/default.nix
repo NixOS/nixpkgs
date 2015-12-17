@@ -25,6 +25,6 @@ stdenv.mkDerivation {
       '';
       homepage = http://xcruiser.sourceforge.net/;
       license = licenses.gpl2;
-      maintainers = with maintainers; [ emery ];
+      maintainers = with maintainers; [ ehmry ];
     };
 }

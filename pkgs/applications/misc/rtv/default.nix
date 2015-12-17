@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, pkgs, lib, python, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  version = "1.6.1";
+  version = "1.7.0";
   name = "rtv-${version}";
 
   src = fetchFromGitHub {
     owner = "michael-lazar";
     repo = "rtv";
     rev = "v${version}";
-    sha256 = "0ywx4h37b25w36vln2ydpw73ysbbkpibp597cghsfn2izlaa0i02";
+    sha256 = "0fynymia3c2rynq9bm0jssd3rad7f7hhmjpkby7yj6g3jvk7jn4x";
   };
 
   propagatedBuildInputs = with pythonPackages; [

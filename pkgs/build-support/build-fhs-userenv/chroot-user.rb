@@ -140,10 +140,10 @@ if $cpid == 0
   link_swdir.call swdir, Pathname.new('')
 
   # New environment
-  ENV.replace(Hash[ envvars.map { |x| [x, ENV[x]] } ])
+  new_env = Hash[ envvars.map { |x| [x, ENV[x]] } ]
 
   # Finally, exec!
-  exec *execp
+  exec(new_env, *execp, close_others: true, unsetenv_others: true)
 end
 
 # Wait for a child. If we catch a signal, resend it to child and continue

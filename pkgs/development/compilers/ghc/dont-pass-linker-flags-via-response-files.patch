@@ -1,0 +1,22 @@
+diff --git a/compiler/main/SysTools.hs b/compiler/main/SysTools.hs
+index 8c3ab1a..47a2da7 100644
+--- a/compiler/main/SysTools.hs
++++ b/compiler/main/SysTools.hs
+@@ -414,7 +414,7 @@ runCc dflags args =   do
+       args1 = map Option (getOpts dflags opt_c)
+       args2 = args0 ++ args1 ++ args
+   mb_env <- getGccEnv args2
+-  runSomethingResponseFile dflags cc_filter "C Compiler" p args2 mb_env
++  runSomethingFiltered dflags cc_filter "C Compiler" p args2 mb_env
+  where
+   -- discard some harmless warnings from gcc that we can't turn off
+   cc_filter = unlines . doFilter . lines
+@@ -928,7 +928,7 @@ runLink dflags args = do
+       args1     = map Option (getOpts dflags opt_l)
+       args2     = args0 ++ linkargs ++ args1 ++ args
+   mb_env <- getGccEnv args2
+-  runSomethingResponseFile dflags ld_filter "Linker" p args2 mb_env
++  runSomethingFiltered dflags ld_filter "Linker" p args2 mb_env
+   where
+     ld_filter = case (platformOS (targetPlatform dflags)) of
+                   OSSolaris2 -> sunos_ld_filter

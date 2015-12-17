@@ -104,6 +104,15 @@ nginx.override {
     You can (still) use the <literal>html-tidy</literal> package, which got updated
     to a stable release from this new upstream.</para>
   </listitem>
+
+  <listitem>
+    <para><literal>extraDeviceOptions</literal> argument is removed
+    from <literal>bumblebee</literal> package. Instead there are
+    now two separate arguments: <literal>extraNvidiaDeviceOptions</literal>
+    and <literal>extraNouveauDeviceOptions</literal> for setting
+    extra X11 options for nvidia and nouveau drivers, respectively.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>

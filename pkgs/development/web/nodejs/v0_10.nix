@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.10.40";
+  version = "0.10.41";
 
   # !!! Should we also do shared libuv?
   deps = {
@@ -32,7 +32,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "17qlk4adjk1ls8ka4gbmvcl02xmvxdxhfdmg54bbxbjrv4prrrxs";
+    sha256 = "15f9n9pydfb3f6gbbxnh6qqmkmwr0j3gcs8cbnvl69f4lpi99xkr";
   };
 
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps) ++
