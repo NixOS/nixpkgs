@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , avahi, libusb, libv4l, net_snmp
-, pkgconfig
+, gettext, pkgconfig
 , gt68xxFirmware ? null, snapscanFirmware ? null
 , hotplugSupport ? true
 , version, src, ...
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional (libusb != null) "--enable-libusb_1_0";
 
   buildInputs = [ avahi libusb libv4l net_snmp ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ gettext pkgconfig ];
 
   postInstall = ''
     if test "$udevSupport" = "1"; then
