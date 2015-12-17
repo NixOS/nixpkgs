@@ -14152,9 +14152,7 @@ let
     libpng = libpng12;
   };
 
-  mnemosyne = callPackage ../games/mnemosyne {
-    inherit (pythonPackages) matplotlib cherrypy sqlite3;
-  };
+  mnemosyne = callPackage ../games/mnemosyne { };
 
   mudlet = qt5Libs.callPackage ../games/mudlet {
     inherit (lua51Packages) luafilesystem lrexlib luazip luasqlite3;
