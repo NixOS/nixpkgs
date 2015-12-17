@@ -14501,7 +14501,7 @@ let
         libusb = libusb1;
         libcanberra = libcanberra_kde;
         boost = boost155;
-        kdelibs = kdeApps_15_08.kdelibs;
+        kdelibs = kde5.kdelibs;
         subversionClient = pkgs.subversion18.override {
           bdbSupport = false;
           perlBindings = true;
