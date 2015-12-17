@@ -90,7 +90,7 @@ in {
 
     extraConfig = mkOption {
       type = types.attrsOf types.str;
-      apply = mapAttrs' (n: v: nameValuePair ("ETCD_" + n) v);
+      apply = mapAttrs' (n: v: nameValuePair ("FLEET_" + n) v);
       default = {};
       example = literalExample ''
         {
