@@ -1,8 +1,8 @@
-pkgs: with pkgs;
+{ fetchurl, lib, stdenv, texinfo }:
 
 let
 
-  inherit (stdenv.lib) makeScope mapAttrs;
+  inherit (lib) makeScope mapAttrs;
 
   json = builtins.readFile ./elpa-packages.json;
   manifest = builtins.fromJSON json;
@@ -40,11 +40,9 @@ self:
     super = mapAttrs (mkPackage self) manifest;
 
     elpaBuild = import ../../../build-support/emacs/melpa.nix {
-      inherit (pkgs) lib stdenv fetchurl texinfo;
+      inherit fetchurl lib stdenv texinfo;
       inherit (self) emacs;
     };
-
-    builtin = null;
 
     markBroken = pkg: pkg.override {
       elpaBuild = args: self.elpaBuild (args // {

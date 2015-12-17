@@ -11648,8 +11648,9 @@ let
 
   emacs24PackagesNg = recurseIntoAttrs (emacsPackagesNgGen emacs24);
 
-  elpaPackages =
-    import ../applications/editors/emacs-modes/elpa-packages.nix pkgs;
+  elpaPackages = import ../applications/editors/emacs-modes/elpa-packages.nix {
+    inherit fetchurl lib stdenv texinfo;
+  };
 
   melpaStablePackages =
     import ../applications/editors/emacs-modes/melpa-stable-packages.nix pkgs;
