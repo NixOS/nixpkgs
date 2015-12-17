@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libusb }:
+{ stdenv, fetchFromGitHub, libusb1 }:
 
 let version = "2015-02-03"; in
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "mkorenkov";
   };
 
-  buildInputs = [ libusb ];
+  buildInputs = [ libusb1 ];
 
   postPatch = ''
     substituteInPlace Makefile \
