@@ -44,6 +44,16 @@ let
       if    debug then "32bit_debug"
       else             "32bit"
     else throw "Flash Player is not supported on this platform";
+
+  suffix =
+    if      stdenv.system == "x86_64-linux" then
+      if    debug then throw "no x86_64 debugging version available"
+      else             "-release.x86_64"
+    else if stdenv.system == "i686-linux"   then
+      if    debug then "_linux_debug.i386"
+      else             "_linux.i386"
+    else throw "Flash Player is not supported on this platform";
+
 in
 stdenv.mkDerivation rec {
   name = "flashplayer-${version}";
@@ -58,7 +68,7 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     cd */*${arch}
-    tar -xvzf flash-plugin*.tar.gz
+    tar -xvzf *${suffix}.tar.gz
   '';
 
   sourceRoot = ".";
@@ -87,5 +97,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.adobe.com/products/flashplayer/;
     license = stdenv.lib.licenses.unfree;
     maintainers = [];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }
