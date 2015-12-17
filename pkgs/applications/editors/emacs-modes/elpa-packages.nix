@@ -1,3 +1,16 @@
+/*
+
+# Updating
+
+To update the list of packages from ELPA,
+
+1. Clone https://github.com/ttuegel/emacs2nix
+2. Run `./elpa-packages.sh` from emacs2nix
+3. Copy the new elpa-packages.json file into Nixpkgs
+4. `git commit -m "elpa-packages $(date -Idate)"`
+
+*/
+
 { fetchurl, lib, stdenv, texinfo }:
 
 let
