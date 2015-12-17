@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-nss" ];
 
+  postInstall = ''
+    substituteInPlace $out/lib/liboauth.la \
+      --replace "-lnss3" "-L${nss}/lib -lnss3"
+  '';
+
   meta = with stdenv.lib; {
     platforms = platforms.linux;
     description = "C library implementing the OAuth secure authentication protocol";
