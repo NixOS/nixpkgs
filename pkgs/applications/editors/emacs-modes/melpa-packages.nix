@@ -1,3 +1,17 @@
+/*
+
+# Updating
+
+To update the list of packages from MELPA,
+
+1. Clone https://github.com/ttuegel/emacs2nix
+2. Clone https://github.com/milkypostman/melpa
+3. Run `./melpa-packages.sh PATH_TO_MELPA_CLONE` from emacs2nix
+4. Copy the new melpa-packages.json file into Nixpkgs
+5. `git commit -m "melpa-packages $(date -Idate)"`
+
+*/
+
 { lib }:
 
 let
