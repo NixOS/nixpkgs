@@ -121,6 +121,12 @@ nginx.override {
     allowing to enable the combination again.
     </para>
   </listitem>
+
+  <listitem>
+    <para><literal>emacsPackagesNg</literal> now contains all packages
+    from the ELPA, MELPA, and MELPA Stable repositories.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
