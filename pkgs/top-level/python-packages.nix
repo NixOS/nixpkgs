@@ -1513,6 +1513,22 @@ in modules // {
     propagatedBuildInputs = with self; [ iowait psutil pyzmq tornado mock ];
   };
 
+  colorlog = buildPythonPackage rec {
+    name = "colorlog-${version}";
+    version = "2.6.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/colorlog/${name}.tar.gz";
+      sha256 = "1s8z9zr4r18igr4rri71nba01arnpppifrkaxhi2xb51500sw0qg";
+    };
+
+    meta = {
+      description = "Log formatting with colors";
+      homepage = https://github.com/borntyping/python-colorlog;
+      license = licenses.free; # BSD-like
+    };
+  };
+
   colour = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "colour";
