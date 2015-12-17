@@ -4113,7 +4113,7 @@ let
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = haskell.packages.ghc7102.override {
+  haskellPackages = haskell.packages.ghc7103.override {
     overrides = config.haskellPackageOverrides or (self: super: {});
   };
   inherit (haskellPackages) ghc cabal-install stack;
