@@ -11655,8 +11655,9 @@ let
   melpaStablePackages =
     import ../applications/editors/emacs-modes/melpa-stable-packages.nix pkgs;
 
-  melpaPackages =
-    import ../applications/editors/emacs-modes/melpa-packages.nix pkgs;
+  melpaPackages = import ../applications/editors/emacs-modes/melpa-packages.nix {
+    inherit lib;
+  };
 
   emacsWithPackages = callPackage ../build-support/emacs/wrapper.nix { };
   emacs24WithPackages = emacsWithPackages.override { emacs = emacs24; };

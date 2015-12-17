@@ -1,8 +1,8 @@
-pkgs: with pkgs;
+{ lib }:
 
 let
 
-  inherit (stdenv.lib) makeScope mapAttrs;
+  inherit (lib) makeScope mapAttrs;
 
   json = builtins.readFile ./melpa-stable-packages.json;
   manifest = builtins.fromJSON json;
