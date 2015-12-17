@@ -15,14 +15,15 @@ stdenv.mkDerivation rec {
     ++ optional interactive ncurses
     ++ optional doCheck procps; # for tests
 
-  configureFlags = stdenv.lib.optionalString stdenv.isSunOS "AWK=${gawk}/bin/awk";
+  configureFlags = stdenv.lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
 
   preInstall = ''
     installFlags="TEXMF=$out/texmf-dist";
     installTargets="install install-tex";
   '';
 
-  doCheck = !stdenv.isDarwin && !stdenv.isSunOS/*flaky*/;
+  doCheck = interactive # simplify bootstrapping
+    && !stdenv.isDarwin && !stdenv.isSunOS/*flaky*/;
 
   meta = {
     homepage = "http://www.gnu.org/software/texinfo/";
@@ -45,6 +46,5 @@ stdenv.mkDerivation rec {
       need revise only that one document.  The Texinfo system is
       well-integrated with GNU Emacs.
     '';
-    branch = "5.2";
   };
 }
