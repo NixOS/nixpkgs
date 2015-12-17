@@ -277,7 +277,7 @@ c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
   multiPkgs = pkgs: (with pkgs;
     [ udev
       alsaLib
-    ]) ++ (with [];
+    ]);
   runScript = "bash";
 }).env
 ]]></programlisting>
