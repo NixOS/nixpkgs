@@ -66,5 +66,7 @@ in
       description = "Nix-serve user";
       uid = config.ids.uids.nix-serve;
     };
+
+    nix.allowedUsers = mkIfUserDefined [ "nix-serve" ];
   };
 }
