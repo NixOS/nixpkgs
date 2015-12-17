@@ -20900,6 +20900,25 @@ in modules // {
     };
   };
 
+  tunigo = buildPythonPackage rec {
+    name = "tunigo-${version}";
+    version = "0.1.3";
+    propagatedBuildInputs = with self; [ requests2 ];
+
+    src = pkgs.fetchFromGitHub {
+      owner = "trygveaa";
+      repo = "python-tunigo";
+      rev = "v${version}";
+      sha256 = "02ili37dbs5mk5f6v3fmi1sji39ymc4zyq44x0abxzr88nc8nh97";
+    };
+
+    meta = {
+      description = "Python API for the browse feature of Spotify";
+      homepage = https://github.com/trygveaa/python-tunigo;
+      license = licenses.asl20;
+    };
+  };
+
   screenkey = buildPythonPackage rec {
     version = "0.2-b3634a2c6eb6d6936c3b2c1ef5078bf3a84c40c6";
     name = "screenkey-${version}";

@@ -12478,6 +12478,14 @@ let
 
   mopidy-mopify = callPackage ../applications/audio/mopidy-mopify { };
 
+  mopidy-spotify-tunigo = callPackage ../applications/audio/mopidy-spotify-tunigo { };
+
+  mopidy-youtube = callPackage ../applications/audio/mopidy-youtube { };
+
+  mopidy-soundcloud = callPackage ../applications/audio/mopidy-soundcloud { };
+
+  mopidy-musicbox-webclient = callPackage ../applications/audio/mopidy-musicbox-webclient { };
+
   mozplugger = callPackage ../applications/networking/browsers/mozilla-plugins/mozplugger {};
 
   easytag = callPackage ../applications/audio/easytag { };
