@@ -255,6 +255,7 @@ self: super: {
   glib = addPkgconfigDepend super.glib pkgs.glib;
   gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
   gtk = addPkgconfigDepend super.gtk pkgs.gtk;
+  gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };
   gtksourceview3 = super.gtksourceview3.override { inherit (pkgs.gnome3) gtksourceview; };
 
   # Need WebkitGTK, not just webkit.
