@@ -120,7 +120,7 @@ in {
         FLEET_PUBLIC_IP = cfg.publicIp;
         FLEET_ETCD_CAFILE = cfg.etcdCafile;
         FLEET_ETCD_KEYFILE = cfg.etcdKeyfile;
-        FEELT_ETCD_CERTFILE = cfg.etcdCertfile;
+        FLEET_ETCD_CERTFILE = cfg.etcdCertfile;
         FLEET_METADATA = cfg.metadata;
       } // cfg.extraConfig;
       serviceConfig = {
