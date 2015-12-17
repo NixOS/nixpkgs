@@ -33,8 +33,8 @@ in stdenv.mkDerivation {
   enableParallelBuilding = false;
 
   installPhase = ''
-    install -m 755   -d $out/lib/modules/${kernel.version}/extra/
-    install -m 644 *.ko $out/lib/modules/${kernel.version}/extra/
+    install -m 755   -d $out/lib/modules/${kernel.modDirVersion}/extra/
+    install -m 644 *.ko $out/lib/modules/${kernel.modDirVersion}/extra/
   '';
 
   meta = with stdenv.lib; {
