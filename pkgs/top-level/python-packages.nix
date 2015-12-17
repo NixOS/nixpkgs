@@ -1804,18 +1804,27 @@ in modules // {
 
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [
-      numpy
-      pandas
-      datashape
-      odo
-      toolz
       cytoolz
-      multipledispatch
-      sqlalchemy9 # sqlalchemy8 should also work
-      psutil
-      numba
+      datashape
+      flask
       h5py
+      multipledispatch
+      numba
+      numpy
+      odo
+      pandas
+      psutil
+      pymongo
+      pyyaml
+      requests2
+      sqlalchemy_1_0
+      tables
+      toolz
     ];
+
+    checkPhase = ''
+      py.test blaze/tests
+    '';
 
     meta = {
       homepage = https://github.com/ContinuumIO/blaze;
@@ -11689,14 +11698,19 @@ in modules // {
 
   odo = buildPythonPackage rec {
     name = "odo-${version}";
-    version= "0.3.3";
+    version= "0.3.4";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/o/odo/${name}.tar.gz";
-      sha256 = "2499ee86c26c74daa28f21ed235ca331911065950deea5169ebdb7d5dae6ebef";
+      sha256 = "77bdb372999ac0d9ef272927d7867a668108a4193e11eb8646bf770370a30725";
     };
 
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ datashape numpy pandas toolz multipledispatch networkx ];
+
+    checkPhase = ''
+      py.test odo/tests
+    '';
 
     meta = {
       homepage = https://github.com/ContinuumIO/odo;
@@ -13105,7 +13119,7 @@ in modules // {
       pytz
       xlrd
       bottleneck
-      sqlalchemy9
+      sqlalchemy_1_0
       lxml
       # Disabling this because an upstream dependency, pep8, is broken on v3.5.
       (if isPy35 then null else html5lib)
@@ -18219,12 +18233,12 @@ in modules // {
   };
 
   sqlalchemy_1_0 = self.sqlalchemy9.override rec {
-    name = "SQLAlchemy-1.0.9";
+    name = "SQLAlchemy-1.0.10";
     doCheck = !isPyPy;  # lots of tests fail
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
-      sha256 = "03mi79s8dcsqpwql98mlvaf6mf4xf5j3fjkv5m6dgibfwc0pbly3";
+      sha256 = "963415bf4ea4fa13698893464bc6917d291331e0e8202dddd0ebfed2864ef7e3";
     };
   };
 
