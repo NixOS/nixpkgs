@@ -11629,7 +11629,7 @@ let
 
     inherit lib newScope stdenv;
     inherit fetchFromGitHub fetchgit fetchhg fetchurl;
-    inherit emacs texinfo;
+    inherit emacs texinfo makeWrapper;
 
     trivialBuild = callPackage ../build-support/emacs/trivial.nix {
       inherit emacs;
@@ -11648,8 +11648,8 @@ let
 
   emacs24PackagesNg = recurseIntoAttrs (emacsPackagesNgGen emacs24);
 
-  emacsWithPackages = callPackage ../build-support/emacs/wrapper.nix { };
-  emacs24WithPackages = emacsWithPackages.override { emacs = emacs24; };
+  emacs24WithPackages = emacs24PackagesNg.emacsWithPackages;
+  emacsWithPackages = emacsPackagesNg.emacsWithPackages;
 
   inherit (gnome3) empathy;
 

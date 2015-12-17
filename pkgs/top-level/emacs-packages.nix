@@ -35,7 +35,7 @@
 
 , lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
 
-, emacs, texinfo
+, emacs, texinfo, makeWrapper
 , trivialBuild
 , melpaBuild
 
@@ -58,9 +58,15 @@ let
     inherit lib;
   };
 
+  emacsWithPackages = import ../build-support/emacs/wrapper.nix {
+    inherit lib makeWrapper stdenv;
+  };
+
   packagesFun = self: with self; {
 
   inherit emacs melpaBuild trivialBuild;
+
+  emacsWithPackages = emacsWithPackages self;
 
   ## START HERE
 

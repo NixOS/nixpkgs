@@ -1,8 +1,15 @@
-{ stdenv, makeWrapper, emacs }:
+{ lib, makeWrapper, stdenv }: self:
 
-with stdenv.lib;
+with lib; let inherit (self) emacs; in
 
-explicitRequires: # packages explicitly requested by the user
+packagesFun: # packages explicitly requested by the user
+
+let
+  explicitRequires =
+    if builtins.isFunction packagesFun
+      then packagesFun self
+    else packagesFun;
+in
 
 stdenv.mkDerivation {
   name = (appendToName "with-packages" emacs).name;
