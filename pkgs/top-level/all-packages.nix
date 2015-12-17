@@ -3067,6 +3067,8 @@ let
   };
 
   snort = callPackage ../applications/networking/ids/snort { };
+  
+  softhsm = callPackage ../applications/security/softhsm { };
 
   solr = callPackage ../servers/search/solr { };
 
