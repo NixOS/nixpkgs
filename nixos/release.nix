@@ -256,6 +256,7 @@ in rec {
   tests.mysqlReplication = callTest tests/mysql-replication.nix {};
   tests.nat.firewall = callTest tests/nat.nix { withFirewall = true; };
   tests.nat.standalone = callTest tests/nat.nix { withFirewall = false; };
+  tests.networking.networkd.loopback = callTest tests/networking.nix { networkd = true; test = "loopback"; };
   tests.networking.networkd.static = callTest tests/networking.nix { networkd = true; test = "static"; };
   tests.networking.networkd.dhcpSimple = callTest tests/networking.nix { networkd = true; test = "dhcpSimple"; };
   tests.networking.networkd.dhcpOneIf = callTest tests/networking.nix { networkd = true; test = "dhcpOneIf"; };
@@ -264,6 +265,7 @@ in rec {
   tests.networking.networkd.macvlan = callTest tests/networking.nix { networkd = true; test = "macvlan"; };
   tests.networking.networkd.sit = callTest tests/networking.nix { networkd = true; test = "sit"; };
   tests.networking.networkd.vlan = callTest tests/networking.nix { networkd = true; test = "vlan"; };
+  tests.networking.scripted.loopback = callTest tests/networking.nix { networkd = false; test = "loopback"; };
   tests.networking.scripted.static = callTest tests/networking.nix { networkd = false; test = "static"; };
   tests.networking.scripted.dhcpSimple = callTest tests/networking.nix { networkd = false; test = "dhcpSimple"; };
   tests.networking.scripted.dhcpOneIf = callTest tests/networking.nix { networkd = false; test = "dhcpOneIf"; };
