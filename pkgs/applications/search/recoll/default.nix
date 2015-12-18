@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ympk2w21cxfvysyx96p0npsa54csfc84cicpi8nsj1qp824zxwq";
   };
 
+  patches = [ ./nodeblayout.patch ];
+
   configureFlags = [ "--with-inotify" ];
 
   buildInputs = [ qt4 xapian file python ];
