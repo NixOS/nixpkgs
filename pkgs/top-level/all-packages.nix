@@ -13329,6 +13329,7 @@ let
 
   tomahawk = callPackage ../applications/audio/tomahawk {
     inherit (pkgs.kde4) kdelibs;
+    taglib = taglib_1_9;
     enableXMPP      = config.tomahawk.enableXMPP      or true;
     enableKDE       = config.tomahawk.enableKDE       or false;
     enableTelepathy = config.tomahawk.enableTelepathy or false;
