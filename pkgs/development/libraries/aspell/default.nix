@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Note: Users should define the `ASPELL_CONF' environment variable to
-  # `dict-dir $HOME/.nix-profile/lib/aspell/' so that they can access
+  # `data-dir $HOME/.nix-profile/lib/aspell/' so that they can access
   # dictionaries installed in their profile.
   #
   # We can't use `$out/etc/aspell.conf' for that purpose since Aspell
