@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "A full-text search tool";
     longDescription = ''
