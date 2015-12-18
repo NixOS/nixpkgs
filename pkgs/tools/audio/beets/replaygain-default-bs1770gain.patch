@@ -11,7 +11,7 @@ index 40b3a3a..9b54a5a 100644
              'overwrite': False,
              'auto': True,
 -            'backend': u'command',
-+            'backend': u'audiotools',
++            'backend': u'bs1770gain',
              'targetlevel': 89,
          })
  
