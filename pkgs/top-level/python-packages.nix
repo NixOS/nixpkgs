@@ -6828,8 +6828,10 @@ in modules // {
     nativeBuildInputs = [ pkgs.intltool ];
 
     postInstall = ''
+       mkdir -p $out/share/applications
        cp -R deluge/data/pixmaps $out/share/
        cp -R deluge/data/icons $out/share/
+       cp deluge/data/share/applications/deluge.desktop $out/share/applications
     '';
 
     meta = {
