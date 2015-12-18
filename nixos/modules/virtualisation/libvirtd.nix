@@ -122,18 +122,14 @@ in
             chmod 755 /var/lib/libvirt
             chmod 755 /var/lib/libvirt/dnsmasq
 
-            # Libvirt unfortunately writes mutable state (such as
-            # runtime changes to VM, network or filter configurations)
-            # to /etc.  So we can't use environment.etc to make the
-            # default network and filter definitions available, since
-            # libvirt will then modify the originals in the Nix store.
-            # So here we copy them instead.  Ugly.
-            for i in $(cd ${pkgs.libvirt}/etc && echo \
+            # Copy default libvirt network config .xml files to /var/lib
+            # Files modified by the user will not be overwritten
+            for i in $(cd ${pkgs.libvirt}/var/lib && echo \
                 libvirt/qemu/networks/*.xml libvirt/qemu/networks/autostart/*.xml \
                 libvirt/nwfilter/*.xml );
             do
-                mkdir -p /etc/$(dirname $i) -m 755
-                cp -fpd ${pkgs.libvirt}/etc/$i /etc/$i
+                mkdir -p /var/lib/$(dirname $i) -m 755
+                cp -npd ${pkgs.libvirt}/var/lib/$i /var/lib/$i
             done
 
             # libvirtd puts the full path of the emulator binary in the machine
