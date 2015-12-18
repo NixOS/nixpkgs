@@ -734,10 +734,10 @@
     "ggtags": {
         "fetch": {
             "tag": "fetchurl",
-            "url": "http://elpa.gnu.org/packages/ggtags-0.8.10.el",
-            "sha256": "0bigf87idd2rh40akyjiy1qvym6y3hvvx6khyb233b231s400aj9"
+            "url": "http://elpa.gnu.org/packages/ggtags-0.8.11.el",
+            "sha256": "1q2bp2b7lylf7n6c1psfn5swyjg0y78ykm0ak2kd84pbyhqak2mq"
         },
-        "version": "0.8.10",
+        "version": "0.8.11",
         "deps": [
             "cl-lib",
             "emacs"
