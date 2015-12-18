@@ -12,6 +12,9 @@
 , enableThumbnails ? true
 , enableWeb        ? true
 
+# External plugins
+, enableAlternatives ? false
+
 , bashInteractive, bashCompletion
 }:
 
@@ -91,7 +94,10 @@ in buildPythonPackage rec {
     ++ optional enableLastfm     pythonPackages.pylast
     ++ optional enableMpd        pythonPackages.mpd
     ++ optional enableThumbnails pythonPackages.pyxdg
-    ++ optional enableWeb        pythonPackages.flask;
+    ++ optional enableWeb        pythonPackages.flask
+    ++ optional enableAlternatives (import ./alternatives-plugin.nix {
+      inherit stdenv buildPythonPackage pythonPackages fetchFromGitHub;
+    });
 
   buildInputs = with pythonPackages; [
     beautifulsoup4
