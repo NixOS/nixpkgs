@@ -2985,7 +2985,9 @@ let
 
   samplicator = callPackage ../tools/networking/samplicator { };
 
-  screen = callPackage ../tools/misc/screen { };
+  screen = callPackage ../tools/misc/screen { 
+    inherit (darwin.apple_sdk.libs) utmp;
+  };
 
   screen-message = callPackage ../tools/X11/screen-message { };
 

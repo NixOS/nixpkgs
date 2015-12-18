@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, ncurses, pam ? null }:
+{ stdenv, fetchurl, fetchpatch, ncurses, utmp, pam ? null }:
 
 stdenv.mkDerivation rec {
   name = "screen-4.3.1";
@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
     sha256 = "192dsa8hm1zw8m638avzhwhnrddgizhyrwaxgwa96zr9vwai2nvc";
   });
 
-  buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isLinux pam;
+  buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isLinux pam
+                            ++ stdenv.lib.optional stdenv.isDarwin utmp;
 
   doCheck = true;
 
