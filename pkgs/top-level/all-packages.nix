@@ -8190,7 +8190,7 @@ let
 
     signon = callPackage ../development/libraries/signon { };
 
-    telepathy = callPackage ../development/libraries/telepathy/qt5 { };
+    telepathy = callPackage ../development/libraries/telepathy/qt { };
 
     vlc = callPackage ../applications/video/vlc {
       qt4 = null;
@@ -8503,9 +8503,9 @@ let
 
   telepathy_farstream = callPackage ../development/libraries/telepathy/farstream {};
 
-  telepathy_qt = callPackage ../development/libraries/telepathy/qt { };
+  telepathy_qt = callPackage ../development/libraries/telepathy/qt { qtbase = qt4; };
 
-  telepathy_qt5 = callPackage ../development/libraries/telepathy/qt5/old.nix {};
+  telepathy_qt5 = telepathy_qt.override { qtbase = qt5.base; };
 
   tevent = callPackage ../development/libraries/tevent {
     python = python2;
