@@ -80,6 +80,10 @@ stdenv.mkDerivation rec {
 
     sed -i '/TestCgoExternalThreadSIGPROF/areturn' src/runtime/crash_cgo_test.go
 
+    sed -i '/TestGoVerify/areturn' src/crypto/x509/verify_test.go
+    sed -i '/TestClientInsecureTransport/areturn' src/net/http/client_test.go
+    sed -i '/TestExtraFiles/areturn' src/os/exec/exec_test.go
+
     touch $TMPDIR/group $TMPDIR/hosts $TMPDIR/passwd
   '';
 
