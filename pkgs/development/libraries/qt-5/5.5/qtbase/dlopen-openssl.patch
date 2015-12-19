@@ -1,17 +1,8 @@
-From 2d7e4e21291238e2b41d0e173f918cd3530c8ade Mon Sep 17 00:00:00 2001
-From: Thomas Tuegel <ttuegel@gmail.com>
-Date: Sun, 23 Aug 2015 08:52:04 -0500
-Subject: [PATCH 06/11] dlopen openssl
-
----
- qtbase/src/network/ssl/qsslsocket_openssl_symbols.cpp | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/qtbase/src/network/ssl/qsslsocket_openssl_symbols.cpp b/qtbase/src/network/ssl/qsslsocket_openssl_symbols.cpp
-index e2700df..a7ccf88 100644
---- a/qtbase/src/network/ssl/qsslsocket_openssl_symbols.cpp
-+++ b/qtbase/src/network/ssl/qsslsocket_openssl_symbols.cpp
-@@ -640,8 +640,8 @@ static QPair<QLibrary*, QLibrary*> loadOpenSsl()
+Index: qt-everywhere-opensource-src-5.5.1/qtbase/src/network/ssl/qsslsocket_openssl_symbols.cpp
+===================================================================
+--- qt-everywhere-opensource-src-5.5.1.orig/qtbase/src/network/ssl/qsslsocket_openssl_symbols.cpp
++++ qt-everywhere-opensource-src-5.5.1/qtbase/src/network/ssl/qsslsocket_openssl_symbols.cpp
+@@ -640,8 +640,8 @@ static QPair<QLibrary*, QLibrary*> loadO
  #endif
  #if defined(SHLIB_VERSION_NUMBER) && !defined(Q_OS_QNX) // on QNX, the libs are always libssl.so and libcrypto.so
      // first attempt: the canonical name is libssl.so.<SHLIB_VERSION_NUMBER>
@@ -22,7 +13,7 @@ index e2700df..a7ccf88 100644
      if (libcrypto->load() && libssl->load()) {
          // libssl.so.<SHLIB_VERSION_NUMBER> and libcrypto.so.<SHLIB_VERSION_NUMBER> found
          return pair;
-@@ -658,8 +658,8 @@ static QPair<QLibrary*, QLibrary*> loadOpenSsl()
+@@ -658,8 +658,8 @@ static QPair<QLibrary*, QLibrary*> loadO
      //  OS X's /usr/lib/libssl.dylib, /usr/lib/libcrypto.dylib will be picked up in the third
      //    attempt, _after_ <bundle>/Contents/Frameworks has been searched.
      //  iOS does not ship a system libssl.dylib, libcrypto.dylib in the first place.
@@ -33,6 +24,3 @@ index e2700df..a7ccf88 100644
      if (libcrypto->load() && libssl->load()) {
          // libssl.so.0 and libcrypto.so.0 found
          return pair;
--- 
-2.5.2
-

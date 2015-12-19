@@ -1,17 +1,8 @@
-From 26c73d6da84f1b4797421b9ddecef18d6ce588f0 Mon Sep 17 00:00:00 2001
-From: Thomas Tuegel <ttuegel@gmail.com>
-Date: Mon, 1 Dec 2014 17:23:22 -0600
-Subject: [PATCH 04/11] tzdir
-
----
- qtbase/src/corelib/tools/qtimezoneprivate_tz.cpp | 21 +++++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
-
-diff --git a/qtbase/src/corelib/tools/qtimezoneprivate_tz.cpp b/qtbase/src/corelib/tools/qtimezoneprivate_tz.cpp
-index 29f0e17..3878974 100644
---- a/qtbase/src/corelib/tools/qtimezoneprivate_tz.cpp
-+++ b/qtbase/src/corelib/tools/qtimezoneprivate_tz.cpp
-@@ -62,7 +62,10 @@ typedef QHash<QByteArray, QTzTimeZone> QTzTimeZoneHash;
+Index: qt-everywhere-opensource-src-5.5.1/qtbase/src/corelib/tools/qtimezoneprivate_tz.cpp
+===================================================================
+--- qt-everywhere-opensource-src-5.5.1.orig/qtbase/src/corelib/tools/qtimezoneprivate_tz.cpp
++++ qt-everywhere-opensource-src-5.5.1/qtbase/src/corelib/tools/qtimezoneprivate_tz.cpp
+@@ -62,7 +62,10 @@ typedef QHash<QByteArray, QTzTimeZone> Q
  // Parse zone.tab table, assume lists all installed zones, if not will need to read directories
  static QTzTimeZoneHash loadTzTimeZones()
  {
@@ -23,7 +14,7 @@ index 29f0e17..3878974 100644
      if (!QFile::exists(path))
          path = QStringLiteral("/usr/lib/zoneinfo/zone.tab");
  
-@@ -553,12 +556,18 @@ void QTzTimeZonePrivate::init(const QByteArray &ianaId)
+@@ -560,12 +563,18 @@ void QTzTimeZonePrivate::init(const QByt
          if (!tzif.open(QIODevice::ReadOnly))
              return;
      } else {
@@ -47,6 +38,3 @@ index 29f0e17..3878974 100644
          }
      }
  
--- 
-2.5.2
-
