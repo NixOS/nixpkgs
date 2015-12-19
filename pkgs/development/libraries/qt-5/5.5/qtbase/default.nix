@@ -90,7 +90,7 @@ stdenv.mkDerivation {
     if [[ -n "$mesaSupported" ]]; then
       substituteInPlace \
         qtbase/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp \
-        --replace "@openglDriver@" "${mesa.driverLink}"
+        --replace "@mesa@" "${mesa}"
       substituteInPlace qtbase/mkspecs/common/linux.conf --replace "@mesa@" "${mesa}"
     fi
   '';
