@@ -7676,14 +7676,14 @@ in modules // {
   };
 
   docker_compose = buildPythonPackage rec {
-    version = "1.5.1";
+    version = "1.5.2";
     name = "docker-compose-${version}";
     namePrefix = "";
     disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/docker-compose/${name}.tar.gz";
-      sha256 = "0mdgpwkpss48zz36sw65crqjry87ba5p3mkl6ncbb8jqsxgqhpnz";
+      sha256 = "79aa7e2e6ef9ab1936f8777476ffd4bb329875ec3d3664d239896d2f2a3c4f4f";
     };
 
     # lots of networking and other fails
