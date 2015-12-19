@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, makeWrapper
+{ stdenv, lib, fetchurl, copyPathsToStore, makeWrapper
 , srcs
 
 , xlibs, libX11, libxcb, libXcursor, libXext, libXrender, libXi
@@ -23,11 +23,9 @@
 , decryptSslTraffic ? false
 }:
 
-with stdenv.lib;
-
 let
   inherit (srcs.qt5) version;
-  system-x86_64 = elem stdenv.system platforms.x86_64;
+  system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
 in
 
 stdenv.mkDerivation {
@@ -54,47 +52,44 @@ stdenv.mkDerivation {
   '';
 
   patches =
-    let dlopen-gtkstyle = substituteAll {
-          src = ./0001-dlopen-gtkstyle.patch;
-          # substituteAll ignores env vars starting with capital letter
-          gconf = GConf;
-          inherit gnome_vfs libgnomeui gtk;
-        };
-        dlopen-resolv = substituteAll {
-          src = ./0002-dlopen-resolv.patch;
-          glibc = stdenv.cc.libc;
-        };
-        dlopen-gl = substituteAll {
-          src = ./0003-dlopen-gl.patch;
-          openglDriver = if mesaSupported then mesa.driverLink else "/no-such-path";
-        };
-        tzdir = ./0004-tzdir.patch;
-        dlopen-libXcursor = substituteAll {
-          src = ./0005-dlopen-libXcursor.patch;
-          inherit libXcursor;
-        };
-        dlopen-openssl = substituteAll {
-          src = ./0006-dlopen-openssl.patch;
-          inherit openssl;
-        };
-        dlopen-dbus = substituteAll {
-          src = ./0007-dlopen-dbus.patch;
-          dbus_libs = dbus;
-        };
-        xdg-config-dirs = ./0008-xdg-config-dirs.patch;
-        decrypt-ssl-traffic = ./0009-decrypt-ssl-traffic.patch;
-        mkspecs-libgl = substituteAll {
-          src = ./0010-mkspecs-libgl.patch;
-          inherit mesa;
-        };
-        nix-profiles-library-paths = ./0011-nix-profiles-library-paths.patch;
-    in [
-      dlopen-resolv dlopen-gl tzdir dlopen-libXcursor dlopen-openssl
-      dlopen-dbus xdg-config-dirs nix-profiles-library-paths
-    ]
-    ++ optional gtkStyle dlopen-gtkstyle
-    ++ optional decryptSslTraffic decrypt-ssl-traffic
-    ++ optional mesaSupported mkspecs-libgl;
+    copyPathsToStore (lib.readPathsFromFile ./. ./series)
+    ++ lib.optional gtkStyle ./dlopen-gtkstyle.patch
+    ++ lib.optional decryptSslTraffic ./decrypt-ssl-traffic.patch
+    ++ lib.optional mesaSupported [ ./dlopen-gl.patch ./mkspecs-libgl.patch ];
+
+  inherit decryptSslTraffic gtkStyle mesaSupported;
+
+  postPatch = ''
+    substituteInPlace qtbase/src/network/kernel/qdnslookup_unix.cpp \
+      --replace "@glibc@" "${stdenv.cc.libc}"
+    substituteInPlace qtbase/src/network/kernel/qhostinfo_unix.cpp \
+      --replace "@glibc@" "${stdenv.cc.libc}"
+
+    substituteInPlace qtbase/src/plugins/platforms/xcb/qxcbcursor.cpp \
+      --replace "@libXcursor@" "${libXcursor}"
+
+    substituteInPlace qtbase/src/network/ssl/qsslsocket_openssl_symbols.cpp \
+      --replace "@openssl@" "${openssl}"
+
+    substituteInPlace qtbase/src/dbus/qdbus_symbols.cpp \
+      --replace "@dbus_libs@" "${dbus}"
+
+    if [[ -n "$gtkStyle" ]]; then
+      substituteInPlace qtbase/src/widgets/styles/qgtk2painter.cpp --replace "@gtk@" "${gtk}"
+      substituteInPlace qtbase/src/widgets/styles/qgtkstyle_p.cpp \
+        --replace "@gtk@" "${gtk}" \
+        --replace "@gnome_vfs@" "${gnome_vfs}" \
+        --replace "@libgnomeui@" "${libgnomeui}" \
+        --replace "@gconf@" "${GConf}"
+    fi
+
+    if [[ -n "$mesaSupported" ]]; then
+      substituteInPlace \
+        qtbase/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp \
+        --replace "@openglDriver@" "${mesa.driverLink}"
+      substituteInPlace qtbase/mkspecs/common/linux.conf --replace "@mesa@" "${mesa}"
+    fi
+  '';
 
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/qtbase/lib:$PWD/qtbase/plugins/platforms:$PWD/qttools/lib:$LD_LIBRARY_PATH"
@@ -121,7 +116,7 @@ stdenv.mkDerivation {
     -release
     -shared
     -c++11
-    ${optionalString developerBuild "-developer-build"}
+    ${lib.optionalString developerBuild "-developer-build"}
     -largefile
     -accessibility
     -rpath
@@ -142,15 +137,15 @@ stdenv.mkDerivation {
     -glib
     -xcb
     -qpa xcb
-    -${optionalString (cups == null) "no-"}cups
-    -${optionalString (!gtkStyle) "no-"}gtkstyle
+    -${lib.optionalString (cups == null) "no-"}cups
+    -${lib.optionalString (!gtkStyle) "no-"}gtkstyle
 
     -no-eglfs
     -no-directfb
     -no-linuxfb
     -no-kms
 
-    ${optionalString (!system-x86_64) "-no-sse2"}
+    ${lib.optionalString (!system-x86_64) "-no-sse2"}
     -no-sse3
     -no-ssse3
     -no-sse4.1
@@ -174,14 +169,14 @@ stdenv.mkDerivation {
 
     -make libs
     -make tools
-    -${optionalString (buildExamples == false) "no"}make examples
-    -${optionalString (buildTests == false) "no"}make tests
+    -${lib.optionalString (buildExamples == false) "no"}make examples
+    -${lib.optionalString (buildTests == false) "no"}make tests
   '';
 
   # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
   # if dependency paths contain the string "pq", which can occur in the hash.
   # To prevent these failures, we need to override PostgreSQL detection.
-  PSQL_LIBS = optionalString (postgresql != null) "-L${postgresql}/lib -lpq";
+  PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql}/lib -lpq";
 
   propagatedBuildInputs = [
     xlibs.libXcomposite libX11 libxcb libXext libXrender libXi
@@ -191,15 +186,15 @@ stdenv.mkDerivation {
   ]
   # Qt doesn't directly need GLU (just GL), but many apps use, it's small and
   # doesn't remain a runtime-dep if not used
-  ++ optionals mesaSupported [ mesa mesa_glu ]
-  ++ optional (cups != null) cups
-  ++ optional (mysql != null) mysql.lib
-  ++ optional (postgresql != null) postgresql
-  ++ optionals gtkStyle [gnome_vfs libgnomeui gtk GConf];
+  ++ lib.optionals mesaSupported [ mesa mesa_glu ]
+  ++ lib.optional (cups != null) cups
+  ++ lib.optional (mysql != null) mysql.lib
+  ++ lib.optional (postgresql != null) postgresql
+  ++ lib.optionals gtkStyle [gnome_vfs libgnomeui gtk GConf];
 
   buildInputs =
     [ bison flex gperf ruby ]
-    ++ optional developerBuild gdb;
+    ++ lib.optional developerBuild gdb;
 
   nativeBuildInputs = [ python perl pkgconfig ];
 
@@ -210,7 +205,7 @@ stdenv.mkDerivation {
 
   postInstall =
     ''
-      ${optionalString buildDocs ''
+      ${lib.optionalString buildDocs ''
         make docs && make install_docs
       ''}
 
@@ -223,7 +218,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = http://qt-project.org;
     description = "A cross-platform application framework for C++";
     license = "GPL/LGPL";

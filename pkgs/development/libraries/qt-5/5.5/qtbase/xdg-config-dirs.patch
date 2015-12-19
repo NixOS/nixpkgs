@@ -1,18 +1,8 @@
-From 253c0829d4bc30da0152a22114a949449796ec7d Mon Sep 17 00:00:00 2001
-From: Thomas Tuegel <ttuegel@gmail.com>
-Date: Sun, 23 Aug 2015 08:52:57 -0500
-Subject: [PATCH 08/11] xdg config dirs
-
----
- qtbase/src/corelib/io/qsettings.cpp | 18 ++++++++++++++++++
- qtbase/src/corelib/io/qsettings_p.h |  2 +-
- 2 files changed, 19 insertions(+), 1 deletion(-)
-
-diff --git a/qtbase/src/corelib/io/qsettings.cpp b/qtbase/src/corelib/io/qsettings.cpp
-index 413f569..8ff4974 100644
---- a/qtbase/src/corelib/io/qsettings.cpp
-+++ b/qtbase/src/corelib/io/qsettings.cpp
-@@ -1131,6 +1131,24 @@ QConfFileSettingsPrivate::QConfFileSettingsPrivate(QSettings::Format format,
+Index: qt-everywhere-opensource-src-5.5.1/qtbase/src/corelib/io/qsettings.cpp
+===================================================================
+--- qt-everywhere-opensource-src-5.5.1.orig/qtbase/src/corelib/io/qsettings.cpp
++++ qt-everywhere-opensource-src-5.5.1/qtbase/src/corelib/io/qsettings.cpp
+@@ -1131,6 +1131,24 @@ QConfFileSettingsPrivate::QConfFileSetti
      if (!application.isEmpty())
          confFiles[F_System | F_Application].reset(QConfFile::fromName(systemPath + appFile, false));
      confFiles[F_System | F_Organization].reset(QConfFile::fromName(systemPath + orgFile, false));
@@ -37,10 +27,10 @@ index 413f569..8ff4974 100644
  #else
      QString confName = getPath(format, QSettings::UserScope) + org;
      if (!application.isEmpty())
-diff --git a/qtbase/src/corelib/io/qsettings_p.h b/qtbase/src/corelib/io/qsettings_p.h
-index 93d63fd..160b197 100644
---- a/qtbase/src/corelib/io/qsettings_p.h
-+++ b/qtbase/src/corelib/io/qsettings_p.h
+Index: qt-everywhere-opensource-src-5.5.1/qtbase/src/corelib/io/qsettings_p.h
+===================================================================
+--- qt-everywhere-opensource-src-5.5.1.orig/qtbase/src/corelib/io/qsettings_p.h
++++ qt-everywhere-opensource-src-5.5.1/qtbase/src/corelib/io/qsettings_p.h
 @@ -240,7 +240,7 @@ public:
          F_Organization = 0x1,
          F_User = 0x0,
@@ -50,6 +40,3 @@ index 93d63fd..160b197 100644
  #else
          SandboxConfFile = 0,
          NumConfFiles = 1
--- 
-2.5.2
-
