@@ -47,8 +47,6 @@ stdenv.mkDerivation {
     ++ lib.optional decryptSslTraffic ./decrypt-ssl-traffic.patch
     ++ lib.optional mesaSupported [ ./dlopen-gl.patch ./mkspecs-libgl.patch ];
 
-  inherit decryptSslTraffic gtkStyle mesaSupported;
-
   postPatch = ''
     substituteInPlace configure --replace /bin/pwd pwd
     substituteInPlace qtbase/configure --replace /bin/pwd pwd
@@ -77,22 +75,20 @@ stdenv.mkDerivation {
     substituteInPlace \
       qtbase/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
       --replace "@libX11@" "${libX11}"
-
-    if [[ -n "$gtkStyle" ]]; then
-      substituteInPlace qtbase/src/widgets/styles/qgtk2painter.cpp --replace "@gtk@" "${gtk}"
-      substituteInPlace qtbase/src/widgets/styles/qgtkstyle_p.cpp \
-        --replace "@gtk@" "${gtk}" \
-        --replace "@gnome_vfs@" "${gnome_vfs}" \
-        --replace "@libgnomeui@" "${libgnomeui}" \
-        --replace "@gconf@" "${GConf}"
-    fi
-
-    if [[ -n "$mesaSupported" ]]; then
-      substituteInPlace \
-        qtbase/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp \
-        --replace "@mesa@" "${mesa}"
-      substituteInPlace qtbase/mkspecs/common/linux.conf --replace "@mesa@" "${mesa}"
-    fi
+  ''
+  + lib.optionalString gtkStyle ''
+    substituteInPlace qtbase/src/widgets/styles/qgtk2painter.cpp --replace "@gtk@" "${gtk}"
+    substituteInPlace qtbase/src/widgets/styles/qgtkstyle_p.cpp \
+      --replace "@gtk@" "${gtk}" \
+      --replace "@gnome_vfs@" "${gnome_vfs}" \
+      --replace "@libgnomeui@" "${libgnomeui}" \
+      --replace "@gconf@" "${GConf}"
+  ''
+  + lib.optionalString mesaSupported ''
+    substituteInPlace \
+      qtbase/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp \
+      --replace "@mesa@" "${mesa}"
+    substituteInPlace qtbase/mkspecs/common/linux.conf --replace "@mesa@" "${mesa}"
   '';
 
   preConfigure = ''
