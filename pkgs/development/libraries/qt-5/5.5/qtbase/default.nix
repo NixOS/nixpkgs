@@ -53,9 +53,6 @@ stdenv.mkDerivation {
     substituteInPlace configure --replace /bin/pwd pwd
     substituteInPlace qtbase/configure --replace /bin/pwd pwd
     substituteInPlace qtbase/src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
-    substituteInPlace qtbase/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
-        --replace /usr/share/X11/locale ${libX11}/share/X11/locale \
-        --replace /usr/lib/X11/locale ${libX11}/share/X11/locale
     sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i qtbase/mkspecs/*/*.conf
 
     sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/src/corelib/Qt5Config.cmake.in"
@@ -76,6 +73,10 @@ stdenv.mkDerivation {
 
     substituteInPlace qtbase/src/dbus/qdbus_symbols.cpp \
       --replace "@dbus_libs@" "${dbus}"
+
+    substituteInPlace \
+      qtbase/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
+      --replace "@libX11@" "${libX11}"
 
     if [[ -n "$gtkStyle" ]]; then
       substituteInPlace qtbase/src/widgets/styles/qgtk2painter.cpp --replace "@gtk@" "${gtk}"
