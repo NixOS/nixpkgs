@@ -6047,8 +6047,6 @@ let
 
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
-  accounts-qt = callPackage ../development/libraries/accounts-qt/old.nix {};
-
   acl = callPackage ../development/libraries/acl { };
 
   activemq = callPackage ../development/libraries/apache-activemq { };
@@ -15798,6 +15796,7 @@ let
   ### Deprecated aliases - for backward compatibility
 
 aliases = with self; rec {
+  accounts-qt = qt5.accounts-qt;  # added 2015-12-19
   adobeReader = adobe-reader;
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
