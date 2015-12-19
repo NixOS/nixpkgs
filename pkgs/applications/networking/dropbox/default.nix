@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper
 , dbus_libs, gcc, glib, libdrm, libffi, libICE, libSM
-, libX11, libXmu, ncurses, popt, qt5, zlib
+, libX11, libXmu, ncurses, popt, qt5, zlib, mesa_noglu
 }:
 
 # this package contains the daemon version of dropbox
@@ -114,7 +114,8 @@ in stdenv.mkDerivation {
 
     mkdir -p "$out/bin"
     makeWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
-      --prefix LD_LIBRARY_PATH : "${ldpath}"
+      --prefix LD_LIBRARY_PATH : "${ldpath}" \
+      --suffix LD_LIBRARY_PATH : "${mesa_noglu}/lib"
 
     mkdir -p "$out/share/icons"
     ln -s "$out/${appdir}/images/hicolor" "$out/share/icons/hicolor"
