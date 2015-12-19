@@ -201,12 +201,11 @@ stdenv.mkDerivation {
 
   postInstall =
     ''
-      ${lib.optionalString buildDocs ''
-        make docs && make install_docs
-      ''}
-
       # Don't retain build-time dependencies like gdb and ruby.
       sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $out/mkspecs/qconfig.pri
+    ''
+    + lib.optionalString buildDocs ''
+      make docs && make install_docs
     '';
 
   inherit lndir;
