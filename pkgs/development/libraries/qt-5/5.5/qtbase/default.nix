@@ -41,16 +41,6 @@ stdenv.mkDerivation {
     mv qtbase-opensource-src-${version} ./qt-everywhere-opensource-src-${version}/qtbase
   '';
 
-  prePatch = ''
-    substituteInPlace configure --replace /bin/pwd pwd
-    substituteInPlace qtbase/configure --replace /bin/pwd pwd
-    substituteInPlace qtbase/src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
-    substituteInPlace qtbase/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
-        --replace /usr/share/X11/locale ${libX11}/share/X11/locale \
-        --replace /usr/lib/X11/locale ${libX11}/share/X11/locale
-    sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i qtbase/mkspecs/*/*.conf
-  '';
-
   patches =
     copyPathsToStore (lib.readPathsFromFile ./. ./series)
     ++ lib.optional gtkStyle ./dlopen-gtkstyle.patch
@@ -60,6 +50,19 @@ stdenv.mkDerivation {
   inherit decryptSslTraffic gtkStyle mesaSupported;
 
   postPatch = ''
+    substituteInPlace configure --replace /bin/pwd pwd
+    substituteInPlace qtbase/configure --replace /bin/pwd pwd
+    substituteInPlace qtbase/src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
+    substituteInPlace qtbase/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
+        --replace /usr/share/X11/locale ${libX11}/share/X11/locale \
+        --replace /usr/lib/X11/locale ${libX11}/share/X11/locale
+    sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i qtbase/mkspecs/*/*.conf
+
+    sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/src/corelib/Qt5Config.cmake.in"
+    sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/src/corelib/Qt5CoreMacros.cmake"
+    sed -i 's/NO_DEFAULT_PATH//' "qtbase/src/gui/Qt5GuiConfigExtras.cmake.in"
+    sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in"
+
     substituteInPlace qtbase/src/network/kernel/qdnslookup_unix.cpp \
       --replace "@glibc@" "${stdenv.cc.libc}"
     substituteInPlace qtbase/src/network/kernel/qhostinfo_unix.cpp \
@@ -94,11 +97,6 @@ stdenv.mkDerivation {
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/qtbase/lib:$PWD/qtbase/plugins/platforms:$PWD/qttools/lib:$LD_LIBRARY_PATH"
     export MAKEFLAGS=-j$NIX_BUILD_CORES
-
-    sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/src/corelib/Qt5Config.cmake.in"
-    sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/src/corelib/Qt5CoreMacros.cmake"
-    sed -i 's/NO_DEFAULT_PATH//' "qtbase/src/gui/Qt5GuiConfigExtras.cmake.in"
-    sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in"
 
     export configureFlags+="-plugindir $out/lib/qt5/plugins -importdir $out/lib/qt5/imports -qmldir $out/lib/qt5/qml"
     export configureFlags+=" -docdir $out/share/doc/qt5"
