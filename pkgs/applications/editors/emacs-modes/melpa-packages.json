@@ -8526,16 +8526,17 @@
     },
     "python-mode": {
         "fetch": {
-            "tag": "fetchgit",
-            "url": "https://gitlab.com/python-mode-devs/python-mode.git",
-            "sha256": "2c17d1a6cdff6a910fe868c46924cc37e88d776db28b673d23450c77eeab9316",
-            "rev": "0740af7b7fff37eb0fe74f9221f8eb3b3f09e5b0"
+            "tag": "fetchFromGitLab",
+            "owner": "python-mode-devs",
+            "repo": "python-mode",
+            "sha256": "1204804m31kfsb0vlfm6ndvxs16maqpghw96s8wmvyg16s8vnczj",
+            "rev": "c6dd413218221a0b7c85d12b6733229fac8f7788"
         },
         "recipe": {
             "sha256": "1m7c6c97xpr5mrbyzhcl2cy7ykdz5yjj90mrakd4lknnsbcq205k",
             "commit": "a38eea3d0fd02c12f6ec8aef6e4cc46eedf25753"
         },
-        "version": "20151218.630",
+        "version": "20151219.555",
         "deps": []
     },
     "ob-sml": {
@@ -10767,9 +10768,10 @@
     },
     "bbdb-csv-import": {
         "fetch": {
-            "tag": "fetchgit",
-            "url": "https://gitlab.com/iankelling/bbdb-csv-import.git",
-            "sha256": "34248f4f6ec5afeb8960cb563c5487fa7fa78099d7bb5f7896ffb7b1788a3bc1",
+            "tag": "fetchFromGitLab",
+            "owner": "iankelling",
+            "repo": "bbdb-csv-import",
+            "sha256": "1h9vi9wb3dzzjrw5zfypk60afzzshxa3qmnbc24ypby5dr7qy91l",
             "rev": "7739d10ebe1787a72aa74085e9baedd0f4988b00"
         },
         "recipe": {
@@ -11821,9 +11823,10 @@
     },
     "git-commit-insert-issue": {
         "fetch": {
-            "tag": "fetchgit",
-            "url": "https://gitlab.com/emacs-stuff/git-commit-insert-issue.git",
-            "sha256": "e17279ceedb59f98913c2425d2842af952723d7ee79ea277d7ad22cd4046be2b",
+            "tag": "fetchFromGitLab",
+            "owner": "emacs-stuff",
+            "repo": "git-commit-insert-issue",
+            "sha256": "0axy8r0cs8mdsxvs57p7gqyp4lpr5a2d49947j8ri7xmxp77jwp1",
             "rev": "1bdfd1960bc279ca830e034a6708b25493b3f460"
         },
         "recipe": {
@@ -11927,9 +11930,10 @@
     },
     "org-if": {
         "fetch": {
-            "tag": "fetchgit",
-            "url": "https://gitlab.com/elzair/org-if.git",
-            "sha256": "dccac99a2e668144209efa19c764640473d9614777bad32b747a245249d53ab7",
+            "tag": "fetchFromGitLab",
+            "owner": "elzair",
+            "repo": "org-if",
+            "sha256": "1iyqv34b7q2k73srshcnpvfzcadq47w4rzkqp6m1d3ajk8x2vypq",
             "rev": "fab602cc1bbee7a4e99c0083e129219d3f9ed2e8"
         },
         "recipe": {
@@ -15318,9 +15322,10 @@
     },
     "totd": {
         "fetch": {
-            "tag": "fetchgit",
-            "url": "https://gitlab.com/egh/emacs-totd.git",
-            "sha256": "e2234b4c1f04d87beffdb1c6479be478c26e34aaeef44b8d1588a8a5a37ee157",
+            "tag": "fetchFromGitLab",
+            "owner": "egh",
+            "repo": "emacs-totd",
+            "sha256": "188cdgic25wrb4jdgdcj070a0pxsh3m0rd9d2r6i1s1n1nalrs6g",
             "rev": "ca47b618ea8290776cdb5b0f1c2c335691f69660"
         },
         "recipe": {
@@ -19328,9 +19333,10 @@
     },
     "visible-mark": {
         "fetch": {
-            "tag": "fetchgit",
-            "url": "https://gitlab.com/iankelling/visible-mark.git",
-            "sha256": "cf1745da4f5fc3b4104e73bc7a2c961a80328a8ed7de3691b9672ce1d7a2909c",
+            "tag": "fetchFromGitLab",
+            "owner": "iankelling",
+            "repo": "visible-mark",
+            "sha256": "15zdbvv6c114mv6hdq375l7ax70sss06p9d7m86hgssc3kiv9vsv",
             "rev": "c1852e13b6b61982738b56977a452ec9026faf1b"
         },
         "recipe": {
@@ -21433,9 +21439,10 @@
     },
     "punctuality-logger": {
         "fetch": {
-            "tag": "fetchgit",
-            "url": "https://gitlab.com/elzair/punctuality-logger.git",
-            "sha256": "d8f8e1bc61f21b3217ac92c532925a626997d49053521a77e400f8a7847e73ae",
+            "tag": "fetchFromGitLab",
+            "owner": "elzair",
+            "repo": "punctuality-logger",
+            "sha256": "1bkkgs2agy00wivilljkj3a9fsb2ba935icjmhbk46zjc6yf3y6q",
             "rev": "e09e5dd37bc92289fa2f7dc44aed51a7b5e04bb0"
         },
         "recipe": {
@@ -27740,9 +27747,10 @@
     },
     "majapahit-theme": {
         "fetch": {
-            "tag": "fetchgit",
-            "url": "https://gitlab.com/franksn/majapahit-theme.git",
-            "sha256": "ab910e3f9ddaec984d05be53cf4f4a593e67d95fbe90705d9fa708ca41377c45",
+            "tag": "fetchFromGitLab",
+            "owner": "franksn",
+            "repo": "majapahit-theme",
+            "sha256": "0ibw6x0wl257kxfp145ybzcnfgjr997wylxy0m6riv6sklzhx4db",
             "rev": "09a038826ef00b82684e569eaca07ceff7228219"
         },
         "recipe": {
@@ -31688,9 +31696,10 @@
     },
     "sexp-move": {
         "fetch": {
-            "tag": "fetchgit",
-            "url": "https://gitlab.com/elzair/sexp-move.git",
-            "sha256": "7564a95c172eae85ce9b69ad3bd11c136f3daf4a4cc88f1f6107605e9ff80586",
+            "tag": "fetchFromGitLab",
+            "owner": "elzair",
+            "repo": "sexp-move",
+            "sha256": "11h5z2gmwq07c4gqzj2c9apksvqk3k8kpbb9kg78bbif2xfajr3m",
             "rev": "117f7a91ab7c25e438413753e916570122011ce7"
         },
         "recipe": {
@@ -33313,9 +33322,10 @@
     },
     "zotxt": {
         "fetch": {
-            "tag": "fetchgit",
-            "url": "https://gitlab.com/egh/zotxt-emacs.git",
-            "sha256": "f47b0203b523bb56da6cec85af00db38f33d783c0e996c60e164eba7a37ebd04",
+            "tag": "fetchFromGitLab",
+            "owner": "egh",
+            "repo": "zotxt-emacs",
+            "sha256": "015xgsisgsv4w5h6r68f7iw3vwrqvc0az1gcdkd5dfr3nl1h4yzl",
             "rev": "3809f0932660c09910639eaecb3d0a8e784420b3"
         },
         "recipe": {
