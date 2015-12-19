@@ -8153,8 +8153,13 @@ let
     developerBuild = true;
   });
 
-  qt54 = recurseIntoAttrs (import ../development/libraries/qt-5/5.4 { inherit pkgs; });
-  qt55 = recurseIntoAttrs (import ../development/libraries/qt-5/5.5 { inherit pkgs; });
+  qt54 =
+    let imported = import ../development/libraries/qt-5/5.4 { inherit pkgs; };
+    in recurseIntoAttrs (imported.override (super: qt5LibsFun));
+
+  qt55 =
+    let imported = import ../development/libraries/qt-5/5.5 { inherit pkgs; };
+    in recurseIntoAttrs (imported.override (super: qt5LibsFun));
 
   qt5 = qt54;
 
