@@ -8153,7 +8153,7 @@ let
     developerBuild = true;
   });
 
-  qt54 = recurseIntoAttrs (callPackage ../development/libraries/qt-5/5.4 {});
+  qt54 = recurseIntoAttrs (import ../development/libraries/qt-5/5.4 { inherit pkgs; });
   qt55 = recurseIntoAttrs (import ../development/libraries/qt-5/5.5 { inherit pkgs; });
 
   qt5 = qt54;
