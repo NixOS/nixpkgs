@@ -47,49 +47,50 @@ stdenv.mkDerivation {
     ++ lib.optional decryptSslTraffic ./decrypt-ssl-traffic.patch
     ++ lib.optional mesaSupported [ ./dlopen-gl.patch ./mkspecs-libgl.patch ];
 
-  postPatch = ''
-    substituteInPlace configure --replace /bin/pwd pwd
-    substituteInPlace qtbase/configure --replace /bin/pwd pwd
-    substituteInPlace qtbase/src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
-    sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i qtbase/mkspecs/*/*.conf
+  postPatch =
+    ''
+      substituteInPlace configure --replace /bin/pwd pwd
+      substituteInPlace qtbase/configure --replace /bin/pwd pwd
+      substituteInPlace qtbase/src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
+      sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i qtbase/mkspecs/*/*.conf
 
-    sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/src/corelib/Qt5Config.cmake.in"
-    sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/src/corelib/Qt5CoreMacros.cmake"
-    sed -i 's/NO_DEFAULT_PATH//' "qtbase/src/gui/Qt5GuiConfigExtras.cmake.in"
-    sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in"
+      sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/src/corelib/Qt5Config.cmake.in"
+      sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/src/corelib/Qt5CoreMacros.cmake"
+      sed -i 's/NO_DEFAULT_PATH//' "qtbase/src/gui/Qt5GuiConfigExtras.cmake.in"
+      sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in"
 
-    substituteInPlace qtbase/src/network/kernel/qdnslookup_unix.cpp \
-      --replace "@glibc@" "${stdenv.cc.libc}"
-    substituteInPlace qtbase/src/network/kernel/qhostinfo_unix.cpp \
-      --replace "@glibc@" "${stdenv.cc.libc}"
+      substituteInPlace qtbase/src/network/kernel/qdnslookup_unix.cpp \
+        --replace "@glibc@" "${stdenv.cc.libc}"
+      substituteInPlace qtbase/src/network/kernel/qhostinfo_unix.cpp \
+        --replace "@glibc@" "${stdenv.cc.libc}"
 
-    substituteInPlace qtbase/src/plugins/platforms/xcb/qxcbcursor.cpp \
-      --replace "@libXcursor@" "${libXcursor}"
+      substituteInPlace qtbase/src/plugins/platforms/xcb/qxcbcursor.cpp \
+        --replace "@libXcursor@" "${libXcursor}"
 
-    substituteInPlace qtbase/src/network/ssl/qsslsocket_openssl_symbols.cpp \
-      --replace "@openssl@" "${openssl}"
+      substituteInPlace qtbase/src/network/ssl/qsslsocket_openssl_symbols.cpp \
+        --replace "@openssl@" "${openssl}"
 
-    substituteInPlace qtbase/src/dbus/qdbus_symbols.cpp \
-      --replace "@dbus_libs@" "${dbus}"
+      substituteInPlace qtbase/src/dbus/qdbus_symbols.cpp \
+        --replace "@dbus_libs@" "${dbus}"
 
-    substituteInPlace \
-      qtbase/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
-      --replace "@libX11@" "${libX11}"
-  ''
-  + lib.optionalString gtkStyle ''
-    substituteInPlace qtbase/src/widgets/styles/qgtk2painter.cpp --replace "@gtk@" "${gtk}"
-    substituteInPlace qtbase/src/widgets/styles/qgtkstyle_p.cpp \
-      --replace "@gtk@" "${gtk}" \
-      --replace "@gnome_vfs@" "${gnome_vfs}" \
-      --replace "@libgnomeui@" "${libgnomeui}" \
-      --replace "@gconf@" "${GConf}"
-  ''
-  + lib.optionalString mesaSupported ''
-    substituteInPlace \
-      qtbase/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp \
-      --replace "@mesa@" "${mesa}"
-    substituteInPlace qtbase/mkspecs/common/linux.conf --replace "@mesa@" "${mesa}"
-  '';
+      substituteInPlace \
+        qtbase/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
+        --replace "@libX11@" "${libX11}"
+    ''
+    + lib.optionalString gtkStyle ''
+      substituteInPlace qtbase/src/widgets/styles/qgtk2painter.cpp --replace "@gtk@" "${gtk}"
+      substituteInPlace qtbase/src/widgets/styles/qgtkstyle_p.cpp \
+        --replace "@gtk@" "${gtk}" \
+        --replace "@gnome_vfs@" "${gnome_vfs}" \
+        --replace "@libgnomeui@" "${libgnomeui}" \
+        --replace "@gconf@" "${GConf}"
+    ''
+    + lib.optionalString mesaSupported ''
+      substituteInPlace \
+        qtbase/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp \
+        --replace "@mesa@" "${mesa}"
+      substituteInPlace qtbase/mkspecs/common/linux.conf --replace "@mesa@" "${mesa}"
+    '';
 
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/qtbase/lib:$PWD/qtbase/plugins/platforms:$LD_LIBRARY_PATH"
