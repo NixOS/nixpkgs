@@ -239,6 +239,24 @@ let
     };
   };
 
+  adal = buildPythonPackage rec {
+    version = "0.1.0";
+    name = "adal-${version}";
+
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/a/adal/adal-0.1.0.tar.gz;
+      sha256 = "1f32k18ck54adqlgvh6fjhy4yavcyrwy813prjyqppqqq4bn1a09";
+    };
+
+    propagatedBuildInputs = with self; [ requests2 pyjwt ];
+
+    meta = {
+      description = "Library to make it easy for python application to authenticate to Azure Active Directory (AAD) in order to access AAD protected web resources";
+      homepage = https://github.com/AzureAD/azure-activedirectory-library-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ phreedom ];
+    };
+  };
 
   afew = buildPythonPackage rec {
     rev = "9744c18c4d6b0a3e7f57b01e5fe145a60fc82a47";
