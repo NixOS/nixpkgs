@@ -6195,9 +6195,10 @@
     },
     "org-if": {
         "fetch": {
-            "tag": "fetchgit",
-            "url": "https://gitlab.com/elzair/org-if.git",
-            "sha256": "dccac99a2e668144209efa19c764640473d9614777bad32b747a245249d53ab7",
+            "tag": "fetchFromGitLab",
+            "owner": "elzair",
+            "repo": "org-if",
+            "sha256": "1iyqv34b7q2k73srshcnpvfzcadq47w4rzkqp6m1d3ajk8x2vypq",
             "rev": "fab602cc1bbee7a4e99c0083e129219d3f9ed2e8"
         },
         "recipe": {
@@ -11066,9 +11067,10 @@
     },
     "punctuality-logger": {
         "fetch": {
-            "tag": "fetchgit",
-            "url": "https://gitlab.com/elzair/punctuality-logger.git",
-            "sha256": "fea22e9fc260da054ab2c081a709ad6b6d63b06391e935bc5f3c671ccf8888ec",
+            "tag": "fetchFromGitLab",
+            "owner": "elzair",
+            "repo": "punctuality-logger",
+            "sha256": "1v48i37iqrrwbyy3bscicfq66vbbml4sg0f0n950bnk0qagjx8py",
             "rev": "708cae8e67dbae293c7c4be0ca5e49d76fac6714"
         },
         "recipe": {
@@ -16040,9 +16042,10 @@
     },
     "sexp-move": {
         "fetch": {
-            "tag": "fetchgit",
-            "url": "https://gitlab.com/elzair/sexp-move.git",
-            "sha256": "7564a95c172eae85ce9b69ad3bd11c136f3daf4a4cc88f1f6107605e9ff80586",
+            "tag": "fetchFromGitLab",
+            "owner": "elzair",
+            "repo": "sexp-move",
+            "sha256": "11h5z2gmwq07c4gqzj2c9apksvqk3k8kpbb9kg78bbif2xfajr3m",
             "rev": "117f7a91ab7c25e438413753e916570122011ce7"
         },
         "recipe": {
