@@ -15777,8 +15777,8 @@ let
   snes9x-gtk = callPackage ../misc/emulators/snes9x-gtk { };
 
   higan = callPackage ../misc/emulators/higan {
-    profile = config.higan.profile or "performance";
-    guiToolkit = config.higan.guiToolkit or "gtk";
+    inherit (gnome) gtksourceview;
+    profile = config.higan.profile or "balanced";
   };
 
   misc = callPackage ../misc/misc.nix { };
