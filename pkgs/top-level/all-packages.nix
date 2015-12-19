@@ -9556,7 +9556,9 @@ let
 
   storm = callPackage ../servers/computing/storm { };
 
-  slurm-llnl = callPackage ../servers/computing/slurm { };
+  slurm-llnl = callPackage ../servers/computing/slurm { gtk = null; };
+
+  slurm-llnl-full = appendToName "full" (callPackage ../servers/computing/slurm { });
 
   tomcat5 = callPackage ../servers/http/tomcat/5.0.nix { };
 
