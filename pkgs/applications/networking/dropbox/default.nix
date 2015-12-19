@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper, patchelf
 , dbus_libs, gcc, glib, libdrm, libffi, libICE, libSM
 , libX11, libXmu, ncurses, popt, qt5, zlib
-, qtbase, qtdeclarative, qtwebkit
+, qtbase, qtdeclarative, qtwebkit, mesa_noglu
 }:
 
 # this package contains the daemon version of dropbox
@@ -103,8 +103,10 @@ in stdenv.mkDerivation {
     mkdir -p "$out/bin"
     RPATH="${ldpath}:$out/${appdir}"
     makeWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
-      --prefix LD_LIBRARY_PATH : "$RPATH"
+      --prefix LD_LIBRARY_PATH : "$RPATH" \
+      --suffix LD_LIBRARY_PATH : "${mesa_noglu}/lib"
   '';
+  ## FIXME: should libGL be on RPATH of qt, instead of being wrapped here?
 
   fixupPhase = ''
     INTERP=$(cat $NIX_CC/nix-support/dynamic-linker)
