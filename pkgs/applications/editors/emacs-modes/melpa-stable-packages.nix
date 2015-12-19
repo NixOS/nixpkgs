@@ -25,15 +25,15 @@ let
 
   mkPackage = self: name: recipe:
     let drv =
-          { melpaBuild, stdenv, fetchurl, fetchcvs, fetchFromGitHub, fetchFromGitLab
-          , fetchgit, fetchhg, fetchsvn }:
+          { melpaBuild, stdenv, fetchbzr, fetchcvs, fetchFromGitHub, fetchFromGitLab
+          , fetchgit, fetchhg, fetchsvn, fetchurl }:
           let
             unknownFetcher =
               abort "emacs-${name}: unknown fetcher '${recipe.fetch.tag}'";
             fetch =
               {
-                inherit fetchurl fetchcvs fetchFromGitHub fetchFromGitLab fetchgit fetchhg
-                        fetchsvn;
+                inherit fetchbzr fetchcvs fetchFromGitHub fetchFromGitLab fetchgit fetchhg
+                        fetchsvn fetchurl;
               }."${recipe.fetch.tag}"
               or unknownFetcher;
             args = builtins.removeAttrs recipe.fetch [ "tag" ];
