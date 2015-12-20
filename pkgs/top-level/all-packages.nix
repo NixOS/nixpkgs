@@ -11795,7 +11795,7 @@ let
     inherit (pkgs.gnome) libgnome libgnomeui;
   };
 
-  firestr = callPackage ../applications/networking/p2p/firestr
+  firestr = qt5.callPackage ../applications/networking/p2p/firestr
     { boost = boost155;
     };
 
