@@ -12579,7 +12579,7 @@ let
 
   smplayer = qt5.callPackage ../applications/video/smplayer { };
 
-  smtube = callPackage ../applications/video/smtube {};
+  smtube = qt5.callPackage ../applications/video/smtube {};
 
   sup = callPackage ../applications/networking/mailreaders/sup {
     ruby = ruby_1_9_3.override { cursesSupport = true; };
