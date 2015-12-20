@@ -11234,7 +11234,7 @@ let
 
   cmatrix = callPackage ../applications/misc/cmatrix { };
 
-  bomi = callPackage ../applications/video/bomi {
+  bomi = qt5.callPackage ../applications/video/bomi {
     youtube-dl = pythonPackages.youtube-dl;
     pulseSupport = config.pulseaudio or true;
   };
