@@ -12749,7 +12749,7 @@ let
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
 
-  photoqt = callPackage ../applications/graphics/photoqt { };
+  photoqt = qt5.callPackage ../applications/graphics/photoqt { };
 
   phototonic = callPackage ../applications/graphics/phototonic { };
 
