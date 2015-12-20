@@ -8167,7 +8167,7 @@ let
 
     phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt5 { };
 
-    polkitQt = callPackage ../development/libraries/polkit-qt-1 {
+    polkit-qt = callPackage ../development/libraries/polkit-qt-1 {
       withQt5 = true;
     };
 

@@ -1,13 +1,13 @@
 { kdeFramework, lib
 , extra-cmake-modules
 , kcoreaddons
-, polkitQt
+, polkit-qt
 }:
 
 kdeFramework {
   name = "kauth";
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ polkitQt ];
+  buildInputs = [ polkit-qt ];
   propagatedBuildInputs = [ kcoreaddons ];
   patches = [ ./kauth-policy-install.patch ];
   meta = {
