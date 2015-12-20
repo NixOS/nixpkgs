@@ -11075,7 +11075,7 @@ let
   };
   awesome = awesome-3-5;
 
-  awesomebump = callPackage ../applications/graphics/awesomebump { };
+  awesomebump = qt5.callPackage ../applications/graphics/awesomebump { };
 
   inherit (gnome3) baobab;
 
