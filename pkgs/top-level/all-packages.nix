@@ -15531,14 +15531,14 @@ let
     };
   };
 
-  saneBackends = callPackage ../applications/graphics/sane/backends.nix {
+  saneBackends = callPackage ../applications/graphics/sane/backends {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
     snapscanFirmware = config.sane.snapscanFirmware or null;
     hotplugSupport = config.sane.hotplugSupport or true;
     libusb = libusb1;
   };
 
-  saneBackendsGit = callPackage ../applications/graphics/sane/backends-git.nix {
+  saneBackendsGit = callPackage ../applications/graphics/sane/backends/git.nix {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
     snapscanFirmware = config.sane.snapscanFirmware or null;
     hotplugSupport = config.sane.hotplugSupport or true;
