@@ -8181,6 +8181,10 @@ let
 
     qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
 
+    qtcreator = callPackage ../development/qtcreator {
+      withDocumentation = true;
+    };
+
     qwt = callPackage ../development/libraries/qwt/6.nix { };
 
     signon = callPackage ../development/libraries/signon { };
@@ -8196,11 +8200,6 @@ let
 
   qtEnv = qt5.env;
   qt5Full = qt5.full;
-
-  qtcreator = callPackage ../development/qtcreator {
-    qtLib = qt54;
-    withDocumentation = true;
-  };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain { };
 
@@ -15802,6 +15801,7 @@ aliases = with self; rec {
   phonon_qt5_backend_gstreamer = qt5.phonon_backend_gstreamer;  # added 2015-12-19
   poppler_qt5 = qt5.poppler;  # added 2015-12-19
   qca-qt5 = qt5.qca-qt5;  # added 2015-12-19
+  qtcreator = qt5.qtcreator;  # added 2015-12-19
   quassel_qt5 = kde5.quassel_qt5; # added 2015-09-30
   quasselClient_qt5 = kde5.quasselClient_qt5; # added 2015-09-30
   quasselDaemon_qt5 = kde5.quasselDaemon; # added 2015-09-30
