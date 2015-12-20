@@ -809,7 +809,7 @@ let
 
   deis = goPackages.deis.bin // { outputs = [ "bin" ]; };
 
-  dfilemanager = callPackage ../applications/misc/dfilemanager { };
+  dfilemanager = kde5.dfilemanager;
 
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
@@ -14714,6 +14714,8 @@ let
       boost = pkgs.boost.override { python=python3; };
       libyamlcpp = callPackage ../development/libraries/libyaml-cpp { makePIC=true; boost=boost; };
     };
+
+    dfilemanager = callPackage ../applications/misc/dfilemanager { };
 
     fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
 
