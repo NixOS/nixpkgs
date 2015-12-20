@@ -19,6 +19,9 @@
 , gnome
 
 # options
+, buildDocs ? false
+, buildExamples ? false
+, buildTests ? false
 , developerBuild ? false
 , decryptSslTraffic ? false
 }:
@@ -67,7 +70,8 @@ let
         # GNOME dependencies are not used unless gtkStyle == true
         inherit (gnome) libgnomeui GConf gnome_vfs;
         bison = bison2; # error: too few arguments to function 'int yylex(...
-        inherit developerBuild srcs version decryptSslTraffic;
+        inherit srcs version buildDocs buildExamples buildTests developerBuild
+                decryptSslTraffic;
       };
 
       connectivity = callPackage
