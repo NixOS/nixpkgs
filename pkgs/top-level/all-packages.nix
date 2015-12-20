@@ -13349,7 +13349,7 @@ let
 
   twister = callPackage ../applications/networking/p2p/twister { };
 
-  twmn = callPackage ../applications/misc/twmn { };
+  twmn = qt5.callPackage ../applications/misc/twmn { };
 
   twinkle = callPackage ../applications/networking/instant-messengers/twinkle { };
 
