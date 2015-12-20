@@ -138,9 +138,6 @@ self: super: {
   # Foreign dependency name clashes with another Haskell package.
   libarchive-conduit = super.libarchive-conduit.override { archive = pkgs.libarchive; };
 
-  # https://github.com/haskell/time/issues/23
-  time_1_5_0_1 = dontCheck super.time_1_5_0_1;
-
   # Switch levmar build to openblas.
   bindings-levmar = overrideCabal super.bindings-levmar (drv: {
     preConfigure = ''
