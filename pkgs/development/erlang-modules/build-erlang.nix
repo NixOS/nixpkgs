@@ -1,3 +1,6 @@
+# This file is not used not tested at this time, build-hex.nix is the currently
+# main vehicle of bringing Erlang packages in.
+
 { stdenv, erlang, rebar, openssl, libyaml }:
 
 { name, version
