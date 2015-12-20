@@ -6571,6 +6571,8 @@ let
 
   gperftools = callPackage ../development/libraries/gperftools { };
 
+  grib-api = callPackage ../development/libraries/grib-api { };
+
   gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
     callPackage = pkgs.newScope (pkgs // { libav = pkgs.ffmpeg; });
   });
