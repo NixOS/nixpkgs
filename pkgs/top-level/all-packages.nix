@@ -13310,6 +13310,7 @@ let
     enableXMPP      = config.tomahawk.enableXMPP      or true;
     enableKDE       = config.tomahawk.enableKDE       or false;
     enableTelepathy = config.tomahawk.enableTelepathy or false;
+    quazip = qt5.quazip.override { qt = qt4; };
   };
 
   torchat = callPackage ../applications/networking/instant-messengers/torchat {
