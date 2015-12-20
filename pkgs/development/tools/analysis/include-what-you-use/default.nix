@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, cmake, llvmPackages_36 }:
+{ stdenv, fetchurl, cmake, llvmPackages_37 }:
 
 let
-  version = "0.4";
-  llvmPackages = llvmPackages_36;
+  version = "0.5";
+  llvmPackages = llvmPackages_37;
 in stdenv.mkDerivation rec {
   name = "include-what-you-use-${version}";
 
