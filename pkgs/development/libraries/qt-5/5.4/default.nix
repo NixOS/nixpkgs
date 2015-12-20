@@ -101,6 +101,14 @@ let
       qtx11extras = callPackage ./qtx11extras.nix {};
       qtxmlpatterns = callPackage ./qtxmlpatterns.nix {};
 
+      env = callPackage ../qt-env.nix {};
+      full = env "qt-${qtbase.version}" [
+        qtconnectivity qtdeclarative qtdoc qtenginio qtgraphicaleffects qtimageformats
+        qtlocation qtmultimedia qtquick1 qtquickcontrols qtscript qtsensors qtserialport
+        qtsvg qttools qttranslations qtwebkit qtwebkit-examples qtwebsockets qtx11extras
+        qtxmlpatterns
+      ];
+
       makeQtWrapper = makeSetupHook { deps = [ makeWrapper ]; } ./make-qt-wrapper.sh;
 
     };

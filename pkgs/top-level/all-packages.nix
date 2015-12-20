@@ -8205,12 +8205,8 @@ let
   qt55Libs = lib.makeScope qt55.newScope qt5LibsFun;
   qt5Libs = qt55Libs;
 
-  qtEnv = callPackage ../development/libraries/qt-5/qt-env.nix {};
-
-  qt5Full = appendToName "full" (qtEnv {
-    qtbase = qt5.base;
-    paths = lib.filter lib.isDerivation (lib.attrValues qt5);
-  });
+  qtEnv = qt5.env;
+  qt5Full = qt5.full;
 
   qtcreator = callPackage ../development/qtcreator {
     qtLib = qt54;

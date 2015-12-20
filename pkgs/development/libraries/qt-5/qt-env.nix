@@ -1,8 +1,6 @@
-{ runCommand, lndir }:
+{ runCommand, lndir, qtbase }: name: paths:
 
-{ paths, qtbase }:
-
-runCommand "qt-env" { inherit paths qtbase; } ''
+runCommand name { inherit paths qtbase; } ''
 
 mkdir -p "$out/bin" "$out/mkspecs" "$out/include" "$out/lib" "$out/share"
 
