@@ -12342,7 +12342,7 @@ let
       webkit = webkitgtk2;
   };
 
-  luminanceHDR = callPackage ../applications/graphics/luminance-hdr { };
+  luminanceHDR = qt5.callPackage ../applications/graphics/luminance-hdr { };
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
