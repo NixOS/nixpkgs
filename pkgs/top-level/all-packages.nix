@@ -8159,7 +8159,7 @@ let
 
     phonon = callPackage ../development/libraries/phonon/qt5 { };
 
-    phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt5 { };
+    phonon-backend-gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt5 { };
 
     phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt5 { };
 
@@ -15799,7 +15799,7 @@ aliases = with self; rec {
   mlt-qt5 = qt5.mlt;  # added 2015-12-19
   nfsUtils = nfs-utils;  # added 2014-12-06
   phonon_qt5 = qt5.phonon;  # added 2015-12-19
-  phonon_qt5_backend_gstreamer = qt5.phonon_backend_gstreamer;  # added 2015-12-19
+  phonon_qt5_backend_gstreamer = qt5.phonon-backend-gstreamer;  # added 2015-12-19
   poppler_qt5 = qt5.poppler;  # added 2015-12-19
   qca-qt5 = qt5.qca-qt5;  # added 2015-12-19
   qtcreator = qt5.qtcreator;  # added 2015-12-19
