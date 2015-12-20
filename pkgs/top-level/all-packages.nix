@@ -11708,7 +11708,7 @@ let
 
   fribid = callPackage ../applications/networking/browsers/mozilla-plugins/fribid { };
 
-  fritzing = callPackage ../applications/science/electronics/fritzing { };
+  fritzing = qt5.callPackage ../applications/science/electronics/fritzing { };
 
   fvwm = callPackage ../applications/window-managers/fvwm { };
 
