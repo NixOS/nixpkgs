@@ -2261,7 +2261,7 @@ let
 
   mfoc = callPackage ../tools/security/mfoc { };
 
-  mgba = callPackage ../misc/emulators/mgba { };
+  mgba = qt5.callPackage ../misc/emulators/mgba { };
 
   minissdpd = callPackage ../tools/networking/minissdpd { };
 
