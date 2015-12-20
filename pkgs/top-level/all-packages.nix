@@ -7812,8 +7812,6 @@ let
     qt = qt4;
   };
 
-  mlt-qt5 = callPackage ../development/libraries/mlt/qt-5.4.nix { };
-
   movit = callPackage ../development/libraries/movit { };
 
   mosquitto = callPackage ../servers/mqtt/mosquitto { };
@@ -8167,7 +8165,7 @@ let
 
     libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
 
-    mlt = callPackage ../development/libraries/mlt/qt-5.5.nix {};
+    mlt = callPackage ../development/libraries/mlt/qt-5.nix {};
 
     openbr = callPackage ../development/libraries/openbr { };
 
@@ -15809,6 +15807,7 @@ aliases = with self; rec {
   libtidy = html-tidy;  # added 2014-12-21
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
+  mlt-qt5 = qt5.mlt;  # added 2015-12-19
   nfsUtils = nfs-utils;  # added 2014-12-06
   quassel_qt5 = kde5.quassel_qt5; # added 2015-09-30
   quasselClient_qt5 = kde5.quasselClient_qt5; # added 2015-09-30
