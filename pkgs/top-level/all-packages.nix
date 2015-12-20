@@ -8034,8 +8034,6 @@ let
 
   phonon_qt5 = callPackage ../development/libraries/phonon/qt5/old.nix {};
 
-  phonon_qt5_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt5/old.nix {};
-
   physfs = callPackage ../development/libraries/physfs { };
 
   pipelight = callPackage ../tools/misc/pipelight {
@@ -15809,6 +15807,7 @@ aliases = with self; rec {
   lttngUst = lttng-ust;  # added 2014-07-31
   mlt-qt5 = qt5.mlt;  # added 2015-12-19
   nfsUtils = nfs-utils;  # added 2014-12-06
+  phonon_qt5_backend_gstreamer = qt5.phonon_backend_gstreamer;  # added 2015-12-19
   quassel_qt5 = kde5.quassel_qt5; # added 2015-09-30
   quasselClient_qt5 = kde5.quasselClient_qt5; # added 2015-09-30
   quasselDaemon_qt5 = kde5.quasselDaemon; # added 2015-09-30
