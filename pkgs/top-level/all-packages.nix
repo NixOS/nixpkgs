@@ -8110,8 +8110,6 @@ let
 
   qca2 = callPackage ../development/libraries/qca2 { qt = qt4; };
 
-  qca-qt5 = callPackage ../development/libraries/qca-qt5/old.nix { };
-
   qimageblitz = callPackage ../development/libraries/qimageblitz {};
 
   qjson = callPackage ../development/libraries/qjson { };
@@ -15808,6 +15806,7 @@ aliases = with self; rec {
   mlt-qt5 = qt5.mlt;  # added 2015-12-19
   nfsUtils = nfs-utils;  # added 2014-12-06
   phonon_qt5_backend_gstreamer = qt5.phonon_backend_gstreamer;  # added 2015-12-19
+  qca-qt5 = qt5.qca-qt5;  # added 2015-12-19
   quassel_qt5 = kde5.quassel_qt5; # added 2015-09-30
   quasselClient_qt5 = kde5.quasselClient_qt5; # added 2015-09-30
   quasselDaemon_qt5 = kde5.quasselDaemon; # added 2015-09-30
