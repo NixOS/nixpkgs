@@ -1022,7 +1022,7 @@ let
 
   davix = callPackage ../tools/networking/davix { };
 
-  cantata = qt5Libs.callPackage ../applications/audio/cantata { };
+  cantata = qt5.callPackage ../applications/audio/cantata { };
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
 
@@ -1154,7 +1154,7 @@ let
 
   convmv = callPackage ../tools/misc/convmv { };
 
-  cool-retro-term = qt5Libs.callPackage ../applications/misc/cool-retro-term { };
+  cool-retro-term = qt5.callPackage ../applications/misc/cool-retro-term { };
 
   coreutils = callPackage ../tools/misc/coreutils {
     aclSupport = stdenv.isLinux;
@@ -2721,7 +2721,7 @@ let
     inherit qt4;
   };
 
-  pinentry_qt5 = qt55Libs.callPackage ../tools/security/pinentry/qt5.nix {
+  pinentry_qt5 = qt5.callPackage ../tools/security/pinentry/qt5.nix {
     libcap = if stdenv.isDarwin then null else libcap;
   };
 
@@ -8194,9 +8194,6 @@ let
 
   };
 
-  qt55Libs = lib.makeScope qt55.newScope qt5LibsFun;
-  qt5Libs = qt55Libs;
-
   qtEnv = qt5.env;
   qt5Full = qt5.full;
 
@@ -11288,7 +11285,7 @@ let
   cutecom = callPackage ../tools/misc/cutecom { };
 
   cutegram =
-    let cp = qt5Libs.callPackage;
+    let cp = qt5.callPackage;
     in cp ../applications/networking/instant-messengers/telegram/cutegram rec {
       libqtelegram-aseman-edition = cp ../applications/networking/instant-messengers/telegram/libqtelegram-aseman-edition { };
       telegram-qml = cp ../applications/networking/instant-messengers/telegram/telegram-qml {
@@ -11337,7 +11334,7 @@ let
     plugins = [];
   };
 
-  dfasma = qt5Libs.callPackage ../applications/audio/dfasma { };
+  dfasma = qt5.callPackage ../applications/audio/dfasma { };
 
   dia = callPackage ../applications/graphics/dia {
     inherit (pkgs.gnome) libart_lgpl libgnomeui;
@@ -11694,7 +11691,7 @@ let
 
   fluidsynth = callPackage ../applications/audio/fluidsynth { };
 
-  fmit = qt5Libs.callPackage ../applications/audio/fmit { };
+  fmit = qt5.callPackage ../applications/audio/fmit { };
 
   focuswriter = callPackage ../applications/editors/focuswriter { };
 
@@ -12145,7 +12142,7 @@ let
     lua = lua5;
   };
 
-  ipe = qt5Libs.callPackage ../applications/graphics/ipe {
+  ipe = qt5.callPackage ../applications/graphics/ipe {
     ghostscript = ghostscriptX;
     texlive = texlive.combine { inherit (texlive) scheme-small; };
   };
@@ -12207,9 +12204,9 @@ let
 
   kermit = callPackage ../tools/misc/kermit { };
 
-  keyfinder = qt5Libs.callPackage ../applications/audio/keyfinder { };
+  keyfinder = qt5.callPackage ../applications/audio/keyfinder { };
 
-  keyfinder-cli = qt5Libs.callPackage ../applications/audio/keyfinder-cli { };
+  keyfinder-cli = qt5.callPackage ../applications/audio/keyfinder-cli { };
 
   keymon = callPackage ../applications/video/key-mon { };
 
@@ -12545,7 +12542,7 @@ let
       iceSupport = config.murmur.iceSupport or true;
     }) mumble mumble_git murmur murmur_git;
 
-  musescore = qt5Libs.callPackage ../applications/audio/musescore { };
+  musescore = qt5.callPackage ../applications/audio/musescore { };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
   mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt {
@@ -13089,7 +13086,7 @@ let
 
   dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
 
-  lightdm = qt5Libs.callPackage ../applications/display-managers/lightdm {
+  lightdm = qt5.callPackage ../applications/display-managers/lightdm {
     qt4 = null;
     withQt5 = false;
   };
@@ -13110,7 +13107,7 @@ let
 
   printrun = callPackage ../applications/misc/printrun { };
 
-  sddm = qt5Libs.callPackage ../applications/display-managers/sddm {
+  sddm = qt5.callPackage ../applications/display-managers/sddm {
     themes = [];  # extra themes, etc.
   };
 
@@ -13132,7 +13129,7 @@ let
 
   sipp = callPackage ../development/tools/misc/sipp { };
 
-  sonic-visualiser = qt5Libs.callPackage ../applications/audio/sonic-visualiser {
+  sonic-visualiser = qt5.callPackage ../applications/audio/sonic-visualiser {
     inherit (pkgs.vamp) vampSDK;
   };
 
@@ -13488,7 +13485,7 @@ let
     ffmpeg = ffmpeg_2;
   };
 
-  vlc_qt5 = qt5Libs.vlc;
+  vlc_qt5 = qt5.vlc;
 
   vmpk = callPackage ../applications/audio/vmpk { };
 
@@ -13964,7 +13961,7 @@ let
 
   chocolateDoom = callPackage ../games/chocolate-doom { };
 
-  cockatrice = qt5Libs.callPackage ../games/cockatrice {  };
+  cockatrice = qt5.callPackage ../games/cockatrice {  };
 
   confd = goPackages.confd.bin // { outputs = [ "bin" ]; };
 
@@ -14032,7 +14029,7 @@ let
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
 
-  flightgear = qt5Libs.callPackage ../games/flightgear { };
+  flightgear = qt5.callPackage ../games/flightgear { };
 
   freecell-solver = callPackage ../games/freecell-solver { };
 
@@ -14135,7 +14132,7 @@ let
 
   mnemosyne = callPackage ../games/mnemosyne { };
 
-  mudlet = qt5Libs.callPackage ../games/mudlet {
+  mudlet = qt5.callPackage ../games/mudlet {
     inherit (lua51Packages) luafilesystem lrexlib luazip luasqlite3;
   };
 
@@ -14760,7 +14757,7 @@ let
       apps = import ../applications/kde-apps-15.12 { inherit pkgs; };
       merged = self: frameworks self // plasma self // apps self // kde5PackagesFun self;
     in
-      recurseIntoAttrs (lib.makeScope qt55Libs.newScope merged);
+      recurseIntoAttrs (lib.makeScope qt5.newScope merged);
 
   kde5_latest =
     let
@@ -14769,7 +14766,7 @@ let
       apps = import ../applications/kde-apps-15.12 { inherit pkgs; };
       merged = self: frameworks self // plasma self // apps self // kde5PackagesFun self;
     in
-      recurseIntoAttrs (lib.makeScope qt55Libs.newScope merged);
+      recurseIntoAttrs (lib.makeScope qt5.newScope merged);
 
   theme-vertex = callPackage ../misc/themes/vertex { };
 
@@ -15803,7 +15800,7 @@ aliases = with self; rec {
   nfsUtils = nfs-utils;  # added 2014-12-06
   phonon_qt5 = qt5.phonon;  # added 2015-12-19
   phonon_qt5_backend_gstreamer = qt5.phonon_backend_gstreamer;  # added 2015-12-19
-  poppler_qt5 = qt5Libs.poppler;  # added 2015-12-19
+  poppler_qt5 = qt5.poppler;  # added 2015-12-19
   qca-qt5 = qt5.qca-qt5;  # added 2015-12-19
   quassel_qt5 = kde5.quassel_qt5; # added 2015-09-30
   quasselClient_qt5 = kde5.quasselClient_qt5; # added 2015-09-30
