@@ -6,11 +6,10 @@
 , version, src, ...
 }:
 
-assert hotplugSupport -> (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux");
+assert hotplugSupport ->
+  builtins.elem stdenv.system [ "i686-linux" "x86_64-linux" ];
 
 let
-
-  firmware = gt68xxFirmware { inherit fetchurl; };
 
   udevSupport = hotplugSupport;
 
@@ -41,8 +40,8 @@ stdenv.mkDerivation {
 
   preInstall =
     if gt68xxFirmware != null then
-      "mkdir -p \${out}/share/sane/gt68xx ; ln -s " + firmware.fw +
-      " \${out}/share/sane/gt68xx/" + firmware.name
+      "mkdir -p \${out}/share/sane/gt68xx ; ln -s " + gt68xxFirmware.fw +
+      " \${out}/share/sane/gt68xx/" + gt68xxFirmware.name
     else if snapscanFirmware != null then
       "mkdir -p \${out}/share/sane/snapscan ; ln -s " + snapscanFirmware +
       " \${out}/share/sane/snapscan/your-firmwarefile.bin"
