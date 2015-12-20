@@ -1,0 +1,82 @@
+--- a/configure	2014-11-08 05:55:50.000000000 +0100
++++ b/configure	2015-11-11 15:20:43.000000000 +0100
+@@ -29621,75 +29621,19 @@
+ #include <utmp.h>
+ 
+ #ifndef WTMP_FILE
+-#  if defined(__FreeBSD__) || defined (__NetBSD__) || defined(__linux__) \
+-        || defined(__FreeBSD_kernel__) || defined(__GLIBC__)
+-#    define WTMP_FILE "/var/log/account/wtmp"
+-#  else
+-#    if defined(sun) || defined(AMIX)
+-#      define WTMP_FILE "/var/adm/wtmp"
+-#    else
+-#      if defined(sgi) || defined(SVR4)
+-#        define WTMP_FILE "/usr/adm/wtmp"
+-#      else
+-#        define WTMP_FILE "/usr/adm/wtmp"
+-#      endif
+-#    endif
+-#  endif
++#    define WTMP_FILE "/var/log/wtmp"
+ #endif
+ 
+ #ifndef ACCT_FILE
+-#  if defined(__FreeBSD__) || defined(__linux__) \
+-        || defined(__FreeBSD_kernel__) || defined(__GLIBC__)
+-#    define ACCT_FILE "/var/log/account/pacct"
+-#  else
+-#    if defined(__NetBSD__)
+-#      define ACCT_FILE "/var/log/account/acct"
+-#    else
+-#      if defined(sun) || defined(AMIX)
+-#        define ACCT_FILE "/var/adm/pacct"
+-#      else
+-#        if defined(sgi) || defined(SVR4) || defined(M_XENIX)
+-#          define ACCT_FILE "/usr/adm/pacct"
+-#        else
+-#          define ACCT_FILE "/usr/adm/acct"
+-#        endif
+-#      endif
+-#    endif
+-#  endif
++#    define ACCT_FILE "/var/account/acct"
+ #endif
+ 
+ #ifndef SAVACCT_FILE
+-#  if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__linux__) \
+-        || defined(__FreeBSD_kernel__) || defined(__GLIBC__)
+-#    define SAVACCT_FILE "/var/log/account/savacct"
+-#  else
+-#    if defined(sun) || defined(AMIX)
+-#      define SAVACCT_FILE "/var/adm/savacct"
+-#    else
+-#      if defined(sgi) || defined(SVR4)
+-#        define SAVACCT_FILE "/usr/adm/savacct"
+-#      else
+-#        define SAVACCT_FILE "/usr/adm/savacct"
+-#      endif
+-#    endif
+-#  endif
++#    define SAVACCT_FILE "/var/account/savacct"
+ #endif
+ 
+ #ifndef USRACCT_FILE
+-#  if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__linux__) \
+-        || defined(__FreeBSD_kernel__) || defined(__GLIBC__)
+-#    define USRACCT_FILE "/var/log/account/usracct"
+-#  else
+-#    if defined(sun) || defined(AMIX)
+-#      define USRACCT_FILE "/var/adm/usracct"
+-#    else
+-#      if defined(sgi) || defined(SVR4)
+-#        define USRACCT_FILE "/usr/adm/usracct"
+-#      else
+-#        define USRACCT_FILE "/usr/adm/usracct"
+-#      endif
+-#    endif
+-#  endif
++#    define USRACCT_FILE "/var/account/usracct"
+ #endif
+ 
+ main ()
