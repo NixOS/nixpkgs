@@ -1072,7 +1072,7 @@ let
 
   citrix_receiver = callPackage ../applications/networking/remote/citrix-receiver { };
 
-  cmst = callPackage ../tools/networking/cmst { };
+  cmst = qt5.callPackage ../tools/networking/cmst { };
 
   colord = callPackage ../tools/misc/colord { };
 
