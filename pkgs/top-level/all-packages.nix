@@ -8183,6 +8183,8 @@ let
 
     qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
 
+    qwt = callPackage ../development/libraries/qwt/6.nix { };
+
     signon = callPackage ../development/libraries/signon { };
 
     telepathy = callPackage ../development/libraries/telepathy/qt { };
@@ -8212,8 +8214,6 @@ let
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
   qwt = callPackage ../development/libraries/qwt {};
-
-  qwt6 = callPackage ../development/libraries/qwt/6.nix { };
 
   qxt = callPackage ../development/libraries/qxt {};
 
@@ -15809,6 +15809,7 @@ aliases = with self; rec {
   quasselDaemon_qt5 = kde5.quasselDaemon; # added 2015-09-30
   quassel_kf5 = kde5.quassel; # added 2015-09-30
   quasselClient_kf5 = kde5.quasselClient; # added 2015-09-30
+  qwt6 = qt5.qwt;  # added 2015-12-19
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rssglx = rss-glx; #added 2015-03-25
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
