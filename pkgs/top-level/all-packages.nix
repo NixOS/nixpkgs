@@ -556,7 +556,7 @@ let
     withGui = false;
   };
 
-  apitrace = callPackage ../applications/graphics/apitrace {};
+  apitrace = qt5.callPackage ../applications/graphics/apitrace {};
 
   argyllcms = callPackage ../tools/graphics/argyllcms {};
 
