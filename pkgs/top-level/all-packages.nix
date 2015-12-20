@@ -2992,7 +2992,7 @@ let
   screen-message = callPackage ../tools/X11/screen-message { };
 
   screencloud = callPackage ../applications/graphics/screencloud {
-    quazip = quazip.override { qt = qt4; };
+    quazip = qt5.quazip.override { qt = qt4; };
   };
 
   scrot = callPackage ../tools/graphics/scrot { };
@@ -8112,10 +8112,6 @@ let
 
   qoauth = callPackage ../development/libraries/qoauth { };
 
-  quazip = callPackage ../development/libraries/quazip {
-    qt = qt5;
-  };
-
   qt3 = callPackage ../development/libraries/qt-3 {
     openglSupport = mesaSupported;
     libpng = libpng12;
@@ -8183,6 +8179,10 @@ let
 
     qtcreator = callPackage ../development/qtcreator {
       withDocumentation = true;
+    };
+
+    quazip = callPackage ../development/libraries/quazip {
+      qt = qtbase;
     };
 
     qwt = callPackage ../development/libraries/qwt/6.nix { };
