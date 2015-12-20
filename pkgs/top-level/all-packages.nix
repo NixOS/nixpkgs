@@ -10929,7 +10929,7 @@ let
 
   xlsx2csv = pythonPackages.xlsx2csv;
 
-  zeal = callPackage ../data/documentation/zeal { };
+  zeal = qt5.callPackage ../data/documentation/zeal { };
 
 
   ### APPLICATIONS
