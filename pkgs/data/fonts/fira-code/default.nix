@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share/fonts/opentype
-    cp -r *.otf $out/share/fonts/opentype
+    cp -v *.otf $out/share/fonts/opentype
   '';
 
   meta = with stdenv.lib; {
