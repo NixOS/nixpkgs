@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libX11, procps, python, qt5 }:
+{ stdenv, fetchFromGitHub, cmake, libX11, procps, python, qtbase }:
 
 let version = "7.1"; in
 stdenv.mkDerivation {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = "apitrace";
   };
 
-  buildInputs = [ libX11 procps python qt5.base ];
+  buildInputs = [ libX11 procps python qtbase ];
   nativeBuildInputs = [ cmake ];
 
   buildPhase = ''

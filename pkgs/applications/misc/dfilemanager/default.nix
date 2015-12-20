@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, qt5, file, kde5}:
+{ stdenv, fetchgit, cmake, file, qtbase, qttools, qtx11extras, solid }:
 
 let
   version = "git-2015-07-25";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dd21xl24xvxs100j8nzhpaqfqk8srqs92al9c03jmyjlk31s6lf";
   };
 
-  buildInputs = [ cmake qt5.base qt5.tools qt5.x11extras file kde5.solid];
+  buildInputs = [ cmake qtbase qttools qtx11extras file solid ];
 
   cmakeFlags = "-DQT5BUILD=true";
 

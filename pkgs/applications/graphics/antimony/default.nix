@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libpng, python3, boost, mesa, qt5, ncurses }:
+{ stdenv, fetchgit, libpng, python3, boost, mesa, qtbase, ncurses }:
 
 let
   gitRev    = "745eca3a2d2657c495d5509e9083c884e021d09c";
@@ -19,7 +19,7 @@ in
 
     buildInputs = [
       libpng python3 (boost.override { python = python3; })
-      mesa qt5.base ncurses
+      mesa qtbase ncurses
     ];
 
     configurePhase = ''

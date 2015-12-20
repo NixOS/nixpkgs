@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, polkitQt, libyamlcpp, python, boost, parted
+{ stdenv, fetchgit, cmake, polkit-qt, libyamlcpp, python, boost, parted
 , extra-cmake-modules, kconfig, ki18n, kcoreaddons, solid, utillinux, libatasmart
 , ckbcomp, glibc, tzdata, xkeyboard_config, qtbase, qtquick1, qtsvg, qttools }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    cmake qtbase qtquick1 qtsvg qttools libyamlcpp python boost polkitQt parted
+    cmake qtbase qtquick1 qtsvg qttools libyamlcpp python boost polkit-qt parted
     extra-cmake-modules kconfig ki18n kcoreaddons solid utillinux libatasmart
   ];
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
-    substituteInPlace cmake_install.cmake --replace "${polkitQt}" "$out"
+    substituteInPlace cmake_install.cmake --replace "${polkit-qt}" "$out"
   '';
 
   meta = with stdenv.lib; {

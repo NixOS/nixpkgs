@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, fetchgit, qt5, pkgconfig, boost }:
+{ fetchurl, stdenv, fetchgit, qtbase, qtx11extras, pkgconfig, boost }:
 
 stdenv.mkDerivation rec {
   name = "twmn-git-2014-09-23";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "9c91e9d3d6d7f9d90d34da6f1a4b9f3dee65605c1e43729417d6921c54dded6b";
   };
 
-  buildInputs = [ qt5.base qt5.x11extras pkgconfig boost ];
+  buildInputs = [ qtbase qtx11extras pkgconfig boost ];
 
   configurePhase = ''
     sed -i s/-Werror// twmnd/twmnd.pro

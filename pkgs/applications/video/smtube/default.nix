@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt5 }:
+{ stdenv, fetchurl, qtscript }:
 
 stdenv.mkDerivation rec {
   version = "15.11.0";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
 
-  buildInputs = [ qt5.script ];
+  buildInputs = [ qtscript ];
 
   meta = with stdenv.lib; {
     description = "Play and download Youtube videos";

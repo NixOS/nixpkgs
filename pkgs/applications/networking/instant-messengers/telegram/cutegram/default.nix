@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, qt5Libs, qtbase, qtquick1, qtmultimedia, qtquickcontrols, qtgraphicaleffects, makeQtWrapper
+, qtbase, qtquick1, qtmultimedia, qtquickcontrols, qtgraphicaleffects, makeQtWrapper
 , telegram-qml, libqtelegram-aseman-edition }:
 
 stdenv.mkDerivation rec {
