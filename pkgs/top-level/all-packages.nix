@@ -8071,8 +8071,6 @@ let
     suffix = "qt4";
   };
 
-  poppler_qt5 = qt5Libs.popplerQt;
-
   poppler_utils = poppler.override { suffix = "utils"; utils = true; };
 
   popt = callPackage ../development/libraries/popt { };
@@ -8173,7 +8171,7 @@ let
       withQt5 = true;
     };
 
-    popplerQt = callPackage ../development/libraries/poppler {
+    poppler = callPackage ../development/libraries/poppler {
       lcms = lcms2;
       qt5Support = true;
       suffix = "qt5";
@@ -15805,6 +15803,7 @@ aliases = with self; rec {
   nfsUtils = nfs-utils;  # added 2014-12-06
   phonon_qt5 = qt5.phonon;  # added 2015-12-19
   phonon_qt5_backend_gstreamer = qt5.phonon_backend_gstreamer;  # added 2015-12-19
+  poppler_qt5 = qt5Libs.poppler;  # added 2015-12-19
   qca-qt5 = qt5.qca-qt5;  # added 2015-12-19
   quassel_qt5 = kde5.quassel_qt5; # added 2015-09-30
   quasselClient_qt5 = kde5.quasselClient_qt5; # added 2015-09-30
