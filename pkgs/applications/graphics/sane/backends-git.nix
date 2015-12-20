@@ -6,13 +6,14 @@ let
 in
 assert hotplugSupport -> (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux");
 
+let version = "2015-12-20"; in
 stdenv.mkDerivation {
-  name = "sane-backends-1.0.25-180-g6d8b8d5";
+  name = "sane-backends-${version}";
 
   src = fetchgit {
     url = "git://alioth.debian.org/git/sane/sane-backends.git";
-    rev = "6d8b8d5aa6e8da2b24e1caa42b9ea75e9624b45d";
-    sha256 = "b5b2786eef835550e4a4522db05c8c81075b1a7aff5a66f1d4a498f6efe0ef03";
+    rev = "5136e664b8608604f54a2cc1d466019922b311e6";
+    sha256 = "998fdc9cdd3f9220c38244e0b87bba3ee623d7d20726479b04ed95b3836a37ed";
   };
 
   udevSupport = hotplugSupport;
@@ -39,6 +40,7 @@ stdenv.mkDerivation {
     else "";
 
   meta = with stdenv.lib; {
+    inherit version;
     homepage = "http://www.sane-project.org/";
     description = "SANE (Scanner Access Now Easy) backends";
     longDescription = ''
