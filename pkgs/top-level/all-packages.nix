@@ -12932,6 +12932,10 @@ let
     demo = false;
   };
 
+  renoise_beta = callPackage ../applications/audio/renoise/beta.nix {
+    personal_sha256 = "2dff3f731e0f91e17682aca1bb8f6922ded0fb76d15338f9746c0538f9a68350";
+  };
+
   rapcad = callPackage ../applications/graphics/rapcad {};
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
