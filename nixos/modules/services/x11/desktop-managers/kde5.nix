@@ -147,7 +147,7 @@ in
       ++ lib.optionals cfg.phonon.vlc.enable
         [
           pkgs.phonon_qt5_backend_vlc
-          pkgs.phonon_backend_vlc
+          pkgs.qt55.phonon-backend-vlc
         ];
 
     environment.pathsToLink = [ "/share" ];
