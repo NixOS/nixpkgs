@@ -12893,7 +12893,7 @@ let
     gst_plugins_bad = null;
   };
 
-  qutebrowser = callPackage ../applications/networking/browsers/qutebrowser {
+  qutebrowser = qt5.callPackage ../applications/networking/browsers/qutebrowser {
     inherit (python34Packages) buildPythonPackage python pyqt5 jinja2 pygments pyyaml pypeg2;
   };
 
