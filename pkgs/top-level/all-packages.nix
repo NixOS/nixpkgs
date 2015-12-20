@@ -12577,7 +12577,7 @@ let
 
   shotcut = qt5.callPackage ../applications/video/shotcut { };
 
-  smplayer = callPackage ../applications/video/smplayer { };
+  smplayer = qt5.callPackage ../applications/video/smplayer { };
 
   smtube = callPackage ../applications/video/smtube {};
 
