@@ -5746,7 +5746,9 @@ let
     inherit (perlPackages) XMLSimple;
   };
 
-  include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use { };
+  include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
+    llvmPackages = llvmPackages_37;
+  };
 
   indent = callPackage ../development/tools/misc/indent { };
 

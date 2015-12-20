@@ -1,9 +1,8 @@
-{ stdenv, fetchurl, cmake, llvmPackages_37 }:
+{ stdenv, fetchurl, cmake, llvmPackages }:
 
-let
-  version = "0.5";
-  llvmPackages = llvmPackages_37;
-in stdenv.mkDerivation rec {
+# Also bump llvmPackages in all-packages.nix to the supported version!
+let version = "0.5"; in
+stdenv.mkDerivation rec {
   name = "include-what-you-use-${version}";
 
   src = fetchurl {
