@@ -8355,8 +8355,6 @@ let
 
   sfml = callPackage ../development/libraries/sfml { };
 
-  signon = callPackage ../development/libraries/signon/old.nix {};
-
   skalibs = callPackage ../development/libraries/skalibs { };
 
   slang = callPackage ../development/libraries/slang { };
@@ -15815,6 +15813,7 @@ aliases = with self; rec {
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rssglx = rss-glx; #added 2015-03-25
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
+  signon = qt5.signon;  # added 2015-12-19
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   telepathy_qt5 = qt5.telepathy;  # added 2015-12-19
