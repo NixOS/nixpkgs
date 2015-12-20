@@ -8504,8 +8504,6 @@ let
 
   telepathy_qt = callPackage ../development/libraries/telepathy/qt { qtbase = qt4; };
 
-  telepathy_qt5 = telepathy_qt.override { qtbase = qt5.base; };
-
   tevent = callPackage ../development/libraries/tevent {
     python = python2;
   };
@@ -15826,6 +15824,7 @@ aliases = with self; rec {
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  telepathy_qt5 = qt5.telepathy;  # added 2015-12-19
   x11 = xlibsWrapper; # added 2015-09
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09
