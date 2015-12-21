@@ -3271,11 +3271,11 @@ in modules // {
 
   mahotas = buildPythonPackage rec {
     name = "python-mahotas-${version}";
-    version = "1.4.0";
+    version = "1.4.1";
 
     src = pkgs.fetchurl {
       url = "https://github.com/luispedro/mahotas/archive/release-${version}.tar.gz";
-      sha256 = "30c4b979e0d5f4c013860321766a79ffcabe56c1ad9088e5d0c6b36aec5f0415";
+      sha256 = "a684d339a3a4135f6f7161851161174755e9ea643b856b0bb48abd5515041ab6";
     };
 
     buildInputs = with self; [
