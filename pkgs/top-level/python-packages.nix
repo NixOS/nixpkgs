@@ -20924,6 +20924,8 @@ in modules // {
       sha256 = "02ili37dbs5mk5f6v3fmi1sji39ymc4zyq44x0abxzr88nc8nh97";
     };
 
+    buildInputs = with self; [ mock nose ];
+
     meta = {
       description = "Python API for the browse feature of Spotify";
       homepage = https://github.com/trygveaa/python-tunigo;
