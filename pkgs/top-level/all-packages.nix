@@ -10768,6 +10768,7 @@ let
   iosevka = callPackage ../data/fonts/iosevka { };
 
   ipafont = callPackage ../data/fonts/ipafont {};
+  ipaexfont = callPackage ../data/fonts/ipaexfont {};
 
   junicode = callPackage ../data/fonts/junicode { };
 
