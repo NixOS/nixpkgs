@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       sha256 = "1d5rf5gcw98m38wam6wh3hyh7qd78ws7zipm67xg744flqsjrzmr";
     };
 
-    pythonPath = [ pyqt4 py.pysqlite py.sqlalchemy9 py.pyaudio ]
+    pythonPath = [ pyqt4 py.pysqlite py.sqlalchemy9 py.pyaudio py.beautifulsoup py.httplib2 ]
               ++ lib.optional plotsSupport py.matplotlib;
 
     buildInputs = [ python py.wrapPython lame mplayer libpulseaudio ];
