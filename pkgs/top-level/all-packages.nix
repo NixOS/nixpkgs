@@ -1741,6 +1741,8 @@ let
 
   trustedGrub = callPackage_i686 ../tools/misc/grub/trusted.nix { };
 
+  trustedGrub-for-HP = callPackage_i686 ../tools/misc/grub/trusted.nix { for_HP_laptop = true; };
+
   grub2 = grub2_full;
 
   grub2_full = callPackage ../tools/misc/grub/2.0x.nix { };
