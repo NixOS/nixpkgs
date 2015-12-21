@@ -3754,11 +3754,11 @@ in modules // {
 
   dask = buildPythonPackage rec {
     name = "dask-${version}";
-    version = "0.7.0";
+    version = "0.7.5";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/dask/${name}.tar.gz";
-      sha256 = "3b48646e9e66ec21a6885700d39ea90e2c2a7ad5d26773a8413b570eb1a67b3e";
+      sha256 = "1csrgfjvq4mlvr7hmgy3a5jczkwpy4jz4jb3c4y45s5fg3y38f3k";
     };
 
     propagatedBuildInputs = with self; [numpy toolz dill];
