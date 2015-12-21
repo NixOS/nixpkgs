@@ -3773,15 +3773,19 @@ in modules // {
 
   datashape = buildPythonPackage rec {
     name = "datashape-${version}";
-    version = "0.4.7";
+    version = "0.5.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/D/DataShape/${name}.tar.gz";
-      sha256 = "14b2ef766d4c9652ab813182e866f493475e65e558bed0822e38bf07bba1a278";
+      sha256 = "13w0rfaqpqkh30bxmx7i7kjfrfkm5maa35gj3c464wah7i2zm9wp";
     };
 
-    buildInputs = with self; [ pytest ];
+    buildInputs = with self; [ pytest mock ];
     propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
+
+    checkPhase = ''
+      py.test datashape/tests
+    '';
 
     meta = {
       homepage = https://github.com/ContinuumIO/datashape;
