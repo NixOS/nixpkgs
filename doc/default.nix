@@ -1,10 +1,12 @@
 with import ./.. { };
 with lib;
-
+let
+  sources = sourceFilesBySuffices ./. [".xml"];
+  sources-langs = ./languages-frameworks;
+in
 stdenv.mkDerivation {
   name = "nixpkgs-manual";
 
-  sources = sourceFilesBySuffices ./. [".xml"];
 
   buildInputs = [ pandoc libxml2 libxslt ];
 
@@ -35,7 +37,9 @@ stdenv.mkDerivation {
       echo "</chapter>"
     } >haskell-users-guide.xml
 
-    ln -s "$sources/"*.xml .
+    ln -s '${sources}/'*.xml .
+    mkdir ./languages-frameworks
+    cp -s '${sources-langs}'/* ./languages-frameworks
 
     echo ${nixpkgsVersion} > .version
 

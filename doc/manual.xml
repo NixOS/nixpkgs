@@ -15,7 +15,7 @@
   <xi:include href="configuration.xml" />
   <xi:include href="functions.xml" />
   <xi:include href="meta.xml" />
-  <xi:include href="language-support.xml" />
+  <xi:include href="languages-frameworks/index.xml" />
   <xi:include href="package-notes.xml" />
   <xi:include href="coding-conventions.xml" />
   <xi:include href="submitting-changes.xml" />

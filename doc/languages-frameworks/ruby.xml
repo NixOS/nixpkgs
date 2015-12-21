@@ -1,0 +1,46 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="sec-language-ruby">
+
+<title>Ruby</title>
+
+  <para>There currently is support to bundle applications that are packaged as Ruby gems. The utility "bundix" allows you to write a <filename>Gemfile</filename>, let bundler create a <filename>Gemfile.lock</filename>, and then convert
+  this into a nix expression that contains all Gem dependencies automatically.</para>
+
+  <para>For example, to package sensu, we did:</para>
+
+<screen>
+<![CDATA[$ cd pkgs/servers/monitoring
+$ mkdir sensu
+$ cat > Gemfile
+source 'https://rubygems.org'
+gem 'sensu'
+$ bundler package --path /tmp/vendor/bundle
+$ $(nix-build '<nixpkgs>' -A bundix)/bin/bundix
+$ cat > default.nix
+{ lib, bundlerEnv, ruby }:
+
+bundlerEnv {
+  name = "sensu-0.17.1";
+
+  inherit ruby;
+  gemfile = ./Gemfile;
+  lockfile = ./Gemfile.lock;
+  gemset = ./gemset.nix;
+
+  meta = with lib; {
+    description = "A monitoring framework that aims to be simple, malleable,
+and scalable.";
+    homepage    = http://sensuapp.org/;
+    license     = with licenses; mit;
+    maintainers = with maintainers; [ theuni ];
+    platforms   = platforms.unix;
+  };
+}]]>
+</screen>
+
+<para>Please check in the <filename>Gemfile</filename>, <filename>Gemfile.lock</filename> and the <filename>gemset.nix</filename> so future updates can be run easily.
+</para>
+
+</section>
+
