@@ -3288,6 +3288,8 @@ in modules // {
       imread
     ];
 
+    disabled = stdenv.isi686; # Failing tests
+
     meta = with stdenv.lib; {
       description = "Computer vision package based on numpy";
       homepage = https://readthedocs.org/projects/mahotas/;
