@@ -3288,6 +3288,8 @@ in modules // {
       imread
     ];
 
+    disabled = stdenv.isi686; # Failing tests
+
     meta = with stdenv.lib; {
       description = "Computer vision package based on numpy";
       homepage = https://readthedocs.org/projects/mahotas/;
@@ -10037,6 +10039,10 @@ in modules // {
     patches = [ ../development/python-modules/mathics/disable_console_tests.patch ];
 
     buildInputs = with self; [ pexpect ];
+
+    prePatch = ''
+      substituteInPlace setup.py --replace "sympy==0.7.6" "sympy"
+    '';
 
     propagatedBuildInputs = with self; [
       argparse
@@ -20938,6 +20944,8 @@ in modules // {
       rev = "v${version}";
       sha256 = "02ili37dbs5mk5f6v3fmi1sji39ymc4zyq44x0abxzr88nc8nh97";
     };
+
+    buildInputs = with self; [ mock nose ];
 
     meta = {
       description = "Python API for the browse feature of Spotify";
