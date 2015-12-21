@@ -1,4 +1,5 @@
 { stdenv, lib, fetchurl, pkgconfig, jansson
+# plugins: list of strings, eg. [python2, python3]
 , plugins
 , pam, withPAM ? stdenv.isLinux
 , systemd, withSystemd ? stdenv.isLinux
