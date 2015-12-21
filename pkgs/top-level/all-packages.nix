@@ -839,6 +839,8 @@ let
     linuxHeaders = linuxHeaders_3_18;
   };
 
+  dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
+
   edac-utils = callPackage ../os-specific/linux/edac-utils { };
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
