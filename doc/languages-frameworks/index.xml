@@ -20,6 +20,7 @@ such as Perl or Haskell.  These are described in this chapter.</para>
 <xi:include href="java.xml" />
 <xi:include href="lua.xml" />
 <xi:include href="coq.xml" />
+<xi:include href="idris.xml" /> <!-- generated from ../../pkgs/development/idris-modules/README.md  -->
 <xi:include href="qt.xml" />
 
 
