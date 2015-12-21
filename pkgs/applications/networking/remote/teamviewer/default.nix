@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     # There is a 64-bit package, but it has no differences apart from Debian dependencies.
     # Generic versioned packages (teamviewer_${version}_i386.tar.xz) are not available for some reason.
     url = "http://download.teamviewer.com/download/teamviewer_${version}_i386.deb";
-    sha256 = "1430dimcv69plpj0ad0wsn10k15x9fwlk6fiq7yz51qbcr5l9wk6";
+    sha256 = "0j4al1wns22aaxn78s1c99kxxvkffi8lpdqk780h0nx2g4vcj96n";
   };
 
   unpackPhase = ''
