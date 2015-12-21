@@ -34,12 +34,12 @@ rec {
     };
   };
 
-  gradle28 = gradleGen rec {
-    name = "gradle-2.8";
+  gradleLatest = gradleGen rec {
+    name = "gradle-2.9";
 
     src = fetchurl {
       url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "1jq3m6ihvcxyp37mwsg3i8li9hd6rpv8ri8ih2mgvph4y71bk3d8";
+      sha256 = "c9159ec4362284c0a38d73237e224deae6139cbde0db4f0f44e1c7691dd3de2f";
     };
   };
 

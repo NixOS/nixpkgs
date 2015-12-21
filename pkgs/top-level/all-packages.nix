@@ -1811,7 +1811,7 @@ let
   pgf_graphics = callPackage ../tools/graphics/pgf { };
 
   pigz = callPackage ../tools/compression/pigz { };
-  
+
   pixz = callPackage ../tools/compression/pixz { };
 
   pxz = callPackage ../tools/compression/pxz { };
@@ -2989,7 +2989,7 @@ let
 
   samplicator = callPackage ../tools/networking/samplicator { };
 
-  screen = callPackage ../tools/misc/screen { 
+  screen = callPackage ../tools/misc/screen {
     inherit (darwin.apple_sdk.libs) utmp;
   };
 
@@ -5721,7 +5721,7 @@ let
   gotty = goPackages.gotty.bin // { outputs = [ "bin" ]; };
 
   gradleGen = callPackage ../development/tools/build-managers/gradle { };
-  gradle = self.gradleGen.gradle28;
+  gradle = self.gradleGen.gradleLatest;
   gradle25 = self.gradleGen.gradle25;
 
   gperf = callPackage ../development/tools/misc/gperf { };
@@ -10306,7 +10306,7 @@ let
 
   gocode = goPackages.gocode.bin // { outputs = [ "bin" ]; };
 
-  kgocode = callPackage ../applications/misc/kgocode { 
+  kgocode = callPackage ../applications/misc/kgocode {
     inherit (pkgs.kde4) kdelibs;
   };
 
