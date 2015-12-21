@@ -1811,11 +1811,11 @@ in modules // {
 
   blaze = buildPythonPackage rec {
     name = "blaze-${version}";
-    version = "0.8.3";
+    version = "0.9.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/blaze/${name}.tar.gz";
-      sha256 = "4f8ceb1248ba44f833f5a46a18b6ea44130a5999d5234324d0456b5f9ffe716b";
+      sha256 = "07h284n6fr0lvy58a6lvwwfb45sy7lggllx2y2vzzs4xrvf5k1i7";
     };
 
     buildInputs = with self; [ pytest ];
@@ -3754,11 +3754,11 @@ in modules // {
 
   dask = buildPythonPackage rec {
     name = "dask-${version}";
-    version = "0.7.0";
+    version = "0.7.5";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/dask/${name}.tar.gz";
-      sha256 = "3b48646e9e66ec21a6885700d39ea90e2c2a7ad5d26773a8413b570eb1a67b3e";
+      sha256 = "1csrgfjvq4mlvr7hmgy3a5jczkwpy4jz4jb3c4y45s5fg3y38f3k";
     };
 
     propagatedBuildInputs = with self; [numpy toolz dill];
@@ -3773,15 +3773,19 @@ in modules // {
 
   datashape = buildPythonPackage rec {
     name = "datashape-${version}";
-    version = "0.4.7";
+    version = "0.5.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/D/DataShape/${name}.tar.gz";
-      sha256 = "14b2ef766d4c9652ab813182e866f493475e65e558bed0822e38bf07bba1a278";
+      sha256 = "13w0rfaqpqkh30bxmx7i7kjfrfkm5maa35gj3c464wah7i2zm9wp";
     };
 
-    buildInputs = with self; [ pytest ];
+    buildInputs = with self; [ pytest mock ];
     propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
+
+    checkPhase = ''
+      py.test datashape/tests
+    '';
 
     meta = {
       homepage = https://github.com/ContinuumIO/datashape;
@@ -11775,11 +11779,11 @@ in modules // {
 
   odo = buildPythonPackage rec {
     name = "odo-${version}";
-    version= "0.3.4";
+    version= "0.4.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/o/odo/${name}.tar.gz";
-      sha256 = "77bdb372999ac0d9ef272927d7867a668108a4193e11eb8646bf770370a30725";
+      sha256 = "0xqm4zb7a7a2cbik9kn6yk0kr26n90iqj102h5wb42x6z5v4mn79";
     };
 
     buildInputs = with self; [ pytest ];
