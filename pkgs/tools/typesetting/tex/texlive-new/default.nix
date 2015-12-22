@@ -84,6 +84,10 @@ let
       latex = orig.latex // {
         deps = removeAttrs orig.latex.deps [ "luatex" ];
       };
+
+      xdvi = orig.xdvi // { # it seems to need it to transform fonts
+        deps = (orig.xdvi.deps or {}) // { inherit (tl) metafont; };
+      };
     }; # overrides
 
     # tl =

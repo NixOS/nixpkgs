@@ -8,6 +8,8 @@
 , makeWrapper
 }:
 
+# Useful resource covering build options:
+# http://tug.org/texlive/doc/tlbuild.html
 
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
@@ -218,6 +220,29 @@ bibtex8 = stdenv.mkDerivation {
     ++ [ "--with-system-kpathsea" "--with-system-icu" ];
 
   enableParallelBuilding = true;
+};
+
+
+xdvi = stdenv.mkDerivation {
+  name = "texlive-xdvi.bin-${version}";
+
+  inherit (common) src;
+
+  buildInputs = [ pkgconfig core/*kpathsea*/ freetype ghostscript ]
+    ++ (with xorg; [ libX11 libXaw libXi libXpm libXmu libXaw libXext libXfixes ]);
+
+  preConfigure = "cd texk/xdvik";
+
+  configureFlags = common.configureFlags
+    ++ [ "--with-system-kpathsea" "--with-system-libgs" ];
+
+  enableParallelBuilding = true;
+
+  postInstall = ''
+    substituteInPlace "$out/bin/xdvi" \
+      --replace "exec xdvi-xaw" "exec '$out/bin/xdvi-xaw'"
+  '';
+  # TODO: it's suspicious that mktexpk generates fonts into ~/.texlive2014
 };
 
 
