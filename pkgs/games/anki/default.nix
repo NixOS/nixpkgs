@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
 
     buildInputs = [ python py.wrapPython lame mplayer libpulseaudio ];
 
+    patchPhase = ''
+      substituteInPlace anki/sound.py --replace '["mplayer"]' '["${mplayer}/bin/mplayer"]'
+    '';
+
     preConfigure = ''
       substituteInPlace anki/anki \
         --replace /usr/share/ $out/share/
