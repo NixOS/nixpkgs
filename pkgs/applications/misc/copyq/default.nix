@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, cmake, makeWrapper, qt4, libXfixes, libXtst}:
+{ stdenv, fetchurl, cmake, qt4, libXfixes, libXtst}:
 
 let version = "2.5.0";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "CopyQ-${version}";
   src  = fetchurl {
     url    = "https://github.com/hluk/CopyQ/archive/v${version}.tar.gz";
     sha256 = "7726745056e8d82625531defc75b2a740d3c42131ecce1f3181bc0a0bae51fb1";
   };
 
-  buildInputs = [ cmake makeWrapper qt4 libXfixes libXtst ];
+  buildInputs = [ cmake qt4 libXfixes libXtst ];
 
   meta = with stdenv.lib; {
     homepage    = "https://hluk.github.io/CopyQ";
