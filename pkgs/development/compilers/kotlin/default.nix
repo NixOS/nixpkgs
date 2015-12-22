@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, jre, unzip, which }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.0-beta-3595";
+  version = "1.0.0-beta-4583";
   name = "kotlin-${version}";
 
   src = fetchurl {
     url = "https://github.com/JetBrains/kotlin/releases/download/build-${version}/kotlin-compiler-${version}.zip";
-    sha256 = "1ed750a169a411349852a102d5a9c23aec656acb76d51018a4933741eb846fae";
+    sha256 = "4db71d3c1f150618568ebd1f8c17567ff15afe022c2f0121368c17afad9e8188";
   };
 
   propagatedBuildInputs = [ jre which ] ;
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Kotlin is a statically typed language that targets the JVM and JavaScript.
       It is a general-purpose language intended for industry use.
-      It is developed by a team at JetBrains although it is an OSS language 
+      It is developed by a team at JetBrains although it is an OSS language
       and has external contributors.
     '';
     homepage = http://kotlinlang.org/;
