@@ -42,7 +42,7 @@ let
             pname = name;
             inherit (recipe) version;
             inherit src;
-            deps =
+            packageRequires =
               let lookupDep = d: self."${d}" or null;
               in map lookupDep recipe.deps;
             meta = {
@@ -64,5 +64,10 @@ self:
         meta = (args.meta or {}) // { broken = true; };
       });
     };
+
+    melpaStablePackages = super // {
+      # broken upstream
+      ack-menu = markBroken super.ack-menu;
+    };
   in
-    super // { melpaStablePackages = super; }
+    melpaStablePackages // { inherit melpaStablePackages; }

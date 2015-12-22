@@ -35,7 +35,7 @@ let
             pname = name;
             inherit (recipe) version;
             inherit src;
-            deps =
+            packageRequires =
               let lookupDep = d: self."${d}" or null;
               in map lookupDep recipe.deps;
             meta = {
