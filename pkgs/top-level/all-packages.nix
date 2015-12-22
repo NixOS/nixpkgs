@@ -1432,11 +1432,7 @@ let
 
   fabric = pythonPackages.fabric;
 
-  fail2ban = callPackage ../tools/security/fail2ban {
-    systemd = systemd.override {
-      pythonSupport = true;
-    };
-  };
+  fail2ban = callPackage ../tools/security/fail2ban { };
 
   fakeroot = callPackage ../tools/system/fakeroot { };
 

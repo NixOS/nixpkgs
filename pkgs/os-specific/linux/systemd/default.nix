@@ -3,13 +3,10 @@
 , glib, kbd, libxslt, coreutils, libgcrypt
 , kexectools, libmicrohttpd, linuxHeaders, libseccomp
 , autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
-, pythonPackages ? null, pythonSupport ? false
 , enableKDbus ? false
 }:
 
 assert stdenv.isLinux;
-
-assert pythonSupport -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
   version = "228";
@@ -32,7 +29,7 @@ stdenv.mkDerivation rec {
          by generating an autoconf'd tarball, but that's probably not
          worth it. */
       autoreconfHook gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
-    ] ++ stdenv.lib.optionals pythonSupport [pythonPackages.python pythonPackages.lxml];
+    ];
 
   configureFlags =
     [ "--localstatedir=/var"

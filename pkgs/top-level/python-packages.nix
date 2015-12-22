@@ -18587,7 +18587,6 @@ in modules // {
     };
   };
 
-
   structlog = buildPythonPackage rec {
     name = "structlog-15.3.0";
 
@@ -18629,21 +18628,59 @@ in modules // {
     };
   };
 
+  syncthing-gtk = buildPythonPackage rec {
+    version = "0.6.3";
+    name = "syncthing-gtk-${version}";
+    src = pkgs.fetchFromGitHub {
+      owner = "syncthing";
+      repo = "syncthing-gtk";
+      rev = "v${version}";
+      sha256 = "1qa5bw2qizjiqvkms8i31wsjf8cw9p0ciamxgfgq6n37wcalv6ms";
+    };
 
-  # XXX: ValueError: ZIP does not support timestamps before 1980
-  # svneverever =  buildPythonPackage rec {
-  #   name = "svneverever-778489a8";
-  #
-  #   src = pkgs.fetchgit {
-  #     url = git://git.goodpoint.de/svneverever.git;
-  #     rev = "778489a8c6f07825fb18c9da3892a781c3d659ac";
-  #     sha256 = "41c9da1dab2be7b60bff87e618befdf5da37c0a56287385cb0cbd3f91e452bb6";
-  #   };
-  #
-  #   propagatedBuildInputs = with self; [ pysvn argparse ];
-  #
-  #   doCheck = false;
-  # };
+    disabled = isPy3k;
+
+    propagatedBuildInputs = with self; [ pkgs.syncthing dateutil pyinotify pkgs.libnotify pkgs.psmisc
+      pygobject3 pkgs.gtk3 ];
+
+    patchPhase = ''
+      substituteInPlace "scripts/syncthing-gtk" \
+              --replace "/usr/share" "$out/share"
+      substituteInPlace setup.py --replace "version = get_version()" "version = '${version}'"
+    '';
+
+    meta = {
+      description = " GTK3 & python based GUI for Syncthing ";
+      maintainers = with maintainers; [ DamienCassou ];
+      platforms = pkgs.syncthing.meta.platforms;
+      homepage = "https://github.com/syncthing/syncthing-gtk";
+      license = licenses.gpl2;
+    };
+  };
+
+  systemd = buildPythonPackage rec {
+    version = "231";
+    name = "python-systemd-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/systemd/python-systemd/archive/v${version}.tar.gz";
+      sha256 = "1sifq7mdg0y5ngab8vjy8995nz9c0hxny35dxs5qjx0k0hyzb71c";
+    };
+
+    buildInputs = with pkgs; [ systemd pkgconfig ];
+
+    patchPhase = ''
+      substituteInPlace setup.py \
+          --replace "/usr/include" "${pkgs.systemd}/include"
+      echo '#include <time.h>' >> systemd/pyutil.h
+    '';
+
+    meta = {
+      description = "Python module for native access to the systemd facilities";
+      homepage = http://www.freedesktop.org/software/systemd/python-systemd/;
+      license = licenses.lgpl21;
+    };
+  };
 
   tabulate = buildPythonPackage rec {
     version = "0.7.5";
@@ -18686,36 +18723,6 @@ in modules // {
       description = "A command shell for managing the Linux LIO kernel target";
       homepage = "https://github.com/agrover/targetcli-fb";
       platforms = platforms.linux;
-    };
-  };
-
-  syncthing-gtk = buildPythonPackage rec {
-    version = "0.6.3";
-    name = "syncthing-gtk-${version}";
-    src = pkgs.fetchFromGitHub {
-      owner = "syncthing";
-      repo = "syncthing-gtk";
-      rev = "v${version}";
-      sha256 = "1qa5bw2qizjiqvkms8i31wsjf8cw9p0ciamxgfgq6n37wcalv6ms";
-    };
-
-    disabled = isPy3k;
-
-    propagatedBuildInputs = with self; [ pkgs.syncthing dateutil pyinotify pkgs.libnotify pkgs.psmisc
-      pygobject3 pkgs.gtk3 ];
-
-    patchPhase = ''
-      substituteInPlace "scripts/syncthing-gtk" \
-              --replace "/usr/share" "$out/share"
-      substituteInPlace setup.py --replace "version = get_version()" "version = '${version}'"
-    '';
-
-    meta = {
-      description = " GTK3 & python based GUI for Syncthing ";
-      maintainers = with maintainers; [ DamienCassou ];
-      platforms = pkgs.syncthing.meta.platforms;
-      homepage = "https://github.com/syncthing/syncthing-gtk";
-      license = licenses.gpl2;
     };
   };
 
