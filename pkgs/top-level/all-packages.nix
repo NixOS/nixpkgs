@@ -1057,7 +1057,7 @@ let
   cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
 
   libceph = ceph.lib;
-  ceph = callPackage ../tools/filesystems/ceph { };
+  ceph = callPackage ../tools/filesystems/ceph { boost = boost159; };
   ceph-dev = ceph;
   #ceph-dev = lowPrio (callPackage ../tools/filesystems/ceph/dev.nix { });
 
@@ -4935,7 +4935,7 @@ let
   scala_2_11 = callPackage ../development/compilers/scala { };
   scala = scala_2_11;
 
-  sdcc = callPackage ../development/compilers/sdcc { };
+  sdcc = callPackage ../development/compilers/sdcc { boost = boost159; };
 
   smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
   smlnj = if stdenv.isDarwin
@@ -6179,7 +6179,8 @@ let
 
   boost155 = callPackage ../development/libraries/boost/1.55.nix { };
   boost159 = callPackage ../development/libraries/boost/1.59.nix { };
-  boost = boost159;
+  boost160 = callPackage ../development/libraries/boost/1.60.nix { };
+  boost = boost160;
 
   boost_process = callPackage ../development/libraries/boost-process { };
 
@@ -9398,6 +9399,7 @@ let
   mariadb = callPackage ../servers/sql/mariadb {
     inherit (darwin) cctools;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
+    boost = boost159;
   };
 
   mongodb = callPackage ../servers/nosql/mongodb {
@@ -12973,7 +12975,7 @@ let
     demo = false;
   };
 
-  rapcad = qt5.callPackage ../applications/graphics/rapcad {};
+  rapcad = qt5.callPackage ../applications/graphics/rapcad { boost = boost159; };
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
 
