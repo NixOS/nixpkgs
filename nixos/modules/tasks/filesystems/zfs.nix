@@ -75,7 +75,7 @@ in
 
       devNodes = mkOption {
         type = types.path;
-        default = "/dev";
+        default = "/dev/disk/by-id";
         example = "/dev/disk/by-id";
         description = ''
           Name of directory from which to import ZFS devices.
