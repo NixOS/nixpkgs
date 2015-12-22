@@ -1,5 +1,8 @@
 # How to contribute
 
+Note: contributing implies licensing those contributions
+under the terms of [COPYING](./COPYING), which is an MIT-like license.
+
 ## Opening issues
 
 * Make sure you have a [GitHub account](https://github.com/signup/free)
