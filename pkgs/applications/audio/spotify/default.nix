@@ -1,7 +1,7 @@
 { fetchurl, stdenv, dpkg, xorg, qt4, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng, GConf
 , libgcrypt, chromium, udev, fontconfig
-, dbus, expat }:
+, dbus, expat, ffmpeg_0_10 }:
 
 assert stdenv.system == "x86_64-linux";
 
@@ -15,6 +15,7 @@ let
     cups
     dbus
     expat
+    ffmpeg_0_10
     fontconfig
     freetype
     GConf
