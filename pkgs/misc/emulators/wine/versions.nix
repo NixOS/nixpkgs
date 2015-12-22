@@ -12,16 +12,15 @@ rec {
     monoSha256 = "09dwfccvfdp3walxzp6qvnyxdj2bbyw9wlh6cxw2sx43gxriys5c";
   };
   unstable = {
-    wineVersion = "1.8-rc4"; ## wait for staging 1.8
-    wineSha256  = "0c4mb49ad11jd880wdl4gs1478q2rkdjw2qxjzskr08bdlcq7h5f";
     inherit (stable)
+      wineVersion wineSha256
       geckoVersion geckoSha256
       gecko64Version gecko64Sha256
       monoVersion monoSha256;
   };
   staging = {
     version = unstable.wineVersion;
-    sha256 = "11kd4id0zyqqjz1006d27ahmhy3gzai7h0wir9lkxnv3pdld0dxn";
+    sha256 = "1mi2nk5cjgfrkv8g082d4klniz1dprmvvida8c30qf2j4jykn3vb";
   };
   winetricks = {
     version = "20151116";
