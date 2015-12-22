@@ -5899,7 +5899,7 @@ let
   uncrustify = callPackage ../development/tools/misc/uncrustify { };
 
   vagrant = callPackage ../development/tools/vagrant {
-    ruby = ruby_2_0_0;
+    ruby = ruby_2_2_2;
   };
 
   gdb = callPackage ../development/tools/misc/gdb {
