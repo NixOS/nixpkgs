@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cairo, gtk, poppler }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+, cairo, gtk, poppler }:
 
 stdenv.mkDerivation rec {
   name = "pdf2svg-${version}";
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "14ffdm4y26imq99wjhkrhy9lp33165xci1l5ndwfia8hz53bl02k";
   };
 
-  buildInputs = [ cairo pkgconfig poppler gtk ];
+  buildInputs = [ autoreconfHook cairo pkgconfig poppler gtk ];
 
   meta = with stdenv.lib; {
     description = "PDF converter to SVG format";
