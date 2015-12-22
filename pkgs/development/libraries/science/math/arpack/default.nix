@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, openblas }:
+{ stdenv, lib, copyPathsToStore, fetchurl, gfortran, openblas }:
 
 with stdenv.lib;
 
@@ -7,10 +7,16 @@ let
 in
 stdenv.mkDerivation {
   name = "arpack-${version}";
+
   src = fetchurl {
     url = "https://github.com/opencollab/arpack-ng/archive/${version}.tar.gz";
     sha256 = "1fwch6vipms1ispzg2djvbzv5wag36f1dmmr3xs3mbp6imfyhvff";
   };
+
+  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  postPatch = ''
+    substituteInPlace arpack.pc.in --replace "@openblas@" "${openblas}/lib"
+  '';
 
   buildInputs = [ gfortran openblas ];
 
