@@ -2938,12 +2938,13 @@ let
   };
 
   syncthing = buildFromGitHub rec {
-    version = "0.12.4";
+    version = "0.12.9";
     rev = "v${version}";
     owner = "syncthing";
     repo = "syncthing";
-    sha256 = "0sri86hsjpf4xlhi45zkafi1jncamzplxnvriza0xsah1bc31g65";
-    # buildFlags = [ "-tags noupgrade,release" ];
+    sha256 = "0d420bmx1ifhjgbc65bflnawqddi4h86p7fvxzzqwfsaj94fsfbi";
+    buildFlags = [ "-tags noupgrade,release" ];
+    disabled = isGo14;
     buildInputs = [
       go-lz4 du luhn xdr snappy ratelimit osext
       goleveldb suture qart crypto net text rcrowley.go-metrics
