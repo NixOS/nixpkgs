@@ -863,13 +863,12 @@ in modules // {
   };
 
   audiotools = buildPythonPackage rec {
-    name = "audiotools-2.22";
-
-    disabled = isPy3k;
+    name = "audiotools-${version}";
+    version = "3.1.1";
 
     src = pkgs.fetchurl {
-      url = "mirror://sourceforge/audiotools/${name}.tar.gz";
-      sha256 = "1c52pggsbxdbj8h92njf4h0jgfndh4yv58ad723pidys47nw1y71";
+      url = "https://github.com/tuffy/python-audio-tools/archive/v${version}.tar.gz";
+      sha256 = "0ymlxvqkqhzk4q088qwir3dq0zgwqlrrdfnq7f0iq97g05qshm2c";
     };
 
     meta = {
