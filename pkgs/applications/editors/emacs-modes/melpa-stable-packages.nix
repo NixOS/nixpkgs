@@ -64,5 +64,10 @@ self:
         meta = (args.meta or {}) // { broken = true; };
       });
     };
+
+    melpaStablePackages = super // {
+      # broken upstream
+      ack-menu = markBroken super.ack-menu;
+    };
   in
-    super // { melpaStablePackages = super; }
+    melpaStablePackages // { inherit melpaStablePackages; }
