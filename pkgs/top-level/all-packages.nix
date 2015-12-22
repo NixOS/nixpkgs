@@ -482,6 +482,8 @@ let
 
   abduco = callPackage ../tools/misc/abduco { };
 
+  acbuild = callPackage ../applications/misc/acbuild { };
+
   acct = callPackage ../tools/system/acct { };
 
   acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {

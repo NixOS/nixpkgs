@@ -3218,26 +3218,6 @@ let
     sha256 = "0zc1ah5cvaqa3zw0ska89a40x445vwl1ixz8v42xi3zicx16ibwz";
   };
 
-  acbuild = stdenv.mkDerivation rec {
-    version = "0.1.1";
-    name = "acbuild-${version}";
-    src = fetchFromGitHub {
-      rev    = "beae3971de6b2c35807a98ef1d0fa3167cc3a4a8";
-      owner  = "appc";
-      repo   = "acbuild";
-      sha256 = "1mjmg2xj190dypp2yqslrx8xhwcyrrz38xxp0rig4fr60i2qy41j";
-    };
-    buildInputs = [ go ];
-    patchPhase = ''
-      sed -i -e 's|\$(git describe --dirty)|"${version}"|' build
-      sed -i -e 's|\$GOBIN/acbuild|$out/bin/acbuild|' build
-    '';
-    installPhase = ''
-      mkdir -p $out/bin
-      ./build
-    '';
-  };
-
   color = buildFromGitHub {
     rev      = "9aae6aaa22315390f03959adca2c4d395b02fcef";
     owner    = "fatih";

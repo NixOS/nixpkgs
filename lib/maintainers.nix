@@ -81,6 +81,7 @@
   devhell = "devhell <\"^\"@regexmail.net>";
   dezgeg = "Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>";
   dfoxfranke = "Daniel Fox Franke <dfoxfranke@gmail.com>";
+  dgonyeo = "Derek Gonyeo <derek@gonyeo.com>";
   dmalikov = "Dmitry Malikov <malikov.d.y@gmail.com>";
   dochang = "Desmond O. Chang <dochang@gmail.com>";
   doublec = "Chris Double <chris.double@double.co.nz>";
