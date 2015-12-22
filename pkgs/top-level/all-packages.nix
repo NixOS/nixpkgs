@@ -11265,6 +11265,8 @@ let
 
   constant-detune-chorus = callPackage ../applications/audio/constant-detune-chorus { };
 
+  copyq = callPackage ../applications/misc/copyq { };
+
   coriander = callPackage ../applications/video/coriander {
     inherit (gnome) libgnomeui GConf;
   };

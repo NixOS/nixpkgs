@@ -321,6 +321,7 @@
   vmandela = "Venkateswara Rao Mandela <venkat.mandela@gmail.com>";
   vozz = "Oliver Hunt <oliver.huntuk@gmail.com>";
   wedens = "wedens <kirill.wedens@gmail.com>";
+  willtim = "Tim Philip Williams <tim.williams.public@gmail.com>";
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";
   wizeman = "Ricardo M. Correia <rcorreia@wizy.org>";
   wjlroe = "William Roe <willroe@gmail.com>";
