@@ -3760,7 +3760,7 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/dask/${name}.tar.gz";
-      sha256 = "1csrgfjvq4mlvr7hmgy3a5jczkwpy4jz4jb3c4y45s5fg3y38f3k";
+      sha256 = "05s1jz3y7llzh3373ab6yx0fb47f0mfy9xyqbknkwsnhabj6g2ib";
     };
 
     propagatedBuildInputs = with self; [numpy toolz dill];
