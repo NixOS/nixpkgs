@@ -44,7 +44,11 @@ self: super: {
   options_1_2 = dontCheck super.options_1_2;
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
-  c2hs = if pkgs.stdenv.isDarwin then dontCheck super.c2hs else super.c2hs;
+  c2hs = let c2hs_ = pkgs.stdenv.lib.overrideDerivation super.c2hs (drv: {
+        noHardening_format = true;
+        doCheck = false;
+      });
+    in if pkgs.stdenv.isDarwin then dontCheck c2hs_ else c2hs_;
 
   # The package doesn't compile with ruby 1.9, which is our default at the moment.
   hruby = super.hruby.override { ruby = pkgs.ruby_2_1; };

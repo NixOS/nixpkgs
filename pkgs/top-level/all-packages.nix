@@ -214,12 +214,12 @@ let
     allPackages = args: import ./all-packages.nix ({ inherit config system; } // args);
   };
 
-  defaultStdenv = allStdenvs.stdenv // { inherit platform; };
+  defaultStdenv = stdenvAdapters.useHardenFlags (allStdenvs.stdenv // { inherit platform; });
 
   stdenvCross = lowPrio (makeStdenvCross defaultStdenv crossSystem binutilsCross gccCrossStageFinal);
 
   stdenv =
-    if bootStdenv != null then (bootStdenv // {inherit platform;}) else
+    if bootStdenv != null then (stdenvAdapters.useHardenFlags bootStdenv // {inherit platform;}) else
       if crossSystem != null then
         stdenvCross
       else

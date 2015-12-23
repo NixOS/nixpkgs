@@ -8,6 +8,8 @@ stdenv.mkDerivation {
     sha256 = "33398b87ca85e2b69e4062cf59f2f7354af46da5edcba036c6f97bae17b8d00e";
   };
 
+  noHardening_format = true;
+
   makeFlags = "PREFIX=$(out)";
 
   # Awful hackery to get dev86 to compile with recent gcc/binutils.

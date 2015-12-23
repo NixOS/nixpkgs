@@ -25,6 +25,8 @@ in
 
     builder = ./builder.sh;
 
+    noHardening_all = true;
+
     # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
     # any program we run, because the gcc will have been placed at a new
     # store path than that determined when built (as a source for the

@@ -5,6 +5,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gnu-efi pkgconfig libxslt utillinux ];
 
+  noHardening_all = true;
+
   # Sigh, gummiboot should be able to find this in buildInputs
   configureFlags = [
     "--with-efi-includedir=${gnu-efi}/include"

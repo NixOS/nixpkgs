@@ -213,6 +213,10 @@ stdenv.mkDerivation ({
   preBuild = "unset NIX_DONT_SET_RPATH";
 }
 
+// stdenv.lib.optionalAttrs (name == "glibc-locales") {
+  noHardening_stackprotector = true;
+}
+
 // stdenv.lib.optionalAttrs (hurdHeaders != null) {
   # Work around the fact that the configure snippet that looks for
   # <hurd/version.h> does not honor `--with-headers=$sysheaders' and that

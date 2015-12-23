@@ -10,6 +10,8 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "doc" ];
 
+  noHardening_format = true;
+
   LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
 
   configureFlags = [ "--disable-csharp" "--with-xz" ]

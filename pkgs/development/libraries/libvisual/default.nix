@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig glib ];
 
+  noHardening_format = true;
+
   meta = {
     description = "An abstraction library for audio visualisations";
     homepage = "http://sourceforge.net/projects/libvisual/";

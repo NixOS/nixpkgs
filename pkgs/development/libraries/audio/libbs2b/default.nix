@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig libsndfile ];
 
+  noHardening_format = true;
+
   meta = {
     homepage = "http://bs2b.sourceforge.net/";
     description = "Bauer stereophonic-to-binaural DSP library";

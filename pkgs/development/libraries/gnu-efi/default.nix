@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1jxlypkgb8bd1c114x96i699ib0glb5aca9dv56j377x2ldg4c65";
   };
 
+  noHardening_all = true;
+
   buildInputs = [ pciutils ];
 
   makeFlags = [
