@@ -48,7 +48,7 @@ in {
         '';
       };
 
-      host = mkOption {
+      listenAddress = mkOption {
         default = "0.0.0.0";
         example = "localhost";
         type = types.str;
@@ -156,14 +156,14 @@ in {
       '';
 
       script = ''
-        ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins} --httpListenAddress=${cfg.host} \
+        ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins} --httpListenAddress=${cfg.listenAddress} \
                                                   --httpPort=${toString cfg.port} \
                                                   --prefix=${cfg.prefix} \
                                                   ${concatStringsSep " " cfg.extraOptions}
       '';
 
       postStart = ''
-        until ${pkgs.curl}/bin/curl -s -L --fail --head http://${cfg.host}:${toString cfg.port}${cfg.prefix} >/dev/null; do
+        until ${pkgs.curl}/bin/curl -s -L --fail --head http://${cfg.listenAddress}:${toString cfg.port}${cfg.prefix} >/dev/null; do
             sleep 2
         done
       '';

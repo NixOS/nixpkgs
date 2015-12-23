@@ -144,7 +144,7 @@ in {
             done
 
             echo "Asking Jenkins to reload config"
-            curl --silent -X POST http://localhost:${toString jenkinsCfg.port}/reload
+            curl --silent -X POST http://${jenkinsCfg.listenAddress}:${toString jenkinsCfg.port}${jenkinsCfg.prefix}/reload
           '';
       serviceConfig = {
         User = jenkinsCfg.user;
