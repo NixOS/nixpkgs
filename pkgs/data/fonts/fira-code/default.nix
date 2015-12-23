@@ -2,16 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "fira-code-${version}";
-  version = "1.100";
+  version = "1.101";
 
   src = fetchurl {
     url = "https://github.com/tonsky/FiraCode/releases/download/${version}/FiraCode_${version}.zip";
-    sha256 = "1fprryfy8b79ncya1jzbzbxs75kvr1zwinflr8sl3d2m1r5kl03x";
+    sha256 = "0wbjk4cyibyjp7kjvwnm7as1ch312zwjbi469v26sl41svf53s5v";
   };
 
   buildInputs = [ unzip ];
   phases = [ "unpackPhase" "installPhase" ];
-  sourceRoot = ".";
 
   installPhase = ''
     mkdir -p $out/share/fonts/opentype
