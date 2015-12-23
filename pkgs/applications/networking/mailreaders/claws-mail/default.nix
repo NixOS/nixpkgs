@@ -29,7 +29,7 @@
 
 with stdenv.lib;
 
-let version = "3.11.1"; in
+let version = "3.13.1"; in
 
 stdenv.mkDerivation {
   name = "claws-mail-${version}";
@@ -44,8 +44,8 @@ stdenv.mkDerivation {
   };
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/claws-mail/Claws%20Mail/${version}/claws-mail-${version}.tar.bz2";
-    sha256 = "0w13xzri9d3165qsxf1dig1f0gxn3ib4lysfc9pgi4zpyzd0zgrw";
+    url = "http://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
+    sha256 = "049av7r0xhjjjm1p93l2ns3xisvn125v3ncqar23cqjzgcichg5d";
   };
 
   patches = [ ./mime.patch ];
