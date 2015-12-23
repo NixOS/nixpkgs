@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
     "--with-libedit=${libedit}"
     "--with-openssl=${openssl}"
     "--without-x"
+    "--with-berkeley-db=${db}"
   ] ++ optionals (!libOnly) [
     "--with-openldap=${openldap}"
   ] ++ optionals (!stdenv.isFreeBSD) [
-    "--with-berkeley-db=${db}" # XXX: this should of course work, but does not, as of nov 2015 (db==db58)
     "--with-capng"
   ];
 
