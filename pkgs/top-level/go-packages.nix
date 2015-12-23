@@ -2938,12 +2938,13 @@ let
   };
 
   syncthing = buildFromGitHub rec {
-    version = "0.12.4";
+    version = "0.12.9";
     rev = "v${version}";
     owner = "syncthing";
     repo = "syncthing";
-    sha256 = "0sri86hsjpf4xlhi45zkafi1jncamzplxnvriza0xsah1bc31g65";
-    # buildFlags = [ "-tags noupgrade,release" ];
+    sha256 = "0d420bmx1ifhjgbc65bflnawqddi4h86p7fvxzzqwfsaj94fsfbi";
+    buildFlags = [ "-tags noupgrade,release" ];
+    disabled = isGo14;
     buildInputs = [
       go-lz4 du luhn xdr snappy ratelimit osext
       goleveldb suture qart crypto net text rcrowley.go-metrics
@@ -3217,24 +3218,27 @@ let
     sha256 = "0zc1ah5cvaqa3zw0ska89a40x445vwl1ixz8v42xi3zicx16ibwz";
   };
 
-  acbuild = stdenv.mkDerivation rec {
-    version = "0.1.1";
-    name = "acbuild-${version}";
-    src = fetchFromGitHub {
-      rev    = "beae3971de6b2c35807a98ef1d0fa3167cc3a4a8";
-      owner  = "appc";
-      repo   = "acbuild";
-      sha256 = "1mjmg2xj190dypp2yqslrx8xhwcyrrz38xxp0rig4fr60i2qy41j";
-    };
-    buildInputs = [ go ];
-    patchPhase = ''
-      sed -i -e 's|\$(git describe --dirty)|"${version}"|' build
-      sed -i -e 's|\$GOBIN/acbuild|$out/bin/acbuild|' build
-    '';
-    installPhase = ''
-      mkdir -p $out/bin
-      ./build
-    '';
+  color = buildFromGitHub {
+    rev      = "9aae6aaa22315390f03959adca2c4d395b02fcef";
+    owner    = "fatih";
+    repo     = "color";
+    sha256   = "1vjcgx4xc0h4870qzz4mrh1l0f07wr79jm8pnbp6a2yd41rm8wjp";
+    propagatedBuildInputs = [ net go-isatty ];
+    buildInputs = [ ansicolor go-colorable ];
   };
 
+  pup = buildFromGitHub {
+    rev      = "9693b292601dd24dab3c04bc628f9ae3fa72f831";
+    owner    = "EricChiang";
+    repo     = "pup";
+    sha256   = "04j3fy1vk6xap8ad7k3c05h9b5mg2n1vy9vcyg9rs02cb13d3sy0";
+    propagatedBuildInputs = [ net ];
+    buildInputs = [ go-colorable color ];
+    postPatch = ''
+      grep -sr github.com/ericchiang/pup/Godeps/_workspace/src/ |
+        cut -f 1 -d : |
+        sort -u |
+        xargs -d '\n' sed -i -e s,github.com/ericchiang/pup/Godeps/_workspace/src/,,g
+    '';
+  };
 }; in self

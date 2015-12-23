@@ -66,7 +66,6 @@ let
       binutils = linux;
       bind = linux;
       bvi = all;
-      castle_combat = linux;
       cdrkit = linux;
       classpath = linux;
       ddrescue = linux;

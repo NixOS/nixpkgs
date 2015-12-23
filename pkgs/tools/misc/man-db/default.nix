@@ -9,12 +9,18 @@ stdenv.mkDerivation rec {
   };
   
   buildInputs = [ pkgconfig libpipeline db groff ];
-  
+
   configureFlags = [
     "--disable-setuid"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-systemdtmpfilesdir=\${out}/lib/tmpfiles.d"
+    "--with-eqn=${groff}/bin/eqn"
+    "--with-neqn=${groff}/bin/neqn"
+    "--with-nroff=${groff}/bin/nroff"
+    "--with-pic=${groff}/bin/pic"
+    "--with-refer=${groff}/bin/refer"
+    "--with-tbl=${groff}/bin/tbl"
   ];
 
   installFlags = [ "DESTDIR=\${out}" ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, git, gnupg, makeWrapper, pass, qt5 }:
+{ stdenv, fetchurl, git, gnupg, makeWrapper, pass, qtbase, qttools }:
 
 stdenv.mkDerivation rec {
   name = "qtpass-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0c07bd1eb9e5336c0225f891e5b9a9df103f218619cf7ec6311edf654e8db281";
   };
 
-  buildInputs = [ git gnupg makeWrapper pass qt5.base qt5.tools ];
+  buildInputs = [ git gnupg makeWrapper pass qtbase qttools ];
 
   configurePhase = "qmake CONFIG+=release PREFIX=$out DESTDIR=$out";
 

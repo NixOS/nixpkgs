@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt5 }:
+{ stdenv, fetchurl, qtscript }:
 
 stdenv.mkDerivation rec {
   name = "smplayer-15.11.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./basegui.cpp.patch ];
 
-  buildInputs = [ qt5.script ];
+  buildInputs = [ qtscript ];
 
   preConfigure = ''
     makeFlags="PREFIX=$out"

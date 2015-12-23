@@ -1,19 +1,19 @@
 # pkgs/development/haskell-modules/configuration-hackage2nix.yaml
 
-compiler: ghc-7.10
+compiler: ghc-7.10.3
 
 core-packages:
   - array-0.5.1.0
-  - base-4.8.1.0
+  - base-4.8.2.0
   - binary-0.7.5.0
   - bin-package-db-0.0.0.0
   - bytestring-0.10.6.0
-  - Cabal-1.22.4.0
+  - Cabal-1.22.5.0
   - containers-0.5.6.2
   - deepseq-1.4.1.1
   - directory-1.2.2.0
   - filepath-1.4.0.0
-  - ghc-7.10.2
+  - ghc-7.10.3
   - ghc-prim-0.4.0.0
   - haskeline-0.7.2.1
   - hoopl-3.10.0.2
@@ -53,6 +53,7 @@ extra-packages:
   - seqid-streams < 0.2                 # newer versions depend on transformers 0.4.x which we cannot provide in GHC 7.8.x
   - split < 0.2                         # newer versions don't work with GHC 6.12.3
   - tar < 0.4.2.0                       # later versions don't work with GHC < 7.6.x
+  - transformers == 0.4.3.*             # the latest version isn't supported by mtl yet
   - vector < 0.10.10                    # newer versions don't work with GHC 6.12.3
   - zlib < 0.6                          # newer versions break cabal-install
 

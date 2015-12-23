@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, cmake, ffmpeg, imagemagick, libzip, SDL2, qt5 }:
+{ stdenv, fetchurl, pkgconfig, cmake, ffmpeg, imagemagick, libzip, SDL2
+, qtbase, qtmultimedia }:
 
 stdenv.mkDerivation rec {
   name = "mgba-${meta.version}";
@@ -9,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig cmake ffmpeg imagemagick libzip SDL2
-    qt5.base qt5.multimedia
+    qtbase qtmultimedia
   ];
 
   enableParallelBuilding = true;

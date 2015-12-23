@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cairo, colord, glib, gtk3, gusb, intltool, itstool
-, libusb, libxml2, pkgconfig, saneBackends, vala, wrapGAppsHook }:
+, libusb1, libxml2, pkgconfig, saneBackends, vala, wrapGAppsHook }:
 
 let version = "3.19.3"; in
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     url = "https://launchpad.net/simple-scan/3.19/${version}/+download/${name}.tar.xz";
   };
 
-  buildInputs = [ cairo colord glib gusb gtk3 libusb libxml2 saneBackends
+  buildInputs = [ cairo colord glib gusb gtk3 libusb1 libxml2 saneBackends
     vala ];
   nativeBuildInputs = [ intltool itstool pkgconfig wrapGAppsHook ];
 

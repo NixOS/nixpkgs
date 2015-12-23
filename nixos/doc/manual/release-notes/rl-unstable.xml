@@ -113,6 +113,20 @@ nginx.override {
     extra X11 options for nvidia and nouveau drivers, respectively.
     </para>
   </listitem>
+
+  <listitem>
+    <para>The <literal>Ctrl+Alt+Backspace</literal> key combination
+    no longer kills the X server by default.
+    There's a new option <option>services.xserver.enableCtrlAltBackspace</option>
+    allowing to enable the combination again.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para><literal>emacsPackagesNg</literal> now contains all packages
+    from the ELPA, MELPA, and MELPA Stable repositories.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>

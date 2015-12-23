@@ -2,12 +2,10 @@
 
 ## FOR USERS
 #
-# Recommended way: simply use `emacsWithPackages` from
-# `all-packages.nix` with the packages you want.
+# Recommended: simply use `emacsWithPackages` with the packages you want.
 #
-# Possible way: use `emacs` from `all-packages.nix`, install
-# everything to a system or user profile and then add this at the
-# start your `init.el`:
+# Alterative: use `emacs`, install everything to a system or user profile
+# and then add this at the start your `init.el`:
 /*
   (require 'package)
 
@@ -33,9 +31,9 @@
 
 { overrides
 
-, lib, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
+, lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
 
-, emacs, elpaPackages
+, emacs, texinfo, makeWrapper
 , trivialBuild
 , melpaBuild
 
@@ -44,9 +42,29 @@
 
 with lib.licenses;
 
-let packagesFun = super: self: with self; {
+let
+
+  elpaPackages = import ../applications/editors/emacs-modes/elpa-packages.nix {
+    inherit fetchurl lib stdenv texinfo;
+  };
+
+  melpaStablePackages = import ../applications/editors/emacs-modes/melpa-stable-packages.nix {
+    inherit lib;
+  };
+
+  melpaPackages = import ../applications/editors/emacs-modes/melpa-packages.nix {
+    inherit lib;
+  };
+
+  emacsWithPackages = import ../build-support/emacs/wrapper.nix {
+    inherit lib makeWrapper stdenv;
+  };
+
+  packagesFun = self: with self; {
 
   inherit emacs melpaBuild trivialBuild;
+
+  emacsWithPackages = emacsWithPackages self;
 
   ## START HERE
 
@@ -62,21 +80,6 @@ let packagesFun = super: self: with self; {
     packageRequires = [ auto-complete haskell-mode ];
     meta = {
       description = "Haskell code completion for auto-complete Emacs framework";
-      license = gpl3Plus;
-    };
-  };
-
-  ace-jump-mode = melpaBuild rec {
-    pname   = "ace-jump-mode";
-    version = "20140616";
-    src = fetchFromGitHub {
-      owner  = "winterTTr";
-      repo   = pname;
-      rev    = "8351e2df4fbbeb2a4003f2fb39f46d33803f3dac";
-      sha256 = "17axrgd99glnl6ma4ls3k01ysdqmiqr581wnrbsn3s4gp53mm2x6";
-    };
-    meta = {
-      description = "Advanced cursor movements mode for Emacs";
       license = gpl3Plus;
     };
   };
@@ -2019,6 +2022,13 @@ let packagesFun = super: self: with self; {
     };
   };
 
-};
+  };
 
-in elpaPackages.override packagesFun
+in
+  lib.makeScope newScope (self:
+    {}
+    // melpaPackages self
+    // melpaStablePackages self
+    // elpaPackages self
+    // packagesFun self
+  )

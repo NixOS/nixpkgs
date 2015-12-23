@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--enable-doc"
     "--disable-api-docs"
+    "--with-init-script=none"
+    "--with-distro=nixos" # just to be sure it is "unknown"
   ] ++ optional (libapparmor != null) "--enable-apparmor"
     ++ optional (libselinux != null) "--enable-selinux"
     ++ optional (libseccomp != null) "--enable-seccomp"

@@ -81,6 +81,7 @@
   devhell = "devhell <\"^\"@regexmail.net>";
   dezgeg = "Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>";
   dfoxfranke = "Daniel Fox Franke <dfoxfranke@gmail.com>";
+  dgonyeo = "Derek Gonyeo <derek@gonyeo.com>";
   dmalikov = "Dmitry Malikov <malikov.d.y@gmail.com>";
   dochang = "Desmond O. Chang <dochang@gmail.com>";
   doublec = "Chris Double <chris.double@double.co.nz>";
@@ -165,6 +166,7 @@
   lebastr = "Alexander Lebedev <lebastr@gmail.com>";
   leonardoce = "Leonardo Cecchi <leonardo.cecchi@gmail.com>";
   lethalman = "Luca Bruno <lucabru@src.gnome.org>";
+  lewo = "Antoine Eiche <lewo@abesis.fr>";
   lhvwb = "Nathaniel Baxter <nathaniel.baxter@gmail.com>";
   lihop = "Leroy Hopson <nixos@leroy.geek.nz>";
   linquize = "Linquize <linquize@yahoo.com.hk>";
@@ -265,6 +267,7 @@
   rszibele = "Richard Szibele <richard_szibele@hotmail.com>";
   rushmorem = "Rushmore Mushambi <rushmore@webenchanter.com>";
   rvl = "Rodney Lorrimar <dev+nix@rodney.id.au>";
+  rvlander = "Gaëtan André <rvlander@gaetanandre.eu>";
   rycee = "Robert Helgesson <robert@rycee.net>";
   samuelrivas = "Samuel Rivas <samuelrivas@gmail.com>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
@@ -318,6 +321,7 @@
   vmandela = "Venkateswara Rao Mandela <venkat.mandela@gmail.com>";
   vozz = "Oliver Hunt <oliver.huntuk@gmail.com>";
   wedens = "wedens <kirill.wedens@gmail.com>";
+  willtim = "Tim Philip Williams <tim.williams.public@gmail.com>";
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";
   wizeman = "Ricardo M. Correia <rcorreia@wizy.org>";
   wjlroe = "William Roe <willroe@gmail.com>";

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, qt5Libs, qtbase, qtmultimedia, qtquick1
+, qtbase, qtmultimedia, qtquick1
 , libqtelegram-aseman-edition }:
 
 stdenv.mkDerivation rec {

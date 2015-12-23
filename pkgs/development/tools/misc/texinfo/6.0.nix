@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   doCheck = interactive # simplify bootstrapping
     && !stdenv.isDarwin && !stdenv.isSunOS/*flaky*/;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://www.gnu.org/software/texinfo/";
     description = "The GNU documentation system";
     license = licenses.gpl3Plus;

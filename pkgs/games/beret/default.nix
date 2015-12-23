@@ -35,6 +35,7 @@ stdenv.mkDerivation {
     license     = licenses.lgpl2;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.all;
+    broken = true; # source won't download, and no replacement is visible
   };
 }
 

@@ -66,11 +66,13 @@ self: super: {
   # build which has the assistant to be used in the top-level.
   git-annex_5_20150727 = (disableCabalFlag super.git-annex_5_20150727 "assistant").override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
+    lsof = if pkgs.stdenv.isLinux then pkgs.lsof else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
   git-annex = (disableCabalFlag super.git-annex "assistant").override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
+    lsof = if pkgs.stdenv.isLinux then pkgs.lsof else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
@@ -135,9 +137,6 @@ self: super: {
 
   # Foreign dependency name clashes with another Haskell package.
   libarchive-conduit = super.libarchive-conduit.override { archive = pkgs.libarchive; };
-
-  # https://github.com/haskell/time/issues/23
-  time_1_5_0_1 = dontCheck super.time_1_5_0_1;
 
   # Switch levmar build to openblas.
   bindings-levmar = overrideCabal super.bindings-levmar (drv: {
@@ -253,6 +252,7 @@ self: super: {
   glib = addPkgconfigDepend super.glib pkgs.glib;
   gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
   gtk = addPkgconfigDepend super.gtk pkgs.gtk;
+  gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };
   gtksourceview3 = super.gtksourceview3.override { inherit (pkgs.gnome3) gtksourceview; };
 
   # Need WebkitGTK, not just webkit.

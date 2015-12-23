@@ -1,0 +1,11 @@
+Index: arpack-ng-3.2.0/arpack.pc.in
+===================================================================
+--- arpack-ng-3.2.0.orig/arpack.pc.in
++++ arpack-ng-3.2.0/arpack.pc.in
+@@ -5,5 +5,5 @@ libdir=@libdir@
+ Name: arpack
+ Description: ARPACK-NG 
+ Version: @PACKAGE_VERSION@
+-Libs: -L${libdir} -larpack @BLAS_LIBS@ @LAPACK_LIBS@
++Libs: -L@openblas@ -L${libdir} -larpack @BLAS_LIBS@ @LAPACK_LIBS@
+ Cflags: 

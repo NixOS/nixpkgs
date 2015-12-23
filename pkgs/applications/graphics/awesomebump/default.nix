@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, qt5, makeWrapper }:
+{ lib, stdenv, fetchurl, qtbase, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "awesomebump-4.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   setSourceRoot = "sourceRoot=$(echo */Sources)";
 
-  buildInputs = [ qt5.base makeWrapper ];
+  buildInputs = [ qtbase makeWrapper ];
 
   preBuild = "qmake";
 

@@ -71,6 +71,7 @@ in rec {
         (all nixos.tests.misc)
         (all nixos.tests.nat.firewall)
         (all nixos.tests.nat.standalone)
+        (all nixos.tests.networking.scripted.loopback)
         (all nixos.tests.networking.scripted.static)
         (all nixos.tests.networking.scripted.dhcpSimple)
         (all nixos.tests.networking.scripted.dhcpOneIf)

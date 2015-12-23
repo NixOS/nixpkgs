@@ -15,15 +15,15 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-libmediainfo=${libmediainfo}" ];
   preConfigure = "sh autogen.sh";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Supplies technical and tag information about a video or audio file";
     longDescription = ''
       MediaInfo is a convenient unified display of the most relevant technical
       and tag data for video and audio files.
     '';
     homepage = http://mediaarea.net/;
-    license = stdenv.lib.licenses.bsd2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.devhell ];
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.devhell ];
   };
 }
