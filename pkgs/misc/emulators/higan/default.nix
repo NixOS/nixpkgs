@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [ "http://download.byuu.org/${sourceName}.7z" ];
-    sha256 = "0xsgyijcf4psi3mlahr5iq7vbbw3jby1if5pkhg8c5xqckpi2fj4";
+    sha256 = "0yc5gwg6dq9iwi2qk3g66wn8j2l55nhdb0311jzmdsh86zcrpvqh";
     curlOpts = "--user-agent 'Mozilla/5.0'"; # the good old user-agent trick...
   };
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    version = "095";
+    version = "096";
     description = "An open-source, cycle-accurate Nintendo multi-system emulator";
     longDescription = ''
       Higan (formerly bsnes) is a Nintendo multi-system emulator.
