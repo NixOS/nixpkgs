@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchsvn {
     url = "http://svn.code.sf.net/p/despotify/code";
     rev = "521";
+    sha256 = "1vc453bv5ngkvaqkq7z5bj6x28m4kik59153jikcfah3k4qmxw21";
   };
 
   buildInputs = [
