@@ -17250,11 +17250,11 @@ in modules // {
     };
   in buildPythonPackage rec {
     name = "scipy-${version}";
-    version = "0.16.1";
+    version = "0.17.0";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/s/scipy/${name}.tar.gz";
-      sha256 = "ecd1efbb1c038accb0516151d1e6679809c6010288765eb5da6051550bf52260";
+      url = "https://github.com/scipy/scipy/releases/download/v${version}/${name}.tar.gz";
+      sha256 = "f600b755fb69437d0f70361f9e560ab4d304b1b66987ed5a28bdd9dd7793e089";
     };
 
     buildInputs = [ pkgs.gfortran self.nose ];
@@ -17264,18 +17264,8 @@ in modules // {
       sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
     '';
 
-    # First test: RuntimeWarning: Mean of empty slice.
-    # Second: SyntaxError: invalid syntax. Due to wrapper?
-    # Third: test checks permissions
-    prePatch = ''
-      substituteInPlace scipy/stats/tests/test_stats.py --replace "test_chisquare_masked_arrays" "remove_this_one"
-      rm scipy/linalg/tests/test_lapack.py
-      substituteInPlace scipy/weave/tests/test_catalog.py --replace "test_user" "remove_this_one"
-    '';
-
     inherit (support) preBuild checkPhase;
 
-    patches = [../development/python-modules/scipy-0.16.1-decorator-fix.patch];
     setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
 
     meta = {
