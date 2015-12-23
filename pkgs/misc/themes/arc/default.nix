@@ -1,16 +1,19 @@
-{ stdenv, autoconf, automake, fetchFromGitHub, gnome3, gtk, gtk-engine-murrine, pkgconfig}:
+{ stdenv, autoconf, automake, fetchFromGitHub, gnome3, gtk-engine-murrine, pkgconfig}:
 
 stdenv.mkDerivation rec {
-  version = "2015-10-21";
+  version = "2015-12-14";
   name = "arc-gtk-theme-git-${version}";
+
   src = fetchFromGitHub {
     owner = "horst3180";
     repo = "arc-theme";
-    sha256 = "09s452ysg5ys5i3ahb2dgdmr9j64b92hy9rgfvbgw6r5kdrnb60s";
-    rev = "f4c71247cf9470037d052ae4a12b86073d0001ff";
+    rev = "946cbf56077088444d6248e3e9cea76dce237e6d";
+    sha256 = "0l4j4db07cill0xz7b7xh2nk8zjmh211z4j2k48a5iwd3g9a2p5b";
   };
 
   preferLocalBuild = true;
+
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   buildInputs = [ autoconf automake gtk-engine-murrine pkgconfig ];
 

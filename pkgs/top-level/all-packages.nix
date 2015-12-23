@@ -14491,6 +14491,8 @@ let
 
   ### DESKTOP ENVIRONMENTS
 
+  budgie = callPackage ../desktops/budgie { };
+
   cinnamon = recurseIntoAttrs rec {
     callPackage = newScope pkgs.cinnamon;
     inherit (gnome3) gnome_common libgnomekbd gnome-menus zenity;
@@ -14768,6 +14770,8 @@ let
   mate-icon-theme = callPackage ../misc/themes/mate-icon-theme { };
 
   mate-themes = callPackage ../misc/themes/mate-themes { };
+
+  moka-icon-theme = callPackage ../misc/themes/moka-icon-theme { };
 
   numix-gtk-theme = callPackage ../misc/themes/gtk3/numix-gtk-theme { };
 

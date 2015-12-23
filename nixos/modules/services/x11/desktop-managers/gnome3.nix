@@ -67,7 +67,7 @@ in {
       description = "Which GNOME 3 package set to use.";
       apply = p: if p == null then pkgs.gnome3 else p;
     };
-    
+
     environment.gnome3.excludePackages = mkOption {
       default = [];
       example = literalExample "[ pkgs.gnome3.totem ]";
