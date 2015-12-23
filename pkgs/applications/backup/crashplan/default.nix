@@ -1,13 +1,13 @@
 { stdenv, fetchurl, makeWrapper, jre, cpio, gawk, gnugrep, gnused, procps, swt, gtk2, glib, libXtst }:
 
-let version = "3.6.4";
+let version = "4.5.0";
 
 in stdenv.mkDerivation rec {
   name = "crashplan-${version}";
 
   crashPlanArchive = fetchurl {
-    url = "http://download.crashplan.com/installs/linux/install/CrashPlan/CrashPlan_${version}_Linux.tgz";
-    sha256 = "0xmzpxfm8vghk552jy167wg1nky1pp93dqds1p922hn73g0x5cv3";
+    url = "https://download.crashplan.com/installs/linux/install/CrashPlan/CrashPlan_${version}_Linux.tgz";
+    sha256 = "0yqmmm92gksj8mfryjkjx83zli3213fffh2g7wi52l7m3g0ajg4a";
   };
 
   srcs = [ crashPlanArchive ];
@@ -16,8 +16,7 @@ in stdenv.mkDerivation rec {
     description = "An online/offline backup solution";
     homepage = "http://www.crashplan.org";
     license = licenses.unfree;
-    broken = true;  # outdated and new client has trouble starting (nullpointer exception)
-    maintainers = with maintainers; [ sztupi iElectric ];
+    maintainers = with maintainers; [ Baughn ];
   };
 
   buildInputs = [ makeWrapper cpio ];
@@ -26,7 +25,7 @@ in stdenv.mkDerivation rec {
 
   manifestdir = "${vardir}/manifest";
 
-  patches = [ ./CrashPlanEngine.patch ./CrashPlanDesktop.patch ];
+  patches = [ ./crashplan.patch ];
 
   installPhase = ''
     mkdir $out
@@ -44,16 +43,15 @@ in stdenv.mkDerivation rec {
 
     install -D -m 644 EULA.txt $out/EULA.txt
     install -D -m 644 run.conf $out/bin/run.conf
-    install -D -m 755 scripts/CrashPlanDesktop $out/bin/CrashPlanDesktop
-    install -D -m 755 scripts/CrashPlanEngine $out/bin/CrashPlanEngine
-    install -D -m 644 scripts/CrashPlan.desktop $out/share/applications/CrashPlan.desktop
+    install -D -m 755 bin/crashplan $out/bin/crashplan
+    install -D -m 755 bin/crashplan-desktop $out/bin/crashplan-desktop
+    install -D -m 755 bin/crashplan-setup.sh $out/bin/crashplan-setup.sh
 
     rm -r $out/log
     ln -s $vardir/log $out/log
     ln -s $vardir/cache $out/cache
     ln -s $vardir/backupArchives $out/backupArchives
-    ln -s $vardir/conf/service.model $out/conf/service.model
-    ln -s $vardir/conf/my.service.xml $out/conf/my.service.xml
+    ln -s $vardir/~custom $out/~custom
 
     echo "JAVACOMMON=${jre}/bin/java" > $out/install.vars
     echo "APP_BASENAME=CrashPlan" >> $out/install.vars
@@ -67,18 +65,14 @@ in stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    for f in $out/bin/CrashPlanDesktop $out/bin/CrashPlanEngine; do
-      echo "substitutions in $f"
-      substituteInPlace $f --replace /bin/ps  ${procps}/bin/ps
-      substituteInPlace $f --replace awk      ${gawk}/bin/awk
-      substituteInPlace $f --replace sed      ${gnused}/bin/sed
-      substituteInPlace $f --replace grep     ${gnugrep}/bin/grep
-    done
-    
-    substituteInPlace $out/share/applications/CrashPlan.desktop \
-      --replace /usr/local  $out \
-      --replace crashplan/skin skin
+    rm $out/bin/restartLinux.sh $out/bin/uninstall.sh
+    mv $out/conf $out/conf.tmpl
+    ln -s $vardir/conf $out/conf
 
-    wrapProgram $out/bin/CrashPlanDesktop --prefix LD_LIBRARY_PATH ":" "${gtk2}/lib:${glib}/lib:${libXtst}/lib"
+    substituteInPlace $out/bin/crashplan --subst-var out
+    substituteInPlace $out/bin/crashplan-desktop --subst-var out
+    substituteInPlace $out/bin/crashplan-setup.sh --subst-var out
+
+    wrapProgram $out/bin/crashplan-desktop --prefix LD_LIBRARY_PATH ":" "${gtk2}/lib:${glib}/lib:${libXtst}/lib"
   '';
 }
