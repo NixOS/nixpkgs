@@ -14778,7 +14778,7 @@ let
       apps = import ../applications/kde-apps-15.12 { inherit pkgs; };
       merged = self: frameworks self // plasma self // apps self // kde5PackagesFun self;
     in
-      recurseIntoAttrs (lib.makeScope qt5.newScope merged);
+      recurseIntoAttrs (lib.makeScope qt55.newScope merged);
 
   kde5_latest =
     let
@@ -14787,7 +14787,7 @@ let
       apps = import ../applications/kde-apps-15.12 { inherit pkgs; };
       merged = self: frameworks self // plasma self // apps self // kde5PackagesFun self;
     in
-      recurseIntoAttrs (lib.makeScope qt5.newScope merged);
+      recurseIntoAttrs (lib.makeScope qt55.newScope merged);
 
   theme-vertex = callPackage ../misc/themes/vertex { };
 
