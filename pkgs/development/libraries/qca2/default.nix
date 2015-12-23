@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  patches = [ ./libressl.patch ];
+
   meta = with stdenv.lib; {
     description = "Qt Cryptographic Architecture";
     license = "LGPL";
