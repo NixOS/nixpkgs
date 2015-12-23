@@ -6,7 +6,7 @@ lib.makeOverridable (
 , ruby ? defs.ruby
 , rubygems ? (rubygemsFun ruby)
 , stdenv ? ruby.stdenv
-, namePrefix ? "${ruby.name}" + "-"
+, namePrefix ? "${lib.replaceStrings ["-"] ["_"] ruby.name}" + "-"
 , buildInputs ? []
 , doCheck ? false
 , dontBuild ? true
