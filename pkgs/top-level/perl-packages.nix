@@ -4972,17 +4972,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   Glib = buildPerlPackage rec {
-    name = "Glib-1.314";
+    name = "Glib-1.320";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "13lhyksm7fgj6rgrgs06kr0hinbyhiq3lfr6gd2qal1j2w0rwzml";
+      sha256 = "15mrwscqjgwpkw9n4x6rakr9rjz2ss8d90k574fs5wx9cmgg3np3";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.glib ];
     meta = {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Perl wrappers for the GLib utility and Object libraries";
       maintainers = with maintainers; [ nckx ];
-      license = stdenv.lib.licenses.lgpl3Plus;
+      license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
 
