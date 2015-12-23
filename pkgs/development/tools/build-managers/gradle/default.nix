@@ -35,11 +35,11 @@ rec {
   };
 
   gradleLatest = gradleGen rec {
-    name = "gradle-2.9";
+    name = "gradle-2.10";
 
     src = fetchurl {
       url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "c9159ec4362284c0a38d73237e224deae6139cbde0db4f0f44e1c7691dd3de2f";
+      sha256 = "66406247f745fc6f05ab382d3f8d3e120c339f34ef54b86f6dc5f6efc18fbb13";
     };
   };
 
