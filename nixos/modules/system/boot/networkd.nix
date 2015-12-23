@@ -131,6 +131,16 @@ let
     (assertValueOneOf "RequestBroadcast" boolValues)
   ];
 
+  checkDhcpServer = checkUnitConfig "DHCPServer" [
+    (assertOnlyFields [
+      "PoolOffset" "PoolSize" "DefaultLeaseTimeSec" "MaxLeaseTimeSec"
+      "EmitDNS" "DNS" "EmitNTP" "NTP" "EmitTimezone" "Timezone"
+    ])
+    (assertValueOneOf "EmitDNS" boolValues)
+    (assertValueOneOf "EmitNTP" boolValues)
+    (assertValueOneOf "EmitTimezone" boolValues)
+  ];
+
   commonNetworkOptions = {
 
     enable = mkOption {
@@ -338,6 +348,18 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[DHCP]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    dhcpServerConfig = mkOption {
+      default = {};
+      example = { PoolOffset = 50; EmitDNS = false; };
+      type = types.addCheck (types.attrsOf unitOption) checkDhcpServer;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[DHCPServer]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -566,6 +588,11 @@ let
           ${optionalString (def.dhcpConfig != { }) ''
             [DHCP]
             ${attrsToSection def.dhcpConfig}
+
+          ''}
+          ${optionalString (def.dhcpServerConfig != { }) ''
+            [DHCPServer]
+            ${attrsToSection def.dhcpServerConfig}
 
           ''}
           ${flip concatMapStrings def.addresses (x: ''
