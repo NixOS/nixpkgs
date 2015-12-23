@@ -10,9 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "1w4gp4hdkb452nmz91l413d1rx89isl2l6wv8kpbdd2afpc3phws";
   };
 
-  patchPhase = ''
+  postPatchPhase = ''
     sed -i 's/^\t.*run/\t/' Makefile.in
   '';
+
+  patches = [ ./libressl.patch ];
 
   buildInputs = [ openssl libtool perl libxml2 ];
 
