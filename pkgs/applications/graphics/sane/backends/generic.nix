@@ -9,11 +9,6 @@
 assert hotplugSupport ->
   builtins.elem stdenv.system [ "i686-linux" "x86_64-linux" ];
 
-let
-
-  udevSupport = hotplugSupport;
-
-in
 stdenv.mkDerivation {
   inherit src;
 
@@ -30,7 +25,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ gettext pkgconfig ];
 
   postInstall = ''
-    if test "$udevSupport" = "1"; then
+    if test "$hotplugSupport" = "1"; then
       mkdir -p $out/etc/udev/rules.d/
       ./tools/sane-desc -m udev > $out/etc/udev/rules.d/49-libsane.rules || \
       cp tools/udev/libsane.rules $out/etc/udev/rules.d/49-libsane.rules
