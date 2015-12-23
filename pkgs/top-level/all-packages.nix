@@ -12206,6 +12206,8 @@ let
 
   joe = callPackage ../applications/editors/joe { };
 
+  josm = callPackage ../applications/misc/josm { };
+
   jbrout = callPackage ../applications/graphics/jbrout { };
 
   jumanji = callPackage ../applications/networking/browsers/jumanji {
