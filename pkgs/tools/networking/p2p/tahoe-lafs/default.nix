@@ -32,12 +32,12 @@ buildPythonPackage rec {
   '';
 
   # Some tests want this + http://tahoe-lafs.org/source/tahoe-lafs/deps/tahoe-dep-sdists/mock-0.6.0.tar.bz2
-  buildInputs = [ unzip numpy mock ];
+  buildInputs = [ unzip numpy ];
 
   # The `backup' command requires `sqlite3'.
   propagatedBuildInputs =
     [ twisted foolscap nevow simplejson zfec pycryptopp sqlite3
-      darcsver setuptoolsTrial setuptoolsDarcs pycrypto pyasn1 zope_interface
+      darcsver setuptoolsTrial setuptoolsDarcs pycrypto pyasn1 zope_interface mock
     ];
 
   postInstall = ''
