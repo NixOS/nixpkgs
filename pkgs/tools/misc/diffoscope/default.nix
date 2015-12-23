@@ -1,6 +1,6 @@
 { stdenv, fetchgit, pythonPackages, docutils
-, acl, binutils, bzip2, cdrkit, cpio, diffutils, e2fsprogs, file, gettext
-, gnupg, gzip, pdftk, poppler_utils, rpm, sqlite, squashfsTools, unzip, vim, xz
+, acl, binutils, bzip2, cbfstool, cdrkit, cpio, diffutils, e2fsprogs, file, fpc, gettext, ghc, gnupg1
+, gzip, jdk, libcaca, mono, pdftk, poppler_utils, rpm, sng, sqlite, squashfsTools, unzip, vim, xz
 }:
 
 pythonPackages.buildPythonPackage rec {
@@ -20,11 +20,11 @@ pythonPackages.buildPythonPackage rec {
     sed -i setup.py -e "/'rpm-python',/d"
   '';
 
-  # Still missing these tools: enjarify ghc img2txt javap otool(maybe OS X only) ppudump showttf sng
+  # Still missing these tools: enjarify otool(maybe OS X only) showttf
   # Also these libraries: python3-guestfs
   propagatedBuildInputs = (with pythonPackages; [ debian libarchive-c python_magic tlsh ]) ++
-    [ acl binutils bzip2 cdrkit cpio diffutils e2fsprogs file gettext gnupg
-      gzip pdftk poppler_utils rpm sqlite squashfsTools unzip vim xz ];
+    [ acl binutils bzip2 cbfstool cdrkit cpio diffutils e2fsprogs file fpc gettext ghc gnupg1
+      gzip jdk libcaca mono pdftk poppler_utils rpm sng sqlite squashfsTools unzip vim xz ];
 
   doCheck = false; # Calls 'mknod' in squashfs tests, which needs root
 
