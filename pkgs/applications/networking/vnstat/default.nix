@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ stdenv, fetchurl, gd, ncurses }:
 
 let version = "1.15"; in
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     url = "http://humdi.net/vnstat/${name}.tar.gz";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ gd ncurses ];
 
   postPatch = ''
     substituteInPlace src/cfg.c --replace /usr/local $out
