@@ -53,8 +53,8 @@ in {
         example = "localhost";
         type = types.str;
         description = ''
-          Specifies the bind adress on which the jenkins HTTP interface listens.
-          The default is the wildcard adress.
+          Specifies the bind address on which the jenkins HTTP interface listens.
+          The default is the wildcard address.
         '';
       };
 
