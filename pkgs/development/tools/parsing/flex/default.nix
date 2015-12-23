@@ -17,6 +17,12 @@ stdenv.mkDerivation rec {
   '';
 
   crossAttrs = {
+
+    # disable tests which can't run on build machine
+    postPatch = ''
+      substituteInPlace Makefile.in --replace "tests" " ";
+    '';
+
     preConfigure = ''
       export ac_cv_func_malloc_0_nonnull=yes
       export ac_cv_func_realloc_0_nonnull=yes
