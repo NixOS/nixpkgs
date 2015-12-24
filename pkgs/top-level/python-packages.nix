@@ -17983,12 +17983,12 @@ in modules // {
 
   sipsimple = buildPythonPackage rec {
     name = "sipsimple-${version}";
-    version = "2.5.1";
+    version = "2.6.0";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://download.ag-projects.com/SipClient/python-${name}.tar.gz";
-      sha256 = "0vpy2vss8667c0kp1k8vybl38nxp7kr2v2wa8sngrgzd65m6ww5p";
+      sha256 = "0xcyasas28q1ad1hgw4vd62b72mf1sng7xwfcls6dc05k9p3q8v3";
     };
 
     propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml ];
