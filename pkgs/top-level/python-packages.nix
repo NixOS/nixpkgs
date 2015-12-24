@@ -21724,9 +21724,10 @@ in modules // {
     };
   };
 
-  libvirt = pkgs.stdenv.mkDerivation rec {
+  libvirt = let
+    version = "1.2.18";
+  in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
-    version = "1.2.19";
 
     src = pkgs.fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";

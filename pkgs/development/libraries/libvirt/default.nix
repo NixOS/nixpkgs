@@ -1,16 +1,12 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnutls, devicemapper, perl, python
 , iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, makeWrapper, pmutils, libcap_ng
-, dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl
-, pythonPackages, perlPackages
+, dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
 }:
-
-let version = "1.2.19"; in
-
-assert version == pythonPackages.libvirt.version;
 
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
+  version = "1.2.19";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.gz";
