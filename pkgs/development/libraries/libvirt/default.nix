@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig libxml2 gnutls perl python readline
     gettext libtasn1 libgcrypt yajl makeWrapper
-    libxslt xhtml1 perlPackages.XMLXPath curl
+    libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux udev libcap_ng libnl numad numactl
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
