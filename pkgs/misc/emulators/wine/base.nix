@@ -1,5 +1,6 @@
 { stdenv, lib, pkgArches,
   name, version, src, monos, geckos, platforms,
+  pulseaudioSupport,
   buildScript ? null, configureFlags ? ""
 }:
 
@@ -19,7 +20,9 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
 
   nativeBuildInputs = toBuildInputs pkgArches (pkgs: (with pkgs; [
     freetype fontconfig mesa mesa_noglu.osmesa libdrm libpng libjpeg openssl gnutls cups ncurses
-  ]) ++ (with pkgs.xorg; [
+  ])
+  ++ lib.optional pulseaudioSupport pkgs.libpulseaudio
+  ++ (with pkgs.xorg; [
     xlibsWrapper libXi libXcursor libXinerama libXrandr libXrender libXxf86vm libXcomposite
   ]));
 

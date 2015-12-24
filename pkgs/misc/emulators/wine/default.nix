@@ -9,11 +9,13 @@
 { lib, pkgs, system, callPackage,
   wineRelease ? "stable",
   wineBuild ? (if system == "x86_64-linux" then "wineWow" else "wine32"),
+  pulseaudioSupport ? false,
   libtxc_dxtn_Name ? "libtxc_dxtn_s2tc" }:
 
 let wine-build = build: release:
       lib.getAttr build (callPackage ./packages.nix {
         wineRelease = release;
+        inherit pulseaudioSupport;
       });
 
 in if wineRelease == "staging" then
