@@ -13469,7 +13469,7 @@ let
 
   neovim-pygui = pythonPackages.neovim_gui;
 
-  virtviewer = callPackage ../applications/virtualization/virt-viewer {
+  virt-viewer = callPackage ../applications/virtualization/virt-viewer {
     gtkvnc = gtkvnc.override { enableGTK3 = true; };
     spice_gtk = spice_gtk.override { enableGTK3 = true; };
   };
@@ -15865,6 +15865,7 @@ aliases = with self; rec {
   tftp_hpa = tftp-hpa; # added 2015-04-03
   manpages = man-pages; # added 2015-12-06
   mssys = ms-sys; # added 2015-12-13
+  virtviewer = virt-viewer; # added 2015-12-24
 };
 
 tweakAlias = _n: alias: with lib;
