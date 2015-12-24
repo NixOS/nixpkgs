@@ -22,6 +22,11 @@ let
 in stdenv.mkDerivation rec {
   name = "llvm-${version}";
 
+  patches = [
+    # Backport for Rust, remove when 3.7.1 is released
+    ./r242372-fix-LLVMBuildLandingPad.patch
+  ];
+
   unpackPhase = ''
     unpackFile ${src}
     mv llvm-${version}.src llvm
