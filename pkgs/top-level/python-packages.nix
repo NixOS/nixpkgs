@@ -426,7 +426,7 @@ in modules // {
     # Let's make the library default to our gpg binary
     patchPhase = ''
       substituteInPlace gnupg.py \
-        --replace "gpgbinary='gpg'" "gpgbinary='${pkgs.gnupg}/bin/gpg'"
+        --replace "gpgbinary='gpg'" "gpgbinary='${pkgs.gnupg1}/bin/gpg'"
     '';
 
     meta = {
