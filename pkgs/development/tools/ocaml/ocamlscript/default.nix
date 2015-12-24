@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = http://martin.jambon.free.fr/ocamlscript.html;
     license = licenses.boost;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     description = "Natively-compiled OCaml scripts";
     maintainers = [ maintainers.vbgl ];
   };

@@ -27,6 +27,6 @@ stdenv.mkDerivation {
     homepage = https://github.com/Chris00/ocaml-csv;
     license = licenses.lgpl21;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

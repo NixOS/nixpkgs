@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "fast, arbitrary precision OCaml integers";
     homepage    = "http://forge.ocamlcore.org/projects/zarith";
     license     = licenses.lgpl2;
-    platforms   = ocaml.meta.platforms;
+    platforms   = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ thoughtpolice vbgl ];
   };
 }

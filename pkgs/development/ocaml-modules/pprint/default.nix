@@ -23,6 +23,6 @@ stdenv.mkDerivation {
     description = "An OCaml adaptation of Wadler’s and Leijen’s prettier printer";
     license = licenses.cecill-c;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }
