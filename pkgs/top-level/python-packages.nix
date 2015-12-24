@@ -21725,7 +21725,7 @@ in modules // {
   };
 
   libvirt = let
-    version = "1.2.18";
+    version = "1.2.19";
   in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
 
