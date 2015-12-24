@@ -3,7 +3,7 @@
 callPackage ./generic.nix {
   shortVersion = "1.5.0";
   isRelease = true;
-  forceBundledLLVM = true;
+  forceBundledLLVM = false;
   configureFlags = [ "--release-channel=stable" ];
   srcSha = "1vfpwx6a2f2rn528774cz9r7r82ppycn8z8ybll6bphdw7cyar1g";
 
