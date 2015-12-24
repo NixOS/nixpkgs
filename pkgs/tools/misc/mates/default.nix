@@ -6,7 +6,7 @@ buildRustPackage rec {
   name = "mates-${version}";
   version = "0.1.0";
 
-  depsSha256 = "03mqw9zs3hbsgz8m3qbrbbcg2q47nldfx280dyv0ivfksnlc7lyc";
+  depsSha256 = "0h8i4y7fr57k31s0m4c5dyzwim6y9f01rljvh2kjpnff97fc25xx";
 
   src = fetchFromGitHub {
     owner = "untitaker";
