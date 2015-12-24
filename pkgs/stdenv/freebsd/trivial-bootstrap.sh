@@ -1,3 +1,7 @@
+set -e
+set -o nounset
+set -o pipefail
+
 echo Building the trivial bootstrap environment...
 echo
 echo Needed FreeBSD packages:
@@ -6,15 +10,22 @@ echo findutils gcpio gawk gnugrep coreutils bash gsed gtar gmake xar binutils gp
 $mkdir -p $out/bin
 
 ln () {
-  if test "x$2" != x -a -f "$out/bin/$2"; then
-    echo "$2 exists"
-    exit 1;
-  fi;
+  if [ ! -z "${2:-}" ]; then
+    if [ -f "$out/bin/$2" ]; then
+      echo "$2 exists"
+      exit 1
+    fi
+  fi
   if test ! -f "$1"; then
     echo Target "$2" does not exist
-    exit 1;
+    exit 1
   fi
-  $ln -s "$1" "$out/bin/$2"
+  # TODO: check that destination directory exists
+  if [ ! -z "${2:-}" ]; then
+    $ln -s "$1" "$out/bin/$2"
+  else
+    $ln -s "$1" "$out/bin/"
+  fi
 }
 
 ln /usr/local/bin/bash
@@ -76,16 +87,16 @@ ln /usr/local/bin/gcomm comm
 ln /usr/local/bin/gcpio cpio
 ln /usr/local/bin/curl curl
 ln /usr/local/bin/gfind find
-ln /usr/local/bin/grep grep #other grep is in /usr/bin
+ln /usr/local/bin/grep grep # other grep is in /usr/bin
 ln /usr/bin/gzip
 ln /usr/bin/gunzip
 ln /usr/bin/zcat
 ln /usr/local/bin/ghead head
-ln /usr/bin/tail tail
+ln /usr/bin/tail tail # note that we are not using gtail!!!
 ln /usr/local/bin/guniq uniq
 ln /usr/bin/less less
 ln /usr/local/bin/gtrue true
-# ln /usr/bin/diff diff
+# ln /usr/bin/diff diff # we are using gdiff (see above)
 ln /usr/local/bin/egrep egrep
 ln /usr/local/bin/fgrep fgrep
 ln /usr/local/bin/gpatch patch

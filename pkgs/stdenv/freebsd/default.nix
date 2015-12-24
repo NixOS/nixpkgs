@@ -11,7 +11,7 @@ rec {
     inherit system;
 
     name    = "trivial-bootstrap-tools";
-    builder = "/bin/sh";
+    builder = "/usr/local/bin/bash";
     args    = [ ./trivial-bootstrap.sh ];
 
     mkdir   = "/bin/mkdir";
@@ -23,8 +23,8 @@ rec {
       name = "stdenv-freebsd-boot-1";
       inherit system config;
 
-      initialPath  = null;
-      shell        = "foo";
+      initialPath  = [ "/" "/usr" ];
+      shell        = "${bootstrapTools}/bin/bash";
       fetchurlBoot = null;
       cc = null;
     };
