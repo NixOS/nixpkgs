@@ -15542,13 +15542,11 @@ let
   saneBackends = callPackage ../applications/graphics/sane/backends {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
     snapscanFirmware = config.sane.snapscanFirmware or null;
-    hotplugSupport = config.sane.hotplugSupport or true;
   };
 
   saneBackendsGit = callPackage ../applications/graphics/sane/backends/git.nix {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
     snapscanFirmware = config.sane.snapscanFirmware or null;
-    hotplugSupport = config.sane.hotplugSupport or true;
   };
 
   mkSaneConfig = callPackage ../applications/graphics/sane/config.nix { };

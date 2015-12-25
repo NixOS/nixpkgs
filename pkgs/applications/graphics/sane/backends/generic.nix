@@ -2,12 +2,8 @@
 , avahi, libusb1, libv4l, net_snmp
 , gettext, pkgconfig
 , gt68xxFirmware ? null, snapscanFirmware ? null
-, hotplugSupport ? true
 , version, src, ...
 }:
-
-assert hotplugSupport ->
-  builtins.elem stdenv.system [ "i686-linux" "x86_64-linux" ];
 
 stdenv.mkDerivation {
   inherit src;
@@ -25,11 +21,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ gettext pkgconfig ];
 
   postInstall = ''
-    if test "$hotplugSupport" = "1"; then
-      mkdir -p $out/etc/udev/rules.d/
-      ./tools/sane-desc -m udev > $out/etc/udev/rules.d/49-libsane.rules || \
-      cp tools/udev/libsane.rules $out/etc/udev/rules.d/49-libsane.rules
-    fi
+    mkdir -p $out/etc/udev/rules.d/
+    ./tools/sane-desc -m udev > $out/etc/udev/rules.d/49-libsane.rules || \
+    cp tools/udev/libsane.rules $out/etc/udev/rules.d/49-libsane.rules
   '';
 
   preInstall =
