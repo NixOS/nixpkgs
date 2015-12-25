@@ -92,4 +92,10 @@ in rec {
     filesToInstall = ["u-boot"];
     patches = [ ./vexpress-Use-config_distro_bootcmd.patch ];
   };
+
+  ubootWandboard = buildUBoot rec {
+    defconfig = "wandboard_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.img" "SPL"];
+  };
 }

@@ -10581,6 +10581,7 @@ let
     ubootPcduino3Nano
     ubootRaspberryPi
     ubootVersatileExpressCA9
+    ubootWandboard
     ;
 
   # Non-upstream U-Boots:
