@@ -34,6 +34,15 @@ in
 
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.slurm-llnl;
+        example = literalExample "pkgs.slurm-llnl-full";
+        description = ''
+          The packge to use for slurm binaries.
+        '';
+      };
+
       controlMachine = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -91,38 +100,69 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.client.enable || cfg.server.enable) {
+  config =
+    let
+      wrappedSlurm = pkgs.stdenv.mkDerivation {
+        name = "wrappedSlurm";
 
-    environment.systemPackages = [ pkgs.slurm-llnl ];
+        propagatedBuildInputs = [ cfg.package configFile ];
+
+        builder = pkgs.writeText "builder.sh" ''
+          source $stdenv/setup
+          mkdir -p $out/bin
+          find  ${cfg.package}/bin -type f -executable | while read EXE
+          do
+            exename="$(basename $EXE)"
+            wrappername="$out/bin/$exename"
+            cat > "$wrappername" <<EOT
+          #!/bin/sh
+          if [ -z "$SLURM_CONF" ]
+          then
+            SLURM_CONF="${configFile}" "$EXE" "\$@"
+          else
+            "$EXE" "\$0"
+          fi
+          EOT
+            chmod +x "$wrappername"
+          done
+        '';
+      };
+
+  in mkIf (cfg.client.enable || cfg.server.enable) {
+
+    environment.systemPackages = [ wrappedSlurm ];
 
     systemd.services.slurmd = mkIf (cfg.client.enable) {
-      path = with pkgs; [ slurm-llnl coreutils ];
+      path = with pkgs; [ wrappedSlurm coreutils ];
 
       wantedBy = [ "multi-user.target" ];
       after = [ "systemd-tmpfiles-clean.service" ];
 
       serviceConfig = {
         Type = "forking";
-        ExecStart = "${pkgs.slurm-llnl}/bin/slurmd -f ${configFile}";
+        ExecStart = "${wrappedSlurm}/bin/slurmd";
         PIDFile = "/run/slurmd.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
+
+      preStart = ''
+        mkdir -p /var/spool
+      '';
     };
 
     systemd.services.slurmctld = mkIf (cfg.server.enable) {
-      path = with pkgs; [ slurm-llnl munge coreutils ];
+      path = with pkgs; [ wrappedSlurm munge coreutils ];
       
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "auditd.service" "munged.service" "slurmdbd.service" ];
+      after = [ "network.target" "munged.service" ];
       requires = [ "munged.service" ];
 
       serviceConfig = {
         Type = "forking";
-        ExecStart = "${pkgs.slurm-llnl}/bin/slurmctld";
+        ExecStart = "${wrappedSlurm}/bin/slurmctld";
         PIDFile = "/run/slurmctld.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
-      environment = { SLURM_CONF = "${configFile}"; };
     };
 
   };
