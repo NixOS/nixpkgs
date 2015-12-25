@@ -3737,6 +3737,8 @@ let
     python = python27Full;
   };
 
+  fish-foreign-env = callPackage ../shells/fish-foreign-env { };
+
   mksh = callPackage ../shells/mksh { };
 
   pash = callPackage ../shells/pash { };

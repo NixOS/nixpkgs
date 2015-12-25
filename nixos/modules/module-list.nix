@@ -64,6 +64,7 @@
   ./programs/dconf.nix
   ./programs/environment.nix
   ./programs/freetds.nix
+  ./programs/fish.nix
   ./programs/ibus.nix
   ./programs/kbdlight.nix
   ./programs/light.nix
