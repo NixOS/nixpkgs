@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, curl, makeWrapper, gcc }:
+{ stdenv, fetchurl, unzip, curl, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "dmd-2.067.1";
@@ -10,9 +10,15 @@ stdenv.mkDerivation {
 
   buildInputs = [ unzip curl makeWrapper ];
 
-  # Allow to use "clang++", commented in Makefile
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-      substituteInPlace src/dmd/posix.mak --replace g++ clang++
+      # Allow to use "clang++", commented in Makefile
+      substituteInPlace src/dmd/posix.mak \
+          --replace g++ clang++ \
+          --replace MACOSX_DEPLOYMENT_TARGET MACOSX_DEPLOYMENT_TARGET_
+
+      # Was not able to compile on darwin due to "__inline_isnanl"
+      # being undefined.
+      substituteInPlace src/dmd/root/port.c --replace __inline_isnanl __inline_isnan
   '';
 
   # Buid and install are based on http://wiki.dlang.org/Building_DMD
@@ -48,7 +54,9 @@ stdenv.mkDerivation {
       cp -r std $out/include/d2
       cp -r etc $out/include/d2
 
-      wrapProgram $out/bin/dmd --prefix PATH ":" "${gcc}/bin/"
+      wrapProgram $out/bin/dmd \
+          --prefix PATH ":" "${stdenv.cc}/bin" \
+          --set CC "$""{CC:-$CC""}"
 
       cd $out/bin
       tee dmd.conf << EOF
