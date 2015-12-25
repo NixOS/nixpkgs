@@ -10576,6 +10576,7 @@ let
   # Upstream U-Boots:
   inherit (callPackage ../misc/uboot {})
     buildUBoot
+    ubootBananaPi
     ubootJetsonTK1
     ubootPcduino3Nano
     ubootRaspberryPi

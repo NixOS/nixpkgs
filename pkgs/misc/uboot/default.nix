@@ -61,6 +61,12 @@ in rec {
     filesToInstall = ["tools/dumpimage" "tools/mkenvimage" "tools/mkimage"];
   };
 
+  ubootBananaPi = buildUBoot rec {
+    defconfig = "Bananapi_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
   ubootJetsonTK1 = buildUBoot rec {
     defconfig = "jetson-tk1_defconfig";
     targetPlatforms = ["armv7l-linux"];
