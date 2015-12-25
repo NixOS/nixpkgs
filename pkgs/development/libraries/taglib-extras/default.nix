@@ -8,4 +8,7 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [ taglib ];
   nativeBuildInputs = [ cmake ];
+  preConfigure = ''
+    sed -i -e 's/STRLESS/VERSION_LESS/g' cmake/modules/FindTaglib.cmake
+  '';
 }
