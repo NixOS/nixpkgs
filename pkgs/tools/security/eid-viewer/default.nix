@@ -1,16 +1,12 @@
-{ stdenv, fetchurl, jre, makeWrapper, pcsclite }:
+{ stdenv, fetchurl, makeWrapper, jre, pcsclite }:
 
-let
-  # TODO: find out what the version components actually mean, if anything:
-  major = "4.1.4-v4.1.4";
-  minor = "tcm406-270732";
-  version = "${major}-${minor}";
-in stdenv.mkDerivation rec {
+let version = "4.1.9"; in
+stdenv.mkDerivation rec {
   name = "eid-viewer-${version}";
 
   src = fetchurl {
-    url = "http://eid.belgium.be/en/binaries/eid-viewer-${major}.src.tar_${minor}.gz";
-    sha256 = "06kda45y7c3wvvqby153zcasgz4jibjypv8gvfwvrwvn4ag2z934";
+    url = "https://downloads.services.belgium.be/eid/eid-viewer-${version}-v${version}.src.tar.gz";
+    sha256 = "0bq9jl4kl97j0dfhz4crcb1wqhn420z5vpg510zadvrmqjhy1x4g";
   };
 
   buildInputs = [ jre pcsclite ];

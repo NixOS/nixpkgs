@@ -17993,8 +17993,6 @@ in modules // {
 
     propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml ];
     buildInputs = with pkgs; [ alsaLib ffmpeg libv4l pkgconfig sqlite libvpx ];
-
-    doCheck = false;
   };
 
 
