@@ -233,6 +233,7 @@
   phausmann = "Philipp Hausmann <nix@314.ch>";
   philandstuff = "Philip Potter <philip.g.potter@gmail.com>";
   phreedom = "Evgeny Egorochkin <phreedom@yandex.ru>";
+  phunehehe = "Hoang Xuan Phu <phunehehe@gmail.com>";
   pierron = "Nicolas B. Pierron <nixos@nbp.name>";
   piotr = "Piotr Pietraszkiewicz <ppietrasa@gmail.com>";
   pjbarnoy = "Perry Barnoy <pjbarnoy@gmail.com>";
