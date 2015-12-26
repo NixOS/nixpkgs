@@ -281,8 +281,8 @@ in
       };
 
       xkbDir = mkOption {
-        type = types.str;
-        default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+        type = types.nullOr types.str;
+        default = null;
         description = ''
         Path used for -xkbdir xserver parameter.
         '';
@@ -435,8 +435,9 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
-
+  config = let
+      xkbDir = if cfg.xkbDir != null then cfg.xkbDir else "${pkgs.xkeyboard_config}/etc/X11/xkb";
+  in mkIf cfg.enable {
     hardware.opengl.enable = mkDefault true;
 
     services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
