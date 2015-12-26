@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, pythonPackages
+{ stdenv, fetchzip, makeWrapper, jre, pythonPackages
 , mesosSupport ? true, mesos
 }:
 
@@ -6,11 +6,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name    = "spark-${version}";
-  version = "1.4.0";
+  version = "1.5.2";
 
-  src = fetchurl {
+  src = fetchzip {
     url    = "mirror://apache/spark/${name}/${name}-bin-cdh4.tgz";
-    sha256 = "1w60xzzg9mcymin1pmqwx1mvcqmdpfyxhd2dmw5alhnrzi21ycxi";
+    sha256 = "0bgpz3bqj24flrbajzhbkz38fjsd53qmji1kls9izji8vprcjr5v";
   };
 
   buildInputs = [ makeWrapper jre pythonPackages.python pythonPackages.numpy ]
