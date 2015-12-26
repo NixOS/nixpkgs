@@ -5,12 +5,7 @@ with lib;
 let
   cfg = config.networking.wireless;
   configFile = "/etc/wpa_supplicant.conf";
-in
-
-{
-
-  ###### interface
-
+in {
   options = {
     networking.wireless = {
       enable = mkOption {
@@ -73,19 +68,17 @@ in
     };
   };
 
+  config = mkMerge [
+    (mkIf cfg.enable {
+      environment.systemPackages =  [ pkgs.wpa_supplicant ];
 
-  ###### implementation
+      services.dbus.packages = [ pkgs.wpa_supplicant ];
 
-  config = mkIf cfg.enable {
-
-    environment.systemPackages =  [ pkgs.wpa_supplicant ];
-
-    services.dbus.packages = [ pkgs.wpa_supplicant ];
-
-    # FIXME: start a separate wpa_supplicant instance per interface.
-    jobs.wpa_supplicant = let
-      ifaces = cfg.interfaces;
-    in { description = "WPA Supplicant";
+      # FIXME: start a separate wpa_supplicant instance per interface.
+      systemd.services.wpa_supplicant = let
+        ifaces = cfg.interfaces;
+      in {
+        description = "WPA Supplicant";
 
         wantedBy = [ "network.target" ];
 
@@ -101,37 +94,33 @@ in
           fi
         '';
 
-        script =
-          ''
-            ${if ifaces == [] then ''
-              for i in $(cd /sys/class/net && echo *); do
-                DEVTYPE=
-                source /sys/class/net/$i/uevent
-                if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
-                  ifaces="$ifaces''${ifaces:+ -N} -i$i"
-                fi
-              done
-            '' else ''
-              ifaces="${concatStringsSep " -N " (map (i: "-i${i}") ifaces)}"
-            ''}
-            exec wpa_supplicant -s -u -D${cfg.driver} -c ${configFile} $ifaces
-          '';
+        script = ''
+          ${if ifaces == [] then ''
+            for i in $(cd /sys/class/net && echo *); do
+              DEVTYPE=
+              source /sys/class/net/$i/uevent
+              if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
+                ifaces="$ifaces''${ifaces:+ -N} -i$i"
+              fi
+            done
+          '' else ''
+            ifaces="${concatStringsSep " -N " (map (i: "-i${i}") ifaces)}"
+          ''}
+          exec wpa_supplicant -s -u -D${cfg.driver} -c ${configFile} $ifaces
+        '';
       };
 
-    powerManagement.resumeCommands =
-      ''
+      powerManagement.resumeCommands = ''
         ${config.systemd.package}/bin/systemctl try-restart wpa_supplicant
       '';
 
-    assertions = [{ assertion = !cfg.userControlled.enable || cfg.interfaces != [];
-                    message = "user controlled wpa_supplicant needs explicit networking.wireless.interfaces";}];
-
-    # Restart wpa_supplicant when a wlan device appears or disappears.
-    services.udev.extraRules =
-      ''
+      # Restart wpa_supplicant when a wlan device appears or disappears.
+      services.udev.extraRules = ''
         ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="${config.systemd.package}/bin/systemctl try-restart wpa_supplicant.service"
       '';
-
-  };
-
+    })
+    {
+      meta.maintainers = with lib.maintainers; [ globin ];
+    }
+  ];
 }
