@@ -35,7 +35,7 @@ nixos.path = ./nixpkgs-16-03/nixos;
 
 <para>Another option is to fetch a specific version of NixOS, with either
 the <literal>fetchTarball</literal> builtin, or the
-<literal>pkgs.fetchFromGithub</literal> function and use the result as an
+<literal>pkgs.fetchFromGitHub</literal> function and use the result as an
 input.
 
 <programlisting>
