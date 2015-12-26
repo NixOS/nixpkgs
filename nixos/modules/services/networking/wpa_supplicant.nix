@@ -3,14 +3,8 @@
 with lib;
 
 let
-
   cfg = config.networking.wireless;
   configFile = "/etc/wpa_supplicant.conf";
-
-  ifaces =
-    cfg.interfaces ++
-    optional (config.networking.WLANInterface != "") config.networking.WLANInterface;
-
 in
 
 {
@@ -18,12 +12,6 @@ in
   ###### interface
 
   options = {
-
-    networking.WLANInterface = mkOption {
-      default = "";
-      description = "Obsolete. Use <option>networking.wireless.interfaces</option> instead.";
-    };
-
     networking.wireless = {
       enable = mkOption {
         type = types.bool;
@@ -95,8 +83,9 @@ in
     services.dbus.packages = [ pkgs.wpa_supplicant ];
 
     # FIXME: start a separate wpa_supplicant instance per interface.
-    jobs.wpa_supplicant =
-      { description = "WPA Supplicant";
+    jobs.wpa_supplicant = let
+      ifaces = cfg.interfaces;
+    in { description = "WPA Supplicant";
 
         wantedBy = [ "network.target" ];
 
