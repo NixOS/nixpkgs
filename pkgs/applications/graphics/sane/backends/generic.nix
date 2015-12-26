@@ -33,8 +33,6 @@ stdenv.mkDerivation {
     else if snapscanFirmware != null then
       "mkdir -p \${out}/share/sane/snapscan ; ln -s " + snapscanFirmware +
       " \${out}/share/sane/snapscan/your-firmwarefile.bin"
-      "mkdir -p \${out}/etc/sane.d ; " +
-      "echo epson2 >> \${out}/etc/sane.d/dll.conf"
     else "";
 
   meta = with stdenv.lib; {
