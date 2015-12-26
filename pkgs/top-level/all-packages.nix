@@ -2172,6 +2172,8 @@ let
 
   liboauth = callPackage ../development/libraries/liboauth { };
 
+  libsrs2 = callPackage ../development/libraries/libsrs2 { };
+
   libtermkey = callPackage ../development/libraries/libtermkey { };
 
   libtirpc = callPackage ../development/libraries/ti-rpc { };
