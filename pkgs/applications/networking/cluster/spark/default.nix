@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   untarDir = "${name}-bin-cdh4";
   installPhase = ''
-    mkdir -p $out/{lib/${untarDir}/conf,bin}
+    mkdir -p $out/{lib/${untarDir}/conf,bin,/share/java}
     mv * $out/lib/${untarDir}
 
     sed -e 's/INFO, console/WARN, console/' < \
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     for n in $(find $out/lib/${untarDir}/bin -type f ! -name "*.*"); do
       makeWrapper "$n" "$out/bin/$(basename $n)"
     done
+    ln -s $out/lib/${untarDir}/lib/spark-assembly-*.jar $out/share/java
   '';
 
   meta = {
