@@ -142,7 +142,7 @@
   jcumming = "Jack Cummings <jack@mudshark.org>";
   jefdaj = "Jeffrey David Johnson <jefdaj@gmail.com>";
   jfb = "James Felix Black <james@yamtime.com>";
-  jgeerds = "Jascha Geerds <jg@ekby.de>";
+  jgeerds = "Jascha Geerds <jascha@jgeerds.name>";
   jgillich = "Jakob Gillich <jakob@gillich.me>";
   jirkamarsik = "Jirka Marsik <jiri.marsik89@gmail.com>";
   joachifm = "Joachim Fasting <joachifm@fastmail.fm>";
