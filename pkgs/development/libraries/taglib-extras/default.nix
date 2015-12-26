@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [ taglib ];
   nativeBuildInputs = [ cmake ];
+
+  # Workaround for upstream bug https://bugs.kde.org/show_bug.cgi?id=357181
   preConfigure = ''
     sed -i -e 's/STRLESS/VERSION_LESS/g' cmake/modules/FindTaglib.cmake
   '';
