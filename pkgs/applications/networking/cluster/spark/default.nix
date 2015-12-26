@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{lib/${untarDir}/conf,bin}
     mv * $out/lib/${untarDir}
 
+    sed -e 's/INFO, console/WARN, console/' < \
+       $out/lib/${untarDir}/conf/log4j.properties.template > \
+       $out/lib/${untarDir}/conf/log4j.properties
+
     cat > $out/lib/${untarDir}/conf/spark-env.sh <<- EOF
     export JAVA_HOME="${jre}"
     export SPARK_HOME="$out/lib/${untarDir}"
