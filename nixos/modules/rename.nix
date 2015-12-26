@@ -75,6 +75,8 @@ with lib;
     # DNSCrypt-proxy
     (mkRenamedOptionModule [ "services" "dnscrypt-proxy" "port" ] [ "services" "dnscrypt-proxy" "localPort" ])
 
+    (mkRenamedOptionModule [ "services" "hostapd" "extraCfg" ] [ "services" "hostapd" "extraConfig" ])
+
     # Options that are obsolete and have no replacement.
     (mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ])
     (mkRemovedOptionModule [ "programs" "bash" "enable" ])
