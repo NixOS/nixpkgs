@@ -5525,8 +5525,8 @@ let
   inherit (callPackage ../development/interpreters/ruby {})
     ruby_1_9_3
     ruby_2_0_0
-    ruby_2_1_0 ruby_2_1_1 ruby_2_1_2 ruby_2_1_3 ruby_2_1_6 ruby_2_1_7
-    ruby_2_2_0 ruby_2_2_2 ruby_2_2_3
+    ruby_2_1_3 ruby_2_1_7
+    ruby_2_2_2 ruby_2_2_3
     ruby_2_3_0;
 
   # Ruby aliases
