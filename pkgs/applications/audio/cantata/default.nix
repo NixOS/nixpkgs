@@ -93,6 +93,10 @@ stdenv.mkDerivation rec {
     "-DENABLE_UDISKS2=ON"
   ];
 
+  preConfigure = ''
+    sed -i -e 's/STRLESS/VERSION_LESS/g' cmake/FindTaglib.cmake
+  '';
+
   postInstall = stdenv.lib.optionalString withQt5 ''
     wrapQtProgram "$out/bin/cantata"
   '';
