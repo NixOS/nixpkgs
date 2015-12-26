@@ -1657,7 +1657,7 @@ let
 
   gnupg20 = callPackage ../tools/security/gnupg/20.nix { };
 
-  gnupg21 = callPackage ../tools/security/gnupg/21.nix { };
+  gnupg21 = lowPrio (callPackage ../tools/security/gnupg/21.nix { });
 
   gnupg = gnupg20;
 
