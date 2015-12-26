@@ -138,6 +138,7 @@ in
         findtime = 600
         maxretry = 3
         backend  = systemd
+        enabled  = true
        '';
 
     # Block SSH if there are too many failing connection attempts.
