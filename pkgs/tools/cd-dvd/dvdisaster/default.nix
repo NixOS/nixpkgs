@@ -33,10 +33,30 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional (builtins.elem stdenv.system
       stdenv.lib.platforms.x86_64) "--with-sse2=yes";
 
-  buildInputs = [
-    pkgconfig which gettext intltool
-    glib gtk2
-  ];
+  enableParallelBuilding = true;
+
+  doCheck = true;
+  checkPhase = ''
+    pushd regtest
+
+    mkdir -p "$TMP"/{log,regtest}
+    substituteInPlace common.bash \
+      --replace /dev/shm "$TMP/log" \
+      --replace /var/tmp "$TMP"
+
+    for test in *.bash; do
+      case "$test" in
+      common.bash)
+        echo "Skipping $test"
+        continue ;;
+      *)
+        echo "Running $test"
+        ./"$test"
+      esac
+    done
+
+    popd
+  '';
 
   postInstall = ''
     mkdir -pv $out/share/applications
