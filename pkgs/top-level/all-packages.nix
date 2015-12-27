@@ -13863,6 +13863,8 @@ let
     GConf2 = gnome2.GConf;
   };
 
+  xmpp-client = go15Packages.xmpp-client.bin // { outputs = [ "bin" ]; };
+
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
   xpra = callPackage ../tools/X11/xpra { inherit (texFunctions) fontsConf; };
