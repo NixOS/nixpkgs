@@ -1,22 +1,25 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, cmake }:
 
-let
-
-  version = "0.8.1";
-  
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "thinkfan-${version}";
+  version = "0.9.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/thinkfan/thinkfan-${version}.tar.gz";
-    sha256 = "04akla66r8k10x0jvmcpfi92hj2sppygcl7hhwn8n8zsvvf0yqxs";
+    sha256 = "0ydgabk2758f6j64g1r9vdsd221nqsv5rwnphm81s7i2vgra1nlh";
   };
-  
+
+  nativeBuildInputs = [ cmake ];
+
+  unpackPhase = ''
+    sourceRoot="$PWD/${name}";
+    mkdir $sourceRoot;
+    tar xzvf "$src" -C $sourceRoot;
+  '';
+
   installPhase = ''
-    mkdir -p $out/bin
-    mv thinkfan $out/bin/
+    mkdir -p $out/bin;
+    mv thinkfan $out/bin/;
   '';
 
   meta = {
