@@ -2964,6 +2964,8 @@ let
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
 
   rubber = callPackage ../tools/typesetting/rubber { };
+  
+  runzip = callPackage ../tools/archivers/runzip { };
 
   rxp = callPackage ../tools/text/xml/rxp { };
 
