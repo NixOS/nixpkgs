@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libevent, openssl, zlib, torsocks, libseccomp }:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.2.7.5";
+  name = "tor-0.2.7.6";
 
   src = fetchurl {
     url = "https://archive.torproject.org/tor-package-archive/${name}.tar.gz";
-    sha256 = "0pxayvcab4cb107ynbpzx4g0qyr1mjfba2an76wdx6dxn56rwakx";
+    sha256 = "0p8hjlfi8dwghlyjif5s0q98cmpgz9kn9jja25430l04z5wqcfj9";
   };
 
   # Note: torsocks is specified as a dependency, as the distributed
