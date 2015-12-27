@@ -17,6 +17,8 @@
 , xterm
 , pkgs
 , pkgsi686Linux
+, which
+, curl
 }:
 
 assert stdenv.isLinux;
@@ -39,6 +41,8 @@ let
       wine
       xdg-user-dirs
       xterm
+      which
+      curl
     ];
 
   ld32 =
