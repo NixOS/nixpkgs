@@ -18,7 +18,7 @@ let
 
   inherit (lib) makeScope mapAttrs;
 
-  json = builtins.readFile ./melpa-stable-packages.json;
+  json = builtins.readFile ./melpa-packages.json;
   manifest = builtins.fromJSON json;
 
   mkPackage = self: name: recipe:
