@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
     = [ readline zlib libgpgerror libgcrypt libassuan libksba pth
         openldap bzip2 libusb curl libiconv ];
 
-  patchPhase = ''
+  patches = [ ./gpgkey2ssh-20.patch ];
+
+  prePatch = ''
     find tests -type f | xargs sed -e 's@/bin/pwd@${coreutils}&@g' -i
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
@@ -34,6 +36,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = optional x11Support "--with-pinentry-pgm=${pinentry}/bin/pinentry";
+
+  postConfigure = "substituteAllInPlace tools/gpgkey2ssh.c";
 
   checkPhase="GNUPGHOME=`pwd` ./agent/gpg-agent --daemon make check";
 
