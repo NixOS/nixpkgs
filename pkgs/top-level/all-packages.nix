@@ -9717,6 +9717,8 @@ let
 
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
+  crda = callPackage ../os-specific/linux/crda { };
+
   darwin = let
     cmdline = callPackage ../os-specific/darwin/command-line-tools {};
     apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
