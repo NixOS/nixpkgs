@@ -10934,6 +10934,8 @@ let
 
   vistafonts = callPackage ../data/fonts/vista-fonts { };
 
+  wireless-regdb = callPackage ../data/misc/wireless-regdb { };
+
   wqy_microhei = callPackage ../data/fonts/wqy-microhei { };
 
   wqy_zenhei = callPackage ../data/fonts/wqy-zenhei { };
