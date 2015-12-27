@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "http://www.cs.uu.nl/wiki/UHC";
     description = "Utrecht Haskell Compiler";
-    maintainers = [ maintainers.phausmann ];
+    maintainers = [ maintainers.phile314 ];
 
     # UHC i686 support is broken, see
     # https://github.com/UU-ComputerScience/uhc/issues/52

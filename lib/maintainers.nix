@@ -231,7 +231,7 @@
   palo = "Ingolf Wanger <palipalo9@googlemail.com>";
   pashev = "Igor Pashev <pashev.igor@gmail.com>";
   pesterhazy = "Paulus Esterhazy <pesterhazy@gmail.com>";
-  phausmann = "Philipp Hausmann <nix@314.ch>";
+  phile314 = "Philipp Hausmann <nix@314.ch>";
   philandstuff = "Philip Potter <philip.g.potter@gmail.com>";
   phreedom = "Evgeny Egorochkin <phreedom@yandex.ru>";
   phunehehe = "Hoang Xuan Phu <phunehehe@gmail.com>";
