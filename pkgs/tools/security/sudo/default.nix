@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     "--with-rundir=/run/sudo"
     "--with-vardir=/var/db/sudo"
     "--with-logpath=/var/log/sudo.log"
+    "--with-iologdir=/var/log/sudo-io"
     "--with-sendmail=${sendmailPath}"
   ] ++ stdenv.lib.optional withInsults [
     "--with-insults"
