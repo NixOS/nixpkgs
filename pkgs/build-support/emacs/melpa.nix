@@ -22,8 +22,8 @@ with lib;
 let
 
   packageBuild = fetchurl {
-    url = https://raw.githubusercontent.com/milkypostman/melpa/12a862e5c5c62ce627dab83d7cf2cca6e8b56c47/package-build.el;
-    sha256 = "1nviyyprypz7nmam9rwli4yv3kxh170glfbznryrp4czxkrjjdhk";
+    url = https://raw.githubusercontent.com/milkypostman/melpa/2b3eb31c077fcaff94b74b757c1ce17650333943/package-build.el;
+    sha256 = "1biwg2pqmmdz5iwqbjdszljazqymvgyyjcnc255nr6qz8mhnx67j";
   };
 
   fname = "${pname}-${version}";

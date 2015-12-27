@@ -23,14 +23,14 @@
 
 (defun melpa2nix-package-build-archive (name version files)
   "Build a package archive for package NAME."
-  (pb/message "\n;;; %s\n" name)
+  (package-build--message "\n;;; %s\n" name)
   (let* ((start-time (current-time))
          (archive-entry (package-build-package name
                                                version
                                                files
                                                package-build-working-dir
                                                package-build-archive-dir)))
-    
-    (pb/message "Built in %.3fs, finished at %s"
-                (time-to-seconds (time-since start-time))
-                (current-time-string))))
+
+    (package-build--message "Built in %.3fs, finished at %s"
+                            (time-to-seconds (time-since start-time))
+                            (current-time-string))))
