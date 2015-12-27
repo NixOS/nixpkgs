@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
     libmtp liblastfm libgpod qjson ffmpeg libofa nepomuk_core
   ];
 
+  # This is already fixed upstream, will be release in 2.9
+  preConfigure = ''
+    sed -i -e 's/STRLESS/VERSION_LESS/g' cmake/modules/FindTaglib.cmake
+  '';
+
   cmakeFlags = "-DKDE4_BUILD_TESTS=OFF";
 
   propagatedUserEnvPkgs = [ qtscriptgenerator ];
