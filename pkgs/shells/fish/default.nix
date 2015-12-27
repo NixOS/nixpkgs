@@ -4,6 +4,8 @@ stdenv.mkDerivation rec {
   name = "fish-${version}";
   version = "2.2.0";
 
+  patches = [ ./command-not-found.patch ];
+
   src = fetchurl {
     url = "http://fishshell.com/files/${version}/${name}.tar.gz";
     sha256 = "0ympqz7llmf0hafxwglykplw6j5cz82yhlrw50lw4bnf2kykjqx7";
