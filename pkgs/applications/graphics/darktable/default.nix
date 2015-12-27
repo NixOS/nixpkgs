@@ -4,26 +4,28 @@
 , lensfun, libXau, libXdmcp, libexif, libglade, libgphoto2, libjpeg
 , libpng, libpthreadstubs, libraw1394, librsvg, libtiff, libxcb
 , openexr, pixman, pkgconfig, sqlite, bash, libxslt, openjpeg
-, mesa }:
+, mesa, majorVersion ? 1, gtk3, lua5_2, pugixml }:
 
 assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
-  version = "1.6.9";
+  version = if majorVersion == 1 then "1.6.9" else "2.0.0";
   name = "darktable-${version}";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "0wri89ygjpv7npiz58mnydhgldywp6arqp9jq3v0g54a56fiwwhg";
+    sha256 = if majorVersion == 1 then "0wri89ygjpv7npiz58mnydhgldywp6arqp9jq3v0g54a56fiwwhg" else "1cbwvzqn3158cy7r499rdwipx7fpb30lrrvh6jy5a4xvpcjzbwnl";
   };
 
   buildInputs =
-    [ GConf atk cairo cmake curl dbus_glib exiv2 glib libgnome_keyring gtk
+    [ GConf atk cairo cmake curl dbus_glib exiv2 glib libgnome_keyring (if  majorVersion == 1 then gtk else gtk3)
       ilmbase intltool lcms lcms2 lensfun libXau libXdmcp libexif
-      libglade libgphoto2 libjpeg libpng libpthreadstubs libraw1394
+      libglade libgphoto2 libjpeg libpng libpthreadstubs
       librsvg libtiff libxcb openexr pixman pkgconfig sqlite libxslt
       libsoup graphicsmagick SDL json_glib openjpeg mesa
-    ];
+    ]
+++ stdenv.lib.optional (majorVersion == 1) libraw1394
+++ stdenv.lib.optional (majorVersion == 2) [ lua5_2 (pugixml.override {pic = true;}) ];
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gtk}/include/gtk-2.0"

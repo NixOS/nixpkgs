@@ -11363,6 +11363,7 @@ let
   darktable = callPackage ../applications/graphics/darktable {
     inherit (gnome) GConf libglade;
   };
+  darktable2 = darktable.override {majorVersion = 2;};
 
   das_watchdog = callPackage ../tools/system/das_watchdog { };
 
