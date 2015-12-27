@@ -1,15 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, which, gettext, intltool
+{ stdenv, fetchurl, pkgconfig, gettext, which
 , glib, gtk2
 , enableSoftening ? true
 }:
 
+let version = "0.79.5"; in
 stdenv.mkDerivation rec {
-  name = "dvdisaster-0.72.6";
+  name = "dvdisaster-${version}";
 
   src = fetchurl {
     url = "http://dvdisaster.net/downloads/${name}.tar.bz2";
-    sha256 = "e9787dea39aeafa38b26604752561bc895083c17b588489d857ac05c58be196b";
+    sha256 = "0f8gjnia2fxcbmhl8b3qkr5b7idl8m855dw7xw2fnmbqwvcm6k4w";
   };
+
+  nativeBuildInputs = [ gettext pkgconfig which ];
+  buildInputs = [ glib gtk2 ];
 
   patches = stdenv.lib.optional enableSoftening [
     ./encryption.patch
@@ -21,8 +25,13 @@ stdenv.mkDerivation rec {
     sed -i 's/dvdisaster48.png/dvdisaster/' contrib/dvdisaster.desktop
   '';
 
-  # Explicit --docdir= is required for on-line help to work:
-  configureFlags = [ "--docdir=$out/share/doc" ];
+  configureFlags = [
+    # Explicit --docdir= is required for on-line help to work:
+    "--docdir=$out/share/doc"
+    "--with-nls=yes"
+    "--with-embedded-src-path=no"
+  ] ++ stdenv.lib.optional (builtins.elem stdenv.system
+      stdenv.lib.platforms.x86_64) "--with-sse2=yes";
 
   buildInputs = [
     pkgconfig which gettext intltool
@@ -35,11 +44,13 @@ stdenv.mkDerivation rec {
 
     for size in 16 24 32 48 64; do
       mkdir -pv $out/share/icons/hicolor/"$size"x"$size"/apps/
-      cp contrib/dvdisaster"$size".png $out/share/icons/hicolor/"$size"x"$size"/apps/dvdisaster.png
+      cp contrib/dvdisaster"$size".png \
+        $out/share/icons/hicolor/"$size"x"$size"/apps/dvdisaster.png
     done
   '';
 
   meta = with stdenv.lib; {
+    inherit version;
     homepage = http://dvdisaster.net/;
     description = "Data loss/scratch/aging protection for CD/DVD media";
     longDescription = ''
@@ -48,8 +59,8 @@ stdenv.mkDerivation rec {
       data which is used to recover unreadable sectors if the disc becomes
       damaged at a later time.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ jgeerds nckx ];
   };
 }
