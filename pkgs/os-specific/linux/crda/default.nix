@@ -23,8 +23,9 @@ stdenv.mkDerivation {
   '';
 
   makeFlags = [
-    "DESTDIR=$(out)"
-    "PREFIX="
+    "PREFIX=$(out)"
+    "SBINDIR=$(out)/bin/"
+    "UDEV_RULE_DIR=$(out)/lib/udev/rules.d/"
     "REG_BIN=${wireless-regdb}/lib/crda/regulatory.bin"
   ];
 
