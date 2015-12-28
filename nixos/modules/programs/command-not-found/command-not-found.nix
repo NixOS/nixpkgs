@@ -30,7 +30,7 @@ in
         local p=/run/current-system/sw/bin/command-not-found
         if [ -x $p -a -f /nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite ]; then
           # Run the helper program.
-          $p "$1"
+          $p "$@"
           # Retry the command if we just installed it.
           if [ $? = 126 ]; then
             "$@"
@@ -51,7 +51,7 @@ in
         local p=/run/current-system/sw/bin/command-not-found
         if [ -x $p -a -f /nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite ]; then
           # Run the helper program.
-          $p "$1"
+          $p "$@"
 
           # Retry the command if we just installed it.
           if [ $? = 126 ]; then
