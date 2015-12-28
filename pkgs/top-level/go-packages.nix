@@ -1744,14 +1744,14 @@ let
     goPackageAliases = [ "github.com/go-inf/inf" ];
   };
 
-  inflect = buildGoPackage {
-    name = "inflect";
+  inflect = buildGoPackage rec {
+    rev = "8961c3750a47b8c0b3e118d52513b97adf85a7e8";
+    name = "inflect-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "bitbucket.org/pkg/inflect";
-    src = fetchFromBitbucket {
-      rev    = "8961c3750a47b8c0b3e118d52513b97adf85a7e8";
-      owner  = "pkg";
-      repo   = "inflect";
-      sha256 = "04iln5b9iyvr6bcn5cj2zq6vqk3a2b4vsy48y2kylhk7qnakip99";
+    src = fetchhg {
+      inherit rev;
+      url  = "https://bitbucket.org/pkg/inflect";
+      sha256 = "11qdyr5gdszy24ai1bh7sf0cgrb4q7g7fsd11kbpgj5hjiigxb9a";
     };
   };
 
