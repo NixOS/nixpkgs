@@ -12145,11 +12145,11 @@ in modules // {
 
   nevow = buildPythonPackage (rec {
     name = "nevow-${version}";
-    version = "0.10.0";
+    version = "0.11.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/N/Nevow/Nevow-${version}.tar.gz";
-      sha256 = "90631f68f626c8934984908d3df15e7c198939d36be7ead1305479dfc67ff6d0";
+      sha256 = "1z0y8a5q4fa2nmh0dap7cs9pp5xs3jm6q0g4vpwcw77q7jagdmw9";
       name = "${name}.tar.gz";
     };
 
