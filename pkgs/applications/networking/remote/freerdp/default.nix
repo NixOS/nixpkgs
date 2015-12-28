@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     sha256 = "1w9dk7dsbppspnnms2xwwmbg7jm61i7aw5nkwzbpdyxngbgkgwf0";
   };
 
+  patches = [ ./libressl-des.diff ];
+
   buildInputs = [
     cmake
     openssl
