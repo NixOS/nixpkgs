@@ -17395,6 +17395,20 @@ in modules // {
     '';
   };
 
+  service_identity = buildPythonPackage rec {
+    name = "service_identity-${version}";
+    version = "14.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/service_identity/${name}.tar.gz";
+      sha256 = "0njg9bklkkp4rl2b9vsfh9aasxy3w2dmjkv9cq34jn65lwcs619i";
+    };
+
+    buildInputs = with self; [ pyasn1 pyasn1-modules pyopenssl ];
+    
+    propagatedBuildInputs = with self; [ characteristic ];
+  };
+
   setuptools_scm = buildPythonPackage rec {
     name = "setuptools_scm-${version}";
     version = "1.7.0";
