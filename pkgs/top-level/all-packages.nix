@@ -2099,7 +2099,7 @@ let
   else
     nodejs-4_x;
 
-  nodePackages_5_x = recurseIntoAttrs (callPackage ./node-packages.nix { self = nodePackages_5_x; nodejs = nodejs-5_x; });
+  nodePackages_5_x = callPackage ./node-packages.nix { self = nodePackages_5_x; nodejs = nodejs-5_x; };
 
   nodePackages_4_x = recurseIntoAttrs (callPackage ./node-packages.nix { self = nodePackages_4_x; nodejs = nodejs-4_x; });
 
