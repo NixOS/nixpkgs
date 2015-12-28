@@ -8914,14 +8914,14 @@ in modules // {
   });
 
   foolscap = buildPythonPackage (rec {
-    name = "foolscap-0.6.4";
+    name = "foolscap-0.10.1";
 
     src = pkgs.fetchurl {
       url = "http://foolscap.lothar.com/releases/${name}.tar.gz";
-      sha256 = "16cddyk5is0gjfn0ia5n2l4lhdzvbjzlx6sfpy7ddjd3d3fq7ckl";
+      sha256 = "1wrnbdq3y3lfxnhx30yj9xbr3iy9512jb60k8qi1da1phalnwz5x";
     };
 
-    propagatedBuildInputs = [ self.twisted self.pyopenssl ];
+    propagatedBuildInputs = [ self.twisted self.pyopenssl self.service-identity ];
 
     meta = {
       homepage = http://foolscap.lothar.com/;
