@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, libxml2, gtk3, gtkvnc, gmp
 , libgcrypt, gnupg, cyrus_sasl, shared_mime_info, libvirt, libcap_ng, yajl
-, gsettings_desktop_schemas, makeWrapper
+, gsettings_desktop_schemas, makeWrapper, numactl
 , spiceSupport ? true, spice_gtk ? null, spice_protocol ? null, libcap ? null, gdbm ? null
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation  {
   };
 
   buildInputs = [ 
-    pkgconfig intltool glib libxml2 gtk3 gtkvnc gmp libgcrypt gnupg cyrus_sasl
+    pkgconfig intltool glib libxml2 gtk3 gtkvnc gmp libgcrypt gnupg cyrus_sasl numactl
     shared_mime_info libvirt libcap_ng yajl gsettings_desktop_schemas makeWrapper
   ] ++ optionals spiceSupport [ spice_gtk spice_protocol libcap gdbm ];
 
