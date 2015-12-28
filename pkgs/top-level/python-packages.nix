@@ -20792,10 +20792,10 @@ in modules // {
     # to packages like carbon (http://stackoverflow.com/questions/19894708/cant-start-carbon-12-04-python-error-importerror-cannot-import-name-daem)
     disabled = isPy3k;
 
-    name = "Twisted-11.1.0";
+    name = "Twisted-13.2.0";
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/T/Twisted/${name}.tar.bz2";
-      sha256 = "05agfp17cndhv2w0p559lvknl7nv0xqkg10apc47fm53m8llbfvz";
+      sha256 = "1wrcqv5lvgwk2aq83qb2s2ng2vx14hbjjk2gc30cg6h1iiipal89";
     };
 
     propagatedBuildInputs = with self; [ zope_interface ];
