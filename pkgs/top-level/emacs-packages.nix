@@ -473,28 +473,6 @@ let
     };
   };
 
-  deferred = melpaBuild rec {
-    version = "0.3.2";
-    pname = "deferred";
-
-    src = fetchFromGitHub {
-      owner = "kiwanami";
-      repo = "emacs-${pname}";
-      rev = "896d4b53210289afe489e1ee7db4e12cb9248109";
-      sha256 = "0ysahdyvlg240dynwn23kk2d9kb432zh2skr1gydm3rxwn6f18r0";
-    };
-
-    meta = {
-      description = "Simple asynchronous functions for emacs-lisp";
-      longDescription = ''
-        deferred.el provides facilities to manage asynchronous tasks.
-        The API and implementations were translated from JSDeferred (by cho45)
-         and Mochikit.Async (by Bob Ippolito) in JavaScript.
-      '';
-      license = gpl3Plus;
-    };
-  };
-
   diminish = melpaBuild rec {
     pname   = "diminish";
     version = "0.44";
