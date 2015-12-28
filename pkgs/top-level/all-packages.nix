@@ -11145,7 +11145,6 @@ let
     jack = jack1;
   };
 
-  cbatticon = callPackage ../applications/misc/cbatticon { };
 
   bazaar = callPackage ../applications/version-management/bazaar { };
 
@@ -11179,6 +11178,11 @@ let
   };
 
   bluejeans = callPackage ../applications/networking/browsers/mozilla-plugins/bluejeans { };
+
+  bomi = qt5.callPackage ../applications/video/bomi {
+    youtube-dl = pythonPackages.youtube-dl;
+    pulseSupport = config.pulseaudio or true;
+  };
 
   brackets = callPackage ../applications/editors/brackets { gconf = gnome3.gconf; };
 
@@ -11216,6 +11220,8 @@ let
   funpidgin = carrier;
 
   cava = callPackage ../applications/audio/cava { };
+
+  cbatticon = callPackage ../applications/misc/cbatticon { };
 
   cbc = callPackage ../applications/science/math/cbc { };
 
@@ -11273,11 +11279,6 @@ let
   clipit = callPackage ../applications/misc/clipit { };
 
   cmatrix = callPackage ../applications/misc/cmatrix { };
-
-  bomi = qt5.callPackage ../applications/video/bomi {
-    youtube-dl = pythonPackages.youtube-dl;
-    pulseSupport = config.pulseaudio or true;
-  };
 
   cmus = callPackage ../applications/audio/cmus {
     libjack = libjack2;
