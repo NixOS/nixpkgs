@@ -20,9 +20,13 @@ stdenv.mkDerivation rec {
     sha256 = "1ybcsazjm21i2ys1wh49cz4azmqz7ghx5rb6hm4gm93i2zc5igck";
   };
 
+  patches = [ ./gpgkey2ssh-21.patch ];
+
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
+
+  postConfigure = "substituteAllInPlace tools/gpgkey2ssh.c";
 
   buildInputs = [
     pkgconfig libgcrypt libassuan libksba libiconv npth
