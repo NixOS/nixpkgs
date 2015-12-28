@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   dontDisableStatic = true;
 
   src = fetchurl {
-    url = "http://archive.apache.org/dist/mesos/${version}/${name}.tar.gz";
+    url = "mirror://apache/mesos/${version}/${name}.tar.gz";
     sha256 = "1v5xpn4wal4vcrvcklchx9slkpa8xlwqkdbnxzy9zkzpq5g3arxr";
   };
 
