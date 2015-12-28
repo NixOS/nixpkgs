@@ -21910,6 +21910,29 @@ in modules // {
     };
   };
 
+  tlsh = buildPythonPackage rec {
+    name = "tlsh-3.4.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "trendmicro";
+      repo = "tlsh";
+      rev = "b319aed6a270cc765347296b442820c495018833";
+      sha256 = "08ysniihvidcyvh9zip64wwvj7mvxvsqs60ci8cxj28f1ip0n8wg";
+    };
+    buildInputs = with pkgs; [ cmake ];
+    preConfigure = ''
+      mkdir build
+      cd build
+      cmake ..
+      cd ../py_ext
+    '';
+    meta = with stdenv.lib; {
+      description = "Trend Micro Locality Sensitive Hash";
+      homepage = https://github.com/trendmicro/tlsh;
+      license = licenses.asl20;
+      platforms = platforms.linux;
+    };
+  };
+
   toposort = buildPythonPackage rec {
     name = "toposort-${version}";
     version = "1.1";
