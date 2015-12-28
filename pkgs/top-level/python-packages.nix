@@ -21278,11 +21278,11 @@ in modules // {
 
   carbon = buildPythonPackage rec {
     name = "carbon-${version}";
-    version = "0.9.12";
+    version = "0.9.15";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/carbon/${name}.tar.gz";
-      md5 = "66967d5a622fd29973838fcd10eb34f3";
+      sha256 = "0bjx6r6mlq1irc7c5wrfsv80sss32jzsfrmai85grii6fz9vc7gh";
     };
 
     propagatedBuildInputs = with self; [ whisper txamqp zope_interface twisted ];
