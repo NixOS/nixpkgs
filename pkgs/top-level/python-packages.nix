@@ -14000,25 +14000,6 @@ in modules // {
   };
 
 
-  polylint = buildPythonPackage rec {
-    name = "polylint-${version}";
-    version = "158125c6ab";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/bendavis78/polylint";
-      rev = version;
-      sha256 = "ea10c67e9ce6df0936d6e2015382acba4f9cc559e2d6a9471f474f6bda78a266";
-    };
-
-    propagatedBuildInputs = with self; [ html5lib lxml cssselect ];
-
-    meta = {
-      description = "Fast HTML linter for polymer";
-      homepage = https://github.com/bendavis78/polylint;
-    };
-  };
-
-
   powerline = buildPythonPackage rec {
     rev  = "2.1.4";
     name = "powerline-${rev}";
