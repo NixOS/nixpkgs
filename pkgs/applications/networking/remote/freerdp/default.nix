@@ -45,12 +45,14 @@ stdenv.mkDerivation rec {
 #    xmlto docbook_xml_dtd_412 docbook_xml_xslt
     libXinerama
     libXv
-  ] ++ stdenv.lib.optional printerSupport cups;
+  ] ++ stdenv.lib.optional printerSupport cups
+  ++ stdenv.lib.optional pulseaudioSupport libpulseaudio;
 
   configureFlags = [
     "--with-x" "-DWITH_MANPAGES=OFF"
-  ] ++ stdenv.lib.optional printerSupport "--with-printer=cups"
-    ++ stdenv.lib.optional pulseaudioSupport "-DWITH_PULSEAUDIO=ON";
+  ] ++ stdenv.lib.optional printerSupport "--with-printer=cups";
+
+  cmakeFlags = stdenv.lib.optional pulseaudioSupport "-DWITH_PULSEAUDIO=ON";
 
   meta = {
     description = "A Remote Desktop Protocol Client";
