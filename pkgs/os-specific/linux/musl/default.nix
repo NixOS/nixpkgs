@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "musl-${version}";
-  version = "1.1.11";
+  version = "1.1.12";
 
   src = fetchurl {
     url    = "http://www.musl-libc.org/releases/${name}.tar.gz";
-    sha256 = "0grmmah3d9wajii26010plpinv3cbiq3kfqsblgn84kv3fjnv7mv";
+    sha256 = "03hwsgq7s5q8ww3yc20mc3yq2pqd6h4rbzmzq1wvdd3nwb3q62vj";
   };
 
   enableParallelBuilding = true;
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   dontDisableStatic = true;
 
+  # needed for rustc musl build
   postInstall = "cp ${llvmPackages.libunwind}/lib/libunwind.a $out/lib/";
 
   meta = {
