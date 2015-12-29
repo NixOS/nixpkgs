@@ -14138,7 +14138,7 @@ let
 
   lincity_ng = callPackage ../games/lincity/ng.nix {};
 
-  liquidwar = builderDefsPackage (callPackage ../games/liquidwar) {
+  liquidwar = callPackage ../games/liquidwar {
     guile = guile_1_8;
   };
 
