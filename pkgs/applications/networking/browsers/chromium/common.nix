@@ -145,6 +145,7 @@ let
       linux_use_gold_binary = false;
       linux_use_gold_flags = false;
       proprietary_codecs = false;
+      use_sysroot = false;
       use_gnome_keyring = gnomeKeyringSupport;
       use_gconf = gnomeSupport;
       use_gio = gnomeSupport;
