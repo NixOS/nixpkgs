@@ -5755,6 +5755,8 @@ let
 
   hyenae = callPackage ../tools/networking/hyenae { };
 
+  icestorm = callPackage ../development/tools/icestorm { };
+
   icmake = callPackage ../development/tools/build-managers/icmake { };
 
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils {
