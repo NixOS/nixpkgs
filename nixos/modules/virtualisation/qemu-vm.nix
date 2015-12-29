@@ -40,16 +40,17 @@ let
       if [ -z "$TMPDIR" -o -z "$USE_TMPDIR" ]; then
           TMPDIR=$(mktemp -d nix-vm.XXXXXXXXXX --tmpdir)
       fi
+
       # Create a directory for exchanging data with the VM.
       mkdir -p $TMPDIR/xchg
 
       ${if cfg.useBootLoader then ''
-        # Create a writable copy/snapshot of the boot disk
-        # A writable boot disk can be booted from automatically
+        # Create a writable copy/snapshot of the boot disk.
+        # A writable boot disk can be booted from automatically.
         ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 -b ${bootDisk}/disk.img $TMPDIR/disk.img || exit 1
 
         ${if cfg.useEFIBoot then ''
-          # VM needs a writable flash BIOS
+          # VM needs a writable flash BIOS.
           cp ${bootDisk}/bios.bin $TMPDIR || exit 1
           chmod 0644 $TMPDIR/bios.bin || exit 1
         '' else ''
