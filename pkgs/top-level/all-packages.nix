@@ -5001,6 +5001,8 @@ let
 
   yasm = callPackage ../development/compilers/yasm { };
 
+  yosys = callPackage ../development/compilers/yosys { };
+
 
   ### DEVELOPMENT / INTERPRETERS
 
