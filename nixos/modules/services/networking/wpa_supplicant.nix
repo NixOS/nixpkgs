@@ -4,33 +4,29 @@ with lib;
 
 let
   cfg = config.networking.wireless;
-  configFile = "/etc/wpa_supplicant.conf";
+  configFile = if cfg.networks != {} then pkgs.writeText "wpa_supplicant.conf" ''
+    ${optionalString cfg.userControlled.enable ''
+      ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=${cfg.userControlled.group}
+      update_config=1''}
+    ${concatStringsSep "\n" (mapAttrsToList (ssid: networkConfig: ''
+      network={
+        ssid="${ssid}"
+        ${optionalString (networkConfig.psk != null) ''psk="${networkConfig.psk}"''}
+        ${optionalString (networkConfig.psk == null) ''key_mgmt=NONE''}
+      }
+    '') cfg.networks)}
+  '' else "/etc/wpa_supplicant.conf";
 in {
   options = {
     networking.wireless = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to start <command>wpa_supplicant</command> to scan for
-          and associate with wireless networks.  Note: NixOS currently
-          does not manage <command>wpa_supplicant</command>'s
-          configuration file, <filename>${configFile}</filename>.  You
-          should edit this file yourself to define wireless networks,
-          WPA keys and so on (see
-          <citerefentry><refentrytitle>wpa_supplicant.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>), or use
-          networking.wireless.userControlled.* to allow users to add entries
-          through <command>wpa_cli</command> and <command>wpa_gui</command>.
-        '';
-      };
+      enable = mkEnableOption "wpa_supplicant";
 
       interfaces = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "wlan0" "wlan1" ];
         description = ''
-          The interfaces <command>wpa_supplicant</command> will use.  If empty, it will
+          The interfaces <command>wpa_supplicant</command> will use. If empty, it will
           automatically use all wireless interfaces.
         '';
       };
@@ -39,6 +35,34 @@ in {
         type = types.str;
         default = "nl80211,wext";
         description = "Force a specific wpa_supplicant driver.";
+      };
+
+      networks = mkOption {
+        type = types.attrsOf (types.submodule {
+          options = {
+            psk = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = ''
+                The network's pre-shared key in plaintext defaulting
+                to being a network without any authentication.
+              '';
+            };
+          };
+        });
+        description = ''
+          The network definitions to automatically connect to when
+           <command>wpa_supplicant</command> is running. If this
+           parameter is left empty wpa_supplicant will use
+          /etc/wpa_supplicant.conf as the configuration file.
+        '';
+        default = {};
+        example = literalExample ''
+          echelon = {
+            psk = "abcdefgh";
+          };
+          "free.wifi" = {};
+        '';
       };
 
       userControlled = {
@@ -51,10 +75,8 @@ in {
             to depend on a large package such as NetworkManager just to pick nearby
             access points.
 
-            When you want to use this, make sure ${configFile} doesn't exist.
-            It will be created for you.
-
-            Currently it is also necessary to explicitly specify networking.wireless.interfaces.
+            When using a declarative network specification you cannot persist any
+            settings via wpa_gui or wpa_cli.
           '';
         };
 
