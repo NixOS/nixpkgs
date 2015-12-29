@@ -813,6 +813,11 @@ let
 
   dialog = callPackage ../development/tools/misc/dialog { };
 
+  ding = callPackage ../applications/misc/ding {
+    aspellDicts_de = aspellDicts.de;
+    aspellDicts_en = aspellDicts.en;
+  };
+
   direnv = callPackage ../tools/misc/direnv { };
 
   discount = callPackage ../tools/text/discount { };
