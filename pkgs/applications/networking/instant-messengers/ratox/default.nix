@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://git.2f30.org/ratox/snapshot/${name}.tar.gz";
-    sha256 = "1fm9b3clvnc2nf0pd1z8g08kfszwhk1ij1lyx57wl8vd51z4xsi5";
+    sha256 = "0xnw3zcz9frmcxqhwg38hhnsy1g5xl9yc19nl0vwi5awz8wqqy19";
   };
 
   buildInputs = [ libtoxcore ];
