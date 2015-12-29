@@ -10320,6 +10320,8 @@ let
 
     openafsClient = callPackage ../servers/openafs-client { };
 
+    facetimehd = callPackage ../os-specific/linux/facetimehd { };
+
     kernelHeaders = callPackage ../os-specific/linux/kernel-headers { };
 
     klibc = callPackage ../os-specific/linux/klibc { };
