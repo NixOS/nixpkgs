@@ -47,6 +47,7 @@ let
           };
           inherit iso;
           passthru = { inherit config; };
+          preferLocalBuild = true;
         }
         ''
           mkdir -p $out/nix-support
@@ -149,6 +150,7 @@ in rec {
             maintainers = maintainers.eelco;
           };
           ova = config.system.build.virtualBoxOVA;
+          preferLocalBuild = true;
         }
         ''
           mkdir -p $out/nix-support
@@ -168,6 +170,7 @@ in rec {
             boot.loader.grub.device = mkDefault "/dev/sda";
           });
       }).config.system.build.toplevel;
+      preferLocalBuild = true;
     }
     "mkdir $out; ln -s $toplevel $out/dummy");
 
