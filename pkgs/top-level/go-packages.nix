@@ -1745,7 +1745,7 @@ let
   };
 
   inflect = buildGoPackage {
-    name = "inflect";
+    name = "inflect-2013-08-29";
     goPackagePath = "bitbucket.org/pkg/inflect";
     src = fetchFromBitbucket {
       rev    = "8961c3750a47b8c0b3e118d52513b97adf85a7e8";
