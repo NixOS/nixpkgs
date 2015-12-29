@@ -2285,7 +2285,7 @@ let
   };
 
   osext = buildFromGitHub {
-    rev = "10da29423eb9a6269092eebdc2be32209612d9d2";
+    rev = "29ae4ffbc9a6fe9fb2bc5029050ce6996ea1d3bc";
     owner = "kardianos";
     repo = "osext";
     sha256 = "1mawalaz84i16njkz6f9fd5jxhcbxkbsjnav3cmqq2dncv2hyv8a";
@@ -3092,11 +3092,11 @@ let
   };
 
   syncthing = buildFromGitHub rec {
-    version = "0.12.9";
+    version = "0.12.10";
     rev = "v${version}";
     owner = "syncthing";
     repo = "syncthing";
-    sha256 = "0d420bmx1ifhjgbc65bflnawqddi4h86p7fvxzzqwfsaj94fsfbi";
+    sha256 = "1xvar4mm6f33mg8d8z8h49cni6sj1vfns379zspqvszs404fra0z";
     buildFlags = [ "-tags noupgrade,release" ];
     disabled = isGo14;
     buildInputs = [
