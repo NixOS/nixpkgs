@@ -6,15 +6,105 @@
 let
   isGo14 = go.meta.branch == "1.4";
 
-  self = _self // overrides; _self = with self; {
-
-  inherit go buildGoPackage;
-
   buildFromGitHub = { rev, date ? null, owner, repo, sha256, name ? repo, goPackagePath ? "github.com/${owner}/${repo}", ... }@args: buildGoPackage (args // {
     inherit rev goPackagePath;
     name = "${name}-${if date != null then date else if builtins.stringLength rev != 40 then rev else stdenv.lib.strings.substring 0 7 rev}";
     src  = fetchFromGitHub { inherit rev owner repo sha256; };
   });
+
+  gitHubHierarchy = self: with self; {
+    spf13 = {
+      afero = {
+        rev    = "90b5a9bd18a72dbf3e27160fc47acfaac6c08389";
+        sha256 = "1xqvbwny61j85psymcs8hggmqyyg4yq3q4cssnvnvbsl3aq8kn4k";
+        propagatedBuildInputs = [ text ];
+      };
+
+      cast = {
+        rev    = "ee815aaf958c707ad07547cd62150d973710f747";
+        sha256 = "144xwvmjbrv59zjj1gnq5j9qpy62dgyfamxg5l3smdwfwa8vpf5i";
+        buildInputs = [ jwalterweatherman ];
+      };
+
+      cobra = {
+        rev    = "ee6224d01f6a83f543ae90f881b703cf195782ba";
+        sha256 = "0skmq1lmkh2xzl731a2sfcnl2xbcy9v1050pcf10dahwqzsbx6ij";
+        propagatedBuildInputs = [ pflag mousetrap go-md2man viper ];
+      };
+
+      fsync = {
+        rev    = "c2544e79b93fda5653255f907a30fba1c2ac2638";
+        sha256 = "0hzfk2f8pm756j10zgsk8b8gbfylcf8h6q4djz0ka9zpg76s26lz";
+        buildInputs = [ afero ];
+      };
+
+      hugo = {
+        rev    = "v0.15";
+        sha256 = "1v0z9ar5kakhib3c3c43ddwd1ga4b8icirg6kk3cnaqfckd638l5";
+        buildInputs = [
+          mapstructure text websocket cobra osext fsnotify.v1 afero
+          jwalterweatherman cast viper yaml-v2 ace purell mmark blackfriday amber
+          cssmin nitro inflect fsync
+        ];
+      };
+
+      jwalterweatherman = {
+        rev    = "c2aa07df593850a04644d77bb757d002e517a296";
+        sha256 = "0m8867afsvka5gp2idrmlarpjg7kxx7qacpwrz1wl8y3zxyn3945";
+      };
+
+      nitro = {
+        rev    = "24d7ef30a12da0bdc5e2eb370a79c659ddccf0e8";
+        sha256 = "143sbpx0jdgf8f8ayv51x6l4jg6cnv6nps6n60qxhx4vd90s6mib";
+      };
+
+      pflag = {
+        rev    = "08b1a584251b5b62f458943640fc8ebd4d50aaa5";
+        sha256 = "139d08cq06jia0arc6cikdnhnaqms07xfay87pzq5ym86fv0agiq";
+      };
+
+      viper = {
+        rev    = "e37b56e207dda4d79b9defe0548e960658ee8b6b";
+        sha256 = "0q0hkla23hgvc3ab6qdlrfwxa8lnhy2s2mh2c8zrh632gp8d6prl";
+        propagatedBuildInputs = [
+          mapstructure yaml-v2 jwalterweatherman crypt fsnotify.v1 cast properties
+          pretty toml pflag
+        ];
+      };
+    };
+  };
+
+  gitHubPackages = specs:
+    let
+      nested =
+        stdenv.lib.mapAttrs
+          (owner: stdenv.lib.mapAttrs
+            (repo: spec: buildFromGitHub ({ inherit owner repo; } // spec))) specs;
+
+      flattened =
+        stdenv.lib.mapAttrs
+          (_: v: (stdenv.lib.head v).pkg)
+          (stdenv.lib.foldAttrsWithKey
+            (k: n: a:
+              if a == [] then
+                [n]
+              else
+                throw ''
+                  Ambiguous unqualified go package attribute requested: ${k}, provided by (at least):
+                    - ${n.owner}
+                    - ${(stdenv.lib.head a).owner}
+                  Please disambiguate by specifying a qualified ${n.owner}.${k} or similar.
+                '') []
+            (stdenv.lib.mapAttrsToList
+              (owner: stdenv.lib.mapAttrs
+                (repo: spec: { inherit owner; pkg = buildFromGitHub ({ inherit owner repo; } // spec); })) specs));
+    in flattened // nested;
+
+  # These two definitions are mutually recursive
+  self = stdenv.lib.fold stdenv.lib.recursiveUpdate {} [ _self (gitHubPackages (gitHubHierarchy self)) overrides ];
+  _self = with self; {
+
+  inherit go buildGoPackage;
 
   ## OFFICIAL GO PACKAGES
 
@@ -183,14 +273,6 @@ let
     propagatedBuildInputs = [ sys ];
   };
 
-  afero = buildFromGitHub {
-    rev    = "90b5a9bd18a72dbf3e27160fc47acfaac6c08389";
-    owner  = "spf13";
-    repo   = "afero";
-    sha256 = "1xqvbwny61j85psymcs8hggmqyyg4yq3q4cssnvnvbsl3aq8kn4k";
-    propagatedBuildInputs = [ text ];
-  };
-
   airbrake-go = buildFromGitHub {
     rev    = "5b5e269e1bc398d43f67e43dafff3414a59cd5a2";
     owner  = "tobi";
@@ -346,14 +428,6 @@ let
     };
   };
 
-  cast = buildFromGitHub {
-    rev    = "ee815aaf958c707ad07547cd62150d973710f747";
-    owner  = "spf13";
-    repo   = "cast";
-    sha256 = "144xwvmjbrv59zjj1gnq5j9qpy62dgyfamxg5l3smdwfwa8vpf5i";
-    buildInputs = [ jwalterweatherman ];
-  };
-
   check-v1 = buildGoPackage rec {
     rev = "871360013c92e1c715c2de6d06b54899468a8a2d";
     name = "check-v1-${stdenv.lib.strings.substring 0 7 rev}";
@@ -385,14 +459,6 @@ let
     owner  = "odeke-em";
     repo   = "cli-spinner";
     sha256 = "13wzs2qrxd72ah32ym0ppswhvyimjw5cqaq3q153y68vlvxd048c";
-  };
-
-  cobra = buildFromGitHub {
-    rev    = "ee6224d01f6a83f543ae90f881b703cf195782ba";
-    owner  = "spf13";
-    repo   = "cobra";
-    sha256 = "0skmq1lmkh2xzl731a2sfcnl2xbcy9v1050pcf10dahwqzsbx6ij";
-    propagatedBuildInputs = [ pflag-spf13 mousetrap go-md2man viper ];
   };
 
   cli-go = buildFromGitHub {
@@ -737,14 +803,6 @@ let
       repo = "fsnotify";
       sha256 = "1308z1by82fbymcra26wjzw7lpjy91kbpp2skmwqcq4q1iwwzvk2";
     };
-  };
-
-  fsync = buildFromGitHub {
-    rev    = "c2544e79b93fda5653255f907a30fba1c2ac2638";
-    owner  = "spf13";
-    repo   = "fsync";
-    sha256 = "0hzfk2f8pm756j10zgsk8b8gbfylcf8h6q4djz0ka9zpg76s26lz";
-    buildInputs = [ afero ];
   };
 
   fzf = buildFromGitHub {
@@ -1723,18 +1781,6 @@ let
     sha256 = "00rrjysmq898qcrf2hfwfh9s70vwvmjx2kp5w03nz1krxa4zhrkl";
   };
 
-  hugo = buildFromGitHub {
-    rev    = "v0.15";
-    owner  = "spf13";
-    repo   = "hugo";
-    sha256 = "1v0z9ar5kakhib3c3c43ddwd1ga4b8icirg6kk3cnaqfckd638l5";
-    buildInputs = [
-      mapstructure text websocket cobra osext fsnotify.v1 afero
-      jwalterweatherman cast viper yaml-v2 ace purell mmark blackfriday amber
-      cssmin nitro inflect fsync
-    ];
-  };
-
   inf = buildFromGitHub {
     rev    = "c85f1217d51339c0fa3a498cc8b2075de695dae6";
     owner  = "go-inf";
@@ -1802,13 +1848,6 @@ let
     owner  = "jehiah";
     repo   = "json2csv";
     sha256 = "1fw0qqaz2wj9d4rj2jkfj7rb25ra106p4znfib69p4d3qibfjcsn";
-  };
-
-  jwalterweatherman = buildFromGitHub {
-    rev    = "c2aa07df593850a04644d77bb757d002e517a296";
-    owner  = "spf13";
-    repo   = "jwalterweatherman";
-    sha256 = "0m8867afsvka5gp2idrmlarpjg7kxx7qacpwrz1wl8y3zxyn3945";
   };
 
   ldap = buildGoPackage rec {
@@ -2164,13 +2203,6 @@ let
     buildFlags = [ "-tags release" ];
   };
 
-  nitro = buildFromGitHub {
-    rev    = "24d7ef30a12da0bdc5e2eb370a79c659ddccf0e8";
-    owner  = "spf13";
-    repo   = "nitro";
-    sha256 = "143sbpx0jdgf8f8ayv51x6l4jg6cnv6nps6n60qxhx4vd90s6mib";
-  };
-
   nsq = buildFromGitHub {
     rev = "v0.3.5";
     owner = "bitly";
@@ -2345,26 +2377,6 @@ let
     repo   = "perks";
     rev    = "b965b613227fddccbfffe13eae360ed3fa822f8d";
     sha256 = "1p8zsj4r0g61q922khfxpwxhdma2dx4xad1m5qx43mfn28kxngqk";
-  };
-
-  pflag = buildGoPackage rec {
-    date = "20131112";
-    rev = "94e98a55fb412fcbcfc302555cb990f5e1590627";
-    name = "pflag-${date}-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/spf13/pflag";
-    src = fetchgit {
-      inherit rev;
-      url = "https://${goPackagePath}.git";
-      sha256 = "0z8nzdhj8nrim8fz11magdl0wxnisix9p2kcvn5kkb3bg8wmxhbg";
-    };
-    doCheck = false; # bad import path in tests
-  };
-
-  pflag-spf13 = buildFromGitHub rec {
-    rev    = "08b1a584251b5b62f458943640fc8ebd4d50aaa5";
-    owner  = "spf13";
-    repo   = "pflag";
-    sha256 = "139d08cq06jia0arc6cikdnhnaqms07xfay87pzq5ym86fv0agiq";
   };
 
   pond = let
@@ -3280,17 +3292,6 @@ let
     owner  = "Masterminds";
     repo   = "vcs";
     sha256 = "1qav4lf4ln5gs81714876q2cy9gfaxblbvawg3hxznbwakd9zmd8";
-  };
-
-  viper = buildFromGitHub {
-    rev    = "e37b56e207dda4d79b9defe0548e960658ee8b6b";
-    owner  = "spf13";
-    repo   = "viper";
-    sha256 = "0q0hkla23hgvc3ab6qdlrfwxa8lnhy2s2mh2c8zrh632gp8d6prl";
-    propagatedBuildInputs = [
-      mapstructure yaml-v2 jwalterweatherman crypt fsnotify.v1 cast properties
-      pretty toml pflag-spf13
-    ];
   };
 
   vulcand = buildGoPackage rec {
