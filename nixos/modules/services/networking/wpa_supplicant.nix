@@ -106,16 +106,6 @@ in {
 
         path = [ pkgs.wpa_supplicant ];
 
-        preStart = ''
-          touch -a ${configFile}
-          chmod 600 ${configFile}
-        '' + optionalString cfg.userControlled.enable ''
-          if [ ! -s ${configFile} ]; then
-            echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=${cfg.userControlled.group}" >> ${configFile}
-            echo "update_config=1" >> ${configFile}
-          fi
-        '';
-
         script = ''
           ${if ifaces == [] then ''
             for i in $(cd /sys/class/net && echo *); do
