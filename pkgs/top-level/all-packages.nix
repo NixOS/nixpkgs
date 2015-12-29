@@ -372,6 +372,7 @@ let
     inherit name sha256;
     url = "https://bitbucket.org/${owner}/${repo}/get/${rev}.tar.gz";
     meta.homepage = "https://bitbucket.org/${owner}/${repo}/";
+    extraPostFetch = ''rm -f "$out"/.hg_archival.txt''; # impure file; see #12002
   };
 
   # cgit example, snapshot support is optional in cgit

@@ -1751,7 +1751,7 @@ let
       rev    = "8961c3750a47b8c0b3e118d52513b97adf85a7e8";
       owner  = "pkg";
       repo   = "inflect";
-      sha256 = "04iln5b9iyvr6bcn5cj2zq6vqk3a2b4vsy48y2kylhk7qnakip99";
+      sha256 = "11qdyr5gdszy24ai1bh7sf0cgrb4q7g7fsd11kbpgj5hjiigxb9a";
     };
   };
 
