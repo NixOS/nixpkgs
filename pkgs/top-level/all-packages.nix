@@ -3776,6 +3776,8 @@ let
 
   aliceml = callPackage ../development/compilers/aliceml { };
 
+  arachne-pnr = callPackage ../development/compilers/arachne-pnr { };
+
   aspectj = callPackage ../development/compilers/aspectj { };
 
   ats = callPackage ../development/compilers/ats { };
