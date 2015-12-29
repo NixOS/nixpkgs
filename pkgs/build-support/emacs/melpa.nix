@@ -8,6 +8,8 @@ with lib;
 { pname
 , version
 
+, recipeFile ? null
+
 , files ? null
 , fileSpecs ? [ "*.el" "*.el.in" "dir"
                 "*.info" "*.texi" "*.texinfo"
@@ -43,8 +45,17 @@ import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
     runHook preBuild
 
     emacs --batch -Q -l $packageBuild -l ${./melpa2nix.el} \
+    ${if recipeFile == null
+      then
+      ''
       -f melpa2nix-build-package \
       ${pname} ${version} ${targets}
+      ''
+      else
+      ''
+      -f melpa2nix-build-package-from-recipe \
+      ${pname} ${version} ${recipeFile}
+      ''}
 
     runHook postBuild
   '';
