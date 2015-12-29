@@ -374,13 +374,6 @@ let
     meta.homepage = "https://bitbucket.org/${owner}/${repo}/";
   };
 
-  # gitorious example
-  fetchFromGitorious = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
-    inherit name sha256;
-    url = "https://gitorious.org/${owner}/${repo}/archive/${rev}.tar.gz";
-    meta.homepage = "https://gitorious.org/${owner}/${repo}/";
-  };
-
   # cgit example, snapshot support is optional in cgit
   fetchFromSavannah = { repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
     inherit name sha256;
@@ -2968,7 +2961,7 @@ let
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
 
   rubber = callPackage ../tools/typesetting/rubber { };
-  
+
   runzip = callPackage ../tools/archivers/runzip { };
 
   rxp = callPackage ../tools/text/xml/rxp { };
