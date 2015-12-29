@@ -13571,6 +13571,8 @@ let
     freerdp = freerdpUnstable;
   };
 
+  windowlab = callPackage ../applications/window-managers/windowlab { };
+
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
 
   alsamixer.app = callPackage ../applications/window-managers/windowmaker/dockapps/alsamixer.app.nix { };
