@@ -26,7 +26,7 @@ let
   # this is the default search path for DRI drivers
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
-with { inherit (stdenv.lib) optional optionals optionalString; };
+with { inherit (stdenv.lib) optional optionals optionalString splitString; };
 
 stdenv.mkDerivation {
   name = "mesa-noglu-${version}";
@@ -35,6 +35,7 @@ stdenv.mkDerivation {
     urls = [
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
+      ''ftp://ftp.freedesktop.org/pub/mesa/older-versions/${builtins.head (splitString "." version)}.x/${version}/mesa-${version}.tar.xz''
     ];
     sha256 = "9c255a2a6695fcc6ef4a279e1df0aeaf417dc142f39ee59dfb533d80494bb67a";
   };
