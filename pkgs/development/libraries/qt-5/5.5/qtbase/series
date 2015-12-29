@@ -6,3 +6,4 @@ dlopen-dbus.patch
 xdg-config-dirs.patch
 nix-profiles-library-paths.patch
 compose-search-path.patch
+libressl.patch

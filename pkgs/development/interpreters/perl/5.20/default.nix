@@ -21,11 +21,11 @@ in
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "perl-5.20.2";
+  name = "perl-5.20.3";
 
   src = fetchurl {
     url = "mirror://cpan/authors/id/S/SH/SHAY/${name}.tar.gz";
-    sha256 = "17cvplgpxbm1hshxlkra2fldn4da1iap1lsnb04hdm8ply93k95i";
+    sha256 = "0jlvpd5l5nk7lzfd4akdg1sw6vinbkj6izclyyr0lrbidfky691m";
   };
 
   outputs = [ "out" "man" ];
@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
   patches =
     [ # Do not look in /usr etc. for dependencies.
       ./no-sys-dirs.patch
-      # Remove in 5.20.3
-      ./perl-5.20.2-gcc5_fixes-1.patch
     ]
     ++ optional stdenv.isSunOS ./ld-shared.patch
     ++ stdenv.lib.optional stdenv.isDarwin [ ./cpp-precomp.patch ./no-libutil.patch ] ;
@@ -84,6 +82,9 @@ stdenv.mkDerivation rec {
       ''}
     '' + optionalString stdenv.isDarwin ''
       substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
+    '' + optionalString (!enableThreading) ''
+      # We need to do this because the bootstrap doesn't have a static libpthread
+      sed -i 's,\(libswanted.*\)pthread,\1,g' Configure
     '';
 
   preBuild = optionalString (!(stdenv ? cc && stdenv.cc.nativeTools))
