@@ -14068,7 +14068,9 @@ let
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
 
-  flightgear = qt5.callPackage ../games/flightgear { };
+  flightgear = qt5.callPackage ../games/flightgear {
+    fltk13 = fltk13.override { cfg.xftSupport = true; };
+  };
 
   freecell-solver = callPackage ../games/freecell-solver { };
 
