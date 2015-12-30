@@ -3776,6 +3776,8 @@ let
 
   aliceml = callPackage ../development/compilers/aliceml { };
 
+  arachne-pnr = callPackage ../development/compilers/arachne-pnr { };
+
   aspectj = callPackage ../development/compilers/aspectj { };
 
   ats = callPackage ../development/compilers/ats { };
@@ -4999,6 +5001,8 @@ let
 
   yasm = callPackage ../development/compilers/yasm { };
 
+  yosys = callPackage ../development/compilers/yosys { };
+
 
   ### DEVELOPMENT / INTERPRETERS
 
@@ -5754,6 +5758,8 @@ let
   heroku = callPackage ../development/tools/heroku { };
 
   hyenae = callPackage ../tools/networking/hyenae { };
+
+  icestorm = callPackage ../development/tools/icestorm { };
 
   icmake = callPackage ../development/tools/build-managers/icmake { };
 
