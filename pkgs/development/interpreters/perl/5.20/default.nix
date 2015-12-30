@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       ./no-sys-dirs.patch
     ]
     ++ optional stdenv.isSunOS ./ld-shared.patch
-    ++ stdenv.lib.optional stdenv.isDarwin [ ./cpp-precomp.patch ./no-libutil.patch ] ;
+    ++ stdenv.lib.optional stdenv.isDarwin [ ./cpp-precomp.patch ];
 
   # There's an annoying bug on sandboxed Darwin in Perl's Cwd.pm where it looks for pwd
   # in /bin/pwd and /usr/bin/pwd and then falls back on just "pwd" if it can't get them
