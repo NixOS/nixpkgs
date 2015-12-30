@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" ${coreutils}/bin:${findutils}/bin:${gnugrep}/bin
     wrapProgram $out/libexec/postfix/postfix-script \
       --prefix PATH ":" ${coreutils}/bin:${findutils}/bin:${gnugrep}/bin:${gawk}/bin:${gnused}/bin
+    ln -fs $out/bin/sendmail $out/bin/mailq
+    ln -fs $out/bin/sendmail $out/bin/newaliases
   '';
 
   meta = {
