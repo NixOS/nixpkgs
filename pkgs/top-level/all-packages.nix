@@ -3365,7 +3365,7 @@ let
 
   vidalia = callPackage ../tools/security/vidalia { };
 
-  vbetool = builderDefsPackage (callPackage ../tools/system/vbetool) { };
+  vbetool = callPackage ../tools/system/vbetool { };
 
   vde2 = callPackage ../tools/networking/vde2 { };
 
