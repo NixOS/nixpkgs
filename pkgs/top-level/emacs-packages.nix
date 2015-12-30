@@ -1493,21 +1493,6 @@ let
     };
   };
 
-  popup = melpaBuild rec {
-    pname   = "popup";
-    version = "0.5.2";
-    src = fetchFromGitHub {
-      owner  = "auto-complete";
-      repo   = "${pname}-el";
-      rev    = "v${version}";
-      sha256 = "0aazkczrzpp75793bpi0pz0cs7vinhdrpxfdlzi0cr39njird2yj";
-    };
-    meta = {
-      description = "Popup tooltips and popup menus for Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   projectile = melpaBuild rec {
     pname   = "projectile";
     version = "0.13.0";
