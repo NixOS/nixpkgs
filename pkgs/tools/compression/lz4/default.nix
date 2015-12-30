@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://code.google.com/p/lz4/;
     license = with licenses; [ bsd2 gpl2Plus ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ nckx ];
   };
 }
