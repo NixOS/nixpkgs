@@ -3365,7 +3365,7 @@ let
 
   vidalia = callPackage ../tools/security/vidalia { };
 
-  vbetool = builderDefsPackage (callPackage ../tools/system/vbetool) { };
+  vbetool = callPackage ../tools/system/vbetool { };
 
   vde2 = callPackage ../tools/networking/vde2 { };
 
@@ -14076,7 +14076,9 @@ let
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
 
-  flightgear = qt5.callPackage ../games/flightgear { };
+  flightgear = qt5.callPackage ../games/flightgear {
+    fltk13 = fltk13.override { cfg.xftSupport = true; };
+  };
 
   freecell-solver = callPackage ../games/freecell-solver { };
 
