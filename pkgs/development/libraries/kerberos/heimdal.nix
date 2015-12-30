@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig python perl yacc flex ]
     ++ (with perlPackages; [ JSON ])
     ++ optional (!libOnly) texinfo;
-  buildInputs = (if (!stdenv.isFreeBSD) then [ libcap_ng db ] else []) ++ [ sqlite openssl libedit ]
+  buildInputs = optionals (!stdenv.isFreeBSD) [ libcap_ng db ]
+    ++ [ sqlite openssl libedit ]
     ++ optionals (!libOnly) [ openldap pam ];
 
   ## ugly, X should be made an option

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./CVE-2015-1283.patch ];
 
-  configureFlags = stdenv.lib.optionalString stdenv.isFreeBSD "--with-pic";
+  configureFlags = stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
 
   meta = with stdenv.lib; {
     homepage = http://www.libexpat.org/;

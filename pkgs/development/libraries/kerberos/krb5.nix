@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "1sgr61cnkgc5xazijaww6wpn5fnxl9vyj9ixk3r3y7ikv3x0gnyf";
   };
 
-  configureFlags = stdenv.lib.optionalString stdenv.isFreeBSD ''WARN_CFLAGS=""'';
+  configureFlags = optional stdenv.isFreeBSD ''WARN_CFLAGS=""'';
 
   nativeBuildInputs = [ pkgconfig perl yacc ]
     # Provides the mig command used by the build scripts
-    ++ stdenv.lib.optional stdenv.isDarwin bootstrap_cmds;
+    ++ optional stdenv.isDarwin bootstrap_cmds;
   buildInputs = [ openssl ]
     ++ optionals (!libOnly) [ openldap libedit ];
 
