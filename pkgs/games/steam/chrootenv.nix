@@ -57,6 +57,7 @@ buildFHSUserEnv {
 
   profile = ''
     export STEAM_RUNTIME=/steamrt
+    export LD_PRELOAD='/lib32/libstdc++.so.6'
   '';
 
   runScript = "steam";
