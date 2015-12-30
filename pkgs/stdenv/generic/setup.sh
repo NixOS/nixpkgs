@@ -612,12 +612,8 @@ fixLibtool() {
 configurePhase() {
     runHook preConfigure
 
-    if [ -z "$configureScript" ]; then
+    if [ -z "$configureScript" -a -x ./configure ]; then
         configureScript=./configure
-        if ! [ -x $configureScript ]; then
-            echo "no configure script, doing nothing"
-            return
-        fi
     fi
 
     if [ -z "$dontFixLibtool" ]; then
@@ -645,8 +641,12 @@ configurePhase() {
         fi
     fi
 
-    echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
-    $configureScript $configureFlags "${configureFlagsArray[@]}"
+    if [ -n "$configureScript" ]; then
+        echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
+        $configureScript $configureFlags "${configureFlagsArray[@]}"
+    else
+        echo "no configure script, doing nothing"
+    fi
 
     runHook postConfigure
 }
@@ -657,17 +657,16 @@ buildPhase() {
 
     if [ -z "$makeFlags" ] && ! [ -n "$makefile" -o -e "Makefile" -o -e "makefile" -o -e "GNUmakefile" ]; then
         echo "no Makefile, doing nothing"
-        return
+    else
+        # See https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
+        makeFlags="SHELL=$SHELL $makeFlags"
+
+        echo "make flags: $makeFlags ${makeFlagsArray[@]} $buildFlags ${buildFlagsArray[@]}"
+        make ${makefile:+-f $makefile} \
+            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}} \
+            $makeFlags "${makeFlagsArray[@]}" \
+            $buildFlags "${buildFlagsArray[@]}"
     fi
-
-    # See https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
-    makeFlags="SHELL=$SHELL $makeFlags"
-
-    echo "make flags: $makeFlags ${makeFlagsArray[@]} $buildFlags ${buildFlagsArray[@]}"
-    make ${makefile:+-f $makefile} \
-        ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}} \
-        $makeFlags "${makeFlagsArray[@]}" \
-        $buildFlags "${buildFlagsArray[@]}"
 
     runHook postBuild
 }
