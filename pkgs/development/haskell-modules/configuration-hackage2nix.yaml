@@ -35,6 +35,7 @@ default-package-overrides:
 
 extra-packages:
   - aeson < 0.8                         # newer versions don't work with GHC 6.12.3
+  - binary > 0.7 && < 0.8               # binary 0.8.x is the latest, but it's largely unsupported so far
   - Cabal == 1.18.*                     # required for cabal-install et al on old GHC versions
   - Cabal == 1.20.*                     # required for cabal-install et al on old GHC versions
   - containers < 0.5                    # required to build alex with GHC 6.12.3
