@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "0g5bl8sdpzx9gx2g5jq3py4bj07z2ylk7s1qn0fvsss2yl3hhs8c";
   };
 
+  # TODO: Add a "dev" output containing the header files.
   outputs = [ "out" "man" "docdev" ];
   setOutputFlags = false;
 
@@ -38,6 +39,8 @@ stdenv.mkDerivation rec {
     ]
     ++ optional stdenv.isSunOS ./ld-shared.patch
     ++ stdenv.lib.optional stdenv.isDarwin [ ./cpp-precomp.patch ];
+
+  sandboxProfile = stdenv.lib.sandbox.allow "ipc-sysv-sem";
 
   # Build a thread-safe Perl with a dynamic libperls.o.  We need the
   # "installstyle" option to ensure that modules are put under

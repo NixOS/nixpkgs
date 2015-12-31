@@ -15,7 +15,8 @@ assert enableThreading -> (stdenv ? glibc);
 let
 
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
-
+  libcInc = libc.dev or libc;
+  libcLib = libc.out or libc;
 in
 
 with stdenv.lib;
@@ -29,8 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   # TODO: Add a "dev" output containing the header files.
-  outputs = [ "out" "man" ];
-
+  outputs = [ "out" "man" "docdev" ];
   setOutputFlags = false;
 
   patches =
@@ -39,17 +39,6 @@ stdenv.mkDerivation rec {
     ]
     ++ optional stdenv.isSunOS ./ld-shared.patch
     ++ stdenv.lib.optional stdenv.isDarwin [ ./cpp-precomp.patch ];
-
-  # There's an annoying bug on sandboxed Darwin in Perl's Cwd.pm where it looks for pwd
-  # in /bin/pwd and /usr/bin/pwd and then falls back on just "pwd" if it can't get them
-  # while at the same time erasing the PATH environment variable so it unconditionally
-  # fails. The code in question is guarded by a check for Mac OS, but the patch below
-  # doesn't have any runtime effect on other platforms.
-  postPatch = stdenv.lib.optional stdenv.isDarwin ''
-    pwd="$(type -P pwd)"
-    substituteInPlace dist/PathTools/Cwd.pm \
-      --replace "/bin/pwd" "$pwd"
-  '';
 
   sandboxProfile = stdenv.lib.sandbox.allow "ipc-sysv-sem";
 
@@ -64,8 +53,8 @@ stdenv.mkDerivation rec {
       "-Uinstallusrbinperl"
       "-Dinstallstyle=lib/perl5"
       "-Duseshrplib"
-      "-Dlocincpth=${libc.dev or libc}/include"
-      "-Dloclibpth=${libc.out or libc}/lib"
+      "-Dlocincpth=${libcInc}/include"
+      "-Dloclibpth=${libcLib}/lib"
     ]
     ++ optional stdenv.isSunOS "-Dcc=gcc"
     ++ optional enableThreading "-Dusethreads";
@@ -76,13 +65,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    pwd="$(type -P pwd)"
+    substituteInPlace dist/PathTools/Cwd.pm \
+      --replace "pwd_cmd = 'pwd'" "pwd_cmd = '$pwd'"
+  '';
+
   preConfigure =
     ''
       configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
-
-      ${optionalString stdenv.isArm ''
-        configureFlagsArray=(-Dldflags="-lm -lrt")
-      ''}
+    '' + optionalString stdenv.isArm ''
+      configureFlagsArray=(-Dldflags="-lm -lrt")
     '' + optionalString stdenv.isDarwin ''
       substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
     '' + optionalString (!enableThreading) ''
@@ -96,20 +89,25 @@ stdenv.mkDerivation rec {
       substituteInPlace dist/PathTools/Cwd.pm --replace "'/bin/pwd'" "'$(type -tP pwd)'"
     '';
 
-  postInstall =
-    ''
-      # Remove dependency between "out" and "man" outputs.
-      rm $out/lib/perl5/*/*/.packlist
-
-      # Remove dependencies on glibc.dev and coreutils.
-      substituteInPlace $out/lib/perl5/*/*/Config_heavy.pl \
-        --replace ${stdenv.glibc.dev or "/blabla"} /no-such-path \
-        --replace $man /no-such-path
-    ''; # */
-
   setupHook = ./setup-hook.sh;
 
   passthru.libPrefix = "lib/perl5/site_perl";
+
+  # TODO: it seems like absolute paths to some coreutils is required.
+  postInstall =
+    ''
+      # Remove dependency between "out" and "man" outputs.
+      rm "$out"/lib/perl5/*/*/.packlist
+
+      # Remove dependencies on glibc and gcc
+      sed "/ *libpth =>/c    libpth => ' '," \
+        -i "$out"/lib/perl5/*/*/Config.pm
+      # TODO: removing those paths would be cleaner than overwriting with nonsense.
+      substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
+        --replace "${libcInc}" /no-such-path \
+        --replace "${stdenv.cc.cc or "/no-such-path"}" /no-such-path \
+        --replace "$man" /no-such-path
+    ''; # */
 
   meta = {
     homepage = https://www.perl.org/;
