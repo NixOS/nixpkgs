@@ -95,7 +95,7 @@ let
     type = "murmur";
 
     postPatch = optional iceSupport ''
-      sed -i 's,/usr/share/Ice/,${zeroc_ice}/,g' src/murmur/murmur.pro
+      grep -Rl '/usr/share/Ice' . | xargs sed -i 's,/usr/share/Ice/,${zeroc_ice}/,g'
     '';
 
     configureFlags = [
