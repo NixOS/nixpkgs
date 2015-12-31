@@ -52,7 +52,7 @@ self: super: {
   haddock-api = super.haddock-api_2_15_0_2;
 
   # This is part of bytestring in our compiler.
-  bytestring-builder = triggerRebuild (dontHaddock super.bytestring-builder) 1;
+  bytestring-builder = dontHaddock super.bytestring-builder;
 
   # Won't compile against mtl 2.1.x.
   imports = super.imports.override { mtl = self.mtl_2_2_1; };
