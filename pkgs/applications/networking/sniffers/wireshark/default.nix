@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, perl, flex, bison, libpcap, libnl, c-ares
 , gnutls, libgcrypt, geoip, openssl, lua5, makeDesktopItem, python, libcap, glib
-, withGtk ? false, gtk ? null
+, zlib
+, withGtk ? false, gtk ? null, pango ? null, cairo ? null, gdk_pixbuf ? null
 , withQt ? false, qt4 ? null
 }:
 
@@ -24,9 +25,9 @@ stdenv.mkDerivation {
 
   buildInputs = [
     bison flex perl pkgconfig libpcap lua5 openssl libgcrypt gnutls
-    geoip libnl c-ares python libcap glib
+    geoip libnl c-ares python libcap glib zlib
   ] ++ optional withQt qt4
-    ++ optional withGtk gtk;
+    ++ (optionals withGtk [gtk pango cairo gdk_pixbuf]);
 
   patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
 
@@ -52,8 +53,6 @@ stdenv.mkDerivation {
     mkdir -p "$out"/share/icons/
     cp "$desktopItem/share/applications/"* "$out/share/applications/"
     cp image/wsicon.svg "$out"/share/icons/wireshark.svg
-  '' + optionalString withQt ''
-    mv "$out/bin/wireshark-qt" "$out/bin/wireshark"
   '';
 
   enableParallelBuilding = true;
