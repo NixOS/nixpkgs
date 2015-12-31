@@ -14,11 +14,12 @@ let
   ];
   isUnix = with stdenv; isLinux || isGNU || isDarwin || isFreeBSD || isOpenBSD;
   isx86 = stdenv.isi686 || stdenv.isx86_64;
-  compileFlags = ""
-    + (stdenv.lib.optionalString isUnix " -Dunix -pthread ")
-    + (stdenv.lib.optionalString (!isx86) " -DNOJIT ")
-    + " -DNDEBUG "
-    + " -fPIC "
+  compileFlags = with stdenv; ""
+    + (lib.optionalString (isUnix) " -Dunix -pthread")
+    + (lib.optionalString (isi686) " -march=i686")
+    + (lib.optionalString (isx86_64) " -march=nocona")
+    + (lib.optionalString (!isx86) " -DNOJIT")
+    + " -O3 -mtune=generic -DNDEBUG"
     ;
 in
 stdenv.mkDerivation {
@@ -29,8 +30,8 @@ stdenv.mkDerivation {
   };
   sourceRoot = ".";
   buildPhase = ''
-    g++ -shared -O3 libzpaq.cpp ${compileFlags} -o libzpaq.so
-    g++ -O3 -L. -L"$out/lib" -lzpaq zpaqd.cpp -o zpaqd
+    g++ ${compileFlags} -fPIC --shared libzpaq.cpp -o libzpaq.so
+    g++ ${compileFlags} -L. -L"$out/lib" -lzpaq zpaqd.cpp -o zpaqd
   '';
   installPhase = ''
     mkdir -p "$out"/{bin,include,lib,share/doc/zpaq}
