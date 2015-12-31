@@ -28,11 +28,13 @@ rec {
       ''
         n=$out${destination}
         mkdir -p "$(dirname "$n")"
+
         if [ -e "$textPath" ]; then
           mv "$textPath" "$n"
         else
           echo -n "$text" > "$n"
         fi
+
         (test -n "$executable" && chmod +x "$n") || true
       '';
 
