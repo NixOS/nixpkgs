@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "1.2.19";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.gz";
-    sha256 = "0vnxmqf04frrj18lrvq7wc70wh179d382py14006879k0cgi8b18";
+    sha256 = "ebcf5645fa565e3fe2fe94a86e841db9b768cf0e0a7e6cf395c6327f9a23bd64";
   };
 
   buildInputs = [
