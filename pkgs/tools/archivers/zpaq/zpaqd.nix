@@ -45,7 +45,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     inherit (s) version;
-    description = "ZPAQ archive decompressor and algorithm development tool";
+    description = "ZPAQ archive (de)compressor and algorithm development tool";
     license = licenses.gpl3Plus ;
     maintainers = with maintainers; [ raskin nckx ];
     platforms = platforms.linux;
