@@ -14006,6 +14006,8 @@ let
 
   chessdb = callPackage ../games/chessdb { };
 
+  chessx = qt5.callPackage ../games/chessx { };
+
   chocolateDoom = callPackage ../games/chocolate-doom { };
 
   cockatrice = qt5.callPackage ../games/cockatrice {  };
@@ -14303,6 +14305,8 @@ let
   springLobby = callPackage ../games/spring/springlobby.nix { };
 
   stardust = callPackage ../games/stardust {};
+
+  stockfish = callPackage ../games/stockfish { };
 
   steamPackages = callPackage ../games/steam { };
   steam = steamPackages.steam-chrootenv.override {
