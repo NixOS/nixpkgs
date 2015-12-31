@@ -19,7 +19,7 @@ in appleDerivation {
   buildInputs = [ bsdmake perl yacc flex ];
 
   patchPhase = ''
-    substituteInPlace BSDMakefile \
+    substituteInPlace BSDmakefile \
       --replace chgrp true \
       --replace /Developer/Makefiles/bin/compress-man-pages.pl true \
       --replace "ps.tproj" "" --replace "gencat.tproj" "" --replace "md.tproj" "" \

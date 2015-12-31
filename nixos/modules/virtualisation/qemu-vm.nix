@@ -40,16 +40,17 @@ let
       if [ -z "$TMPDIR" -o -z "$USE_TMPDIR" ]; then
           TMPDIR=$(mktemp -d nix-vm.XXXXXXXXXX --tmpdir)
       fi
+
       # Create a directory for exchanging data with the VM.
       mkdir -p $TMPDIR/xchg
 
       ${if cfg.useBootLoader then ''
-        # Create a writable copy/snapshot of the boot disk
-        # A writable boot disk can be booted from automatically
+        # Create a writable copy/snapshot of the boot disk.
+        # A writable boot disk can be booted from automatically.
         ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 -b ${bootDisk}/disk.img $TMPDIR/disk.img || exit 1
 
         ${if cfg.useEFIBoot then ''
-          # VM needs a writable flash BIOS
+          # VM needs a writable flash BIOS.
           cp ${bootDisk}/bios.bin $TMPDIR || exit 1
           chmod 0644 $TMPDIR/bios.bin || exit 1
         '' else ''
@@ -76,14 +77,14 @@ let
           -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
           -virtfs local,path=''${SHARED_DIR:-$TMPDIR/xchg},security_model=none,mount_tag=shared \
           ${if cfg.useBootLoader then ''
-            -drive index=0,id=drive1,file=$NIX_DISK_IMAGE,if=${cfg.qemu.diskInterface},cache=writeback,werror=report \
+            -drive index=0,id=drive1,file=$NIX_DISK_IMAGE,if=${cfg.qemu.diskInterface},cache=none,werror=report \
             -drive index=1,id=drive2,file=$TMPDIR/disk.img,media=disk \
             ${if cfg.useEFIBoot then ''
               -pflash $TMPDIR/bios.bin \
             '' else ''
             ''}
           '' else ''
-            -drive index=0,id=drive1,file=$NIX_DISK_IMAGE,if=${cfg.qemu.diskInterface},cache=writeback,werror=report \
+            -drive index=0,id=drive1,file=$NIX_DISK_IMAGE,if=${cfg.qemu.diskInterface},cache=none,werror=report \
             -kernel ${config.system.build.toplevel}/kernel \
             -initrd ${config.system.build.toplevel}/initrd \
             -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo} ${kernelConsole} $QEMU_KERNEL_PARAMS" \
@@ -297,6 +298,7 @@ in
     virtualisation.qemu = {
       options =
         mkOption {
+          type = types.listOf types.unspecified;
           default = [];
           example = [ "-vga std" ];
           description = "Options passed to QEMU.";
@@ -425,19 +427,19 @@ in
         ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
           { device = "store";
             fsType = "9p";
-            options = "trans=virtio,version=9p2000.L,msize=1048576,cache=loose";
+            options = "trans=virtio,version=9p2000.L,cache=loose";
             neededForBoot = true;
           };
         "/tmp/xchg" =
           { device = "xchg";
             fsType = "9p";
-            options = "trans=virtio,version=9p2000.L,msize=1048576,cache=loose";
+            options = "trans=virtio,version=9p2000.L,cache=loose";
             neededForBoot = true;
           };
         "/tmp/shared" =
           { device = "shared";
             fsType = "9p";
-            options = "trans=virtio,version=9p2000.L,msize=1048576";
+            options = "trans=virtio,version=9p2000.L";
             neededForBoot = true;
           };
       } // optionalAttrs cfg.writableStore

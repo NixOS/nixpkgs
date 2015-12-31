@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       "--with-logfile=/var/log/net-snmpd.log"
       "--with-persistent-directory=/var/lib/net-snmp"
       "--with-openssl=${openssl}"
-    ];
+    ] ++ stdenv.lib.optional stdenv.isLinux "--with-mnttab=/proc/mounts";
 
   buildInputs = [ autoreconfHook file perl unzip openssl ];
 

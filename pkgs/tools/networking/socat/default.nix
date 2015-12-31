@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
-  patches = [ ./enable-ecdhe.patch ];
+  patches = [ ./enable-ecdhe.patch ./libressl-fixes.patch ];
 
   meta = {
     description = "A utility for bidirectional data transfer between two independent data channels";

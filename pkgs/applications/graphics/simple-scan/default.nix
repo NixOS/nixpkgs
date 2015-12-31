@@ -1,16 +1,16 @@
 { stdenv, fetchurl, cairo, colord, glib, gtk3, gusb, intltool, itstool
-, libusb, libxml2, pkgconfig, saneBackends, vala, wrapGAppsHook }:
+, libusb1, libxml2, pkgconfig, saneBackends, vala, wrapGAppsHook }:
 
-let version = "3.19.2"; in
+let version = "3.19.3"; in
 stdenv.mkDerivation rec {
   name = "simple-scan-${version}";
 
   src = fetchurl {
-    sha256 = "08454ky855iaiq5wn9rdbfal3i4fjss5fn5mg6cmags50wy9spsg";
+    sha256 = "0il7ikd5hj9mgzrivm01g572g9101w8la58h3hjyakwcfw3jp976";
     url = "https://launchpad.net/simple-scan/3.19/${version}/+download/${name}.tar.xz";
   };
 
-  buildInputs = [ cairo colord glib gusb gtk3 libusb libxml2 saneBackends
+  buildInputs = [ cairo colord glib gusb gtk3 libusb1 libxml2 saneBackends
     vala ];
   nativeBuildInputs = [ intltool itstool pkgconfig wrapGAppsHook ];
 

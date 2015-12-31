@@ -3,13 +3,10 @@
 , glib, kbd, libxslt, coreutils, libgcrypt
 , kexectools, libmicrohttpd, linuxHeaders, libseccomp
 , autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
-, pythonPackages ? null, pythonSupport ? false
 , enableKDbus ? false
 }:
 
 assert stdenv.isLinux;
-
-assert pythonSupport -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
   version = "228";
@@ -18,8 +15,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "17c30663f79499ad0163c7ffe2c79e5c28525a6f";
-    sha256 = "0jyqwqyh7l2qp7k4h83gzzp9bgijz0bx02jhd0063jcl1s2amlnh";
+    rev = "b737c07cc0234acfa87282786025d556bca91c3f";
+    sha256 = "0wca8zkn39914c232andvf3v0ni6ylv154kz3s9fcvg47rhpd5n1";
   };
 
   patches = [ ./hwdb-location.diff ];
@@ -40,7 +37,7 @@ stdenv.mkDerivation rec {
          by generating an autoconf'd tarball, but that's probably not
          worth it. */
       autoreconfHook gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
-    ] ++ stdenv.lib.optionals pythonSupport [pythonPackages.python pythonPackages.lxml];
+    ];
 
 
   configureFlags =

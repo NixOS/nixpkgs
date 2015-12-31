@@ -35,7 +35,7 @@
   <command>systemctl stop network-manager</command>.</para></listitem>
 
   <listitem><para>The NixOS installer doesn’t do any partitioning or
-  formatting yet, so you need to that yourself.  Use the following
+  formatting yet, so you need to do that yourself.  Use the following
   commands:
 
   <itemizedlist>

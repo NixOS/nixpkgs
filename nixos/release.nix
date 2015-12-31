@@ -47,6 +47,7 @@ let
           };
           inherit iso;
           passthru = { inherit config; };
+          preferLocalBuild = true;
         }
         ''
           mkdir -p $out/nix-support
@@ -149,6 +150,7 @@ in rec {
             maintainers = maintainers.eelco;
           };
           ova = config.system.build.virtualBoxOVA;
+          preferLocalBuild = true;
         }
         ''
           mkdir -p $out/nix-support
@@ -168,6 +170,7 @@ in rec {
             boot.loader.grub.device = mkDefault "/dev/sda";
           });
       }).config.system.build.toplevel;
+      preferLocalBuild = true;
     }
     "mkdir $out; ln -s $toplevel $out/dummy");
 
@@ -220,7 +223,7 @@ in rec {
   tests.dockerRegistry = hydraJob (import tests/docker-registry.nix { system = "x86_64-linux"; });
   tests.etcd = hydraJob (import tests/etcd.nix { system = "x86_64-linux"; });
   tests.ec2-nixops = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-nixops;
-  #tests.ec2-config = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-config;
+  tests.ec2-config = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-config;
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
   tests.fleet = hydraJob (import tests/fleet.nix { system = "x86_64-linux"; });
@@ -256,6 +259,7 @@ in rec {
   tests.mysqlReplication = callTest tests/mysql-replication.nix {};
   tests.nat.firewall = callTest tests/nat.nix { withFirewall = true; };
   tests.nat.standalone = callTest tests/nat.nix { withFirewall = false; };
+  tests.networking.networkd.loopback = callTest tests/networking.nix { networkd = true; test = "loopback"; };
   tests.networking.networkd.static = callTest tests/networking.nix { networkd = true; test = "static"; };
   tests.networking.networkd.dhcpSimple = callTest tests/networking.nix { networkd = true; test = "dhcpSimple"; };
   tests.networking.networkd.dhcpOneIf = callTest tests/networking.nix { networkd = true; test = "dhcpOneIf"; };
@@ -264,6 +268,7 @@ in rec {
   tests.networking.networkd.macvlan = callTest tests/networking.nix { networkd = true; test = "macvlan"; };
   tests.networking.networkd.sit = callTest tests/networking.nix { networkd = true; test = "sit"; };
   tests.networking.networkd.vlan = callTest tests/networking.nix { networkd = true; test = "vlan"; };
+  tests.networking.scripted.loopback = callTest tests/networking.nix { networkd = false; test = "loopback"; };
   tests.networking.scripted.static = callTest tests/networking.nix { networkd = false; test = "static"; };
   tests.networking.scripted.dhcpSimple = callTest tests/networking.nix { networkd = false; test = "dhcpSimple"; };
   tests.networking.scripted.dhcpOneIf = callTest tests/networking.nix { networkd = false; test = "dhcpOneIf"; };

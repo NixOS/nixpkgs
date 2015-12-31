@@ -68,7 +68,7 @@ rec {
       # Copy what we need of clang
       cp -d ${llvmPackages.clang-unwrapped}/bin/clang $out/bin
       cp -d ${llvmPackages.clang-unwrapped}/bin/clang++ $out/bin
-      cp -d ${llvmPackages.clang-unwrapped}/bin/clang-3.6 $out/bin
+      cp -d ${llvmPackages.clang-unwrapped}/bin/clang-[0-9].[0-9] $out/bin
 
       cp -rL ${llvmPackages.clang-unwrapped}/lib/clang $out/lib
 
@@ -150,6 +150,10 @@ rec {
     '';
 
     allowedReferences = [];
+
+    meta = {
+      maintainers = [ stdenv.lib.maintainers.copumpkin ];
+    };
   };
 
   dist = stdenv.mkDerivation {

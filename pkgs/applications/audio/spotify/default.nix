@@ -1,7 +1,7 @@
-{ fetchurl, stdenv, dpkg, xorg, qt4, alsaLib, makeWrapper, openssl, freetype
+{ fetchurl, stdenv, dpkg, xorg, qt4, alsaLib, makeWrapper, openssl_1_0_1, freetype
 , glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng, GConf
 , libgcrypt, chromium, udev, fontconfig
-, dbus, expat }:
+, dbus, expat, ffmpeg_0_10 }:
 
 assert stdenv.system == "x86_64-linux";
 
@@ -15,6 +15,7 @@ let
     cups
     dbus
     expat
+    ffmpeg_0_10
     fontconfig
     freetype
     GConf
@@ -66,8 +67,8 @@ stdenv.mkDerivation {
       # Work around Spotify referring to a specific minor version of
       # OpenSSL.
 
-      ln -s ${openssl.out}/lib/libssl.so $libdir/libssl.so.1.0.0
-      ln -s ${openssl.out}/lib/libcrypto.so $libdir/libcrypto.so.1.0.0
+      ln -s ${openssl_1_0_1.out}/lib/libssl.so $libdir/libssl.so.1.0.0
+      ln -s ${openssl_1_0_1.out}/lib/libcrypto.so $libdir/libcrypto.so.1.0.0
       ln -s ${nspr.out}/lib/libnspr4.so $libdir/libnspr4.so
       ln -s ${nspr.out}/lib/libplc4.so $libdir/libplc4.so
 

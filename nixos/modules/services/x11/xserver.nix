@@ -280,6 +280,13 @@ in
         '';
       };
 
+      xkbDir = mkOption {
+        type = types.path;
+        description = ''
+          Path used for -xkbdir xserver parameter.
+        '';
+      };
+
       config = mkOption {
         type = types.lines;
         description = ''
@@ -381,13 +388,13 @@ in
       };
 
       tty = mkOption {
-        type = types.int;
+        type = types.nullOr types.int;
         default = 7;
         description = "Virtual console for the X server.";
       };
 
       display = mkOption {
-        type = types.int;
+        type = types.nullOr types.int;
         default = 0;
         description = "Display number for the X server.";
       };
@@ -407,6 +414,16 @@ in
         description = ''
           Whether to use the Glamor module for 2D acceleration,
           if possible.
+        '';
+      };
+
+      enableCtrlAltBackspace = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to enable the DontZap option, which binds Ctrl+Alt+Backspace
+          to forcefully kill X. This can lead to data loss and is disabled
+          by default.
         '';
       };
     };
@@ -452,7 +469,7 @@ in
             target = "X11/xorg.conf";
           }
           # -xkbdir command line option does not seems to be passed to xkbcomp.
-          { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+          { source = "${cfg.xkbDir}";
             target = "X11/xkb";
           }
         ]);
@@ -517,11 +534,12 @@ in
     services.xserver.displayManager.xserverArgs =
       [ "-ac"
         "-terminate"
-        "-logfile" "/var/log/X.${toString cfg.display}.log"
         "-config ${configFile}"
-        ":${toString cfg.display}" "vt${toString cfg.tty}"
-        "-xkbdir" "${pkgs.xkeyboard_config}/etc/X11/xkb"
-      ] ++ optional (!cfg.enableTCP) "-nolisten tcp";
+        "-xkbdir" "${cfg.xkbDir}"
+      ] ++ optional (cfg.display != null) ":${toString cfg.display}"
+        ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
+        ++ optionals (cfg.display != null) [ "-logfile" "/var/log/X.${toString cfg.display}.log" ]
+        ++ optional (!cfg.enableTCP) "-nolisten tcp";
 
     services.xserver.modules =
       concatLists (catAttrs "modules" cfg.drivers) ++
@@ -529,10 +547,13 @@ in
         xorg.xf86inputevdev
       ];
 
+    services.xserver.xkbDir = mkDefault "${pkgs.xkeyboard_config}/etc/X11/xkb";
+
     services.xserver.config =
       ''
         Section "ServerFlags"
           Option "AllowMouseOpenFail" "on"
+          Option "DontZap" "${if cfg.enableCtrlAltBackspace then "off" else "on"}"
           ${cfg.serverFlagsSection}
         EndSection
 

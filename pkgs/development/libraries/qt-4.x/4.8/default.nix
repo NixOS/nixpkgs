@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [ ./glib-2.32.patch
+      ./libressl.patch
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
         cups = cups.out;

@@ -1,5 +1,6 @@
 { stdenv, fetchurl, unzip, cmake, pkgconfig, makeWrapper
-, hunspell, minizip, boost, xercesc, qt5
+, hunspell, minizip, boost, xercesc
+, qtbase, qttools, qtwebkit, qtxmlpatterns
 }:
 
 let
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     unzip cmake pkgconfig
-    hunspell minizip boost xercesc qt5.base qt5.tools qt5.webkit qt5.xmlpatterns
+    hunspell minizip boost xercesc qtbase qttools qtwebkit qtxmlpatterns
   ];
 
   # XXX: the compiler seems to treat the .h file inappropriately:

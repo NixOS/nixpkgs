@@ -1,10 +1,13 @@
-{ stdenv, fetchurl, makeWrapper, qtLib, withDocumentation ? false }:
+{ stdenv, fetchurl, makeWrapper
+, qtbase, qtquickcontrols, qtscript, qtdeclarative
+, withDocumentation ? false
+}:
 
 with stdenv.lib;
 
 let
-  baseVersion = "3.4";
-  revision = "2";
+  baseVersion = "3.5";
+  revision = "1";
   version = "${baseVersion}.${revision}";
 in
 
@@ -13,10 +16,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qtcreator/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.gz";
-    sha256 = "1asbfphws0aqs92gjgh0iqzr1911kg51r9al44jxpfk88yazjzgm";
+    sha256 = "0r9ysq9hzig4ag9m8pcpw1jng2fqqns8zwp0jj893gh8ia0sq9ar";
   };
 
-  buildInputs = [ makeWrapper qtLib.base qtLib.script qtLib.quickcontrols qtLib.declarative ];
+  buildInputs = [ makeWrapper qtbase qtscript qtquickcontrols qtdeclarative ];
 
   doCheck = false;
 
@@ -45,8 +48,8 @@ stdenv.mkDerivation rec {
     Categories=Qt;Development;IDE;
     __EOF__
     # Wrap the qtcreator binary
-    addToSearchPath QML2_IMPORT_PATH "${qtLib.quickcontrols}/lib/qt5/qml"
-    addToSearchPath QML2_IMPORT_PATH "${qtLib.declarative}/lib/qt5/qml"
+    addToSearchPath QML2_IMPORT_PATH "${qtquickcontrols}/lib/qt5/qml"
+    addToSearchPath QML2_IMPORT_PATH "${qtdeclarative}/lib/qt5/qml"
     wrapProgram $out/bin/qtcreator \
       --prefix QT_PLUGIN_PATH : "$QT_PLUGIN_PATH" \
       --prefix QML_IMPORT_PATH : "$QML_IMPORT_PATH" \

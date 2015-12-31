@@ -4,7 +4,8 @@
 , ffmpeg
 , jansson
 , libxkbcommon
-, qt5
+, qtbase
+, qtx11extras
 , libv4l
 , x264
 , curl
@@ -34,8 +35,8 @@ in stdenv.mkDerivation rec {
                   jansson
                   libv4l
                   libxkbcommon
-                  qt5.base
-                  qt5.x11extras
+                  qtbase
+                  qtx11extras
                   x264
                 ]
                 ++ optional pulseaudioSupport libpulseaudio;

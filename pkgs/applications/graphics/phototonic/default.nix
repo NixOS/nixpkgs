@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qt5, exiv2 }:
+{ stdenv, fetchFromGitHub, qtbase, exiv2 }:
 
 stdenv.mkDerivation rec {
   name = "phototonic-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1agd3bsrpljd019qrjvlbim5l0bhpx53dhpc0gvyn0wmcdzn92gj";
   };
 
-  buildInputs = [ qt5.base exiv2 ];
+  buildInputs = [ qtbase exiv2 ];
 
   configurePhase = ''
     sed -i 's;/usr;;' phototonic.pro

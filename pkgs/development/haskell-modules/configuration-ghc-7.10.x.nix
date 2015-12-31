@@ -92,7 +92,6 @@ self: super: {
   utf8-string = overrideCabal super.utf8-string (drv: {
     postPatch = "sed -i -e 's|base >= 3 && < 4.8|base|' utf8-string.cabal";
   });
-  pointfree = doJailbreak super.pointfree;
 
   # acid-state/safecopy#25 acid-state/safecopy#26
   safecopy = dontCheck (super.safecopy);

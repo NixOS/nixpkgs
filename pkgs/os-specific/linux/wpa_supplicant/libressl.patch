@@ -1,0 +1,69 @@
+$OpenBSD: patch-src_crypto_tls_openssl_c,v 1.3 2015/09/29 11:57:54 dcoppa Exp $
+
+Compatibility fixes for LibreSSL
+
+--- a/src/crypto/tls_openssl.c	Sun Sep 27 21:02:05 2015
++++ b/src/crypto/tls_openssl.c	Mon Sep 28 13:43:46 2015
+@@ -2229,7 +2229,7 @@ static int tls_parse_pkcs12(struct tls_data *data, SSL
+ 	}
+ 
+ 	if (certs) {
+-#if OPENSSL_VERSION_NUMBER >= 0x10002000L
++#if OPENSSL_VERSION_NUMBER >= 0x10002000L && !defined(LIBRESSL_VERSION_NUMBER)
+ 		SSL_clear_chain_certs(ssl);
+ 		while ((cert = sk_X509_pop(certs)) != NULL) {
+ 			X509_NAME_oneline(X509_get_subject_name(cert), buf,
+@@ -2247,7 +2247,7 @@ static int tls_parse_pkcs12(struct tls_data *data, SSL
+ 			/* Try to continue anyway */
+ 		}
+ 		sk_X509_free(certs);
+-#ifndef OPENSSL_IS_BORINGSSL
++#if !defined(OPENSSL_IS_BORINGSSL) && !defined(LIBRESSL_VERSION_NUMBER)
+ 		res = SSL_build_cert_chain(ssl,
+ 					   SSL_BUILD_CHAIN_FLAG_CHECK |
+ 					   SSL_BUILD_CHAIN_FLAG_IGNORE_ERROR);
+@@ -2812,7 +2812,7 @@ int tls_connection_get_random(void *ssl_ctx, struct tl
+ 	if (conn == NULL || keys == NULL)
+ 		return -1;
+ 	ssl = conn->ssl;
+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+ 	if (ssl == NULL || ssl->s3 == NULL || ssl->session == NULL)
+ 		return -1;
+ 
+@@ -2841,7 +2841,7 @@ int tls_connection_get_random(void *ssl_ctx, struct tl
+ #ifndef CONFIG_FIPS
+ static int openssl_get_keyblock_size(SSL *ssl)
+ {
+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+ 	const EVP_CIPHER *c;
+ 	const EVP_MD *h;
+ 	int md_size;
+@@ -2911,7 +2911,7 @@ static int openssl_tls_prf(struct tls_connection *conn
+ 		   "mode");
+ 	return -1;
+ #else /* CONFIG_FIPS */
+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+ 	SSL *ssl;
+ 	u8 *rnd;
+ 	int ret = -1;
+@@ -3394,7 +3394,7 @@ int tls_connection_set_cipher_list(void *tls_ctx, stru
+ 
+ 	wpa_printf(MSG_DEBUG, "OpenSSL: cipher suites: %s", buf + 1);
+ 
+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined(LIBRESSL_VERSION_NUMBER)
+ #if defined(EAP_FAST) || defined(EAP_FAST_DYNAMIC) || defined(EAP_SERVER_FAST)
+ 	if (os_strstr(buf, ":ADH-")) {
+ 		/*
+@@ -3977,7 +3977,7 @@ static int tls_sess_sec_cb(SSL *s, void *secret, int *
+ 	struct tls_connection *conn = arg;
+ 	int ret;
+ 
+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+ 	if (conn == NULL || conn->session_ticket_cb == NULL)
+ 		return 0;
+ 

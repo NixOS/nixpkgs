@@ -1,20 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, cairo, gtk, poppler }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+, cairo, gtk, poppler }:
 
-stdenv.mkDerivation {
-  name = "pdf2svg-0.2.2";
+stdenv.mkDerivation rec {
+  name = "pdf2svg-${version}";
+  version = "0.2.3";
 
-  src = fetchurl {
-    url = "http://www.cityinthesky.co.uk/wp-content/uploads/2013/10/pdf2svg-0.2.2.tar.gz" ; 
-    sha256 = "1jy6iqwwvd7drcybmdlmnc8m970f82fd7fisa8ha5zh13p49r8n2";
+  src = fetchFromGitHub {
+    owner = "db9052";
+    repo = "pdf2svg";
+    rev = "v${version}";
+    sha256 = "14ffdm4y26imq99wjhkrhy9lp33165xci1l5ndwfia8hz53bl02k";
   };
 
-  buildInputs = [ cairo pkgconfig poppler gtk ];
+  buildInputs = [ autoreconfHook cairo pkgconfig poppler gtk ];
 
-  meta = { 
+  meta = with stdenv.lib; {
     description = "PDF converter to SVG format";
     homepage = http://www.cityinthesky.co.uk/opensource/pdf2svg;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.ianwookim ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.ianwookim ];
+    platforms = platforms.unix;
   };
 }

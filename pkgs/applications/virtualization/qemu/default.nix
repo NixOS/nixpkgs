@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python, zlib, pkgconfig, glib, ncurses, perl, pixman
 , attr, libcap, vde2, alsaLib, texinfo, libuuid, flex, bison, lzo, snappy
-, libseccomp, libaio, libcap_ng, gnutls, nettle
+, libseccomp, libaio, libcap_ng, gnutls, nettle, numactl
 , makeWrapper
 , pulseSupport ? true, libpulseaudio
 , sdlSupport ? true, SDL
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ python zlib pkgconfig glib ncurses perl pixman attr libcap
       vde2 texinfo libuuid flex bison makeWrapper lzo snappy libseccomp
-      libcap_ng gnutls nettle
+      libcap_ng gnutls nettle numactl
     ]
     ++ optionals pulseSupport [ libpulseaudio ]
     ++ optionals sdlSupport [ SDL ]
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--enable-seccomp"
+      "--enable-numa"
       "--smbd=smbd" # use `smbd' from $PATH
       "--audio-drv-list=${audio}"
       "--sysconfdir=/etc"

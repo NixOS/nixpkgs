@@ -21,13 +21,14 @@ let
   srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
   mirror = "mirror://kde";
 
-  kdeApp = import ./kde-app.nix {
-    inherit stdenv lib;
-    inherit debug srcs;
-  };
-
   packages = self: with self; {
-    inherit (pkgs.kdeApps_15_08) kdelibs ksnapshot;
+
+    kdeApp = import ./kde-app.nix {
+      inherit stdenv lib;
+      inherit debug srcs;
+    };
+
+    kdelibs = callPackage ./kdelibs { inherit (pkgs) attica phonon; };
 
     ark = callPackage ./ark.nix {};
     baloo-widgets = callPackage ./baloo-widgets.nix {};
@@ -45,10 +46,9 @@ let
     libkipi = callPackage ./libkipi.nix {};
     okular = callPackage ./okular.nix {};
     print-manager = callPackage ./print-manager.nix {};
+    spectacle = callPackage ./spectacle.nix {};
 
     l10n = pkgs.recurseIntoAttrs (import ./l10n.nix { inherit callPackage lib pkgs; });
   };
 
-  newScope = scope: pkgs.kf516.newScope ({ inherit kdeApp; } // scope);
-
-in lib.makeScope newScope packages
+in packages

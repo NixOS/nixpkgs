@@ -98,6 +98,10 @@ rec {
       ghc = compiler.ghc7102;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
     };
+    ghc7103 = callPackage ../development/haskell-modules {
+      ghc = compiler.ghc7103;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
+    };
     ghcHEAD = callPackage ../development/haskell-modules {
       ghc = compiler.ghcHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
@@ -299,6 +303,18 @@ rec {
     };
     lts-3_16 = packages.ghc7102.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.16.nix { };
+    };
+    lts-3_17 = packages.ghc7102.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.17.nix { };
+    };
+    lts-3_18 = packages.ghc7102.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.18.nix { };
+    };
+    lts-3_19 = packages.ghc7102.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.19.nix { };
+    };
+    lts-3_20 = packages.ghc7102.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.20.nix { };
     };
 
   };

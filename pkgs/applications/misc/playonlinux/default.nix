@@ -17,7 +17,11 @@
 , xterm
 , pkgs
 , pkgsi686Linux
+, which
+, curl
 }:
+
+assert stdenv.isLinux;
 
 let
   version = "4.2.9";
@@ -37,6 +41,8 @@ let
       wine
       xdg-user-dirs
       xterm
+      which
+      curl
     ];
 
   ld32 =

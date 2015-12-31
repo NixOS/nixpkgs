@@ -1,4 +1,4 @@
-{stdenv, fetchurl, alsaLib, gettext, ncurses, libsamplerate}:
+{stdenv, fetchurl, alsaLib, gettext, ncurses, libsamplerate, pciutils}:
 
 stdenv.mkDerivation rec {
   name = "alsa-utils-${version}";
@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "16ryhgbapp4pxyvsjc258mcj14wk7x3xs6g9bpnkqj0l7s7haq2i";
   };
 
+  patchPhase = ''
+    substituteInPlace alsa-info/alsa-info.sh \
+      --replace "which" "type -p" \
+      --replace "lspci" "${pciutils}/bin/lspci"
+  '';
   buildInputs = [ gettext alsaLib ncurses libsamplerate ];
 
   configureFlags = "--disable-xmlto --with-udev-rules-dir=$(out)/lib/udev/rules.d";

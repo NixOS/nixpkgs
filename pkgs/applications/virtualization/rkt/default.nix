@@ -2,14 +2,14 @@
 , fetchurl, fetchFromGitHub }:
 
 let
-  coreosImageRelease = "794.1.0";
-  coreosImageSystemdVersion = "222";
+  coreosImageRelease = "835.9.0";
+  coreosImageSystemdVersion = "225";
 
   # TODO: track https://github.com/coreos/rkt/issues/1758 to allow "host" flavor.
   stage1Flavours = [ "coreos" ];
 
 in stdenv.mkDerivation rec {
-  version = "0.12.0";
+  version = "0.14.0";
   name = "rkt-${version}";
   BUILDDIR="build-${name}";
 
@@ -17,12 +17,12 @@ in stdenv.mkDerivation rec {
       rev = "v${version}";
       owner = "coreos";
       repo = "rkt";
-      sha256 = "1qwj3a4780lqra2c6ncw86lskzqnh59fxk577hgqym4jgxxk4bbv";
+      sha256 = "0dmgs9s40xhan2rh9f5n0k5gv8p2dn946zffq02sq35qqvi67s71";
   };
 
   stage1BaseImage = fetchurl {
-    url = "http://alpha.release.core-os.net/amd64-usr/${coreosImageRelease}/coreos_production_pxe_image.cpio.gz";
-    sha256 = "05nzl3av6cawr8v203a8c95c443g6h1nfy2n4jmgvn0j4iyy44ym";
+    url = "http://stable.release.core-os.net/amd64-usr/${coreosImageRelease}/coreos_production_pxe_image.cpio.gz";
+    sha256 = "51dc10b4269b9c1801c233de49da817d29ca8d858bb0881df94dc90f7e86ce70";
   };
 
   buildInputs = [ autoconf automake go file git wget gnupg1 squashfsTools cpio ];

@@ -1,26 +1,29 @@
-{ stdenv, fetchurl, gfortran, openblas }:
+{ stdenv, lib, copyPathsToStore, fetchurl, autoconf, automake, gettext, libtool
+, gfortran, openblas }:
 
 with stdenv.lib;
 
 let
-  version = "3.2.0";
+  version = "3.3.0";
 in
 stdenv.mkDerivation {
   name = "arpack-${version}";
+
   src = fetchurl {
     url = "https://github.com/opencollab/arpack-ng/archive/${version}.tar.gz";
-    sha256 = "1fwch6vipms1ispzg2djvbzv5wag36f1dmmr3xs3mbp6imfyhvff";
+    sha256 = "1cz53wqzcf6czmcpfb3vb61xi0rn5bwhinczl65hpmbrglg82ndd";
   };
 
+  nativeBuildInputs = [ autoconf automake gettext libtool ];
   buildInputs = [ gfortran openblas ];
 
-  # Auto-detection fails because gfortran brings in BLAS by default
-  configureFlags = [
-    "--with-blas=-lopenblas"
-    "--with-lapack=-lopenblas"
-  ];
+  BLAS_LIBS = "-L${openblas}/lib -lopenblas";
 
   FFLAGS = optional openblas.blas64 "-fdefault-integer-8";
+
+  preConfigure = ''
+    ./bootstrap
+  '';
 
   meta = {
     homepage = "http://github.com/opencollab/arpack-ng";

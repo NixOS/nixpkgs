@@ -1,5 +1,6 @@
-{ stdenv, fetchgit, python, buildPythonPackage, qt5, pyqt5, jinja2, pygments, pyyaml, pypeg2,
-  gst_plugins_base, gst_plugins_good, gst_ffmpeg }:
+{ stdenv, fetchgit, python, buildPythonPackage, qtmultimedia, pyqt5
+, jinja2, pygments, pyyaml, pypeg2, gst_plugins_base, gst_plugins_good
+, gst_ffmpeg }:
 
 let version = "0.4.1"; in
 
@@ -23,7 +24,7 @@ buildPythonPackage {
   makeWrapperArgs = ''
     --prefix GST_PLUGIN_PATH : "${stdenv.lib.makeSearchPath "lib/gstreamer-0.10"
        [ gst_plugins_base gst_plugins_good gst_ffmpeg ]}"
-    --prefix QT_PLUGIN_PATH : "${qt5.multimedia}/lib/qt5/plugins"
+    --prefix QT_PLUGIN_PATH : "${qtmultimedia}/lib/qt5/plugins"
   '';
 
   meta = {

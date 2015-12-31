@@ -1,6 +1,6 @@
---- xmonad-0.11/XMonad/Core.hs	2013-01-01 01:31:47.000000000 +0000
-+++ new-xmonad/XMonad/Core.hs	2013-12-23 17:36:40.862146910 +0000
-@@ -47,6 +47,7 @@
+--- a/src/XMonad/Core.hs
++++ b/src/XMonad/Core.hs
+@@ -48,6 +48,7 @@ import System.Posix.Types (ProcessID)
  import System.Process
  import System.Directory
  import System.Exit
@@ -8,7 +8,7 @@
  import Graphics.X11.Xlib
  import Graphics.X11.Xlib.Extras (Event)
  import Data.Typeable
-@@ -452,6 +453,7 @@
+@@ -463,6 +464,7 @@ recompile force = io $ do
          err  = base ++ ".errors"
          src  = base ++ ".hs"
          lib  = dir </> "lib"
@@ -16,16 +16,16 @@
      libTs <- mapM getModTime . Prelude.filter isSource =<< allFiles lib
      srcT <- getModTime src
      binT <- getModTime bin
-@@ -460,7 +462,7 @@
+@@ -471,7 +473,7 @@ recompile force = io $ do
          -- temporarily disable SIGCHLD ignoring:
          uninstallSignalHandlers
          status <- bracket (openFile err WriteMode) hClose $ \h ->
--            waitForProcess =<< runProcess "ghc" ["--make", "xmonad.hs", "-i", "-ilib", "-fforce-recomp", "-v0", "-o",binn] (Just dir)
-+            waitForProcess =<< runProcess ghc ["--make", "xmonad.hs", "-i", "-ilib", "-fforce-recomp", "-v0", "-o",binn] (Just dir)
+-            waitForProcess =<< runProcess "ghc" ["--make", "xmonad.hs", "-i", "-ilib", "-fforce-recomp", "-main-is", "main", "-v0", "-o",binn] (Just dir)
++            waitForProcess =<< runProcess ghc ["--make", "xmonad.hs", "-i", "-ilib", "-fforce-recomp", "-main-is", "main", "-v0", "-o",binn] (Just dir)
                                      Nothing Nothing Nothing (Just h)
  
          -- re-enable SIGCHLD:
-@@ -469,6 +471,7 @@
+@@ -480,6 +482,7 @@ recompile force = io $ do
          -- now, if it fails, run xmessage to let the user know:
          when (status /= ExitSuccess) $ do
              ghcErr <- readFile err
@@ -33,7 +33,7 @@
              let msg = unlines $
                      ["Error detected while loading xmonad configuration file: " ++ src]
                      ++ lines (if null ghcErr then show status else ghcErr)
-@@ -476,7 +479,7 @@
+@@ -487,7 +490,7 @@ recompile force = io $ do
              -- nb, the ordering of printing, then forking, is crucial due to
              -- lazy evaluation
              hPutStrLn stderr msg

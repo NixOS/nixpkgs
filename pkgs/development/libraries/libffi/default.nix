@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, dejagnu, doCheck ? false }:
 
 stdenv.mkDerivation rec {
   name = "libffi-3.2.1";
@@ -12,10 +12,14 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" "doc" ];
 
+  buildInputs = stdenv.lib.optional doCheck dejagnu;
+
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
     "--enable-pax_emutramp"
   ];
+
+  inherit doCheck;
 
   dontStrip = stdenv ? cross; # Don't run the native `strip' when cross-compiling.
 

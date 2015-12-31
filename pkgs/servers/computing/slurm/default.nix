@@ -1,22 +1,21 @@
-{ stdenv, fetchurl, python, munge, perl, pam, openssl, mysql }:
-
-#TODO: add sview support based on gtk2
+{ stdenv, fetchurl, pkgconfig, curl, python, munge, perl, pam, openssl,
+  ncurses, mysql, gtk }:
 
 stdenv.mkDerivation rec {
   name = "slurm-llnl-${version}";
-  version = "14.11.5";
+  version = "15-08-5-1";
 
   src = fetchurl {
-    url = "http://www.schedmd.com/download/latest/slurm-${version}.tar.bz2";
-    sha256 = "0xx1q9ximsyyipl0xbj8r7ajsz4xrxik8xmhcb1z9nv0aza1rff2";
+    url = "https://github.com/SchedMD/slurm/archive/slurm-${version}.tar.gz";
+    sha256 = "05si1cn7zivggan25brsqfdw0ilvrlnhj96pwv16dh6vfkggzjr1";
   };
 
-  buildInputs = [ python munge perl pam openssl mysql.lib ];
+  buildInputs = [ pkgconfig curl python munge perl pam openssl mysql.lib ncurses gtk ];
 
-  configureFlags = ''
-    --with-munge=${munge}
-    --with-ssl=${openssl}
-  '';
+  configureFlags =
+    [ "--with-munge=${munge}"
+      "--with-ssl=${openssl}"
+    ] ++ stdenv.lib.optional (gtk == null)  "--disable-gtktest";
 
   preConfigure = ''
     substituteInPlace ./doc/html/shtml2html.py --replace "/usr/bin/env python" "${python.interpreter}"

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libressl-${version}";
-  version = "2.2.4";
+  version = "2.2.5";
 
   src = fetchurl {
     url    = "mirror://openbsd/LibreSSL/${name}.tar.gz";
-    sha256 = "0zlsxw366n438dc14zqnim6fc5vh1574jj95hv1sym46prcrhh3b";
+    sha256 = "0jwidi7fafcdh5qml72dx0ad0kfsk94qxzm29i7wd3cx8v8dxjp3";
   };
 
   enableParallelBuilding = true;
@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
     description = "Free TLS/SSL implementation";
     homepage    = "http://www.libressl.org";
     platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice wkennington fpletz ];
+    maintainers = with maintainers; [ thoughtpolice wkennington fpletz globin ];
   };
 }

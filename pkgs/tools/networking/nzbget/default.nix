@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "nzbget-${version}";
-  version = "16.3";
+  version = "16.4";
 
   src = fetchurl {
     url = "http://github.com/nzbget/nzbget/releases/download/v${version}/${name}-src.tar.gz";
-    sha256 = "03xzrvgqh90wx183sjrcyn7yilip92g2x5wffnw956ywxb3nsy2g";
+    sha256 = "03sdzxxsjpxp82jpk593xls96yk29989z05j73jah21dbpkkx7lf";
   };
 
   buildInputs = [ pkgconfig libxml2 ncurses libsigcxx libpar2 gnutls

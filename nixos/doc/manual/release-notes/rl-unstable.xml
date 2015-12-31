@@ -30,6 +30,7 @@ nixos.path = ./nixpkgs-unstable-2015-12-06/nixos;
 
   <itemizedlist>
     <listitem><para><literal>services/monitoring/longview.nix</literal></para></listitem>
+    <listitem><para><literal>services/web-apps/pump.io.nix</literal></para></listitem>
   </itemizedlist>
 </para>
 
@@ -111,6 +112,20 @@ nginx.override {
     now two separate arguments: <literal>extraNvidiaDeviceOptions</literal>
     and <literal>extraNouveauDeviceOptions</literal> for setting
     extra X11 options for nvidia and nouveau drivers, respectively.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>The <literal>Ctrl+Alt+Backspace</literal> key combination
+    no longer kills the X server by default.
+    There's a new option <option>services.xserver.enableCtrlAltBackspace</option>
+    allowing to enable the combination again.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para><literal>emacsPackagesNg</literal> now contains all packages
+    from the ELPA, MELPA, and MELPA Stable repositories.
     </para>
   </listitem>
 </itemizedlist>

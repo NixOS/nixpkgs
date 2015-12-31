@@ -1,6 +1,7 @@
-{ stdenv, fetchgit, pkgconfig, libtoxcore-dev, qt5, openal, opencv,
+{ stdenv, fetchgit, pkgconfig, libtoxcore-dev, openal, opencv,
   libsodium, libXScrnSaver, glib, gdk_pixbuf, gtk2, cairo,
-  pango, atk, qrencode, ffmpeg, filter-audio, makeWrapper }:
+  pango, atk, qrencode, ffmpeg, filter-audio, makeWrapper,
+  qtbase, qtsvg, qttools, qttranslations }:
 
 let
   revision = "1673b43e26c853f6446f228fec083af166cbf446";
@@ -18,8 +19,8 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       libtoxcore-dev openal opencv libsodium filter-audio
-      qt5.base qt5.tools libXScrnSaver glib gtk2 cairo
-      pango atk qrencode ffmpeg qt5.translations makeWrapper
+      qtbase qttools libXScrnSaver glib gtk2 cairo
+      pango atk qrencode ffmpeg qttranslations makeWrapper
     ];
 
   nativeBuildInputs = [ pkgconfig ];
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp qtox $out/bin
     wrapProgram $out/bin/qtox \
-      --prefix QT_PLUGIN_PATH : ${qt5.svg}/lib/qt5/plugins
+      --prefix QT_PLUGIN_PATH : ${qtsvg}/lib/qt5/plugins
   '';
 
   enableParallelBuilding = true;

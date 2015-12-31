@@ -9,7 +9,7 @@
 , kconfig
 , kiconthemes
 , knotifications
-, polkitQt
+, polkit-qt
 }:
 
 plasmaPackage {
@@ -25,7 +25,7 @@ plasmaPackage {
     kconfig
     kiconthemes
     knotifications
-    polkitQt
+    polkit-qt
   ];
   propagatedBuildInputs = [ ki18n kwindowsystem ];
 }

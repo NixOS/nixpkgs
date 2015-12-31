@@ -55,6 +55,7 @@ let
       cp -prd $sources/* . # */
       chmod -R u+w .
       cp ${../../modules/services/databases/postgresql.xml} configuration/postgresql.xml
+      cp ${../../modules/security/acme.xml} configuration/acme.xml
       cp ${../../modules/misc/nixos.xml} configuration/nixos.xml
       ln -s ${optionsDocBook} options-db.xml
       echo "${version}" > version

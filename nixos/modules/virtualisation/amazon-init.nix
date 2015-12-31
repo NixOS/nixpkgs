@@ -44,7 +44,6 @@ let
     nixos-rebuild switch
   '';
 in {
-  imports = [ "${modulesPath}/virtualisation/amazon-image.nix" ];
   boot.postBootCommands = ''
     ${bootScript} &
   '';

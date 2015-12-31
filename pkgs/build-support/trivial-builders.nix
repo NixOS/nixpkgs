@@ -153,4 +153,10 @@ _EOF_
         exec ${bin} "$@"
       '';
 
+  # Copy a path to the Nix store.
+  copyPathToStore = builtins.filterSource (p: t: true);
+
+  # Copy a list of paths to the Nix store.
+  copyPathsToStore = builtins.map copyPathToStore;
+
 }

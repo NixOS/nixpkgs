@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, pam ? null }:
+{ stdenv, fetchurl, fetchpatch, ncurses, utmp, pam ? null }:
 
 stdenv.mkDerivation rec {
   name = "screen-4.3.1";
@@ -13,13 +13,21 @@ stdenv.mkDerivation rec {
     sed -i -e "s|/usr/local|/non-existent|g" -e "s|/usr|/non-existent|g" configure Makefile.in */Makefile.in
   '';
 
-  # TODO: remove when updating the version of screen. Only a patch for 4.3.1
-  patches = stdenv.lib.optional stdenv.isDarwin (fetchurl {
+  # TODO: remove when updating the version of screen. Only patches for 4.3.1
+  patches = [
+    (fetchpatch {
+      name = "CVE-2015-6806.patch";
+      stripLen = 1;
+      url = "http://git.savannah.gnu.org/cgit/screen.git/patch/?id=b7484c224738247b510ed0d268cd577076958f1b";
+      sha256 = "160zhpzi80qkvwib78jdvx4jcm2c2h59q5ap7hgnbz4xbkb3k37l";
+    })
+  ] ++ stdenv.lib.optional stdenv.isDarwin (fetchurl {
     url = "http://savannah.gnu.org/file/screen-utmp.patch\?file_id=34815";
     sha256 = "192dsa8hm1zw8m638avzhwhnrddgizhyrwaxgwa96zr9vwai2nvc";
   });
 
-  buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isLinux pam;
+  buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isLinux pam
+                            ++ stdenv.lib.optional stdenv.isDarwin utmp;
 
   doCheck = true;
 

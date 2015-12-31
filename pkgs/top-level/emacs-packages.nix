@@ -2,12 +2,10 @@
 
 ## FOR USERS
 #
-# Recommended way: simply use `emacsWithPackages` from
-# `all-packages.nix` with the packages you want.
+# Recommended: simply use `emacsWithPackages` with the packages you want.
 #
-# Possible way: use `emacs` from `all-packages.nix`, install
-# everything to a system or user profile and then add this at the
-# start your `init.el`:
+# Alterative: use `emacs`, install everything to a system or user profile
+# and then add this at the start your `init.el`:
 /*
   (require 'package)
 
@@ -33,9 +31,9 @@
 
 { overrides
 
-, lib, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
+, lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
 
-, emacs, elpaPackages
+, emacs, texinfo, makeWrapper
 , trivialBuild
 , melpaBuild
 
@@ -44,9 +42,29 @@
 
 with lib.licenses;
 
-let packagesFun = super: self: with self; {
+let
+
+  elpaPackages = import ../applications/editors/emacs-modes/elpa-packages.nix {
+    inherit fetchurl lib stdenv texinfo;
+  };
+
+  melpaStablePackages = import ../applications/editors/emacs-modes/melpa-stable-packages.nix {
+    inherit lib;
+  };
+
+  melpaPackages = import ../applications/editors/emacs-modes/melpa-packages.nix {
+    inherit lib;
+  };
+
+  emacsWithPackages = import ../build-support/emacs/wrapper.nix {
+    inherit lib makeWrapper stdenv;
+  };
+
+  packagesFun = self: with self; {
 
   inherit emacs melpaBuild trivialBuild;
+
+  emacsWithPackages = emacsWithPackages self;
 
   ## START HERE
 
@@ -62,21 +80,6 @@ let packagesFun = super: self: with self; {
     packageRequires = [ auto-complete haskell-mode ];
     meta = {
       description = "Haskell code completion for auto-complete Emacs framework";
-      license = gpl3Plus;
-    };
-  };
-
-  ace-jump-mode = melpaBuild rec {
-    pname   = "ace-jump-mode";
-    version = "20140616";
-    src = fetchFromGitHub {
-      owner  = "winterTTr";
-      repo   = pname;
-      rev    = "8351e2df4fbbeb2a4003f2fb39f46d33803f3dac";
-      sha256 = "17axrgd99glnl6ma4ls3k01ysdqmiqr581wnrbsn3s4gp53mm2x6";
-    };
-    meta = {
-      description = "Advanced cursor movements mode for Emacs";
       license = gpl3Plus;
     };
   };
@@ -392,15 +395,15 @@ let packagesFun = super: self: with self; {
 
   circe = melpaBuild rec {
     pname   = "circe";
-    version = "1.5";
+    version = "2.1";
     src = fetchFromGitHub {
       owner  = "jorgenschaefer";
       repo   = "circe";
       rev    = "v${version}";
-      sha256 = "08dsv1dzgb9jx076ia7xbpyjpaxn1w87h6rzlb349spaydq7ih24";
+      sha256 = "0q3rv6lk37yybkbswmn4pgzca0nfhvf4h3ac395fr16k5ixybc5q";
     };
     packageRequires = [ lcs lui ];
-    fileSpecs = [ "lisp/circe*.el" ];
+    fileSpecs = [ "circe*.el" "irc.el" "make-tls-process.el" ];
     meta = {
       description = "IRC client for Emacs";
       license = gpl3Plus;
@@ -466,28 +469,6 @@ let packagesFun = super: self: with self; {
     files = [ "dash-functional.el" ];
     meta = {
       description = "Collection of useful combinators for Emacs Lisp.";
-      license = gpl3Plus;
-    };
-  };
-
-  deferred = melpaBuild rec {
-    version = "0.3.2";
-    pname = "deferred";
-
-    src = fetchFromGitHub {
-      owner = "kiwanami";
-      repo = "emacs-${pname}";
-      rev = "896d4b53210289afe489e1ee7db4e12cb9248109";
-      sha256 = "0ysahdyvlg240dynwn23kk2d9kb432zh2skr1gydm3rxwn6f18r0";
-    };
-
-    meta = {
-      description = "Simple asynchronous functions for emacs-lisp";
-      longDescription = ''
-        deferred.el provides facilities to manage asynchronous tasks.
-        The API and implementations were translated from JSDeferred (by cho45)
-         and Mochikit.Async (by Bob Ippolito) in JavaScript.
-      '';
       license = gpl3Plus;
     };
   };
@@ -676,12 +657,12 @@ let packagesFun = super: self: with self; {
 
   expand-region = melpaBuild rec {
     pname   = "expand-region";
-    version = "20141012";
+    version = "20150902";
     src = fetchFromGitHub {
       owner  = "magnars";
       repo   = "${pname}.el";
-      rev    = "fa413e07c97997d950c92d6012f5442b5c3cee78";
-      sha256 = "04k0518wfy72wpzsswmncnhd372fxa0r8nbfhmbyfmns8n7sr045";
+      rev    = "59f67115263676de5345581216640019975c4fda";
+      sha256 = "0qqqv0pp25xg1zh72i6fsb7l9vi14nd96rx0qdj1f3pdwfidqms1";
     };
     meta = {
       description = "Increases the selected region by semantic units in Emacs";
@@ -744,14 +725,14 @@ let packagesFun = super: self: with self; {
 
   flycheck = melpaBuild rec {
     pname   = "flycheck";
-    version = "0.23";
+    version = "0.25.1";
     src = fetchFromGitHub {
       owner  = pname;
       repo   = pname;
       rev    = version;
-      sha256 = "1ydk1wa7h7z9qw7prfvszxrmy2dyzsdij3xdy10rq197xnrw94wz";
+      sha256 = "19mnx2zm71qrf7qf3mk5kriv5vgq0nl67lj029n63wqd8jcjb5fi";
     };
-    packageRequires = [ dash let-alist pkg-info ];
+    packageRequires = [ dash let-alist pkg-info seq ];
     meta = {
       description = "On-the-fly syntax checking, intended as replacement for the older Flymake which is part of Emacs";
       license = gpl3Plus;
@@ -1016,12 +997,12 @@ let packagesFun = super: self: with self; {
 
   haskell-mode = melpaBuild rec {
     pname   = "haskell-mode";
-    version = "13.14";
+    version = "13.16";
     src = fetchFromGitHub {
       owner  = "haskell";
       repo   = pname;
       rev    = "v${version}";
-      sha256 = "1mxr2cflgafcr8wkvgbq8l3wmc9qhhb7bn9zl1bkf10zspw9m58z";
+      sha256 = "1gmpmfkr54sfzrif87zf92a1i13wx75bhp66h1rxhflg216m62yv";
     };
     meta = {
       description = "Haskell language support for Emacs";
@@ -1077,6 +1058,7 @@ let packagesFun = super: self: with self; {
     };
   };
 
+  # deprecated, part of haskell-mode now
   hi2 = melpaBuild rec {
     pname   = "hi2";
     version = "1.0";
@@ -1179,14 +1161,9 @@ let packagesFun = super: self: with self; {
 
   lcs = melpaBuild rec {
     pname   = "lcs";
-    version = "1.5";
-    src = fetchFromGitHub {
-      owner  = "jorgenschaefer";
-      repo   = "circe";
-      rev    = "v${version}";
-      sha256 = "08dsv1dzgb9jx076ia7xbpyjpaxn1w87h6rzlb349spaydq7ih24";
-    };
-    fileSpecs = [ "lisp/lcs*.el" ];
+    version = circe.version;
+    src     = circe.src;
+    fileSpecs = [ "lcs.el" ];
     meta = {
       description = "Longest Common Sequence (LCS) library for Emacs";
       license = gpl3Plus;
@@ -1227,15 +1204,10 @@ let packagesFun = super: self: with self; {
 
   lui = melpaBuild rec {
     pname   = "lui";
-    version = "1.5";
-    src = fetchFromGitHub {
-      owner  = "jorgenschaefer";
-      repo   = "circe";
-      rev    = "v${version}";
-      sha256 = "08dsv1dzgb9jx076ia7xbpyjpaxn1w87h6rzlb349spaydq7ih24";
-    };
+    version = circe.version;
+    src     = circe.src;
     packageRequires = [ tracking ];
-    fileSpecs = [ "lisp/lui*.el" ];
+    fileSpecs = [ "lui*.el" ];
     meta = {
       description = "User interface library for Emacs";
       license = gpl3Plus;
@@ -1244,12 +1216,12 @@ let packagesFun = super: self: with self; {
 
   magit = melpaBuild rec {
     pname   = "magit";
-    version = "2.3.0";
+    version = "2.3.1";
     src = fetchFromGitHub {
       owner  = pname;
       repo   = pname;
       rev    = version;
-      sha256 = "1zbx1ky1481lkvfjr4k23q7jdrk9ji9v5ghj88qib36vbmzfwww8";
+      sha256 = "01x9kahr3szzc00wlfrihl4x28yrq065fq4rpzx9dxiksayk24pd";
     };
     packageRequires = [ dash git-commit magit-popup with-editor ];
     fileSpecs = [ "lisp/magit-utils.el"
@@ -1538,12 +1510,12 @@ let packagesFun = super: self: with self; {
 
   projectile = melpaBuild rec {
     pname   = "projectile";
-    version = "0.12.0";
+    version = "0.13.0";
     src = fetchFromGitHub {
       owner  = "bbatsov";
       repo   = pname;
       rev    = "v${version}";
-      sha256 = "1bl5wpkyv9xlf5v5hzkj8si1z4hjn3yywrjs1mx0g4irmq3mk29m";
+      sha256 = "1rl6n6v9f4m7m969frx8b51a4lzfix2bxx6rfcfbh6kzhc00qnxf";
     };
     fileSpecs = [ "projectile.el" ];
     packageRequires = [ dash helm pkg-info ];
@@ -1717,16 +1689,26 @@ let packagesFun = super: self: with self; {
     };
   };
 
+  seq = melpaBuild rec {
+    pname = "seq";
+    version = "1.11";
+    src = fetchFromGitHub {
+      owner  = "NicolasPetton";
+      repo   = "${pname}.el";
+      rev    = version;
+      sha256 = "18ydaz2y5n7h4wr0dx2k9qbxl0mc50qfwk52ma4amk8nmm1bjwgc";
+    };
+    meta = {
+      description = "Sequence manipulation library for Emacs";
+      license = gpl3Plus; # probably
+    };
+  };
+
   shorten = melpaBuild rec {
     pname   = "shorten";
-    version = "1.5";
-    src = fetchFromGitHub {
-      owner  = "jorgenschaefer";
-      repo   = "circe";
-      rev    = "v${version}";
-      sha256 = "08dsv1dzgb9jx076ia7xbpyjpaxn1w87h6rzlb349spaydq7ih24";
-    };
-    fileSpecs = [ "lisp/shorten*.el" ];
+    version = circe.version;
+    src     = circe.src;
+    fileSpecs = [ "shorten.el" ];
     meta = {
       description = "String shortening to unique prefix library for Emacs";
       license = gpl3Plus;
@@ -1751,12 +1733,12 @@ let packagesFun = super: self: with self; {
 
   smartparens = melpaBuild rec {
     pname   = "smartparens";
-    version = "1.6.2";
+    version = "20151025";
     src = fetchFromGitHub {
       owner  = "Fuco1";
       repo   = pname;
-      rev    = version;
-      sha256 = "16pzd740vd1r3qfmxia2ibiarinm6xpja0mjv3nni5dis5s4r9gc";
+      rev    = "85583f9570be58f17ccd68388d9d4e58234d8ae9";
+      sha256 = "1pvzcrnzvksx1rzrr19256x1qhidr2acz6yipijlfx2zfjx2gxa7";
     };
     packageRequires = [ dash ];
     meta = {
@@ -1803,12 +1785,12 @@ let packagesFun = super: self: with self; {
 
   swiper = melpaBuild rec {
     pname   = "swiper";
-    version = "0.6.0";
+    version = "0.7.0";
     src = fetchFromGitHub {
       owner  = "abo-abo";
       repo   = pname;
       rev    = version;
-      sha256 = "18madh4hvrk8sxrll84ry13n1l3ad1gnp3prj828sszrbbdp20ly";
+      sha256 = "1kahl3h18vsjkbqvd84fb2w45s4srsiydn6jiv49vvg1yaxzxcbm";
     };
     fileSpecs = [ "swiper.el" "ivy.el" "colir.el" "counsel.el" ];
     meta = {
@@ -1837,15 +1819,10 @@ let packagesFun = super: self: with self; {
 
   tracking = melpaBuild rec {
     pname   = "tracking";
-    version = "1.5";
-    src = fetchFromGitHub {
-      owner  = "jorgenschaefer";
-      repo   = "circe";
-      rev    = "v${version}";
-      sha256 = "08dsv1dzgb9jx076ia7xbpyjpaxn1w87h6rzlb349spaydq7ih24";
-    };
+    version = circe.version;
+    src     = circe.src;
     packageRequires = [ shorten ];
-    fileSpecs = [ "lisp/tracking*.el" ];
+    fileSpecs = [ "tracking.el" ];
     meta = {
       description = "Register buffers for user review library for Emacs";
       license = gpl3Plus;
@@ -1985,29 +1962,6 @@ let packagesFun = super: self: with self; {
     };
   };
 
-  yasnippet = melpaBuild rec {
-    pname = "yasnippet";
-    version = "0.8.1";
-    src = fetchFromGitHub {
-      owner  = "capitaomorte";
-      repo   = pname;
-      rev    = "01139a2deb9eda272b9b771fbbe15d096061efa4";
-      sha256 = "1b0bxzkmw7yd1yf6326zf52aq63n283vy57pysj8cc34d9bk6nnk";
-    };
-    meta = {
-      description = "A template system for Emacs";
-      longDescription = ''
-        YASnippet is a template system for Emacs.
-        It allows you to type an abbreviation and automatically expand it into
-        function templates. Bundled language templates include: C, C++, C#,
-        Perl, Python, Ruby, SQL, LaTeX, HTML, CSS and more.
-        The snippet syntax is inspired from TextMate's syntax, you can even import
-        most TextMate templates to YASnippet.
-      '';
-      license = gpl2Plus;
-    };
-  };
-
   zenburn-theme = melpaBuild rec {
     pname   = "zenburn-theme";
     version = "2.2";
@@ -2023,6 +1977,13 @@ let packagesFun = super: self: with self; {
     };
   };
 
-};
+  };
 
-in elpaPackages.override packagesFun
+in
+  lib.makeScope newScope (self:
+    {}
+    // melpaPackages self
+    // melpaStablePackages self
+    // elpaPackages self
+    // packagesFun self
+  )

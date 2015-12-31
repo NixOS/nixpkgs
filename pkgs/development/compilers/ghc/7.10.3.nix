@@ -4,16 +4,10 @@
 
 let
 
-  buildMK = ''
-    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"
-    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp}/include"
-    libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-includes="${ncurses}/include"
-    libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-libraries="${ncurses}/lib"
-    ${stdenv.lib.optionalString stdenv.isDarwin ''
-      libraries/base_CONFIGURE_OPTS += --configure-option=--with-iconv-includes="${libiconv}/include"
-      libraries/base_CONFIGURE_OPTS += --configure-option=--with-iconv-libraries="${libiconv}/lib"
-    ''}
-  '';
+  docFixes = fetchurl {
+    url = "https://downloads.haskell.org/~ghc/7.10.3/ghc-7.10.3a.patch";
+    sha256 = "1j45z4kcd3w1rzm4hapap2xc16bbh942qnzzdbdjcwqznsccznf0";
+  };
 
 in
 
@@ -26,12 +20,16 @@ stdenv.mkDerivation rec {
     sha256 = "1vsgmic8csczl62ciz51iv8nhrkm72lyhbz7p7id13y2w7fcx46g";
   };
 
+  patches = [
+    docFixes
+    ./dont-pass-linker-flags-via-response-files.patch   # https://github.com/NixOS/nixpkgs/issues/10752
+  ];
+
   buildInputs = [ ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 hscolour ];
 
   enableParallelBuilding = true;
 
   preConfigure = ''
-    echo >mk/build.mk "${buildMK}"
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
@@ -42,6 +40,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-gcc=${stdenv.cc}/bin/cc"
     "--with-gmp-includes=${gmp}/include" "--with-gmp-libraries=${gmp}/lib"
+    "--with-curses-includes=${ncurses}/include" "--with-curses-libraries=${ncurses}/lib"
+  ] ++ stdenv.lib.optional stdenv.isDarwin [
+    "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ];
 
   # required, because otherwise all symbols from HSffi.o are stripped, and

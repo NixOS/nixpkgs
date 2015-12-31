@@ -3,7 +3,7 @@
 
 with stdenv.lib;
 
-let version = "4.0.7";
+let version = "4.0.8";
     pkgName = "tvheadend";
 
 in
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/tvheadend/tvheadend/archive/v${version}.tar.gz";
-    sha256 = "0vhj4vkgl4brjw1pdc80g1wbjn6hyy57jrxkwilnivqfd1mwx3aw";
+    sha256 = "0k4g7pvfyk4bxpsjdwv7bmbygbp7gfg9wrr2aqb099ncbz18bx04";
   };
 
   enableParallelBuilding = true;

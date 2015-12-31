@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "2.5.0";
 
   src = fetchurl {
-    url = https://gforge.inria.fr/frs/download.php/file/35091/flocq-2.5.0.tar.gz;
+    url = "https://gforge.inria.fr/frs/download.php/file/33979/flocq-${version}.tar.gz";
     sha256 = "0v3qiaz7vxfc5nk8rxwi39mik7hm7p5kb040q2pimb69qgfl6vml";
   };
 

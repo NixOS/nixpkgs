@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, qt5, which }:
+{ stdenv, fetchurl, zlib, qtbase, which }:
 
 stdenv.mkDerivation rec {
   name = "gpsbabel-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xf7wmy2m29g2lm8lqc74yf8rf7sxfl3cfwbk7dpf0yf42pb0b6w";
   };
 
-  buildInputs = [ zlib qt5.base which ];
+  buildInputs = [ zlib qtbase which ];
 
   /* FIXME: Building the documentation, with "make doc", requires this:
 

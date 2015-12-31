@@ -8,9 +8,12 @@
 , enableFetchart   ? true
 , enableLastfm     ? true
 , enableMpd        ? true
-, enableReplaygain ? true
+, enableReplaygain ? true, bs1770gain ? null
 , enableThumbnails ? true
 , enableWeb        ? true
+
+# External plugins
+, enableAlternatives ? false
 
 , bashInteractive, bashCompletion
 }:
@@ -22,7 +25,7 @@ assert enableEchonest    -> pythonPackages.pyechonest     != null;
 assert enableFetchart    -> pythonPackages.responses      != null;
 assert enableLastfm      -> pythonPackages.pylast         != null;
 assert enableMpd         -> pythonPackages.mpd            != null;
-assert enableReplaygain  -> pythonPackages.audiotools     != null;
+assert enableReplaygain  -> bs1770gain                    != null;
 assert enableThumbnails  -> pythonPackages.pyxdg          != null;
 assert enableWeb         -> pythonPackages.flask          != null;
 
@@ -90,9 +93,11 @@ in buildPythonPackage rec {
     ++ optional enableEchonest   pythonPackages.pyechonest
     ++ optional enableLastfm     pythonPackages.pylast
     ++ optional enableMpd        pythonPackages.mpd
-    ++ optional enableReplaygain pythonPackages.audiotools
     ++ optional enableThumbnails pythonPackages.pyxdg
-    ++ optional enableWeb        pythonPackages.flask;
+    ++ optional enableWeb        pythonPackages.flask
+    ++ optional enableAlternatives (import ./alternatives-plugin.nix {
+      inherit stdenv buildPythonPackage pythonPackages fetchFromGitHub;
+    });
 
   buildInputs = with pythonPackages; [
     beautifulsoup4
@@ -104,7 +109,7 @@ in buildPythonPackage rec {
   ];
 
   patches = [
-    ./replaygain-default-audiotools.patch
+    ./replaygain-default-bs1770gain.patch
   ];
 
   postPatch = ''
@@ -119,6 +124,12 @@ in buildPythonPackage rec {
       s,"flac","${flac}/bin/flac",
       s,"mp3val","${mp3val}/bin/mp3val",
     }' beetsplug/badfiles.py
+  '' + optionalString enableReplaygain ''
+    sed -i -re '
+      s!^( *cmd *= *b?['\'''"])(bs1770gain['\'''"])!\1${bs1770gain}/bin/\2!
+    ' beetsplug/replaygain.py
+    sed -i -e 's/if has_program.*bs1770gain.*:/if True:/' \
+      test/test_replaygain.py
   '';
 
   doCheck = true;

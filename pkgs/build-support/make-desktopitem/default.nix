@@ -9,6 +9,7 @@
 , genericName
 , mimeType ? ""
 , categories ? "Application;Other;"
+, startupNotify ? null
 }:
 
 stdenv.mkDerivation {
@@ -26,6 +27,8 @@ stdenv.mkDerivation {
     GenericName=${genericName}
     MimeType=${mimeType}
     Categories=${categories}
-    EOF
+    ${if startupNotify == null then ''EOF'' else ''
+    StartupNotify=${startupNotify}
+    EOF''}
   '';
 }

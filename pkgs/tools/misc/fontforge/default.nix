@@ -29,10 +29,9 @@ stdenv.mkDerivation {
   buildInputs = [
     git autoconf automake gnum4 libtool perl pkgconfig gettext uthash
     python freetype zlib glib libungif libpng libjpeg libtiff libxml2
+    pango
   ]
-    ++ lib.optionals withGTK [ gtk2 ]
-    # I'm not sure why pango doesn't seem necessary on Linux
-    ++ lib.optionals stdenv.isDarwin [ pango ];
+    ++ lib.optionals withGTK [ gtk2 ];
 
   configureFlags =
     lib.optionals (!withPython) [ "--disable-python-scripting" "--disable-python-extension" ]

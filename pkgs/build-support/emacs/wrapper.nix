@@ -1,8 +1,49 @@
-{ stdenv, makeWrapper, emacs }:
+/*
 
-with stdenv.lib;
+# Usage
 
-explicitRequires: # packages explicitly requested by the user
+`emacsWithPackages` takes a single argument: a function from a package
+set to a list of packages (the packages that will be available in
+Emacs). For example,
+```
+emacsWithPackages (epkgs: [ epkgs.evil epkgs.magit ])
+```
+All the packages in the list should come from the provided package
+set. It is possible to add any package to the list, but the provided
+set is guaranteed to have consistent dependencies and be built with
+the correct version of Emacs.
+
+# Overriding
+
+`emacsWithPackages` inherits the package set which contains it, so the
+correct way to override the provided package set is to override the
+set which contains `emacsWithPackages`. For example, to override
+`emacsPackagesNg.emacsWithPackages`,
+```
+let customEmacsPackages =
+      emacsPackagesNg.override (super: self: {
+        # use a custom version of emacs
+        emacs = ...;
+        # use the unstable MELPA version of magit
+        magit = self.melpaPackages.magit;
+      });
+in customEmacsPackages.emacsWithPackages (epkgs: [ epkgs.evil epkgs.magit ])
+```
+
+*/
+
+{ lib, makeWrapper, stdenv }: self:
+
+with lib; let inherit (self) emacs; in
+
+packagesFun: # packages explicitly requested by the user
+
+let
+  explicitRequires =
+    if builtins.isFunction packagesFun
+      then packagesFun self
+    else packagesFun;
+in
 
 stdenv.mkDerivation {
   name = (appendToName "with-packages" emacs).name;

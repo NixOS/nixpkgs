@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, autoconf, automake, libtool, makeWrapper
 , ncurses, cpio, gperf, perl, cdrkit, flex, bison, qemu, pcre, augeas, libxml2
 , acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex
-, gmp, readline, file, libintlperl, GetoptLong, SysVirt }:
+, gmp, readline, file, libintlperl, GetoptLong, SysVirt, numactl, xen }:
 
 stdenv.mkDerivation rec {
   name = "libguestfs-${version}";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     makeWrapper pkgconfig autoconf automake libtool ncurses cpio gperf perl
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
     systemd fuse yajl libvirt gmp readline file hivex libintlperl GetoptLong
-    SysVirt
+    SysVirt numactl xen
   ];
 
   configureFlags = "--disable-appliance --disable-daemon";
