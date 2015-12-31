@@ -215,7 +215,7 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  outputs = [ "out" "lib" "doc" ];
+  outputs = [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
