@@ -1992,6 +1992,8 @@ let
 
   jp2a = callPackage ../applications/misc/jp2a { };
 
+  jpegoptim = callPackage ../applications/graphics/jpegoptim { };
+
   jq = callPackage ../development/tools/jq {};
 
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
