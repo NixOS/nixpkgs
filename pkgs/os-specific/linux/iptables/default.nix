@@ -1,13 +1,21 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, bison, flex, libnetfilter_conntrack, libnftnl, libmnl}:
 
 stdenv.mkDerivation rec {
   name = "iptables-${version}";
-  version = "1.4.21"; # before updating check #12178
+  version = "1.6.0";
 
   src = fetchurl {
     url = "http://www.netfilter.org/projects/iptables/files/${name}.tar.bz2";
-    sha256 = "1q6kg7sf0pgpq0qhab6sywl23cngxxfzc9zdzscsba8x09l4q02j";
+    sha256 = "0q0w1x4aijid8wj7dg1ny9fqwll483f1sqw7kvkskd8q1c52mdsb";
   };
+
+  nativeBuildInputs = [bison flex];
+
+  buildInputs = [libnetfilter_conntrack libnftnl libmnl];
+
+  preConfigure = ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lmnl -lnftnl"
+  '';
 
   configureFlags = ''
     --enable-devel
