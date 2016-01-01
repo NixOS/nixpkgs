@@ -2581,6 +2581,8 @@ let
 
   ossec = callPackage ../tools/security/ossec {};
 
+  ostinato = callPackage ../applications/networking/ostinato { };
+
   ostree = callPackage ../tools/misc/ostree { };
 
   otpw = callPackage ../os-specific/linux/otpw { };
