@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace qmltermwidget.pro \
-      --replace '$$[QT_INSTALL_QML]' "/lib/qml/"
+      --replace '$$[QT_INSTALL_QML]' "/lib/qt5/qml/"
   '';
 
   configurePhase = "qmake PREFIX=$out";
