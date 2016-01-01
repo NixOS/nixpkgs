@@ -23,6 +23,7 @@ let
       sha256 = "0sp5445rbvms6qvzhld0kwwvydw51vq5iaf4kdqsf2d9jvaz3yx5";
     };
     armv6l-linux = armv7l-linux;
+    x86_64-solaris = x86_64-linux;
     x86_64-freebsd = rec {
       version = "1.2.7";
       system = "x86-64-freebsd";
