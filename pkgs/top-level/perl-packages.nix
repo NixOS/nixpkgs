@@ -12401,10 +12401,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   URI = buildPerlPackage {
-    name = "URI-1.68";
+    name = "URI-1.69";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/URI-1.68.tar.gz;
-      sha256 = "c840d30f7657bfd4b2acbb311bd764232911cd3dc97e92415fbd0a242185c358";
+      url = mirror://cpan/authors/id/E/ET/ETHER/URI-1.69.tar.gz;
+      sha256 = "0bdlk1cn7ipy4kdylrn73yz9i2k39ikm1cqvh9hq0vvbcbm1cjxp";
     };
     meta = {
       description = "Uniform Resource Identifiers (absolute and relative)";
