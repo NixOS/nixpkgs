@@ -77,6 +77,7 @@ stdenv.mkDerivation rec {
     sed -i '/TestCgoLookupIP/areturn' src/net/cgo_unix_test.go
     sed -i '/TestChdirAndGetwd/areturn' src/os/os_test.go
     sed -i '/TestRead0/areturn' src/os/os_test.go
+    sed -i '/TestNohup/areturn' src/os/signal/signal_test.go
     sed -i '/TestSystemRoots/areturn' src/crypto/x509/root_darwin_test.go
 
     sed -i '/TestGoInstallRebuildsStalePackagesInOtherGOPATH/areturn' src/cmd/go/go_test.go
