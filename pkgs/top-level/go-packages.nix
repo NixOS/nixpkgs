@@ -57,9 +57,9 @@ let
     goPackageAliases = [ "github.com/golang/image" ];
   };
 
-  net = buildFromGitHub {
+  net_go15 = buildFromGitHub {
     rev    = "62ac18b461605b4be188bbc7300e9aa2bc836cd4";
-    date   = "2015-08-29";
+    date   = "2015-11-04";
     owner  = "golang";
     repo   = "net";
     sha256 = "0lwwvbbwbf3yshxkfhn6z20gd45dkvnmw2ms36diiy34krgy402p";
@@ -71,6 +71,23 @@ let
     ];
     propagatedBuildInputs = [ text crypto ];
   };
+
+  net_go14 = buildFromGitHub {
+    rev    = "ea47fc708ee3e20177f3ca3716217c4ab75942cb";
+    date   = "2015-08-29";
+    owner  = "golang";
+    repo   = "net";
+    sha256 = "0x1pmg97n7l62vak9qnjdjrrfl98jydhv6j0w3jkk4dycdlzn30d";
+    goPackagePath = "golang.org/x/net";
+    goPackageAliases = [
+      "code.google.com/p/go.net"
+      "github.com/hashicorp/go.net"
+      "github.com/golang/net"
+    ];
+    propagatedBuildInputs = [ text ];
+  };
+
+  net = if isGo14 then net_go14 else net_go15;
 
   oauth2 = buildFromGitHub {
     rev = "397fe7649477ff2e8ced8fc0b2696f781e53745a";
