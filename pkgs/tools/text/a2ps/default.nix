@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       well as pretty printing for a wide range of programming languages.
     '';
     homepage = http://www.inf.enst.fr/~demaille/a2ps/index.html;
-    license = gpl3Plus;
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.bennofs ];
     platforms = platforms.linux;
 
