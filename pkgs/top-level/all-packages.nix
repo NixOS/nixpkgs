@@ -474,6 +474,8 @@ let
     glibc = glibc.override { debugSymbols = true; };
   };
 
+  a2ps = callPackage ../tools/text/a2ps { };
+
   abduco = callPackage ../tools/misc/abduco { };
 
   acbuild = callPackage ../applications/misc/acbuild { };
