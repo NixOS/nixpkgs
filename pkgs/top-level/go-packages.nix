@@ -70,6 +70,7 @@ let
       "github.com/golang/net"
     ];
     propagatedBuildInputs = [ text crypto ];
+    disabled = isGo14;
   };
 
   net_go14 = buildFromGitHub {
@@ -85,6 +86,7 @@ let
       "github.com/golang/net"
     ];
     propagatedBuildInputs = [ text ];
+    disabled = !isGo14;
   };
 
   net = if isGo14 then net_go14 else net_go15;
