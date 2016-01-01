@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
                   libvdpau
                   libva
                   libbluray
+                  qtquickcontrols
                 ]
                 ++ optional jackSupport jack
                 ++ optional portaudioSupport portaudio
