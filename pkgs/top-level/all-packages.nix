@@ -15310,6 +15310,8 @@ let
 
   cups_filters = callPackage ../misc/cups/filters.nix { };
 
+  cups-pk-helper = callPackage ../misc/cups/cups-pk-helper.nix { };
+
   crashplan = callPackage ../applications/backup/crashplan { };
 
   gutenprint = callPackage ../misc/drivers/gutenprint { };
