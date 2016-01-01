@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   inherit buildInputs;
   src = fetchurl {
     url = "http://invisible-island.net/datafiles/release/cdk.tar.gz";
-    sha256 = "00s87kq5x10x22azr6q17b663syk169y3dk3kaj8z6dlk2b8vknp";
+    sha256 = "0j74l874y33i26y5kjg3pf1vswyjif8k93pqhi0iqykpbxfsg382";
   };
   meta = {
     description = ''Curses development kit'';
