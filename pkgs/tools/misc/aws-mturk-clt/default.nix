@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://mturk.s3.amazonaws.com/CLTSource/${name}.tar.gz";
-    sha256 = "06p0cbb5afmqjjlibbw9gb08jp270c7j57lhnf9ld50sm1z021ln";
+    sha256 = "00yyc7k3iygg83cknv9i2dsaxwpwzdkc8a2l9j56lg999hw3mqm3";
   };
 
   installPhase =
