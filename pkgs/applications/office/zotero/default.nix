@@ -4,10 +4,10 @@ let
 
   xpi = fetchurl {
     url = "https://download.zotero.org/extension/zotero-${version}.xpi";
-    sha256 = "15wdbwnaxs748psjnxw40wld45npjjmvwx70c0jx2p63y6ks2gcx";
+    sha256 = "02h2ja08v8as4fawj683rh5rmxsjf5d0qmvqa77i176nm20y5s7s";
   };
 
-  version = "4.0.26";
+  version = "4.0.28";
 
 in
 stdenv.mkDerivation {
@@ -15,8 +15,8 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "https://github.com/zotero/zotero-standalone-build/archive/${version}.tar.gz";
-    sha256 = "11gbislxkhfycnii05v6d8h9qdp5rk5xag7kdnsih67gicnn467g";
+    url = "https://github.com/zotero/zotero-standalone-build/archive/4.0.28.8.tar.gz";
+    sha256 = "ab1fd5dde9bd2a6b6d31cc9a53183a04de3698f1273a943ef31ecc4c42808a68";
   };
 
   nativeBuildInputs = [ perl unzipNLS ];
