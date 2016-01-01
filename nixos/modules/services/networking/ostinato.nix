@@ -47,7 +47,7 @@ in
           sacrifice the accuracy to reduce the CPU load.
         '';
       };
-      
+  
       rpcServer = {
         address = mkOption {
           type = types.string;
