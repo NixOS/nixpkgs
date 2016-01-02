@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python, pyqt5, sip_4_16, poppler_utils, pkgconfig, libpng
 , imagemagick, libjpeg, fontconfig, podofo, qtbase, icu, sqlite
-, makeWrapper, unrar, chmlib, pythonPackages, xz, libusb1, libmtp
+, makeWrapper, unrarSupport ? false, chmlib, pythonPackages, xz, libusb1, libmtp
 , xdg_utils
 }:
 
@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
 
   inherit python;
 
-  patchPhase = ''
+  patches = stdenv.lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+
+  prePatch = ''
     sed -i "/pyqt_sip_dir/ s:=.*:= '${pyqt5}/share/sip':"  \
       setup/build_environment.py
   '';
@@ -53,7 +55,6 @@ stdenv.mkDerivation rec {
 
     for a in $out/bin/*; do
       wrapProgram $a --prefix PYTHONPATH : $PYTHONPATH \
-                     --prefix LD_LIBRARY_PATH : ${unrar}/lib \
                      --prefix PATH : ${poppler_utils}/bin
     done
   '';
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Comprehensive e-book software";
     homepage = http://calibre-ebook.com;
-    license = licenses.gpl3;
+    license = with licenses; if unrarSupport then unfreeRedistributable else gpl3;
     maintainers = with maintainers; [ viric iElectric pSub AndersonTorres ];
     platforms = platforms.linux;
     inherit version;
