@@ -78,7 +78,7 @@ stdenv.mkDerivation {
     '')
 
     + optionalString (!nativeLibc) ''
-      # The "-B$libc/lib/" flag is a quick hack to force gcc to link
+      # The "-B${libc_lib}/lib/" flag is a quick hack to force gcc to link
       # against the crt1.o from our own glibc, rather than the one in
       # /usr/lib.  (This is only an issue when using an `impure'
       # compiler/linker, i.e., one that searches /usr/lib and so on.)
@@ -89,7 +89,7 @@ stdenv.mkDerivation {
       # compile, because it uses "#include_next <limits.h>" to find the
       # limits.h file in ../includes-fixed. To remedy the problem,
       # another -idirafter is necessary to add that directory again.
-      echo "-B${libc_lib}/lib/ -idirafter ${libc_dev}/include -idirafter $cc/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
+      echo "-B${libc_lib}/lib/ -idirafter ${libc_dev}/include -idirafter ${cc}/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
 
       echo "-L${libc_lib}/lib" > $out/nix-support/libc-ldflags
 
@@ -102,13 +102,13 @@ stdenv.mkDerivation {
     '' else ''
       echo $cc > $out/nix-support/orig-cc
 
-      # GCC shows $cc/lib in `gcc -print-search-dirs', but not
-      # $cc/lib64 (even though it does actually search there...)..
+      # GCC shows ${cc_solib}/lib in `gcc -print-search-dirs', but not
+      # ${cc_solib}/lib64 (even though it does actually search there...)..
       # This confuses libtool.  So add it to the compiler tool search
       # path explicitly.
-      if [ -e "${cc.out}/lib64" -a ! -L "${cc.out}/lib64" ]; then
+      if [ -e "${cc_solib}/lib64" -a ! -L "${cc_solib}/lib64" ]; then
         ccLDFlags+=" -L${cc_solib}/lib64"
-        ccCFlags+=" -B${cc.out}/lib64"
+        ccCFlags+=" -B${cc_solib}/lib64"
       fi
       ccLDFlags+=" -L${cc_solib}/lib"
 
@@ -118,7 +118,7 @@ stdenv.mkDerivation {
 
       # Find the gcc libraries path (may work only without multilib).
       ${optionalString cc.langAda or false ''
-        basePath=`echo $cc/lib/*/*/*`
+        basePath=`echo ${cc_solib}/lib/*/*/*`
         ccCFlags+=" -B$basePath -I$basePath/adainclude"
         gnatCFlags="-aI$basePath/adainclude -aO$basePath/adalib"
         echo "$gnatCFlags" > $out/nix-support/gnat-cflags
@@ -134,7 +134,7 @@ stdenv.mkDerivation {
       echo "$ccLDFlags" > $out/nix-support/cc-ldflags
       echo "$ccCFlags" > $out/nix-support/cc-cflags
 
-      ccPath="$cc/bin"
+      ccPath="${cc}/bin"
       ldPath="${binutils_bin}/bin"
 
       # Propagate the wrapped cc so that if you install the wrapper,
