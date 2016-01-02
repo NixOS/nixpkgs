@@ -9370,6 +9370,8 @@ let
 
   postsrsd = callPackage ../servers/mail/postsrsd { };
 
+  rmilter = callPackage ../servers/mail/rmilter { };
+
   pshs = callPackage ../servers/http/pshs { };
 
   libpulseaudio = callPackage ../servers/pulseaudio { libOnly = true; };
