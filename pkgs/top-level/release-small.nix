@@ -130,7 +130,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   perl = all;
   pkgconfig = all;
   pmccabe = linux;
-  policykit = linux;
   portmap = linux;
   procps = linux;
   python = allBut cygwin;
