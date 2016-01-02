@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Utility for RAR archives";
     homepage = http://www.rarlab.com/;
-    license = licenses.gpl2;
+    license = licenses.unfreeRedistributable;
     maintainers = [ maintainers.ehmry ];
     platforms = platforms.all;
   };
