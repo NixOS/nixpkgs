@@ -26,9 +26,22 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+  buildFlags = [
+    "zopfli"
+    "libzopfli"
+    "zopflipng"
+    "libzopflipng"
+  ];
 
   installPhase = ''
-    install -D zopfli $out/bin/zopfli
+    mkdir -p $out/bin
+    install -m755 zopfli{,png} $out/bin
+
+    mkdir -p $out/lib
+    install -m755 libzopfli{,png}.so* $out/lib
+
+    mkdir -p $out/share/doc/zopfli
+    install -m644 README* $out/share/doc/zopfli
   '';
 
   meta = with stdenv.lib; {
