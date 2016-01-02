@@ -11,16 +11,13 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace GNUmakefile.in \
-      --replace which type \
-      --replace 'tooldir = $(DESTDIR)' 'tooldir = ' \
-      --replace 'makedir = $(DESTDIR)' 'makedir = ' \
-      --replace 'mandir  = $(DESTDIR)' 'mandir  = '
+      --replace which type
 
     substituteInPlace FilesystemLayouts/apple \
       --replace /usr/local ""
   '';
 
-  installFlags = "DESTDIR=$(out)";
+  installFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
     mkdir -p $out/nix-support
