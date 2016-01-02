@@ -12,6 +12,12 @@
 
 assert (!libsOnly) -> kernel != null;
 
+# ------------ DROPPED SUPPORT FOR RADEONS HD 5 6 k --------------
+# Please note that the radeon-crimson-15.12-15 SADLY :(
+# drops support for pre-GCN cards so mainly
+# Radeons of series 5000 and 6000
+# ----------------------------------------------------------------
+
 # If you want to use a different Xorg version probably
 # DIR_DEPENDING_ON_XORG_VERSION in builder.sh has to be adopted (?)
 # make sure libglx.so of ati is used. xorg.xorgserver does provide it as well
@@ -25,13 +31,14 @@ assert (!libsOnly) -> kernel != null;
 
 # http://wiki.cchtml.com/index.php/Main_Page
 
-# There is one issue left:
+# 
 # /usr/lib/dri/fglrx_dri.so must point to /run/opengl-driver/lib/fglrx_dri.so
+# This is done in the builder script.
 
 with stdenv.lib;
 
 stdenv.mkDerivation {
-  name = "ati-drivers-15.7" + (optionalString (!libsOnly) "-${kernel.version}");
+  name = "ati-drivers-15.12" + (optionalString (!libsOnly) "-${kernel.version}");
 
   builder = ./builder.sh;
 
@@ -39,13 +46,22 @@ stdenv.mkDerivation {
   gcc = stdenv.cc.cc;
 
   src = fetchurl {
-    url = "http://www2.ati.com/drivers/linux/amd-driver-installer-15.20.1046-x86.x86_64.zip";
-    sha256 = "ffde64203f49d9288eaa25f4d744187b6f4f14a87a444bab6a001d822b327a9d";
+    url = "http://www2.ati.com/drivers/linux/radeon-crimson-15.12-15.302-151217a-297685e.zip";
+    sha256 = "704f2dfc14681f76dae3b4120c87b1ded33cf43d5a1d800b6de5ca292bb61e58";
     curlOpts = "--referer http://support.amd.com/en-us/download/desktop?os=Linux%20x86_64";
   };
 
-  patchPhase = "patch -p1 < ${./kernel-api-fixes.patch}";
   patchPhaseSamples = "patch -p2 < ${./patch-samples.patch}";
+# The following patches were found at https://aur.archlinux.org/packages/catalyst
+# they provide various fixes and allow catalyst crimson to build past kernel 4.2 to 4.3 at the very least.
+  patchPhase1 = "patch -p1 < ${./makefile_compat.patch}";
+  patchPhase2 = "patch -p1 < ${./lano1106_kcl_agp_13_4.patch}";
+  patchPhase3 = "patch -p1 < ${./lano1106_fglrx_intel_iommu.patch}";
+  patchPhase4 = "patch -p1 < ${./grsec_arch.patch}";
+  patchPhase5 = "patch -p1 < ${./fglrx_gpl_symbol.patch}";
+  patchPhase6 = "patch -p1 < ${./crimson_i686_xg.patch}";
+  patchPhase7 = "patch -p1 < ${./4.3-kolasa-seq_printf.patch}";
+  patchPhase8 = "patch -p1 < ${./4.3-gentoo-mtrr.patch}";
 
   buildInputs =
     [ xorg.libXext xorg.libX11 xorg.libXinerama
@@ -68,12 +84,13 @@ stdenv.mkDerivation {
       "${xorg.libXext}/lib"
       "${xorg.libX11}/lib"
       "${xorg.libXinerama}/lib"
+#      "${stdenv.cc.cc}/lib"
     ];
 
   # without this some applications like blender don't start, but they start
   # with nvidia. This causes them to be symlinked to $out/lib so that they
   # appear in /run/opengl-driver/lib which get's added to LD_LIBRARY_PATH
-  extraDRIlibs = [ xorg.libXext ];
+  extraDRIlibs = [ xorg.libXext xorg.libX11 ];
 
   inherit mesa qt4; # only required to build examples and amdcccle
 
