@@ -26,11 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ]
     ++ optionals (!libOnly) [ openldap libedit ];
 
-  unpackPhase = ''
-    tar -xf $src
-    #tar -xzf krb5-${version}.tar.gz
-    cd krb5-${version}/src
-  '';
+  preConfigure = "cd ./src";
 
   buildPhase = optionalString libOnly ''
     (cd util; make -j $NIX_BUILD_CORES)
