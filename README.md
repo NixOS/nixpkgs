@@ -1,8 +1,8 @@
 [<img src="http://nixos.org/logo/nixos-hires.png" width="500px" alt="logo" />](https://nixos.org/nixos)
 
 [![Build Status](https://travis-ci.org/NixOS/nixpkgs.svg?branch=master)](https://travis-ci.org/NixOS/nixpkgs)
-[![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/pr)](http://www.issuestats.com/github/nixos/nixpkgs)
-[![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/issue)](http://www.issuestats.com/github/nixos/nixpkgs)
+[![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/pr?style=flat)](http://www.issuestats.com/github/nixos/nixpkgs)
+[![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/issue?style=flat)](http://www.issuestats.com/github/nixos/nixpkgs)
 
 Nixpkgs is a collection of packages for the [Nix](https://nixos.org/nix/) package
 manager. It is periodically built and tested by the [hydra](http://hydra.nixos.org/)
