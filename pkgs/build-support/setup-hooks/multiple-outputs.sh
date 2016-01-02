@@ -106,7 +106,7 @@ moveToOutput() {
             if rmdir "$srcParent"; then
                 echo "Removing empty $srcParent/ and (possibly) its parents"
                 rmdir -p --ignore-fail-on-non-empty "$(readlink -m "$srcParent/..")" \
-                    > /dev/null || true # doesn't ignore failure for some reason
+                    2> /dev/null || true # doesn't ignore failure for some reason
             fi
         done
     done
@@ -114,7 +114,6 @@ moveToOutput() {
 
 # Move documentation to the desired outputs.
 _multioutDocs() {
-    if [ "$outputs" = "out" ]; then return; fi;
     local REMOVE=REMOVE # slightly hacky - we expand ${!outputFoo}
 
     moveToOutput share/info "${!outputInfo}"
