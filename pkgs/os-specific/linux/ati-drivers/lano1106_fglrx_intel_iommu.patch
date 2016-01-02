@@ -1,0 +1,11 @@
+--- 13.4/common/lib/modules/fglrx/build_mod/firegl_public.c	2013-04-16 23:29:55.000000000 +0200
++++ 13.4/common/lib/modules/fglrx/build_mod/firegl_public.c	2013-05-21 17:05:34.726681102 +0200
+@@ -93,7 +93,7 @@
+    and they use different config options. These options can only be enabled
+    on x86_64 with newer 2.6 kernels (2.6.23 for intel, 2.6.26 for amd).
+ */
+-#if defined(CONFIG_AMD_IOMMU) || defined(CONFIG_DMAR)
++#if defined(CONFIG_AMD_IOMMU) || defined(CONFIG_INTEL_IOMMU)
+     #define FIREGL_DMA_REMAPPING
+ #endif
+

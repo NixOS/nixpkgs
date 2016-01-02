@@ -11,10 +11,17 @@ mkdir fglrx
 cd fglrx
 unzip $src
 cd ..
-run_file=$(echo fglrx/amd-driver-installer-*)
+run_file=$(echo fglrx/fglrx*/amd-driver-installer-*)
 sh $run_file --extract .
 
-eval "$patchPhase"
+eval "$patchPhase1"
+eval "$patchPhase2"
+eval "$patchPhase3"
+eval "$patchPhase4"
+eval "$patchPhase5"
+eval "$patchPhase6"
+eval "$patchPhase7"
+eval "$patchPhase8"
 
 case "$system" in
   x86_64-linux)
@@ -182,7 +189,6 @@ fi
 
   cp -r $TMP/arch/$arch/usr/$lib_arch/* $out/lib
 
-  # cp -r $TMP/arch/$arch/usr/$lib_arch/* $out/lib
   ln -s libatiuki.so.1.0 $out/lib/libatiuki.so.1
   ln -s fglrx-libGL.so.1.2 $out/lib/libGL.so.1
   ln -s fglrx-libGL.so.1.2 $out/lib/libGL.so
@@ -190,7 +196,6 @@ fi
   ln -s libfglrx_gamma.so.1.0 $out/lib/libfglrx_gamma.so.1
   # make xorg use the ati version
   ln -s $out/lib/xorg/modules/extensions/{fglrx/fglrx-libglx.so,libglx.so}
-
   # Correct some paths that are hardcoded into binary libs.
   if [ "$arch" ==  "x86_64" ]; then
     for lib in \
@@ -226,8 +231,12 @@ fi
   fi
 
   # libstdc++ and gcc are needed by some libs
+  patchelf --remove-needed libX11.so.6 $out/lib/dri/fglrx_dri.so
+  patchelf --remove-needed libX11.so.6 $out/lib/fglrx_dri.so
   patchelf --set-rpath $gcc/$lib_arch $out/lib/libatiadlxx.so
   patchelf --set-rpath $gcc/$lib_arch $out/lib/xorg/modules/glesx.so
+  patchelf --set-rpath $gcc/$lib_arch/ $out/lib/dri/fglrx_dri.so
+  patchelf --set-rpath $gcc/$lib_arch/ $out/lib/libaticaldd.so
 }
 
 if test -z "$libsOnly"; then

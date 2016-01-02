@@ -1,0 +1,12 @@
+--- 15.11/common/lib/modules/fglrx/build_mod/firegl_public.c	2015-11-21 00:35:38.000000000 +0100
++++ 15.11b/common/lib/modules/fglrx/build_mod/firegl_public.c	2015-11-24 22:28:02.113843493 +0100
+@@ -1714,6 +1714,9 @@
+ 
+ #if defined(__i386__) 
+ #ifndef __HAVE_ARCH_CMPXCHG
++#ifndef __xg
++#define __xg(x) ((volatile long *)(x))
++#endif
+ static inline 
+ unsigned long __fgl_cmpxchg(volatile void *ptr, unsigned long old,            
+                         unsigned long new, int size)                      
