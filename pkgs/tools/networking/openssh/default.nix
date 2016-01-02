@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, zlib, openssl, perl, libedit, pkgconfig, pam
+{ stdenv, fetchurl, fetchpatch, zlib, openssl, perl, libedit, pkgconfig, pam
 , etcDir ? null
 , hpnSupport ? false
 , withKerberos ? false
+, withGssapiPatches ? withKerberos
 , kerberos
 }:
 
@@ -12,6 +13,11 @@ let
   hpnSrc = fetchurl {
     url = mirror://sourceforge/hpnssh/openssh-6.6p1-hpnssh14v5.diff.gz;
     sha256 = "682b4a6880d224ee0b7447241b684330b731018585f1ba519f46660c10d63950";
+  };
+
+  gssapiSrc = fetchpatch {
+    url = "http://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian/patches/gssapi.patch?h=debian/6.9p1-3";
+    sha256 = "03zlgkb3a1igj20kn8cz55ggaxg65h6f0kg20m39m0wsb94qjdb1";
   };
 
 in
@@ -30,7 +36,8 @@ stdenv.mkDerivation rec {
       export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
     '';
 
-  patches = [ ./locale_archive.patch ./openssh-6.9p1-security-7.0.patch];
+  patches = [ ./locale_archive.patch ./openssh-6.9p1-security-7.0.patch ]
+    ++ optional withGssapiPatches gssapiSrc;
 
   buildInputs = [ zlib openssl libedit pkgconfig pam ]
     ++ optional withKerberos [ kerberos ];
