@@ -1,9 +1,10 @@
 { pkgs }: #? import <nixpkgs> {} }:
 
 let
-  callPackage = pkgs.lib.callPackageWith (pkgs // self);
 
   self = rec {
+    callPackage = pkgs.lib.callPackageWith (pkgs // self);
+
     buildErlang = callPackage ./build-erlang.nix {};
     buildHex = callPackage ./build-hex.nix {};
 
