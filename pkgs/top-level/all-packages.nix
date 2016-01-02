@@ -15571,19 +15571,19 @@ let
     };
   };
 
-  saneBackends = callPackage ../applications/graphics/sane/backends {
+  sane-backends = callPackage ../applications/graphics/sane/backends {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
     snapscanFirmware = config.sane.snapscanFirmware or null;
   };
 
-  saneBackendsGit = callPackage ../applications/graphics/sane/backends/git.nix {
+  sane-backends-git = callPackage ../applications/graphics/sane/backends/git.nix {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
     snapscanFirmware = config.sane.snapscanFirmware or null;
   };
 
   mkSaneConfig = callPackage ../applications/graphics/sane/config.nix { };
 
-  saneFrontends = callPackage ../applications/graphics/sane/frontends.nix { };
+  sane-frontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
   sct = callPackage ../tools/X11/sct {};
 
@@ -15889,6 +15889,9 @@ aliases = with self; rec {
   manpages = man-pages; # added 2015-12-06
   mssys = ms-sys; # added 2015-12-13
   virtviewer = virt-viewer; # added 2015-12-24
+  saneBackends = sane-backends; # added 2016-01-02
+  saneBackendsGit = sane-backends-git; # added 2016-01-02
+  saneFrontends = sane-frontends; # added 2016-01-02
 };
 
 tweakAlias = _n: alias: with lib;
