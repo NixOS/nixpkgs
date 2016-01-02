@@ -926,6 +926,10 @@ self: super: {
   # https://github.com/sol/hpack/issues/53
   hpack = dontCheck super.hpack;
 
+  # Tests require `docker` command in PATH
+  # Tests require running docker service :on localhost
+  docker = dontCheck super.docker;
+
   # https://github.com/deech/fltkhs/issues/16
   fltkhs = overrideCabal super.fltkhs (drv: {
     libraryToolDepends = (drv.libraryToolDepends or []) ++ [pkgs.autoconf];
