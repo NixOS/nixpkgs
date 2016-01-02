@@ -26,7 +26,7 @@ let
   '';
 
   hashedPasswordDescription = ''
-    To generate hashed password install <literal>mkpassword</literal>
+    To generate hashed password install <literal>mkpasswd</literal>
     package and run <literal>mkpasswd -m sha-512</literal>.
   '';
 
