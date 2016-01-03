@@ -13234,7 +13234,7 @@ let
 
   subunit = callPackage ../development/libraries/subunit { };
 
-  surf = callPackage ../applications/misc/surf {
+  surf = callPackage ../applications/networking/browsers/surf {
     webkit = webkitgtk2;
   };
 
