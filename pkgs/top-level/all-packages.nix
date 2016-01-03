@@ -12191,6 +12191,8 @@ let
     inherit (pythonPackages) lxml;
     lcms = lcms2;
   };
+  
+  inspectrum = callPackage ../applications/misc/inspectrum { };
 
   ion3 = callPackage ../applications/window-managers/ion-3 {
     lua = lua5;
