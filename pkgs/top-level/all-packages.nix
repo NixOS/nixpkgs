@@ -3144,7 +3144,7 @@ let
 
   sysbench = callPackage ../development/tools/misc/sysbench {};
 
-  system_config_printer = callPackage ../tools/misc/system-config-printer {
+  system-config-printer = callPackage ../tools/misc/system-config-printer {
     libxml2 = libxml2Python;
    };
 
@@ -15346,6 +15346,7 @@ aliases = with self; rec {
   rssglx = rss-glx; #added 2015-03-25
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  system_config_printer = system-config-printer;  # added 2016-01-03
   x11 = xlibsWrapper; # added 2015-09
   xlibs = xorg; # added 2015-09
   youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
