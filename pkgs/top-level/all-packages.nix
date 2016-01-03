@@ -3192,7 +3192,7 @@ let
 
   sysbench = callPackage ../development/tools/misc/sysbench {};
 
-  system_config_printer = callPackage ../tools/misc/system-config-printer {
+  system-config-printer = callPackage ../tools/misc/system-config-printer {
     libxml2 = libxml2Python;
    };
 
@@ -15877,6 +15877,7 @@ aliases = with self; rec {
   signon = qt5.signon;  # added 2015-12-19
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  system_config_printer = system-config-printer;  # added 2016-01-03
   telepathy_qt5 = qt5.telepathy;  # added 2015-12-19
   x11 = xlibsWrapper; # added 2015-09
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
