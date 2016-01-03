@@ -733,7 +733,7 @@ let
 
   bsod = callPackage ../misc/emulators/bsod { };
 
-  btrfsProgs = callPackage ../tools/filesystems/btrfsprogs { };
+  btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
 
   bwm_ng = callPackage ../tools/networking/bwm-ng { };
 
@@ -15894,6 +15894,7 @@ aliases = with self; rec {
   saneBackends = sane-backends; # added 2016-01-02
   saneBackendsGit = sane-backends-git; # added 2016-01-02
   saneFrontends = sane-frontends; # added 2016-01-02
+  btrfsProgs = btrfs-progs; # added 2016-01-03
 };
 
 tweakAlias = _n: alias: with lib;
