@@ -3255,6 +3255,8 @@ let
 
   tlsdate = callPackage ../tools/networking/tlsdate { };
 
+  tldr = callPackage ../tools/misc/tldr { };
+
   tmate = callPackage ../tools/misc/tmate { };
 
   tmpwatch = callPackage ../tools/misc/tmpwatch  { };
