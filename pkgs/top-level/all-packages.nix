@@ -9919,6 +9919,8 @@ let
 
   ipset = callPackage ../os-specific/linux/ipset { };
 
+  irqbalance = callPackage ../os-specific/linux/irqbalance { };
+
   iw = callPackage ../os-specific/linux/iw { };
 
   jfbview = callPackage ../os-specific/linux/jfbview { };
