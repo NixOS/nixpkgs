@@ -2596,8 +2596,6 @@ let
 
   ossec = callPackage ../tools/security/ossec {};
 
-  ostinato = callPackage ../applications/networking/ostinato { };
-
   ostree = callPackage ../tools/misc/ostree { };
 
   otpw = callPackage ../os-specific/linux/otpw { };
@@ -12618,6 +12616,8 @@ let
   openshift = callPackage ../applications/networking/cluster/openshift { };
 
   oroborus = callPackage ../applications/window-managers/oroborus {};
+
+  ostinato = callPackage ../applications/networking/ostinato { };
 
   panamax_api = callPackage ../applications/networking/cluster/panamax/api {
     ruby = ruby_2_1;
