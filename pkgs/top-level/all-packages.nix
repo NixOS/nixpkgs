@@ -15753,7 +15753,6 @@ let
 
   xsane = callPackage ../applications/graphics/sane/xsane.nix {
     libpng = libpng12;
-    saneBackends = saneBackends;
   };
 
   xwiimote = callPackage ../misc/drivers/xwiimote {
