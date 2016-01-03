@@ -1291,6 +1291,8 @@ let
 
   dhcpcd = callPackage ../tools/networking/dhcpcd { };
 
+  dhcping = callPackage ../tools/networking/dhcping { };
+
   di = callPackage ../tools/system/di { };
 
   diffoscope = callPackage ../tools/misc/diffoscope {
