@@ -54,6 +54,8 @@ let
       cp man/mum* $out/share/man/man1
     '' + (overrides.installPhase or "");
 
+    enableParallelBuilding = true;
+
     meta = {
       description = "Low-latency, high quality voice chat software";
       homepage = "http://mumble.sourceforge.net/";
