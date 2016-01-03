@@ -8450,6 +8450,24 @@ in modules // {
     };
   };
 
+  git-sweep = buildPythonPackage rec {
+    name = "git-sweep-0.1.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/git-sweep/${name}.tar.gz";
+      sha256 = "1csp0zd049d643d409rfivbswwzrayb4i6gkypp5mc27fb1z2afd";
+    };
+
+    propagatedBuildInputs = with self; [ GitPython ];
+
+    meta = {
+      description = "A command-line tool that helps you clean up Git branches";
+      homepage = http://lab.arc90.com/2012/04/03/git-sweep/;
+      license = licenses.mit;
+      maintainers = with maintainers; [ pSub ];
+    };
+  };
+
   glances = buildPythonPackage rec {
     name = "glances-${version}";
     version = "2.4.2";
