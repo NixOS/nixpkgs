@@ -13895,6 +13895,8 @@ let
     inherit (gnome) scrollkeeper libglade;
   };
 
+  xzgv = callPackage ../applications/graphics/xzgv { };
+
   yate = callPackage ../applications/misc/yate { };
 
   inherit (gnome3) yelp;
