@@ -1,4 +1,6 @@
-#! /usr/bin/env bash
+#! @bash@/bin/bash
+
+PATH=@coreutils@/bin:$PATH
 
 export FREENET_HOME="$HOME/.local/share/freenet"
 if [ -n "$XDG_DATA_HOME" ]
@@ -9,8 +11,8 @@ if [ ! -d $FREENET_HOME ]; then
   mkdir -p $FREENET_HOME
 fi
 
-cp -u $FREENET_SEEDNODES $FREENET_HOME/seednodes.fref
+cp -u @seednodes@ $FREENET_HOME/seednodes.fref
 chmod u+rw $FREENET_HOME/seednodes.fref
 
 cd $FREENET_HOME
-exec $FREENET_ROOT/bin/freenet.wrapped "$@"
+@jre@/bin/java -cp @freenet@/share/freenet/bcprov-jdk15on-152.jar:@freenet@/share/freenet/freenet-ext.jar:@freenet@/share/freenet/freenet.jar -Xmx1024M freenet.node.NodeStarter
