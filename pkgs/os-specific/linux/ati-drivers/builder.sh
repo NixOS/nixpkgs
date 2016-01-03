@@ -226,8 +226,12 @@ fi
   fi
 
   # libstdc++ and gcc are needed by some libs
+  patchelf --remove-needed libX11.so.6 $out/lib/dri/fglrx_dri.so
+  patchelf --remove-needed libX11.so.6 $out/lib/fglrx_dri.so
   patchelf --set-rpath $gcc/$lib_arch $out/lib/libatiadlxx.so
   patchelf --set-rpath $gcc/$lib_arch $out/lib/xorg/modules/glesx.so
+  patchelf --set-rpath $gcc/$lib_arch/ $out/lib/dri/fglrx_dri.so
+  patchelf --set-rpath $gcc/$lib_arch/ $out/lib/libaticaldd.so
 }
 
 if test -z "$libsOnly"; then
