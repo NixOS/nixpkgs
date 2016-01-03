@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "cantarell-fonts-0.0.16";
+  name = "cantarell-fonts-0.0.17";
 
   src = fetchurl {
-    url = mirror://gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.16.tar.xz;
-    sha256 = "071g2l89gdjgqhapw9dbm1ch6hnzydhf7b38pi86fm91adaqggqm";
+    url = mirror://gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.17.tar.xz;
+    sha256 = "0kx05fw1i11zcqx5yv9y9iprpl49k51sibz86bc58a50n1w6gcwn";
   };
 
   meta = {
