@@ -3529,6 +3529,8 @@ let
 
   xcruiser = callPackage ../applications/misc/xcruiser { };
 
+  xxkb = callPackage ../applications/misc/xxkb { };
+
   unarj = callPackage ../tools/archivers/unarj { };
 
   unshield = callPackage ../tools/archivers/unshield { };
