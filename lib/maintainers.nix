@@ -294,6 +294,7 @@
   steveej = "Stefan Junker <mail@stefanjunker.de>";
   szczyp = "Szczyp <qb@szczyp.com>";
   sztupi = "Attila Sztupak <attila.sztupak@gmail.com>";
+  taeer = "Taeer Bar-Yam <taeer@necsi.edu>";
   tailhook = "Paul Colomiets <paul@colomiets.name>";
   taktoa = "Remy Goldschmidt <taktoa@gmail.com>";
   telotortium = "Robert Irelan <rirelan@gmail.com>";
