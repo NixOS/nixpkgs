@@ -11222,7 +11222,10 @@ let
 
   cdparanoia = cdparanoiaIII;
 
-  cdparanoiaIII = callPackage ../applications/audio/cdparanoia { };
+  cdparanoiaIII = callPackage ../applications/audio/cdparanoia {
+    inherit (darwin) IOKit;
+    inherit (darwin.apple_sdk.frameworks) Carbon;
+  };
 
   cdrtools = callPackage ../applications/misc/cdrtools { };
 
