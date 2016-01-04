@@ -1747,6 +1747,16 @@ let
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xorgserver xproto ];
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xorgserver xproto ;};
 
+  xf86videorendition = (mkDerivation "xf86videorendition" {
+    name = "xf86-video-rendition-4.2.6";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/driver/xf86-video-rendition-4.2.6.tar.bz2;
+      sha256 = "1a7rqafxzc2hd0s5pnq8s8j9d3jg64ndc0xnq4160kasyqhwy3k6";
+    };
+    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ;};
+
   xf86videos3virge = (mkDerivation "xf86videos3virge" {
     name = "xf86-video-s3virge-1.10.7";
     builder = ./builder.sh;

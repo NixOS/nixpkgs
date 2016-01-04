@@ -151,6 +151,7 @@ mirror://xorg/X11R7.7/src/everything/xf86-video-newport-0.2.4.tar.bz2
 mirror://xorg/individual/driver/xf86-video-nv-2.1.20.tar.bz2
 mirror://xorg/individual/driver/xf86-video-openchrome-0.3.3.tar.bz2
 mirror://xorg/individual/driver/xf86-video-r128-6.10.0.tar.bz2
+mirror://xorg/individual/driver/xf86-video-rendition-4.2.6.tar.bz2
 mirror://xorg/individual/driver/xf86-video-s3virge-1.10.7.tar.bz2
 mirror://xorg/individual/driver/xf86-video-savage-2.3.8.tar.bz2
 mirror://xorg/individual/driver/xf86-video-siliconmotion-1.7.8.tar.bz2
