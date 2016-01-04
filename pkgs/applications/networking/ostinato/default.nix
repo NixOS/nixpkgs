@@ -3,12 +3,17 @@
 , wireshark, gzip, diffutils, gawk
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "ostinato-2015-12-24";
   src = fetchgit {
     url = "https://github.com/pstavirs/ostinato.git";
     rev = "414d89860de0987843295d149bcabeac7c6fd9e5";
     sha256 = "0hb78bq51r93p0yr4l1z5xlf1i666v5pa3zkdj7jmpb879kj05dx";
+  };
+
+  ostinato_png = fetchurl {
+    url = "http://ostinato.org/images/site-logo.png";
+    sha256 = "f5c067823f2934e4d358d76f65a343efd69ad783a7aeabd7ab4ce3cd03490d70";
   };
 
   buildInputs = [ qt4 protobuf libpcap ];
@@ -28,7 +33,7 @@ stdenv.mkDerivation {
     EOF
 
     mkdir -p $out/share/pixmaps
-    install -D -m 644 ${./ostinato.png} $out/share/pixmaps/ostinato.png
+    cp ${ostinato_png} $out/share/pixmaps/ostinato.png
 
     # Create a desktop item.
     mkdir -p $out/share/applications
