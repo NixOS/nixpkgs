@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
 
     substituteInPlace FilesystemLayouts/apple \
       --replace /usr/local ""
+
+    substituteInPlace configure \
+      --replace /Library/GNUstep "$out"
   '';
 
   installFlags = [ "PREFIX=$(out)" ];
