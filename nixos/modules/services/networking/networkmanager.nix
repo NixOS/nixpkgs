@@ -212,9 +212,11 @@ in {
     }
     {
       name = "nm-openvpn";
+      gid = config.ids.gids.nm-openvpn;
     }];
     users.extraUsers = [{
       name = "nm-openvpn";
+      uid = config.ids.uids.nm-openvpn;
     }];
 
     systemd.packages = cfg.packages;
