@@ -36,7 +36,7 @@ rec {
   # Linux standard environment.
   stdenvLinux = (import ./linux { inherit system allPackages platform config lib; }).stdenvLinux;
 
-  stdenvDarwin = (import ./darwin { inherit system allPackages platform config;}).stage5;
+  stdenvDarwin = (import ./darwin { inherit system allPackages platform config;}).stdenvDarwin;
 
   # Select the appropriate stdenv for the platform `system'.
   stdenv =

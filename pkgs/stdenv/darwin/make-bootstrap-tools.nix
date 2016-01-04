@@ -1,4 +1,6 @@
-with import ../../top-level/all-packages.nix { system = "x86_64-darwin"; };
+{ system ? builtins.currentSystem }:
+
+with import ../../top-level/all-packages.nix { inherit system; };
 
 rec {
   # We want coreutils without ACL support.
@@ -169,7 +171,15 @@ rec {
     '';
   };
 
-  unpack = stdenv.mkDerivation {
+  bootstrapFiles = {
+    sh      = "${build}/on-server/sh";
+    bzip2   = "${build}/on-server/bzip2";
+    mkdir   = "${build}/on-server/mkdir";
+    cpio    = "${build}/on-server/cpio";
+    tarball = "${build}/on-server/bootstrap-tools.cpio.bz2";
+  };
+
+  unpack = stdenv.mkDerivation (bootstrapFiles // {
     name = "unpack";
 
     # This is by necessity a near-duplicate of unpack-bootstrap-tools.sh. If we refer to it directly,
@@ -216,14 +226,8 @@ rec {
       EOF
     '';
 
-    tarball = "${build}/on-server/bootstrap-tools.cpio.bz2";
-
-    mkdir = "${build}/on-server/mkdir";
-    bzip2 = "${build}/on-server/bzip2";
-    cpio  = "${build}/on-server/cpio";
-
     allowedReferences = [ "out" ];
-  };
+  });
 
   test = stdenv.mkDerivation {
     name = "test";
@@ -282,5 +286,13 @@ rec {
 
       $out/bin/hello
     '';
+  };
+
+  # The ultimate test: bootstrap a whole stdenv from the tools specified above and get a package set out of it
+  test-pkgs = let
+    stdenv = import ./. { inherit system bootstrapFiles; };
+  in import ../../top-level/all-packages.nix {
+    inherit system;
+    bootStdenv = stdenv.stdenvDarwin;
   };
 }

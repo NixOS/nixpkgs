@@ -1,27 +1,26 @@
-{ system      ? builtins.currentSystem
-, allPackages ? import ../../top-level/all-packages.nix
-, platform    ? null
-, config      ? {}
+{ system         ? builtins.currentSystem
+, allPackages    ? import ../../top-level/all-packages.nix
+, platform       ? null
+, config         ? {}
+
+# Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
+, bootstrapFiles ? let
+  fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
+    url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/4f07c88d467216d9692fefc951deb5cd3c4cc722/${file}";
+    inherit sha256 system executable;
+  }; in {
+    sh      = fetch { file = "sh";    sha256 = "1siix3wakzil31r2cydmh3v8a1nyq4605dwiabqc5lx73j4xzrzi"; };
+    bzip2   = fetch { file = "bzip2"; sha256 = "0zvqm977k11b5cl4ixxb5h0ds24g6z0f8m28z4pqxzpa353lqbla"; };
+    mkdir   = fetch { file = "mkdir"; sha256 = "13frk8lsfgzlb65p9l26cvxf06aag43yjk7vg9msn7ix3v8cmrg1"; };
+    cpio    = fetch { file = "cpio";  sha256 = "0ms5i9m1vdksj575sf1djwgm7zhnvfrrb44dxnfh9avr793rc2w4"; };
+    tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "1lz1b0grl4642h6n635xvi6imf0yyy1zyzdr9ing5aphzz0z5iic"; executable = false; };
+  }
 }:
 
 let
   libSystemProfile = ''
     (import "${./standard-sandbox.sb}")
   '';
-
-  fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
-    url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/4f07c88d467216d9692fefc951deb5cd3c4cc722/${file}";
-    inherit sha256 system executable;
-  };
-
-  bootstrapFiles = {
-    sh    = fetch { file = "sh";    sha256 = "1siix3wakzil31r2cydmh3v8a1nyq4605dwiabqc5lx73j4xzrzi"; };
-    bzip2 = fetch { file = "bzip2"; sha256 = "0zvqm977k11b5cl4ixxb5h0ds24g6z0f8m28z4pqxzpa353lqbla"; };
-    mkdir = fetch { file = "mkdir"; sha256 = "13frk8lsfgzlb65p9l26cvxf06aag43yjk7vg9msn7ix3v8cmrg1"; };
-    cpio  = fetch { file = "cpio";  sha256 = "0ms5i9m1vdksj575sf1djwgm7zhnvfrrb44dxnfh9avr793rc2w4"; };
-  };
-
-  tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "1lz1b0grl4642h6n635xvi6imf0yyy1zyzdr9ing5aphzz0z5iic"; executable = false; };
 in rec {
   allPackages = import ../../top-level/all-packages.nix;
 
@@ -42,13 +41,13 @@ in rec {
   '';
 
   bootstrapTools = derivation rec {
-    inherit system tarball;
+    inherit system;
 
     name    = "bootstrap-tools";
     builder = bootstrapFiles.sh; # Not a filename! Attribute 'sh' on bootstrapFiles
     args    = [ ./unpack-bootstrap-tools.sh ];
 
-    inherit (bootstrapFiles) mkdir bzip2 cpio;
+    inherit (bootstrapFiles) mkdir bzip2 cpio tarball;
 
     __sandboxProfile = binShClosure + libSystemProfile;
   };
@@ -306,4 +305,6 @@ in rec {
       inherit cc;
     };
   };
+
+  stdenvDarwin = stage5;
 }
