@@ -22,6 +22,10 @@ stdenv.mkDerivation {
 
   doCheck = false;
 
+  postInstall = ''
+    install -Dm644 {..,$out/share/doc/pingtcp}/README.md
+  '';
+
   meta = with stdenv.lib; {
     inherit version;
     description = "Measure TCP handshake time";
