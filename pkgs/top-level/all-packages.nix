@@ -14265,6 +14265,8 @@ let
 
   quake3demodata = callPackage ../games/quake3/demo { };
 
+  quake3pointrelease = callPackage ../games/quake3/content/pointrelease.nix { };
+
   ioquake3 = callPackage ../games/quake3/ioquake { };
 
   quantumminigolf = callPackage ../games/quantumminigolf {};
