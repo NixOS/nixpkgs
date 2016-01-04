@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, gnutls, devicemapper, perl, python
+{ stdenv, fetchurl, fetchpatch
+, pkgconfig, makeWrapper
+, libxml2, gnutls, devicemapper, perl, python
 , iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext
-, libtasn1, ebtables, libgcrypt, yajl, makeWrapper, pmutils, libcap_ng
+, libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
 , curl, libiconv, gmp, xen
 }:
@@ -14,9 +16,12 @@ stdenv.mkDerivation rec {
     sha256 = "ebcf5645fa565e3fe2fe94a86e841db9b768cf0e0a7e6cf395c6327f9a23bd64";
   };
 
+  patches = [ ./build-on-bsd.patch ];
+
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
-    pkgconfig libxml2 gnutls perl python readline
-    gettext libtasn1 libgcrypt yajl makeWrapper
+    libxml2 gnutls perl python readline
+    gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux udev libcap_ng
