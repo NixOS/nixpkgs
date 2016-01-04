@@ -8,33 +8,47 @@
 
 assert stdenv ? glibc;
 
-stdenv.mkDerivation rec {
+with stdenv.lib;
+
+let
   version = if majorVersion == 1 then "1.6.9" else "2.0.0";
+  sha256 = if majorVersion == 1 then "0wri89ygjpv7npiz58mnydhgldywp6arqp9jq3v0g54a56fiwwhg" else "1cbwvzqn3158cy7r499rdwipx7fpb30lrrvh6jy5a4xvpcjzbwnl";
+
+  optionalPreConfigure = if majorVersion == 1 then ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gtk}/include/gtk-2.0"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gtk}/lib/gtk-2.0/include"
+  '' else ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gtk3}/include/gtk-3.0"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gtk3}/lib/gtk-3.0/include"
+  '';
+
+  optionalBuildInputs = if majorVersion == 1 then [gtk libraw1394] else [gtk3 lua5_2 (pugixml.override {pic = true;})];
+
+in
+
+stdenv.mkDerivation rec {
+inherit version;
   name = "darktable-${version}";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = if majorVersion == 1 then "0wri89ygjpv7npiz58mnydhgldywp6arqp9jq3v0g54a56fiwwhg" else "1cbwvzqn3158cy7r499rdwipx7fpb30lrrvh6jy5a4xvpcjzbwnl";
+    sha256 = sha256;
   };
 
   buildInputs =
-    [ GConf atk cairo cmake curl dbus_glib exiv2 glib libgnome_keyring (if  majorVersion == 1 then gtk else gtk3)
+    [ GConf atk cairo cmake curl dbus_glib exiv2 glib libgnome_keyring
       ilmbase intltool lcms lcms2 lensfun libXau libXdmcp libexif
       libglade libgphoto2 libjpeg libpng libpthreadstubs
       librsvg libtiff libxcb openexr pixman pkgconfig sqlite libxslt
       libsoup graphicsmagick SDL json_glib openjpeg mesa
-    ]
-++ stdenv.lib.optional (majorVersion == 1) libraw1394
-++ stdenv.lib.optional (majorVersion == 2) [ lua5_2 (pugixml.override {pic = true;}) ];
+    ] ++ optionalBuildInputs;
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gtk}/include/gtk-2.0"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${gtk}/lib/gtk-2.0/include"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${cairo}/include/cairo"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${atk}/include/atk-1.0"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${ilmbase}/include/OpenEXR"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${openexr}/include/OpenEXR"
-  '';
+  '' + optionalPreConfigure;
 
   cmakeFlags = [
     "-DPTHREAD_INCLUDE_DIR=${stdenv.glibc}/include"

@@ -11365,6 +11365,11 @@ let
   };
   darktable2 = darktable.override {majorVersion = 2;};
 
+  osm-gps-map = callPackage ../applications/misc/osm-gps-map {
+    inherit (gnome) gtkdoc;
+  };
+
+
   das_watchdog = callPackage ../tools/system/das_watchdog { };
 
   dbvisualizer = callPackage ../applications/misc/dbvisualizer {};
