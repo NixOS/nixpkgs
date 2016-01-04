@@ -2714,6 +2714,8 @@ let
 
   bully = callPackage ../tools/networking/bully { };
 
+  pcapc = callPackage ../tools/networking/pcapc { };
+
   pdnsd = callPackage ../tools/networking/pdnsd { };
 
   peco = callPackage ../tools/text/peco { };
