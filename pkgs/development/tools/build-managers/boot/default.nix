@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jdk }:
+{ stdenv, fetchurl, jdk }:
 
 stdenv.mkDerivation rec {
   version = "2.4.2";
@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
   inherit jdk;
   
   builder = ./builder.sh;
-
-  buildInputs = [ makeWrapper ];
 
   propagatedBuildInputs = [ jdk ];
 
