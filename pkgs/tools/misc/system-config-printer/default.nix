@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://cyberelk.net/tim/software/system-config-printer/;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
