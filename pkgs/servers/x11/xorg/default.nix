@@ -717,6 +717,16 @@ let
     buildInputs = [pkgconfig libfontenc fontsproto freetype xproto xtrans zlib ];
   }) // {inherit libfontenc fontsproto freetype xproto xtrans zlib ;};
 
+  libXfont2 = (mkDerivation "libXfont2" {
+    name = "libXfont2-2.0.1";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/lib/libXfont2-2.0.1.tar.bz2;
+      sha256 = "0znvwk36nhmyqpmhbm9mzisgixp1mp5qkfald8x1n5yxbm3vpyz9";
+    };
+    buildInputs = [pkgconfig libfontenc fontsproto freetype xproto xtrans zlib ];
+  }) // {inherit libfontenc fontsproto freetype xproto xtrans zlib ;};
+
   libXft = (mkDerivation "libXft" {
     name = "libXft-2.3.2";
     builder = ./builder.sh;
