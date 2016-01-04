@@ -1809,7 +1809,7 @@ let
 
   gupnp_igd = callPackage ../development/libraries/gupnp-igd {};
 
-  gupnptools = callPackage ../tools/networking/gupnp-tools {};
+  gupnp-tools = callPackage ../tools/networking/gupnp-tools {};
 
   gvpe = callPackage ../tools/networking/gvpe { };
 
@@ -15862,6 +15862,7 @@ aliases = with self; rec {
   firefoxWrapper = firefox-wrapper;
   fuse_exfat = exfat;                   # 2015-09-11
   grantlee5 = qt5.grantlee;  # added 2015-12-19
+  gupnptools = gupnp-tools;  # added 2015-12-19
   htmlTidy = html-tidy;  # added 2014-12-06
   inherit (haskell.compiler) jhc uhc;   # 2015-05-15
   inotifyTools = inotify-tools;
