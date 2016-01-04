@@ -2108,11 +2108,11 @@ let
   }) // {inherit libX11 xproto ;};
 
   xorgcffiles = (mkDerivation "xorgcffiles" {
-    name = "xorg-cf-files-1.0.5";
+    name = "xorg-cf-files-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/util/xorg-cf-files-1.0.5.tar.bz2;
-      sha256 = "1m3ypq0xcy46ghxc0svl1rbhpy3zvgmy0aa2mn7w7v7d8d8bh8zd";
+      url = mirror://xorg/individual/util/xorg-cf-files-1.0.6.tar.bz2;
+      sha256 = "0kckng0zs1viz0nr84rdl6dswgip7ndn4pnh5nfwnviwpsfmmksd";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
