@@ -287,6 +287,8 @@ let
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
+  cmark = callPackage ../development/libraries/cmark { };
+
   dotnetenv = callPackage ../build-support/dotnetenv {
     dotnetfx = dotnetfx40;
   };
