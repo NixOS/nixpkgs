@@ -15983,11 +15983,11 @@ in modules // {
 
   pyopengl = buildPythonPackage rec {
     name = "pyopengl-${version}";
-    version = "3.0.2";
+    version = "3.1.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/P/PyOpenGL/PyOpenGL-${version}.tar.gz";
-      sha256 = "9ef93bbea2c193898341f574e281c3ca0dfe87c53aa25fbec4b03581f6d1ba03";
+      sha256 = "9b47c5c3a094fa518ca88aeed35ae75834d53e4285512c61879f67a48c94ddaf";
     };
     propagatedBuildInputs = [ pkgs.mesa pkgs.freeglut self.pillow ];
     patchPhase = ''
