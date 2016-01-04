@@ -10672,10 +10672,6 @@ let
   multipath-tools = callPackage ../os-specific/linux/multipath-tools { };
 
   musl = callPackage ../os-specific/linux/musl { };
-  muslWithUnwind = callPackage ../os-specific/linux/musl {
-    withUnwind = true;
-    inherit libunwind-llvm;
-  };
 
   nettools = callPackage ../os-specific/linux/net-tools { };
 
