@@ -14182,6 +14182,8 @@ in modules // {
     # failed tests: https://code.google.com/p/psutil/issues/detail?id=434
     doCheck = false;
 
+    buildInputs = optional stdenv.isDarwin pkgs.darwin.IOKit;
+
     meta = {
       description = "Process and system utilization information interface for python";
       homepage = http://code.google.com/p/psutil/;
