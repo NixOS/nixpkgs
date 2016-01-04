@@ -258,7 +258,7 @@ in modules // {
 
     buildInputs = with self; [ nose ];
 
-    sourceRoot = "letsencrypt-${version}/acme";
+    sourceRoot = "letsencrypt-v${version}-src/acme";
   };
 
   actdiag = buildPythonPackage rec {

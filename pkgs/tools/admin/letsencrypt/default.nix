@@ -1,12 +1,14 @@
-{ stdenv, pythonPackages, fetchurl, dialog }:
+{ stdenv, pythonPackages, fetchFromGitHub, dialog }:
 
 pythonPackages.buildPythonPackage rec {
-  version = "0.1.0";
+  version = "0.1.1-corrected";
   name = "letsencrypt-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/letsencrypt/letsencrypt/archive/v${version}.tar.gz";
-    sha256 = "056y5bsmpc4ya5xxals4ypzsm927j6n5kwby3bjc03sy3sscf6hw";
+  src = fetchFromGitHub {
+    owner = "letsencrypt";
+    repo = "letsencrypt";
+    rev = "v${version}";
+    sha256 = "1f94yg81vhcv42lxccwzcjjgiz2ik1al2hb456hpbmlsd9i99n81";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -17,6 +19,7 @@ pythonPackages.buildPythonPackage rec {
 
   patchPhase = ''
     substituteInPlace letsencrypt/notify.py --replace "/usr/sbin/sendmail" "/var/setuid-wrappers/sendmail"
+    substituteInPlace letsencrypt/le_util.py --replace "sw_vers" "/usr/bin/sw_vers"
   '';
 
   postInstall = ''
