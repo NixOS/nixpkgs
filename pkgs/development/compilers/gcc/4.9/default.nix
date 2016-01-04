@@ -422,6 +422,7 @@ stdenv.mkDerivation ({
       ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr.crossDrv}" else ""}
       --with-gmp=${gmp.crossDrv}
       --with-mpfr=${mpfr.crossDrv}
+      --with-mpc=${libmpc.crossDrv}
       --disable-libstdcxx-pch
       --without-included-gettext
       --with-system-zlib
