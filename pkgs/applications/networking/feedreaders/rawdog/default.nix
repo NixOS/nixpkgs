@@ -13,11 +13,12 @@ pythonPackages.buildPythonPackage rec {
 
   namePrefix = "";
   
-  meta = {
+  meta = with stdenv.lib; {
     inherit version;
     homepage = "http://offog.org/code/rawdog/";
-    description = "An RSS Aggregator Without Delusions Of Grandeur";
-    license = stdenv.lib.licenses.gpl2;
-    platform = stdenv.lib.platforms.unix;
+    description = "RSS Aggregator Without Delusions Of Grandeur";
+    license = licenses.gpl2;
+    platform = platforms.unix;
+    maintainers = with maintainers; [ nckx ];
   };
 }
