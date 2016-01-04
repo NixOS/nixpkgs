@@ -2253,6 +2253,8 @@ let
     guile = guile_1_8;
   };
 
+  email = callPackage ../tools/networking/email { };
+
   maim = callPackage ../tools/graphics/maim {};
 
   mairix = callPackage ../tools/text/mairix { };
