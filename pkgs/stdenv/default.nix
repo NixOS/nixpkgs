@@ -36,11 +36,7 @@ rec {
   # Linux standard environment.
   stdenvLinux = (import ./linux { inherit system allPackages platform config lib; }).stdenvLinux;
 
-  # Pure Darwin standard environment. Allows building with the sandbox enabled. To use,
-  # you can add this to your nixpkgs config:
-  #
-  #   replaceStdenv = {pkgs}: pkgs.allStdenvs.stdenvDarwinPure
-  stdenvDarwinPure = (import ./pure-darwin { inherit system allPackages platform config;}).stage5;
+  stdenvDarwin = (import ./darwin { inherit system allPackages platform config;}).stage5;
 
   # Select the appropriate stdenv for the platform `system'.
   stdenv =
@@ -51,7 +47,7 @@ rec {
     if system == "armv7l-linux" then stdenvLinux else
     if system == "mips64el-linux" then stdenvLinux else
     if system == "powerpc-linux" then /* stdenvLinux */ stdenvNative else
-    if system == "x86_64-darwin" then stdenvDarwinPure else
+    if system == "x86_64-darwin" then stdenvDarwin else
     if system == "x86_64-solaris" then stdenvNix else
     if system == "i686-cygwin" then stdenvNative else
     if system == "x86_64-cygwin" then stdenvNative else
