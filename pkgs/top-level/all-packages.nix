@@ -14260,10 +14260,10 @@ let
     name = "quake3-demo-${ioquake3.name}";
     description = "Demo of Quake 3 Arena, a classic first-person shooter";
     game = ioquake3;
-    paks = [quake3demodata];
+    paks = [ quake3pointrelease quake3demodata ];
   };
 
-  quake3demodata = callPackage ../games/quake3/demo { };
+  quake3demodata = callPackage ../games/quake3/content/demo.nix { };
 
   quake3pointrelease = callPackage ../games/quake3/content/pointrelease.nix { };
 
