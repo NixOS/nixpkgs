@@ -738,11 +738,11 @@ let
   }) // {inherit fontconfig freetype libX11 xproto libXrender ;};
 
   libXi = (mkDerivation "libXi" {
-    name = "libXi-1.7.5";
+    name = "libXi-1.7.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXi-1.7.5.tar.bz2;
-      sha256 = "0ad21jy40d8b2f9ldadx7lkspmvka1i9r5jqqfwxdxyqnpgdfr6r";
+      url = mirror://xorg/individual/lib/libXi-1.7.6.tar.bz2;
+      sha256 = "1b5p0l19ynmd6blnqr205wyngh6fagl35nqb4v05dw60rr9aachz";
     };
     buildInputs = [pkgconfig inputproto libX11 libXext xextproto libXfixes xproto ];
   }) // {inherit inputproto libX11 libXext xextproto libXfixes xproto ;};
@@ -2028,11 +2028,11 @@ let
   }) // {inherit inputproto libX11 libXaw xproto libXt ;};
 
   xkeyboardconfig = (mkDerivation "xkeyboardconfig" {
-    name = "xkeyboard-config-2.15";
+    name = "xkeyboard-config-2.16";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.15.tar.bz2;
-      sha256 = "1grqdy5a9f2dii3y24fn0p3kz4q5g9j2kh3jcj2402rgrbvkqi0f";
+      url = mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.16.tar.bz2;
+      sha256 = "0n0xinsljc5mww1qw7dfp8knv0f1r9hs6pdhl0fggdwn5hhiz2hy";
     };
     buildInputs = [pkgconfig libX11 xproto ];
   }) // {inherit libX11 xproto ;};
