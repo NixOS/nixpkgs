@@ -16,9 +16,10 @@ let
     ''
       "webui":
       {
-        ${optionalEmptyStr cfg.httpLogin "\"login\":    \"${cfg.httpLogin}\","}
-        ${optionalEmptyStr cfg.httpPass  "\"password\": \"${cfg.httpPass}\","}
-        ${optionalEmptyStr cfg.apiKey    "\"api_key\":  \"${cfg.apiKey}\","}
+        ${optionalEmptyStr cfg.httpLogin     "\"login\":          \"${cfg.httpLogin}\","}
+        ${optionalEmptyStr cfg.httpPass      "\"password\":       \"${cfg.httpPass}\","}
+        ${optionalEmptyStr cfg.apiKey        "\"api_key\":        \"${cfg.apiKey}\","}
+        ${optionalEmptyStr cfg.directoryRoot "\"directory_root\": \"${cfg.directoryRoot}\","}
         "listen": "${listenAddr}"
       }
     '';
@@ -219,6 +220,13 @@ in
         type = types.str;
         default = "";
         description = "API key, which enables the developer API.";
+      };
+
+      directoryRoot = mkOption {
+        type = types.str;
+        default = "";
+        example = "/media";
+        description = "Default directory to add folders in the web UI.";
       };
 
       sharedFolders = mkOption {
