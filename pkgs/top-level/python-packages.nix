@@ -3975,17 +3975,12 @@ in modules // {
 
   decorator = buildPythonPackage rec {
     name = "decorator-${version}";
-    version = "4.0.4";
+    version = "4.0.6";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/d/decorator/${name}.tar.gz";
-      sha256 = "1qf3iiv401vhsdmf4bd08fwb3fq4xq769q2yl7zqqr1iml7w3l2s";
+      sha256 = "1c6254597777fd003da2e8fb503c3dbf3d9e8f8d55f054709c0e65be3467209c";
     };
-
-    # no idea what that file is doing there (probably bad release)
-    preCheck = ''
-      rm src/tests/x.py
-    '';
 
     meta = {
       homepage = http://pypi.python.org/pypi/decorator;
