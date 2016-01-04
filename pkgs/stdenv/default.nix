@@ -36,9 +36,6 @@ rec {
   # Linux standard environment.
   stdenvLinux = (import ./linux { inherit system allPackages platform config lib; }).stdenvLinux;
 
-  # Darwin standard environment.
-  stdenvDarwin = (import ./darwin { inherit system allPackages platform config;}).stdenvDarwin;
-
   # Pure Darwin standard environment. Allows building with the sandbox enabled. To use,
   # you can add this to your nixpkgs config:
   #
