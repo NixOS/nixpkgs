@@ -256,13 +256,13 @@ in {
       };
 
       enableAggregator = mkOption {
-        description = "Whether to enable carbon agregator, the carbon buffering service.";
+        description = "Whether to enable carbon aggregator, the carbon buffering service.";
         default = false;
         type = types.bool;
       };
 
       aggregationRules = mkOption {
-        description = "Defines if and how received metrics will be agregated.";
+        description = "Defines if and how received metrics will be aggregated.";
         default = null;
         type = types.uniq (types.nullOr types.string);
         example = ''
