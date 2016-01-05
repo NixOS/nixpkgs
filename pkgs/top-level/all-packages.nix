@@ -15742,6 +15742,7 @@ let
   wine = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
     wineBuild = config.wine.build or "wine32";
+    pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
   };
   wineStable = wine.override { wineRelease = "stable"; };
   wineUnstable = lowPrio (wine.override { wineRelease = "unstable"; });

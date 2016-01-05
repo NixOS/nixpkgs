@@ -15,7 +15,7 @@ let v = (import ./versions.nix).staging;
 in assert (builtins.parseDrvName wineUnstable.name).version == version;
 
 stdenv.lib.overrideDerivation wineUnstable (self: {
-  nativeBuildInputs = build-inputs [ "libpulseaudio" libtxc_dxtn_Name ] self.nativeBuildInputs; 
+  nativeBuildInputs = build-inputs [ libtxc_dxtn_Name ] self.nativeBuildInputs; 
   buildInputs = build-inputs [ "perl" "utillinux" "autoconf" ] self.buildInputs;
 
   name = "${self.name}-staging";
