@@ -83,6 +83,9 @@ let
     + optionalString (cfg.virtual != "") ''
       virtual_alias_maps = hash:/etc/postfix/virtual
     ''
+    + optionalString (cfg.transport != "") ''
+      transport_maps = hash:/etc/postfix/transport
+    ''
     + cfg.extraConfig;
 
   masterCf = ''
@@ -142,6 +145,7 @@ let
   virtualFile = pkgs.writeText "postfix-virtual" cfg.virtual;
   mainCfFile = pkgs.writeText "postfix-main.cf" mainCf;
   masterCfFile = pkgs.writeText "postfix-master.cf" masterCf;
+  transportFile = pkgs.writeText "postfix-transport" cfg.transport;
 
 in
 
@@ -314,6 +318,13 @@ in
         ";
       };
 
+      transport = mkOption {
+        default = "";
+        description = "
+          Entries for the transport map, cf. man-page transport(8).
+        ";
+      };
+
       extraMasterConf = mkOption {
         default = "";
         example = "submission inet n - n - - smtpd";
@@ -392,6 +403,7 @@ in
           ln -sf ${virtualFile} /var/postfix/conf/virtual
           ln -sf ${mainCfFile} /var/postfix/conf/main.cf
           ln -sf ${masterCfFile} /var/postfix/conf/master.cf
+          ln -sf ${transportFile} /var/postfix/conf/transport
 
           ${pkgs.postfix}/sbin/postalias -c /var/postfix/conf /var/postfix/conf/aliases
           ${pkgs.postfix}/sbin/postmap -c /var/postfix/conf /var/postfix/conf/virtual
