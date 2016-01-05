@@ -149,7 +149,7 @@ in
             unitConfig.DefaultDependencies = false; # needed to prevent a cycle
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = sw.randomEncryption;
-            serviceConfig.ExecStop = optionalString sw.randomEncryption "cryptsetup luksClose ${sw.deviceName}";
+            serviceConfig.ExecStop = optionalString sw.randomEncryption "${pkgs.cryptsetup}/bin/cryptsetup luksClose ${sw.deviceName}";
           };
 
       in listToAttrs (map createSwapDevice (filter (sw: sw.size != null || sw.randomEncryption) config.swapDevices));
