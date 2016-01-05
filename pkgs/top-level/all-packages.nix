@@ -15684,6 +15684,8 @@ let
 
   thinkfan = callPackage ../tools/system/thinkfan { };
 
+  triumphAdler = callPackage ../misc/cups/drivers/triumph-adler { };
+
   tup = callPackage ../development/tools/build-managers/tup { };
 
   tvheadend = callPackage ../servers/tvheadend { };
