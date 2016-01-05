@@ -5918,6 +5918,8 @@ in modules // {
       description = "A command line interface for The Pirate Bay";
       homepage = https://github.com/vikstrous/pirate-get;
       license = licenses.gpl1;
+      maintainers = with maintainers; [ rnhmjoj ];
+      platforms = platforms.unix;
     };
   };
 
