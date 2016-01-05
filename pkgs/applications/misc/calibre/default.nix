@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
 
   inherit python;
 
-  patches = stdenv.lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+  patches = [
+    # Patch from Debian that switches the version update change from
+    # enabled by default to disabled by default.
+    ./no_updates_dialog.patch
+  ] ++ stdenv.lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
     sed -i "/pyqt_sip_dir/ s:=.*:= '${pyqt5}/share/sip':"  \
