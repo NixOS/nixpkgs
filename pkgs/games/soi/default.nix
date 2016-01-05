@@ -1,31 +1,29 @@
-{ stdenv, fetchurl, mesa, SDL, cmake, eigen }:
+{ stdenv, fetchurl, cmake
+, boost, eigen2, lua, luabind, mesa, SDL }:
 
-let
-  baseName = "soi";
-  majorVersion = "0.1";
-  minorVersion = "1";
-  version = "${majorVersion}.${minorVersion}";
-  name = "${baseName}-${version}";
-in
-
+let version = "0.1.2"; in
 stdenv.mkDerivation rec {
-  inherit name;
+  name = "soi-${version}";
+
   src = fetchurl {
-    url = "mirror://sourceforge/project/${baseName}/${baseName}-${majorVersion}/Spheres%20of%20Influence-${version}-Source.tar.gz";
-    inherit name;
-    sha256 = "dfc59319d2962033709bb751c71728417888addc6c32cbec3da9679087732a81";
+    url = "mirror://sourceforge/project/soi/Spheres%20of%20Influence-${version}-Source.tar.bz2";
+    name = "${name}.tar.bz2";
+    sha256 = "03c3wnvhd42qh8mi68lybf8nv6wzlm1nx16d6pdcn2jzgx1j2lzd";
   };
 
-  buildInputs = [ mesa SDL cmake eigen ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost lua luabind mesa SDL ];
 
-  preConfigure = ''export EIGENDIR=${eigen}/include/eigen2'';
+  cmakeFlags = [
+    "-DEIGEN_INCLUDE_DIR=${eigen2}/include/eigen2"
+  ];
 
   meta = with stdenv.lib; {
     description = "A physics-based puzzle game";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [ raskin nckx ];
     platforms = platforms.linux;
     license = licenses.free;
     broken = true;
-    downloadPage = "http://sourceforge.net/projects/soi/files/";
+    downloadPage = http://sourceforge.net/projects/soi/files/;
   };
 }
