@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
 
     sed -i "s@/usr/bin/fortune@fortune@g" ding
 
+    sed -i "s@/usr/bin/ding@$out/bin/ding@g" ding.desktop
+
     cp ding $out/bin/
     cp de-en.txt $out/share/dict/
     cp ding.1 $out/share/man/man1/

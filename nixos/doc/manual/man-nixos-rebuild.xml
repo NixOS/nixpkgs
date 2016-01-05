@@ -281,6 +281,51 @@ $ nixos-rebuild switch -p test -I nixos-config=./test.nix
     </listitem>
   </varlistentry>
 
+  <varlistentry>
+    <term><option>--build-host</option></term>
+    <listitem>
+      <para>Instead of building the new configuration locally, use the
+      specified host to perform the build. The host needs to be accessible
+      with ssh, and must be able to perform Nix builds. If the option
+      <option>--target-host</option> is not set, the build will be copied back
+      to the local machine when done.</para>
+
+      <para>Note that, if <option>--no-build-nix</option> is not specified,
+      Nix will be built both locally and remotely. This is because the
+      configuration will always be evaluated locally even though the building
+      might be performed remotely.</para>
+
+      <para>You can include a remote user name in
+      the host name (<replaceable>user@host</replaceable>). You can also set
+      ssh options by defining the <envar>NIX_SSHOPTS</envar> environment
+      variable.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>--target-host</option></term>
+    <listitem>
+      <para>Specifies the NixOS target host. By setting this to something other
+      than <replaceable>localhost</replaceable>, the system activation will
+      happen on the remote host instead of the local machine. The remote host
+      needs to be accessible over ssh, and for the commands
+      <option>switch</option>, <option>boot</option> and <option>test</option>
+      you need root access.</para>
+
+      <para>If <option>--build-host</option> is not explicitly
+      specified, <option>--build-host</option> will implicitly be set to the
+      same value as <option>--target-host</option>. So, if you only specify
+      <option>--target-host</option> both building and activation will take
+      place remotely (and no build artifacts will be copied to the local
+      machine).</para>
+
+      <para>You can include a remote user name in
+      the host name (<replaceable>user@host</replaceable>). You can also set
+      ssh options by defining the <envar>NIX_SSHOPTS</envar> environment
+      variable.</para>
+    </listitem>
+  </varlistentry>
+
 </variablelist>
 
 <para>In addition, <command>nixos-rebuild</command> accepts various
@@ -303,6 +348,13 @@ the Nix manual for details.</para>
       <para>Path to the main NixOS configuration module.  Defaults to
       <filename>/etc/nixos/configuration.nix</filename>.</para>
     </listitem>
+  </varlistentry>
+
+  <varlistentry><term><envar>NIX_SSHOPTS</envar></term>
+
+    <listitem><para>Additional options to be passed to
+    <command>ssh</command> on the command line.</para></listitem>
+
   </varlistentry>
 
 </variablelist>

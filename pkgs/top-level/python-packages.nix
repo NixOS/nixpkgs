@@ -1430,7 +1430,7 @@ in modules // {
       sha256 = "e61768fa19934bd176799f90bda3ea9f49a5def21fa2523a8e47df8a48e730e9";
     };
 
-    buildInputs = with self; [ pkgs.btrfsProgs ];
+    buildInputs = with self; [ pkgs.btrfs-progs ];
     propagatedBuildInputs = with self; [ contextlib2 pyxdg pycparser alembic ]
       ++ optionals (!isPyPy) [ cffi ];
 
@@ -3975,17 +3975,12 @@ in modules // {
 
   decorator = buildPythonPackage rec {
     name = "decorator-${version}";
-    version = "4.0.4";
+    version = "4.0.6";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/d/decorator/${name}.tar.gz";
-      sha256 = "1qf3iiv401vhsdmf4bd08fwb3fq4xq769q2yl7zqqr1iml7w3l2s";
+      sha256 = "1c6254597777fd003da2e8fb503c3dbf3d9e8f8d55f054709c0e65be3467209c";
     };
-
-    # no idea what that file is doing there (probably bad release)
-    preCheck = ''
-      rm src/tests/x.py
-    '';
 
     meta = {
       homepage = http://pypi.python.org/pypi/decorator;
@@ -8447,6 +8442,24 @@ in modules // {
       homepage = http://gehrcke.de/gipc;
       license = licenses.mit;
       maintainers = with maintainers; [ nckx ];
+    };
+  };
+
+  git-sweep = buildPythonPackage rec {
+    name = "git-sweep-0.1.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/git-sweep/${name}.tar.gz";
+      sha256 = "1csp0zd049d643d409rfivbswwzrayb4i6gkypp5mc27fb1z2afd";
+    };
+
+    propagatedBuildInputs = with self; [ GitPython ];
+
+    meta = {
+      description = "A command-line tool that helps you clean up Git branches";
+      homepage = http://lab.arc90.com/2012/04/03/git-sweep/;
+      license = licenses.mit;
+      maintainers = with maintainers; [ pSub ];
     };
   };
 
@@ -14169,6 +14182,8 @@ in modules // {
     # failed tests: https://code.google.com/p/psutil/issues/detail?id=434
     doCheck = false;
 
+    buildInputs = optional stdenv.isDarwin pkgs.darwin.IOKit;
+
     meta = {
       description = "Process and system utilization information interface for python";
       homepage = http://code.google.com/p/psutil/;
@@ -19120,11 +19135,14 @@ in modules // {
     buildInputs = with self; [ nose coverage pkgs.glibcLocales flake8 ];
     propagatedBuildInputs = with self; [ matplotlib pandas ];
 
+    # Performance test fails
+    prePatch = ''
+      rm tqdm/tests/tests_perf.py
+    '';
+
     preBuild = ''
       export LC_ALL="en_US.UTF-8"
     '';
-
-    doCheck = !(isPy27); # Performance test fails
 
     meta = {
       description = "A Fast, Extensible Progress Meter";
@@ -21704,13 +21722,13 @@ in modules // {
   };
 
   libvirt = let
-    version = "1.2.19";
+    version = "1.3.0";
   in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
 
     src = pkgs.fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "0jgcggrwaz9512wzlkgxirq56cr7zq2ihmg8qv95nhryqnq67aw8";
+      sha256 = "0z7w79mkx7w322d2mf9d4bz56mmfic3nx0q4bc6fa063aay42z89";
     };
 
     buildInputs = with self; [ python pkgs.pkgconfig pkgs.libvirt lxml ];

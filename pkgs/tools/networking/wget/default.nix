@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gettext, libidn, pkgconfig
 , perl, perlPackages, LWP, python3
-, libiconv, libpsl, openssl ? null }:
+, libiconv, libpsl ? null, openssl ? null }:
 
 stdenv.mkDerivation rec {
   name = "wget-1.17.1";

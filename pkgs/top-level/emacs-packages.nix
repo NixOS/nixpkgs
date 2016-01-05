@@ -234,21 +234,6 @@ let
     };
   };
 
-  async = melpaBuild rec {
-    pname   = "async";
-    version = "1.5";
-    src = fetchFromGitHub {
-      owner  = "jwiegley";
-      repo   = "emacs-async";
-      rev    = "v${version}";
-      sha256 = "1yq1aby4n5k3caasynhxhakng01qp4099zjbsm633d351ib3h20g";
-    };
-    meta = {
-      description = "Asynchronous processing in Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   auctex = melpaBuild rec {
     pname   = "auctex";
     version = "11.87.7";
@@ -262,23 +247,6 @@ let
     meta = {
       description = "Extensible package for writing and formatting TeX files in GNU Emacs and XEmacs";
       homepage = https://www.gnu.org/software/auctex/;
-      license = gpl3Plus;
-    };
-  };
-
-  auto-complete = melpaBuild rec {
-    pname = "auto-complete";
-    version = "1.4.0";
-    src = fetchFromGitHub {
-      owner = pname;
-      repo  = pname;
-      rev   = "v${version}";
-      sha256 = "050lb8qjq7ra35mqp6j6qkwbvq5zj3yhz73aym5kf1vjd42rmjcw";
-    };
-    packageRequires = [ popup ];
-    meta = {
-      description = "Auto-complete extension for Emacs";
-      homepage = http://cx4a.org/software/auto-complete/;
       license = gpl3Plus;
     };
   };
@@ -1290,21 +1258,6 @@ let
     fileSpecs = [ "Documentation/with-editor.texi" "lisp/with-editor.el" ];
     meta = magit.meta // {
       description = "Use the Emacsclient as EDITOR of child processes library for Emacs";
-    };
-  };
-
-  markdown-mode = melpaBuild rec {
-    pname   = "markdown-mode";
-    version = "2.0";
-    src = fetchFromGitHub {
-      owner  = "defunkt";
-      repo   = pname;
-      rev    = "v${version}";
-      sha256 = "1l2w0j9xl8pipz61426s79jq2yns42vjvysc6yjc29kbsnhalj29";
-    };
-    meta = {
-      description = "Major mode for editing markdown files in Emacs";
-      license = gpl3Plus;
     };
   };
 

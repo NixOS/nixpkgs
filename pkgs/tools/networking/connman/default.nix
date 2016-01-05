@@ -1,5 +1,5 @@
 { stdenv, fetchgit, autoconf, automake, libtool, pkgconfig, openconnect, file,
-  openvpn, vpnc, glib, dbus, iptables, gnutls, policykit, polkit,
+  openvpn, vpnc, glib, dbus, iptables, gnutls, polkit,
   wpa_supplicant, readline6, pptp, ppp, tree }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ autoconf automake libtool pkgconfig openconnect polkit
-                  file openvpn vpnc glib dbus iptables gnutls policykit
+                  file openvpn vpnc glib dbus iptables gnutls
                   wpa_supplicant readline6 pptp ppp tree ];
 
   preConfigure = ''
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     cp ./client/connmanctl $out/sbin/connmanctl
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Provides a daemon for managing internet connections";
     homepage = "https://connman.net/";
-    maintainers = [ stdenv.lib.maintainers.matejc ];
+    maintainers = [ maintainers.matejc ];
     # tested only on linux, might work on others also
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

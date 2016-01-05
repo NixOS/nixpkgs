@@ -67,7 +67,7 @@ in
       pkgs.dmraid
 
       # Tools to create / manipulate filesystems.
-      pkgs.btrfsProgs
+      pkgs.btrfs-progs
 
       # Some compression/archiver tools.
       pkgs.unzip

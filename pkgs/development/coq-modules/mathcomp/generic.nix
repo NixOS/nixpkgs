@@ -18,6 +18,7 @@ stdenv.mkDerivation {
   buildFlags = stdenv.lib.optionalString withDoc "doc";
 
   preBuild = ''
+    patchShebangs etc/utils/ssrcoqdep
     cd mathcomp
     export COQBIN=${coq}/bin/
   '';

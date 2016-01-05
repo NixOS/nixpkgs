@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper
 , go, sqlite, iproute, bridge-utils, devicemapper
-, btrfsProgs, iptables, e2fsprogs, xz, utillinux
+, btrfs-progs, iptables, e2fsprogs, xz, utillinux
 , enableLxc ? false, lxc
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    makeWrapper go sqlite iproute bridge-utils devicemapper btrfsProgs
+    makeWrapper go sqlite iproute bridge-utils devicemapper btrfs-progs
     iptables e2fsprogs
   ];
 

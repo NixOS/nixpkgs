@@ -7,12 +7,12 @@
 , librsvg, gnome_vfs, mesa, bsh, CoinMP, libwps, libabw
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus_glib, glibc, qt4, kde4, clucene_core, libcdr, lcms, vigra
-, unixODBC, mdds, saneBackends, mythes, libexttextcat, libvisio
+, unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
 , fontsConf, pkgconfig, libzip, bluez5, libtool, maven
 , libatomic_ops, graphite2, harfbuzz, libodfgen
 , librevenge, libe-book, libmwaw, glm, glew, gst_all_1
 , gdb, commonsLogging
-, langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" ]
+, langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" "pl" ]
 , withHelp ? true
 }:
 
@@ -220,7 +220,7 @@ in stdenv.mkDerivation rec {
       libXdmcp libpthreadstubs mesa mythes gst_all_1.gstreamer
       gst_all_1.gst-plugins-base
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfigUpstream poppler
-      python3 sablotron saneBackends tcsh unzip vigra which zip zlib
+      python3 sablotron sane-backends tcsh unzip vigra which zip zlib
       mdds bluez5 glibc libcmis libwps libabw
       libxshmfence libatomic_ops graphite2 harfbuzz
       librevenge libe-book libmwaw glm glew

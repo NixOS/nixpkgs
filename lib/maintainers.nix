@@ -231,7 +231,7 @@
   palo = "Ingolf Wanger <palipalo9@googlemail.com>";
   pashev = "Igor Pashev <pashev.igor@gmail.com>";
   pesterhazy = "Paulus Esterhazy <pesterhazy@gmail.com>";
-  phausmann = "Philipp Hausmann <nix@314.ch>";
+  phile314 = "Philipp Hausmann <nix@314.ch>";
   philandstuff = "Philip Potter <philip.g.potter@gmail.com>";
   phreedom = "Evgeny Egorochkin <phreedom@yandex.ru>";
   phunehehe = "Hoang Xuan Phu <phunehehe@gmail.com>";
@@ -294,6 +294,7 @@
   steveej = "Stefan Junker <mail@stefanjunker.de>";
   szczyp = "Szczyp <qb@szczyp.com>";
   sztupi = "Attila Sztupak <attila.sztupak@gmail.com>";
+  taeer = "Taeer Bar-Yam <taeer@necsi.edu>";
   tailhook = "Paul Colomiets <paul@colomiets.name>";
   taktoa = "Remy Goldschmidt <taktoa@gmail.com>";
   telotortium = "Robert Irelan <rirelan@gmail.com>";

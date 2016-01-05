@@ -18,6 +18,7 @@ stdenv.mkDerivation {
   inherit patches;
 
   preBuild = ''
+    patchShebangs etc/utils/ssrcoqdep
     cd mathcomp/ssreflect
     export COQBIN=${coq}/bin/
   '';

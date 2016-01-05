@@ -74,7 +74,7 @@ in
 
       # Tools to create / manipulate filesystems.
       pkgs.ntfsprogs # for resizing NTFS partitions
-      pkgs.btrfsProgs
+      pkgs.btrfs-progs
       pkgs.jfsutils
 
       # Some compression/archiver tools.

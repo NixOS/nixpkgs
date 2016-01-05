@@ -16,14 +16,20 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-udevrulesdir=$out/lib/udev/rules.d"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--localstatedir=/var"
     "--disable-bash-completion"
   ];
+
+  # don't touch /var at install time, colord creates what it needs at runtime
+  postPatch = ''
+    sed -i -e "s|if test -w .*;|if false;|" src/Makefile.in
+    sed -i -e "s|if test -w .*;|if false;|" src/Makefile.am
+  '';
 
   buildInputs = [ glib polkit pkgconfig intltool gusb libusb1 lcms2 sqlite systemd dbus gobjectIntrospection
                   bashCompletion argyllcms automake autoconf libgudev ];
 
   postInstall = ''
-    rm -fr $out/var/lib/colord
     mkdir -p $out/etc/bash_completion.d
     cp -v data/colormgr $out/etc/bash_completion.d
   '';
