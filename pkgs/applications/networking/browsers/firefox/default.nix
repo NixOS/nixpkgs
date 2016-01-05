@@ -133,8 +133,8 @@ in {
 
   firefox = common {
     pname = "firefox";
-    version = "43.0";
-    sha256 = "1slg5m05z67q29mrpjv0a753c4vy1vxhx7p3f75494yfvi0ngcd5";
+    version = "43.0.3";
+    sha256 = "129f8vmsam498j0s4rbi31a88j9ibkzm4m0w19ppcsha7cp25i8m";
   };
 
   firefox-esr = common {
