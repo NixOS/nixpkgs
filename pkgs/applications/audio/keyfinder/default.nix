@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, libav_0_8, libkeyfinder, qtbase, qtxmlpatterns, taglib }:
 
-let version = "2.00"; in
+let version = "2.1"; in
 stdenv.mkDerivation {
   name = "keyfinder-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "16gyvvws93fyvx5qb2x9qhsg4bn710kgdh6q9sl2dwfsx6npkh9m";
+    sha256 = "0j9k90ll4cr8j8dywb6zf1bs9vijlx7m4zsh6w9hxwrr7ymz89hn";
     rev = version;
     repo = "is_KeyFinder";
     owner = "ibsh";
@@ -29,7 +29,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ nckx ];
   };
 
-  # TODO: upgrade libav when "Audio sample format conversion failed" is fixed
   buildInputs = [ libav_0_8 libkeyfinder qtbase qtxmlpatterns taglib ];
 
   postPatch = ''
