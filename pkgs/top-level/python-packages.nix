@@ -6005,6 +6005,39 @@ in modules // {
     };
   };
 
+  pykafka = buildPythonPackage rec {
+    name = "pykafka-${version}";
+    version = "2.0.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pykafka/${name}.tar.gz";
+      sha256 = "6c7b475d86a9c4867a88c1e5c3b0ea3af46b55b3ba2408378d161cb9b9ac73ea";
+    };
+
+    buildInputs = with self; [
+      mock
+      python-snappy
+      tabulate
+      unittest2
+      coverage
+      pytest
+      pytestcov
+    ];
+
+    propagatedBuildInputs = with self; [
+      kazoo
+    ];
+
+    meta = {
+      description = "Full-Featured Pure-Python Kafka Client";
+      homepage = "https://github.com/Parsely/pykafka";
+      license = licenses.asl20;
+    };
+
+    doCheck = false;
+  };
+
+
   pyramid = buildPythonPackage rec {
     name = "pyramid-1.5.7";
 
@@ -6192,6 +6225,27 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; [ pyramid hawkauthlib tokenlib webtest ];
+  };
+
+  python-snappy = buildPythonPackage rec {
+    name = "python-snappy-${version}";
+    version = "0.5";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-snappy/${name}.tar.gz";
+      sha256 = "c7fe37679ebfc73840c7cc83657a76bc1ac978efa286b8ac3569fd0630d2b80d";
+    };
+
+    buildInputs = with self; [
+      pkgs.snappy
+      pytestcov
+    ];
+
+    meta = {
+      description = "Python library for the snappy compression library from Google";
+      homepage = "http://code.google.com/p/snappy";
+      license = licenses.bsd3;
+    };
   };
 
   radicale = buildPythonPackage rec {
