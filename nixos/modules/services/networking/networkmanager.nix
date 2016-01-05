@@ -72,6 +72,25 @@ let
     ${coreutils}/bin/rm -f $tmp $tmp.ns
   '';
 
+  createWifi = ssid: opt: {
+    # TODO(akavel): find out how to make sure that user's custom/changed files won't be overridden by those below?
+    target = "NetworkManager/system-connections/__${ssid}";
+    mode = "0400";
+    text = ''
+      [connection]
+      type=wifi
+      id=${ssid}
+
+      [wifi]
+      ssid=${ssid}
+
+      [wifi-security]
+      ${optionalString (opt.psk != null) ''
+      key-mgmt=wpa-psk
+      psk=${opt.psk}''}
+    '';
+  };
+
   dispatcherTypesSubdirMap = {
     "basic" = "";
     "pre-up" = "pre-up.d/";
@@ -210,6 +229,7 @@ in {
            { source = overrideNameserversScript;
              target = "NetworkManager/dispatcher.d/02overridedns";
            }
+      ++ mapAttrsToList createWifi config.networking.wireless.networks
       ++ lib.imap (i: s: {
         text = s.source;
         target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";

@@ -18,7 +18,13 @@ NixOS will start wpa_supplicant for you if you enable this setting:
 networking.wireless.enable = true;
 </programlisting>
 
-NixOS lets you specify networks for wpa_supplicant declaratively:
+NixOS lets you specify networks for wpa_supplicant declaratively, as shown in
+<xref linkend="ex-wireless-networks"/>. Be aware that keys will be written to
+the nix store in plaintext!
+</para>
+
+<example xml:id="ex-wireless-networks">
+<title>Declarative configuration of wireless networks</title>
 <programlisting>
 networking.wireless.networks = {
   echelon = {
@@ -27,9 +33,9 @@ networking.wireless.networks = {
   "free.wifi" = {};
 }
 </programlisting>
+</example>
 
-Be aware that keys will be written to the nix store in plaintext!
-
+<para>
 When no networks are set, it will default to using a configuration file at
 <literal>/etc/wpa_supplicant.conf</literal>. You should edit this file
 yourself to define wireless networks, WPA keys and so on (see

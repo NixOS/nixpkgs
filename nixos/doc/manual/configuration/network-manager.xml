@@ -24,4 +24,13 @@ must belong to the <code>networkmanager</code> group.</para>
 you can still connect to the wireless networks using
 NetworkManager.</para></note>
 
+<para>To enable easy configuration of simple wireless networks, NetworkManager
+configuration supports the same declarative syntax as used by wpa_supplicant
+(see <xref linkend="ex-wireless-networks"/>).</para>
+
+<note><para>For networks configured declaratively, any changes made dynamically
+on running system via NetworkManager's GUI or the <code>nmcli</code>
+command-line tool are not persisted on reboot or
+<code>nixos-rebuild</code>.</para></note>
+
 </section>
