@@ -3676,8 +3676,6 @@ let
     w3m = w3m-batch;
   };
 
-  xmltv = callPackage ../tools/misc/xmltv { };
-
   xmpppy = pythonPackages.xmpppy;
 
   xorriso = callPackage ../tools/cd-dvd/xorriso { };
