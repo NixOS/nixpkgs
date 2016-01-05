@@ -57,6 +57,7 @@ let
   kdmrc = pkgs.stdenv.mkDerivation {
     name = "kdmrc";
     config = defaultConfig + cfg.extraConfig;
+    preferLocalBuild = true;
     buildCommand =
       ''
         echo "$config" > $out
