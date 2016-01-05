@@ -11231,8 +11231,6 @@ let
 
   cbc = callPackage ../applications/science/math/cbc { };
 
-  cc1394 = callPackage ../applications/video/cc1394 { };
-
   cddiscid = callPackage ../applications/audio/cd-discid { };
 
   cdparanoia = cdparanoiaIII;
