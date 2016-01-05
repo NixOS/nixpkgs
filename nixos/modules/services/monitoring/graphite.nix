@@ -77,7 +77,7 @@ in {
         type = types.bool;
       };
 
-      host = mkOption {
+      listenAddress = mkOption {
         description = "Graphite web frontend listen address.";
         default = "127.0.0.1";
         type = types.str;
@@ -121,7 +121,7 @@ in {
         type = types.listOf types.str;
       };
 
-      host = mkOption {
+      listenAddress = mkOption {
         description = "Graphite web service listen address.";
         default = "127.0.0.1";
         type = types.str;
@@ -292,7 +292,7 @@ in {
       };
 
       graphiteUrl = mkOption {
-        default = "http://${cfg.web.host}:${toString cfg.web.port}";
+        default = "http://${cfg.web.listenAddress}:${toString cfg.web.port}";
         description = "Host where graphite service runs.";
         type = types.str;
       };
@@ -337,7 +337,7 @@ in {
 
       graphiteUrl = mkOption {
         description = "URL to your graphite service.";
-        default = "http://${cfg.web.host}:${toString cfg.web.port}";
+        default = "http://${cfg.web.listenAddress}:${toString cfg.web.port}";
         type = types.str;
       };
 
@@ -452,7 +452,7 @@ in {
         serviceConfig = {
           ExecStart = ''
             ${pkgs.python27Packages.waitress}/bin/waitress-serve \
-            --host=${cfg.web.host} --port=${toString cfg.web.port} \
+            --host=${cfg.web.listenAddress} --port=${toString cfg.web.port} \
             --call django.core.handlers.wsgi:WSGIHandler'';
           User = "graphite";
           Group = "graphite";
@@ -494,7 +494,7 @@ in {
         serviceConfig = {
           ExecStart = ''
             ${pkgs.python27Packages.waitress}/bin/waitress-serve \
-            --host=${cfg.api.host} --port=${toString cfg.api.port} \
+            --host=${cfg.api.listenAddress} --port=${toString cfg.api.port} \
             graphite_api.app:app
           '';
           User = "graphite";
