@@ -133,7 +133,6 @@
 , "node-xmpp-server"
 , "node-xmpp-serviceadmin"
 , "node-xmpp-joap"
-, "7f"
 , "jfs"
 , "cordova"
 , "sloc"
