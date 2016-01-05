@@ -7083,8 +7083,6 @@ let
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  libdc1394avt = callPackage ../development/libraries/libdc1394avt { };
-
   libdevil = callPackage ../development/libraries/libdevil {
     inherit (darwin.apple_sdk.frameworks) OpenGL;
   };
