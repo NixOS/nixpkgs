@@ -1,5 +1,8 @@
 { stdenv, fetchurl, intltool, gettext, pkgconfig
-, gtk3, portaudio, libpng, SDL2, ffmpeg, udev, libusb1, libv4l, alsaLib, gsl }:
+, gtk3, portaudio, libpng, SDL2, ffmpeg, udev, libusb1, libv4l, alsaLib, gsl
+, pulseaudioSupport ? true, libpulseaudio ? null }:
+
+assert pulseaudioSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
   version = "2.0.2";
@@ -22,7 +25,7 @@ stdenv.mkDerivation rec {
       portaudio
       udev
       gsl
-    ];
+    ] ++ stdenv.lib.optional pulseaudioSupport [ libpulseaudio ];
 
   meta = {
     description = "A simple interface for devices supported by the linux UVC driver";
