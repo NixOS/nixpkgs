@@ -19638,10 +19638,11 @@ in modules // {
   };
 
   virtualenv = buildPythonPackage rec {
-    name = "virtualenv-1.11.6";
+    name = "virtualenv-13.1.2";
+
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/v/virtualenv/${name}.tar.gz";
-      md5 = "f61cdd983d2c4e6aeabb70b1060d6f49";
+      sha256 = "1p732accxwqfjbdna39k8w8lp9gyw91vr4kzkhm8mgfxikqqxg5a";
     };
 
     pythonPath = [ self.recursivePthLoader ];
@@ -19650,9 +19651,8 @@ in modules // {
 
     propagatedBuildInputs = with self; [ modules.readline modules.sqlite3 modules.curses ];
 
-    buildInputs = with self; [ mock nose ];
-
-    # XXX: Ran 0 tests in 0.003s
+    # Tarball doesn't contain tests
+    doCheck = false;
 
     meta = {
       description = "a tool to create isolated Python environments";
