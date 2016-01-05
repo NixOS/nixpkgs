@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
     phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
     patches = [
+      # Disable updated version check.
+      ./no-version-check.patch
+
       (substituteAll {
         src = ./fix-paths.patch;
         inherit lame mplayer qt4;
