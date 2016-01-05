@@ -9238,6 +9238,8 @@ let
     dovecot = dovecot22;
   };
 
+  dovecot_antispam = callPackage ../servers/mail/dovecot/plugins/antispam { };
+
   dspam = callPackage ../servers/mail/dspam {
     inherit (perlPackages) NetSMTP;
   };
