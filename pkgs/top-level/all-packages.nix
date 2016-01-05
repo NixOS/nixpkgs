@@ -897,6 +897,8 @@ let
     pynotify = pythonPackages.notify;
   };
 
+  syscall_limiter = callPackage ../os-specific/linux/syscall_limiter {};
+
   syslogng = callPackage ../tools/system/syslog-ng { };
 
   syslogng_incubator = callPackage ../tools/system/syslog-ng-incubator { };
