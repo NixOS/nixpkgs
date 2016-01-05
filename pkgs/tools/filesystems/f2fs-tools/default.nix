@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, libuuid }:
+{ stdenv, fetchurl, autoreconfHook, libuuid, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "f2fs-tools-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libuuid ];
+  buildInputs = [ libuuid pkgconfig ];
 
   meta = with stdenv.lib; {
     homepage = "http://git.kernel.org/cgit/linux/kernel/git/jaegeuk/f2fs-tools.git/";
