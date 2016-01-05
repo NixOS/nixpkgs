@@ -14313,7 +14313,9 @@ let
 
   snake4 = callPackage ../games/snake4 { };
 
-  soi = callPackage ../games/soi {};
+  soi = callPackage ../games/soi {
+    lua = lua5_1;
+  };
 
   # You still can override by passing more arguments.
   spaceOrbit = callPackage ../games/orbit { };
