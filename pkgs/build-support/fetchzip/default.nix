@@ -52,4 +52,4 @@ lib.overrideDerivation (fetchurl ({
     + extraPostFetch;
 } // removeAttrs args [ "stripRoot" "extraPostFetch" ]))
 # Hackety-hack: we actually need unzip hooks, too
-(x: {nativeBuildInputs = x.nativeBuildInputs++ [unzip];})
+(x: {buildInputs = x.buildInputs++ [unzip];})

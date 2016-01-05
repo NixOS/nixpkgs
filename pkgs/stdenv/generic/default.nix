@@ -89,7 +89,7 @@ let
 
   # Add a utility function to produce derivations that use this
   # stdenv and its shell.
-  mkDerivation =
+  mkDerivation_ =
     { buildInputs ? []
     , nativeBuildInputs ? []
     , propagatedBuildInputs ? []
@@ -305,7 +305,7 @@ let
       # Whether we should run paxctl to pax-mark binaries.
       needsPax = isLinux;
 
-      inherit mkDerivation;
+      mkDerivation = lib.makeOverridable mkDerivation_;
 
       # For convenience, bring in the library functions in lib/ so
       # packages don't have to do that themselves.
