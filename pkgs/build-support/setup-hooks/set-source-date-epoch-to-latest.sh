@@ -1,12 +1,6 @@
 updateSourceDateEpoch() {
     local path="$1"
 
-    # FIXME: Support Darwin.
-    if ! [[ $system =~ linux ]]; then
-        exit 1
-        return
-    fi
-
     # Get the last modification time of all regular files, sort them,
     # and get the most recent. Maybe we should use
     # https://github.com/0-wiz-0/findnewest here.
