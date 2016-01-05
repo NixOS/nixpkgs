@@ -74,15 +74,13 @@ let
   gcc = pkgs.gcc.cc.crossDrv;
   gmpxx = pkgs.gmpxx.crossDrv;
   mpfr = pkgs.mpfr.crossDrv;
-  ppl = pkgs.ppl.crossDrv;
-  cloogppl = pkgs.cloogppl.crossDrv;
-  cloog = pkgs.cloog.crossDrv;
   zlib = pkgs.zlib.crossDrv;
-  isl = pkgs.isl.crossDrv;
   libmpc = pkgs.libmpc.crossDrv;
   binutils = pkgs.binutils.crossDrv;
   libelf = pkgs.libelf.crossDrv;
 
+  # Keep these versions in sync with the versions used in the current GCC!
+  isl = pkgs.isl_0_14.crossDrv;
 in
 
 rec {
@@ -93,12 +91,6 @@ rec {
     # Our tooling currently can't handle scripts in bin/, only ELFs and symlinks.
     singleBinary = "symlinks";
   })).crossDrv;
-
-  curlMinimal = (pkgs.curl.override {
-    zlibSupport = false;
-    sslSupport = false;
-    scpSupport = false;
-  }).crossDrv;
 
   busyboxMinimal = (pkgs.busybox.override {
     # TBD: uClibc is broken.
@@ -172,8 +164,6 @@ rec {
         cp -d ${gnumake}/bin/* $out/bin
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
-        cp ${curlMinimal}/bin/curl $out/bin
-        cp -d ${curlMinimal}/lib/libcurl* $out/lib
 
         cp -d ${gnugrep.pcre.crossDrv}/lib/libpcre*.so* $out/lib # needed by grep
 
@@ -206,10 +196,13 @@ rec {
         cp -d ${zlib.out}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
 
-        # TBD: Why are these needed for cross but not native tools?
-        cp -d ${cloogppl}/lib/libcloog*.so* $out/lib
-        cp -d ${cloog}/lib/libcloog*.so* $out/lib
+        # These needed for cross but not native tools because the stdenv
+        # GCC has certain things built in statically. See
+        # pkgs/stdenv/linux/default.nix for the details.
         cp -d ${isl}/lib/libisl*.so* $out/lib
+        # Also this is needed since bzip2 uses a custom build system
+        # for native builds but autoconf (via a patch) for cross builds
+        cp -d ${bzip2}/lib/libbz2.so* $out/lib
 
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
