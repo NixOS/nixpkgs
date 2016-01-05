@@ -14993,6 +14993,8 @@ let
 
     coqeal = callPackage ../development/coq-modules/coqeal {};
 
+    coquelicot = callPackage ../development/coq-modules/coquelicot {};
+
     domains = callPackage ../development/coq-modules/domains {};
 
     fiat = callPackage ../development/coq-modules/fiat {};
@@ -15026,6 +15028,8 @@ let
     coq = coq_8_5;
 
     coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
+
+    coquelicot = callPackage ../development/coq-modules/coquelicot {};
 
     flocq = callPackage ../development/coq-modules/flocq {};
 
