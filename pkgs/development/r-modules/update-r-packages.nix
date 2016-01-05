@@ -1,7 +1,7 @@
 with import <nixpkgs> {};
 
 stdenv.mkDerivation {
-  name = "generate-r-packages-shell";
+  name = "update-r-packages-shell";
 
   buildCommand = "exit 1";
 
@@ -12,5 +12,6 @@ stdenv.mkDerivation {
         parallel
       ];
     })
+    wget
   ];
 }
