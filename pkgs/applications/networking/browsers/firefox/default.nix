@@ -139,8 +139,8 @@ in {
 
   firefox-esr = common {
     pname = "firefox-esr";
-    version = "38.5.0esr";
-    sha256 = "086vkhrls9g0cxf50izfzcf2h60syswqrlzyi2z21awhwg7r07ra";
+    version = "38.5.2esr";
+    sha256 = "0xqirpiys2pgzk9hs4s93svknc0sss8ry60zar7n9jj74cgz590m";
   };
 
 }
