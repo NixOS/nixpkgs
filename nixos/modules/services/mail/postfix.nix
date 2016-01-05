@@ -57,7 +57,7 @@ let
         else
           "[" + cfg.relayHost + "]"}
 
-      alias_maps = hash:/var/postfix/conf/aliases
+      alias_maps = ${cfg.aliasMapType}:/var/postfix/conf/aliases
 
       mail_spool_directory = /var/spool/mail/
 
@@ -131,12 +131,16 @@ let
     ${cfg.extraMasterConf}
   '';
 
+  aliasSelector = s:
+    if cfg.aliasMapType == "hash" then s + ":"
+    else "/^" + s + "$/";
+
   aliases =
     optionalString (cfg.postmasterAlias != "") ''
-      postmaster: ${cfg.postmasterAlias}
+      ${aliasSelector "postmaster"} ${cfg.postmasterAlias}
     ''
     + optionalString (cfg.rootAlias != "") ''
-      root: ${cfg.rootAlias}
+      ${aliasSelector "root"} ${cfg.rootAlias}
     ''
     + cfg.extraAliases
   ;
@@ -281,6 +285,14 @@ in
         ";
       };
 
+      aliasMapType = mkOption {
+        default = "hash";
+        type = lib.types.enum [ "hash" "regexp" ];
+        description = "
+          The type of alias map file to use.
+        ";
+      };
+
       extraConfig = mkOption {
         default = "";
         description = "
@@ -405,7 +417,9 @@ in
           ln -sf ${masterCfFile} /var/postfix/conf/master.cf
           ln -sf ${transportFile} /var/postfix/conf/transport
 
-          ${pkgs.postfix}/sbin/postalias -c /var/postfix/conf /var/postfix/conf/aliases
+          ${optionalString (cfg.aliasMapType == "hash") ''
+            ${pkgs.postfix}/sbin/postalias -c /var/postfix/conf /var/postfix/conf/aliases
+          ''}
           ${pkgs.postfix}/sbin/postmap -c /var/postfix/conf /var/postfix/conf/virtual
         '';
 
