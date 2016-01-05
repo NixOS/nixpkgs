@@ -426,7 +426,7 @@ in modules // {
     # Let's make the library default to our gpg binary
     patchPhase = ''
       substituteInPlace gnupg.py \
-        --replace "gpgbinary='gpg'" "gpgbinary='${pkgs.gnupg}/bin/gpg'"
+        --replace "gpgbinary='gpg'" "gpgbinary='${pkgs.gnupg1}/bin/gpg'"
     '';
 
     meta = {
@@ -14000,25 +14000,6 @@ in modules // {
   };
 
 
-  polylint = buildPythonPackage rec {
-    name = "polylint-${version}";
-    version = "158125c6ab";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/bendavis78/polylint";
-      rev = version;
-      sha256 = "ea10c67e9ce6df0936d6e2015382acba4f9cc559e2d6a9471f474f6bda78a266";
-    };
-
-    propagatedBuildInputs = with self; [ html5lib lxml cssselect ];
-
-    meta = {
-      description = "Fast HTML linter for polymer";
-      homepage = https://github.com/bendavis78/polylint;
-    };
-  };
-
-
   powerline = buildPythonPackage rec {
     rev  = "2.1.4";
     name = "powerline-${rev}";
@@ -17983,18 +17964,16 @@ in modules // {
 
   sipsimple = buildPythonPackage rec {
     name = "sipsimple-${version}";
-    version = "2.5.1";
+    version = "2.6.0";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://download.ag-projects.com/SipClient/python-${name}.tar.gz";
-      sha256 = "0vpy2vss8667c0kp1k8vybl38nxp7kr2v2wa8sngrgzd65m6ww5p";
+      sha256 = "0xcyasas28q1ad1hgw4vd62b72mf1sng7xwfcls6dc05k9p3q8v3";
     };
 
     propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml ];
     buildInputs = with pkgs; [ alsaLib ffmpeg libv4l pkgconfig sqlite libvpx ];
-
-    doCheck = false;
   };
 
 
@@ -21724,9 +21703,10 @@ in modules // {
     };
   };
 
-  libvirt = pkgs.stdenv.mkDerivation rec {
-    name = "libvirt-python-${version}";
+  libvirt = let
     version = "1.2.19";
+  in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
+    name = "libvirt-python-${version}";
 
     src = pkgs.fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
@@ -21908,6 +21888,29 @@ in modules // {
       maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx ];
       platforms = platforms.linux;
       license = licenses.gpl3;
+    };
+  };
+
+  tlsh = buildPythonPackage rec {
+    name = "tlsh-3.4.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "trendmicro";
+      repo = "tlsh";
+      rev = "b319aed6a270cc765347296b442820c495018833";
+      sha256 = "08ysniihvidcyvh9zip64wwvj7mvxvsqs60ci8cxj28f1ip0n8wg";
+    };
+    buildInputs = with pkgs; [ cmake ];
+    preConfigure = ''
+      mkdir build
+      cd build
+      cmake ..
+      cd ../py_ext
+    '';
+    meta = with stdenv.lib; {
+      description = "Trend Micro Locality Sensitive Hash";
+      homepage = https://github.com/trendmicro/tlsh;
+      license = licenses.asl20;
+      platforms = platforms.linux;
     };
   };
 
@@ -22952,6 +22955,26 @@ in modules // {
     meta = with stdenv.lib; {
       description = "Lightweight SOAP client (Jurko's fork)";
       homepage = "http://bitbucket.org/jurko/suds";
+    };
+  };
+
+  maildir-deduplicate = buildPythonPackage rec {
+    name = "maildir-deduplicate-${version}";
+    version = "1.0.2";
+
+    disabled = !isPy27;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/m/maildir-deduplicate/${name}.tar.gz";
+      sha256 = "1xy5z756alrjgpl9qx2gdx898rw1mryrqkwmipbh39mgrvkl3fz9";
+    };
+
+    propagatedBuildInputs = with self; [ click ];
+
+    meta = with stdenv.lib; {
+      description = "Command-line tool to deduplicate mails from a set of maildir folders";
+      homepage = "https://github.com/kdeldycke/maildir-deduplicate";
+      license = licenses.gpl2;
     };
   };
 

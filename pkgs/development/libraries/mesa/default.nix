@@ -33,8 +33,10 @@ stdenv.mkDerivation {
 
   src =  fetchurl {
     urls = [
-      "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
+      (with stdenv.lib; ''ftp://ftp.freedesktop.org/pub/mesa/older-versions/''
+        + head (splitString "." version) + ''.x/${version}/mesa-${version}.tar.xz'')
+      "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
     sha256 = "5696e4730518b6805d2ed5def393c4293f425a2c2c01bd5ed4bdd7ad62f7ad75";
   };

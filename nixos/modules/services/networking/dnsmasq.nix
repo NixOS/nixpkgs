@@ -5,8 +5,10 @@ with lib;
 let
   cfg = config.services.dnsmasq;
   dnsmasq = pkgs.dnsmasq;
+  stateDir = "/var/lib/dnsmasq";
 
   dnsmasqConf = pkgs.writeText "dnsmasq.conf" ''
+    dhcp-leasefile=${stateDir}/dnsmasq.leases
     ${optionalString cfg.resolveLocalQueries ''
       conf-file=/etc/dnsmasq-conf.conf
       resolv-file=/etc/dnsmasq-resolv.conf
@@ -76,12 +78,11 @@ in
 
     services.dbus.packages = [ dnsmasq ];
 
-    users.extraUsers = singleton
-      { name = "dnsmasq";
-        uid = config.ids.uids.dnsmasq;
-        description = "Dnsmasq daemon user";
-        home = "/var/empty";
-      };
+    users.extraUsers = singleton {
+      name = "dnsmasq";
+      uid = config.ids.uids.dnsmasq;
+      description = "Dnsmasq daemon user";
+    };
 
     systemd.services.dnsmasq = {
         description = "Dnsmasq Daemon";
@@ -89,6 +90,9 @@ in
         wantedBy = [ "multi-user.target" ];
         path = [ dnsmasq ];
         preStart = ''
+          mkdir -m 755 -p ${stateDir}
+          touch ${stateDir}/dnsmasq.leases
+          chown -R dnsmasq ${stateDir}
           touch /etc/dnsmasq-{conf,resolv}.conf
           dnsmasq --test
         '';

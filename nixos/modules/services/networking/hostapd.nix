@@ -2,21 +2,17 @@
 
 # TODO:
 #
-# asserts 
+# asserts
 #   ensure that the nl80211 module is loaded/compiled in the kernel
-#   hwMode must be a/b/g
-#   channel must be between 1 and 13 (maybe)
 #   wpa_supplicant and hostapd on the same wireless interface doesn't make any sense
-#   perhaps an assertion that there is a dhcp server and a dns server on the IP address serviced by the hostapd?
 
 with lib;
 
 let
 
   cfg = config.services.hostapd;
-  
-  configFile = pkgs.writeText "hostapd.conf"  
-    ''
+
+  configFile = pkgs.writeText "hostapd.conf" ''
     interface=${cfg.interface}
     driver=${cfg.driver}
     ssid=${cfg.ssid}
@@ -37,8 +33,8 @@ let
       wpa_passphrase=${cfg.wpaPassphrase}
       '' else ""}
 
-    ${cfg.extraCfg}
-    '' ;
+    ${cfg.extraConfig}
+  '' ;
 
 in
 
@@ -65,9 +61,9 @@ in
 
       interface = mkOption {
         default = "";
-        example = "wlan0";
+        example = "wlp2s0";
         description = ''
-          The interfaces <command>hostapd</command> will use. 
+          The interfaces <command>hostapd</command> will use.
         '';
       };
 
@@ -89,8 +85,7 @@ in
       };
 
       hwMode = mkOption {
-        default = "b";
-        example = "g";
+        default = "g";
         type = types.string;
         description = ''
           Operation mode.
@@ -98,17 +93,16 @@ in
         '';
       };
 
-      channel = mkOption { 
+      channel = mkOption {
         default = 7;
         example = 11;
         type = types.int;
-        description = 
-          ''
+        description = ''
           Channel number (IEEE 802.11)
           Please note that some drivers do not use this value from
           <command>hostapd</command> and the channel will need to be configured
           separately with <command>iwconfig</command>.
-          '';
+        '';
       };
 
       group = mkOption {
@@ -131,16 +125,15 @@ in
         default = "my_sekret";
         example = "any_64_char_string";
         type = types.string;
-        description = 
-          ''
+        description = ''
           WPA-PSK (pre-shared-key) passphrase. Clients will need this
           passphrase to associate with this access point.
           Warning: This passphrase will get put into a world-readable file in
           the Nix store!
-          '';
+        '';
       };
 
-      extraCfg = mkOption {
+      extraConfig = mkOption {
         default = "";
         example = ''
           auth_algo=0
@@ -158,17 +151,25 @@ in
 
   config = mkIf cfg.enable {
 
+    assertions = [
+      { assertion = (cfg.hwMode == "a" || cfg.hwMode == "b" || cfg.hwMode == "g");
+        message = "hwMode must be a/b/g";
+      }
+      { assertion = (cfg.channel >= 1 && cfg.channel <= 13);
+        message = "channel must be between 1 and 13";
+      }];
+
     environment.systemPackages =  [ pkgs.hostapd ];
 
     systemd.services.hostapd =
       { description = "hostapd wireless AP";
 
-        path = [ pkgs.hostapd ]; 
+        path = [ pkgs.hostapd ];
         wantedBy = [ "network.target" ];
 
         after = [ "${cfg.interface}-cfg.service" "nat.service" "bind.service" "dhcpd.service"];
 
-        serviceConfig = 
+        serviceConfig =
           { ExecStart = "${pkgs.hostapd}/bin/hostapd ${configFile}";
             Restart = "always";
           };

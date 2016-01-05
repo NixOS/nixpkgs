@@ -15,7 +15,8 @@ stdenv.mkDerivation {
   buildInputs = [ pcre libiconv ];
 
   # cygwin: FAIL: multibyte-white-space
-  doCheck = !stdenv.isDarwin && !stdenv.isSunOS && !stdenv.isCygwin;
+  # freebsd: FAIL mb-non-UTF8-performance
+  doCheck = !stdenv.isDarwin && !stdenv.isSunOS && !stdenv.isCygwin && !stdenv.isFreeBSD;
 
   # On Mac OS X, force use of mkdir -p, since Grep's fallback
   # (./install-sh) is broken.

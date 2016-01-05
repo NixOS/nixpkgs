@@ -473,28 +473,6 @@ let
     };
   };
 
-  deferred = melpaBuild rec {
-    version = "0.3.2";
-    pname = "deferred";
-
-    src = fetchFromGitHub {
-      owner = "kiwanami";
-      repo = "emacs-${pname}";
-      rev = "896d4b53210289afe489e1ee7db4e12cb9248109";
-      sha256 = "0ysahdyvlg240dynwn23kk2d9kb432zh2skr1gydm3rxwn6f18r0";
-    };
-
-    meta = {
-      description = "Simple asynchronous functions for emacs-lisp";
-      longDescription = ''
-        deferred.el provides facilities to manage asynchronous tasks.
-        The API and implementations were translated from JSDeferred (by cho45)
-         and Mochikit.Async (by Bob Ippolito) in JavaScript.
-      '';
-      license = gpl3Plus;
-    };
-  };
-
   diminish = melpaBuild rec {
     pname   = "diminish";
     version = "0.44";
@@ -1515,21 +1493,6 @@ let
     };
   };
 
-  popup = melpaBuild rec {
-    pname   = "popup";
-    version = "0.5.2";
-    src = fetchFromGitHub {
-      owner  = "auto-complete";
-      repo   = "${pname}-el";
-      rev    = "v${version}";
-      sha256 = "0aazkczrzpp75793bpi0pz0cs7vinhdrpxfdlzi0cr39njird2yj";
-    };
-    meta = {
-      description = "Popup tooltips and popup menus for Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   projectile = melpaBuild rec {
     pname   = "projectile";
     version = "0.13.0";
@@ -1981,29 +1944,6 @@ let
     meta = {
       description = "Writable grep buffer mode for Emacs";
       license = gpl3Plus;
-    };
-  };
-
-  yasnippet = melpaBuild rec {
-    pname = "yasnippet";
-    version = "0.8.1";
-    src = fetchFromGitHub {
-      owner  = "capitaomorte";
-      repo   = pname;
-      rev    = "01139a2deb9eda272b9b771fbbe15d096061efa4";
-      sha256 = "1b0bxzkmw7yd1yf6326zf52aq63n283vy57pysj8cc34d9bk6nnk";
-    };
-    meta = {
-      description = "A template system for Emacs";
-      longDescription = ''
-        YASnippet is a template system for Emacs.
-        It allows you to type an abbreviation and automatically expand it into
-        function templates. Bundled language templates include: C, C++, C#,
-        Perl, Python, Ruby, SQL, LaTeX, HTML, CSS and more.
-        The snippet syntax is inspired from TextMate's syntax, you can even import
-        most TextMate templates to YASnippet.
-      '';
-      license = gpl2Plus;
     };
   };
 

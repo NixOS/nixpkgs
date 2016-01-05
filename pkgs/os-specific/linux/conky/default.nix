@@ -122,5 +122,6 @@ stdenv.mkDerivation rec {
     description = "Advanced, highly configurable system monitor based on torsmo";
     maintainers = [ maintainers.guibert ];
     license = licenses.gpl3Plus;
+    platforms = platforms.linux;
   };
 }

@@ -10,6 +10,7 @@
 { # Optionally move the contents of the unpacked tree up one level.
   stripRoot ? true
 , url
+, extraPostFetch ? ""
 , ... } @ args:
 
 lib.overrideDerivation (fetchurl ({
@@ -47,7 +48,8 @@ lib.overrideDerivation (fetchurl ({
       fi
     '' else ''
       mv "$unpackDir"/* "$out/"
-    '');
-} // removeAttrs args [ "stripRoot" ]))
+    '') #*/
+    + extraPostFetch;
+} // removeAttrs args [ "stripRoot" "extraPostFetch" ]))
 # Hackety-hack: we actually need unzip hooks, too
 (x: {nativeBuildInputs = x.nativeBuildInputs++ [unzip];})

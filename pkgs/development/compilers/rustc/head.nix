@@ -23,6 +23,6 @@ callPackage ./generic.nix {
   snapshotRev = "1af31d4";
 
   patches = [ ./patches/remove-uneeded-git.patch ]
-    ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec-head.patch;
+    ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
 }
 

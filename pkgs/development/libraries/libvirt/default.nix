@@ -1,16 +1,13 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnutls, devicemapper, perl, python
 , iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, makeWrapper, pmutils, libcap_ng
-, dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl
-, pythonPackages, perlPackages
+, dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
+, curl, libiconv, gmp, xen
 }:
-
-let version = "1.2.19"; in
-
-assert version == pythonPackages.libvirt.version;
 
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
+  version = "1.2.19";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.gz";
@@ -18,25 +15,40 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig libxml2 gnutls devicemapper perl python readline lvm2
-    utillinux udev libpciaccess gettext libtasn1 libgcrypt yajl makeWrapper
-    libcap_ng libnl libxslt xhtml1 perlPackages.XMLXPath numad numactl
+    pkgconfig libxml2 gnutls perl python readline
+    gettext libtasn1 libgcrypt yajl makeWrapper
+    libxslt xhtml1 perlPackages.XMLXPath curl libpcap
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    libpciaccess devicemapper lvm2 utillinux udev libcap_ng
+    libnl numad numactl xen
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+     libiconv gmp
   ];
 
-  preConfigure = ''
-    PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${udev}/sbin:${dnsmasq}/bin:$PATH
+  preConfigure = stdenv.lib.optionalString stdenv.isLinux ''
+    PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${udev}/sbin:$PATH
     substituteInPlace configure --replace 'as_dummy="/bin:/usr/bin:/usr/sbin"' 'as_dummy="${numad}/bin"'
+  '' + ''
+    PATH=${dnsmasq}/bin:$PATH
     patchShebangs . # fixes /usr/bin/python references
   '';
 
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
-    "--with-init-script=redhat"
+    "--with-libpcap"
+    "--with-vmware"
+    "--with-vbox"
+    "--with-test"
+    "--with-esx"
+    "--with-remote"
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    "--with-numad"
     "--with-macvtap"
     "--with-virtualport"
-    "--with-libpcap"
-    "--with-numad"
+    "--with-init-script=redhat"
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "--with-init-script=none"
   ];
 
   installFlags = [
@@ -48,6 +60,7 @@ stdenv.mkDerivation rec {
     sed -i 's/ON_SHUTDOWN=suspend/ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}/' $out/libexec/libvirt-guests.sh
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace "$out/bin" "${gettext}/bin"
+  '' + stdenv.lib.optionalString stdenv.isLinux ''
     wrapProgram $out/sbin/libvirtd \
       --prefix PATH : ${iptables}/sbin:${iproute}/sbin:${pmutils}/bin:${numad}/bin:${numactl}/bin
   '';
@@ -64,6 +77,6 @@ stdenv.mkDerivation rec {
       versions of Linux (and other OSes)
     '';
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -17,7 +17,8 @@ stdenv.mkDerivation rec{
   };
 
   buildInputs = [ pkgconfig autoreconfHook openssl db48 boost zlib
-                  miniupnpc utillinux protobuf ]
+                  miniupnpc protobuf ]
+                  ++ optionals stdenv.isLinux [ utillinux ]
                   ++ optionals withGui [ qt4 qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.lib}/lib" ]

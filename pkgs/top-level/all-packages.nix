@@ -372,13 +372,7 @@ let
     inherit name sha256;
     url = "https://bitbucket.org/${owner}/${repo}/get/${rev}.tar.gz";
     meta.homepage = "https://bitbucket.org/${owner}/${repo}/";
-  };
-
-  # gitorious example
-  fetchFromGitorious = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
-    inherit name sha256;
-    url = "https://gitorious.org/${owner}/${repo}/archive/${rev}.tar.gz";
-    meta.homepage = "https://gitorious.org/${owner}/${repo}/";
+    extraPostFetch = ''rm -f "$out"/.hg_archival.txt''; # impure file; see #12002
   };
 
   # cgit example, snapshot support is optional in cgit
@@ -818,6 +812,11 @@ let
   };
 
   dialog = callPackage ../development/tools/misc/dialog { };
+
+  ding = callPackage ../applications/misc/ding {
+    aspellDicts_de = aspellDicts.de;
+    aspellDicts_en = aspellDicts.en;
+  };
 
   direnv = callPackage ../tools/misc/direnv { };
 
@@ -1292,7 +1291,11 @@ let
 
   di = callPackage ../tools/system/di { };
 
-  diffoscope = callPackage ../tools/misc/diffoscope { };
+  diffoscope = callPackage ../tools/misc/diffoscope {
+    jdk = jdk7;
+    pythonPackages = python3Packages;
+    rpm = rpm.override { python = python3; };
+  };
 
   diffstat = callPackage ../tools/text/diffstat { };
 
@@ -1657,7 +1660,7 @@ let
 
   gnupg20 = callPackage ../tools/security/gnupg/20.nix { };
 
-  gnupg21 = callPackage ../tools/security/gnupg/21.nix { };
+  gnupg21 = lowPrio (callPackage ../tools/security/gnupg/21.nix { });
 
   gnupg = gnupg20;
 
@@ -1989,6 +1992,8 @@ let
 
   jp2a = callPackage ../applications/misc/jp2a { };
 
+  jpegoptim = callPackage ../applications/graphics/jpegoptim { };
+
   jq = callPackage ../development/tools/jq {};
 
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
@@ -2095,7 +2100,7 @@ let
   else
     nodejs-4_x;
 
-  nodePackages_5_x = recurseIntoAttrs (callPackage ./node-packages.nix { self = nodePackages_5_x; nodejs = nodejs-5_x; });
+  nodePackages_5_x = callPackage ./node-packages.nix { self = nodePackages_5_x; nodejs = nodejs-5_x; };
 
   nodePackages_4_x = recurseIntoAttrs (callPackage ./node-packages.nix { self = nodePackages_4_x; nodejs = nodejs-4_x; });
 
@@ -2965,6 +2970,8 @@ let
 
   rubber = callPackage ../tools/typesetting/rubber { };
 
+  runzip = callPackage ../tools/archivers/runzip { };
+
   rxp = callPackage ../tools/text/xml/rxp { };
 
   rzip = callPackage ../tools/compression/rzip { };
@@ -3360,7 +3367,7 @@ let
 
   vidalia = callPackage ../tools/security/vidalia { };
 
-  vbetool = builderDefsPackage (callPackage ../tools/system/vbetool) { };
+  vbetool = callPackage ../tools/system/vbetool { };
 
   vde2 = callPackage ../tools/networking/vde2 { };
 
@@ -3677,6 +3684,8 @@ let
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
 
+  yle-dl = callPackage ../tools/misc/yle-dl {};
+
   zbackup = callPackage ../tools/backup/zbackup {};
 
   zbar = callPackage ../tools/graphics/zbar {
@@ -3768,6 +3777,8 @@ let
   aldor = callPackage ../development/compilers/aldor { };
 
   aliceml = callPackage ../development/compilers/aliceml { };
+
+  arachne-pnr = callPackage ../development/compilers/arachne-pnr { };
 
   aspectj = callPackage ../development/compilers/aspectj { };
 
@@ -4992,6 +5003,8 @@ let
 
   yasm = callPackage ../development/compilers/yasm { };
 
+  yosys = callPackage ../development/compilers/yosys { };
+
 
   ### DEVELOPMENT / INTERPRETERS
 
@@ -5743,6 +5756,8 @@ let
 
   hyenae = callPackage ../tools/networking/hyenae { };
 
+  icestorm = callPackage ../development/tools/icestorm { };
+
   icmake = callPackage ../development/tools/build-managers/icmake { };
 
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils {
@@ -6079,6 +6094,9 @@ let
 
   aprutil = callPackage ../development/libraries/apr-util {
     bdbSupport = true;
+    db = if stdenv.isFreeBSD then db47 else db;
+    # XXX: only the db_185 interface was available through
+    #      apr with db58 on freebsd (nov 2015), for unknown reasons
   };
 
   assimp = callPackage ../development/libraries/assimp { };
@@ -6257,7 +6275,9 @@ let
 
   cwiid = callPackage ../development/libraries/cwiid { };
 
-  cyrus_sasl = callPackage ../development/libraries/cyrus-sasl { };
+  cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
+    kerberos = if stdenv.isFreeBSD then libheimdal else kerberos;
+  };
 
   # Make bdb5 the default as it is the last release under the custom
   # bsd-like license
@@ -7091,7 +7111,9 @@ let
 
   libedit = callPackage ../development/libraries/libedit { };
 
-  libelf = callPackage ../development/libraries/libelf { };
+  libelf = if stdenv.isFreeBSD
+  then callPackage ../development/libraries/libelf-freebsd { }
+  else callPackage ../development/libraries/libelf { };
 
   libetpan = callPackage ../development/libraries/libetpan { };
 
@@ -8138,6 +8160,9 @@ let
     mesa = mesa_noglu;
     inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
     cups = if stdenv.isLinux then cups else null;
+
+    # XXX: mariadb doesn't built on fbsd as of nov 2015
+    mysql = if (!stdenv.isFreeBSD) then mysql else null;
   };
 
   qt48Full = appendToName "full" (qt48.override {
@@ -8505,6 +8530,8 @@ let
   tevent = callPackage ../development/libraries/tevent {
     python = python2;
   };
+
+  tet = callPackage ../development/tools/misc/tet { };
 
   thrift = callPackage ../development/libraries/thrift { };
 
@@ -9110,6 +9137,8 @@ let
   apacheHttpdPackages_2_2 = apacheHttpdPackagesFor pkgs.apacheHttpd_2_2 pkgs.apacheHttpdPackages_2_2;
   apacheHttpdPackages_2_4 = apacheHttpdPackagesFor pkgs.apacheHttpd_2_4 pkgs.apacheHttpdPackages_2_4;
 
+  archiveopteryx = callPackage ../servers/mail/archiveopteryx/default.nix { };
+
   cadvisor = callPackage ../servers/monitoring/cadvisor { };
 
   cassandra_1_2 = callPackage ../servers/nosql/cassandra/1.2.nix { };
@@ -9530,7 +9559,10 @@ let
     ruby = ruby_2_1;
   };
 
-  shishi = callPackage ../servers/shishi { };
+  shishi = callPackage ../servers/shishi {
+      pam = if stdenv.isLinux then pam else null;
+      # see also openssl, which has/had this same trick
+  };
 
   sipcmd = callPackage ../applications/networking/sipcmd { };
 
@@ -9712,6 +9744,8 @@ let
   cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
 
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
+
+  crda = callPackage ../os-specific/linux/crda { };
 
   darwin = let
     cmdline = callPackage ../os-specific/darwin/command-line-tools {};
@@ -10930,6 +10964,8 @@ let
 
   vistafonts = callPackage ../data/fonts/vista-fonts { };
 
+  wireless-regdb = callPackage ../data/misc/wireless-regdb { };
+
   wqy_microhei = callPackage ../data/fonts/wqy-microhei { };
 
   wqy_zenhei = callPackage ../data/fonts/wqy-zenhei { };
@@ -12031,6 +12067,8 @@ let
 
   gpsd = callPackage ../servers/gpsd { };
 
+  gpsprune = callPackage ../applications/misc/gpsprune { };
+
   gtk2fontsel = callPackage ../applications/misc/gtk2fontsel {
     inherit (gnome2) gtk;
   };
@@ -12203,6 +12241,8 @@ let
   jitsi = callPackage ../applications/networking/instant-messengers/jitsi { };
 
   joe = callPackage ../applications/editors/joe { };
+
+  josm = callPackage ../applications/misc/josm { };
 
   jbrout = callPackage ../applications/graphics/jbrout { };
 
@@ -13127,9 +13167,7 @@ let
 
   printrun = callPackage ../applications/misc/printrun { };
 
-  sddm = qt5.callPackage ../applications/display-managers/sddm {
-    themes = [];  # extra themes, etc.
-  };
+  sddm = kde5.sddm;
 
   slim = callPackage ../applications/display-managers/slim {
     libpng = libpng12;
@@ -13455,7 +13493,7 @@ let
 
   neovim-pygui = pythonPackages.neovim_gui;
 
-  virtviewer = callPackage ../applications/virtualization/virt-viewer {
+  virt-viewer = callPackage ../applications/virtualization/virt-viewer {
     gtkvnc = gtkvnc.override { enableGTK3 = true; };
     spice_gtk = spice_gtk.override { enableGTK3 = true; };
   };
@@ -13556,6 +13594,8 @@ let
   weston = callPackage ../applications/window-managers/weston {
     freerdp = freerdpUnstable;
   };
+
+  windowlab = callPackage ../applications/window-managers/windowlab { };
 
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
 
@@ -13980,6 +14020,8 @@ let
 
   chessdb = callPackage ../games/chessdb { };
 
+  chessx = qt5.callPackage ../games/chessx { };
+
   chocolateDoom = callPackage ../games/chocolate-doom { };
 
   cockatrice = qt5.callPackage ../games/cockatrice {  };
@@ -14050,7 +14092,9 @@ let
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
 
-  flightgear = qt5.callPackage ../games/flightgear { };
+  flightgear = qt5.callPackage ../games/flightgear {
+    fltk13 = fltk13.override { cfg.xftSupport = true; };
+  };
 
   freecell-solver = callPackage ../games/freecell-solver { };
 
@@ -14125,7 +14169,7 @@ let
 
   lincity_ng = callPackage ../games/lincity/ng.nix {};
 
-  liquidwar = builderDefsPackage (callPackage ../games/liquidwar) {
+  liquidwar = callPackage ../games/liquidwar {
     guile = guile_1_8;
   };
 
@@ -14275,6 +14319,8 @@ let
   springLobby = callPackage ../games/spring/springlobby.nix { };
 
   stardust = callPackage ../games/stardust {};
+
+  stockfish = callPackage ../games/stockfish { };
 
   steamPackages = callPackage ../games/steam { };
   steam = steamPackages.steam-chrootenv.override {
@@ -14769,6 +14815,10 @@ let
       withKDE = false;
     };
 
+    sddm = callPackage ../applications/display-managers/sddm {
+      themes = [];  # extra themes, etc.
+    };
+
   };
 
   kde5 =
@@ -14776,18 +14826,22 @@ let
       frameworks = import ../development/libraries/kde-frameworks-5.17 { inherit pkgs; };
       plasma = import ../desktops/plasma-5.5 { inherit pkgs; };
       apps = import ../applications/kde-apps-15.12 { inherit pkgs; };
-      merged = self: frameworks self // plasma self // apps self // kde5PackagesFun self;
+      named = self: { plasma = plasma self; frameworks = frameworks self; apps = apps self; };
+      merged = self:
+        named self // frameworks self // plasma self // apps self // kde5PackagesFun self;
     in
-      recurseIntoAttrs (lib.makeScope qt5.newScope merged);
+      recurseIntoAttrs (lib.makeScope qt55.newScope merged);
 
   kde5_latest =
     let
       frameworks = import ../development/libraries/kde-frameworks-5.17 { inherit pkgs; };
       plasma = import ../desktops/plasma-5.5 { inherit pkgs; };
       apps = import ../applications/kde-apps-15.12 { inherit pkgs; };
-      merged = self: frameworks self // plasma self // apps self // kde5PackagesFun self;
+      named = self: { plasma = plasma self; frameworks = frameworks self; apps = apps self; };
+      merged = self:
+        named self // frameworks self // plasma self // apps self // kde5PackagesFun self;
     in
-      recurseIntoAttrs (lib.makeScope qt5.newScope merged);
+      recurseIntoAttrs (lib.makeScope qt55.newScope merged);
 
   theme-vertex = callPackage ../misc/themes/vertex { };
 
@@ -15527,17 +15581,14 @@ let
     };
   };
 
-  saneBackends = callPackage ../applications/graphics/sane/backends.nix {
+  saneBackends = callPackage ../applications/graphics/sane/backends {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
     snapscanFirmware = config.sane.snapscanFirmware or null;
-    hotplugSupport = config.sane.hotplugSupport or true;
-    libusb = libusb1;
   };
 
-  saneBackendsGit = callPackage ../applications/graphics/sane/backends-git.nix {
+  saneBackendsGit = callPackage ../applications/graphics/sane/backends/git.nix {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
     snapscanFirmware = config.sane.snapscanFirmware or null;
-    hotplugSupport = config.sane.hotplugSupport or true;
   };
 
   mkSaneConfig = callPackage ../applications/graphics/sane/config.nix { };
@@ -15846,6 +15897,7 @@ aliases = with self; rec {
   tftp_hpa = tftp-hpa; # added 2015-04-03
   manpages = man-pages; # added 2015-12-06
   mssys = ms-sys; # added 2015-12-13
+  virtviewer = virt-viewer; # added 2015-12-24
 };
 
 tweakAlias = _n: alias: with lib;

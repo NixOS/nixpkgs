@@ -99,6 +99,7 @@
   ericsagnes = "Eric Sagnes <eric.sagnes@gmail.com>";
   erikryb = "Erik Rybakken <erik.rybakken@math.ntnu.no>";
   ertes = "Ertugrul Söylemez <ertesx@gmx.de>";
+  exi = "Reno Reckling <nixos@reckling.org>";
   exlevan = "Alexey Levan <exlevan@gmail.com>";
   falsifian = "James Cook <james.cook@utoronto.ca>";
   flosse = "Markus Kohlhase <mail@markus-kohlhase.de>";
@@ -142,7 +143,7 @@
   jcumming = "Jack Cummings <jack@mudshark.org>";
   jefdaj = "Jeffrey David Johnson <jefdaj@gmail.com>";
   jfb = "James Felix Black <james@yamtime.com>";
-  jgeerds = "Jascha Geerds <jg@ekby.de>";
+  jgeerds = "Jascha Geerds <jascha@jgeerds.name>";
   jgillich = "Jakob Gillich <jakob@gillich.me>";
   jirkamarsik = "Jirka Marsik <jiri.marsik89@gmail.com>";
   joachifm = "Joachim Fasting <joachifm@fastmail.fm>";
@@ -233,6 +234,7 @@
   phausmann = "Philipp Hausmann <nix@314.ch>";
   philandstuff = "Philip Potter <philip.g.potter@gmail.com>";
   phreedom = "Evgeny Egorochkin <phreedom@yandex.ru>";
+  phunehehe = "Hoang Xuan Phu <phunehehe@gmail.com>";
   pierron = "Nicolas B. Pierron <nixos@nbp.name>";
   piotr = "Piotr Pietraszkiewicz <ppietrasa@gmail.com>";
   pjbarnoy = "Perry Barnoy <pjbarnoy@gmail.com>";

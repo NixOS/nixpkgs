@@ -18,7 +18,7 @@ let
 
   inherit (lib) makeScope mapAttrs;
 
-  json = builtins.readFile ./melpa-stable-packages.json;
+  json = builtins.readFile ./melpa-packages.json;
   manifest = builtins.fromJSON json;
 
   mkPackage = self: name: recipe:
@@ -36,10 +36,14 @@ let
               or unknownFetcher;
             args = builtins.removeAttrs recipe.fetch [ "tag" ];
             src = fetch args;
+            recipeFile = fetchurl {
+              url = "https://raw.githubusercontent.com/milkypostman/melpa/${recipe.recipe.commit}/recipes/${name}";
+              inherit (recipe.recipe) sha256;
+            };
           in melpaBuild {
             pname = name;
             inherit (recipe) version;
-            inherit src;
+            inherit recipeFile src;
             packageRequires =
               let lookupDep = d: self."${d}" or null;
               in map lookupDep recipe.deps;

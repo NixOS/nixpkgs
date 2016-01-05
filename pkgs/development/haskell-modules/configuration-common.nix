@@ -43,11 +43,6 @@ self: super: {
   options_1_2 = dontCheck super.options_1_2;
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
-  text_1_1_1_3 = dontCheck super.text_1_1_1_3;
-  text_1_2_0_3 = dontCheck super.text_1_2_0_3;
-  text_1_2_0_4 = dontCheck super.text_1_2_0_4;
-  text_1_2_0_6 = dontCheck super.text_1_2_0_6;
-  text = dontCheck super.text;
   c2hs = if pkgs.stdenv.isDarwin then dontCheck super.c2hs else super.c2hs;
 
   # The package doesn't compile with ruby 1.9, which is our default at the moment.
@@ -946,8 +941,4 @@ self: super: {
 
   # https://github.com/mainland/language-c-quote/issues/57
   language-c-quote = super.language-c-quote.override { alex = self.alex_3_1_4; };
-
-  # The package doesn't yet compile with new HSE: https://github.com/bmillwood/pointfree/pull/13
-  pointfree = super.pointfree.override { haskell-src-exts = self.haskell-src-exts_1_16_0_1; };
-
 }

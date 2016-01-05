@@ -48,13 +48,13 @@ in {
         '';
       };
 
-      host = mkOption {
+      listenAddress = mkOption {
         default = "0.0.0.0";
         example = "localhost";
         type = types.str;
         description = ''
-          Specifies the bind adress on which the jenkins HTTP interface listens.
-          The default is the wildcard adress.
+          Specifies the bind address on which the jenkins HTTP interface listens.
+          The default is the wildcard address.
         '';
       };
 
@@ -156,18 +156,18 @@ in {
       '';
 
       script = ''
-        ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins} --httpListenAddress=${cfg.host} \
+        ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins} --httpListenAddress=${cfg.listenAddress} \
                                                   --httpPort=${toString cfg.port} \
                                                   --prefix=${cfg.prefix} \
                                                   ${concatStringsSep " " cfg.extraOptions}
       '';
 
       postStart = ''
-        until ${pkgs.curl}/bin/curl -s -L ${cfg.host}:${toString cfg.port}${cfg.prefix} ; do
+        until ${pkgs.curl}/bin/curl -s -L ${cfg.listenAddress}:${toString cfg.port}${cfg.prefix} ; do
           sleep 10
         done
         while true ; do
-          index=`${pkgs.curl}/bin/curl -s -L ${cfg.host}:${toString cfg.port}${cfg.prefix}`
+          index=`${pkgs.curl}/bin/curl -s -L ${cfg.listenAddress}:${toString cfg.port}${cfg.prefix}`
           if [[ !("$index" =~ 'Please wait while Jenkins is restarting' ||
                   "$index" =~ 'Please wait while Jenkins is getting ready to work') ]]; then
             exit 0

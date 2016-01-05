@@ -246,10 +246,10 @@
     "org": {
         "fetch": {
             "tag": "fetchurl",
-            "url": "http://elpa.gnu.org/packages/org-20151214.tar",
-            "sha256": "15m9l7p7xfmcrxrcsxbvpp8bq5ajcapknvqblhmk77j7ca3jffi1"
+            "url": "http://elpa.gnu.org/packages/org-20151221.tar",
+            "sha256": "01p8c70bd2mp3w08vpha0dvpljhj4r5797b0m9q16z4zhxqaqbqx"
         },
-        "version": "20151214",
+        "version": "20151221",
         "deps": []
     },
     "bug-hunter": {

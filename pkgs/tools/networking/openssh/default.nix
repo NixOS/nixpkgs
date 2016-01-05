@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
   # properly when cross building.
   configureFlags = [
     "--localstatedir=/var"
+    "--with-pid-dir=/run"
     "--with-mantype=man"
     "--with-libedit=yes"
     "--disable-strip"
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
     cp contrib/ssh-copy-id.1 $out/share/man/man1/
   '';
 
+  installTargets = [ "install-nokeys" ];
   installFlags = [
     "sysconfdir=\${out}/etc/ssh"
   ];

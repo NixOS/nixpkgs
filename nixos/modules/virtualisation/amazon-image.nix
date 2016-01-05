@@ -11,7 +11,7 @@ with lib;
 let cfg = config.ec2; in
 
 {
-  imports = [ ../profiles/headless.nix ./ec2-data.nix ./amazon-grow-partition.nix ];
+  imports = [ ../profiles/headless.nix ./ec2-data.nix ./amazon-grow-partition.nix ./amazon-init.nix ];
 
   config = {
 
