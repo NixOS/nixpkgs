@@ -12083,7 +12083,9 @@ let
 
   gv = callPackage ../applications/misc/gv { };
 
-  guvcview = callPackage ../os-specific/linux/guvcview { };
+  guvcview = callPackage ../os-specific/linux/guvcview {
+    pulseaudioSupport = config.pulseaudio or true;
+  };
 
   gxmessage = callPackage ../applications/misc/gxmessage { };
 
