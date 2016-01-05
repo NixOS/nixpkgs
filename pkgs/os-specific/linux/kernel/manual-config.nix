@@ -24,7 +24,7 @@ in {
   modDirVersion ? version,
   # The kernel source (tarball, git checkout, etc.)
   src,
-  # Any patches
+  # a list of { name=..., patch=..., extraConfig=...} patches
   kernelPatches ? [],
   # The kernel .config file
   configfile,
