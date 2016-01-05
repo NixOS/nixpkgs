@@ -12713,9 +12713,6 @@ let
     motif = lesstif;
   };
 
-  netsurfBrowser = netsurf.browser;
-  netsurf = recurseIntoAttrs (callPackage ../applications/networking/browsers/netsurf {});
-
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     # No need to build Emacs - notmuch.el works just fine without
     # byte-compilation. Use emacs24Packages.notmuch if you want to
