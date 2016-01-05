@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
       define(\`confINCGRP', \`root')
       define(\`confLIBGRP', \`root')
       APPENDDEF(\`confENVDEF', \`-DNETINET6')
+      define(\`confCCOPTS', \`-fPIE -fstack-protector-all --param ssp-buffer-size=4 -O2 -D_FORTIFY_SOURCE=2')
+      define(\`confLDOPTS', \`-pie -Wl,-z,relro,-z,now')
     EOF
     sh Build -f ./a.m4
   '';
