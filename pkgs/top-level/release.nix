@@ -55,7 +55,7 @@ let
         { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "x86_64-linux"; }) dist test; };
 
       stdenvBootstrapTools.x86_64-darwin =
-        { inherit (import ../stdenv/pure-darwin/make-bootstrap-tools.nix) dist test; };
+        { inherit (import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; }) dist test; };
 
     } // (mapTestOn ((packagePlatforms pkgs) // rec {
 
