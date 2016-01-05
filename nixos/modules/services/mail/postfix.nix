@@ -108,10 +108,14 @@ let
     flush     unix  n       -       n       1000?   0       flush
     proxymap  unix  -       -       n       -       -       proxymap
     proxywrite unix -       -       n       -       1       proxymap
+  ''
+  + optionalString cfg.enableSmtp ''
     smtp      unix  -       -       n       -       -       smtp
     relay     unix  -       -       n       -       -       smtp
     	      -o smtp_fallback_relay=
     #       -o smtp_helo_timeout=5 -o smtp_connect_timeout=5
+  ''
+  + ''
     showq     unix  n       -       n       -       -       showq
     error     unix  -       -       n       -       -       error
     retry     unix  -       -       n       -       -       error
@@ -152,6 +156,11 @@ in
       enable = mkOption {
         default = false;
         description = "Whether to run the Postfix mail server.";
+      };
+
+      enableSmtp = mkOption {
+        default = true;
+        description = "Whether to enable smtp in master.cf.";
       };
 
       setSendmail = mkOption {
