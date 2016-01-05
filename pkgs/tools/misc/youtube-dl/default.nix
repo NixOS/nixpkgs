@@ -1,5 +1,6 @@
 { stdenv, fetchurl, buildPythonPackage, makeWrapper, ffmpeg, zip
-, pandoc ? null }:
+, pandoc ? null
+}:
 
 # Pandoc is required to build the package's man page. Release tarballs
 # contain a formatted man page already, though, so it's fine to pass
@@ -13,7 +14,7 @@ buildPythonPackage rec {
   name = "youtube-dl-2016.01.01";
 
   src = fetchurl {
-    url = "http://yt-dl.org/downloads/${(builtins.parseDrvName name).version}/${name}.tar.gz";
+    url = "http://yt-dl.org/downloads/${stdenv.lib.getVersion name}/${name}.tar.gz";
     sha256 = "0b0pk8h2iswdiyf65c0zcwcad9dm2hid67fnfafj7d3ikp4kfbvk";
   };
 
