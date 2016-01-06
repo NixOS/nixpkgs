@@ -2555,8 +2555,6 @@ let
 
   opensc = callPackage ../tools/security/opensc { };
 
-  opensc_dnie_wrapper = callPackage ../tools/security/opensc-dnie-wrapper { };
-
   openssh =
     callPackage ../tools/networking/openssh {
       hpnSupport = false;
@@ -7988,8 +7986,6 @@ let
   openexr = callPackage ../development/libraries/openexr { };
 
   openldap = callPackage ../development/libraries/openldap { };
-
-  libopensc_dnie = callPackage ../development/libraries/libopensc-dnie { };
 
   opencolorio = callPackage ../development/libraries/opencolorio { };
 
