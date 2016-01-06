@@ -19364,13 +19364,14 @@ in modules // {
   });
 
   tweepy = buildPythonPackage (rec {
-    name = "tweepy-2.3.0";
-    disabled = isPy3k;
+    name = "tweepy-3.5.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/t/tweepy/${name}.tar.gz";
-      md5 = "065c80d244360988c61d64b5dfb7e229";
+      sha256 = "0n2shilamgwhzmvf534xg7f6hrnznbixyl5pw2f5a3f391gwy37h";
     };
+
+    propagatedBuildInputs = with self; [ six requests_oauthlib ];
 
     meta = {
       homepage = "https://github.com/tweepy/tweepy";
