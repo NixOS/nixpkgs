@@ -3037,6 +3037,8 @@ let
 
   seccure = callPackage ../tools/security/seccure { };
 
+  setroot = callPackage  ../tools/X11/setroot { };
+
   setserial = callPackage ../tools/system/setserial { };
 
   seqdiag = pythonPackages.seqdiag;
