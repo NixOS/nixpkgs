@@ -3022,12 +3022,20 @@ in modules // {
 
   cytoolz = buildPythonPackage rec {
     name = "cytoolz-${version}";
-    version = "0.7.3";
+    version = "0.7.4";
 
     src = pkgs.fetchurl{
       url = "https://pypi.python.org/packages/source/c/cytoolz/cytoolz-${version}.tar.gz";
-      md5 = "e9f0441d9f340a23c60357f68f25d163";
+      sha256 = "9c2e3dda8232b6cd5b84b8c8df6c8155c2adeb8734eb7ec38e189affc0f2eba5";
     };
+
+    buildInputs = with self; [ nose ];
+
+    checkPhase = ''
+      nosetests cytoolz/tests
+    '';
+
+    doCheck = false; # Cannot import the extension module
 
     meta = {
       homepage = "http://github.com/pytoolz/cytoolz/";
