@@ -12020,11 +12020,6 @@ let
     java = if stdenv.isLinux then jre else jdk;
   };
 
-  qrdecode = callPackage ../tools/graphics/qrdecode {
-    libpng = libpng12;
-    opencv = opencv_2_1;
-  };
-
   qrencode = callPackage ../tools/graphics/qrencode { };
 
   gecko_mediaplayer = callPackage ../applications/networking/browsers/mozilla-plugins/gecko-mediaplayer {
