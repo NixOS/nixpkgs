@@ -100,8 +100,6 @@
   ./services/amqp/activemq/default.nix
   ./services/amqp/rabbitmq.nix
   ./services/audio/alsa.nix
-  # Disabled as fuppes no longer builds.
-  # ./services/audio/fuppes.nix
   ./services/audio/icecast.nix
   ./services/audio/liquidsoap.nix
   ./services/audio/mpd.nix
