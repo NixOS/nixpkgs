@@ -2358,8 +2358,6 @@ let
 
   munge = callPackage ../tools/security/munge { };
 
-  muscleframework = callPackage ../tools/security/muscleframework { };
-
   muscletool = callPackage ../tools/security/muscletool { };
 
   mysql2pgsql = callPackage ../tools/misc/mysql2pgsql { };
