@@ -20,18 +20,17 @@ with lib;
 
   };
 
-  
+
   ###### implementation
 
   config = mkIf config.services.oidentd.enable {
-
-    jobs.oidentd =
-      { startOn = "started network-interfaces";
-        daemonType = "fork";
-        exec = "${pkgs.oidentd}/sbin/oidentd -u oidentd -g nogroup" +
-          optionalString config.networking.enableIPv6 " -a ::"
-        ;
-      };
+    systemd.services.oidentd = {
+      after = [ "network-interfaces.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "forking";
+      script = "${pkgs.oidentd}/sbin/oidentd -u oidentd -g nogroup" +
+          optionalString config.networking.enableIPv6 " -a ::";
+    };
 
     users.extraUsers.oidentd = {
       description = "Ident Protocol daemon user";

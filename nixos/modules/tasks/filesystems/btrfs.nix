@@ -31,13 +31,5 @@ in
       ''
         btrfs device scan
       '';
-
-    # !!! This is broken.  There should be a udev rule to do this when
-    # new devices are discovered.
-    jobs.udev.postStart =
-      ''
-        ${pkgs.btrfs-progs}/bin/btrfs device scan
-      '';
-
   };
 }

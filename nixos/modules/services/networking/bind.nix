@@ -142,20 +142,17 @@ in
         description = "BIND daemon user";
       };
 
-    jobs.bind =
-      { description = "BIND name server job";
+    systemd.services.bind = {
+      description = "BIND name server job";
+      after = [ "network-interfaces.target" ];
+      wantedBy = [ "multi-user.target" ];
 
-        startOn = "started network-interfaces";
+      preStart = ''
+        ${pkgs.coreutils}/bin/mkdir -p /var/run/named
+        chown ${bindUser} /var/run/named
+      '';
 
-        preStart =
-          ''
-            ${pkgs.coreutils}/bin/mkdir -p /var/run/named
-            chown ${bindUser} /var/run/named
-          '';
-
-        exec = "${pkgs.bind}/sbin/named -u ${bindUser} ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} -f";
-      };
-
+      script = "${pkgs.bind}/sbin/named -u ${bindUser} ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} -f";
+    };
   };
-
 }

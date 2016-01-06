@@ -180,31 +180,36 @@ in
 
     environment.systemPackages = [ pkgs.nut ];
 
-    jobs.upsmon = {
+    systemd.services.upsmon = {
       description = "Uninterruptible Power Supplies (Monitor)";
-      startOn = "ip-up";
-      daemonType = "fork";
-      exec = ''${pkgs.nut}/sbin/upsmon'';
+      wantedBy = [ "ip-up.target" ];
+      serviceConfig.Type = "forking";
+      script = "${pkgs.nut}/sbin/upsmon";
       environment.NUT_CONFPATH = "/etc/nut/";
       environment.NUT_STATEPATH = "/var/lib/nut/";
     };
 
-    jobs.upsd = {
+    systemd.services.upsd = {
       description = "Uninterruptible Power Supplies (Daemon)";
-      startOn = "started network-interfaces and started upsmon";
-      daemonType = "fork";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-interfaces.target" "upsmon.service" ];
+      serviceConfig.Type = "forking";
       # TODO: replace 'root' by another username.
-      exec = ''${pkgs.nut}/sbin/upsd -u root'';
+      script = "${pkgs.nut}/sbin/upsd -u root";
       environment.NUT_CONFPATH = "/etc/nut/";
       environment.NUT_STATEPATH = "/var/lib/nut/";
     };
 
-    jobs.upsdrv = {
+    systemd.services.upsdrv = {
       description = "Uninterruptible Power Supplies (Register all UPS)";
-      startOn = "started upsd";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "upsd.service" ];
       # TODO: replace 'root' by another username.
-      exec = ''${pkgs.nut}/bin/upsdrvctl -u root start'';
-      task = true;
+      script = ''${pkgs.nut}/bin/upsdrvctl -u root start'';
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
       environment.NUT_CONFPATH = "/etc/nut/";
       environment.NUT_STATEPATH = "/var/lib/nut/";
     };

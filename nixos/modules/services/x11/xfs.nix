@@ -30,20 +30,17 @@ in
   ###### implementation
 
   config = mkIf config.services.xfs.enable {
-
     assertions = singleton
       { assertion = config.fonts.enableFontDir;
         message = "Please enable fonts.enableFontDir to use the X Font Server.";
       };
 
-    jobs.xfs =
-      { description = "X Font Server";
-
-        startOn = "started networking";
-
-        exec = "${pkgs.xorg.xfs}/bin/xfs -config ${configFile}";
-      };
-
+    systemd.services.xfs = {
+      description = "X Font Server";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.xorg.xfs ];
+      script = "xfs -config ${configFile}";
+    };
   };
-
 }

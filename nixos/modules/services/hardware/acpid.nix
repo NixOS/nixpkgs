@@ -98,21 +98,25 @@ in
 
   config = mkIf config.services.acpid.enable {
 
-    jobs.acpid =
-      { description = "ACPI Daemon";
+    systemd.services.acpid = {
+      description = "ACPI Daemon";
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "systemd-udev-settle.service" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "systemd-udev-settle.service" ];
 
-        path = [ pkgs.acpid ];
+      path = [ pkgs.acpid ];
 
-        daemonType = "fork";
-
-        exec = "acpid --confdir ${acpiConfDir}";
-
-        unitConfig.ConditionVirtualization = "!systemd-nspawn";
-        unitConfig.ConditionPathExists = [ "/proc/acpi" ];
+      serviceConfig = {
+        Type = "forking";
       };
+
+      unitConfig = {
+        ConditionVirtualization = "!systemd-nspawn";
+        ConditionPathExists = [ "/proc/acpi" ];
+      };
+
+      script = "acpid --confdir ${acpiConfDir}";
+    };
 
   };
 

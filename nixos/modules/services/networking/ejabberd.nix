@@ -56,81 +56,73 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.ejabberd ];
 
-    jobs.ejabberd =
-      { description = "EJabberd server";
+    systemd.services.ejabberd = {
+      description = "EJabberd server";
+      after = [ "network-interfaces.target" ];
+      wantedBy = [ "multi-user.target" ];
+      path = with pkgs; [ ejabberd coreutils bash gnused ];
 
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
+      preStart = ''
+        # Initialise state data
+        mkdir -p ${cfg.logsDir}
 
-        environment = {
-          PATH = "$PATH:${pkgs.ejabberd}/sbin:${pkgs.ejabberd}/bin:${pkgs.coreutils}/bin:${pkgs.bash}/bin:${pkgs.gnused}/bin";
-        };
+        if ! test -d ${cfg.spoolDir}
+        then
+            initialize=1
+            cp -av ${pkgs.ejabberd}/var/lib/ejabberd /var/lib
+        fi
 
-        preStart =
+        if ! test -d ${cfg.confDir}
+        then
+            mkdir -p ${cfg.confDir}
+            cp ${pkgs.ejabberd}/etc/ejabberd/* ${cfg.confDir}
+            sed -e 's|{hosts, \["localhost"\]}.|{hosts, \[${cfg.virtualHosts}\]}.|' ${pkgs.ejabberd}/etc/ejabberd/ejabberd.cfg > ${cfg.confDir}/ejabberd.cfg
+        fi
+
+        ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} start
+
+        ${if cfg.loadDumps == [] then "" else
           ''
-            PATH="$PATH:${pkgs.ejabberd}/sbin:${pkgs.ejabberd}/bin:${pkgs.coreutils}/bin:${pkgs.bash}/bin:${pkgs.gnused}/bin";
-	    
-            # Initialise state data
-            mkdir -p ${cfg.logsDir}
-
-            if ! test -d ${cfg.spoolDir}
+            if [ "$initialize" = "1" ]
             then
-                initialize=1
-                cp -av ${pkgs.ejabberd}/var/lib/ejabberd /var/lib
+                # Wait until the ejabberd server is available for use
+                count=0
+                while ! ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} status
+                do
+                    if [ $count -eq 30 ]
+                    then
+                        echo "Tried 30 times, giving up..."
+                        exit 1
+                    fi
+
+                    echo "Ejabberd daemon not yet started. Waiting for 1 second..."
+                    count=$((count++))
+                    sleep 1
+                done
+
+                ${concatMapStrings (dump:
+                  ''
+                    echo "Importing dump: ${dump}"
+
+                    if [ -f ${dump} ]
+                    then
+                        ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} load ${dump}
+                    elif [ -d ${dump} ]
+                    then
+                        for i in ${dump}/ejabberd-dump/*
+                        do
+                            ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} load $i
+                        done
+                    fi
+                  '') cfg.loadDumps}
             fi
+          ''}
+      '';
 
-            if ! test -d ${cfg.confDir}
-            then
-                mkdir -p ${cfg.confDir}
-                cp ${pkgs.ejabberd}/etc/ejabberd/* ${cfg.confDir}
-                sed -e 's|{hosts, \["localhost"\]}.|{hosts, \[${cfg.virtualHosts}\]}.|' ${pkgs.ejabberd}/etc/ejabberd/ejabberd.cfg > ${cfg.confDir}/ejabberd.cfg
-            fi
-
-            ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} start
-
-            ${if cfg.loadDumps == [] then "" else
-              ''
-                if [ "$initialize" = "1" ]
-                then
-                    # Wait until the ejabberd server is available for use
-                    count=0
-                    while ! ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} status
-                    do
-                        if [ $count -eq 30 ]
-                        then
-                            echo "Tried 30 times, giving up..."
-                            exit 1
-                        fi
-
-                        echo "Ejabberd daemon not yet started. Waiting for 1 second..."
-                        count=$((count++))
-                        sleep 1
-                    done
-
-                    ${concatMapStrings (dump:
-                      ''
-                        echo "Importing dump: ${dump}"
-
-                        if [ -f ${dump} ]
-                        then
-                            ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} load ${dump}
-                        elif [ -d ${dump} ]
-                        then
-                            for i in ${dump}/ejabberd-dump/*
-                            do
-                                ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} load $i
-                            done
-                        fi
-                      '') cfg.loadDumps}
-                fi
-              ''}
-          '';
-
-        postStop =
-          ''
-            ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} stop
-          '';
-      };
+      postStop = ''
+        ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} stop
+      '';
+    };
 
     security.pam.services.ejabberd = {};
 

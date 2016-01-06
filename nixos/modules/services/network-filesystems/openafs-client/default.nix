@@ -72,34 +72,28 @@ in
       }
     ];
 
-    jobs.openafsClient =
-      { name = "afsd";
+    systemd.services.afsd = {
+      description = "AFS client";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-interfaces.target" ];
 
-        description = "AFS client";
+      preStart = ''
+        mkdir -p -m 0755 /afs
+        mkdir -m 0700 -p ${cfg.cacheDirectory}
+        ${pkgs.module_init_tools}/sbin/insmod ${openafsPkgs}/lib/openafs/libafs-*.ko || true
+        ${openafsPkgs}/sbin/afsd -confdir ${afsConfig} -cachedir ${cfg.cacheDirectory} ${if cfg.sparse then "-dynroot-sparse" else "-dynroot"} -fakestat -afsdb
+        ${openafsPkgs}/bin/fs setcrypt ${if cfg.crypt then "on" else "off"}
+      '';
 
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
-
-        preStart = ''
-          mkdir -p -m 0755 /afs
-          mkdir -m 0700 -p ${cfg.cacheDirectory}
-          ${pkgs.module_init_tools}/sbin/insmod ${openafsPkgs}/lib/openafs/libafs-*.ko || true
-          ${openafsPkgs}/sbin/afsd -confdir ${afsConfig} -cachedir ${cfg.cacheDirectory} ${if cfg.sparse then "-dynroot-sparse" else "-dynroot"} -fakestat -afsdb
-          ${openafsPkgs}/bin/fs setcrypt ${if cfg.crypt then "on" else "off"}
-        '';
-
-        # Doing this in preStop, because after these commands AFS is basically
-        # stopped, so systemd has nothing to do, just noticing it.  If done in
-        # postStop, then we get a hang + kernel oops, because AFS can't be
-        # stopped simply by sending signals to processes.
-        preStop = ''
-          ${pkgs.utillinux}/bin/umount /afs
-          ${openafsPkgs}/sbin/afsd -shutdown
-          ${pkgs.module_init_tools}/sbin/rmmod libafs
-        '';
-
-      };
-
+      # Doing this in preStop, because after these commands AFS is basically
+      # stopped, so systemd has nothing to do, just noticing it.  If done in
+      # postStop, then we get a hang + kernel oops, because AFS can't be
+      # stopped simply by sending signals to processes.
+      preStop = ''
+        ${pkgs.utillinux}/bin/umount /afs
+        ${openafsPkgs}/sbin/afsd -shutdown
+        ${pkgs.module_init_tools}/sbin/rmmod libafs
+      '';
+    };
   };
-
 }

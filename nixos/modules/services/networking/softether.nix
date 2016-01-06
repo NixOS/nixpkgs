@@ -61,9 +61,10 @@ in
             dataDir = cfg.dataDir;
           }))
         ];
-      jobs.softether = {
+      systemd.services.softether = {
         description = "SoftEther VPN services initial job";
-        startOn = "started network-interfaces";
+        after = [ "network-interfaces.target" ];
+        wantedBy = [ "multi-user.target" ];
         preStart = ''
             for d in vpnserver vpnbridge vpnclient vpncmd; do
                 if ! test -e ${cfg.dataDir}/$d; then
@@ -74,7 +75,6 @@ in
             rm -rf ${cfg.dataDir}/vpncmd/vpncmd
             ln -s ${pkg}${cfg.dataDir}/vpncmd/vpncmd ${cfg.dataDir}/vpncmd/vpncmd
         '';
-        exec = "true";
       };
     }
 
