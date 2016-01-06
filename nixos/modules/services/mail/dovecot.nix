@@ -162,7 +162,7 @@ in
     enablePAM = mkOption {
       type = types.bool;
       default = true;
-      description = "Wether to create a own Dovecot PAM service and configure PAM user logins.";
+      description = "Whether to create a own Dovecot PAM service and configure PAM user logins.";
     };
 
     showPAMFailure = mkOption {
@@ -211,6 +211,7 @@ in
 
       serviceConfig = {
         ExecStart = "${dovecotPkg}/sbin/dovecot -F -c ${cfg.configFile}";
+        ExecReload = "${dovecotPkg}/sbin/doveadm reload -c ${cfg.configFile}";
         Restart = "on-failure";
         RestartSec = "1s";
         StartLimitInterval = "1min";
