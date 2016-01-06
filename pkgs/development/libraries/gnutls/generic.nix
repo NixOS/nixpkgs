@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = !guileBindings;
 
   buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen ]
-    ++ lib.optional (stdenv.isDarwin) libiconv
+    ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ [ unbound ]
     ++ lib.optional guileBindings guile;

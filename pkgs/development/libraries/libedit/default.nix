@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patches = if stdenv.isCygwin then [
     ./01-cygwin.patch
-  ] else null;
+  ] else [ ] ++ [ ./freebsd-wchar.patch ];
 
   postInstall = ''
     find $out/lib -type f | grep '\.\(la\|pc\)''$' | xargs sed -i \

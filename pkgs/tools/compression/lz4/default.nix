@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   doCheck = false; # tests take a very long time
   checkTarget = "test";
 
+  patches = [ ./install-on-freebsd.patch ] ;
+
   meta = with stdenv.lib; {
     inherit version;
     description = "Extremely fast compression algorithm";

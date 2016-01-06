@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
   # (Windows' linker would need to be used somehow to produce an actual
   # DLL.)  Thus, build the static library too, and this is what Gettext
   # will actually use.
-  configureFlags = if stdenv.isCygwin then [ "--enable-static" ] else null;
+  configureFlags = if stdenv.isCygwin then [ "--enable-static" ] else
+                   if stdenv.isFreeBSD then [ "--with-pic" ] else null;
 
   crossAttrs = {
     # Disable stripping to avoid "libiconv.a: Archive has no index" (MinGW).
