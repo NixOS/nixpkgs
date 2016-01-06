@@ -793,6 +793,7 @@ let
     "bedr" # broken build
     "BEST"
     "betr" # broken build
+    "bdynsys" # depends on broken package car-2.1
     "bgmm" # depends on broken package nlopt-2.4.2
     "bgx" # depends on broken package affyio-1.37.0
     "BicARE" # broken build
@@ -983,6 +984,7 @@ let
     "CSAR" # broken build
     "csaw" # depends on broken package Rsamtools-1.21.8
     "ctsem" # depends on broken package r-OpenMx-2.2.6
+    "cquad" # depends on broken package car-2.1-1
     "cudaBayesreg" # build is broken
     "cummeRbund" # depends on broken package Rsamtools-1.21.8
     "curvHDR" # broken build
@@ -1655,6 +1657,7 @@ let
     "OGSA" # broken build
     "oligoClasses" # depends on broken package affyio-1.37.0
     "oligo" # depends on broken package affyio-1.37.0
+    "omics" # depends on broken package lme4-1.1-10
     "OmicCircos" # broken build
     "omics" # depends on broken package lme4-1.1-10
     "OmicsMarkeR" # depends on broken package nlopt-2.4.2
@@ -1859,6 +1862,7 @@ let
     "rbsurv" # broken build
     "rbundler" # broken build
     "Rcade" # depends on broken package Rsamtools-1.21.8
+    "RANKS" # depends on broken package graph-1.48.0
     "rcellminer" # broken build
     "rCGH" # depends on broken package r-affy-1.47.1
     "Rchemcpp" # depends on broken package ChemmineR-2.21.7
