@@ -327,21 +327,20 @@ rec {
       dropinProp = "-D${dropinPropName}=${pluginEnv}/eclipse/dropins";
       jvmArgsText = stdenv.lib.concatStringsSep "\n" (jvmArgs ++ [dropinProp]);
 
-      # Prepare an eclipse.ini with the plugin directory.
-      origEclipseIni = builtins.readFile "${eclipse}/eclipse/eclipse.ini";
-      eclipseIniFile = writeText "eclipse.ini" ''
-        ${origEclipseIni}
-        ${jvmArgsText}
-      '';
-
       # Base the derivation name on the name of the underlying
       # Eclipse.
       name = (stdenv.lib.meta.appendToName "with-plugins" eclipse).name;
     in
       runCommand name { buildInputs = [ makeWrapper ]; } ''
-        mkdir -p $out/bin
+        mkdir -p $out/bin $out/etc
+
+        # Prepare an eclipse.ini with the plugin directory.
+        cat ${eclipse}/eclipse/eclipse.ini - > $out/etc/eclipse.ini <<EOF
+        ${jvmArgsText}
+        EOF
+
         makeWrapper ${eclipse}/bin/eclipse $out/bin/eclipse \
-          --add-flags "--launcher.ini ${eclipseIniFile}"
+          --add-flags "--launcher.ini $out/etc/eclipse.ini"
 
         ln -s ${eclipse}/share $out/
       '';
