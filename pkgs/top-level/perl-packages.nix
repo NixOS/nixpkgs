@@ -4757,7 +4757,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Simple and Efficient Reading/Writing/Modifying of Complete Files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -6601,7 +6601,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Provide https support for LWP::UserAgent";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
