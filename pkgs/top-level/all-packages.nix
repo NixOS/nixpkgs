@@ -7424,8 +7424,6 @@ let
 
   libmspack = callPackage ../development/libraries/libmspack { };
 
-  libmusclecard = callPackage ../development/libraries/libmusclecard { };
-
   libmusicbrainz2 = callPackage ../development/libraries/libmusicbrainz/2.x.nix { };
 
   libmusicbrainz3 = callPackage ../development/libraries/libmusicbrainz { };
