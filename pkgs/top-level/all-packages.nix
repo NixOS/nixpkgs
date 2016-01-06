@@ -15037,6 +15037,8 @@ let
 
     flocq = callPackage ../development/coq-modules/flocq {};
 
+    interval = callPackage ../development/coq-modules/interval {};
+
     mathcomp = callPackage ../development/coq-modules/mathcomp { };
 
     ssreflect = callPackage ../development/coq-modules/ssreflect { };
