@@ -1564,8 +1564,6 @@ let
 
   ftop = callPackage ../os-specific/linux/ftop { };
 
-  fuppes = callPackage ../tools/networking/fuppes { };
-
   fsfs = callPackage ../tools/filesystems/fsfs { };
 
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
