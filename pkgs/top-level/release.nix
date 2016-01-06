@@ -45,6 +45,10 @@ let
               jobs.thunderbird.i686-linux
               jobs.glib-tested.x86_64-linux # standard glib doesn't do checks
               jobs.glib-tested.i686-linux
+              # Ensure that basic stuff works on darwin
+              jobs.git.x86_64-darwin
+              jobs.mysql.x86_64-darwin
+              jobs.vim.x86_64-darwin
             ] ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools;
         };
 
@@ -55,10 +59,24 @@ let
         { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "x86_64-linux"; }) dist test; };
 
       stdenvBootstrapTools.x86_64-darwin =
-        { inherit (import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; }) dist test; };
+        let
+          bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; };
+        in {
+          # Lightweight distribution and test
+          inherit (bootstrap) dist test;
+          # Test a full stdenv bootstrap from the bootstrap tools definition
+          inherit (bootstrap.test-pkgs) stdenv;
+        };
 
     } // (mapTestOn ((packagePlatforms pkgs) // rec {
 
+      # TODO: most (but possibly not all) of the jobs specified here are unnecessary now that we have release-lib.nix
+      # traversing all packages and looking at their meta.platform attributes. Someone who's better at this than I am
+      # should go through these and kill the ones that are safe to kill.
+      #
+      # <niksnut> note that all that " = linux" stuff in release.nix is legacy, from before we had meta.platforms
+      # <copumpkin> niksnut: so should I just kill all the obsolete jobs in release.nix?
+      # <niksnut> I don't know if they're all covered
       abcde = linux;
       aspell = all;
       atlas = linux;
