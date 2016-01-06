@@ -2747,6 +2747,9 @@ let
 
   plan9port = callPackage ../tools/system/plan9port { };
 
+  platformioPackages = callPackage ../development/arduino/platformio { };
+  platformio = platformioPackages.platformio-chrootenv.override {};
+
   plex = callPackage ../servers/plex { };
 
   ploticus = callPackage ../tools/graphics/ploticus {

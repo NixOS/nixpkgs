@@ -13780,6 +13780,27 @@ in modules // {
     propagatedBuildInputs = with self; [ unittest2 ];
   };
 
+  platformio =  buildPythonPackage rec {
+    name = "platformio-${version}";
+    version="2.7.0";
+
+    disabled = isPy3k || isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/platformio/platformio-${version}.tar.gz";
+      sha256 = "0bjp8gapd8v5az0xvsgh44zyma5kazhhbq266fk092i2q348zbv6";
+     };
+
+     propagatedBuildInputs = with self; [ click_5 requests2 bottle pyserial lockfile colorama];
+
+     meta = with stdenv.lib; {
+     description = "An open source ecosystem for IoT development";
+     homepage = http://platformio.org;
+     maintainers = with maintainers; [ mog ];
+     license = licenses.asl20;
+     };
+  };
+
   pylibconfig2 = buildPythonPackage rec {
     name = "pylibconfig2-${version}";
     version = "0.2.4";
