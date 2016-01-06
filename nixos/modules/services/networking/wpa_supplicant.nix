@@ -46,6 +46,9 @@ in {
               description = ''
                 The network's pre-shared key in plaintext defaulting
                 to being a network without any authentication.
+
+                Be aware that these will be written to the nix store
+                in plaintext!
               '';
             };
           };
