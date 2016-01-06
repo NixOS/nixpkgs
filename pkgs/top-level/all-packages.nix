@@ -13746,8 +13746,6 @@ let
 
   xchainkeys = callPackage ../tools/X11/xchainkeys { };
 
-  xchat = callPackage ../applications/networking/irc/xchat { };
-
   xchm = callPackage ../applications/misc/xchm { };
 
   inherit (xorg) xcompmgr;
