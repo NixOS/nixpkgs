@@ -121,17 +121,11 @@ in
 
     users.extraGroups.ircd.gid = config.ids.gids.ircd;
 
-    jobs.ircd_hybrid =
-      { name = "ircd-hybrid";
-
-        description = "IRCD Hybrid server";
-
-        startOn = "started networking";
-        stopOn = "stopping networking";
-
-        exec = "${ircdService}/bin/control start";
-      };
-
+    systemd.services."ircd-hybrid" = {
+      description = "IRCD Hybrid server";
+      after = [ "started networking" ];
+      wantedBy = [ "multi-user.target" ];
+      script = "${ircdService}/bin/control start";
+    };
   };
-
 }

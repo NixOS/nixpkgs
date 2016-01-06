@@ -164,7 +164,7 @@ in
   # not be started by default on the installation CD because the
   # default root password is empty.
   services.openssh.enable = true;
-  jobs.openssh.startOn = lib.mkOverride 50 "";
+  systemd.services.openssh.wantedBy = lib.mkOverride 50 [];
 
   # cpufrequtils fails to build on non-pc
   powerManagement.enable = false;

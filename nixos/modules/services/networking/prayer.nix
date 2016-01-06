@@ -83,21 +83,14 @@ in
         gid = config.ids.gids.prayer;
       };
 
-    jobs.prayer =
-      { name = "prayer";
-
-        startOn = "startup";
-
-        preStart =
-          ''
-            mkdir -m 0755 -p ${stateDir}
-            chown ${prayerUser}.${prayerGroup} ${stateDir}
-          '';
-
-        daemonType = "daemon";
-
-        exec = "${prayer}/sbin/prayer --config-file=${prayerCfg}";
-      };
+    systemd.services.prayer = {
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "forking";
+      preStart = ''
+        mkdir -m 0755 -p ${stateDir}
+        chown ${prayerUser}.${prayerGroup} ${stateDir}
+      '';
+      script = "${prayer}/sbin/prayer --config-file=${prayerCfg}";
+    };
   };
-
 }

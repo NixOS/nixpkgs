@@ -34,13 +34,11 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    jobs.svnserve = {
-      startOn = "started network-interfaces";
-      stopOn = "stopping network-interfaces";
-
+    systemd.services.svnserve = {
+      after = [ "network-interfaces.target" ];
+      wantedBy = [ "multi-user.target" ];
       preStart = "mkdir -p ${cfg.svnBaseDir}";
-
-      exec = "${pkgs.subversion}/bin/svnserve -r ${cfg.svnBaseDir} -d --foreground --pid-file=/var/run/svnserve.pid";
+      script = "${pkgs.subversion}/bin/svnserve -r ${cfg.svnBaseDir} -d --foreground --pid-file=/var/run/svnserve.pid";
     };
   };
 }

@@ -35,18 +35,13 @@ with lib;
 
     services.dbus.packages = [ pkgs.pommed ];
 
-    jobs.pommed = { name = "pommed";
-
+    systemd.services.pommed = {
       description = "Pommed hotkey management";
-
-      startOn = "started dbus";
-
+      wantedBy = [ "multi-user.target" ];
+      after = [ "dbus.service" ];
       postStop = "rm -f /var/run/pommed.pid";
-
-      exec = "${pkgs.pommed}/bin/pommed";
-
-      daemonType = "fork";
-
+      script = "${pkgs.pommed}/bin/pommed";
+      serviceConfig.Type = "forking";
       path = [ pkgs.eject ];
     };
   };
