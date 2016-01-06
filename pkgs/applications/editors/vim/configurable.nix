@@ -108,26 +108,14 @@ composableDerivation {
 
       // edf {
         name = "python";
-        feat = "pythoninterp";
+        feat = "python${if python ? isPy3 then "3" else ""}interp";
         enable = {
           nativeBuildInputs = [ python ];
         } // lib.optionalAttrs stdenv.isDarwin {
           configureFlags
-            = [ "--enable-pythoninterp=yes"
-                "--with-python-config-dir=${python}/lib" ];
-        };
-      }
-
-      // edf {
-        name = "python3";
-        feat = "python3interp";
-        enable = {
-          nativeBuildInputs = [ pkgs.python3 ];
-        } // lib.optionalAttrs stdenv.isDarwin {
-          configureFlags
-            = [ "--enable-python3interp=yes"
-                "--with-python3-config-dir=${pkgs.python3}/lib"
-                "--disable-pythoninterp" ];
+            = [ "--enable-python${if python ? isPy3 then "3" else ""}interp=yes"
+                "--with-python${if python ? isPy3 then "3" else ""}-config-dir=${python}/lib"
+                "--disable-python${if python ? isPy3 then "" else "3"}interp" ];
         };
       }
 
@@ -160,7 +148,6 @@ composableDerivation {
   cfg = {
     luaSupport       = config.vim.lua or true;
     pythonSupport    = config.vim.python or true;
-    python3Support   = config.vim.python3 or false;
     rubySupport      = config.vim.ruby or true;
     nlsSupport       = config.vim.nls or false;
     tclSupport       = config.vim.tcl or false;
