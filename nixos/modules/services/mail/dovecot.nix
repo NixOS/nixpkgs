@@ -178,22 +178,22 @@ in
     security.pam.services.dovecot2 = mkIf cfg.enablePAM {};
 
     users.extraUsers = [
-      { name = cfg.user;
-        uid = config.ids.uids.dovecot2;
-        description = "Dovecot user";
-        group = cfg.group;
-      }
       { name = "dovenull";
         uid = config.ids.uids.dovenull2;
         description = "Dovecot user for untrusted logins";
         group = cfg.group;
       }
-    ];
+    ] ++ optional (cfg.user == "dovecot2")
+         { name = "dovecot2";
+           uid = config.ids.uids.dovecot2;
+           description = "Dovecot user";
+           group = cfg.group;
+         };
 
-    users.extraGroups = singleton {
-      name = cfg.group;
-      gid = config.ids.gids.dovecot2;
-    };
+    users.extraGroups = optional (cfg.group == "dovecot2")
+      { name = "dovecot2";
+        gid = config.ids.gids.dovecot2;
+      };
 
     systemd.services.dovecot2 = {
       description = "Dovecot IMAP/POP3 server";
