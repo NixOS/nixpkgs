@@ -16420,11 +16420,11 @@ in modules // {
 
 
   requests_oauthlib = buildPythonPackage rec {
-    version = "v0.4.1";
+    version = "0.4.1";
     name = "requests-oauthlib-${version}";
 
     src = pkgs.fetchurl {
-      url = "http://github.com/requests/requests-oauthlib/archive/${version}.tar.gz";
+      url = "http://github.com/requests/requests-oauthlib/archive/v${version}.tar.gz";
       sha256 = "0vx252nzq5h9m9brwnw2ph8aj526y26jr2dqcafzzcdx6z4l8vj4";
     };
 
