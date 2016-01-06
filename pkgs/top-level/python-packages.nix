@@ -19113,6 +19113,12 @@ in modules // {
       sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
     };
 
+    buildInputs = with self; [ nose ];
+
+    checkPhase = ''
+      nosetests toolz/tests
+    '';
+
     meta = {
       homepage = "http://github.com/pytoolz/toolz/";
       description = "List processing tools and functional utilities";
