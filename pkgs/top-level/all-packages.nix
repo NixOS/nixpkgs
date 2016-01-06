@@ -7982,10 +7982,6 @@ let
 
   opencv = callPackage ../development/libraries/opencv { };
 
-  opencv_2_1 = callPackage ../development/libraries/opencv/2.1.nix {
-    libpng = libpng12;
-  };
-
   opencv3 = callPackage ../development/libraries/opencv/3.x.nix { };
 
   # this ctl version is needed by openexr_viewers
