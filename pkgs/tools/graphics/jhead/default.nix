@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, libjpeg }:
 
 stdenv.mkDerivation rec {
   name = "jhead-${version}";
@@ -9,12 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "0pl9s9ssb2a9di82f3ypin2hd098ns8kzdsxw3i2y94f07d03k48";
   };
 
+  buildInputs = [ libjpeg ];
+
   patchPhase = ''
     substituteInPlace makefile \
       --replace /usr/local/bin $out/bin
 
     substituteInPlace jhead.c \
-      --replace "\"   Compiled: \"__DATE__" ""
+      --replace "\"   Compiled: \"__DATE__" "" \
+      --replace "jpegtran -trim" "${libjpeg}/bin/jpegtran -trim"
   '';
 
   installPhase = ''
