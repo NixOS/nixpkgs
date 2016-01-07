@@ -14259,10 +14259,6 @@ let
     openglSupport = mesaSupported;
   };
 
-  rigsofrods = callPackage ../games/rigsofrods {
-    mygui = myguiSvn;
-  };
-
   rili = callPackage ../games/rili { };
 
   rogue = callPackage ../games/rogue { };
