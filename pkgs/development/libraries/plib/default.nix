@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0cha71mflpa10vh2l7ipyqk67dq2y0k5xbafwdks03fwdyzj4ns8";
   };
 
+  patches = [ ./CVE-2012-4552.patch ];
+
   NIX_CFLAGS_COMPILE = if enablePIC then "-fPIC" else "";
 
   propagatedBuildInputs = [
