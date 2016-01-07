@@ -409,21 +409,6 @@ let
     };
   };
 
-  dash = melpaBuild rec {
-    pname   = "dash";
-    version = "2.12.1";
-    src = fetchFromGitHub {
-      owner  = "magnars";
-      repo   = "${pname}.el";
-      rev    = version;
-      sha256 = "1njv5adcm96kdch0jb941l8pm51yfdx7mlz83y0pq6jlzjs9mwaa";
-    };
-    meta = {
-      description = "A modern list library for Emacs (think Haskell's Prelude in elisp)";
-      license = gpl3Plus;
-    };
-  };
-
   dash-functional = melpaBuild rec {
     pname = "dash-functional";
       version = "2.11.0";
