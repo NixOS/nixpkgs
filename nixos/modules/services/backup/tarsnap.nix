@@ -5,8 +5,8 @@ with lib;
 let
   cfg = config.services.tarsnap;
 
-  configFile = name: cfg: ''
-    cachedir ${config.services.tarsnap.cachedir}/${name}
+  configFile = cfg: ''
+    cachedir ${config.services.tarsnap.cachedir}
     keyfile  ${config.services.tarsnap.keyfile}
     ${optionalString cfg.nodump "nodump"}
     ${optionalString cfg.printStats "print-stats"}
@@ -56,12 +56,6 @@ in
           Should the cache become desynchronized or corrupted, tarsnap
           will refuse to run until you manually rebuild the cache with
           <command>tarsnap --fsck</command>.
-
-          Note that each individual archive (specified below) has its own cache
-          directory specified under <literal>cachedir</literal>; this is because
-          tarsnap locks the cache during backups, meaning multiple services
-          archives cannot be backed up concurrently or overlap with a shared
-          cache.
 
           Set to <literal>null</literal> to disable caching.
         '';
@@ -257,7 +251,6 @@ in
         mkdir -p -m 0700 ${cfg.cachedir}
         chown root:root ${cfg.cachedir}
         chmod 0700 ${cfg.cachedir}
-        mkdir -p -m 0700 ${cfg.cachedir}/$1
         DIRS=`cat /etc/tarsnap/$1.dirs`
         exec tarsnap --configfile /etc/tarsnap/$1.conf -c -f $1-$(date +"%Y%m%d%H%M%S") $DIRS
       '';
@@ -276,7 +269,7 @@ in
 
     environment.etc =
       (mapAttrs' (name: cfg: nameValuePair "tarsnap/${name}.conf"
-        { text = configFile name cfg;
+        { text = configFile cfg;
         }) cfg.archives) //
       (mapAttrs' (name: cfg: nameValuePair "tarsnap/${name}.dirs"
         { text = concatStringsSep " " cfg.directories;
