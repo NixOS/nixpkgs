@@ -869,6 +869,7 @@ self: super: {
   "SpaceInvaders" = dontDistribute super."SpaceInvaders";
   "SpacePrivateers" = dontDistribute super."SpacePrivateers";
   "SpinCounter" = dontDistribute super."SpinCounter";
+  "Spintax" = dontDistribute super."Spintax";
   "Spock" = doDistribute super."Spock_0_8_1_0";
   "Spock-auth" = dontDistribute super."Spock-auth";
   "Spock-digestive" = doDistribute super."Spock-digestive_0_1_0_1";
@@ -953,6 +954,7 @@ self: super: {
   "Vec-OpenGLRaw" = dontDistribute super."Vec-OpenGLRaw";
   "Vec-Transform" = dontDistribute super."Vec-Transform";
   "VecN" = dontDistribute super."VecN";
+  "Verba" = dontDistribute super."Verba";
   "ViennaRNA-bindings" = dontDistribute super."ViennaRNA-bindings";
   "ViennaRNAParser" = dontDistribute super."ViennaRNAParser";
   "WAVE" = dontDistribute super."WAVE";
@@ -1293,6 +1295,7 @@ self: super: {
   "arff" = dontDistribute super."arff";
   "arghwxhaskell" = dontDistribute super."arghwxhaskell";
   "argon" = dontDistribute super."argon";
+  "argon2" = dontDistribute super."argon2";
   "argparser" = dontDistribute super."argparser";
   "arguedit" = dontDistribute super."arguedit";
   "ariadne" = dontDistribute super."ariadne";
@@ -2328,6 +2331,7 @@ self: super: {
   "datetime-sb" = dontDistribute super."datetime-sb";
   "dawdle" = dontDistribute super."dawdle";
   "dawg" = dontDistribute super."dawg";
+  "dawg-ord" = dontDistribute super."dawg-ord";
   "dbcleaner" = dontDistribute super."dbcleaner";
   "dbf" = dontDistribute super."dbf";
   "dbjava" = dontDistribute super."dbjava";
@@ -2777,6 +2781,7 @@ self: super: {
   "extensible-data" = dontDistribute super."extensible-data";
   "extensible-effects" = dontDistribute super."extensible-effects";
   "external-sort" = dontDistribute super."external-sort";
+  "extra" = doDistribute super."extra_1_4_2";
   "extract-dependencies" = dontDistribute super."extract-dependencies";
   "extractelf" = dontDistribute super."extractelf";
   "ez-couch" = dontDistribute super."ez-couch";
@@ -3056,6 +3061,7 @@ self: super: {
   "gdiff" = dontDistribute super."gdiff";
   "gdiff-ig" = dontDistribute super."gdiff-ig";
   "gdiff-th" = dontDistribute super."gdiff-th";
+  "gdo" = dontDistribute super."gdo";
   "gearbox" = dontDistribute super."gearbox";
   "geek" = dontDistribute super."geek";
   "geek-server" = dontDistribute super."geek-server";
@@ -3517,6 +3523,7 @@ self: super: {
   "haeredes" = dontDistribute super."haeredes";
   "haggis" = dontDistribute super."haggis";
   "haha" = dontDistribute super."haha";
+  "haiji" = dontDistribute super."haiji";
   "hailgun" = dontDistribute super."hailgun";
   "hailgun-send" = dontDistribute super."hailgun-send";
   "hails" = dontDistribute super."hails";
@@ -4449,6 +4456,7 @@ self: super: {
   "inflist" = dontDistribute super."inflist";
   "influxdb" = dontDistribute super."influxdb";
   "informative" = dontDistribute super."informative";
+  "ini" = doDistribute super."ini_0_3_2";
   "inilist" = dontDistribute super."inilist";
   "inject" = dontDistribute super."inject";
   "inject-function" = dontDistribute super."inject-function";
@@ -5823,6 +5831,7 @@ self: super: {
   "pipes-cellular-csv" = dontDistribute super."pipes-cellular-csv";
   "pipes-cereal" = dontDistribute super."pipes-cereal";
   "pipes-cereal-plus" = dontDistribute super."pipes-cereal-plus";
+  "pipes-concurrency" = doDistribute super."pipes-concurrency_2_0_4";
   "pipes-conduit" = dontDistribute super."pipes-conduit";
   "pipes-core" = dontDistribute super."pipes-core";
   "pipes-courier" = dontDistribute super."pipes-courier";
@@ -7448,6 +7457,7 @@ self: super: {
   "turing-music" = dontDistribute super."turing-music";
   "turkish-deasciifier" = dontDistribute super."turkish-deasciifier";
   "turni" = dontDistribute super."turni";
+  "turtle" = doDistribute super."turtle_1_2_4";
   "tweak" = dontDistribute super."tweak";
   "twentefp" = dontDistribute super."twentefp";
   "twentefp-eventloop-graphics" = dontDistribute super."twentefp-eventloop-graphics";
