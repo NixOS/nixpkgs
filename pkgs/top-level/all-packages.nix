@@ -12520,6 +12520,8 @@ let
 
   mozplugger = callPackage ../applications/networking/browsers/mozilla-plugins/mozplugger {};
 
+  mozjpeg = callPackage ../applications/graphics/mozjpeg { };
+
   easytag = callPackage ../applications/audio/easytag { };
 
   mp3gain = callPackage ../applications/audio/mp3gain { };
