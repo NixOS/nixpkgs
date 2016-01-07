@@ -2,7 +2,7 @@
 , lndir, makeWrapper }:
 
 let
-  version = "5.4.2";
+  version = "5.5.1";
 in stdenv.mkDerivation {
   name = "${python.libPrefix}-PyQt-${version}";
 
@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt-gpl-${version}.tar.gz";
-    sha256 = "1402n5kwzd973b65avxk1j9js96wzfm0yw4rshjfy8l7an00bnac";
+    sha256 = "11l3pm0wkwkxzw4n3022iid3yyia5ap4l0ny1m5ngkzzzfafyw0a";
   };
 
   buildInputs = [

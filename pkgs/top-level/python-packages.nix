@@ -166,7 +166,7 @@ in modules // {
   pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix {
     sip = self.sip_4_16;
     pythonDBus = self.dbus;
-    inherit (pkgs.qt5) qtbase qtsvg qtwebkit;
+    inherit (pkgs.qt55) qtbase qtsvg qtwebkit;
   };
 
   pyside = callPackage ../development/python-modules/pyside { };
