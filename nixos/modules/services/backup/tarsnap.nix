@@ -7,7 +7,7 @@ let
 
   configFile = name: cfg: ''
     cachedir ${config.services.tarsnap.cachedir}/${name}
-    keyfile  ${config.services.tarsnap.keyfile}
+    keyfile  ${cfg.keyfile}
     ${optionalString cfg.nodump "nodump"}
     ${optionalString cfg.printStats "print-stats"}
     ${optionalString cfg.printStats "humanize-numbers"}
@@ -41,6 +41,20 @@ in
           account.
           Create the keyfile with <command>tarsnap-keygen</command>.
 
+          Note that each individual archive (specified below) may also have its
+          own individual keyfile specified. Tarsnap does not allow multiple
+          concurrent backups with the same cache directory and key (starting a
+          new backup will cause another one to fail). If you have multiple
+          archives specified, you should either spread out your backups to be
+          far apart, or specify a separate key for each archive. By default
+          every archive defaults to using
+          <literal>"/root/tarsnap.key"</literal>.
+
+          It's recommended for backups that you generate a key for every archive
+          using <literal>tarsnap-keygen(1)</literal>, and then generate a
+          write-only tarsnap key using <literal>tarsnap-keymgmt(1)</literal>,
+          and keep your master key(s) for a particular machine off-site.
+
           The keyfile name should be given as a string and not a path, to
           avoid the key being copied into the Nix store.
         '';
@@ -71,6 +85,28 @@ in
         type = types.attrsOf (types.submodule (
           {
             options = {
+              keyfile = mkOption {
+                type = types.str;
+                default = config.services.tarsnap.keyfile;
+                description = ''
+                  Set a specific keyfile for this archive. This defaults to
+                  <literal>"/root/tarsnap.key"</literal> if left unspecified.
+
+                  Use this option if you want to run multiple backups
+                  concurrently - each archive must have a unique key. You can
+                  generate a write-only key derived from your master key (which
+                  is recommended) using <literal>tarsnap-keymgmt(1)</literal>.
+
+                  Note: every archive must have an individual master key. You
+                  must generate multiple keys with
+                  <literal>tarsnap-keygen(1)</literal>, and then generate write
+                  only keys from those.
+
+                  The keyfile name should be given as a string and not a path, to
+                  avoid the key being copied into the Nix store.
+                '';
+              };
+
               nodump = mkOption {
                 type = types.bool;
                 default = true;
