@@ -317,7 +317,7 @@ rec {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.20.nix { };
     };
 
-    lts-4_0 = packages.ghc7102.override {
+    lts-4_0 = packages.ghc7103.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-4.0.nix { };
     };
 
