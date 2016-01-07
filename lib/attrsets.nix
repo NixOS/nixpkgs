@@ -113,10 +113,12 @@ rec {
      foldAttrs (n: a: [n] ++ a) [] [{ a = 2; } { a = 3; }]
      => { a = [ 2 3 ]; }
   */
-  foldAttrs = op: nul: list_of_attrs:
+  foldAttrs = op: foldAttrsWithKey (k: op);
+
+  foldAttrsWithKey = op: nul: list_of_attrs:
     fold (n: a:
         fold (name: o:
-          o // (listToAttrs [{inherit name; value = op n.${name} (a.${name} or nul); }])
+          o // (listToAttrs [{inherit name; value = op name n.${name} (a.${name} or nul); }])
         ) a (attrNames n)
     ) {} list_of_attrs;
 
