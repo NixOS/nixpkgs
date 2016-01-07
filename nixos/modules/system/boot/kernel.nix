@@ -197,9 +197,6 @@ in
         "hid_generic" "hid_lenovo"
         "hid_apple" "hid_logitech_dj" "hid_lenovo_tpkbd" "hid_roccat"
 
-        # Unix domain sockets (needed by udev).
-        "unix"
-
         # Misc. stuff.
         "pcips2" "atkbd"
 
