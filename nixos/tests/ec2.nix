@@ -125,8 +125,8 @@ in {
     name         = "config-userdata";
     sshPublicKey = snakeOilPublicKey;
 
+    # ### http://nixos.org/channels/nixos-unstable nixos
     userData = ''
-      ### http://nixos.org/channels/nixos-unstable nixos
       {
         imports = [
           <nixpkgs/nixos/modules/virtualisation/amazon-image.nix>
