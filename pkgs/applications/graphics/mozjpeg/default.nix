@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, file, libpng, nasm }:
+{ stdenv, fetchurl, file, pkgconfig, libpng, nasm }:
 
 stdenv.mkDerivation rec {
   version = "3.1";
@@ -10,11 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-
     sed -i -e "s!/usr/bin/file!${file}/bin/file!g" configure
   '';
 
-  buildInputs = [ libpng nasm ];
+  buildInputs = [ libpng pkgconfig nasm ];
 
   meta = {
     description = "Mozilla JPEG Encoder Project";
