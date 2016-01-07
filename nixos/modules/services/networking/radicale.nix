@@ -33,16 +33,14 @@ in
   };
 
   config = mkIf cfg.enable {
-
     environment.systemPackages = [ pkgs.pythonPackages.radicale ];
 
-    jobs.radicale = {
+    systemd.services.radicale = {
       description = "A Simple Calendar and Contact Server";
-      startOn = "started network-interfaces";
-      exec = "${pkgs.pythonPackages.radicale}/bin/radicale -C ${confFile} -d";
-      daemonType = "fork";
+      after = [ "network-interfaces.target" ];
+      wantedBy = [ "multi-user.target" ];
+      script = "${pkgs.pythonPackages.radicale}/bin/radicale -C ${confFile} -d";
+      serviceConfig.Type = "forking";
     };
-
   };
-
 }

@@ -78,8 +78,8 @@ in
       bot_replaypath = replays
     '';
 
-    jobs.ghostOne = {
-      name = "ghost-one";
+    systemd.services."ghost-one" = {
+      wantedBy = [ "multi-user.target" ];
       script = ''
         mkdir -p ${stateDir}
         cd ${stateDir}
