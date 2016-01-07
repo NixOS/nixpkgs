@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "llvm-libunwind-${version}";
 
-  src = fetch "libunwind" "0nyar9xs42jlxhzxdapicpmr031aa89gsbccmwglm9gkp4q0yq3a";
+  src = fetch "libunwind" "1ys9z41nr1l3k6vj0mas1qz24bd5fa9kggkapv4d7rf2ad9497xn";
 
   buildInputs = [ cmake llvm ];
   cmakeFlags = "-DLIBUNWIND_ENABLE_SHARED=0";
