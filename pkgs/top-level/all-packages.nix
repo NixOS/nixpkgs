@@ -8525,7 +8525,9 @@ let
     python = python2;
   };
 
-  thrift = callPackage ../development/libraries/thrift { };
+  thrift = callPackage ../development/libraries/thrift {
+    inherit (pythonPackages) twisted;
+  };
 
   tidyp = callPackage ../development/libraries/tidyp { };
 
