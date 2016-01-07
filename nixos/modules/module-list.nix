@@ -323,7 +323,6 @@
   ./services/networking/networkmanager.nix
   ./services/networking/ngircd.nix
   ./services/networking/nix-serve.nix
-  ./services/networking/notbit.nix
   ./services/networking/nsd.nix
   ./services/networking/ntopng.nix
   ./services/networking/ntpd.nix

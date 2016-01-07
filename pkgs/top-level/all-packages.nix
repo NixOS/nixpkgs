@@ -2469,8 +2469,6 @@ let
     graphicalSupport = true;
   };
 
-  notbit = callPackage ../applications/networking/notbit { };
-
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
   nox = callPackage ../tools/package-management/nox {

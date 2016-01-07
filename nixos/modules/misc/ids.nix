@@ -136,7 +136,7 @@
       kippo = 108;
       jenkins = 109;
       systemd-journal-gateway = 110;
-      notbit = 111;
+      #notbit = 111; # unused
       ngircd = 112;
       btsync = 113;
       minecraft = 114;
@@ -356,7 +356,7 @@
       kippo = 108;
       jenkins = 109;
       systemd-journal-gateway = 110;
-      notbit = 111;
+      #notbit = 111; # unused
       #ngircd = 112; # unused
       btsync = 113;
       #minecraft = 114; # unused
