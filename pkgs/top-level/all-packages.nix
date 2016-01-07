@@ -7885,8 +7885,6 @@ let
 
   mygui = callPackage ../development/libraries/mygui {};
 
-  myguiSvn = callPackage ../development/libraries/mygui/svn.nix {};
-
   mysocketw = callPackage ../development/libraries/mysocketw { };
 
   mythes = callPackage ../development/libraries/mythes { };
