@@ -22999,15 +22999,15 @@ in modules // {
 
   mps-youtube = buildPythonPackage rec {
     name = "mps-youtube-${version}";
-    version = "0.2.5";
+    version = "0.2.6";
 
     disabled = (!isPy3k);
 
     src = pkgs.fetchFromGitHub {
       owner = "mps-youtube";
       repo = "mps-youtube";
-      rev = "7e457d2b4700387b88a3c96579e13cb76ca1f06b";
-      sha256 = "1811vlhgfi4rasjfsfdl7x174s75zk3x08p2z05wfcvinflfgxly";
+      rev = "v${version}";
+      sha256 = "1vbf60z2birbm7wc9irxy0jf5x3y32ncl8fw52v19xyx7fq10jrm";
     };
 
     propagatedBuildInputs = with self; [ pafy ];
