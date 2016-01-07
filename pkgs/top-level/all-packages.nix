@@ -6172,8 +6172,6 @@ let
     fetchurl = fetchurlBoot;
   };
 
-  caelum = callPackage ../development/libraries/caelum { };
-
   capnproto = callPackage ../development/libraries/capnproto { };
 
   ccnx = callPackage ../development/libraries/ccnx { };
