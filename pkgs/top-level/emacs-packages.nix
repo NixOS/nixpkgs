@@ -605,7 +605,7 @@ let
     packageRequires = [ evil ];
     meta = {
       description = "Multiple cursors implementation for evil-mode";
-      license = gpl3plus;
+      license = gpl3Plus;
     };
   };
 
