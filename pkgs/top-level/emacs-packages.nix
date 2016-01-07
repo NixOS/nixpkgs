@@ -561,6 +561,22 @@ let
     };
   };
 
+  evil-jumper = melpaBuild rec {
+    pname   = "evil-jumper";
+    version = "20151017";
+    src = fetchFromGitHub {
+      owner  = "bling";
+      repo   = pname;
+      rev    = "fcadf2d93aaea3ba88a2ae63a860b9c1f0568167";
+      sha256 = "0axx6cc9z9c1wh7qgm6ya54dsp3bn82bnb0cwj1rpv509qqmwgsj";
+    };
+    packageRequires = [ evil ];
+    meta = {
+      description = "Jump across buffer boundaries and revive dead buffers if necessary";
+      license = gpl3Plus;
+    };
+  };
+
   evil-leader = melpaBuild rec {
     pname   = "evil-leader";
     version = "0.4.3";
@@ -574,6 +590,22 @@ let
     meta = {
       description = "<leader> key for evil";
       license = gpl3Plus;
+    };
+  };
+
+  evil-mc = melpaBuild rec {
+    pname   = "evil-mc";
+    version = "20150117";
+    src = fetchFromGitHub {
+      owner  = "gabesoft";
+      repo   = "evil-mc";
+      rev    = "80471ba1173775e706c2043afd7d20ace652df7d";
+      sha256 = "1j23avcxj79plba99yfpmj9rfpdb527d7qfp4mx658y837vji1zm";
+    };
+    packageRequires = [ evil ];
+    meta = {
+      description = "Multiple cursors implementation for evil-mode";
+      license = gpl3plus;
     };
   };
 
@@ -593,13 +625,29 @@ let
     };
   };
 
+  evil-visualstar = melpaBuild rec {
+    pname   = "evil-visualstar";
+    version = "20151017";
+    src = fetchFromGitHub {
+      owner  = "bling";
+      repo   = pname;
+      rev    = "bd9e1b50c03b37c57355d387f291c2ec8ce51eec";
+      sha256 = "17m4kdz1is4ipnyiv9n3vss49faswbbd6v57df9npzsbn5jyydd0";
+    };
+    packageRequires = [ evil ];
+    meta = {
+      description = "Start a * or # search from the visual selection";
+      license = gpl3Plus;
+    };
+  };
+
   evil = melpaBuild {
     pname   = "evil";
-    version = "1.2.3";
+    version = "1.2.5";
     src = fetchhg {
       url = "https://bitbucket.org/lyro/evil";
-      rev = "e5588e50c0e40a66c099868ea825755e348311fb";
-      sha256 = "0185vrzfdz6iwhmc22rjy0n7ppfppp2ddc8xl0vvbda79q6w3bp8";
+      rev = "72593d8e83a3";
+      sha256 = "1pv055qlc3vawzdik29d6zbbv8fa2ygwylm04wa46qr5sj53v0i8";
     };
     packageRequires = [ goto-chg undo-tree ];
     meta = {
