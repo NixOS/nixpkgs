@@ -21612,14 +21612,15 @@ in modules // {
   pyspotify = buildPythonPackage rec {
     name = "pyspotify-${version}";
 
-    version = "1.12";
+    version = "2.0.5";
 
     src = pkgs.fetchurl {
       url = "https://github.com/mopidy/pyspotify/archive/v${version}.tar.gz";
-      sha256 = "0bj6p4hafj1yp0j5n1rxww39nvi3w6y3azadz8a8nxb3b4a8f1xn";
+      sha256 = "1ilbz2w1gw3f1bpapfa09p84dwh08bf7qcrkmd3aj0psz57p2rls";
     };
 
-    buildInputs = with self; [ pkgs.libspotify ]
+    propagatedBuildInputs = with self; [ cffi ];
+    buildInputs = [ pkgs.libspotify ]
       ++ stdenv.lib.optional stdenv.isDarwin pkgs.install_name_tool;
 
     # python zip complains about old timestamps
