@@ -22917,11 +22917,11 @@ in modules // {
 
   pafy = buildPythonPackage rec {
     name = "pafy-${version}";
-    version = "0.4.2";
+    version = "0.4.3";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pafy/${name}.tar.gz";
-      sha256 = "140nacvyv1a2frvgygbpbsdpxjh82ysfmgp7jf2apn4x2gnkip59";
+      sha256 = "1la4nn4n66p6dmcf1dyxw7i5j0xprmq82gwmxjv1jjis7vsnk254";
     };
 
     propagatedBuildInputs = with self; [ youtube-dl ];
