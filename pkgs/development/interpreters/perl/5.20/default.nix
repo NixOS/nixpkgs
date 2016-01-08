@@ -93,6 +93,14 @@ stdenv.mkDerivation rec {
       substituteInPlace dist/PathTools/Cwd.pm --replace "'/bin/pwd'" "'$(type -tP pwd)'"
     '';
 
+  # Inspired by nuke-references, which I can't depend on because it uses perl. Perhaps it should just use sed :)
+  postInstall = ''
+    self=$(echo $out | sed -n "s|^$NIX_STORE/\\([a-z0-9]\{32\}\\)-.*|\1|p")
+
+    sed -i "/$self/b; s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" "$out"/lib/perl5/*/*/Config.pm
+    sed -i "/$self/b; s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" "$out"/lib/perl5/*/*/Config_heavy.pl
+  '';
+
   setupHook = ./setup-hook.sh;
 
   passthru.libPrefix = "lib/perl5/site_perl";
