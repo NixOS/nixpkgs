@@ -74,7 +74,7 @@ let
     kidletime = callPackage ./kidletime.nix {};
     kimageformats = callPackage ./kimageformats.nix {};
     kinit = callPackage ./kinit {};
-    kio = callPackage ./kio.nix {};
+    kio = callPackage ./kio {};
     kitemmodels = callPackage ./kitemmodels.nix {};
     kitemviews = callPackage ./kitemviews.nix {};
     kjobwidgets = callPackage ./kjobwidgets.nix {};
