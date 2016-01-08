@@ -1,7 +1,8 @@
 # TODO check that no license information gets lost
-{ fetchurl, bash, stdenv, python, cmake, vim, vimUtils, perl, ruby, unzip,
-  which, fetchgit, fetchFromGitHub, fetchhg, fetchzip, llvmPackages, zip,
-  vim_configurable, vimPlugins, xkb_switch, git
+{ fetchurl, bash, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
+, which, fetchgit, fetchFromGitHub, fetchhg, fetchzip, llvmPackages, zip
+, vim_configurable, vimPlugins, xkb_switch, git
+, Cocoa
 }:
 
 let
@@ -885,33 +886,24 @@ rec {
     };
     dependencies = [];
     buildInputs = [
-      python cmake
+      python go cmake
       (if stdenv.isDarwin then llvmPackages.clang else llvmPackages.clang-unwrapped)
       llvmPackages.llvm
-    ];
-
-    configurePhase = ":";
+    ] ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
 
     buildPhase = ''
       patchShebangs .
+      substituteInPlace plugin/youcompleteme.vim \
+        --replace "'ycm_path_to_python_interpreter', '''" "'ycm_path_to_python_interpreter', '${python}/bin/python'"
 
-      target=$out/${rtpPath}/youcompleteme
-      mkdir -p $target
-      cp -a ./ $target
 
-      mkdir $target/build
-      cd $target/build
-      cmake -G "Unix Makefiles" . $target/third_party/ycmd/cpp -DPYTHON_LIBRARIES:PATH=${python}/lib/libpython2.7.so -DPYTHON_INCLUDE_DIR:PATH=${python}/include/python2.7 -DUSE_CLANG_COMPLETER=ON -DUSE_SYSTEM_LIBCLANG=ON
+      mkdir build
+      pushd build
+      cmake -G "Unix Makefiles" . ../third_party/ycmd/cpp -DPYTHON_LIBRARIES:PATH=${python}/lib/libpython2.7.so -DPYTHON_INCLUDE_DIR:PATH=${python}/include/python2.7 -DUSE_CLANG_COMPLETER=ON -DUSE_SYSTEM_LIBCLANG=ON
       make ycm_support_libs -j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
-      ${python}/bin/python $target/third_party/ycmd/build.py --clang-completer --system-libclang
-
-      ${vimHelpTags}
-      vimHelpTags $target
+      ${python}/bin/python ../third_party/ycmd/build.py --gocode-completer --clang-completer --system-libclang
+      popd
     '';
-
-    # TODO: implement proper install phase rather than keeping everything in store
-    # TODO: support llvm based C completion, See README of git repository
-    installPhase = ":";
 
     meta = {
       description = "Fastest non utf-8 aware word and C completion engine for Vim";
@@ -1331,6 +1323,7 @@ rec {
       sha256 = "a3b5da9bcc01c6f0fb0a5e13a6f9efb58471339ed32c480fde96856bb9e1e7be";
     };
     dependencies = [];
+    buildInputs = stdenv.lib.optional stdenv.isDarwin Cocoa;
 
   };
 
