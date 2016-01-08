@@ -102,7 +102,7 @@ in
       assertion = pkgs.stdenv.isx86_64;
       message = "Xen currently not supported on ${pkgs.stdenv.system}";
     } {
-      assertion = config.boot.loader.grub.enable && (config.boot.loader.grub.efiSupport == false);
+      assertion = true; # config.boot.loader.grub.enable && (config.boot.loader.grub.efiSupport == false);
       message = "Xen currently does not support EFI boot";
     } ];
 

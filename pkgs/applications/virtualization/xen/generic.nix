@@ -7,6 +7,7 @@
 , spice_protocol, usbredir, alsaLib, quilt
 , coreutils, gawk, gnused, gnugrep, diffutils, multipath_tools
 , inetutils, iptables, openvswitch, nbd, drbd, xenConfig
+, binutils
 , xenserverPatched ? false, ... }:
 
 with stdenv.lib;
@@ -14,6 +15,23 @@ with stdenv.lib;
 let
 
   libDir = if stdenv.is64bit then "lib64" else "lib";
+  efiBinutils = stdenv.lib.overrideDerivation binutils (o: {
+    # we are building our own binutils just for EFI, because we need a
+    # version of ld that supports the flag -mi386pep.  This binutils
+    # derivation is not expected to be otherwise useful.
+    name = "efi-binutils";
+    src = fetchurl {
+      url = "mirror://gnu/binutils/binutils-2.24.tar.bz2";
+      sha256 = "0ds1y7qa0xqihw4ihnsgg6bxanmb228r228ddvwzgrv4jszcbs75";
+    };
+    # all of the regular binutils patches are generally important, but
+    # I *think* none of them are relevant to our requirement
+    patches = [];
+    configureFlags = o.configureFlags ++ [
+    "--program-prefix=efi-"     # keep out of the real binutils way
+    "--enable-targets=x86_64-pep"
+    ];
+   });
 
   # Sources needed to build the stubdoms and tools
   # These sources are already rather old and probably do not change frequently
@@ -70,12 +88,17 @@ stdenv.mkDerivation {
       flex ocaml ocamlPackages.findlib figlet libaio
       checkpolicy pythonPackages.markdown transfig
       glusterfs acl cmake spice spice_protocol usbredir
-      alsaLib quilt
+      alsaLib quilt efiBinutils
     ];
 
+
+    
   pythonPath = [ pythonPackages.curses ];
 
-  patches = stdenv.lib.optionals ((xenserverPatched == false) && (builtins.hasAttr "xenPatches" xenConfig)) xenConfig.xenPatches;
+  patches = stdenv.lib.optionals ((xenserverPatched == false) && (builtins.hasAttr "xenPatches" xenConfig)) xenConfig.xenPatches ++
+    [ ./0004-makefile-use-efi-ld.patch
+      ./0005-makefile-fix-efi-mountdir-use.patch ];
+
 
   postPatch = ''
       ${stdenv.lib.optionalString ((xenserverPatched == true) && (builtins.hasAttr "xenserverPatches" xenConfig)) xenConfig.xenserverPatches}
@@ -114,8 +137,13 @@ stdenv.mkDerivation {
     export EXTRA_QEMUU_CONFIGURE_ARGS="--enable-spice --enable-usb-redir --enable-linux-aio"
   '';
 
+  EFI_LD = "${efiBinutils}/bin/efi-ld";
+  EFI_VENDOR = "nixos";
+  
   postConfigure =
     ''
+      substituteInPlace xen/arch/x86/efi/Makefile \
+        --replace LD EFI_LD
       substituteInPlace tools/libfsimage/common/fsimage_plugin.c \
         --replace /usr $out
 
