@@ -6360,6 +6360,8 @@ let
 
   faad2 = callPackage ../development/libraries/faad2 { };
 
+  farbfeld = callPackage ../development/libraries/farbfeld { };
+
   farsight2 = callPackage ../development/libraries/farsight2 { };
 
   farstream = callPackage ../development/libraries/farstream {
