@@ -6,6 +6,13 @@
       sha256 = "06pahxyrckhgb7alsxwhhlx1ib2xsx33793finj01jk8i054bkxl";
     };
   };
+  "rouge" = {
+    version = "1.10.1";
+    source = {
+      type = "gem";
+      sha256 = "0wp8as9ypdy18kdj9h70kny1rdfq71mr8cj2bpahr9vxjjvjasqz";
+    };
+  };
   "blankslate" = {
     version = "2.1.2.4";
     source = {
@@ -95,6 +102,7 @@
     dependencies = [
       "classifier-reborn"
       "colorator"
+      "rogue"
       "jekyll-coffeescript"
       "jekyll-gist"
       "jekyll-paginate"
