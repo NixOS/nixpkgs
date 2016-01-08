@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    rouge (1.10.1)
     RedCloth (4.2.9)
     blankslate (2.1.2.4)
     celluloid (0.16.0)
@@ -71,6 +72,7 @@ PLATFORMS
 DEPENDENCIES
   RedCloth
   jekyll
+  rouge
   rdiscount
 
 BUNDLED WITH
