@@ -1603,6 +1603,7 @@ self: super: {
   "blank-canvas" = dontDistribute super."blank-canvas";
   "blas" = dontDistribute super."blas";
   "blas-hs" = dontDistribute super."blas-hs";
+  "blatex" = dontDistribute super."blatex";
   "blaze" = dontDistribute super."blaze";
   "blaze-bootstrap" = dontDistribute super."blaze-bootstrap";
   "blaze-builder-conduit" = dontDistribute super."blaze-builder-conduit";
@@ -2354,6 +2355,7 @@ self: super: {
   "debian-binary" = dontDistribute super."debian-binary";
   "debian-build" = dontDistribute super."debian-build";
   "debug-diff" = dontDistribute super."debug-diff";
+  "debug-time" = dontDistribute super."debug-time";
   "decepticons" = dontDistribute super."decepticons";
   "declarative" = dontDistribute super."declarative";
   "decode-utf8" = dontDistribute super."decode-utf8";
@@ -2482,6 +2484,7 @@ self: super: {
   "distributed-process-client-server" = dontDistribute super."distributed-process-client-server";
   "distributed-process-execution" = dontDistribute super."distributed-process-execution";
   "distributed-process-extras" = dontDistribute super."distributed-process-extras";
+  "distributed-process-lifted" = dontDistribute super."distributed-process-lifted";
   "distributed-process-monad-control" = dontDistribute super."distributed-process-monad-control";
   "distributed-process-p2p" = dontDistribute super."distributed-process-p2p";
   "distributed-process-platform" = dontDistribute super."distributed-process-platform";
@@ -2811,6 +2814,7 @@ self: super: {
   "fdo-trash" = dontDistribute super."fdo-trash";
   "fec" = dontDistribute super."fec";
   "fedora-packages" = dontDistribute super."fedora-packages";
+  "feed" = doDistribute super."feed_0_3_10_4";
   "feed-cli" = dontDistribute super."feed-cli";
   "feed-collect" = dontDistribute super."feed-collect";
   "feed-crawl" = dontDistribute super."feed-crawl";
@@ -3783,6 +3787,7 @@ self: super: {
   "headergen" = dontDistribute super."headergen";
   "heapsort" = dontDistribute super."heapsort";
   "hecc" = dontDistribute super."hecc";
+  "hedis" = doDistribute super."hedis_0_6_9";
   "hedis-config" = dontDistribute super."hedis-config";
   "hedis-monadic" = dontDistribute super."hedis-monadic";
   "hedis-pile" = dontDistribute super."hedis-pile";
@@ -4370,6 +4375,7 @@ self: super: {
   "iap-verifier" = dontDistribute super."iap-verifier";
   "ib-api" = dontDistribute super."ib-api";
   "iban" = dontDistribute super."iban";
+  "ibus-hs" = dontDistribute super."ibus-hs";
   "ical" = dontDistribute super."ical";
   "iconv" = dontDistribute super."iconv";
   "ideas" = dontDistribute super."ideas";
@@ -4383,6 +4389,7 @@ self: super: {
   "ieee" = dontDistribute super."ieee";
   "ieee-utils" = dontDistribute super."ieee-utils";
   "ieee-utils-tempfix" = dontDistribute super."ieee-utils-tempfix";
+  "ieee754" = doDistribute super."ieee754_0_7_6";
   "ieee754-parser" = dontDistribute super."ieee754-parser";
   "ifcxt" = dontDistribute super."ifcxt";
   "iff" = dontDistribute super."iff";
@@ -4438,6 +4445,7 @@ self: super: {
   "inflist" = dontDistribute super."inflist";
   "influxdb" = dontDistribute super."influxdb";
   "informative" = dontDistribute super."informative";
+  "ini" = doDistribute super."ini_0_3_3";
   "inilist" = dontDistribute super."inilist";
   "inject" = dontDistribute super."inject";
   "inject-function" = dontDistribute super."inject-function";
@@ -4477,6 +4485,7 @@ self: super: {
   "io-reactive" = dontDistribute super."io-reactive";
   "io-region" = dontDistribute super."io-region";
   "io-storage" = dontDistribute super."io-storage";
+  "io-streams" = doDistribute super."io-streams_1_3_4_0";
   "io-streams-http" = dontDistribute super."io-streams-http";
   "io-throttle" = dontDistribute super."io-throttle";
   "ioctl" = dontDistribute super."ioctl";
@@ -4927,6 +4936,8 @@ self: super: {
   "llvm-tf" = dontDistribute super."llvm-tf";
   "llvm-tools" = dontDistribute super."llvm-tools";
   "lmdb" = dontDistribute super."lmdb";
+  "lmonad" = dontDistribute super."lmonad";
+  "lmonad-yesod" = dontDistribute super."lmonad-yesod";
   "load-env" = dontDistribute super."load-env";
   "loadavg" = dontDistribute super."loadavg";
   "local-address" = dontDistribute super."local-address";
@@ -5826,6 +5837,7 @@ self: super: {
   "pipes-sqlite-simple" = dontDistribute super."pipes-sqlite-simple";
   "pipes-transduce" = dontDistribute super."pipes-transduce";
   "pipes-vector" = dontDistribute super."pipes-vector";
+  "pipes-wai" = doDistribute super."pipes-wai_3_0_2";
   "pipes-websockets" = dontDistribute super."pipes-websockets";
   "pipes-zeromq4" = dontDistribute super."pipes-zeromq4";
   "pipes-zlib" = dontDistribute super."pipes-zlib";
@@ -7113,6 +7125,7 @@ self: super: {
   "taglib" = dontDistribute super."taglib";
   "taglib-api" = dontDistribute super."taglib-api";
   "tagset-positional" = dontDistribute super."tagset-positional";
+  "tagsoup" = doDistribute super."tagsoup_0_13_6";
   "tagsoup-ht" = dontDistribute super."tagsoup-ht";
   "tagsoup-parsec" = dontDistribute super."tagsoup-parsec";
   "takahashi" = dontDistribute super."takahashi";
@@ -7318,6 +7331,7 @@ self: super: {
   "tinytemplate" = dontDistribute super."tinytemplate";
   "tip-haskell-frontend" = dontDistribute super."tip-haskell-frontend";
   "tip-lib" = dontDistribute super."tip-lib";
+  "tiphys" = dontDistribute super."tiphys";
   "titlecase" = dontDistribute super."titlecase";
   "tkhs" = dontDistribute super."tkhs";
   "tkyprof" = dontDistribute super."tkyprof";
@@ -8004,6 +8018,7 @@ self: super: {
   "yesod-auth-ldap" = dontDistribute super."yesod-auth-ldap";
   "yesod-auth-ldap-mediocre" = dontDistribute super."yesod-auth-ldap-mediocre";
   "yesod-auth-ldap-native" = dontDistribute super."yesod-auth-ldap-native";
+  "yesod-auth-oauth2" = doDistribute super."yesod-auth-oauth2_0_1_5";
   "yesod-auth-pam" = dontDistribute super."yesod-auth-pam";
   "yesod-auth-smbclient" = dontDistribute super."yesod-auth-smbclient";
   "yesod-auth-zendesk" = dontDistribute super."yesod-auth-zendesk";
