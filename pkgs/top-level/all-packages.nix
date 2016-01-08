@@ -3039,7 +3039,9 @@ let
 
   sharutils = callPackage ../tools/archivers/sharutils { };
 
-  shotwell = callPackage ../applications/graphics/shotwell { };
+  shotwell = callPackage ../applications/graphics/shotwell {
+    vala = vala_0_28;
+  };
 
   shout = callPackage ../applications/networking/irc/shout { };
 
