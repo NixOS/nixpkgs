@@ -208,4 +208,7 @@ self: super: {
   # https://github.com/DanielG/cabal-helper/issues/10
   cabal-helper = dontCheck super.cabal-helper;
 
+  # https://github.com/fpco/stackage/issues/1112
+  vector-algorithms = dontCheck super.vector-algorithms;
+
 }
