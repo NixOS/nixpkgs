@@ -1,7 +1,8 @@
 # TODO check that no license information gets lost
-{ fetchurl, bash, stdenv, python, cmake, vim, vimUtils, perl, ruby, unzip,
-  which, fetchgit, fetchFromGitHub, fetchhg, fetchzip, llvmPackages, zip,
-  vim_configurable, vimPlugins, xkb_switch, git
+{ fetchurl, bash, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
+, which, fetchgit, fetchFromGitHub, fetchhg, fetchzip, llvmPackages, zip
+, vim_configurable, vimPlugins, xkb_switch, git
+, Cocoa
 }:
 
 let
