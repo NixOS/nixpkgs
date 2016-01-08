@@ -57,8 +57,6 @@ let
         else
           "[" + cfg.relayHost + "]"}
 
-      alias_maps = hash:/var/postfix/conf/aliases
-
       mail_spool_directory = /var/spool/mail/
 
       setgid_group = ${setgidGroup}
@@ -85,6 +83,8 @@ let
     ''
     + optionalString (cfg.transport != "") ''
       transport_maps = hash:/etc/postfix/transport
+    + optionalString (cfg.postmasterAlias != "" || cfg.rootAlias != "" || cfg.extraAliases != "") ''
+      alias_maps = hash:/var/postfix/conf/aliases
     ''
     + cfg.extraConfig;
 
