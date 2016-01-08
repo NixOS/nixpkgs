@@ -7866,6 +7866,24 @@ in modules // {
     };
   };
 
+  flask-pymongo = buildPythonPackage rec {
+    name = "Flask-PyMongo-${version}";
+    version = "0.3.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/F/Flask-PyMongo/${name}.tar.gz";
+      sha256 = "0305qngvjrjyyabf8gxqgqvd9ffh00gr5yfrjf4nncr2my9svbyd";
+    };
+
+    propagatedBuildInputs = with self; [ flask pymongo_2_9_1 ];
+
+    meta = {
+      homepage = "http://flask-pymongo.readthedocs.org/";
+      description = "PyMongo support for Flask applications";
+      license = licenses.bsd2;
+    };
+  };
+
   wtforms = buildPythonPackage rec {
     version = "2.0.2";
     name = "wtforms-${version}";
