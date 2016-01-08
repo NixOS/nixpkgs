@@ -15687,7 +15687,9 @@ let
 
   vimUtils = callPackage ../misc/vim-plugins/vim-utils.nix { };
 
-  vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins { });
+  vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  });
 
   vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
     webkit = webkitgtk2;
