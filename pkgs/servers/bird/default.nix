@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://bird.network.cz/pub/bird/${name}.tar.gz";
-    sha256 = "79d5c4254e25f5890626830ca42aae03735716bdf152ddd8368473d2b3c17b5d";
+    sha256 = "0pbvq6rx4ww46vcdslpiplb5fwq3mqma83434q38kx959qjw9mbr";
   };
 
   buildInputs = [ flex bison readline ];
