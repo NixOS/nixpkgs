@@ -11653,8 +11653,6 @@ let
     xmlRpc = callPackage ../applications/editors/emacs-modes/xml-rpc { };
 
     cask = callPackage ../applications/editors/emacs-modes/cask { };
-
-    slime = callPackage ../applications/editors/emacs-modes/slime { };
   };
 
   emacs24Packages = recurseIntoAttrs (emacsPackagesGen emacs24 pkgs.emacs24Packages);
