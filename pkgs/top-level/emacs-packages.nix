@@ -103,9 +103,10 @@ let
       rev = "v${version}";
       sha256 = "19sy49r3ijh36m7hl4vspw5c4i8pnfqdn4ldm2sqchxigkw56ayl";
     };
-    buildInputs = with external; [ autoconf automake libpng zlib poppler pkgconfig ] ++ [ tablist let-alist ];
+    buildInputs = with external; [ autoconf automake libpng zlib poppler pkgconfig ];
     preBuild = "make server/epdfinfo";
     fileSpecs = [ "lisp/pdf-*.el" "server/epdfinfo" ];
+    packageRequires = [ tablist let-alist ];
     meta = {
       description = "Emacs support library for PDF files";
       license = gpl3;
