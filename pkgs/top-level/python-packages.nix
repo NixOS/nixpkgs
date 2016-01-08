@@ -2492,6 +2492,21 @@ in modules // {
     };
   };
 
+  cerberus = buildPythonPackage rec {
+    name = "Cerberus-${version}";
+    version = "0.9.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/C/Cerberus/${name}.tar.gz";
+      sha256 = "1km7hvns1snrmcwz58bssi4wv3gwd34zm1z1hwjylmpqrfrcf8mi";
+    };
+
+    meta = {
+      homepage = http://python-cerberus.org/;
+      description = "Lightweight, extensible schema and data validation tool for Python dictionaries";
+      license = licenses.mit;
+    };
+  };
 
   certifi = buildPythonPackage rec {
     name = "certifi-${version}";
