@@ -1,10 +1,12 @@
 { pkgs, php }:
 
-let self = with self; {
-  buildPecl = import ../build-support/build-pecl.nix {
-    inherit php;
-    inherit (pkgs) stdenv autoreconfHook fetchurl;
-  };
+let
+  self = with self; {
+    buildPecl = import ../build-support/build-pecl.nix {
+      inherit php;
+      inherit (pkgs) stdenv autoreconfHook fetchurl;
+    };
+  php7 = pkgs.lib.versionAtLeast php.version "7.0";
 
   apcu = buildPecl {
     name = "apcu-4.0.7";
@@ -92,11 +94,20 @@ let self = with self; {
     buildInputs = [ pkgs.m4 ];
   };
 
-  pthreads = assert pkgs.config.php.zts or false; buildPecl {
-    #pthreads requires a build of PHP with ZTS (Zend Thread Safety) enabled
-    #--enable-maintainer-zts or --enable-zts on Windows
+  #pthreads requires a build of PHP with ZTS (Zend Thread Safety) enabled
+  #--enable-maintainer-zts or --enable-zts on Windows
+  pthreads = if php7 then pthreads31 else pthreads20;
+
+  # 2.x is not supported and does not work on PHP 7
+  pthreads20 = assert (pkgs.config.php.zts or false) && (!php7); buildPecl {
     name = "pthreads-2.0.10";
     sha256 = "1xlcb1b1g10jd0xhm3c01a06yqpb5qln47pd1k522138324qvpwb";
+  };
+
+  # Starting from 3.x, pthreads requires at least PHP 7.0
+  pthreads31 = assert (pkgs.config.php.zts or false) && php7; buildPecl {
+    name = "pthreads-3.1.5";
+    sha256 = "1ziap0py3zrc7qj9lw4nzq6wx1viyj8v9y1babchizzan014x6p5";
   };
 
   geoip = buildPecl {
