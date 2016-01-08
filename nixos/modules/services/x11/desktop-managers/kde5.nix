@@ -102,6 +102,7 @@ in
         kde5.gwenview
         kde5.kate
         kde5.kdegraphics-thumbnailers
+        kde5.kio-extras
         kde5.konsole
         kde5.okular
         kde5.print-manager
