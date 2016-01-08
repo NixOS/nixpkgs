@@ -1,4 +1,5 @@
-{ kdeFramework, lib, extra-cmake-modules, acl, karchive
+{ kdeFramework, lib, copyPathsToStore
+, extra-cmake-modules, acl, karchive
 , kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons
 , kdbusaddons, kdoctools, ki18n, kiconthemes, kitemviews
 , kjobwidgets, knotifications, kservice, ktextwidgets, kwallet
@@ -8,6 +9,7 @@
 
 kdeFramework {
   name = "kio";
+  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeQtWrapper ];
   buildInputs = [
     acl karchive kconfig kcoreaddons kdbusaddons kiconthemes
