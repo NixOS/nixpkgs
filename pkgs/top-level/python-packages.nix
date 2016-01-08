@@ -15951,6 +15951,25 @@ in modules // {
     };
   };
 
+  pymongo_2_9_1 = buildPythonPackage rec {
+    name = "pymongo-2.9.1";
+    version = "2.9.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pymongo/${name}.tar.gz";
+      sha256 = "1nrr1fxyrlxd69bgxl7bvaj2j4z7v3zaciij5sbhxg0vqiz6ny50";
+    };
+
+    # Tests call a running mongodb instance
+    doCheck = false;
+
+    meta = {
+      homepage = "http://github.com/mongodb/mongo-python-driver";
+      license = licenses.asl20;
+      description = "Python driver for MongoDB ";
+    };
+  };
+
   pyperclip = buildPythonPackage rec {
     version = "1.5.11";
     name = "pyperclip-${version}";
