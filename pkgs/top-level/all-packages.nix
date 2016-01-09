@@ -15532,6 +15532,8 @@ let
 
   PPSSPP = callPackage ../misc/emulators/ppsspp { SDL = SDL2; };
 
+  pt = callPackage ../applications/misc/pt { };
+
   uae = callPackage ../misc/emulators/uae { };
 
   fsuae = callPackage ../misc/emulators/fs-uae { };
