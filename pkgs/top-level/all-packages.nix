@@ -3338,6 +3338,8 @@ let
 
   txt2tags = callPackage ../tools/text/txt2tags { };
 
+  txtw = callPackage ../tools/misc/txtw { };
+
   u9fs = callPackage ../servers/u9fs { };
 
   ucl = callPackage ../development/libraries/ucl { };
