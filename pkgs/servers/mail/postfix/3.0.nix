@@ -1,8 +1,25 @@
-{ stdenv, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, coreutils
-, findutils, gnugrep, gawk, icu
+{ stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl
+, coreutils, findutils, gnugrep, gawk, icu, pcre
+, withPgSQL ? false, postgresql
+, withMySQL ? false, libmysql
+, withSQLite ? false, sqlite
 }:
 
-stdenv.mkDerivation rec {
+let
+  ccargs = lib.concatStringsSep " " ([
+    "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl}/include/sasl"
+    "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
+    "-fPIE" "-fstack-protector-all" "--param" "ssp-buffer-size=4" "-O2" "-D_FORTIFY_SOURCE=2"
+   ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
+     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${libmysql}/include/mysql" ]
+     ++ lib.optional withSQLite "-DHAS_SQLITE");
+   auxlibs = lib.concatStringsSep " " ([
+     "-ldb" "-lnsl" "-lresolv" "-lsasl2" "-lcrypto" "-lssl" "-pie" "-Wl,-z,relro,-z,now"
+   ] ++ lib.optional withPgSQL "-lpq"
+     ++ lib.optional withMySQL "-lmysqlclient"
+     ++ lib.optional withSQLite "-lsqlite3");
+
+in stdenv.mkDerivation rec {
 
   name = "postfix-${version}";
 
@@ -13,7 +30,10 @@ stdenv.mkDerivation rec {
     sha256 = "00mc12k5p1zlrlqcf33vh5zizaqr5ai8q78dwv69smjh6kn4c7j0";
   };
 
-  buildInputs = [ makeWrapper gnused db openssl cyrus_sasl icu ];
+  buildInputs = [ makeWrapper gnused db openssl cyrus_sasl icu pcre ]
+                ++ lib.optional withPgSQL postgresql
+                ++ lib.optional withMySQL libmysql
+                ++ lib.optional withSQLite sqlite;
 
   patches = [ ./postfix-script-shell.patch ./postfix-3.0-no-warnings.patch ];
 
@@ -33,16 +53,12 @@ stdenv.mkDerivation rec {
     export readme_directory=$out/share/postfix/doc
     export sendmail_path=$out/bin/sendmail
 
-    make makefiles \
-      CCARGS='-DUSE_TLS -DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I${cyrus_sasl}/include/sasl \
-              -DHAS_DB_BYPASS_MAKEDEFS_CHECK \
-              -fPIE -fstack-protector-all --param ssp-buffer-size=4 -O2 -D_FORTIFY_SOURCE=2' \
-      AUXLIBS='-ldb -lnsl -lresolv -lsasl2 -lcrypto -lssl -pie -Wl,-z,relro,-z,now'
+    make makefiles CCARGS='${ccargs}' AUXLIBS='${auxlibs}'
   '';
 
   installTargets = [ "non-interactive-package" ];
 
-  installFlags = [ " install_root=installdir " ];
+  installFlags = [ "install_root=installdir" ];
 
   postInstall = ''
     mkdir -p $out
@@ -58,9 +74,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.postfix.org/";
     description = "A fast, easy to administer, and secure mail server";
-    license = stdenv.lib.licenses.bsdOriginal;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.rickynils ];
+    license = lib.licenses.bsdOriginal;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.rickynils ];
   };
 
 }
