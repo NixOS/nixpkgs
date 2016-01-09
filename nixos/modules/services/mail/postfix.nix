@@ -378,26 +378,27 @@ in
       program = "sendmail";
       source = "${pkgs.postfix}/bin/sendmail";
       owner = "nobody";
-      group = "postdrop";
+      group = setgidGroup;
       setuid = false;
       setgid = true;
     };
 
-    users.extraUsers = singleton
-      { name = user;
+    users.extraUsers = optional (user == "postfix")
+      { name = "postfix";
         description = "Postfix mail server user";
         uid = config.ids.uids.postfix;
         group = group;
       };
 
     users.extraGroups =
-      [ { name = group;
-          gid = config.ids.gids.postfix;
-        }
-        { name = setgidGroup;
-          gid = config.ids.gids.postdrop;
-        }
-      ];
+      optional (group == "postfix")
+      { name = group;
+        gid = config.ids.gids.postfix;
+      }
+      ++ optional (setgidGroup == "postdrop")
+      { name = setgidGroup;
+        gid = config.ids.gids.postdrop;
+      };
 
     systemd.services.postfix =
       { description = "Postfix mail server";
