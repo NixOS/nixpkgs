@@ -50,7 +50,7 @@ in
 self:
 
   let
-    super = mapAttrs (mkPackage self) manifest;
+    super = removeAttrs (mapAttrs (mkPackage self) manifest) [ "dash" ];
 
     elpaBuild = import ../../../build-support/emacs/melpa.nix {
       inherit fetchurl lib stdenv texinfo;
