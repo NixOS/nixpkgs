@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper gnused db openssl cyrus_sasl icu ];
 
-  patches = [ ./postfix-script-shell.patch ];
+  patches = [ ./postfix-script-shell.patch ./postfix-3.0-no-warnings.patch ];
 
   preBuild = ''
     sed -e '/^PATH=/d' -i postfix-install
