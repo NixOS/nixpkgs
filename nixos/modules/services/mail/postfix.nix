@@ -9,13 +9,13 @@ let
   group = cfg.group;
   setgidGroup = cfg.setgidGroup;
 
+  haveAliases = cfg.postmasterAlias != "" || cfg.rootAlias != "" || cfg.extraAliases != "";
+  haveTransport = cfg.transport != "";
+  haveVirtual = cfg.virtual != "";
+
   mainCf =
     ''
       compatibility_level = 2
-
-      queue_directory = /var/postfix/queue
-      command_directory = ${pkgs.postfix}/sbin
-      daemon_directory = ${pkgs.postfix}/libexec/postfix
 
       mail_owner = ${user}
       default_privs = nobody
@@ -78,13 +78,14 @@ let
     + optionalString (cfg.recipientDelimiter != "") ''
       recipient_delimiter = ${cfg.recipientDelimiter}
     ''
-    + optionalString (cfg.virtual != "") ''
-      virtual_alias_maps = hash:/etc/postfix/virtual
+    + optionalString haveAliases ''
+      alias_maps = hash:/etc/postfix/aliases
     ''
-    + optionalString (cfg.transport != "") ''
+    + optionalString haveTransport ''
       transport_maps = hash:/etc/postfix/transport
-    + optionalString (cfg.postmasterAlias != "" || cfg.rootAlias != "" || cfg.extraAliases != "") ''
-      alias_maps = hash:/var/postfix/conf/aliases
+    ''
+    + optionalString haveVirtual ''
+      virtual_alias_maps = hash:/etc/postfix/virtual
     ''
     + cfg.extraConfig;
 
@@ -366,7 +367,7 @@ in
 
     environment = {
       etc = singleton
-        { source = "/var/postfix/conf";
+        { source = "/var/lib/postfix/conf";
           target = "postfix";
         };
 
@@ -377,7 +378,6 @@ in
     services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
       program = "sendmail";
       source = "${pkgs.postfix}/bin/sendmail";
-      owner = "nobody";
       group = setgidGroup;
       setuid = false;
       setgid = true;
@@ -409,41 +409,51 @@ in
         serviceConfig = {
           Type = "forking";
           Restart = "always";
-          PIDFile = "/var/postfix/queue/pid/master.pid";
+          PIDFile = "/var/lib/postfix/queue/pid/master.pid";
         };
 
         preStart = ''
-          ${pkgs.coreutils}/bin/mkdir -p /var/spool/mail /var/postfix/conf /var/postfix/queue
+          ${pkgs.coreutils}/bin/mkdir -p /var/lib/postfix/data /var/lib/postfix/queue/{pid,public,maildrop}
 
-          ${pkgs.coreutils}/bin/chown -R ${user}:${group} /var/postfix
-          ${pkgs.coreutils}/bin/chown -R ${user}:${setgidGroup} /var/postfix/queue
-          ${pkgs.coreutils}/bin/chmod -R ug+rwX /var/postfix/queue
+          ${pkgs.coreutils}/bin/chown -R ${user}:${group} /var/lib/postfix
+          ${pkgs.coreutils}/bin/chown root /var/lib/postfix/queue
+          ${pkgs.coreutils}/bin/chown root /var/lib/postfix/queue/pid
+          ${pkgs.coreutils}/bin/chgrp -R ${setgidGroup} /var/lib/postfix/queue/{public,maildrop}
+          ${pkgs.coreutils}/bin/chmod 770 /var/lib/postfix/queue/{public,maildrop}
+
+          ${pkgs.coreutils}/bin/rm -rf /var/lib/postfix/conf
+          ${pkgs.coreutils}/bin/mkdir -p /var/lib/postfix/conf
+          ${pkgs.coreutils}/bin/ln -sf ${mainCfFile} /var/lib/postfix/conf/main.cf
+          ${pkgs.coreutils}/bin/ln -sf ${masterCfFile} /var/lib/postfix/conf/master.cf
+          ${optionalString haveAliases ''
+            ${pkgs.coreutils}/bin/ln -sf ${aliasesFile} /var/lib/postfix/conf/aliases
+            ${pkgs.postfix}/bin/postalias /var/lib/postfix/conf/aliases
+          ''}
+          ${optionalString haveTransport ''
+            ${pkgs.coreutils}/bin/ln -sf ${transportFile} /var/lib/postfix/conf/transport
+            ${pkgs.postfix}/bin/postmap /var/lib/postfix/conf/transport
+          ''}
+          ${optionalString haveVirtual ''
+            ${pkgs.coreutils}/bin/ln -sf ${virtualFile} /var/lib/postfix/conf/virtual
+            ${pkgs.postfix}/bin/postmap /var/lib/postfix/conf/virtual
+          ''}
+
+          ${pkgs.coreutils}/bin/mkdir -p /var/spool/mail
           ${pkgs.coreutils}/bin/chown root:root /var/spool/mail
           ${pkgs.coreutils}/bin/chmod a+rwxt /var/spool/mail
           ${pkgs.coreutils}/bin/ln -sf /var/spool/mail /var/
-
-          ln -sf ${pkgs.postfix}/etc/postfix/postfix-files /var/postfix/conf
-
-          ln -sf ${aliasesFile} /var/postfix/conf/aliases
-          ln -sf ${virtualFile} /var/postfix/conf/virtual
-          ln -sf ${mainCfFile} /var/postfix/conf/main.cf
-          ln -sf ${masterCfFile} /var/postfix/conf/master.cf
-          ln -sf ${transportFile} /var/postfix/conf/transport
-
-          ${pkgs.postfix}/sbin/postalias -c /var/postfix/conf /var/postfix/conf/aliases
-          ${pkgs.postfix}/sbin/postmap -c /var/postfix/conf /var/postfix/conf/virtual
         '';
 
         script = ''
-          ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf start
+          ${pkgs.postfix}/sbin/postfix -c /etc/postfix start
         '';
 
         reload = ''
-          ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf reload
+          ${pkgs.postfix}/sbin/postfix -c /etc/postfix reload
         '';
 
         preStop = ''
-          ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf stop
+          ${pkgs.postfix}/sbin/postfix -c /etc/postfix stop
         '';
 
       };
