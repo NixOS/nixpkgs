@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, gcc5 }:
 
-let version = "7.23.02"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "icmake-${version}";
+  version = "8.00.05";
 
   src = fetchFromGitHub {
-    sha256 = "0gp2f8bw9i7vccsbz878mri0k6fls2x8hklbbr6mayag397gr928";
+    sha256 = "06bfz9awi2vh2mzikw4sp7wqrp0nlcg89b9br43awz2801k15hpf";
     rev = version;
     repo = "icmake";
     owner = "fbb-git";
@@ -13,13 +13,16 @@ stdenv.mkDerivation {
 
   sourceRoot = "icmake-${version}-src/icmake";
 
+  buildInputs = [ gcc5 ];
+
   preConfigure = ''
     patchShebangs ./
     substituteInPlace INSTALL.im --replace "usr/" ""
   '';
 
   buildPhase = ''
-    ./icm_bootstrap $out
+    ./icm_prepare $out
+    ./icm_bootstrap x
   '';
 
   installPhase = ''
