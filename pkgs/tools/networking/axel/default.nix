@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     description = "Console downloading program with some features for parallel connections for faster downloading";
     homepage = http://axel.alioth.debian.org/;
     maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }
