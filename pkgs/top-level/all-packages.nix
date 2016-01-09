@@ -9228,7 +9228,7 @@ let
 
   dnschain = callPackage ../servers/dnschain { };
 
-  dovecot = dovecot21;
+  dovecot = dovecot22;
 
   dovecot21 = callPackage ../servers/mail/dovecot { };
 
