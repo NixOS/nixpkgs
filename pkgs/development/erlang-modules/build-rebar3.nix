@@ -1,5 +1,5 @@
 { stdenv, writeText, erlang, rebar3, openssl, libyaml, fetchHex, fetchFromGitHub,
-  rebar3-pc, buildEnv }:
+  pc, buildEnv }:
 
 { name, version
 , src
@@ -13,7 +13,7 @@
 with stdenv.lib;
 
 let
-  plugins = pluginDeps ++ (if compilePorts then [rebar3-pc] else []);
+  plugins = pluginDeps ++ (if compilePorts then [pc] else []);
 
 
   shell = drv: stdenv.mkDerivation {

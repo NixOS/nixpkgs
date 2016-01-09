@@ -1,8 +1,8 @@
-{ pkgs }: #? import <nixpkgs> {} }:
+{ stdenv, pkgs }: #? import <nixpkgs> {} }:
 
 let
   self = rec {
-    hex = import ./hex-packages.nix { callPackage = self.callPackage; };
+    hex = import ./hex-packages.nix { stdenv = stdenv; callPackage = self.callPackage; };
     callPackage = pkgs.lib.callPackageWith (pkgs // self // hex);
 
     buildRebar3 = callPackage ./build-rebar3.nix {};
