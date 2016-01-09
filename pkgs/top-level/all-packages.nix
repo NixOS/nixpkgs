@@ -2628,6 +2628,8 @@ let
 
   panomatic = callPackage ../tools/graphics/panomatic { };
 
+  pamtester = callPackage ../tools/security/pamtester { };
+
   paper-gtk-theme = callPackage ../misc/themes/gtk3/paper-gtk-theme { };
 
   par2cmdline = callPackage ../tools/networking/par2cmdline {
