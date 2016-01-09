@@ -97,15 +97,16 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = let efi = !(config.boot.loader.grub.enable && (config.boot.loader.grub.efiSupport == false)); in
+    mkIf cfg.enable {
+
     assertions = [ {
       assertion = pkgs.stdenv.isx86_64;
       message = "Xen currently not supported on ${pkgs.stdenv.system}";
     } {
-      assertion = true; # config.boot.loader.grub.enable && (config.boot.loader.grub.efiSupport == false);
+      assertion = true || !efi;
       message = "Xen currently does not support EFI boot";
     } ];
-
     virtualisation.xen.stored = mkDefault "${pkgs.xen}/bin/oxenstored";
 
     environment.systemPackages = [ pkgs.xen ];
@@ -142,11 +143,10 @@ in
       optionals cfg.trace [ "loglvl=all" "guest_loglvl=all" ] ++
       optional (cfg.domain0MemorySize != 0) "dom0_mem=${toString cfg.domain0MemorySize}M";
 
-    system.extraSystemBuilderCmds =
-      ''
-        ln -s ${pkgs.xen}/boot/xen.gz $out/xen.gz
-        echo "${toString cfg.bootParams}" > $out/xen-params
-      '';
+    system.extraSystemBuilderCmds = toString
+      ([ "ln -s ${pkgs.xen}/boot/xen.gz $out/xen.gz; " ] ++
+        optional (efi) [ "ln -s ${pkgs.xen}/boot/efi/nixos/${pkgs.xen.name}.efi $out/xen.efi; " ] ++
+       [ ''echo "${toString cfg.bootParams}" > $out/xen-params'' ] );
 
     # Mount the /proc/xen pseudo-filesystem.
     system.activationScripts.xen =
