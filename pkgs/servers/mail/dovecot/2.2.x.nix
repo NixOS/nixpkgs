@@ -26,7 +26,13 @@ stdenv.mkDerivation rec {
     patchShebangs src/config/settings-get.pl
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  # We need this for sysconfdir, see remark below.
+  installFlags = [ "DESTDIR=$(out)" ];
+
+  postInstall = ''
+    cp -r $out/$out/* $out
+    rm -rf $out/$(echo "$out" | cut -d "/" -f2)
+  '' + lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libclucene-shared.1.dylib \
         ${clucene_core_2}/lib/libclucene-shared.1.dylib \
         $out/lib/dovecot/lib21_fts_lucene_plugin.so
@@ -46,6 +52,8 @@ stdenv.mkDerivation rec {
     # It will hardcode this for /var/lib/dovecot.
     # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=626211
     "--localstatedir=/var"
+    # We need this so utilities default to reading /etc/dovecot/dovecot.conf file.
+    "--sysconfdir=/etc"
     "--with-ldap"
     "--with-ssl=openssl"
     "--with-zlib"
