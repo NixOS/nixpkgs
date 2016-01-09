@@ -40,6 +40,8 @@ in stdenv.mkDerivation {
 
   prePatch = ''
     patchShebangs .
+    sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' deps/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
+    sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' tools/gyp/pylib/gyp/xcode_emulation.py
   '';
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./default-arch.patch ./no-xcode.patch ];
@@ -60,7 +62,6 @@ in stdenv.mkDerivation {
     pushd $out/lib/node_modules/npm/node_modules/node-gyp
     patch -p2 < ${./no-xcode.patch}
     popd
-    sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' $out/lib/node_modules/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
   '';
 
   passthru.interpreterName = "nodejs-0.10";
