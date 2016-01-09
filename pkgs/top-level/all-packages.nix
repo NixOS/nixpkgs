@@ -15778,6 +15778,8 @@ let
 
   yara = callPackage ../tools/security/yara { };
 
+  zap = callPackage ../tools/networking/zap { };
+
   zdfmediathk = callPackage ../applications/video/zdfmediathk { };
 
   zopfli = callPackage ../tools/compression/zopfli { };
