@@ -410,6 +410,9 @@ in
           Type = "forking";
           Restart = "always";
           PIDFile = "/var/lib/postfix/queue/pid/master.pid";
+          ExecStart = "${pkgs.postfix}/bin/postfix -c /etc/postfix start";
+          ExecStop = "${pkgs.postfix}/bin/postfix -c /etc/postfix stop";
+          ExecReload = "${pkgs.postfix}/bin/postfix -c /etc/postfix reload";
         };
 
         preStart = ''
@@ -443,19 +446,6 @@ in
           ${pkgs.coreutils}/bin/chmod a+rwxt /var/spool/mail
           ${pkgs.coreutils}/bin/ln -sf /var/spool/mail /var/
         '';
-
-        script = ''
-          ${pkgs.postfix}/sbin/postfix -c /etc/postfix start
-        '';
-
-        reload = ''
-          ${pkgs.postfix}/sbin/postfix -c /etc/postfix reload
-        '';
-
-        preStop = ''
-          ${pkgs.postfix}/sbin/postfix -c /etc/postfix stop
-        '';
-
       };
 
   };
