@@ -9285,6 +9285,8 @@ let
 
   groovebasin = callPackage ../applications/audio/groovebasin { };
 
+  haka = callPackage ../tools/security/haka { };
+
   heapster = (callPackage ../servers/monitoring/heapster { }).bin // { outputs = ["bin"]; };
 
   hbase = callPackage ../servers/hbase {};
