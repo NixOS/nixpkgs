@@ -13427,8 +13427,6 @@ let
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
-  veracity = callPackage ../applications/version-management/veracity {};
-
   viewMtn = builderDefsPackage (callPackage ../applications/version-management/viewmtn/0.10.nix)
   {
     flup = pythonPackages.flup;
