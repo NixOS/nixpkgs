@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
-    # Make dovecot look for plugins in /var/lib/dovecot/modules
+    # Make dovecot look for plugins in /etc/dovecot/modules
     # so we can symlink plugins from several packages there
     # The symlinking needs to be done in NixOS, as part of the
     # dovecot service start-up
