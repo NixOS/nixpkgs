@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, perl, icmake, utillinux }:
 
-let version = "3.05.01"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "yodl-${version}";
+  version = "3.06.00";
 
   buildInputs = [ perl icmake ];
 
   src = fetchFromGitHub {
-    sha256 = "02vbayvnz5p0055456i8kc8qxywkhn7agfrx1kwxaalbsnrd4g9h";
+    sha256 = "03n03bxc5lh3v9yzdikqrzzdvrna8zf98mlg2dhnn5z5sb5jhyzc";
     rev = version;
     repo = "yodl";
     owner = "fbb-git";
