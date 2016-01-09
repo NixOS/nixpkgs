@@ -2741,6 +2741,8 @@ let
     libcap = if stdenv.isDarwin then null else libcap;
   };
 
+  pinentry_mac = callPackage ../tools/security/pinentry-mac { };
+
   pingtcp = callPackage ../tools/networking/pingtcp { };
 
   pius = callPackage ../tools/security/pius { };
