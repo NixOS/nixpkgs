@@ -203,8 +203,6 @@ in
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        mkdir -p "${baseDir}/login"
-        chown -R ${cfg.user}:${cfg.group} "${baseDir}"
         rm -f "${stateDir}/modules"
         ln -s "${modulesDir}" "${stateDir}/modules"
       '';
@@ -215,6 +213,7 @@ in
         Restart = "on-failure";
         RestartSec = "1s";
         StartLimitInterval = "1min";
+        RuntimeDirectory = [ "dovecot2" ];
       };
     };
 
