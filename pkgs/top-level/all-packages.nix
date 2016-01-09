@@ -11525,6 +11525,7 @@ let
 
   darktable = callPackage ../applications/graphics/darktable {
     inherit (gnome) GConf libglade;
+    pugixml = pugixml.override { shared = true; };
   };
 
   das_watchdog = callPackage ../tools/system/das_watchdog { };
