@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       libtoxcore-dev openal opencv libsodium filter-audio
-      qtbase qttools libXScrnSaver glib gtk2 cairo
+      qtbase qttools qtsvg libXScrnSaver glib gtk2 cairo
       pango atk qrencode ffmpeg qttranslations makeWrapper
     ];
 
