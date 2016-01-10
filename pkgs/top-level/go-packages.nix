@@ -1804,6 +1804,10 @@ let
     repo   = "go-ipfs";
     sha256 = "00p7kv6000bk6lbqqnnf4xy5pmd93fv6fihji3vn7br53645blaa";
     disabled = isGo14;
+    meta = with stdenv.lib; {
+      description = "A global, versioned, peer-to-peer filesystem";
+      license = licenses.mit;
+    };
   };
 
   json2csv = buildFromGitHub{
