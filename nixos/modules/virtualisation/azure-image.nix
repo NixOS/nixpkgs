@@ -105,7 +105,7 @@ in
       path  = [ pkgs.coreutils ];
       script =
         ''
-          eval "$(base64 --decode /metadata/CustomData.bin)"
+          eval "$(cat /metadata/CustomData.bin)"
           if ! [ -z "$ssh_host_ecdsa_key" ]; then
             echo "downloaded ssh_host_ecdsa_key"
             echo "$ssh_host_ecdsa_key" > /etc/ssh/ssh_host_ed25519_key
