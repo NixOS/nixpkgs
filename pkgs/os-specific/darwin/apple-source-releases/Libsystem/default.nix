@@ -113,7 +113,7 @@ appleDerivation rec {
        -o $out/lib/libSystem.dylib \
        CompatibilityHacks.o init.o \
        -compatibility_version 1.0 \
-       -current_version ${version} \
+       -current_version 1197.1.1 \
        -reexport_library $out/lib/system/libsystem_c.dylib \
        -reexport_library $out/lib/system/libsystem_kernel.dylib \
         ${stdenv.lib.concatStringsSep " "
