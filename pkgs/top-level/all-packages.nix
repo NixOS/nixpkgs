@@ -10456,6 +10456,8 @@ let
 
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
+  rt5677-firmware = callPackage ../os-specific/linux/firmware/rt5677 { };
+
   s3ql = callPackage ../tools/backup/s3ql { };
 
   sassc = callPackage ../development/tools/sassc { };
