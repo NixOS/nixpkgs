@@ -1,0 +1,13 @@
+diff --git a/KF5AuthConfig.cmake.in b/KF5AuthConfig.cmake.in
+index e859ec7..9a8ab18 100644
+--- a/KF5AuthConfig.cmake.in
++++ b/KF5AuthConfig.cmake.in
+@@ -4,7 +4,7 @@ set(KAUTH_STUB_FILES_DIR "${PACKAGE_PREFIX_DIR}/@KF5_DATA_INSTALL_DIR@/kauth/")
+ 
+ set(KAUTH_BACKEND_NAME "@KAUTH_BACKEND_NAME@")
+ set(KAUTH_HELPER_BACKEND_NAME "@KAUTH_HELPER_BACKEND_NAME@")
+-set(KAUTH_POLICY_FILES_INSTALL_DIR "@KAUTH_POLICY_FILES_INSTALL_DIR@")
++set(KAUTH_POLICY_FILES_INSTALL_DIR "\${CMAKE_INSTALL_PREFIX}/share/polkit-1/actions")
+ set(KAUTH_HELPER_INSTALL_DIR "@KAUTH_HELPER_INSTALL_DIR@")
+ 
+ find_dependency(KF5CoreAddons "@KF5_DEP_VERSION@")
