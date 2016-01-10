@@ -19,7 +19,7 @@ assert stdenv.cc ? libc && stdenv.cc.libc != null;
 let
 
 common = { pname, version, sha256 }: stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  name = "${pname}-unwrapped-${version}";
 
   src = fetchurl {
     url =
