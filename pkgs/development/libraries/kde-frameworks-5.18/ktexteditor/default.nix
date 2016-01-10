@@ -1,17 +1,21 @@
-{ kdeFramework, lib, extra-cmake-modules, karchive, kconfig
-, kguiaddons, ki18n, kio, kiconthemes, kparts, perl, qtscript
-, qtxmlpatterns, sonnet
+{ kdeFramework, lib, copyPathsToStore
+, extra-cmake-modules, makeQtWrapper, perl
+, karchive, kconfig, kguiaddons, kiconthemes, kparts
+, libgit2
+, qtscript, qtxmlpatterns
+, ki18n, kio, sonnet
 }:
 
 kdeFramework {
   name = "ktexteditor";
-  nativeBuildInputs = [ extra-cmake-modules perl ];
+  nativeBuildInputs = [ extra-cmake-modules makeQtWrapper perl ];
   buildInputs = [
-    karchive kconfig kguiaddons kiconthemes kparts qtscript
-    qtxmlpatterns
+    karchive kconfig kguiaddons kiconthemes kparts
+    libgit2
+    qtscript qtxmlpatterns
   ];
   propagatedBuildInputs = [ ki18n kio sonnet ];
-  patches = [ ./0001-no-qcoreapplication.patch ];
+  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
   };
