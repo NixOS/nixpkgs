@@ -108,7 +108,7 @@ let
       $machine->waitUntilSucceeds("cat /proc/swaps | grep -q /dev");
 
       # Check whether the channel works.
-      $machine->succeed("nix-env -i coreutils >&2");
+      $machine->succeed("nix-env -iA coreutils >&2");
       $machine->succeed("type -tP ls | tee /dev/stderr") =~ /.nix-profile/
           or die "nix-env failed";
 
