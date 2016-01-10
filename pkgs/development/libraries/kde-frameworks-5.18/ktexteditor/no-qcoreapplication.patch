@@ -1,17 +1,8 @@
-From dc50fffdc72b76498384ce2f9065c3757b786d71 Mon Sep 17 00:00:00 2001
-From: Thomas Tuegel <ttuegel@gmail.com>
-Date: Wed, 14 Oct 2015 09:08:59 -0500
-Subject: [PATCH] no qcoreapplication
-
----
- src/syntax/data/katehighlightingindexer.cpp | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
-
-diff --git a/src/syntax/data/katehighlightingindexer.cpp b/src/syntax/data/katehighlightingindexer.cpp
-index 3c63140..e3d5efe 100644
---- a/src/syntax/data/katehighlightingindexer.cpp
-+++ b/src/syntax/data/katehighlightingindexer.cpp
-@@ -51,19 +51,16 @@ QStringList readListing(const QString &fileName)
+Index: ktexteditor-5.18.0/src/syntax/data/katehighlightingindexer.cpp
+===================================================================
+--- ktexteditor-5.18.0.orig/src/syntax/data/katehighlightingindexer.cpp
++++ ktexteditor-5.18.0/src/syntax/data/katehighlightingindexer.cpp
+@@ -55,19 +55,16 @@ QStringList readListing(const QString &f
  
  int main(int argc, char *argv[])
  {
@@ -34,7 +25,7 @@ index 3c63140..e3d5efe 100644
      if (hlFilenamesListing.isEmpty()) {
          return 1;
      }
-@@ -147,7 +144,7 @@ int main(int argc, char *argv[])
+@@ -152,7 +149,7 @@ int main(int argc, char *argv[])
          return anyError;
  
      // create outfile, after all has worked!
@@ -43,6 +34,3 @@ index 3c63140..e3d5efe 100644
      if (!outFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
          return 7;
  
--- 
-2.5.2
-
