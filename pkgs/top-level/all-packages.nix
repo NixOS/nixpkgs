@@ -6478,6 +6478,14 @@ let
     gstPluginsGood = pkgs.gst_plugins_good;
     gstPluginsUgly = pkgs.gst_plugins_ugly;
     gstFfmpeg = pkgs.gst_ffmpeg;
+
+    # aliases with the dashed naming, same as in gst_all_1
+    gst-plugins-base = pkgs.gst_plugins_base;
+    gst-plugins-bad = pkgs.gst_plugins_bad;
+    gst-plugins-good = pkgs.gst_plugins_good;
+    gst-plugins-ugly = pkgs.gst_plugins_ugly;
+    gst-ffmpeg = pkgs.gst_ffmpeg;
+    gst-python = pkgs.gst_python;
   };
 
   gstreamer = callPackage ../development/libraries/gstreamer/legacy/gstreamer {
