@@ -130,4 +130,17 @@ nginx.override {
   </listitem>
 </itemizedlist>
 
+
+<para>Other notable improvements:
+<itemizedlist>
+  <listitem>
+    <para>The <command>command-not-found</command> hook was extended.
+    Apart from <literal>$NIX_AUTO_INSTALL</literal> variable,
+    it newly also checks for <literal>$NIX_AUTO_RUN</literal>
+    which causes it to directly run the missing commands via
+    <command>nix-shell</command> (without installing anything). </para>
+  </listitem>
+
+</itemizedlist></para>
+
 </section>
