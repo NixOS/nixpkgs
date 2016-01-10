@@ -12617,6 +12617,8 @@ let
 
   oroborus = callPackage ../applications/window-managers/oroborus {};
 
+  ostinato = callPackage ../applications/networking/ostinato { };
+
   panamax_api = callPackage ../applications/networking/cluster/panamax/api {
     ruby = ruby_2_1;
   };
