@@ -27,6 +27,8 @@ let
 
     ''
       default_internal_user = ${cfg.user}
+      ${optionalString (cfg.mailUser != null) "mail_uid = ${cfg.mailUser}"}
+      ${optionalString (cfg.mailGroup != null) "mail_gid = ${cfg.mailGroup}"}
 
       mail_location = ${cfg.mailLocation}
 
@@ -133,6 +135,18 @@ in
       description = ''
         Location that dovecot will use for mail folders. Dovecot mail_location option.
       '';
+    };
+
+    mailUser = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Default user to store mail for virtual users.";
+    };
+
+    mailGroup = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Default group to store mail for virtual users.";
     };
 
     modules = mkOption {
@@ -245,7 +259,7 @@ in
           fi
            ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/sieve/${to}'
         '') cfg.sieveScripts)}
-        chown -R '${cfg.user}:${cfg.group}' ${stateDir}/sieve
+        chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/sieve'
       '';
     };
 
