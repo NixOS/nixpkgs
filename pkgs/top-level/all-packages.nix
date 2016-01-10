@@ -10057,6 +10057,15 @@ let
       ];
   };
 
+  linux_chromiumos_3_18 = callPackage ../os-specific/linux/kernel/linux-chromiumos-3.18.nix {
+    kernelPatches = [ kernelPatches.chromiumos_Kconfig_fix_entries_3_18
+                      kernelPatches.chromiumos_no_link_restrictions
+                      kernelPatches.genksyms_fix_segfault
+                    ];
+  };
+
+  linux_chromiumos_latest = linux_chromiumos_3_18;
+
   /* grsec configuration
 
      We build several flavors of 'default' grsec kernels. These are
@@ -10243,6 +10252,10 @@ let
   linuxPackages_grsec_testing_desktop = grPackage grFlavors.linux_grsec_testing_desktop;
   linuxPackages_grsec_testing_server  = grPackage grFlavors.linux_grsec_testing_server;
   linuxPackages_grsec_testing_server_xen = grPackage grFlavors.linux_grsec_testing_server_xen;
+
+  # ChromiumOS kernels
+  linuxPackages_chromiumos_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_3_18 linuxPackages_chromiumos_3_18);
+  linuxPackages_chromiumos_latest = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_latest linuxPackages_chromiumos_latest);
 
   # A function to build a manually-configured kernel
   linuxManualConfig = pkgs.buildLinux;

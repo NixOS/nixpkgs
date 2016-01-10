@@ -103,4 +103,19 @@ rec {
       patch = ./crc-regression.patch;
     };
 
+  genksyms_fix_segfault =
+    { name = "genksyms-fix-segfault";
+      patch = ./genksyms-fix-segfault.patch;
+    };
+
+
+  chromiumos_Kconfig_fix_entries_3_18 =
+    { name = "Kconfig_fix_entries_3_18";
+      patch = ./chromiumos-patches/fix-double-Kconfig-entry-3.18.patch;
+    };
+
+  chromiumos_no_link_restrictions =
+    { name = "chromium-no-link-restrictions";
+      patch = ./chromiumos-patches/no-link-restrictions.patch;
+    };
 }
