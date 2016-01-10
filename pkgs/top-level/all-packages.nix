@@ -11294,6 +11294,8 @@ let
     pulseaudioSupport = config.pulseaudio or false;
   };
 
+  communi = callPackage ../applications/networking/irc/communi { };
+
   CompBus = callPackage ../applications/audio/CompBus { };
 
   compiz = callPackage ../applications/window-managers/compiz {
