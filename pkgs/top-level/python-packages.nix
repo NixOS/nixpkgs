@@ -1,5 +1,7 @@
 { pkgs, stdenv, python, self }:
 
+# When updating a package, use sha256 checksum instead of md5's from pypi!
+
 with pkgs.lib;
 
 let
