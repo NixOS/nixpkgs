@@ -51,6 +51,12 @@ let
       }
     '')
 
+    (optionalString (cfg.sieveScripts != {}) ''
+      plugin {
+        ${concatStringsSep "\n" (mapAttrsToList (to: from: "sieve_${to} = ${stateDir}/sieve/${to}") cfg.sieveScripts)}
+      }
+    '')
+
     cfg.extraConfig
   ];
 
@@ -165,6 +171,12 @@ in
       description = "Whether to create a own Dovecot PAM service and configure PAM user logins.";
     };
 
+    sieveScripts = mkOption {
+      type = types.attrsOf types.path;
+      default = {};
+      description = "Sieve scripts to be executed. Key is a sequence, e.g. 'before2', 'after' etc.";
+    };
+
     showPAMFailure = mkOption {
       type = types.bool;
       default = false;
@@ -219,6 +231,22 @@ in
         StartLimitInterval = "1min";
         RuntimeDirectory = [ "dovecot2" ];
       };
+
+      preStart = ''
+        rm -rf ${stateDir}/sieve
+      '' + optionalString (cfg.sieveScripts != {}) ''
+        mkdir -p ${stateDir}/sieve
+        ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
+          if [ -d '${from}' ]; then
+            mkdir '${stateDir}/sieve/${to}'
+            cp ${from}/*.sieve '${stateDir}/sieve/${to}'
+          else
+            cp '${from}' '${stateDir}/sieve/${to}'
+          fi
+           ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/sieve/${to}'
+        '') cfg.sieveScripts)}
+        chown -R '${cfg.user}:${cfg.group}' ${stateDir}/sieve
+      '';
     };
 
     environment.systemPackages = [ dovecotPkg ];
