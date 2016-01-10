@@ -7042,6 +7042,8 @@ let
 
   libcm = callPackage ../development/libraries/libcm { };
 
+  libcommuni = callPackage ../development/libraries/libcommuni { };
+
   inherit (gnome3) libcroco;
 
   libcangjie = callPackage ../development/libraries/libcangjie { };
