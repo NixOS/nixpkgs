@@ -3,17 +3,21 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mpDris2";
+  name = "mpDris2-${version}";
   version = "0.6";
 
   src = fetchurl {
-    url = "https://github.com/eonpatapon/${name}/archive/${version}.tar.gz";
+    url = "https://github.com/eonpatapon/mpDris2/archive/${version}.tar.gz";
     sha256 = "0zdmamj2ldhr6y3s464w8y2x3yizda784jnlrg3j3myfabssisvz";
   };
 
-  buildInputs = [ intltool autoreconfHook ];
+  makeFlags = [
+    "DATADIRNAME=share"
+  ];
+
+  nativeBuildInputs = [ autoreconfHook intltool ];
   propagatedBuildInputs = [ python wrapPython ];
-  pythonPath = [ mpd pygtk dbus pynotify ];
+  pythonPath = [ dbus mpd pygtk pynotify ];
   postInstall = "wrapPythonPrograms";
 
   meta = with stdenv.lib; {
