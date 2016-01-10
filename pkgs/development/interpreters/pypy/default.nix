@@ -1,6 +1,6 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
 , sqlite, openssl, ncurses, pythonFull, expat, tcl, tk, xlibsWrapper, libX11
-, makeWrapper, callPackage, self }:
+, makeWrapper, callPackage, self, gdbm, db }:
 
 assert zlibSupport -> zlib != null;
 
@@ -21,7 +21,7 @@ let
       sha256 = "1g7iipllgdfjgdkypsa1g2pzxgjw9agp40rh82hk31rsbak2hfbl";
     };
 
-    buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper ]
+    buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]
       ++ stdenv.lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
 
@@ -81,11 +81,11 @@ let
        # disable sqlite3 due to https://bugs.pypy.org/issue1740
        # disable test_multiprocessing due to transient errors
        # disable test_os because test_urandom_failure fails
-       # disable test_urllib2net and test_urllibnet because it requires networking (example.com)
+       # disable test_urllib2net, test_urllib2_localnet, and test_urllibnet because they require networking (example.com)
        # disable test_zipfile64 because it randomly timeouts
        # disable test_cpickle because timeouts
        # disable test_ssl because no shared cipher' not found in '[Errno 1] error:14077410:SSL routines:SSL23_GET_SERVER_HELLO:sslv3 alert handshake failure
-      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k 'not (test_ssl or test_cpickle or test_sqlite or test_urllib2net or test_urllibnet or test_socket or test_os or test_shutil or test_mhlib or test_multiprocessing or test_zipfile64)' lib-python
+      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k 'not (test_ssl or test_cpickle or test_sqlite or test_urllib2net or test_urllibnet or test_urllib2_localnet or test_socket or test_os or test_shutil or test_mhlib or test_multiprocessing or test_zipfile64)' lib-python
     '';
 
     installPhase = ''
