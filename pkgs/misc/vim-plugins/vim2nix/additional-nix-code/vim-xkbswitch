@@ -1,0 +1,5 @@
+    patchPhase = ''
+      substituteInPlace plugin/xkbswitch.vim \
+              --replace /usr/local/lib/libxkbswitch.so ${xkb_switch}/lib/libxkbswitch.so
+    '';
+    buildInputs = [ xkb_switch ];
