@@ -55,7 +55,7 @@ let
   ];
 
   modulesDir = pkgs.symlinkJoin "dovecot-modules"
-    (map (module: "${module}/lib/dovecot") cfg.modules);
+    (map (pkg: "${pkg}/lib/dovecot") ([ dovecotPkg ] ++ map (module: module.override { dovecot = dovecotPkg; }) cfg.modules));
 
 in
 {
