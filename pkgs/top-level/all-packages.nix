@@ -4194,12 +4194,12 @@ let
 
   icedtea7_web = callPackage ../development/compilers/icedtea-web {
     jdk = jdk7;
-    xulrunner = firefox;
+    xulrunner = firefox-unwrapped;
   };
 
   icedtea8_web = callPackage ../development/compilers/icedtea-web {
     jdk = jdk8;
-    xulrunner = firefox;
+    xulrunner = firefox-unwrapped;
   };
 
   icedtea_web = icedtea8_web;
@@ -11326,13 +11326,8 @@ let
 
   comical = callPackage ../applications/graphics/comical { };
 
-  conkeror = callPackage ../applications/networking/browsers/conkeror { };
-
-  conkerorWrapper = wrapFirefox {
-    browser = conkeror;
-    browserName = "conkeror";
-    desktopName = "Conkeror";
-  };
+  conkeror-unwrapped = callPackage ../applications/networking/browsers/conkeror { };
+  conkeror = wrapFirefox conkeror-unwrapped { };
 
   csdp = callPackage ../applications/science/math/csdp {
     liblapack = liblapackWithoutAtlas;
@@ -11440,11 +11435,8 @@ let
 
   dvd-slideshow = callPackage ../applications/video/dvd-slideshow { };
 
-  dwb = callPackage ../applications/networking/browsers/dwb { dconf = gnome3.dconf; };
-
-  dwbWrapper = wrapFirefox
-    { browser = dwb; browserName = "dwb"; desktopName = "dwb";
-    };
+  dwb-unwrapped = callPackage ../applications/networking/browsers/dwb { dconf = gnome3.dconf; };
+  dwb = wrapFirefox dwb-unwrapped { desktopName = "dwb"; };
 
   dwm = callPackage ../applications/window-managers/dwm {
     patches = config.dwm.patches or [];
@@ -11838,10 +11830,10 @@ let
     inherit (pythonPackages) pysqlite;
     libpng = libpng_apng;
     enableGTK3 = false;
-  }) firefox firefox-esr;
+  }) firefox-unwrapped firefox-esr-unwrapped;
 
-  firefox-wrapper = wrapFirefox { browser = pkgs.firefox; };
-  firefox-esr-wrapper = wrapFirefox { browser = pkgs.firefox-esr; };
+  firefox = wrapFirefox firefox-unwrapped { };
+  firefox-esr = wrapFirefox firefox-esr-unwrapped { };
 
   firefox-bin = callPackage ../applications/networking/browsers/firefox-bin {
     gconf = pkgs.gnome.GConf;
@@ -12033,7 +12025,7 @@ let
 
   gecko_mediaplayer = callPackage ../applications/networking/browsers/mozilla-plugins/gecko-mediaplayer {
     inherit (gnome) GConf;
-    browser = firefox;
+    browser = firefox-unwrapped;
   };
 
   geeqie = callPackage ../applications/graphics/geeqie { };
@@ -12458,12 +12450,10 @@ let
 
   mid2key = callPackage ../applications/audio/mid2key { };
 
-  midori = callPackage ../applications/networking/browsers/midori {
+  midori-unwrapped = callPackage ../applications/networking/browsers/midori {
     webkitgtk = webkitgtk24x;
   };
-
-  midoriWrapper = wrapFirefox
-    { browser = midori; browserName = "midori"; desktopName = "Midori"; };
+  midori = wrapFirefox midori-unwrapped { };
 
   mikmod = callPackage ../applications/audio/mikmod { };
 
@@ -13917,7 +13907,9 @@ let
     pygtk = pyGtkGlade;
   };
 
-  zotero = callPackage ../applications/office/zotero {};
+  zotero = callPackage ../applications/office/zotero {
+    firefox = firefox-unwrapped;
+  };
 
   zscroll = callPackage ../applications/misc/zscroll {};
 
@@ -14657,7 +14649,8 @@ let
             tag = "-client-without-kde";
           });
 
-          rekonq = callPackage ../applications/networking/browsers/rekonq { };
+          rekonq-unwrapped = callPackage ../applications/networking/browsers/rekonq { };
+          rekonq = wrapFirefox rekonq-unwrapped { };
 
           kwebkitpart = callPackage ../applications/networking/browsers/kwebkitpart { };
 
@@ -15670,27 +15663,17 @@ let
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   });
 
-  vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
+  vimprobable2-unwrapped = callPackage ../applications/networking/browsers/vimprobable2 {
     webkit = webkitgtk2;
   };
+  vimprobable2 = wrapFirefox vimprobable2-unwrapped { };
 
-  vimprobable2Wrapper = wrapFirefox
-    { browser = vimprobable2; browserName = "vimprobable2"; desktopName = "Vimprobable2";
-    };
+  inherit (kde4) rekonq;
 
-  rekonqWrapper = wrapFirefox {
-    browser = kde4.rekonq; browserName = "rekonq"; desktopName = "Rekonq";
-  };
-
-  vimb = callPackage ../applications/networking/browsers/vimb {
+  vimb-unwrapped = callPackage ../applications/networking/browsers/vimb {
     webkit = webkitgtk2;
   };
-
-  vimbWrapper = wrapFirefox {
-    browser = vimb;
-    browserName = "vimb";
-    desktopName = "Vimb";
-  };
+  vimb = wrapFirefox vimb-unwrapped { };
 
   vips = callPackage ../tools/graphics/vips { };
   nip2 = callPackage ../tools/graphics/nip2 { };
@@ -15821,12 +15804,16 @@ aliases = with self; rec {
   buildbotSlave = buildbot-slave;  # added 2014-12-09
   cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
+  conkerorWrapper = conkeror; # added 2015-01
   cool-old-term = cool-retro-term; # added 2015-01-31
   cupsBjnp = cups-bjnp; # added 2016-01-02
   cv = progress; # added 2015-09-06
+  dwbWrapper = dwb; # added 2015-01
   enblendenfuse = enblend-enfuse;	# 2015-09-30
   exfat-utils = exfat;                  # 2015-09-11
-  firefoxWrapper = firefox-wrapper;
+  firefoxWrapper = firefox;           # 2015-09
+  firefox-wrapper = firefox;          # 2016-01
+  firefox-esr-wrapper = firefox-esr;  # 2016-01
   fuse_exfat = exfat;                   # 2015-09-11
   grantlee5 = qt5.grantlee;  # added 2015-12-19
   gupnptools = gupnp-tools;  # added 2015-12-19
@@ -15838,6 +15825,7 @@ aliases = with self; rec {
   libtidy = html-tidy;  # added 2014-12-21
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
+  midoriWrapper = midori; # added 2015-01
   mlt-qt5 = qt5.mlt;  # added 2015-12-19
   nfsUtils = nfs-utils;  # added 2014-12-06
   phonon_qt5 = qt5.phonon;  # added 2015-12-19
@@ -15852,6 +15840,7 @@ aliases = with self; rec {
   quasselClient_kf5 = kde5.quasselClient; # added 2015-09-30
   qwt6 = qt5.qwt;  # added 2015-12-19
   rdiff_backup = rdiff-backup;  # added 2014-11-23
+  rekonqWrapper = rekonq; # added 2015-01
   rssglx = rss-glx; #added 2015-03-25
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
   signon = qt5.signon;  # added 2015-12-19
@@ -15864,6 +15853,8 @@ aliases = with self; rec {
   xlibs = xorg; # added 2015-09
   youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
   youtubeDL = youtube-dl;  # added 2014-10-26
+  vimbWrapper = vimb; # added 2015-01
+  vimprobable2Wrapper = vimprobable2; # added 2015-01
   pidginlatexSF = pidginlatex; # added 2014-11-02
   tftp_hpa = tftp-hpa; # added 2015-04-03
   manpages = man-pages; # added 2015-12-06
