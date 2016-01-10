@@ -4531,6 +4531,28 @@ in modules // {
     };
   };
 
+  dopy = buildPythonPackage rec {
+    version = "2016-01-04";
+    name = "dopy-${version}";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "Wiredcraft";
+      repo = "dopy";
+      rev = "cb443214166a4e91b17c925f40009ac883336dc3";
+      sha256 ="0ams289qcgna96aak96jbz6wybs6qb95h2gn8lb4lmx2p5sq4q56";
+    };
+
+    propagatedBuildInputs = with self; [ requests2 six ];
+
+    meta = {
+      description = "Digital Ocean API python wrapper";
+      homepage = "https://github.com/Wiredcraft/dopy";
+      license = licenses.mit;
+      maintainers = with maintainers; [ lihop ];
+      platforms = platforms.all;
+    };
+  };
+
   dpkt = buildPythonPackage rec {
     name = "dpkt-1.8";
     disabled = isPy3k;
