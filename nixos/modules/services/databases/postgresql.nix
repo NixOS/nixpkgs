@@ -122,8 +122,8 @@ in
         example = literalExample "[ (pkgs.postgis.override { postgresql = pkgs.postgresql94; }).v_2_1_4 ]";
         description = ''
           When this list contains elements a new store path is created.
-          PostgreSQL and the elments are symlinked into it. Then pg_config,
-          postgres and pc_ctl are copied to make them use the new
+          PostgreSQL and the elements are symlinked into it. Then pg_config,
+          postgres and pg_ctl are copied to make them use the new
           $out/lib directory as pkglibdir. This makes it possible to use postgis
           without patching the .sql files which reference $libdir/postgis-1.5.
         '';
