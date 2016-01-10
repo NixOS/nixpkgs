@@ -9632,8 +9632,6 @@ let
     libdrm = if stdenv.isLinux then libdrm else null;
   } // { inherit xlibsWrapper; } );
 
-  xorgVideoUnichrome = callPackage ../servers/x11/xorg/unichrome/default.nix { };
-
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
 
   yaws = callPackage ../servers/http/yaws { erlang = erlangR17; };
