@@ -1,6 +1,6 @@
 { kdeFramework, lib, extra-cmake-modules, docbook_xml_dtd_45, kauth
 , karchive, kcompletion, kconfig, kconfigwidgets, kcoreaddons
-, kcrash, kdbusaddons, kdesignerplugin, kdoctools, kemoticons
+, kcrash, kdbusaddons, kded, kdesignerplugin, kdoctools, kemoticons
 , kglobalaccel, kguiaddons, ki18n, kiconthemes, kio, kitemmodels
 , kinit, knotifications, kparts, kservice, ktextwidgets
 , kunitconversion, kwidgetsaddons, kwindowsystem, kxmlgui
@@ -13,7 +13,7 @@ kdeFramework {
   name = "kdelibs4support";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    kcompletion kconfig kservice kwidgetsaddons
+    kcompletion kconfig kded kservice kwidgetsaddons
     kxmlgui networkmanager qtsvg qtx11extras xlibs.libSM
   ];
   propagatedBuildInputs = [

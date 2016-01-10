@@ -1,4 +1,4 @@
-{ kdeFramework, lib
+{ kdeFramework, lib, copyPathsToStore
 , extra-cmake-modules
 , karchive
 , kconfig
@@ -13,10 +13,7 @@ kdeFramework {
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeQtWrapper ];
   buildInputs = [ karchive kconfig ];
   propagatedBuildInputs = [ kcoreaddons ki18n ];
-  patches = [
-    ./0001-allow-external-paths.patch
-    ./0002-qdiriterator-follow-symlinks.patch
-  ];
+  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   postInstall = ''
     wrapQtProgram "$out/bin/kpackagetool5"
   '';
