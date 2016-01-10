@@ -10143,8 +10143,6 @@ let
 
     openafsClient = callPackage ../servers/openafs-client { };
 
-    wis_go7007 = callPackage ../os-specific/linux/wis-go7007 { };
-
     kernelHeaders = callPackage ../os-specific/linux/kernel-headers { };
 
     klibc = callPackage ../os-specific/linux/klibc { };
