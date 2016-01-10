@@ -10057,6 +10057,14 @@ let
       ];
   };
 
+  linux_chromiumos_3_14 = callPackage ../os-specific/linux/kernel/linux-chromiumos-3.14.nix {
+    kernelPatches = [ kernelPatches.chromiumos_Kconfig_fix_entries_3_14
+                      kernelPatches.chromiumos_mfd_fix_dependency
+                      kernelPatches.chromiumos_no_link_restrictions
+                      kernelPatches.genksyms_fix_segfault
+                    ];
+  };
+
   linux_chromiumos_3_18 = callPackage ../os-specific/linux/kernel/linux-chromiumos-3.18.nix {
     kernelPatches = [ kernelPatches.chromiumos_Kconfig_fix_entries_3_18
                       kernelPatches.chromiumos_no_link_restrictions
@@ -10254,6 +10262,7 @@ let
   linuxPackages_grsec_testing_server_xen = grPackage grFlavors.linux_grsec_testing_server_xen;
 
   # ChromiumOS kernels
+  linuxPackages_chromiumos_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_3_14 linuxPackages_chromiumos_3_14);
   linuxPackages_chromiumos_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_3_18 linuxPackages_chromiumos_3_18);
   linuxPackages_chromiumos_latest = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_latest linuxPackages_chromiumos_latest);
 

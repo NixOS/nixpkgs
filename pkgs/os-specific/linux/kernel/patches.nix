@@ -109,6 +109,11 @@ rec {
     };
 
 
+  chromiumos_Kconfig_fix_entries_3_14 =
+    { name = "Kconfig_fix_entries_3_14";
+      patch = ./chromiumos-patches/fix-double-Kconfig-entry-3.14.patch;
+    };
+
   chromiumos_Kconfig_fix_entries_3_18 =
     { name = "Kconfig_fix_entries_3_18";
       patch = ./chromiumos-patches/fix-double-Kconfig-entry-3.18.patch;
@@ -117,5 +122,10 @@ rec {
   chromiumos_no_link_restrictions =
     { name = "chromium-no-link-restrictions";
       patch = ./chromiumos-patches/no-link-restrictions.patch;
+    };
+
+  chromiumos_mfd_fix_dependency =
+    { name = "mfd_fix_dependency";
+      patch = ./chromiumos-patches/mfd-fix-dependency.patch;
     };
 }
