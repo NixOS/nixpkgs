@@ -9,16 +9,10 @@ let
   baseDir = "/run/dovecot2";
   stateDir = "/var/lib/dovecot";
 
-  protocols = concatStrings [
-    (optionalString cfg.enableImap "imap")
-    (optionalString cfg.enablePop3 "pop3")
-    (optionalString cfg.enableLmtp "lmtp")
-  ];
-
   dovecotConf = concatStrings [
     ''
       base_dir = ${baseDir}
-      protocols = ${protocols}
+      protocols = ${concatStringsSep " " cfg.protocols}
     ''
 
     (if isNull cfg.sslServerCert then ''
@@ -85,6 +79,12 @@ in
       type = types.bool;
       default = false;
       description = "Start the LMTP listener (when Dovecot is enabled).";
+    };
+
+    protocols = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "Additional listeners to start when Dovecot is enabled.";
     };
 
     package = mkOption {
@@ -177,6 +177,11 @@ in
 
     security.pam.services.dovecot2 = mkIf cfg.enablePAM {};
 
+    services.dovecot2.protocols =
+     optional cfg.enableImap "imap"
+     ++ optional cfg.enablePop3 "pop3"
+     ++ optional cfg.enableLmtp "lmtp";
+
     users.extraUsers = [
       { name = "dovenull";
         uid = config.ids.uids.dovenull2;
@@ -220,7 +225,7 @@ in
     environment.systemPackages = [ dovecotPkg ];
 
     assertions = [
-      { assertion = cfg.enablePop3 || cfg.enableImap;
+      { assertion = intersectLists cfg.protocols [ "pop3" "imap" ] != [];
         message = "dovecot needs at least one of the IMAP or POP3 listeners enabled";
       }
       { assertion = isNull cfg.sslServerCert == isNull cfg.sslServerKey
