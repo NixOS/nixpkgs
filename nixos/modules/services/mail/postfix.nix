@@ -356,6 +356,18 @@ in
         description = "Extra lines to append to the generated master.cf file.";
       };
 
+      aliasFiles = mkOption {
+        type = types.attrsOf types.path;
+        default = {};
+        description = "Aliases' tables to be compiled and placed into /var/lib/postfix/conf.";
+      };
+
+      mapFiles = mkOption {
+        type = types.attrsOf types.path;
+        default = {};
+        description = "Maps to be compiled and placed into /var/lib/postfix/conf.";
+      };
+
     };
 
   };
@@ -363,92 +375,99 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.postfix.enable {
+  config = mkIf config.services.postfix.enable (mkMerge [
+    {
 
-    environment = {
-      etc = singleton
-        { source = "/var/lib/postfix/conf";
-          target = "postfix";
+      environment = {
+        etc = singleton
+          { source = "/var/lib/postfix/conf";
+            target = "postfix";
+          };
+
+        # This makes comfortable for root to run 'postqueue' for example.
+        systemPackages = [ pkgs.postfix ];
+      };
+
+      services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
+        program = "sendmail";
+        source = "${pkgs.postfix}/bin/sendmail";
+        group = setgidGroup;
+        setuid = false;
+        setgid = true;
+      };
+
+      users.extraUsers = optional (user == "postfix")
+        { name = "postfix";
+          description = "Postfix mail server user";
+          uid = config.ids.uids.postfix;
+          group = group;
         };
 
-      # This makes comfortable for root to run 'postqueue' for example.
-      systemPackages = [ pkgs.postfix ];
-    };
-
-    services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
-      program = "sendmail";
-      source = "${pkgs.postfix}/bin/sendmail";
-      group = setgidGroup;
-      setuid = false;
-      setgid = true;
-    };
-
-    users.extraUsers = optional (user == "postfix")
-      { name = "postfix";
-        description = "Postfix mail server user";
-        uid = config.ids.uids.postfix;
-        group = group;
-      };
-
-    users.extraGroups =
-      optional (group == "postfix")
-      { name = group;
-        gid = config.ids.gids.postfix;
-      }
-      ++ optional (setgidGroup == "postdrop")
-      { name = setgidGroup;
-        gid = config.ids.gids.postdrop;
-      };
-
-    systemd.services.postfix =
-      { description = "Postfix mail server";
-
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        path = [ pkgs.postfix ];
-
-        serviceConfig = {
-          Type = "forking";
-          Restart = "always";
-          PIDFile = "/var/lib/postfix/queue/pid/master.pid";
-          ExecStart = "${pkgs.postfix}/bin/postfix -c /etc/postfix start";
-          ExecStop = "${pkgs.postfix}/bin/postfix -c /etc/postfix stop";
-          ExecReload = "${pkgs.postfix}/bin/postfix -c /etc/postfix reload";
+      users.extraGroups =
+        optional (group == "postfix")
+        { name = group;
+          gid = config.ids.gids.postfix;
+        }
+        ++ optional (setgidGroup == "postdrop")
+        { name = setgidGroup;
+          gid = config.ids.gids.postdrop;
         };
 
-        preStart = ''
-          mkdir -p /var/lib/postfix/data /var/lib/postfix/queue/{pid,public,maildrop}
+      systemd.services.postfix =
+        { description = "Postfix mail server";
 
-          chown -R ${user}:${group} /var/lib/postfix
-          chown root /var/lib/postfix/queue
-          chown root /var/lib/postfix/queue/pid
-          chgrp -R ${setgidGroup} /var/lib/postfix/queue/{public,maildrop}
-          chmod 770 /var/lib/postfix/queue/{public,maildrop}
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+          path = [ pkgs.postfix ];
 
-          rm -rf /var/lib/postfix/conf
-          mkdir -p /var/lib/postfix/conf
-          ln -sf ${mainCfFile} /var/lib/postfix/conf/main.cf
-          ln -sf ${masterCfFile} /var/lib/postfix/conf/master.cf
-          ${optionalString haveAliases ''
-            ln -sf ${aliasesFile} /var/lib/postfix/conf/aliases
-            postalias /var/lib/postfix/conf/aliases
-          ''}
-          ${optionalString haveTransport ''
-            ${pkgs.coreutils}/bin/ln -sf ${transportFile} /var/lib/postfix/conf/transport
-            ${pkgs.postfix}/bin/postmap /var/lib/postfix/conf/transport
-          ''}
-          ${optionalString haveVirtual ''
-            ln -sf ${virtualFile} /var/lib/postfix/conf/virtual
-            postmap /var/lib/postfix/conf/virtual
-          ''}
+          serviceConfig = {
+            Type = "forking";
+            Restart = "always";
+            PIDFile = "/var/lib/postfix/queue/pid/master.pid";
+            ExecStart = "${pkgs.postfix}/bin/postfix start";
+            ExecStop = "${pkgs.postfix}/bin/postfix stop";
+            ExecReload = "${pkgs.postfix}/bin/postfix reload";
+          };
 
-          mkdir -p /var/spool/mail
-          chown root:root /var/spool/mail
-          chmod a+rwxt /var/spool/mail
-          ln -sf /var/spool/mail /var/
-        '';
-      };
+          preStart = ''
+            mkdir -p /var/lib/postfix/data /var/lib/postfix/queue/{pid,public,maildrop}
 
-  };
+            chown -R ${user}:${group} /var/lib/postfix
+            chown root /var/lib/postfix/queue
+            chown root /var/lib/postfix/queue/pid
+            chgrp -R ${setgidGroup} /var/lib/postfix/queue/{public,maildrop}
+            chmod 770 /var/lib/postfix/queue/{public,maildrop}
+
+            rm -rf /var/lib/postfix/conf
+            mkdir -p /var/lib/postfix/conf
+            ln -sf ${mainCfFile} /var/lib/postfix/conf/main.cf
+            ln -sf ${masterCfFile} /var/lib/postfix/conf/master.cf
+            ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
+              ln -sf ${from} /var/lib/postfix/conf/${to}
+              postalias /var/lib/postfix/conf/${to}
+            '') cfg.aliasFiles)}
+            ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
+              ln -sf ${from} /var/lib/postfix/conf/${to}
+              postmap /var/lib/postfix/conf/${to}
+            '') cfg.mapFiles)}
+
+            mkdir -p /var/spool/mail
+            chown root:root /var/spool/mail
+            chmod a+rwxt /var/spool/mail
+            ln -sf /var/spool/mail /var/
+          '';
+        };
+    }
+
+    (mkIf haveAliases {
+      services.postfix.aliasFiles."aliases" = aliasesFile;
+    })
+    (mkIf haveTransport {
+      services.postfix.mapFiles."transport" = transportFile;
+    })
+    (mkIf haveVirtual {
+      services.postfix.mapFiles."virtual" = virtualFile;
+    })
+  ]);
 
 }
