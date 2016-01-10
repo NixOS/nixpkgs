@@ -1789,11 +1789,11 @@ let
   };
 
   ipfs = buildFromGitHub{
-    rev = "43622bd5eed1f62d53d364dc771bbb500939d9e6";
-    date   = "2015-10-30";
+    rev = "f9dc4c726b770199f4ee64d97775d5fe8122814e";
+    date   = "2015-12-07";
     owner  = "ipfs";
     repo   = "go-ipfs";
-    sha256 = "0g80b65ysj995dj3mkh3lp4v616fzjl7bx2wf14mkxfri4gr5icb";
+    sha256 = "00p7kv6000bk6lbqqnnf4xy5pmd93fv6fihji3vn7br53645blaa";
     disabled = isGo14;
   };
 
