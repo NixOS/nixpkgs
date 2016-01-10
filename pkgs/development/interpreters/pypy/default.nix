@@ -25,9 +25,9 @@ let
       ++ stdenv.lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
 
-    C_INCLUDE_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p}/include") buildInputs);
-    LIBRARY_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
-    LD_LIBRARY_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p}/lib")
+    C_INCLUDE_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p.dev or p}/include") buildInputs);
+    LIBRARY_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p.lib or p.out or p}/lib") buildInputs);
+    LD_LIBRARY_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p.lib or p.out or p}/lib")
       (stdenv.lib.filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs));
 
     preConfigure = ''
