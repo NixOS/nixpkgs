@@ -332,6 +332,8 @@ let
 
   fetchgitLocal = callPackage ../build-support/fetchgitlocal { };
 
+  fetchmaven = callPackage ../development/java-modules/m2install.nix { };
+
   fetchmtn = callPackage ../build-support/fetchmtn (config.fetchmtn or {});
 
   packer = callPackage ../development/tools/packer { };
@@ -423,6 +425,8 @@ let
     callPackage ../build-support/kernel/modules-closure.nix {
       inherit kernel rootModules allowMissing;
     };
+
+  mavenbuild = callPackage ../development/java-modules/maven-build.nix { };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
@@ -4285,6 +4289,17 @@ let
     assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
       (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix { inherit installjdk; });
+
+  javaPackages = {
+    commonsIo = callPackage ../development/java-modules/commons-io.nix {};
+  };
+
+  mavenPlugins = {
+    mavenRemoteResourcesGen = callPackage ../development/java-modules/maven-plugins/maven-remote-resources-plugin { };
+    mavenRemoteResources10 = self.mavenPlugins.mavenRemoteResourcesGen.mavenRemoteResources10;
+    mavenRemoteResources11 = self.mavenPlugins.mavenRemoteResourcesGen.mavenRemoteResources11;
+    mavenRemoteResources121 = self.mavenPlugins.mavenRemoteResourcesGen.mavenRemoteResources121;
+  };
 
   jikes = callPackage ../development/compilers/jikes { };
 
