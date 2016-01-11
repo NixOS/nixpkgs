@@ -223,8 +223,8 @@ in modules // {
     pname = "acd_cli";
     version = "0.3.1";
 
-    disabled = !isPy3k;
-    doCheck = !isPy3k;
+    disabled = !isPy33;
+    doCheck = !isPy33;
 
     src = pkgs.fetchFromGitHub {
       owner = "yadayada";
