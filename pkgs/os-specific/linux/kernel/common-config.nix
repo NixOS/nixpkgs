@@ -328,6 +328,7 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.11") ''
     PINCTRL_BAYTRAIL y # GPIO on Intel Bay Trail, for some Chromebook internal eMMC disks
   ''}
+  MMC_BLOCK_MINORS 32 # 8 is default. Modern gpt tables on eMMC may go far beyond 8.
   PPP_MULTILINK y # PPP multilink support
   PPP_FILTER y
   REGULATOR y # Voltage and Current Regulator Support
