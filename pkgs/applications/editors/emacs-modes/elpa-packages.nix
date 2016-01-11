@@ -64,21 +64,10 @@ self:
     };
 
     elpaPackages = super // {
-      ace-window = markBroken super.ace-window;
-      ada-mode = markBroken super.ada-mode;
-      company-math = markBroken super.company-math;
-      company-statistics = markBroken super.company-statistics;
-      context-coloring = markBroken super.context-coloring;
-      dict-tree = markBroken super.dict-tree;
       el-search = markBroken super.el-search;
       ergoemacs-mode = markBroken super.ergoemacs-mode;
-      exwm = markBroken super.exwm;
-      gnugo = markBroken super.gnugo;
       iterators = markBroken super.iterators;
       midi-kbd = markBroken super.midi-kbd;
       stream = markBroken super.stream;
-      tNFA = markBroken super.tNFA;
-      trie = markBroken super.trie;
-      xelb = markBroken super.xelb;
     };
   in elpaPackages // { inherit elpaBuild elpaPackages; }
