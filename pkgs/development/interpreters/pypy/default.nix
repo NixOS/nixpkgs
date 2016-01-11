@@ -31,16 +31,6 @@ let
       (stdenv.lib.filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs));
 
     preConfigure = ''
-      substituteInPlace Makefile \
-        --replace "-Ojit" "-Ojit --batch" \
-        --replace "pypy/goal/targetpypystandalone.py" "pypy/goal/targetpypystandalone.py --withmod-_minimal_curses --withmod-unicodedata --withmod-thread --withmod-bz2 --withmod-_multiprocessing"
-
-      # we are using cpython and not pypy to do translation
-      substituteInPlace rpython/bin/rpython \
-        --replace "/usr/bin/env pypy" "${pythonFull}/bin/python"
-      substituteInPlace pypy/goal/targetpypystandalone.py \
-        --replace "/usr/bin/env pypy" "${pythonFull}/bin/python"
-
       # hint pypy to find nix ncurses
       substituteInPlace pypy/module/_minimal_curses/fficurses.py \
         --replace "/usr/include/ncurses/curses.h" "${ncurses}/include/curses.h" \
@@ -55,6 +45,10 @@ let
         --replace "libdirs = []" "libdirs = ['${tk}/lib', '${tcl}/lib']"
 
       sed -i "s@libraries=\['sqlite3'\]\$@libraries=['sqlite3'], include_dirs=['${sqlite}/include'], library_dirs=['${sqlite}/lib']@" lib_pypy/_sqlite3_build.py
+    '';
+
+    buildPhase = ''
+      ${pythonFull.interpreter} rpython/bin/rpython --make-jobs="$NIX_BUILD_CORES" -Ojit --batch pypy/goal/targetpypystandalone.py --withmod-_minimal_curses --withmod-unicodedata --withmod-thread --withmod-bz2 --withmod-_multiprocessing
     '';
 
     setupHook = ./setup-hook.sh;
