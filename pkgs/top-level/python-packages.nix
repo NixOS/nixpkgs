@@ -23393,6 +23393,21 @@ in modules // {
     };
   };
 
+  xkcdpass = buildPythonPackage rec {
+    name = "xkcdpass-${version}";
+    version = "1.4.2";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/x/xkcdpass/xkcdpass-1.4.2.tar.gz";
+      sha256 = "4c1f8bee886820c42ccc64c15c3a2275dc6d01028cf6af7c481ded87267d8269";
+    };
+    meta = {
+      homepage = https://pypi.python.org/pypi/xkcdpass/;
+      description = "Generate secure multiword passwords/passphrases, inspired by XKCD";
+      license = licenses.bsd3;
+      maintainers = [ ];
+    };
+  };
+
   xstatic = buildPythonPackage rec {
     name = "XStatic-${version}";
     version = "1.0.1";
