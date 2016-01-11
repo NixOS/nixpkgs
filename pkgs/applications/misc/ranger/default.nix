@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, python, w3m }:
+{ stdenv, fetchurl, buildPythonPackage, python, w3m, file }:
 
 buildPythonPackage rec {
   name = "ranger-1.7.1";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "11nznx2lqv884q9d2if63101prgnjlnan8pcwy550hji2qsn3c7q";
   };
 
-  propagatedBuildInputs = with python.modules; [ curses ];
+  propagatedBuildInputs = [ python.modules.curses file ];
 
   preConfigure = ''
     substituteInPlace ranger/ext/img_display.py \
