@@ -8432,11 +8432,11 @@ in modules // {
   };
 
   future = buildPythonPackage rec {
-    version = "v0.14.3";
+    version = "0.14.3";
     name = "future-${version}";
 
     src = pkgs.fetchurl {
-      url = "http://github.com/PythonCharmers/python-future/archive/${version}.tar.gz";
+      url = "http://github.com/PythonCharmers/python-future/archive/v${version}.tar.gz";
       sha256 = "0hgp9kq7h4ipw8ax5xvvkyh3bkqw361d3rndvb9xix01h9j9mi3p";
     };
 
