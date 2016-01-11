@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   emacsName = "emacs-24.5";
-  name = "${emacsName}-mac-5.13";
+  name = "${emacsName}-mac-5.15";
 
   #builder = ./builder.sh;
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${name}.tar.gz";
-    sha256 = "0p8xpsnsdpwpfq4mz0fazm785d0my0pq4ifbw533g959jh17b36h";
+    sha256 = "1r47bm1pf5av2yr37byz91y7bp6vdw9smahiy18g5qp4jp6mz193";
   };
 
   enableParallelBuilding = true;
