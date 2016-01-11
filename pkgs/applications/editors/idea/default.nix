@@ -1,10 +1,14 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, patchelf, p7zip, jdk
+{ stdenv, fetchurl, makeDesktopItem, makeWrapper, patchelf, p7zip, oraclejdk8
 , coreutils, gnugrep, which, git, python, unzip, androidsdk
 }:
 
 assert stdenv.isLinux;
 
 let
+
+  # After IDEA 15 we can no longer use OpenJDK.
+  # https://youtrack.jetbrains.com/issue/IDEA-147272
+  jdk = oraclejdk8;
 
   mkIdeaProduct = with stdenv.lib;
   { name, product, version, build, src, meta }:
