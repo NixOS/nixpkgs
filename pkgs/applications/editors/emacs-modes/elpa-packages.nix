@@ -64,6 +64,7 @@ self:
     };
 
     elpaPackages = super // {
+      # These packages require emacs-25
       el-search = markBroken super.el-search;
       iterators = markBroken super.iterators;
       midi-kbd = markBroken super.midi-kbd;
