@@ -5099,6 +5099,7 @@ let
   fetchHex = callPackage ../development/tools/build-managers/rebar3/fetch-hex.nix { };
 
   erlangPackages = callPackage ../development/erlang-modules { };
+  hex2nix = erlangPackages.callPackage ../development/tools/erlang/hex2nix { };
 
   elixir = callPackage ../development/interpreters/elixir { };
 
