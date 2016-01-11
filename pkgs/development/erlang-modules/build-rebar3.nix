@@ -7,6 +7,7 @@
 , buildInputs ? [], erlangDeps ? [], pluginDeps ? []
 , postPatch ? ""
 , compilePorts ? false
+, installPhase ? null
 , meta ? {}
 , ... }@attrs:
 
@@ -56,7 +57,8 @@ let
       runHook postBuild
     '';
 
-    installPhase = ''
+    installPhase = if installPhase == null
+    then ''
       runHook preInstall
       mkdir -p "$out/lib/erlang/lib/${name}-${version}"
       for reldir in src ebin priv include; do
@@ -66,7 +68,8 @@ let
         success=1
       done
       runHook postInstall
-    '';
+    ''
+    else installPhase;
 
     meta = {
       inherit (erlang.meta) platforms;
