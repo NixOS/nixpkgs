@@ -8067,6 +8067,8 @@ let
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
+  quicksynergy = callPackage ../applications/misc/quicksynergy { };
+
   qwt = callPackage ../development/libraries/qwt {};
 
   qwt6 = callPackage ../development/libraries/qwt/6.nix { };
