@@ -205,9 +205,6 @@ self: super: {
   # The tests in vty-ui do not build, but vty-ui itself builds.
   vty-ui = enableCabalFlag super.vty-ui "no-tests";
 
-  # https://github.com/DanielG/cabal-helper/issues/10
-  cabal-helper = dontCheck super.cabal-helper;
-
   # https://github.com/fpco/stackage/issues/1112
   vector-algorithms = dontCheck super.vector-algorithms;
 
