@@ -1,7 +1,15 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook
+, lzmaSupport ? true, xz ? null
+}:
 
-let version = "3.0.11"; in
-stdenv.mkDerivation {
+assert lzmaSupport -> xz != null;
+
+let
+  version = "3.0.11";
+  mkWith = flag: name: if flag
+    then "--with-${name}"
+    else "--without-${name}";
+in stdenv.mkDerivation {
   name = "xdelta-${version}";
   
   src = fetchFromGitHub {
@@ -12,10 +20,16 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = []
+    ++ stdenv.lib.optionals lzmaSupport [ xz ];
 
   postPatch = ''
     cd xdelta3
   '';
+
+  configureFlags = [
+    (mkWith lzmaSupport "liblzma")
+  ];
 
   enableParallelBuilding = true;
 
