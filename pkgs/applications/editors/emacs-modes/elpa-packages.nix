@@ -65,7 +65,6 @@ self:
 
     elpaPackages = super // {
       el-search = markBroken super.el-search;
-      ergoemacs-mode = markBroken super.ergoemacs-mode;
       iterators = markBroken super.iterators;
       midi-kbd = markBroken super.midi-kbd;
       stream = markBroken super.stream;
