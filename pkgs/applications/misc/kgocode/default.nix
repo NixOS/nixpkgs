@@ -12,7 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    description = "a plugin for KTextEditor (Kate, KDevelop, among others) that provides basic code completion for the Go programming language. Uses gocode as completion provider";
+    description = "Go code completion for Kate, KDevelop and others";
+    longDescription = ''
+      A plugin for KTextEditor (Kate, KDevelop, among others) that provides
+      basic code completion for the Go programming language.
+      Uses gocode as completion provider.
+    '';
     homepage    = https://bitbucket.org/lucashnegri/kgocode/overview;
     maintainers = with maintainers; [ qknight ];
     license = licenses.gpl3Plus;
