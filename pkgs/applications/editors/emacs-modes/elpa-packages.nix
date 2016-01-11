@@ -66,8 +66,6 @@ self:
     elpaPackages = super // {
       ace-window = markBroken super.ace-window;
       ada-mode = markBroken super.ada-mode;
-      beacon = markBroken super.beacon;
-      bug-hunter = markBroken super.bug-hunter;
       company-math = markBroken super.company-math;
       company-statistics = markBroken super.company-statistics;
       context-coloring = markBroken super.context-coloring;
