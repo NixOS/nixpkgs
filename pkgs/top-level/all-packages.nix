@@ -3658,6 +3658,7 @@ let
   xtitle = callPackage ../tools/misc/xtitle { };
 
   xdelta = callPackage ../tools/compression/xdelta { };
+  xdeltaUnstable = callPackage ../tools/compression/xdelta/unstable.nix { };
 
   xdummy = callPackage ../tools/misc/xdummy { };
 

@@ -5,7 +5,7 @@
 assert lzmaSupport -> xz != null;
 
 let
-  version = "3.0.11";
+  version = "3.1.0";
   mkWith = flag: name: if flag
     then "--with-${name}"
     else "--without-${name}";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
   name = "xdelta-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "1c7xym7xr26phyf4wb9hh2w88ybzbzh2w3h1kyqq3da0ndidmf2r";
+    sha256 = "09mmsalc7dwlvgrda56s2k927rpl3a5dzfa88aslkqcjnr790wjy";
     rev = "v${version}";
     repo = "xdelta-devel";
     owner = "jmacd";
@@ -25,6 +25,10 @@ in stdenv.mkDerivation {
 
   postPatch = ''
     cd xdelta3
+
+    substituteInPlace Makefile.am --replace \
+      "common_CFLAGS =" \
+      "common_CFLAGS = -DXD3_USE_LARGESIZET=1"
   '';
 
   configureFlags = [
