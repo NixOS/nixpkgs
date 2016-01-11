@@ -6133,8 +6133,6 @@ let
 
   aterm25 = callPackage ../development/libraries/aterm/2.5.nix { };
 
-  aterm28 = lowPrio (callPackage ../development/libraries/aterm/2.8.nix { });
-
   attica = callPackage ../development/libraries/attica { };
 
   attr = callPackage ../development/libraries/attr { };
@@ -7816,23 +7814,6 @@ let
   });
 
   meterbridge = callPackage ../applications/audio/meterbridge { };
-
-  metaEnvironment = recurseIntoAttrs (let callPackage = newScope pkgs.metaEnvironment; in rec {
-    sdfLibrary    = callPackage ../development/libraries/sdf-library { aterm = aterm28; };
-    toolbuslib    = callPackage ../development/libraries/toolbuslib { aterm = aterm28; inherit (windows) w32api; };
-    cLibrary      = callPackage ../development/libraries/c-library { aterm = aterm28; };
-    errorSupport  = callPackage ../development/libraries/error-support { aterm = aterm28; };
-    ptSupport     = callPackage ../development/libraries/pt-support { aterm = aterm28; };
-    ptableSupport = callPackage ../development/libraries/ptable-support { aterm = aterm28; };
-    configSupport = callPackage ../development/libraries/config-support { aterm = aterm28; };
-    asfSupport    = callPackage ../development/libraries/asf-support { aterm = aterm28; };
-    tideSupport   = callPackage ../development/libraries/tide-support { aterm = aterm28; };
-    rstoreSupport = callPackage ../development/libraries/rstore-support { aterm = aterm28; };
-    sdfSupport    = callPackage ../development/libraries/sdf-support { aterm = aterm28; };
-    sglr          = callPackage ../development/libraries/sglr { aterm = aterm28; };
-    ascSupport    = callPackage ../development/libraries/asc-support { aterm = aterm28; };
-    pgen          = callPackage ../development/libraries/pgen { aterm = aterm28; };
-  });
 
   mhddfs = callPackage ../tools/filesystems/mhddfs { };
 
