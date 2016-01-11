@@ -50,6 +50,11 @@ in stdenv.mkDerivation {
   meta = with stdenv.lib; {
     inherit version;
     description = "Binary differential compression in VCDIFF (RFC 3284) format";
+    longDescription = ''
+      xdelta is a command line program for delta encoding, which generates two
+      file differences. This is similar to diff and patch, but it is targeted
+      for binary files and does not generate human readable output.
+    '';
     homepage = http://xdelta.org/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
