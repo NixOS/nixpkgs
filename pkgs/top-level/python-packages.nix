@@ -15263,11 +15263,12 @@ in modules // {
   };
 
   pyglet = buildPythonPackage rec {
-    name = "pyglet-1.1.4";
+    name = "pyglet-${version}";
+    version = "1.2.4";
 
     src = pkgs.fetchurl {
-      url = "http://pyglet.googlecode.com/files/${name}.tar.gz";
-      sha256 = "048n20d606i3njnzhajadnznnfm8pwchs43hxs50da9p79g2m6qx";
+      url = "https://pypi.python.org/packages/source/p/pyglet/pyglet-${version}.tar.gz";
+      sha256 = "9f62ffbbcf2b202d084bf158685e77d28b8f4f5f2738f4c5e63a947a07503445";
     };
 
     patchPhase = let
