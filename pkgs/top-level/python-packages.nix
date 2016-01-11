@@ -19382,15 +19382,16 @@ in modules // {
   };
 
   tox = buildPythonPackage rec {
-    name = "tox-1.8.1";
+    name = "tox-${version}";
+    version = "2.3.1";
 
-    propagatedBuildInputs = with self; [ py virtualenv ];
+    propagatedBuildInputs = with self; [ py virtualenv pluggy ];
 
     doCheck = false;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/tox/${name}.tar.gz";
-      md5 = "c4423cc6512932b37e5b0d1faa87bef2";
+      sha256 = "1vj73ar4rimq3fwy5r2z3jv4g9qbh8rmpmncsc00g0k310acqzxz";
     };
   };
 
