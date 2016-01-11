@@ -8293,6 +8293,8 @@ let
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
+  quicksynergy = callPackage ../applications/misc/quicksynergy { };
+
   qwt = callPackage ../development/libraries/qwt {};
 
   qxt = callPackage ../development/libraries/qxt {};
