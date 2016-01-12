@@ -11578,6 +11578,8 @@ let
 
     notmuch = lowPrio (pkgs.notmuch.override { inherit emacs; });
 
+    notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
+
     ocamlMode = callPackage ../applications/editors/emacs-modes/ocaml { };
 
     offlineimap = callPackage ../applications/editors/emacs-modes/offlineimap {};
