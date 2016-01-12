@@ -14,6 +14,14 @@ let
     dwarf-fortress-unfuck = callPackage_i686 ./unfuck.nix { };
 
     dwarf-fortress = callPackage ./wrapper { };
+
+    dwarf-therapist-original = callPackage ./dwarf-therapist {
+      texlive = pkgs.texlive.combine {
+        inherit (pkgs.texlive) scheme-basic float caption wrapfig adjmulticol sidecap preprint enumitem;
+      };
+    };
+
+    dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix { };
   };
 
 in self

@@ -14112,7 +14112,7 @@ let
 
   dwarf-fortress = dwarf-fortress-packages.dwarf-fortress.override { };
 
-  dwarf-therapist = callPackage ../games/dwarf-therapist { };
+  dwarf-therapist = dwarf-fortress-packages.dwarf-therapist;
 
   d1x_rebirth = callPackage ../games/d1x-rebirth { };
 
