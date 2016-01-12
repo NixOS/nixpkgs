@@ -143,7 +143,7 @@ in
       systemd.services = flip mapAttrs' cfg.certs (cert: data:
         let
           cpath = "${cfg.directory}/${cert}";
-          rights = if cfg.allowKeysForGroup then "750" else "700";
+          rights = if data.allowKeysForGroup then "750" else "700";
           cmdline = [ "-v" "-d" cert "--default_root" data.webroot "--valid_min" cfg.validMin ]
                     ++ optionals (data.email != null) [ "--email" data.email ]
                     ++ concatMap (p: [ "-f" p ]) data.plugins
