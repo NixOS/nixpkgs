@@ -2031,6 +2031,8 @@ let
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
+  klick = callPackage ../applications/audio/klick { };
+
   knockknock = callPackage ../tools/security/knockknock { };
 
   kpcli = callPackage ../tools/security/kpcli { };
