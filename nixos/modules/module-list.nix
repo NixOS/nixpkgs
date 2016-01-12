@@ -193,6 +193,7 @@
   ./services/mail/postfix.nix
   ./services/mail/postsrsd.nix
   ./services/mail/spamassassin.nix
+  ./services/mail/rspamd.nix
   ./services/misc/apache-kafka.nix
   ./services/misc/autofs.nix
   ./services/misc/bepasty.nix
