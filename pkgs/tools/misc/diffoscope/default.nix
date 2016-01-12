@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, pythonPackages, docutils
+{ lib, stdenv, fetchgit, fetchpatch, pythonPackages, docutils
 , acl, binutils, bzip2, cbfstool, cdrkit, cpio, diffutils, e2fsprogs, file, fpc, gettext, ghc, gnupg1
 , gzip, jdk, libcaca, mono, pdftk, poppler_utils, rpm, sng, sqlite, squashfsTools, unzip, vim, xz
 , enableBloat ? false
@@ -15,6 +15,14 @@ pythonPackages.buildPythonPackage rec {
     rev = "refs/tags/${version}";
     sha256 = "1wdphcmr2n0pyg7zwvczy7ik1bzjlrjb76jwbzk971lwba3ajazk";
   };
+
+  patches =
+    [ # Ignore different link counts and inode change times.
+      (fetchpatch {
+        url = https://github.com/edolstra/diffoscope/commit/367f77bba8df0dbc89e63c9f66f05736adf5ec59.patch;
+        sha256 = "0mnp7icdrjn02dr6f5dwqvvr848jzgkv3cg69a24234y9gxd30ww";
+      })
+    ];
 
   postPatch = ''
     # Upstream doesn't provide a PKG-INFO file
