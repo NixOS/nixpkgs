@@ -12877,6 +12877,8 @@ let
 
   puremapping = callPackage ../applications/audio/pd-plugins/puremapping { };
 
+  pybitmessage = callPackage ../applications/networking/instant-messengers/pybitmessage { };
+
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
   qbittorrent = callPackage ../applications/networking/p2p/qbittorrent {
