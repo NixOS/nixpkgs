@@ -1,19 +1,19 @@
 { stdenv, fetchgit, pkgconfig, libtoxcore-dev, openal, opencv,
   libsodium, libXScrnSaver, glib, gdk_pixbuf, gtk2, cairo,
   pango, atk, qrencode, ffmpeg, filter-audio, makeWrapper,
-  qtbase, qtsvg, qttools, qttranslations }:
+  qtbase, qtsvg, qttools, qttranslations, sqlcipher }:
 
 let
-  revision = "1673b43e26c853f6446f228fec083af166cbf446";
+  revision = "8b671916abdcc1d553a367a502b23ec4ea7568a1";
 in
 
 stdenv.mkDerivation rec {
-  name = "qtox-dev-20150925";
+  name = "qtox-dev-20151221";
 
   src = fetchgit {
       url = "https://github.com/tux3/qTox.git";
       rev = "${revision}";
-      md5 = "785f5b305cdcdf777d93ee823a5b9f49";
+      md5 = "a93a63d35e506be4b21abda0986f19e7";
   };
 
   buildInputs =
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
       libtoxcore-dev openal opencv libsodium filter-audio
       qtbase qttools qtsvg libXScrnSaver glib gtk2 cairo
       pango atk qrencode ffmpeg qttranslations makeWrapper
+      sqlcipher
     ];
 
   nativeBuildInputs = [ pkgconfig ];
