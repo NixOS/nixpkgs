@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libX11, libXext, gettext, libICE, libXtst, libXi, libSM, xorgserver
+{ stdenv, fetchFromGitHub, libX11, libXext, gettext, libICE, libXtst, libXi, libSM, xorgserver
 , autoconf, automake, cvs, libtool, nasm, utilmacros, pixman, xkbcomp, xkeyboard_config
 , fontDirectories, fontutil, libgcrypt, gnutls, pam, flex, bison
 , fixesproto, damageproto, xcmiscproto, bigreqsproto, randrproto, renderproto
@@ -10,13 +10,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "git-20150504";
   name = "tigervnc-${version}";
+  version = "1.6.0";
 
-  src = fetchgit {
-    url = "https://github.com/TigerVNC/tigervnc/";
-    sha256 = "1ib8f870wqa8kpvif01fvd2690dhq7fg233pc78pl9ag6pxlihmn";
-    rev = "bc84faa2f366ed8fa0f44abc7e3e481e0a54859d";
+  src = fetchFromGitHub {
+    owner = "TigerVNC";
+    repo = "tigervnc";
+    rev = "v${version}";
+    sha256 = "1plljv1cxsax88kv52g02n8c1hzwgp6j1p8z1aqhskw36shg4pij";
   };
 
   inherit fontDirectories;
