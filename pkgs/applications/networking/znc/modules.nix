@@ -16,19 +16,21 @@ let
 in rec {
 
   fish = zncDerivation rec {
-    name = "znc-fish-8e1f150fda";
+    name = "znc-fish-${version}";
+    version = "git-2014-10-10";
     module_name = "fish";
 
     src = fetchgit {
-        url = meta.repositories.git;
-        rev = "8e1f150fdaf18dc33e023795584dec8255e6614e";
-        sha256 = "0vpk4336c191irl3g7wibblnbqf3903hjrci4gs0qgg1wvj7fw66";
+      url = meta.repositories.git;
+      rev = "9c580e018a1a08374e814fc06f551281cff827de";
+      sha256 = "0yvs0jkwwp18qxqvw1dvir91ggczz56ka00k0zlsb81csdi8xfvl";
     };
 
     meta = {
       description = "ZNC FiSH module";
       homepage = https://github.com/dctrwatson/znc-fish;
-      repositories.git = https://github.com/dctrwatson/znc-fish.git;
+      # this fork works with ZNC 1.6
+      repositories.git = https://github.com/jarrydpage/znc-fish.git;
       maintainers = [ stdenv.lib.maintainers.offline ];
     };
   };
