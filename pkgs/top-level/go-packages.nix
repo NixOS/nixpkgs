@@ -824,6 +824,13 @@ let
     subPackages = [ "./" ];  # don't try to build test fixtures
   };
 
+  git-appraise = buildFromGitHub {
+    rev = "v0.3";
+    owner = "google";
+    repo = "git-appraise";
+    sha256 = "124hci9whsvlcywsfz5y20kkj3nhy176a1d5s1lkvsga09yxq6wm";
+  };
+
   git-lfs = buildFromGitHub {
     rev = "v1.0.0";
     owner = "github";
