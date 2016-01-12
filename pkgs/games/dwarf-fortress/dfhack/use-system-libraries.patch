@@ -1,0 +1,138 @@
+From 1196fcb987b6aadb49075d817b3615bf8a6d7d51 Mon Sep 17 00:00:00 2001
+From: Nikolay Amiantov <ab@fmap.me>
+Date: Wed, 6 Jan 2016 03:07:20 +0300
+Subject: [PATCH 2/2] Use as much system libraries as possible
+
+---
+ CMakeLists.txt                    |  5 -----
+ depends/CMakeLists.txt            |  3 ---
+ library/CMakeLists.txt            | 10 +++++-----
+ plugins/CMakeLists.txt            |  4 ++--
+ plugins/mapexport/CMakeLists.txt  |  4 ++--
+ plugins/stockpiles/CMakeLists.txt |  4 ++--
+ 6 files changed, 11 insertions(+), 19 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1933390..d871df4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -152,8 +152,6 @@ ELSEIF(MSVC)
+   SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od")
+ ENDIF()
+ 
+-# use shared libraries for protobuf
+-ADD_DEFINITIONS(-DPROTOBUF_USE_DLLS)
+ ADD_DEFINITIONS(-DLUA_BUILD_AS_DLL)
+ 
+ if(APPLE)
+@@ -173,11 +171,8 @@ if(NOT UNIX)
+ endif()
+ set(ZLIB_ROOT /usr/lib/i386-linux-gnu)
+ find_package(ZLIB REQUIRED)
+-include_directories(depends/protobuf)
+ include_directories(depends/lua/include)
+ include_directories(depends/md5)
+-include_directories(depends/jsoncpp)
+-include_directories(depends/tinyxml)
+ include_directories(depends/tthread)
+ include_directories(${ZLIB_INCLUDE_DIRS})
+ include_directories(depends/clsocket/src)
+diff --git a/depends/CMakeLists.txt b/depends/CMakeLists.txt
+index bf0345b..2a1a852 100644
+--- a/depends/CMakeLists.txt
++++ b/depends/CMakeLists.txt
+@@ -1,10 +1,7 @@
+ #list depends here.
+ add_subdirectory(lua)
+ add_subdirectory(md5)
+-add_subdirectory(protobuf)
+-add_subdirectory(tinyxml)
+ add_subdirectory(tthread)
+-add_subdirectory(jsoncpp)
+ # build clsocket static and only as a dependency. Setting those options here overrides its own default settings.
+ OPTION(CLSOCKET_SHARED "Build clsocket lib as shared." OFF)
+ OPTION(CLSOCKET_DEP_ONLY "Build for use inside other CMake projects as dependency." ON)
+diff --git a/library/CMakeLists.txt b/library/CMakeLists.txt
+index 5071d9e..d346d1e 100644
+--- a/library/CMakeLists.txt
++++ b/library/CMakeLists.txt
+@@ -203,10 +203,10 @@ LIST(APPEND PROJECT_SOURCES ${PROJECT_PROTO_SRCS})
+ 
+ ADD_CUSTOM_COMMAND(
+     OUTPUT ${PROJECT_PROTO_SRCS} ${PROJECT_PROTO_HDRS}
+-    COMMAND protoc-bin -I=${CMAKE_CURRENT_SOURCE_DIR}/proto/
++    COMMAND protoc -I=${CMAKE_CURRENT_SOURCE_DIR}/proto/
+             --cpp_out=dllexport_decl=DFHACK_EXPORT:${CMAKE_CURRENT_SOURCE_DIR}/proto/
+             ${PROJECT_PROTOS}
+-    DEPENDS protoc-bin ${PROJECT_PROTOS}
++    DEPENDS ${PROJECT_PROTOS}
+ )
+ 
+ # Merge headers into sources
+@@ -249,12 +249,12 @@ IF(UNIX)
+ ENDIF()
+ 
+ IF(APPLE)
+-  SET(PROJECT_LIBS dl dfhack-md5 dfhack-tinyxml dfhack-tinythread)
++  SET(PROJECT_LIBS dl dfhack-md5 tinyxml dfhack-tinythread)
+ ELSEIF(UNIX)
+-  SET(PROJECT_LIBS rt dl dfhack-md5 dfhack-tinyxml dfhack-tinythread)
++  SET(PROJECT_LIBS rt dl dfhack-md5 tinyxml dfhack-tinythread)
+ ELSE(WIN32)
+   #FIXME: do we really need psapi?
+-  SET(PROJECT_LIBS psapi dfhack-md5 dfhack-tinyxml dfhack-tinythread)
++  SET(PROJECT_LIBS psapi dfhack-md5 tinyxml dfhack-tinythread)
+ ENDIF()
+ 
+ ADD_LIBRARY(dfhack-version STATIC DFHackVersion.cpp)
+diff --git a/plugins/CMakeLists.txt b/plugins/CMakeLists.txt
+index 9781401..ece508c 100644
+--- a/plugins/CMakeLists.txt
++++ b/plugins/CMakeLists.txt
+@@ -69,11 +69,11 @@ STRING(REPLACE ".proto" ".pb.h" PROJECT_PROTO_HDRS "${PROJECT_PROTOS}")
+ 
+ ADD_CUSTOM_COMMAND(
+     OUTPUT ${PROJECT_PROTO_SRCS} ${PROJECT_PROTO_HDRS}
+-    COMMAND protoc-bin -I=${dfhack_SOURCE_DIR}/library/proto/
++    COMMAND protoc -I=${dfhack_SOURCE_DIR}/library/proto/
+                        -I=${CMAKE_CURRENT_SOURCE_DIR}/proto/
+             --cpp_out=${CMAKE_CURRENT_SOURCE_DIR}/proto/
+             ${PROJECT_PROTOS}
+-    DEPENDS protoc-bin ${PROJECT_PROTOS}
++    DEPENDS ${PROJECT_PROTOS}
+ )
+ add_custom_target(generate_proto DEPENDS ${PROJECT_PROTO_SRCS} ${PROJECT_PROTO_HDRS})
+ 
+diff --git a/plugins/mapexport/CMakeLists.txt b/plugins/mapexport/CMakeLists.txt
+index 429507a..7e2390a 100644
+--- a/plugins/mapexport/CMakeLists.txt
++++ b/plugins/mapexport/CMakeLists.txt
+@@ -32,8 +32,8 @@ LIST(APPEND PROJECT_SRCS ${PROJECT_HDRS})
+ #Generate sources from our proto files and store them in the source tree
+ ADD_CUSTOM_COMMAND(
+ OUTPUT ${PROJECT_PROTO_SRCS} ${PROJECT_PROTO_HDRS}
+-COMMAND protoc-bin -I=${CMAKE_CURRENT_SOURCE_DIR}/proto/ --cpp_out=${CMAKE_CURRENT_SOURCE_DIR}/proto/ ${PROJECT_PROTOS}
+-DEPENDS protoc-bin ${PROJECT_PROTOS}
++COMMAND protoc -I=${CMAKE_CURRENT_SOURCE_DIR}/proto/ --cpp_out=${CMAKE_CURRENT_SOURCE_DIR}/proto/ ${PROJECT_PROTOS}
++DEPENDS ${PROJECT_PROTOS}
+ )
+ 
+ IF(WIN32)
+diff --git a/plugins/stockpiles/CMakeLists.txt b/plugins/stockpiles/CMakeLists.txt
+index 713c3d6..dd2d4cb 100644
+--- a/plugins/stockpiles/CMakeLists.txt
++++ b/plugins/stockpiles/CMakeLists.txt
+@@ -33,8 +33,8 @@ LIST(APPEND PROJECT_SRCS ${PROJECT_HDRS})
+ #Generate sources from our proto files and store them in the source tree
+ ADD_CUSTOM_COMMAND(
+ OUTPUT ${PROJECT_PROTO_SRCS} ${PROJECT_PROTO_HDRS}
+-COMMAND protoc-bin -I=${CMAKE_CURRENT_SOURCE_DIR}/proto/ --cpp_out=${CMAKE_CURRENT_SOURCE_DIR}/proto/ ${PROJECT_PROTOS}
+-DEPENDS protoc-bin ${PROJECT_PROTOS}
++COMMAND protoc -I=${CMAKE_CURRENT_SOURCE_DIR}/proto/ --cpp_out=${CMAKE_CURRENT_SOURCE_DIR}/proto/ ${PROJECT_PROTOS}
++DEPENDS ${PROJECT_PROTOS}
+ )
+ 
+ IF(WIN32)
+-- 
+2.6.3
+
