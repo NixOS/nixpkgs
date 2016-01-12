@@ -1,7 +1,6 @@
-{ stdenv, fetchurl, fetchgit,  znc }:
+{ stdenv, fetchurl, fetchgit, znc }:
 
 let
-
   zncDerivation = a@{
     name, src, module_name,
     buildPhase ? "${znc}/bin/znc-buildmod ${module_name}.cpp",
@@ -15,25 +14,6 @@ let
   });
 
 in rec {
-
-  push = zncDerivation rec {
-    name = "znc-push-${version}";
-    version = "1.0.0";
-    module_name = "push";
-
-    src = fetchurl {
-        url = "https://github.com/jreese/znc-push/archive/v${version}.tar.gz";
-        sha256 = "1v9a16b1d8mfzhddf4drh6rbxa0szr842g7614r8ninmc0gi7a2v";
-    };
-
-    meta = {
-      description = "Push notification service module for ZNC";
-      homepage = https://github.com/jreese/znc-push;
-      repositories.git = https://github.com/jreese/znc-push.git;
-      license = stdenv.lib.licenses.mit;
-      maintainers = [ stdenv.lib.maintainers.offline ];
-    };
-  };
 
   fish = zncDerivation rec {
     name = "znc-fish-8e1f150fda";
@@ -67,6 +47,26 @@ in rec {
       description = "ZNC privmsg module";
       homepage = https://github.com/kylef/znc-contrib;
       repositories.git = https://github.com/kylef/znc-contrib.git;
+    };
+  };
+
+  push = zncDerivation rec {
+    name = "znc-push-${version}";
+    version = "git-2015-12-07";
+    module_name = "push";
+
+    src = fetchgit {
+      url = "https://github.com/jreese/znc-push.git";
+      rev = "717a2b1741eee75456b0862ef76dbb5af906e936";
+      sha256 = "1lr5bhcy8156f7sbah7kjgz4g4mhkkwgvwjd2rxpbwnpq3ssza9k";
+    };
+
+    meta = {
+      description = "Push notification service module for ZNC";
+      homepage = https://github.com/jreese/znc-push;
+      repositories.git = https://github.com/jreese/znc-push.git;
+      license = stdenv.lib.licenses.mit;
+      maintainers = [ stdenv.lib.maintainers.offline ];
     };
   };
 
