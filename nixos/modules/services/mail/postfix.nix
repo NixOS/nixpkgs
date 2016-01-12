@@ -405,6 +405,7 @@ in
 
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
+        path = [ pkgs.postfix ];
 
         serviceConfig = {
           Type = "forking";
@@ -416,35 +417,35 @@ in
         };
 
         preStart = ''
-          ${pkgs.coreutils}/bin/mkdir -p /var/lib/postfix/data /var/lib/postfix/queue/{pid,public,maildrop}
+          mkdir -p /var/lib/postfix/data /var/lib/postfix/queue/{pid,public,maildrop}
 
-          ${pkgs.coreutils}/bin/chown -R ${user}:${group} /var/lib/postfix
-          ${pkgs.coreutils}/bin/chown root /var/lib/postfix/queue
-          ${pkgs.coreutils}/bin/chown root /var/lib/postfix/queue/pid
-          ${pkgs.coreutils}/bin/chgrp -R ${setgidGroup} /var/lib/postfix/queue/{public,maildrop}
-          ${pkgs.coreutils}/bin/chmod 770 /var/lib/postfix/queue/{public,maildrop}
+          chown -R ${user}:${group} /var/lib/postfix
+          chown root /var/lib/postfix/queue
+          chown root /var/lib/postfix/queue/pid
+          chgrp -R ${setgidGroup} /var/lib/postfix/queue/{public,maildrop}
+          chmod 770 /var/lib/postfix/queue/{public,maildrop}
 
-          ${pkgs.coreutils}/bin/rm -rf /var/lib/postfix/conf
-          ${pkgs.coreutils}/bin/mkdir -p /var/lib/postfix/conf
-          ${pkgs.coreutils}/bin/ln -sf ${mainCfFile} /var/lib/postfix/conf/main.cf
-          ${pkgs.coreutils}/bin/ln -sf ${masterCfFile} /var/lib/postfix/conf/master.cf
+          rm -rf /var/lib/postfix/conf
+          mkdir -p /var/lib/postfix/conf
+          ln -sf ${mainCfFile} /var/lib/postfix/conf/main.cf
+          ln -sf ${masterCfFile} /var/lib/postfix/conf/master.cf
           ${optionalString haveAliases ''
-            ${pkgs.coreutils}/bin/ln -sf ${aliasesFile} /var/lib/postfix/conf/aliases
-            ${pkgs.postfix}/bin/postalias /var/lib/postfix/conf/aliases
+            ln -sf ${aliasesFile} /var/lib/postfix/conf/aliases
+            postalias /var/lib/postfix/conf/aliases
           ''}
           ${optionalString haveTransport ''
             ${pkgs.coreutils}/bin/ln -sf ${transportFile} /var/lib/postfix/conf/transport
             ${pkgs.postfix}/bin/postmap /var/lib/postfix/conf/transport
           ''}
           ${optionalString haveVirtual ''
-            ${pkgs.coreutils}/bin/ln -sf ${virtualFile} /var/lib/postfix/conf/virtual
-            ${pkgs.postfix}/bin/postmap /var/lib/postfix/conf/virtual
+            ln -sf ${virtualFile} /var/lib/postfix/conf/virtual
+            postmap /var/lib/postfix/conf/virtual
           ''}
 
-          ${pkgs.coreutils}/bin/mkdir -p /var/spool/mail
-          ${pkgs.coreutils}/bin/chown root:root /var/spool/mail
-          ${pkgs.coreutils}/bin/chmod a+rwxt /var/spool/mail
-          ${pkgs.coreutils}/bin/ln -sf /var/spool/mail /var/
+          mkdir -p /var/spool/mail
+          chown root:root /var/spool/mail
+          chmod a+rwxt /var/spool/mail
+          ln -sf /var/spool/mail /var/
         '';
       };
 
