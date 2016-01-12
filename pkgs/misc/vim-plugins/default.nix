@@ -966,7 +966,7 @@ rec {
       pushd build
       cmake -G "Unix Makefiles" . ../third_party/ycmd/cpp -DPYTHON_LIBRARIES:PATH=${python}/lib/libpython2.7.so -DPYTHON_INCLUDE_DIR:PATH=${python}/include/python2.7 -DUSE_CLANG_COMPLETER=ON -DUSE_SYSTEM_LIBCLANG=ON
       make ycm_core -j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
-      ${python}/bin/python ../third_party/ycmd/build.py --gocode-completer --clang-completer --system-libclang
+      ${python}/bin/python ../third_party/ycmd/build.py --racer-completer --gocode-completer --clang-completer --system-libclang
       popd
     '';
 
