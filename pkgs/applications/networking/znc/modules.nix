@@ -15,6 +15,26 @@ let
 
 in rec {
 
+  clientbuffer = zncDerivation rec {
+    name = "znc-clientbuffer-${version}";
+    version = "git-2015-08-27";
+    module_name = "clientbuffer";
+
+    src = fetchgit {
+      url = meta.repositories.git;
+      rev = "fe0f368e1fcab2b89d5c94209822d9b616cea840";
+      sha256 = "1knbkj1dm45s741qndsfclmk3pyxnihgwq2i1n75ip3wv8i1bf4b";
+    };
+
+    meta = with stdenv.lib; {
+      description = "ZNC module for client specific buffers";
+      homepage = https://github.com/jpnurmi/znc-clientbuffer;
+      repositories.git = https://github.com/jpnurmi/znc-clientbuffer.git;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ hrdinka ];
+    };
+  };
+
   fish = zncDerivation rec {
     name = "znc-fish-${version}";
     version = "git-2014-10-10";
