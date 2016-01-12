@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, openssl, libpcap, python
-, enableStatic ? false
-}:
+{ stdenv, fetchurl, openssl, libpcap, python }:
 
 stdenv.mkDerivation rec {
   name = "vde2-2.3.2";
@@ -11,9 +9,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ openssl libpcap python ];
-
-  # Avoid qemu rebuild; feel free to replace with optional
-  configureFlags = if enableStatic then [ "--enable-static" ] else null;
 
   meta = {
     homepage = http://vde.sourceforge.net/;
