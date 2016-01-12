@@ -55,6 +55,26 @@ in rec {
     };
   };
 
+  playback = zncDerivation rec {
+    name = "znc-playback-${version}";
+    version = "git-2015-08-04";
+    module_name = "playback";
+
+    src = fetchgit {
+      url = meta.repositories.git;
+      rev = "8691abf75becc1f3d7b5bb5ad68dad17cd21863b";
+      sha256 = "0pd89p00yfir4lvw0107lc3qxzx8bgbm5lqq0lpwb6cahv3ipdra";
+    };
+
+    meta = with stdenv.lib; {
+      description = "An advanced playback module for ZNC";
+      homepage = https://github.com/jpnurmi/znc-playback;
+      repositories.git = https://github.com/jpnurmi/znc-playback.git;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ hrdinka ];
+    };
+  };
+
   privmsg = zncDerivation rec {
     name = "znc-privmsg-${version}";
     version = "git-2015-02-22";
