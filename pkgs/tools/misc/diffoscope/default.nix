@@ -6,14 +6,14 @@
 
 pythonPackages.buildPythonPackage rec {
   name = "diffoscope-${version}";
-  version = "44";
+  version = "45";
 
   namePrefix = "";
 
   src = fetchgit {
     url = "git://anonscm.debian.org/reproducible/diffoscope.git";
     rev = "refs/tags/${version}";
-    sha256 = "1sisdmh1bl62b16yfjy9mxxdfzhskrabp0l3pl1kxn7db0c4vpac";
+    sha256 = "1wdphcmr2n0pyg7zwvczy7ik1bzjlrjb76jwbzk971lwba3ajazk";
   };
 
   postPatch = ''
