@@ -36,13 +36,14 @@ in rec {
   };
 
   privmsg = zncDerivation rec {
-    name        = "znc-privmsg-c9f98690be";
+    name = "znc-privmsg-${version}";
+    version = "git-2015-02-22";
     module_name = "privmsg";
 
     src = fetchgit {
-      url    = meta.repositories.git;
-      rev    = "c9f98690beb4e3a7681468d5421ff11dc8e1ee8b";
-      sha256 = "dfeb28878b12b98141ab204191288cb4c3f7df153a01391ebf6ed6a32007247f";
+      url = meta.repositories.git;
+      rev = "9f1f98db56cbbea96d83e6628f657e0d62cd9517";
+      sha256 = "0n82z87gdxxragcaixjc80z8bw4bmfwbk0jrf9zs8kk42phlkkc2";
     };
 
     meta = {
