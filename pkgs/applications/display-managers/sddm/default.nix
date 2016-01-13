@@ -1,4 +1,4 @@
-{ stdenv, makeQtWrapper, fetchFromGitHub
+{ stdenv, makeQtWrapper, fetchFromGitHub, fetchpatch
 , cmake, pkgconfig, libxcb, libpthreadstubs, lndir
 , libXdmcp, libXau, qtbase, qtdeclarative, qttools, pam, systemd
 , themes
@@ -20,6 +20,10 @@ let
     patches = [
       ./0001-ignore-config-mtime.patch
       ./0002-fix-ConfigReader-QStringList-corruption.patch
+      (fetchpatch {
+        url = https://github.com/benjarobin/sddm/commit/7d05362e3c7c5945ad85b0176771bc1c5a370598.patch;
+        sha256 = "17f174lsb8vm7k1vx00yiqcipyyr6hgg4rm1rclps7saapfah5sj";
+      })
     ];
 
     nativeBuildInputs = [ cmake pkgconfig qttools ];
