@@ -94,7 +94,7 @@ in stdenv.mkDerivation rec {
     $out/bin/phantomjs
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Headless WebKit with JavaScript API";
     longDescription = ''
       PhantomJS2 is a headless WebKit with JavaScript API.
@@ -109,9 +109,9 @@ in stdenv.mkDerivation rec {
     '';
 
     homepage = http://phantomjs.org/;
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
 
-    maintainers = [ stdenv.lib.maintainers.aflatter ];
-    platforms = with stdenv.lib.platforms; darwin ++ linux;
+    maintainers = [ maintainers.aflatter ];
+    platforms = platforms.darwin ++ platforms.linux;
   };
 }
