@@ -2452,12 +2452,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptX = buildPerlModule rec {
-    name = "CryptX-0.025";
+    name = "CryptX-0.026";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "f8b7e3ec1713c8dfe3eef9d114f45f223b97e2340f81a20589b5605fa49cfe38";
+      sha256 = "0465843c86eb16b13717fde5b803c7390bb14805e277e1a1841a62e5124debc2";
     };
-    propagatedBuildInputs = [ JSON ];
+    propagatedBuildInputs = [ JSONMaybeXS ];
     meta = {
       description = "Crypto toolkit";
       license = "perl";
@@ -2486,20 +2486,6 @@ let self = _self // overrides; _self = with self; {
       inherit version;
       description = "Perl bindings to ncurses";
       license = stdenv.lib.licenses.artistic1;
-    };
-  };
-
-  CryptX = buildPerlModule {
-    name = "CryptX-0.026";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIK/CryptX-0.026.tar.gz;
-      sha256 = "0465843c86eb16b13717fde5b803c7390bb14805e277e1a1841a62e5124debc2";
-    };
-    buildInputs = [ JSONMaybeXS ];
-    propagatedBuildInputs = [ JSONMaybeXS ];
-    meta = {
-      description = "Crypto toolkit";
-      license = "perl";
     };
   };
 
