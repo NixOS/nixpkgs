@@ -92,15 +92,33 @@ let
   }).config));
 
 
+  cleanConfig = import ./lib/eval-config.nix {
+    system = "x86_64-linux";
+    modules = [ ];
+    pkgs = with pkgs.lib;
+      let
+        scrubDerivations = namePrefix: pkgSet: mapAttrs
+          (name: value:
+            let wholeName = "${namePrefix}.${name}"; in
+            if isAttrs value then
+              scrubDerivations wholeName value
+              // (optionalAttrs (isDerivation value) { outPath = "\${${wholeName}}"; })
+            else value
+          )
+          pkgSet;
+      in scrubDerivations "pkgs" pkgs;
+  };
+  docs = (import ./doc/manual) {
+    inherit pkgs version;
+    revision = versionModule.system.nixosRevision;
+    inherit (cleanConfig) options;
+  };
+
 in rec {
 
   channel = import lib/make-channel.nix { inherit pkgs nixpkgs version versionSuffix; };
 
-  manual = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manual);
-  manualPDF = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manualPDF)).x86_64-linux;
-  manpages = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manpages);
-  options = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
-
+  inherit (docs) manual manualPDF manpages optionsJSON;
 
   # Build the initial ramdisk so Hydra can keep track of its size over time.
   initialRamdisk = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.initialRamdisk);
