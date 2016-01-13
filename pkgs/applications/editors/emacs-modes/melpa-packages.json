@@ -11403,6 +11403,20 @@
         "version": "20140306.845",
         "deps": []
     },
+    "2048-game": {
+        "fetch": {
+            "tag": "fetchhg",
+            "url": "https://bitbucket.com/zck/2048.el",
+            "sha256": "1p9qn9n8mfb4z62h1s94mlg0vshpzafbhsxgzvx78sqlf6bfc80l",
+            "rev": "ea6c3bce8ac1"
+        },
+        "recipe": {
+            "sha256": "0z7x9bnyi3qlq7l0fskb61i6yr9gm7w7wplqd28wz8p1j5yw8aa0",
+            "commit": "2b3eb31c077fcaff94b74b757c1ce17650333943"
+        },
+        "version": "20151026.1433",
+        "deps": []
+    },
     "mag-menu": {
         "fetch": {
             "tag": "fetchFromGitHub",
