@@ -13699,6 +13699,7 @@ let
       ++ optional (config.kodi.enableSVTPlay or false) svtplay
       ++ optional (config.kodi.enableSteamLauncher or false) steam-launcher
       ++ optional (config.kodi.enablePVRHTS or false) pvr-hts
+      ++ optional (config.kodi.enableSALTS or false) salts
       );
   };
 
@@ -15845,7 +15846,7 @@ aliases = with self; rec {
   cool-old-term = cool-retro-term; # added 2015-01-31
   cupsBjnp = cups-bjnp; # added 2016-01-02
   cv = progress; # added 2015-09-06
-  enblendenfuse = enblend-enfuse;	# 2015-09-30
+  enblendenfuse = enblend-enfuse; # 2015-09-30
   exfat-utils = exfat;                  # 2015-09-11
   firefoxWrapper = firefox-wrapper;
   fuse_exfat = exfat;                   # 2015-09-11

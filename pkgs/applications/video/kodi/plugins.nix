@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, kodi, steam, libcec_platform, tinyxml }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, kodi, steam, libcec_platform, tinyxml }:
 
 let
 
@@ -92,6 +92,32 @@ in
 
   };
 
+  salts = (mkKodiPlugin rec {
+
+    plugin = "salts";
+    namespace = "plugin.video.salts";
+    version = "1.0.98";
+
+    src = fetchFromGitHub {
+      name = plugin + "-" + version + ".tar.gz";
+      owner = "tknorris";
+      repo = plugin;
+      rev = "02cb63360ac1f60c01ec29d1da94902542f9a47a";
+      sha256 = "10cy633g383m1xy6yap46aqzyz96dh62y7c5rn5nvyw8ms18089z";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/tknorris/salts";
+      description = "Stream All The Sources";
+      maintainers = with maintainers; [ edwtjo ];
+    };
+  }).override {
+    patches = [ (fetchpatch {
+      url = https://github.com/tknorris/salts/pull/115.patch;
+      sha256 = "157dhp049mw8lna6cg3x549jv2b9zq1vj6v94mil65q2hlw09sjd";
+    }) ];
+  };
+
   svtplay = mkKodiPlugin rec {
 
     plugin = "svtplay";
@@ -122,7 +148,7 @@ in
   };
 
   steam-launcher = (mkKodiPlugin rec {
-  
+
     plugin = "steam-launcher";
     namespace = "script.steam.launcher";
     version = "3.1.1";
