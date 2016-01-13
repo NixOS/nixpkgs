@@ -4886,8 +4886,7 @@ let
   rustPlatform = rustStable;
 
   rustStable = recurseIntoAttrs (makeRustPlatform cargo rustStable);
-  rustUnstable = recurseIntoAttrs (makeRustPlatform
-    (cargo.override { rustPlatform = rustUnstableCargoPlatform; }) rustUnstable);
+  rustUnstable = recurseIntoAttrs (makeRustPlatform cargoUnstable rustUnstable);
 
   # rust platform to build cargo itself (with cargoSnapshot)
   rustCargoPlatform = makeRustPlatform (cargoSnapshot rustc) rustCargoPlatform;
@@ -5544,6 +5543,10 @@ let
   cargo = callPackage ../development/tools/build-managers/cargo {
     # cargo needs to be built with rustCargoPlatform, which uses cargoSnapshot
     rustPlatform = rustCargoPlatform;
+  };
+
+  cargoUnstable = callPackage ../development/tools/build-managers/cargo/head.nix {
+    rustPlatform = rustUnstableCargoPlatform;
   };
 
   cargoSnapshot = rustc:
