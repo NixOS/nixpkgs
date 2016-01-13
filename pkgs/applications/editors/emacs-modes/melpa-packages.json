@@ -2115,24 +2115,6 @@
             "web-server"
         ]
     },
-    "4clojure": {
-        "fetch": {
-            "tag": "fetchFromGitHub",
-            "owner": "joshuarh",
-            "repo": "4clojure.el",
-            "sha256": "1fybicg46fc5jjqv7g2d3dnj1x9n58m2fg9x6qxn9l8qlzk9yxkq",
-            "rev": "3cdfd356c24cd3518397d29ae833f56a4d20b4ca"
-        },
-        "recipe": {
-            "sha256": "1w9zxy6jwiln28cmdgkbbdfk3pdscqlfahrqi6lbgpjvkw9z44mb",
-            "commit": "2b3eb31c077fcaff94b74b757c1ce17650333943"
-        },
-        "version": "20131014.1707",
-        "deps": [
-            "json",
-            "request"
-        ]
-    },
     "mustard-theme": {
         "fetch": {
             "tag": "fetchFromGitHub",
