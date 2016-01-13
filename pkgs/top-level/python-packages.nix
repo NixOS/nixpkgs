@@ -2800,6 +2800,26 @@ in modules // {
     };
   };
 
+  click_5 = buildPythonPackage rec {
+    name = "click-5.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/click/${name}.tar.gz";
+      sha256 = "0njsm0wn31l21bi118g5825ma5sa3rwn7v2x4wjd7yiiahkri337";
+    };
+
+    meta = {
+      homepage = http://click.pocoo.org/;
+      description = "Create beautiful command line interfaces in Python";
+      longDescription = ''
+        A Python package for creating beautiful command line interfaces in a
+        composable way, with as little code as necessary.
+      '';
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ mog ];
+    };
+  };
+
   click-log = buildPythonPackage rec {
     version = "0.1.1";
     name = "click-log-${version}";
@@ -14035,6 +14055,27 @@ in modules // {
     buildInputs = with self; [ nose mock pyyaml ];
 
     propagatedBuildInputs = with self; [ unittest2 ];
+  };
+
+  platformio =  buildPythonPackage rec {
+    name = "platformio-${version}";
+    version="2.7.0";
+
+    disabled = isPy3k || isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/platformio/platformio-${version}.tar.gz";
+      sha256 = "0bjp8gapd8v5az0xvsgh44zyma5kazhhbq266fk092i2q348zbv6";
+     };
+
+     propagatedBuildInputs = with self; [ click_5 requests2 bottle pyserial lockfile colorama];
+
+     meta = with stdenv.lib; {
+     description = "An open source ecosystem for IoT development";
+     homepage = http://platformio.org;
+     maintainers = with maintainers; [ mog ];
+     license = licenses.asl20;
+     };
   };
 
   pylibconfig2 = buildPythonPackage rec {

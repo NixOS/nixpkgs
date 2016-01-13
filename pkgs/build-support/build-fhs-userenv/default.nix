@@ -1,5 +1,5 @@
 { runCommand, lib, writeText, writeScriptBin, stdenv, bash, ruby } :
-{ env, runScript ? "${bash}/bin/bash", extraBindMounts ? [], extraInstallCommands ? "" } :
+{ env, runScript ? "${bash}/bin/bash", extraBindMounts ? [], extraInstallCommands ? "", importMeta ? {} } :
 
 let
   name = env.pname;
@@ -26,6 +26,7 @@ let
   '';
 
 in runCommand name {
+  meta = importMeta;
   passthru.env =
     runCommand "${name}-shell-env" {
       shellHook = ''

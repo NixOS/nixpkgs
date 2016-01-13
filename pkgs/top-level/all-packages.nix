@@ -279,10 +279,11 @@ let
   };
 
   buildFHSUserEnv = args: userFHSEnv {
-    env = buildFHSEnv (removeAttrs args [ "runScript" "extraBindMounts" "extraInstallCommands" ]);
+    env = buildFHSEnv (removeAttrs args [ "runScript" "extraBindMounts" "extraInstallCommands" "meta" ]);
     runScript = args.runScript or "bash";
     extraBindMounts = args.extraBindMounts or [];
     extraInstallCommands = args.extraInstallCommands or "";
+    importMeta = args.meta or {};
   };
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
@@ -2758,6 +2759,9 @@ let
   plantuml = callPackage ../tools/misc/plantuml { };
 
   plan9port = callPackage ../tools/system/plan9port { };
+
+  platformioPackages = callPackage ../development/arduino/platformio { };
+  platformio = platformioPackages.platformio-chrootenv.override {};
 
   plex = callPackage ../servers/plex { };
 
