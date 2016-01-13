@@ -11821,8 +11821,6 @@ let
 
     cedet = callPackage ../applications/editors/emacs-modes/cedet { };
 
-    calfw = callPackage ../applications/editors/emacs-modes/calfw { };
-
     coffee = callPackage ../applications/editors/emacs-modes/coffee { };
 
     colorTheme = callPackage ../applications/editors/emacs-modes/color-theme { };
@@ -11837,8 +11835,6 @@ let
 
     darcsum = callPackage ../applications/editors/emacs-modes/darcsum { };
 
-    dash = callPackage ../applications/editors/emacs-modes/dash { };
-
     # ecb = callPackage ../applications/editors/emacs-modes/ecb { };
 
     emacsClangCompleteAsync = callPackage ../applications/editors/emacs-modes/emacs-clang-complete-async { };
@@ -11849,17 +11845,9 @@ let
 
     emms = callPackage ../applications/editors/emacs-modes/emms { };
 
-    ensime = callPackage ../applications/editors/emacs-modes/ensime { };
-
     erlangMode = callPackage ../applications/editors/emacs-modes/erlang { };
 
-    ess = callPackage ../applications/editors/emacs-modes/ess { };
-
-    flycheck = callPackage ../applications/editors/emacs-modes/flycheck { };
-
     flymakeCursor = callPackage ../applications/editors/emacs-modes/flymake-cursor { };
-
-    gh = callPackage ../applications/editors/emacs-modes/gh { };
 
     graphvizDot = callPackage ../applications/editors/emacs-modes/graphviz-dot { };
 
@@ -11889,13 +11877,7 @@ let
 
     js2 = callPackage ../applications/editors/emacs-modes/js2 { };
 
-    let-alist = callPackage ../applications/editors/emacs-modes/let-alist { };
-
-    logito = callPackage ../applications/editors/emacs-modes/logito { };
-
     loremIpsum = callPackage ../applications/editors/emacs-modes/lorem-ipsum { };
-
-    magit = callPackage ../applications/editors/emacs-modes/magit { };
 
     markdownMode = callPackage ../applications/editors/emacs-modes/markdown-mode { };
 
@@ -11918,8 +11900,6 @@ let
     org = hiPrio (callPackage ../applications/editors/emacs-modes/org { });
 
     org2blog = callPackage ../applications/editors/emacs-modes/org2blog { };
-
-    pcache = callPackage ../applications/editors/emacs-modes/pcache { };
 
     phpMode = callPackage ../applications/editors/emacs-modes/php { };
 
@@ -11944,8 +11924,6 @@ let
     remember = callPackage ../applications/editors/emacs-modes/remember { };
 
     rudel = callPackage ../applications/editors/emacs-modes/rudel { };
-
-    s = callPackage ../applications/editors/emacs-modes/s { };
 
     sbtMode = callPackage ../applications/editors/emacs-modes/sbt-mode { };
 
