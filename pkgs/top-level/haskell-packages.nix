@@ -98,6 +98,10 @@ rec {
       ghc = compiler.ghc7102;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
     };
+    ghc7103 = callPackage ../development/haskell-modules {
+      ghc = compiler.ghc7103;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
+    };
     ghcHEAD = callPackage ../development/haskell-modules {
       ghc = compiler.ghcHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
