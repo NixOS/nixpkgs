@@ -4299,6 +4299,12 @@ let
     mavenRemoteResources10 = self.mavenPlugins.mavenRemoteResourcesGen.mavenRemoteResources10;
     mavenRemoteResources11 = self.mavenPlugins.mavenRemoteResourcesGen.mavenRemoteResources11;
     mavenRemoteResources121 = self.mavenPlugins.mavenRemoteResourcesGen.mavenRemoteResources121;
+
+    modelloMavenGen = callPackage ../development/java-modules/maven-plugins/modello-maven-plugin { };
+    modelloMavenPlugin10Alpha15 = self.mavenPlugins.modelloMavenGen.modelloMavenPlugin10Alpha15;
+
+    wagonWebdavGen = callPackage ../development/java-modules/maven-plugins/wagon-webdav { };
+    wagonWebdav10beta2 = self.mavenPlugins.wagonWebdavGen.wagonWebdav10beta2;
   };
 
   jikes = callPackage ../development/compilers/jikes { };

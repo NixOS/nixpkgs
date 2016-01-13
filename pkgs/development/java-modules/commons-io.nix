@@ -16,6 +16,8 @@ in mavenbuild rec {
 
   mavenDeps = [ apacheCommonsParent24 apacheParent9 mavenRemoteResources121 ];
 
+  m2Path = "/org/apache/commons/commons-io/2.2";
+
   meta = {
     homepage = http://commons.apache.org/proper/commons-io/;
     description = "Commons IO is a library of utilities to assist with developing IO functionality.";

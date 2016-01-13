@@ -1,10 +1,11 @@
-{ stdenv, fetchsvn, mavenbuild, fetchurl, fetchmaven }:
+{ stdenv, fetchsvn, mavenbuild, fetchurl, fetchmaven, pkgs }:
 
+with pkgs.mavenPlugins;
 with import ../../poms.nix { inherit fetchurl; inherit fetchmaven; };
 
 rec {
-  mavenRemoteResourcesGen = { name, src, mavenDeps}: mavenbuild rec {
-    inherit name src mavenDeps;
+  mavenRemoteResourcesGen = { name, src, mavenDeps, m2Path }: mavenbuild rec {
+    inherit name src mavenDeps m2Path;
 
     meta = {
       homepage = https://maven.apache.org/plugins/maven-remote-resources-plugin/;
@@ -16,6 +17,28 @@ rec {
     };
   };
 
+  mavenRemoteResourcesAlpha6Jar = fetchmaven {
+    version = "1.0-alpha-6";
+    name = "maven-remote-resources-plugin";
+    src = fetchurl rec {
+      url = "https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-remote-resources-plugin/1.0-alpha-6/maven-remote-resources-plugin-1.0-alpha-6.jar";
+      sha256 = "1193xrrxcy9xgva89vvarw65q3gskzpgj0ysw9qqvb65pa6fk2wr";
+    };
+    m2Path = "/org/apache/maven/plugins/maven-remote-resources-plugin/1.0-alpha-6";
+    m2File = "maven-remote-resources-plugin-1.0-alpha-6.jar";
+  };
+
+  mavenRemoteResourcesAlpha6 = mavenRemoteResourcesGen {
+    name = "maven-remote-resources-plugin-1.0-alpha-6";
+    src = fetchsvn {
+      url = "http://svn.apache.org/repos/asf/maven/plugins/tags/maven-remote-resources-plugin-1.0-alpha-6/";
+      rev = 1723938;
+      sha256 = "1ri6bv79hvhdza6b5973gzw149rx611wcjvyvmz5n7ixkz9bplfa";
+    };
+    mavenDeps = [ apacheParent4 mavenParent5 mavenPlugins8 mavenRemoteResourcesAlpha6Jar modelloMavenPlugin10Alpha15 ];
+    m2Path = "/org/apache/maven/plugins/maven-remote-resources-plugin/1.0-alpha-6";
+  };
+
   mavenRemoteResources10 = mavenRemoteResourcesGen {
     name = "maven-remote-resources-plugin-1.0";
     src = fetchsvn {
@@ -23,7 +46,8 @@ rec {
       rev = 1723938;
       sha256 = "15zqzlmqvwp8w5q4y9jzgilm5jmrm3zr26zb24zxvv16wvj30jkc";
     };
-    mavenDeps = [ apacheParent4 mavenParent7 mavenPlugins10 ];
+    mavenDeps = [ apacheParent4 mavenParent7 mavenPlugins10 mavenRemoteResourcesAlpha6 ];
+    m2Path = "/org/apache/maven/plugins/maven-remote-resources-plugin/1.0";
   };
 
   mavenRemoteResources11 = mavenRemoteResourcesGen {
@@ -34,6 +58,7 @@ rec {
       sha256 = "0y8xq6w9nnssz988pjjnn6xplv694vw8swx80dlcfgmyxl29lsw6";
     };
     mavenDeps = [ apacheParent6 mavenParent13 mavenPlugins14 mavenRemoteResources10 ];
+    m2Path = "/org/apache/maven/plugins/maven-remote-resources-plugin/1.1";
   };
 
   mavenRemoteResources121 = mavenRemoteResourcesGen {
@@ -44,6 +69,7 @@ rec {
       sha256 = "0f0v5qd4fbfg755dic78gymhqlf6pl7zfqs5d5cvhaagqf2as5j6";
     };
     mavenDeps = [ apacheParent9 mavenParent19 mavenPlugins19 mavenRemoteResources11 ];
+    m2Path = "/org/apache/maven/plugins/maven-remote-resources-plugin/1.2.1";
   };
 }
 
