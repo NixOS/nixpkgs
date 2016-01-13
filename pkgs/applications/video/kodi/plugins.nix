@@ -202,6 +202,27 @@ in
     propagatedBuildinputs = [ steam ];
   };
 
+  t0mm0-common = mkKodiPlugin rec {
+
+    plugin = "t0mm0-common";
+    namespace = "script.module.t0mm0.common";
+    version = "0.0.1";
+
+    src = fetchFromGitHub {
+      name = plugin + "-" + version + ".tar.gz";
+      owner = "t0mm0";
+      repo = "xbmc-urlresolver";
+      rev = "ab16933a996a9e77b572953c45e70900c723d6e1";
+      sha256 = "1yd00md8iirizzaiqy6fv1n2snydcpqvp2f9irzfzxxi3i9asb93";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/t0mm0/xbmc-urlresolver/";
+      description = "t0mm0's common stuff";
+      maintainers = with maintainers; [ edwtjo ];
+    };
+  };
+
   pvr-hts = (mkKodiPlugin rec {
     plugin = "pvr-hts";
     namespace = "pvr.hts";

@@ -13699,7 +13699,7 @@ let
       ++ optional (config.kodi.enableSVTPlay or false) svtplay
       ++ optional (config.kodi.enableSteamLauncher or false) steam-launcher
       ++ optional (config.kodi.enablePVRHTS or false) pvr-hts
-      ++ optionals (config.kodi.enableSALTS or false) [salts urlresolver]
+      ++ optionals (config.kodi.enableSALTS or false) [salts urlresolver t0mm0-common]
       );
   };
 
