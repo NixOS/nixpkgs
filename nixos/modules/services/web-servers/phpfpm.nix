@@ -44,7 +44,8 @@ in {
 
       phpIni = mkOption {
         type = types.path;
-        description = "PHP configuration file to use.";
+        default = "${cfg.phpPackage}/etc/php-recommended.ini";
+        description = "php.ini file to use.";
       };
 
       poolConfigs = mkOption {
@@ -84,8 +85,6 @@ in {
         PIDFile = pidFile;
       };
     };
-
-    services.phpfpm.phpIni = mkDefault "${cfg.phpPackage}/etc/php-recommended.ini";
 
   };
 }

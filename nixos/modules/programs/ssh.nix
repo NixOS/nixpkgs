@@ -36,6 +36,7 @@ in
 
       askPassword = mkOption {
         type = types.str;
+        default = "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
         description = ''Program used by SSH to ask for passwords.'';
       };
 
@@ -221,8 +222,6 @@ in
       ''
         export SSH_ASKPASS=${askPassword}
       '';
-
-    programs.ssh.askPassword = mkDefault "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
 
   };
 }
