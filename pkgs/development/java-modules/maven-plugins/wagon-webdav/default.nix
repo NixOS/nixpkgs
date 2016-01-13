@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, mavenbuild, fetchmaven, fetchurl, pkgs }:
+{ stdenv, fetchsvn, mavenbuild, fetchmaven, fetchurl }:
 
 with import ../../poms.nix { inherit fetchurl; inherit fetchmaven; };
 
@@ -8,7 +8,7 @@ rec {
 
     meta = {
       homepage = http://maven.apache.org/wagon/wagon-providers/wagon-webdav-jackrabbit/;
-      description = "";
+      description = "This component is an implementation of Wagon provider for WebDAV server access";
       license = stdenv.lib.licenses.asl20;
       platforms = stdenv.lib.platforms.all;
       maintainers = with stdenv.lib.maintainers;

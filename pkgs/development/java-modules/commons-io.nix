@@ -1,8 +1,8 @@
-{ stdenv, fetchsvn, fetchurl, maven, fetchmaven, rsync, mavenbuild, pkgs }:
+{ stdenv, fetchsvn, fetchurl, fetchmaven, mavenbuild, pkgs }:
 
 with pkgs.mavenPlugins;
 with import ./poms.nix { inherit fetchurl; inherit fetchmaven; };
-  
+
 let
   version = "2.2";
 in mavenbuild rec {

@@ -3,7 +3,7 @@
 
 rec {
   apacheCommonsParent24 = fetchmaven {
-    version = "24";
+    version = 24;
     name = "commons-parent";
     src = fetchurl rec {
       url = "http://svn.apache.org/repos/asf/commons/proper/commons-parent/tags/commons-parent-24/pom.xml";
