@@ -57,9 +57,9 @@ let
     goPackageAliases = [ "github.com/golang/image" ];
   };
 
-  net = buildFromGitHub {
+  net_go15 = buildFromGitHub {
     rev    = "62ac18b461605b4be188bbc7300e9aa2bc836cd4";
-    date   = "2015-08-29";
+    date   = "2015-11-04";
     owner  = "golang";
     repo   = "net";
     sha256 = "0lwwvbbwbf3yshxkfhn6z20gd45dkvnmw2ms36diiy34krgy402p";
@@ -70,7 +70,26 @@ let
       "github.com/golang/net"
     ];
     propagatedBuildInputs = [ text crypto ];
+    disabled = isGo14;
   };
+
+  net_go14 = buildFromGitHub {
+    rev    = "ea47fc708ee3e20177f3ca3716217c4ab75942cb";
+    date   = "2015-08-29";
+    owner  = "golang";
+    repo   = "net";
+    sha256 = "0x1pmg97n7l62vak9qnjdjrrfl98jydhv6j0w3jkk4dycdlzn30d";
+    goPackagePath = "golang.org/x/net";
+    goPackageAliases = [
+      "code.google.com/p/go.net"
+      "github.com/hashicorp/go.net"
+      "github.com/golang/net"
+    ];
+    propagatedBuildInputs = [ text ];
+    disabled = !isGo14;
+  };
+
+  net = if isGo14 then net_go14 else net_go15;
 
   oauth2 = buildFromGitHub {
     rev = "397fe7649477ff2e8ced8fc0b2696f781e53745a";
@@ -2305,7 +2324,7 @@ let
   };
 
   osext = buildFromGitHub {
-    rev = "10da29423eb9a6269092eebdc2be32209612d9d2";
+    rev = "29ae4ffbc9a6fe9fb2bc5029050ce6996ea1d3bc";
     owner = "kardianos";
     repo = "osext";
     sha256 = "1mawalaz84i16njkz6f9fd5jxhcbxkbsjnav3cmqq2dncv2hyv8a";
@@ -3120,11 +3139,11 @@ let
   };
 
   syncthing = buildFromGitHub rec {
-    version = "0.12.9";
+    version = "0.12.10";
     rev = "v${version}";
     owner = "syncthing";
     repo = "syncthing";
-    sha256 = "0d420bmx1ifhjgbc65bflnawqddi4h86p7fvxzzqwfsaj94fsfbi";
+    sha256 = "1xvar4mm6f33mg8d8z8h49cni6sj1vfns379zspqvszs404fra0z";
     buildFlags = [ "-tags noupgrade,release" ];
     disabled = isGo14;
     buildInputs = [
