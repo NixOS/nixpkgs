@@ -13692,14 +13692,14 @@ let
 
   wrapKodi = { kodi }: callPackage ../applications/video/kodi/wrapper.nix {
     inherit kodi;
-    plugins = let inherit (lib) optional; in with kodiPlugins;
+    plugins = let inherit (lib) optional optionals; in with kodiPlugins;
       ([]
       ++ optional (config.kodi.enableAdvancedLauncher or false) advanced-launcher
       ++ optional (config.kodi.enableGenesis or false) genesis
       ++ optional (config.kodi.enableSVTPlay or false) svtplay
       ++ optional (config.kodi.enableSteamLauncher or false) steam-launcher
       ++ optional (config.kodi.enablePVRHTS or false) pvr-hts
-      ++ optional (config.kodi.enableSALTS or false) salts
+      ++ optionals (config.kodi.enableSALTS or false) [salts urlresolver]
       );
   };
 

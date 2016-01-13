@@ -92,6 +92,32 @@ in
 
   };
 
+  urlresolver = (mkKodiPlugin rec {
+
+    plugin = "urlresolver";
+    namespace = "script.module.urlresolver";
+    version = "2.10.0";
+
+    src = fetchFromGitHub {
+      name = plugin + "-" + version + ".tar.gz";
+      owner = "Eldorados";
+      repo = namespace;
+      rev = "72b9d978d90d54bb7a0224a1fd2407143e592984";
+      sha256 = "0r5glfvgy9ri3ar9zdkvix8lalr1kfp22fap2pqp739b6k2iqir6";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/Eldorados/urlresolver";
+      description = "Resolve common video host URL's to be playable in XBMC/Kodi";
+      maintainers = with maintainers; [ edwtjo ];
+    };
+  }).override {
+    patches = [ (fetchpatch {
+      url = https://github.com/Eldorados/script.module.urlresolver/pull/355.patch;
+      sha256 = "0q1n2sqdjqq32202s6ifh81c9a1l5a7yfkkf170dbkiajvxglz1m";
+    }) ];
+  };
+
   salts = (mkKodiPlugin rec {
 
     plugin = "salts";
