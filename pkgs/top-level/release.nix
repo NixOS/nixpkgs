@@ -235,6 +235,8 @@ let
       zsh = linux;
       zsnes = ["i686-linux"];
 
+      emacs24PackagesNg = packagePlatforms pkgs.emacs24PackagesNg;
+
       gnome = {
         gnome_panel = linux;
         metacity = linux;
