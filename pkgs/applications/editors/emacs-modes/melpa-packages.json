@@ -37286,6 +37286,21 @@
             "emacs"
         ]
     },
+    "0blayout": {
+        "fetch": {
+            "tag": "fetchFromGitHub",
+            "owner": "etu",
+            "repo": "0blayout-mode",
+            "sha256": "1xigpz2aswlmpcsc1f7gfakyw7041pbyl9zfd8nz38iq036n5b96",
+            "rev": "e256da71d4e0f126a0fd8a9b8fb77f54931f4dfc"
+        },
+        "recipe": {
+            "sha256": "027k85h34998i8vmbg2hi4q1m4f7jfva5jm38k0g9m1db700gk92",
+            "commit": "2b3eb31c077fcaff94b74b757c1ce17650333943"
+        },
+        "version": "20151021.549",
+        "deps": []
+    },
     "afternoon-theme": {
         "fetch": {
             "tag": "fetchFromGitHub",
