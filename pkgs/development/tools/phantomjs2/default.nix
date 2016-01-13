@@ -112,6 +112,6 @@ in stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
 
     maintainers = [ stdenv.lib.maintainers.aflatter ];
-    platforms = with stdenv.lib.platforms; darwin ++ linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }
