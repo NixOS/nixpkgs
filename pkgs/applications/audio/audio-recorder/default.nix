@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib
 , pkgconfig, intltool, autoconf, wrapGAppsHook, hicolor_icon_theme
-, glib, dbus, gtk3, libdbusmenu-gtk3, libappindicator-gtk3, gst_all_1
+, glib, dbus, gtk3, libdbusmenu-gtk3, libappindicator-gtk3, gst_all_1, gnome3
 , pulseaudioSupport ? true, libpulseaudio ? null }:
 
 with lib;
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool autoconf wrapGAppsHook ];
 
   buildInputs = with gst_all_1; [
-    glib dbus gtk3 libdbusmenu-gtk3 libappindicator-gtk3 hicolor_icon_theme
+    glib dbus gtk3 libdbusmenu-gtk3 libappindicator-gtk3 hicolor_icon_theme gnome3.dconf
     gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
   ] ++ optional pulseaudioSupport libpulseaudio;
 
