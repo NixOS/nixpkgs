@@ -25,8 +25,10 @@ let
     nativeBuildInputs = [ cmake pkgconfig qttools ];
 
     buildInputs = [
-      libxcb libpthreadstubs libXdmcp libXau qtbase qtdeclarative pam systemd
+      libxcb libpthreadstubs libXdmcp libXau qtbase pam systemd
     ];
+
+    propagatedBuildInputs = [ qtdeclarative ];
 
     cmakeFlags = [
       "-DCONFIG_FILE=/etc/sddm.conf"
