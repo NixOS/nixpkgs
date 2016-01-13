@@ -32,6 +32,7 @@ in {
         '';
       };
       configurationDir = mkOption {
+        default = "${activemq}/conf";
         description = ''
           The base directory for ActiveMQ's configuration.
           By default, this directory is searched for a file named activemq.xml,
@@ -124,8 +125,6 @@ in {
           ${cfg.extraJavaOptions} ActiveMQBroker "${cfg.configurationURI}"
       '';
     };
-
-    services.activemq.configurationDir = mkDefault "${activemq}/conf";
 
   };
 
