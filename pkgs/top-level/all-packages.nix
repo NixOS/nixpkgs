@@ -14516,7 +14516,7 @@ let
 
   gnome3_18 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.18 { });
 
-  gnome3 = gnome3_16;
+  gnome3 = gnome3_18;
 
   gnome = recurseIntoAttrs gnome2;
 
