@@ -57,6 +57,13 @@ in {
           '';
       };
 
+      naturalScrolling = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Enables or disables natural scrolling behavior.";
+      };
+
       tapping = mkOption {
         type = types.bool;
         default = true;
@@ -66,6 +73,27 @@ in {
             Enables or disables tap-to-click behavior.
           '';
       };
+
+      scrollMethod = mkOption {
+        type = types.enum [ "twofinger" "edge" "none" ];
+        default = "twofinger";
+        example = "edge";
+        description =
+          ''
+            Specify the scrolling method.
+          '';
+      };
+
+      disableWhileTyping = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description =
+          ''
+            Disable input method while typing.
+          '';
+      };
+
 
       tappingDragLock = mkOption {
         type = types.bool;
@@ -114,8 +142,11 @@ in {
           ${optionalString (cfg.accelSpeed != null) ''Option "AccelSpeed" "${cfg.accelSpeed}"''}
           ${optionalString (cfg.buttonMapping != null) ''Option "ButtonMapping" "${cfg.buttonMapping}"''}
           ${optionalString (cfg.calibrationMatrix != null) ''Option "CalibrationMatrix" "${cfg.calibrationMatrix}"''}
+          ${optionalString cfg.naturalScrolling ''Option "NaturalScrolling" "on"''}
           ${if cfg.tapping then ''Option "Tapping" "1"'' else ""}
           ${if cfg.tappingDragLock then ''Option "TappingDragLock" "1"'' else ""}
+          Option "ScrollMethod" "${cfg.scrollMethod}"
+          ${optionalString cfg.disableWhileTyping ''Option "DisableWhileTyping" "on"''}
           ${cfg.additionalOptions}
         EndSection
       '';
