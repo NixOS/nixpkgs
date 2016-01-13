@@ -11487,7 +11487,7 @@ let
     gpm = null;
     inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
     inherit (darwin) libobjc;
-  };
+  });
 
   emacsPackagesGen = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
@@ -12172,7 +12172,7 @@ let
     inherit (pythonPackages) lxml;
     lcms = lcms2;
   };
-  
+
   inspectrum = callPackage ../applications/misc/inspectrum { };
 
   ion3 = callPackage ../applications/window-managers/ion-3 {
