@@ -9,13 +9,13 @@ let
   group = cfg.group;
   setgidGroup = cfg.setgidGroup;
 
+  haveAliases = cfg.postmasterAlias != "" || cfg.rootAlias != "" || cfg.extraAliases != "";
+  haveTransport = cfg.transport != "";
+  haveVirtual = cfg.virtual != "";
+
   mainCf =
     ''
       compatibility_level = 2
-
-      queue_directory = /var/postfix/queue
-      command_directory = ${pkgs.postfix}/sbin
-      daemon_directory = ${pkgs.postfix}/libexec/postfix
 
       mail_owner = ${user}
       default_privs = nobody
@@ -57,8 +57,6 @@ let
         else
           "[" + cfg.relayHost + "]"}
 
-      alias_maps = hash:/var/postfix/conf/aliases
-
       mail_spool_directory = /var/spool/mail/
 
       setgid_group = ${setgidGroup}
@@ -80,11 +78,14 @@ let
     + optionalString (cfg.recipientDelimiter != "") ''
       recipient_delimiter = ${cfg.recipientDelimiter}
     ''
-    + optionalString (cfg.virtual != "") ''
-      virtual_alias_maps = hash:/etc/postfix/virtual
+    + optionalString haveAliases ''
+      alias_maps = hash:/etc/postfix/aliases
     ''
-    + optionalString (cfg.transport != "") ''
+    + optionalString haveTransport ''
       transport_maps = hash:/etc/postfix/transport
+    ''
+    + optionalString haveVirtual ''
+      virtual_alias_maps = hash:/etc/postfix/virtual
     ''
     + cfg.extraConfig;
 
@@ -158,6 +159,7 @@ in
     services.postfix = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Whether to run the Postfix mail server.";
       };
@@ -168,21 +170,25 @@ in
       };
 
       setSendmail = mkOption {
+        type = types.bool;
         default = true;
         description = "Whether to set the system sendmail to postfix's.";
       };
 
       user = mkOption {
+        type = types.str;
         default = "postfix";
         description = "What to call the Postfix user (must be used only for postfix).";
       };
 
       group = mkOption {
+        type = types.str;
         default = "postfix";
         description = "What to call the Postfix group (must be used only for postfix).";
       };
 
       setgidGroup = mkOption {
+        type = types.str;
         default = "postdrop";
         description = "
           How to call postfix setgid group (for postdrop). Should
@@ -191,6 +197,7 @@ in
       };
 
       networks = mkOption {
+        type = types.nullOr (types.listOf types.str);
         default = null;
         example = ["192.168.0.1/24"];
         description = "
@@ -201,6 +208,7 @@ in
       };
 
       networksStyle = mkOption {
+        type = types.str;
         default = "";
         description = "
           Name of standard way of trusted network specification to use,
@@ -210,6 +218,7 @@ in
       };
 
       hostname = mkOption {
+        type = types.str;
         default = "";
         description ="
           Hostname to use. Leave blank to use just the hostname of machine.
@@ -218,6 +227,7 @@ in
       };
 
       domain = mkOption {
+        type = types.str;
         default = "";
         description ="
           Domain to use. Leave blank to use hostname minus first component.
@@ -225,6 +235,7 @@ in
       };
 
       origin = mkOption {
+        type = types.str;
         default = "";
         description ="
           Origin to use in outgoing e-mail. Leave blank to use hostname.
@@ -232,6 +243,7 @@ in
       };
 
       destination = mkOption {
+        type = types.nullOr (types.listOf types.str);
         default = null;
         example = ["localhost"];
         description = "
@@ -241,6 +253,7 @@ in
       };
 
       relayDomains = mkOption {
+        type = types.nullOr (types.listOf types.str);
         default = null;
         example = ["localdomain"];
         description = "
@@ -249,6 +262,7 @@ in
       };
 
       relayHost = mkOption {
+        type = types.str;
         default = "";
         description = "
           Mail relay for outbound mail.
@@ -256,6 +270,7 @@ in
       };
 
       lookupMX = mkOption {
+        type = types.bool;
         default = false;
         description = "
           Whether relay specified is just domain whose MX must be used.
@@ -263,11 +278,13 @@ in
       };
 
       postmasterAlias = mkOption {
+        type = types.str;
         default = "root";
         description = "Who should receive postmaster e-mail.";
       };
 
       rootAlias = mkOption {
+        type = types.str;
         default = "";
         description = "
           Who should receive root e-mail. Blank for no redirection.
@@ -275,6 +292,7 @@ in
       };
 
       extraAliases = mkOption {
+        type = types.lines;
         default = "";
         description = "
           Additional entries to put verbatim into aliases file, cf. man-page aliases(8).
@@ -282,6 +300,7 @@ in
       };
 
       extraConfig = mkOption {
+        type = types.str;
         default = "";
         description = "
           Extra lines to be added verbatim to the main.cf configuration file.
@@ -289,21 +308,25 @@ in
       };
 
       sslCert = mkOption {
+        type = types.str;
         default = "";
         description = "SSL certificate to use.";
       };
 
       sslCACert = mkOption {
+        type = types.str;
         default = "";
         description = "SSL certificate of CA.";
       };
 
       sslKey = mkOption {
+        type = types.str;
         default = "";
         description = "SSL key to use.";
       };
 
       recipientDelimiter = mkOption {
+        type = types.str;
         default = "";
         example = "+";
         description = "
@@ -312,6 +335,7 @@ in
       };
 
       virtual = mkOption {
+        type = types.lines;
         default = "";
         description = "
           Entries for the virtual alias map, cf. man-page virtual(8).
@@ -326,9 +350,22 @@ in
       };
 
       extraMasterConf = mkOption {
+        type = types.lines;
         default = "";
         example = "submission inet n - n - - smtpd";
         description = "Extra lines to append to the generated master.cf file.";
+      };
+
+      aliasFiles = mkOption {
+        type = types.attrsOf types.path;
+        default = {};
+        description = "Aliases' tables to be compiled and placed into /var/lib/postfix/conf.";
+      };
+
+      mapFiles = mkOption {
+        type = types.attrsOf types.path;
+        default = {};
+        description = "Maps to be compiled and placed into /var/lib/postfix/conf.";
       };
 
     };
@@ -338,91 +375,104 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.postfix.enable {
+  config = mkIf config.services.postfix.enable (mkMerge [
+    {
 
-    environment = {
-      etc = singleton
-        { source = "/var/postfix/conf";
-          target = "postfix";
-        };
+      environment = {
+        etc = singleton
+          { source = "/var/lib/postfix/conf";
+            target = "postfix";
+          };
 
-      # This makes comfortable for root to run 'postqueue' for example.
-      systemPackages = [ pkgs.postfix ];
-    };
-
-    services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
-      program = "sendmail";
-      source = "${pkgs.postfix}/bin/sendmail";
-      owner = "nobody";
-      group = "postdrop";
-      setuid = false;
-      setgid = true;
-    };
-
-    users.extraUsers = singleton
-      { name = user;
-        description = "Postfix mail server user";
-        uid = config.ids.uids.postfix;
-        group = group;
+        # This makes comfortable for root to run 'postqueue' for example.
+        systemPackages = [ pkgs.postfix ];
       };
 
-    users.extraGroups =
-      [ { name = group;
+      services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
+        program = "sendmail";
+        source = "${pkgs.postfix}/bin/sendmail";
+        group = setgidGroup;
+        setuid = false;
+        setgid = true;
+      };
+
+      users.extraUsers = optional (user == "postfix")
+        { name = "postfix";
+          description = "Postfix mail server user";
+          uid = config.ids.uids.postfix;
+          group = group;
+        };
+
+      users.extraGroups =
+        optional (group == "postfix")
+        { name = group;
           gid = config.ids.gids.postfix;
         }
+        ++ optional (setgidGroup == "postdrop")
         { name = setgidGroup;
           gid = config.ids.gids.postdrop;
-        }
-      ];
-
-    systemd.services.postfix =
-      { description = "Postfix mail server";
-
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-
-        serviceConfig = {
-          Type = "forking";
-          Restart = "always";
-          PIDFile = "/var/postfix/queue/pid/master.pid";
         };
 
-        preStart = ''
-          ${pkgs.coreutils}/bin/mkdir -p /var/spool/mail /var/postfix/conf /var/postfix/queue
+      systemd.services.postfix =
+        { description = "Postfix mail server";
 
-          ${pkgs.coreutils}/bin/chown -R ${user}:${group} /var/postfix
-          ${pkgs.coreutils}/bin/chown -R ${user}:${setgidGroup} /var/postfix/queue
-          ${pkgs.coreutils}/bin/chmod -R ug+rwX /var/postfix/queue
-          ${pkgs.coreutils}/bin/chown root:root /var/spool/mail
-          ${pkgs.coreutils}/bin/chmod a+rwxt /var/spool/mail
-          ${pkgs.coreutils}/bin/ln -sf /var/spool/mail /var/
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+          path = [ pkgs.postfix ];
 
-          ln -sf ${pkgs.postfix}/etc/postfix/postfix-files /var/postfix/conf
+          serviceConfig = {
+            Type = "forking";
+            Restart = "always";
+            PIDFile = "/var/lib/postfix/queue/pid/master.pid";
+            ExecStart = "${pkgs.postfix}/bin/postfix start";
+            ExecStop = "${pkgs.postfix}/bin/postfix stop";
+            ExecReload = "${pkgs.postfix}/bin/postfix reload";
+          };
 
-          ln -sf ${aliasesFile} /var/postfix/conf/aliases
-          ln -sf ${virtualFile} /var/postfix/conf/virtual
-          ln -sf ${mainCfFile} /var/postfix/conf/main.cf
-          ln -sf ${masterCfFile} /var/postfix/conf/master.cf
-          ln -sf ${transportFile} /var/postfix/conf/transport
+          preStart = ''
+            # Backwards compatibility
+            if [ ! -d /var/lib/postfix ] && [ -d /var/postfix ]; then
+              mkdir -p /var/lib
+              mv /var/postfix /var/lib/postfix
+            fi
+            mkdir -p /var/lib/postfix/data /var/lib/postfix/queue/{pid,public,maildrop}
 
-          ${pkgs.postfix}/sbin/postalias -c /var/postfix/conf /var/postfix/conf/aliases
-          ${pkgs.postfix}/sbin/postmap -c /var/postfix/conf /var/postfix/conf/virtual
-        '';
+            chown -R ${user}:${group} /var/lib/postfix
+            chown root /var/lib/postfix/queue
+            chown root /var/lib/postfix/queue/pid
+            chgrp -R ${setgidGroup} /var/lib/postfix/queue/{public,maildrop}
+            chmod 770 /var/lib/postfix/queue/{public,maildrop}
 
-        script = ''
-          ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf start
-        '';
+            rm -rf /var/lib/postfix/conf
+            mkdir -p /var/lib/postfix/conf
+            ln -sf ${mainCfFile} /var/lib/postfix/conf/main.cf
+            ln -sf ${masterCfFile} /var/lib/postfix/conf/master.cf
+            ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
+              ln -sf ${from} /var/lib/postfix/conf/${to}
+              postalias /var/lib/postfix/conf/${to}
+            '') cfg.aliasFiles)}
+            ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
+              ln -sf ${from} /var/lib/postfix/conf/${to}
+              postmap /var/lib/postfix/conf/${to}
+            '') cfg.mapFiles)}
 
-        reload = ''
-          ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf reload
-        '';
+            mkdir -p /var/spool/mail
+            chown root:root /var/spool/mail
+            chmod a+rwxt /var/spool/mail
+            ln -sf /var/spool/mail /var/
+          '';
+        };
+    }
 
-        preStop = ''
-          ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf stop
-        '';
-
-      };
-
-  };
+    (mkIf haveAliases {
+      services.postfix.aliasFiles."aliases" = aliasesFile;
+    })
+    (mkIf haveTransport {
+      services.postfix.mapFiles."transport" = transportFile;
+    })
+    (mkIf haveVirtual {
+      services.postfix.mapFiles."virtual" = virtualFile;
+    })
+  ]);
 
 }
