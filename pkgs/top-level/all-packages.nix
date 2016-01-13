@@ -330,6 +330,10 @@ let
 
   fetchgitPrivate = callPackage ../build-support/fetchgit/private.nix { };
 
+  fetchgitRecord = callPackage ../build-support/fetchgit/record.nix { };
+
+  record-playback = callPackage ../build-support/record-playback { };
+
   fetchgitrevision = import ../build-support/fetchgitrevision runCommand git;
 
   fetchgitLocal = callPackage ../build-support/fetchgitlocal { };
@@ -5316,7 +5320,7 @@ let
   };
   bundler = callPackage ../development/interpreters/ruby/bundler.nix { };
   bundler_HEAD = import ../development/interpreters/ruby/bundler-head.nix {
-    inherit buildRubyGem coreutils fetchgit;
+    inherit buildRubyGem coreutils fetchgitRecord record-playback;
   };
   defaultGemConfig = callPackage ../development/interpreters/ruby/bundler-env/default-gem-config.nix { };
   buildRubyGem = callPackage ../development/interpreters/ruby/gem.nix { };
