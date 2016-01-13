@@ -9338,6 +9338,8 @@ let
   postfix30 = callPackage ../servers/mail/postfix/3.0.nix { };
   postfix = postfix30;
 
+  postsrsd = callPackage ../servers/mail/postsrsd { };
+
   pshs = callPackage ../servers/http/pshs { };
 
   libpulseaudio = callPackage ../servers/pulseaudio { libOnly = true; };
