@@ -46,6 +46,9 @@ rec {
     ghcNokinds = callPackage ../development/compilers/ghc/nokinds.nix ({ inherit (packages.ghc784) ghc alex happy; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
       libiconv = pkgs.darwin.libiconv;
     });
+    ghc801 = callPackage ../development/compilers/ghc/8.0.1.nix {
+      ghc = compiler.ghc7103; inherit (packages.ghc7103) hscolour;
+    };
 
     ghcjs = packages.ghc7102.callPackage ../development/compilers/ghcjs {
       ghc = compiler.ghc7102;
@@ -101,6 +104,10 @@ rec {
     ghc7103 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc7103;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
+    };
+    ghc801 = callPackage ../development/haskell-modules {
+      ghc = compiler.ghc801;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {
       ghc = compiler.ghcHEAD;
