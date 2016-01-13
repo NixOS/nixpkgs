@@ -2478,8 +2478,6 @@ let
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
-  ntop = callPackage ../tools/networking/ntop { };
-
   ntopng = callPackage ../tools/networking/ntopng { };
 
   ntp = callPackage ../tools/networking/ntp {
