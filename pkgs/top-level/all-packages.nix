@@ -289,6 +289,8 @@ let
 
   cmark = callPackage ../development/libraries/cmark { };
 
+  dockerTools = callPackage ../build-support/docker { };
+
   dotnetenv = callPackage ../build-support/dotnetenv {
     dotnetfx = dotnetfx40;
   };
