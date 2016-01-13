@@ -11688,7 +11688,7 @@ let
     };
   };
 
-  emacs24PackagesNg = recurseIntoAttrs (emacsPackagesNgGen emacs24);
+  emacs24PackagesNg = emacsPackagesNgGen emacs24;
 
   emacs24WithPackages = emacs24PackagesNg.emacsWithPackages;
   emacsWithPackages = emacsPackagesNg.emacsWithPackages;
