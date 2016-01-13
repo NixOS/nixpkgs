@@ -14601,24 +14601,18 @@ in modules // {
     };
   };
 
-  pyaudio = pkgs.stdenv.mkDerivation rec {
+  pyaudio = buildPythonPackage rec {
     name = "python-pyaudio-${version}";
-    version = "0.2.4";
+    version = "0.2.9";
 
     src = pkgs.fetchurl {
-      url = "http://people.csail.mit.edu/hubert/pyaudio/packages/pyaudio-${version}.tar.gz";
-      md5 = "623809778f3d70254a25492bae63b575";
+      url = "https://pypi.python.org/packages/source/P/PyAudio/PyAudio-${version}.tar.gz";
+      sha256 = "bfd694272b3d1efc51726d0c27650b3c3ba1345f7f8fdada7e86c9751ce0f2a1";
     };
 
-    buildInputs = with self; [ python pkgs.portaudio ];
+    disabled = isPyPy;
 
-    buildPhase = if stdenv.isDarwin then ''
-      PORTAUDIO_PATH="${pkgs.portaudio}" ${python}/bin/${python.executable} setup.py build --static-link
-    '' else ''
-      ${python}/bin/${python.executable} setup.py build
-    '';
-
-    installPhase = "${python}/bin/${python.executable} setup.py install --prefix=$out";
+    buildInputs = with self; [ pkgs.portaudio ];
 
     meta = {
       description = "Python bindings for PortAudio";
