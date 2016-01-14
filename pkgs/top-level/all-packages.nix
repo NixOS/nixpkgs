@@ -14256,16 +14256,19 @@ let
 
   qqwing = callPackage ../games/qqwing { };
 
-  quake3demo = callPackage ../games/quake3/wrapper {
-    name = "quake3-demo-${quake3game.name}";
+  quake3wrapper = callPackage ../games/quake3/wrapper { };
+
+  quake3demo = quake3wrapper {
+    name = "quake3-demo-${lib.getVersion quake3demodata}";
     description = "Demo of Quake 3 Arena, a classic first-person shooter";
-    game = quake3game;
-    paks = [quake3demodata];
+    paks = [ quake3pointrelease quake3demodata ];
   };
 
-  quake3demodata = callPackage ../games/quake3/demo { };
+  quake3demodata = callPackage ../games/quake3/content/demo.nix { };
 
-  quake3game = callPackage ../games/quake3/game { };
+  quake3pointrelease = callPackage ../games/quake3/content/pointrelease.nix { };
+
+  ioquake3 = callPackage ../games/quake3/ioquake { };
 
   quantumminigolf = callPackage ../games/quantumminigolf {};
 
@@ -15906,6 +15909,7 @@ aliases = with self; rec {
   saneFrontends = sane-frontends; # added 2016-01-02
   btrfsProgs = btrfs-progs; # added 2016-01-03
   aircrackng = aircrack-ng; # added 2016-01-14
+  quake3game = ioquake3; # added 2016-01-14
 };
 
 tweakAlias = _n: alias: with lib;
