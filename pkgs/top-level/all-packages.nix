@@ -5438,7 +5438,10 @@ let
 
   guile-xcb = callPackage ../development/guile-modules/guile-xcb { };
 
-  pharo-vm = callPackage_i686 ../development/pharo/vm { };
+  pharo-vms = callPackage_i686 ../development/pharo/vm { };
+  pharo-vm  = pharo-vms.pharo-no-spur;
+  pharo-vm5 = pharo-vms.pharo-spur;
+
   pharo-launcher = callPackage ../development/pharo/launcher { };
 
   srecord = callPackage ../development/tools/misc/srecord { };
