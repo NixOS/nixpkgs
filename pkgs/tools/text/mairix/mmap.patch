@@ -1,0 +1,110 @@
+Fix "Cannot allocate memory" on mmap of files bigger than 2GiB.
+
+https://github.com/rc0/mairix/issues/12
+
+diff -ruN t/mairix-0.22/mairix.h mairix/mairix-0.22/mairix.h
+--- t/mairix-0.22/mairix.h  2010-06-05 14:41:10.000000000 -0700
++++ mairix/mairix-0.22/mairix.h 2015-07-08 13:33:06.678718524 -0700
+@@ -327,8 +327,8 @@
+   DTR8_BAD_ATTACHMENT /* corrupt attachment (e.g. no body part) */
+ };
+ struct rfc822 *data_to_rfc822(struct msg_src *src, char *data, int length, enum data_to_rfc822_error *error);
+-void create_ro_mapping(const char *filename, unsigned char **data, int *len);
+-void free_ro_mapping(unsigned char *data, int len);
++void create_ro_mapping(const char *filename, unsigned char **data, size_t *len);
++void free_ro_mapping(unsigned char *data, size_t len);
+ char *format_msg_src(struct msg_src *src);
+
+ /* In tok.c */
+diff -ruN t/mairix-0.22/mbox.c mairix/mairix-0.22/mbox.c
+--- t/mairix-0.22/mbox.c    2010-06-05 14:41:10.000000000 -0700
++++ mairix/mairix-0.22/mbox.c   2015-07-08 13:32:45.126280861 -0700
+@@ -816,7 +816,7 @@
+         mb->n_old_msgs_valid = mb->n_msgs;
+       } else {
+         unsigned char *va;
+-        int len;
++        size_t len;
+         create_ro_mapping(mb->path, &va, &len);
+         if (va) {
+           rescan_mbox(mb, (char *) va, len);
+@@ -852,7 +852,7 @@
+   int any_new = 0;
+   int N;
+   unsigned char *va;
+-  int valen;
++  size_t valen;
+   enum data_to_rfc822_error error;
+
+   for (i=0; i<db->n_mboxen; i++) {
+diff -ruN t/mairix-0.22/rfc822.c mairix/mairix-0.22/rfc822.c
+--- t/mairix-0.22/rfc822.c  2010-06-05 14:41:10.000000000 -0700
++++ mairix/mairix-0.22/rfc822.c 2015-07-08 13:30:59.388133879 -0700
+@@ -1250,7 +1250,7 @@
+ }
+ #endif /* USE_GZIP_MBOX || USE_BZIP_MBOX */
+
+-void create_ro_mapping(const char *filename, unsigned char **data, int *len)/*{{{*/
++void create_ro_mapping(const char *filename, unsigned char **data, size_t *len)/*{{{*/
+ {
+   struct stat sb;
+   int fd;
+@@ -1371,7 +1371,7 @@
+   data_alloc_type = ALLOC_MMAP;
+ }
+ /*}}}*/
+-void free_ro_mapping(unsigned char *data, int len)/*{{{*/
++void free_ro_mapping(unsigned char *data, size_t len)/*{{{*/
+ {
+   int r;
+
+@@ -1399,7 +1399,7 @@
+ /*}}}*/
+ struct rfc822 *make_rfc822(char *filename)/*{{{*/
+ {
+-  int len;
++  size_t len;
+   unsigned char *data;
+   struct rfc822 *result;
+
+diff -ruN t/mairix-0.22/search.c mairix/mairix-0.22/search.c
+--- t/mairix-0.22/search.c  2010-06-05 14:41:10.000000000 -0700
++++ mairix/mairix-0.22/search.c 2015-07-08 13:32:25.809888610 -0700
+@@ -667,7 +667,7 @@
+ static void append_file_to_mbox(const char *path, FILE *out)/*{{{*/
+ {
+   unsigned char *data;
+-  int len;
++  size_t len;
+   create_ro_mapping(path, &data, &len);
+   if (data) {
+     fprintf(out, "From mairix@mairix Mon Jan  1 12:34:56 1970\n");
+@@ -683,8 +683,8 @@
+
+ static void get_validated_mbox_msg(struct read_db *db, int msg_index,/*{{{*/
+                                    int *mbox_index,
+-                                   unsigned char **mbox_data, int *mbox_len,
+-                                   unsigned char **msg_data,  int *msg_len)
++                                   unsigned char **mbox_data, size_t *mbox_len,
++                                   unsigned char **msg_data,  size_t *msg_len)
+ {
+   /* msg_data==NULL if checksum mismatches */
+   unsigned char *start;
+@@ -715,7 +715,7 @@
+ {
+   /* Need to common up code with try_copy_to_path */
+   unsigned char *mbox_start, *msg_start;
+-  int mbox_len, msg_len;
++  size_t mbox_len, msg_len;
+   int mbox_index;
+
+   get_validated_mbox_msg(db, msg_index, &mbox_index, &mbox_start, &mbox_len, &msg_start, &msg_len);
+@@ -735,7 +735,7 @@
+ static void try_copy_to_path(struct read_db *db, int msg_index, char *target_path)/*{{{*/
+ {
+   unsigned char *data;
+-  int mbox_len, msg_len;
++  size_t mbox_len, msg_len;
+   int mbi;
+   FILE *out;
+   unsigned char *start;
