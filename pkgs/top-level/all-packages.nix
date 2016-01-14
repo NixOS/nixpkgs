@@ -3491,9 +3491,6 @@ let
 
   tkgate = callPackage ../applications/science/electronics/tkgate/1.x.nix { };
 
-  # The newer package is low-priority because it segfaults at startup.
-  tkgate2 = lowPrio (callPackage ../applications/science/electronics/tkgate/2.x.nix { });
-
   tm = callPackage ../tools/system/tm { };
 
   tradcpp = callPackage ../development/tools/tradcpp { };
