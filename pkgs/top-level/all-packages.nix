@@ -4143,9 +4143,13 @@ let
         bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "7"; };
       };
 
-  openjdk8 = callPackage ../development/compilers/openjdk/8.nix {
-    bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "8"; };
-  };
+  openjdk8 =
+    if stdenv.isDarwin then
+      callPackage ../development/compilers/openjdk-darwin/8.nix { }
+    else
+      callPackage ../development/compilers/openjdk/8.nix {
+        bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "8"; };
+      };
 
   openjdk = if stdenv.isDarwin then openjdk7 else openjdk8;
 
