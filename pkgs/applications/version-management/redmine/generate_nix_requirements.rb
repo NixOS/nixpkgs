@@ -31,7 +31,7 @@ lockfile.specs.each do |s|
   Dir.chdir TMP_DIR do
     filename = `gem fetch #{s.name} -v #{s.version.to_s}`.split()[1]
     hash = `sha256sum #{filename}.gem`
-    url = "#{GEMSERVER}/downloads/#{filename}.gem"
+    url = "#{GEMSERVER}/gems/#{filename}.gem"
     puts url
     requirements[s.name] = { :version => s.version.to_s, 
                              :hash => hash.split().first,
