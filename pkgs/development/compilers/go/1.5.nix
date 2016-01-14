@@ -15,11 +15,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchurl {
     url = "https://github.com/golang/go/archive/go${version}.tar.gz";
-    sha256 = "1xd1nd1li7pdl72vq8zkh6m7ms3ajgyqz9a5d61gagm0cgj8zilz";
+    sha256 = "1n2niq0147pqflqh8j1s5wv8aq3vlh58ni3bp9add261z5q1g50k";
   };
 
   # perl is used for testing go vet
