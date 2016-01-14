@@ -10006,6 +10006,8 @@ let
     kernelPatches = [ kernelPatches.bridge_stp_helper ];
   };
 
+  linux_samus_4_4 = callPackage ../os-specific/linux/kernel/linux-samus-4.4.nix { };
+
   linux_3_10 = callPackage ../os-specific/linux/kernel/linux-3.10.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -10258,6 +10260,8 @@ let
                                                                                                allowImportFromDerivation=true;})
                                                      linuxPackages_self);
                            in recurseIntoAttrs linuxPackages_self;
+
+  linuxPackages_samus_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_4_4 linuxPackages_samus_4_4);
 
   # Build a kernel for Xen dom0
   linuxPackages_latest_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }) linuxPackages_latest);
