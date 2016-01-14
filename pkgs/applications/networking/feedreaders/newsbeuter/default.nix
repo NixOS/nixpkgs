@@ -1,5 +1,5 @@
 { stdenv, fetchurl, sqlite, curl, pkgconfig, libxml2, stfl, json-c-0-11, ncurses
-, gettext, libiconv, makeWrapper, perl }:
+, gettext, libiconv, makeWrapper, perl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "newsbeuter-2.9";
@@ -21,6 +21,13 @@ stdenv.mkDerivation rec {
     sed -i "1 s%^.*$%#!${perl}/bin/perl%" txt2h.pl
     export LDFLAGS=-lncursesw
   '';
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/akrennmair/newsbeuter/commit/cdacfbde9fe3ae2489fc96d35dfb7d263ab03f50.patch";
+      sha256 = "1qi71w893llrknrm0vbxlc1bpvxlqgbs3b23a4cwv53j1vf0qz0x";
+    })
+  ];
 
   installFlags = [ "DESTDIR=$(out)" "prefix=" ];
 
