@@ -13833,6 +13833,8 @@ in modules // {
       sha256 = "0wq4j56r6gnfhi9xjcn5jzyrg5ll41x0zg6xys7cw1v4fdsqd7hp";
     };
 
+    patches = [ ../development/python-modules/py-sonic-ssl-security.patch ];
+
     meta = {
       description = "A python library to wrap the Subsonic REST API ";
       license = licenses.gpl3;
