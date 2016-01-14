@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    description = "Wireless encryption crackign tools";
+    description = "Wireless encryption cracking tools";
     homepage = http://www.aircrack-ng.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ maintainers.iElectric maintainers.viric maintainers.garbas maintainers.chaoflow ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ iElectric viric garbas chaoflow nckx ];
     platforms = platforms.linux;
   };
 }
