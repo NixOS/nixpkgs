@@ -523,7 +523,7 @@ let
 
   aide = callPackage ../tools/security/aide { };
 
-  aircrackng = callPackage ../tools/networking/aircrack-ng { };
+  aircrack-ng = callPackage ../tools/networking/aircrack-ng { };
 
   airfield = callPackage ../tools/networking/airfield { };
 
@@ -15899,6 +15899,7 @@ aliases = with self; rec {
   saneBackendsGit = sane-backends-git; # added 2016-01-02
   saneFrontends = sane-frontends; # added 2016-01-02
   btrfsProgs = btrfs-progs; # added 2016-01-03
+  aircrackng = aircrack-ng; # added 2016-01-14
 };
 
 tweakAlias = _n: alias: with lib;
