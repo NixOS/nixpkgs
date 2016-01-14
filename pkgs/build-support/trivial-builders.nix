@@ -108,7 +108,7 @@ rec {
         using either
           nix-store --add-fixed ${hashAlgo} ${name_}
         or
-          nix-prefetch-url --type ${hashAlgo} file://path/to/${name_}
+          nix-prefetch-url --type ${hashAlgo} file:///path/to/${name_}
       '';
       hashAlgo = if sha256 != null then "sha256" else "sha1";
       hash = if sha256 != null then sha256 else sha1;
