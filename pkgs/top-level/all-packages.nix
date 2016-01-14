@@ -14491,25 +14491,6 @@ let
 
   ### DESKTOP ENVIRONMENTS
 
-  cinnamon = recurseIntoAttrs rec {
-    callPackage = newScope pkgs.cinnamon;
-    inherit (gnome3) gnome_common libgnomekbd gnome-menus zenity;
-
-    muffin = callPackage ../desktops/cinnamon/muffin.nix { } ;
-
-    cinnamon-control-center = callPackage ../desktops/cinnamon/cinnamon-control-center.nix{ };
-
-    cinnamon-settings-daemon = callPackage ../desktops/cinnamon/cinnamon-settings-daemon.nix{ };
-
-    cinnamon-session = callPackage ../desktops/cinnamon/cinnamon-session.nix{ } ;
-
-    cinnamon-desktop = callPackage ../desktops/cinnamon/cinnamon-desktop.nix { };
-
-    cinnamon-translations = callPackage ../desktops/cinnamon/cinnamon-translations.nix { };
-
-    cjs = callPackage ../desktops/cinnamon/cjs.nix { };
-  };
-
   clearlooks-phenix = callPackage ../misc/themes/gtk3/clearlooks-phenix { };
 
   enlightenment = callPackage ../desktops/enlightenment { };
