@@ -1805,11 +1805,11 @@ let
   };
 
   ipfs = buildFromGitHub{
-    rev = "f9dc4c726b770199f4ee64d97775d5fe8122814e";
-    date   = "2015-12-07";
+    rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
+    date   = "2016-01-12";
     owner  = "ipfs";
     repo   = "go-ipfs";
-    sha256 = "00p7kv6000bk6lbqqnnf4xy5pmd93fv6fihji3vn7br53645blaa";
+    sha256 = "1b7aimnbz287fy7p27v3qdxnz514r5142v3jihqxanbk9g384gcd";
     disabled = isGo14;
     meta = with stdenv.lib; {
       description = "A global, versioned, peer-to-peer filesystem";
