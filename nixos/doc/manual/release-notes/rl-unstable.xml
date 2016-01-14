@@ -48,6 +48,12 @@ following incompatible changes:</para>
   </listitem>
 
   <listitem>
+    <para><literal>jobs</literal> NixOS option has been removed. It served as
+    compatibility layer between Upstart jobs and SystemD services. All services
+    have been rewritten to use <literal>systemd.services</literal></para>
+  </listitem>
+
+  <listitem>
     <para><command>wmiimenu</command> is removed, as it has been
     removed by the developers upstream. Use <command>wimenu</command>
     from the <command>wmii-hg</command> package.</para>
