@@ -65,47 +65,18 @@ stdenv.mkDerivation rec {
 	      substituteInPlace "roccateventhandler/CMakeLists.txt" --replace '/etc/xdg/autostart' "$out/etc/xdg/autostart"
 	}
         postInstall () {
-	    # For some unknown as yet reason, these applications segfault on start if not run as super user.
-	    substituteInPlace $out/share/applications/roccatarvoconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccatkoneconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccatkonepuremilitaryconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccatkonextdopticalconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccatnythconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccatryostklconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccatiskuconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccatkoneplusconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccatkonepureopticalconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccatkovaplusconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccatpyraconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccatsavuconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccatiskufxconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccatkonepureconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccatkonextdconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccatluaconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccatryosmkconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccattyonconfig.desktop --replace "Exec=" "Exec=su -c "
-	    substituteInPlace $out/share/applications/roccatarvoconfig.desktop --replace "Terminal=false" "Terminal=true"
-	    substituteInPlace $out/share/applications/roccatkoneconfig.desktop --replace "Terminal=false" "Terminal=true"
-	    substituteInPlace $out/share/applications/roccatkonepuremilitaryconfig.desktop --replace "Terminal=false" "Terminal=true"
-	    substituteInPlace $out/share/applications/roccatkonextdopticalconfig.desktop --replace "Terminal=false" "Terminal=true"
-	    substituteInPlace $out/share/applications/roccatnythconfig.desktop --replace "Terminal=false" "Terminal=true"
-	    substituteInPlace $out/share/applications/roccatryostklconfig.desktop --replace "Terminal=false" "Terminal=true"
-	    substituteInPlace $out/share/applications/roccatiskuconfig.desktop --replace "Terminal=false" "Terminal=true"
-	    substituteInPlace $out/share/applications/roccatkoneplusconfig.desktop --replace "Terminal=false" "Terminal=true"
-	    substituteInPlace $out/share/applications/roccatkonepureopticalconfig.desktop --replace "Terminal=false" "Terminal=true"
-	    substituteInPlace $out/share/applications/roccatkovaplusconfig.desktop --replace "Terminal=false" "Terminal=true"
-	    substituteInPlace $out/share/applications/roccatpyraconfig.desktop --replace "Terminal=false" "Terminal=true"
-	    substituteInPlace $out/share/applications/roccatsavuconfig.desktop --replace "Terminal=false" "Terminal=true"
-	    substituteInPlace $out/share/applications/roccatiskufxconfig.desktop --replace "Terminal=false" "Terminal=true"
-	    substituteInPlace $out/share/applications/roccatkonepureconfig.desktop --replace "Terminal=false" "Terminal=true"
-	    substituteInPlace $out/share/applications/roccatkonextdconfig.desktop --replace "Terminal=false" "Terminal=true"
-	    substituteInPlace $out/share/applications/roccatluaconfig.desktop --replace "Terminal=false" "Terminal=true"
-	    substituteInPlace $out/share/applications/roccatryosmkconfig.desktop --replace "Terminal=false" "Terminal=true"
-	    substituteInPlace $out/share/applications/roccattyonconfig.desktop --replace "Terminal=false" "Terminal=true"
+	    # For some unknown as yet reason, the applications segfault on start if not run as super user.
+	    for desktopfile in $out/share/applications/*.desktop
+	    do
+		substituteInPlace $desktopfile --replace "Exec=" "Exec=su -c "
+		substituteInPlace $desktopfile --replace "Terminal=false" "Terminal=true"
+	    done
 	    touch --no-create /usr/share/icons/hicolor
+	    ### gtk-icon cache on nixos seems broken
+	    ##  so we don't do this yet
 	    # gtk-update-icon-cache -q /usr/share/icons/hicolor
-	    # Don't need to do the below because for now we run the
-	    # application using pkexec
+	    ### The below will need to be carried out if
+	    ##  the applications are to run as a regular user
 	    # groupadd --force --system roccat
 	    # mkdir --parents /var/lib/roccat
 	    # chown root:roccat /var/lib/roccat
@@ -121,7 +92,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    description = "Roccat hardware support for Linux";
+    description = "Tools for ROCCAT® hardware";
     homepage = http://sourceforge.net/projects/roccat/;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.heydojo ];
