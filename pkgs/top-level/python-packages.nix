@@ -4628,6 +4628,34 @@ in modules // {
     };
   };
 
+  dyn = buildPythonPackage rec {
+    version = "1.5.0";
+    name = "dyn-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dyn/${name}.tar.gz";
+      sha256 = "dc4b4b2a5d9d26f683230fd822641b39494df5fcbfa716281d126ea6425dd4c3";
+    };
+
+    buildInputs = with self; [
+      pytest
+      pytestcov
+      mock
+      pytestpep8
+      pytest_xdist
+      covCore
+      pkgs.glibcLocales
+    ];
+
+    LC_ALL="en_US.UTF-8";
+
+    meta = {
+      description = "Dynect dns lib";
+      homepage = "http://dyn.readthedocs.org/en/latest/intro.html";
+      license = licenses.bsd3;
+    };
+  };
+
   easy-process = buildPythonPackage rec {
     name = "EasyProcess-0.1.9";
 
