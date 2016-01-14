@@ -5801,6 +5801,8 @@ let
 
   intel-gpu-tools = callPackage ../development/tools/misc/intel-gpu-tools {};
 
+  iozone = callPackage ../development/tools/misc/iozone { };
+
   ired = callPackage ../development/tools/analysis/radare/ired.nix { };
 
   itstool = callPackage ../development/tools/misc/itstool { };
