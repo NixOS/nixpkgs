@@ -10,9 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib bzip2 bison flex ];
 
-  # https://github.com/rc0/mairix/issues/12
+  # https://github.com/rc0/mairix/pull/19
   patches = [ ./mmap.patch ];
-  patchFlags = "-p2";
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = http://www.rc0.org.uk/mairix;
