@@ -3362,10 +3362,11 @@ let
   };
 
   xmpp-client = buildFromGitHub {
-    rev      = "dc9d6be127f7c044ca0d56e5681c717a440ac177";
+    rev      = "525bd26cf5f56ec5aee99464714fd1d019c119ff";
+    date     = "2016-01-10";
     owner    = "agl";
     repo     = "xmpp-client";
-    sha256   = "1zxh88mfzvq7fzf0536qy8kpcl82nw4jwrvyb9z6lhwk05gmi3vi";
+    sha256   = "0a1r08zs723ikcskmn6ylkdi3frcd0i0lkx30i9q39ilf734v253";
     disabled = isGo14;
     buildInputs = [ crypto net ];
 
