@@ -54,7 +54,7 @@ import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
       else
       ''
       -f melpa2nix-build-package-from-recipe \
-      ${pname} ${version} ${recipeFile}
+      ${recipeFile} ${version}
       ''}
 
     runHook postBuild

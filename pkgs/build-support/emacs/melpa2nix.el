@@ -25,8 +25,10 @@
   (if (not noninteractive)
       (error "`melpa2nix-build-package' is to be used only with -batch"))
   (pcase command-line-args-left
-    (`(,package ,version ,recipe-file)
-     (let* ((rcp (cdr (package-build--read-from-file recipe-file)))
+    (`(,recipe-file ,version)
+     (let* ((recipe (package-build--read-from-file recipe-file))
+            (rcp (cdr recipe))
+            (package (car recipe))
             (files (package-build--config-file-list rcp)))
        (melpa2nix-package-build-archive package version files)))))
 
