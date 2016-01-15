@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
     version = "0.0.0+build.${rev}";
 
     src = fetchFromGitHub {
-        owner = "gleber";
+        owner = "erlang-nix";
         repo = "hex-pm-registry-snapshots";
         inherit rev;
         sha256 = "1rs3z8psfvy10mzlfvkdzbflgikcnq08r38kfi0f8p5wvi8f8hmh";
