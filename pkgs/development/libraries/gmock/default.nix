@@ -1,15 +1,13 @@
-{ stdenv, fetchurl, unzip, cmake}:
-
+{ stdenv, cmake, callPackage }:
+let
+  source = callPackage ./source.nix { };
+in
 stdenv.mkDerivation rec {
-  version = "1.7.0";
-  name = "gmock-${version}";
+  name = "gmock-${source.version}";
 
-  src = fetchurl {
-    url = "https://googlemock.googlecode.com/files/${name}.zip";
-    sha256="26fcbb5925b74ad5fc8c26b0495dfc96353f4d553492eb97e85a8a6d2f43095b";
-  };
+  src = source;
 
-  buildInputs = [ unzip cmake ];
+  buildInputs = [ cmake ];
 
   buildPhase = ''
     # avoid building gtest
@@ -29,4 +27,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.auntie ];
   };
+
+  passthru = { inherit source; };
 }
