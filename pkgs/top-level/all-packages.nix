@@ -618,6 +618,8 @@ let
 
   awscli = callPackage ../tools/admin/awscli { };
 
+  azure-cli = callPackage ../tools/virtualization/azure-cli { };
+
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
