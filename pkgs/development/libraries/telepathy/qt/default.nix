@@ -17,7 +17,12 @@ stdenv.mkDerivation rec {
         sha256 = "1rh7n3xyrwpvpa3haqi35qn4mfz4396ha43w4zsqpmcyda9y65v2";
       })
       (fetchpatch {
-        name = "parallel-make.patch";
+        name = "parallel-make-1.patch";
+        url = mkUrl "1e1f53e9d91684918c34ec50392f86287e001a1e";
+        sha256 = "1f9nk0bi90armb9zay53c7cz70zcwqqwli7sb9wgw76rmwqhl8qw";
+      })
+      (fetchpatch {
+        name = "parallel-make-2.patch";
         url = mkUrl "7389dc990c67d4269f3a79c924c054e87f2e4ac5";
         sha256 = "0mvdvyy76kpaxacljidf06wd43fr2qripr4mwsakjs3hxb1pkk57";
       })
