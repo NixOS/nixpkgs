@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
   buildFlags = target;
 
   installPhase = ''
-    mkdir -p $out/{man,bin,doc}
-    install docs/iozone.1 $out/man/
-    install docs/Iozone_ps.gz $out/doc/
+    mkdir -p $out/{bin,share/doc,share/man/man1}
+    install docs/iozone.1 $out/share/man/man1/
+    install docs/Iozone_ps.gz $out/share/doc/
     install -s src/current/{iozone,fileop,pit_server} $out/bin/
     # License copy is mandated by the license, but it's not in the tarball.
-    install ${license} $out/doc/Iozone_License.txt
+    install ${license} $out/share/doc/Iozone_License.txt
   '';
 
   meta = {
