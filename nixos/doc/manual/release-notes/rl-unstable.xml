@@ -24,6 +24,17 @@ nixos.path = ./nixpkgs-unstable-2015-12-06/nixos;
     <xref linkend="module-misc-nixos" /></para>
   </listitem>
 
+  <listitem>
+    <para>Firefox and similar browsers are now <emphasis>wrapped by default</emphasis>.
+    The package and attribute names are plain <literal>firefox</literal>
+    or <literal>midori</literal>, etc.  Backward-compatibility attributes were set up,
+    but note that <command>nix-env -u</command> will <emphasis>not</emphasis> update
+    your current <literal>firefox-with-plugins</literal>;
+    you have to uninstall it and install <literal>firefox</literal> instead.
+    More discussion is <link xlink:href="https://github.com/NixOS/nixpkgs/pull/12299">
+    on the PR</link>.  </para>
+  </listitem>
+
 </itemizedlist>
 
 <para>The following new services were added since the last release:
