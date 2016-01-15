@@ -31,11 +31,9 @@ stdenv.mkDerivation {
       --prefix PYTHONPATH : "$(toPythonPath "${pythonPackages.pysqlite}")"
   '';
 
-  meta = {
-    homepage = "http://git.fishsoup.net/cgit/git-bz/";
-    description = "integration of git with Bugzilla";
-    license = stdenv.lib.licenses.gpl2;
-
+  meta = with stdenv.lib; {
+    inherit version;
+    description = "Bugzilla integration for git";
     longDescription = ''
       git-bz is a tool for integrating the Git command line with the
       Bugzilla bug-tracking system. Operations such as attaching patches to
@@ -49,9 +47,10 @@ stdenv.mkDerivation {
       currently is able to do this for Firefox, Epiphany, Galeon and
       Chromium on Linux.
     '';
+    license = licenses.gpl2Plus;
+    homepage = http://git.fishsoup.net/cgit/git-bz/;
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.pierron ];
-    broken = true;
+    mantainers = with maintainers; [ nckx ];
+    platforms = platforms.linux;
   };
 }
