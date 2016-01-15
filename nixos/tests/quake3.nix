@@ -10,6 +10,13 @@ let
       });
     };
 
+  # Only allow the demo data to be used (only if it's unfreeRedistributable).
+  unfreePredicate = pkg: with pkgs.lib; let
+    allowDrvPredicates = [ "quake3-demo" "quake3-pointrelease" ];
+    allowLicenses = [ pkgs.lib.licenses.unfreeRedistributable ];
+  in any (flip hasPrefix pkg.name) allowDrvPredicates &&
+     elem (pkg.meta.license or null) allowLicenses;
+
 in
 
 rec {
@@ -28,6 +35,7 @@ rec {
       hardware.opengl.driSupport = true;
       environment.systemPackages = [ pkgs.quake3demo ];
       nixpkgs.config.packageOverrides = overrides;
+      nixpkgs.config.allowUnfreePredicate = unfreePredicate;
     };
 
   nodes =
@@ -41,6 +49,7 @@ rec {
                 "'+map q3dm7' '+addbot grunt' '+addbot daemia' 2> /tmp/log";
             };
           nixpkgs.config.packageOverrides = overrides;
+          nixpkgs.config.allowUnfreePredicate = unfreePredicate;
           networking.firewall.allowedUDPPorts = [ 27960 ];
         };
 
