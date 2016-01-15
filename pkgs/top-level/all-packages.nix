@@ -2076,6 +2076,8 @@ let
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
+  matrix-synapse = callPackage ../servers/matrix-synapse { };
+
   memtester = callPackage ../tools/system/memtester { };
 
   minidlna = callPackage ../tools/networking/minidlna { };
