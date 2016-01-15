@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     license = licenses.gpl2Plus;
     homepage = http://git.fishsoup.net/cgit/git-bz/;
 
-    mantainers = with maintainers; [ nckx ];
+    maintainers = with maintainers; [ nckx ];
     platforms = platforms.linux;
   };
 }
