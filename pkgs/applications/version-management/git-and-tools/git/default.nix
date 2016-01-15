@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "2.6.4";
+  version = "2.7.0";
   svn = subversionClient.override { perlBindings = true; };
 in
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "0rnlbp7l4ggq3lk96v24rzw7qqawp6477i3b4m0b5q3346ap008w";
+    sha256 = "03bvb8s5j8i54qbi3yayl42bv0wf2fpgnh1a2lkhbj79zi7b77zs";
   };
 
   patches = [
@@ -144,7 +144,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://git-scm.com/;
     description = "Distributed version control system";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''
       Git, a popular distributed version control system designed to

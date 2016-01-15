@@ -2293,6 +2293,19 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ClassMix];
   };
 
+  CryptJWT = buildPerlPackage {
+    name = "Crypt-JWT-0.011";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MI/MIK/Crypt-JWT-0.011.tar.gz;
+      sha256 = "0eb02328aa2949adbf91c760bcdc9a5f6e206db8533023847fd7f76783f71e09";
+    };
+    propagatedBuildInputs = [ CryptX JSONMaybeXS ];
+    meta = {
+      description = "JSON Web Token";
+      license = "perl";
+    };
+  };
+
   CryptPasswdMD5 = buildPerlPackage {
     name = "Crypt-PasswdMD5-1.40";
     src = fetchurl {
@@ -2438,19 +2451,6 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ PathClass TryTiny ];
   };
 
-  CryptX = buildPerlModule rec {
-    name = "CryptX-0.025";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "f8b7e3ec1713c8dfe3eef9d114f45f223b97e2340f81a20589b5605fa49cfe38";
-    };
-    propagatedBuildInputs = [ JSON ];
-    meta = {
-      description = "Crypto toolkit";
-      license = "perl";
-    };
-  };
-
   CSSDOM = buildPerlPackage rec {
     name = "CSS-DOM-0.15";
     src = fetchurl {
@@ -2473,6 +2473,20 @@ let self = _self // overrides; _self = with self; {
       inherit version;
       description = "Perl bindings to ncurses";
       license = stdenv.lib.licenses.artistic1;
+    };
+  };
+
+  CryptX = buildPerlModule {
+    name = "CryptX-0.026";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MI/MIK/CryptX-0.026.tar.gz;
+      sha256 = "0465843c86eb16b13717fde5b803c7390bb14805e277e1a1841a62e5124debc2";
+    };
+    buildInputs = [ JSONMaybeXS ];
+    propagatedBuildInputs = [ JSONMaybeXS ];
+    meta = {
+      description = "Crypto toolkit";
+      license = "perl";
     };
   };
 
@@ -4757,7 +4771,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Simple and Efficient Reading/Writing/Modifying of Complete Files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -6601,7 +6615,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Provide https support for LWP::UserAgent";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 

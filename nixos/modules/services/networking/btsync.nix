@@ -16,9 +16,10 @@ let
     ''
       "webui":
       {
-        ${optionalEmptyStr cfg.httpLogin "\"login\":    \"${cfg.httpLogin}\","}
-        ${optionalEmptyStr cfg.httpPass  "\"password\": \"${cfg.httpPass}\","}
-        ${optionalEmptyStr cfg.apiKey    "\"api_key\":  \"${cfg.apiKey}\","}
+        ${optionalEmptyStr cfg.httpLogin     "\"login\":          \"${cfg.httpLogin}\","}
+        ${optionalEmptyStr cfg.httpPass      "\"password\":       \"${cfg.httpPass}\","}
+        ${optionalEmptyStr cfg.apiKey        "\"api_key\":        \"${cfg.apiKey}\","}
+        ${optionalEmptyStr cfg.directoryRoot "\"directory_root\": \"${cfg.directoryRoot}\","}
         "listen": "${listenAddr}"
       }
     '';
@@ -82,15 +83,13 @@ in
         type = types.bool;
         default = false;
         description = ''
-          If enabled, start the Bittorrent Sync daemon. Once enabled,
-          you can interact with the service through the Web UI, or
-          configure it in your NixOS configuration. Enabling the
-          <literal>btsync</literal> service also installs a
-          multi-instance systemd unit which can be used to start
-          user-specific copies of the daemon. Once installed, you can
-          use <literal>systemctl start btsync@user</literal> to start
-          the daemon only for user <literal>user</literal>, using the
-          configuration file located at
+          If enabled, start the Bittorrent Sync daemon. Once enabled, you can
+          interact with the service through the Web UI, or configure it in your
+          NixOS configuration. Enabling the <literal>btsync</literal> service
+          also installs a systemd user unit which can be used to start
+          user-specific copies of the daemon. Once installed, you can use
+          <literal>systemctl --user start btsync</literal> as your user to start
+          the daemon using the configuration file located at
           <literal>$HOME/.config/btsync.conf</literal>.
         '';
       };
@@ -211,7 +210,9 @@ in
         default = "/var/lib/btsync/";
         example = "/var/lib/btsync/";
         description = ''
-          Where to store the bittorrent sync files.
+          Where BitTorrent Sync will store it's database files (containing
+          things like username info and licenses). Generally, you should not
+          need to ever change this.
         '';
       };
 
@@ -219,6 +220,13 @@ in
         type = types.str;
         default = "";
         description = "API key, which enables the developer API.";
+      };
+
+      directoryRoot = mkOption {
+        type = types.str;
+        default = "";
+        example = "/media";
+        description = "Default directory to add folders in the web UI.";
       };
 
       sharedFolders = mkOption {
@@ -303,12 +311,11 @@ in
       };
     };
 
-    systemd.services."btsync@" = with pkgs; {
-      description = "Bittorrent Sync Service for %i";
+    systemd.user.services.btsync = with pkgs; {
+      description = "Bittorrent Sync user service";
       after       = [ "network.target" "local-fs.target" ];
       serviceConfig = {
         Restart   = "on-abort";
-        User      = "%i";
         ExecStart =
           "${bittorrentSync}/bin/btsync --nodaemon --config %h/.config/btsync.conf";
       };

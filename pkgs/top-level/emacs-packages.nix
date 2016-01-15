@@ -103,9 +103,10 @@ let
       rev = "v${version}";
       sha256 = "19sy49r3ijh36m7hl4vspw5c4i8pnfqdn4ldm2sqchxigkw56ayl";
     };
-    buildInputs = with external; [ autoconf automake libpng zlib poppler pkgconfig ] ++ [ tablist let-alist ];
+    buildInputs = with external; [ autoconf automake libpng zlib poppler pkgconfig ];
     preBuild = "make server/epdfinfo";
     fileSpecs = [ "lisp/pdf-*.el" "server/epdfinfo" ];
+    packageRequires = [ tablist let-alist ];
     meta = {
       description = "Emacs support library for PDF files";
       license = gpl3;
@@ -409,21 +410,6 @@ let
     };
   };
 
-  dash = melpaBuild rec {
-    pname   = "dash";
-    version = "2.12.1";
-    src = fetchFromGitHub {
-      owner  = "magnars";
-      repo   = "${pname}.el";
-      rev    = version;
-      sha256 = "1njv5adcm96kdch0jb941l8pm51yfdx7mlz83y0pq6jlzjs9mwaa";
-    };
-    meta = {
-      description = "A modern list library for Emacs (think Haskell's Prelude in elisp)";
-      license = gpl3Plus;
-    };
-  };
-
   dash-functional = melpaBuild rec {
     pname = "dash-functional";
       version = "2.11.0";
@@ -561,6 +547,22 @@ let
     };
   };
 
+  evil-jumper = melpaBuild rec {
+    pname   = "evil-jumper";
+    version = "20151017";
+    src = fetchFromGitHub {
+      owner  = "bling";
+      repo   = pname;
+      rev    = "fcadf2d93aaea3ba88a2ae63a860b9c1f0568167";
+      sha256 = "0axx6cc9z9c1wh7qgm6ya54dsp3bn82bnb0cwj1rpv509qqmwgsj";
+    };
+    packageRequires = [ evil ];
+    meta = {
+      description = "Jump across buffer boundaries and revive dead buffers if necessary";
+      license = gpl3Plus;
+    };
+  };
+
   evil-leader = melpaBuild rec {
     pname   = "evil-leader";
     version = "0.4.3";
@@ -573,6 +575,22 @@ let
     packageRequires = [ evil ];
     meta = {
       description = "<leader> key for evil";
+      license = gpl3Plus;
+    };
+  };
+
+  evil-mc = melpaBuild rec {
+    pname   = "evil-mc";
+    version = "20150117";
+    src = fetchFromGitHub {
+      owner  = "gabesoft";
+      repo   = "evil-mc";
+      rev    = "80471ba1173775e706c2043afd7d20ace652df7d";
+      sha256 = "1j23avcxj79plba99yfpmj9rfpdb527d7qfp4mx658y837vji1zm";
+    };
+    packageRequires = [ evil ];
+    meta = {
+      description = "Multiple cursors implementation for evil-mode";
       license = gpl3Plus;
     };
   };
@@ -593,13 +611,29 @@ let
     };
   };
 
+  evil-visualstar = melpaBuild rec {
+    pname   = "evil-visualstar";
+    version = "20151017";
+    src = fetchFromGitHub {
+      owner  = "bling";
+      repo   = pname;
+      rev    = "bd9e1b50c03b37c57355d387f291c2ec8ce51eec";
+      sha256 = "17m4kdz1is4ipnyiv9n3vss49faswbbd6v57df9npzsbn5jyydd0";
+    };
+    packageRequires = [ evil ];
+    meta = {
+      description = "Start a * or # search from the visual selection";
+      license = gpl3Plus;
+    };
+  };
+
   evil = melpaBuild {
     pname   = "evil";
-    version = "1.2.3";
+    version = "1.2.5";
     src = fetchhg {
       url = "https://bitbucket.org/lyro/evil";
-      rev = "e5588e50c0e40a66c099868ea825755e348311fb";
-      sha256 = "0185vrzfdz6iwhmc22rjy0n7ppfppp2ddc8xl0vvbda79q6w3bp8";
+      rev = "72593d8e83a3";
+      sha256 = "1pv055qlc3vawzdik29d6zbbv8fa2ygwylm04wa46qr5sj53v0i8";
     };
     packageRequires = [ goto-chg undo-tree ];
     meta = {
@@ -1385,21 +1419,6 @@ let
     };
   };
 
-  paredit = trivialBuild rec {
-    pname = "paredit-${version}";
-    version = "25";
-    src = fetchgit {
-      url = http://mumble.net/~campbell/git/paredit.git/;
-      rev = "9a696fdcce87c9d9eec4569a9929d0300ac6ae5c";
-      sha256 = "13wjqimp2s6pwcqix8pmsrk76bq1cxlnwmj3m57bb5y60y67vp9l";
-    };
-    meta = {
-      homepage = http://www.emacswiki.org/emacs/ParEdit;
-      description = "Minor Emacs mode for structured editing of S-expression data";
-      license = gpl3Plus;
-    };
-  };
-
   parsebib = melpaBuild rec {
     pname = "parsebib";
     version = "20151006";
@@ -1779,20 +1798,6 @@ let
     packageRequires = [ caml ];
     meta = {
       description = "Extension of OCaml mode for Emacs";
-      license = gpl3Plus;
-    };
-  };
-
-  undo-tree = melpaBuild rec {
-    pname   = "undo-tree";
-    version = "0.6.4";
-    src = fetchgit {
-      url    = "http://www.dr-qubit.org/git/${pname}.git";
-      rev    = "a3e81b682053a81e082139300ef0a913a7a610a2";
-      sha256 = "1qla7njkb7gx5aj87i8x6ni8jfk1k78ivwfiiws3gpbnyiydpx8y";
-    };
-    meta = {
-      description = "A port of Vim's undo tree functionality to Emacs";
       license = gpl3Plus;
     };
   };

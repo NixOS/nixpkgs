@@ -242,9 +242,16 @@ in
 
     systemd.services."tarsnap@" = {
       description = "Tarsnap archive '%i'";
-      requires    = [ "network.target" ];
+      requires    = [ "network-online.target" ];
+      after       = [ "network-online.target" ];
 
-      path = [ pkgs.tarsnap pkgs.coreutils ];
+      path = [ pkgs.iputils pkgs.tarsnap pkgs.coreutils ];
+
+      # In order for the persistent tarsnap timer to work reliably, we have to
+      # make sure that the tarsnap server is reachable after systemd starts up
+      # the service - therefore we sleep in a loop until we can ping the
+      # endpoint.
+      preStart = "while ! ping -q -c 1 betatest-server.tarsnap.com &> /dev/null; do sleep 3; done";
       scriptArgs = "%i";
       script = ''
         mkdir -p -m 0755 ${dirOf cfg.cachedir}
@@ -259,11 +266,15 @@ in
         IOSchedulingClass = "idle";
         NoNewPrivileges = "true";
         CapabilityBoundingSet = "CAP_DAC_READ_SEARCH";
+        PermissionsStartOnly = "true";
       };
     };
 
+    # Note: the timer must be Persistent=true, so that systemd will start it even
+    # if e.g. your laptop was asleep while the latest interval occurred.
     systemd.timers = mapAttrs' (name: cfg: nameValuePair "tarsnap@${name}"
       { timerConfig.OnCalendar = cfg.period;
+        timerConfig.Persistent = "true";
         wantedBy = [ "timers.target" ];
       }) cfg.archives;
 

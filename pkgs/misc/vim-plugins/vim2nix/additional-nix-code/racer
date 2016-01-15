@@ -1,0 +1,4 @@
+    buildPhase = ''
+      find . -type f -not -name 'racer.vim' -exec rm -rf {} \;
+      rm -rf editors images src
+    '';

@@ -1,25 +1,21 @@
-{ stdenv, fetchFromGitHub, autoconf, automake110x, libtool, pkgconfig, zlib, openssl, libevent, ncurses, cmake, ruby }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, zlib, openssl, libevent, ncurses, cmake, ruby, libmsgpack, libssh }:
 
 stdenv.mkDerivation rec {
   name = "tmate-${version}";
-  version = "1.8.10";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner  = "nviennot";
     repo   = "tmate";
     rev    = version;
-    sha256 = "1bd9mi8fx40608zlady9dbv21kbdwc3kqrgz012m529f6cbysmzc";
+    sha256 = "1w3a7na0yj1y0x24qckc7s2y9xfak5iv6vyqrd0iibn3b7dxarli";
   };
 
-  buildInputs = [ autoconf automake110x pkgconfig libtool zlib openssl libevent ncurses cmake ruby ];
+  buildInputs = [ autoconf automake pkgconfig libtool zlib openssl libevent ncurses cmake ruby libmsgpack libssh ];
 
   dontUseCmakeConfigure=true;
 
   preConfigure = "./autogen.sh";
-
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace msgpack/bootstrap --replace glibtoolize libtoolize
-  '';
 
   meta = {
     homepage = http://tmate.io/;

@@ -102,6 +102,7 @@ in
         kde5.gwenview
         kde5.kate
         kde5.kdegraphics-thumbnailers
+        kde5.kio-extras
         kde5.konsole
         kde5.okular
         kde5.print-manager
@@ -125,6 +126,7 @@ in
       ++ lib.optional config.networking.networkmanager.enable kde5.plasma-nm
       ++ lib.optional config.hardware.pulseaudio.enable kde5.plasma-pa
       ++ lib.optional config.powerManagement.enable kde5.powerdevil
+      ++ lib.optionals config.services.samba.enable [ kde5.kdenetwork-filesharing pkgs.samba ]
 
       ++ lib.optionals cfg.phonon.gstreamer.enable
         [

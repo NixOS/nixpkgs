@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib bzip2 bison flex ];
 
+  # https://github.com/rc0/mairix/issues/12
+  patches = [ ./mmap.patch ];
+  patchFlags = "-p2";
+
   meta = {
     homepage = http://www.rc0.org.uk/mairix;
     license = stdenv.lib.licenses.gpl2Plus;

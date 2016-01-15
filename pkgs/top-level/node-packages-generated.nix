@@ -1,27 +1,6 @@
 { self, fetchurl, fetchgit ? null, lib }:
 
 {
-  by-spec."7f"."*" =
-    self.by-version."7f"."1.1.3";
-  by-version."7f"."1.1.3" = self.buildNodePackage {
-    name = "7f-1.1.3";
-    version = "1.1.3";
-    bin = false;
-    src = fetchurl {
-      url = "http://registry.npmjs.org/7f/-/7f-1.1.3.tgz";
-      name = "7f-1.1.3.tgz";
-      sha1 = "88d2cb194fceeb96db7b24bc710b283451e7a851";
-    };
-    deps = {
-      "bits-0.1.1" = self.by-version."bits"."0.1.1";
-    };
-    optionalDependencies = {
-    };
-    peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
-  };
-  "7f" = self.by-version."7f"."1.1.3";
   by-spec."Base64"."~0.2.0" =
     self.by-version."Base64"."0.2.1";
   by-version."Base64"."0.2.1" = self.buildNodePackage {

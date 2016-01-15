@@ -166,33 +166,33 @@ in
           '';
       };
 
-    jobs."libvirt-guests" =
-      { description = "Libvirt Virtual Machines";
+    systemd.services."libvirt-guests" = {
+      description = "Libvirt Virtual Machines";
 
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "libvirtd.service" ];
-        after = [ "libvirtd.service" ];
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "libvirtd.service" ];
+      after = [ "libvirtd.service" ];
 
-        restartIfChanged = false;
+      restartIfChanged = false;
 
-        path = [ pkgs.gettext pkgs.libvirt pkgs.gawk ];
+      path = with pkgs; [ gettext libvirt gawk ];
 
-        preStart =
-          ''
-            mkdir -p /var/lock/subsys -m 755
-            ${pkgs.libvirt}/etc/rc.d/init.d/libvirt-guests start || true
-          '';
+      preStart = ''
+        mkdir -p /var/lock/subsys -m 755
+        ${pkgs.libvirt}/etc/rc.d/init.d/libvirt-guests start || true
+      '';
 
-        postStop = 
-            ''
-            export PATH=${pkgs.gettext}/bin:$PATH
-            export ON_SHUTDOWN=${cfg.onShutdown}
-            ${pkgs.libvirt}/etc/rc.d/init.d/libvirt-guests stop
-            '';
+      postStop = ''
+        export PATH=${pkgs.gettext}/bin:$PATH
+        export ON_SHUTDOWN=${cfg.onShutdown}
+        ${pkgs.libvirt}/etc/rc.d/init.d/libvirt-guests stop
+      '';
 
-        serviceConfig.Type = "oneshot";
-        serviceConfig.RemainAfterExit = true;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
       };
+    };
 
     users.extraGroups.libvirtd.gid = config.ids.gids.libvirtd;
 

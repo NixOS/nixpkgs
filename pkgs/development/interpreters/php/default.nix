@@ -293,18 +293,18 @@ in {
   };
 
   php55 = generic {
-    version = "5.5.30";
-    sha256 = "0a9v7jq8mr15dcim23rzcfgpijc5k1rkc4qv9as1rpgc7iqjlcz7";
+    version = "5.5.31";
+    sha256 = "0xx23gb70jsgbd772hy8f79wh2rja617s17gnx4vgklxk8mkhjpv";
   };
 
   php56 = generic {
-    version = "5.6.16";
-    sha256 = "1bnjpj5vjj2sx80z3x452vhk7bfdl8hbli61byhapgy1ch4z9rjg";
+    version = "5.6.17";
+    sha256 = "0fyxg95m918ngi6lnxyfb4y0ii4f8f5znb5l4axpagp6l5b5zd3p";
   };
 
   php70 = generic {
-    version = "7.0.1";
-    sha256 = "0hiyv71ysbzcl3kf28phjyycp7myjd89l8f28arrf4q0vb8kpkh4";
+    version = "7.0.2";
+    sha256 = "0di2vallv5kry85l67za25nq4f2hjr8fad5j0c06nb69v7xpa6wv";
   };
 
 }

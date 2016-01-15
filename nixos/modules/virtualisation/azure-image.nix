@@ -26,7 +26,7 @@ in
               ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -O vpc $diskImage $out/disk.vhd
               rm $diskImage
             '';
-          diskImageBase = "nixos-image-${config.system.nixosVersion}-${pkgs.stdenv.system}.raw";
+          diskImageBase = "nixos-image-${config.system.nixosLabel}-${pkgs.stdenv.system}.raw";
           buildInputs = [ pkgs.utillinux pkgs.perl ];
           exportReferencesGraph =
             [ "closure" config.system.build.toplevel ];
@@ -105,7 +105,7 @@ in
       path  = [ pkgs.coreutils ];
       script =
         ''
-          eval "$(base64 --decode /metadata/CustomData.bin)"
+          eval "$(cat /metadata/CustomData.bin)"
           if ! [ -z "$ssh_host_ecdsa_key" ]; then
             echo "downloaded ssh_host_ecdsa_key"
             echo "$ssh_host_ecdsa_key" > /etc/ssh/ssh_host_ed25519_key

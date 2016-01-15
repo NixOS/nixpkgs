@@ -45,23 +45,21 @@ in
         home = stateDir;
       };
 
-    jobs.uptimed =
-      { description = "Uptimed daemon";
+    systemd.services.uptimed = {
+      description = "Uptimed daemon";
+      wantedBy = [ "multi-user.target" ];
 
-        startOn = "startup";
+      preStart = ''
+        mkdir -m 0755 -p ${stateDir}
+        chown ${uptimedUser} ${stateDir}
 
-        preStart =
-          ''
-            mkdir -m 0755 -p ${stateDir}
-            chown ${uptimedUser} ${stateDir}
+        if ! test -f ${stateDir}/bootid ; then
+          ${uptimed}/sbin/uptimed -b
+        fi
+      '';
 
-            if ! test -f ${stateDir}/bootid ; then
-              ${uptimed}/sbin/uptimed -b
-            fi
-          '';
-
-        exec = "${uptimed}/sbin/uptimed";
-      };
+      script = "${uptimed}/sbin/uptimed";
+    };
 
   };
 

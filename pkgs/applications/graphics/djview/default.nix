@@ -5,10 +5,10 @@ let
   # TODO: qt = qt5.base; # should work but there's a mysterious "-silent" error
 in
 stdenv.mkDerivation rec {
-  name = "djview-4.10.3";
+  name = "djview-4.10.5";
   src = fetchurl {
     url = "mirror://sourceforge/djvu/${name}.tar.gz";
-    sha256 = "09dbws0k8giizc0xqpad8plbyaply8x1pjc2k3207v2svk6hxf2h";
+    sha256 = "0gbvbly7w3cr8wgpyh76nf9w7cf7740vp7k5hccks186f6005cx0";
   };
 
   nativeBuildInputs = [ pkgconfig ];

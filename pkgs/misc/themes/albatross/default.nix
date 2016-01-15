@@ -1,13 +1,14 @@
-{stdenv, fetchgit}:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "Albatross-${version}";
-  version = "1.7.3";
+  version = "1.7.4";
 
-  src = fetchgit {
-    url = git://github.com/shimmerproject/Albatross.git;
-    rev = "refs/tags/v${version}";
-    sha256 = "7a585068dd59f753149c0d390f2ef541f2ace67e7d681613588edb9f962e3196";
+  src = fetchFromGitHub {
+    repo = "Albatross";
+    owner = "shimmerproject";
+    rev = "v${version}";
+    sha256 = "0mq87n2hxy44nzr567av24n5nqjaljhi1afxrn3mpjqdbkq7lx88";
   };
 
   dontBuild = true;
@@ -18,8 +19,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Albatross";
-    homepage = "http://shimmerproject.org/our-projects/albatross/";
+    description = "A desktop Suite for Xfce";
+    homepage = http://shimmerproject.org/our-projects/albatross/;
     license = stdenv.lib.licenses.gpl2;
   };
 }

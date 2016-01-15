@@ -1,10 +1,14 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, patchelf, p7zip, jdk
+{ stdenv, fetchurl, makeDesktopItem, makeWrapper, patchelf, p7zip, oraclejdk8
 , coreutils, gnugrep, which, git, python, unzip, androidsdk
 }:
 
 assert stdenv.isLinux;
 
 let
+
+  # After IDEA 15 we can no longer use OpenJDK.
+  # https://youtrack.jetbrains.com/issue/IDEA-147272
+  jdk = oraclejdk8;
 
   mkIdeaProduct = with stdenv.lib;
   { name, product, version, build, src, meta }:
@@ -273,25 +277,25 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "5.0.1";
-    build = "143.595";
+    version = "5.0.3";
+    build = "143.1559.1";
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "14m3imy64cp2l9pnmknxbjzj3z30rx88r4brz9d5xk5qailjg2wf";
+      sha256 = "1xb3qxhl8ln488v0hmjqkzpyypm7wh941c7syi4cs7plbdp6w4c2";
     };
   };
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "5.0.1";
-    build = "143.595";
+    version = "5.0.3";
+    build = "143.1559.1";
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "102sfjvchk80911w3qpjsp30wvq73kgpwyqcqdgqxcgm2vqh3183";
+      sha256 = "1v2g9867nn3id1zfbg4zwj0c0z9d72rl9c1dz6vs2c4j0y4gy9xl";
     };
   };
 
