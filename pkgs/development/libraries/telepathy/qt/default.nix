@@ -2,11 +2,11 @@
 , telepathy_farstream, telepathy_glib, pythonDBus, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "telepathy-qt-0.9.6";
+  name = "telepathy-qt-0.9.6.1";
 
   src = fetchurl {
     url = "http://telepathy.freedesktop.org/releases/telepathy-qt/${name}.tar.gz";
-    sha256 = "0j7hs055cx5g9chn3b2p0arig70m5g9547qgqvk29kxdyxxxsmqc";
+    sha256 = "1y51c6rxk5qvmab98c8rnmrlyk27hnl248casvbq3cd93sav8vj9";
   };
   patches = let
     mkUrl = hash: "http://cgit.freedesktop.org/telepathy/telepathy-qt/patch/?id=" + hash;
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
   buildInputs = stdenv.lib.optional doCheck dbus_daemon;
 
   cmakeFlags = "-DDESIRED_QT_VERSION=${builtins.substring 0 1 qtbase.version}";
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=cpp" ]; # remove after the next update
 
   preBuild = ''
     NIX_CFLAGS_COMPILE+=" `pkg-config --cflags dbus-glib-1`"
