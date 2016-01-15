@@ -2241,6 +2241,7 @@ self: super: {
   "configifier" = dontDistribute super."configifier";
   "configuration" = dontDistribute super."configuration";
   "configuration-tools" = dontDistribute super."configuration-tools";
+  "configurator-export" = dontDistribute super."configurator-export";
   "confsolve" = dontDistribute super."confsolve";
   "congruence-relation" = dontDistribute super."congruence-relation";
   "conjugateGradient" = dontDistribute super."conjugateGradient";
@@ -3201,6 +3202,7 @@ self: super: {
   "flowsim" = dontDistribute super."flowsim";
   "fltkhs" = dontDistribute super."fltkhs";
   "fltkhs-fluid-examples" = dontDistribute super."fltkhs-fluid-examples";
+  "fltkhs-hello-world" = dontDistribute super."fltkhs-hello-world";
   "fluent-logger" = dontDistribute super."fluent-logger";
   "fluent-logger-conduit" = dontDistribute super."fluent-logger-conduit";
   "fluidsynth" = dontDistribute super."fluidsynth";
@@ -7938,6 +7940,7 @@ self: super: {
   "termination-combinators" = dontDistribute super."termination-combinators";
   "terminfo-hs" = dontDistribute super."terminfo-hs";
   "termplot" = dontDistribute super."termplot";
+  "terntup" = dontDistribute super."terntup";
   "terrahs" = dontDistribute super."terrahs";
   "tersmu" = dontDistribute super."tersmu";
   "test-framework" = doDistribute super."test-framework_0_8_0_3";

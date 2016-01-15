@@ -2186,6 +2186,7 @@ self: super: {
   "configifier" = dontDistribute super."configifier";
   "configuration" = dontDistribute super."configuration";
   "configuration-tools" = dontDistribute super."configuration-tools";
+  "configurator-export" = dontDistribute super."configurator-export";
   "confsolve" = dontDistribute super."confsolve";
   "congruence-relation" = dontDistribute super."congruence-relation";
   "conjugateGradient" = dontDistribute super."conjugateGradient";
@@ -2929,6 +2930,7 @@ self: super: {
   "exception-mtl" = doDistribute super."exception-mtl_0_3_0_5";
   "exception-transformers" = doDistribute super."exception-transformers_0_3_0_4";
   "exceptional" = dontDistribute super."exceptional";
+  "exceptions" = doDistribute super."exceptions_0_8_0_2";
   "exhaustive" = dontDistribute super."exhaustive";
   "exherbo-cabal" = dontDistribute super."exherbo-cabal";
   "exif" = dontDistribute super."exif";
@@ -3115,6 +3117,7 @@ self: super: {
   "flowsim" = dontDistribute super."flowsim";
   "fltkhs" = dontDistribute super."fltkhs";
   "fltkhs-fluid-examples" = dontDistribute super."fltkhs-fluid-examples";
+  "fltkhs-hello-world" = dontDistribute super."fltkhs-hello-world";
   "fluent-logger" = dontDistribute super."fluent-logger";
   "fluent-logger-conduit" = dontDistribute super."fluent-logger-conduit";
   "fluidsynth" = dontDistribute super."fluidsynth";
@@ -3844,6 +3847,7 @@ self: super: {
   "hascat-setup" = dontDistribute super."hascat-setup";
   "hascat-system" = dontDistribute super."hascat-system";
   "hash" = dontDistribute super."hash";
+  "hashable" = doDistribute super."hashable_1_2_3_3";
   "hashable-extras" = doDistribute super."hashable-extras_0_2_1";
   "hashable-generics" = dontDistribute super."hashable-generics";
   "hashable-time" = dontDistribute super."hashable-time";
@@ -7689,6 +7693,7 @@ self: super: {
   "termination-combinators" = dontDistribute super."termination-combinators";
   "terminfo-hs" = dontDistribute super."terminfo-hs";
   "termplot" = dontDistribute super."termplot";
+  "terntup" = dontDistribute super."terntup";
   "terrahs" = dontDistribute super."terrahs";
   "tersmu" = dontDistribute super."tersmu";
   "test-framework-doctest" = dontDistribute super."test-framework-doctest";

@@ -2074,6 +2074,7 @@ self: super: {
   "configifier" = dontDistribute super."configifier";
   "configuration" = dontDistribute super."configuration";
   "configuration-tools" = dontDistribute super."configuration-tools";
+  "configurator-export" = dontDistribute super."configurator-export";
   "confsolve" = dontDistribute super."confsolve";
   "congruence-relation" = dontDistribute super."congruence-relation";
   "conjugateGradient" = dontDistribute super."conjugateGradient";
@@ -2352,6 +2353,7 @@ self: super: {
   "dbf" = dontDistribute super."dbf";
   "dbjava" = dontDistribute super."dbjava";
   "dbmigrations" = dontDistribute super."dbmigrations";
+  "dbus" = doDistribute super."dbus_0_10_11";
   "dbus-client" = dontDistribute super."dbus-client";
   "dbus-core" = dontDistribute super."dbus-core";
   "dbus-qq" = dontDistribute super."dbus-qq";
@@ -2441,6 +2443,7 @@ self: super: {
   "dia-base" = dontDistribute super."dia-base";
   "dia-functions" = dontDistribute super."dia-functions";
   "diagrams-canvas" = dontDistribute super."diagrams-canvas";
+  "diagrams-core" = doDistribute super."diagrams-core_1_3_0_4";
   "diagrams-graphviz" = dontDistribute super."diagrams-graphviz";
   "diagrams-gtk" = dontDistribute super."diagrams-gtk";
   "diagrams-haddock" = doDistribute super."diagrams-haddock_0_3_0_7";
@@ -2740,6 +2743,7 @@ self: super: {
   "ersatz-toysat" = dontDistribute super."ersatz-toysat";
   "ert" = dontDistribute super."ert";
   "esotericbot" = dontDistribute super."esotericbot";
+  "esqueleto" = doDistribute super."esqueleto_2_4_1";
   "ess" = dontDistribute super."ess";
   "estimator" = dontDistribute super."estimator";
   "estimators" = dontDistribute super."estimators";
@@ -2769,6 +2773,7 @@ self: super: {
   "exception-mailer" = dontDistribute super."exception-mailer";
   "exception-monads-fd" = dontDistribute super."exception-monads-fd";
   "exception-monads-tf" = dontDistribute super."exception-monads-tf";
+  "exceptions" = doDistribute super."exceptions_0_8_0_2";
   "exherbo-cabal" = dontDistribute super."exherbo-cabal";
   "exif" = dontDistribute super."exif";
   "exinst" = dontDistribute super."exinst";
@@ -2939,6 +2944,7 @@ self: super: {
   "flowsim" = dontDistribute super."flowsim";
   "fltkhs" = dontDistribute super."fltkhs";
   "fltkhs-fluid-examples" = dontDistribute super."fltkhs-fluid-examples";
+  "fltkhs-hello-world" = dontDistribute super."fltkhs-hello-world";
   "fluent-logger" = dontDistribute super."fluent-logger";
   "fluent-logger-conduit" = dontDistribute super."fluent-logger-conduit";
   "fluidsynth" = dontDistribute super."fluidsynth";
@@ -2990,6 +2996,7 @@ self: super: {
   "frame" = dontDistribute super."frame";
   "frame-markdown" = dontDistribute super."frame-markdown";
   "franchise" = dontDistribute super."franchise";
+  "free" = doDistribute super."free_4_12_1";
   "free-concurrent" = dontDistribute super."free-concurrent";
   "free-functors" = dontDistribute super."free-functors";
   "free-game" = dontDistribute super."free-game";
@@ -3114,6 +3121,7 @@ self: super: {
   "geniconvert" = dontDistribute super."geniconvert";
   "genifunctors" = dontDistribute super."genifunctors";
   "geniplate" = dontDistribute super."geniplate";
+  "geniplate-mirror" = doDistribute super."geniplate-mirror_0_7_1";
   "geniserver" = dontDistribute super."geniserver";
   "genprog" = dontDistribute super."genprog";
   "gentlemark" = dontDistribute super."gentlemark";
@@ -3645,6 +3653,7 @@ self: super: {
   "hascat-setup" = dontDistribute super."hascat-setup";
   "hascat-system" = dontDistribute super."hascat-system";
   "hash" = dontDistribute super."hash";
+  "hashable" = doDistribute super."hashable_1_2_3_3";
   "hashable-generics" = dontDistribute super."hashable-generics";
   "hashable-time" = dontDistribute super."hashable-time";
   "hashabler" = dontDistribute super."hashabler";
@@ -3780,6 +3789,7 @@ self: super: {
   "haxl-amazonka" = dontDistribute super."haxl-amazonka";
   "haxl-facebook" = dontDistribute super."haxl-facebook";
   "haxparse" = dontDistribute super."haxparse";
+  "haxr" = doDistribute super."haxr_3000_11_1_2";
   "haxr-th" = dontDistribute super."haxr-th";
   "haxy" = dontDistribute super."haxy";
   "hayland" = dontDistribute super."hayland";
@@ -7279,6 +7289,7 @@ self: super: {
   "terminfo" = doDistribute super."terminfo_0_4_0_1";
   "terminfo-hs" = dontDistribute super."terminfo-hs";
   "termplot" = dontDistribute super."termplot";
+  "terntup" = dontDistribute super."terntup";
   "terrahs" = dontDistribute super."terrahs";
   "tersmu" = dontDistribute super."tersmu";
   "test-framework-doctest" = dontDistribute super."test-framework-doctest";
