@@ -2907,6 +2907,8 @@ let
 
   redmine = callPackage ../applications/version-management/redmine { };
 
+  rt = callPackage ../servers/rt { };
+
   rtmpdump = callPackage ../tools/video/rtmpdump { };
   rtmpdump_gnutls = rtmpdump.override { gnutlsSupport = true; opensslSupport = false; };
 
