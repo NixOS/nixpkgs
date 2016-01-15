@@ -1,5 +1,6 @@
-{ stdenv, fetchsvn, mavenbuild, fetchmaven, fetchurl }:
+{ stdenv, fetchsvn, mavenbuild, fetchmaven, fetchurl, pkgs }:
 
+with pkgs.mavenPlugins;
 with import ../../poms.nix { inherit fetchurl; inherit fetchmaven; };
 
 rec {
@@ -23,7 +24,7 @@ rec {
       rev = 1723938;
       sha256 = "0x8mpz9kwv1vd7kwz3fy7v8pidws6akcp8pspn69jjayn7g1dkws";
     };
-    mavenDeps = [ apacheParent4 ];
+    mavenDeps = [ apacheParent3 apacheParent4 mavenClean25 mavenParent4 wagon10beta2 wagonProviders10beta2 ];
     m2Path = "/org/apache/maven/wagon/wagon-webdav/1.0-beta-2";
   };
 }

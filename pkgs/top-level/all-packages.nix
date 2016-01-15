@@ -4295,10 +4295,14 @@ let
   };
 
   mavenPlugins = {
+    mavenCleanGen = callPackage ../development/java-modules/maven-plugins/maven-clean-plugin { };
+    mavenClean25 = self.mavenPlugins.mavenCleanGen.mavenClean25;
+
     mavenRemoteResourcesGen = callPackage ../development/java-modules/maven-plugins/maven-remote-resources-plugin { };
     mavenRemoteResources10 = self.mavenPlugins.mavenRemoteResourcesGen.mavenRemoteResources10;
     mavenRemoteResources11 = self.mavenPlugins.mavenRemoteResourcesGen.mavenRemoteResources11;
     mavenRemoteResources121 = self.mavenPlugins.mavenRemoteResourcesGen.mavenRemoteResources121;
+    mavenRemoteResources121Jar = self.mavenPlugins.mavenRemoteResourcesGen.mavenRemoteResources121Jar;
 
     modelloMavenGen = callPackage ../development/java-modules/maven-plugins/modello-maven-plugin { };
     modelloMavenPlugin10Alpha15 = self.mavenPlugins.modelloMavenGen.modelloMavenPlugin10Alpha15;
