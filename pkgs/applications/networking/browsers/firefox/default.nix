@@ -83,8 +83,8 @@ common = { pname, version, sha256 }: stdenv.mkDerivation rec {
     ''
       mkdir ../objdir
       cd ../objdir
-      if [ -e ../${name} ]; then
-        configureScript=../${name}/configure
+      if [ -e ../${pname}-${version} ]; then
+        configureScript=../${pname}-${version}/configure
       else
         configureScript=../mozilla-*/configure
       fi
@@ -99,7 +99,7 @@ common = { pname, version, sha256 }: stdenv.mkDerivation rec {
   postInstall =
     ''
       # For grsecurity kernels
-      paxmark m $out/lib/${name}/{firefox,firefox-bin,plugin-container}
+      paxmark m $out/lib/${pname}-${version}/{firefox,firefox-bin,plugin-container}
 
       # Remove SDK cruft. FIXME: move to a separate output?
       rm -rf $out/share/idl $out/include $out/lib/firefox-devel-*
