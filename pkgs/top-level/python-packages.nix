@@ -5610,6 +5610,32 @@ in modules // {
     };
   };
 
+  ledger-autosync = buildPythonPackage rec {
+    name = "ledger-autosync-${version}";
+    version = "0.2.3";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/ledger-autosync/ledger-autosync-${version}.tar.gz";
+      sha256 = "f19fa66e656309825887171d84a462e64676b1cc36b62e4dd8679ff63926a469";
+    };
+
+    buildInputs = [
+      self.ofxclient self.mock
+      # Used at runtime to translate ofx entries to the ledger
+      # format. In fact, user could use either ledger or hledger.
+      pkgs.which pkgs.ledger ];
+
+    # Tests are disable since they require hledger and python-ledger
+    doCheck = false;
+
+    meta = {
+      homepage = https://gitlab.com/egh/ledger-autosync;
+      description = "ledger-autosync is a program to pull down transactions from your bank and create ledger transactions for them";
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ lewo ];
+    };
+  };
+
+
   libthumbor = buildPythonPackage rec {
     name = "libthumbor-${version}";
     version = "1.2.0";
