@@ -1926,7 +1926,7 @@ in
   lib.makeScope newScope (self:
     {}
     // melpaPackages self
-    // melpaStablePackages self
     // elpaPackages self
+    // melpaStablePackages self
     // packagesFun self
   )
