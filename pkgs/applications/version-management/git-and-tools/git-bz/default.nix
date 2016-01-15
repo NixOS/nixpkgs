@@ -1,31 +1,34 @@
-{ stdenv, fetchgit, python, asciidoc, xmlto, pysqlite, makeWrapper }:
+{ stdenv, fetchgit
+, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, makeWrapper, xmlto
+, pythonPackages }:
 
-let
-  version = "3.20110902";
-in
+let version = "3.2015-09-08"; in
 stdenv.mkDerivation {
-  name = "git-bz";
+  name = "git-bz-${version}";
 
   src = fetchgit {
+    sha256 = "19d9c81d4eeabe87079d8f60e4cfa7303f776f5a7c9874642cf2bd188851d029";
+    rev = "e17bbae7a2ce454d9f69c32fc40066995d44913d";
     url = "git://git.fishsoup.net/git-bz";
-    rev = "refs/heads/master";
   };
 
-  buildInputs = [
-    makeWrapper python pysqlite # asciidoc xmlto
-  ];
 
-  buildPhase = ''
-    true
-    # make git-bz.1
+  nativeBuildInputs = [
+    asciidoc docbook_xml_dtd_45 docbook_xsl libxslt makeWrapper xmlto
+  ];
+  buildInputs = []
+    ++ (with pythonPackages; [ python pysqlite ]);
+
+  postPatch = ''
+    patchShebangs configure
+
+    # Don't create a .html copy of the man page that isn't installed anyway:
+    substituteInPlace Makefile --replace "git-bz.html" ""
   '';
 
-  installPhase = ''
-    mkdir -p $out
-    mkdir -p $out/bin
-    cp git-bz $out/bin
+  postInstall = ''
     wrapProgram $out/bin/git-bz \
-      --prefix PYTHONPATH : "$(toPythonPath $python):$(toPythonPath $pysqlite)"
+      --prefix PYTHONPATH : "$(toPythonPath "${pythonPackages.pysqlite}")"
   '';
 
   meta = {
