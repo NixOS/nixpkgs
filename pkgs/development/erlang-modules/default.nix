@@ -7,5 +7,8 @@ let
 
     buildRebar3 = callPackage ./build-rebar3.nix {};
     buildHex = callPackage ./build-hex.nix {};
+
+    ## Non hex packages
+    webdriver = callPackage ./webdriver {};
   };
 in self // self.hex
