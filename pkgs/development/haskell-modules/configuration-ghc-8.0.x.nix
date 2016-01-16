@@ -3,6 +3,10 @@
 with import ./lib.nix { inherit pkgs; };
 
 self: super: {
+
+  # Suitable LLVM version.
+  llvmPackages = pkgs.llvmPackages_35;
+
   # Disable GHC 8.0.x core libraries.
   array = null;
   base = null;
@@ -30,25 +34,18 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  Cabal_1_23_0_0 = overrideCabal super.Cabal_1_22_4_0 (drv: {
-    version = "1.23.0.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "haskell";
-      repo = "cabal";
-      rev = "18fcd9c1aaeddd9d10a25e44c0e986c9889f06a7";
-      sha256 = "1bakw7h5qadjhqbkmwijg3588mjnpvdhrn8lqg8wq485cfcv6vn3";
-    };
-    jailbreak = false;
-    doHaddock = false;
-    postUnpack = "sourceRoot+=/Cabal";
-    postPatch = ''
-      setupCompileFlags+=" -DMIN_VERSION_binary_0_8_0=1"
-    '';
-  });
+  # jailbreak-cabal can use the native Cabal library.
   jailbreak-cabal = super.jailbreak-cabal.override {
-    Cabal = self.Cabal_1_23_0_0;
+    Cabal = null;
     mkDerivation = drv: self.mkDerivation (drv // {
       preConfigure = "sed -i -e 's/Cabal == 1.20\\.\\*/Cabal >= 1.23/' jailbreak-cabal.cabal";
     });
   };
+
+  # Older versions of QuickCheck don't support our version of Template Haskell.
+  QuickCheck = self.QuickCheck_2_8_2;
+
+  # https://github.com/hspec/HUnit/issues/7
+  HUnit = dontCheck super.HUnit;
+
 }
