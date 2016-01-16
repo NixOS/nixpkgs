@@ -5524,6 +5524,28 @@ in modules // {
     propagatedBuildInputs = with self; [ logilab_common ];
   };
 
+  lpod = buildPythonPackage rec {
+    version = "1.1.5";
+    name = "python-lpod-${version}";
+    # lpod library currently does not support Python 3.x
+    disabled = isPy3k;
+
+    propagatedBuildInputs = with self; [ ];
+
+    src = pkgs.fetchFromGitHub {
+      owner = "lpod";
+      repo = "lpod-python";
+      rev = "v${version}";
+      sha256 = "1g909li511jkpcl26j1dzg8gn1ipkc374sh8vv54dx30sl0xfqxf";
+    };
+
+    meta = {
+      homepage = https://github.com/lpod/lpod-python/;
+      description = "Library implementing the ISO/IEC 26300 OpenDocument Format standard (ODF) ";
+      license = licenses.gpl3;
+    };
+  };
+
   mailchimp = buildPythonPackage rec {
     version = "2.0.9";
     name = "mailchimp-${version}";
