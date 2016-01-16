@@ -7364,6 +7364,7 @@ let
   libspectre = callPackage ../development/libraries/libspectre { };
 
   libspnav = callPackage ../development/libraries/libspnav { };
+  spacenavd = callPackage ../misc/drivers/spacenavd { };
 
   libgsf = callPackage ../development/libraries/libgsf { };
 
