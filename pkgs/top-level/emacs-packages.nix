@@ -1347,16 +1347,13 @@ let
     };
   };
 
-  org-plus-contrib = melpaBuild rec {
+  org-plus-contrib = elpaBuild rec {
     pname   = "org-plus-contrib";
     version = "20150406";
     src = fetchurl {
       url    = "http://orgmode.org/elpa/${pname}-${version}.tar";
       sha256 = "1ny2myg4rm75ab2gl5rqrwy7h53q0vv18df8gk3zv13kljj76c6i";
     };
-    buildPhase = ''
-      cp $src ${pname}-${version}.tar
-    '';
     meta = {
       description = "Notes, TODO lists, projects, and authoring in plain-text with Emacs";
       license = gpl3Plus;
