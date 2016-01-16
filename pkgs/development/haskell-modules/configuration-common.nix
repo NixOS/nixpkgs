@@ -180,11 +180,8 @@ self: super: {
   wai-test = dontHaddock super.wai-test;
   zlib-conduit = dontHaddock super.zlib-conduit;
 
-  # Jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
-  darcs = (overrideCabal super.darcs (drv: {
-    doCheck = false;            # The test suite won't even start.
-    postPatch = "sed -i -e 's|attoparsec .*,|attoparsec,|' -e 's|vector .*,|vector,|' darcs.cabal";
-  }));
+  # The test suite won't even start.
+  darcs = dontCheck super.darcs;
 
   # https://github.com/massysett/rainbox/issues/1
   rainbox = dontCheck super.rainbox;
