@@ -8,11 +8,9 @@
 
 assert stdenv ? glibc;
 
-let
+rec {
 
-  buildEclipse = import ./buildEclipse.nix args;
-
-in {
+  buildEclipse = import ./build-eclipse.nix args;
 
   eclipse_sdk_35 = buildEclipse {
     name = "eclipse-sdk-3.5.2";
