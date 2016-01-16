@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0wp91hlh9n0ismikljf63558rzdwim8w1s271grsbaic35vr5z57";
   };
 
+  patches = [ ./glibc-2.21.patch ];
+
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
   # as the host-bzip2 will be in the path.
   nativeBuildInputs = [ m4 bison flex gettext bzip2 ];
