@@ -1,7 +1,7 @@
 { stdenv, callPackage, fetchurl, python27
 , pkgconfig, spidermonkey_31, boost, icu, libxml2, libpng
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
-, openal, mesa, xproto, libX11, libXcursor, nspr, SDL
+, openal, mesa, xproto, libX11, libXcursor, nspr, SDL, SDL2
 , gloox, nvidia-texture-tools
 , withEditor ? true, wxGTK ? null
 }:
@@ -9,7 +9,7 @@
 assert withEditor -> wxGTK != null;
 
 let
-  version = "0.0.18";
+  version = "0.0.19";
 
   releaseType = "alpha";
 
@@ -25,20 +25,22 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-${releaseType}-unix-build.tar.xz";
-    sha256 = "15q3mv5k3lqzf0wrby2r93fs194ym13790i68q8azscs4v9h8bxx";
+    sha256 = "1cwvhg30i6axm7y5b62qyjwf1j8gwa5fgc13xsga3gzdphmjchrd";
   };
 
   buildInputs = [
     zeroadData python27 pkgconfig spidermonkey_31 boost icu
     libxml2 libpng libjpeg zlib curl libogg libvorbis enet
     miniupnpc openal mesa xproto libX11 libXcursor nspr
-    SDL gloox nvidia-texture-tools
+    SDL SDL2 gloox nvidia-texture-tools
   ] ++ stdenv.lib.optional withEditor wxGTK;
 
   NIX_CFLAGS_COMPILE = [
     "-I${xproto}/include/X11"
     "-I${libX11}/include/X11"
     "-I${libXcursor}/include/X11"
+    "-I${SDL}/include/SDL"
+    "-I${SDL2}/include/SDL2"
   ];
 
   patchPhase = ''
