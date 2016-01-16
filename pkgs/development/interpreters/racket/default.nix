@@ -3,6 +3,7 @@
 , glib, gmp, gtk, libffi, libjpeg, libpng
 , libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
+, disableDocs ? true
 }:
 
 let
@@ -50,7 +51,8 @@ stdenv.mkDerivation rec {
     cd src/build
   '';
 
-  configureFlags = [ "--enable-shared" "--enable-lt=${libtool}/bin/libtool" "--disable-docs"];
+  configureFlags = [ "--enable-shared" "--enable-lt=${libtool}/bin/libtool" ]
+                   ++ stdenv.lib.optional disableDocs [ "--disable-docs" ];
 
   configureScript = "../configure";
 
