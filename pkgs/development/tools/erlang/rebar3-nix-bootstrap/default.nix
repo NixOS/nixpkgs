@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub }:
+{stdenv, fetchFromGitHub, erlang }:
 
 stdenv.mkDerivation rec {
     name = "rebar3-nix-bootstrap";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
         rev = "${version}";
         sha256 = "0xyj7j59dmxyl5nhhsmb0r1pihmk0s4k02ga1rfgm30rij6n7431";
     };
+
+    buildInputs = [ erlang ];
 
     installFlags = "PREFIX=$(out)";
 
