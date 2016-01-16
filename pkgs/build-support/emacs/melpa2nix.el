@@ -40,8 +40,11 @@
                                                version
                                                files
                                                package-build-working-dir
-                                               package-build-archive-dir)))
+                                               package-build-archive-dir))
+         (archive-file (package-build--archive-file-name archive-entry)))
 
-    (package-build--message "Built in %.3fs, finished at %s"
+    (progn
+      (package-build--message "Built in %.3fs, finished at %s"
                             (time-to-seconds (time-since start-time))
-                            (current-time-string))))
+                            (current-time-string))
+      (princ (format "%s\n" archive-file)))))
