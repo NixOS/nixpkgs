@@ -4899,8 +4899,7 @@ let
   rustPlatform = rustStable;
 
   rustStable = recurseIntoAttrs (makeRustPlatform cargo rustStable);
-  rustUnstable = recurseIntoAttrs (makeRustPlatform
-    (cargo.override { rustPlatform = rustUnstableCargoPlatform; }) rustUnstable);
+  rustUnstable = recurseIntoAttrs (makeRustPlatform cargoUnstable rustUnstable);
 
   # rust platform to build cargo itself (with cargoSnapshot)
   rustCargoPlatform = makeRustPlatform (cargoSnapshot rustc) rustCargoPlatform;
@@ -5328,11 +5327,9 @@ let
     ruby = ruby_2_1_3;
   };
   bundler = callPackage ../development/interpreters/ruby/bundler.nix { };
-  bundler_HEAD = import ../development/interpreters/ruby/bundler-head.nix {
-    inherit buildRubyGem coreutils fetchgit;
-  };
-  defaultGemConfig = callPackage ../development/interpreters/ruby/bundler-env/default-gem-config.nix { };
-  buildRubyGem = callPackage ../development/interpreters/ruby/gem.nix { };
+  bundler_HEAD = bundler;
+  defaultGemConfig = callPackage ../development/interpreters/ruby/gemconfig/default.nix { };
+  buildRubyGem = callPackage ../development/interpreters/ruby/build-ruby-gem { };
   bundlerEnv = callPackage ../development/interpreters/ruby/bundler-env { };
 
   inherit (callPackage ../development/interpreters/ruby {})
@@ -5348,10 +5345,7 @@ let
   ruby_2_1 = ruby_2_1_7;
   ruby_2_2 = ruby_2_2_3;
 
-  rubygemsFun = ruby: builderDefsPackage (callPackage ../development/interpreters/ruby/rubygems.nix) {
-    inherit ruby;
-  };
-  rubygems = hiPrio (rubygemsFun ruby);
+  rubygems = hiPrio (callPackage ../development/interpreters/ruby/rubygems.nix {});
 
   rq = callPackage ../applications/networking/cluster/rq { };
 
@@ -5560,6 +5554,10 @@ let
   cargo = callPackage ../development/tools/build-managers/cargo {
     # cargo needs to be built with rustCargoPlatform, which uses cargoSnapshot
     rustPlatform = rustCargoPlatform;
+  };
+
+  cargoUnstable = callPackage ../development/tools/build-managers/cargo/head.nix {
+    rustPlatform = rustUnstableCargoPlatform;
   };
 
   cargoSnapshot = rustc:
@@ -6141,6 +6139,9 @@ let
 
   aprutil = callPackage ../development/libraries/apr-util {
     bdbSupport = true;
+    db = if stdenv.isFreeBSD then db47 else db;
+    # XXX: only the db_185 interface was available through
+    #      apr with db58 on freebsd (nov 2015), for unknown reasons
   };
 
   assimp = callPackage ../development/libraries/assimp { };
@@ -6315,7 +6316,9 @@ let
 
   cwiid = callPackage ../development/libraries/cwiid { };
 
-  cyrus_sasl = callPackage ../development/libraries/cyrus-sasl { };
+  cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
+    kerberos = if stdenv.isFreeBSD then libheimdal else kerberos;
+  };
 
   # Make bdb5 the default as it is the last release under the custom
   # bsd-like license
@@ -6504,7 +6507,9 @@ let
 
   gdbm = callPackage ../development/libraries/gdbm { };
 
-  gecode = callPackage ../development/libraries/gecode { };
+  gecode_3 = callPackage ../development/libraries/gecode/3.nix { };
+  gecode_4 = callPackage ../development/libraries/gecode { };
+  gecode = gecode_4;
 
   gegl = callPackage ../development/libraries/gegl { };
 
@@ -7157,7 +7162,9 @@ let
 
   libedit = callPackage ../development/libraries/libedit { };
 
-  libelf = callPackage ../development/libraries/libelf { };
+  libelf = if stdenv.isFreeBSD
+  then callPackage ../development/libraries/libelf-freebsd { }
+  else callPackage ../development/libraries/libelf { };
 
   libetpan = callPackage ../development/libraries/libetpan { };
 
@@ -8178,6 +8185,9 @@ let
     mesa = mesa_noglu;
     inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
     cups = if stdenv.isLinux then cups else null;
+
+    # XXX: mariadb doesn't built on fbsd as of nov 2015
+    mysql = if (!stdenv.isFreeBSD) then mysql else null;
   };
 
   qt48Full = appendToName "full" (qt48.override {
@@ -8545,6 +8555,8 @@ let
   tevent = callPackage ../development/libraries/tevent {
     python = python2;
   };
+
+  tet = callPackage ../development/tools/misc/tet { };
 
   thrift = callPackage ../development/libraries/thrift {
     inherit (pythonPackages) twisted;
@@ -9579,7 +9591,10 @@ let
     ruby = ruby_2_1;
   };
 
-  shishi = callPackage ../servers/shishi { };
+  shishi = callPackage ../servers/shishi {
+      pam = if stdenv.isLinux then pam else null;
+      # see also openssl, which has/had this same trick
+  };
 
   sipcmd = callPackage ../applications/networking/sipcmd { };
 
@@ -12963,8 +12978,9 @@ let
     gst_plugins_bad = null;
   };
 
-  qutebrowser = qt5.callPackage ../applications/networking/browsers/qutebrowser {
+  qutebrowser = qt55.callPackage ../applications/networking/browsers/qutebrowser {
     inherit (python34Packages) buildPythonPackage python pyqt5 jinja2 pygments pyyaml pypeg2;
+    inherit (gst_all_1) gst-plugins-base gst-plugins-good gst-plugins-bad gst-libav;
   };
 
   rabbitvcs = callPackage ../applications/version-management/rabbitvcs {};

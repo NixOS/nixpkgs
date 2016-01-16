@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libffi ];
 
-  doCheck = true;
+  doCheck = !stdenv.isFreeBSD; # XXX: 00-socket.test hangs
 
   meta = {
     description = "G-Wrap, a wrapper generator for Guile";

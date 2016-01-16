@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = "--disable-debug" +
-    stdenv.lib.optionalString stdenv.isDarwin " --enable-rpath";
+    stdenv.lib.optionalString (stdenv.isFreeBSD || stdenv.isDarwin) " --enable-rpath";
 
   # remove dependency on bootstrap-tools in early stdenv build
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
