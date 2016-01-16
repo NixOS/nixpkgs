@@ -1,6 +1,8 @@
 { stdenv, fetchurl, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts
 , boost, zlib, python, swig, gfortran, soqt, libf2c, makeWrapper
-, matplotlib, pycollada, pyside, pysideTools, pysideShiboken }:
+, matplotlib, pycollada, pyside, pysideTools, pysideShiboken
+, spacenavSupport ? true, libspnav
+}:
 
 stdenv.mkDerivation rec {
   name = "freecad-${version}";
@@ -14,7 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake coin3d xercesc ode eigen qt4 opencascade gts boost
     zlib python swig gfortran soqt libf2c makeWrapper matplotlib
     pycollada pyside pysideShiboken pysideTools
-  ];
+  ]
+  ++ stdenv.lib.optional spacenavSupport libspnav;
 
   enableParallelBuilding = true;
 
