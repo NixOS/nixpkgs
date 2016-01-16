@@ -1,5 +1,7 @@
 { pkgs, stdenv, python, self }:
 
+# When updating a package, use sha256 checksum instead of md5's from pypi!
+
 with pkgs.lib;
 
 let
@@ -7201,11 +7203,11 @@ in modules // {
   };
 
   chardet = buildPythonPackage rec {
-    name = "chardet-2.1.1";
+    name = "chardet-2.3.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/c/chardet/${name}.tar.gz";
-      md5 = "295367fd210d20f3febda615a88e1ef0";
+      sha256 = "1ak87ikcw34fivcgiz2xvi938dmclh078az65l9x3rmgljrkhgp5";
     };
 
     meta = {
@@ -19687,13 +19689,14 @@ in modules // {
   });
 
   tweepy = buildPythonPackage (rec {
-    name = "tweepy-2.3.0";
-    disabled = isPy3k;
+    name = "tweepy-3.5.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/t/tweepy/${name}.tar.gz";
-      md5 = "065c80d244360988c61d64b5dfb7e229";
+      sha256 = "0n2shilamgwhzmvf534xg7f6hrnznbixyl5pw2f5a3f391gwy37h";
     };
+
+    propagatedBuildInputs = with self; [ six requests_oauthlib ];
 
     meta = {
       homepage = "https://github.com/tweepy/tweepy";
