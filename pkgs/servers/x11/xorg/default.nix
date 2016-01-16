@@ -2316,12 +2316,13 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
-  xorgserver = (mkDerivation "xorgserver" {
-    name = "xorg-server-1.17.4";
+  xorgserver = (mkDerivation "xorgserver" rec {
+    name = "xorg-server-${version}";
+    version = "1.18.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xserver/xorg-server-1.17.4.tar.bz2;
-      sha256 = "0mv4ilpqi5hpg182mzqn766frhi6rw48aba3xfbaj4m82v0lajqc";
+      url = "mirror://xorg/individual/xserver/xorg-server-${version}.tar.bz2";
+      sha256 = "0biimwnp17wz80nplybpi940y3dyd7hgp5fyipfwxncmjs0p0mhr";
     };
     buildInputs = [pkgconfig dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
