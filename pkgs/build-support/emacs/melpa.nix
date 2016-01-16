@@ -63,8 +63,8 @@ import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
   installPhase = ''
     runHook preInstall
 
-    emacs --batch -Q -l $packageBuild -l ${./melpa2nix.el} \
-        -f melpa2nix-install-package \
+    emacs --batch -Q -l ${./elpa2nix.el} \
+        -f elpa2nix-install-package \
         "$archive" "$out/share/emacs/site-lisp/elpa"
 
     runHook postInstall
