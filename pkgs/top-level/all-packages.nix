@@ -2824,6 +2824,8 @@ let
 
   ponysay = callPackage ../tools/misc/ponysay { };
 
+  popfile = callPackage ../tools/text/popfile { };
+
   povray = callPackage ../tools/graphics/povray {
     automake = automake113x; # fails with 14
   };
