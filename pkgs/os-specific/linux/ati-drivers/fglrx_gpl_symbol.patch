@@ -1,0 +1,11 @@
+--- 13.1/common/lib/modules/fglrx/build_mod/firegl_public.c	2013-01-15 22:33:27.000000000 +0100
++++ 13.1/common/lib/modules/fglrx/build_mod/firegl_public.c	2014-08-18 20:05:44.327520475 +0200
+@@ -250,7 +250,7 @@
+ #endif
+ 
+ #ifdef MODULE_LICENSE
+-MODULE_LICENSE("Proprietary. (C) 2002 - ATI Technologies, Starnberg, GERMANY");
++MODULE_LICENSE("GPL\0Proprietary. (C) 2002 - ATI Technologies, Starnberg, GERMANY");
+ #endif
+ #ifdef MODULE_DEVICE_TABLE
+ MODULE_DEVICE_TABLE(pci, fglrx_pci_table);
