@@ -112,6 +112,17 @@ rec {
     m2File = "maven-parent-13.pom";
   };
 
+  mavenParent16 = fetchmaven {
+    version = 16;
+    name = "maven-parent";
+    src = fetchurl rec {
+      url = "http://svn.apache.org/repos/asf/maven/pom/tags/maven-parent-16/pom.xml";
+      sha256 = "0v40bkhd3d0fbg5hpnc83fgj55999zgdnl2b8rjjc4ihc0gqzdlz";
+    };
+    m2Path = "org/apache/maven/maven-parent/16";
+    m2File = "maven-parent-16.pom";
+  };
+
   mavenParent19 = fetchmaven {
     version = 19;
     name = "maven-parent";
@@ -165,6 +176,17 @@ rec {
     };
     m2Path = "org/apache/maven/plugins/maven-plugins/14";
     m2File = "maven-plugins-14.pom";
+  };
+
+  mavenPlugins18 = fetchmaven {
+    version = 18;
+    name = "maven-plugins";
+    src = fetchurl rec {
+      url = "http://svn.apache.org/repos/asf/maven/plugins/tags/maven-plugins-18/pom.xml";
+      sha256 = "0ag1xvl93irhmpnih10096pn1iqx1y7mc613ywdd6ci6magn1kc4";
+    };
+    m2Path = "org/apache/maven/plugins/maven-plugins/18";
+    m2File = "maven-plugins-18.pom";
   };
 
   mavenPlugins19 = fetchmaven {

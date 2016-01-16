@@ -4295,14 +4295,27 @@ let
   };
 
   mavenPlugins = {
+    mavenCleanBootstrap = callPackage ../development/java-modules/maven-plugins/maven-clean-plugin/bootstrap.nix { };
+    mavenClean241Jar = self.mavenPlugins.mavenCleanBootstrap.mavenClean241Jar;
+    mavenClean241Pom = self.mavenPlugins.mavenCleanBootstrap.mavenClean241Pom;
+
     mavenCleanGen = callPackage ../development/java-modules/maven-plugins/maven-clean-plugin { };
     mavenClean25 = self.mavenPlugins.mavenCleanGen.mavenClean25;
+
+    mavenEnforcerGen = callPackage ../development/java-modules/maven-plugins/maven-enforcer-plugin { };
+    mavenEnforcer101 = self.mavenPlugins.mavenEnforcerGen.mavenEnforcer101;
 
     mavenRemoteResourcesGen = callPackage ../development/java-modules/maven-plugins/maven-remote-resources-plugin { };
     mavenRemoteResources10 = self.mavenPlugins.mavenRemoteResourcesGen.mavenRemoteResources10;
     mavenRemoteResources11 = self.mavenPlugins.mavenRemoteResourcesGen.mavenRemoteResources11;
     mavenRemoteResources121 = self.mavenPlugins.mavenRemoteResourcesGen.mavenRemoteResources121;
-    mavenRemoteResources121Jar = self.mavenPlugins.mavenRemoteResourcesGen.mavenRemoteResources121Jar;
+
+    mavenRemoteResourcesBootstrap = callPackage ../development/java-modules/maven-plugins/maven-remote-resources-plugin/bootstrap.nix { };
+    mavenRemoteResourcesAlpha6Jar = self.mavenPlugins.mavenRemoteResourcesBootstrap.mavenRemoteResourcesAlpha6Jar;
+    mavenRemoteResources11Jar = self.mavenPlugins.mavenRemoteResourcesBootstrap.mavenRemoteResources11Jar;
+    mavenRemoteResources11Pom = self.mavenPlugins.mavenRemoteResourcesBootstrap.mavenRemoteResources11Pom;
+    mavenRemoteResources121Jar = self.mavenPlugins.mavenRemoteResourcesBootstrap.mavenRemoteResources121Jar;
+    mavenRemoteResources121Pom = self.mavenPlugins.mavenRemoteResourcesBootstrap.mavenRemoteResources121Pom;
 
     modelloMavenGen = callPackage ../development/java-modules/maven-plugins/modello-maven-plugin { };
     modelloMavenPlugin10Alpha15 = self.mavenPlugins.modelloMavenGen.modelloMavenPlugin10Alpha15;

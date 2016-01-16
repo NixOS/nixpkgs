@@ -17,29 +17,6 @@ rec {
     };
   };
 
-  # We need the JARs directly for bootstrapping
-  mavenRemoteResourcesAlpha6Jar = fetchmaven {
-    version = "1.0-alpha-6";
-    name = "maven-remote-resources-plugin";
-    src = fetchurl rec {
-      url = "https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-remote-resources-plugin/1.0-alpha-6/maven-remote-resources-plugin-1.0-alpha-6.jar";
-      sha256 = "1193xrrxcy9xgva89vvarw65q3gskzpgj0ysw9qqvb65pa6fk2wr";
-    };
-    m2Path = "/org/apache/maven/plugins/maven-remote-resources-plugin/1.0-alpha-6";
-    m2File = "maven-remote-resources-plugin-1.0-alpha-6.jar";
-  };
-
-  mavenRemoteResources121Jar = fetchmaven {
-    version = "1.2.1";
-    name = "maven-remote-resources-plugin";
-    src = fetchurl rec {
-      url = "https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-remote-resources-plugin/1.2.1/maven-remote-resources-plugin-1.2.1.jar";
-      sha256 = "1kw6s4znp52q2y1l9k6wn6vxmcs9xas4mnmd748lhily9hanmi95";
-    };
-    m2Path = "/org/apache/maven/plugins/maven-remote-resources-plugin/1.2.1";
-    m2File = "maven-remote-resources-plugin-1.2.1.jar";
-  };
-
   mavenRemoteResourcesAlpha6 = mavenRemoteResourcesGen {
     name = "maven-remote-resources-plugin-1.0-alpha-6";
     src = fetchsvn {
