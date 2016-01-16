@@ -99,32 +99,13 @@
 * ucol_nif_1_1_5
 * katipo_0_2_4
 * xref_runner_0_2_4
+* erlexec_1_0_1
+* exec_1_0_1
 */
 { stdenv, callPackage }:
 
 let
   self = rec {
-
-    aws_http_0_2_4 = callPackage
-      (
-        {  buildHex, barrel_jiffy_0_14_4, lhttpc_1_3_0 }:
-          buildHex {
-            name = "aws_http";
-            version = "0.2.4";
-            sha256 =
-              "96065da0d348a8e47e01531cfa720615e15a21c1bd4e5c82decf56026cde128f";
-
-            erlangDeps = [ barrel_jiffy_0_14_4 lhttpc_1_3_0 ];
-
-            meta = {
-              description = "Amazon AWS HTTP helpers";
-              license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/anha0825/erl_aws_http";
-            };
-          }
-      ) {};
-
-    aws_http = aws_http_0_2_4;
 
     backoff_1_1_3 = callPackage
       (
@@ -625,12 +606,14 @@ let
 
     denrei_0_2_3 = callPackage
       (
-        {  buildHex }:
+        {  buildHex, lager_3_0_1, ranch }:
           buildHex {
             name = "denrei";
             version = "0.2.3";
             sha256 =
               "bc0e8cf7e085dda6027df83ef5d63c41b93988bcd7f3db7c68e4dad3cd599744";
+
+            erlangDeps = [ lager_3_0_1 ranch ];
 
             meta = {
               description = "Denrei - a lightweight Erlang messaging system.";
@@ -1072,26 +1055,6 @@ let
 
     erldn = erldn_1_0_2;
 
-    erlexec_1_0_1 = callPackage
-      (
-        {  buildHex }:
-          buildHex {
-            name = "erlexec";
-            version = "1.0.1";
-            sha256 =
-              "eb1e11f16288db4ea35af08503eabf1250d5540c1e8bd35ba04312f5f703e14f";
-            compilePort = true;
-
-            meta = {
-              description = "OS Process Manager";
-              license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/saleyn/erlexec";
-            };
-          }
-      ) {};
-
-    erlexec = erlexec_1_0_1;
-
     erlsh_0_1_0 = callPackage
       (
         {  buildHex }:
@@ -1249,26 +1212,6 @@ let
       ) {};
 
     ex_bitcask = ex_bitcask_0_1_0;
-
-    exec_1_0_1 = callPackage
-      (
-        {  buildHex }:
-          buildHex {
-            name = "exec";
-            version = "1.0.1";
-            sha256 =
-              "87c7ef2dea2bb503bb0eec8cb34776172999aecc6e12d90f7629796a7a3ccb1f";
-            compilePort = true;
-
-            meta = {
-              description = "OS Process Manager";
-              license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/saleyn/erlexec";
-            };
-          }
-      ) {};
-
-    exec = exec_1_0_1;
 
     exmerl_0_1_1 = callPackage
       (
@@ -1796,12 +1739,14 @@ let
 
     jc_1_0_4 = callPackage
       (
-        {  buildHex }:
+        {  buildHex, jsone_1_2_0, jwalk_1_1_0, lager_3_0_1, ranch }:
           buildHex {
             name = "jc";
             version = "1.0.4";
             sha256 =
               "8bcfe202084109fc80fcf521e630466fc53cbb909aff4283bed43252664023df";
+
+            erlangDeps = [ jsone_1_2_0 jwalk_1_1_0 lager_3_0_1 ranch ];
 
             meta = {
               description = "A simple, distributed, in-memory caching system";
@@ -2012,12 +1957,14 @@ let
 
     key2value_1_4_0 = callPackage
       (
-        {  buildHex }:
+        {  buildHex, lager_3_0_1, barrel_jiffy }:
           buildHex {
             name = "key2value";
             version = "1.4.0";
             sha256 =
               "ad63453fcf54ab853581b78c6d2df56be41ea691ba4bc05920264c19f35a0ded";
+
+            erlangDeps = [ lager_3_0_1 barrel_jiffy ];
 
             meta = {
               description = "Erlang 2-way Map";
@@ -2029,12 +1976,14 @@ let
 
     key2value_1_5_1 = callPackage
       (
-        {  buildHex }:
+        {  buildHex, lager_3_0_1, barrel_jiffy }:
           buildHex {
             name = "key2value";
             version = "1.5.1";
             sha256 =
               "2a40464b9f8ef62e8828d869ac8d2bf9135b4956d29ba4eb044e8522b2d35ffa";
+
+            erlangDeps = [ lager_3_0_1 barrel_jiffy ];
 
             meta = {
               description = "Erlang 2-way Map";
@@ -2432,27 +2381,6 @@ let
 
     neotoma = neotoma_1_7_3;
 
-    observer_cli_1_0_3 = callPackage
-      (
-        {  buildHex, recon_2_2_1 }:
-          buildHex {
-            name = "observer_cli";
-            version = "1.0.3";
-            sha256 =
-              "18e5d9aa5412ec063cf9719bcfe73bf990c5fed5c9a3c8422c2b5d9529fc8b0d";
-
-            erlangDeps = [ recon_2_2_1 ];
-
-            meta = {
-              description = "Visualize Erlang Nodes On The Command Line";
-              license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zhongwencool/observer_cli";
-            };
-          }
-      ) {};
-
-    observer_cli = observer_cli_1_0_3;
-
     p1_stringprep_1_0_0 = callPackage
       (
         {  buildHex, p1_utils_1_0_1 }:
@@ -2701,26 +2629,6 @@ let
       ) {};
 
     pqueue = pqueue_1_5_1;
-
-    proper_1_1_1_beta = callPackage
-      (
-        {  buildHex }:
-          buildHex {
-            name = "proper";
-            version = "1.1.1-beta";
-            sha256 =
-              "bde5c0fef0f8d804a7c06aab4f293d19f42149e5880b3412b75efa608e86d342";
-
-            meta = {
-              description =
-                "QuickCheck-inspired property-based testing tool for Erlang.";
-              license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/manopapad/proper";
-            };
-          }
-      ) {};
-
-    proper = proper_1_1_1_beta;
 
     providers_1_6_0 = callPackage
       (
