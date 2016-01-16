@@ -45,8 +45,8 @@ rec {
         { systemd.services."quake3-server" =
             { wantedBy = [ "multi-user.target" ];
               script =
-                "${pkgs.quake3demo}/bin/quake3-server '+set g_gametype 0' " +
-                "'+map q3dm7' '+addbot grunt' '+addbot daemia' 2> /tmp/log";
+                "${pkgs.quake3demo}/bin/quake3-server +set g_gametype 0 " +
+                "+map q3dm7 +addbot grunt +addbot daemia 2> /tmp/log";
             };
           nixpkgs.config.packageOverrides = overrides;
           nixpkgs.config.allowUnfreePredicate = unfreePredicate;
@@ -65,8 +65,8 @@ rec {
       $client1->waitForX;
       $client2->waitForX;
 
-      $client1->execute("quake3 '+set r_fullscreen 0' '+set name Foo' '+connect server' &");
-      $client2->execute("quake3 '+set r_fullscreen 0' '+set name Bar' '+connect server' &");
+      $client1->execute("quake3 +set r_fullscreen 0 +set name Foo +connect server &");
+      $client2->execute("quake3 +set r_fullscreen 0 +set name Bar +connect server &");
 
       $server->waitUntilSucceeds("grep -q 'Foo.*entered the game' /tmp/log");
       $server->waitUntilSucceeds("grep -q 'Bar.*entered the game' /tmp/log");
