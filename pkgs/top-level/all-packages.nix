@@ -11864,9 +11864,16 @@ let
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-esr = wrapFirefox firefox-esr-unwrapped { };
 
-  firefox-bin = callPackage ../applications/networking/browsers/firefox-bin {
+  firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     gconf = pkgs.gnome.GConf;
     inherit (pkgs.gnome) libgnome libgnomeui;
+  };
+
+  firefox-bin = wrapFirefox firefox-bin-unwrapped {
+    browserName = "firefox";
+    name = "firefox-bin-" +
+      (builtins.parseDrvName firefox-bin-unwrapped.name).version;
+    desktopName = "Firefox";
   };
 
   firestr = qt5.callPackage ../applications/networking/p2p/firestr
