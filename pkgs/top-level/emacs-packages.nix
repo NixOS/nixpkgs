@@ -1172,23 +1172,6 @@ let
     };
   };
 
-  let-alist = melpaBuild rec {
-    pname   = "let-alist";
-    version = "1.0.4";
-    src = fetchurl {
-      url    = "http://elpa.gnu.org/packages/${pname}-${version}.el";
-      sha256 = "07312bvvyz86lf64vdkxg2l1wgfjl25ljdjwlf1bdzj01c4hm88x";
-    };
-    unpackPhase = "true";
-    buildPhase = ''
-      cp $src ${pname}-${version}.el
-    '';
-    meta = {
-      description = "Easily let-bind values of an assoc-list by their names";
-      license = gpl3Plus;
-    };
-  };
-
   log4e = melpaBuild rec {
     pname = "log4e";
     version = "0.3.0";
