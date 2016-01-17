@@ -8549,12 +8549,12 @@ in modules // {
   };
 
   future = buildPythonPackage rec {
-    version = "0.14.3";
+    version = "0.15.2";
     name = "future-${version}";
 
     src = pkgs.fetchurl {
       url = "http://github.com/PythonCharmers/python-future/archive/v${version}.tar.gz";
-      sha256 = "0hgp9kq7h4ipw8ax5xvvkyh3bkqw361d3rndvb9xix01h9j9mi3p";
+      sha256 = "0vm61j5br6jiry6pgcxnwvxhki8ksnirp7k9mcbmxmgib3r60xd3";
     };
 
     propagatedBuildInputs = with self; optionals isPy26 [ importlib argparse ];
