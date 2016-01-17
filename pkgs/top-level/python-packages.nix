@@ -11228,6 +11228,25 @@ in modules // {
     };
   };
 
+  pygraphviz = buildPythonPackage rec {
+    version = "1.2";
+    name = "pygraphviz-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/pygraphviz/pygraphviz/archive/${name}.tar.gz";
+      sha256 = "0jyd049wj994y1h9k3xwvjk9jwzi6vpdj10767kq8alz86hp4ak5";
+    };
+
+    propagatedBuildInputs = [ pkgs.graphviz pkgs.pkgconfig ];
+
+    meta = {
+      description = "Python interface to Graphviz graph drawing package";
+      homepage = https://github.com/pygraphviz/pygraphviz;
+      license = licenses.bsd;
+      maintainers = with maintainers; [ matthiasbeyer ];
+    };
+  };
+
   pymysql = buildPythonPackage rec {
     name = "pymysql-${version}";
     version = "0.6.6";
