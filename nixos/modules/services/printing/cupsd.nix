@@ -4,9 +4,12 @@ with lib;
 
 let
 
-  inherit (pkgs) cups cups_filters;
+  inherit (pkgs) cups cups-pk-helper cups_filters;
 
   cfg = config.services.printing;
+
+  avahiEnabled = config.services.avahi.enable;
+  polkitEnabled = config.security.polkit.enable;
 
   additionalBackends = pkgs.runCommand "additional-cups-backends" { }
     ''
@@ -204,7 +207,7 @@ in
         description = "CUPS printing services";
       };
 
-    environment.systemPackages = [ cups ];
+    environment.systemPackages = [ cups ] ++ optional polkitEnabled cups-pk-helper;
 
     environment.etc."cups/client.conf".text = cfg.clientConf;
     environment.etc."cups/cups-files.conf".text = cfg.cupsFilesConf;
@@ -212,7 +215,7 @@ in
     environment.etc."cups/cups-browsed.conf".text = cfg.browsedConf;
     environment.etc."cups/snmp.conf".text = cfg.snmpConf;
 
-    services.dbus.packages = [ cups ];
+    services.dbus.packages = [ cups ] ++ optional polkitEnabled cups-pk-helper;
 
     # Cups uses libusb to talk to printers, and does not use the
     # linux kernel driver. If the driver is not in a black list, it
@@ -242,7 +245,7 @@ in
           ];
       };
 
-    systemd.services.cups-browsed = mkIf config.services.avahi.enable
+    systemd.services.cups-browsed = mkIf avahiEnabled
       { description = "CUPS Remote Printer Discovery";
 
         wantedBy = [ "multi-user.target" ];
