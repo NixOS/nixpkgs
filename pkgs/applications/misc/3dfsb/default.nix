@@ -4,12 +4,14 @@
 stdenv.mkDerivation {
   name = "3dfsb-1.0";
 
+  broken = true; # segfaults as of this commit
+
   meta = with stdenv.lib; {
     description = "3D File System Browser - cleaned up and improved fork of the old tdfsb which runs on GNU/Linux and should also run on BeOS/Haiku and FreeBSD";
     homepage = "https://github.com/tomvanbraeckel/3dfsb";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ eduarrrd ];
+    maintainers = with maintainers; [ ];
   };
 
   src = fetchgit {
