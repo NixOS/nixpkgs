@@ -2128,6 +2128,8 @@ let
 
   multitail = callPackage ../tools/misc/multitail { };
 
+  mxt-app = callPackage ../misc/mxt-app { };
+
   netperf = callPackage ../applications/networking/netperf { };
 
   netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
