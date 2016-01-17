@@ -2248,8 +2248,6 @@ let
 
   man_db = callPackage ../tools/misc/man-db { };
 
-  mates = callPackage ../tools/misc/mates { };
-
   mawk = callPackage ../tools/text/mawk { };
 
   mbox = callPackage ../tools/security/mbox { };
