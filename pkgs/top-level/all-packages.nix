@@ -5619,6 +5619,8 @@ let
 
   complexity = callPackage ../development/tools/misc/complexity { };
 
+  cookiecutter = pythonPackages.cookiecutter;
+
   ctags = callPackage ../development/tools/misc/ctags { };
 
   ctagsWrapped = callPackage ../development/tools/misc/ctags/wrapped.nix {};

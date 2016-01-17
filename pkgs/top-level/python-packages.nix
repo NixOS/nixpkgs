@@ -3151,6 +3151,30 @@ in modules // {
     };
   };
 
+  cookiecutter = buildPythonPackage rec {
+    version = "1.3.0";
+    name = "cookiecutter-${version}";
+
+    # dependency problems, next release of cookiecutter should unblock these
+    disabled = isPy3k || isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/audreyr/cookiecutter/archive/${version}.tar.gz";
+      sha256 = "1vchjvh7591nczz2zz55aghk9mhpm6kqgm62d05d4mjrx9xjkdcg";
+    };
+
+    buildInputs = with self; [ itsdangerous  ];
+    propagatedBuildInputs = with self; [
+          jinja2 future binaryornot click whichcraft ruamel_yaml ];
+
+    meta = {
+      homepage = https://github.com/audreyr/cookiecutter;
+      description = "A command-line utility that creates projects from project templates";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ kragniz ];
+    };
+  };
+
   cookies = buildPythonPackage rec {
     name = "cookies-2.2.1";
 
