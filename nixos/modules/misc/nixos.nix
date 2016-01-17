@@ -37,8 +37,8 @@ with lib;
 
     nixos.extraModules = mkOption {
       default = [];
-      example = literalExample "mkIf config.services.openssh.enable [ ./sshd-config.nix ]";
-      type = types.listOf types.unspecified;
+      example = literalExample "[ ./sshd-config.nix ]";
+      type = types.listOf (types.either (types.submodule ({...}:{options={};})) types.path);
       description = ''
         Define additional modules which would be loaded to evaluate the
         configuration.

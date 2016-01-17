@@ -20,6 +20,7 @@ in
   options = {
 
     boot.kernelPackages = mkOption {
+      type = types.packageSet;
       default = pkgs.linuxPackages;
       # We don't want to evaluate all of linuxPackages for the manual
       # - some of it might not even evaluate correctly.
@@ -63,7 +64,7 @@ in
     };
 
     boot.extraModulePackages = mkOption {
-      type = types.listOf types.path;
+      type = types.listOf types.package;
       default = [];
       example = literalExample "[ pkgs.linuxPackages.nvidia_x11 ]";
       description = "A list of additional packages supplying kernel modules.";

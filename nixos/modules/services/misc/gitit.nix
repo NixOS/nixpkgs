@@ -35,6 +35,7 @@ let
       };
 
       haskellPackages = mkOption {
+        type = types.attrsOf types.package;
         default = pkgs.haskellPackages;
         defaultText = "pkgs.haskellPackages";
         example = literalExample "pkgs.haskell.packages.ghc784";

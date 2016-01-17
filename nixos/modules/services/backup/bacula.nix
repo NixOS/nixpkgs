@@ -207,7 +207,7 @@ in {
         description = ''
           Extra configuration to be passed in Client directive.
         '';
-        example = literalExample ''
+        example = ''
           Maximum Concurrent Jobs = 20;
           Heartbeat Interval = 30;
         '';
@@ -218,7 +218,7 @@ in {
         description = ''
           Extra configuration to be passed in Messages directive.
         '';
-        example = literalExample ''
+        example = ''
           console = all
         '';
       };

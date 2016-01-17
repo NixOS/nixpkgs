@@ -43,6 +43,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.syncthing;
+        defaultText = "pkgs.syncthing";
         example = literalExample "pkgs.syncthing";
         description = ''
           Syncthing package to use.

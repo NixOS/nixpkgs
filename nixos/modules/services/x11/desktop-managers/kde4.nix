@@ -66,6 +66,7 @@ in
       kdeWorkspacePackage = mkOption {
         internal = true;
         default = pkgs.kde4.kde_workspace;
+        defaultText = "pkgs.kde4.kde_workspace";
         type = types.package;
         description = "Custom kde-workspace, used for NixOS rebranding.";
       };

@@ -43,6 +43,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.rsnapshot;
+        defaultText = "pkgs.rsnapshot";
         example = literalExample "pkgs.rsnapshotGit";
         description = ''
           RSnapshot package to use.

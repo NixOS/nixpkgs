@@ -119,6 +119,7 @@ in
 
     environment.binsh = mkOption {
       default = "${config.system.build.binsh}/bin/sh";
+      defaultText = "\${config.system.build.binsh}/bin/sh";
       example = literalExample ''
         "''${pkgs.dash}/bin/dash"
       '';
