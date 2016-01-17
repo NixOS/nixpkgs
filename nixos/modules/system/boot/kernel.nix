@@ -20,7 +20,6 @@ in
   options = {
 
     boot.kernelPackages = mkOption {
-      type = types.packageSet;
       default = pkgs.linuxPackages;
       # We don't want to evaluate all of linuxPackages for the manual
       # - some of it might not even evaluate correctly.
