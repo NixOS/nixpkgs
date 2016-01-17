@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, autoconf, automake, libtool }:
+{ fetchFromGitHub, stdenv, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "dotconf-" + version;
@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sc95hw5k2xagpafny0v35filmcn05k1ds5ghkldfpf6xw4hakp7";
   };
 
-  buildInputs = [ autoconf automake libtool ];
-
-  preConfigure = "autoreconf --install";
+  buildInputs = [ autoreconfHook ];
 
   meta = with stdenv.lib; {
     description = "A configuration parser library";

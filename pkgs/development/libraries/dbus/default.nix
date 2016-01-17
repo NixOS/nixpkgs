@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, autoconf, automake, libtool
+{ stdenv, fetchurl, pkgconfig, autoreconfHook
 , expat, systemd, glib, dbus_glib, python
 , libX11 ? null, libICE ? null, libSM ? null, x11Support ? (stdenv.isLinux || stdenv.isDarwin) }:
 
@@ -46,14 +46,15 @@ let
           done
         '';
 
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig autoreconfHook ];
     propagatedBuildInputs = [ expat ];
-    buildInputs = [ autoconf automake libtool ]; # ToDo: optional selinux?
+
+    preAutoreconf = ''
+      substituteInPlace tools/Makefile.am --replace 'install-localstatelibDATA:' 'disabled:'
+    '';
 
     preConfigure = ''
       patchShebangs .
-      substituteInPlace tools/Makefile.am --replace 'install-localstatelibDATA:' 'disabled:'
-      autoreconf -fi
     '';
 
     configureFlags = [
