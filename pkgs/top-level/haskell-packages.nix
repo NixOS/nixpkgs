@@ -4,7 +4,7 @@ rec {
 
   lib = import ../development/haskell-modules/lib.nix { inherit pkgs; };
 
-  buildStackProject = callPackage ../build-support/haskell/stack.nix { };
+  buildStackProject = callPackage ../development/haskell-modules/generic-stack-builder.nix { };
 
   compiler = {
 
