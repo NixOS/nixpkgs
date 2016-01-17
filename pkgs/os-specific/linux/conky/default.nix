@@ -61,13 +61,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "conky-${version}";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     rev = "v${version}";
-    sha256 = "00vyrf72l54j3majqmn6vykqvvb15vygsaby644nsb5vpma6b1cn";
+    sha256 = "0k93nqx8mxz2z84zzwpwfp7v7dwxwg1di1a2yb137lk7l157azw6";
   };
 
   postPatch = ''
@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
       --replace "http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl" "${docbook_xsl}/xml/xsl/docbook/html/docbook.xsl"
     substituteInPlace doc/docs.xml \
       --replace "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" "${docbook_xml_dtd_44}/xml/dtd/docbook/docbookx.dtd"
+    substituteInPlace cmake/Conky.cmake --replace "#set(RELEASE true)" "set(RELEASE true)"
   '';
 
   NIX_LDFLAGS = "-lgcc_s";
