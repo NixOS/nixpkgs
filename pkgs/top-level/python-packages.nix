@@ -6537,11 +6537,11 @@ in modules // {
   radicale = buildPythonPackage rec {
     name = "radicale-${version}";
     namePrefix = "";
-    version = "1.0.1";
+    version = "1.1.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/R/Radicale/Radicale-${version}.tar.gz";
-      sha256 = "0q0vxqg32lp9bzbqn06x7igwq3a9hcmpspvj3icyf0rlg786i2p1";
+      sha256 = "1c5lv8qca21mndkx350wxv34qypqh6gb4rhzms4anr642clq3jg2";
     };
 
     propagatedBuildInputs = with self; [
@@ -6550,7 +6550,7 @@ in modules // {
       sqlalchemy
     ];
 
-    doCheck = false;
+    doCheck = true;
 
     meta = {
       homepage = http://www.radicale.org/;
