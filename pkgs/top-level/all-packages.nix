@@ -1750,7 +1750,6 @@ let
 
   grub = callPackage_i686 ../tools/misc/grub {
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
-    automake = automake112x; # fails with 13 and 14
   };
 
   trustedGrub = callPackage_i686 ../tools/misc/grub/trusted.nix { };
@@ -2635,9 +2634,7 @@ let
 
   paper-gtk-theme = callPackage ../misc/themes/gtk3/paper-gtk-theme { };
 
-  par2cmdline = callPackage ../tools/networking/par2cmdline {
-    automake = automake112x; # fails with 14
-  };
+  par2cmdline = callPackage ../tools/networking/par2cmdline { };
 
   parallel = callPackage ../tools/misc/parallel { };
 
@@ -13027,9 +13024,7 @@ let
 
   rkt = callPackage ../applications/virtualization/rkt { };
 
-  rofi = callPackage ../applications/misc/rofi {
-    automake = automake114x;
-  };
+  rofi = callPackage ../applications/misc/rofi { };
 
   rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };
 
