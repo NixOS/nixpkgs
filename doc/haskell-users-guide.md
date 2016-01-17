@@ -117,9 +117,10 @@ Also, the attributes `haskell.compiler.ghcXYC` and
 
 ### How to install a compiler
 
-A simple development environment consists of a Haskell compiler and the tool
-`cabal-install`, and we saw in section [How to install Haskell packages] how
-you can install those programs into your user profile:
+A simple development environment consists of a Haskell compiler and one or both
+of the tools `cabal-install` and `stack`. We saw in section
+[How to install Haskell packages] how you can install those programs into your
+user profile:
 
     $ nix-env -f "<nixpkgs>" -iA haskellPackages.ghc haskellPackages.cabal-install
 
@@ -148,10 +149,16 @@ version; just enter the Nix shell environment with the command
 
     $ nix-shell -p haskell.compiler.ghc784
 
-to bring GHC 7.8.4 into `$PATH`. Re-running `cabal configure` switches your
-build to use that compiler instead. If you're working on a project that doesn't
-depend on any additional system libraries outside of GHC, then it's sufficient
-even to run the `cabal configure` command inside of the shell:
+to bring GHC 7.8.4 into `$PATH`. Alternatively, you can use Stack instead of
+`nix-shell` directly to select compiler versions and other build tools
+per-project. It uses `nix-shell` under the hood when Nix support is turned on.
+See [How to build a Haskell project using Stack].
+
+If you're using `cabal-install`, re-running `cabal configure` inside the spawned
+shell switches your build to use that compiler instead. If you're working on
+a project that doesn't depend on any additional system libraries outside of GHC,
+then it's even sufficient to just run the `cabal configure` command inside of
+the shell:
 
     $ nix-shell -p haskell.compiler.ghc784 --command "cabal configure"
 
@@ -320,6 +327,58 @@ security reasons, which might be quite an inconvenience. See [this
 page](http://kb.mozillazine.org/Links_to_local_pages_do_not_work) for
 workarounds.
 
+### How to build a Haskell project using Stack
+
+[Stack][http://haskellstack.org] is a popular build tool for Haskell projects.
+It has first-class support for Nix. Stack can optionally use Nix to
+automatically select the right version of GHC and other build tools to build,
+test and execute apps in an existing project downloaded from somewhere on the
+Internet. Pass the `--nix` flag to any `stack` command to do so, e.g.
+
+    $ git clone --recursive http://github.com/yesodweb/wai
+    $ cd wai
+    $ stack --nix build
+
+If you want `stack` to use Nix by default, you can add a `nix` section to the
+`stack.yaml` file, as explained in the [Stack documentation][stack-nix-doc]. For
+example:
+
+    nix:
+      enable: true
+      packages: [pkgconfig zeromq zlib]
+
+The example configuration snippet above tells Stack to create an ad hoc
+environment for `nix-shell` as in the below section, in which the `pkgconfig`,
+`zeromq` and `zlib` packages from Nixpkgs are available. All `stack` commands
+will implicitly be executed inside this ad hoc environment.
+
+Some projects have more sophisticated needs. For examples, some ad hoc
+environments might need to expose Nixpkgs packages compiled in a certain way, or
+with extra environment variables. In these cases, you'll need a `shell` field
+instead of `packages`:
+
+    nix:
+      enable: true
+      shell-file: shell.nix
+
+For more on how to write a `shell.nix` file see the below section. You'll need
+to express a derivation. Note that Nixpkgs ships with a convenience wrapper
+function around `mkDerivation` called `haskell.buildStackProject` to help you
+create this derivation in exactly the way Stack expects. All of the same inputs
+as `mkDerivation` can be provided. For example, to build a Stack project that
+including packages that link against a version of the R library compiled with
+special options turned on:
+
+    with (import <nixpkgs> { });
+
+    let R = pkgs.R.override { enableStrictBarrier = true; };
+    in
+	haskell.buildStackProject {
+      name = "HaskellR";
+	  buildInputs = [ R zeromq zlib ];
+    }
+
+[stack-nix-doc]: http://docs.haskellstack.org/en/stable/nix_integration.html
 
 ### How to create ad hoc environments for `nix-shell`
 
