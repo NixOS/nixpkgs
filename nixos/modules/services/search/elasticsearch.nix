@@ -9,6 +9,8 @@ let
     network.host: ${cfg.listenAddress}
     network.port: ${toString cfg.port}
     network.tcp.port: ${toString cfg.tcp_port}
+    # TODO: find a way to enable security manager
+    security.manager.enabled: false
     cluster.name: ${cfg.cluster_name}
     ${cfg.extraConf}
   '';
@@ -128,7 +130,9 @@ in {
       description = "Elasticsearch Daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
-      environment = { ES_HOME = cfg.dataDir; };
+      environment = {
+        ES_HOME = cfg.dataDir;
+      };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/elasticsearch -Des.path.conf=${configDir} ${toString cfg.extraCmdLineOptions}";
         User = "elasticsearch";
@@ -136,11 +140,15 @@ in {
       };
       preStart = ''
         mkdir -m 0700 -p ${cfg.dataDir}
-        if [ "$(id -u)" = 0 ]; then chown -R elasticsearch ${cfg.dataDir}; fi
+        
 
         # Install plugins
         rm ${cfg.dataDir}/plugins || true
         ln -s ${esPlugins}/plugins ${cfg.dataDir}/plugins
+
+        rm -R ${cfg.dataDir}/lib || true
+        ln -s ${cfg.package}/lib ${cfg.dataDir}/lib
+        if [ "$(id -u)" = 0 ]; then chown -R elasticsearch ${cfg.dataDir}; fi
       '';
       postStart = mkBefore ''
         until ${pkgs.curl}/bin/curl -s -o /dev/null ${cfg.listenAddress}:${toString cfg.port}; do
