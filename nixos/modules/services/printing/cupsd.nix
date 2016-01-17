@@ -37,7 +37,7 @@ let
       [ cups additionalBackends cups_filters pkgs.ghostscript ]
       ++ optional cfg.gutenprint gutenprint
       ++ cfg.drivers;
-    pathsToLink = [ "/lib/cups" "/share/cups" "/bin" "/etc/cups" ];
+    pathsToLink = [ "/lib/cups" "/share/cups" "/bin" ];
     postBuild = cfg.bindirCmds;
     ignoreCollisions = true;
   };
@@ -87,6 +87,20 @@ let
   '';
 
   browsedFile = writeConf "cups-browsed.conf" cfg.browsedConf;
+
+  rootdir = pkgs.buildEnv {
+    name = "cups-progs";
+    paths = [
+      cupsFilesFile
+      cupsdFile
+      (writeConf "client.conf" cfg.clientConf)
+      (writeConf "snmp.conf" cfg.snmpConf)
+    ] ++ optional avahiEnabled browsedFile
+      ++ optional cfg.gutenprint gutenprint
+      ++ cfg.drivers;
+    pathsToLink = [ "/etc/cups" ];
+    ignoreCollisions = true;
+  };
 
 in
 
@@ -253,12 +267,7 @@ in
       };
 
     environment.systemPackages = [ cups ] ++ optional polkitEnabled cups-pk-helper;
-
-    environment.etc."cups/client.conf".text = cfg.clientConf;
-    environment.etc."cups/cups-files.conf".source = cupsFilesFile;
-    environment.etc."cups/cupsd.conf".source = cupsdFile;
-    environment.etc."cups/cups-browsed.conf".source = browsedFile;
-    environment.etc."cups/snmp.conf".text = cfg.snmpConf;
+    environment.etc."cups".source = "/var/lib/cups";
 
     services.dbus.packages = [ cups ] ++ optional polkitEnabled cups-pk-helper;
 
@@ -278,19 +287,32 @@ in
 
         preStart =
           ''
-            mkdir -m 0755 -p /etc/cups
             mkdir -m 0700 -p /var/cache/cups
             mkdir -m 0700 -p /var/spool/cups
             mkdir -m 0755 -p ${cfg.tempDir}
+
+            mkdir -m 0755 -p /var/lib/cups
+            # Backwards compatibility
+            if [ ! -L /etc/cups ]; then
+              mv /etc/cups/* /var/lib/cups
+              rmdir /etc/cups
+              ln -s /var/lib/cups /etc/cups
+            fi
+            # First, clean existing symlinks
+            if [ -n "$(ls /var/lib/cups)" ]; then
+              for i in /var/lib/cups/*; do
+                [ -L "$i" ] && rm "$i"
+              done
+            fi
+            # Then, populate it with static files
+            cd ${rootdir}/etc/cups
+            for i in *; do
+              [ ! -e "/var/lib/cups/$i" ] && ln -s "${rootdir}/etc/cups/$i" "/var/lib/cups/$i"
+            done
             ${optionalString cfg.gutenprint ''
               ${gutenprint}/bin/cups-genppdupdate
             ''}
           '';
-
-        restartTriggers =
-          [ config.environment.etc."cups/cups-files.conf".source
-            config.environment.etc."cups/cupsd.conf".source
-          ];
       };
 
     systemd.services.cups-browsed = mkIf avahiEnabled
