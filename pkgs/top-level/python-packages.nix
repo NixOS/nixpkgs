@@ -18113,6 +18113,26 @@ in modules // {
     };
   };
 
+  sopel = buildPythonPackage rec {
+    name = "sopel-6.1.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sopel/${name}.tar.gz";
+      sha256 = "0nr2a88bkxg2593dd947qkh96g8j32q7pl7x9zvx4158h4bgx99y";
+    };
+
+    propagatedBuildInputs = with self; [ praw xmltodict pytz pyenchant pygeoip ];
+
+    disabled = isPyPy || isPy26 || isPy27;
+
+    meta = {
+      description = "Simple and extensible IRC bot";
+      homepage = "http://sopel.chat";
+      license = licenses.efl20;
+      maintainers = with maintainers; [ mog ];
+    };
+  };
+
   stevedore = buildPythonPackage rec {
     name = "stevedore-1.7.0";
 
