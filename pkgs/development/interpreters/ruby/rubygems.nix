@@ -2,10 +2,10 @@ args @ { makeWrapper, ruby, ... }: with args;
 
 rec {
   name = "rubygems-" + version;
-  version = "2.4.1";
+  version = "2.5.1";
   src = fetchurl {
     url = "http://production.cf.rubygems.org/rubygems/${name}.tgz";
-    sha256 = "0cpr6cx3h74ykpb0cp4p4xg7a8j0bhz3sk271jq69l4mm4zy4h4f";
+    sha256 = "0wsj6si96k15f5hrbryc5gikp8lcg4p92047x9rxk0vrd1vbpm02";
   };
 
   buildInputs = [ruby makeWrapper];
