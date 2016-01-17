@@ -9022,8 +9022,6 @@ let
     self = pypyPackages;
   });
 
-  foursuite = pythonPackages.foursuite;
-
   bsddb3 = pythonPackages.bsddb3;
 
   ecdsa = pythonPackages.ecdsa;

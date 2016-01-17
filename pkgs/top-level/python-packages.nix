@@ -8558,8 +8558,6 @@ in modules // {
     };
   });
 
-  foursuite = callPackage ../development/python-modules/4suite {};
-
   fs = buildPythonPackage rec {
     name = "fs-0.5.0";
 
