@@ -25,22 +25,7 @@ in
         description = "
           Whether to enable the ldap server.
         ";
-        example = literalExample ''
-          openldap.enable = true;
-          openldap.extraConfig = '''
-            include ''${pkgs.openldap}/etc/openldap/schema/core.schema
-            include ''${pkgs.openldap}/etc/openldap/schema/cosine.schema
-            include ''${pkgs.openldap}/etc/openldap/schema/inetorgperson.schema
-            include ''${pkgs.openldap}/etc/openldap/schema/nis.schema
-
-            database bdb 
-            suffix dc=example,dc=org 
-            rootdn cn=admin,dc=example,dc=org 
-            # NOTE: change after first start
-            rootpw secret
-            directory /var/db/openldap
-          ''';
-        '';
+        example = true;
       };
 
       user = mkOption {
@@ -67,6 +52,19 @@ in
         description = "
           sldapd.conf configuration
         ";
+        example = ''
+            include ''${pkgs.openldap}/etc/openldap/schema/core.schema
+            include ''${pkgs.openldap}/etc/openldap/schema/cosine.schema
+            include ''${pkgs.openldap}/etc/openldap/schema/inetorgperson.schema
+            include ''${pkgs.openldap}/etc/openldap/schema/nis.schema
+
+            database bdb 
+            suffix dc=example,dc=org 
+            rootdn cn=admin,dc=example,dc=org 
+            # NOTE: change after first start
+            rootpw secret
+            directory /var/db/openldap
+          '';
       };
     };
 

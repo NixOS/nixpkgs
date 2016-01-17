@@ -193,6 +193,8 @@
   ./services/mail/postfix.nix
   ./services/mail/postsrsd.nix
   ./services/mail/spamassassin.nix
+  ./services/mail/rspamd.nix
+  ./services/mail/rmilter.nix
   ./services/misc/apache-kafka.nix
   ./services/misc/autofs.nix
   ./services/misc/bepasty.nix
@@ -214,6 +216,7 @@
   ./services/misc/gpsd.nix
   ./services/misc/ihaskell.nix
   ./services/misc/mathics.nix
+  ./services/misc/matrix-synapse.nix
   ./services/misc/mbpfan.nix
   ./services/misc/mediatomb.nix
   ./services/misc/mesos-master.nix

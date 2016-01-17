@@ -118,6 +118,7 @@ in
         package = mkOption {
           description = "Package to use for consul-alerts.";
           default = pkgs.consul-alerts;
+          defaultText = "pkgs.consul-alerts";
           type = types.package;
         };
 

@@ -108,7 +108,7 @@ in {
       finders = mkOption {
         description = "List of finder plugins to load.";
         default = [];
-        example = [ pkgs.python27Packages.graphite_influxdb ];
+        example = literalExample "[ pkgs.python27Packages.graphite_influxdb ]";
         type = types.listOf types.package;
       };
 
@@ -136,6 +136,7 @@ in {
       package = mkOption {
         description = "Package to use for graphite api.";
         default = pkgs.python27Packages.graphite_api;
+        defaultText = "pkgs.python27Packages.graphite_api";
         type = types.package;
       };
 
@@ -146,7 +147,7 @@ in {
             directories:
                 - ${dataDir}/whisper
         '';
-        example = literalExample ''
+        example = ''
           allowed_origins:
             - dashboard.example.com
           cheat_times: true
@@ -350,7 +351,7 @@ in {
               critical: 200
               name: Test
         '';
-        example = literalExample ''
+        example = ''
           pushbullet_key: pushbullet_api_key
           alerts:
             - target: stats.seatgeek.app.deal_quality.venue_info_cache.hit

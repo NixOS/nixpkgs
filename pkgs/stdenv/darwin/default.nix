@@ -95,7 +95,7 @@ in rec {
         stdenvSandboxProfile = binShClosure + libSystemProfile;
         extraSandboxProfile  = binShClosure + libSystemProfile;
 
-        extraAttrs = { inherit platform; };
+        extraAttrs = { inherit platform; parent = last; };
         overrides  = pkgs: (overrides pkgs) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
 
@@ -290,6 +290,7 @@ in rec {
       inherit platform bootstrapTools;
       libc         = pkgs.darwin.Libsystem;
       shellPackage = pkgs.bash;
+      parent       = stage4;
     };
 
     allowedRequisites = (with pkgs; [

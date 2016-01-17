@@ -104,7 +104,7 @@ rec {
       if message != null then message
       else ''
         Unfortunately, we may not download file ${name_} automatically.
-        Please, go to ${url}, download it yourself, and add it to the Nix store
+        Please, go to ${url} to download it yourself, and add it to the Nix store
         using either
           nix-store --add-fixed ${hashAlgo} ${name_}
         or

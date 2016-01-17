@@ -87,7 +87,9 @@ in
           };
 
           package = mkOption {
+            type = types.package;
             default = pkgs.tinc_pre;
+            defaultText = "pkgs.tinc_pre";
             description = ''
               The package to use for the tinc daemon's binary.
             '';

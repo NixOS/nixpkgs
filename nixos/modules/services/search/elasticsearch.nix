@@ -40,6 +40,7 @@ in {
     package = mkOption {
       description = "Elasticsearch package to use.";
       default = pkgs.elasticsearch;
+      defaultText = "pkgs.elasticsearch";
       type = types.package;
     };
 

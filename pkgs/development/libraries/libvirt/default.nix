@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--localstatedir=/var"
-    "--sysconfdir=/etc"
+    "--sysconfdir=/var/lib"
     "--with-libpcap"
     "--with-vmware"
     "--with-vbox"
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [
     "localstatedir=$(TMPDIR)/var"
-    "sysconfdir=$(out)/etc"
+    "sysconfdir=$(out)/var/lib"
   ];
 
   postInstall = ''

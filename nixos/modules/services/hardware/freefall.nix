@@ -21,6 +21,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.freefall;
+      defaultText = "pkgs.freefall";
       description = ''
         freefall derivation to use.
       '';

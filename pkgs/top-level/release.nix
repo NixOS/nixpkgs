@@ -117,8 +117,6 @@ let
       gcj = linux;
       ghostscript = linux;
       ghostscriptX = linux;
-      git = linux;
-      gitFull = linux;
       glibc = linux;
       glibcLocales = linux;
       glxinfo = linux;
@@ -162,9 +160,6 @@ let
       mod_python = linux;
       mupen64plus = linux;
       mutt = linux;
-      mysql = linux;
-      mysql51 = linux;
-      mysql55 = linux;
       nano = allBut cygwin;
       ncat = linux;
       netcat = all;
@@ -209,7 +204,6 @@ let
       uae = linux;
       viking = linux;
       vice = linux;
-      vim = linux;
       vimHugeX = linux;
       vncrec = linux;
       vorbisTools = linux;

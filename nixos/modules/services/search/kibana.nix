@@ -127,6 +127,7 @@ in {
     package = mkOption {
       description = "Kibana package to use";
       default = pkgs.kibana;
+      defaultText = "pkgs.kibana";
       type = types.package;
     };
 

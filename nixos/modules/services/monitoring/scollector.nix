@@ -43,6 +43,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.scollector;
+        defaultText = "pkgs.scollector";
         example = literalExample "pkgs.scollector";
         description = ''
           scollector binary to use.
@@ -77,7 +78,7 @@ in {
       collectors = mkOption {
         type = with types; attrsOf (listOf path);
         default = {};
-        example = literalExample "{ 0 = [ \"\${postgresStats}/bin/collect-stats\" ]; }";
+        example = literalExample "{ \"0\" = [ \"\${postgresStats}/bin/collect-stats\" ]; }";
         description = ''
           An attribute set mapping the frequency of collection to a list of
           binaries that should be executed at that frequency. You can use "0"
