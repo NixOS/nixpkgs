@@ -4306,6 +4306,10 @@ let
     mavenEnforcer10 = self.mavenPlugins.mavenEnforcerGen.mavenEnforcer10;
     mavenEnforcer101 = self.mavenPlugins.mavenEnforcerGen.mavenEnforcer101;
 
+    mavenEnforcerBootstrap = callPackage ../development/java-modules/maven-plugins/maven-enforcer-plugin/bootstrap.nix { };
+    mavenEnforcer10Jar = self.mavenPlugins.mavenEnforcerBootstrap.mavenEnforcer10Jar;
+    mavenEnforcer10Pom = self.mavenPlugins.mavenEnforcerBootstrap.mavenEnforcer10Pom;
+
     mavenInstallGen = callPackage ../development/java-modules/maven-plugins/maven-install-plugin { };
     mavenInstall231 = self.mavenPlugins.mavenInstallGen.mavenInstall231;
 

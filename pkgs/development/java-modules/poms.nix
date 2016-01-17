@@ -79,6 +79,17 @@ rec {
     m2File = "apache-10.pom";
   };
 
+  mavenEnforcerParent10Pom = fetchmaven {
+    version = "1.0";
+    name = "maven-enforcer";
+    src = fetchurl rec {
+      url = "https://svn.apache.org/repos/asf/maven/enforcer/tags/enforcer-1.0/pom.xml";
+      sha256 = "033w1wlj1d16r6vylcsvqch74iw4lz6iqlvmh0hm6j3cqn2cbfli";
+    };
+    m2Path = "org/apache/maven/enforcer/enforcer/1.0";
+    m2File = "enforcer-1.0.pom";
+  };
+
   mavenParent4 = fetchmaven {
     version = 4;
     name = "maven-parent";
