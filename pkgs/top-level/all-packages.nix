@@ -9369,6 +9369,10 @@ let
 
   postsrsd = callPackage ../servers/mail/postsrsd { };
 
+  rmilter = callPackage ../servers/mail/rmilter { };
+
+  rspamd = callPackage ../servers/mail/rspamd { };
+
   pshs = callPackage ../servers/http/pshs { };
 
   libpulseaudio = callPackage ../servers/pulseaudio { libOnly = true; };
