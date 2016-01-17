@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     # Copy executables.
     mkdir -p "$out"/bin
-    cp binaries/system/pyrogenesis "$out"/bin/
+    cp binaries/system/pyrogenesis "$out"/bin/0ad
     ((${ toString withEditor })) && cp binaries/system/ActorEditor "$out"/bin/
 
     # Copy l10n data.
