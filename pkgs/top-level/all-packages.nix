@@ -4321,6 +4321,9 @@ let
     mavenRemoteResources121Jar = self.mavenPlugins.mavenRemoteResourcesBootstrap.mavenRemoteResources121Jar;
     mavenRemoteResources121Pom = self.mavenPlugins.mavenRemoteResourcesBootstrap.mavenRemoteResources121Pom;
 
+    mavenSiteGen = callPackage ../development/java-modules/maven-plugins/maven-site-plugin { };
+    mavenSite30beta3 = self.mavenPlugins.mavenSiteGen.mavenSite30beta3;
+
     modelloMavenGen = callPackage ../development/java-modules/maven-plugins/modello-maven-plugin { };
     modelloMavenPlugin10Alpha15 = self.mavenPlugins.modelloMavenGen.modelloMavenPlugin10Alpha15;
 

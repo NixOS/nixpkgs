@@ -24,7 +24,7 @@ rec {
       rev = 1724719;
       sha256 = "1ph1qlcxpbrc00cmfc0aqdjv9n4v5qmlswgvk9c4l6fhd7jv8i3d";
     };
-    mavenDeps = [ apacheParent6 apacheParent7 mavenParent13 mavenParent17 mavenPlugins14 mavenRemoteResources11Jar mavenRemoteResources11Pom ];
+    mavenDeps = [ apacheParent6 apacheParent7 mavenParent13 mavenParent17 mavenPlugins14 mavenRemoteResources11Jar mavenRemoteResources11Pom mavenSite30beta3 ];
     m2Path = "/org/apache/maven/plugins/maven-enforcer-plugin/1.0";
   };
 
