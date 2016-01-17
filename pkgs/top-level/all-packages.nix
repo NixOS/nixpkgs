@@ -6408,9 +6408,6 @@ let
   ffmpeg_1_2 = callPackage ../development/libraries/ffmpeg/1.2.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
-  ffmpeg_2_2 = callPackage ../development/libraries/ffmpeg/2.2.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
   ffmpeg_2_8 = callPackage ../development/libraries/ffmpeg/2.8.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
