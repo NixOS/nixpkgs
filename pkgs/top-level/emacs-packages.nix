@@ -103,9 +103,10 @@ let
       rev = "v${version}";
       sha256 = "19sy49r3ijh36m7hl4vspw5c4i8pnfqdn4ldm2sqchxigkw56ayl";
     };
-    buildInputs = with external; [ autoconf automake libpng zlib poppler pkgconfig ] ++ [ tablist let-alist ];
+    buildInputs = with external; [ autoconf automake libpng zlib poppler pkgconfig ];
     preBuild = "make server/epdfinfo";
     fileSpecs = [ "lisp/pdf-*.el" "server/epdfinfo" ];
+    packageRequires = [ tablist let-alist ];
     meta = {
       description = "Emacs support library for PDF files";
       license = gpl3;
@@ -1797,20 +1798,6 @@ let
     packageRequires = [ caml ];
     meta = {
       description = "Extension of OCaml mode for Emacs";
-      license = gpl3Plus;
-    };
-  };
-
-  undo-tree = melpaBuild rec {
-    pname   = "undo-tree";
-    version = "0.6.4";
-    src = fetchgit {
-      url    = "http://www.dr-qubit.org/git/${pname}.git";
-      rev    = "a3e81b682053a81e082139300ef0a913a7a610a2";
-      sha256 = "1qla7njkb7gx5aj87i8x6ni8jfk1k78ivwfiiws3gpbnyiydpx8y";
-    };
-    meta = {
-      description = "A port of Vim's undo tree functionality to Emacs";
       license = gpl3Plus;
     };
   };

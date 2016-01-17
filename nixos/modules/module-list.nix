@@ -162,6 +162,7 @@
   ./services/hardware/bluetooth.nix
   ./services/hardware/brltty.nix
   ./services/hardware/freefall.nix
+  ./services/hardware/irqbalance.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/pcscd.nix
   ./services/hardware/pommed.nix
@@ -182,12 +183,15 @@
   ./services/logging/syslogd.nix
   ./services/logging/syslog-ng.nix
   ./services/mail/dovecot.nix
+  ./services/mail/dspam.nix
   ./services/mail/exim.nix
   ./services/mail/freepops.nix
   ./services/mail/mail.nix
   ./services/mail/mlmmj.nix
+  ./services/mail/opendkim.nix
   ./services/mail/opensmtpd.nix
   ./services/mail/postfix.nix
+  ./services/mail/postsrsd.nix
   ./services/mail/spamassassin.nix
   ./services/misc/apache-kafka.nix
   ./services/misc/autofs.nix
@@ -297,6 +301,7 @@
   ./services/networking/firewall.nix
   ./services/networking/flashpolicyd.nix
   ./services/networking/freenet.nix
+  ./services/networking/gale.nix
   ./services/networking/gateone.nix
   ./services/networking/git-daemon.nix
   ./services/networking/gnunet.nix
@@ -330,6 +335,7 @@
   ./services/networking/openfire.nix
   ./services/networking/openntpd.nix
   ./services/networking/openvpn.nix
+  ./services/networking/ostinato.nix
   ./services/networking/polipo.nix
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix

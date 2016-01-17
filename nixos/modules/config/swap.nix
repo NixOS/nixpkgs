@@ -128,6 +128,7 @@ in
             wantedBy = [ "${realDevice'}.swap" ];
             before = [ "${realDevice'}.swap" ];
             path = [ pkgs.utillinux ] ++ optional sw.randomEncryption pkgs.cryptsetup;
+
             script =
               ''
                 ${optionalString (sw.size != null) ''
@@ -145,11 +146,13 @@ in
                   mkswap ${sw.realDevice}
                 ''}
               '';
+
             unitConfig.RequiresMountsFor = [ "${dirOf sw.device}" ];
             unitConfig.DefaultDependencies = false; # needed to prevent a cycle
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = sw.randomEncryption;
-            serviceConfig.ExecStop = optionalString sw.randomEncryption "cryptsetup luksClose ${sw.deviceName}";
+            serviceConfig.ExecStop = optionalString sw.randomEncryption "${pkgs.cryptsetup}/bin/cryptsetup luksClose ${sw.deviceName}";
+            restartIfChanged = false;
           };
 
       in listToAttrs (map createSwapDevice (filter (sw: sw.size != null || sw.randomEncryption) config.swapDevices));

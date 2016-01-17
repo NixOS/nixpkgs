@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE+=" `pkg-config --cflags dbus-glib-1`"
   '';
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false; # missing _gen/future-constants.h
   doCheck = false; # giving up for now
 
   meta = {

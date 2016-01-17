@@ -131,7 +131,8 @@ in
       description = "Apache Tomcat server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
-      serviceConfig.Type = "daemon";
+      serviceConfig.Type = "oneshot";
+      serviceConfig.RemainAfterExit = true;
 
       preStart = ''
         # Create the base directory

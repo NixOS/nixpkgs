@@ -1,0 +1,7 @@
+    buildInputs = [ perl ruby ];
+    buildPhase = ''
+      pushd ruby/command-t
+      ruby extconf.rb
+      make
+      popd
+    '';

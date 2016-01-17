@@ -13,7 +13,6 @@ let
 
   # Map video driver names to driver packages. FIXME: move into card-specific modules.
   knownVideoDrivers = {
-    unichrome    = { modules = [ pkgs.xorgVideoUnichrome ]; };
     virtualbox   = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
     ati = { modules = [ pkgs.xorg.xf86videoati pkgs.xorg.glamoregl ]; };
     intel-testing = { modules = with pkgs.xorg; [ xf86videointel-testing glamoregl ]; driverName = "intel"; };
@@ -503,7 +502,7 @@ in
     systemd.services.display-manager =
       { description = "X11 Server";
 
-        after = [ "systemd-udev-settle.service" "local-fs.target" "acpid.service" ];
+        after = [ "systemd-udev-settle.service" "local-fs.target" "acpid.service" "systemd-logind.service" ];
 
         restartIfChanged = false;
 

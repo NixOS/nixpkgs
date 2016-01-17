@@ -17,11 +17,11 @@ in
 stdenv.mkDerivation rec {
   name = "bluejeans-${version}";
 
-  version = "2.100.102.8";
+  version = "2.125.24.5";
 
   src = fetchurl {
     url = "https://swdl.bluejeans.com/skinny/bjnplugin_${version}-1_amd64.deb";
-    sha256 = "18f8jmhxvqy1yiiwlsssj7rjlfcb41xn16hnl6wv8r8r2mmic4v8";
+    sha256 = "0lxxd7icfqcpg5rb4njkk4ybxmisv4c509yisznxspi49qfxirwq";
   };
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];

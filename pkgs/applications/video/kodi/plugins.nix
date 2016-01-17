@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, kodi, steam, libcec_platform, tinyxml }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, kodi, steam, libcec_platform, tinyxml }:
 
 let
 
@@ -92,17 +92,70 @@ in
 
   };
 
+  urlresolver = (mkKodiPlugin rec {
+
+    plugin = "urlresolver";
+    namespace = "script.module.urlresolver";
+    version = "2.10.0";
+
+    src = fetchFromGitHub {
+      name = plugin + "-" + version + ".tar.gz";
+      owner = "Eldorados";
+      repo = namespace;
+      rev = "72b9d978d90d54bb7a0224a1fd2407143e592984";
+      sha256 = "0r5glfvgy9ri3ar9zdkvix8lalr1kfp22fap2pqp739b6k2iqir6";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/Eldorados/urlresolver";
+      description = "Resolve common video host URL's to be playable in XBMC/Kodi";
+      maintainers = with maintainers; [ edwtjo ];
+    };
+  }).override {
+    patches = [ (fetchpatch {
+      url = https://github.com/Eldorados/script.module.urlresolver/pull/355.patch;
+      sha256 = "0q1n2sqdjqq32202s6ifh81c9a1l5a7yfkkf170dbkiajvxglz1m";
+    }) ];
+  };
+
+  salts = (mkKodiPlugin rec {
+
+    plugin = "salts";
+    namespace = "plugin.video.salts";
+    version = "1.0.98";
+
+    src = fetchFromGitHub {
+      name = plugin + "-" + version + ".tar.gz";
+      owner = "tknorris";
+      repo = plugin;
+      rev = "02cb63360ac1f60c01ec29d1da94902542f9a47a";
+      sha256 = "10cy633g383m1xy6yap46aqzyz96dh62y7c5rn5nvyw8ms18089z";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/tknorris/salts";
+      description = "Stream All The Sources";
+      maintainers = with maintainers; [ edwtjo ];
+    };
+  }).override {
+    patches = [ (fetchpatch {
+      url = https://github.com/tknorris/salts/pull/115.patch;
+      sha256 = "157dhp049mw8lna6cg3x549jv2b9zq1vj6v94mil65q2hlw09sjd";
+    }) ];
+  };
+
   svtplay = mkKodiPlugin rec {
 
     plugin = "svtplay";
     namespace = "plugin.video.svtplay";
-    version = "4.0.18";
+    version = "4.0.21";
 
     src = fetchFromGitHub {
+      name = plugin + "-" + version + ".tar.gz";
       owner = "nilzen";
       repo = "xbmc-" + plugin;
-      rev = "b60cc1164d0077451be935d0d1a26f2d29b0f589";
-      sha256 = "0rdmrgjlzhnrpmhgqvf2947i98s51r0pjbnwrhw67nnqkylss5dj";
+      rev = "1fb099dcddc65e58ca8691d19de657321b1b1fc2";
+      sha256 = "178krh8kzll7cprqwyhydb41b1jh961av875bm5yfdlplzaiynm0";
     };
 
     meta = with stdenv.lib; {
@@ -121,7 +174,7 @@ in
   };
 
   steam-launcher = (mkKodiPlugin rec {
-  
+
     plugin = "steam-launcher";
     namespace = "script.steam.launcher";
     version = "3.1.1";
@@ -147,6 +200,27 @@ in
     };
   }).override {
     propagatedBuildinputs = [ steam ];
+  };
+
+  t0mm0-common = mkKodiPlugin rec {
+
+    plugin = "t0mm0-common";
+    namespace = "script.module.t0mm0.common";
+    version = "0.0.1";
+
+    src = fetchFromGitHub {
+      name = plugin + "-" + version + ".tar.gz";
+      owner = "t0mm0";
+      repo = "xbmc-urlresolver";
+      rev = "ab16933a996a9e77b572953c45e70900c723d6e1";
+      sha256 = "1yd00md8iirizzaiqy6fv1n2snydcpqvp2f9irzfzxxi3i9asb93";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/t0mm0/xbmc-urlresolver/";
+      description = "t0mm0's common stuff";
+      maintainers = with maintainers; [ edwtjo ];
+    };
   };
 
   pvr-hts = (mkKodiPlugin rec {

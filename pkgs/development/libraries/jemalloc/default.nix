@@ -10,7 +10,11 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://www.canonware.com/jemalloc/index.html;
-    description = "a general purpose malloc(3) implementation that emphasizes fragmentation avoidance and scalable concurrency support";
+    description = "General purpose malloc(3) implementation";
+    longDescription = ''
+      malloc(3)-compatible memory allocator that emphasizes fragmentation
+      avoidance and scalable concurrency support.
+    '';
     license = licenses.bsd2;
     platforms = platforms.all;
     maintainers = with maintainers; [ wkennington ];

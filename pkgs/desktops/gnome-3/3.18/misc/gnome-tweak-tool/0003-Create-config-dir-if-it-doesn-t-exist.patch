@@ -1,7 +1,7 @@
-From dea8fc3c37c43f4fbbcc658ee995a95b93452b3c Mon Sep 17 00:00:00 2001
-From: Jascha Geerds <jg@ekby.de>
+From cdafa01dc90da486d0114b423e3e467f7b083d1b Mon Sep 17 00:00:00 2001
+From: Jascha Geerds <jascha@jgeerds.name>
 Date: Sun, 2 Aug 2015 12:01:20 +0200
-Subject: [PATCH 1/1] Create config dir if it doesn't exist
+Subject: [PATCH 3/3] Create config dir if it doesn't exist
 
 Otherwise gnome-tweak-tool can't enable the dark theme and fails
 without a clear error message.
@@ -25,5 +25,5 @@ index bcec9f1..f39991b 100644
              keyfile.load_from_file(self._path, 0)
          except MemoryError:
 -- 
-2.4.5
+2.7.0
 

@@ -10,7 +10,10 @@ in stdenv.mkDerivation rec {
     sha256 = "0yyjzv4161rqxrgjcijkrawnk55rb96ha0pav48s03l2klx855wq";
   };
 
-  patches = [ ./sunrpc.patch ];
+  patches = [
+    ./sunrpc.patch
+    ./0001-handle_reply-Don-t-use-the-xp_auth-pointer-directly.patch
+  ];
 
   buildInputs = [ libtirpc ]
              ++ stdenv.lib.optional useSystemd systemd;

@@ -88,4 +88,11 @@ in {
     sha256 = "0faav7k3nlhh1z7j1r3adrhx1fpsji3jixmm2abjm93fdg350z5q";
   };
 
+  postgresql95 = common {
+    version = "9.5.0";
+    psqlSchema = "9.5";
+    sha256 = "f1c0d3a1a8aa8c92738cab0153fbfffcc4d4158b3fee84f7aa6bfea8283978bc";
+  };
+
+
 }

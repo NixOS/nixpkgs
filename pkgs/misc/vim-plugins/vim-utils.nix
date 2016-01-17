@@ -103,7 +103,7 @@ Then create a temp vim file and insert:
 
 Then ":source %" it.
 
-nix#ExportPluginsForNix is provided by github.com/JagaJaga/vim-addon-vim2nix
+nix#ExportPluginsForNix is provided by ./vim2nix
 
 A buffer will open containing the plugin derivation lines as well list 
 fitting the vimrcConfig.vam.pluginDictionaries option.
@@ -297,7 +297,7 @@ rec {
   pluginnames2Nix = {name, namefiles} : vim_configurable.customize {
     inherit name;
     vimrcConfig.vam.knownPlugins = vimPlugins;
-    vimrcConfig.vam.pluginDictionaries = ["vim-addon-vim2nix"]; # Using fork until patch is accepted by upstream
+    vimrcConfig.vam.pluginDictionaries = ["vim2nix"];
     vimrcConfig.customRC = ''
       " Yes - this is impure and will create the cache file and checkout vim-pi
       " into ~/.vim/vim-addons
