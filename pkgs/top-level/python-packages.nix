@@ -10553,6 +10553,8 @@ in modules // {
       sha256 = "1cd7d3dji8q4mvcnf9asxn8j109pd5g5d5shr6xvn0iwr35qprgi";
     };
 
+    disabled = isPyPy;
+
     buildInputs = with self; [ pyflakes pep8 ];
     propagatedBuildInputs = with self; [
       django_1_6 filebrowser_safe grappelli_safe bleach tzlocal beautifulsoup4
