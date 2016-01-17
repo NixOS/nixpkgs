@@ -46,6 +46,17 @@ rec {
     m2File = "apache-6.pom";
   };
 
+  apacheParent7 = fetchmaven {
+    version = 7;
+    name = "apache-parent";
+    src = fetchurl rec {
+      url = "https://repo1.maven.org/maven2/org/apache/apache/7/apache-7.pom";
+      sha256 = "09bc9gxpi3pnb2gf4jhzfm418s1ks6b79w6v4grckb9knhfwx5qk";
+    };
+    m2Path = "org/apache/apache/7";
+    m2File = "apache-7.pom";
+  };
+
   apacheParent9 = fetchmaven {
     version = 9;
     name = "apache-parent";
@@ -121,6 +132,17 @@ rec {
     };
     m2Path = "org/apache/maven/maven-parent/16";
     m2File = "maven-parent-16.pom";
+  };
+
+  mavenParent17 = fetchmaven {
+    version = 17;
+    name = "maven-parent";
+    src = fetchurl rec {
+      url = "http://svn.apache.org/repos/asf/maven/pom/tags/maven-parent-17/pom.xml";
+      sha256 = "0bzcr59hqqiaivz1pi7vjkfaan5qlc6k2rkhvwi4q28dasajacln";
+    };
+    m2Path = "org/apache/maven/maven-parent/17";
+    m2File = "maven-parent-17.pom";
   };
 
   mavenParent19 = fetchmaven {

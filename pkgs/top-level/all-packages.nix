@@ -4303,7 +4303,11 @@ let
     mavenClean25 = self.mavenPlugins.mavenCleanGen.mavenClean25;
 
     mavenEnforcerGen = callPackage ../development/java-modules/maven-plugins/maven-enforcer-plugin { };
+    mavenEnforcer10 = self.mavenPlugins.mavenEnforcerGen.mavenEnforcer10;
     mavenEnforcer101 = self.mavenPlugins.mavenEnforcerGen.mavenEnforcer101;
+
+    mavenInstallGen = callPackage ../development/java-modules/maven-plugins/maven-install-plugin { };
+    mavenInstall231 = self.mavenPlugins.mavenInstallGen.mavenInstall231;
 
     mavenRemoteResourcesGen = callPackage ../development/java-modules/maven-plugins/maven-remote-resources-plugin { };
     mavenRemoteResources10 = self.mavenPlugins.mavenRemoteResourcesGen.mavenRemoteResources10;
