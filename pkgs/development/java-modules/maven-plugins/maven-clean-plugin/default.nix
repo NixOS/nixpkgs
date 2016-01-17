@@ -24,7 +24,7 @@ rec {
       rev = 1724719;
       sha256 = "1cq1cy6jwc89k3wr3gnpvgxh8rvslssk5bm28wbb1i5cydfk6rid";
     };
-    mavenDeps = [  apacheParent9 apacheParent10 mavenEnforcer101 mavenParent19 mavenPlugins19 mavenParent21 mavenPlugins22 mavenRemoteResources121Jar mavenRemoteResources121Pom ];
+    mavenDeps = [  apacheParent9 apacheParent10 mavenEnforcer101 mavenParent19 mavenPlugins19 mavenParent21 mavenPlugins22 bootstrapMavenRemoteResources121Jar bootstrapMavenRemoteResources121Pom ];
     m2Path = "/org/apache/maven/plugins/maven-clean-plugin/2.5";
   };
 }

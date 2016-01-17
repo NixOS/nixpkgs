@@ -24,7 +24,7 @@ rec {
       rev = 1724719;
       sha256 = "0q4sm09vgvavf2ylhdsw9bn9ihmi5l1wv0hz9n8riiar5g0w960a";
     };
-    mavenDeps = [ apacheParent6 apacheParent7 apacheParent9 mavenEnforcer10Jar mavenEnforcer10Pom mavenEnforcerParent10Pom mavenParent13 mavenParent16 mavenParent17 mavenPlugins14 mavenPlugins18 mavenRemoteResources11Pom mavenRemoteResources11Jar ];
+    mavenDeps = [ apacheParent6 apacheParent7 apacheParent9 bootstrapMavenEnforcer10Jar bootstrapMavenEnforcer10Pom mavenEnforcerParent10Pom mavenParent13 mavenParent16 mavenParent17 mavenPlugins14 mavenPlugins18 bootstrapMavenRemoteResources11Pom bootstrapMavenRemoteResources11Jar ];
     m2Path = "/org/apache/maven/plugins/maven-site-plugin/3.0-beta-3";
   };
 }

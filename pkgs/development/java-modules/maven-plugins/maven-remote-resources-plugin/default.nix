@@ -24,7 +24,7 @@ rec {
       rev = 1723938;
       sha256 = "1ri6bv79hvhdza6b5973gzw149rx611wcjvyvmz5n7ixkz9bplfa";
     };
-    mavenDeps = [ apacheParent4 mavenParent5 mavenPlugins8 mavenRemoteResourcesAlpha6Jar modelloMavenPlugin10Alpha15 ];
+    mavenDeps = [ apacheParent4 mavenParent5 mavenPlugins8 bootstrapMavenRemoteResourcesAlpha6Jar modelloMavenPlugin10Alpha15 ];
     m2Path = "/org/apache/maven/plugins/maven-remote-resources-plugin/1.0-alpha-6";
   };
 

@@ -24,7 +24,7 @@ rec {
       rev = 1724719;
       sha256 = "0xi565jf7jv9iymna0ps8rqgswfb4fx3fmf9smwd0ynl0c8050q2";
     };
-    mavenDeps = [ apacheParent6 apacheParent9 mavenEnforcer10Pom mavenEnforcer10 mavenParent13 mavenParent16 mavenPlugins14 mavenPlugins18 mavenRemoteResources11Pom mavenRemoteResources11Jar ];
+    mavenDeps = [ apacheParent6 apacheParent9 bootstrapMavenEnforcer10Pom mavenEnforcer10 mavenParent13 mavenParent16 mavenPlugins14 mavenPlugins18 bootstrapMavenRemoteResources11Pom bootstrapMavenRemoteResources11Jar ];
     m2Path = "/org/apache/maven/plugins/maven-install-plugin/2.3.1";
   };
 }
