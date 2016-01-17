@@ -475,10 +475,6 @@ let
 
   _9pfs = callPackage ../tools/filesystems/9pfs { };
 
-  "3dfsb" = callPackage ../applications/misc/3dfsb {
-    glibc = glibc.override { debugSymbols = true; };
-  };
-
   a2ps = callPackage ../tools/text/a2ps { };
 
   abduco = callPackage ../tools/misc/abduco { };
