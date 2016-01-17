@@ -664,7 +664,7 @@ can configure the environment variables
 
 in their `~/.bashrc` file to avoid the compiler error.
 
-### Using Stack together with Nix
+### Builds using Stack complain about missing system libraries
 
     --  While building package zlib-0.5.4.2 using:
       runhaskell -package=Cabal-1.22.4.0 -clear-package-db [... lots of flags ...]
@@ -692,13 +692,16 @@ means specific to Stack: you'll have that problem with any other
 Haskell package that's built inside of nix-shell but run outside of that
 environment.
 
-I suppose we could try to remedy the issue by wrapping `stack` or
-`cabal` with a script that tries to find those kind of implicit search
-paths and makes them explicit on the "cabal configure" command line. I
-don't think anyone is working on that subject yet, though, because the
-problem doesn't seem so bad in practice.
+You can remedy this issue in several ways. The easiest is to add a `nix` section
+to the `stack.yaml` like the following:
 
-You can remedy that issue in several ways. First of all, run
+    nix:
+      enable: true
+	  packages: [ zlib ]
+
+Stack's Nix support knows to add `${zlib}/lib` and `${zlib}/include` as an
+`--extra-lib-dirs` and `extra-include-dirs`, respectively. Alternatively, you
+can achieve the same effect by hand. First of all, run
 
     $ nix-build --no-out-link "<nixpkgs>" -A zlib
     /nix/store/alsvwzkiw4b7ip38l4nlfjijdvg3fvzn-zlib-1.2.8
@@ -722,7 +725,8 @@ to find out the store path of the system's zlib library. Now, you can
    Typically, you'll need --extra-include-dirs as well. It's possible
    to add those flag to the project's "stack.yaml" or your user's
    global "~/.stack/global/stack.yaml" file so that you don't have to
-   specify them manually every time.
+   specify them manually every time. But again, you're likely better off using
+   Stack's Nix support instead.
 
    The same thing applies to `cabal configure`, of course, if you're
    building with `cabal-install` instead of Stack.
