@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  inherit (pkgs) cups cups-pk-helper cups_filters;
+  inherit (pkgs) cups cups-pk-helper cups_filters gutenprint;
 
   cfg = config.services.printing;
 
@@ -35,6 +35,7 @@ let
     name = "cups-progs";
     paths =
       [ cups additionalBackends cups_filters pkgs.ghostscript ]
+      ++ optional cfg.gutenprint gutenprint
       ++ cfg.drivers;
     pathsToLink = [ "/lib/cups" "/share/cups" "/bin" "/etc/cups" ];
     postBuild = cfg.bindirCmds;
@@ -176,6 +177,15 @@ in
         '';
       };
 
+      gutenprint = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to enable Gutenprint drivers for CUPS. This includes auto-updating
+          Gutenprint PPD files.
+        '';
+      };
+
       drivers = mkOption {
         type = types.listOf types.path;
         default = [];
@@ -240,6 +250,9 @@ in
             mkdir -m 0700 -p /var/cache/cups
             mkdir -m 0700 -p /var/spool/cups
             mkdir -m 0755 -p ${cfg.tempDir}
+            ${optionalString cfg.gutenprint ''
+              ${gutenprint}/bin/cups-genppdupdate
+            ''}
           '';
 
         restartTriggers =
