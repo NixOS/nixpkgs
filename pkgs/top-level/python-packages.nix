@@ -6347,6 +6347,26 @@ in modules // {
     };
   };
 
+  python-axolotl = buildPythonPackage rec {
+    name = "python-axolotl-${version}";
+    version = "0.1.7";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-axolotl/${name}.tar.gz";
+      sha256 = "1i3id1mjl67n4sca31s5zwq96kswgsi6lga6np83ayb45rxggvhx";
+    };
+
+    propagatedBuildInputs = with self; [ python-axolotl-curve25519 protobuf pycrypto ];
+
+    meta = {
+      homepage = https://github.com/tgalal/python-axolotl;
+      description = "Python port of libaxolotl-android";
+      maintainers = with maintainers; [ abbradar ];
+      license = licenses.gpl3;
+      platform = platforms.all;
+    };
+  };
+
   python-axolotl-curve25519 = buildPythonPackage rec {
     name = "python-axolotl-curve25519-${version}";
     version = "0.1";
