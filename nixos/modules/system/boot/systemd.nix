@@ -61,6 +61,8 @@ let
       "systemd-user-sessions.service"
       "dbus-org.freedesktop.login1.service"
       "dbus-org.freedesktop.machine1.service"
+      "org.freedesktop.login1.busname"
+      "org.freedesktop.machine1.busname"
       "user@.service"
 
       # Journal.
@@ -147,10 +149,14 @@ let
       "systemd-tmpfiles-setup-dev.service"
 
       # Misc.
+      "org.freedesktop.systemd1.busname"
       "systemd-sysctl.service"
       "dbus-org.freedesktop.timedate1.service"
       "dbus-org.freedesktop.locale1.service"
       "dbus-org.freedesktop.hostname1.service"
+      "org.freedesktop.timedate1.busname"
+      "org.freedesktop.locale1.busname"
+      "org.freedesktop.hostname1.busname"
       "systemd-timedated.service"
       "systemd-localed.service"
       "systemd-hostnamed.service"
