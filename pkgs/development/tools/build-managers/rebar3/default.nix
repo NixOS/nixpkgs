@@ -81,8 +81,7 @@ stdenv.mkDerivation {
   patches = [ ./hermetic-bootstrap.patch ];
 
   buildInputs = [ erlang tree  ];
-  propagatedBuildInputs = [ registrySnapshot  rebar3-nix-bootstrap ];
-
+  propagatedBuildInputs = [ registrySnapshot rebar3-nix-bootstrap ];
 
   postPatch = ''
     echo postPatch
