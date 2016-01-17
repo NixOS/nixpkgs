@@ -21,7 +21,10 @@
 (defun elpa2nix-install-file (file)
   "Install a package from a file.
 The file can either be a tar file or an Emacs Lisp file."
-  (with-temp-buffer
-    (insert-file-contents-literally file)
-    (when (string-match "\\.tar\\'" file) (tar-mode))
-    (elpa2nix-install-from-buffer)))
+  (let ((is-tar (string-match "\\.tar\\'" file)))
+    (with-temp-buffer
+      (if is-tar
+          (insert-file-contents-literally file)
+        (insert-file-contents file))
+      (when is-tar (tar-mode))
+      (elpa2nix-install-from-buffer))))
