@@ -7430,6 +7430,8 @@ in
   };
   libkrb5 = self.krb5Full.override { type = "lib"; };
 
+  lasso = callPackage ../development/libraries/lasso { };  
+
   LASzip = callPackage ../development/libraries/LASzip { };
 
   lcms = self.lcms1;
