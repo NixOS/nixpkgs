@@ -5,9 +5,6 @@
 
 # Pass PATH/LD_LIBRARY_PATH to point to current mpirun by default
 , enablePrefix ? false
-
-# Build static libraries
-, enableStatic ? false
 }:
 
 with stdenv.lib;
@@ -30,7 +27,6 @@ in stdenv.mkDerivation rec {
   configureFlags = []
     ++ optional enableSGE "--with-sge"
     ++ optional enablePrefix "--enable-mpirun-prefix-by-default"
-    ++ optional enableStatic "--enable-static"
     ;
 
   enableParallelBuilding = true;
