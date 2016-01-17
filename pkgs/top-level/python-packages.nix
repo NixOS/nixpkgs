@@ -17544,6 +17544,23 @@ in modules // {
     };
   };
 
+  ruamel_ordereddict = buildPythonPackage rec {
+    name = "ruamel.ordereddict-${version}";
+    version = "0.4.9";
+    disabled = isPy3k || isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/ruamel.ordereddict/${name}.tar.gz";
+      sha256 = "1xmkl8v9l9inm2pyxgc1fm5005yxm7fkd5gv74q7lj1iy5qc8n3h";
+    };
+
+    meta = {
+      description = "a version of dict that keeps keys in insertion resp. sorted order";
+      homepage = https://bitbucket.org/ruamel/ordereddict;
+      license = licenses.mit;
+    };
+  };
+
   ruamel_yaml = buildPythonPackage rec {
     name = "ruamel.yaml-${version}";
     version = "0.10.13";
