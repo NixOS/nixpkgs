@@ -1923,6 +1923,27 @@ in modules // {
   };
 
 
+  binaryornot = buildPythonPackage rec {
+    name = "binaryornot-${version}";
+    version = "0.4.0";
+
+    src = pkgs.fetchurl {
+      url ="https://pypi.python.org/packages/source/b/binaryornot/${name}.tar.gz";
+      sha256 = "1j4f51dxic39mdwf6alj7gd769wy6mhk916v031wjali51xkh3xb";
+    };
+
+    buildInputs = with self; [ hypothesis sqlite3 ];
+
+    propagatedBuildInputs = with self; [ chardet ];
+
+    meta = {
+      homepage = https://github.com/audreyr/binaryornot;
+      description = "Ultra-lightweight pure Python package to check if a file is binary or text";
+      license = licenses.bsd3;
+    };
+  };
+
+
   bitbucket_api = buildPythonPackage rec {
     name = "bitbucket-api-0.4.4";
 
@@ -3127,6 +3148,30 @@ in modules // {
     src = pkgs.fetchurl rec {
       url = "https://pypi.python.org/packages/source/c/contextlib2/${name}.tar.gz";
       md5 = "ea687207db25f65552061db4a2c6727d";
+    };
+  };
+
+  cookiecutter = buildPythonPackage rec {
+    version = "1.3.0";
+    name = "cookiecutter-${version}";
+
+    # dependency problems, next release of cookiecutter should unblock these
+    disabled = isPy3k || isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/audreyr/cookiecutter/archive/${version}.tar.gz";
+      sha256 = "1vchjvh7591nczz2zz55aghk9mhpm6kqgm62d05d4mjrx9xjkdcg";
+    };
+
+    buildInputs = with self; [ itsdangerous  ];
+    propagatedBuildInputs = with self; [
+          jinja2 future binaryornot click whichcraft ruamel_yaml ];
+
+    meta = {
+      homepage = https://github.com/audreyr/cookiecutter;
+      description = "A command-line utility that creates projects from project templates";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ kragniz ];
     };
   };
 
@@ -7223,15 +7268,15 @@ in modules // {
   };
 
   chardet = buildPythonPackage rec {
-    name = "chardet-2.1.1";
+    name = "chardet-2.3.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/c/chardet/${name}.tar.gz";
-      md5 = "295367fd210d20f3febda615a88e1ef0";
+      md5 = "25274d664ccb5130adae08047416e1a8";
     };
 
     meta = {
-      homepage = https://github.com/erikrose/chardet;
+      homepage = https://github.com/chardet/chardet;
       description = "Universal encoding detector";
       license = licenses.lgpl2;
       maintainers = with maintainers; [ iElectric ];
@@ -8528,12 +8573,12 @@ in modules // {
   };
 
   future = buildPythonPackage rec {
-    version = "0.14.3";
+    version = "0.15.2";
     name = "future-${version}";
 
     src = pkgs.fetchurl {
       url = "http://github.com/PythonCharmers/python-future/archive/v${version}.tar.gz";
-      sha256 = "0hgp9kq7h4ipw8ax5xvvkyh3bkqw361d3rndvb9xix01h9j9mi3p";
+      sha256 = "0vm61j5br6jiry6pgcxnwvxhki8ksnirp7k9mcbmxmgib3r60xd3";
     };
 
     propagatedBuildInputs = with self; optionals isPy26 [ importlib argparse ];
@@ -17523,6 +17568,57 @@ in modules // {
     };
   };
 
+  ruamel_base = buildPythonPackage rec {
+    name = "ruamel.base-${version}";
+    version = "1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/ruamel.base/${name}.tar.gz";
+      sha256 = "1wswxrn4givsm917mfl39rafgadimf1sldpbjdjws00g1wx36hf0";
+    };
+
+    meta = {
+      description = "common routines for ruamel packages";
+      homepage = https://bitbucket.org/ruamel/base;
+      license = licenses.mit;
+    };
+  };
+
+  ruamel_ordereddict = buildPythonPackage rec {
+    name = "ruamel.ordereddict-${version}";
+    version = "0.4.9";
+    disabled = isPy3k || isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/ruamel.ordereddict/${name}.tar.gz";
+      sha256 = "1xmkl8v9l9inm2pyxgc1fm5005yxm7fkd5gv74q7lj1iy5qc8n3h";
+    };
+
+    meta = {
+      description = "a version of dict that keeps keys in insertion resp. sorted order";
+      homepage = https://bitbucket.org/ruamel/ordereddict;
+      license = licenses.mit;
+    };
+  };
+
+  ruamel_yaml = buildPythonPackage rec {
+    name = "ruamel.yaml-${version}";
+    version = "0.10.13";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/ruamel.yaml/${name}.tar.gz";
+      sha256 = "0r9mn5lm9dcxpy0wpn18cp7i5hkvjvknv3dxg8d9ca6km39m4asn";
+    };
+
+    propagatedBuildInputs = with self; [ ruamel_base ruamel_ordereddict ];
+
+    meta = {
+      description = "YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order";
+      homepage = https://bitbucket.org/ruamel/yaml;
+      license = licenses.mit;
+    };
+  };
+
   runsnakerun = buildPythonPackage rec {
     name = "runsnakerun-2.0.4";
 
@@ -21736,6 +21832,24 @@ in modules // {
       platforms = platforms.all;
     };
   };
+
+
+  whichcraft = buildPythonPackage rec {
+    name = "whichcraft-${version}";
+    version = "0.1.1";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/pydanny/whichcraft/archive/${version}.tar.gz";
+      sha256 = "1xqp66knzlb01k30qic40vzwl51jmlsb8r96iv60m2ca6623abbv";
+    };
+
+    meta = {
+      homepage = https://github.com/pydanny/whichcraft;
+      description = "Cross-platform cross-python shutil.which functionality";
+      license = licenses.bsd3;
+    };
+  };
+
 
   whisper = buildPythonPackage rec {
     name = "whisper-${version}";
