@@ -42,6 +42,52 @@ let
     ignoreCollisions = true;
   };
 
+  writeConf = name: text: pkgs.writeTextFile {
+    inherit name text;
+    destination = "/etc/cups/${name}";
+  };
+
+  cupsFilesFile = writeConf "cups-files.conf" ''
+    SystemGroup root wheel
+
+    ServerBin ${bindir}/lib/cups
+    DataDir ${bindir}/share/cups
+
+    AccessLog syslog
+    ErrorLog syslog
+    PageLog syslog
+
+    TempDir ${cfg.tempDir}
+
+    # User and group used to run external programs, including
+    # those that actually send the job to the printer.  Note that
+    # Udev sets the group of printer devices to `lp', so we want
+    # these programs to run as `lp' as well.
+    User cups
+    Group lp
+
+    ${cfg.extraFilesConf}
+  '';
+
+  cupsdFile = writeConf "cupsd.conf" ''
+    ${concatMapStrings (addr: ''
+      Listen ${addr}
+    '') cfg.listenAddresses}
+    Listen /var/run/cups/cups.sock
+
+    SetEnv PATH ${bindir}/lib/cups/filter:${bindir}/bin
+
+    DefaultShared ${if cfg.defaultShared then "Yes" else "No"}
+
+    Browsing ${if cfg.browsing then "Yes" else "No"}
+
+    WebInterface ${if cfg.webInterface then "Yes" else "No"}
+
+    ${cfg.extraConf}
+  '';
+
+  browsedFile = writeConf "cups-browsed.conf" cfg.browsedConf;
+
 in
 
 {
@@ -102,25 +148,11 @@ in
         '';
       };
 
-      cupsdConf = mkOption {
-        type = types.lines;
-        default = "";
-        example =
-          ''
-            BrowsePoll cups.example.com
-            LogLevel debug
-          '';
-        description = ''
-          The contents of the configuration file of the CUPS daemon
-          (<filename>cupsd.conf</filename>).
-        '';
-      };
-
-      cupsFilesConf = mkOption {
+      extraFilesConf = mkOption {
         type = types.lines;
         default = "";
         description = ''
-          The contents of the configuration file of the CUPS daemon
+          Extra contents of the configuration file of the CUPS daemon
           (<filename>cups-files.conf</filename>).
         '';
       };
@@ -223,9 +255,9 @@ in
     environment.systemPackages = [ cups ] ++ optional polkitEnabled cups-pk-helper;
 
     environment.etc."cups/client.conf".text = cfg.clientConf;
-    environment.etc."cups/cups-files.conf".text = cfg.cupsFilesConf;
-    environment.etc."cups/cupsd.conf".text = cfg.cupsdConf;
-    environment.etc."cups/cups-browsed.conf".text = cfg.browsedConf;
+    environment.etc."cups/cups-files.conf".source = cupsFilesFile;
+    environment.etc."cups/cupsd.conf".source = cupsdFile;
+    environment.etc."cups/cups-browsed.conf".source = browsedFile;
     environment.etc."cups/snmp.conf".text = cfg.snmpConf;
 
     services.dbus.packages = [ cups ] ++ optional polkitEnabled cups-pk-helper;
@@ -274,48 +306,12 @@ in
 
         serviceConfig.ExecStart = "${cups_filters}/bin/cups-browsed";
 
-        restartTriggers =
-          [ config.environment.etc."cups/cups-browsed.conf".source
-          ];
+        restartTriggers = [ browsedFile ];
       };
 
-    services.printing.cupsFilesConf =
-      ''
-        SystemGroup root wheel
-
-        ServerBin ${bindir}/lib/cups
-        DataDir ${bindir}/share/cups
-
-        AccessLog syslog
-        ErrorLog syslog
-        PageLog syslog
-
-        TempDir ${cfg.tempDir}
-
-        # User and group used to run external programs, including
-        # those that actually send the job to the printer.  Note that
-        # Udev sets the group of printer devices to `lp', so we want
-        # these programs to run as `lp' as well.
-        User cups
-        Group lp
-      '';
-
-    services.printing.cupsdConf =
+    services.printing.extraConf =
       ''
         LogLevel info
-
-        ${concatMapStrings (addr: ''
-          Listen ${addr}
-        '') cfg.listenAddresses}
-        Listen /var/run/cups/cups.sock
-
-        SetEnv PATH ${bindir}/lib/cups/filter:${bindir}/bin:${bindir}/sbin
-
-        DefaultShared ${if cfg.defaultShared then "Yes" else "No"}
-
-        Browsing ${if cfg.browsing then "Yes" else "No"}
-
-        WebInterface ${if cfg.webInterface then "Yes" else "No"}
 
         DefaultAuthType Basic
 
@@ -357,8 +353,6 @@ in
             Order deny,allow
           </Limit>
         </Policy>
-
-        ${cfg.extraConf}
       '';
 
     security.pam.services.cups = {};

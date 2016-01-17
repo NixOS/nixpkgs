@@ -99,6 +99,8 @@ with lib;
     (mkRemovedOptionModule [ "services" "syslog-ng" "listenToJournal" ])
     (mkRemovedOptionModule [ "ec2" "metadata" ])
     (mkRemovedOptionModule [ "services" "openvpn" "enable" ])
+    (mkRemovedOptionModule [ "services" "printing" "cupsFilesConf" ])
+    (mkRemovedOptionModule [ "services" "printing" "cupsdConf" ])
 
   ];
 }
