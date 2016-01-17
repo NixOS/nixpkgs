@@ -17544,6 +17544,22 @@ in modules // {
     };
   };
 
+  ruamel_base = buildPythonPackage rec {
+    name = "ruamel.base-${version}";
+    version = "1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/ruamel.base/${name}.tar.gz";
+      sha256 = "1wswxrn4givsm917mfl39rafgadimf1sldpbjdjws00g1wx36hf0";
+    };
+
+    meta = {
+      description = "common routines for ruamel packages";
+      homepage = https://bitbucket.org/ruamel/base;
+      license = licenses.mit;
+    };
+  };
+
   ruamel_ordereddict = buildPythonPackage rec {
     name = "ruamel.ordereddict-${version}";
     version = "0.4.9";
