@@ -1,21 +1,19 @@
-{ stdenv, pythonPackages, fetchFromGitHub, makeWrapper, pandoc
+{ stdenv, pythonPackages, fetchurl, makeWrapper, pandoc
 , coreutils, iptables, nettools, openssh, procps }:
   
 pythonPackages.buildPythonPackage rec {
-  version = "0.74";
+  version = "0.76";
   name = "sshuttle-${version}";
 
-  src = fetchFromGitHub {
-    sha256 = "1mx440wb1clis97nvgx67am9qssa3v11nb9irjzhnx44ygadhfcp";
-    rev = "v${version}";
-    repo = "sshuttle";
-    owner = "sshuttle";
+  src = fetchurl {
+    sha256 = "1q0hr0vhdvv23cw5dqndsmf61283mvs6b14662ci00xj6zp5v48b";
+    url = "https://pypi.python.org/packages/source/s/sshuttle/${name}.tar.gz";
   };
 
   patches = [ ./sudo.patch ];
 
   propagatedBuildInputs = with pythonPackages; [ PyXAPI mock pytest ];
-  nativeBuildInputs = [ makeWrapper pandoc ];
+  nativeBuildInputs = [ makeWrapper pandoc pythonPackages.setuptools_scm ];
   buildInputs =
     [ coreutils openssh ] ++
     stdenv.lib.optionals stdenv.isLinux [ iptables nettools procps ];
@@ -29,7 +27,7 @@ pythonPackages.buildPythonPackage rec {
   
   meta = with stdenv.lib; {
     inherit version;
-    inherit (src.meta) homepage;
+    homepage = https://github.com/sshuttle/sshuttle/;
     description = "Transparent proxy server that works as a poor man's VPN";
     longDescription = ''
       Forward connections over SSH, without requiring administrator access to the
