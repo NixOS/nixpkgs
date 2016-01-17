@@ -7252,7 +7252,7 @@ in modules // {
     };
 
     meta = {
-      homepage = https://github.com/erikrose/chardet;
+      homepage = https://github.com/chardet/chardet;
       description = "Universal encoding detector";
       license = licenses.lgpl2;
       maintainers = with maintainers; [ iElectric ];
