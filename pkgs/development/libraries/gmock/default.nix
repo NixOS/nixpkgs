@@ -1,11 +1,13 @@
-{ stdenv, cmake, callPackage }:
-let
-  source = callPackage ./source.nix { };
-in
-stdenv.mkDerivation rec {
-  name = "gmock-${source.version}";
+{ stdenv, cmake, fetchzip }:
 
-  src = source;
+stdenv.mkDerivation rec {
+  name = "gmock-${version}";
+  version = "1.7.0";
+
+  src = fetchzip {
+    url = "https://googlemock.googlecode.com/files/gmock-${version}.zip";
+    sha256 = "04n9p6pf3mrqsabrsncv32d3fqvd86zmcdq3gyni7liszgfk0paz";
+  };
 
   buildInputs = [ cmake ];
 
@@ -28,5 +30,5 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.auntie ];
   };
 
-  passthru = { inherit source; };
+  passthru = { source = src; };
 }
