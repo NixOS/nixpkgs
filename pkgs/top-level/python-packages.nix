@@ -13788,6 +13788,25 @@ in modules // {
     propagatedBuildInputs = [self.numpy];
   };
 
+  paho-mqtt = buildPythonPackage rec {
+    name = "paho-mqtt-${version}";
+    version = "1.1";
+
+    disabled = isPyPy || isPy26;
+
+    src = pkgs.fetchurl {
+        url = "https://pypi.python.org/packages/source/p/paho-mqtt/${name}.tar.gz";
+        sha256 = "07i6k9mw66kgbvjgsrcsd2sjji9ckym50dcxnmhjqfkfzsg64yhg";
+    };
+
+    meta = {
+      homepage = "https://eclipse.org/paho/";
+      description = "mqtt library for machine to machine and internet of things";
+      license = licenses.epl10;
+      maintainers = with maintainers; [ mog ];
+    };
+  };
+
   parsedatetime = buildPythonPackage rec {
     name = "parsedatetime-${version}";
     version = "1.4";
