@@ -88,17 +88,13 @@ let
 
   # Handle assertions
 
-  failed = map (x: x.message) (filter (x: !x.assertion) config.assertions);
-
-  showWarnings = res: fold (w: x: builtins.trace "[1;31mwarning: ${w}[0m" x) res config.warnings;
-
   # Putting it all together.  This builds a store path containing
   # symlinks to the various parts of the built configuration (the
   # kernel, systemd units, init scripts, etc.) as well as a script
   # `switch-to-configuration' that activates the configuration and
   # makes it bootable.
-  baseSystem = showWarnings (
-    if [] == failed then pkgs.stdenv.mkDerivation {
+  baseSystem = config.handle-assertions "" (
+    pkgs.stdenv.mkDerivation {
       name = let hn = config.networking.hostName;
                  nn = if (hn != "") then hn else "unnamed";
           in "nixos-system-${nn}-${config.system.nixosLabel}";
@@ -121,7 +117,7 @@ let
 
       # Needed by switch-to-configuration.
       perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
-  } else throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failed)}");
+  });
 
   # Replace runtime dependencies
   system = fold ({ oldDependency, newDependency }: drv:
