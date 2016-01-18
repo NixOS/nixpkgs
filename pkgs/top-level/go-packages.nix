@@ -3361,6 +3361,23 @@ let
     sha256 = "0gljdfxqc94yb1kpqqrm5p94ph9dsxrzcixhdj6m92cwwa7z7p99";
   };
 
+  xmpp-client = buildFromGitHub {
+    rev      = "525bd26cf5f56ec5aee99464714fd1d019c119ff";
+    date     = "2016-01-10";
+    owner    = "agl";
+    repo     = "xmpp-client";
+    sha256   = "0a1r08zs723ikcskmn6ylkdi3frcd0i0lkx30i9q39ilf734v253";
+    disabled = isGo14;
+    buildInputs = [ crypto net ];
+
+    meta = with stdenv.lib; {
+      description = "An XMPP client with OTR support";
+      homepage = https://github.com/agl/xmpp-client;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ codsl ];
+    };
+  };
+
   yaml-v1 = buildGoPackage rec {
     name = "yaml-v1-${version}";
     version = "git-2015-05-01";

@@ -13034,6 +13034,8 @@ let
 
   RhythmDelay = callPackage ../applications/audio/RhythmDelay { };
 
+  ricochet = qt5.callPackage ../applications/networking/instant-messengers/ricochet { };
+
   rkt = callPackage ../applications/virtualization/rkt { };
 
   rofi = callPackage ../applications/misc/rofi {
@@ -13860,6 +13862,8 @@ let
     gnome2_panel = gnome2.gnome_panel;
     GConf2 = gnome2.GConf;
   };
+
+  xmpp-client = go15Packages.xmpp-client.bin // { outputs = [ "bin" ]; };
 
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
