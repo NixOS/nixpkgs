@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, boost, pkgconfig, libtool, acl, libxml2, btrfs-progs, dbus_libs, docbook_xsl, libxslt, docbook_xml_dtd_45,  diffutils, pam, utillinux, attr, gettext }:
+{ stdenv, fetchFromGitHub
+, autoreconfHook, diffutils, pkgconfig, docbook_xsl, libxml2, libxslt, docbook_xml_dtd_45
+, acl, attr, boost, btrfs-progs, dbus_libs, pam, utillinux }:
 
 stdenv.mkDerivation rec {
   name = "snapper-${ver}";
@@ -11,7 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "1rj8vy6hq140pbnc7mjjb34mfqdgdah1dmlv2073izdgakh7p38j";
   };
 
-  buildInputs = [ autoconf automake boost pkgconfig libtool acl libxml2 btrfs-progs dbus_libs docbook_xsl libxslt docbook_xml_dtd_45 diffutils pam utillinux attr gettext ];
+  buildInputs = [
+    acl attr boost btrfs-progs dbus_libs pam utillinux
+  ];
+  nativeBuildInputs = [
+    autoreconfHook diffutils pkgconfig
+    docbook_xsl libxml2 libxslt docbook_xml_dtd_45
+  ];
 
   patchPhase = ''
     # work around missing btrfs/version.h; otherwise, use "-DHAVE_BTRFS_VERSION_H"
@@ -23,12 +31,6 @@ stdenv.mkDerivation rec {
     '';
 
   configurePhase = ''
-    aclocal
-    libtoolize --force --automake --copy
-    autoheader
-    automake --add-missing --copy
-    autoconf
-
     ./configure --disable-silent-rules --disable-ext4 --disable-btrfs-quota --prefix=$out
     '';
 
