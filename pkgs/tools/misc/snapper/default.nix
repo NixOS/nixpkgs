@@ -24,11 +24,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     # work around missing btrfs/version.h; otherwise, use "-DHAVE_BTRFS_VERSION_H"
     substituteInPlace snapper/Btrfs.cc --replace "define BTRFS_LIB_VERSION (100)" "define BTRFS_LIB_VERSION (200)";
-    # fix strange SuSE boost naming
-    substituteInPlace snapper/Makefile.am --replace \
-      "libsnapper_la_LIBADD = -lboost_thread-mt -lboost_system-mt -lxml2 -lacl -lz -lm" \
-      "libsnapper_la_LIBADD = -lboost_thread -lboost_system -lxml2 -lacl -lz -lm";
-    '';
+  '';
 
   configurePhase = ''
     ./configure --disable-silent-rules --disable-ext4 --disable-btrfs-quota --prefix=$out
