@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "0j2kvxfb5pd9abciv161nkcsyam6n8kfqs8ymwj2mxiqflwbmfl1";
   };
 
-  buildInputs = [ cmake makeWrapper qtbase qttools exiv2 graphicsmagick ];
+  buildInputs = [
+    cmake makeWrapper qtbase qtquickcontrols qttools exiv2 graphicsmagick
+  ];
 
   preConfigure = ''
     export MAGICK_LOCATION="${graphicsmagick}/include/GraphicsMagick"
