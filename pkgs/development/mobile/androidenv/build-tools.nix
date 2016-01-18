@@ -18,10 +18,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/build-tools
     cd $out/build-tools
     unzip $src
+    mv android-* ${version}
     
     ${stdenv.lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
       ''
-        cd android-*
+        cd ${version}
         
         # Patch the interpreter
         for i in aapt aidl bcc_compat dexdump llvm-rs-cc
