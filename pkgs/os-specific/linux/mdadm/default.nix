@@ -1,5 +1,7 @@
 { stdenv, fetchurl, groff }:
 
+assert stdenv.isLinux;
+
 stdenv.mkDerivation rec {
   name = "mdadm-3.3.4";
 
