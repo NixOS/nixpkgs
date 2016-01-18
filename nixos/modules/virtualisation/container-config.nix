@@ -19,6 +19,9 @@ with lib;
     # Shut up warnings about not having a boot loader.
     system.build.installBootLoader = "${pkgs.coreutils}/bin/true";
 
+    # Not supported in systemd-nspawn containers.
+    security.audit.enable = false;
+
   };
 
 }

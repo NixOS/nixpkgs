@@ -93,8 +93,10 @@ in {
 
   config = mkIf (cfg.enable == "lock" || cfg.enable) {
     systemd.services.audit = {
-      description = "pseudo-service representing the kernel audit state";
+      description = "Kernel Auditing";
       wantedBy = [ "basic.target" ];
+
+      unitConfig.ConditionVirtualization = "!container";
 
       path = [ pkgs.audit ];
 
