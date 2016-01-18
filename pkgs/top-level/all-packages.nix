@@ -13357,9 +13357,8 @@ let
   };
 
   termite = callPackage ../applications/misc/termite {
-    gtk = gtk3;
     vte = gnome3.vte-select-text;
-   };
+  };
 
   tesseract = callPackage ../applications/graphics/tesseract { };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, vte, gtk, ncurses }:
+{ stdenv, fetchgit, pkgconfig, vte, gtk3, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "termite-${version}";
@@ -10,11 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "107v59x8q2m1cx1x3i5ciibw4nl1qbq7p58bfw0irkhp7sl7kjk2";
   };
 
-  makeFlags = "VERSION=v${version}";
+  makeFlags = [ "VERSION=v${version}" "PREFIX=$(out)" ];
 
-  buildInputs = [pkgconfig vte gtk ncurses];
-
-  installFlags = "PREFIX=$(out)";
+  buildInputs = [ pkgconfig vte gtk3 ncurses ];
 
   meta = with stdenv.lib; {
     description = "A simple VTE-based terminal";
