@@ -13,46 +13,17 @@ To update the list of packages from ELPA,
 
 { fetchurl, lib, stdenv, texinfo }:
 
-let
-
-  inherit (lib) makeScope mapAttrs;
-
-  json = builtins.readFile ./elpa-packages.json;
-  manifest = builtins.fromJSON json;
-
-  mkPackage = self: name: recipe:
-    let drv =
-          { elpaBuild, stdenv, fetchurl }:
-          let
-            unknownFetcher =
-              abort "emacs-${name}: unknown fetcher '${recipe.fetch.tag}'";
-            fetch =
-              { inherit fetchurl; }."${recipe.fetch.tag}"
-              or unknownFetcher;
-            args = builtins.removeAttrs recipe.fetch [ "tag" ];
-            src = fetch args;
-          in elpaBuild {
-            pname = name;
-            inherit (recipe) version;
-            inherit src;
-            packageRequires =
-              let lookupDep = d: self."${d}" or null;
-              in map lookupDep recipe.deps;
-            meta = {
-              homepage = "http://elpa.gnu.org/packages/${name}.html";
-              license = stdenv.lib.licenses.free;
-            };
-          };
-    in self.callPackage drv {};
-
-in
-
 self:
 
   let
-    super = removeAttrs (mapAttrs (mkPackage self) manifest) [ "dash" ];
 
-    elpaBuild = import ../../../build-support/emacs/melpa.nix {
+    imported = import ./elpa-generated.nix {
+      inherit (self) callPackage;
+    };
+
+    super = removeAttrs imported [ "dash" ];
+
+    elpaBuild = import ../../../build-support/emacs/elpa.nix {
       inherit fetchurl lib stdenv texinfo;
       inherit (self) emacs;
     };
@@ -63,11 +34,14 @@ self:
       });
     };
 
-    elpaPackages = super // {
+    overrides = {
       # These packages require emacs-25
       el-search = markBroken super.el-search;
       iterators = markBroken super.iterators;
       midi-kbd = markBroken super.midi-kbd;
       stream = markBroken super.stream;
     };
+
+    elpaPackages = super // overrides;
+
   in elpaPackages // { inherit elpaBuild elpaPackages; }
