@@ -1,30 +1,15 @@
-{stdenv, clang, fetchurl, curl}:
+{ stdenv, fetchurl, clang, curl, libzip }:
 
-with stdenv.lib;
-
-let version = "1.0"; in
+let version = "1.1.0"; in
 stdenv.mkDerivation {
   name = "tldr-${version}";
 
   src = fetchurl {
     url = "https://github.com/tldr-pages/tldr-cpp-client/archive/v${version}.tar.gz";
-    sha256 = "11k2pc4vfhx9q3cfd1145sdwhis9g0zhw4qnrv7s7mqnslzrrkgw";
+    sha256 = "0f2ijx17hv64w6zrv0vhj1j1jikzsj42657510vxcqqr8zanzlpf";
   };
 
-  meta = {
-    inherit version;
-    description = "Simplified and community-driven man pages";
-    longDescription = ''
-      tldr pages gives common use cases for commands, so you don't need to hunt through a man page for the correct flags.
-    '';
-    homepage = http://tldr-pages.github.io;
-    license = licenses.mit;
-    maintainers = [maintainers.taeer];
-    platforms = platforms.linux;
-
-  };
-
-  buildInputs = [curl clang];
+  buildInputs = [ curl clang libzip ];
 
   preBuild = ''
     cd src
@@ -34,4 +19,17 @@ stdenv.mkDerivation {
     install -d $prefix/bin
     install tldr $prefix/bin
   '';
+
+  meta = with stdenv.lib; {
+    inherit version;
+    description = "Simplified and community-driven man pages";
+    longDescription = ''
+      tldr pages gives common use cases for commands, so you don't need to hunt
+      through a man page for the correct flags.
+    '';
+    homepage = http://tldr-pages.github.io;
+    license = licenses.mit;
+    maintainers = with maintainers; [ taeer nckx ];
+    platforms = platforms.linux;
+  };
 }
