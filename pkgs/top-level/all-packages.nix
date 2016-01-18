@@ -4966,6 +4966,12 @@ let
 
   tbb = callPackage ../development/libraries/tbb { };
 
+  terra = callPackage ../development/compilers/terra {
+    llvm = llvmPackages_35.llvm.override { enableSharedLibraries = false; };
+    clang = clang_35;
+    lua = lua5_1;
+  };
+
   teyjus = callPackage ../development/compilers/teyjus {
     omake = omake_rc1;
   };
