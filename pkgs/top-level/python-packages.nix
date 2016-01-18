@@ -4988,6 +4988,21 @@ in modules // {
     propagatedBuildInputs = with self; [ rpkg offtrac urlgrabber fedora_cert ];
   });
 
+  frozendict = buildPythonPackage rec {
+    name = "frozendict-0.5";
+  
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/f/frozendict/${name}.tar.gz";
+      sha256 = "0m4kg6hbadvf99if78nx01q7qnbyhdw3x4znl5dasgciyi54432n";
+    };
+  
+    meta = {
+      homepage = https://github.com/slezica/python-frozendict;
+      description = "An immutable dictionary";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   fudge = buildPythonPackage rec {
     name = "fudge-0.9.6";
     src = pkgs.fetchurl {

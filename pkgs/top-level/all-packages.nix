@@ -6097,6 +6097,8 @@ let
 
   yacc = bison;
 
+  ycmd = callPackage ../development/tools/misc/ycmd { };
+
   yodl = callPackage ../development/tools/misc/yodl { };
 
   winpdb = callPackage ../development/tools/winpdb { };
