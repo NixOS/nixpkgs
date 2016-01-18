@@ -1,12 +1,14 @@
-{ stdenv, fetchgit, autoconf, automake, boost, pkgconfig, libtool, acl, libxml2, btrfs-progs, dbus_libs, docbook_xsl, libxslt, docbook_xml_dtd_45,  diffutils, pam, utillinux, attr, gettext }:
+{ stdenv, fetchFromGitHub, autoconf, automake, boost, pkgconfig, libtool, acl, libxml2, btrfs-progs, dbus_libs, docbook_xsl, libxslt, docbook_xml_dtd_45,  diffutils, pam, utillinux, attr, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "snapper-0.2.4";
+  name = "snapper-${ver}";
+  ver = "0.2.8";
 
-  src = fetchgit {
-    url = "https://github.com/openSUSE/snapper";
-    rev = "24e18153f7a32d0185dcfb20f8b8a4709ba8fe4a";
-    sha256 = "ec4b829430bd7181995e66a26ac86e8ac71c27e77faf8eb06db71d645c6f859b";
+  src = fetchFromGitHub {
+    owner = "openSUSE";
+    repo = "snapper";
+    rev = "v${ver}";
+    sha256 = "1rj8vy6hq140pbnc7mjjb34mfqdgdah1dmlv2073izdgakh7p38j";
   };
 
   buildInputs = [ autoconf automake boost pkgconfig libtool acl libxml2 btrfs-progs dbus_libs docbook_xsl libxslt docbook_xml_dtd_45 diffutils pam utillinux attr gettext ];
@@ -18,8 +20,6 @@ stdenv.mkDerivation rec {
     substituteInPlace snapper/Makefile.am --replace \
       "libsnapper_la_LIBADD = -lboost_thread-mt -lboost_system-mt -lxml2 -lacl -lz -lm" \
       "libsnapper_la_LIBADD = -lboost_thread -lboost_system -lxml2 -lacl -lz -lm";
-    # general cleanup
-    sed -i 's/^INCLUDES/AM_CPPFLAGS/' $(grep -rl ^INCLUDES .|grep "\.am$")
     '';
 
   configurePhase = ''
