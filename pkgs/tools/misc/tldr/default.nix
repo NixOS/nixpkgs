@@ -1,23 +1,25 @@
-{ stdenv, fetchurl, clang, curl, libzip }:
+{ stdenv, fetchFromGitHub, clang, curl, libzip, pkgconfig }:
 
 let version = "1.1.0"; in
 stdenv.mkDerivation {
   name = "tldr-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/tldr-pages/tldr-cpp-client/archive/v${version}.tar.gz";
-    sha256 = "0f2ijx17hv64w6zrv0vhj1j1jikzsj42657510vxcqqr8zanzlpf";
+  src = fetchFromGitHub {
+    sha256 = "0hxkrzp5njhy7c19v8i3svcb148f1jni7dlv36gc1nmcrz5izsiz";
+    rev = "v${version}";
+    repo = "tldr-cpp-client";
+    owner = "tldr-pages";
   };
 
   buildInputs = [ curl clang libzip ];
+  nativeBuildInputs = [ pkgconfig ];
 
-  preBuild = ''
+  preConfigure = ''
     cd src
   '';
 
   installPhase = ''
-    install -d $prefix/bin
-    install tldr $prefix/bin
+    install -Dm755 {.,$out/bin}/tldr
   '';
 
   meta = with stdenv.lib; {
