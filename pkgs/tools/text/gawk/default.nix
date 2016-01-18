@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
        stdenv.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
     || stdenv.isDarwin # XXX: `locale' segfaults
     || stdenv.isSunOS  # XXX: `_backsmalls1' fails, locale stuff?
+    || stdenv.isFreeBSD
   );
 
   buildInputs = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") libsigsegv
