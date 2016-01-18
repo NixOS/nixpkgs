@@ -4990,12 +4990,12 @@ in modules // {
 
   frozendict = buildPythonPackage rec {
     name = "frozendict-0.5";
-  
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/f/frozendict/${name}.tar.gz";
       sha256 = "0m4kg6hbadvf99if78nx01q7qnbyhdw3x4znl5dasgciyi54432n";
     };
-  
+
     meta = {
       homepage = https://github.com/slezica/python-frozendict;
       description = "An immutable dictionary";
@@ -22928,16 +22928,6 @@ in modules // {
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/daemonize/daemonize-${version}.tar.gz";
       sha256 = "0y139sq657bpzfv6k0aqm4071z4s40i6ybpni9qvngvdcz6r86n2";
-    };
-  };
-
-  frozendict = buildPythonPackage rec {
-    name = "frozendict-${version}";
-    version = "0.5";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/f/frozendict/frozendict-0.5.tar.gz";
-      sha256 = "0m4kg6hbadvf99if78nx01q7qnbyhdw3x4znl5dasgciyi54432n";
     };
   };
 
