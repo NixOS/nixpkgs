@@ -9,11 +9,11 @@ let mkpath = p: n:
 in
 
 stdenv.mkDerivation {
-  name = "ocsigenserver-2.5";
+  name = "ocsigenserver-2.6";
 
   src = fetchurl {
-    url = https://github.com/ocsigen/ocsigenserver/archive/2.5.tar.gz;
-    sha256 = "0ayzlzjwg199va4sclsldlcp0dnwdj45ahhg9ckb51m28c2pw46r";
+    url = https://github.com/ocsigen/ocsigenserver/archive/2.6.tar.gz;
+    sha256 = "0638xvlr0sssvjarmdwhgh7vbgdx8wiyjwq73w1bkjfwl7qm21zp";
   };
 
   buildInputs = [ocaml which findlib ocaml_react ocaml_ssl ocaml_lwt
