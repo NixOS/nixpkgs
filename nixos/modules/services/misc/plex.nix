@@ -75,7 +75,7 @@ in
       preStart = ''
         test -d "${cfg.dataDir}" || {
           echo "Creating initial Plex data directory in \"${cfg.dataDir}\"."
-          mkdir -p "${cfg.dataDir}"
+          mkdir -p "${cfg.dataDir}/Plex Media Server"
           chown -R ${cfg.user}:${cfg.group} "${cfg.dataDir}"
         }
 

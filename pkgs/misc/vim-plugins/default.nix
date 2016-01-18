@@ -890,6 +890,8 @@ rec {
 
     buildPhase = ''
       patchShebangs .
+      substituteInPlace plugin/youcompleteme.vim \
+        --replace "'ycm_path_to_python_interpreter', '''" "'ycm_path_to_python_interpreter', '${python}/bin/python'"
 
       mkdir build
       pushd build

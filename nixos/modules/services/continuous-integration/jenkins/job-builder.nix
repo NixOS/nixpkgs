@@ -74,7 +74,7 @@ in {
                 ];
               };
             }
-          ];
+          ]
         '';
         description = ''
           Job descriptions for Jenkins Job Builder in Nix format.

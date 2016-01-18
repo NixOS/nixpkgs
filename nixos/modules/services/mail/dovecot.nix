@@ -90,6 +90,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.dovecot22;
+      defaultText = "pkgs.dovecot22";
       description = "Dovecot package to use.";
     };
 
@@ -131,7 +132,7 @@ in
     modules = mkOption {
       type = types.listOf types.package;
       default = [];
-      example = [ pkgs.dovecot_pigeonhole ];
+      example = literalExample "[ pkgs.dovecot_pigeonhole ]";
       description = ''
         Symlinks the contents of lib/dovecot of every given package into
         /var/lib/dovecot/modules. This will make the given modules available

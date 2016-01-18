@@ -8,14 +8,3 @@
  
  ####
  
---- old/Makefile	2014-09-30 16:40:37.000000000 +0200
-+++ new/Makefile	2015-10-14 10:28:41.366815864 +0200
-@@ -52,7 +52,7 @@
- install-bin:
- 	install -d -m 755 $(BINDIR)
- 	install $(BIN) $(BINDIR)
--	install $(TOOLS) $(BINDIR)
-+	install $(TOOLS) $(BINDIR) || true
- 
- uninstall: uninstall-lib uninstall-bin
- 

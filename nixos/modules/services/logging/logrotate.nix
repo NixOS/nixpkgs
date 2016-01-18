@@ -13,6 +13,7 @@ in
   options = {
     services.logrotate = {
       enable = mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable the logrotate cron job

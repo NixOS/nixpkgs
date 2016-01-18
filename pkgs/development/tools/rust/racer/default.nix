@@ -4,15 +4,15 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "racer-${version}";
-  version = "1.0.0";
+  version = "1.1.0";
   src = fetchFromGitHub {
     owner = "phildawes";
     repo = "racer";
     rev = "v${version}";
-    sha256 = "1b6829nqx0sqw1akcid61izw8mah1dfx2nxldkmmg4scnydhvw1l";
+    sha256 = "1y6xzavxm5bnqcnnz0mbnf2491m2kksp36yx3kd5mxyly33482y7";
   };
 
-  depsSha256 = "1hfqr1kidl77lq3djbhfn37whvv6k0hg9g5gcnl6pgl6kn669hdc";
+  depsSha256 = "1r2fxirkc0y6g7aas65n3yg1f2lf3kypnjr2v20p5np2lvla6djj";
 
   buildInputs = [ makeWrapper ];
 
@@ -24,8 +24,6 @@ buildRustPackage rec {
     mkdir -p $out/bin
     cp -p target/release/racer $out/bin/
     wrapProgram $out/bin/racer --set RUST_SRC_PATH "${rustc.src}/src"
-    install -d $out/share/emacs/site-lisp
-    install "editors/emacs/"*.el $out/share/emacs/site-lisp
   '';
 
   meta = with stdenv.lib; {

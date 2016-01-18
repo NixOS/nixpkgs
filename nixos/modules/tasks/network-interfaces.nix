@@ -355,6 +355,7 @@ in
     };
 
     networking.nameservers = mkOption {
+      type = types.listOf types.str;
       default = [];
       example = ["130.161.158.4" "130.161.33.17"];
       description = ''
@@ -390,6 +391,7 @@ in
     };
 
     networking.localCommands = mkOption {
+      type = types.str;
       default = "";
       example = "text=anything; echo You can put $text here.";
       description = ''

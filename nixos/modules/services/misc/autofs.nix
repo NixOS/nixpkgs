@@ -27,8 +27,9 @@ in
       };
 
       autoMaster = mkOption {
+        type = types.str;
         example = literalExample ''
-          autoMaster = let
+          let
             mapConf = pkgs.writeText "auto" '''
              kernel    -ro,soft,intr       ftp.kernel.org:/pub/linux
              boot      -fstype=ext2        :/dev/hda1

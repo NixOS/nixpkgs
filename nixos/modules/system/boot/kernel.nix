@@ -63,7 +63,7 @@ in
     };
 
     boot.extraModulePackages = mkOption {
-      type = types.listOf types.path;
+      type = types.listOf types.package;
       default = [];
       example = literalExample "[ pkgs.linuxPackages.nvidia_x11 ]";
       description = "A list of additional packages supplying kernel modules.";

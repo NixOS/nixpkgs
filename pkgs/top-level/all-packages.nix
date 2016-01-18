@@ -475,10 +475,6 @@ let
 
   _9pfs = callPackage ../tools/filesystems/9pfs { };
 
-  "3dfsb" = callPackage ../applications/misc/3dfsb {
-    glibc = glibc.override { debugSymbols = true; };
-  };
-
   a2ps = callPackage ../tools/text/a2ps { };
 
   abduco = callPackage ../tools/misc/abduco { };
@@ -2076,6 +2072,8 @@ let
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
+  matrix-synapse = callPackage ../servers/matrix-synapse { };
+
   memtester = callPackage ../tools/system/memtester { };
 
   minidlna = callPackage ../tools/networking/minidlna { };
@@ -2245,8 +2243,6 @@ let
   man = callPackage ../tools/misc/man { };
 
   man_db = callPackage ../tools/misc/man-db { };
-
-  mates = callPackage ../tools/misc/mates { };
 
   mawk = callPackage ../tools/text/mawk { };
 
@@ -2904,6 +2900,8 @@ let
   redir = callPackage ../tools/networking/redir { };
 
   redmine = callPackage ../applications/version-management/redmine { };
+
+  rt = callPackage ../servers/rt { };
 
   rtmpdump = callPackage ../tools/video/rtmpdump { };
   rtmpdump_gnutls = rtmpdump.override { gnutlsSupport = true; opensslSupport = false; };
@@ -4967,6 +4965,12 @@ let
 
   tbb = callPackage ../development/libraries/tbb { };
 
+  terra = callPackage ../development/compilers/terra {
+    llvm = llvmPackages_35.llvm.override { enableSharedLibraries = false; };
+    clang = clang_35;
+    lua = lua5_1;
+  };
+
   teyjus = callPackage ../development/compilers/teyjus {
     omake = omake_rc1;
   };
@@ -5093,9 +5097,11 @@ let
 
   rebar = callPackage ../development/tools/build-managers/rebar { };
   rebar3 = callPackage ../development/tools/build-managers/rebar3 { };
+  rebar3-nix-bootstrap = callPackage ../development/tools/erlang/rebar3-nix-bootstrap { };
   fetchHex = callPackage ../development/tools/build-managers/rebar3/fetch-hex.nix { };
 
   erlangPackages = callPackage ../development/erlang-modules { };
+  hex2nix = erlangPackages.callPackage ../development/tools/erlang/hex2nix { };
 
   elixir = callPackage ../development/interpreters/elixir { };
 
@@ -5610,6 +5616,8 @@ let
   coan = callPackage ../development/tools/analysis/coan { };
 
   complexity = callPackage ../development/tools/misc/complexity { };
+
+  cookiecutter = pythonPackages.cookiecutter;
 
   ctags = callPackage ../development/tools/misc/ctags { };
 
@@ -6403,9 +6411,6 @@ let
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
   ffmpeg_1_2 = callPackage ../development/libraries/ffmpeg/1.2.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-  ffmpeg_2_2 = callPackage ../development/libraries/ffmpeg/2.2.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
   ffmpeg_2_8 = callPackage ../development/libraries/ffmpeg/2.8.nix {
@@ -9035,8 +9040,6 @@ let
     self = pypyPackages;
   });
 
-  foursuite = pythonPackages.foursuite;
-
   bsddb3 = pythonPackages.bsddb3;
 
   ecdsa = pythonPackages.ecdsa;
@@ -9377,6 +9380,10 @@ let
   postfix = postfix30;
 
   postsrsd = callPackage ../servers/mail/postsrsd { };
+
+  rmilter = callPackage ../servers/mail/rmilter { };
+
+  rspamd = callPackage ../servers/mail/rspamd { };
 
   pshs = callPackage ../servers/http/pshs { };
 
@@ -11108,9 +11115,7 @@ let
 
   audacious = callPackage ../applications/audio/audacious { };
 
-  audacity = callPackage ../applications/audio/audacity {
-    ffmpeg = ffmpeg_2_2;
-  };
+  audacity = callPackage ../applications/audio/audacity { };
 
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
 
@@ -11163,10 +11168,6 @@ let
   backintime = backintime-qt4;
 
   bandwidth = callPackage ../tools/misc/bandwidth { };
-
-  bar = callPackage ../applications/window-managers/bar { };
-
-  bar-xft = callPackage ../applications/window-managers/bar/xft.nix { };
 
   baresip = callPackage ../applications/networking/instant-messengers/baresip {
     ffmpeg = ffmpeg_1;
@@ -12350,6 +12351,10 @@ let
   ldcpp = callPackage ../applications/networking/p2p/ldcpp {
     inherit (gnome) libglade;
   };
+
+  lemonbar = callPackage ../applications/window-managers/lemonbar { };
+
+  lemonbar-xft = callPackage ../applications/window-managers/lemonbar/xft.nix { };
 
   leo-editor = callPackage ../applications/editors/leo-editor { };
 
@@ -15810,6 +15815,8 @@ aliases = with self; rec {
   adobeReader = adobe-reader;
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
+  bar = lemonbar;  # added 2015-01-16
+  bar-xft = lemonbar-xft;  # added 2015-01-16
   bridge_utils = bridge-utils;  # added 2015-02-20
   buildbotSlave = buildbot-slave;  # added 2014-12-09
   cheetahTemplate = pythonPackages.cheetah; # 2015-06-15

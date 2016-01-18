@@ -118,9 +118,8 @@ in {
 
     package = mkOption {
       description = "The kafka package to use";
-
       default = pkgs.apacheKafka;
-
+      defaultText = "pkgs.apacheKafka";
       type = types.package;
     };
 

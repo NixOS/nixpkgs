@@ -88,7 +88,7 @@ let
     (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
     (enableFeature enableSplitObjs "split-objs")
     (enableFeature enableLibraryProfiling "library-profiling")
-    (enableFeature enableExecutableProfiling "executable-profiling")
+    (enableFeature enableExecutableProfiling (if versionOlder ghc.version "8" then "executable-profiling" else "profiling"))
     (enableFeature enableSharedLibraries "shared")
     (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature enableStaticLibraries "library-vanilla"))
     (optionalString (isGhcjs || versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
