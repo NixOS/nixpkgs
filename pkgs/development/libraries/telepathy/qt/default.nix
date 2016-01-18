@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = "-DDESIRED_QT_VERSION=${builtins.substring 0 1 qtbase.version}";
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=cpp" ]; # remove after the next update
+  # should be removable after the next update
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=cpp" "-Wno-error=unused-but-set-variable" ];
 
   preBuild = ''
     NIX_CFLAGS_COMPILE+=" `pkg-config --cflags dbus-glib-1`"
