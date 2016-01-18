@@ -14247,6 +14247,8 @@ let
 
   pingus = callPackage ../games/pingus {};
 
+  pioneer = callPackage ../games/pioneer { };
+
   pioneers = callPackage ../games/pioneers { };
 
   planetary_annihilation = callPackage ../games/planetaryannihilation { };
