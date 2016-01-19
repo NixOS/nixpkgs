@@ -2,13 +2,13 @@
 
 buildRebar3 rec {
     name = "hex2nix";
-    version = "0.0.2";
+    version = "0.0.3";
 
     src = fetchFromGitHub {
          owner = "erlang-nix";
          repo = "hex2nix";
          rev = "${version}";
-         sha256 = "18gkq5fkdiwq5zj98cz4kqxbpzjkpqcplpsw987drxwdbvq4hkwm";
+         sha256 = "1snlcb60al7fz3z4c4rqrb9gqdyihyhsrr90n40v9rdm98csry3k";
      };
 
     erlangDeps = [ ibrowse jsx erlware_commons getopt ];

@@ -3,6 +3,23 @@
          xml:id="users-guide-to-the-erlang-infrastructure">
 
 <title>User's Guide to the Erlang Infrastructure</title>
+<section xml:id="build-tools">
+  <title>Build Tools</title>
+  <para>
+    By default Rebar3 wants to manage it's own dependencies. In the
+    normal non-Nix, this is perfectly acceptable. In the Nix world it
+    is not. To support this we have created two versions of rebar3,
+    <literal>rebar3</literal> and <literal>rebar3-open</literal>. The
+    <literal>rebar3</literal> version has been patched to remove the
+    ability to download anything from it. If you are not running it a
+    nix-shell or a nix-build then its probably not going to work for
+    you. <literal>rebar3-open</literal> is the normal, un-modified
+    rebar3. It should work exactly as would any other version of
+    rebar3. Any Erlang package should rely on
+    <literal>rebar3</literal> and thats really what you should be
+    using too.
+  </para>
+</section>
 
 <section xml:id="how-to-install-erlang-packages">
   <title>How to install Erlang packages</title>
