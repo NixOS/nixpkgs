@@ -61,6 +61,10 @@ in
           url = "https://github.com/jagajaga/nixos-slim-theme/archive/2.0.tar.gz";
           sha256 = "0lldizhigx7bjhxkipii87y432hlf5wdvamnfxrryf9z7zkfypc8";
         };
+        defaultText = ''pkgs.fetchurl {
+          url = "https://github.com/jagajaga/nixos-slim-theme/archive/2.0.tar.gz";
+          sha256 = "0lldizhigx7bjhxkipii87y432hlf5wdvamnfxrryf9z7zkfypc8";
+        }'';
         example = literalExample ''
           pkgs.fetchurl {
             url = "mirror://sourceforge/slim.berlios/slim-wave.tar.gz";

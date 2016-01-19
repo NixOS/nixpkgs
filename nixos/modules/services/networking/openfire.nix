@@ -2,17 +2,7 @@
 
 with lib;
 
-let
-
-  inherit (pkgs) jre openfire coreutils which gnugrep gawk gnused;
-
-  extraStartDependency =
-    if config.services.openfire.usePostgreSQL then "and started postgresql" else "";
-
-in
-
 {
-
   ###### interface
 
   options = {
@@ -47,26 +37,24 @@ in
         message = "OpenFire assertion failed.";
       };
 
-    jobs.openfire =
-      { description = "OpenFire XMPP server";
-
-        startOn = "started networking ${extraStartDependency}";
-
-        script =
-          ''
-            export PATH=${jre}/bin:${openfire}/bin:${coreutils}/bin:${which}/bin:${gnugrep}/bin:${gawk}/bin:${gnused}/bin
-            export HOME=/tmp
-            mkdir /var/log/openfire || true
-            mkdir /etc/openfire || true
-            for i in ${openfire}/conf.inst/*; do
-                if ! test -f /etc/openfire/$(basename $i); then
-                    cp $i /etc/openfire/
-                fi
-            done
-            openfire start
-          ''; # */
-      };
-
+    systemd.services.openfire = {
+      description = "OpenFire XMPP server";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "networking.target" ] ++
+        optional config.services.openfire.usePostgreSQL "postgresql.service";
+      path = with pkgs; [ jre openfire coreutils which gnugrep gawk gnused ];
+      script = ''
+        export HOME=/tmp
+        mkdir /var/log/openfire || true
+        mkdir /etc/openfire || true
+        for i in ${openfire}/conf.inst/*; do
+            if ! test -f /etc/openfire/$(basename $i); then
+                cp $i /etc/openfire/
+            fi
+        done
+        openfire start
+      ''; # */
+    };
   };
 
 }

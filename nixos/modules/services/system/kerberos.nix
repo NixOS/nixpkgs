@@ -45,27 +45,20 @@ in
         serverArgs = "${pkgs.heimdal}/sbin/kadmind";
       };
 
-    jobs.kdc =
-      { description = "Kerberos Domain Controller daemon";
+    systemd.services.kdc = {
+      description = "Kerberos Domain Controller daemon";
+      wantedBy = [ "multi-user.target" ];
+      preStart = ''
+        mkdir -m 0755 -p ${stateDir}
+      '';
+      script = "${heimdal}/sbin/kdc";
+    };
 
-        startOn = "ip-up";
-
-        preStart =
-          ''
-            mkdir -m 0755 -p ${stateDir}
-          '';
-
-        exec = "${heimdal}/sbin/kdc";
-
-      };
-
-    jobs.kpasswdd =
-      { description = "Kerberos Domain Controller daemon";
-
-        startOn = "ip-up";
-
-        exec = "${heimdal}/sbin/kpasswdd";
-      };
+    systemd.services.kpasswdd = {
+      description = "Kerberos Domain Controller daemon";
+      wantedBy = [ "multi-user.target" ];
+      script = "${heimdal}/sbin/kpasswdd";
+    };
   };
 
 }

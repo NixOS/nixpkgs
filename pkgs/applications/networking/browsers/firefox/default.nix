@@ -19,7 +19,7 @@ assert stdenv.cc ? libc && stdenv.cc.libc != null;
 let
 
 common = { pname, version, sha256 }: stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  name = "${pname}-unwrapped-${version}";
 
   src = fetchurl {
     url =
@@ -83,8 +83,8 @@ common = { pname, version, sha256 }: stdenv.mkDerivation rec {
     ''
       mkdir ../objdir
       cd ../objdir
-      if [ -e ../${name} ]; then
-        configureScript=../${name}/configure
+      if [ -e ../${pname}-${version} ]; then
+        configureScript=../${pname}-${version}/configure
       else
         configureScript=../mozilla-*/configure
       fi
@@ -99,7 +99,7 @@ common = { pname, version, sha256 }: stdenv.mkDerivation rec {
   postInstall =
     ''
       # For grsecurity kernels
-      paxmark m $out/lib/${name}/{firefox,firefox-bin,plugin-container}
+      paxmark m $out/lib/${pname}-${version}/{firefox,firefox-bin,plugin-container}
 
       # Remove SDK cruft. FIXME: move to a separate output?
       rm -rf $out/share/idl $out/include $out/lib/firefox-devel-*
@@ -131,16 +131,16 @@ common = { pname, version, sha256 }: stdenv.mkDerivation rec {
 
 in {
 
-  firefox = common {
+  firefox-unwrapped = common {
     pname = "firefox";
-    version = "43.0";
-    sha256 = "1slg5m05z67q29mrpjv0a753c4vy1vxhx7p3f75494yfvi0ngcd5";
+    version = "43.0.4";
+    sha256 = "0xjs4j26h8fyy8izrcc482vfvgg4gqzap5kh17jfv7flhn9akkvn";
   };
 
-  firefox-esr = common {
+  firefox-esr-unwrapped = common {
     pname = "firefox-esr";
-    version = "38.5.0esr";
-    sha256 = "086vkhrls9g0cxf50izfzcf2h60syswqrlzyi2z21awhwg7r07ra";
+    version = "38.5.2esr";
+    sha256 = "0xqirpiys2pgzk9hs4s93svknc0sss8ry60zar7n9jj74cgz590m";
   };
 
 }

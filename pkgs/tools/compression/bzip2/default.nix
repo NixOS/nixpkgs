@@ -63,8 +63,9 @@ in stdenv.mkDerivation {
     mv "$bin/lib" "$static/"
   '';
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile --replace 'CC=gcc' 'CC=clang'
+  patchPhase = ''
+    substituteInPlace Makefile --replace CC=gcc CC=cc
+    substituteInPlace Makefile-libbz2_so --replace CC=gcc CC=cc
   '';
 
   preConfigure = ''

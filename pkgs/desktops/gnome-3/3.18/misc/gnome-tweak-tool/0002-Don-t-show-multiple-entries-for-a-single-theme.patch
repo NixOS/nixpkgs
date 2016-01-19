@@ -1,7 +1,7 @@
-From edd3203c7b7d5ba596df9f148c443cdfc8a58d88 Mon Sep 17 00:00:00 2001
-From: Jascha Geerds <jg@ekby.de>
+From 22b948c39b32fb45066c4f5a9f99082094fea3d1 Mon Sep 17 00:00:00 2001
+From: Jascha Geerds <jascha@jgeerds.name>
 Date: Sat, 1 Aug 2015 21:26:57 +0200
-Subject: [PATCH 1/1] Don't show multiple entries for a single theme
+Subject: [PATCH 2/3] Don't show multiple entries for a single theme
 
 ---
  gtweak/tweaks/tweak_group_interface.py |  8 ++++----
@@ -50,7 +50,7 @@ index a319907..82c0286 100644
  class ShellThemeTweak(Gtk.Box, Tweak):
  
 diff --git a/gtweak/tweaks/tweak_group_keymouse.py b/gtweak/tweaks/tweak_group_keymouse.py
-index 3486098..9f53425 100644
+index 4ac08b7..ce1d0c1 100644
 --- a/gtweak/tweaks/tweak_group_keymouse.py
 +++ b/gtweak/tweaks/tweak_group_keymouse.py
 @@ -20,7 +20,7 @@ import os.path
@@ -59,10 +59,10 @@ index 3486098..9f53425 100644
  import gtweak
 -from gtweak.utils import XSettingsOverrides, walk_directories, make_combo_list_with_default, get_resource_dirs
 +from gtweak.utils import XSettingsOverrides, walk_directories, make_combo_list_with_default, get_resource_dirs, get_unique_resources
- from gtweak.widgets import ListBoxTweakGroup, GSettingsComboTweak, GSettingsSwitchTweak, GetterSetterSwitchTweak, Title
+ from gtweak.widgets import ListBoxTweakGroup, GSettingsComboTweak, GSettingsSwitchTweak, GetterSetterSwitchTweak, Title, GSettingsComboEnumTweak
  
  class PrimaryPasteTweak(GetterSetterSwitchTweak):
-@@ -50,7 +50,7 @@ class KeyThemeSwitcher(GSettingsComboTweak):
+@@ -51,7 +51,7 @@ class KeyThemeSwitcher(GSettingsComboTweak):
          valid = walk_directories(get_resource_dirs("themes"), lambda d:
                      os.path.isfile(os.path.join(d, "gtk-3.0", "gtk-keys.css")) and \
                      os.path.isfile(os.path.join(d, "gtk-2.0-key", "gtkrc")))
@@ -72,10 +72,10 @@ index 3486098..9f53425 100644
  TWEAK_GROUPS = [
      ListBoxTweakGroup(_("Keyboard and Mouse"),
 diff --git a/gtweak/utils.py b/gtweak/utils.py
-index 0fcb51d..ce8e12e 100644
+index 535e1f3..42f7d96 100644
 --- a/gtweak/utils.py
 +++ b/gtweak/utils.py
-@@ -131,6 +131,22 @@ def get_resource_dirs(resource):
+@@ -133,6 +133,22 @@ def get_resource_dirs(resource):
  
      return [dir for dir in dirs if os.path.isdir(dir)]
  
@@ -99,5 +99,5 @@ index 0fcb51d..ce8e12e 100644
  class AutostartManager:
  
 -- 
-2.4.5
+2.7.0
 

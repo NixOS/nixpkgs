@@ -85,6 +85,7 @@ let
       ../../build-support/setup-hooks/multiple-outputs.sh
       ../../build-support/setup-hooks/move-sbin.sh
       ../../build-support/setup-hooks/move-lib64.sh
+      ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
       cc
     ];
 

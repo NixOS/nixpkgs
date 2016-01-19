@@ -31,13 +31,13 @@ let cfg = config.services.drbd; in
 
   };
 
-  
+
   ###### implementation
 
   config = mkIf cfg.enable {
-  
+
     environment.systemPackages = [ pkgs.drbd ];
-    
+
     services.udev.packages = [ pkgs.drbd ];
 
     boot.kernelModules = [ "drbd" ];
@@ -52,26 +52,16 @@ let cfg = config.services.drbd; in
         target = "drbd.conf";
       };
 
-    jobs.drbd_up =
-      { name = "drbd-up";
-        startOn = "stopped udevtrigger or ip-up";
-        task = true;
-        script =
-          ''
-            ${pkgs.drbd}/sbin/drbdadm up all
-          '';
-      };
-    
-    jobs.drbd_down =
-      { name = "drbd-down";
-        startOn = "starting shutdown";
-        task = true;
-        script =
-          ''
-            ${pkgs.drbd}/sbin/drbdadm down all
-          '';
-      };
-    
+    systemd.services.drbd = {
+      after = [ "systemd-udev.settle.service" ];
+      wants = [ "systemd-udev.settle.service" ];
+      wantedBy = [ "ip-up.target" ];
+      script = ''
+        ${pkgs.drbd}/sbin/drbdadm up all
+      '';
+      serviceConfig.ExecStop = ''
+        ${pkgs.drbd}/sbin/drbdadm down all
+      '';
+    };
   };
-  
 }

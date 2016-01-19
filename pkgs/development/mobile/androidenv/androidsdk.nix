@@ -221,7 +221,7 @@ stdenv.mkDerivation rec {
         fi
     done
 
-    for i in $out/libexec/android-sdk-*/build-tools/android-*/*
+    for i in $out/libexec/android-sdk-*/build-tools/*/*
     do
         if [ ! -d $i ] && [ -x $i ]
         then

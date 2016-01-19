@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
-    homepage    = http://zx2c4.com/projects/password-store/;
+    homepage    = http://www.passwordstore.org/;
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ lovek323 the-kenny ];
     platforms   = platforms.unix;

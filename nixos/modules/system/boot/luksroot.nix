@@ -229,7 +229,7 @@ in
 
     boot.initrd.luks.devices = mkOption {
       default = [ ];
-      example = [ { name = "luksroot"; device = "/dev/sda3"; preLVM = true; } ];
+      example = literalExample ''[ { name = "luksroot"; device = "/dev/sda3"; preLVM = true; } ]'';
       description = ''
         The list of devices that should be decrypted using LUKS before trying to mount the
         root partition. This works for both LVM-over-LUKS and LUKS-over-LVM setups.

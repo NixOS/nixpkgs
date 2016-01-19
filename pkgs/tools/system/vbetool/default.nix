@@ -1,31 +1,26 @@
-a @ {pciutils, libx86, zlib, ...} :
-let
-  s = import ./src-for-default.nix;
-  buildInputs = with a; [
-    libx86 pciutils zlib
-  ];
-in
-rec {
-  src = a.fetchUrlFromSrcInfo s;
+{ stdenv, fetchurl, pciutils, libx86, zlib }:
 
-  inherit (s) name;
-  inherit buildInputs;
-  configureFlags = [];
+stdenv.mkDerivation rec {
+  name = "vbetool-${version}";
+  version = "1.1";
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["fixPCIref" "doConfigure" "doMakeInstall"];
+  src = fetchurl {
+    url = "http://www.codon.org.uk/~mjg59/vbetool/download/${name}.tar.gz";
+    sha256 = "0m7rc9v8nz6w9x4x96maza139kin6lg4hscy6i13fna4672ds9jd";
+  };
 
-  fixPCIref = a.fullDepEntry (''
-    sed -e 's@$(libdir)/libpci.a@${a.pciutils}/lib/libpci.so@' -i Makefile.in
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lpci"
-  '') ["doUnpack" "minInit"];
+  buildInputs = [ pciutils libx86 zlib ];
 
-  meta = {
+  patchPhase = ''
+    substituteInPlace Makefile.in --replace '$(libdir)/libpci.a' ""
+  '';
+
+  configureFlags = [ "LDFLAGS=-lpci" ];
+
+  meta = with stdenv.lib; {
     description = "Video BIOS execution tool";
-    maintainers = [
-      a.lib.maintainers.raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    homepage = http://www.codon.org.uk/~mjg59/vbetool/;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
 }

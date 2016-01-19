@@ -27,6 +27,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.upower;
+        defaultText = "pkgs.upower";
         example = lib.literalExample "pkgs.upower";
         description = ''
           Which upower package to use.

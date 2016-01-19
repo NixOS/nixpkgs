@@ -1,17 +1,19 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libtoxcore, dbus, libvpx, libX11, openal, freetype, libv4l
-, libXrender, fontconfig, libXext, libXft }:
+{ stdenv, fetchFromGitHub, pkgconfig, libtoxcore-dev, dbus, libvpx, libX11, openal, freetype, libv4l
+, libXrender, fontconfig, libXext, libXft, utillinux, git, libsodium }:
 
 let
 
   filteraudio = stdenv.mkDerivation rec {
-    name = "filter_audio-20150128";
+    name = "filter_audio-20150516";
 
     src = fetchFromGitHub {
       owner = "irungentoo";
       repo = "filter_audio";
-      rev = "76428a6cda";
-      sha256 = "0c4wp9a7dzbj9ykfkbsxrkkyy0nz7vyr5map3z7q8bmv9pjylbk9";
+      rev = "612c5a102550c614e4c8f859e753ea64c0b7250c";
+      sha256 = "0bmf8dxnr4vb6y36lvlwqd5x68r4cbsd625kbw3pypm5yqp0n5na";
     };
+
+    buildInputs = [ utillinux ];
 
     doCheck = false;
 
@@ -19,17 +21,18 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "utox-dev-20150130";
+  name = "utox-dev-20151220";
 
   src = fetchFromGitHub {
-    owner = "notsecure";
+    owner = "GrayHatter";
     repo = "uTox";
-    rev = "cb7b8d09b08";
-    sha256 = "0vg9h07ipwyf7p54p43z9bcymy0skiyjbm7zvyjg7r5cvqxv1vpa";
+    rev = "7e2907470835746b6819d631b48dd54bc9c4de66";
+    sha256 = "074wa0np8hyqwy9xqgyyds94pdfv2i1jh019m98d8apxc5vn36wk";
   };
 
-  buildInputs = [ pkgconfig libtoxcore dbus libvpx libX11 openal freetype
-                  libv4l libXrender fontconfig libXext libXft filteraudio ];
+  buildInputs = [ pkgconfig libtoxcore-dev dbus libvpx libX11 openal freetype
+                  libv4l libXrender fontconfig libXext libXft filteraudio 
+                  git libsodium ];
 
   doCheck = false;
   

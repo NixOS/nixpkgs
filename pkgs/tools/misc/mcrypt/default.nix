@@ -1,16 +1,18 @@
 { stdenv, fetchurl, libmcrypt, libmhash }:
- 
+
 stdenv.mkDerivation rec {
   version = "2.6.8";
   name = "mcrypt-${version}";
-  
+
   src = fetchurl {
     url = "mirror://sourceforge/mcrypt/MCrypt/${version}/${name}.tar.gz";
     sha256 = "5145aa844e54cca89ddab6fb7dd9e5952811d8d787c4f4bf27eb261e6c182098";
   };
- 
-  buildInputs = [libmcrypt libmhash];
- 
+
+  patches = [ ./format-string.patch ./overflow.patch ./segv.patch ./sprintf.patch ];
+
+  buildInputs = [ libmcrypt libmhash ];
+
   meta = {
     description = "Replacement for old UNIX crypt(1)";
     longDescription = ''

@@ -15,11 +15,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchurl {
     url = "https://github.com/golang/go/archive/go${version}.tar.gz";
-    sha256 = "1ggh5ll774an78yiij6xan67n38zglws0pxj36g0rcg84460h4m4";
+    sha256 = "1n2niq0147pqflqh8j1s5wv8aq3vlh58ni3bp9add261z5q1g50k";
   };
 
   # perl is used for testing go vet
@@ -77,6 +77,7 @@ stdenv.mkDerivation rec {
     sed -i '/TestCgoLookupIP/areturn' src/net/cgo_unix_test.go
     sed -i '/TestChdirAndGetwd/areturn' src/os/os_test.go
     sed -i '/TestRead0/areturn' src/os/os_test.go
+    sed -i '/TestNohup/areturn' src/os/signal/signal_test.go
     sed -i '/TestSystemRoots/areturn' src/crypto/x509/root_darwin_test.go
 
     sed -i '/TestGoInstallRebuildsStalePackagesInOtherGOPATH/areturn' src/cmd/go/go_test.go

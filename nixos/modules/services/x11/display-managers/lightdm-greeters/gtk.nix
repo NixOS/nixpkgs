@@ -67,8 +67,9 @@ in
       theme = {
 
         package = mkOption {
-          type = types.path;
+          type = types.package;
           default = pkgs.gnome3.gnome_themes_standard;
+          defaultText = "pkgs.gnome3.gnome_themes_standard";
           description = ''
             The package path that contains the theme given in the name option.
           '';
@@ -87,8 +88,9 @@ in
       iconTheme = {
 
         package = mkOption {
-          type = types.path;
+          type = types.package;
           default = pkgs.gnome3.defaultIconTheme;
+          defaultText = "pkgs.gnome3.defaultIconTheme";
           description = ''
             The package path that contains the icon theme given in the name option.
           '';

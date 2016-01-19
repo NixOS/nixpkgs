@@ -113,11 +113,6 @@ meta-attributes</title>
   </varlistentry>
 
   <varlistentry>
-    <term><varname>version</varname></term>
-    <listitem><para>Package version.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
     <term><varname>branch</varname></term>
     <listitem><para>Release branch. Used to specify that a package is not
     going to receive updates that are not in this branch; for example, Linux

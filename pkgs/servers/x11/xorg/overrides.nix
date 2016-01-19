@@ -413,6 +413,10 @@ in
           wrapProgram $out/bin/Xephyr \
             --set XKB_BINDIR "${xorg.xkbcomp}/bin" \
             --add-flags "-xkbdir ${xorg.xkeyboardconfig}/share/X11/xkb"
+          wrapProgram $out/bin/Xvfb \
+            --set XKB_BINDIR "${xorg.xkbcomp}/bin" \
+            --set XORG_DRI_DRIVER_PATH ${args.mesa}/lib/dri \
+            --add-flags "-xkbdir ${xorg.xkeyboardconfig}/share/X11/xkb"
           ( # assert() keeps runtime reference xorgserver-dev in xf86-video-intel and others
             cd "$dev"
             for f in include/xorg/*.h; do

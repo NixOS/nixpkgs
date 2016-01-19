@@ -1,6 +1,6 @@
 { stdenv, fetchurl, substituteAll
 , pkgconfig
-, cups, zlib, libjpeg, libusb1, pythonPackages, saneBackends, dbus, usbutils
+, cups, zlib, libjpeg, libusb1, pythonPackages, sane-backends, dbus, usbutils
 , net_snmp, polkit
 , qtSupport ? true, qt4, pyqt4
 , withPlugin ? false
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
     libusb1
     pythonPackages.python
     pythonPackages.wrapPython
-    saneBackends
+    sane-backends
     dbus
     net_snmp
   ] ++ stdenv.lib.optionals qtSupport [

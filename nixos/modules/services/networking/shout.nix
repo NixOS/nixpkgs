@@ -19,7 +19,7 @@ in {
       '';
     };
 
-    host = mkOption {
+    listenAddress = mkOption {
       type = types.string;
       default = "0.0.0.0";
       description = "IP interface to listen on for http connections.";
@@ -66,7 +66,7 @@ in {
         "${pkgs.shout}/bin/shout"
         (if cfg.private then "--private" else "--public")
         "--port" (toString cfg.port)
-        "--host" (toString cfg.host)
+        "--host" (toString cfg.listenAddress)
         "--home" shoutHome
       ];
       serviceConfig = {

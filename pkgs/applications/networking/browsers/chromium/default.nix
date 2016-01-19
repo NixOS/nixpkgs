@@ -64,20 +64,17 @@ let
 in stdenv.mkDerivation {
   name = "chromium${suffix}-${chromium.browser.version}";
 
-  buildInputs = [ makeWrapper ] ++ chromium.plugins.enabledPlugins;
+  buildInputs = [ makeWrapper ];
 
   buildCommand = let
     browserBinary = "${chromium.browser}/libexec/chromium/chromium";
-    mkEnvVar = key: val: "--set '${key}' '${val}'";
-    envVars = chromium.plugins.settings.envVars or {};
-    flags = chromium.plugins.settings.flags or [];
+    getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
   in with stdenv.lib; ''
     mkdir -p "$out/bin" "$out/share/applications"
 
     ln -s "${chromium.browser}/share" "$out/share"
-    makeWrapper "${browserBinary}" "$out/bin/chromium" \
-      ${concatStrings (mapAttrsToList mkEnvVar envVars)} \
-      --add-flags "${concatStringsSep " " flags}"
+    eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
+      ${concatMapStringsSep " " getWrapperFlags chromium.plugins.enabled}
 
     ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
     ln -s "${chromium.browser}/share/icons" "$out/share/icons"

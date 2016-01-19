@@ -1,10 +1,14 @@
-{ stdenv, R, xvfb_run, utillinux }:
+{ stdenv, R, libcxx, xvfb_run, utillinux, Cocoa, Foundation }:
 
 { name, buildInputs ? [], ... } @ attrs:
 
 stdenv.mkDerivation ({
   buildInputs = buildInputs ++ [R] ++
-                stdenv.lib.optionals attrs.requireX [utillinux xvfb_run];
+                stdenv.lib.optionals attrs.requireX [utillinux xvfb_run] ++
+                stdenv.lib.optionals stdenv.isDarwin [Cocoa Foundation];
+
+  NIX_CFLAGS_COMPILE =
+    stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
   configurePhase = ''
     runHook preConfigure

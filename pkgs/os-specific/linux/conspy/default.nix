@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="conspy";
-    version="1.10";
+    version="1.13";
     name="${baseName}-${version}";
-    hash="1vnph4xa1qp4sr52jc9zldmbdpkr6z5j7hk2vgyhfn7m1vc5g0qw";
-    url="mirror://sourceforge/project/conspy/conspy-1.10-1/conspy-1.10.tar.gz";
-    sha256="1vnph4xa1qp4sr52jc9zldmbdpkr6z5j7hk2vgyhfn7m1vc5g0qw";
+    hash="059sag372n09y1ddb1i0sx013kzkbr8a9pjqk03kyijn8h1z5hl2";
+    url="mirror://sourceforge/project/conspy/conspy-1.13-1/conspy-1.13.tar.gz";
+    sha256="059sag372n09y1ddb1i0sx013kzkbr8a9pjqk03kyijn8h1z5hl2";
   };
   buildInputs = [
     autoconf automake ncurses

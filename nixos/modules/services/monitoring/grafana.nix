@@ -93,6 +93,7 @@ in {
     package = mkOption {
       description = "Package to use.";
       default = pkgs.grafana;
+      defaultText = "pkgs.grafana";
       type = types.package;
     };
 

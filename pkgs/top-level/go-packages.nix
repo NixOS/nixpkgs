@@ -57,9 +57,9 @@ let
     goPackageAliases = [ "github.com/golang/image" ];
   };
 
-  net = buildFromGitHub {
+  net_go15 = buildFromGitHub {
     rev    = "62ac18b461605b4be188bbc7300e9aa2bc836cd4";
-    date   = "2015-08-29";
+    date   = "2015-11-04";
     owner  = "golang";
     repo   = "net";
     sha256 = "0lwwvbbwbf3yshxkfhn6z20gd45dkvnmw2ms36diiy34krgy402p";
@@ -70,7 +70,26 @@ let
       "github.com/golang/net"
     ];
     propagatedBuildInputs = [ text crypto ];
+    disabled = isGo14;
   };
+
+  net_go14 = buildFromGitHub {
+    rev    = "ea47fc708ee3e20177f3ca3716217c4ab75942cb";
+    date   = "2015-08-29";
+    owner  = "golang";
+    repo   = "net";
+    sha256 = "0x1pmg97n7l62vak9qnjdjrrfl98jydhv6j0w3jkk4dycdlzn30d";
+    goPackagePath = "golang.org/x/net";
+    goPackageAliases = [
+      "code.google.com/p/go.net"
+      "github.com/hashicorp/go.net"
+      "github.com/golang/net"
+    ];
+    propagatedBuildInputs = [ text ];
+    disabled = !isGo14;
+  };
+
+  net = if isGo14 then net_go14 else net_go15;
 
   oauth2 = buildFromGitHub {
     rev = "397fe7649477ff2e8ced8fc0b2696f781e53745a";
@@ -822,6 +841,13 @@ let
       sha256 = "0ghrx5qmgvgb8cbvsj53v1ir4j9agilg4wyhpk5ikqdv6mmqly4h";
     };
     subPackages = [ "./" ];  # don't try to build test fixtures
+  };
+
+  git-appraise = buildFromGitHub {
+    rev = "v0.3";
+    owner = "google";
+    repo = "git-appraise";
+    sha256 = "124hci9whsvlcywsfz5y20kkj3nhy176a1d5s1lkvsga09yxq6wm";
   };
 
   git-lfs = buildFromGitHub {
@@ -1735,6 +1761,15 @@ let
     ];
   };
 
+  i3cat = buildFromGitHub {
+    rev    = "b9ba886a7c769994ccd8d4627978ef4b51fcf576";
+    date   = "2015-03-21";
+    owner  = "vincent-petithory";
+    repo   = "i3cat";
+    sha256 = "1xlm5c9ajdb71985nq7hcsaraq2z06przbl6r4ykvzi8w2lwgv72";
+    buildInputs = [ structfield ];
+  };
+
   inf = buildFromGitHub {
     rev    = "c85f1217d51339c0fa3a498cc8b2075de695dae6";
     owner  = "go-inf";
@@ -1789,12 +1824,16 @@ let
   };
 
   ipfs = buildFromGitHub{
-    rev = "43622bd5eed1f62d53d364dc771bbb500939d9e6";
-    date   = "2015-10-30";
+    rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
+    date   = "2016-01-12";
     owner  = "ipfs";
     repo   = "go-ipfs";
-    sha256 = "0g80b65ysj995dj3mkh3lp4v616fzjl7bx2wf14mkxfri4gr5icb";
+    sha256 = "1b7aimnbz287fy7p27v3qdxnz514r5142v3jihqxanbk9g384gcd";
     disabled = isGo14;
+    meta = with stdenv.lib; {
+      description = "A global, versioned, peer-to-peer filesystem";
+      license = licenses.mit;
+    };
   };
 
   json2csv = buildFromGitHub{
@@ -2285,7 +2324,7 @@ let
   };
 
   osext = buildFromGitHub {
-    rev = "10da29423eb9a6269092eebdc2be32209612d9d2";
+    rev = "29ae4ffbc9a6fe9fb2bc5029050ce6996ea1d3bc";
     owner = "kardianos";
     repo = "osext";
     sha256 = "1mawalaz84i16njkz6f9fd5jxhcbxkbsjnav3cmqq2dncv2hyv8a";
@@ -3076,6 +3115,14 @@ let
     };
   };
 
+  structfield = buildFromGitHub {
+    rev    = "01a738558a47fbf16712994d1737fb31c77e7d11";
+    date   = "2014-08-01";
+    owner  = "vincent-petithory";
+    repo   = "structfield";
+    sha256 = "1kyx71z13mf6hc8ly0j0b9zblgvj5lzzvgnc3fqh61wgxrsw24dw";
+  };
+
   structs = buildFromGitHub {
     rev    = "a9f7daa9c2729e97450c2da2feda19130a367d8f";
     owner  = "fatih";
@@ -3092,11 +3139,11 @@ let
   };
 
   syncthing = buildFromGitHub rec {
-    version = "0.12.9";
+    version = "0.12.10";
     rev = "v${version}";
     owner = "syncthing";
     repo = "syncthing";
-    sha256 = "0d420bmx1ifhjgbc65bflnawqddi4h86p7fvxzzqwfsaj94fsfbi";
+    sha256 = "1xvar4mm6f33mg8d8z8h49cni6sj1vfns379zspqvszs404fra0z";
     buildFlags = [ "-tags noupgrade,release" ];
     disabled = isGo14;
     buildInputs = [

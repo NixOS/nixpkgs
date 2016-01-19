@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, automake, boost, pkgconfig, libtool, acl, libxml2, btrfsProgs, dbus_libs, docbook_xsl, libxslt, docbook_xml_dtd_45,  diffutils, pam, utillinux, attr, gettext }:
+{ stdenv, fetchgit, autoconf, automake, boost, pkgconfig, libtool, acl, libxml2, btrfs-progs, dbus_libs, docbook_xsl, libxslt, docbook_xml_dtd_45,  diffutils, pam, utillinux, attr, gettext }:
 
 stdenv.mkDerivation rec {
   name = "snapper-0.2.4";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "ec4b829430bd7181995e66a26ac86e8ac71c27e77faf8eb06db71d645c6f859b";
   };
 
-  buildInputs = [ autoconf automake boost pkgconfig libtool acl libxml2 btrfsProgs dbus_libs docbook_xsl libxslt docbook_xml_dtd_45 diffutils pam utillinux attr gettext ];
+  buildInputs = [ autoconf automake boost pkgconfig libtool acl libxml2 btrfs-progs dbus_libs docbook_xsl libxslt docbook_xml_dtd_45 diffutils pam utillinux attr gettext ];
 
   patchPhase = ''
     # work around missing btrfs/version.h; otherwise, use "-DHAVE_BTRFS_VERSION_H"

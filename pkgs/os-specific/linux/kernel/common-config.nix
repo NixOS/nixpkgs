@@ -36,6 +36,9 @@ with stdenv.lib;
   SCHEDSTATS n
   DETECT_HUNG_TASK y
 
+  # Unix domain sockets.
+  UNIX y
+
   # Power management.
   ${optionalString (versionOlder version "3.19") ''
     PM_RUNTIME y
@@ -137,6 +140,7 @@ with stdenv.lib;
   FB_3DFX_ACCEL y
   FB_VESA y
   FRAMEBUFFER_CONSOLE y
+  FRAMEBUFFER_CONSOLE_ROTATION y
   ${optionalString (versionOlder version "3.9" || stdenv.system == "i686-linux") ''
     FB_GEODE y
   ''}
@@ -324,6 +328,7 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.11") ''
     PINCTRL_BAYTRAIL y # GPIO on Intel Bay Trail, for some Chromebook internal eMMC disks
   ''}
+  MMC_BLOCK_MINORS 32 # 8 is default. Modern gpt tables on eMMC may go far beyond 8.
   PPP_MULTILINK y # PPP multilink support
   PPP_FILTER y
   REGULATOR y # Voltage and Current Regulator Support

@@ -1,0 +1,20 @@
+diff --git a/homeserver b/homeserver
+new file mode 120000
+index 0000000..2f1d413
+--- /dev/null
++++ b/homeserver
+@@ -0,0 +1 @@
++synapse/app/homeserver.py
+\ No newline at end of file
+diff --git a/setup.py b/setup.py
+index 9d24761..f3e6a00 100755
+--- a/setup.py
++++ b/setup.py
+@@ -85,6 +85,6 @@ setup(
+     include_package_data=True,
+     zip_safe=False,
+     long_description=long_description,
+-    scripts=["synctl"] + glob.glob("scripts/*"),
++    scripts=["synctl", "homeserver"] + glob.glob("scripts/*"),
+     cmdclass={'test': Tox},
+ )

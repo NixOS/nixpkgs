@@ -39,7 +39,9 @@ let
     gwenview = callPackage ./gwenview.nix {};
     kate = callPackage ./kate.nix {};
     kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
+    kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
     kgpg = callPackage ./kgpg.nix { inherit (pkgs.kde4) kdepimlibs; };
+    kio-extras = callPackage ./kio-extras.nix {};
     konsole = callPackage ./konsole.nix {};
     libkdcraw = callPackage ./libkdcraw.nix {};
     libkexiv2 = callPackage ./libkexiv2.nix {};

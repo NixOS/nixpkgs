@@ -179,8 +179,9 @@ let
     ];
 
   makeJobScript = name: text:
-    let x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${shellEscape name}"; inherit text; };
-    in "${x}/bin/${shellEscape name}";
+    let mkScriptName =  s: (replaceChars [ "\\" ] [ "-" ] (shellEscape s) );
+        x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${mkScriptName name}"; inherit text; };
+    in "${x}/bin/${mkScriptName name}";
 
   unitConfig = { name, config, ... }: {
     config = {
@@ -373,6 +374,7 @@ in
 
     systemd.package = mkOption {
       default = pkgs.systemd;
+      defaultText = "pkgs.systemd";
       type = types.package;
       description = "The systemd package.";
     };

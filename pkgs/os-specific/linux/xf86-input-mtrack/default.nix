@@ -1,34 +1,28 @@
 {
   stdenv
 , fetchurl
-, autoconf
-, automake
 , utilmacros
 , pkgconfig
-, libtool
 , mtdev
 , xorgserver
 , xproto
 , inputproto
 , pixman
+, autoreconfHook
 }:
 
 stdenv.mkDerivation {
   name = "xf86-input-mtrack-0.3.0";
 
-  preConfigure = "autoreconf -vfi";
-
   buildInputs = [
-    autoconf
-    automake
     utilmacros
     pkgconfig
-    libtool
     mtdev
     xorgserver
     xproto
     inputproto
     pixman
+    autoreconfHook
   ];
 
   CFLAGS = "-I${pixman}/include/pixman-1";

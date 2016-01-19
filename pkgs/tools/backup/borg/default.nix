@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonPackage rec {
   name = "borgbackup-${version}";
-  version = "0.27.0";
+  version = "0.29.0";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://pypi.python.org/packages/source/b/borgbackup/borgbackup-${version}.tar.gz";
-    sha256 = "04iizidag4fwy6kx1747d633s1amr81slgk743qsfbwixaxfjq9b";
+    sha256 = "1gvx036a7j16hd5rg8cr3ibiig7gwqhmddrilsakcw4wnfimjy5m";
   };
 
   propagatedBuildInputs = with python3Packages;
@@ -16,8 +16,6 @@ python3Packages.buildPythonPackage rec {
   preConfigure = ''
     export BORG_OPENSSL_PREFIX="${openssl}"
     export BORG_LZ4_PREFIX="${lz4}"
-    # note: fix for this issue already upstream and probably in 0.27.1 (or whatever the next release is called)
-    substituteInPlace setup.py --replace "possible_openssl_prefixes.insert(0, os.environ.get('BORG_LZ4_PREFIX'))" "possible_lz4_prefixes.insert(0, os.environ.get('BORG_LZ4_PREFIX'))"
   '';
 
   meta = with stdenv.lib; {
@@ -25,5 +23,6 @@ python3Packages.buildPythonPackage rec {
     homepage = https://borgbackup.github.io/;
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
+    maintainers = with maintainers; [ nckx ];
   };
 }

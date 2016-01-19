@@ -54,6 +54,15 @@ in
           false.
         '';
       };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.plex;
+        description = ''
+          The Plex package to use. Plex subscribers may wish to use their own
+          package here, pointing to subscriber-only server versions.
+        '';
+      };
     };
   };
 
@@ -66,7 +75,7 @@ in
       preStart = ''
         test -d "${cfg.dataDir}" || {
           echo "Creating initial Plex data directory in \"${cfg.dataDir}\"."
-          mkdir -p "${cfg.dataDir}"
+          mkdir -p "${cfg.dataDir}/Plex Media Server"
           chown -R ${cfg.user}:${cfg.group} "${cfg.dataDir}"
         }
 
@@ -75,7 +84,7 @@ in
         # why this is done.
         test -d "${cfg.dataDir}/.skeleton" || mkdir "${cfg.dataDir}/.skeleton"
         for db in "com.plexapp.plugins.library.db"; do
-            cp "${plex}/usr/lib/plexmediaserver/Resources/base_$db" "${cfg.dataDir}/.skeleton/$db"
+            cp "${cfg.package}/usr/lib/plexmediaserver/Resources/base_$db" "${cfg.dataDir}/.skeleton/$db"
             chmod u+w "${cfg.dataDir}/.skeleton/$db"
             chown ${cfg.user}:${cfg.group} "${cfg.dataDir}/.skeleton/$db"
         done
@@ -117,14 +126,14 @@ in
         User = cfg.user;
         Group = cfg.group;
         PermissionsStartOnly = "true";
-        ExecStart = "/bin/sh -c '${plex}/usr/lib/plexmediaserver/Plex\\ Media\\ Server'";
+        ExecStart = "/bin/sh -c '${cfg.package}/usr/lib/plexmediaserver/Plex\\ Media\\ Server'";
       };
       environment = {
         PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR=cfg.dataDir;
-        PLEX_MEDIA_SERVER_HOME="${plex}/usr/lib/plexmediaserver";
+        PLEX_MEDIA_SERVER_HOME="${cfg.package}/usr/lib/plexmediaserver";
         PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS="6";
         PLEX_MEDIA_SERVER_TMPDIR="/tmp";
-        LD_LIBRARY_PATH="${plex}/usr/lib/plexmediaserver";
+        LD_LIBRARY_PATH="${cfg.package}/usr/lib/plexmediaserver";
         LC_ALL="en_US.UTF-8";
         LANG="en_US.UTF-8";
       };

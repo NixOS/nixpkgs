@@ -98,17 +98,17 @@ in
       loginShellInit = cfge.loginShellInit;
 
       interactiveShellInit = ''
-        ${cfge.interactiveShellInit}
-
-        ${cfg.promptInit}
-        ${zshAliases}
-
-        # Some sane history defaults
+        # history defaults
         export SAVEHIST=2000
         export HISTSIZE=2000
         export HISTFILE=$HOME/.zsh_history
 
         setopt HIST_IGNORE_DUPS SHARE_HISTORY HIST_FCNTL_LOCK
+
+        ${cfge.interactiveShellInit}
+
+        ${cfg.promptInit}
+        ${zshAliases}
 
         # Tell zsh how to find installed completions
         for p in ''${(z)NIX_PROFILES}; do

@@ -1,12 +1,12 @@
 { stdenv, fetchgit, mlton }:
 
 stdenv.mkDerivation rec {
-  name = "ceptre-2015-11-20";
+  name = "ceptre-2016-01-01";
 
   src = fetchgit {
     url = https://github.com/chrisamaphone/interactive-lp;
-    rev = "adb59d980f903e49a63b668618241d1b8beb28be";
-    sha256 = "1pyl2imrvq2icr2rr4ys7djnizppbgqldgsv5525xsvzm78w3ac7";
+    rev = "b3d21489d4994f03d2982de273eea90bc7fba5d0";
+    sha256 = "01f72q435kmf3mkgnn47hlnv6k3i5kjb26pbjrwvysc6am33jlcb";
   };
 
   nativeBuildInputs = [ mlton ];

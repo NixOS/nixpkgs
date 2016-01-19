@@ -191,9 +191,13 @@ rec {
   versionAtLeast = v1: v2: !versionOlder v1 v2;
 
 
-  # Get the version of the specified derivation, as specified in its
-  # ‘name’ attribute.
-  getVersion = drv: (builtins.parseDrvName drv.name).version;
+  # This function takes an argument that's either a derivation or a
+  # derivation's "name" attribute and extracts the version part from that
+  # argument. For example:
+  #
+  #    lib.getVersion "youtube-dl-2016.01.01" ==> "2016.01.01"
+  #    lib.getVersion pkgs.youtube-dl         ==> "2016.01.01"
+  getVersion = x: (builtins.parseDrvName (x.name or x)).version;
 
 
   # Extract name with version from URL. Ask for separator which is

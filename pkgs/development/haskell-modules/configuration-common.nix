@@ -180,11 +180,8 @@ self: super: {
   wai-test = dontHaddock super.wai-test;
   zlib-conduit = dontHaddock super.zlib-conduit;
 
-  # Jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
-  darcs = (overrideCabal super.darcs (drv: {
-    doCheck = false;            # The test suite won't even start.
-    postPatch = "sed -i -e 's|attoparsec .*,|attoparsec,|' -e 's|vector .*,|vector,|' darcs.cabal";
-  }));
+  # The test suite won't even start.
+  darcs = dontCheck super.darcs;
 
   # https://github.com/massysett/rainbox/issues/1
   rainbox = dontCheck super.rainbox;
@@ -926,6 +923,10 @@ self: super: {
   # https://github.com/sol/hpack/issues/53
   hpack = dontCheck super.hpack;
 
+  # Tests require `docker` command in PATH
+  # Tests require running docker service :on localhost
+  docker = dontCheck super.docker;
+
   # https://github.com/deech/fltkhs/issues/16
   fltkhs = overrideCabal super.fltkhs (drv: {
     libraryToolDepends = (drv.libraryToolDepends or []) ++ [pkgs.autoconf];
@@ -941,8 +942,4 @@ self: super: {
 
   # https://github.com/mainland/language-c-quote/issues/57
   language-c-quote = super.language-c-quote.override { alex = self.alex_3_1_4; };
-
-  # The package doesn't yet compile with new HSE: https://github.com/bmillwood/pointfree/pull/13
-  pointfree = super.pointfree.override { haskell-src-exts = self.haskell-src-exts_1_16_0_1; };
-
 }

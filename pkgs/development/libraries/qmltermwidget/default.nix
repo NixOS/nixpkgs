@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace qmltermwidget.pro \
-      --replace '$$[QT_INSTALL_QML]' "/lib/qml/"
+      --replace '$$[QT_INSTALL_QML]' "/lib/qt5/qml/"
   '';
 
   configurePhase = "qmake PREFIX=$out";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A QML port of qtermwidget";
-    homepage = "https://github.com/Swordifish90/qmltermwidget";
+    homepage = "https://github.com/Swordfish90/qmltermwidget";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ skeidel ];

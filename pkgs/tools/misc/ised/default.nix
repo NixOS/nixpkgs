@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "ised-${version}";
-  version = "2.6.0";
+  version = "2.7.0";
   src = fetchurl {
     url = "mirror://sourceforge/project/ised/${name}.tar.bz2";
-    sha256 = "0rf9brqkrad8f3czpfc1bxq9ybv3nxci9276wdxas033c82cqkjs";
+    sha256 = "08wzgmyvlhfaxa0m2b6pw2mn03k1a87pzbzxm0x9z84gci9w2g4h";
   };
 
   meta = {

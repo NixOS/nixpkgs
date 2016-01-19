@@ -136,7 +136,7 @@
       kippo = 108;
       jenkins = 109;
       systemd-journal-gateway = 110;
-      notbit = 111;
+      #notbit = 111; # unused
       ngircd = 112;
       btsync = 113;
       minecraft = 114;
@@ -239,6 +239,15 @@
       bepasty = 215;
       pumpio = 216;
       nm-openvpn = 217;
+      mathics = 218;
+      ejabberd = 219;
+      postsrsd = 220;
+      opendkim = 221;
+      dspam = 222;
+      gale = 223;
+      matrix-synapse = 224;
+      rspamd = 225;
+      rmilter = 226;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -355,7 +364,7 @@
       kippo = 108;
       jenkins = 109;
       systemd-journal-gateway = 110;
-      notbit = 111;
+      #notbit = 111; # unused
       #ngircd = 112; # unused
       btsync = 113;
       #minecraft = 114; # unused
@@ -455,6 +464,15 @@
       bepasty = 215;
       pumpio = 216;
       nm-openvpn = 217;
+      mathics = 218;
+      ejabberd = 219;
+      postsrsd = 220;
+      opendkim = 221;
+      dspam = 222;
+      gale = 223;
+      matrix-synapse = 224;
+      rspamd = 225;
+      rmilter = 226;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

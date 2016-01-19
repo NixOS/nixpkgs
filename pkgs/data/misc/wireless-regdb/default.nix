@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     inherit version;
     description = "Wireless regulatory database for CRDA";
-    homepage = https://git.kernel.org/cgit/linux/kernel/git/sforshee/wireless-regdb.git/;
+    homepage = http://wireless.kernel.org/en/developers/Regulatory/;
     license = licenses.isc;
     platforms = platforms.all;
     maintainers = with maintainers; [ nckx ];

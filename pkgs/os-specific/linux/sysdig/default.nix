@@ -3,10 +3,10 @@ let
   inherit (stdenv.lib) optional optionalString;
   s = rec {
     baseName="sysdig";
-    version = "0.5.1";
+    version = "0.6.0";
     name="${baseName}-${version}";
     url="https://github.com/draios/sysdig/archive/${version}.tar.gz";
-    sha256 = "08wnk0593ljdq466hk0npsjc0gbm37nsjm1x2ilsf58n1xl8dmfs";
+    sha256 = "0729mjs9gpd7kb495q80zlp23zczm8ka3xcq4571c0sm732sa3g3";
   };
   buildInputs = [
     cmake zlib luajit ncurses perl jsoncpp libb64 openssl curl

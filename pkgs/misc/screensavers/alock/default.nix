@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, autoconf, automake
+{ stdenv, fetchgit, pkgconfig, autoreconfHook
 , libX11, pam, libgcrypt, libXrender, imlib2 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "c1f00bf90c966b2b76e00061cc4b54a3c0bc6547e788731ab694b43f55a216ab";
   };
 
-  preConfigure = "autoreconf -fvi";
   configureFlags = [
     "--enable-pam"
     "--enable-hash"
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
     "--enable-imlib2"
   ];
   buildInputs = [
-    pkgconfig autoconf automake libX11
+    pkgconfig autoreconfHook libX11
     pam libgcrypt libXrender imlib2
   ];
 

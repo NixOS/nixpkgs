@@ -1,13 +1,11 @@
-{ stdenv, fetchurl, fetchHex, erlang, tree, fetchFromGitHub }:
+{ stdenv, writeText, callPackage, fetchurl,
+  fetchHex, erlang, rebar3-nix-bootstrap, tree, fetchFromGitHub }:
 
 
 let
   version = "3.0.0-beta.4";
-  registrySnapshot = import ./registrySnapshot.nix { inherit fetchFromGitHub; };
-  setupRegistry = ''
-    mkdir -p _build/default/{lib,plugins,packages}/ ./.cache/rebar3/hex/default/
-    zcat ${registrySnapshot}/registry.ets.gz > .cache/rebar3/hex/default/registry
-  '';
+  registrySnapshot = callPackage ./registrySnapshot.nix { };
+
   # TODO: all these below probably should go into nixpkgs.erlangModules.sources.*
   # {erlware_commons,     "0.16.0"},
   erlware_commons = fetchHex {
@@ -73,6 +71,7 @@ let
 in
 stdenv.mkDerivation {
   name = "rebar3-${version}";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/rebar/rebar3/archive/${version}.tar.gz";
@@ -81,14 +80,13 @@ stdenv.mkDerivation {
 
   patches = [ ./hermetic-bootstrap.patch ];
 
-  buildInputs = [ erlang
-                  tree
-                ];
-  inherit setupRegistry;
+  buildInputs = [ erlang tree  ];
+  propagatedBuildInputs = [ registrySnapshot rebar3-nix-bootstrap ];
 
   postPatch = ''
     echo postPatch
-    ${setupRegistry}
+    rebar3-nix-bootstrap registry-only
+    echo "$ERL_LIBS"
     mkdir -p _build/default/lib/
     cp --no-preserve=mode -R ${erlware_commons} _build/default/lib/erlware_commons
     cp --no-preserve=mode -R ${providers} _build/default/lib/providers

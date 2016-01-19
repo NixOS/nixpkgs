@@ -1,35 +1,36 @@
 { stdenv, fetchFromGitHub, autoreconfHook, docbook_xsl, gtk_doc, icu
-, libxslt, pkgconfig }:
+, libxslt, pkgconfig, python }:
 
 let
 
   version = "${libVersion}-list-${listVersion}";
 
-  listVersion = "2015-12-17";
+  listVersion = "2016-01-09";
   listSources = fetchFromGitHub {
-    sha256 = "09scxqlw7cp7vkjn7bp7dr9nqb3wg84kvw3iyapyxddfri4k0rvl";
-    rev = "9636089f5f22b0af98b1a48fb9179dc875f0872d";
+    sha256 = "1xsal9vyan954ahyn9pxvqpipmpcf6drp30xz7ag5xp3f2clcx8s";
+    rev = "0f7cc8b00498812ddaa983c56d67ef3713e48350";
     repo = "list";
     owner = "publicsuffix";
   };
 
-  libVersion = "0.11.0";
+  libVersion = "0.12.0";
 
 in stdenv.mkDerivation {
   name = "libpsl-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "08k7prrr83lg6jmm5r5k4alpm2in4qlnx49ypb4bxv16lq8dcnmm";
+    sha256 = "13w3lc752az2swymg408f3w2lbqs0f2h5ri6d5jw1vv9z0ij9xlw";
     rev = "libpsl-${libVersion}";
     repo = "libpsl";
     owner = "rockdaboot";
   };
 
   buildInputs = [ icu libxslt ];
-  nativeBuildInputs = [ autoreconfHook docbook_xsl gtk_doc pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook docbook_xsl gtk_doc pkgconfig python ];
 
   postPatch = ''
     substituteInPlace src/psl.c --replace bits/stat.h sys/stat.h
+    patchShebangs src/make_dafsa.py
   '';
 
   preAutoreconf = ''
@@ -41,7 +42,12 @@ in stdenv.mkDerivation {
     # The libpsl check phase requires the list's test scripts (tests/) as well
     cp -Rv "${listSources}"/* list
   '';
-  configureFlags = [ "--disable-static" "--enable-gtk-doc" "--enable-man" ];
+  configureFlags = [
+    "--disable-builtin"
+    "--disable-static"
+    "--enable-gtk-doc"
+    "--enable-man"
+  ];
 
   enableParallelBuilding = true;
 

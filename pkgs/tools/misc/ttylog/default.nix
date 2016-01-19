@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = "http://ttylog.sourceforg.net";
-    description = "a serial port logger which can be used to print everything to stdout that comes from a serial device";
+    description = "Simple serial port logger";
+    longDescription = ''
+      A serial port logger which can be used to print everything to stdout
+      that comes from a serial device.
+    '';
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];

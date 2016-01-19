@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   doCheck = false; # tests take a very long time
   checkTarget = "test";
 
+  patches = [ ./install-on-freebsd.patch ] ;
+
   meta = with stdenv.lib; {
     inherit version;
     description = "Extremely fast compression algorithm";
@@ -32,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://code.google.com/p/lz4/;
     license = with licenses; [ bsd2 gpl2Plus ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ nckx ];
   };
 }

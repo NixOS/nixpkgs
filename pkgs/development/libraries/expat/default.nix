@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" ]; # TODO: fix referrers
   outputBin = "dev";
+
+  configureFlags = stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
+
   outputMan = "dev"; # tiny page for a dev tool
 
   meta = with stdenv.lib; {

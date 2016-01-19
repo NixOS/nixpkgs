@@ -33,10 +33,6 @@ buildPythonPackage rec {
     pygobject3 pycairo cython
   ];
 
-  postPatch = ''
-    sed -i 's|DEFAULT_XVFB_COMMAND = "Xvfb|DEFAULT_XVFB_COMMAND = "Xvfb -xkbdir ${xkeyboard_config}/etc/X11/xkb|' xpra/platform/features.py
-  '';
-
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-3.0) $(pkg-config --cflags xtst)"
   '';

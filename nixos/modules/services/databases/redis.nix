@@ -46,6 +46,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.redis;
+        defaultText = "pkgs.redis";
         description = "Which Redis derivation to use.";
       };
 

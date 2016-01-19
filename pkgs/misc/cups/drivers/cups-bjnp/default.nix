@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-include stdio.h";
 
   meta = {
+    description = "CUPS back-end for Canon printers";
+    longDescription = ''
+      CUPS back-end for the canon printers using the proprietary USB over IP
+      BJNP protocol. This back-end allows Cups to print over the network to a
+      Canon printer. The design is based on reverse engineering of the protocol.
+    '';
     homepage = http://cups-bjnp.sourceforge.net;
   };
 }

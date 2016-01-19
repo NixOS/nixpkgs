@@ -1,7 +1,7 @@
 {stdenv, androidsdk, titaniumsdk, titanium, xcodewrapper, jdk, python, which, xcodeBaseDir}:
-{ name, src, target, androidPlatformVersions ? [ "8" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ], tiVersion ? null
+{ name, src, target, androidPlatformVersions ? [ "23" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ], tiVersion ? null
 , release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
-, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "8.1", iosWwdrCertificate ? null
+, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "9.2"
 , enableWirelessDistribution ? false, installURL ? null
 }:
 
@@ -43,31 +43,29 @@ stdenv.mkDerivation {
     
     echo "{}" > $TMPDIR/config.json
     titanium --config-file $TMPDIR/config.json --no-colors config sdk.defaultInstallLocation ${titaniumsdk}
-    
     titanium --config-file $TMPDIR/config.json --no-colors config paths.modules ${titaniumsdk}
     
     mkdir -p $out
     
     ${if target == "android" then
         ''
-          titanium config --config-file $TMPDIR/config.json --no-colors android.sdkPath ${androidsdkComposition}/libexec/android-sdk-*
+          titanium config --config-file $TMPDIR/config.json --no-colors android.sdk ${androidsdkComposition}/libexec/android-sdk-*
+          titanium config --config-file $TMPDIR/config.json --no-colors android.buildTools.selectedVersion 23.0.1
+          titanium config --config-file $TMPDIR/config.json --no-colors android.buildTools.path ${androidsdkComposition}/libexec/android-sdk-*/build-tools/android-*
+          titanium config --config-file $TMPDIR/config.json android.executables.zipalign ${androidsdkComposition}/libexec/android-sdk-*/build-tools/android-*/zipalign
+          titanium config --config-file $TMPDIR/config.json android.executables.aapt ${androidsdkComposition}/libexec/android-sdk-*/build-tools/android-*/aapt
+          titanium config --config-file $TMPDIR/config.json android.executables.aidl ${androidsdkComposition}/libexec/android-sdk-*/build-tools/android-*/aidl
+          titanium config --config-file $TMPDIR/config.json android.executables.dx ${androidsdkComposition}/libexec/android-sdk-*/build-tools/android-*/dx
           
-          # Add zipalign to PATH to make Ti 3.1 builds still work
-          for i in $(find -L ${androidsdkComposition}/libexec/android-sdk-*/build-tools -name zipalign)
-          do
-              export PATH=$(dirname $i):$PATH
-              break
-          done
+          export PATH=$(echo ${androidsdkComposition}/libexec/android-sdk-*/tools):$(echo ${androidsdkComposition}/libexec/android-sdk-*/build-tools/android-*):$PATH
           
           ${if release then
-            ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target dist-playstore --keystore ${androidKeyStore} --alias ${androidKeyAlias} --password ${androidKeyStorePassword} --output-dir $out''
+            ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target dist-playstore --keystore ${androidKeyStore} --alias ${androidKeyAlias} --store-password ${androidKeyStorePassword} --output-dir $out''
           else
             ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target emulator --build-only -B foo --output $out''}
         ''
       else if target == "iphone" then
         ''
-          export NIX_TITANIUM_WORKAROUND="--config-file $TMPDIR/config.json"
-          
           ${if release then
             ''
               export HOME=/Users/$(whoami)
@@ -78,9 +76,6 @@ stdenv.mkDerivation {
               security default-keychain -s $keychainName
               security unlock-keychain -p "" $keychainName
               security import ${iosCertificate} -k $keychainName -P "${iosCertificatePassword}" -A
-              ${stdenv.lib.optionalString (iosWwdrCertificate != null) ''
-                security import ${iosWwdrCertificate} -k $keychainName
-              ''}
               provisioningId=$(grep UUID -A1 -a ${iosMobileProvisioningProfile} | grep -o "[-A-Za-z0-9]\{36\}")
    
               # Ensure that the requested provisioning profile can be found
@@ -91,16 +86,6 @@ stdenv.mkDerivation {
                   cp ${iosMobileProvisioningProfile} "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision"
               fi
             
-              # Make a copy of the Titanium SDK and fix its permissions. Without it,
-              # builds using the facebook module fail, because it needs to be writable
-            
-              cp -av ${titaniumsdk} $TMPDIR/titaniumsdk
-            
-              find $TMPDIR/titaniumsdk | while read i
-              do
-                  chmod 755 "$i"
-              done
-              
               # Simulate a login
               mkdir -p $HOME/.titanium
               cat > $HOME/.titanium/auth_session.json <<EOF
@@ -110,14 +95,21 @@ stdenv.mkDerivation {
               # Configure the path to Xcode
               titanium --config-file $TMPDIR/config.json --no-colors config paths.xcode ${xcodeBaseDir}
               
-              # Set the SDK to our copy
-              titanium --config-file $TMPDIR/config.json --no-colors config sdk.defaultInstallLocation $TMPDIR/titaniumsdk
-            
+              # Make plutil available
+              mkdir -p $TMPDIR/bin
+              ln -s /usr/bin/plutil $TMPDIR/bin
+              export PATH=$TMPDIR/bin:$PATH
+              
+              # Link the modules folder
+              if [ ! -e modules ]
+              then
+                  ln -s ${titaniumsdk}/modules modules
+              fi
+              
               # Do the actual build
               titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target dist-adhoc --pp-uuid $provisioningId --distribution-name "${iosCertificateName}" --keychain $HOME/Library/Keychains/$keychainName --device-family universal --ios-version ${iosVersion} --output-dir $out
             
               # Remove our generated keychain
-            
               ${deleteKeychain}
             ''
           else
@@ -129,11 +121,28 @@ stdenv.mkDerivation {
             
               cp -av * $out
               cd $out
-            
+              
+              # We need to consult a real home directory to find the available simulators
+              export HOME=/Users/$(whoami)
+              
               # Configure the path to Xcode
               titanium --config-file $TMPDIR/config.json --no-colors config paths.xcode ${xcodeBaseDir}
               
+              # Link the modules folder
+              if [ ! -e modules ]
+              then
+                  ln -s ${titaniumsdk}/modules modules
+                  createdModulesSymlink=1
+              fi
+              
+              # Execute the build
               titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target simulator --build-only --device-family universal --ios-version ${iosVersion} --output-dir $out
+              
+              # Remove the modules symlink
+              if [ "$createdModulesSymlink" = "1" ]
+              then
+                  rm $out/modules
+              fi
           ''}
         ''
 

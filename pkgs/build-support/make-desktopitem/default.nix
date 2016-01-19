@@ -13,10 +13,10 @@
 }:
 
 stdenv.mkDerivation {
-  inherit name;
+  name = "${name}.desktop";
   buildCommand = ''
     mkdir -p $out/share/applications
-    cat > $out/share/applications/$name.desktop <<EOF
+    cat > $out/share/applications/${name}.desktop <<EOF
     [Desktop Entry]
     Type=${type}
     Exec=${exec}

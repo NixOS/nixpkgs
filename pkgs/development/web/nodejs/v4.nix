@@ -48,6 +48,9 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ]
     ++ optional stdenv.isDarwin libtool;
 
+  postFixup = ''
+    sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' $out/lib/node_modules/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
+  '';
   setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true;

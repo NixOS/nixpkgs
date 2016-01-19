@@ -1,78 +1,19 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, patchelf, p7zip, jdk
-, coreutils, gnugrep, which, git, python, unzip, androidsdk
+{ stdenv, callPackage, fetchurl, makeDesktopItem, makeWrapper, patchelf
+, coreutils, gnugrep, which, git, python, unzip, p7zip
+, androidsdk, jdk, oraclejdk8
 }:
 
 assert stdenv.isLinux;
 
 let
 
-  mkIdeaProduct = with stdenv.lib;
-  { name, product, version, build, src, meta }:
-
-  let loName = toLower product;
-      hiName = toUpper product;
-      execName = concatStringsSep "-" (init (splitString "-" name));
-  in
-
-  with stdenv; lib.makeOverridable mkDerivation rec {
-    inherit name build src meta;
-    desktopItem = makeDesktopItem {
-      name = execName;
-      exec = execName;
-      comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
-      desktopName = product;
-      genericName = meta.description;
-      categories = "Application;Development;";
-      icon = execName;
-    };
-
-    buildInputs = [ makeWrapper patchelf p7zip unzip ];
-
-    patchPhase = ''
-        get_file_size() {
-          local fname="$1"
-          echo $(ls -l $fname | cut -d ' ' -f5)
-        }
-
-        munge_size_hack() {
-          local fname="$1"
-          local size="$2"
-          strip $fname
-          truncate --size=$size $fname
-        }
-
-        interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
-        if [ "${stdenv.system}" == "x86_64-linux" ]; then
-          target_size=$(get_file_size bin/fsnotifier64)
-          patchelf --set-interpreter "$interpreter" bin/fsnotifier64
-          munge_size_hack bin/fsnotifier64 $target_size
-        else
-          target_size=$(get_file_size bin/fsnotifier)
-          patchelf --set-interpreter "$interpreter" bin/fsnotifier
-          munge_size_hack bin/fsnotifier $target_size
-        fi
-    '';
-
-    installPhase = ''
-      mkdir -p $out/{bin,$name,share/pixmaps,libexec/${name}}
-      cp -a . $out/$name
-      ln -s $out/$name/bin/${loName}.png $out/share/pixmaps/${execName}.png
-      mv bin/fsnotifier* $out/libexec/${name}/.
-
-      jdk=${jdk.home}
-      item=${desktopItem}
-
-      makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${execName}" \
-        --prefix PATH : "$out/libexec/${name}:${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin" \
-        --set JDK_HOME "$jdk" \
-        --set ${hiName}_JDK "$jdk" \
-        --set ANDROID_JAVA_HOME "$jdk" \
-        --set JAVA_HOME "$jdk"
-
-      ln -s "$item/share/applications" $out/share
-    '';
-
-  };
+  bnumber = with stdenv.lib; build: last (splitString "-" build);
+  mkIdeaProduct' = callPackage ./common.nix { };
+  mkIdeaProduct = attrs: mkIdeaProduct' ({
+      # After IDEA 15 we can no longer use OpenJDK.
+      # https://youtrack.jetbrains.com/issue/IDEA-147272
+      jdk = if (bnumber attrs.build) < "143" then jdk else oraclejdk8;
+  } // attrs);
 
   buildAndroidStudio = { name, version, build, src, license, description }:
     let drv = (mkIdeaProduct rec {
@@ -235,6 +176,18 @@ in
     };
   };
 
+  idea14-community = buildIdea rec {
+    name = "idea-community-${version}";
+    version = "14.1.6";
+    build = "IC-141.3056.4";
+    description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
+    license = stdenv.lib.licenses.asl20;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
+      sha256 = "157969b37sbafby1r1gva2xm3a3y0dgj7pisgxmk8k1d5rgncvil";
+    };
+  };
+
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
     version = "15.0.2";
@@ -273,25 +226,25 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "5.0.1";
-    build = "143.595";
+    version = "5.0.3";
+    build = "143.1559.1";
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "14m3imy64cp2l9pnmknxbjzj3z30rx88r4brz9d5xk5qailjg2wf";
+      sha256 = "1xb3qxhl8ln488v0hmjqkzpyypm7wh941c7syi4cs7plbdp6w4c2";
     };
   };
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "5.0.1";
-    build = "143.595";
+    version = "5.0.3";
+    build = "143.1559.1";
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "102sfjvchk80911w3qpjsp30wvq73kgpwyqcqdgqxcgm2vqh3183";
+      sha256 = "1v2g9867nn3id1zfbg4zwj0c0z9d72rl9c1dz6vs2c4j0y4gy9xl";
     };
   };
 

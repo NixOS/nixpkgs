@@ -93,7 +93,9 @@ in
       };
 
       package = mkOption {
+        type = types.package;
         default = pkgs.openssh;
+        defaultText = "pkgs.openssh";
         description = ''
           The package used for the openssh client and daemon.
         '';
@@ -142,16 +144,18 @@ in
         description = ''
           The set of system-wide known SSH hosts.
         '';
-        example = [
-          {
-            hostNames = [ "myhost" "myhost.mydomain.com" "10.10.1.4" ];
-            publicKeyFile = literalExample "./pubkeys/myhost_ssh_host_dsa_key.pub";
-          }
-          {
-            hostNames = [ "myhost2" ];
-            publicKeyFile = literalExample "./pubkeys/myhost2_ssh_host_dsa_key.pub";
-          }
-        ];
+        example = literalExample ''
+          [
+            {
+              hostNames = [ "myhost" "myhost.mydomain.com" "10.10.1.4" ];
+              publicKeyFile = "./pubkeys/myhost_ssh_host_dsa_key.pub";
+            }
+            {
+              hostNames = [ "myhost2" ];
+              publicKeyFile = "./pubkeys/myhost2_ssh_host_dsa_key.pub";
+            }
+          ]
+        '';
       };
 
     };

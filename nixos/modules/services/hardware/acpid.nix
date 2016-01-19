@@ -20,7 +20,7 @@ let
       }
     '';
 
-  events = [powerEvent lidEvent acEvent];
+  events = [powerEvent lidEvent acEvent muteEvent volumeDownEvent volumeUpEvent cdPlayEvent cdNextEvent cdPrevEvent];
 
   # Called when the power button is pressed.
   powerEvent =
@@ -54,6 +54,61 @@ let
           ${config.services.acpid.acEventCommands}
         '';
     };
+
+  muteEvent = {
+    name = "mute";
+    event = "button/mute.*";
+    action = ''
+      #! ${pkgs.bash}/bin/sh
+      ${config.services.acpid.muteCommands}
+    '';
+  };
+
+  volumeDownEvent = {
+    name = "volume-down";
+    event = "button/volumedown.*";
+    action = ''
+      #! ${pkgs.bash}/bin/sh
+      ${config.services.acpid.volumeDownEventCommands}
+    '';
+  };
+
+  volumeUpEvent = {
+    name = "volume-up";
+    event = "button/volumeup.*";
+    action = ''
+      #! ${pkgs.bash}/bin/sh
+      ${config.services.acpid.volumeUpEventCommands}
+    '';
+  };
+
+  cdPlayEvent = {
+    name = "cd-play";
+    event = "cd/play.*";
+    action = ''
+      #! ${pkgs.bash}/bin/sh
+      ${config.services.acpid.cdPlayEventCommands}
+    '';
+  };
+
+  cdNextEvent = {
+    name = "cd-next";
+    event = "cd/next.*";
+    action = ''
+      #! ${pkgs.bash}/bin/sh
+      ${config.services.acpid.cdNextEventCommands}
+    '';
+  };
+
+  cdPrevEvent = {
+    name = "cd-prev";
+    event = "cd/prev.*";
+    action = ''
+      #! ${pkgs.bash}/bin/sh
+      ${config.services.acpid.cdPrevEventCommands}
+    '';
+  };
+
 
 in
 
@@ -89,6 +144,42 @@ in
         description = "Shell commands to execute on an ac_adapter.* event.";
       };
 
+      muteCommands = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Shell commands to execute on an button/mute.* event.";
+      };
+
+      volumeDownEventCommands = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Shell commands to execute on an button/volumedown.* event.";
+      };
+
+      volumeUpEventCommands = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Shell commands to execute on an button/volumeup.* event.";
+      };
+
+      cdPlayEventCommands = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Shell commands to execute on an cd/play.* event.";
+      };
+
+      cdNextEventCommands = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Shell commands to execute on an cd/next.* event.";
+      };
+
+      cdPrevEventCommands = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Shell commands to execute on an cd/prev.* event.";
+      };
+
     };
 
   };
@@ -98,21 +189,25 @@ in
 
   config = mkIf config.services.acpid.enable {
 
-    jobs.acpid =
-      { description = "ACPI Daemon";
+    systemd.services.acpid = {
+      description = "ACPI Daemon";
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "systemd-udev-settle.service" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "systemd-udev-settle.service" ];
 
-        path = [ pkgs.acpid ];
+      path = [ pkgs.acpid ];
 
-        daemonType = "fork";
-
-        exec = "acpid --confdir ${acpiConfDir}";
-
-        unitConfig.ConditionVirtualization = "!systemd-nspawn";
-        unitConfig.ConditionPathExists = [ "/proc/acpi" ];
+      serviceConfig = {
+        Type = "forking";
       };
+
+      unitConfig = {
+        ConditionVirtualization = "!systemd-nspawn";
+        ConditionPathExists = [ "/proc/acpi" ];
+      };
+
+      script = "acpid --confdir ${acpiConfDir}";
+    };
 
   };
 

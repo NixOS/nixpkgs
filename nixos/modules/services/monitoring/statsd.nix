@@ -11,7 +11,7 @@ let
 
   configFile = pkgs.writeText "statsd.conf" ''
     {
-      address: "${cfg.host}",
+      address: "${cfg.listenAddress}",
       port: "${toString cfg.port}",
       mgmt_address: "${cfg.mgmt_address}",
       mgmt_port: "${toString cfg.mgmt_port}",
@@ -48,7 +48,7 @@ in
       type = types.bool;
     };
 
-    host = mkOption {
+    listenAddress = mkOption {
       description = "Address that statsd listens on over UDP";
       default = "127.0.0.1";
       type = types.str;

@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt
-, libjpeg, libpng, libtiff, ncurses, pango, pcre, perl, readline, tcl
-, texLive, tk, xz, zlib, less, texinfo, graphviz, icu, pkgconfig, bison
-, imake, which, jdk, openblas, curl
+{ stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
+, libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
+, less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
+, curl, Cocoa, Foundation, cf-private, libobjc, tzdata
 , withRecommendedPackages ? true
+, enableStrictBarrier ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -14,10 +15,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ bzip2 gfortran libX11 libXmu libXt
-    libXt libjpeg libpng libtiff ncurses pango pcre perl readline tcl
-    texLive tk xz zlib less texinfo graphviz icu pkgconfig bison imake
-    which jdk openblas curl
-  ];
+    libXt libjpeg libpng libtiff ncurses pango pcre perl readline
+    texLive xz zlib less texinfo graphviz icu pkgconfig bison imake
+    which jdk openblas curl ]
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ tcl tk ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation cf-private libobjc ];
 
   patches = [ ./no-usr-local-search-paths.patch ];
 
@@ -38,6 +40,7 @@ stdenv.mkDerivation rec {
       --with-system-pcre
       --with-system-xz
       --with-ICU
+      ${stdenv.lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
       --enable-R-shlib
       AR=$(type -p ar)
       AWK=$(type -p gawk)
@@ -47,8 +50,21 @@ stdenv.mkDerivation rec {
       JAVA_HOME="${jdk}"
       RANLIB=$(type -p ranlib)
       R_SHELL="${stdenv.shell}"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+      --without-tcltk
+      --without-aqua
+      --disable-R-framework
+      CC="clang"
+      CXX="clang++"
+      OBJC="clang"
+  '' + ''
     )
     echo "TCLLIBPATH=${tk}/lib" >>etc/Renviron.in
+  '';
+
+  postConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i 's|/usr/share/zoneinfo|${tzdata}/share/zoneinfo|g' src/library/base/R/datetime.R
+    sed -i 's|getenv("R_SHARE_DIR")|"${tzdata}/share"|g' src/extra/tzone/localtime.c
   '';
 
   installTargets = [ "install" "install-info" "install-pdf" ];

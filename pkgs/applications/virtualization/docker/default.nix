@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper
 , go, sqlite, iproute, bridge-utils, devicemapper
-, btrfsProgs, iptables, e2fsprogs, xz, utillinux
+, btrfs-progs, iptables, e2fsprogs, xz, utillinux
+, systemd, pkgconfig
 , enableLxc ? false, lxc
 }:
 
@@ -20,11 +21,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    makeWrapper go sqlite iproute bridge-utils devicemapper btrfsProgs
-    iptables e2fsprogs stdenv.glibc stdenv.glibc.static
+    makeWrapper go sqlite iproute bridge-utils devicemapper btrfs-progs
+    iptables e2fsprogs systemd pkgconfig stdenv.glibc stdenv.glibc.static
   ];
 
   dontStrip = true;
+
+  DOCKER_BUILDTAGS = [ "journald" ];
 
   buildPhase = ''
     patchShebangs .

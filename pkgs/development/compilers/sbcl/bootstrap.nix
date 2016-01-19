@@ -24,6 +24,11 @@ let
     };
     armv6l-linux = armv7l-linux;
     x86_64-solaris = x86_64-linux;
+    x86_64-freebsd = rec {
+      version = "1.2.7";
+      system = "x86-64-freebsd";
+      sha256 = "14k42xiqd2rrim4pd5k5pjcrpkac09qnpynha8j1v4jngrvmw7y6";
+    };
   };
   cfg = options.${stdenv.system};
 in

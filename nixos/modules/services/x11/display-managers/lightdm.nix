@@ -69,7 +69,7 @@ in
 
       greeter =  {
         package = mkOption {
-          type = types.path;
+          type = types.package;
           description = ''
             The LightDM greeter to login via. The package should be a directory
             containing a .desktop file matching the name in the 'name' option.
@@ -86,6 +86,7 @@ in
       };
 
       background = mkOption {
+        type = types.path;
         description = ''
           The background image or color to use.
         '';

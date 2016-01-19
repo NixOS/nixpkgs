@@ -5,10 +5,10 @@ let
   s = # Generated upstream information
   rec {
     baseName="qpdfview";
-    version = "0.4.15";
+    version = "0.4.16";
     name="${baseName}-${version}";
     url="https://launchpad.net/qpdfview/trunk/${version}/+download/qpdfview-${version}.tar.gz";
-    sha256 = "0wgj02zpbyq4m2ix8rljiz312l2xk81gpy030vy424icq4xsip52";
+    sha256 = "0zysjhr58nnmx7ba01q3zvgidkgcqxjdj4ld3gx5fc7wzvl1dm7s";
   };
   buildInputs = [
     qt4 poppler_qt4 pkgconfig djvulibre libspectre cups file ghostscript

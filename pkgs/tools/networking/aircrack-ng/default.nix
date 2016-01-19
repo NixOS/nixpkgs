@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libpcap, openssl, zlib, wirelesstools, libnl, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "aircrack-ng-1.2-beta3";
+  name = "aircrack-ng-1.2-rc3";
 
   src = fetchurl {
     url = "http://download.aircrack-ng.org/${name}.tar.gz";
-    sha256 = "13g9xz9djjgfc2xi88vnx7zhgy751hqb3739y7znyihd6q9sw8id";
+    sha256 = "11a53acln0fpar6v75qlybzdg8hdwc9ssd06fxygr47yp755qncf";
   };
 
   buildInputs = [ libpcap openssl zlib libnl pkgconfig ];
@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    description = "Wireless encryption crackign tools";
+    description = "Wireless encryption cracking tools";
     homepage = http://www.aircrack-ng.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ maintainers.iElectric maintainers.viric maintainers.garbas maintainers.chaoflow ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ iElectric viric garbas chaoflow nckx ];
     platforms = platforms.linux;
   };
 }

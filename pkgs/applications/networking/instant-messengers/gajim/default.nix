@@ -7,6 +7,7 @@
 , enableRST ? true
 , enableSpelling ? true, gtkspell ? null
 , enableNotifications ? false
+, extraPythonPackages ? pkgs: []
 }:
 
 assert enableJingle -> farstream != null && gst_plugins_bad != null
@@ -20,11 +21,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "gajim-${version}";
-  version = "0.16.4";
+  version = "0.16.5";
 
   src = fetchurl {
     url = "http://www.gajim.org/downloads/0.16/gajim-${version}.tar.bz2";
-    sha256 = "0zyfs7q1qg8iqszr8l1gb18gqla6zrrfsgpmbxblpi9maqxas5i1";
+    sha256 = "14fhcqnkqygh91132dnf1idayj4r3iqbwb44sd3mxv20n6ribh55";
   };
 
   patches = [
@@ -61,7 +62,8 @@ stdenv.mkDerivation rec {
   ] ++ optionals enableJingle [ farstream gst_plugins_bad libnice ]
     ++ optional enableE2E pythonPackages.pycrypto
     ++ optional enableRST pythonPackages.docutils
-    ++ optional enableNotifications pythonPackages.notify;
+    ++ optional enableNotifications pythonPackages.notify
+    ++ extraPythonPackages pythonPackages;
 
   postInstall = ''
     install -m 644 -t "$out/share/gajim/icons/hicolor" \

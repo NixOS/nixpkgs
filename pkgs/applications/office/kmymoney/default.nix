@@ -1,17 +1,21 @@
 { stdenv, fetchurl, cmake, kdelibs, automoc4, kdepimlibs, gettext, pkgconfig
 , shared_mime_info, perl, boost, gpgme, gmpxx, libalkimia, libofx, libical
-, doxygen }:
+, doxygen, aqbanking, gwenhywfar }:
 
 stdenv.mkDerivation rec {
-  name = "kmymoney-4.6.4";
+  name = "kmymoney-4.7.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/kmymoney2/${name}.tar.xz";
-    sha256 = "04n0lgi2yrx67bgjzbdbcm10pxs7l53srmp240znzw59njnjyll9";
+    sha256 = "0g9rakjx7zmw4bf7m5516rrx0n3bl2by3nn24iiz9209yfgw5cmz";
   };
 
+  cmakeFlags = [
+    "-DENABLE_KBANKING='true'"
+  ];
+
   buildInputs = [ kdepimlibs perl boost gpgme gmpxx libalkimia libofx libical
-                  doxygen ];
+                  doxygen aqbanking gwenhywfar ];
   nativeBuildInputs = [ cmake automoc4 gettext shared_mime_info pkgconfig ];
 
   KDEDIRS = libalkimia;

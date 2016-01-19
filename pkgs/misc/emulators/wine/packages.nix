@@ -1,4 +1,5 @@
 { system, stdenv, stdenv_32bit, lib, pkgs, pkgsi686Linux, fetchurl,
+  pulseaudioSupport,
   wineRelease ? "stable"
 }:
 
@@ -30,6 +31,7 @@ in {
     name = "wine-${version}";
     inherit (sources) version src;
     inherit (pkgsi686Linux) lib stdenv;
+    inherit pulseaudioSupport;
     pkgArches = [ pkgsi686Linux ];
     geckos = with sources; [ wineGecko32 ];
     monos = with sources; [ wineMono ];
@@ -39,6 +41,7 @@ in {
     name = "wine64-${version}";
     inherit (sources) version src;
     inherit lib stdenv;
+    inherit pulseaudioSupport;
     pkgArches = [ pkgs ];
     geckos = with sources; [ wineGecko64 ];
     monos = with sources; [ wineMono ];
@@ -50,6 +53,7 @@ in {
     inherit (sources) version src;
     inherit lib;
     stdenv = stdenv_32bit;
+    inherit pulseaudioSupport;
     pkgArches = [ pkgs pkgsi686Linux ];
     geckos = with sources; [ wineGecko32 wineGecko64 ];
     monos = with sources; [ wineMono ];

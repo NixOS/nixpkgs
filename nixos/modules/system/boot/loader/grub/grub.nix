@@ -56,7 +56,7 @@ let
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
         default fsIdentifier efiSupport gfxmodeEfi gfxmodeBios;
       path = (makeSearchPath "bin" ([
-        pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfsProgs
+        pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfs-progs
         pkgs.utillinux ] ++ (if cfg.efiSupport && (cfg.version == 2) then [pkgs.efibootmgr ] else [])
       )) + ":" + (makeSearchPath "sbin" [
         pkgs.mdadm pkgs.utillinux
@@ -251,6 +251,7 @@ in
       };
 
       extraFiles = mkOption {
+        type = types.attrsOf types.path;
         default = {};
         example = literalExample ''
           { "memtest.bin" = "''${pkgs.memtest86plus}/memtest.bin"; }

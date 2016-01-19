@@ -19,6 +19,15 @@ stdenv.mkDerivation {
 
       mkdir -p $out/share/fonts/truetype
       cp -v */*.ttf $out/share/fonts/truetype
+
+      mkdir -p $out/share/fonts/bdf
+      cp -v */BDF/*.bdf $out/share/fonts/bdf
+
+      mkdir -p $out/share/fonts/pcf
+      cp -v */PCF/*.pcf.gz $out/share/fonts/pcf
+
+      mkdir -p $out/share/fonts/psf
+      cp -v */PSF/*.psf.gz $out/share/fonts/psf
     '';
 
   meta = with stdenv.lib; {

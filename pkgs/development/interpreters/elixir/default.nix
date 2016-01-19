@@ -1,17 +1,20 @@
 { stdenv, fetchurl, erlang, rebar, makeWrapper, coreutils, curl, bash }:
 
-let
-  version = "1.1.1";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "elixir-${version}";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "https://github.com/elixir-lang/elixir/archive/v${version}.tar.gz";
-    sha256 = "0shh5brhcrvbvhl4bw0fs2y5llw7i97khkkglygx30ncvd7nwz9v";
+    sha256 = "0s3j7ra9gb2p3dwgfxghvc9mkv6ffgvz27aj5wgwk0xq2d9fws4z";
   };
 
   buildInputs = [ erlang rebar makeWrapper ];
+
+  # Elixir expects that UTF-8 locale to be set (see https://github.com/elixir-lang/elixir/issues/3548).
+  # In other cases there is warnings during compilation.
+  LANG = "en_US.UTF-8";
+  LC_TYPE = "en_US.UTF-8";
 
   preBuild = ''
     # The build process uses ./rebar. Link it to the nixpkgs rebar
@@ -52,6 +55,6 @@ stdenv.mkDerivation {
 
     license = licenses.epl10;
     platforms = platforms.unix;
-    maintainers = [ maintainers.the-kenny maintainers.havvy ];
+    maintainers = with maintainers; [ the-kenny havvy couchemar ];
   };
 }

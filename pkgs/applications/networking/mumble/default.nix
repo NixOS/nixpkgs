@@ -54,6 +54,8 @@ let
       cp man/mum* $out/share/man/man1
     '' + (overrides.installPhase or "");
 
+    enableParallelBuilding = true;
+
     meta = {
       description = "Low-latency, high quality voice chat software";
       homepage = "http://mumble.sourceforge.net/";
@@ -95,7 +97,7 @@ let
     type = "murmur";
 
     postPatch = optional iceSupport ''
-      sed -i 's,/usr/share/Ice/,${zeroc_ice}/,g' src/murmur/murmur.pro
+      grep -Rl '/usr/share/Ice' . | xargs sed -i 's,/usr/share/Ice/,${zeroc_ice}/,g'
     '';
 
     configureFlags = [

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl, lua, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "imapfilter-2.5.7";
+  name = "imapfilter-2.6.3";
 
   src = fetchurl {
-    url = "https://github.com/lefcha/imapfilter/archive/v2.5.7.tar.gz";
-    sha256 = "1l7sg7pyw1i8cxqnyb5xv983fakj8mxq6w44qd7w3kc7l6ixd4n7";
+    url = "https://github.com/lefcha/imapfilter/archive/v2.6.3.tar.gz";
+    sha256 = "0i6j9ilzh43b9gyqs3y3rv0d9yvbbg12gcbqbar9i92wdlnqcx0i";
   };
 
   makeFlagsArray = "PREFIX=$(out)";

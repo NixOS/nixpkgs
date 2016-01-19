@@ -7,7 +7,7 @@ let
 
   serverConfig = pkgs.writeText "neo4j-server.properties" ''
     org.neo4j.server.database.location=${cfg.dataDir}/data/graph.db
-    org.neo4j.server.webserver.address=${cfg.host}
+    org.neo4j.server.webserver.address=${cfg.listenAddress}
     org.neo4j.server.webserver.port=${toString cfg.port}
     ${optionalString cfg.enableHttps ''
       org.neo4j.server.webserver.https.enabled=true
@@ -49,10 +49,11 @@ in {
     package = mkOption {
       description = "Neo4j package to use.";
       default = pkgs.neo4j;
+      defaultText = "pkgs.neo4j";
       type = types.package;
     };
 
-    host = mkOption {
+    listenAddress = mkOption {
       description = "Neo4j listen address.";
       default = "127.0.0.1";
       type = types.str;
