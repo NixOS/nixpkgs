@@ -10369,6 +10369,8 @@ let
 
   mkinitcpio-nfs-utils = callPackage ../os-specific/linux/mkinitcpio-nfs-utils { };
 
+  mmc-utils = callPackage ../os-specific/linux/mmc-utils { };
+
   module_init_tools = callPackage ../os-specific/linux/module-init-tools { };
 
   aggregateModules = modules:
