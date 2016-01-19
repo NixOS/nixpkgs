@@ -55,6 +55,7 @@ let
       port:                ${toString cfg.port}
       verbosity:           ${toString cfg.verbosity}
       hide-version:        ${yesOrNo  cfg.hideVersion}
+      ${maybeString "version: " cfg.version}
       identity:            "${cfg.identity}"
       ${maybeString "nsid: " cfg.nsid}
       tcp-count:           ${toString cfg.tcpCount}
@@ -373,6 +374,16 @@ in
         default     = true;
         description = ''
           Wheter NSD should answer VERSION.BIND and VERSION.SERVER CHAOS class queries.
+        '';
+      };
+
+      version = mkOption {
+        type        = types.nullOr types.str;
+        default     = null;
+        description = ''
+          The version string replied for CH TXT version.server and version.bind
+          queries. Will use the compiled package version on null.
+          See hideVersion for enabling/disabling this responses.
         '';
       };
 
