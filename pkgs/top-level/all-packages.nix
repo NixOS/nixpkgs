@@ -11929,8 +11929,6 @@ let
     boost = boost155;
   };
 
-  fuze = callPackage ../applications/networking/instant-messengers/fuze {};
-
   game-music-emu = callPackage ../applications/audio/game-music-emu { };
 
   gcolor2 = callPackage ../applications/graphics/gcolor2 { };
