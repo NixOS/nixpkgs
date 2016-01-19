@@ -19931,18 +19931,29 @@ in modules // {
 
 
   turses = buildPythonPackage (rec {
-    name = "turses-0.2.23";
+    name = "turses-0.3.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/t/turses/${name}.tar.gz";
-      md5 = "71b9e3ab12d9186798e739b5273d1438";
+      sha256 = "15mkhm3b5ka42h8qph0mhh8izfc1200v7651c62k7ldcs50ib9j6";
     };
 
-    propagatedBuildInputs = with self; [ oauth2 urwid tweepy ] ++ optional isPy26 argparse;
+    buildInputs = with self; [ mock pytest coverage tox ];
+    propagatedBuildInputs = with self; [ urwid tweepy future ] ++ optional isPy26 argparse;
 
-    #buildInputs = [ tox ];
-    # needs tox
-    doCheck = false;
+    checkPhase = ''
+      TMP_TURSES=`echo turses-$RANDOM`
+      mkdir $TMP_TURSES
+      HOME=$TMP_TURSES py.test tests/
+      rm -rf $TMP_TURSES
+    '';
+
+    patchPhase = ''
+      sed -i -e "s|future==0.14.3|future==${pkgs.lib.getVersion self.future}|" setup.py
+      sed -i -e "s|tweepy==3.3.0|tweepy==${pkgs.lib.getVersion self.tweepy}|" setup.py
+      sed -i -e "s|config.generate_config_file.assert_called_once()|assert config.generate_config_file.call_count == 1|" tests/test_config.py
+      sed -i -e "s|self.observer.update.assert_called_once()|assert self.observer.update.call_count == 1|" tests/test_meta.py
+    '';
 
     meta = {
       homepage = https://github.com/alejandrogomez/turses;
@@ -19954,13 +19965,14 @@ in modules // {
   });
 
   tweepy = buildPythonPackage (rec {
-    name = "tweepy-2.3.0";
-    disabled = isPy3k;
+    name = "tweepy-3.5.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/t/tweepy/${name}.tar.gz";
-      md5 = "065c80d244360988c61d64b5dfb7e229";
+      sha256 = "0n2shilamgwhzmvf534xg7f6hrnznbixyl5pw2f5a3f391gwy37h";
     };
+
+    propagatedBuildInputs = with self; [ requests2 six requests_oauthlib ];
 
     meta = {
       homepage = "https://github.com/tweepy/tweepy";
