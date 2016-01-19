@@ -126,5 +126,6 @@ stdenv.mkDerivation rec {
       licenses.zlib # otherwise masked by pkgs.zlib
     ];
     platforms = [ "x86_64-linux" "i686-linux" ];
+    hydraPlatforms = []; # the data are too big (~1.5 GB)
   };
 }
