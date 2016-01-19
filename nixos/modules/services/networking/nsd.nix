@@ -56,14 +56,18 @@ let
       ipv4-edns-size:      ${toString cfg.ipv4EDNSSize}
       do-ip6:              ${yesOrNo  cfg.ipv6}
       ipv6-edns-size:      ${toString cfg.ipv6EDNSSize}
+      log-time-asci:       ${yesOrNo  cfg.logTimeAscii}
       ${maybeString "nsid: " cfg.nsid}
       port:                ${toString cfg.port}
+      reuseport:           ${yesOrNo  cfg.reuseport}
+      round-robin:         ${yesOrNo  cfg.roundRobin}
       server-count:        ${toString cfg.serverCount}
       ${if cfg.statistics == null then "" else "statistics:          ${toString cfg.statistics}"}
       tcp-count:           ${toString cfg.tcpCount}
       tcp-query-count:     ${toString cfg.tcpQueryCount}
       tcp-timeout:         ${toString cfg.tcpTimeout}
       verbosity:           ${toString cfg.verbosity}
+      ${maybeString "version: " cfg.version}
       xfrd-reload-timeout: ${toString cfg.xfrdReloadTimeout}
       zonefiles-check:     ${yesOrNo  cfg.zonefilesCheck}
 
@@ -381,6 +385,14 @@ in
       '';
     };
 
+    logTimeAscii = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Log time in ascii, if false then in unix epoch seconds.
+      '';
+    };
+
     nsid = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -397,6 +409,17 @@ in
       '';
     };
 
+    reuseport = mkOption {
+      type = types.bool;
+      default = pkgs.stdenv.isLinux;
+      description = ''
+        Wheter to enable SO_REUSEPORT on all used sockets. This lets multiple
+        processes bind to the same port. This speeds up operation especially
+        if the server count is greater than one and makes fast restarts less
+        prone to fail
+      '';
+    };
+
     rootServer = mkOption {
       type = types.bool;
       default = false;
@@ -405,6 +428,8 @@ in
         usually don't want that).
       '';
     };
+
+    roundRobin = mkEnableOption "round robin rotation of records";
 
     serverCount = mkOption {
       type = types.int;
@@ -453,6 +478,16 @@ in
       default = 0;
       description = ''
         Verbosity level.
+      '';
+    };
+
+    version = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        The version string replied for CH TXT version.server and version.bind
+        queries. Will use the compiled package version on null.
+        See hideVersion for enabling/disabling this responses.
       '';
     };
 
