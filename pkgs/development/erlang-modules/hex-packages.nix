@@ -7,6 +7,8 @@
  * aws_http_0_2_4
  * barrel_jiffy_0_14_4
  * barrel_jiffy_0_14_5
+ * cache_tab_1_0_1
+ * certifi_0_1_1
  * cet_0_2_1
  * cloudi_core_1_4_0_rc_4
  * cloudi_core_1_5_1
@@ -39,10 +41,12 @@
  * cmark_0_6_2
  * comeonin_2_0_1
  * conferl_0_0_1
+ * couchbeam_1_2_1
  * cowboy_1_0_4
  * cpg_1_4_0
  * cpg_1_5_1
  * craterl_0_2_3
+ * cucumberl_0_0_6
  * db_0_9_0
  * ddb_client_0_1_17
  * denrei_0_2_3
@@ -50,6 +54,7 @@
  * dqe_0_1_22
  * ekstat_0_2_2
  * elibphonenumber_0_1_1
+ * elli_1_0_4
  * enotify_0_1_0
  * ensq_0_1_6
  * eplugin_0_1_4
@@ -58,6 +63,7 @@
  * erlang_lua_0_1_0
  * erlastic_search_1_1_1
  * erlaudio_0_2_3
+ * erlcloud_0_12_0
  * erltrace_0_1_4
  * escalus_2_6_4
  * ex_bitcask_0_1_0
@@ -73,10 +79,12 @@
  * hackney_1_1_0
  * hackney_1_3_1
  * hackney_1_3_2
+ * hackney_1_4_4
  * hackney_1_4_8
  * hash_ring_ex_1_1_2
  * jc_1_0_4
  * jose_1_4_2
+ * jsx_2_7_2
  * jsxn_0_2_1
  * katipo_0_2_4
  * kvs_2_1_0
@@ -89,17 +97,26 @@
  * mcrypt_0_1_0
  * mdns_client_0_1_7
  * mdns_client_lib_0_1_33
+ * mimerl_1_0_0
  * mmath_0_1_15
  * mmath_0_1_16
+ * msgpack_0_4_0
  * mstore_0_1_9
  * n2o_2_3_0
  * nacl_0_3_0
+ * neotoma_1_7_3
  * nodefinder_1_4_0
  * nodefinder_1_5_1
  * observer_cli_1_0_3
+ * p1_stringprep_1_0_0
+ * p1_utils_1_0_0
+ * p1_utils_1_0_1
+ * p1_utils_1_0_2
+ * p1_utils_1_0_3
  * p1_xml_1_1_1
  * parse_trans_2_9_0
  * picosat_0_1_0
+ * png_0_1_1
  * pooler_1_4_0
  * protobuffs_0_8_2
  * rankmatcher_0_1_2
@@ -108,11 +125,15 @@
  * rebar3_eqc_0_0_8
  * rebar3_exunit_0_1_1
  * rebar3_live_0_1_3
+ * rebar3_neotoma_plugin_0_2_0
  * rebar3_proper_0_5_0
+ * rebar3_proper_plugin_0_1_0
  * rebar3_protobuffs_0_2_0
  * rebar3_run_0_2_0
  * rebar3_yang_plugin_0_2_1
  * rebar_protobuffs_0_1_0
+ * relflow_1_0_4
+ * reup_0_1_0
  * riak_pb_2_1_0
  * riakc_2_1_1
  * service_1_5_1
@@ -122,6 +143,7 @@
  * stun_1_0_0
  * syslog_1_0_2
  * ucol_nif_1_1_5
+ * ui_0_1_1
  * uuid_erl_1_4_0
  * uuid_erl_1_5_1
  * xref_runner_0_2_5
@@ -303,44 +325,6 @@ let
     
     bstr = bstr_0_3_0;
     
-    cache_tab_1_0_1 = callPackage
-      (
-	{ buildHex, p1_utils_1_0_1 }:
-	  buildHex {
-	    name = "cache_tab";
-	    version = "1.0.1";
-	    sha256 =
-	      "717a91101e03535ab65e4a9ce028ae3f0ddfb4ce0fd4144bf8816082c6dc2933";
-	     
-	    erlangDeps  = [ p1_utils_1_0_1 ];
-	    
-	    meta = {
-	      description = "In-memory cache Erlang / Elixir library";
-	      license = stdenv.lib.licenses.asl20;
-	      homepage = "https://github.com/processone/cache_tab";
-	    };
-	  }
-      ) {};
-    
-    cache_tab = cache_tab_1_0_1;
-    
-    certifi_0_1_1 = callPackage
-      (
-	{ buildHex }:
-	  buildHex {
-	    name = "certifi";
-	    version = "0.1.1";
-	    sha256 =
-	      "e6d1dda48fad1b1c5b454c8402e2ac375ae12bf85a9910decaf791f330a7de29";
-	      
-	    meta = {
-	      description = "An OTP library";
-	      license = stdenv.lib.licenses.bsd3;
-	      homepage = "https://github.com/certifi/erlang-certifi";
-	    };
-	  }
-      ) {};
-    
     certifi_0_3_0 = callPackage
       (
 	{ buildHex }:
@@ -393,26 +377,6 @@ let
       ) {};
     
     cf = cf_0_2_1;
-    
-    couchbeam_1_2_1 = callPackage
-      (
-	{ buildHex, hackney_1_4_4, jsx_2_8_0 }:
-	  buildHex {
-	    name = "couchbeam";
-	    version = "1.2.1";
-	    sha256 =
-	      "ed19f0412aa0539ecf622ac8ade1ca0e316f424e3334ad015a3fb8db19e91194";
-	     
-	    erlangDeps  = [ hackney_1_4_4 jsx_2_8_0 ];
-	    
-	    meta = {
-	      description = "Erlang CouchDB client";
-	      license = stdenv.lib.licenses.free; 
-	    };
-	  }
-      ) {};
-    
-    couchbeam = couchbeam_1_2_1;
     
     cowlib_1_0_0 = callPackage
       (
@@ -528,25 +492,6 @@ let
       ) {};
     
     cth_readable = cth_readable_1_2_0;
-    
-    cucumberl_0_0_6 = callPackage
-      (
-	{ buildHex }:
-	  buildHex {
-	    name = "cucumberl";
-	    version = "0.0.6";
-	    sha256 =
-	      "3b9ea813997fd8c1e3d2b004e89288496dc21d2e5027f432e5900569d2c61cf3";
-	      
-	    meta = {
-	      description = "A pure-erlang implementation of Cucumber.";
-	      license = stdenv.lib.licenses.mit;
-	      homepage = "https://github.com/ericbmerritt/cucumberl";
-	    };
-	  }
-      ) {};
-    
-    cucumberl = cucumberl_0_0_6;
     
     detergent_0_3_0 = callPackage
       (
@@ -682,25 +627,6 @@ let
       ) {};
     
     elixir_ale = elixir_ale_0_4_1;
-    
-    elli_1_0_4 = callPackage
-      (
-	{ buildHex }:
-	  buildHex {
-	    name = "elli";
-	    version = "1.0.4";
-	    sha256 =
-	      "87641b9c069b1372dac4e1bdda795076ea3142af78aac0d63896a38079e89e8e";
-	      
-	    meta = {
-	      description =
-		"Fast and robust web server for building high-throughput, low-latency apps";
-	      license = stdenv.lib.licenses.free; 
-	    };
-	  }
-      ) {};
-    
-    elli = elli_1_0_4;
     
     eper_0_94_0 = callPackage
       (
@@ -876,27 +802,6 @@ let
 	    };
 	  }
       ) {};
-    
-    erlcloud_0_12_0 = callPackage
-      (
-	{ buildHex, jsx_2_7_2, lhttpc_1_3_0, meck_0_8_3 }:
-	  buildHex {
-	    name = "erlcloud";
-	    version = "0.12.0";
-	    sha256 =
-	      "2ff2631a4e405a645cedf2713ec66728023e93ac80ed47035554a7d6205d412d";
-	     
-	    erlangDeps  = [ jsx_2_7_2 lhttpc_1_3_0 meck_0_8_3 ];
-	    
-	    meta = {
-	      description = "Cloud Computing library for erlang";
-	      license = stdenv.lib.licenses.mit;
-	      homepage = "https://github.com/gleber/erlcloud";
-	    };
-	  }
-      ) {};
-    
-    erlcloud = erlcloud_0_12_0;
     
     erldn_1_0_2 = callPackage
       (
@@ -1413,36 +1318,6 @@ let
     
     gurka = gurka_0_1_7;
     
-    hackney_1_4_4 = callPackage
-      (
-	{
-	  buildHex,
-	  certifi_0_1_1,
-	  idna_1_0_2,
-	  mimerl_1_0_0,
-	  ssl_verify_hostname_1_0_5
-	}:
-	  buildHex {
-	    name = "hackney";
-	    version = "1.4.4";
-	    sha256 =
-	      "c8ab2436556d6bce7e85a85adec67f6abeb8c7508668a3e29750be3c4bf4e3a8";
-	     
-	    erlangDeps  = [
-			    certifi_0_1_1
-			    idna_1_0_2
-			    mimerl_1_0_0
-			    ssl_verify_hostname_1_0_5
-			  ];
-	    
-	    meta = {
-	      description = "simple HTTP client";
-	      license = stdenv.lib.licenses.asl20;
-	      homepage = "https://github.com/benoitc/hackney";
-	    };
-	  }
-      ) {};
-    
     hamcrest_0_1_1 = callPackage
       (
 	{ buildHex }:
@@ -1718,25 +1593,6 @@ let
 	    version = "2.7.1";
 	    sha256 =
 	      "52d0e8bda0c8624bc59c3119236eb49bb66289702ea3d59ad76fd2a56cdf9089";
-	      
-	    meta = {
-	      longDescription = ''an erlang application for consuming,
-				producing and manipulating json. inspired by
-				yajl'';
-	      license = stdenv.lib.licenses.mit;
-	      homepage = "https://github.com/talentdeficit/jsx";
-	    };
-	  }
-      ) {};
-    
-    jsx_2_7_2 = callPackage
-      (
-	{ buildHex }:
-	  buildHex {
-	    name = "jsx";
-	    version = "2.7.2";
-	    sha256 =
-	      "36ca4772c09d69efc9e069aec7327cbd57d53d56c9a2777d8fb3bf3c1eab6df3";
 	      
 	    meta = {
 	      longDescription = ''an erlang application for consuming,
@@ -2138,23 +1994,6 @@ let
     
     metrics = metrics_0_2_1;
     
-    mimerl_1_0_0 = callPackage
-      (
-	{ buildHex }:
-	  buildHex {
-	    name = "mimerl";
-	    version = "1.0.0";
-	    sha256 =
-	      "a30b01104a29bd3a363db8646e4ce0f7980f9ecd23a98707c46c3ced918c41b4";
-	      
-	    meta = {
-	      description = "Library to handle mimetypes";
-	      license = stdenv.lib.licenses.mit;
-	      homepage = "https://github.com/benoitc/mimerl";
-	    };
-	  }
-      ) {};
-    
     mimerl_1_0_2 = callPackage
       (
 	{ buildHex }:
@@ -2212,25 +2051,6 @@ let
     
     mochiweb = mochiweb_2_12_2;
     
-    msgpack_0_4_0 = callPackage
-      (
-	{ buildHex }:
-	  buildHex {
-	    name = "msgpack";
-	    version = "0.4.0";
-	    sha256 =
-	      "cb69184b254bcddfd0b3b813fa9ffc87dd4642ad026bb8117e2384b55239eae4";
-	      
-	    meta = {
-	      description = "MessagePack serializer/deserializer";
-	      license = stdenv.lib.licenses.free;
-	      homepage = "http://msgpack.org";
-	    };
-	  }
-      ) {};
-    
-    msgpack = msgpack_0_4_0;
-    
     mtx_1_0_0 = callPackage
       (
 	{ buildHex }:
@@ -2250,117 +2070,6 @@ let
     
     mtx = mtx_1_0_0;
     
-    neotoma_1_7_3 = callPackage
-      (
-	{ buildHex }:
-	  buildHex {
-	    name = "neotoma";
-	    version = "1.7.3";
-	    sha256 =
-	      "2da322b9b1567ffa0706a7f30f6bbbde70835ae44a1050615f4b4a3d436e0f28";
-	      
-	    meta = {
-	      description = "PEG/Packrat toolkit and parser-generator.";
-	      license = stdenv.lib.licenses.mit;
-	      homepage = "https://github.com/seancribbs/neotoma";
-	    };
-	  }
-      ) {};
-    
-    neotoma = neotoma_1_7_3;
-    
-    p1_stringprep_1_0_0 = callPackage
-      (
-	{ buildHex, p1_utils_1_0_1 }:
-	  buildHex {
-	    name = "p1_stringprep";
-	    version = "1.0.0";
-	    sha256 =
-	      "2a9ce90acb64089f0a34cc592690b398830a5b6fd3c8a84689af5d2feb85d876";
-	    compilePorts = true;
-	    
-	    erlangDeps  = [ p1_utils_1_0_1 ];
-	    
-	    meta = {
-	      description = "Fast Stringprep Erlang / Elixir implementation";
-	      license = with stdenv.lib.licenses; [ asl20 free ];
-	      homepage = "https://github.com/processone/stringprep";
-	    };
-	  }
-      ) {};
-    
-    p1_stringprep = p1_stringprep_1_0_0;
-    
-    p1_utils_1_0_0 = callPackage
-      (
-	{ buildHex }:
-	  buildHex {
-	    name = "p1_utils";
-	    version = "1.0.0";
-	    sha256 =
-	      "b2c6316286b071f2f667fb1c59b44fe0c996917515fa93374a4a3264affc5105";
-	      
-	    meta = {
-	      description = "Erlang utility modules from ProcessOne";
-	      license = stdenv.lib.licenses.asl20;
-	      homepage = "https://github.com/processone/p1_utils";
-	    };
-	  }
-      ) {};
-    
-    p1_utils_1_0_1 = callPackage
-      (
-	{ buildHex }:
-	  buildHex {
-	    name = "p1_utils";
-	    version = "1.0.1";
-	    sha256 =
-	      "8e19478439c3ef05229fbd4fb65ff2e4aee02458a9c2b86a103a7f1384b76fdb";
-	      
-	    meta = {
-	      description = "Erlang utility modules from ProcessOne";
-	      license = stdenv.lib.licenses.asl20;
-	      homepage = "https://github.com/processone/p1_utils";
-	    };
-	  }
-      ) {};
-    
-    p1_utils_1_0_2 = callPackage
-      (
-	{ buildHex }:
-	  buildHex {
-	    name = "p1_utils";
-	    version = "1.0.2";
-	    sha256 =
-	      "c4b770fd925f2fc6c301a1e27f1bfb77aff3fff8d0951cc56c06bef9835af918";
-	      
-	    meta = {
-	      description = "Erlang utility modules from ProcessOne";
-	      license = stdenv.lib.licenses.asl20;
-	      homepage = "https://github.com/processone/p1_utils";
-	    };
-	  }
-      ) {};
-    
-    p1_utils_1_0_3 = callPackage
-      (
-	{ buildHex }:
-	  buildHex {
-	    name = "p1_utils";
-	    version = "1.0.3";
-	    sha256 =
-	      "6bf7dc7108eee70e036ea745faf5f55b4354e267f14371ea13338f58ce402d5e";
-	      
-	    meta = {
-	      description = "Erlang utility modules from ProcessOne";
-	      license = stdenv.lib.licenses.asl20;
-	      homepage = "https://github.com/processone/p1_utils";
-	    };
-	  }
-      ) {};
-    
-    p1_utils = p1_utils_1_0_3;
-    
     pc_1_2_0 = callPackage
       (
 	{ buildHex }:
@@ -2379,28 +2088,6 @@ let
       ) {};
     
     pc = pc_1_2_0;
-    
-    png_0_1_1 = callPackage
-      (
-	{ buildHex }:
-	  buildHex {
-	    name = "png";
-	    version = "0.1.1";
-	    sha256 =
-	      "f8d4a17c118dcc16bb18d0fda6e26947001f9312bc6c061d2236b424fc3dd9ea";
-	      
-	    meta = {
-	      longDescription = ''A pure Erlang library for creating PNG
-				images. It can currently create 8 and 16 bit
-				RGB, RGB with alpha, indexed, grayscale and
-				grayscale with alpha images.'';
-	      license = stdenv.lib.licenses.mit;
-	      homepage = "https://github.com/yuce/png";
-	    };
-	  }
-      ) {};
-    
-    png = png_0_1_1;
     
     poolboy_1_5_1 = callPackage
       (
@@ -2733,46 +2420,6 @@ let
     
     rebar3_idl_compiler = rebar3_idl_compiler_0_3_0;
     
-    rebar3_neotoma_plugin_0_2_0 = callPackage
-      (
-	{ buildHex, neotoma_1_7_3 }:
-	  buildHex {
-	    name = "rebar3_neotoma_plugin";
-	    version = "0.2.0";
-	    sha256 =
-	      "c0ebbdb08c017cac90c7d3310a9bd4a5088a46abd4e2fef9e9a9805a657396b8";
-	     
-	    erlangDeps  = [ neotoma_1_7_3 ];
-	    
-	    meta = {
-	      description = "Neotoma rebar plugin";
-	      license = stdenv.lib.licenses.free;
-	      homepage =
-		"https://github.com/zamotivator/rebar3_neotoma_plugin";
-	    };
-	  }
-      ) {};
-    
-    rebar3_neotoma_plugin = rebar3_neotoma_plugin_0_2_0;
-    
-    rebar3_proper_plugin_0_1_0 = callPackage
-      (
-	{ buildHex }:
-	  buildHex {
-	    name = "rebar3_proper_plugin";
-	    version = "0.1.0";
-	    sha256 =
-	      "7071555afb623e73a2c572de6d4379f9c197b44e68608944eb2835617faed10d";
-	      
-	    meta = {
-	      description = "A rebar plugin";
-	      license = stdenv.lib.licenses.free; 
-	    };
-	  }
-      ) {};
-    
-    rebar3_proper_plugin = rebar3_proper_plugin_0_1_0;
-    
     rebar_alias_0_1_0 = callPackage
       (
 	{ buildHex }:
@@ -2849,24 +2496,6 @@ let
     
     redo = redo_2_0_1;
     
-    relflow_1_0_4 = callPackage
-      (
-	{ buildHex }:
-	  buildHex {
-	    name = "relflow";
-	    version = "1.0.4";
-	    sha256 =
-	      "e6d9652ed7511aea18fa012d5abc19301acd8cbe81a44a159391086a5be12e1f";
-	      
-	    meta = {
-	      description = "Rebar3 release workflow plugin";
-	      license = stdenv.lib.licenses.free; 
-	    };
-	  }
-      ) {};
-    
-    relflow = relflow_1_0_4;
-    
     reltool_util_1_4_0 = callPackage
       (
 	{ buildHex }:
@@ -2936,25 +2565,6 @@ let
       ) {};
     
     relx = relx_3_13_0;
-    
-    reup_0_1_0 = callPackage
-      (
-	{ buildHex }:
-	  buildHex {
-	    name = "reup";
-	    version = "0.1.0";
-	    sha256 =
-	      "949a672190119f8b24160167e3685fdd5397474f98dc875ccfd31378ebd68506";
-	      
-	    meta = {
-	      description =
-		"dev watcher that auto compiles and reloads modules";
-	      license = stdenv.lib.licenses.free; 
-	    };
-	  }
-      ) {};
-    
-    reup = reup_0_1_0;
     
     savory_0_0_2 = callPackage
       (
@@ -3275,24 +2885,6 @@ let
       ) {};
     
     tsuru = tsuru_1_0_2;
-    
-    ui_0_1_1 = callPackage
-      (
-	{ buildHex }:
-	  buildHex {
-	    name = "ui";
-	    version = "0.1.1";
-	    sha256 =
-	      "492da59ca39055c0dfc794a2ebd564adb9ed635402c7b46659981f32aa9d94c1";
-	      
-	    meta = {
-	      description = "An OTP application";
-	      license = stdenv.lib.licenses.free; 
-	    };
-	  }
-      ) {};
-    
-    ui = ui_0_1_1;
     
     uri_0_1_0 = callPackage
       (
