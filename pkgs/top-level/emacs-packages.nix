@@ -415,12 +415,12 @@ let
 
   diminish = melpaBuild rec {
     pname   = "diminish";
-    version = "0.44";
+    version = "0.45";
     src = fetchFromGitHub {
-      owner  = "emacsmirror";
-      repo   = pname;
-      rev    = version;
-      sha256 = "0hshw7z5f8pqxvgxw74kbj6nvprsgfvy45fl854xarnkvqcara09";
+      owner  = "myrjola";
+      repo   = "${pname}.el";
+      rev    = "v${version}";
+      sha256 = "0qpgfgp8hrzz4vdifxq8h25n0a0jlzgf7aa1fpy6r0080v5rqbb6";
     };
     meta = {
       description = "Diminishes the amount of space taken on the mode-line by Emacs minor modes";
