@@ -1,21 +1,54 @@
-{ stdenv, lib, dwarf-fortress-original, substituteAll
+{ stdenv, lib, buildEnv, dwarf-fortress-original, substituteAll
 , enableDFHack ? false, dfhack
+, themes ? {}
+, theme ? null
 }:
 
-assert enableDFHack -> (dfhack.dfVersion == dwarf-fortress-original.dfVersion);
+let
+  ptheme =
+    if builtins.isString theme
+    then builtins.getAttr theme themes
+    else theme;
+
+  # These are in inverse order for first packages to override the next ones.
+  pkgs = lib.optional (theme != null) ptheme
+         ++ lib.optional enableDFHack dfhack
+         ++ [ dwarf-fortress-original ];
+
+  env = buildEnv {
+    name = "dwarf-fortress-env-${dwarf-fortress-original.dfVersion}";
+    paths = pkgs;
+    ignoreCollisions = true;
+    postBuild = lib.optionalString enableDFHack ''
+      # #4621
+      if [ -L "$out/hack" ]; then
+        rm $out/hack
+        mkdir $out/hack
+        for i in ${dfhack}/hack/*; do
+          ln -s $i $out/hack
+        done
+      fi
+      rm $out/hack/symbols.xml
+      substitute ${dfhack}/hack/symbols.xml $out/hack/symbols.xml \
+        --replace $(cat ${dwarf-fortress-original}/full-hash-orig.md5) \
+                  $(cat ${dwarf-fortress-original}/full-hash-patched.md5)
+    '';
+  };
+in
+
+assert lib.all (x: x.dfVersion == dwarf-fortress-original.dfVersion) pkgs;
 
 stdenv.mkDerivation rec {
   name = "dwarf-fortress-${dwarf-fortress-original.dfVersion}";
 
-  runDF = ./dwarf-fortress.in;
-  runDFHack = ./dfhack.in;
   dfInit = substituteAll {
     name = "dwarf-fortress-init";
     src = ./dwarf-fortress-init.in;
-    dwarfFortress = dwarf-fortress-original;
+    inherit env;
   };
-  inherit dfhack;
-  df = dwarf-fortress-original;
+
+  runDF = ./dwarf-fortress.in;
+  runDFHack = ./dfhack.in;
 
   buildCommand = ''
     mkdir -p $out/bin
@@ -25,23 +58,11 @@ stdenv.mkDerivation rec {
       --subst-var dfInit
     chmod 755 $out/bin/dwarf-fortress
   '' + lib.optionalString enableDFHack ''
-    mkdir -p $out/hack
-    substitute $dfhack/hack/symbols.xml $out/hack/symbols.xml \
-      --replace $(cat $df/full-hash-orig.md5) $(cat $df/full-hash-patched.md5)
-
     substitute $runDFHack $out/bin/dfhack \
       --subst-var-by stdenv_shell ${stdenv.shell} \
-      --subst-var dfInit \
-      --subst-var dfhack \
-      --subst-var-by dfhackWrapper $out
+      --subst-var dfInit
     chmod 755 $out/bin/dfhack
   '';
 
   preferLocalBuild = true;
-
-  meta = {
-    description = "A single-player fantasy game with a randomly generated adventure world";
-    homepage = http://www.bay12games.com/dwarves;
-    maintainers = with lib.maintainers; [ a1russell robbinch roconnor the-kenny ];
-  };
 }

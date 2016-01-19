@@ -3,4 +3,4 @@
 source @dfInit@
 
 cd "$DF_DIR"
-exec $game_dir/libs/Dwarf_Fortress "$@"
+exec "$env_dir/libs/Dwarf_Fortress" "$@"

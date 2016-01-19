@@ -4,7 +4,7 @@ let
   callPackage = pkgs.newScope self;
   callPackage_i686 = pkgsi686Linux.newScope self;
 
-  self = {
+  self = rec {
     dwarf-fortress-original = callPackage_i686 ./game.nix { };
 
     dfhack = callPackage_i686 ./dfhack {
@@ -13,7 +13,11 @@ let
 
     dwarf-fortress-unfuck = callPackage_i686 ./unfuck.nix { };
 
-    dwarf-fortress = callPackage ./wrapper { };
+    dwarf-fortress = callPackage ./wrapper {
+      themes = {
+        "phoebus" = phoebus-theme;
+      };
+    };
 
     dwarf-therapist-original = callPackage ./dwarf-therapist {
       texlive = pkgs.texlive.combine {

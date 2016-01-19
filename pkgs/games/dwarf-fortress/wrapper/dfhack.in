@@ -1,17 +1,11 @@
 #!@stdenv_shell@ -e
 
-hack_dir="@dfhack@"
-hack_wrap_dir="@dfhackWrapper@"
-
 source @dfInit@
 
-cd "$hack_dir"
-for i in dfhack.init-example dfhack-config/default hack/!(symbols.xml|*.so|dfhack-run|binpatch); do
-  update_path "$hack_dir" "$i"
+for i in dfhack.init-example dfhack-config/default hack/*; do
+  update_path "$i"
 done
 
-update_path "$hack_wrap_dir" "hack/symbols.xml"
-
 cd "$DF_DIR"
-LD_LIBRARY_PATH="$hack_dir/hack/libs:$hack_dir/hack:$LD_LIBRARY_PATH" \
-  LD_PRELOAD=$hack_dir/hack/libdfhack.so exec $game_dir/libs/Dwarf_Fortress "$@"
+LD_LIBRARY_PATH="$env_dir/hack/libs:$env_dir/hack:$LD_LIBRARY_PATH" \
+  LD_PRELOAD=$env_dir/hack/libdfhack.so exec $env_dir/libs/Dwarf_Fortress "$@"
