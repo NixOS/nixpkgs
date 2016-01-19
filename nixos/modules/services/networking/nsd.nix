@@ -9,6 +9,7 @@ let
   stateDir = "/var/lib/nsd";
   pidFile = stateDir + "/var/nsd.pid";
 
+  # build nsd with the options needed for the given config
   nsdPkg = pkgs.nsd.override {
     bind8Stats = cfg.bind8Stats;
     ipv6 = cfg.ipv6;
@@ -17,21 +18,42 @@ let
     zoneStats = length (collect (x: (x.zoneStats or null) != null) cfg.zones) > 0;
   };
 
-  zoneFiles = pkgs.stdenv.mkDerivation {
-    preferLocalBuild = true;
+
+  nsdEnv = pkgs.buildEnv {
     name = "nsd-env";
-    buildCommand = concatStringsSep "\n"
-      [ "mkdir -p $out"
-        (concatStrings (mapAttrsToList (zoneName: zoneOptions: ''
-          cat > "$out/${zoneName}" <<_EOF_
-          ${zoneOptions.data}
-          _EOF_
-        '') zoneConfigs))
-      ];
+
+    paths = [ configFile ]
+      ++ mapAttrsToList (name: zone: writeZoneData name zone.data) zoneConfigs;
+
+    postBuild = ''
+      echo "checking zone files"
+      cd $out/zones
+
+      for zoneFile in *; do
+        ${nsdPkg}/sbin/nsd-checkzone "$zoneFile" "$zoneFile" || {
+          if grep -q \\\\\\$ "$zoneFile"; then
+            echo zone "$zoneFile" contains escaped dollar signes \\\$
+            echo Escaping them is not needed any more. Please make shure \
+                 to unescape them where they prefix a variable name
+          fi
+
+          exit 1
+        }
+      done
+
+      echo "checking configuration file"
+      ${nsdPkg}/sbin/nsd-checkconf $out/nsd.conf
+    '';
   };
 
+  writeZoneData = name: text: pkgs.writeTextFile {
+    inherit name text;
+    destination = "/zones/${name}";
+  };
+
+
   # options are ordered alphanumerically by the nixos option name
-  configFile = pkgs.writeText "nsd.conf" ''
+  configFile = pkgs.writeTextDir "nsd.conf" ''
     server:
       chroot:   "${stateDir}"
       username: ${username}
@@ -56,7 +78,7 @@ let
       ipv4-edns-size:      ${toString cfg.ipv4EDNSSize}
       do-ip6:              ${yesOrNo  cfg.ipv6}
       ipv6-edns-size:      ${toString cfg.ipv6EDNSSize}
-      log-time-asci:       ${yesOrNo  cfg.logTimeAscii}
+      log-time-ascii:      ${yesOrNo  cfg.logTimeAscii}
       ${maybeString "nsid: " cfg.nsid}
       port:                ${toString cfg.port}
       reuseport:           ${yesOrNo  cfg.reuseport}
@@ -89,7 +111,6 @@ let
       server-key-file:   "${cfg.remoteControl.serverKeyFile}"
       server-cert-file:  "${cfg.remoteControl.serverCertFile}"
 
-    # zone files reside in "${zoneFiles}" linked to "${stateDir}/zones"
     ${concatStrings (mapAttrsToList zoneConfigFile zoneConfigs)}
 
     ${cfg.extraConfig}
@@ -111,8 +132,8 @@ let
     secret=$(cat "${keyOptions.keyFile}")
     dest="${stateDir}/private/${keyName}"
     echo "  secret: \"$secret\"" > "$dest"
-    ${pkgs.coreutils}/bin/chown ${username}:${username} "$dest"
-    ${pkgs.coreutils}/bin/chmod 0400 "$dest"
+    chown ${username}:${username} "$dest"
+    chmod 0400 "$dest"
   '') cfg.keys);
 
 
@@ -730,31 +751,40 @@ in
 
     systemd.services.nsd = {
       description = "NSD authoritative only domain name service";
+
+      after = [ "keys.target" "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wants = [ "keys.target" ];
 
       serviceConfig = {
+        ExecStart = "${nsdPkg}/sbin/nsd -d -c ${nsdEnv}/nsd.conf";
         PIDFile = pidFile;
         Restart = "always";
-        ExecStart = "${nsdPkg}/sbin/nsd -d -c ${configFile}";
+        RestartSec = "4s";
+        StartLimitBurst = 4;
+        StartLimitInterval = "5min";
       };
 
       preStart = ''
-        ${pkgs.coreutils}/bin/mkdir -m 0700 -p "${stateDir}/private"
-        ${pkgs.coreutils}/bin/mkdir -m 0700 -p "${stateDir}/tmp"
-        ${pkgs.coreutils}/bin/mkdir -m 0700 -p "${stateDir}/var"
+        rm -Rf "${stateDir}/private/"
+        rm -Rf "${stateDir}/tmp/"
 
-        ${pkgs.coreutils}/bin/touch "${stateDir}/don't touch anything in here"
+        mkdir -m 0700 -p "${stateDir}/private"
+        mkdir -m 0700 -p "${stateDir}/tmp"
+        mkdir -m 0700 -p "${stateDir}/var"
 
-        ${pkgs.coreutils}/bin/rm -f "${stateDir}/private/"*
-        ${pkgs.coreutils}/bin/rm -f "${stateDir}/tmp/"*
+        cat > "${stateDir}/don't touch anything in here" << EOF
+        Everything in this directory except NSD's state in var is
+        automatically generated and will be purged and redeployed
+        by the nsd.service pre-start script.
+        EOF
 
-        ${pkgs.coreutils}/bin/chown nsd:nsd -R "${stateDir}/private"
-        ${pkgs.coreutils}/bin/chown nsd:nsd -R "${stateDir}/tmp"
-        ${pkgs.coreutils}/bin/chown nsd:nsd -R "${stateDir}/var"
+        chown ${username}:${username} -R "${stateDir}/private"
+        chown ${username}:${username} -R "${stateDir}/tmp"
+        chown ${username}:${username} -R "${stateDir}/var"
 
-        ${pkgs.coreutils}/bin/rm -rf "${stateDir}/zones"
-        ${pkgs.coreutils}/bin/cp -r  "${zoneFiles}" "${stateDir}/zones"
+        rm -rf "${stateDir}/zones"
+        cp -rL "${nsdEnv}/zones" "${stateDir}/zones"
 
         ${copyKeys}
       '';
