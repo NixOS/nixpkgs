@@ -1881,6 +1881,8 @@ let
     lua = lua5;
   };
 
+  homesick = callPackage ../tools/misc/homesick { };
+
   honcho = callPackage ../tools/system/honcho { };
 
   horst = callPackage ../tools/networking/horst { };
