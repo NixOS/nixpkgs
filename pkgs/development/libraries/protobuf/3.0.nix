@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ autoreconfHook zlib ];
 
+  enableParallelBuilding = true;
+
   doCheck = true;
 
   meta = {
