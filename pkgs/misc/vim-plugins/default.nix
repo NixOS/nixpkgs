@@ -906,7 +906,7 @@ rec {
       homepage = http://github.com/Valloric/YouCompleteMe;
       license = stdenv.lib.licenses.gpl3;
       maintainers = with stdenv.lib.maintainers; [marcweber jagajaga];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.unix;
     };
   };
 
