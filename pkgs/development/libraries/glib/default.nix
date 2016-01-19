@@ -68,16 +68,11 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     optional stdenv.isDarwin "--disable-compile-warnings"
-    ++ optional (stdenv.isFreeBSD || stdenv.isSunOS) "--with-libiconv=gnu"
-    ++ optional stdenv.isSunOS "--disable-dtrace";
+    ++ optional stdenv.isFreeBSD "--with-libiconv=gnu"
+    ++ optional stdenv.isSunOS ["--disable-modular-tests" "--with-libiconv"];
 
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl"
     + optionalString stdenv.isSunOS " -DBSD_COMP";
-
-  preConfigure = optionalString stdenv.isSunOS
-    ''
-      sed -i -e 's|inotify.h|foobar-inotify.h|g' configure
-    '';
 
   preBuild = optionalString stdenv.isDarwin
     ''
