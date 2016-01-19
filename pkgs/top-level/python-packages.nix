@@ -9922,6 +9922,20 @@ in modules // {
     };
   };
 
+  libclang-py3 = buildPythonPackage (rec {
+    name = "libclang-py3-0.3";
+
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/l/libclang-py3/libclang-py3-0.3.tar.gz;
+      sha256 = "0sf6mdkn5riyfvzs9lfv23qa6s409xfw9irc71prdy3ddbkh783a";
+    };
+
+    meta = {
+      description = "Python3 bindings for libclang";
+      homepage = https://bitbucket.org/Anteru/python3-libclang;
+    };
+  });
+
 
   libcloud = buildPythonPackage (rec {
     name = "libcloud-0.18.0";
