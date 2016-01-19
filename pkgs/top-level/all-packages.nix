@@ -4180,6 +4180,10 @@ let
 
   fsharp = callPackage ../development/compilers/fsharp {};
 
+  fstar = callPackage ../development/compilers/fstar {
+    ocamlPackages = ocamlPackages_4_02;
+  };
+
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
   go_1_4 = callPackage ../development/compilers/go/1.4.nix {
