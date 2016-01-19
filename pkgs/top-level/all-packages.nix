@@ -525,6 +525,8 @@ let
 
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
+  albert = qt5.callPackage ../applications/misc/albert {};
+
   analog = callPackage ../tools/admin/analog {};
 
   apktool = callPackage ../development/tools/apktool {
