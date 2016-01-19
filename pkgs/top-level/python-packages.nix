@@ -19932,6 +19932,7 @@ in modules // {
 
   turses = buildPythonPackage (rec {
     name = "turses-0.3.1";
+    disabled = isPyPy || isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/t/turses/${name}.tar.gz";
