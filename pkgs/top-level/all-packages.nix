@@ -6440,6 +6440,8 @@ let
 
   gecode = callPackage ../development/libraries/gecode { };
 
+  gecode_3_7_3 = callPackage ../development/libraries/gecode/3.7.3.nix { };
+
   gegl = callPackage ../development/libraries/gegl { };
 
   gegl_0_3 = callPackage ../development/libraries/gegl/3.0.nix { };
