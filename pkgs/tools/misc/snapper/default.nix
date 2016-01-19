@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub
-, autoreconfHook, diffutils, pkgconfig, docbook_xsl, libxml2, libxslt, docbook_xml_dtd_45
-, acl, attr, boost, btrfs-progs, dbus_libs, pam, utillinux }:
+, autoreconfHook, pkgconfig, docbook_xsl, libxslt, docbook_xml_dtd_45
+, acl, attr, boost, btrfs-progs, dbus_libs, diffutils, e2fsprogs, libxml2
+, lvm2, pam, utillinux }:
 
 stdenv.mkDerivation rec {
   name = "snapper-${ver}";
@@ -13,12 +14,13 @@ stdenv.mkDerivation rec {
     sha256 = "1rj8vy6hq140pbnc7mjjb34mfqdgdah1dmlv2073izdgakh7p38j";
   };
 
-  buildInputs = [
-    acl attr boost btrfs-progs dbus_libs pam utillinux
-  ];
   nativeBuildInputs = [
-    autoreconfHook diffutils pkgconfig
-    docbook_xsl libxml2 libxslt docbook_xml_dtd_45
+    autoreconfHook pkgconfig
+    docbook_xsl libxslt docbook_xml_dtd_45
+  ];
+  buildInputs = [
+    acl attr boost btrfs-progs dbus_libs diffutils e2fsprogs libxml2
+    lvm2 pam utillinux
   ];
 
   patchPhase = ''
