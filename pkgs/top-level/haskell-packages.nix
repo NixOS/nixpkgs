@@ -330,6 +330,9 @@ rec {
     lts-4_1 = packages.ghc7103.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-4.1.nix { };
     };
+    lts-4_2 = packages.ghc7103.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-4.2.nix { };
+    };
 
   };
 }
