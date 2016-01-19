@@ -1,13 +1,13 @@
 { stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper }:
 
-let version = "1.18.2"; in
+let version = "1.18.4"; in
 
 stdenv.mkDerivation {
   name = "dpkg-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "192pqjd0c7i91kiqzn3cq2sqp5vivf0079i0wybdc9yhfcm4yj0i";
+    sha256 = "1nh6y6xvnq6f4qd6y3dx9m77sxjg4qk1z1j5pwayg348d0w292gy";
   };
 
   postPatch = ''
