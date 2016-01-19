@@ -22,6 +22,8 @@ let
     };
 
     dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix { };
+
+    phoebus-theme = callPackage ./themes/phoebus.nix { };
   };
 
 in self

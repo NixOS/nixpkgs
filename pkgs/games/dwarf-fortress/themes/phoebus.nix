@@ -1,36 +1,33 @@
-{ dfBaseVersion
-, dfPatchVersion
-, fetchzip
-, ...
-}:
+{ stdenv, fetchFromGitHub }:
 
-let
+# On upgrade check https://github.com/fricy/Phoebus/blob/master/manifest.json
+# for compatibility information.
 
-  phoebusVersion = "00";
-  phoebusFileName = "Phoebus_${dfBaseVersion}_${dfPatchVersion}v${phoebusVersion}";
+stdenv.mkDerivation {
+  name = "phoebus-theme-20160118";
 
-in rec {
-
-  src = fetchzip {
-    name = phoebusFileName;
-    url = "http://dffd.bay12games.com/download.php?id=2430&f=${phoebusFileName}.zip";
-    sha256 = "0fb68r6fd7v67mbh2439ygqrmdk4pw94gd293fqxb9qg71ilrb6s";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "fricy";
+    repo = "Phoebus";
+    rev = "2c5777b0f307b1d752a8a484c6a05b67531c84a9";
+    sha256 = "0a5ixm181wz7crr3rpa2mh0drb371j5hvizqninvdnhah2mypz8v";
   };
 
-  sourceRoot = src.name;
-
   installPhase = ''
-    pushd ../../$themeSourceRoot
-
-    cp data/init/phoebus/* $out/share/df_linux/data/init/
-    cp -rT raw $out/share/df_linux/raw
-    mkdir -p $out/share/df_linux/data/config
-    cp data/config/* $out/share/df_linux/data/config/
-    cp data/art/* $out/share/df_linux/data/art/
-
-    popd
+    mkdir $out
+    cp -r data raw $out
   '';
 
-}
+  passthru.dfVersion = "0.42.05";
 
+  preferLocalBuild = true;
+
+  meta = with stdenv.lib; {
+    description = "Phoebus graphics set for Dwarf Fortress";
+    homepage = "http://www.bay12forums.com/smf/index.php?topic=137096.0";
+    platforms = platforms.all;
+    maintainers = with maintainers; [ a1russell abbradar ];
+    # https://github.com/fricy/Phoebus/issues/5
+    license = licenses.free;
+  };
+}
