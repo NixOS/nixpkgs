@@ -16,6 +16,10 @@
 , # Whether to ignore collisions or abort.
   ignoreCollisions ? false
 
+, # If there is a collision, check whether the contents and permissions match
+  # and only if not, throw a collision error.
+  checkCollisionContents ? true
+
 , # The paths (relative to each element of `paths') that we want to
   # symlink (e.g., ["/bin"]).  Any file not inside any of the
   # directories in the list is not symlinked.
@@ -39,7 +43,9 @@
 }:
 
 runCommand name
-  rec { inherit manifest ignoreCollisions passthru meta pathsToLink extraPrefix postBuild buildInputs;
+  rec {
+    inherit manifest ignoreCollisions checkCollisionContents passthru
+            meta pathsToLink extraPrefix postBuild buildInputs;
     pkgs = builtins.toJSON (map (drv: {
       paths =
         [ drv ]
