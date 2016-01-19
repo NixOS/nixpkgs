@@ -14739,6 +14739,9 @@ let
 
     k9copy = callPackage ../applications/video/k9copy {};
 
+    konversation = callPackage ../applications/networking/irc/konversation/1.6.nix {
+    };
+
     quassel = callPackage ../applications/networking/irc/quassel/qt-5.nix {
       monolithic = true;
       daemon = false;
