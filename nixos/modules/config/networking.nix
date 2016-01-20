@@ -174,7 +174,7 @@ in
             '' + optionalString cfg.dnsSingleRequest ''
               # only send one DNS request at a time
               resolv_conf_options+=' single-request'
-            '' + optionalString dnsExtensionMechanism ''
+            '' + optionalString cfg.dnsExtensionMechanism ''
               # enable extension mechanisms for DNS
               resolv_conf_options+=' edns0'
             '' + optionalString hasLocalResolver ''
