@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
     '';
 
-  patches = [ ./locale_archive.patch ./openssh-6.9p1-security-7.0.patch];
+  patches = [ ./locale_archive.patch ./openssh-6.9p1-security-7.0.patch ./disable-roaming.patch ];
 
   buildInputs = [ zlib openssl libedit pkgconfig pam ]
     ++ optional withKerberos [ kerberos ];

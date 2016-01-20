@@ -216,6 +216,8 @@ let
       haskell.compiler = packagePlatforms pkgs.haskell-ng.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
 
+      rPackages = packagePlatforms pkgs.rPackages;
+
       strategoPackages = {
         sdf = linux;
         strategoxt = linux;

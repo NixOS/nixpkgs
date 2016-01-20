@@ -997,13 +997,13 @@ let
 
 
   beaker = buildPythonPackage rec {
-    name = "Beaker-1.6.4";
+    name = "Beaker-1.7.0";
 
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/B/Beaker/${name}.tar.gz";
-      md5 = "c2e102870ed4c53104dec48ceadf8e9d";
+      sha256 = "0vv4y22b3ly1212n9nnhgvc8yz32adlfl7w7s1wj0i5srpjcgvlq";
     };
 
     buildInputs =
@@ -3855,12 +3855,12 @@ let
     };
   };
 
-  internetarchive = let ver = "0.8.3"; in buildPythonPackage rec {
+  internetarchive = let ver = "0.9.3"; in buildPythonPackage rec {
     name = "internetarchive-${ver}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/jjjake/internetarchive/archive/v${ver}.tar.gz";
-      sha256 = "0j3l13zvbx50j66l6pnf8y8y8m6gk1sc3yssvfd2scvmv4gnmm8n";
+      sha256 = "0camj5id9i2nw3zarykz1iaz4wsxv5s5774m0all70nq0f1z49wd";
     };
 
     # It is hardcoded to specific versions, I don't know why.
@@ -4302,6 +4302,25 @@ let
     meta = {
       description = "Defines override classes that should be included with pies only if running on Python2";
       homepage = https://github.com/timothycrosley/pies;
+      license = licenses.mit;
+    };
+  };
+
+
+  plotly = pythonPackages.buildPythonPackage rec {
+    name = "plotly-1.9.1";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/plotly/${name}.tar.gz";
+      md5 = "84fe80b294b639357f12fa210ce09f95";
+    };
+
+    propagatedBuildInputs = with self; [ self.pytz self.six self.requests ];
+
+    meta = {
+      description = "Python plotting library for collaborative, interactive, publication-quality graphs";
+      homepage = https://plot.ly/python/;
       license = licenses.mit;
     };
   };
@@ -5148,6 +5167,27 @@ let
 
   django = self.django_1_7;
 
+  django_1_9 = buildPythonPackage rec {
+    name = "Django-${version}";
+    version = "1.9";
+    disabled = pythonOlder "2.7";
+
+    src = pkgs.fetchurl {
+      url = "http://www.djangoproject.com/m/releases/1.9/${name}.tar.gz";
+      sha256 = "0rkwdxh63y7pwx9larl2g7m1z206675dzx7ipd44p3bpm0clpzh5";
+    };
+
+    # patch only $out/bin to avoid problems with starter templates (see #3134)
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
+
+    meta = {
+      description = "A high-level Python Web framework";
+      homepage = https://www.djangoproject.com/;
+    };
+  };
+
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.8.4";
@@ -5392,11 +5432,11 @@ let
 
 
   djblets = buildPythonPackage rec {
-    name = "Djblets-0.6.28";
+    name = "Djblets-0.6.31";
 
     src = pkgs.fetchurl {
       url = "http://downloads.reviewboard.org/releases/Djblets/0.6/${name}.tar.gz";
-      sha256 = "11fsi911cqkjgv9j7646ljc2fgxsdfyq44kzmv01xhysm50fn6xx";
+      sha256 = "1yf0dnkj00yzzhbssw88j9gr58ngjfrd6r68p9asf6djishj9h45";
     };
 
     propagatedBuildInputs = with self; [ pil django_1_3 feedparser ];
@@ -6248,11 +6288,11 @@ let
 
   geventhttpclient = buildPythonPackage rec {
     name = "geventhttpclient-${version}";
-    version = "1.1.0";
+    version = "1.2.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/geventhttpclient/${name}.tar.gz";
-      sha256 = "1k7s4dnkmcfqqkmbqi0vvb2ns53r9cl2652mq20bgg65zj26j2l6";
+      sha256 = "0s1qd1qz0zyzksd5h38ynw06d1012h0k7z8522zhb6mzaq4144yz";
     };
 
     propagatedBuildInputs = with self; [ gevent certifi backports_ssl_match_hostname_3_4_0_2 ];
@@ -6610,12 +6650,13 @@ let
 
   hetzner = buildPythonPackage rec {
     name = "hetzner-${version}";
-    version = "0.7.3";
+    version = "0.7.4";
 
-    src = pkgs.fetchurl {
-      url = "https://github.com/RedMoonStudios/hetzner/archive/"
-          + "v${version}.tar.gz";
-      sha256 = "1a0kcwqd1pj5giwh75m2m3jcnr1kd38v40hh64wgly2zp485nm5m";
+    src = pkgs.fetchFromGitHub {
+      repo = "hetzner";
+      owner = "RedMoonStudios";
+      rev = "v${version}";
+      sha256 = "04dlixczzvpimk48p87ix7j9q54jy46cwn4f05n2dlzsyc5vvxin";
     };
 
     # not there yet, but coming soon.
@@ -11674,11 +11715,11 @@ let
 
 
   pyyaml = buildPythonPackage (rec {
-    name = "PyYAML-3.10";
+    name = "PyYAML-3.11";
 
     src = pkgs.fetchurl {
       url = "http://pyyaml.org/download/pyyaml/${name}.zip";
-      sha256 = "1r127fa354ppb667f4acxlzwxixap1jgzjrr790bw8mcpxv2hqaa";
+      sha256 = "1jbagwfs5is9fb7c5sfxhrri6yn1sp3kfbd6hkd8v1zga31kmfqr";
     };
 
     buildInputs = with self; [ pkgs.pyrex ];
@@ -12001,11 +12042,11 @@ let
 
 
   reviewboard = buildPythonPackage rec {
-    name = "ReviewBoard-1.6.16";
+    name = "ReviewBoard-1.6.22";
 
     src = pkgs.fetchurl {
       url = "http://downloads.reviewboard.org/releases/ReviewBoard/1.6/${name}.tar.gz";
-      sha256 = "0vg3ypm57m43bscv8vswjdllv3d2j8lxqwwvpd65cl7jd1in0yr1";
+      sha256 = "09lc3ccazlyyd63ifxw3w4kzwd60ax2alk1a95ih6da4clg73mxf";
     };
 
     propagatedBuildInputs = with self;
@@ -17331,8 +17372,10 @@ let
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/suds/suds-0.4.tar.gz";
-      md5 = "b7502de662341ed7275b673e6bd73191";
+      sha256 = "1w4s9051iv90c0gs73k80c3d51y2wbx1xgfdgg2hk7mv4gjlllnm";
     };
+
+    patches = [ ../development/python-modules/suds-0.4-CVE-2013-2217.patch ];
 
     meta = with stdenv.lib; {
       description = "Lightweight SOAP client";

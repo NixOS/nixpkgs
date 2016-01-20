@@ -201,6 +201,7 @@ in
         for d in '${varlibdir}' '${spooldir}' '${logdir}'; do
           # TODO: Make exceptions for /var directories that likely should be updated
           if [ ! -e "$d" ]; then
+            mkdir -p "$d"
             cp --recursive ${pkgs.asterisk}/"$d" "$d"
             chown --recursive ${asteriskUser} "$d"
             find "$d" -type d | xargs chmod 0755

@@ -40,7 +40,6 @@ let
     polkit.addRule(function(action, subject) {
       if (
         subject.isInGroup("networkmanager")
-        && subject.active
         && (action.id.indexOf("org.freedesktop.NetworkManager.") == 0
             || action.id.indexOf("org.freedesktop.ModemManager")  == 0
         ))
@@ -207,10 +206,18 @@ in {
 
     environment.systemPackages = cfg.packages;
 
-    users.extraGroups = singleton {
+    users.extraGroups = [{
       name = "networkmanager";
       gid = config.ids.gids.networkmanager;
-    };
+    }
+    {
+      name = "nm-openvpn";
+      gid = config.ids.gids.nm-openvpn;
+    }];
+    users.extraUsers = [{
+      name = "nm-openvpn";
+      uid = config.ids.uids.nm-openvpn;
+    }];
 
     systemd.packages = cfg.packages;
 

@@ -16,6 +16,7 @@ in stdenv.mkDerivation rec {
     description = "An online/offline backup solution";
     homepage = "http://www.crashplan.org";
     license = licenses.unfree;
+    broken = true;  # outdated and new client has trouble starting (nullpointer exception)
     maintainers = with maintainers; [ sztupi iElectric ];
   };
 

@@ -36,6 +36,9 @@ with stdenv.lib;
   SCHEDSTATS n
   DETECT_HUNG_TASK y
 
+  # Unix domain sockets.
+  UNIX y
+
   # Power management.
   ${optionalString (versionOlder version "3.19") ''
     PM_RUNTIME y
@@ -140,7 +143,9 @@ with stdenv.lib;
 
   # Video configuration.
   # Enable KMS for devices whose X.org driver supports it.
-  DRM_I915_KMS y
+  ${optionalString (versionOlder version "4.3") ''
+    DRM_I915_KMS y
+  ''}
   # Allow specifying custom EDID on the kernel command line
   DRM_LOAD_EDID_FIRMWARE y
   ${optionalString (versionOlder version "3.9") ''
@@ -327,6 +332,7 @@ with stdenv.lib;
   SERIAL_8250 y # 8250/16550 and compatible serial support
   SLIP_COMPRESSED y # CSLIP compressed headers
   SLIP_SMART y
+  HWMON y
   THERMAL_HWMON y # Hardware monitoring support
   ${optionalString (versionAtLeast version "3.15") ''
     UEVENT_HELPER n
@@ -477,10 +483,18 @@ with stdenv.lib;
 
   ${optionalString (versionAtLeast version "3.17") "NFC? n"}
 
-  # Enable firmware loading via udev (legacy).
-  ${optionalString (versionAtLeast version "3.17") ''
-    FW_LOADER_USER_HELPER_FALLBACK y
+  # Enable PCIe and USB for the brcmfmac driver
+  BRCMFMAC_USB? y
+  BRCMFMAC_PCIE? y
+
+  # Support x2APIC (which requires IRQ remapping).
+  ${optionalString (stdenv.system == "x86_64-linux") ''
+    X86_X2APIC y
+    IRQ_REMAP y
   ''}
+
+  # Disable the firmware helper fallback, udev doesn't implement it any more
+  FW_LOADER_USER_HELPER_FALLBACK? n
 
   ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}

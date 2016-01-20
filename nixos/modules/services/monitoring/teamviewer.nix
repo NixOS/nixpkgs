@@ -14,7 +14,7 @@ in
 
   options = {
 
-    services.teamviewer.enable = mkEnableOption "teamviewer daemon";
+    services.teamviewer.enable = mkEnableOption "TeamViewer daemon";
       
   };
 
@@ -27,8 +27,9 @@ in
     systemd.services.teamviewerd = {
       description = "TeamViewer remote control daemon";
 
-      wantedBy = [ "graphical.target" ];
+      wantedBy = [ "multi-user.target" ];
       after = [ "NetworkManager-wait-online.service" "network.target" ];
+      preStart = "mkdir -pv /var/lib/teamviewer /var/log/teamviewer";
 
       serviceConfig = {
         Type = "forking";

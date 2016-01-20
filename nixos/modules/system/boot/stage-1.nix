@@ -203,7 +203,7 @@ let
     inherit (config.boot) resumeDevice devSize runSize;
 
     inherit (config.boot.initrd) checkJournalingFS
-      preLVMCommands postDeviceCommands postMountCommands kernelModules;
+      preLVMCommands preDeviceCommands postDeviceCommands postMountCommands kernelModules;
 
     resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
                     (filter (sd: sd ? label || hasPrefix "/dev/" sd.device) config.swapDevices);
@@ -300,6 +300,15 @@ in
       type = types.lines;
       description = ''
         Shell commands to be executed immediately before LVM discovery.
+      '';
+    };
+
+    boot.initrd.preDeviceCommands = mkOption {
+      default = "";
+      type = types.lines;
+      description = ''
+        Shell commands to be executed before udev is started to create
+        device nodes.
       '';
     };
 

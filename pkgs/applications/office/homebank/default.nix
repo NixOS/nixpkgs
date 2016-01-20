@@ -1,8 +1,9 @@
-{ fetchurl, stdenv, gtk, pkgconfig, libofx, intltool }:
+{ fetchurl, stdenv, gtk, pkgconfig, libofx, intltool, wrapGAppsHook
+, hicolor_icon_theme}:
 
 let
    download_root = "http://homebank.free.fr/public/";
-   name = "homebank-5.0.0";
+   name = "homebank-5.0.6";
    lastrelease = download_root + name + ".tar.gz";
    oldrelease = download_root + "old/" + name + ".tar.gz";
 in
@@ -12,10 +13,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     urls = [ lastrelease oldrelease ];
-    sha256 = "062r61ryn2v1sxyw6zymhxnvnhk19wsr4nyzmiiwx5wrk0nk9m18";
+    sha256 = "1r1rn8lgnqnlwkspx230gly5f4i90ij0a3ddrvw51kdc41xfylja";
   };
 
-  buildInputs = [ pkgconfig gtk libofx intltool ];
+  buildInputs = [ pkgconfig gtk libofx intltool hicolor_icon_theme wrapGAppsHook ];
 
   meta = {
     description = "Free, easy, personal accounting for everyone";

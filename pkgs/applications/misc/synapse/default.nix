@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, pkgconfig, glib, libnotify, gtk3, libgee
-, keybinder3, json_glib, zeitgeist, vala
+, keybinder3, json_glib, zeitgeist, vala, hicolor_icon_theme
 }:
 
 with stdenv.lib;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     intltool pkgconfig glib libnotify gtk3 libgee keybinder3 json_glib zeitgeist 
-    vala
+    vala hicolor_icon_theme
   ];
 
   meta = { 

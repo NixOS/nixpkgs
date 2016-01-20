@@ -203,6 +203,8 @@ in
                   # For non-root operation.
                   initdb
                 fi
+                # See postStart!
+                touch "${cfg.dataDir}/.first_startup"
             fi
 
             ln -sfn "${configFile}" "${cfg.dataDir}/postgresql.conf"

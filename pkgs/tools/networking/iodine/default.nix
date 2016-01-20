@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  patchPhase = ''sed -i "s,/sbin/ifconfig,${nettools}/bin/ifconfig,; s,/sbin/route,${nettools}/bin/route," src/tun.c'';
+  NIX_CFLAGS_COMPILE = "-DIFCONFIGPATH=\"${nettools}/bin/\"";
+  patchPhase = ''sed -i "s,/sbin/route,${nettools}/bin/route," src/tun.c'';
 
   installFlags = "prefix=\${out}";
 

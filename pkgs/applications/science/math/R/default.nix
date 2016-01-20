@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.2.1";
+  name = "R-3.2.2";
 
   src = fetchurl {
     url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "d59dbc3f04f4604a5cf0fb210b8ea703ef2438b3ee65fd5ab536ec5234f4c982";
+    sha256 = "07a6s865bjnh7w0fqsrkv1pva76w99v86w0w787qpdil87km54cw";
   };
 
   buildInputs = [ bzip2 gfortran libX11 libXmu libXt
@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     which jdk openblas
   ];
 
-  patches = [ ./no-usr-local-search-paths.patch ];
+  patches = [ ./no-usr-local-search-paths.patch
+              ./fix-tests-without-recommended-packages.patch ];
 
   preConfigure = ''
     configureFlagsArray=(

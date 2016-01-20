@@ -5,7 +5,6 @@
 , enableSELinux ? false
 , enableNaCl ? false
 , enableHotwording ? false
-, useOpenSSL ? false
 , gnomeSupport ? false
 , gnomeKeyringSupport ? false
 , proprietaryCodecs ? true
@@ -23,11 +22,10 @@ let
     source = callPackage ./source {
       inherit channel;
       # XXX: common config
-      inherit useOpenSSL;
     };
 
     mkChromiumDerivation = callPackage ./common.nix {
-      inherit enableSELinux enableNaCl enableHotwording useOpenSSL gnomeSupport
+      inherit enableSELinux enableNaCl enableHotwording gnomeSupport
               gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
               hiDPISupport;
     };

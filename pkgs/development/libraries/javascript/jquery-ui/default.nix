@@ -1,11 +1,11 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "jquery-ui-1.11.1";
+  name = "jquery-ui-1.11.4";
 
   src = fetchurl {
     url = "http://jqueryui.com/resources/download/${name}.zip";
-    sha256 = "05dlcfwklymx94fb4n88l5syf80l6zrs862zzmla477vd8ndk537";
+    sha256 = "0ciyaj1acg08g8hpzqx6whayq206fvf4whksz2pjgxlv207lqgjh";
   };
 
   buildInputs = [ unzip ];

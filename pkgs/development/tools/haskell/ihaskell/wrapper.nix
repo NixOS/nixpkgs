@@ -1,4 +1,4 @@
-{ stdenv, writeScriptBin, buildEnv, ghcWithPackages, ihaskell, ipython, packages }:
+{ stdenv, writeScriptBin, makeWrapper, buildEnv, ghcWithPackages, ihaskell, ipython, packages }:
 let
   ihaskellEnv = ghcWithPackages (self: [
     self.ihaskell
@@ -18,6 +18,10 @@ buildEnv {
   name = "ihaskell-with-packages";
   paths = [ ihaskellEnv ipython ];
   postBuild = ''
+    . "${makeWrapper}/nix-support/setup-hook"
     ln -s ${ihaskellSh}/bin/ihaskell-notebook $out/bin/.
+    for prg in $out/bin"/"*;do
+      wrapProgram $prg --set PYTHONPATH "$(echo ${ipython}/lib/*/site-packages)"
+    done
   '';
 }

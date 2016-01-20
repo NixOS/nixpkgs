@@ -5,11 +5,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "mariadb-${version}";
-  version = "10.0.21";
+  version = "10.0.22";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/interstitial/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "0i9mzbn35f4lj4y1lqzgbavh5xyx18zfn0ks0nqzvppabkhk56jb";
+    sha256 = "0yzwv99s6smbmhs28pmdy01h23sdjxaa5k2m8n3rl1mprjmg85wy";
   };
 
   buildInputs = [ cmake ncurses openssl zlib pcre libxml2 boost judy bison libevent ]

@@ -1,7 +1,7 @@
-From 5fbe717120864d490fa4d60bc7f7676ac19bd69d Mon Sep 17 00:00:00 2001
+From 9fbdfd6c1231ee4778acc9a2edf297cf4b9314ac Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@gmail.com>
 Date: Mon, 1 Dec 2014 17:33:51 -0600
-Subject: [PATCH 5/9] dlopen-libXcursor
+Subject: [PATCH 05/11] dlopen-libXcursor
 
 ---
  qtbase/src/plugins/platforms/xcb/qxcbcursor.cpp | 4 ++--
@@ -25,5 +25,5 @@ index e51ab85..7ec4b0b 100644
          }
          if (xcursorFound) {
 -- 
-2.5.0
+2.5.2
 

@@ -1,14 +1,15 @@
 { stdenv, fetchurl, ... } @ args:
 
 import ./generic.nix (args // rec {
-  version = "4.1.7";
-  # Remember to update grsecurity!
+  version = "4.1.15";
   extraMeta.branch = "4.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
-    sha256 = "0g1dnvak0pd03d4miy1025bw64wq71w29a058dzspdr6jcf9qwbn";
+    sha256 = "18sr0dl5ax6pcx6nqp9drb4l6a38g07vxihiqpbwb231jv68h8j7";
   };
+
+  kernelPatches = args.kernelPatches ++ [ { name = "cve-2016-0728"; patch = ./cve-2016-0728.patch; } ];
 
   features.iwlwifi = true;
   features.efiBootStub = true;

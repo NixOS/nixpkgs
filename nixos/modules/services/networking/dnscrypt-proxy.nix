@@ -52,10 +52,7 @@ in
         default = "opendns";
         type = types.nullOr types.string;
         description = ''
-          The name of the upstream DNSCrypt resolver to use. See
-          <literal>${resolverListFile}</literal> for alternative resolvers
-          (e.g., if you are concerned about logging and/or server
-          location).
+          The name of the upstream DNSCrypt resolver to use.
         '';
       };
       customResolver = mkOption {

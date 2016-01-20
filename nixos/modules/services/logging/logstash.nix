@@ -84,10 +84,10 @@ in
         type = types.lines;
         default = ''stdin { type => "example" }'';
         description = "Logstash input configuration.";
-        example = ''
+        example = literalExample ''
           # Read from journal
           pipe {
-            command => "${pkgs.systemd}/bin/journalctl -f -o json"
+            command => "''${pkgs.systemd}/bin/journalctl -f -o json"
             type => "syslog" codec => json {}
           }
         '';

@@ -55,6 +55,14 @@ self: super: {
   unordered-containers = null;
   vector = null;
 
+  # These packages are core libraries in GHC 7.10.x, but not here.
+  bin-package-db = null;
+  haskeline = self.haskeline_0_7_2_1;
+  hoopl = self.hoopl_3_10_2_0;
+  hpc = self.hpc_0_6_0_2;
+  terminfo = self.terminfo_0_4_0_1;
+  xhtml = self.xhtml_3000_2_1;
+
   pqueue = overrideCabal super.pqueue (drv: {
     postPatch = ''
       sed -i -e '12s|null|Data.PQueue.Internals.null|' Data/PQueue/Internals.hs
@@ -79,12 +87,6 @@ self: super: {
   ghcjs-dom = overrideCabal super.ghcjs-dom (drv: {
     buildDepends = [ self.base self.mtl self.text self.ghcjs-base ];
     libraryHaskellDepends = [ ];
-    src = pkgs.fetchFromGitHub {
-      owner = "ghcjs";
-      repo = "ghcjs-dom";
-      rev = "8d77202b46cbf0aed77bb1f1e8d827f27dee90d7";
-      sha256 = "01npi286mwg7yr3h9qhxnylnjzbjb4lg5235v5lqfwy76hmmb9lp";
-    };
   });
 
   ghc-paths = overrideCabal super.ghc-paths (drv: {

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Ripple P2P payment network reference server";
     homepage = https://ripple.com;
-    maintainers = [ maintainers.emery maintainers.offline ];
+    maintainers = with maintainers; [ ehmry offline ];
     license = licenses.isc;
     platforms = [ "x86_64-linux" ];
   };

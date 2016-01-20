@@ -1,7 +1,7 @@
-From fc9f34b6e8a290615868e27bfcd31c355d11487c Mon Sep 17 00:00:00 2001
+From d1f7bf62e4bab26df5deea37f08cfdd278cca47c Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@gmail.com>
 Date: Mon, 1 Dec 2014 17:23:08 -0600
-Subject: [PATCH 3/9] dlopen-gl
+Subject: [PATCH 03/11] dlopen-gl
 
 ---
  .../plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp   | 2 +-
@@ -21,5 +21,5 @@ index 5166372..bdeb69a 100644
              }
          }
 -- 
-2.5.0
+2.5.2
 

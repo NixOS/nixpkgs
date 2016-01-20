@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "2.36.0";
 
   src = fetchurl {
-    url = "https://github.com/kovidgoyal/calibre/releases/download/v${version}/${name}.tar.xz";
+    url = "http://download.calibre-ebook.com/${version}/${name}.tar.xz";
     sha256 = "1my7fjj1lc28mhmvb85rcc4c5bwsycs6bgmafbx9agil5bgrbnb2";
   };
 

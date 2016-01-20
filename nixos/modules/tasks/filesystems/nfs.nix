@@ -90,7 +90,7 @@ in
         serviceConfig.Type = "forking";
         serviceConfig.ExecStart = ''
           @${pkgs.nfs-utils}/sbin/rpc.statd rpc.statd --no-notify \
-              ${if cfg.statdPort != null then "-p ${toString statdPort}" else ""}
+              ${if cfg.statdPort != null then "-p ${toString cfg.statdPort}" else ""}
         '';
         serviceConfig.Restart = "always";
       };

@@ -42,6 +42,17 @@ let cfg = config.system.autoUpgrade; in
         '';
       };
 
+      dates = mkOption {
+        default = "04:40";
+        type = types.str;
+        description = ''
+          Specification (in the format described by
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry>) of the time at
+          which the update will occur.
+        '';
+      };
+
     };
 
   };
@@ -70,10 +81,10 @@ let cfg = config.system.autoUpgrade; in
       path = [ pkgs.gnutar pkgs.xz config.nix.package ];
 
       script = ''
-        ${config.system.build.nixos-rebuild}/bin/nixos-rebuild test ${toString cfg.flags}
+        ${config.system.build.nixos-rebuild}/bin/nixos-rebuild switch ${toString cfg.flags}
       '';
 
-      startAt = mkIf cfg.enable "04:40";
+      startAt = optionalString cfg.enable cfg.dates;
     };
 
   };

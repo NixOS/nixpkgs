@@ -6,15 +6,15 @@
 let
   isGo14 = go.meta.branch == "1.4";
 
+  self = _self // overrides; _self = with self; {
+
+  inherit go buildGoPackage;
+
   buildFromGitHub = { rev, date ? null, owner, repo, sha256, name ? repo, goPackagePath ? "github.com/${owner}/${repo}", ... }@args: buildGoPackage (args // {
     inherit rev goPackagePath;
     name = "${name}-${if date != null then date else if builtins.stringLength rev != 40 then rev else stdenv.lib.strings.substring 0 7 rev}";
     src  = fetchFromGitHub { inherit rev owner repo sha256; };
   });
-
-  self = _self // overrides; _self = with self; {
-
-  inherit go buildGoPackage;
 
   ## OFFICIAL GO PACKAGES
 
@@ -1086,6 +1086,21 @@ let
     propagatedBuildInputs = [ go-querystring ];
   };
 
+  go-gtk-agl = buildFromGitHub {
+    rev = "6937b8d28cf70d583346220b966074cfd3a2e233";
+    owner = "agl";
+    repo = "go-gtk";
+    sha256 = "0jnhsv7ypyhprpy0fndah22v2pbbavr3db6f9wxl1vf34qkns3p4";
+    # Examples require many go libs, and gtksourceview seems ready only for
+    # gtk2
+    preConfigure = ''
+      rm -R example gtksourceview
+    '';
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    propagatedBuildInputs = [ pkgs.gtk3 ];
+    buildInputs = [ pkgs.gtkspell3 ];
+  };
+
   go-gypsy = buildFromGitHub {
     rev    = "42fc2c7ee9b8bd0ff636cd2d7a8c0a49491044c5";
     owner  = "kylelemons";
@@ -1456,15 +1471,15 @@ let
   };
 
   hologram = buildGoPackage rec {
-    rev  = "2bf08f0edee49297358bd06a0c9bf44ba9051e9c";
+    rev  = "63014b81675e1228818bf36ef6ef0028bacad24b";
     name = "hologram-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/AdRoll/hologram";
 
     src = fetchFromGitHub {
       inherit rev;
-      owner  = "copumpkin";
+      owner  = "AdRoll";
       repo   = "hologram";
-      sha256 = "1ra6rdniqh3pi84fm29zam4irzv52a1dd2sppaqngk07f7rkkhi4";
+      sha256 = "0k8g7dwrkxdvmzs4aa8zz39qa8r2danc4x40hrblcgjhfcwzxrzr";
     };
     buildInputs = [ crypto protobuf goamz rgbterm go-bindata go-homedir ldap g2s gox ];
   };
@@ -2050,15 +2065,19 @@ let
     doCheck = false; # bad import path in tests
   };
 
-  pond = let isx86_64 = stdenv.lib.any (n: n == stdenv.system) stdenv.lib.platforms.x86_64; in buildFromGitHub {
+  pond = let
+      isx86_64 = stdenv.lib.any (n: n == stdenv.system) stdenv.lib.platforms.x86_64;
+      gui = true; # Might be implemented with nixpkgs config.
+  in buildFromGitHub {
     rev = "bce6e0dc61803c23699c749e29a83f81da3c41b2";
     owner = "agl";
     repo = "pond";
     sha256 = "1dmgbg4ak3jkbgmxh0lr4hga1nl623mh7pvsgby1rxl4ivbzwkh4";
 
     buildInputs = [ net crypto protobuf ed25519 pkgs.trousers ]
-      ++ stdenv.lib.optional isx86_64 pkgs.dclxvi;
-    buildFlags = "-tags nogui";
+      ++ stdenv.lib.optional isx86_64 pkgs.dclxvi
+      ++ stdenv.lib.optionals gui [ go-gtk-agl pkgs.wrapGAppsHook ];
+    buildFlags = stdenv.lib.optionalString (!gui) "-tags nogui";
     excludedPackages = "\\(appengine\\|bn256cgo\\)";
     postPatch = stdenv.lib.optionalString isx86_64 ''
       grep -r 'bn256' | awk -F: '{print $1}' | xargs sed -i \

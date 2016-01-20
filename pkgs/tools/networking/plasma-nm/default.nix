@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, cmake, gettext, kdelibs, networkmanager, libnm-qt }:
+{ stdenv, fetchurl, pkgconfig, cmake, gettext, kdelibs, networkmanager, libnm-qt, glib }:
 
 let
   pname = "plasma-nm";
@@ -12,6 +12,8 @@ stdenv.mkDerivation {
     url = "mirror://kde/stable/${pname}/${name}.tar.xz";
     sha256 = "0xj14isvjq8ll70b6q66n8adm8ff4j9ng195ndk2gmavjf6bb751";
   };
+
+  NIX_CFLAGS_COMPILE = "-I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include";
 
   buildInputs = [
     cmake

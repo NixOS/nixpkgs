@@ -1,11 +1,12 @@
 { stdenv, fetchurl, bzip2, qt4, libX11, xextproto, libXtst }:
 
 stdenv.mkDerivation rec {
-  name = "keepassx-0.4.3";
+  name = "keepassx-${version}";
+  version = "0.4.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/keepassx/${name}.tar.gz";
-    sha256 = "cd901a0611ce57e62cf6df7eeeb1b690b5232302bdad8626994eb54adcfa1e85";
+    url = "https://www.keepassx.org/releases/${version}/${name}.tar.gz";
+    sha256 = "1i5dq10x28mg7m4c0yacm32xfj4j7imir4ph8x9p0s2ym260c9ry";
   };
 
   configurePhase = ''

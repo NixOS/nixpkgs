@@ -1,10 +1,12 @@
 { stdenv, fetchurl, gfortran }:
-
-stdenv.mkDerivation {
-  name = "blas-20110419";
+let
+  version = "3.5.0";
+in
+stdenv.mkDerivation rec {
+  name = "blas-${version}";
   src = fetchurl {
-    url = "http://www.netlib.org/blas/blas.tgz";
-    sha256 = "1d931d91byv2svydpj2ipjh1f2sm1h9ns8ik2w5fwaa8qinxz1za";
+    url = "http://www.netlib.org/blas/${name}.tgz";
+    sha256 = "096a3apnh899abjymjjg8m34hncagkzp9qxw08cms98g71fpfzgg";
   };
 
   buildInputs = [gfortran];
@@ -21,7 +23,7 @@ stdenv.mkDerivation {
     echo >>make.inc "ARCH = gfortran"
     echo >>make.inc "ARCHFLAGS = -shared -o"
     echo >>make.inc "RANLIB = echo"
-    echo >>make.inc "BLASLIB = libblas.so.3.0.3"
+    echo >>make.inc "BLASLIB = libblas.so.${version}"
   '';
 
   buildPhase = ''
@@ -39,9 +41,9 @@ stdenv.mkDerivation {
     (stdenv.lib.optionalString stdenv.isFreeBSD "mkdir -p $out/lib ;")
     + ''
     install ${dashD} -m755 libblas.a "$out/lib/libblas.a"
-    install ${dashD} -m755 libblas.so.3.0.3 "$out/lib/libblas.so.3.0.3"
-    ln -s libblas.so.3.0.3 "$out/lib/libblas.so.3"
-    ln -s libblas.so.3.0.3 "$out/lib/libblas.so"
+    install ${dashD} -m755 libblas.so.${version} "$out/lib/libblas.so.${version}"
+    ln -s libblas.so.${version} "$out/lib/libblas.so.3"
+    ln -s libblas.so.${version} "$out/lib/libblas.so"
   '';
 
   meta = {

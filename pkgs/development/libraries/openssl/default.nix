@@ -8,14 +8,14 @@ let
     stdenv.cross;
 in
 stdenv.mkDerivation rec {
-  name = "openssl-1.0.1p";
+  name = "openssl-1.0.1q";
 
   src = fetchurl {
     urls = [
       "http://www.openssl.org/source/${name}.tar.gz"
       "http://openssl.linux-mirror.org/source/${name}.tar.gz"
     ];
-    sha1 = "9d1977cc89242cd11471269ece2ed4650947c046";
+    sha256 = "1dvz0hx7fjxag06b51pawy154y6d2xajm5rwxmfnlq7ax628nrdk";
   };
 
   outputs = [ "out" "man" ];

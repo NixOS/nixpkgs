@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://acme.com/software/thttpd/${name}.tar.gz";
-    sha256 = "1dybhpyfrly0m285cdn9jah397bqzylrwzi26gin2h451z3gdcqm";
+    sha256 = "1idlpnwrd5fpmnfh477h1lzanavx8jxir2d8adax46zy472dg4s6";
   };
 
   prePatch = ''

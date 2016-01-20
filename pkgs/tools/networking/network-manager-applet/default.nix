@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pn}/${major}/${name}.tar.xz";
-    sha256 = "1afri2zln5p59660hqzbwm2r8phx9inrm2bgp5scynzs8ddzh2kn";
+    sha256 = "1yj0m6fb9v12d0di0rfmk3hx1vmygjkiff2c476rf792sbh56kax";
   };
 
   configureFlags = [ "--sysconfdir=/etc" ];

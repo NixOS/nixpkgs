@@ -32,6 +32,9 @@ _separateDebugInfo() {
         mkdir -p "$dst/${id:0:2}"
         objcopy --only-keep-debug "$i" "$dst/${id:0:2}/${id:2}.debug" --compress-debug-sections
         strip --strip-debug "$i"
+
+        # Also a create a symlink <original-name>.debug.
+        ln -sfn ".build-id/${id:0:2}/${id:2}.debug" "$dst/../$(basename "$i")"
     done
 }
 

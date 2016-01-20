@@ -1,7 +1,7 @@
-From 64bc88615a4cb58d461fe600b46611415d74b7b2 Mon Sep 17 00:00:00 2001
+From 44378743aa6ca21eb61de93476daa8356081c0fc Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@gmail.com>
 Date: Sun, 23 Aug 2015 08:53:42 -0500
-Subject: [PATCH 9/9] decrypt ssl traffic
+Subject: [PATCH 09/11] decrypt ssl traffic
 
 ---
  qtbase/src/network/ssl/qsslsocket_openssl.cpp | 2 +-
@@ -21,5 +21,5 @@ index 049666b..e8342ab 100644
  #include "qssl_p.h"
  #include "qsslsocket_openssl_p.h"
 -- 
-2.5.0
+2.5.2
 

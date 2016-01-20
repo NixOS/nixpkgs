@@ -18,14 +18,14 @@ assert stdenv.cc ? libc && stdenv.cc.libc != null;
 
 let
 
-common = { pname, version, sha1 }: stdenv.mkDerivation rec {
+common = { pname, version, sha256 }: stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url =
       let ext = if lib.versionAtLeast version "41.0" then "xz" else "bz2";
       in "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${version}/source/firefox-${version}.source.tar.${ext}";
-    inherit sha1;
+    inherit sha256;
   };
 
   buildInputs =
@@ -83,7 +83,11 @@ common = { pname, version, sha1 }: stdenv.mkDerivation rec {
     ''
       mkdir ../objdir
       cd ../objdir
-      configureScript=../mozilla-*/configure
+      if [ -e ../${name} ]; then
+        configureScript=../${name}/configure
+      else
+        configureScript=../mozilla-*/configure
+      fi
     '';
 
   preInstall =
@@ -129,14 +133,14 @@ in {
 
   firefox = common {
     pname = "firefox";
-    version = "41.0";
-    sha1 = "0ce7a5ccdf671a6c98eaac07d06d49a895a99449";
+    version = "43.0.3";
+    sha256 = "129f8vmsam498j0s4rbi31a88j9ibkzm4m0w19ppcsha7cp25i8m";
   };
 
   firefox-esr = common {
     pname = "firefox-esr";
-    version = "38.3.0esr";
-    sha1 = "57d2c255348ac13b6ffbb952c5e0d57757aa0290";
+    version = "38.5.2esr";
+    sha256 = "0xqirpiys2pgzk9hs4s93svknc0sss8ry60zar7n9jj74cgz590m";
   };
 
 }

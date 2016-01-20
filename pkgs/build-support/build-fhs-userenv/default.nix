@@ -1,4 +1,4 @@
-{ runCommand, writeText, writeScriptBin, stdenv, ruby } : { env, runScript ? "bash" } :
+{ runCommand, lib, writeText, writeScriptBin, stdenv, ruby } : { env, runScript ? "bash", extraBindMounts ? [] } :
 
 let
   name = env.pname;
@@ -27,6 +27,7 @@ in runCommand name {
   passthru.env =
     runCommand "${name}-shell-env" {
       shellHook = ''
+        export CHROOTENV_EXTRA_BINDS="${lib.concatStringsSep ":" extraBindMounts}:$CHROOTENV_EXTRA_BINDS"
         exec ${chroot-user}/bin/chroot-user ${env} bash -l ${init "bash"} "$(pwd)"
       '';
     } ''
@@ -39,6 +40,7 @@ in runCommand name {
   mkdir -p $out/bin
   cat <<EOF >$out/bin/${name}
   #! ${stdenv.shell}
+  export CHROOTENV_EXTRA_BINDS="${lib.concatStringsSep ":" extraBindMounts}:\$CHROOTENV_EXTRA_BINDS"
   exec ${chroot-user}/bin/chroot-user ${env} bash -l ${init runScript} "\$(pwd)" "\$@"
   EOF
   chmod +x $out/bin/${name}

@@ -46,7 +46,7 @@ rec {
     sendEmailSupport = !stdenv.isDarwin;
   };
 
-  inherit (pkgs.haskellPackages) git-annex;
+  git-annex = pkgs.haskellPackages.git-annex-with-assistant;
   gitAnnex = git-annex;
 
   qgit = import ./qgit {

@@ -1,13 +1,14 @@
-{ stdenv, fetchsvn, cmake, qt, libupnp, gpgme, gnome3, glib, libssh, pkgconfig, protobuf, bzip2
-, libXScrnSaver, speex, curl, libxml2, libxslt, sqlcipher }:
+{ stdenv, fetchFromGitHub, cmake, qt, libupnp, gpgme, gnome3, glib, libssh, pkgconfig, protobuf, bzip2
+, libXScrnSaver, speex, curl, libxml2, libxslt, sqlcipher, libmicrohttpd, opencv }:
 
 stdenv.mkDerivation {
-  name = "retroshare-0.6-svn-7445";
+  name = "retroshare-0.6-git-fabc3a3";
 
-  src = fetchsvn {
-    url = svn://svn.code.sf.net/p/retroshare/code/trunk;
-    rev = 7445;
-    sha256 = "1dqh65bn21g7ix752ddrr10kijjdwjgjipgysyxnm90zjmdlx3cc";
+  src = fetchFromGitHub {
+    owner = "RetroShare";
+    repo = "RetroShare";
+    rev = "fabc3a398536565efe77fb1b1ef37bd484dc7d4a";
+    sha256 = "189qndkfq9kgv3qi3wx8ivla4j8fxr4iv7c8y9rjrjaz8jwdkn5x";
   };
 
   NIX_CFLAGS_COMPILE = "-I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include -I${libxml2}/include/libxml2 -I${sqlcipher}/include/sqlcipher";
@@ -29,11 +30,13 @@ stdenv.mkDerivation {
   #    retroshare-nogui/src/retroshare-nogui.pro
 
   buildInputs = [ speex qt libupnp gpgme gnome3.libgnome_keyring glib libssh pkgconfig
-                  protobuf bzip2 libXScrnSaver curl libxml2 libxslt sqlcipher ];
+                  protobuf bzip2 libXScrnSaver curl libxml2 libxslt sqlcipher libmicrohttpd opencv ];
 
   configurePhase = ''
     qmake PREFIX=$out DESTDIR=$out RetroShare.pro
   '';
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p $out/bin
