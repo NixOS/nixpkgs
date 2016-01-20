@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"/share/applications
     while read LINE; do
       if [[ $LINE = "Exec=0ad" ]]; then
-        echo "Exec=$out/bin/pyrogenesis"
+        echo "Exec=$out/bin/zeroad"
       elif [[ $LINE = "Icon=0ad" ]]; then
         echo "Icon=$out/share/icons/0ad.png"
       else
