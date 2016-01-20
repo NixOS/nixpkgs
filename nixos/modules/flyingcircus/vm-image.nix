@@ -15,7 +15,7 @@ with lib;
             ''
               mkdir $out
               diskImage=$out/image.qcow2
-              ${pkgs.vmTools.qemu}/bin/qemu-img create -f qcow2 $diskImage "4G"
+              ${pkgs.vmTools.qemu}/bin/qemu-img create -f qcow2 $diskImage "10G"
               mv closure xchg/
             '';
           postVM = ''
