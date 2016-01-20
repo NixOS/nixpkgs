@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "rubygems-${version}";
-  version = "2.4.1";
+  version = "2.4.8";
   src = fetchurl {
     url = "http://production.cf.rubygems.org/rubygems/${name}.tgz";
-    sha256 = "0cpr6cx3h74ykpb0cp4p4xg7a8j0bhz3sk271jq69l4mm4zy4h4f";
+    sha256 = "0pl4civyf0vhqsqbqaivvxrb3fsg8sid9a8jv5vfnk4hypz3ahss";
   };
 
   patches = [ ./gem_hook.patch ];
