@@ -2523,6 +2523,10 @@ let
 
   obnam = callPackage ../tools/backup/obnam { };
 
+  odpdown = callPackage ../tools/typesetting/odpdown {
+    inherit (pythonPackages) lpod lxml mistune pillow pygments;
+  };
+
   odt2txt = callPackage ../tools/text/odt2txt { };
 
   offlineimap = callPackage ../tools/networking/offlineimap {
