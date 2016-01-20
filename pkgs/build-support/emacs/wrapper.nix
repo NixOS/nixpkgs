@@ -51,7 +51,7 @@ stdenv.mkDerivation {
   inherit emacs explicitRequires;
   phases = [ "installPhase" ];
   installPhase = ''
-    requires=""
+    local requires
     for pkg in $explicitRequires; do
       findInputs $pkg requires propagated-user-env-packages
     done
