@@ -36,7 +36,7 @@
 
 , lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
 
-, emacs, texinfo, makeWrapper
+, emacs, texinfo, lndir, makeWrapper
 , trivialBuild
 , melpaBuild
 
@@ -60,7 +60,7 @@ let
   };
 
   emacsWithPackages = import ../build-support/emacs/wrapper.nix {
-    inherit lib makeWrapper stdenv;
+    inherit lib lndir makeWrapper stdenv;
   };
 
   packagesFun = self: with self; {
