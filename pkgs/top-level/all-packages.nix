@@ -2893,6 +2893,8 @@ let
 
   ranger = callPackage ../applications/misc/ranger { };
 
+  rarcrack = callPackage ../tools/security/rarcrack { };
+
   rawdog = callPackage ../applications/networking/feedreaders/rawdog { };
 
   read-edid = callPackage ../os-specific/linux/read-edid { };
