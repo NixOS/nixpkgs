@@ -5,11 +5,11 @@
 pythonPackages.buildPythonPackage rec {
   name = "mopidy-${version}";
 
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchurl {
     url = "https://github.com/mopidy/mopidy/archive/v${version}.tar.gz";
-    sha256 = "1xfyg8xqgnrb98wx7a4fzr4vlzkffjhkc1s36ka63rwmx86vqhyw";
+    sha256 = "1vn4knpmnp3krmn627iv1r7xa50zl816ac6b24b8ph50cq2sqjfv";
   };
 
   buildInputs = [
@@ -34,7 +34,7 @@ pythonPackages.buildPythonPackage rec {
       SoundCloud, Google Play Music, and more
     '';
     license = licenses.asl20;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = with maintainers; [ rickynils fpletz ];
     hydraPlatforms = [];
   };
 }
