@@ -41,10 +41,11 @@ stdenv.mkDerivation rec {
     --enable-js-trunk
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A database that uses JSON for documents, JavaScript for MapReduce queries, and regular HTTP for an API";
     homepage = "http://couchdb.apache.org";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ viric garbas ];
+    license = licenses.asl20;
+    platform = platforms.all;
+    maintainers = with maintainers; [ garbas ];
   };
 }
