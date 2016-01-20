@@ -23405,6 +23405,23 @@ in modules // {
      };
   };
 
+  setproctitle = buildPythonPackage rec {
+    name = "python-setproctitle-${version}";
+    version = "1.1.9";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/setproctitle/setproctitle-${version}.tar.gz";
+      sha256 = "1mqadassxcm0m9r1l02m5vr4bbandn48xz8gifvxmb4wiz8i8d0w";
+    };
+
+    meta = {
+      description = "Allows a process to change its title (as displayed by system tools such as ps and top)";
+      homepage =  https://github.com/dvarrazzo/py-setproctitle;
+      license = licenses.bsdOriginal;
+      maintainers = with maintainers; [ exi ];
+    };
+  };
+
   thrift = buildPythonPackage rec {
     name = "thrift-${version}";
     version = "0.9.2";
