@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out
     mv -v installdir/$out/* $out/
-    mv -v installdir/etc $out/etc
+    cp -rv installdir/etc $out
     sed -e '/^PATH=/d' -i $out/libexec/postfix/post-install
     wrapProgram $out/libexec/postfix/post-install \
       --prefix PATH ":" ${coreutils}/bin:${findutils}/bin:${gnugrep}/bin
