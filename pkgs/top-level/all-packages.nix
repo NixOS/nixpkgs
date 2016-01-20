@@ -10002,6 +10002,8 @@ let
 
   openiscsi = callPackage ../os-specific/linux/open-iscsi { };
 
+  roccat-tools = callPackage ../os-specific/linux/roccat-tools { };
+
   tgt = callPackage ../tools/networking/tgt { };
 
   # -- Linux kernel expressions ------------------------------------------------
