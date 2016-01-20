@@ -1142,6 +1142,8 @@ let
 
   ibus-table-others = callPackage ../tools/inputmethods/ibus-table-others { };
 
+  brotli = callPackage ../tools/compression/brotli { };
+
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
   checkbashism = callPackage ../development/tools/misc/checkbashisms { };
