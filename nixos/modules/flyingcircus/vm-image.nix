@@ -34,7 +34,7 @@ with lib;
           mknod /dev/vda1 b $MAJOR $MINOR
 
           # Create an empty filesystem and mount it.
-          ${pkgs.xfsprogs}/sbin/mkfs.xfs -m crc=1,finobt=1 -L nixos /dev/vda1
+          ${pkgs.xfsprogs}/sbin/mkfs.xfs -m crc=1,finobt=1 -L root /dev/vda1
           mkdir /mnt
           mount /dev/vda1 /mnt
 
