@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pythonPackages, pygobject, gst_python
-, gst_plugins_good, gst_plugins_base, gst_plugins_ugly
+{ stdenv, fetchurl, pythonPackages, pygobject, gst_python, wrapGAppsHook
+, glib_networking, gst_plugins_good, gst_plugins_base, gst_plugins_ugly
 }:
 
 pythonPackages.buildPythonPackage rec {
@@ -12,16 +12,19 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "1xfyg8xqgnrb98wx7a4fzr4vlzkffjhkc1s36ka63rwmx86vqhyw";
   };
 
+  buildInputs = [
+    wrapGAppsHook gst_plugins_base gst_plugins_good gst_plugins_ugly glib_networking
+  ];
+
   propagatedBuildInputs = with pythonPackages; [
-    gst_python pygobject pykka tornado requests2 gst_plugins_base gst_plugins_good gst_plugins_ugly
+    gst_python pygobject pykka tornado requests2
   ];
 
   # There are no tests
   doCheck = false;
 
-  postInstall = ''
-    wrapProgram $out/bin/mopidy \
-      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH")
   '';
 
   meta = with stdenv.lib; {
