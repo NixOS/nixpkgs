@@ -68,11 +68,10 @@ stdenv.mkDerivation {
       fi
     }
 
-    # Add a dependency's paths to site-start.el
-    addToEmacsPaths() {
+    # Add a package's paths to site-start.el
+    addEmacsPackage() {
       addEmacsPath "exec-path" "$1/bin"
       addEmacsPath "load-path" "$1/share/emacs/site-lisp"
-      addEmacsPath "package-directory-list" "$1/share/emacs/site-lisp/elpa"
     }
 
     mkdir -p $out/share/emacs/site-lisp
@@ -80,7 +79,6 @@ stdenv.mkDerivation {
     # NixOS-specific paths. Paths are searched in the reverse of the order
     # they are specified in, so user and system profile paths are searched last.
     echo "(load-file \"$emacs/share/emacs/site-lisp/site-start.el\")" >"$siteStart"
-    echo "(require 'package)" >>"$siteStart"
 
     # Set paths for the dependencies of the requested packages. These paths are
     # searched before the profile paths, but after the explicitly-required paths.
@@ -88,14 +86,14 @@ stdenv.mkDerivation {
       # The explicitly-required packages are also in the list, but we will add
       # those paths last.
       if ! ( echo "$explicitRequires" | grep "$pkg" >/dev/null ) ; then
-        addToEmacsPaths $pkg
+        addEmacsPackage $pkg
       fi
     done
 
     # Finally, add paths for all the explicitly-required packages. These paths
     # will be searched first.
     for pkg in $explicitRequires; do
-      addToEmacsPaths $pkg
+      addEmacsPackage $pkg
     done
 
     # Byte-compiling improves start-up time only slightly, but costs nothing.
