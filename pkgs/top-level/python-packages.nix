@@ -2684,6 +2684,21 @@ in modules // {
     };
   };
 
+  cerberus = buildPythonPackage rec {
+    name = "Cerberus-${version}";
+    version = "0.9.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/C/Cerberus/${name}.tar.gz";
+      sha256 = "1km7hvns1snrmcwz58bssi4wv3gwd34zm1z1hwjylmpqrfrcf8mi";
+    };
+
+    meta = {
+      homepage = http://python-cerberus.org/;
+      description = "Lightweight, extensible schema and data validation tool for Python dictionaries";
+      license = licenses.mit;
+    };
+  };
 
   certifi = buildPythonPackage rec {
     name = "certifi-${version}";
@@ -4824,6 +4839,39 @@ in modules // {
     };
   };
 
+  eve = buildPythonPackage rec {
+    version = "0.6.1";
+    name = "Eve-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/E/Eve/${name}.tar.gz";
+      sha256 = "0wf1x8qixkld6liz5syqi8i9nrfrhq4lpmh0p9cy3jbkhk34km69";
+    };
+
+    propagatedBuildInputs = with self; [
+      cerberus
+      events
+      flask-pymongo
+      flask
+      itsdangerous
+      jinja2
+      markupsafe
+      pymongo_2_9_1
+      simplejson
+      werkzeug
+
+    ];
+
+    # tests call a running mongodb instance
+    doCheck = false;
+
+    meta = {
+      homepage = "http://python-eve.org/";
+      description = "open source Python REST API framework designed for human beings";
+      license = licenses.bsd3;
+    };
+  };
+
 
   eventlib = buildPythonPackage rec {
     name = "python-eventlib-${version}";
@@ -4841,6 +4889,22 @@ in modules // {
       homepage    = "http://ag-projects.com/";
       license     = licenses.lgpl2;
       platforms   = platforms.all;
+    };
+  };
+
+  events = buildPythonPackage rec {
+    name = "Events-${version}";
+    version = "0.2.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/E/Events/${name}.tar.gz";
+      sha256 = "0rymyfvarjdi2fdhfz2iqmp4wgd2n2sm0p2mx44c3spm7ylnqzqa";
+    };
+
+    meta = {
+      homepage = "http://events.readthedocs.org";
+      description = "Bringing the elegance of C# EventHanlder to Python";
+      license = licenses.bsd3;
     };
   };
 
@@ -8278,6 +8342,24 @@ in modules // {
       homepage = https://github.com/thadeusb/flask-cache;
       description = "Adds cache support to your Flask application";
       license = "BSD";
+    };
+  };
+
+  flask-pymongo = buildPythonPackage rec {
+    name = "Flask-PyMongo-${version}";
+    version = "0.3.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/F/Flask-PyMongo/${name}.tar.gz";
+      sha256 = "0305qngvjrjyyabf8gxqgqvd9ffh00gr5yfrjf4nncr2my9svbyd";
+    };
+
+    propagatedBuildInputs = with self; [ flask pymongo_2_9_1 ];
+
+    meta = {
+      homepage = "http://flask-pymongo.readthedocs.org/";
+      description = "PyMongo support for Flask applications";
+      license = licenses.bsd2;
     };
   };
 
@@ -16453,6 +16535,25 @@ in modules // {
       sha256 = "3c6b2317f8031bc1e200fd1ea35f00a96f4569e3f3f220a5e66ab6227d96ccaf";
     };
 
+    doCheck = false;
+
+    meta = {
+      homepage = "http://github.com/mongodb/mongo-python-driver";
+      license = licenses.asl20;
+      description = "Python driver for MongoDB ";
+    };
+  };
+
+  pymongo_2_9_1 = buildPythonPackage rec {
+    name = "pymongo-2.9.1";
+    version = "2.9.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pymongo/${name}.tar.gz";
+      sha256 = "1nrr1fxyrlxd69bgxl7bvaj2j4z7v3zaciij5sbhxg0vqiz6ny50";
+    };
+
+    # Tests call a running mongodb instance
     doCheck = false;
 
     meta = {
