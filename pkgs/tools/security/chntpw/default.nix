@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1k1cxsj0221dpsqi5yibq2hr7n8xywnicl8yyaicn91y8h2hkqln";
   };
 
-  buildInputs = [ unzip ];
+  buildInputs = [ unzip ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ stdenv.glibc.out stdenv.glibc.static ];
 
   patches = [
     ./00-chntpw-build-arch-autodetect.patch
