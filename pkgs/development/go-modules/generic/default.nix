@@ -112,6 +112,9 @@ go.stdenv.mkDerivation (
     }
 
     export -f buildGoDir # parallel needs to see the function
+    if [ -z "$enableParallelBuilding" ]; then
+        export NIX_BUILD_CORES=1
+    fi
     getGoDirs "" | parallel -j $NIX_BUILD_CORES buildGoDir install
 
     runHook postBuild
