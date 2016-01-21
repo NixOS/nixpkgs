@@ -1682,6 +1682,15 @@ let
     excludedPackages = "\\(test\\|benchmark\\)";
   };
 
+  gtreap = buildFromGitHub {
+    rev = "0abe01ef9be25c4aedc174758ec2d917314d6d70";
+    date = "2015-08-07";
+    owner = "steveyen";
+    repo = "gtreap";
+    sha256 = "03z5j8myrpmd0jk834l318xnyfm0n4rg15yq0d35y7j1aqx26gvk";
+    goPackagePath = "github.com/steveyen/gtreap";
+  };
+
   gucumber = buildGoPackage rec {
     rev = "e8116c9c66e641e9f81fc0a79fac923dfc646378";
     name = "gucumber-${stdenv.lib.strings.substring 0 7 rev}";
