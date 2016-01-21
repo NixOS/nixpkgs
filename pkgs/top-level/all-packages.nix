@@ -10384,7 +10384,7 @@ let
       inherit modules;
     };
 
-  multipath_tools = callPackage ../os-specific/linux/multipath-tools { };
+  multipath-tools = callPackage ../os-specific/linux/multipath-tools { };
 
   musl = callPackage ../os-specific/linux/musl { };
 
@@ -15880,6 +15880,7 @@ aliases = with self; rec {
   lttngUst = lttng-ust;  # added 2014-07-31
   midoriWrapper = midori; # added 2015-01
   mlt-qt5 = qt5.mlt;  # added 2015-12-19
+  multipath_tools = multipath-tools;  # added 2016-01-21
   nfsUtils = nfs-utils;  # added 2014-12-06
   phonon_qt5 = qt5.phonon;  # added 2015-12-19
   phonon_qt5_backend_gstreamer = qt5.phonon-backend-gstreamer;  # added 2015-12-19
