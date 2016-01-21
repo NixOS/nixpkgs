@@ -18903,14 +18903,14 @@ in modules // {
 
 
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.3.1";
+    name = "Sphinx-1.3.4";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/S/Sphinx/${name}.tar.gz";
-      sha256 = "052i5c7cgvs5iv011dkq3r8d6jycg2gjjg3907ijsbdlq8q52vhs";
+      sha256 = "0mw06q7bzzjylgwh0wnnaxmwc95hx8w95as4vcgpan579brw7b4a";
     };
 
-    patches = [ ../development/python-modules/sphinx-1.3.1-pr-1946.patch ];
+    patches = [ ../development/python-modules/sphinx-fix-tests-with-pygments-2.1.patch ];
     LC_ALL = "en_US.UTF-8";
     checkPhase = ''
       PYTHON=${python.executable} make test
@@ -18938,6 +18938,8 @@ in modules // {
     };
     patches = [];
     disabled = isPy35;
+    # Tests requires Pygments >=2.0.2 which isn't worth keeping around for this:
+    doCheck = false;
   };
 
   sphinx_rtd_theme = buildPythonPackage (rec {
