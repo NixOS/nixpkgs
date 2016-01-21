@@ -25067,4 +25067,24 @@ in modules // {
       maintainers = with maintainers; [ np ];
     };
   };
+
+  trezor_agent = buildPythonPackage rec{
+    version = "0.6.1";
+    name = "trezor_agent-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/trezor_agent/${name}.tar.gz";
+      sha256 = "0wpppxzld7kqqxdvy80qc8629n047vm3m3nk171i7hijfw285p0b";
+    };
+
+    propagatedBuildInputs = with self; [ trezor ecdsa ed25519 mnemonic keepkey semver ];
+
+    meta = {
+      description = "Using Trezor as hardware SSH agent";
+      homepage = https://github.com/romanz/trezor-agent;
+      license = licenses.gpl3;
+      maintainer = with maintainers; [ np ];
+    };
+  };
+
 }
