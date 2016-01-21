@@ -1,1 +1,1 @@
-EVAL additions_libgltf='  subDir = "libgltf";'
+EVAL additions_libgltf='  subDir = "libgltf/";'
