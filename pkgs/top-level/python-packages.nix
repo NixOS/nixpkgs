@@ -25010,6 +25010,30 @@ in modules // {
     };
   };
 
+  keepkey = buildPythonPackage rec{
+    version = "0.7.0";
+    name = "keepkey-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/k/keepkey/${name}.tar.gz";
+      sha256 = "1ikyp4jpydskznsrlwmxh9sn7b64aldwj2lf0phmb19r5kk06qmp";
+    };
+
+    propagatedBuildInputs = with self; [ protobuf2_6 hidapi ];
+
+    buildInputs = with self; [ ecdsa mnemonic ];
+
+    # There are no actual tests: "ImportError: No module named tests"
+    doCheck = false;
+
+    meta = {
+      description = "KeepKey Python client";
+      homepage = https://github.com/keepkey/python-keepkey;
+      license = licenses.gpl3;
+      maintainer = with maintainers; [ np ];
+    };
+  };
+
   ed25519 = buildPythonPackage rec {
     name = "ed25519-${version}";
     version = "1.4";
