@@ -158,6 +158,11 @@ nginx.override {
     <command>nix-shell</command> (without installing anything). </para>
   </listitem>
 
+  <listitem>
+    <para><literal>ejabberd</literal> module is brought back and now works on
+    NixOS.</para>
+  </listitem>
+
 </itemizedlist></para>
 
 </section>
