@@ -11574,6 +11574,8 @@ let
 
   electrum = callPackage ../applications/misc/electrum { };
 
+  electrum-dash = callPackage ../applications/misc/electrum-dash { };
+
   elinks = callPackage ../applications/networking/browsers/elinks { };
 
   elvis = callPackage ../applications/editors/elvis { };
