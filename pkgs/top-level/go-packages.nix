@@ -304,11 +304,30 @@ let
     ];
   };
 
+  bleve = buildFromGitHub {
+    rev    = "fc34a97875840b2ae24517e7d746b69bdae9be90";
+    date   = "2016-01-19";
+    owner  = "blevesearch";
+    repo   = "bleve";
+    sha256 = "0ny7nvilrxmmzcdvpivwyrjkynnhc22c5gdrxzs421jly35jw8jx";
+    buildFlags = [ "-tags all" ];
+    propagatedBuildInputs = [ protobuf goleveldb kagome gtreap bolt text
+     rcrowley.go-metrics bitset segment go-porterstemmer ];
+  };
+
   binarydist = buildFromGitHub {
     rev    = "9955b0ab8708602d411341e55fffd7e0700f86bd";
     owner  = "kr";
     repo   = "binarydist";
     sha256 = "11wncbbbrdcxl5ff3h6w8vqfg4bxsf8709mh6vda0cv236flkyn3";
+  };
+
+  bitset = buildFromGitHub {
+    rev    = "bb0da3785c4fe9d26f6029c77c8fce2aa4d0b291";
+    date   = "2016-01-13";
+    owner  = "willf";
+    repo   = "bitset";
+    sha256 = "1d4z2hjjs9jk6aysi4mf50p8lbbzag4ir4y1f0z4sz8gkwagh7b7";
   };
 
   blackfriday = buildFromGitHub {
@@ -1487,6 +1506,14 @@ let
     owner  = "mreiferson";
     repo   = "go-options";
     sha256 = "0ksyi2cb4k6r2fxamljg42qbz5hdcb9kv5i7y6cx4ajjy0xznwgm";
+  };
+
+  go-porterstemmer = buildFromGitHub {
+    rev    = "23a2c8e5cf1f380f27722c6d2ae8896431dc7d0e";
+    date   = "2014-12-30";
+    owner  = "blevesearch";
+    repo   = "go-porterstemmer";
+    sha256 = "0rcfbrad79xd114h3dhy5d3zs3b5bcgqwm3h5ih1lk69zr9wi91d";
   };
 
   go-querystring = buildFromGitHub {
@@ -3033,6 +3060,14 @@ let
     owner = "cihub";
     repo = "seelog";
     sha256 = "1f0rwgqlffv1a7b05736a4gf4l9dn80wsfyqcnz6qd2skhwnzv29";
+  };
+
+  segment = buildFromGitHub {
+    rev    = "db70c57796cc8c310613541dfade3dce627d09c7";
+    date   = "2016-01-05";
+    owner  = "blevesearch";
+    repo   = "segment";
+    sha256 = "09xfdlcc6bsrr5grxp6fgnw9p4cf6jc0wwa9049fd1l0zmhj2m1g";
   };
 
   semver = buildFromGitHub {
