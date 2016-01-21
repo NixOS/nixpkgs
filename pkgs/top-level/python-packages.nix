@@ -8248,11 +8248,11 @@ in modules // {
 
   ecdsa = buildPythonPackage rec {
     name = "ecdsa-${version}";
-    version = "0.11";
+    version = "0.13";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/e/ecdsa/${name}.tar.gz";
-      md5 = "8ef586fe4dbb156697d756900cb41d7c";
+      sha256 = "1yj31j0asmrx4an9xvsaj2icdmzy6pw0glfpqrrkrphwdpi1xkv4";
     };
 
     # Only needed for tests
