@@ -1144,6 +1144,8 @@ let
 
   brotli = callPackage ../tools/compression/brotli { };
 
+  brotliUnstable = callPackage ../tools/compression/brotli/unstable.nix { };
+
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
   checkbashism = callPackage ../development/tools/misc/checkbashisms { };
