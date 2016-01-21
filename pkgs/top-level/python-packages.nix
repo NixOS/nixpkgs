@@ -5932,7 +5932,7 @@ in modules // {
   };
 
   lpod = buildPythonPackage rec {
-    version = "1.1.5";
+    version = "1.1.7";
     name = "python-lpod-${version}";
     # lpod library currently does not support Python 3.x
     disabled = isPy3k;
@@ -5942,8 +5942,8 @@ in modules // {
     src = pkgs.fetchFromGitHub {
       owner = "lpod";
       repo = "lpod-python";
-      rev = "v${version}";
-      sha256 = "1g909li511jkpcl26j1dzg8gn1ipkc374sh8vv54dx30sl0xfqxf";
+      rev = "dee32120ee582ff337b0c52a95a9a87cca71fd67";
+      sha256 = "1mikvzp27wxkzpr2lii4wg1hhx8h610agckqynvsrdc8v3nw9ciw";
     };
 
     meta = {
