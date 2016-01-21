@@ -1,6 +1,16 @@
 { fetchFromGitHub, pkgs }:
 
 {
+  brotli = {
+    src = fetchFromGitHub {
+      owner = "google";
+      repo = "ngx_brotli";
+      rev = "788615eab7c5e0a984278113c55248305620df14";
+      sha256 = "02514bbjdhm9m38vljdh626d3c1783jxsxawv5c6bzblwmb8xgvf";
+    };
+    inputs = [ pkgs.libbrotli ];
+  };
+
   rtmp = {
     src = fetchFromGitHub {
       owner = "arut";
