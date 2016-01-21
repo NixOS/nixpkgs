@@ -1859,6 +1859,17 @@ let
     sha256 = "0m8867afsvka5gp2idrmlarpjg7kxx7qacpwrz1wl8y3zxyn3945";
   };
 
+  kagome = buildFromGitHub {
+    rev = "1bbdbdd590e13a8c2f4508c67a079113cd7b9f51";
+    date = "2016-01-19";
+    owner = "ikawaha";
+    repo = "kagome";
+    sha256 = "1isnjdkn9hnrkp5g37p2k5bbsrx0ma32v3icwlmwwyc5mppa4blb";
+    buildFlags = "-p 1";
+    enableParallelBuilding = false;
+    goPackagePath = "github.com/ikawaha/kagome";
+  };
+
   ldap = buildGoPackage rec {
     rev = "83e65426fd1c06626e88aa8a085e5bfed0208e29";
     name = "ldap-${stdenv.lib.strings.substring 0 7 rev}";
