@@ -349,7 +349,7 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
   fileSystems.\"$mountPoint\" =
     { device = \"$base$path\";
       fsType = \"none\";
-      options = \"bind\";
+      options = \[ \"bind\" \];
     };
 
 EOF
@@ -409,7 +409,7 @@ EOF
 
     if (scalar @extraOptions > 0) {
       $fileSystems .= <<EOF;
-      options = \"${\join ",", uniq(@extraOptions)}\";
+      options = \[ ${\join " ", map { "\"" . $_ . "\"" } uniq(@extraOptions)} \];
 EOF
     }
 

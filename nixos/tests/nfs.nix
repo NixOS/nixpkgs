@@ -8,7 +8,7 @@ let
         [ { mountPoint = "/data";
             device = "server:/data";
             fsType = "nfs";
-            options = "vers=${toString version}";
+            options = [ "vers=${toString version}" ];
           }
         ];
       networking.firewall.enable = false; # FIXME: only open statd
