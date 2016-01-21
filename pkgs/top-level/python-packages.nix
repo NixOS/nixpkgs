@@ -24985,4 +24985,28 @@ in modules // {
       maintainer = with maintainers; [ np ];
     };
   };
+
+  trezor = buildPythonPackage rec{
+    version = "0.6.11";
+    name = "trezor-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/trezor/${name}.tar.gz";
+      sha256 = "0nqbjj0mvkp314hpq36px12hxbyidmhsdflq3121l4g9y3scfbnx";
+    };
+
+    propagatedBuildInputs = with self; [ protobuf2_6 hidapi ];
+
+    buildInputs = with self; [ ecdsa mnemonic ];
+
+    # There are no actual tests: "ImportError: No module named tests"
+    doCheck = false;
+
+    meta = {
+      description = "Python library for communicating with TREZOR Bitcoin Hardware Wallet";
+      homepage = https://github.com/trezor/python-trezor;
+      license = licenses.gpl3;
+      maintainer = with maintainers; [ np ];
+    };
+  };
 }
