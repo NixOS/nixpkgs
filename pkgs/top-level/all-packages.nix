@@ -8688,6 +8688,8 @@ let
 
   webkit = webkitgtk;
 
+  wcslib = callPackage ../development/libraries/wcslib { };
+
   webkitgtk = callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzz-icu;
     gst-plugins-base = gst_all_1.gst-plugins-base;
