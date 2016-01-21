@@ -24966,4 +24966,23 @@ in modules // {
       maintainer = with maintainers; [ np ];
     };
   };
+
+  mnemonic = buildPythonPackage rec{
+    version = "0.12";
+    name = "mnemonic-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/m/mnemonic/${name}.tar.gz";
+      sha256 = "0j5jm4v54135qqw455fw4ix2mhxhzjqvxji9gqkpxagk31cvbnj4";
+    };
+
+    propagatedBuildInputs = with self; [ pbkdf2 ];
+
+    meta = {
+      description = "Implementation of Bitcoin BIP-0039";
+      homepage = https://github.com/trezor/python-mnemonic;
+      license = licenses.mit;
+      maintainer = with maintainers; [ np ];
+    };
+  };
 }
