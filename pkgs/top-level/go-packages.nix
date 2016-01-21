@@ -3599,4 +3599,38 @@ let
         xargs -d '\n' sed -i -e s,github.com/ericchiang/pup/Godeps/_workspace/src/,,g
     '';
   };
+
+  textsecure = buildFromGitHub rec {
+    rev = "505e129c42fc4c5cb2d105520cef7c04fa3a6b64";
+    owner = "janimo";
+    repo = "textsecure";
+    sha256 = "0sdcqd89dlic0bllb6mjliz4x54rxnm1r3xqd5qdp936n7xs3mc6";
+    propagatedBuildInputs = [ crypto protobuf ed25519 yaml-v2 logrus ];
+    disabled = isGo14;
+  };
+
+  interlock = buildFromGitHub rec {
+    version = "2016.01.14";
+    rev = "v${version}";
+    owner = "inversepath";
+    repo = "interlock";
+    sha256 = "0wabx6vqdxh2aprsm2rd9mh71q7c2xm6xk9a6r1bn53r9dh5wrsb";
+    buildInputs = [ crypto textsecure ];
+    nativeBuildInputs = [ pkgs.sudo ];
+    buildFlags = [ "-tags textsecure" ];
+    subPackages = [ "./cmd/interlock" ];
+    postPatch = ''
+      grep -lr '/s\?bin/' | xargs sed -i \
+        -e 's|/bin/mount|${pkgs.utillinux}/bin/mount|' \
+        -e 's|/bin/umount|${pkgs.utillinux}/bin/umount|' \
+        -e 's|/bin/cp|${pkgs.coreutils}/bin/cp|' \
+        -e 's|/bin/mv|${pkgs.coreutils}/bin/mv|' \
+        -e 's|/bin/chown|${pkgs.coreutils}/bin/chown|' \
+        -e 's|/bin/date|${pkgs.coreutils}/bin/date|' \
+        -e 's|/sbin/poweroff|${pkgs.systemd}/sbin/poweroff|' \
+        -e 's|/usr/bin/sudo|/var/setuid-wrappers/sudo|' \
+        -e 's|/sbin/cryptsetup|${pkgs.cryptsetup}/bin/cryptsetup|'
+    '';
+    disabled = isGo14;
+  };
 }; in self

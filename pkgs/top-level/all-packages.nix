@@ -879,6 +879,8 @@ let
 
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
+  interlock = goPackages.interlock.bin // { outputs = [ "bin" ]; };
+
   mathics = pythonPackages.mathics;
 
   mcrl = callPackage ../tools/misc/mcrl { };
