@@ -71,23 +71,24 @@ in
     environment.noXlibs = true;
     sound.enable = false;
 
-    environment.systemPackages = [
-        pkgs.cyrus_sasl
-        pkgs.db
-        pkgs.dstat
-        pkgs.gcc
-        pkgs.git
-        pkgs.libxml2
-        pkgs.libxslt
-        pkgs.mercurial
-        pkgs.openldap
-        pkgs.openssl
-        pkgs.python27Full
-        pkgs.python27Packages.virtualenv
-        pkgs.vim
-        pkgs.zlib
-        pkgs.fcagent
-        pkgs.zsh
+    environment.systemPackages = with pkgs; [
+        cyrus_sasl
+        db
+        dstat
+        gcc
+        git
+        libxml2
+        libxslt
+        mercurial
+	ncdu
+        openldap
+        openssl
+        python27Full
+        python27Packages.virtualenv
+        vim
+        zlib
+        fcagent
+        zsh
     ];
 
     environment.pathsToLink = [ "/include" ];
