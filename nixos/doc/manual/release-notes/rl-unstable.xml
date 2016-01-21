@@ -145,6 +145,15 @@ nginx.override {
     from the ELPA, MELPA, and MELPA Stable repositories.
     </para>
   </listitem>
+
+  <listitem>
+    <para>Data directory for Postfix MTA server is moved from
+    <filename>/var/postfix</filename> to <filename>/var/lib/postfix</filename>.
+    Old configurations are migrated automatically. <literal>service.postfix</literal>
+    module has also received many improvements, such as correct directories' access
+    rights, new <literal>aliasFiles</literal> and <literal>mapFiles</literal>
+    options and more.</para>
+  </listitem>
 </itemizedlist>
 
 
