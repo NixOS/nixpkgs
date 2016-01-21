@@ -24939,4 +24939,31 @@ in modules // {
     };
   };
 
+  hidapi = buildPythonPackage rec{
+    version = "0.7.99.post12";
+    name = "hidapi-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/h/hidapi/${name}.tar.gz";
+      sha256 = "1jaj0y5vn5yk033q01wacsz379mf3sy66d6gz072ycfr5rahcp59";
+    };
+
+    propagatedBuildInputs = with self; [ pkgs.libusb1 pkgs.udev cython ];
+
+    # Fix the USB backend library lookup
+    postPatch = ''
+      libusb=${pkgs.libusb1}/include/libusb-1.0
+      test -d $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
+      sed -i -e "s|/usr/include/libusb-1.0|$libusb|" setup.py
+    '';
+
+    meta = {
+      description = "A Cython interface to the hidapi from https://github.com/signal11/hidapi";
+      homepage = https://github.com/trezor/cython-hidapi;
+      # license can actually be either bsd3 or gpl3
+      # see https://github.com/trezor/cython-hidapi/blob/master/LICENSE-orig.txt
+      license = licenses.bsd3;
+      maintainer = with maintainers; [ np ];
+    };
+  };
 }
