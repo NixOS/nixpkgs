@@ -1206,6 +1206,13 @@ let
     repo   = "gozim";
     sha256 = "1n50fdd56r3s1sgjbpa72nvdh50gfpf6fq55c077w2p3bxn6p8k6";
     propagatedBuildInputs = [ bleve go-liblzma groupcache go-rice goquery ];
+    buildInputs = [ pkgs.zip ];
+    postInstall = ''
+      pushd $NIX_BUILD_TOP/go/src/$goPackagePath/cmd/gozimhttpd
+      ${go-rice.bin}/bin/rice append --exec $bin/bin/gozimhttpd
+      popd
+    '';
+    dontStrip = true;
   };
 
   go-assert = buildGoPackage rec {
