@@ -4548,6 +4548,7 @@ let
   mozart = mozart-binary;
 
   nim = callPackage ../development/compilers/nim { };
+  nimble = callPackage ../development/tools/nimble { };
 
   neko = callPackage ../development/compilers/neko { };
 
