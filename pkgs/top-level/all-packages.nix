@@ -3549,6 +3549,8 @@ let
 
   xxkb = callPackage ../applications/misc/xxkb { };
 
+  ugarit = callPackage ../tools/backup/ugarit { };
+
   unarj = callPackage ../tools/archivers/unarj { };
 
   unshield = callPackage ../tools/archivers/unshield { };
