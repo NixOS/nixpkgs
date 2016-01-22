@@ -9712,24 +9712,31 @@ in modules // {
   };
 
   ipython = buildPythonPackage rec {
-    version = "4.0.0";
+    version = "4.0.3";
     name = "ipython-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipython/${name}.tar.gz";
-      sha256 = "2fd276c407fb0b29e5d4884a7029a2c27fef0a06fd7a34924cce69b7cc43f4da";
+      sha256 = "3a928f59e8ac8dd97858c28390867c87c09510f1f8bbe97e4e9c6b036eb84fc0";
     };
 
     prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
       substituteInPlace setup.py --replace "'gnureadline'" " "
     '';
 
-    buildInputs = with self; [nose] ++ optionals isPy27 [mock];
+    buildInputs = with self; [ nose pkgs.glibcLocales pygments ] ++ optionals isPy27 [mock];
 
     propagatedBuildInputs = with self;
       [decorator pickleshare simplegeneric traitlets readline requests2 pexpect sqlite3]
       ++ optionals stdenv.isDarwin [appnope gnureadline];
 
+    LC_ALL="en_US.UTF-8";
+
+    doCheck = false; # Circular dependency with ipykernel
+
+    checkPhase = ''
+      nosetests
+    '';
     meta = {
       description = "IPython: Productive Interactive Computing";
       homepage = http://ipython.org/;
