@@ -17155,12 +17155,12 @@ in modules // {
   };
 
   qtconsole = buildPythonPackage rec {
-    version = "4.1.0";
+    version = "4.1.1";
     name = "qtconsole-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/q/qtconsole/${name}.tar.gz";
-      sha256 = "61fb6e001dd2619a9fe8bd3a096d91c2c794cd9b2c7550a6df27ab6d5d03eb19";
+      sha256 = "741906acae9e02c0df9138ac88b621ef22e438565aa96d783a9ef88faec3de46";
     };
 
     buildInputs = with self; [] ++ optionals isPy27 [mock];
