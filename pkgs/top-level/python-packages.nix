@@ -20979,21 +20979,21 @@ in modules // {
     };
   });
 
-  xray = buildPythonPackage rec {
-    name = "xray-${version}";
-    version = "0.6.1";
+  xarray = buildPythonPackage rec {
+    name = "xarray-${version}";
+    version = "0.7.0";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/x/xray/${name}.tar.gz";
-      sha256 = "bfbc307203d5433b4da31c210773c8474c237ff97350874b6e436d452fb9dfc8";
+      url = "https://pypi.python.org/packages/source/x/xarray/${name}.tar.gz";
+      sha256 = "b1562e8e2c61f1c3587d557ff48d2bc7be36574d6a8e86f11186c356bdd794cf";
     };
 
-    buildInputs = with self; [nose];
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [numpy pandas];
 
     meta = {
       description = "N-D labeled arrays and datasets in Python";
-      homepage = https://github.com/xray/xray;
+      homepage = https://github.com/pydata/xarray;
       license = licenses.asl20;
       maintainers = with maintainers; [ fridh ];
     };
