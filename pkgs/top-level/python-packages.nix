@@ -1110,6 +1110,7 @@ in modules // {
       rsa
       pyasn1
       pkgs.groff
+      pkgs.less
     ];
 
     postInstall = ''
