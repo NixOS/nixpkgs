@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1v63lqc6bhhxwkpa43qmz8phqs8ci4dhzizyy16d3vkb20m846z8";
   };
 
+  patches = [ ./libspectre-0.2.7-gs918.patch ];
+
   buildInputs = [
     # Need `libgs.so'.
     pkgconfig ghostscript cairo /*for tests*/
