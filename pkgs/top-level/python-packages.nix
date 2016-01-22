@@ -18265,13 +18265,13 @@ in modules // {
 
   shortuuid = buildPythonPackage rec {
     name = "shortuuid-${version}";
-    version = "0.4.2";
+    version = "0.4.3";
 
     disabled = isPy26;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/shortuuid/${name}.tar.gz";
-      md5 = "142e3ae4e7cd32d41a71deb359db4cfe";
+      sha256 = "4606dbb19124d98109c00e2cafae2df8117aec02115623e18fb2abe3f766d293";
     };
 
     buildInputs = with self; [pep8];
