@@ -69,11 +69,19 @@ with lib;
     script = ''
       ${pkgs.python3}/bin/python3 ${./update.py}
     '';
-
-    # XXX Include host-randomized offset.
-    startAt = "*:0/10:00";
   };
 
-
+  systemd.timers.fc-manage = {
+    description = "Timer for fc-manage";
+    wantedBy = [ "timers.target" ];
+    enable = true;
+    timerConfig = {
+      Unit = "fc-manage.service";
+      OnBootSec = "0";
+      OnUnitActiveSec = "10m";
+      # Not yet supported by our systemd version.
+      # RandomSec = "3m";
+    };
+  };
 
 }
