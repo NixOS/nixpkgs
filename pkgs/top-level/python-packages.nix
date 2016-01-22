@@ -18109,7 +18109,10 @@ in modules // {
       md5 = "1d1c5117ccfc7b5961cae6c1020c0848";
     };
 
-    buildInputs = with self; [ nose pytest ];
+    buildInputs = with self; [ pytest ];
+
+    # Tests are not included. See https://github.com/pypa/scripttest/issues/11
+    doCheck = false;
 
     meta = {
       description = "A library for testing interactive command-line applications";
