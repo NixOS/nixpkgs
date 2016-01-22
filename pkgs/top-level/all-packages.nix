@@ -13106,7 +13106,7 @@ let
     boost = boost155;
   };
 
-  scim = callPackage ../applications/misc/scim { };
+  sc-im = callPackage ../applications/misc/scim { };
 
   scite = callPackage ../applications/editors/scite { };
 
@@ -15920,6 +15920,7 @@ aliases = with self; rec {
   btrfsProgs = btrfs-progs; # added 2016-01-03
   aircrackng = aircrack-ng; # added 2016-01-14
   quake3game = ioquake3; # added 2016-01-14
+  scim = sc-im; # added 2016-01-22
 };
 
 tweakAlias = _n: alias: with lib;
