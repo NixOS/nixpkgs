@@ -6,7 +6,6 @@ let
 
   cfg = config.services.ihaskell;
   ihaskell = pkgs.ihaskell.override {
-    inherit (cfg.haskellPackages) ihaskell ghcWithPackages;
     packages = self: cfg.extraPackages self;
   };
 
