@@ -8,10 +8,15 @@ buildPerlPackage {
   preConfigure = "touch Makefile.PL";
   doCheck = false;
 
+  patchPhase = ''
+    sed -e 's|^update_script|#update_script|' \
+        -e '/WARNING.*updater/d' \
+        -i get_iplayer
+  '';
+
   installPhase = '' 
     mkdir -p $out/bin
     cp get_iplayer $out/bin
-    sed -i 's|^update_script|#update_script|' $out/bin/get_iplayer
     wrapProgram $out/bin/get_iplayer --suffix PATH : ${ffmpeg}/bin:${flvstreamer}/bin:${vlc}/bin:${rtmpdump}/bin --prefix PERL5LIB : $PERL5LIB
   '';  
   
