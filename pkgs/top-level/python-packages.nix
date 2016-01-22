@@ -14223,14 +14223,11 @@ in modules // {
 
   pep8 = buildPythonPackage rec {
     name = "pep8-${version}";
-    # 1.6.0 and higher are blocked by flake8
-    version = "1.5.7";
-
-    disabled = isPy35; # Not yet supported
+    version = "1.7.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pep8/${name}.tar.gz";
-      sha256 = "12b9bbdbwnspxgak14xg58c130x2n0blxzlms5jn2dszn8qj3d0m";
+      sha256 = "a113d5f5ad7a7abacef9df5ec3f2af23a20a28005921577b15dd584d099d5900";
     };
 
     meta = {
