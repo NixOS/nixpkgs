@@ -15,7 +15,7 @@ let
 
     enc =
       get_enc config.fcio.enc_path
-      (get_enc /tmp/fc-data/enc.json {});
+      (get_enc /etc/nixos/enc.json {});
 
 in
 {

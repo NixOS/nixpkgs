@@ -2,6 +2,7 @@
 import json
 import logging
 import os
+import shutil
 import xmlrpc.client
 
 enc = None
@@ -10,12 +11,10 @@ directory = None
 
 def load_enc():
     global enc, directory
-    if os.path.exists('/etc/nixos/enc.json'):
-        enc_path = '/etc/nixos/enc.json'
-    else:
-        # Bootstrap
-        enc_path = '/tmp/fc-data/enc.json'
-    enc = json.load(open(enc_path))
+    if not os.path.exists('/etc/nixos/enc.json'):
+        shutil.copy('/tmp/fc-data/enc.json',
+                    '/etc/nixos/enc.json')
+    enc = json.load(open('/etc/nixos/enc.json'))
     directory = xmlrpc.client.Server(
         'https://{}:{}@directory.fcio.net/v2/api/rg-{}'.format(
             enc['name'],
