@@ -16797,11 +16797,11 @@ in modules // {
 
   pytz = buildPythonPackage rec {
     name = "pytz-${version}";
-    version = "2015.4";
+    version = "2015.7";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/p/pytz/${name}.tar.bz2";
-      md5 = "39f7375c4b1fa34cdcb4b4765d08f817";
+      url = "http://pypi.python.org/packages/source/p/pytz/${name}.tar.gz";
+      sha256 = "99266ef30a37e43932deec2b7ca73e83c8dbc3b9ff703ec73eca6b1dae6befea";
     };
 
     meta = {
