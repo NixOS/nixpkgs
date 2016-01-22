@@ -12335,12 +12335,12 @@ in modules // {
   });
 
   oauth2 = buildPythonPackage (rec {
-    name = "oauth2-1.5.211";
-    disabled = isPy3k;
+    name = "oauth2-${version}";
+    version = "1.9.0.post1";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/o/oauth2/oauth2-1.5.211.tar.gz";
-      sha256 = "82a38f674da1fa496c0fc4df714cbb058540bed72a30c50a2e344b0d984c4d21";
+      url = "http://pypi.python.org/packages/source/o/oauth2/${name}.tar.gz";
+      sha256 = "c006a85e7c60107c7cc6da1b184b5c719f6dd7202098196dfa6e55df669b59bf";
     };
 
     propagatedBuildInputs = with self; [ httplib2 ];
