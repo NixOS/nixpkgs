@@ -11439,12 +11439,12 @@ in modules // {
   };
 
   pygraphviz = buildPythonPackage rec {
-    version = "1.3";
+    version = "1.3.1";
     name = "pygraphviz-${version}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/pygraphviz/pygraphviz/archive/${name}.tar.gz";
-      sha256 = "1fhn123hy4qj0zmmmbx0q0r4hwikay13yirsp74niiw5d52y7ib8";
+      sha256 = "7c294cbc9d88946be671cc0d8602aac176d8c56695c0a7d871eadea75a958408";
     };
 
     buildInputs = with self; [ doctest-ignore-unicode ];
