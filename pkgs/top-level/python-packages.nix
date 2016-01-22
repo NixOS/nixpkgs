@@ -19664,11 +19664,11 @@ in modules // {
 
   terminado = buildPythonPackage rec {
     name = "terminado-${version}";
-    version = "0.5";
+    version = "0.6";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/terminado/${name}.tar.gz";
-      sha256 = "63e893eff1ba84f1ee7c4bfcca7676ba1de6394538bb9aa80cbbc8866cb875b6";
+      sha256 = "2c0ba1f624067dccaaead7d2247cfe029806355cef124dc2ccb53c83229f0126";
     };
 
     propagatedBuildInputs = with self; [ ptyprocess tornado ];
