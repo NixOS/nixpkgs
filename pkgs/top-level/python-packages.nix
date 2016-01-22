@@ -9866,14 +9866,19 @@ in modules // {
     };
   };
 
-  iso8601 = buildPythonPackage {
-    name = "iso8601-0.1.10";
+  iso8601 = buildPythonPackage rec {
+    name = "iso8601-${version}";
+    version = "0.1.11";
     src = pkgs.fetchurl {
-      url = https://pypi.python.org/packages/source/i/iso8601/iso8601-0.1.10.tar.gz;
-      sha256 = "1qf01afxh7j4gja71vxv345if8avg6nnm0ry0zsk6j3030xgy4p7";
+      url = "https://pypi.python.org/packages/source/i/iso8601/${name}.tar.gz";
+      sha256 = "e8fb52f78880ae063336c94eb5b87b181e6a0cc33a6c008511bac9a6e980ef30";
     };
 
     buildInputs = [ self.pytest ];
+
+    checkPhase = ''
+      py.test iso8601
+    '';
 
     meta = {
       homepage = https://bitbucket.org/micktwomey/pyiso8601/;
