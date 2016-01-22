@@ -14094,15 +14094,17 @@ in modules // {
   };
 
   pathpy = buildPythonPackage rec {
-    version = "7.6";
+    version = "8.1.2";
     name = "path.py-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/path.py/${name}.tar.gz";
-      sha256 = "5cdf60f359f1add18f8556c9a1855cbd1d517f0780e3d386c256515f698ba0e0";
+      sha256 = "ada95d117c4559abe64080961daf5badda68561afdd34c278f8ca20f2fa466d2";
     };
 
-    buildInputs = with self; [setuptools_scm pytestrunner pytest];
+    buildInputs = with self; [setuptools_scm pytestrunner pytest pkgs.glibcLocales ];
+
+    LC_ALL="en_US.UTF-8";
 
     meta = {
       description = "A module wrapper for os.path";
@@ -14110,10 +14112,9 @@ in modules // {
       license = licenses.mit;
     };
 
-    # Test fails with python 2.7: TestUnicodePaths.test_walkdirs_with_unicode_name
-    # Also during tests with python 3.4: RuntimeError: dictionary changed size during iteration
-    # Caused by pytestrunner
-    doCheck = false;
+    checkPhase = ''
+      py.test test_path.py
+    '';
   };
 
   paypalrestsdk = buildPythonPackage rec {
