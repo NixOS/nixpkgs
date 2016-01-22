@@ -2971,12 +2971,17 @@ in modules // {
 
   CommonMark = buildPythonPackage rec {
     name = "CommonMark-${version}";
-    version = "0.5.4";
+    version = "0.6.3";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/C/CommonMark/${name}.tar.gz";
-      sha256 = "34d73ec8085923c023930dfc0bcd1c4286e28a2a82de094bb72fabcc0281cbe5";
+      sha256 = "ee5a88f23678794592efe3fc11033f17fc77b3296a85f5e1d5b715f8e110a773";
     };
+
+    LC_ALL="en_US.UTF-8";
+
+    buildInputs = with self; [ flake8 pkgs.glibcLocales ];
+    propagatedBuildInputs = with self; [ future ];
 
     meta = {
       description = "Python parser for the CommonMark Markdown spec";
