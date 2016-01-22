@@ -8627,14 +8627,14 @@ in modules // {
   });
 
   foolscap = buildPythonPackage (rec {
-    name = "foolscap-0.6.4";
+    name = "foolscap-0.8.0";
 
     src = pkgs.fetchurl {
       url = "http://foolscap.lothar.com/releases/${name}.tar.gz";
-      sha256 = "16cddyk5is0gjfn0ia5n2l4lhdzvbjzlx6sfpy7ddjd3d3fq7ckl";
+      sha256 = "1jg1gdk00agzifpflcnbcfdcmdnxjdsqfal091qmjjgfaa69xd3a";
     };
 
-    propagatedBuildInputs = [ self.twisted self.pyopenssl ];
+    propagatedBuildInputs = [ self.twisted self.pyopenssl self.service_identity ];
 
     meta = {
       homepage = http://foolscap.lothar.com/;
@@ -11715,11 +11715,11 @@ in modules // {
 
   nevow = buildPythonPackage (rec {
     name = "nevow-${version}";
-    version = "0.10.0";
+    version = "0.11.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/N/Nevow/Nevow-${version}.tar.gz";
-      sha256 = "90631f68f626c8934984908d3df15e7c198939d36be7ead1305479dfc67ff6d0";
+      sha256 = "1z0y8a5q4fa2nmh0dap7cs9pp5xs3jm6q0g4vpwcw77q7jagdmw9";
       name = "${name}.tar.gz";
     };
 
@@ -18113,6 +18113,20 @@ in modules // {
     '';
   };
 
+  service_identity = buildPythonPackage rec {
+    name = "service_identity-${version}";
+    version = "14.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/service_identity/${name}.tar.gz";
+      sha256 = "0njg9bklkkp4rl2b9vsfh9aasxy3w2dmjkv9cq34jn65lwcs619i";
+    };
+
+    buildInputs = with self; [ pyasn1 pyasn1-modules pyopenssl ];
+    
+    propagatedBuildInputs = with self; [ characteristic ];
+  };
+
   setuptools_scm = buildPythonPackage rec {
     name = "setuptools_scm-${version}";
     version = "1.7.0";
@@ -20136,10 +20150,10 @@ in modules // {
     # to packages like carbon (http://stackoverflow.com/questions/19894708/cant-start-carbon-12-04-python-error-importerror-cannot-import-name-daem)
     disabled = isPy3k;
 
-    name = "Twisted-11.1.0";
+    name = "Twisted-13.2.0";
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/T/Twisted/${name}.tar.bz2";
-      sha256 = "05agfp17cndhv2w0p559lvknl7nv0xqkg10apc47fm53m8llbfvz";
+      sha256 = "1wrcqv5lvgwk2aq83qb2s2ng2vx14hbjjk2gc30cg6h1iiipal89";
     };
 
     propagatedBuildInputs = with self; [ zope_interface ];
@@ -22097,11 +22111,11 @@ in modules // {
 
   carbon = buildPythonPackage rec {
     name = "carbon-${version}";
-    version = "0.9.12";
+    version = "0.9.15";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/carbon/${name}.tar.gz";
-      md5 = "66967d5a622fd29973838fcd10eb34f3";
+      sha256 = "0bjx6r6mlq1irc7c5wrfsv80sss32jzsfrmai85grii6fz9vc7gh";
     };
 
     propagatedBuildInputs = with self; [ whisper txamqp zope_interface twisted ];

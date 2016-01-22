@@ -1,6 +1,7 @@
 { fetchurl, lib, unzip, buildPythonPackage, twisted, foolscap, nevow
 , simplejson, zfec, pycryptopp, sqlite3, darcsver, setuptoolsTrial, python
-, setuptoolsDarcs, numpy, nettools, pycrypto, pyasn1, mock, zope_interface }:
+, setuptoolsDarcs, numpy, nettools, pycrypto, pyasn1, mock, zope_interface
+, service_identity }:
 
 # FAILURES: The "running build_ext" phase fails to compile Twisted
 # plugins, because it tries to write them into Twisted's (immutable)
@@ -8,12 +9,12 @@
 # some loss of functionality because of it.
 
 buildPythonPackage rec {
-  name = "tahoe-lafs-1.10.0";
+  name = "tahoe-lafs-1.10.2";
   namePrefix = "";
 
   src = fetchurl {
-    url = "http://tahoe-lafs.org/source/tahoe-lafs/releases/allmydata-tahoe-1.10.0.tar.bz2";
-    sha256 = "1qng7j1vykk8zl5da9yklkljvgxfnjky58gcay6dypz91xq1cmcw";
+    url = "http://tahoe-lafs.org/source/tahoe-lafs/releases/allmydata-tahoe-1.10.2.tar.bz2";
+    sha256 = "1rvv0ik5biy7ji8pg56v0qycnggzr3k6dbg88n555nb6r4cxgmgy";
   };
 
   patchPhase = ''
@@ -32,12 +33,13 @@ buildPythonPackage rec {
   '';
 
   # Some tests want this + http://tahoe-lafs.org/source/tahoe-lafs/deps/tahoe-dep-sdists/mock-0.6.0.tar.bz2
-  buildInputs = [ unzip numpy ];
+  buildInputs = [ unzip numpy mock ];
 
   # The `backup' command requires `sqlite3'.
   propagatedBuildInputs =
     [ twisted foolscap nevow simplejson zfec pycryptopp sqlite3
-      darcsver setuptoolsTrial setuptoolsDarcs pycrypto pyasn1 zope_interface mock
+      darcsver setuptoolsTrial setuptoolsDarcs pycrypto pyasn1 zope_interface
+      service_identity
     ];
 
   postInstall = ''
