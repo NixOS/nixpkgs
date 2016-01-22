@@ -1,6 +1,6 @@
 { stdenv, fetchurl, glib, flex, bison, pkgconfig, libffi, python
 , libintlOrEmpty, autoconf, automake, otool
-, substituteAll, nixStoreDir ? "/nix/store"
+, substituteAll, nixStoreDir ? builtins.storeDir
 }:
 # now that gobjectIntrospection creates large .gir files (eg gtk3 case)
 # it may be worth thinking about using multiple derivation outputs

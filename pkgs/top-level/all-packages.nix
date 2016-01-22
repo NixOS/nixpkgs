@@ -6640,7 +6640,7 @@ let
   mpfr = callPackage ../development/libraries/mpfr/default.nix { };
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection {
-    nixStoreDir = config.nix.storeDir or "/nix/store";
+    nixStoreDir = config.nix.storeDir or builtins.storeDir;
   };
 
   goocanvas = callPackage ../development/libraries/goocanvas { };
