@@ -206,4 +206,7 @@ in
       ''
       else "";
   };
+
+   services.nscd.enable = false;
+
 }
