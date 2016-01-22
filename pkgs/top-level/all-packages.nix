@@ -3245,6 +3245,8 @@ let
 
   talkfilters = callPackage ../misc/talkfilters {};
 
+  sanoid = callPackage ../tools/backup/sanoid { };
+  
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
