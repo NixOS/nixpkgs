@@ -11545,6 +11545,11 @@ let
     ffmpeg = ffmpeg_1;
   };
 
+  banshee = callPackage ../applications/audio/banshee {
+    gconf = pkgs.gnome.GConf;
+    libgpod = pkgs.libgpod.override { monoSupport = true; };
+  };
+
   batik = callPackage ../applications/graphics/batik { };
 
   batti = callPackage ../applications/misc/batti { };
