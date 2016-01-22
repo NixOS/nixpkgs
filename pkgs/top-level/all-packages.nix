@@ -861,6 +861,8 @@ let
 
   ent = callPackage ../tools/misc/ent { };
 
+  env-friendly = callPackage ../misc/env-friendly {};
+
   facter = callPackage ../tools/system/facter {};
 
   fasd = callPackage ../tools/misc/fasd { };
