@@ -1951,8 +1951,12 @@ let
     owner = "ikawaha";
     repo = "kagome";
     sha256 = "1isnjdkn9hnrkp5g37p2k5bbsrx0ma32v3icwlmwwyc5mppa4blb";
+
+    # I disable the parallel building, because otherwise each
+    # spawned compile takes over 1.5GB of RAM.
     buildFlags = "-p 1";
     enableParallelBuilding = false;
+
     goPackagePath = "github.com/ikawaha/kagome";
   };
 
