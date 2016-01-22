@@ -1,37 +1,69 @@
 #!/usr/bin/env python3.4
-import xmlrpc.client
 import json
+import logging
 import os
+import xmlrpc.client
 
-enc = json.load(open('/tmp/fc-data/enc.json'))
+enc = None
+directory = None
 
-directory = xmlrpc.client.Server(
-    'https://{}:{}@directory.fcio.net/v2/api/rg-{}'.format(
-        enc['name'],
-        enc['parameters']['directory_password'],
-        enc['parameters']['resource_group']))
 
-print('Getting node data ...')
-enc = directory.lookup_node(enc['name'])
-with open('/tmp/fc-data/enc.json', 'w') as f:
-    json.dump(enc, f, ensure_ascii=False)
+def load_enc():
+    global enc, directory
+    if os.path.exists('/etc/nixos/enc.json'):
+        enc_path = '/etc/nixos/enc.json'
+    else:
+        # Bootstrap
+        enc_path = '/tmp/fc-data/enc.json'
+    enc = json.load(open(enc_path))
+    directory = xmlrpc.client.Server(
+        'https://{}:{}@directory.fcio.net/v2/api/rg-{}'.format(
+            enc['name'],
+            enc['parameters']['directory_password'],
+            enc['parameters']['resource_group']))
 
-print('Getting user list ...')
-with open('/etc/nixos/users.json', 'w') as f:
-    json.dump(directory.list_users(), f, ensure_ascii=False)
 
-print('Getting permission list ...')
-with open('/etc/nixos/permissions.json', 'w') as f:
-    json.dump(directory.list_permissions(), f, ensure_ascii=False)
+def update_inventory():
+    calls = [
+        (lambda: directory.lookup_node(enc['name']),
+         'enc.json'),
+        (lambda: directory.list_users(),
+         'users.json'),
+        (lambda: directory.list_permissions(),
+         'permissions.json'),
+        (lambda: directory.lookup_resourcegroup('admins'),
+         'admins.json'),
+    ]
+    for lookup, target in calls:
+        print('Retrieving {} ...'.format(target))
+        try:
+            data = lookup()
+        except Exception:
+            logging.exception('Error retrieving data:')
+        with open('/etc/nixos/{}'.format(target), 'w') as f:
+            json.dump(data, f, ensure_ascii=False)
 
-print('Getting admin group ...')
-with open('/etc/nixos/admins.json', 'w') as f:
-    json.dump(directory.lookup_resourcegroup('admins'), f, ensure_ascii=False)
 
-print('Switching and updating channel ...')
-os.system(
-    'nix-channel --add https://hydra.flyingcircus.io/channels/branches/{} nixos'.
-    format(enc['parameters']['environment']))
+def ensure_channel():
+    print('Switching channel ...')
+    try:
+        os.system(
+            'nix-channel --add '
+            'https://hydra.flyingcircus.io/channels/branches/{} nixos'.format(
+                enc['parameters']['environment']))
+    except Exception:
+        logging.exception('Error switching channel ')
 
-print('Building configuration ...')
-os.system('nixos-rebuild switch --upgrade')
+
+def build_system():
+    print('Building configuration ...')
+    os.system('nixos-rebuild switch --upgrade')
+
+
+logging.basicConfig()
+
+load_enc()
+update_inventory()
+load_enc()
+ensure_channel()
+build_system()
