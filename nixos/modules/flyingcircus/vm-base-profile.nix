@@ -59,7 +59,7 @@ in
         Support:   support@flyingcircus.io or +49 345 219401-0
         Status:    http://status.flyingcircus.io/
         Docs:      http://flyingcircus.io/doc/
-        ChangeLog: http://flyingcircus.io/doc/reference/changes/XXX
+        Release:   ${config.system.nixosVersion}
 
       '' + lib.optionalString (enc ? name) ''
 
@@ -80,7 +80,7 @@ in
         libxml2
         libxslt
         mercurial
-	ncdu
+	      ncdu
         openldap
         openssl
         python27Full

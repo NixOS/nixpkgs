@@ -45,4 +45,35 @@ with lib;
   networking.firewall.allowPing = true;
   networking.firewall.rejectPackets = true;
 
+
+  systemd.services.fc-manage = {
+    description = "Flying Circus Management Task";
+
+    restartIfChanged = false;
+    unitConfig.X-StopOnRemoval = false;
+
+    serviceConfig.Type = "oneshot";
+
+    environment = config.nix.envVars //
+      { inherit (config.environment.sessionVariables) NIX_PATH SSL_CERT_FILE;
+        HOME = "/root";
+      };
+
+    path = [
+      pkgs.gnutar
+      pkgs.xz
+      config.nix.package
+      config.system.build.nixos-rebuild
+    ];
+
+    script = ''
+      ${pkgs.python3}/bin/python3 ${./update.py}
+    '';
+
+    # XXX Include host-randomized offset.
+    startAt = "*:0/10:00";
+  };
+
+
+
 }
