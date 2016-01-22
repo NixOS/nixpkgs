@@ -26,7 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = with pythonPackages; [
     blist canonicaljson daemonize dateutil frozendict pillow pybcrypt pyasn1
     pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests2
-    service-identity signedjson systemd twisted15 ujson unpaddedbase64 pyyaml
+    service-identity signedjson systemd twisted ujson unpaddedbase64 pyyaml
     matrix-angular-sdk
   ];
 

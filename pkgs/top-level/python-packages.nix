@@ -18216,7 +18216,7 @@ in modules // {
       md5 = "f16f4237c9ee483a0cd13208849d96ad";
     };
 
-    propagatedBuildInputs = with self; [ twisted15 ];
+    propagatedBuildInputs = with self; [ twisted ];
 
     meta = {
       description = "setuptools plug-in that helps run unit tests built with the \"Trial\" framework (from Twisted)";
@@ -20176,7 +20176,7 @@ in modules // {
     };
   };
 
-  twisted = buildPythonPackage rec {
+  twisted_11 = buildPythonPackage rec {
     # NOTE: When updating please check if new versions still cause issues
     # to packages like carbon (http://stackoverflow.com/questions/19894708/cant-start-carbon-12-04-python-error-importerror-cannot-import-name-daem)
     disabled = isPy3k;
@@ -20207,7 +20207,7 @@ in modules // {
     };
   };
 
-  twisted15 = buildPythonPackage rec {
+  twisted = buildPythonPackage rec {
     disabled = isPy3k;
 
     name = "Twisted-15.5.0";
