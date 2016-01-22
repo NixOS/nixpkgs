@@ -22166,17 +22166,14 @@ in modules // {
 
   carbon = buildPythonPackage rec {
     name = "carbon-${version}";
-    version = "0.9.12";
+    version = "0.9.15";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/carbon/${name}.tar.gz";
-      md5 = "66967d5a622fd29973838fcd10eb34f3";
+      sha256 = "f01db6d37726c6fc0a8aaa66a7bf14436b0dd0d62ef3c20ecb31605a4d365d2e";
     };
 
     propagatedBuildInputs = with self; [ whisper txamqp zope_interface twisted ];
-
-    # error: invalid command 'test'
-    doCheck = false;
 
     meta = {
       homepage = http://graphite.wikidot.com/;
