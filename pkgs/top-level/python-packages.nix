@@ -4587,6 +4587,24 @@ in modules // {
     };
   };
 
+  doctest-ignore-unicode = buildPythonPackage rec {
+    name = "doctest-ignore-unicode-${version}";
+    version = "0.1.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/doctest-ignore-unicode/${name}.tar.gz";
+      sha256= "fc90b2d0846477285c6b67fc4cb4d6f39fcf76d8752f4df0a241486f31512ad5";
+    };
+
+    propagatedBuildInputs = with self; [ nose ];
+
+    meta = {
+      description = "Add flag to ignore unicode literal prefixes in doctests";
+      license = with licenses; [ asl20 ];
+      homepage = http://github.com/gnublade/doctest-ignore-unicode;
+    };
+  };
+
   dogpile_cache = buildPythonPackage rec {
     name = "dogpile.cache-0.5.4";
 
@@ -11429,6 +11447,7 @@ in modules // {
       sha256 = "1fhn123hy4qj0zmmmbx0q0r4hwikay13yirsp74niiw5d52y7ib8";
     };
 
+    buildInputs = with self; [ doctest-ignore-unicode ];
     propagatedBuildInputs = [ pkgs.graphviz pkgs.pkgconfig ];
 
     meta = {
