@@ -8324,12 +8324,13 @@ in modules // {
     };
   };
 
-  flake8 = buildPythonPackage (rec {
-    name = "flake8-2.5.0";
+  flake8 = buildPythonPackage rec {
+    name = "flake8-${version}";
+    version = "2.5.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/f/flake8/${name}.tar.gz";
-      sha256 = "137qwipa4z6z8z7n0zg7kg6qi3348l8ck6zqa4yyjah9xv3ch5l2";
+      sha256 = "448aed48b0671fe6062f47b98c3081f3a4b36fbe99ddb8ac2a3be6e6cb135603";
     };
 
     buildInputs = with self; [ nose mock ];
@@ -8341,7 +8342,7 @@ in modules // {
       license = licenses.mit;
       maintainers = with maintainers; [ garbas ];
     };
-  });
+  };
 
   flask = buildPythonPackage {
     name = "flask-0.10.1";
