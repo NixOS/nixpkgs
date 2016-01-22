@@ -4159,26 +4159,32 @@ in modules // {
     };
   });
 
-  dateparser = buildPythonPackage (rec {
+  dateparser = buildPythonPackage rec {
     name = "dateparser-${version}";
-    version = "0.3.1";
-    disabled = isPy3k;
+    version = "0.3.2-pre-2016-01-21"; # Fix assert year 2016 == 2015
 
-    src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/d/dateparser/${name}.tar.gz";
-      sha256 = "56c291a45398e9172d53201ac213226989295749191c1f02d8f3b593b6f88e48";
+    src = pkgs.fetchgit {
+      url = "https://github.com/scrapinghub/dateparser.git";
+      rev = "d20a63f1d1cee5b4bd19c9f745774cfa9f219549";
+      sha256 = "f04f75d013ba2896681ffeb3669d78e4c496236121da751b89ff0b4a4053f771";
     };
 
-    buildInputs = with self; [ nose nose-parameterized mock ];
+    # Does not seem to work on Python 3 because of relative import.
+    # Upstream Travis configuration is wrong and tests only 2.7
+    disabled = isPy3k;
 
-    propagatedBuildInputs = with self; [ self.six jdatetime pyyaml dateutil ];
+    LC_ALL = "en_US.UTF-8";
+
+    buildInputs = with self; [ nose nose-parameterized mock pkgs.glibcLocales ];
+
+    propagatedBuildInputs = with self; [ six jdatetime pyyaml dateutil umalqurra pytz ];
 
     meta = {
       description = "Date parsing library designed to parse dates from HTML pages";
       homepage = http://pypi.python.org/pypi/dateparser;
       license = licenses.bsd3;
     };
-  });
+  };
 
   dateutil = buildPythonPackage (rec {
     name = "dateutil-${version}";
