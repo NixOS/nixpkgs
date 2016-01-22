@@ -87,6 +87,9 @@ self:
       # upstream issue: missing file header
       fold-dwim = markBroken super.fold-dwim;
 
+      # build timeout
+      graphene = markBroken super.graphene;
+
       # upstream issue: mismatched filename
       helm-lobsters = markBroken super.helm-lobsters;
 
