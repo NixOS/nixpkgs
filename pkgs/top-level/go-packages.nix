@@ -3060,6 +3060,16 @@ let
     ];
   };
 
+  restic = buildFromGitHub {
+    rev    = "4d7e802c44369b40177cd52938bc5b0930bd2be1";
+    date   = "2016-01-17";
+    owner  = "restic";
+    repo   = "restic";
+    sha256 = "0lf40539dy2xa5l1xy1kyn1vk3w0fmapa1h65ciksrdhn89ilrxv";
+    # Using its delivered dependencies. Easier.
+    preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/$goPackagePath/Godeps/_workspace";
+  };
+
   rgbterm = buildFromGitHub {
     rev    = "c07e2f009ed2311e9c35bca12ec00b38ccd48283";
     owner  = "aybabtme";
