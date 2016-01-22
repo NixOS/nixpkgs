@@ -1,5 +1,55 @@
+diff --git a/giscanner/scannermain.py b/giscanner/scannermain.py
+index 89ec193..8ee92c3 100755
+--- a/giscanner/scannermain.py
++++ b/giscanner/scannermain.py
+@@ -94,6 +94,34 @@ def get_windows_option_group(parser):
+     return group
+ 
+ 
++def _get_default_fallback_libpath():
++    outputs = os.environ.get("outputs", "out").split()
++    if "lib" in outputs:
++        # For multiple output derivations let's try whether there is a $lib
++        # environment variable and use that as the base store path.
++        store_path = os.environ.get("lib")
++    elif "out" in outputs:
++        # Otherwise we have a single output derivation, so the libraries most
++        # certainly will end up in "$out/lib".
++        store_path = os.environ.get("out")
++
++    if store_path is not None:
++        # Even if we have a $lib as output, there still should be a $lib/lib
++        # directory.
++        return os.path.join(store_path, 'lib')
++    else:
++        # If we haven't found a possible scenario, let's return an empty string
++        # so that the shared library won't be prepended with a path.
++        #
++        # Note that this doesn't mean that all hope is lost, because after all
++        # we can still use --fallback-library-path to set one.
++        #
++        # Also, we're not returning None, because that would make it very
++        # difficult to disable adding fallback paths altogether using something
++        # like: --fallback-library-path=""
++        return ""
++
++
+ def _get_option_parser():
+     parser = optparse.OptionParser('%prog [options] sources')
+     parser.add_option('', "--quiet",
+@@ -200,6 +228,10 @@ match the namespace prefix.""")
+     parser.add_option("", "--filelist",
+                       action="store", dest="filelist", default=[],
+                       help="file containing headers and sources to be scanned")
++    parser.add_option("", "--fallback-library-path",
++                      action="store", dest="fallback_libpath",
++                      default=_get_default_fallback_libpath(),
++                      help="Path to prepend to unknown shared libraries")
+ 
+     group = get_preprocessor_option_group(parser)
+     parser.add_option_group(group)
 diff --git a/giscanner/shlibs.py b/giscanner/shlibs.py
-index 838d343..9dbdc0f 100644
+index 838d343..35b6dab 100644
 --- a/giscanner/shlibs.py
 +++ b/giscanner/shlibs.py
 @@ -53,10 +53,24 @@ def _resolve_libtool(options, binary, libraries):
@@ -30,6 +80,19 @@ index 838d343..9dbdc0f 100644
  
  
  # This is a what we do for non-la files. We assume that we are on an
+@@ -115,7 +129,11 @@ def _resolve_non_libtool(options, binary, libraries):
+                 m = pattern.search(line)
+                 if m:
+                     del patterns[library]
+-                    shlibs.append(m.group(1))
++                    match = m.group(1)
++                    if not match.startswith('/') \
++                       and len(options.fallback_libpath) > 0:
++                        match = os.path.join(options.fallback_libpath, match)
++                    shlibs.append(match)
+                     break
+ 
+         if len(patterns) > 0:
 diff --git a/giscanner/utils.py b/giscanner/utils.py
 index 660081e..c9c767a 100644
 --- a/giscanner/utils.py
