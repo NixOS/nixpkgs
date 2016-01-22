@@ -14862,17 +14862,23 @@ in modules // {
 
   psutil = buildPythonPackage rec {
     name = "psutil-${version}";
-    version = "2.1.1";
+    version = "3.4.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/psutil/${name}.tar.gz";
-      sha256 = "14smqj57yjrm6hjz5n2annkgv0kmxckdhqvfx784f4d4lr52m0dz";
+      sha256 = "b17fa01aa766daa388362d0eda5c215d77e03a8d37676b68971f37bf3913b725";
     };
 
-    # failed tests: https://code.google.com/p/psutil/issues/detail?id=434
+    # Certain tests fail due to being in a chroot.
+    # See also the older issue: https://code.google.com/p/psutil/issues/detail?id=434
     doCheck = false;
 
-    buildInputs = optional stdenv.isDarwin pkgs.darwin.IOKit;
+    checkPhase = ''
+      ${python.interpreter} test/test_psutil.py
+    '';
+
+    # Test suite needs `free`, therefore we have pkgs.busybox
+    buildInputs = with self; [ mock pkgs.busybox] ++ optionals stdenv.isDarwin [ pkgs.darwin.IOKit ];
 
     meta = {
       description = "Process and system utilization information interface for python";
