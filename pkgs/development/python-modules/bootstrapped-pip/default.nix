@@ -11,11 +11,11 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "python-${python.version}-bootstrapped-pip-${version}";
-  version = "7.1.2";
+  version = "8.0.2";
 
   src = fetchurl {
     url = "https://pypi.python.org/packages/py2.py3/p/pip/pip-${version}-py2.py3-none-any.whl";
-    sha256 = "133hx6jaspm6hd02gza66lng37l65yficc2y2x1gh16fbhxrilxr";
+    sha256 = "249a6f3194be8c2e8cb4d4be3f6fd16a9f1e3336218caffa8e7419e3816f9988";
   };
 
   unpackPhase = ''
@@ -27,12 +27,6 @@ in stdenv.mkDerivation rec {
 
   patchPhase = ''
     mkdir -p $out/bin
-
-    # patch pip to support "pip install --prefix"
-    # https://github.com/pypa/pip/pull/3252
-    pushd $out/${python.sitePackages}/
-    patch -p1 < ${./pip-7.0.1-prefix.patch}
-    popd
   '';
 
   buildInputs = [ python makeWrapper unzip ];
