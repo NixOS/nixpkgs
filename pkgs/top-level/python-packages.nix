@@ -9663,16 +9663,25 @@ in modules // {
   };
 
   ipykernel = buildPythonPackage rec {
-    version = "4.2.0";
+    version = "4.2.2";
     name = "ipykernel-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipykernel/${name}.tar.gz";
-      sha256 = "723b3d4baac20f0c9cd91fc75c3e813636ecb6c6e303fb34d628c3df078985a7";
+      sha256 = "a876da43e01acec2c305abdd8e6aa55f052bab1196171ccf1cb9a6aa230298b0";
     };
 
-    buildInputs = with self; [] ++ optionals isPy27 [mock];
-    propagatedBuildInputs = with self; [ipython traitlets jupyter_client pexpect];
+    buildInputs = with self; [ nose ] ++ optionals isPy27 [mock];
+    propagatedBuildInputs = with self; [
+      ipython
+      jupyter_client
+      pexpect
+      traitlets
+    ];
+
+    # Tests require backends.
+    # I don't want to add all supported backends as propagatedBuildInputs
+    doCheck = false;
 
     meta = {
       description = "IPython Kernel for Jupyter";
