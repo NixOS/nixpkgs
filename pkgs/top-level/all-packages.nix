@@ -15272,6 +15272,8 @@ in
       themes = [];  # extra themes, etc.
     };
 
+    yakuake = callPackage ../applications/misc/yakuake/3.0.nix {};
+
   };
 
   kde5 =
