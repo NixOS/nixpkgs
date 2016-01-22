@@ -1,6 +1,40 @@
---- ./giscanner/utils.py.orig	2014-08-14 22:05:05.055334080 +0200
-+++ ./giscanner/utils.py	2014-08-14 22:05:24.687497334 +0200
-@@ -110,17 +110,11 @@
+diff --git a/giscanner/shlibs.py b/giscanner/shlibs.py
+index 838d343..9dbdc0f 100644
+--- a/giscanner/shlibs.py
++++ b/giscanner/shlibs.py
+@@ -53,10 +53,24 @@ def _resolve_libtool(options, binary, libraries):
+ # Match absolute paths on OS X to conform to how libraries are usually
+ # referenced on OS X systems.
+ def _ldd_library_pattern(library_name):
++    nix_store_dir = re.escape('@nixStoreDir@'.rstrip('/'))
+     pattern = "(?<![A-Za-z0-9_-])(lib*%s[^A-Za-z0-9_-][^\s\(\)]*)"
+-    if platform.system() == 'Darwin':
+-        pattern = "([^\s]*lib*%s[^A-Za-z0-9_-][^\s\(\)]*)"
+-    return re.compile(pattern % re.escape(library_name))
++    pattern = r'''
++        (
++          (?:
++            # First match Nix store paths because they need to be absolute.
++            (?:%s(?:/[^/]*)+)
++            # Everything else not a store path remains relative, because we
++            # would end up having absolute build paths in the resulting GIR
++            # file.
++            | (?<=/)
++          )
++          # And finally the library itself:
++          (?:lib%s[^A-Za-z0-9_-][^\s\(\)]*)
++        )
++    '''
++    return re.compile(pattern % (nix_store_dir, re.escape(library_name)),
++                      re.VERBOSE)
+ 
+ 
+ # This is a what we do for non-la files. We assume that we are on an
+diff --git a/giscanner/utils.py b/giscanner/utils.py
+index 660081e..c9c767a 100644
+--- a/giscanner/utils.py
++++ b/giscanner/utils.py
+@@ -109,17 +109,11 @@ def extract_libtool_shlib(la_file):
      if dlname is None:
          return None
  

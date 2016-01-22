@@ -6639,7 +6639,9 @@ let
   #GMP ex-satellite, so better keep it near gmp
   mpfr = callPackage ../development/libraries/mpfr/default.nix { };
 
-  gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
+  gobjectIntrospection = callPackage ../development/libraries/gobject-introspection {
+    nixStoreDir = config.nix.storeDir or "/nix/store";
+  };
 
   goocanvas = callPackage ../development/libraries/goocanvas { };
 
