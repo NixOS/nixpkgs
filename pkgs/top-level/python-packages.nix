@@ -17819,14 +17819,19 @@ in modules // {
   };
 
   rsa = buildPythonPackage rec {
-    name = "rsa-3.1.4";
+    name = "rsa-${version}";
+    version = "3.3";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/r/rsa/${name}.tar.gz";
-      sha256 = "1842ghkkimzf4fi3np4vwbwnsriv4d9malp1sbnv2xn26rcv1c72";
+      sha256 = "03f3d9bebad06681771016b8752a40b12f615ff32363c7aa19b3798e73ccd615";
     };
 
-    buildInputs = with self; [ self.pyasn1 ];
+    buildInputs = with self; [ pyasn1 unittest2 ];
+
+    checkPhase = ''
+      ${python.interpreter} run_tests.py
+    '';
 
     meta = {
       homepage = http://stuvel.eu/rsa;
