@@ -15759,6 +15759,8 @@ let
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
 
+  xcftools = callPackage ../tools/graphics/xcftools { };
+
   xhyve = callPackage ../applications/virtualization/xhyve { };
 
   xinput_calibrator = callPackage ../tools/X11/xinput_calibrator {};
