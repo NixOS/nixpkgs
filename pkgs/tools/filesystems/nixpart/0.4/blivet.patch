@@ -37,3 +37,15 @@ index 705b93d..7268d71 100644
  
  # load the udev library
  libudev = CDLL(libudev)
+diff --git a/blivet/deviceaction.py b/blivet/deviceaction.py
+index 705b93d..60f8f32 100644
+--- a/blivet/deviceaction.py
++++ b/blivet/deviceaction.py
+@@ -467,6 +467,7 @@ def execute(self):
+ 
+                 self.device.disk.format.commitToDisk()
+ 
++            self.device.setup()
+             self.device.format.create(device=self.device.path,
+                                       options=self.device.formatArgs)
+ 
