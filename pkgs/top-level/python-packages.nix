@@ -5880,14 +5880,15 @@ in modules // {
   };
 
   jupyter_console = buildPythonPackage rec {
-    version = "4.0.3";
+    version = "4.1.0";
     name = "jupyter_console-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jupyter_console/${name}.tar.gz";
-      sha256 = "555be6963a8f6431fbe1d424c7ffefee90824758058e4c9a2ab3aa045948eb85";
+      sha256 = "3f9703b632e38d68713fc2ea1f546edc4db2a8f925c94b6dd91a8d0c13816ce9";
     };
 
+    buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [
       jupyter_client
       ipython
