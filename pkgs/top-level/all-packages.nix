@@ -8350,6 +8350,8 @@ let
     inherit (vamp) vampSDK;
   };
 
+  rundeck = callPackage ../servers/rundeck { };
+
   sad = callPackage ../applications/science/logic/sad { };
 
   sbc = callPackage ../development/libraries/sbc { };
