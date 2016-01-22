@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, pythonPackages, groff }:
+{ stdenv, fetchzip, pythonPackages, groff, less }:
 
 pythonPackages.buildPythonPackage rec {
   name = "awscli-${version}";
@@ -19,6 +19,7 @@ pythonPackages.buildPythonPackage rec {
     pythonPackages.rsa
     pythonPackages.pyasn1
     groff
+    less
   ];
 
   postInstall = ''
