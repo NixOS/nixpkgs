@@ -126,6 +126,20 @@ rec {
       substSubModules = m: listOf (elemType.substSubModules m);
     };
 
+    # a listOf type with a restriction on valid values
+    # example: types.someOf types.package [ pkgs.vim pkgs.emacs ]
+    someOf = elemType: validValues:
+      let checkValues = validValues: values:
+        let invalidValues = subtractLists validValues values; 
+            showList = xs: "[${concatStringsSep " " (map toString xs)}]";
+        in
+        if (invalidValues == []) then true
+        else builtins.trace (''
+          Invalid value(s) ${showList invalidValues}.
+          Should be some of ${showList validValues}.
+        '') false;
+      in addCheck (listOf elemType) (checkValues validValues);
+
     attrsOf = elemType: mkOptionType {
       name = "attribute set of ${elemType.name}s";
       check = isAttrs;

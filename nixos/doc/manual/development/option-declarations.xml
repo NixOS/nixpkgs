@@ -125,6 +125,15 @@ options = {
   </varlistentry>
 
   <varlistentry>
+    <term><varname>types.someOf</varname> <replaceable>t</replaceable> <replaceable>[v]</replaceable></term>
+    <listitem>
+      <para>A list of elements of type <replaceable>t</replaceable> with a list of valid values of [v]
+      (e.g., <literal>types.someOf types.str ["a" "b"]</literal> is a list of
+      strings where ["a"], ["b"] or ["a" "b"] are the only valid values).</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><varname>types.attrsOf</varname> <replaceable>t</replaceable></term>
     <listitem>
       <para>A set of elements of type <replaceable>t</replaceable>
