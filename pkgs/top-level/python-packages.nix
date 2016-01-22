@@ -11848,12 +11848,12 @@ in modules // {
   };
 
   nose = buildPythonPackage rec {
-    version = "1.3.4";
+    version = "1.3.7";
     name = "nose-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/n/nose/${name}.tar.gz";
-      sha256 = "00qymfgwg4iam4xi0w9bnv7lcb3fypq1hzfafzgs1rfmwaj67g3n";
+      sha256 = "f1bffef9cbc82628f6e7d7b40d7e255aefaa1adb6a1b1d26c69a8b79e6208a98";
     };
 
     propagatedBuildInputs = [ self.coverage ];
