@@ -30,7 +30,7 @@ with open('/etc/nixos/admins.json', 'w') as f:
 
 print('Switching and updating channel ...')
 os.system(
-    'nix-channel --add https://hydra.flyingcircus.io/channels/branches/{}'.
+    'nix-channel --add https://hydra.flyingcircus.io/channels/branches/{} nixos'.
     format(enc['parameters']['environment']))
 
 print('Building configuration ...')
