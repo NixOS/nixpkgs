@@ -3,6 +3,7 @@
 with lib;
 
 let cfg = config.services.xserver.libinput;
+    xorgBool = v: if v then "on" else "off";
 in {
 
   options = {
@@ -27,6 +28,18 @@ in {
           '';
       };
 
+      accelProfile = mkOption {
+        type = types.enum [ "flat" "adaptive" ];
+        default = "flat";
+        example = "adaptive";
+        description =
+          ''
+            Sets  the pointer acceleration profile to the given profile. Permitted values are adaptive, flat.
+            Not all devices support this option or all profiles. If a profile is unsupported, the default profile
+            for this is used. For a description on the profiles and their behavior, see the libinput documentation.
+          '';
+      };    
+      
       accelSpeed = mkOption {
         type = types.nullOr types.string;
         default = null;
@@ -57,6 +70,36 @@ in {
           '';
       };
 
+      clickMethod = mkOption {
+        type = types.nullOr (types.enum [ "none" "buttonareas" "clickfinger" ]);
+        default = null;
+        example = "none";
+        description =
+          ''
+            Enables a click method. Permitted values are none, buttonareas, clickfinger.
+            Not all devices support all methods, if an option is unsupported,
+            the default click method for this device is used. 
+          '';
+      };
+      
+      leftHanded = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = "Enables left-handed button orientation, i.e. swapping left and right buttons.";
+      };
+
+      middleEmulation = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description =
+          ''
+            Enables middle button emulation. When enabled, pressing the left and right buttons
+            simultaneously produces a middle mouse button click.
+          '';
+      };
+      
       naturalScrolling = mkOption {
         type = types.bool;
         default = false;
@@ -64,13 +107,14 @@ in {
         description = "Enables or disables natural scrolling behavior.";
       };
 
-      tapping = mkOption {
-        type = types.bool;
-        default = true;
-        example = false;
+      scrollButton = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        example = 1;
         description =
           ''
-            Enables or disables tap-to-click behavior.
+            Designates a button as scroll button. If the ScrollMethod is button and the button is logically
+            held down, x/y axis movement is converted into scroll events.
           '';
       };
 
@@ -84,16 +128,37 @@ in {
           '';
       };
 
-      disableWhileTyping = mkOption {
+      horizontalScrolling = mkOption {
         type = types.bool;
         default = true;
         example = false;
         description =
           ''
-            Disable input method while typing.
+            Disables horizontal scrolling. When disabled, this driver will discard any horizontal scroll
+            events from libinput. Note that this does not disable horizontal scrolling, it merely
+            discards the horizontal axis from any scroll events.
           '';
       };
 
+      sendEventsMode = mkOption {
+        type = types.enum [ "disabled" "enabled" "disabled-on-external-mouse" ];
+        default = "enabled";
+        example = "disabled";
+        description =
+          ''
+            Sets the send events mode to disabled, enabled, or "disable when an external mouse is connected".
+          '';
+      };
+
+      tapping = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description =
+          ''
+            Enables or disables tap-to-click behavior.
+          '';
+      };
 
       tappingDragLock = mkOption {
         type = types.bool;
@@ -107,17 +172,24 @@ in {
           '';
       };
 
+      disableWhileTyping = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description =
+          ''
+            Disable input method while typing.
+          '';
+      };
 
       additionalOptions = mkOption {
         type = types.str;
         default = "";
-        example = ''
-          Option "RTCornerButton" "2"
-          Option "RBCornerButton" "3"
+        example =
+        ''
+          Option "DragLockButtons" "L1 B1 L2 B2"
         '';
-        description = ''
-          Additional options for libinput touchpad driver.
-        '';
+        description = "Additional options for libinput touchpad driver.";
       };
 
     };
@@ -139,14 +211,21 @@ in {
           MatchIsTouchpad "on"
           ${optionalString (cfg.dev != null) ''MatchDevicePath "${cfg.dev}"''}
           Driver "libinput"
+          Option "AccelProfile" "${cfg.accelProfile}"
           ${optionalString (cfg.accelSpeed != null) ''Option "AccelSpeed" "${cfg.accelSpeed}"''}
           ${optionalString (cfg.buttonMapping != null) ''Option "ButtonMapping" "${cfg.buttonMapping}"''}
           ${optionalString (cfg.calibrationMatrix != null) ''Option "CalibrationMatrix" "${cfg.calibrationMatrix}"''}
-          ${optionalString cfg.naturalScrolling ''Option "NaturalScrolling" "on"''}
-          ${if cfg.tapping then ''Option "Tapping" "1"'' else ""}
-          ${if cfg.tappingDragLock then ''Option "TappingDragLock" "1"'' else ""}
+          ${optionalString (cfg.clickMethod != null) ''Option "ClickMethod" "${cfg.clickMethod}"''}
+          Option "LeftHanded" "${xorgBool cfg.leftHanded}"
+          Option "MiddleEmulation" "${xorgBool cfg.middleEmulation}"
+          Option "NaturalScrolling" "${xorgBool cfg.naturalScrolling}"
+          ${optionalString (cfg.scrollButton != null) ''Option "ScrollButton" "${cfg.scrollButton}"''}
           Option "ScrollMethod" "${cfg.scrollMethod}"
-          ${optionalString cfg.disableWhileTyping ''Option "DisableWhileTyping" "on"''}
+          Option "HorizontalScrolling" "${xorgBool cfg.horizontalScrolling}"
+          Option "SendEventsMode" "${cfg.sendEventsMode}"
+          Option "Tapping" "${xorgBool cfg.tapping}"
+          Option "TappingDragLock" "${xorgBool cfg.tappingDragLock}"
+          Option "DisableWhileTyping" "${xorgBool cfg.disableWhileTyping}"
           ${cfg.additionalOptions}
         EndSection
       '';
