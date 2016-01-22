@@ -12070,12 +12070,12 @@ in modules // {
   };
 
   numba = buildPythonPackage rec {
-    version = "0.22.1";
+    version = "0.23.1";
     name = "numba-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/numba/${name}.tar.gz";
-      sha256 = "8194c41cdf96c16e3b3d246c0381daf4e587d1ada761f410efecb8315c2cdda3";
+      sha256 = "80ce9968591db7c93e36258cc5e6734eb1e42826332799746dc6c073a6d5d317";
     };
 
     NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${pkgs.libcxx}/include/c++/v1";
@@ -12088,6 +12088,14 @@ in modules // {
     #  export NUMBAPRO_NVVM=${pkgs.cudatoolkit6}
     #  export NUMBAPRO_LIBDEVICE=
     #'';
+
+    # Copy test script into $out and run the test suite.
+    checkPhase = ''
+      cp runtests.py $out/${python.sitePackages}/numba/runtests.py
+      ${python.interpreter} $out/${python.sitePackages}/numba/runtests.py
+    '';
+    # ImportError: cannot import name '_typeconv'
+    doCheck = false;
 
     meta = {
       homepage = http://numba.pydata.org/;
