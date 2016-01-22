@@ -2990,6 +2990,14 @@ in modules // {
     };
   };
 
+  CommonMark_54 = self.CommonMark.override rec {
+    name = "CommonMark-0.5.4";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/C/CommonMark/${name}.tar.gz";
+      sha256 = "34d73ec8085923c023930dfc0bcd1c4286e28a2a82de094bb72fabcc0281cbe5";
+    };
+  };
+
 
   coilmq = buildPythonPackage (rec {
     name = "coilmq-0.6.1";
@@ -17222,15 +17230,15 @@ in modules // {
 
   recommonmark = buildPythonPackage rec {
     name = "recommonmark-${version}";
-    version = "0.2.0";
+    version = "0.4.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/r/recommonmark/${name}.tar.gz";
-      sha256 = "28c0babc79c487280fc5bf5daf1f3f1d734e9e4293ba929a7617524ff6911fd7";
+      sha256 = "6e29c723abcf5533842376d87c4589e62923ecb6002a8e059eb608345ddaff9d";
     };
 
     buildInputs = with self; [ pytest sphinx ];
-    propagatedBuildInputs = with self; [ CommonMark docutils ];
+    propagatedBuildInputs = with self; [ CommonMark_54 docutils ];
 
     meta = {
       description = "A docutils-compatibility bridge to CommonMark";
