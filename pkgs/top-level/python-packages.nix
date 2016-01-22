@@ -19781,12 +19781,12 @@ in modules // {
   };
 
   traitlets = buildPythonPackage rec {
-    version = "4.0.0";
+    version = "4.1.0";
     name = "traitlets-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/traitlets/${name}.tar.gz";
-      sha256 = "0b140b4a94a4f1951887d9bce4650da211f79600fc9fdb422acc90c5bbe0233b";
+      sha256 = "440e38dfa5d2a26c086d4b427cfb7aed17d0a2dca78bce90c33354da2592af5b";
     };
 
     propagatedBuildInputs = with self; [ipython_genutils decorator];
