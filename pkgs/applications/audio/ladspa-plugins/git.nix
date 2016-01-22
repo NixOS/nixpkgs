@@ -1,4 +1,5 @@
-{ stdenv, fetchgit, automake, autoreconfHook, fftw, gettext, ladspaH, libxml2, pkgconfig, perl, perlPackages }:
+{ stdenv, fetchgit, autoreconfHook, automake, fftw, ladspaH, libxml2, pkgconfig
+, perl, perlPackages }:
 
 stdenv.mkDerivation {
   name = "swh-plugins-git-2015-03-04";
@@ -9,17 +10,12 @@ stdenv.mkDerivation {
     sha256 = "7d9aa13a064903b330bd52e35c1f810f1c8a253ea5eb4e5a3a69a051af03150e";
   };
 
-  buildInputs = [ automake autoreconfHook fftw gettext ladspaH libxml2 pkgconfig perl perlPackages.XMLParser ];
+  buildInputs = [ autoreconfHook fftw ladspaH libxml2 pkgconfig perl perlPackages.XMLParser ];
 
   patchPhase = ''
     patchShebangs .
     patchShebangs ./metadata/
     cp ${automake}/share/automake-*/mkinstalldirs .
-  '';
-
-  configurePhase = ''
-    autoreconf -i
-    ./configure --prefix=$out
   '';
 
   meta = with stdenv.lib; {

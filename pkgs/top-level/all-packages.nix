@@ -1754,7 +1754,6 @@ let
 
   grub = callPackage_i686 ../tools/misc/grub {
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
-    automake = automake112x; # fails with 13 and 14
   };
 
   trustedGrub = callPackage_i686 ../tools/misc/grub/trusted.nix { };
@@ -2639,9 +2638,7 @@ let
 
   paper-gtk-theme = callPackage ../misc/themes/gtk3/paper-gtk-theme { };
 
-  par2cmdline = callPackage ../tools/networking/par2cmdline {
-    automake = automake112x; # fails with 14
-  };
+  par2cmdline = callPackage ../tools/networking/par2cmdline { };
 
   parallel = callPackage ../tools/misc/parallel { };
 
@@ -13006,8 +13003,9 @@ let
     gst_plugins_bad = null;
   };
 
-  qutebrowser = qt5.callPackage ../applications/networking/browsers/qutebrowser {
+  qutebrowser = qt55.callPackage ../applications/networking/browsers/qutebrowser {
     inherit (python34Packages) buildPythonPackage python pyqt5 jinja2 pygments pyyaml pypeg2;
+    inherit (gst_all_1) gst-plugins-base gst-plugins-good gst-plugins-bad gst-libav;
   };
 
   rabbitvcs = callPackage ../applications/version-management/rabbitvcs {};
@@ -13056,9 +13054,7 @@ let
 
   rkt = callPackage ../applications/virtualization/rkt { };
 
-  rofi = callPackage ../applications/misc/rofi {
-    automake = automake114x;
-  };
+  rofi = callPackage ../applications/misc/rofi { };
 
   rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };
 

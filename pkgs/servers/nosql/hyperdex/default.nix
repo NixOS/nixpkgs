@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, makeWrapper, unzip, autoconf, automake, libtool,
-  python, libsodium, pkgconfig, popt, glog, xz, json_c, gperf, yacc,
-  flex, pandoc, help2man, autoconf-archive, callPackage }:
+{ stdenv, fetchurl, makeWrapper, unzip, autoreconfHook, autoconf-archive
+, python, libsodium, pkgconfig, popt, glog, xz, json_c, gperf, yacc
+, flex, pandoc, help2man, callPackage }:
 
 assert stdenv.isLinux;
 
@@ -25,9 +25,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    autoconf
+    autoreconfHook
     autoconf-archive
-    automake
     busybee
     glog
     hyperleveldb
@@ -35,7 +34,6 @@ stdenv.mkDerivation rec {
     libe
     libmacaroons
     libpo6
-    libtool
     pkgconfig
     popt
     python
@@ -47,7 +45,6 @@ stdenv.mkDerivation rec {
     help2man
     pandoc
   ];
-  preConfigure = "autoreconf -fi";
 
   meta = with stdenv.lib; {
     description = "A scalable, searchable key-value store";
