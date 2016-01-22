@@ -18475,14 +18475,17 @@ in modules // {
   };
 
   shapely = buildPythonPackage rec {
-    name = "Shapely-1.3.1";
+    name = "Shapely-${version}";
+    version = "1.5.13";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/S/Shapely/${name}.tar.gz";
-      sha256 = "099sc7ajpp6hbgrx3c0bl6hhkz1mhnr0ahvc7s4i3f3b7q1zfn7l";
+      sha256 = "68f8efb43112e8ef1f7e56e2c9eef64e0cbc1c19528c627696fb07345075a348";
     };
 
-    buildInputs = with self; [ pkgs.geos pkgs.glibcLocales ];
+    buildInputs = with self; [ pkgs.geos pkgs.glibcLocales pytest ];
+
+    propagatedBuildInputs = with self; [ numpy ];
 
     preConfigure = ''
       export LANG="en_US.UTF-8";
@@ -18492,7 +18495,11 @@ in modules // {
       sed -i "s|_lgeos = load_dll('geos_c', fallbacks=.*)|_lgeos = load_dll('geos_c', fallbacks=['${pkgs.geos}/lib/libgeos_c.so'])|" shapely/geos.py
     '';
 
-    doCheck = false; # won't suceed for unknown reasons that look harmless, though
+    # Error when importing extension types. Happens also after install
+
+    checkPhase = ''
+      py.test tests
+    '';
 
     meta = {
       description = "Geometric objects, predicates, and operations";
