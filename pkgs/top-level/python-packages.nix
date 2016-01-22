@@ -17501,11 +17501,12 @@ in modules // {
   });
 
   isodate = buildPythonPackage rec {
-    name = "isodate-0.5.0";
+    name = "isodate-${version}";
+    version = "0.5.4";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/isodate/${name}.tar.gz";
-      md5 = "9a267e9327feb3d021cae26002ba6e0e";
+      sha256 = "42105c41d037246dc1987e36d96f3752ffd5c0c24834dd12e4fdbe1e79544e31";
     };
 
     meta = {
