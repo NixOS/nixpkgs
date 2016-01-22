@@ -5819,11 +5819,14 @@ in modules // {
       sha256 = "f19fa66e656309825887171d84a462e64676b1cc36b62e4dd8679ff63926a469";
     };
 
-    buildInputs = [
-      self.ofxclient self.mock
+    buildInputs = with self; [
+      ofxclient
+      mock
+      nose
       # Used at runtime to translate ofx entries to the ledger
       # format. In fact, user could use either ledger or hledger.
-      pkgs.which pkgs.ledger ];
+      pkgs.which
+      pkgs.ledger ];
 
     # Tests are disable since they require hledger and python-ledger
     doCheck = false;
