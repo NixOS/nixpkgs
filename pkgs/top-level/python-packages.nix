@@ -21952,12 +21952,12 @@ in modules // {
   };
 
   pyzmq = buildPythonPackage rec {
-    name = "pyzmq-14.5.0";
+    name = "pyzmq-15.2.0";
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyzmq/${name}.tar.gz";
-      sha256 = "1gbpgz4ngfw5x6zlsa1k0jwy5vd5wg9iz1shdx4zav256ib08vjx";
+      sha256 = "2dafa322670a94e20283aba2a44b92134d425bd326419b68ad4db8d0831a26ec";
     };
-    buildInputs = with self; [ pkgs.zeromq3 pytest];
+    buildInputs = with self; [ pkgs.zeromq3 pytest tornado ];
     propagatedBuildInputs = [ self.py ];
     checkPhase = ''
       py.test $out/${python.sitePackages}/zmq/
