@@ -5899,13 +5899,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  if_ = buildPerlPackage {
-    name = "if-0.0601";
+  "if" = buildPerlPackage rec {
+    name = "if-0.0606";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IL/ILYAZ/modules/if-0.0601.tar.gz;
-      sha256 = "fb2b7329aa111a673cd22dc2889167e52058aead0de2fe0855b32dd658d5c1b7";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "63d69282d6c4c9e76370b78d770ca720cea88cfe5ee5b612709240fc6078d50e";
+    };
+    meta = {
+      description = "C<use> a Perl module if a condition holds (also can C<no> a module)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
+
+  # For backwards compatibility.
+  if_ = self."if";
 
   ImageSize = buildPerlPackage rec {
     name = "Image-Size-3.232";
