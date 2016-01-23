@@ -25,7 +25,9 @@ in
     [./user.nix
      ./network.nix
      ./packages/default.nix
-     ./roles/default.nix];
+     ./roles/default.nix
+     ./manage
+    ];
 
   options = {
 

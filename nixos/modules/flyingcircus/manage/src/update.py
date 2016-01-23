@@ -4,6 +4,23 @@ import logging
 import os
 import shutil
 import xmlrpc.client
+import sys
+
+
+# TODO
+#
+# - better integration with dev-checkouts, not killing them with the channel
+#   version
+# - better channel management
+#   - explicitly download nixpkgs from our hydra
+#   - keep a "current" version
+#   - keep the "next" version
+#   - validate the next version and decide whether to switch automatically
+#     or whether to create a maintenance window and let the current one stay
+#     for now, but keep updating ENC data.
+#
+# - better robustness to not leave non-parsable json files around
+
 
 enc = None
 directory = None
@@ -37,32 +54,46 @@ def update_inventory():
         print('Retrieving {} ...'.format(target))
         try:
             data = lookup()
+            with open('/etc/nixos/{}'.format(target), 'w') as f:
+                json.dump(data, f, ensure_ascii=False)
         except Exception:
             logging.exception('Error retrieving data:')
-        with open('/etc/nixos/{}'.format(target), 'w') as f:
-            json.dump(data, f, ensure_ascii=False)
 
 
-def ensure_channel():
+def build_channel():
     print('Switching channel ...')
     try:
         os.system(
             'nix-channel --add '
             'https://hydra.flyingcircus.io/channels/branches/{} nixos'.format(
                 enc['parameters']['environment']))
+        os.system('nix-channel --update')
+        os.system('nixos-rebuild --no-build-output switch')
     except Exception:
         logging.exception('Error switching channel ')
 
 
-def build_system():
-    print('Building configuration ...')
-    os.system('nixos-rebuild switch --upgrade')
+def build_dev():
+    print('Switching to development environment')
+    try:
+        os.system(
+            'nix-channel --remove nixos')
+    except Exception:
+        logging.exception('Error removing channel ')
+    os.system('nixos-rebuild -I nixpkgs=/root/nixpkgs switch')
 
 
 logging.basicConfig()
 
+
+if '--directory' in sys.argv:
+    load_enc()
+    update_inventory()
+
 load_enc()
-update_inventory()
-load_enc()
-ensure_channel()
-build_system()
+
+if '--channel' in sys.argv:
+    build_channel()
+
+if '--dev' in sys.argv:
+    build_dev()
