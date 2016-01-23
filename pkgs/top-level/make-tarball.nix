@@ -2,7 +2,11 @@
    also builds the documentation and tests whether the Nix expressions
    evaluate correctly. */
 
-{ pkgs, nixpkgs, officialRelease }:
+{ nixpkgs
+, officialRelease
+, pkgs ? import nixpkgs.outPath {}
+, nix ? pkgs.nix
+}:
 
 with pkgs;
 

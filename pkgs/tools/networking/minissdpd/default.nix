@@ -1,13 +1,13 @@
 { stdenv, fetchurl, libnfnetlink }:
 
 let
-  version = "1.5";
+  version = "1.5.20160119";
   name = "minissdpd-${version}";
 in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    sha256 = "03w9zg8i8bfjlr0haa08r823rfcff6lzm1ia875il7kkhnqkgmnz";
+    sha256 = "0z0h2fqjlys9g08fbv0jg8l53h8cjlpdk45z4g71kwdk1m9ld8r2";
     url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
     name = "${name}.tar.gz";
   };

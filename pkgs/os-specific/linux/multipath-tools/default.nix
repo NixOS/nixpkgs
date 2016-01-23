@@ -1,30 +1,32 @@
 { stdenv, fetchurl, lvm2, libaio, gzip, readline, udev }:
 
 stdenv.mkDerivation rec {
-  name = "multipath-tools-0.4.9";
+  name = "multipath-tools-0.5.0";
 
   src = fetchurl {
     url = "http://christophe.varoqui.free.fr/multipath-tools/${name}.tar.bz2";
-    sha256 = "04n7kazp1zrlqfza32phmqla0xkcq4zwn176qff5ida4a60whi4d";
+    sha256 = "1yd6l1l1c62xjr1xnij2x49kr416anbgfs4y06r86kp9hkmz2g7i";
   };
 
-  sourceRoot = ".";
+  postPatch = ''
+    sed -i -re '
+      s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
+    ' libmultipath/defaults.h
+    sed -i -e 's,\$(DESTDIR)/\(usr/\)\?,$(prefix)/,g' \
+      kpartx/Makefile libmpathpersist/Makefile
+  '';
 
-  buildInputs = [ lvm2 libaio readline ];
+  nativeBuildInputs = [ gzip ];
+  buildInputs = [ udev lvm2 libaio readline ];
 
-  preBuild =
-    ''
-      makeFlagsArray=(GZIP="${gzip}/bin/gzip -9n -c" prefix=$out mandir=$out/share/man/man8 man5dir=$out/share/man/man5 LIB=lib)
-      
-      substituteInPlace multipath/Makefile --replace /etc $out/etc
-      substituteInPlace kpartx/Makefile --replace /etc $out/etc
-      
-      substituteInPlace kpartx/kpartx.rules --replace /sbin/kpartx $out/sbin/kpartx
-      substituteInPlace kpartx/kpartx_id --replace /sbin/dmsetup ${lvm2}/sbin/dmsetup
-
-      substituteInPlace libmultipath/defaults.h --replace /lib/udev/scsi_id ${udev}/lib/udev/scsi_id
-      substituteInPlace libmultipath/hwtable.c --replace /lib/udev/scsi_id ${udev}/lib/udev/scsi_id
-    '';
+  makeFlags = [
+    "LIB=lib"
+    "prefix=$(out)"
+    "mandir=$(out)/share/man/man8"
+    "man5dir=$(out)/share/man/man5"
+    "man3dir=$(out)/share/man/man3"
+    "unitdir=$(out)/lib/systemd/system"
+  ];
 
   meta = {
     description = "Tools for the Linux multipathing driver";

@@ -61,11 +61,14 @@ in
             dataDir = cfg.dataDir;
           }))
         ];
-      systemd.services.softether = {
-        description = "SoftEther VPN services initial job";
-        after = [ "network-interfaces.target" ];
-        wantedBy = [ "multi-user.target" ];
-        preStart = ''
+      systemd.services."softether-init" = {
+        description = "SoftEther VPN services initial task";
+        wantedBy = [ "network-interfaces.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = false;
+        };
+        script = ''
             for d in vpnserver vpnbridge vpnclient vpncmd; do
                 if ! test -e ${cfg.dataDir}/$d; then
                     ${pkgs.coreutils}/bin/mkdir -m0700 -p ${cfg.dataDir}/$d
@@ -81,12 +84,12 @@ in
     (mkIf (cfg.vpnserver.enable) {
       systemd.services.vpnserver = {
         description = "SoftEther VPN Server";
-        after = [ "network-interfaces.target" ];
-        wantedBy = [ "multi-user.target" ];
+        after = [ "softether-init.service" ];
+        wantedBy = [ "network-interfaces.target" ];
         serviceConfig = {
+          Type = "forking";
           ExecStart = "${pkg}/bin/vpnserver start";
           ExecStop = "${pkg}/bin/vpnserver stop";
-          Type = "forking";
         };
         preStart = ''
             rm -rf ${cfg.dataDir}/vpnserver/vpnserver
@@ -101,12 +104,12 @@ in
     (mkIf (cfg.vpnbridge.enable) {
       systemd.services.vpnbridge = {
         description = "SoftEther VPN Bridge";
-        after = [ "network-interfaces.target" ];
-        wantedBy = [ "multi-user.target" ];
+        after = [ "softether-init.service" ];
+        wantedBy = [ "network-interfaces.target" ];
         serviceConfig = {
+          Type = "forking";
           ExecStart = "${pkg}/bin/vpnbridge start";
           ExecStop = "${pkg}/bin/vpnbridge stop";
-          Type = "forking";
         };
         preStart = ''
             rm -rf ${cfg.dataDir}/vpnbridge/vpnbridge
@@ -121,12 +124,12 @@ in
     (mkIf (cfg.vpnclient.enable) {
       systemd.services.vpnclient = {
         description = "SoftEther VPN Client";
-        after = [ "network-interfaces.target" ];
-        wantedBy = [ "multi-user.target" ];
+        after = [ "softether-init.service" ];
+        wantedBy = [ "network-interfaces.target" ];
         serviceConfig = {
+          Type = "forking";
           ExecStart = "${pkg}/bin/vpnclient start";
           ExecStop = "${pkg}/bin/vpnclient stop";
-          Type = "forking";
         };
         preStart = ''
             rm -rf ${cfg.dataDir}/vpnclient/vpnclient

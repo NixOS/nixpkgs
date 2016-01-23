@@ -1,5 +1,4 @@
-{ stdenv, fetchurl, unzip, autoconf, automake, libtool,
-  libpo6, libe, pkgconfig }:
+{ stdenv, fetchurl, unzip, autoreconfHook, libpo6, libe, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "busybee-${version}";
@@ -9,16 +8,14 @@ stdenv.mkDerivation rec {
     url = "https://github.com/rescrv/busybee/archive/releases/${version}.zip";
     sha256 = "0b51h1kmkf0s3d9y7wjqgp1pk1rk9i7n8bcgyj01kflzdgafbl0b";
   };
+
   buildInputs = [
-    autoconf
-    automake
+    autoreconfHook
     libe
     libpo6
-    libtool
     pkgconfig
     unzip
   ];
-  preConfigure = "autoreconf -i";
 
   meta = with stdenv.lib; {
     description = "A high-performance messaging layer";

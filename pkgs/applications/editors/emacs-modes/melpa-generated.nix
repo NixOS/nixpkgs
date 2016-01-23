@@ -29697,10 +29697,10 @@
       }) {};
     isearch-plus = callPackage ({ fetchurl, lib, melpaBuild }: melpaBuild {
         pname = "isearch-plus";
-        version = "20160115.1122";
+        version = "20160118.1030";
         src = fetchurl {
           url = "http://www.emacswiki.org/emacs/download/isearch+.el";
-          sha256 = "0wgfjl083nz7p5j9gbsq7ki7wpjikb8546iiaydkx5ay3lrcg7nf";
+          sha256 = "176krgrrjvj6r6iahr53ncxm2hrc4nmkyz43lc2rbnpivih4z9i6";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/isearch+";

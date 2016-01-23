@@ -21,13 +21,14 @@ self: super: {
   clock = dontCheck super.clock;
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
-  hspec_2_1_10 = super.hspec_2_1_10.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_2 = super.hspec_2_1_2.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_3 = super.hspec_2_1_3.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_4 = super.hspec_2_1_4.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_5 = super.hspec_2_1_5.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_6 = super.hspec_2_1_6.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_7 = super.hspec_2_1_7.override { stringbuilder = dontCheck super.stringbuilder; };
+  hspec_2_1_10 = super.hspec_2_1_10.override { stringbuilder = dontCheck super.stringbuilder; };
+  hspec_2_2_1 = super.hspec_2_2_1.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec-expectations_0_6_1_1 = dontCheck super.hspec-expectations_0_6_1_1;
   hspec-expectations_0_6_1 = dontCheck super.hspec-expectations_0_6_1;
   hspec-expectations_0_7_1 = dontCheck super.hspec-expectations_0_7_1;

@@ -12,6 +12,8 @@ let
   '';
 
   init = run: writeText "${name}-init" ''
+    source /etc/profile
+
     # Make /tmp directory
     mkdir -m 1777 /tmp
 
@@ -44,7 +46,7 @@ in runCommand name {
   cat <<EOF >$out/bin/${name}
   #! ${stdenv.shell}
   export CHROOTENV_EXTRA_BINDS="${lib.concatStringsSep ":" extraBindMounts}:\$CHROOTENV_EXTRA_BINDS"
-  exec ${chroot-user}/bin/chroot-user ${env} ${bash'} -l ${init runScript} "\$(pwd)" "\$@"
+  exec ${chroot-user}/bin/chroot-user ${env} ${bash'} ${init runScript} "\$(pwd)" "\$@"
   EOF
   chmod +x $out/bin/${name}
   ${extraInstallCommands}

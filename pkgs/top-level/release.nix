@@ -40,11 +40,15 @@ let
               jobs.stdenv.x86_64-darwin
               jobs.linux.x86_64-linux
               jobs.linux.i686-linux
+              jobs.python.x86_64-linux
+              jobs.python.i686-linux
+              jobs.python.x86_64-darwin
+              jobs.python3.x86_64-linux
+              jobs.python3.i686-linux
+              jobs.python3.x86_64-darwin
               # Ensure that X11/GTK+ are in order.
               jobs.thunderbird.x86_64-linux
               jobs.thunderbird.i686-linux
-              jobs.glib-tested.x86_64-linux # standard glib doesn't do checks
-              jobs.glib-tested.i686-linux
               # Ensure that basic stuff works on darwin
               jobs.git.x86_64-darwin
               jobs.mysql.x86_64-darwin

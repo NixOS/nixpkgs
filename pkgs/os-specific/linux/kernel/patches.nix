@@ -87,10 +87,10 @@ rec {
     };
 
   grsecurity_unstable = grsecPatch
-    { kversion  = "4.2.3";
-      revision  = "201510130858";
+    { kversion  = "4.3.3";
+      revision  = "201601051958";
       branch    = "test";
-      sha256    = "0ndzcx9i94c065dlyvgykmin5bfkbydrv0kxxq52a4c9is6nlsrb";
+      sha256    = "0hdf9fp5kyd9g8p3qp76jwqvqf561k61wynsq7q9aabvy0p1s18k";
     };
 
   grsec_fix_path =
@@ -103,4 +103,29 @@ rec {
       patch = ./crc-regression.patch;
     };
 
+  genksyms_fix_segfault =
+    { name = "genksyms-fix-segfault";
+      patch = ./genksyms-fix-segfault.patch;
+    };
+
+
+  chromiumos_Kconfig_fix_entries_3_14 =
+    { name = "Kconfig_fix_entries_3_14";
+      patch = ./chromiumos-patches/fix-double-Kconfig-entry-3.14.patch;
+    };
+
+  chromiumos_Kconfig_fix_entries_3_18 =
+    { name = "Kconfig_fix_entries_3_18";
+      patch = ./chromiumos-patches/fix-double-Kconfig-entry-3.18.patch;
+    };
+
+  chromiumos_no_link_restrictions =
+    { name = "chromium-no-link-restrictions";
+      patch = ./chromiumos-patches/no-link-restrictions.patch;
+    };
+
+  chromiumos_mfd_fix_dependency =
+    { name = "mfd_fix_dependency";
+      patch = ./chromiumos-patches/mfd-fix-dependency.patch;
+    };
 }

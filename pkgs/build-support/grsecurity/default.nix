@@ -33,7 +33,7 @@ let
 
     grKernel = if cfg.stable
                then mkKernel pkgs.linux_3_14 stable-patch
-               else mkKernel pkgs.linux_4_2 test-patch;
+               else mkKernel pkgs.linux_4_3 test-patch;
 
     ## -- grsecurity configuration ---------------------------------------------
 
@@ -142,6 +142,7 @@ let
         };
         extraConfig = grsecConfig;
         features.grsecurity = true;
+        ignoreConfigErrors = true; # Too lazy to model the config options that work with grsecurity and don't for now
       })) (args: grsecurityOverrider args grkern));
 
     mkGrsecPkg = grkern: pkgs.linuxPackagesFor grkern (mkGrsecPkg grkern);

@@ -1110,6 +1110,7 @@ in modules // {
       rsa
       pyasn1
       pkgs.groff
+      pkgs.less
     ];
 
     postInstall = ''
@@ -2684,6 +2685,21 @@ in modules // {
     };
   };
 
+  cerberus = buildPythonPackage rec {
+    name = "Cerberus-${version}";
+    version = "0.9.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/C/Cerberus/${name}.tar.gz";
+      sha256 = "1km7hvns1snrmcwz58bssi4wv3gwd34zm1z1hwjylmpqrfrcf8mi";
+    };
+
+    meta = {
+      homepage = http://python-cerberus.org/;
+      description = "Lightweight, extensible schema and data validation tool for Python dictionaries";
+      license = licenses.mit;
+    };
+  };
 
   certifi = buildPythonPackage rec {
     name = "certifi-${version}";
@@ -4824,6 +4840,39 @@ in modules // {
     };
   };
 
+  eve = buildPythonPackage rec {
+    version = "0.6.1";
+    name = "Eve-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/E/Eve/${name}.tar.gz";
+      sha256 = "0wf1x8qixkld6liz5syqi8i9nrfrhq4lpmh0p9cy3jbkhk34km69";
+    };
+
+    propagatedBuildInputs = with self; [
+      cerberus
+      events
+      flask-pymongo
+      flask
+      itsdangerous
+      jinja2
+      markupsafe
+      pymongo_2_9_1
+      simplejson
+      werkzeug
+
+    ];
+
+    # tests call a running mongodb instance
+    doCheck = false;
+
+    meta = {
+      homepage = "http://python-eve.org/";
+      description = "open source Python REST API framework designed for human beings";
+      license = licenses.bsd3;
+    };
+  };
+
 
   eventlib = buildPythonPackage rec {
     name = "python-eventlib-${version}";
@@ -4841,6 +4890,22 @@ in modules // {
       homepage    = "http://ag-projects.com/";
       license     = licenses.lgpl2;
       platforms   = platforms.all;
+    };
+  };
+
+  events = buildPythonPackage rec {
+    name = "Events-${version}";
+    version = "0.2.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/E/Events/${name}.tar.gz";
+      sha256 = "0rymyfvarjdi2fdhfz2iqmp4wgd2n2sm0p2mx44c3spm7ylnqzqa";
+    };
+
+    meta = {
+      homepage = "http://events.readthedocs.org";
+      description = "Bringing the elegance of C# EventHanlder to Python";
+      license = licenses.bsd3;
     };
   };
 
@@ -5868,7 +5933,7 @@ in modules // {
   };
 
   lpod = buildPythonPackage rec {
-    version = "1.1.5";
+    version = "1.1.7";
     name = "python-lpod-${version}";
     # lpod library currently does not support Python 3.x
     disabled = isPy3k;
@@ -5878,8 +5943,8 @@ in modules // {
     src = pkgs.fetchFromGitHub {
       owner = "lpod";
       repo = "lpod-python";
-      rev = "v${version}";
-      sha256 = "1g909li511jkpcl26j1dzg8gn1ipkc374sh8vv54dx30sl0xfqxf";
+      rev = "dee32120ee582ff337b0c52a95a9a87cca71fd67";
+      sha256 = "1mikvzp27wxkzpr2lii4wg1hhx8h610agckqynvsrdc8v3nw9ciw";
     };
 
     meta = {
@@ -8278,6 +8343,24 @@ in modules // {
       homepage = https://github.com/thadeusb/flask-cache;
       description = "Adds cache support to your Flask application";
       license = "BSD";
+    };
+  };
+
+  flask-pymongo = buildPythonPackage rec {
+    name = "Flask-PyMongo-${version}";
+    version = "0.3.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/F/Flask-PyMongo/${name}.tar.gz";
+      sha256 = "0305qngvjrjyyabf8gxqgqvd9ffh00gr5yfrjf4nncr2my9svbyd";
+    };
+
+    propagatedBuildInputs = with self; [ flask pymongo_2_9_1 ];
+
+    meta = {
+      homepage = "http://flask-pymongo.readthedocs.org/";
+      description = "PyMongo support for Flask applications";
+      license = licenses.bsd2;
     };
   };
 
@@ -15555,12 +15638,12 @@ in modules // {
   };
 
   pygments = buildPythonPackage rec {
-    version = "2.0.2";
+    version = "2.1";
     name = "Pygments-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pygments/${name}.tar.gz";
-      sha256 = "0lagrwifsgn0s8bzqahpr87p7gd38xja8f06akscinp6hj89283k";
+      sha256 = "0yx4p3w9lw1kw24zr87xnaqxm007mdxgwa5wjpwnrcfpmxgyz80k";
     };
 
     propagatedBuildInputs = with self; [ docutils ];
@@ -16453,6 +16536,25 @@ in modules // {
       sha256 = "3c6b2317f8031bc1e200fd1ea35f00a96f4569e3f3f220a5e66ab6227d96ccaf";
     };
 
+    doCheck = false;
+
+    meta = {
+      homepage = "http://github.com/mongodb/mongo-python-driver";
+      license = licenses.asl20;
+      description = "Python driver for MongoDB ";
+    };
+  };
+
+  pymongo_2_9_1 = buildPythonPackage rec {
+    name = "pymongo-2.9.1";
+    version = "2.9.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pymongo/${name}.tar.gz";
+      sha256 = "1nrr1fxyrlxd69bgxl7bvaj2j4z7v3zaciij5sbhxg0vqiz6ny50";
+    };
+
+    # Tests call a running mongodb instance
     doCheck = false;
 
     meta = {
@@ -18315,17 +18417,21 @@ in modules // {
   };
 
   sopel = buildPythonPackage rec {
-    name = "sopel-6.1.1";
+    name = "sopel-6.2.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/sopel/${name}.tar.gz";
-      sha256 = "0nr2a88bkxg2593dd947qkh96g8j32q7pl7x9zvx4158h4bgx99y";
+      sha256 = "06m5clmg9x0bsnhvl5d75mskwqnxvkdd00p0dqnpwip9vmq6n8cz";
     };
 
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ praw xmltodict pytz pyenchant pygeoip ];
 
     disabled = isPyPy || isPy26 || isPy27;
 
+    checkPhase = ''
+    ${python.interpreter} test/*.py
+    '';
     meta = {
       description = "Simple and extensible IRC bot";
       homepage = "http://sopel.chat";
@@ -18802,14 +18908,14 @@ in modules // {
 
 
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.3.1";
+    name = "Sphinx-1.3.4";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/S/Sphinx/${name}.tar.gz";
-      sha256 = "052i5c7cgvs5iv011dkq3r8d6jycg2gjjg3907ijsbdlq8q52vhs";
+      sha256 = "0mw06q7bzzjylgwh0wnnaxmwc95hx8w95as4vcgpan579brw7b4a";
     };
 
-    patches = [ ../development/python-modules/sphinx-1.3.1-pr-1946.patch ];
+    patches = [ ../development/python-modules/sphinx-fix-tests-with-pygments-2.1.patch ];
     LC_ALL = "en_US.UTF-8";
     checkPhase = ''
       PYTHON=${python.executable} make test
@@ -18837,6 +18943,8 @@ in modules // {
     };
     patches = [];
     disabled = isPy35;
+    # Tests requires Pygments >=2.0.2 which isn't worth keeping around for this:
+    doCheck = false;
   };
 
   sphinx_rtd_theme = buildPythonPackage (rec {
@@ -19931,18 +20039,30 @@ in modules // {
 
 
   turses = buildPythonPackage (rec {
-    name = "turses-0.2.23";
+    name = "turses-0.3.1";
+    disabled = isPyPy || isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/t/turses/${name}.tar.gz";
-      md5 = "71b9e3ab12d9186798e739b5273d1438";
+      sha256 = "15mkhm3b5ka42h8qph0mhh8izfc1200v7651c62k7ldcs50ib9j6";
     };
 
-    propagatedBuildInputs = with self; [ oauth2 urwid tweepy ] ++ optional isPy26 argparse;
+    buildInputs = with self; [ mock pytest coverage tox ];
+    propagatedBuildInputs = with self; [ urwid tweepy future ] ++ optional isPy26 argparse;
 
-    #buildInputs = [ tox ];
-    # needs tox
-    doCheck = false;
+    checkPhase = ''
+      TMP_TURSES=`echo turses-$RANDOM`
+      mkdir $TMP_TURSES
+      HOME=$TMP_TURSES py.test tests/
+      rm -rf $TMP_TURSES
+    '';
+
+    patchPhase = ''
+      sed -i -e "s|future==0.14.3|future==${pkgs.lib.getVersion self.future}|" setup.py
+      sed -i -e "s|tweepy==3.3.0|tweepy==${pkgs.lib.getVersion self.tweepy}|" setup.py
+      sed -i -e "s|config.generate_config_file.assert_called_once()|assert config.generate_config_file.call_count == 1|" tests/test_config.py
+      sed -i -e "s|self.observer.update.assert_called_once()|assert self.observer.update.call_count == 1|" tests/test_meta.py
+    '';
 
     meta = {
       homepage = https://github.com/alejandrogomez/turses;
@@ -19954,13 +20074,14 @@ in modules // {
   });
 
   tweepy = buildPythonPackage (rec {
-    name = "tweepy-2.3.0";
-    disabled = isPy3k;
+    name = "tweepy-3.5.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/t/tweepy/${name}.tar.gz";
-      md5 = "065c80d244360988c61d64b5dfb7e229";
+      sha256 = "0n2shilamgwhzmvf534xg7f6hrnznbixyl5pw2f5a3f391gwy37h";
     };
+
+    propagatedBuildInputs = with self; [ requests2 six requests_oauthlib ];
 
     meta = {
       homepage = "https://github.com/tweepy/tweepy";
@@ -23390,6 +23511,23 @@ in modules // {
       license = licenses.asl20;
       maintainers = with maintainers; [ hbunke ];
      };
+  };
+
+  setproctitle = buildPythonPackage rec {
+    name = "python-setproctitle-${version}";
+    version = "1.1.9";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/setproctitle/setproctitle-${version}.tar.gz";
+      sha256 = "1mqadassxcm0m9r1l02m5vr4bbandn48xz8gifvxmb4wiz8i8d0w";
+    };
+
+    meta = {
+      description = "Allows a process to change its title (as displayed by system tools such as ps and top)";
+      homepage =  https://github.com/dvarrazzo/py-setproctitle;
+      license = licenses.bsdOriginal;
+      maintainers = with maintainers; [ exi ];
+    };
   };
 
   thrift = buildPythonPackage rec {

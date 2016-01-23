@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, sqlite, pkgconfig, autoconf, automake
+{ fetchurl, stdenv, sqlite, pkgconfig, autoreconfHook
 , xapian, glib, gmime, texinfo , emacs, guile
 , gtk3, webkit, libsoup, icu, withMug ? false /* doesn't build with current gtk3 */ }:
 
@@ -11,14 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "0wj33pma8xgjvn2akk7khzbycwn4c9sshxvzdph9dnpy7gyqxj51";
   };
 
-  buildInputs =
-    [ sqlite pkgconfig autoconf automake xapian
-      glib gmime texinfo emacs guile libsoup icu ]
-    ++ stdenv.lib.optionals withMug [ gtk3 webkit ];
-
-  preConfigure = ''
-    autoreconf -i
-  '';
+  buildInputs = [
+    sqlite pkgconfig xapian glib gmime texinfo emacs guile libsoup icu
+    autoreconfHook
+  ] ++ stdenv.lib.optionals withMug [ gtk3 webkit ];
 
   preBuild = ''
     # Fix mu4e-builddir (set it to $out)

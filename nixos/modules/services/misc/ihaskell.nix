@@ -6,7 +6,6 @@ let
 
   cfg = config.services.ihaskell;
   ihaskell = pkgs.ihaskell.override {
-    inherit (cfg.haskellPackages) ihaskell ghcWithPackages;
     packages = self: cfg.extraPackages self;
   };
 
@@ -22,7 +21,6 @@ in
       };
 
       haskellPackages = mkOption {
-        type = types.attrsOf types.package;
         default = pkgs.haskellPackages;
         defaultText = "pkgs.haskellPackages";
         example = literalExample "pkgs.haskell.packages.ghc784";
