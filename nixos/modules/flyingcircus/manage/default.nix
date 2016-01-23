@@ -43,7 +43,7 @@ in
 
       steps = mkOption {
         type = types.str;
-        default = "--inventory --channel --switch";
+        default = "--directory --channel";
         description = "Steps to run by the agent.";
       };
 
