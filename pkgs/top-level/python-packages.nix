@@ -14322,6 +14322,9 @@ in modules // {
       sha256 = "dfea618d43e83cfff21504f18f98019ba520f330e4142e5185ef7c73527de5ba";
     };
 
+    # Wants to run python in a subprocess
+    doCheck = false;
+
     meta = {
       homepage = http://www.noah.org/wiki/Pexpect;
       description = "Automate interactive console applications such as ssh, ftp, etc";
