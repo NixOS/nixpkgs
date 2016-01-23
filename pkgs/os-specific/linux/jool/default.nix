@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = sourceAttrs.src;
 
-  noHardening_pic = true;
+  hardening_pic = false;
 
   prePatch = ''
     sed -e 's@/lib/modules/\$(.*)@${kernel.dev}/lib/modules/${kernel.modDirVersion}@' -i mod/*/Makefile

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gqi2vqkg35gazzzv8asnhihchnbjcd6bzjfzqhmj7wy1dw9iiw6";
   };
 
-  noHardening_format = true;
+  hardening_format = false;
 
   meta = with stdenv.lib; {
     homepage = https://projects.coin-or.org/CoinMP/;

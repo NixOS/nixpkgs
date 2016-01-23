@@ -224,15 +224,15 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
   nativeBuildInputs = [ perl bc nettools openssl ] ++ optional (stdenv.platform.uboot != null)
     (ubootChooser stdenv.platform.uboot);
 
-  noHardening_format = true;
-  noHardening_fortify = true;
-  noHardening_stackprotector = true;
+  hardening_format = false;
+  hardening_fortify = false;
+  hardening_stackprotector = false;
 
   makeFlags = commonMakeFlags ++ [
     "ARCH=${stdenv.platform.kernelArch}"
   ];
 
-  noHardening_pic = true;
+  hardening_pic = false;
 
   karch = stdenv.platform.kernelArch;
 

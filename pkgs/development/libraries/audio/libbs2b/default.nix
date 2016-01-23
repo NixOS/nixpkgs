@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig libsndfile ];
 
-  noHardening_format = true;
+  hardening_format = false;
 
   meta = {
     homepage = "http://bs2b.sourceforge.net/";

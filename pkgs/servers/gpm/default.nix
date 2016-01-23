@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ automake autoconf libtool flex bison texinfo ];
   buildInputs = [ ncurses ];
 
-  noHardening_format = true;
+  hardening_format = false;
 
   preConfigure = ''
     ./autogen.sh

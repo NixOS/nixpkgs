@@ -45,7 +45,7 @@ self: super: {
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
   c2hs = let c2hs_ = pkgs.stdenv.lib.overrideDerivation super.c2hs (drv: {
-        noHardening_format = true;
+        hardening_format = false;
         doCheck = false;
       });
     in if pkgs.stdenv.isDarwin then dontCheck c2hs_ else c2hs_;

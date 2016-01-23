@@ -9,7 +9,7 @@ stdenv.mkDerivation (rec {
   };
 
   doCheck = true;
-  
+
   # For cross-compiling, native glibc is needed for the "gencat" program.
   crossAttrs = {
     nativeBuildInputs = [ glibc ];

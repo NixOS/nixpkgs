@@ -218,7 +218,7 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  noHardening_format = true;
+  hardening_format = false;
 
   postPatch =
     if (stdenv.isGNU

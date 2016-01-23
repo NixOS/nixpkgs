@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gnu-efi pkgconfig libxslt utillinux ];
 
-  noHardening_all = true;
+  #hardening_all = false;
 
   # Sigh, gummiboot should be able to find this in buildInputs
   configureFlags = [

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     Security Foundation
   ];
 
-  noHardening_all = true;
+  #hardening_all = false;
 
   # I'm not sure what go wants from its 'src', but the go installation manual
   # describes an installation keeping the src.

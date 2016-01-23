@@ -239,16 +239,22 @@ rec {
   useHardenFlags = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "")
-          + stdenv.lib.optionalString (!(args.noHardening_all or false)) (
-            stdenv.lib.optionalString (!(args.noHardening_fortify or false)) " -O2 -D_FORTIFY_SOURCE=2"
-            + stdenv.lib.optionalString (!(args.noHardening_stackprotector or false)) " -fstack-protector-all"
-            + stdenv.lib.optionalString ((args.noHardening_pie or false) && true) " -fPIE -pie"
-            + stdenv.lib.optionalString (!(args.noHardening_pic or false)) " -fPIC"
-            + stdenv.lib.optionalString (!(args.noHardening_relro or false)) " -z relro"
-            + stdenv.lib.optionalString ((args.noHardening_bindnow or false) && true) " -z now"
-            + stdenv.lib.optionalString (!(args.noHardening_strictoverflow or false)) " -fno-strict-overflow"
-            + stdenv.lib.optionalString (!(args.noHardening_format or false)) " -Wformat -Wformat-security -Werror=format-security"
+          + stdenv.lib.optionalString (args.hardening_all or true) (
+            stdenv.lib.optionalString (args.hardening_fortify or true) " -O2 -D_FORTIFY_SOURCE=2"
+            + stdenv.lib.optionalString (args.hardening_stackprotector or true) " -fstack-protector-all"
+            + stdenv.lib.optionalString (args.hardening_pie or false) " -fPIE -pie"
+            + stdenv.lib.optionalString (args.hardening_pic or true) " -fPIC"
+            + stdenv.lib.optionalString (args.hardening_relro or true) " -Wl,-z,relro"
+            + stdenv.lib.optionalString (args.hardening_bindnow or true) " -Wl,-z,now"
+            + stdenv.lib.optionalString (args.hardening_strictoverflow or true) " -fno-strict-overflow"
+            + stdenv.lib.optionalString (args.hardening_format or true) " -Wformat -Wformat-security -Werror=format-security"
           );
+        NIX_LDFLAGS = toString (args.NIX_LDFLAGS or "")
+          + stdenv.lib.optionalString (args.hardening_all or true) (
+              stdenv.lib.optionalString (args.hardening_relro or true) " -z relro"
+            + stdenv.lib.optionalString (args.hardening_bindnow or true) " -z now"
+          );
+
       });
     };
 

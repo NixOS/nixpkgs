@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0amjv4lypvclmi4vim2qdyw5xa6v4x50zjgf682vahqjc0wjn55k";
   };
 
-  noHardening_all = true;
+  #hardening_all = false;
 
   meta = {
     description = "libupnp, an open source UPnP development kit for Linux";

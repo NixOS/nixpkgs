@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl libpcap python ];
 
-  noHardening_format = true;
+  hardening_format = false;
 
   meta = {
     homepage = http://vde.sourceforge.net/;

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ki8mh76bbmdh77qsiw682dvi8y468yhbdabqwg05igmwc1wqvq5";
   };
 
-  noHardening_format = true;
+  hardening_format = false;
 
   configureFlags = [
     ("--enable-alsa=" + (if stdenv.isLinux then "yes" else "no"))

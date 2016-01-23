@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [libjpeg fontconfig]; # urgh
 
-  noHardening_format = true;
+  hardening_format = false;
 
   configureFlags = "--without-x";
 

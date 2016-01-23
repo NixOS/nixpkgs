@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./glibc-2.21.patch ];
 
-  noHardening_format = true;
+  hardening_format = false;
 
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
   # as the host-bzip2 will be in the path.

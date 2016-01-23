@@ -214,7 +214,7 @@ stdenv.mkDerivation ({
 }
 
 // stdenv.lib.optionalAttrs (name == "glibc-locales") {
-  noHardening_stackprotector = true;
+  hardening_stackprotector = false;
 }
 
 // stdenv.lib.optionalAttrs (hurdHeaders != null) {

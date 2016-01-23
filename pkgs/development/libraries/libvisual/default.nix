@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig glib ];
 
-  noHardening_format = true;
+  hardening_format = false;
 
   meta = {
     description = "An abstraction library for audio visualisations";

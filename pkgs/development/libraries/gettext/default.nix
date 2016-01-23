@@ -10,7 +10,7 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "doc" ];
 
-  noHardening_format = true;
+  hardening_format = false;
 
   LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
 

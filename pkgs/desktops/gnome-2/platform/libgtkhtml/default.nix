@@ -11,5 +11,5 @@ stdenv.mkDerivation {
   buildInputs = [ pkgconfig gtk gettext ];
   propagatedBuildInputs = [ libxml2 ];
 
-  noHardening_format = true;
+  hardening_format = false;
 }

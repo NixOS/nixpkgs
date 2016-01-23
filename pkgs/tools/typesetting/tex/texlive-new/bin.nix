@@ -64,7 +64,7 @@ core = stdenv.mkDerivation rec {
     perl
   ];
 
-  noHardening_format = true;
+  hardening_format = false;
 
   preConfigure = ''
     rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
