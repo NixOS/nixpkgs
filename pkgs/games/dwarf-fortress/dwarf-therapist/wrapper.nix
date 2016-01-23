@@ -33,9 +33,11 @@ in buildEnv {
     recreate_dir share
     recreate_dir share/dwarftherapist
     mkdir -p $out/share/dwarftherapist/memory_layouts/linux
+    origmd5=$(cat "${dfHashFile}.orig" | cut -c1-8)
+    patchedmd5=$(cat "${dfHashFile}" | cut -c1-8)
     substitute \
       ${dt.layouts}/${inifile} \
       $out/share/dwarftherapist/memory_layouts/${inifile} \
-      --replace $(cat "${dfHashFile}.orig") $(cat "${dfHashFile}.patched")
+      --replace "$origmd5" "$patchedmd5"
   '';
 }

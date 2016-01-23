@@ -26,19 +26,15 @@ stdenv.mkDerivation {
     rm $out/libs/lib*
 
     # Store the original hash
-    orig_hash=$(md5sum $out/libs/Dwarf_Fortress | awk '{ print $1 }')
-    echo $orig_hash | cut -c1-8 > $out/hash.md5.orig  # for dwarf-therapist
-    echo $orig_hash > $out/full-hash-orig.md5  # for dfhack
+    md5sum $out/libs/Dwarf_Fortress | awk '{ print $1 }' > $out/hash.md5.orig
 
     patchelf \
       --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
       --set-rpath "${libpath}" \
       $out/libs/Dwarf_Fortress
 
-    # Store new hash
-    patched_hash=$(md5sum $out/libs/Dwarf_Fortress | awk '{ print $1 }')
-    echo $patched_hash | cut -c1-8 > $out/hash.md5.patched  # for dwarf-therapist
-    echo $patched_hash > $out/full-hash-patched.md5  # for dfhack
+    # Store the new hash
+    md5sum $out/libs/Dwarf_Fortress | awk '{ print $1 }' > $out/hash.md5
   '';
 
   passthru = { inherit baseVersion patchVersion dfVersion; };

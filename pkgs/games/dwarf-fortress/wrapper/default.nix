@@ -30,8 +30,8 @@ let
       fi
       rm $out/hack/symbols.xml
       substitute ${dfhack}/hack/symbols.xml $out/hack/symbols.xml \
-        --replace $(cat ${dwarf-fortress-original}/full-hash-orig.md5) \
-                  $(cat ${dwarf-fortress-original}/full-hash-patched.md5)
+        --replace $(cat ${dwarf-fortress-original}/hash.md5.orig) \
+                  $(cat ${dwarf-fortress-original}/hash.md5)
     '';
   };
 in
