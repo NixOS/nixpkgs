@@ -11,8 +11,8 @@
 }:
 
 let
-  baseVersion = "40";
-  patchVersion = "24";
+  baseVersion = "42";
+  patchVersion = "04";
   srcs = {
     df_unfuck = fetchgit {
       url = "https://github.com/svenstaro/dwarf_fortress_unfuck";
@@ -28,7 +28,7 @@ let
 
     df = fetchurl {
       url = "http://www.bay12games.com/dwarves/df_${baseVersion}_${patchVersion}_linux.tar.bz2";
-      sha256 = "0d4jrs45qj89vq9mjg7fxxhis7zivvb0vzjpmkk274b778kccdys";
+      sha256 = "1ki4g47cx539lv9kx15h28fmqsx55sz5hcj2q5yf7avpnklgg0gj";
     };
   };
 
