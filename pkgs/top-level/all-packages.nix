@@ -10321,9 +10321,9 @@ let
   linuxPackages_grsec_stable_server_xen = grPackage grFlavors.linux_grsec_stable_server_xen;
 
   # Testing kernels: outdated ATM
-  #linuxPackages_grsec_testing_desktop = grPackage grFlavors.linux_grsec_testing_desktop;
-  #linuxPackages_grsec_testing_server  = grPackage grFlavors.linux_grsec_testing_server;
-  #linuxPackages_grsec_testing_server_xen = grPackage grFlavors.linux_grsec_testing_server_xen;
+  linuxPackages_grsec_testing_desktop = grPackage grFlavors.linux_grsec_testing_desktop;
+  linuxPackages_grsec_testing_server  = grPackage grFlavors.linux_grsec_testing_server;
+  linuxPackages_grsec_testing_server_xen = grPackage grFlavors.linux_grsec_testing_server_xen;
 
   # ChromiumOS kernels
   linuxPackages_chromiumos_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_3_14 linuxPackages_chromiumos_3_14);
