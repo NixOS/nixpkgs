@@ -3311,10 +3311,12 @@ in modules // {
     buildInputs = with self; [ nose ];
 
     checkPhase = ''
-      nosetests cytoolz/tests
+      nosetests -v $out/${python.sitePackages}
     '';
 
-    doCheck = false; # Cannot import the extension module
+    # Several tests fail with Python 3.5
+    # https://github.com/pytoolz/cytoolz/issues/73
+    doCheck = !isPy35;
 
     meta = {
       homepage = "http://github.com/pytoolz/cytoolz/";
