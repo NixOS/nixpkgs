@@ -15,7 +15,6 @@
 
 # options
 , mesaSupported, mesa
-, buildDocs ? false
 , buildExamples ? false
 , buildTests ? false
 , developerBuild ? false
@@ -204,9 +203,6 @@ stdenv.mkDerivation {
     ''
       # Don't retain build-time dependencies like gdb and ruby.
       sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $out/mkspecs/qconfig.pri
-    ''
-    + lib.optionalString buildDocs ''
-      make docs && make install_docs
     '';
 
   inherit lndir;
