@@ -55,7 +55,10 @@ let
   inherit (stdenv.lib) optional optionals optionalString versionOlder
                        concatStringsSep enableFeature optionalAttrs toUpper;
 
+  isCross = ghc.isCross or false;
   isGhcjs = ghc.isGhcjs or false;
+  nativeGhc = if isCross then ghc.bootPkgs.ghc else ghc;
+
 
   newCabalFileUrl = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
