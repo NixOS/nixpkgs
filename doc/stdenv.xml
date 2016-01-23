@@ -1244,6 +1244,14 @@ echo @foo@
   </varlistentry>
 
   <varlistentry>
+    <term>Autoconf</term>
+    <listitem><para>The <varname>autoreconfHook</varname> derivation adds
+    <varname>autoreconfPhase</varname>, which runs autoreconf, libtoolize and
+    automake, essentially preparing the configure script in autotools-based
+    builds.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term>libxml2</term>
     <listitem><para>Adds every file named
     <filename>catalog.xml</filename> found under the
