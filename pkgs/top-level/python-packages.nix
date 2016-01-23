@@ -19950,6 +19950,10 @@ in modules // {
       sha256 = "0skzrvhjnnacrz52jml4i050vdx5lfcd3np172srxjaghdgfxg9k";
     };
 
+    # Errors in several tests:
+    # TypeError: must be str, not bytes
+    disabled = isPy3k;
+
     propagatedBuildInputs = with self; [ six pillow ];
 
     meta = {
