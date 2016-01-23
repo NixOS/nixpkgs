@@ -185,14 +185,14 @@ stdenv.mkDerivation {
   # Qt doesn't directly need GLU (just GL), but many apps use, it's small and
   # doesn't remain a runtime-dep if not used
   ++ lib.optionals mesaSupported [ mesa mesa_glu ]
-  ++ lib.optional (postgresql != null) postgresql
   ++ lib.optionals gtkStyle [gnome_vfs.out libgnomeui.out gtk GConf];
 
   buildInputs =
     [ bison flex gperf ruby ]
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
-    ++ lib.optional (mysql != null) mysql.lib;
+    ++ lib.optional (mysql != null) mysql.lib
+    ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs = [ python perl pkgconfig ];
 
