@@ -63,6 +63,22 @@ setQMakePath() {
     export PATH="$qtOut/bin${PATH:+:}$PATH"
 }
 
+_multioutQtModuleDevs() {
+    # We cannot simply set these paths in configureFlags because libQtCore retains
+    # references to the paths it was built with.
+    moveToOutput "bin" "${!outputDev}"
+    moveToOutput "include" "${!outputDev}"
+
+    # The destination directory must exist or moveToOutput will do nothing
+    mkdir -p "${!outputDev}/share"
+    moveToOutput "share/doc" "${!outputDev}"
+}
+
+_multioutQtDevs() {
+    # This is necessary whether the package is a Qt module or not
+    moveToOutput "mkspecs" "${!outputDev}"
+}
+
 qtOut=""
 if [[ -z "$NIX_QT_SUBMODULE" ]]; then
     qtOut=`mktemp -d`
@@ -72,7 +88,7 @@ fi
 
 mkdir -p "$qtOut/bin" "$qtOut/mkspecs" "$qtOut/include" "$qtOut/nix-support" "$qtOut/lib" "$qtOut/share"
 
-cp "@out@/bin/qmake" "$qtOut/bin"
+cp "@dev@/bin/qmake" "$qtOut/bin"
 cat >"$qtOut/bin/qt.conf" <<EOF
 [Paths]
 Prefix = $qtOut
@@ -85,11 +101,14 @@ EOF
 export QMAKE="$qtOut/bin/qmake"
 
 envHooks+=(addQtModule propagateRuntimeDeps)
-preConfigurePhases+=(setQMakePath)
+# Set PATH to find qmake first in a preConfigure hook
+# It must run after all the envHooks!
+preConfigureHooks+=(setQMakePath)
 
+preFixupHooks+=(_multioutQtDevs)
 if [[ -n "$NIX_QT_SUBMODULE" ]]; then
-    preFixupPhases+=(rmQtModules)
-    postPhases+=(rmQMake)
+    postInstallHooks+=(rmQMake rmQtModules)
+    preFixupHooks+=(_multioutQtModuleDevs)
 fi
 
 fi

@@ -36,6 +36,8 @@ stdenv.mkDerivation {
 
   sourceRoot = "qt-everywhere-opensource-src-${version}";
 
+  outputs = [ "dev" "out" ];
+
   postUnpack = ''
     mv qtbase-opensource-src-${version} ./qt-everywhere-opensource-src-${version}/qtbase
   '';
@@ -93,12 +95,34 @@ stdenv.mkDerivation {
         --replace "@mesa_inc@" "${mesa.dev}"
     '';
 
+  setOutputFlags = false;
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/qtbase/lib:$PWD/qtbase/plugins/platforms:$LD_LIBRARY_PATH"
     export MAKEFLAGS=-j$NIX_BUILD_CORES
 
-    export configureFlags+="-plugindir $out/lib/qt5/plugins -importdir $out/lib/qt5/imports -qmldir $out/lib/qt5/qml"
-    export configureFlags+=" -docdir $out/share/doc/qt5"
+    _multioutQtDevs() {
+        # We cannot simply set these paths in configureFlags because libQtCore retains
+        # references to the paths it was built with.
+        moveToOutput "bin" "$dev"
+        moveToOutput "include" "$dev"
+        moveToOutput "mkspecs" "$dev"
+
+        # The destination directory must exist or moveToOutput will do nothing
+        mkdir -p "$dev/share"
+        moveToOutput "share/doc" "$dev"
+
+        mkdir -p "$dev/lib"
+        lndir -silent "$out/lib" "$dev/lib"
+        if [[ -h "$dev/lib/cmake" ]]; then rm "$dev/lib/cmake"; fi
+        if [[ -h "$dev/lib/pkgconfig" ]]; then rm "$dev/lib/pkgconfig"; fi
+    }
+    preFixupHooks+=(_multioutQtDevs)
+
+    configureFlags+="\
+        -plugindir $out/lib/qt5/plugins \
+        -importdir $out/lib/qt5/imports \
+        -qmldir $out/lib/qt5/qml \
+        -docdir $out/share/doc/qt5"
   '';
 
   prefixKey = "-prefix ";
@@ -191,15 +215,15 @@ stdenv.mkDerivation {
     ++ lib.optional (postgresql != null) postgresql
     ++ lib.optionals gtkStyle [gnome_vfs.out libgnomeui.out gtk GConf];
 
-  nativeBuildInputs = [ python perl pkgconfig ];
+  nativeBuildInputs = [ lndir python perl pkgconfig ];
 
   # freetype-2.5.4 changed signedness of some struct fields
   NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
 
-  postInstall =
+  postFixup =
     ''
       # Don't retain build-time dependencies like gdb and ruby.
-      sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $out/mkspecs/qconfig.pri
+      sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
     '';
 
   inherit lndir;
