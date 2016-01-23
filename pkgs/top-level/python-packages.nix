@@ -18848,6 +18848,12 @@ in modules // {
       sha256 = "0snmb8xffb3vsma0z67i0h0w2g2dy0p3gsgh9gi4i0kgc5l8spqh";
     };
 
+    buildInputs = with self; [ pytest ];
+
+    checkPhase = ''
+      py.test test_six.py
+    '';
+
     meta = {
       description = "A Python 2 and 3 compatibility library";
       homepage = http://pypi.python.org/pypi/six/;
