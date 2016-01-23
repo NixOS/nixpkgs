@@ -14,7 +14,7 @@
 , mysql ? null, postgresql ? null
 
 # options
-, mesaSupported, mesa, mesa_glu
+, mesaSupported, mesa
 , buildDocs ? false
 , buildExamples ? false
 , buildTests ? false
@@ -185,9 +185,7 @@ stdenv.mkDerivation {
     zlib libjpeg libpng libtiff sqlite icu
     xcbutil xcbutilimage xcbutilkeysyms xcbutilwm libxkbcommon
   ]
-  # Qt doesn't directly need GLU (just GL), but many apps use, it's small and
-  # doesn't remain a runtime-dep if not used
-  ++ lib.optionals mesaSupported [ mesa mesa_glu ];
+  ++ lib.optional mesaSupported mesa;
 
   buildInputs =
     [ bison flex gperf ruby ]
