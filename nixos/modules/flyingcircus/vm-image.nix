@@ -69,6 +69,7 @@ with lib;
           # Install a configuration.nix.
           mkdir -p /mnt/etc/nixos
           cp ${./bootstrap-config.nix} /mnt/etc/nixos/configuration.nix
+          chmod u+rw /mnt/etc/nixos/configuration.nix
 
           # Generate the GRUB menu.
           chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
