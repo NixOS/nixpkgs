@@ -1,6 +1,7 @@
-{ stdenv, fetchgit, ghc, perl, gmp, ncurses, libiconv, autoconf, automake, happy, alex }:
+{ stdenv, fetchgit, bootPkgs, perl, gmp, ncurses, libiconv, autoconf, automake, happy, alex }:
 
 let
+  inherit (bootPkgs) ghc;
 
   buildMK = ''
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"
