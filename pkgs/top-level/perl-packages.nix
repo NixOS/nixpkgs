@@ -8234,18 +8234,19 @@ let self = _self // overrides; _self = with self; {
       [ ClassMOP Moose namespaceautoclean ListMoreUtils ];
   };
 
-  MooseXTypes = buildPerlPackage {
-    name = "MooseX-Types-0.45";
+  "MooseXTypes" = buildPerlPackage rec {
+    name = "MooseX-Types-0.46";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-0.45.tar.gz;
-      sha256 = "d01ff4a3db78e1150101b4b63569e4bce3ced3b5b0024c52c87575e0820609c7";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "e9e8c36284cf1adc6563c980c0a4f0a7df720dbaaece0dd6be66b975dde5db7a";
     };
-    buildInputs = [ ModuleBuildTiny Moose TestFatal TestRequires if_ ];
-    propagatedBuildInputs = [ CarpClan ModuleRuntime Moose SubExporter SubName namespaceautoclean ];
+    buildInputs = [ ModuleBuildTiny Moose TestFatal TestRequires self."if" ];
+    propagatedBuildInputs = [ CarpClan Moose SubExporterForMethods SubName namespaceautoclean ];
     meta = {
       homepage = https://github.com/moose/MooseX-Types;
       description = "Organise your Moose types in libraries";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
