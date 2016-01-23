@@ -8709,14 +8709,26 @@ in modules // {
   });
 
   fs = buildPythonPackage rec {
-    name = "fs-0.5.0";
+    name = "fs-0.5.4";
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/f/fs/${name}.tar.gz";
-      sha256 = "144f4yn2nvnxh2vrnmiabpwx3s637np0d1j1w95zym790d66shir";
+      sha256 = "ba2cca8773435a7c86059d57cb4b8ea30fda40f8610941f7822d1ce3ffd36197";
     };
 
+    LC_ALL = "en_US.UTF-8";
+    buildInputs = [ pkgs.glibcLocales ];
     propagatedBuildInputs = [ self.six ];
+
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover
+    '';
+
+    # Judging from SyntaxError
+    disabled = isPy3k;
+
+    # Lots of errors. Likely due to being in a chroot
+    doCheck = false;
 
     meta = {
       description = "Filesystem abstraction";
