@@ -24174,15 +24174,19 @@ in modules // {
 
   willow = buildPythonPackage rec {
     name = "willow-${version}";
-    version = "0.2.1";
+    version = "0.2.2";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/W/Willow/Willow-${version}.tar.gz";
-      sha256 = "0mgdpq7cvyvgk0n8ibkym3nsw1xg89kbismsj2y186ldcyxfajwa";
+      sha256 = "111c82fbfcda2710ce6201b0b7e0cfa1ff3c4f2f0dc788cc8dfc8db933c39c73";
     };
 
-    propagatedBuildInputs = with self; [ six ];
+    propagatedBuildInputs = with self; [ six pillow ];
+
+    # Test data is not included
+    # https://github.com/torchbox/Willow/issues/34
+    doCheck = false;
 
     meta = {
       description = "A Python image library that sits on top of Pillow, Wand and OpenCV";
