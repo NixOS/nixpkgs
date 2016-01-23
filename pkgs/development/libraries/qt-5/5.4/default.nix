@@ -43,6 +43,9 @@ let
       dontFixLibtool = args.dontFixLibtool or true;
       configureScript = args.configureScript or "qmake";
 
+      outputs = args.outputs or [ "dev" "out" ];
+      setOutputFlags = false;
+
       enableParallelBuilding = args.enableParallelBuilding or true;
 
       meta = {
