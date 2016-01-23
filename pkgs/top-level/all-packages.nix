@@ -1662,7 +1662,7 @@ let
 
   gnaural = callPackage ../applications/audio/gnaural { };
 
-  gnokii = builderDefsPackage (callPackage ../tools/misc/gnokii) { };
+  gnokii = callPackage ../tools/misc/gnokii { };
 
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
 
