@@ -1,20 +1,21 @@
 { stdenv, fetchurl, scons, pkgconfig, qt4, portaudio, portmidi, libusb1
 , libmad, protobuf, libvorbis, taglib, libid3tag, flac, libsndfile, libshout
-, fftw, vampSDK
+, rubberband, fftw, vampSDK, chromaprint, libopus, sqlite
 }:
 
 stdenv.mkDerivation rec {
   name = "mixxx-${version}";
-  version = "1.11.0";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "http://downloads.mixxx.org/${name}/${name}-src.tar.gz";
-    sha256 = "0c833gf4169xvpfn7car9vzvwfwl9d3xwmbfsy36cv8ydifip5h0";
+    sha256 = "0vb71w1yq0xwwsclrn2jj9bk8w4n14rfv5c0aw46c11mp8xz7f71";
   };
 
   buildInputs = [
     scons pkgconfig qt4 portaudio portmidi libusb1 libmad protobuf libvorbis
-    taglib libid3tag flac libsndfile libshout fftw vampSDK
+    taglib libid3tag flac libsndfile libshout rubberband fftw vampSDK chromaprint
+    libopus sqlite
   ];
 
   sconsFlags = [
