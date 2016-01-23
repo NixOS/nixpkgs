@@ -11049,6 +11049,10 @@ in modules // {
     buildInputs = with self; [ unittest2 ];
     propagatedBuildInputs = with self; [ funcsigs six pbr ];
 
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover
+    '';
+
     meta = {
       description = "Mock objects for Python";
       homepage = http://python-mock.sourceforge.net/;
