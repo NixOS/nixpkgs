@@ -13649,7 +13649,14 @@ in modules // {
       sha256 = "0nghdq3zihiqg10dp76ls7yn44m5wjncyz7fk8isagkrspkh9a3n";
     };
 
-    propagatedBuildInputs = with self; [ six monotonic ];
+    propagatedBuildInputs = with self; [ six monotonic testtools ];
+
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover
+    '';
+    # Tests are written for Python 3.x only (concurrent.futures)
+    doCheck = isPy3k;
+
 
     meta = with stdenv.lib; {
       description = "Fasteners";
