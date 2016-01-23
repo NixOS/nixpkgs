@@ -14793,11 +14793,11 @@ in modules // {
 
   psutil = buildPythonPackage rec {
     name = "psutil-${version}";
-    version = "2.1.1";
+    version = "3.4.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/psutil/${name}.tar.gz";
-      sha256 = "14smqj57yjrm6hjz5n2annkgv0kmxckdhqvfx784f4d4lr52m0dz";
+      sha256 = "09dp2cwvydqzjxl6nrrpilxf0xsx45fdl3id6s4a7nk6lwda0zxi";
     };
 
     # failed tests: https://code.google.com/p/psutil/issues/detail?id=434
