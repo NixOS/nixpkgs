@@ -339,6 +339,7 @@
   zagy = "Christian Zagrodnick <cz@flyingcircus.io>";
   zef = "Zef Hemel <zef@zef.me>";
   zimbatm = "zimbatm <zimbatm@zimbatm.com>";
+  zohl = "Al Zohali <zohl@fmap.me>";
   zoomulator = "Kim Simmons <zoomulator@gmail.com>";
   Gonzih = "Max Gonzih <gonzih@gmail.com>";
 }
