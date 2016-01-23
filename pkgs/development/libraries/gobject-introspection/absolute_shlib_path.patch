@@ -1,21 +1,26 @@
 diff --git a/giscanner/scannermain.py b/giscanner/scannermain.py
-index 89ec193..8ee92c3 100755
+index 89ec193..54f1d2e 100755
 --- a/giscanner/scannermain.py
 +++ b/giscanner/scannermain.py
-@@ -94,6 +94,34 @@ def get_windows_option_group(parser):
+@@ -94,6 +94,39 @@ def get_windows_option_group(parser):
      return group
  
  
 +def _get_default_fallback_libpath():
-+    outputs = os.environ.get("outputs", "out").split()
-+    if "lib" in outputs:
-+        # For multiple output derivations let's try whether there is a $lib
-+        # environment variable and use that as the base store path.
-+        store_path = os.environ.get("lib")
-+    elif "out" in outputs:
-+        # Otherwise we have a single output derivation, so the libraries most
-+        # certainly will end up in "$out/lib".
-+        store_path = os.environ.get("out")
++    # Newer multiple-output-optimized stdenv has an environment variable
++    # $outputLib which in turn specifies another variable which then is used as
++    # the destination for the library contents (${!outputLib}/lib).
++    store_path = os.environ.get(os.environ.get("outputLib"))
++    if store_path is None:
++        outputs = os.environ.get("outputs", "out").split()
++        if "lib" in outputs:
++            # For multiple output derivations let's try whether there is a $lib
++            # environment variable and use that as the base store path.
++            store_path = os.environ.get("lib")
++        elif "out" in outputs:
++            # Otherwise we have a single output derivation, so the libraries
++            # most certainly will end up in "$out/lib".
++            store_path = os.environ.get("out")
 +
 +    if store_path is not None:
 +        # Even if we have a $lib as output, there still should be a $lib/lib
@@ -37,7 +42,7 @@ index 89ec193..8ee92c3 100755
  def _get_option_parser():
      parser = optparse.OptionParser('%prog [options] sources')
      parser.add_option('', "--quiet",
-@@ -200,6 +228,10 @@ match the namespace prefix.""")
+@@ -200,6 +233,10 @@ match the namespace prefix.""")
      parser.add_option("", "--filelist",
                        action="store", dest="filelist", default=[],
                        help="file containing headers and sources to be scanned")
