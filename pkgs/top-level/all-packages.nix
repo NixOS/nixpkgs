@@ -1968,6 +1968,8 @@ let
 
   ipmiutil = callPackage ../tools/system/ipmiutil {};
 
+  ipmiview = callPackage ../applications/misc/ipmiview {};
+
   ipcalc = callPackage ../tools/networking/ipcalc {};
 
   ipv6calc = callPackage ../tools/networking/ipv6calc {};
