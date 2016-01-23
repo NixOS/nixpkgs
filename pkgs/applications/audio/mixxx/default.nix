@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, scons, pkgconfig, qt4, portaudio, portmidi, libusb1
-, libmad, protobuf, libvorbis, taglib, libid3tag, flac, libsndfile, libshout
-, rubberband, fftw, vampSDK, chromaprint, libopus, sqlite
+{ stdenv, fetchurl, chromaprint, fftw, flac, libid3tag, libmad
+, libopus, libshout, libsndfile, libusb1, libvorbis, pkgconfig
+, portaudio, portmidi, protobuf, qt4, rubberband, scons, sqlite
+, taglib, vampSDK
 }:
 
 stdenv.mkDerivation rec {
@@ -13,19 +14,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    scons pkgconfig qt4 portaudio portmidi libusb1 libmad protobuf libvorbis
-    taglib libid3tag flac libsndfile libshout rubberband fftw vampSDK chromaprint
-    libopus sqlite
+    chromaprint fftw flac libid3tag libmad libopus libshout libsndfile
+    libusb1 libvorbis pkgconfig portaudio portmidi protobuf qt4
+    rubberband scons sqlite taglib vampSDK
   ];
 
   sconsFlags = [
     "build=release"
     "qtdir=${qt4}"
   ];
-
-  postPatch = ''
-    sed -i -e 's/"which /"type -P /' build/depends.py
-  '';
 
   buildPhase = ''
     runHook preBuild
@@ -42,11 +39,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
-    homepage = "http://mixxx.org/";
+  meta = with stdenv.lib; {
+    homepage = http://mixxx.org;
     description = "Digital DJ mixing software";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.aszlig ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.aszlig maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }
