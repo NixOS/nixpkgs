@@ -83,7 +83,7 @@ stdenv.mkDerivation {
         --replace "@gtk@" "${gtk.out}" \
         --replace "@gnome_vfs@" "${gnome_vfs.out}" \
         --replace "@libgnomeui@" "${libgnomeui.out}" \
-        --replace "@gconf@" "${GConf}"
+        --replace "@gconf@" "${GConf.out}"
     ''
     + lib.optionalString mesaSupported ''
       substituteInPlace \
