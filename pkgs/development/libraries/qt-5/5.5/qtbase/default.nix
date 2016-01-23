@@ -53,8 +53,6 @@ stdenv.mkDerivation {
       substituteInPlace qtbase/configure --replace /bin/pwd pwd
       substituteInPlace qtbase/src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
       sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i qtbase/mkspecs/*/*.conf
-          libgnomeui = libgnomeui.out;
-          gnome_vfs = gnome_vfs.out;
 
       sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/src/corelib/Qt5Config.cmake.in"
       sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/src/corelib/Qt5CoreMacros.cmake"
@@ -83,8 +81,8 @@ stdenv.mkDerivation {
       substituteInPlace qtbase/src/widgets/styles/qgtk2painter.cpp --replace "@gtk@" "${gtk}"
       substituteInPlace qtbase/src/widgets/styles/qgtkstyle_p.cpp \
         --replace "@gtk@" "${gtk}" \
-        --replace "@gnome_vfs@" "${gnome_vfs}" \
-        --replace "@libgnomeui@" "${libgnomeui}" \
+        --replace "@gnome_vfs@" "${gnome_vfs.out}" \
+        --replace "@libgnomeui@" "${libgnomeui.out}" \
         --replace "@gconf@" "${GConf}"
     ''
     + lib.optionalString mesaSupported ''
@@ -188,7 +186,7 @@ stdenv.mkDerivation {
   ++ lib.optional (cups != null) cups
   ++ lib.optional (mysql != null) mysql.lib
   ++ lib.optional (postgresql != null) postgresql
-  ++ lib.optionals gtkStyle [gnome_vfs libgnomeui gtk GConf];
+  ++ lib.optionals gtkStyle [gnome_vfs.out libgnomeui.out gtk GConf];
 
   buildInputs =
     [ bison flex gperf ruby ]
