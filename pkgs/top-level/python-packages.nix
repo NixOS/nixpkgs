@@ -13952,7 +13952,12 @@ in modules // {
       url = "https://pypi.python.org/packages/source/B/Bottleneck/Bottleneck-${version}.tar.gz";
       sha256 = "15dl0ll5xmfzj2fsvajzwxsb9dbw5i9fx9i4r6n4i5nzzba7m6wd";
     };
+
+    buildInputs = with self; [ nose ];
     propagatedBuildInputs = [self.numpy];
+    checkPhase = ''
+      nosetests -v $out/${python.sitePackages}
+    '';
   };
 
   paho-mqtt = buildPythonPackage rec {
