@@ -8250,17 +8250,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXTypesCommon = buildPerlPackage rec {
-    name = "MooseX-Types-Common-0.001008";
+  "MooseXTypesCommon" = buildPerlPackage rec {
+    name = "MooseX-Types-Common-0.001013";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/MooseX/${name}.tar.gz";
-      sha256 = "0s0z6v32vyykni8an6jzyvl0icr5d5b8kbi4qqp4vwc5438jrpdz";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "ff0c963f5e8304acb5f64bdf9ba1f19284311148e1a8f0d1f81f123f9950f5f2";
     };
-    buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ Moose MooseXTypes ];
+    buildInputs = [ ModuleBuildTiny TestDeep TestWarnings perl ];
+    propagatedBuildInputs = [ MooseXTypes self."if" ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
-      platforms   = stdenv.lib.platforms.unix;
+      homepage = https://github.com/moose/MooseX-Types-Common;
+      description = "A library of commonly used type constraints";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ ocharles rycee ];
     };
   };
 
