@@ -13928,10 +13928,10 @@ in modules // {
 
   xlrd = buildPythonPackage rec {
     name = "xlrd-${version}";
-    version = "0.9.3";
+    version = "0.9.4";
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/x/xlrd/xlrd-${version}.tar.gz";
-      sha256 = "174ks80h0g9p67ahnakf0y7di3gvbhxvb1jlk097gvd7gpi3aflk";
+      sha256 = "8e8d3359f39541a6ff937f4030db54864836a06e42988c452db5b6b86d29ea72";
     };
   };
 
