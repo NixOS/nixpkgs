@@ -176,7 +176,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     xlibs.libXcomposite libX11 libxcb libXext libXrender libXi
-    fontconfig freetype openssl dbus.libs glib udev libxml2 libxslt pcre
+    fontconfig freetype openssl dbus glib udev libxml2 libxslt pcre
     zlib libjpeg libpng libtiff sqlite icu
     xcbutil xcbutilimage xcbutilkeysyms xcbutilwm libxkbcommon
   ]
