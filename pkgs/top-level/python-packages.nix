@@ -3282,7 +3282,13 @@ in modules // {
       sha256 = "13hdffhd37mx3gjby018xl179jaj957fy7kzi01crmimxvn2zi7y";
     };
 
-    buildInputs = with self; [ pkgs.pkgconfig ];
+    buildInputs = with self; [ pkgs.pkgconfig pkgs.gdb ];
+
+    checkPhase = ''
+      ${python.interpreter} runtests.py
+    '';
+
+    doCheck = false; # Lots of weird compiler errors
 
     meta = {
       description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
