@@ -108,4 +108,13 @@
     };
     inputs = [ pkgs.pam ];
   };
+
+  statsd = {
+    src = fetchFromGitHub {
+      owner = "zebrafishlabs";
+      repo = "nginx-statsd";
+      rev = "b756a12abf110b9e36399ab7ede346d4bb86d691";
+      sha256 = "1psrb5v071idlplvbnaq904nlhqw1zrbw4aawfs278zcdmq67zn8";
+    };
+  };
 }
