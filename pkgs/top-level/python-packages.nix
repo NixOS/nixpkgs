@@ -2824,6 +2824,15 @@ in modules // {
       sha256 = "10kavbisnk9m93jl2wi34pw7ryr2qbxshh2cysxwxd7bymqgz87v";
     };
 
+    buildInputs = with self; [ pytest ];
+
+    checkPhase = ''
+      py.test tests
+    '';
+
+    # Python 3.5 str/bytes-like errors with reading files
+    doCheck = !isPy3k;
+
     meta = {
       homepage = http://click.pocoo.org/;
       description = "Create beautiful command line interfaces in Python";
