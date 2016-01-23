@@ -9762,7 +9762,12 @@ in modules // {
       sha256 = "3a0624a251a26463c9dfa0ffa635ec51c4265380980d9a50d65611c3c2bd82a6";
     };
 
-    buildInputs = with self; [ pytest ];
+    LC_ALL = "en_US.UTF-8";
+    buildInputs = with self; [ nose pkgs.glibcLocales ];
+
+    checkPhase = ''
+      nosetests -v ipython_genutils/tests
+    '';
 
     meta = {
       description = "Vestigial utilities from IPython";
