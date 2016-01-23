@@ -11969,17 +11969,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestWarnings = buildPerlPackage rec {
-    name = "Test-Warnings-0.021";
+  "TestWarnings" = buildPerlPackage rec {
+    name = "Test-Warnings-0.026";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "0i1crkhqfl5gs55i5nrvsw3xy946ajgnvp4gqrzvsn1x6cp1i2nr";
+      sha256 = "ae2b68b1b5616704598ce07f5118efe42dc4605834453b7b2be14e26f9cc9a08";
     };
-    buildInputs = [ TestTester if_ CPANMetaCheck ModuleMetadata ];
+    buildInputs = [ TestTester CPANMetaCheck ModuleMetadata self."if" ];
     meta = {
       homepage = https://github.com/karenetheridge/Test-Warnings;
       description = "Test for warnings and the lack of them";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
