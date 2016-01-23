@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, e19 }:
 stdenv.mkDerivation rec {
   name = "terminology-${version}";
-  version = "0.8.0";
+  version = "0.9.1";
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/terminology/${name}.tar.gz";
-    sha256 = "7a10d44b023cf6134c2483304e4ad33bea6df0f11266aec482f54fa67a3ce628";
+    url = "http://download.enlightenment.org/rel/apps/terminology/${name}.tar.xz";
+    sha256 = "1kwv9vkhngdm5v38q93xpcykghnyawhjjcb5bgy0p89gpbk7mvpc";
   };
   buildInputs = [ pkgconfig e19.efl e19.elementary ];
   meta = {

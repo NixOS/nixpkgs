@@ -1,12 +1,11 @@
 { callPackage, pkgs }:
 let
-  openjpeg_1 = with pkgs; lib.overrideDerivation openjpeg (oldAttrs: {
-         name = "openjpeg-1.5.1";
+  openjpeg_1 = with pkgs; lib.overrideDerivation openjpeg (oldAttrs: rec {
+         name = "openjpeg-1.5.2";
          src = fetchurl {
-           url = "http://openjpeg.googlecode.com/files/openjpeg-1.5.1.tar.gz";
-           sha1 = "1b0b74d1af4c297fd82806a9325bb544caf9bb8b";
+           url = "mirror://sourceforge/openjpeg.mirror/${name}.tar.gz";
+           sha1 = "lahbqvjpsfdxsrm0wsy3pdrp3pzrjvj9";
          };
-         #passthru = { incDir = "openjpeg-1.5.1"; };
      });
 in
 rec {
@@ -23,5 +22,4 @@ rec {
   econnman = callPackage ./econnman.nix { };
   terminology = callPackage ./terminology.nix { };
   rage = callPackage ./rage.nix { };
-
 }

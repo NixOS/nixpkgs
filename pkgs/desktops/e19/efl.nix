@@ -3,10 +3,10 @@
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = "1.15.0";
+  version = "1.16.1";
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.gz";
-    sha256 = "1x5n2afy5z1akam5y187ajk52mq2k9lwmz7nlrxp92rvx1jf6li5";
+    url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
+    sha256 = "116s4lcfj5lrfhyvvka3np9glqyrh21cyl9rhw7al0wgb60vw0gg";
   };
 
   buildInputs = [ pkgconfig openssl zlib freetype fontconfig fribidi SDL2 SDL mesa

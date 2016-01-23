@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, e19, xorg, libffi, pam, alsaLib, luajit, bzip2
+{ stdenv, fetchurl, pkgconfig, e19, xorg, libffi, pam, alsaLib, luajit, bzip2, libuuid
 , libpthreadstubs, gdbm, libcap, mesa_glu, xkeyboard_config, set_freqset_setuid ? false }:
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.19.8";
+  version = "0.20.3";
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "1y83jnq01k9i328adgjgpfwgpvvd2a1ixpm029pjcar8p1mvgadi";
+    sha256 = "19z3bwdzwpzwi330l5g5mj7xy6wy8xrc39zivjhm0d1ql3fh649j";
   };
   buildInputs = [ pkgconfig e19.efl e19.elementary xorg.libXdmcp xorg.libxcb
-    xorg.xcbutilkeysyms xorg.libXrandr libffi pam alsaLib luajit bzip2
+    xorg.xcbutilkeysyms xorg.libXrandr libffi pam alsaLib luajit bzip2 libuuid
     libpthreadstubs gdbm ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
-  NIX_CFLAGS_COMPILE = [ "-I${e19.efl}/include/eo-1" "-I${e19.efl}/include/emile-1" ];
+  NIX_CFLAGS_COMPILE = [ "-I${e19.efl}/include/eo-1" "-I${e19.efl}/include/emile-1" "-I${libuuid}/include/uuid" ];
   preConfigure = ''
     export USER_SESSION_DIR=$prefix/lib/systemd/user
 
