@@ -10469,6 +10469,8 @@ let
 
   paxctl = callPackage ../os-specific/linux/paxctl { };
 
+  paxtest = callPackage ../os-specific/linux/paxtest { };
+
   pax-utils = callPackage ../os-specific/linux/pax-utils { };
 
   pcmciaUtils = callPackage ../os-specific/linux/pcmciautils {
