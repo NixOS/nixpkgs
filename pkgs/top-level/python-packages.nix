@@ -19023,11 +19023,11 @@ in modules // {
   };
 
   nose_progressive = buildPythonPackage rec {
-    name = "nose-progressive-1.3";
+    name = "nose-progressive-1.5.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/n/nose-progressive/${name}.tar.gz";
-      md5 = "180be93929c5962044a35489f193259d";
+      sha256 = "0mfbjv3dcg23q0a130670g7xpfyvgza4wxkj991xxh8w9hs43ga4";
     };
 
     buildInputs = with self; [ pillow blessings nose ];
