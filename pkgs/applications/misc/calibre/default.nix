@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     export HOME=$TMPDIR/fakehome
     export POPPLER_INC_DIR=${poppler_utils}/include/poppler
-    export POPPLER_LIB_DIR=${poppler_utils}/lib
+    export POPPLER_LIB_DIR=${poppler_utils.out}/lib
     export MAGICK_INC=${imagemagick}/include/ImageMagick
     export MAGICK_LIB=${imagemagick}/lib
     export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
