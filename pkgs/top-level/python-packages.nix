@@ -8431,8 +8431,10 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/f/filebrowser_safe/${name}.tar.gz";
-      md5 = "12a1ad3a1ed6a9377e758c4fa7fee570";
+      sha256 = "02bn60fdslvng2ckn65fms3hjbzgsa8qa5161a8lr720wbx8gpj2";
     };
+
+    buildInputs = [ self.django ];
 
     meta = {
       description = "A snapshot of django-filebrowser for the Mezzanine CMS";
