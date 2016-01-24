@@ -16380,6 +16380,10 @@ in modules // {
       md5 = "46ee623eeeba5a7cc0d95cbfa7e18abd";
     };
 
+    checkPhase = ''
+      ${python.interpreter} runtests.py
+    '';
+
     meta = {
       description = "Snowball stemming algorithms, for information retrieval";
       homepage = http://snowball.tartarus.org/;
