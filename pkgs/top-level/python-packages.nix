@@ -15914,6 +15914,9 @@ in modules // {
 
     propagatedBuildInputs = with self; [ docutils ];
 
+    # Circular dependency with sphinx
+    doCheck = false;
+
     meta = {
       homepage = http://pygments.org/;
       description = "A generic syntax highlighter";
