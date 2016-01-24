@@ -1,5 +1,10 @@
 { pkgs }:
 
+let
+  removeLibraryHaskellDepends = pnames: depends:
+    builtins.filter (e: !(builtins.elem (e.pname or "") pnames)) depends;
+in
+
 with import ./lib.nix { inherit pkgs; };
 
 self: super: {
@@ -85,8 +90,10 @@ self: super: {
   });
 
   ghcjs-dom = overrideCabal super.ghcjs-dom (drv: {
-    buildDepends = [ self.base self.mtl self.text self.ghcjs-base ];
-    libraryHaskellDepends = [ ];
+    libraryHaskellDepends =
+      removeLibraryHaskellDepends [
+        "glib" "gtk" "gtk3" "webkitgtk" "webkitgtk3"
+      ] drv.libraryHaskellDepends;
   });
 
   ghc-paths = overrideCabal super.ghc-paths (drv: {
@@ -96,72 +103,25 @@ self: super: {
   # reflex 0.3, made compatible with the newest GHCJS.
   reflex = overrideCabal super.reflex (drv: {
     src = pkgs.fetchFromGitHub {
-      owner = "k0001";
+      owner = "ryantrinkle";
       repo = "reflex";
-      rev = "e9b2f777ad07875149614e8337507afd5b1a2466";
-      sha256 = "005hr3s6y369pxfdlixi4wabgav0bb653j98788kq9q9ssgijlwn";
+      rev = "cc62c11a6cde31412582758c236919d4bb766ada";
+      sha256 = "1j4vw0636bkl46lj8ry16i04vgpivjc6bs3ls54ppp1wfp63q7w4";
     };
-    libraryHaskellDepends = [
-      self.base self.containers self.dependent-map_0_1_1_3
-      self.dependent-sum_0_2_0_1 self.exception-transformers self.mtl
-      self.primitive self.ref-tf self.semigroups self.template-haskell
-      self.these self.transformers self.transformers-compat
-    ];
   });
 
   # reflex-dom 0.2, made compatible with the newest GHCJS.
   reflex-dom = overrideCabal super.reflex-dom (drv: {
     src = pkgs.fetchFromGitHub {
-      owner = "k0001";
+      owner = "ryantrinkle";
       repo = "reflex-dom";
-      rev = "a117eae8e101198977611f87605a5cb2ae752fc7";
-      sha256 = "18m8ng2fgsfbqdvx5jxy23ndyyhafnxflq8apg5psdz3aqkfimzh";
+      rev = "639d9ca13c2def075e83344c9afca6eafaf24219";
+      sha256 = "0166ihbh3dbfjiym9w561svpgvj0x4i8i8ws70xaafi0cmpsxrar";
     };
-    libraryHaskellDepends = [
-      self.aeson self.base self.bifunctors self.bytestring self.containers
-      self.data-default self.dependent-map_0_1_1_3 self.dependent-sum_0_2_0_1
-      self.dependent-sum-template self.directory
-      self.exception-transformers self.ghcjs-dom self.lens self.mtl self.ref-tf
-      self.reflex self.safe self.semigroups self.text self.these self.time
-      self.transformers
-    ];
-  });
-
-  # required by reflex, reflex-dom
-  dependent-map_0_1_1_3 = self.callPackage (
-    { mkDerivation, base, containers, dependent-sum_0_2_0_1, stdenv
-    }:
-    mkDerivation {
-      pname = "dependent-map";
-      version = "0.1.1.3";
-      sha256 = "1by83rrv8dfn5lxrpx3qzs1lg31fhnzlqy979h8ampyxd0w93pa4";
-      libraryHaskellDepends = [ base containers dependent-sum_0_2_0_1 ];
-      homepage = "https://github.com/mokus0/dependent-map";
-      description = "Dependent finite maps (partial dependent products)";
-      license = "unknown";
-    }
-  ) {};
-
-  # required by reflex, reflex-dom
-  dependent-sum_0_2_0_1 = self.callPackage (
-    { mkDerivation, base, stdenv
-    }:
-    mkDerivation {
-      pname = "dependent-sum";
-      version = "0.2.1.0";
-      sha256 = "1h6wsrh206k6q3jcfdxvlsswbm47x30psp6x30l2z0j9jyf7jpl3";
-      libraryHaskellDepends = [ base ];
-      homepage = "https://github.com/mokus0/dependent-sum";
-      description = "Dependent sum type";
-      license = stdenv.lib.licenses.publicDomain;
-    }
-  ) {};
-
-  # required by reflex-dom
-  dependent-sum-template = overrideCabal super.dependent-sum-template (drv: {
-    libraryHaskellDepends = [
-      self.base self.dependent-sum_0_2_0_1 self.template-haskell self.th-extras
-    ];
+    libraryHaskellDepends =
+      removeLibraryHaskellDepends [
+        "glib" "gtk3" "webkitgtk3" "webkitgtk3-javascriptcore" "raw-strings-qq" "unix"
+      ] drv.libraryHaskellDepends;
   });
 
 }
