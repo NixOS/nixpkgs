@@ -1,15 +1,20 @@
-# Maintainer's Notes:
-#
-# Minor updates:
-#  1. Edit ./fetchsrcs.sh to point to the updated URL.
-#  2. Run ./fetchsrcs.sh.
-#  3. Build and enjoy.
-#
-# Major updates:
-#  We prefer not to immediately overwrite older versions with major updates, so
-#  make a copy of this directory first. After copying, be sure to delete ./tmp
-#  if it exists. Then follow the minor update instructions. Be sure to check if
-#  any new components have been added and package them as necessary.
+/*
+
+# Minor Updates
+
+1. Edit ./fetchsrcs.sh to point to the updated URL.
+2. Run ./fetchsrcs.sh.
+3. Build and enjoy.
+
+# Major Updates
+
+1. Make a copy of this directory. (We like to keep the old version around
+   for a short time after major updates.)
+2. Delete the tmp/ subdirectory of the copy.
+3. Follow the minor update instructions above.
+4. Package any new Qt modules, if necessary.
+
+*/
 
 { pkgs
 
