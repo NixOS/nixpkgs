@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/shellinaboxd \
-      --prefix LD_LIBRARY_PATH : ${openssl}/lib
+      --prefix LD_LIBRARY_PATH : ${openssl.out}/lib
     mkdir -p $out/lib
     cp shellinabox/* $out/lib
   '';

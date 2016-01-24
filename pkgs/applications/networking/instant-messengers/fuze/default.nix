@@ -39,8 +39,8 @@ stdenv.mkDerivation {
         $f
     done
 
-    ln -s ${openssl}/lib/libssl.so.1.0.0 $out/lib/fuzebox/libssl.so.0.9.8
-    ln -s ${openssl}/lib/libcrypto.so.1.0.0 $out/lib/fuzebox/libcrypto.so.0.9.8
+    ln -s ${openssl.out}/lib/libssl.so.1.0.0 $out/lib/fuzebox/libssl.so.0.9.8
+    ln -s ${openssl.out}/lib/libcrypto.so.1.0.0 $out/lib/fuzebox/libcrypto.so.0.9.8
 
     ln -s $out/lib/fuzebox/FuzeLinuxApp $out/bin/fuze
   '';
