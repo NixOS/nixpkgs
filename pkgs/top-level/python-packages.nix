@@ -5123,7 +5123,7 @@ in modules // {
     disabled = isPy3k;
     doCheck = (!isPyPy);  # https://github.com/fabric/fabric/issues/11891
     propagatedBuildInputs = with self; [ paramiko pycrypto ];
-    buildInputs = with self; [ fudge nose ];
+    buildInputs = with self; [ fudge_9 nose ];
   };
 
   fedora_cert = stdenv.mkDerivation (rec {
