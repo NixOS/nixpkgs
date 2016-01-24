@@ -3330,6 +3330,9 @@ in modules // {
       sha256 = "9c2e3dda8232b6cd5b84b8c8df6c8155c2adeb8734eb7ec38e189affc0f2eba5";
     };
 
+    # Extension types
+    disabled = isPyPy;
+
     buildInputs = with self; [ nose ];
 
     checkPhase = ''
