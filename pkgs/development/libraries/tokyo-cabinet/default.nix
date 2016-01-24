@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   postInstall =
     '' sed -i "$out/lib/pkgconfig/tokyocabinet.pc" \
            -e 's|-lz|-L${zlib}/lib -lz|g;
-               s|-lbz2|-L${bzip2}/lib -lbz2|g'
+               s|-lbz2|-L${bzip2.out}/lib -lbz2|g'
     '';
 
   meta = {

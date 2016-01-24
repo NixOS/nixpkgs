@@ -1940,7 +1940,7 @@ let self = _self // overrides; _self = with self; {
 
     # Don't build a private copy of bzip2.
     BUILD_BZIP2 = false;
-    BZIP2_LIB = "${pkgs.bzip2}/lib";
+    BZIP2_LIB = "${pkgs.bzip2.out}/lib";
     BZIP2_INCLUDE = "${pkgs.bzip2}/include";
 
     meta = {
