@@ -6968,11 +6968,14 @@ in modules // {
 
   joblib = buildPythonPackage rec {
     name = "joblib-${version}";
-    version = "0.9.0b4";
+    version = "0.9.4";
     src = pkgs.fetchurl {
-      url = https://pypi.python.org/packages/source/j/joblib/joblib-0.9.0b4.tar.gz;
-      md5 = "e0d79a085d4773c7a61cd38b4fb6dad5";
+      url = "https://pypi.python.org/packages/source/j/joblib/${name}.tar.gz";
+      sha256 = "e5faacf0da7b3035dbca9d56210962b86564aafca71a25f4ea376a405455cd60";
     };
+
+    buildInputs = with self; [ nose ];
+
   };
 
   samplerate = buildPythonPackage rec {
