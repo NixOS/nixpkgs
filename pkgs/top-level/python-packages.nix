@@ -8977,7 +8977,7 @@ in modules // {
     };
   };
 
-  futures_2_2 = self.futures.override {
+  futures_2_2 = self.futures.override rec {
     version = "2.2.0";
     name = "futures-${version}";
 
