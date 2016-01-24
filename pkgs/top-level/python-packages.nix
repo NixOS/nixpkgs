@@ -11678,8 +11678,6 @@ in modules // {
   pymysql = buildPythonPackage rec {
     name = "pymysql-${version}";
     version = "0.6.6";
-    # expects a local myqsl instance
-    doCheck = false;
     src = pkgs.fetchgit {
       url = https://github.com/PyMySQL/PyMySQL.git;
       rev = "refs/tags/pymysql-${version}";
@@ -19642,6 +19640,9 @@ in modules // {
   sqlparse = buildPythonPackage rec {
     name = "sqlparse-${version}";
     version = "0.1.16";
+
+    # the source wasn't transformed with 2to3 yet
+    doCheck = !isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/sqlparse/${name}.tar.gz";
