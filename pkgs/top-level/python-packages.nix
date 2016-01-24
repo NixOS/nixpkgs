@@ -9856,7 +9856,12 @@ in modules // {
       sha256 = "c943f6b3bbabb9332336d15474969e2a7a73d5b583f9786f7b357c75e4b1709a";
     };
 
+    buildInputs = with self; [ nose ];
+
     propagatedBuildInputs = with self; [ipython_genutils decorator pyzmq ipython jupyter_client ipykernel];
+
+    # Requires access to cluster
+    doCheck = false;
 
     meta = {
       description = "Interactive Parallel Computing with IPython";
