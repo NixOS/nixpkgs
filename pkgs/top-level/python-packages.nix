@@ -11789,6 +11789,7 @@ in modules // {
       sha256 = "5261c957589b9dfcd387c338d59375162ba9ca82c69e378961a1f4e641285db5";
     };
 
+    buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ipython_genutils traitlets jsonschema jupyter_core];
 
     meta = {
