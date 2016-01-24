@@ -4408,7 +4408,13 @@ in modules // {
       sha256 = "1hgq3vqsfqdmlyahnlc40w13viawhpzqf4jzigsggdb41x545fda";
     };
 
-    propagatedBuildInputs = with self; [ deform ];
+    buildInputs = [ self.mock ];
+    propagatedBuildInputs = with self; [ deform pyramid ];
+
+    # demo is removed as it depends on deformdemo
+    patchPhase = ''
+      rm -rf deform_bootstrap/demo
+    '';
 
     meta = {
       maintainers = with maintainers; [ iElectric ];
