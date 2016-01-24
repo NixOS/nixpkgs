@@ -18567,12 +18567,15 @@ in modules // {
   };
 
   snowballstemmer = buildPythonPackage rec {
-    name = "snowballstemmer-1.2.0";
+    name = "snowballstemmer-1.2.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/snowballstemmer/${name}.tar.gz";
-      md5 = "51f2ef829db8129dd0f2354f0b209970";
+      sha256 = "919f26a68b2c17a7634da993d91339e288964f93c274f1343e3bbbe2096e1128";
     };
+
+    # No tests included
+    doCheck = false;
 
     propagatedBuildInputs = with self; [ PyStemmer ];
 
