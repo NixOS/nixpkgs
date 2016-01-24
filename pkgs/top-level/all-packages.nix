@@ -1452,7 +1452,7 @@ let
 
   f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
 
-  fabric = pythonPackages.fabric;
+  Fabric = pythonPackages.Fabric;
 
   fail2ban = callPackage ../tools/security/fail2ban { };
 
