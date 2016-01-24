@@ -10213,7 +10213,15 @@ in modules // {
       sha256 = "96a68a3b1d018ff7776270b26b7cb0cfd7a18a53ef2061421daff435707d198c";
     };
 
-    propagatedBuildInputs = with self; [traitlets];
+    buildInputs = with self; [ pytest mock ];
+    propagatedBuildInputs = with self; [ ipython traitlets];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    # Several tests fail due to being in a chroot
+    doCheck = false;
 
     meta = {
       description = "Jupyter core package. A base package on which Jupyter projects rely";
