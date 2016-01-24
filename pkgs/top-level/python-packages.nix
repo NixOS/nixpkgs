@@ -8252,10 +8252,17 @@ in modules // {
     name = "fastimport-${version}";
     version = "0.9.4";
 
+    # Judging from SyntaxError
+    disabled = isPy3k;
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/f/fastimport/${name}.tar.gz";
       sha256 = "0k8x7552ypx9rc14vbsvg2lc6z0r8pv9laah28pdwyynbq10825d";
     };
+
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover
+    '';
 
     meta = {
       homepage = https://launchpad.net/python-fastimport;
