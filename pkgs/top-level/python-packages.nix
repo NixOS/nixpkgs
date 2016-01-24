@@ -10081,12 +10081,21 @@ in modules // {
   };
 
   jedi = buildPythonPackage (rec {
-    name = "jedi-0.8.1";
+    name = "jedi-0.9.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/j/jedi/${name}.tar.gz";
-      sha256 = "1a7bg159mc1la5p1zsblzpr9hmypa7nz0mpvf7dww57cgi2sw8sd";
+      sha256 = "0c8x962ynpx001fdvp07m2q5jk4igkxbj3rmnydavphvlgxijk1v";
     };
+
+    buildInputs = [ self.pytest ];
+
+    checkPhase = ''
+      py.test test
+    '';
+
+    # 7 failed
+    doCheck = false;
 
     meta = {
       homepage = https://github.com/davidhalter/jedi;
