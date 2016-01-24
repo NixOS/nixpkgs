@@ -65,7 +65,7 @@ stdenv.mkDerivation {
   LD_LIBRARY_PATH = stdenv.lib.concatStringsSep ":"
     [ "${xorg.libXrandr}/lib"
       "${xorg.libXrender}/lib"
-      "${xorg.libXext}/lib"
+      "${xorg.libXext.out}/lib"
       "${xorg.libX11.out}/lib"
       "${xorg.libXinerama}/lib"
     ];
