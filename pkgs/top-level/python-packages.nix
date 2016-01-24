@@ -3749,21 +3749,6 @@ in modules // {
     };
   };
 
-  cffi_0_8 = if isPyPy then null else buildPythonPackage rec {
-    name = "cffi-0.8.6";
-
-    src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/c/cffi/${name}.tar.gz";
-      sha256 = "0406j3sgndmx88idv5zxkkrwfqxmjl18pj8gf47nsg4ymzixjci5";
-    };
-
-    propagatedBuildInputs = with self; [ pkgs.libffi pycparser ];
-
-    meta = {
-      maintainers = with maintainers; [ iElectric ];
-    };
-  };
-
   cffi = if isPyPy then null else buildPythonPackage rec {
     name = "cffi-1.3.0";
 
