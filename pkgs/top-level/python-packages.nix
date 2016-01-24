@@ -23129,12 +23129,15 @@ in modules // {
 
 
   funcy = buildPythonPackage rec {
-    name = "funcy-1.4";
+    name = "funcy-1.6";
 
     src = pkgs.fetchurl {
-        url = "https://github.com/Suor/funcy/archive/1.4.tar.gz";
-        sha256 = "694e29aa67d03a6ab006f1854740b65f4f87e581afb33853f80e647ddb5f24e7";
+        url = "https://pypi.python.org/packages/source/f/funcy/${name}.tar.gz";
+        sha256 = "511495db0c5660af18d3151b008c6ce698ae7fbf60887278e79675e35eed1f01";
     };
+
+    # No tests
+    doCheck = false;
 
     meta = {
       description = "Collection of fancy functional tools focused on practicality";
