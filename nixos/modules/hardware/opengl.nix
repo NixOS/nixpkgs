@@ -93,18 +93,21 @@ in
     hardware.opengl.extraPackages = mkOption {
       type = types.listOf types.package;
       default = [];
+      example = literalExample "with pkgs; [ vaapiIntel libvdpau-va-gl vaapiVdpau ]";
       description = ''
-        Additional packages to add to OpenGL drivers.
+        Additional packages to add to OpenGL drivers. This can be used
+        to add additional VA-API/VDPAU drivers.
       '';
     };
 
     hardware.opengl.extraPackages32 = mkOption {
       type = types.listOf types.package;
       default = [];
+      example = literalExample "with pkgs; [ vaapiIntel libvdpau-va-gl vaapiVdpau ]";
       description = ''
         Additional packages to add to 32-bit OpenGL drivers on
         64-bit systems. Used when <option>driSupport32Bit</option> is
-        set.
+        set. This can be used to add additional VA-API/VDPAU drivers.
       '';
     };
 
