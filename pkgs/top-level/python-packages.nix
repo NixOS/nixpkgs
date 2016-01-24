@@ -11595,7 +11595,7 @@ in modules // {
     name = "pygraphviz-${version}";
 
     src = pkgs.fetchurl {
-      url = "https://github.com/pygraphviz/pygraphviz/archive/${name}.tar.gz";
+      url = "https://pypi.python.org/packages/source/p/pygraphviz/${name}.tar.gz";
       sha256 = "7c294cbc9d88946be671cc0d8602aac176d8c56695c0a7d871eadea75a958408";
     };
 
