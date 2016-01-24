@@ -1125,6 +1125,9 @@ in modules // {
       sha256 = "0b50de084c8de70adf45c0e938b6350344d9b6acde8b7cdee02cb32964bc58fd";
     };
 
+    # No tests included
+    doCheck = false;
+
     propagatedBuildInputs = with self; [
       botocore
       bcdoc
