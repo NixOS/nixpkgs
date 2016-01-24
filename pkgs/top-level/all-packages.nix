@@ -14144,6 +14144,8 @@ let
 
   exult = callPackage ../games/exult { };
 
+  factorio = callPackage ../games/factorio {};
+
   fairymax = callPackage ../games/fairymax {};
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
