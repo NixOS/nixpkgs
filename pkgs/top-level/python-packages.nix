@@ -18529,14 +18529,22 @@ in modules // {
     };
   };
 
-  seaborn= buildPythonPackage rec {
+  seaborn = buildPythonPackage rec {
     name = "seaborn-0.6.0";
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/seaborn/${name}.tar.gz";
       md5 = "bc518f1f45dadb9deb2bb57ca3af3cad";
     };
 
+    buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ pandas matplotlib ];
+
+    checkPhase = ''
+      nosetests -v
+    '';
+
+    # Computationally very demanding tests
+    doCheck = false;
 
     meta = {
       description = "statisitical data visualization";
