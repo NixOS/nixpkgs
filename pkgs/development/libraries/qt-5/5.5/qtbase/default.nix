@@ -3,7 +3,8 @@
 
 , xlibs, libX11, libxcb, libXcursor, libXext, libXrender, libXi
 , xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilwm, libxkbcommon
-, fontconfig, freetype, openssl, dbus, glib, udev, libxml2, libxslt, pcre
+, fontconfig, freetype, harfbuzz
+, openssl, dbus, glib, udev, libxml2, libxslt, pcre
 , zlib, libjpeg, libpng, libtiff, sqlite, icu
 
 , coreutils, bison, flex, gdb, gperf, lndir, ruby
@@ -177,6 +178,7 @@ stdenv.mkDerivation {
     -no-mips_dspr2
 
     -system-zlib
+    -system-harfbuzz
     -system-libpng
     -system-libjpeg
     -system-xcb
@@ -200,9 +202,16 @@ stdenv.mkDerivation {
   PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
   propagatedBuildInputs = [
+    dbus glib libxml2 libxslt openssl pcre sqlite udev zlib
+
+    # Image formats
+    libjpeg libpng libtiff
+
+    # Text rendering
+    fontconfig freetype harfbuzz icu
+
+    # X11 libs
     xlibs.libXcomposite libX11 libxcb libXext libXrender libXi
-    fontconfig freetype openssl dbus glib udev libxml2 libxslt pcre
-    zlib libjpeg libpng libtiff sqlite icu
     xcbutil xcbutilimage xcbutilkeysyms xcbutilwm libxkbcommon
   ]
   ++ lib.optional mesaSupported mesa;
