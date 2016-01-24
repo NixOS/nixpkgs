@@ -57,6 +57,7 @@ cmakeConfigurePhase() {
 }
 
 if [ -z "$dontUseCmakeConfigure" -a -z "$configurePhase" ]; then
+    setOutputFlags=
     configurePhase=cmakeConfigurePhase
 fi
 
