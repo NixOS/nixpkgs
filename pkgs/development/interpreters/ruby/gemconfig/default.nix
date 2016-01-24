@@ -79,7 +79,6 @@ in
       "--with-exslt-lib=${libxslt}/lib"
       "--with-exslt-include=${libxslt}/include"
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
-    buildInputs = lib.optional stdenv.isDarwin darwin.libobjc;
   };
 
   patron = attrs: {
@@ -141,10 +140,6 @@ in
       substituteInPlace lib/tzinfo/zoneinfo_data_source.rb \
         --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
     '';
-  };
-
-  unf_ext = attrs: {
-    buildInputs = lib.optional stdenv.isDarwin darwin.libobjc;
   };
 
   xapian-ruby = attrs: {
