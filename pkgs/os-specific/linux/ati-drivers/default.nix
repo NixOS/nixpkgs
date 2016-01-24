@@ -63,7 +63,7 @@ stdenv.mkDerivation {
   inherit glibc /* glibc only used for setting interpreter */;
 
   LD_LIBRARY_PATH = stdenv.lib.concatStringsSep ":"
-    [ "${xorg.libXrandr}/lib"
+    [ "${xorg.libXrandr.out}/lib"
       "${xorg.libXrender}/lib"
       "${xorg.libXext.out}/lib"
       "${xorg.libX11.out}/lib"
