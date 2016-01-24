@@ -23,6 +23,8 @@ let
         name = "${name}-${version}";
         inherit src;
 
+        outputs = [ "dev" "out" ];
+
         cmakeFlags =
           (args.cmakeFlags or [])
           ++ [ "-DBUILD_TESTING=OFF" ]
