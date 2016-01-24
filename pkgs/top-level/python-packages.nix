@@ -6554,14 +6554,17 @@ in modules // {
 
   pycares = buildPythonPackage rec {
     name = "pycares-${version}";
-    version = "0.7.0";
+    version = "1.0.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pycares/${name}.tar.gz";
-      sha256 = "10lr3ij67khmfm14cb3sqch3vhv37f3j1whwznq6qy4prfmz5gvl";
+      sha256 = "a18341ea030e2cc0743acdf4aa72302bdf6b820938b36ce4bd76e43faa2276a3";
     };
 
     propagatedBuildInputs = [ pkgs.c-ares ];
+
+    # No tests included
+    doCheck = false;
 
     meta = {
       homepage = http://github.com/saghul/pycares;
