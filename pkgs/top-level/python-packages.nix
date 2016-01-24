@@ -6742,7 +6742,7 @@ in modules // {
     preConfigure = ''
        cat > site.cfg << END
        [samplerate]
-       library_dirs=${pkgs.libsamplerate}/lib
+       library_dirs=${pkgs.libsamplerate.out}/lib
        include_dirs=${pkgs.libsamplerate}/include
        END
     '';
