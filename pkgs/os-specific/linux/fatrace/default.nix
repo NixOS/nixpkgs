@@ -1,8 +1,8 @@
 { stdenv, fetchurl, python3, which }:
 
-let version = "0.11"; in
 stdenv.mkDerivation rec {
   name = "fatrace-${version}";
+  version = "0.11";
 
   src = fetchurl {
     url = "http://launchpad.net/fatrace/trunk/${version}/+download/${name}.tar.bz2";
@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Report system-wide file access events";
     homepage = https://launchpad.net/fatrace/;
     license = licenses.gpl3Plus;

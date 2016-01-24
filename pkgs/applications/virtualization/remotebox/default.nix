@@ -1,8 +1,8 @@
 { stdenv, fetchurl, makeWrapper, perl, perlPackages }:
 
-let version = "2.0"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "remotebox-${version}";
+  version = "2.0";
 
   src = fetchurl {
     url = "http://remotebox.knobgoblin.org.uk/downloads/RemoteBox-${version}.tar.bz2";
@@ -26,7 +26,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "VirtualBox client with remote management";
     homepage = http://remotebox.knobgoblin.org.uk/;
     license = licenses.gpl2Plus;

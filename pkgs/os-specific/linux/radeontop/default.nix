@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, pkgconfig, gettext, ncurses, libdrm, libpciaccess }:
 
-let version = "2015-11-24"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "radeontop-${version}";
+  version = "2015-11-24";
 
   src = fetchFromGitHub {
     sha256 = "0irwq6rps5mnban8cxbrm59wpyv4j80q3xdjm9fxvfpiyys2g2hz";
@@ -23,7 +23,6 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Top-like tool for viewing AMD Radeon GPU utilization";
     longDescription = ''
       View GPU utilization, both for the total activity percent and individual

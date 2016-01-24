@@ -1,8 +1,8 @@
 { stdenv, fetchurl }:
 
-let version = "4.04"; in
 stdenv.mkDerivation rec {
   name = "man-pages-${version}";
+  version = "4.04";
 
   src = fetchurl {
     url = "mirror://kernel/linux/docs/man-pages/${name}.tar.xz";
@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
   makeFlags = [ "MANDIR=$(out)/share/man" ];
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Linux development manual pages";
     homepage = http://www.kernel.org/doc/man-pages/;
     repositories.git = http://git.kernel.org/pub/scm/docs/man-pages/man-pages;

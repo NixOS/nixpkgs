@@ -1,8 +1,8 @@
 { stdenv, fetchurl, gd, ncurses }:
 
-let version = "1.15"; in
 stdenv.mkDerivation rec {
   name = "vnstat-${version}";
+  version = "1.15";
 
   src = fetchurl {
     sha256 = "0fdw3nbrfm4acv48r0934ls6ld5lwkff3gyym2c72qlbm9dlp0f3";
@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Console-based network statistics utility for Linux";
     longDescription = ''
       vnStat is a console-based network traffic monitor for Linux and BSD that

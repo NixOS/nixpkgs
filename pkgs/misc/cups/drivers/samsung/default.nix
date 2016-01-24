@@ -11,13 +11,13 @@
 # }
 # (This advice was tested on 2010 August 2.)
 
-{stdenv, fetchurl, cups, gcc, ghostscript, glibc, patchelf}:
+{ stdenv, fetchurl, cups, gcc, ghostscript, glibc, patchelf }:
 
 # Do not bump lightly! Visit <http://www.bchemnet.com/suldr/supported.html>
 # to see what will break when upgrading. Consider a new versioned attribute.
-let version = "4.00.39"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "samsung-UnifiedLinuxDriver-${version}";
+  version = "4.00.39";
 
   src = fetchurl {
     url = "http://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${version}.tar.gz";

@@ -1,8 +1,8 @@
 { stdenv, fetchurl }:
 
-let version = "1.2"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "dhcping-${version}";
+  version = "1.2";
 
   src = fetchurl {
     sha256 = "0sk4sg3hn88n44dxikipf3ggfj3ixrp22asb7nry9p0bkfaqdvrj";
@@ -14,7 +14,6 @@ stdenv.mkDerivation {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Send DHCP request to find out if a DHCP server is running";
     longDescription = ''
       dhcping sends either a DHCPREQUEST or DHCPINFORM packet to the server
@@ -31,4 +30,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
- }
+}

@@ -15,11 +15,10 @@ with stdenv.lib;
 
 let
 
-  version = "0.1.1";
-
   # Note: this is NOT the libvterm already in nixpkgs, but some NIH silliness:
-  neovimLibvterm = let version = "2015-11-06"; in stdenv.mkDerivation {
+  neovimLibvterm = stdenv.mkDerivation rec {
     name = "neovim-libvterm-${version}";
+    version = "2015-11-06";
 
     src = fetchFromGitHub {
       sha256 = "0f9r0wnr9ajcdd6as24igmch0n8s1annycb9f4k0vg6fngwaypy9";
@@ -59,8 +58,9 @@ let
     ignoreCollisions = true;
   };
 
-  neovim = stdenv.mkDerivation {
+  neovim = stdenv.mkDerivation rec {
     name = "neovim-${version}";
+    version = "0.1.1";
 
     src = fetchFromGitHub {
       sha256 = "0crswjslp687yp1cpn7nmm0j2sccqhcxryzxv1s81cgpai0fzf60";
@@ -146,7 +146,10 @@ let
 
 in if (vimAlias == false && configure == null) then neovim else stdenv.mkDerivation {
   name = "neovim-${version}-configured";
+  inherit (neovim) version;
+
   nativeBuildInputs = [ makeWrapper ];
+
   buildCommand = ''
     mkdir -p $out/bin
     for item in ${neovim}/bin/*; do

@@ -1,8 +1,8 @@
 { stdenv, fetchurl, makeWrapper, jre, pcsclite }:
 
-let version = "4.1.9"; in
 stdenv.mkDerivation rec {
   name = "eid-viewer-${version}";
+  version = "4.1.9";
 
   src = fetchurl {
     url = "https://downloads.services.belgium.be/eid/eid-viewer-${version}-v${version}.src.tar.gz";
@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Belgian electronic identity card (eID) viewer";
     homepage = http://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/;
     license = licenses.lgpl3;

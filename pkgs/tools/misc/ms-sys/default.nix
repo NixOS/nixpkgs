@@ -1,8 +1,8 @@
 { stdenv, fetchurl, gettext }:
 
-let version = "2.5.2"; in
 stdenv.mkDerivation rec {
   name = "ms-sys-${version}";
+  version = "2.5.2";
  
   src = fetchurl {
     url = "mirror://sourceforge/ms-sys/${name}.tar.gz";
@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "A program for writing Microsoft compatible boot records";
     homepage = http://ms-sys.sourceforge.net/;
     license = licenses.gpl2Plus;
