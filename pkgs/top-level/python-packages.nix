@@ -15961,6 +15961,9 @@ in modules // {
       md5 = "861664f8be3bed44820356539f2ea5b6";
     };
 
+    # requires geoip samples
+    doCheck = false;
+
     buildInputs = with self; [ nose ];
 
     meta = {
