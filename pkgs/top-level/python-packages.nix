@@ -2169,6 +2169,9 @@ in modules // {
 
     buildInputs = [ pkgs.db ];
 
+    # Judging from SyntaxError in test
+    disabled = isPy3k;
+
     # Path to database need to be set.
     # Somehow the setup.py flag is not propagated.
     #setupPyBuildFlags = [ "--berkeley-db=${pkgs.db}" ];
