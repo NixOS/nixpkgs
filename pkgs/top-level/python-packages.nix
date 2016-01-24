@@ -5102,11 +5102,11 @@ in modules // {
     };
   };
 
-  fabric = buildPythonPackage rec {
-    name = "fabric-${version}";
-    version = "1.10.0";
+  Fabric = buildPythonPackage rec {
+    name = "Fabric-${version}";
+    version = "1.10.2";
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/F/Fabric/Fabric-${version}.tar.gz";
+      url = "https://pypi.python.org/packages/source/F/Fabric/${name}.tar.gz";
       sha256 = "0nikc05iz1fx2c9pvxrhrs819cpmg566azm99450yq2m8qmp1cpd";
     };
     disabled = isPy3k;
