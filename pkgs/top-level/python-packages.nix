@@ -4035,6 +4035,14 @@ in modules // {
       sha256 = "1pichqra4wk86142hqgvy9s5x6c5k5zhy8l9qxr0620pqk8spbd4";
     };
 
+    buildInputs = with self; [ pytest ];
+
+    propagatedBuildInputs = with self; [ cssutils ];
+
+    checkPhase = ''
+      py.test $out/${python.sitePackages}
+    '';
+
     meta = {
       description = "complete yet simple CSS parser for Python";
       license = licenses.bsd3;
