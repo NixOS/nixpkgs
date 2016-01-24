@@ -8205,6 +8205,8 @@ let
 
   nanomsg = callPackage ../development/libraries/nanomsg { };
 
+  notify-sharp = callPackage ../development/libraries/notify-sharp { };
+
   ncurses = callPackage ../development/libraries/ncurses { };
 
   neardal = callPackage ../development/libraries/neardal { };
