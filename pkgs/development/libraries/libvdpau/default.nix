@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, xorg }:
+{ stdenv, fetchurl, pkgconfig, xorg, mesa_noglu }:
 
 stdenv.mkDerivation rec {
   name = "libvdpau-1.1.1";
@@ -11,6 +11,16 @@ stdenv.mkDerivation rec {
   buildInputs = with xorg; [ pkgconfig dri2proto libXext ];
 
   propagatedBuildInputs = [ xorg.libX11 ];
+
+  configureFlags = [ "--with-module-dir=${mesa_noglu.driverLink}/lib/vdpau" ];
+
+  installFlags = [ "DESTDIR=$(out)" ];
+
+  postInstall = ''
+    cp -r $out/${mesa_noglu.driverLink}/* $out
+    cp -r $out/$out/* $out
+    rm -rf $out/run $out/$(echo "$out" | cut -d "/" -f2)
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://people.freedesktop.org/~aplattner/vdpau/;
