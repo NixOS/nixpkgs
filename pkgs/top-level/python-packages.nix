@@ -15427,11 +15427,11 @@ in modules // {
     doCheck = false;
 
     preConfigure = ''
-      export LDFLAGS="-L${pkgs.fftw}/lib -L${pkgs.fftwFloat}/lib -L${pkgs.fftwLongDouble}/lib"
+      export LDFLAGS="-L${pkgs.fftw.out}/lib -L${pkgs.fftwFloat}/lib -L${pkgs.fftwLongDouble}/lib"
       export CFLAGS="-I${pkgs.fftw}/include -I${pkgs.fftwFloat}/include -I${pkgs.fftwLongDouble}/include"
     '';
     #+ optionalString isDarwin ''
-    #  export DYLD_LIBRARY_PATH="${pkgs.fftw}/lib"
+    #  export DYLD_LIBRARY_PATH="${pkgs.fftw.out}/lib"
     #'';
 
     meta = {
