@@ -85,8 +85,6 @@ in modules // {
 
   blivet = callPackage ../development/python-modules/blivet { };
 
-  pylint = callPackage ../development/python-modules/pylint { };
-
   dbus = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
   };
@@ -15833,6 +15831,32 @@ in modules // {
       description = "A Python wrapper for the GPGME library";
       license = licenses.lgpl21;
       maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  pylint = buildPythonPackage rec {
+    name = "pylint-${version}";
+    version = "1.5.4";
+
+    src = pkgs.fetchurl {
+        url = "https://pypi.python.org/packages/source/p/pylint/${name}.tar.gz";
+        sha256 = "2fe3cc2fc66a56fdc35dbbc2bf1dd96a534abfc79ee6b2ad9ae4fe166e570c4b";
+    };
+
+    propagatedBuildInputs = with self; [ astroid ];
+
+    checkPhase = ''
+        cd pylint/test; ${python.interpreter} -m unittest discover -p "*test*"
+    '';
+
+    postInstall = ''
+        mkdir -p $out/share/emacs/site-lisp
+        cp "elisp/"*.el $out/share/emacs/site-lisp/
+    '';
+
+    meta = {
+        homepage = http://www.logilab.org/project/pylint;
+        description = "A bug and style checker for Python";
     };
   };
 
