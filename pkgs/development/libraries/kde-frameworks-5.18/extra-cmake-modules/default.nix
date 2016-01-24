@@ -1,9 +1,11 @@
-{ kdeFramework, lib, stdenv, cmake, pkgconfig, qttools }:
+{ kdeFramework, lib, copyPathsToStore, cmake, pkgconfig, qttools }:
 
 kdeFramework {
   name = "extra-cmake-modules";
-  patches = [ ./0001-extra-cmake-modules-paths.patch ];
 
+  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+
+  outputs = [ "out" ];  # this package has no runtime components
   setupHook = ./setup-hook.sh;
 
   # It is OK to propagate these inputs as long as
@@ -11,8 +13,8 @@ kdeFramework {
   # of some other derivation.
   propagatedNativeBuildInputs = [ cmake pkgconfig qttools ];
 
-  meta = {
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.ttuegel ];
+  meta = with lib; {
+    license = licenses.bsd2;
+    maintainers = [ maintainers.ttuegel ];
   };
 }
