@@ -13176,6 +13176,9 @@ in modules // {
       sha256 = "1a346zcd46c8gwbbp2cxsmvgfkyy26kwxjzdnkv7n47w6660sy5c";
     };
 
+    # No tests included
+    doCheck = false;
+
     propagatedBuildInputs = with self; [
       pyparsing
     ];
