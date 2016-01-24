@@ -19867,6 +19867,9 @@ in modules // {
     name = "testtools-${version}";
     version = "1.8.0";
 
+    # Python 2 only judging from SyntaxError
+    disabled = isPy3k;
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/testtools/${name}.tar.gz";
       sha256 = "15yxz8d70iy1b1x6gd7spvblq0mjxjardl4vnaqasxafzc069zca";
@@ -19892,7 +19895,12 @@ in modules // {
       sha256 = "440e38dfa5d2a26c086d4b427cfb7aed17d0a2dca78bce90c33354da2592af5b";
     };
 
+    buildInputs = with self; [ nose mock ];
     propagatedBuildInputs = with self; [ipython_genutils decorator];
+
+    checkPhase = ''
+      nosetests -v
+    '';
 
     meta = {
       description = "Traitlets Python config system";
