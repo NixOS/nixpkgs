@@ -86,7 +86,7 @@ rec {
         cp ${curlMinimal}/bin/curl $out/bin
         cp -d ${curlMinimal}/lib/libcurl* $out/lib
 
-        cp -d ${gnugrep.pcre}/lib/libpcre*.so* $out/lib # needed by grep
+        cp -d ${gnugrep.pcre.out}/lib/libpcre*.so* $out/lib # needed by grep
 
         # Copy what we need of GCC.
         cp -d ${gcc.cc}/bin/gcc $out/bin
