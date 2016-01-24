@@ -22428,6 +22428,16 @@ in modules // {
       sha256 = "0my8zq9d27mc7j78pz9971cn5wz6zi4vxlqa50szr2vq9j2xxkll";
     };
 
+    buildInputs = with self; [ nose mock manuel ];
+
+    checkPhase = ''
+      nosetests -v
+    '';
+
+    # Test suite seems broken
+    # TypeError: TestSuite() missing 1 required positional argument: 'm'
+    # Haven't checked with newer version
+    doCheck = false;
 
     meta = with stdenv.lib; {
       homepage = "https://github.com/Simplistix/testfixtures";
