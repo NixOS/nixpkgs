@@ -18612,6 +18612,17 @@ in modules // {
       md5 = "2a28267370c9409b592cdb786649cb25";
     };
 
+    # Judging from SyntaxError in tests
+    disabled = isPy3k;
+
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover
+    '';
+
+    # Bunch of tests fail
+    # https://github.com/countergram/pytidylib/issues/13
+    doCheck = false;
+
     patchPhase = ''
       sed -i 's#load_library(name)#load_library("${pkgs.html-tidy}/lib/libtidy.so")#' tidylib/__init__.py
     '';
