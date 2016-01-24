@@ -2984,6 +2984,22 @@ in modules // {
     };
   });
 
+  cloudpickle = buildPythonPackage rec {
+    name = "cloudpickle-${version}";
+    version = "0.1.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/cloudpickle/${name}.tar.gz";
+      sha256 = "3418303f44c6c4daa184f1dc36c8c0b7ff8261c56d1f922ffd8d09e79caa4b74";
+    };
+
+    meta = {
+      description = "Extended pickling support for Python objects";
+      homepage = https://github.com/cloudpipe/cloudpickle;
+      license = with licenses; [ bsd3 ];
+    };
+  };
+
 
   cogapp = buildPythonPackage rec {
     version = "2.3";
