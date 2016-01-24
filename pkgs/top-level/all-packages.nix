@@ -6597,6 +6597,8 @@ let
   dbus-sharp-1_0 = callPackage ../development/libraries/dbus-sharp/dbus-sharp-1.0.nix { };
   dbus-sharp-2_0 = callPackage ../development/libraries/dbus-sharp { };
 
+  dbus-sharp-glib-2_0 = callPackage ../development/libraries/dbus-sharp-glib { };
+
   # Should we deprecate these? Currently there are many references.
   dbus_tools = pkgs.dbus.tools;
   dbus_libs = pkgs.dbus.libs;
