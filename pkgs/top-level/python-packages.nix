@@ -11845,16 +11845,16 @@ in modules // {
 
   slixmpp = buildPythonPackage rec {
     name = "slixmpp-${version}";
-    version = "1.0.post5";
+    version = "1.1";
 
     disabled = (!isPy34);
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/slixmpp/${name}.tar.gz";
-      sha256 = "0ik23w3y52m30z56874wgac07j70k7b06n20j44slii8avf58p4b";
+      sha256 = "030ca7e71cbb7e17fb48f83db97779fdbac0b4424cef01245f3276a110b30a6c";
     };
 
-    propagatedBuildInputs = with self ; [ aiodns pyasn1 ];
+    propagatedBuildInputs = with self ; [ aiodns pyasn1 pkgs.gnupg1];
 
     meta = {
       meta = "Elegant Python library for XMPP";
