@@ -16001,6 +16001,16 @@ in modules // {
     };
   };
 
+  # For Pelican 3.6.3
+  pygments_2_0 = self.pygments.override rec {
+    version = "2.0.2";
+    name = "Pygments-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/P/Pygments/${name}.tar.gz";
+      sha256 = "7320919084e6dac8f4540638a46447a3bd730fca172afc17d2c03eed22cf4f51";
+    };
+  };
 
   pygpgme = buildPythonPackage rec {
     version = "0.3";
