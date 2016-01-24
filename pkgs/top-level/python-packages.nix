@@ -4137,7 +4137,15 @@ in modules // {
       sha256 = "ff27419e059715907afefe6cbcc1f8c748855c7a93be25be211dabcb689cee3b";
     };
 
-    propagatedBuildInputs = with self; [numpy toolz dill];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [numpy toolz dill pandas ];
+
+    checkPhase = ''
+      py.test dask
+    '';
+
+    # Segfault, likely in numpy
+    doCheck = false;
 
     meta = {
       description = "Minimal task scheduling abstraction";
