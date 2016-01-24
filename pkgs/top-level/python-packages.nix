@@ -4186,7 +4186,16 @@ in modules // {
       sha256 = "a11c41b0cf8218e7cdc19ab7a1bdf5c141d161cd2350daee819473cc63cd0685";
     };
 
+    disabled = !isPy3k;
+
+    LC_ALL = "en_US.UTF-8";
+    buildInputs = with self; [ nose pkgs.glibcLocales ];
     propagatedBuildInputs = with self; [ self.six ];
+
+    checkPhase = ''
+      nosetests -v
+    '';
+
 
     meta = {
       description = "Parameterized testing with any Python test framework";
