@@ -490,7 +490,7 @@ in {
             "${cfg.api.package}/lib/python2.7/site-packages:" +
             concatMapStringsSep ":" (f: f + "/lib/python2.7/site-packages") cfg.api.finders;
           GRAPHITE_API_CONFIG = graphiteApiConfig;
-          LD_LIBRARY_PATH = "${pkgs.cairo}/lib";
+          LD_LIBRARY_PATH = "${pkgs.cairo.out}/lib";
         };
         serviceConfig = {
           ExecStart = ''

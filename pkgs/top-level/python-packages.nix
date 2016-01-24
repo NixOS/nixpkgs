@@ -2565,7 +2565,7 @@ in modules // {
 
     patchPhase = ''
       # Hardcode cairo library path
-      sed -e 's,ffi\.dlopen(,&"${pkgs.cairo}/lib/" + ,' -i cairocffi/__init__.py
+      sed -e 's,ffi\.dlopen(,&"${pkgs.cairo.out}/lib/" + ,' -i cairocffi/__init__.py
     '';
 
     meta = {
