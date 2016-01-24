@@ -24233,6 +24233,8 @@ in modules // {
 
     namePrefix = "";
     disabled = (!isPy34);
+
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr ];
 
     patches =
