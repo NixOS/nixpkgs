@@ -4948,6 +4948,9 @@ in modules // {
     name = "python-eventlib-${version}";
     version = "0.2.1";
 
+    # Judging from SyntaxError
+    disabled = isPy3k;
+
     src = pkgs.fetchurl {
       url = "http://download.ag-projects.com/SipClient/${name}.tar.gz";
       sha256 = "25224794420f430946fe46932718b521a6264903fe8c0ed3563dfdb844c623e7";
