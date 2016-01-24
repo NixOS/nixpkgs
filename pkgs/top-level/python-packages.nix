@@ -419,12 +419,17 @@ in modules // {
   };
 
   alabaster = buildPythonPackage rec {
-    name = "alabaster-0.7.3";
+    name = "alabaster-0.7.7";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/alabaster/${name}.tar.gz";
-      md5 = "67428d1383fd833f1282fed5deba0898";
+      sha256 = "f416a84e0d0ddbc288f6b8f2c276d10b40ca1238562cd9ed5a751292ec647b71";
     };
+
+    propagatedBuildInputs = with self; [ pygments ];
+
+    # No tests included
+    doCheck = false;
 
     meta = {
       homepage = https://github.com/bitprophet/alabaster;
