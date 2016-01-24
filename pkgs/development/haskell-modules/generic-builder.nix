@@ -299,7 +299,6 @@ stdenv.mkDerivation ({
 // optionalAttrs (configureFlags != []) { inherit configureFlags; }
 // optionalAttrs (patches != [])        { inherit patches; }
 // optionalAttrs (patchPhase != "")     { inherit patchPhase; }
-// optionalAttrs (postPatch != "")      { inherit postPatch; }
 // optionalAttrs (preConfigure != "")   { inherit preConfigure; }
 // optionalAttrs (postConfigure != "")  { inherit postConfigure; }
 // optionalAttrs (preBuild != "")       { inherit preBuild; }
