@@ -11678,6 +11678,8 @@ in modules // {
   pymysql = buildPythonPackage rec {
     name = "pymysql-${version}";
     version = "0.6.6";
+    # expects a local myqsl instance
+    doCheck = false;
     src = pkgs.fetchgit {
       url = https://github.com/PyMySQL/PyMySQL.git;
       rev = "refs/tags/pymysql-${version}";
