@@ -243,7 +243,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = http://www.qt.io;
     description = "A cross-platform application framework for C++";
-    license = "GPL/LGPL";
+    license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
     maintainers = with maintainers; [ bbenoist qknight ttuegel ];
     platforms = platforms.linux;
   };
