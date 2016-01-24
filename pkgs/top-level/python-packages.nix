@@ -23377,6 +23377,9 @@ in modules // {
       description = "Transparent calculations with uncertainties on the quantities involved (aka error propagation)";
       license = licenses.bsd3;
     };
+
+    # No tests included
+    doCheck = false;
   };
 
 
