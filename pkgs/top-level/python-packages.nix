@@ -5160,13 +5160,19 @@ in modules // {
   };
 
   fudge = buildPythonPackage rec {
-    name = "fudge-0.9.6";
+    name = "fudge-1.1.0";
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/f/fudge/${name}.tar.gz";
-      sha256 = "185ia3vr3qk4f2s1a9hdxb8ci4qc0x0xidrad96pywg8j930qs9l";
+      sha256 = "eba59a926fa1df1ab6dddd69a7a8af21865b16cad800cb4d1af75070b0f52afb";
     };
     buildInputs = with self; [ nose nosejs ];
     propagatedBuildInputs = with self; [ sphinx ];
+
+    disabled = isPy3k;
+
+    checkPhase = ''
+      nosetests -v
+    '';
   };
 
 
