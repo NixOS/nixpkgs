@@ -23216,14 +23216,16 @@ in modules // {
   };
 
   tlsh = buildPythonPackage rec {
-    name = "tlsh-3.4.1";
+    name = "tlsh-3.4.5";
     src = pkgs.fetchFromGitHub {
       owner = "trendmicro";
       repo = "tlsh";
-      rev = "b319aed6a270cc765347296b442820c495018833";
-      sha256 = "08ysniihvidcyvh9zip64wwvj7mvxvsqs60ci8cxj28f1ip0n8wg";
+      rev = "22fa9a62068b92c63f2b5a87004a7a7ceaac1930";
+      sha256 = "1ydliir308xn4ywy705mmsh7863ldlixdvpqwdhbipzq9vfpmvll";
     };
     buildInputs = with pkgs; [ cmake ];
+    # no test data
+    doCheck = false;
     preConfigure = ''
       mkdir build
       cd build
