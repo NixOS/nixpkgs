@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     [ "--with-pngincludedir=${libpng}/include"
       "--with-pnglibdir=${libpng}/lib"
       "--with-jpegincludedir=${libjpeg}/include"
-      "--with-jpeglibdir=${libjpeg}/lib"
+      "--with-jpeglibdir=${libjpeg.out}/lib"
       "--with-expatincludedir=${expat}/include"
       "--with-expatlibdir=${expat.out}/lib"
       "--with-cgraph=no"

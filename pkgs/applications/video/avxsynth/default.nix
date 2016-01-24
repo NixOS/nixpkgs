@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "--enable-subtitle"
     "--enable-ffms2"
     (enableFeature avxeditSupport "avxedit")
-    "--with-jpeg=${libjpeg}/lib"
+    "--with-jpeg=${libjpeg.out}/lib"
   ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
