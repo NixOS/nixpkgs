@@ -42,6 +42,7 @@ let
       inherit src;
 
       propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
+      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ self.fixQtModuleCMakeConfig ];
 
       NIX_QT_SUBMODULE = args.NIX_QT_SUBMODULE or true;
       dontAddPrefix = args.dontAddPrefix or true;
@@ -113,6 +114,7 @@ let
       ];
 
       makeQtWrapper = makeSetupHook { deps = [ makeWrapper ]; } ./make-qt-wrapper.sh;
+      fixQtModuleCMakeConfig = makeSetupHook { } ./fix-qt-module-cmake-config.sh;
 
     };
 
