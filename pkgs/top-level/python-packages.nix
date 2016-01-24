@@ -3797,6 +3797,9 @@ in modules // {
       sha256 = "7959b4a74abdc27b312fed1c21e6caf9309ce0b29ea86b591fd2e99ecdf27f73";
     };
 
+    # Unsupported
+    disabled = isPy35;
+
     meta = {
       description = "C parser in Python";
       homepage = https://github.com/eliben/pycparser;
