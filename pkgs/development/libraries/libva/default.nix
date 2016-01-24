@@ -2,7 +2,9 @@
 , mesa ? null
 }:
 
-stdenv.mkDerivation rec {
+let
+  driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
+in stdenv.mkDerivation rec {
   name = "libva-1.6.1";
 
   src = fetchurl {
@@ -12,7 +14,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 libXext pkgconfig libdrm libXfixes wayland libffi mesa ];
 
-  configureFlags = stdenv.lib.optional (mesa != null) "--enable-glx";
+  configureFlags = [ "--with-drivers-path=${driverLink}/lib/dri" ]
+                   ++ stdenv.lib.optional (mesa != null) "--enable-glx";
+
+  installFlags = [ "DESTDIR=$(out)" ];
+
+  postInstall = ''
+    cp -r $out/run/opengl-driver*/* $out
+    cp -r $out/$out/* $out
+    rm -rf $out/run $out/$(echo "$out" | cut -d "/" -f2)
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/vaapi;
