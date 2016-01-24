@@ -102,6 +102,23 @@ hash_from_ref(){
     git ls-remote origin | sed -n "\,\t$ref, { s,\(.*\)\t\(.*\),\1,; p; q}"
 }
 
+# Returns a name based on the url and reference
+#
+# This function needs to be in sync with nix's fetchgit implementation
+# of urlToName() to re-use the same nix store paths.
+url_to_name(){
+    local url=$1
+    local ref=$2
+    # basename removes the / and .git suffixes
+    local base=$(basename "$url" .git)
+
+    if [[ $ref =~ [a-z0-9]+ ]]; then
+        echo "$base-${ref:0:7}"
+    else
+        echo $base
+    fi
+}
+
 # Fetch everything and checkout the right sha1
 checkout_hash(){
     local hash="$1"
@@ -288,7 +305,7 @@ else
     # If the hash was given, a file with that hash may already be in the
     # store.
     if test -n "$expHash"; then
-        finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" git-export)
+        finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" "$(url_to_name "$url" "$rev")")
         if ! nix-store --check-validity "$finalPath" 2> /dev/null; then
             finalPath=
         fi
@@ -302,7 +319,7 @@ else
         tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/git-checkout-tmp-XXXXXXXX")"
         trap "rm -rf \"$tmpPath\"" EXIT
 
-        tmpFile="$tmpPath/git-export"
+        tmpFile="$tmpPath/$(url_to_name "$url" "$rev")"
         mkdir "$tmpFile"
 
         # Perform the checkout.
@@ -313,7 +330,7 @@ else
         if ! test -n "$QUIET"; then echo "hash is $hash" >&2; fi
 
         # Add the downloaded file to the Nix store.
-        finalPath=$(nix-store --add-fixed --recursive "$hashType" $tmpFile)
+        finalPath=$(nix-store --add-fixed --recursive "$hashType" "$tmpFile")
 
         if test -n "$expHash" -a "$expHash" != "$hash"; then
             echo "hash mismatch for URL \`$url'"
