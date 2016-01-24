@@ -16696,9 +16696,11 @@ in modules // {
       sha256 = "1sw225j9fgsvg1zm7lrij96fihfmq8pc1vg611dc55491zvj9ls3";
     };
 
-    buildInputs = with self; [ ];
+    LC_ALL = "en_US.UTF-8";
+    buildInputs = [ pkgs.glibcLocales ];
 
     meta = {
+      broken = true; # 2 tests, both fail
       description = "A Pure-Python library built as a PDF toolkit";
       homepage = "http://mstamy2.github.com/PyPDF2/";
       license = licenses.bsd3;
