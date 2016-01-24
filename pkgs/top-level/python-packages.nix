@@ -978,14 +978,22 @@ in modules // {
     };
   });
 
-  astroid = buildPythonPackage (rec {
-    name = "astroid-1.3.4";
-    propagatedBuildInputs = with self; [ logilab_common six ];
+  astroid = buildPythonPackage rec {
+    name = "astroid-1.4.4";
+
+    propagatedBuildInputs = with self; [ logilab_common six lazy-object-proxy ];
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/astroid/${name}.tar.gz";
-      sha256 = "1fz9x21pziy9dmivvlsgl7a86ka2m9jp3pky01da5aj89ym3wi8b";
+      sha256 = "7f7e5512efe515098e77cbd3a60e87c8db8954097b0e025d8d6f72f2e8ddc298";
     };
-  });
+
+    meta = {
+      description = "A abstract syntax tree for Python with inference support";
+      homepage = http://bitbucket.org/logilab/astroid;
+      license = with licenses; [ lgpl2 ];
+    };
+  };
 
   attrdict = buildPythonPackage (rec {
     name = "attrdict-2.0.0";
