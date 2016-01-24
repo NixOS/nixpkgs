@@ -24220,7 +24220,9 @@ in modules // {
       md5 = "63f38f80531996f187d2894cc497ba08";
     };
     disabled = isPyPy;
-    propagatedBuildInputs = with self; [ smartypants ];
+    # Wants to set up Django
+    doCheck = false;
+    propagatedBuildInputs = with self; [ django_1_9 smartypants jinja2 ];
     meta = {
       description = "Filters to enhance web typography, including support for Django & Jinja templates";
       homepage = "https://github.com/mintchaos/typogrify";
