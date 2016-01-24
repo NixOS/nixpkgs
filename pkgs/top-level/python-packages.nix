@@ -3823,6 +3823,15 @@ in modules // {
     };
   };
 
+  pytest_28 = self.pytest.override rec {
+    name = "pytest-2.8.6";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pytest/${name}.tar.gz";
+      sha256 = "ed38a3725b8e4478555dfdb549a4219ca3ba57955751141a1aaa45b706d84194";
+    };
+  };
+
   pytestcache = buildPythonPackage rec {
     name = "pytest-cache-1.0";
     src = pkgs.fetchurl {
