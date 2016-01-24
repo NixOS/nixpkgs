@@ -8847,6 +8847,9 @@ in modules // {
 
     propagatedBuildInputs = [ pkgs.fuse ];
 
+    # No tests included
+    doCheck = false;
+
     patchPhase = ''
       substituteInPlace fuse.py --replace \
         "find_library('fuse')" "'${pkgs.fuse}/lib/libfuse.so'"
