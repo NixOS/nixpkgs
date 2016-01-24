@@ -14118,6 +14118,8 @@ in modules // {
       sha256 = "1k572anw39rws67mvxl2w6y93y8w8q5smnwc0dd2gnnr16cc2vsh";
     };
 
+    patches = [ ../development/python-modules/pelican-fix-tests-with-pygments-2.1.patch ];
+
     buildInputs = with self; [
       pkgs.glibcLocales
       pkgs.pandoc
