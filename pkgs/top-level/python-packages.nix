@@ -5576,7 +5576,7 @@ in modules // {
 
     propagatedBuildInputs = with self; [ keyring colour netifaces praw psutil
       basiciw pkgs.libpulseaudio ];
-    ldWrapperSuffix = "--suffix LD_LIBRARY_PATH : \"${pkgs.libpulseaudio}/lib\"";
+    ldWrapperSuffix = "--suffix LD_LIBRARY_PATH : \"${pkgs.libpulseaudio.out}/lib\"";
     makeWrapperArgs = [ ldWrapperSuffix ]; # libpulseaudio.so is loaded manually
 
     postInstall = ''
