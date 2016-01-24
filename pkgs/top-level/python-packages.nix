@@ -11761,9 +11761,16 @@ in modules // {
       sha256 = "e0296e45293dd127d028f678e3b6aba3f1db3283a134178bdb49eea402d4cf1c";
     };
 
-    buildInputs = with self; [nose];
+    buildInputs = with self; [nose ipykernel ];
 
     propagatedBuildInputs = with self; [mistune jinja2 pygments traitlets jupyter_core nbformat ipykernel tornado jupyter_client];
+
+    checkPhase = ''
+      nosetests -v
+    '';
+
+    # PermissionError. Likely due to being in a chroot
+    doCheck = false;
 
     meta = {
       description = "Converting Jupyter Notebooks";
