@@ -27,5 +27,9 @@ updateSourceDateEpoch() {
 postUnpackHooks+=(_updateSourceDateEpochFromSourceRoot)
 
 _updateSourceDateEpochFromSourceRoot() {
-    updateSourceDateEpoch "$sourceRoot"
+    if [ -z "$sourceRoot" ]; then
+      echo "warning: \$sourceRoot missing in the derivation"
+    else
+      updateSourceDateEpoch "$sourceRoot"
+    fi
 }
