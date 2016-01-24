@@ -15345,11 +15345,11 @@ in modules // {
 
 
   Babel = buildPythonPackage (rec {
-    name = "Babel-2.1.1";
+    name = "Babel-2.2.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/B/Babel/${name}.tar.gz";
-      sha256 = "0j2jgfzj1a2m39pm2qc36fzr7a6p5ybwndi0xdzhi2p8zw7dbdkz";
+      sha256 = "d8cb4c0e78148aee89560f9fe21587aa57739c975bb89ff66b1e842cc697428f";
     };
 
     buildInputs = with self; [ pytest ];
