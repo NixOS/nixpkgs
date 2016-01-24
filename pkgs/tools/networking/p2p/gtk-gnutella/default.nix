@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ bison pkgconfig ];
   buildInputs = [ glib gtk libxml2 gettext zlib ];
 
-  NIX_LDFLAGS = "-rpath ${zlib}/lib";
+  NIX_LDFLAGS = "-rpath ${zlib.out}/lib";
   configureScript = "./Configure";
   dontAddPrefix = true;
   configureFlags = "-d -e -D prefix=$out -D gtkversion=2 -D official=true";

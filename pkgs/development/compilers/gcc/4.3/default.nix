@@ -142,7 +142,7 @@ stdenv.mkDerivation ({
 } // (if langJava then {
   postConfigure = ''
     make configure-gcc
-    sed -i gcc/Makefile -e 's@^CFLAGS = .*@& -I${zlib}/include@ ; s@^LDFLAGS = .*@& -L${zlib}/lib@'
+    sed -i gcc/Makefile -e 's@^CFLAGS = .*@& -I${zlib}/include@ ; s@^LDFLAGS = .*@& -L${zlib.out}/lib@'
     sed -i gcc/Makefile -e 's@^CFLAGS = .*@& -I${boehmgc}/include@ ; s@^LDFLAGS = .*@& -L${boehmgc.out}/lib -lgc@'
   '';
 } else {})
