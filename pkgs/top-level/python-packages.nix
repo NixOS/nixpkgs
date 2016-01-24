@@ -22980,13 +22980,19 @@ in modules // {
 
   Logbook = buildPythonPackage rec {
     name = "Logbook-${version}";
-    version = "0.4.2";
+    version = "0.11.3";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/L/Logbook/${name}.tar.gz";
-      # md5 = "143cb15af4c4a784ca785a1546ad1b93";
-      sha256 = "1g2pnhxh7m64qsrs0ifwcmpfk7gqjvrawd8z66i001rsdnq778v0";
+      sha256 = "0bchn00jj0y4dmrmqsm29ffcx37g79jcxjihadmgz2aj0z6dbsrc";
     };
+
+    buildInputs = [ self.pytest ];
+
+    checkPhase = ''
+      find tests -name \*.pyc -delete
+      py.test tests
+    '';
 
     meta = {
       homepage = http://pythonhosted.org/Logbook/;
