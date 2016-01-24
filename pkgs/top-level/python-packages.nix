@@ -16779,6 +16779,12 @@ in modules // {
       license = "BSD-style";
       platforms = platforms.mesaPlatforms;
     };
+
+    # Need to fix test runner
+    # Tests have many dependencies
+    # Extension types could not be found.
+    # Should run test suite from $out/${python.sitePackages}
+    doCheck = false;
   };
 
   pyopenssl = buildPythonPackage rec {
