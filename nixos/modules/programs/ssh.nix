@@ -221,10 +221,7 @@ in
         fi
       '';
 
-    environment.interactiveShellInit = optionalString config.services.xserver.enable
-      ''
-        export SSH_ASKPASS=${askPassword}
-      '';
+    environment.variables.SSH_ASKPASS = optionalString config.services.xserver.enable askPassword;
 
     programs.ssh.askPassword = mkDefault "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
 
