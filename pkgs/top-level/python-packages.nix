@@ -12129,6 +12129,9 @@ in modules // {
 
     propagatedBuildInputs = with self; [ nose ];
 
+    # No tests included
+    doCheck = false;
+
     meta = {
       description = "Coverage 3.x support for Nose";
       homepage = https://github.com/ask/nosecover3;
