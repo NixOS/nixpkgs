@@ -7726,6 +7726,8 @@ let
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
+  libvdpau-va-gl = callPackage ../development/libraries/libvdpau-va-gl { };
+
   libvirt = callPackage ../development/libraries/libvirt { };
 
   libvirt-glib = callPackage ../development/libraries/libvirt-glib { };
