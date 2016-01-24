@@ -8969,20 +8969,13 @@ in modules // {
     };
   };
 
-  futures_2_2 = buildPythonPackage rec {
+  futures_2_2 = self.futures.override {
     version = "2.2.0";
     name = "futures-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/f/futures/${name}.tar.gz";
       sha256 = "1lqfzl3z3pkxakgbcrfy6x7x0fp3q18mj5lpz103ljj7fdqha70m";
-    };
-
-    meta = with stdenv.lib; {
-      description = "Backport of the concurrent.futures package from Python 3.2";
-      homepage = "https://github.com/agronholm/pythonfutures";
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ garbas ];
     };
   };
 
