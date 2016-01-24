@@ -11846,6 +11846,10 @@ let
     debug = config.flashplayer.debug or false;
   };
 
+  flashplayer-standalone = pkgsi686Linux.flashplayer.sa;
+
+  flashplayer-standalone-debugger = pkgsi686Linux.flashplayer.saDbg;
+
   fluxbox = callPackage ../applications/window-managers/fluxbox { };
 
   fme = callPackage ../applications/misc/fme {
