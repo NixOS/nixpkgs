@@ -44,7 +44,7 @@
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , preFixup ? "", postFixup ? ""
 , shellHook ? ""
-, coreSetup ? false # Use only core packages to build Setup.hs.
+, coreSetup ? ghc.isCross or false # Use only core packages to build Setup.hs. True for cross-compilers.
 , useCpphs ? false
 } @ args:
 
@@ -55,10 +55,18 @@ let
   inherit (stdenv.lib) optional optionals optionalString versionOlder
                        concatStringsSep enableFeature optionalAttrs toUpper;
 
+
   isCross = ghc.isCross or false;
   isGhcjs = ghc.isGhcjs or false;
-  nativeGhc = if isCross then ghc.bootPkgs.ghc else ghc;
+  packageDbFlag = if isGhcjs || versionOlder "7.6" ghc.version
+                  then "package-db"
+                  else "package-conf";
 
+  nativeGhc = if isCross then ghc.bootPkgs.ghc else ghc;
+  nativeIsCross = nativeGhc.isCross or false;
+  nativePackageDbFlag = if versionOlder "7.6" nativeGhc.version
+                        then "package-db"
+                        else "package-conf";
 
   newCabalFileUrl = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
@@ -71,9 +79,6 @@ let
                      import Distribution.Simple
                      main = defaultMain
                    '';
-
-  ghc76xOrLater = isGhcjs || stdenv.lib.versionOlder "7.6" ghc.version;
-  packageDbFlag = if ghc76xOrLater then "package-db" else "package-conf";
 
   hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
 
@@ -98,14 +103,14 @@ let
     (optionalString (isGhcjs || versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
     (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
   ] ++ optionals isGhcjs [
-    "--with-hsc2hs=${ghc.nativeGhc}/bin/hsc2hs"
+    "--with-hsc2hs=${nativeGhc}/bin/hsc2hs"
     "--ghcjs"
   ];
 
   setupCompileFlags = [
-    (optionalString (!coreSetup) "-${packageDbFlag}=$packageConfDir")
-    (optionalString (isGhcjs || versionOlder "7.8" ghc.version) "-j$NIX_BUILD_CORES")
-    (optionalString (versionOlder "7.10" ghc.version) "-threaded") # https://github.com/haskell/cabal/issues/2398
+    (optionalString (!coreSetup) "-${nativePackageDbFlag}=$packageConfDir")
+    (optionalString (isGhcjs || versionOlder "7.8" nativeGhc.version) "-j$NIX_BUILD_CORES")
+    (optionalString (versionOlder "7.10" nativeGhc.version) "-threaded") # https://github.com/haskell/cabal/issues/2398
   ];
 
   isHaskellPkg = x: (x ? pname) && (x ? version) && (x ? env);
@@ -126,7 +131,7 @@ let
 
   ghcEnv = ghc.withPackages (p: haskellBuildInputs);
 
-  setupCommand = if isGhcjs then "${ghc.nodejs}/bin/node ./Setup.jsexe/all.js" else "./Setup";
+  setupCommand = "./Setup";
   ghcCommand = if isGhcjs then "ghcjs" else "ghc";
   ghcCommandCaps = toUpper ghcCommand;
 
@@ -202,7 +207,7 @@ stdenv.mkDerivation ({
     done
 
     echo setupCompileFlags: $setupCompileFlags
-    ${ghcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+    ${if isCross then "${nativeGhc}/bin/ghc" else ghcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
     runHook postCompileBuildDriver
   '';
