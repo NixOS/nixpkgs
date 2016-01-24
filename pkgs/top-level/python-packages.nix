@@ -7965,12 +7965,15 @@ in modules // {
 
   keepalive = buildPythonPackage rec {
     name = "keepalive-${version}";
-    version = "0.4.1";
+    version = "0.5";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/k/keepalive/keepalive-${version}.tar.gz";
-      sha256 = "07vn3b67ajwi7vv37h02kw7hg2z5dxhn9947dnvii05rfr5b27iy";
+      sha256 = "3c6b96f9062a5a76022f0c9d41e9ef5552d80b1cadd4fccc1bf8f183ba1d1ec1";
     };
+
+    # No tests included
+    doCheck = false;
 
     meta = with stdenv.lib; {
       description = "An HTTP handler for `urllib2` that supports HTTP 1.1 and keepalive.";
