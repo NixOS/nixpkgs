@@ -979,12 +979,19 @@ in modules // {
   astroid = buildPythonPackage rec {
     name = "astroid-1.4.4";
 
-    propagatedBuildInputs = with self; [ logilab_common six lazy-object-proxy ];
+    propagatedBuildInputs = with self; [ logilab_common six lazy-object-proxy wrapt ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/astroid/${name}.tar.gz";
       sha256 = "7f7e5512efe515098e77cbd3a60e87c8db8954097b0e025d8d6f72f2e8ddc298";
     };
+
+    checkPhase = ''
+        ${python.interpreter} -m unittest discover
+    '';
+
+    # Tests cannot be found because they're named unittest_...
+    # instead of test_...
 
     meta = {
       description = "A abstract syntax tree for Python with inference support";
