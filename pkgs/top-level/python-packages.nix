@@ -10478,14 +10478,16 @@ in modules // {
 
   le = buildPythonPackage rec {
     name = "le-${version}";
-    version = "1.4.13";
+    version = "1.4.29";
 
-    src = pkgs.fetchFromGitHub {
-      owner = "logentries";
-      repo = "le";
-      rev = "v${version}";
-      sha256 = "12l6fqavykjinq286i9pgbbbrv5lq2mmiji91g0m05lfdx9pg4y1";
+    src = pkgs.fetchurl {
+      url = "https://github.com/logentries/le/archive/v${version}.tar.gz";
+      sha256 = "d29738937cb6e714b6ec2ae74b66b1983482ffd54b4faa40767af18509521d4c";
     };
+
+    disabled = isPy3k;
+
+    doCheck = false;
 
     propagatedBuildInputs = with self; [ simplejson psutil ];
 
