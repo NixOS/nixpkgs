@@ -21525,6 +21525,10 @@ in modules // {
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [numpy pandas];
 
+    checkPhase = ''
+      py.test $out/${python.sitePackages}
+    '';
+
     meta = {
       description = "N-D labeled arrays and datasets in Python";
       homepage = https://github.com/pydata/xarray;
