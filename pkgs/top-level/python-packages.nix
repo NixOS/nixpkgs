@@ -11364,14 +11364,16 @@ in modules // {
 
   mrbob = buildPythonPackage rec {
     name = "mrbob-${version}";
-    version = "0.1.1";
+    version = "0.1.2";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/m/mr.bob/mr.bob-${version}.zip";
-      md5 = "84a117c9a75b86842b0fa5f5c9c767f3";
+      url = "http://pypi.python.org/packages/source/m/mr.bob/mr.bob-${version}.tar.gz";
+      sha256 = "6737eaf98aaeae85e07ebef844ee5156df2f06a8b28d7c3dcb056f811c588121";
     };
 
     buildInputs = [ pkgs.glibcLocales self.mock ];
+
+    disabled = isPy3k;
 
     LC_ALL="en_US.UTF-8";
 
