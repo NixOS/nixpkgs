@@ -2581,14 +2581,24 @@ in modules // {
 
 
   cairocffi = buildPythonPackage rec {
-    name = "cairocffi-0.7.1";
+    name = "cairocffi-0.7.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/cairocffi/${name}.tar.gz";
-      md5 = "e26d06a8d8b16c7210414ce15d453636";
+      sha256 = "e42b4256d27bd960cbf3b91a6c55d602defcdbc2a73f7317849c80279feeb975";
     };
 
+    LC_ALL = "en_US.UTF-8";
+    buildInputs = with self; [ pytest pkgs.glibcLocales ];
     propagatedBuildInputs = with self; [ pkgs.cairo cffi ];
+
+    checkPhase = ''
+      py.test $out/${python.sitePackages}
+    '';
+
+    # Marked broken since according to test
+    # Happens with 0.7.1 and 0.7.2
+    # OSError: dlopen() failed to load a library: gdk_pixbuf-2.0 / gdk_pixbuf-2.0-0
 
     patchPhase = ''
       # Hardcode cairo library path
@@ -2596,6 +2606,7 @@ in modules // {
     '';
 
     meta = {
+      broken = true;
       homepage = https://github.com/SimonSapin/cairocffi;
       license = "bsd";
       description = "cffi-based cairo bindings for Python";
