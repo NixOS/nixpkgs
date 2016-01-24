@@ -67,7 +67,7 @@ stdenv.mkDerivation {
       "${xorg.libXrender}/lib"
       "${xorg.libXext.out}/lib"
       "${xorg.libX11.out}/lib"
-      "${xorg.libXinerama}/lib"
+      "${xorg.libXinerama.out}/lib"
     ];
 
   # without this some applications like blender don't start, but they start
