@@ -2993,6 +2993,15 @@ in modules // {
       sha256 = "3418303f44c6c4daa184f1dc36c8c0b7ff8261c56d1f922ffd8d09e79caa4b74";
     };
 
+    buildInputs = with self; [ pytest mock ];
+
+    checkPhase = ''
+      py.test tests
+    '';
+
+    # ImportError of test suite
+    doCheck = false;
+
     meta = {
       description = "Extended pickling support for Python objects";
       homepage = https://github.com/cloudpipe/cloudpickle;
