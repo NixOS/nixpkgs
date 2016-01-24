@@ -6185,7 +6185,9 @@ let
 
   aubio = callPackage ../development/libraries/aubio { };
 
-  audiofile = callPackage ../development/libraries/audiofile { };
+  audiofile = callPackage ../development/libraries/audiofile {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio CoreServices AudioUnit Cocoa;
+  };
 
   babl = callPackage ../development/libraries/babl { };
 
