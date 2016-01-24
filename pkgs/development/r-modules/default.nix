@@ -2383,7 +2383,7 @@ let
     });
 
     devEMF = old.devEMF.overrideDerivation (attrs: {
-      NIX_CFLAGS_LINK = "-L${pkgs.xorg.libXft}/lib -lXft";
+      NIX_CFLAGS_LINK = "-L${pkgs.xorg.libXft.out}/lib -lXft";
     });
 
     slfm = old.slfm.overrideDerivation (attrs: {
