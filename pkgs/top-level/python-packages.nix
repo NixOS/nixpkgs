@@ -5153,6 +5153,13 @@ in modules // {
       md5 = "3aba546bdad5d0826596910551ce37c0";
     };
 
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover
+    '';
+
+    # Judging from SyntaxError in tests.
+    disabled = isPy3k;
+
     meta = {
       description = "Recursive descent parsing library based on functional combinators";
       homepage = https://code.google.com/p/funcparserlib/;
