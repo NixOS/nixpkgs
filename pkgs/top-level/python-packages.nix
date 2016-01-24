@@ -4059,6 +4059,9 @@ in modules // {
       py.test $out/${python.sitePackages}
     '';
 
+    # Disable Cython tests for PyPy
+    TINYCSS_SKIP_SPEEDUPS_TESTS = optional isPyPy true;
+
     meta = {
       description = "complete yet simple CSS parser for Python";
       license = licenses.bsd3;
