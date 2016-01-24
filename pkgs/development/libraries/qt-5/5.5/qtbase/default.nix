@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, copyPathsToStore, makeWrapper
+{ stdenv, lib, fetchurl, copyPathsToStore, fixQtModuleCMakeConfig
 , srcs
 
 , xlibs, libX11, libxcb, libXcursor, libXext, libXrender, libXi
@@ -224,7 +224,7 @@ stdenv.mkDerivation {
     ++ lib.optional (postgresql != null) postgresql
     ++ lib.optionals gtkStyle [gnome_vfs.out libgnomeui.out gtk GConf];
 
-  nativeBuildInputs = [ lndir python perl pkgconfig ];
+  nativeBuildInputs = [ fixQtModuleCMakeConfig lndir python perl pkgconfig ];
 
   # freetype-2.5.4 changed signedness of some struct fields
   NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
@@ -233,6 +233,19 @@ stdenv.mkDerivation {
     ''
       # Don't retain build-time dependencies like gdb and ruby.
       sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
+
+      fixQtModuleCMakeConfig "Concurrent"
+      fixQtModuleCMakeConfig "Core"
+      fixQtModuleCMakeConfig "DBus"
+      fixQtModuleCMakeConfig "Gui"
+      fixQtModuleCMakeConfig "Network"
+      fixQtModuleCMakeConfig "OpenGL"
+      fixQtModuleCMakeConfig "OpenGLExtensions"
+      fixQtModuleCMakeConfig "PrintSupport"
+      fixQtModuleCMakeConfig "Sql"
+      fixQtModuleCMakeConfig "Test"
+      fixQtModuleCMakeConfig "Widgets"
+      fixQtModuleCMakeConfig "Xml"
     '';
 
   inherit lndir;
