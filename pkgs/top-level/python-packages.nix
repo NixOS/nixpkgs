@@ -11683,6 +11683,15 @@ in modules // {
       rev = "refs/tags/pymysql-${version}";
       sha256 = "12v8bw7pp455zqkwraxk69qycz2ngk18bbz60v72kdbp6kssnqhz";
     };
+
+    buildInputs = with self; [ unittest2 ];
+
+    checkPhase = ''
+      ${python.interpreter} runtests.py
+    '';
+
+    # Wants to connect to MySQL
+    doCheck = false;
   };
 
   pymysqlsa = self.buildPythonPackage rec {
