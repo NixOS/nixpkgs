@@ -12173,10 +12173,19 @@ in modules // {
       sha256 = "b597437ba33538221008e21fea71cd01eda9da1515ca3963d7c74e44f4b03d90";
     };
 
-    buildInputs = with self; [nose]  ++ optionals isPy27 [mock];
+    LC_ALL = "en_US.UTF-8";
+
+    buildInputs = with self; [nose pkgs.glibcLocales]  ++ optionals isPy27 [mock];
 
     propagatedBuildInputs = with self; [jinja2 tornado ipython_genutils traitlets jupyter_core jupyter_client nbformat nbconvert ipykernel terminado requests2 pexpect];
 
+    checkPhase = ''
+      nosetests -v
+    '';
+
+    # Certain tests fail due to being in a chroot.
+    # PermissionError
+    doCheck = false;
     meta = {
       description = "The Jupyter HTML notebook is a web-based notebook environment for interactive computing";
       homepage = http://jupyter.org/;
