@@ -6295,6 +6295,9 @@ in modules // {
       sha256 = "1prv4j3wcy9kl5ndd5by543xp4cji9k35qncsl995w6sway34s1a";
     };
 
+    # uses networking
+    doCheck = false;
+
     meta = {
       homepage = https://github.com/cedadev/ndg_httpsclient/;
       description = "Provide enhanced HTTPS support for httplib and urllib2 using PyOpenSSL";
