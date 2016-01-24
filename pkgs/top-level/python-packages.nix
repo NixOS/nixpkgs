@@ -3060,6 +3060,8 @@ in modules // {
 
     LC_ALL="en_US.UTF-8";
 
+    doCheck = false;
+
     buildInputs = with self; [ flake8 pkgs.glibcLocales ];
     propagatedBuildInputs = with self; [ future ];
 
