@@ -18359,11 +18359,11 @@ in modules // {
 
   setuptools_scm = buildPythonPackage rec {
     name = "setuptools_scm-${version}";
-    version = "1.7.0";
+    version = "1.10.1";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/s/setuptools_scm/${name}.tar.gz";
-      sha256 = "f2f69c782b4f549003edf5b75b356b37f40a4e880b615996c5d9c117913d6f9c";
+      url = "https://pypi.python.org/packages/source/s/setuptools_scm/${name}.tar.bz2";
+      sha256 = "1cdea91bbe1ec4d52b3e9c451ab32ae6e1f3aa3fd91e90580490a9eb75bea286";
     };
 
     buildInputs = with self; [ pip ];
