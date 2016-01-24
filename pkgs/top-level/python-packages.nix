@@ -1011,12 +1011,16 @@ in modules // {
   });
 
   audioread = buildPythonPackage rec {
-    name = "audioread-1.2.1";
+    name = "audioread-${version}";
+    version = "2.1.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/audioread/${name}.tar.gz";
-      md5 = "01a80357f38dbd9bf8d7403802df89ac";
+      sha256 = "ffb601de7a9e40850d4ec3256a3a6bbe8fa40466dafb5c65f41b08e4bb963f1e";
     };
+
+    # No tests, need to disable or py3k breaks
+    doCheck = false;
 
     meta = {
       description = "Cross-platform audio decoding";
