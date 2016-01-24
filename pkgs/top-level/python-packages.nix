@@ -5186,6 +5186,14 @@ in modules // {
     '';
   };
 
+  fudge_9 = self.fudge.override rec {
+    name = "fudge-0.9.6";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/f/fudge/${name}.tar.gz";
+      sha256 = "34690c4692e8717f4d6a2ab7d841070c93c8d0ea0d2615b47064e291f750b1a0";
+    };
+  };
+
 
   funcparserlib = buildPythonPackage rec {
     name = "funcparserlib-0.3.6";
