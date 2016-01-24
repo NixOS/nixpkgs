@@ -17496,6 +17496,9 @@ in modules // {
     buildInputs = with self; [ nose ] ++ optionals isPy27 [mock];
     propagatedBuildInputs = with self; [traitlets jupyter_core jupyter_client pygments ipykernel pyqt4];
 
+    # : cannot connect to X server 
+    doCheck = false;
+
     meta = {
       description = "Jupyter Qt console";
       homepage = http://jupyter.org/;
