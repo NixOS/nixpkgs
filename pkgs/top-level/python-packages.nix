@@ -10176,6 +10176,7 @@ in modules // {
       sha256 = "1lazbx65imassd7h24z49za001rvx1lmx8r0l21h4izs7pp14nnd";
     };
 
+    buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ ply ];
 
     meta = {
