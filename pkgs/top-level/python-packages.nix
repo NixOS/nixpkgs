@@ -9918,6 +9918,7 @@ in modules // {
       sha256 = "ceeb325e45ade9537c2d115fed9d522e5c6e90bb161592e2f0807375dc661028";
     };
 
+    buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ipython ipykernel traitlets notebook];
 
     meta = {
