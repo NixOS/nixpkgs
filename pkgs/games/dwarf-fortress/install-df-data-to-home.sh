@@ -8,5 +8,5 @@ if [[ $(readlink $data_dir/libs) != "$pkg_dir/libs" ]]; then
   ln -s $pkg_dir/libs $data_dir/libs
 fi
 mkdir -p "$data_dir/data"
-cp -rn $pkg_dir/data/init $data_dir/data/init
+cp -rnT $pkg_dir/data/init $data_dir/data/init
 chmod -R u+rw $data_dir/data/init

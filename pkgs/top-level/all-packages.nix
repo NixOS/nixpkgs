@@ -14120,6 +14120,7 @@ let
     };
     inherit (pkgsi686Linux.perlPackages) XMLLibXML XMLLibXSLT;
     enableDFHack = config.dwarfFortress.enableDFHack or false;
+    theme = config.dwarfFortress.theme or null;
   };
 
   dwarf-therapist = callPackage ../games/dwarf-therapist { };
