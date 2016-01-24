@@ -12165,6 +12165,11 @@ in modules // {
       sha256 = "0qrhkd3sga56qf6k0sqyhwfcladwi05gl6aqmr0xriiq1sgva5dy";
     };
     buildInputs = with self; [ nose ];
+
+    checkPhase = ''
+      nosetests -v
+    '';
+
   };
 
   nose-cprof = buildPythonPackage rec {
