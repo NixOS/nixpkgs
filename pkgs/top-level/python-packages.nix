@@ -7597,6 +7597,9 @@ in modules // {
       wrapPythonProgramsIn $out/bin "$out $pythonPath"
     '';
 
+    # too complicated to setup
+    doCheck = false;
+
     meta = {
       description = "A high-level Python Web framework";
       homepage = https://www.djangoproject.com/;
@@ -7613,7 +7616,7 @@ in modules // {
       sha256 = "1n3hb80v7wl5j2mry5pfald6i9z42a9c3m9405877iqw3v49csc2";
     };
 
-    # error: invalid command 'test'
+    # too complicated to setup
     doCheck = false;
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
@@ -7638,7 +7641,7 @@ in modules // {
       sha256 = "0xbwg6nyvwcbp2hvk0x3s5y823k5kizn0za1bl2rf6g6xcn7sddr";
     };
 
-    # error: invalid command 'test'
+    # too complicated to setup
     doCheck = false;
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
@@ -7661,7 +7664,7 @@ in modules // {
       sha256 = "0misvia78c14y07zs5xsb9lv54q0v217jpaindrmhhw4wiryal3y";
     };
 
-    # error: invalid command 'test'
+    # too complicated to setup
     doCheck = false;
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
@@ -7684,7 +7687,7 @@ in modules // {
       sha256 = "1vbcvn6ncg7hq5i1w95h746vkq9lmp120vx63h3p56z5nsz7gpmk";
     };
 
-    # error: invalid command 'test'
+    # too complicated to setup
     doCheck = false;
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
