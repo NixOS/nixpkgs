@@ -10186,7 +10186,15 @@ in modules // {
       sha256 = "ff1ef5c6c3031a62db46ec6329867b4cb1595e6102a7819b3b5252b0c524bdb8";
     };
 
+    buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [traitlets jupyter_core pyzmq] ++ optional isPyPy py;
+
+    checkPhase = ''
+      nosetests -v
+    '';
+
+    # Circular dependency with ipykernel
+    doCheck = false;
 
     meta = {
       description = "Jupyter protocol implementation and client libraries";
