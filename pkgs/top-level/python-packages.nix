@@ -13737,6 +13737,9 @@ in modules // {
       sha256 = "1akmzf51cjfvmd0nvvm562z1w9vq45zsx6fa72kraqgsgxhnrhqz";
     };
 
+    # Judging from SyntaxError
+    disabled = isPy3k;
+
     meta = with stdenv.lib; {
       homepage = "https://github.com/mozilla-services/ldappool";
     };
