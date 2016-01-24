@@ -23800,12 +23800,15 @@ in modules // {
 
   thrift = buildPythonPackage rec {
     name = "thrift-${version}";
-    version = "0.9.2";
+    version = "0.9.3";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/thrift/${name}.tar.gz";
-      sha256 = "1yla6wg18x2a0l0lrvkp1v464hqhff98ck8pnv8d5j9kn3j6bxh8";
+      sha256 = "dfbc3d3bd19d396718dab05abaf46d93ae8005e2df798ef02e32793cd963877e";
     };
+
+    # No tests. Breaks when not disabling.
+    doCheck = false;
 
     meta = {
       description = "Python bindings for the Apache Thrift RPC system";
