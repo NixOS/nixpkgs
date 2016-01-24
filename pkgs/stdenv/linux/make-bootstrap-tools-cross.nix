@@ -199,7 +199,7 @@ rec {
         rm -rf $out/include/c++/*/ext/parallel
 
         cp -d ${gmpxx}/lib/libgmp*.so* $out/lib
-        cp -d ${mpfr}/lib/libmpfr*.so* $out/lib
+        cp -d ${mpfr.out}/lib/libmpfr*.so* $out/lib
         cp -d ${libmpc}/lib/libmpc*.so* $out/lib
         cp -d ${zlib}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
