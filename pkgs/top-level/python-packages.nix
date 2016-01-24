@@ -2296,7 +2296,7 @@ in modules // {
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.3.12";
+    version = "1.3.12"; # This version is required by awscli
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
@@ -2310,15 +2310,19 @@ in modules // {
         self.jmespath
       ];
 
-    buildInputs = [ self.docutils ];
+    buildInputs = with self; [ docutils mock nose ];
+
+    checkPhase = ''
+      nosetests -v
+    '';
+
+    # Network access
+    doCheck = false;
 
     meta = {
       homepage = https://github.com/boto/botocore;
-
       license = "bsd";
-
       description = "A low-level interface to a growing number of Amazon Web Services";
-
     };
   };
 
