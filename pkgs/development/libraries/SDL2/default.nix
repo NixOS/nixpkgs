@@ -22,6 +22,7 @@ let
         ${if alsaSupport then "--with-alsa-prefix=${attrs.alsaLib}/lib" else ""}
         ${if (!x11Support) then "--without-x" else ""}
       '';
+  pkgConfigRequires = if (x11Support) then "x11" else "";
 in
 stdenv.mkDerivation rec {
   name = "SDL2-2.0.3";
@@ -34,6 +35,10 @@ stdenv.mkDerivation rec {
   # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
   propagatedBuildInputs = stdenv.lib.optionals x11Support [ xlibsWrapper libXrandr ] ++
     stdenv.lib.optional pulseaudioSupport libpulseaudio;
+
+  preConfigure = ''
+    substituteInPlace sdl2.pc.in --replace "Requires:" "Requires: ${pkgConfigRequires}"
+  '';
 
   buildInputs = [ pkgconfig audiofile ] ++
     stdenv.lib.optional openglSupport mesa ++
