@@ -12751,12 +12751,20 @@ in modules // {
   };
 
   ply = buildPythonPackage (rec {
-    name = "ply-3.7";
+    name = "ply-3.8";
 
     src = pkgs.fetchurl {
-      url = "http://www.dabeaz.com/ply/${name}.tar.gz";
-      sha256 = "105gw1xayqww99qsls0lv37z4hzg5qnglxkd7s3h96hw9jsbfpzq";
+      url = "https://pypi.python.org/packages/source/p/ply/${name}.tar.gz";
+      sha256 = "e7d1bdff026beb159c9942f7a17e102c375638d9478a7ecd4cc0c76afd8de0b8";
     };
+
+    checkPhase = ''
+      ${python.interpreter} test/testlex.py
+      ${python.interpreter} test/testyacc.py
+    '';
+
+    # Test suite appears broken
+    doCheck = false;
 
     meta = {
       homepage = http://www.dabeaz.com/ply/;
