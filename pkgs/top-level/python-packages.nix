@@ -11879,7 +11879,7 @@ in modules // {
       sha256 = "030ca7e71cbb7e17fb48f83db97779fdbac0b4424cef01245f3276a110b30a6c";
     };
 
-    propagatedBuildInputs = with self ; [ aiodns pyasn1 pkgs.gnupg1];
+    propagatedBuildInputs = with self ; [ aiodns pyasn1 pkgs.gnupg1 pyasn1-modules];
 
     meta = {
       meta = "Elegant Python library for XMPP";
