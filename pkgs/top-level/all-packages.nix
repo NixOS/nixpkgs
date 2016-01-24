@@ -11341,11 +11341,6 @@ let
 
   carddav-util = callPackage ../tools/networking/carddav-util { };
 
-  carrier = builderDefsPackage (callPackage ../applications/networking/instant-messengers/carrier/2.5.0.nix) {
-    inherit (gnome) startupnotification GConf ;
-  };
-  funpidgin = carrier;
-
   cava = callPackage ../applications/audio/cava { };
 
   cbatticon = callPackage ../applications/misc/cbatticon { };
