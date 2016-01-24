@@ -1,6 +1,8 @@
 { stdenv, fetchurl, pkgconfig, xorg }:
 
-stdenv.mkDerivation rec {
+let
+  driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
+in stdenv.mkDerivation rec {
   name = "libvdpau-1.1.1";
 
   src = fetchurl {
@@ -11,6 +13,16 @@ stdenv.mkDerivation rec {
   buildInputs = with xorg; [ pkgconfig dri2proto libXext ];
 
   propagatedBuildInputs = [ xorg.libX11 ];
+
+  configureFlags = [ "--with-module-dir=${driverLink}/lib/vdpau" ];
+
+  installFlags = [ "DESTDIR=$(out)" ];
+
+  postInstall = ''
+    cp -r $out/run/opengl-driver*/* $out
+    cp -r $out/$out/* $out
+    rm -rf $out/run $out/$(echo "$out" | cut -d "/" -f2)
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://people.freedesktop.org/~aplattner/vdpau/;
