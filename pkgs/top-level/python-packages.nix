@@ -15707,6 +15707,9 @@ in modules // {
 
     buildInputs = [ pkgs.cups ];
 
+    # Wants to connect to CUPS
+    doCheck = false;
+
     meta = {
       description = "Python bindings for libcups";
       homepage = http://cyberelk.net/tim/software/pycups/;
