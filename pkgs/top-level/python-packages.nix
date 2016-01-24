@@ -14017,6 +14017,9 @@ in modules // {
     name = "wrapt-${version}";
     version = "1.10.5";
 
+    # No tests in archive
+    doCheck = false;
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/w/wrapt/${name}.tar.gz";
       sha256 = "0cq8rlpzkxzk48b50yrfhzn1d1hrq4gjcdqlrgq4v5palgiv9jwr";
