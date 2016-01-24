@@ -51,7 +51,4 @@ self: super: {
   # https://github.com/hspec/HUnit/issues/7
   HUnit = dontCheck super.HUnit;
 
-  # Older versions don't support our version of base.
-  async = self.async_2_1_0;
-
 }
