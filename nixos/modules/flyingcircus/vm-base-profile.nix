@@ -103,6 +103,8 @@ in
      export C_INCLUDE_PATH=/var/run/current-system/sw/include:/var/run/current-system/sw/include/sasl
     '';
 
+    boot.kernelPackages = pkgs.linuxPackages_4_3;
+
     security.sudo.extraConfig =
         ''
         Defaults lecture = never
