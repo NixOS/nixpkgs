@@ -10820,7 +10820,7 @@ let
 
   anonymousPro = callPackage ../data/fonts/anonymous-pro { };
 
-  arkpandora_ttf = builderDefsPackage (callPackage ../data/fonts/arkpandora) { };
+  arkpandora_ttf = callPackage ../data/fonts/arkpandora { };
 
   aurulent-sans = callPackage ../data/fonts/aurulent-sans { };
 
