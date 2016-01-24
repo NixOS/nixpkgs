@@ -102,7 +102,7 @@ in
     '' + optionalString cfg.ssh.enable ''
       copy_bin_and_libs ${pkgs.dropbear}/bin/dropbear
 
-      cp -pv ${pkgs.glibc}/lib/libnss_files.so.* $out/lib
+      cp -pv ${pkgs.glibc.out}/lib/libnss_files.so.* $out/lib
     '';
 
     boot.initrd.extraUtilsCommandsTest = optionalString cfg.ssh.enable ''

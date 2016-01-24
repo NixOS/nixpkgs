@@ -194,7 +194,7 @@ stdenv.mkDerivation rec {
     # Fix rpath
     patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc stdenv.glibc ]}:$out/share/df_linux/libs" $out/share/df_linux/libs/Dwarf_Fortress
 
-    patchelf --set-interpreter ${glibc}/lib/ld-linux.so.2 $out/share/df_linux/libs/Dwarf_Fortress
+    patchelf --set-interpreter ${glibc.out}/lib/ld-linux.so.2 $out/share/df_linux/libs/Dwarf_Fortress
 
     # Store new hash
     patched_hash=$(md5sum $out/share/df_linux/libs/Dwarf_Fortress | awk '{ print $1 }')

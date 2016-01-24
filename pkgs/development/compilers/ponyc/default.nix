@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   checkTarget = "test";
 
   patchPhase = ''
-    sed 's|/usr/lib/x86_64-linux-gnu/|${glibc}/lib/|g' -i src/libponyc/codegen/genexe.c
+    sed 's|/usr/lib/x86_64-linux-gnu/|${glibc.out}/lib/|g' -i src/libponyc/codegen/genexe.c
     sed 's|/lib/x86_64-linux-gnu/|${stdenv.cc.cc}/lib/|g' -i src/libponyc/codegen/genexe.c
   '';
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     cp -r $TMPDIR/{etc,usr/{bin,lib,share}} $out
     for BIN in $(find $out/bin -type f); do
       echo Patching $BIN
-      patchelf --set-interpreter "${glibc}/lib/ld-linux-x86-64.so.2" --set-rpath "${glibc}/lib:${gcc.cc}/lib:${libuuid}/lib:$out/lib" $BIN
+      patchelf --set-interpreter "${glibc.out}/lib/ld-linux-x86-64.so.2" --set-rpath "${glibc.out}/lib:${gcc.cc}/lib:${libuuid}/lib:$out/lib" $BIN
 
       # Test our binary to see if it was correctly patched
       set +e
