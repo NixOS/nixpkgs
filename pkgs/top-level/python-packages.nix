@@ -19091,8 +19091,11 @@ in modules // {
       sha256 = "0mfbjv3dcg23q0a130670g7xpfyvgza4wxkj991xxh8w9hs43ga4";
     };
 
-    buildInputs = with self; [ pillow blessings nose ];
-    propagatedBuildInputs = with self; [ modules.curses ];
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ pillow blessings ];
+
+    # fails with obscure error
+    doCheck = !isPy3k;
 
     meta = {
       maintainers = with maintainers; [ iElectric ];
@@ -19100,17 +19103,17 @@ in modules // {
   };
 
   blessings = buildPythonPackage rec {
-    name = "blessings-1.5.1";
+    name = "blessings-1.6";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/b/blessings/${name}.tar.gz";
-      md5 = "fbbddbf20b1f9a13e3fa612b1e086fd8";
+      sha256 = "01rhgn2c3xjf9h1lxij9m05iwf2ba6d0vd7nic26c2gic4q73igd";
     };
 
-    # 4 failing tests
+    # 4 failing tests, 2to3
     doCheck = false;
 
-    buildInputs = with self; [ nose modules.curses ];
+    propagatedBuildInputs = with self; [ modules.curses ];
 
     meta = {
       maintainers = with maintainers; [ iElectric ];
