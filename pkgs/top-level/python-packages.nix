@@ -17353,7 +17353,7 @@ in modules // {
     '';
 
     # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit
-    disabled = isPypy;
+    disabled = isPyPy;
 
     meta = {
       description = "An Open Source Python library for generating PDFs and graphics";
