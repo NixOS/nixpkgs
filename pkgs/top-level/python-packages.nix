@@ -15427,7 +15427,7 @@ in modules // {
     doCheck = false;
 
     preConfigure = ''
-      export LDFLAGS="-L${pkgs.fftw.out}/lib -L${pkgs.fftwFloat}/lib -L${pkgs.fftwLongDouble}/lib"
+      export LDFLAGS="-L${pkgs.fftw.out}/lib -L${pkgs.fftwFloat}/lib -L${pkgs.fftwLongDouble.out}/lib"
       export CFLAGS="-I${pkgs.fftw}/include -I${pkgs.fftwFloat}/include -I${pkgs.fftwLongDouble}/include"
     '';
     #+ optionalString isDarwin ''
