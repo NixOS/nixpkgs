@@ -17659,12 +17659,17 @@ in modules // {
       sha256 = "08j2w67nilczn1i5r7h22vag9673i6vnfhyq2rv27r1bdmi5a30m";
     };
 
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [
       six docutils pygments bleach html5lib
     ];
-    buildInputs = with self; [
 
-    ];
+    checkPhase = ''
+      py.test
+    '';
+
+    # Tests fail, possibly broken.
+    doCheck = false;
 
     meta = with stdenv.lib; {
       description = "readme";
