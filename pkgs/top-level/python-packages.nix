@@ -17490,7 +17490,7 @@ in modules // {
       sha256 = "741906acae9e02c0df9138ac88b621ef22e438565aa96d783a9ef88faec3de46";
     };
 
-    buildInputs = with self; [] ++ optionals isPy27 [mock];
+    buildInputs = with self; [ nose ] ++ optionals isPy27 [mock];
     propagatedBuildInputs = with self; [traitlets jupyter_core jupyter_client pygments ipykernel pyqt4];
 
     meta = {
