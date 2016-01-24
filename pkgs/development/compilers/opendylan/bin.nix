@@ -24,10 +24,10 @@ stdenv.mkDerivation {
     interpreter="$(cat "$NIX_CC"/nix-support/dynamic-linker)"
     for a in "$out"/bin/*; do 
       patchelf --set-interpreter "$interpreter" "$a"
-      patchelf --set-rpath "$out/lib:${boehmgc}/lib" "$a"
+      patchelf --set-rpath "$out/lib:${boehmgc.out}/lib" "$a"
     done
     for a in "$out"/lib/*.so; do 
-      patchelf --set-rpath "$out/lib:${boehmgc}/lib" "$a"
+      patchelf --set-rpath "$out/lib:${boehmgc.out}/lib" "$a"
     done
     sed -i -e "s|\-lgc|\-L${boehmgc}\/lib -lgc|" $out/lib/config.jam
     wrapProgram $out/bin/dylan-compiler --suffix PATH : ${gcc}/bin
