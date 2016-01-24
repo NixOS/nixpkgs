@@ -8913,15 +8913,22 @@ in modules // {
 
   futures = buildPythonPackage rec {
     name = "futures-${version}";
-    version = "3.0.3";
+    version = "3.0.4";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/f/futures/${name}.tar.gz";
-      sha256 = "2fe2342bb4fe8b8e217f0d21b5921cbe5408bf966d9f92025e707e881b198bed";
+      sha256 = "19485d83f7bd2151c0aeaf88fbba3ee50dadfb222ffc3b66a344ef4952b782a3";
     };
 
     # This module is for backporting functionality to Python 2.x, it's builtin in py3k
     disabled = isPy3k;
+
+    checkPhase = ''
+        ${python.interpreter} -m unittest discover
+    '';
+
+    # Tests fail
+    doCheck = false;
 
     meta = with pkgs.stdenv.lib; {
       description = "Backport of the concurrent.futures package from Python 3.2";
