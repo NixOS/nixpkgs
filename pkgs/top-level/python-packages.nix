@@ -11656,8 +11656,7 @@ in modules // {
   };
 
   pygraphviz = buildPythonPackage rec {
-    version = "1.3.1";
-    name = "pygraphviz-${version}";
+    name = "pygraphviz-1.3.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pygraphviz/${name}.tar.gz";
