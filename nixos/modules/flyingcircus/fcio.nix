@@ -11,7 +11,13 @@ with lib;
 
   boot.blacklistedKernelModules = [ "bochs_drm" ];
   boot.initrd.supportedFilesystems = [ "xfs" ];
-  boot.kernelParams = [ "panic=1" "boot.panic_on_fail" "console=ttyS0" "nosetmode" ];
+  boot.kernelParams = [
+    "panic=1"
+    "boot.panic_on_fail"
+    "console=ttyS0"
+    "systemd.journald.forward_to_console=yes"
+    "nosetmode"
+    ];
   boot.loader.grub.device = "/dev/vda";
   boot.loader.grub.fsIdentifier = "provided";
   boot.loader.grub.gfxmodeBios = "text";
@@ -19,6 +25,7 @@ with lib;
   boot.loader.grub.version = 2;
   boot.supportedFilesystems = [ "xfs" ];
   boot.vesa = false;
+  boot.consoleLogLevel = 0;
 
   networking.useDHCP = true;
 
