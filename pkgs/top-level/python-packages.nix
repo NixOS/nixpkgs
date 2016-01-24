@@ -1190,6 +1190,7 @@ in modules // {
   azure-common = buildPythonPackage rec {
     version = "1.0.0";
     name = "azure-common-${version}";
+    disabled = isPyPy;
     src = pkgs.fetchurl {
       url = https://pypi.python.org/packages/source/a/azure-common/azure-common-1.0.0.zip;
       sha256 = "074rwwy8zzs7zw3nww5q2wg5lxgdc4rmypp2gfc9mwsz0gb70491";
