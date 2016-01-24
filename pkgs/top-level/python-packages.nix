@@ -16323,7 +16323,7 @@ in modules // {
   };
 
   pyjwt = buildPythonPackage rec {
-    version = "0.3.2";
+    version = "1.4.0";
     name = "pyjwt-${version}";
 
     src = pkgs.fetchurl {
