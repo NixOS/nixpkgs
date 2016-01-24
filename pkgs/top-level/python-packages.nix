@@ -4280,6 +4280,8 @@ in modules // {
   dateutil_1_5 = buildPythonPackage (rec {
     name = "dateutil-1.5";
 
+    disabled = isPy3k;
+
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/python-dateutil/python-${name}.tar.gz";
       sha256 = "02dhw57jf5kjcp7ng1if7vdrbnlpb9yjmz7wygwwvf3gni4766bg";
