@@ -1,6 +1,6 @@
 { stdenv, callPackage, fetchurl, makeDesktopItem, makeWrapper, patchelf
 , coreutils, gnugrep, which, git, python, unzip, p7zip
-, androidsdk, jdk, oraclejdk8
+, androidsdk, jdk
 }:
 
 assert stdenv.isLinux;
@@ -8,12 +8,7 @@ assert stdenv.isLinux;
 let
 
   bnumber = with stdenv.lib; build: last (splitString "-" build);
-  mkIdeaProduct' = callPackage ./common.nix { };
-  mkIdeaProduct = attrs: mkIdeaProduct' ({
-      # After IDEA 15 we can no longer use OpenJDK.
-      # https://youtrack.jetbrains.com/issue/IDEA-147272
-      jdk = if (bnumber attrs.build) < "143" then jdk else oraclejdk8;
-  } // attrs);
+  mkIdeaProduct = callPackage ./common.nix { };
 
   buildAndroidStudio = { name, version, build, src, license, description }:
     let drv = (mkIdeaProduct rec {
