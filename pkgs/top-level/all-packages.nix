@@ -2870,7 +2870,7 @@ let
 
   pythonIRClib = pythonPackages.pythonIRClib;
 
-  pythonSexy = builderDefsPackage (callPackage ../development/python-modules/libsexy) { };
+  pythonSexy = callPackage ../development/python-modules/libsexy { };
 
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
