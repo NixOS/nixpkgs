@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages, openssl, acl, lz4 }:
+{ stdenv, fetchurl, python3Packages, acl, lz4, openssl }:
 
 python3Packages.buildPythonPackage rec {
   name = "borgbackup-${version}";
@@ -10,12 +10,29 @@ python3Packages.buildPythonPackage rec {
     sha256 = "0n78c982kdfqbyi9jawcvzgdik4l36c2s7rpzkfr1ka6506k2rx4";
   };
 
-  propagatedBuildInputs = with python3Packages;
-    [ cython msgpack openssl acl llfuse tox detox lz4 setuptools_scm ];
+  nativeBuildInputs = with python3Packages; [
+    # For building documentation:
+    sphinx
+  ];
+  propagatedBuildInputs = [
+    acl lz4 openssl
+  ] ++ (with python3Packages; [
+    cython msgpack llfuse tox detox setuptools_scm
+  ]);
 
   preConfigure = ''
     export BORG_OPENSSL_PREFIX="${openssl}"
     export BORG_LZ4_PREFIX="${lz4}"
+  '';
+
+  postInstall = ''
+    make -C docs singlehtml
+    mkdir -p $out/share/doc/borg
+    cp -R docs/_build/singlehtml $out/share/doc/borg/html
+
+    make -C docs man
+    mkdir -p $out/share/man
+    cp -R docs/_build/man $out/share/man/man1
   '';
 
   meta = with stdenv.lib; {
