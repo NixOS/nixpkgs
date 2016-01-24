@@ -18800,10 +18800,8 @@ in modules // {
       sed -i "s|_lgeos = load_dll('geos_c', fallbacks=.*)|_lgeos = load_dll('geos_c', fallbacks=['${pkgs.geos}/lib/libgeos_c.so'])|" shapely/geos.py
     '';
 
-    # Error when importing extension types. Happens also after install
-
     checkPhase = ''
-      py.test tests
+      py.test $out
     '';
 
     meta = {
