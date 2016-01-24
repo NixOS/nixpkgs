@@ -68,8 +68,8 @@ let
     passthru = rec {
       inherit ruby bundler meta gems;
 
-      wrapper = stdenv.mkDerivation {
-        name = "wrapper-${name}";
+      wrappedRuby = stdenv.mkDerivation {
+        name = "wrapped-ruby-${name}";
         nativeBuildInputs = [ makeWrapper ];
         buildCommand = ''
           mkdir -p $out/bin
@@ -93,7 +93,7 @@ let
         '';
         in stdenv.mkDerivation {
           name = "interactive-${name}-environment";
-          nativeBuildInputs = [ wrapper bundlerEnv ];
+          nativeBuildInputs = [ wrappedRuby bundlerEnv ];
           shellHook = ''
             export OLD_IRBRC="$IRBRC"
             export IRBRC=${irbrc}
