@@ -52,7 +52,7 @@ mkDerivation (rec {
   };
   isLibrary = true;
   isExecutable = true;
-  jailbreak = true;
+  jailbreak = false; # manually jailbreak, until postPatch in mkDerivation is fixed
   doHaddock = false;
   doCheck = false;
   buildDepends = [
@@ -72,6 +72,9 @@ mkDerivation (rec {
   ];
   patches = [ ./ghcjs.patch ];
   postPatch = ''
+    echo "Run jailbreak-cabal to lift version restrictions on build inputs."
+    ${jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
+
     substituteInPlace Setup.hs \
       --replace "/usr/bin/env" "${coreutils}/bin/env"
 
@@ -119,5 +122,4 @@ mkDerivation (rec {
   license = stdenv.lib.licenses.bsd3;
   platforms = ghc.meta.platforms;
   maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan ];
-  broken = true; # depends on outdated versions of its Haskell build inputs
 })
