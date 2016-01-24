@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     [ "${xorg.libXrandr}/lib"
       "${xorg.libXrender}/lib"
       "${xorg.libXext}/lib"
-      "${xorg.libX11}/lib"
+      "${xorg.libX11.out}/lib"
       "${xorg.libXinerama}/lib"
     ];
 
