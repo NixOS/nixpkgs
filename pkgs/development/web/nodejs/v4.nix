@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openssl, python, zlib, libuv, v8, utillinux, http-parser
-, pkgconfig, runCommand, which, libtool
+, pkgconfig, runCommand, which, libtool, nix-xcode
 }:
 
 # nodejs 0.12 can't be built on armv5tel. Armv6 with FPU, minimum I think.
@@ -38,18 +38,13 @@ in stdenv.mkDerivation {
   dontDisableStatic = true;
   prePatch = ''
     patchShebangs .
-    sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' tools/gyp/pylib/gyp/xcode_emulation.py
   '';
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode.patch ./pkg-libpath.patch ];
-
-  postFixup = ''
-    sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' $out/lib/node_modules/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
-  '';
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./pkg-libpath.patch ];
 
   buildInputs = [ python which zlib libuv openssl python ]
     ++ optionals stdenv.isLinux [ utillinux http-parser ]
-    ++ optionals stdenv.isDarwin [ pkgconfig openssl libtool ];
+    ++ optionals stdenv.isDarwin [ pkgconfig openssl libtool nix-xcode ];
   setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true;

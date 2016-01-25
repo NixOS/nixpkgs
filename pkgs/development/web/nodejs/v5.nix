@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openssl, python, zlib, libuv, v8, utillinux, http-parser
-, pkgconfig, runCommand, which, libtool
+, pkgconfig, runCommand, which, libtool, nix-xcode
 }:
 
 # nodejs 5.0.0 can't be built on armv5tel. Armv6 with FPU, minimum I think.
@@ -42,7 +42,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [ python which zlib libuv openssl python ]
     ++ optionals stdenv.isLinux [ utillinux http-parser ]
-    ++ optionals stdenv.isDarwin [ pkgconfig openssl libtool ];
+    ++ optionals stdenv.isDarwin [ pkgconfig openssl libtool nix-xcode ];
   setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true;

@@ -1,6 +1,6 @@
 { stdenv, fetchurl,
   bison2, flex, fontconfig, freetype, gperf, icu, openssl, libjpeg, libpng, perl, python, ruby, sqlite,
-  darwin, writeScriptBin, cups
+  darwin, writeScriptBin, cups, nix-xcode
 }:
 
 let
@@ -44,6 +44,7 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       AGL ApplicationServices AppKit Cocoa OpenGL
       darwin.libobjc fakeClang cups
+      nix-xcode
     ]);
 
 
@@ -57,26 +58,13 @@ in stdenv.mkDerivation rec {
     sed -i 88d src/qt/qtwebkit/Tools/qmake/mkspecs/features/features.prf
     echo 'CONFIG -= create_cmake' >> src/qt/qtwebkit/Source/api.pri
     echo 'CONFIG -= create_cmake' >> src/qt/qtwebkit/Source/widgetsapi.pri
-    pushd src/qt
-
-      substituteInPlace qtbase/configure \
-        --replace /usr/bin/xcode-select true \
-        --replace '/usr/bin/xcodebuild -sdk $sdk -version Path 2>/dev/null' 'echo /var/empty' \
-        --replace '/usr/bin/xcrun -sdk $sdk -find' 'type -P'
-      substituteInPlace qtbase/mkspecs/features/mac/default_pre.prf \
-        --replace '/usr/bin/xcode-select --print-path 2>/dev/null' "echo ${stdenv.libc}" \
-        --replace '/usr/bin/xcrun -find xcrun 2>/dev/null' 'echo success' \
-        --replace '/usr/bin/xcodebuild -version' 'echo Xcode 7.2; echo Build version 7C68' \
-        --replace 'sdk rez' ""
-      for file in $(grep -rl /usr/bin/xcrun .); do
-        substituteInPlace "$file" --replace "/usr/bin/xcrun" ${fakeXcrun}/bin/xcrun
-      done
-      substituteInPlace qtbase/src/tools/qlalr/lalr.cpp --replace _Nullable Nullable
-
-    popd
+    substituteInPlace src/qt/qtbase/src/tools/qlalr/lalr.cpp --replace _Nullable Nullable
   '';
 
-  __impureHostDeps = stdenv.lib.optional stdenv.isDarwin "/usr/lib/libicucore.dylib";
+  __impureHostDeps = stdenv.lib.optionals stdenv.isDarwin [
+    "/usr/lib/libicucore.dylib"
+    "/usr/libexec/PlistBuddy"
+  ];
 
   buildPhase = "./build.sh --confirm";
 
