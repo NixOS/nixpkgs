@@ -67,7 +67,7 @@ let
     kdnssd = callPackage ./kdnssd.nix {};
     kdoctools = callPackage ./kdoctools {};
     kemoticons = callPackage ./kemoticons.nix {};
-    kfilemetadata = callPackage ./kfilemetadata.nix {};
+    kfilemetadata = callPackage ./kfilemetadata {};
     kglobalaccel = callPackage ./kglobalaccel.nix {};
     kguiaddons = callPackage ./kguiaddons.nix {};
     khtml = callPackage ./khtml.nix {};
