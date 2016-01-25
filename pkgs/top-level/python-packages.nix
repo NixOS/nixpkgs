@@ -1633,6 +1633,9 @@ in modules // {
     propagatedBuildInputs = with self; [ contextlib2 pyxdg pycparser alembic ]
       ++ optionals (!isPyPy) [ cffi ];
 
+    # No proper test suite. Included tests cannot be run because of relative import
+    doCheck = false;
+
     meta = {
       description = "Deduplication for Btrfs";
       longDescription = ''
