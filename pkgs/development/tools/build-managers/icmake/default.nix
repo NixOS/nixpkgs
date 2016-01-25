@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "A program maintenance (make) utility using a C-like grammar";
     homepage = https://fbb-git.github.io/icmake/;
     license = licenses.gpl3;

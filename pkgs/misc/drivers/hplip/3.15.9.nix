@@ -8,9 +8,8 @@
 
 let
 
-  version = "3.15.9";
-
   name = "hplip-${version}";
+  version = "3.15.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
@@ -48,7 +47,7 @@ assert withPlugin -> builtins.elem hplipArch pluginArches
   || throw "HPLIP plugin not supported on ${stdenv.system}";
 
 stdenv.mkDerivation {
-  inherit name src;
+  inherit name src version;
 
   buildInputs = [
     libjpeg
@@ -179,7 +178,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Print, scan and fax HP drivers for Linux";
     homepage = http://hplipopensource.com/;
     license = if withPlugin

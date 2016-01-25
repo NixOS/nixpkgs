@@ -8,9 +8,8 @@
 
 let
 
-  version = "3.15.11";
-
   name = "hplip-${version}";
+  version = "3.15.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
@@ -179,7 +178,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Print, scan and fax HP drivers for Linux";
     homepage = http://hplipopensource.com/;
     license = if withPlugin

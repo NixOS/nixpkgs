@@ -2,8 +2,8 @@
 , coreutils, iptables, nettools, openssh, procps }:
   
 pythonPackages.buildPythonPackage rec {
-  version = "0.76";
   name = "sshuttle-${version}";
+  version = "0.76";
 
   src = fetchurl {
     sha256 = "1q0hr0vhdvv23cw5dqndsmf61283mvs6b14662ci00xj6zp5v48b";
@@ -26,7 +26,6 @@ pythonPackages.buildPythonPackage rec {
   '';
   
   meta = with stdenv.lib; {
-    inherit version;
     homepage = https://github.com/sshuttle/sshuttle/;
     description = "Transparent proxy server that works as a poor man's VPN";
     longDescription = ''

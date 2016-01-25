@@ -2,11 +2,11 @@
 , mujs, mupdf, ncurses, openjpeg, openssl }:
 
 let
-  version = "0.5.1";
   binaries = [ "jfbpdf" "jfbview" "jpdfcat" "jpdfgrep" ];
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "jfbview-${version}";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     sha256 = "113bkf49q04k9rjps5l28ychmzsfjajp9cjhr433s9ld0972z01m";
@@ -27,7 +27,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "PDF and image viewer for the Linux framebuffer";
     longDescription = ''
       A very fast PDF and image viewer for the Linux framebuffer with some

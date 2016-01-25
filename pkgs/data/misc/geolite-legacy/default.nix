@@ -5,13 +5,10 @@ let
     inherit name sha256;
     url = "https://geolite.maxmind.com/download/geoip/database/${src}";
   };
-
-  # Annoyingly, these files are updated without a change in URL. This means that
-  # builds will start failing every month or so, until the hashes are updated.
-  version = "2016-01-25";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "geolite-legacy-${version}";
+  version = "2016-01-25";
 
   srcGeoIP = fetchDB
     "GeoLiteCountry/GeoIP.dat.gz" "GeoIP.dat.gz"
@@ -33,7 +30,6 @@ stdenv.mkDerivation {
     "1id60almra7mq4v86p37sfph8jrbdnc5pzxvy55wiyrvf6ydvk56";
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "GeoLite Legacy IP geolocation databases";
     homepage = https://geolite.maxmind.com/download/geoip;
     license = licenses.cc-by-sa-30;
