@@ -13657,7 +13657,7 @@ let
 
   VoiceOfFaust = callPackage ../applications/audio/VoiceOfFaust { };
 
-  vorbisTools = callPackage ../applications/audio/vorbis-tools { };
+  vorbis-tools = callPackage ../applications/audio/vorbis-tools { };
 
   vue = callPackage ../applications/misc/vue { };
 
@@ -15973,6 +15973,7 @@ aliases = with self; rec {
   quake3game = ioquake3; # added 2016-01-14
   scim = sc-im; # added 2016-01-22
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
+  vorbisTools = vorbis-tools; # added 2016-01-26
 };
 
 tweakAlias = _n: alias: with lib;

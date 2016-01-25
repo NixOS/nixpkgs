@@ -11278,7 +11278,7 @@ in modules // {
     };
 
     # Needed for tests only
-    buildInputs = [ pkgs.faad2 pkgs.flac pkgs.vorbisTools pkgs.liboggz ];
+    buildInputs = [ pkgs.faad2 pkgs.flac pkgs.vorbis-tools pkgs.liboggz ];
 
     meta = {
       description = "Python multimedia tagging library";

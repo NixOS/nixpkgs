@@ -1,6 +1,6 @@
 { stdenv, fetchurl, utillinux
 , cdparanoia, cdrdao, dvdplusrwtools, flac, lame, mpg123, normalize
-, vorbisTools, xorriso }:
+, vorbis-tools, xorriso }:
 
 stdenv.mkDerivation rec {
   name = "bashburn-${version}";
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
       BB_READCD=${xorriso}/bin/"xorriso -as mkisofs" \
       BB_MP3ENC=${lame}/bin/lame \
       BB_MP3DEC=${mpg123}/bin/mpg123 \
-      BB_OGGENC=${vorbisTools}/bin/oggenc \
-      BB_OGGDEC=${vorbisTools}/bin/oggdec \
+      BB_OGGENC=${vorbis-tools}/bin/oggenc \
+      BB_OGGDEC=${vorbis-tools}/bin/oggdec \
       BB_FLACCMD=${flac}/bin/flac \
       BB_EJECT=${utillinux}/bin/eject \
       BB_NORMCMD=${normalize}/bin/normalize \

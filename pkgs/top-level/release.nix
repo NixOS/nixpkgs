@@ -210,7 +210,7 @@ let
       vice = linux;
       vimHugeX = linux;
       vncrec = linux;
-      vorbisTools = linux;
+      vorbis-tools = linux;
       vsftpd = linux;
       w3m = all;
       weechat = linux;
