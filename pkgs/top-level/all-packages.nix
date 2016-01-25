@@ -13401,7 +13401,7 @@ let
       numpy pyasn1 mock zope_interface;
   };
 
-  tailor = builderDefsPackage (callPackage ../applications/version-management/tailor) {};
+  tailor = callPackage ../applications/version-management/tailor {};
 
   tangogps = callPackage ../applications/misc/tangogps {
     gconf = gnome.GConf;
