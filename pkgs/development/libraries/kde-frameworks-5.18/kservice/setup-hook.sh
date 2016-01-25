@@ -1,43 +1,17 @@
-addServicePkg() {
-    local propagated
-    for dir in "share/kservices5" "share/kservicetypes5"; do
-        if [[ -d "$1/$dir" ]]; then
-            propagated=
-            for pkg in $propagatedBuildInputs; do
-                if [[ "z$pkg" == "z$1" ]]; then
-                    propagated=1
-                    break
-                fi
-            done
-            if [[ -z $propagated ]]; then
-                propagatedBuildInputs="$propagatedBuildInputs $1"
-            fi
-
-            propagated=
-            for pkg in $propagatedUserEnvPkgs; do
-                if [[ "z$pkg" == "z$1" ]]; then
-                    propagated=1
-                    break
-                fi
-            done
-            if [[ -z $propagated ]]; then
-                propagatedUserEnvPkgs="$propagatedUserEnvPkgs $1"
-            fi
-
-            break
-        fi
-    done
+_propagateServices() {
+    if [ -d "$1/share/kservices5" ]; then
+        propagateOnce propagatedUserEnvPkgs "$1"
+        addToSearchPathOnce XDG_DATA_DIRS "$1/share"
+    fi
 }
 
-envHooks+=(addServicePkg)
-
-local propagated
-for pkg in $propagatedBuildInputs; do
-    if [[ "z$pkg" == "z@out@" ]]; then
-        propagated=1
-        break
+_propagateServiceTypes() {
+    if [ -d "$1/share/kservicetypes5" ]; then
+        propagateOnce propagatedUserEnvPkgs "$1"
+        addToSearchPathOnce XDG_DATA_DIRS "$1/share"
     fi
-done
-if [[ -z $propagated ]]; then
-    propagatedBuildInputs="$propagatedBuildInputs @out@"
-fi
+}
+
+envHooks+=(_propagateServices _propagateServiceTypes)
+
+propagateOnce propagatedBuildInputs "@out@"
