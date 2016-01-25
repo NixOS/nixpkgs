@@ -3,7 +3,6 @@ addQtDependency() {
     addToSearchPath QML_IMPORT_PATH "$1/lib/qt5/imports"
     addToSearchPath QML2_IMPORT_PATH "$1/lib/qt5/qml"
     addToSearchPath XDG_CONFIG_DIRS "$1/etc/xdg"
-    addToSearchPath XDG_DATA_DIRS "$1/share"
 }
 
 wrapQtProgram() {
@@ -33,10 +32,10 @@ makeQtWrapper() {
 }
 
 # cannot use addToSearchPath because these directories may not exist yet
-export QT_PLUGIN_PATH="$QT_PLUGIN_PATH${QT_PLUGIN_PATH:+:}$out/lib/qt5/plugins"
-export QML_IMPORT_PATH="$QML_IMPORT_PATH${QML_IMPORT_PATH:+:}$out/lib/qt5/imports"
-export QML2_IMPORT_PATH="$QML2_IMPORT_PATH${QML2_IMPORT_PATH:+:}$out/lib/qt5/qml"
-export XDG_CONFIG_DIRS="$XDG_CONFIG_DIRS${XDG_CONFIG_DIRS:+:}$out/etc/xdg"
-export XDG_DATA_DIRS="$XDG_DATA_DIRS${XDG_DATA_DIRS:+:}$out/share"
+export QT_PLUGIN_PATH="$QT_PLUGIN_PATH${QT_PLUGIN_PATH:+:}${!outputLib}/lib/qt5/plugins"
+export QML_IMPORT_PATH="$QML_IMPORT_PATH${QML_IMPORT_PATH:+:}${!outputLib}/lib/qt5/imports"
+export QML2_IMPORT_PATH="$QML2_IMPORT_PATH${QML2_IMPORT_PATH:+:}${!outputLib}/lib/qt5/qml"
+export XDG_CONFIG_DIRS="$XDG_CONFIG_DIRS${XDG_CONFIG_DIRS:+:}${!outputLib}/etc/xdg"
+export XDG_DATA_DIRS="$XDG_DATA_DIRS${XDG_DATA_DIRS:+:}${!outputLib}/share"
 
 envHooks+=(addQtDependency)
