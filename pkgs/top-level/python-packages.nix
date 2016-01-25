@@ -390,6 +390,9 @@ in modules // {
       ${python.interpreter} tests.py
     '';
 
+    # 'Could not contact DNS servers'
+    doCheck = false;
+
     meta = {
       homepage = http://github.com/saghul/aiodns;
       license = licenses.mit;
