@@ -119,7 +119,6 @@ let
       "systemd-poweroff.service"
       "halt.target"
       "systemd-halt.service"
-      "ctrl-alt-del.target"
       "shutdown.target"
       "umount.target"
       "final.target"
@@ -150,7 +149,6 @@ let
       # Misc.
       "systemd-sysctl.service"
     ]
-
     ++ cfg.additionalUpstreamSystemUnits;
 
   upstreamSystemWants =
@@ -449,6 +447,12 @@ in
       default = "multi-user.target";
       type = types.str;
       description = "Default unit started when the system boots.";
+    };
+
+    systemd.ctrl-alt-del = mkOption {
+      default = "reboot.target";
+      type = types.str;
+      description = "Target that should be started when Ctrl-Alt-Delete is pressed.";
     };
 
     systemd.globalEnvironment = mkOption {
