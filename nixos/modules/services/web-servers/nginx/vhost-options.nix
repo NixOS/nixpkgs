@@ -26,6 +26,18 @@ with lib;
       '';
     };
 
+    enableACME = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Whether to ask Let's Encrypt to sign a certificate for this vhost.";
+    };
+
+    acmeRoot = mkOption {
+      type = types.str;
+      default = "/var/lib/acme/acme-challenge";
+      description = "Directory to store certificates and keys managed by the ACME service.";
+    };
+
     enableSSL = mkOption {
       type = types.bool;
       default = false;
@@ -44,7 +56,7 @@ with lib;
       description = "Path to server SSL certificate.";
     };
 
-    sslCertificateKey= mkOption {
+    sslCertificateKey = mkOption {
       type = types.path;
       example = "/var/host.key";
       description = "Path to server SSL certificate key.";

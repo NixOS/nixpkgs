@@ -4,7 +4,13 @@ with lib;
 
 let
   cfg = config.services.nginx;
-  nginx = cfg.package;
+  virtualHosts = mapAttrs (vhostName: vhostConfig:
+    vhostConfig // (optionalAttrs vhostConfig.enableACME {
+      sslCertificate = "/var/lib/acme/${vhostName}/fullchain.pem";
+      sslCertificateKey = "/var/lib/acme/${vhostName}/key.pem";
+    })
+  ) cfg.virtualHosts;
+
   configFile = pkgs.writeText "nginx.conf" ''
     user ${cfg.user} ${cfg.group};
     error_log stderr;
@@ -72,21 +78,23 @@ let
         port = if vhost.port != null then vhost.port else (if ssl then 443 else 80);
         listenString = toString port + optionalString ssl " ssl spdy";
       in ''
-        ${if vhost.forceSSL then ''
+        ${optionalString vhost.forceSSL ''
           server {
             listen 80;
             listen [::]:80;
 
             server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
+            ${optionalString vhost.enableACME "location /.well-known/acme-challenge { root ${vhost.acmeRoot}; }"}
             return 301 https://$host${optionalString (port != 443) ":${port}"}$request_uri;
           }
-        '' else ""}
+        ''}
 
         server {
           listen ${listenString};
           listen [::]:${listenString};
 
           server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
+          ${optionalString vhost.enableACME "location /.well-known/acme-challenge { root ${vhost.acmeRoot}; }"}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
             return 301 https://${vhost.globalRedirect}$request_uri;
@@ -101,7 +109,7 @@ let
           ${vhost.extraConfig}
         }
       ''
-  ) cfg.virtualHosts);
+  ) virtualHosts);
   genLocations = locations: concatStringsSep "\n" (mapAttrsToList (location: config: ''
     location ${location} {
       ${optionalString (config.proxyPass != null) "proxy_pass ${config.proxyPass};"}
@@ -202,7 +210,6 @@ in
       description = "Nginx Web Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ nginx ];
       preStart =
         ''
         mkdir -p ${cfg.stateDir}/logs
@@ -210,13 +217,21 @@ in
         chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
         '';
       serviceConfig = {
-        ExecStart = "${nginx}/bin/nginx -c ${configFile} -p ${cfg.stateDir}";
+        ExecStart = "${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
         RestartSec = "10s";
         StartLimitInterval = "1min";
       };
     };
+
+    security.acme.certs = mapAttrs (vhostName: vhostConfig: {
+      webroot = vhostConfig.acmeRoot;
+      extraDomains = genAttrs vhostConfig.serverAliases (alias: {
+        "${alias}" = null;
+      });
+    }) virtualHosts;
+
 
     users.extraUsers = optionalAttrs (cfg.user == "nginx") (singleton
       { name = "nginx";
