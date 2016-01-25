@@ -377,18 +377,18 @@ in modules // {
 
   aiodns = buildPythonPackage rec {
     name = "aiodns-${version}";
-    version = "1.0.0";
+    version = "1.0.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/aiodns/${name}.tar.gz";
-      sha256 = "95140e4d2b67ee16dfbf357d9b54d7453b58f1732e81f869a1803a3ba3773b0d";
+      sha256 = "595b78b8d54115d937cf60d778c02dad76b6f789fd527dab308f99e5601e7f3d";
     };
 
     propagatedBuildInputs = with self; [ pycares ] ++ optional isPy33 asyncio ++ optional (isPy26 || isPy27 || isPyPy) trollius;
 
-    # Tests are not distributed
-    # https://github.com/saghul/aiodns/issues/13
-    doCheck = false;
+    checkPhase = ''
+      ${python.interpreter} tests.py
+    '';
 
     meta = {
       homepage = http://github.com/saghul/aiodns;
