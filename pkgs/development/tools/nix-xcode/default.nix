@@ -36,4 +36,9 @@ in stdenv.mkDerivation {
     ln -s ${script ./xcrun.sh} $out/bin/xcrun
     ln -s ${script ./xcodebuild.sh} $out/bin/xcodebuild
   '';
+
+  meta = with stdenv.lib; {
+    maintainers = [ maintainers.pikajude ];
+    platforms = platforms.darwin;
+  };
 }
