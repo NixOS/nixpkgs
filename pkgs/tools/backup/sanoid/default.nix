@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     install -m 755 sleepymutex $out/bin/sleepymutex
     install -m 755 syncoid $out/bin/syncoid
     install -m 644 sanoid.defaults.conf $out/etc/sanoid.defaults.conf
-    
+
     substituteInPlace $out/bin/findoid --replace '/sbin/zfs' ${zfs}/bin/zfs
     substituteInPlace $out/bin/findoid --replace '/usr/bin/perl' ${perl}/bin/perl
     substituteInPlace $out/bin/sanoid --replace '/sbin/zfs' ${zfs}/bin/zfs
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Policy-driven snapshot management and replication tools for ZFS.";
+    description = "Policy-driven snapshot management and replication tools for ZFS";
     homepage    = "http://www.openoid.net/products/";
     license     = stdenv.lib.licenses.gpl3;
     platforms   = stdenv.lib.platforms.linux;

@@ -26,13 +26,7 @@ in
 {
   options = {
     services.sanoid = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable periodic Sanoid runs.
-        '';
-      };
+      enable = mkEnableOption "Enable periodic Sanoid runs.";
 
       period = mkOption {
         type = types.str;
