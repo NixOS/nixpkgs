@@ -675,6 +675,8 @@ let
 
   barcode = callPackage ../tools/graphics/barcode {};
 
+  bashburn = callPackage ../tools/cd-dvd/bashburn { };
+
   bashmount = callPackage ../tools/filesystems/bashmount {};
 
   bc = callPackage ../tools/misc/bc { };
