@@ -18953,6 +18953,32 @@ in modules // {
     };
   };
 
+  sounddevice = buildPythonPackage rec {
+    name = "sounddevice-${version}";
+    version = "0.3.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sounddevice/${name}.tar.gz";
+      sha256 = "8e5a6816b369c7aea77e06092b2fee99c8b6efbeef4851f53ea3cb208a7607f5";
+    };
+
+    propagatedBuildInputs = with self; [ cffi numpy pkgs.portaudio ];
+
+    # No tests included nor upstream available.
+    doCheck = false;
+
+    prePatch = ''
+      substituteInPlace sounddevice.py --replace "'portaudio'" "'${pkgs.portaudio}/lib/libportaudio.so.2'"
+    '';
+
+    meta = {
+      description = "Play and Record Sound with Python";
+      homepage = http://python-sounddevice.rtfd.org/;
+      license = with licenses; [ mit ];
+      maintainers = with maintainers; [ fridh ];
+    };
+  };
+
   stevedore = buildPythonPackage rec {
     name = "stevedore-1.7.0";
 
