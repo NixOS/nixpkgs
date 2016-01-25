@@ -11,7 +11,8 @@
 
 buildPythonPackage rec {
 
-  name = "youtube-dl-2016.01.01";
+  name = "youtube-dl-${version}";
+  version = "2016.01.01";
 
   src = fetchurl {
     url = "http://yt-dl.org/downloads/${stdenv.lib.getVersion name}/${name}.tar.gz";
@@ -23,6 +24,9 @@ buildPythonPackage rec {
   # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
   postInstall = stdenv.lib.optionalString (ffmpeg != null)
     ''wrapProgram $out/bin/youtube-dl --prefix PATH : "${ffmpeg}/bin"'';
+
+  # Requires network
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = http://rg3.github.io/youtube-dl/;
