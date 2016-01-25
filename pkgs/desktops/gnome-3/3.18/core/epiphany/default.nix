@@ -1,6 +1,6 @@
 { stdenv, intltool, fetchurl, pkgconfig, gtk3, glib, nspr, icu
 , bash, makeWrapper, gnome3, libwnck3, libxml2, libxslt, libtool
-, webkitgtk, libsoup, libsecret, gnome_desktop, libnotify, p11_kit
+, webkitgtk, libsoup, glib_networking, libsecret, gnome_desktop, libnotify, p11_kit
 , sqlite, gcr, avahi, nss, isocodes, itstool, file, which
 , gdk_pixbuf, librsvg, gnome_common }:
 
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     for f in $out/bin/* $out/libexec/*; do
       wrapProgram "$f" \
         --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
+        --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
         --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
     done
   '';

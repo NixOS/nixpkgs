@@ -76,7 +76,7 @@ in
 
        system.activationScripts.gale = mkIf cfg.enable (
          stringAfter [ "users" "groups" ] ''
-           chmod -R 755 ${home}
+           chmod 755 ${home}
            mkdir -m 0777 -p ${home}/auth/cache
            mkdir -m 1777 -p ${home}/auth/local # GALE_DOMAIN.gpub
            mkdir -m 0700 -p ${home}/auth/private # ROOT.gpub
@@ -86,7 +86,8 @@ in
            mkdir -m 0700 -p ${home}/.gale/auth/private # GALE_DOMAIN.gpri
 
            ln -sf ${pkgs.gale}/etc/gale/auth/trusted/ROOT "${home}/auth/trusted/ROOT"
-           chown -R ${cfg.user}:${cfg.group} ${home}
+           chown ${cfg.user}:${cfg.group} ${home} ${home}/auth ${home}/auth/*
+           chown ${cfg.user}:${cfg.group} ${home}/.gale ${home}/.gale/auth ${home}/.gale/auth/private
          ''
        );
 
@@ -149,10 +150,9 @@ in
          after = [ "network.target" ];
 
          preStart = ''
-           install -m 0640 ${keyPath}/${cfg.domain}.gpri "${home}/.gale/auth/private/"
-           install -m 0644 ${gpubFile} "${home}/.gale/auth/private/${cfg.domain}.gpub"
-           install -m 0644 ${gpubFile} "${home}/auth/local/${cfg.domain}.gpub"
-           chown -R ${cfg.user}:${cfg.group} ${home}
+           install -m 0640 -o ${cfg.user} -g ${cfg.group} ${keyPath}/${cfg.domain}.gpri "${home}/.gale/auth/private/"
+           install -m 0644 -o ${cfg.user} -g ${cfg.group} ${gpubFile} "${home}/.gale/auth/private/${cfg.domain}.gpub"
+           install -m 0644 -o ${cfg.user} -g ${cfg.group} ${gpubFile} "${home}/auth/local/${cfg.domain}.gpub"
          '';
 
          serviceConfig = {

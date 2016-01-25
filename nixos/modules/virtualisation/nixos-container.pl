@@ -97,10 +97,10 @@ if ($action eq "create") {
     if ($ensureUniqueName) {
         my $base = $containerName;
         for (my $nr = 0; ; $nr++) {
-            $containerName = "$base-$nr";
             $confFile = "/etc/containers/$containerName.conf";
             $root = "/var/lib/containers/$containerName";
             last unless -e $confFile || -e $root;
+            $containerName = "$base-$nr";
         }
     }
 

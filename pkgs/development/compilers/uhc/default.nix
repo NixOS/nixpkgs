@@ -51,5 +51,7 @@ in stdenv.mkDerivation rec {
     # support the -static flag and thus breaks the build.
     platforms = ["x86_64-linux"];
 
+    broken = true;  # https://github.com/UU-ComputerScience/uhc/issues/69
+
   };
 }

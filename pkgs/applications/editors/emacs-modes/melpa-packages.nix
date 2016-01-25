@@ -14,62 +14,174 @@ To update the list of packages from MELPA,
 
 { lib }:
 
-let
-
-  inherit (lib) makeScope mapAttrs;
-
-  json = builtins.readFile ./melpa-packages.json;
-  manifest = builtins.fromJSON json;
-
-  mkPackage = self: name: recipe:
-    let drv =
-          { melpaBuild, stdenv, fetchbzr, fetchcvs, fetchFromGitHub, fetchFromGitLab
-          , fetchgit, fetchhg, fetchsvn, fetchurl }:
-          let
-            unknownFetcher =
-              abort "emacs-${name}: unknown fetcher '${recipe.fetch.tag}'";
-            fetch =
-              {
-                inherit fetchbzr fetchcvs fetchFromGitHub fetchFromGitLab fetchgit fetchhg
-                        fetchsvn fetchurl;
-              }."${recipe.fetch.tag}"
-              or unknownFetcher;
-            args = builtins.removeAttrs recipe.fetch [ "tag" ];
-            src = fetch args;
-            recipeFile = fetchurl {
-              url = "https://raw.githubusercontent.com/milkypostman/melpa/${recipe.recipe.commit}/recipes/${name}";
-              inherit (recipe.recipe) sha256;
-            };
-          in melpaBuild {
-            pname = name;
-            inherit (recipe) version;
-            inherit recipeFile src;
-            packageRequires =
-              let lookupDep = d: self."${d}" or null;
-              in map lookupDep recipe.deps;
-            meta = {
-              homepage = "http://melpa.org/#/${name}";
-              license = stdenv.lib.licenses.free;
-            };
-          };
-    in self.callPackage drv {};
-
-in
-
 self:
 
   let
-    super = mapAttrs (mkPackage self) manifest;
+    imported = import ./melpa-generated.nix { inherit (self) callPackage; };
+    super = builtins.removeAttrs imported [
+      "swbuff-x" # required dependency swbuff is missing
+    ];
 
-    markBroken = pkg: pkg.override {
-      melpaBuild = args: self.melpaBuild (args // {
-        meta = (args.meta or {}) // { broken = true; };
+    dontConfigure = pkg: pkg.override (args: {
+      melpaBuild = drv: args.melpaBuild (drv // {
+        configureScript = "true";
       });
+    });
+
+    markBroken = pkg: pkg.override (args: {
+      melpaBuild = drv: args.melpaBuild (drv // {
+        meta = (drv.meta or {}) // { broken = true; };
+      });
+    });
+
+    overrides = {
+      ac-php = super.ac-php.override {
+        inherit (self.melpaPackages) company popup;
+      };
+
+      # upstream issue: mismatched filename
+      ack-menu = markBroken super.ack-menu;
+
+      airline-themes = super.airline-themes.override {
+        inherit (self.melpaPackages) powerline;
+      };
+
+      # upstream issue: missing file header
+      bufshow = markBroken super.bufshow;
+
+      # part of a larger package
+      # upstream issue: missing package version
+      cmake-mode = markBroken (dontConfigure super.cmake-mode);
+
+      # upstream issue: missing file header
+      cn-outline = markBroken super.cn-outline;
+
+      # upstream issue: missing file header
+      connection = markBroken super.connection;
+
+      # upstream issue: missing file header
+      crux = markBroken super.crux;
+
+      # upstream issue: missing file header
+      dictionary = markBroken super.dictionary;
+
+      easy-kill-extras = super.easy-kill-extras.override {
+        inherit (self.melpaPackages) easy-kill;
+      };
+
+      # missing git
+      egg = markBroken super.egg;
+
+      # upstream issue: missing file header
+      elmine = markBroken super.elmine;
+
+      ess-R-data-view = super.ess-R-data-view.override {
+        inherit (self.melpaPackages) ess ctable popup;
+      };
+
+      ess-R-object-popup = super.ess-R-object-popup.override {
+        inherit (self.melpaPackages) ess popup;
+      };
+
+      # missing OCaml
+      flycheck-ocaml = markBroken super.flycheck-ocaml;
+
+      # upstream issue: missing file header
+      fold-dwim = markBroken super.fold-dwim;
+
+      # build timeout
+      graphene = markBroken super.graphene;
+
+      # upstream issue: mismatched filename
+      helm-lobsters = markBroken super.helm-lobsters;
+
+      # upstream issue: missing file header
+      helm-words = markBroken super.helm-words;
+
+      # upstream issue: missing file header
+      ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
+
+      # upstream issue: missing file header
+      initsplit = markBroken super.initsplit;
+
+      # upstream issue: missing file header
+      jsfmt = markBroken super.jsfmt;
+
+      # upstream issue: missing file header
+      link = markBroken super.link;
+
+      # upstream issue: mismatched filename
+      link-hint = markBroken super.link-hint;
+
+      # part of a larger package
+      llvm-mode = dontConfigure super.llvm-mode;
+
+      # upstream issue: missing file header
+      maxframe = markBroken super.maxframe;
+
+      # missing OCaml
+      merlin = markBroken super.merlin;
+
+      mhc = super.mhc.override {
+        inherit (self.melpaPackages) calfw;
+      };
+
+      # missing .NET
+      nemerle = markBroken super.nemerle;
+
+      # part of a larger package
+      notmuch = dontConfigure super.notmuch;
+
+      # missing OCaml
+      ocp-indent = markBroken super.ocp-indent;
+
+      # upstream issue: missing file header
+      perl-completion = markBroken super.perl-completion;
+
+      # upstream issue: truncated file
+      powershell = markBroken super.powershell;
+
+      # upstream issue: mismatched filename
+      processing-snippets = markBroken super.processing-snippets;
+
+      # upstream issue: missing file header
+      qiita = markBroken super.qiita;
+
+      # upstream issue: missing package version
+      quack = markBroken super.quack;
+
+      # upstream issue: missing file header
+      railgun = markBroken super.railgun;
+
+      # upstream issue: missing file footer
+      seoul256-theme = markBroken super.seoul256-theme;
+
+      spaceline = super.spaceline.override {
+        inherit (self.melpaPackages) powerline;
+      };
+
+      # upstream issue: missing file header
+      speech-tagger = markBroken super.speech-tagger;
+
+      # upstream issue: missing file header
+      stgit = markBroken super.stgit;
+
+      # upstream issue: missing file header
+      textmate = markBroken super.textmate;
+
+      # missing OCaml
+      utop = markBroken super.utop;
+
+      # upstream issue: missing file header
+      voca-builder = markBroken super.voca-builder;
+
+      # upstream issue: missing file header
+      window-numbering = markBroken super.window-numbering;
+
+      # upstream issue: missing file header
+      zeitgeist = markBroken super.zeitgeist;
     };
 
-    melpaPackages = super // {
-      # broken upstream
-      ack-menu = markBroken super.ack-menu;
-    };
+    melpaPackages = super // overrides;
   in
     melpaPackages // { inherit melpaPackages; }

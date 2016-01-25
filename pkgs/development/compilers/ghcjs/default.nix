@@ -119,5 +119,4 @@ mkDerivation (rec {
   license = stdenv.lib.licenses.bsd3;
   platforms = ghc.meta.platforms;
   maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan ];
-  broken = true; # depends on outdated versions of its Haskell build inputs
 })

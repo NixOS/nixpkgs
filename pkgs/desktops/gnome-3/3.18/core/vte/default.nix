@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gnome3, ncurses, gobjectIntrospection, vala, libxml2
-, gnutls, selectTextPatch ? false }:
+{ stdenv, fetchurl, intltool, pkgconfig
+, gnome3, ncurses, gobjectIntrospection, vala, libxml2, gnutls
 
-stdenv.mkDerivation rec {
+, selectTextPatch ? false
+, fetchFromGitHub, autoconf, automake, libtool, gtk_doc, gperf
+}:
+
+let baseAttrs = rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  patches = with stdenv.lib; optional selectTextPatch ./expose_select_text.0.40.0.patch;
-
-  buildInputs = [ gobjectIntrospection intltool pkgconfig gnome3.glib 
+  buildInputs = [ gobjectIntrospection intltool pkgconfig gnome3.glib
                   gnome3.gtk3 ncurses vala libxml2 ];
 
   propagatedBuildInputs = [ gnutls ];
@@ -36,4 +38,22 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ astsmtl antono lethalman ];
     platforms = platforms.linux;
   };
-}
+};
+
+in stdenv.mkDerivation ( baseAttrs
+  // stdenv.lib.optionalAttrs selectTextPatch rec {
+      name = "vte-ng-${version}";
+      version = "0.42.1.a";
+      src = fetchFromGitHub {
+        owner = "thestinger";
+        repo = "vte-ng";
+        rev = version;
+        sha256 = "1296rvngixi6l31mhhaks6vr1xyqw8h6n5hwknadrlk95nknrpxm";
+      };
+      # slightly hacky; I couldn't make it work with autoreconfHook
+      configureScript = "./autogen.sh";
+      nativeBuildInputs = (baseAttrs.nativeBuildInputs or [])
+        ++ [ gtk_doc autoconf automake libtool gperf ];
+  }
+)
+

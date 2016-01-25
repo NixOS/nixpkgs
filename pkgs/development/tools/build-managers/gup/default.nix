@@ -1,10 +1,10 @@
 { stdenv, fetchgit, lib, python, which }:
 let
-  version = "0.5.1";
+  version = "0.5.3";
   src = fetchgit {
     url = "https://github.com/gfxmonk/gup.git";
-    rev = "f185052e2177ed5e46720e6c6cfb529b96cd17e2";
-    sha256 = "c2e27cdba2231017ceb4868f58f5c3b224be0491b81558b4e59bb08a952ad1a5";
+    rev = "55ffd8828ddc28a2a786b75422d672d6569f961f";
+    sha256 = "7c2abbf5d3814c6b84da0de1c91f9f7d299c2362cf091da96f6a68d8fffcb5ce";
   };
 in
 import ./build.nix

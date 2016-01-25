@@ -1,0 +1,108 @@
+diff --git a/src/rebar3.erl b/src/rebar3.erl
+index 2b73844..af1d871 100644
+--- a/src/rebar3.erl
++++ b/src/rebar3.erl
+@@ -282,9 +282,11 @@ start_and_load_apps(Caller) ->
+     ensure_running(crypto, Caller),
+     ensure_running(asn1, Caller),
+     ensure_running(public_key, Caller),
+-    ensure_running(ssl, Caller),
+-    inets:start(),
+-    inets:start(httpc, [{profile, rebar}]).
++    ensure_running(ssl, Caller).
++%%    Removed due to the hermicity requirements of Nix
++%%
++%%    inets:start(),
++%%    inets:start(httpc, [{profile, rebar}]).
+ 
+ ensure_running(App, Caller) ->
+     case application:start(App) of
+@@ -339,4 +341,4 @@ safe_define_test_macro(Opts) ->
+ test_defined([{d, 'TEST'}|_]) -> true;
+ test_defined([{d, 'TEST', true}|_]) -> true;
+ test_defined([_|Rest]) -> test_defined(Rest);
+-test_defined([]) -> false.
+\ No newline at end of file
++test_defined([]) -> false.
+diff --git a/src/rebar_hermicity.erl b/src/rebar_hermicity.erl
+new file mode 100644
+index 0000000..d814e2a
+--- /dev/null
++++ b/src/rebar_hermicity.erl
+@@ -0,0 +1,42 @@
++%% -*- erlang-indent-level: 4;indent-tabs-mode: nil -*-
++%% ex: ts=4 sw=4 et
++%% -------------------------------------------------------------------
++%%
++%% rebar: Erlang Build Tools
++%%
++%% Copyright (c) 2016 Eric Merritt (eric@merritt.tech)
++%%
++%% Permission is hereby granted, free of charge, to any person obtaining a copy
++%% of this software and associated documentation files (the "Software"), to deal
++%% in the Software without restriction, including without limitation the rights
++%% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++%% copies of the Software, and to permit persons to whom the Software is
++%% furnished to do so, subject to the following conditions:
++%%
++%% The above copyright notice and this permission notice shall be included in
++%% all copies or substantial portions of the Software.
++%%
++%% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++%% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++%% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++%% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++%% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++%% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
++%% THE SOFTWARE.
++%% -------------------------------------------------------------------
++-module(rebar_hermicity).
++
++-export([request/5]).
++
++-include("rebar.hrl").
++
++%% ====================================================================
++%% Public API
++%% ====================================================================
++
++request(Method, {Url, _Headers}, _HTTPOptions, _Options, _Profile) ->
++    ?ERROR("A request is being made that violates Nix hermicity "
++           "This request has been stopped. Details of the request "
++           "are as follows:", []),
++    ?ERROR("Requesnt: ~p ~s", [Method, Url]),
++    erlang:halt(1).
+diff --git a/src/rebar_pkg_resource.erl b/src/rebar_pkg_resource.erl
+index 4f55ad1..f76fd5d 100644
+--- a/src/rebar_pkg_resource.erl
++++ b/src/rebar_pkg_resource.erl
+@@ -100,10 +100,10 @@ make_vsn(_) ->
+     {error, "Replacing version of type pkg not supported."}.
+ 
+ request(Url, ETag) ->
+-    case httpc:request(get, {Url, [{"if-none-match", ETag} || ETag =/= false]},
+-                       [{ssl, ssl_opts(Url)}, {relaxed, true}],
+-                       [{body_format, binary}],
+-                       rebar) of
++    case rebar_hermicity:request(get, {Url, [{"if-none-match", ETag} || ETag =/= false]},
++                                 [{ssl, ssl_opts(Url)}, {relaxed, true}],
++                                 [{body_format, binary}],
++                                 rebar) of
+         {ok, {{_Version, 200, _Reason}, Headers, Body}} ->
+             ?DEBUG("Successfully downloaded ~s", [Url]),
+             {"etag", ETag1} = lists:keyfind("etag", 1, Headers),
+diff --git a/src/rebar_prv_update.erl b/src/rebar_prv_update.erl
+index 6637ebe..d82c1d8 100644
+--- a/src/rebar_prv_update.erl
++++ b/src/rebar_prv_update.erl
+@@ -44,8 +44,8 @@ do(State) ->
+         TmpFile = filename:join(TmpDir, "packages.gz"),
+ 
+         Url = rebar_state:get(State, rebar_packages_cdn, ?DEFAULT_HEX_REGISTRY),
+-        case httpc:request(get, {Url, []},
+-                           [], [{stream, TmpFile}, {sync, true}],
++        case rebar_hermicity:request(get, {Url, []},
++                                     [], [{stream, TmpFile}, {sync, true}],
+                            rebar) of
+             {ok, saved_to_file} ->
+                 {ok, Data} = file:read_file(TmpFile),

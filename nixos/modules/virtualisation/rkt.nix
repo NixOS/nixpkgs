@@ -58,5 +58,7 @@ in
         ExecStart = "${pkgs.rkt}/bin/rkt gc ${cfg.gc.options}";
       };
     };
+
+    users.extraGroups.rkt = {};
   };
 }

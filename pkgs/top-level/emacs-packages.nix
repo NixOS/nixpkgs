@@ -24,6 +24,9 @@
 ## FOR CONTRIBUTORS
 #
 # When adding a new package here please note that
+# * please use `elpaBuild` for pre-built package.el packages and
+#   `melpaBuild` or `trivialBuild` if the package must actually
+#   be built from the source.
 # * lib.licenses are `with`ed on top of the file here
 # * both trivialBuild and melpaBuild will automatically derive a
 #   `meta` with `platforms` and `homepage` set to something you are
@@ -235,23 +238,6 @@ let
     };
   };
 
-  auctex = melpaBuild rec {
-    pname   = "auctex";
-    version = "11.87.7";
-    src = fetchurl {
-      url    = "http://elpa.gnu.org/packages/${pname}-${version}.tar";
-      sha256 = "07bhw8zc3d1f2basjy80njmxpsp4f70kg3ynkch9ghlai3mm2b7n";
-    };
-    buildPhase = ''
-      cp $src ${pname}-${version}.tar
-    '';
-    meta = {
-      description = "Extensible package for writing and formatting TeX files in GNU Emacs and XEmacs";
-      homepage = https://www.gnu.org/software/auctex/;
-      license = gpl3Plus;
-    };
-  };
-
   autotetris = melpaBuild {
     pname = "autotetris-mode";
     version = "20141114.846";
@@ -429,12 +415,12 @@ let
 
   diminish = melpaBuild rec {
     pname   = "diminish";
-    version = "0.44";
+    version = "0.45";
     src = fetchFromGitHub {
-      owner  = "emacsmirror";
-      repo   = pname;
-      rev    = version;
-      sha256 = "0hshw7z5f8pqxvgxw74kbj6nvprsgfvy45fl854xarnkvqcara09";
+      owner  = "myrjola";
+      repo   = "${pname}.el";
+      rev    = "v${version}";
+      sha256 = "0qpgfgp8hrzz4vdifxq8h25n0a0jlzgf7aa1fpy6r0080v5rqbb6";
     };
     meta = {
       description = "Diminishes the amount of space taken on the mode-line by Emacs minor modes";
@@ -1172,23 +1158,6 @@ let
     };
   };
 
-  let-alist = melpaBuild rec {
-    pname   = "let-alist";
-    version = "1.0.4";
-    src = fetchurl {
-      url    = "http://elpa.gnu.org/packages/${pname}-${version}.el";
-      sha256 = "07312bvvyz86lf64vdkxg2l1wgfjl25ljdjwlf1bdzj01c4hm88x";
-    };
-    unpackPhase = "true";
-    buildPhase = ''
-      cp $src ${pname}-${version}.el
-    '';
-    meta = {
-      description = "Easily let-bind values of an assoc-list by their names";
-      license = gpl3Plus;
-    };
-  };
-
   log4e = melpaBuild rec {
     pname = "log4e";
     version = "0.3.0";
@@ -1381,16 +1350,13 @@ let
     };
   };
 
-  org-plus-contrib = melpaBuild rec {
+  org-plus-contrib = elpaBuild rec {
     pname   = "org-plus-contrib";
     version = "20150406";
     src = fetchurl {
       url    = "http://orgmode.org/elpa/${pname}-${version}.tar";
       sha256 = "1ny2myg4rm75ab2gl5rqrwy7h53q0vv18df8gk3zv13kljj76c6i";
     };
-    buildPhase = ''
-      cp $src ${pname}-${version}.tar
-    '';
     meta = {
       description = "Notes, TODO lists, projects, and authoring in plain-text with Emacs";
       license = gpl3Plus;
@@ -1926,7 +1892,7 @@ in
   lib.makeScope newScope (self:
     {}
     // melpaPackages self
-    // melpaStablePackages self
     // elpaPackages self
+    // melpaStablePackages self
     // packagesFun self
   )

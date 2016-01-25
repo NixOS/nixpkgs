@@ -94,6 +94,18 @@ in
 
     };
 
+    environment.usrbinenv = mkOption {
+      default = "${pkgs.coreutils}/bin/env";
+      example = literalExample ''
+        "''${pkgs.busybox}/bin/env"
+      '';
+      type = types.nullOr types.path;
+      visible = false;
+      description = ''
+        The env(1) executable that is linked system-wide to
+        <literal>/usr/bin/env</literal>.
+      '';
+    };
   };
 
 
@@ -128,11 +140,15 @@ in
         mkdir -m 0555 -p /var/empty
       '';
 
-    system.activationScripts.usrbinenv =
-      ''
+    system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
+      then ''
         mkdir -m 0755 -p /usr/bin
-        ln -sfn ${pkgs.coreutils}/bin/env /usr/bin/.env.tmp
+        ln -sfn ${config.environment.usrbinenv} /usr/bin/.env.tmp
         mv /usr/bin/.env.tmp /usr/bin/env # atomically replace /usr/bin/env
+      ''
+      else ''
+        rm -f /usr/bin/env
+        rmdir --ignore-fail-on-non-empty /usr/bin /usr
       '';
 
     system.activationScripts.tmpfs =

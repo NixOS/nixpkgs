@@ -5,10 +5,8 @@ assert useGnupg1 -> gnupg1 != null;
 assert !useGnupg1 -> gnupg != null;
 
 let
-  gpgPath = if useGnupg1 then
-    "${gnupg1}/bin/gpg"
-  else
-    "${gnupg}/bin/gpg2";
+  gpgStorePath = if useGnupg1 then gnupg1 else gnupg;
+  gpgProgram = if useGnupg1 then "gpg" else "gpg2";
 in
 stdenv.mkDerivation rec {
   name = "gpgme-1.6.0";
@@ -22,7 +20,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gnupg ];
 
-  configureFlags = "--with-gpg=${gpgPath}";
+  configureFlags = [
+    "--with-gpg=${gpgStorePath}/bin/${gpgProgram}"
+    "--enable-fixed-path=${gpgStorePath}/bin"
+  ];
 
   meta = {
     homepage = "http://www.gnupg.org/related_software/gpgme";

@@ -6,14 +6,6 @@
 (setq package-build-working-dir (expand-file-name ".")
       package-build-archive-dir (expand-file-name "."))
 
-(defun melpa2nix-install-package ()
-  (if (not noninteractive)
-      (error "`melpa2nix-install-package' is to be used only with -batch"))
-  (pcase command-line-args-left
-    (`(,archive ,elpa)
-     (progn (setq package-user-dir elpa)
-            (package-install-file archive)))))
-
 (defun melpa2nix-build-package ()
   (if (not noninteractive)
       (error "`melpa2nix-build-package' is to be used only with -batch"))
@@ -25,8 +17,10 @@
   (if (not noninteractive)
       (error "`melpa2nix-build-package' is to be used only with -batch"))
   (pcase command-line-args-left
-    (`(,package ,version ,recipe-file)
-     (let* ((rcp (cdr (package-build--read-from-file recipe-file)))
+    (`(,recipe-file ,version)
+     (let* ((recipe (package-build--read-from-file recipe-file))
+            (rcp (cdr recipe))
+            (package (car recipe))
             (files (package-build--config-file-list rcp)))
        (melpa2nix-package-build-archive package version files)))))
 
@@ -38,8 +32,11 @@
                                                version
                                                files
                                                package-build-working-dir
-                                               package-build-archive-dir)))
+                                               package-build-archive-dir))
+         (archive-file (package-build--archive-file-name archive-entry)))
 
-    (package-build--message "Built in %.3fs, finished at %s"
+    (progn
+      (package-build--message "Built in %.3fs, finished at %s"
                             (time-to-seconds (time-since start-time))
-                            (current-time-string))))
+                            (current-time-string))
+      (princ (format "%s\n" archive-file)))))

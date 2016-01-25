@@ -1,11 +1,11 @@
 { stdenv, fetchurl, kernel }:
 
 stdenv.mkDerivation {
-  name = "e1000e-2.5.4-${kernel.version}";
+  name = "e1000e-3.3.1-${kernel.version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/e1000/e1000e-2.5.4.tar.gz";
-    sha256 = "0bmihkc7y37jzwi996ryqblnyflyhhbimbnrnmlk419vxlzg1pzi";
+    url = "mirror://sourceforge/e1000/e1000e-3.3.1.tar.gz";
+    sha256 = "07hg6xxqgqshnys1qs9wbl9qr7d4ixdkd1y1fj27cg6bn8s2n797";
   };
 
   configurePhase = ''

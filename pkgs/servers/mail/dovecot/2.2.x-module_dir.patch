@@ -6,7 +6,7 @@ diff -ur dovecot-2.2.12-orig/src/auth/main.c dovecot-2.2.12/src/auth/main.c
  	mod_set.filter_callback = auth_module_filter;
  
 -	modules = module_dir_load(AUTH_MODULE_DIR, NULL, &mod_set);
-+	modules = module_dir_load("/var/lib/dovecot/modules/auth", NULL, &mod_set);
++	modules = module_dir_load("/etc/dovecot/modules/auth", NULL, &mod_set);
  	module_dir_init(modules);
  
  	if (!worker)
@@ -15,7 +15,7 @@ diff -ur dovecot-2.2.12-orig/src/auth/main.c dovecot-2.2.12/src/auth/main.c
  	mod_set.ignore_missing = TRUE;
  
 -	modules = module_dir_load_missing(modules, AUTH_MODULE_DIR, names,
-+	modules = module_dir_load_missing(modules, "/var/lib/dovecot/modules/auth", names,
++	modules = module_dir_load_missing(modules, "/etc/dovecot/modules/auth", names,
  					  &mod_set);
  	module_dir_init(modules);
  }
@@ -27,7 +27,7 @@ diff -ur dovecot-2.2.12-orig/src/config/all-settings.c dovecot-2.2.12/src/config
  
  	.mail_plugins = "",
 -	.mail_plugin_dir = MODULEDIR,
-+	.mail_plugin_dir = "/var/lib/dovecot/modules",
++	.mail_plugin_dir = "/etc/dovecot/modules",
  
  	.mail_log_prefix = "%s(%u): ",
  
@@ -36,7 +36,7 @@ diff -ur dovecot-2.2.12-orig/src/config/all-settings.c dovecot-2.2.12/src/config
  	.libexec_dir = PKG_LIBEXECDIR,
  	.mail_plugins = "",
 -	.mail_plugin_dir = MODULEDIR,
-+	.mail_plugin_dir = "/var/lib/dovecot/modules",
++	.mail_plugin_dir = "/etc/dovecot/modules",
  	.auth_socket_path = "auth-userdb",
  	.doveadm_socket_path = "doveadm-server",
  	.doveadm_worker_count = 0,
@@ -49,7 +49,7 @@ diff -ur dovecot-2.2.12-orig/src/config/config-parser.c dovecot-2.2.12/src/confi
  	memset(&mod_set, 0, sizeof(mod_set));
  	mod_set.abi_version = DOVECOT_ABI_VERSION;
 -	modules = module_dir_load(CONFIG_MODULE_DIR, NULL, &mod_set);
-+	modules = module_dir_load("/var/lib/dovecot/modules/settings", NULL, &mod_set);
++	modules = module_dir_load("/etc/dovecot/modules/settings", NULL, &mod_set);
  	module_dir_init(modules);
  
  	i_array_init(&new_roots, 64);
@@ -61,7 +61,7 @@ diff -ur dovecot-2.2.12-orig/src/dict/main.c dovecot-2.2.12/src/dict/main.c
  	mod_set.require_init_funcs = TRUE;
  
 -	modules = module_dir_load(DICT_MODULE_DIR, NULL, &mod_set);
-+	modules = module_dir_load("/var/lib/dovecot/modules/dict", NULL, &mod_set);
++	modules = module_dir_load("/etc/dovecot/modules/dict", NULL, &mod_set);
  	module_dir_init(modules);
  
  	/* Register only after loading modules. They may contain SQL drivers,
@@ -73,7 +73,7 @@ diff -ur dovecot-2.2.12-orig/src/doveadm/doveadm-settings.c dovecot-2.2.12/src/d
  	.libexec_dir = PKG_LIBEXECDIR,
  	.mail_plugins = "",
 -	.mail_plugin_dir = MODULEDIR,
-+	.mail_plugin_dir = "/var/lib/dovecot/modules",
++	.mail_plugin_dir = "/etc/dovecot/modules",
  	.auth_socket_path = "auth-userdb",
  	.doveadm_socket_path = "doveadm-server",
  	.doveadm_worker_count = 0,
@@ -86,7 +86,7 @@ diff -ur dovecot-2.2.12-orig/src/lib-fs/fs-api.c dovecot-2.2.12/src/lib-fs/fs-ap
  	mod_set.ignore_missing = TRUE;
  
 -	fs_modules = module_dir_load_missing(fs_modules, MODULE_DIR,
-+	fs_modules = module_dir_load_missing(fs_modules, "/var/lib/dovecot/modules",
++	fs_modules = module_dir_load_missing(fs_modules, "/etc/dovecot/modules",
  					     module_name, &mod_set);
  	module_dir_init(fs_modules);
  
@@ -99,7 +99,7 @@ diff -ur dovecot-2.2.12-orig/src/lib-ssl-iostream/iostream-ssl.c dovecot-2.2.12/
  	mod_set.abi_version = DOVECOT_ABI_VERSION;
  	mod_set.setting_name = "<built-in lib-ssl-iostream lookup>";
 -	ssl_module = module_dir_load(MODULE_DIR, plugin_name, &mod_set);
-+	ssl_module = module_dir_load("/var/lib/dovecot/modules", plugin_name, &mod_set);
++	ssl_module = module_dir_load("/etc/dovecot/modules", plugin_name, &mod_set);
  
  	ssl_vfuncs = module_get_symbol(ssl_module, "ssl_vfuncs");
  	if (ssl_vfuncs == NULL) {
@@ -112,7 +112,7 @@ diff -ur dovecot-2.2.12-orig/src/lib-storage/mail-storage-settings.c dovecot-2.2
  
  	.mail_plugins = "",
 -	.mail_plugin_dir = MODULEDIR,
-+	.mail_plugin_dir = "/var/lib/dovecot/modules",
++	.mail_plugin_dir = "/etc/dovecot/modules",
  
  	.mail_log_prefix = "%s(%u): ",
  

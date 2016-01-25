@@ -525,6 +525,8 @@ let
 
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
+  albert = qt5.callPackage ../applications/misc/albert {};
+
   analog = callPackage ../tools/admin/analog {};
 
   apktool = callPackage ../development/tools/apktool {
@@ -1139,6 +1141,8 @@ let
   ibus-table = callPackage ../tools/inputmethods/ibus-table { };
 
   ibus-table-others = callPackage ../tools/inputmethods/ibus-table-others { };
+
+  brotli = callPackage ../tools/compression/brotli { };
 
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
@@ -1876,6 +1880,8 @@ let
     lua = lua5;
   };
 
+  homesick = callPackage ../tools/misc/homesick { };
+
   honcho = callPackage ../tools/system/honcho { };
 
   horst = callPackage ../tools/networking/horst { };
@@ -1963,6 +1969,8 @@ let
   };
 
   ipmiutil = callPackage ../tools/system/ipmiutil {};
+
+  ipmiview = callPackage ../applications/misc/ipmiview {};
 
   ipcalc = callPackage ../tools/networking/ipcalc {};
 
@@ -2518,6 +2526,10 @@ let
 
   obnam = callPackage ../tools/backup/obnam { };
 
+  odpdown = callPackage ../tools/typesetting/odpdown {
+    inherit (pythonPackages) lpod lxml mistune pillow pygments;
+  };
+
   odt2txt = callPackage ../tools/text/odt2txt { };
 
   offlineimap = callPackage ../tools/networking/offlineimap {
@@ -3014,6 +3026,8 @@ let
 
   samplicator = callPackage ../tools/networking/samplicator { };
 
+  scanbd = callPackage ../tools/graphics/scanbd { };
+
   screen = callPackage ../tools/misc/screen {
     inherit (darwin.apple_sdk.libs) utmp;
   };
@@ -3129,8 +3143,7 @@ let
 
   socat2pre = lowPrio (callPackage ../tools/networking/socat/2.x.nix { });
 
-  softether_4_18 = callPackage ../servers/softether/4.18.nix { };
-  softether = softether_4_18;
+  solaar = callPackage ../applications/misc/solaar {};
 
   sourceHighlight = callPackage ../tools/text/source-highlight { };
 
@@ -3885,7 +3898,7 @@ let
 
   eql = callPackage ../development/compilers/eql {};
 
-  elmPackages = callPackage ../development/compilers/elm { };
+  elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm { });
 
   adobe_flex_sdk = callPackage ../development/compilers/adobe-flex-sdk { };
 
@@ -4176,6 +4189,10 @@ let
   falcon = callPackage ../development/interpreters/falcon { };
 
   fsharp = callPackage ../development/compilers/fsharp {};
+
+  fstar = callPackage ../development/compilers/fstar {
+    ocamlPackages = ocamlPackages_4_02;
+  };
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
@@ -5093,7 +5110,8 @@ let
   erlang_odbc_javac = erlangR18_odbc_javac;
 
   rebar = callPackage ../development/tools/build-managers/rebar { };
-  rebar3 = callPackage ../development/tools/build-managers/rebar3 { };
+  rebar3-open = callPackage ../development/tools/build-managers/rebar3 { hermeticRebar3 = false; };
+  rebar3 = callPackage ../development/tools/build-managers/rebar3 { hermeticRebar3 = true; };
   rebar3-nix-bootstrap = callPackage ../development/tools/erlang/rebar3-nix-bootstrap { };
   fetchHex = callPackage ../development/tools/build-managers/rebar3/fetch-hex.nix { };
 
@@ -6094,6 +6112,8 @@ let
 
   yacc = bison;
 
+  ycmd = callPackage ../development/tools/misc/ycmd { };
+
   yodl = callPackage ../development/tools/misc/yodl { };
 
   winpdb = callPackage ../development/tools/winpdb { };
@@ -7076,6 +7096,8 @@ let
 
   libcommuni = callPackage ../development/libraries/libcommuni { };
 
+  libconfuse = callPackage ../development/libraries/libconfuse { };
+
   inherit (gnome3) libcroco;
 
   libcangjie = callPackage ../development/libraries/libcangjie { };
@@ -7680,6 +7702,8 @@ let
 
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
 
+  libutempter = callPackage ../development/libraries/libutempter { };
+
   libunwind = if stdenv.isDarwin
     then darwin.libunwind
     else callPackage ../development/libraries/libunwind { };
@@ -8269,6 +8293,8 @@ let
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
+  quicksynergy = callPackage ../applications/misc/quicksynergy { };
+
   qwt = callPackage ../development/libraries/qwt {};
 
   qxt = callPackage ../development/libraries/qxt {};
@@ -8674,6 +8700,8 @@ let
   };
 
   webkit = webkitgtk;
+
+  wcslib = callPackage ../development/libraries/wcslib { };
 
   webkitgtk = callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzz-icu;
@@ -9215,13 +9243,17 @@ let
 
   dnschain = callPackage ../servers/dnschain { };
 
-  dovecot = dovecot21;
+  dovecot = dovecot22;
 
   dovecot21 = callPackage ../servers/mail/dovecot { };
 
   dovecot22 = callPackage ../servers/mail/dovecot/2.2.x.nix { };
 
-  dovecot_pigeonhole = callPackage ../servers/mail/dovecot-pigeonhole { };
+  dovecot_pigeonhole = callPackage ../servers/mail/dovecot/plugins/pigeonhole {
+    dovecot = dovecot22;
+  };
+
+  dovecot_antispam = callPackage ../servers/mail/dovecot/plugins/antispam { };
 
   dspam = callPackage ../servers/mail/dspam {
     inherit (perlPackages) NetSMTP;
@@ -9458,6 +9490,9 @@ let
   openfire = callPackage ../servers/xmpp/openfire { };
 
   oracleXE = callPackage ../servers/sql/oracle-xe { };
+
+  softether_4_18 = callPackage ../servers/softether/4.18.nix { };
+  softether = softether_4_18;
 
   qboot = callPackage ../applications/virtualization/qboot { stdenv = stdenv_32bit; };
 
@@ -10014,6 +10049,15 @@ let
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
+  linux_mptcp = callPackage ../os-specific/linux/kernel/linux-mptcp.nix {
+    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   linux_rpi = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ];
   };
@@ -10063,15 +10107,6 @@ let
       ];
   };
 
-  linux_4_2 = callPackage ../os-specific/linux/kernel/linux-4.2.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
   linux_4_3 = callPackage ../os-specific/linux/kernel/linux-4.3.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -10098,6 +10133,23 @@ let
         kernelPatches.mips_ext3_n32
       ];
   };
+
+  linux_chromiumos_3_14 = callPackage ../os-specific/linux/kernel/linux-chromiumos-3.14.nix {
+    kernelPatches = [ kernelPatches.chromiumos_Kconfig_fix_entries_3_14
+                      kernelPatches.chromiumos_mfd_fix_dependency
+                      kernelPatches.chromiumos_no_link_restrictions
+                      kernelPatches.genksyms_fix_segfault
+                    ];
+  };
+
+  linux_chromiumos_3_18 = callPackage ../os-specific/linux/kernel/linux-chromiumos-3.18.nix {
+    kernelPatches = [ kernelPatches.chromiumos_Kconfig_fix_entries_3_18
+                      kernelPatches.chromiumos_no_link_restrictions
+                      kernelPatches.genksyms_fix_segfault
+                    ];
+  };
+
+  linux_chromiumos_latest = linux_chromiumos_3_18;
 
   /* grsec configuration
 
@@ -10132,10 +10184,10 @@ let
   linux_grsec_stable_server_xen = throw "No longer supporteddue to https://grsecurity.net/announce.php. "
     + "Please use linux_grsec_testing_server_xen.";
 
-  # Testing kernels
-  linux_grsec_testing_desktop = grKernel grFlavors.linux_grsec_testing_desktop;
-  linux_grsec_testing_server  = grKernel grFlavors.linux_grsec_testing_server;
-  linux_grsec_testing_server_xen = grKernel grFlavors.linux_grsec_testing_server_xen;
+  # Testing kernels: outdated ATM
+  #linux_grsec_testing_desktop = grKernel grFlavors.linux_grsec_testing_desktop;
+  #linux_grsec_testing_server  = grKernel grFlavors.linux_grsec_testing_server;
+  #linux_grsec_testing_server_xen = grKernel grFlavors.linux_grsec_testing_server_xen;
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
@@ -10254,6 +10306,7 @@ let
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
+  linuxPackages_mptcp = linuxPackagesFor pkgs.linux_mptcp linuxPackages_mptcp;
   linuxPackages_rpi = linuxPackagesFor pkgs.linux_rpi linuxPackages_rpi;
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
   linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
@@ -10261,7 +10314,6 @@ let
   linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
   linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18 linuxPackages_3_18);
   linuxPackages_4_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_1 linuxPackages_4_1);
-  linuxPackages_4_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_2 linuxPackages_4_2);
   linuxPackages_4_3 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_3 linuxPackages_4_3);
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4 linuxPackages_4_4);
   linuxPackages_testing = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing linuxPackages_testing);
@@ -10280,10 +10332,15 @@ let
   linuxPackages_grsec_stable_server     = grPackage grFlavors.linux_grsec_stable_server;
   linuxPackages_grsec_stable_server_xen = grPackage grFlavors.linux_grsec_stable_server_xen;
 
-  # Testing kernels
+  # Testing kernels: outdated ATM
   linuxPackages_grsec_testing_desktop = grPackage grFlavors.linux_grsec_testing_desktop;
   linuxPackages_grsec_testing_server  = grPackage grFlavors.linux_grsec_testing_server;
   linuxPackages_grsec_testing_server_xen = grPackage grFlavors.linux_grsec_testing_server_xen;
+
+  # ChromiumOS kernels
+  linuxPackages_chromiumos_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_3_14 linuxPackages_chromiumos_3_14);
+  linuxPackages_chromiumos_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_3_18 linuxPackages_chromiumos_3_18);
+  linuxPackages_chromiumos_latest = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_latest linuxPackages_chromiumos_latest);
 
   # A function to build a manually-configured kernel
   linuxManualConfig = pkgs.buildLinux;
@@ -10357,6 +10414,8 @@ let
 
   mkinitcpio-nfs-utils = callPackage ../os-specific/linux/mkinitcpio-nfs-utils { };
 
+  mmc-utils = callPackage ../os-specific/linux/mmc-utils { };
+
   module_init_tools = callPackage ../os-specific/linux/module-init-tools { };
 
   aggregateModules = modules:
@@ -10364,7 +10423,7 @@ let
       inherit modules;
     };
 
-  multipath_tools = callPackage ../os-specific/linux/multipath-tools { };
+  multipath-tools = callPackage ../os-specific/linux/multipath-tools { };
 
   musl = callPackage ../os-specific/linux/musl { };
 
@@ -10422,6 +10481,8 @@ let
 
   paxctl = callPackage ../os-specific/linux/paxctl { };
 
+  paxtest = callPackage ../os-specific/linux/paxtest { };
+
   pax-utils = callPackage ../os-specific/linux/pax-utils { };
 
   pcmciaUtils = callPackage ../os-specific/linux/pcmciautils {
@@ -10474,6 +10535,8 @@ let
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
   rtkit = callPackage ../os-specific/linux/rtkit { };
+
+  rt5677-firmware = callPackage ../os-specific/linux/firmware/rt5677 { };
 
   s3ql = callPackage ../tools/backup/s3ql { };
 
@@ -11861,9 +11924,16 @@ let
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-esr = wrapFirefox firefox-esr-unwrapped { };
 
-  firefox-bin = callPackage ../applications/networking/browsers/firefox-bin {
+  firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     gconf = pkgs.gnome.GConf;
     inherit (pkgs.gnome) libgnome libgnomeui;
+  };
+
+  firefox-bin = wrapFirefox firefox-bin-unwrapped {
+    browserName = "firefox";
+    name = "firefox-bin-" +
+      (builtins.parseDrvName firefox-bin-unwrapped.name).version;
+    desktopName = "Firefox";
   };
 
   firestr = qt5.callPackage ../applications/networking/p2p/firestr
@@ -11910,8 +11980,6 @@ let
   freicoin = callPackage ../applications/misc/freicoin {
     boost = boost155;
   };
-
-  fuze = callPackage ../applications/networking/instant-messengers/fuze {};
 
   game-music-emu = callPackage ../applications/audio/game-music-emu { };
 
@@ -12086,6 +12154,11 @@ let
 
   gtk2fontsel = callPackage ../applications/misc/gtk2fontsel {
     inherit (gnome2) gtk;
+  };
+
+  guake = callPackage ../applications/misc/guake {
+    gconf = gnome.GConf;
+    vte = gnome.vte.override { pythonSupport = true; };
   };
 
   guitone = callPackage ../applications/version-management/guitone {
@@ -13023,6 +13096,8 @@ let
 
   RhythmDelay = callPackage ../applications/audio/RhythmDelay { };
 
+  ricochet = qt5.callPackage ../applications/networking/instant-messengers/ricochet { };
+
   rkt = callPackage ../applications/virtualization/rkt { };
 
   rofi = callPackage ../applications/misc/rofi { };
@@ -13073,7 +13148,7 @@ let
     boost = boost155;
   };
 
-  scim = callPackage ../applications/misc/scim { };
+  sc-im = callPackage ../applications/misc/scim { };
 
   scite = callPackage ../applications/editors/scite { };
 
@@ -13342,9 +13417,8 @@ let
   };
 
   termite = callPackage ../applications/misc/termite {
-    gtk = gtk3;
     vte = gnome3.vte-select-text;
-   };
+  };
 
   tesseract = callPackage ../applications/graphics/tesseract { };
 
@@ -13848,6 +13922,8 @@ let
     GConf2 = gnome2.GConf;
   };
 
+  xmpp-client = go15Packages.xmpp-client.bin // { outputs = [ "bin" ]; };
+
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
   xpra = callPackage ../tools/X11/xpra { inherit (texFunctions) fontsConf; };
@@ -14076,6 +14152,8 @@ let
 
   exult = callPackage ../games/exult { };
 
+  factorio = callPackage ../games/factorio {};
+
   fairymax = callPackage ../games/fairymax {};
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
@@ -14230,6 +14308,8 @@ let
   performous = callPackage ../games/performous { };
 
   pingus = callPackage ../games/pingus {};
+
+  pioneer = callPackage ../games/pioneer { };
 
   pioneers = callPackage ../games/pioneers { };
 
@@ -14753,6 +14833,9 @@ let
     fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
 
     k9copy = callPackage ../applications/video/k9copy {};
+
+    konversation = callPackage ../applications/networking/irc/konversation/1.6.nix {
+    };
 
     quassel = callPackage ../applications/networking/irc/quassel/qt-5.nix {
       monolithic = true;
@@ -15643,6 +15726,10 @@ let
 
   texLiveModerntimeline = builderDefsPackage (callPackage ../tools/typesetting/tex/texlive/moderntimeline.nix) {};
 
+  ib-tws = callPackage ../applications/office/ib/tws { jdk=oraclejdk8; };
+
+  ib-controller = callPackage ../applications/office/ib/controller { jdk=oraclejdk8; };
+
   thermald = callPackage ../tools/system/thermald { };
 
   thinkfan = callPackage ../tools/system/thinkfan { };
@@ -15715,6 +15802,8 @@ let
   x2x = callPackage ../tools/X11/x2x { };
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
+
+  xcftools = callPackage ../tools/graphics/xcftools { };
 
   xhyve = callPackage ../applications/virtualization/xhyve { };
 
@@ -15840,6 +15929,7 @@ aliases = with self; rec {
   lttngUst = lttng-ust;  # added 2014-07-31
   midoriWrapper = midori; # added 2015-01
   mlt-qt5 = qt5.mlt;  # added 2015-12-19
+  multipath_tools = multipath-tools;  # added 2016-01-21
   nfsUtils = nfs-utils;  # added 2014-12-06
   phonon_qt5 = qt5.phonon;  # added 2015-12-19
   phonon_qt5_backend_gstreamer = qt5.phonon-backend-gstreamer;  # added 2015-12-19
@@ -15879,6 +15969,7 @@ aliases = with self; rec {
   btrfsProgs = btrfs-progs; # added 2016-01-03
   aircrackng = aircrack-ng; # added 2016-01-14
   quake3game = ioquake3; # added 2016-01-14
+  scim = sc-im; # added 2016-01-22
 };
 
 tweakAlias = _n: alias: with lib;

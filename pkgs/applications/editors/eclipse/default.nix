@@ -4,67 +4,13 @@
 , webkitgtk2 ? null  # for internal web browser
 , buildEnv, writeText, runCommand
 , callPackage
-}:
+} @ args:
 
 assert stdenv ? glibc;
 
-let
+rec {
 
-  buildEclipse =
-    { name, src ? builtins.getAttr stdenv.system sources, sources ? null, description }:
-
-    stdenv.mkDerivation rec {
-      inherit name src;
-
-      desktopItem = makeDesktopItem {
-        name = "Eclipse";
-        exec = "eclipse";
-        icon = "eclipse";
-        comment = "Integrated Development Environment";
-        desktopName = "Eclipse IDE";
-        genericName = "Integrated Development Environment";
-        categories = "Application;Development;";
-      };
-
-      buildInputs = [ makeWrapper ];
-
-      buildCommand = ''
-        # Unpack tarball.
-        mkdir -p $out
-        tar xfvz $src -C $out
-
-        # Patch binaries.
-        interpreter=$(echo ${stdenv.glibc}/lib/ld-linux*.so.2)
-        libCairo=$out/eclipse/libcairo-swt.so
-        patchelf --set-interpreter $interpreter $out/eclipse/eclipse
-        [ -f $libCairo ] && patchelf --set-rpath ${freetype}/lib:${fontconfig}/lib:${libX11}/lib:${libXrender}/lib:${zlib}/lib $libCairo
-
-        # Create wrapper script.  Pass -configuration to store
-        # settings in ~/.eclipse/org.eclipse.platform_<version> rather
-        # than ~/.eclipse/org.eclipse.platform_<version>_<number>.
-        productId=$(sed 's/id=//; t; d' $out/eclipse/.eclipseproduct)
-        productVersion=$(sed 's/version=//; t; d' $out/eclipse/.eclipseproduct)
-        
-        makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
-          --prefix PATH : ${jre}/bin \
-          --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib${stdenv.lib.optionalString (webkitgtk2 != null) ":${webkitgtk2}/lib"} \
-          --add-flags "-configuration \$HOME/.eclipse/''${productId}_$productVersion/configuration"
-
-        # Create desktop item.
-        mkdir -p $out/share/applications
-        cp ${desktopItem}/share/applications/* $out/share/applications
-        mkdir -p $out/share/pixmaps
-        ln -s $out/eclipse/icon.xpm $out/share/pixmaps/eclipse.xpm
-      ''; # */
-
-      meta = {
-        homepage = http://www.eclipse.org/;
-        inherit description;
-      };
-
-    };
-    
-in {
+  buildEclipse = import ./build-eclipse.nix args;
 
   eclipse_sdk_35 = buildEclipse {
     name = "eclipse-sdk-3.5.2";
@@ -312,7 +258,6 @@ in {
       "x86_64-linux" = fetchurl {
           url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.4.2-201502041700/eclipse-SDK-4.4.2-linux-gtk-x86_64.tar.gz;
           sha256 = "0g00alsixfaakmn4khr0m9fxvkrbhbg6qqfa27xr6a9np6gzg98l";
-
         };
       "i686-linux" = fetchurl {
           url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.4.2-201502041700/eclipse-SDK-4.4.2-linux-gtk.tar.gz;
@@ -328,7 +273,6 @@ in {
       "x86_64-linux" = fetchurl {
           url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5-201506032000/eclipse-SDK-4.5-linux-gtk-x86_64.tar.gz;
           sha256 = "0vfql4gh263ms8bg7sgn05gnjajplx304cn3nr03jlacgr3pkarf";
-
         };
       "i686-linux" = fetchurl {
           url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5-201506032000/eclipse-SDK-4.5-linux-gtk.tar.gz;
@@ -337,18 +281,49 @@ in {
     };
   };
 
-  eclipse-platform = buildEclipse {
+  eclipse_sdk_451 = buildEclipse {
+    name = "eclipse-sdk-4.5.1";
+    description = "Eclipse Mars Classic";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5.1-201509040015/eclipse-SDK-4.5.1-linux-gtk-x86_64.tar.gz;
+          sha256 = "b56503ab4b86f54e1cdc93084ef8c32fb1eaabc6f6dad9ef636153b14c928e02";
+        };
+      "i686-linux" = fetchurl {
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5.1-201509040015/eclipse-SDK-4.5.1-linux-gtk.tar.gz;
+          sha256 = "f2e41da52e138276f8f121fd4d57c3f98839817836b56f8424e99b63c9b1b025";
+        };
+    };
+  };
+
+  eclipse-platform = eclipse-platform-451;
+
+  eclipse-platform-45 = buildEclipse {
     name = "eclipse-platform-4.5";
     description = "Eclipse platform";
     sources = {
       "x86_64-linux" = fetchurl {
-          url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5-201506032000/eclipse-platform-4.5-linux-gtk-x86_64.tar.gz";
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5-201506032000/eclipse-platform-4.5-linux-gtk-x86_64.tar.gz;
           sha256 = "1510j41yr86pbzwf48kjjdd46nkpkh8zwn0hna0cqvsw1gk2vqcg";
-
         };
       "i686-linux" = fetchurl {
-          url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5-201506032000/eclipse-platform-4.5-linux-gtk.tar.gz";
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5-201506032000/eclipse-platform-4.5-linux-gtk.tar.gz;
           sha256 = "1f97jd3qbi3830y3djk8bhwzd9whsq8gzfdk996chxc55prn0qbd";
+        };
+    };
+  };
+
+  eclipse-platform-451 = buildEclipse {
+    name = "eclipse-platform-4.5.1";
+    description = "Eclipse platform";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5.1-201509040015/eclipse-platform-4.5.1-linux-gtk-x86_64.tar.gz;
+          sha256 = "1m7bzyi20yss6cz74d7hvhxj1cddcpgzxjia5wcjycsvq33kkny0";
+        };
+      "i686-linux" = fetchurl {
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5.1-201509040015/eclipse-platform-4.5.1-linux-gtk.tar.gz;
+          sha256 = "17x8w4k0rba0c0v9ghxdl0zqfadla5c1aakfd5k0q9q3x3qi6rxp";
         };
     };
   };
@@ -369,21 +344,20 @@ in {
       dropinProp = "-D${dropinPropName}=${pluginEnv}/eclipse/dropins";
       jvmArgsText = stdenv.lib.concatStringsSep "\n" (jvmArgs ++ [dropinProp]);
 
-      # Prepare an eclipse.ini with the plugin directory.
-      origEclipseIni = builtins.readFile "${eclipse}/eclipse/eclipse.ini";
-      eclipseIniFile = writeText "eclipse.ini" ''
-        ${origEclipseIni}
-        ${jvmArgsText}
-      '';
-
       # Base the derivation name on the name of the underlying
       # Eclipse.
       name = (stdenv.lib.meta.appendToName "with-plugins" eclipse).name;
     in
       runCommand name { buildInputs = [ makeWrapper ]; } ''
-        mkdir -p $out/bin
+        mkdir -p $out/bin $out/etc
+
+        # Prepare an eclipse.ini with the plugin directory.
+        cat ${eclipse}/eclipse/eclipse.ini - > $out/etc/eclipse.ini <<EOF
+        ${jvmArgsText}
+        EOF
+
         makeWrapper ${eclipse}/bin/eclipse $out/bin/eclipse \
-          --add-flags "--launcher.ini ${eclipseIniFile}"
+          --add-flags "--launcher.ini $out/etc/eclipse.ini"
 
         ln -s ${eclipse}/share $out/
       '';
