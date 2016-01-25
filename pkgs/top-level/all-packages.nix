@@ -13564,11 +13564,6 @@ let
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
-  viewMtn = builderDefsPackage (callPackage ../applications/version-management/viewmtn/0.10.nix)
-  {
-    flup = pythonPackages.flup;
-  };
-
   vim = callPackage ../applications/editors/vim {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
