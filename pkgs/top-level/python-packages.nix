@@ -24760,6 +24760,11 @@ in modules // {
       url = "https://pypi.python.org/packages/source/x/xkcdpass/xkcdpass-1.4.2.tar.gz";
       sha256 = "4c1f8bee886820c42ccc64c15c3a2275dc6d01028cf6af7c481ded87267d8269";
     };
+
+    # No tests included
+    # https://github.com/redacted/XKCD-password-generator/issues/32
+    doCheck = false;
+
     meta = {
       homepage = https://pypi.python.org/pypi/xkcdpass/;
       description = "Generate secure multiword passwords/passphrases, inspired by XKCD";
