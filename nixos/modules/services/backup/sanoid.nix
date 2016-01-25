@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.sanoid;
-  
+
   makeConfigPart = name: cfg:
   ''
     [${name}]
@@ -53,7 +53,7 @@ in
                   Number of hourly snapshots to keep.
                 '';
               };
-              
+
               daily = mkOption {
                 type = types.nullOr types.int;
                 default = null;
@@ -61,7 +61,7 @@ in
                   Number of daily snapshots to keep.
                 '';
               };
-              
+
               monthly = mkOption {
                 type = types.nullOr types.int;
                 default = null;
@@ -69,7 +69,7 @@ in
                   Number of monthly snapshots to keep.
                 '';
               };
-              
+
               yearly = mkOption {
                 type = types.nullOr types.int;
                 default = null;
@@ -77,7 +77,7 @@ in
                   Number of yearly snapshots to keep.
                 '';
               };
-              
+
               autosnap = mkOption {
                 type = types.nullOr types.bool;
                 default = null;
@@ -85,7 +85,7 @@ in
                   Create snapshots automatically.
                 '';
               };
-              
+
               autoprune = mkOption {
                 type = types.nullOr types.bool;
                 default = null;
@@ -93,7 +93,8 @@ in
                   Prune old snapshots automatically.
                 '';
               };
-recursive = mkOption {
+
+              recursive = mkOption {
                 type = types.nullOr types.bool;
                 default = false;
                 description = ''

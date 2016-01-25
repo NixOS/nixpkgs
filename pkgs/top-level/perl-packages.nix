@@ -2031,14 +2031,13 @@ let self = _self // overrides; _self = with self; {
       maintainers = [ maintainers.rycee ];
     };
   };
-  
+
   ConfigIniFiles = buildPerlPackage rec {
     name = "Config-IniFiles-2.38";
     src = fetchurl {
       url = "mirror://cpan/authors/id/W/WA/WADG/${name}.tar.gz";
       sha256 = "0cz5gz5qk729nrbmamz84i3335cc3vfzz8z450crrvzip4isdpgc";
     };
-#    propagatedBuildInputs = [ MixinLinewise ];
     meta = {
       description = "A module for reading .ini-style configuration files.";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -10363,7 +10362,7 @@ let self = _self // overrides; _self = with self; {
       platforms = stdenv.lib.platforms.linux;
     };
   };
-  
+
   PackageVariant = buildPerlPackage {
     name = "Package-Variant-1.002002";
     src = fetchurl {
