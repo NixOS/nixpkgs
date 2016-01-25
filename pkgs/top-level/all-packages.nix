@@ -4369,7 +4369,10 @@ let
 
   mlton = callPackage ../development/compilers/mlton { };
 
-  mono = callPackage ../development/compilers/mono {};
+  mono = callPackage ../development/compilers/mono {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
 
