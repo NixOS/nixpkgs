@@ -14235,8 +14235,6 @@ let
     lua = lua5;
   };
 
-  jamp = builderDefsPackage (callPackage ../games/jamp) {};
-
   klavaro = callPackage ../games/klavaro {};
 
   kobodeluxe = callPackage ../games/kobodeluxe { };
