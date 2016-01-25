@@ -1,5 +1,5 @@
 #! @shell@ -e
-path_backup=$PATH
+path_backup="$PATH"
 if [ -n "@coreutils@" ]; then
   PATH="@coreutils@/bin"
 fi
@@ -104,5 +104,5 @@ if [ -n "$NIX_GNAT_WRAPPER_EXEC_HOOK" ]; then
     source "$NIX_GNAT_WRAPPER_EXEC_HOOK"
 fi
 
-PATH=$path_backup
+PATH="$path_backup"
 exec @prog@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]}
