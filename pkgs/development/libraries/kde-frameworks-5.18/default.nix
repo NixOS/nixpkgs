@@ -23,7 +23,7 @@ let
         name = "${name}-${version}";
         inherit src;
 
-        outputs = [ "dev" "out" ];
+        outputs = args.outputs or [ "dev" "out" ];
 
         cmakeFlags =
           (args.cmakeFlags or [])

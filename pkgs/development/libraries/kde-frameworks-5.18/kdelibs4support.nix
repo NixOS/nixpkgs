@@ -11,6 +11,7 @@
 
 kdeFramework {
   name = "kdelibs4support";
+  outputs = [ "out" ];
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kcompletion kconfig kded kservice kwidgetsaddons
