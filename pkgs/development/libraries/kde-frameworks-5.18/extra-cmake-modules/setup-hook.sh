@@ -1,26 +1,36 @@
-addMimePkg() {
-    local propagated
+_propagateMimeTypes() {
+    if [ -d "$1/share/mime" ]; then
+        propagateOnce propagatedUserEnvPkgs "$1"
+        addToSearchPathOnce XDG_DATA_DIRS "$1/share"
+    fi
+}
 
-    if [[ -d "$1/share/mime" ]]; then
-        propagated=
-        for pkg in $propagatedBuildInputs; do
-            if [[ "z$pkg" == "z$1" ]]; then
-                propagated=1
-            fi
-        done
-        if [[ -z $propagated ]]; then
-            propagatedBuildInputs="$propagatedBuildInputs $1"
-        fi
+addToSearchPathOnceWithCustomDelimiter() {
+    local delim="$1"
+    local search="$2"
+    local target="$3"
+    local dirs
+    local exported
+    IFS="$delim" read -a dirs <<< "${!search}"
+    for dir in ${dirs[@]}; do
+        if [ "z$dir" == "z$target" ]; then exported=1; fi
+    done
+    if [ -z $exported ]; then
+        eval "export ${search}=\"${!search}${!search:+$delim}$target\""
+    fi
+}
 
-        propagated=
-        for pkg in $propagatedUserEnvPkgs; do
-            if [[ "z$pkg" == "z$1" ]]; then
-                propagated=1
-            fi
-        done
-        if [[ -z $propagated ]]; then
-            propagatedUserEnvPkgs="$propagatedUserEnvPkgs $1"
-        fi
+addToSearchPathOnce() {
+    addToSearchPathOnceWithCustomDelimiter ':' "$@"
+}
+
+propagateOnce() {
+    addToSearchPathOnceWithCustomDelimiter ' ' "$@"
+}
+
+_exportLocales() {
+    if [[ -d "$1/share/locale" ]]; then
+        addToSearchPathOnce XDG_DATA_DIRS "$1/share"
     fi
 }
 
@@ -67,5 +77,5 @@ _ecmConfig() {
     cmakeFlags+=" -DKDE_INSTALL_AUTOSTARTDIR=${!outputLib}/etc/xdg/autostart"
 }
 
-envHooks+=(addMimePkg)
+envHooks+=(_propagateMimeTypes _exportLocales)
 preConfigureHooks+=(_ecmConfig)
