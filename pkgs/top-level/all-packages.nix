@@ -14554,7 +14554,7 @@ let
 
   zandronum-bin = callPackage ../games/zandronum/bin.nix { };
 
-  zangband = builderDefsPackage (callPackage ../games/zangband) {};
+  zangband = callPackage ../games/zangband { };
 
   zdoom = callPackage ../games/zdoom { };
 
