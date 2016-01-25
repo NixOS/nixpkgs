@@ -1386,6 +1386,8 @@ let
 
   easyrsa = callPackage ../tools/networking/easyrsa { };
 
+  easyrsa2 = callPackage ../tools/networking/easyrsa/2.x.nix { };
+
   ebook_tools = callPackage ../tools/text/ebook-tools { };
 
   ecryptfs = callPackage ../tools/security/ecryptfs { };
