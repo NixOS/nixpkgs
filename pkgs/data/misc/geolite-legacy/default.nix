@@ -8,7 +8,7 @@ let
 
   # Annoyingly, these files are updated without a change in URL. This means that
   # builds will start failing every month or so, until the hashes are updated.
-  version = "2016-01-18";
+  version = "2016-01-25";
 in
 stdenv.mkDerivation {
   name = "geolite-legacy-${version}";
@@ -27,10 +27,10 @@ stdenv.mkDerivation {
     "1fksbnmda2a05cpax41h9r7jhi8102q41kl5nij4ai42d6yqy73x";
   srcGeoIPASNum = fetchDB
     "asnum/GeoIPASNum.dat.gz" "GeoIPASNum.dat.gz"
-    "00x6d11l8jxc1dj7p1kwmr3x1zwxwbv7xqbxj17j30s4qjmkb2i1";
+    "1n7zlmnaxvjljyih9yi9hns530by21h42j2kcszbcyvn7rd9rnyw";
   srcGeoIPASNumv6 = fetchDB
     "asnum/GeoIPASNumv6.dat.gz" "GeoIPASNumv6.dat.gz"
-    "0r84ji86q4f6maw3scx9i054nzhjg4kb26r6fp1jdbiqjp8mhkyw";
+    "1id60almra7mq4v86p37sfph8jrbdnc5pzxvy55wiyrvf6ydvk56";
 
   meta = with stdenv.lib; {
     inherit version;
