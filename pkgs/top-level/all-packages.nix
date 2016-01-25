@@ -14241,7 +14241,7 @@ let
 
   lgogdownloader = callPackage ../games/lgogdownloader { };
 
-  lincity = builderDefsPackage (callPackage ../games/lincity) {};
+  lincity = callPackage ../games/lincity {};
 
   lincity_ng = callPackage ../games/lincity/ng.nix {};
 
