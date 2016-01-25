@@ -231,7 +231,8 @@ rec {
   # Construct a fourth stdenv that uses the new GCC.  But coreutils is
   # still from the bootstrap tools.
   stage4 = stageFun {
-    inherit (stage3.pkgs) gccPlain glibc binutils gnugrep;
+    inherit (stage3.pkgs) gccPlain glibc binutils;
+    gnugrep = bootstrapTools;
     coreutils = bootstrapTools;
     name = "";
 
