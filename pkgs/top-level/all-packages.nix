@@ -7094,6 +7094,8 @@ let
 
   libcommuni = callPackage ../development/libraries/libcommuni { };
 
+  libconfuse = callPackage ../development/libraries/libconfuse { };
+
   inherit (gnome3) libcroco;
 
   libcangjie = callPackage ../development/libraries/libcangjie { };
