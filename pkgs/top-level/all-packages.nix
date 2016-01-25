@@ -3026,6 +3026,8 @@ let
 
   samplicator = callPackage ../tools/networking/samplicator { };
 
+  scanbd = callPackage ../tools/graphics/scanbd { };
+
   screen = callPackage ../tools/misc/screen {
     inherit (darwin.apple_sdk.libs) utmp;
   };
