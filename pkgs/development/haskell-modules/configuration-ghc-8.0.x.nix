@@ -51,4 +51,7 @@ self: super: {
   # https://github.com/hspec/HUnit/issues/7
   HUnit = dontCheck super.HUnit;
 
+  # https://github.com/hspec/hspec/issues/253
+  hspec-core = dontCheck super.hspec-core;
+
 }
