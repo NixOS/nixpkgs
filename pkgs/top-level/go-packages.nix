@@ -1228,6 +1228,15 @@ let
     propagatedBuildInputs = [ pretty ];
   };
 
+  go-backblaze = buildFromGitHub {
+    buildInputs = [ go-flags go-humanize uilive uiprogress ];
+    goPackagePath = "gopkg.in/kothar/go-backblaze.v0";
+    rev = "373819725fc560fa962c6cd883b533d2ebec4844";
+    owner = "kothar";
+    repo = "go-backblaze";
+    sha256 = "1kmlwfnnfd4h46bb9pz2gw1hxqm1pzkwvidfmnc0zkrilaywk6fx";
+  };
+
   go-bencode = buildGoPackage rec {
     version = "1.1.1";
     name = "go-bencode-${version}";
