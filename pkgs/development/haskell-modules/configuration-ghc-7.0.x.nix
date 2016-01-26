@@ -68,6 +68,7 @@ self: super: {
   doctest = dontHaddock super.doctest;
 
   # Needs hashable on pre 7.10.x compilers.
+  nats_1 = addBuildDepend super.nats_1 self.hashable;
   nats = addBuildDepend super.nats self.hashable;
 
   # Newer versions require bytestring >=0.10.

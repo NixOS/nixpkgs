@@ -77,6 +77,7 @@ self: super: {
   control-monad-free = super.control-monad-free_0_5_3;
 
   # Needs hashable on pre 7.10.x compilers.
+  nats_1 = addBuildDepend super.nats_1 self.hashable;
   nats = addBuildDepend super.nats self.hashable;
 
   # https://github.com/magthe/sandi/issues/7

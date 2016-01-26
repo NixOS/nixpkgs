@@ -89,6 +89,7 @@ self: super: {
   split = super.split_0_1_4_3;
 
   # Needs hashable on pre 7.10.x compilers.
+  nats_1 = addBuildDepend super.nats_1 self.hashable;
   nats = addBuildDepend super.nats self.hashable;
 
   # Needs void on pre 7.10.x compilers.
