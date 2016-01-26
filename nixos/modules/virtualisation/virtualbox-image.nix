@@ -8,6 +8,8 @@ let
 
 in {
 
+  imports = [ ./grow-partition.nix ];
+
   options = {
     virtualbox = {
       baseImageSize = mkOption {
@@ -64,7 +66,10 @@ in {
         '';
     };
 
-    fileSystems."/".device = "/dev/disk/by-label/nixos";
+    fileSystems."/" = {
+      device = "/dev/disk/by-label/nixos";
+      autoResize = true;
+    };
 
     boot.loader.grub.device = "/dev/sda";
 
