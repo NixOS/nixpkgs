@@ -7190,14 +7190,13 @@ let
 
   kombu = buildPythonPackage rec {
     name = "kombu-${version}";
-    version = "3.0.24";
+    version = "3.0.33";
 
     disabled = pythonOlder "2.6";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/k/kombu/${name}.tar.gz";
-      sha256 = "13dzybciispin9c4znpiyvgha354mz124lgx06ksw4vic0vh9zxr";
-      md5 = "37c8b5084ac83b8a6f5ff9f157cac0e9";
+      sha256 = "16brjx2lgwbj2a37d0pjbfb84nvld6irghmqrs3qfncajp51hgc5";
     };
 
     buildInputs = with self; optionals (!isPy3k) [ anyjson mock unittest2 nose ];
