@@ -4289,7 +4289,13 @@ let
 
   oraclejre8psu = lowPrio (pkgs.oraclejdk8psu_distro false false);
 
-  jrePlugin = lowPrio (pkgs.jdkdistro false true);
+  jrePlugin = jre8Plugin;
+
+  jre6Plugin = lowPrio (pkgs.jdkdistro false true);
+
+  jre7Plugin = lowPrio (pkgs.oraclejdk7distro false true);
+
+  jre8Plugin = lowPrio (pkgs.oraclejdk8distro false true);
 
   supportsJDK =
     system == "i686-linux" ||
