@@ -32,8 +32,8 @@ Options:
       --url url       Any url understand by 'git clone'.
       --rev ref       Any sha1 or references (such as refs/heads/master)
       --hash h        Expected hash.
-      --deepClone     Clone submodules recursively.
-      --no-deepClone  Do not clone submodules.
+      --deepClone     Clone the entire repository.
+      --no-deepClone  Make a shallow clone of just the required ref.
       --leave-dotGit  Keep the .git directories.
       --fetch-submodules Fetch submodules.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
