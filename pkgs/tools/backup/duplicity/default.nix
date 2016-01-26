@@ -3,14 +3,14 @@
 }:
 
 let
-  version = "0.7.02";
+  version = "0.7.06";
 in
 stdenv.mkDerivation {
   name = "duplicity-${version}";
 
   src = fetchurl {
     url = "http://code.launchpad.net/duplicity/0.7-series/${version}/+download/duplicity-${version}.tar.gz";
-    sha256 = "0fh3xl4xc7cpi7iam34qd0ndqp1641kfw2609yp40lr78fx65530";
+    sha256 = "133zdi1rbiacvzjys7q3vjm7x84kmr51bsgs037rjhw9vdg5jx80";
   };
 
   installPhase = ''
