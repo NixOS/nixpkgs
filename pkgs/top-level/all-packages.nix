@@ -14956,8 +14956,6 @@ let
 
   blas = callPackage ../development/libraries/science/math/blas { };
 
-  content = builderDefsPackage (callPackage ../applications/science/math/content) {};
-
   jags = callPackage ../applications/science/math/jags { };
 
 
