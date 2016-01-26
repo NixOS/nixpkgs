@@ -1,0 +1,84 @@
+Throttle every frame and
+use reference time to make frame rate more accurate.
+
+--- a/src/sdl/SDL.cpp
++++ b/src/sdl/SDL.cpp
+@@ -212,7 +212,8 @@
+ int renderedFrames = 0;
+ 
+ int throttle = 0;
+-u32 throttleLastTime = 0;
++u32 throttleRefTime = 0;
++int throttleIndex = 0;
+ u32 autoFrameSkipLastTime = 0;
+ 
+ int showSpeed = 1;
+@@ -2551,7 +2552,7 @@
+   if(!soundOffFlag)
+     soundInit();
+ 
+-  autoFrameSkipLastTime = throttleLastTime = systemGetClock();
++  autoFrameSkipLastTime = throttleRefTime = systemGetClock();
+   
+   SDL_WM_SetCaption("VisualBoyAdvance", NULL);
+ 
+@@ -2826,17 +2827,13 @@
+ 
+ void systemFrame()
+ {
+-}
+-
+-void system10Frames(int rate)
+-{
+   u32 time = systemGetClock();  
+   if(!wasPaused && autoFrameSkip && !throttle) {
+     u32 diff = time - autoFrameSkipLastTime;
+     int speed = 100;
+ 
+     if(diff)
+-      speed = (1000000/rate)/diff;
++      speed = (1000000/60)/diff;
+     
+     if(speed >= 98) {
+       frameskipadjust++;
+@@ -2861,17 +2858,34 @@
+   }
+   if(!wasPaused && throttle) {
+     if(!speedup) {
+-      u32 diff = time - throttleLastTime;
+-      
+-      int target = (1000000/(rate*throttle));
+-      int d = (target - diff);
+-      
++      u32 diff = time - throttleRefTime;
++      int target = throttleIndex*(1000*100)/(60*throttle);
++      throttleIndex++;
++
++      int d = target - diff;
+       if(d > 0) {
+         SDL_Delay(d);
++        if (throttleIndex > 999) {
++          throttleIndex = 0;
++          throttleRefTime = systemGetClock();
++        }
++      } else {
++        int target = (throttleIndex+3)*(1000*100)/(60*throttle);
++        int d = target - diff;
++        if(d < 0) {
++          // Have fallen more than 4 frames behind.  Give up.
++          throttleIndex = 0;
++          throttleRefTime = systemGetClock();
++        }
+       }
+     }
+-    throttleLastTime = systemGetClock();
+   }
++}
++
++void system10Frames(int rate)
++{
++  u32 time = systemGetClock();  
++
+   if(rewindMemory) {
+     if(++rewindCounter >= rewindTimer) {
+       rewindSaveNeeded = true;
