@@ -11,7 +11,16 @@ stdenv.mkDerivation rec {
     owner = "Cyan4973";
   };
 
+  patches = [ ./install-on-freebsd.patch ] ;
+
   buildInputs = stdenv.lib.optional doCheck valgrind;
+
+  # An ever-changing __DATE__ isn't very reproducible, so we must override it.
+  # But rather than displaying "()" or 1970, let --version show useful info:
+  NIX_CFLAGS_COMPILE = [
+    ''-D__DATE__="${stdenv.cc.cc.name}"''
+    "-Wno-builtin-macro-redefined"
+  ];
 
   enableParallelBuilding = true;
 
@@ -19,8 +28,6 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # tests take a very long time
   checkTarget = "test";
-
-  patches = [ ./install-on-freebsd.patch ] ;
 
   meta = with stdenv.lib; {
     description = "Extremely fast compression algorithm";
