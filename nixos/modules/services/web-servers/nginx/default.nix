@@ -84,7 +84,9 @@ let
 
             server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
             ${optionalString vhost.enableACME "location /.well-known/acme-challenge { root ${vhost.acmeRoot}; }"}
-            return 301 https://$host${optionalString (port != 443) ":${port}"}$request_uri;
+            location / {
+              return 301 https://$host${optionalString (port != 443) ":${port}"}$request_uri;
+            }
           }
         ''}
 
@@ -224,9 +226,7 @@ in
 
     security.acme.certs = mapAttrs (vhostName: vhostConfig: {
       webroot = vhostConfig.acmeRoot;
-      extraDomains = genAttrs vhostConfig.serverAliases (alias: {
-        "${alias}" = null;
-      });
+      extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
     }) virtualHosts;
 
 
