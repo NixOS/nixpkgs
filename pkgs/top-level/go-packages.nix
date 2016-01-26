@@ -3423,6 +3423,14 @@ let
     sha256 = "0669f21hd5cw74irrfakdpvxn608cd5xy6s2nyp5kgcy2ijrq4ab";
   };
 
+  uiprogress = buildFromGitHub {
+    buildInputs = [ uilive ];
+    rev = "fd1c82df78a6c1f5ddbd3b6ec46407ea0acda1ad";
+    owner = "gosuri";
+    repo = "uiprogress";
+    sha256 = "1s61vp2h6n1d8y1zqr2ca613ch5n18rx28waz6a8im94sgzzawp7";
+  };
+
   urlesc = buildFromGitHub {
     rev    = "5fa9ff0392746aeae1c4b37fcc42c65afa7a9587";
     owner  = "opennota";
