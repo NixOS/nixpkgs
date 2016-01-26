@@ -1413,6 +1413,13 @@ let
     sha256 = "14ph12krn5zlg00vh9g6g08lkfjxnpw46nzadrfb718yl1hgyk3g";
   };
 
+  go-humanize = buildFromGitHub {
+    rev = "8929fe90cee4b2cb9deb468b51fb34eba64d1bf0";
+    owner = "dustin";
+    repo = "go-humanize";
+    sha256 = "1g155kxjh6hd3ibx41nbpj6f7h5bh54zgl9dr53xzg2xlxljgjy0";
+  };
+
   go-ini = buildFromGitHub {
     rev    = "a98ad7ee00ec53921f08832bc06ecf7fd600e6a1";
     owner  = "vaughan0";
