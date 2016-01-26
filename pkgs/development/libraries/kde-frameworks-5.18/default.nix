@@ -60,7 +60,7 @@ let
     kdbusaddons = callPackage ./kdbusaddons.nix {};
     kdeclarative = callPackage ./kdeclarative.nix {};
     kded = callPackage ./kded.nix {};
-    kdelibs4support = callPackage ./kdelibs4support.nix {};
+    kdelibs4support = callPackage ./kdelibs4support {};
     kdesignerplugin = callPackage ./kdesignerplugin.nix {};
     kdewebkit = callPackage ./kdewebkit.nix {};
     kdesu = callPackage ./kdesu.nix {};
