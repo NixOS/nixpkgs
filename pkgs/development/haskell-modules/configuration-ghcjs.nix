@@ -14,10 +14,6 @@ self: super: {
 
   inherit (pkgs.haskell.packages.ghc7102) jailbreak-cabal alex happy gtk2hs-buildtools;
 
-  # Many packages fail with:
-  #   haddock: internal error: expectJust getPackageDetails
-  mkDerivation = drv: super.mkDerivation (drv // { doHaddock = false; });
-
   # This is the list of packages that are built into a booted ghcjs installation
   # It can be generated with the command:
   # nix-shell -p haskell.packages.ghcjs.ghc --command "ghcjs-pkg list | sed -n 's/^    \(.*\)-\([0-9.]*\)$/\1_\2/ p' | sed 's/\./_/g' | sed 's/-\(.\)/\U\1/' | sed 's/^\([^_]*\)\(.*\)$/\1 = null;/'"
