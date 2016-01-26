@@ -3416,6 +3416,13 @@ let
     sha256 = "0gkgkw04ndr5y7hrdy0r4v2drs5srwfcw2bs1gyas066hwl84xyw";
   };
 
+  uilive = buildFromGitHub {
+    rev = "1b9b73fa2b2cc24489b1aba4d29a82b12cd0a71f";
+    owner = "gosuri";
+    repo = "uilive";
+    sha256 = "0669f21hd5cw74irrfakdpvxn608cd5xy6s2nyp5kgcy2ijrq4ab";
+  };
+
   urlesc = buildFromGitHub {
     rev    = "5fa9ff0392746aeae1c4b37fcc42c65afa7a9587";
     owner  = "opennota";
