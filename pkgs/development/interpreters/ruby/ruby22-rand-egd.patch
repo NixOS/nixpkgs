@@ -1,0 +1,42 @@
+diff --git a/ext/openssl/extconf.rb b/ext/openssl/extconf.rb
+index e272cba..3a1fa71 100644
+--- a/ext/openssl/extconf.rb
++++ b/ext/openssl/extconf.rb
+@@ -87,6 +87,7 @@
+ have_func("PEM_def_callback")
+ have_func("PKCS5_PBKDF2_HMAC")
+ have_func("PKCS5_PBKDF2_HMAC_SHA1")
++have_func("RAND_egd")
+ have_func("X509V3_set_nconf")
+ have_func("X509V3_EXT_nconf_nid")
+ have_func("X509_CRL_add0_revoked")
+diff --git a/ext/openssl/ossl_rand.c b/ext/openssl/ossl_rand.c
+index 29cbf8c..27466fe 100644
+--- a/ext/openssl/ossl_rand.c
++++ b/ext/openssl/ossl_rand.c
+@@ -148,6 +148,7 @@ ossl_rand_pseudo_bytes(VALUE self, VALUE len)
+     return str;
+ }
+ 
++#ifdef HAVE_RAND_EGD
+ /*
+  *  call-seq:
+  *     egd(filename) -> true
+@@ -186,6 +187,7 @@ ossl_rand_egd_bytes(VALUE self, VALUE filename, VALUE len)
+     }
+     return Qtrue;
+ }
++#endif /* HAVE_RAND_EGD */
+ 
+ /*
+  *  call-seq:
+@@ -219,8 +221,10 @@ Init_ossl_rand(void)
+     rb_define_module_function(mRandom, "write_random_file", ossl_rand_write_file, 1);
+     rb_define_module_function(mRandom, "random_bytes", ossl_rand_bytes, 1);
+     rb_define_module_function(mRandom, "pseudo_bytes", ossl_rand_pseudo_bytes, 1);
++#ifdef HAVE_RAND_EGD
+     rb_define_module_function(mRandom, "egd", ossl_rand_egd, 1);
+     rb_define_module_function(mRandom, "egd_bytes", ossl_rand_egd_bytes, 2);
++#endif /* HAVE_RAND_EGD */
+     rb_define_module_function(mRandom, "status?", ossl_rand_status, 0);
+ }
