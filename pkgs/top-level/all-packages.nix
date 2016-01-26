@@ -2434,8 +2434,6 @@ in
 
   nc6 = callPackage ../tools/networking/nc6 { };
 
-  ncat = callPackage ../tools/networking/ncat { };
-
   ncftp = callPackage ../tools/networking/ncftp { };
 
   ncompress = callPackage ../tools/compression/ncompress { };
@@ -16407,4 +16405,3 @@ in
   togglesg-download = callPackage ../tools/misc/togglesg-download { };
 
 }
-
