@@ -105,6 +105,16 @@ in
 
     boot.kernelPackages = pkgs.linuxPackages_4_3;
 
+    nixpkgs.config.packageOverrides = pkgs:
+      { linux_4_3 = pkgs.linux_4_3.override {
+          extraConfig =
+            ''
+              IPV6_MULTIPLE_TABLES y
+              IP_MULTIPLE_TABLES y
+            '';
+        };
+      };
+
     security.sudo.extraConfig =
         ''
         Defaults lecture = never
