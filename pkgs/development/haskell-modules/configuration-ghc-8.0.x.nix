@@ -35,12 +35,7 @@ self: super: {
   xhtml = null;
 
   # jailbreak-cabal can use the native Cabal library.
-  jailbreak-cabal = super.jailbreak-cabal.override {
-    Cabal = null;
-    mkDerivation = drv: self.mkDerivation (drv // {
-      preConfigure = "sed -i -e 's/Cabal == 1.20\\.\\*/Cabal >= 1.23/' jailbreak-cabal.cabal";
-    });
-  };
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
 
   # Older versions of QuickCheck don't support our version of Template Haskell.
   QuickCheck = self.QuickCheck_2_8_2;
