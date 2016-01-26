@@ -52,4 +52,6 @@ with lib;
   networking.firewall.allowPing = true;
   networking.firewall.rejectPackets = true;
 
+  systemd.ctrl-alt-del = "poweroff.target";
+
 }
