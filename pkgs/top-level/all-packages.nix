@@ -15628,13 +15628,7 @@ let
 
   mfcj470dw = callPackage_i686 ../misc/cups/drivers/mfcj470dw { };
 
-  samsungUnifiedLinuxDriver = callPackage ../misc/cups/drivers/samsung {
-    gcc = import ../development/compilers/gcc/4.4 {
-      inherit stdenv fetchurl gmp mpfr noSysDirs gettext which;
-      texinfo = texinfo4;
-      profiledCompiler = true;
-    };
-  };
+  samsung-unified-linux-driver = callPackage ../misc/cups/drivers/samsung { };
 
   sane-backends = callPackage ../applications/graphics/sane/backends {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
@@ -15973,6 +15967,7 @@ aliases = with self; rec {
   quake3game = ioquake3; # added 2016-01-14
   scim = sc-im; # added 2016-01-22
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
+  samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   vorbisTools = vorbis-tools; # added 2016-01-26
 };
 
