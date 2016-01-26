@@ -165,7 +165,6 @@ let
       mupen64plus = linux;
       mutt = linux;
       nano = allBut cygwin;
-      ncat = linux;
       netcat = all;
       nss_ldap = linux;
       nssmdns = linux;
