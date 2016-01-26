@@ -15628,7 +15628,8 @@ let
 
   mfcj470dw = callPackage_i686 ../misc/cups/drivers/mfcj470dw { };
 
-  samsung-unified-linux-driver = callPackage ../misc/cups/drivers/samsung { };
+  samsung-unified-linux-driver_1_00_37 = callPackage ../misc/cups/drivers/samsung { };
+  samsung-unified-linux-driver = callPackage ../misc/cups/drivers/samsung/4.00.39 { };
 
   sane-backends = callPackage ../applications/graphics/sane/backends {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
