@@ -5,15 +5,19 @@
 , withGUI ? true
 }:
 
-stdenv.mkDerivation rec {
-  name = "system-config-printer-1.3.12";
+let majorVersion = "1.5";
+
+in stdenv.mkDerivation rec {
+  name = "system-config-printer-${majorVersion}.7";
 
   src = fetchurl {
-    url = "http://cyberelk.net/tim/data/system-config-printer/1.3/${name}.tar.xz";
+    url = "http://cyberelk.net/tim/data/system-config-printer/${majorVersion}/${name}.tar.xz";
     sha256 = "1cg9n75rg5l9vr1925n2g771kga33imikyl0mf70lww2sfgvs18r";
   };
 
   propagatedBuildInputs = [ pythonPackages.pycurl ];
+
+  patches = [ ./detect_serverbindir.patch ];
 
   buildInputs =
     [ intltool pkgconfig glib udev libusb1 cups xmlto
@@ -32,17 +36,28 @@ stdenv.mkDerivation rec {
 
   postInstall =
     ''
+      export makeWrapperArgs="--set prefix $out"
       wrapPythonPrograms
+      # The program imports itself, so we need to move shell wrappers to a proper place.
+      fixupWrapper() {
+        mv "$out/share/system-config-printer/$2.py" \
+           "$out/bin/$1"
+        sed -i "s/.$2.py-wrapped/$2.py/g" "$out/bin/$1"
+        mv "$out/share/system-config-printer/.$2.py-wrapped" \
+           "$out/share/system-config-printer/$2.py"
+      }
+      fixupWrapper scp-dbus-service scp-dbus-service
+      fixupWrapper system-config-printer system-config-printer
+      fixupWrapper system-config-printer-applet applet
+      # This __init__.py is both executed and imported.
       ( cd $out/share/system-config-printer/troubleshoot
         mv .__init__.py-wrapped __init__.py
       )
-
-      # Upstream issue: https://github.com/twaugh/system-config-printer/issues/28
-      sed -i -e "s|/usr/bin|$out/bin|" "$out/share/dbus-1/services/org.fedoraproject.Config.Printing.service"
     '';
 
   meta = {
     homepage = http://cyberelk.net/tim/software/system-config-printer/;
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2;
   };
 }
