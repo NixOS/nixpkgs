@@ -438,13 +438,12 @@ let
 
   amqp = buildPythonPackage rec {
     name = "amqp-${version}";
-    version = "1.4.6";
+    version = "1.4.9";
     disabled = pythonOlder "2.6";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/amqp/${name}.tar.gz";
-      sha256 = "0h76dnqfbc6fslwr7lx86n2gyslfv2x1vl8lpbszjs2svrkwikzb";
-      md5 = "a061581b6864f838bffd62b6a3d0fb9f";
+      sha256 = "06n6q0kxhjnbfz3vn8x9yz09lwmn1xi9d6wxp31h5jbks0b4vsid";
     };
 
     buildInputs = with self; [ mock coverage nose-cover3 unittest2 ];
