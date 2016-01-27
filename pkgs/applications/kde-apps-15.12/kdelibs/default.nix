@@ -9,6 +9,8 @@
 kdeApp {
   name = "kdelibs";
 
+  outputs = [ "out" ];
+
   buildInputs = [
     attica attr avahi giflib libdbusmenu_qt libjpeg libxml2
     polkit_qt4 qca2 shared_desktop_ontologies udev xz pcre
