@@ -87,6 +87,7 @@ in
 
 assert builtins.isList urls;
 assert (urls == []) != (url == "");
+assert sha512 != "" -> builtins.compareVersions "1.11" builtins.nixVersion <= 0;
 
 
 let
