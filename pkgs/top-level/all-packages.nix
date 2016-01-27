@@ -1640,6 +1640,8 @@ let
 
   gitlab-git-http-server = callPackage ../applications/version-management/gitlab-git-http-server { };
 
+  git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
+
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
   glmark2 = callPackage ../tools/graphics/glmark2 { };
