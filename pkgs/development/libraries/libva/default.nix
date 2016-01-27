@@ -1,8 +1,10 @@
-{ stdenv, fetchurl, libX11, pkgconfig, libXext, libdrm, libXfixes, wayland, libffi
+{ stdenv, lib, fetchurl, libX11, pkgconfig, libXext, libdrm, libXfixes, wayland, libffi
 , mesa_noglu ? null
 }:
 
-stdenv.mkDerivation rec {
+let
+  withMesa = mesa_noglu != null;
+in stdenv.mkDerivation rec {
   name = "libva-1.6.2";
 
   src = fetchurl {
@@ -12,14 +14,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 libXext pkgconfig libdrm libXfixes wayland libffi mesa_noglu ];
 
-  configureFlags = stdenv.lib.optionals (mesa_noglu != null) [
+  configureFlags = lib.optionals withMesa [
     "--with-drivers-path=${mesa_noglu.driverLink}/lib/dri"
     "--enable-glx"
   ];
 
-  installFlags = [ "DESTDIR=$(out)" ];
+  installFlags = lib.optional withMesa "DESTDIR=$(out)";
 
-  postInstall = ''
+  postInstall = lib.optionalString withMesa ''
     cp -r $out/${mesa_noglu.driverLink}/* $out
     cp -r $out/$out/* $out
     rm -rf $out/run $out/$(echo "$out" | cut -d "/" -f2)
