@@ -11,4 +11,9 @@ with lib;
     "flyingcircus.io-1:Rr9CwiPv8cdVf3EQu633IOTb6iJKnWbVfCC8x8gVz2o="
   ];
 
+  nix.binaryCaches = [
+    https://cache.nixosorg
+    https://hydra.flyingcircus.io
+  ];
+
 }
