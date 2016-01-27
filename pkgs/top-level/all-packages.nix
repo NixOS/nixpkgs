@@ -10467,6 +10467,8 @@ let
 
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
 
+  pagemon = callPackage ../os-specific/linux/pagemon { };
+
   pam = callPackage ../os-specific/linux/pam { };
 
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
