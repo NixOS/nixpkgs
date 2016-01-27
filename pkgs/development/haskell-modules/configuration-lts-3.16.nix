@@ -163,6 +163,7 @@ self: super: {
   "Cartesian" = dontDistribute super."Cartesian";
   "Cascade" = dontDistribute super."Cascade";
   "Catana" = dontDistribute super."Catana";
+  "ChannelT" = dontDistribute super."ChannelT";
   "Chart-gtk" = dontDistribute super."Chart-gtk";
   "Chart-simple" = dontDistribute super."Chart-simple";
   "CheatSheet" = dontDistribute super."CheatSheet";
@@ -4245,6 +4246,7 @@ self: super: {
   "hscassandra" = dontDistribute super."hscassandra";
   "hscd" = dontDistribute super."hscd";
   "hsclock" = dontDistribute super."hsclock";
+  "hscolour" = doDistribute super."hscolour_1_23";
   "hscope" = dontDistribute super."hscope";
   "hscrtmpl" = dontDistribute super."hscrtmpl";
   "hscuid" = dontDistribute super."hscuid";
@@ -4640,6 +4642,7 @@ self: super: {
   "irc-fun-client" = dontDistribute super."irc-fun-client";
   "irc-fun-color" = dontDistribute super."irc-fun-color";
   "irc-fun-messages" = dontDistribute super."irc-fun-messages";
+  "irc-fun-types" = dontDistribute super."irc-fun-types";
   "ircbot" = dontDistribute super."ircbot";
   "ircbouncer" = dontDistribute super."ircbouncer";
   "ireal" = dontDistribute super."ireal";
@@ -4716,6 +4719,7 @@ self: super: {
   "jsc" = dontDistribute super."jsc";
   "jsmw" = dontDistribute super."jsmw";
   "json-assertions" = dontDistribute super."json-assertions";
+  "json-ast" = dontDistribute super."json-ast";
   "json-b" = dontDistribute super."json-b";
   "json-encoder" = dontDistribute super."json-encoder";
   "json-enumerator" = dontDistribute super."json-enumerator";
@@ -7199,6 +7203,7 @@ self: super: {
   "string-qq" = dontDistribute super."string-qq";
   "string-quote" = dontDistribute super."string-quote";
   "string-similarity" = dontDistribute super."string-similarity";
+  "string-typelits" = dontDistribute super."string-typelits";
   "stringlike" = dontDistribute super."stringlike";
   "stringprep" = dontDistribute super."stringprep";
   "strings" = dontDistribute super."strings";
