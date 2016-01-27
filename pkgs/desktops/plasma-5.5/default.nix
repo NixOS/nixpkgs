@@ -26,8 +26,6 @@ let
         name = "${name}-${version}";
         inherit src;
 
-        setupHook = args.setupHook or ./setup-hook.sh;
-
         cmakeFlags =
           (args.cmakeFlags or [])
           ++ [ "-DBUILD_TESTING=OFF" ]
