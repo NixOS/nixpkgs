@@ -1,5 +1,5 @@
 { stdenv, fetchurl, eventlog, pkgconfig, glib, python, systemd, perl
-, riemann_c_client, protobufc, yacc }:
+, riemann_c_client, protobufc, pcre, yacc }:
 
 stdenv.mkDerivation rec {
   name = "syslog-ng-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qc21mwajk6xrra3gqy2nvaza5gq62psamq4ayphj7lqabdglizg";
   };
 
-  buildInputs = [ eventlog pkgconfig glib python systemd perl riemann_c_client protobufc yacc ];
+  buildInputs = [ eventlog pkgconfig glib python systemd perl riemann_c_client protobufc yacc pcre ];
 
   configureFlags = [
     "--enable-dynamic-linking"
