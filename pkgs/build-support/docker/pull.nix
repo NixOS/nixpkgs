@@ -8,13 +8,14 @@
 { imageName, imageTag ? "latest", imageId ? null
 , sha256, name ? "${imageName}-${imageTag}"
 , indexUrl ? "https://index.docker.io"
-, registryUrl ? "https://registry-1.docker.io"
 , registryVersion ? "v1"
 , curlOpts ? "" }:
 
+assert registryVersion == "v1";
+
 let layer = stdenv.mkDerivation {
   inherit name imageName imageTag imageId
-          indexUrl registryUrl registryVersion curlOpts;
+          indexUrl registryVersion curlOpts;
 
   builder = ./pull.sh;
   detjson = ./detjson.py;
@@ -34,10 +35,6 @@ let layer = stdenv.mkDerivation {
 
     # This variable allows the user to pass additional options to curl
     "NIX_CURL_FLAGS"
-
-    # This variable allows overriding the timeout for connecting to
-    # the hashed mirrors.
-    "NIX_CONNECT_TIMEOUT"
   ];
   
   # Doing the download on a remote machine just duplicates network
