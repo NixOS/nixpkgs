@@ -610,10 +610,10 @@ let
   };
 
   deis = buildFromGitHub {
-    rev = "v1.10.0";
+    rev = "v1.12.2";
     owner = "deis";
     repo = "deis";
-    sha256 = "0qji0dcfqgvjrfn5fjagjib606n24iy9qank2ckh202s75rxx5w9";
+    sha256 = "03lznzcij3gn08kqj2p6skifcdv5aw09dm6zxgvqw7nxx2n1j2ib";
     subPackages = [ "client" ];
     buildInputs = [ docopt-go crypto yaml-v2 ];
     postInstall = ''
