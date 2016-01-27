@@ -862,6 +862,14 @@ let
     subPackages = [ "./" ];  # don't try to build test fixtures
   };
 
+  git-annex-remote-b2 = buildFromGitHub {
+    buildInputs = [ go go-backblaze ];
+    owner = "encryptio";
+    repo = "git-annex-remote-b2";
+    rev = "v0.2";
+    sha256 = "1139rzdvlj3hanqsccfinprvrzf4qjc5n4f0r21jp9j24yhjs6j2";
+  };
+
   git-appraise = buildFromGitHub {
     rev = "v0.3";
     owner = "google";
@@ -1228,6 +1236,15 @@ let
     propagatedBuildInputs = [ pretty ];
   };
 
+  go-backblaze = buildFromGitHub {
+    buildInputs = [ go-flags go-humanize uilive uiprogress ];
+    goPackagePath = "gopkg.in/kothar/go-backblaze.v0";
+    rev = "373819725fc560fa962c6cd883b533d2ebec4844";
+    owner = "kothar";
+    repo = "go-backblaze";
+    sha256 = "1kmlwfnnfd4h46bb9pz2gw1hxqm1pzkwvidfmnc0zkrilaywk6fx";
+  };
+
   go-bencode = buildGoPackage rec {
     version = "1.1.1";
     name = "go-bencode-${version}";
@@ -1411,6 +1428,13 @@ let
     owner  = "bitly";
     repo   = "go-hostpool";
     sha256 = "14ph12krn5zlg00vh9g6g08lkfjxnpw46nzadrfb718yl1hgyk3g";
+  };
+
+  go-humanize = buildFromGitHub {
+    rev = "8929fe90cee4b2cb9deb468b51fb34eba64d1bf0";
+    owner = "dustin";
+    repo = "go-humanize";
+    sha256 = "1g155kxjh6hd3ibx41nbpj6f7h5bh54zgl9dr53xzg2xlxljgjy0";
   };
 
   go-ini = buildFromGitHub {
@@ -3407,6 +3431,21 @@ let
     owner  = "BurntSushi";
     repo   = "toml";
     sha256 = "0gkgkw04ndr5y7hrdy0r4v2drs5srwfcw2bs1gyas066hwl84xyw";
+  };
+
+  uilive = buildFromGitHub {
+    rev = "1b9b73fa2b2cc24489b1aba4d29a82b12cd0a71f";
+    owner = "gosuri";
+    repo = "uilive";
+    sha256 = "0669f21hd5cw74irrfakdpvxn608cd5xy6s2nyp5kgcy2ijrq4ab";
+  };
+
+  uiprogress = buildFromGitHub {
+    buildInputs = [ uilive ];
+    rev = "fd1c82df78a6c1f5ddbd3b6ec46407ea0acda1ad";
+    owner = "gosuri";
+    repo = "uiprogress";
+    sha256 = "1s61vp2h6n1d8y1zqr2ca613ch5n18rx28waz6a8im94sgzzawp7";
   };
 
   urlesc = buildFromGitHub {
