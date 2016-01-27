@@ -68,15 +68,24 @@ let
        network = network;
        interface = interface_name;
        gateway = builtins.getAttr network (builtins.getAttr interface_name interfaces).gateways;
+       addresses = builtins.getAttr network (builtins.getAttr interface_name interfaces).networks;
+       family = if (is_ip4 network) then "4" else "6";
      })
     (builtins.attrNames
       (builtins.getAttr interface_name interfaces).gateways);
 
 
   render_policy_routing_rule = ruleset:
+    let
+      render_address_rules =
+        builtins.toString
+          (map (address: "ip -${ruleset.family} rule add priority ${builtins.toString (ruleset.priority)} from ${address} lookup ${ruleset.interface}")
+           (ruleset.addresses));
+    in
     ''
-    ip rule add priority ${builtins.toString (ruleset.priority)} from ${ruleset.network} lookup ${ruleset.interface}
-    ip route add default via ${ruleset.gateway} table ${ruleset.interface} || true
+    ${render_address_rules}
+    ip -${ruleset.family} rule add priority ${builtins.toString (ruleset.priority)} from all to ${ruleset.network} lookup ${ruleset.interface}
+    ip -${ruleset.family} route add default via ${ruleset.gateway} table ${ruleset.interface} || true
     '';
 
   get_policy_routing = interfaces:
@@ -187,10 +196,13 @@ in
         mkdir -p /etc/iproute2
         ln -sf ${rt_tables} /etc/iproute2/rt_tables
 
-        ip rule flush
+        ip -4 rule flush
+        ip -4 rule add priority 32766 lookup main
+        ip -4 rule add priority 32767 lookup default
 
-        ip rule add priority 32766 lookup main
-        ip rule add priority 32767 lookup default
+        ip -6 rule flush
+        ip -6 rule add priority 32766 lookup main
+        ip -6 rule add priority 32767 lookup default
 
         ${builtins.toString
             (get_policy_routing config.fcio.enc.parameters.interfaces)}
