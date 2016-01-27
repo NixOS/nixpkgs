@@ -18164,7 +18164,7 @@ in modules // {
   };
 
 
-  setuptoolsTrial = buildPythonPackage {
+  setuptoolsTrial = makeOverridable ({ twisted ? self.twisted }: buildPythonPackage {
     name = "setuptools-trial-0.5.12";
 
     src = pkgs.fetchurl {
@@ -18181,7 +18181,7 @@ in modules // {
 
       license = "unspecified"; # !
     };
-  };
+  }) {};
 
   simplegeneric = buildPythonPackage rec {
     version = "0.8.1";

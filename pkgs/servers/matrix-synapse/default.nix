@@ -34,7 +34,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   buildInputs = with pythonPackages; [
-    mock setuptoolsTrial
+    mock (setuptoolsTrial.override { twisted = twisted15; })
   ];
 
   meta = {
