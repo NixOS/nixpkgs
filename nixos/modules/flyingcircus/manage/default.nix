@@ -15,7 +15,8 @@ manage_script = pkgs.stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp $src/update.py $out/fc-manage.py
+    cp $src/*.py $out/
+
     cat <<__EOF__ > $out/bin/fc-manage
     #!/bin/bash
     # The current system reference is bad because I wasn't able tof figure out
@@ -24,6 +25,15 @@ manage_script = pkgs.stdenv.mkDerivation {
     ${pkgs.python3}/bin/python3 $out/fc-manage.py \$@
     __EOF__
     chmod +x $out/bin/fc-manage
+
+    cat <<__EOF__ > $out/bin/fc-resize-root
+    #!/bin/bash
+    # The current system reference is bad because I wasn't able tof figure out
+    # retrieving the path of all all dependencies (and theirs).
+    PATH=${pkgs.gptfdisk}/bin:${pkgs.utillinux}/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin
+    ${pkgs.python3}/bin/python3 $out/fc-resize-root.py \$@
+    __EOF__
+    chmod +x $out/bin/fc-resize-root
     '';
   };
 
@@ -95,7 +105,10 @@ in
           inherit (config.environment.sessionVariables) NIX_PATH SSL_CERT_FILE;
           HOME = "/root";
         };
-        script = "${manage_script}/bin/fc-manage ${config.flyingcircus.agent.steps}";
+        script = ''
+          ${manage_script}/bin/fc-manage ${config.flyingcircus.agent.steps}
+          ${manage_script}/bin/fc-resize-root
+          '';
       };
     })
 
