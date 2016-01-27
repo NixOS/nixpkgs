@@ -62,22 +62,17 @@ let
     srv = 30;
   };
 
-  get_routing_priority = interface_name:
-    if builtins.hasAttr interface_name routing_priorities
-    then builtins.getAttr interface_name routing_priorities
-    else 100;
-
-  get_policy_routing_for_network = interfaces: interface_name: network:
-    {
-      priority = get_routing_priority interface_name;
-      network = network;
-      interface = interface_name;
-      gateway = builtins.getAttr network (builtins.getAttr interface_name interfaces).gateways;
-    };
-
   get_policy_routing_for_interface = interfaces: interface_name:
     map
-    (get_policy_routing_for_network interfaces interface_name)
+    (network: {
+       priority =
+        if builtins.hasAttr interface_name routing_priorities
+        then builtins.getAttr interface_name routing_priorities
+        else 100;
+       network = network;
+       interface = interface_name;
+       gateway = builtins.getAttr network (builtins.getAttr interface_name interfaces).gateways;
+     })
     (builtins.attrNames
       (builtins.getAttr interface_name interfaces).gateways);
 
