@@ -30,7 +30,7 @@ let
   libc_dev = if nativeLibc then null else libc.dev or libc;
   libc_lib = if nativeLibc then null else libc.out or libc;
   cc_solib = cc.lib or cc;
-  binutils_bin = if nativeTools then null else binutils.bin or binutils;
+  binutils_bin = if nativeTools then "$binutils" else binutils.bin or binutils;
   # The wrapper scripts use 'cat', so we may need coreutils.
   coreutils_bin = if nativeTools then null else coreutils.bin or coreutils;
 in
