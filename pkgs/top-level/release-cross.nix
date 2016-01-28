@@ -219,7 +219,6 @@ in {
     libffi.crossDrv = nativePlatforms;
     libtool.crossDrv = nativePlatforms;
     libunistring.crossDrv = nativePlatforms;
-    lsh.crossDrv = nativePlatforms;
     nixUnstable.crossDrv = nativePlatforms;
     openssl.crossDrv = nativePlatforms;            # dependency of Nix
     patch.crossDrv = nativePlatforms;
