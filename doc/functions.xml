@@ -489,7 +489,6 @@ c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
     sha256 = "1bhw5hkz6chrnrih0ymjbmn69hyfriza2lr550xyvpdrnbzr4gk2"; <co xml:id='ex-dockerTools-pullImage-4' />
 
     indexUrl = "https://index.docker.io"; <co xml:id='ex-dockerTools-pullImage-5' />
-    registryUrl = "https://registry-1.docker.io";
     registryVersion = "v1";
   }
   </programlisting>
@@ -534,8 +533,8 @@ c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
 
    <callout arearefs='ex-dockerTools-pullImage-5'>
     <para>
-     In the above example the default values are shown for the variables <varname>indexUrl</varname>,
-     <varname>registryUrl</varname> and <varname>registryVersion</varname>.
+     In the above example the default values are shown for the variables
+     <varname>indexUrl</varname> and <varname>registryVersion</varname>.
      Hence by default the Docker.io registry is used to pull the images.
     </para>
    </callout>
