@@ -1259,7 +1259,6 @@ dont-distribute-packages:
   ghc-exactprint:                               [ x86_64-darwin ]
   ghci-diagrams:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   ghci-haskeline:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
-  ghc-imported-from:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   ghclive:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   ghc-parmake:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   ghc-pkg-autofix:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
