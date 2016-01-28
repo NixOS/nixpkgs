@@ -1,37 +1,37 @@
-_propagateMimeTypes() {
-    if [ -d "$1/share/mime" ]; then
-        propagateOnce propagatedUserEnvPkgs "$1"
-        addToSearchPathOnce XDG_DATA_DIRS "$1/share"
-    fi
+_ecmSetXdgDirs() {
+    addToSearchPathOnce XDG_DATA_DIRS "$1/share"
+    addToSearchPathOnce XDG_CONFIG_DIRS "$1/etc/xdg"
+    addToSearchPathOnce NIX_WRAP_XDG_CONFIG_DIRS "$1/etc/xdg"
 }
 
-addToSearchPathOnceWithCustomDelimiter() {
-    local delim="$1"
-    local search="$2"
-    local target="$3"
-    local dirs
-    local exported
-    IFS="$delim" read -a dirs <<< "${!search}"
-    for dir in ${dirs[@]}; do
-        if [ "z$dir" == "z$target" ]; then exported=1; fi
+_ecmPropagateSharedData() {
+    local sharedPaths=( \
+        "config.cfg" \
+        "doc" \
+        "kconf_update" \
+        "kservices5" \
+        "kservicetypes5" \
+        "kxmlgui5" \
+        "knotifications5" \
+        "icons" \
+        "sounds" \
+        "templates" \
+        "wallpapers" \
+        "applications" \
+        "desktop-directories" \
+        "mime" \
+        "info" \
+        "dbus-1" \
+        "interfaces" \
+        "services" \
+        "system-services" )
+    for dir in ${sharedPaths[@]}; do
+        if [ -d "$1/share/$dir" ]; then
+            addToSearchPathOnce NIX_WRAP_XDG_DATA_DIRS "$1/share"
+            propagateOnce propagatedUserEnvPkgs "$1"
+            break
+        fi
     done
-    if [ -z $exported ]; then
-        eval "export ${search}=\"${!search}${!search:+$delim}$target\""
-    fi
-}
-
-addToSearchPathOnce() {
-    addToSearchPathOnceWithCustomDelimiter ':' "$@"
-}
-
-propagateOnce() {
-    addToSearchPathOnceWithCustomDelimiter ' ' "$@"
-}
-
-_exportLocales() {
-    if [[ -d "$1/share/locale" ]]; then
-        addToSearchPathOnce XDG_DATA_DIRS "$1/share"
-    fi
 }
 
 _ecmConfig() {
@@ -69,13 +69,13 @@ _ecmConfig() {
     cmakeFlags+=" -DKDE_INSTALL_MANDIR=${!outputLib}/share/man"
     cmakeFlags+=" -DKDE_INSTALL_INFODIR=${!outputLib}/share/info"
     cmakeFlags+=" -DKDE_INSTALL_DBUSDIR=${!outputLib}/share/dbus-1"
-    cmakeFlags+=" -DKDE_INSTALL_DBUSINTERFACEDIR=${!outputLib}/share/interfaces"
-    cmakeFlags+=" -DKDE_INSTALL_DBUSSERVICEDIR=${!outputLib}/share/services"
-    cmakeFlags+=" -DKDE_INSTALL_DBUSSYSTEMSERVICEDIR=${!outputLib}/share/system-services"
+    cmakeFlags+=" -DKDE_INSTALL_DBUSINTERFACEDIR=${!outputLib}/share/dbus-1/interfaces"
+    cmakeFlags+=" -DKDE_INSTALL_DBUSSERVICEDIR=${!outputLib}/share/dbus-1/services"
+    cmakeFlags+=" -DKDE_INSTALL_DBUSSYSTEMSERVICEDIR=${!outputLib}/share/dbus-1/system-services"
     cmakeFlags+=" -DKDE_INSTALL_SYSCONFDIR=${!outputLib}/etc"
     cmakeFlags+=" -DKDE_INSTALL_CONFDIR=${!outputLib}/etc/xdg"
     cmakeFlags+=" -DKDE_INSTALL_AUTOSTARTDIR=${!outputLib}/etc/xdg/autostart"
 }
 
-envHooks+=(_propagateMimeTypes _exportLocales)
+envHooks+=(_ecmSetXdgDirs _ecmPropagateSharedData)
 preConfigureHooks+=(_ecmConfig)

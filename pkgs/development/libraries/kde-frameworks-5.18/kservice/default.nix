@@ -4,7 +4,6 @@
 
 kdeFramework {
   name = "kservice";
-  setupHook = ./setup-hook.sh;
   propagatedNativeBuildInputs = [ extra-cmake-modules ];
   nativeBuildInputs = [ kdoctools ];
   buildInputs = [ kcrash kdbusaddons ];
