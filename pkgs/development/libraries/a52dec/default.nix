@@ -8,8 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "0czccp4fcpf2ykp16xcrzdfmnircz1ynhls334q374xknd5747d2";
   };
 
-  NIX_CFLAGS_COMPILE = "-fpic";
-
   # From Handbrake
   patches = [
     ./A00-a52-state-t-public.patch

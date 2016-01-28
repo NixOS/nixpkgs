@@ -33,8 +33,6 @@ stdenv.mkDerivation {
     "LAPACK="
   ];
 
-  NIX_CFLAGS = "-fPIC";
-
   postInstall = ''
     # Build and install shared library
     (

@@ -12,8 +12,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ automake autoconf libtool ];
 
-  CFLAGS="-fPIC";
-
   # .so endings are missing (quick and dirty fix)
   postInstall = ''
     for i in $out/lib/*; do

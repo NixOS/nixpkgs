@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
   patchPhase = ''patchShebangs .'';
   buildInputs = [ perl zlib ];
 
-  makeFlags = "CFLAGS=-fPIC";
-
   meta = {
     description = "Hebrew spell checker";
     homepage = http://hspell.ivrix.org.il/;

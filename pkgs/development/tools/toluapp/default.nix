@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
       --replace /usr/local $out
   '';
 
-  NIX_CFLAGS_COMPILE = "-fPIC";
-
   buildPhase = ''scons'';
 
   installPhase = ''scons install'';

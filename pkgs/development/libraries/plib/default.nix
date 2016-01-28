@@ -1,6 +1,5 @@
 { fetchurl, stdenv, mesa, freeglut, SDL
-, libXi, libSM, libXmu, libXext, libX11,
-enablePIC ? false }:
+, libXi, libSM, libXmu, libXext, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "plib-1.8.5";
@@ -12,8 +11,6 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./CVE-2012-4552.patch ];
-
-  NIX_CFLAGS_COMPILE = if enablePIC then "-fPIC" else "";
 
   propagatedBuildInputs = [
     mesa freeglut SDL

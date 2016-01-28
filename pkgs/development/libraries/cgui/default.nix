@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ texinfo allegro perl ];
 
   configurePhase = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC"
     sh fix.sh unix
   '';
 

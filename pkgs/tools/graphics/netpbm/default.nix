@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
       --replace '"-DSAFER"' '"-DPARANOIDSAFER"'
   '';
 
-  NIX_CFLAGS_COMPILE = "-fPIC"; # Gentoo adds this on every platform
-
   buildInputs =
     [ pkgconfig flex zlib perl libpng libjpeg libxml2 makeWrapper libtiff ]
     ++ lib.optional enableX11 libX11;
