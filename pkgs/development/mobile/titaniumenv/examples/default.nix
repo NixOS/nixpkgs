@@ -4,7 +4,7 @@
 , xcodeBaseDir ? "/Applications/Xcode.app"
 , tiVersion ? "5.1.1.GA"
 , rename ? false
-, newBundleId ? "com.example.kitchensink", iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? "Example", iosCertificatePassword ? "", iosVersion ? "9.2", iosWwdrCertificate ? null
+, newBundleId ? "com.example.kitchensink", iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? "Example", iosCertificatePassword ? "", iosVersion ? "9.2"
 , allowUnfree ? false
 , enableWirelessDistribution ? false, installURL ? null
 }:
@@ -84,7 +84,7 @@ rec {
       inherit tiVersion;
       release = true;
       rename = true;
-      inherit newBundleId iosMobileProvisioningProfile iosCertificate iosCertificateName iosCertificatePassword iosVersion iosWwdrCertificate;
+      inherit newBundleId iosMobileProvisioningProfile iosCertificate iosCertificateName iosCertificatePassword iosVersion;
       inherit enableWirelessDistribution installURL;
     };
   }
