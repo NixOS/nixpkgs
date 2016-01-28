@@ -129,7 +129,7 @@ rec {
         };
 
       outputsList = map outputToAttrListElement outputs;
-  in commonAttrs.${drv.outputName};
+  in commonAttrs // { outputUnspecified = true; };
 
 
   /* Strip a derivation of all non-essential attributes, returning

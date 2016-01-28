@@ -21,6 +21,10 @@
   # directories in the list is not symlinked.
   pathsToLink ? ["/"]
 
+, # The package outputs to include. By default, only the default
+  # output is included.
+  extraOutputsToLink ? []
+
 , # Root the result in directory "$out${extraPrefix}", e.g. "/share".
   extraPrefix ? ""
 
@@ -37,7 +41,10 @@
 runCommand name
   rec { inherit manifest ignoreCollisions passthru meta pathsToLink extraPrefix postBuild buildInputs;
     pkgs = builtins.toJSON (map (drv: {
-      paths = [ drv ];
+      paths =
+        [ drv ]
+        ++ lib.filter (p: p!=null)
+          (builtins.map (outName: drv.${outName} or null) extraOutputsToLink);
       priority = drv.meta.priority or 5;
     }) paths);
     preferLocalBuild = true;

@@ -73,11 +73,11 @@ in
         description = "List of directories to be symlinked in <filename>/run/current-system/sw</filename>.";
       };
 
-      outputsToLink = mkOption {
+      extraOutputsToLink = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        example = [ "doc" ];
-        description = "List of package outputs to be symlinked into <filename>/run/current-system/sw</filename>.";
+        example = [ "doc" "info" "docdev" ];
+        description = "List of additional package outputs to be symlinked into <filename>/run/current-system/sw</filename>.";
       };
 
     };
@@ -120,18 +120,17 @@ in
         "/share/vim-plugins"
       ];
 
-    environment.outputsToLink = [ "bin" "lib" "out" ];
-
     system.path = pkgs.buildEnv {
       name = "system-path";
       paths =
-        lib.filter (drv: drv != null && drv != (drv.dev or null))
-          (lib.concatMap (drv:
-            [ drv ] ++ map (outputName: drv.${outputName}.outPath or null) config.environment.outputsToLink)
-           config.environment.systemPackages);
-      inherit (config.environment) pathsToLink;
+        # The default output probably shouldn't be globally configurable.
+        # Services and users should specify them explicitly unless they want this default.
+        map (p: if p.outputUnspecified or false then p.bin or p.out or p else p)
+          config.environment.systemPackages;
+      inherit (config.environment) pathsToLink extraOutputsToLink;
       ignoreCollisions = true;
       # !!! Hacky, should modularise.
+      # outputs TODO: note that the tools will often not be linked by default
       postBuild =
         ''
           if [ -x $out/bin/update-mime-database -a -w $out/share/mime ]; then
