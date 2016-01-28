@@ -66,7 +66,7 @@ rec {
     # did the same thing in texLive, but couldn't get it to carry to the
     # binaries installed by texLiveFull
     for prog in $out/bin/*; do
-      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${poppler}/lib"
+      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${poppler.out}/lib"
     done
   '' ) [ "minInit" "defEnsureDir" "addInputs" ];
 

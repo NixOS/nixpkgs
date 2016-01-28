@@ -2565,7 +2565,7 @@ in modules // {
 
     patchPhase = ''
       # Hardcode cairo library path
-      sed -e 's,ffi\.dlopen(,&"${pkgs.cairo}/lib/" + ,' -i cairocffi/__init__.py
+      sed -e 's,ffi\.dlopen(,&"${pkgs.cairo.out}/lib/" + ,' -i cairocffi/__init__.py
     '';
 
     meta = {
@@ -5576,7 +5576,7 @@ in modules // {
 
     propagatedBuildInputs = with self; [ keyring colour netifaces praw psutil
       basiciw pkgs.libpulseaudio ];
-    ldWrapperSuffix = "--suffix LD_LIBRARY_PATH : \"${pkgs.libpulseaudio}/lib\"";
+    ldWrapperSuffix = "--suffix LD_LIBRARY_PATH : \"${pkgs.libpulseaudio.out}/lib\"";
     makeWrapperArgs = [ ldWrapperSuffix ]; # libpulseaudio.so is loaded manually
 
     postInstall = ''
@@ -6742,7 +6742,7 @@ in modules // {
     preConfigure = ''
        cat > site.cfg << END
        [samplerate]
-       library_dirs=${pkgs.libsamplerate}/lib
+       library_dirs=${pkgs.libsamplerate.out}/lib
        include_dirs=${pkgs.libsamplerate}/include
        END
     '';
@@ -11339,7 +11339,7 @@ in modules // {
 
     patchPhase = optionalString stdenv.isLinux ''
       substituteInPlace monotonic.py --replace \
-        "ctypes.util.find_library('c')" "'${stdenv.glibc}/lib/libc.so.6'"
+        "ctypes.util.find_library('c')" "'${stdenv.glibc.out}/lib/libc.so.6'"
     '';
   };
 
@@ -14360,7 +14360,7 @@ in modules // {
     };
 
     prePatch = ''
-      substituteInPlace soundfile.py --replace "'sndfile'" "'${pkgs.libsndfile}/lib/libsndfile.so'"
+      substituteInPlace soundfile.py --replace "'sndfile'" "'${pkgs.libsndfile.out}/lib/libsndfile.so'"
     '';
 
     # https://github.com/bastibe/PySoundFile/issues/157
@@ -15067,7 +15067,7 @@ in modules // {
     preConfigure = ''
       substituteInPlace setup.py \
         --replace '"/usr/include"' '"${pkgs.gdb}/include"' \
-        --replace '"/usr/lib"' '"${pkgs.binutils}/lib"'
+        --replace '"/usr/lib"' '"${pkgs.binutils.out}/lib"'
     '';
 
     meta = {
@@ -15427,11 +15427,11 @@ in modules // {
     doCheck = false;
 
     preConfigure = ''
-      export LDFLAGS="-L${pkgs.fftw}/lib -L${pkgs.fftwFloat}/lib -L${pkgs.fftwLongDouble}/lib"
+      export LDFLAGS="-L${pkgs.fftw.out}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
       export CFLAGS="-I${pkgs.fftw}/include -I${pkgs.fftwFloat}/include -I${pkgs.fftwLongDouble}/include"
     '';
     #+ optionalString isDarwin ''
-    #  export DYLD_LIBRARY_PATH="${pkgs.fftw}/lib"
+    #  export DYLD_LIBRARY_PATH="${pkgs.fftw.out}/lib"
     #'';
 
     meta = {
@@ -22018,7 +22018,7 @@ in modules // {
 
     # Fix the USB backend library lookup
     postPatch = ''
-      libusb=${pkgs.libusb1}/lib/libusb-1.0.so
+      libusb=${pkgs.libusb1.out}/lib/libusb-1.0.so
       test -f $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
       sed -i -e "s|libname = .*|libname = \"$libusb\"|" usb/backend/libusb1.py
     '';
@@ -23731,7 +23731,7 @@ in modules // {
 
     patchPhase = ''
       # Hardcode cairo library path
-      sed -e 's,ffi\.dlopen(,&"${pkgs.xorg.libxcb}/lib/" + ,' -i xcffib/__init__.py
+      sed -e 's,ffi\.dlopen(,&"${pkgs.xorg.libxcb.out}/lib/" + ,' -i xcffib/__init__.py
     '';
 
     propagatedBuildInputs = [ self.cffi self.six ];

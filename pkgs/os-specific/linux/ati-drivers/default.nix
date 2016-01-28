@@ -63,11 +63,11 @@ stdenv.mkDerivation {
   inherit glibc /* glibc only used for setting interpreter */;
 
   LD_LIBRARY_PATH = stdenv.lib.concatStringsSep ":"
-    [ "${xorg.libXrandr}/lib"
-      "${xorg.libXrender}/lib"
-      "${xorg.libXext}/lib"
-      "${xorg.libX11}/lib"
-      "${xorg.libXinerama}/lib"
+    [ "${xorg.libXrandr.out}/lib"
+      "${xorg.libXrender.out}/lib"
+      "${xorg.libXext.out}/lib"
+      "${xorg.libX11.out}/lib"
+      "${xorg.libXinerama.out}/lib"
     ];
 
   # without this some applications like blender don't start, but they start

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild=''
-    export CPATH=${zlib}/lib
+    export CPATH=${zlib.out}/lib
   '';
 
   buildInputs = [ SDL alsaLib autoconf automake libjack2 perl zlib zziplib ];

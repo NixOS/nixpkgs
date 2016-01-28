@@ -29,8 +29,8 @@ with lib;
         network inet raw,
 
         ${pkgs.glibc.out}/lib/*.so mr,
-        ${pkgs.libcap}/lib/libcap.so* mr,
-        ${pkgs.attr}/lib/libattr.so* mr,
+        ${pkgs.libcap.out}/lib/libcap.so* mr,
+        ${pkgs.attr.out}/lib/libattr.so* mr,
 
         ${pkgs.iputils}/bin/ping mixr,
         /var/setuid-wrappers/ping.real r,

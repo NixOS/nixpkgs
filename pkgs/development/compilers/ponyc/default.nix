@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   checkTarget = "test";
 
   patchPhase = ''
-    sed 's|/usr/lib/x86_64-linux-gnu/|${glibc}/lib/|g' -i src/libponyc/codegen/genexe.c
+    sed 's|/usr/lib/x86_64-linux-gnu/|${glibc.out}/lib/|g' -i src/libponyc/codegen/genexe.c
     sed 's|/lib/x86_64-linux-gnu/|${stdenv.cc.cc}/lib/|g' -i src/libponyc/codegen/genexe.c
   '';
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     '';
 
   preCheck = ''
-    export LIBRARY_PATH="$out/lib:${openssl}/lib:${pcre2}/lib"
+    export LIBRARY_PATH="$out/lib:${openssl.out}/lib:${pcre2}/lib"
   '';
 
   installPhase = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     mv $out/bin/ponyc $out/bin/ponyc.wrapped
     makeWrapper $out/bin/ponyc.wrapped $out/bin/ponyc \
       --prefix LIBRARY_PATH : "$out/lib" \
-      --prefix LIBRARY_PATH : "${openssl}/lib" \
+      --prefix LIBRARY_PATH : "${openssl.out}/lib" \
       --prefix LIBRARY_PATH : "${pcre2}/lib"
   '';
 

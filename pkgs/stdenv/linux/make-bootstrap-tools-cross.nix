@@ -199,9 +199,9 @@ rec {
         rm -rf $out/include/c++/*/ext/parallel
 
         cp -d ${gmpxx}/lib/libgmp*.so* $out/lib
-        cp -d ${mpfr}/lib/libmpfr*.so* $out/lib
+        cp -d ${mpfr.out}/lib/libmpfr*.so* $out/lib
         cp -d ${libmpc}/lib/libmpc*.so* $out/lib
-        cp -d ${zlib}/lib/libz.so* $out/lib
+        cp -d ${zlib.out}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
         
         # TBD: Why are these needed for cross but not native tools?
@@ -213,7 +213,7 @@ rec {
         for i in as ld ar ranlib nm strip readelf objdump; do
           cp ${binutils}/bin/$i $out/bin
         done
-        cp -d ${binutils}/lib/lib*.so* $out/lib
+        cp -d ${binutils.out}/lib/lib*.so* $out/lib
 
         chmod -R u+w $out
         

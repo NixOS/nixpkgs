@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     ./install.sh "--prefix=$out"
   '' + (if stdenv.isLinux then ''
     patchelf --interpreter "${stdenv.glibc.out}/lib/${stdenv.cc.dynamicLinker}" \
-             --set-rpath "${stdenv.cc.cc}/lib/:${stdenv.cc.cc}/lib64/:${zlib}/lib" \
+             --set-rpath "${stdenv.cc.cc}/lib/:${stdenv.cc.cc}/lib64/:${zlib.out}/lib" \
              "$out/bin/cargo"
   '' else "") + postInstall;
 }
