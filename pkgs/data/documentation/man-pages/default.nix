@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0v8zxq4scfixy3pjpw9ankvv5v8frv62khv4xm1jpkswyq6rbqcg";
   };
 
+  # keep developer docs separately (man2 and man3)
+  outputs = [ "out" "docdev" ];
   makeFlags = [ "MANDIR=$(out)/share/man" ];
+  postFixup = ''moveToOutput share/man/man2 "$docdev" '';
 
   meta = with stdenv.lib; {
     inherit version;
