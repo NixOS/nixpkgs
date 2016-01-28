@@ -60,27 +60,27 @@ stdenv.mkDerivation {
       sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in"
 
       substituteInPlace qtbase/src/network/kernel/qdnslookup_unix.cpp \
-        --replace "@glibc@" "${stdenv.cc.libc}"
+        --replace "@glibc@" "${stdenv.cc.libc.out}"
       substituteInPlace qtbase/src/network/kernel/qhostinfo_unix.cpp \
-        --replace "@glibc@" "${stdenv.cc.libc}"
+        --replace "@glibc@" "${stdenv.cc.libc.out}"
 
       substituteInPlace qtbase/src/plugins/platforms/xcb/qxcbcursor.cpp \
-        --replace "@libXcursor@" "${libXcursor}"
+        --replace "@libXcursor@" "${libXcursor.out}"
 
       substituteInPlace qtbase/src/network/ssl/qsslsocket_openssl_symbols.cpp \
-        --replace "@openssl@" "${openssl}"
+        --replace "@openssl@" "${openssl.out}"
 
       substituteInPlace qtbase/src/dbus/qdbus_symbols.cpp \
-        --replace "@dbus_libs@" "${dbus}"
+        --replace "@dbus_libs@" "${dbus.lib}"
 
       substituteInPlace \
         qtbase/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
-        --replace "@libX11@" "${libX11}"
+        --replace "@libX11@" "${libX11.out}"
     ''
     + lib.optionalString gtkStyle ''
-      substituteInPlace qtbase/src/widgets/styles/qgtk2painter.cpp --replace "@gtk@" "${gtk}"
+      substituteInPlace qtbase/src/widgets/styles/qgtk2painter.cpp --replace "@gtk@" "${gtk.out}"
       substituteInPlace qtbase/src/widgets/styles/qgtkstyle_p.cpp \
-        --replace "@gtk@" "${gtk}" \
+        --replace "@gtk@" "${gtk.out}" \
         --replace "@gnome_vfs@" "${gnome_vfs.out}" \
         --replace "@libgnomeui@" "${libgnomeui.out}" \
         --replace "@gconf@" "${GConf}"
@@ -88,8 +88,10 @@ stdenv.mkDerivation {
     + lib.optionalString mesaSupported ''
       substituteInPlace \
         qtbase/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp \
-        --replace "@mesa@" "${mesa}"
-      substituteInPlace qtbase/mkspecs/common/linux.conf --replace "@mesa@" "${mesa}"
+        --replace "@mesa_lib@" "${mesa.out}"
+      substituteInPlace qtbase/mkspecs/common/linux.conf \
+        --replace "@mesa_lib@" "${mesa.out}" \
+        --replace "@mesa_inc@" "${mesa.dev}"
     '';
 
   preConfigure = ''
