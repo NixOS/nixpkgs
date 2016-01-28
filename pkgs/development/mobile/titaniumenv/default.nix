@@ -1,4 +1,4 @@
-{pkgs, pkgs_i686, xcodeVersion ? "7.2", xcodeBaseDir ? "/Applications/Xcode.app", tiVersion ? "5.1.1.GA"}:
+{pkgs, pkgs_i686, xcodeVersion ? "7.2", xcodeBaseDir ? "/Applications/Xcode.app", tiVersion ? "5.1.2.GA"}:
 
 rec {
   androidenv = pkgs.androidenv;
