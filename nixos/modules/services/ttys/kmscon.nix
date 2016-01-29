@@ -84,5 +84,7 @@ in {
     '';
 
     hardware.opengl.enable = mkIf cfg.hwRender true;
+
+    fonts.fontconfig.enable = true;
   };
 }
