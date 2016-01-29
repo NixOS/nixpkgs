@@ -3,11 +3,11 @@
 , enableX11 ? false, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "netpbm-10.66.00";
+  name = "netpbm-10.70.00";
 
   src = fetchurl {
     url = "mirror://gentoo/distfiles/${name}.tar.xz";
-    sha256 = "1z33pxdir92m7jlvp5c2q44gxwj7jyf8skiqkr71kgirw4w4zsbz";
+    sha256 = "14vxmzbwsy4rzrqjnzr4cvz1s0amacq69faps3v1j1kr05lcns0j";
   };
 
   postPatch = /* CVE-2005-2471, from Arch */ ''
