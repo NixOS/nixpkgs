@@ -232,7 +232,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = http://qt-project.org;
+    homepage = http://www.qt.io;
     description = "A cross-platform application framework for C++";
     license = "GPL/LGPL";
     maintainers = with maintainers; [ bbenoist qknight ttuegel ];

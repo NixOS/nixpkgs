@@ -49,7 +49,7 @@ let
       enableParallelBuilding = args.enableParallelBuilding or true;
 
       meta = {
-        homepage = http://qt-project.org;
+        homepage = http://www.qt.io;
         description = "A cross-platform application framework for C++";
         license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
         maintainers = with maintainers; [ bbenoist qknight ttuegel ];
