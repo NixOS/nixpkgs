@@ -651,6 +651,8 @@ in
         ${xrandrMonitorSections}
       '';
 
+    fonts.fontconfig.enable = true;
+
   };
 
 }
