@@ -7142,12 +7142,15 @@ in modules // {
   };
 
   py3status = buildPythonPackage rec {
-    name = "py3status-2.7";
+    name = "py3status-2.8";
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/py3status/${name}.tar.gz";
-      sha256 = "09r70zbq5xxhzbgd54dcx8p9z0631a454j2ird1lawkms22fc7wv";
+      sha256 = "1aq4l1lj6j54a8mh9y3yscbxv41bbhz89fiwnydj2gx0md5sq5v5";
     };
     propagatedBuildInputs = with self; [ requests2 ];
+    prePatch = ''
+      sed -i -e "s|\[\"acpi\"|\[\"${pkgs.acpi}/bin/acpi\"|" py3status/modules/battery_level.py
+    '';
     meta = {
       maintainers = with maintainers; [ garbas ];
     };
