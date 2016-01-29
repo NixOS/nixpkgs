@@ -33,7 +33,7 @@ let
   prefixesToStrip = [ herePrefix ] ++ extraSources;
 
   stripAnyPrefixes = fn:
-    flip (flip fold fn) prefixesToStrip (fn: prefix:
+    flip (flip fold fn) prefixesToStrip (prefix: fn:
       if substring 0 (stringLength prefix) fn == prefix then
         substring (stringLength prefix + 1) 1000 fn
       else
