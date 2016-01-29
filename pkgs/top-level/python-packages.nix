@@ -343,13 +343,13 @@ in modules // {
   };
 
   afew = buildPythonPackage rec {
-    rev = "9744c18c4d6b0a3e7f57b01e5fe145a60fc82a47";
-    name = "afew-1.0_${rev}";
+    rev = "3f1e5e93119788984c2193292c988ac81ecb0a45";
+    name = "afew-git-2016-01-04";
 
     src = pkgs.fetchurl {
       url = "https://github.com/teythoon/afew/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "1qyban022aji2hl91dh0j3xa6ikkxl5argc6w71yp2x8b02kp3mf";
+      sha256 = "1fi19g2j1qilh7ikp7pzn6sagkn76g740zdxgnsqmmvl2zk2yhrw";
     };
 
     buildInputs = with self; [ pkgs.dbacl ];
