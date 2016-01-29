@@ -29,15 +29,8 @@ let
   #
   # E.g. if some `options` came from modules in ${pkgs.customModules}/nix,
   # you'd need to include `extraSources = [ pkgs.customModules ]`
-  prefixesToStrip = map toString ([ ../../.. ] ++ extraSources);
-
-  stripPrefix = prefix: fullPath:
-    if substring 0 (stringLength prefix) fullPath == prefix then
-      substring (stringLength prefix + 1) 1000 fullPath
-    else
-      fileName;
-
-  stripAnyPrefixes = fullPath: fold stripPrefix fullPath prefixesToStrip;
+  prefixesToStrip = map (p: "${toString p}/") ([ ../../.. ] ++ extraSources);
+  stripAnyPrefixes = flip (fold removePrefix) prefixesToStrip;
 
   # Convert the list of options into an XML file.
   optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList');
