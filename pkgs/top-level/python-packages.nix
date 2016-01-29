@@ -14781,13 +14781,13 @@ in modules // {
 
   platformio =  buildPythonPackage rec {
     name = "platformio-${version}";
-    version="2.7.1";
+    version="2.8.1";
 
     disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/platformio/platformio-${version}.tar.gz";
-      sha256 = "1xrjzgwdw7526vfimqjyr9115qzcs17dbyf7023x13anc8b2s9pq";
+      sha256 = "0lx0cg2jyvikpcp9jjzrzgb89hvnn4ri84708d37xvzqsr0ml1fa";
      };
 
      propagatedBuildInputs = with self; [ click_5 requests2 bottle pyserial lockfile colorama];
