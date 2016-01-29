@@ -4009,6 +4009,10 @@ let
 
   bigloo = callPackage ../development/compilers/bigloo { };
 
+  boo = callPackage ../development/compilers/boo {
+    inherit (gnome) gtksourceview;
+  };
+
   colm = callPackage ../development/compilers/colm { };
 
   fetchegg = callPackage ../build-support/fetchegg { };
