@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Tools for manipulating binaries (linker, assembler, etc.)";
     longDescription = ''
       The GNU Binutils are a collection of binary tools.  The main
@@ -76,8 +76,8 @@ stdenv.mkDerivation rec {
       `gprof', `nm', `strip', etc.
     '';
     homepage = http://www.gnu.org/software/binutils/;
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
 
     /* Give binutils a lower priority than gcc-wrapper to prevent a
        collision due to the ld/as wrappers/symlinks in the latter. */

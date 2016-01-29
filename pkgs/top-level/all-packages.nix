@@ -255,8 +255,6 @@ let
     theAttrSet = arg;
   };
 
-  autonix = import ../build-support/autonix { inherit pkgs; };
-
   autoreconfHook = makeSetupHook
     { substitutions = { inherit autoconf automake gettext libtool; }; }
     ../build-support/setup-hooks/autoreconf.sh;
@@ -675,6 +673,8 @@ let
 
   barcode = callPackage ../tools/graphics/barcode {};
 
+  bashburn = callPackage ../tools/cd-dvd/bashburn { };
+
   bashmount = callPackage ../tools/filesystems/bashmount {};
 
   bc = callPackage ../tools/misc/bc { };
@@ -737,6 +737,8 @@ let
     alsaSupport = (!stdenv.isDarwin);
   };
   bro = callPackage ../applications/networking/ids/bro { };
+
+  bruteforce-luks = callPackage ../tools/security/bruteforce-luks { };
 
   bsod = callPackage ../misc/emulators/bsod { };
 
@@ -969,6 +971,8 @@ let
   autossh = callPackage ../tools/networking/autossh { };
 
   asynk = callPackage ../tools/networking/asynk { };
+
+  b2 = callPackage ../tools/backup/b2 { };
 
   bacula = callPackage ../tools/backup/bacula { };
 
@@ -1386,6 +1390,8 @@ let
 
   easyrsa = callPackage ../tools/networking/easyrsa { };
 
+  easyrsa2 = callPackage ../tools/networking/easyrsa/2.x.nix { };
+
   ebook_tools = callPackage ../tools/text/ebook-tools { };
 
   ecryptfs = callPackage ../tools/security/ecryptfs { };
@@ -1452,7 +1458,7 @@ let
 
   f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
 
-  fabric = pythonPackages.fabric;
+  Fabric = pythonPackages.Fabric;
 
   fail2ban = callPackage ../tools/security/fail2ban { };
 
@@ -1639,6 +1645,8 @@ let
   };
 
   gitlab-git-http-server = callPackage ../applications/version-management/gitlab-git-http-server { };
+
+  git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
@@ -3755,6 +3763,8 @@ let
 
   zsh-navigation-tools = callPackage ../tools/misc/zsh-navigation-tools { };
 
+  zstd = callPackage ../tools/compression/zstd { };
+
   zsync = callPackage ../tools/compression/zsync { };
 
   zxing = callPackage ../tools/graphics/zxing {};
@@ -3881,11 +3891,13 @@ let
 
   cmucl_binary = callPackage_i686 ../development/compilers/cmucl/binary.nix { };
 
-  compcert = callPackage ../development/compilers/compcert (
+  compcert = callPackage ../development/compilers/compcert ((
     if system == "x86_64-linux"
     then { tools = pkgsi686Linux.stdenv.cc; }
     else {}
-  );
+  ) // {
+    ocamlPackages = ocamlPackages_4_02;
+  });
 
   cryptol = haskellPackages.cryptol;
 
@@ -4285,7 +4297,13 @@ let
 
   oraclejre8psu = lowPrio (pkgs.oraclejdk8psu_distro false false);
 
-  jrePlugin = lowPrio (pkgs.jdkdistro false true);
+  jrePlugin = jre8Plugin;
+
+  jre6Plugin = lowPrio (pkgs.jdkdistro false true);
+
+  jre7Plugin = lowPrio (pkgs.oraclejdk7distro false true);
+
+  jre8Plugin = lowPrio (pkgs.oraclejdk8distro false true);
 
   supportsJDK =
     system == "i686-linux" ||
@@ -4378,7 +4396,10 @@ let
 
   mlton = callPackage ../development/compilers/mlton { };
 
-  mono = callPackage ../development/compilers/mono {};
+  mono = callPackage ../development/compilers/mono {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
 
@@ -6189,7 +6210,9 @@ let
 
   aubio = callPackage ../development/libraries/aubio { };
 
-  audiofile = callPackage ../development/libraries/audiofile { };
+  audiofile = callPackage ../development/libraries/audiofile {
+    inherit (darwin.apple_sdk.frameworks) AudioUnit CoreServices;
+  };
 
   babl = callPackage ../development/libraries/babl { };
 
@@ -7278,7 +7301,9 @@ let
 
   libgcrypt_1_5 = callPackage ../development/libraries/libgcrypt/1.5.nix { };
 
-  libgdiplus = callPackage ../development/libraries/libgdiplus { };
+  libgdiplus = callPackage ../development/libraries/libgdiplus {
+      inherit (darwin.apple_sdk.frameworks) Carbon;
+  };
 
   libgksu = callPackage ../development/libraries/libgksu { };
 
@@ -10459,6 +10484,8 @@ let
 
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
 
+  pagemon = callPackage ../os-specific/linux/pagemon { };
+
   pam = callPackage ../os-specific/linux/pam { };
 
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
@@ -11947,6 +11974,10 @@ let
   flashplayer = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-11 {
     debug = config.flashplayer.debug or false;
   };
+
+  flashplayer-standalone = pkgsi686Linux.flashplayer.sa;
+
+  flashplayer-standalone-debugger = pkgsi686Linux.flashplayer.saDbg;
 
   fluxbox = callPackage ../applications/window-managers/fluxbox { };
 
@@ -13649,7 +13680,7 @@ let
 
   VoiceOfFaust = callPackage ../applications/audio/VoiceOfFaust { };
 
-  vorbisTools = callPackage ../applications/audio/vorbis-tools { };
+  vorbis-tools = callPackage ../applications/audio/vorbis-tools { };
 
   vue = callPackage ../applications/misc/vue { };
 
@@ -14118,23 +14149,15 @@ let
 
   cuyo = callPackage ../games/cuyo { };
 
-  dfhack = callPackage_i686 ../games/dfhack {
-    inherit (pkgsi686Linux.perlPackages) XMLLibXML XMLLibXSLT;
-  };
-
   dhewm3 = callPackage ../games/dhewm3 {};
 
   drumkv1 = callPackage ../applications/audio/drumkv1 { };
 
-  dwarf_fortress = callPackage_i686 ../games/dwarf-fortress {
-    SDL_image = pkgsi686Linux.SDL_image.override {
-      libpng = pkgsi686Linux.libpng12;
-    };
-    inherit (pkgsi686Linux.perlPackages) XMLLibXML XMLLibXSLT;
-    enableDFHack = config.dwarfFortress.enableDFHack or false;
-  };
+  dwarf-fortress-packages = callPackage ../games/dwarf-fortress { };
 
-  dwarf-therapist = callPackage ../games/dwarf-therapist { };
+  dwarf-fortress = dwarf-fortress-packages.dwarf-fortress.override { };
+
+  dwarf-therapist = dwarf-fortress-packages.dwarf-therapist;
 
   d1x_rebirth = callPackage ../games/d1x-rebirth { };
 
@@ -15515,7 +15538,7 @@ let
 
   nixops = callPackage ../tools/package-management/nixops { };
 
-  nixopsUnstable = callPackage ../tools/package-management/nixops/unstable.nix { };
+  nixopsUnstable = nixops;# callPackage ../tools/package-management/nixops/unstable.nix { };
 
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 
@@ -15628,13 +15651,8 @@ let
 
   mfcj470dw = callPackage_i686 ../misc/cups/drivers/mfcj470dw { };
 
-  samsungUnifiedLinuxDriver = callPackage ../misc/cups/drivers/samsung {
-    gcc = import ../development/compilers/gcc/4.4 {
-      inherit stdenv fetchurl gmp mpfr noSysDirs gettext which;
-      texinfo = texinfo4;
-      profiledCompiler = true;
-    };
-  };
+  samsung-unified-linux-driver_1_00_37 = callPackage ../misc/cups/drivers/samsung { };
+  samsung-unified-linux-driver = callPackage ../misc/cups/drivers/samsung/4.00.39 { };
 
   sane-backends = callPackage ../applications/graphics/sane/backends {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
@@ -15972,6 +15990,9 @@ aliases = with self; rec {
   aircrackng = aircrack-ng; # added 2016-01-14
   quake3game = ioquake3; # added 2016-01-14
   scim = sc-im; # added 2016-01-22
+  dwarf_fortress = dwarf-fortress; # added 2016-01-23
+  samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
+  vorbisTools = vorbis-tools; # added 2016-01-26
 };
 
 tweakAlias = _n: alias: with lib;

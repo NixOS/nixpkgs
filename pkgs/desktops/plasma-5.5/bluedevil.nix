@@ -16,6 +16,7 @@ plasmaPackage {
   propagatedBuildInputs = [
     bluez-qt ki18n kio kwindowsystem plasma-framework qtdeclarative
   ];
+  propagatedUserEnvPkgs = [ bluez-qt ];
   postInstall = ''
     wrapQtProgram "$out/bin/bluedevil-wizard"
     wrapQtProgram "$out/bin/bluedevil-sendfile"

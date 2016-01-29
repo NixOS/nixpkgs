@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, curl, fuse, libxml2, pkgconfig }:
 
 let
-  version = "2-20150109";
   srcs = {
     boxfs2 = fetchFromGitHub {
       sha256 = "10af1l3sjnh25shmq5gdnpyqk4vrq7i1zklv4csf1n2nrahln8j8";
@@ -22,8 +21,9 @@ let
       owner = "vincenthz";
     };
   };
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   name = "boxfs-${version}";
+  version = "2-20150109";
 
   src = srcs.boxfs2;
 
@@ -45,7 +45,6 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "FUSE file system for box.com accounts";
     longDescription = ''
       Store files on box.com (an account is required). The first time you run

@@ -1,8 +1,8 @@
 { stdenv, fetchurl, zlib }:
 
-let version = "2.0.11"; in
 stdenv.mkDerivation rec {
   name = "kexec-tools-${version}";
+  version = "2.0.11";
 
   src = fetchurl {
     urls = [
@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ];
 
   meta = with stdenv.lib; {
-    inherit version;
     homepage = http://horms.net/projects/kexec/kexec-tools;
     description = "Tools related to the kexec Linux feature";
     platforms = platforms.linux;

@@ -5,12 +5,12 @@
 assert lzmaSupport -> xz != null;
 
 let
-  version = "3.0.11";
   mkWith = flag: name: if flag
     then "--with-${name}"
     else "--without-${name}";
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   name = "xdelta-${version}";
+  version = "3.0.11";
 
   src = fetchFromGitHub {
     sha256 = "1c7xym7xr26phyf4wb9hh2w88ybzbzh2w3h1kyqq3da0ndidmf2r";
@@ -48,7 +48,6 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Binary differential compression in VCDIFF (RFC 3284) format";
     longDescription = ''
       xdelta is a command line program for delta encoding, which generates two

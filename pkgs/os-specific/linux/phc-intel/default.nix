@@ -1,7 +1,7 @@
 { stdenv, fetchurl, kernel, which }:
 
 assert stdenv.isLinux;
-# Don't bother with older versions, though some would probably work:
+# Don't bother with older versions, though some might even work:
 assert stdenv.lib.versionAtLeast kernel.version "4.3";
 # Disable on grsecurity kernels, which break module building:
 assert !kernel.features ? grsecurity;
@@ -9,9 +9,9 @@ assert !kernel.features ? grsecurity;
 let
   release = "0.4.0";
   revbump = "rev19"; # don't forget to change forum download id...
-  version = "${release}-${revbump}";
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   name = "linux-phc-intel-${version}-${kernel.version}";
+  version = "${release}-${revbump}";
 
   src = fetchurl {
     sha256 = "1apvjp2rpaf3acjvsxgk6xiwrx4n9p565gxvra05pvicwikfiqa8";
@@ -38,7 +38,6 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Undervolting kernel driver for Intel processors";
     longDescription = ''
       PHC is a Linux kernel patch to undervolt processors. This can divide the

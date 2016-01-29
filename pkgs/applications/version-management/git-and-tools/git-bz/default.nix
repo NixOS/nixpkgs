@@ -2,16 +2,15 @@
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, makeWrapper, xmlto
 , pythonPackages }:
 
-let version = "3.2015-09-08"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "git-bz-${version}";
+  version = "3.2015-09-08";
 
   src = fetchgit {
     sha256 = "19d9c81d4eeabe87079d8f60e4cfa7303f776f5a7c9874642cf2bd188851d029";
     rev = "e17bbae7a2ce454d9f69c32fc40066995d44913d";
     url = "git://git.fishsoup.net/git-bz";
   };
-
 
   nativeBuildInputs = [
     asciidoc docbook_xml_dtd_45 docbook_xsl libxslt makeWrapper xmlto
@@ -32,7 +31,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Bugzilla integration for git";
     longDescription = ''
       git-bz is a tool for integrating the Git command line with the

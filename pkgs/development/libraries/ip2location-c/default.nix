@@ -1,8 +1,8 @@
 { stdenv, fetchurl, autoreconfHook }:
 
-let version = "7.0.2"; in # meta.homepage might change after a major update
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "ip2location-c-${version}";
+  version = "7.0.2"; # meta.homepage might change after a major update
 
   src = fetchurl {
     sha256 = "1gs43qgcyfn83abrkhvvw1s67d1sbkbj3hab9m17ysn6swafiycx";
@@ -18,7 +18,6 @@ stdenv.mkDerivation {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Library to look up locations of host names and IP addresses";
     longDescription = ''
       A C library to find the country, region, city,coordinates,

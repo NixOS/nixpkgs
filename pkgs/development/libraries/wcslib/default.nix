@@ -1,15 +1,17 @@
 { fetchurl,  stdenv, flex }:
 
 stdenv.mkDerivation rec {
-  version = "5.12";
+  version = "5.13";
   name = "wcslib-${version}";
 
   buildInputs = [ flex ];
 
   src = fetchurl {
     url = "ftp://ftp.atnf.csiro.au/pub/software/wcslib/${name}.tar.bz2";
-    sha256 ="1r4dz5514pba2d5cc2ydpnqm85xsvy65hlvzdqayl6sl40liizsh";
+    sha256 ="1rxlp7p1b84r9fnk7m9p2ivg2cajfj88afyccrg64zlrqn5kx66n";
   };
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "World Coordinate System Library for Astronomy";

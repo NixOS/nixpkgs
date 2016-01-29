@@ -1,6 +1,9 @@
 { lib, buildFHSUserEnv, steam
-, withJava   ? false
+, withJava ? false
 , withPrimus ? false
+, nativeOnly ? false
+, runtimeOnly ? false
+, newStdcpp ? false
 }:
 
 buildFHSUserEnv {
@@ -20,7 +23,7 @@ buildFHSUserEnv {
       # Needed by gdialog, including in the steam-runtime
       perl
     ]
-    ++ lib.optional withJava   jdk
+    ++ lib.optional withJava jdk
     ++ lib.optional withPrimus primus
     ;
 
@@ -38,7 +41,9 @@ buildFHSUserEnv {
       gst_all_1.gst-plugins-ugly
       libdrm
 
-      steamPackages.steam-runtime-wrapped
+      (steamPackages.steam-runtime-wrapped.override {
+        inherit nativeOnly runtimeOnly newStdcpp;
+      })
     ];
 
   extraBuildCommands = ''

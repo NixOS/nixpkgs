@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation {
-  inherit src;
+  inherit src version;
 
   name = "sane-backends-${version}";
 
@@ -56,8 +56,6 @@ stdenv.mkDerivation {
   '' + stdenv.lib.concatStrings (builtins.map installFirmware compatFirmware);
 
   meta = with stdenv.lib; {
-    inherit version;
-
     description = "SANE (Scanner Access Now Easy) backends";
     longDescription = ''
       Collection of open-source SANE backends (device drivers).

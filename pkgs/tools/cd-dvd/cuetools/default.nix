@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoreconfHook
-, bison, flac, flex, id3v2, vorbisTools
+, bison, flac, flex, id3v2, vorbis-tools
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ bison flac flex id3v2 vorbisTools ];
+  buildInputs = [ bison flac flex id3v2 vorbis-tools ];
 
   meta = with stdenv.lib; {
     description = "A set of utilities for working with cue files and toc files";

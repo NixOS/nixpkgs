@@ -1,9 +1,8 @@
 { stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper }:
 
-let version = "1.18.4"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "dpkg-${version}";
+  version = "1.18.4";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";

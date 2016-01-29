@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "urweb-${version}";
-  version = "20151018";
+  version = "20151220";
 
   src = fetchurl {
     url = "http://www.impredicative.com/ur/${name}.tgz";
-    sha256 = "08p52p5m1xl2gzdchnayky44mm2b0x8hv0f00iviyyv1gnx3lpy0";
+    sha256 = "155maalm4l1ni7az3yqs0lrgl5f2xr3pz4118ag1hnk82qldd4s5";
   };
 
   buildInputs = [ openssl mlton mysql postgresql sqlite ];

@@ -35,12 +35,7 @@ self: super: {
   xhtml = null;
 
   # jailbreak-cabal can use the native Cabal library.
-  jailbreak-cabal = super.jailbreak-cabal.override {
-    Cabal = null;
-    mkDerivation = drv: self.mkDerivation (drv // {
-      preConfigure = "sed -i -e 's/Cabal == 1.20\\.\\*/Cabal >= 1.23/' jailbreak-cabal.cabal";
-    });
-  };
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
 
   # Older versions of QuickCheck don't support our version of Template Haskell.
   QuickCheck = self.QuickCheck_2_8_2;
@@ -51,7 +46,7 @@ self: super: {
   # https://github.com/hspec/HUnit/issues/7
   HUnit = dontCheck super.HUnit;
 
-  # Older versions don't support our version of base.
-  async = self.async_2_1_0;
+  # https://github.com/hspec/hspec/issues/253
+  hspec-core = dontCheck super.hspec-core;
 
 }

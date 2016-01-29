@@ -51,11 +51,6 @@ stdenv.mkDerivation {
         ''
           titanium config --config-file $TMPDIR/config.json --no-colors android.sdk ${androidsdkComposition}/libexec/android-sdk-*
           titanium config --config-file $TMPDIR/config.json --no-colors android.buildTools.selectedVersion 23.0.1
-          titanium config --config-file $TMPDIR/config.json --no-colors android.buildTools.path ${androidsdkComposition}/libexec/android-sdk-*/build-tools/android-*
-          titanium config --config-file $TMPDIR/config.json android.executables.zipalign ${androidsdkComposition}/libexec/android-sdk-*/build-tools/android-*/zipalign
-          titanium config --config-file $TMPDIR/config.json android.executables.aapt ${androidsdkComposition}/libexec/android-sdk-*/build-tools/android-*/aapt
-          titanium config --config-file $TMPDIR/config.json android.executables.aidl ${androidsdkComposition}/libexec/android-sdk-*/build-tools/android-*/aidl
-          titanium config --config-file $TMPDIR/config.json android.executables.dx ${androidsdkComposition}/libexec/android-sdk-*/build-tools/android-*/dx
           
           export PATH=$(echo ${androidsdkComposition}/libexec/android-sdk-*/tools):$(echo ${androidsdkComposition}/libexec/android-sdk-*/build-tools/android-*):$PATH
           

@@ -1,8 +1,8 @@
 { stdenv, fetchurl, groff }:
 
-let version = "52"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "mksh-${version}";
+  version = "52";
 
   src = fetchurl {
     urls = [
@@ -30,7 +30,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "MirBSD Korn Shell";
     longDescription = ''
       The MirBSD Korn Shell is a DFSG-free and OSD-compliant (and OSI

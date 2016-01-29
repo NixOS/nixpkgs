@@ -1,8 +1,8 @@
 { stdenv, fetchurl }:
 
-let version = "4.3"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "freefall-${version}";
+  version = "4.3";
 
   src = fetchurl {
     sha256 = "1bpkr45i4yzp32p0vpnz8mlv9lk4q2q9awf1kg9khg4a9g42qqja";

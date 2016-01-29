@@ -212,6 +212,45 @@ rec {
     };
   };
 
+  cup = buildEclipsePluginBase rec {
+    name = "cup-${version}";
+    version = "1.0.0.201412081321";
+
+    srcFeature = fetchurl {
+      url = "http://www2.in.tum.de/projects/cup/eclipse/features/CupEclipsePluginFeature_${version}.jar";
+      sha256 = "353513445f77ed144687bafc20ab85dc31f2f95ffdc47f102ab773ab0b7afb8b";
+    };
+
+    srcPlugin1 = fetchurl {
+      url = "http://www2.in.tum.de/projects/cup/eclipse/plugins/CupReferencedLibraries_${version}.jar";
+      sha256 = "082b5ed8730ad065efaac6ea2812dae15669ae74a49778911125b171bea41187";
+    };
+
+    srcPlugin2 = fetchurl {
+      url = "http://www2.in.tum.de/projects/cup/eclipse/plugins/de.tum.in.www2.CupPlugin_${version}.jar";
+      sha256 = "6b67937fa11944b0330173a9d8564a19eccd705e76b96291d80077a1d7344939";
+    };
+
+    srcs = [ srcFeature srcPlugin1 srcPlugin2 ];
+
+    phases = [ "installPhase" ];
+
+    installPhase = ''
+      dropinDir="$out/eclipse/dropins/${name}"
+      mkdir -p $dropinDir/features
+      unzip ${srcFeature} -d $dropinDir/features/
+      mkdir -p $dropinDir/plugins
+      cp -v ${srcPlugin1} ${srcPlugin2} $dropinDir/plugins/
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = http://www2.cs.tum.edu/projects/cup/eclipse.php;
+      description = "IDE for developing CUP based parsers";
+      platforms = platforms.all;
+      maintainers = [ maintainers.romildo ];
+    };
+  };
+
   eclemma = buildEclipseUpdateSite rec {
     name = "eclemma-${version}";
     version = "2.3.2.201409141915";
@@ -317,11 +356,11 @@ rec {
 
   scala = buildEclipseUpdateSite rec {
     name = "scala-${version}";
-    version = "4.1.1.20151201";
+    version = "4.3.0.201512011535";
 
     src = fetchzip {
       url = "http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/update-site.zip";
-      sha256 = "19iqaha9c5n5hkyn83xj8znkvshm4823d65zigbj97fz8gzrr0la";
+      sha256 = "1j0qw4frkvvmyl64wdbznglgjjr9sfg8wb9npar0x7qv1hj4hw3x";
     };
 
     meta = with stdenv.lib; {

@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, valgrind }:
 
-let version = "131"; in
 stdenv.mkDerivation rec {
   name = "lz4-${version}";
+  version = "131";
 
   src = fetchFromGitHub {
     sha256 = "1bhvcq8fxxsqnpg5qa6k3nsyhq0nl0iarh08sqzclww27hlpyay2";
@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
   patches = [ ./install-on-freebsd.patch ] ;
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Extremely fast compression algorithm";
     longDescription = ''
       Very fast lossless compression algorithm, providing compression speed

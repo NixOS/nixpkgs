@@ -183,7 +183,7 @@ in {
         Restart = "always";
         RestartSec = 2;
       };
-      environment.SSL_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
+      environment.SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
       restartTriggers = [ pkgs.dd-agent ddConf diskConfig networkConfig postgresqlConfig nginxConfig mongoConfig ];
     };
 
