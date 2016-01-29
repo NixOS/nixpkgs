@@ -20,7 +20,7 @@ let
       }
     '';
 
-  events = [powerEvent lidEvent acEvent muteEvent volumeDownEvent volumeUpEvent cdPlayEvent cdNextEvent cdPrevEvent];
+  events = [powerEvent lidEvent acEvent muteEvent volumeDownEvent volumeUpEvent cdPlayEvent cdNextEvent cdPrevEvent brightnessDownEvent brightnessUpEvent];
 
   # Called when the power button is pressed.
   powerEvent =
@@ -109,6 +109,24 @@ let
     '';
   };
 
+  brightnessDownEvent = {
+    name = "brightness-down";
+    event = "video/brightnessdown.*";
+    action = ''
+      #! ${pkgs.bash}/bin/sh
+      ${config.services.acpid.brightnessDownEventCommands}
+    '';
+  };
+
+  brightnessUpEvent = {
+    name = "brightness-up";
+    event = "video/brightnessup.*";
+    action = ''
+      #! ${pkgs.bash}/bin/sh
+      ${config.services.acpid.brightnessUpEventCommands}
+    '';
+  };
+
 
 in
 
@@ -178,6 +196,18 @@ in
         type = types.lines;
         default = "";
         description = "Shell commands to execute on an cd/prev.* event.";
+      };
+
+      brightnessDownEventCommands = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Shell commands to execute on an video/brightnessdown.* event.";
+      };
+
+      brightnessUpEventCommands = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Shell commands to execute on an video/brightnessup.* event.";
       };
 
     };
