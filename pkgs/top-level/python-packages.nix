@@ -24472,6 +24472,10 @@ in modules // {
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr ];
 
+    checkPhase = ''
+      PYTHONPATH="$PYTHONPATH:$out/${python.sitePackages}/poezio" make test
+    '';
+
     patches =
       let patch_base = ../development/python-modules/poezio;
       in [ "${patch_base}/make_default_config_writable.patch" ];
