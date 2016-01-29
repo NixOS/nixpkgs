@@ -1,3 +1,8 @@
+# Note: The Haskell package set used for building UHC is
+# determined in the file top-level/haskell-packages.nix.
+# We are using Stackage LTS to avoid constant breakage.
+# Bump the Stackage LTS release to the last release if possible
+# when a new UHC version is released.
 { stdenv, coreutils, fetchgit, m4, libtool, clang, ghcWithPackages }:
 
 let wrappedGhc = ghcWithPackages (hpkgs: with hpkgs; [fgl vector syb uulib network binary hashable uhc-util mtl transformers directory containers array process filepath shuffle uuagc] );
@@ -50,8 +55,10 @@ in stdenv.mkDerivation rec {
     # On Darwin, the GNU libtool is used, which does not
     # support the -static flag and thus breaks the build.
     platforms = ["x86_64-linux"];
-
-    broken = true;  # https://github.com/UU-ComputerScience/uhc/issues/69
+    # Hydra currently doesn't build the Stackage LTS package set,
+    # and we don't want to build all our haskell dependencies
+    # from scratch just to build UHC.
+    hydraPlatforms = stdenv.lib.platforms.none;
 
   };
 }
