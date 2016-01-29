@@ -5858,6 +5858,8 @@ let
     };
   };
 
+  nant = callPackage ../development/tools/build-managers/nant { };
+
   ninja = callPackage ../development/tools/build-managers/ninja { };
 
   nixbang = callPackage ../development/tools/misc/nixbang {
