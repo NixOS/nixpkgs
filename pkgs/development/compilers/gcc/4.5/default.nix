@@ -134,7 +134,7 @@ stdenv.mkDerivation ({
     inherit langC langCC langFortran langJava langAda;
   };
 
-  #hardening_all = false;
+  hardening_format = false;
 
   patches =
     [ ]
