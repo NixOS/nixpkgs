@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, libxfce4util, libxfce4ui
 , libxfce4ui_gtk3, libwnck, exo, garcon, xfconf, libstartup_notification
-, makeWrapper, xfce4mixer
+, wrapGAppsHook, xfce4mixer
 , withGtk3 ? false, gtk3
 }:
 
@@ -22,18 +22,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = optional withGtk3 "--enable-gtk3";
 
+  nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
+
   buildInputs =
-    [ pkgconfig intltool gtk libxfce4util exo libwnck
-      garcon xfconf libstartup_notification makeWrapper
+    [ gtk libxfce4util exo libwnck garcon xfconf libstartup_notification
     ] ++ xfce4mixer.gst_plugins
       ++ optional withGtk3 gtk3;
 
   propagatedBuildInputs = [ (if withGtk3 then libxfce4ui_gtk3 else libxfce4ui) ];
-
-  postInstall = ''
-    wrapProgram "$out/bin/xfce4-panel" \
-      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
-  '';
 
   preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
 

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, intltool, makeWrapper
-, glib, gstreamer, gst_plugins_base, gtk
+{ stdenv, fetchurl, pkgconfig, intltool, wrapGAppsHook
+, glib, gstreamer, gst_plugins_base, gtk, hicolor_icon_theme
 , libxfce4util, libxfce4ui, xfce4panel, xfconf, libunique ? null
 , pulseaudioSupport ? false, gst_plugins_good
 }:
@@ -28,16 +28,12 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  buildInputs =
-    [ pkgconfig intltool glib gstreamer gtk
-      libxfce4util libxfce4ui xfce4panel xfconf libunique makeWrapper
-    ] ++ gst_plugins;
+  nativeBuildInputs =
+    [ pkgconfig intltool wrapGAppsHook hicolor_icon_theme ];
 
-  postInstall =
-    ''
-      wrapProgram "$out/bin/xfce4-mixer" \
-        --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
-    '';
+  buildInputs =
+    [ glib gstreamer gtk libxfce4util libxfce4ui xfce4panel xfconf libunique
+    ] ++ gst_plugins;
 
   passthru = { inherit gst_plugins; };
 

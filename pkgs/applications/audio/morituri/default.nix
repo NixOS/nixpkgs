@@ -1,6 +1,7 @@
 { stdenv, fetchgit, python, pythonPackages, cdparanoia, cdrdao
 , pygobject, gst_python, gst_plugins_base, gst_plugins_good
-, setuptools, utillinux, makeWrapper, substituteAll, autoreconfHook }:
+, setuptools, utillinux, substituteAll, autoreconfHook
+, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "morituri-${version}";
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
-    python cdparanoia cdrdao utillinux makeWrapper
+    python cdparanoia cdrdao utillinux wrapGAppsHook
     gst_plugins_base gst_plugins_good
   ] ++ pythonPath;
 
@@ -37,11 +38,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontStrip = true;
 
-  postInstall = ''
-    wrapProgram "$out/bin/rip" \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
-      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
-  '';
+  wrapPrefixVariables = "PYTHONPATH";
 
   meta = with stdenv.lib; {
     homepage = http://thomas.apestaart.org/morituri/trac/;
