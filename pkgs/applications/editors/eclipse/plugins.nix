@@ -318,12 +318,12 @@ rec {
 
   gnuarmeclipse = buildEclipseUpdateSite rec {
     name = "gnuarmeclipse-${version}";
-    version = "2.8.1-201504061754";
+    version = "2.11.1-201512141335";
 
     src = fetchzip {
       stripRoot = false;
-      url = "mirror://sourceforge/project/gnuarmeclipse/Current%20Releases/2.x/ilg.gnuarmeclipse.repository-${version}.zip";
-      sha256 = "08jsnyis1ry62cidr9sl11ylyxbkwh834nlhx6qp31gh1l439px9";
+      url = "https://github.com/gnuarmeclipse/plug-ins/releases/download/v${version}/ilg.gnuarmeclipse.repository-${version}.zip";
+      sha256 = "1ijvnahfw2wc860la7kj8b52z2sfm8k1yk62bl0d4lq60y3aycg9";
     };
 
     meta = with stdenv.lib; {
