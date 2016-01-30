@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/darkfasel/charybdis.git";
-    rev = "cda5778a4a04b53d7b507c63c0664259e423a37f";
-    sha256 = "1z8frj95q068rbcxb05ppzgbayih2nhqrp2dacllch4j9lx533a8";
+    rev = "3c580b8793b4681742c87438c1207485b2359aff";
+    sha256 = "560a04dbe39787140c6524e07e1982631b9f0405744d6ed4b280b6ff97a3edb1";
   };
 
   patches = [
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     "--enable-ipv6"
     "--enable-openssl=${openssl}"
     "--with-program-prefix=charybdis-"
+    "--sysconfdir=/etc/charybdis"
   ];
 
   buildInputs = [ bison flex openssl ];
