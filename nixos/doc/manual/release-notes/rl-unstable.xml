@@ -154,6 +154,12 @@ nginx.override {
     rights, new <literal>aliasFiles</literal> and <literal>mapFiles</literal>
     options and more.</para>
   </listitem>
+
+  <listitem>
+    <para>The default display manager is now LightDM.
+    To use SLiM set <literal>services.xserver.displayManager.slim.enable</literal>
+    to <literal>true</literal>.
+  </listitem>
 </itemizedlist>
 
 

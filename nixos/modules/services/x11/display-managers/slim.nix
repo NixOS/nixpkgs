@@ -49,7 +49,7 @@ in
 
       enable = mkOption {
         type = types.bool;
-        default = config.services.xserver.enable;
+        default = false;
         description = ''
           Whether to enable SLiM as the display manager.
         '';
