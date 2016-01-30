@@ -171,12 +171,12 @@ rec {
 
   checkstyle = buildEclipseUpdateSite rec {
     name = "checkstyle-${version}";
-    version = "6.11.1.201510102004";
+    version = "6.14.0.201601142217";
 
     src = fetchzip {
       stripRoot = false;
-      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.11.1/net.sf.eclipsecs-updatesite_${version}-bin.zip";
-      sha256 = "0l9nfx7a3qdx1pvjgc6ck4rxh7yrvqsskr190yrxxwmpnyj9cjs4";
+      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.14.0/net.sf.eclipsecs-updatesite_${version}-bin.zip";
+      sha256 = "0ysxir1fv0mb9xnidc9hv6llnk48lkav0sryjbx7pw7vy1f8nd4c";
     };
 
     meta = with stdenv.lib; {
