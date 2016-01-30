@@ -165,18 +165,18 @@ rec {
   eclipse_cpp_43 = eclipse-cpp-43; # backward compatibility, added 2016-01-30
   
   eclipse-cpp-44 = buildEclipse {
-    name = "eclipse-cpp-4.4";
+    name = "eclipse-cpp-4.4.2";
     description = "Eclipse IDE for C/C++ Developers";
     src =
       if stdenv.system == "x86_64-linux" then
         fetchurl {
-          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/luna/R/eclipse-cpp-luna-R-linux-gtk-x86_64.tar.gz;
-          md5 = "b0a6ee33e8108a7ff4682ab911271b04";
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/luna/SR2/eclipse-cpp-luna-SR2-linux-gtk-x86_64.tar.gz;
+          sha256 = "1vxwj7yihgipvrb3gksmddqkarzazpwk3mh1mjnw0i5xz2y32ba4";
         }
       else
         fetchurl {
-          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/luna/R/eclipse-cpp-luna-R-linux-gtk.tar.gz;
-          md5 = "5000f93cecf6ef9af112f0df6e8c87f3";
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/luna/SR2/eclipse-cpp-luna-SR2-linux-gtk.tar.gz;
+          sha256 = "1yn7yzzx8izc199c8w4f7vrc0b08idyq0dn113i8123b0mxw5lkp";
         };
   };
   eclipse_cpp_44 = eclipse-cpp-44; # backward compatibility, added 2016-01-30
