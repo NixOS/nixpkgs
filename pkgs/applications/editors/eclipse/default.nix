@@ -47,7 +47,7 @@ rec {
   eclipse_sdk_36 = eclipse-sdk-36; # backward compatibility, added 2016-01-30
 
   eclipse-scala-sdk-40 = buildEclipse {
-    name = "eclipse-scala_sdk-4.0.0";
+    name = "eclipse-scala-sdk-4.0.0";
     description = "Eclipse IDE for Scala Developers";
     src =
       if stdenv.system == "x86_64-linux" then
