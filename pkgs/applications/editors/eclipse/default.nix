@@ -29,8 +29,6 @@ rec {
   };
   eclipse_sdk_35 = eclipse-sdk-35; # backward compatibility, added 2016-01-30
 
-  # !!! Use mirror://eclipse/.
-
   eclipse-sdk-36 = buildEclipse {
     name = "eclipse-sdk-3.6.2";
     description = "Eclipse Classic";
