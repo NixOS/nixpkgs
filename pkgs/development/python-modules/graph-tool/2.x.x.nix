@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, python, cairomm, sparsehash, pycairo, automake, m4,
-pkgconfig, boost, expat, scipy, numpy, cgal, gmp, mpfr, lndir, makeWrapper,
-gobjectIntrospection, pygobject3, gtk3, matplotlib, autoconf, libtool }:
+{ stdenv, fetchurl, python, cairomm, sparsehash, pycairo, autoreconfHook,
+pkgconfig, boost, expat, scipy, numpy, cgal, gmp, mpfr, lndir,
+gobjectIntrospection, pygobject3, gtk3, matplotlib }:
 
 stdenv.mkDerivation rec {
   version = "2.12";
@@ -19,13 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "12w58djyx6nn00wixqnxnxby9ksabhzdkkvynl8b89parfvfbpwl";
   };
 
-  preConfigure = ''
-    patchShebangs autogen.sh
-    ./autogen.sh
-    configureFlags="--with-python-module-path=$out/${python.sitePackages} --enable-openmp"
-  '';
+  configureFlags = [
+    "--with-python-module-path=$(out)/${python.sitePackages}"
+    "--enable-openmp"
+  ];
 
-  buildInputs = [ automake m4 pkgconfig makeWrapper autoconf libtool ];
+  buildInputs = [ pkgconfig autoreconfHook ];
 
   propagatedBuildInputs = [
     boost
