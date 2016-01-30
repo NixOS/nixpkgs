@@ -57,7 +57,7 @@ let
   system = config.nixpkgs.system;
 
   bindMountOpts = { name, config, ... }: {
-  
+
     options = {
       mountPoint = mkOption {
         example = "/mnt/usb";
@@ -77,13 +77,13 @@ let
         description = "Determine whether the mounted path will be accessed in read-only mode.";
       };
     };
-    
+
     config = {
       mountPoint = mkDefault name;
     };
-    
+
   };
-  
+
   mkBindFlag = d:
                let flagPrefix = if d.isReadOnly then " --bind-ro=" else " --bind=";
                    mountstr = if d.hostPath != null then "${d.hostPath}:${d.mountPoint}" else "${d.mountPoint}";
@@ -225,7 +225,7 @@ in
               example = { "/home" = { hostPath = "/home/alice";
                                       isReadOnly = false; };
                         };
-                        
+
               description =
                 ''
                   An extra list of directories that is bound to the container.
@@ -402,6 +402,9 @@ in
 
         restartIfChanged = false;
         #reloadIfChanged = true; # FIXME
+
+        wants = [ "netwprk.target" ];
+        after = [ "network.target" ];
 
         serviceConfig = {
           ExecReload = pkgs.writeScript "reload-container"
