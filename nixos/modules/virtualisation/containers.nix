@@ -110,6 +110,17 @@ in
               '';
             };
 
+            hostBridge = mkOption {
+              type = types.nullOr types.string;
+              default = null;
+              example = "br0";
+              description = ''
+                Put the host-side of the veth-pair into the named bridge.
+                CAUTION: only one of hostAddress or hostBridge can be given.
+                         hostAddress currently takes precedence
+              '';
+            };
+
             localAddress = mkOption {
               type = types.nullOr types.string;
               default = null;
@@ -269,6 +280,10 @@ in
               ip link set dev $ifaceHost up
               if [ -n "$HOST_ADDRESS" ]; then
                 ip addr add $HOST_ADDRESS dev $ifaceHost
+              else
+                if [ -n "$HOST_BRIDGE" ]; then
+                  ip link set dev $ifaceHost master $HOST_BRIDGE
+                fi
               fi
               if [ -n "$LOCAL_ADDRESS" ]; then
                 ip route add $LOCAL_ADDRESS dev $ifaceHost
@@ -339,6 +354,9 @@ in
               PRIVATE_NETWORK=1
               ${optionalString (cfg.hostAddress != null) ''
                 HOST_ADDRESS=${cfg.hostAddress}
+              ''}
+              ${optionalString (cfg.hostBridge != null) ''
+                HOST_BRIDGE=${cfg.hostBridge}
               ''}
               ${optionalString (cfg.localAddress != null) ''
                 LOCAL_ADDRESS=${cfg.localAddress}
