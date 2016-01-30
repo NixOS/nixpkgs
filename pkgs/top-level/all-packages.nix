@@ -689,6 +689,8 @@ let
 
   bibtool = callPackage ../tools/misc/bibtool { };
 
+  bibutils = callPackage ../tools/misc/bibutils { };
+
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
   binwalk = callPackage ../tools/misc/binwalk {
