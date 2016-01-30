@@ -285,7 +285,7 @@ in
                   ip link set dev $ifaceHost master $HOST_BRIDGE
                 fi
               fi
-              if [ -n "$LOCAL_ADDRESS" ]; then
+              if [ -n "$LOCAL_ADDRESS" -a -z "$HOST_BRIDGE" ]; then
                 ip route add $LOCAL_ADDRESS dev $ifaceHost
               fi
             fi
