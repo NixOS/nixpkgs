@@ -182,18 +182,18 @@ rec {
   eclipse_cpp_44 = eclipse-cpp-44; # backward compatibility, added 2016-01-30
 
   eclipse-cpp-45 = buildEclipse {
-    name = "eclipse-cpp-4.5";
+    name = "eclipse-cpp-4.5.1";
     description = "Eclipse IDE for C/C++ Developers, Mars release";
     src =
       if stdenv.system == "x86_64-linux" then
         fetchurl {
-          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/mars/R/eclipse-cpp-mars-R-linux-gtk-x86_64.tar.gz;
-          sha1 = "11f9583e23ae68eb675107e6c9acc48e0a2520ae";
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/mars/1/eclipse-cpp-mars-1-linux-gtk-x86_64.tar.gz;
+          sha256 = "1j6rsgr44kya2v7y34ifscajqk7lnq1w9m9fx4i0qgby84sy4xj7";
         }
       else if stdenv.system == "i686-linux" then
         fetchurl {
-          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/mars/R/eclipse-cpp-mars-R-linux-gtk.tar.gz;
-          sha1 = "45dddb8c8f2ec79b7e25cc13d93785863ffe4791";
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/mars/1/eclipse-cpp-mars-1-linux-gtk.tar.gz;
+          sha256 = "0qsbvjkq0ssxbnafh4gs8pfclynqis3nf7xlxx4w3k20jcjx7sr2";
         }
       else throw "Unsupported system: ${stdenv.system}";
   };
