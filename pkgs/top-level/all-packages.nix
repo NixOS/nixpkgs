@@ -13150,7 +13150,7 @@ let
     boost = boost155;
   };
 
-  sc-im = callPackage ../applications/misc/scim { };
+  sc-im = callPackage ../applications/misc/sc-im { };
 
   scite = callPackage ../applications/editors/scite { };
 
