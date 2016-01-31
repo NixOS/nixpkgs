@@ -81,7 +81,7 @@ stdenv.mkDerivation {
     mkdir -p "$out/share/sddm"
     for pkg in $unwrapped $themes; do
         local sddmDir="$pkg/share/sddm"
-        if [[ -d "$sddmDir" ]]; then
+        if [ -d "$sddmDir" ]; then
             lndir -silent "$sddmDir" "$out/share/sddm"
         fi
     done
