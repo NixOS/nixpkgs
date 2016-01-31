@@ -92,7 +92,7 @@ let
 
       ${mkPluginInfo {
         output = "flash";
-        allowedVars = [ "flash" "flashVersion" ];
+        allowedVars = [ "flashVersion" "flash" ];
         flags = [
           "--ppapi-flash-path=$flash/lib/libpepflashplayer.so"
           "--ppapi-flash-version=$flashVersion"
