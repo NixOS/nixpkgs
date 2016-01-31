@@ -17,7 +17,4 @@ plasmaPackage rec {
     baloo kactivities kdeclarative kfilemetadata ki18n kio
     plasma-framework
   ];
-  # All propagatedBuildInputs should be present in the profile because
-  # wrappers cannot be used here.
-  propagatedUserEnvPkgs = propagatedBuildInputs;
 }
