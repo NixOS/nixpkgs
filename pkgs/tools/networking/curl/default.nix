@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, libnghttp2, pkgconfig, perl
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
 , zlibSupport ? false, zlib ? null
@@ -16,17 +16,20 @@ assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.45.0";
+  name = "curl-7.47.0";
 
   src = fetchurl {
     url = "http://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "1slq5c0v9wa8hajgimhkxhvsrd07jmih8sa3gjsl597qp5k4w5b5";
+    sha256 = "0riz70pjg82gbcfi2ndvsksb2dv55g31ir8piph2p6zvhy9ny29b";
   };
+
+  nativeBuildInputs = [ pkgconfig perl ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of
   # applications that use Curl.
   propagatedBuildInputs = with stdenv.lib;
+    [ libnghttp2 ] ++
     optional idnSupport libidn ++
     optional ldapSupport openldap ++
     optional zlibSupport zlib ++
@@ -48,6 +51,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
       "--disable-manual"
+      "--with-nghttp2=${libnghttp2}"
       ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
       ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
