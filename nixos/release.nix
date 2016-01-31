@@ -200,6 +200,8 @@ in rec {
   tests.chromium = callSubTests tests/chromium.nix {};
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.containers = callTest tests/containers.nix {};
+  tests.containers-ipv6 = callTest tests/containers-ipv6.nix {};
+  tests.containers-bridge = callTest tests/containers-bridge.nix {};
   tests.docker = hydraJob (import tests/docker.nix { system = "x86_64-linux"; });
   tests.dockerRegistry = hydraJob (import tests/docker-registry.nix { system = "x86_64-linux"; });
   tests.dnscrypt-proxy = callTest tests/dnscrypt-proxy.nix { system = "x86_64-linux"; };
