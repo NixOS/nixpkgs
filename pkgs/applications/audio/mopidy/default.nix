@@ -23,10 +23,6 @@ pythonPackages.buildPythonPackage rec {
   # There are no tests
   doCheck = false;
 
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH")
-  '';
-
   meta = with stdenv.lib; {
     homepage = http://www.mopidy.com/;
     description = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, makeWrapper
+{ stdenv, fetchurl, pkgconfig, wrapGAppsHook
 , gstreamer, gtk2, gst_plugins_base, libnotify
 , keybinder, xfconf
 }:
@@ -28,13 +28,7 @@ stdenv.mkDerivation rec {
       keybinder xfconf libnotify
     ];
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
-
-  postInstall =
-    ''
-      wrapProgram "$out/bin/xfce4-volumed" \
-        --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
-    '';
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
 
   meta = with stdenv.lib; {
     homepage = http://www.xfce.org/projects/xfce4-volumed; # referenced but inactive

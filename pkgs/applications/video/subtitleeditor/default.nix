@@ -1,6 +1,6 @@
 { stdenv, fetchurl, desktop_file_utils, enchant, gnome, gstreamer, gstreamermm,
   gst_plugins_base, gst_plugins_good, intltool, hicolor_icon_theme,
-  libsigcxx, libxmlxx, makeWrapper, xdg_utils, pkgconfig } :
+  libsigcxx, libxmlxx, wrapGAppsHook, xdg_utils, pkgconfig } :
 
 let
   ver_maj = "0.41";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs =  [
     desktop_file_utils enchant gnome.gtk gnome.gtkmm gstreamer gstreamermm
     gst_plugins_base gst_plugins_good intltool hicolor_icon_theme libsigcxx libxmlxx
-    makeWrapper xdg_utils pkgconfig
+    wrapGAppsHook xdg_utils pkgconfig
   ];
 
   src = fetchurl {
@@ -22,12 +22,6 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = true;
-
-  postInstall = ''
-    wrapProgram "$out/bin/subtitleeditor" --prefix \
-      GST_PLUGIN_SYSTEM_PATH ":" "$GST_PLUGIN_SYSTEM_PATH"                                                     \
-  '';
-
 
   meta = {
     description = "GTK+2 application to edit video subtitles";
