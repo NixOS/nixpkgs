@@ -61,7 +61,7 @@ installPhase() {
       libname_short=`echo -n "$libname" | sed 's/so\..*/so/'`
 
       # nvidia's EGL stack seems to expect libGLESv2.so.2 to be available
-      if [ $(basename "$libname_short") == "libGLESv2.so" ]; then
+      if [ $(basename "$libname_short") == "libGLESv2.so" -a "$libname" != "$libname_short.2" ]; then
           ln -srnf "$libname" "$libname_short.2"
       fi
 
@@ -125,6 +125,9 @@ installPhase() {
     # Move VDPAU libraries to their place
     mkdir "$out"/lib/vdpau
     mv "$out"/lib/libvdpau* "$out"/lib/vdpau
+
+    # # nvidia no longer distributes them in 361.18 and up, so eventually remove this.
+    # rm -f "$out"/lib/libvdpau{.*,_trace.*}
 }
 
 
