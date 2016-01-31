@@ -34,11 +34,14 @@ import ./make-test.nix ({ pkgs, ...} : {
       # Start the webserver container.
       $machine->succeed("nixos-container start webserver");
 
+      # wait two seconds for the container to start and the network to be up
+      sleep 2;
+
       # Since "start" returns after the container has reached
       # multi-user.target, we should now be able to access it.
       my $ip = $machine->succeed("nixos-container show-ip webserver");
       chomp $ip;
-      #$machine->succeed("ping -c1 $ip"); # FIXME
+      $machine->succeed("ping -n -c1 $ip");
       $machine->succeed("curl --fail http://$ip/ > /dev/null");
 
       # Stop the container.
