@@ -55,12 +55,12 @@ in
     services.xserver.desktopManager.session = singleton {
       name = "kde5";
       bgSupport = true;
-      start = ''exec ${kde5.plasma-workspace}/bin/startkde;'';
+      start = ''exec startkde;'';
     };
 
     security.setuidOwners = singleton {
       program = "kcheckpass";
-      source = "${kde5.plasma-workspace}/lib/libexec/kcheckpass";
+      source = "${kde5.plasma-workspace.out}/lib/libexec/kcheckpass";
       owner = "root";
       group = "root";
       setuid = true;
@@ -168,12 +168,12 @@ in
 
     # Enable GTK applications to load SVG icons
     environment.variables = mkIf (lib.hasAttr "breeze-icons" kde5) {
-      GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
+      GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
     };
 
     fonts.fonts = [ (kde5.oxygen-fonts or pkgs.noto-fonts) ];
 
-    programs.ssh.askPassword = "${kde5.ksshaskpass}/bin/ksshaskpass";
+    programs.ssh.askPassword = "${kde5.ksshaskpass.out}/bin/ksshaskpass";
 
     # Enable helpful DBus services.
     services.udisks2.enable = true;
