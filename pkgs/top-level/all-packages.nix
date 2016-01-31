@@ -12498,8 +12498,6 @@ let
     inherit (gnome) libglade;
   };
 
-  links = callPackage ../applications/networking/browsers/links { };
-
   ledger2 = callPackage ../applications/office/ledger/2.6.3.nix { };
   ledger3 = callPackage ../applications/office/ledger {
     boost = boost155;
@@ -15951,6 +15949,7 @@ aliases = with self; rec {
   jquery_ui = jquery-ui;  # added 2014-09-07
   libdbusmenu_qt5 = qt5.libdbusmenu;  # added 2015-12-19
   libtidy = html-tidy;  # added 2014-12-21
+  links = links2; # added 2016-01-31
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
   midoriWrapper = midori; # added 2015-01
