@@ -32,7 +32,9 @@ import ./make-test.nix ({ pkgs, ...} : {
       };
 
       containers.webserver =
-        { privateNetwork = true;
+        {
+          autoStart = true;
+          privateNetwork = true;
           hostBridge = "br0";
           localAddress = containerIp;
           localAddress6 = containerIp6;
@@ -53,13 +55,8 @@ import ./make-test.nix ({ pkgs, ...} : {
       $machine->succeed("nixos-container list") =~ /webserver/ or die;
 
       # Start the webserver container.
-      $machine->succeed("nixos-container start webserver");
+      $machine->succeed("nixos-container status webserver") =~ /up/ or die;
 
-      # wait two seconds for the container to start and the network to be up
-      sleep 2;
-
-      # Since "start" returns after the container has reached
-      # multi-user.target, we should now be able to access it.
       "${containerIp}" =~ /([^\/]+)\/([0-9+])/;
       my $ip = $1;
       chomp $ip;
