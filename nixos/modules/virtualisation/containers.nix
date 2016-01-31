@@ -22,14 +22,23 @@ let
 
       # Initialise the container side of the veth pair.
       if [ "$PRIVATE_NETWORK" = 1 ]; then
+
         ip link set host0 name eth0
         ip link set dev eth0 up
+
+        if [ -n "$LOCAL_ADDRESS" ]; then
+          ip addr add $LOCAL_ADDRESS dev eth0
+        fi
+        if [ -n "$LOCAL_ADDRESS6" ]; then
+          ip -6 addr add $LOCAL_ADDRESS6 dev eth0
+        fi
         if [ -n "$HOST_ADDRESS" ]; then
           ip route add $HOST_ADDRESS dev eth0
           ip route add default via $HOST_ADDRESS
         fi
-        if [ -n "$LOCAL_ADDRESS" ]; then
-          ip addr add $LOCAL_ADDRESS dev eth0
+        if [ -n "$HOST_ADDRESS6" ]; then
+          ip -6 route add $HOST_ADDRESS6 dev eth0
+          ip -6 route add default via $HOST_ADDRESS6
         fi
       fi
 
