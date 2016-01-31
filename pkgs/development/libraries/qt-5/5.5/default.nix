@@ -50,7 +50,7 @@ let
       configureScript = args.configureScript or "qmake";
 
       outputs = args.outputs or [ "dev" "out" ];
-      setOutputFlags = false;
+      setOutputFlags = args.setOutputFlags or false;
 
       enableParallelBuilding = args.enableParallelBuilding or true;
 
