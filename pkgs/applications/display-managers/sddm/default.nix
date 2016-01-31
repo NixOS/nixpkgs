@@ -72,7 +72,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ lndir makeQtWrapper ];
   buildInputs = [ unwrapped ] ++ themes;
-  inherit themes;
+  themes = map (pkg: pkg.out or pkg) themes;
   inherit unwrapped;
 
   installPhase = ''
