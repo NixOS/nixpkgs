@@ -19949,6 +19949,25 @@ in modules // {
     };
   };
 
+  svgwrite = buildPythonPackage rec {
+    name = "svgwrite-${version}";
+    version = "1.1.6";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/svgwrite/${name}.tar.gz";
+      sha256 = "1f018813072aa4d7e95e58f133acb3f68fa7de0a0d89ec9402cc38406a0ec5b8";
+    };
+
+    buildInputs = with self; [ setuptools ];
+    propagatedBuildInputs = with self; [ pyparsing ];
+
+    meta = {
+      description = "A Python library to create SVG drawings.";
+      homepage = http://bitbucket.org/mozman/svgwrite;
+      license = licenses.mit;
+    };
+  };
+
   freezegun = buildPythonPackage rec {
     name = "freezegun-${version}";
     version = "0.3.5";
