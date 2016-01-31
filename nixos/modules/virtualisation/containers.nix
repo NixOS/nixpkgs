@@ -101,12 +101,22 @@ in
               '';
             };
 
+            hostBridge = mkOption {
+              type = types.nullOr types.string;
+              default = null;
+              example = "br0";
+              description = ''
+                Put the host-side of the veth-pair into the named bridge.
+                Only one of hostAddress* or hostBridge can be given.
+              '';
+            };
             hostAddress = mkOption {
               type = types.nullOr types.string;
               default = null;
               example = "10.231.136.1";
               description = ''
                 The IPv4 address assigned to the host interface.
+                (Not used when hostBridge is set.)
               '';
             };
 
@@ -116,19 +126,10 @@ in
               example = "fc00::1";
               description = ''
                 The IPv6 address assigned to the host interface.
+                (Not used when hostBridge is set.)
               '';
             };
 
-            hostBridge = mkOption {
-              type = types.nullOr types.string;
-              default = null;
-              example = "br0";
-              description = ''
-                Put the host-side of the veth-pair into the named bridge.
-                CAUTION: only one of hostAddress or hostBridge can be given.
-                         hostAddress currently takes precedence
-              '';
-            };
 
             localAddress = mkOption {
               type = types.nullOr types.string;
@@ -232,11 +233,6 @@ in
             if [ "$PRIVATE_NETWORK" = 1 ]; then
               ip link del dev "ve-$INSTANCE" 2> /dev/null || true
             fi
-
-
-            if [ "$PRIVATE_NETWORK" = 1 ]; then
-              ip link del dev "ve-$INSTANCE" 2> /dev/null || true
-            fi
          '';
 
         script =
@@ -300,21 +296,21 @@ in
             if [ "$PRIVATE_NETWORK" = 1 ]; then
               ifaceHost=ve-$INSTANCE
               ip link set dev $ifaceHost up
-              if [ -n "$HOST_ADDRESS" ]; then
-                ip addr add $HOST_ADDRESS dev $ifaceHost
-                if [ -n "$HOST_ADDRESS6" ]; then
-                  ip addr add $HOST_ADDRESS6 dev $ifaceHost
-                fi
+              if [ -n "$HOST_BRIDGE" ]; then
+                ip link set dev $ifaceHost master $HOST_BRIDGE
               else
-                if [ -n "$HOST_BRIDGE" ]; then
-                  ip link set dev $ifaceHost master $HOST_BRIDGE
+                if [ -n "$HOST_ADDRESS" ]; then
+                  ip addr add $HOST_ADDRESS dev $ifaceHost
                 fi
-              fi
-              if [ -n "$LOCAL_ADDRESS" -a -z "$HOST_BRIDGE" ]; then
-                ip route add $LOCAL_ADDRESS dev $ifaceHost
-              fi
-              if [ -n "$LOCAL_ADDRESS6" -a -z "$HOST_BRIDGE" ]; then
-                ip route add $LOCAL_ADDRESS6 dev $ifaceHost
+                if [ -n "$HOST_ADDRESS6" ]; then
+                  ip -6 addr add $HOST_ADDRESS6 dev $ifaceHost
+                fi
+                if [ -n "$LOCAL_ADDRESS" ]; then
+                  ip route add $LOCAL_ADDRESS dev $ifaceHost
+                fi
+                if [ -n "$LOCAL_ADDRESS6" ]; then
+                  ip -6 route add $LOCAL_ADDRESS6 dev $ifaceHost
+                fi
               fi
             fi
 
