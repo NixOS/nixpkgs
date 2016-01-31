@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, libnl, ncurses, pciutils, pkgconfig, zlib }:
+{ stdenv, fetchurl, gettext, libnl, ncurses, pciutils, pkgconfig, zlib, xorg }:
 
 stdenv.mkDerivation rec {
   name = "powertop-2.8";
@@ -8,10 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "0nlwazxbnn0k6q5f5b09wdhw0f194lpzkp3l7vxansqhfczmcyx8";
   };
 
-  buildInputs = [ gettext libnl ncurses pciutils pkgconfig zlib ];
+  buildInputs = [ gettext libnl ncurses pciutils pkgconfig zlib xorg.xset ];
 
   postPatch = ''
     substituteInPlace src/main.cpp --replace "/sbin/modprobe" "modprobe"
+    substituteInPlace src/calibrate/calibrate.cpp --replace "/usr/bin/xset" "xset"
   '';
 
   meta = {
