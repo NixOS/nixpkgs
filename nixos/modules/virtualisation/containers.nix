@@ -110,6 +110,15 @@ in
               '';
             };
 
+            hostAddress6 = mkOption {
+              type = types.nullOr types.string;
+              default = null;
+              example = "fc00::1";
+              description = ''
+                The IPv6 address assigned to the host interface.
+              '';
+            };
+
             hostBridge = mkOption {
               type = types.nullOr types.string;
               default = null;
@@ -127,6 +136,16 @@ in
               example = "10.231.136.2";
               description = ''
                 The IPv4 address assigned to <literal>eth0</literal>
+                in the container.
+              '';
+            };
+
+            localAddress6 = mkOption {
+              type = types.nullOr types.string;
+              default = null;
+              example = "fc00::2";
+              description = ''
+                The IPv6 address assigned to <literal>eth0</literal>
                 in the container.
               '';
             };
@@ -267,8 +286,11 @@ in
               --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
               --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
               --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
+              --setenv HOST_BRIDGE="$HOST_BRIDGE" \
               --setenv HOST_ADDRESS="$HOST_ADDRESS" \
               --setenv LOCAL_ADDRESS="$LOCAL_ADDRESS" \
+              --setenv HOST_ADDRESS6="$HOST_ADDRESS6" \
+              --setenv LOCAL_ADDRESS6="$LOCAL_ADDRESS6" \
               --setenv PATH="$PATH" \
               ${containerInit} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
           '';
@@ -280,6 +302,9 @@ in
               ip link set dev $ifaceHost up
               if [ -n "$HOST_ADDRESS" ]; then
                 ip addr add $HOST_ADDRESS dev $ifaceHost
+                if [ -n "$HOST_ADDRESS6" ]; then
+                  ip addr add $HOST_ADDRESS6 dev $ifaceHost
+                fi
               else
                 if [ -n "$HOST_BRIDGE" ]; then
                   ip link set dev $ifaceHost master $HOST_BRIDGE
@@ -287,6 +312,9 @@ in
               fi
               if [ -n "$LOCAL_ADDRESS" -a -z "$HOST_BRIDGE" ]; then
                 ip route add $LOCAL_ADDRESS dev $ifaceHost
+              fi
+              if [ -n "$LOCAL_ADDRESS6" -a -z "$HOST_BRIDGE" ]; then
+                ip route add $LOCAL_ADDRESS6 dev $ifaceHost
               fi
             fi
 
@@ -352,14 +380,20 @@ in
             SYSTEM_PATH=${cfg.path}
             ${optionalString cfg.privateNetwork ''
               PRIVATE_NETWORK=1
-              ${optionalString (cfg.hostAddress != null) ''
-                HOST_ADDRESS=${cfg.hostAddress}
-              ''}
               ${optionalString (cfg.hostBridge != null) ''
                 HOST_BRIDGE=${cfg.hostBridge}
               ''}
+              ${optionalString (cfg.hostAddress != null) ''
+                HOST_ADDRESS=${cfg.hostAddress}
+              ''}
+              ${optionalString (cfg.hostAddress6 != null) ''
+                HOST_ADDRESS6=${cfg.hostAddress6}
+              ''}
               ${optionalString (cfg.localAddress != null) ''
                 LOCAL_ADDRESS=${cfg.localAddress}
+              ''}
+              ${optionalString (cfg.localAddress6 != null) ''
+                LOCAL_ADDRESS6=${cfg.localAddress6}
               ''}
             ''}
              INTERFACES="${toString cfg.interfaces}"
