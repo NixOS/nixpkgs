@@ -6,14 +6,14 @@
 }:
 
 let pname = "liferea";
-    version = "1.10.17";
+    version = "1.10.18";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${name}.tar.bz2";
-    sha256 = "0svgl50w3hai31n5sm42sl0cd86c32cka0xzfy4r8gi0lyjdjxyx";
+    sha256 = "0wpinar2cxyzq2j7ff7lznc08f0n6qjdm9aavsarbgdpaf2s1xvq";
   };
 
   buildInputs = with gst_all_1; [
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     libnotify
     makeWrapper
   ];
+
+  patches = [ ./liferea-fix-notification-header-location.patch ];
 
   preFixup = ''
     for f in "$out"/bin/*; do
