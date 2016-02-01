@@ -1138,6 +1138,8 @@ let
 
   m17n_db = callPackage ../tools/inputmethods/m17n-db { };
 
+  m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
+
   mozc = callPackage ../tools/inputmethods/mozc {
     inherit (pythonPackages) gyp;
   };
