@@ -37,6 +37,7 @@ let
       ssl_ciphers ${cfg.sslCiphers};
       ssl_ecdh_curve secp521r1;
       ssl_prefer_server_ciphers on;
+      ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
 
       ssl_stapling on;
       ssl_stapling_verify on;
@@ -202,6 +203,13 @@ in
         default = "TLSv1.2";
         example = "TLSv1 TLSv1.1 TLSv1.2";
         description = "Allowed TLS protocol versions.";
+      };
+
+      sslDhparam = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = literalExample "/path/to/dhparams.pem";
+        description = "Path to DH parameters file.";
       };
 
       virtualHosts = mkOption {
