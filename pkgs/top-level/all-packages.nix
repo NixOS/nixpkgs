@@ -7147,6 +7147,8 @@ let
 
   libcue = callPackage ../development/libraries/libcue { };
 
+  libcutl = callPackage ../development/libraries/libcutl { };
+
   libdaemon = callPackage ../development/libraries/libdaemon { };
 
   libdbi = callPackage ../development/libraries/libdbi { };
