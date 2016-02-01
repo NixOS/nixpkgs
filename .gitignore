@@ -16,3 +16,5 @@ result-*
 /pkgs/development/libraries/kde-frameworks-*/tmp/
 /pkgs/development/libraries/qt-5/*/tmp/
 /pkgs/desktops/plasma-*/tmp/
+
+/nixos/modules/flyingcircus/.vagrant
