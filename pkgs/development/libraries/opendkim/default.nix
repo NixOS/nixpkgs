@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/sbin/opendkim-genkey \
-      --prefix PATH : ${openssl}/bin
+      --prefix PATH : ${openssl.bin}/bin
   '';
 
   meta = with stdenv.lib; {

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     substituteInPlace ./shellinabox/launcher.c --replace "/usr/games" "${openssh}/bin"
     substituteInPlace ./shellinabox/service.c --replace "/bin/login" "${shadow}/bin/login"
     substituteInPlace ./shellinabox/launcher.c --replace "/bin/login" "${shadow}/bin/login"
-    substituteInPlace ./libhttp/ssl.c --replace "/usr/bin" "${openssl}/bin"
+    substituteInPlace ./libhttp/ssl.c --replace "/usr/bin" "${openssl.bin}/bin"
   '';
 
   postInstall = ''

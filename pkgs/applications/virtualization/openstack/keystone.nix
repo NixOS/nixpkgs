@@ -33,7 +33,7 @@ pythonPackages.buildPythonPackage rec {
     ldap ldappool webtest requests2 oslotest pep8 pymongo which
   ];
 
-  makeWrapperArgs = ["--prefix PATH : '${openssl}/bin:$PATH'"];
+  makeWrapperArgs = ["--prefix PATH : '${openssl.bin}/bin:$PATH'"];
 
   postInstall = ''
     # install .ini files
