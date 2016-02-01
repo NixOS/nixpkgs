@@ -355,6 +355,9 @@ with stdenv.lib;
   X86_CHECK_BIOS_CORRUPTION y
   X86_MCE y
 
+  # PCI-Expresscard hotplug support
+  HOTPLUG_PCI_PCIE y
+
   # Linux containers.
   NAMESPACES? y #  Required by 'unshare' used by 'nixos-install'
   RT_GROUP_SCHED? y
