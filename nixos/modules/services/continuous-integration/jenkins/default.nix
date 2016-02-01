@@ -177,6 +177,9 @@ in {
         # automatically installed from the pre-installed plugins we
         # prefix them with "nix-plugin-". Then we can safely remove
         # them:
+        mkdir -p ${cfg.home}/plugins # plugins dir is created by
+                                     # Jenkins on first startup but
+                                     # this script runs before startup.
         rm -f ${cfg.home}/plugins/nix-plugin-*.hpi
         for path in ${concatMapStrings (x: x + "/*.hpi ") cfg.plugins}; do
           cp $path ${cfg.home}/plugins/nix-plugin-$(basename $path)
