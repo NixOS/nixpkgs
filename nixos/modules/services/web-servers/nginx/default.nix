@@ -193,7 +193,7 @@ in
 
       sslCiphers = mkOption {
         type = types.str;
-        default = "EDH+aRSA+AES256:+AESGCM:ECDHE+aRSA+AES256";
+        default = "EDH+aRSA+CHACHA20:EDH+aRSA+AES:ECDHE+aRSA+AES:+AES128";
         description = "Ciphers to choose from when negotiating tls handshakes.";
       };
 
