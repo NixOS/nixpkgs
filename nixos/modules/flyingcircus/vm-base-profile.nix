@@ -23,6 +23,7 @@ in
   imports =
     flavor_files ++
     [./user.nix
+     ./role.nix
      ./network.nix
      ./packages/default.nix
      ./roles/default.nix
