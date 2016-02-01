@@ -34,7 +34,7 @@ let
       ssl_session_cache shared:SSL:42m;
       ssl_session_timeout 23m;
 
-      ssl_ciphers EDH+aRSA+AES256:+AESGCM:ECDHE+aRSA+AES256;
+      ssl_ciphers ${cfg.sslCiphers};
       ssl_ecdh_curve secp521r1;
       ssl_prefer_server_ciphers on;
 
@@ -188,6 +188,12 @@ in
         type = types.bool;
         default = false;
         description = "Show nginx version in headers and error pages";
+      };
+
+      sslCiphers = mkOption {
+        type = types.str;
+        default = "EDH+aRSA+AES256:+AESGCM:ECDHE+aRSA+AES256";
+        description = "Ciphers to choose from when negotiating tls handshakes.";
       };
 
       sslProtocols = mkOption {
