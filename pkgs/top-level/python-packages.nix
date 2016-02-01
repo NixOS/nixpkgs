@@ -5241,6 +5241,25 @@ in modules // {
     };
   };
 
+  ftputil = buildPythonPackage rec {
+    version = "3.3";
+    name = "ftputil-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/f/ftputil/${name}.tar.gz";
+      sha256 = "1714w0v6icw2xjx5m54yv2qgkq49qwxwllq4gdb7wkz25iiapr8b";
+    };
+
+    disabled = isPy3k;
+
+    meta = {
+      description = "High-level FTP client library (virtual file system and more)";
+      homepage    = https://pypi.python.org/pypi/ftputil;
+      platforms   = platforms.linux;
+      license     = licenses.bsd2; # "Modified BSD licence, says pypi"
+    };
+  };
+
   fudge = buildPythonPackage rec {
     name = "fudge-1.1.0";
     src = pkgs.fetchurl {
