@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
       --replace @coreutils@ "${coreutils}/bin" \
       --replace @findutils@ "${findutils}/bin" \
       --replace @nix@ "${nix}/bin" \
-      --replace @xz@ "${xz}/bin" \
+      --replace @xz@ "${xz.bin}/bin" \
       --replace @bzip2@ "${bzip2.bin}/bin" \
       --replace @gnused@ "${gnused}/bin" \
       --replace @gnugrep@ "${gnugrep}/bin" \
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       --replace @coreutils@ "${coreutils}/bin" \
       --replace @findutils@ "${findutils}/bin" \
       --replace @nix@ "${nix}/bin" \
-      --replace @xz@ "${xz}/bin" \
+      --replace @xz@ "${xz.bin}/bin" \
       --replace @bzip2@ "${bzip2.bin}/bin" \
       --replace @gnused@ "${gnused}/bin" \
       --replace @gnugrep@ "${gnugrep}/bin" \

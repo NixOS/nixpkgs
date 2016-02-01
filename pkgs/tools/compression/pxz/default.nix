@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     gcc -o pxz pxz.c -llzma \
         -fopenmp -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -O2 \
         -DPXZ_BUILD_DATE=\"nixpkgs\" \
-        -DXZ_BINARY=\"${xz}/bin/xz\" \
+        -DXZ_BINARY=\"${xz.bin}/bin/xz\" \
         -DPXZ_VERSION=\"${version}\"
   '';
 
