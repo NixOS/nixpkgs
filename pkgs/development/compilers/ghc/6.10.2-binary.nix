@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     (if stdenv.isLinux then ''
       find . -type f -perm -0100 \
           -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${libedit}/lib:${ncurses.lib}/lib:${gmp.out}/lib" {} \;
+          --set-rpath "${libedit}/lib:${ncurses.out}/lib:${gmp.out}/lib" {} \;
       for prog in ld ar gcc strip ranlib; do
         find . -name "setup-config" -exec sed -i "s@/usr/bin/$prog@$(type -p $prog)@g" {} \;
       done

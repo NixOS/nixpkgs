@@ -73,7 +73,7 @@ in
     buildInputs = [ ncurses ];
     buildFlags = [
       "--with-cflags=-I${ncurses.dev}/include"
-      "--with-ldflags=-L${ncurses.lib}/lib"
+      "--with-ldflags=-L${ncurses.out}/lib"
     ];
   };
 

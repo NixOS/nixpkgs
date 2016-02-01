@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     # find editline/gmp.
     stdenv.lib.optionalString stdenv.isLinux ''
       mkdir -p "$out/lib"
-      ln -sv "${ncurses.lib}/lib/libncurses.so" "$out/lib/libncurses${stdenv.lib.optionalString stdenv.is64bit "w"}.so.5"
+      ln -sv "${ncurses.out}/lib/libncurses.so" "$out/lib/libncurses${stdenv.lib.optionalString stdenv.is64bit "w"}.so.5"
       find . -type f -perm -0100 \
           -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "$out/lib:${gmp.out}/lib" {} \;

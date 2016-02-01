@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/lib/gstreamer-0.10/libgstaasink.la \
-      --replace "${ncurses.dev}/lib" "${ncurses.lib}/lib"
+      --replace "${ncurses.dev}/lib" "${ncurses.out}/lib"
   '';
 
   meta = {
