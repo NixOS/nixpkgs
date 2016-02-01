@@ -1,5 +1,6 @@
 { stdenv, fetchurl, perl
-, withCryptodev ? false, cryptodevHeaders }:
+, withCryptodev ? false, cryptodevHeaders
+, defaultCertificate ? "/etc/ssl/certs/ca-certificates.crt" }:
 
 with stdenv.lib;
 let
@@ -58,6 +59,9 @@ stdenv.mkDerivation rec {
 
     # remove dependency on Perl at runtime
     rm -r $out/etc/ssl/misc $out/bin/c_rehash
+
+    # configure the default trust store
+    ${optionalString (defaultCertificate != null) "ln -s ${defaultCertificate} $out/etc/ssl/cert.pem"}
   '';
 
   postFixup = ''
