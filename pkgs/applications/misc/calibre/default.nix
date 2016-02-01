@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
     for a in $out/bin/*; do
       wrapProgram $a --prefix PYTHONPATH : $PYTHONPATH \
-                     --prefix PATH : ${poppler_utils}/bin
+                     --prefix PATH : ${poppler_utils.out}/bin
     done
   '';
 
