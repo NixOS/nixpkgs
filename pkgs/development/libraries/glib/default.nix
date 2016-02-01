@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
        export XDG_RUNTIME_HOME="$TMP"
        export HOME="$TMP"
        export XDG_DATA_DIRS="${desktop_file_utils}/share:${shared_mime_info}/share"
-       export G_TEST_DBUS_DAEMON="${dbus_daemon}/bin/dbus-daemon"
+       export G_TEST_DBUS_DAEMON="${dbus_daemon.out}/bin/dbus-daemon"
 
        substituteInPlace gio/tests/desktop-files/home/applications/epiphany-weather-for-toronto-island-9c6a4e022b17686306243dada811d550d25eb1fb.desktop --replace "Exec=/bin/true" "Exec=${coreutils}/bin/true"
        # Needs machine-id, comment the test
