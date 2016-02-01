@@ -21,6 +21,12 @@
 with stdenv.lib;
 
 ''
+  # Compress kernel modules for a sizable disk space savings.
+  ${optionalString (versionAtLeast version "3.18") ''
+    MODULE_COMPRESS y
+    MODULE_COMPRESS_XZ y
+  ''}
+
   # Debugging.
   DEBUG_KERNEL y
   TIMER_STATS y
