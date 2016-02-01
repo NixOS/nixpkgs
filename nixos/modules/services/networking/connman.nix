@@ -59,7 +59,7 @@ in {
       assertion = config.networking.wireless.enable;
       message = "You must use services.networking.connman with services.networking.wireless";
     }{
-      assertion = config.networking.networkmanager.enable;
+      assertion = !config.networking.networkmanager.enable;
       message = "You can not use services.networking.connman with services.networking.networkmanager";
     }];
 
