@@ -85,6 +85,25 @@ self: super: {
     '';
   });
 
+  ghcjs-ffiqq = self.callPackage
+    ({ mkDerivation, base, template-haskell, ghcjs-base, split, containers, text, ghc-prim
+     }:
+     mkDerivation {
+       pname = "ghcjs-ffiqq";
+       version = "0.1.0.0";
+       src = pkgs.fetchFromGitHub {
+         owner = "ghcjs";
+         repo = "ghcjs-ffiqq";
+         rev = "da31b18582542fcfceade5ef6b2aca66662b9e20";
+         sha256 = "1mkp8p9hispyzvkb5v607ihjp912jfip61id8d42i19k554ssp8y";
+       };
+       libraryHaskellDepends = [
+         base template-haskell ghcjs-base split containers text ghc-prim
+       ];
+       description = "FFI QuasiQuoter for GHCJS";
+       license = stdenv.lib.licenses.mit;
+     }) {};
+
   ghcjs-dom = overrideCabal super.ghcjs-dom (drv: {
     libraryHaskellDepends =
       removeLibraryHaskellDepends [
