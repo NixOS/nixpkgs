@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -e 's|"gzip"|"${gzip}/bin/gzip"|' \
-        -e 's|"bzip2"|"${bzip2}/bin/bzip2"|' \
+        -e 's|"bzip2"|"${bzip2.bin}/bin/bzip2"|' \
         -e 's|"xz"|"${xz}/bin/xz"|' \
         -i ui-snapshot.c
   '';
