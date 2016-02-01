@@ -11,9 +11,6 @@ stdenv.mkDerivation {
   patches = [ ./getcwd-chroot.patch ];
 
   preConfigure = ''
-    # Fix location of info and man directories.
-    configureFlags="--infodir=$out/share/info --mandir=$out/share/man"
-
     # Apply the Debian patches.
     for p in "debian/patches/"*; do
       echo "applying \`$p' ..."
