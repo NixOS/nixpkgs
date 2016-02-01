@@ -149,9 +149,10 @@ nixBuild() {
                 local j="$1"; shift 1
                 instArgs+=("$i" "$j")
                 ;;
-              -I)
-                # We don't want this in buildArgs
+              -I) # We don't want this in buildArgs
                 shift 1
+                ;;
+              --no-out-link) # We don't want this in buildArgs
                 ;;
               "<"*) # nix paths
                 instArgs+=("$i")
