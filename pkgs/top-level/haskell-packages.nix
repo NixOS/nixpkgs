@@ -50,8 +50,8 @@ rec {
       inherit (packages.ghc784) ghc alex happy;
     };
 
-    ghcjs = packages.ghc7102.callPackage ../development/compilers/ghcjs {
-      ghc = compiler.ghc7102;
+    ghcjs = packages.ghc7103.callPackage ../development/compilers/ghcjs {
+      ghc = compiler.ghc7103;
     };
 
     jhc = callPackage ../development/compilers/jhc {
