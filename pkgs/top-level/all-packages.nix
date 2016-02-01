@@ -14498,6 +14498,8 @@ let
 
   ut2004demo = callPackage ../games/ut2004demo { };
 
+  vassal = callPackage ../games/vassal { };
+
   vdrift = callPackage ../games/vdrift { };
 
   vectoroids = callPackage ../games/vectoroids { };
