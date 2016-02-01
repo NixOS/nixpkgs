@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   preferLocalBuild = true;
 
   inherit cc shell libc_bin libc_dev libc_lib binutils_bin coreutils_bin;
-  gnugrep = if nativeTools then "" else gnugrep;
+  gnugrep_bin = if nativeTools then "" else gnugrep;
 
   passthru = { inherit libc nativeTools nativeLibc nativePrefix isGNU isClang; };
 
