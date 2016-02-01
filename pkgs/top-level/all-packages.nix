@@ -15714,8 +15714,6 @@ let
   texLiveAggregationFun = params:
     builderDefsPackage (callPackage ../tools/typesetting/tex/texlive/aggregate.nix) params;
 
-  texDisser = callPackage ../tools/typesetting/tex/disser {};
-
   texLiveContext = builderDefsPackage (callPackage ../tools/typesetting/tex/texlive/context.nix) {};
 
   texLiveExtra = builderDefsPackage (callPackage ../tools/typesetting/tex/texlive/extra.nix) {};
