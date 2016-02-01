@@ -31,6 +31,7 @@ let
   inherit (stdenv.lib) optional;
   wrapper = ./hoogle-local-wrapper.sh;
   isGhcjs = ghc.isGhcjs or false;
+  opts = lib.optionalString;
   haddockExe =
     if !isGhcjs
     then "haddock"
@@ -79,9 +80,11 @@ stdenv.mkDerivation {
 
     echo importing builtin packages
     for docdir in ${ghc}/${docLibGlob}/*; do
+      name="$(basename $docdir)"
+      ${opts isGhcjs ''docdir="$docdir/html"''}
       if [[ -d $docdir ]]; then
         import_dbs $docdir
-        ln -sfn $docdir $out/share/doc/hoogle
+        ln -sfn $docdir $out/share/doc/hoogle/$name
       fi
     done
 
