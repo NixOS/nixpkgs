@@ -14,6 +14,8 @@ let
   nvidiaForKernel = kernelPackages:
     if elem "nvidia" drivers then
         kernelPackages.nvidia_x11
+    else if elem "nvidiaBeta" drivers then
+        kernelPackages.nvidia_x11_beta
     else if elem "nvidiaLegacy173" drivers then
       kernelPackages.nvidia_x11_legacy173
     else if elem "nvidiaLegacy304" drivers then
