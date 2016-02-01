@@ -242,6 +242,7 @@ let
       };
 
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
+      haskell.packages.ghcjs = packagePlatforms pkgs.haskell.packages.ghcjs;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
 
       rPackages = packagePlatforms pkgs.rPackages;
