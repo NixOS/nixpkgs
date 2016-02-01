@@ -1136,6 +1136,8 @@ let
 
   anthy = callPackage ../tools/inputmethods/anthy { };
 
+  m17n_db = callPackage ../tools/inputmethods/m17n-db { };
+
   mozc = callPackage ../tools/inputmethods/mozc {
     inherit (pythonPackages) gyp;
   };
