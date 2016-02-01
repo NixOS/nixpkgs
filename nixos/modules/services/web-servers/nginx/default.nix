@@ -30,7 +30,7 @@ let
       types_hash_max_size 2048;
 
       # use secure TLS defaults
-      ssl_protocols TLSv1.2;
+      ssl_protocols ${cfg.sslProtocols};
       ssl_session_cache shared:SSL:42m;
       ssl_session_timeout 23m;
 
@@ -189,6 +189,13 @@ in
         type = types.bool;
         default = false;
         description = "Show nginx version in headers and error pages";
+      };
+
+      sslProtocols = mkOption {
+        type = types.str;
+        default = "TLSv1.2";
+        example = "TLSv1 TLSv1.1 TLSv1.2";
+        description = "Allowed TLS protocol versions.";
       };
 
       virtualHosts = mkOption {
