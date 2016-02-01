@@ -27,6 +27,10 @@ stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
+  postInstall = ''
+    ln -s $out/lib/pkgconfig/libxml-2.0.pc $out/lib/pkgconfig/libxml2.pc
+  '';
+
   meta = {
     homepage = http://xmlsoft.org/;
     description = "An XML parsing library for C";
