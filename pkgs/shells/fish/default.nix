@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
         -i "$out/share/fish/functions/alias.fish" \
            "$out/share/fish/functions/prompt_pwd.fish"
     substituteInPlace "$out/share/fish/functions/fish_default_key_bindings.fish" \
-      --replace "clear;" "${ncurses}/bin/clear;"
+      --replace "clear;" "${ncurses.out}/bin/clear;"
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     substituteInPlace "$out/share/fish/functions/__fish_print_help.fish" \
       --replace "| ul" "| ${utillinux}/bin/ul" 

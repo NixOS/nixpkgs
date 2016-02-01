@@ -98,6 +98,14 @@ stdenv.mkDerivation rec {
         ln -svf ''${library}$suffix.pc $dev/lib/pkgconfig/$library$newsuffix.pc
       done
     done
+
+    # move some utilities to $bin
+    # these programs are used at runtime and don't really belong in $dev
+    moveToOutput "bin/clear" "$out"
+    moveToOutput "bin/reset" "$out"
+    moveToOutput "bin/tabs" "$out"
+    moveToOutput "bin/tput" "$out"
+    moveToOutput "bin/tset" "$out"
   '';
 
   preFixup = ''
