@@ -36,7 +36,16 @@ stdenv.mkDerivation rec {
       export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
     '';
 
-  patches = [ ./locale_archive.patch ]
+  patches =
+    [ ./locale_archive.patch
+
+      # Fix "HostKeyAlgoritms +...", which we need to enable DSA
+      # host key support.
+      (fetchurl {
+        url = "https://pkgs.fedoraproject.org/cgit/rpms/openssh.git/plain/openssh-7.1p1-hostkeyalgorithms.patch?id=c98f5597250d6f9a8e8d96960beb6306d150ef0f";
+        sha256 = "029lzp9qv1af8wdm0wwj7qwjj1nimgsjj214jqm3amwz0857qgvp";
+      })
+    ]
     ++ optional withGssapiPatches gssapiSrc;
 
   buildInputs = [ zlib openssl libedit pkgconfig pam ]
