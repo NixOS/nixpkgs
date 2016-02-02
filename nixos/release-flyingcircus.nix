@@ -7,11 +7,15 @@
 , supportedSystems ? [ "x86_64-linux" ] # no i686-linux
 }:
 
+with import ../lib;
+
 let
 
   nixpkgsSrc = nixpkgs; # urgh
 
   pkgs = import ./.. {};
+
+  system = "x86_64-linux";
 
   lib = pkgs.lib;
 
@@ -55,7 +59,7 @@ in rec {
   # A bootable Flying Circus disk image (raw) that can be extracted onto
   # Ceph RBD volume.
   flyingcircus_vm_image =
-    with import <nixpkgs> { system = "x86_64-linux"; };
+    with import <nixpkgs> { inherit system; };
     with lib;
     let
       config = (import lib/eval-config.nix {
@@ -81,7 +85,11 @@ in rec {
         '');
 
   nixos = {
-    inherit (nixos') channel manual iso_minimal dummy;
+    inherit (nixos')
+      channel
+      manual
+      iso_minimal
+      dummy;
     tests = {
       inherit (nixos'.tests)
         containers
@@ -91,14 +99,31 @@ in rec {
         misc
         nat
         nfs3
+        nfs4
+        mysql
+        networking
+        postgresql
         openssh
         proxy
         simple;
+
+# Our custom tests dont work, yet. Our environment specifies too much
+# configuration that collides with the testing infrastructure. Need to
+# think about that.
+#
+#      flyingcircus = {
+#            users = hydraJob
+#              (import tests/fc-users.nix { inherit system; });
+#      };
       installer = {
         inherit (nixos'.tests.installer)
           lvm
           separateBoot
           simple;
+      };
+      latestKernel = {
+        inherit (nixos'.tests.latestKernel)
+          login;
       };
     };
   };
@@ -141,7 +166,7 @@ in rec {
       let all = x: map (system: x.${system}) supportedSystems; in
       [ nixpkgs.tarball
         (all nixpkgs.jdk)
- 	flyingcircus_vm_image
+ 	      flyingcircus_vm_image
       ]
       ++ lib.collect lib.isDerivation nixos;
   });
