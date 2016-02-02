@@ -72,6 +72,11 @@ mkdir -p /run
 mount -t tmpfs -o "mode=0755,size=@runSize@" tmpfs /run
 
 
+# Initialise /etc.
+echo 'root:x:0:0:root:/root:${cfg.shell}' > /etc/passwd
+echo 'passwd: files' > /etc/nsswitch.conf
+
+
 # Process the kernel command line.
 export stage2Init=/init
 for o in $(cat /proc/cmdline); do
@@ -148,10 +153,6 @@ mkdir -p /dev/.mdadm
 systemd-udevd --daemon
 udevadm trigger --action=add
 udevadm settle
-
-
-# Additional devices initialization.
-@postEarlyDeviceCommands@
 
 
 # Load boot-time keymap before any LVM/LUKS initialization
