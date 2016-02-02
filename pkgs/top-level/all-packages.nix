@@ -7029,6 +7029,8 @@ let
 
   pangox_compat = callPackage ../development/libraries/pangox-compat { };
 
+  gdata-sharp = callPackage ../development/libraries/gdata-sharp { };
+
   gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
 
   gnome-sharp = callPackage ../development/libraries/gnome-sharp {};
