@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl, nix, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, bzip2, perl, nix, perlPackages }:
 
 let rev = "7e09caa2a7a435aeb2cd5446aa590d6f9ae1699d"; in
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       mkdir -p $out/bin
       cat > $out/bin/nix-serve <<EOF
       #! ${stdenv.shell}
-      PERL5LIB=$PERL5LIB exec ${perlPackages.Starman}/bin/starman $out/libexec/nix-serve/nix-serve.psgi "\$@"
+      PATH="\''${PATH}\''${PATH:+:}${bzip2.bin}/bin" PERL5LIB=$PERL5LIB exec ${perlPackages.Starman}/bin/starman $out/libexec/nix-serve/nix-serve.psgi "\$@"
       EOF
       chmod +x $out/bin/nix-serve
     '';
