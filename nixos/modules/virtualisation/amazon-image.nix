@@ -8,7 +8,28 @@
 
 with lib;
 
-let cfg = config.ec2; in
+let
+
+  cfg = config.ec2;
+
+  udhcpcScript = pkgs.writeScript "udhcp-script"
+    ''
+      #! /bin/sh
+      if [ "$1" = bound ]; then
+        ip address add "$ip/$mask" dev "$interface"
+        if [ -n "$router" ]; then
+          ip route add default via "$router" dev "$interface"
+        fi
+        if [ -n "$dns" ]; then
+          rm -f /etc/resolv.conf
+          for i in $dns; do
+            echo "nameserver $dns" >> /etc/resolv.conf
+          done
+        fi
+      fi
+    '';
+
+in
 
 {
   imports = [ ../profiles/headless.nix ./ec2-data.nix ./amazon-grow-partition.nix ./amazon-init.nix ];
@@ -20,8 +41,10 @@ let cfg = config.ec2; in
       autoResize = true;
     };
 
-    boot.initrd.kernelModules = [ "xen-blkfront" ];
-    boot.kernelModules = [ "xen-netfront" ];
+    boot.initrd.kernelModules =
+      [ "xen-blkfront" "xen-netfront"
+        "af_packet" # <- required by udhcpc
+      ];
     boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0" ];
 
     # Prevent the nouveau kernel module from being loaded, as it
@@ -55,6 +78,18 @@ let cfg = config.ec2; in
     # Nix operations.
     boot.initrd.postMountCommands =
       ''
+        metaDir=$targetRoot/etc/ec2-metadata
+        mkdir -m 0755 $targetRoot/etc
+        mkdir -m 0700 -p "$metaDir"
+
+        echo "getting EC2 instance metadata..."
+        ip link set eth0 up
+        udhcpc --interface eth0 --quit --now --script ${udhcpcScript}
+
+        if ! [ -e "$metaDir/ami-manifest-path" ]; then
+          wget -q -O "$metaDir/ami-manifest-path" http://169.254.169.254/1.0/meta-data/ami-manifest-path
+        fi
+
         diskNr=0
         diskForUnionfs=
         for device in /dev/xvd[abcde]*; do
@@ -85,7 +120,7 @@ let cfg = config.ec2; in
             mkdir -m 1777 -p $targetRoot/$diskForUnionfs/root/tmp $targetRoot/tmp
             mount --bind $targetRoot/$diskForUnionfs/root/tmp $targetRoot/tmp
 
-            if [ ! -e $targetRoot/.ebs ]; then
+            if [ "$(cat "$metaDir/ami-manifest-path")" != "(unknown)" ]; then
                 mkdir -m 755 -p $targetRoot/$diskForUnionfs/root/var $targetRoot/var
                 mount --bind $targetRoot/$diskForUnionfs/root/var $targetRoot/var
 
