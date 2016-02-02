@@ -1,6 +1,6 @@
 {stdenv, fetchurl
   , freeglut, ghostscriptX, imagemagick, fftw 
-  , boehmgc, mesa, ncurses, readline, gsl, libsigsegv
+  , boehmgc, mesa_glu, mesa_noglu, ncurses, readline, gsl, libsigsegv
   , python, zlib, perl, texLive, texinfo, xz
 }:
 let
@@ -15,7 +15,7 @@ let
   };
   buildInputs = [
    freeglut ghostscriptX imagemagick fftw 
-   boehmgc mesa ncurses readline gsl libsigsegv
+   boehmgc mesa_glu mesa_noglu mesa_noglu.osmesa ncurses readline gsl libsigsegv
    python zlib perl texLive texinfo xz
   ];
 in
@@ -33,8 +33,11 @@ stdenv.mkDerivation {
     sed -e 's@epswrite@eps2write@g' -i runlabel.in
     xz -d < ${texinfo.src} | tar --wildcards -x texinfo-'*'/doc/texinfo.tex
     cp texinfo-*/doc/texinfo.tex doc/
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${boehmgc}/include/gc"
+    rm *.tar.gz
+    configureFlags="$configureFlags --with-latex=$out/share/texmf/tex/latex --with-context=$out/share/texmf/tex/context/third"
   '';
+
+  NIX_CFLAGS_COMPILE = [ "-I${boehmgc}/include/gc" ];
 
   postInstall = ''
     mv -v "$out/share/info/asymptote/"*.info $out/share/info/
