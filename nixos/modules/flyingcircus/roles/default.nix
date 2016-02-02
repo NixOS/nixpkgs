@@ -6,10 +6,11 @@
     [
      ./compat.nix
      ./dovecot.nix
+     ./generic.nix
      ./haproxy.nix
      ./mysql.nix
      ./nginx.nix
-     ./postgresql.nix
+     ./postgresql93.nix
      ./varnish.nix
     ];
 
