@@ -143,7 +143,7 @@ let
 
         ${optionalString includeModules "$out/bin/python ./setup.py build_ext"}
 
-        ${optionalString stdenv.isLinux ''rm "$out"/lib/python*/plat-linux2/regen # refers to glibc.dev''}
+        rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
       '';
 
     passthru = rec {
