@@ -12,7 +12,7 @@ with lib;
   ];
 
   nix.binaryCaches = [
-    https://cache.nixosorg
+    https://cache.nixos.org
     https://hydra.flyingcircus.io
   ];
 
