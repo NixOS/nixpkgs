@@ -79,11 +79,7 @@ let cfg = config.ec2; in
                 diskNr=$((diskNr + 1))
                 echo "mounting $device on $mp..."
                 if mountFS "$device" "$mp" "" ext3; then
-                    if [ -z "$diskForUnionfs" -a \
-                         $(lsblk -bno size $device) -gt $(lsblk -bno size /dev/xvda1)
-                       ]; then
-                       diskForUnionfs="$mp";
-                    fi
+                    if [ -z "$diskForUnionfs" ]; then diskForUnionfs="$mp"; fi
                 fi
             else
                 echo "skipping unknown device type $device"
