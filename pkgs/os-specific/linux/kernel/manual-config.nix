@@ -129,6 +129,9 @@ let
         mkdir -p $out/dtbs
         cp $buildRoot/arch/$karch/boot/dts/*.dtb $out/dtbs
       '' else "") + (if isModular then ''
+        if [ -z "$dontStrip" ]; then
+          installFlagsArray+=("INSTALL_MOD_STRIP=1")
+        fi
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
         unlink $out/lib/modules/${modDirVersion}/build
@@ -190,9 +193,6 @@ let
       # !!! This leaves references to gcc in $dev
       # that we might be able to avoid
       postFixup = if isModular then ''
-        if [ -z "$dontStrip" ]; then
-            find $out -name "*.ko" -print0 | xargs -0 -r ''${crossConfig+$crossConfig-}strip -S
-        fi
         # !!! Should this be part of stdenv? Also patchELF should take an argument...
         prefix=$dev
         patchELF
