@@ -16,13 +16,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-module-dir=${mesa_noglu.driverLink}/lib/vdpau" ];
 
-  installFlags = [ "DESTDIR=$(out)" ];
-
-  postInstall = ''
-    cp -r $out/${mesa_noglu.driverLink}/* $out
-    cp -r $out/$out/* $out
-    rm -rf $out/run $out/$(echo "$out" | cut -d "/" -f2)
-  '';
+  installFlags = [ "moduledir=$(out)/lib/vdpau" ];
 
   meta = with stdenv.lib; {
     homepage = http://people.freedesktop.org/~aplattner/vdpau/;
