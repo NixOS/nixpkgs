@@ -22,9 +22,11 @@ in
 stdenv.mkDerivation {
   inherit (s) name version;
   inherit buildInputs;
+
   src = fetchurl {
     inherit (s) url sha256;
   };
+
   preConfigure = ''
     export HOME="$PWD"
     patchShebangs . 
@@ -33,12 +35,16 @@ stdenv.mkDerivation {
     cp texinfo-*/doc/texinfo.tex doc/
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${boehmgc}/include/gc"
   '';
+
   postInstall = ''
     mv -v "$out/share/info/asymptote/"*.info $out/share/info/
     sed -i -e 's|(asymptote/asymptote)|(asymptote)|' $out/share/info/asymptote.info
     rmdir $out/share/info/asymptote
     rm $out/share/info/dir
   '';
+
+  enableParallelBuilding = true;
+
   meta = {
     inherit (s) version;
     description =  "A tool for programming graphics intended to replace Metapost";
