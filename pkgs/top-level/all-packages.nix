@@ -8171,6 +8171,8 @@ let
     qt = qt4;
   };
 
+  mono-addins = callPackage ../development/libraries/mono-addins { };
+
   movit = callPackage ../development/libraries/movit { };
 
   mosquitto = callPackage ../servers/mqtt/mosquitto { };
