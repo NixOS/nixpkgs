@@ -16,7 +16,7 @@ runCommand "fc-cache"
     <?xml version='1.0'?>
     <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
     <fontconfig>
-      <include>${fontconfig}/etc/fonts/fonts.conf</include>
+      <include>${fontconfig.out}/etc/fonts/fonts.conf</include>
       <cachedir>$out</cachedir>
     EOF
     cat "$fontDirsPath" >> fonts.conf
