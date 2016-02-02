@@ -8,28 +8,7 @@
 
 with lib;
 
-let
-
-  cfg = config.ec2;
-
-  udhcpcScript = pkgs.writeScript "udhcp-script"
-    ''
-      #! /bin/sh
-      if [ "$1" = bound ]; then
-        ip address add "$ip/$mask" dev "$interface"
-        if [ -n "$router" ]; then
-          ip route add default via "$router" dev "$interface"
-        fi
-        if [ -n "$dns" ]; then
-          rm -f /etc/resolv.conf
-          for i in $dns; do
-            echo "nameserver $dns" >> /etc/resolv.conf
-          done
-        fi
-      fi
-    '';
-
-in
+let cfg = config.ec2; in
 
 {
   imports = [ ../profiles/headless.nix ./ec2-data.nix ./amazon-grow-partition.nix ./amazon-init.nix ];
@@ -41,10 +20,7 @@ in
       autoResize = true;
     };
 
-    boot.initrd.kernelModules =
-      [ "xen-blkfront" "xen-netfront"
-        "af_packet" # <- required by udhcpc
-      ];
+    boot.initrd.kernelModules = [ "xen-blkfront" "xen-netfront" ];
     boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0" ];
 
     # Prevent the nouveau kernel module from being loaded, as it
@@ -67,6 +43,8 @@ in
         kill -9 -1
       '';
 
+    boot.initrd.network.enable = true;
+
     # Mount all formatted ephemeral disks and activate all swap devices.
     # We cannot do this with the ‘fileSystems’ and ‘swapDevices’ options
     # because the set of devices is dependent on the instance type
@@ -79,12 +57,10 @@ in
     boot.initrd.postMountCommands =
       ''
         metaDir=$targetRoot/etc/ec2-metadata
-        mkdir -m 0755 $targetRoot/etc
+        mkdir -m 0755 -p $targetRoot/etc
         mkdir -m 0700 -p "$metaDir"
 
         echo "getting EC2 instance metadata..."
-        ip link set eth0 up
-        udhcpc --interface eth0 --quit --now --script ${udhcpcScript}
 
         if ! [ -e "$metaDir/ami-manifest-path" ]; then
           wget -q -O "$metaDir/ami-manifest-path" http://169.254.169.254/1.0/meta-data/ami-manifest-path
