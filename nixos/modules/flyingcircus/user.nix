@@ -24,7 +24,7 @@ let
           createHome = true;
           description = user.name;
           group = get_primary_group user;
-          hashedPassword = user.password;
+          hashedPassword = lib.removePrefix "{CRYPT}" user.password;
           home = user.home_directory;
           shell = "/run/current-system/sw" + user.login_shell;
           uid = user.id;
@@ -55,17 +55,16 @@ let
     then
       lib.listToAttrs
         (map
-          (perm: { name = perm; value = { members = [user.uid]; }; })
+          # making members a scalar here so that zipAttrs automatically joins
+          # them but doesn't create a list of lists.
+          (perm: { name = perm; value = { members = user.uid; }; })
           (builtins.getAttr current_rg user.permissions))
     else {};
 
   # user list from directory -> { groupname.members = [a b c], ...}
   get_group_memberships = users:
-    if users == []
-    then {}
-    else
-      get_group_memberships_for_user (builtins.head users) //
-      get_group_memberships (builtins.tail users);
+    lib.mapAttrs (name: groupdata: lib.zipAttrs groupdata)
+      (lib.zipAttrs (map get_group_memberships_for_user users));
 
   permissions =
     if builtins.pathExists config.fcio.permissions_path
@@ -141,5 +140,31 @@ in
         // admins_group
         // get_group_memberships userdata;
     };
+
+    security.sudo.extraConfig = ''
+      Defaults set_home,!authenticate,!mail_no_user,env_keep+=SSH_AUTH_SOCK
+
+      ## Cmnd alias specification
+      Cmnd_Alias  NGINX = /etc/init.d/nginx
+      Cmnd_Alias  LOCALCONFIG = /usr/local/sbin/localconfig, \
+            /usr/local/sbin/localconfig -v
+      Cmnd_Alias  REBOOT = /sbin/reboot, \
+            /sbin/shutdown -r now, \
+            /sbin/shutdown -h now
+
+      ## User privilege specification
+      root ALL=(ALL) ALL
+
+      %wheel ALL=(ALL) PASSWD: ALL
+      %sudo-srv ALL=(%service:service) ALL
+      %sudo-srv ALL=(root) NGINX, LOCALCONFIG, REBOOT
+      %service ALL=(root) NGINX, LOCALCONFIG
+
+
+      # Allow unrestricted access to super admins
+      %admins ALL=(ALL) PASSWD: ALL
+    '';
+
   };
+
 }
