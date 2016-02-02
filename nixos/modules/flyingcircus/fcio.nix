@@ -12,8 +12,13 @@ with lib;
   boot.blacklistedKernelModules = [ "bochs_drm" ];
   boot.initrd.supportedFilesystems = [ "xfs" ];
   boot.kernelParams = [
+    # Crash management
     "panic=1"
+    # panic_on_fail is a NixOSism managed by stage-1-init.sh
     "boot.panic_on_fail"
+    "systemd.crash_reboot=yes"
+
+    # Output management
     "console=ttyS0"
     "systemd.journald.forward_to_console=yes"
     "nosetmode"
@@ -53,5 +58,19 @@ with lib;
   networking.firewall.rejectPackets = true;
 
   systemd.ctrl-alt-del = "poweroff.target";
+  systemd.extraConfig = ''
+    RuntimeWatchdogSec=60
+  '';
+
+  systemd.services.serial-console-liveness = {
+    description = "Serial console liveness marker";
+    wantedBy = [ "serial-getty@ttyS0.service" ];
+    script = ''
+      while true; do
+          echo "$(date) -- SERIAL CONSOLE IS LIVE --" > /dev/ttyS0
+          sleep 300;
+      done
+      '';
+  };
 
 }
