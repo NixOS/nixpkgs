@@ -1,9 +1,9 @@
 { callPackage, fetchurl }:
 
 callPackage ./generic.nix (rec {
-  version = "1.3";
+  version = "1.3.1";
   src = fetchurl {
-    url = "http://nixos.org/releases/nixops/nixops/nixops-${version}.tar.bz2";
-    sha256 = "d80b0fe3bb31bb84a8545f9ea804ec8137172c8df44f03326ed7639e5a4bad55";
+    url = "http://nixos.org/releases/nixops/nixops-${version}/nixops-${version}.tar.bz2";
+    sha256 = "04j8s0gg1aj3wmj1bs7dwscfmlzk2xpwfw9rk4xzxwxw1y0j64nd";
   };
 })

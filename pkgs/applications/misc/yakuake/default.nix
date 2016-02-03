@@ -3,23 +3,21 @@
 
 let
   pname = "yakuake";
-  version = "2.9.8";
+  version = "2.9.9";
 in
 stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.bz2";
-    sha256 = "0a9x3nmala8nl4xl3h7rcd76f5j7b7r74jc5cfbayc6jgkjdynd3";
+    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
+    sha256 = "0e0e4994c568f8091c9424e4aab35645436a9ff341c00b1cd1eab0ada0bf61ce";
   };
 
   buildInputs = [ kdelibs ];
 
   nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig ];
 
-  patchPhase = ''
-    substituteInPlace app/terminal.cpp --replace \"konsolepart\" "\"${konsole}/lib/kde4/libkonsolepart.so\""
-  '';
+  propagatedUserEnvPkgs = [ konsole ];
 
   meta = {
     homepage = http://yakuake.kde.org;

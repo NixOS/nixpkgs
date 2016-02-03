@@ -5,14 +5,14 @@ with import ./lib.nix { inherit pkgs; };
 self: super: {
 
   # Some packages need a non-core version of Cabal.
-  Cabal_1_18_1_6 = dontCheck super.Cabal_1_18_1_6;
-  Cabal_1_20_0_3 = dontCheck super.Cabal_1_20_0_3;
+  Cabal_1_18_1_7 = dontCheck super.Cabal_1_18_1_7;
+  Cabal_1_20_0_4 = dontCheck super.Cabal_1_20_0_4;
   Cabal_1_22_4_0 = dontCheck super.Cabal_1_22_4_0;
   cabal-install = (dontCheck super.cabal-install).overrideScope (self: super: { Cabal = self.Cabal_1_22_4_0; });
-  cabal-install_1_18_1_0 = (dontCheck super.cabal-install_1_18_1_0).overrideScope (self: super: { Cabal = self.Cabal_1_18_1_6; });
+  cabal-install_1_18_1_0 = (dontCheck super.cabal-install_1_18_1_0).overrideScope (self: super: { Cabal = self.Cabal_1_18_1_7; });
 
   # Link statically to avoid runtime dependency on GHC.
-  jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = dontJailbreak self.Cabal_1_20_0_3; };
+  jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = dontJailbreak self.Cabal_1_20_0_4; };
 
   # Apply NixOS-specific patches.
   ghc-paths = appendPatch super.ghc-paths ./patches/ghc-paths-nix.patch;
@@ -21,13 +21,14 @@ self: super: {
   clock = dontCheck super.clock;
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
-  hspec_2_1_10 = super.hspec_2_1_10.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_2 = super.hspec_2_1_2.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_3 = super.hspec_2_1_3.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_4 = super.hspec_2_1_4.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_5 = super.hspec_2_1_5.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_6 = super.hspec_2_1_6.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_7 = super.hspec_2_1_7.override { stringbuilder = dontCheck super.stringbuilder; };
+  hspec_2_1_10 = super.hspec_2_1_10.override { stringbuilder = dontCheck super.stringbuilder; };
+  hspec_2_2_1 = super.hspec_2_2_1.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec-expectations_0_6_1_1 = dontCheck super.hspec-expectations_0_6_1_1;
   hspec-expectations_0_6_1 = dontCheck super.hspec-expectations_0_6_1;
   hspec-expectations_0_7_1 = dontCheck super.hspec-expectations_0_7_1;

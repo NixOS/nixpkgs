@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gettext }:
 
-# The last release (0.5.2) is more than 2 years old and lacks features like -D,
-# limiting its usefulness. Upstream appears comatose if not dead.
-let version = "2014-07-03"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "duff-${version}";
+  # The last release (0.5.2) is more than 2 years old and lacks features like -D,
+  # limiting its usefulness. Upstream appears comatose if not dead.
+  version = "2014-07-03";
 
   src = fetchFromGitHub {
     sha256 = "1k2dx38pjzc5d624vw1cs5ipj9fprsm5vqv55agksc29m63lswnx";
@@ -28,7 +28,6 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Quickly find duplicate files";
     longDescription = ''
       Duff is a Unix command-line utility for quickly finding duplicates in

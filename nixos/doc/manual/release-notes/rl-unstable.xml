@@ -145,6 +145,41 @@ nginx.override {
     from the ELPA, MELPA, and MELPA Stable repositories.
     </para>
   </listitem>
+
+  <listitem>
+    <para>Data directory for Postfix MTA server is moved from
+    <filename>/var/postfix</filename> to <filename>/var/lib/postfix</filename>.
+    Old configurations are migrated automatically. <literal>service.postfix</literal>
+    module has also received many improvements, such as correct directories' access
+    rights, new <literal>aliasFiles</literal> and <literal>mapFiles</literal>
+    options and more.</para>
+  </listitem>
+
+  <listitem>
+    <para>CUPS, installed by <literal>services.printing</literal> module, now
+    has its data directory in <filename>/var/lib/cups</filename>. Old
+    configurations from <filename>/etc/cups</filename> are moved there
+    automatically, but there might be problems. Also configuration options
+    <literal>services.printing.cupsdConf</literal> and
+    <literal>services.printing.cupsdFilesConf</literal> were removed
+    because they had been allowing one to override configuration variables
+    required for CUPS to work at all on NixOS. For most use cases,
+    <literal>services.printing.extraConf</literal> and new option
+    <literal>services.printing.extraFilesConf</literal> should be enough;
+    if you encounter a situation when they are not, please file a bug.</para>
+
+    <para>There are also Gutenprint improvements; in particular, a new option
+    <literal>services.printing.gutenprint</literal> is added to enable automatic
+    updating of Gutenprint PPMs; it's greatly recommended to enable it instead
+    of adding <literal>gutenprint</literal> to the <literal>drivers</literal> list.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para><literal>services.xserver.vaapiDrivers</literal> has been removed. Use
+    <literal>services.hardware.opengl.extraPackages{,32}</literal> instead. You can
+    also specify VDPAU drivers there.</para>
+  </listitem>
 </itemizedlist>
 
 
@@ -156,6 +191,11 @@ nginx.override {
     it newly also checks for <literal>$NIX_AUTO_RUN</literal>
     which causes it to directly run the missing commands via
     <command>nix-shell</command> (without installing anything). </para>
+  </listitem>
+
+  <listitem>
+    <para><literal>ejabberd</literal> module is brought back and now works on
+    NixOS.</para>
   </listitem>
 
 </itemizedlist></para>

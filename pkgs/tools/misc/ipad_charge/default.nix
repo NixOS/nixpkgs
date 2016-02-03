@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, libusb1 }:
 
-let version = "2015-02-03"; in
 stdenv.mkDerivation rec {
   name = "ipad_charge-${version}";
+  version = "2015-02-03";
 
   src = fetchFromGitHub {
     sha256 = "0f40hqx1dbqpwrhyf42h5982jwqv8j5zp5hwwakz6600hyqvnnz7";
@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     inherit (src.meta) homepage;
     description = "Apple device USB charging utility for Linux";
     longDescription = ''

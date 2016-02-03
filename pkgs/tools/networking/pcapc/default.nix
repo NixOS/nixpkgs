@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, libpcap }:
 
-let version = "2015-03-06"; in
 stdenv.mkDerivation rec {
   name = "pcapc-${version}";
+  version = "2015-03-06";
 
   src = fetchFromGitHub {
     sha256 = "02j45wmxy8qcji0giwx3364pbqb6849s8y0xfvzx40g98mssl027";
@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     inherit (src.meta) homepage;
     description = "Compile libpcap filter expressions into BPF opcodes";
     license = licenses.gpl3;

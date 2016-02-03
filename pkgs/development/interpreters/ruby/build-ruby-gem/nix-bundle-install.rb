@@ -107,7 +107,6 @@ if spec.executables.any?
   spec.executables.each do |exe|
     wrapper = File.join(bin_dir, exe)
     File.open(wrapper, "w") do |f|
-      stub = generate_stub(spec.name, exe)
       f.write(<<-EOF)
 #!#{ruby}
 #

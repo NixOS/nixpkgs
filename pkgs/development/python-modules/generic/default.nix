@@ -112,7 +112,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
   postFixup = attrs.postFixup or ''
     wrapPythonPrograms
 
-    # check if we have two packagegs with the same name in closure and fail
+    # check if we have two packages with the same name in closure and fail
     # this shouldn't happen, something went wrong with dependencies specs
     ${python.interpreter} ${./catch_conflicts.py}
   '';
@@ -135,7 +135,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
   } // meta // {
     # add extra maintainer(s) to every package
     maintainers = (meta.maintainers or []) ++ [ chaoflow iElectric ];
-    # a marker for release utilies to discover python packages
+    # a marker for release utilities to discover python packages
     isBuildPythonPackage = python.meta.platforms;
   };
 })

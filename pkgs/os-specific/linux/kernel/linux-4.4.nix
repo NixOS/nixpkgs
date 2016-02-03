@@ -10,6 +10,8 @@ import ./generic.nix (args // rec {
     sha256 = "401d7c8fef594999a460d10c72c5a94e9c2e1022f16795ec51746b0d165418b2";
   };
 
+  kernelPatches = args.kernelPatches ++ [ { name = "cve-2016-0728"; patch = ./cve-2016-0728.patch; } ];
+
   features.iwlwifi = true;
   features.efiBootStub = true;
   features.needsCifsUtils = true;

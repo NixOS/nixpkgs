@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert }:
+{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc }:
 
 let
   llvm     = callPackage ./llvm.nix { };
@@ -14,10 +14,12 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib
-    ];
+    ]
+    ++ (stdenv.lib.optionals stdenv.isDarwin [ Foundation libobjc ]);
+
   propagatedBuildInputs = [glib];
 
-  NIX_LDFLAGS = "-lgcc_s" ;
+  NIX_LDFLAGS = if stdenv.isDarwin then "" else "-lgcc_s" ;
 
   # To overcome the bug https://bugzilla.novell.com/show_bug.cgi?id=644723
   dontDisableStatic = true;
@@ -68,7 +70,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://mono-project.com/;
     description = "Cross platform, open source .NET development framework";
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; darwin ++ linux;
     maintainers = with stdenv.lib.maintainers; [ viric thoughtpolice obadz ];
     license = stdenv.lib.licenses.free; # Combination of LGPL/X11/GPL ?
   };

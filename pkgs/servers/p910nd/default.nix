@@ -1,10 +1,8 @@
 { stdenv, fetchurl }:
 
-let
-  version = "0.97";
+stdenv.mkDerivation rec {
   name = "p910nd-${version}";
-in stdenv.mkDerivation {
-  inherit name;
+  version = "0.97";
 
   src = fetchurl {
     sha256 = "0vy2qf386dif1nqznmy3j953mq7c4lk6j2hgyzkbmfi4msiq1jaa";
@@ -27,7 +25,6 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Small printer daemon passing jobs directly to the printer";
     longDescription = ''
       p910nd is a small printer daemon intended for diskless platforms that

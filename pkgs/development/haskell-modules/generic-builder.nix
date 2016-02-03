@@ -3,6 +3,7 @@
 }:
 
 { pname
+, dontStrip ? (ghc.isGhcjs or false)
 , version, revision ? null
 , sha256 ? null
 , src ? fetchurl { url = "mirror://hackage/${pname}-${version}.tar.gz"; inherit sha256; }
@@ -299,7 +300,6 @@ stdenv.mkDerivation ({
 // optionalAttrs (configureFlags != []) { inherit configureFlags; }
 // optionalAttrs (patches != [])        { inherit patches; }
 // optionalAttrs (patchPhase != "")     { inherit patchPhase; }
-// optionalAttrs (postPatch != "")      { inherit postPatch; }
 // optionalAttrs (preConfigure != "")   { inherit preConfigure; }
 // optionalAttrs (postConfigure != "")  { inherit postConfigure; }
 // optionalAttrs (preBuild != "")       { inherit preBuild; }
@@ -313,5 +313,6 @@ stdenv.mkDerivation ({
 // optionalAttrs (postInstall != "")    { inherit postInstall; }
 // optionalAttrs (preFixup != "")       { inherit preFixup; }
 // optionalAttrs (postFixup != "")      { inherit postFixup; }
+// optionalAttrs (dontStrip)            { inherit dontStrip; }
 // optionalAttrs (stdenv.isLinux)       { LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
 )

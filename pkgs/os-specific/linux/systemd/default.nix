@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, gperf, libcap, kmod
 , zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
-, glib, kbd, libxslt, coreutils, libgcrypt
+, glib, kbd, libxslt, coreutils, libgcrypt, libapparmor, audit, lz4
 , kexectools, libmicrohttpd, linuxHeaders, libseccomp
 , autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , enableKDbus ? false
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt
-      libmicrohttpd kexectools libseccomp libffi
+      libmicrohttpd kexectools libseccomp libffi audit lz4 libapparmor
       /* FIXME: we may be able to prevent the following dependencies
          by generating an autoconf'd tarball, but that's probably not
          worth it. */
@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
       "--enable-compat-libs" # get rid of this eventually
       "--disable-tests"
 
+      "--enable-lz4"
       "--enable-hostnamed"
       "--enable-networkd"
       "--disable-sysusers"

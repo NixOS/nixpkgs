@@ -2,9 +2,9 @@
 , libnetfilter_conntrack, libnl, libpcap, libsodium, liburcu, ncurses, perl
 , pkgconfig, zlib }:
 
-let version = "0.6.0"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "netsniff-ng-${version}";
+  version = "0.6.0";
 
   # Upstream recommends and supports git
   src = fetchFromGitHub rec {
@@ -41,7 +41,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Swiss army knife for daily Linux network plumbing";
     longDescription = ''
       netsniff-ng is a free Linux networking toolkit. Its gain of performance

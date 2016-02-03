@@ -127,7 +127,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      environment.SSL_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
+      environment.SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
       serviceConfig = {
         # Uncomment this if too many problems occur:
         # Type = "forking";

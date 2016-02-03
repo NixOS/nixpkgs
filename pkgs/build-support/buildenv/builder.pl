@@ -5,6 +5,7 @@ use Cwd 'abs_path';
 use IO::Handle;
 use File::Path;
 use File::Basename;
+use File::Compare;
 use JSON::PP;
 
 STDOUT->autoflush(1);
@@ -38,7 +39,7 @@ for my $p (@pathsToLink) {
 sub findFiles;
 
 sub findFilesInDir {
-    my ($relName, $target, $ignoreCollisions, $priority) = @_;
+    my ($relName, $target, $ignoreCollisions, $checkCollisionContents, $priority) = @_;
 
     opendir DIR, "$target" or die "cannot open `$target': $!";
     my @names = readdir DIR or die;
@@ -46,12 +47,28 @@ sub findFilesInDir {
 
     foreach my $name (@names) {
         next if $name eq "." || $name eq "..";
-        findFiles("$relName/$name", "$target/$name", $name, $ignoreCollisions, $priority);
+        findFiles("$relName/$name", "$target/$name", $name, $ignoreCollisions, $checkCollisionContents, $priority);
     }
 }
 
+sub checkCollision {
+    my ($path1, $path2) = @_;
+
+    my $stat1 = (stat($path1))[2];
+    my $stat2 = (stat($path2))[2];
+
+    if ($stat1 != $stat2) {
+        warn "different permissions in `$path1' and `$path2': "
+           . sprintf("%04o", $stat1 & 07777) . " <-> "
+           . sprintf("%04o", $stat2 & 07777);
+        return 0;
+    }
+
+    return compare($path1, $path2) == 0;
+}
+
 sub findFiles {
-    my ($relName, $target, $baseName, $ignoreCollisions, $priority) = @_;
+    my ($relName, $target, $baseName, $ignoreCollisions, $checkCollisionContents, $priority) = @_;
 
     # Urgh, hacky...
     return if
@@ -82,13 +99,15 @@ sub findFiles {
         if ($ignoreCollisions) {
             warn "collision between `$target' and `$oldTarget'\n" if $ignoreCollisions == 1;
             return;
+        } elsif ($checkCollisionContents && checkCollision($oldTarget, $target)) {
+            return;
         } else {
             die "collision between `$target' and `$oldTarget'\n";
         }
     }
 
-    findFilesInDir($relName, $oldTarget, $ignoreCollisions, $oldPriority) unless $oldTarget eq "";
-    findFilesInDir($relName, $target, $ignoreCollisions, $priority);
+    findFilesInDir($relName, $oldTarget, $ignoreCollisions, $checkCollisionContents, $oldPriority) unless $oldTarget eq "";
+    findFilesInDir($relName, $target, $ignoreCollisions, $checkCollisionContents, $priority);
 
     $symlinks{$relName} = ["", $priority]; # denotes directory
 }
@@ -98,12 +117,12 @@ my %done;
 my %postponed;
 
 sub addPkg {
-    my ($pkgDir, $ignoreCollisions, $priority)  = @_;
+    my ($pkgDir, $ignoreCollisions, $checkCollisionContents, $priority)  = @_;
 
     return if (defined $done{$pkgDir});
     $done{$pkgDir} = 1;
 
-    findFiles("", $pkgDir, "", $ignoreCollisions, $priority);
+    findFiles("", $pkgDir, "", $ignoreCollisions, $checkCollisionContents, $priority);
 
     my $propagatedFN = "$pkgDir/nix-support/propagated-user-env-packages";
     if (-e $propagatedFN) {
@@ -132,7 +151,11 @@ if (exists $ENV{"pkgsPath"}) {
 # user.
 for my $pkg (@{decode_json $pkgs}) {
     for my $path (@{$pkg->{paths}}) {
-        addPkg($path, $ENV{"ignoreCollisions"} eq "1", $pkg->{priority}) if -e $path;
+        addPkg($path,
+               $ENV{"ignoreCollisions"} eq "1",
+               $ENV{"checkCollisionContents"} eq "1",
+               $pkg->{priority})
+           if -e $path;
     }
 }
 
@@ -146,7 +169,7 @@ while (scalar(keys %postponed) > 0) {
     my @pkgDirs = keys %postponed;
     %postponed = ();
     foreach my $pkgDir (sort @pkgDirs) {
-        addPkg($pkgDir, 2, $priorityCounter++);
+        addPkg($pkgDir, 2, $ENV{"checkCollisionContents"} eq "1", $priorityCounter++);
     }
 }
 

@@ -1,7 +1,9 @@
 { stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "rt-4.2.12";
+  name = "rt-${version}";
+
+  version = "4.2.12";
 
   src = fetchurl {
     url = "https://download.bestpractical.com/pub/rt/release/${name}.tar.gz";

@@ -1,54 +1,43 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libusb1, udev
-, enableGUI ? true, qt4 ? null
-}:
+{ stdenv, fetchFromGitHub, zlib, libusb1, cmake, qt5
+, enableGUI ? false }:
+
+let version = "d0526a3"; in
+let verName = "1.4.2pre"; in
 
 stdenv.mkDerivation rec {
-  version = "1.4.1";
-  name = "heimdall-${version}";
+  name = "heimdall-${verName}";
 
   src = fetchFromGitHub {
     owner  = "Benjamin-Dobell";
     repo   = "Heimdall";
-    rev    = "v${version}";
-    sha256 = "1b7xpamwvw5r2d9yf73f0axv35vg8zaz1345xs3lmsr105phnnp4";
+    rev    = "${version}";
+    sha256 = "1y8gvqprajlml1z6mjcrlj54m9xsr8691nqagakkkis7hs1lgzmp";
   };
 
-  buildInputs =
-    [ pkgconfig libusb1 udev ]
-    ++ stdenv.lib.optional enableGUI qt4 ;
-
-  makeFlags = "udevrulesdir=$(out)/lib/udev/rules.d";
+  buildInputs = [ zlib libusb1 cmake ];
+  patchPhase = stdenv.lib.optional (!enableGUI) ''
+    sed -i '/heimdall-frontend/d' CMakeLists.txt
+  '';
+  enableParallelBuilding = true;
+  cmakeFlags = ["-DQt5Widgets_DIR=${qt5.qtbase}/lib/cmake/Qt5Widgets"
+                "-DQt5Gui_DIR=${qt5.qtbase}/lib/cmake/Qt5Gui"
+                "-DQt5Core_DIR=${qt5.qtbase}/lib/cmake/Qt5Core"
+                "-DBUILD_TYPE=Release"];
 
   preConfigure =
     ''
-      pushd libpit
-      ./configure
-      make
-      popd
-
-      cd heimdall
-      substituteInPlace Makefile.in --replace sudo true
-
-      # Give ownership of the Galaxy S USB device to the logged in
-      # user.
-      substituteInPlace 60-heimdall-galaxy-s.rules --replace 'MODE="0666"' 'TAG+="udev-acl"'
+      # Give ownership of the Galaxy S USB device to the logged in user.
+      substituteInPlace heimdall/60-heimdall.rules --replace 'MODE="0666"' 'TAG+="uaccess"'
     '';
 
-  postBuild = stdenv.lib.optionalString enableGUI
+  installPhase =
     ''
-      pushd ../heimdall-frontend
-      substituteInPlace Source/mainwindow.cpp --replace /usr/bin $out/bin
-      qmake heimdall-frontend.pro OUTPUTDIR=$out/bin
-      make
-      popd
-    '';
-
-  postInstall =
-    ''
-      mkdir -p $out/share/doc/heimdall
-      cp ../Linux/README $out/share/doc/heimdall/
+      mkdir -p $out/bin $out/share/doc/heimdall $out/lib/udev/rules.d
+      cp bin/heimdall $out/bin
+      cp ../Linux/README $out/share/doc/heimdall
+      cp ../heimdall/60-heimdall.rules $out/lib/udev/rules.d
     '' + stdenv.lib.optionalString enableGUI ''
-      make -C ../heimdall-frontend install
+      cp bin/heimdall-frontend $out/bin
     '';
 
   meta = {

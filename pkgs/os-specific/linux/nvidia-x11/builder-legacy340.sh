@@ -108,8 +108,12 @@ installPhase() {
     #patchelf --set-rpath $cudaPath $out/lib/libcuda.so.*.*
     #patchelf --set-rpath $openclPath $out/lib/libnvidia-opencl.so.*.*
 
-    # we distribute these separately in `libvdpau`
+    # We distribute these separately in `libvdpau`
     rm "$out"/lib/libvdpau{.*,_trace.*}
+
+    # Move VDPAU libraries to their place
+    mkdir "$out"/lib/vdpau
+    mv "$out"/lib/libvdpau* "$out"/lib/vdpau
 }
 
 

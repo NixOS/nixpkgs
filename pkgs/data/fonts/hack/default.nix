@@ -1,8 +1,8 @@
 { stdenv, fetchurl, unzip }:
 
-let version = "2.019"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "hack-font-${version}";
+  version = "2.019";
 
   src = let
     version_ = with stdenv.lib;
@@ -22,7 +22,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "A typeface designed for source code";
     longDescription = ''
       Hack is hand groomed and optically balanced to be a workhorse face for

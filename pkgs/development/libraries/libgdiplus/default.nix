@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, cairo, fontconfig
+{ stdenv, fetchurl, pkgconfig, glib, cairo, Carbon, fontconfig
 , libtiff, giflib, libungif, libjpeg, libpng, monoDLLFixer
 , libXrender, libexif }:
 
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig glib cairo fontconfig libtiff giflib libungif
       libjpeg libpng libXrender libexif
-    ];
+    ]
+    ++ stdenv.lib.optional stdenv.isDarwin Carbon;
 }

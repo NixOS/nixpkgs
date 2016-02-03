@@ -1,8 +1,8 @@
 { stdenv, fetchurl, ncurses }:
 
-let version = "1.0"; in
 stdenv.mkDerivation rec {
   name = "ftop-${version}";
+  version = "1.0";
 
   src = fetchurl {
     url = "http://ftop.googlecode.com/files/${name}.tar.bz2";
@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Show progress of open files and file systems";
     homepage = https://code.google.com/p/ftop/;
     license = licenses.gpl3Plus;

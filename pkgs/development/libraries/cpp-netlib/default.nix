@@ -1,11 +1,8 @@
 { stdenv, fetchurl, cmake, boost, openssl }:
 
-let
-  version = "0.11.2";
-in
-
 stdenv.mkDerivation rec {
   name = "cpp-netlib-${version}";
+  version = "0.11.2";
 
   src = fetchurl {
     url = "http://downloads.cpp-netlib.org/${version}/${name}-final.tar.bz2";
@@ -19,7 +16,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "A collection of open-source libraries for high level network programming";
     homepage    = http://cpp-netlib.org;
     license     = licenses.boost;

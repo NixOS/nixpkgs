@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   name = "scim-${version}";
 
   src = fetchurl {
-    url = "https://github.com/andmarti1424/scim/archive/v${version}.tar.gz";
+    url = "https://github.com/andmarti1424/sc-im/archive/v${version}.tar.gz";
     sha256 = "00rjz344acw0bxv78x1w9jz8snl9lb9qhr9z22phxinidnd3vaaz";
   };
 
