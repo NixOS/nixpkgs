@@ -84,7 +84,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (config.boot.initrd.network.enable && cfg.enable) {
 
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.dropbear}/bin/dropbear
