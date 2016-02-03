@@ -8109,21 +8109,16 @@ let
   wolfssl = callPackage ../development/libraries/wolfssl { };
 
   openssl = openssl_1_0_1;
-  openssl_1_0_1 = callPackage ../development/libraries/openssl {
-    fetchurl = fetchurlBoot;
-    cryptodevHeaders = linuxPackages.cryptodev.override {
-      fetchurl = fetchurlBoot;
-      onlyHeaders = true;
-    };
-  };
 
-  openssl_1_0_2 = callPackage ../development/libraries/openssl/1.0.2.x.nix {
-    fetchurl = fetchurlBoot;
-    cryptodevHeaders = linuxPackages.cryptodev.override {
+  inherit (callPackages ../development/libraries/openssl {
       fetchurl = fetchurlBoot;
-      onlyHeaders = true;
-    };
-  };
+      cryptodevHeaders = linuxPackages.cryptodev.override {
+        fetchurl = fetchurlBoot;
+        onlyHeaders = true;
+      };
+    })
+    openssl_1_0_1
+    openssl_1_0_2;
 
   opensubdiv = callPackage ../development/libraries/opensubdiv { };
 
