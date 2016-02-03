@@ -72,11 +72,6 @@ mkdir -p /run
 mount -t tmpfs -o "mode=0755,size=@runSize@" tmpfs /run
 
 
-# Initialise /etc.
-echo 'root:x:0:0:root:/root:${cfg.shell}' > /etc/passwd
-echo 'passwd: files' > /etc/nsswitch.conf
-
-
 # Process the kernel command line.
 export stage2Init=/init
 for o in $(cat /proc/cmdline); do

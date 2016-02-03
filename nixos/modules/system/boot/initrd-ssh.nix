@@ -101,6 +101,8 @@ in
         mount -t devpts devpts /dev/pts
 
         echo '${cfg.shell}' > /etc/shells
+        echo 'root:x:0:0:root:/root:${cfg.shell}' > /etc/passwd
+        echo 'passwd: files' > /etc/nsswitch.conf
 
         mkdir -p /var/log
         touch /var/log/lastlog
