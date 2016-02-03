@@ -1,0 +1,55 @@
+diff -ruN orig/bin/crashplan patched/bin/crashplan
+--- orig/bin/crashplan	1970-01-01 01:00:00.000000000 +0100
++++ patched/bin/crashplan	2015-12-23 16:22:20.127898096 +0100
+@@ -0,0 +1,14 @@
++#!/bin/bash
++
++set -eu
++
++cd @out@
++
++source bin/crashplan-setup.sh
++
++$JAVACOMMON -Dfile.encoding=UTF-8 -Dapp=CrashPlanService \
++  -DappBaseName=CrashPlan -Xms20m -Xmx512m -Dsun.net.inetaddr.ttl=300 \
++  -Dnetworkaddress.cache.ttl=300 -Dsun.net.inetaddr.negative.ttl=0 \
++  -Dnetworkaddress.cache.negative.ttl=0 \
++  -Dc42.native.md5.enabled=false \
++  -classpath lib/com.backup42.desktop.jar:lang com.backup42.service.CPService
+diff -ruN orig/bin/crashplan-desktop patched/bin/crashplan-desktop
+--- orig/bin/crashplan-desktop	1970-01-01 01:00:00.000000000 +0100
++++ patched/bin/crashplan-desktop	2015-12-23 16:25:26.279623906 +0100
+@@ -0,0 +1,15 @@
++#!/bin/bash
++
++set -eu
++
++cd @out@
++
++source bin/crashplan-setup.sh
++#export SWT_GTK3=0
++
++$JAVACOMMON -Dfile.encoding=UTF-8 -Dapp=CrashPlanDesktop \
++  -DappBaseName=CrashPlan -Xms20m -Xmx512m -Dsun.net.inetaddr.ttl=300 \
++  -Dnetworkaddress.cache.ttl=300 -Dsun.net.inetaddr.negative.ttl=0 \
++  -Dnetworkaddress.cache.negative.ttl=0 -Dc42.native.md5.enabled=false \
++  -classpath "./lib/com.backup42.desktop.jar:./lang:./skin" \
++  com.backup42.desktop.CPDesktop 
+diff -ruN orig/bin/crashplan-setup.sh patched/bin/crashplan-setup.sh
+--- orig/bin/crashplan-setup.sh	1970-01-01 01:00:00.000000000 +0100
++++ patched/bin/crashplan-setup.sh	2015-12-23 16:19:31.016056441 +0100
+@@ -0,0 +1,14 @@
++#!/bin/bash
++
++set -eu
++
++cd @out@
++
++source install.vars
++source bin/run.conf
++
++# First-time setup
++mkdir -p -m 0700 $VARDIR/{log,cache,backupArchives}
++if [[ ! -d $VARDIR/conf ]]; then
++  cp -a @out@/conf.tmpl $VARDIR/conf
++fi
