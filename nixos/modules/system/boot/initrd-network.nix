@@ -65,7 +65,7 @@ in
 
     boot.initrd.preLVMCommands =
       # Search for interface definitions in command line.
-      ''
+      mkBefore ''
         for o in $(cat /proc/cmdline); do
           case $o in
             ip=*)
