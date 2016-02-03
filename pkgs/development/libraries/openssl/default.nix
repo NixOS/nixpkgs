@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl
 , withCryptodev ? false, cryptodevHeaders
-, defaultCertificate ? "/etc/ssl/certs/ca-certificates.crt" }:
+}:
 
 with stdenv.lib;
 let
@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  patches = optional stdenv.isCygwin ./1.0.1-cygwin64.patch
+  patches =
+    [ ./use-etc-ssl-certs.patch ]
+    ++ optional stdenv.isCygwin ./1.0.1-cygwin64.patch
     ++ optional (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem")) ./darwin-arch.patch;
 
   nativeBuildInputs = [ perl ];
@@ -60,8 +62,7 @@ stdenv.mkDerivation rec {
     # remove dependency on Perl at runtime
     rm -r $out/etc/ssl/misc $out/bin/c_rehash
 
-    # configure the default trust store
-    ${optionalString (defaultCertificate != null) "ln -s ${defaultCertificate} $out/etc/ssl/cert.pem"}
+    rmdir $out/etc/ssl/certs
   '';
 
   postFixup = ''
@@ -71,6 +72,11 @@ stdenv.mkDerivation rec {
       exit 1
     fi
   '';
+
+  setupHook = builtins.toFile "openssl-setup-hook"
+    ''
+      export SSL_CERT_FILE=/no-cert-file.crt
+    '';
 
   crossAttrs = {
     # upstream patch: https://rt.openssl.org/Ticket/Display.html?id=2558
