@@ -663,6 +663,8 @@ let
 
   azureus = callPackage ../tools/networking/p2p/azureus { };
 
+  backblaze-b2 = callPackage ../development/tools/backblaze-b2 { };
+
   backup = callPackage ../tools/backup/backup { };
 
   basex = callPackage ../tools/text/xml/basex { };
@@ -2327,8 +2329,8 @@ let
 
   miniupnpd = callPackage ../tools/networking/miniupnpd { };
 
-  miniball = callPackage ../development/libraries/miniball { }; 
- 
+  miniball = callPackage ../development/libraries/miniball { };
+
   minixml = callPackage ../development/libraries/minixml { };
 
   mjpegtools = callPackage ../tools/video/mjpegtools { };
