@@ -6344,6 +6344,8 @@ let
 
   cminpack = callPackage ../development/libraries/cminpack { };
 
+  cmocka = callPackage ../development/libraries/cmocka { };
+
   cogl = callPackage ../development/libraries/cogl { };
 
   cogl_1_20 = callPackage ../development/libraries/cogl/1.20.nix { };
