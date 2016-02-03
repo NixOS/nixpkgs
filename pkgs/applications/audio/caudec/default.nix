@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for executable in $(cd $out/bin && ls); do
 	wrapProgram $out/bin/$executable \
-	  --prefix PATH : "${bc}/bin:${findutils}/bin:${sox}/bin:${procps}/bin:${opusTools}/bin:${lame}/bin:${flac}/bin"
+	  --prefix PATH : "${bc}/bin:${findutils}/bin:${sox}/bin:${procps}/bin:${opusTools}/bin:${lame}/bin:${flac.bin}/bin"
     done
   '';
 

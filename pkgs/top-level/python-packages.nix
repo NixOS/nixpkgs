@@ -277,7 +277,7 @@ in modules // {
     doCheck = false;
 
     patchPhase = ''
-      substituteInPlace acme_tiny.py --replace "openssl" "${pkgs.openssl}/bin/openssl"
+      substituteInPlace acme_tiny.py --replace "openssl" "${pkgs.openssl.bin}/bin/openssl"
     '';
 
     installPhase = ''

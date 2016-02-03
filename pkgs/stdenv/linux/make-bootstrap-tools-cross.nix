@@ -166,7 +166,7 @@ rec {
         cp -d ${gawk}/bin/awk $out/bin
         cp ${gnutar}/bin/tar $out/bin
         cp ${gzip}/bin/gzip $out/bin
-        cp ${bzip2}/bin/bzip2 $out/bin
+        cp ${bzip2.bin}/bin/bzip2 $out/bin
         cp -d ${gnumake}/bin/* $out/bin
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin

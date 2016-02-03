@@ -121,7 +121,7 @@ in buildPythonPackage rec {
     }' beets/ui/commands.py
   '' + optionalString enableBadfiles ''
     sed -i -e '/self\.run_command(\[/ {
-      s,"flac","${flac}/bin/flac",
+      s,"flac","${flac.bin}/bin/flac",
       s,"mp3val","${mp3val}/bin/mp3val",
     }' beetsplug/badfiles.py
   '' + optionalString enableReplaygain ''

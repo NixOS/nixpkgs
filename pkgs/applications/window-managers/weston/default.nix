@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (vaapi != null) "--enabe-vaapi-recorder"
     ++ stdenv.lib.optionals (xwayland != null) [
         "--enable-xwayland"
-        "--with-xserver-path=${xwayland}/bin/Xwayland"
+        "--with-xserver-path=${xwayland.out}/bin/Xwayland"
       ];
 
   meta = with stdenv.lib; {

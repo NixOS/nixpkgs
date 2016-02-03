@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram "$out/bin/dunst" \
-      --prefix PATH : '${dbus_daemon}/bin'
+      --prefix PATH : '${dbus_daemon.out}/bin'
   '';
 
   meta = {

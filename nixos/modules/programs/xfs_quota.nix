@@ -89,8 +89,8 @@ in
       nameValuePair "xfs_quota-${name}" {
         description = "Setup xfs_quota for project ${name}";
         script = ''
-          ${pkgs.xfsprogs}/bin/xfs_quota -x -c 'project -s ${name}' ${opts.fileSystem}
-          ${pkgs.xfsprogs}/bin/xfs_quota -x -c 'limit -p ${limitOptions opts} ${name}' ${opts.fileSystem}
+          ${pkgs.xfsprogs.bin}/bin/xfs_quota -x -c 'project -s ${name}' ${opts.fileSystem}
+          ${pkgs.xfsprogs.bin}/bin/xfs_quota -x -c 'limit -p ${limitOptions opts} ${name}' ${opts.fileSystem}
         '';
 
         wantedBy = [ "multi-user.target" ];
