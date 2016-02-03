@@ -7931,6 +7931,26 @@ in modules // {
     };
   };
 
+  django_nose = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
+    name = "django-nose-${version}";
+    version = "1.4.3";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/d/django-nose/${name}.tar.gz";
+      sha256 = "0rl9ipa98smprlw56xqlhzhps28p84wg0640qlyn0rjyrpsdmf0r";
+    };
+
+    # vast dependency list
+    doCheck = false;
+
+    propagatedBuildInputs = [ django self.nose ];
+
+    meta = {
+      description = "Provides all the goodness of nose in your Django tests";
+      homepage = https://github.com/django-nose/django-nose;
+    };
+  }) {};
+
   django_redis = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
     name = "django-redis-${version}";
     version = "4.2.0";
