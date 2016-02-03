@@ -8062,6 +8062,27 @@ in modules // {
     };
   };
 
+  django_nose = buildPythonPackage rec {
+    name = "django-nose-${version}";
+    version = "1.4.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/django-nose/${name}.tar.gz";
+      sha256 = "0rl9ipa98smprlw56xqlhzhps28p84wg0640qlyn0rjyrpsdmf0r";
+    };
+
+    # vast dependency list
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ django nose ];
+
+    meta = {
+      description = "Provides all the goodness of nose in your Django tests";
+      homepage = https://github.com/django-nose/django-nose;
+      license = licenses.bsd3;
+    };
+  };
+
   django_modelcluster = buildPythonPackage rec {
     name = "django-modelcluster-${version}";
     version = "0.6.2";
