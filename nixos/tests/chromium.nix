@@ -2,8 +2,8 @@ import ./make-test.nix (
 { pkgs
 , channelMap ? {
     stable = pkgs.chromium;
-    beta   = pkgs.chromiumBeta;
-    dev    = pkgs.chromiumDev;
+    #beta   = pkgs.chromiumBeta;
+    #dev    = pkgs.chromiumDev;
   }
 , ...
 }: rec {
