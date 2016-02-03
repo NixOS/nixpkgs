@@ -116,7 +116,7 @@ let
           )"
           echo "$localFile ($remoteFile) contains references to $refs."
         done
-        ${optionalString (!cfg.allowImpurePaths) "exit 1"}
+        exit 1
       fi
 
       ${optionalString config.networking.usePredictableInterfaceNames ''
@@ -229,20 +229,6 @@ in
           Additional <command>hwdb</command> files. They'll be written
           into file <filename>10-local.hwdb</filename>. Thus they are
           read before all other files.
-        '';
-      };
-
-      allowImpurePaths = mkOption {
-        default = true;
-        example = false;
-        type = types.bool;
-        description = ''
-          If this is disabled, the build will fail whenever one of the
-          <command>udev</command> rules contains a reference to
-          <filename>/usr/bin</filename>, <filename>/usr/sbin</filename>,
-          <filename>/bin</filename> or <filename>/sbin</filename>.
-
-          By default only a warning is printed during build.
         '';
       };
 
