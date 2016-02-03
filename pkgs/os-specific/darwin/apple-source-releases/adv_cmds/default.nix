@@ -73,12 +73,15 @@ in appleDerivation {
 
     install -d 0755 $ps/bin
     install ps $ps/bin/ps
+    touch "$out"
   '';
 
   outputs = [
+    "out"
     "ps"
     "locale"
   ];
+  setOutputFlags = false;
 
   # ps uses this syscall to get process info
   propagatedSandboxProfile = stdenv.lib.sandbox.allow "mach-priv-task-port";
