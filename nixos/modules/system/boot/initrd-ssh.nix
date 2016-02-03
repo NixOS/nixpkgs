@@ -96,29 +96,27 @@ in
     '';
 
     boot.initrd.network.postCommands = ''
-      if [ -n "$hasNetwork" ]; then
-        mkdir /dev/pts
-        mount -t devpts devpts /dev/pts
+      mkdir /dev/pts
+      mount -t devpts devpts /dev/pts
 
-        echo '${cfg.shell}' > /etc/shells
-        echo 'root:x:0:0:root:/root:${cfg.shell}' > /etc/passwd
-        echo 'passwd: files' > /etc/nsswitch.conf
+      echo '${cfg.shell}' > /etc/shells
+      echo 'root:x:0:0:root:/root:${cfg.shell}' > /etc/passwd
+      echo 'passwd: files' > /etc/nsswitch.conf
 
-        mkdir -p /var/log
-        touch /var/log/lastlog
+      mkdir -p /var/log
+      touch /var/log/lastlog
 
-        mkdir -p /etc/dropbear
-        ${optionalString (cfg.hostRSAKey != null) "ln -s ${cfg.hostRSAKey} /etc/dropbear/dropbear_rsa_host_key"}
-        ${optionalString (cfg.hostDSSKey != null) "ln -s ${cfg.hostDSSKey} /etc/dropbear/dropbear_dss_host_key"}
-        ${optionalString (cfg.hostECDSAKey != null) "ln -s ${cfg.hostECDSAKey} /etc/dropbear/dropbear_ecdsa_host_key"}
+      mkdir -p /etc/dropbear
+      ${optionalString (cfg.hostRSAKey != null) "ln -s ${cfg.hostRSAKey} /etc/dropbear/dropbear_rsa_host_key"}
+      ${optionalString (cfg.hostDSSKey != null) "ln -s ${cfg.hostDSSKey} /etc/dropbear/dropbear_dss_host_key"}
+      ${optionalString (cfg.hostECDSAKey != null) "ln -s ${cfg.hostECDSAKey} /etc/dropbear/dropbear_ecdsa_host_key"}
 
-        mkdir -p /root/.ssh
-        ${concatStrings (map (key: ''
-          echo -n ${escapeShellArg key} >> /root/.ssh/authorized_keys
-        '') cfg.authorizedKeys)}
+      mkdir -p /root/.ssh
+      ${concatStrings (map (key: ''
+        echo -n ${escapeShellArg key} >> /root/.ssh/authorized_keys
+      '') cfg.authorizedKeys)}
 
-        dropbear -s -j -k -E -m -p ${toString cfg.port}
-      fi
+      dropbear -s -j -k -E -m -p ${toString cfg.port}
     '';
 
   };
