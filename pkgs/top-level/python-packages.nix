@@ -17052,6 +17052,8 @@ in modules // {
 
     propagatedBuildInputs = with self; [ requests2 ];
 
+    buildInputs = with self; [ betamax ];
+
     meta = {
       description = "A toolbelt of useful classes and functions to be used with python-requests";
       homepage = http://toolbelt.rtfd.org;
