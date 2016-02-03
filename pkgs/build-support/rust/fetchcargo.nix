@@ -16,8 +16,6 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = sha256;
 
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-
   impureEnvVars = [ "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy" ];
   preferLocalBuild = true;
 }

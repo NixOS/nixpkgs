@@ -64,12 +64,6 @@ in
     # CentOS/Fedora compatibility.
     environment.etc."pki/tls/certs/ca-bundle.crt".source = caCertificates;
 
-    environment.sessionVariables =
-      { SSL_CERT_FILE          = "/etc/ssl/certs/ca-certificates.crt";
-        # FIXME: unneeded - remove eventually.
-        GIT_SSL_CAINFO         = "/etc/ssl/certs/ca-certificates.crt";
-      };
-
   };
 
 }

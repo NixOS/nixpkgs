@@ -74,7 +74,7 @@ let cfg = config.system.autoUpgrade; in
       serviceConfig.Type = "oneshot";
 
       environment = config.nix.envVars //
-        { inherit (config.environment.sessionVariables) NIX_PATH SSL_CERT_FILE;
+        { inherit (config.environment.sessionVariables) NIX_PATH;
           HOME = "/root";
         };
 
