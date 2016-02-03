@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "info" ];
 
-  buildInputs = [ acl ]
+  buildInputs = [ ]
+    ++ stdenv.lib.optional stdenv.isLinux acl
     ++ stdenv.lib.optional stdenv.isDarwin autoreconfHook;
 
   # May have some issues with root compilation because the bootstrap tool
