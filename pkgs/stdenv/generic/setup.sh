@@ -371,6 +371,11 @@ export NIX_BUILD_CORES
 paxmark() { true; }
 
 
+# Prevent OpenSSL-based applications from using certificates in
+# /etc/ssl.
+export SSL_CERT_FILE=/no-cert-file.crt
+
+
 ######################################################################
 # Textual substitution functions.
 

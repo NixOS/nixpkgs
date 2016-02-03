@@ -70,11 +70,6 @@ let
       fi
     '';
 
-    setupHook = builtins.toFile "openssl-setup-hook"
-      ''
-        export SSL_CERT_FILE=/no-cert-file.crt
-      '';
-
     crossAttrs = {
       # upstream patch: https://rt.openssl.org/Ticket/Display.html?id=2558
       postPatch = ''
