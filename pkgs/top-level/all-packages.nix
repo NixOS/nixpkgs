@@ -2321,6 +2321,8 @@ let
 
   miniupnpd = callPackage ../tools/networking/miniupnpd { };
 
+  miniball = callPackage ../development/libraries/miniball { }; 
+ 
   minixml = callPackage ../development/libraries/minixml { };
 
   mjpegtools = callPackage ../tools/video/mjpegtools { };
