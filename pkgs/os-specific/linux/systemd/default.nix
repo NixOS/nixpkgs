@@ -8,6 +8,8 @@
 
 assert stdenv.isLinux;
 
+# FIXME: When updating, please remove makeFlags -- `hwdb_bin` flag is not supported anymore.
+
 stdenv.mkDerivation rec {
   version = "228";
   name = "systemd-${version}";

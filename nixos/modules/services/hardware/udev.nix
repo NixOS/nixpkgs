@@ -16,6 +16,12 @@ let
     destination = "/etc/udev/rules.d/10-local.rules";
   };
 
+  extraHwdbFile = pkgs.writeTextFile {
+    name = "extra-hwdb-file";
+    text = cfg.extraHwdb;
+    destination = "/etc/udev/hwdb.d/10-local.hwdb";
+  };
+
   nixosRules = ''
     # Miscellaneous devices.
     KERNEL=="kvm",                  MODE="0666"
@@ -104,6 +110,27 @@ let
     ''; # */
   };
 
+  hwdbBin = stdenv.mkDerivation {
+    name = "hwdb.bin";
+
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+
+    buildCommand = ''
+      mkdir -p etc/udev/hwdb.d
+      for i in ${toString ([udev] ++ cfg.packages)}; do
+        echo "Adding hwdb files for package $i"
+        for j in $i/{etc,lib}/udev/hwdb.d/*; do
+          ln -s $j etc/udev/hwdb.d/$(basename $j)
+        done
+      done
+
+      echo "Generating hwdb database..."
+      ${udev}/bin/udevadm hwdb --update --root=$(pwd)
+      mv etc/udev/hwdb.bin $out
+    '';
+  };
+
   # Udev has a 512-character limit for ENV{PATH}, so create a symlink
   # tree to work around this.
   udevPath = pkgs.buildEnv {
@@ -168,6 +195,21 @@ in
         '';
       };
 
+      extraHwdb = mkOption {
+        default = "";
+        example = ''
+          evdev:input:b0003v05AFp8277*
+            KEYBOARD_KEY_70039=leftalt
+            KEYBOARD_KEY_700e2=leftctrl
+        '';
+        type = types.lines;
+        description = ''
+          Additional <command>hwdb</command> files. They'll be written
+          into file <filename>10-local.hwdb</filename>. Thus they are
+          read before all other files.
+        '';
+      };
+
     };
 
     hardware.firmware = mkOption {
@@ -216,13 +258,16 @@ in
 
     services.udev.extraRules = nixosRules;
 
-    services.udev.packages = [ extraUdevRules ];
+    services.udev.packages = [ extraUdevRules extraHwdbFile ];
 
     services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.utillinux udev ];
 
     environment.etc =
       [ { source = udevRules;
           target = "udev/rules.d";
+        }
+        { source = hwdbBin;
+          target = "udev/hwdb.bin";
         }
       ];
 
@@ -239,13 +284,6 @@ in
         # The deprecated hotplug uevent helper is not used anymore
         if [ -e /proc/sys/kernel/hotplug ]; then
           echo "" > /proc/sys/kernel/hotplug
-        fi
-
-        # Regenerate the hardware database /var/lib/udev/hwdb.bin
-        # whenever systemd changes.
-        if [ ! -e /var/lib/udev/prev-systemd -o "$(readlink /var/lib/udev/prev-systemd)" != ${config.systemd.package} ]; then
-          echo "regenerating udev hardware database..."
-          ${config.systemd.package}/bin/udevadm hwdb --update && ln -sfn ${config.systemd.package} /var/lib/udev/prev-systemd
         fi
 
         # Allow the kernel to find our firmware.
