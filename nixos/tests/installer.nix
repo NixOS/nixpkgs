@@ -30,6 +30,8 @@ let
 
         hardware.enableAllFirmware = lib.mkForce false;
 
+        services.udev.allowImpurePaths = false;
+
         ${replaceChars ["\n"] ["\n  "] extraConfig}
       }
     '';
@@ -184,6 +186,8 @@ let
               if grubVersion == 1 then "scsi" else "virtio";
 
             hardware.enableAllFirmware = mkForce false;
+
+            services.udev.allowImpurePaths = false;
 
             # The test cannot access the network, so any packages we
             # need must be included in the VM.
