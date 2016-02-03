@@ -94,10 +94,29 @@ let
       done
       echo "OK"
 
-      echo "Consider fixing the following udev rules:"
-      for i in ${toString cfg.packages}; do
-        grep -l '\(RUN+\|IMPORT{program}\)="\(/usr\)\?/s\?bin' $i/*/udev/rules.d/* || true
-      done
+      filesToFixup="$(for i in "$out"/*; do
+        grep -l '\B\(/usr\)\?/s\?bin' "$i" || :
+      done)"
+
+      if [ -n "$filesToFixup" ]; then
+        echo "Consider fixing the following udev rules:"
+        echo "$filesToFixup" | while read localFile; do
+          remoteFile="origin unknown"
+          for i in ${toString cfg.packages}; do
+            for j in "$i"/*/udev/rules.d/*; do
+              if [ -e "$out/$(basename "$j")" ]; then
+                remoteFile="originally from $j"
+                break 2
+              fi
+            done
+          done
+          refs="$(
+            grep -o '\B\(/usr\)\?/s\?bin/[^ "]\+' "$localFile" \
+              | sed -e ':r;N;''${s/\n/ and /;br};s/\n/, /g;br'
+          )"
+          echo "$localFile ($remoteFile) contains references to $refs."
+        done
+      fi
 
       ${optionalString config.networking.usePredictableInterfaceNames ''
         cp ${./80-net-setup-link.rules} $out/80-net-setup-link.rules
