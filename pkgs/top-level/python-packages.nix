@@ -7950,6 +7950,23 @@ in modules // {
     };
   };
 
+  django_hijack = ({ django ? self.django }: buildPythonPackage rec {
+    name = "django-hijack-${version}";
+    version = "2.0.3";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/d/django-hijack/${name}.tar.gz";
+      sha256 = "1s2pnm2ynbs03m5m2asg06szkw634c56mcnp0jq29vgma49jdlyd";
+    };
+
+    propagatedBuildInputs = [ django (self.django_compat.override { inherit django; }) ];
+
+    meta = {
+      description = "Allows superusers to hijack (=login as) and work on behalf of another user";
+      homepage = https://github.com/arteria/django-hijack;
+    };
+  }) {};
+
   django_nose = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
     name = "django-nose-${version}";
     version = "1.4.3";
