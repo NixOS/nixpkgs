@@ -7833,8 +7833,27 @@ in modules // {
     };
   };
 
+  django_compat = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
+    name = "django-compat-${version}";
+    version = "1.0.8";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/d/django-compat/${name}.tar.gz";
+      sha256 = "195dgr55vzpw1fbjvbw2h35k9bfhvm5zchh2p7nzbq57xmwb3sra";
+    };
+
+    buildInputs = [ (self.django_nose.override { inherit django; }) ];
+    propagatedBuildInputs = [ django self.six ];
+
+    meta = {
+      description = "Forward and backwards compatibility layer for Django 1.4, 1.7, 1.8, and 1.9";
+      homepage = https://github.com/arteria/django-compat;
+    };
+  }) {};
+
   django_evolution = buildPythonPackage rec {
     name = "django_evolution-0.7.5";
+    
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
