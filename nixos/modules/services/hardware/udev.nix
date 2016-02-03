@@ -61,7 +61,9 @@ let
           --replace \"/sbin/modprobe \"${config.system.sbin.modprobe}/sbin/modprobe \
           --replace \"/sbin/mdadm \"${pkgs.mdadm}/sbin/mdadm \
           --replace \"/sbin/blkid \"${pkgs.utillinux}/sbin/blkid \
-          --replace \"/bin/mount \"${pkgs.utillinux}/bin/mount
+          --replace \"/bin/mount \"${pkgs.utillinux}/bin/mount \
+          --replace /usr/bin/readlink ${pkgs.coreutils}/bin/readlink \
+          --replace /usr/bin/basename ${pkgs.coreutils}/bin/basename
       done
 
       echo -n "Checking that all programs called by relative paths in udev rules exist in ${udev}/lib/udev... "
