@@ -36,6 +36,10 @@ stdenv.mkDerivation rec {
     stripLen = 1;
   });
 
+  makeFlags = let
+    isPy3 = python.isPy3 or false;
+  in optionalString (enablePython && isPy3) "PYTHON=python3";
+
   postPatch = optionalString enablePython ''
     sed -i -e 's|\$(LIBDIR)/libsepol.a|${libsepol}/lib/libsepol.a|' src/Makefile
   '';
