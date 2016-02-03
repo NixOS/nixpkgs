@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Very simple way to find out which SSL ciphersuites are supported by a target";
     homepage = "https://github.com/jvehent/cipherscan";
-    license = licenses.mpl;
+    license = licenses.mpl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ cstrahan ];
   };
