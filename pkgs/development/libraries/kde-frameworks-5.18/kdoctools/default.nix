@@ -4,7 +4,6 @@
 
 kdeFramework {
   name = "kdoctools";
-  setupHook = ./setup-hook.sh;
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ karchive ];
   propagatedBuildInputs = [ ki18n ];

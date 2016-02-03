@@ -1,45 +1,26 @@
 if [[ -z "$QMAKE" ]]; then
 
-linkDependencyDir() {
+_qtLinkDependencyDir() {
     @lndir@/bin/lndir -silent "$1/$2" "$qtOut/$2"
     if [[ -n "$NIX_QT_SUBMODULE" ]]; then
         find "$1/$2" -printf "$2/%P\n" >> "$out/nix-support/qt-inputs"
     fi
 }
 
-addQtModule() {
-    if [[ -d "$1/mkspecs" ]]; then
+_qtLinkModule() {
+    if [ -d "$1/mkspecs" ]; then
         # $1 is a Qt module
-        linkDependencyDir "$1" mkspecs
+        _qtLinkDependencyDir "$1" mkspecs
 
         for dir in bin include lib share; do
-            if [[ -d "$1/$dir" ]]; then
-                linkDependencyDir "$1" "$dir"
+            if [ -d "$1/$dir" ]; then
+                _qtLinkDependencyDir "$1" "$dir"
             fi
         done
     fi
 }
 
-propagateRuntimeDeps() {
-    local propagated
-    for dir in "etc/xdg" "lib/qt5/plugins" "lib/qt5/qml" "lib/qt5/imports" "share"; do
-        if [[ -d "$1/$dir" ]]; then
-            propagated=
-            for pkg in $propagatedBuildInputs; do
-                if [[ "z$pkg" == "z$1" ]]; then
-                    propagated=1
-                    break
-                fi
-            done
-            if [[ -z $propagated ]]; then
-                propagatedBuildInputs="$propagatedBuildInputs $1"
-            fi
-            break
-        fi
-    done
-}
-
-rmQtModules() {
+_qtRmModules() {
     cat "$out/nix-support/qt-inputs" | while read file; do
       if [[ -h "$out/$file" ]]; then
         rm "$out/$file"
@@ -55,12 +36,64 @@ rmQtModules() {
     rm "$out/nix-support/qt-inputs"
 }
 
-rmQMake() {
+addToSearchPathOnceWithCustomDelimiter() {
+    local delim="$1"
+    local search="$2"
+    local target="$3"
+    local dirs
+    local exported
+    IFS="$delim" read -a dirs <<< "${!search}"
+    for dir in ${dirs[@]}; do
+        if [ "z$dir" == "z$target" ]; then exported=1; fi
+    done
+    if [ -z $exported ]; then
+        eval "export ${search}=\"${!search}${!search:+$delim}$target\""
+    fi
+}
+
+addToSearchPathOnce() {
+    addToSearchPathOnceWithCustomDelimiter ':' "$@"
+}
+
+propagateOnce() {
+    addToSearchPathOnceWithCustomDelimiter ' ' "$@"
+}
+
+_qtPropagateRuntimeDependencies() {
+    for dir in "lib/qt5/plugins" "lib/qt5/qml" "lib/qt5/imports"; do
+        if [ -d "$1/$dir" ]; then
+            propagateOnce propagatedBuildInputs "$1"
+            propagateOnce propagatedUserEnvPkgs "$1"
+            break
+        fi
+    done
+    addToSearchPathOnce QT_PLUGIN_PATH "$1/lib/qt5/plugins"
+    addToSearchPathOnce QML_IMPORT_PATH "$1/lib/qt5/imports"
+    addToSearchPathOnce QML2_IMPORT_PATH "$1/lib/qt5/qml"
+}
+
+_qtRmQmake() {
     rm "$qtOut/bin/qmake" "$qtOut/bin/qt.conf"
 }
 
-setQMakePath() {
+_qtSetQmakePath() {
     export PATH="$qtOut/bin${PATH:+:}$PATH"
+}
+
+_qtMultioutModuleDevs() {
+    # We cannot simply set these paths in configureFlags because libQtCore retains
+    # references to the paths it was built with.
+    moveToOutput "bin" "${!outputDev}"
+    moveToOutput "include" "${!outputDev}"
+
+    # The destination directory must exist or moveToOutput will do nothing
+    mkdir -p "${!outputDev}/share"
+    moveToOutput "share/doc" "${!outputDev}"
+}
+
+_qtMultioutDevs() {
+    # This is necessary whether the package is a Qt module or not
+    moveToOutput "mkspecs" "${!outputDev}"
 }
 
 qtOut=""
@@ -72,7 +105,7 @@ fi
 
 mkdir -p "$qtOut/bin" "$qtOut/mkspecs" "$qtOut/include" "$qtOut/nix-support" "$qtOut/lib" "$qtOut/share"
 
-cp "@out@/bin/qmake" "$qtOut/bin"
+cp "@dev@/bin/qmake" "$qtOut/bin"
 cat >"$qtOut/bin/qt.conf" <<EOF
 [Paths]
 Prefix = $qtOut
@@ -84,17 +117,20 @@ EOF
 
 export QMAKE="$qtOut/bin/qmake"
 
-envHooks+=(addQtModule propagateRuntimeDeps)
-preConfigurePhases+=(setQMakePath)
+envHooks+=(_qtLinkModule _qtPropagateRuntimeDependencies)
+# Set PATH to find qmake first in a preConfigure hook
+# It must run after all the envHooks!
+preConfigureHooks+=(_qtSetQmakePath)
 
+preFixupHooks+=(_qtMultioutDevs)
 if [[ -n "$NIX_QT_SUBMODULE" ]]; then
-    preFixupPhases+=(rmQtModules)
-    postPhases+=(rmQMake)
+    postInstallHooks+=(_qtRmQmake _qtRmModules)
+    preFixupHooks+=(_qtMultioutModuleDevs)
 fi
 
 fi
 
 if [[ -z "$NIX_QT_PIC" ]]; then
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE${NIX_CFLAGS_COMPILE:+ }-fPIC"
     export NIX_QT_PIC=1
 fi

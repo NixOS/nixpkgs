@@ -37,21 +37,19 @@ let
       inherit src;
 
       propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
+      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ self.fixQtModuleCMakeConfig ];
 
       NIX_QT_SUBMODULE = args.NIX_QT_SUBMODULE or true;
       dontAddPrefix = args.dontAddPrefix or true;
       dontFixLibtool = args.dontFixLibtool or true;
       configureScript = args.configureScript or "qmake";
 
+      outputs = args.outputs or [ "dev" "out" ];
+      setOutputFlags = false;
+
       enableParallelBuilding = args.enableParallelBuilding or true;
 
-      meta = {
-        homepage = http://qt-project.org;
-        description = "A cross-platform application framework for C++";
-        license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
-        maintainers = with maintainers; [ bbenoist qknight ttuegel ];
-        platforms = platforms.linux;
-      } // (args.meta or {});
+      meta = self.qtbase.meta // (args.meta or {});
     });
 
   addPackages = self: with self;
@@ -110,7 +108,10 @@ let
       ];
 
       makeQtWrapper = makeSetupHook { deps = [ makeWrapper ]; } ./make-qt-wrapper.sh;
+      fixQtModuleCMakeConfig = makeSetupHook { } ./fix-qt-module-cmake-config.sh;
 
     };
 
-in makeScope pkgs.newScope addPackages
+    self = makeScope pkgs.newScope addPackages;
+
+in self

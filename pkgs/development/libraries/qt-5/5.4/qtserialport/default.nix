@@ -10,4 +10,7 @@ qtSubmodule {
       libudev = libudev.out;
     })
   ];
+  postFixup = ''
+    fixQtModuleCMakeConfig "SerialPort"
+  '';
 }

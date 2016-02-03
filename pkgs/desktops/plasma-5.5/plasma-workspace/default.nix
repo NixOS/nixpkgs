@@ -11,7 +11,7 @@
 , xprop, xrdb, xset, xsetroot, solid, qtquickcontrols
 }:
 
-plasmaPackage rec {
+plasmaPackage {
   name = "plasma-workspace";
 
   nativeBuildInputs = [
@@ -20,10 +20,11 @@ plasmaPackage rec {
     makeQtWrapper
   ];
   buildInputs = [
-    kcmutils kcrash kdbusaddons kdesu kdewebkit kjsembed knewstuff
-    knotifyconfig kpackage ktextwidgets kwallet kwayland kxmlrpcclient
-    libdbusmenu libSM libXcursor networkmanager-qt pam phonon
-    qtscript wayland
+    dbus_tools kcmutils kconfig kcrash kdbusaddons kdesu kdewebkit
+    kinit kjsembed knewstuff knotifyconfig kpackage kservice
+    ktextwidgets kwallet kwayland kxmlrpcclient libdbusmenu libSM
+    libXcursor mkfontdir networkmanager-qt pam phonon qtscript qttools
+    socat wayland xmessage xprop xset xsetroot
   ];
   propagatedBuildInputs = [
     baloo kactivities kdeclarative kdelibs4support kglobalaccel
@@ -32,13 +33,31 @@ plasmaPackage rec {
   ];
 
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
-  inherit bash coreutils gnused gnugrep socat;
-  inherit kconfig kinit kservice qttools;
-  inherit dbus_tools mkfontdir xmessage xprop xrdb xset xsetroot;
+
   postPatch = ''
-    substituteAllInPlace startkde/startkde.cmake
+    substituteInPlace startkde/startkde.cmake \
+        --subst-var-by bash $(type -P bash) \
+        --subst-var-by sed $(type -P sed) \
+        --subst-var-by grep $(type -P grep) \
+        --subst-var-by socat $(type -P socat) \
+        --subst-var-by kcheckrunning $(type -P kcheckrunning) \
+        --subst-var-by xmessage $(type -P xmessage) \
+        --subst-var-by tr $(type -P tr) \
+        --subst-var-by qtpaths $(type -P qtpaths) \
+        --subst-var-by qdbus $(type -P qdbus) \
+        --subst-var-by dbus-launch $(type -P dbus-launch) \
+        --subst-var-by mkfontdir $(type -P mkfontdir) \
+        --subst-var-by xset $(type -P xset) \
+        --subst-var-by xsetroot $(type -P xsetroot) \
+        --subst-var-by xprop $(type -P xprop) \
+        --subst-var-by start_kdeinit_wrapper "${kinit.out}/lib/libexec/kf5/start_kdeinit_wrapper" \
+        --subst-var-by kwrapper5 $(type -P kwrapper5) \
+        --subst-var-by kdeinit5_shutdown $(type -P kdeinit5_shutdown) \
+        --subst-var-by kbuildsycoca5 $(type -P kbuildsycoca5) \
+        --subst-var-by kreadconfig5 $(type -P kreadconfig5) \
+        --subst-var out
     substituteInPlace startkde/kstartupconfig/kstartupconfig.cpp \
-      --replace kdostartupconfig5 $out/bin/kdostartupconfig5
+        --replace kdostartupconfig5 $out/bin/kdostartupconfig5
   '';
 
   postInstall = ''

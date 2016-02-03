@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, copyPathsToStore, makeWrapper
+{ stdenv, lib, fetchurl, copyPathsToStore, fixQtModuleCMakeConfig
 , srcs
 
 , xlibs, libX11, libxcb, libXcursor, libXext, libXrender, libXi
@@ -14,8 +14,7 @@
 , mysql ? null, postgresql ? null
 
 # options
-, mesaSupported, mesa, mesa_glu
-, buildDocs ? false
+, mesaSupported, mesa
 , buildExamples ? false
 , buildTests ? false
 , developerBuild ? false
@@ -36,6 +35,8 @@ stdenv.mkDerivation {
   srcs = with srcs; [ qt5.src qtbase.src ];
 
   sourceRoot = "qt-everywhere-opensource-src-${version}";
+
+  outputs = [ "dev" "out" ];
 
   postUnpack = ''
     mv qtbase-opensource-src-${version} ./qt-everywhere-opensource-src-${version}/qtbase
@@ -94,12 +95,34 @@ stdenv.mkDerivation {
         --replace "@mesa_inc@" "${mesa.dev}"
     '';
 
+  setOutputFlags = false;
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/qtbase/lib:$PWD/qtbase/plugins/platforms:$LD_LIBRARY_PATH"
     export MAKEFLAGS=-j$NIX_BUILD_CORES
 
-    export configureFlags+="-plugindir $out/lib/qt5/plugins -importdir $out/lib/qt5/imports -qmldir $out/lib/qt5/qml"
-    export configureFlags+=" -docdir $out/share/doc/qt5"
+    _multioutQtDevs() {
+        # We cannot simply set these paths in configureFlags because libQtCore retains
+        # references to the paths it was built with.
+        moveToOutput "bin" "$dev"
+        moveToOutput "include" "$dev"
+        moveToOutput "mkspecs" "$dev"
+
+        # The destination directory must exist or moveToOutput will do nothing
+        mkdir -p "$dev/share"
+        moveToOutput "share/doc" "$dev"
+
+        mkdir -p "$dev/lib"
+        lndir -silent "$out/lib" "$dev/lib"
+        if [[ -h "$dev/lib/cmake" ]]; then rm "$dev/lib/cmake"; fi
+        if [[ -h "$dev/lib/pkgconfig" ]]; then rm "$dev/lib/pkgconfig"; fi
+    }
+    preFixupHooks+=(_multioutQtDevs)
+
+    configureFlags+="\
+        -plugindir $out/lib/qt5/plugins \
+        -importdir $out/lib/qt5/imports \
+        -qmldir $out/lib/qt5/qml \
+        -docdir $out/share/doc/qt5"
   '';
 
   prefixKey = "-prefix ";
@@ -182,32 +205,38 @@ stdenv.mkDerivation {
     zlib libjpeg libpng libtiff sqlite icu
     xcbutil xcbutilimage xcbutilkeysyms xcbutilwm libxkbcommon
   ]
-  # Qt doesn't directly need GLU (just GL), but many apps use, it's small and
-  # doesn't remain a runtime-dep if not used
-  ++ lib.optionals mesaSupported [ mesa mesa_glu ]
-  ++ lib.optional (cups != null) cups
-  ++ lib.optional (mysql != null) mysql.lib
-  ++ lib.optional (postgresql != null) postgresql
-  ++ lib.optionals gtkStyle [gnome_vfs libgnomeui gtk GConf];
+  ++ lib.optional mesaSupported mesa;
 
   buildInputs =
     [ bison flex gperf ruby ]
-    ++ lib.optional developerBuild gdb;
+    ++ lib.optional developerBuild gdb
+    ++ lib.optional (cups != null) cups
+    ++ lib.optional (mysql != null) mysql.lib
+    ++ lib.optional (postgresql != null) postgresql
+    ++ lib.optionals gtkStyle [gnome_vfs libgnomeui gtk GConf];
 
-  nativeBuildInputs = [ python perl pkgconfig ];
-
-  propagatedNativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ fixQtModuleCMakeConfig lndir python perl pkgconfig ];
 
   # freetype-2.5.4 changed signedness of some struct fields
   NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
 
-  postInstall =
+  postFixup =
     ''
       # Don't retain build-time dependencies like gdb and ruby.
-      sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $out/mkspecs/qconfig.pri
-    ''
-    + lib.optionalString buildDocs ''
-      make docs && make install_docs
+      sed '/QMAKE_DEFAULT_.*DIRS/ d' -i "$dev/mkspecs/qconfig.pri"
+
+      fixQtModuleCMakeConfig "Concurrent"
+      fixQtModuleCMakeConfig "Core"
+      fixQtModuleCMakeConfig "DBus"
+      fixQtModuleCMakeConfig "Gui"
+      fixQtModuleCMakeConfig "Network"
+      fixQtModuleCMakeConfig "OpenGL"
+      fixQtModuleCMakeConfig "OpenGLExtensions"
+      fixQtModuleCMakeConfig "PrintSupport"
+      fixQtModuleCMakeConfig "Sql"
+      fixQtModuleCMakeConfig "Test"
+      fixQtModuleCMakeConfig "Widgets"
+      fixQtModuleCMakeConfig "Xml"
     '';
 
   inherit lndir;
@@ -216,9 +245,9 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = http://qt-project.org;
+    homepage = http://www.qt.io;
     description = "A cross-platform application framework for C++";
-    license = "GPL/LGPL";
+    license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
     maintainers = with maintainers; [ bbenoist qknight ttuegel ];
     platforms = platforms.linux;
   };

@@ -1,4 +1,4 @@
-{ kdeFramework, lib
+{ kdeFramework, lib, copyPathsToStore
 , extra-cmake-modules
 , kcoreaddons
 , polkit-qt
@@ -9,7 +9,7 @@ kdeFramework {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ polkit-qt ];
   propagatedBuildInputs = [ kcoreaddons ];
-  patches = [ ./kauth-policy-install.patch ];
+  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
   };
