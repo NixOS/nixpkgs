@@ -13,14 +13,12 @@ with stdenv.lib;
 assert x11Support -> pinentry != null;
 
 stdenv.mkDerivation rec {
-  name = "gnupg-2.1.10";
+  name = "gnupg-2.1.11";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "1ybcsazjm21i2ys1wh49cz4azmqz7ghx5rb6hm4gm93i2zc5igck";
+    sha256 = "06mn2viiwsyq991arh5i5fhr9jyxq2bi0jkdj7ndfisxihngpc5p";
   };
-
-  patches = [ ./gpgkey2ssh-21.patch ];
 
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
