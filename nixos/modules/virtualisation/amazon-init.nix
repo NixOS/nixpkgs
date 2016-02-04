@@ -4,7 +4,7 @@
 
 let
   bootScript = pkgs.writeScript "bootscript.sh" ''
-    #!${pkgs.stdenv.shell} -eux
+    #!${pkgs.stdenv.shell} -eu
 
     echo "attempting to fetch configuration from EC2 user data..."
 
