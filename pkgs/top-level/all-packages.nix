@@ -14596,7 +14596,7 @@ let
     serverOnly = true;
   };
 
-  zandronum-bin = callPackage ../games/zandronum/bin.nix { };
+  zandronum-bin = hiPrio (callPackage ../games/zandronum/bin.nix { });
 
   zangband = callPackage ../games/zangband { };
 
