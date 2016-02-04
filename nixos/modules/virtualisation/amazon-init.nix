@@ -8,13 +8,12 @@ let
 
     echo "attempting to fetch configuration from EC2 user data..."
 
-    export PATH=${config.nix.package}/bin:${pkgs.wget}/bin:${pkgs.systemd}/bin:${pkgs.gnugrep}/bin:${pkgs.gnused}/bin:${config.system.build.nixos-rebuild}/bin:$PATH
+    export PATH=${config.nix.package}/bin:${pkgs.systemd}/bin:${pkgs.gnugrep}/bin:${pkgs.gnused}/bin:${config.system.build.nixos-rebuild}/bin:$PATH
     export NIX_PATH=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix:/nix/var/nix/profiles/per-user/root/channels
 
-    userData="$(mktemp)"
-    wget -q --wait=1 --tries=0 --retry-connrefused -O - http://169.254.169.254/2011-01-01/user-data > "$userData"
+    userData=/etc/ec2-metadata/user-data
 
-    if [[ $? -eq 0 ]]; then
+    if [ -s "$userData" ]; then
 
       # If the user-data looks like it could be a nix expression,
       # copy it over. Also, look for a magic three-hash comment and set
@@ -37,7 +36,7 @@ let
         exit
       fi
     else
-      echo "failed to fetch user data"
+      echo "no user data is available"
       exit
     fi
 
