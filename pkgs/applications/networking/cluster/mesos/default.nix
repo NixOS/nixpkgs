@@ -22,6 +22,7 @@ in stdenv.mkDerivation rec {
   patches = [
     # https://reviews.apache.org/r/36610/
     ./rb36610.patch
+    ./maven_repo.patch
   ];
 
   buildInputs = [
@@ -37,7 +38,7 @@ in stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    export MAVEN_OPTS="-Dmaven.repo.local=${mavenRepo}"
+    substituteInPlace src/Makefile.am --subst-var-by mavenRepo ${mavenRepo}
 
     substituteInPlace src/launcher/fetcher.cpp \
       --replace '"gzip' '"${gzip}/bin/gzip'    \
