@@ -9448,6 +9448,8 @@ let
 
   nsq = goPackages.nsq.bin // { outputs = [ "bin" ]; };
 
+  oauth2_proxy = goPackages.oauth2_proxy.bin // { outputs = [ "bin" ]; };
+
   openpts = callPackage ../servers/openpts { };
 
   openresty = callPackage ../servers/http/openresty { };
