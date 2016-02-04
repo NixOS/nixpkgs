@@ -93,7 +93,7 @@ stdenv.mkDerivation ({
       "--enable-kernel=2.6.32"
     ] ++ lib.optionals (cross != null) [
       (if cross.withTLS then "--with-tls" else "--without-tls")
-      (if cross.float == "soft" then "--without-fp" else "--with-fp")
+      (if cross ? float && cross.float == "soft" then "--without-fp" else "--with-fp")
     ] ++ lib.optionals (cross != null
           && cross.platform ? kernelMajor
           && cross.platform.kernelMajor == "2.6") [
