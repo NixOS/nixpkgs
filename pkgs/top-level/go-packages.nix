@@ -2052,10 +2052,10 @@ let
   };
 
   liner = buildFromGitHub {
-    rev    = "1bb0d1c1a25ed393d8feb09bab039b2b1b1fbced";
+    rev    = "ad1edfd30321d8f006ccf05f1e0524adeb943060";
     owner  = "peterh";
     repo   = "liner";
-    sha256 = "05ihxpmp6x3hw71xzvjdgxnyvyx2s4lf23xqnfjj16s4j4qidc48";
+    sha256 = "0c24d9j1gnq7r982h1l2isp3d37379qw155hr8ihx9i2mhpfz317";
   };
 
   odeke-em.log = buildFromGitHub {
