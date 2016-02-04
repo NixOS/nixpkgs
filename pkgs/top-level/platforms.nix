@@ -443,12 +443,29 @@ rec {
     };
   };
 
+  aarch64-multiplatform = {
+    name = "aarch64-multiplatform";
+    kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
+    kernelHeadersBaseConfig = "defconfig";
+    kernelBaseConfig = "defconfig";
+    kernelArch = "arm64";
+    kernelDTB = true;
+    kernelAutoModules = false;
+    kernelExtraConfig = "";
+    uboot = null;
+    kernelTarget = "Image";
+    gcc = {
+      arch = "armv8-a";
+    };
+  };
+
   selectPlatformBySystem = system: {
       "i686-linux" = pc32;
       "x86_64-linux" = pc64;
       "armv5tel-linux" = sheevaplug;
       "armv6l-linux" = raspberrypi;
       "armv7l-linux" = armv7l-hf-multiplatform;
+      "aarch64-linux" = aarch64-multiplatform;
       "mips64el-linux" = fuloong2f_n32;
     }.${system} or pcBase;
 }
