@@ -8201,6 +8201,8 @@ in modules // {
       sha256 = "14x1k5k0jv3fiynpdfyp5zh4qvs4nr6qwy09chv3js3dhs5887ic";
     };
 
+    propagatedBuildInputs = [ modules.curses ];
+
     # crecord comes as just a bare directory
     configurePhase = " ";
     buildPhase = "${python.executable} -m compileall crecord";
