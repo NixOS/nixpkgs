@@ -8190,35 +8190,6 @@ in modules // {
   };
 
 
-  hg-crecord = buildPythonPackage rec {
-    rev = "5cfaabfe9cb9f0a0d6837956d73127f290a213be";
-    name = "hg-crecord-${rev}";
-    disabled = isPy3k;
-
-    src = pkgs.fetchhg {
-      inherit rev;
-      url = "https://bitbucket.org/edgimar/crecord";
-      sha256 = "14x1k5k0jv3fiynpdfyp5zh4qvs4nr6qwy09chv3js3dhs5887ic";
-    };
-
-    # crecord comes as just a bare directory
-    configurePhase = " ";
-    buildPhase = "${python.executable} -m compileall crecord";
-    installPhase = ''
-      mkdir -p $out/${python.sitePackages}
-      cp -Lr crecord $out/${python.sitePackages}/
-    '';
-
-    # there ain't none
-    doCheck = false;
-
-    meta = {
-      description = "Mercurial extension for selecting graphically which files/hunk/lines to commit";
-      homepage = https://bitbucket.org/edgimar/crecord;
-    };
-  };
-
-
   docutils = buildPythonPackage rec {
     name = "docutils-0.12";
 
