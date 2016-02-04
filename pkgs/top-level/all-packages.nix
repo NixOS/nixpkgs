@@ -582,6 +582,8 @@ let
 
   awscli = pythonPackages.awscli;
 
+  aws_shell = pythonPackages.aws_shell;
+
   azure-cli = callPackage ../tools/virtualization/azure-cli { };
 
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
