@@ -14106,6 +14106,8 @@ let
   anki = callPackage ../games/anki { };
 
   armagetronad = callPackage ../games/armagetronad { };
+  
+  arx-libertatis = callPackage ../games/arx-libertatis { };
 
   asc = callPackage ../games/asc {
     lua = lua5_1;
