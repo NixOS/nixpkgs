@@ -1,15 +1,11 @@
-require 'rbconfig'
-require 'rubygems'
-require 'rubygems/specification'
 require 'fileutils'
 
 # args/settings
 out = ENV["out"]
-ruby = ARGV[0]
-gemfile = ARGV[1]
-bundle_path = ARGV[2]
-bundler_gem_path = ARGV[3]
-paths = ARGV[4].split
+ruby = ARGV.shift
+bundle_path = ARGV.shift
+bundler_gem_path = ARGV.shift
+paths = ARGV.shift.split
 
 # generate binstubs
 FileUtils.mkdir_p("#{out}/bin")
@@ -19,6 +15,7 @@ paths.each do |path|
   name = File.read("#{path}/nix-support/gem-meta/name")
   executables = File.read("#{path}/nix-support/gem-meta/executables").split
   executables.each do |exe|
+    path_to_exe = "#{path}/bin/#{exe}"
     File.open("#{out}/bin/#{exe}", "w") do |f|
       f.write(<<-EOF)
 #!#{ruby}
@@ -29,16 +26,9 @@ paths.each do |path|
 # this file is here to facilitate running it.
 #
 
-ENV["BUNDLE_GEMFILE"] = "#{gemfile}"
-ENV["BUNDLE_PATH"] = "#{bundle_path}"
-
-gem_path = ENV["GEM_PATH"]
-ENV["GEM_PATH"] = "\#{gem_path}\#{":" unless gem_path.nil? || gem_path.empty?}#{bundler_gem_path}"
-
-require 'rubygems'
-require 'bundler/setup'
-
-load Gem.bin_path(#{name.inspect}, #{exe.inspect})
+unless system(#{path_to_exe.dump}, *ARGV)
+  fail %(#{path_to_exe.dump} #{ARGV.join(' ')} failed with \#$?)
+end
 EOF
       FileUtils.chmod("+x", "#{out}/bin/#{exe}")
     end
