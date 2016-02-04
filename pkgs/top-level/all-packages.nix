@@ -12675,6 +12675,11 @@ let
     lua = lua5;
   };
 
+  monotoneViz = callPackage ../applications/version-management/monotone-viz {
+    inherit (ocamlPackages_4_01_0) lablgtk ocaml camlp4;
+    inherit (gnome) libgnomecanvas glib;
+  };
+
   mopidy = callPackage ../applications/audio/mopidy { };
 
   mopidy-gmusic = callPackage ../applications/audio/mopidy-gmusic { };
