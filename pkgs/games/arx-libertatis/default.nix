@@ -1,5 +1,6 @@
 { stdenv, fetchgit, cmake, zlib, boost,
-  openal, glm, freetype, mesa, glew, SDL2 }:
+  openal, glm, freetype, mesa, glew, SDL2,
+  dejavu_fonts }:
 
 stdenv.mkDerivation rec {
   name = "arx-libertatis-${version}";
@@ -15,6 +16,18 @@ stdenv.mkDerivation rec {
     cmake zlib boost openal glm
     freetype mesa glew SDL2
   ];
+
+  preConfigure = ''
+    cmakeFlags="-DDATA_DIR_PREFIXES=$out/share"
+  '';
+
+  enableParallelBuilding = true;
+
+  postInstall = ''
+    ln -sf \
+      ${dejavu_fonts}/share/fonts/truetype/DejaVuSansMono.ttf \
+      $out/share/games/arx/misc/dejavusansmono.ttf
+  '';
   
   meta = with stdenv.lib; {
     description = ''
