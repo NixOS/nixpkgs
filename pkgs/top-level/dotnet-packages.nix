@@ -532,10 +532,6 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       pkgconfig
     ];
 
-    preConfigure = ''
-      substituteInPlace configure --replace gmcs mcs
-    '';
-
     postInstall = ''
       # Otherwise pkg-config won't find it and the DLL will get duplicated
       ln -sv $out/lib/pkgconfig/ndesk-options.pc $out/lib/pkgconfig/NDesk.Options.pc
