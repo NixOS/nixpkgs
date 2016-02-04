@@ -7,7 +7,7 @@
 , tree
 }@defs:
 
-{ name, gemset, lockfile, ruby ? defs.ruby, gemConfig ? defaultGemConfig
+{ name, gemset, ruby ? defs.ruby, gemConfig ? defaultGemConfig
 , postBuild ? null
 , document ? []
 , meta ? {}
