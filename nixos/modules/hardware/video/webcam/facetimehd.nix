@@ -23,6 +23,8 @@ in
 
     boot.kernelModules = [ "facetimehd" ];
 
+    boot.blacklistedKernelModules = [ "bdc_pci" ];
+
     boot.extraModulePackages = [ kernelPackages.facetimehd ];
 
     hardware.firmware = [ pkgs.facetimehd-firmware ];
