@@ -3773,6 +3773,8 @@ let
 
   mksh = callPackage ../shells/mksh { };
 
+  oh = goPackages.oh.bin // { outputs = [ "bin" ]; };
+
   pash = callPackage ../shells/pash { };
 
   tcsh = callPackage ../shells/tcsh { };
