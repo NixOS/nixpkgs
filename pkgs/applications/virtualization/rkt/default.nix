@@ -2,8 +2,8 @@
   cpio, fetchurl, fetchFromGitHub, iptables, systemd, makeWrapper }:
 
 let
-  coreosImageRelease = "835.12.0";
-  coreosImageSystemdVersion = "225";
+  coreosImageRelease = "794.1.0";
+  coreosImageSystemdVersion = "222";
 
   # TODO: track https://github.com/coreos/rkt/issues/1758 to allow "host" flavor.
   stage1Flavours = [ "coreos" "fly" "host" ];
@@ -21,8 +21,8 @@ in stdenv.mkDerivation rec {
   };
 
   stage1BaseImage = fetchurl {
-    url = "http://stable.release.core-os.net/amd64-usr/${coreosImageRelease}/coreos_production_pxe_image.cpio.gz";
-    sha256 = "0djzgfcqr9yy13i415204ji82lrk8mvdhl9rxjr123j1glf5sdh3";
+    url = "http://alpha.release.core-os.net/amd64-usr/${coreosImageRelease}/coreos_production_pxe_image.cpio.gz";
+    sha256 = "05nzl3av6cawr8v203a8c95c443g6h1nfy2n4jmgvn0j4iyy44ym";
   };
 
   buildInputs = [
