@@ -13,10 +13,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses libevent ];
 
-#  prePatch = ''
-#    sed -e '/256colors.pl/d;d;d' -i 112.diff
-#  '';
-
   patches = copyPathToStore ./tmux-truecolor-gh112.patch;
 
   configureFlags = [
