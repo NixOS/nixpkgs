@@ -18464,7 +18464,7 @@ in modules // {
     gfortran = pkgs.gfortran;
   };
 
-  scipy = self.scipy_0_16;
+  scipy = self.scipy_0_17;
 
   scipy_0_16 = self.buildScipyPackage rec {
     version = "0.16.1";
