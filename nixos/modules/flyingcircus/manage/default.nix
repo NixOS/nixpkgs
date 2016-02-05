@@ -88,8 +88,8 @@ with lib;
           HOME = "/root";
         };
         script = ''
-          ${manage_script}/bin/fc-manage ${config.flyingcircus.agent.steps}
-          ${manage_script}/bin/fc-resize-root
+          ${pkgs.fcmanage}/bin/fc-manage ${config.flyingcircus.agent.steps}
+          ${pkgs.fcmanage}/bin/fc-resize-root
           '';
       };
     })
