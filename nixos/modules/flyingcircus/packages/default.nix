@@ -6,5 +6,6 @@
 
     fcagent = pkgs.callPackage ./fcagent.nix { };
     nagiosplugin = pkgs.callPackage ./nagiosplugin.nix { };
+
   };
 }

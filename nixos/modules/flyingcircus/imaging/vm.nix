@@ -4,9 +4,14 @@ with lib;
 
 {
   imports = [
-      ../installer/cd-dvd/channel.nix
-      ../profiles/clone-config.nix
+      <nixpkgs/nixos/modules/installer/cd-dvd/channel.nix>
+      <nixpkgs/nixos/modules/profiles/clone-config.nix>
   ];
+
+
+  # Providing the expected device-indepentend symlink wasn't easily possible,
+  # so we just start with the fixed known environment here.
+  boot.loader.grub.device = lib.mkOverride 10 "/dev/vda";
 
   system.build.flyingcircusVMImage =
     pkgs.vmTools.runInLinuxVM (
@@ -65,11 +70,6 @@ with lib;
           # `switch-to-configuration' requires a /bin/sh
           mkdir -p /mnt/bin
           ln -s ${config.system.build.binsh}/bin/sh /mnt/bin/sh
-
-          # Install a configuration.nix.
-          mkdir -p /mnt/etc/nixos
-          cp ${./bootstrap-config.nix} /mnt/etc/nixos/configuration.nix
-          chmod u+rw /mnt/etc/nixos/configuration.nix
 
           # Generate the GRUB menu.
           chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot

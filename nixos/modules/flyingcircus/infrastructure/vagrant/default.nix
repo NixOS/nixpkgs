@@ -8,7 +8,6 @@ let
 in
 {
     imports = [
-        ./base.nix
         /etc/nixos/hardware-configuration.nix
         /etc/nixos/vagrant.nix] ++
         interfaces_config;

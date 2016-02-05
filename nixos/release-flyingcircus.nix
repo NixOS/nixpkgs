@@ -65,9 +65,8 @@ in rec {
       config = (import lib/eval-config.nix {
         inherit system;
         modules = [ versionModule
-                   ./modules/flyingcircus/fcio.nix
-                   ./modules/flyingcircus/vm-base-profile.nix
-                   ./modules/flyingcircus/vm-image.nix ];
+                   ./modules/flyingcircus
+                   ./modules/flyingcircus/imaging/vm.nix ];
       }).config;
     in
       # Declare the image as a build product so that it shows up in Hydra.

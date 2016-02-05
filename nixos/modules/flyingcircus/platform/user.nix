@@ -38,6 +38,7 @@ let
     if builtins.pathExists config.fcio.admins_group_path
     then builtins.fromJSON (builtins.readFile config.fcio.admins_group_path)
     else null;
+
   admins_group =
     if admins_group_data == null
     then {}
@@ -85,6 +86,7 @@ let
           permissions));
 
 in
+
 {
 
   options = {
