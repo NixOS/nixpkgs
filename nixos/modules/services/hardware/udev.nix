@@ -104,10 +104,10 @@ let
           remoteFile="origin unknown"
           for i in ${toString cfg.packages}; do
             for j in "$i"/*/udev/rules.d/*; do
-              if [ -e "$out/$(basename "$j")" ]; then
-                remoteFile="originally from $j"
-                break 2
-              fi
+              [ -e "$out/$(basename "$j")" ] || continue
+              [ "$(basename "$j")" = "$(basename "$localFile")" ] || continue
+              remoteFile="originally from $j"
+              break 2
             done
           done
           refs="$(
