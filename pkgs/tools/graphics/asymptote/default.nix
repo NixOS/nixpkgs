@@ -3,6 +3,9 @@
   , boehmgc, mesa_glu, mesa_noglu, ncurses, readline, gsl, libsigsegv
   , python, zlib, perl, texLive, texinfo, xz
 }:
+
+assert stdenv.isLinux;
+
 let
   s = # Generated upstream information
   rec {
