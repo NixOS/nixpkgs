@@ -5,40 +5,6 @@
 
 with lib;
 
-let
-
-# Need to turn this into a real package once we require more
-manage_script = pkgs.stdenv.mkDerivation {
-  name = "fc-manage-0.1";
-
-  src = ./src;
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp $src/*.py $out/
-
-    cat <<__EOF__ > $out/bin/fc-manage
-    #!/bin/bash
-    # The current system reference is bad because I wasn't able tof figure out
-    # retrieving the path of all all dependencies (and theirs).
-    PATH=/run/current-system/sw/bin:/run/current-system/sw/sbin
-    ${pkgs.python3}/bin/python3 $out/fc-manage.py \$@
-    __EOF__
-    chmod +x $out/bin/fc-manage
-
-    cat <<__EOF__ > $out/bin/fc-resize-root
-    #!/bin/bash
-    # The current system reference is bad because I wasn't able tof figure out
-    # retrieving the path of all all dependencies (and theirs).
-    PATH=${pkgs.gptfdisk}/bin:${pkgs.utillinux}/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin
-    ${pkgs.python3}/bin/python3 $out/fc-resize-root.py \$@
-    __EOF__
-    chmod +x $out/bin/fc-resize-root
-    '';
-  };
-
-in
-
 {
 
   options = {
@@ -66,8 +32,24 @@ in
       # We always install the management agent, but we don't necessarily
       # enable it running automatically.
 
+      nixpkgs.config.packageOverrides = pkgs: rec {
+        fcmanage = pkgs.callPackage ./fcmanage.nix { };
+      };
+
+      # XXX This isn't activated cleanly. We can merge
+      # https://github.com/NixOS/nixpkgs/pull/12797
+      # if we like, once upstream has accepted it.
+
       environment.systemPackages = [
-        manage_script
+        pkgs.fcmanage
+      ];
+
+      services.udev.packages = [
+        pkgs.fcmanage
+      ];
+
+      services.udev.path = [
+        pkgs.fcmanage
       ];
 
     }

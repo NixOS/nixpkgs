@@ -23,7 +23,11 @@ with lib;
     "systemd.journald.forward_to_console=yes"
     "nosetmode"
     ];
-  boot.loader.grub.device = "/dev/vda";
+  # Changing this can be nasty: grub is reconfigured before any configuration
+  # is activated. This means we currently have to make sure that device exists
+  # when switching the configuration to it.
+  # https://github.com/NixOS/nixpkgs/issues/12833
+  boot.loader.grub.device = "/dev/disk/device-by-alias/root";
   boot.loader.grub.fsIdentifier = "provided";
   boot.loader.grub.gfxmodeBios = "text";
   boot.loader.grub.timeout = 3;
@@ -72,5 +76,6 @@ with lib;
       done
       '';
   };
+
 
 }
