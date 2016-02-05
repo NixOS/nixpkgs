@@ -1,4 +1,5 @@
 {stdenv, fetchurl, gettext}:
+
 stdenv.mkDerivation rec {
   name = "m17n-db-1.7.0";
 
@@ -9,9 +10,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gettext ];
 
-  configureFlags = [
+  configureFlags = stdenv.lib.optional (stdenv ? glibc)
     "--with-charmaps=${stdenv.glibc}/share/i18n/charmaps"
-  ];
+  ;
 
   meta = {
     homepage = http://www.nongnu.org/m17n/;
