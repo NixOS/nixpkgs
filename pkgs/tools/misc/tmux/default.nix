@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, libevent, pkgconfig }:
+{ stdenv, fetchurl, ncurses, libevent, pkgconfig, copyPathToStore }:
 
 stdenv.mkDerivation rec {
   name = "tmux-${version}";
@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ ncurses libevent ];
+
+#  prePatch = ''
+#    sed -e '/256colors.pl/d;d;d' -i 112.diff
+#  '';
+
+  patches = copyPathToStore ./tmux-truecolor-gh112.patch;
 
   configureFlags = [
     "--sysconfdir=/etc"
