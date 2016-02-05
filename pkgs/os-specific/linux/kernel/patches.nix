@@ -82,17 +82,10 @@ rec {
     };
 
   grsecurity_unstable = grsecPatch
-<<<<<<< HEAD
-    { kversion  = "4.1.7";
-      revision  = "201509131604";
-      branch    = "test";
-      sha256    = "1frfyi1pkiqc3awri3sr7xv41qxc8m2kb1yhfvj6xkrwb9li2bki";
-=======
     { kversion  = "4.3.4";
       revision  = "201601231215";
       branch    = "test";
       sha256    = "1dacld4zlp8mk6ykc0f1v5crppvq3znbdw9rwfrf6qi90984x0mr";
->>>>>>> 78956c7... linux: 4.3.3 -> 4.34 (and update grsecurity patches, too)
     };
 
   grsec_fix_path =
