@@ -14110,7 +14110,7 @@ let
   anki = callPackage ../games/anki { };
 
   armagetronad = callPackage ../games/armagetronad { };
-  
+
   arx-libertatis = callPackage ../games/arx-libertatis { };
 
   asc = callPackage ../games/asc {
@@ -15467,7 +15467,7 @@ let
 
   faust1 = callPackage ../applications/audio/faust/faust1.nix { };
 
-  faust2 = callPackage ../applications/audio/faust { };
+  faust2 = callPackage ../applications/audio/faust/faust2.nix { };
 
   faust2alqt = callPackage ../applications/audio/faust/faust2alqt.nix { };
 
