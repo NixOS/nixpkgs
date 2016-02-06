@@ -9731,6 +9731,8 @@ in
   apacheHttpdPackagesFor = apacheHttpd: self: let callPackage = newScope self; in {
     inherit apacheHttpd;
 
+    mod_auth_mellon = callPackage ../servers/http/apache-modules/mod_auth_mellon { };
+
     mod_dnssd = callPackage ../servers/http/apache-modules/mod_dnssd { };
 
     mod_evasive = callPackage ../servers/http/apache-modules/mod_evasive { };
