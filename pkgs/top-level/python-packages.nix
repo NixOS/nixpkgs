@@ -2609,6 +2609,13 @@ in modules // {
     };
 
     LC_ALL = "en_US.UTF-8";
+
+    # checkPhase require at least one 'normal' font and one 'monospace',
+    # otherwise glyph tests fails
+    FONTCONFIG_FILE = pkgs.makeFontsConf {
+      fontDirectories = [ pkgs.freefont_ttf ];
+    };
+
     buildInputs = with self; [ pytest pkgs.glibcLocales ];
     propagatedBuildInputs = with self; [ pkgs.cairo cffi ];
 
