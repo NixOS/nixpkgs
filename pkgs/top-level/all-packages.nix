@@ -790,6 +790,8 @@ let
 
   cli53 = callPackage ../tools/admin/cli53 { };
 
+  cli-visualizer = callPackage ../applications/misc/cli-visualizer { };
+
   cloud-init = callPackage ../tools/virtualization/cloud-init { };
 
   clib = callPackage ../tools/package-management/clib { };
