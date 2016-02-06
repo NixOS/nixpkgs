@@ -316,6 +316,7 @@ in
 
     systemd.services.systemd-udevd =
       { environment.MODULE_DIR = "/run/booted-system/kernel-modules/lib/modules";
+        restartTriggers = cfg.packages;
       };
 
   };
