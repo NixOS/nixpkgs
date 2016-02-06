@@ -21,15 +21,18 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optionals (!minimal) [
     "--with-drivers-path=${mesa_noglu.driverLink}/lib/dri"
-     "--enable-glx" 
-   ];
+    "--enable-glx"
+  ];
 
-   installFlags = lib.optional (!minimal) "DESTDIR=$(out)";
+  installFlags = lib.optional (!minimal) "DESTDIR=$(out)";
 
   postInstall = lib.optionalString (!minimal) ''
     cp -r $out/${mesa_noglu.driverLink}/* $out
     cp -r $out/$out/* $out
     rm -rf $out/run $out/$(echo "$out" | cut -d "/" -f2)
+
+    mkdir -p "$bin"
+    moveToOutput bin "$bin"
   '';
 
   meta = with stdenv.lib; {
