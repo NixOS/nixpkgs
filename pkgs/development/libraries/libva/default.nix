@@ -19,13 +19,7 @@ in stdenv.mkDerivation rec {
     "--enable-glx"
   ];
 
-  installFlags = lib.optional withMesa "DESTDIR=$(out)";
-
-  postInstall = lib.optionalString withMesa ''
-    cp -r $out/${mesa_noglu.driverLink}/* $out
-    cp -r $out/$out/* $out
-    rm -rf $out/run $out/$(echo "$out" | cut -d "/" -f2)
-  '';
+  installFlags = [ "dummy_drv_video_ladir=$(out)/lib/dri" ];
 
   meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/vaapi;
