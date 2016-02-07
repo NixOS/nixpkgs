@@ -5,7 +5,7 @@ let
     /* TODO: there are also MacOS, FreeBSD and Windows versions */
     x86_64-linux = {
       arch = "linuxx86";
-      sha256 = "0d2vhp5n74yhwixnvlsnp7dzaf9aj6zd2894hr2728djyd8x9fx6";
+      sha256 = "07cny2qkzc624bzpdsy4iakcln0p7v5rhf8bv0vnh6rhpvnahrnq";
       runtime = "lx86cl64";
       kernel = "linuxx8664";
     };
