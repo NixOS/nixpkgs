@@ -123,6 +123,8 @@ core-big = stdenv.mkDerivation {
 
   inherit (common) src;
 
+  hardening_format = false;
+
   buildInputs = core.buildInputs ++ [ core cairo harfbuzz icu graphite2 ];
 
   configureFlags = common.configureFlags
