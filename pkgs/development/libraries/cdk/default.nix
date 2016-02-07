@@ -1,18 +1,23 @@
-{stdenv, fetchurl, ncurses}:
+{ stdenv, fetchurl, ncurses }:
+
 let
+  version = "5.0-20160131";
+in
+stdenv.mkDerivation {
+  name = "cdk-${version}";
+  inherit version;
+
   buildInputs = [
     ncurses
   ];
-in
-stdenv.mkDerivation {
-  name = "cdk";
-  inherit buildInputs;
+
   src = fetchurl {
-    url = "http://invisible-island.net/datafiles/release/cdk.tar.gz";
-    sha256 = "0j74l874y33i26y5kjg3pf1vswyjif8k93pqhi0iqykpbxfsg382";
+    url = "ftp://invisible-island.net/cdk/cdk-${version}.tgz";
+    sha256 = "08ic2f5rmi8niaxwxwr6l6lhpan7690x52vpldnbjcf20rc0fbf3";
   };
+
   meta = {
-    description = ''Curses development kit'';
+    description = "Curses development kit";
     license = stdenv.lib.licenses.bsdOriginal ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
