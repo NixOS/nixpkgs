@@ -19,20 +19,22 @@ stdenv.mkDerivation {
         sha256 = "0sd9qkvhmk9av4g1f8dsjwc309hf1g0731bhvicnjb3b3d42l1n3";
     })
   ];
-  
+
   sourceRoot = ".";
 
   nativeBuildInputs = [ texinfo ];
-  
+
   buildInputs = [ gmp mpfr libmpc zlib ];
-  
+
+  hardening_format = false;
+
   # Make sure we don't strip the libraries in lib/gcc/avr.
   stripDebugList= [ "bin" "avr/bin" "libexec" ];
-  
+
   installPhase = ''
     # important, without this gcc won't find the binutils executables
     export PATH=$PATH:$out/bin
-    
+
     # Binutils.
     pushd binutils-*/
     mkdir obj-avr
@@ -64,7 +66,7 @@ stdenv.mkDerivation {
     make install
     popd
   '';
-  
+
   meta = with stdenv.lib; {
     description = "AVR development environment including binutils, avr-gcc and avr-libc";
     # I've tried compiling the packages separately.. too much hassle. This just works. Fine.
