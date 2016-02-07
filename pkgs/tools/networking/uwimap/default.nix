@@ -14,6 +14,8 @@ stdenv.mkDerivation {
     # -fPIC is required to compile php with imap on x86_64 systems
     + stdenv.lib.optionalString stdenv.isx86_64 " EXTRACFLAGS=-fPIC";
 
+  hardening_format = false;
+
   buildInputs = [ openssl ]
     ++ stdenv.lib.optional (!stdenv.isDarwin) pam;
 
