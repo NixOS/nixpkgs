@@ -1586,6 +1586,17 @@ rec {
 
   };
 
+  vinegar = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vinegar-2016-01-30";
+    src = fetchgit {
+      url = "git://github.com/tpope/vim-vinegar";
+      rev = "75fc3824bc09053f22735d6726c5cfd614c15642";
+      sha256 = "19fc1487169f1d8941ffddda1ffadd842ef4a773de2d32536eae52cf494154a6";
+    };
+    dependencies = [];
+
+  };
+
   vundle = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vundle-2015-11-04";
     src = fetchgit {
