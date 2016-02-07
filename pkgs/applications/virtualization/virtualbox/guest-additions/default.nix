@@ -17,6 +17,8 @@ stdenv.mkDerivation {
 
   KERN_DIR = "${kernel.dev}/lib/modules/*/build";
 
+  hardening_pic = false;
+
   buildInputs = [ patchelf cdrkit makeWrapper dbus ];
 
   installPhase = ''
