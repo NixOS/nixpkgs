@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  hardening_format = false;
+
   buildInputs = [ SDL gtk mesa ];
 
   nativeBuildInputs = [ autoconf automake libtool m4 pkgconfig makeWrapper ];
