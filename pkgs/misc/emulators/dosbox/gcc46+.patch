@@ -1,0 +1,11 @@
+--- include/dos_inc.h.old   2011-04-28 08:46:04.505011354 +0200
++++ include/dos_inc.h   2011-04-28 08:46:27.104408178 +0200
+@@ -21,6 +21,7 @@
+ #ifndef DOSBOX_DOS_INC_H
+ #define DOSBOX_DOS_INC_H
+ 
++#include <cstddef>
+ #ifndef DOSBOX_DOS_SYSTEM_H
+ #include "dos_system.h"
+ #endif
+
