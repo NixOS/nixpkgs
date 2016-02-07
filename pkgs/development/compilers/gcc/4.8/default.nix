@@ -218,6 +218,8 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
+  hardening_format = false;
+
   postPatch =
     if (stdenv.isGNU
         || (libcCross != null                  # e.g., building `gcc.crossDrv'
