@@ -263,7 +263,8 @@ let
     (writeScript "ensure-newer-sources-hook.sh" ''
       postUnpackHooks+=(_ensureNewerSources)
       _ensureNewerSources() {
-        find "$sourceRoot" '!' -newermt '${year}-01-01' -exec touch -d '${year}-01-02' '{}' '+'
+        '${findutils}/bin/find' "$sourceRoot" \
+          '!' -newermt '${year}-01-01' -exec touch -d '${year}-01-02' '{}' '+'
       }
     '');
 
