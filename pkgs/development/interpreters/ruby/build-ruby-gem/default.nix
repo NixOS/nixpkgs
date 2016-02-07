@@ -32,7 +32,9 @@ lib.makeOverridable (
 , platform ? "ruby"
 , ruby ? defs.ruby
 , stdenv ? ruby.stdenv
-, namePrefix ? "${ruby.name}" + "-"
+, namePrefix ? (let
+    rubyName = builtins.parseDrvName ruby.name;
+  in "${rubyName.name}${rubyName.version}-")
 , buildInputs ? []
 , doCheck ? false
 , meta ? {}
