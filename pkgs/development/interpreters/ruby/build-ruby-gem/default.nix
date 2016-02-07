@@ -91,7 +91,7 @@ stdenv.mkDerivation (attrs // {
     ++ lib.optional stdenv.isDarwin darwin.libobjc
     ++ buildInputs;
 
-  name = attrs.name or (namePrefix + gemName);
+  name = attrs.name or "${namePrefix}${gemName}-${version}";
 
   inherit src;
 
