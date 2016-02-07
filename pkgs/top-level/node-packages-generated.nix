@@ -29315,7 +29315,7 @@
     version = "0.9.12";
     bin = false;
     src = fetchurl {
-      url = "https://github.com/ciaranj/node-oauth/tarball/master";
+      url = "https://github.com/ciaranj/node-oauth/tarball/0.9.12";
       name = "oauth-0.9.12.tgz";
       sha256 = "e06c3c3537e9c802c8ad00640b9f91bf2857cf8cc91209e355b5646f4da8b3e7";
     };
