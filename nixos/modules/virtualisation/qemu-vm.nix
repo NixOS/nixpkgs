@@ -427,38 +427,38 @@ in
         ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
           { device = "store";
             fsType = "9p";
-            options = "trans=virtio,version=9p2000.L,cache=loose";
+            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
             neededForBoot = true;
           };
         "/tmp/xchg" =
           { device = "xchg";
             fsType = "9p";
-            options = "trans=virtio,version=9p2000.L,cache=loose";
+            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
             neededForBoot = true;
           };
         "/tmp/shared" =
           { device = "shared";
             fsType = "9p";
-            options = "trans=virtio,version=9p2000.L";
+            options = [ "trans=virtio" "version=9p2000.L" ];
             neededForBoot = true;
           };
       } // optionalAttrs cfg.writableStore
       { "/nix/store" =
           { fsType = "unionfs-fuse";
             device = "unionfs";
-            options = "allow_other,cow,nonempty,chroot=/mnt-root,max_files=32768,hide_meta_files,dirs=/nix/.rw-store=rw:/nix/.ro-store=ro";
+            options = [ "allow_other" "cow" "nonempty" "chroot=/mnt-root" "max_files=32768" "hide_meta_files" "dirs=/nix/.rw-store=rw:/nix/.ro-store=ro" ];
           };
       } // optionalAttrs (cfg.writableStore && cfg.writableStoreUseTmpfs)
       { "/nix/.rw-store" =
           { fsType = "tmpfs";
-            options = "mode=0755";
+            options = [ "mode=0755" ];
             neededForBoot = true;
           };
       } // optionalAttrs cfg.useBootLoader
       { "/boot" =
           { device = "/dev/vdb2";
             fsType = "vfat";
-            options = "ro";
+            options = [ "ro" ];
             noCheck = true; # fsck fails on a r/o filesystem
           };
       });

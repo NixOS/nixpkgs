@@ -28,10 +28,10 @@
     ada-mode = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib, wisi }:
     elpaBuild {
         pname = "ada-mode";
-        version = "5.1.8";
+        version = "5.1.9";
         src = fetchurl {
-          url = "http://elpa.gnu.org/packages/ada-mode-5.1.8.tar";
-          sha256 = "015lmliwk4qa2sbs9spxik6dnwsf1a34py6anklf92qnmzhjicy6";
+          url = "http://elpa.gnu.org/packages/ada-mode-5.1.9.tar";
+          sha256 = "04hwy9py22c4vpbk24idbyavjdjpm1akvnfigdzx35zljdrvk3l7";
         };
         packageRequires = [ cl-lib emacs wisi ];
         meta = {
@@ -148,10 +148,10 @@
       }) {};
     auctex = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "auctex";
-        version = "11.89";
+        version = "11.89.1";
         src = fetchurl {
-          url = "http://elpa.gnu.org/packages/auctex-11.89.tar";
-          sha256 = "0ggk2q17wq4y9yw5b9mykk153ihphazjdj1fl4lv0zblgnrxz5l5";
+          url = "http://elpa.gnu.org/packages/auctex-11.89.1.tar";
+          sha256 = "0nqp12l5x2h0hxl8p3l6aiz4mvdf79zz84z1wl3q2prliac3xz17";
         };
         packageRequires = [];
         meta = {
@@ -188,10 +188,10 @@
     avy = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "avy";
-        version = "0.3.0";
+        version = "0.4.0";
         src = fetchurl {
-          url = "http://elpa.gnu.org/packages/avy-0.3.0.tar";
-          sha256 = "1ycfqabx949s7dgp9vhyb9phpxw83gjw4cc7914gr84bqlkj0458";
+          url = "http://elpa.gnu.org/packages/avy-0.4.0.tar";
+          sha256 = "1vbp37ndv5930x120n0isxxxfs8d5wqlrbnxvp6h3ahbbv0zdcsn";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -417,10 +417,10 @@
       }) {};
     debbugs = callPackage ({ async, elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "debbugs";
-        version = "0.8";
+        version = "0.9";
         src = fetchurl {
-          url = "http://elpa.gnu.org/packages/debbugs-0.8.tar";
-          sha256 = "1wp5wa2a0rwvpfdzd2b78k6vd26qbyqwl4p2c2s5l7zkqy258in5";
+          url = "http://elpa.gnu.org/packages/debbugs-0.9.tar";
+          sha256 = "1wc6kw7hihqqdx8qyl01akygycnan44x400hwrcf54m3hb4isa0k";
         };
         packageRequires = [ async ];
         meta = {
@@ -445,10 +445,10 @@
     diff-hl = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "diff-hl";
-        version = "1.8.2";
+        version = "1.8.3";
         src = fetchurl {
-          url = "http://elpa.gnu.org/packages/diff-hl-1.8.2.tar";
-          sha256 = "1y0v5fiizkmhzafiscrcqjzxpwjcag5rx79lq3iplh58vxlmb65w";
+          url = "http://elpa.gnu.org/packages/diff-hl-1.8.3.tar";
+          sha256 = "1i3ngx5gmjl1a15y6d0xmcgdimn7ghrqkbzqisz4ra3dgwbbb3f9";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -681,6 +681,19 @@
         packageRequires = [ cl-lib emacs ];
         meta = {
           homepage = "http://elpa.gnu.org/packages/ggtags.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    gnome-c-style = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
+        pname = "gnome-c-style";
+        version = "0.1";
+        src = fetchurl {
+          url = "http://elpa.gnu.org/packages/gnome-c-style-0.1.tar";
+          sha256 = "09w68jbpzyyhcaqw335qpr840j7xx0j81zxxkxq4ahqv6ck27v4x";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "http://elpa.gnu.org/packages/gnome-c-style.html";
           license = lib.licenses.free;
         };
       }) {};
@@ -923,6 +936,20 @@
           license = lib.licenses.free;
         };
       }) {};
+    loccur = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
+    elpaBuild {
+        pname = "loccur";
+        version = "1.2.2";
+        src = fetchurl {
+          url = "http://elpa.gnu.org/packages/loccur-1.2.2.el";
+          sha256 = "0ij5wzxysaikiccw7mjbw1sfylvih0n6b6yyp55vn8w1z2dba0xk";
+        };
+        packageRequires = [ cl-lib ];
+        meta = {
+          homepage = "http://elpa.gnu.org/packages/loccur.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     markchars = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "markchars";
         version = "0.2.0";
@@ -1017,10 +1044,10 @@
       }) {};
     multishell = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "multishell";
-        version = "1.0.4";
+        version = "1.1.2";
         src = fetchurl {
-          url = "http://elpa.gnu.org/packages/multishell-1.0.4.el";
-          sha256 = "11nx9h1c039h7md7pr1xlc3kla8n0vq6pa54i25wakf5n30019f4";
+          url = "http://elpa.gnu.org/packages/multishell-1.1.2.tar";
+          sha256 = "1y0b6ri0kgxj0jw1cyb796lsy3ipzb7syvmj7pqpx9myzpvd3hz3";
         };
         packageRequires = [];
         meta = {
@@ -1175,10 +1202,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20160118";
+        version = "20160201";
         src = fetchurl {
-          url = "http://elpa.gnu.org/packages/org-20160118.tar";
-          sha256 = "107jzpykg5fgd4wzppn2ayvrg2l6z7mnlq8v7r52x15400k9xnxr";
+          url = "http://elpa.gnu.org/packages/org-20160201.tar";
+          sha256 = "1lyvfpksl88c9d7k2w4k3iswgjah51k9f8fdi3jbfwivd814m9nb";
         };
         packageRequires = [];
         meta = {
@@ -1329,6 +1356,19 @@
         packageRequires = [ cl-lib ];
         meta = {
           homepage = "http://elpa.gnu.org/packages/rich-minority.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    rnc-mode = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
+        pname = "rnc-mode";
+        version = "0.1";
+        src = fetchurl {
+          url = "http://elpa.gnu.org/packages/rnc-mode-0.1.el";
+          sha256 = "18hm9g05ld8i1apr28dmd9ccq6dc0w6rdqhi0k7ka95jxxdr9m6d";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "http://elpa.gnu.org/packages/rnc-mode.html";
           license = lib.licenses.free;
         };
       }) {};
@@ -1663,10 +1703,10 @@
       }) {};
     wcheck-mode = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "wcheck-mode";
-        version = "2016.1.5";
+        version = "2016.1.30";
         src = fetchurl {
-          url = "http://elpa.gnu.org/packages/wcheck-mode-2016.1.5.el";
-          sha256 = "0axd32sw1papxz4yscjg85a2li8a8m8z5fn2jzb3620700j86jb3";
+          url = "http://elpa.gnu.org/packages/wcheck-mode-2016.1.30.el";
+          sha256 = "0hzrxnslfl04h083njy7wp4hhgrqpyz0cnm73v348kr1i4wx9xjq";
         };
         packageRequires = [];
         meta = {
@@ -1729,10 +1769,10 @@
     wisi = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "wisi";
-        version = "1.1.1";
+        version = "1.1.2";
         src = fetchurl {
-          url = "http://elpa.gnu.org/packages/wisi-1.1.1.tar";
-          sha256 = "14bpir7kng8b4m1yna4iahhp2z0saagc2i8z53apd39msbplay3r";
+          url = "http://elpa.gnu.org/packages/wisi-1.1.2.tar";
+          sha256 = "04gryfpgbviviwbnvv3sh280pzasr59cp5xz1s0yf0n4d3rv2df3";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -1806,14 +1846,15 @@
           license = lib.licenses.free;
         };
       }) {};
-    ztree = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
+    ztree = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
+    elpaBuild {
         pname = "ztree";
-        version = "1.0.2";
+        version = "1.0.3";
         src = fetchurl {
-          url = "http://elpa.gnu.org/packages/ztree-1.0.2.tar";
-          sha256 = "0rm9b7cw5md9zbgbq89kh8wb5jdjrqy9g43psdws19z6j532g665";
+          url = "http://elpa.gnu.org/packages/ztree-1.0.3.tar";
+          sha256 = "1mwzk48sah4w5jmlmzqxnwhnlnc2mf25ayhgymv24sv8c6hdllsw";
         };
-        packageRequires = [];
+        packageRequires = [ cl-lib ];
         meta = {
           homepage = "http://elpa.gnu.org/packages/ztree.html";
           license = lib.licenses.free;

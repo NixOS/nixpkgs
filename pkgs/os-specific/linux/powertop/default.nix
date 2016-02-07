@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/main.cpp --replace "/sbin/modprobe" "modprobe"
+    substituteInPlace src/calibrate/calibrate.cpp --replace "/usr/bin/xset" "xset"
   '';
 
   meta = {

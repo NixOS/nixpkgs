@@ -21,6 +21,12 @@
 with stdenv.lib;
 
 ''
+  # Compress kernel modules for a sizable disk space savings.
+  ${optionalString (versionAtLeast version "3.18") ''
+    MODULE_COMPRESS y
+    MODULE_COMPRESS_XZ y
+  ''}
+
   # Debugging.
   DEBUG_KERNEL y
   TIMER_STATS y
@@ -354,6 +360,9 @@ with stdenv.lib;
   USB_EHCI_TT_NEWSCHED y # Improved transaction translator scheduling
   X86_CHECK_BIOS_CORRUPTION y
   X86_MCE y
+
+  # PCI-Expresscard hotplug support
+  HOTPLUG_PCI_PCIE y
 
   # Linux containers.
   NAMESPACES? y #  Required by 'unshare' used by 'nixos-install'

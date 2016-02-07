@@ -119,7 +119,7 @@ mirror://xorg/individual/proto/xextproto-7.3.0.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86bigfontproto-1.2.0.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86dgaproto-2.1.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86driproto-2.1.1.tar.bz2
-mirror://xorg/individual/driver/xf86-input-evdev-2.10.0.tar.bz2
+mirror://xorg/individual/driver/xf86-input-evdev-2.10.1.tar.bz2
 mirror://xorg/individual/driver/xf86-input-joystick-1.6.2.tar.bz2
 mirror://xorg/individual/driver/xf86-input-keyboard-1.8.1.tar.bz2
 mirror://xorg/individual/driver/xf86-input-libinput-0.16.0.tar.bz2

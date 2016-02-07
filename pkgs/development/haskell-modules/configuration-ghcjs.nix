@@ -12,7 +12,7 @@ self: super: {
   # LLVM is not supported on this GHC; use the latest one.
   inherit (pkgs) llvmPackages;
 
-  inherit (pkgs.haskell.packages.ghc7102) jailbreak-cabal alex happy gtk2hs-buildtools;
+  inherit (pkgs.haskell.packages.ghc7103) jailbreak-cabal alex happy gtk2hs-buildtools rehoo hoogle;
 
   # This is the list of packages that are built into a booted ghcjs installation
   # It can be generated with the command:
@@ -84,6 +84,25 @@ self: super: {
       sed -i 's/^{-# ANN .* #-}//' src/Data/Profunctor/Unsafe.hs
     '';
   });
+
+  ghcjs-ffiqq = self.callPackage
+    ({ mkDerivation, base, template-haskell, ghcjs-base, split, containers, text, ghc-prim
+     }:
+     mkDerivation {
+       pname = "ghcjs-ffiqq";
+       version = "0.1.0.0";
+       src = pkgs.fetchFromGitHub {
+         owner = "ghcjs";
+         repo = "ghcjs-ffiqq";
+         rev = "da31b18582542fcfceade5ef6b2aca66662b9e20";
+         sha256 = "1mkp8p9hispyzvkb5v607ihjp912jfip61id8d42i19k554ssp8y";
+       };
+       libraryHaskellDepends = [
+         base template-haskell ghcjs-base split containers text ghc-prim
+       ];
+       description = "FFI QuasiQuoter for GHCJS";
+       license = stdenv.lib.licenses.mit;
+     }) {};
 
   ghcjs-dom = overrideCabal super.ghcjs-dom (drv: {
     libraryHaskellDepends =

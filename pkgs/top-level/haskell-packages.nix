@@ -50,8 +50,8 @@ rec {
       inherit (packages.ghc784) ghc alex happy;
     };
 
-    ghcjs = packages.ghc7102.callPackage ../development/compilers/ghcjs {
-      ghc = compiler.ghc7102;
+    ghcjs = packages.ghc7103.callPackage ../development/compilers/ghcjs {
+      ghc = compiler.ghc7103;
     };
 
     jhc = callPackage ../development/compilers/jhc {
@@ -339,6 +339,9 @@ rec {
 
     lts-5_0 = packages.ghc7103.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-5.0.nix { };
+    };
+    lts-5_1 = packages.ghc7103.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-5.1.nix { };
     };
 
   };

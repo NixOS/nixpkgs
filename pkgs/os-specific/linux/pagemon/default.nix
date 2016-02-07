@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "pagemon-${version}";
-  version = "0.01.06";
+  version = "0.01.07";
 
   src = fetchFromGitHub {
-    sha256 = "0p6mzmyjn5dq1ma9ld47gnrszyf0yph76dd5k7hl60a5zq5741aa";
+    sha256 = "041jqk11sq1qn3avsx4jbfqzvg6rfa5kmgn16q8jnwm5fqfaj037";
     rev = "V${version}";
     repo = "pagemon";
     owner = "ColinIanKing";

@@ -34,6 +34,9 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # cabal-install can use the native Cabal library.
+  cabal-install = super.cabal-install.override { Cabal = null; };
+
   # jailbreak-cabal can use the native Cabal library.
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
 

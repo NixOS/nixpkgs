@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     sed -i "s|(hostname\||(${nettools}/bin/hostname\||" "$out/share/fish/functions/fish_prompt.fish"
     sed -i "s|Popen(\['manpath'|Popen(\['${man_db}/bin/manpath'|" "$out/share/fish/tools/create_manpage_completions.py"
+    sed -i "s|command manpath|command ${man_db}/bin/manpath|" "$out/share/fish/functions/man.fish"
   '' + ''
     sed -i "s|/sbin /usr/sbin||" \
            "$out/share/fish/functions/__fish_complete_subcommand_root.fish"
