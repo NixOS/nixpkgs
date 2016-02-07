@@ -54,7 +54,10 @@ in stdenv.mkDerivation rec {
   # vendored header file - regardless of whether or not we're using the system
   # tcmalloc - so we need to lift the include path manipulation out of the
   # conditional.
-  patches = [ ./valgrind-include.patch ];
+  patches = [
+    ./valgrind-include.patch
+    ./asio-sslv3.patch  # remove when using system asio
+  ];
 
   postPatch = ''
     # fix environment variable reading
