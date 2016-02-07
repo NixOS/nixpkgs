@@ -13388,6 +13388,8 @@ let
 
   stp = callPackage ../applications/science/logic/stp {};
 
+  swm = callPackage ../applications/window-managers/swm {};
+
   stumpwm = callPackage ../applications/window-managers/stumpwm {
     sbcl = sbcl_1_2_5;
     lispPackages = lispPackagesFor (wrapLisp sbcl_1_2_5);
@@ -15849,6 +15851,8 @@ let
   };
 
   wmutils-core = callPackage ../tools/X11/wmutils-core { };
+
+  wmutils-opt = callPackage ../tools/X11/wmutils-opt { };
 
   wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
 
