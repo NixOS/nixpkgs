@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./drop-comments.patch ]; # we would get into a cycle when using fetchpatch on this one
 
+  hardening_format = false;
+
   meta = with stdenv.lib; {
     description = "Tools to manipulate patch files";
     homepage = http://cyberelk.net/tim/software/patchutils;
