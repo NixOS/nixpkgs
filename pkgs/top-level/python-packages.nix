@@ -7054,14 +7054,14 @@ in modules // {
     name = "scikits.samplerate-${version}";
     version = "0.3.3";
     src = pkgs.fetchgit {
-      url = https://github.com/ThomasLecocq/samplerate;
-      rev = "7edb22b23f5aa8e7342aea0b538bdd0434988510";
-      sha256 = "ec2a09819c38028283505090ee9839963d3557e73f6e8eb3348ff8884d0d67ed";
-      };
+      url = https://github.com/cournape/samplerate;
+      rev = "a536c97eb2d6195b5f266ea3cc3a35364c4c2210";
+      sha256 = "0mgic7bs5zv5ji05vr527jlxxlb70f9dg93hy1lzyz2plm1kf7gg";
+    };
+
     buildInputs = with self;  [ pkgs.libsamplerate ];
 
     propagatedBuildInputs = with self; [ numpy ];
-
 
     preConfigure = ''
        cat > site.cfg << END
