@@ -62,6 +62,9 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.isDarwin && withX)
     "-I${cairo}/include/cairo";
 
+  NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.isDarwin
+    "-headerpad_max_install_names";
+
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/
     cp ${./site-start.el} $out/share/emacs/site-lisp/site-start.el
