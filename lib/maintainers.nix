@@ -125,7 +125,7 @@
   gfxmonk = "Tim Cuthbertson <tim@gfxmonk.net>";
   giogadi = "Luis G. Torres <lgtorres42@gmail.com>";
   gleber = "Gleb Peregud <gleber.p@gmail.com>";
-  globin = "Robin Gloster <robin@glob.in>";
+  globin = "Robin Gloster <mail@glob.in>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
   gridaphobe = "Eric Seidel <eric@seidel.io>";
   guibert = "David Guibert <david.guibert@gmail.com>";
