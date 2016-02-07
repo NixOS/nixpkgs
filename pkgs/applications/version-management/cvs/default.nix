@@ -10,6 +10,8 @@ stdenv.mkDerivation {
 
   patches = [ ./getcwd-chroot.patch ];
 
+  hardening_format = false;
+
   preConfigure = ''
     # Apply the Debian patches.
     for p in "debian/patches/"*; do
