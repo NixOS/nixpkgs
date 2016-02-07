@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ autoconf automake libtool ];
 
+  hardening_pic = false;
+
   preConfigure = ''
     ./autogen.sh
 
