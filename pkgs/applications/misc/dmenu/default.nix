@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libX11, libXinerama, libXft, zlib}:
+{ stdenv, fetchurl, libX11, libXinerama, libXft, zlib, patches ? null }:
 
 stdenv.mkDerivation rec {
   name = "dmenu-4.6";
@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libX11 libXinerama zlib libXft ];
+
+  inherit patches;
 
   postPatch = ''
     sed -ri -e 's!\<(dmenu|stest)\>!'"$out/bin"'/&!g' dmenu_run

@@ -16,7 +16,7 @@ let
   mkPluginInfo = { output ? "out", allowedVars ? [ output ]
                  , flags ? [], envVars ? {}
                  }: let
-    shSearch = ["'"] ++ map (var: "\$${var}") allowedVars;
+    shSearch = ["'"] ++ map (var: "@${var}@") allowedVars;
     shReplace = ["'\\''"] ++ map (var: "'\"\${${var}}\"'") allowedVars;
     # We need to triple-escape "val":
     #  * First because makeWrapper doesn't do any quoting of its arguments by
@@ -94,8 +94,8 @@ let
         output = "flash";
         allowedVars = [ "flash" "flashVersion" ];
         flags = [
-          "--ppapi-flash-path=$flash/lib/libpepflashplayer.so"
-          "--ppapi-flash-version=$flashVersion"
+          "--ppapi-flash-path=@flash@/lib/libpepflashplayer.so"
+          "--ppapi-flash-version=@flashVersion@"
         ];
       }}
 
@@ -107,7 +107,7 @@ let
       ${mkPluginInfo {
         output = "widevine";
         flags = [ "--register-pepper-plugins=${wvModule}${wvInfo}" ];
-        envVars.NIX_CHROMIUM_PLUGIN_PATH_WIDEVINE = "$widevine/lib";
+        envVars.NIX_CHROMIUM_PLUGIN_PATH_WIDEVINE = "@widevine@/lib";
       }}
     '';
 

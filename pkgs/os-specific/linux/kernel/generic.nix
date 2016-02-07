@@ -57,10 +57,6 @@ let
     autoModules = stdenv.platform.kernelAutoModules;
     arch = stdenv.platform.kernelArch;
 
-    preConfigure = ''
-        buildFlagsArray+=("KBUILD_BUILD_TIMESTAMP=Thu Jan 1 00:00:01 UTC 1970")
-    '';
-
     crossAttrs = let
         cp = stdenv.cross.platform;
       in {

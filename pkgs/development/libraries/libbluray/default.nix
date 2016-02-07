@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   name = "${baseName}-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.videolan.org/pub/videolan/${baseName}/${version}/${name}.tar.bz2";
+    url = "http://get.videolan.org/${baseName}/${version}/${name}.tar.bz2";
     sha256 = "1sp71j4agcsg17g6b85cqz78pn5vknl5pl39rvr6mkib5ps99jgg";
   };
 

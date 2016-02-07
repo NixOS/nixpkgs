@@ -36,7 +36,7 @@
 
 , lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
 
-, emacs, texinfo, makeWrapper
+, emacs, texinfo, lndir, makeWrapper
 , trivialBuild
 , melpaBuild
 
@@ -60,7 +60,7 @@ let
   };
 
   emacsWithPackages = import ../build-support/emacs/wrapper.nix {
-    inherit lib makeWrapper stdenv;
+    inherit lib lndir makeWrapper stdenv;
   };
 
   packagesFun = self: with self; {
@@ -711,54 +711,6 @@ let
     };
   };
 
-  flycheck = melpaBuild rec {
-    pname   = "flycheck";
-    version = "0.25.1";
-    src = fetchFromGitHub {
-      owner  = pname;
-      repo   = pname;
-      rev    = version;
-      sha256 = "19mnx2zm71qrf7qf3mk5kriv5vgq0nl67lj029n63wqd8jcjb5fi";
-    };
-    packageRequires = [ dash let-alist pkg-info seq ];
-    meta = {
-      description = "On-the-fly syntax checking, intended as replacement for the older Flymake which is part of Emacs";
-      license = gpl3Plus;
-    };
-  };
-
-  flycheck-haskell = melpaBuild rec {
-    pname   = "flycheck-haskell";
-    version = "0.7.2";
-    src = fetchFromGitHub {
-      owner  = "flycheck";
-      repo   = pname;
-      rev    = version;
-      sha256 = "0143lcn6g46g7skm4r6lqq09s8mr3268rikbzlh65qg80rpg9frj";
-    };
-    packageRequires = [ dash flycheck haskell-mode let-alist pkg-info ];
-    meta = {
-      description = "Improved Haskell support for Flycheck";
-      license = gpl3Plus;
-    };
-  };
-
-  flycheck-pos-tip = melpaBuild rec {
-    pname   = "flycheck-pos-tip";
-    version = "20140813";
-    src = fetchFromGitHub {
-      owner  = "flycheck";
-      repo   = pname;
-      rev    = "5b3a203bbdb03e4f48d1654efecd71f44376e199";
-      sha256 = "0b4x24aq0jh4j4bjv0fqyaz6hzh3gqf57k9763jj9rl32cc3dpnp";
-    };
-    packageRequires = [ flycheck popup ];
-    meta = {
-      description = "Flycheck errors display in tooltip";
-      license = gpl3Plus;
-    };
-  };
-
   ghc-mod = melpaBuild rec {
     pname = "ghc";
     version = external.ghc-mod.version;
@@ -768,6 +720,19 @@ let
     fileSpecs = [ "elisp/*.el" ];
     meta = {
       description = "An extension of haskell-mode that provides completion of symbols and documentation browsing";
+      license = bsd3;
+    };
+  };
+
+  hindent = melpaBuild rec {
+    pname = "hindent";
+    version = external.hindent.version;
+    src = external.hindent.src;
+    packageRequires = [ haskell-mode ];
+    propagatedUserEnvPkgs = [ external.hindent ];
+    fileSpecs = [ "elisp/*.el" ];
+    meta = {
+      description = "Indent haskell code using the \"hindent\" program";
       license = bsd3;
     };
   };

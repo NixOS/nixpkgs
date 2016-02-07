@@ -1,19 +1,14 @@
-{fetchurl, stdenv, makeWrapper, gtk3, python3Packages}:
-let
-  version = "0.9.2";
-in
-stdenv.mkDerivation {
+{fetchurl, stdenv, gtk3, python34Packages, gobjectIntrospection}:
+python34Packages.buildPythonPackage rec {
   name = "solaar-${version}";
+  version = "0.9.2";
+  namePrefix = "";
   src = fetchurl {
     sha256 = "0954grz2adggfzcj4df4mpr4d7qyl7w8rb4j2s0f9ymawl92i05j";
     url = "https://github.com/pwr/Solaar/archive/${version}.tar.gz";
   };
 
-  buildInputs = [gtk3 python3Packages.pygobject3 python3Packages.pyudev];
-  enableParallelBuilding = true;
-  installPhase = ''
-    mkdir -p "$out";
-  '';
+  propagatedBuildInputs = [python34Packages.pygobject3 python34Packages.pyudev gobjectIntrospection gtk3];
   postInstall = ''
     wrapProgram "$out/bin/solaar" \
       --prefix PYTHONPATH : "$PYTHONPATH" \
@@ -22,6 +17,8 @@ stdenv.mkDerivation {
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
   '';
+
+  enableParallelBuilding = true;
   meta = with stdenv.lib; {
     description = "Linux devices manager for the Logitech Unifying Receiver";
     longDescription = ''

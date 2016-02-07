@@ -840,6 +840,9 @@ self: super: {
   configurator = dontCheck super.configurator;
 
   # The cabal files for these libraries do not list the required system dependencies.
+  miniball = overrideCabal super.miniball (drv: {
+    librarySystemDepends = [ pkgs.miniball ];
+  });
   SDL-image = overrideCabal super.SDL-image (drv: {
     librarySystemDepends = [ pkgs.SDL pkgs.SDL_image ] ++ drv.librarySystemDepends or [];
   });

@@ -255,4 +255,16 @@ in {
       git = "1ssq3c23ay57ypfis47y2n817hfmb71w0xrdzp57j6bv12jqmgrx";
     };
   };
+
+  ruby_2_3_0 = generic {
+    majorVersion = "2";
+    minorVersion = "3";
+    teenyVersion = "0";
+    patchLevel = "0";
+    sha256 = {
+      # src = "1ssq3c23ay57ypfis47y2n817hfmb71w0xrdzp57j6bv12jqmgrx";
+      src = "01z5cya4a7y751d4pb3aak5qcwmmvnwkbgz9z171p8hsbw7acnxs";
+      git = "0nl0pp96m0jxi422mqx09jqn9bff90pzz0xxa0ikrx7by0g00npg";
+    };
+  };
 }

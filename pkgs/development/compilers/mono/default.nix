@@ -65,6 +65,11 @@ stdenv.mkDerivation rec {
   postInstall = ''
     echo "Updating Mono key store"
     $out/bin/cert-sync ${cacert}/etc/ssl/certs/ca-bundle.crt
+  ''
+  # According to [1], gmcs is just mcs
+  # [1] https://github.com/mono/mono/blob/master/scripts/gmcs.in
+  + ''
+    ln -s $out/bin/mcs $out/bin/gmcs
   '';
 
   meta = {

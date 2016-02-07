@@ -98,11 +98,9 @@ in
             script = ''
               set -u
               set -o pipefail
-
-              PATH=${pkgs.procps}/bin:${pkgs.gnugrep}/bin:${pkgs.gnused}/bin
-
+              
               # Calculate memory to use for zram
-              totalmem=$(free | grep -e "^Mem:" | sed -e 's/^Mem: *//' -e 's/  *.*//')
+              totalmem=$(${pkgs.gnugrep}/bin/grep 'MemTotal: ' /proc/meminfo | ${pkgs.gawk}/bin/awk '{print $2}')
               mem=$(((totalmem * ${toString cfg.memoryPercent} / 100 / ${toString cfg.numDevices}) * 1024))
 
               echo $mem > /sys/class/block/${dev}/disksize

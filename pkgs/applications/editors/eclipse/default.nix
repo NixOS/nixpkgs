@@ -12,7 +12,7 @@ rec {
 
   buildEclipse = import ./build-eclipse.nix args;
 
-  eclipse_sdk_35 = buildEclipse {
+  eclipse-sdk-35 = buildEclipse {
     name = "eclipse-sdk-3.5.2";
     description = "Eclipse Classic";
     src =
@@ -27,10 +27,9 @@ rec {
           md5 = "bde55a2354dc224cf5f26e5320e72dac";
         };
   };
+  eclipse_sdk_35 = eclipse-sdk-35; # backward compatibility, added 2016-01-30
 
-  # !!! Use mirror://eclipse/.
-
-  eclipse_sdk_36 = buildEclipse {
+  eclipse-sdk-36 = buildEclipse {
     name = "eclipse-sdk-3.6.2";
     description = "Eclipse Classic";
     src =
@@ -45,9 +44,10 @@ rec {
           sha256 = "1bh8ykliqr8wbciv13vpiy50rvm7yszk7y8dslr796dbwhi5b1cj";
         };
   };
+  eclipse_sdk_36 = eclipse-sdk-36; # backward compatibility, added 2016-01-30
 
-  eclipse_scala_sdk_40 = buildEclipse {
-    name = "eclipse-scala_sdk-4.0.0";
+  eclipse-scala-sdk-40 = buildEclipse {
+    name = "eclipse-scala-sdk-4.0.0";
     description = "Eclipse IDE for Scala Developers";
     src =
       if stdenv.system == "x86_64-linux" then
@@ -61,8 +61,9 @@ rec {
           sha256 = "f422aea5903c97d212264a5a43c6ebc638aecbd4ce5e6078d92618725bc5d31e";
         };
   };
+  eclipse_scala_sdk_40 = eclipse-scala-sdk-40; # backward compatibility, added 2016-01-30
 
-  eclipse_cpp_36 = buildEclipse {
+  eclipse-cpp-36 = buildEclipse {
     name = "eclipse-cpp-3.6.2";
     description = "Eclipse IDE for C/C++ Developers";
     src =
@@ -77,8 +78,9 @@ rec {
           sha1 = "1156e4bc0253ae3a3a4e54839e4944dc64d3108f";
         };
   };
+  eclipse_cpp_36 = eclipse-cpp-36; # backward compatibility, added 2016-01-30
 
-  eclipse_modeling_36 = buildEclipse {
+  eclipse-modeling-36 = buildEclipse {
     name = "eclipse-modeling-3.6.2";
     description = "Eclipse Modeling Tools (includes Incubating components)";
     src =
@@ -93,8 +95,9 @@ rec {
           sha1 = "696377895bb26445de39d82a916b7e69edb1d939";
         };
   };
+  eclipse_modeling_36 = eclipse-modeling-36; # backward compatibility, added 2016-01-30
 
-  eclipse_sdk_37 = buildEclipse {
+  eclipse-sdk-37 = buildEclipse {
     name = "eclipse-sdk-3.7";
     description = "Eclipse Classic";
     sources = {
@@ -108,8 +111,9 @@ rec {
         };
     };
   };
+  eclipse_sdk_37 = eclipse-sdk-37; # backward compatibility, added 2016-01-30
 
-  eclipse_cpp_37 = buildEclipse {
+  eclipse-cpp-37 = buildEclipse {
     name = "eclipse-cpp-3.7";
     description = "Eclipse IDE for C/C++ Developers";
     src =
@@ -124,8 +128,9 @@ rec {
           sha256 = "1cvg1vgyazrkinwzlvlf0dpl197p4784752srqybqylyj5psdi3b";
         };
   };
+  eclipse_cpp_37 = eclipse-cpp-37; # backward compatibility, added 2016-01-30
 
-  eclipse_cpp_42 = buildEclipse {
+  eclipse-cpp-42 = buildEclipse {
     name = "eclipse-cpp-4.2";
     description = "Eclipse IDE for C/C++ Developers";
     src =
@@ -140,8 +145,9 @@ rec {
           sha256 = "1a4s9qlhfpfpdhvffyglnfdr3dq5r2ywcxqywhqi95yhq5nmsgyk";
         };
   };
+  eclipse_cpp_42 = eclipse-cpp-42; # backward compatibility, added 2016-01-30
 
-  eclipse_cpp_43 = buildEclipse {
+  eclipse-cpp-43 = buildEclipse {
     name = "eclipse-cpp-4.3.2";
     description = "Eclipse IDE for C/C++ Developers";
     src =
@@ -156,41 +162,44 @@ rec {
           sha256 = "0d6jlj7hwz8blx6csrlyi2h2prql0wckbh7ihwjmgclwpcpj84g6";
         };
   };
+  eclipse_cpp_43 = eclipse-cpp-43; # backward compatibility, added 2016-01-30
   
-   eclipse_cpp_44 = buildEclipse {
-    name = "eclipse-cpp-4.4";
+  eclipse-cpp-44 = buildEclipse {
+    name = "eclipse-cpp-4.4.2";
     description = "Eclipse IDE for C/C++ Developers";
     src =
       if stdenv.system == "x86_64-linux" then
         fetchurl {
-          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/luna/R/eclipse-cpp-luna-R-linux-gtk-x86_64.tar.gz;
-          md5 = "b0a6ee33e8108a7ff4682ab911271b04";
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/luna/SR2/eclipse-cpp-luna-SR2-linux-gtk-x86_64.tar.gz;
+          sha256 = "1vxwj7yihgipvrb3gksmddqkarzazpwk3mh1mjnw0i5xz2y32ba4";
         }
       else
         fetchurl {
-          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/luna/R/eclipse-cpp-luna-R-linux-gtk.tar.gz;
-          md5 = "5000f93cecf6ef9af112f0df6e8c87f3";
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/luna/SR2/eclipse-cpp-luna-SR2-linux-gtk.tar.gz;
+          sha256 = "1yn7yzzx8izc199c8w4f7vrc0b08idyq0dn113i8123b0mxw5lkp";
         };
   };
+  eclipse_cpp_44 = eclipse-cpp-44; # backward compatibility, added 2016-01-30
 
-  eclipse_cpp_45 = buildEclipse {
-    name = "eclipse-cpp-4.5";
+  eclipse-cpp-45 = buildEclipse {
+    name = "eclipse-cpp-4.5.1";
     description = "Eclipse IDE for C/C++ Developers, Mars release";
     src =
       if stdenv.system == "x86_64-linux" then
         fetchurl {
-          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/mars/R/eclipse-cpp-mars-R-linux-gtk-x86_64.tar.gz;
-          sha1 = "11f9583e23ae68eb675107e6c9acc48e0a2520ae";
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/mars/1/eclipse-cpp-mars-1-linux-gtk-x86_64.tar.gz;
+          sha256 = "1j6rsgr44kya2v7y34ifscajqk7lnq1w9m9fx4i0qgby84sy4xj7";
         }
       else if stdenv.system == "i686-linux" then
         fetchurl {
-          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/mars/R/eclipse-cpp-mars-R-linux-gtk.tar.gz;
-          sha1 = "45dddb8c8f2ec79b7e25cc13d93785863ffe4791";
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/mars/1/eclipse-cpp-mars-1-linux-gtk.tar.gz;
+          sha256 = "0qsbvjkq0ssxbnafh4gs8pfclynqis3nf7xlxx4w3k20jcjx7sr2";
         }
       else throw "Unsupported system: ${stdenv.system}";
   };
+  eclipse_cpp_45 = eclipse-cpp-45; # backward compatibility, added 2016-01-30
 
-  eclipse_sdk_421 = buildEclipse {
+  eclipse-sdk-421 = buildEclipse {
     name = "eclipse-sdk-4.2.1";
     description = "Eclipse Classic";
     src =
@@ -205,8 +214,9 @@ rec {
           sha256 = "1av6qm9wkbyk123qqf38f0jq4jv2bj9wp6fmpnl55zg6qr463c1w";
         };
     };
+  eclipse_sdk_421 = eclipse-sdk-421; # backward compatibility, added 2016-01-30
 
-  eclipse_sdk_422 = buildEclipse {
+  eclipse-sdk-422 = buildEclipse {
     name = "eclipse-sdk-4.2.2";
     description = "Eclipse Classic";
     sources = {
@@ -220,8 +230,9 @@ rec {
         };
     };
   };
+  eclipse_sdk_422 = eclipse-sdk-422; # backward compatibility, added 2016-01-30
 
-  eclipse_sdk_431 = buildEclipse {
+  eclipse-sdk-431 = buildEclipse {
     name = "eclipse-sdk-4.3.1";
     description = "Eclipse Classic";
     sources = {
@@ -235,8 +246,9 @@ rec {
         };
     };
   };
+  eclipse_sdk_431 = eclipse-sdk-431; # backward compatibility, added 2016-01-30
 
-  eclipse_sdk_44 = buildEclipse {
+  eclipse-sdk-44 = buildEclipse {
     name = "eclipse-sdk-4.4";
     description = "Eclipse Classic";
     sources = {
@@ -250,8 +262,9 @@ rec {
         };
     };
   };
+  eclipse_sdk_44 = eclipse-sdk-44; # backward compatibility, added 2016-01-30
 
-  eclipse_sdk_442 = buildEclipse {
+  eclipse-sdk-442 = buildEclipse {
     name = "eclipse-sdk-4.4.2";
     description = "Eclipse Classic";
     sources = {
@@ -265,8 +278,9 @@ rec {
         };
     };
   };
+  eclipse_sdk_442 = eclipse-sdk-442; # backward compatibility, added 2016-01-30
 
-  eclipse_sdk_45 = buildEclipse {
+  eclipse-sdk-45 = buildEclipse {
     name = "eclipse-sdk-4.5";
     description = "Eclipse Mars Classic";
     sources = {
@@ -280,8 +294,9 @@ rec {
         };
     };
   };
+  eclipse_sdk_45 = eclipse-sdk-45; # backward compatibility, added 2016-01-30
 
-  eclipse_sdk_451 = buildEclipse {
+  eclipse-sdk-451 = buildEclipse {
     name = "eclipse-sdk-4.5.1";
     description = "Eclipse Mars Classic";
     sources = {
@@ -295,6 +310,7 @@ rec {
         };
     };
   };
+  eclipse_sdk_451 = eclipse-sdk-451; # backward compatibility, added 2016-01-30
 
   eclipse-platform = eclipse-platform-451;
 

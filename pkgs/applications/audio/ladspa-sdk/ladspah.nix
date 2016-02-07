@@ -1,17 +1,26 @@
-{ runCommand, fetchurl }:
-
-let
-
+{ stdenv, fetchurl }:
+stdenv.mkDerivation rec {
+  name = "ladspa.h-${version}";
+  version = "1.13";
   src = fetchurl {
-    url = http://www.ladspa.org/ladspa_sdk/ladspa.h.txt;
-    sha256 = "1b908csn85ng9sz5s5d1mqk711cmawain2z8px2ajngihdrynb67";
+    url = "http://http.debian.net/debian/pool/main/l/ladspa-sdk/ladspa-sdk_${version}.orig.tar.gz";
+    sha256 = "0srh5n2l63354bc0srcrv58rzjkn4gv8qjqzg8dnq3rs4m7kzvdm";
   };
 
-in
-
-runCommand "ladspa.h"
-  { meta.description = "LADSPA format audio plugins"; }
-  ''
+  installPhase = ''
     mkdir -p $out/include
-    cp ${src} $out/include/ladspa.h
-  ''
+    cp src/ladspa.h $out/include/ladspa.h
+  '';
+
+  meta = {
+    description = "LADSPA format audio plugins header file";
+    longDescription = ''
+      The ladspa.h API header file from the LADSPA SDK.
+      For the full SDK, use the ladspa-sdk package.
+    '';
+    homepage = http://www.ladspa.org/ladspa_sdk/overview.html;
+    license = stdenv.lib.licenses.lgpl2;
+    maintainers = [ stdenv.lib.maintainers.magnetophon ];
+    platforms = stdenv.lib.platforms.all;
+  };
+}

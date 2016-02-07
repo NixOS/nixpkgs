@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = http://anonscm.debian.org/cgit/d-i/console-setup.git;
     license = licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ dezgeg ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

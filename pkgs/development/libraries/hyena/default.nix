@@ -19,10 +19,6 @@ stdenv.mkDerivation rec {
     find -name Makefile.in | xargs -n 1 -d '\n' sed -e 's/^dnl/#/' -i
   '';
 
-  preConfigure = ''
-    substituteInPlace configure --replace gmcs mcs
-  '';
-
   dontStrip = true;
 
   inherit monoDLLFixer;
