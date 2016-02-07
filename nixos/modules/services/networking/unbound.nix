@@ -38,28 +38,28 @@ in
     services.unbound = {
 
       enable = mkOption {
-	default = false;
-	description = "Whether to enable the Unbound domain name server.";
+        default = false;
+        description = "Whether to enable the Unbound domain name server.";
       };
 
       allowedAccess = mkOption {
-	default = ["127.0.0.0/24"];
-	description = "What networks are allowed to use unbound as a resolver.";
+        default = ["127.0.0.0/24"];
+        description = "What networks are allowed to use unbound as a resolver.";
       };
 
       interfaces = mkOption {
-	default = [ "127.0.0.1" "::1" ];
-	description = "What addresses the server should listen on.";
+        default = [ "127.0.0.1" "::1" ];
+        description = "What addresses the server should listen on.";
       };
 
       forwardAddresses = mkOption {
-	default = [ ];
-	description = "What servers to forward queries to.";
+        default = [ ];
+        description = "What servers to forward queries to.";
       };
 
       extraConfig = mkOption {
-	default = "";
-	description = "Extra lines of unbound config.";
+        default = "";
+        description = "Extra lines of unbound config.";
       };
 
     };
@@ -88,9 +88,9 @@ in
 
       preStart = ''
         mkdir -m 0755 -p ${stateDir}/dev/
-	cp ${confFile} ${stateDir}/unbound.conf
-	chown unbound ${stateDir}
-	touch ${stateDir}/dev/random
+        cp ${confFile} ${stateDir}/unbound.conf
+        chown unbound ${stateDir}
+        touch ${stateDir}/dev/random
         ${pkgs.utillinux}/bin/mount --bind -n /dev/random ${stateDir}/dev/random
       '';
 
