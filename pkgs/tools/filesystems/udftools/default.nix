@@ -10,6 +10,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses readline ];
 
+  patches = [ ./gcc5.patch ];
+  hardening_fortify = false;
+
   preConfigure = ''
     sed -e '1i#include <limits.h>' -i cdrwtool/cdrwtool.c -i pktsetup/pktsetup.c
     sed -e 's@[(]char[*][)]spm [+]=@spm = ((char*) spm) + @' -i wrudf/wrudf.c
