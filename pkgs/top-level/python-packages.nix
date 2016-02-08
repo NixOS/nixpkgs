@@ -18475,6 +18475,15 @@ in modules // {
     numpy = self.numpy_1_10;
   };
 
+  scipy_0_17 = self.buildScipyPackage rec {
+    version = "0.17.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/scipy/scipy-${version}.tar.gz";
+      sha256 = "f600b755fb69437d0f70361f9e560ab4d304b1b66987ed5a28bdd9dd7793e089";
+    };
+    numpy = self.numpy_1_10;
+  };
+
   scikitimage = buildPythonPackage rec {
     name = "scikit-image-${version}";
     version = "0.11.3";
