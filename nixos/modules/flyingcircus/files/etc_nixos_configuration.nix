@@ -2,5 +2,6 @@
 { modulesPath, ...}:
 {
     imports =
-        ["${modulesPath}/flyingcircus"];
+        ["${modulesPath}/flyingcircus"
+         "/etc/nixos/local.nix"];
 }

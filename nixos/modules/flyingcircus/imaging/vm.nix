@@ -71,6 +71,11 @@ with lib;
           mkdir -p /mnt/bin
           ln -s ${config.system.build.binsh}/bin/sh /mnt/bin/sh
 
+          # Install our local, unmanaged configuration template.
+          mkdir -p /mnt/etc/nixos
+          cp ${../files/etc_nixos_local.nix} /mnt/etc/nixos/local.nix
+          chmod u+rw /mnt/etc/nixos/local.nix
+
           # Generate the GRUB menu.
           chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
 
