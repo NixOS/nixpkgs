@@ -8824,6 +8824,8 @@ let
 
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
 
+  taglib-sharp = callPackage ../development/libraries/taglib-sharp { };
+
   talloc = callPackage ../development/libraries/talloc {
     python = python2;
   };
