@@ -2609,6 +2609,13 @@ in modules // {
     };
 
     LC_ALL = "en_US.UTF-8";
+
+    # checkPhase require at least one 'normal' font and one 'monospace',
+    # otherwise glyph tests fails
+    FONTCONFIG_FILE = pkgs.makeFontsConf {
+      fontDirectories = [ pkgs.freefont_ttf ];
+    };
+
     buildInputs = with self; [ pytest pkgs.glibcLocales ];
     propagatedBuildInputs = with self; [ pkgs.cairo cffi ];
 
@@ -2616,17 +2623,29 @@ in modules // {
       py.test $out/${python.sitePackages}
     '';
 
-    # Marked broken since according to test
+    # FIXME: make gdk_pixbuf dependency optional (as wel as xcfffi)
     # Happens with 0.7.1 and 0.7.2
     # OSError: dlopen() failed to load a library: gdk_pixbuf-2.0 / gdk_pixbuf-2.0-0
 
-    patchPhase = ''
+    patches = [
+      # This patch from PR substituted upstream
+      (pkgs.fetchpatch {
+          url = "https://github.com/avnik/cairocffi/commit/2266882e263c5efc87350cf016d117b2ec6a1d59.patch";
+          sha256 = "0gb570z3ivf1b0ixsk526n3h29m8c5rhjsiyam7rr3x80dp65cdl";
+      })
+
+      ../development/python-modules/cairocffi/dlopen-paths.patch
+    ];
+
+    postPatch = ''
       # Hardcode cairo library path
-      sed -e 's,ffi\.dlopen(,&"${pkgs.cairo}/lib/" + ,' -i cairocffi/__init__.py
+      # FIXME: for closure-size branch all pkgs.foo should be replaced with pkgs.foo.lib
+      substituteInPlace cairocffi/__init__.py --subst-var-by cairo ${pkgs.cairo}
+      substituteInPlace cairocffi/__init__.py --subst-var-by glib ${pkgs.glib}
+      substituteInPlace cairocffi/__init__.py --subst-var-by gdk_pixbuf ${pkgs.gdk_pixbuf}
     '';
 
     meta = {
-      broken = true;
       homepage = https://github.com/SimonSapin/cairocffi;
       license = "bsd";
       description = "cffi-based cairo bindings for Python";
