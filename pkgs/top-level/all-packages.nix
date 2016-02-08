@@ -3129,6 +3129,8 @@ let
 
   simplescreenrecorder = callPackage ../applications/video/simplescreenrecorder { };
 
+  simple-mtpfs = callPackage ../tools/filesystems/simple-mtpfs { };
+
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
   skydns = goPackages.skydns.bin // { outputs = [ "bin" ]; };
