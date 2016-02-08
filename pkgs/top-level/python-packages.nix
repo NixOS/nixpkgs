@@ -22499,8 +22499,11 @@ in modules // {
     };
     buildInputs = with self; [ pkgs.zeromq3 pytest tornado ];
     propagatedBuildInputs = [ self.py ];
+
+    # Disable broken test
+    # https://github.com/zeromq/pyzmq/issues/799
     checkPhase = ''
-      py.test $out/${python.sitePackages}/zmq/
+      py.test $out/${python.sitePackages}/zmq/ -k "not test_large_send"
     '';
   };
 
