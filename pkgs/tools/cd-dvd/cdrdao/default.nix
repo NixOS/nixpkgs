@@ -12,6 +12,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ lame libvorbis libmad pkgconfig libao ];
 
+  hardening_format = false;
+
   # Adjust some headers to match glibc 2.12 ... patch is a diff between
   # the cdrdao CVS head and the 1.2.3 release.
   patches = [ ./adjust-includes-for-glibc-212.patch ];
