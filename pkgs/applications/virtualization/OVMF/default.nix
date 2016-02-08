@@ -17,6 +17,10 @@ stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
   # TODO: properly include openssl for secureBoot
   buildInputs = [nasm iasl] ++ stdenv.lib.optionals (secureBoot == true) [ openssl ];
 
+  hardening_stackprotector = false;
+  hardening_pic = false;
+  hardening_fortify = false;
+
   unpackPhase = ''
     for file in \
       "${edk2.src}"/{UefiCpuPkg,MdeModulePkg,IntelFrameworkModulePkg,PcAtChipsetPkg,FatBinPkg,EdkShellBinPkg,MdePkg,ShellPkg,OptionRomPkg,IntelFrameworkPkg};
