@@ -12745,11 +12745,11 @@ in modules // {
 
   odo = buildPythonPackage rec {
     name = "odo-${version}";
-    version= "0.4.0";
+    version= "0.4.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/o/odo/${name}.tar.gz";
-      sha256 = "0xqm4zb7a7a2cbik9kn6yk0kr26n90iqj102h5wb42x6z5v4mn79";
+      sha256 = "f793df8b212994ea23ce34e90e2048d0237d3b95ecd066ef2cfbb1c2384b79e9";
     };
 
     buildInputs = with self; [ pytest ];
