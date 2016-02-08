@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [gettext pkgconfig glib gtk libX11 libSM libICE];
 
+  hardening_format = false;
+
   # Makefiles are patched to fix references to `/usr/X11R6' and to add
   # `-lX11' to make sure libX11's store path is in the RPATH.
   patchPhase = ''
