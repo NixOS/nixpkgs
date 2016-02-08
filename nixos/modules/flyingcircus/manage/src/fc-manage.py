@@ -29,6 +29,10 @@ directory = None
 def load_enc():
     global enc, directory
     if not os.path.exists('/etc/nixos/enc.json'):
+        if not os.path.exists('/tmp/fc-data/enc.json'):
+            # This environment doesn't seem to support an ENC,
+            # i.e. Vagrant. Silently ignore for now.
+            return
         shutil.copy('/tmp/fc-data/enc.json',
                     '/etc/nixos/enc.json')
     enc = json.load(open('/etc/nixos/enc.json'))

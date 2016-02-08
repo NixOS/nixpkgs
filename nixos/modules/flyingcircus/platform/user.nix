@@ -133,7 +133,6 @@ in
 
     security.pam.services.sshd.showMotd = true;
     users = {
-      motd = "Welcome to the Flying Circus";
       mutableUsers = false;
       users = map_userdata userdata;
       groups =
