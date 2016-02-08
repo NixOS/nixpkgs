@@ -248,10 +248,14 @@ in
       };
     };
 
-    security.acme.certs = mapAttrs (vhostName: vhostConfig: {
-      webroot = vhostConfig.acmeRoot;
-      extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
-    }) virtualHosts;
+    security.acme.certs = filterAttrs (n: v: v != {}) (
+      mapAttrs (vhostName: vhostConfig:
+        optionalAttrs vhostConfig.enableACME {
+          webroot = vhostConfig.acmeRoot;
+          extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
+        }
+      ) virtualHosts
+    );
 
 
     users.extraUsers = optionalAttrs (cfg.user == "nginx") (singleton
