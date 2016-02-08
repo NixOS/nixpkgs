@@ -14745,12 +14745,12 @@ in modules // {
   };
 
   pip = buildPythonPackage rec {
-    version = "7.1.2";
+    version = "8.0.2";
     name = "pip-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pip/pip-${version}.tar.gz";
-      sha256 = "0xx4aypfgchxdknxq7gyqghd8wb221zrzyqlbabzm32jy237j16a";
+      sha256 = "46f4bd0d8dfd51125a554568d646fe4200a3c2c6c36b9f2d06d2212148439521";
     };
 
     buildInputs = with self; [ mock scripttest virtualenv pytest ];
