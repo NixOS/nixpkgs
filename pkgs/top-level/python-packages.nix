@@ -9952,17 +9952,18 @@ in modules // {
   };
 
   ipyparallel = buildPythonPackage rec {
-    version = "4.1.0";
+    version = "5.0.0";
     name = "ipyparallel-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipyparallel/${name}.tar.gz";
-      sha256 = "c943f6b3bbabb9332336d15474969e2a7a73d5b583f9786f7b357c75e4b1709a";
+      sha256 = "ffa7e2e29fdc4844b3c1721f46b42eee5a1abe5cbb851ccf79d0f4f89b9fe21a";
     };
 
     buildInputs = with self; [ nose ];
 
-    propagatedBuildInputs = with self; [ipython_genutils decorator pyzmq ipython jupyter_client ipykernel];
+    propagatedBuildInputs = with self; [ipython_genutils decorator pyzmq ipython jupyter_client ipykernel tornado
+    ] ++ optionals (!isPy3k) [ futures ];
 
     # Requires access to cluster
     doCheck = false;
