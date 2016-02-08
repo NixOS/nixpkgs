@@ -2519,6 +2519,8 @@ let
     pythonPackages = python3Packages;
   };
 
+  nq = callPackage ../tools/system/nq { };
+
   nsjail = callPackage ../tools/security/nsjail {};
 
   nss_pam_ldapd = callPackage ../tools/networking/nss-pam-ldapd {};
