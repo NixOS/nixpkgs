@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "unbound-${version}";
-  version = "1.5.3";
+  version = "1.5.7";
 
   src = fetchurl {
     url = "http://unbound.net/downloads/${name}.tar.gz";
-    sha256 = "1jly2apag4yg649w3flaq73wdrcfyxnhx5py9j73y7adxmswigbn";
+    sha256 = "1a0wfgp6wqpf7cxlcbprqhnjx6z9ywf0rhrpcf7x98l1mbjqh82b";
   };
 
   buildInputs = [ openssl expat libevent ];
@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Validating, recursive, and caching DNS resolver";
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
     homepage = http://www.unbound.net;
-    maintainers = [ stdenv.lib.maintainers.ehmry ];
+    maintainers = with maintainers; [ ehmry fpletz ];
     platforms = stdenv.lib.platforms.unix;
   };
 }
