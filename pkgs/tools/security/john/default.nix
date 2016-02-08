@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "08q92sfdvkz47rx6qjn7qv57cmlpy7i7rgddapq5384mb413vjds";
   };
 
+  patches = [ ./gcc5.patch ];
+
   postPatch = ''
     sed -ri -e '
       s!^(#define\s+CFG_[A-Z]+_NAME\s+).*/!\1"'"$out"'/etc/john/!
