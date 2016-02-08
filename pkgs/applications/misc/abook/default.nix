@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig ncurses readline ];
 
+  # Changed inline semantics in GCC5, need to export symbols for inline funcs
+  postPatch = ''
+    substituteInPlace database.c --replace inline extern
+  '';
+
   meta = {
     homepage = "http://abook.sourceforge.net/";
     description = "Text-based addressbook program designed to use with mutt mail client";
