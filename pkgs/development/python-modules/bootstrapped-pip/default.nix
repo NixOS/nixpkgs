@@ -2,8 +2,8 @@
 
 let
   wheel_source = fetchurl {
-    url = "https://pypi.python.org/packages/py2.py3/w/wheel/wheel-0.26.0-py2.py3-none-any.whl";
-    sha256 = "1sl642ncvipqx0hzypvl5hsiqngy0sib0kq242g4mic7vnid6bn9";
+    url = "https://pypi.python.org/packages/py2.py3/w/wheel/wheel-0.29.0-py2.py3-none-any.whl";
+    sha256 = "ea8033fc9905804e652f75474d33410a07404c1a78dd3c949a66863bd1050ebd";
   };
   setuptools_source = fetchurl {
     url = "https://pypi.python.org/packages/3.5/s/setuptools/setuptools-19.4-py2.py3-none-any.whl";
