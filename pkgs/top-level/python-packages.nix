@@ -8367,6 +8367,11 @@ in modules // {
       sha256="0nrkhcb6jdrlb6pwkvd4rycw34y3s931hjf409ij9xkjsli9fkb1";
     };
 
+    buildInputs = with self; [ lxml pytest ];
+    checkPhase = ''
+      py.test $out
+    '';
+
     meta = {
       description = "An implementation of lxml.xmlfile for the standard library";
       longDescription = ''
