@@ -2236,6 +2236,8 @@ let
 
   lout = callPackage ../tools/typesetting/lout { };
 
+  lr = callPackage ../tools/system/lr { };
+
   lrzip = callPackage ../tools/compression/lrzip { };
 
   # lsh installs `bin/nettle-lfib-stream' and so does Nettle.  Give the
