@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1l2i3d3h5z7nnbzilb6z92r0rbx0kh6yaxn2c5qhn3000xcfsay3";
   };
 
-  phases = "unpackPhase patchPhase buildPhase installPhase";
+  hardening_format = false;
 
   patchPhase = ''
     RM=$(type -tp rm)
@@ -22,6 +22,8 @@ stdenv.mkDerivation {
   '';
 
   buildFlags = "all";
+
+  checkPhase = "make test1";
 
   installPhase = ''
     mkdir -p $out/bin
