@@ -4202,11 +4202,11 @@ in modules // {
 
   datashape = buildPythonPackage rec {
     name = "datashape-${version}";
-    version = "0.5.0";
+    version = "0.5.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/D/DataShape/${name}.tar.gz";
-      sha256 = "13w0rfaqpqkh30bxmx7i7kjfrfkm5maa35gj3c464wah7i2zm9wp";
+      sha256 = "21c424f11604873da9a36d4c55ef1d15cc3960cd208d7828b82315c494bff96a";
     };
 
     buildInputs = with self; [ pytest mock ];
