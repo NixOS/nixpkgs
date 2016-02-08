@@ -100,7 +100,7 @@ in rec {
         nfs3
         nfs4
         mysql
-        networking
+
         postgresql
         openssh
         proxy
@@ -114,6 +114,19 @@ in rec {
 #            users = hydraJob
 #              (import tests/fc-users.nix { inherit system; });
 #      };
+      networking.scripted = {
+        inherit (nixos'.tests.networking.scripted)
+          static
+          dhcpSimple
+          dhcpOneIf
+          bond
+          bridge
+          # macvlan tests regularly get stuck and we don't use macvlan.
+          # at the moment
+          # scripted.macvlan
+          sit
+          vlan;
+      };
       installer = {
         inherit (nixos'.tests.installer)
           lvm
