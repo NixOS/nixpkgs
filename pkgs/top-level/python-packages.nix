@@ -1608,6 +1608,8 @@ in modules // {
       sha256 = "1i6is7lv4v9by4panrd9w63m4xsmhwlp3rq4jjj3azwg5jm10940";
     };
 
+    disabled = isPy3k;
+
     meta = {
       description = "A Python library and tool for CalDAV";
 
