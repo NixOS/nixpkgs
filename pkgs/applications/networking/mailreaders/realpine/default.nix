@@ -2,34 +2,35 @@
 , openldap
 }:
 let
-  s = 
-  rec {
-    version = "2.03";
+  baseName = "re-alpine";
+  version = "2.03";
+in
+stdenv.mkDerivation {
+  name = "${baseName}-${version}";
+  inherit version;
+
+  src = fetchurl {
     url = "mirror://sourceforge/re-alpine/re-alpine-${version}.tar.bz2";
     sha256 = "11xspzbk9cwmklmcw6rxsan7j71ysd4m9c7qldlc59ck595k5nbh";
-    baseName = "re-alpine";
-    name = "${baseName}-${version}";
   };
+
   buildInputs = [
     ncurses tcl openssl pam kerberos openldap
   ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
-  src = fetchurl {
-    inherit (s) url sha256;
-  };
+
+  hardening_format = false;
+
   configureFlags = [
     "--with-ssl-include-dir=${openssl}/include/openssl"
     "--with-tcl-lib=${tcl.libPrefix}"
-    ];
+  ];
+
   preConfigure = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
   '';
+
   meta = {
-    inherit (s) version;
-    description = ''Console mail reader'';
+    description = "Console mail reader";
     license = stdenv.lib.licenses.asl20;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
