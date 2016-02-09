@@ -17,6 +17,8 @@ in stdenv.mkDerivation rec {
     "--enable-gi-system-install=no"
   ];
 
+  hardening_format = false;
+
   enableParallelBuilding = true;
 
   buildInputs = [ pkgconfig intltool itstool libxml2 gtk3 openssl ];
