@@ -22213,7 +22213,8 @@ in modules // {
 
     propagatedBuildInputs = with self; [ zope_interface zope_exceptions zope_testing six ] ++ optional (!python.is_py3k or false) subunit;
 
-    doCheck = !isPy27;
+    # https://github.com/zopefoundation/zope.testrunner/issues/35
+    doCheck = !(isPy27 || isPy34);
 
     meta = {
       description = "A flexible test runner with layer support";
