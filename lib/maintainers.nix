@@ -105,6 +105,7 @@
   ertes = "Ertugrul Söylemez <ertesx@gmx.de>";
   exi = "Reno Reckling <nixos@reckling.org>";
   exlevan = "Alexey Levan <exlevan@gmail.com>";
+  fadenb = "Tristan Helmich <tristan.helmich+nixos@gmail.com>";
   falsifian = "James Cook <james.cook@utoronto.ca>";
   flosse = "Markus Kohlhase <mail@markus-kohlhase.de>";
   fluffynukeit = "Daniel Austin <dan@fluffynukeit.com>";
