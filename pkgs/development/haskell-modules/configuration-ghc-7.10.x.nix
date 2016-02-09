@@ -77,7 +77,7 @@ self: super: {
 
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
-  bytestring-builder = dontHaddock (triggerRebuild super.bytestring-builder 1);
+  bytestring-builder = dontHaddock super.bytestring-builder;
 
   # We have time 1.5
   aeson = disableCabalFlag super.aeson "old-locale";
@@ -92,7 +92,6 @@ self: super: {
   utf8-string = overrideCabal super.utf8-string (drv: {
     postPatch = "sed -i -e 's|base >= 3 && < 4.8|base|' utf8-string.cabal";
   });
-  pointfree = doJailbreak super.pointfree;
 
   # acid-state/safecopy#25 acid-state/safecopy#26
   safecopy = dontCheck (super.safecopy);
@@ -117,9 +116,6 @@ self: super: {
 
   # Version 1.19.5 fails its test suite.
   happy = dontCheck super.happy;
-
-  # Test suite fails in "/tokens_bytestring_unicode.g.bin".
-  alex = dontCheck super.alex;
 
   # Upstream was notified about the over-specified constraint on 'base'
   # but refused to do anything about it because he "doesn't want to
@@ -209,7 +205,7 @@ self: super: {
   # The tests in vty-ui do not build, but vty-ui itself builds.
   vty-ui = enableCabalFlag super.vty-ui "no-tests";
 
-  # https://github.com/DanielG/cabal-helper/issues/10
-  cabal-helper = dontCheck super.cabal-helper;
+  # https://github.com/fpco/stackage/issues/1112
+  vector-algorithms = dontCheck super.vector-algorithms;
 
 }

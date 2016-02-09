@@ -60,7 +60,10 @@ rec {
 
     uhc = callPackage ../development/compilers/uhc/default.nix ({
       stdenv = pkgs.clangStdenv;
-      inherit (pkgs.haskellPackages) ghcWithPackages;
+      # UHC 1.1.9.2 is incompatible with hashable 1.2.4.0,
+      # latest LTS with a compatible hashable is LTS 4.1
+      # See also https://github.com/UU-ComputerScience/uhc/issues/69
+      inherit (pkgs.haskell.packages.lts-4_1) ghcWithPackages;
     });
 
   };
@@ -301,6 +304,47 @@ rec {
     };
     lts-3_13 = packages.ghc7102.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.13.nix { };
+    };
+    lts-3_14 = packages.ghc7102.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.14.nix { };
+    };
+    lts-3_15 = packages.ghc7102.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.15.nix { };
+    };
+    lts-3_16 = packages.ghc7102.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.16.nix { };
+    };
+    lts-3_17 = packages.ghc7102.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.17.nix { };
+    };
+    lts-3_18 = packages.ghc7102.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.18.nix { };
+    };
+    lts-3_19 = packages.ghc7102.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.19.nix { };
+    };
+    lts-3_20 = packages.ghc7102.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.20.nix { };
+    };
+
+    lts-4_0 = packages.ghc7103.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-4.0.nix { };
+    };
+    lts-4_1 = packages.ghc7103.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-4.1.nix { };
+    };
+    lts-4_2 = packages.ghc7103.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-4.2.nix { };
+    };
+
+    lts-5_0 = packages.ghc7103.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-5.0.nix { };
+    };
+    lts-5_1 = packages.ghc7103.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-5.1.nix { };
+    };
+    lts-5_2 = packages.ghc7103.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-5.2.nix { };
     };
 
   };
