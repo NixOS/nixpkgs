@@ -13,6 +13,7 @@ let
     ''
       base_dir = ${baseDir}
       protocols = ${concatStringsSep " " cfg.protocols}
+      sendmail_path = /var/setuid-wrappers/sendmail
     ''
 
     (if isNull cfg.sslServerCert then ''
