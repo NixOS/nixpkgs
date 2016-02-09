@@ -44,6 +44,7 @@
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , preFixup ? "", postFixup ? ""
 , shellHook ? ""
+, hardening_fortify ? true
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
 } @ args:
@@ -314,5 +315,6 @@ stdenv.mkDerivation ({
 // optionalAttrs (preFixup != "")       { inherit preFixup; }
 // optionalAttrs (postFixup != "")      { inherit postFixup; }
 // optionalAttrs (dontStrip)            { inherit dontStrip; }
+// optionalAttrs (!hardening_fortify)   { inherit hardening_fortify; }
 // optionalAttrs (stdenv.isLinux)       { LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
 )
