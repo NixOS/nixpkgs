@@ -4,23 +4,23 @@
 
 stdenv.mkDerivation rec {
   name = "orbment-${version}";
-  version = "git-2015-09-30";
+  version = "git-2016-01-31";
   repo = "https://github.com/Cloudef/orbment";
-  rev = "229a870dbbb9dbc66c137cf2747eab11acdf1a95";
+  rev = "7f649fb76649f826dd29578a5ec41bb561b116eb";
 
   chck_repo = "https://github.com/Cloudef/chck";
-  chck_rev = "6191a69572952291c137294317874c06c9c0d6a9";
+  chck_rev = "fe5e2606b7242aa5d89af2ea9fd048821128d2bc";
   inihck_repo = "https://github.com/Cloudef/inihck";
   inihck_rev = "462cbd5fd67226714ac2bdfe4ceaec8e251b2d9c";
 
   srcs = [
    (fetchurl {
      url = "${repo}/archive/${rev}.tar.gz";
-     sha256 = "7aaa0262d078adaf47abdf500b9ea581f6bec164c195a44a3c165a865414ca2c";
+     sha256 = "5a426da0d5f4487911cfe9226865ed0cd1a7cdf253eec19d5eadc4b0d14a2ea0";
    })
    (fetchurl {
      url = "${chck_repo}/archive/${chck_rev}.tar.gz";
-     sha256 = "26b4af1390bf67c674732cad69fc94fb027a3d269241d0bd862f42fb80bd5160";
+     sha256 = "ca316b544c48e837c32f08d613be42da10e0a3251e8e4488d1848b91ef92ab9e";
    })
    (fetchurl {
      url = "${inihck_repo}/archive/${inihck_rev}.tar.gz";
