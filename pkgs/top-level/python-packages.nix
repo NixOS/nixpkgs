@@ -1608,6 +1608,8 @@ in modules // {
       sha256 = "1i6is7lv4v9by4panrd9w63m4xsmhwlp3rq4jjj3azwg5jm10940";
     };
 
+    disabled = isPy3k;
+
     meta = {
       description = "A Python library and tool for CalDAV";
 
@@ -2037,11 +2039,11 @@ in modules // {
 
   blaze = buildPythonPackage rec {
     name = "blaze-${version}";
-    version = "0.9.0";
+    version = "0.9.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/blaze/${name}.tar.gz";
-      sha256 = "07h284n6fr0lvy58a6lvwwfb45sy7lggllx2y2vzzs4xrvf5k1i7";
+      sha256 = "fde4fd5733d8574345521581078a4fd89bb51ad3814eda88f1f467faa3a9784a";
     };
 
     buildInputs = with self; [ pytest ];
@@ -2609,6 +2611,13 @@ in modules // {
     };
 
     LC_ALL = "en_US.UTF-8";
+
+    # checkPhase require at least one 'normal' font and one 'monospace',
+    # otherwise glyph tests fails
+    FONTCONFIG_FILE = pkgs.makeFontsConf {
+      fontDirectories = [ pkgs.freefont_ttf ];
+    };
+
     buildInputs = with self; [ pytest pkgs.glibcLocales ];
     propagatedBuildInputs = with self; [ pkgs.cairo cffi ];
 
@@ -2616,17 +2625,29 @@ in modules // {
       py.test $out/${python.sitePackages}
     '';
 
-    # Marked broken since according to test
+    # FIXME: make gdk_pixbuf dependency optional (as wel as xcfffi)
     # Happens with 0.7.1 and 0.7.2
     # OSError: dlopen() failed to load a library: gdk_pixbuf-2.0 / gdk_pixbuf-2.0-0
 
-    patchPhase = ''
+    patches = [
+      # This patch from PR substituted upstream
+      (pkgs.fetchpatch {
+          url = "https://github.com/avnik/cairocffi/commit/2266882e263c5efc87350cf016d117b2ec6a1d59.patch";
+          sha256 = "0gb570z3ivf1b0ixsk526n3h29m8c5rhjsiyam7rr3x80dp65cdl";
+      })
+
+      ../development/python-modules/cairocffi/dlopen-paths.patch
+    ];
+
+    postPatch = ''
       # Hardcode cairo library path
-      sed -e 's,ffi\.dlopen(,&"${pkgs.cairo}/lib/" + ,' -i cairocffi/__init__.py
+      # FIXME: for closure-size branch all pkgs.foo should be replaced with pkgs.foo.lib
+      substituteInPlace cairocffi/__init__.py --subst-var-by cairo ${pkgs.cairo}
+      substituteInPlace cairocffi/__init__.py --subst-var-by glib ${pkgs.glib}
+      substituteInPlace cairocffi/__init__.py --subst-var-by gdk_pixbuf ${pkgs.gdk_pixbuf}
     '';
 
     meta = {
-      broken = true;
       homepage = https://github.com/SimonSapin/cairocffi;
       license = "bsd";
       description = "cffi-based cairo bindings for Python";
@@ -4183,11 +4204,11 @@ in modules // {
 
   datashape = buildPythonPackage rec {
     name = "datashape-${version}";
-    version = "0.5.0";
+    version = "0.5.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/D/DataShape/${name}.tar.gz";
-      sha256 = "13w0rfaqpqkh30bxmx7i7kjfrfkm5maa35gj3c464wah7i2zm9wp";
+      sha256 = "21c424f11604873da9a36d4c55ef1d15cc3960cd208d7828b82315c494bff96a";
     };
 
     buildInputs = with self; [ pytest mock ];
@@ -8346,6 +8367,11 @@ in modules // {
       sha256="0nrkhcb6jdrlb6pwkvd4rycw34y3s931hjf409ij9xkjsli9fkb1";
     };
 
+    buildInputs = with self; [ lxml pytest ];
+    checkPhase = ''
+      py.test $out
+    '';
+
     meta = {
       description = "An implementation of lxml.xmlfile for the standard library";
       longDescription = ''
@@ -9933,17 +9959,18 @@ in modules // {
   };
 
   ipyparallel = buildPythonPackage rec {
-    version = "4.1.0";
+    version = "5.0.0";
     name = "ipyparallel-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipyparallel/${name}.tar.gz";
-      sha256 = "c943f6b3bbabb9332336d15474969e2a7a73d5b583f9786f7b357c75e4b1709a";
+      sha256 = "ffa7e2e29fdc4844b3c1721f46b42eee5a1abe5cbb851ccf79d0f4f89b9fe21a";
     };
 
     buildInputs = with self; [ nose ];
 
-    propagatedBuildInputs = with self; [ipython_genutils decorator pyzmq ipython jupyter_client ipykernel];
+    propagatedBuildInputs = with self; [ipython_genutils decorator pyzmq ipython jupyter_client ipykernel tornado
+    ] ++ optionals (!isPy3k) [ futures ];
 
     # Requires access to cluster
     doCheck = false;
@@ -12486,48 +12513,20 @@ in modules // {
     };
   };
 
-  numpy = let
-    support = import ../development/python-modules/numpy-scipy-support.nix {
-      inherit python;
-      openblas = pkgs.openblasCompat;
-      pkgName = "numpy";
-    };
-  in buildPythonPackage ( rec {
-    name = "numpy-${version}";
-    version = "1.10.4";
+  buildNumpyPackage = callPackage ../development/python-modules/numpy.nix {
+    gfortran = pkgs.gfortran;
+    blas = pkgs.openblasCompat_2_14;
+  };
 
+  numpy = self.numpy_1_10;
+
+  numpy_1_10 = self.buildNumpyPackage rec {
+    version = "1.10.4";
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/n/numpy/${name}.tar.gz";
+      url = "https://pypi.python.org/packages/source/n/numpy/numpy-${version}.tar.gz";
       sha256 = "7356e98fbcc529e8d540666f5a919912752e569150e9a4f8d869c686f14c720b";
     };
-
-    disabled = isPyPy;  # WIP
-
-    preConfigure = ''
-      sed -i 's/-faltivec//' numpy/distutils/system_info.py
-    '';
-
-    inherit (support) preBuild checkPhase;
-
-    buildInputs = [ pkgs.gfortran self.nose ];
-    propagatedBuildInputs = [ support.openblas ];
-
-    # Disable failing test_f2py test.
-    # f2py couldn't be found by test,
-    # even though it was used successfully to build numpy
-
-    # The large file support test is disabled because it takes forever
-    # and can cause the machine to run out of disk space when run.
-    prePatch = ''
-      sed -i 's/test_f2py/donttest/' numpy/tests/test_scripts.py
-      sed -i 's/test_large_file_support/donttest/' numpy/lib/tests/test_format.py
-    '';
-
-    meta = {
-      description = "Scientific tools for Python";
-      homepage = "http://numpy.scipy.org/";
-    };
-  });
+  };
 
   numpydoc = buildPythonPackage rec {
     name = "numpydoc-${version}";
@@ -12753,11 +12752,11 @@ in modules // {
 
   odo = buildPythonPackage rec {
     name = "odo-${version}";
-    version= "0.4.0";
+    version= "0.4.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/o/odo/${name}.tar.gz";
-      sha256 = "0xqm4zb7a7a2cbik9kn6yk0kr26n90iqj102h5wb42x6z5v4mn79";
+      sha256 = "f793df8b212994ea23ce34e90e2048d0237d3b95ecd066ef2cfbb1c2384b79e9";
     };
 
     buildInputs = with self; [ pytest ];
@@ -14754,12 +14753,12 @@ in modules // {
   };
 
   pip = buildPythonPackage rec {
-    version = "7.1.2";
+    version = "8.0.2";
     name = "pip-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pip/pip-${version}.tar.gz";
-      sha256 = "0xx4aypfgchxdknxq7gyqghd8wb221zrzyqlbabzm32jy237j16a";
+      sha256 = "46f4bd0d8dfd51125a554568d646fe4200a3c2c6c36b9f2d06d2212148439521";
     };
 
     buildInputs = with self; [ mock scripttest virtualenv pytest ];
@@ -18469,47 +18468,28 @@ in modules // {
     };
   };
 
+  buildScipyPackage = callPackage ../development/python-modules/scipy.nix {
+    gfortran = pkgs.gfortran;
+  };
 
-  scipy = let
-    support = import ../development/python-modules/numpy-scipy-support.nix {
-      inherit python;
-      openblas = pkgs.openblasCompat;
-      pkgName = "scipy";
-    };
-  in buildPythonPackage rec {
-    name = "scipy-${version}";
+  scipy = self.scipy_0_17;
+
+  scipy_0_16 = self.buildScipyPackage rec {
     version = "0.16.1";
-
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/s/scipy/${name}.tar.gz";
+      url = "https://pypi.python.org/packages/source/s/scipy/scipy-${version}.tar.gz";
       sha256 = "ecd1efbb1c038accb0516151d1e6679809c6010288765eb5da6051550bf52260";
     };
+    numpy = self.numpy_1_10;
+  };
 
-    buildInputs = [ pkgs.gfortran self.nose ];
-    propagatedBuildInputs = [ self.numpy ];
-
-    preConfigure = ''
-      sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
-    '';
-
-    # First test: RuntimeWarning: Mean of empty slice.
-    # Second: SyntaxError: invalid syntax. Due to wrapper?
-    # Third: test checks permissions
-    prePatch = ''
-      substituteInPlace scipy/stats/tests/test_stats.py --replace "test_chisquare_masked_arrays" "remove_this_one"
-      rm scipy/linalg/tests/test_lapack.py
-      substituteInPlace scipy/weave/tests/test_catalog.py --replace "test_user" "remove_this_one"
-    '';
-
-    inherit (support) preBuild checkPhase;
-
-    patches = [../development/python-modules/scipy-0.16.1-decorator-fix.patch];
-    setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
-
-    meta = {
-      description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering. ";
-      homepage = http://www.scipy.org/;
+  scipy_0_17 = self.buildScipyPackage rec {
+    version = "0.17.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/scipy/scipy-${version}.tar.gz";
+      sha256 = "f600b755fb69437d0f70361f9e560ab4d304b1b66987ed5a28bdd9dd7793e089";
     };
+    numpy = self.numpy_1_10;
   };
 
   scikitimage = buildPythonPackage rec {
@@ -18544,7 +18524,7 @@ in modules // {
     };
 
     buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
-    propagatedBuildInputs = with self; [ numpy scipy pkgs.openblas ];
+    propagatedBuildInputs = with self; [ numpy scipy numpy.blas ];
 
     LC_ALL="en_US.UTF-8";
 
@@ -21427,11 +21407,11 @@ in modules // {
 
   wheel = buildPythonPackage rec {
     name = "wheel-${version}";
-    version = "0.26.0";
+    version = "0.29.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/w/wheel/${name}.tar.gz";
-      sha256 = "eaad353805c180a47545a256e6508835b65a8e830ba1093ed8162f19a50a530c";
+      sha256 = "1ebb8ad7e26b448e9caa4773d2357849bf80ff9e313964bcaf79cbf0201a1648";
     };
 
     buildInputs = with self; [ pytest pytestcov coverage ];
@@ -22241,7 +22221,8 @@ in modules // {
 
     propagatedBuildInputs = with self; [ zope_interface zope_exceptions zope_testing six ] ++ optional (!python.is_py3k or false) subunit;
 
-    doCheck = !isPy27;
+    # https://github.com/zopefoundation/zope.testrunner/issues/35
+    doCheck = !(isPy27 || isPy34);
 
     meta = {
       description = "A flexible test runner with layer support";
@@ -22526,8 +22507,11 @@ in modules // {
     };
     buildInputs = with self; [ pkgs.zeromq3 pytest tornado ];
     propagatedBuildInputs = [ self.py ];
+
+    # Disable broken test
+    # https://github.com/zeromq/pyzmq/issues/799
     checkPhase = ''
-      py.test $out/${python.sitePackages}/zmq/
+      py.test $out/${python.sitePackages}/zmq/ -k "not test_large_send"
     '';
   };
 
