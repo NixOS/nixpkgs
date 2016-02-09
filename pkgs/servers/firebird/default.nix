@@ -65,6 +65,8 @@ stdenv.mkDerivation rec {
     sha256 = "0887a813wffp44hnc2gmwbc4ylpqw3fh3hz3bf6q3648344a9fdv";
   };
 
+  hardening_format = false;
+
   # configurePhase = ''
   #   sed -i 's@cp /usr/share/automake-.*@@' autogen.sh
   #   sh autogen.sh $configureFlags --prefix=$out
