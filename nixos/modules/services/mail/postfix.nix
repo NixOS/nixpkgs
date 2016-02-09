@@ -461,7 +461,7 @@ in
             rm -rf /var/lib/postfix/conf
             mkdir -p /var/lib/postfix/conf
             chmod 0755 /var/lib/postfix/conf
-            ln -sf ${pkgs.postfix}/etc/postfix/postfix-files
+            ln -sf ${pkgs.postfix}/etc/postfix/postfix-files /var/lib/postfix/conf/postfix-files
             ln -sf ${mainCfFile} /var/lib/postfix/conf/main.cf
             ln -sf ${masterCfFile} /var/lib/postfix/conf/master.cf
 
