@@ -12980,6 +12980,8 @@ let
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
 
+  pflask = callPackage ../os-specific/linux/pflask {};
+
   photoqt = qt5.callPackage ../applications/graphics/photoqt { };
 
   phototonic = qt5.callPackage ../applications/graphics/phototonic { };
