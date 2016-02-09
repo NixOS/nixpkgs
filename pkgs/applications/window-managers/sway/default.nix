@@ -4,10 +4,12 @@
 
 stdenv.mkDerivation rec {
   name = "sway-${version}";
-  version = "git-2015-10-16";
+  version = "git-2016-02-08";
+  repo = "https://github.com/SirCmpwn/sway";
+  rev = "16e904634c65128610537bed7fcb16ac3bb45165";
 
   src = fetchurl {
-    url = "https://github.com/SirCmpwn/sway/archive/16e904634c65128610537bed7fcb16ac3bb45165.tar.gz";
+    url = "${repo}/archive/${rev}.tar.gz";
     sha256 = "52d6c4b49fea69e2a2c1b44b858908b7736301bdb9ed483c294bc54bb40e872e";
   };
 
