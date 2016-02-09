@@ -7060,6 +7060,8 @@ let
 
   gtk-sharp = gtk-sharp-2_0;
 
+  gtk-sharp-beans = callPackage ../development/libraries/gtk-sharp-beans { };
+
   gtkspell = callPackage ../development/libraries/gtkspell { };
 
   gtkspell3 = callPackage ../development/libraries/gtkspell/3.nix { };
