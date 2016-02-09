@@ -1,0 +1,5 @@
+# Services are NixOS modules without too much Flying Circus specifics.
+#
+# Those are basically the implementations that our roles build upon.
+#
+# They should be easy to extract and provided as upstream modules.

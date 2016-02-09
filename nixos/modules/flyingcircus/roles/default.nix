@@ -22,6 +22,7 @@ in
      ./mysql.nix
      ./nginx.nix
      ./postgresql93.nix
+     ./sensuserver.nix
      ./varnish.nix
     ];
 

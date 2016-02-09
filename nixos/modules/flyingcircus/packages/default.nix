@@ -8,7 +8,7 @@
     nagiosplugin = pkgs.callPackage ./nagiosplugin.nix { };
 
     sensu = pkgs.callPackage ./sensu { };
-    sensu-plugins = pkgs.callPackage ./sensu-plugins { };
+    sensu_plugins = pkgs.callPackage ./sensu-plugins { };
     uchiwa = pkgs.callPackage ./uchiwa { };
 
   };

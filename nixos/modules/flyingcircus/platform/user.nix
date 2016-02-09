@@ -1,10 +1,25 @@
 { config, lib, pkgs, ... }:
 
+# Flying Circus user management
+#
+# UID ranges
+#
+# 30.000 - 30.999: reserved for nixbldXX and nixos stuff
+# 31.000 - 31.999: reserved for Flying Circus-specific system user
+#
+#
+# GID ranges
+#
+# 30.000 - 31.000: reserved for nixos-specific stuff
+# 31.000 - 31.999: reserved for Flying Circus-specific system groups
+
 let
 
+  cfg = config.flyingcircus;
+
   userdata =
-    if builtins.pathExists config.fcio.userdata_path
-    then builtins.fromJSON (builtins.readFile config.fcio.userdata_path)
+    if builtins.pathExists cfg.userdata_path
+    then builtins.fromJSON (builtins.readFile cfg.userdata_path)
     else [];
 
   get_primary_group = user:
@@ -35,8 +50,8 @@ let
 
 
   admins_group_data =
-    if builtins.pathExists config.fcio.admins_group_path
-    then builtins.fromJSON (builtins.readFile config.fcio.admins_group_path)
+    if builtins.pathExists cfg.admins_group_path
+    then builtins.fromJSON (builtins.readFile cfg.admins_group_path)
     else null;
 
   admins_group =
@@ -47,8 +62,8 @@ let
     };
 
   current_rg =
-    if lib.hasAttrByPath ["parameters" "resource_group"] config.fcio.enc
-    then config.fcio.enc.parameters.resource_group
+    if lib.hasAttrByPath ["parameters" "resource_group"] cfg.enc
+    then cfg.enc.parameters.resource_group
     else null;
 
   get_group_memberships_for_user = user:
@@ -68,8 +83,8 @@ let
       (lib.zipAttrs (map get_group_memberships_for_user users));
 
   permissions =
-    if builtins.pathExists config.fcio.permissions_path
-    then builtins.fromJSON (builtins.readFile config.fcio.permissions_path)
+    if builtins.pathExists cfg.permissions_path
+    then builtins.fromJSON (builtins.readFile cfg.permissions_path)
     else [];
 
   get_permission_groups = permissions:
@@ -91,7 +106,7 @@ in
 
   options = {
 
-    fcio.userdata_path = lib.mkOption {
+    flyingcircus.userdata_path = lib.mkOption {
       default = /etc/nixos/users.json;
       type = lib.types.path;
       description = ''
@@ -101,7 +116,7 @@ in
       '';
     };
 
-    fcio.admins_group_path = lib.mkOption {
+    flyingcircus.admins_group_path = lib.mkOption {
       default = /etc/nixos/admins.json;
       type = lib.types.path;
       description = ''
@@ -111,7 +126,7 @@ in
       '';
     };
 
-    fcio.permissions_path = lib.mkOption {
+    flyingcircus.permissions_path = lib.mkOption {
       default = /etc/nixos/permissions.json;
       type = lib.types.path;
       description = ''
@@ -126,9 +141,21 @@ in
 
   config = {
 
+    ids.uids = {
+      sensuserver = 31001;
+      sensuapi = 31002;
+      uchiwa = 31003;
+      sensuclient = 31004;
+    };
+
     ids.gids = {
-      # This is different from Gentoo. But 101 is already used in
+      # The generic 'service' GID is different from Gentoo.
+      # But 101 is already used in NixOS.
       service = 900;
+      sensuserver = 31001;
+      sensuapi = 31002;
+      uchiwa = 31003;
+      sensuclient = 31004;
     };
 
     security.pam.services.sshd.showMotd = true;

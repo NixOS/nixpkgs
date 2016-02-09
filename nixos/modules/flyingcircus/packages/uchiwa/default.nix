@@ -2,13 +2,13 @@
 
 let
 
-  version = "0.13.0";
+  version = "0.14.2";
 
   uchiwa_src = fetchFromGitHub {
     owner = "sensu";
     repo = "uchiwa";
     rev = "${version}";
-    sha256 = "05v7d29fjcxm55xajlmnph6yjlj8bx0hnnmgjagp36blk7jxyml0";
+    sha256 = "0jzx8a0yz1s4shgb41s7d2gyjpzrasp3rj8zi4npqvr321s6xiza";
   };
 
 
@@ -22,31 +22,30 @@ let
         goPackages.context
         goPackages.mapstructure
 
-          (goPackages.buildGoPackage rec {
-            name = "dgrijalva-jwt-go-${rev}";
-            goPackagePath = "github.com/dgrijalva/jwt-go";
-            rev = "v2.2.0-15-g61124b6";
+        (goPackages.buildGoPackage rec {
+          name = "dgrijalva-jwt-go-${rev}";
+          goPackagePath = "github.com/dgrijalva/jwt-go";
+          rev = "v2.2.0-15-g61124b6";
 
-            src = fetchFromGitHub {
-              inherit rev;
-              owner = "dgrijalva";
-              repo = "jwt-go";
-              sha256 = "1pjianfr96rxa5b9sc9659gnay3kqwhcmjw26z77gznfjxajigqd";
-            };
-          })
+          src = fetchFromGitHub {
+            inherit rev;
+            owner = "dgrijalva";
+            repo = "jwt-go";
+            sha256 = "1pjianfr96rxa5b9sc9659gnay3kqwhcmjw26z77gznfjxajigqd";
+          };
+        })
 
-#          (goPackages.buildGoPackage rec {
-#            name = "palourde-mergo-${rev}";
-#            goPackagePath = "github.com/palourde/mergo";
-#            rev = "v0.2.0-10-gd931ffd";
-#
-#            src = fetchFromGitHub {
-#              inherit rev;
-#              owner = "palourde";
-#              repo = "mergo";
-#              sha256 = "0kdwx97fqxhk3ia3bf6z0q3ayb7mmdh7d7i8rihzlyxi28wpj072";
-#            };
-#          })
+       (goPackages.buildGoPackage rec {
+         name = "palourde-mergo-${rev}";
+         goPackagePath = "github.com/palourde/mergo";
+         rev = "v0.2.0-10-gd931ffd";
+         src = fetchFromGitHub {
+           inherit rev;
+           owner = "palourde";
+           repo = "mergo";
+           sha256 = "0kdwx97fqxhk3ia3bf6z0q3ayb7mmdh7d7i8rihzlyxi28wpj072";
+         };
+       })
 
     ];
 
@@ -69,7 +68,6 @@ in
     buildInputs = [ uchiwa_go_package nodePackages.bower strace git ];
 
     buildPhase = ''
-       echo "asdf"
        export HOME=$(pwd)
        bower --allow-root install
        find public

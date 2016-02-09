@@ -1,0 +1,5 @@
+Roles provide Flying Circus platform components within our context and within
+our policies.
+
+They rely on upstream NixOS modules/services and self-implemented services
+they should mostly contain binding our policies to more generic services.

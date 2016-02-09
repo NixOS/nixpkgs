@@ -106,14 +106,12 @@ in rec {
         proxy
         simple;
 
-# Our custom tests dont work, yet. Our environment specifies too much
-# configuration that collides with the testing infrastructure. Need to
-# think about that.
-#
-#      flyingcircus = {
-#            users = hydraJob
-#              (import tests/fc-users.nix { inherit system; });
-#      };
+      flyingcircus = {
+            sensuserver = hydraJob
+              (import modules/flyingcircus/tests/sensu.nix {
+                  inherit system; });
+      };
+
       networking.scripted = {
         inherit (nixos'.tests.networking.scripted)
           static

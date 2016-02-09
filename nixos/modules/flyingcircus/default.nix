@@ -21,6 +21,7 @@ in
     [./data
      ./platform
      ./packages
+     ./services/default.nix
      ./roles
      ./manage
     ];
