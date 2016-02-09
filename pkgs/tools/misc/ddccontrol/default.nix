@@ -16,10 +16,12 @@
 let version = "0.4.2"; in
 stdenv.mkDerivation {
   name = "ddccontrol-${version}";
+
   src = fetchurl {
     url = "mirror://sourceforge/ddccontrol/ddccontrol-${version}.tar.bz2";
     sha1 = "fd5c53286315a61a18697a950e63ed0c8d5acff1";
   };
+
   buildInputs =
     [
       intltool
@@ -34,6 +36,8 @@ stdenv.mkDerivation {
       gtk
       ddccontrol-db
     ];
+
+  hardening_format = false;
 
   prePatch = ''
       newPath=$(echo "${ddccontrol-db}/share/ddccontrol-db" | sed "s/\\//\\\\\\//g")
