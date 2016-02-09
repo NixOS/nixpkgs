@@ -6813,6 +6813,8 @@ let
 
   giblib = callPackage ../development/libraries/giblib { };
 
+  gio-sharp = callPackage ../development/libraries/gio-sharp { };
+
   libgit2 = callPackage ../development/libraries/git2 { };
 
   libgit2_0_21 = callPackage ../development/libraries/git2/0.21.nix { };
