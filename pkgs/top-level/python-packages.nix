@@ -14229,7 +14229,8 @@ in modules // {
     checkPhase = let
       testsToSkip = ["test_data" "test_excel" "test_html" "test_json"
                      "test_frequencies" "test_frame"
-                     "test_read_clipboard_infer_excel"] ++
+                     "test_read_clipboard_infer_excel"
+                     "test_interp_alt_scipy" "test_nanops" "test_stats"] ++
                     optional isPy35 "test_sql";
     in ''
       runHook preCheck
