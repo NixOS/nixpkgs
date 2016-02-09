@@ -62,6 +62,12 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.isDarwin && withX)
     "-I${cairo}/include/cairo";
 
+  # Occasionally, the Emacs "unexec" method of producing an executable
+  # on OS X will fail if there is not enough room for data segments.
+  # See:
+  #   http://web.mit.edu/Emacs/source/emacs-23.1/src/unexmacosx.c
+  #   https://lists.gnu.org/archive/html/emacs-devel/2013-05/msg00453.html
+  # Increasing the headerpad size fixes this issue.
   NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.isDarwin
     "-headerpad_max_install_names";
 
