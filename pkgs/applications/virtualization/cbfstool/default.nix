@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ iasl flex bison ];
 
+  hardening_fortify = false;
+
   buildPhase = ''
     export LEX=${flex}/bin/flex
     make -C util/cbfstool
