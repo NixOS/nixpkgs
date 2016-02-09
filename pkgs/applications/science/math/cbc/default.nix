@@ -12,6 +12,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  hardening_format = false;
+
   buildInputs = [ zlib bzip2 ];
 
   # FIXME: move share/coin/Data to a separate output?
