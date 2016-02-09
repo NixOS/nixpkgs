@@ -13120,6 +13120,8 @@ let
 
   qtractor = callPackage ../applications/audio/qtractor { };
 
+  qtscrobbler = callPackage ../applications/audio/qtscrobbler { };
+
   quirc = callPackage ../tools/graphics/quirc {};
 
   quodlibet = callPackage ../applications/audio/quodlibet {
