@@ -1,11 +1,11 @@
 { fetchurl, buildPerlPackage, DBI, mysql }:
 
 buildPerlPackage rec {
-  name = "DBD-mysql-4.031";
+  name = "DBD-mysql-4.033";
 
   src = fetchurl {
     url = "mirror://cpan/authors/id/C/CA/CAPTTOFU/${name}.tar.gz";
-    sha256 = "1lngnkfi71gcpfk93xhil2x9i3w3rqjpxlvn5n92jd5ikwry8bmf";
+    sha256 = "0769xakykps0cx368g4vaips4w3bjk383rianiavq7sq6g6bp66c";
   };
 
   buildInputs = [ mysql.lib ] ;

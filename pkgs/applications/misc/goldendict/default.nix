@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, pkgconfig, qt4, libXtst, libvorbis, hunspell, libao, ffmpeg, libeb, lzo, xz, libtiff }:
 stdenv.mkDerivation rec {
-  name = "goldendict-1.5.0.20150801";
+  name = "goldendict-1.5.0.ec86515";
   src = fetchFromGitHub {
     owner = "goldendict";
     repo = "goldendict";
-    rev = "b4bb1e9635c764aa602fbeaeee661f35e461d062";
-    sha256 = "0dhaa0nii226541al3i2d8x8h7cfh96w5vkw3pa3l74llgrj7yx2";
+    rev = "ec865158f5b7116f629e4d451a39ee59093eefa5";
+    sha256 = "070majwxbn15cy7sbgz7ljl8rkn7vcgkm10884v97csln7bfzwhr";
   };
 
   buildInputs = [ pkgconfig qt4 libXtst libvorbis hunspell libao ffmpeg libeb lzo xz libtiff ];

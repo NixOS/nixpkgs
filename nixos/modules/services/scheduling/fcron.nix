@@ -108,29 +108,25 @@ in
 
     security.setuidPrograms = [ "fcrontab" ];
 
-    jobs.fcron =
-      { description = "fcron daemon";
+    systemd.services.fcron = {
+      description = "fcron daemon";
+      after = [ "local-fs.target" ];
+      wantedBy = [ "multi-user.target" ];
 
-        startOn = "startup";
-
-        after = [ "local-fs.target" ];
-
-        environment =
-          { PATH = "/run/current-system/sw/bin";
-          };
-
-        preStart =
-          ''
-            ${pkgs.coreutils}/bin/mkdir -m 0700 -p /var/spool/fcron
-            # load system crontab file
-            ${pkgs.fcron}/bin/fcrontab -u systab ${pkgs.writeText "systab" cfg.systab}
-          '';
-
-        daemonType = "fork";
-
-        exec = "${pkgs.fcron}/sbin/fcron -m ${toString cfg.maxSerialJobs} ${queuelen}";
+      # FIXME use specific path
+      environment = {
+        PATH = "/run/current-system/sw/bin";
       };
 
-  };
+      preStart = ''
+        ${pkgs.coreutils}/bin/mkdir -m 0700 -p /var/spool/fcron
+        # load system crontab file
+        ${pkgs.fcron}/bin/fcrontab -u systab ${pkgs.writeText "systab" cfg.systab}
+      '';
 
+      serviceConfig.Type = "forking";
+
+      script = "${pkgs.fcron}/sbin/fcron -m ${toString cfg.maxSerialJobs} ${queuelen}";
+    };
+  };
 }

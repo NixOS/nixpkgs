@@ -32,7 +32,7 @@ with lib;
         example = 255;
         type = types.int;
         description = ''
-          Configure the trackpoint sensitivity. By default, the kernel
+          Configure the trackpoint speed. By default, the kernel
           configures 97.
         '';
       };

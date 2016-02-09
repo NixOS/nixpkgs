@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libjpeg, libexif, libungif, libtiff, libpng, libwebp
-, pkgconfig, freetype, fontconfig, which, imagemagick, curl, saneBackends
+, pkgconfig, freetype, fontconfig, which, imagemagick, curl, sane-backends
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig which ];
   buildInputs =
     [ libexif libjpeg libpng libungif freetype fontconfig libtiff libwebp
-      imagemagick curl saneBackends
+      imagemagick curl sane-backends
     ];
   
   makeFlags = [ "prefix=$(out)" "verbose=yes" ];

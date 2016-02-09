@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     description = "A set of command line tools that assist applications with a variety of desktop integration tasks";
     license = if mimiSupport then licenses.gpl2 else licenses.free;
     maintainers = [ maintainers.eelco ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, perl, liblapack, config, coreutils
+{ stdenv, fetchurl, gfortran, perl, which, config, coreutils
 # Most packages depending on openblas expect integer width to match pointer width,
 # but some expect to use 32-bit integers always (for compatibility with reference BLAS).
 , blas64 ? null
@@ -22,21 +22,19 @@ let local = config.openblas.preferLocalBuild or false;
       optionals (hasAttr "target" config.openblas) [ "TARGET=${config.openblas.target}" ];
     blas64 = if blas64_ != null then blas64_ else hasPrefix "x86_64" stdenv.system;
 
-    version = "0.2.14";
+    version = "0.2.15";
 in
 stdenv.mkDerivation {
   name = "openblas-${version}";
   src = fetchurl {
-    url = "https://github.com/xianyi/OpenBLAS/tarball/v${version}";
-    sha256 = "0av3pd96j8rx5i65f652xv9wqfkaqn0w4ma1gvbyz73i6j2hi9db";
+    url = "https://github.com/xianyi/OpenBLAS/archive/v${version}.tar.gz";
+    sha256 = "0i4hrjx622vw5ff35wm6cnga3ic8hcfa88p1wlj24a3qb770mi3k";
     name = "openblas-${version}.tar.gz";
   };
 
   inherit blas64;
 
-  preBuild = "cp ${liblapack.src} lapack-${liblapack.meta.version}.tgz";
-
-  nativeBuildInputs = optionals stdenv.isDarwin [coreutils] ++ [gfortran perl];
+  nativeBuildInputs = optionals stdenv.isDarwin [coreutils] ++ [gfortran perl which];
 
   makeFlags =
     (if local then localFlags else genericFlags)
@@ -61,7 +59,7 @@ stdenv.mkDerivation {
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
     homepage = "https://github.com/xianyi/OpenBLAS";
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ ttuegel ];
   };
 }

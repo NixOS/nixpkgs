@@ -66,10 +66,6 @@ let
         copy_bin_and_libs $BIN
       done
 
-      # Copy modprobe.
-      copy_bin_and_libs ${pkgs.kmod}/bin/kmod
-      ln -sf kmod $out/bin/modprobe
-
       # Copy resize2fs if needed.
       ${optionalString (any (fs: fs.autoResize) (attrValues config.fileSystems)) ''
         # We need mke2fs in the initrd.
@@ -104,7 +100,7 @@ let
       stripDirs "lib bin" "-s"
 
       # Run patchelf to make the programs refer to the copied libraries.
-      for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done
+      for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs -e $out $i; fi; done
 
       for i in $out/bin/*; do
           if ! test -L $i; then
@@ -161,7 +157,9 @@ let
             --replace /sbin/blkid ${extraUtils}/bin/blkid \
             --replace ${pkgs.lvm2}/sbin ${extraUtils}/bin \
             --replace /sbin/mdadm ${extraUtils}/bin/mdadm \
-            --replace /bin/sh ${extraUtils}/bin/sh
+            --replace /bin/sh ${extraUtils}/bin/sh \
+            --replace /usr/bin/readlink ${extraUtils}/bin/readlink \
+            --replace /usr/bin/basename ${extraUtils}/bin/basename
       done
 
       # Work around a bug in QEMU, which doesn't implement the "READ
@@ -203,13 +201,13 @@ let
     inherit (config.boot) resumeDevice devSize runSize;
 
     inherit (config.boot.initrd) checkJournalingFS
-      preLVMCommands postDeviceCommands postMountCommands kernelModules;
+      preLVMCommands preDeviceCommands postDeviceCommands postMountCommands kernelModules;
 
     resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
-                    (filter (sd: sd ? label || hasPrefix "/dev/" sd.device) config.swapDevices);
+                    (filter (sd: (sd ? label || hasPrefix "/dev/" sd.device) && !sd.randomEncryption) config.swapDevices);
 
     fsInfo =
-      let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType fs.options ];
+      let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType (builtins.concatStringsSep "," fs.options) ];
       in pkgs.writeText "initrd-fsinfo" (concatStringsSep "\n" (concatMap f fileSystems));
 
     setHostId = optionalString (config.networking.hostId != null) ''
@@ -300,6 +298,15 @@ in
       type = types.lines;
       description = ''
         Shell commands to be executed immediately before LVM discovery.
+      '';
+    };
+
+    boot.initrd.preDeviceCommands = mkOption {
+      default = "";
+      type = types.lines;
+      description = ''
+        Shell commands to be executed before udev is started to create
+        device nodes.
       '';
     };
 

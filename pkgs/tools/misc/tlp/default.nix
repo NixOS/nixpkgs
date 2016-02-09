@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, makeWrapper, perl, systemd, iw, rfkill, hdparm, ethtool, inetutils, kmod
-, enableRDW ? true, networkmanager }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, perl, systemd, iw, rfkill, hdparm, ethtool, inetutils
+, module_init_tools, pciutils, smartmontools, x86_energy_perf_policy, gawk, gnugrep, coreutils
+, enableRDW ? false, networkmanager
+}:
 
 let version = "0.8";
 in stdenv.mkDerivation {
-  inherit enableRDW;
-
   name = "tlp-${version}";
 
   src = fetchFromGitHub {
@@ -26,10 +26,11 @@ in stdenv.mkDerivation {
 
   buildInputs = [ perl ];
 
-  paths = with stdenv.lib;
-          concatMapStringsSep ":" (x: "${x}/bin")
-          ([ iw rfkill hdparm ethtool inetutils systemd kmod ]
-           ++ optional enableRDW networkmanager
+  paths = lib.makeSearchPath "bin"
+          ([ iw rfkill hdparm ethtool inetutils systemd module_init_tools pciutils smartmontools
+             x86_energy_perf_policy gawk gnugrep coreutils
+           ]
+           ++ lib.optional enableRDW networkmanager
           );
 
   installTargets = [ "install-tlp" ] ++ stdenv.lib.optional enableRDW "install-rdw";
@@ -40,13 +41,6 @@ in stdenv.mkDerivation {
       wrapProgram "$i" \
         --prefix PATH : "$paths"
     done
-    if [ "$enableRDW" = "1" ]; then
-      for i in $out/etc/NetworkManager/dispatcher.d/*; do
-        sed -i "s,/usr/lib/,$out/lib/,g" "$i"
-        wrapProgram "$i" \
-          --prefix PATH : "$paths"
-      done
-    fi
 
     for i in $out/lib/udev/rules.d/*; do
       sed -i "s,RUN+=\",\\0$out,g; s,/usr/sbin,/bin,g" "$i"
@@ -55,9 +49,13 @@ in stdenv.mkDerivation {
     for i in man/*; do
       install -D $i $out/share/man/man''${i##*.}/$(basename $i)
     done
+  '' + lib.optionalString enableRDW ''
+    for i in $out/etc/NetworkManager/dispatcher.d/*; do
+      sed -i "s,/usr/lib/,$out/lib/,g" "$i"
+      wrapProgram "$i" \
+        --prefix PATH : "$paths"
+    done
   '';
-
-  passthru = { inherit enableRDW; };
 
   meta = with stdenv.lib; {
     description = "Advanced Power Management for Linux";

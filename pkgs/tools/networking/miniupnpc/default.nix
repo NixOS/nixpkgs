@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
     name = "${name}.tar.gz";
   };
 
-  doCheck = true;
+  patches = stdenv.lib.optional stdenv.isFreeBSD ./freebsd.patch;
+
+  doCheck = !stdenv.isFreeBSD;
 
   installFlags = "PREFIX=$(out) INSTALLPREFIX=$(out)";
 
@@ -18,6 +20,6 @@ stdenv.mkDerivation rec {
     inherit version;
     homepage = http://miniupnp.free.fr/;
     description = "A client that implements the UPnP Internet Gateway Device (IGD) specification";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ freebsd;
   };
 }

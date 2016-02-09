@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, curl, fuse, libxml2, pkgconfig }:
 
 let
-  version = "2-20150109";
   srcs = {
     boxfs2 = fetchFromGitHub {
       sha256 = "10af1l3sjnh25shmq5gdnpyqk4vrq7i1zklv4csf1n2nrahln8j8";
@@ -22,22 +21,23 @@ let
       owner = "vincenthz";
     };
   };
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   name = "boxfs-${version}";
+  version = "2-20150109";
 
   src = srcs.boxfs2;
+
   prePatch = with srcs; ''
     substituteInPlace Makefile --replace "git pull" "true"
     cp -a --no-preserve=mode ${libapp} libapp
     cp -a --no-preserve=mode ${libjson} libjson
   '';
-
   patches = [ ./work-around-API-borkage.patch ];
 
   buildInputs = [ curl fuse libxml2 ];
   nativeBuildInputs = [ pkgconfig ];
 
-  buildFlags = "static";
+  buildFlags = [ "static" ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -55,7 +55,7 @@ in stdenv.mkDerivation {
     '';
     homepage = https://github.com/drotiro/boxfs2;
     license = licenses.gpl3;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
 }

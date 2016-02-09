@@ -1,27 +1,24 @@
 { stdenv, fetchurl, libnfnetlink }:
 
-let
-  version = "1.4";
+stdenv.mkDerivation rec {
   name = "minissdpd-${version}";
-in stdenv.mkDerivation {
-  inherit name;
+  version = "1.5.20160119";
 
   src = fetchurl {
-    sha256 = "0450680b9hpr3z4dn6gy01clxdc17w0lmxcjx6kfj8ahsklwg8j6";
+    sha256 = "0z0h2fqjlys9g08fbv0jg8l53h8cjlpdk45z4g71kwdk1m9ld8r2";
     url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
     name = "${name}.tar.gz";
   };
 
   buildInputs = [ libnfnetlink ];
 
-  installFlags = "PREFIX=$(out) INSTALLPREFIX=$(out)";
+  installFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];
 
   enableParallelBuilding = true;
 
   doCheck = true;
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Small daemon to speed up UPnP device discoveries";
     longDescription = ''
       MiniSSDPd receives NOTIFY packets and stores (caches) that information

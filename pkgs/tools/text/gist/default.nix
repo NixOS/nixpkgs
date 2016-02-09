@@ -1,6 +1,6 @@
 { stdenv, lib, bundlerEnv }:
 
-let version = "4.3.0";
+let version = "4.4.2";
 in bundlerEnv {
   name = "gist-${version}";
   gemfile = ./Gemfile;

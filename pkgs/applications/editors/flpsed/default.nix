@@ -1,11 +1,11 @@
 {stdenv, fetchurl, fltk13, ghostscript}:
 
 stdenv.mkDerivation {
-  name = "flpsed-0.7.2";
+  name = "flpsed-0.7.3";
 
   src = fetchurl {
-    url = "http://www.ecademix.com/JohannesHofmann/flpsed-0.7.2.tar.gz";
-    sha256 = "1132nlganr6x4f4lzcp9l0xihg2ky1l7xk8vq7r2l2qxs97vbif8";
+    url = "http://www.ecademix.com/JohannesHofmann/flpsed-0.7.3.tar.gz";
+    sha256 = "0vngqxanykicabhfdznisv82k5ypkxwg0s93ms9ribvhpm8vf2xp";
   };
 
   buildInputs = [ fltk13 ghostscript ];

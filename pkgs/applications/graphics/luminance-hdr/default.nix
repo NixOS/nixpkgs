@@ -1,5 +1,6 @@
-{ stdenv, cmake, fetchurl, fetchpatch, pkgconfig, qt5, boost, exiv2, fftwFloat, gsl
+{ stdenv, cmake, fetchurl, fetchpatch, pkgconfig, boost, exiv2, fftwFloat, gsl
 , ilmbase, lcms2, libraw, libtiff, openexr
+, qtbase, qtdeclarative, qttools, qtwebkit
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      qt5.base qt5.declarative qt5.tools qt5.webkit
+      qtbase qtdeclarative qttools qtwebkit
       boost exiv2 fftwFloat gsl ilmbase lcms2 libraw libtiff openexr
     ];
 

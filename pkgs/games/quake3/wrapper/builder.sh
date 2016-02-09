@@ -2,8 +2,8 @@ source $stdenv/setup
 
 mkdir -p $out/baseq3
 for i in $paks; do
-    if test -d "$paks/baseq3"; then
-        ln -s $paks/baseq3/* $out/baseq3/
+    if test -d "$i/baseq3"; then
+        ln -s "$i/baseq3"/* $out/baseq3/
     fi
 done
 

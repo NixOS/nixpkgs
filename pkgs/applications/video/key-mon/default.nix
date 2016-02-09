@@ -1,5 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, gnome, librsvg, makeWrapper, pygtk
-, pythonPackages }:
+{ stdenv, fetchurl, buildPythonPackage, gnome, librsvg, pygtk, pythonPackages }:
 
 buildPythonPackage rec {
   name = "key-mon-${version}";
@@ -12,14 +11,13 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs =
-    [ gnome.python_rsvg librsvg makeWrapper pygtk pythonPackages.xlib ];
+    [ gnome.python_rsvg librsvg pygtk pythonPackages.xlib ];
 
   doCheck = false;
 
-  postInstall = ''
-      wrapProgram $out/bin/key-mon --prefix GDK_PIXBUF_MODULE_FILE : \
-      ${librsvg}/lib/gdk-pixbuf/loaders.cache
-    '';
+  preFixup = ''
+      export makeWrapperArgs="--set GDK_PIXBUF_MODULE_FILE $GDK_PIXBUF_MODULE_FILE"
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://code.google.com/p/key-mon;

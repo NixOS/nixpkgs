@@ -9,10 +9,6 @@ assert useX11 -> !stdenv.isArm && !stdenv.isMips;
 let
    useNativeCompilers = !stdenv.isMips;
    inherit (stdenv.lib) optionals optionalString;
-   patchOcamlBuild = fetchurl {
-     url = https://github.com/ocaml/ocaml/pull/117.patch;
-     sha256 = "0x2cdn2sgzq29qzqg5y2ial0jqy8gjg5a7jf8qqch55dc4vkyjw0";
-   };
 in
 
 stdenv.mkDerivation rec {
@@ -28,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qwwvy8nzd87hk8rd9sm667nppakiapnx4ypdwcrlnav2dz6kil3";
   };
 
-  patches = [ patchOcamlBuild ];
+  patches = [ ./ocamlbuild.patch ];
 
   prefixKey = "-prefix ";
   configureFlags = optionals useX11 [ "-x11lib" x11lib

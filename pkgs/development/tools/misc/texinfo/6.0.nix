@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, ncurses, perl, xz, interactive ? false }:
+{ stdenv, fetchurl, ncurses, perl, xz, libiconv, gawk, procps, interactive ? false }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "texinfo-6.0";
@@ -9,20 +11,25 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl xz ]
-    ++ stdenv.lib.optional interactive ncurses;
+    ++ optionals stdenv.isSunOS [ libiconv gawk ]
+    ++ optional interactive ncurses
+    ++ optional doCheck procps; # for tests
+
+  configureFlags = stdenv.lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
 
   preInstall = ''
     installFlags="TEXMF=$out/texmf-dist";
     installTargets="install install-tex";
   '';
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = interactive # simplify bootstrapping
+    && !stdenv.isDarwin && !stdenv.isSunOS/*flaky*/;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://www.gnu.org/software/texinfo/";
     description = "The GNU documentation system";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
 
     longDescription = ''
       Texinfo is the official documentation format of the GNU project.
@@ -39,6 +46,5 @@ stdenv.mkDerivation rec {
       need revise only that one document.  The Texinfo system is
       well-integrated with GNU Emacs.
     '';
-    branch = "5.2";
   };
 }

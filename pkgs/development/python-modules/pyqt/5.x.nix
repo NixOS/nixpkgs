@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, python, pkgconfig, qt5, sip, pythonDBus, lndir, makeWrapper }:
+{ stdenv, fetchurl, python, pkgconfig, qtbase, qtsvg, qtwebkit, sip, pythonDBus
+, lndir, makeWrapper }:
 
 let
-  version = "5.4.2";
+  version = "5.5.1";
 in stdenv.mkDerivation {
-  name = "PyQt-${version}";
+  name = "${python.libPrefix}-PyQt-${version}";
 
   meta = with stdenv.lib; {
     description = "Python bindings for Qt5";
@@ -15,12 +16,12 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt-gpl-${version}.tar.gz";
-    sha256 = "1402n5kwzd973b65avxk1j9js96wzfm0yw4rshjfy8l7an00bnac";
+    sha256 = "11l3pm0wkwkxzw4n3022iid3yyia5ap4l0ny1m5ngkzzzfafyw0a";
   };
 
   buildInputs = [
     python pkgconfig makeWrapper lndir
-    qt5.base qt5.svg qt5.webkit
+    qtbase qtsvg qtwebkit
   ];
 
   propagatedBuildInputs = [ sip ];

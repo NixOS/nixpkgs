@@ -1,8 +1,14 @@
-{ stdenv, fetchurl, alsaLib, faac, libjack2, lame, libopus, libpulseaudio, libsamplerate, libvorbis }:
+{ stdenv, buildEnv, fetchurl, alsaLib, faac, libjack2, lame, libogg, libopus, libpulseaudio, libsamplerate, libvorbis }:
 
-with stdenv.lib;
+let
+  oggEnv = buildEnv {
+    name = "env-darkice-ogg";
+    paths = [
+      libopus libvorbis libogg
+    ];
+  };
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "darkice-${version}";
   version = "1.2";
 
@@ -16,10 +22,10 @@ stdenv.mkDerivation rec {
     "--with-faac-prefix=${faac}"
     "--with-jack-prefix=${libjack2}"
     "--with-lame-prefix=${lame}"
-    "--with-opus-prefix=${libopus}"
+    "--with-opus-prefix=${oggEnv}"
     "--with-pulseaudio-prefix=${libpulseaudio}"
     "--with-samplerate-prefix=${libsamplerate}"	
-    "--with-vorbis-prefix=${libvorbis}"
+    "--with-vorbis-prefix=${oggEnv}"
 #    "--with-aacplus-prefix=${aacplus}" ### missing: aacplus
 #    "--with-twolame-prefix=${twolame}" ### missing: twolame
   ];

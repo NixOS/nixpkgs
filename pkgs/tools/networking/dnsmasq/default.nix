@@ -3,10 +3,10 @@
 with stdenv.lib;
 let
   copts = concatStringsSep " " ([
-    "-DHAVE_DBUS"
     "-DHAVE_IDN"
     "-DHAVE_DNSSEC"
   ] ++ optionals stdenv.isLinux [
+    "-DHAVE_DBUS"
     "-DHAVE_CONNTRACK"
   ]);
 in
@@ -29,9 +29,18 @@ stdenv.mkDerivation rec {
     "LOCALEDIR=$(out)/share/locale"
   ];
 
+  postBuild = optionalString stdenv.isLinux ''
+    make -C contrib/wrt
+  '';
+
+  # XXX: Does the systemd service definition really belong here when our NixOS
+  # module can create it in Nix-land?
   postInstall = ''
-    install -Dm644 dbus/dnsmasq.conf $out/etc/dbus-1/system.d/dnsmasq.conf
     install -Dm644 trust-anchors.conf $out/share/dnsmasq/trust-anchors.conf
+  '' + optionalString stdenv.isLinux ''
+    install -Dm644 dbus/dnsmasq.conf $out/etc/dbus-1/system.d/dnsmasq.conf
+    install -Dm755 contrib/wrt/dhcp_lease_time $out/bin/dhcp_lease_time
+    install -Dm755 contrib/wrt/dhcp_release $out/bin/dhcp_release
 
     mkdir -p $out/share/dbus-1/system-services
     cat <<END > $out/share/dbus-1/system-services/uk.org.thekelleys.dnsmasq.service
@@ -44,8 +53,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ dbus_libs nettle libidn ]
-    ++ optional stdenv.isLinux libnetfilter_conntrack;
+  buildInputs = [ nettle libidn ]
+    ++ optionals stdenv.isLinux [ dbus_libs libnetfilter_conntrack ];
 
   meta = {
     description = "An integrated DNS, DHCP and TFTP server for small networks";

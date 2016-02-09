@@ -218,7 +218,7 @@ let
       # Samba stuff to the Samba module.  This requires that the PAM
       # module provides the right hooks.
       text = mkDefault
-        ''
+        (''
           # Account management.
           account sufficient pam_unix.so
           ${optionalString config.users.ldap.enable
@@ -241,12 +241,22 @@ let
               "auth sufficient ${pkgs.pam_u2f}/lib/security/pam_u2f.so"}
           ${optionalString cfg.usbAuth
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
+        '' +
+          # Modules in this block require having the password set in PAM_AUTHTOK.
+          # pam_unix is marked as 'sufficient' on NixOS which means nothing will run
+          # after it succeeds. Certain modules need to run after pam_unix
+          # prompts the user for password so we run it once with 'required' at an
+          # earlier point and it will run again with 'sufficient' further down.
+          # We use try_first_pass the second time to avoid prompting password twice
+          (optionalString (cfg.unixAuth && (config.security.pam.enableEcryptfs || cfg.pamMount)) ''
+              auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth
+              ${optionalString config.security.pam.enableEcryptfs
+                "auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
+              ${optionalString cfg.pamMount
+                "auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
+            '') + ''
           ${optionalString cfg.unixAuth
-              "auth ${if (config.security.pam.enableEcryptfs || cfg.pamMount) then "required" else "sufficient"} pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth"}
-          ${optionalString cfg.pamMount
-              "auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
-          ${optionalString config.security.pam.enableEcryptfs
-              "auth required ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
+              "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth try_first_pass"}
           ${optionalString cfg.otpwAuth
               "auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so"}
           ${optionalString cfg.oathAuth
@@ -258,7 +268,7 @@ let
             auth [default=die success=done] ${pam_ccreds}/lib/security/pam_ccreds.so action=validate use_first_pass
             auth sufficient ${pam_ccreds}/lib/security/pam_ccreds.so action=store use_first_pass
           ''}
-          ${optionalString (!(config.security.pam.enableEcryptfs || cfg.pamMount)) "auth required pam_deny.so"}
+          auth required pam_deny.so
 
           # Password management.
           password requisite pam_unix.so nullok sha512
@@ -306,7 +316,7 @@ let
               "session optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
           ${optionalString (cfg.enableAppArmor && config.security.apparmor.enable)
               "session optional ${pkgs.apparmor-pam}/lib/security/pam_apparmor.so order=user,group,default debug"}
-        '';
+        '');
     };
 
   };

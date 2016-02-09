@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "zsh-navigation-tools-${version}";
-  version = "1.2";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "psprint";
     repo = "zsh-navigation-tools";
     rev = "v${version}";
-    sha256 = "1p3r8pra88sjcc8b5d7qlz1axsyyspl3835y6mqwia57b9g0fpy8";
+    sha256 = "1r24mpx57jyn201mdhd793rlhlr5r83n9137aafkgf86282ghr7y";
   };
 
   dontBuild = true;

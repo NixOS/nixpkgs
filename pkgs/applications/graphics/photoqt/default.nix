@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, cmake, makeWrapper, qt5, exiv2, graphicsmagick }:
+{ stdenv, fetchurl, cmake, makeWrapper, exiv2, graphicsmagick
+, qtbase, qtdeclarative, qtmultimedia, qtquickcontrols, qttools
+}:
 
 let
   version = "1.3";
   qmlPath = stdenv.lib.makeSearchPath "lib/qt5/qml/" [
-    qt5.quickcontrols
-    qt5.declarative
-    qt5.multimedia
+    qtquickcontrols
+    qtdeclarative
+    qtmultimedia
   ];
 in
 stdenv.mkDerivation rec {
@@ -15,7 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "0j2kvxfb5pd9abciv161nkcsyam6n8kfqs8ymwj2mxiqflwbmfl1";
   };
 
-  buildInputs = [ cmake makeWrapper qt5.base qt5.tools exiv2 graphicsmagick ];
+  buildInputs = [
+    cmake makeWrapper qtbase qtquickcontrols qttools exiv2 graphicsmagick
+  ];
 
   preConfigure = ''
     export MAGICK_LOCATION="${graphicsmagick}/include/GraphicsMagick"

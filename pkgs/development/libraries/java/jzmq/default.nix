@@ -6,6 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://github.com/zeromq/jzmq.git;
     rev = "946fd39780423b2df6e5efd9fa2cd863fd79c9db";
+    sha256 = "0j6kfmngqw2gpyxc1ak67d65l208vrb0h8bm8svclia8b339m37a";
   };
 
   buildInputs = [ automake autoconf libtool pkgconfig zeromq2 jdk ];

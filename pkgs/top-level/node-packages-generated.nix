@@ -1,27 +1,6 @@
-{ self, fetchurl, fetchgit ? null, lib }:
+{ self, fetchurl, fetchgit ? null, fetchFromGitHub, lib }:
 
 {
-  by-spec."7f"."*" =
-    self.by-version."7f"."1.1.3";
-  by-version."7f"."1.1.3" = self.buildNodePackage {
-    name = "7f-1.1.3";
-    version = "1.1.3";
-    bin = false;
-    src = fetchurl {
-      url = "http://registry.npmjs.org/7f/-/7f-1.1.3.tgz";
-      name = "7f-1.1.3.tgz";
-      sha1 = "88d2cb194fceeb96db7b24bc710b283451e7a851";
-    };
-    deps = {
-      "bits-0.1.1" = self.by-version."bits"."0.1.1";
-    };
-    optionalDependencies = {
-    };
-    peerDependencies = [];
-    os = [ ];
-    cpu = [ ];
-  };
-  "7f" = self.by-version."7f"."1.1.3";
   by-spec."Base64"."~0.2.0" =
     self.by-version."Base64"."0.2.1";
   by-version."Base64"."0.2.1" = self.buildNodePackage {
@@ -29335,10 +29314,11 @@
     name = "oauth-0.9.12";
     version = "0.9.12";
     bin = false;
-    src = fetchurl {
-      url = "https://github.com/ciaranj/node-oauth/tarball/master";
-      name = "oauth-0.9.12.tgz";
-      sha256 = "e06c3c3537e9c802c8ad00640b9f91bf2857cf8cc91209e355b5646f4da8b3e7";
+    src = fetchFromGitHub {
+      owner = "ciaranj";
+      repo = "node-oauth";
+      rev = "0.9.12";
+      sha256 = "1c67nq1q5isfcvyp520q02w5c527s1wsfiyknzfvvp22sf2yn7k6";
     };
     deps = {
     };

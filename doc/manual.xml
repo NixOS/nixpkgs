@@ -12,14 +12,15 @@
   <xi:include href="introduction.xml" />
   <xi:include href="quick-start.xml" />
   <xi:include href="stdenv.xml" />
-  <xi:include href="packageconfig.xml" />
+  <xi:include href="configuration.xml" />
   <xi:include href="functions.xml" />
   <xi:include href="meta.xml" />
-  <xi:include href="language-support.xml" />
+  <xi:include href="languages-frameworks/index.xml" />
   <xi:include href="package-notes.xml" />
   <xi:include href="coding-conventions.xml" />
   <xi:include href="submitting-changes.xml" />
   <xi:include href="haskell-users-guide.xml" />
+  <xi:include href="erlang-users-guide.xml" />
   <xi:include href="contributing.xml" />
 
 </book>

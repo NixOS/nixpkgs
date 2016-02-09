@@ -1,7 +1,7 @@
 { fetchurl, stdenv, pkgconfig, gst_plugins_base, aalib, cairo
 , flac, libjpeg, zlib, speex, libpng, libdv, libcaca, libvpx
 , libiec61883, libavc1394, taglib, libpulseaudio, gdk_pixbuf, orc
-, glib, gstreamer, bzip2, libsoup, libintlOrEmpty
+, glib, gstreamer, bzip2, libsoup, libshout, libintlOrEmpty
 , # Whether to build no plugins that have external dependencies
   # (except the PulseAudio plugin).
   minimalDeps ? false
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     ++ libintlOrEmpty
     ++ stdenv.lib.optionals (!minimalDeps)
       [ aalib libcaca cairo libdv flac libjpeg libpng speex
-        taglib bzip2 libvpx gdk_pixbuf orc libsoup ];
+        taglib bzip2 libvpx gdk_pixbuf orc libsoup libshout ];
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
 

@@ -33,7 +33,7 @@ the package.  The value of a meta-attribute must be a string.</para>
 command-line using <command>nix-env</command>:
 
 <screen>
-$ nix-env -qa hello --meta --json
+$ nix-env -qa hello --json
 {
     "hello": {
         "meta": {
@@ -110,11 +110,6 @@ meta-attributes</title>
     <term><varname>longDescription</varname></term>
     <listitem><para>An arbitrarily long description of the
     package.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>version</varname></term>
-    <listitem><para>Package version.</para></listitem>
   </varlistentry>
 
   <varlistentry>

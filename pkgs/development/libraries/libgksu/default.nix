@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, makeWrapper, gtk, gnome, gnome3,
-  libstartup_notification, libgtop, perl, perlXMLParser, autoconf,
-  automake, libtool, intltool, gtk_doc, docbook_xsl, xauth, sudo
+  libstartup_notification, libgtop, perl, perlXMLParser,
+  autoreconfHook, intltool, gtk_doc, docbook_xsl, xauth, sudo
 }:
 
 stdenv.mkDerivation rec {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
     # Fix some binary paths
     sed -i -e 's|/usr/bin/xauth|${xauth}/bin/xauth|g' libgksu/gksu-run-helper.c libgksu/libgksu.c
-    sed -i -e 's|/usr/bin/sudo|${sudo}/bin/sudo|g' libgksu/libgksu.c
+    sed -i -e 's|/usr/bin/sudo|/var/setuid-wrappers/sudo|g' libgksu/libgksu.c
     sed -i -e 's|/bin/su\([^d]\)|/var/setuid-wrappers/su\1|g' libgksu/libgksu.c
 
     touch NEWS README
@@ -52,13 +52,12 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     intltoolize --force --copy --automake
-    autoreconf -vfi
   '';
 
   buildInputs = [
     pkgconfig makeWrapper gtk gnome.GConf libstartup_notification
     gnome3.libgnome_keyring libgtop gnome.libglade perl perlXMLParser
-    autoconf automake libtool intltool gtk_doc docbook_xsl
+    autoreconfHook intltool gtk_doc docbook_xsl
   ];
 
   preFixup = ''

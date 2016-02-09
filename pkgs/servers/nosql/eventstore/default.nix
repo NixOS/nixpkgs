@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchpatch, git, mono, v8, icu }:
+{ stdenv, fetchFromGitHub, fetchpatch, git, mono, v8, icu }:
 
 # There are some similarities with the pinta derivation. We should
 # have a helper to make it easy to package these Mono apps.
@@ -6,11 +6,11 @@
 stdenv.mkDerivation rec {
   name = "EventStore-${version}";
   version = "3.0.3";
-  src = fetchgit {
-    url = "https://github.com/EventStore/EventStore.git";
-    rev = "a1382252dd1ed0554ddb04015cdb2cbc1b0a65c1";
-    sha256 = "07ir6jlli2q1yvsnyw8r8dfril6h1wmfj98yf7a6k81585v2mc6g";
-    leaveDotGit = true;
+  src = fetchFromGitHub {
+    owner  = "EventStore";
+    repo   = "EventStore";
+    rev    = "oss-v${version}";
+    sha256 = "1xz1dpnbkqqd3ph9g3z5cghr8zp14sr9y31lrdjrdydr3gm4sll2";
   };
 
   patches = [

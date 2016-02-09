@@ -37,7 +37,7 @@ let
     
   _arch = if arch == null
     then
-      if release then "armv7" else "i386"
+      if release then "armv7" else "x86_64"
     else arch;
 
   _sdk = if sdk == null
@@ -83,7 +83,7 @@ stdenv.mkDerivation {
       ''}
 
     # Do the building
-    xcodebuild -target ${_target} -configuration ${_configuration} ${stdenv.lib.optionalString (scheme != null) "-scheme ${scheme}"} -sdk ${_sdk} -arch ${_arch} ONLY_ACTIVE_ARCH=NO CONFIGURATION_TEMP_DIR=$TMPDIR CONFIGURATION_BUILD_DIR=$out ${if generateXCArchive then "archive" else ""} ${xcodeFlags} ${if release then ''"CODE_SIGN_IDENTITY=${codeSignIdentity}" PROVISIONING_PROFILE=$PROVISIONING_PROFILE OTHER_CODE_SIGN_FLAGS="--keychain $HOME/Library/Keychains/$keychainName"'' else ""}
+    xcodebuild -target ${_target} -configuration ${_configuration} ${stdenv.lib.optionalString (scheme != null) "-scheme ${scheme}"} -sdk ${_sdk} -arch ${_arch} ONLY_ACTIVE_ARCH=NO VALID_ARCHS="${_arch}" CONFIGURATION_TEMP_DIR=$TMPDIR CONFIGURATION_BUILD_DIR=$out ${if generateXCArchive then "archive" else ""} ${xcodeFlags} ${if release then ''"CODE_SIGN_IDENTITY=${codeSignIdentity}" PROVISIONING_PROFILE=$PROVISIONING_PROFILE OTHER_CODE_SIGN_FLAGS="--keychain $HOME/Library/Keychains/$keychainName"'' else ""}
     
     ${stdenv.lib.optionalString release ''
       ${stdenv.lib.optionalString generateIPA ''

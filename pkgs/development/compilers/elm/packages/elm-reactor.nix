@@ -1,24 +1,22 @@
 { mkDerivation, base, blaze-html, blaze-markup, bytestring, cmdargs
-, containers, directory, elm-compiler, fetchgit, filepath, fsnotify
-, HTTP, mtl, process, snap-core, snap-server, stdenv
-, system-filepath, text, time, transformers, unordered-containers
+, directory, elm-compiler, fetchgit, filepath, fsnotify, mtl
+, snap-core, snap-server, stdenv, text, time, transformers
 , websockets, websockets-snap
 }:
 mkDerivation {
   pname = "elm-reactor";
-  version = "0.3.2";
+  version = "0.16";
   src = fetchgit {
     url = "https://github.com/elm-lang/elm-reactor";
-    sha256 = "a7775971ea6634f13436f10098c462d39c6e115dbda79e537831a71975451e9a";
-    rev = "b6c11be539734e72015ce151a9189d06dfc9db76";
+    sha256 = "dbf881808ff00772d464675f1dd88a40273569ab0e9298805133a3b8f3ed4f26";
+    rev = "ff4ad13ea6b55c63b2d2099b738fd1d5ec2d29b4";
   };
   isLibrary = false;
   isExecutable = true;
-  buildDepends = [
-    base blaze-html blaze-markup bytestring cmdargs containers
-    directory elm-compiler filepath fsnotify HTTP mtl process snap-core
-    snap-server system-filepath text time transformers
-    unordered-containers websockets websockets-snap
+  executableHaskellDepends = [
+    base blaze-html blaze-markup bytestring cmdargs directory
+    elm-compiler filepath fsnotify mtl snap-core snap-server text time
+    transformers websockets websockets-snap
   ];
   jailbreak = true;
   homepage = "http://elm-lang.org";

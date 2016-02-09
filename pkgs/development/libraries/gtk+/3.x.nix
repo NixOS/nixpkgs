@@ -1,16 +1,16 @@
 { stdenv, fetchurl, pkgconfig, gettext, perl
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, gobjectIntrospection
-, xorg, xlibsWrapper, wayland, libxkbcommon, epoxy
+, xlibs, x11, wayland, libxkbcommon, epoxy
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
 }:
 
-assert xineramaSupport -> xorg.libXinerama != null;
+assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 let
-  ver_maj = "3.16";
-  ver_min = "7";
+  ver_maj = "3.18";
+  ver_min = "5";
   version = "${ver_maj}.${ver_min}";
 in
 stdenv.mkDerivation rec {
@@ -18,24 +18,24 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
-    sha256 = "1fkzdhqa1pjzb1qsh2ll3y2567ylyszks59qspx85lalvqa9ss0r";
+    sha256 = "107aeb9a4244ce3c044becdd6dffc32d83202595181597180d4c736302a71852";
   };
 
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
 
   buildInputs = [ libxkbcommon epoxy ];
-  propagatedBuildInputs = with xorg; with stdenv.lib;
+  propagatedBuildInputs = with xlibs; with stdenv.lib;
     [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk libXrandr libXrender libXcomposite libXi libXcursor ]
     ++ optionals stdenv.isLinux [ wayland ]
     ++ optional xineramaSupport libXinerama
     ++ optional cupsSupport cups;
 
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
+
   # demos fail to install, no idea where's the problem
   preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
 
   enableParallelBuilding = true;
-
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   postInstall = "rm -rf $out/share/gtk-doc";
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     ''; # workaround for bug of nix-mode for Emacs */ '';
   };
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A multi-platform toolkit for creating graphical user interfaces";
 
     longDescription = ''
@@ -62,9 +62,9 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gtk.org/;
 
-    license = licenses.lgpl2Plus;
+    license = stdenv.lib.licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ urkud raskin vcunat lethalman ];
-    platforms = platforms.all;
+    maintainers = with stdenv.lib.maintainers; [ urkud raskin vcunat lethalman ];
+    platforms = stdenv.lib.platforms.all;
   };
 }

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "logkeys-${version}";
-  version = "5ef6b0dcb9e3";
+  version = "2015-11-10";
 
   src = fetchgit {
     url = https://github.com/kernc/logkeys;
-    rev = "5ef6b0dcb9e38e6137ad1579d624ec12107c56c3";
-    sha256 = "02p0l92l0fq069g31ks6xbqavzxa9njj9460vw2jsa7livcn2z9d";
+    rev = "78321c6e70f61c1e7e672fa82daa664017c9e69d";
+    sha256 = "1b1fa1rblyfsg6avqyls03y0rq0favipn5fha770rsirzg4r637q";
   };
 
   buildInputs = [ which procps kbd ];
@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     homepage = https://github.com/kernc/logkeys;
     maintainers = with maintainers; [offline];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

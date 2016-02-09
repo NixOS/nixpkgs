@@ -6,13 +6,21 @@ let
 
   cfg = config.services.statsd;
 
+  isBuiltinBackend = name:
+    builtins.elem name [ "graphite" "console" "repeater" ];
+
   configFile = pkgs.writeText "statsd.conf" ''
     {
-      address: "${cfg.host}",
+      address: "${cfg.listenAddress}",
       port: "${toString cfg.port}",
       mgmt_address: "${cfg.mgmt_address}",
       mgmt_port: "${toString cfg.mgmt_port}",
-      backends: [${concatMapStringsSep "," (el: if (nixType el) == "string" then ''"./backends/${el}"'' else ''"${head el.names}"'') cfg.backends}],
+      backends: [${
+        concatMapStringsSep "," (name:
+          if (isBuiltinBackend name)
+          then ''"./backends/${name}"''
+          else ''"${name}"''
+        ) cfg.backends}],
       ${optionalString (cfg.graphiteHost!=null) ''graphiteHost: "${cfg.graphiteHost}",''}
       ${optionalString (cfg.graphitePort!=null) ''graphitePort: "${toString cfg.graphitePort}",''}
       console: {
@@ -40,7 +48,7 @@ in
       type = types.bool;
     };
 
-    host = mkOption {
+    listenAddress = mkOption {
       description = "Address that statsd listens on over UDP";
       default = "127.0.0.1";
       type = types.str;
@@ -66,9 +74,16 @@ in
 
     backends = mkOption {
       description = "List of backends statsd will use for data persistence";
-      default = ["graphite"];
-      example = ["graphite" pkgs.nodePackages."statsd-influxdb-backend"];
-      type = types.listOf (types.either types.str types.package);
+      default = [];
+      example = [
+        "graphite"
+        "console"
+        "repeater"
+        "statsd-librato-backend"
+        "stackdriver-statsd-backend"
+        "statsd-influxdb-backend"
+      ];
+      type = types.listOf types.str;
     };
 
     graphiteHost = mkOption {
@@ -105,15 +120,17 @@ in
       description = "Statsd Server";
       wantedBy = [ "multi-user.target" ];
       environment = {
-        NODE_PATH=concatMapStringsSep ":" (el: "${el}/lib/node_modules") (filter (el: (nixType el) != "string") cfg.backends);
+        NODE_PATH=concatMapStringsSep ":"
+          (pkg: "${builtins.getAttr pkg pkgs.statsd.nodePackages}/lib/node_modules")
+          (filter (name: !isBuiltinBackend name) cfg.backends);
       };
       serviceConfig = {
-        ExecStart = "${pkgs.nodePackages.statsd}/bin/statsd ${configFile}";
+        ExecStart = "${pkgs.statsd}/bin/statsd ${configFile}";
         User = "statsd";
       };
     };
 
-    environment.systemPackages = [pkgs.nodePackages.statsd];
+    environment.systemPackages = [ pkgs.statsd ];
 
   };
 

@@ -1,21 +1,16 @@
 { fetchurl, fetchpatch, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "gsl-1.16";
+  name = "gsl-2.1";
 
   src = fetchurl {
     url = "mirror://gnu/gsl/${name}.tar.gz";
-    sha256 = "0lrgipi0z6559jqh82yx8n4xgnxkhzj46v96dl77hahdp58jzg3k";
+    sha256 = "0rhcia9jhr3p1f1wybwyllwqfs9bggz99i3mi5lpyqcpff1hdbar";
   };
 
   patches = [
     # ToDo: there might be more impurities than FMA support check
     ./disable-fma.patch # http://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html
-    (fetchpatch {
-      name = "bug-39055.patch";
-      url = "http://git.savannah.gnu.org/cgit/gsl.git/patch/?id=9cc12d";
-      sha256 = "1bmrmihi28cly9g9pq54kkix2jy59y7cd7h5fw4v1c7h5rc2qvs8";
-    })
   ];
 
   doCheck = true;

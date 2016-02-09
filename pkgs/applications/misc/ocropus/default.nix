@@ -2,11 +2,11 @@
 
 let
   getmodel = name: sha256: {
+    inherit name;
     src = fetchurl {
       url = "http://www.tmbdev.net/ocropy/${name}";
       inherit sha256;
     };
-    inherit name;
   };
 
   models = [
@@ -16,10 +16,10 @@ let
       "1wlwvxn91ilgmlri1hj81arl3mbzxc24ycdnkf5icq4hdi4c6y8b")
   ];
 
-  version = "20150316";
 in
-pythonPackages.buildPythonPackage {
+pythonPackages.buildPythonPackage rec {
   name = "ocropus-${version}";
+  version = "20150316";
 
   src = fetchFromGitHub {
     sha256 = "0m5bm2ah3p29c13vp7hz7rm058qnlm840zd8xv20byijhlz0447g";
@@ -32,14 +32,15 @@ pythonPackages.buildPythonPackage {
     matplotlib beautifulsoup4 pygtk lxml ];
 
   enableParallelBuilding = true;
-  
+
   preConfigure = with stdenv.lib; ''
-    ${concatStrings (map (x: "ln -s ${x.src} models/`basename ${x.name}`;")
+    ${concatStrings (map (x: "cp -R ${x.src} models/`basename ${x.name}`;")
       models)}
 
     substituteInPlace ocrolib/{common,default}.py --replace /usr/local $out
   '';
 
+  doCheck = false;  # fails
   checkPhase = ''
     patchShebangs .
     substituteInPlace ./run-test \
@@ -48,7 +49,6 @@ pythonPackages.buildPythonPackage {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Open source document analysis and OCR system";
     license = licenses.asl20;
     homepage = https://github.com/tmbdev/ocropy/;

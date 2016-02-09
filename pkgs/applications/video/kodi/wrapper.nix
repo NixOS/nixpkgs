@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ makeWrapper ];
 
   buildCommand = ''
-    mkdir -p $out/share/kodi/addons/packages
+    mkdir -p $out/share/kodi/addons
     ${stdenv.lib.concatMapStrings
         (plugin: "ln -s ${plugin.out
                             + plugin.kodiPlugin

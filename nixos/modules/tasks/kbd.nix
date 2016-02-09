@@ -4,12 +4,14 @@ with lib;
 
 let
 
-  vconsoleConf = pkgs.writeText "vconsole.conf"
-    ''
-      KEYMAP=${config.i18n.consoleKeyMap}
-      FONT=${config.i18n.consoleFont}
-    '';
+  makeColor = n: value: "COLOR_${toString n}=${value}";
+  colors = concatImapStringsSep "\n" makeColor config.i18n.consoleColors;
 
+  vconsoleConf = pkgs.writeText "vconsole.conf" ''
+    KEYMAP=${config.i18n.consoleKeyMap}
+    FONT=${config.i18n.consoleFont}
+    ${colors}
+  '';
 in
 
 {
@@ -54,6 +56,8 @@ in
     # it has a restart trigger.
     systemd.services."systemd-vconsole-setup" =
       { wantedBy = [ "multi-user.target" ];
+        before = [ "display-manager.service" ];
+        after = [ "systemd-udev-settle.service" ];
         restartTriggers = [ vconsoleConf ];
       };
 

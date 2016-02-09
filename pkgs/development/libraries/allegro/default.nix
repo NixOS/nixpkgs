@@ -1,59 +1,30 @@
-x@{builderDefsPackage
-  , texinfo, libXext, xextproto, libX11, xproto, libXpm, libXt, libXcursor
-  , alsaLib, cmake, zlib, libpng, libvorbis, libXxf86dga, libXxf86misc
-  , xf86dgaproto, xf86miscproto, xf86vidmodeproto, libXxf86vm, openal, mesa
-  , ...}:
-builderDefsPackage
-(a :
-let
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
-    [];
+{ stdenv, fetchurl, texinfo, libXext, xextproto, libX11, xproto
+, libXpm, libXt, libXcursor, alsaLib, cmake, zlib, libpng, libvorbis
+, libXxf86dga, libXxf86misc, xf86dgaproto, xf86miscproto
+, xf86vidmodeproto, libXxf86vm, openal, mesa }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="allegro";
-    version="4.4.2";
-    name="${baseName}-${version}";
-    project="alleg";
-    url="mirror://sourceforge/project/${project}/${baseName}/${version}/${name}.tar.gz";
-    hash="1p0ghkmpc4kwij1z9rzxfv7adnpy4ayi0ifahlns1bdzgmbyf88v";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  name = "allegro-${version}";
+  version="4.4.2";
+
+  src = fetchurl {
+    url = "http://download.gna.org/allegro/allegro/${version}/${name}.tar.gz";
+    sha256 = "1p0ghkmpc4kwij1z9rzxfv7adnpy4ayi0ifahlns1bdzgmbyf88v";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doCmake" "doMakeInstall"];
-
-  doCmake = a.fullDepEntry (''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lXext -lX11 -lXpm -lXcursor -lXxf86vm"
-    cmake -D CMAKE_INSTALL_PREFIX=$out -D CMAKE_SKIP_RPATH=ON .
-  '') ["minInit" "doUnpack" "addInputs"];
-
-  makeFlags = [
+  buildInputs = [
+    texinfo libXext xextproto libX11 xproto libXpm libXt libXcursor
+    alsaLib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
+    xf86dgaproto xf86miscproto xf86vidmodeproto libXxf86vm openal mesa
   ];
 
-  meta = {
-    branch = "4";
+  cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
+
+  meta = with stdenv.lib; {
     description = "A game programming library";
-    license = a.lib.licenses.free; # giftware
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    homepage = http://liballeg.org/;
+    license = licenses.free; # giftware
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/alleg/files/";
-    };
-  };
-}) x
+}

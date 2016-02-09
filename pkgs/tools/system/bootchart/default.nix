@@ -1,31 +1,21 @@
-{stdenv, fetchurl, gnutar, gzip, coreutils, utillinux, gnugrep, gnused, psmisc, nettools}:
+{stdenv, fetchurl, lib, pkgconfig, glib, gtk, python27, pythonPackages }:
 
 stdenv.mkDerivation rec {
-  name = "bootchart-0.9";
+  version = "0.14.7";
+  name = "bootchart-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bootchart/${name}.tar.bz2";
-    sha256 = "0z9jvi7cyp3hpx6hf1fyaa8fhnaz7aqid8wrkwp29cngryg3jf3p";
+    url = "https://github.com/mmeeks/bootchart/archive/${version}.tar.gz";
+    sha256 = "1abn4amsyys6vwn7csxsxny94n24ycca3xhqxqcmdc4j0dzn3kmb";
   };
 
-  buildInputs = [ gnutar gzip coreutils utillinux gnugrep gnused psmisc nettools ];
-
-  patchPhase = ''
-    export MYPATH=
-    for i in $buildInputs; do
-       export MYPATH=''${MYPATH}''${MYPATH:+:}$i/bin:$i/sbin
-    done
-
-    sed -i -e 's,PATH.*,PATH='$MYPATH, \
-       -e 's,^CONF.*,CONF='$out/etc/bootchartd.conf, \
-      script/bootchartd
-  '';
+  buildInputs = [ pkgconfig glib gtk python27 pythonPackages.wrapPython pythonPackages.pygtk ];
+  pythonPath = with pythonPackages; [ pygtk pycairo ];
 
   installPhase = ''
-    mkdir -p $out/sbin $out/etc
-    cp script/bootchartd $out/sbin
-    cp script/bootchartd.conf $out/etc
-    chmod +x $out/sbin/bootchartd
+    make install DESTDIR=$out BINDIR=/bin PY_LIBDIR=/lib/python2.7
+    wrapProgram $out/bin/pybootchartgui \
+      --prefix PYTHONPATH : "$PYTHONPATH:$(toPythonPath $out)"
   '';
 
   meta = with stdenv.lib; {

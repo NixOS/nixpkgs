@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "0.4-beta";
+  version = "0.8-beta";
   name = "nanomsg-${version}";
 
   src = fetchurl {
-    url = "http://download.nanomsg.org/${name}.tar.gz";
-    sha256 = "0bgjj1x1a991pckw4nm5bkmbibjsf74y0ns23fpk4jj5dwarhm3d";
+    url = "https://github.com/nanomsg/nanomsg/releases/download/0.8-beta/${name}.tar.gz";
+    sha256 = "0ix9yd6shqmgm1mxig8ww2jpbgg2n5dms0wrv1q81ihclml0rkkm";
   };
 
   installPhase = ''
@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description= "Socket library that provides several common communication patterns";
     homepage = http://nanomsg.org/;
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

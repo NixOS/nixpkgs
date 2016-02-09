@@ -11,11 +11,11 @@
 #   fatal("cannot run \"facedetect\" (see http://www.thregr.org/~wavexx/hacks/facedetect/)");
 
 stdenv.mkDerivation rec {
-  name = "fgallery-1.7";
+  name = "fgallery-1.8";
 
   src = fetchurl {
     url = "http://www.thregr.org/~wavexx/software/fgallery/releases/${name}.zip";
-    sha256 = "1iix6p8viwnsq3zn9vg99sx20nmgk2p5als3j1lk914nz3anvai4";
+    sha256 = "1n237sk7fm4yrpn69qaz9fwbjl6i94y664q7d16bhngrcil3bq1d";
   };
 
   buildInputs = [ unzip makeWrapper perl ImageExifTool JSON ];

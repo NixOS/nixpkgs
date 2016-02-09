@@ -1,15 +1,8 @@
 { stdenv, lib, bundler, fetchgit, bundlerEnv, defaultGemConfig, libiconv, ruby
-, tzdata, git
+, tzdata, git, nodejs, procps
 }:
 
 let
-  gitlab = fetchgit {
-    url = "https://github.com/gitlabhq/gitlabhq.git";
-    rev = "477743a154e85c411e8a533980abce460b5669fc";
-    fetchSubmodules = false;
-    sha256 = "1gk77j886w6zvw5cawpgja6f87qirmjx7y4g5i3psxm4j67llxdp";
-  };
-
   env = bundlerEnv {
     name = "gitlab";
     inherit ruby;
@@ -28,18 +21,18 @@ in
 
 stdenv.mkDerivation rec {
   name = "gitlab-${version}";
-  version = "7.4.2";
-  buildInputs = [ ruby bundler tzdata git ];
-  unpackPhase = ''
-    runHook preUnpack
-    cp -r ${gitlab}/* .
-    chmod -R +w .
-    cp ${./Gemfile} Gemfile
-    cp ${./Gemfile.lock} Gemfile.lock
-    runHook postUnpack
-  '';
+  version = "8.0.5";
+  buildInputs = [ ruby bundler tzdata git nodejs procps ];
+  src = fetchgit {
+    url = "https://github.com/gitlabhq/gitlabhq.git";
+    rev = "2866c501b5a5abb69d101cc07261a1d684b4bd4c";
+    fetchSubmodules = false;
+    sha256 = "edc6bedd5e79940189355d8cb343d20b0781b69fcef56ccae5906fa5e81ed521";
+  };
+
   patches = [
     ./remove-hardcoded-locations.patch
+    ./disable-dump-schema-after-migration.patch
   ];
   postPatch = ''
     # For reasons I don't understand "bundle exec" ignores the
@@ -49,6 +42,10 @@ stdenv.mkDerivation rec {
     rm lib/tasks/test.rake
 
     mv config/gitlab.yml.example config/gitlab.yml
+    rm config/initializers/gitlab_shell_secret_token.rb
+
+    substituteInPlace app/controllers/admin/background_jobs_controller.rb \
+        --replace "ps -U" "${procps}/bin/ps -U"
 
     # required for some gems:
     cat > config/database.yml <<EOF

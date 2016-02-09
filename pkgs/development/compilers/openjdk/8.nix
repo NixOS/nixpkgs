@@ -2,6 +2,7 @@
 , alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig, zlib
 , setJavaClassPath
 , minimal ? false
+, enableInfinality ? true # font rendering patch
 }:
 
 let
@@ -17,42 +18,42 @@ let
     else
       throw "openjdk requires i686-linux or x86_64 linux";
 
-  update = "60";
-  build = "24";
+  update = "76";
+  build = "00";
   baseurl = "http://hg.openjdk.java.net/jdk8u/jdk8u";
   repover = "jdk8u${update}-b${build}";
   paxflags = if stdenv.isi686 then "msp" else "m";
   jdk8 = fetchurl {
              url = "${baseurl}/archive/${repover}.tar.gz";
-             sha256 = "1gxfyz5kdl3xgfmn6gr65hj66zh5p67y1g0hxdbps1h8gcc6iqwp";
+             sha256 = "1bzwrm18vdd531xxin7pzsc5dx2ybkdgdxz6jp2ki19ka6pmk1l7";
           };
   langtools = fetchurl {
              url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-             sha256 = "0a8kmfcnw92hvhivmpa9g22k1lvcr64zjw7x1gjj1j6zx7r579ck";
+             sha256 = "044gyb7hgrahlr78vah9r3wfv6w569ihqzwqplwzr6m0l1s52994";
           };
   hotspot = fetchurl {
              url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-             sha256 = "0k68wqwg5fz8i2za9dg2zfx4db5zcbls31vk2abrqrwp31ik0y4y";
+             sha256 = "1if70s9wjsvmrdj92ky88ngpmigi9c5gfpkilpydzdibs38f05f8";
           };
   corba = fetchurl {
              url = "${baseurl}/corba/archive/${repover}.tar.gz";
-             sha256 = "0rc8m5jrwjzrbxnzbhxjm265z23ky6v11g8sgcb6flr0l636fwvn";
+             sha256 = "0fl852x25cjzz3lrhjnhj59qbb4m3ywwc2f9vbj6mqdnpzl7cg83";
           };
   jdk = fetchurl {
              url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-             sha256 = "11c90zz728p30zc6zas9ip67n9sd09i0v6afxs608k9s451057wr";
+             sha256 = "11ql3p5fsizrn1fiylfkgrw0lgf6snwyich18hggsmd00bhvv3ah";
           };
   jaxws = fetchurl {
              url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-             sha256 = "15pzczqwrr47qv51bsisjylilhljban8938n1436hsjd5k1dhhwn";
+             sha256 = "1d2q4bbvlz557caqciwpd5ms9f14bjk8jl5zlfflqnww9b097qy4";
           };
   jaxp = fetchurl {
              url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-             sha256 = "0gcc7pb07yl76drcynpz5gjjv3y6s1c0k4kfp9fayha5f624k1fb";
+             sha256 = "0nrd4c77ggxkyv2271k30afbjjcp0kybc8gcypmhy8by54w4ap0j";
           };
   nashorn = fetchurl {
              url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
-             sha256 = "00g849wwqxljqpml6r7rv3pscj0ma0jaamyvxsxlfxbqvwid93ai";
+             sha256 = "11idvkzk4nqhhw4xq5pl03g4gwnaiq021xxj2yx54rixr59zl0q6";
           };
   openjdk8 = stdenv.mkDerivation {
     name = "openjdk-8u${update}b${build}";
@@ -80,7 +81,10 @@ let
       ./fix-java-home-jdk8.patch
       ./read-truststore-from-env-jdk8.patch
       ./currency-date-range-jdk8.patch
-    ];
+    ] ++ (if enableInfinality then [
+      ./004_add-fontconfig.patch
+      ./005_enable-infinality.patch
+    ] else []);
 
     preConfigure = ''
       chmod +x configure
@@ -136,6 +140,11 @@ let
 
       rm -rf $out/lib/openjdk/jre/bina
       ln -s $out/lib/openjdk/bin $out/lib/openjdk/jre/bin
+
+      # Make sure cmm/*.pf are not symlinks:
+      # https://youtrack.jetbrains.com/issue/IDEA-147272
+      rm -rf $out/lib/openjdk/jre/lib/cmm
+      ln -s {$jre,$out}/lib/openjdk/jre/lib/cmm
 
       # Set PaX markings
       exes=$(file $out/lib/openjdk/bin/* $jre/lib/openjdk/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')

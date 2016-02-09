@@ -1,0 +1,15 @@
+Forget about X11 in fb module.
+This breaks w3mimgdisplay under X11, but removes X11 dependency it in pure fb.
+diff --git a/w3mimg/fb/fb_imlib2.c b/w3mimg/fb/fb_imlib2.c
+index ea36637..d3d7bc3 100644
+--- a/w3mimg/fb/fb_imlib2.c
++++ b/w3mimg/fb/fb_imlib2.c
+@@ -3,7 +3,7 @@
+                 fb_imlib2.c 0.3 Copyright (C) 2002, hito
+  **************************************************************************/
+ 
+-#include <X11/Xlib.h>
++#define X_DISPLAY_MISSING
+ #include <Imlib2.h>
+ #include "fb.h"
+ #include "fb_img.h"

@@ -41,8 +41,15 @@ let
   };
 
   carbonOpts = name: with config.ids; ''
-    --nodaemon --syslog --prefix=${name} --pidfile ${dataDir}/${name}.pid ${name}
+    --nodaemon --syslog --prefix=${name} --pidfile /run/${name}/${name}.pid ${name}
   '';
+
+  mkPidFileDir = name: ''
+    mkdir -p /run/${name}
+    chmod 0700 /run/${name}
+    chown -R graphite:graphite /run/${name}
+  '';
+
   carbonEnv = {
     PYTHONPATH = "${pkgs.python27Packages.carbon}/lib/python2.7/site-packages";
     GRAPHITE_ROOT = dataDir;
@@ -70,7 +77,7 @@ in {
         type = types.bool;
       };
 
-      host = mkOption {
+      listenAddress = mkOption {
         description = "Graphite web frontend listen address.";
         default = "127.0.0.1";
         type = types.str;
@@ -101,7 +108,7 @@ in {
       finders = mkOption {
         description = "List of finder plugins to load.";
         default = [];
-        example = [ pkgs.python27Packages.graphite_influxdb ];
+        example = literalExample "[ pkgs.python27Packages.graphite_influxdb ]";
         type = types.listOf types.package;
       };
 
@@ -114,7 +121,7 @@ in {
         type = types.listOf types.str;
       };
 
-      host = mkOption {
+      listenAddress = mkOption {
         description = "Graphite web service listen address.";
         default = "127.0.0.1";
         type = types.str;
@@ -129,6 +136,7 @@ in {
       package = mkOption {
         description = "Package to use for graphite api.";
         default = pkgs.python27Packages.graphite_api;
+        defaultText = "pkgs.python27Packages.graphite_api";
         type = types.package;
       };
 
@@ -139,7 +147,7 @@ in {
             directories:
                 - ${dataDir}/whisper
         '';
-        example = literalExample ''
+        example = ''
           allowed_origins:
             - dashboard.example.com
           cheat_times: true
@@ -249,13 +257,13 @@ in {
       };
 
       enableAggregator = mkOption {
-        description = "Whether to enable carbon agregator, the carbon buffering service.";
+        description = "Whether to enable carbon aggregator, the carbon buffering service.";
         default = false;
         type = types.bool;
       };
 
       aggregationRules = mkOption {
-        description = "Defines if and how received metrics will be agregated.";
+        description = "Defines if and how received metrics will be aggregated.";
         default = null;
         type = types.uniq (types.nullOr types.string);
         example = ''
@@ -285,7 +293,7 @@ in {
       };
 
       graphiteUrl = mkOption {
-        default = "http://${cfg.web.host}:${toString cfg.web.port}";
+        default = "http://${cfg.web.listenAddress}:${toString cfg.web.port}";
         description = "Host where graphite service runs.";
         type = types.str;
       };
@@ -330,7 +338,7 @@ in {
 
       graphiteUrl = mkOption {
         description = "URL to your graphite service.";
-        default = "http://${cfg.web.host}:${toString cfg.web.port}";
+        default = "http://${cfg.web.listenAddress}:${toString cfg.web.port}";
         type = types.str;
       };
 
@@ -343,7 +351,7 @@ in {
               critical: 200
               name: Test
         '';
-        example = literalExample ''
+        example = ''
           pushbullet_key: pushbullet_api_key
           alerts:
             - target: stats.seatgeek.app.deal_quality.venue_info_cache.hit
@@ -370,18 +378,20 @@ in {
 
   config = mkMerge [
     (mkIf cfg.carbon.enableCache {
-      systemd.services.carbonCache = {
+      systemd.services.carbonCache = let name = "carbon-cache"; in {
         description = "Graphite Data Storage Backend";
         wantedBy = [ "multi-user.target" ];
         after = [ "network-interfaces.target" ];
         environment = carbonEnv;
         serviceConfig = {
-          ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts "carbon-cache"}";
+          ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
           PermissionsStartOnly = true;
+          PIDFile="/run/${name}/${name}.pid";
         };
-        preStart = ''
+        preStart = mkPidFileDir name + ''
+
           mkdir -p ${cfg.dataDir}/whisper
           chmod 0700 ${cfg.dataDir}/whisper
           chown -R graphite:graphite ${cfg.dataDir}
@@ -390,31 +400,35 @@ in {
     })
 
     (mkIf cfg.carbon.enableAggregator {
-      systemd.services.carbonAggregator = {
+      systemd.services.carbonAggregator = let name = "carbon-aggregator"; in {
         enable = cfg.carbon.enableAggregator;
         description = "Carbon Data Aggregator";
         wantedBy = [ "multi-user.target" ];
         after = [ "network-interfaces.target" ];
         environment = carbonEnv;
         serviceConfig = {
-          ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts "carbon-aggregator"}";
+          ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
+          PIDFile="/run/${name}/${name}.pid";
         };
+        preStart = mkPidFileDir name;
       };
     })
 
     (mkIf cfg.carbon.enableRelay {
-      systemd.services.carbonRelay = {
+      systemd.services.carbonRelay = let name = "carbon-relay"; in {
         description = "Carbon Data Relay";
         wantedBy = [ "multi-user.target" ];
         after = [ "network-interfaces.target" ];
         environment = carbonEnv;
         serviceConfig = {
-          ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts "carbon-relay"}";
+          ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
+          PIDFile="/run/${name}/${name}.pid";
         };
+        preStart = mkPidFileDir name;
       };
     })
 
@@ -439,7 +453,7 @@ in {
         serviceConfig = {
           ExecStart = ''
             ${pkgs.python27Packages.waitress}/bin/waitress-serve \
-            --host=${cfg.web.host} --port=${toString cfg.web.port} \
+            --host=${cfg.web.listenAddress} --port=${toString cfg.web.port} \
             --call django.core.handlers.wsgi:WSGIHandler'';
           User = "graphite";
           Group = "graphite";
@@ -481,7 +495,7 @@ in {
         serviceConfig = {
           ExecStart = ''
             ${pkgs.python27Packages.waitress}/bin/waitress-serve \
-            --host=${cfg.api.host} --port=${toString cfg.api.port} \
+            --host=${cfg.api.listenAddress} --port=${toString cfg.api.port} \
             graphite_api.app:app
           '';
           User = "graphite";

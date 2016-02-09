@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, file, protobufc }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, file, protobufc }:
 
 stdenv.mkDerivation rec {
   name = "libivykis-${version}";
@@ -10,9 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "11d7sjbhcll932rlvx9sf3vk60b5bazmjf4vlr4qd9cz0cashizz";
   };
 
-  buildInputs = [ autoconf automake libtool pkgconfig file protobufc ];
-
-  preConfigure = "autoreconf -i";
+  buildInputs = [ autoreconfHook pkgconfig file protobufc ];
 
   meta = with stdenv.lib; {
     description = ''

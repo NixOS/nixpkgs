@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     '';
     homepage = https://github.com/rpodgorny/uptimed/;
     license = licenses.gpl2;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 
   patches = [ ./no-var-spool-install.patch ];

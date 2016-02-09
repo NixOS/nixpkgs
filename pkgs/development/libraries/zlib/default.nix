@@ -31,7 +31,8 @@ stdenv.mkDerivation (rec {
 
   # As zlib takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!stdenv.isDarwin) "-static-libgcc";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!stdenv.isDarwin) "-static-libgcc "
+                     + stdenv.lib.optionalString (stdenv.isFreeBSD) "-fPIC";
 
   crossAttrs = {
     dontStrip = static;

@@ -1,13 +1,13 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
 , sqlite, openssl, ncurses, pythonFull, expat, tcl, tk, xlibsWrapper, libX11
-, makeWrapper, callPackage, self }:
+, makeWrapper, callPackage, self, gdbm, db }:
 
 assert zlibSupport -> zlib != null;
 
 let
 
-  majorVersion = "2.6";
-  version = "${majorVersion}.0";
+  majorVersion = "4.0";
+  version = "${majorVersion}.1";
   libPrefix = "pypy${majorVersion}";
 
   pypy = stdenv.mkDerivation rec {
@@ -18,10 +18,10 @@ let
 
     src = fetchurl {
       url = "https://bitbucket.org/pypy/pypy/get/release-${version}.tar.bz2";
-      sha256 = "0xympj874cnjpxj68xm5gllq2f8bbvz8hr0md8mh1yd6fgzzxibh";
+      sha256 = "1g7iipllgdfjgdkypsa1g2pzxgjw9agp40rh82hk31rsbak2hfbl";
     };
 
-    buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper ]
+    buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]
       ++ stdenv.lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
 
@@ -31,16 +31,6 @@ let
       (stdenv.lib.filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs));
 
     preConfigure = ''
-      substituteInPlace Makefile \
-        --replace "-Ojit" "-Ojit --batch" \
-        --replace "pypy/goal/targetpypystandalone.py" "pypy/goal/targetpypystandalone.py --withmod-_minimal_curses --withmod-unicodedata --withmod-thread --withmod-bz2 --withmod-_multiprocessing"
-
-      # we are using cpython and not pypy to do translation
-      substituteInPlace rpython/bin/rpython \
-        --replace "/usr/bin/env pypy" "${pythonFull}/bin/python"
-      substituteInPlace pypy/goal/targetpypystandalone.py \
-        --replace "/usr/bin/env pypy" "${pythonFull}/bin/python"
-
       # hint pypy to find nix ncurses
       substituteInPlace pypy/module/_minimal_curses/fficurses.py \
         --replace "/usr/include/ncurses/curses.h" "${ncurses}/include/curses.h" \
@@ -55,6 +45,10 @@ let
         --replace "libdirs = []" "libdirs = ['${tk}/lib', '${tcl}/lib']"
 
       sed -i "s@libraries=\['sqlite3'\]\$@libraries=['sqlite3'], include_dirs=['${sqlite}/include'], library_dirs=['${sqlite}/lib']@" lib_pypy/_sqlite3_build.py
+    '';
+
+    buildPhase = ''
+      ${pythonFull.interpreter} rpython/bin/rpython --make-jobs="$NIX_BUILD_CORES" -Ojit --batch pypy/goal/targetpypystandalone.py --withmod-_minimal_curses --withmod-unicodedata --withmod-thread --withmod-bz2 --withmod-_multiprocessing
     '';
 
     setupHook = ./setup-hook.sh;
@@ -81,11 +75,11 @@ let
        # disable sqlite3 due to https://bugs.pypy.org/issue1740
        # disable test_multiprocessing due to transient errors
        # disable test_os because test_urandom_failure fails
-       # disable test_urllib2net and test_urllibnet because it requires networking (example.com)
+       # disable test_urllib2net, test_urllib2_localnet, and test_urllibnet because they require networking (example.com)
        # disable test_zipfile64 because it randomly timeouts
        # disable test_cpickle because timeouts
        # disable test_ssl because no shared cipher' not found in '[Errno 1] error:14077410:SSL routines:SSL23_GET_SERVER_HELLO:sslv3 alert handshake failure
-      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k 'not (test_ssl or test_cpickle or test_sqlite or test_urllib2net or test_urllibnet or test_socket or test_os or test_shutil or test_mhlib or test_multiprocessing or test_zipfile64)' lib-python
+      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k 'not (test_ssl or test_cpickle or test_sqlite or test_urllib2net or test_urllibnet or test_urllib2_localnet or test_socket or test_os or test_shutil or test_mhlib or test_multiprocessing or test_zipfile64)' lib-python
     '';
 
     installPhase = ''
@@ -119,7 +113,7 @@ let
       isPypy = true;
       buildEnv = callPackage ../python/wrapper.nix { python = self; };
       interpreter = "${self}/bin/${executable}";
-      sitePackages = "lib/${libPrefix}/site-packages";
+      sitePackages = "site-packages";
     };
 
     enableParallelBuilding = true;  # almost no parallelization without STM

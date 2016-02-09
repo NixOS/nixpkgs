@@ -73,7 +73,7 @@ mkdir -p $unpackDirTmp
 unpackDir=$tmp/unpacked/$name
 mkdir -p $unpackDir
 
-downloadedFile=$tmp/$name
+downloadedFile=$tmp/$(basename "$url")
 
 unpackFile() {
   local curSrc="$1"

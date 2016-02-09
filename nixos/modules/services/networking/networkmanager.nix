@@ -6,16 +6,18 @@ with lib;
 let
   cfg = config.networking.networkmanager;
 
-  stateDirs = "/var/lib/NetworkManager /var/lib/dhclient";
+  # /var/lib/misc is for dnsmasq.leases.
+  stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
 
   configFile = writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
 
     [keyfile]
-    ${optionalString (config.networking.hostName != "") ''
-      hostname=${config.networking.hostName}
-    ''}
+    ${optionalString (config.networking.hostName != "")
+      ''hostname=${config.networking.hostName}''}
+    ${optionalString (cfg.unmanaged != [])
+      ''unmanaged-devices=${lib.concatStringsSep ";" cfg.unmanaged}''}
 
     [logging]
     level=WARN
@@ -96,9 +98,19 @@ in {
         '';
       };
 
+      unmanaged = mkOption {
+        type = types.listOf types.string;
+        default = [];
+        description = ''
+          List of interfaces that will not be managed by NetworkManager.
+          Interface name can be specified here, but if you need more fidelity
+          see "Device List Format" in NetworkManager.conf man page.
+        '';
+      };
+
       # Ugly hack for using the correct gnome3 packageSet
       basePackages = mkOption {
-        type = types.attrsOf types.path;
+        type = types.attrsOf types.package;
         default = { inherit networkmanager modemmanager wpa_supplicant
                             networkmanager_openvpn networkmanager_vpnc
                             networkmanager_openconnect
@@ -205,10 +217,18 @@ in {
 
     environment.systemPackages = cfg.packages;
 
-    users.extraGroups = singleton {
+    users.extraGroups = [{
       name = "networkmanager";
       gid = config.ids.gids.networkmanager;
-    };
+    }
+    {
+      name = "nm-openvpn";
+      gid = config.ids.gids.nm-openvpn;
+    }];
+    users.extraUsers = [{
+      name = "nm-openvpn";
+      uid = config.ids.uids.nm-openvpn;
+    }];
 
     systemd.packages = cfg.packages;
 

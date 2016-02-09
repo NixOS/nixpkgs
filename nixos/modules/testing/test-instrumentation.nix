@@ -43,6 +43,11 @@ let kernel = config.boot.kernelPackages.kernel; in
     # into thinking they're running interactively.
     environment.variables.PAGER = "";
 
+    boot.initrd.preDeviceCommands =
+      ''
+        echo 600 > /proc/sys/kernel/hung_task_timeout_secs
+      '';
+
     boot.initrd.postDeviceCommands =
       ''
         # Using acpi_pm as a clock source causes the guest clock to

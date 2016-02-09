@@ -8,10 +8,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.afterstep.enable = mkOption {
-      default = false;
-      description = "Enable the Afterstep window manager.";
-    };
+    services.xserver.windowManager.afterstep.enable = mkEnableOption "afterstep";
   };
 
   ###### implementation

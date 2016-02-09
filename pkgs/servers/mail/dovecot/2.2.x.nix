@@ -1,23 +1,38 @@
-{ stdenv, fetchurl, perl, systemd, openssl, pam, bzip2, zlib, openldap
-, inotify-tools, clucene_core_2, sqlite }:
+{ stdenv, lib, fetchurl, perl, pkgconfig, systemd, openssl
+, bzip2, zlib, inotify-tools, pam, libcap
+, clucene_core_2, icu, openldap
+# Auth modules
+, withMySQL ? false, libmysql
+, withPgSQL ? false, postgresql
+, withSQLite ? true, sqlite
+}:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.2.16";
+  name = "dovecot-2.2.21";
 
-  buildInputs = [perl openssl bzip2 zlib openldap clucene_core_2 sqlite]
-    ++ stdenv.lib.optionals (stdenv.isLinux) [ systemd pam inotify-tools ];
+  nativeBuildInputs = [ perl pkgconfig ];
+  buildInputs = [ openssl bzip2 zlib clucene_core_2 icu openldap ]
+    ++ lib.optionals (stdenv.isLinux) [ systemd pam libcap inotify-tools ]
+    ++ lib.optional withMySQL libmysql
+    ++ lib.optional withPgSQL postgresql
+    ++ lib.optional withSQLite sqlite;
 
   src = fetchurl {
     url = "http://dovecot.org/releases/2.2/${name}.tar.gz";
-    sha256 = "1w6gg4h9mxg3i8faqpmgj19imzyy001b0v8ihch8ma3zl63i5kjn";
+    sha256 = "080bil83gr2dski4gk2bxykg2g497kqm2hn2z4xkbw71b6g17dvs";
   };
 
   preConfigure = ''
-    substituteInPlace src/config/settings-get.pl --replace \
-      "/usr/bin/env perl" "${perl}/bin/perl"
+    patchShebangs src/config/settings-get.pl
   '';
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  # We need this for sysconfdir, see remark below.
+  installFlags = [ "DESTDIR=$(out)" ];
+
+  postInstall = ''
+    cp -r $out/$out/* $out
+    rm -rf $out/$(echo "$out" | cut -d "/" -f2)
+  '' + lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libclucene-shared.1.dylib \
         ${clucene_core_2}/lib/libclucene-shared.1.dylib \
         $out/lib/dovecot/lib21_fts_lucene_plugin.so
@@ -27,10 +42,9 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
-    # Make dovecot look for plugins in /var/lib/dovecot/modules
-    # so we can symlink plugins from several packages there
-    # The symlinking needs to be done in NixOS, as part of the
-    # dovecot service start-up
+    # Make dovecot look for plugins in /etc/dovecot/modules
+    # so we can symlink plugins from several packages there.
+    # The symlinking needs to be done in NixOS.
     ./2.2.x-module_dir.patch
   ];
 
@@ -38,15 +52,19 @@ stdenv.mkDerivation rec {
     # It will hardcode this for /var/lib/dovecot.
     # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=626211
     "--localstatedir=/var"
+    # We need this so utilities default to reading /etc/dovecot/dovecot.conf file.
+    "--sysconfdir=/etc"
     "--with-ldap"
-    "--with-lucene"
     "--with-ssl=openssl"
-    "--with-sqlite"
     "--with-zlib"
     "--with-bzlib"
-  ] ++ stdenv.lib.optionals (stdenv.isLinux) [
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-  ];
+    "--with-ldap"
+    "--with-lucene"
+    "--with-icu"
+  ] ++ lib.optional (stdenv.isLinux) "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    ++ lib.optional withMySQL "--with-mysql"
+    ++ lib.optional withPgSQL "--with-pgsql"
+    ++ lib.optional withSQLite "--with-sqlite";
 
   meta = {
     homepage = "http://dovecot.org/";

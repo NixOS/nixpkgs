@@ -1,26 +1,40 @@
-{ stdenv, fetchurl, pkgconfig, udev, dbus_libs, perl, pcsclite }:
+{ stdenv, lib, fetchurl, makeWrapper, pkgconfig, udev, dbus_libs, pcsclite
+, wget, coreutils
+, perl, pcscperl, Glib, Gtk2, Pango
+}:
 
-stdenv.mkDerivation rec {
-  name = "pcsc-tools-1.4.23";
+let deps = lib.makeSearchPath "bin" [ wget coreutils ];
+
+in stdenv.mkDerivation rec {
+  name = "pcsc-tools-1.4.25";
 
   src = fetchurl {
-    url = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/pcsc-tools-1.4.23.tar.gz";
-    sha256 = "1qjgvvvwhykmzn4js9s3rjnp9pbjc3sz4lb4d7i9kvr3xsv7pjk9";
+    url = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/${name}.tar.gz";
+    sha256 = "0iqcy28pb963ds4pjrpi37577vm6nkgf3i0b3rr978jy9qi1bix9";
   };
 
   buildInputs = [ udev dbus_libs perl pcsclite ];
 
-  preBuild = ''
-    makeFlags=DESTDIR=$out
+  makeFlags = [ "DESTDIR=$(out)" ];
+
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
+
+  postInstall = ''
+    wrapProgram $out/bin/scriptor \
+      --set PERL5LIB "${lib.makePerlPath [ pcscperl ]}"
+    wrapProgram $out/bin/gscriptor \
+      --set PERL5LIB "${lib.makePerlPath [ pcscperl Glib Gtk2 Pango ]}"
+    wrapProgram $out/bin/ATR_analysis \
+      --set PERL5LIB "${lib.makePerlPath [ pcscperl ]}"
+    wrapProgram $out/bin/pcsc_scan \
+      --set PATH "$out/bin:${deps}"
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools used to test a PC/SC driver, card or reader";
     homepage = http://ludovic.rousseau.free.fr/softwares/pcsc-tools/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ viric ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

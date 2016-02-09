@@ -21,6 +21,12 @@
 with stdenv.lib;
 
 ''
+  # Compress kernel modules for a sizable disk space savings.
+  ${optionalString (versionAtLeast version "3.18") ''
+    MODULE_COMPRESS y
+    MODULE_COMPRESS_XZ y
+  ''}
+
   # Debugging.
   DEBUG_KERNEL y
   TIMER_STATS y
@@ -36,11 +42,17 @@ with stdenv.lib;
   SCHEDSTATS n
   DETECT_HUNG_TASK y
 
+  # Unix domain sockets.
+  UNIX y
+
   # Power management.
   ${optionalString (versionOlder version "3.19") ''
     PM_RUNTIME y
   ''}
   PM_ADVANCED_DEBUG y
+  ${optionalString (versionAtLeast version "3.11") ''
+    X86_INTEL_LPSS y
+  ''}
   ${optionalString (versionAtLeast version "3.10") ''
     X86_INTEL_PSTATE y
   ''}
@@ -134,13 +146,14 @@ with stdenv.lib;
   FB_3DFX_ACCEL y
   FB_VESA y
   FRAMEBUFFER_CONSOLE y
+  FRAMEBUFFER_CONSOLE_ROTATION y
   ${optionalString (versionOlder version "3.9" || stdenv.system == "i686-linux") ''
     FB_GEODE y
   ''}
 
   # Video configuration.
   # Enable KMS for devices whose X.org driver supports it.
-  ${optionalString (versionOlder version "4.3") ''
+  ${optionalString (versionOlder version "4.3" && !(features.chromiumos or false)) ''
     DRM_I915_KMS y
   ''}
   # Allow specifying custom EDID on the kernel command line
@@ -261,7 +274,7 @@ with stdenv.lib;
   MICROCODE y
   MICROCODE_INTEL y
   MICROCODE_AMD y
-  ${optionalString (versionAtLeast version "3.11") ''
+  ${optionalString (versionAtLeast version "3.11" && versionOlder version "4.4") ''
     MICROCODE_EARLY y
     MICROCODE_INTEL_EARLY y
     MICROCODE_AMD_EARLY y
@@ -276,7 +289,9 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.3" && versionOlder version "3.13") ''
     AUDIT_LOGINUID_IMMUTABLE y
   ''}
-  B43_PCMCIA? y
+  ${optionalString (versionOlder version "4.4") ''
+    B43_PCMCIA? y
+  ''}
   BLK_DEV_CMD640_ENHANCED y # CMD640 enhanced support
   BLK_DEV_IDEACPI y # IDE ACPI support
   BLK_DEV_INTEGRITY y
@@ -316,6 +331,10 @@ with stdenv.lib;
   MOUSE_PS2_ELANTECH y # Elantech PS/2 protocol extension
   MTRR_SANITIZER y
   NET_FC y # Fibre Channel driver support
+  ${optionalString (versionAtLeast version "3.11") ''
+    PINCTRL_BAYTRAIL y # GPIO on Intel Bay Trail, for some Chromebook internal eMMC disks
+  ''}
+  MMC_BLOCK_MINORS 32 # 8 is default. Modern gpt tables on eMMC may go far beyond 8.
   PPP_MULTILINK y # PPP multilink support
   PPP_FILTER y
   REGULATOR y # Voltage and Current Regulator Support
@@ -341,6 +360,9 @@ with stdenv.lib;
   USB_EHCI_TT_NEWSCHED y # Improved transaction translator scheduling
   X86_CHECK_BIOS_CORRUPTION y
   X86_MCE y
+
+  # PCI-Expresscard hotplug support
+  HOTPLUG_PCI_PCIE y
 
   # Linux containers.
   NAMESPACES? y #  Required by 'unshare' used by 'nixos-install'
@@ -478,14 +500,79 @@ with stdenv.lib;
   ''}
   ZRAM m
 
-  # Enable firmware loading via udev (legacy).
-  ${optionalString (versionAtLeast version "3.17") ''
-    FW_LOADER_USER_HELPER_FALLBACK y
-  ''}
-
   # Enable PCIe and USB for the brcmfmac driver
   BRCMFMAC_USB? y
   BRCMFMAC_PCIE? y
+
+  # Support x2APIC (which requires IRQ remapping).
+  ${optionalString (stdenv.system == "x86_64-linux") ''
+    X86_X2APIC y
+    IRQ_REMAP y
+  ''}
+
+  # Disable the firmware helper fallback, udev doesn't implement it any more
+  FW_LOADER_USER_HELPER_FALLBACK? n
+
+  # ChromiumOS support
+  ${optionalString (features.chromiumos or false) ''
+    CHROME_PLATFORMS y
+    VGA_SWITCHEROO n
+    MMC_SDHCI_PXAV2 n
+    NET_IPVTI n
+    IPV6_VTI n
+    REGULATOR_FIXED_VOLTAGE n
+    TPS6105X n
+    CPU_FREQ_STAT y
+    IPV6 y
+    MFD_CROS_EC y
+    MFD_CROS_EC_LPC y
+    MFD_CROS_EC_DEV y
+    CHARGER_CROS_USB_PD y
+    I2C y
+    MEDIA_SUBDRV_AUTOSELECT n
+    VIDEO_IR_I2C n
+    BLK_DEV_DM y
+    ANDROID_PARANOID_NETWORK n
+    DM_VERITY n
+    DRM_VGEM n
+    CPU_FREQ_GOV_INTERACTIVE n
+    INPUT_KEYRESET n
+    DM_BOOTCACHE n
+    UID_CPUTIME n
+
+    ${optionalString (versionAtLeast version "3.18") ''
+      CPUFREQ_DT n
+      EXTCON_CROS_EC n
+      DRM_POWERVR_ROGUE n
+      CHROMEOS_OF_FIRMWARE y
+      TEST_RHASHTABLE n
+      BCMDHD n
+      TRUSTY n
+    ''}
+
+    ${optionalString (versionOlder version "3.18") ''
+      MALI_MIDGARD n
+      DVB_USB_DIB0700 n
+      DVB_USB_DW2102 n
+      DVB_USB_PCTV452E n
+      DVB_USB_TTUSB2 n
+      DVB_USB_AF9015 n
+      DVB_USB_AF9035 n
+      DVB_USB_ANYSEE n
+      DVB_USB_AZ6007 n
+      DVB_USB_IT913X n
+      DVB_USB_LME2510 n
+      DVB_USB_RTL28XXU n
+      USB_S2255 n
+      VIDEO_EM28XX n
+      VIDEO_TM6000 n
+      USB_DWC2 n
+      USB_GSPCA n
+      SPEAKUP n
+      XO15_EBOOK n
+      USB_GADGET n
+    ''}
+  ''}
 
   ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}

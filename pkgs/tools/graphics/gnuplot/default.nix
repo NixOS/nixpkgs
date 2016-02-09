@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, zlib, gd, texinfo4, makeWrapper, readline
-, withTeXLive ? false, texLive
+, withTeXLive ? false, texlive
 , withLua ? false, lua
 , emacs ? null
 , libX11 ? null
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ zlib gd texinfo4 readline pango cairo pkgconfig makeWrapper ]
-    ++ lib.optional withTeXLive texLive
+    ++ lib.optional withTeXLive (texlive.combine { inherit (texlive) scheme-small; })
     ++ lib.optional withLua lua
     ++ lib.optionals withX [ libX11 libXpm libXt libXaw ]
     ++ lib.optional withQt [ qt ]

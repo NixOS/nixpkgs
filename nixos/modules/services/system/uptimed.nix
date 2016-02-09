@@ -1,68 +1,55 @@
-{pkgs, config, lib, ...}:
+{ config, lib, pkgs, ... }:
+
+with lib;
 
 let
-
-  inherit (lib) mkOption mkIf singleton;
-
-  inherit (pkgs) uptimed;
-
+  cfg = config.services.uptimed;
   stateDir = "/var/spool/uptimed";
-
-  uptimedUser = "uptimed";
-
 in
-
 {
-
-  ###### interface
-
   options = {
-
     services.uptimed = {
-
       enable = mkOption {
         default = false;
         description = ''
-          Uptimed allows you to track your highest uptimes.
+          Enable <literal>uptimed</literal>, allowing you to track
+          your highest uptimes.
         '';
       };
+    };
+  };
 
+  config = mkIf cfg.enable {
+    users.extraUsers.uptimed = {
+      description = "Uptimed daemon user";
+      home        = stateDir;
+      createHome  = true;
+      uid         = config.ids.uids.uptimed;
     };
 
-  };
+    systemd.services.uptimed = {
+      unitConfig.Documentation = "man:uptimed(8) man:uprecords(1)";
+      description = "uptimed service";
+      wantedBy    = [ "multi-user.target" ];
 
-
-  ###### implementation
-
-  config = mkIf config.services.uptimed.enable {
-
-    environment.systemPackages = [ uptimed ];
-
-    users.extraUsers = singleton
-      { name = uptimedUser;
-        uid = config.ids.uids.uptimed;
-        description = "Uptimed daemon user";
-        home = stateDir;
+      serviceConfig = {
+        Restart                 = "on-failure";
+        User                    = "uptimed";
+        Nice                    = 19;
+        IOSchedulingClass       = "idle";
+        PrivateTmp              = "yes";
+        PrivateNetwork          = "yes";
+        NoNewPrivileges         = "yes";
+        ReadWriteDirectories    = stateDir;
+        InaccessibleDirectories = "/home";
+        ExecStart               = "${pkgs.uptimed}/sbin/uptimed -f -p ${stateDir}/pid";
       };
 
-    jobs.uptimed =
-      { description = "Uptimed daemon";
-
-        startOn = "startup";
-
-        preStart =
-          ''
-            mkdir -m 0755 -p ${stateDir}
-            chown ${uptimedUser} ${stateDir}
-
-            if ! test -f ${stateDir}/bootid ; then
-              ${uptimed}/sbin/uptimed -b
-            fi
-          '';
-
-        exec = "${uptimed}/sbin/uptimed";
-      };
-
+      preStart = ''
+        if ! test -f ${stateDir}/bootid ; then
+          ${pkgs.uptimed}/sbin/uptimed -b
+        fi
+      '';
+    };
   };
-
 }

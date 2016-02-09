@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, cmake, pysideApiextractor, python27Packages, qt4 }:
+{ stdenv, fetchurl, cmake, pysideApiextractor, python, sphinx, qt4 }:
 
 stdenv.mkDerivation {
-  name = "pyside-generatorrunner-0.6.16";
+  name = "${python.libPrefix}-pyside-generatorrunner-0.6.16";
 
   src = fetchurl {
     url = "https://github.com/PySide/Generatorrunner/archive/0.6.16.tar.gz";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake pysideApiextractor python27Packages.sphinx qt4 ];
+  buildInputs = [ cmake pysideApiextractor sphinx qt4 ];
 
   meta = {
     description = "Eases the development of binding generators for C++ and Qt-based libraries by providing a framework to help automating most of the process";

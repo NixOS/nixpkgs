@@ -7,7 +7,7 @@ runTests {
     expr = id 1;
     expected = 1;
   };
-  
+
   testConst = {
     expr = const 2 3;
     expected = 2;
@@ -19,12 +19,12 @@ runTests {
     expected = true;
   };
   */
-  
+
   testAnd = {
     expr = and true false;
     expected = false;
   };
-  
+
   testFix = {
     expr = fix (x: {a = if x ? a then "a" else "b";});
     expected = {a = "a";};
@@ -67,7 +67,7 @@ runTests {
   };
 
   testOverridableDelayableArgsTest = {
-    expr = 
+    expr =
       let res1 = defaultOverridableDelayableArgs id {};
           res2 = defaultOverridableDelayableArgs id { a = 7; };
           res3 = let x = defaultOverridableDelayableArgs id { a = 7; };
@@ -87,7 +87,7 @@ runTests {
                         in (x2.replace) { a = 10; }; # and override the value by 10
 
           # fixed tests (delayed args): (when using them add some comments, please)
-          resFixed1 = 
+          resFixed1 =
                 let x = defaultOverridableDelayableArgs id ( x : { a = 7; c = x.fixed.b; });
                     y = x.merge (x : { name = "name-${builtins.toString x.fixed.c}"; });
                 in (y.merge) { b = 10; };
@@ -109,5 +109,25 @@ runTests {
     expr = sort builtins.lessThan [ 40 2 30 42 ];
     expected = [2 30 40 42];
   };
-  
+
+  testToIntShouldConvertStringToInt = {
+    expr = toInt "27";
+    expected = 27;
+  };
+
+  testToIntShouldThrowErrorIfItCouldNotConvertToInt = {
+    expr = builtins.tryEval (toInt "\"foo\"");
+    expected = { success = false; value = false; };
+  };
+
+  testHasAttrByPathTrue = {
+    expr = hasAttrByPath ["a" "b"] { a = { b = "yey"; }; };
+    expected = true;
+  };
+
+  testHasAttrByPathFalse = {
+    expr = hasAttrByPath ["a" "b"] { a = { c = "yey"; }; };
+    expected = false;
+  };
+
 }

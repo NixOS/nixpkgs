@@ -31,16 +31,11 @@ in
     socketActivation =
       mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description =
           ''
             This option enables docker with socket activation. I.e. docker will
             start when first called by client.
-
-            Note: This is false by default because systemd lower than 214 that
-            nixos uses so far, doesn't support SocketGroup option, so socket
-            created by docker has root group now. This will likely be changed
-            in future.  So set this option explicitly to false if you wish.
           '';
       };
     storageDriver =
@@ -74,7 +69,8 @@ in
         description = ''
           The postStart phase of the systemd service. You may need to
           override this if you are passing in flags to docker which
-          don't cause the socket file to be created.
+          don't cause the socket file to be created. This option is ignored
+          if socket activation is used.
         '';
       };
 
@@ -86,41 +82,13 @@ in
   config = mkIf cfg.enable (mkMerge [
     { environment.systemPackages = [ pkgs.docker ];
       users.extraGroups.docker.gid = config.ids.gids.docker;
-    }
-    (mkIf cfg.socketActivation {
-
       systemd.services.docker = {
         description = "Docker Application Container Engine";
-        after = [ "network.target" "docker.socket" ];
-        requires = [ "docker.socket" ];
+        wantedBy = optional (!cfg.socketActivation) "multi-user.target";
+        after = [ "network.target" ] ++ (optional cfg.socketActivation "docker.socket") ;
+        requires = optional cfg.socketActivation "docker.socket";
         serviceConfig = {
-          ExecStart = "${pkgs.docker}/bin/docker daemon --host=fd:// --group=docker --storage-driver=${cfg.storageDriver} ${cfg.extraOptions}";
-          #  I'm not sure if that limits aren't too high, but it's what
-          #  goes in config bundled with docker itself
-          LimitNOFILE = 1048576;
-          LimitNPROC = 1048576;
-        } // proxy_env;
-      };
-
-      systemd.sockets.docker = {
-        description = "Docker Socket for the API";
-        wantedBy = [ "sockets.target" ];
-        socketConfig = {
-          ListenStream = "/var/run/docker.sock";
-          SocketMode = "0660";
-          SocketUser = "root";
-          SocketGroup = "docker";
-        };
-      };
-    })
-    (mkIf (!cfg.socketActivation) {
-
-      systemd.services.docker = {
-        description = "Docker Application Container Engine";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        serviceConfig = {
-          ExecStart = "${pkgs.docker}/bin/docker daemon --group=docker --storage-driver=${cfg.storageDriver} ${cfg.extraOptions}";
+          ExecStart = "${pkgs.docker}/bin/docker daemon --group=docker --storage-driver=${cfg.storageDriver} ${optionalString cfg.socketActivation "--host=fd://"} ${cfg.extraOptions}";
           #  I'm not sure if that limits aren't too high, but it's what
           #  goes in config bundled with docker itself
           LimitNOFILE = 1048576;
@@ -130,10 +98,22 @@ in
         path = [ pkgs.kmod ] ++ (optional (cfg.storageDriver == "zfs") pkgs.zfs);
         environment.MODULE_DIR = "/run/current-system/kernel-modules/lib/modules";
 
-        postStart = cfg.postStart;
+        postStart = if cfg.socketActivation then "" else cfg.postStart;
 
         # Presumably some containers are running we don't want to interrupt
         restartIfChanged = false;
+      };
+    }
+    (mkIf cfg.socketActivation {
+      systemd.sockets.docker = {
+        description = "Docker Socket for the API";
+        wantedBy = [ "sockets.target" ];
+        socketConfig = {
+          ListenStream = "/var/run/docker.sock";
+          SocketMode = "0660";
+          SocketUser = "root";
+          SocketGroup = "docker";
+        };
       };
     })
   ]);

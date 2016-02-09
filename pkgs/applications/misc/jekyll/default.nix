@@ -1,14 +1,13 @@
-{ stdenv, lib, bundlerEnv, ruby_2_1, curl }:
+{ stdenv, lib, bundlerEnv, ruby_2_2, curl }:
 
-bundlerEnv {
-  name = "jekyll-2.5.3";
+bundlerEnv rec {
+  name = "jekyll-${version}";
+  version = "3.0.1";
 
-  ruby = ruby_2_1;
+  ruby = ruby_2_2;
   gemfile = ./Gemfile;
   lockfile = ./Gemfile.lock;
   gemset = ./gemset.nix;
-
-  buildInputs = [ curl ];
 
   meta = with lib; {
     description = "Simple, blog aware, static site generator";

@@ -1,56 +1,29 @@
-x@{builderDefsPackage
-  , mesa, SDL, cmake, eigen
-  , ...}:
-builderDefsPackage
-(a :
-let
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
-    [];
+{ stdenv, fetchurl, cmake
+, boost, eigen2, lua, luabind, mesa, SDL }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="soi";
-    fileName="Spheres%20of%20Influence";
-    majorVersion="0.1";
-    minorVersion="1";
-    version="${majorVersion}.${minorVersion}";
-    name="${baseName}-${version}";
-    project="${baseName}";
-    url="mirror://sourceforge/project/${project}/${baseName}-${majorVersion}/${fileName}-${version}-Source.tar.gz";
-    hash="dfc59319d2962033709bb751c71728417888addc6c32cbec3da9679087732a81";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
-    name = "${sourceInfo.name}.tar.gz";
+stdenv.mkDerivation rec {
+  name = "soi-${version}";
+  version = "0.1.2";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/project/soi/Spheres%20of%20Influence-${version}-Source.tar.bz2";
+    name = "${name}.tar.bz2";
+    sha256 = "03c3wnvhd42qh8mi68lybf8nv6wzlm1nx16d6pdcn2jzgx1j2lzd";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost lua luabind mesa SDL ];
 
-  phaseNames = ["setVars" "doCmake" "doMakeInstall"];
+  cmakeFlags = [
+    "-DEIGEN_INCLUDE_DIR=${eigen2}/include/eigen2"
+  ];
 
-  setVars = a.noDepEntry ''
-    export EIGENDIR=${a.eigen}/include/eigen2
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "A physics-based puzzle game";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.free;
+    maintainers = with maintainers; [ raskin nckx ];
+    platforms = platforms.linux;
+    license = licenses.free;
     broken = true;
+    downloadPage = http://sourceforge.net/projects/soi/files/;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/soi/files/";
-    };
-  };
-}) x
+}

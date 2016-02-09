@@ -31,6 +31,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.openvswitch;
+      defaultText = "pkgs.openvswitch";
       description = ''
         Open vSwitch package to use.
       '';

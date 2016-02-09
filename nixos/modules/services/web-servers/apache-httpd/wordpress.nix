@@ -5,7 +5,7 @@ with lib;
 
 let
 
-  version = "4.3";
+  version = "4.3.1";
   fullversion = "${version}";
 
   # Our bare-bones wp-config.php file using the above settings
@@ -17,10 +17,10 @@ let
     define('DB_HOST',     '${config.dbHost}');
     define('DB_CHARSET',  'utf8');
     $table_prefix  = '${config.tablePrefix}';
+    ${config.extraConfig}
     if ( !defined('ABSPATH') )
     	define('ABSPATH', dirname(__FILE__) . '/');
     require_once(ABSPATH . 'wp-settings.php');
-    ${config.extraConfig}
   '';
 
   # .htaccess to support pretty URLs
@@ -74,7 +74,7 @@ let
       owner = "WordPress";
       repo = "WordPress";
       rev = "${fullversion}";
-      sha256 = "0sz5jjhjpwqis8336gyq9a77cr4sf8zahd1y4pzmpvpzn9cn503y";
+      sha256 = "1rk10vcv4z9p04hfzc0wkbilrgx7m9ssyr6c3w6vw3vl1bcgqxza";
     };
     installPhase = ''
       mkdir -p $out
@@ -248,7 +248,7 @@ in
     if [ ! -d ${serverInfo.fullConfig.services.mysql.dataDir}/${config.dbName} ]; then
       echo "Need to create the database '${config.dbName}' and grant permissions to user named '${config.dbUser}'."
       # Wait until MySQL is up
-      while [ ! -e /var/run/mysql/mysqld.pid ]; do
+      while [ ! -e ${serverInfo.fullConfig.services.mysql.pidDir}/mysqld.pid ]; do
         sleep 1
       done
       ${pkgs.mysql}/bin/mysql -e 'CREATE DATABASE ${config.dbName};'

@@ -9,11 +9,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchurl {
     url = "https://github.com/golang/go/archive/go${version}.tar.gz";
-    sha256 = "3e5d07bc5214a1ffe187cf6406c5b5a80ee44f12f6bca97a5463db0afee2f6ac";
+    sha256 = "0rcrhb3r997dw3d02r37zp26ln4q9n77fqxbnvw04zs413md5s35";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -63,9 +63,15 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.isDarwin ''
     sed -i 's,"/etc","'"$TMPDIR"'",' src/os/os_test.go
     sed -i 's,/_go_os_test,'"$TMPDIR"'/_go_os_test,' src/os/path_test.go
+    sed -i '/TestCgoLookupIP/areturn' src/net/cgo_unix_test.go
+    sed -i '/TestChdirAndGetwd/areturn' src/os/os_test.go
+    sed -i '/TestDialDualStackLocalhost/areturn' src/net/dial_test.go
     sed -i '/TestRead0/areturn' src/os/os_test.go
     sed -i '/TestSystemRoots/areturn' src/crypto/x509/root_darwin_test.go
-    sed -i '/TestDialDualStackLocalhost/areturn' src/net/dial_test.go
+
+    # fails when running inside tmux
+    sed -i '/TestNohup/areturn' src/os/signal/signal_test.go
+
 
     # remove IP resolving tests, on darwin they can find fe80::1%lo while expecting ::1
     sed -i '/TestResolveIPAddr/areturn' src/net/ipraw_test.go

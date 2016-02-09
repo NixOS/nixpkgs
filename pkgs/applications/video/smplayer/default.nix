@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, qt5 }:
+{ stdenv, fetchurl, qtscript }:
 
 stdenv.mkDerivation rec {
-  name = "smplayer-15.9.0";
+  name = "smplayer-16.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/smplayer/${name}.tar.bz2";
-    sha256 = "1yx6kikaj9v5aj8aavvrcklx283wl6wrnpl905hjc7v03kgp1ac5";
+    sha256 = "1jfqpmbbjrs9lna44dp10zblj7b0cras9sb0nczycpkcsdi9np6j";
   };
 
   patches = [ ./basegui.cpp.patch ];
 
-  buildInputs = [ qt5.script ];
+  buildInputs = [ qtscript ];
 
   preConfigure = ''
     makeFlags="PREFIX=$out"

@@ -1,25 +1,27 @@
-{ stdenv, fetchgit, pkgconfig, libtoxcore-dev, qt5, openal, opencv,
+{ stdenv, fetchgit, pkgconfig, libtoxcore-dev, openal, opencv,
   libsodium, libXScrnSaver, glib, gdk_pixbuf, gtk2, cairo,
-  pango, atk, qrencode, ffmpeg, filter-audio, makeWrapper }:
+  pango, atk, qrencode, ffmpeg, filter-audio, makeWrapper,
+  qtbase, qtsvg, qttools, qttranslations, sqlcipher }:
 
 let
-  revision = "1673b43e26c853f6446f228fec083af166cbf446";
+  revision = "8b671916abdcc1d553a367a502b23ec4ea7568a1";
 in
 
 stdenv.mkDerivation rec {
-  name = "qtox-dev-20150925";
+  name = "qtox-dev-20151221";
 
   src = fetchgit {
       url = "https://github.com/tux3/qTox.git";
       rev = "${revision}";
-      md5 = "785f5b305cdcdf777d93ee823a5b9f49";
+      md5 = "a93a63d35e506be4b21abda0986f19e7";
   };
 
   buildInputs =
     [
       libtoxcore-dev openal opencv libsodium filter-audio
-      qt5.base qt5.tools libXScrnSaver glib gtk2 cairo
-      pango atk qrencode ffmpeg qt5.translations makeWrapper
+      qtbase qttools qtsvg libXScrnSaver glib gtk2 cairo
+      pango atk qrencode ffmpeg qttranslations makeWrapper
+      sqlcipher
     ];
 
   nativeBuildInputs = [ pkgconfig ];
@@ -46,7 +48,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp qtox $out/bin
     wrapProgram $out/bin/qtox \
-      --prefix QT_PLUGIN_PATH : ${qt5.svg}/lib/qt5/plugins
+      --prefix QT_PLUGIN_PATH : ${qtsvg}/lib/qt5/plugins
   '';
 
   enableParallelBuilding = true;

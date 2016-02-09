@@ -1,15 +1,15 @@
 { fetchurl, stdenv, pkgconfig, autoconf, automake, clutter, clutter-gst
-, gdk_pixbuf, cairo }:
+, gdk_pixbuf, cairo, clutter_gtk }:
 
 stdenv.mkDerivation rec {
   name = "pinpoint-${version}";
-  version = "0.1.6";
+  version = "0.1.8";
   src = fetchurl {
     url = "http://ftp.gnome.org/pub/GNOME/sources/pinpoint/0.1/${name}.tar.xz";
-    sha256 = "0jzkf74w75paflnvsil2y6qsyaqgxf6akz97176xdg6qri4nwal1";
+    sha256 = "1jp8chr9vjlpb5lybwp5cg6g90ak5jdzz9baiqkbg0anlg8ps82s";
   };
   buildInputs = [ pkgconfig autoconf automake clutter clutter-gst gdk_pixbuf
-                  cairo ];
+                  cairo clutter_gtk ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/action/show/Apps/Pinpoint;

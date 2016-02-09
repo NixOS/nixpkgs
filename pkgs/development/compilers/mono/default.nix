@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert }:
+{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc }:
 
 let
   llvm     = callPackage ./llvm.nix { };
@@ -6,18 +6,20 @@ let
 in
 stdenv.mkDerivation rec {
   name = "mono-${version}";
-  version = "4.0.3.20";
+  version = "4.0.4.1";
   src = fetchurl {
     url = "http://download.mono-project.com/sources/mono/${name}.tar.bz2";
-    sha256 = "1z0k8gv5z3yrkjhi2yjaqj42p55jn5h3q4z890gkcrlvmgihnv4p";
+    sha256 = "1ydw9l89apc9p7xr5mdzy0h97g2q6v243g82mxswfc2rrqhfs4gd";
   };
 
   buildInputs =
     [ bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib
-    ];
+    ]
+    ++ (stdenv.lib.optionals stdenv.isDarwin [ Foundation libobjc ]);
+
   propagatedBuildInputs = [glib];
 
-  NIX_LDFLAGS = "-lgcc_s" ;
+  NIX_LDFLAGS = if stdenv.isDarwin then "" else "-lgcc_s" ;
 
   # To overcome the bug https://bugzilla.novell.com/show_bug.cgi?id=644723
   dontDisableStatic = true;
@@ -63,12 +65,17 @@ stdenv.mkDerivation rec {
   postInstall = ''
     echo "Updating Mono key store"
     $out/bin/cert-sync ${cacert}/etc/ssl/certs/ca-bundle.crt
+  ''
+  # According to [1], gmcs is just mcs
+  # [1] https://github.com/mono/mono/blob/master/scripts/gmcs.in
+  + ''
+    ln -s $out/bin/mcs $out/bin/gmcs
   '';
 
   meta = {
     homepage = http://mono-project.com/;
     description = "Cross platform, open source .NET development framework";
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; darwin ++ linux;
     maintainers = with stdenv.lib.maintainers; [ viric thoughtpolice obadz ];
     license = stdenv.lib.licenses.free; # Combination of LGPL/X11/GPL ?
   };

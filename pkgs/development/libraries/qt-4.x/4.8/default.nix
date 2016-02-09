@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [ ./glib-2.32.patch
+      ./libressl.patch
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
         inherit cups icu libXfixes;
@@ -84,7 +85,7 @@ stdenv.mkDerivation rec {
       -datadir $out/share/${name}
       -translationdir $out/share/${name}/translations
     "
-  '' + optionalString stdenv.isDarwin ''
+  '' + optionalString stdenv.cc.isClang ''
     sed -i 's/QMAKE_CC = gcc/QMAKE_CC = clang/' mkspecs/common/g++-base.conf
     sed -i 's/QMAKE_CXX = g++/QMAKE_CXX = clang++/' mkspecs/common/g++-base.conf
   '';
@@ -94,7 +95,7 @@ stdenv.mkDerivation rec {
     ''
       -v -no-separate-debug-info -release -no-fast -confirm-license -opensource
 
-      -opengl -xrender -xrandr -xinerama -xcursor -xinput -xfixes -fontconfig
+      -${if stdenv.isFreeBSD then "no-" else ""}opengl -xrender -xrandr -xinerama -xcursor -xinput -xfixes -fontconfig
       -qdbus -${if cups == null then "no-" else ""}cups -glib -dbus-linked -openssl-linked
 
       ${if mysql != null then "-plugin" else "-no"}-sql-mysql -system-sqlite
@@ -121,17 +122,18 @@ stdenv.mkDerivation rec {
   # The following libraries are only used in plugins
   buildInputs =
     [ cups # Qt dlopen's libcups instead of linking to it
-      mysql.lib postgresql sqlite libjpeg libmng libtiff icu ]
+      postgresql sqlite libjpeg libmng libtiff icu ]
+    ++ optionals (mysql != null) [ mysql.lib ]
     ++ optionals gtkStyle [ gtk gdk_pixbuf ];
 
   nativeBuildInputs = [ perl pkgconfig which ];
 
   enableParallelBuilding = false;
 
-  NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin
+  NIX_CFLAGS_COMPILE = optionalString (stdenv.isFreeBSD || stdenv.isDarwin)
     "-I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include";
 
-  NIX_LDFLAGS = optionalString stdenv.isDarwin
+  NIX_LDFLAGS = optionalString (stdenv.isFreeBSD || stdenv.isDarwin)
     "-lglib-2.0";
 
   preBuild = optionalString stdenv.isDarwin ''

@@ -1,6 +1,9 @@
-{ lib, buildFHSUserEnv
-, withJava   ? false
+{ lib, buildFHSUserEnv, steam
+, withJava ? false
 , withPrimus ? false
+, nativeOnly ? false
+, runtimeOnly ? false
+, newStdcpp ? false
 }:
 
 buildFHSUserEnv {
@@ -9,6 +12,8 @@ buildFHSUserEnv {
   targetPkgs = pkgs: with pkgs; [
       steamPackages.steam
       steamPackages.steam-fonts
+      # License agreement
+      gnome3.zenity
       # Errors in output without those
       pciutils
       python2
@@ -18,7 +23,7 @@ buildFHSUserEnv {
       # Needed by gdialog, including in the steam-runtime
       perl
     ]
-    ++ lib.optional withJava   jdk
+    ++ lib.optional withJava jdk
     ++ lib.optional withPrimus primus
     ;
 
@@ -36,16 +41,23 @@ buildFHSUserEnv {
       gst_all_1.gst-plugins-ugly
       libdrm
 
-      steamPackages.steam-runtime-wrapped
+      (steamPackages.steam-runtime-wrapped.override {
+        inherit nativeOnly runtimeOnly newStdcpp;
+      })
     ];
 
   extraBuildCommands = ''
-    [ -d lib64 ] && mv lib64/steam lib
-
     mkdir -p steamrt
 
     ln -s ../lib64/steam-runtime steamrt/amd64
-    ln -s ../lib/steam-runtime steamrt/i386
+    ln -s ../lib32/steam-runtime steamrt/i386
+  '';
+
+  extraInstallCommands = ''
+    mkdir -p $out/share/applications
+    ln -s ${steam}/share/icons $out/share
+    ln -s ${steam}/share/pixmaps $out/share
+    sed "s,/usr/bin/steam,$out/bin/steam,g" ${steam}/share/applications/steam.desktop > $out/share/applications/steam.desktop
   '';
 
   profile = ''

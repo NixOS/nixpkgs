@@ -1,5 +1,4 @@
-{ stdenv, fetchFromGitHub, libtoxcore, pidgin, autoconf, automake, libtool
-, libsodium } :
+{ stdenv, fetchFromGitHub, libtoxcore, pidgin, autoreconfHook, libsodium }:
 
 let
   version = "dd181722ea";
@@ -17,11 +16,9 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lssp -lsodium";
 
-  preConfigure = "autoreconf -vfi";
-
   postInstall = "mv $out/lib/purple-2 $out/lib/pidgin";
 
-  buildInputs = [ libtoxcore pidgin autoconf automake libtool libsodium ];
+  buildInputs = [ libtoxcore pidgin autoreconfHook libsodium ];
 
   meta = {
     homepage = http://tox.dhs.org/;

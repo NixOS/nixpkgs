@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, libxml2, gnutls, libxslt, pkgconfig, libgcrypt, libtool }:
+{ stdenv, fetchurl, libxml2, gnutls, libxslt, pkgconfig, libgcrypt, libtool
+, openssl, makeWrapper }:
 
 let
   version = "1.2.20";
@@ -11,9 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "01bkbv2y3x8d1sf4dcln1x3y2jyj391s3208d9a2ndhglly5j89j";
   };
 
-  buildInputs = [ libxml2 gnutls libxslt pkgconfig libgcrypt libtool ];
-
+  buildInputs = [ makeWrapper libxml2 gnutls libxslt pkgconfig libgcrypt libtool openssl ];
   enableParallelBuilding = true;
+  doCheck = true;
+
+  postFixup = ''
+    wrapProgram "$out/bin/xmlsec1" --prefix LD_LIBRARY_PATH ":" "$out/lib"
+  '';
 
   meta = {
     homepage = http://www.aleksey.com/xmlsec;

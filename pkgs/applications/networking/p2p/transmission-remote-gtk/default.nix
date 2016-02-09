@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     { description = "GTK remote control for the Transmission BitTorrent client";
       homepage = https://github.com/ajf8/transmission-remote-gtk;
       license = licenses.gpl2;
-      maintainers = [ maintainers.emery ];
+      maintainers = [ maintainers.ehmry ];
       platforms = platforms.linux;
     };
 }

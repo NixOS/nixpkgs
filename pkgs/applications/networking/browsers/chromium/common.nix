@@ -5,7 +5,7 @@
 , libevent, expat, libjpeg, snappy
 , libpng, libxml2, libxslt, libcap
 , xdg_utils, yasm, minizip, libwebp
-, libusb1, libexif, pciutils
+, libusb1, libexif, pciutils, nss
 
 , python, pythonPackages, perl, pkgconfig
 , nspr, udev, kerberos
@@ -22,7 +22,6 @@
 , enableSELinux ? false, libselinux ? null
 , enableNaCl ? false
 , enableHotwording ? false
-, useOpenSSL ? false, nss ? null, openssl ? null
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome_keyring3 ? null
 , proprietaryCodecs ? true
@@ -65,7 +64,6 @@ let
     use_system_opus = true;
     use_system_snappy = true;
     use_system_speex = true;
-    use_system_ssl = useOpenSSL;
     use_system_stlport = true;
     use_system_xdg_utils = true;
     use_system_yasm = true;
@@ -107,8 +105,7 @@ let
     buildInputs = defaultDependencies ++ [
       which
       python perl pkgconfig
-      nspr udev
-      (if useOpenSSL then openssl else nss)
+      nspr nss udev
       utillinux alsaLib
       bison gperf kerberos
       glib gtk dbus_glib
@@ -148,6 +145,7 @@ let
       linux_use_gold_binary = false;
       linux_use_gold_flags = false;
       proprietary_codecs = false;
+      use_sysroot = false;
       use_gnome_keyring = gnomeKeyringSupport;
       use_gconf = gnomeSupport;
       use_gio = gnomeSupport;
@@ -155,7 +153,6 @@ let
       linux_link_pulseaudio = pulseSupport;
       disable_nacl = !enableNaCl;
       enable_hotwording = enableHotwording;
-      use_openssl = useOpenSSL;
       selinux = enableSELinux;
       use_cups = cupsSupport;
     } // {

@@ -5,43 +5,103 @@ with lib;
 let
   cfg = config.services.influxdb;
 
-  influxdbConfig = pkgs.writeText "config.toml" ''
-    bind-address = "${cfg.bindAddress}"
+  configOptions = recursiveUpdate {
+    meta = {
+      bind-address = ":8088";
+      commit-timeout = "50ms";
+      dir = "${cfg.dataDir}/meta";
+      election-timeout = "1s";
+      heartbeat-timeout = "1s";
+      hostname = "localhost";
+      leader-lease-timeout = "500ms";
+      retention-autocreate = true;
+    };
 
-    [logging]
-    level  = "info"
-    file   = "stdout"
+    data = {
+      dir = "${cfg.dataDir}/data";
+      wal-dir = "${cfg.dataDir}/wal";
+      max-wal-size = 104857600;
+      wal-enable-logging = true;
+      wal-flush-interval = "10m";
+      wal-partition-flush-delay = "2s";
+    };
 
-    [admin]
-    port   = ${toString cfg.adminPort}
-    assets = "${pkgs.influxdb}/share/influxdb/admin"
+    cluster = {
+      shard-writer-timeout = "5s";
+      write-timeout = "5s";
+    };
 
-    [api]
-    port   = ${toString cfg.apiPort}
-    ${cfg.apiExtraConfig}
+    retention = {
+      enabled = true;
+      check-interval = "30m";
+    };
 
-    [input_plugins]
-      ${cfg.inputPluginsConfig}
+    http = {
+      enabled = true;
+      auth-enabled = false;
+      bind-address = ":8086";
+      https-enabled = false;
+      log-enabled = true;
+      pprof-enabled = false;
+      write-tracing = false;
+    };
 
-    [raft]
-    dir = "${cfg.dataDir}/raft"
-    ${cfg.raftConfig}
+    monitor = {
+      store-enabled = false;
+      store-database = "_internal";
+      store-interval = "10s";
+    };
 
-    [storage]
-    dir = "${cfg.dataDir}/db"
-    ${cfg.storageConfig}
+    admin = {
+      enabled = true;
+      bind-address = ":8083";
+      https-enabled = false;
+    };
 
-    [cluster]
-    ${cfg.clusterConfig}
+    graphite = [{
+      enabled = false;
+    }];
 
-    [sharding]
-      ${cfg.shardingConfig}
+    udp = [{
+      enabled = false;
+    }];
 
-    [wal]
-    dir = "${cfg.dataDir}/wal"
-    ${cfg.walConfig}
+    collectd = {
+      enabled = false;
+      typesdb = "${pkgs.collectd}/share/collectd/types.db";
+      database = "collectd_db";
+      port = 25826;
+    };
 
-    ${cfg.extraConfig}
+    opentsdb = {
+      enabled = false;
+    };
+
+    continuous_queries = {
+      enabled = true;
+      log-enabled = true;
+      recompute-previous-n = 2;
+      recompute-no-older-than = "10m";
+      compute-runs-per-interval = 10;
+      compute-no-more-than = "2m";
+    };
+
+    hinted-handoff = {
+      enabled = true;
+      dir = "${cfg.dataDir}/hh";
+      max-size = 1073741824;
+      max-age = "168h";
+      retry-rate-limit = 0;
+      retry-interval = "1s";
+    };
+  } cfg.extraConfig;
+
+  configFile = pkgs.runCommand "config.toml" {
+    buildInputs = [ pkgs.remarshal ];
+  } ''
+    remarshal -if json -of toml \
+      < ${pkgs.writeText "config.json" (builtins.toJSON configOptions)} \
+      > $out
   '';
 in
 {
@@ -60,6 +120,7 @@ in
 
       package = mkOption {
         default = pkgs.influxdb;
+        defaultText = "pkgs.influxdb";
         description = "Which influxdb derivation to use";
         type = types.package;
       };
@@ -82,124 +143,10 @@ in
         type = types.path;
       };
 
-      bindAddress = mkOption {
-        default = "127.0.0.1";
-        description = "Address where influxdb listens";
-        type = types.str;
-      };
-
-      adminPort = mkOption {
-        default = 8083;
-        description = "The port where influxdb admin listens";
-        type = types.int;
-      };
-
-      apiPort = mkOption {
-        default = 8086;
-        description = "The port where influxdb api listens";
-        type = types.int;
-      };
-
-      apiExtraConfig = mkOption {
-        default = ''
-          read-timeout = "5s"
-        '';
-        description = "Extra influxdb api configuration";
-        example = ''
-          ssl-port = 8084
-          ssl-cert = /path/to/cert.pem
-          read-timeout = "5s"
-        '';
-        type = types.lines;
-      };
-
-      inputPluginsConfig = mkOption {
-        default = "";
-        description = "Configuration of influxdb extra plugins";
-        example = ''
-          [input_plugins.graphite]
-          enabled = true
-          port = 2003
-          database = "graphite"
-        '';
-      };
-
-      raftConfig = mkOption {
-        default = ''
-          port = 8090
-        '';
-        description = "Influxdb raft configuration";
-        type = types.lines;
-      };
-
-      storageConfig = mkOption {
-        default = ''
-          write-buffer-size = 10000
-        '';
-        description = "Influxdb raft configuration";
-        type = types.lines;
-      };
-
-      clusterConfig = mkOption {
-        default = ''
-          protobuf_port = 8099
-          protobuf_timeout = "2s"
-          protobuf_heartbeat = "200ms"
-          protobuf_min_backoff = "1s"
-          protobuf_max_backoff = "10s"
-
-          write-buffer-size = 10000
-          max-response-buffer-size = 100
-
-          concurrent-shard-query-limit = 10
-        '';
-        description = "Influxdb cluster configuration";
-        type = types.lines;
-      };
-
-      leveldbConfig = mkOption {
-        default = ''
-          max-open-files = 40
-          lru-cache-size = "200m"
-          max-open-shards = 0
-          point-batch-size = 100
-          write-batch-size = 5000000
-        '';
-        description = "Influxdb leveldb configuration";
-        type = types.lines;
-      };
-
-      shardingConfig = mkOption {
-        default = ''
-          replication-factor = 1
-
-          [sharding.short-term]
-          duration = "7d"
-          split = 1
-
-          [sharding.long-term]
-          duration = "30d"
-          split = 1
-        '';
-        description = "Influxdb sharding configuration";
-        type = types.lines;
-      };
-
-      walConfig = mkOption {
-        default = ''
-          flush-after = 1000
-          bookmark-after = 1000
-          index-after = 1000
-          requests-per-logfile = 10000
-        '';
-        description = "Influxdb write-ahead log configuration";
-        type = types.lines;
-      };
-
       extraConfig = mkOption {
-        default = "";
+        default = {};
         description = "Extra configuration options for influxdb";
-        type = types.string;
+        type = types.attrs;
       };
     };
 
@@ -215,7 +162,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
       serviceConfig = {
-        ExecStart = ''${cfg.package}/bin/influxdb -config "${influxdbConfig}"'';
+        ExecStart = ''${cfg.package}/bin/influxd -config "${configFile}"'';
         User = "${cfg.user}";
         Group = "${cfg.group}";
         PermissionsStartOnly = true;
@@ -223,11 +170,6 @@ in
       preStart = ''
         mkdir -m 0770 -p ${cfg.dataDir}
         if [ "$(id -u)" = 0 ]; then chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}; fi
-      '';
-      postStart = mkBefore ''
-        until ${pkgs.curl}/bin/curl -s -o /dev/null 'http://${cfg.bindAddress}:${toString cfg.apiPort}/'; do
-          sleep 1;
-        done
       '';
     };
 

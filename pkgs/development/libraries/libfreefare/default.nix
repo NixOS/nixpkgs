@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     homepage = http://code.google.com/p/libfreefare/;
     maintainers = with maintainers; [bobvanderlinden];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
   };
 }

@@ -25,6 +25,7 @@ let
       sha256 = "1zi4p07mp6jmk030p4gmglwxcwp0lzs5mi31y1b4rp8lsqxdxizw";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   bdftopcf = (mkDerivation "bdftopcf" {
@@ -35,6 +36,7 @@ let
       sha256 = "09i03sk878cmx2i40lkpsysn7zqcvlczb30j7x3lryb11jz4gx1q";
     };
     buildInputs = [pkgconfig libXfont ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libXfont ;};
 
   bigreqsproto = (mkDerivation "bigreqsproto" {
@@ -45,6 +47,7 @@ let
       sha256 = "07hvfm84scz8zjw14riiln2v4w03jlhp756ypwhq27g48jmic8a6";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   compositeproto = (mkDerivation "compositeproto" {
@@ -55,6 +58,7 @@ let
       sha256 = "1z0crmf669hirw4s7972mmp8xig80kfndja9h559haqbpvq5k4q4";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   damageproto = (mkDerivation "damageproto" {
@@ -65,6 +69,7 @@ let
       sha256 = "0nzwr5pv9hg7c21n995pdiv0zqhs91yz3r8rn3aska4ykcp12z2w";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   dmxproto = (mkDerivation "dmxproto" {
@@ -75,6 +80,7 @@ let
       sha256 = "02b5x9dkgajizm8dqyx2w6hmqx3v25l67mgf35nj6sz0lgk52877";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   dri2proto = (mkDerivation "dri2proto" {
@@ -85,6 +91,7 @@ let
       sha256 = "015az1vfdqmil1yay5nlsmpf6cf7vcbpslxjb72cfkzlvrv59dgr";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   dri3proto = (mkDerivation "dri3proto" {
@@ -95,6 +102,7 @@ let
       sha256 = "0x609xvnl8jky5m8jdklw4nymx3irkv32w99dfd8nl800bblkgh1";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   encodings = (mkDerivation "encodings" {
@@ -105,6 +113,7 @@ let
       sha256 = "0ffmaw80vmfwdgvdkp6495xgsqszb6s0iira5j0j6pd4i0lk3mnf";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   fixesproto = (mkDerivation "fixesproto" {
@@ -115,6 +124,7 @@ let
       sha256 = "1ki4wiq2iivx5g4w5ckzbjbap759kfqd72yg18m3zpbb4hqkybxs";
     };
     buildInputs = [pkgconfig xextproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit xextproto ;};
 
   fontadobe100dpi = (mkDerivation "fontadobe100dpi" {
@@ -125,6 +135,7 @@ let
       sha256 = "0m60f5bd0caambrk8ksknb5dks7wzsg7g7xaf0j21jxmx8rq9h5j";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
   fontadobe75dpi = (mkDerivation "fontadobe75dpi" {
@@ -135,6 +146,7 @@ let
       sha256 = "02advcv9lyxpvrjv8bjh1b797lzg6jvhipclz49z8r8y98g4l0n6";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
   fontadobeutopia100dpi = (mkDerivation "fontadobeutopia100dpi" {
@@ -145,6 +157,7 @@ let
       sha256 = "19dd9znam1ah72jmdh7i6ny2ss2r6m21z9v0l43xvikw48zmwvyi";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
   fontadobeutopia75dpi = (mkDerivation "fontadobeutopia75dpi" {
@@ -155,6 +168,7 @@ let
       sha256 = "152wigpph5wvl4k9m3l4mchxxisgsnzlx033mn5iqrpkc6f72cl7";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
   fontadobeutopiatype1 = (mkDerivation "fontadobeutopiatype1" {
@@ -165,6 +179,7 @@ let
       sha256 = "0xw0pdnzj5jljsbbhakc6q9ha2qnca1jr81zk7w70yl9bw83b54p";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit mkfontdir mkfontscale ;};
 
   fontalias = (mkDerivation "fontalias" {
@@ -175,6 +190,7 @@ let
       sha256 = "16ic8wfwwr3jicaml7b5a0sk6plcgc1kg84w02881yhwmqm3nicb";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   fontarabicmisc = (mkDerivation "fontarabicmisc" {
@@ -185,6 +201,7 @@ let
       sha256 = "1x246dfnxnmflzf0qzy62k8jdpkb6jkgspcjgbk8jcq9lw99npah";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontbh100dpi = (mkDerivation "fontbh100dpi" {
@@ -195,6 +212,7 @@ let
       sha256 = "10cl4gm38dw68jzln99ijix730y7cbx8np096gmpjjwff1i73h13";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
   fontbh75dpi = (mkDerivation "fontbh75dpi" {
@@ -205,6 +223,7 @@ let
       sha256 = "073jmhf0sr2j1l8da97pzsqj805f7mf9r2gy92j4diljmi8sm1il";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
   fontbhlucidatypewriter100dpi = (mkDerivation "fontbhlucidatypewriter100dpi" {
@@ -215,6 +234,7 @@ let
       sha256 = "1fqzckxdzjv4802iad2fdrkpaxl4w0hhs9lxlkyraq2kq9ik7a32";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
   fontbhlucidatypewriter75dpi = (mkDerivation "fontbhlucidatypewriter75dpi" {
@@ -225,6 +245,7 @@ let
       sha256 = "0cfbxdp5m12cm7jsh3my0lym9328cgm7fa9faz2hqj05wbxnmhaa";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
   fontbhttf = (mkDerivation "fontbhttf" {
@@ -235,6 +256,7 @@ let
       sha256 = "0pyjmc0ha288d4i4j0si4dh3ncf3jiwwjljvddrb0k8v4xiyljqv";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit mkfontdir mkfontscale ;};
 
   fontbhtype1 = (mkDerivation "fontbhtype1" {
@@ -245,6 +267,7 @@ let
       sha256 = "1hb3iav089albp4sdgnlh50k47cdjif9p4axm0kkjvs8jyi5a53n";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit mkfontdir mkfontscale ;};
 
   fontbitstream100dpi = (mkDerivation "fontbitstream100dpi" {
@@ -255,6 +278,7 @@ let
       sha256 = "1kmn9jbck3vghz6rj3bhc3h0w6gh0qiaqm90cjkqsz1x9r2dgq7b";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontbitstream75dpi = (mkDerivation "fontbitstream75dpi" {
@@ -265,6 +289,7 @@ let
       sha256 = "13plbifkvfvdfym6gjbgy9wx2xbdxi9hfrl1k22xayy02135wgxs";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontbitstreamtype1 = (mkDerivation "fontbitstreamtype1" {
@@ -275,6 +300,7 @@ let
       sha256 = "1256z0jhcf5gbh1d03593qdwnag708rxqa032izmfb5dmmlhbsn6";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit mkfontdir mkfontscale ;};
 
   fontcronyxcyrillic = (mkDerivation "fontcronyxcyrillic" {
@@ -285,6 +311,7 @@ let
       sha256 = "0ai1v4n61k8j9x2a1knvfbl2xjxk3xxmqaq3p9vpqrspc69k31kf";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontcursormisc = (mkDerivation "fontcursormisc" {
@@ -295,6 +322,7 @@ let
       sha256 = "0dd6vfiagjc4zmvlskrbjz85jfqhf060cpys8j0y1qpcbsrkwdhp";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontdaewoomisc = (mkDerivation "fontdaewoomisc" {
@@ -305,6 +333,7 @@ let
       sha256 = "1s2bbhizzgbbbn5wqs3vw53n619cclxksljvm759h9p1prqdwrdw";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontdecmisc = (mkDerivation "fontdecmisc" {
@@ -315,6 +344,7 @@ let
       sha256 = "0yzza0l4zwyy7accr1s8ab7fjqkpwggqydbm2vc19scdby5xz7g1";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontibmtype1 = (mkDerivation "fontibmtype1" {
@@ -325,6 +355,7 @@ let
       sha256 = "1pyjll4adch3z5cg663s6vhi02k8m6488f0mrasg81ssvg9jinzx";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit mkfontdir mkfontscale ;};
 
   fontisasmisc = (mkDerivation "fontisasmisc" {
@@ -335,6 +366,7 @@ let
       sha256 = "0rx8q02rkx673a7skkpnvfkg28i8gmqzgf25s9yi0lar915sn92q";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontjismisc = (mkDerivation "fontjismisc" {
@@ -345,6 +377,7 @@ let
       sha256 = "0rdc3xdz12pnv951538q6wilx8mrdndpkphpbblszsv7nc8cw61b";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontmicromisc = (mkDerivation "fontmicromisc" {
@@ -355,6 +388,7 @@ let
       sha256 = "1dldxlh54zq1yzfnrh83j5vm0k4ijprrs5yl18gm3n9j1z0q2cws";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontmisccyrillic = (mkDerivation "fontmisccyrillic" {
@@ -365,6 +399,7 @@ let
       sha256 = "0q2ybxs8wvylvw95j6x9i800rismsmx4b587alwbfqiw6biy63z4";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontmiscethiopic = (mkDerivation "fontmiscethiopic" {
@@ -375,6 +410,7 @@ let
       sha256 = "19cq7iq0pfad0nc2v28n681fdq3fcw1l1hzaq0wpkgpx7bc1zjsk";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit mkfontdir mkfontscale ;};
 
   fontmiscmeltho = (mkDerivation "fontmiscmeltho" {
@@ -385,6 +421,7 @@ let
       sha256 = "148793fqwzrc3bmh2vlw5fdiwjc2n7vs25cic35gfp452czk489p";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit mkfontdir mkfontscale ;};
 
   fontmiscmisc = (mkDerivation "fontmiscmisc" {
@@ -395,6 +432,7 @@ let
       sha256 = "150pq6n8n984fah34n3k133kggn9v0c5k07igv29sxp1wi07krxq";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
   fontmuttmisc = (mkDerivation "fontmuttmisc" {
@@ -405,6 +443,7 @@ let
       sha256 = "13qghgr1zzpv64m0p42195k1kc77pksiv059fdvijz1n6kdplpxx";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontschumachermisc = (mkDerivation "fontschumachermisc" {
@@ -415,6 +454,7 @@ let
       sha256 = "0nkym3n48b4v36y4s927bbkjnsmicajarnf6vlp7wxp0as304i74";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
   fontscreencyrillic = (mkDerivation "fontscreencyrillic" {
@@ -425,6 +465,7 @@ let
       sha256 = "0yayf1qlv7irf58nngddz2f1q04qkpr5jwp4aja2j5gyvzl32hl2";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontsonymisc = (mkDerivation "fontsonymisc" {
@@ -435,6 +476,7 @@ let
       sha256 = "1xfgcx4gsgik5mkgkca31fj3w72jw9iw76qyrajrsz1lp8ka6hr0";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontsproto = (mkDerivation "fontsproto" {
@@ -445,6 +487,7 @@ let
       sha256 = "1f2sdsd74y34nnaf4m1zlcbhyv8xb6irnisc99f84c4ivnq4d415";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   fontsunmisc = (mkDerivation "fontsunmisc" {
@@ -455,6 +498,7 @@ let
       sha256 = "1q6jcqrffg9q5f5raivzwx9ffvf7r11g6g0b125na1bhpz5ly7s8";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontutil = (mkDerivation "fontutil" {
@@ -465,6 +509,7 @@ let
       sha256 = "08drjb6cf84pf5ysghjpb4i7xkd2p86k3wl2a0jxs1jif6qbszma";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   fontwinitzkicyrillic = (mkDerivation "fontwinitzkicyrillic" {
@@ -475,6 +520,7 @@ let
       sha256 = "181n1bgq8vxfxqicmy1jpm1hnr6gwn1kdhl6hr4frjigs1ikpldb";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontxfree86type1 = (mkDerivation "fontxfree86type1" {
@@ -485,6 +531,7 @@ let
       sha256 = "0jp3zc0qfdaqfkgzrb44vi9vi0a8ygb35wp082yz7rvvxhmg9sya";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit mkfontdir mkfontscale ;};
 
   gccmakedep = (mkDerivation "gccmakedep" {
@@ -495,6 +542,7 @@ let
       sha256 = "1r1fpy5ni8chbgx7j5sz0008fpb6vbazpy1nifgdhgijyzqxqxdj";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   glamoregl = (mkDerivation "glamoregl" {
@@ -505,6 +553,7 @@ let
       sha256 = "1jg5clihklb9drh1jd7nhhdsszla6nv7xmbvm8yvakh5wrb1nlv6";
     };
     buildInputs = [pkgconfig dri2proto xorgserver ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit dri2proto xorgserver ;};
 
   glproto = (mkDerivation "glproto" {
@@ -515,6 +564,7 @@ let
       sha256 = "0h5ykmcddwid5qj6sbrszgkcypwn3mslvswxpgy2n2iixnyr9amd";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   iceauth = (mkDerivation "iceauth" {
@@ -525,6 +575,7 @@ let
       sha256 = "02izdyzhwpgiyjd8brzilwvwnfr72ncjb6mzz3y1icwrxqnsy5hj";
     };
     buildInputs = [pkgconfig libICE xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libICE xproto ;};
 
   imake = (mkDerivation "imake" {
@@ -535,6 +586,7 @@ let
       sha256 = "0zpk8p044jh14bis838shbf4100bjg7mccd7bq54glpsq552q339";
     };
     buildInputs = [pkgconfig xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit xproto ;};
 
   inputproto = (mkDerivation "inputproto" {
@@ -545,6 +597,7 @@ let
       sha256 = "1lf1jlxp0fc8h6fjdffhd084dqab94966l1zm3rwwsis0mifwiss";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   kbproto = (mkDerivation "kbproto" {
@@ -555,6 +608,7 @@ let
       sha256 = "0mxqj1pzhjpz9495vrjnpi10kv2n1s4vs7di0sh3yvipfq5j30pq";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   libAppleWM = (mkDerivation "libAppleWM" {
@@ -565,6 +619,7 @@ let
       sha256 = "0r8x28n45q89x91mz8mv0zkkcxi8wazkac886fyvflhiv2y8ap2y";
     };
     buildInputs = [pkgconfig applewmproto libX11 libXext xextproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit applewmproto libX11 libXext xextproto ;};
 
   libFS = (mkDerivation "libFS" {
@@ -575,6 +630,7 @@ let
       sha256 = "1wy4km3qwwajbyl8y9pka0zwizn7d9pfiyjgzba02x3a083lr79f";
     };
     buildInputs = [pkgconfig fontsproto xproto xtrans ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto xproto xtrans ;};
 
   libICE = (mkDerivation "libICE" {
@@ -585,6 +641,7 @@ let
       sha256 = "00p2b6bsg6kcdbb39bv46339qcywxfl4hsrz8asm4hy6q7r34w4g";
     };
     buildInputs = [pkgconfig xproto xtrans ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit xproto xtrans ;};
 
   libSM = (mkDerivation "libSM" {
@@ -595,6 +652,7 @@ let
       sha256 = "1gc7wavgs435g9qkp9jw4lhmaiq6ip9llv49f054ad6ryp4sib0b";
     };
     buildInputs = [pkgconfig libICE libuuid xproto xtrans ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libICE libuuid xproto xtrans ;};
 
   libWindowsWM = (mkDerivation "libWindowsWM" {
@@ -605,6 +663,7 @@ let
       sha256 = "1p0flwb67xawyv6yhri9w17m1i4lji5qnd0gq8v1vsfb8zw7rw15";
     };
     buildInputs = [pkgconfig windowswmproto libX11 libXext xextproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit windowswmproto libX11 libXext xextproto ;};
 
   libX11 = (mkDerivation "libX11" {
@@ -615,6 +674,7 @@ let
       sha256 = "04c1vj53xq2xgyxx5vhln3wm2d76hh1n95fvs3myhligkz1sfcfg";
     };
     buildInputs = [pkgconfig inputproto kbproto libxcb xextproto xf86bigfontproto xproto xtrans ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit inputproto kbproto libxcb xextproto xf86bigfontproto xproto xtrans ;};
 
   libXScrnSaver = (mkDerivation "libXScrnSaver" {
@@ -625,6 +685,7 @@ let
       sha256 = "07ff4r20nkkrj7h08f9fwamds9b3imj8jz5iz6y38zqw6jkyzwcg";
     };
     buildInputs = [pkgconfig scrnsaverproto libX11 libXext xextproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit scrnsaverproto libX11 libXext xextproto ;};
 
   libXau = (mkDerivation "libXau" {
@@ -635,6 +696,7 @@ let
       sha256 = "1wm4pv12f36cwzhldpp7vy3lhm3xdcnp4f184xkxsp7b18r7gm7x";
     };
     buildInputs = [pkgconfig xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit xproto ;};
 
   libXaw = (mkDerivation "libXaw" {
@@ -645,6 +707,7 @@ let
       sha256 = "1kdhxplwrn43d9jp3v54llp05kwx210lrsdvqb6944jp29rhdy4f";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto libXmu libXpm xproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXext xextproto libXmu libXpm xproto libXt ;};
 
   libXcomposite = (mkDerivation "libXcomposite" {
@@ -655,6 +718,7 @@ let
       sha256 = "0y21nfpa5s8qmx0srdlilyndas3sgl0c6rc26d5fx2vx436m1qpd";
     };
     buildInputs = [pkgconfig compositeproto libX11 libXfixes xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit compositeproto libX11 libXfixes xproto ;};
 
   libXcursor = (mkDerivation "libXcursor" {
@@ -665,6 +729,7 @@ let
       sha256 = "1prkdicl5y5yx32h1azh6gjfbijvjp415javv8dsakd13jrarilv";
     };
     buildInputs = [pkgconfig fixesproto libX11 libXfixes xproto libXrender ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fixesproto libX11 libXfixes xproto libXrender ;};
 
   libXdamage = (mkDerivation "libXdamage" {
@@ -675,6 +740,7 @@ let
       sha256 = "1bamagq7g6s0d23l8rb3nppj8ifqj05f7z9bhbs4fdg8az3ffgvw";
     };
     buildInputs = [pkgconfig damageproto fixesproto libX11 xextproto libXfixes xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit damageproto fixesproto libX11 xextproto libXfixes xproto ;};
 
   libXdmcp = (mkDerivation "libXdmcp" {
@@ -685,6 +751,7 @@ let
       sha256 = "1qp4yhxbfnpj34swa0fj635kkihdkwaiw7kf55cg5zqqg630kzl1";
     };
     buildInputs = [pkgconfig xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit xproto ;};
 
   libXext = (mkDerivation "libXext" {
@@ -695,6 +762,7 @@ let
       sha256 = "0dbfn5bznnrhqzvkrcmw4c44yvvpwdcsrvzxf4rk27r36b9x865m";
     };
     buildInputs = [pkgconfig libX11 xextproto xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 xextproto xproto ;};
 
   libXfixes = (mkDerivation "libXfixes" {
@@ -705,6 +773,7 @@ let
       sha256 = "0rs7qgzr6dpr62db7sd91c1b47hzhzfr010qwnpcm8sg122w1gk3";
     };
     buildInputs = [pkgconfig fixesproto libX11 xextproto xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fixesproto libX11 xextproto xproto ;};
 
   libXfont = (mkDerivation "libXfont" {
@@ -713,6 +782,17 @@ let
     src = fetchurl {
       url = mirror://xorg/individual/lib/libXfont-1.5.1.tar.bz2;
       sha256 = "1630v3sfvwwlimb2ja10c84ql6v1mw9bdfhvan7pbybkgi99h25p";
+    };
+    buildInputs = [pkgconfig libfontenc fontsproto freetype xproto xtrans zlib ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit libfontenc fontsproto freetype xproto xtrans zlib ;};
+
+  libXfont2 = (mkDerivation "libXfont2" {
+    name = "libXfont2-2.0.1";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/lib/libXfont2-2.0.1.tar.bz2;
+      sha256 = "0znvwk36nhmyqpmhbm9mzisgixp1mp5qkfald8x1n5yxbm3vpyz9";
     };
     buildInputs = [pkgconfig libfontenc fontsproto freetype xproto xtrans zlib ];
   }) // {inherit libfontenc fontsproto freetype xproto xtrans zlib ;};
@@ -725,16 +805,18 @@ let
       sha256 = "0k6wzi5rzs0d0n338ms8n8lfyhq914hw4yl2j7553wqxfqjci8zm";
     };
     buildInputs = [pkgconfig fontconfig freetype libX11 xproto libXrender ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontconfig freetype libX11 xproto libXrender ;};
 
   libXi = (mkDerivation "libXi" {
-    name = "libXi-1.7.5";
+    name = "libXi-1.7.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXi-1.7.5.tar.bz2;
-      sha256 = "0ad21jy40d8b2f9ldadx7lkspmvka1i9r5jqqfwxdxyqnpgdfr6r";
+      url = mirror://xorg/individual/lib/libXi-1.7.6.tar.bz2;
+      sha256 = "1b5p0l19ynmd6blnqr205wyngh6fagl35nqb4v05dw60rr9aachz";
     };
     buildInputs = [pkgconfig inputproto libX11 libXext xextproto libXfixes xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit inputproto libX11 libXext xextproto libXfixes xproto ;};
 
   libXinerama = (mkDerivation "libXinerama" {
@@ -745,6 +827,7 @@ let
       sha256 = "1qlqfvzw45gdzk9xirgwlp2qgj0hbsyiqj8yh8zml2bk2ygnjibs";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xineramaproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXext xextproto xineramaproto ;};
 
   libXmu = (mkDerivation "libXmu" {
@@ -755,6 +838,7 @@ let
       sha256 = "02wx6jw7i0q5qwx87yf94fsn3h0xpz1k7dz1nkwfwm1j71ydqvkm";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXext xextproto xproto libXt ;};
 
   libXp = (mkDerivation "libXp" {
@@ -765,6 +849,7 @@ let
       sha256 = "0mwc2jwmq03b1m9ihax5c6gw2ln8rc70zz4fsj3kb7440nchqdkz";
     };
     buildInputs = [pkgconfig printproto libX11 libXau libXext xextproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit printproto libX11 libXau libXext xextproto ;};
 
   libXpm = (mkDerivation "libXpm" {
@@ -775,6 +860,7 @@ let
       sha256 = "07041q4k8m4nirzl7lrqn8by2zylx0xvh6n0za301qqs3njszgf5";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXext xextproto xproto libXt ;};
 
   libXpresent = (mkDerivation "libXpresent" {
@@ -785,6 +871,7 @@ let
       sha256 = "12kvvar3ihf6sw49h6ywfdiwmb8i1gh8wasg1zhzp6hs2hay06n1";
     };
     buildInputs = [pkgconfig presentproto libX11 xextproto xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit presentproto libX11 xextproto xproto ;};
 
   libXrandr = (mkDerivation "libXrandr" {
@@ -795,6 +882,7 @@ let
       sha256 = "0n6ycs1arf4wb1cal9il6v7vbxbf21qhs9sbfl8xndgwnxclk1kg";
     };
     buildInputs = [pkgconfig randrproto renderproto libX11 libXext xextproto xproto libXrender ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit randrproto renderproto libX11 libXext xextproto xproto libXrender ;};
 
   libXrender = (mkDerivation "libXrender" {
@@ -805,6 +893,7 @@ let
       sha256 = "06myx7044qqdswxndsmd82fpp670klnizkgzdm194h51h1wyabzw";
     };
     buildInputs = [pkgconfig renderproto libX11 xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit renderproto libX11 xproto ;};
 
   libXres = (mkDerivation "libXres" {
@@ -815,6 +904,7 @@ let
       sha256 = "1rd0bzn67cpb2qkc946gch2183r4bdjfhs6cpqbipy47m9a91296";
     };
     buildInputs = [pkgconfig resourceproto libX11 libXext xextproto xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit resourceproto libX11 libXext xextproto xproto ;};
 
   libXt = (mkDerivation "libXt" {
@@ -825,6 +915,7 @@ let
       sha256 = "06lz6i7rbrp19kgikpaz4c97fw7n31k2h2aiikczs482g2zbdvj6";
     };
     buildInputs = [pkgconfig libICE kbproto libSM libX11 xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libICE kbproto libSM libX11 xproto ;};
 
   libXtst = (mkDerivation "libXtst" {
@@ -835,6 +926,7 @@ let
       sha256 = "1ngn161nq679ffmbwl81i2hn75jjg5b3ffv6n4jilpvyazypy2pg";
     };
     buildInputs = [pkgconfig inputproto recordproto libX11 libXext xextproto libXi ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit inputproto recordproto libX11 libXext xextproto libXi ;};
 
   libXv = (mkDerivation "libXv" {
@@ -845,6 +937,7 @@ let
       sha256 = "09a5j6bisysiipd0nw6s352565bp0n6gbyhv5hp63s3cd3w95zjm";
     };
     buildInputs = [pkgconfig videoproto libX11 libXext xextproto xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit videoproto libX11 libXext xextproto xproto ;};
 
   libXvMC = (mkDerivation "libXvMC" {
@@ -855,6 +948,7 @@ let
       sha256 = "0mjp1b21dvkaz7r0iq085r92nh5vkpmx99awfgqq9hgzyvgxf0q7";
     };
     buildInputs = [pkgconfig videoproto libX11 libXext xextproto xproto libXv ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit videoproto libX11 libXext xextproto xproto libXv ;};
 
   libXxf86dga = (mkDerivation "libXxf86dga" {
@@ -865,6 +959,7 @@ let
       sha256 = "0zn7aqj8x0951d8zb2h2andldvwkzbsc4cs7q023g6nzq6vd9v4f";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xf86dgaproto xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXext xextproto xf86dgaproto xproto ;};
 
   libXxf86misc = (mkDerivation "libXxf86misc" {
@@ -875,6 +970,7 @@ let
       sha256 = "0nvbq9y6k6m9hxdvg3crycqsnnxf1859wrisqcs37z9fhq044gsn";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xf86miscproto xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXext xextproto xf86miscproto xproto ;};
 
   libXxf86vm = (mkDerivation "libXxf86vm" {
@@ -885,6 +981,7 @@ let
       sha256 = "0mydhlyn72i7brjwypsqrpkls3nm6vxw0li8b2nw0caz7kwjgvmg";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xf86vidmodeproto xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXext xextproto xf86vidmodeproto xproto ;};
 
   libdmx = (mkDerivation "libdmx" {
@@ -895,6 +992,7 @@ let
       sha256 = "00djlxas38kbsrglcmwmxfbmxjdchlbj95pqwjvdg8jn5rns6zf9";
     };
     buildInputs = [pkgconfig dmxproto libX11 libXext xextproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit dmxproto libX11 libXext xextproto ;};
 
   libfontenc = (mkDerivation "libfontenc" {
@@ -905,6 +1003,7 @@ let
       sha256 = "08gxmrhgw97mv0pvkfmd46zzxrn6zdw4g27073zl55gwwqq8jn3h";
     };
     buildInputs = [pkgconfig xproto zlib ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit xproto zlib ;};
 
   libpciaccess = (mkDerivation "libpciaccess" {
@@ -915,6 +1014,7 @@ let
       sha256 = "1krgryi9ngjr66242v0v5mczihgv0y7rrvx0563arr318mjn9y07";
     };
     buildInputs = [pkgconfig zlib ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit zlib ;};
 
   libpthreadstubs = (mkDerivation "libpthreadstubs" {
@@ -925,6 +1025,7 @@ let
       sha256 = "16bjv3in19l84hbri41iayvvg4ls9gv1ma0x0qlbmwy67i7dbdim";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   libxcb = (mkDerivation "libxcb" {
@@ -935,6 +1036,7 @@ let
       sha256 = "0c4xyvdyx5adh8dzyhnrmvwwz24gri4z1czxmxqm63i0gmngs85p";
     };
     buildInputs = [pkgconfig libxslt libpthreadstubs python libXau xcbproto libXdmcp ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libxslt libpthreadstubs python libXau xcbproto libXdmcp ;};
 
   libxkbfile = (mkDerivation "libxkbfile" {
@@ -945,6 +1047,7 @@ let
       sha256 = "0smimr14zvail7ar68n7spvpblpdnih3jxrva7cpa6cn602px0ai";
     };
     buildInputs = [pkgconfig kbproto libX11 ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit kbproto libX11 ;};
 
   libxshmfence = (mkDerivation "libxshmfence" {
@@ -955,6 +1058,7 @@ let
       sha256 = "032b0nlkdrpbimdld4gqvhqx53rzn8fawvf1ybhzn7lcswgjs6yj";
     };
     buildInputs = [pkgconfig xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit xproto ;};
 
   lndir = (mkDerivation "lndir" {
@@ -965,6 +1069,7 @@ let
       sha256 = "0pdngiy8zdhsiqx2am75yfcl36l7kd7d7nl0rss8shcdvsqgmx29";
     };
     buildInputs = [pkgconfig xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit xproto ;};
 
   luit = (mkDerivation "luit" {
@@ -975,6 +1080,7 @@ let
       sha256 = "0dn694mk56x6hdk6y9ylx4f128h5jcin278gnw2gb807rf3ygc1h";
     };
     buildInputs = [pkgconfig libfontenc ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libfontenc ;};
 
   makedepend = (mkDerivation "makedepend" {
@@ -985,6 +1091,7 @@ let
       sha256 = "09alw99r6y2bbd1dc786n3jfgv4j520apblyn7cw6jkjydshba7p";
     };
     buildInputs = [pkgconfig xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit xproto ;};
 
   mkfontdir = (mkDerivation "mkfontdir" {
@@ -995,6 +1102,7 @@ let
       sha256 = "0c3563kw9fg15dpgx4dwvl12qz6sdqdns1pxa574hc7i5m42mman";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   mkfontscale = (mkDerivation "mkfontscale" {
@@ -1005,6 +1113,7 @@ let
       sha256 = "081z8lwh9c1gyrx3ad12whnpv3jpfbqsc366mswpfm48mwl54vcc";
     };
     buildInputs = [pkgconfig libfontenc freetype xproto zlib ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libfontenc freetype xproto zlib ;};
 
   presentproto = (mkDerivation "presentproto" {
@@ -1015,6 +1124,7 @@ let
       sha256 = "1kir51aqg9cwazs14ivcldcn3mzadqgykc9cg87rm40zf947sb41";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   printproto = (mkDerivation "printproto" {
@@ -1025,6 +1135,7 @@ let
       sha256 = "06liap8n4s25sgp27d371cc7yg9a08dxcr3pmdjp761vyin3360j";
     };
     buildInputs = [pkgconfig libXau ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libXau ;};
 
   randrproto = (mkDerivation "randrproto" {
@@ -1035,6 +1146,7 @@ let
       sha256 = "0s4496z61y5q45q20gldwpf788b9nsa8hb13gnck1mwwwwrmarsc";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   recordproto = (mkDerivation "recordproto" {
@@ -1045,6 +1157,7 @@ let
       sha256 = "0w3kgr1zabwf79bpc28dcnj0fpni6r53rpi82ngjbalj5s6m8xx7";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   renderproto = (mkDerivation "renderproto" {
@@ -1055,6 +1168,7 @@ let
       sha256 = "0dr5xw6s0qmqg0q5pdkb4jkdhaja0vbfqla79qh5j1xjj9dmlwq6";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   resourceproto = (mkDerivation "resourceproto" {
@@ -1065,6 +1179,7 @@ let
       sha256 = "0638iyfiiyjw1hg3139pai0j6m65gkskrvd9684zgc6ydcx00riw";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   scrnsaverproto = (mkDerivation "scrnsaverproto" {
@@ -1075,6 +1190,7 @@ let
       sha256 = "0rfdbfwd35d761xkfifcscx56q0n56043ixlmv70r4v4l66hmdwb";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   sessreg = (mkDerivation "sessreg" {
@@ -1085,6 +1201,7 @@ let
       sha256 = "0z013rskwmdadd8cdlxvh4asmgim61qijyzfbqmr1q1mg1jpf4am";
     };
     buildInputs = [pkgconfig xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit xproto ;};
 
   setxkbmap = (mkDerivation "setxkbmap" {
@@ -1095,6 +1212,7 @@ let
       sha256 = "1qfk097vjysqb72pq89h0la3462kbb2dh1d11qzs2fr67ybb7pd9";
     };
     buildInputs = [pkgconfig libX11 libxkbfile ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libxkbfile ;};
 
   smproxy = (mkDerivation "smproxy" {
@@ -1105,6 +1223,7 @@ let
       sha256 = "0rkjyzmsdqmlrkx8gy2j4q6iksk58hcc92xzdprkf8kml9ar3wbc";
     };
     buildInputs = [pkgconfig libICE libSM libXmu libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libICE libSM libXmu libXt ;};
 
   twm = (mkDerivation "twm" {
@@ -1115,6 +1234,7 @@ let
       sha256 = "02iicvhkp3i7q5rliyymiq9bppjr0pzfs6rgb78kppryqdx1cxf5";
     };
     buildInputs = [pkgconfig libICE libSM libX11 libXext libXmu xproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libICE libSM libX11 libXext libXmu xproto libXt ;};
 
   utilmacros = (mkDerivation "utilmacros" {
@@ -1125,6 +1245,7 @@ let
       sha256 = "1fnhpryf55l0yqajxn0cxan3kvsjzi67nlanz8clwqzf54cb2d98";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   videoproto = (mkDerivation "videoproto" {
@@ -1135,6 +1256,7 @@ let
       sha256 = "1dnlkd9nb0m135lgd6hd61vc29sdyarsyya8aqpx7z10p261dbld";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   windowswmproto = (mkDerivation "windowswmproto" {
@@ -1145,6 +1267,7 @@ let
       sha256 = "0syjxgy4m8l94qrm03nvn5k6bkxc8knnlld1gbllym97nvnv0ny0";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   x11perf = (mkDerivation "x11perf" {
@@ -1155,6 +1278,7 @@ let
       sha256 = "0lb716yfdb8f11h4cz93d1bapqdxf1xplsb21kbp4xclq7g9hw78";
     };
     buildInputs = [pkgconfig libX11 libXext libXft libXmu xproto libXrender ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXext libXft libXmu xproto libXrender ;};
 
   xauth = (mkDerivation "xauth" {
@@ -1165,6 +1289,7 @@ let
       sha256 = "13y2invb0894b1in03jbglximbz6v31y2kr4yjjgica8xciibkjn";
     };
     buildInputs = [pkgconfig libX11 libXau libXext libXmu xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXau libXext libXmu xproto ;};
 
   xbacklight = (mkDerivation "xbacklight" {
@@ -1175,6 +1300,7 @@ let
       sha256 = "0arnd1j8vzhzmw72mqhjjcb2qwcbs9qphsy3ps593ajyld8wzxhp";
     };
     buildInputs = [pkgconfig libxcb xcbutil ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libxcb xcbutil ;};
 
   xbitmaps = (mkDerivation "xbitmaps" {
@@ -1185,6 +1311,7 @@ let
       sha256 = "178ym90kwidia6nas4qr5n5yqh698vv8r02js0r4vg3b6lsb0w9n";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   xcbproto = (mkDerivation "xcbproto" {
@@ -1195,6 +1322,7 @@ let
       sha256 = "0bp3f53l9fy5x3mn1rkj1g81aiyzl90wacwvqdgy831aa3kfxb5l";
     };
     buildInputs = [pkgconfig python ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit python ;};
 
   xcbutil = (mkDerivation "xcbutil" {
@@ -1205,6 +1333,7 @@ let
       sha256 = "1sahmrgbpyki4bb72hxym0zvxwnycmswsxiisgqlln9vrdlr9r26";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit gperf m4 libxcb xproto ;};
 
   xcbutilcursor = (mkDerivation "xcbutilcursor" {
@@ -1215,6 +1344,7 @@ let
       sha256 = "0fpv46zb7kz04qxwvpax4cpd2kd8yhsm2n0if1isniqdh5xkcrgd";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xcbutilimage xcbutilrenderutil xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit gperf m4 libxcb xcbutilimage xcbutilrenderutil xproto ;};
 
   xcbutilerrors = (mkDerivation "xcbutilerrors" {
@@ -1225,6 +1355,7 @@ let
       sha256 = "158rm913dg3hxrrhyvvxr8bcm0pjy5jws70dhy2s12w1krv829k8";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xcbproto xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit gperf m4 libxcb xcbproto xproto ;};
 
   xcbutilimage = (mkDerivation "xcbutilimage" {
@@ -1235,6 +1366,7 @@ let
       sha256 = "1z1gxacg7q4cw6jrd26gvi5y04npsyavblcdad1xccc8swvnmf9d";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xcbutil xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit gperf m4 libxcb xcbutil xproto ;};
 
   xcbutilkeysyms = (mkDerivation "xcbutilkeysyms" {
@@ -1245,6 +1377,7 @@ let
       sha256 = "1nbd45pzc1wm6v5drr5338j4nicbgxa5hcakvsvm5pnyy47lky0f";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit gperf m4 libxcb xproto ;};
 
   xcbutilrenderutil = (mkDerivation "xcbutilrenderutil" {
@@ -1255,6 +1388,7 @@ let
       sha256 = "0nza1csdvvxbmk8vgv8vpmq7q8h05xrw3cfx9lwxd1hjzd47xsf6";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit gperf m4 libxcb xproto ;};
 
   xcbutilwm = (mkDerivation "xcbutilwm" {
@@ -1265,6 +1399,7 @@ let
       sha256 = "0gra7hfyxajic4mjd63cpqvd20si53j1q3rbdlkqkahfciwq3gr8";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit gperf m4 libxcb xproto ;};
 
   xclock = (mkDerivation "xclock" {
@@ -1275,6 +1410,7 @@ let
       sha256 = "1l3xv4bsca6bwxx73jyjz0blav86i7vwffkhdb1ac81y9slyrki3";
     };
     buildInputs = [pkgconfig libX11 libXaw libXft libxkbfile libXmu xproto libXrender libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXaw libXft libxkbfile libXmu xproto libXrender libXt ;};
 
   xcmiscproto = (mkDerivation "xcmiscproto" {
@@ -1285,6 +1421,7 @@ let
       sha256 = "1pyjv45wivnwap2wvsbrzdvjc5ql8bakkbkrvcv6q9bjjf33ccmi";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   xcmsdb = (mkDerivation "xcmsdb" {
@@ -1295,6 +1432,7 @@ let
       sha256 = "1ik7gzlp2igz183x70883000ygp99r20x3aah6xhaslbpdhm6n75";
     };
     buildInputs = [pkgconfig libX11 ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 ;};
 
   xcompmgr = (mkDerivation "xcompmgr" {
@@ -1305,6 +1443,7 @@ let
       sha256 = "14k89mz13jxgp4h2pz0yq0fbkw1lsfcb3acv8vkknc9i4ld9n168";
     };
     buildInputs = [pkgconfig libXcomposite libXdamage libXext libXfixes libXrender ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libXcomposite libXdamage libXext libXfixes libXrender ;};
 
   xcursorgen = (mkDerivation "xcursorgen" {
@@ -1315,6 +1454,7 @@ let
       sha256 = "0v7nncj3kaa8c0524j7ricdf4rvld5i7c3m6fj55l5zbah7r3j1i";
     };
     buildInputs = [pkgconfig libpng libX11 libXcursor ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libpng libX11 libXcursor ;};
 
   xcursorthemes = (mkDerivation "xcursorthemes" {
@@ -1325,6 +1465,7 @@ let
       sha256 = "11mv661nj1p22sqkv87ryj2lcx4m68a04b0rs6iqh3fzp42jrzg3";
     };
     buildInputs = [pkgconfig libXcursor ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libXcursor ;};
 
   xdm = (mkDerivation "xdm" {
@@ -1335,6 +1476,7 @@ let
       sha256 = "0iqw11977lpr9nk1is4fca84d531vck0mq7jldwl44m0vrnl5nnl";
     };
     buildInputs = [pkgconfig libX11 libXau libXaw libXdmcp libXext libXft libXinerama libXmu libXpm libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXau libXaw libXdmcp libXext libXft libXinerama libXmu libXpm libXt ;};
 
   xdpyinfo = (mkDerivation "xdpyinfo" {
@@ -1345,6 +1487,7 @@ let
       sha256 = "0ldgrj4w2fa8jng4b3f3biaj0wyn8zvya88pnk70d7k12pcqw8rh";
     };
     buildInputs = [pkgconfig libdmx libX11 libxcb libXcomposite libXext libXi libXinerama xproto libXrender libXtst libXxf86dga libXxf86misc libXxf86vm ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libdmx libX11 libxcb libXcomposite libXext libXi libXinerama xproto libXrender libXtst libXxf86dga libXxf86misc libXxf86vm ;};
 
   xdriinfo = (mkDerivation "xdriinfo" {
@@ -1355,6 +1498,7 @@ let
       sha256 = "0681d0y8liqakkpz7mmsf689jcxrvs5291r20qi78mc9xxk3gfjc";
     };
     buildInputs = [pkgconfig glproto libX11 ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit glproto libX11 ;};
 
   xev = (mkDerivation "xev" {
@@ -1365,6 +1509,7 @@ let
       sha256 = "0krivhrxpq6719103r541xpi3i3a0y15f7ypc4lnrx8sdhmfcjnr";
     };
     buildInputs = [pkgconfig libX11 xproto libXrandr ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 xproto libXrandr ;};
 
   xextproto = (mkDerivation "xextproto" {
@@ -1375,6 +1520,7 @@ let
       sha256 = "1c2vma9gqgc2v06rfxdiqgwhxmzk2cbmknwf1ng3m76vr0xb5x7k";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   xeyes = (mkDerivation "xeyes" {
@@ -1385,6 +1531,7 @@ let
       sha256 = "08d5x2kar5kg4yammw6hhk10iva6jmh8cqq176a1z7nm1il9hplp";
     };
     buildInputs = [pkgconfig libX11 libXext libXmu libXrender libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXext libXmu libXrender libXt ;};
 
   xf86bigfontproto = (mkDerivation "xf86bigfontproto" {
@@ -1395,6 +1542,7 @@ let
       sha256 = "0j0n7sj5xfjpmmgx6n5x556rw21hdd18fwmavp95wps7qki214ms";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   xf86dgaproto = (mkDerivation "xf86dgaproto" {
@@ -1405,6 +1553,7 @@ let
       sha256 = "0l4hx48207mx0hp09026r6gy9nl3asbq0c75hri19wp1118zcpmc";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   xf86driproto = (mkDerivation "xf86driproto" {
@@ -1415,16 +1564,18 @@ let
       sha256 = "07v69m0g2dfzb653jni4x656jlr7l84c1k39j8qc8vfb45r8sjww";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   xf86inputevdev = (mkDerivation "xf86inputevdev" {
-    name = "xf86-input-evdev-2.9.2";
+    name = "xf86-input-evdev-2.10.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-evdev-2.9.2.tar.bz2;
-      sha256 = "1v7gmjc1ilyhln80i87rivgls3ajlm8lnkm9rn695img66sjj8vr";
+      url = mirror://xorg/individual/driver/xf86-input-evdev-2.10.1.tar.bz2;
+      sha256 = "05z05n39v8s2b0hwhcjb1bca7j8gc62bv9jxnibawwmjym3jp75g";
     };
     buildInputs = [pkgconfig inputproto udev xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit inputproto udev xorgserver xproto ;};
 
   xf86inputjoystick = (mkDerivation "xf86inputjoystick" {
@@ -1435,6 +1586,7 @@ let
       sha256 = "038mfqairyyqvz02rk7v3i070sab1wr0k6fkxvyvxdgkfbnqcfzf";
     };
     buildInputs = [pkgconfig inputproto kbproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit inputproto kbproto xorgserver xproto ;};
 
   xf86inputkeyboard = (mkDerivation "xf86inputkeyboard" {
@@ -1445,16 +1597,18 @@ let
       sha256 = "04d27kwqq03fc26an6051hs3i0bff8albhnngzyd59wxpwwzzj0s";
     };
     buildInputs = [pkgconfig inputproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit inputproto xorgserver xproto ;};
 
   xf86inputlibinput = (mkDerivation "xf86inputlibinput" {
-    name = "xf86-input-libinput-0.14.0";
+    name = "xf86-input-libinput-0.16.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-libinput-0.14.0.tar.bz2;
-      sha256 = "0r92fkpbnydhjgni35zqpkl8fm225rivn8qqkw6ymranlnc5gl78";
+      url = mirror://xorg/individual/driver/xf86-input-libinput-0.16.0.tar.bz2;
+      sha256 = "0jbgnxsbr3g4g9vkspcc6pqy7av59zx5bb78vkvaqy8yx4qybbgx";
     };
     buildInputs = [pkgconfig inputproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit inputproto xorgserver xproto ;};
 
   xf86inputmouse = (mkDerivation "xf86inputmouse" {
@@ -1465,16 +1619,18 @@ let
       sha256 = "1kn5kx3qyn9qqvd6s24a2l1wfgck2pgfvzl90xpl024wfxsx719l";
     };
     buildInputs = [pkgconfig inputproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit inputproto xorgserver xproto ;};
 
   xf86inputsynaptics = (mkDerivation "xf86inputsynaptics" {
-    name = "xf86-input-synaptics-1.8.2";
+    name = "xf86-input-synaptics-1.8.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-synaptics-1.8.2.tar.bz2;
-      sha256 = "104cd67dqalp1a73jmi61kdpxwsr61w5x5cmqvh819h2pm71c3kv";
+      url = mirror://xorg/individual/driver/xf86-input-synaptics-1.8.3.tar.bz2;
+      sha256 = "009zx199pilcvlaqm6fx4mg94q81d6vvl5rznmw3frzkfh6117yk";
     };
     buildInputs = [pkgconfig inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ;};
 
   xf86inputvmmouse = (mkDerivation "xf86inputvmmouse" {
@@ -1485,6 +1641,7 @@ let
       sha256 = "06ckn4hlkpig5vnivl0zj8a7ykcgvrsj8b3iccl1pgn1gaamix8a";
     };
     buildInputs = [pkgconfig inputproto udev randrproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit inputproto udev randrproto xorgserver xproto ;};
 
   xf86inputvoid = (mkDerivation "xf86inputvoid" {
@@ -1495,6 +1652,7 @@ let
       sha256 = "171k8b8s42s3w73l7ln9jqwk88w4l7r1km2blx1vy898c854yvpr";
     };
     buildInputs = [pkgconfig xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit xorgserver xproto ;};
 
   xf86miscproto = (mkDerivation "xf86miscproto" {
@@ -1505,6 +1663,7 @@ let
       sha256 = "15dhcdpv61fyj6rhzrhnwri9hlw8rjfy05z1vik118lc99mfrf25";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   xf86videoark = (mkDerivation "xf86videoark" {
@@ -1515,6 +1674,7 @@ let
       sha256 = "07p5vdsj2ckxb6wh02s61akcv4qfg6s1d5ld3jn3lfaayd3f1466";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess xextproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libpciaccess xextproto xorgserver xproto ;};
 
   xf86videoast = (mkDerivation "xf86videoast" {
@@ -1525,16 +1685,18 @@ let
       sha256 = "1pm2cy81ma7ldsw0yfk28b33h9z2hcj5rccrxhfxfgvxsiavrnqy";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videoati = (mkDerivation "xf86videoati" {
-    name = "xf86-video-ati-7.5.0";
+    name = "xf86-video-ati-7.6.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-ati-7.5.0.tar.bz2;
-      sha256 = "0dkrw036ikym8aacl43lnf04q0wbms5498xg5b3l16ngnq36ygpc";
+      url = mirror://xorg/individual/driver/xf86-video-ati-7.6.1.tar.bz2;
+      sha256 = "0k6kw69mcarlmxlb4jlhz887jxqr94qx2pin04xcv2ysp3pdj5i5";
     };
     buildInputs = [pkgconfig fontsproto glamoregl libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto glamoregl libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videochips = (mkDerivation "xf86videochips" {
@@ -1545,6 +1707,7 @@ let
       sha256 = "073bcdsvvsg19mb963sa5v7x2zs19y0q6javmgpiwfaqkz7zbblr";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videocirrus = (mkDerivation "xf86videocirrus" {
@@ -1555,6 +1718,7 @@ let
       sha256 = "1asifc6ld2g9kap15vfhvsvyl69lj7pw3d9ra9mi4najllh7pj7d";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videodummy = (mkDerivation "xf86videodummy" {
@@ -1565,6 +1729,7 @@ let
       sha256 = "1046p64xap69vlsmsz5rjv0djc970yhvq44fmllmas0mqp5lzy2n";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xf86dgaproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto randrproto renderproto videoproto xf86dgaproto xorgserver xproto ;};
 
   xf86videofbdev = (mkDerivation "xf86videofbdev" {
@@ -1575,6 +1740,7 @@ let
       sha256 = "06ym7yy017lanj730hfkpfk4znx3dsj8jq3qvyzsn8w294kb7m4x";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xorgserver xproto ;};
 
   xf86videogeode = (mkDerivation "xf86videogeode" {
@@ -1585,6 +1751,7 @@ let
       sha256 = "0h9w6cfj7s86rg72c6qci8f733hg4g7paan5fwmmj7p74ckd9d07";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videoglide = (mkDerivation "xf86videoglide" {
@@ -1595,6 +1762,7 @@ let
       sha256 = "1vaav6kx4n00q4fawgqnjmbdkppl0dir2dkrj4ad372mxrvl9c4y";
     };
     buildInputs = [pkgconfig xextproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit xextproto xorgserver xproto ;};
 
   xf86videoglint = (mkDerivation "xf86videoglint" {
@@ -1605,6 +1773,7 @@ let
       sha256 = "08a2aark2yn9irws9c78d9q44dichr03i9zbk61jgr54ncxqhzv5";
     };
     buildInputs = [pkgconfig libpciaccess videoproto xextproto xf86dgaproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libpciaccess videoproto xextproto xf86dgaproto xorgserver xproto ;};
 
   xf86videoi128 = (mkDerivation "xf86videoi128" {
@@ -1615,6 +1784,7 @@ let
       sha256 = "171b8lbxr56w3isph947dnw7x87hc46v6m3mcxdcz44gk167x0pq";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videoi740 = (mkDerivation "xf86videoi740" {
@@ -1625,16 +1795,18 @@ let
       sha256 = "0973zzmdsvlmplcax1c91is7v78lcwy6d9mwp11npgqzl782vq0w";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videointel = (mkDerivation "xf86videointel" {
-    name = "xf86-video-intel-2015-07-22";
+    name = "xf86-video-intel-2015-11-14";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/a29e765ec0c1d73ee7ef2dad3aa148214ec04335.tar.gz;
-      sha256 = "094qa8x0f7vgyirjbj9qdyak71nwxnmmsxml4zk49z59blq4l874";
+      url = http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/0340718366d7cb168a46930eb7be22f2d88354d8.tar.gz;
+      sha256 = "0x11dig1wmpjz5n35sh30zs58ar8q8836w3zrkwkvgxj6q6smvvr";
     };
     buildInputs = [pkgconfig dri2proto dri3proto fontsproto libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXcursor libXdamage libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXtst libXvMC ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit dri2proto dri3proto fontsproto libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXcursor libXdamage libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXtst libXvMC ;};
 
   xf86videomach64 = (mkDerivation "xf86videomach64" {
@@ -1645,6 +1817,7 @@ let
       sha256 = "07xlf5nsjm0x18ij5gyy4lf8hwpl10i8chi3skpqjh84drdri61y";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videomga = (mkDerivation "xf86videomga" {
@@ -1655,6 +1828,7 @@ let
       sha256 = "0kyl8w99arviv27pc349zsy2vinnm7mdpy34vr9nzisicw5nkij8";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videomodesetting = (mkDerivation "xf86videomodesetting" {
@@ -1665,6 +1839,7 @@ let
       sha256 = "0p6pjn5bnd2wr3lmas4b12zcq12d9ilvssga93fzlg90fdahikwh";
     };
     buildInputs = [pkgconfig fontsproto libdrm udev libpciaccess randrproto libX11 xextproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libdrm udev libpciaccess randrproto libX11 xextproto xorgserver xproto ;};
 
   xf86videoneomagic = (mkDerivation "xf86videoneomagic" {
@@ -1675,6 +1850,7 @@ let
       sha256 = "1whb2kgyqaxdjim27ya404acz50izgmafwnb6y9m89q5n6b97y3j";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libpciaccess xorgserver xproto ;};
 
   xf86videonewport = (mkDerivation "xf86videonewport" {
@@ -1685,16 +1861,18 @@ let
       sha256 = "1yafmp23jrfdmc094i6a4dsizapsc9v0pl65cpc8w1kvn7343k4i";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto randrproto renderproto videoproto xorgserver xproto ;};
 
   xf86videonouveau = (mkDerivation "xf86videonouveau" {
-    name = "xf86-video-nouveau-1.0.11";
+    name = "xf86-video-nouveau-1.0.12";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-nouveau-1.0.11.tar.bz2;
-      sha256 = "0j3847rnffy81iaxxi6vnd8saadrc9jahfmckr0sjgkzg2rf4kzq";
+      url = mirror://xorg/individual/driver/xf86-video-nouveau-1.0.12.tar.bz2;
+      sha256 = "07irv1zkk0rkyn1d7f2gn1icgcz2ix0pwv74sjian763gynmg80f";
     };
     buildInputs = [pkgconfig dri2proto fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit dri2proto fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videonv = (mkDerivation "xf86videonv" {
@@ -1705,6 +1883,7 @@ let
       sha256 = "1gqh1khc4zalip5hh2nksgs7i3piqq18nncgmsx9qvzi05azd5c3";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videoopenchrome = (mkDerivation "xf86videoopenchrome" {
@@ -1715,6 +1894,7 @@ let
       sha256 = "1v8j4i1r268n4fc5gq54zg1x50j0rhw71f3lba7411mcblg2z7p4";
     };
     buildInputs = [pkgconfig fontsproto glproto libdrm udev libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xf86driproto xorgserver xproto libXvMC ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto glproto libdrm udev libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xf86driproto xorgserver xproto libXvMC ;};
 
   xf86videoqxl = (mkDerivation "xf86videoqxl" {
@@ -1725,6 +1905,7 @@ let
       sha256 = "1368dd5mihn3s098n7wa3fpjkp8pnamabfjjipkqs9zyrcvncy3m";
     };
     buildInputs = [pkgconfig fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xf86dgaproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xf86dgaproto xorgserver xproto ;};
 
   xf86videor128 = (mkDerivation "xf86videor128" {
@@ -1735,7 +1916,18 @@ let
       sha256 = "0g9m1n5184h05mq14vb6k288zm6g81a9m048id00l8v8f6h33mc0";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xorgserver xproto ;};
+
+  xf86videorendition = (mkDerivation "xf86videorendition" {
+    name = "xf86-video-rendition-4.2.6";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/driver/xf86-video-rendition-4.2.6.tar.bz2;
+      sha256 = "1a7rqafxzc2hd0s5pnq8s8j9d3jg64ndc0xnq4160kasyqhwy3k6";
+    };
+    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ;};
 
   xf86videos3virge = (mkDerivation "xf86videos3virge" {
     name = "xf86-video-s3virge-1.10.7";
@@ -1745,6 +1937,7 @@ let
       sha256 = "1nm4cngjbw226q63rdacw6nx5lgxv7l7rsa8vhpr0gs80pg6igjx";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videosavage = (mkDerivation "xf86videosavage" {
@@ -1755,6 +1948,7 @@ let
       sha256 = "0qzshncynjdmyhavhqw4x5ha3gwbygi0zbsy158fpg1jcnla9kpx";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videosiliconmotion = (mkDerivation "xf86videosiliconmotion" {
@@ -1765,6 +1959,7 @@ let
       sha256 = "1sqv0y31mi4zmh9yaxqpzg7p8y2z01j6qys433hb8n4yznllkm79";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess videoproto xextproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libpciaccess videoproto xextproto xorgserver xproto ;};
 
   xf86videosis = (mkDerivation "xf86videosis" {
@@ -1775,6 +1970,7 @@ let
       sha256 = "1znkqwdyd6am23xbsfjzamq125j5rrylg5mzqky4scv9gxbz5wy8";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xineramaproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xineramaproto xorgserver xproto ;};
 
   xf86videosuncg6 = (mkDerivation "xf86videosuncg6" {
@@ -1785,6 +1981,7 @@ let
       sha256 = "04fgwgk02m4nimlv67rrg1wnyahgymrn6rb2cjj1l8bmzkii4glr";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
 
   xf86videosunffb = (mkDerivation "xf86videosunffb" {
@@ -1795,6 +1992,7 @@ let
       sha256 = "07z3ngifwg2d4jgq8pms47n5lr2yn0ai72g86xxjnb3k20n5ym7s";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto randrproto renderproto xextproto xorgserver xproto ;};
 
   xf86videotdfx = (mkDerivation "xf86videotdfx" {
@@ -1805,6 +2003,7 @@ let
       sha256 = "0dvdrhyn1iv6rr85v1c52s1gl0j1qrxgv7x0r7qn3ba0gj38i2is";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videotga = (mkDerivation "xf86videotga" {
@@ -1815,6 +2014,7 @@ let
       sha256 = "0cb161lvdgi6qnf1sfz722qn38q7kgakcvj7b45ba3i0020828r0";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
 
   xf86videotrident = (mkDerivation "xf86videotrident" {
@@ -1825,6 +2025,7 @@ let
       sha256 = "1bhkwic2acq9za4yz4bwj338cwv5mdrgr2qmgkhlj3bscbg1imgc";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
 
   xf86videov4l = (mkDerivation "xf86videov4l" {
@@ -1835,6 +2036,7 @@ let
       sha256 = "0pcjc75hgbih3qvhpsx8d4fljysfk025slxcqyyhr45dzch93zyb";
     };
     buildInputs = [pkgconfig randrproto videoproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit randrproto videoproto xorgserver xproto ;};
 
   xf86videovesa = (mkDerivation "xf86videovesa" {
@@ -1845,6 +2047,7 @@ let
       sha256 = "1haiw8r1z8ihk68d0jqph2wsld13w4qkl86biq46fvyxg7cg9pbv";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ;};
 
   xf86videovmware = (mkDerivation "xf86videovmware" {
@@ -1855,6 +2058,7 @@ let
       sha256 = "1k50whwnkzxam2ihc1sw456dx0pvr76naycm4qhyjxqv9d72879w";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto ;};
 
   xf86videovoodoo = (mkDerivation "xf86videovoodoo" {
@@ -1865,6 +2069,7 @@ let
       sha256 = "1s6p7yxmi12q4y05va53rljwyzd6ry492r1pgi7wwq6cznivhgly";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto xextproto xf86dgaproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libpciaccess randrproto renderproto xextproto xf86dgaproto xorgserver xproto ;};
 
   xf86videowsfb = (mkDerivation "xf86videowsfb" {
@@ -1875,6 +2080,7 @@ let
       sha256 = "0hr8397wpd0by1hc47fqqrnaw3qdqd8aqgwgzv38w5k3l3jy6p4p";
     };
     buildInputs = [pkgconfig xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit xorgserver xproto ;};
 
   xf86videoxgi = (mkDerivation "xf86videoxgi" {
@@ -1885,6 +2091,7 @@ let
       sha256 = "10xd2vah0pnpw5spn40n4p95mpmgvdkly4i1cz51imnlfsw7g8si";
     };
     buildInputs = [pkgconfig fontsproto glproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xineramaproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto glproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xineramaproto xorgserver xproto ;};
 
   xf86vidmodeproto = (mkDerivation "xf86vidmodeproto" {
@@ -1895,6 +2102,7 @@ let
       sha256 = "0w47d7gfa8zizh2bshdr2rffvbr4jqjv019mdgyh6cmplyd4kna5";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   xfs = (mkDerivation "xfs" {
@@ -1905,6 +2113,7 @@ let
       sha256 = "1ylz4r7adf567rnlbb52yi9x3qi4pyv954kkhm7ld4f0fkk7a2x4";
     };
     buildInputs = [pkgconfig libXfont xproto xtrans ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libXfont xproto xtrans ;};
 
   xgamma = (mkDerivation "xgamma" {
@@ -1915,6 +2124,7 @@ let
       sha256 = "1lr2nb1fhg5fk2fchqxdxyl739602ggwhmgl2wiv5c8qbidw7w8f";
     };
     buildInputs = [pkgconfig libX11 xproto libXxf86vm ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 xproto libXxf86vm ;};
 
   xgc = (mkDerivation "xgc" {
@@ -1925,6 +2135,7 @@ let
       sha256 = "0pigvjd3i9fchmj1inqy151aafz3dr0vq1h2zizdb2imvadqv0hl";
     };
     buildInputs = [pkgconfig libXaw libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libXaw libXt ;};
 
   xhost = (mkDerivation "xhost" {
@@ -1935,6 +2146,7 @@ let
       sha256 = "16n26xw6l01zq31d4qvsaz50misvizhn7iihzdn5f7s72pp1krlk";
     };
     buildInputs = [pkgconfig libX11 libXau libXmu xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXau libXmu xproto ;};
 
   xineramaproto = (mkDerivation "xineramaproto" {
@@ -1945,6 +2157,7 @@ let
       sha256 = "0ns8abd27x7gbp4r44z3wc5k9zqxxj8zjnazqpcyr4n17nxp8xcp";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   xinit = (mkDerivation "xinit" {
@@ -1955,26 +2168,29 @@ let
       sha256 = "1cq2g469mb2cfgr8k57960yrn90bl33vfqri4pdh2zm0jxrqvn3m";
     };
     buildInputs = [pkgconfig libX11 xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 xproto ;};
 
   xinput = (mkDerivation "xinput" {
-    name = "xinput-1.6.1";
+    name = "xinput-1.6.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xinput-1.6.1.tar.bz2;
-      sha256 = "07w7zlpdhpwzzshg8q0y152cy3wl2fj7x1897glnp2la487jsqxp";
+      url = mirror://xorg/individual/app/xinput-1.6.2.tar.bz2;
+      sha256 = "1i75mviz9dyqyf7qigzmxq8vn31i86aybm662fzjz5c086dx551n";
     };
     buildInputs = [pkgconfig inputproto libX11 libXext libXi libXinerama libXrandr ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit inputproto libX11 libXext libXi libXinerama libXrandr ;};
 
   xkbcomp = (mkDerivation "xkbcomp" {
-    name = "xkbcomp-1.3.0";
+    name = "xkbcomp-1.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xkbcomp-1.3.0.tar.bz2;
-      sha256 = "0aibcbhhjlwcrxh943xg2dswwx5bz1x0pmhs28b55gzsg0vrgb6g";
+      url = mirror://xorg/individual/app/xkbcomp-1.3.1.tar.bz2;
+      sha256 = "0gcjy70ppmcl610z8gxc7sydsx93f8cm8pggm4qhihaa1ngdq103";
     };
     buildInputs = [pkgconfig libX11 libxkbfile xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libxkbfile xproto ;};
 
   xkbevd = (mkDerivation "xkbevd" {
@@ -1985,6 +2201,7 @@ let
       sha256 = "0sprjx8i86ljk0l7ldzbz2xlk8916z5zh78cafjv8k1a63js4c14";
     };
     buildInputs = [pkgconfig libX11 libxkbfile ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libxkbfile ;};
 
   xkbprint = (mkDerivation "xkbprint" {
@@ -1995,6 +2212,7 @@ let
       sha256 = "04iyv5z8aqhabv7wcpvbvq0ji0jrz1666vw6gvxkvl7szswalgqb";
     };
     buildInputs = [pkgconfig libX11 libxkbfile xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libxkbfile xproto ;};
 
   xkbutils = (mkDerivation "xkbutils" {
@@ -2005,16 +2223,18 @@ let
       sha256 = "0c412isxl65wplhl7nsk12vxlri29lk48g3p52hbrs3m0awqm8fj";
     };
     buildInputs = [pkgconfig inputproto libX11 libXaw xproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit inputproto libX11 libXaw xproto libXt ;};
 
   xkeyboardconfig = (mkDerivation "xkeyboardconfig" {
-    name = "xkeyboard-config-2.15";
+    name = "xkeyboard-config-2.16";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.15.tar.bz2;
-      sha256 = "1grqdy5a9f2dii3y24fn0p3kz4q5g9j2kh3jcj2402rgrbvkqi0f";
+      url = mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.16.tar.bz2;
+      sha256 = "0n0xinsljc5mww1qw7dfp8knv0f1r9hs6pdhl0fggdwn5hhiz2hy";
     };
     buildInputs = [pkgconfig libX11 xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 xproto ;};
 
   xkill = (mkDerivation "xkill" {
@@ -2025,6 +2245,7 @@ let
       sha256 = "0bl1ky8ps9jg842j4mnmf4zbx8nkvk0h77w7bqjlpwij9wq2mvw8";
     };
     buildInputs = [pkgconfig libX11 libXmu xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXmu xproto ;};
 
   xlsatoms = (mkDerivation "xlsatoms" {
@@ -2035,6 +2256,7 @@ let
       sha256 = "196yjik910xsr7dwy8daa0amr0r22ynfs360z0ndp9mx7mydrra7";
     };
     buildInputs = [pkgconfig libxcb ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libxcb ;};
 
   xlsclients = (mkDerivation "xlsclients" {
@@ -2045,6 +2267,7 @@ let
       sha256 = "0g9x7rrggs741x9xwvv1k9qayma980d88nhdqw7j3pn3qvy6d5jx";
     };
     buildInputs = [pkgconfig libxcb ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libxcb ;};
 
   xlsfonts = (mkDerivation "xlsfonts" {
@@ -2055,6 +2278,7 @@ let
       sha256 = "1yi774g6r1kafsbnxbkrwyndd3i60362ck1fps9ywz076pn5naa0";
     };
     buildInputs = [pkgconfig libX11 xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 xproto ;};
 
   xmag = (mkDerivation "xmag" {
@@ -2065,6 +2289,7 @@ let
       sha256 = "0qg12ifbbk9n8fh4jmyb625cknn8ssj86chd6zwdiqjin8ivr8l7";
     };
     buildInputs = [pkgconfig libX11 libXaw libXmu libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXaw libXmu libXt ;};
 
   xmessage = (mkDerivation "xmessage" {
@@ -2075,6 +2300,7 @@ let
       sha256 = "0s5bjlpxnmh8sxx6nfg9m0nr32r1sr3irr71wsnv76s33i34ppxw";
     };
     buildInputs = [pkgconfig libXaw libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libXaw libXt ;};
 
   xmodmap = (mkDerivation "xmodmap" {
@@ -2085,16 +2311,18 @@ let
       sha256 = "0y649an3jqfq9klkp9y5gj20xb78fw6g193f5mnzpl0hbz6fbc5p";
     };
     buildInputs = [pkgconfig libX11 xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 xproto ;};
 
   xorgcffiles = (mkDerivation "xorgcffiles" {
-    name = "xorg-cf-files-1.0.5";
+    name = "xorg-cf-files-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/util/xorg-cf-files-1.0.5.tar.bz2;
-      sha256 = "1m3ypq0xcy46ghxc0svl1rbhpy3zvgmy0aa2mn7w7v7d8d8bh8zd";
+      url = mirror://xorg/individual/util/xorg-cf-files-1.0.6.tar.bz2;
+      sha256 = "0kckng0zs1viz0nr84rdl6dswgip7ndn4pnh5nfwnviwpsfmmksd";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   xorgdocs = (mkDerivation "xorgdocs" {
@@ -2105,16 +2333,18 @@ let
       sha256 = "0jrc4jmb4raqawx0j9jmhgasr0k6sxv0bm2hrxjh9hb26iy6gf14";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   xorgserver = (mkDerivation "xorgserver" {
-    name = "xorg-server-1.17.2";
+    name = "xorg-server-1.17.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xserver/xorg-server-1.17.2.tar.bz2;
-      sha256 = "14vr4mm0x94a9bd3sfx9mdh8qhvk48zcml3i8q1wbwi84xhj04gn";
+      url = mirror://xorg/individual/xserver/xorg-server-1.17.4.tar.bz2;
+      sha256 = "0mv4ilpqi5hpg182mzqn766frhi6rw48aba3xfbaj4m82v0lajqc";
     };
     buildInputs = [pkgconfig dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ;};
 
   xorgsgmldoctools = (mkDerivation "xorgsgmldoctools" {
@@ -2125,6 +2355,7 @@ let
       sha256 = "0k5pffyi5bx8dmfn033cyhgd3gf6viqj3x769fqixifwhbgy2777";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   xpr = (mkDerivation "xpr" {
@@ -2135,6 +2366,7 @@ let
       sha256 = "1dbcv26w2yand2qy7b3h5rbvw1mdmdd57jw88v53sgdr3vrqvngy";
     };
     buildInputs = [pkgconfig libX11 libXmu xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXmu xproto ;};
 
   xprop = (mkDerivation "xprop" {
@@ -2145,6 +2377,7 @@ let
       sha256 = "1ilvhqfjcg6f1hqahjkp8qaay9rhvmv2blvj3w9asraq0aqqivlv";
     };
     buildInputs = [pkgconfig libX11 xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 xproto ;};
 
   xproto = (mkDerivation "xproto" {
@@ -2155,6 +2388,7 @@ let
       sha256 = "1jpnvm33vi2dar5y5zgz7jjh0m8fpkcxm0f0lbwfx37ns5l5bs19";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   xrandr = (mkDerivation "xrandr" {
@@ -2165,6 +2399,7 @@ let
       sha256 = "06xy0kr6ih7ilrwl6b5g6ay75vm2j4lxnv1d5xlj6sdqhqsaqm3i";
     };
     buildInputs = [pkgconfig libX11 xproto libXrandr libXrender ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 xproto libXrandr libXrender ;};
 
   xrdb = (mkDerivation "xrdb" {
@@ -2175,6 +2410,7 @@ let
       sha256 = "0nsnr90wazcdd50nc5dqswy0bmq6qcj14nnrhyi7rln9pxmpp0kk";
     };
     buildInputs = [pkgconfig libX11 libXmu xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXmu xproto ;};
 
   xrefresh = (mkDerivation "xrefresh" {
@@ -2185,6 +2421,7 @@ let
       sha256 = "1mlinwgvql6s1rbf46yckbfr9j22d3c3z7jx3n6ix7ca18dnf4rj";
     };
     buildInputs = [pkgconfig libX11 xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 xproto ;};
 
   xset = (mkDerivation "xset" {
@@ -2195,6 +2432,7 @@ let
       sha256 = "0qw0iic27bz3yz2wynf1gxs70hhkcf9c4jrv7zhlg1mq57xz90j3";
     };
     buildInputs = [pkgconfig libX11 libXext libXmu xproto libXxf86misc ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXext libXmu xproto libXxf86misc ;};
 
   xsetroot = (mkDerivation "xsetroot" {
@@ -2205,6 +2443,7 @@ let
       sha256 = "1bazzsf9sy0q2bj4lxvh1kvyrhmpggzb7jg575i15sksksa3xwc8";
     };
     buildInputs = [pkgconfig libX11 xbitmaps libXcursor libXmu ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 xbitmaps libXcursor libXmu ;};
 
   xtrans = (mkDerivation "xtrans" {
@@ -2215,6 +2454,7 @@ let
       sha256 = "00c3ph17acnsch3gbdmx33b9ifjnl5w7vx8hrmic1r1cjcv3pgdd";
     };
     buildInputs = [pkgconfig ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
   xvinfo = (mkDerivation "xvinfo" {
@@ -2225,6 +2465,7 @@ let
       sha256 = "1sz5wqhxd1fqsfi1w5advdlwzkizf2fgl12hdpk66f7mv9l8pflz";
     };
     buildInputs = [pkgconfig libX11 xproto libXv ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 xproto libXv ;};
 
   xwd = (mkDerivation "xwd" {
@@ -2235,6 +2476,7 @@ let
       sha256 = "0ybx48agdvjp9lgwvcw79r1x6jbqbyl3fliy3i5xwy4d4si9dcrv";
     };
     buildInputs = [pkgconfig libX11 xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 xproto ;};
 
   xwininfo = (mkDerivation "xwininfo" {
@@ -2245,6 +2487,7 @@ let
       sha256 = "1y1zn8ijqslb5lfpbq4bb78kllhch8in98ps7n8fg3dxjpmb13i1";
     };
     buildInputs = [pkgconfig libX11 libxcb xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libxcb xproto ;};
 
   xwud = (mkDerivation "xwud" {
@@ -2255,6 +2498,7 @@ let
       sha256 = "1ggql6maivah58kwsh3z9x1hvzxm1a8888xx4s78cl77ryfa1cyn";
     };
     buildInputs = [pkgconfig libX11 xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 xproto ;};
 
 }; in xorg

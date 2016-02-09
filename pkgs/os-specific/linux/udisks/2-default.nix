@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, intltool
+{ stdenv, fetchurl, pkgconfig, intltool, gnused
 , expat, acl, systemd, glib, libatasmart, polkit
-, libxslt, docbook_xsl, utillinux, mdadm
+, libxslt, docbook_xsl, utillinux, mdadm, libgudev
 }:
 
 stdenv.mkDerivation rec {
@@ -21,14 +21,16 @@ stdenv.mkDerivation rec {
     ''
       substituteInPlace src/main.c --replace \
         "@path@" \
-        "${utillinux}/bin:${mdadm}/sbin:/var/run/current-system/sw/bin:/var/run/current-system/sw/bin"
+        "${utillinux}/bin:${mdadm}/bin:/run/current-system/sw/bin"
+      substituteInPlace data/80-udisks2.rules \
+        --replace "/bin/sh" "${stdenv.shell}" \
+        --replace "/sbin/mdadm" "${mdadm}/bin/mdadm" \
+        --replace " sed " " ${gnused}/bin/sed "
     '';
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
-  propagatedBuildInputs = [ expat acl systemd glib libatasmart polkit ]; # in closure anyway
-
-  buildInputs = [ libxslt docbook_xsl ];
+  buildInputs = [ libxslt docbook_xsl libgudev expat acl systemd glib libatasmart polkit ];
 
   configureFlags = [
     "--localstatedir=/var"

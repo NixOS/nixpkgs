@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_LINK = "-L${elfutils}/lib";
 
+  postPatch = ''
+    # For Python3, the original expression evaluates as 'python3.4' but we want 'python3.4m' here
+    substituteInPlace configure --replace 'python''${PYTHON_VERSION}' ${python.executable}
+  '';
+
   configureFlags = "--with-external-db --without-lua --enable-python";
 
   meta = with stdenv.lib; {

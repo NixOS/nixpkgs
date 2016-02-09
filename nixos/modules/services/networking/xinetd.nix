@@ -6,8 +6,6 @@ let
 
   cfg = config.services.xinetd;
 
-  inherit (pkgs) xinetd;
-
   configFile = pkgs.writeText "xinetd.conf"
     ''
       defaults
@@ -141,18 +139,12 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    jobs.xinetd =
-      { description = "xinetd server";
-
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
-
-        path = [ xinetd ];
-
-        exec = "xinetd -syslog daemon -dontfork -stayalive -f ${configFile}";
-      };
-
+    systemd.services.xinetd = {
+      description = "xinetd server";
+      after = [ "network-interfaces.target" ];
+      wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.xinetd ];
+      script = "xinetd -syslog daemon -dontfork -stayalive -f ${configFile}";
+    };
   };
-
 }

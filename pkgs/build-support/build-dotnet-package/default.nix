@@ -9,6 +9,9 @@ attrsOrig @
 , outputFiles ? [ "bin/Release/*" ]
 , dllFiles ? [ "*.dll" ]
 , exeFiles ? [ "*.exe" ]
+# Additional arguments to pass to the makeWrapper function, which wraps
+# generated binaries.
+, makeWrapperArgs ? [ ]
 , ... }:
   let
     arrayToShell = (a: toString (map (lib.escape (lib.stringToCharacters "\\ ';$`()|<>\t") ) a));
@@ -98,7 +101,10 @@ attrsOrig @
             [ -f "$exe" ] || continue
             mkdir -p "$out"/bin
             commandName="$(basename -s .exe "$(echo "$exe" | tr "[A-Z]" "[a-z]")")"
-            makeWrapper "${mono}/bin/mono \"$exe\"" "$out"/bin/"$commandName"
+            makeWrapper \
+              "${mono}/bin/mono \"$exe\"" \
+              "$out"/bin/"$commandName" \
+              ''${makeWrapperArgs}
           done
         done
 

@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "Console-based Audio Visualizer for Alsa";
     homepage = https://github.com/karlstav/cava;
     maintainers = with maintainers; [offline];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

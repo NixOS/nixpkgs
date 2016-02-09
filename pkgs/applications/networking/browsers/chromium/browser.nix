@@ -12,9 +12,6 @@ mkChromiumDerivation (base: rec {
     cp -v "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
-    ${optionalString (versionOlder base.version "44.0.0.0") ''
-      cp -v "$buildPath/libffmpegsumo.so" "$libExecPath/"
-    ''}
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
     cp -v "$buildPath/chrome_sandbox" "$libExecPath/chrome-sandbox"
 
@@ -37,7 +34,7 @@ mkChromiumDerivation (base: rec {
   meta = {
     description = "An open source web browser from Google";
     homepage = http://www.chromium.org/;
-    maintainers = with maintainers; [ goibhniu chaoflow aszlig ];
+    maintainers = with maintainers; [ chaoflow ];
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

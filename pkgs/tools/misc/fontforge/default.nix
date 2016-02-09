@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "20141230"; # also tagged v2.1.0
+  version = "20150824"; # also tagged v2.1.0
 in
 
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/fontforge/fontforge/archive/${version}.tar.gz";
-    sha256 = "1xfi13knn1x7hd7pvr6090qz6qfa5znbs85rg1p5mfj377z2h8rb";
+    sha256 = "09zzg166lw5ldbzsa2j9x7hizn6y3ld1kf4abfkiy301rdqj9ar8";
   };
 
   patches = [(fetchpatch {
@@ -29,10 +29,9 @@ stdenv.mkDerivation {
   buildInputs = [
     git autoconf automake gnum4 libtool perl pkgconfig gettext uthash
     python freetype zlib glib libungif libpng libjpeg libtiff libxml2
+    pango
   ]
-    ++ lib.optionals withGTK [ gtk2 ]
-    # I'm not sure why pango doesn't seem necessary on Linux
-    ++ lib.optionals stdenv.isDarwin [ pango ];
+    ++ lib.optionals withGTK [ gtk2 ];
 
   configureFlags =
     lib.optionals (!withPython) [ "--disable-python-scripting" "--disable-python-extension" ]

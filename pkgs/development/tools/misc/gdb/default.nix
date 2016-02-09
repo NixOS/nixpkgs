@@ -1,6 +1,8 @@
-{ fetchurl, stdenv, ncurses, readline, gmp, mpfr, expat, texinfo
-, dejagnu, python, perl, pkgconfig, guile, target ? null
-
+{ fetchurl, stdenv, ncurses, readline, gmp, mpfr, expat, texinfo, zlib
+, dejagnu, perl, pkgconfig
+, python ? null
+, guile ? null
+, target ? null
 # Additional dependencies for GNU/Hurd.
 , mig ? null, hurd ? null
 
@@ -8,7 +10,7 @@
 
 let
 
-  basename = "gdb-7.10";
+  basename = "gdb-7.10.1";
 
   # Whether (cross-)building for GNU/Hurd.  This is an approximation since
   # having `stdenv ? cross' doesn't tell us if we're building `crossDrv' and
@@ -27,35 +29,32 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "1a08c9svaihqmz2mm44il1gwa810gmwkckns8b0y0v3qz52amgby";
+    sha256 = "1mfnjcwnwm5cg4rc9pncs9v356a0bz6ymjyac56mbj6784yjzir5";
   };
 
-  # I think python is not a native input, but I leave it
-  # here while I will not need it cross building
-  nativeBuildInputs = [ texinfo python perl ]
+  nativeBuildInputs = [ pkgconfig texinfo perl ]
     ++ stdenv.lib.optional isGNU mig;
 
-  buildInputs = [ ncurses readline gmp mpfr expat /* pkgconfig guile */ ]
+  buildInputs = [ ncurses readline gmp mpfr expat zlib python guile ]
     ++ stdenv.lib.optional isGNU hurd
     ++ stdenv.lib.optional doCheck dejagnu;
 
   enableParallelBuilding = true;
 
   configureFlags = with stdenv.lib;
-    '' --with-gmp=${gmp} --with-mpfr=${mpfr} --with-system-readline
-       --with-expat --with-libexpat-prefix=${expat}
-       --with-separate-debug-dir=/run/current-system/sw/lib/debug
-    ''
-    + optionalString (target != null) " --target=${target.config}"
-    + optionalString (elem stdenv.system platforms.cygwin) "  --without-python";
+    [ "--with-gmp=${gmp}" "--with-mpfr=${mpfr}" "--with-system-readline"
+      "--with-system-zlib" "--with-expat" "--with-libexpat-prefix=${expat}"
+      "--with-separate-debug-dir=/run/current-system/sw/lib/debug"
+    ]
+    ++ optional (target != null) "--target=${target.config}"
+    ++ optional (elem stdenv.system platforms.cygwin) "--without-python";
 
   crossAttrs = {
     # Do not add --with-python here to avoid cross building it.
-    configureFlags =
-      '' --with-gmp=${gmp.crossDrv} --with-mpfr=${mpfr.crossDrv} --with-system-readline
-         --with-expat --with-libexpat-prefix=${expat.crossDrv} --without-python
-      '' + stdenv.lib.optionalString (target != null)
-         " --target=${target.config}";
+    configureFlags = with stdenv.lib;
+      [ "--with-gmp=${gmp.crossDrv}" "--with-mpfr=${mpfr.crossDrv}" "--with-system-readline"
+        "--with-system-zlib" "--with-expat" "--with-libexpat-prefix=${expat.crossDrv}" "--without-python"
+      ] ++ optional (target != null) "--target=${target.config}";
   };
 
   postInstall =

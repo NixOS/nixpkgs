@@ -27,8 +27,9 @@ in
       };
 
       autoMaster = mkOption {
+        type = types.str;
         example = literalExample ''
-          autoMaster = let
+          let
             mapConf = pkgs.writeText "auto" '''
              kernel    -ro,soft,intr       ftp.kernel.org:/pub/linux
              boot      -fstype=ext2        :/dev/hda1
@@ -71,48 +72,17 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.etc = singleton
-      { target = "auto.master";
-        source = pkgs.writeText "auto.master" cfg.autoMaster;
-      };
-
     boot.kernelModules = [ "autofs4" ];
 
-    jobs.autofs =
+    systemd.services.autofs =
       { description = "Filesystem automounter";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
-
-        path = [ pkgs.nfs-utils pkgs.sshfsFuse ];
-
-        preStop =
-          ''
-            set -e; while :; do pkill -TERM automount; sleep 1; done
-          '';
-
-        # automount doesn't clean up when receiving SIGKILL.
-        # umount -l should unmount the directories recursively when they are no longer used
-        # It does, but traces are left in /etc/mtab. So unmount recursively..
-        postStop =
-          ''
-          PATH=${pkgs.gnused}/bin:${pkgs.coreutils}/bin
-          exec &> /tmp/logss
-          # double quote for sed:
-          escapeSpaces(){ sed 's/ /\\\\040/g'; }
-          unescapeSpaces(){ sed 's/\\040/ /g'; }
-          sed -n 's@^\s*\(\([^\\ ]\|\\ \)*\)\s.*@\1@p' ${autoMaster} | sed 's/[\\]//' | while read mountPoint; do
-            sed -n "s@[^ ]\+\s\+\($(echo "$mountPoint"| escapeSpaces)[^ ]*\).*@\1@p" /proc/mounts | sort -r | unescapeSpaces| while read smountP; do
-              ${pkgs.utillinux}/bin/umount -l "$smountP" || true
-            done
-          done
-          '';
-
-        script =
-          ''
-            ${if cfg.debug then "exec &> /var/log/autofs" else ""}
-            exec ${pkgs.autofs5}/sbin/automount ${if cfg.debug then "-d" else ""} -f -t ${builtins.toString cfg.timeout} "${autoMaster}" ${if cfg.debug then "-l7" else ""}
-          '';
+        serviceConfig = {
+          ExecStart = "${pkgs.autofs5}/sbin/automount ${if cfg.debug then "-d" else ""} -f -t ${builtins.toString cfg.timeout} ${autoMaster} ${if cfg.debug then "-l7" else ""}";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        };
       };
 
   };

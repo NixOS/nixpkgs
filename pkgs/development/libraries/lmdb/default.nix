@@ -1,6 +1,7 @@
 { stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+let optional = stdenv.lib.optional;
+in stdenv.mkDerivation rec {
   name = "lmdb-${version}";
   version = "0.9.16";
 
@@ -11,7 +12,8 @@ stdenv.mkDerivation rec {
 
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";
 
-  makeFlags = "prefix=$(out)";
+  makeFlags = ["prefix=$(out)"]
+              ++ optional stdenv.cc.isClang "CC=clang";
 
   doCheck = true;
   checkPhase = "make test";

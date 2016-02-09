@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = http://st.suckless.org/;
     license = stdenv.lib.licenses.mit;
     maintainers = with maintainers; [viric];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

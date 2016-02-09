@@ -1,0 +1,69 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="module-security-acme">
+
+<title>SSL/TLS Certificates with ACME</title>
+
+<para>NixOS supports automatic domain validation &amp; certificate
+retrieval and renewal using the ACME protocol. This is currently only
+implemented by and for Let's Encrypt. The alternative ACME client
+<literal>simp_le</literal> is used under the hood.</para>
+
+<section><title>Prerequisites</title>
+
+<para>You need to have a running HTTP server for verification. The server must
+have a webroot defined that can serve
+<filename>.well-known/acme-challenge</filename>. This directory must be
+writeable by the user that will run the ACME client.</para>
+
+<para>For instance, this generic snippet could be used for Nginx:
+
+<programlisting>
+http {
+  server {
+    server_name _;
+    listen 80;
+    listen [::]:80;
+
+    location /.well-known/acme-challenge {
+      root /var/www/challenges;
+    }
+
+    location / {
+      return 301 https://$host$request_uri;
+    }
+  }
+}
+</programlisting>
+</para>
+
+</section>
+
+<section><title>Configuring</title>
+
+<para>To enable ACME certificate retrieval &amp; renewal for a certificate for
+<literal>foo.example.com</literal>, add the following in your
+<filename>configuration.nix</filename>:
+
+<programlisting>
+security.acme.certs."foo.example.com" = {
+  webroot = "/var/www/challenges";
+  email = "foo@example.com";
+};
+</programlisting>
+</para>
+
+<para>The private key <filename>key.pem</filename> and certificate
+<filename>fullchain.pem</filename> will be put into
+<filename>/var/lib/acme/foo.example.com</filename>. The target directory can
+be configured with the option <literal>security.acme.directory</literal>.
+</para>
+
+<para>Refer to <xref linkend="ch-options" /> for all available configuration
+options for the <literal>security.acme</literal> module.</para>
+
+</section>
+
+</chapter>

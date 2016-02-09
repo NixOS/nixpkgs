@@ -38,6 +38,13 @@ stdenv.mkDerivation rec {
     ]
     ++ stdenv.lib.optional (xorg == null) "--without-x";
 
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    for foo in cmd/dot/Makefile.in cmd/edgepaint/Makefile.in \
+                    cmd/mingle/Makefile.in plugin/gdiplus/Makefile.in; do
+      substituteInPlace "$foo" --replace "-lstdc++" "-lc++"
+    done
+  '';
+
   preBuild = ''
     sed -e 's@am__append_5 *=.*@am_append_5 =@' -i lib/gvc/Makefile
   '';

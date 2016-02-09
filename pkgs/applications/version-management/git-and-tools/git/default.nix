@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "2.6.2";
+  version = "2.7.0";
   svn = subversionClient.override { perlBindings = true; };
 in
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "0w56027asrc5s20l5d4rnki7dla66gn84373afqw3mb9pjmkfvk4";
+    sha256 = "03bvb8s5j8i54qbi3yayl42bv0wf2fpgnh1a2lkhbj79zi7b77zs";
   };
 
   patches = [
@@ -34,7 +34,11 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optionals guiSupport [tcl tk];
 
   # required to support pthread_cancel()
-  NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
+  NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.cc.isClang) "-lgcc_s"
+              + stdenv.lib.optionalString (stdenv.isFreeBSD) "-lthr";
+
+  # without this, git fails when trying to check for /etc/gitconfig existence
+  propagatedSandboxProfile = stdenv.lib.sandbox.allowDirectoryList "/etc";
 
   makeFlags = "prefix=\${out} sysconfdir=/etc/ PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
       + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
@@ -140,7 +144,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://git-scm.com/;
     description = "Distributed version control system";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''
       Git, a popular distributed version control system designed to

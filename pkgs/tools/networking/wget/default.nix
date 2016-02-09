@@ -1,13 +1,13 @@
 { stdenv, fetchurl, gettext, libidn, pkgconfig
 , perl, perlPackages, LWP, python3
-, libiconv, libpsl, openssl ? null }:
+, libiconv, libpsl ? null, openssl ? null }:
 
 stdenv.mkDerivation rec {
-  name = "wget-1.16.3";
+  name = "wget-1.17.1";
 
   src = fetchurl {
     url = "mirror://gnu/wget/${name}.tar.xz";
-    sha256 = "0dzv5xf9qxc2bp4cyifmaghh3h464wbm73xiwcrvckf1ynqbgxv7";
+    sha256 = "1jcpvl5sxb2ag8yahpy370c5jlfb097a21k2mhsidh4wxdhrnmgy";
   };
 
   preConfigure = ''

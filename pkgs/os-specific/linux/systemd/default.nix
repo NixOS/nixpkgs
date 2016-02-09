@@ -1,35 +1,37 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
+{ stdenv, fetchFromGitHub, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux
-, glib, kbd, libxslt, coreutils, libgcrypt
-, kexectools, libmicrohttpd, linuxHeaders
-, pythonPackages ? null, pythonSupport ? false
+, glib, kbd, libxslt, coreutils, libgcrypt, libapparmor, audit, lz4
+, kexectools, libmicrohttpd, linuxHeaders, libseccomp
+, autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , enableKDbus ? false
 }:
 
 assert stdenv.isLinux;
 
-assert pythonSupport -> pythonPackages != null;
+# FIXME: When updating, please remove makeFlags -- `hwdb_bin` flag is not supported anymore.
 
 stdenv.mkDerivation rec {
-  version = "217";
+  version = "228";
   name = "systemd-${version}";
 
-  src = fetchurl {
-    url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "163l1y4p2a564d4ynfq3k3xf53j2v5s81blb6cvpn1y7rpxyccd0";
+  src = fetchFromGitHub {
+    owner = "NixOS";
+    repo = "systemd";
+    rev = "b737c07cc0234acfa87282786025d556bca91c3f";
+    sha256 = "0wca8zkn39914c232andvf3v0ni6ylv154kz3s9fcvg47rhpd5n1";
   };
 
-  patches =
-    [ # These are all changes between upstream and
-      # https://github.com/NixOS/systemd/tree/nixos-v217.
-      ./fixes.patch
-    ];
+  outputs = [ "out" "man" "doc" ];
 
   buildInputs =
-    [ pkgconfig intltool gperf libcap kmod xz pam acl
+    [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt
-      libmicrohttpd linuxHeaders
-    ] ++ stdenv.lib.optionals pythonSupport [pythonPackages.python pythonPackages.lxml];
+      libmicrohttpd kexectools libseccomp audit lz4 libapparmor
+      /* FIXME: we may be able to prevent the following dependencies
+         by generating an autoconf'd tarball, but that's probably not
+         worth it. */
+      autoreconfHook gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
+    ];
 
   configureFlags =
     [ "--localstatedir=/var"
@@ -38,25 +40,28 @@ stdenv.mkDerivation rec {
       "--with-kbd-loadkeys=${kbd}/bin/loadkeys"
       "--with-kbd-setfont=${kbd}/bin/setfont"
       "--with-rootprefix=$(out)"
-      "--with-dbusinterfacedir=$(out)/share/dbus-1/interfaces"
       "--with-dbuspolicydir=$(out)/etc/dbus-1/system.d"
       "--with-dbussystemservicedir=$(out)/share/dbus-1/system-services"
       "--with-dbussessionservicedir=$(out)/share/dbus-1/services"
-      "--with-firmware-path=/root/test-firmware:/run/current-system/firmware"
       "--with-tty-gid=3" # tty in NixOS has gid 3
       "--enable-compat-libs" # get rid of this eventually
       "--disable-tests"
 
-      "--disable-hostnamed"
+      "--enable-lz4"
+      "--enable-hostnamed"
       "--enable-networkd"
       "--disable-sysusers"
-      "--disable-timedated"
+      "--enable-timedated"
       "--enable-timesyncd"
-      "--disable-readahead"
       "--disable-firstboot"
-      "--disable-localed"
+      "--enable-localed"
       "--enable-resolved"
       "--disable-split-usr"
+      "--disable-libcurl"
+      "--disable-libidn"
+      "--disable-quotacheck"
+      "--disable-ldconfig"
+      "--disable-smack"
 
       "--with-sysvinit-path="
       "--with-sysvrcnd-path="
@@ -65,9 +70,10 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
+      ./autogen.sh
+
       # FIXME: patch this in systemd properly (and send upstream).
-      # FIXME: use sulogin from util-linux once updated.
-      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/core/shutdown.c src/nspawn/nspawn.c; do
+      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/core/shutdown.c src/nspawn/nspawn.c src/shared/generator.c; do
         test -e $i
         substituteInPlace $i \
           --replace /usr/bin/getent ${stdenv.glibc}/bin/getent \
@@ -78,7 +84,7 @@ stdenv.mkDerivation rec {
           --replace /bin/echo ${coreutils}/bin/echo \
           --replace /bin/cat ${coreutils}/bin/cat \
           --replace /sbin/sulogin ${utillinux}/sbin/sulogin \
-          --replace /sbin/kexec ${kexectools}/sbin/kexec
+          --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck
       done
 
       substituteInPlace src/journal/catalog.c \
@@ -86,10 +92,6 @@ stdenv.mkDerivation rec {
 
       configureFlagsArray+=("--with-ntp-servers=0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
     '';
-
-  # This is needed because systemd uses the gold linker, which doesn't
-  # yet have the wrapper script to add rpath flags automatically.
-  NIX_LDFLAGS = "-rpath ${pam}/lib -rpath ${libcap}/lib -rpath ${acl}/lib -rpath ${stdenv.cc.cc}/lib";
 
   PYTHON_BINARY = "${coreutils}/bin/env python"; # don't want a build time dependency on Python
 
@@ -148,6 +150,11 @@ stdenv.mkDerivation rec {
       done
 
       rm -rf $out/etc/rpm
+
+      rm $out/lib/*.la
+
+      # "kernel-install" shouldn't be used on NixOS.
+      find $out -name "*kernel-install*" -exec rm {} \;
     ''; # */
 
   enableParallelBuilding = true;

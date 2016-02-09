@@ -28,6 +28,12 @@ stdenv.mkDerivation (rec {
         "gt_cv_func_CFLocaleCopyCurrent=no"
       ]);
 
+  patchPhase = ''
+   substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
+   substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
+   substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
+  '';
+
   # On cross building, gettext supposes that the wchar.h from libc
   # does not fulfill gettext needs, so it tries to work with its
   # own wchar.h file, which does not cope well with the system's
@@ -90,8 +96,8 @@ stdenv.mkDerivation (rec {
    # Make sure `error.c' gets compiled and is part of `libgettextlib.la'.
    # This fixes:
    # gettext-0.18.1.1/gettext-tools/src/msgcmp.c:371: undefined reference to `_error_message_count'
-
-   '' sed -i gettext-tools/gnulib-lib/Makefile.in \
+  '' 
+   sed -i gettext-tools/gnulib-lib/Makefile.in \
           -e 's/am_libgettextlib_la_OBJECTS =/am_libgettextlib_la_OBJECTS = error.lo/g'
    '';
 })

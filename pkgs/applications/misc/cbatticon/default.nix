@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, gtk, libnotify, unzip, glib, pkgconfig }:
+{ stdenv, fetchzip, gtk, libnotify, unzip, glib, pkgconfig }:
 
 stdenv.mkDerivation rec {
 
   name = "cbatticon-${version}";
   version = "1.4.2";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/valr/cbatticon/archive/${version}.zip";
-    sha256 = "1jkaar987ayydgghl8s8f1yy41mcmhqvgw897jv4y8yliskn0604";
+    sha256 = "0ixkxvlrn84b8nh75c9s2gvxnycis89mf047iz8j38814979di5l";
   };
 
   makeFlags = "PREFIX=$(out)";

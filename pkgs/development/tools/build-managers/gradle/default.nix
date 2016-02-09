@@ -1,39 +1,54 @@
 { stdenv, fetchurl, unzip, jdk, makeWrapper }:
 
-stdenv.mkDerivation rec {
-  name = "gradle-2.6";
+rec {
+  gradleGen = {name, src} : stdenv.mkDerivation rec {
+    inherit name src;
 
-  src = fetchurl {
-    url = "http://services.gradle.org/distributions/${name}-bin.zip";
-    sha256 = "10ww9vqyi5jkdw5bna14y63fjfhh40n81q7qsfhdycgj19b8ra8q";
+    installPhase = ''
+      mkdir -pv $out/lib/gradle/
+      cp -rv lib/ $out/lib/gradle/
+
+      gradle_launcher_jar=$(echo $out/lib/gradle/lib/gradle-launcher-*.jar)
+      test -f $gradle_launcher_jar
+      makeWrapper ${jdk}/bin/java $out/bin/gradle \
+        --set JAVA_HOME ${jdk} \
+        --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain"
+    '';
+
+    phases = "unpackPhase installPhase";
+
+    buildInputs = [ unzip jdk makeWrapper ];
+
+    meta = {
+      description = "Enterprise-grade build system";
+      longDescription = ''
+        Gradle is a build system which offers you ease, power and freedom.
+        You can choose the balance for yourself. It has powerful multi-project
+        build support. It has a layer on top of Ivy that provides a
+        build-by-convention integration for Ivy. It gives you always the choice
+        between the flexibility of Ant and the convenience of a
+        build-by-convention behavior.
+      '';
+      homepage = http://www.gradle.org/;
+      license = stdenv.lib.licenses.asl20;
+    };
   };
 
-  installPhase = ''
-    mkdir -pv $out/gradle
-    cp -rv lib $out/gradle
+  gradleLatest = gradleGen rec {
+    name = "gradle-2.10";
 
-    gradle_launcher_jar=$(echo $out/gradle/lib/gradle-launcher-*.jar)
-    test -f $gradle_launcher_jar
-    makeWrapper ${jdk}/bin/java $out/bin/gradle \
-      --set JAVA_HOME ${jdk} \
-      --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain"
-  '';
+    src = fetchurl {
+      url = "http://services.gradle.org/distributions/${name}-bin.zip";
+      sha256 = "66406247f745fc6f05ab382d3f8d3e120c339f34ef54b86f6dc5f6efc18fbb13";
+    };
+  };
 
-  phases = "unpackPhase installPhase";
+  gradle25 = gradleGen rec {
+    name = "gradle-2.5";
 
-  buildInputs = [ unzip jdk makeWrapper ];
-
-  meta = {
-    description = "Enterprise-grade build system";
-    longDescription = ''
-      Gradle is a build system which offers you ease, power and freedom.
-      You can choose the balance for yourself. It has powerful multi-project
-      build support. It has a layer on top of Ivy that provides a 
-      build-by-convention integration for Ivy. It gives you always the choice
-      between the flexibility of Ant and the convenience of a 
-      build-by-convention behavior.
-    '';
-    homepage = http://www.gradle.org/;
-    license = stdenv.lib.licenses.asl20;
+    src = fetchurl {
+      url = "http://services.gradle.org/distributions/${name}-bin.zip";
+      sha256 = "0mc5lf6phkncx77r0papzmfvyiqm0y26x50ipvmzkcsbn463x59z";
+    };
   };
 }

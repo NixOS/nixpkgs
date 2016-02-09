@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   # Fixes support for gcrypt 1.6+
-  patches = [ ./gcrypt-fix.patch ];
+  patches = [ ./gcrypt-fix.patch ./freebsd-unistd.patch ];
 
   buildInputs = [ libgcrypt libgpgerror libtasn1 optPam optLibidn optGnutls ];
 

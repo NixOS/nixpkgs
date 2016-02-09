@@ -21,7 +21,7 @@
 , jackSupport ? true, libjack2
 , gmeSupport ? true, game-music-emu
 , icuSupport ? true, icu
-, clientSupport ? false, mpd_clientlib
+, clientSupport ? true, mpd_clientlib
 , opusSupport ? true, libopus
 }:
 
@@ -29,13 +29,13 @@ let
   opt = stdenv.lib.optional;
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
   major = "0.19";
-  minor = "9";
+  minor = "12";
 
 in stdenv.mkDerivation rec {
   name = "mpd-${major}.${minor}";
   src = fetchurl {
     url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.xz";
-    sha256 = "0vzj365s4j0pw5w37lfhx3dmpkdp85driravsvx8rlrw0lii91a7";
+    sha256 = "0xg8w5vn6xd0yfw55qj6wnav7v14nmr00s3d4w5gixbjrv3ycvvv";
   };
 
   buildInputs = [ pkgconfig glib boost ]
@@ -107,7 +107,7 @@ in stdenv.mkDerivation rec {
     description = "A flexible, powerful daemon for playing music";
     homepage    = http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ astsmtl fuuzetsu emery ];
+    maintainers = with maintainers; [ astsmtl fuuzetsu ehmry ];
     platforms   = platforms.unix;
 
     longDescription = ''

@@ -31,6 +31,7 @@ let
       javaPackage = mkOption {
         type = types.package;
         default = pkgs.jre;
+        defaultText = "pkgs.jre";
         description = ''
           Which Java derivation to use for running Winstone.
         '';

@@ -208,6 +208,7 @@ in
 	description = "Which rippled package to use.";
 	type = types.package;
 	default = pkgs.rippled;
+	defaultText = "pkgs.rippled";
       };
 
       ports = mkOption {
@@ -238,7 +239,7 @@ in
       nodeDb = mkOption {
 	description = "Rippled main database options.";
 	type = types.nullOr types.optionSet;
-	options = [dbOptions];
+	options = dbOptions;
 	default = {
 	  type = "rocksdb";
 	  extraOpts = ''
@@ -254,14 +255,14 @@ in
       tempDb = mkOption {
 	description = "Rippled temporary database options.";
 	type = types.nullOr types.optionSet;
-	options = [dbOptions];
+	options = dbOptions;
 	default = null;
       };
 
       importDb = mkOption {
 	description = "Settings for performing a one-time import.";
 	type = types.nullOr types.optionSet;
-	options = [dbOptions];
+	options = dbOptions;
 	default = null;
       };
 

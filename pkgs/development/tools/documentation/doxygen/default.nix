@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, python, flex, bison, qt4 }:
+{ stdenv, fetchurl, perl, python, flex, bison, qt4, CoreServices, libiconv }:
 
 let
   name = "doxygen-1.8.6";
@@ -11,16 +11,23 @@ stdenv.mkDerivation {
     sha256 = "0pskjlkbj76m9ka7zi66yj8ffjcv821izv3qxqyyphf0y0jqcwba";
   };
 
+  prePatch = ''
+    substituteInPlace configure --replace /usr/bin/install $(type -P install)
+  '';
+
   patches = [ ./tmake.patch ];
 
   buildInputs =
     [ perl python flex bison ]
-    ++ stdenv.lib.optional (qt4 != null) qt4;
+    ++ stdenv.lib.optional (qt4 != null) qt4
+    ++ stdenv.lib.optional stdenv.isSunOS libiconv
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
 
   prefixKey = "--prefix ";
 
   configureFlags =
     [ "--dot dot" ]
+    ++ stdenv.lib.optional stdenv.isSunOS "--install install"
     ++ stdenv.lib.optional (qt4 != null) "--with-doxywizard";
 
   preConfigure =

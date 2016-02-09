@@ -1,11 +1,11 @@
 { stdenv, fetchurl, colord, intltool, glib, gtk3, pkgconfig, lcms2 }:
 
 stdenv.mkDerivation rec {
-  name = "colord-gtk-0.1.25";
+  name = "colord-gtk-0.1.26";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/colord/releases/${name}.tar.xz";
-    sha256 = "02hblw9rw24dhj0wqfw86pfq4y4icb6iaa92308a9jwa6k2923xx";
+    sha256 = "0i9y3bb5apj6a0f8cx36l6mjzs7xc0k7nf0magmf58vy2mzhpl18";
   };
 
   buildInputs = [ intltool colord glib gtk3 pkgconfig lcms2 ];

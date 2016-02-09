@@ -134,7 +134,7 @@ rec {
   raspberrypi = {
     name = "raspberrypi";
     kernelMajor = "2.6";
-    kernelHeadersBaseConfig = "kirkwood_defconfig";
+    kernelHeadersBaseConfig = "bcm2835_defconfig";
     kernelBaseConfig = "bcmrpi_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;

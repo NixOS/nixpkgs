@@ -11,9 +11,7 @@ assert enableXMPP      -> libjreen     != null;
 assert enableKDE       -> kdelibs      != null;
 assert enableTelepathy -> telepathy_qt != null;
 
-let
-  quazipQt4 = quazip.override { qt = qt4; };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "tomahawk-${version}";
   version = "0.8.4";
 
@@ -29,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     cmake pkgconfig attica boost gnutls libechonest liblastfm lucenepp phonon
-    qca2 qjson qt4 qtkeychain quazipQt4 sparsehash taglib websocketpp
+    qca2 qjson qt4 qtkeychain quazip sparsehash taglib websocketpp
     makeWrapper
   ] ++ stdenv.lib.optional enableXMPP      libjreen
     ++ stdenv.lib.optional enableKDE       kdelibs

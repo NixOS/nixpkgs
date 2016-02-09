@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, libxfce4util
-, gtk, gtksourceview, dbus, dbus_glib, makeWrapper }:
+, gtk, gtksourceview, dbus, dbus_glib, makeWrapper
+, dconf }:
 
 stdenv.mkDerivation rec {
   p_name  = "mousepad";
@@ -15,11 +16,13 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig intltool libxfce4util
       gtk gtksourceview dbus dbus_glib makeWrapper
+      dconf
     ];
 
   preFixup = ''
     wrapProgram "$out/bin/mousepad" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:${gtksourceview}/share"
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:${gtksourceview}/share" \
+      --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
   '';
 
   meta = {

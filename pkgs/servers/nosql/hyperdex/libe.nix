@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, unzip, autoconf, automake, libtool, libpo6, pkgconfig }:
+{ stdenv, fetchurl, unzip, autoreconfHook, libpo6, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "libe-${version}";
   version = "0.8.1";
 
   src = fetchurl {
-    url = "https://github.com/rescrv/e/archive/releases/0.8.1.zip";
-    sha256 = "1l13axsi52j2qaxbdnszdvfxksi7rwm2j1rrf0nlh990m6a3yg3s";
+    url = "https://github.com/rescrv/e/archive/releases/${version}.zip";
+    sha256 = "18xm0hcnqdf0ipfn19jrgzqsxij5xjbbnihhzc57n4v7yfdca1w3";
   };
-  buildInputs = [ unzip autoconf automake libtool libpo6 pkgconfig ];
-  preConfigure = "autoreconf -i";
+
+  buildInputs = [ unzip autoreconfHook libpo6 pkgconfig ];
 
   meta = with stdenv.lib; {
     description = "Library containing high-performance datastructures and utilities for C++";

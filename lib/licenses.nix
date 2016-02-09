@@ -85,6 +85,26 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Creative Commons Zero v1.0 Universal";
   };
 
+  cc-by-nc-sa-20 = spdx {
+    spdxId = "CC-BY-NC-SA-2.0";
+    fullName = "Creative Commons Attribution Non Commercial Share Alike 2.0";
+  };
+
+  cc-by-nc-sa-25 = spdx {
+    spdxId = "CC-BY-NC-SA-2.5";
+    fullName = "Creative Commons Attribution Non Commercial Share Alike 2.5";
+  };
+
+  cc-by-nc-sa-30 = spdx {
+    spdxId = "CC-BY-NC-SA-3.0";
+    fullName = "Creative Commons Attribution Non Commercial Share Alike 3.0";
+  };
+
+  cc-by-nc-sa-40 = spdx {
+    spdxId = "CC-BY-NC-SA-4.0";
+    fullName = "Creative Commons Attribution Non Commercial Share Alike 4.0";
+  };
+
   cc-by-sa-25 = spdx {
     spdxId = "CC-BY-SA-2.5";
     fullName = "Creative Commons Attribution Share Alike 2.5";
@@ -400,6 +420,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   tcltk = spdx {
     spdxId = "TCL";
     fullName = "TCL/TK License";
+  };
+
+  ufl = {
+    fullName = "Ubuntu Font License 1.0";
+    url = http://font.ubuntu.com/ufl/ubuntu-font-licence-1.0.txt;
   };
 
   unfree = {

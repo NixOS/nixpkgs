@@ -19,7 +19,7 @@ in {
       '';
     };
 
-    host = mkOption {
+    listenAddress = mkOption {
       type = types.string;
       default = "0.0.0.0";
       description = "IP interface to listen on for http connections.";
@@ -57,7 +57,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      preStart = if isNull cfg.configFile then null
+      preStart = if isNull cfg.configFile then ""
                  else ''
                    ln -sf ${pkgs.writeText "config.js" cfg.configFile} \
                           ${shoutHome}/config.js
@@ -66,7 +66,7 @@ in {
         "${pkgs.shout}/bin/shout"
         (if cfg.private then "--private" else "--public")
         "--port" (toString cfg.port)
-        "--host" (toString cfg.host)
+        "--host" (toString cfg.listenAddress)
         "--home" shoutHome
       ];
       serviceConfig = {

@@ -29,6 +29,22 @@ in
 stdenv.mkDerivation ({
   name = "emacs-${pname}${optionalString (version != null) "-${version}"}";
 
+  unpackCmd = ''
+    case "$curSrc" in
+      *.el)
+        # keep original source filename without the hash
+        local filename=$(basename "$curSrc")
+        filename="''${filename:33}"
+        cp $curSrc $filename
+        chmod +w $filename
+        sourceRoot="."
+        ;;
+      *)
+        _defaultUnpack "$curSrc"
+        ;;
+    esac
+  '';
+
   buildInputs = [emacs texinfo] ++ packageRequires ++ buildInputs;
   propagatedBuildInputs = packageRequires;
   propagatedUserEnvPkgs = packageRequires;

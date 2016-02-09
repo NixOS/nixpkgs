@@ -1,30 +1,50 @@
-{ stdenv, fetchurl, libtorrent, ncurses, pkgconfig, libsigcxx, curl
+{ stdenv, fetchurl, fetchFromGitHub, pkgconfig
+, libtool, autoconf, automake, cppunit
+, libtorrent, ncurses, libsigcxx, curl
 , zlib, openssl, xmlrpc_c
+
+# This no longer works
+, colorSupport ? false
 }:
 
 stdenv.mkDerivation rec {
   name = "rtorrent-${version}";
   version = "0.9.6";
 
-  src = fetchurl {
-    url = "http://rtorrent.net/downloads/${name}.tar.gz";
-    sha256 = "03jvzw9pi2mhcm913h8qg0qw9gwjqc6lhwynb1yz1y163x7w4s8y";
+  src = fetchFromGitHub {
+    owner = "rakshasa";
+    repo = "rtorrent";
+    rev = "${version}";
+    sha256 = "0iyxmjr1984vs7hrnxkfwgrgckacqml0kv4bhj185w9bhjqvgfnf";
   };
 
-  buildInputs = [ libtorrent ncurses pkgconfig libsigcxx curl zlib openssl xmlrpc_c ];
-  configureFlags = "--with-xmlrpc-c";
+  buildInputs = [
+    pkgconfig libtool autoconf automake cppunit
+    libtorrent ncurses libsigcxx curl zlib openssl xmlrpc_c
+  ];
 
-  # postInstall = ''
-  #   mkdir -p $out/share/man/man1 $out/share/rtorrent
-  #   mv doc/rtorrent.1 $out/share/man/man1/rtorrent.1
-  #   mv doc/rtorrent.rc $out/share/rtorrent/rtorrent.rc
-  # '';
+  # Optional patch adds support for custom configurable colors
+  # https://github.com/Chlorm/chlorm_overlay/blob/master/net-p2p/rtorrent/README.md
+  patches = stdenv.lib.optional colorSupport (fetchurl {
+    url = "https://gist.githubusercontent.com/codyopel/a816c2993f8013b5f4d6/raw/b952b32da1dcf14c61820dfcf7df00bc8918fec4/rtorrent-color.patch";
+    sha256 = "00gcl7yq6261rrfzpz2k8bd7mffwya0ifji1xqcvhfw50syk8965";
+  });
+
+  preConfigure = "./autogen.sh";
+
+  configureFlags = [ "--with-xmlrpc-c" "--with-posix-fallocate" ];
+
+  postInstall = ''
+    mkdir -p $out/share/man/man1 $out/share/doc/rtorrent
+    mv doc/old/rtorrent.1 $out/share/man/man1/rtorrent.1
+    mv doc/rtorrent.rc $out/share/doc/rtorrent/rtorrent.rc
+  '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/rakshasa/rtorrent/;
+    inherit (src.meta) homepage;
     description = "An ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ simons ebzzry ];
+    maintainers = with maintainers; [ simons ebzzry codyopel ];
   };
 }

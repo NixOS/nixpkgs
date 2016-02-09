@@ -54,7 +54,8 @@ stdenv.mkDerivation rec {
   # The following settings fix failures in the test suite. It's not required otherwise.
   NIX_LDFLAGS = "-rpath=${guile}/lib -rpath=${glib}/lib";
   preCheck = "export GNC_DOT_DIR=$PWD/dot-gnucash";
-  doCheck = true;
+
+  doCheck = false;      # https://github.com/NixOS/nixpkgs/issues/11084
 
   enableParallelBuilding = true;
 

@@ -91,7 +91,7 @@ in
       ( { hostname = config.networking.hostName;
           #targetHost = config.deployment.targetHost;
           system = if config.nixpkgs.system == "" then builtins.currentSystem else config.nixpkgs.system;
-          
+
           supportedTypes = (import "${pkgs.stdenv.mkDerivation {
             name = "supportedtypes";
             buildCommand = ''
@@ -110,6 +110,7 @@ in
         // optionalAttrs (config.services.mysql.enable) { mysqlPort = config.services.mysql.port; }
         // optionalAttrs (config.services.tomcat.enable) { tomcatPort = 8080; }
         // optionalAttrs (config.services.svnserve.enable) { svnBaseDir = config.services.svnserve.svnBaseDir; }
+        // optionalAttrs (config.services.ejabberd.enable) { ejabberdUser = config.services.ejabberd.user; }
         // optionalAttrs (cfg.publishInfrastructure.enableAuthentication) (
           optionalAttrs (config.services.mysql.enable) { mysqlUsername = "root"; mysqlPassword = readFile config.services.mysql.rootPassword; })
         )
@@ -117,51 +118,61 @@ in
 
     services.disnix.publishInfrastructure.enable = cfg.publishAvahi;
 
-    jobs = {
-      disnix =
-        { description = "Disnix server";
-        
-          wantedBy = [ "multi-user.target" ];
-          after = [ "dbus.service" ]
-            ++ optional config.services.httpd.enable "httpd.service"
-            ++ optional config.services.mysql.enable "mysql.service"
-            ++ optional config.services.postgresql.enable "postgresql.service"
-            ++ optional config.services.tomcat.enable "tomcat.service"
-            ++ optional config.services.svnserve.enable "svnserve.service"
-            ++ optional config.services.mongodb.enable "mongodb.service";
+    systemd.services = {
+      disnix = {
+        description = "Disnix server";
+        wants = [ "dysnomia.target" ];
+        wantedBy = [ "multi-user.target" ];
+        after = [ "dbus.service" ]
+          ++ optional config.services.httpd.enable "httpd.service"
+          ++ optional config.services.mysql.enable "mysql.service"
+          ++ optional config.services.postgresql.enable "postgresql.service"
+          ++ optional config.services.tomcat.enable "tomcat.service"
+          ++ optional config.services.svnserve.enable "svnserve.service"
+          ++ optional config.services.mongodb.enable "mongodb.service";
 
-          restartIfChanged = false;
-          
-          path = [ pkgs.nix pkgs.disnix dysnomia "/run/current-system/sw" ];
-          
-          environment = {
-            HOME = "/root";
-          };
+        restartIfChanged = false;
 
-          exec = "disnix-service";
+        path = [ pkgs.nix pkgs.disnix dysnomia "/run/current-system/sw" ];
+
+        environment = {
+          HOME = "/root";
         };
+
+        preStart = ''
+          mkdir -p /etc/systemd-mutable/system
+          if [ ! -f /etc/systemd-mutable/system/dysnomia.target ]
+          then
+              ( echo "[Unit]"
+                echo "Description=Services that are activated and deactivated by Dysnomia"
+                echo "After=final.target"
+              ) > /etc/systemd-mutable/system/dysnomia.target
+          fi
+        '';
+
+        script = "disnix-service";
+      };
     } // optionalAttrs cfg.publishAvahi {
-      disnixAvahi =
-        { description = "Disnix Avahi publisher";
+      disnixAvahi = {
+        description = "Disnix Avahi publisher";
+        wants = [ "avahi-daemon.service" ];
+        wantedBy = [ "multi-user.target" ];
 
-          startOn = "started avahi-daemon";
-
-          exec =
-          ''
-            ${pkgs.avahi}/bin/avahi-publish-service disnix-${config.networking.hostName} _disnix._tcp 22 \
-              "mem=$(grep 'MemTotal:' /proc/meminfo | sed -e 's/kB//' -e 's/MemTotal://' -e 's/ //g')" \
-              ${concatMapStrings (infrastructureAttrName:
-                let infrastructureAttrValue = getAttr infrastructureAttrName (cfg.infrastructure);
-                in
-                if isInt infrastructureAttrValue then
-                ''${infrastructureAttrName}=${toString infrastructureAttrValue} \
-                ''
-                else
-                ''${infrastructureAttrName}=\"${infrastructureAttrValue}\" \
-                ''
-                ) (attrNames (cfg.infrastructure))}
-          '';
-        };
+        script = ''
+          ${pkgs.avahi}/bin/avahi-publish-service disnix-${config.networking.hostName} _disnix._tcp 22 \
+            "mem=$(grep 'MemTotal:' /proc/meminfo | sed -e 's/kB//' -e 's/MemTotal://' -e 's/ //g')" \
+            ${concatMapStrings (infrastructureAttrName:
+              let infrastructureAttrValue = getAttr infrastructureAttrName (cfg.infrastructure);
+              in
+              if isInt infrastructureAttrValue then
+              ''${infrastructureAttrName}=${toString infrastructureAttrValue} \
+              ''
+              else
+              ''${infrastructureAttrName}=\"${infrastructureAttrValue}\" \
+              ''
+              ) (attrNames (cfg.infrastructure))}
+        '';
+      };
     };
   };
 }

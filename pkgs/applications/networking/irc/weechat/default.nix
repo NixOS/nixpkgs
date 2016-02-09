@@ -4,12 +4,12 @@
 , extraBuildInputs ? [] }:
 
 stdenv.mkDerivation rec {
-  version = "1.3";
+  version = "1.4";
   name = "weechat-${version}";
 
   src = fetchurl {
     url = "http://weechat.org/files/src/weechat-${version}.tar.bz2";
-    sha256 = "0j2ic1c69ksf78wi0cmc4yi5348x6c92g6annsx928sayxqxfgbh";
+    sha256 = "1m6xq6izcac5186xvvmm8znfjzrg9hq42p69jabdvv7cri4rjvg0";
   };
 
   cmakeFlags = stdenv.lib.optional stdenv.isDarwin

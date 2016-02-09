@@ -60,11 +60,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "firefox-bin-${version}";
+  name = "firefox-bin-unwrapped-${version}";
 
   src = fetchurl {
     url = "http://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/${source.arch}/${source.locale}/firefox-${version}.tar.bz2";
-    inherit (source) sha1;
+    inherit (source) sha256;
   };
 
   phases = "unpackPhase installPhase";

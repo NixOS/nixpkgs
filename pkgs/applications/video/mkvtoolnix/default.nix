@@ -6,6 +6,7 @@
 , legacyGUI ? true, wxGTK ? null
 # For now both qt5 and wxwidgets gui's are enabled, if wxwidgets is disabled the
 # build system doesn't install desktop entries, icons, etc...
+, libiconv
 }:
 
 let
@@ -17,11 +18,11 @@ assert legacyGUI -> wxGTK != null;
 
 stdenv.mkDerivation rec {
   name = "mkvtoolnix-${version}";
-  version = "8.3.0";
+  version = "8.4.0";
 
   src = fetchurl {
     url = "http://www.bunkus.org/videotools/mkvtoolnix/sources/${name}.tar.xz";
-    sha256 = "0dzwmwa76y4nhb5brp5a1kxgxjr71czd8vj218qmrlwm54i85gc7";
+    sha256 = "0y7qm8q9vpvjiw7b69k9140pw9nhvs6ggmk56yxnmcd02inm19gn";
   };
 
   patchPhase = ''
@@ -51,7 +52,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost expat file flac libebml libmatroska libogg libvorbis xdg_utils zlib
-  ] ++ optional withGUI qt5
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ]
+    ++ optional withGUI qt5
     ++ optional legacyGUI wxGTK;
 
   enableParallelBuilding = true;
@@ -69,6 +71,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.bunkus.org/videotools/mkvtoolnix/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ codyopel fuuzetsu ];
-    platforms = platforms.unix;
+    platforms = platforms.all;
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, which
-, boost, libtorrentRasterbar, qt4
+, boost, libtorrentRasterbar, qt5
 , debugSupport ? false # Debugging
 , guiSupport ? true, dbus_libs ? null # GUI (disable to run headless)
 , webuiSupport ? true # WebUI
@@ -10,16 +10,16 @@ assert guiSupport -> (dbus_libs != null);
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "qbittorrent-${version}";
-  version = "3.2.3";
+  version = "3.3.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/qbittorrent/${name}.tar.xz";
-    sha256 = "05590ak4nnqkah8dy71cxf7mqv6phw0ih1719dm761mxf8vrz9w6";
+    sha256 = "0lyv230vqwb77isjqm6fwwgv8hdap88zir9yrccj0qxj7zf8p3cw";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
 
-  buildInputs = [ boost libtorrentRasterbar qt4 ]
+  buildInputs = [ boost libtorrentRasterbar qt5.qtbase qt5.qttools ]
     ++ optional guiSupport dbus_libs;
 
   configureFlags = [
@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
     (if guiSupport then "" else "--disable-gui")
     (if webuiSupport then "" else "--disable-webui")
   ] ++ optional debugSupport "--enable-debug";
+
+  # The lrelease binary is named lrelease instead of lrelease-qt4
+  patches = [ ./fix-lrelease.patch];
 
   # https://github.com/qbittorrent/qBittorrent/issues/1992 
   enableParallelBuilding = false;

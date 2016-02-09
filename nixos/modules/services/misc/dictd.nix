@@ -51,13 +51,12 @@ with lib;
         gid = config.ids.gids.dictd;
       };
 
-    jobs.dictd =
-      { description = "DICT.org Dictionary Server";
-        startOn = "startup";
-        environment = { LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive"; };
-        daemonType = "fork";
-        exec = "${pkgs.dict}/sbin/dictd -s -c ${dictdb}/share/dictd/dictd.conf --locale en_US.UTF-8";
-      };
+    systemd.services.dictd = {
+      description = "DICT.org Dictionary Server";
+      wantedBy = [ "multi-user.target" ];
+      environment = { LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive"; };
+      serviceConfig.Type = "forking";
+      script = "${pkgs.dict}/sbin/dictd -s -c ${dictdb}/share/dictd/dictd.conf --locale en_US.UTF-8";
+    };
   };
-
 }

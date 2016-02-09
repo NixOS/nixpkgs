@@ -1,13 +1,21 @@
-{stdenv, fetchurl, game, paks, mesa, name, description, makeWrapper}:
+{ stdenv, fetchurl, mesa, ioquake3, makeWrapper }:
+
+{ paks, name ? (stdenv.lib.head paks).name, description ? "" }:
 
 stdenv.mkDerivation {
+  name = "${name}-${ioquake3.name}";
+
   builder = ./builder.sh;
 
-  buildInputs = [makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
   
-  inherit game paks mesa name;
+  inherit paks mesa;
+
+  game = ioquake3;
 
   gcc = stdenv.cc.cc;
+
+  preferLocalBuild = true;
   
   meta = {
     inherit description;

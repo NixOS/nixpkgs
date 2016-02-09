@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, autoconf, automake, libtool, makeWrapper
+{ stdenv, fetchurl, pkgconfig, autoreconfHook, makeWrapper
 , ncurses, cpio, gperf, perl, cdrkit, flex, bison, qemu, pcre, augeas, libxml2
 , acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex
-, gmp, readline, file, libintlperl, GetoptLong, SysVirt }:
+, gmp, readline, file, libintlperl, GetoptLong, SysVirt, numactl, xen }:
 
 stdenv.mkDerivation rec {
   name = "libguestfs-${version}";
@@ -18,19 +18,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    makeWrapper pkgconfig autoconf automake libtool ncurses cpio gperf perl
+    makeWrapper pkgconfig autoreconfHook ncurses cpio gperf perl
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
     systemd fuse yajl libvirt gmp readline file hivex libintlperl GetoptLong
-    SysVirt
+    SysVirt numactl xen
   ];
 
   configureFlags = "--disable-appliance --disable-daemon";
   patches = [ ./libguestfs-syms.patch ];
   NIX_CFLAGS_COMPILE="-I${libxml2}/include/libxml2/";
-
-  preConfigure = ''
-    AUTOPOINT=true LIBTOOLIZE=true autoreconf --verbose --install
-  '';
 
   postInstall = ''
     for bin in $out/bin/*; do
@@ -50,7 +46,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     homepage = http://libguestfs.org/;
     maintainers = with maintainers; [offline];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     hydraPlatforms = [];
   };
 }

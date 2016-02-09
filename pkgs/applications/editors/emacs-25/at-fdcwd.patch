@@ -1,0 +1,13 @@
+diff --git a/lib/careadlinkat.h b/lib/careadlinkat.h
+index 5cdb813..7a272e8 100644
+--- a/lib/careadlinkat.h
++++ b/lib/careadlinkat.h
+@@ -23,6 +23,8 @@
+ #include <fcntl.h>
+ #include <unistd.h>
+ 
++#define AT_FDCWD -2
++
+ struct allocator;
+ 
+ /* Assuming the current directory is FD, get the symbolic link value

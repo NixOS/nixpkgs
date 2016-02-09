@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
       homepage = https://bitbucket.org/melek/dmenu2;
       license = stdenv.lib.licenses.mit;
       maintainers = with maintainers; [ cstrahan ];
-      platforms = with platforms; all;
+      platforms = platforms.all;
   };
 }

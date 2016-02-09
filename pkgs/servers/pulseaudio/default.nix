@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation rec {
   name = "${if libOnly then "lib" else ""}pulseaudio-${version}";
-  version = "7.0";
+  version = "8.0";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    sha256 = "1yp8x8z4wigrzik131kjdyhn7hznazvbkbp2zz1vy9l9gqvy26na";
+    sha256 = "128rrlvrgb4ia3pbzipf5mi6nvrpm6zmxn5r3bynqiikhvify3k9";
   };
 
   patches = [ ./caps-fix.patch ];
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString libOnly ''
     rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
-    sed 's|-lltdl|-L${libtool}/lib -lltdl|' -i $out/lib/libpulsecore-${version}.la
+    sed 's|-lltdl|-L${libtool}/lib -lltdl|' -i $out/lib/pulseaudio/libpulsecore-${version}.la
   '';
 
   meta = {

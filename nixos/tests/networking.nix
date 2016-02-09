@@ -31,6 +31,17 @@ import ./make-test.nix ({ pkgs, networkd, test, ... }:
         };
       };
     testCases = {
+      loopback = {
+        name = "Loopback";
+        machine.networking.useNetworkd = networkd;
+        testScript = ''
+          startAll;
+          $machine->waitForUnit("network-interfaces.target");
+          $machine->waitForUnit("network.target");
+          $machine->succeed("ip addr show lo | grep -q 'inet 127.0.0.1/8 '");
+          $machine->succeed("ip addr show lo | grep -q 'inet6 ::1/128 '");
+        '';
+      };
       static = {
         name = "Static";
         nodes.router = router;

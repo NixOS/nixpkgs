@@ -262,21 +262,70 @@ Additional information.
 </listitem>
 
 <listitem>
-<para>Master should only see non-breaking commits that do not cause mass rebuilds.</para>
-</listitem>
-
-<listitem>
-<para>Staging should only see non-breaking mass-rebuild commits. That means it's not to be used for testing, and changes must have been well tested already. <link xlink:href="http://comments.gmane.org/gmane.linux.distributions.nixos/13447">Read policy here</link>.</para>
-</listitem>
-
-<listitem>
-<para>If staging is already in a broken state, please refrain from adding extra new breakages. Stabilize it for a few days, merge into master, then resume development on staging. <link xlink:href="http://hydra.nixos.org/jobset/nixpkgs/staging#tabs-evaluations">Keep an eye on the staging evaluations here</link>.</para>
-</listitem>
-
-<listitem>
 <para>When changing the bootloader installation process, extra care must be taken. Grub installations cannot be rolled back, hence changes may break people's installations forever. For any non-trivial change to the bootloader please file a PR asking for review, especially from @edolstra.</para>
 </listitem>
 </itemizedlist>
+
+<section>
+  <title>Master branch</title>
+
+  <itemizedlist>
+    <listitem>
+      <para>
+        It should only see non-breaking commits that do not cause mass rebuilds.
+      </para>
+    </listitem>
+  </itemizedlist>
+</section>
+
+<section>
+  <title>Staging branch</title>
+
+  <itemizedlist>
+    <listitem>
+      <para>
+        It's only for non-breaking mass-rebuild commits. That means it's not to
+        be used for testing, and changes must have been well tested already.
+        <link xlink:href="http://comments.gmane.org/gmane.linux.distributions.nixos/13447">Read policy here</link>.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        If the branch is already in a broken state, please refrain from adding
+        extra new breakages. Stabilize it for a few days, merge into master,
+        then resume development on staging.
+        <link xlink:href="http://hydra.nixos.org/jobset/nixpkgs/staging#tabs-evaluations">Keep an eye on the staging evaluations here</link>.
+        If any fixes for staging happen to be already in master, then master can
+        be merged into staging.
+      </para>
+    </listitem>
+  </itemizedlist>
+</section>
+
+<section>
+  <title>Stable release branches</title>
+
+  <itemizedlist>
+    <listitem>
+      <para>
+        If you're cherry-picking a commit to a stable release branch, always use
+        <command>git cherry-pick -xe</command> and ensure the message contains a
+        clear description about why this needs to be included in the stable
+        branch.
+      </para>
+      <para>An example of a cherry-picked commit would look like this:</para>
+      <screen>
+nixos: Refactor the world.
+
+The original commit message describing the reason why the world was torn apart.
+
+(cherry picked from commit abcdef)
+Reason: I just had a gut feeling that this would also be wanted by people from
+the stone age.
+      </screen>
+    </listitem>
+  </itemizedlist>
+</section>
 
 </section>
 </chapter>

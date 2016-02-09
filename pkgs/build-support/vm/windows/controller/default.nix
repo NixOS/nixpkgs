@@ -48,11 +48,11 @@ let
     mount -t proc none /fs/proc
 
     mount -t 9p \
-      -o trans=virtio,version=9p2000.L,msize=262144,cache=loose \
+      -o trans=virtio,version=9p2000.L,cache=loose \
       store /fs/nix/store
 
     mount -t 9p \
-      -o trans=virtio,version=9p2000.L,msize=262144,cache=loose \
+      -o trans=virtio,version=9p2000.L,cache=loose \
       xchg /fs/xchg
 
     echo root:x:0:0::/root:/bin/false > /fs/etc/passwd

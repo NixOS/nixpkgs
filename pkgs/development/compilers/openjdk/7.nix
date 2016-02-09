@@ -17,9 +17,9 @@ let
     else
       throw "openjdk requires i686-linux or x86_64 linux";
 
-  update = "80";
+  update = "91";
 
-  build = "32";
+  build = "01";
 
   # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
   paxflags = if stdenv.isi686 then "msp" else "m";
@@ -33,31 +33,31 @@ let
   repover = "jdk7u${update}-b${build}";
   jdk7 = fetchurl {
     url = "${baseurl}/archive/${repover}.tar.gz";
-    sha256 = "1r8xnn87nmqaq2f8i3cp3i9ngq66k0c0wgkdq5cf59lkgs8wkcdi";
+    sha256 = "08f7cbayyrryim3xbrs12cr12i1mczcikyc9rdlsyih0r4xvll28";
   };
   langtools = fetchurl {
     url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-    sha256 = "01alj6pfrjqyf4irll9wg34h4w9nmb3973lvbacs528qm1nxgh9r";
+    sha256 = "0rmlzrgsacn60blpg1sp30k6p0sgzsml8wb41yc998km1bsnjxnh";
   };
   hotspot = fetchurl {
     url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-    sha256 = "14zla8axmg5344zf45i4cj7yyli0kmdjsh9yalmzqaphpkqjqpf2";
+    sha256 = "1w1n81y9jcvjzssl4049yzfc0gdfnh73ki6wg1d8pg22zlyhrrwv";
   };
   corba = fetchurl {
     url = "${baseurl}/corba/archive/${repover}.tar.gz";
-    sha256 = "19z3ay3f2q7r2ra03c6wy8b5rbdbrkq5g2dzhrqcg0n4iydd3c40";
+    sha256 = "086yr927bxnlgljx7mw2cg6f6aip57hi4qpn1h35n6fsyvb4n67h";
   };
   jdk = fetchurl {
     url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-    sha256 = "1q0r2l9bz2cyx4fq79x6cb2f5xycw83hl5cn1d1mazgsckp590lb";
+    sha256 = "14r39ylj3qa63arpqxl0h84baah1kjgnyp3v9d7d4vd0yagpn66b";
   };
   jaxws = fetchurl {
     url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-    sha256 = "1lp0mww2x3b6xavb7idrzckh6iw8jd6s1fvqgfvzs853z4ifksqj";
+    sha256 = "1p1739gb5gx9m4sm3i4javfk9lk41wnz92k6gis6sq99dd1bj1l5";
   };
   jaxp = fetchurl {
     url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-    sha256 = "0pd874dkgxkb7frxg4n9py61kkhhck4x33dcynynwb3vl6k6iy79";
+    sha256 = "1nl3kmbwqhhymcp25rnmf5mr3dn87lgdxvz9wgng7if6yqxlyakq";
   };
   openjdk = stdenv.mkDerivation rec {
     name = "openjdk-7u${update}b${build}";
@@ -100,7 +100,6 @@ let
       ./paxctl.patch
       ./read-truststore-from-env.patch
       ./currency-date-range.patch
-      ./linux-4.0.patch
     ];
 
     NIX_NO_SELF_RPATH = true;

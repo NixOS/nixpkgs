@@ -14,7 +14,7 @@ in {
         description = "Whether to enable cadvisor service.";
       };
 
-      host = mkOption {
+      listenAddress = mkOption {
         default = "127.0.0.1";
         type = types.str;
         description = "Cadvisor listening host";
@@ -71,7 +71,7 @@ in {
       after = [ "network.target" "docker.service" "influxdb.service" ];
 
       postStart = mkBefore ''
-        until ${pkgs.curl}/bin/curl -s -o /dev/null 'http://${cfg.host}:${toString cfg.port}/containers/'; do
+        until ${pkgs.curl}/bin/curl -s -o /dev/null 'http://${cfg.listenAddress}:${toString cfg.port}/containers/'; do
           sleep 1;
         done
       '';
@@ -79,7 +79,7 @@ in {
       serviceConfig = {
         ExecStart = ''${pkgs.cadvisor}/bin/cadvisor \
           -logtostderr=true \
-          -listen_ip=${cfg.host} \
+          -listen_ip=${cfg.listenAddress} \
           -port=${toString cfg.port} \
           ${optionalString (cfg.storageDriver != null) ''
             -storage_driver ${cfg.storageDriver} \

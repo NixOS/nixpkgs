@@ -66,10 +66,6 @@
 , "flatiron"
 , "ironhorse"
 , "fs-walk"
-, { "statsd": "https://github.com/etsy/statsd/tarball/23b331895cc4b22b64a19fd0e7b6def6f6f30d9e"}
-, "statsd-librato-backend"
-, "stackdriver-statsd-backend"
-, "statsd-influxdb-backend"
 , "ungit"
 , { "node-uptime": "https://github.com/fzaninotto/uptime/tarball/1c65756575f90f563a752e2a22892ba2981c79b7" }
 , { "guifi-earth": "https://github.com/jmendeth/guifi-earth/tarball/f3ee96835fd4fb0e3e12fadbd2cb782770d64854 " }
@@ -137,7 +133,6 @@
 , "node-xmpp-server"
 , "node-xmpp-serviceadmin"
 , "node-xmpp-joap"
-, "7f"
 , "jfs"
 , "cordova"
 , "sloc"

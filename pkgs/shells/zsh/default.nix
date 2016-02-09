@@ -2,11 +2,11 @@
 
 let
 
-  version = "5.1.1";
+  version = "5.2";
 
   documentation = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.gz";
-    sha256 = "0p99dr7kck0a6im1w9qiiz2ai78mgy53gbbn87bam9ya2885gf05";
+    sha256 = "1r9r91gmrrflzl0yq10bib9gxbqyhycb09hcx28m2g3vv9skmccj";
   };
 
 in
@@ -16,18 +16,24 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}.tar.gz";
-    sha256 = "11shllzhq53fg8ngy3bgbmpf09fn2czifg7hsb41nxi3410mpvcl";
+    sha256 = "0dsr450v8nydvpk8ry276fvbznlrjgddgp7zvhcw4cv69i9lr4ps";
   };
 
   buildInputs = [ ncurses coreutils pcre ];
 
-  preConfigure = ''
-    configureFlags="--enable-maildir-support --enable-multibyte --enable-zprofile=$out/etc/zprofile --with-tcsetpgrp --enable-pcre"
-  '';
+  configureFlags = [
+    "--enable-maildir-support"
+    "--enable-multibyte"
+    "--enable-zprofile=$out/etc/zprofile"
+    "--with-tcsetpgrp"
+    "--enable-pcre"
+  ];
 
-  # Some tests fail on hydra, see
-  # http://hydra.nixos.org/build/25637689/nixlog/1
-  doCheck = false;
+  # the zsh/zpty module is not available on hydra
+  # so skip groups Y Z
+  checkFlagsArray = ''
+    (TESTNUM=A TESTNUM=B TESTNUM=C TESTNUM=D TESTNUM=E TESTNUM=V TESTNUM=W)
+  '';
 
   # XXX: think/discuss about this, also with respect to nixos vs nix-on-X
   postInstall = ''

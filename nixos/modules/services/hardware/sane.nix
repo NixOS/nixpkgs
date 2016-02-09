@@ -4,7 +4,9 @@ with lib;
 
 let
 
-  pkg = if config.hardware.sane.snapshot then pkgs.saneBackendsGit else pkgs.saneBackends;
+  pkg = if config.hardware.sane.snapshot
+    then pkgs.sane-backends-git
+    else pkgs.sane-backends;
   backends = [ pkg ] ++ config.hardware.sane.extraBackends;
   saneConfig = pkgs.mkSaneConfig { paths = backends; };
 

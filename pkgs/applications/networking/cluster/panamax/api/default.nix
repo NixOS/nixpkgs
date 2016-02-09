@@ -1,6 +1,6 @@
-{ stdenv, buildEnv, fetchgit, fetchurl, makeWrapper, bundlerEnv, bundler_HEAD
+{ stdenv, buildEnv, fetchgit, fetchurl, makeWrapper, bundlerEnv, bundler
 , ruby, libxslt, libxml2, sqlite, openssl, docker
-, dataDir ? "/var/lib/panamax-api" }:
+, dataDir ? "/var/lib/panamax-api" }@args:
 
 with stdenv.lib;
 
@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
     gemset = ./gemset.nix;
     gemfile = ./Gemfile;
     lockfile = ./Gemfile.lock;
-    buildInputs = [ openssl ];
   };
-  bundler = bundler_HEAD.override { inherit ruby; };
+
+  bundler = args.bundler.override { inherit ruby; };
 
   database_yml = builtins.toFile "database.yml" ''
     production:

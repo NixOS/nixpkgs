@@ -1,3 +1,8 @@
+# Note: The Haskell package set used for building UHC is
+# determined in the file top-level/haskell-packages.nix.
+# We are using Stackage LTS to avoid constant breakage.
+# Bump the Stackage LTS release to the last release if possible
+# when a new UHC version is released.
 { stdenv, coreutils, fetchgit, m4, libtool, clang, ghcWithPackages }:
 
 let wrappedGhc = ghcWithPackages (hpkgs: with hpkgs; [fgl vector syb uulib network binary hashable uhc-util mtl transformers directory containers array process filepath shuffle uuagc] );
@@ -6,13 +11,13 @@ in stdenv.mkDerivation rec {
   # The commits "Fixate/tag v..." are the released versions.
   # Ignore the "bumped version to ...." commits, they do not
   # correspond to releases.
-  version = "1.1.9.1";
+  version = "1.1.9.2";
   name = "uhc-${version}";
 
   src = fetchgit {
     url = "https://github.com/UU-ComputerScience/uhc.git";
-    rev = "ce93d01486972c994ea2bbbd3d43859911120c39";
-    sha256 = "1y670sc6ky74l3msayzqjlkjv1kpv3g35pirsq3q79klzvnpyj2x";
+    rev = "292d259113b98c32154a5be336875751caa5edbc";
+    sha256 = "1f462xq9ilkp9mnxm8hxhh1cdwps5d0hxysyibxryk32l7hh53cz";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/EHC";
@@ -41,7 +46,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "http://www.cs.uu.nl/wiki/UHC";
     description = "Utrecht Haskell Compiler";
-    maintainers = [ maintainers.phausmann ];
+    maintainers = [ maintainers.phile314 ];
 
     # UHC i686 support is broken, see
     # https://github.com/UU-ComputerScience/uhc/issues/52
@@ -50,5 +55,10 @@ in stdenv.mkDerivation rec {
     # On Darwin, the GNU libtool is used, which does not
     # support the -static flag and thus breaks the build.
     platforms = ["x86_64-linux"];
+    # Hydra currently doesn't build the Stackage LTS package set,
+    # and we don't want to build all our haskell dependencies
+    # from scratch just to build UHC.
+    hydraPlatforms = stdenv.lib.platforms.none;
+
   };
 }

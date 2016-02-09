@@ -112,8 +112,9 @@ in
 
           config = {
             target = mkDefault name;
-            source = mkIf (config.text != null)
-              (mkDefault (pkgs.writeText "etc-file" config.text));
+            source = mkIf (config.text != null) (
+              let name' = "etc-" + baseNameOf name;
+              in mkDefault (pkgs.writeText name' config.text));
           };
 
         });

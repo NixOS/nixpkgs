@@ -18,7 +18,7 @@ let
     password=${config.services.ddclient.password}
     protocol=${config.services.ddclient.protocol}
     server=${config.services.ddclient.server}
-    ssl=${if config.services.ddclient.ssl then "yes" else "yes"}
+    ssl=${if config.services.ddclient.ssl then "yes" else "no"}
     wildcard=YES
     ${config.services.ddclient.domain}
     ${config.services.ddclient.extraConfig}
@@ -127,7 +127,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      environment.SSL_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
+      environment.SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
       serviceConfig = {
         # Uncomment this if too many problems occur:
         # Type = "forking";

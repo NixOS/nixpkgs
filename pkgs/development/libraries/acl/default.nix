@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://savannah.nongnu.org/projects/acl;
     description = "Library and tools for manipulating access control lists";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

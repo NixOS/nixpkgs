@@ -57,6 +57,7 @@ in
     users.ldap = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Whether to enable authentication against an LDAP server.";
       };

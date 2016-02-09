@@ -18,7 +18,6 @@ let
       else versionNoPatch;
     tag = "v" + stdenv.lib.replaceChars ["." "p" "-"] ["_" "_" ""] fullVersionName;
     isRuby21 = majorVersion == "2" && minorVersion == "1";
-    isRuby18 = majorVersion == "1" && minorVersion == "8";
     baseruby = self.override { useRailsExpress = false; };
     self = lib.makeOverridable (
       { stdenv, lib, fetchurl, fetchFromSavannah, fetchFromGitHub
@@ -64,8 +63,7 @@ let
           # support is disabled (if it's enabled, we already have it) and we're
           # running on darwin
           ++ (op (!cursesSupport && stdenv.isDarwin) readline)
-          ++ (ops stdenv.isDarwin (with darwin; [ libiconv libobjc libunwind ]))
-          ++ op isRuby18 autoconf;
+          ++ (ops stdenv.isDarwin (with darwin; [ libiconv libobjc libunwind ]));
 
         enableParallelBuilding = true;
 
@@ -77,15 +75,16 @@ let
           rm "$sourceRoot/enc/unicode/name2ctype.h"
         '';
 
-        postPatch = opString (!isRuby18) (if isRuby21 then ''
+        postPatch = if isRuby21 then ''
           rm tool/config_files.rb
           cp ${config}/config.guess tool/
           cp ${config}/config.sub tool/
-        '' else opString useRailsExpress ''
+        ''
+        else opString useRailsExpress ''
           sed -i configure.in -e '/config.guess/d'
           cp ${config}/config.guess tool/
           cp ${config}/config.sub tool/
-        '');
+        '';
 
         configureFlags = ["--enable-shared" "--enable-pthread"]
           ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
@@ -136,17 +135,6 @@ let
     ) args; in self;
 
 in {
-  ruby_1_8_7 = generic {
-    majorVersion = "1";
-    minorVersion = "8";
-    teenyVersion = "7";
-    patchLevel = "374";
-    sha256 = {
-      src = "0v17cmm95f3xwa4kvza8xwbnfvfqcrym8cvqfvscn45bxsmfwvl7";
-      git = "1xddhxr0j26hpxfixvhqdscwk2ri846w2129fcfwfjzvy19igswx";
-    };
-  };
-
   ruby_1_9_3 = generic {
     majorVersion = "1";
     minorVersion = "9";
@@ -162,10 +150,10 @@ in {
     majorVersion = "2";
     minorVersion = "0";
     teenyVersion = "0";
-    patchLevel = "645";
+    patchLevel = "647";
     sha256 = {
-      src = "1azl3kbqqw3jvwfcsy6fdb7vmwz5w73fwpq1y1gblz79zzzqx7sy";
-      git = "14bnas1iif2shyaz4ylb0832x96y2mda52x0v0aglkvqmcz1cfxb";
+      src = "1v2vbvydarcx5801gx9lc6gr6dfi0i7qbzwhsavjqbn79rdsz2n8";
+      git = "186pf4q9xymzn4zn1sjppl1skrl5f0159ixz5cz8g72dmmynq3g3";
     };
   };
 
@@ -224,6 +212,17 @@ in {
     };
   };
 
+  ruby_2_1_7 = generic {
+    majorVersion = "2";
+    minorVersion = "1";
+    teenyVersion = "7";
+    patchLevel = "0";
+    sha256 = {
+      src = "10fxlqmpbq9407zgsx060q22yj4zq6c3czbf29h7xk1rmjb1b77m";
+      git = "1fmbqd943akqjwsfbj9bg394ac46qmpavm8s0kv2w87rflrjcjfb";
+    };
+  };
+
   ruby_2_2_0 = generic {
     majorVersion = "2";
     minorVersion = "2";
@@ -243,6 +242,29 @@ in {
     sha256 = {
       src = "0i4v7l8pnam0by2cza12zldlhrffqchwb2m9shlnp7j2gqqhzz2z";
       git = "08mw1ql2ghy483cp8xzzm78q17simn4l6phgm2gah7kjh9y3vbrn";
+    };
+  };
+
+  ruby_2_2_3 = generic {
+    majorVersion = "2";
+    minorVersion = "2";
+    teenyVersion = "3";
+    patchLevel = "0";
+    sha256 = {
+      src = "1kpdf7f8pw90n5bckpl2idzggk0nn0240ah92sj4a1w6k4pmyyfz";
+      git = "1ssq3c23ay57ypfis47y2n817hfmb71w0xrdzp57j6bv12jqmgrx";
+    };
+  };
+
+  ruby_2_3_0 = generic {
+    majorVersion = "2";
+    minorVersion = "3";
+    teenyVersion = "0";
+    patchLevel = "0";
+    sha256 = {
+      # src = "1ssq3c23ay57ypfis47y2n817hfmb71w0xrdzp57j6bv12jqmgrx";
+      src = "01z5cya4a7y751d4pb3aak5qcwmmvnwkbgz9z171p8hsbw7acnxs";
+      git = "0nl0pp96m0jxi422mqx09jqn9bff90pzz0xxa0ikrx7by0g00npg";
     };
   };
 }

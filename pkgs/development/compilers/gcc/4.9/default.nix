@@ -63,7 +63,8 @@ let version = "4.9.3";
 
     enableParallelBuilding = true;
 
-    patches = [ ]
+    patches =
+      [ ../use-source-date-epoch.patch ]
       ++ optionals enableParallelBuilding [ ../parallel-bconfig.patch ./parallel-strsignal.patch ]
       ++ optional (cross != null) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
@@ -293,9 +294,8 @@ stdenv.mkDerivation ({
     ++ (optional stdenv.isDarwin gnused)
     ;
 
-  NIX_LDFLAGS = stdenv.lib.optionalString  stdenv.isSunOS "-lm -ldl";
-
   preConfigure = stdenv.lib.optionalString (stdenv.isSunOS && stdenv.is64bit) ''
+    sed -i -e "s/-lrt//g" libstdc++-v3/configure
     export NIX_LDFLAGS=`echo $NIX_LDFLAGS | sed -e s~$prefix/lib~$prefix/lib/amd64~g`
     export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
     export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
@@ -518,6 +518,7 @@ stdenv.mkDerivation ({
     platforms =
       stdenv.lib.platforms.linux ++
       stdenv.lib.platforms.freebsd ++
+      stdenv.lib.platforms.illumos ++
       optionals (langAda == false) stdenv.lib.platforms.darwin;
   };
 }

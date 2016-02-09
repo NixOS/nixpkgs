@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, autoconf, libtool, automake, libsodium, ncurses, libopus
+{ stdenv, fetchFromGitHub, autoreconfHook, libsodium, ncurses, libopus
 , libvpx, check, libconfig, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "tox-core-dev-20150629";
+  name = "tox-core-dev-20160105";
 
   src = fetchFromGitHub {
     owner  = "irungentoo";
     repo   = "toxcore";
-    rev    = "219fabc0f5dbaac7968cb7728d25dface3ebb2ea";
-    sha256 = "1rsnxa5b7i2zclx0kzbf4a5mds0jfkvfjz1s4whzk7rf8w3vpqkh";
+    rev    = "b9ef24875ce1d9bf5f04f0164ae95f729330a295";
+    sha256 = "0hxwp4nk5an3a2pmha6x2729mxm57j52vnrsq47gir31c0hk6x2x";
   };
 
   NIX_LDFLAGS = "-lgcc_s";
@@ -22,10 +22,6 @@ stdenv.mkDerivation rec {
       auto_tests/tox_test.c
   '';
 
-  preConfigure = ''
-    autoreconf -i
-  '';
-
   configureFlags = [
     "--with-libsodium-headers=${libsodium}/include"
     "--with-libsodium-libs=${libsodium}/lib"
@@ -34,8 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    autoconf libtool automake libsodium ncurses
-    check libconfig pkgconfig
+    autoreconfHook libsodium ncurses check libconfig pkgconfig
   ] ++ stdenv.lib.optionals (!stdenv.isArm) [
     libopus
   ];

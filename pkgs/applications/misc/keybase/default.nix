@@ -11,11 +11,11 @@ let
 
 in nodePackages.buildNodePackage rec {
   name = "keybase-${version}";
-  version = "0.7.8";
+  version = "0.8.25";
 
   src = [(fetchurl {
     url = "https://github.com/keybase/node-client/archive/v${version}.tar.gz";
-    sha256 = "1ak27bd7jwyss85i7plnfr5al33ykfifqknncyx1ir2r2ldagzc7";
+    sha256 = "1zc357hwh26lsg8ngj7iwjdmywyzk6fz3wxmcqq1qyp2927i4jz3";
   })];
 
   deps = (filter (v: nixType v == "derivation") (attrValues nodePackages));
@@ -32,6 +32,6 @@ in nodePackages.buildNodePackage rec {
     license = licenses.mit;
     homepage = https://keybase.io/docs/command_line;
     maintainers = with maintainers; [manveru];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

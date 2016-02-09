@@ -21,7 +21,7 @@ in
         description = ''
           Whether to enable the Syncthing, self-hosted open-source alternative
           to Dropbox and BittorrentSync. Initial interface will be
-          available on http://127.0.0.1:8080/.
+          available on http://127.0.0.1:8384/.
         '';
       };
 
@@ -39,6 +39,18 @@ in
           Path where the settings and keys will exist.
         '';
       };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.syncthing;
+        defaultText = "pkgs.syncthing";
+        example = literalExample "pkgs.syncthing";
+        description = ''
+          Syncthing package to use.
+        '';
+      };
+
+
 
     };
 
@@ -66,7 +78,7 @@ in
         };
       };
 
-    environment.systemPackages = [ pkgs.syncthing ];
+    environment.systemPackages = [ cfg.package ];
 
   };
 

@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="librevenge";
-    version="0.0.2";
+    version="0.0.3";
     name="${baseName}-${version}";
-    hash="03ygxyb0vfjv8raif5q62sl33b54wkr5rzgadb8slijm6k281wpn";
-    url="mirror://sourceforge/project/libwpd/librevenge/librevenge-0.0.2/librevenge-0.0.2.tar.xz";
-    sha256="03ygxyb0vfjv8raif5q62sl33b54wkr5rzgadb8slijm6k281wpn";
+    hash="1r0n5q7rw32h5fhnxfl7f4pwvprn9agpf117nhn71jrjqx57irvw";
+    url="mirror://sourceforge/project/libwpd/librevenge/librevenge-0.0.3/librevenge-0.0.3.tar.xz";
+    sha256="1r0n5q7rw32h5fhnxfl7f4pwvprn9agpf117nhn71jrjqx57irvw";
   };
   buildInputs = [
     boost pkgconfig cppunit zlib

@@ -8,7 +8,7 @@ let
   cfgFile = pkgs.writeText "kibana.json" (builtins.toJSON (
     (filterAttrsRecursive (n: v: v != null) ({
       server = {
-        host = cfg.host;
+        host = cfg.listenAddress;
         port = cfg.port;
         ssl = {
           cert = cfg.cert;
@@ -44,7 +44,7 @@ in {
   options.services.kibana = {
     enable = mkEnableOption "enable kibana service";
 
-    host = mkOption {
+    listenAddress = mkOption {
       description = "Kibana listening host";
       default = "127.0.0.1";
       type = types.str;
@@ -127,6 +127,7 @@ in {
     package = mkOption {
       description = "Kibana package to use";
       default = pkgs.kibana;
+      defaultText = "pkgs.kibana";
       type = types.package;
     };
 

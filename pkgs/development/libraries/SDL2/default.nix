@@ -3,6 +3,7 @@
 , alsaSupport ? true, alsaLib ? null
 , x11Support ? true, xlibsWrapper ? null, libXrandr ? null
 , pulseaudioSupport ? true, libpulseaudio ? null
+, AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
 }:
 
 # OSS is no longer supported, for it's much crappier than ALSA and
@@ -36,7 +37,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig audiofile ] ++
     stdenv.lib.optional openglSupport mesa ++
-    stdenv.lib.optional alsaSupport alsaLib;
+    stdenv.lib.optional alsaSupport alsaLib ++
+    stdenv.lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
 
   # https://bugzilla.libsdl.org/show_bug.cgi?id=1431
   dontDisableStatic = true;

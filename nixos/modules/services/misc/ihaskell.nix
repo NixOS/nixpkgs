@@ -6,7 +6,6 @@ let
 
   cfg = config.services.ihaskell;
   ihaskell = pkgs.ihaskell.override {
-    inherit (cfg.haskellPackages) ihaskell ghcWithPackages;
     packages = self: cfg.extraPackages self;
   };
 
@@ -22,9 +21,9 @@ in
       };
 
       haskellPackages = mkOption {
-        default = pkgs.haskellngPackages;
-        defaultText = "pkgs.haskellngPackages";
-        example = literalExample "pkgs.haskell-ng.packages.ghc784";
+        default = pkgs.haskellPackages;
+        defaultText = "pkgs.haskellPackages";
+        example = literalExample "pkgs.haskell.packages.ghc784";
         description = ''
           haskellPackages used to build IHaskell and other packages.
           This can be used to change the GHC version used to build

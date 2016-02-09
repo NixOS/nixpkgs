@@ -1,6 +1,7 @@
 { stdenv, fetchzip, fetchgit, bashCompletion
 , glib, polkit, pkgconfig, intltool, gusb, libusb1, lcms2, sqlite, systemd, dbus
-, automake, autoconf, libtool, gtk_doc, which, gobjectIntrospection, argyllcms }:
+, automake, autoconf, libtool, gtk_doc, which, gobjectIntrospection, argyllcms
+, libgudev }:
 
 stdenv.mkDerivation rec {
   name = "colord-1.2.12";
@@ -15,20 +16,26 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-udevrulesdir=$out/lib/udev/rules.d"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--localstatedir=/var"
     "--disable-bash-completion"
   ];
 
+  # don't touch /var at install time, colord creates what it needs at runtime
+  postPatch = ''
+    sed -i -e "s|if test -w .*;|if false;|" src/Makefile.in
+    sed -i -e "s|if test -w .*;|if false;|" src/Makefile.am
+  '';
+
   buildInputs = [ glib polkit pkgconfig intltool gusb libusb1 lcms2 sqlite systemd dbus gobjectIntrospection
-                  bashCompletion argyllcms automake autoconf ];
+                  bashCompletion argyllcms automake autoconf libgudev ];
 
   postInstall = ''
-    rm -fr $out/var/lib/colord
     mkdir -p $out/etc/bash_completion.d
     cp -v data/colormgr $out/etc/bash_completion.d
   '';
 
   meta = {
-    description = "system service that makes it easy to manage, install and generate color profiles to accurately color manage input and output devices";
+    description = "System service to manage, install and generate color profiles to accurately color manage input and output devices";
     homepage = http://www.freedesktop.org/software/colord/intro.html;
     license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [stdenv.lib.maintainers.marcweber];

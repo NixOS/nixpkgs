@@ -66,6 +66,7 @@ in
       kdeWorkspacePackage = mkOption {
         internal = true;
         default = pkgs.kde4.kde_workspace;
+        defaultText = "pkgs.kde4.kde_workspace";
         type = types.package;
         description = "Custom kde-workspace, used for NixOS rebranding.";
       };
@@ -106,6 +107,12 @@ in
             if [ -e $HOME/.config/Trolltech.conf ]; then
                 sed -e '/nix\\store\|nix\/store/ d' -i $HOME/.config/Trolltech.conf
             fi
+
+            # Load PulseAudio module for routing support.
+            # See http://colin.guthr.ie/2009/10/so-how-does-the-kde-pulseaudio-support-work-anyway/
+            ${optionalString config.hardware.pulseaudio.enable ''
+              ${config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
+            ''}
 
             # Start KDE.
             exec ${kde_workspace}/bin/startkde

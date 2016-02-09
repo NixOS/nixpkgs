@@ -9,11 +9,10 @@
 
 stdenv.mkDerivation rec {
 
-  name = "kid3-${version}";
-  version = "3.3.0";
+  name = "kid3-${meta.version}";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/kid3/kid3/${version}/${name}.tar.gz";
+    url = "http://downloads.sourceforge.net/project/kid3/kid3/${meta.version}/${name}.tar.gz";
     sha256 = "12sa54mg1b3wkagmh5yi20ski8km9d199lk0a1yfxy0ffjfld7js";
   };
 
@@ -34,6 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    version = "3.3.0";
     description = "A simple and powerful audio tag editor";
     longDescription = ''
       If you want to easily tag multiple MP3, Ogg/Vorbis, FLAC, MPC,
@@ -70,5 +70,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.AndersonTorres ];
   };
 }
-
 # TODO: Qt5 support

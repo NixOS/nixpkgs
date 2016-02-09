@@ -1,21 +1,27 @@
 { stdenv, fetchurl, python, pyqt5, sip_4_16, poppler_utils, pkgconfig, libpng
-, imagemagick, libjpeg, fontconfig, podofo, qt5, icu, sqlite
-, pil, makeWrapper, unrar, chmlib, pythonPackages, xz, libusb1, libmtp
+, imagemagick, libjpeg, fontconfig, podofo, qtbase, icu, sqlite
+, makeWrapper, unrarSupport ? false, chmlib, pythonPackages, xz, libusb1, libmtp
 , xdg_utils
 }:
 
 stdenv.mkDerivation rec {
+  version = "2.50.1";
   name = "calibre-${version}";
-  version = "2.41.0";
 
   src = fetchurl {
-    url = "https://github.com/kovidgoyal/calibre/releases/download/v${version}/${name}.tar.xz";
-    sha256 = "069fkcsx7kaazs7f095nkz4jw9jrm0k9zq16ayx41lxjbd1r97ik";
+    url = "http://download.calibre-ebook.com/${version}/${name}.tar.xz";
+    sha256 = "0fy5fwj53hl8bcl412d2y61xm1nmkry24dlanj07nn6dhmrs0cm9";
   };
 
   inherit python;
 
-  patchPhase = ''
+  patches = [
+    # Patch from Debian that switches the version update change from
+    # enabled by default to disabled by default.
+    ./no_updates_dialog.patch
+  ] ++ stdenv.lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+
+  prePatch = ''
     sed -i "/pyqt_sip_dir/ s:=.*:= '${pyqt5}/share/sip':"  \
       setup/build_environment.py
   '';
@@ -24,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ python pyqt5 sip_4_16 poppler_utils libpng imagemagick libjpeg
-      fontconfig podofo qt5.base pil chmlib icu sqlite libusb1 libmtp xdg_utils
+      fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
       pythonPackages.mechanize pythonPackages.lxml pythonPackages.dateutil
       pythonPackages.cssutils pythonPackages.beautifulsoup pythonPackages.pillow
       pythonPackages.sqlite3 pythonPackages.netifaces pythonPackages.apsw
@@ -53,7 +59,6 @@ stdenv.mkDerivation rec {
 
     for a in $out/bin/*; do
       wrapProgram $a --prefix PYTHONPATH : $PYTHONPATH \
-                     --prefix LD_LIBRARY_PATH : ${unrar}/lib \
                      --prefix PATH : ${poppler_utils}/bin
     done
   '';
@@ -61,8 +66,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Comprehensive e-book software";
     homepage = http://calibre-ebook.com;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ viric iElectric pSub ];
+    license = with licenses; if unrarSupport then unfreeRedistributable else gpl3;
+    maintainers = with maintainers; [ viric iElectric pSub AndersonTorres ];
     platforms = platforms.linux;
+    inherit version;
   };
 }

@@ -39,9 +39,16 @@ let
     DEFAULT boot
 
     LABEL boot
-    MENU LABEL NixOS ${config.system.nixosVersion}${config.isoImage.appendToMenuLabel}
+    MENU LABEL NixOS ${config.system.nixosLabel}${config.isoImage.appendToMenuLabel}
     LINUX /boot/bzImage
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
+    INITRD /boot/initrd
+
+    # A variant to boot with 'nomodeset'
+    LABEL boot-nomodeset
+    MENU LABEL NixOS ${config.system.nixosVersion}${config.isoImage.appendToMenuLabel} (with nomodeset)
+    LINUX /boot/bzImage
+    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} nomodeset
     INITRD /boot/initrd
   '';
 
@@ -59,10 +66,18 @@ let
     mkdir -p $out/EFI/boot
     cp -v ${pkgs.gummiboot}/lib/gummiboot/gummiboot${targetArch}.efi $out/EFI/boot/boot${targetArch}.efi
     mkdir -p $out/loader/entries
+
     echo "title NixOS Live CD" > $out/loader/entries/nixos-livecd.conf
     echo "linux /boot/bzImage" >> $out/loader/entries/nixos-livecd.conf
     echo "initrd /boot/initrd" >> $out/loader/entries/nixos-livecd.conf
     echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" >> $out/loader/entries/nixos-livecd.conf
+
+    # A variant to boot with 'nomodeset'
+    echo "title NixOS Live CD (with nomodeset)" > $out/loader/entries/nixos-livecd-nomodeset.conf
+    echo "linux /boot/bzImage" >> $out/loader/entries/nixos-livecd-nomodeset.conf
+    echo "initrd /boot/initrd" >> $out/loader/entries/nixos-livecd-nomodeset.conf
+    echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} nomodeset" >> $out/loader/entries/nixos-livecd-nomodeset.conf
+
     echo "default nixos-livecd" > $out/loader/loader.conf
     echo "timeout ${builtins.toString config.boot.loader.gummiboot.timeout}" >> $out/loader/loader.conf
   '';
@@ -230,12 +245,11 @@ in
     boot.kernelParams =
       [ "root=LABEL=${config.isoImage.volumeID}"
         "boot.shell_on_fail"
-        "nomodeset"
       ];
 
     fileSystems."/" =
       { fsType = "tmpfs";
-        options = "mode=0755";
+        options = [ "mode=0755" ];
       };
 
     # Note that /dev/root is a symlink to the actual root device
@@ -252,20 +266,20 @@ in
     fileSystems."/nix/.ro-store" =
       { fsType = "squashfs";
         device = "/iso/nix-store.squashfs";
-        options = "loop";
+        options = [ "loop" ];
         neededForBoot = true;
       };
 
     fileSystems."/nix/.rw-store" =
       { fsType = "tmpfs";
-        options = "mode=0755";
+        options = [ "mode=0755" ];
         neededForBoot = true;
       };
 
     fileSystems."/nix/store" =
       { fsType = "unionfs-fuse";
         device = "unionfs";
-        options = "allow_other,cow,nonempty,chroot=/mnt-root,max_files=32768,hide_meta_files,dirs=/nix/.rw-store=rw:/nix/.ro-store=ro";
+        options = [ "allow_other" "cow" "nonempty" "chroot=/mnt-root" "max_files=32768" "hide_meta_files" "dirs=/nix/.rw-store=rw:/nix/.ro-store=ro" ];
       };
 
     boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "usb-storage" ];

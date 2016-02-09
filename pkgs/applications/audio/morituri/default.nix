@@ -1,22 +1,26 @@
-{ stdenv, fetchurl, python, pythonPackages, cdparanoia, cdrdao
+{ stdenv, fetchgit, python, pythonPackages, cdparanoia, cdrdao
 , pygobject, gst_python, gst_plugins_base, gst_plugins_good
-, setuptools, utillinux, makeWrapper, substituteAll }:
+, setuptools, utillinux, makeWrapper, substituteAll, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "morituri-${version}";
-  version = "0.2.3";
+  version = "0.2.3.20151109";
   namePrefix = "";
 
-  src = fetchurl {
-    url = "http://thomas.apestaart.org/download/morituri/${name}.tar.bz2";
-    sha256 = "1b30bs1y8azl04izsrl01gw9ys0lhzkn5afxi4p8qbiri2h4v210";
+  src = fetchgit {
+    url = "https://github.com/thomasvs/morituri.git";
+    fetchSubmodules = true;
+    rev = "135b2f7bf27721177e3aeb1d26403f1b29116599";
+    sha256 = "1ccxq1spny6xgd7nqwn13n9nqa00ay0nhflg3vbdkvbirh8fgxwq";
   };
 
   pythonPath = [
     pygobject gst_python pythonPackages.musicbrainzngs
     pythonPackages.pycdio pythonPackages.pyxdg setuptools
+    pythonPackages.CDDB
   ];
 
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
     python cdparanoia cdrdao utillinux makeWrapper
     gst_plugins_base gst_plugins_good
@@ -44,5 +48,6 @@ stdenv.mkDerivation rec {
     description = "A CD ripper aiming for accuracy over speed";
     maintainers = with maintainers; [ rycee jgeerds ];
     license = licenses.gpl3Plus;
+    platforms = platforms.linux;
   };
 }

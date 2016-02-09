@@ -124,7 +124,7 @@ in {
 
     assertions = [
       { assertion = cfg.databasePassword != "";
-        message = "databasePassword must be set";
+        message = "services.redmine.databasePassword must be set";
       }
     ];
 

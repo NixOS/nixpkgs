@@ -1,4 +1,4 @@
-{stdenv, fetchzip, autoconf, automake}:
+{ stdenv, fetchzip, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name    = "par2cmdline-${version}";
@@ -9,9 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0maywssv468ia7rf8jyq4axwahgli3nfykl7x3zip503psywjj8a";
   };
 
-  buildInputs = [ autoconf automake ];
-
-  preConfigure = "autoreconf";
+  buildInputs = [ autoreconfHook ];
 
   meta = {
     homepage = https://github.com/BlackIkeEagle/par2cmdline;

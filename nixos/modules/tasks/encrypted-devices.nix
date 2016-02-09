@@ -30,7 +30,7 @@ let
       label = mkOption {
         default = null;
         example = "rootfs";
-        type = types.uniq (types.nullOr types.str);
+        type = types.nullOr types.str;
         description = "Label of the unlocked encrypted device. Set <literal>fileSystems.&lt;name?&gt;.device</literal> to <literal>/dev/mapper/&lt;label&gt;</literal> to mount the unlocked device.";
       };
 

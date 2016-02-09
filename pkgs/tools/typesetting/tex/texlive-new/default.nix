@@ -24,7 +24,7 @@
     * in case of any bugs or feature requests, file a github issue and /cc @vcunat
 */
 
-{ stdenv, lib, fetchurl, runCommand, buildEnv
+{ stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min
 , makeWrapper, perl, python, ruby
 , useFixedHashes ? true
@@ -48,7 +48,8 @@ let
 
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
-    inherit bin combinePkgs buildEnv fastUnique lib makeWrapper perl stdenv python ruby;
+    inherit bin combinePkgs buildEnv fastUnique lib makeWrapper writeText
+      perl stdenv python ruby;
   };
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming
@@ -82,6 +83,10 @@ let
       };
       latex = orig.latex // {
         deps = removeAttrs orig.latex.deps [ "luatex" ];
+      };
+
+      xdvi = orig.xdvi // { # it seems to need it to transform fonts
+        deps = (orig.xdvi.deps or {}) // { inherit (tl) metafont; };
       };
     }; # overrides
 

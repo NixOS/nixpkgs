@@ -73,6 +73,21 @@ in
         '';
       };
 
+      devNodes = mkOption {
+        type = types.path;
+        default = "/dev/disk/by-id";
+        example = "/dev/disk/by-id";
+        description = ''
+          Name of directory from which to import ZFS devices.
+
+          Usually /dev works. However, ZFS import may fail if a device node is renamed.
+          It should therefore use stable device names, such as from /dev/disk/by-id.
+
+          The default remains /dev for 15.09, due to backwards compatibility concerns.
+          It will change to /dev/disk/by-id in the next NixOS release.
+        '';
+      };
+
       forceImportRoot = mkOption {
         type = types.bool;
         default = true;
@@ -214,7 +229,7 @@ in
             done
             ''] ++ (map (pool: ''
             echo "importing root ZFS pool \"${pool}\"..."
-            zpool import -N $ZFS_FORCE "${pool}"
+            zpool import -d ${cfgZfs.devNodes} -N $ZFS_FORCE "${pool}"
         '') rootPools));
       };
 
@@ -255,7 +270,7 @@ in
             };
             script = ''
               zpool_cmd="${zfsUserPkg}/sbin/zpool"
-              ("$zpool_cmd" list "${pool}" >/dev/null) || "$zpool_cmd" import -N ${optionalString cfgZfs.forceImportAll "-f"} "${pool}"
+              ("$zpool_cmd" list "${pool}" >/dev/null) || "$zpool_cmd" import -d ${cfgZfs.devNodes} -N ${optionalString cfgZfs.forceImportAll "-f"} "${pool}"
             '';
           };
       in listToAttrs (map createImportService dataPools) // {

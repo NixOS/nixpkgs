@@ -3,51 +3,34 @@
 with lib;
 
 let
-
   cfg = config.networking.wireless;
-  configFile = "/etc/wpa_supplicant.conf";
-
-  ifaces =
-    cfg.interfaces ++
-    optional (config.networking.WLANInterface != "") config.networking.WLANInterface;
-
-in
-
-{
-
-  ###### interface
-
+  configFile = if cfg.networks != {} then pkgs.writeText "wpa_supplicant.conf" ''
+    ${optionalString cfg.userControlled.enable ''
+      ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=${cfg.userControlled.group}
+      update_config=1''}
+    ${concatStringsSep "\n" (mapAttrsToList (ssid: networkConfig: let
+      psk = if networkConfig.psk != null
+        then ''"${networkConfig.psk}"''
+        else networkConfig.pskRaw;
+    in ''
+      network={
+        ssid="${ssid}"
+        ${optionalString (psk != null) ''psk=${psk}''}
+        ${optionalString (psk == null) ''key_mgmt=NONE''}
+      }
+    '') cfg.networks)}
+  '' else "/etc/wpa_supplicant.conf";
+in {
   options = {
-
-    networking.WLANInterface = mkOption {
-      default = "";
-      description = "Obsolete. Use <option>networking.wireless.interfaces</option> instead.";
-    };
-
     networking.wireless = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to start <command>wpa_supplicant</command> to scan for
-          and associate with wireless networks.  Note: NixOS currently
-          does not manage <command>wpa_supplicant</command>'s
-          configuration file, <filename>${configFile}</filename>.  You
-          should edit this file yourself to define wireless networks,
-          WPA keys and so on (see
-          <citerefentry><refentrytitle>wpa_supplicant.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>), or use
-          networking.wireless.userControlled.* to allow users to add entries
-          through <command>wpa_cli</command> and <command>wpa_gui</command>.
-        '';
-      };
+      enable = mkEnableOption "wpa_supplicant";
 
       interfaces = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "wlan0" "wlan1" ];
         description = ''
-          The interfaces <command>wpa_supplicant</command> will use.  If empty, it will
+          The interfaces <command>wpa_supplicant</command> will use. If empty, it will
           automatically use all wireless interfaces.
         '';
       };
@@ -56,6 +39,50 @@ in
         type = types.str;
         default = "nl80211,wext";
         description = "Force a specific wpa_supplicant driver.";
+      };
+
+      networks = mkOption {
+        type = types.attrsOf (types.submodule {
+          options = {
+            psk = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = ''
+                The network's pre-shared key in plaintext defaulting
+                to being a network without any authentication.
+
+                Be aware that these will be written to the nix store
+                in plaintext!
+
+                Mutually exclusive with <varname>pskRaw</varname>.
+              '';
+            };
+
+            pskRaw = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = ''
+                The network's pre-shared key in hex defaulting
+                to being a network without any authentication.
+
+                Mutually exclusive with <varname>psk</varname>.
+              '';
+            };
+          };
+        });
+        description = ''
+          The network definitions to automatically connect to when
+           <command>wpa_supplicant</command> is running. If this
+           parameter is left empty wpa_supplicant will use
+          /etc/wpa_supplicant.conf as the configuration file.
+        '';
+        default = {};
+        example = literalExample ''
+          echelon = {
+            psk = "abcdefgh";
+          };
+          "free.wifi" = {};
+        '';
       };
 
       userControlled = {
@@ -68,10 +95,8 @@ in
             to depend on a large package such as NetworkManager just to pick nearby
             access points.
 
-            When you want to use this, make sure ${configFile} doesn't exist.
-            It will be created for you.
-
-            Currently it is also necessary to explicitly specify networking.wireless.interfaces.
+            When using a declarative network specification you cannot persist any
+            settings via wpa_gui or wpa_cli.
           '';
         };
 
@@ -85,64 +110,54 @@ in
     };
   };
 
+  config = mkMerge [
+    (mkIf cfg.enable {
+      assertions = flip mapAttrsToList cfg.networks (name: cfg: {
+        assertion = cfg.psk == null || cfg.pskRaw == null;
+        message = ''networking.wireless."${name}".psk and networking.wireless."${name}".pskRaw are mutually exclusive'';
+      });
 
-  ###### implementation
+      environment.systemPackages =  [ pkgs.wpa_supplicant ];
 
-  config = mkIf cfg.enable {
+      services.dbus.packages = [ pkgs.wpa_supplicant ];
 
-    environment.systemPackages =  [ pkgs.wpa_supplicant ];
-
-    services.dbus.packages = [ pkgs.wpa_supplicant ];
-
-    # FIXME: start a separate wpa_supplicant instance per interface.
-    jobs.wpa_supplicant =
-      { description = "WPA Supplicant";
+      # FIXME: start a separate wpa_supplicant instance per interface.
+      systemd.services.wpa_supplicant = let
+        ifaces = cfg.interfaces;
+      in {
+        description = "WPA Supplicant";
 
         wantedBy = [ "network.target" ];
 
         path = [ pkgs.wpa_supplicant ];
 
-        preStart = ''
-          touch -a ${configFile}
-          chmod 600 ${configFile}
-        '' + optionalString cfg.userControlled.enable ''
-          if [ ! -s ${configFile} ]; then
-            echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=${cfg.userControlled.group}" >> ${configFile}
-            echo "update_config=1" >> ${configFile}
-          fi
+        script = ''
+          ${if ifaces == [] then ''
+            for i in $(cd /sys/class/net && echo *); do
+              DEVTYPE=
+              source /sys/class/net/$i/uevent
+              if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
+                ifaces="$ifaces''${ifaces:+ -N} -i$i"
+              fi
+            done
+          '' else ''
+            ifaces="${concatStringsSep " -N " (map (i: "-i${i}") ifaces)}"
+          ''}
+          exec wpa_supplicant -s -u -D${cfg.driver} -c ${configFile} $ifaces
         '';
-
-        script =
-          ''
-            ${if ifaces == [] then ''
-              for i in $(cd /sys/class/net && echo *); do
-                DEVTYPE=
-                source /sys/class/net/$i/uevent
-                if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
-                  ifaces="$ifaces''${ifaces:+ -N} -i$i"
-                fi
-              done
-            '' else ''
-              ifaces="${concatStringsSep " -N " (map (i: "-i${i}") ifaces)}"
-            ''}
-            exec wpa_supplicant -s -u -D${cfg.driver} -c ${configFile} $ifaces
-          '';
       };
 
-    powerManagement.resumeCommands =
-      ''
+      powerManagement.resumeCommands = ''
         ${config.systemd.package}/bin/systemctl try-restart wpa_supplicant
       '';
 
-    assertions = [{ assertion = !cfg.userControlled.enable || cfg.interfaces != [];
-                    message = "user controlled wpa_supplicant needs explicit networking.wireless.interfaces";}];
-
-    # Restart wpa_supplicant when a wlan device appears or disappears.
-    services.udev.extraRules =
-      ''
+      # Restart wpa_supplicant when a wlan device appears or disappears.
+      services.udev.extraRules = ''
         ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="${config.systemd.package}/bin/systemctl try-restart wpa_supplicant.service"
       '';
-
-  };
-
+    })
+    {
+      meta.maintainers = with lib.maintainers; [ globin ];
+    }
+  ];
 }

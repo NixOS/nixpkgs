@@ -1,6 +1,6 @@
 { stdenv, appleDerivation, cpio, bootstrap_cmds, xnu, Libc, Libm, libdispatch, cctools, Libinfo,
   dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto, copyfile,
-  removefile, libresolv, Libnotify, libpthread, mDNSResponder, launchd, version }:
+  removefile, libresolv, Libnotify, libpthread, mDNSResponder, launchd, libutil, version }:
 
 appleDerivation rec {
   phases = [ "unpackPhase" "installPhase" ];
@@ -54,7 +54,7 @@ appleDerivation rec {
 
     for dep in ${Libc} ${Libm} ${Libinfo} ${dyld} ${architecture} ${libclosure} ${CarbonHeaders} \
                ${libdispatch} ${ncurses} ${CommonCrypto} ${copyfile} ${removefile} ${libresolv} \
-               ${Libnotify} ${mDNSResponder} ${launchd}; do
+               ${Libnotify} ${mDNSResponder} ${launchd} ${libutil}; do
       (cd $dep/include && find . -name '*.h' | cpio -pdm $out/include)
     done
 
@@ -113,14 +113,14 @@ appleDerivation rec {
        -o $out/lib/libSystem.dylib \
        CompatibilityHacks.o init.o \
        -compatibility_version 1.0 \
-       -current_version ${version} \
+       -current_version 1197.1.1 \
        -reexport_library $out/lib/system/libsystem_c.dylib \
        -reexport_library $out/lib/system/libsystem_kernel.dylib \
         ${stdenv.lib.concatStringsSep " "
           (map (l: "-reexport_library /usr/lib/system/lib${l}.dylib") systemlibs)}
 
     # Set up links to pretend we work like a conventional unix (Apple's design, not mine!)
-    for name in c dbm dl info m mx poll proc pthread rpcsvc gcc_s.10.4 gcc_s.10.5; do
+    for name in c dbm dl info m mx poll proc pthread rpcsvc util gcc_s.10.4 gcc_s.10.5; do
       ln -s libSystem.dylib $out/lib/lib$name.dylib
     done
 
@@ -136,8 +136,6 @@ appleDerivation rec {
       -delete_rpath ${libresolv}/lib \
       $out/lib/libresolv.9.dylib
     ln -s libresolv.9.dylib $out/lib/libresolv.dylib
-
-    otool -L $out/lib/libresolv.dylib
   '';
 
   meta = with stdenv.lib; {

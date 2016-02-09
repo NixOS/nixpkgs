@@ -63,7 +63,7 @@ in
     };
 
     boot.extraModulePackages = mkOption {
-      type = types.listOf types.path;
+      type = types.listOf types.package;
       default = [];
       example = literalExample "[ pkgs.linuxPackages.nvidia_x11 ]";
       description = "A list of additional packages supplying kernel modules.";
@@ -158,7 +158,7 @@ in
 
     boot.kernel.sysctl."kernel.printk" = config.boot.consoleLogLevel;
 
-    boot.kernelModules = [ "loop" "configs" "atkbd" ];
+    boot.kernelModules = [ "loop" "atkbd" ];
 
     boot.initrd.availableKernelModules =
       [ # Note: most of these (especially the SATA/PATA modules)
@@ -184,6 +184,9 @@ in
         "ide_disk"
         "ide_generic"
 
+        # SD cards and internal eMMC drives.
+        "mmc_block"
+
         # Support USB keyboards, in case the boot fails and we only have
         # a USB keyboard.
         "uhci_hcd"
@@ -196,9 +199,6 @@ in
         "usbhid"
         "hid_generic" "hid_lenovo"
         "hid_apple" "hid_logitech_dj" "hid_lenovo_tpkbd" "hid_roccat"
-
-        # Unix domain sockets (needed by udev).
-        "unix"
 
         # Misc. stuff.
         "pcips2" "atkbd"

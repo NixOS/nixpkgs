@@ -5,11 +5,11 @@ let arch =
   else if stdenv.isx86_64 then "x86_64"
   else abort "Unknown architecture";
 in stdenv.mkDerivation {
-  name = "grub4dos-0.4.6a";
+  name = "grub4dos-0.4.6a-2015-12-31";
 
   src = fetchurl {
-    url = https://github.com/chenall/grub4dos/archive/e855b293432bd4d155e42d48356f9aa1974ec385.zip;
-    sha256 = "1vihzllsdshd5dyr7i7dp5ragyg77gg8r279pz954p7lkcda4kx7";
+    url = https://github.com/chenall/grub4dos/archive/a8024743c61cc4909514b27df07b7cc4bc89d1fb.zip;
+    sha256 = "1m5d7klb12qz5sa09919z7jchfafgh84cmpwilp52qnbpi3zh2fd";
   };
 
   nativeBuildInputs = [ unzip nasm ];

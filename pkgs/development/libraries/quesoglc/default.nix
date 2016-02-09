@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = http://quesoglc.sourceforge.net/;
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ astsmtl ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

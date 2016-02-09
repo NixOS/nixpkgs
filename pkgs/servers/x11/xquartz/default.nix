@@ -109,8 +109,7 @@ in stdenv.mkDerivation {
 
     cp ${installer} $out/bin/xquartz-install
 
-    rm -r $out/LaunchAgents
-    rm -r $out/LaunchDaemons
+    rm -rf $out/LaunchAgents $out/LaunchDaemons
 
     fontsConfPath=$out/etc/X11/fonts.conf
     cp ${fontsConf} $fontsConfPath
@@ -147,7 +146,7 @@ in stdenv.mkDerivation {
       --replace "@STARTX@"          "$defaultStartX" \
       --replace "@FONTCONFIG_FILE@" "$fontsConfPath"
 
-    rm $out/lib/X11/xinit/privileged_startx.d/*
+    mkdir -p $out/lib/X11/xinit/privileged_startx.d
     cp ${./privileged} $out/lib/X11/xinit/privileged_startx.d/privileged
     substituteInPlace $out/lib/X11/xinit/privileged_startx.d/privileged \
       --replace "@PATH@"            "$out/bin:${env}" \

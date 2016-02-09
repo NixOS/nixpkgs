@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "ckbcomp-${version}";
-  version = "1.131";
+  version = "1.133";
 
   src = fetchgit {
     url = "git://anonscm.debian.org/d-i/console-setup.git";
     rev = "refs/tags/${version}";
-    sha256 = "0xmdnzhm1wsdpjb0wsi24xzk1xpv5h2bxgwm9f4awb7aj7wv59ma";
+    sha256 = "0za7y5v5rsl9da67rfiwzyfaia4xgnavqdadq0l6v8blc2kcsxr7";
   };
 
   buildInputs = [ perl ];
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = http://anonscm.debian.org/cgit/d-i/console-setup.git;
     license = licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ dezgeg ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

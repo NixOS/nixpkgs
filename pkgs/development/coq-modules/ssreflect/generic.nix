@@ -1,39 +1,39 @@
-{ stdenv, fetchurl, coq
-, graphviz, withDoc ? true
+{ stdenv, fetchurl, coq, ncurses, which
+, graphviz, withDoc ? false
 , src, patches ? []
 }:
 
 stdenv.mkDerivation {
 
-  name = "coq-ssreflect-1.5-${coq.coq-version}";
+  name = "coq-ssreflect-1.6-${coq.coq-version}";
 
   inherit src;
 
   nativeBuildInputs = stdenv.lib.optionals withDoc [ graphviz ];
-  buildInputs = [ coq.ocaml coq.camlp5 ];
+  buildInputs = [ coq.ocaml coq.camlp5 ncurses which ];
   propagatedBuildInputs = [ coq ];
 
   enableParallelBuilding = true;
 
   inherit patches;
 
-  postPatch = ''
-    # Permit building of the ssrcoq statically-bound executable
-    sed -i 's/^#-custom/-custom/' Make
-    sed -i 's/^#SSRCOQ/SSRCOQ/' Make
+  preBuild = ''
+    patchShebangs etc/utils/ssrcoqdep
+    cd mathcomp/ssreflect
+    export COQBIN=${coq}/bin/
   '';
 
-  buildFlags = stdenv.lib.optionalString withDoc "doc";
-
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  installPhase = ''
+    make -f Makefile.coq COQLIB=$out/lib/coq/${coq.coq-version}/ install
+  '';
 
   postInstall = ''
-    mkdir -p $out/bin
-    cp -p bin/ssrcoq $out/bin
-    cp -p bin/ssrcoq.byte $out/bin
+    # mkdir -p $out/bin
+    # cp -p bin/ssrcoq $out/bin
+    # cp -p bin/ssrcoq.byte $out/bin
   '' + stdenv.lib.optionalString withDoc ''
-    mkdir -p $out/share/doc/coq/${coq.coq-version}/user-contrib/Ssreflect/
-    cp -r html $out/share/doc/coq/${coq.coq-version}/user-contrib/Ssreflect/
+    mkdir -p $out/share/doc/coq/${coq.coq-version}/user-contrib/mathcomp/ssreflect/
+    cp -r html $out/share/doc/coq/${coq.coq-version}/user-contrib/mathcomp/ssreflect/
   '';
 
   meta = with stdenv.lib; {

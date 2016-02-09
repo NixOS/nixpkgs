@@ -57,14 +57,15 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "5.2.0";
+let version = "5.3.0";
 
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
 
     enableParallelBuilding = true;
 
-    patches = [ ]
+    patches =
+      [ ../use-source-date-epoch.patch ]
       ++ optional (cross != null) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
@@ -212,7 +213,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
-    sha256 = "1bccp8a106xwz3wkixn65ngxif112vn90qf95m6lzpgpnl25p0sz";
+    sha256 = "1ny4smkp5bzs3cp8ss7pl6lk8yss0d9m4av1mvdp72r1x695akxq";
   };
 
   inherit patches;

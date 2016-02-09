@@ -8,6 +8,8 @@ with lib;
 { pname
 , version
 
+, recipeFile ? null
+
 , files ? null
 , fileSpecs ? [ "*.el" "*.el.in" "dir"
                 "*.info" "*.texi" "*.texinfo"
@@ -22,11 +24,9 @@ with lib;
 let
 
   packageBuild = fetchurl {
-    url = https://raw.githubusercontent.com/milkypostman/melpa/12a862e5c5c62ce627dab83d7cf2cca6e8b56c47/package-build.el;
-    sha256 = "1nviyyprypz7nmam9rwli4yv3kxh170glfbznryrp4czxkrjjdhk";
+    url = https://raw.githubusercontent.com/milkypostman/melpa/2b3eb31c077fcaff94b74b757c1ce17650333943/package-build.el;
+    sha256 = "1biwg2pqmmdz5iwqbjdszljazqymvgyyjcnc255nr6qz8mhnx67j";
   };
-
-  fname = "${pname}-${version}";
 
   targets = concatStringsSep " " (if files == null then fileSpecs else files);
 
@@ -39,22 +39,33 @@ in
 import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
   inherit packageBuild;
 
-  buildPhase = ''
-    runHook preBuild
+  buildPhase =
+    if recipeFile == null
+      then ''
+        runHook preBuild
 
-    emacs --batch -Q -l $packageBuild -l ${./melpa2nix.el} \
-      -f melpa2nix-build-package \
-      ${pname} ${version} ${targets}
+        export archive=$(emacs --batch -Q -l $packageBuild -l ${./melpa2nix.el} \
+            -f melpa2nix-build-package \
+            ${pname} ${version} ${targets})
 
-    runHook postBuild
-  '';
+        runHook postBuild
+      ''
+      else ''
+        runHook preBuild
+
+        export archive=$(emacs --batch -Q -l $packageBuild -l ${./melpa2nix.el} \
+            -f melpa2nix-build-package-from-recipe \
+            ${recipeFile} ${version})
+
+        runHook postBuild
+      '';
 
   installPhase = ''
     runHook preInstall
 
-    emacs --batch -Q -l $packageBuild -l ${./melpa2nix.el} \
-      -f melpa2nix-install-package \
-      ${fname}.* $out/share/emacs/site-lisp/elpa
+    emacs --batch -Q -l ${./elpa2nix.el} \
+        -f elpa2nix-install-package \
+        "$archive" "$out/share/emacs/site-lisp/elpa"
 
     runHook postInstall
   '';

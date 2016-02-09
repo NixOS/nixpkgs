@@ -41,6 +41,7 @@ in
 
       package = mkOption {
         default = pkgs.cgminer;
+        defaultText = "pkgs.cgminer";
         description = "Which cgminer derivation to use.";
         type = types.package;
       };

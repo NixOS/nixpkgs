@@ -1,0 +1,47 @@
+Author: Dmitry Shachnev <mitya57@gmail.com>
+Description: do not build unrar extension as we strip unrar from the tarball
+Forwarded: not-needed
+Last-Update: 2013-04-04
+
+Index: calibre/setup/extensions.py
+===================================================================
+--- calibre.orig/setup/extensions.py	2014-02-02 10:42:14.510954007 +0100
++++ calibre/setup/extensions.py	2014-02-02 10:42:14.502954007 +0100
+@@ -209,24 +209,6 @@
+                 sip_files=['calibre/ebooks/pdf/render/qt_hack.sip']
+                 ),
+ 
+-    Extension('unrar',
+-              ['unrar/%s.cpp'%(x.partition('.')[0]) for x in '''
+-               rar.o strlist.o strfn.o pathfn.o savepos.o smallfn.o global.o file.o
+-               filefn.o filcreat.o archive.o arcread.o unicode.o system.o
+-               isnt.o crypt.o crc.o rawread.o encname.o resource.o match.o
+-               timefn.o rdwrfn.o consio.o options.o ulinks.o errhnd.o rarvm.o
+-               secpassword.o rijndael.o getbits.o sha1.o extinfo.o extract.o
+-               volume.o list.o find.o unpack.o cmddata.o filestr.o scantree.o
+-               '''.split()] + ['calibre/utils/unrar.cpp'],
+-              inc_dirs=['unrar'],
+-              cflags=[('/' if iswindows else '-') + x for x in (
+-                  'DSILENT', 'DRARDLL', 'DUNRAR')] + (
+-                  [] if iswindows else ['-D_FILE_OFFSET_BITS=64',
+-                                        '-D_LARGEFILE_SOURCE']),
+-              optimize_level=2,
+-              libraries=['User32', 'Advapi32', 'kernel32', 'Shell32'] if iswindows else []
+-              ),
+-
+     ]
+ 
+ 
+Index: calibre/src/calibre/ebooks/metadata/archive.py
+===================================================================
+--- calibre.orig/src/calibre/ebooks/metadata/archive.py	2014-02-02 10:42:14.510954007 +0100
++++ calibre/src/calibre/ebooks/metadata/archive.py	2014-02-02 10:42:14.502954007 +0100
+@@ -42,7 +42,7 @@
+     description = _('Extract common e-book formats from archives '
+         '(zip/rar) files. Also try to autodetect if they are actually '
+         'cbz/cbr files.')
+-    file_types = set(['zip', 'rar'])
++    file_types = set(['zip'])
+     supported_platforms = ['windows', 'osx', 'linux']
+     on_import = True
+ 

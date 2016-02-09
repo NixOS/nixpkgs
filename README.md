@@ -1,8 +1,8 @@
 [<img src="http://nixos.org/logo/nixos-hires.png" width="500px" alt="logo" />](https://nixos.org/nixos)
 
 [![Build Status](https://travis-ci.org/NixOS/nixpkgs.svg?branch=master)](https://travis-ci.org/NixOS/nixpkgs)
-[![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/pr)](http://www.issuestats.com/github/nixos/nixpkgs)
-[![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/issue)](http://www.issuestats.com/github/nixos/nixpkgs)
+[![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/pr?style=flat)](http://www.issuestats.com/github/nixos/nixpkgs)
+[![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/issue?style=flat)](http://www.issuestats.com/github/nixos/nixpkgs)
 
 Nixpkgs is a collection of packages for the [Nix](https://nixos.org/nix/) package
 manager. It is periodically built and tested by the [hydra](http://hydra.nixos.org/)
@@ -31,11 +31,10 @@ For pull-requests, please rebase onto nixpkgs `master`.
 * [Documentation (Nix Expression Language chapter)](https://nixos.org/nix/manual/#ch-expression-language)
 * [Manual (How to write packages for Nix)](https://nixos.org/nixpkgs/manual/)
 * [Manual (NixOS)](https://nixos.org/nixos/manual/)
+* [Nix Wiki](https://nixos.org/wiki/)
 * [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
-* [Continuous package builds for 14.12 release](https://hydra.nixos.org/jobset/nixos/release-14.12)
 * [Continuous package builds for 15.09 release](https://hydra.nixos.org/jobset/nixos/release-15.09)
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
-* [Tests for 14.12 release](https://hydra.nixos.org/job/nixos/release-14.12/tested#tabs-constituents)
 * [Tests for 15.09 release](https://hydra.nixos.org/job/nixos/release-15.09/tested#tabs-constituents)
 
 Communication:

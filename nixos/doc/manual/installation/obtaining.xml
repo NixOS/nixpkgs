@@ -39,8 +39,8 @@ running NixOS system through several other means:
     <para>Using NixOps, the NixOS-based cloud deployment tool, which
     allows you to provision VirtualBox and EC2 NixOS instances from
     declarative specifications.  Check out the <link
-    xlink:href="https://github.com/NixOS/nixops">NixOps
-    homepage</link> for details.</para>
+    xlink:href="https://nixos.org/nixops">NixOps homepage</link> for
+    details.</para>
   </listitem>
 </itemizedlist>
 

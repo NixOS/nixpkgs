@@ -1,25 +1,34 @@
-{ stdenv, fetchurl, coq, ssreflect
-, graphviz, ocamlPackages, withDoc ? true
+{ stdenv, fetchurl, coq, ssreflect, ncurses, which
+, graphviz, ocamlPackages, withDoc ? false
 , src
 }:
 
 stdenv.mkDerivation {
 
-  name = "coq-mathcomp-1.5-${coq.coq-version}";
+  name = "coq-mathcomp-1.6-${coq.coq-version}";
 
   inherit src;
 
-  nativeBuildInputs = stdenv.lib.optionals withDoc
-    ([ graphviz ] ++ (with ocamlPackages; [ ocaml camlp5_transitional ]));
-  propagatedBuildInputs = [ ssreflect ];
+  nativeBuildInputs = stdenv.lib.optionals withDoc [ graphviz ];
+  buildInputs = [ coq.ocaml coq.camlp5 ncurses which ];
+  propagatedBuildInputs = [ coq ssreflect ];
 
   enableParallelBuilding = true;
 
   buildFlags = stdenv.lib.optionalString withDoc "doc";
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  preBuild = ''
+    patchShebangs etc/utils/ssrcoqdep
+    cd mathcomp
+    export COQBIN=${coq}/bin/
+  '';
 
-  postInstall = stdenv.lib.optionalString withDoc ''
+  installPhase = ''
+    make -f Makefile.coq COQLIB=$out/lib/coq/${coq.coq-version}/ install
+    rm -fr $out/lib/coq/${coq.coq-version}/user-contrib/mathcomp/ssreflect*
+    rm -fr $out/lib/coq/${coq.coq-version}/user-contrib/ssrmatching.cmi
+    rm -fr $out/share/coq/${coq.coq-version}/user-contrib/mathcomp/ssreflect*
+  '' + stdenv.lib.optionalString withDoc ''
     make -f Makefile.coq install-doc DOCDIR=$out/share/coq/${coq.coq-version}/
   '';
 

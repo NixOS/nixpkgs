@@ -2,7 +2,7 @@
 # a fork of the buildEnv in the Nix distribution.  Most changes should
 # eventually be merged back into the Nix distribution.
 
-{ perl, runCommand }:
+{ perl, runCommand, lib }:
 
 { name
 
@@ -16,10 +16,18 @@
 , # Whether to ignore collisions or abort.
   ignoreCollisions ? false
 
+, # If there is a collision, check whether the contents and permissions match
+  # and only if not, throw a collision error.
+  checkCollisionContents ? true
+
 , # The paths (relative to each element of `paths') that we want to
   # symlink (e.g., ["/bin"]).  Any file not inside any of the
   # directories in the list is not symlinked.
   pathsToLink ? ["/"]
+
+, # The package outputs to include. By default, only the default
+  # output is included.
+  outputsToLink ? []
 
 , # Root the result in directory "$out${extraPrefix}", e.g. "/share".
   extraPrefix ? ""
@@ -31,15 +39,22 @@
   buildInputs ? []
 
 , passthru ? {}
+, meta ? {}
 }:
 
 runCommand name
-  { inherit manifest ignoreCollisions passthru pathsToLink extraPrefix postBuild buildInputs;
+  rec {
+    inherit manifest ignoreCollisions checkCollisionContents passthru
+            meta pathsToLink extraPrefix postBuild buildInputs;
     pkgs = builtins.toJSON (map (drv: {
-      paths = [ drv ]; # FIXME: handle multiple outputs
+      paths =
+        [ drv ]
+        ++ lib.concatMap (outputName: lib.optional (drv.${outputName}.outPath or null != null) drv.${outputName}) outputsToLink;
       priority = drv.meta.priority or 5;
     }) paths);
     preferLocalBuild = true;
+    # XXX: The size is somewhat arbitrary
+    passAsFile = if builtins.stringLength pkgs >= 128*1024 then [ "pkgs" ] else null;
   }
   ''
     ${perl}/bin/perl -w ${./builder.pl}

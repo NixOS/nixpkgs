@@ -1,4 +1,6 @@
-{stdenv, fetchgit, qt5, cgal, boost, gmp, mpfr, flex, bison, dxflib, readline }: 
+{ stdenv, fetchgit, cgal, boost, gmp, mpfr, flex, bison, dxflib, readline
+, qtbase
+}:
 
 stdenv.mkDerivation rec {
   version = "0.9.5";
@@ -9,8 +11,8 @@ stdenv.mkDerivation rec {
     rev = "refs/tags/v${version}";
     sha256 = "15c18jvgbwyrfhv7r35ih0gzx35vjlsbi984h1sckgh2z17hjq8l";
   };
-  
-  buildInputs = [qt5.base cgal boost gmp mpfr flex bison dxflib readline ];
+
+  buildInputs = [ qtbase cgal boost gmp mpfr flex bison dxflib readline ];
 
   configurePhase = ''
     qmake;

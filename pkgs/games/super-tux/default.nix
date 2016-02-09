@@ -1,24 +1,18 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, SDL2, SDL2_image, SDL2_mixer
+{ stdenv, fetchurl, cmake, pkgconfig, SDL2, SDL2_image, SDL2_mixer
 , curl, gettext, libogg, libvorbis, mesa, openal, physfs, boost, glew
 , libiconv }:
 
 stdenv.mkDerivation rec {
   name = "supertux-${version}";
-  version = "0.3.5a";
+  version = "0.4.0";
 
-  src = fetchFromGitHub {
-    owner = "SuperTux";
-    repo = "supertux";
-    rev = "v${version}";
-    sha256 = "0f522wsv0gx7v1h70x8xznklaqr5bm2l9h7ls9vjywy0z4iy1ahp";
+  src = fetchurl {
+    url = https://github.com/SuperTux/supertux/releases/download/v0.4.0/supertux-0.4.0.tar.bz2;
+    sha256 = "10ppmy6w77lxj8bdzjahc9bidgl4qgzr9rimn15rnqay84ydx3fi";
   };
 
   buildInputs = [ pkgconfig cmake SDL2 SDL2_image SDL2_mixer curl gettext
                   libogg libvorbis mesa openal physfs boost glew libiconv ];
-
-  preConfigure = ''
-    patchShebangs configure
-  '';
 
   postInstall = ''
     mkdir $out/bin

@@ -1,15 +1,15 @@
-{stdenv, fetchurl, cmake, luajit, kernel, zlib, ncurses}:
+{stdenv, fetchurl, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl}:
 let
   inherit (stdenv.lib) optional optionalString;
   s = rec {
     baseName="sysdig";
-    version = "0.1.102";
+    version = "0.6.0";
     name="${baseName}-${version}";
     url="https://github.com/draios/sysdig/archive/${version}.tar.gz";
-    sha256 = "0mrz14wvcb8m8idr4iqbr3jmxfs7dlmh06n0q9fcfph75wkc5fp0";
+    sha256 = "0729mjs9gpd7kb495q80zlp23zczm8ka3xcq4571c0sm732sa3g3";
   };
   buildInputs = [
-    cmake zlib luajit ncurses
+    cmake zlib luajit ncurses perl jsoncpp libb64 openssl curl
   ];
 in
 stdenv.mkDerivation {
@@ -20,9 +20,7 @@ stdenv.mkDerivation {
   };
 
   cmakeFlags = [
-    "-DUSE_BUNDLED_LUAJIT=OFF"
-    "-DUSE_BUNDLED_ZLIB=OFF"
-    "-DUSE_BUNDLED_NCURSES=OFF"
+    "-DUSE_BUNDLED_DEPS=OFF"
   ] ++ optional (kernel == null) "-DBUILD_DRIVER=OFF";
   preConfigure = ''
     export INSTALL_MOD_PATH="$out"

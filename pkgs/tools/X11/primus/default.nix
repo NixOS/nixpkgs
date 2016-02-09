@@ -5,31 +5,18 @@
 # Other distributions do the same.
 { stdenv
 , primusLib
-, writeScript
+, writeScriptBin
 , primusLib_i686 ? null
+, useNvidia ? true
 }:
-with stdenv.lib;
+
 let
-  version = "1.0.0748176";
-  ldPath = makeLibraryPath ([primusLib] ++ optional (primusLib_i686 != null) primusLib_i686);
-  primusrun = writeScript "primusrun"
-''
+  primus = if useNvidia then primusLib else primusLib.override { nvidia_x11 = null; };
+  primus_i686 = if useNvidia then primusLib_i686 else primusLib_i686.override { nvidia_x11 = null; };
+  ldPath = stdenv.lib.makeLibraryPath ([primus] ++ stdenv.lib.optional (primusLib_i686 != null) primus_i686);
+
+in writeScriptBin "primusrun" ''
+  #!${stdenv.shell}
   export LD_LIBRARY_PATH=${ldPath}:$LD_LIBRARY_PATH
   exec "$@"
-'';
-in
-stdenv.mkDerivation {
-  name = "primus-${version}";
-  builder = writeScript "builder"
-  ''
-  source $stdenv/setup
-  mkdir -p $out/bin
-  cp ${primusrun} $out/bin/primusrun
-  '';
-
-  meta = {
-    homepage = https://github.com/amonakov/primus;
-    description = "Faster OpenGL offloading for Bumblebee";
-    maintainers = with maintainers; [ coconnor ];
-  };
-}
+''

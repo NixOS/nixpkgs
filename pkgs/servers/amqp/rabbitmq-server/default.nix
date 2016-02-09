@@ -1,5 +1,8 @@
 { stdenv, fetchurl, erlang, python, libxml2, libxslt, xmlto
-, docbook_xml_dtd_45, docbook_xsl, zip, unzip }:
+, docbook_xml_dtd_45, docbook_xsl, zip, unzip
+
+, AppKit, Carbon, Cocoa
+}:
 
 stdenv.mkDerivation rec {
   name = "rabbitmq-server-${version}";
@@ -12,7 +15,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ erlang python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl zip unzip ];
+    [ erlang python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl zip unzip ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
 
   preBuild =
     ''

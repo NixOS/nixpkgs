@@ -125,7 +125,7 @@ $ make menuconfig ARCH=<replaceable>arch</replaceable></screen>
   <listitem>
     <para>It may be that the new kernel requires updating the external
     kernel modules and kernel-dependent packages listed in the
-    <varname>kernelPackagesFor</varname> function in
+    <varname>linuxPackagesFor</varname> function in
     <filename>all-packages.nix</filename> (such as the NVIDIA drivers,
     AUFS, etc.).  If the updated packages aren’t backwards compatible
     with older kernels, you may need to keep the older versions

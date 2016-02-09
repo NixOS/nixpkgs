@@ -33,29 +33,12 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Don't use jailbreak built with Cabal 1.22.x because of https://github.com/peti/jailbreak-cabal/issues/9.
-  Cabal_1_23_0_0 = overrideCabal super.Cabal_1_22_4_0 (drv: {
-    version = "1.23.0.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "haskell";
-      repo = "cabal";
-      rev = "fe7b8784ac0a5848974066bdab76ce376ba67277";
-      sha256 = "1d70ryz1l49pkr70g8r9ysqyg1rnx84wwzx8hsg6vwnmg0l5am7s";
-    };
-    jailbreak = false;
-    doHaddock = false;
-    postUnpack = "sourceRoot+=/Cabal";
-  });
-  jailbreak-cabal = overrideCabal super.jailbreak-cabal (drv: {
-    executableHaskellDepends = [ self.Cabal_1_23_0_0 ];
-    preConfigure = "sed -i -e 's/Cabal == 1.20\\.\\*/Cabal >= 1.23/' jailbreak-cabal.cabal";
-  });
+  # jailbreak-cabal can use the native Cabal library.
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
 
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
   bytestring-builder = dontHaddock super.bytestring-builder;
-
-  alex = dontCheck super.alex;
 
   # We have time 1.5
   aeson = disableCabalFlag super.aeson "old-locale";

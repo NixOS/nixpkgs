@@ -1,14 +1,14 @@
 { fetchurl, stdenv, makeWrapper, pkgconfig, intltool, gettext, gtk, expat, curl
 , gpsd, bc, file, gnome_doc_utils, libexif, libxml2, libxslt, scrollkeeper
-, docbook_xml_dtd_412, gexiv2, sqlite, gpsbabel }:
+, docbook_xml_dtd_412, gexiv2, sqlite, gpsbabel, expect }:
 
 stdenv.mkDerivation rec {
   name = "viking-${version}";
-  version = "1.6";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/viking/viking/viking-${version}.tar.bz2";
-    sha256 = "02ljnnc1in3cnafmld93qvzgx3j4qsgac2a53q18s6sp5hvvvw91";
+    sha256 = "09kq0sxs2czps0d6xzgkkp41746v44ip63m72qvfs7rsrnqj7qnz";
   };
 
   buildInputs = [ makeWrapper pkgconfig intltool gettext gtk expat curl gpsd bc file gnome_doc_utils
@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/viking \
-      --prefix PATH : "${gpsbabel}/bin"
+      --prefix PATH : "${gpsbabel}/bin" \
+      --prefix PATH : "${expect}/bin"
   '';
 
   meta = with stdenv.lib; {

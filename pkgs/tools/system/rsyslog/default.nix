@@ -11,14 +11,14 @@ let
   mkFlag = cond: name: if cond then "--enable-${name}" else "--disable-${name}";
 in
 stdenv.mkDerivation rec {
-  name = "rsyslog-8.12.0";
+  name = "rsyslog-8.14.0";
 
   src = fetchurl {
     url = "http://www.rsyslog.com/files/download/rsyslog/${name}.tar.gz";
-    sha256 = "083yrgv7s5j7pfbk254lav15yyxsk04qhachxghrvs4nhangwss6";
+    sha256 = "1hp7ga543m6vhijcnjb4z8v26ddjgypk1lh6km1cvxc45cfmnfs4";
   };
 
-  patches = [ ./fix-gnutls-detection.patch ];
+  #patches = [ ./fix-gnutls-detection.patch ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [

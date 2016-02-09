@@ -17,7 +17,9 @@ in {
     };
 
     package = mkOption {
+      type = types.package;
       default = pkgs.mbpfan;
+      defaultText = "pkgs.mbpfan";
       description = ''
         The package used for the mbpfan daemon.
       '';

@@ -1,5 +1,5 @@
-{ stdenv, fetchgit,autoconf, automake, gcc, fltk13
-, libjpeg, libpng, libtool, mesa, pkgconfig }:
+{ stdenv, fetchgit, autoreconfHook, fltk13
+, libjpeg, libpng, mesa, pkgconfig }:
 
 stdenv.mkDerivation {
   name = "solvespace-2.0";
@@ -14,26 +14,14 @@ stdenv.mkDerivation {
   dontBuild = true;
   enableParallelBuilding = false;
 
-  buildInputs = [        
-    autoconf
-    automake
-    gcc
+  buildInputs = [
+    autoreconfHook
     fltk13
     libjpeg
     libpng
-    libtool
     mesa
     pkgconfig
-    stdenv
   ];
-
-  preConfigure = ''
-    aclocal
-    libtoolize
-    
-    autoreconf -i
-    automake --add-missing
-  '';
 
   meta = {
     description = "A parametric 3d CAD program";

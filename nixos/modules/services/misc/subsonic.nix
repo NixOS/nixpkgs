@@ -21,7 +21,7 @@ in
         '';
       };
 
-      host = mkOption {
+      listenAddress = mkOption {
         type = types.string;
         default = "0.0.0.0";
         description = ''
@@ -115,7 +115,7 @@ in
         ExecStart = ''
           ${pkgs.jre}/bin/java -Xmx${toString cfg.maxMemory}m \
             -Dsubsonic.home=${cfg.home} \
-            -Dsubsonic.host=${cfg.host} \
+            -Dsubsonic.host=${cfg.listenAddress} \
             -Dsubsonic.port=${toString cfg.port} \
             -Dsubsonic.httpsPort=${toString cfg.httpsPort} \
             -Dsubsonic.contextPath=${cfg.contextPath} \

@@ -145,7 +145,7 @@ stdenv.mkDerivation {
     + optionalString (stdenv.isSunOS && nativePrefix != "") ''
       # Solaris needs an additional ld wrapper.
       ldPath="${nativePrefix}/bin"
-      ld="$out/bin/ld-solaris"
+      exec="$ldPath/ld"
       wrap ld-solaris ${./ld-solaris-wrapper.sh}
     '')
 

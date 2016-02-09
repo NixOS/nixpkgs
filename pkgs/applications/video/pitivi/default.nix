@@ -1,16 +1,16 @@
 { stdenv, fetchurl, pkgconfig, intltool, itstool, makeWrapper
-, python3Packages, gst, clutter-gtk, hicolor_icon_theme
+, python3Packages, gst, gtk3, hicolor_icon_theme
 , gobjectIntrospection, librsvg, gnome3, libnotify
 }:
 
 let
-  version = "0.94";
+  version = "0.95";
 in stdenv.mkDerivation rec {
   name = "pitivi-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pitivi/${version}/${name}.tar.xz";
-    sha256 = "1v7s0qsibwykkmknspjhpdrj80s987pvbl01kh34k4aspi1hcapm";
+    sha256 = "04ykw619aikhxk5wj7z44pvwl52053d1kamcxpscw0ixrh5j45az";
   };
 
   meta = with stdenv.lib; {
@@ -29,15 +29,15 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool itstool makeWrapper ];
 
   buildInputs = [
-    gobjectIntrospection clutter-gtk librsvg gnome3.gnome_desktop
+    gobjectIntrospection gtk3 librsvg gnome3.gnome_desktop
     gnome3.defaultIconTheme
     gnome3.gsettings_desktop_schemas libnotify
   ] ++ (with gst; [
     gstreamer gst-editing-services
     gst-plugins-base gst-plugins-good
-    gst-plugins-bad gst-plugins-ugly gst-libav
+    gst-plugins-bad gst-plugins-ugly gst-libav gst-validate
   ]) ++ (with python3Packages; [
-    python pygobject3 gst-python pyxdg numpy pycairo sqlite3
+    python pygobject3 gst-python pyxdg numpy pycairo sqlite3 matplotlib
   ]);
 
   preFixup = ''

@@ -70,7 +70,7 @@ let
       "proxyuserpwd" => "",
 
       /* List of trusted domains, to prevent host header poisoning ownCloud is only using these Host headers */
-      'trusted_domains' => array('${config.trustedDomain}'),
+      ${if config.trustedDomain != "" then "'trusted_domains' => array('${config.trustedDomain}')," else ""}
 
       /* Theme to use for ownCloud */
       "theme" => "",
@@ -331,7 +331,7 @@ let
        */
       'share_folder' => '/',
 
-      'version' => '${pkgs.owncloud.version}',
+      'version' => '${config.package.version}',
 
       'openssl' => '${pkgs.openssl}/bin/openssl'
 
@@ -345,16 +345,15 @@ rec {
 
   extraConfig =
     ''
-      ServerName ${config.siteName}
-      ServerAdmin ${config.adminAddr}
-      DocumentRoot ${documentRoot}
+      ${if config.urlPrefix != "" then "Alias ${config.urlPrefix} ${config.package}" else ''
 
-      RewriteEngine On
-      RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
-      RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
+        RewriteEngine On
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
+      ''}
 
-      <Directory ${pkgs.owncloud}>
-        ${builtins.readFile "${pkgs.owncloud}/.htaccess"}
+      <Directory ${config.package}>
+        ${builtins.readFile "${config.package}/.htaccess"}
       </Directory>
     '';
 
@@ -362,11 +361,28 @@ rec {
     { name = "OC_CONFIG_PATH"; value = "${config.dataDir}/config/"; }
   ];
 
-  documentRoot = pkgs.owncloud;
+  documentRoot = if config.urlPrefix == "" then config.package else null;
 
   enablePHP = true;
 
   options = {
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.owncloud70;
+      example = literalExample "pkgs.owncloud70";
+      description = ''
+          PostgreSQL package to use.
+      '';
+    };
+
+    urlPrefix = mkOption {
+      default = "";
+      example = "/owncloud";
+      description = ''
+        The URL prefix under which the owncloud service appears.
+      '';
+    };
 
     id = mkOption {
       default = "main";
@@ -552,7 +568,7 @@ rec {
       cp ${owncloudConfig} ${config.dataDir}/config/config.php
       mkdir -p ${config.dataDir}/storage
       mkdir -p ${config.dataDir}/apps
-      cp -r ${pkgs.owncloud}/apps/* ${config.dataDir}/apps/
+      cp -r ${config.package}/apps/* ${config.dataDir}/apps/
       chmod -R ug+rw ${config.dataDir}
       chmod -R o-rwx ${config.dataDir}
       chown -R wwwrun:wwwrun ${config.dataDir}
@@ -566,7 +582,11 @@ rec {
       ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/psql -h "/tmp" -U postgres -d ${config.dbName} -Atw -c "$QUERY" || true
     fi
 
-    ${php}/bin/php ${pkgs.owncloud}/occ upgrade || true
+    if [ -e ${config.package}/config/ca-bundle.crt ]; then
+      cp -f ${config.package}/config/ca-bundle.crt ${config.dataDir}/config/
+    fi
+
+    ${php}/bin/php ${config.package}/occ upgrade >> ${config.dataDir}/upgrade.log || true
 
     chown wwwrun:wwwrun ${config.dataDir}/owncloud.log || true
 

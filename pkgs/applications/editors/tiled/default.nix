@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt5, pkgconfig, python }:
+{ stdenv, fetchurl, qtbase, qttools, pkgconfig, python }:
 
 let
   version = "0.12.3";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [ qt5.base qt5.tools pkgconfig python ];
+  buildInputs = [ qtbase qttools pkgconfig python ];
 
   preConfigure = "qmake -r PREFIX=$out";
 

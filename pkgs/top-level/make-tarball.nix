@@ -2,7 +2,11 @@
    also builds the documentation and tests whether the Nix expressions
    evaluate correctly. */
 
-{ pkgs, nixpkgs, officialRelease }:
+{ nixpkgs
+, officialRelease
+, pkgs ? import nixpkgs.outPath {}
+, nix ? pkgs.nix
+}:
 
 with pkgs;
 
@@ -14,7 +18,7 @@ releaseTools.sourceTarball rec {
   version = builtins.readFile ../../.version;
   versionSuffix = "pre${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
-  buildInputs = [ nix ];
+  buildInputs = [ nix jq ];
 
   configurePhase = ''
     eval "$preConfigure"
@@ -30,12 +34,21 @@ releaseTools.sourceTarball rec {
   checkPhase = ''
     export NIX_DB_DIR=$TMPDIR
     export NIX_STATE_DIR=$TMPDIR
+    export NIX_PATH=nixpkgs=$TMPDIR/barf.nix
     nix-store --init
+
+    echo 'abort "Illegal use of <nixpkgs> in Nixpkgs."' > $TMPDIR/barf.nix
+
+    # Make sure that Nixpkgs does not use <nixpkgs>
+    if grep -r '<nixpkgs\/' pkgs; then
+        echo "Nixpkgs is not allowed to use <nixpkgs> to refer to itself."
+        exit 1
+    fi
 
     # Make sure that derivation paths do not depend on the Nixpkgs path.
     mkdir $TMPDIR/foo
     ln -s $(readlink -f .) $TMPDIR/foo/bar
-    p1=$(nix-instantiate pkgs/top-level/all-packages.nix --dry-run -A firefox)
+    p1=$(nix-instantiate pkgs/top-level/all-packages.nix --dry-run -A firefox --show-trace)
     p2=$(nix-instantiate $TMPDIR/foo/bar/pkgs/top-level/all-packages.nix --dry-run -A firefox)
     if [ "$p1" != "$p2" ]; then
         echo "Nixpkgs evaluation depends on Nixpkgs path ($p1 vs $p2)!"
@@ -51,19 +64,19 @@ releaseTools.sourceTarball rec {
 
     # Check that all-packages.nix evaluates on a number of platforms without any warnings.
     for platform in i686-linux x86_64-linux x86_64-darwin; do
-        header "checking pkgs/top-level/all-packages.nix on $platform"
+        header "checking Nixpkgs on $platform"
 
-        NIXPKGS_ALLOW_BROKEN=1 nix-env -f pkgs/top-level/all-packages.nix \
+        NIXPKGS_ALLOW_BROKEN=1 nix-env -f . \
             --show-trace --argstr system "$platform" \
             -qa --drv-path --system-filter \* --system 2>&1 >/dev/null | tee eval-warnings.log
 
         if [ -s eval-warnings.log ]; then
-            echo "pkgs/top-level/all-packages.nix on $platform evaluated with warnings, aborting"
+            echo "Nixpkgs on $platform evaluated with warnings, aborting"
             exit 1
         fi
         rm eval-warnings.log
 
-        NIXPKGS_ALLOW_BROKEN=1 nix-env -f pkgs/top-level/all-packages.nix \
+        NIXPKGS_ALLOW_BROKEN=1 nix-env -f . \
             --show-trace --argstr system "$platform" \
             -qa --drv-path --system-filter \* --system --meta --xml > /dev/null
         stopNest
@@ -74,7 +87,15 @@ releaseTools.sourceTarball rec {
     stopNest
 
     header "checking find-tarballs.nix"
-    nix-instantiate --eval --strict --show-trace ./maintainers/scripts/find-tarballs.nix > /dev/null
+    nix-instantiate --eval --strict --show-trace --json \
+       ./maintainers/scripts/find-tarballs.nix \
+      --arg expr 'import ./maintainers/scripts/all-tarballs.nix' > $TMPDIR/tarballs.json
+    nrUrls=$(jq -r '.[].url' < $TMPDIR/tarballs.json | wc -l)
+    echo "found $nrUrls URLs"
+    if [ "$nrUrls" -lt 10000 ]; then
+      echo "suspiciously low number of URLs"
+      exit 1
+    fi
     stopNest
   '';
 

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, xfce4_dev_tools
 , gtk
-, thunar
+, thunarx-2-dev
 , exo, libxfce4util, libxfce4ui
 , xfconf, udev, libnotify
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig
     xfce4_dev_tools
-    thunar
+    thunarx-2-dev
     exo gtk libxfce4util libxfce4ui
     xfconf udev libnotify
   ];

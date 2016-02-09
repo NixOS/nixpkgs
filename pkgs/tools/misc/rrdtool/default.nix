@@ -1,16 +1,17 @@
 { fetchurl, stdenv, gettext, perl, pkgconfig, libxml2, pango, cairo, groff }:
 
 stdenv.mkDerivation rec {
-  name = "rrdtool-1.5.4";
+  name = "rrdtool-1.5.5";
   src = fetchurl {
     url = "http://oss.oetiker.ch/rrdtool/pub/${name}.tar.gz";
-    sha256 = "169zbidc5h88w064qmj6x5rzczkrrfrcgwc3f2i2h8f0hzda7viz";
+    sha256 = "1xm6ikzx8iaa6r7v292k8s7srkzhnifamp1szkimgmh5ki26sa1s";
   };
   buildInputs = [ gettext perl pkgconfig libxml2 pango cairo groff ];
   
   postInstall = ''
-    # for munin support
-    mv $out/lib/perl/5*/*/*.pm $out/lib/perl/5*/
+    # for munin and rrdtool support
+    mkdir -p $out/lib/perl5/site_perl/
+    mv $out/lib/perl/5* $out/lib/perl5/site_perl/
   '';
 
   meta = with stdenv.lib; {

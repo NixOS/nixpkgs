@@ -28,11 +28,13 @@ rec {
       ''
         n=$out${destination}
         mkdir -p "$(dirname "$n")"
+
         if [ -e "$textPath" ]; then
           mv "$textPath" "$n"
         else
           echo -n "$text" > "$n"
         fi
+
         (test -n "$executable" && chmod +x "$n") || true
       '';
 
@@ -102,11 +104,11 @@ rec {
       if message != null then message
       else ''
         Unfortunately, we may not download file ${name_} automatically.
-        Please, go to ${url}, download it yourself, and add it to the Nix store
+        Please, go to ${url} to download it yourself, and add it to the Nix store
         using either
           nix-store --add-fixed ${hashAlgo} ${name_}
         or
-          nix-prefetch-url --type ${hashAlgo} file://path/to/${name_}
+          nix-prefetch-url --type ${hashAlgo} file:///path/to/${name_}
       '';
       hashAlgo = if sha256 != null then "sha256" else "sha1";
       hash = if sha256 != null then sha256 else sha1;
@@ -152,5 +154,11 @@ _EOF_
         done
         exec ${bin} "$@"
       '';
+
+  # Copy a path to the Nix store.
+  copyPathToStore = builtins.filterSource (p: t: true);
+
+  # Copy a list of paths to the Nix store.
+  copyPathsToStore = builtins.map copyPathToStore;
 
 }

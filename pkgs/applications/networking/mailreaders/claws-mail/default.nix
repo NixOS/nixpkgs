@@ -1,7 +1,8 @@
-{ fetchurl, stdenv
+{ fetchurl, stdenv, wrapGAppsHook
 , curl, dbus, dbus_glib, enchant, gtk, gnutls, gnupg, gpgme, hicolor_icon_theme
 , libarchive, libcanberra, libetpan, libnotify, libsoup, libxml2, networkmanager
 , openldap , perl, pkgconfig, poppler, python, shared_mime_info, webkitgtk2
+, glib_networking, gsettings_desktop_schemas
 
 # Build options
 # TODO: A flag to build the manual.
@@ -12,7 +13,7 @@
 #         python requires python
 , enableLdap ? false
 , enableNetworkManager ? false
-, enablePgp ? false
+, enablePgp ? true
 , enablePluginArchive ? false
 , enablePluginFancy ? false
 , enablePluginNotificationDialogs ? true
@@ -29,22 +30,21 @@
 
 with stdenv.lib;
 
-let version = "3.12.0"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "claws-mail-${version}";
+  version = "3.13.2";
 
   meta = {
     description = "The user-friendly, lightweight, and fast email client";
     homepage = http://www.claws-mail.org/;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.khumba ];
+    maintainers = with maintainers; [ khumba fpletz ];
   };
 
   src = fetchurl {
     url = "http://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    sha256 = "1jnnwivpcplv8x4w0ibb1qcnasl37fr53lbfybhgb936l2mdcai7";
+    sha256 = "1l8ankx0qpq1ix1an8viphcf11ksh53jsrm1xjmq8cjbh5910wva";
   };
 
   patches = [ ./mime.patch ];
@@ -55,8 +55,8 @@ stdenv.mkDerivation {
   '';
 
   buildInputs =
-    [ curl dbus dbus_glib gtk gnutls hicolor_icon_theme
-      libetpan perl pkgconfig python
+    [ curl dbus dbus_glib gtk gnutls gsettings_desktop_schemas hicolor_icon_theme
+      libetpan perl pkgconfig python wrapGAppsHook glib_networking
     ]
     ++ optional enableSpellcheck enchant
     ++ optionals (enablePgp || enablePluginSmime) [ gnupg gpgme ]
@@ -90,6 +90,10 @@ stdenv.mkDerivation {
     ++ optional (!enableSpellcheck) "--disable-enchant";
 
   enableParallelBuilding = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared_mime_info}/share")
+  '';
 
   postInstall = ''
     mkdir -p $out/share/applications

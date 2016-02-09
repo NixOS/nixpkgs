@@ -1,53 +1,30 @@
-x@{builderDefsPackage
-  , libX11, gtk, pkgconfig, libXmu
-  , libXpm, libpng, libjpeg, libtiff, librsvg
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, pkgconfig
+, libX11, libXmu, libXpm, gtk, libpng, libjpeg, libtiff, librsvg
+}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="fbpanel";
-    version="6.1";
-    name="${baseName}-${version}";
-    url="mirror://sourceforge/${baseName}/${name}.tbz2";
-    hash="e14542cc81ea06e64dd4708546f5fd3f5e01884c3e4617885c7ef22af8cf3965";
+stdenv.mkDerivation rec {
+  name = "fbpanel-${version}";
+  version = "6.1";
+  src = fetchurl {
+    url = "mirror://sourceforge/fbpanel/${name}.tbz2";
+    sha256 = "e14542cc81ea06e64dd4708546f5fd3f5e01884c3e4617885c7ef22af8cf3965";
   };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
-  };
+  buildInputs =
+    [ pkgconfig libX11 libXmu libXpm gtk libpng libjpeg libtiff librsvg ];
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  preConfigure = "patchShebangs .";
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["setVars" "doUnpack" "fixPaths" "doConfigure" "doMakeInstall"];
+  NIX_LDFLAGS="-lX11";
 
-  fixPaths=(a.doPatchShebangs ".");
-  setVars = a.fullDepEntry ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lX11"
-  '' [];
-      
-  meta = {
+  meta = with stdenv.lib; {
     description = "A stand-alone panel";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
   };
+
   passthru = {
     updateInfo = {
       downloadPage = "fbpanel.sourceforge.net";
     };
   };
-}) x
-
+}

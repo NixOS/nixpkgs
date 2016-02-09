@@ -1,12 +1,13 @@
-# This expression returns a list of all fetchurl calls used by all
-# packages reachable from release.nix.
+# This expression returns a list of all fetchurl calls used by ‘expr’.
 
 with import ../.. { };
 with lib;
 
+{ expr }:
+
 let
 
-  root = removeAttrs (import ../../pkgs/top-level/release.nix { }) [ "tarball" "unstable" ];
+  root = expr;
 
   uniqueUrls = map (x: x.file) (genericClosure {
     startSet = map (file: { key = file.url; inherit file; }) urls;
@@ -15,7 +16,10 @@ let
 
   urls = map (drv: { url = head drv.urls; hash = drv.outputHash; type = drv.outputHashAlgo; }) fetchurlDependencies;
 
-  fetchurlDependencies = filter (drv: drv.outputHash or "" != "" && drv ? urls) dependencies;
+  fetchurlDependencies =
+    filter
+      (drv: drv.outputHash or "" != "" && drv.outputHashMode == "flat" && drv.postFetch or "" == "" && drv ? urls)
+      dependencies;
 
   dependencies = map (x: x.value) (genericClosure {
     startSet = map keyDrv (derivationsIn' root);

@@ -23,7 +23,7 @@ with stdenv.lib;
 let
   majorVersion = "3.4";
   pythonVersion = majorVersion;
-  version = "${majorVersion}.3";
+  version = "${majorVersion}.4";
   fullVersion = "${version}";
 
   buildInputs = filter (p: p != null) [
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${fullVersion}.tar.xz";
-    sha256 = "1f4nm4z08sy0kqwisvv95l02crv6dyysdmx44p1mz3bn6csrdcxm";
+    sha256 = "18kb5c29w04rj4gyz3jngm72sy8izfnbjlm6ajv6rv2m061d75x7";
   };
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";

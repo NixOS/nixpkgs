@@ -22,8 +22,10 @@ containers.database =
 </programlisting>
 
 If you run <literal>nixos-rebuild switch</literal>, the container will
-be built and started. If the container was already running, it will be
-updated in place, without rebooting.</para>
+be built. If the container was already running, it will be
+updated in place, without rebooting. The container can be configured to
+start automatically by setting <literal>containers.database.autoStart = true</literal>
+in its configuration.</para>
 
 <para>By default, declarative containers share the network namespace
 of the host, meaning that they can listen on (privileged)
@@ -41,13 +43,15 @@ containers.database =
 This gives the container a private virtual Ethernet interface with IP
 address <literal>192.168.100.11</literal>, which is hooked up to a
 virtual Ethernet interface on the host with IP address
-<literal>192.168.100.10</literal>.  (See the next section for details
+<literal>192.168.100.10</literal>. (See the next section for details
 on container networking.)</para>
 
 <para>To disable the container, just remove it from
 <filename>configuration.nix</filename> and run <literal>nixos-rebuild
 switch</literal>. Note that this will not delete the root directory of
-the container in <literal>/var/lib/containers</literal>.</para>
+the container in <literal>/var/lib/containers</literal>. Containers can be
+destroyed using the imperative method: <literal>nixos-container destroy
+ foo</literal>.</para>
 
 <para>Declarative containers can be started and stopped using the
 corresponding systemd service, e.g. <literal>systemctl start

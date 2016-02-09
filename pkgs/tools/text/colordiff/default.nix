@@ -1,11 +1,14 @@
 { stdenv, fetchurl, perl /*, xmlto */}:
 
-stdenv.mkDerivation {
-  name = "colordiff-1.0.15";
+stdenv.mkDerivation rec {
+  name = "colordiff-1.0.16";
 
   src = fetchurl {
-    url = http://www.colordiff.org/colordiff-1.0.15.tar.gz;
-    sha256 = "0icx4v2h1gy08vhh3qqi2qfyfjp37vgj27hq1fnjz83bg7ly8pjr";
+    urls = [
+      "http://www.colordiff.org/${name}.tar.gz"
+      "http://www.colordiff.org/archive/${name}.tar.gz"
+    ];
+    sha256 = "12qkkw13261dra8pg7mzx4r8p9pb0ajb090bib9j1s6hgphwzwga";
   };
 
   buildInputs = [ perl /* xmlto */ ];

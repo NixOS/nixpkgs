@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gfortran
+{stdenv, fetchurl, gfortran, perl
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
@@ -9,17 +9,32 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation {
-  name = "openmpi-1.6.5";
+let
+  majorVersion = "1.10";
+
+in stdenv.mkDerivation rec {
+  name = "openmpi-${majorVersion}.1";
+
   src = fetchurl {
-    url = http://www.open-mpi.org/software/ompi/v1.6/downloads/openmpi-1.6.5.tar.bz2 ;
-    sha256 = "11gws4d3z7934zna2r7m1f80iay2ha17kp42mkh39wjykfwbldzy";
+    url = "http://www.open-mpi.org/software/ompi/v${majorVersion}/downloads/${name}.tar.bz2";
+    sha256 = "14p4px9a3qzjc22lnl6braxrcrmd9rgmy7fh4qpanawn2pgfq6br";
   };
+
   buildInputs = [ gfortran ];
+
+  nativeBuildInputs = [ perl ];
+
   configureFlags = []
     ++ optional enableSGE "--with-sge"
     ++ optional enablePrefix "--enable-mpirun-prefix-by-default"
     ;
+
+  enableParallelBuilding = true;
+
+  preBuild = ''
+    patchShebangs ompi/mpi/fortran/base/gen-mpi-sizeof.pl
+  '';
+
   meta = {
     homepage = http://www.open-mpi.org/;
     description = "Open source MPI-2 implementation";

@@ -16,7 +16,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Enable Git daemon, which allows public hosting  of git repositories
+          Enable Git daemon, which allows public hosting of git repositories
           without any access controls. This is mostly intended for read-only access.
 
           You can allow write access by setting daemon.receivepack configuration
@@ -115,10 +115,9 @@ in
         gid = config.ids.gids.git;
       };
 
-    jobs.gitDaemon = {
-      name = "git-daemon";
-      startOn = "ip-up";
-      exec = "${pkgs.git}/bin/git daemon --reuseaddr "
+    systemd.services."git-daemon" = {
+      wantedBy = [ "ip-up.target" ];
+      script = "${pkgs.git}/bin/git daemon --reuseaddr "
         + (optionalString (cfg.basePath != "") "--base-path=${cfg.basePath} ")
         + (optionalString (cfg.listenAddress != "") "--listen=${cfg.listenAddress} ")
         + "--port=${toString cfg.port} --user=${cfg.user} --group=${cfg.group} ${cfg.options} "

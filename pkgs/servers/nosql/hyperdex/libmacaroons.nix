@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, unzip, autoconf, automake, libtool, 
-  pkgconfig, libsodium, python }:
+{ stdenv, fetchurl, unzip, autoreconfHook, pkgconfig, libsodium, python }:
+
 stdenv.mkDerivation rec {
   name = "libmacaroons-${version}";
-  version = "HEAD";
+  version = "0.3.0";
 
   src = fetchurl {
-    url = "https://github.com/rescrv/libmacaroons/archive/6febf3ce6c4c77a46d24b40ed29b03ffbfb175a7.zip";
-    sha256 = "0b4qgim87398chvc3qhxfqv2l1cyl65rhyknln8lk0gq9y00p1ik";
+    url = "https://github.com/rescrv/libmacaroons/archive/releases/${version}.zip";
+    sha256 = "18c44424jri0p5la6jgrnlz5p937hk7ws2mldhzjwisqyf5qld43";
   };
-  buildInputs = [ unzip autoconf automake libtool python libsodium pkgconfig ];
-  preConfigure = "autoreconf -i";
-  
+
+  buildInputs = [ unzip autoreconfHook python libsodium pkgconfig ];
+
   meta = with stdenv.lib; {
     description = ''Macaroons are flexible authorization credentials that
         support decentralized delegation, attenuation, and verification.'';

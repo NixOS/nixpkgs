@@ -20,7 +20,9 @@ in
 
       enable = mkEnableOption ''
         GDM as the display manager.
-        <emphasis>GDM is very experimental and may render system unusable.</emphasis>
+        <emphasis>GDM in NixOS is not well-tested with desktops other
+        than GNOME, so use with caution, as it could render the
+        system unusable.</emphasis>
       '';
 
       debug = mkEnableOption ''
@@ -160,7 +162,7 @@ in
 
       gdm.text = ''
         auth     requisite      pam_nologin.so
-        auth     required       pam_env.so
+        auth     required       pam_env.so envfile=${config.system.build.pamEnvironment}
 
         auth     required       pam_succeed_if.so uid >= 1000 quiet
         auth     optional       ${gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so

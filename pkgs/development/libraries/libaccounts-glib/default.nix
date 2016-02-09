@@ -22,4 +22,6 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     HAVE_GCOV_FALSE="#" ./configure $configureFlags --prefix=$out
   '';
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations"; # since glib-2.46
 }

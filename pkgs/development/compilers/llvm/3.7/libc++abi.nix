@@ -3,9 +3,9 @@
 stdenv.mkDerivation {
   name = "libc++abi-${version}";
 
-  src = fetch "libcxxabi" "1swvnhrf9g67579c5picg0l869f8l2bwi4xqpbcb4n296gyp9c28";
+  src = fetch "libcxxabi" "0ambfcmr2nh88hx000xb7yjm9lsqjjz49w5mlf6dlxzmj3nslzx4";
 
-  buildInputs = [ cmake ] ++ stdenv.lib.optional (!stdenv.isDarwin) libunwind;
+  buildInputs = [ cmake ] ++ stdenv.lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) libunwind;
 
   postUnpack = ''
     unpackFile ${libcxx.src}
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
       done
       make install
       install -d 755 $out/include
-      install -m 644 ../include/cxxabi.h $out/include
+      install -m 644 ../include/*.h $out/include
     ''
     else ''
       install -d -m 755 $out/include $out/lib

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, cmake, pyside, python27, qt4, pysideShiboken }:
+{ stdenv, fetchurl, cmake, pyside, python, qt4, pysideShiboken }:
 
 stdenv.mkDerivation {
-  name = "pyside-tools-0.2.15";
+  name = "${python.libPrefix}-pyside-tools-0.2.15";
 
   src = fetchurl {
     url = "https://github.com/PySide/Tools/archive/0.2.15.tar.gz";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake pyside python27 qt4 pysideShiboken ];
+  buildInputs = [ cmake pyside python qt4 pysideShiboken ];
 
   meta = {
     description = "Tools for pyside, the LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";

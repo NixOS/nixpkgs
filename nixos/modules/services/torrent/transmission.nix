@@ -9,7 +9,7 @@ let
   homeDir = "/var/lib/transmission";
   downloadDir = "${homeDir}/Downloads";
   incompleteDir = "${homeDir}/.incomplete";
-  
+
   settingsDir = "${homeDir}/.config/transmission-daemon";
   settingsFile = pkgs.writeText "settings.json" (builtins.toJSON fullSettings);
 
@@ -21,7 +21,7 @@ let
     else toString ''"${x}"'';
 
   # for users in group "transmission" to have access to torrents
-  fullSettings = cfg.settings // { umask = 2; };
+  fullSettings = { download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings // { umask = 2; };
 in
 {
   options = {
@@ -35,7 +35,7 @@ in
           Transmission daemon can be controlled via the RPC interface using
           transmission-remote or the WebUI (http://localhost:9091/ by default).
 
-          Torrents are downloaded to ${homeDir}/Downloads/ by default and are
+          Torrents are downloaded to ${downloadDir} by default and are
           accessible to users in the "transmission" group.
         '';
       };
@@ -83,7 +83,7 @@ in
       # 1) Only the "transmission" user and group have access to torrents.
       # 2) Optionally update/force specific fields into the configuration file.
       serviceConfig.ExecStartPre = ''
-          ${pkgs.stdenv.shell} -c "chmod 770 ${homeDir} && mkdir -p ${settingsDir} ${downloadDir} ${incompleteDir} && rm -f ${settingsDir}/settings.json && cp -f ${settingsFile} ${settingsDir}/settings.json"
+          ${pkgs.stdenv.shell} -c "mkdir -p ${homeDir} ${settingsDir} ${fullSettings.download-dir} ${fullSettings.incomplete-dir} && chmod 770 ${homeDir} ${settingsDir} ${fullSettings.download-dir} ${fullSettings.incomplete-dir} && rm -f ${settingsDir}/settings.json && cp -f ${settingsFile} ${settingsDir}/settings.json"
       '';
       serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port}";
       serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
@@ -113,21 +113,26 @@ in
           #include <abstractions/base>
           #include <abstractions/nameservice>
 
-          ${pkgs.glibc}/lib/*.so               mr,
-          ${pkgs.libevent}/lib/libevent*.so*   mr,
-          ${pkgs.curl}/lib/libcurl*.so*        mr,
-          ${pkgs.openssl}/lib/libssl*.so*      mr,
-          ${pkgs.openssl}/lib/libcrypto*.so*   mr,
-          ${pkgs.zlib}/lib/libz*.so*           mr,
-          ${pkgs.libssh2}/lib/libssh2*.so*     mr,
-          ${pkgs.systemd}/lib/libsystemd*.so*  mr,
-          ${pkgs.xz}/lib/liblzma*.so*          mr,
-          ${pkgs.libgcrypt}/lib/libgcrypt*.so* mr,
+          ${pkgs.glibc}/lib/*.so                    mr,
+          ${pkgs.libevent}/lib/libevent*.so*        mr,
+          ${pkgs.curl}/lib/libcurl*.so*             mr,
+          ${pkgs.openssl}/lib/libssl*.so*           mr,
+          ${pkgs.openssl}/lib/libcrypto*.so*        mr,
+          ${pkgs.zlib}/lib/libz*.so*                mr,
+          ${pkgs.libssh2}/lib/libssh2*.so*          mr,
+          ${pkgs.systemd}/lib/libsystemd*.so*       mr,
+          ${pkgs.xz}/lib/liblzma*.so*               mr,
+          ${pkgs.libgcrypt}/lib/libgcrypt*.so*      mr,
           ${pkgs.libgpgerror}/lib/libgpg-error*.so* mr,
+          ${pkgs.libnghttp2}/lib/libnghttp2*.so*    mr,
+          ${pkgs.c-ares}/lib/libcares*.so*          mr,
+          ${pkgs.libcap}/lib/libcap*.so*            mr,
+          ${pkgs.attr}/lib/libattr*.so*             mr,
 
           @{PROC}/sys/kernel/random/uuid   r,
           @{PROC}/sys/vm/overcommit_memory r,
 
+          ${pkgs.openssl}/etc/**                     r,
           ${pkgs.transmission}/share/transmission/** r,
 
           owner ${settingsDir}/** rw,

@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, zlib, qt4, freetype, cairo, lua5, texLive, ghostscriptX
-, libjpeg
-, makeWrapper }:
-let ghostscript = ghostscriptX; in
+{ stdenv, fetchurl, pkgconfig, zlib, freetype, cairo, lua5, texlive, ghostscript
+, libjpeg, qtbase
+, makeQtWrapper
+}:
+
 stdenv.mkDerivation rec {
-  name = "ipe-7.1.8";
+  name = "ipe-7.1.10";
 
   src = fetchurl {
-    url = "http://github.com/otfried/ipe/raw/master/releases/7.1/${name}-src.tar.gz";
-    sha256 = "1zx6dyr1rb6m6rvawagg9f8bc2li9nbighv2dglzjbh11bxqsyva";
+    url = "https://dl.bintray.com/otfried/generic/ipe/7.1/${name}-src.tar.gz";
+    sha256 = "0kwk8l2jasb4fdixaca08g661d0sdmx2jkk3ch7pxh0f4xkdxkkz";
   };
 
   # changes taken from Gentoo portage
@@ -21,16 +22,18 @@ stdenv.mkDerivation rec {
   '';
 
   IPEPREFIX="$$out";
-  URWFONTDIR="${texLive}/texmf-dist/fonts/type1/urw/";
+  URWFONTDIR="${texlive}/texmf-dist/fonts/type1/urw/";
   LUA_PACKAGE = "lua";
 
   buildInputs = [
-    libjpeg pkgconfig zlib qt4 freetype cairo lua5 texLive ghostscript makeWrapper
+    libjpeg pkgconfig zlib qtbase freetype cairo lua5 texlive ghostscript
   ];
 
-  postInstall = ''
+  nativeBuildInputs = [ makeQtWrapper ];
+
+  postFixup = ''
     for prog in $out/bin/*; do
-      wrapProgram "$prog" --prefix PATH : "${texLive}/bin"
+      wrapQtProgram "$prog" --prefix PATH : "${texlive}/bin"
     done
   '';
 

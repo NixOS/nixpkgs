@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = http://fribid.se;
     license = with licenses; [ gpl2 mpl10 ];
     maintainers = [ maintainers.edwtjo ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

@@ -21,6 +21,7 @@ stdenv.mkDerivation {
     cat src/Makefile.am
     exit 2
   '';
+  patches = [ ./device-info-sys-stat.patch ];
   meta = {
     description = "A command line Linux program which mounts and unmounts removable devices without a password, shows device info, and monitors device changes";
     homepage = https://ignorantguru.github.io/udevil/;

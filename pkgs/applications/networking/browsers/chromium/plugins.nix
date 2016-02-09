@@ -8,6 +8,34 @@
 with stdenv.lib;
 
 let
+  # Generate a shell fragment that emits flags appended to the
+  # final makeWrapper call for wrapping the browser's main binary.
+  #
+  # Note that this is shell-escaped so that only the variable specified
+  # by the "output" attribute is substituted.
+  mkPluginInfo = { output ? "out", allowedVars ? [ output ]
+                 , flags ? [], envVars ? {}
+                 }: let
+    shSearch = ["'"] ++ map (var: "@${var}@") allowedVars;
+    shReplace = ["'\\''"] ++ map (var: "'\"\${${var}}\"'") allowedVars;
+    # We need to triple-escape "val":
+    #  * First because makeWrapper doesn't do any quoting of its arguments by
+    #    itself.
+    #  * Second because it's passed to the makeWrapper call separated by IFS but
+    #    not by the _real_ arguments, for example the Widevine plugin flags
+    #    contain spaces, so they would end up as separate arguments.
+    #  * Third in order to be correctly quoted for the "echo" call below.
+    shEsc = val: "'${replaceStrings ["'"] ["'\\''"] val}'";
+    mkSh = val: "'${replaceStrings shSearch shReplace (shEsc val)}'";
+    mkFlag = flag: ["--add-flags" (shEsc flag)];
+    mkEnvVar = key: val: ["--set" (shEsc key) (shEsc val)];
+    envList = mapAttrsToList mkEnvVar envVars;
+    quoted = map mkSh (flatten ((map mkFlag flags) ++ envList));
+  in ''
+    mkdir -p "''$${output}/nix-support"
+    echo ${toString quoted} > "''$${output}/nix-support/wrapper-flags"
+  '';
+
   plugins = stdenv.mkDerivation {
     name = "chromium-binary-plugins";
 
@@ -61,40 +89,29 @@ let
 
       install -vD PepperFlash/libpepflashplayer.so \
         "$flash/lib/libpepflashplayer.so"
-      mkdir -p "$flash/nix-support"
-      cat > "$flash/nix-support/chromium-plugin.nix" <<NIXOUT
-        { flags = [
-            "--ppapi-flash-path='$flash/lib/libpepflashplayer.so'"
-            "--ppapi-flash-version=$flashVersion"
-          ];
-        }
-      NIXOUT
+
+      ${mkPluginInfo {
+        output = "flash";
+        allowedVars = [ "flash" "flashVersion" ];
+        flags = [
+          "--ppapi-flash-path=@flash@/lib/libpepflashplayer.so"
+          "--ppapi-flash-version=@flashVersion@"
+        ];
+      }}
 
       install -vD libwidevinecdm.so \
         "$widevine/lib/libwidevinecdm.so"
       install -vD libwidevinecdmadapter.so \
         "$widevine/lib/libwidevinecdmadapter.so"
-      mkdir -p "$widevine/nix-support"
-      cat > "$widevine/nix-support/chromium-plugin.nix" <<NIXOUT
-        { flags = [ "--register-pepper-plugins='${wvModule}${wvInfo}'" ];
-          envVars.NIX_CHROMIUM_PLUGIN_PATH_WIDEVINE = "$widevine/lib";
-        }
-      NIXOUT
+
+      ${mkPluginInfo {
+        output = "widevine";
+        flags = [ "--register-pepper-plugins=${wvModule}${wvInfo}" ];
+        envVars.NIX_CHROMIUM_PLUGIN_PATH_WIDEVINE = "@widevine@/lib";
+      }}
     '';
 
-    passthru = let
-      enabledPlugins = optional enablePepperFlash plugins.flash
+    passthru.enabled = optional enablePepperFlash plugins.flash
                     ++ optional enableWideVine    plugins.widevine;
-      getNix = plugin: import "${plugin}/nix-support/chromium-plugin.nix";
-      mergeAttrsets = let
-        f = v: if all isAttrs v then mergeAttrsets v
-          else if all isList  v then concatLists   v
-          else if tail v == []  then head          v
-          else head (tail v);
-      in fold (l: r: zipAttrsWith (_: f) [ l r ]) {};
-    in {
-      inherit enabledPlugins;
-      settings = mergeAttrsets (map getNix enabledPlugins);
-    };
   };
 in plugins

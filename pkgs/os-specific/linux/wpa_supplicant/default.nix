@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   # TODO: Patch epoll so that the dbus actually responds
   # TODO: Figure out how to get privsep working, currently getting SIGBUS
   extraConfig = ''
+    CONFIG_AP=y
     CONFIG_LIBNL32=y
     CONFIG_EAP_FAST=y
     CONFIG_EAP_PWD=y
@@ -78,6 +79,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./build-fix.patch
+    ./libressl.patch
   ];
 
   postInstall = ''

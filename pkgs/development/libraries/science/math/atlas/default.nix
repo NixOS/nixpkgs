@@ -63,7 +63,8 @@ stdenv.mkDerivation {
   # performance timings. We ignore that check, however, because with binaries
   # being pre-built on Hydra those timings aren't accurate for the local
   # machine in the first place.
-  patches = optional tolerateCpuTimingInaccuracy ./disable-timing-accuracy-check.patch;
+  patches = optional tolerateCpuTimingInaccuracy ./disable-timing-accuracy-check.patch
+    ++ optional stdenv.isDarwin ./tmpdir.patch;
 
   # Configure outside of the source directory.
   preConfigure = ''
@@ -106,6 +107,7 @@ stdenv.mkDerivation {
     homepage = "http://math-atlas.sourceforge.net/";
     description = "Automatically Tuned Linear Algebra Software (ATLAS)";
     license = stdenv.lib.licenses.bsd3;
+    platforms = stdenv.lib.platforms.linux;
 
     longDescription = ''
       The ATLAS (Automatically Tuned Linear Algebra Software) project is an

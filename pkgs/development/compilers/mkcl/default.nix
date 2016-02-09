@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, gmp }:
+{ stdenv, fetchgit, makeWrapper, gmp, gcc }:
 
 stdenv.mkDerivation rec {
   v = "1.1.9";
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ja7vyp5rjidb2a1gah35jqzqn6zjkikz5sd966p0f0wh26l6n03";
   };
 
+  buildInputs = [ makeWrapper ];
   propagatedBuildInputs = [ gmp ];
 
   configureFlags = [
@@ -17,11 +18,16 @@ stdenv.mkDerivation rec {
     "GMP_LDFLAGS=-L${gmp}/lib"
   ];
 
+  postInstall = ''
+    wrapProgram $out/bin/mkcl --prefix PATH : "${gcc}/bin"
+  '';
+
   meta = {
     description = "ANSI Common Lisp Implementation";
     homepage = https://common-lisp.net/project/mkcl/;
     license = stdenv.lib.licenses.lgpl2Plus;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [stdenv.lib.maintainers.tohl];
   };
 }
 

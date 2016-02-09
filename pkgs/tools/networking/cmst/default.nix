@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, qt5, makeWrapper, libX11 }:
+{ stdenv, fetchgit, qtbase, makeWrapper, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "cmst-2014.12.05";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "070rxv3kyn41ra7nnk1wbqvy6fjg38h7hrdv4dn71b201kmzd194";
   };
 
-  buildInputs = [ qt5.base makeWrapper ];
+  buildInputs = [ qtbase makeWrapper ];
 
   configurePhase = ''
     substituteInPlace ./cmst.pro \

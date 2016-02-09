@@ -67,19 +67,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Tools for manipulating binaries (linker, assembler, etc.)";
-
     longDescription = ''
       The GNU Binutils are a collection of binary tools.  The main
       ones are `ld' (the GNU linker) and `as' (the GNU assembler).
       They also include the BFD (Binary File Descriptor) library,
       `gprof', `nm', `strip', etc.
     '';
-
     homepage = http://www.gnu.org/software/binutils/;
-
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
 
     /* Give binutils a lower priority than gcc-wrapper to prevent a
        collision due to the ld/as wrappers/symlinks in the latter. */

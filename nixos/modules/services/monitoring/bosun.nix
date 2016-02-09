@@ -6,10 +6,12 @@ let
   cfg = config.services.bosun;
 
   configFile = pkgs.writeText "bosun.conf" ''
-    tsdbHost = ${cfg.opentsdbHost}
+    ${optionalString (cfg.opentsdbHost !=null) "tsdbHost = ${cfg.opentsdbHost}"}
+    ${optionalString (cfg.influxHost !=null) "influxHost = ${cfg.influxHost}"}
     httpListen = ${cfg.listenAddress}
     stateFile = ${cfg.stateFile}
-    checkFrequency = 5m
+    ledisDir = ${cfg.ledisDir}
+    checkFrequency = ${cfg.checkFrequency}
 
     ${cfg.extraConfig}
   '';
@@ -31,6 +33,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.bosun;
+        defaultText = "pkgs.bosun";
         example = literalExample "pkgs.bosun";
         description = ''
           bosun binary to use.
@@ -54,10 +57,20 @@ in {
       };
 
       opentsdbHost = mkOption {
-        type = types.string;
+        type = types.nullOr types.string;
         default = "localhost:4242";
         description = ''
           Host and port of the OpenTSDB database that stores bosun data.
+          To disable opentsdb you can pass null as parameter.
+        '';
+      };
+
+      influxHost = mkOption {
+        type = types.nullOr types.string;
+        default = null;
+        example = "localhost:8086";
+        description = ''
+           Host and port of the influxdb database.
         '';
       };
 
@@ -70,10 +83,26 @@ in {
       };
 
       stateFile = mkOption {
-        type = types.string;
+        type = types.path;
         default = "/var/lib/bosun/bosun.state";
         description = ''
           Path to bosun's state file.
+        '';
+      };
+
+      ledisDir = mkOption {
+        type = types.path;
+        default = "/var/lib/bosun/ledis_data";
+        description = ''
+          Path to bosun's ledis data dir
+        '';
+      };
+
+      checkFrequency = mkOption {
+        type = types.str;
+        default = "5m";
+        description = ''
+          Bosun's check frequency
         '';
       };
 
@@ -95,22 +124,24 @@ in {
   };
 
   config = mkIf cfg.enable {
-  
+
     systemd.services.bosun = {
       description = "bosun metrics collector (part of Bosun)";
       wantedBy = [ "multi-user.target" ];
 
-      preStart =
-        ''
-        mkdir -p `dirname ${cfg.stateFile}`;
-        touch ${cfg.stateFile}
-        touch ${cfg.stateFile}.tmp
+      preStart = ''
+        mkdir -p "$(dirname "${cfg.stateFile}")";
+        touch "${cfg.stateFile}"
+        touch "${cfg.stateFile}.tmp"
+
+        mkdir -p "${cfg.ledisDir}";
 
         if [ "$(id -u)" = 0 ]; then
-          chown ${cfg.user}:${cfg.group} ${cfg.stateFile}
-          chown ${cfg.user}:${cfg.group} ${cfg.stateFile}.tmp
+          chown ${cfg.user}:${cfg.group} "${cfg.stateFile}"
+          chown ${cfg.user}:${cfg.group} "${cfg.stateFile}.tmp"
+          chown ${cfg.user}:${cfg.group} "${cfg.ledisDir}"
         fi
-        '';
+      '';
 
       serviceConfig = {
         PermissionsStartOnly = true;

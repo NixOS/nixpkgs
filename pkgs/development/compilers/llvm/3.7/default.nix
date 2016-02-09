@@ -2,7 +2,7 @@
 let
   callPackage = newScope (self // { inherit stdenv isl version fetch; });
 
-  version = "3.7.0";
+  version = "3.7.1";
 
   fetch = fetch_v version;
   fetch_v = ver: name: sha256: fetchurl {
@@ -10,8 +10,8 @@ let
     inherit sha256;
   };
 
-  compiler-rt_src = fetch "compiler-rt" "02rbsqdnj1dw9q3d8w5wwmvz5gfraiv8xp18lis4kj8baacajzr2";
-  clang-tools-extra_src = fetch "clang-tools-extra" "1k894zkx4w8grigmgv5y4q9zrcic2ypz0zfn28270ykbm6is1s4a";
+  compiler-rt_src = fetch "compiler-rt" "10c1mz2q4bdq9bqfgr3dirc6hz1h3sq8573srd5q5lr7m7j6jiwx";
+  clang-tools-extra_src = fetch "clang-tools-extra" "0sxw2l3q5msbrwxv1ck72arggdw6n5ysi929gi69ikniranfv4aa";
 
   self = {
     llvm = callPackage ./llvm.nix {

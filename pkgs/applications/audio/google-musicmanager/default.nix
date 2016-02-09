@@ -6,23 +6,24 @@ let
   archUrl = name: arch: "http://dl.google.com/linux/musicmanager/deb/pool/main/g/google-musicmanager-beta/${name}_${arch}.deb";
 in
 stdenv.mkDerivation rec {
-  version = "beta_1.0.221.5230-r0"; # friendly to nix-env version sorting algo
+  version = "beta_1.0.243.1116-r0"; # friendly to nix-env version sorting algo
   product = "google-musicmanager";
   name    = "${product}-${version}";
 
   # When looking for newer versions, since google doesn't let you list their repo dirs,
   # curl http://dl.google.com/linux/musicmanager/deb/dists/stable/Release
-  # fetch an appropriate packages file eg main/binary-amd64/Packages
+  # fetch an appropriate packages file such as main/binary-amd64/Packages:
+  # curl http://dl.google.com/linux/musicmanager/deb/dists/stable/main/binary-amd64/Packages
   # which will contain the links to all available *.debs for the arch.
 
   src = if stdenv.system == "x86_64-linux"
     then fetchurl {
       url    = archUrl name "amd64";
-      sha256 = "1h0ssbz6y9xi2szalgb5wcxi8m1ylg4qf2za6zgvi908hpan7q37";
+      sha256 = "54f97f449136e173492d36084f2c01244b84f02d6e223fb8a40661093e0bec7c";
     }
     else fetchurl {
         url    = archUrl name "i386";
-        sha256 = "0q8cnzx7s25bpqlbp40d43mwd6m8kvhvdifkqlgc9phpydnqpd1i";
+        sha256 = "121a7939015e2270afa3f1c73554102e2b4f2e6a31482ff7be5e7c28dd101d3c";
     };
 
   unpackPhase = ''

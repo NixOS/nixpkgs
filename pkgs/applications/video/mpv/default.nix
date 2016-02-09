@@ -23,10 +23,6 @@
 , vaapiSupport ? false, libva ? null
 }:
 
-# TODO: Wayland support
-# TODO: investigate caca support
-# TODO: investigate lua5_sockets bug
-
 assert x11Support -> (libX11 != null && libXext != null && mesa != null && libXxf86vm != null);
 assert xineramaSupport -> (libXinerama != null && x11Support);
 assert xvSupport -> (libXv != null && x11Support);
@@ -51,19 +47,21 @@ let
 
   # Purity: Waf is normally downloaded by bootstrap.py, but
   # for purity reasons this behavior should be avoided.
+  wafVersion = "1.8.12";
   waf = fetchurl {
-    url = http://ftp.waf.io/pub/release/waf-1.8.5;
-    sha256 = "0gh266076pd9fzwkycskyd3kkv2kds9613blpxmn9w4glkiwmmh5";
+    urls = [ "http://ftp.waf.io/pub/release/waf-${wafVersion}"
+             "http://waf.io/waf-${wafVersion}" ];
+    sha256 = "12y9c352zwliw0zk9jm2lhynsjcf5jy0k1qch1c1av8hnbm2pgq1";
   };
 in
 
 stdenv.mkDerivation rec {
-  name = "mpv-${version}";
-  version = "0.9.2";
+
+  name = "mpv-${meta.version}";
 
   src = fetchurl {
-    url = "https://github.com/mpv-player/mpv/archive/v${version}.tar.gz";
-    sha256 = "0la7pmy75mq92kcrawdiw5idw6a46z7d15mlkgs0axyivdaqy560";
+    url = "https://github.com/mpv-player/mpv/archive/v${meta.version}.tar.gz";
+    sha256 = "0cqjwl0xyg0sv1jflipfkvqjg32y0kqfh4gc3lyhqgv0hgs3fa84";
   };
 
   patchPhase = ''
@@ -127,6 +125,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    version = "0.14.0";
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
     homepage = http://mpv.io;
     license = licenses.gpl2Plus;
@@ -140,3 +139,6 @@ stdenv.mkDerivation rec {
     '';
   };
 }
+# TODO: Wayland support
+# TODO: investigate caca support
+# TODO: investigate lua5_sockets bug

@@ -25,6 +25,11 @@ stdenv.mkDerivation rec{
 
   preConfigure=''
     sed -e "s@mem=mf2pt1@mem=$PWD/mf/mf2pt1@" -i scripts/build/mf2pt1.pl
+
+    # At some point our fontforge had path 2n…-fontforge-2015… and it
+    # confused the version detection…
+    sed -re 's%("[$]exe" --version .*)([|\\] *$)%\1 | sed -re "s@/nix/store/[a-z0-9]{32}-@@" \2%' \
+      -i configure
   '';
 
   postInstall = ''
@@ -52,7 +57,7 @@ stdenv.mkDerivation rec{
     homepage = http://lilypond.org/;
     license = licenses.gpl3;
     maintainers = [ maintainers.marcweber ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 
   patches = [ ./findlib.patch ];

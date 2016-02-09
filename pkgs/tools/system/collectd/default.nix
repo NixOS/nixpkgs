@@ -4,6 +4,7 @@
 , curl ? null
 , iptables ? null
 , jdk ? null
+, libatasmart ? null
 , libcredis ? null
 , libdbi ? null
 , libgcrypt ? null
@@ -25,6 +26,7 @@
 , rabbitmq-c ? null
 , riemann ? null
 , rrdtool ? null
+, udev ? null
 , varnish ? null
 , yajl ? null
 }:
@@ -38,10 +40,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig curl iptables libcredis libdbi libgcrypt libmemcached cyrus_sasl
-    libmodbus libnotify gdk_pixbuf liboping libpcap libsigrok libvirt
+    pkgconfig curl iptables libatasmart libcredis libdbi libgcrypt libmemcached
+    cyrus_sasl libmodbus libnotify gdk_pixbuf liboping libpcap libsigrok libvirt
     lm_sensors libxml2 lvm2 mysql.lib postgresql protobufc rabbitmq-c rrdtool
-    varnish yajl jdk libtool python
+    varnish yajl jdk libtool python udev
   ];
 
   # for some reason libsigrok isn't auto-detected

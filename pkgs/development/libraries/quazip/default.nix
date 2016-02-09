@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   installFlags = "INSTALL_ROOT=$(out)";
 
-  buildInputs = [ zlib (qt.base or qt) ];
+  buildInputs = [ zlib qt ];
 
   meta = {
     description = "Provides access to ZIP archives from Qt programs";

@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     description = "cat replacement";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qknight ];
-    platforms = with platforms; all;
+    platforms = platforms.all;
   };
 }

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, bdftopcf, mkfontdir, mkfontscale }:
 
 stdenv.mkDerivation rec {
-  name = "terminus-font-4.39";
+  name = "terminus-font-4.40";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/terminus-font/${name}/${name}.tar.gz";
-    sha256 = "1gzmn7zakvy6yrvmswyjfklnsvqrjm0imhq8rjws8rdkhqwkh21i";
+    sha256 = "0487cyx5h1f0crbny5sg73a22gmym5vk1i7646gy7hgiscj2rxb4";
   };
 
   buildInputs = [ perl bdftopcf mkfontdir mkfontscale ];
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.is-vn.bg/hamster/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ astsmtl ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

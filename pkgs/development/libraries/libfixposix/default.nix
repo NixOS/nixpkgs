@@ -1,57 +1,28 @@
-x@{builderDefsPackage
-  , fetchgit
-  , autoconf, automake, libtool
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    ["fetchgit"];
+{ stdenv, fetchurl, fetchgit, autoreconfHook, libtool }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    method="fetchgit";
-    baseName="libfixposix"; 
-    url="https://github.com/sionescu/libfixposix";
-    rev="30b75609d858588ea00b427015940351896867e9";
-    version="git-${rev}";
-    name="${baseName}-${version}";
-    hash="44553c90d67f839cdd57d14d37d9faa25b1b766f607408896137f3013c1c9424";
-  };
-in
-rec {
-  srcDrv = a.fetchgit {
-    url = sourceInfo.url;
-    rev = sourceInfo.rev;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  name="libfixposix-${version}";
+  version="git-${src.rev}";
+
+  src = fetchgit {
+    url = "https://github.com/sionescu/libfixposix";
+    rev = "30b75609d858588ea00b427015940351896867e9";
+    sha256 = "44553c90d67f839cdd57d14d37d9faa25b1b766f607408896137f3013c1c9424";
   };
 
-  src = srcDrv +"/";
+  buildInputs = [ autoreconfHook libtool ];
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doAutoreconf" "doConfigure" "doMakeInstall"];
-
-  doAutoreconf = a.fullDepEntry (''
-    autoreconf -i
-  '') ["doUnpack" "addInputs"];
-      
-  meta = {
+  meta = with stdenv.lib; {
     description = "A set of workarounds for places in POSIX that get implemented differently";
-    maintainers = with a.lib.maintainers;
+    maintainers = with maintainers;
     [
       raskin
     ];
-    platforms = with a.lib.platforms;
-      linux;
+    platforms = platforms.linux;
   };
   passthru = {
     updateInfo = {
       downloadPage = "http://gitorious.org/libfixposix/libfixposix";
     };
   };
-}) x
-
+}

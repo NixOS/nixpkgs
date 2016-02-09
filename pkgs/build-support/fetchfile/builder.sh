@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-echo "copying $url into $out..."
+echo "copying $pathname into $out..."
 
 cp "$pathname" "$out" || exit 1
 

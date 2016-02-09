@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A collection of GTK+ widgets";
-    homepahe = http://blog.chipx86.com/tag/libsexy/;
+    homepage = http://blog.chipx86.com/tag/libsexy/;
     license = licenses.lgpl21;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;

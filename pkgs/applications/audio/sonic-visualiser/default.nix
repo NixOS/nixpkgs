@@ -2,7 +2,7 @@
 
 { stdenv, fetchurl, alsaLib, bzip2, fftw, libjack2, libX11, liblo
 , libmad, libogg, librdf, librdf_raptor, librdf_rasqal, libsamplerate
-, libsndfile, pkgconfig, libpulseaudio, qtbase, redland
+, libsndfile, pkgconfig, libpulseaudio, makeQtWrapper, qtbase, redland
 , rubberband, serd, sord, vampSDK, fftwFloat
 }:
 
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
       liblo
       libX11
     ];
+
+  nativeBuildInputs = [ makeQtWrapper ];
 
   buildPhase = ''
     for i in sonic-visualiser svapp svcore svgui;

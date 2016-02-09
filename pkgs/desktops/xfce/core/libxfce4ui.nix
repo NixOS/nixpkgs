@@ -1,5 +1,9 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, libxfce4util, xfconf
-, libglade, libstartup_notification }:
+, libglade, libstartup_notification
+, withGtk3 ? false, gtk3
+}:
+
+with { inherit (stdenv.lib) optional; };
 
 stdenv.mkDerivation rec {
   p_name  = "libxfce4ui";
@@ -14,15 +18,14 @@ stdenv.mkDerivation rec {
 
   #TODO: gladeui
   # Install into our own prefix instead.
-  preConfigure =
-    ''
-      configureFlags="--with-libglade-module-path=$out/lib/libglade/2.0"
-    '';
+  configureFlags = [
+    "--with-libglade-module-path=$out/lib/libglade/2.0"
+  ] ++ optional withGtk3 "--enable-gtk3";
 
   buildInputs =
     [ pkgconfig intltool gtk libxfce4util xfconf libglade
       libstartup_notification
-    ];
+    ] ++ optional withGtk3 gtk3;
 
   preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
 

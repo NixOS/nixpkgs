@@ -1,17 +1,17 @@
 { stdenv, fetchurl, alsaLib, cmake, libjack2, fftw, fltk13, libjpeg
-, minixml, pkgconfig, zlib
+, minixml, pkgconfig, zlib, liblo
 }:
 
 stdenv.mkDerivation  rec {
   name = "zynaddsubfx-${version}";
-  version = "2.4.4";
+  version = "2.5.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/zynaddsubfx/zynaddsubfx-${version}.tar.xz";
-    sha256 = "15byz08p5maf3v8l1zz11xan6s0qcfasjf1b81xc8rffh13x5f53";
+    url = "mirror://sourceforge/zynaddsubfx/zynaddsubfx-${version}.tar.gz";
+    sha256 = "11yrady7xwfrzszkk2fvq81ymv99mq474h60qnirk27khdygk24m";
   };
 
-  buildInputs = [ alsaLib libjack2 fftw fltk13 libjpeg minixml zlib ];
+  buildInputs = [ alsaLib libjack2 fftw fltk13 libjpeg minixml zlib liblo ];
   nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = with stdenv.lib; {
@@ -19,6 +19,6 @@ stdenv.mkDerivation  rec {
     homepage = http://zynaddsubfx.sourceforge.net;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ maintainers.goibhniu maintainers.palo ];
   };
 }

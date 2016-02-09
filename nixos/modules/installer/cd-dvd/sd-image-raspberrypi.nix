@@ -27,9 +27,6 @@ in
 
   boot.kernelPackages = pkgs.linuxPackages_rpi;
 
-  # FIXME: fix manual evaluation on ARM
-  services.nixosManual.enable = lib.mkOverride 0 false;
-
   # FIXME: this probably should be in installation-device.nix
   users.extraUsers.root.initialHashedPassword = "";
 

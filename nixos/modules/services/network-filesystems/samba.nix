@@ -85,7 +85,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.samba;
-        example = pkgs.samba4;
+        defaultText = "pkgs.samba";
+        example = literalExample "pkgs.samba4";
         description = ''
           Defines which package should be used for the samba server.
         '';

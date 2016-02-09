@@ -1,0 +1,70 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="sec-language-qt">
+
+<title>Qt</title>
+
+<para>The information in this section applies to Qt 5.5 and later.</para>
+
+<para>Qt is an application development toolkit for C++. Although it is
+not a distinct programming language, there are special considerations
+for packaging Qt-based programs and libraries. A small set of tools
+and conventions has grown out of these considerations.</para>
+
+<section xml:id="ssec-qt-libraries"><title>Libraries</title>
+
+<para>Packages that provide libraries should be listed in
+<varname>qt5LibsFun</varname> so that the library is built with each
+Qt version. A set of packages is provided for each version of Qt; for
+example, <varname>qt5Libs</varname> always provides libraries built
+with the latest version, <varname>qt55Libs</varname> provides
+libraries built with Qt 5.5, and so on. To avoid version conflicts, no
+top-level attributes are created for these packages.</para>
+
+</section>
+
+<section xml:id="ssec-qt-programs"><title>Programs</title>
+
+<para>Application packages do not need to be built with every Qt
+version. To ensure consistency between the package's dependencies,
+call the package with <literal>qt5Libs.callPackage</literal> instead
+of the usual <literal>callPackage</literal>. An older version may be
+selected in case of incompatibility. For example, to build with Qt
+5.5, call the package with
+<literal>qt55Libs.callPackage</literal>.</para>
+
+<para>Several environment variables must be set at runtime for Qt
+applications to function correctly, including:</para>
+
+<itemizedlist>
+  <listitem><para><envar>QT_PLUGIN_PATH</envar></para></listitem>
+  <listitem><para><envar>QML_IMPORT_PATH</envar></para></listitem>
+  <listitem><para><envar>QML2_IMPORT_PATH</envar></para></listitem>
+  <listitem><para><envar>XDG_DATA_DIRS</envar></para></listitem>
+</itemizedlist>
+
+<para>To ensure that these are set correctly, the program must be wrapped by
+invoking <literal>wrapQtProgram <replaceable>program</replaceable></literal>
+during installation (for example, during
+<literal>fixupPhase</literal>). <literal>wrapQtProgram</literal>
+accepts the same options as <literal>makeWrapper</literal>.
+</para>
+
+</section>
+
+<section xml:id="ssec-qt-kde"><title>KDE</title>
+
+<para>Many of the considerations above also apply to KDE packages,
+especially the need to set the correct environment variables at
+runtime. To ensure that this is done, invoke <literal>wrapKDEProgram
+<replaceable>program</replaceable></literal> during
+installation. <literal>wrapKDEProgram</literal> also generates a
+<literal>ksycoca</literal> database so that required data and services
+can be found. Like its Qt counterpart,
+<literal>wrapKDEProgram</literal> accepts the same options as
+<literal>makeWrapper</literal>.</para>
+
+</section>
+
+</section>
+

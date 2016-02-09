@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, valgrind }:
 
-let version = "131"; in
 stdenv.mkDerivation rec {
   name = "lz4-${version}";
+  version = "131";
 
   src = fetchFromGitHub {
     sha256 = "1bhvcq8fxxsqnpg5qa6k3nsyhq0nl0iarh08sqzclww27hlpyay2";
@@ -15,10 +15,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   doCheck = false; # tests take a very long time
   checkTarget = "test";
+
+  patches = [ ./install-on-freebsd.patch ] ;
 
   meta = with stdenv.lib; {
     description = "Extremely fast compression algorithm";
@@ -31,7 +33,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://code.google.com/p/lz4/;
     license = with licenses; [ bsd2 gpl2Plus ];
-    platforms = with platforms; linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ nckx ];
   };
 }

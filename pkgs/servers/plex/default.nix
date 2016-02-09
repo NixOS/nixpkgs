@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   name = "plex-${version}";
-  version = "0.9.12.11.1406";
-  vsnHash = "8403350";
+  version = "0.9.15.2.1663";
+  vsnHash = "7efd046";
 
   src = fetchurl {
-    url = "https://downloads.plex.tv/plex-media-server/${version}-${vsnHash}/plexmediaserver-${version}-${vsnHash}.x86_64.rpm";
-    sha256 = "295174b3617d699f11ecc22bc603a579e2291fe6ba55a536711acafd64455390";
+    url    = "https://downloads.plex.tv/plex-media-server/${version}-${vsnHash}/plexmediaserver-${version}-${vsnHash}.x86_64.rpm";
+    sha256 = "f06225807c6284914bca1cfaec4490d594c53a2c794d916b321658388d40f9cf";
   };
 
   buildInputs = [ rpmextract glibc ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     homepage = http://plex.tv/;
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ forkk ];
+    maintainers = with stdenv.lib.maintainers; [ forkk thoughtpolice ];
     description = "Media / DLNA server";
     longDescription = ''
       Plex is a media server which allows you to store your media and play it

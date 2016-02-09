@@ -2,9 +2,7 @@
 , fetchurl
 , buildPythonPackage
 , pyqt4
-, matplotlib
-, cherrypy
-, sqlite3
+, pythonPackages
 }:
 let
   version = "2.3.2";
@@ -14,17 +12,17 @@ in buildPythonPackage rec {
     url    = "http://sourceforge.net/projects/mnemosyne-proj/files/mnemosyne/${name}/Mnemosyne-${version}.tar.gz";
     sha256 = "0jkrw45i4v24p6xyq94z7rz5948h7f5dspgs5mcdaslnlp2accfp";
   };
-  pythonPath = [
+  propagatedBuildInputs = with pythonPackages; [
     pyqt4
     matplotlib
     cherrypy
     sqlite3
+    webob
   ];
   preConfigure = ''
     substituteInPlace setup.py --replace /usr $out
     find . -type f -exec grep -H sys.exec_prefix {} ';' | cut -d: -f1 | xargs sed -i s,sys.exec_prefix,\"$out\",
   '';
-  installCommand = "python setup.py install --prefix=$out";
   meta = {
     homepage = http://mnemosyne-proj.org/;
     description = "Spaced-repetition software";

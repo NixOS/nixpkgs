@@ -47,6 +47,41 @@ let
 
   system = config.nixpkgs.system;
 
+  bindMountOpts = { name, config, ... }: {
+  
+    options = {
+      mountPoint = mkOption {
+        example = "/mnt/usb";
+        type = types.str;
+        description = "Mount point on the container file system.";
+      };
+      hostPath = mkOption {
+        default = null;
+        example = "/home/alice";
+        type = types.nullOr types.str;
+        description = "Location of the host path to be mounted.";
+      };
+      isReadOnly = mkOption {
+        default = true;
+        example = true;
+        type = types.bool;
+        description = "Determine whether the mounted path will be accessed in read-only mode.";
+      };
+    };
+    
+    config = {
+      mountPoint = mkDefault name;
+    };
+    
+  };
+  
+  mkBindFlag = d:
+               let flagPrefix = if d.isReadOnly then " --bind-ro=" else " --bind=";
+                   mountstr = if d.hostPath != null then "${d.hostPath}:${d.mountPoint}" else "${d.mountPoint}";
+               in flagPrefix + mountstr ;
+
+  mkBindFlags = bs: concatMapStrings mkBindFlag (lib.attrValues bs);
+
 in
 
 {
@@ -142,6 +177,21 @@ in
                 Wether the container is automatically started at boot-time.
               '';
             };
+
+            bindMounts = mkOption {
+              type = types.loaOf types.optionSet;
+              options = [ bindMountOpts ];
+              default = {};
+              example = { "/home" = { hostPath = "/home/alice";
+                                      isReadOnly = false; };
+                        };
+                        
+              description =
+                ''
+                  An extra list of directories that is bound to the container.
+                '';
+            };
+
           };
 
           config = mkMerge
@@ -249,12 +299,15 @@ in
               fi
             ''}
 
+
+
             # Run systemd-nspawn without startup notification (we'll
             # wait for the container systemd to signal readiness).
             EXIT_ON_REBOOT=1 NOTIFY_SOCKET= \
             exec ${config.systemd.package}/bin/systemd-nspawn \
               --keep-unit \
               -M "$INSTANCE" -D "$root" $extraFlags \
+              $EXTRA_NSPAWN_FLAGS \
               --bind-ro=/nix/store \
               --bind-ro=/nix/var/nix/db \
               --bind-ro=/nix/var/nix/daemon-socket \
@@ -354,6 +407,7 @@ in
            ${optionalString cfg.autoStart ''
              AUTO_START=1
            ''}
+           EXTRA_NSPAWN_FLAGS="${mkBindFlags cfg.bindMounts}"
           '';
       }) config.containers;
 

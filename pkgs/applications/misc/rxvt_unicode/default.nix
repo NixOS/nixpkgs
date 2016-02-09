@@ -4,7 +4,7 @@
 
 let
   name = "rxvt-unicode";
-  version = "9.20";
+  version = "9.21";
   n = "${name}-${version}";
 in
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation (rec {
 
   src = fetchurl {
     url = "http://dist.schmorp.de/rxvt-unicode/Attic/rxvt-unicode-${version}.tar.bz2";
-    sha256 = "e73e13fe64b59fd3c8e6e20c00f149d388741f141b8155e4700d3ed40aa94b4e";
+    sha256 = "0swmi308v5yxsddrdhvi4cch88k2bbs2nffpl5j5m2f55gbhw9vm";
   };
 
   buildInputs =

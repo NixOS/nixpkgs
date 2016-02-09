@@ -82,21 +82,21 @@ in buildEnv {
     # updmap.cfg seems like not needing changes
 
     # now filter hyphenation patterns, in a hacky way ATM
-  ''
+  (let script =
+    writeText "hyphens.sed" (
+      lib.concatMapStrings (pkg: "/^\% from ${pkg.pname}/,/^\%/p;\n") pkgList.splitBin.wrong
+      + "1,/^\% from/p;" );
+  in ''
     (
-      local script='${
-        lib.concatMapStrings (pkg: "/^\% from ${pkg.pname}/,/^\%/p;\n")
-          pkgList.splitBin.wrong
-      } 1,/^\% from/p;'
       cd ./share/texmf/tex/generic/config/
       for fname in language.dat language.def; do
         [ -e $fname ] || continue;
         cnfOrig="$(realpath ./$fname)"
         rm ./$fname
-        cat "$cnfOrig" | sed -n "$script" > ./$fname
+        cat "$cnfOrig" | sed -n -f '${script}' > ./$fname
       done
     )
-  '' +
+  '') +
 
   # function to wrap created executables with required env vars
   ''

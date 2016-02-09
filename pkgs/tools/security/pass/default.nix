@@ -19,13 +19,15 @@ stdenv.mkDerivation rec {
     sha256 = "05bk3lrp5jwg0v338lvylp7glpliydzz4jf5pjr6k3kagrv3jyik";
   };
 
-  patches = if stdenv.isDarwin then [ ./no-darwin-getopt.patch ] else null;
+  patches =
+    [ ./program-name.patch ] ++
+    stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
 
   buildInputs = [ makeWrapper ];
 
   meta = with stdenv.lib; {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
-    homepage    = http://zx2c4.com/projects/password-store/;
+    homepage    = http://www.passwordstore.org/;
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ lovek323 the-kenny ];
     platforms   = platforms.unix;

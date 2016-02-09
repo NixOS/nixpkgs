@@ -17,6 +17,6 @@ stdenv.mkDerivation {
     homepage = "http://ngspice.sourceforge.net";
     license = with licenses; [ "BSD" gpl2 ];
     maintainers = with maintainers; [ viric ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

@@ -1,0 +1,78 @@
+diff --git a/bootstrap b/bootstrap
+index 25bd658..b2a986b 100755
+--- a/bootstrap
++++ b/bootstrap
+@@ -8,9 +8,6 @@ main(_Args) ->
+     application:start(asn1),
+     application:start(public_key),
+     application:start(ssl),
+-    inets:start(),
+-    inets:start(httpc, [{profile, rebar}]),
+-    set_httpc_options(),
+ 
+     %% Fetch and build deps required to build rebar3
+     BaseDeps = [{providers, []}
+@@ -33,7 +30,6 @@ main(_Args) ->
+ 
+     setup_env(),
+     os:putenv("REBAR_PROFILE", "bootstrap"),
+-    rebar3:run(["update"]),
+     {ok, State} = rebar3:run(["compile"]),
+     reset_env(),
+     os:putenv("REBAR_PROFILE", ""),
+@@ -71,33 +67,7 @@ fetch_and_compile({Name, ErlFirstFiles}, Deps) ->
+     compile(Name, ErlFirstFiles).
+ 
+ fetch({pkg, Name, Vsn}, App) ->
+-    Dir = filename:join([filename:absname("_build/default/lib/"), App]),
+-    CDN = "https://s3.amazonaws.com/s3.hex.pm/tarballs",
+-    Package = binary_to_list(<<Name/binary, "-", Vsn/binary, ".tar">>),
+-    Url = string:join([CDN, Package], "/"),
+-    case request(Url) of
+-        {ok, Binary} ->
+-            {ok, Contents} = extract(Binary),
+-            ok = erl_tar:extract({binary, Contents}, [{cwd, Dir}, compressed]);
+-        _ ->
+-            io:format("Error: Unable to fetch package ~p ~p~n", [Name, Vsn])
+-    end.
+-
+-extract(Binary) ->
+-    {ok, Files} = erl_tar:extract({binary, Binary}, [memory]),
+-    {"contents.tar.gz", Contents} = lists:keyfind("contents.tar.gz", 1, Files),
+-    {ok, Contents}.
+-
+-request(Url) ->
+-    case httpc:request(get, {Url, []},
+-                       [{relaxed, true}],
+-                       [{body_format, binary}],
+-                       rebar) of
+-        {ok, {{_Version, 200, _Reason}, _Headers, Body}} ->
+-            {ok, Body};
+-        Error ->
+-            Error
+-    end.
++    ok.
+ 
+ get_rebar_config() ->
+     {ok, [[Home]]} = init:get_argument(home),
+@@ -109,20 +79,6 @@ get_rebar_config() ->
+             []
+     end.
+ 
+-get_http_vars(Scheme) ->
+-    proplists:get_value(Scheme, get_rebar_config(), []).
+-
+-set_httpc_options() ->
+-    set_httpc_options(https_proxy, get_http_vars(https_proxy)),
+-    set_httpc_options(proxy, get_http_vars(http_proxy)).
+-
+-set_httpc_options(_, []) ->
+-    ok;
+-
+-set_httpc_options(Scheme, Proxy) ->
+-    {ok, {_, _, Host, Port, _, _}} = http_uri:parse(Proxy),
+-    httpc:set_options([{Scheme, {{Host, Port}, []}}], rebar).
+-
+ compile(App, FirstFiles) ->
+     Dir = filename:join(filename:absname("_build/default/lib/"), App),
+     filelib:ensure_dir(filename:join([Dir, "ebin", "dummy.beam"])),

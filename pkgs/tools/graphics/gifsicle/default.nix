@@ -2,22 +2,32 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation {
-  name = "gifsicle-1.87";
+stdenv.mkDerivation rec {
+  name = "gifsicle-${version}";
+  version = "1.88";
 
   src = fetchurl {
-    url = http://www.lcdf.org/gifsicle/gifsicle-1.87.tar.gz;
-    sha256 = "078rih7gq86ixjqbnn5z1jsh11qlfisw6k8dxaccsh5amhybw2j7";
+    url = "http://www.lcdf.org/gifsicle/${name}.tar.gz";
+    sha256 = "4585d2e683d7f68eb8fcb15504732d71d7ede48ab5963e61915201f9e68305be";
   };
 
   buildInputs = optional gifview [ xproto libXt libX11 ];
 
+  configureFlags = []
+    ++ optional (!gifview) [ "--disable-gifview" ];
+
   LDFLAGS = optional static "-static";
+
+  doCheck = true;
+  checkPhase = ''
+    ./src/gifsicle --info logo.gif
+  '';
 
   meta = {
     description = "Command-line tool for creating, editing, and getting information about GIF images and animations";
-    homepage = http://www.lcdf.org/gifsicle/;
+    homepage = https://www.lcdf.org/gifsicle/;
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    platforms = platforms.all;
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu zimbatm ];
   };
 }

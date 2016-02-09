@@ -1,7 +1,7 @@
 { stdenv, lib, bundlerEnv, ruby, perl, autoconf }:
 
 bundlerEnv {
-  name = "chefdk-0.4.0";
+  name = "chefdk-0.10.0";
 
   inherit ruby;
   gemfile = ./Gemfile;

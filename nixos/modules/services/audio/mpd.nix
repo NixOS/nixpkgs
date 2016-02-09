@@ -18,7 +18,7 @@ let
     user                "${cfg.user}"
     group               "${cfg.group}"
 
-    ${optionalString (cfg.network.host != "any") ''bind_to_address "${cfg.network.host}"''}
+    ${optionalString (cfg.network.listenAddress != "any") ''bind_to_address "${cfg.network.listenAddress}"''}
     ${optionalString (cfg.network.port != 6600)  ''port "${toString cfg.network.port}"''}
 
     ${cfg.extraConfig}
@@ -75,7 +75,7 @@ in {
 
       network = {
 
-        host = mkOption {
+        listenAddress = mkOption {
           default = "any";
           description = ''
             This setting sets the address for the daemon to listen on. Careful attention

@@ -1,10 +1,12 @@
 with import ./.. { };
 with lib;
-
+let
+  sources = sourceFilesBySuffices ./. [".xml"];
+  sources-langs = ./languages-frameworks;
+in
 stdenv.mkDerivation {
   name = "nixpkgs-manual";
 
-  sources = sourceFilesBySuffices ./. [".xml"];
 
   buildInputs = [ pandoc libxml2 libxslt ];
 
@@ -18,25 +20,39 @@ stdenv.mkDerivation {
     --param callout.graphics.extension '.gif'
   '';
 
-  buildCommand = ''
-    {
-      echo "<chapter xmlns=\"http://docbook.org/ns/docbook\""
-      echo "         xmlns:xlink=\"http://www.w3.org/1999/xlink\""
-      echo "         xml:id=\"users-guide-to-the-haskell-infrastructure\">"
-      echo ""
-      echo "<title>User's Guide to the Haskell Infrastructure</title>"
-      echo ""
-      pandoc ${./haskell-users-guide.md} -w docbook | \
-        sed -e 's|<ulink url=|<link xlink:href=|' \
-            -e 's|</ulink>|</link>|' \
-            -e 's|<sect. id=|<section xml:id=|' \
-            -e 's|</sect[0-9]>|</section>|'
-      echo ""
-      echo "</chapter>"
-    } >haskell-users-guide.xml
 
-    ln -s "$sources/"*.xml .
+  buildCommand = let toDocbook = { useChapters ? false, inputFile, outputFile }:
+    let
+      extraHeader = ''xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" '';
+    in ''
+      {
+        pandoc '${inputFile}' -w docbook ${optionalString useChapters "--chapters"} \
+          | sed -e 's|<ulink url=|<link xlink:href=|' \
+              -e 's|</ulink>|</link>|' \
+              -e 's|<sect. id=|<section xml:id=|' \
+              -e 's|</sect[0-9]>|</section>|' \
+              -e '1s| id=| xml:id=|' \
+              -e '1s|\(<[^ ]* \)|\1${extraHeader}|'
+      } > '${outputFile}'
+    '';
+  in
 
+  ''
+    ln -s '${sources}/'*.xml .
+    mkdir ./languages-frameworks
+    cp -s '${sources-langs}'/* ./languages-frameworks
+  ''
+  + toDocbook {
+      inputFile = ./haskell-users-guide.md;
+      outputFile = "haskell-users-guide.xml";
+      useChapters = true;
+    }
+  + toDocbook {
+      inputFile = ./../pkgs/development/idris-modules/README.md;
+      outputFile = "languages-frameworks/idris.xml";
+    }
+  + ''
+    cat languages-frameworks/idris.xml
     echo ${nixpkgsVersion} > .version
 
     xmllint --noout --nonet --xinclude --noxincludenode \

@@ -12,12 +12,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = stdenv.lib.optionalString stdenv.isDarwin "--disable-ip6";
 
-  meta = {
+  patches = stdenv.lib.singleton ./libressl-fixes.patch ;
+
+  meta = with stdenv.lib; {
     description = "A utility for bidirectional data transfer between two independent data channels";
     homepage = http://www.dest-unreach.org/socat/;
     repositories.git = git://repo.or.cz/socat.git;
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = platforms.unix;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.eelco ];
   };
 }

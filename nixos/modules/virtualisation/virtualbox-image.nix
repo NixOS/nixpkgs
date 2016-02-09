@@ -44,8 +44,8 @@ in {
 
     system.build.virtualBoxOVA = pkgs.runCommand "virtualbox-ova"
       { buildInputs = [ pkgs.linuxPackages.virtualbox ];
-        vmName = "NixOS ${config.system.nixosVersion} (${pkgs.stdenv.system})";
-        fileName = "nixos-image-${config.system.nixosVersion}-${pkgs.stdenv.system}.ova";
+        vmName = "NixOS ${config.system.nixosLabel} (${pkgs.stdenv.system})";
+        fileName = "nixos-image-${config.system.nixosLabel}-${pkgs.stdenv.system}.ova";
       }
       ''
         echo "creating VirtualBox VM..."

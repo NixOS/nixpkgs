@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = with gst_all_1; [ gstreamer gst-plugins-base phonon qtbase ];
 
+  NIX_CFLAGS_COMPILE = [
+    # This flag should be picked up through pkgconfig, but it isn't.
+    "-I${gst_all_1.gstreamer}/lib/gstreamer-1.0/include"
+  ];
+
   nativeBuildInputs = [ cmake pkgconfig ];
 
   cmakeFlags = [

@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
+let version = "2.6.7"; in
 stdenv.mkDerivation rec {
-  name = "make-${version}";
-  version = "1.0";
+  name = "gnustep-make-${version}";
 
   src = fetchurl {
-    url = "http://ftpmain.gnustep.org/pub/gnustep/core/gnustep-make-2.6.6.tar.gz";
-    sha256 = "07cqr8x17bia9w6clbmiv7ay6r9nplrjz2cyzinv4w7zfpc19vxw";
+    url = "http://ftpmain.gnustep.org/pub/gnustep/core/${name}.tar.gz";
+    sha256 = "1r2is23xdg4qirckb6bd4lynfwnnw5d9522wib3ndk1xgirmfaqi";
   };
 
   patchPhase = ''
@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
 
     substituteInPlace FilesystemLayouts/apple \
       --replace /usr/local ""
+
+    substituteInPlace configure \
+      --replace /Library/GNUstep "$out"
   '';
 
   installFlags = "DESTDIR=$(out)";

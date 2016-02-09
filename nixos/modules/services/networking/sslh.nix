@@ -16,7 +16,7 @@ let
 
     listen:
     (
-      { host: "${cfg.host}"; port: "${toString cfg.port}"; }
+      { host: "${cfg.listenAddress}"; port: "${toString cfg.port}"; }
     );
 
     ${cfg.appendConfig}
@@ -56,7 +56,7 @@ in
         description = "PID file path for sslh daemon.";
       };
 
-      host = mkOption {
+      listenAddress = mkOption {
         type = types.str;
         default = config.networking.hostName;
         description = "Listening hostname.";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, docbook2x
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, perl, docbook2x
 , docbook_xml_dtd_45, python3Packages
 
 # Optional Dependencies
@@ -11,13 +11,12 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lxc-1.1.3";
+  name = "lxc-${version}";
+  version = "1.1.4";
 
-  src = fetchFromGitHub {
-    owner = "lxc";
-    repo = "lxc";
-    rev = name;
-    sha256 = "109vpkxzkhixfvwfs6qphfbxb7pbk2qx22qc4zbk52d6gl78ygsb";
+  src = fetchurl {
+    url = "https://linuxcontainers.org/downloads/lxc/lxc-${version}.tar.gz";
+    sha256 = "1p75ff4lnkm7hq26zq09nqbdypl508csk0ix024l7j8v02i2w1wg";
   };
 
   nativeBuildInputs = [
@@ -37,6 +36,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--enable-doc"
     "--disable-api-docs"
+    "--with-init-script=none"
+    "--with-distro=nixos" # just to be sure it is "unknown"
   ] ++ optional (libapparmor != null) "--enable-apparmor"
     ++ optional (libselinux != null) "--enable-selinux"
     ++ optional (libseccomp != null) "--enable-seccomp"

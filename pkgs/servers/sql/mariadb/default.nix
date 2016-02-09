@@ -1,20 +1,26 @@
-{ stdenv, fetchurl, cmake, ncurses, zlib, openssl, pcre, boost, judy, bison, libxml2
-, libaio, libevent, groff, jemalloc, perl, fixDarwinDylibNames
+{ stdenv, fetchurl, cmake, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
+, openssl, pcre, boost, judy, bison, libxml2
+, libaio, libevent, groff, jemalloc, cracklib, systemd, numactl, perl
+, fixDarwinDylibNames, cctools, CoreServices
 }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "mariadb-${version}";
-  version = "10.0.21";
+  version = "10.1.9";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/interstitial/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "0i9mzbn35f4lj4y1lqzgbavh5xyx18zfn0ks0nqzvppabkhk56jb";
+    sha256 = "0471vwg9c5c17m7679krjha16ib6d48fcsphkchb9v9cf8k5i74f";
   };
 
-  buildInputs = [ cmake ncurses openssl zlib pcre libxml2 boost judy bison libevent ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames ];
+  buildInputs = [
+    cmake ncurses openssl zlib xz lzo lz4 bzip2
+    # temporary due to https://mariadb.atlassian.net/browse/MDEV-9000
+    (if stdenv.is64bit then snappy else null)
+    pcre libxml2 boost judy bison libevent cracklib
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio systemd numactl ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
 
   patches = stdenv.lib.optional stdenv.isDarwin ./my_context_asm.patch;
 
@@ -49,13 +55,16 @@ stdenv.mkDerivation rec {
     "-DWITH_PARTITION_STORAGE_ENGINE=1"
     "-DWITHOUT_EXAMPLE_STORAGE_ENGINE=1"
     "-DWITHOUT_FEDERATED_STORAGE_ENGINE=1"
+    "-DSECURITY_HARDENED=ON"
+    "-DWITH_WSREP=ON"
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "-DWITHOUT_OQGRAPH_STORAGE_ENGINE=1"
     "-DWITHOUT_TOKUDB=1"
+    "-DCURSES_LIBRARY=${ncurses}/lib/libncurses.dylib"
   ];
 
   # fails to find lex_token.h sometimes
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   outputs = [ "out" "lib" ];
 
@@ -92,6 +101,15 @@ stdenv.mkDerivation rec {
     mv $out/lib $lib
     mv $out/include $lib
 
+  ''
+  + stdenv.lib.optionalString stdenv.isDarwin ''
+    # Fix library rpaths
+    # TODO: put this in the stdenv to prepare for wide usage of multi-output derivations
+    for file in $(grep -rl $out/lib $lib); do
+      install_name_tool -delete_rpath $out/lib -add_rpath $lib $file
+    done
+
+  '' + ''
     # Fix the mysql_config
     sed -i $out/bin/mysql_config \
       -e 's,-lz,-L${zlib}/lib -lz,g' \

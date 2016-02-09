@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "Extract URLs from text";
     homepage = http://packages.qa.debian.org/u/urlview.html;
     licencse = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

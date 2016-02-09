@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake
 , withQt4 ? false, qt4
-, withQt5 ? true, qtbase, qtsvg, qttools
+, withQt5 ? true, qtbase, qtsvg, qttools, makeQtWrapper
 
 # I'm unable to make KDE work here, crashes at runtime so I simply
 # make Qt4 the default until someone who wants KDE can figure it out.
@@ -68,6 +68,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional withMusicbrainz libmusicbrainz5
     ++ stdenv.lib.optional (withTaglib && !withKDE4 && withDevices) udisks2;
 
+  nativeBuildInputs = stdenv.lib.optional withQt5 makeQtWrapper;
+
   unpackPhase = "tar -xvf $src";
   sourceRoot = "${name}";
 
@@ -91,7 +93,12 @@ stdenv.mkDerivation rec {
     "-DENABLE_UDISKS2=ON"
   ];
 
-  postInstall = ''
+  # This is already fixed upstream but not released yet. Maybe in version 2.
+  preConfigure = ''
+    sed -i -e 's/STRLESS/VERSION_LESS/g' cmake/FindTaglib.cmake
+  '';
+
+  postInstall = stdenv.lib.optionalString withQt5 ''
     wrapQtProgram "$out/bin/cantata"
   '';
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, intltool, pkgconfig, libglade, networkmanager, gnome3
 , libnotify, libsecret, dbus_glib, polkit, isocodes
 , mobile_broadband_provider_info, glib_networking, gsettings_desktop_schemas
-, makeWrapper, udev, hicolor_icon_theme }:
+, makeWrapper, udev, libgudev, hicolor_icon_theme }:
 
 let
   pn = "network-manager-applet";
@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pn}/${major}/${name}.tar.xz";
-    sha256 = "1afri2zln5p59660hqzbwm2r8phx9inrm2bgp5scynzs8ddzh2kn";
+    sha256 = "1yj0m6fb9v12d0di0rfmk3hx1vmygjkiff2c476rf792sbh56kax";
   };
 
   configureFlags = [ "--sysconfdir=/etc" ];
 
   buildInputs = [
     gnome3.gtk libglade networkmanager libnotify libsecret dbus_glib gsettings_desktop_schemas
-    polkit isocodes makeWrapper udev gnome3.gconf gnome3.libgnome_keyring
+    polkit isocodes makeWrapper udev libgudev gnome3.gconf gnome3.libgnome_keyring
   ];
 
   nativeBuildInputs = [ intltool pkgconfig ];

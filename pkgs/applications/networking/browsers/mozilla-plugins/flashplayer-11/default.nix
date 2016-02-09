@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchurl
 , zlib
 , alsaLib
@@ -20,6 +21,7 @@
 , atk
 , gdk_pixbuf
 , nss
+, unzip
 , debug ? false
 
 /* you have to add ~/mm.cfg :
@@ -35,45 +37,80 @@
 }:
 
 let
-  # -> http://get.adobe.com/flashplayer/
-  version = "11.2.202.535";
-
-  src =
-    if stdenv.system == "x86_64-linux" then
-      if debug then
-        # no plans to provide a x86_64 version:
-        # http://labs.adobe.com/technologies/flashplayer10/faq.html
-        throw "no x86_64 debugging version available"
-      else rec {
-        inherit version;
-        url = "http://fpdownload.adobe.com/get/flashplayer/pdc/${version}/install_flash_player_11_linux.x86_64.tar.gz";
-        sha256 = "13fy842plbnv4w081sbhga0jrpbwz8yydg49c2v96l2marmzw9zp";
-      }
-    else if stdenv.system == "i686-linux" then
-      if debug then
-        throw "flash debugging version is outdated and probably broken" /* {
-        # The debug version also contains a player
-        version = "11.1";
-        url = http://fpdownload.adobe.com/pub/flashplayer/updaters/11/flashplayer_11_plugin_debug.i386.tar.gz;
-        sha256 = "0jn7klq2cyqasj6nxfka2l8nsf7sn7hi6443nv6dd2sb3g7m6x92";
-      }*/
-      else rec {
-        inherit version;
-        url = "http://fpdownload.adobe.com/get/flashplayer/pdc/${version}/install_flash_player_11_linux.i386.tar.gz";
-        sha256 = "0z99nz1k0cf86dgs367ddxfnf05m32psidpmdzi5qiqaj10h6j6s";
-      }
+  arch =
+    if      stdenv.system == "x86_64-linux" then
+      if    debug then throw "no x86_64 debugging version available"
+      else  "64bit"
+    else if stdenv.system == "i686-linux"   then
+      if    debug then "32bit_debug"
+      else             "32bit"
     else throw "Flash Player is not supported on this platform";
 
+  suffix =
+    if      stdenv.system == "x86_64-linux" then
+      if    debug then throw "no x86_64 debugging version available"
+      else             "-release.x86_64"
+    else if stdenv.system == "i686-linux"   then
+      if    debug then "_linux_debug.i386"
+      else             "_linux.i386"
+    else throw "Flash Player is not supported on this platform";
+
+  is-i686 = (stdenv.system == "i686-linux");
 in
+stdenv.mkDerivation rec {
+  name = "flashplayer-${version}";
+  version = "11.2.202.559";
 
-stdenv.mkDerivation {
-  name = "flashplayer-${src.version}";
+  src = fetchurl {
+    url = "https://fpdownload.macromedia.com/pub/flashplayer/installers/archive/fp_${version}_archive.zip";
+    sha256 = "1vb01pd1jhhh86r01nwdzcf66d72jksiyiyp92hs4khy6n5qfsl3";
+  };
 
-  builder = ./builder.sh;
+  buildInputs = [ unzip ];
 
-  src = fetchurl { inherit (src) url sha256; };
+  postUnpack = ''
+    pushd $sourceRoot
+    tar -xvzf *${arch}/*${suffix}.tar.gz
 
-  inherit zlib alsaLib;
+    ${ lib.optionalString is-i686 ''
+       tar -xvzf */*_sa.*.tar.gz
+       tar -xvzf */*_sa_debug.*.tar.gz
+    ''}
+
+    popd
+  '';
+
+  sourceRoot = "fp_${version}_archive";
+
+  dontStrip = true;
+  dontPatchELF = true;
+
+  outputs = [ "out" ] ++ lib.optionals is-i686 ["sa" "saDbg" ];
+
+  installPhase = ''
+    mkdir -p $out/lib/mozilla/plugins
+    cp -pv libflashplayer.so $out/lib/mozilla/plugins
+    patchelf --set-rpath "$rpath" $out/lib/mozilla/plugins/libflashplayer.so
+
+    ${ lib.optionalString is-i686 ''
+       mkdir -p $sa/bin
+       cp flashplayer $sa/bin/
+
+       patchelf \
+         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+         --set-rpath "$rpath" \
+         $sa/bin/flashplayer
+
+
+       mkdir -p $saDbg/bin
+       cp flashplayerdebugger $saDbg/bin/
+
+       patchelf \
+         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+         --set-rpath "$rpath" \
+         $saDbg/bin/flashplayerdebugger
+    ''}
+  '';
 
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";
@@ -85,12 +122,11 @@ stdenv.mkDerivation {
       libvdpau nss
     ];
 
-  buildPhase = ":";
-
   meta = {
     description = "Adobe Flash Player browser plugin";
     homepage = http://www.adobe.com/products/flashplayer/;
     license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.enolan ];
+    maintainers = [];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

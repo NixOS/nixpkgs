@@ -56,7 +56,7 @@ in
 
       serviceConfig = {
         ExecStart = "${pkgs.nix-serve}/bin/nix-serve " +
-          "--port ${cfg.bindAddress}:${toString cfg.port} ${cfg.extraParams}";
+          "--listen ${cfg.bindAddress}:${toString cfg.port} ${cfg.extraParams}";
         User = "nix-serve";
         Group = "nogroup";
       };

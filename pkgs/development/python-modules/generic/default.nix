@@ -3,7 +3,7 @@
    (http://pypi.python.org/pypi/setuptools/), which represents a large
    number of Python packages nowadays.  */
 
-{ python, setuptools, unzip, wrapPython, lib, recursivePthLoader, distutils-cfg }:
+{ python, setuptools, unzip, wrapPython, lib, bootstrapped-pip }:
 
 { name
 
@@ -12,28 +12,18 @@
 
 , buildInputs ? []
 
-# pass extra information to the distutils global configuration (think as global setup.cfg)
-, distutilsExtraCfg ? ""
-
 # propagate build dependencies so in case we have A -> B -> C,
-# C can import propagated packages by A
+# C can import package A propagated by B 
 , propagatedBuildInputs ? []
 
-# passed to "python setup.py install"
-, setupPyInstallFlags ? []
-
-# passed to "python setup.py build"
+# passed to "python setup.py build_ext"
+# https://github.com/pypa/pip/issues/881
 , setupPyBuildFlags ? []
 
 # enable tests by default
 , doCheck ? true
 
-# List of packages that should be added to the PYTHONPATH
-# environment variable in programs built by this function.  Packages
-# in the standard `propagatedBuildInputs' variable are also added.
-# The difference is that `pythonPath' is not propagated to the user
-# environment.  This is preferrable for programs because it doesn't
-# pollute the user environment.
+# DEPRECATED: use propagatedBuildInputs
 , pythonPath ? []
 
 # used to disable derivation, useful for specific python versions
@@ -59,19 +49,21 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
-python.stdenv.mkDerivation (attrs // {
-  inherit doCheck;
-
+let
+  # use setuptools shim (so that setuptools is imported before distutils)
+  # pip does the same thing: https://github.com/pypa/pip/pull/3265
+  setuppy = ./run_setup.py;
+  # For backwards compatibility, let's use an alias
+  doInstallCheck = doCheck;
+in
+python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] // {
   name = namePrefix + name;
 
-  buildInputs = [
-    wrapPython setuptools
-    (distutils-cfg.override { extraCfg = distutilsExtraCfg; })
-  ] ++ buildInputs ++ pythonPath
+  buildInputs = [ wrapPython bootstrapped-pip ] ++ buildInputs ++ pythonPath
     ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip);
 
   # propagate python/setuptools to active setup-hook in nix-shell
-  propagatedBuildInputs = propagatedBuildInputs ++ [ recursivePthLoader python setuptools ];
+  propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
 
   pythonPath = pythonPath;
 
@@ -79,97 +71,62 @@ python.stdenv.mkDerivation (attrs // {
     runHook preConfigure
 
     # patch python interpreter to write null timestamps when compiling python files
-    # with following var we tell python to activate the patch so that python doesn't
-    # try to update them when we freeze timestamps in nix store
+    # this way python doesn't try to update them when we freeze timestamps in nix store
     export DETERMINISTIC_BUILD=1
-
-    # prepend following line to import setuptools before distutils
-    # this way we make sure setuptools monkeypatches distutils commands
-    # this way setuptools provides extra helpers such as "python setup.py test"
-    sed -i '0,/import distutils/s//import setuptools;import distutils/' setup.py
-    sed -i '0,/from distutils/s//import setuptools;from distutils/' setup.py
 
     runHook postConfigure
   '';
 
-  checkPhase = attrs.checkPhase or ''
-      runHook preCheck
-
-      ${python}/bin/${python.executable} setup.py test
-
-      runHook postCheck
-  '';
-
+  # we copy nix_run_setup.py over so it's executed relative to the root of the source
+  # many project make that assumption
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
-
-    ${python}/bin/${python.executable} setup.py build ${lib.concatStringsSep " " setupPyBuildFlags}
-
+    cp ${setuppy} nix_run_setup.py
+    ${python.interpreter} nix_run_setup.py ${lib.optionalString (setupPyBuildFlags != []) ("build_ext " + (lib.concatStringsSep " " setupPyBuildFlags))} bdist_wheel
     runHook postBuild
   '';
 
   installPhase = attrs.installPhase or ''
     runHook preInstall
 
-    mkdir -p "$out/lib/${python.libPrefix}/site-packages"
+    mkdir -p "$out/${python.sitePackages}"
+    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
 
-    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-
-    ${python}/bin/${python.executable} setup.py install \
-      --install-lib=$out/lib/${python.libPrefix}/site-packages \
-      --old-and-unmanageable \
-      --prefix="$out" ${lib.concatStringsSep " " setupPyInstallFlags}
-
-    # --install-lib:
-    # sometimes packages specify where files should be installed outside the usual
-    # python lib prefix, we override that back so all infrastructure (setup hooks)
-    # work as expected
-
-    # --old-and-unmanagable:
-    # instruct setuptools not to use eggs but fallback to plan package install
-    # this also reduces one .pth file in the chain, but the main reason is to
-    # force install process to install only scripts for the package we are
-    # installing (otherwise it will install scripts also for dependencies)
-
-    # A pth file might have been generated to load the package from
-    # within its own site-packages, rename this package not to
-    # collide with others.
-    eapth="$out/lib/${python.libPrefix}"/site-packages/easy-install.pth
-    if [ -e "$eapth" ]; then
-        # move colliding easy_install.pth to specifically named one
-        mv "$eapth" $(dirname "$eapth")/${name}.pth
-    fi
-
-    # Remove any site.py files generated by easy_install as these
-    # cause collisions. If pth files are to be processed a
-    # corresponding site.py needs to be included in the PYTHONPATH.
-    rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
+    pushd dist
+    ${bootstrapped-pip}/bin/pip install *.whl --no-index --prefix=$out --no-cache
+    popd
 
     runHook postInstall
   '';
 
-  postFixup = attrs.postFixup or ''
-      wrapPythonPrograms
+  # We run all tests after software has been installed since that is
+  # a common idiom in Python
+  doInstallCheck = doInstallCheck;
 
-      # TODO: document
-      createBuildInputsPth build-inputs "$buildInputStrings"
-      for inputsfile in propagated-build-inputs propagated-native-build-inputs; do
-        if test -e $out/nix-support/$inputsfile; then
-            createBuildInputsPth $inputsfile "$(cat $out/nix-support/$inputsfile)"
-        fi
-      done
-    '';
+  installCheckPhase = attrs.checkPhase or ''
+    runHook preCheck
+    ${python.interpreter} nix_run_setup.py test
+    runHook postCheck
+  '';
+
+  postFixup = attrs.postFixup or ''
+    wrapPythonPrograms
+
+    # check if we have two packages with the same name in closure and fail
+    # this shouldn't happen, something went wrong with dependencies specs
+    ${python.interpreter} ${./catch_conflicts.py}
+  '';
 
   shellHook = attrs.shellHook or ''
+    ${preShellHook}
     if test -e setup.py; then
-       tmp_path=/tmp/`pwd | md5sum | cut -f 1 -d " "`-$name
-       mkdir -p $tmp_path/lib/${python.libPrefix}/site-packages
-       ${preShellHook}
+       tmp_path=$(mktemp -d)
        export PATH="$tmp_path/bin:$PATH"
-       export PYTHONPATH="$tmp_path/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-       ${python}/bin/${python.executable} setup.py develop --prefix $tmp_path
-       ${postShellHook}
+       export PYTHONPATH="$tmp_path/${python.sitePackages}:$PYTHONPATH"
+       mkdir -p $tmp_path/${python.sitePackages}
+       ${bootstrapped-pip}/bin/pip install -e . --prefix $tmp_path
     fi
+    ${postShellHook}
   '';
 
   meta = with lib.maintainers; {
@@ -178,6 +135,7 @@ python.stdenv.mkDerivation (attrs // {
   } // meta // {
     # add extra maintainer(s) to every package
     maintainers = (meta.maintainers or []) ++ [ chaoflow iElectric ];
+    # a marker for release utilities to discover python packages
+    isBuildPythonPackage = python.meta.platforms;
   };
-
 })

@@ -68,7 +68,7 @@ in {
   machine = { config, pkgs, ... }: {
     environment.systemPackages = [
       pkgs.pythonPackages.nixpart0
-      pkgs.file pkgs.btrfsProgs pkgs.xfsprogs pkgs.lvm2
+      pkgs.file pkgs.btrfs-progs pkgs.xfsprogs pkgs.lvm2
     ];
     virtualisation.emptyDiskImages = [ 4096 4096 ];
   };

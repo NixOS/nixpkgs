@@ -1,12 +1,14 @@
 { stdenv, fetchurl, zlib, ncurses ? null, perl ? null, pam }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-2.26.2";
+  name = "util-linux-2.27.1";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux/v2.26/${name}.tar.xz";
-    sha256 = "0rlnzmiqdannzf81fbh41541lrck63v9zhskm6h4i2jj8ahvsa8f";
+    url = "mirror://kernel/linux/utils/util-linux/v2.27/${name}.tar.xz";
+    sha256 = "1452hz5zx56a3mad8yrg5wb0vy5zi19mpjp6zx1yr6p9xp6qz08a";
   };
+
+  outputs = [ "out" "man" ];
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch

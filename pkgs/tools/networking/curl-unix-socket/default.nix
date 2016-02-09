@@ -19,6 +19,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     homepage = https://github.com/Soulou/curl-unix-socket;
     maintainers = with maintainers; [offline];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
   };
 }

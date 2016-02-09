@@ -43,6 +43,14 @@ in
             '';
           };
 
+          ed25519PrivateKeyFile = mkOption {
+            default = null;
+            type = types.nullOr types.path;
+            description = ''
+              Path of the private ed25519 keyfile.
+            '';
+          };
+
           debugLevel = mkOption {
             default = 0;
             type = types.addCheck types.int (l: l >= 0 && l <= 5);
@@ -70,8 +78,18 @@ in
             '';
           };
 
+          listenAddress = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+            description = ''
+              The ip adress to bind to.
+            '';
+          };
+
           package = mkOption {
+            type = types.package;
             default = pkgs.tinc_pre;
+            defaultText = "pkgs.tinc_pre";
             description = ''
               The package to use for the tinc daemon's binary.
             '';
@@ -99,6 +117,8 @@ in
             text = ''
               Name = ${if data.name == null then "$HOST" else data.name}
               DeviceType = ${data.interfaceType}
+              ${optionalString (data.ed25519PrivateKeyFile != null) "Ed25519PrivateKeyFile = ${data.ed25519PrivateKeyFile}"}
+              ${optionalString (data.listenAddress != null) "BindToAddress = ${data.listenAddress}"}
               Device = /dev/net/tun
               Interface = tinc.${network}
               ${data.extraConfig}
@@ -134,10 +154,10 @@ in
           # Determine how we should generate our keys
           if type tinc >/dev/null 2>&1; then
             # Tinc 1.1+ uses the tinc helper application for key generation
-
+          ${if data.ed25519PrivateKeyFile != null then "  # Keyfile managed by nix" else ''
             # Prefer ED25519 keys (only in 1.1+)
             [ -f "/etc/tinc/${network}/ed25519_key.priv" ] || tinc -n ${network} generate-ed25519-keys
-
+          ''}
             # Otherwise use RSA keys
             [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tinc -n ${network} generate-rsa-keys 4096
           else

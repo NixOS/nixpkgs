@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, boost155, zlib, openssl, R, qt4, libuuid, hunspellDicts, unzip, ant, jdk }:
+{ stdenv, fetchurl, cmake, boost155, zlib, openssl, R, qt4, libuuid, hunspellDicts, unzip, ant, jdk, gnumake, makeWrapper }:
 
 let
   version = "0.98.110";
@@ -8,7 +8,7 @@ in
 stdenv.mkDerivation {
   name = "RStudio-${version}";
 
-  buildInputs = [ cmake boost155 zlib openssl R qt4 libuuid unzip ant jdk ];
+  buildInputs = [ cmake boost155 zlib openssl R qt4 libuuid unzip ant jdk makeWrapper ];
 
   src = fetchurl {
     url = "https://github.com/rstudio/rstudio/archive/v${version}.tar.gz";
@@ -61,11 +61,15 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ "-DRSTUDIO_TARGET=Desktop" ];
 
+  postInstall = ''
+      wrapProgram $out/bin/rstudio --suffix PATH : ${gnumake}/bin
+  '';
+
   meta = with stdenv.lib;
     { description = "Set of integrated tools for the R language";
       homepage = http://www.rstudio.com/;
       license = licenses.agpl3;
-      maintainers = [ maintainers.emery ];
+      maintainers = [ maintainers.ehmry ];
       platforms = platforms.linux;
     };
 }

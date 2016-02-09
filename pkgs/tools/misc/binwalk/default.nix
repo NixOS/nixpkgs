@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python, wrapPython, curses, mtdutils, zlib, xz, ncompress, gzip, bzip2, gnutar, p7zip, cabextract
+{ stdenv, fetchFromGitHub, python, wrapPython, curses, zlib, xz, ncompress, gzip, bzip2, gnutar, p7zip, cabextract
 , pyqtgraph ? null
 , visualizationSupport ? false }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   pythonPath = with stdenv.lib; [ curses ]
                ++ optional visualizationSupport [ pyqtgraph ];
 
-  propagatedBuildInputs = with stdenv.lib; [ python wrapPython curses mtdutils zlib xz ncompress gzip bzip2 gnutar p7zip cabextract ]
+  propagatedBuildInputs = with stdenv.lib; [ python wrapPython curses zlib xz ncompress gzip bzip2 gnutar p7zip cabextract ]
                           ++ optional visualizationSupport [ pyqtgraph ];
 
   postInstall = "wrapPythonPrograms";

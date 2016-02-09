@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
 , pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
-, alsaLib, cairo, acl, gpm, AppKit, Foundation, libobjc
+, alsaLib, cairo, acl, gpm, AppKit, CoreWLAN, Kerberos, GSS, ImageIO
 , withX ? !stdenv.isDarwin
 , withGTK3 ? false, gtk3 ? null
 , withGTK2 ? true, gtk2
@@ -47,11 +47,9 @@ stdenv.mkDerivation rec {
         imagemagick gconf ]
     ++ stdenv.lib.optional (withX && withGTK2) gtk2
     ++ stdenv.lib.optional (withX && withGTK3) gtk3
-    ++ stdenv.lib.optional (stdenv.isDarwin && withX) cairo
-    ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Foundation libobjc ];
+    ++ stdenv.lib.optional (stdenv.isDarwin && withX) cairo;
 
-  NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin
-    "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
+  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
 
   configureFlags =
     if stdenv.isDarwin
@@ -78,7 +76,7 @@ stdenv.mkDerivation rec {
     description = "GNU Emacs 24, the extensible, customizable text editor";
     homepage    = http://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chaoflow lovek323 simons the-kenny ];
+    maintainers = with maintainers; [ chaoflow lovek323 simons the-kenny jwiegley ];
     platforms   = platforms.all;
 
     # So that Exuberant ctags is preferred

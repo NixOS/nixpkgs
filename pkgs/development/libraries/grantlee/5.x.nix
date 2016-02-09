@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://gitorious.org/grantlee;
     maintainers = [ stdenv.lib.maintainers.urkud ];
-    inherit (qt5.base.meta) platforms;
+    inherit (qtbase.meta) platforms;
   };
 }

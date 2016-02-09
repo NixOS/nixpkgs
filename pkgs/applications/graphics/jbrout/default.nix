@@ -1,36 +1,36 @@
-{ stdenv, fetchsvn, buildPythonPackage, python, pyGtkGlade, makeWrapper, pyexiv2, lxml, pil, fbida, which }:
+{ stdenv, fetchsvn, buildPythonPackage, python, pyGtkGlade, makeWrapper, pyexiv2,  pythonPackages, fbida, which }:
 
-buildPythonPackage {
-  name = "jbrout-338";
+buildPythonPackage rec {
+  name = "jbrout-${version}";
   version = "338";
+
   src = fetchsvn {
     url = "http://jbrout.googlecode.com/svn/trunk";
-    rev = "338";
+    rev = version;
     sha256 = "0257ni4vkxgd0qhs73fw5ppw1qpf11j8fgwsqc03b1k1yv3hk4hf";
   };
 
   doCheck = false;
-# XXX: preConfigure to avoid this
-#  File "/nix/store/vnyjxn6h3rbrn49m25yyw7i1chlxglhw-python-2.7.1/lib/python2.7/zipfile.py", line 348, in FileHeader
-#    len(filename), len(extra))
-#struct.error: ushort format requires 0 <= number <= USHRT_MAX
 
-  preConfigure = ''
+  # XXX: patchPhase to avoid this
+  #  File "/nix/store/vnyjxn6h3rbrn49m25yyw7i1chlxglhw-python-2.7.1/lib/python2.7/zipfile.py", line 348, in FileHeader
+  #    len(filename), len(extra))
+  #struct.error: ushort format requires 0 <= number <= USHRT_MAX
+  patchPhase = ''
     find | xargs touch
+
+    substituteInPlace setup.py --replace "version=__version__" "version=baseVersion"
   '';
 
   postInstall = ''
-    mkdir -p $out/bin
-    echo '#!/bin/sh' > $out/bin/jbrout
-    echo "python $out/lib/python2.7/site-packages/jbrout-src-py2.7.egg/jbrout/jbrout.py" >> $out/bin/jbrout
+    mkdir $out/bin
+    echo "python $out/${python.sitePackages}/jbrout/jbrout.py" > $out/bin/jbrout
     chmod +x $out/bin/jbrout
-
-    wrapProgram $out/bin/jbrout \
-            --set PYTHONPATH "$out/lib/python:$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pyexiv2}):$(toPythonPath ${lxml}):$(toPythonPath ${pil}):$PYTHONPATH" \
-            --set PATH "${fbida}/bin:${which}/bin:$PATH"
   '';
 
-  buildInputs = [ python pyGtkGlade makeWrapper pyexiv2 lxml pil fbida which ];
+  buildInputs = [ python makeWrapper which ];
+  propagatedBuildInputs = with pythonPackages; [ pillow lxml pyGtkGlade pyexiv2 fbida ];
+
   meta = {
     homepage = "http://code.google.com/p/jbrout";
     description = "Photo manager";

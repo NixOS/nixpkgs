@@ -3,26 +3,26 @@
 }:
 
 let
-  ver_maj = "1.36";
-  ver_min = "8";
+  ver_maj = "1.38";
+  ver_min = "1";
 in
 stdenv.mkDerivation rec {
   name = "pango-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pango/${ver_maj}/${name}.tar.xz";
-    sha256 = "01rdzjh68w8l5zn0648yibyarj8p6g7yfn59nw5awaz1i8dvbnqq";
+    sha256 = "1dsf45m51i4rcyvh5wlxxrjfhvn5b67d5ckjc6vdcxbddjgmc80k";
   };
 
   buildInputs = with stdenv.lib; [ gobjectIntrospection ]
-    ++ optionals stdenv.isDarwin [ fontconfig ];
+    ++ optional stdenv.isDarwin fontconfig;
   nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ xlibsWrapper glib cairo libpng fontconfig freetype harfbuzz ] ++ libintlOrEmpty;
 
   enableParallelBuilding = true;
 
-  doCheck = false; # test-layout fails on 1.36.8
+  doCheck = false; # test-layout fails on 1.38.0
   # jww (2014-05-05): The tests currently fail on Darwin:
   #
   # ERROR:testiter.c:139:iter_char_test: assertion failed: (extents.width == x1 - x0)
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   postInstall = "rm -rf $out/share/gtk-doc";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A library for laying out and rendering of text, with an emphasis on internationalization";
 
     longDescription = ''
@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.pango.org/;
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ raskin urkud ];
-    hydraPlatforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    maintainers = with maintainers; [ raskin urkud ];
+    platforms = with platforms; linux ++ darwin;
   };
 }

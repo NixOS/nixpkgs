@@ -1,13 +1,15 @@
 { stdenv, fetchurl, kernel, zlib }:
 
-assert stdenv.lib.versionOlder kernel.version "3.17";
+let
+  version = "0.7";
+in
 
 stdenv.mkDerivation {
-  name = "netatop-${kernel.version}-0.3";
+  name = "netatop-${kernel.version}-${version}";
 
   src = fetchurl {
-    url = http://www.atoptool.nl/download/netatop-0.3.tar.gz;
-    sha256 = "0rk873nb1hgfnz040plmv6rm9mcm813n0clfjs53fsqbn8y1lhvv";
+    url = "http://www.atoptool.nl/download/netatop-${version}.tar.gz";
+    sha256 = "11v9lvlshn7mwsbr69xrm7gfhxbgdczcf3cf9fssbd9qgv9abifl";
   };
 
   buildInputs = [ zlib ];
@@ -27,7 +29,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin $out/sbin $out/share/man/man{4,8}
     mkdir -p $out/lib/modules/${kernel.modDirVersion}/extra
   '';
-      
+
   meta = {
     description = "Network monitoring module for atop";
     homepage = http://www.atoptool.nl/downloadnetatop.php;

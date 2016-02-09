@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool_2
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool_2
 , llvm, libcxx, libcxxabi, clang, openssl, libuuid
 , libobjc ? null
 }:
@@ -6,16 +6,13 @@
 let
   baseParams = rec {
     name = "cctools-port-${version}";
-    version = "862";
+    version = "877.5";
 
-    src = let
-      # Should be fetchFromGitHub but it was whining so this will do for now
+    src = fetchFromGitHub {
       owner  = "tpoechtrager";
       repo   = "cctools-port";
-      rev    = "59d21d2c793c51d205c8b4ab14b9b28e63c72445";
-    in fetchurl {
-      url    = "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz";
-      sha256 = "01f31ijpnplbiyp7ldwzy8vbkn3j3m56n5blsvsav5nlp4lp2g71";
+      rev    = "7d405492b09fa27546caaa989b8493829365deab";
+      sha256 = "0nj1q5bqdx5jm68dispybxc7wnkb6p8p2igpnap9q6qyv2r9p07w";
     };
 
     buildInputs = [ autoconf automake libtool_2 openssl libuuid ] ++
@@ -59,6 +56,8 @@ let
       sed -i -e 's|clang++|& -I${libcxx}/include/c++/v1|' cctools/autogen.sh
     '';
 
+    # TODO: this builds an ld without support for LLVM's LTO. We need to teach it, but that's rather
+    # hairy to handle during bootstrap. Perhaps it could be optional?
     preConfigure = ''
       cd cctools
       sh autogen.sh

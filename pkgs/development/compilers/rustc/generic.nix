@@ -37,6 +37,8 @@ let version = if isRelease then
 
     name = "rustc-${version}";
 
+    llvmShared = llvmPackages_37.llvm.override { enableSharedLibraries = true; };
+
     platform = if stdenv.system == "i686-linux"
       then "linux-i386"
       else if stdenv.system == "x86_64-linux"
@@ -84,6 +86,8 @@ with stdenv.lib; stdenv.mkDerivation {
 
   __impureHostDeps = [ "/usr/lib/libedit.3.dylib" ];
 
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-rpath ${llvmShared}/lib";
+
   src = if isRelease then
       fetchzip {
         url = "http://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
@@ -119,7 +123,7 @@ with stdenv.lib; stdenv.mkDerivation {
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
                 ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${stdenv.cc.binutils}/bin/ar" ]
                 ++ optional (stdenv.cc.cc ? isClang) "--enable-clang"
-                ++ optional (!forceBundledLLVM) "--llvm-root=${llvmPackages_37.llvm}";
+                ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
 
   inherit patches;
 
@@ -155,11 +159,10 @@ with stdenv.lib; stdenv.mkDerivation {
     configureFlagsArray+=("--infodir=$out/share/info")
   '';
 
-  # Procps is needed for one of the test cases
-  nativeBuildInputs = [ file python2 ]
-    ++ optionals stdenv.isLinux [ procps ];
+  # ps is needed for one of the test cases
+  nativeBuildInputs = [ file python2 procps ];
   buildInputs = [ ncurses ]
-    ++ optional (!forceBundledLLVM) llvmPackages_37.llvm;
+    ++ optional (!forceBundledLLVM) llvmShared;
 
   enableParallelBuilding = true;
 

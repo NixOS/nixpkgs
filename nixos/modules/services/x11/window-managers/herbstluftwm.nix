@@ -8,12 +8,7 @@ in
 
 {
   options = {
-    services.xserver.windowManager.herbstluftwm.enable = mkOption {
-      type = types.bool;
-      default = false;
-      example = true;
-      description = "Enable the herbstluftwm window manager.";
-    };
+    services.xserver.windowManager.herbstluftwm.enable = mkEnableOption "herbstluftwm";
   };
 
   config = mkIf cfg.enable {

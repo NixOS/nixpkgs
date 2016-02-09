@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     description = "Zoomable User Interface";
     license = licenses.gpl3;
     maintainers = with maintainers; [ viric ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
+    hydraPlatforms = [];
   };
 }

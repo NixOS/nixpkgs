@@ -1,5 +1,5 @@
-{ stdenv, fetchgit, autoconf, automake, fontsproto, libX11, libXext
-, libtool, pixman, pkgconfig, renderproto, utilmacros, xorgserver
+{ stdenv, fetchgit, autoreconfHook, fontsproto, libX11, libXext
+, pixman, pkgconfig, renderproto, utilmacros, xorgserver
 }:
 
 stdenv.mkDerivation {
@@ -12,13 +12,12 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ autoconf automake fontsproto libX11 libXext libtool pixman
+    [ autoreconfHook fontsproto libX11 libXext pixman
       pkgconfig renderproto utilmacros xorgserver
     ];
 
 
   configurePhase = ''
-    autoreconf -fvi
     ./configure --prefix=$out CFLAGS="-I${pixman}/include/pixman-1"
   '';
 

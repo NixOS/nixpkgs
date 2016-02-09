@@ -15,7 +15,7 @@ in {
       type = types.bool;
     };
 
-    host = mkOption {
+    listenAddress = mkOption {
       description = "Docker registry host or ip to bind to.";
       default = "127.0.0.1";
       type = types.str;
@@ -50,7 +50,7 @@ in {
       after = [ "network.target" ];
 
       environment = {
-        REGISTRY_HOST = cfg.host;
+        REGISTRY_HOST = cfg.listenAddress;
         REGISTRY_PORT = toString cfg.port;
         GUNICORN_OPTS = "[--preload]"; # see https://github.com/docker/docker-registry#sqlalchemy
         STORAGE_PATH = cfg.storagePath;
@@ -65,7 +65,7 @@ in {
       };
 
       postStart = ''
-        until ${pkgs.curl}/bin/curl -s -o /dev/null 'http://${cfg.host}:${toString cfg.port}/'; do
+        until ${pkgs.curl}/bin/curl -s -o /dev/null 'http://${cfg.listenAddress}:${toString cfg.port}/'; do
           sleep 1;
         done
       '';

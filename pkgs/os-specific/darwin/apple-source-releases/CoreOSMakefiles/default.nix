@@ -1,7 +1,7 @@
 { stdenv, appleDerivation, unifdef }:
 
 appleDerivation {
-  buildinputs = [ unifdef ];
+  buildInputs = [ unifdef ];
 
   phases = [ "unpackPhase" "installPhase" ];
 

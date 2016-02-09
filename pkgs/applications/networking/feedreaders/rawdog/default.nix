@@ -1,21 +1,23 @@
 { stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "rawdog-2.20";
+  name = "rawdog-${version}";
+  version = "2.21";
 
   src = fetchurl {
     url = "http://offog.org/files/${name}.tar.gz";
-    sha256 = "0a63b26cc111b0deca441f498177b49be0330760c5c0e24584cdb9ba1e7fd5a6";
+    sha256 = "0f5z7b70pyhjl6s28hgxninsr86s4dj5ycd50sv6bfz4hm1c2030";
   };
 
   propagatedBuildInputs = with pythonPackages; [ feedparser ];
 
   namePrefix = "";
   
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://offog.org/code/rawdog/";
-    description = "An RSS Aggregator Without Delusions Of Grandeur";
-    license = stdenv.lib.licenses.gpl2;
-    platform = stdenv.lib.platforms.unix;
+    description = "RSS Aggregator Without Delusions Of Grandeur";
+    license = licenses.gpl2;
+    platform = platforms.unix;
+    maintainers = with maintainers; [ nckx ];
   };
 }

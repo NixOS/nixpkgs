@@ -4,15 +4,15 @@ let src =
   if coq.coq-version == "8.4" then
 
     fetchurl {
-      url = http://ssr.msr-inria.inria.fr/FTP/mathcomp-1.5.tar.gz;
-      sha256 = "1297svwi18blrlyd8vsqilar2h5nfixlvlifdkbx47aljq4m5bam";
+      url = http://ssr.msr-inria.inria.fr/FTP/mathcomp-1.6.tar.gz;
+      sha256 = "0adr556032r1jkvphbpfvrrv041qk0yqb7a1xnbam52ji0mdl2w8";
     }
 
   else if coq.coq-version == "8.5" then
 
     fetchurl {
-      url = http://ssr.msr-inria.inria.fr/FTP/mathcomp-1.5.coq85beta2.tar.gz;
-      sha256 = "03bnq44ym43x8shi7whc02l0g5vy6rx8f1imjw478chlgwcxazqy";
+      url = http://ssr.msr-inria.inria.fr/FTP/mathcomp-1.6.tar.gz;
+      sha256 = "0adr556032r1jkvphbpfvrrv041qk0yqb7a1xnbam52ji0mdl2w8";
     }
 
   else throw "No mathcomp package for Coq version ${coq.coq-version}";

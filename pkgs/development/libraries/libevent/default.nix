@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, python, findutils }:
+{ stdenv, fetchurl, autoreconfHook, openssl, python, findutils }:
 
 let version = "2.0.22"; in
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ python ] ++ stdenv.lib.optional stdenv.isCygwin findutils;
+  buildInputs = [ openssl python ] ++ stdenv.lib.optional stdenv.isCygwin findutils;
 
   patchPhase = ''
     patchShebangs event_rpcgen.py

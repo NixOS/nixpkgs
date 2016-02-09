@@ -1,21 +1,25 @@
 { stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib, xz
-, udev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
+, udev, libgudev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
 , libgcrypt, dnsmasq, avahi, bind, perl, bluez5, substituteAll, readline
-, gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup }:
+, gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
+, ethtool, gnused }:
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
-  version = "1.0.2";
+  version = "1.0.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/1.0/NetworkManager-${version}.tar.xz";
-    sha256 = "1zq8jm1rc7n7amqa9xz1v93w2jnczg6942gyijsdpgllfiq8b4rm";
+    sha256 = "38ea002403e3b884ffa9aae25aea431d2a8420f81f4919761c83fb92648254bd";
   };
 
   preConfigure = ''
     substituteInPlace tools/glib-mkenums --replace /usr/bin/perl ${perl}/bin/perl
-    substituteInPlace src/ppp-manager/nm-ppp-manager.c --replace /sbin/modprobe /run/current-system/sw/sbin/modprobe
-    substituteInPlace src/devices/nm-device.c --replace /sbin/modprobe /run/current-system/sw/sbin/modprobe
+    substituteInPlace src/NetworkManagerUtils.c --replace /sbin/modprobe /run/current-system/sw/sbin/modprobe
+    substituteInPlace data/85-nm-unmanaged.rules \
+      --replace /bin/sh ${stdenv.shell} \
+      --replace /usr/sbin/ethtool ${ethtool}/sbin/ethtool \
+      --replace /bin/sed ${gnused}/bin/sed
     configureFlags="$configureFlags --with-udev-dir=$out/lib/udev"
   '';
 
@@ -44,12 +48,14 @@ stdenv.mkDerivation rec {
     "--with-libsoup=yes"
   ];
 
-  buildInputs = [ wirelesstools udev libnl libuuid polkit ppp libndp
-                  xz bluez5 gobjectIntrospection modemmanager readline newt libsoup ];
+  buildInputs = [ wirelesstools udev libgudev libnl libuuid polkit ppp libndp
+                  xz bluez5 dnsmasq gobjectIntrospection modemmanager readline newt libsoup ];
 
   propagatedBuildInputs = [ dbus_glib gnutls libgcrypt ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
+
+  patches = [ ./nm-platform.patch ];
 
   preInstall =
     ''

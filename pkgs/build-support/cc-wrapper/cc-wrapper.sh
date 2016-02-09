@@ -90,14 +90,6 @@ fi
 extraAfter=($NIX_CFLAGS_COMPILE)
 extraBefore=()
 
-# When enforcing purity, pretend gcc can't find the current date and
-# time
-if [ "$NIX_ENFORCE_PURITY" = 1 ]; then
-    extraAfter+=('-D__DATE__="Jan 01 1970"'
-        '-D__TIME__="00:00:01"'
-        -Wno-builtin-macro-redefined)
-fi
-
 
 if [ "$dontLink" != 1 ]; then
 

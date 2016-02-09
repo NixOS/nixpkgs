@@ -7,12 +7,12 @@
 , librsvg, gnome_vfs, mesa, bsh, CoinMP, libwps, libabw
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus_glib, glibc, qt4, kde4, clucene_core, libcdr, lcms, vigra
-, unixODBC, mdds, saneBackends, mythes, libexttextcat, libvisio
+, unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
 , fontsConf, pkgconfig, libzip, bluez5, libtool, maven
 , libatomic_ops, graphite2, harfbuzz, libodfgen
 , librevenge, libe-book, libmwaw, glm, glew, gst_all_1
 , gdb, commonsLogging
-, langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" ]
+, langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" "pl" ]
 , withHelp ? true
 }:
 
@@ -20,7 +20,7 @@ let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
   major = "5";
   minor = "0";
-  patch = "2";
+  patch = "4";
   tweak = "2";
   subdir = "${major}.${minor}.${patch}";
   version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
@@ -47,14 +47,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "06w1gz78136bs6fbwslxz5zsg538yqfarkq1am7zn8rzczz2qplh";
+      sha256 = "1kdrs49agqhb2b687hqh6sq7328z2sf04dmhb3xv5zy4rjvv5pha";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "157hypz093vhqbysygx5q4fbb81785m2b7slccfkp8x87dcsahj3";
+      sha256 = "005jwny8xmsnvvh0xkk9csnqv2jkaslr2n9xm82bqalcg81j0g2x";
     };
 
   };
@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "0xn1pg72vfdajmhak6chajvd51h74jqvq2565xv3j823143niw01";
+    sha256 = "1j3dmk5xifcgmd6dgqqifzh8wmc7daqfbkvk6cxa94611yvl0x34";
   };
 
   # Openoffice will open libcups dynamically, so we link it directly
@@ -220,7 +220,7 @@ in stdenv.mkDerivation rec {
       libXdmcp libpthreadstubs mesa mythes gst_all_1.gstreamer
       gst_all_1.gst-plugins-base
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfigUpstream poppler
-      python3 sablotron saneBackends tcsh unzip vigra which zip zlib
+      python3 sablotron sane-backends tcsh unzip vigra which zip zlib
       mdds bluez5 glibc libcmis libwps libabw
       libxshmfence libatomic_ops graphite2 harfbuzz
       librevenge libe-book libmwaw glm glew

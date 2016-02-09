@@ -2,6 +2,7 @@
 , aclSupport ? false, acl ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
 , autoconf, automake114x, texinfo
+, withPrefix ? false
 }:
 
 assert aclSupport -> acl != null;
@@ -19,13 +20,24 @@ let
       sha256 = "0w11jw3fb5sslf0f72kxy7llxgk1ia3a6bcw0c9kmvxrlj355mx2";
     };
 
-    patches = if stdenv.isCygwin then [ ./coreutils-8.23-4.cygwin.patch ] else null;
+    patches = if stdenv.isCygwin then ./coreutils-8.23-4.cygwin.patch else
+              (if stdenv.isArm then (fetchurl {
+                  url = "http://git.savannah.gnu.org/cgit/coreutils.git/patch/?id=3ba68f9e64fa2eb8af22d510437a0c6441feb5e0";
+                  sha256 = "1dnlszhc8lihhg801i9sz896mlrgfsjfcz62636prb27k5hmixqz";
+                  name = "coreutils-tail-inotify-race.patch";
+              }) else null);
 
     # The test tends to fail on btrfs and maybe other unusual filesystems.
     postPatch = stdenv.lib.optionalString (!stdenv.isDarwin) ''
       sed '2i echo Skipping dd sparse test && exit 0' -i ./tests/dd/sparse.sh
       sed '2i echo Skipping cp sparse test && exit 0' -i ./tests/cp/sparse.sh
-    '';
+    '' +
+       # This is required by coreutils-tail-inotify-race.patch to avoid more deps
+       stdenv.lib.optionalString stdenv.isArm ''
+         touch -r src/stat.c src/tail.c
+       '';
+
+    configureFlags = optionalString stdenv.isSunOS "ac_cv_func_inotify_init=no";
 
     nativeBuildInputs = [ perl ];
     buildInputs = [ gmp ]
@@ -71,8 +83,20 @@ let
     enableParallelBuilding = false;
 
     NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
+    FORCE_UNSAFE_CONFIGURE = stdenv.lib.optionalString (stdenv.system == "armv7l-linux" || stdenv.isSunOS) "1";
 
     makeFlags = optionalString stdenv.isDarwin "CFLAGS=-D_FORTIFY_SOURCE=0";
+
+    # e.g. ls -> gls; grep -> ggrep
+    postFixup = # feel free to simplify on a mass rebuild
+      if withPrefix then
+      ''
+        (
+          cd "$out/bin"
+          find * -type f -executable -exec mv {} g{} \;
+        )
+      ''
+      else null;
 
     meta = {
       homepage = http://www.gnu.org/software/coreutils/;
@@ -94,6 +118,3 @@ let
   };
 in
   self
-  // stdenv.lib.optionalAttrs (stdenv.system == "armv7l-linux" || stdenv.isSunOS) {
-    FORCE_UNSAFE_CONFIGURE = 1;
-  }

@@ -1,18 +1,17 @@
-{ stdenv, lib, fetchgit, pkgconfig, zathura_core, gtk, girara, mupdf, openssl, openjpeg, libjpeg, jbig2dec }:
+{ stdenv, lib, fetchurl, pkgconfig, zathura_core, gtk, girara, mupdf, openssl }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.7";
+  version = "0.2.8";
   name = "zathura-pdf-mupdf-${version}";
 
-  src = fetchgit {
-    url = "https://git.pwmt.org/zathura-pdf-mupdf.git";
-    rev = "99bff723291f5aa2558e5c8b475f496025105f4a";
-    sha256 = "14mfp116a8dmazss3dcipvjs6dclazp36vsbcc53lr8lal5ccfnf";
+  src = fetchurl {
+    url = "https://pwmt.org/projects/zathura-pdf-mupdf/download/${name}.tar.gz";
+    sha256 = "0439ls8xqnq6hqa53hd0wqxh1qf0xmccfi3pb0m4mlfs5iv952wz";
   };
 
-  buildInputs = [ pkgconfig zathura_core gtk girara openssl mupdf openjpeg libjpeg jbig2dec ];
+  buildInputs = [ pkgconfig zathura_core gtk girara openssl mupdf ];
 
-  makeFlags = "PREFIX=$(out) PLUGINDIR=$(out)/lib";
+  makeFlags = [ "PREFIX=$(out)" "PLUGINDIR=$(out)/lib" ];
 
   patches = [
     ./config.patch

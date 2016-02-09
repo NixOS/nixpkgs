@@ -54,9 +54,9 @@ let
 
   etcProfile = nixpkgs.writeText "profile" ''
     export PS1='${name}-chrootenv:\u@\h:\w\$ '
-    export LOCALE_ARCHIVE='/usr/lib${if isMultiBuild then "64" else ""}/locale/locale-archive'
-    export LD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib:/lib:/lib64
-    export PATH='/usr/bin:/usr/sbin'
+    export LOCALE_ARCHIVE='/usr/lib/locale/locale-archive'
+    export LD_LIBRARY_PATH='/run/opengl-driver/lib:/run/opengl-driver-32/lib:/usr/lib:/usr/lib32'
+    export PATH='/var/setuid-wrappers:/usr/bin:/usr/sbin'
     ${profile}
   '';
 
@@ -80,6 +80,11 @@ let
       ln -s /host-etc/hosts hosts
       ln -s /host-etc/resolv.conf resolv.conf
       ln -s /host-etc/nsswitch.conf nsswitch.conf
+
+      # symlink sudo and su stuff
+      ln -s /host-etc/login.defs login.defs
+      ln -s /host-etc/sudoers sudoers
+      ln -s /host-etc/sudoers.d sudoers.d
 
       # symlink other core stuff
       ln -s /host-etc/localtime localtime
@@ -129,7 +134,7 @@ let
   setupLibDirs_multi = ''
     mkdir -m0755 lib32
     mkdir -m0755 lib64
-    ln -s lib32 lib
+    ln -s lib64 lib
 
     # copy glibc stuff
     cp -rsHf ${staticUsrProfileTarget}/lib/32/* lib32/ && chmod u+w -R lib32/
@@ -149,6 +154,9 @@ let
     # copy gcc libs
     cp -rsHf ${chosenGcc.cc}/lib/*   lib32/
     cp -rsHf ${chosenGcc.cc}/lib64/* lib64/
+
+    # symlink 32-bit ld-linux.so
+    ln -s ${staticUsrProfileTarget}/lib/32/ld-linux.so.2 lib/
   '';
 
   setupLibDirs = if isTargetBuild then setupLibDirs_target
@@ -160,15 +168,19 @@ let
     cd usr
     ${setupLibDirs}
     for i in bin sbin share include; do
-      cp -r "${staticUsrProfileTarget}/$i" $i
+      if [ -d "${staticUsrProfileTarget}/$i" ]; then
+        cp -rsHf "${staticUsrProfileTarget}/$i" "$i"
+      fi
     done
     cd ..
-    
+
     for i in var etc; do
-      cp -r "${staticUsrProfileTarget}/$i" "$i"
+      if [ -d "${staticUsrProfileTarget}/$i" ]; then
+        cp -rsHf "${staticUsrProfileTarget}/$i" "$i"
+      fi
     done
     for i in usr/{bin,sbin,lib,lib32,lib64}; do
-      if [ -x "$i" ]; then
+      if [ -d "$i" ]; then
         ln -s "$i"
       fi
     done

@@ -1,12 +1,12 @@
-diff -Naur a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_emulation.py
---- a/tools/gyp/pylib/gyp/xcode_emulation.py	2014-01-23 06:05:51.000000000 +0100
-+++ b/tools/gyp/pylib/gyp/xcode_emulation.py	2014-02-04 17:49:48.000000000 +0100
-@@ -1018,12 +1033,16 @@
+diff --git a/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py b/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
+index 30f27d5..eb178a5 100644
+--- a/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
++++ b/deps/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
+@@ -1018,12 +1018,15 @@ class XcodeSettings(object):
      # Since the value returned by this function is only used when ARCHS is not
      # set, then on iOS we return "i386", as the default xcode project generator
      # does not set ARCHS if it is not set in the .gyp file.
 -    if self.isIOS:
-+    
 +    try:
 +      if self.isIOS:
 +        return 'i386'

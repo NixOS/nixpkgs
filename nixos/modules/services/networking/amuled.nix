@@ -57,22 +57,19 @@ in
         gid = config.ids.gids.amule;
       } ];
 
-    jobs.amuled =
-      { description = "AMule daemon";
+    systemd.services.amuled = {
+      description = "AMule daemon";
+      wantedBy = [ "ip-up.target" ];
 
-        startOn = "ip-up";
+      preStart = ''
+        mkdir -p ${cfg.dataDir}
+        chown ${user} ${cfg.dataDir}
+      '';
 
-        preStart = ''
-            mkdir -p ${cfg.dataDir}
-            chown ${user} ${cfg.dataDir}
-        '';
-
-        exec = ''
-            ${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${user} \
-                -c 'HOME="${cfg.dataDir}" ${pkgs.amuleDaemon}/bin/amuled'
-        '';
-      };
-
+      script = ''
+        ${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${user} \
+            -c 'HOME="${cfg.dataDir}" ${pkgs.amuleDaemon}/bin/amuled'
+      '';
+    };
   };
-
 }

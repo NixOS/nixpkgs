@@ -2,7 +2,7 @@
 
 let
   pname = "icu4c";
-  version = "55.1";
+  version = "56.1";
 in
 stdenv.mkDerivation {
   name = pname + "-" + version;
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "http://download.icu-project.org/files/${pname}/${version}/${pname}-"
       + (stdenv.lib.replaceChars ["."] ["_"] version) + "-src.tgz";
-    sha256 = "0ys5f5spizg45qlaa31j2lhgry0jka2gfha527n4ndfxxz5j4sz1";
+    sha256 = "05j86714qaj0lvhvyr2s1xncw6sk0h2dcghb3iiwykbkbh8fjr1s";
   };
 
   makeFlags = stdenv.lib.optionalString stdenv.isDarwin
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = "--disable-debug" +
-    stdenv.lib.optionalString stdenv.isDarwin " --enable-rpath";
+    stdenv.lib.optionalString (stdenv.isFreeBSD || stdenv.isDarwin) " --enable-rpath";
 
   # remove dependency on bootstrap-tools in early stdenv build
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt5, boost }:
+{ stdenv, fetchurl, qtbase, qtsvg, boost }:
 
 stdenv.mkDerivation rec {
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     tar xjf ${src}
   '';
 
-  buildInputs = [ qt5.base qt5.svg boost ];
+  buildInputs = [ qtbase qtsvg boost ];
 
   configurePhase = ''
     cd fritzing-${version}.source

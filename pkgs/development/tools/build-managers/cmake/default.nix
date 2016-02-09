@@ -10,8 +10,8 @@ assert wantPS -> (ps != null);
 
 let
   os = stdenv.lib.optionalString;
-  majorVersion = "3.3";
-  minorVersion = "2";
+  majorVersion = "3.4";
+  minorVersion = "0";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    sha256 = "08pwy9ip9cgwgynhn5vrjw8drw29gijy1rmziq22n65zds6ifnp7";
+    sha256 = "1shwim3gfdybjx9f11ykxz5l09rh58vmvz8ip76q3i76mkv2pf55";
   };
 
   enableParallelBuilding = true;
@@ -30,13 +30,8 @@ stdenv.mkDerivation rec {
   patches =
     # Don't search in non-Nix locations such as /usr, but do search in
     # Nixpkgs' Glibc.
-    optional (stdenv ? glibc) ./search-path-3.2.patch ++
-    optional (stdenv ? cross) (fetchurl {
-      name = "fix-darwin-cross-compile.patch";
-      url = "http://public.kitware.com/Bug/file_download.php?"
-          + "file_id=4981&type=bug";
-      sha256 = "16acmdr27adma7gs9rs0dxdiqppm15vl3vv3agy7y8s94wyh4ybv";
-    }) ++ stdenv.lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch;
+    optional (stdenv ? glibc) ./search-path-3.2.patch
+    ++ optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
   buildInputs =
     [ bzip2 curl expat libarchive xz zlib ]

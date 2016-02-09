@@ -1,13 +1,13 @@
 {stdenv, fetchurl, unzip, lib }:
 let
   fonts = {
-    aegean = { version = "8.00"; file = "Aegean.zip"; sha256 = "09pmazcpxhkx3l8h4gxiixihi1c49pli5gvlcm1b6sbf4xvf9kwm";
+    aegean = { version = "8.00"; file = "Aegean.zip"; sha256 = "0jhj4i0262f4zbm979fm01rnvc91a00kwkbcgvzs281256g2ciny";
                description = "Scripts and symbols of the Aegean world"; };
-    textfonts = { version = "6.00"; file = "Textfonts.zip"; sha256 = "10m6kpyj8cc0b4qxxi78akiyjxcbhxj2wmbicdcfh008jibbaxsz";
+    textfonts = { version = "6.00"; file = "Textfonts.zip"; sha256 = "06igp3hdql0yfaj9h2ahh5n7yvj2ni7rj2jdmz534f9618l8qi6r";
                   description = "Fonts based on early Greek editions"; };
     symbola = { version = "8.00"; file = "Symbola.zip"; sha256 = "1lfs2j816332ysvpb5ibj2gwpmyqyispqdl7skkshf2gra18hmhd";
                 description = "Basic Latin, Greek, Cyrillic and many Symbol blocks of Unicode"; };
-    aegyptus = { version = "6.00"; file = "Aegyptus.zip"; sha256 = "092vci45wp9x0yky6dcfky4bs4avaxn6xpai3bs74gxskd2j9s3q";
+    aegyptus = { version = "6.00"; file = "Aegyptus.zip"; sha256 = "10mr54ja9b169fhqfkrw510jybghrpjx7a8a7m38k5v39ck8wz6v";
                  description = "Egyptian Hieroglyphs, Coptic, Meroitic"; };
     akkadian = { version = "7.13"; file = "Akkadian.zip"; sha256 = "1jd2fb6jnwpdwgkidsi2pnw0nk2cpya8k85299w591sqslfkxyij";
                  description = "Sumero-Akkadian Cuneiform"; };

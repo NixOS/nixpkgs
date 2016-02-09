@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, makeWrapper, unzip, autoconf, automake, libtool,
-  python, libsodium, pkgconfig, popt, glog, xz, json_c, gperf, yacc,
-  flex, pandoc, help2man, autoconf-archive, callPackage }:
+{ stdenv, fetchurl, makeWrapper, unzip, autoreconfHook, autoconf-archive
+, python, libsodium, pkgconfig, popt, glog, xz, json_c, gperf, yacc
+, flex, pandoc, help2man, callPackage }:
 
 assert stdenv.isLinux;
 
@@ -21,13 +21,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/rescrv/HyperDex/archive/releases/${version}.zip";
-    sha256 = "0s1capy2hj45f5rmdb4fk0wxy7vz69krplhba57f6wrkpcz1zb57";
+    sha256 = "0l7w3x6c4nslz5ijmj8xys0k1slwi3s4crxmi16ml1x32bqgzhj7";
   };
 
   buildInputs = [
-    autoconf
+    autoreconfHook
     autoconf-archive
-    automake
     busybee
     glog
     hyperleveldb
@@ -35,7 +34,6 @@ stdenv.mkDerivation rec {
     libe
     libmacaroons
     libpo6
-    libtool
     pkgconfig
     popt
     python
@@ -47,7 +45,6 @@ stdenv.mkDerivation rec {
     help2man
     pandoc
   ];
-  preConfigure = "autoreconf -fi";
 
   meta = with stdenv.lib; {
     description = "A scalable, searchable key-value store";

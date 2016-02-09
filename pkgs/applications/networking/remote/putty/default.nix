@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ncurses, gtk, pkgconfig, autoconf, automake, perl, halibut, libtool }:
 
 stdenv.mkDerivation rec {
-  version = "0.65";
+  version = "0.66";
   name = "putty-${version}";
 
   src = fetchurl {
     url = "http://the.earth.li/~sgtatham/putty/latest/${name}.tar.gz";
-    sha256 = "180ccrsyh775hdmxqdnbclfbvsfdp2zk3gsadpa53sj497yw2hym";
+    sha256 = "14r9yfqjs61l82q09m8zifgcxrzvs6dvgx32ndl5i1jldkv14wzy";
   };
 
   preConfigure = ''

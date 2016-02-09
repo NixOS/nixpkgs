@@ -32,9 +32,12 @@ let
     ''}
 
     open_normally() {
-        cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} \
+        echo luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} \
           ${optionalString (header != null) "--header=${header}"} \
-          ${optionalString (keyFile != null) "--key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}"}
+          ${optionalString (keyFile != null) "--key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}"} \
+          > /.luksopen_args
+        cryptsetup-askpass
+        rm /.luksopen_args
     }
 
     ${optionalString (luks.yubikeySupport && (yubikey != null)) ''
@@ -226,7 +229,7 @@ in
 
     boot.initrd.luks.devices = mkOption {
       default = [ ];
-      example = [ { name = "luksroot"; device = "/dev/sda3"; preLVM = true; } ];
+      example = literalExample ''[ { name = "luksroot"; device = "/dev/sda3"; preLVM = true; } ]'';
       description = ''
         The list of devices that should be decrypted using LUKS before trying to mount the
         root partition. This works for both LVM-over-LUKS and LUKS-over-LVM setups.
@@ -418,6 +421,18 @@ in
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.cryptsetup}/bin/cryptsetup
 
+      cat > $out/bin/cryptsetup-askpass <<EOF
+      #!$out/bin/sh -e
+      if [ -e /.luksopen_args ]; then
+        cryptsetup \$(cat /.luksopen_args)
+        killall cryptsetup
+      else
+        echo "Passphrase is not requested now"
+        exit 1
+      fi
+      EOF
+      chmod +x $out/bin/cryptsetup-askpass
+
       ${optionalString luks.yubikeySupport ''
         copy_bin_and_libs ${pkgs.ykpers}/bin/ykchalresp
         copy_bin_and_libs ${pkgs.ykpers}/bin/ykinfo
@@ -432,6 +447,8 @@ in
 
         cat > $out/bin/openssl-wrap <<EOF
         #!$out/bin/sh
+        export OPENSSL_CONF=$out/etc/ssl/openssl.cnf
+        $out/bin/openssl "\$@"
         EOF
         chmod +x $out/bin/openssl-wrap
       ''}
@@ -442,11 +459,6 @@ in
       ${optionalString luks.yubikeySupport ''
         $out/bin/ykchalresp -V
         $out/bin/ykinfo -V
-        cat > $out/bin/openssl-wrap <<EOF
-        #!$out/bin/sh
-        export OPENSSL_CONF=$out/etc/ssl/openssl.cnf
-        $out/bin/openssl "\$@"
-        EOF
         $out/bin/openssl-wrap version
       ''}
     '';

@@ -15,7 +15,7 @@ in buildPythonPackage rec {
   };
 
   buildInputs = [
-    coverage feedparser minimock sqlite3 mygpoclient intltool
+    coverage minimock sqlite3 mygpoclient intltool
     gnome3.gnome_themes_standard gnome3.defaultIconTheme
     gnome3.gsettings_desktop_schemas
   ];
@@ -27,8 +27,6 @@ in buildPythonPackage rec {
 
   postPatch = "sed -ie 's/PYTHONPATH=src/PYTHONPATH=\$(PYTHONPATH):src/' makefile";
 
-  checkPhase = "make unittest";
-
   preFixup = ''
     wrapProgram $out/bin/gpodder \
       --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
@@ -39,17 +37,6 @@ in buildPythonPackage rec {
   # the wrapped file.
   postFixup = ''
     wrapPythonPrograms
-
-    if test -e $out/nix-support/propagated-build-inputs; then
-        ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
-    fi
-
-    createBuildInputsPth build-inputs "$buildInputStrings"
-    for inputsfile in propagated-build-inputs propagated-native-build-inputs; do
-      if test -e $out/nix-support/$inputsfile; then
-          createBuildInputsPth $inputsfile "$(cat $out/nix-support/$inputsfile)"
-      fi
-    done
 
     sed -i "$out/bin/..gpodder-wrapped-wrapped" -e '{
         /import sys; sys.argv/d

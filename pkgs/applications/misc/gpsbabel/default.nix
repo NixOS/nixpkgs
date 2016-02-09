@@ -1,19 +1,17 @@
-{ fetchurl, stdenv, zlib, expat, which }:
+{ stdenv, fetchurl, zlib, qtbase, which }:
 
-let version = "1.4.3"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "gpsbabel-${version}";
+  version = "1.5.2";
 
   src = fetchurl {
     # gpgbabel.org makes it hard to get the source tarball automatically, so
     # get it from elsewhere.
     url = "mirror://debian/pool/main/g/gpsbabel/gpsbabel_${version}.orig.tar.gz";
-    sha256 = "1s31xa36ivf836h89m1f3qiaz3c3znvqjdm0bnh8vr2jjlrz9jdi";
+    sha256 = "0xf7wmy2m29g2lm8lqc74yf8rf7sxfl3cfwbk7dpf0yf42pb0b6w";
   };
 
-  # FIXME: Would need libxml2 for one of the tests, but that in turns require
-  # network access for the XML schemas.
-  buildInputs = [ zlib expat which ];
+  buildInputs = [ zlib qtbase which ];
 
   /* FIXME: Building the documentation, with "make doc", requires this:
 
@@ -22,13 +20,28 @@ stdenv.mkDerivation {
     But FOP isn't packaged yet.  */
 
   preConfigure = "cd gpsbabel";
-  configureFlags = [ "--with-zlib=system" ];
+  configureFlags = [ "--with-zlib=system" ]
+    # Floating point behavior on i686 causes test failures. Preventing
+    # extended precision fixes this problem.
+    ++ stdenv.lib.optionals stdenv.isi686 [
+      "CFLAGS=-ffloat-store" "CXXFLAGS=-ffloat-store"
+    ];
+
+  enableParallelBuilding = true;
 
   doCheck = true;
+  preCheck = ''
+    patchShebangs testo
+    substituteInPlace testo \
+      --replace "-x /usr/bin/hexdump" ""
+  '' + (
+    # The raymarine and gtm tests fail on i686 despite -ffloat-store.
+    if stdenv.isi686 then "rm -v testo.d/raymarine.test testo.d/gtm.test;"
+    else ""
+  );
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Convert, upload and download data from GPS and Map programs";
-
     longDescription = ''
       GPSBabel converts waypoints, tracks, and routes between popular
       GPS receivers and mapping programs.  It also has powerful
@@ -47,12 +60,9 @@ stdenv.mkDerivation {
       process data that may (or may not be) placed on a map, such as
       waypoints, tracks, and routes.
     '';
-
     homepage = http://www.gpsbabel.org/;
-
-    license = stdenv.lib.licenses.gpl2Plus;
-
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;         # arbitrary choice
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.rycee ];
+    platforms = platforms.all;
   };
 }

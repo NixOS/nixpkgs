@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls, Carbon, Foundation,
-libobjc, Cocoa, WebKit, Quartz, ImageCaptureCore, OSAKit
+{ stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls, gettext
+, AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
+, ImageCaptureCore, GSS, ImageIO # These may be optional
 }:
 
 stdenv.mkDerivation rec {
   emacsName = "emacs-24.5";
-  name = "${emacsName}-mac-5.11";
+  name = "${emacsName}-mac-5.15";
 
-  #builder = ./builder.sh;
+  builder = ./builder.sh;
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${emacsName}.tar.xz";
@@ -15,18 +16,16 @@ stdenv.mkDerivation rec {
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${name}.tar.gz";
-    sha256 = "0p4jh6s1qi6jm6zr82grk65x33ix1hb0fbpih4vh3vnx6310iwsb";
+    sha256 = "1r47bm1pf5av2yr37byz91y7bp6vdw9smahiy18g5qp4jp6mz193";
   };
-
-  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
-  NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin
-    "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
 
   enableParallelBuilding = true;
 
-  buildInputs = [
-    ncurses pkgconfig texinfo libxml2 gnutls Carbon Cocoa Foundation libobjc WebKit Quartz
-    ImageCaptureCore OSAKit
+  buildInputs = [ ncurses libxml2 gnutls pkgconfig texinfo gettext ];
+
+  propagatedBuildInputs = [
+    AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
+    ImageCaptureCore GSS ImageIO   # may be optional
   ];
 
   postUnpack = ''
@@ -35,45 +34,25 @@ stdenv.mkDerivation rec {
     mv $name $emacsName
   '';
 
-  preConfigure = ''
-    substituteInPlace Makefile.in --replace "/bin/pwd" "pwd"
-    substituteInPlace lib-src/Makefile.in --replace "/bin/pwd" "pwd"
-
+  postPatch = ''
     patch -p1 < patch-mac
-
-    # The search for 'tputs' will fail because it's in ncursesw within the
-    # ncurses package, yet Emacs' configure script only looks in ncurses.
-    # Further, we need to make sure that the -L option occurs before mention
-    # of the library, so that it finds it within the Nix store.
-    sed -i 's/tinfo ncurses/tinfo ncursesw/' configure
-    ncurseslib=$(echo ${ncurses}/lib | sed 's#/#\\/#g')
-    sed -i "s/OLIBS=\$LIBS/OLIBS=\"-L$ncurseslib \$LIBS\"/" configure
-    sed -i 's/LIBS="\$LIBS_TERMCAP \$LIBS"/LIBS="\$LIBS \$LIBS_TERMCAP"/' configure
-
-    configureFlagsArray=(
-      LDFLAGS=-L${ncurses}/lib
-      --with-xml2=yes
-      --with-gnutls=yes
-      --with-mac
-      --enable-mac-app=$out/Applications
-    )
-    makeFlagsArray=(
-      CFLAGS=-O3
-      LDFLAGS="-O3 -L${ncurses}/lib"
-    );
+    sed -i 's|/usr/share/locale|${gettext}/share/locale|g' lisp/international/mule-cmds.el
   '';
 
-  postInstall = ''
-    cat >$out/share/emacs/site-lisp/site-start.el <<EOF
-    ;; nixos specific load-path
-    (when (getenv "NIX_PROFILES") (setq load-path
-                          (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
-                             (split-string (getenv "NIX_PROFILES"))))
-                    load-path)))
+  configureFlags = [
+    "LDFLAGS=-L${ncurses}/lib"
+    "--with-xml2=yes"
+    "--with-gnutls=yes"
+    "--with-mac"
+    "--enable-mac-app=$$out/Applications"
+  ];
 
-    ;; make tramp work for NixOS machines
-    (eval-after-load 'tramp '(add-to-list 'tramp-remote-path "/run/current-system/sw/bin"))
-    EOF
+  CFLAGS = "-O3";
+  LDFLAGS = "-O3 -L${ncurses}/lib";
+
+  postInstall = ''
+    mkdir -p $out/share/emacs/site-lisp/
+    cp ${./site-start.el} $out/share/emacs/site-lisp/site-start.el
   '';
 
   doCheck = true;
@@ -102,7 +81,7 @@ stdenv.mkDerivation rec {
       separately.
 
       This is "Mac port" addition to GNU Emacs 24. This provides a native
-      GUI support for Mac OS X 10.4 - 10.9. Note that Emacs 23 and later
+      GUI support for Mac OS X 10.4 - 10.11. Note that Emacs 23 and later
       already contain the official GUI support via the NS (Cocoa) port for
       Mac OS X 10.4 and later. So if it is good enough for you, then you
       don't need to try this.

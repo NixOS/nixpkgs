@@ -10,8 +10,11 @@ let
 
   realGrub = if cfg.version == 1 then pkgs.grub
     else if cfg.zfsSupport then pkgs.grub2.override { zfsSupport = true; }
-    else if cfg.enableTrustedBoot then pkgs.trustedGrub
-           else pkgs.grub2;
+    else if cfg.trustedBoot.enable
+         then if cfg.trustedBoot.isHPLaptop
+              then pkgs.trustedGrub-for-HP
+              else pkgs.trustedGrub
+         else pkgs.grub2;
 
   grub =
     # Don't include GRUB if we're only generating a GRUB menu (e.g.,
@@ -53,7 +56,7 @@ let
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
         default fsIdentifier efiSupport gfxmodeEfi gfxmodeBios;
       path = (makeSearchPath "bin" ([
-        pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfsProgs
+        pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfs-progs
         pkgs.utillinux ] ++ (if cfg.efiSupport && (cfg.version == 2) then [pkgs.efibootmgr ] else [])
       )) + ":" + (makeSearchPath "sbin" [
         pkgs.mdadm pkgs.utillinux
@@ -248,6 +251,7 @@ in
       };
 
       extraFiles = mkOption {
+        type = types.attrsOf types.path;
         default = {};
         example = literalExample ''
           { "memtest.bin" = "''${pkgs.memtest86plus}/memtest.bin"; }
@@ -369,24 +373,37 @@ in
         '';
       };
 
-      enableTrustedBoot = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Enable trusted boot. GRUB will measure all critical components during
-          the boot process to offer TCG (TPM) support.
-        '';
-      };
+      trustedBoot = {
 
-      systemHasTPM = mkOption {
-        default = "";
-        example = "YES_TPM_is_activated";
-        type = types.string;
-        description = ''
-          Assertion that the target system has an activated TPM. It is a safety
-          check before allowing the activation of 'enableTrustedBoot'. TrustedBoot
-          WILL FAIL TO BOOT YOUR SYSTEM if no TPM is available.
-        '';
+        enable = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Enable trusted boot. GRUB will measure all critical components during
+            the boot process to offer TCG (TPM) support.
+          '';
+        };
+
+        systemHasTPM = mkOption {
+          default = "";
+          example = "YES_TPM_is_activated";
+          type = types.string;
+          description = ''
+            Assertion that the target system has an activated TPM. It is a safety
+            check before allowing the activation of 'trustedBoot.enable'. TrustedBoot
+            WILL FAIL TO BOOT YOUR SYSTEM if no TPM is available.
+          '';
+        };
+
+        isHPLaptop = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Use a special version of TrustedGRUB that is needed by some HP laptops
+            and works only for the HP laptops.
+          '';
+        };
+
       };
 
     };
@@ -452,25 +469,25 @@ in
           message = "You cannot have duplicated devices in mirroredBoots";
         }
         {
-          assertion = !cfg.enableTrustedBoot || cfg.version == 2;
+          assertion = !cfg.trustedBoot.enable || cfg.version == 2;
           message = "Trusted GRUB is only available for GRUB 2";
         }
         {
-          assertion = !cfg.efiSupport || !cfg.enableTrustedBoot;
+          assertion = !cfg.efiSupport || !cfg.trustedBoot.enable;
           message = "Trusted GRUB does not have EFI support";
         }
         {
-          assertion = !cfg.zfsSupport || !cfg.enableTrustedBoot;
+          assertion = !cfg.zfsSupport || !cfg.trustedBoot.enable;
           message = "Trusted GRUB does not have ZFS support";
         }
         {
-          assertion = !cfg.enableTrustedBoot || cfg.systemHasTPM == "YES_TPM_is_activated";
+          assertion = !cfg.trustedBoot.enable || cfg.trustedBoot.systemHasTPM == "YES_TPM_is_activated";
           message = "Trusted GRUB can break the system! Confirm that the system has an activated TPM by setting 'systemHasTPM'.";
         }
       ] ++ flip concatMap cfg.mirroredBoots (args: [
         {
           assertion = args.devices != [ ];
-          message = "A boot path cannot have an empty devices string in ${arg.path}";
+          message = "A boot path cannot have an empty devices string in ${args.path}";
         }
         {
           assertion = hasPrefix "/" args.path;

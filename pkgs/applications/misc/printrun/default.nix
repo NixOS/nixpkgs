@@ -1,25 +1,25 @@
-{ stdenv, python27Packages, fetchgit }:
-let
-  py = python27Packages;
-in
-py.buildPythonPackage rec {
-  name = "printrun";
+{ stdenv, python27Packages, fetchFromGitHub }:
 
-  src = fetchgit {
-    url = "https://github.com/kliment/Printrun";
-    rev = "2299962bb338d3f4335b97211ee609ebaea008f7"; # printrun-20140801
-    sha256 = "19nay7xclm36x56hpm87gw4ca6rnygpqaw5ypbmrz0hyxx140abj";
+python27Packages.buildPythonPackage rec {
+  name = "printrun-20150310";
+
+  src = fetchFromGitHub {
+    owner = "kliment";
+    repo = "Printrun";
+    rev = name;
+    sha256 = "09ijv8h4k5h15swg64s7igamvynawz7gdi7hiymzrzywdvr0zwsa";
   };
 
-  propagatedBuildInputs = with py; [ wxPython30 pyserial dbus psutil
-    numpy pyopengl pyglet cython ];
+  propagatedBuildInputs = with python27Packages; [
+    wxPython30 pyserial dbus psutil numpy pyopengl pyglet cython
+  ];
 
   doCheck = false;
 
+  setupPyBuildFlags = ["-i"];
+
   postPatch = ''
     sed -i -r "s|/usr(/local)?/share/|$out/share/|g" printrun/utils.py
-    sed -i "s|distutils.core|setuptools|" setup.py
-    sed -i "s|distutils.command.install |setuptools.command.install |" setup.py
   '';
 
   postInstall = ''

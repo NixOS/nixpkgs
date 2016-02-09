@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     pythonPackages.twisted
     pythonPackages.gmpy
     pythonPackages.netifaces
-    pythonPackages.pil
+    pythonPackages.pillow
     pythonPackages.pycrypto
     pythonPackages.pyasn1
     pythonPackages.requests

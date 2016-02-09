@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -p $out";
 
   meta = {
-    homepahe = http://fredrik.hubbe.net/x2vnc.html;
+    homepage = http://fredrik.hubbe.net/x2vnc.html;
     description = "A program to control a remote VNC server";
   };
 }

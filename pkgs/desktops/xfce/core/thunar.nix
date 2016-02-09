@@ -1,37 +1,68 @@
-{ stdenv, fetchurl, pkgconfig, intltool
-, gtk, dbus_glib, libstartup_notification, libnotify, libexif, pcre, udev
-, exo, libxfce4util,  xfconf, xfce4panel
+{ stdenv, buildEnv, runCommand, makeWrapper, lndir, thunar-build
+, thunarPlugins ? []
 }:
 
-stdenv.mkDerivation rec {
-  p_name  = "thunar";
-  ver_maj = "1.6";
-  ver_min = "10";
+with stdenv.lib; 
 
-  src = fetchurl {
-    url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/Thunar-${ver_maj}.${ver_min}.tar.bz2";
-    sha256 = "7e9d24067268900e5e44d3325e60a1a2b2f8f556ec238ec12574fbea15fdee8a";
-  };
-  name = "${p_name}-${ver_maj}.${ver_min}";
+let
 
-  patches = [ ./thunarx_plugins_directory.patch ];
+  build = thunar-build;
 
-  buildInputs = [
-    pkgconfig intltool
-    gtk dbus_glib libstartup_notification libnotify libexif pcre udev
-    exo libxfce4util xfconf xfce4panel
-  ];
-  # TODO: optionality?
+  replaceLnExeListWithWrapped = exeDir: exeNameList: mkWrapArgs: ''
+    exeDir="${exeDir}"
+    oriDir=`realpath -e "$exeDir"`
+    unlink "$exeDir"
+    mkdir -p "$exeDir"
+    lndir "$oriDir" "$exeDir"
 
-  enableParallelBuilding = true;
+    exeList="${concatStrings (intersperse " " (map (x: "${exeDir}/${x}") exeNameList))}"
 
-  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
+    for exe in $exeList; do
+      oriExe=`realpath -e "$exe"`
+      rm -f "$exe"
+      makeWrapper "$oriExe" "$exe" ${concatStrings (intersperse " " mkWrapArgs)}
+    done
+  '';
+
+  name = "${build.p_name}-${build.ver_maj}.${build.ver_min}";
 
   meta = {
-    homepage = http://thunar.xfce.org/;
-    description = "Xfce file manager";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    inherit (build.meta) homepage license platforms;
+
+    description = build.meta.description + optionalString
+      (0 != length thunarPlugins)
+      " (with plugins: ${concatStrings (intersperse ", " (map (x: x.name) thunarPlugins))})";
+    maintainers = build.meta.maintainers /*++ [ jraygauthier ]*/;
   };
-}
+
+in
+
+# TODO: To be replaced with `buildEnv` awaiting missing features.
+runCommand name {
+  inherit build;
+  inherit meta;
+
+  nativeBuildInputs = [ makeWrapper lndir ];
+
+  dontPatchELF = true;
+  dontStrip = true;
+
+} 
+(let
+  buildWithPlugins = buildEnv {
+    name = "thunar-build-with-plugins";
+    paths = [ build ] ++ thunarPlugins;
+  };
+
+in ''
+  mkdir -p $out
+  pushd ${buildWithPlugins} > /dev/null
+  for d in `find . -maxdepth 1 -name "*" -printf "%f\n" | tail -n+2`; do
+    ln -s "${buildWithPlugins}/$d" "$out/$d"
+  done
+  popd > /dev/null
+
+  ${replaceLnExeListWithWrapped "$out/bin" [ "thunar" "thunar-settings" ] [
+    "--set THUNARX_MODULE_DIR \"${buildWithPlugins}/lib/thunarx-2\""
+  ]}
+'')

@@ -8,7 +8,12 @@ find_gio_modules() {
 
 envHooks+=(find_gio_modules)
 
+# Note: $gappsWrapperArgs still gets defined even if $dontWrapGApps is set.
 wrapGAppsHook() {
+  # guard against running multiple times (e.g. due to propagation)
+  [ -z "$wrapGAppsHookHasRun" ] || return
+  wrapGAppsHookHasRun=1
+
   if [ -n "$GDK_PIXBUF_MODULE_FILE" ]; then
     gappsWrapperArgs+=(--set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE")
   fi

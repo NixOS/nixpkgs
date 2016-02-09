@@ -7,7 +7,7 @@
 
 with stdenv.lib;
 
-assert !stdenv.isDarwin -> stdenv.cc.isGNU;
+assert stdenv.isFreeBSD || stdenv.isDarwin || stdenv.cc.isGNU;
 
 # TODO:
 # * Add gio-module-fam
@@ -39,8 +39,8 @@ let
     ln -sr -t "$out/include/" "$out"/lib/*/include/* 2>/dev/null || true
   '';
 
-  ver_maj = "2.44";
-  ver_min = "1";
+  ver_maj = "2.46";
+  ver_min = "2";
 in
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "01yabrfp64i11mrks3p1gcks99lw0zm7f5vhkc53sl4amyndw4c8";
+    sha256 = "5031722e37036719c1a09163cc6cf7c326e4c4f1f1e074b433c156862bd733db";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch ++ optional doCheck ./skip-timer-test.patch;
@@ -63,12 +63,21 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ pcre zlib libffi libiconv ]
     ++ libintlOrEmpty;
 
+  LIBELF_CFLAGS = optional stdenv.isFreeBSD "-I${libelf}";
+  LIBELF_LIBS = optional stdenv.isFreeBSD "-L${libelf} -lelf";
+
   configureFlags =
     optional stdenv.isDarwin "--disable-compile-warnings"
-    ++ optional stdenv.isSunOS "--disable-modular-tests";
+    ++ optional (stdenv.isFreeBSD || stdenv.isSunOS) "--with-libiconv=gnu"
+    ++ optional stdenv.isSunOS "--disable-dtrace";
 
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl"
     + optionalString stdenv.isSunOS " -DBSD_COMP";
+
+  preConfigure = if !stdenv.isSunOS then null else
+    ''
+      sed -i -e 's|inotify.h|foobar-inotify.h|g' configure
+    '';
 
   preBuild = optionalString stdenv.isDarwin
     ''

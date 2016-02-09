@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     description = "Private, secure, untraceable currency";
     homepage = http://monero.cc/;
     license = licenses.bsd3;
-    maintainers = [ maintainers.emery ];
+    maintainers = [ maintainers.ehmry ];
     platforms = [ "x86_64-linux" ];
   };
 }

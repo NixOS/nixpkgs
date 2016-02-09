@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, autoconf, automake, libtool }:
+{ stdenv, fetchurl, unzip, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "hyperleveldb-${version}";
@@ -6,10 +6,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/rescrv/HyperLevelDB/archive/releases/${version}.zip";
-    sha256 = "0xrzhwkrm7f2wz3jn4iqn1dim2pmgjhmpb1fy23fwa06v0q18hw8";
+    sha256 = "0m5fwl9sc7c6m2zm3zjlxxg7f602gnaryikxgflahhdccdvvr56y";
   };
-  buildInputs = [ unzip autoconf automake libtool ];
-  preConfigure = "autoreconf -i";
+
+  buildInputs = [ unzip autoreconfHook ];
 
   meta = with stdenv.lib; {
     description = ''A fork of LevelDB intended to meet the needs of

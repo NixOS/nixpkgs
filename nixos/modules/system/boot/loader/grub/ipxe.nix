@@ -39,7 +39,7 @@ in
               dhcp
               chain http://boot.ipxe.org/demo/boot.php
             ''';
-          };
+          }
         '';
       };
     };

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A TLS terminating proxy";
     license     = licenses.mit;
-    platforms   = with platforms; linux;
+    platforms   = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];
   };
 }

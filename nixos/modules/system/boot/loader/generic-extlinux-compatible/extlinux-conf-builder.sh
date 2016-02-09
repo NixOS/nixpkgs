@@ -83,7 +83,7 @@ addEntry() {
     timestampEpoch=$(stat -L -c '%Z' $path)
 
     timestamp=$(date "+%Y-%m-%d %H:%M" -d @$timestampEpoch)
-    nixosVersion="$(cat $path/nixos-version)"
+    nixosLabel="$(cat $path/nixos-version)"
     extraParams="$(cat $path/kernel-params)"
 
     echo
@@ -91,7 +91,7 @@ addEntry() {
     if [ "$tag" = "default" ]; then
         echo "  MENU LABEL NixOS - Default"
     else
-        echo "  MENU LABEL NixOS - Configuration $tag ($timestamp - $nixosVersion)"
+        echo "  MENU LABEL NixOS - Configuration $tag ($timestamp - $nixosLabel)"
     fi
     echo "  LINUX ../nixos/$(basename $kernel)"
     echo "  INITRD ../nixos/$(basename $initrd)"

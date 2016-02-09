@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, gss, libidn }:
+{ fetchurl, stdenv, gss, libidn, krb5Full }:
 
 stdenv.mkDerivation rec {
   name = "gsasl-1.8.0";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libidn ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) gss;
+    ++ stdenv.lib.optional (!stdenv.isDarwin) gss
+    ++ stdenv.lib.optional stdenv.isDarwin krb5Full;
 
   configureFlags = stdenv.lib.optionalString stdenv.isDarwin "--with-gssapi-impl=mit";
 

@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation {
-  name = "screenFetch-2015-04-20";
+  name = "screenFetch-2016-01-13";
 
   src = fetchgit {
     url = git://github.com/KittyKatt/screenFetch.git;
-    rev = "53e1c0cccacf648e846057938a68dda914f532a1";
-    sha256 = "1wyvy1sn7vnclwrzd32jqlq6iirjkhp2ak55brhkpp9rj1qxk3q6";
+    rev = "22e5bee7647453d45ec82f543f37b8a6a062835d";
+    sha256 = "0xdiz02bqg7ajj547j496qq9adysm1f6zymcy3yyfgw3prnzvdir";
   };
 
   nativeBuildInputs = [ makeWrapper ];

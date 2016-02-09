@@ -8,7 +8,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.icewm.enable = mkEnableOption "oroborus";
+    services.xserver.windowManager.icewm.enable = mkEnableOption "icewm";
   };
 
   ###### implementation

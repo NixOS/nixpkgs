@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ocaml, ocamlPackages }:
+{ fetchurl, stdenv, ocamlPackages }:
 
 stdenv.mkDerivation rec {
   name = "alt-ergo-${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "High-performance theorem prover and SMT solver";
     homepage    = "http://alt-ergo.ocamlpro.com/";
     license     = stdenv.lib.licenses.cecill-c; # LGPL-2 compatible
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

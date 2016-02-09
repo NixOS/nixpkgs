@@ -2,21 +2,23 @@
 , openssl, libX11, libXext, libXrender, overrideDerivation }:
 
 stdenv.mkDerivation rec {
-  version = "0.12.1";
+  version = "0.12.2.4";
   name = "wkhtmltopdf-${version}";
 
   src = fetchgit {
     url = "https://github.com/wkhtmltopdf/wkhtmltopdf.git";
     rev = "refs/tags/${version}";
-    sha256 = "0wjzaaviy1k3z8r2kzb2rmyx6xdj23a338b86sxcb15ws3kzwgwh";
+    sha256 = "0g96vgi3s633j4myjfzakkyiml1zspvdvbc0q1vhw8fp5n1xdknm";
+    fetchSubmodules = false;
   };
 
   wkQt = overrideDerivation qt4 (deriv: {
     name = "qt-mod-4.8.6";
+    enableParallelBuilding = true;
     src = fetchgit {
       url = "https://github.com/wkhtmltopdf/qt.git";
-      rev = "82b568b"; # From git submodule spec in wkhtml repo.
-      sha256 = "0whppwxnymh5bdayqsqx54n074m99yk6v78z7f0k5prja55yvwyx";
+      rev = "48e71c19c7fc67517fb3dca6d42eacb57341c9ba"; # From git submodule spec in wkhtml repo.
+      sha256 = "1ygr7g3k900zjf54ji6kkfppqnxaqwbh8npr53g2krdw3bmny6fx";
     };
     configureFlags =
       ''
@@ -67,12 +69,12 @@ stdenv.mkDerivation rec {
     ];
 
   configurePhase = "qmake wkhtmltopdf.pro INSTALLBASE=$out";
-  
+
   patches = [ ./makefix.patch ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://wkhtmltopdf.org/;
     description = "Tools for rendering web pages to PDF or images";
     longDescription = ''
@@ -83,6 +85,7 @@ stdenv.mkDerivation rec {
 
       There is also a C library, if you're into that kind of thing.
     '';
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ jb55 ];
   };
 }

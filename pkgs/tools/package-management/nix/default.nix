@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, curl, bzip2, sqlite, openssl ? null
+{ lib, stdenv, fetchurl, perl, curl, bzip2, sqlite, openssl ? null, xz
 , pkgconfig, boehmgc, perlPackages, libsodium
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
@@ -13,8 +13,8 @@ let
 
     nativeBuildInputs = [ perl pkgconfig ];
 
-    buildInputs = [ curl openssl sqlite ] ++
-      lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium;
+    buildInputs = [ curl openssl sqlite xz ]
+      ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium;
 
     propagatedBuildInputs = [ boehmgc ];
 
@@ -42,6 +42,8 @@ let
     installFlags = "sysconfdir=$(out)/etc";
 
     doInstallCheck = false;
+
+    separateDebugInfo = stdenv.isLinux;
 
     crossAttrs = {
       postUnpack =
@@ -87,19 +89,22 @@ in rec {
    nix = nixStable;
 
    nixStable = common rec {
-     name = "nix-1.10";
+     name = "nix-1.11.1";
      src = fetchurl {
        url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-       sha256 = "5612ca7a549dd1ee20b208123e041aaa95a414a0e8f650ea88c672dc023d10f6";
+       sha256 = "21a99b3d0afdbe10241aaf506738fd0a81ff868e3d7c666e3cb6b621a926ea7a";
      };
    };
 
+   nixUnstable = nixStable;
+   /*
    nixUnstable = lib.lowPrio (common rec {
-     name = "nix-1.11pre4244_133a421";
+     name = "nix-1.11pre4379_786046c";
      src = fetchurl {
-       url = "http://hydra.nixos.org/build/26680779/download/4/${name}.tar.xz";
-       sha256 = "cb98e3e0791c3f5a508990e8ddba02ce7fe9282a9fe151c743206c1410cdfd93";
+       url = "http://hydra.nixos.org/build/30375557/download/4/${name}.tar.xz";
+       sha256 = "ff42c70697fce7ca6eade622a31e5fbe45aed0edf1204fb491b40df207a807d5";
      };
    });
+   */
 
 }

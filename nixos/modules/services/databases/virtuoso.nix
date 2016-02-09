@@ -29,20 +29,20 @@ with lib;
       };
 
       listenAddress = mkOption {
-	default = "1111";
-	example = "myserver:1323";
+        default = "1111";
+        example = "myserver:1323";
         description = "ip:port or port to listen on.";
       };
 
       httpListenAddress = mkOption {
-	default = null;
-	example = "myserver:8080";
+        default = null;
+        example = "myserver:8080";
         description = "ip:port or port for Virtuoso HTTP server to listen on.";
       };
 
       dirsAllowed = mkOption {
-	default = null;
-	example = "/www, /home/";
+        default = null;
+        example = "/www, /home/";
         description = "A list of directories Virtuoso is allowed to access";
       };
     };
@@ -61,18 +61,17 @@ with lib;
         home = stateDir;
       };
 
-    jobs.virtuoso = {
-      name = "virtuoso";
-      startOn = "ip-up";
+    systemd.services.virtuoso = {
+      wantedBy = [ "ip-up.target" ];
 
       preStart = ''
-	mkdir -p ${stateDir}
-	chown ${virtuosoUser} ${stateDir}
+        mkdir -p ${stateDir}
+        chown ${virtuosoUser} ${stateDir}
       '';
 
       script = ''
-	cd ${stateDir}
-	${pkgs.virtuoso}/bin/virtuoso-t +foreground +configfile ${pkgs.writeText "virtuoso.ini" cfg.config}
+        cd ${stateDir}
+        ${pkgs.virtuoso}/bin/virtuoso-t +foreground +configfile ${pkgs.writeText "virtuoso.ini" cfg.config}
       '';
     };
 

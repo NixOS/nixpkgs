@@ -1,8 +1,8 @@
 { stdenv, fetchurl, ncurses }:
 
-let version = "0.2.8"; in
 stdenv.mkDerivation rec {
   name = "rote-${version}";
+  version = "0.2.8";
 
   src = fetchurl {
     sha256 = "05v1lw99jv4cwxl7spyi7by61j2scpdsvx809x5cga7dm5dhlmky";
@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Our Own Terminal Emulation Library";
     longDescription = ''
       ROTE is a simple C library for VT102 terminal emulation. It allows the

@@ -47,6 +47,7 @@ let
           };
           inherit iso;
           passthru = { inherit config; };
+          preferLocalBuild = true;
         }
         ''
           mkdir -p $out/nix-support
@@ -149,6 +150,7 @@ in rec {
             maintainers = maintainers.eelco;
           };
           ova = config.system.build.virtualBoxOVA;
+          preferLocalBuild = true;
         }
         ''
           mkdir -p $out/nix-support
@@ -168,6 +170,7 @@ in rec {
             boot.loader.grub.device = mkDefault "/dev/sda";
           });
       }).config.system.build.toplevel;
+      preferLocalBuild = true;
     }
     "mkdir $out; ln -s $toplevel $out/dummy");
 
@@ -220,13 +223,14 @@ in rec {
   tests.dockerRegistry = hydraJob (import tests/docker-registry.nix { system = "x86_64-linux"; });
   tests.etcd = hydraJob (import tests/etcd.nix { system = "x86_64-linux"; });
   tests.ec2-nixops = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-nixops;
-  #tests.ec2-config = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-config;
+  tests.ec2-config = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-config;
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
   tests.fleet = hydraJob (import tests/fleet.nix { system = "x86_64-linux"; });
   #tests.gitlab = callTest tests/gitlab.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
   tests.gnome3-gdm = callTest tests/gnome3-gdm.nix {};
+  tests.grsecurity = callTest tests/grsecurity.nix {};
   tests.i3wm = callTest tests/i3wm.nix {};
   tests.installer.grub1 = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).grub1.test);
   tests.installer.lvm = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).lvm.test);
@@ -244,11 +248,13 @@ in rec {
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
   tests.kde4 = callTest tests/kde4.nix {};
+  tests.initrdNetwork = callTest tests/initrd-network.nix {};
   tests.kubernetes = hydraJob (import tests/kubernetes.nix { system = "x86_64-linux"; });
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   #tests.lightdm = callTest tests/lightdm.nix {};
   tests.login = callTest tests/login.nix {};
   #tests.logstash = callTest tests/logstash.nix {};
+  tests.mathics = callTest tests/mathics.nix {};
   tests.misc = callTest tests/misc.nix {};
   tests.mumble = callTest tests/mumble.nix {};
   tests.munin = callTest tests/munin.nix {};
@@ -256,6 +262,7 @@ in rec {
   tests.mysqlReplication = callTest tests/mysql-replication.nix {};
   tests.nat.firewall = callTest tests/nat.nix { withFirewall = true; };
   tests.nat.standalone = callTest tests/nat.nix { withFirewall = false; };
+  tests.networking.networkd.loopback = callTest tests/networking.nix { networkd = true; test = "loopback"; };
   tests.networking.networkd.static = callTest tests/networking.nix { networkd = true; test = "static"; };
   tests.networking.networkd.dhcpSimple = callTest tests/networking.nix { networkd = true; test = "dhcpSimple"; };
   tests.networking.networkd.dhcpOneIf = callTest tests/networking.nix { networkd = true; test = "dhcpOneIf"; };
@@ -264,6 +271,7 @@ in rec {
   tests.networking.networkd.macvlan = callTest tests/networking.nix { networkd = true; test = "macvlan"; };
   tests.networking.networkd.sit = callTest tests/networking.nix { networkd = true; test = "sit"; };
   tests.networking.networkd.vlan = callTest tests/networking.nix { networkd = true; test = "vlan"; };
+  tests.networking.scripted.loopback = callTest tests/networking.nix { networkd = false; test = "loopback"; };
   tests.networking.scripted.static = callTest tests/networking.nix { networkd = false; test = "static"; };
   tests.networking.scripted.dhcpSimple = callTest tests/networking.nix { networkd = false; test = "dhcpSimple"; };
   tests.networking.scripted.dhcpOneIf = callTest tests/networking.nix { networkd = false; test = "dhcpOneIf"; };
@@ -276,14 +284,19 @@ in rec {
   tests.networkingProxy = callTest tests/networking-proxy.nix {};
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
   tests.nfs4 = callTest tests/nfs.nix { version = 4; };
+  tests.nixosPinVersion = callTest tests/nixos-pin-version.nix {};
   tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};
   tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
   tests.peerflix = callTest tests/peerflix.nix {};
+  tests.postgresql = callTest tests/postgresql.nix {};
   tests.printing = callTest tests/printing.nix {};
   tests.proxy = callTest tests/proxy.nix {};
+  tests.pumpio = callTest tests/pump.io.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
+  tests.sddm = callTest tests/sddm.nix {};
+  tests.sddm-kde5 = callTest tests/sddm-kde5.nix {};
   tests.simple = callTest tests/simple.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};

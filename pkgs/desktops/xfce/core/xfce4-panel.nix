@@ -1,6 +1,10 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, libxfce4util, libxfce4ui
-, libwnck, exo, garcon, xfconf, libstartup_notification
-, makeWrapper, xfce4mixer }:
+, libxfce4ui_gtk3, libwnck, exo, garcon, xfconf, libstartup_notification
+, makeWrapper, xfce4mixer
+, withGtk3 ? false, gtk3
+}:
+
+with { inherit (stdenv.lib) optional; };
 
 stdenv.mkDerivation rec {
   p_name  = "xfce4-panel";
@@ -16,11 +20,15 @@ stdenv.mkDerivation rec {
   patches = [ ./xfce4-panel-datadir.patch ];
   patchFlags = "-p1";
 
+  configureFlags = optional withGtk3 "--enable-gtk3";
+
   buildInputs =
     [ pkgconfig intltool gtk libxfce4util exo libwnck
       garcon xfconf libstartup_notification makeWrapper
-    ] ++ xfce4mixer.gst_plugins;
-  propagatedBuildInputs = [ libxfce4ui ];
+    ] ++ xfce4mixer.gst_plugins
+      ++ optional withGtk3 gtk3;
+
+  propagatedBuildInputs = [ (if withGtk3 then libxfce4ui_gtk3 else libxfce4ui) ];
 
   postInstall = ''
     wrapProgram "$out/bin/xfce4-panel" \

@@ -387,6 +387,10 @@ sub addProfile {
     my $curEntry = 0;
     foreach my $link (@links) {
         last if $curEntry++ >= $configurationLimit;
+        if (! -e "$link/nixos-version") {
+            warn "skipping corrupt system profile entry ‘$link’\n";
+            next;
+        }
         my $date = strftime("%F", localtime(lstat($link)->mtime));
         my $version =
             -e "$link/nixos-version"

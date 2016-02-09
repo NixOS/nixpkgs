@@ -5,7 +5,7 @@
 # In that case its about 6MB which could be separated
 
 let
-  ver_maj = "1.44";
+  ver_maj = "1.46";
   ver_min = "0";
 in
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${ver_maj}/${name}.tar.xz";
-    sha256 = "1b972qg2yb51sdavfvb6kc19akwc15c1bwnbg81vadxamql2q33g";
+    sha256 = "6658bd3c2b8813eb3e2511ee153238d09ace9d309e4574af27443d87423e4233";
   };
 
   buildInputs = [ flex bison pkgconfig python ]
@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
   # Tests depend on cairo, which is undesirable (it pulls in lots of
   # other dependencies).
   configureFlags = [ "--disable-tests" ];
+
+  preConfigure = ''
+    sed 's|/usr/bin/env ||' -i tools/g-ir-tool-template.in
+  '';
 
   postInstall = "rm -rf $out/share/gtk-doc";
 

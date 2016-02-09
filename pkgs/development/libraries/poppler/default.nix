@@ -5,8 +5,8 @@
 }:
 
 let # beware: updates often break cups_filters build
-  version = "0.34.0"; # even major numbers are stable
-  sha256 = "1c2wa4pfzqmvzq1jpp3ps5nmzz745gcg8dnpwqpfdccy5ydbm90v";
+  version = "0.36.0"; # even major numbers are stable
+  sha256 = "13i440kv873wgmw50rs4d1v05cj0r7bqnghd70hp9vy44dxhdk4k";
 in
 stdenv.mkDerivation rec {
   name = "poppler-${suffix}-${version}";

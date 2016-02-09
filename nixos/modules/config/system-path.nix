@@ -7,12 +7,6 @@ with lib;
 
 let
 
-  extraManpages = pkgs.runCommand "extra-manpages" { buildInputs = [ pkgs.help2man ]; }
-    ''
-      mkdir -p $out/share/man/man1
-      help2man ${pkgs.gnutar}/bin/tar > $out/share/man/man1/tar.1
-    '';
-
   requiredPackages =
     [ config.nix.package
       pkgs.acl
@@ -34,7 +28,6 @@ let
       pkgs.xz
       pkgs.less
       pkgs.libcap
-      pkgs.man
       pkgs.nano
       pkgs.ncurses
       pkgs.netcat
@@ -47,7 +40,6 @@ let
       pkgs.time
       pkgs.texinfoInteractive
       pkgs.utillinux
-      extraManpages
     ];
 
 in
@@ -78,8 +70,16 @@ in
         # to work.
         default = [];
         example = ["/"];
-        description = "List of directories to be symlinked in `/run/current-system/sw'.";
+        description = "List of directories to be symlinked in <filename>/run/current-system/sw</filename>.";
       };
+
+      outputsToLink = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "doc" ];
+        description = "List of package outputs to be symlinked into <filename>/run/current-system/sw</filename>.";
+      };
+
     };
 
     system = {
@@ -103,9 +103,7 @@ in
       [ "/bin"
         "/etc/xdg"
         "/info"
-        "/lib" # FIXME: remove
-        #"/lib/debug/.build-id" # enables GDB to find separated debug info
-        "/man"
+        "/lib" # FIXME: remove and update debug-info.nix
         "/sbin"
         "/share/applications"
         "/share/desktop-directories"
@@ -113,7 +111,6 @@ in
         "/share/emacs"
         "/share/icons"
         "/share/info"
-        "/share/man"
         "/share/menus"
         "/share/mime"
         "/share/nano"
@@ -126,12 +123,12 @@ in
     system.path = pkgs.buildEnv {
       name = "system-path";
       paths = config.environment.systemPackages;
-      inherit (config.environment) pathsToLink;
+      inherit (config.environment) pathsToLink outputsToLink;
       ignoreCollisions = true;
       # !!! Hacky, should modularise.
       postBuild =
         ''
-          if [ -x $out/bin/update-mime-database -a -w $out/share/mime/packages ]; then
+          if [ -x $out/bin/update-mime-database -a -w $out/share/mime ]; then
               XDG_DATA_DIRS=$out/share $out/bin/update-mime-database -V $out/share/mime > /dev/null
           fi
 

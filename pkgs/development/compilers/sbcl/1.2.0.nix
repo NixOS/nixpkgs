@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       sh make.sh clisp --prefix=$out
     ''
     else ''
-      sh make.sh --prefix=$out --xc-host='${sbclBootstrap}/bin/sbcl --core ${sbclBootstrap}/share/sbcl/sbcl.core --disable-debugger --no-userinit --no-sysinit'
+      sh make.sh --prefix=$out --xc-host='${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit'
     '';
 
   installPhase = ''

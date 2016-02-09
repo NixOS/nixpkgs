@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig utilmacros python ];
   buildInputs = [ mesa libX11 ];
 
+  preConfigure = stdenv.lib.optional stdenv.isDarwin ''
+    substituteInPlace configure --replace build_glx=no build_glx=yes
+    substituteInPlace src/dispatch_common.h --replace "PLATFORM_HAS_GLX 0" "PLATFORM_HAS_GLX 1"
+  '';
+
   meta = with stdenv.lib; {
     description = "A library for handling OpenGL function pointer management";
     homepage = https://github.com/anholt/libepoxy;

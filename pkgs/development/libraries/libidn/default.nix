@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "libidn-1.32";
@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = ! stdenv.isDarwin;
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
 
   meta = {
     homepage = http://www.gnu.org/software/libidn/;

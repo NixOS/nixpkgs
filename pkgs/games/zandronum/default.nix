@@ -1,43 +1,61 @@
-{ stdenv, fetchhg, cmake, SDL, mesa, fmod42416, openssl, sqlite, sqlite-amalgamation }:
+{ stdenv, lib, fetchhg, cmake, pkgconfig, makeWrapper
+, SDL, mesa, bzip2, zlib, fmod, libjpeg, fluidsynth, openssl, sqlite-amalgamation
+, serverOnly ? false
+}:
 
-stdenv.mkDerivation {
-  name = "zandronum-2.1.2";
+let suffix = lib.optionalString serverOnly "-server";
+
+# FIXME: drop binary package when upstream fixes their protocol versioning
+in stdenv.mkDerivation {
+  name = "zandronum${suffix}-2.1.2";
+
   src = fetchhg {
     url = "https://bitbucket.org/Torr_Samaho/zandronum-stable";
     rev = "a3663b0061d5";
     sha256 = "0qwsnbwhcldwrirfk6hpiklmcj3a7dzh6pn36nizci6pcza07p56";
   };
 
-  phases = [ "unpackPhase" "configurePhase" "buildPhase" "installPhase" ];
+  # I have no idea why would SDL and libjpeg be needed for the server part!
+  # But they are.
+  buildInputs = [ openssl bzip2 zlib SDL libjpeg ]
+             ++ lib.optionals (!serverOnly) [ mesa fmod fluidsynth ];
 
-  buildInputs = [ cmake SDL mesa fmod42416 openssl sqlite sqlite-amalgamation ];
+  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
 
   preConfigure = ''
-    cp ${sqlite-amalgamation}/* sqlite/
+    ln -s ${sqlite-amalgamation}/* sqlite/
   '';
 
-  cmakeFlags = [
-    "-DFMOD_LIBRARY=${fmod42416}/lib/libfmodex.so"
-  ];
+  cmakeFlags =
+    lib.optional (!serverOnly) "-DFMOD_LIBRARY=${fmod}/lib/libfmodex.so"
+    ++ lib.optional serverOnly "-DSERVERONLY=ON"
+    ;
+
+  enableParallelBuilding = true;
 
   installPhase = ''
     mkdir -p $out/bin
-    mkdir -p $out/share
-    cp zandronum zandronum.pk3 skulltag_actors.pk3 liboutput_sdl.so $out/share
+    mkdir -p $out/share/zandronum
+    cp zandronum${suffix} \
+       zandronum.pk3 \
+       skulltag_actors.pk3 \
+       ${lib.optionalString (!serverOnly) "liboutput_sdl.so"} \
+       $out/share/zandronum
 
-    cat > $out/bin/zandronum << EOF
-    #!/bin/sh
-
-    LD_LIBRARY_PATH=$out/share $out/share/zandronum "\$@"
-    EOF
-
-    chmod +x "$out/bin/zandronum"
+    # For some reason, while symlinks work for binary version, they don't for source one.
+    makeWrapper $out/share/zandronum/zandronum${suffix} $out/bin/zandronum${suffix}
   '';
 
-  meta = {
+  postFixup = lib.optionalString (!serverOnly) ''
+    patchelf --set-rpath $(patchelf --print-rpath $out/share/zandronum/zandronum):$out/share/zandronum \
+      $out/share/zandronum/zandronum
+  '';
+
+  meta = with stdenv.lib; {
     homepage = http://zandronum.com/;
     description = "Multiplayer oriented port, based off Skulltag, for Doom and Doom II by id Software.";
-    maintainer = [ stdenv.lib.maintainers.lassulus ];
+    maintainer = with maintainers; [ lassulus ];
+    platforms = platforms.linux;
+    license = licenses.bsdOriginal;
   };
 }
-

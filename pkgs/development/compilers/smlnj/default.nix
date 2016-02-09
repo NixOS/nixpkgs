@@ -1,30 +1,31 @@
 { stdenv, fetchurl, darwin }:
 let
-  version = "110.78";
+  version = "110.79";
   baseurl = "http://smlnj.cs.uchicago.edu/dist/working/${version}";
 
   sources = map fetchurl [
-    { url = "${baseurl}/config.tgz";              sha256 = "018c6iflpm3im6679via1wshw2sls4jgiqrc30pqkb80kfrh1pg2"; }
-    { url = "${baseurl}/cm.tgz";                  sha256 = "0id37j6lj4b3qczn4949gvc8hys9j3h7nk9kc9fxv4rv1g7i328x"; }
-    { url = "${baseurl}/compiler.tgz";            sha256 = "1m299lzc8l9mixb2l9scvilz27v16db3igzwca19alsrvldnmpg2"; }
-    { url = "${baseurl}/runtime.tgz";             sha256 = "1pwbv1bnh8dz4w62cx19c56z4y57krbpr1ziayyycg7lj44pb7sy"; }
-    { url = "${baseurl}/system.tgz";              sha256 = "1jdilm3wcjxcnnbd3g8rcd1f5nsb5ffzfjqcsdcpqd9mnx81fca9"; }
-    { url = "${baseurl}/MLRISC.tgz";              sha256 = "0ibqwkkqd4c62p3q1jbgqyh7k78sms01igl7ibk6jyrhy9n7vw0v"; }
-    { url = "${baseurl}/smlnj-lib.tgz";           sha256 = "1lxnwp8q3xw0wqqrv3hlk3fjancrfz862fy9j504s38ljhdjc3jr"; }
-    { url = "${baseurl}/ckit.tgz";                sha256 = "1nqw40vjxy40ckif5d480g5mf7b91lmwcs7m689gs9n2dj3gbwnp"; }
-    { url = "${baseurl}/nlffi.tgz";               sha256 = "1cks1xifb32wya2flw7h7cvcdnkxv7ngk8y7xv29888r7xbdr3h0"; }
-    { url = "${baseurl}/cml.tgz";                 sha256 = "0qfaj6vsagsnh9di94cxvn77f91zfwsnn95rz8ig5dz5zmq77ghz"; }
-    { url = "${baseurl}/eXene.tgz";               sha256 = "1nlkb2y48m702qplxkqphvb9nbj433300j7yrdbsj39j6vvp8pmw"; }
-    { url = "${baseurl}/ml-lpt.tgz";              sha256 = "02b2gdl1qdwilhls3ssa04wcyg3aswndn1bh85008rqj85ppddiq"; }
-    { url = "${baseurl}/ml-lex.tgz";              sha256 = "0l1sddd5wfpqgmyw1g3iwv2p27fbkpjkm10db2qd2pid9r95dxz5"; }
-    { url = "${baseurl}/ml-yacc.tgz";             sha256 = "0ln790ydb43sxbjjymbd6jnnzfygrc0lr50k81p5cazzzy1yfim6"; }
-    { url = "${baseurl}/ml-burg.tgz";             sha256 = "03anyy2gdkgfprmahx489hxg9zjh9lydq3gkzrlyw51yzvgp3f92"; }
-    { url = "${baseurl}/pgraph.tgz";              sha256 = "19hbcav11a6fv0xmzgin0v5dl4m08msk1vsmw26kpqiqkvkh7j39"; }
-    { url = "${baseurl}/trace-debug-profile.tgz"; sha256 = "0awssg3vgj3sp85kdfjcp28zaq815zr55k9z6v79zs9gll02ghlk"; }
-    { url = "${baseurl}/heap2asm.tgz";            sha256 = "1vkmxbm6x37l1wqvilvvw662pdvg6mkbvcfvya8ggsihz4c1z0jg"; }
-    { url = "${baseurl}/smlnj-c.tgz";             sha256 = "08b8acd5vwhz1gg7960rha00qhwk7l7p01vvgwzmdiqlcd3fcj1d"; }
-    { url = "${baseurl}/doc.tgz";                 sha256 = "1pbsvc8nmnjwq239wrylb209drr4xv9a66r0fjm126b6nw1slrbq"; }
-    { url = "${baseurl}/boot.x86-unix.tgz";       sha256 = "19wd273k4ldnxndq6cqr7xv387ynbviz6jlgxmlld7nxf549kn5a"; }
+    { url = "${baseurl}/config.tgz";              sha256 = "1siahy5sxz20bdy88s7zjj6gn55np1h54dalmg0nwzqq1rc048xb"; }
+    { url = "${baseurl}/cm.tgz";                  sha256 = "174g71hvk1wfdmrg1mbx3p5j04ywnbbjapnnr9sgjd99pqqqsmdz"; }
+    { url = "${baseurl}/compiler.tgz";            sha256 = "001wi97ghj3mym4bk73gzzzrh7584hd79jn08cnq1wssdcfpn4mw"; }
+    { url = "${baseurl}/runtime.tgz";             sha256 = "0lavdzg25nbdzdyyf6wm304k0gsbb5bng2nlcx8gcfl743vl13r0"; }
+    { url = "${baseurl}/system.tgz";              sha256 = "00j34m5n8m30p51kajd0sxamy7gpwxaxrlgw5agxh0wi83vqfaki"; }
+    { url = "${baseurl}/MLRISC.tgz";              sha256 = "19q3gp7yfby4n8z6jn9m9q8g0a9kvb13arj8f2j0x9jnh3y2is78"; }
+    { url = "${baseurl}/smlnj-lib.tgz";           sha256 = "0frkc23zh9h1c2lvkidh92lsp56liyb3hyv17503nchmkxrlsi09"; }
+    { url = "${baseurl}/old-basis.tgz";           sha256 = "1ka7w4nvkmaf86dkdzgbwiw8kay6gxhcyx4q17m33wdzsjbq56lh"; }
+    { url = "${baseurl}/ckit.tgz";                sha256 = "1z8xf5pqwayqd8j6xhfhqs4axkb4dx7vdqi2a7gq3zbx2fd3s7pw"; }
+    { url = "${baseurl}/nlffi.tgz";               sha256 = "1544m7ildyd0d60wfy2hl700jnslpxqb7brgh8p0bmkvhhvvc96v"; }
+    { url = "${baseurl}/cml.tgz";                 sha256 = "11blq65zlsbh6iwq502jww1z4iyk9pf2iv3d437cgnpb3sn9mx72"; }
+    { url = "${baseurl}/eXene.tgz";               sha256 = "14yl8a5xwms1m9bvfwfiz6rhg49225l52lqqq9sbxbf57615n9yg"; }
+    { url = "${baseurl}/ml-lpt.tgz";              sha256 = "118s7v2f73ym91ymvnmswjxm2pw5n4q1d4hvbs1cmm43dv28pw7m"; }
+    { url = "${baseurl}/ml-lex.tgz";              sha256 = "0lf5ir12v8j6n11mblrl00jgm583ak077vgbabc1dfmz47rd566b"; }
+    { url = "${baseurl}/ml-yacc.tgz";             sha256 = "0dmifbbq1wxkxf479jv61nsy79sr78ad9fq6561rvgi4h12lzh7k"; }
+    { url = "${baseurl}/ml-burg.tgz";             sha256 = "1b5z18azik1kpaafi1vjgaf181yv32h88zm3z5fqxs96pwb86h1d"; }
+    { url = "${baseurl}/pgraph.tgz";              sha256 = "15g06hl7zn98qas3b6r6lrl75g9d1galqxdyai7d5z9q5lq71j2v"; }
+    { url = "${baseurl}/trace-debug-profile.tgz"; sha256 = "0jwilcv2ycfpcy3cgs8ndaj16yqm8m2q63sipcigfycacpyqfsiw"; }
+    { url = "${baseurl}/heap2asm.tgz";            sha256 = "0wylsw1dkls9l86j226ilfb50mfk4h4zz4r9zdj104a1mqvvbgfk"; }
+    { url = "${baseurl}/smlnj-c.tgz";             sha256 = "1xr89r1nhzg53hk0v0fk1livphwpgmzh1dgjqxl4w8dx9qhk9yf0"; }
+    { url = "${baseurl}/doc.tgz";                 sha256 = "1fz4l3019n1rkrww98w59cdhlrz9jg635hmdq59xryc0j78y4ga1"; }
+    { url = "${baseurl}/boot.x86-unix.tgz";       sha256 = "0nka4dhklhilrsw4byr5vixiap28zp67ai0vjkwhqh03amkcr8zq"; }
   ];
 in stdenv.mkDerivation {
   name = "smlnj-${version}";

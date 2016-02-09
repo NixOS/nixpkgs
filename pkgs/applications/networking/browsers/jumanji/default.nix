@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "20150107";
 
   src = fetchgit {
-    url = git://pwmt.org/jumanji.git;
+    url = https://git.pwmt.org/pwmt/jumanji.git;
     rev = "f8e04e5b5a9fec47d49ca63a096e5d35be281151";
     sha256 = "1xq06iabr4y76faf4w1cx6fhwdksfsxggz1ndny7icniwjzk98h9";
   };

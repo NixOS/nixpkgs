@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, python, pygtk, pil, libX11, gettext }:
+{ stdenv, fetchurl, buildPythonPackage, python, pygtk, pillow, libX11, gettext }:
 
 buildPythonPackage rec {
     namePrefix = "";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
       sed -i "s@/usr/local/share/locale@$out/share/locale@" mirage.py
     '';
 
-    pythonPath = [ pygtk pil ];
+    propagatedBuildInputs = [ pygtk pillow ];
 
     meta = {
       description = "Simple image viewer written in PyGTK";

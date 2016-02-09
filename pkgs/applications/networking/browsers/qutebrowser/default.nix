@@ -1,29 +1,31 @@
-{ stdenv, fetchgit, python, buildPythonPackage, qt5, pyqt5, jinja2, pygments, pyyaml, pypeg2,
-  gst_plugins_base, gst_plugins_good, gst_ffmpeg }:
+{ stdenv, fetchurl, python, buildPythonPackage, qtmultimedia, pyqt5
+, jinja2, pygments, pyyaml, pypeg2, gst-plugins-base, gst-plugins-good
+, gst-plugins-bad, gst-libav, wrapGAppsHook, glib_networking }:
 
-let version = "0.4.1"; in
+let version = "0.5.1"; in
 
-buildPythonPackage {
+buildPythonPackage rec {
   name = "qutebrowser-${version}";
   namePrefix = "";
 
-  src = fetchgit {
-    url = "https://github.com/The-Compiler/qutebrowser.git";
-    rev = "8d9e9851f1dcff5deb6363586ad0f1edec040b72";
-    sha256 = "1qsdad10swnk14qw4pfyvb94y6valhkscyvl46zbxxs7ck6llsm2";
+  src = fetchurl {
+    url = "https://github.com/The-Compiler/qutebrowser/releases/download/v${version}/${name}.tar.gz";
+    sha256 = "1pxgap04rv94kgcp9a05xx2kwg3j6jv8f6d3ww7hqs2xnkj8wzqb";
   };
 
   # Needs tox
   doCheck = false;
+
+  buildInputs = [ wrapGAppsHook
+    gst-plugins-base gst-plugins-good gst-plugins-bad gst-libav
+    glib_networking ];
 
   propagatedBuildInputs = [
     python pyyaml pyqt5 jinja2 pygments pypeg2
   ];
 
   makeWrapperArgs = ''
-    --prefix GST_PLUGIN_PATH : "${stdenv.lib.makeSearchPath "lib/gstreamer-0.10"
-       [ gst_plugins_base gst_plugins_good gst_ffmpeg ]}"
-    --prefix QT_PLUGIN_PATH : "${qt5.multimedia}/lib/qt5/plugins"
+    --prefix QT_PLUGIN_PATH : "${qtmultimedia}/lib/qt5/plugins"
   '';
 
   meta = {

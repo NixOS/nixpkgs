@@ -7,15 +7,16 @@
 
 stdenv.mkDerivation rec {
   name = "weston-${version}";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "04nkbbdglh0pqznxkdqvak3pc53jmz24d0658bn5r0cf6agycqw9";
+    sha256 = "1ks8mja6glzy2dkayi535hd6w5c5h021bqk7vzgv182g33rh66ww";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig wayland mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
+    wayland mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
     mtdev libjpeg pam dbus.libs libinput pango libunwind freerdp vaapi libva
     libwebp
   ];

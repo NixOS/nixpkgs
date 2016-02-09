@@ -125,6 +125,9 @@ in
       };
     };
 
+    # For testing
+    environment.systemPackages = [ pkgs.actkbd ];
+
   };
 
 }

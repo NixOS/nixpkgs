@@ -1,17 +1,17 @@
-{stdenv, fetchurl, libX11, libXinerama, patches ? []}:
+{stdenv, fetchurl, libX11, libXinerama, libXft, patches ? []}:
 
 let
-  name = "dwm-6.0";
+  name = "dwm-6.1";
 in
 stdenv.mkDerivation {
   inherit name;
  
   src = fetchurl {
     url = "http://dl.suckless.org/dwm/${name}.tar.gz";
-    sha256 = "0mpbivy9j80l1jqq4bd4g4z8s5c54fxrjj44avmfwncjwqylifdj";
+    sha256 = "1zkmwb6df6m254shx06ly90c0q4jl70skk1pvkixpb7hcxhwbxn2";
   };
  
-  buildInputs = [ libX11 libXinerama ];
+  buildInputs = [ libX11 libXinerama libXft ];
  
   prePatch = ''sed -i "s@/usr/local@$out@" config.mk'';
 

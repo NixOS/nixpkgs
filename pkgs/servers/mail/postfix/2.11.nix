@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "11riz8ggaa09pi8d6xv2807qp7yjn918mrylfvkfwmvcdlgwck0a";
   };
 
-  patches = [ ./postfix-2.11.0.patch ];
+  patches = [
+    ./postfix-2.11.0.patch
+    ./postfix-script-shell.patch
+  ];
 
   buildInputs = [ makeWrapper gnused db openssl cyrus_sasl ];
 

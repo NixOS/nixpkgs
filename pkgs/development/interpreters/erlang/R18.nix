@@ -1,5 +1,6 @@
 { stdenv, fetchurl, perl, gnum4, ncurses, openssl
 , gnused, gawk, makeWrapper
+, Carbon, Cocoa
 , odbcSupport ? false, unixODBC ? null
 , wxSupport ? true, mesa ? null, wxGTK ? null, xorg ? null, wxmac ? null
 , javacSupport ? false, openjdk ? null
@@ -18,18 +19,19 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "erlang-" + version + "${optionalString odbcSupport "-odbc"}"
   + "${optionalString javacSupport "-javac"}";
-  version = "18.0";
+  version = "18.2";
 
   src = fetchurl {
     url = "http://www.erlang.org/download/otp_src_${version}.tar.gz";
-    sha256 = "1ahi865ii3iqzd00yyn3nrxjb9qa2by9d7ixssvqw8ag9firvdm0";
+    sha256 = "1l1zzf245w1abiylll8pjm0pppqwvvw4fihknqkcybkx62n2ipj3";
   };
 
   buildInputs =
     [ perl gnum4 ncurses openssl makeWrapper
-    ] ++ optional wxSupport (if stdenv.isDarwin then [ wxmac ] else [ mesa wxGTK xorg.libX11 ])
-      ++ optional odbcSupport [ unixODBC ]
-      ++ optional javacSupport [ openjdk ];
+    ] ++ optionals wxSupport (if stdenv.isDarwin then [ wxmac ] else [ mesa wxGTK xorg.libX11 ])
+      ++ optional odbcSupport unixODBC
+      ++ optional javacSupport openjdk
+      ++ stdenv.lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
   patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';
 
@@ -49,7 +51,7 @@ stdenv.mkDerivation rec {
   postInstall = let
     manpages = fetchurl {
       url = "http://www.erlang.org/download/otp_doc_man_${version}.tar.gz";
-      sha256 = "0wsnp7sp21ydinwkg3rkazyrs382pdzwra9apikkhs70dv1hwkz4";
+      sha256 = "0abaqnw6hkr1h1zw6cdqwg2k7rfmj2b9sqqldnqf3qaj0shz759n";
     };
   in ''
     ln -s $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call
@@ -67,8 +69,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/lib/erlang/bin/start_erl --prefix PATH ":" "${gnused}/bin/:${gawk}/bin"
   '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     homepage = "http://www.erlang.org/";
+    downloadPage = "http://www.erlang.org/download.html";
     description = "Programming language used for massively scalable soft real-time systems";
 
     longDescription = ''

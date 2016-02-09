@@ -64,7 +64,13 @@ in
           else if any (w: w.name == defaultDM) cfg.session.list then
             defaultDM
           else
-            throw "Default desktop manager ($(defaultDM)) not found.";
+            throw ''
+              Default desktop manager (${defaultDM}) not found.
+              Probably you want to change
+                services.xserver.desktopManager.default = "${defaultDM}";
+              to one of
+                ${concatMapStringsSep "\n  " (w: "services.xserver.desktopManager.default = \"${w.name}\";") cfg.session.list}
+            '';
       };
 
     };

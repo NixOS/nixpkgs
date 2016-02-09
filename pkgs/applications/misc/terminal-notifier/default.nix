@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
     cp -r terminal-notifier.app $out/Applications
     cat >$out/bin/terminal-notifier <<EOF
     cd $out/Applications/terminal-notifier.app
-    exec ./Contents/MacOS/terminal-notifier
+    exec ./Contents/MacOS/terminal-notifier "\$@"
     EOF
     chmod +x $out/bin/terminal-notifier
   '';
 
   meta = with lib; {
     maintainers = with maintainers; [ cstrahan ];
-    platforms   = with platforms; darwin;
+    platforms   = platforms.darwin;
   };
 }

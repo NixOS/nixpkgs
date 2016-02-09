@@ -1,13 +1,12 @@
-# DEPRECATED: these dependencies sould be system libraries
 [
+{
+  name = "libabw-0.1.1.tar.bz2";
+  md5 = "7a3815b506d064313ba309617b6f5a0b";
+  brief = true;
+}
 {
   name = "commons-codec-1.6-src.tar.gz";
   md5 = "2e482c7567908d334785ce7d69ddfff7";
-  brief = false;
-}
-{
-  name = "commons-codec-1.9-src.zip";
-  md5 = "048751f3271906db5126ab76870444c4";
   brief = false;
 }
 {
@@ -18,11 +17,6 @@
 {
   name = "commons-lang-2.4-src.tar.gz";
   md5 = "625ff5f2f968dd908bca43c9469d6e6b";
-  brief = false;
-}
-{
-  name = "commons-lang3-3.3.1-src.tar.gz";
-  md5 = "8ab049135b2d15313da5d9f0656894a1";
   brief = false;
 }
 {
@@ -41,9 +35,39 @@
   brief = true;
 }
 {
+  name = "boost_1_55_0.tar.bz2";
+  md5 = "d6eef4b4cacb2183f2bf265a5a03a354";
+  brief = false;
+}
+{
+  name = "bsh-2.0b5-src.zip";
+  md5 = "ec1941a74d3ef513c4ce57a9092b74e1";
+  brief = false;
+}
+{
+  name = "cairo-1.10.2.tar.gz";
+  md5 = "f101a9e88b783337b20b2e26dfd26d5f";
+  brief = false;
+}
+{
+  name = "libcdr-0.1.1.tar.bz2";
+  md5 = "b33fd0be3befdd1b37777e08ce058bd9";
+  brief = true;
+}
+{
   name = "clucene-core-2.3.3.4.tar.gz";
   md5 = "48d647fbd8ef8889e5a7f422c1bfda94";
   brief = false;
+}
+{
+  name = "libcmis-0.5.0.tar.gz";
+  md5 = "5821b806a98e6c38370970e682ce76e8";
+  brief = false;
+}
+{
+  name = "CoinMP-1.7.6.tgz";
+  md5 = "1cce53bf4b40ae29790d2c5c9f8b1129";
+  brief = true;
 }
 {
   name = "collada2gltf-master-cb1d97788a.tar.bz2";
@@ -51,9 +75,19 @@
   brief = false;
 }
 {
-  name = "ConvertTextToNumber-1.3.2.oxt";
-  md5 = "451ccf439a36a568653b024534669971";
+  name = "cppunit-1.13.2.tar.gz";
+  md5 = "d1c6bdd5a76c66d2c38331e2d287bc01";
+  brief = true;
+}
+{
+  name = "converttexttonumber-1-5-0.oxt";
+  md5 = "1f467e5bb703f12cbbb09d5cf67ecf4a";
   brief = false;
+}
+{
+  name = "curl-7.43.0.tar.bz2";
+  md5 = "11bddbb452a8b766b932f859aaeeed39";
+  brief = true;
 }
 {
   name = "libe-book-0.1.2.tar.bz2";
@@ -73,6 +107,16 @@
 {
   name = "expat-2.1.0.tar.gz";
   md5 = "dd7dab7a5fea97d2a6a43f511449b7cd";
+  brief = false;
+}
+{
+  name = "Firebird-2.5.2.26540-0.tar.bz2";
+  md5 = "21154d2004e025c8a3666625b0357bb5";
+  brief = true;
+}
+{
+  name = "fontconfig-2.8.0.tar.gz";
+  md5 = "77e15a92006ddc2adbb06f840d591c0e";
   brief = false;
 }
 {
@@ -138,6 +182,16 @@
 {
   name = "freetype-2.4.8.tar.bz2";
   md5 = "dbf2caca1d3afd410a29217a9809d397";
+  brief = false;
+}
+{
+  name = "glew-1.10.0.zip";
+  md5 = "594eb47b4b1210e25438d51825404d5a";
+  brief = false;
+}
+{
+  name = "glm-0.9.4.6-libreoffice.zip";
+  md5 = "bae83fa5dc7f081768daace6e199adc3";
   brief = false;
 }
 {
@@ -226,8 +280,18 @@
   brief = false;
 }
 {
-  name = "language-subtag-registry-2015-06-08.tar.bz2";
-  md5 = "d431bd8a70455be1fa8523fa633c005b";
+  name = "jpegsrc.v9a.tar.gz";
+  md5 = "3353992aecaee1805ef4109aadd433e7";
+  brief = true;
+}
+{
+  name = "libjpeg-turbo-1.3.1.tar.gz";
+  md5 = "2c3a68129dac443a72815ff5bb374b05";
+  brief = true;
+}
+{
+  name = "language-subtag-registry-2015-08-04.tar.bz2";
+  md5 = "bf5986dbfa1c9a0f26cf1b00ed369484";
   brief = true;
 }
 {
@@ -272,8 +336,23 @@
   brief = false;
 }
 {
+  name = "libxml2-2.9.3.tar.gz";
+  md5 = "daece17e045f1c107610e137ab50c179";
+  brief = false;
+}
+{
+  name = "libxslt-1.1.28.tar.gz";
+  md5 = "9667bf6f9310b957254fdcf6596600b7";
+  brief = false;
+}
+{
   name = "lp_solve_5.5.tar.gz";
   md5 = "26b3e95ddf3d9c077c480ea45874b3b8";
+  brief = false;
+}
+{
+  name = "mariadb_client-2.0.0-src.tar.gz";
+  md5 = "a233181e03d3c307668b4c722d881661";
   brief = false;
 }
 {
@@ -307,8 +386,8 @@
   brief = false;
 }
 {
-  name = "nss-3.19.2-with-nspr-4.10.8.tar.gz";
-  md5 = "2100bc5a7ea9685928ff68cda2e60569";
+  name = "nss-3.19.4-with-nspr-4.10.10.tar.gz";
+  md5 = "478e0e90ebc4a90159549e77021021fd";
   brief = false;
 }
 {
@@ -319,6 +398,16 @@
 {
   name = "OpenCOLLADA-master-6509aa13af.tar.bz2";
   md5 = "4ca8a6ef0afeefc864e9ef21b9f14bd6";
+  brief = true;
+}
+{
+  name = "openldap-2.4.31.tgz";
+  md5 = "804c6cb5698db30b75ad0ff1c25baefd";
+  brief = false;
+}
+{
+  name = "openssl-1.0.2a.tar.gz";
+  md5 = "a06c547dac9044161a477211049f60ef";
   brief = true;
 }
 {
@@ -337,13 +426,23 @@
   brief = false;
 }
 {
-  name = "libpng-1.5.18.tar.gz";
-  md5 = "5266905cef49d1224437465ad4d67fd9";
+  name = "libpng-1.5.24.tar.gz";
+  md5 = "6652e428d1d3fc3c6cb1362159b1cf3b";
   brief = true;
 }
 {
   name = "poppler-0.26.4.tar.gz";
   md5 = "35c0660065d023365e9854c13e289d12";
+  brief = true;
+}
+{
+  name = "postgresql-9.2.1.tar.bz2";
+  md5 = "c0b4799ea9850eae3ead14f0a60e9418";
+  brief = false;
+}
+{
+  name = "Python-3.3.5.tgz";
+  md5 = "803a75927f8f241ca78633890c798021";
   brief = true;
 }
 {
@@ -387,8 +486,38 @@
   brief = false;
 }
 {
+  name = "vigra1.6.0.tar.gz";
+  md5 = "d62650a6f908e85643e557a236ea989c";
+  brief = false;
+}
+{
+  name = "libvisio-0.1.1.tar.bz2";
+  md5 = "726c1f5be65eb7d649e0d48b63d920e7";
+  brief = true;
+}
+{
+  name = "libwpd-0.10.0.tar.bz2";
+  md5 = "0773d79a1f240ef9f4f20242b13c5bb7";
+  brief = true;
+}
+{
+  name = "libwpg-0.3.0.tar.bz2";
+  md5 = "17da9770cb8b317b7633f9807b32b71a";
+  brief = true;
+}
+{
+  name = "libwps-0.4.0.tar.bz2";
+  md5 = "e9162d2566421d9d71b3ad2377a68fd5";
+  brief = true;
+}
+{
   name = "xsltml_2.1.2.zip";
   md5 = "a7983f859eafb2677d7ff386a023bc40";
   brief = false;
+}
+{
+  name = "zlib-1.2.8.tar.gz";
+  md5 = "44d667c142d7cda120332623eab69f40";
+  brief = true;
 }
 ]

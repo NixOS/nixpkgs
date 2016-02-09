@@ -8,6 +8,7 @@
     enable = true;
     displayManager.kdm.enable = true;
     desktopManager.kde4.enable = true;
+    synaptics.enable = true; # for touchpad support on many laptops
   };
 
   environment.systemPackages = [ pkgs.glxinfo ];

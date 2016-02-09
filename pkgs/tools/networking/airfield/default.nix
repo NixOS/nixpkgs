@@ -33,7 +33,7 @@ in nodePackages.buildNodePackage rec {
     license = licenses.mit;
     homepage = https://github.com/emblica/airfield;
     maintainers = with maintainers; [offline];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     broken = true;
   };
 }

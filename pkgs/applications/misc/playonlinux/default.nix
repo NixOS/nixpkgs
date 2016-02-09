@@ -1,8 +1,6 @@
 { stdenv
 , makeWrapper
 , fetchurl
-, wxPython
-, libXmu
 , cabextract
 , gettext
 , glxinfo
@@ -11,17 +9,51 @@
 , imagemagick
 , netcat
 , p7zip
-, python
+, python2Packages
 , unzip
 , wget
 , wine
 , xdg-user-dirs
 , xterm
+, pkgs
+, pkgsi686Linux
+, which
+, curl
 }:
 
-stdenv.mkDerivation rec {
-  name = "playonlinux-${version}";
+assert stdenv.isLinux;
+
+let
   version = "4.2.9";
+
+  binpath = stdenv.lib.makeSearchPath "bin"
+    [ cabextract
+      python2Packages.python
+      gettext
+      glxinfo
+      gnupg1compat
+      icoutils
+      imagemagick
+      netcat
+      p7zip
+      unzip
+      wget
+      wine
+      xdg-user-dirs
+      xterm
+      which
+      curl
+    ];
+
+  ld32 =
+    if stdenv.system == "x86_64-linux" then "${stdenv.cc}/nix-support/dynamic-linker-m32"
+    else if stdenv.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
+    else abort "Unsupported platform for PlayOnLinux: ${stdenv.system}";
+  ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
+  libs = pkgs: stdenv.lib.makeLibraryPath [ pkgs.xlibs.libX11 ];
+
+in stdenv.mkDerivation {
+  name = "playonlinux-${version}";
 
   src = fetchurl {
     url = "https://www.playonlinux.com/script_files/PlayOnLinux/${version}/PlayOnLinux_${version}.tar.gz";
@@ -31,74 +63,34 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs =
-    [ wxPython
-      libXmu
-      cabextract
-      gettext
-      glxinfo
-      gnupg1compat
-      icoutils
-      imagemagick
-      netcat
-      p7zip
-      python
-      unzip
-      wget
-      wine
-      xdg-user-dirs
-      xterm
+    [ python2Packages.python
+      python2Packages.wxPython
+      python2Packages.setuptools
     ];
 
   patchPhase = ''
-    PYFILES="python/*.py python/lib/*.py tests/python/*.py"
-    sed -i "s/env python[0-9.]*/python/" $PYFILES
+    patchShebangs python tests/python
     sed -i "s/ %F//g" etc/PlayOnLinux.desktop
   '';
 
   installPhase = ''
     install -d $out/share/playonlinux
-    install -d $out/bin
     cp -r . $out/share/playonlinux/
 
-    echo "#!${stdenv.shell}" > $out/bin/playonlinux
-    echo "$prefix/share/playonlinux/playonlinux \"\$@\"" >> $out/bin/playonlinux
-    chmod +x $out/bin/playonlinux
-
     install -D -m644 etc/PlayOnLinux.desktop $out/share/applications/playonlinux.desktop
-  '';
 
-  preFixupPhases = [ "preFixupPhase" ];
+    makeWrapper $out/share/playonlinux/playonlinux $out/bin/playonlinux \
+      --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath "$out") \
+      --prefix PATH : ${binpath}
 
-  preFixupPhase = ''
-    for f in $out/bin/*; do
-      wrapProgram $f \
-        --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath "$out") \
-        --prefix PATH : \
-    ${cabextract}/bin:\
-    ${gettext}/bin:\
-    ${glxinfo}/bin:\
-    ${gnupg1compat}/bin:\
-    ${icoutils}/bin:\
-    ${imagemagick}/bin:\
-    ${netcat}/bin:\
-    ${p7zip}/bin:\
-    ${python}/bin:\
-    ${unzip}/bin:\
-    ${wget}/bin:\
-    ${wine}/bin:\
-    ${xdg-user-dirs}/bin:\
-    ${xterm}/bin
-
-    done
-
-    for f in $out/share/playonlinux/bin/*; do
-      bunzip2 $f
-    done
-  '';
-
-  postFixupPhases = [ "postFixupPhase" ];
-
-  postFixupPhase = ''
+    bunzip2 $out/share/playonlinux/bin/check_dd_x86.bz2
+    patchelf --set-interpreter $(cat ${ld32}) --set-rpath ${libs pkgsi686Linux} $out/share/playonlinux/bin/check_dd_x86
+    ${if stdenv.system == "x86_64-linux" then ''
+      bunzip2 $out/share/playonlinux/bin/check_dd_amd64.bz2
+      patchelf --set-interpreter $(cat ${ld64}) --set-rpath ${libs pkgs} $out/share/playonlinux/bin/check_dd_amd64
+    '' else ''
+      rm $out/share/playonlinux/bin/check_dd_amd64.bz2
+    ''}
     for f in $out/share/playonlinux/bin/*; do
       bzip2 $f
     done
@@ -109,6 +101,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.playonlinux.com/;
     license = licenses.gpl3;
     maintainers = [ maintainers.a1russell ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

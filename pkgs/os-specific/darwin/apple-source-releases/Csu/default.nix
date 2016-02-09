@@ -6,7 +6,9 @@ appleDerivation {
       --replace "/usr/lib" "/lib" \
       --replace "/usr/local/lib" "/lib" \
       --replace "/usr/bin" "" \
-      --replace "/bin/" ""
+      --replace "/bin/" "" \
+      --replace "CC = " "CC = cc #" \
+      --replace "SDK_DIR = " "SDK_DIR = . #"
   '';
 
   # Mac OS didn't support rpaths back before 10.5, and this package intentionally builds stubs targeting versions prior to that

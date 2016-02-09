@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     description = "terminal mixer - multiplexer for the i/o of terminal applications";
     license = licenses.gpl2;
     maintainers = with maintainers; [ viric ];
-    platforms = with platforms; all;
+    platforms = platforms.all;
   };
 
 }

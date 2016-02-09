@@ -45,6 +45,11 @@ tryDownload() {
 
 finish() {
     set +o noglob
+
+    if [[ $executable == "1" ]]; then
+      chmod +x $downloadedFile
+    fi
+
     runHook postFetch
     stopNest
     exit 0
@@ -89,10 +94,6 @@ for url in $urls; do
         if test -z "${!varName}"; then
             echo "warning: unknown mirror:// site \`$site'"
         else
-            # Assume that SourceForge/GNU/kernel mirrors have better
-            # bandwidth than nixos.org.
-            preferHashedMirrors=
-
             mirrors=${!varName}
 
             # Allow command-line override by setting NIX_MIRRORS_$site.

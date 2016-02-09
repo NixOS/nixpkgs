@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, enableNLS ? true, libnatspec ? null, libiconv }:
+{ stdenv, fetchurl, enableNLS ? false, libnatspec ? null, libiconv }:
 
 assert enableNLS -> libnatspec != null;
 
@@ -13,11 +13,9 @@ stdenv.mkDerivation {
     sha256 = "0sb3h3067pzf3a7mlxn1hikpcjrsvycjcnj9hl9b1c3ykcgvps7h";
   };
 
-  # should be makeFlags on all archs, not changed yet to prevent rebuild
-  buildFlags="-f unix/Makefile generic";
-  makeFlags = if stdenv.isCygwin then "-f unix/Makefile ${if stdenv.isCygwin then "cygwin" else "generic"}" else null;
-
-  installFlags="-f unix/Makefile prefix=$(out) INSTALL=cp";
+  makefile = "unix/Makefile";
+  buildFlags = if stdenv.isCygwin then "cygwin" else "generic";
+  installFlags = "prefix=$(out) INSTALL=cp";
 
   patches = if (enableNLS && !stdenv.isCygwin) then [ ./natspec-gentoo.patch.bz2 ] else [];
 

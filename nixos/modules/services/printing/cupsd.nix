@@ -247,6 +247,8 @@ in
 
         wantedBy = [ "multi-user.target" ];
         wants = [ "cups.service" "avahi-daemon.service" ];
+        bindsTo = [ "cups.service" "avahi-daemon.service" ];
+        partOf = [ "cups.service" "avahi-daemon.service" ];
         after = [ "cups.service" "avahi-daemon.service" ];
 
         path = [ cups ];

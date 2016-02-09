@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     fi
     
     # Open the simulator instance
-    open -a "$(readlink "${xcodewrapper}/bin/iOS Simulator")" --args -CurrentDeviceUDID $udid
+    open -a "$(readlink "${xcodewrapper}/bin/Simulator")" --args -CurrentDeviceUDID $udid
     
     # Copy the app and restore the write permissions
     appTmpDir=$(mktemp -d -t appTmpDir)

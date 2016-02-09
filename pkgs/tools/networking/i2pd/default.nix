@@ -1,21 +1,23 @@
-{ stdenv, fetchFromGitHub, boost, cryptopp }:
+{ stdenv, fetchFromGitHub, fetchpatch, boost, zlib, openssl }:
 
 stdenv.mkDerivation rec {
 
   name = pname + "-" + version;
   pname = "i2pd";
-  version = "0.10.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = pname;
     rev = version;
-    sha256 = "11w62rc326rhj2xh06307ngx0fai30qny8ml6n5lrx2y1dzjfxd1";
+    sha256 = "0gb6bdsyb7m0jkilln9h7z2l8gr8ia10jah17ygc15jzycygijis";
   };
 
-  buildInputs = [ boost cryptopp ];
+  buildInputs = [ boost zlib openssl ];
+  makeFlags = "USE_AESNI=no";
+
   installPhase = ''
-    install -D i2p $out/bin/i2p
+    install -D i2pd $out/bin/i2pd
   '';
 
   meta = with stdenv.lib; {

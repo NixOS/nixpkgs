@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "notmuch-0.20.2";
+  name = "notmuch-0.21";
 
   passthru = {
     pythonSourceRoot = "${name}/bindings/python";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "1v5dcnlg4km5hfaq0i0qywq5fn66fi0rq4aaibyqkwxz8mis4hgp";
+    sha256 = "1cr53rbpkcy3pvrmhbg2gq7sjpwb0c8xd7a4zhzxbiv8s7z8yvyh";
   };
 
   buildInputs = [ bash emacs glib gmime gnupg pkgconfig talloc xapian sphinx python ]
@@ -42,10 +42,30 @@ stdenv.mkDerivation rec {
 
   preFixup = if stdenv.isDarwin then
     ''
+      set -e
+
+      die() {
+        >&2 echo "$@"
+        exit 1
+      }
+
       prg="$out/bin/notmuch"
-      target="libnotmuch.3.dylib"
-      echo "$prg: fixing link to $target"
-      install_name_tool -change "$target" "$out/lib/$target" "$prg"
+      lib="$(find "$out/lib" -name 'libnotmuch.?.dylib')"
+
+      [[ -s "$prg" ]] || die "couldn't find notmuch binary"
+      [[ -s "$lib" ]] || die "couldn't find libnotmuch"
+
+      badname="$(otool -L "$prg" | awk '$1 ~ /libtalloc/ { print $1 }')"
+      goodname="$(find "${talloc}/lib" -name 'libtalloc.?.?.?.dylib')"
+
+      [[ -n "$badname" ]]  || die "couldn't find libtalloc reference in binary"
+      [[ -n "$goodname" ]] || die "couldn't find libtalloc in nix store"
+
+      echo "fixing libtalloc link in $lib"
+      install_name_tool -change "$badname" "$goodname" "$lib"
+
+      echo "fixing libtalloc link in $prg"
+      install_name_tool -change "$badname" "$goodname" "$prg"
     ''
   else
     "";
@@ -58,6 +78,6 @@ stdenv.mkDerivation rec {
     description = "Mail indexer";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ chaoflow garbas ];
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, ncurses, gettext,
-  pkgconfig, cscope, python, ruby, tcl, perl, luajit
+{ stdenv, fetchFromGitHub, ncurses, gettext
+, pkgconfig, cscope, python, ruby, tcl, perl, luajit
 }:
 
 stdenv.mkDerivation rec {
   name = "macvim-${version}";
 
-  version = "7.4.648";
+  version = "7.4.909";
 
-  src = fetchurl {
-    url = "https://github.com/genoma/macvim/archive/g-snapshot-32.tar.gz";
-    sha256 = "1wqg5sy7krgqg3sj00gb34avg90ga2kbvv09bsxv2267j7agi0iq";
+  src = fetchFromGitHub {
+    owner = "macvim-dev";
+    repo = "macvim";
+    rev = "75aa7774645adb586ab9010803773bd80e659254";
+    sha256 = "0k04jimbms6zffh8i8fjm2y51q01m5kga2n4djipd3pxij1qy89y";
   };
 
   enableParallelBuilding = true;
@@ -54,7 +56,16 @@ stdenv.mkDerivation rec {
 
   makeFlags = ''PREFIX=$(out) CPPFLAGS="-Wno-error"'';
 
+  # This is unfortunate, but we need to use the same compiler as XCode,
+  # but XCode doesn't provide a way to configure the compiler.
+  #
+  # If you're willing to modify the system files, you can do this:
+  #   http://hamelot.co.uk/programming/add-gcc-compiler-to-xcode-6/
+  #
+  # But we don't have that option.
   preConfigure = ''
+    CC=/usr/bin/clang
+
     DEV_DIR=$(/usr/bin/xcode-select -print-path)/Platforms/MacOSX.platform/Developer
     configureFlagsArray+=(
       "--with-developer-dir=$DEV_DIR"

@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, cmake, boost, botan, snappy, libopus, libuuid, qt5
-, libXScrnSaver, openssl }:
+{ stdenv, fetchFromGitHub, cmake, boost, botan, snappy, libopus, libuuid
+, libXScrnSaver, openssl, qtbase, qtmultimedia }:
 
 stdenv.mkDerivation {
   name = "firestr-0.8";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0s2kdi8rw3i3f8gbiy0ykyi6xj5n8p80m0d1i86mhh8jpagvbfzb";
   };
 
-  buildInputs = [ cmake boost botan snappy libopus libuuid qt5.base qt5.multimedia
+  buildInputs = [ cmake boost botan snappy libopus libuuid qtbase qtmultimedia
                   libXScrnSaver openssl ];
 
   patches = ./return.patch;
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     description = "Grass computing platform";
     homepage = http://firestr.com/;
     license = licenses.gpl3;
-    maintainers = [ maintainers.emery ];
+    maintainers = [ maintainers.ehmry ];
     platforms = platforms.linux;
   };
 }

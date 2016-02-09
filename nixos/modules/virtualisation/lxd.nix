@@ -45,7 +45,7 @@ in
         after = [ "systemd-udev-settle.service" ];
 
         # TODO(wkennington): Add lvm2 and thin-provisioning-tools
-        path = with pkgs; [ acl rsync gnutar xz btrfsProgs ];
+        path = with pkgs; [ acl rsync gnutar xz btrfs-progs ];
 
         serviceConfig.ExecStart = "@${pkgs.lxd}/bin/lxd lxd --syslog --group lxd";
         serviceConfig.Type = "simple";

@@ -170,6 +170,15 @@ in rec {
       '';
     };
 
+    onFailure = mkOption {
+      default = [];
+      type = types.listOf types.str;
+      description = ''
+        A list of one or more units that are activated when
+        this unit enters the "failed" state.
+      '';
+    };
+
   };
 
 

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "minisign-${version}";
-  version = "0.4";
+  version = "0.6";
 
   src = fetchurl {
     url = "https://github.com/jedisct1/minisign/archive/${version}.tar.gz";
-    sha256 = "1k1dk6piaz8pw4b9zg55n4wcpyc301mkxb873njm8mki7r8raxnw";
+    sha256 = "029g8ian72fy07k73nf451dw1yggav6crjjc2x6kv4nfpq3pl9pj";
   };
 
   buildInputs = [ cmake libsodium ];

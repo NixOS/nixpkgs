@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam
-, dbus, acl, gmp
+, dbus, acl, gmp, darwin
 , libusb ? null, gnutls ? null, avahi ? null, libpaper ? null
 }:
 
@@ -16,8 +16,11 @@ stdenv.mkDerivation {
     sha256 = "1gaakz24k6x5nc09rmpiq0xq20j1qdjc3szag8qwmyi4ky6ydmg1";
   };
 
-  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls avahi libpaper ]
-    ++ optionals stdenv.isLinux [ pam dbus.libs acl ];
+  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls libpaper ]
+    ++ optionals stdenv.isLinux [ avahi pam dbus.libs acl ]
+    ++ optionals stdenv.isDarwin (with darwin; [
+      configd apple_sdk.frameworks.ApplicationServices
+    ]);
 
   propagatedBuildInputs = [ gmp ];
 
@@ -33,7 +36,11 @@ stdenv.mkDerivation {
   ] ++ optional (libusb != null) "--enable-libusb"
     ++ optional (gnutls != null) "--enable-ssl"
     ++ optional (avahi != null) "--enable-avahi"
-    ++ optional (libpaper != null) "--enable-libpaper";
+    ++ optional (libpaper != null) "--enable-libpaper"
+    ++ optionals stdenv.isDarwin [
+    "--with-bundledir=$out"
+    "--disable-launchd"
+  ];
 
   installFlags =
     [ # Don't try to write in /var at build time.

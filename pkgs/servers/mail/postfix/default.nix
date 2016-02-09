@@ -14,7 +14,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [db openssl cyrus_sasl bison perl];
 
-  patches = [ ./postfix-2.2.9-db.patch  ./postfix-2.2.9-lib.patch ./db-linux3.patch ];
+  patches = [
+    ./postfix-2.2.9-db.patch
+    ./postfix-2.2.9-lib.patch
+    ./db-linux3.patch
+    ./postfix-script-shell.patch
+  ];
 
   postPatch = ''
     sed -i -e s,/usr/bin,/var/run/current-system/sw/bin, \

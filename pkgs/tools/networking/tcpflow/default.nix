@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="tcpflow";
-    version="1.4.4";
+    version="1.4.5";
     name="${baseName}-${version}";
-    hash="0k2lxlvn1x8avkrijc22scrj4p2g5agfskbgfc2d0w9zgrg61xdn";
-    url="http://www.digitalcorpora.org/downloads/tcpflow/tcpflow-1.4.4.tar.gz";
-    sha256="0k2lxlvn1x8avkrijc22scrj4p2g5agfskbgfc2d0w9zgrg61xdn";
+    hash="0whcyykq710s84jyiaqp6rsr19prd0pr1g1pg74mif0ig51yv7zk";
+    url="http://www.digitalcorpora.org/downloads/tcpflow/tcpflow-1.4.5.tar.gz";
+    sha256="0whcyykq710s84jyiaqp6rsr19prd0pr1g1pg74mif0ig51yv7zk";
   };
   buildInputs = [
     openssl zlib libpcap boost cairo

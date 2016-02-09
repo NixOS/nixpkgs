@@ -1,5 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub, pkgconfig, perl, python, which, makeWrapper
-, libX11, libxcb, qt5, mesa
+, libX11, libxcb, mesa
+, qtbase, qtdeclarative, qtquickcontrols, qttools, qtx11extras
 , ffmpeg
 , libchardet
 , mpg123
@@ -26,7 +27,7 @@ assert pulseSupport -> libpulseaudio != null;
 assert cddaSupport -> libcdda != null;
 assert youtubeSupport -> youtube-dl != null;
 
-let qtPath = makeSearchPath "lib/qt5/qml" [ qt5.declarative qt5.quickcontrols ];
+let qtPath = makeSearchPath "lib/qt5/qml" [ qtdeclarative qtquickcontrols ];
 in
 
 stdenv.mkDerivation rec {
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with stdenv.lib;
                 [ libX11 libxcb mesa
-                  qt5.base qt5.x11extras
+                  qtbase qtx11extras
                   ffmpeg
                   libchardet
                   mpg123
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
                   libvdpau
                   libva
                   libbluray
+                  qtquickcontrols
                 ]
                 ++ optional jackSupport jack
                 ++ optional portaudioSupport portaudio
@@ -85,7 +87,7 @@ stdenv.mkDerivation rec {
                    ++ optional cddaSupport "--enable-cdda"
                    ;
 
-  nativeBuildInputs = [ pkgconfig perl python which qt5.tools makeWrapper ];
+  nativeBuildInputs = [ pkgconfig perl python which qttools makeWrapper ];
 
   enableParallelBuilding = true;
 

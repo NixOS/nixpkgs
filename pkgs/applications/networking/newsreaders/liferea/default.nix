@@ -6,14 +6,14 @@
 }:
 
 let pname = "liferea";
-    version = "1.10.16";
+    version = "1.10.18";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${name}.tar.bz2";
-    sha256 = "0b8cvlyiamc4hwjcxzs0h3mk3gxnmnwyi79mjv36601xgfjs5f9j";
+    sha256 = "0wpinar2cxyzq2j7ff7lznc08f0n6qjdm9aavsarbgdpaf2s1xvq";
   };
 
   buildInputs = with gst_all_1; [
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
+  patches = [ ./liferea-fix-notification-header-location.patch ];
+
   preFixup = ''
     for f in "$out"/bin/*; do
       wrapProgram "$f" \
@@ -37,12 +39,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
-    description = "A GTK-based news feed agregator";
+  meta = with stdenv.lib; {
+    description = "A GTK-based news feed aggregator";
     homepage = http://lzone.de/liferea/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ vcunat romildo ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ vcunat romildo ];
+    platforms = platforms.linux;
 
     longDescription = ''
       Liferea (Linux Feed Reader) is an RSS/RDF feed reader.

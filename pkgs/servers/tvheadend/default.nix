@@ -1,9 +1,9 @@
-{avahi, dbus, fetchurl, git, gzip, libav, libiconv, openssl, pkgconfig, python
+{avahi, dbus, fetchurl, git, gnutar, gzip, libav, libiconv, openssl, pkgconfig, python
 , stdenv, which, zlib}:
 
 with stdenv.lib;
 
-let version = "4.0.6";
+let version = "4.0.8";
     pkgName = "tvheadend";
 
 in
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/tvheadend/tvheadend/archive/v${version}.tar.gz";
-    sha256 = "05jidg7jma3mban40iy1bg3sirw6crscxkd8b70if4kjlf86i31l";
+    sha256 = "0k4g7pvfyk4bxpsjdwv7bmbygbp7gfg9wrr2aqb099ncbz18bx04";
   };
 
   enableParallelBuilding = true;
@@ -22,10 +22,13 @@ stdenv.mkDerivation rec {
   # cannot happen during build.
   configureFlags = [ "--disable-dvbscan" ];
 
-  buildInputs = [ avahi dbus git gzip libav libiconv openssl pkgconfig python
+  buildInputs = [ avahi dbus git gnutar gzip libav libiconv openssl pkgconfig python
     which zlib ];
 
-  preConfigure = "patchShebangs ./configure";
+  preConfigure = ''
+    patchShebangs ./configure
+    substituteInPlace src/config.c --replace /usr/bin/tar ${gnutar}/bin/tar
+  '';
 
   meta = {
     description = "TV steaming server";

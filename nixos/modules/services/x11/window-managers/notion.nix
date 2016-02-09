@@ -8,13 +8,7 @@ in
 
 {
   options = {
-    services.xserver.windowManager.notion = {
-      enable = mkOption {
-        default = false;
-        example = true;
-        description = "Enable the notion tiling window manager.";
-      };
-    };
+    services.xserver.windowManager.notion.enable = mkEnableOption "notion";
   };
 
   config = mkIf cfg.enable {

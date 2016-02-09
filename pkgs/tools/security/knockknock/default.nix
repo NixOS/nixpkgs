@@ -14,6 +14,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pycrypto ];
 
   patchPhase = ''
+    sed -i '/build\//d' setup.py
     substituteInPlace setup.py --replace "/etc" "$out/etc"
     substituteInPlace knockknock.py --replace 'existsInPath("hping3")' '"${hping}/bin/hping3"'
   '';
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     homepage    = "http://www.thoughtcrime.org/software/knockknock/";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ copumpkin ];
-    platforms   = with platforms; linux;
+    platforms   = platforms.linux;
   };
 }
 

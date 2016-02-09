@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       cc-by-sa-25 /* media */
     ];
     maintainers = with maintainers; [ astsmtl ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
     broken = true;
   };
 }

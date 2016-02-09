@@ -1,17 +1,17 @@
 { stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  version = "0.6.0";
+  version = "0.8.1";
   name = "vdirsyncer-${version}";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://pypi.python.org/packages/source/v/vdirsyncer/${name}.tar.gz";
-    sha256 = "1mb0pws5vsgnmyp5dp5m5jvgl6jcvdamxjz7wmgvxkw6n1vrcahd";
+    sha256 = "1abflqw6x30xd2dlj58cr5n62x98kc0ia9f9vr8l64k2z1fjlq78";
   };
 
   propagatedBuildInputs = with pythonPackages; [
-    click
+    click click-log click-threading
     lxml
     setuptools
     setuptools_scm

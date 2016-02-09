@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
         else
         requireFile {
             url = "http://backstage.renoise.com/frontend/app/index.html#/login";
-            name = "rns_3_0_1_reg_x86_64.tar.gz";
-            sha256 = "1swax2jz0gswdpzz8alwjfd8rhigc2yfspj7p8wvdvylqrf7n8q7";
+            name = "rns_3_0_1_linux_x86_64.tar.gz";
+            sha256 = "1yb5w5jrg9dk9fg5rfvfk6p0rxn4r4i32vxp2l9lzhbs02pv15wd";
         }
     else if builtins.currentSystem == "i686-linux" then
         if demo then

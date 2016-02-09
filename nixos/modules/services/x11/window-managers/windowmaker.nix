@@ -8,10 +8,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.windowmaker.enable = mkOption {
-      default = false;
-      description = "Enable the Windowmaker window manager.";
-    };
+    services.xserver.windowManager.windowmaker.enable = mkEnableOption "windowmaker";
   };
 
   ###### implementation

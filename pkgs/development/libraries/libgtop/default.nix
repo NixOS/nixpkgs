@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, glib, pkgconfig, perl, intltool }:
+{ stdenv, fetchurl, glib, pkgconfig, perl, intltool, gobjectIntrospection }:
 stdenv.mkDerivation {
-  name = "libgtop-2.28.5";
+  name = "libgtop-2.32.0";
 
   src = fetchurl {
-    url = mirror://gnome/sources/libgtop/2.28/libgtop-2.28.5.tar.xz;
-    sha256 = "0hik1aklcn79irgw1xf7d6cfkw8hzmy46r9jyfhp32aawisc24n8";
+    url = mirror://gnome/sources/libgtop/2.32/libgtop-2.32.0.tar.xz;
+    sha256 = "13hpml2vfm23816qggr5fvxj75ndb1dq4rgmi7ik6azj69ij8hw4";
   };
 
   propagatedBuildInputs = [ glib ];
-  nativeBuildInputs = [ pkgconfig perl intltool ];
+  nativeBuildInputs = [ pkgconfig perl intltool gobjectIntrospection ];
 }

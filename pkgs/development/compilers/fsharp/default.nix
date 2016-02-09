@@ -4,15 +4,17 @@
 
 stdenv.mkDerivation rec {
   name = "fsharp-${version}";
-  version = "3.1.2.5";
+  version = "4.0.0.4";
 
   src = fetchurl {
     url = "https://github.com/fsharp/fsharp/archive/${version}.tar.gz";
-    sha256 = "1j6lnzvhj8fj1csb9am9xcrmmph6v3jyangkq8n1yp3dr6yxqzh1";
+    sha256 = "1m9pwr4xjl3ikaf3pzsa4pb3pr533xa0v34y2cy4pjcc6j0f71av";
   };
 
   buildInputs = [ mono pkgconfig dotnetbuildhelpers autoconf automake which ];
+
   configurePhase = ''
+    sed -i '988d' src/FSharpSource.targets
     substituteInPlace ./autogen.sh --replace "/usr/bin/env sh" "/bin/sh"
     ./autogen.sh --prefix $out
   '';

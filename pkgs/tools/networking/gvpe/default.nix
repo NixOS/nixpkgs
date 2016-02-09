@@ -1,33 +1,30 @@
-a @ { openssl, gmp, nettools, iproute, zlib, ... } :
-let
-  s = import ./src-for-default.nix;
-  buildInputs = with a; [
-    openssl gmp zlib
-  ];
-in
-rec {
-  src = a.fetchUrlFromSrcInfo s;
+{ stdenv, fetchurl, openssl, gmp, zlib, iproute, nettools }:
 
-  inherit (s) name;
-  inherit buildInputs;
+stdenv.mkDerivation rec {
+  name = "gvpe-${version}";
+  version = "2.25";
+
+  src = fetchurl {
+    url = "http://ftp.gnu.org/gnu/gvpe/gvpe-${version}.tar.gz";
+    sha256 = "1gsipcysvsk80gvyn9jnk9g0xg4ng9yd5zp066jnmpgs52d2vhvk";
+  };
+
+  buildInputs = [ openssl gmp zlib ];
+
   configureFlags = [
     "--enable-tcp"
     "--enable-http-proxy"
     "--enable-dns"
     ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "preBuild" "doMakeInstall"];
-  preBuild = a.fullDepEntry (''
-    sed -e 's@"/sbin/ifconfig.*"@"${a.iproute}/sbin/ip link set $IFNAME address $MAC mtu $MTU"@' -i src/device-linux.C
-    sed -e 's@/sbin/ifconfig@${a.nettools}/sbin/ifconfig@g' -i src/device-*.C
-  '') ["minInit" "doUnpack"];
+  preBuild = ''
+    sed -e 's@"/sbin/ifconfig.*"@"${iproute}/sbin/ip link set $IFNAME address $MAC mtu $MTU"@' -i src/device-linux.C
+    sed -e 's@/sbin/ifconfig@${nettools}/sbin/ifconfig@g' -i src/device-*.C
+  '';
 
   meta = {
-    description = "A proteted multinode virtual network";
-    maintainers = [
-      a.lib.maintainers.raskin
-    ];
-    platforms = with a.lib.platforms; linux ++ freebsd;
+    description = "A protected multinode virtual network";
+    maintainers = [ stdenv.lib.maintainers.raskin ];
+    platforms = with stdenv.lib.platforms; linux ++ freebsd;
   };
 }

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, sg3_utils, udev, glib, dbus, dbus_glib
 , polkit, parted, lvm2, libatasmart, intltool, libuuid, mdadm
-, libxslt, docbook_xsl, utillinux }:
+, libxslt, docbook_xsl, utillinux, libgudev }:
 
 stdenv.mkDerivation rec {
   name = "udisks-1.0.5";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wbg3jrv8limdgvcygf4dqin3y6d30y9pcmmk711vq571vmq5v7j";
   };
 
-  patches = [ ./purity.patch ./no-pci-db.patch ];
+  patches = [ ./purity.patch ./no-pci-db.patch ./glibc.patch ];
 
   preConfigure =
     ''
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     '';
 
   buildInputs =
-    [ sg3_utils udev glib dbus dbus_glib polkit parted
+    [ sg3_utils udev glib dbus dbus_glib polkit parted libgudev
       lvm2 libatasmart intltool libuuid libxslt docbook_xsl
     ];
 

@@ -1,16 +1,14 @@
-{ stdenv, fetchFromGitHub, gnutls33, autoreconfHook }:
+{ stdenv, fetchurl, gnutls33, autoreconfHook }:
 
 let
-  version = "1.99.13";
+  version = "1.99.15";
 in
 stdenv.mkDerivation {
   name = "inadyn-${version}";
 
-  src = fetchFromGitHub {
-    repo = "inadyn";
-    owner = "troglobit";
-    rev = version;
-    sha256 = "19z8si66b2kwb7y29qpd8y45rhg5wrycwkdgjqqp98sg5yq8p7v0";
+  src = fetchurl {
+    url = "https://github.com/troglobit/inadyn/releases/download/${version}/inadyn-${version}.tar.xz";
+    sha256 = "05f7k9wpr0fn44y0pvdrv8xyilygmq3kjhvrwlj6dgg9ackdhkmm";
   };
 
   preConfigure = ''

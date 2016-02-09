@@ -17,7 +17,7 @@ trap "exitHandler" EXIT
 # fetch the trace and the drvPath of the attribute.
 nix-instantiate $NIXPKGS -A $attr --show-trace > "$tmp/drvPath" 2> "$tmp/trace" || {
   cat 1>&2 - "$tmp/trace" <<EOF
-An error occured while evaluating $attr.
+An error occurred while evaluating $attr.
 EOF
   exit 1
 }

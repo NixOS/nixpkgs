@@ -15,11 +15,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchurl {
     url = "https://github.com/golang/go/archive/go${version}.tar.gz";
-    sha256 = "1xd1nd1li7pdl72vq8zkh6m7ms3ajgyqz9a5d61gagm0cgj8zilz";
+    sha256 = "1n2niq0147pqflqh8j1s5wv8aq3vlh58ni3bp9add261z5q1g50k";
   };
 
   # perl is used for testing go vet
@@ -74,8 +74,14 @@ stdenv.mkDerivation rec {
     sed -i 's,strings.Contains(.*sysctl.*,true {,' src/cmd/dist/util.go
     sed -i 's,"/etc","'"$TMPDIR"'",' src/os/os_test.go
     sed -i 's,/_go_os_test,'"$TMPDIR"'/_go_os_test,' src/os/path_test.go
+    sed -i '/TestCgoLookupIP/areturn' src/net/cgo_unix_test.go
+    sed -i '/TestChdirAndGetwd/areturn' src/os/os_test.go
     sed -i '/TestRead0/areturn' src/os/os_test.go
+    sed -i '/TestNohup/areturn' src/os/signal/signal_test.go
     sed -i '/TestSystemRoots/areturn' src/crypto/x509/root_darwin_test.go
+
+    sed -i '/TestGoInstallRebuildsStalePackagesInOtherGOPATH/areturn' src/cmd/go/go_test.go
+    sed -i '/TestBuildDashIInstallsDependencies/areturn' src/cmd/go/go_test.go
 
     sed -i '/TestDisasmExtld/areturn' src/cmd/objdump/objdump_test.go
 

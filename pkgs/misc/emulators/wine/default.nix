@@ -6,17 +6,22 @@
 # };
 # Make additional configurations on demand:
 # wine.override { wineBuild = "wine32"; wineRelease = "staging"; };
-{ lib, pkgs, system, callPackage, wineUnstable,
+{ lib, pkgs, system, callPackage,
   wineRelease ? "stable",
   wineBuild ? (if system == "x86_64-linux" then "wineWow" else "wine32"),
+  pulseaudioSupport ? false,
   libtxc_dxtn_Name ? "libtxc_dxtn_s2tc" }:
 
-if wineRelease == "staging" then
+let wine-build = build: release:
+      lib.getAttr build (callPackage ./packages.nix {
+        wineRelease = release;
+        inherit pulseaudioSupport;
+      });
+
+in if wineRelease == "staging" then
   callPackage ./staging.nix {
     inherit libtxc_dxtn_Name;
-    wine = wineUnstable;
+    wineUnstable = wine-build wineBuild "unstable";
   }
 else
-  lib.getAttr wineBuild (callPackage ./packages.nix {
-    inherit wineRelease;
-  })
+  wine-build wineBuild wineRelease

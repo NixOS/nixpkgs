@@ -106,16 +106,16 @@ rec {
 
   anyedittools = buildEclipsePlugin rec {
     name = "anyedit-${version}";
-    version = "2.4.15.201504172030";
+    version = "2.6.0.201511291145";
 
     srcFeature = fetchurl {
       url = "http://andrei.gmxhome.de/eclipse/features/AnyEditTools_${version}.jar";
-      sha256 = "19hbwgqn02ghflbcp5cw3qy203mym5kwgzq4xrn0xcl8ckl5s2pp";
+      sha256 = "1vllci75qcd28b6hn2jz29l6cabxx9ql5i6l9cwq9rxp49dhc96b";
     };
 
     srcPlugin = fetchurl {
-      url = "http://dl.bintray.com/iloveeclipse/plugins/de.loskutov.anyedit.AnyEditTools_${version}.jar";
-      sha256 = "1i3ghf2mhdfhify30hlyxqmyqcp40pkd5zhsiyg6finn4w81sxv2";
+      url = "https://github.com/iloveeclipse/anyedittools/releases/download/2.6.0/de.loskutov.anyedit.AnyEditTools_${version}.jar";
+      sha256 = "0mgq0ylfa7srjf7azyx0kbahlsjf0sdpazqphzx4f0bfn1l328s4";
     };
 
     meta = with stdenv.lib; {
@@ -152,12 +152,12 @@ rec {
 
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
-    version = "8.7.0";
+    version = "8.8.0";
 
     src = fetchzip {
       stripRoot = false;
-      url = "http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/8.7/${name}.zip";
-      sha256 = "0qpcjcl6n98x7ys4qz8p1x5hhk2ydrgh8w3r1kqk0zc7liqrx7vg";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/8.8/${name}.zip";
+      sha256 = "1i1m7g5128q21njgrkiw71y4vi4aqzz8xdd4iv80j3nsvhbv6cnm";
     };
 
     meta = with stdenv.lib; {
@@ -171,12 +171,12 @@ rec {
 
   checkstyle = buildEclipseUpdateSite rec {
     name = "checkstyle-${version}";
-    version = "6.11.1.201510102004";
+    version = "6.14.0.201601142217";
 
     src = fetchzip {
       stripRoot = false;
-      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.11.1/net.sf.eclipsecs-updatesite_${version}-bin.zip";
-      sha256 = "0l9nfx7a3qdx1pvjgc6ck4rxh7yrvqsskr190yrxxwmpnyj9cjs4";
+      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.14.0/net.sf.eclipsecs-updatesite_${version}-bin.zip";
+      sha256 = "0ysxir1fv0mb9xnidc9hv6llnk48lkav0sryjbx7pw7vy1f8nd4c";
     };
 
     meta = with stdenv.lib; {
@@ -209,6 +209,45 @@ rec {
       license = licenses.epl10;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  cup = buildEclipsePluginBase rec {
+    name = "cup-${version}";
+    version = "1.0.0.201412081321";
+
+    srcFeature = fetchurl {
+      url = "http://www2.in.tum.de/projects/cup/eclipse/features/CupEclipsePluginFeature_${version}.jar";
+      sha256 = "353513445f77ed144687bafc20ab85dc31f2f95ffdc47f102ab773ab0b7afb8b";
+    };
+
+    srcPlugin1 = fetchurl {
+      url = "http://www2.in.tum.de/projects/cup/eclipse/plugins/CupReferencedLibraries_${version}.jar";
+      sha256 = "082b5ed8730ad065efaac6ea2812dae15669ae74a49778911125b171bea41187";
+    };
+
+    srcPlugin2 = fetchurl {
+      url = "http://www2.in.tum.de/projects/cup/eclipse/plugins/de.tum.in.www2.CupPlugin_${version}.jar";
+      sha256 = "6b67937fa11944b0330173a9d8564a19eccd705e76b96291d80077a1d7344939";
+    };
+
+    srcs = [ srcFeature srcPlugin1 srcPlugin2 ];
+
+    phases = [ "installPhase" ];
+
+    installPhase = ''
+      dropinDir="$out/eclipse/dropins/${name}"
+      mkdir -p $dropinDir/features
+      unzip ${srcFeature} -d $dropinDir/features/
+      mkdir -p $dropinDir/plugins
+      cp -v ${srcPlugin1} ${srcPlugin2} $dropinDir/plugins/
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = http://www2.cs.tum.edu/projects/cup/eclipse.php;
+      description = "IDE for developing CUP based parsers";
+      platforms = platforms.all;
+      maintainers = [ maintainers.romildo ];
     };
   };
 
@@ -279,12 +318,12 @@ rec {
 
   gnuarmeclipse = buildEclipseUpdateSite rec {
     name = "gnuarmeclipse-${version}";
-    version = "2.8.1-201504061754";
+    version = "2.11.1-201512141335";
 
     src = fetchzip {
       stripRoot = false;
-      url = "mirror://sourceforge/project/gnuarmeclipse/Current%20Releases/2.x/ilg.gnuarmeclipse.repository-${version}.zip";
-      sha256 = "08jsnyis1ry62cidr9sl11ylyxbkwh834nlhx6qp31gh1l439px9";
+      url = "https://github.com/gnuarmeclipse/plug-ins/releases/download/v${version}/ilg.gnuarmeclipse.repository-${version}.zip";
+      sha256 = "1ijvnahfw2wc860la7kj8b52z2sfm8k1yk62bl0d4lq60y3aycg9";
     };
 
     meta = with stdenv.lib; {
@@ -298,12 +337,12 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.5";
+    version = "4.5.1";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5-201506032000/org.eclipse.jdt-4.5.zip";
-      sha256 = "0zrdn26f7qsms2xfiyc049bhhh0czsbf989pgyq736b8hfmmh9iy";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5.1-201509040015/org.eclipse.jdt-4.5.1.zip";
+      sha256 = "0nxi552vvpjalnsqhc0zi6fgaj9p22amxsiczpv7za4kr7m47x73";
     };
 
     meta = with stdenv.lib; {
@@ -317,11 +356,11 @@ rec {
 
   scala = buildEclipseUpdateSite rec {
     name = "scala-${version}";
-    version = "4.1.1.20150911";
+    version = "4.3.0.201512011535";
 
     src = fetchzip {
       url = "http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/update-site.zip";
-      sha256 = "03g24sjivm7kzy64wwjs4ihf9vrb6703lb7bx3jafxzcwqm0pj1i";
+      sha256 = "1j0qw4frkvvmyl64wdbznglgjjr9sfg8wb9npar0x7qv1hj4hw3x";
     };
 
     meta = with stdenv.lib; {
@@ -335,16 +374,16 @@ rec {
 
   testng = buildEclipsePlugin rec {
     name = "testng-${version}";
-    version = "6.9.8.201510130443";
+    version = "6.9.10.201512020421";
 
     srcFeature = fetchurl {
-      url = "http://beust.com/eclipse/features/org.testng.eclipse_${version}.jar";
-      sha256 = "0g0dva1zpqk0rz0vgr025g2cfc47snr857fsqcrssmp9qmy8x0i0";
+      url = "http://beust.com/eclipse-old/eclipse_${version}/features/org.testng.eclipse_${version}.jar";
+      sha256 = "17y0cb1xprldjav14iy2sinv7lcw4xnjs2fwz9gl41m9m1c0hajk";
     };
 
     srcPlugin = fetchurl {
-      url = "http://beust.com/eclipse/plugins/org.testng.eclipse_${version}.jar";
-      sha256 = "16mnvqkakixqp3bcnyx6x2iwkhnv3k4q561c97kssz98xsrr8f54";
+      url = "http://beust.com/eclipse-old/eclipse_${version}/plugins/org.testng.eclipse_${version}.jar";
+      sha256 = "1iwq0ifk9l56z11vhy5yscvl8l1xk6igkp103v9vwvcx6nlmkfgc";
     };
 
     meta = with stdenv.lib; {

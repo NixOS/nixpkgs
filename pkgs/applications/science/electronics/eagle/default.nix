@@ -1,24 +1,34 @@
 { stdenv, fetchurl, makeDesktopItem, patchelf, zlib, freetype, fontconfig
 , openssl, libXrender, libXrandr, libXcursor, libX11, libXext, libXi
+, libxcb, cups, xkeyboardconfig
 }:
 
 let
 
   libPath = stdenv.lib.makeLibraryPath
     [ zlib freetype fontconfig openssl libXrender libXrandr libXcursor libX11
-      libXext libXi
+      libXext libXi libxcb cups
     ];
 
 in
 
 stdenv.mkDerivation rec {
   name = "eagle-${version}";
-  version = "6.6.0";
+  version = "7.5.0";
 
-  src = fetchurl {
-    url = "ftp://ftp.cadsoft.de/eagle/program/6.6/eagle-lin-${version}.run";
-    sha256 = "0m5289daah85b2rwpivnh2z1573v6j4alzjy9hg78fkb9jdgbn0x";
-  };
+  src =
+    if stdenv.system == "i686-linux" then
+      fetchurl {
+        url = "ftp://ftp.cadsoft.de/eagle/program/7.5/eagle-lin32-${version}.run";
+        sha256 = "1yfpfv2bqppc95964dhn38g0hq198wnz88lq2dmh517z7jlq9j5g";
+      }
+    else if stdenv.system == "x86_64-linux" then
+      fetchurl {
+        url = "ftp://ftp.cadsoft.de/eagle/program/7.5/eagle-lin64-${version}.run";
+        sha256 = "0msd0sn8yfln96mf7j5rc3b8amprxn87vmpq4wsz2cnmgd8xq0s9";
+      }
+    else
+      throw "Unsupported system: ${stdenv.system}";
 
   desktopItem = makeDesktopItem {
     name = "eagle";
@@ -65,6 +75,7 @@ stdenv.mkDerivation rec {
     #!${stdenv.shell}
     export LD_LIBRARY_PATH="${stdenv.cc.cc}/lib:${libPath}"
     export LD_PRELOAD="$out/lib/eagle_fixer.so"
+    export QT_XKB_CONFIG_ROOT="${xkeyboardconfig}/share/X11/xkb"
     exec "$dynlinker" "$out/eagle-${version}/bin/eagle" "\$@"
     EOF
     chmod a+x "$out"/bin/eagle

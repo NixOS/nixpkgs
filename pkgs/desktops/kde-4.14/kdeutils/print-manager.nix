@@ -1,7 +1,7 @@
 { kde, kdelibs
-, pythonPackages, cups, pyqt4, pykde4, pycups, system_config_printer }:
+, pythonPackages, cups, pyqt4, pykde4, pycups, system-config-printer }:
 
-let s_c_p = system_config_printer.override { withGUI = false; }; in
+let s_c_p = system-config-printer.override { withGUI = false; }; in
 
 kde rec {
   buildInputs = [ kdelibs pythonPackages.python pythonPackages.wrapPython

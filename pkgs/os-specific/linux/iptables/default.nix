@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "iptables-${version}";
-  version = "1.4.21";
+  version = "1.4.21"; # before updating check #12178
 
   src = fetchurl {
     url = "http://www.netfilter.org/projects/iptables/files/${name}.tar.bz2";

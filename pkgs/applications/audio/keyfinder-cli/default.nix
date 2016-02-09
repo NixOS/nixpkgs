@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, libav, libkeyfinder }:
 
-let version = "2015-09-13"; in
 stdenv.mkDerivation rec {
   name = "keyfinder-cli-${version}";
+  version = "2015-09-13";
 
   src = fetchFromGitHub {
     repo = "keyfinder-cli";
@@ -13,12 +13,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libav libkeyfinder ];
 
-  makeFlagsArray = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    inherit version;
     inherit (src.meta) homepage;
     description = "Musical key detection for digital audio (command-line tool)";
     longDescription = ''

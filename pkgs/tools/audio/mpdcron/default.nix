@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, automake, libtool, pkgconfig, glib, libdaemon, buildRubyGem
+{ stdenv, fetchgit, autoconf, automake, libtool, pkgconfig, glib, libdaemon
 , mpd_clientlib, curl, sqlite, ruby, bundlerEnv, libnotify, pandoc }:
 
 let

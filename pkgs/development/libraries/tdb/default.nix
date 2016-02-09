@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tdb-1.3.7";
+  name = "tdb-1.3.8";
 
   src = fetchurl {
     url = "mirror://samba/tdb/${name}.tar.gz";
-    sha256 = "04k42cjvjc5wsqsqf44397hclq3nxlm9avjcsbz2hsn01k59akd6";
+    sha256 = "1cg6gmpgn36dd4bsp3j9k3hyrm87d8hdigqyyqxw5jga4w2aq186";
   };
 
   buildInputs = [

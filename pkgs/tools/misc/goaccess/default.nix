@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, geoip, ncurses, glib }:
+{ stdenv, fetchurl, pkgconfig, geoipWithDatabase, ncurses, glib }:
 
 let
   version = "0.9.4";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig
-    geoip
+    geoipWithDatabase
     ncurses
     glib
   ];

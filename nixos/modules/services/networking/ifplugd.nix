@@ -66,23 +66,17 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    jobs.ifplugd =
-      { description = "Network interface connectivity monitor";
-
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
-
-        exec =
-          ''
-            ${ifplugd}/sbin/ifplugd --no-daemon --no-startup --no-shutdown \
-              ${if config.networking.interfaceMonitor.beep then "" else "--no-beep"} \
-              --run ${plugScript}
-          '';
-      };
+    systemd.services.ifplugd = {
+      description = "Network interface connectivity monitor";
+      after = [ "network-interfaces.target" ];
+      wantedBy = [ "multi-user.target" ];
+      script = ''
+        ${ifplugd}/sbin/ifplugd --no-daemon --no-startup --no-shutdown \
+          ${if config.networking.interfaceMonitor.beep then "" else "--no-beep"} \
+          --run ${plugScript}
+      '';
+    };
 
     environment.systemPackages = [ ifplugd ];
-
   };
-
 }

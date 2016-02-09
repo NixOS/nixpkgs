@@ -25,17 +25,13 @@ with lib;
 
     environment.systemPackages = [pkgs.wicd];
 
-    jobs.wicd =
-      { startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
-
-        script =
-          "${pkgs.wicd}/sbin/wicd -f";
-      };
+    systemd.services.wicd = {
+      after = [ "network-interfaces.target" ];
+      wantedBy = [ "multi-user.target" ];
+      script = "${pkgs.wicd}/sbin/wicd -f";
+    };
 
     services.dbus.enable = true;
     services.dbus.packages = [pkgs.wicd];
-
   };
-
 }

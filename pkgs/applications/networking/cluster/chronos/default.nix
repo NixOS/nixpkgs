@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     license     = licenses.asl20;
     description = "Fault tolerant job scheduler for Mesos which handles dependencies and ISO8601 based schedules";
     maintainers = with maintainers; [ offline ];
-    platforms   = with platforms; unix;
+    platforms   = platforms.unix;
     broken = true; # doesn't build http://hydra.nixos.org/build/25768319
   };
 }

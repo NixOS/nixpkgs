@@ -146,7 +146,7 @@ in
 
         path =
           [ pkgs.sudo pkgs.vlan pkgs.nettools pkgs.iptables pkgs.qemu_kvm
-            pkgs.e2fsprogs pkgs.utillinux pkgs.multipath_tools pkgs.iproute
+            pkgs.e2fsprogs pkgs.utillinux pkgs.multipath-tools pkgs.iproute
             pkgs.bridge-utils
           ];
 

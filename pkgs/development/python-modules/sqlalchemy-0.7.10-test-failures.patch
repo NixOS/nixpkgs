@@ -31,19 +31,6 @@ index 416df5a..f07c9ec 100644
  
  .. changelog::
      :version: 0.7.10
-diff --git a/lib/sqlalchemy/__init__.py b/lib/sqlalchemy/__init__.py
-index 9a21a70..6523ccb 100644
---- a/lib/sqlalchemy/__init__.py
-+++ b/lib/sqlalchemy/__init__.py
-@@ -120,7 +120,7 @@
- __all__ = sorted(name for name, obj in locals().items()
-                  if not (name.startswith('_') or inspect.ismodule(obj)))
- 
--__version__ = '0.7.10'
-+__version__ = '0.7.11'
- 
- del inspect, sys
- 
 diff --git a/test/engine/test_execute.py b/test/engine/test_execute.py
 index 69b94f1..a37f684 100644
 --- a/test/engine/test_execute.py
