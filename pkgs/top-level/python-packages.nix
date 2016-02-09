@@ -14745,12 +14745,12 @@ in modules // {
   };
 
   pip = buildPythonPackage rec {
-    version = "7.1.2";
+    version = "8.0.2";
     name = "pip-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pip/pip-${version}.tar.gz";
-      sha256 = "0xx4aypfgchxdknxq7gyqghd8wb221zrzyqlbabzm32jy237j16a";
+      sha256 = "46f4bd0d8dfd51125a554568d646fe4200a3c2c6c36b9f2d06d2212148439521";
     };
 
     buildInputs = with self; [ mock scripttest virtualenv pytest ];
@@ -21399,11 +21399,11 @@ in modules // {
 
   wheel = buildPythonPackage rec {
     name = "wheel-${version}";
-    version = "0.26.0";
+    version = "0.29.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/w/wheel/${name}.tar.gz";
-      sha256 = "eaad353805c180a47545a256e6508835b65a8e830ba1093ed8162f19a50a530c";
+      sha256 = "1ebb8ad7e26b448e9caa4773d2357849bf80ff9e313964bcaf79cbf0201a1648";
     };
 
     buildInputs = with self; [ pytest pytestcov coverage ];
