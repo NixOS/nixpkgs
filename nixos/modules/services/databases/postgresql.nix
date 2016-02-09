@@ -177,7 +177,7 @@ in
 
     users.extraGroups.postgres.gid = config.ids.gids.postgres;
 
-    environment.systemPackages = [postgresql];
+    environment.systemPackages = [ postgresql ];
 
     systemd.services.postgresql =
       { description = "PostgreSQL Server";
@@ -187,35 +187,37 @@ in
 
         environment.PGDATA = cfg.dataDir;
 
-        path = [ pkgs.su postgresql ];
+        path = [ postgresql ];
 
         preStart =
           ''
+            # Create data directory.
+            if ! test -e ${cfg.dataDir}/PG_VERSION; then
+              mkdir -m 0700 -p ${cfg.dataDir}
+              rm -f ${cfg.dataDir}/*.conf
+              chown -R postgres:postgres ${cfg.dataDir}
+            fi
+          ''; # */
+
+        script =
+          ''
             # Initialise the database.
             if ! test -e ${cfg.dataDir}/PG_VERSION; then
-                mkdir -m 0700 -p ${cfg.dataDir}
-                rm -f ${cfg.dataDir}/*.conf
-                if [ "$(id -u)" = 0 ]; then
-                  chown -R postgres ${cfg.dataDir}
-                  su -s ${pkgs.stdenv.shell} postgres -c 'initdb -U root'
-                else
-                  # For non-root operation.
-                  initdb
-                fi
-                # See postStart!
-                touch "${cfg.dataDir}/.first_startup"
+              initdb -U root
+              # See postStart!
+              touch "${cfg.dataDir}/.first_startup"
             fi
-
             ln -sfn "${configFile}" "${cfg.dataDir}/postgresql.conf"
             ${optionalString (cfg.recoveryConfig != null) ''
               ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
                 "${cfg.dataDir}/recovery.conf"
             ''}
-          ''; # */
+
+             exec postgres ${toString flags}
+          '';
 
         serviceConfig =
-          { ExecStart = "@${postgresql}/bin/postgres postgres ${toString flags}";
-            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          { ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             User = "postgres";
             Group = "postgres";
             PermissionsStartOnly = true;
