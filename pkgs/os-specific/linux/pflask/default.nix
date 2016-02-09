@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   name = "pflask-${version}";
-  version = "git-2015-10-06";
-  rev = "1f575a73d796fbb92e8f2012ded7e97247f1c6c3";
+  version = "git-2015-12-17";
+  rev = "599418bb6453eaa0ccab493f9411f13726c1a636";
 
   src = fetchurl {
     url = "https://github.com/ghedo/pflask/archive/${rev}.tar.gz";
-    sha256 = "3518aa1e8fa35e059bd63956daed9d8c4115475b66b674d02ebc80484248ddbc";
+    sha256 = "2545fca37f9da484b46b6fb5e3a9bbba6526a9725189fe4af5227ef6e6fca440";
   };
 
   buildInputs = [ python ];
