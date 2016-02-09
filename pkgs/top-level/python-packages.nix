@@ -23343,7 +23343,18 @@ in modules // {
       export XDG_RUNTIME_DIR=/tmp
     '';
 
+    buildInputs = [
+      pkgs.asciidoc-full        # For building man page.
+    ];
+
     propagatedBuildInputs = with self; [ pkgs.gobjectIntrospection pkgs.gtk3 pyyaml pygobject3 pkgs.libnotify pkgs.udisks2 pkgs.gettext self.docopt ];
+
+    postBuild = "make -C doc";
+
+    postInstall = ''
+      mkdir -p $out/share/man/man8
+      cp -v doc/udiskie.8 $out/share/man/man8/
+    '';
 
     preFixup = ''
         wrapProgram "$out/bin/"* \
