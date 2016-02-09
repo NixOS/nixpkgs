@@ -4,7 +4,7 @@
 , gnash, flashplayer, hal-flash
 , MPlayerPlugin, gecko_mediaplayer, gst_all, xorg, libpulseaudio, libcanberra
 , supportsJDK, jrePlugin, icedtea_web
-, trezor-bridge, bluejeans, djview4
+, trezor-bridge, bluejeans, djview4, adobe-reader
 , google_talk_plugin, fribid, gnome3/*.gnome_shell*/
 }:
 
@@ -41,6 +41,7 @@ let
       ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome_shell
       ++ lib.optional (cfg.enableTrezor or false) trezor-bridge
       ++ lib.optional (cfg.enableBluejeans or false) bluejeans
+      ++ lib.optional (cfg.enableAdobeReader or false) adobe-reader
      );
   libs = [ gst_all.gstreamer gst_all.gst-plugins-base ]
          ++ lib.optionals (cfg.enableQuakeLive or false)
