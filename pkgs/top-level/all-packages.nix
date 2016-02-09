@@ -3944,7 +3944,7 @@ let
 
   gambit = callPackage ../development/compilers/gambit { };
 
-  gcc = gcc5;
+  gcc = gcc49;
 
   gcc_multi =
     if system == "x86_64-linux" then lowPrio (
@@ -4092,7 +4092,7 @@ let
     cross = null;
     libcCross = if crossSystem != null then libcCross else null;
 
-    isl = isl_0_15;
+    isl = isl_0_14;
   }));
 
   gfortran = if !stdenv.isDarwin then gfortran49
