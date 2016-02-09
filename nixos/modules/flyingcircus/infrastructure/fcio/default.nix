@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... }:
-# Configuration for running on FCIO infrastructure (i.e. not on vagrant)
+# Configuration for running on Flying Circus owned and operated infrastructure
+# (i.e. not on Vagrant but in DEV, RZOB, ...)
 
 with lib;
 
@@ -34,6 +35,10 @@ with lib;
   boot.supportedFilesystems = [ "xfs" ];
   boot.vesa = false;
   boot.consoleLogLevel = 0;
+
+  networking.hostName = if config.flyingcircus.enc ? name
+    then config.flyingcircus.enc.name
+    else "default";
 
   networking.useDHCP = true;
 
