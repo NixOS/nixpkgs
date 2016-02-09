@@ -13,7 +13,7 @@ with lib;
             enable = mkOption {
                 type = types.bool;
                 default = false;
-                description = "Enable Flying Circus old-world compatibility.";
+                description = "Enable Flying Circus Gentoo backwards compatibility.";
             };
 
         };
@@ -22,8 +22,8 @@ with lib;
 
     config = mkIf config.flyingcircus.compat.gentoo.enable {
 
-        jobs.fcio-stubs-compat = {
-            description = "Create FC IO stubs for gentoo compat.";
+        jobs.flyingcircus-stubs-compat = {
+            description = "Create stubs for old Flying Circus Gentoo backwards compatibility.";
             task = true;
 
             startOn = "started networking";

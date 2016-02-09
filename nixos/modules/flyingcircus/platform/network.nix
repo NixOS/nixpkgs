@@ -2,6 +2,8 @@
 
 let
 
+  cfg = config.flyingcircus;
+
   get_prefix_length = network:
     lib.toInt (builtins.elemAt (lib.splitString "/" network) 1);
 
@@ -145,52 +147,47 @@ in
   config = {
 
     services.udev.extraRules =
-      if lib.hasAttrByPath ["parameters" "interfaces"] config.fcio.enc
+      if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
       then
         toString
-        (get_udev_configuration config.fcio.enc.parameters.interfaces)
+        (get_udev_configuration cfg.enc.parameters.interfaces)
       else "";
 
     networking.domain = "gocept.net";
-    networking.hostName =
-      if config.fcio.enc ? name
-      then config.fcio.enc.name
-      else "default";
-
 
   networking.defaultGateway =
-    if lib.hasAttrByPath ["parameters" "interfaces"] config.fcio.enc
-    then get_default_gateway is_ip4 config.fcio.enc.parameters.interfaces
+    if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
+    then get_default_gateway is_ip4 cfg.enc.parameters.interfaces
     else null;
   networking.defaultGateway6 =
-    if lib.hasAttrByPath ["parameters" "interfaces"] config.fcio.enc
-    then get_default_gateway is_ip6 config.fcio.enc.parameters.interfaces
+    if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
+    then get_default_gateway is_ip6 cfg.enc.parameters.interfaces
     else null;
 
   # Only set nameserver if there is an enc set.
   networking.nameservers =
-  if lib.hasAttrByPath ["parameters" "location"] config.fcio.enc
+  if lib.hasAttrByPath ["parameters" "location"] cfg.enc
   then
-    if builtins.hasAttr config.fcio.enc.parameters.location ns_by_location
-    then builtins.getAttr config.fcio.enc.parameters.location ns_by_location
+    if builtins.hasAttr cfg.enc.parameters.location ns_by_location
+    then builtins.getAttr cfg.enc.parameters.location ns_by_location
     else []
   else [];
   networking.resolvconfOptions = "ndots:1 timeout:1 attempts:4 rotate";
 
   # If there is no enc data, we are probably not on FC platform.
   networking.search =
-    if lib.hasAttrByPath ["parameters" "location"] config.fcio.enc
-    then ["${config.fcio.enc.parameters.location}.gocept.net"
+    if lib.hasAttrByPath ["parameters" "location"] cfg.enc
+    then ["${cfg.enc.parameters.location}.gocept.net"
           "gocept.net"]
     else [];
 
   networking.interfaces =
-    if lib.hasAttrByPath ["parameters" "interfaces"] config.fcio.enc
-    then get_network_configuration config.fcio.enc.parameters.interfaces
+    if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
+    then get_network_configuration cfg.enc.parameters.interfaces
     else {};
 
   networking.localCommands =
-    if lib.hasAttrByPath ["parameters" "interfaces"] config.fcio.enc
+    if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
     then
       ''
         mkdir -p /etc/iproute2
@@ -205,7 +202,7 @@ in
         ip -6 rule add priority 32767 lookup default
 
         ${builtins.toString
-            (get_policy_routing config.fcio.enc.parameters.interfaces)}
+            (get_policy_routing cfg.enc.parameters.interfaces)}
       ''
       else "";
 

@@ -2,10 +2,6 @@
 
 import ./make-test.nix ({ pkgs, ...} :
 
-let
-
-
-
 in
 
 {
@@ -26,7 +22,7 @@ in
       imports =
         ["${modulesPath}/flyingcircus/vm-base-profile.nix"];
 
-      fcio.userdata = ''
+      flyingcircus.userdata = ''
     [{"login_shell": "/bin/bash", "uid": "bob", "home_directory": "/home/bob", "name": "Bob the Blob", "ssh_pubkey": ["ssh-rsa asdf bob"], "permissions": {"test": ["stats", "sudo-srv", "login", "admins"]}, "password": "{CRYPT}$6$FrY8Rmj2$asdffdsa", "gid": 100, "id": 1152, "class": "human"}]
 '';
       swapDevices = mkOverride 0

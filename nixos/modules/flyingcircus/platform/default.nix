@@ -17,7 +17,7 @@ let
       else default;
 
     enc =
-      get_enc config.fcio.enc_path
+      get_enc config.flyingcircus.enc_path
       (get_enc /etc/nixos/enc.json {});
 
 in
@@ -31,19 +31,19 @@ in
 
   options = {
 
-    fcio.enc = mkOption {
+    flyingcircus.enc = mkOption {
       default = null;
       type = types.nullOr types.attrs;
       description = "Essential node configuration";
     };
 
-    fcio.load_enc = mkOption {
+    flyingcircus.load_enc = mkOption {
       default = true;
       type = types.bool;
       description = "Automatically load ENC data?";
     };
 
-    fcio.enc_path = mkOption {
+    flyingcircus.enc_path = mkOption {
       default = /etc/nixos/enc.json;
       type = types.path;
       description = "Where to find the ENC json file.";
@@ -63,7 +63,7 @@ in
       https://hydra.flyingcircus.io
     ];
 
-    fcio.enc = lib.optionalAttrs config.fcio.load_enc enc;
+    flyingcircus.enc = lib.optionalAttrs config.flyingcircus.load_enc enc;
 
     users.motd = ''
         Welcome to the Flying Circus
@@ -133,8 +133,8 @@ in
         '';
 
     environment.etc = (
-      lib.optionalAttrs (lib.hasAttrByPath ["parameters" "directory_secret"] config.fcio.enc)
-      { "directory.secret".text = config.fcio.enc.parameters.directory_secret;
+      lib.optionalAttrs (lib.hasAttrByPath ["parameters" "directory_secret"] config.flyingcircus.enc)
+      { "directory.secret".text = config.flyingcircus.enc.parameters.directory_secret;
         "directory.secret".mode = "0600";}) //
       { "nixos/configuration.nix".text = lib.readFile ../files/etc_nixos_configuration.nix; };
   };
