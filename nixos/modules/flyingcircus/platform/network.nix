@@ -166,12 +166,12 @@ in
 
     # Only set nameserver if there is an enc set.
     networking.nameservers =
-    if lib.hasAttrByPath ["parameters" "location"] cfg.enc
-    then
-      if builtins.hasAttr cfg.enc.parameters.location ns_by_location
-      then builtins.getAttr cfg.enc.parameters.location ns_by_location
-      else []
-    else [];
+      if lib.hasAttrByPath ["parameters" "location"] cfg.enc
+      then
+        if builtins.hasAttr cfg.enc.parameters.location ns_by_location
+        then builtins.getAttr cfg.enc.parameters.location ns_by_location
+        else []
+      else [];
     networking.resolvconfOptions = "ndots:1 timeout:1 attempts:4 rotate";
 
     # If there is no enc data, we are probably not on FC platform.
