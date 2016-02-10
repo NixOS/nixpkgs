@@ -43,6 +43,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  crossAttrs.postPatch =
+    # there are tests using `strXXX_s` functions that are missing apparently
+    stdenv.lib.optionalString (stdenv.cross.libc or null == "msvcrt")
+      "sed '/^SUBDIRS =/s/ test / /' -i Makefile.in";
+
   meta = with lib; {
     homepage = http://poppler.freedesktop.org/;
     description = "A PDF rendering library";
