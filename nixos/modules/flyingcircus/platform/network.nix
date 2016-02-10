@@ -187,7 +187,12 @@ in
       else {};
 
     networking.localCommands =
-      if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
+      if
+        lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc &&
+        # In Vagrant the policy routing doesn't work. The outgoing traffic
+        # needs to go via the NATted device in any case.
+        lib.hasAttrByPath ["parameters" "location"] cfg.enc &&
+        cfg.enc.parameters.location != "vagrant"
       then
         ''
           mkdir -p /etc/iproute2

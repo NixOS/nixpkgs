@@ -18,6 +18,7 @@ Vagrant.configure("2") do |config|
     {
       fcio.enc = {
         parameters = {
+          location = "vagrant";
           interfaces = {
             fe = {
               bridged = false;
