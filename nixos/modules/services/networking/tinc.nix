@@ -95,6 +95,16 @@ in
             '';
           };
 
+          chroot = mkOption {
+            default = true;
+            type = types.bool;
+            description = ''
+              Change process root directory to the directory where the config file is located (/etc/tinc/netname/), for added security.
+              The chroot is performed after all the initialization is done, after writing pid files and opening network sockets.
+
+              Note that tinc can't run scripts anymore (such as tinc-down or host-up), unless it is setup to be runnable inside chroot environment.
+            '';
+          };
         };
       };
     };
@@ -166,7 +176,7 @@ in
           fi
         '';
         script = ''
-          tincd -R -D -U tinc.${network} -n ${network} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}
+          tincd -D -U tinc.${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}
         '';
       })
     );
