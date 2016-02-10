@@ -35,6 +35,14 @@ with lib;
         Whether or not to enable fastcgi passing to php-fpm or not.
       '';
     };
+
+    extraConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        These lines go to the end of the location verbatim.
+      '';
+    };
   };
 }
 
