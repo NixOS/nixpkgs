@@ -6,11 +6,12 @@ stdenv.mkDerivation rec {
   version = "1.5.8";
 
   meta = with stdenv.lib; {
-    description = "IBus interface to the anthy input method";
-    homepage    = http://wiki.github.com/fujiwarat/ibus-anthy;
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ gebner ericsagnes ];
+    isIbusEngine = true;
+    description  = "IBus interface to the anthy input method";
+    homepage     = http://wiki.github.com/fujiwarat/ibus-anthy;
+    license      = licenses.gpl2Plus;
+    platforms    = platforms.linux;
+    maintainers  = with maintainers; [ gebner ericsagnes ];
   };
 
   preConfigure = "./autogen.sh --prefix=$out";

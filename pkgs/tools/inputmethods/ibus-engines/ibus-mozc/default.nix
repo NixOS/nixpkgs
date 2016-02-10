@@ -11,11 +11,12 @@ in clangStdenv.mkDerivation rec {
   version = "2.17.2313.102";
 
   meta = with clangStdenv.lib; {
-    description = "Japanese input method from Google";
-    homepage = http://code.google.com/p/mozc/;
-    license = licenses.free;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ gebner ericsagnes ];
+    isIbusEngine = true;
+    description  = "Japanese input method from Google";
+    homepage     = http://code.google.com/p/mozc/;
+    license      = licenses.free;
+    platforms    = platforms.linux;
+    maintainers  = with maintainers; [ gebner ericsagnes ];
   };
 
   nativeBuildInputs = [ gyp which ninja python pkgconfig ];

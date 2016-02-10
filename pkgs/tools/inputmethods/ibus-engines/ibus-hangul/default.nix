@@ -29,10 +29,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Ibus Hangul engine.";
-    homepage    = https://github.com/choehwanjin/ibus-hangul;
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ ericsagnes ];
+    isIbusEngine = true;
+    description  = "Ibus Hangul engine.";
+    homepage     = https://github.com/choehwanjin/ibus-hangul;
+    license      = licenses.gpl2;
+    platforms    = platforms.linux;
+    maintainers  = with maintainers; [ ericsagnes ];
   };
 }
