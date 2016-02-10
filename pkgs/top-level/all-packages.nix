@@ -3639,6 +3639,8 @@ let
 
   volumeicon = callPackage ../tools/audio/volumeicon { };
 
+  waf = callPackage ../development/tools/build-managers/waf { };
+
   wakelan = callPackage ../tools/networking/wakelan { };
 
   wavemon = callPackage ../tools/networking/wavemon { };
@@ -12989,6 +12991,8 @@ let
     inherit (gnome3) libgee;
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
+
+  pflask = callPackage ../os-specific/linux/pflask {};
 
   photoqt = qt5.callPackage ../applications/graphics/photoqt { };
 
