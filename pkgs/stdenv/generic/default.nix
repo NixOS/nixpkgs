@@ -196,7 +196,13 @@ let
           buildInputs = if crossConfig != null then buildInputs' else [];
           propagatedBuildInputs = if crossConfig != null then propagatedBuildInputs else [];
           # Inputs built by the usual native compiler.
-          nativeBuildInputs = nativeBuildInputs ++ (if crossConfig == null then buildInputs' else []);
+          nativeBuildInputs = nativeBuildInputs
+            ++ lib.optionals (crossConfig == null) buildInputs'
+            ++ lib.optional
+                (result.isCygwin
+                  || (crossConfig != null && lib.hasSuffix "mingw32" crossConfig))
+                ../../build-support/setup-hooks/win-dll-link.sh
+            ;
           propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
             (if crossConfig == null then propagatedBuildInputs else []);
         } // ifDarwin {
