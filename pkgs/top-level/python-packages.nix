@@ -18549,6 +18549,13 @@ in modules // {
 
     LC_ALL="en_US.UTF-8";
 
+    # Exclude "test_image.py" because the Lena function/image was removed from SciPy since 0.17
+    # Should be fixed in next release.
+    # Using the -I switch broke nosetests...?
+    patchPhase = ''
+      rm sklearn/feature_extraction/tests/test_image.py
+    '';
+
     checkPhase = ''
       HOME=$TMPDIR OMP_NUM_THREADS=1 nosetests $out/${python.sitePackages}/sklearn/
     '';
