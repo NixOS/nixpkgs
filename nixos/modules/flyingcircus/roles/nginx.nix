@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }: with lib;
 
 let
+    cfg = config.flyingcircus;
 
     localConfig = if pathExists /etc/nginx/local
                   then "include ${/etc/nginx/local}/*.conf;"
@@ -116,7 +117,7 @@ in
 
     };
 
-    config = mkIf config.flyingcircus.roles.nginx.enable {
+    config = mkIf cfg.roles.nginx.enable {
 
         services.nginx.enable = true;
         services.nginx.appendConfig = baseConfig;
