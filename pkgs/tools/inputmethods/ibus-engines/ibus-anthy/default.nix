@@ -1,20 +1,24 @@
-{ stdenv, fetchurl, makeWrapper, ibus, anthy, intltool, pkgconfig, glib, gobjectIntrospection, python, pythonPackages }:
+{ stdenv, fetchFromGitHub, makeWrapper, ibus, anthy, intltool, pkgconfig, glib, gobjectIntrospection,
+  python, pythonPackages, gtk3, libtool, automake, autoconf }:
 
 stdenv.mkDerivation rec {
   name = "ibus-anthy-${version}";
-  version = "1.5.7";
+  version = "1.5.8";
 
   meta = with stdenv.lib; {
     description = "IBus interface to the anthy input method";
     homepage    = http://wiki.github.com/fujiwarat/ibus-anthy;
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ gebner ericsagnes ];
   };
+
+  preConfigure = "./autogen.sh --prefix=$out";
 
   configureFlags = "--with-anthy-zipcode=${anthy}/share/anthy/zipcode.t";
 
-  buildInputs = [ makeWrapper ibus anthy intltool pkgconfig glib gobjectIntrospection python pythonPackages.pygobject3 ];
+  buildInputs = [ makeWrapper ibus anthy intltool pkgconfig glib gobjectIntrospection
+    python pythonPackages.pygobject3 gtk3 libtool automake autoconf ];
 
   postFixup = ''
     substituteInPlace $out/share/ibus/component/anthy.xml --replace \$\{exec_prefix\} $out
@@ -25,8 +29,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  src = fetchurl {
-    url = "https://github.com/ibus/ibus-anthy/releases/download/${version}/${name}.tar.gz";
-    sha256 = "00sjrfhghrgkqm72mf39f8sz6wr4fwvvs9mn2alaldhgr5v0c861";
+  src = fetchFromGitHub {
+    owner  = "ibus";
+    repo   = "ibus-anthy";
+    rev    = version;
+    sha256 = "1laxwpnhgihv4dz5cgcz6d0a0880r93n7039ciz1m53hdzapwi4a";
   };
 }
