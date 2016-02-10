@@ -88,6 +88,7 @@ let
 
             ${localConfig}
 
+            ${config.flyingcircus.roles.nginx.httpConfig}
         }
         '';
 
@@ -105,6 +106,12 @@ in
                 description = "Enable the Flying Circus nginx server role.";
             };
 
+            httpConfig = mkOption {
+              type = types.lines;
+              default = "";
+              description = "Configuration lines to be appended inside of the http {} block.";
+             };
+
         };
 
     };
@@ -114,9 +121,19 @@ in
         services.nginx.enable = true;
         services.nginx.appendConfig = baseConfig;
 
+        # XXX only on FE!
         networking.firewall.allowedTCPPorts = [ 80 443 ];
 
-        jobs.fcio-stubs-nginx = {
+        system.activationScripts = {
+            nginx = {
+                deps = [];
+                text = ''
+                mkdir -p /var/log/nginx
+                '';
+            };
+        };
+
+        jobs.fcio-stubs-nginx = mkIf config.flyingcircus.compat.gentoo.enable {
             description = "Create FC IO stubs for nginx";
             task = true;
 
