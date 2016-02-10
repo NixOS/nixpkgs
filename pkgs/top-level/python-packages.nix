@@ -2051,6 +2051,7 @@ in modules // {
       cytoolz
       datashape
       flask
+      flask-cors
       h5py
       multipledispatch
       numba
