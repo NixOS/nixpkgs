@@ -155,61 +155,59 @@ in
 
     networking.domain = "gocept.net";
 
-  networking.defaultGateway =
-    if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
-    then get_default_gateway is_ip4 cfg.enc.parameters.interfaces
-    else null;
-  networking.defaultGateway6 =
-    if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
-    then get_default_gateway is_ip6 cfg.enc.parameters.interfaces
-    else null;
+    networking.defaultGateway =
+      if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
+      then get_default_gateway is_ip4 cfg.enc.parameters.interfaces
+      else null;
+    networking.defaultGateway6 =
+      if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
+      then get_default_gateway is_ip6 cfg.enc.parameters.interfaces
+      else null;
 
-  # Only set nameserver if there is an enc set.
-  networking.nameservers =
-  if lib.hasAttrByPath ["parameters" "location"] cfg.enc
-  then
-    if builtins.hasAttr cfg.enc.parameters.location ns_by_location
-    then builtins.getAttr cfg.enc.parameters.location ns_by_location
-    else []
-  else [];
-  networking.resolvconfOptions = "ndots:1 timeout:1 attempts:4 rotate";
-
-  # If there is no enc data, we are probably not on FC platform.
-  networking.search =
+    # Only set nameserver if there is an enc set.
+    networking.nameservers =
     if lib.hasAttrByPath ["parameters" "location"] cfg.enc
-    then ["${cfg.enc.parameters.location}.gocept.net"
-          "gocept.net"]
-    else [];
-
-  networking.interfaces =
-    if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
-    then get_network_configuration cfg.enc.parameters.interfaces
-    else {};
-
-  networking.localCommands =
-    if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
     then
-      ''
-        mkdir -p /etc/iproute2
-        ln -sf ${rt_tables} /etc/iproute2/rt_tables
+      if builtins.hasAttr cfg.enc.parameters.location ns_by_location
+      then builtins.getAttr cfg.enc.parameters.location ns_by_location
+      else []
+    else [];
+    networking.resolvconfOptions = "ndots:1 timeout:1 attempts:4 rotate";
 
-        ip -4 rule flush
-        ip -4 rule add priority 32766 lookup main
-        ip -4 rule add priority 32767 lookup default
+    # If there is no enc data, we are probably not on FC platform.
+    networking.search =
+      if lib.hasAttrByPath ["parameters" "location"] cfg.enc
+      then ["${cfg.enc.parameters.location}.gocept.net"
+            "gocept.net"]
+      else [];
 
-        ip -6 rule flush
-        ip -6 rule add priority 32766 lookup main
-        ip -6 rule add priority 32767 lookup default
+    networking.interfaces =
+      if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
+      then get_network_configuration cfg.enc.parameters.interfaces
+      else {};
 
-        ${builtins.toString
-            (get_policy_routing cfg.enc.parameters.interfaces)}
-      ''
-      else "";
+    networking.localCommands =
+      if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
+      then
+        ''
+          mkdir -p /etc/iproute2
+          ln -sf ${rt_tables} /etc/iproute2/rt_tables
 
-   services.nscd.enable = false;
+          ip -4 rule flush
+          ip -4 rule add priority 32766 lookup main
+          ip -4 rule add priority 32767 lookup default
+
+          ip -6 rule flush
+          ip -6 rule add priority 32766 lookup main
+          ip -6 rule add priority 32767 lookup default
+
+          ${builtins.toString
+              (get_policy_routing cfg.enc.parameters.interfaces)}
+        ''
+        else "";
+
+     services.nscd.enable = false;
 
   };
-
-
 
 }
