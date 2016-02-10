@@ -39,7 +39,7 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ fcitxPackage ];
     gtkPlugins = [ fcitxPackage ];
-    qtPlugins  = [ fcitxPackage pkgs.kde5.fcitx-qt5 ];
+    qtPlugins  = [ fcitxPackage ];
 
     environment.variables = {
       GTK_IM_MODULE = "fcitx";
