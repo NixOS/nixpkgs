@@ -2051,6 +2051,7 @@ in modules // {
       cytoolz
       datashape
       flask
+      flask-cors
       h5py
       multipledispatch
       numba
@@ -8605,6 +8606,25 @@ in modules // {
     };
   };
 
+  flask-cors = buildPythonPackage rec {
+    name = "Flask-Cors-${version}";
+    version = "2.1.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/F/Flask-Cors/${name}.tar.gz";
+      sha256 = "0fd618a4f88ykqx4x55viz47cm9rl214q1b45a0b4mz5vhxffqpj";
+    };
+
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ flask six ];
+
+    meta = {
+      description = "A Flask extension adding a decorator for CORS support";
+      homepage = https://github.com/corydolphin/flask-cors;
+      license = with licenses; [ mit ];
+    };
+  };
+
   flask-pymongo = buildPythonPackage rec {
     name = "Flask-PyMongo-${version}";
     version = "0.3.1";
@@ -14229,7 +14249,8 @@ in modules // {
     checkPhase = let
       testsToSkip = ["test_data" "test_excel" "test_html" "test_json"
                      "test_frequencies" "test_frame"
-                     "test_read_clipboard_infer_excel"] ++
+                     "test_read_clipboard_infer_excel"
+                     "test_interp_alt_scipy" "test_nanops" "test_stats"] ++
                     optional isPy35 "test_sql";
     in ''
       runHook preCheck
@@ -18527,6 +18548,13 @@ in modules // {
     propagatedBuildInputs = with self; [ numpy scipy numpy.blas ];
 
     LC_ALL="en_US.UTF-8";
+
+    # Exclude "test_image.py" because the Lena function/image was removed from SciPy since 0.17
+    # Should be fixed in next release.
+    # Using the -I switch broke nosetests...?
+    patchPhase = ''
+      rm sklearn/feature_extraction/tests/test_image.py
+    '';
 
     checkPhase = ''
       HOME=$TMPDIR OMP_NUM_THREADS=1 nosetests $out/${python.sitePackages}/sklearn/
