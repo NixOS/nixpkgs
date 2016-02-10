@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  hardening_format = false;
+
   meta = {
     branch = "1.6";
     description = "A C++ based class library for building Graphical User Interfaces";
