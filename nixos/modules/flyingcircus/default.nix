@@ -1,8 +1,3 @@
-# This is the placeholder file that gets referenced from
-# /etc/nixos/configuration.nix (instead of a symlink.)
-#
-# It bootstraps the necessary configuration depending on the infrastructure.
-
 { config, lib, pkgs, ... }:
 
 with lib;
