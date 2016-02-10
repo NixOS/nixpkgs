@@ -1178,7 +1178,9 @@ let
 
     anthy = callPackage ../tools/inputmethods/ibus-engines/ibus-anthy { };
 
-    mozc = callPackage ../tools/inputmethods/ibus-engines/mozc {
+    hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
+
+    mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
       inherit (pythonPackages) gyp;
     };
 

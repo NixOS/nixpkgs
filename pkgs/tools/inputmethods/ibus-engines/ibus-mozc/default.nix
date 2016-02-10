@@ -7,33 +7,40 @@ let
     sha256 = "0pyrpz9c8nxccwpgyr36w314mi8h132cis8ijvlqmmhqxwsi30hm";
   };
 in clangStdenv.mkDerivation rec {
-  name = "mozc-${version}";
-  version = "2015-05-02";
+  name = "ibus-mozc-${version}";
+  version = "2.17.2313.102";
 
   meta = with clangStdenv.lib; {
     description = "Japanese input method from Google";
     homepage = http://code.google.com/p/mozc/;
-    license = licenses.bsd3;
+    license = licenses.free;
     platforms = platforms.linux;
-    maintainers = [ maintainers.gebner ];
+    maintainers = with maintainers; [ gebner ericsagnes ];
   };
 
   nativeBuildInputs = [ gyp which ninja python pkgconfig ];
   buildInputs = [ protobuf ibus gtk zinnia qt4 libxcb ];
 
   src = fetchFromGitHub {
-    owner = "google";
-    repo = "mozc";
-    rev = "d9783737ecfcb68c3d98d84e7052d716f4d0e0cb";
-    sha256 = "52a83658e2e4a7b38e31a4085682be24c9c5f4c51a01578598a30b9833827b72";
+    owner  = "google";
+    repo   = "mozc";
+    rev    = "3306d3314499a54a4064b8b80bbc1bce3f6cfac4";
+    sha256 = "0l7mjlnbm6i1ipni8pg9ym5bjg3rzkaxi9xwmsz2lddv348sqii2";
   };
+
   postUnpack = ''
+    rmdir $sourceRoot/src/third_party/japanese_usage_dictionary/
     ln -s ${japanese_usage_dictionary} $sourceRoot/src/third_party/japanese_usage_dictionary
   '';
 
   configurePhase = ''
-    export GYP_DEFINES="ibus_mozc_path=$out/lib/ibus-mozc/ibus-engine-mozc ibus_mozc_icon_path=$out/share/ibus-mozc/product_icon.png document_dir=$out/share/doc/mozc zinnia_model_file=${tegaki-zinnia-japanese}/share/tegaki/models/zinnia/handwriting-ja.model use_libprotobuf=1"
-    python src/build_mozc.py gyp --gypdir=${gyp}/bin --server_dir=$out/lib/mozc
+    export GYP_DEFINES="document_dir=$out/share/doc/mozc use_libzinnia=1 use_libprotobuf=1 ibus_mozc_path=$out/lib/ibus-mozc/ibus-engine-mozc"
+    python src/build_mozc.py gyp --gypdir=${gyp}/bin --server_dir=$out/lib/mozc \
+    python src/unix/fcitx/fcitx.gyp gyp --gypdir=${gyp}/bin
+  '';
+
+  preBuildPhase = ''
+    head -n 29 src/server/mozc_server.cc > LICENSE
   '';
 
   buildPhase = ''
@@ -50,6 +57,9 @@ in clangStdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    install -d        $out/share/licenses/mozc/
+    install -m 644    LICENSE src/data/installer/*.html     $out/share/licenses/mozc/
+
     install -D -m 755 src/out_linux/Release/mozc_server $out/lib/mozc/mozc_server
     install    -m 755 src/out_linux/Release/mozc_tool   $out/lib/mozc/mozc_tool
 
