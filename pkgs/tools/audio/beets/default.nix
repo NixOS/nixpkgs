@@ -121,7 +121,7 @@ in buildPythonPackage rec {
 
   postPatch = ''
     sed -i -e '/assertIn.*item.*path/d' test/test_info.py
-    echo echo completion tests passed > test/test_completion.sh
+    echo echo completion tests passed > test/rsrc/test_completion.sh
 
     sed -i -e '/^BASH_COMPLETION_PATHS *=/,/^])$/ {
       /^])$/i u"${completion}"
@@ -139,7 +139,7 @@ in buildPythonPackage rec {
       test/test_replaygain.py
   '';
 
-  doCheck = false; # TODO, see https://github.com/beetbox/beets/issues/1876#issuecomment-182010438
+  doCheck = true;
 
   preCheck = ''
     (${concatMapStrings (s: "echo \"${s}\";") allPlugins}) \
