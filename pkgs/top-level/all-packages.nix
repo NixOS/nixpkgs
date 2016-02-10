@@ -1170,19 +1170,23 @@ let
 
   m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
 
-  mozc = callPackage ../tools/inputmethods/mozc {
-    inherit (pythonPackages) gyp;
-  };
-
   ibus = callPackage ../tools/inputmethods/ibus { };
 
-  ibus-qt = callPackage ../tools/inputmethods/ibus-qt { };
+  ibus-qt = callPackage ../tools/inputmethods/ibus/ibus-qt.nix { };
 
-  ibus-anthy = callPackage ../tools/inputmethods/ibus-anthy { };
+  ibus-engines = {
 
-  ibus-table = callPackage ../tools/inputmethods/ibus-table { };
+    anthy = callPackage ../tools/inputmethods/ibus-engines/ibus-anthy { };
 
-  ibus-table-others = callPackage ../tools/inputmethods/ibus-table-others { };
+    mozc = callPackage ../tools/inputmethods/ibus-engines/mozc {
+      inherit (pythonPackages) gyp;
+    };
+
+    table = callPackage ../tools/inputmethods/ibus-engines/ibus-table { };
+
+    table-others = callPackage ../tools/inputmethods/ibus-engines/ibus-table-others { };
+
+  };
 
   brotli = callPackage ../tools/compression/brotli { };
 
