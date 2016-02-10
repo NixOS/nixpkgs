@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   # TODO: reduce propagation to necessary libs
   propagatedBuildInputs = with lib;
-    [ zlib freetype fontconfig libjpeg lcms curl openjpeg ]
-    ++ optional (!minimal) cairo
+    [ zlib freetype fontconfig libjpeg ]
+    ++ optionals (!minimal) [ cairo lcms curl openjpeg ]
     ++ optional qt4Support qt4
     ++ optional qt5Support qtbase;
 
@@ -35,8 +35,11 @@ stdenv.mkDerivation rec {
       "--enable-libcurl"
       "--enable-zlib"
     ]
-    ++ optionals minimal [ "--disable-poppler-glib" "--disable-poppler-cpp" ]
-    ++ optional (!utils) "--disable-utils";
+    ++ optionals minimal [
+      "--disable-poppler-glib" "--disable-poppler-cpp"
+      "--disable-libopenjpeg" "--disable-libcurl"
+    ]
+    ++ optional (!utils) "--disable-utils" ;
 
   enableParallelBuilding = true;
 
