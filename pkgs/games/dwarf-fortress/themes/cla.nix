@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub }:
 
-# On upgrade check https://github.com/fricy/Phoebus/blob/master/manifest.json
+# On upgrade check https://github.com/DFgraphics/CLA/blob/master/manifest.json
 # for compatibility information.
 
 stdenv.mkDerivation {
