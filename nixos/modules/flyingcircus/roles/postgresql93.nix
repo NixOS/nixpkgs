@@ -19,6 +19,7 @@
     services.postgresql.package = pkgs.postgresql93;
 
     services.postgresql.initialScript = ./postgresql-init.sql;
+    services.postgresql.dataDir = "/srv/postgresql/9.3";
 
   };
 
