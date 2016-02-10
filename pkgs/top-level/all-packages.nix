@@ -1190,6 +1190,10 @@ let
 
   };
 
+  ibus-with-plugins = callPackage ../tools/inputmethods/ibus/wrapper.nix {
+    plugins = [ ];
+  };
+
   brotli = callPackage ../tools/compression/brotli { };
 
   biosdevname = callPackage ../tools/networking/biosdevname { };
