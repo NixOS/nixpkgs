@@ -166,7 +166,7 @@ in
           fi
         '';
         script = ''
-          tincd -D -U tinc.${network} -n ${network} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}
+          tincd -R -D -U tinc.${network} -n ${network} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}
         '';
       })
     );
