@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://zandronum.com/;
     description = "multiplayer oriented port, based off Skulltag, for Doom and Doom II by id Software. Binary version for online play.";
-    maintainer = [ stdenv.lib.maintainers.lassulus ];
+    maintainers = [ stdenv.lib.maintainers.lassulus ];
     # Binary version has different version string than source code version.
     license = stdenv.lib.licenses.unfreeRedistributable;
     platforms = [ "x86_64-linux" ];

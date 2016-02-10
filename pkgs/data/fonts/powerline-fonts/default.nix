@@ -38,6 +38,6 @@ stdenv.mkDerivation {
     '';
     license = with licenses; [ asl20 free ofl ];
     platforms = platforms.all;
-    maintainer = with maintainers; [ malyn ];
+    maintainers = with maintainers; [ malyn ];
   };
 }

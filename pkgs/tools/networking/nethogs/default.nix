@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     homepage = http://nethogs.sourceforge.net/;
     platforms = platforms.linux;
-    maintainer = [ maintainers.rycee ];
+    maintainers = [ maintainers.rycee ];
   };
 }
