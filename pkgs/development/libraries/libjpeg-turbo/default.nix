@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "0gi349hp1x7mb98s4mf66sb2xay2kjjxj9ihrriw0yiy0k9va6sj";
   };
 
+  patches =
+    stdenv.lib.optional (stdenv.cross.libc or null == "msvcrt")
+      ./mingw-boolean.patch;
+
   outputs = [ "dev" "out" "doc" "bin" ];
 
   nativeBuildInputs = [ nasm ];
