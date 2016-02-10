@@ -4,6 +4,8 @@
 , libxml2
 , mesa, libXt
 , boost, silo
+, fortranSupport ? true
+, gfortran
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +36,8 @@ stdenv.mkDerivation rec {
     # http://www.paraview.org/Wiki/VisIt_Database_Bridge
     "-DPARAVIEW_USE_VISITBRIDGE:BOOL=ON"
     "-DVISIT_BUILD_READER_Silo:BOOL=ON"
+
+    "-DPARAVIEW_ENABLE_CATALYST=ON"
   ];
 
   # https://bugzilla.redhat.com/show_bug.cgi?id=1138466
@@ -41,7 +45,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake qt4 mpich2 python libxml2 mesa libXt boost silo ];
+  buildInputs = [ cmake qt4 mpich2 python libxml2 mesa libXt boost silo
+    ] ++ stdenv.lib.optionals fortranSupport [ gfortran ];
 
   meta = {
     homepage = "http://www.paraview.org/";
