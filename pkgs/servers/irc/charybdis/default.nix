@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     "--with-program-prefix=charybdis-"
   ];
 
+  hardening_format = false;
+
   buildInputs = [ bison flex openssl ];
 
   meta = {
