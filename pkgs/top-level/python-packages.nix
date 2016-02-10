@@ -554,28 +554,35 @@ in modules // {
 
 
   alot = buildPythonPackage rec {
-    rev = "0.3.6";
-    name = "alot-0.3.6";
+    rev = "0.3.7";
+    name = "alot-${rev}";
 
-    src = pkgs.fetchurl {
-      url = "https://github.com/pazz/alot/tarball/${rev}";
-      name = "${name}.tar.bz";
-      sha256 = "1rzy70w4isvypa94310xw403vq5him21q8rlx4laa0z530phkrmq";
+    src = pkgs.fetchFromGitHub {
+      owner = "pazz";
+      repo = "alot";
+      inherit rev;
+      sha256 = "0sscmmf42gsrjbisi6wm01alzlnq6wqhpwkm8pc557075jfg19il";
     };
 
-    # error: invalid command 'test'
-    doCheck = false;
+    postPatch = ''
+      substituteInPlace alot/defaults/alot.rc.spec \
+        --replace "themes_dir = string(default=None)" \
+                  "themes_dir = string(default='$out/share/themes')"
+    '';
 
     propagatedBuildInputs =
       [ self.notmuch
         self.urwid
+        self.urwidtrees
         self.twisted
-        self.magic
+        self.python_magic
         self.configobj
         self.pygpgme
       ];
 
     postInstall = ''
+      mkdir -p $out/share
+      cp -r extra/themes $out/share
       wrapProgram $out/bin/alot \
         --prefix LD_LIBRARY_PATH : ${pkgs.notmuch}/lib:${pkgs.file}/lib:${pkgs.gpgme}/lib
     '';
@@ -583,7 +590,7 @@ in modules // {
     meta = {
       homepage = https://github.com/pazz/alot;
       description = "Terminal MUA using notmuch mail";
-      maintainers = with maintainers; [ garbas ];
+      maintainers = with maintainers; [ garbas profpatsch ];
     };
   };
 
@@ -21059,6 +21066,26 @@ in modules // {
       maintainers = with maintainers; [ garbas ];
     };
   });
+
+  urwidtrees = buildPythonPackage rec {
+    name = "urwidtrees-${rev}";
+    rev = "1.0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "pazz";
+      repo = "urwidtrees";
+      inherit rev;
+      sha256 = "03gpcdi45z2idy1fd9zv8v9naivmpfx65hshm8r984k9wklv1dsa";
+    };
+
+    propagatedBuildInputs = with self; [ urwid ];
+
+    meta = {
+      description = "Tree widgets for urwid";
+      license = licenses.gpl3;
+      maintainer = with maintainters; [ profpatsch ];
+    };
+  };
 
   pyuv = buildPythonPackage rec {
     name = "pyuv-0.11.5";
