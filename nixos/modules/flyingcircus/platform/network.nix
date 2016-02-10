@@ -48,7 +48,8 @@ let
   get_udev_configuration = interfaces:
     map
       (interface_name: ''
-        KERNEL=="eth*", ATTR{address}=="${(builtins.getAttr interface_name interfaces).mac}", NAME="eth${interface_name}"
+       KERNEL=="eth*", ATTR{address}=="${lib.toLower (builtins.getAttr
+         interface_name interfaces).mac}", NAME="eth${interface_name}"
        '')
       (builtins.attrNames interfaces);
 
