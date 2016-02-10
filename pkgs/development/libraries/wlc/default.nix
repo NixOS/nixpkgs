@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchgit, cmake, pkgconfig
 , glibc, wayland, pixman, libxkbcommon, libinput, libxcb, xcbutilwm, xcbutilimage, mesa, libdrm, udev, systemd, dbus_libs
-, libpthreadstubs, libX11, libXau, libXdmcp, libXext, libXdamage, libxshmfence, libXxf86vm, linuxPackages_4_2
+, libpthreadstubs, libX11, libXau, libXdmcp, libXext, libXdamage, libxshmfence, libXxf86vm
 }:
 
 stdenv.mkDerivation rec {
