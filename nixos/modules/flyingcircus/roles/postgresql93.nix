@@ -81,9 +81,7 @@ in
       wal_buffers = ${toString wal_buffers}MB
       checkpoint_segments = 100
       checkpoint_completion_target = 0.9
-      archive_mode = on
-      archive_command = '/usr/local/sbin/postgresql-archive-log %p'
-      archive_timeout = 60
+      archive_mode = off
 
     '';
   };
