@@ -6440,6 +6440,8 @@ let
     fltk = fltk13;
   };
 
+  dirac = callPackage ../development/libraries/dirac { };
+
   directfb = callPackage ../development/libraries/directfb { };
 
   dlib = callPackage ../development/libraries/dlib { };
