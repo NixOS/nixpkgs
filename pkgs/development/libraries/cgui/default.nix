@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sh fix.sh unix
   '';
 
+  hardening_format = false;
+
   makeFlags = [ "SYSTEM_DIR=$(out)" ];
 
   meta = with stdenv.lib; {
