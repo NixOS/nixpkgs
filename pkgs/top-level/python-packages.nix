@@ -1815,7 +1815,7 @@ in modules // {
       description = "Composable style cycles";
       homepage = http://github.com/matplotlib/cycler;
       license = licenses.bsd3;
-      maintainer = with maintainers; [ fridh ];
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -10664,7 +10664,7 @@ in modules // {
       description = "Line-by-line profiler";
       homepage = https://github.com/rkern/line_profiler;
       license = licenses.bsd3;
-      maintainer = with maintainers; [ fridh ];
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -12589,7 +12589,7 @@ in modules // {
     meta = {
       description = "Numerical traits for Python objects";
       license = licenses.bsd2;
-      maintainer = with maintainers; [ fridh ];
+      maintainers = with maintainers; [ fridh ];
       homepage = https://github.com/astrofrog/numtraits;
     };
   };
@@ -14905,7 +14905,7 @@ in modules // {
       description = "An audio library based on libsndfile, CFFI and NumPy";
       license = licenses.bsd3;
       homepage = https://github.com/bastibe/PySoundFile;
-      maintainer = with maintainers; [ fridh ];
+      maintainers = with maintainers; [ fridh ];
     };
 
     prePatch = ''
@@ -15994,7 +15994,7 @@ in modules // {
       description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
       homepage = http://hgomersall.github.com/pyFFTW/;
       license = with licenses; [ bsd2 bsd3 ];
-      maintainer = with maintainers; [ fridh ];
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -17727,7 +17727,7 @@ in modules // {
       description = "A docutils-compatibility bridge to CommonMark";
       homepage = https://github.com/rtfd/recommonmark;
       license = licenses.mit;
-      maintainer = with maintainers; [ fridh ];
+      maintainers = with maintainers; [ fridh ];
     };
 
   };
@@ -19794,7 +19794,7 @@ in modules // {
       description = "Statistical computations and models for use with SciPy";
       homepage = "https://www.github.com/statsmodels/statsmodels";
       license = licenses.bsd3;
-      maintainer = with maintainers; [ fridh ];
+      maintainers = with maintainers; [ fridh ];
     };
 
     # Many tests fail when using latest numpy and pandas.
@@ -20072,7 +20072,7 @@ in modules // {
       description = "Pretty-print tabular data";
       homepage = https://bitbucket.org/astanin/python-tabulate;
       license = licenses.mit;
-      maintainer = with maintainers; [ fridh ];
+      maintainers = with maintainers; [ fridh ];
     };
 
   };
@@ -21083,7 +21083,7 @@ in modules // {
     meta = {
       description = "Tree widgets for urwid";
       license = licenses.gpl3;
-      maintainer = with maintainters; [ profpatsch ];
+      maintainers = with maintainers; [ profpatsch ];
     };
   };
 
@@ -25019,7 +25019,7 @@ in modules // {
       # license can actually be either bsd3 or gpl3
       # see https://github.com/trezor/cython-hidapi/blob/master/LICENSE-orig.txt
       license = licenses.bsd3;
-      maintainer = with maintainers; [ np ];
+      maintainers = with maintainers; [ np ];
     };
   };
 
@@ -25038,7 +25038,7 @@ in modules // {
       description = "Implementation of Bitcoin BIP-0039";
       homepage = https://github.com/trezor/python-mnemonic;
       license = licenses.mit;
-      maintainer = with maintainers; [ np ];
+      maintainers = with maintainers; [ np ];
     };
   };
 
@@ -25062,7 +25062,7 @@ in modules // {
       description = "Python library for communicating with TREZOR Bitcoin Hardware Wallet";
       homepage = https://github.com/trezor/python-trezor;
       license = licenses.gpl3;
-      maintainer = with maintainers; [ np ];
+      maintainers = with maintainers; [ np ];
     };
   };
 
@@ -25086,7 +25086,7 @@ in modules // {
       description = "KeepKey Python client";
       homepage = https://github.com/keepkey/python-keepkey;
       license = licenses.gpl3;
-      maintainer = with maintainers; [ np ];
+      maintainers = with maintainers; [ np ];
     };
   };
 
@@ -25139,7 +25139,7 @@ in modules // {
       description = "Using Trezor as hardware SSH agent";
       homepage = https://github.com/romanz/trezor-agent;
       license = licenses.gpl3;
-      maintainer = with maintainers; [ np ];
+      maintainers = with maintainers; [ np ];
     };
   };
 
@@ -25156,7 +25156,7 @@ in modules // {
       description = "Binding for X11 proof of work hashing";
       homepage = https://github.com/mazaclub/x11_hash;
       license = licenses.mit;
-      maintainer = with maintainers; [ np ];
+      maintainers = with maintainers; [ np ];
     };
   };
 
