@@ -40,3 +40,4 @@ forcecopy_path data/index
 # For some reason, it's needed to be writable...
 forcecopy_path data/announcement
 forcecopy_path data/help
+forcecopy_path data/dipscript
