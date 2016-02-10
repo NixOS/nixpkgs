@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libfprint gtk2 ];
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
 
+  hardening_format = false;
+
   meta = with stdenv.lib; {
     homepage = "http://www.freedesktop.org/wiki/Software/fprint/fprint_demo/";
     description = "A simple GTK+ application to demonstrate and test libfprint's capabilities";
