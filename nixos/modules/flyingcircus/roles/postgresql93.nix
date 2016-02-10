@@ -23,6 +23,12 @@ let
       (max [16 (current_memory / 4)])
        (shared_memory_max * 4 / 5)];
 
+  work_mem =
+    max [1 shared_buffers 200];
+
+  maintenance_work_mem =
+    max [16 work_mem (current_memory / 20)];
+
   wal_buffers =
     max [
       (min [64 (shared_buffers / 32)])
@@ -74,6 +80,21 @@ in
 
     # Custom postgresql configuration
     services.postgresql.extraConfig = ''
+      #------------------------------------------------------------------------------
+      # RESOURCE USAGE (except WAL)
+      #------------------------------------------------------------------------------
+      shared_buffers = ${toString shared_buffers}MB   # starting point is 25% RAM
+      temp_buffers = 16MB
+      work_mem = ${toString work_mem}MB
+      maintenance_work_mem = ${toString maintenance_work_mem}MB
+      #------------------------------------------------------------------------------
+      # QUERY TUNING
+      #------------------------------------------------------------------------------
+      effective_cache_size = ${toString (shared_buffers * 2)}MB
+
+      # version-specific resource settings for 9.3
+      effective_io_concurrency = 100
+
       #------------------------------------------------------------------------------
       # WRITE AHEAD LOG
       #------------------------------------------------------------------------------
