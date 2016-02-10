@@ -16,6 +16,7 @@ let
     dwarf-fortress = callPackage ./wrapper {
       themes = {
         "phoebus" = phoebus-theme;
+        "cla" = cla-theme;
       };
     };
 
@@ -28,6 +29,8 @@ let
     dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix { };
 
     phoebus-theme = callPackage ./themes/phoebus.nix { };
+
+    cla-theme = callPackage ./themes/cla.nix { };
   };
 
 in self
