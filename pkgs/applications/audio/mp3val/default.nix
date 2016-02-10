@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     install -Dv mp3val "$out/bin/mp3val"
   '';
 
+  hardening_fortify = false;
+
   meta = {
     description = "A tool for validating and repairing MPEG audio streams";
     longDescription = ''
