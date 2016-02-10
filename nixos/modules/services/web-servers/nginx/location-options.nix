@@ -27,6 +27,14 @@ with lib;
         Root directory for requests.
       '';
     };
+
+    extraConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        These lines go to the end of the location verbatim.
+      '';
+    };
   };
 }
 

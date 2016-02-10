@@ -117,6 +117,7 @@ let
     location ${location} {
       ${optionalString (config.proxyPass != null) "proxy_pass ${config.proxyPass};"}
       ${optionalString (config.root != null) "root ${config.root};"}
+      ${config.extraConfig}
     }
   '') locations);
 in
