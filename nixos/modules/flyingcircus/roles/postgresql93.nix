@@ -104,6 +104,28 @@ in
       checkpoint_completion_target = 0.9
       archive_mode = off
 
+      #------------------------------------------------------------------------------
+      # ERROR REPORTING AND LOGGING
+      #------------------------------------------------------------------------------
+      log_min_duration_statement = 1000
+      log_checkpoints = on
+      log_connections = on
+      log_line_prefix = 'user=%u,db=%d '
+      log_lock_waits = on
+      log_autovacuum_min_duration = 5000
+      log_temp_files = 1kB
+      shared_preload_libraries = 'auto_explain'
+      auto_explain.log_min_duration = '3s'
+
+      #------------------------------------------------------------------------------
+      # CLIENT CONNECTION DEFAULTS
+      #------------------------------------------------------------------------------
+      datestyle = 'iso, mdy'
+      lc_messages = 'en_US.utf8'
+      lc_monetary = 'en_US.utf8'
+      lc_numeric = 'en_US.utf8'
+      lc_time = 'en_US.utf8'
+
     '';
   };
 
