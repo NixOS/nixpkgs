@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ iasl python ];
 
+  hardening_pic = false;
+  hardening_stackprotector = false;
+
   configurePhase = ''
     # build SeaBIOS for CSM
     cat > .config << EOF
@@ -21,12 +24,12 @@ stdenv.mkDerivation rec {
     EOF
 
     make olddefconfig
-    '';
+  '';
 
   installPhase = ''
     mkdir $out
     cp out/Csm16.bin $out/Csm16.bin
-    '';
+  '';
 
   meta = with stdenv.lib; {
     description = "Open source implementation of a 16bit X86 BIOS";
