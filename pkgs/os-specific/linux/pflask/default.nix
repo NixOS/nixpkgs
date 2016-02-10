@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, python
-}:
+{ lib, stdenv, fetchurl, python, waf }:
 
 stdenv.mkDerivation rec {
   name = "pflask-${version}";
@@ -14,10 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ python ];
 
   configurePhase = ''
-    ln -s ${fetchurl {
-      url = "http://ftp.waf.io/pub/release/waf-1.8.6";
-      sha256 = "81c4e6a3144c7b2021a839e7277bdaf1cedbbc87302186897b4ae03f4effcbf5";
-    }} waf
+    ln -s ${waf} waf
     python waf configure --prefix=$out
   '';
   buildPhase = ''
