@@ -21,6 +21,22 @@
     services.postgresql.initialScript = ./postgresql-init.sql;
     services.postgresql.dataDir = "/srv/postgresql/9.3";
 
+    users.users.postgres = {
+      shell = "/run/current-system/sw/bin/bash";
+      home = "/srv/postgresql";
+    };
+    system.activationScripts.flyingcircus_postgresql93 = ''
+      if ! test -e /srv/postgresql; then
+        mkdir -p /srv/postgresql
+      fi
+      chown ${toString config.ids.uids.postgres} /srv/postgresql
+    '';
+    security.sudo.extraConfig = ''
+      # Service users may switch to the postgres system user
+      %sudo-srv ALL=(postgres) ALL
+      %service ALL=(postgres) ALL
+    '';
+
   };
 
 }
