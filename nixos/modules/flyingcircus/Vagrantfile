@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
     { config, lib, pkgs, ... }:
     with config;
     {
-      fcio.enc = {
+      flyingcircus.enc = {
         parameters = {
           location = "vagrant";
           interfaces = {
