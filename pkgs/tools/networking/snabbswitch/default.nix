@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, bash, makeWrapper, git, mariadb, diffutils }:
+{ stdenv, lib, fetchurl, bash, makeWrapper, git, mariadb, diffutils, which, coreutils, procps, nettools }:
 
 stdenv.mkDerivation rec {
   name = "snabb-${version}";
@@ -18,13 +18,15 @@ stdenv.mkDerivation rec {
     for f in $(find src/program/snabbnfv/ -type f); do
       substituteInPlace $f --replace "/bin/bash" "${bash}/bin/bash"
     done
+   
+    # We need a way to pass $PATH to the scripts
+    sed -i '2iexport PATH=${git}/bin:${mariadb}/bin:${which}/bin:${procps}/bin:${coreutils}/bin' src/program/snabbnfv/neutron_sync_master/neutron_sync_master.sh.inc
+    sed -i '2iexport PATH=${git}/bin:${coreutils}/bin:${diffutils}/bin:${nettools}/bin' src/program/snabbnfv/neutron_sync_agent/neutron_sync_agent.sh.inc
   '';
 
   installPhase = ''
     mkdir -p $out/bin
     cp src/snabb $out/bin
-
-    wrapProgram $out/bin/snabb --prefix PATH : "${ lib.makeBinPath [ git mariadb diffutils ]}"
   '';
 
   meta = with stdenv.lib; {
