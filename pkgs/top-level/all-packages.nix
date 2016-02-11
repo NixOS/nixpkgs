@@ -7074,6 +7074,7 @@ let
 
   libao = callPackage ../development/libraries/libao {
     usePulseAudio = config.pulseaudio or true;
+    inherit (darwin.apple_sdk.frameworks) CoreAudio CoreServices AudioUnit;
   };
 
   libabw = callPackage ../development/libraries/libabw { };
