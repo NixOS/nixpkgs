@@ -19,6 +19,8 @@ stdenv.mkDerivation {
 
   patches = [ ./am_path_sdl.patch ./xml.patch ];
 
+  hardening_format = false;
+
   meta = {
     description = "A live looping instrument with JACK and MIDI support";
     longDescription = ''
