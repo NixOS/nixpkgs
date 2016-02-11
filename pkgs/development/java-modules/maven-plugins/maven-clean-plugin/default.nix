@@ -24,7 +24,7 @@ rec {
       rev = 1724719;
       sha256 = "0j01zbrrk7b2qaismgdazmgrcwyyv0ni2cc46awbgal9pcx54bqa";
     };
-    mavenDeps = [ bootstrapMavenClean25Jar bootstrapMavenRemoteResourcesAlpha6Jar apacheParent4 mavenParent7 mavenPlugins10 ];
+    mavenDeps = [ bootstrapMavenClean25Jar bootstrapMavenRemoteResources10alpha6Jar apacheParent4 mavenParent7 mavenPlugins10 mavenResources26 ];
     m2Path = "/org/apache/maven/plugins/maven-clean-plugin/2.2";
   };
 
@@ -37,6 +37,17 @@ rec {
     };
     mavenDeps = [ bootstrapMavenRemoteResources10Jar bootstrapMavenEnforcer10Jar apacheParent4 mavenEnforcer10alpha4 mavenParent9 mavenPlugins12 ];
     m2Path = "/org/apache/maven/plugins/maven-clean-plugin/2.3";
+  };
+
+  mavenClean24 = mavenCleanGen {
+    name = "maven-clean-plugin-2.4";
+    src = fetchsvn {
+      url = "https://svn.apache.org/repos/asf/maven/plugins/tags/maven-clean-plugin-2.4/";
+      rev = 1724719;
+      sha256 = "0a28nx3ys0r13sm0czvlrz5qn87i9vbn4kpxd18n04bfj3yh5vz0";
+    };
+    mavenDeps = [ bootstrapMavenClean23Jar bootstrapMavenEnforcer10beta1Jar bootstrapMavenPlugin251Jar bootstrapMavenRemoteResources10Jar apacheParent6 mavenParent15 mavenPlugins16 mavenResources23 ];
+    m2Path = "/org/apache/maven/plugins/maven-clean-plugin/2.4";
   };
 
   mavenClean25 = mavenCleanGen {

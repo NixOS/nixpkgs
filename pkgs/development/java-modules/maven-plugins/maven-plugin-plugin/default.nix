@@ -17,6 +17,17 @@ rec {
     };
   };
 
+  mavenPlugin243 = mavenPluginGen {
+    name = "maven-plugin-plugin-2.4.3";
+    src = fetchsvn {
+      url = "https://svn.apache.org/repos/asf/maven/plugin-tools/tags/maven-plugin-tools-2.4.3/maven-plugin-plugin/";
+      rev = 1724719;
+      sha256 = "0yx91zi781327jx8vlhc330496rjii8lhsaf90chdfply1hz64ma";
+    };
+    mavenDeps = [ apacheParent4 mavenParent8 mavenPlugins11 mavenRemoteResources10beta2 ];
+    m2Path = "/org/apache/maven/plugins/maven-plugin-plugin/2.4.3";
+  };
+
   mavenPlugin251 = mavenPluginGen {
     name = "maven-plugin-plugin-2.5.1";
     src = fetchsvn {
@@ -37,5 +48,27 @@ rec {
     };
     mavenDeps = [ apacheParent9 bootstrapMavenEnforcer10Jar bootstrapMavenRemoteResources11Jar mavenParent16 mavenPlugin251 mavenPlugins17 ];
     m2Path = "/org/apache/maven/plugins/maven-plugin-plugin/2.6";
+  };
+
+  mavenPlugin27 = mavenPluginGen {
+    name = "maven-plugin-plugin-2.7";
+    src = fetchsvn {
+      url = "https://svn.apache.org/repos/asf/maven/plugin-tools/tags/maven-plugin-tools-2.7/maven-plugin-plugin/";
+      rev = 1724719;
+      sha256 = "16jbj29f4q7z83664qn5l1z8ix85srgpsf6kxrs7fdhz6dybx4fn";
+    };
+    mavenDeps = [ bootstrapMavenEnforcer10Jar bootstrapMavenPlugin26Jar bootstrapMavenRemoteResources11Jar apacheParent9 mavenParent16 mavenPlugins18 modelloMavenPlugin141 ];
+    m2Path = "/org/apache/maven/plugins/maven-plugin-plugin/2.7";
+  };
+
+  mavenPlugin28 = mavenPluginGen {
+    name = "maven-plugin-plugin-2.8";
+    src = fetchsvn {
+      url = "https://svn.apache.org/repos/asf/maven/plugin-tools/tags/maven-plugin-tools-2.8/maven-plugin-plugin/";
+      rev = 1724719;
+      sha256 = "1f7sysy7zng22mz4rqj1s4dm0viidlnj6adcc5rg37drqa7yn4wn";
+    };
+    mavenDeps = [ bootstrapMavenEnforcer10Jar bootstrapMavenRemoteResources11Jar apacheParent9 mavenParent19 mavenPlugin27 mavenPlugins20 ];
+    m2Path = "/org/apache/maven/plugins/maven-plugin-plugin/2.8";
   };
 }

@@ -1,6 +1,17 @@
 { fetchmaven, fetchurl }:
 
 rec {
+  mavenClean23Jar = fetchmaven {
+    version = "2.3";
+    name = "bootstrap-maven-clean-plugin-jar-2.3";
+    src = fetchurl rec {
+      url = "https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-clean-plugin/2.3/maven-clean-plugin-2.3.jar";
+      sha256 = "1sq599x3ki8sakfx5sby6yaxjvv4aawbksp9lnj3chyv36cha000";
+    };
+    m2Path = "/org/apache/maven/plugins/maven-clean-plugin/2.3";
+    m2File = "maven-clean-plugin-2.3.jar";
+  };
+
   mavenClean241Jar = fetchmaven {
     version = "2.4.1";
     name = "bootstrap-maven-clean-plugin-jar-2.4.1";

@@ -17,15 +17,26 @@ rec {
     };
   };
 
-  mavenRemoteResourcesAlpha6 = mavenRemoteResourcesGen {
+  mavenRemoteResources10alpha6 = mavenRemoteResourcesGen {
     name = "maven-remote-resources-plugin-1.0-alpha-6";
     src = fetchsvn {
       url = "http://svn.apache.org/repos/asf/maven/plugins/tags/maven-remote-resources-plugin-1.0-alpha-6/";
       rev = 1723938;
       sha256 = "1ri6bv79hvhdza6b5973gzw149rx611wcjvyvmz5n7ixkz9bplfa";
     };
-    mavenDeps = [ apacheParent4 mavenParent5 mavenPlugins8 bootstrapMavenRemoteResourcesAlpha6Jar modelloMavenPlugin10Alpha15 ];
+    mavenDeps = [ apacheParent4 mavenParent5 mavenPlugins8 bootstrapMavenRemoteResources10alpha6Jar modelloMavenPlugin10Alpha15 ];
     m2Path = "/org/apache/maven/plugins/maven-remote-resources-plugin/1.0-alpha-6";
+  };
+
+  mavenRemoteResources10beta2 = mavenRemoteResourcesGen {
+    name = "maven-remote-resources-plugin-1.0-beta-2";
+    src = fetchsvn {
+      url = "http://svn.apache.org/repos/asf/maven/plugins/tags/maven-remote-resources-plugin-1.0-beta-2/";
+      rev = 1723938;
+      sha256 = "03ndkaglcr50jh9pj8587q17kjb13nd7097r05mxykh07ap906c1";
+    };
+    mavenDeps = [ bootstrapMavenRemoteResources10alpha6Jar apacheParent4 mavenParent7 mavenPlugins10 ];
+    m2Path = "/org/apache/maven/plugins/maven-remote-resources-plugin/1.0-beta-2";
   };
 
   mavenRemoteResources10 = mavenRemoteResourcesGen {
@@ -35,7 +46,7 @@ rec {
       rev = 1723938;
       sha256 = "15zqzlmqvwp8w5q4y9jzgilm5jmrm3zr26zb24zxvv16wvj30jkc";
     };
-    mavenDeps = [ apacheParent4 mavenParent7 mavenPlugins10 mavenRemoteResourcesAlpha6 ];
+    mavenDeps = [ apacheParent4 mavenParent7 mavenPlugins10 mavenRemoteResources10alpha6 ];
     m2Path = "/org/apache/maven/plugins/maven-remote-resources-plugin/1.0";
   };
 
@@ -60,5 +71,15 @@ rec {
     mavenDeps = [ apacheParent9 mavenParent19 mavenPlugins19 mavenRemoteResources11 ];
     m2Path = "/org/apache/maven/plugins/maven-remote-resources-plugin/1.2.1";
   };
-}
 
+  mavenRemoteResources13 = mavenRemoteResourcesGen {
+    name = "maven-remote-resources-plugin-1.3";
+    src = fetchsvn {
+      url = "http://svn.apache.org/repos/asf/maven/plugins/tags/maven-remote-resources-plugin-1.3/";
+      rev = 1723938;
+      sha256 = "1sl6dl6j2i6yxd11y55164ciq48c6qddjibi3198kpv6h0lr30rv";
+    };
+    mavenDeps = [ bootstrapMavenRemoteResources121Jar bootstrapMavenEnforcer101Jar apacheParent10 mavenParent21 mavenPlugin28 mavenPlugins22 ];
+    m2Path = "/org/apache/maven/plugins/maven-remote-resources-plugin/1.3";
+  };
+}

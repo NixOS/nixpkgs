@@ -27,4 +27,15 @@ rec {
     mavenDeps = [ wagonWebdav10beta2 ];
     m2Path = "/org/codehaus/modello/modello-maven-plugin/1.0-alpha-15";
   };
+
+  modelloMavenPlugin141 = modelloMavenPluginGen {
+    name = "modello-maven-plugin-1.4.1";
+    src = fetchgit {
+      url = "git://github.com/codehaus-plexus/modello.git";
+      rev = "refs/tags/modello-1.4.1";
+      sha256 = "0nxdgh98cr353dmr2y09d2wqvbkgihi39rznn7vb75qw9aq7mi5j";
+    };
+    mavenDeps = [ mavenClean24 ];
+    m2Path = "/org/codehaus/modello/modello-maven-plugin/1.4.1";
+  };
 }
