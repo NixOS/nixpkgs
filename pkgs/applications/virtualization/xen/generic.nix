@@ -77,6 +77,7 @@ stdenv.mkDerivation {
 
   hardening_stackprotector = false;
   hardening_fortify = false;
+  hardening_pic = false;
 
   patches = stdenv.lib.optionals ((xenserverPatched == false) && (builtins.hasAttr "xenPatches" xenConfig)) xenConfig.xenPatches;
 
