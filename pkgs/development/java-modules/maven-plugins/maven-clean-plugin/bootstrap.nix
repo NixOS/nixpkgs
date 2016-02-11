@@ -22,4 +22,15 @@ rec {
     m2Path = "/org/apache/maven/plugins/maven-clean-plugin/2.4.1";
     m2File = "maven-clean-plugin-2.4.1.pom";
   };
+
+  mavenClean25Jar = fetchmaven {
+    version = "2.5";
+    name = "bootstrap-maven-clean-plugin-jar-2.5";
+    src = fetchurl rec {
+      url = "https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-clean-plugin/2.5/maven-clean-plugin-2.5.jar";
+      sha256 = "0wxg8yyz5jsy35pvjy5cwsbv4306q3gay1gyvwq604966qs34af2";
+    };
+    m2Path = "/org/apache/maven/plugins/maven-clean-plugin/2.5";
+    m2File = "maven-clean-plugin-2.5.jar";
+  };
 }

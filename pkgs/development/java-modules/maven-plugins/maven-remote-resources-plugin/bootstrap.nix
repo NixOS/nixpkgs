@@ -12,6 +12,17 @@ rec {
     m2File = "maven-remote-resources-plugin-1.0-alpha-6.jar";
   };
 
+  mavenRemoteResources10Jar = fetchmaven {
+    version = "1.0";
+    name = "bootstrap-maven-remote-resources-plugin-jar-1.0";
+    src = fetchurl rec {
+      url = "https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-remote-resources-plugin/1.0/maven-remote-resources-plugin-1.0.jar";
+      sha256 = "1s2h4z4xss7zmjz7jg9ia960kwgb1s7vcyc0wqs0fr6a8xkfqzhj";
+    };
+    m2Path = "/org/apache/maven/plugins/maven-remote-resources-plugin/1.0";
+    m2File = "maven-remote-resources-plugin-1.0.jar";
+  };
+
   mavenRemoteResources121Jar = fetchmaven {
     version = "1.2.1";
     name = "bootstrap-maven-remote-resources-plugin-jar-1.2.1";

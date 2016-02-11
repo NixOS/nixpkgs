@@ -17,6 +17,28 @@ rec {
     };
   };
 
+  mavenEnforcer10alpha4 = mavenEnforcerGen {
+    name = "maven-enforcer-plugin-1.0-alpha-4";
+    src = fetchsvn {
+      url = "http://svn.apache.org/repos/asf/maven/enforcer/tags/enforcer-1.0-alpha-4/";
+      rev = 1724719;
+      sha256 = "0qg5r1b0c7fk5ypvz05m1cnfc4h86mphaj20flf5pwbr1kvglq76";
+    };
+    mavenDeps = [ bootstrapMavenRemoteResources10Jar apacheParent4 mavenClean22 mavenParent9 ];
+    m2Path = "/org/apache/maven/plugins/maven-enforcer-plugin/1.0-alpha-4";
+  };
+
+  mavenEnforcer10beta1 = mavenEnforcerGen {
+    name = "maven-enforcer-plugin-1.0-beta-1";
+    src = fetchsvn {
+      url = "http://svn.apache.org/repos/asf/maven/enforcer/tags/enforcer-1.0-beta-1/";
+      rev = 1724719;
+      sha256 = "158f2qsxcncymd80xk5x0whmi34r2fp5m2ln8lp2jj3vm96wy5ra";
+    };
+    mavenDeps = [ bootstrapMavenRemoteResources10Jar apacheParent5 mavenClean23 mavenParent11 ];
+    m2Path = "/org/apache/maven/plugins/maven-enforcer-plugin/1.0-beta-1";
+  };
+
   mavenEnforcer10 = mavenEnforcerGen {
     name = "maven-enforcer-plugin-1.0";
     src = fetchsvn {

@@ -4318,6 +4318,7 @@ let
     bootstrapMavenClean = callPackage ../development/java-modules/maven-plugins/maven-clean-plugin/bootstrap.nix { };
     bootstrapMavenClean241Jar = self.mavenPlugins.bootstrapMavenClean.mavenClean241Jar;
     bootstrapMavenClean241Pom = self.mavenPlugins.bootstrapMavenClean.mavenClean241Pom;
+    bootstrapMavenClean25Jar = self.mavenPlugins.bootstrapMavenClean.mavenClean25Jar;
 
     bootstrapMavenEnforcer = callPackage ../development/java-modules/maven-plugins/maven-enforcer-plugin/bootstrap.nix { };
     bootstrapMavenEnforcer10Jar = self.mavenPlugins.bootstrapMavenEnforcer.mavenEnforcer10Jar;
@@ -4325,20 +4326,28 @@ let
 
     bootstrapMavenRemoteResources = callPackage ../development/java-modules/maven-plugins/maven-remote-resources-plugin/bootstrap.nix { };
     bootstrapMavenRemoteResourcesAlpha6Jar = self.mavenPlugins.bootstrapMavenRemoteResources.mavenRemoteResourcesAlpha6Jar;
+    bootstrapMavenRemoteResources10Jar = self.mavenPlugins.bootstrapMavenRemoteResources.mavenRemoteResources10Jar;
     bootstrapMavenRemoteResources11Jar = self.mavenPlugins.bootstrapMavenRemoteResources.mavenRemoteResources11Jar;
     bootstrapMavenRemoteResources11Pom = self.mavenPlugins.bootstrapMavenRemoteResources.mavenRemoteResources11Pom;
     bootstrapMavenRemoteResources121Jar = self.mavenPlugins.bootstrapMavenRemoteResources.mavenRemoteResources121Jar;
     bootstrapMavenRemoteResources121Pom = self.mavenPlugins.bootstrapMavenRemoteResources.mavenRemoteResources121Pom;
 
     mavenCleanGen = callPackage ../development/java-modules/maven-plugins/maven-clean-plugin { };
+    mavenClean22 = self.mavenPlugins.mavenCleanGen.mavenClean22;
+    mavenClean23 = self.mavenPlugins.mavenCleanGen.mavenClean23;
     mavenClean25 = self.mavenPlugins.mavenCleanGen.mavenClean25;
 
     mavenEnforcerGen = callPackage ../development/java-modules/maven-plugins/maven-enforcer-plugin { };
+    mavenEnforcer10alpha4 = self.mavenPlugins.mavenEnforcerGen.mavenEnforcer10alpha4;
+    mavenEnforcer10beta1 = self.mavenPlugins.mavenEnforcerGen.mavenEnforcer10beta1;
     mavenEnforcer10 = self.mavenPlugins.mavenEnforcerGen.mavenEnforcer10;
     mavenEnforcer101 = self.mavenPlugins.mavenEnforcerGen.mavenEnforcer101;
 
     mavenInstallGen = callPackage ../development/java-modules/maven-plugins/maven-install-plugin { };
     mavenInstall231 = self.mavenPlugins.mavenInstallGen.mavenInstall231;
+
+    mavenPluginGen = callPackage ../development/java-modules/maven-plugins/maven-plugin-plugin { };
+    mavenPlugin26 = self.mavenPlugins.mavenPluginGen.mavenPlugin26;
 
     mavenRemoteResourcesGen = callPackage ../development/java-modules/maven-plugins/maven-remote-resources-plugin { };
     mavenRemoteResources10 = self.mavenPlugins.mavenRemoteResourcesGen.mavenRemoteResources10;
