@@ -14,6 +14,8 @@ composableDerivation.composableDerivation {} (fixed: rec {
   buildInputs = [ unzip libjpeg libtiff libpng proj openssl ]
   ++ (with pythonPackages; [ python numpy wrapPython ]);
 
+  hardening_format = false;
+
   patches = [
     # This ensures that the python package is installed into gdal's prefix,
     # rather than trying to install into python's prefix.
