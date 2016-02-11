@@ -1,6 +1,17 @@
 { fetchmaven, fetchurl }:
 
 rec {
+  mavenPlugin243Jar = fetchmaven {
+    version = "2.4.3";
+    name = "bootstrap-maven-plugin-plugin-jar-2.4.3";
+    src = fetchurl rec {
+      url = "https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-plugin-plugin/2.4.3/maven-plugin-plugin-2.4.3.jar";
+      sha256 = "052mb7kaljyqhzr06m5q3zx2gj37rsv18hyp6bwmfc67dc02wan6";
+    };
+    m2Path = "/org/apache/maven/plugins/maven-plugin-plugin/2.4.3";
+    m2File = "maven-plugin-plugin-2.4.3.jar";
+  };
+
   mavenPlugin251Jar = fetchmaven {
     version = "2.5.1";
     name = "bootstrap-maven-plugin-plugin-jar-2.5.1";

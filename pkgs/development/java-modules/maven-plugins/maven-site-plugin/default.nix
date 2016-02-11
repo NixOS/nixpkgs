@@ -35,7 +35,7 @@ rec {
       rev = 1724719;
       sha256 = "0p245nwwgsnmmqrfb62bhqg01nnz4ig1jr275sslyykhx04qwf5v";
     };
-    mavenDeps = [ bootstrapMavenEnforcer101Jar bootstrapMavenPlugin28Jar bootstrapMavenRemoteResources121Jar apacheParent10 mavenParent21 mavenPlugins22 ];
+    mavenDeps = [ bootstrapMavenEnforcer101Jar bootstrapMavenPlugin28Jar bootstrapMavenRemoteResources121Jar apacheParent10 mavenParent21 mavenPlugins22 plexusComponentMetadata154 ];
     m2Path = "/org/apache/maven/plugins/maven-site-plugin/3.1";
   };
 }

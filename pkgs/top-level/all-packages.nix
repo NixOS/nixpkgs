@@ -4317,6 +4317,7 @@ let
   mavenPlugins = {
     bootstrapMavenClean = callPackage ../development/java-modules/maven-plugins/maven-clean-plugin/bootstrap.nix { };
     bootstrapMavenClean23Jar = self.mavenPlugins.bootstrapMavenClean.mavenClean23Jar;
+    bootstrapMavenClean24Jar = self.mavenPlugins.bootstrapMavenClean.mavenClean24Jar;
     bootstrapMavenClean241Jar = self.mavenPlugins.bootstrapMavenClean.mavenClean241Jar;
     bootstrapMavenClean241Pom = self.mavenPlugins.bootstrapMavenClean.mavenClean241Pom;
     bootstrapMavenClean25Jar = self.mavenPlugins.bootstrapMavenClean.mavenClean25Jar;
@@ -4329,6 +4330,7 @@ let
     bootstrapMavenEnforcer101Jar = self.mavenPlugins.bootstrapMavenEnforcer.mavenEnforcer101Jar;
 
     bootstrapMavenPlugin = callPackage ../development/java-modules/maven-plugins/maven-plugin-plugin/bootstrap.nix { };
+    bootstrapMavenPlugin243Jar = self.mavenPlugins.bootstrapMavenPlugin.mavenPlugin243Jar;
     bootstrapMavenPlugin251Jar = self.mavenPlugins.bootstrapMavenPlugin.mavenPlugin251Jar;
     bootstrapMavenPlugin26Jar = self.mavenPlugins.bootstrapMavenPlugin.mavenPlugin26Jar;
     bootstrapMavenPlugin28Jar = self.mavenPlugins.bootstrapMavenPlugin.mavenPlugin28Jar;
@@ -4343,6 +4345,7 @@ let
     bootstrapMavenRemoteResources13Jar = self.mavenPlugins.bootstrapMavenRemoteResources.mavenRemoteResources13Jar;
 
     bootstrapMavenResources = callPackage ../development/java-modules/maven-plugins/maven-resources-plugin/bootstrap.nix { };
+    bootstrapMavenResources23Jar = self.mavenPlugins.bootstrapMavenResources.mavenResources23Jar;
     bootstrapMavenResources26Jar = self.mavenPlugins.bootstrapMavenResources.mavenResources26Jar;
 
     bootstrapModelloMaven = callPackage ../development/java-modules/maven-plugins/modello-maven-plugin/bootstrap.nix { };
@@ -4365,6 +4368,7 @@ let
     mavenEnforcer101 = self.mavenPlugins.mavenEnforcerGen.mavenEnforcer101;
 
     mavenInstallGen = callPackage ../development/java-modules/maven-plugins/maven-install-plugin { };
+    mavenInstall23 = self.mavenPlugins.mavenInstallGen.mavenInstall23;
     mavenInstall231 = self.mavenPlugins.mavenInstallGen.mavenInstall231;
 
     mavenPluginGen = callPackage ../development/java-modules/maven-plugins/maven-plugin-plugin { };
@@ -4395,6 +4399,9 @@ let
     modelloMavenGen = callPackage ../development/java-modules/maven-plugins/modello-maven-plugin { };
     modelloMavenPlugin10Alpha15 = self.mavenPlugins.modelloMavenGen.modelloMavenPlugin10Alpha15;
     modelloMavenPlugin141 = self.mavenPlugins.modelloMavenGen.modelloMavenPlugin141;
+
+    plexusComponentMetadataGen = callPackage ../development/java-modules/maven-plugins/plexus-component-metadata { };
+    plexusComponentMetadata154 = self.mavenPlugins.plexusComponentMetadataGen.plexusComponentMetadata154;
 
     wagonWebdavGen = callPackage ../development/java-modules/maven-plugins/wagon-webdav { };
     wagonWebdav10beta2 = self.mavenPlugins.wagonWebdavGen.wagonWebdav10beta2;

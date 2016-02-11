@@ -321,6 +321,17 @@ rec {
     m2File = "maven-plugins-12.pom";
   };
 
+  mavenPlugins13 = fetchmaven {
+    version = 13;
+    name = "maven-plugins";
+    src = fetchurl rec {
+      url = "http://svn.apache.org/repos/asf/maven/plugins/tags/maven-plugins-13/pom.xml";
+      sha256 = "1ywhhds68nq52p6kfxq1a3py80dj8f0qyx4nh835v1197a9ccy6n";
+    };
+    m2Path = "org/apache/maven/plugins/maven-plugins/13";
+    m2File = "maven-plugins-13.pom";
+  };
+
   mavenPlugins14 = fetchmaven {
     version = 14;
     name = "maven-plugins";
@@ -429,6 +440,17 @@ rec {
     };
     m2Path = "org/apache/maven/plugin-tools/maven-plugin-tools/3.1";
     m2File = "maven-plugin-tools-3.1.pom";
+  };
+
+  plexusParent205 = fetchmaven {
+    version = "2.0.5";
+    name = "plexus-pom-2.0.5";
+    src = fetchurl rec {
+      url = "https://raw.githubusercontent.com/sonatype/plexus-pom/plexus-2.0.5/pom.xml";
+      sha256 = "0882f9y732q5nb7c39ysv6rs744hcmqz2s66nqcyn3ckxdn8y655";
+    };
+    m2Path = "org/codehaus/plexus/plexus/2.0.5";
+    m2File = "plexus-2.0.5.pom";
   };
 
   wagon10beta2 = fetchmaven {
