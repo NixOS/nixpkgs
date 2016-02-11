@@ -33,6 +33,17 @@ let
     max [
       (min [64 (shared_buffers / 32)])
       1];
+
+  listen_addresses =
+    if builtins.hasAttr "ethsrv" config.networking.interfaces
+    then
+      let
+        ethsrv = config.networking.interfaces.ethsrv;
+      in
+        (map (addr: addr.address) ethsrv.ip4) ++
+        (map (addr: addr.address) ethsrv.ip6)
+    else [];
+
 in
 {
   options = {
@@ -80,6 +91,11 @@ in
 
     # Custom postgresql configuration
     services.postgresql.extraConfig = ''
+      #------------------------------------------------------------------------------
+      # CONNECTIONS AND AUTHENTICATION
+      #------------------------------------------------------------------------------
+      listen_addresses = '${concatStringsSep "," listen_addresses},127.0.0.1,::1'
+      max_connections = 400
       #------------------------------------------------------------------------------
       # RESOURCE USAGE (except WAL)
       #------------------------------------------------------------------------------
