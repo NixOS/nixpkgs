@@ -43,17 +43,27 @@ def load_enc():
             enc['parameters']['resource_group']))
 
 
-def update_inventory():
-    calls = [
-        (lambda: directory.lookup_node(enc['name']),
-         'enc.json'),
-        (lambda: directory.list_users(),
-         'users.json'),
-        (lambda: directory.list_permissions(),
-         'permissions.json'),
-        (lambda: directory.lookup_resourcegroup('admins'),
-         'admins.json'),
-    ]
+def system_state():
+    def load_system_state():
+        result = {}
+        try:
+            with open('/proc/meminfo') as f:
+                for line in f:
+                    if line.startswith('MemTotal:'):
+                        _, memkb, _ = line.split()
+                        result['memory'] = int(memkb) // 1024
+                        break
+        except IOError:
+            pass
+        return result
+
+    _load_and_write_json([
+        (lambda: load_system_state(),
+         'system_state.json'),
+    ])
+
+
+def _load_and_write_json(calls):
     for lookup, target in calls:
         print('Retrieving {} ...'.format(target))
         try:
@@ -62,6 +72,19 @@ def update_inventory():
                 json.dump(data, f, ensure_ascii=False)
         except Exception:
             logging.exception('Error retrieving data:')
+
+
+def update_inventory():
+    _load_and_write_json([
+        (lambda: directory.lookup_node(enc['name']),
+         'enc.json'),
+        (lambda: directory.list_users(),
+         'users.json'),
+        (lambda: directory.list_permissions(),
+         'permissions.json'),
+        (lambda: directory.lookup_resourcegroup('admins'),
+         'admins.json'),
+    ])
 
 
 def build_channel():
@@ -93,6 +116,9 @@ logging.basicConfig()
 if '--directory' in sys.argv:
     load_enc()
     update_inventory()
+
+if '--system-state' in sys.argv:
+    system_state()
 
 load_enc()
 

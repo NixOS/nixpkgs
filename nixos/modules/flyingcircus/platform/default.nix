@@ -11,14 +11,19 @@ with lib;
 
 let
 
-    get_enc = path: default:
-      if builtins.pathExists path
-      then builtins.fromJSON (builtins.readFile path)
-      else default;
+  cfg = config.flyingcircus;
 
-    enc =
-      get_enc config.flyingcircus.enc_path
-      (get_enc /etc/nixos/enc.json {});
+  get_json = path: default:
+    if builtins.pathExists path
+    then builtins.fromJSON (builtins.readFile path)
+    else default;
+
+  enc =
+    get_json cfg.enc_path
+    (get_json /etc/nixos/enc.json {});
+
+  system_state =
+    get_json cfg.system_state_path {};
 
 in
 
@@ -49,6 +54,19 @@ in
       description = "Where to find the ENC json file.";
     };
 
+
+    flyingcircus.system_state = mkOption {
+      default = {};
+      type = types.attrs;
+      description = "The current system state as put out by fc-manage";
+    };
+
+    flyingcircus.system_state_path = mkOption {
+      default = /etc/nixos/system_state.json;
+      type = types.path;
+      description = "Where to find the system state json file.";
+    };
+
   };
 
   config = {
@@ -63,7 +81,8 @@ in
       https://hydra.flyingcircus.io
     ];
 
-    flyingcircus.enc = lib.optionalAttrs config.flyingcircus.load_enc enc;
+    flyingcircus.enc = lib.optionalAttrs cfg.load_enc enc;
+    flyingcircus.system_state = system_state;
 
     users.motd = ''
         Welcome to the Flying Circus
@@ -133,8 +152,8 @@ in
         '';
 
     environment.etc = (
-      lib.optionalAttrs (lib.hasAttrByPath ["parameters" "directory_secret"] config.flyingcircus.enc)
-      { "directory.secret".text = config.flyingcircus.enc.parameters.directory_secret;
+      lib.optionalAttrs (lib.hasAttrByPath ["parameters" "directory_secret"] cfg.enc)
+      { "directory.secret".text = cfg.enc.parameters.directory_secret;
         "directory.secret".mode = "0600";}) //
       { "nixos/configuration.nix".text = lib.readFile ../files/etc_nixos_configuration.nix; };
   };

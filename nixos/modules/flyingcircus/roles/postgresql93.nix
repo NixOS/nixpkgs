@@ -12,9 +12,20 @@ let
   # return the "current" system memory in MiB. We currently use the value from
   # the ENC but should use the actual system memory.
   current_memory =
-    if lib.hasAttrByPath ["parameters" "memory"] cfg.enc
-    then cfg.enc.parameters.memory
-    else 256;
+    let
+      enc_memory =
+        if lib.hasAttrByPath ["parameters" "memory"] cfg.enc
+        then cfg.enc.parameters.memory
+        else null;
+      system_memory =
+        if hasAttr "memory" cfg.system_state
+        then cfg.system_state.memory
+        else null;
+      options = lib.remove null [enc_memory system_memory];
+    in
+      if options == []
+      then 256
+      else min options;
 
   shared_memory_max = current_memory / 2 * 1048576;
 
@@ -99,6 +110,7 @@ in
       #------------------------------------------------------------------------------
       # RESOURCE USAGE (except WAL)
       #------------------------------------------------------------------------------
+      # available memory: ${toString current_memory}MB
       shared_buffers = ${toString shared_buffers}MB   # starting point is 25% RAM
       temp_buffers = 16MB
       work_mem = ${toString work_mem}MB

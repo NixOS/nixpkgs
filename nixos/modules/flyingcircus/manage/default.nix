@@ -19,7 +19,7 @@ with lib;
 
       steps = mkOption {
         type = types.str;
-        default = "--directory --channel";
+        default = "--directory --system-state --channel";
         description = "Steps to run by the agent.";
       };
 
