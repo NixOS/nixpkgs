@@ -22,4 +22,15 @@ rec {
     m2Path = "/org/apache/maven/plugins/maven-plugin-plugin/2.6";
     m2File = "maven-plugin-plugin-2.6.jar";
   };
+
+  mavenPlugin28Jar = fetchmaven {
+    version = "2.8";
+    name = "bootstrap-maven-plugin-plugin-jar-2.8";
+    src = fetchurl rec {
+      url = "https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-plugin-plugin/2.8/maven-plugin-plugin-2.8.jar";
+      sha256 = "03kp6qknsls7iy5p56aa33l8sih66mjx3cwjalmw94j515nrnim9";
+    };
+    m2Path = "/org/apache/maven/plugins/maven-plugin-plugin/2.8";
+    m2File = "maven-plugin-plugin-2.8.jar";
+  };
 }

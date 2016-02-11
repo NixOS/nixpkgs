@@ -101,6 +101,17 @@ rec {
     m2File = "apache-11.pom";
   };
 
+  apacheParent13 = fetchmaven {
+    version = 13;
+    name = "apache-parent";
+    src = fetchurl rec {
+      url = "https://repo1.maven.org/maven2/org/apache/apache/13/apache-13.pom";
+      sha256 = "07c4yg52q1qiz2b982pcsiwf9ahmpil4jy7lpqvi5m0z6sq3slgz";
+    };
+    m2Path = "org/apache/apache/13";
+    m2File = "apache-13.pom";
+  };
+
   mavenEnforcerParent10Pom = fetchmaven {
     version = "1.0";
     name = "maven-enforcer";
@@ -255,6 +266,17 @@ rec {
     m2File = "maven-parent-22.pom";
   };
 
+  mavenParent23 = fetchmaven {
+    version = 23;
+    name = "maven-parent";
+    src = fetchurl rec {
+      url = "http://svn.apache.org/repos/asf/maven/pom/tags/maven-parent-23/pom.xml";
+      sha256 = "118nah9ig7kmqvwh84qma54d4dk8w29cqlya3sqdf2wyvlg509al";
+    };
+    m2Path = "org/apache/maven/maven-parent/23";
+    m2File = "maven-parent-23.pom";
+  };
+
   mavenPlugins8 = fetchmaven {
     version = 8;
     name = "maven-plugins";
@@ -385,6 +407,28 @@ rec {
     };
     m2Path = "org/apache/maven/plugins/maven-plugins/23";
     m2File = "maven-plugins-23.pom";
+  };
+
+  mavenPlugins24 = fetchmaven {
+    version = 24;
+    name = "maven-plugins";
+    src = fetchurl rec {
+      url = "http://svn.apache.org/repos/asf/maven/plugins/tags/maven-plugins-24/pom.xml";
+      sha256 = "0mly2jydjqf455mic36hcjz2cx6682icw5wfz3v9ia6ifaykifmz";
+    };
+    m2Path = "org/apache/maven/plugins/maven-plugins/24";
+    m2File = "maven-plugins-24.pom";
+  };
+
+  mavenPluginTools31 = fetchmaven {
+    version = "3.1";
+    name = "maven-plugin-tools";
+    src = fetchurl rec {
+      url = "http://svn.apache.org/repos/asf/maven/plugin-tools/tags/maven-plugin-tools-3.1/pom.xml";
+      sha256 = "1v5bcspzanm5km7gh1b9i5dz0ycgrxmkggk2kmwiahcigi0j4d7a";
+    };
+    m2Path = "org/apache/maven/plugin-tools/maven-plugin-tools/3.1";
+    m2File = "maven-plugin-tools-3.1.pom";
   };
 
   wagon10beta2 = fetchmaven {
