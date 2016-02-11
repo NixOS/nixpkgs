@@ -58,7 +58,7 @@ in stdenv.mkDerivation {
     ln -s bzip2 $out/bin/bzcat
   '';
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile --replace CC=gcc CC=cc
     substituteInPlace Makefile-libbz2_so --replace CC=gcc CC=cc
   '';
