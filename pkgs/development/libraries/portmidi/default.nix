@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unzip cmake /*jdk*/ alsaLib ];
 
+  hardening_format = false;
+
   meta = {
     homepage = "http://portmedia.sourceforge.net/portmidi/";
     description = "Platform independent library for MIDI I/O";
