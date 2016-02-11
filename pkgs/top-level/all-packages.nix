@@ -3207,6 +3207,8 @@ let
 
   sundtek = callPackage ../misc/drivers/sundtek { };
 
+  sunxi-tools = callPackage ../development/tools/sunxi-tools { };
+
   super = callPackage ../tools/security/super { };
 
   supertux-editor = callPackage ../applications/editors/supertux-editor { };
