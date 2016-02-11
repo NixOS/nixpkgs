@@ -42,6 +42,18 @@ let
 
   kernelHasRPFilter = ((kernel.config.isEnabled or (x: false)) "IP_NF_MATCH_RPFILTER") || (kernel.features.netfilterRPFilter or false);
 
+  targetChains = {
+    ACCEPT = "nixos-fw-accept";
+    DROP = "nixos-fw-refuse";
+    REJECT = "nixos-fw-log-refuse";
+    LOG = "LOG";
+    INPUT = "nixos-fw-input";
+    OUTPUT = "nixos-fw-output";
+    FORWARD = "nixos-fw-forward";
+    PREROUTING = "PREROUTING";
+    POSTROUTING = "POSTROUTING";
+  };
+
   helpers =
     ''
       # Helper command to manipulate both the IPv4 and IPv6 tables.
@@ -52,6 +64,16 @@ let
         ''}
       }
     '';
+
+  getTargetForPolicy = policy:
+    if policy == "ACCEPT"
+    then "nixos-fw-accept"
+    else "nixos-fw-refuse";
+
+  prependStringIfNotNull = prefix: string:
+    if string != null
+    then "${prefix}${string}"
+    else "";
 
   writeShScript = name: text: let dir = pkgs.writeScriptBin name ''
     #! ${pkgs.stdenv.shell} -e
@@ -64,12 +86,18 @@ let
     # Flush the old firewall rules.  !!! Ideally, updating the
     # firewall would be atomic.  Apparently that's possible
     # with iptables-restore.
-    ip46tables -D INPUT -j nixos-fw 2> /dev/null || true
-    for chain in nixos-fw nixos-fw-accept nixos-fw-log-refuse nixos-fw-refuse; do
+    ip46tables -D INPUT -j nixos-fw-input 2> /dev/null || true
+    ip46tables -D OUTPUT -j nixos-fw-output 2> /dev/null || true
+    ip46tables -D FORWARD -j nixos-fw-forward 2> /dev/null || true
+    for chain in nixos-fw nixos-fw-accept nixos-fw-input nixos-fw-output nixos-fw-forward nixos-fw-accept nixos-fw-log-refuse nixos-fw-refuse __invalid_chain__ FW_REFUSE; do
       ip46tables -F "$chain" 2> /dev/null || true
       ip46tables -X "$chain" 2> /dev/null || true
     done
 
+    # Set default policies
+    ip46tables -P INPUT ${cfg.defaultPolicies.input}
+    ip46tables -P OUTPUT ${cfg.defaultPolicies.output}
+    ip46tables -P FORWARD ${cfg.defaultPolicies.forward}
 
     # The "nixos-fw-accept" chain just accepts packets.
     ip46tables -N nixos-fw-accept
@@ -88,7 +116,6 @@ let
     '' else ''
       ip46tables -A nixos-fw-refuse -j DROP
     ''}
-
 
     # The "nixos-fw-log-refuse" chain performs logging, then
     # jumps to the "nixos-fw-refuse" chain.
@@ -111,9 +138,6 @@ let
     ip46tables -A nixos-fw-log-refuse -j nixos-fw-refuse
 
 
-    # The "nixos-fw" chain does the actual work.
-    ip46tables -N nixos-fw
-
     # Perform a reverse-path test to refuse spoofers
     # For now, we just drop, as the raw table doesn't have a log-refuse yet
     ${optionalString (kernelHasRPFilter && (cfg.checkReversePath != false)) ''
@@ -135,18 +159,102 @@ let
       ip46tables -t raw -A PREROUTING -j nixos-fw-rpfilter
     ''}
 
-    # Accept all traffic on the trusted interfaces.
-    ${flip concatMapStrings cfg.trustedInterfaces (iface: ''
-      ip46tables -A nixos-fw -i ${iface} -j nixos-fw-accept
-    '')}
+    # The "nixos-fw-[input|output|forward]" chains do the actual work.
+    ip46tables -N nixos-fw-input
+    ip46tables -N nixos-fw-output
+    ip46tables -N nixos-fw-forward
+
+    ip46tables -N __invalid_chain__
 
     # Accept packets from established or related connections.
-    ip46tables -A nixos-fw -m conntrack --ctstate ESTABLISHED,RELATED -j nixos-fw-accept
+    ip46tables -A nixos-fw-input -m conntrack --ctstate ESTABLISHED,RELATED -j nixos-fw-accept
+    ip46tables -A nixos-fw-forward -m conntrack --ctstate ESTABLISHED,RELATED -j nixos-fw-accept
+    ip46tables -A nixos-fw-output -m conntrack --ctstate ESTABLISHED,RELATED -j nixos-fw-accept
+
+    # Put the rules into their respective chains.
+    ${concatMapStrings (rule:
+        let
+          ipversions = if
+              rule.ipv6Only ||
+              rule.protocol == "icmpv6" ||
+              (
+                if rule.sourceAddr != null
+                then elem ":" (stringToCharacters rule.sourceAddr)
+                else false
+              ) || (
+                if rule.destinationAddr != null
+                then elem ":" (stringToCharacters rule.destinationAddr)
+                else false
+              )
+            then
+              ["ipv6"]
+            else
+              if
+                rule.ipv4Only ||
+                rule.protocol == "icmp" ||
+                (
+                  if rule.sourceAddr != null
+                  then elem "." (stringToCharacters rule.sourceAddr)
+                  else false
+                ) || (
+                  if rule.destinationAddr != null
+                  then elem "." (stringToCharacters rule.destinationAddr)
+                  else false
+                )
+              then
+                ["ipv4"]
+              else
+                ["ipv4" "ipv6"];
+          chain = getAttr rule.chain targetChains;
+          target = getAttr rule.target targetChains;
+          ifacein = prependStringIfNotNull "-i " rule.fromInterface;
+          ifaceout = prependStringIfNotNull "-o " rule.toInterface;
+          srcaddr = prependStringIfNotNull "-s " rule.sourceAddr;
+          destaddr = prependStringIfNotNull "-d " rule.destinationAddr;
+          sourceport = if rule.sourcePort != null
+            then
+              if elem rule.protocol [ "tcp" "udp" "dccp" "sctp" ]
+              then prependStringIfNotNull "--sport " rule.sourcePort
+              else abort "Usage of source port in rules is only allowed with protocols tcp, udp, dccp or sctp"
+            else "";
+          destinationport = if rule.destinationPort != null
+            then
+              if elem rule.protocol [ "tcp" "udp" "dccp" "sctp" ]
+              then prependStringIfNotNull "--dport " rule.destinationPort
+              else abort "Usage of destination port in rules is only allowed with protocols tcp, udp, dccp or sctp"
+            else "";
+          logargs = if target == "LOG" && rule . log-prefix or null != null
+          then "--log-prefix \"${rule.log-prefix}\" --log-level ${rule.log-level}"
+          else "";
+        in
+        ''
+          ${optionalString (elem "ipv4" ipversions) ''
+            iptables -t ${rule.table} -A ${chain} -p ${rule.protocol} \
+              ${ifacein} ${ifaceout} \
+              ${srcaddr} ${destaddr} \
+              ${sourceport} ${destinationport} \
+              -j ${target} ${logargs}
+          ''}
+          ${optionalString (elem "ipv6" ipversions) ''
+            ip6tables -t ${rule.table} -A ${chain} -p ${rule.protocol} \
+              ${ifacein} ${ifaceout} \
+              ${srcaddr} ${destaddr} \
+              ${sourceport} ${destinationport} \
+              -j ${target} ${logargs}
+          ''}
+        ''
+      ) cfg.rules
+    }
+
+    # Accept all traffic on the trusted interfaces.
+    ${flip concatMapStrings cfg.trustedInterfaces (iface: ''
+      ip46tables -A nixos-fw-input -i ${iface} -j nixos-fw-accept
+    '')}
 
     # Accept connections to the allowed TCP ports.
     ${concatMapStrings (port:
         ''
-          ip46tables -A nixos-fw -p tcp --dport ${toString port} -j nixos-fw-accept
+          ip46tables -A nixos-fw-input -p tcp --dport ${toString port} -j nixos-fw-accept
         ''
       ) cfg.allowedTCPPorts
     }
@@ -155,7 +263,7 @@ let
     ${concatMapStrings (rangeAttr:
         let range = toString rangeAttr.from + ":" + toString rangeAttr.to; in
         ''
-          ip46tables -A nixos-fw -p tcp --dport ${range} -j nixos-fw-accept
+          ip46tables -A nixos-fw-input -p tcp --dport ${range} -j nixos-fw-accept
         ''
       ) cfg.allowedTCPPortRanges
     }
@@ -163,7 +271,7 @@ let
     # Accept packets on the allowed UDP ports.
     ${concatMapStrings (port:
         ''
-          ip46tables -A nixos-fw -p udp --dport ${toString port} -j nixos-fw-accept
+          ip46tables -A nixos-fw-input -p udp --dport ${toString port} -j nixos-fw-accept
         ''
       ) cfg.allowedUDPPorts
     }
@@ -172,18 +280,18 @@ let
     ${concatMapStrings (rangeAttr:
         let range = toString rangeAttr.from + ":" + toString rangeAttr.to; in
         ''
-          ip46tables -A nixos-fw -p udp --dport ${range} -j nixos-fw-accept
+          ip46tables -A nixos-fw-input -p udp --dport ${range} -j nixos-fw-accept
         ''
       ) cfg.allowedUDPPortRanges
     }
 
     # Accept IPv4 multicast.  Not a big security risk since
     # probably nobody is listening anyway.
-    #iptables -A nixos-fw -d 224.0.0.0/4 -j nixos-fw-accept
+    #iptables -A nixos-fw-input -d 224.0.0.0/4 -j nixos-fw-accept
 
     # Optionally respond to ICMPv4 pings.
     ${optionalString cfg.allowPing ''
-      iptables -w -A nixos-fw -p icmp --icmp-type echo-request ${optionalString (cfg.pingLimit != null)
+      iptables -w -A nixos-fw-input -p icmp --icmp-type echo-request ${optionalString (cfg.pingLimit != null)
         "-m limit ${cfg.pingLimit} "
       }-j nixos-fw-accept
     ''}
@@ -192,22 +300,26 @@ let
       # Accept all ICMPv6 messages except redirects and node
       # information queries (type 139).  See RFC 4890, section
       # 4.4.
-      ip6tables -A nixos-fw -p icmpv6 --icmpv6-type redirect -j DROP
-      ip6tables -A nixos-fw -p icmpv6 --icmpv6-type 139 -j DROP
-      ip6tables -A nixos-fw -p icmpv6 -j nixos-fw-accept
+      ip6tables -A nixos-fw-input -p icmpv6 --icmpv6-type redirect -j DROP
+      ip6tables -A nixos-fw-input -p icmpv6 --icmpv6-type 139 -j DROP
+      ip6tables -A nixos-fw-input -p icmpv6 -j nixos-fw-accept
 
       # Allow this host to act as a DHCPv6 client
-      ip6tables -A nixos-fw -d fe80::/64 -p udp --dport 546 -j nixos-fw-accept
+      ip6tables -A nixos-fw-input -d fe80::/64 -p udp --dport 546 -j nixos-fw-accept
     ''}
 
     ${cfg.extraCommands}
 
-    # Reject/drop everything else.
-    ip46tables -A nixos-fw -j nixos-fw-log-refuse
+    # Reject/drop everything else depending on the default policies.
+    ip46tables -A nixos-fw-input -j ${getTargetForPolicy cfg.defaultPolicies.input}
+    ip46tables -A nixos-fw-output -j ${getTargetForPolicy cfg.defaultPolicies.output}
+    ip46tables -A nixos-fw-forward -j ${getTargetForPolicy cfg.defaultPolicies.forward}
 
 
     # Enable the firewall.
-    ip46tables -A INPUT -j nixos-fw
+    ip46tables -A INPUT -j nixos-fw-input
+    ip46tables -A OUTPUT -j nixos-fw-output
+    ip46tables -A FORWARD -j nixos-fw-forward
   '';
 
   stopScript = writeShScript "firewall-stop" ''
@@ -217,7 +329,14 @@ let
     ip46tables -D INPUT -j nixos-drop 2>/dev/null || true
 
     # Clean up after added ruleset
-    ip46tables -D INPUT -j nixos-fw 2>/dev/null || true
+    ip46tables -D INPUT -j nixos-fw-input 2>/dev/null || true
+    ip46tables -D OUTPUT -j nixos-fw-output 2>/dev/null || true
+    ip46tables -D FORWARD -j nixos-fw-forward 2>/dev/null || true
+
+    # Open up the firewall by the default policies
+    ip46tables -P INPUT ACCEPT
+    ip46tables -P OUTPUT ACCEPT
+    ip46tables -P FORWARD ACCEPT
 
     ${optionalString (kernelHasRPFilter && (cfg.checkReversePath != false)) ''
       ip46tables -t raw -D PREROUTING -j nixos-fw-rpfilter 2>/dev/null || true
@@ -247,6 +366,7 @@ let
     fi
   '';
 
+  targetTypes = [ "ACCEPT" "DROP" "REJECT" ];
 in
 
 {
@@ -364,6 +484,157 @@ in
         ''
           Range of open UDP ports.
         '';
+    };
+
+    networking.firewall.defaultPolicies = mkOption {
+      type = types.submodule {
+        options = {
+          input = mkOption {
+            default = "DROP";
+            type = types.enum targetTypes;
+            description = "";
+          };
+          output = mkOption {
+            default = "ACCEPT";
+            type = types.enum targetTypes;
+            description = "";
+          };
+          forward = mkOption {
+            default = "DROP";
+            type = types.enum targetTypes;
+            description = "";
+          };
+        };
+      };
+      default = {};
+      description = ''
+        Set the default policies of the main filter chains
+      '';
+    };
+
+    networking.firewall.rules = mkOption {
+      default = [];
+      example = [];
+      description = ''
+        Rules for the iptables firewall.
+      '';
+      type = types.listOf (types.submodule {
+        options = {
+          ipv4Only = mkOption {
+            default = false;
+            type = types.bool;
+            description = ''
+              Force this rule to apply to ipv4 tables only.
+              Otherwise its decided upon the ipaddress and its format if it
+              applies to ipv6 or not.
+            '';
+          };
+          ipv6Only = mkOption {
+            default = false;
+            type = types.bool;
+            description = ''
+              Force this rule to apply to ipv6 tables only.
+              Otherwise its decided upon the ipaddress and its format if it
+              applies to ipv4 or not.
+            '';
+          };
+
+          table = mkOption {
+            type = types.enum [ "filter" "mangle" "nat" "raw" ];
+            default = "filter";
+            description = ''
+              Set the table for the rule.
+            '';
+          };
+          chain = mkOption {
+            type = types.enum [ "INPUT" "OUTPUT" "FORWARD" "PREROUTING" "POSTROUTING" ];
+            default = "INPUT";
+            description = ''
+              Set the chain where the rule should be added to.
+            '';
+          };
+
+          sourceAddr = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+            '';
+          };
+          destinationAddr = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+            '';
+          };
+
+          sourcePort = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "10000:15000";
+            description = ''
+              A port or portrange (as string) for the --sport option of iptables.
+            '';
+          };
+          destinationPort = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "80:443";
+            description = ''
+              A port or portrange (as string) for the --dport option of iptables.
+            '';
+          };
+
+          fromInterface = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+            description = ''
+              Source interface to match on.
+              Value is the name of the interface, optionally prefixed with ! to
+              match everything _except_ that interface.
+              Wildcards are allowed: eth+ matches all eth-something interfaces.
+              Special value null equals all interfaces.
+            '';
+          };
+          toInterface = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+            description = ''
+              Source interface to match on.
+              Value is the name of the interface, optionally prefixed with ! to
+              match everything _except_ that interface.
+              Wildcards are allowed: eth+ matches all eth-something interfaces.
+              Special value null equals all interfaces.
+            '';
+          };
+          target = mkOption {
+            default = null;
+            type = types.nullOr (types.enum (targetTypes ++ [ "LOG" ]));
+            description = ''
+              What to do with the data. Allowed values: ACCEPT, REJECT and DROP.
+            '';
+          };
+          protocol = mkOption {
+            default = "all";
+            type = types.enum [ "tcp" "udp" "udplite" "icmp" "icmpv6" "esp" "ah" "sctp" "mh" "all" ];
+            description = ''
+              Protocols to filter on. One of tcp, udp, udplite, icmp, icmpv6, esp, ah, sctp, mh and all, which matches all protocols.
+              Not to be mixed up with the port(s).
+            '';
+          };
+
+          log-prefix = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Prefix for logging.
+            '';
+          };
+          log-level = mkOption {
+            type = types.enum [ "debug" "info" "warning" "critical" ];
+            default = "info";
+          };
+        };
+      });
     };
 
     networking.firewall.allowPing = mkOption {
