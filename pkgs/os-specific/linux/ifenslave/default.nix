@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     cp -a ifenslave $out/bin
   '';
 
+  hardening_format = false;
+
   meta = {
     description = "Utility for enslaving networking interfaces under a bond";
     license = stdenv.lib.licenses.gpl2;
