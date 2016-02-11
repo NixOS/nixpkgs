@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [dbus glib dbus_glib];
 
+  hardening_format = false;
+
   preConfigure = ''
     sed -e '/-Werror/d' -i configure
   '';
