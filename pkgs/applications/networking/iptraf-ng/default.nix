@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
                 --localstatedir=$out/var --sbindir=$out/bin
   '';
 
+  hardening_format = false;
+
   meta = {
     description = "A console-based network monitoring utility (fork of iptraf)";
     longDescription = ''
