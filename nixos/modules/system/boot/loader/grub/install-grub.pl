@@ -228,7 +228,7 @@ if ($grubVersion == 1) {
     ";
     if ($splashImage) {
         copy $splashImage, "$bootPath/background.xpm.gz" or die "cannot copy $splashImage to $bootPath\n";
-        $conf .= "splashimage " . $grubBoot->path . "/background.xpm.gz\n";
+        $conf .= "splashimage " . Cwd::abs_path($grubBoot->path . "/background.xpm.gz") . "\n";
     }
 }
 
@@ -327,9 +327,9 @@ sub addEntry {
     my ($name, $path) = @_;
     return unless -e "$path/kernel" && -e "$path/initrd";
 
-    my $kernel = copyToKernelsDir(Cwd::abs_path("$path/kernel"));
-    my $initrd = copyToKernelsDir(Cwd::abs_path("$path/initrd"));
-    my $xen = -e "$path/xen.gz" ? copyToKernelsDir(Cwd::abs_path("$path/xen.gz")) : undef;
+    my $kernel = Cwd::abs_path(copyToKernelsDir(Cwd::abs_path("$path/kernel")));
+    my $initrd = Cwd::abs_path(copyToKernelsDir(Cwd::abs_path("$path/initrd")));
+    my $xen = -e "$path/xen.gz" ? Cwd::abs_path(copyToKernelsDir(Cwd::abs_path("$path/xen.gz"))) : undef;
 
     # FIXME: $confName
 
