@@ -3,11 +3,11 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "miniupnpd-1.9.20160113";
+  name = "miniupnpd-1.9.20160209";
 
   src = fetchurl {
     url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
-    sha256 = "084ii5vb54rr8sg50cqvsw5rj6linj23p3gnxwfyl100dkkgvcaa";
+    sha256 = "0r4giqsr39s17mn9lmmy3zawrfj7kj9im7nzv7mx3rgz2ncw092z";
     name = "${name}.tar.gz";
   };
 
