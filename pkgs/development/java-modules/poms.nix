@@ -106,7 +106,7 @@ rec {
     name = "maven-parent";
     src = fetchurl rec {
       url = "http://svn.apache.org/repos/asf/maven/pom/tags/maven-parent-5/pom.xml";
-      sha256 = "10wj48s4n0ir61apmsq1s94sixh3azknpky5nh6vwihs5v32srld";
+      sha256 = "0l5xcmkk0h3r47lpdny9a9zd5w0v48pk702kqhimh5bkj4i2lz2x";
     };
     m2Path = "org/apache/maven/maven-parent/5";
     m2File = "maven-parent-5.pom";
