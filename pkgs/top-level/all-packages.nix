@@ -11216,6 +11216,8 @@ let
 
   alock = callPackage ../misc/screensavers/alock { };
 
+  inherit (python2Packages) alot;
+
   alpine = callPackage ../applications/networking/mailreaders/alpine {
     tcl = tcl-8_5;
   };
