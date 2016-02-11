@@ -143,6 +143,11 @@ in
       lc_time = 'en_US.utf8'
 
     '';
+
+    services.postgresql.authentication = ''
+      host all  all  0.0.0.0/0  md5
+      host all  all  ::/0       md5
+    '';
   };
 
 }
