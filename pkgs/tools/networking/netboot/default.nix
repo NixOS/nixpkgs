@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ yacc lzo db4 ];
 
+  hardening_format = false;
+
   meta = with stdenv.lib; {
     description = "Mini PXE server";
     maintainers = [ maintainers.raskin ];
