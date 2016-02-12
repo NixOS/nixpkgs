@@ -22,6 +22,8 @@ stdenv.mkDerivation {
 
   configureFlags = "--with-ssl=${openssl}";
 
+  hardening_format = false;
+
   postInstall = let
     manpages = fetchurl {
       url = "http://www.erlang.org/download/otp_doc_man_R${version}.tar.gz";
