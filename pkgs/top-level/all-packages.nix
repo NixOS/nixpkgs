@@ -1012,7 +1012,8 @@ let
   bittornado = callPackage ../tools/networking/p2p/bit-tornado { };
 
   blueman = callPackage ../tools/bluetooth/blueman {
-    inherit (pythonPackages) notify;
+    inherit (gnome3) dconf;
+    withPulseAudio = config.pulseaudio or true;
   };
 
   bmrsa = callPackage ../tools/security/bmrsa/11.nix { };
