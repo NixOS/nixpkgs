@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "12jqba3jsdrk20ib9wc2wiivki88ypcd4mkzgsri9siywbbz9w8x";
   };
 
-  buildInputs = [puredata ];
+  buildInputs = [ puredata ];
+
+  hardening_format = false;
 
   patchPhase = ''
     for D in net osc
