@@ -7,9 +7,14 @@ let
   rspamdCfg = config.services.rspamd;
   cfg = config.services.rmilter;
 
+  inetSockets = map (sock: let s = stringSplit ":" sock; in "inet:${last s}:${head s}") cfg.bindInetSockets;
+  unixSockets = map (sock: "unix:${sock}") cfg.bindUnixSockets;
+
+  allSockets = unixSockets ++ inetSockets;
+
   rmilterConf = ''
 pidfile = /run/rmilter/rmilter.pid;
-bind_socket = ${cfg.bindSocket};
+bind_socket = ${if cfg.socketActivation then "fd:3" else concatStringsSep ", " allSockets};
 tempdir = /tmp;
 
   '' + (with cfg.rspamd; if enable then ''
@@ -68,14 +73,37 @@ in
         '';
        };
 
-      bindSocket =  mkOption {
-        type = types.string;
-        default = "unix:/run/rmilter/rmilter.sock";
-        description = "Socket to listed for MTA requests";
+      bindUnixSockets =  mkOption {
+        type = types.listOf types.str;
+        default = ["/run/rmilter/rmilter.sock"];
+        description = ''
+          Unix domain sockets to listen for MTA requests.
+        '';
         example = ''
-            "unix:/run/rmilter/rmilter.sock" or
-            "inet:11990@127.0.0.1"
-          '';
+            [ "/run/rmilter/rmilter.sock"] 
+        '';
+      };
+
+      bindInetSockets = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Inet addresses to listen (in format accepted by systemd.socket)
+        '';
+        example = ''
+            ["127.0.0.1:11990"]
+        '';
+      };
+
+      socketActivation = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Enable systemd socket activation for rmilter.
+          (disabling socket activation not recommended
+          when unix socket used, and follow to wrong
+          permissions on unix domain socket.)
+        '';
       };
 
       rspamd = {
@@ -86,7 +114,7 @@ in
 
         servers = mkOption {
           type = types.listOf types.str;
-          default = ["r:0.0.0.0:11333"];
+          default = ["r:/run/rspamd/rspamd.sock"];
           description = ''
             Spamd socket definitions.
             Is server name is prefixed with r: it is rspamd server.
@@ -129,7 +157,7 @@ in
           type = types.str;
           description = "Addon to postfix configuration";
           default = ''
-smtpd_milters = ${cfg.bindSocket}
+smtpd_milters = ${head allSockets}
 # or for TCP socket
 # # smtpd_milters = inet:localhost:9900
 milter_protocol = 6
@@ -169,17 +197,26 @@ milter_default_action = accept
 
       serviceConfig = {
         ExecStart = "${pkgs.rmilter}/bin/rmilter ${optionalString cfg.debug "-d"} -n -c ${rmilterConfigFile}";
+        ExecReload = "/bin/kill -USR1 $MAINPID";
         User = cfg.user;
         Group = cfg.group;
         PermissionsStartOnly = true;
         Restart = "always";
+        RuntimeDirectory = "rmilter";
+        RuntimeDirectoryPermissions="0755";
       };
 
-      preStart = ''
-        ${pkgs.coreutils}/bin/mkdir -p /run/rmilter
-        ${pkgs.coreutils}/bin/chown ${cfg.user}:${cfg.group} /run/rmilter
-      '';
+    };
 
+    systemd.sockets.rmilter = mkIf cfg.socketActivation {
+      description = "Rmilter service socket";
+      wantedBy = [ "sockets.target" ];
+      socketConfig = {
+          ListenStream = cfg.bindUnixSockets ++ cfg.bindInetSockets;
+          SocketUser = cfg.user;
+          SocketGroup = config.ids.gids.adm;
+          SocketMode = "0660";
+      };
     };
 
     services.postfix.extraConfig = optionalString cfg.postfix.enable cfg.postfix.configFragment;
