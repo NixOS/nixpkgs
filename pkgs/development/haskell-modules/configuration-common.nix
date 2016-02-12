@@ -627,14 +627,6 @@ self: super: {
   # https://github.com/haskell/haddock/issues/378
   haddock-library = dontCheck super.haddock-library;
 
-  # Already fixed in upstream darcs repo.
-  xmonad-contrib = overrideCabal super.xmonad-contrib (drv: {
-    postPatch = ''
-      sed -i -e '24iimport Control.Applicative' XMonad/Util/Invisible.hs
-      sed -i -e '22iimport Control.Applicative' XMonad/Hooks/DebugEvents.hs
-    '';
-  });
-
   # https://github.com/anton-k/csound-expression-dynamic/issues/1
   csound-expression-dynamic = dontHaddock super.csound-expression-dynamic;
 
