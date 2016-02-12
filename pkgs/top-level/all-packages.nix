@@ -9603,7 +9603,7 @@ let
     libmemcached = null; # Detection is broken upstream
   };
 
-  postgresql = postgresql94;
+  postgresql = postgresql95;
 
   inherit (callPackages ../servers/sql/postgresql { })
     postgresql90
