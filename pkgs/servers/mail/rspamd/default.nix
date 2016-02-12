@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, perl
 , file, glib, gmime, libevent, luajit, openssl, pcre, pkgconfig, sqlite }:
 
-let libmagic = file;  # libmagic provided buy file package ATM
+let libmagic = file;  # libmagic provided by file package ATM
 in
 
 stdenv.mkDerivation rec {
