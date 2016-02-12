@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ intltool pkgconfig gtk ];
 
+  hardening_format = false;
+
   configureFlags = [
     "--enable-chooser"
   ];
