@@ -9,9 +9,10 @@ stdenv.mkDerivation {
     md5 = "2465d652fff6f1fad3da3b98e60e83c9";
   };
   builder = ./builder.sh;
-  
+
   inherit glibc;
   kernelHeaders = glibc.kernelHeaders;
+  hardening_stackprotector = false;
 
   patches = [
 
