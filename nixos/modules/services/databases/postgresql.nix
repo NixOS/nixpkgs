@@ -158,7 +158,7 @@ in
       # Note: when changing the default, make it conditional on
       # ‘system.stateVersion’ to maintain compatibility with existing
       # systems!
-      mkDefault pkgs.postgresql94;
+      mkDefault (if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql95 else pkgs.postgresql94);
 
     services.postgresql.authentication = mkAfter
       ''
