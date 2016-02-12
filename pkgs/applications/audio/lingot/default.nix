@@ -8,6 +8,8 @@ stdenv.mkDerivation {
     sha256 = "0ygras6ndw2fylwxx86ac11pcr2y2bcfvvgiwrh92z6zncx254gc";
   };
 
+  hardening_format = false;
+
   buildInputs = [ pkgconfig intltool gtk alsaLib libglade ];
 
   configureFlags = "--disable-jack";
