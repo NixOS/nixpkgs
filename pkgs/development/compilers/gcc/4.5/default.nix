@@ -135,10 +135,7 @@ stdenv.mkDerivation ({
   };
 
   hardening_format = false;
-  hardening_relro = name != "gnat";
-  hardening_bindnow = name != "gnat";
-  hardening_stackprotector = name != "gnat";
-  hardening_strictoverflow = name != "gnat";
+  hardening_all = name != "gnat";
 
   patches =
     [ ]
