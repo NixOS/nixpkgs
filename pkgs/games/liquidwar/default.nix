@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     libXrender libcaca cunit
   ];
 
+  hardening_format = false;
+
   # To avoid problems finding SDL_types.h.
   configureFlags = [ "CFLAGS=-I${SDL}/include/SDL" ];
 
