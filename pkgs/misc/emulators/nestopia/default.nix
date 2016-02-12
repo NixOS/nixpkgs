@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   # nondeterministic failures when creating directories
   enableParallelBuilding = false;
 
+  hardening_format = false;
+
   buildInputs = [ pkgconfig SDL2 alsaLib gtk3 mesa_glu mesa makeWrapper
                   libarchive libao unzip xdg_utils gsettings_desktop_schemas ];
 
