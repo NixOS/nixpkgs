@@ -10,6 +10,8 @@ stdenv.mkDerivation  rec {
     sha256 = "1rpf63pdn54c4yg13k7cb1w1c7zsvl97c4qxcpz41c8l91xd55kn";
   };
 
+  hardening_format = false;
+
   patches = [ ./fltk-path.patch ];
 
   buildInputs = [ alsaLib alsaUtils fltk libjack2 libXft libXpm libjpeg
