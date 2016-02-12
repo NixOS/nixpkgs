@@ -32,6 +32,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ which ];
   propagatedBuildInputs = [libpng xlibsWrapper libXft libXrender zlib libjpeg];
 
+  hardening_format = false;
+
   configureFlags = "
     -v
     -system-zlib -system-libpng -system-libjpeg
