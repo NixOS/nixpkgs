@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = "-DMAN_INSTALL_DIR=share/man/man1 -DDOC_INSTALL_DIR=share/doc/qhull";
 
+  hardening_format = false;
+
   meta = {
     homepage = http://www.qhull.org/;
     description = "Computes the convex hull, Delaunay triangulation, Voronoi diagram and more";
