@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0b986x5yny9vrzgxlbyg80b23mxylxv2zz8ppd9svhva6vi8xsm4";
   };
 
+  hardening_format = false;
+
   nativeBuildInputs = [ intltool pkgconfig ];
   buildInputs = [ libqalculate gtk gnome2.libglade gnome2.libgnome gnome2.scrollkeeper ];
 
