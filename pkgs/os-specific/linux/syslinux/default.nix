@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libuuid makeWrapper ];
 
   enableParallelBuilding = false; # Fails very rarely with 'No rule to make target: ...'
+  hardening_stackprotector = false;
+  hardening_pic = false;
 
   preBuild = ''
     substituteInPlace Makefile --replace /bin/pwd $(type -P pwd)
