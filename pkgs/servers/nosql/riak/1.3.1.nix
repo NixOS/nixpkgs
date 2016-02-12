@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./riak-1.3.1.patch ./riak-admin-1.3.1.patch ];
 
+  hardening_format = false;
+
   postUnpack = ''
     mkdir -p $sourceRoot/deps/eleveldb/c_src/leveldb
     cp -r ${srcs.leveldb}/* $sourceRoot/deps/eleveldb/c_src/leveldb
