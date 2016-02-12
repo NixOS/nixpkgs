@@ -19,6 +19,8 @@ composableDerivation.composableDerivation {} (fixed: rec {
     ./python.patch
   ];
 
+  hardening_format = false;
+
   # Don't use optimization for gcc >= 4.3. That's said to be causing segfaults.
   # Unset CC and CXX as they confuse libtool.
   preConfigure = "export CFLAGS=-O0 CXXFLAGS=-O0; unset CC CXX";
