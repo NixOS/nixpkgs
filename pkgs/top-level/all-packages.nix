@@ -3324,6 +3324,8 @@ let
 
   tiled = qt5.callPackage ../applications/editors/tiled { };
 
+  timemachine = callPackage ../applications/audio/timemachine { };
+
   tinc = callPackage ../tools/networking/tinc { };
 
   tinc_pre = callPackage ../tools/networking/tinc/pre.nix { };
