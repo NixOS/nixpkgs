@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
     sed -i -e 's,/etc/pal\.conf,'$out/etc/pal.conf, src/input.c
   '';
 
-  preBuild = ''
-    export makeFlags="prefix=$out"
-  '';
+  makeFlags = "prefix=$(out)";
 
   buildInputs = [ glib gettext readline pkgconfig ];
+
+  hardening_format = false;
 
   meta = {
     homepage = http://palcal.sourceforge.net/;
