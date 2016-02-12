@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1xx62l5srfhh9cfi7n3pxj8hpcgr1rpa0hzfmbrqadzv09z36723";
   };
 
+  hardening_format = false;
+
   # 'cvs' is only for the autogen
   buildInputs = [ pkgconfig gtk SDL fontconfig freetype imlib2 SDL_image mesa
     libXmu freeglut python gettext quesoglc gd postgresql cmake qt4 SDL_ttf fribidi ];
