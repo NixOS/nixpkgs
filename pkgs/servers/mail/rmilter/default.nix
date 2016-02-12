@@ -1,5 +1,10 @@
 { stdenv, fetchFromGitHub, cmake, bison, flex, openssl, pcre, libmilter, opendkim }:
 
+let patchedLibmilter = stdenv.lib.overrideDerivation  libmilter (_ : {
+    patches = libmilter.patches ++ [ ./fd-passing-libmilter.patch ];
+});
+in
+
 stdenv.mkDerivation rec {
   name = "rmilter-${version}";
   version = "1.7.3";
@@ -12,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ bison cmake flex ];
-  buildInputs = [ libmilter openssl pcre opendkim ];
+  buildInputs = [ patchedLibmilter openssl pcre opendkim];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/vstakhov/rmilter";
