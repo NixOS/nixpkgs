@@ -19,7 +19,8 @@ let
       ],
       "uchiwa": {
         "host": "0.0.0.0",
-        "port": 3000
+        "port": 3000,
+        "users": ${config.flyingcircus.services.uchiwa.users}
       }
     }
   '';
@@ -36,10 +37,13 @@ in {
           Enable the Uchiwa sensu dashboard daemon.
         '';
       };
-      config = mkOption {
+      users = mkOption {
         type = types.lines;
+        default = ''
+        []
+        '';
         description = ''
-          Contents of the uchiwa configuration file.
+          User configuration to insert into the configuration file.
         '';
       };
       extraOpts = mkOption {

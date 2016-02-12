@@ -32,6 +32,7 @@ in
   imports = [
     ./user.nix
     ./network.nix
+    ./ssl/certificate.nix
   ];
 
   options = {
