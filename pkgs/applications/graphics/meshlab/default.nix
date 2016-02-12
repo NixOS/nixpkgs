@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./include-unistd.diff ];
 
+  hardening_format = false;
+
   buildPhase = ''
     mkdir -p "$out/include"
     cp -r vcglib "$out/include"
