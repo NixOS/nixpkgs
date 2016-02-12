@@ -21,6 +21,8 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ which ];
 
+  hardening_pic = false;
+
   makeFlags = with kernel; [
     "DESTDIR=$(out)"
     "KERNELSRC=${dev}/lib/modules/${modDirVersion}/build"
