@@ -17,6 +17,17 @@ rec {
     };
   };
 
+  mavenCompiler202 = mavenCompilerGen {
+    name = "maven-compiler-plugin-2.0.2";
+    src = fetchsvn {
+      url = "http://svn.apache.org/repos/asf/maven/plugins/tags/maven-compiler-plugin-2.0.2/";
+      rev = 1724719;
+      sha256 = "18klzifbj6kkrj0a181hzp6j4kgfgh7paqla5h79l285dkr7i7sk";
+    };
+    mavenDeps = [ mavenPlugins8 ];
+    m2Path = "/org/apache/maven/plugins/maven-compiler-plugin/2.0.2";
+  };
+
   mavenCompiler31 = mavenCompilerGen {
     name = "maven-compiler-plugin-3.1";
     src = fetchsvn {

@@ -4359,6 +4359,7 @@ let
     mavenClean25 = self.mavenPlugins.mavenCleanGen.mavenClean25;
 
     mavenCompilerGen = callPackage ../development/java-modules/maven-plugins/maven-compiler-plugin { };
+    mavenCompiler202 = self.mavenPlugins.mavenCompilerGen.mavenCompiler202;
     mavenCompiler31 = self.mavenPlugins.mavenCompilerGen.mavenCompiler31;
 
     mavenEnforcerGen = callPackage ../development/java-modules/maven-plugins/maven-enforcer-plugin { };
