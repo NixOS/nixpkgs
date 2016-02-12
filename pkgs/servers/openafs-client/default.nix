@@ -23,6 +23,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ autoconf automake flex yacc ncurses perl which ];
 
+  hardening_pic = false;
+
   preConfigure = ''
     ln -s "${kernel.dev}/lib/modules/"*/build $TMP/linux
 
