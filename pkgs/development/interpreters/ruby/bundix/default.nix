@@ -5,9 +5,9 @@ buildRubyGem rec {
 
   name = "${gemName}-${version}";
   gemName = "bundix";
-  version = "2.0.4";
+  version = "2.0.5";
 
-  sha256 = "0i7fdxi6w29yxnblpckczazb79m5x03hja8sfnabndg4yjc868qs";
+  sha256 = "0bsynhr44jz6nih0xn7v32h1qvywnb5335ka208gn7jp6bjwabhy";
 
   buildInputs = [bundler];
 
