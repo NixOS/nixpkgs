@@ -1,7 +1,7 @@
 { fetchmaven, fetchurl }:
 
 rec {
-  bootstrapModelloMaven10alpha15Jar = fetchmaven {
+  modelloMaven10alpha15Jar = fetchmaven {
     version = "1.0-alpha-15";
     name = "bootstrap-modello-maven-plugin-jar-1.0-alpha-15";
     src = fetchurl rec {
@@ -12,7 +12,7 @@ rec {
     m2File = "modello-maven-plugin-1.0-alpha-15.jar";
   };
 
-  bootstrapModelloMaven141Jar = fetchmaven {
+  modelloMaven141Jar = fetchmaven {
     version = "1.4.1";
     name = "bootstrap-modello-maven-plugin-jar-1.4.1";
     src = fetchurl rec {

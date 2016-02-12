@@ -442,6 +442,17 @@ rec {
     m2File = "maven-plugin-tools-3.1.pom";
   };
 
+  mavenPluginTools32 = fetchmaven {
+    version = "3.2";
+    name = "maven-plugin-tools";
+    src = fetchurl rec {
+      url = "http://svn.apache.org/repos/asf/maven/plugin-tools/tags/maven-plugin-tools-3.2/pom.xml";
+      sha256 = "07wjr4irs3mq9qzs6z0jbww2f4abn0y6b30lqbzj41chmjlzkxrn";
+    };
+    m2Path = "org/apache/maven/plugin-tools/maven-plugin-tools/3.2";
+    m2File = "maven-plugin-tools-3.2.pom";
+  };
+
   plexusParent205 = fetchmaven {
     version = "2.0.5";
     name = "plexus-pom-2.0.5";
