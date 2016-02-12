@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0f8gjnia2fxcbmhl8b3qkr5b7idl8m855dw7xw2fnmbqwvcm6k4w";
   };
 
+  hardening_fortify = false;
+
   nativeBuildInputs = [ gettext pkgconfig which ];
   buildInputs = [ glib gtk2 ];
 
