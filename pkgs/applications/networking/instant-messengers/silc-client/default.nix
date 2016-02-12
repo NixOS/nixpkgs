@@ -19,6 +19,8 @@ stdenv.mkDerivation {
 
   dontDisableStatic = true;
 
+  hardening_format = false;
+
   configureFlags = "--with-ncurses=${ncurses}";
 
   preConfigure = stdenv.lib.optionalString enablePlugin ''
