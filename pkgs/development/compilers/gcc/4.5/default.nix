@@ -135,6 +135,10 @@ stdenv.mkDerivation ({
   };
 
   hardening_format = false;
+  hardening_relro = name != "gnat";
+  hardening_bindnow = name != "gnat";
+  hardening_stackprotector = name != "gnat";
+  hardening_strictoverflow = name != "gnat";
 
   patches =
     [ ]
@@ -209,7 +213,7 @@ stdenv.mkDerivation ({
 
   nativeBuildInputs = [ texinfo which ]
     ++ optional (perl != null) perl;
-    
+
   buildInputs = [ gmp mpfr libmpc libelf gettext ]
     ++ (optional (ppl != null) ppl)
     ++ (optional (cloogppl != null) cloogppl)
