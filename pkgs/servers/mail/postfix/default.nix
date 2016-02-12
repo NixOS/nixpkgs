@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [db openssl cyrus_sasl bison perl];
 
+  hardening_format = false;
+
   patches = [
     ./postfix-2.2.9-db.patch
     ./postfix-2.2.9-lib.patch
