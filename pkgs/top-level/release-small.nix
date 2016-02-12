@@ -169,7 +169,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   upstart = linux;
   usbutils = linux;
   utillinux = linux;
-  utillinuxCurses = linux;
+  utillinuxMinimal = linux;
   w3m = all;
   webkit = linux;
   wget = all;
