@@ -8046,6 +8046,8 @@ let
     nix = pkgs.nixUnstable;
   };
 
+  nntp-proxy = callPackage ../applications/networking/nntp-proxy { };
+
   non = callPackage ../applications/audio/non { };
 
   nspr = callPackage ../development/libraries/nspr { };
