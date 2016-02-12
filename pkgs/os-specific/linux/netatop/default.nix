@@ -14,6 +14,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ zlib ];
 
+  hardening_pic = false;
+
   preConfigure = ''
     patchShebangs mkversion
     sed -i -e 's,^KERNDIR.*,KERNDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build,' \
