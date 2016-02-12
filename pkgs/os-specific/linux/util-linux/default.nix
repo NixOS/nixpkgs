@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, zlib, ncurses ? null, perl ? null, pam }:
+{ stdenv, fetchurl, zlib, ncurses ? null, perl ? null, pam, systemd ? null
+, pkgconfig
+}:
 
 stdenv.mkDerivation rec {
   name = "util-linux-2.27.1";
@@ -38,11 +40,16 @@ stdenv.mkDerivation rec {
     --disable-use-tty-group
     --enable-fs-paths-default=/var/setuid-wrappers:/var/run/current-system/sw/bin:/sbin
     ${if ncurses == null then "--without-ncurses" else ""}
+    ${if systemd == null then "" else ''
+      --with-systemd
+      --with-systemdsystemunitdir=$out/lib/systemd/system/
+    ''}
   '';
 
   buildInputs =
     [ zlib pam ]
     ++ stdenv.lib.optional (ncurses != null) ncurses
+    ++ stdenv.lib.optional (systemd != null) [ systemd pkgconfig ]
     ++ stdenv.lib.optional (perl != null) perl;
 
   postInstall = ''

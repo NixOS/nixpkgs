@@ -10021,8 +10021,8 @@ let
 
   libuuid =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
-    then (utillinux // {
-      crossDrv = lib.overrideDerivation utillinux.crossDrv (args: {
+    then (utillinuxMinimal // {
+      crossDrv = lib.overrideDerivation utillinuxMinimal.crossDrv (args: {
         # `libblkid' fails to build on GNU/Hurd.
         configureFlags = args.configureFlags
           + " --disable-libblkid --disable-mount --disable-libmount"
@@ -10035,7 +10035,7 @@ let
       });
     })
     else if stdenv.isLinux
-    then utillinux
+    then utillinuxMinimal
     else null;
 
   light = callPackage ../os-specific/linux/light { };
@@ -10809,13 +10809,12 @@ let
 
   usermount = callPackage ../os-specific/linux/usermount { };
 
-  utillinux = callPackage ../os-specific/linux/util-linux {
+  utillinux = callPackage ../os-specific/linux/util-linux { };
+
+  utillinuxMinimal = appendToName "minimal" (utillinux.override {
     ncurses = null;
     perl = null;
-  };
-
-  utillinuxCurses = appendToName "curses" (utillinux.override {
-    inherit ncurses perl;
+    systemd = null;
   });
 
   v4l_utils = callPackage ../os-specific/linux/v4l-utils {
