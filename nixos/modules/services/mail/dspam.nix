@@ -139,7 +139,7 @@ in {
         restartTriggers = [ cfgfile ];
 
         serviceConfig = {
-          ExecStart = "${dspam}/bin/dspam_maintenance";
+          ExecStart = "${dspam}/bin/dspam_maintenance --verbose";
           Type = "oneshot";
           User = cfg.user;
           Group = cfg.group;
