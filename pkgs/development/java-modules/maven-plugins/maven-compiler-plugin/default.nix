@@ -24,7 +24,7 @@ rec {
       rev = 1724719;
       sha256 = "18klzifbj6kkrj0a181hzp6j4kgfgh7paqla5h79l285dkr7i7sk";
     };
-    mavenDeps = [ mavenPlugins8 ];
+    mavenDeps = [ bootstrapMavenClean25Jar bootstrapMavenResources26Jar apacheParent3 mavenParent5 mavenPlugins8 ];
     m2Path = "/org/apache/maven/plugins/maven-compiler-plugin/2.0.2";
   };
 
