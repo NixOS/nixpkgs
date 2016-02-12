@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, libotr, automake, autoconf, libtool, glib, pkgconfig, irssi }:
+{ stdenv, fetchFromGitHub, libotr, automake, autoconf, libtool, glib, pkgconfig, irssi }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "irssi-otr-${version}";
   version = "1.0.0";
 
-  src = fetchurl {
-    url = "https://github.com/cryptodotis/irssi-otr/archive/v${version}.tar.gz";
-    name = "${name}.tar.gz";
-    sha256 = "bad09a2853ea6fb1a7af42c8f15868fd3ce45f973be90c78944ddf04f8ab517e";
+  src = fetchFromGitHub {
+    owner = "cryptodotis";
+    repo = "irssi-otr";
+    rev = "v${version}";
+    sha256 = "139jawz3la6k91fy5kpgr6zvljl14n0fdpz72n2zw6wql69xlnnl";
   };
 
   patchPhase = ''
