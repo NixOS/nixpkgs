@@ -721,6 +721,8 @@ let
 
   blockdiag = pythonPackages.blockdiag;
 
+  bluez-tools = callPackage ../tools/bluetooth/bluez-tools { };
+
   bmon = callPackage ../tools/misc/bmon { };
 
   bochs = callPackage ../applications/virtualization/bochs { };
