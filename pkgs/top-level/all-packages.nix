@@ -12236,6 +12236,8 @@ let
     inherit (gnome) GConf;
   };
 
+  gollum = callPackage ../applications/misc/gollum { };
+
   google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome.GConf; };
 
   googleearth = callPackage_i686 ../applications/misc/googleearth { };
