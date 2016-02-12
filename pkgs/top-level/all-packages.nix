@@ -15607,8 +15607,6 @@ let
 
   mupen64plus = callPackage ../misc/emulators/mupen64plus { };
 
-  mupen64plus1_5 = callPackage ../misc/emulators/mupen64plus/1.5.nix { };
-
   inherit (callPackages ../tools/package-management/nix {
       storeDir = config.nix.storeDir or "/nix/store";
       stateDir = config.nix.stateDir or "/nix/var";
@@ -16030,6 +16028,8 @@ aliases = with self; rec {
   midoriWrapper = midori; # added 2015-01
   mlt-qt5 = qt5.mlt;  # added 2015-12-19
   multipath_tools = multipath-tools;  # added 2016-01-21
+  mupen64plus1_5 = mupen64plus; # added 2016-02-12
+  ncat = nmap;  # added 2016-01-26
   nfsUtils = nfs-utils;  # added 2014-12-06
   phonon_qt5 = qt5.phonon;  # added 2015-12-19
   phonon_qt5_backend_gstreamer = qt5.phonon-backend-gstreamer;  # added 2015-12-19
