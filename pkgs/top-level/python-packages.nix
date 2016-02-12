@@ -4307,12 +4307,12 @@ let
 
 
   plotly = pythonPackages.buildPythonPackage rec {
-    name = "plotly-1.9.1";
+    name = "plotly-1.9.5";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/plotly/${name}.tar.gz";
-      md5 = "84fe80b294b639357f12fa210ce09f95";
+      md5 = "56fb77dff80325413c8cf40cf229ce90";
     };
 
     propagatedBuildInputs = with self; [ self.pytz self.six self.requests ];
