@@ -13225,6 +13225,7 @@ let
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD);
     enableCopyDevicesPatch = (config.rsync.enableCopyDevicesPatch or false);
   };
+  rrsync = callPackage ../applications/networking/sync/rsync/rrsync.nix {};
 
   rtl-sdr = callPackage ../applications/misc/rtl-sdr { };
 
