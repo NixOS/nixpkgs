@@ -1,10 +1,12 @@
 { stdenv, fetchurl, perl, rsync }:
 
+let
+  base = import ./base.nix { inherit stdenv fetchurl; };
+in
 stdenv.mkDerivation rec {
-  name = "rrsync-${version}";
-  version = "3.1.2";
+  name = "rrsync-${base.version}";
 
-  src = import ./src.nix { inherit fetchurl version; };
+  src = base.src;
 
   buildInputs = [ rsync ];
   nativeBuildInputs = [perl];
@@ -15,7 +17,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   postPatch = ''
-    sed -i 's#/usr/bin/rsync#${rsync}/bin/rsync#' support/rrsync
+    substituteInPlace support/rrsync --replace /usr/bin/rsync ${rsync}/bin/rsync
   '';
 
   installPhase = ''
@@ -24,11 +26,7 @@ stdenv.mkDerivation rec {
     chmod a+x $out/bin/rrsync
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://rsync.samba.org/;
-    description = "A helper to run rsync-only environments from ssh-logins.";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ simons ehmry ];
+  meta = base.meta // {
+    description = "A helper to run rsync-only environments from ssh-logins";
   };
 }
