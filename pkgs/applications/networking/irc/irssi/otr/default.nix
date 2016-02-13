@@ -3,13 +3,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "irssi-otr-${version}";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "cryptodotis";
     repo = "irssi-otr";
-    rev = "v${version}";
-    sha256 = "139jawz3la6k91fy5kpgr6zvljl14n0fdpz72n2zw6wql69xlnnl";
+    rev = "4ad3b7b6c85be0154ab3694fe9831796db20c4fe";
+    sha256 = "1hm1whx1wzlx4fh4xf2y68rx9x6whi8bsbrhd6hqjhskg5msssrg";
   };
 
   patchPhase = ''
