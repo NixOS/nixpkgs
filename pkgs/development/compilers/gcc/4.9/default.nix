@@ -71,8 +71,10 @@ let version = "4.9.3";
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
       # target libraries and tools.
       ++ optional langAda ../gnat-cflags.patch
-      ++ optional langFortran ../gfortran-driving.patch;
-
+      ++ optional langFortran ../gfortran-driving.patch
+      # The NXConstStr.patch can be removed at 4.9.4
+      ++ optional stdenv.isDarwin ../gfortran-darwin-NXConstStr.patch; 
+	  
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
       # `configure' time.
