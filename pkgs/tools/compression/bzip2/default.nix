@@ -3,9 +3,13 @@
 let
   version = "1.0.6";
 
-  sharedLibrary = !stdenv.isDarwin && !(stdenv ? isStatic)
+  sharedLibrary = !(stdenv ? isStatic)
                && stdenv.system != "i686-cygwin" && !linkStatic;
 
+  darwinMakefile = fetchurl {
+    url    = "https://gitweb.gentoo.org/repo/proj/prefix.git/plain/app-arch/bzip2/files/bzip2-1.0.6-Makefile-libbz2_dylib";
+    sha256 = "1lq6g98kfpwv2f7wn4sk8hzcf87dwf92gviq0b4691f5bvc9mawz";
+  };
 in stdenv.mkDerivation {
   name = "bzip2-${version}";
 
@@ -38,17 +42,24 @@ in stdenv.mkDerivation {
   };
 
   preBuild = stdenv.lib.optionalString sharedLibrary ''
-    make -f Makefile-libbz2_so
+    make -f ${if stdenv.isDarwin then "Makefile-libbz2_dylib" else "Makefile-libbz2_so"}
   '';
 
-  preInstall = stdenv.lib.optionalString sharedLibrary ''
+  preInstall = stdenv.lib.optionalString sharedLibrary (if !stdenv.isDarwin then ''
     mkdir -p $out/lib
     mv libbz2.so* $out/lib
     ( cd $out/lib &&
       ln -s libbz2.so.1.0.? libbz2.so &&
       ln -s libbz2.so.1.0.? libbz2.so.1
     )
-  '';
+  '' else ''
+    mkdir -p $out/lib
+    mv libbz2.*.dylib $out/lib
+    ( cd $out/lib &&
+      ln -s libbz2.1.0.?.dylib libbz2.dylib &&
+      ln -s libbz2.1.0.?.dylib libbz2.1.dylib
+    )
+  '');
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -61,6 +72,11 @@ in stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace Makefile --replace CC=gcc CC=cc
     substituteInPlace Makefile-libbz2_so --replace CC=gcc CC=cc
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    cp ${darwinMakefile} Makefile-libbz2_dylib
+    substituteInPlace Makefile-libbz2_dylib \
+      --replace "CC=gcc" "CC=cc" \
+      --replace "PREFIX=/usr" "PREFIX=$out"
   '';
 
   preConfigure = ''
