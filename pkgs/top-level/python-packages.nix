@@ -1167,7 +1167,6 @@ in modules // {
       colorama
       docutils
       rsa
-      pyasn1
       pkgs.groff
       pkgs.less
     ];
@@ -4751,7 +4750,7 @@ in modules // {
     doCheck = false; # requires redis server
     propagatedBuildInputs = with self; [
       setuptools docker_registry_core blinker flask gevent gunicorn pyyaml
-      requests2 rsa sqlalchemy9 setuptools backports_lzma pyasn1 m2crypto
+      requests2 rsa sqlalchemy9 setuptools backports_lzma m2crypto
     ];
 
     patchPhase = "> requirements/main.txt";
@@ -12883,7 +12882,7 @@ in modules // {
       sha256 = "0phfk6s8bgpap5xihdk1xv2lakdk1pb3rg6hp2wsg94hxcxnrakl";
     };
 
-    propagatedBuildInputs = with self; [ six httplib2 pyasn1 pyasn1-modules rsa ];
+    propagatedBuildInputs = with self; [ six httplib2 pyasn1-modules rsa ];
     doCheck = false;
 
     meta = {
@@ -18470,7 +18469,8 @@ in modules // {
       sha256 = "03f3d9bebad06681771016b8752a40b12f615ff32363c7aa19b3798e73ccd615";
     };
 
-    buildInputs = with self; [ pyasn1 unittest2 ];
+    nativeBuildInputs = with self; [ unittest2 ];
+    propagatedBuildInputs = with self; [ pyasn1 ];
 
     checkPhase = ''
       ${python.interpreter} run_tests.py
