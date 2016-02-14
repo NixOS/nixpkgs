@@ -19149,6 +19149,27 @@ in modules // {
     };
   };
 
+  sockjs-tornado = buildPythonPackage rec {
+    name = "sockjs-tornado-${version}";
+    version = "1.0.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sockjs-tornado/${name}.tar.gz";
+      sha256 = "15lcy40h2cm0l8aknbrk48p2sni5wzybsqjx1hxwpk9lfa1xryyv";
+    };
+
+    # This is needed for compatibility with OctoPrint
+    propagatedBuildInputs = with self; [ tornado_4_0_1 ];
+
+    meta = {
+      description = "SockJS python server implementation on top of Tornado framework";
+      homepage = http://github.com/mrjoes/sockjs-tornado/;
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
   sopel = buildPythonPackage rec {
     name = "sopel-6.3.0";
 
