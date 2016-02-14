@@ -8709,6 +8709,29 @@ in modules // {
     };
   };
 
+  flask_login = buildPythonPackage rec {
+    name = "Flask-Login-${version}";
+    version = "0.2.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/F/Flask-Login/${name}.tar.gz";
+      sha256 = "09ygn0r3i3jz065a5psng6bhlsqm78msnly4z6x39bs48r5ww17p";
+    };
+
+    propagatedBuildInputs = with self; [ flask ];
+
+    # FIXME
+    doCheck = false;
+
+    meta = {
+      homepage = http://github.com/miracle2k/flask-assets;
+      description = "User session management for Flask";
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
   flask-pymongo = buildPythonPackage rec {
     name = "Flask-PyMongo-${version}";
     version = "0.3.1";
