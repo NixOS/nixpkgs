@@ -21487,6 +21487,25 @@ in modules // {
     };
   };
 
+  webassets = buildPythonPackage rec {
+    name = "webassets-${version}";
+    version = "0.11.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/w/webassets/${name}.tar.gz";
+      sha256 = "0p1qypcbq9b88ipcylxh3bbnby5n6dr421wb4bwmrlcrgvj4r5lz";
+    };
+
+    propagatedBuildInputs = with self; [ pyyaml ];
+
+    meta = {
+      description = "Media asset management for Python, with glue code for various web frameworks";
+      homepage = http://github.com/miracle2k/webassets/;
+      license = licenses.bsd2;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
 
   webcolors = buildPythonPackage rec {
     name = "webcolors-1.4";
