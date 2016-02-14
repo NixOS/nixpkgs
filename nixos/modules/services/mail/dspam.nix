@@ -111,6 +111,7 @@ in {
           User = cfg.user;
           Group = cfg.group;
           RuntimeDirectory = optional (cfg.domainSocket == defaultSock) "dspam";
+          RuntimeDirectoryMode = optional (cfg.domainSocket == defaultSock) "0750";
           PermissionsStartOnly = true;
           # DSPAM segfaults on just about every error
           Restart = "on-failure";
