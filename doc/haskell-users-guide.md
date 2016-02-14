@@ -234,7 +234,7 @@ library promises to give its users access to GHC's installation paths. Only,
 the library can't possible know that path when it's compiled, because the path
 GHC considers its own is determined only much later, when the user configures
 it through `ghcWithPackages`. So we [patched
-ghc-paths](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/haskell-modules/ghc-paths-nix.patch)
+ghc-paths](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/haskell-modules/patches/ghc-paths-nix.patch)
 to return the paths found in those environment variables at run-time rather
 than trying to guess them at compile-time.
 
