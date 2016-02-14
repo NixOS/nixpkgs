@@ -21,6 +21,199 @@ rec {
     kernelAutoModules = false;
   };
 
+  odroid_xu4  = {
+    name = "odroid_xu4";
+    kernelMajor = "2.6";
+    kernelHeadersBaseConfig = "multi_v7_defconfig";
+    kernelBaseConfig = "odroidxu4_defconfig";
+    kernelArch = "arm";
+    kernelAutoModules = false;
+
+    kernelMakeFlags = [ "LOADADDR=0x42000000" ];
+    kernelTarget = "zImage";
+
+    ubootConfig = "odroid_config";
+    uboot = "odroid_xu4";
+
+    kernelDTB = true; # Beyond 3.10
+
+   gcc = {
+      arch = "armv7-a";
+      fpu = "neon";
+      float = "hard";
+    };
+
+    kernelExtraConfig =
+      ''
+        BLK_DEV_RAM y
+        BLK_DEV_INITRD y
+        BLK_DEV_CRYPTOLOOP m
+        BLK_DEV_DM m
+        DM_CRYPT m
+        MD y
+        REISERFS_FS m
+        BTRFS_FS y
+        XFS_FS m
+        JFS_FS y
+        EXT4_FS y
+
+        IP_PNP y
+        IP_PNP_DHCP y
+        NFS_FS y
+        ROOT_NFS y
+        TUN m
+        NFS_V4 y
+        NFS_V4_1 y
+        NFS_FSCACHE y
+        NFSD m
+        NFSD_V2_ACL y
+        NFSD_V3 y
+        NFSD_V3_ACL y
+        NFSD_V4 y
+        NETFILTER y
+        IP_NF_IPTABLES y
+        IP_NF_FILTER y
+        IP_NF_MATCH_ADDRTYPE y
+        IP_NF_TARGET_LOG y
+        IP_NF_MANGLE y
+        IPV6 m
+        VLAN_8021Q m
+
+        CIFS y
+        CIFS_XATTR y
+        CIFS_POSIX y
+        CIFS_FSCACHE y
+        CIFS_ACL y
+
+        ZRAM m
+
+        # Fail to build
+        DRM n
+        SCSI_ADVANSYS n
+        USB_ISP1362_HCD n
+        SND_SOC n
+        SND_ALI5451 n
+        FB_SAVAGE n
+        SCSI_NSP32 n
+        ATA_SFF n
+        SUNGEM n
+        IRDA n
+        ATM_HE n
+        SCSI_ACARD n
+        BLK_DEV_CMD640_ENHANCED n
+
+        FUSE_FS m
+
+        # nixos mounts some cgroup
+        CGROUPS y
+
+        # Latencytop 
+        LATENCYTOP y
+
+        NF_DEFRAG_IPV6 m
+        NF_CONNTRACK_IPV6 m
+        NF_REJECT_IPV6 m
+        NF_LOG_IPV6 m
+        IP6_NF_IPTABLES m
+        IP6_NF_FILTER m
+        IPV6 m
+
+        NETFILTER_XT_MARK m
+        NETFILTER_XT_CONNMARK m
+        NETFILTER_XT_SET m
+        NETFILTER_XT_TARGET_AUDIT m
+        NETFILTER_XT_TARGET_CHECKSUM m
+        NETFILTER_XT_TARGET_CLASSIFY m
+        NETFILTER_XT_TARGET_CONNMARK m
+        NETFILTER_XT_TARGET_CONNSECMARK m
+        NETFILTER_XT_TARGET_CT m
+        NETFILTER_XT_TARGET_DSCP m
+        NETFILTER_XT_TARGET_HL m
+        NETFILTER_XT_TARGET_HMARK m
+        NETFILTER_XT_TARGET_IDLETIMER m
+        NETFILTER_XT_TARGET_LED m
+        NETFILTER_XT_TARGET_LOG m
+        NETFILTER_XT_TARGET_MARK m
+        NETFILTER_XT_NAT m
+        NETFILTER_XT_TARGET_NETMAP m
+        NETFILTER_XT_TARGET_NFLOG m
+        NETFILTER_XT_TARGET_NFQUEUE m
+        NETFILTER_XT_TARGET_NOTRACK m
+        NETFILTER_XT_TARGET_RATEEST m
+        NETFILTER_XT_TARGET_REDIRECT m
+        NETFILTER_XT_TARGET_TEE m
+        NETFILTER_XT_TARGET_TPROXY m
+        NETFILTER_XT_TARGET_TRACE m
+        NETFILTER_XT_TARGET_SECMARK m
+        NETFILTER_XT_TARGET_TCPMSS m
+        NETFILTER_XT_TARGET_TCPOPTSTRIP m
+        NETFILTER_XT_MATCH_ADDRTYPE m
+        NETFILTER_XT_MATCH_BPF m
+        NETFILTER_XT_MATCH_CGROUP m
+        NETFILTER_XT_MATCH_CLUSTER m
+        NETFILTER_XT_MATCH_COMMENT m
+        NETFILTER_XT_MATCH_CONNBYTES m
+        NETFILTER_XT_MATCH_CONNLABEL m
+        NETFILTER_XT_MATCH_CONNLIMIT m
+        NETFILTER_XT_MATCH_CONNMARK m
+        NETFILTER_XT_MATCH_CONNTRACK m
+        NETFILTER_XT_MATCH_CPU m
+        NETFILTER_XT_MATCH_DCCP m
+        NETFILTER_XT_MATCH_DEVGROUP m
+        NETFILTER_XT_MATCH_DSCP m
+        NETFILTER_XT_MATCH_ECN m
+        NETFILTER_XT_MATCH_ESP m
+        NETFILTER_XT_MATCH_HASHLIMIT m
+        NETFILTER_XT_MATCH_HELPER m
+        NETFILTER_XT_MATCH_HL m
+        NETFILTER_XT_MATCH_IPCOMP m
+        NETFILTER_XT_MATCH_IPRANGE m
+        NETFILTER_XT_MATCH_IPVS m
+        NETFILTER_XT_MATCH_L2TP m
+        NETFILTER_XT_MATCH_LENGTH m
+        NETFILTER_XT_MATCH_LIMIT m
+        NETFILTER_XT_MATCH_MAC m
+        NETFILTER_XT_MATCH_MARK m
+        NETFILTER_XT_MATCH_MULTIPORT m
+        NETFILTER_XT_MATCH_NFACCT m
+        NETFILTER_XT_MATCH_OSF m
+        NETFILTER_XT_MATCH_OWNER m
+        NETFILTER_XT_MATCH_POLICY m
+        NETFILTER_XT_MATCH_PHYSDEV m
+        NETFILTER_XT_MATCH_PKTTYPE m
+        NETFILTER_XT_MATCH_QUOTA m
+        NETFILTER_XT_MATCH_RATEEST m
+        NETFILTER_XT_MATCH_REALM m
+        NETFILTER_XT_MATCH_RECENT m
+        NETFILTER_XT_MATCH_SCTP m
+        NETFILTER_XT_MATCH_SOCKET m
+        NETFILTER_XT_MATCH_STATE m
+        NETFILTER_XT_MATCH_STATISTIC m
+        NETFILTER_XT_MATCH_STRING m
+        NETFILTER_XT_MATCH_TCPMSS m
+        NETFILTER_XT_MATCH_TIME m
+        NETFILTER_XT_MATCH_U32 m
+        NF_CONNTRACK_MARK y
+        NF_CONNTRACK_SECMARK y
+        NF_CONNTRACK_PROCFS y
+        NF_CONNTRACK_LABELS y
+        NF_CONNTRACK_AMANDA m
+        NF_CONNTRACK_FTP m
+        NF_CONNTRACK_H323 m
+        NF_CONNTRACK_IRC m
+        NF_CONNTRACK_BROADCAST m
+        NF_CONNTRACK_NETBIOS_NS m
+        NF_CONNTRACK_SNMP m
+        NF_CONNTRACK_PPTP m
+        NF_CONNTRACK_SANE m
+        NF_CONNTRACK_SIP m
+        NF_CONNTRACK_TFTP m
+        NF_CONNTRACK_IPV4 m
+        NF_CONNTRACK_PROC_COMPAT y
+        NF_CONNTRACK_IPV6 m
+      '';
+  };
+
   sheevaplug = {
     name = "sheevaplug";
     kernelMajor = "2.6";

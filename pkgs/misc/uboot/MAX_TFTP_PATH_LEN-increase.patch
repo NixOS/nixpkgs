@@ -1,0 +1,18 @@
+A patch to make NixOS on the Odroid XU4 booting with U-Boot/extlinux possible. If not applied U-Boot can't process the long string:
+  FDTDIR ../nixos/ccn1vfjww519c56wy8jkc0p6acw4asf3-linux-4.2.0-5eb40d45b291ee129cbfac2073f1ca7aa32ff4c5-dtbs/exynos5422-odroidxu4.dtb
+---
+
+diff --git a/common/cmd_pxe.c b/common/cmd_pxe.c
+index 080b376..67dd647 100644
+--- a/common/cmd_pxe.c
++++ b/common/cmd_pxe.c
+@@ -19,7 +19,7 @@
+ #include "menu.h"
+ #include "cli.h"
+ 
+-#define MAX_TFTP_PATH_LEN 127
++#define MAX_TFTP_PATH_LEN 512
+ 
+ const char *pxe_default_paths[] = {
+ #ifdef CONFIG_SYS_SOC
+
