@@ -23572,7 +23572,7 @@ in modules // {
       sha256 = "0k7vk4k54y55ma0nx2k5s0phfqbriwslhy5shh3b0d046q7ibzaa";
     };
 
-    buildInputs = with self; [ flask jinja2 speaklater Babel pytz ];
+    propagatedBuildInputs = with self; [ flask jinja2 speaklater Babel pytz ];
 
     meta = {
       description = "Adds i18n/l10n support to Flask applications";
