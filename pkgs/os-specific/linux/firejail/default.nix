@@ -1,15 +1,16 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, which}:
 let
   s = # Generated upstream information
   rec {
     baseName="firejail";
-    version="0.9.36";
+    version="0.9.38";
     name="${baseName}-${version}";
-    hash="1mxgkfn2hbacarcp51qwgi7jxxzv69wb4lz78m71zysy3kkqn23k";
-    url="mirror://sourceforge/project/firejail/firejail/firejail-0.9.36-rc1.tar.bz2";
-    sha256="1mxgkfn2hbacarcp51qwgi7jxxzv69wb4lz78m71zysy3kkqn23k";
+    hash="0j0zvff9rwjwxcxddfhgzimjgmr99kd04nl40dllkrv3apv5ag4i";
+    url="mirror://sourceforge/project/firejail/firejail/firejail-0.9.38-rc1.tar.bz2";
+    sha256="0j0zvff9rwjwxcxddfhgzimjgmr99kd04nl40dllkrv3apv5ag4i";
   };
   buildInputs = [
+    which
   ];
 in
 stdenv.mkDerivation {
@@ -21,6 +22,7 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     sed -e 's@/bin/bash@${stdenv.shell}@g' -i $( grep -lr /bin/bash .)
+    sed -e "s@/bin/cp@$(which cp)@g" -i $( grep -lr /bin/cp .)
     sed -e '/void fs_var_run(/achar *vrcs = get_link("/var/run/current-system")\;' -i ./src/firejail/fs_var.c
     sed -e '/ \/run/iif(vrcs!=NULL){symlink(vrcs, "/var/run/current-system")\;free(vrcs)\;}' -i ./src/firejail/fs_var.c
   '';
