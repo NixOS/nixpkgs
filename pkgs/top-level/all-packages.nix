@@ -12452,6 +12452,8 @@ let
 
   jalv = callPackage ../applications/audio/jalv { };
 
+  jamin = callPackage ../applications/audio/jamin { };
+
   jedit = callPackage ../applications/editors/jedit { };
 
   jigdo = callPackage ../applications/misc/jigdo { };
