@@ -7125,6 +7125,24 @@ in modules // {
     doCheck = false;
   };
 
+  sarge = buildPythonPackage rec {
+    name = "sarge-${version}";
+    version = "0.1.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sarge/${name}.tar.gz";
+      sha256 = "08s8896973bz1gg0pkr592w6g4p6v47bkfvws5i91p9xf8b35yar";
+    };
+
+    meta = {
+      homepage = http://sarge.readthedocs.org/;
+      description = "A wrapper for subprocess which provides command pipeline functionality";
+      license = licenses.bsd3;
+      platform = platforms.all;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
   hyp = buildPythonPackage rec {
     name = "hyp-server-${version}";
     version = "1.2.0";
