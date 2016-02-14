@@ -13801,6 +13801,8 @@ in
      stdenv = stdenv_32bit;
   };
 
+  scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
+
   shotcut = qt5.callPackage ../applications/video/shotcut { };
 
   smplayer = qt5.callPackage ../applications/video/smplayer { };
