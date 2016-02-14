@@ -11399,7 +11399,7 @@ let
 
   calcurse = callPackage ../applications/misc/calcurse { };
 
-  calibre = qt5.callPackage ../applications/misc/calibre {
+  calibre = qt55.callPackage ../applications/misc/calibre {
     inherit (pythonPackages) pyqt5 sip_4_16;
   };
 
