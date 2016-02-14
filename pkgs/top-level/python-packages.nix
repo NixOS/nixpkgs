@@ -22629,6 +22629,18 @@ in modules // {
     };
   };
 
+  tornado_4_0_1 = buildPythonPackage rec {
+    name = "tornado-${version}";
+    version = "4.0.1";
+
+    propagatedBuildInputs = with self; [ backports_ssl_match_hostname_3_4_0_2 certifi ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
+      sha256 = "00crp5vnasxg7qyjv89qgssb69vd7qr13jfghdryrcbnn9l8c1df";
+    };
+  };
+
   tokenlib = buildPythonPackage rec {
     name = "tokenlib-${version}";
     version = "0.3.1";
