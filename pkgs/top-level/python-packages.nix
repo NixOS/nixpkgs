@@ -10693,6 +10693,24 @@ in modules // {
     };
   };
 
+  pylru = buildPythonPackage rec {
+    name = "pylru-${version}";
+    version = "1.0.9";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pylru/${name}.tar.gz";
+      sha256 = "0b0pq0l7xv83dfsajsc49jcxzc99kb9jfx1a1dlx22hzcy962dvi";
+    };
+
+    meta = {
+      homepage = https://github.com/jlhutch/pylru;
+      description = "A least recently used (LRU) cache implementation";
+      license = licenses.gpl2;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
   lazy-object-proxy = buildPythonPackage rec {
     name = "lazy-object-proxy-${version}";
     version = "1.2.1";
