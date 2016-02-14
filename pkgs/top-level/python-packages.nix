@@ -7440,6 +7440,23 @@ in modules // {
     };
   };
 
+  regex = buildPythonPackage rec {
+    name = "regex-${version}";
+    version = "2016.01.10";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/regex/${name}.tar.gz";
+      sha256 = "1q3rbmnijjzn7y3cm3qy49b5lqw1fq38zv974xma387lwc37d9q2";
+    };
+
+    meta = {
+      description = "Alternative regular expression module, to replace re";
+      homepage = https://bitbucket.org/mrabarnett/mrab-regex;
+      license = licenses.psfl;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
 
   repoze_lru = buildPythonPackage rec {
     name = "repoze.lru-0.6";
