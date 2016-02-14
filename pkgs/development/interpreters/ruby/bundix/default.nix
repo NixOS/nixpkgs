@@ -1,4 +1,4 @@
-{ buildRubyGem, lib, bundler, ruby, nix, nix-prefetch-scripts }:
+{ buildRubyGem, lib, bundler, ruby, nix, nix-prefetch-git }:
 
 buildRubyGem rec {
   inherit ruby;
@@ -12,19 +12,19 @@ buildRubyGem rec {
   buildInputs = [bundler];
 
   postInstall = ''
-    gem_root=$GEM_HOME/gems/${gemName}-${version}
-    sed \
-      -e 's|NIX_INSTANTIATE =.*|NIX_INSTANTIATE = "${nix}/bin/nix-instantiate"|' \
-      -i $gem_root/lib/bundix.rb
-    sed \
-      -e 's|NIX_HASH =.*|NIX_HASH = "${nix}/bin/nix-hash"|' \
-      -i $gem_root/lib/bundix.rb
-    sed \
-      -e 's|NIX_PREFETCH_URL =.*|NIX_PREFETCH_URL = "${nix}/bin/nix-prefetch-url"|' \
-      -i $gem_root/lib/bundix.rb
-    sed \
-      -e 's|NIX_PREFETCH_GIT =.*|NIX_PREFETCH_GIT = "${nix-prefetch-scripts}/bin/nix-prefetch-git"|' \
-      -i $gem_root/lib/bundix.rb
+    substituteInPlace $GEM_HOME/gems/${gemName}-${version}/lib/bundix.rb \
+      --replace \
+        "'nix-instantiate'" \
+        "'${nix}/bin/nix-instantiate'" \
+      --replace \
+        "'nix-hash'" \
+        "'${nix}/bin/nix-hash'" \
+      --replace \
+        "'nix-prefetch-url'" \
+        "'${nix}/bin/nix-prefetch-url'" \
+      --replace \
+        "'nix-prefetch-git'" \
+        "'${nix-prefetch-git}/bin/nix-prefetch-git'"
   '';
 
   meta = {
