@@ -3651,7 +3651,6 @@ in modules // {
     };
   };
 
-
   openstackclient = buildPythonPackage rec {
     name = "openstackclient-${version}";
     version = "1.7.1";

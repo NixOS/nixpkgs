@@ -12983,6 +12983,8 @@ let
     pulseaudioSupport = config.pulseaudio or true;
   };
 
+  octoprint = callPackage ../applications/misc/octoprint { };
+
   ocrad = callPackage ../applications/graphics/ocrad { };
 
   offrss = callPackage ../applications/networking/offrss { };
