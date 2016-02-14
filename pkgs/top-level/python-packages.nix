@@ -8732,6 +8732,26 @@ in modules // {
     };
   };
 
+  flask_principal = buildPythonPackage rec {
+    name = "Flask-Principal-${version}";
+    version = "0.4.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/F/Flask-Principal/${name}.tar.gz";
+      sha256 = "0lwlr5smz8vfm5h9a9i7da3q1c24xqc6vm9jdywdpgxfbi5i7mpm";
+    };
+
+    propagatedBuildInputs = with self; [ flask blinker nose ];
+
+    meta = {
+      homepage = http://packages.python.org/Flask-Principal/;
+      description = "Identity management for flask";
+      license = licenses.bsd2;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
   flask-pymongo = buildPythonPackage rec {
     name = "Flask-PyMongo-${version}";
     version = "0.3.1";
