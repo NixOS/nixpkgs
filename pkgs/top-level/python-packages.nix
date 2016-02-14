@@ -1128,6 +1128,26 @@ in modules // {
     };
   }));
 
+  awesome-slugify = buildPythonPackage rec {
+    name = "awesome-slugify-${version}";
+    version = "1.6.5";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/awesome-slugify/${name}.tar.gz";
+      sha256 = "0wgxrhr8s5vk2xmcz9s1z1aml4ppawmhkbggl9rp94c747xc7pmv";
+    };
+
+    propagatedBuildInputs = with self; [ unidecode regex ];
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/dimka665/awesome-slugify;
+      description = "Python flexible slugify function";
+      license = licenses.gpl3;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
   awscli = buildPythonPackage rec {
     name = "awscli-${version}";
     version = "1.10.1";
