@@ -10,7 +10,7 @@
           sha256 = "13f4l9xzx4xm5m80kkb49zh31w0bn0kw9m5ca28rrx4aysqmwryv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/abc-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/abc-mode";
           sha256 = "0qf5lbszyscmagiqhc0d05vzkhdky7ini4w33z1h3j5417sscrcx";
           name = "abc-mode";
         };
@@ -31,7 +31,7 @@
           sha256 = "0a8widshsm39cbala17pmnk1sazazhhyqppwalysli170whk49c5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-alchemist";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-alchemist";
           sha256 = "02ll3hcixgdb8zyszn78714gy1h2q0vkhpbnwap9302mr2racwl0";
           name = "ac-alchemist";
         };
@@ -52,7 +52,7 @@
           sha256 = "0vrd6g9cl02jjxrjxpshq4pd748b5xszhpmakywrw8s08nh8jf44";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-anaconda";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-anaconda";
           sha256 = "124nvigk6y3iw0lj2r7div88rrx8vz59xwqph1063jsrc29x8rjf";
           name = "ac-anaconda";
         };
@@ -73,7 +73,7 @@
           sha256 = "12z8nq797hjy0bq5vzpcm7z7bdn0ixc3ma4cj3v51xnwmgknzk6c";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-cake";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-cake";
           sha256 = "0s2pgf0m98ixgadsnn201vm5gnawanpvxv56sf599f33krqnxzkl";
           name = "ac-cake";
         };
@@ -94,7 +94,7 @@
           sha256 = "0mlmhdl9s28z981y8bnpj8jpfzm6bgfiyl0zmpgvhyqw1wzqywwv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-cake2";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-cake2";
           sha256 = "0qxilldx23wqf8ilif2nin119bvd0l7b6f6wifixx28a6kl1vsgy";
           name = "ac-cake2";
         };
@@ -115,7 +115,7 @@
           sha256 = "0nyq34yq4jcp3p30ygma3iz1h0q551p33792byj76pa5ps09g1da";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-capf";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-capf";
           sha256 = "1drgk5iz2wp3rxzd39pj0n4cfmm5z8zqlp50jw5z7ffbbg35qxbm";
           name = "ac-capf";
         };
@@ -136,7 +136,7 @@
           sha256 = "1vpj0lxbvlxffj2z29l109w70hcphiavyvglsw524agxql3c8yf9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-cider";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-cider";
           sha256 = "1dszpb706h34miq2bxqyq1ycbran5ax36vcniwp8vvhgcjsw5sz6";
           name = "ac-cider";
         };
@@ -157,7 +157,7 @@
           sha256 = "1sdgpyq5p824dnxv6r7djwvhyhdmnis8k6992klr8iz7anhxzdam";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-clang";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-clang";
           sha256 = "070s06xhkzaqfc3j8c4i44rks6gn8z66lwd54j17p8d91x3qjpr4";
           name = "ac-clang";
         };
@@ -178,7 +178,7 @@
           sha256 = "0a3s880nswc2s6yh2v5zsmws550q917i7av8nrxc5sp1d03xqwmn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-dcd";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-dcd";
           sha256 = "086jp9c6bilc361n1hscza3pbhgvqlq944z7cil2jm1kicsf8s7r";
           name = "ac-dcd";
         };
@@ -199,7 +199,7 @@
           sha256 = "0cc3jpc4pihbyznyzvf6i3xwc2x78gb5m36ba9gkvxhabsljnlfg";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-emoji";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-emoji";
           sha256 = "0msh3dh89jzk6hxva34gp9d5pazchgdknxjbi72z26rss9bkp1mw";
           name = "ac-emoji";
         };
@@ -220,7 +220,7 @@
           sha256 = "0ijni3qgd68jhznhirhgcl59cr7hwfvbwgf6z120x56jmp8h01d2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-etags";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-etags";
           sha256 = "0ag49k9izrs4ikzac9lifvvwhcn5n89lr2vb20pngsvg1czdyhzb";
           name = "ac-etags";
         };
@@ -241,7 +241,7 @@
           sha256 = "02ifz25rq64z0ifxs52aqdz0iz4mi6xvj88hcn3aakkmsj749vvn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-geiser";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-geiser";
           sha256 = "0v558qz1mp8b1bgk8kgdk5sx5mpd353mw77n5b0pw4b2ikzpz2mx";
           name = "ac-geiser";
         };
@@ -262,7 +262,7 @@
           sha256 = "0m33v9iy3y37sicfmpx7kvmn8v1a8k6cs7d0v9v5k93p4d5ila41";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-haskell-process";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-haskell-process";
           sha256 = "0kv4z850kv03wiax1flnrp6sgqja25j23l719w7rkr7ck110q8rw";
           name = "ac-haskell-process";
         };
@@ -283,7 +283,7 @@
           sha256 = "1gw38phyaslpql7szvlpwgyfngdgd21f6lq406vq0gjwwmxgig34";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-helm";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-helm";
           sha256 = "16ajxlhcah5zbvywpc6l4l1arr308gjpgvdx6l1nrv2zvpckhlwq";
           name = "ac-helm";
         };
@@ -304,7 +304,7 @@
           sha256 = "19v9515ixg22m7h7riix8w3vyhzax1m2pbwdirp59v532xn9b0cz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-html";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-html";
           sha256 = "0qf8f75b6dvy844dq8vh8d9c6k599rh1ynjcif9bwvdpf6pxwvqa";
           name = "ac-html";
         };
@@ -325,7 +325,7 @@
           sha256 = "1zmjqnlbfchnb7n2v7ms7q06xma1lmf9ry3v6f4pfnwlmz5lsf3a";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-html-bootstrap";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-html-bootstrap";
           sha256 = "0z71m6xws0k9smhsswaivpikr64mv0wh6klnmi5cwhwcqas6kdi1";
           name = "ac-html-bootstrap";
         };
@@ -346,7 +346,7 @@
           sha256 = "0p18wxyyc1jmcwx9y5i77s25v4jszv7cmm4bkwm4dzhkxd33kh1f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-html-csswatcher";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-html-csswatcher";
           sha256 = "0jb9dnm2lxadrxssf0rjqw8yvvskcq4hys8c21shjyj3gkvwbfqn";
           name = "ac-html-csswatcher";
         };
@@ -367,7 +367,7 @@
           sha256 = "1acm13n59sdgvvzicscxzrr5j1x5sa5x4rc4cnkbwb28nw5a5ysm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-inf-ruby";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-inf-ruby";
           sha256 = "04jclf0yxz78x1fsaf5sh1p466947nqrcx337kyhqn0nkj3hplqr";
           name = "ac-inf-ruby";
         };
@@ -388,7 +388,7 @@
           sha256 = "16qsj3wni4xhcrjx2rnxdzq6jb7jrl4bngi4an37vgdlrx3w8m6l";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-ispell";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-ispell";
           sha256 = "1vsy2qjh60n5lavivpqhhcpg5pk8zz2r0wy1sb65capn841zdi67";
           name = "ac-ispell";
         };
@@ -409,7 +409,7 @@
           sha256 = "19cb8kq8gmrplkxil22ahvbyq5cng1l2vh2lrfiyqpjsap7zfjz5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-mozc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-mozc";
           sha256 = "1v3iiid8cq50i076q98ycks9m827xzncgxqwqs2rqhab0ncy3h0f";
           name = "ac-mozc";
         };
@@ -430,7 +430,7 @@
           sha256 = "16f8hvdz6y8nsfj7094yrvw194ag3w1jvz81h287vcgcvmyb7wdf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-octave";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-octave";
           sha256 = "1g5s4dk1rcgkjn17jfw6g201pw0vfhqcx1nhigmnizpnzy0man9z";
           name = "ac-octave";
         };
@@ -443,15 +443,15 @@
     ac-php = callPackage ({ auto-complete, company, dash, emacs, f, fetchFromGitHub, fetchurl, lib, melpaBuild, php-mode, popup, s, xcscope, yasnippet }:
     melpaBuild {
         pname = "ac-php";
-        version = "1.7.1";
+        version = "1.7.2";
         src = fetchFromGitHub {
           owner = "xcwen";
           repo = "ac-php";
-          rev = "3147e2f10a3959c0f54fcc71f87a0a2ef64043d0";
-          sha256 = "11v45azd544fs4v5ndxxc2d6rbqh9r6mqx8gk1487jw7j290j6v8";
+          rev = "109c8fa6410e98bb4374c117590d2a58580571b6";
+          sha256 = "0qz8q9qzr7nqdhyjf01p50949bkps62nckampahv9bli4w92xckz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-php";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-php";
           sha256 = "0p9qq8nszp5jb71s35cxnmcxp50b62y2jv1ha7vvqfz5p8miallk";
           name = "ac-php";
         };
@@ -483,7 +483,7 @@
           sha256 = "0g7xbfsfqpmcay56y8xbmif52ccz430s3rjxf5bgl9ahkk7zgkzl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-racer";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-racer";
           sha256 = "1vkvh8y3ckvzvqxj4i2k6jqri94121wbfjziybli74qba8dca4yp";
           name = "ac-racer";
         };
@@ -504,7 +504,7 @@
           sha256 = "13yghv7p6c91fn8mrxbwrb6ldk5n3b6nj6a7pwsvks1q73i1pl88";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ac-slime";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ac-slime";
           sha256 = "0mk3k1lcbqa16xvsbgk28x09vzqyaidqaqpq934xdbrwhdgwgckg";
           name = "ac-slime";
         };
@@ -525,7 +525,7 @@
           sha256 = "1pzh5l8dybrrmglj55nbff6065pxlbx14501p3a1qx1wvf24g1sv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ace-flyspell";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ace-flyspell";
           sha256 = "0f24qrpcvyg7h6ylyggn4zrbydci537iigshac1d8yywsr0j47gd";
           name = "ace-flyspell";
         };
@@ -546,7 +546,7 @@
           sha256 = "0233ai62zhsy5yhv72016clygwp2pcg80y6kr4cjm2k1k2wwy7m9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ace-isearch";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ace-isearch";
           sha256 = "0n8qf08z9n8c2sp5ks29nxcfks5mil1jj6wq348apda8safk36hm";
           name = "ace-isearch";
         };
@@ -567,7 +567,7 @@
           sha256 = "1z82a0lrb61msamqpsy7rxcgs2nfhhckkk4zw0aw49l248p2nrgs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ace-jump-buffer";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ace-jump-buffer";
           sha256 = "0hkxa0ps0v1hwmjafqbnyr6rc4s0w95igk8y3w53asl7f5sj5mpi";
           name = "ace-jump-buffer";
         };
@@ -588,7 +588,7 @@
           sha256 = "0rrdh7jq23dyplq5rsf6f3a8v5f8smrzi85dgvqagasv74d19jbv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ace-jump-helm-line";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ace-jump-helm-line";
           sha256 = "04q8wh6jskvbiq6y2xsp2ir23vgz5zw09rm127sgiqrmn0jc61b9";
           name = "ace-jump-helm-line";
         };
@@ -609,7 +609,7 @@
           sha256 = "1bwvzh056ls2v7y26a0s4j5mj582dmds04lx4x6iqihs04ss74bb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ace-jump-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ace-jump-mode";
           sha256 = "0yk0kppjyblr5wamncrjm3ym3n8jcl0r0g0cbnwni89smvpngij6";
           name = "ace-jump-mode";
         };
@@ -630,7 +630,7 @@
           sha256 = "0yng6qayzqadk4cdviri84ghld4can35q134hm3n3j3vprhpbmca";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ace-jump-zap";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ace-jump-zap";
           sha256 = "07bkmly3lvlbby2m13nj3m1q0gcnwy5sas7d6ws6vr9jh0d36byb";
           name = "ace-jump-zap";
         };
@@ -651,7 +651,7 @@
           sha256 = "1v127ld04gn16bgismbcz91kfjk71f3g8yf10r4scfp603y41zgz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ace-link";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ace-link";
           sha256 = "1jl805r2s3wa0xyhss1q28rcy6y2fngf0yfcrcd9wf8kamhpajk5";
           name = "ace-link";
         };
@@ -664,15 +664,15 @@
     ace-pinyin = callPackage ({ ace-jump-mode, avy, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "ace-pinyin";
-        version = "0.2.3";
+        version = "0.2.4";
         src = fetchFromGitHub {
           owner = "cute-jumper";
           repo = "ace-pinyin";
-          rev = "10f66ba2355bed78ef0a1ad24edb00972a0dbe02";
-          sha256 = "10n01sgdi1zq1fyb5ani1fbvwfnqnj74rxzmw5v0y72cwq27r9kr";
+          rev = "2f6791b5f0ac1753ae0d0d7a486a385c17151b42";
+          sha256 = "1614xypwiv8xri7w921w7gj26zx7pvwk3212k71qn0capq7hs32g";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ace-pinyin";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ace-pinyin";
           sha256 = "18gmj71zd0i6yx8ifjxsqz2v81jx0j37f5kxllf31w7fj32ymbkc";
           name = "ace-pinyin";
         };
@@ -682,22 +682,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    ace-popup-menu = callPackage ({ avy, cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    ace-popup-menu = callPackage ({ avy-menu, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "ace-popup-menu";
-        version = "0.1.1";
+        version = "0.2.0";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "ace-popup-menu";
-          rev = "eb8d0d938debdf89575d2ed204aeb7c0b52060b0";
-          sha256 = "061gi4w43dvdys2i0ffc3bnzhrkc83h5x2c43yv4fwb3xz0zn9h0";
+          rev = "3e771b470b0c633d7633dceec054fc05beac81f0";
+          sha256 = "1qiiivkwa95bhyym8ly7fnwwglc9dcifkyr314bsq8m4rp1mgry4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ace-popup-menu";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ace-popup-menu";
           sha256 = "1cq1mpv7v98bqrpsm598krq1741b6rwih71cx3yjifpbagrv4m5s";
           name = "ace-popup-menu";
         };
-        packageRequires = [ avy cl-lib emacs ];
+        packageRequires = [ avy-menu emacs ];
         meta = {
           homepage = "http://melpa.org/#/ace-popup-menu";
           license = lib.licenses.free;
@@ -714,7 +714,7 @@
           sha256 = "07mcdzjmgrqdvjs94f2n5bkrf5vrq2fwzz256wbm3wzqxqkfy1q6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ace-window";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ace-window";
           sha256 = "1k0x8m1phmvgdxb5aj841iai9q96a5lfq8i4b5vnlbc3w888n3xa";
           name = "ace-window";
         };
@@ -735,7 +735,7 @@
           sha256 = "0hib4a8385q2czi1yqs0hwnva2xi7kw0bdfnrgha1hrl30rilp2f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ack-menu";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ack-menu";
           sha256 = "1d2kw04ndxji2qjcm1b65qnxpp08zx8gbia8bl6x6mnjb2isc2d9";
           name = "ack-menu";
         };
@@ -756,7 +756,7 @@
           sha256 = "0zybch8hz3mj63i0pxynb4d76ywqcy7b4fsa4hh71c2kb0bnczb3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/actionscript-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/actionscript-mode";
           sha256 = "1dkiay9jmizvslji5kzab4dxm1dq0jm8ps7sjq6710g7a5aqdvwq";
           name = "actionscript-mode";
         };
@@ -777,7 +777,7 @@
           sha256 = "1mb7dlyd5w161xagwn6w5h4q660dppkd50m71vz0w3zmxsc9a0vq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/adoc-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/adoc-mode";
           sha256 = "0wgagcsh0fkb51fy17ilrs20z2vzdpmz97vpwijcfy2b9rypxq15";
           name = "adoc-mode";
         };
@@ -798,7 +798,7 @@
           sha256 = "1y9bw2vkl952pha2dsi18swyr94mihgwlcg5m8hg4d5bfg2fzcb2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/aes";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/aes";
           sha256 = "11vl9x3ldrv7q7rd29xk4xmlvfxs0m6iys84f6mlgf00190l5r5v";
           name = "aes";
         };
@@ -819,7 +819,7 @@
           sha256 = "0hpsv2zyhhfm53hrd2lzvc9gpvfn6g5dpwmzxfl8l1sqjisips2a";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ag";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ag";
           sha256 = "1r4ai09vdckkg4h4i7dp781qqmm4kky53p4q8azp3n2c78i1vz6g";
           name = "ag";
         };
@@ -840,7 +840,7 @@
           sha256 = "0nss26rz8qly0q00iq7i7q4ss3xvs4s5ndjjmfxhybmnb71a8y9k";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/aggressive-indent";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/aggressive-indent";
           sha256 = "1qi8jbr28gax35siim3hnnkiy8pa2vcrzqzc6axr98wzny46x0i2";
           name = "aggressive-indent";
         };
@@ -861,7 +861,7 @@
           sha256 = "1qqrf9ncc3blkv4p2bhh9q6y41pp9p4wr667mm80vb5j8rkpsaa8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ahk-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ahk-mode";
           sha256 = "066l4hsb49wbyv381qgn9k4hn8gxlzi20h3qaim9grngjj5ljbni";
           name = "ahk-mode";
         };
@@ -874,15 +874,15 @@
     airline-themes = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, powerline }:
     melpaBuild {
         pname = "airline-themes";
-        version = "1.2";
+        version = "1.4";
         src = fetchFromGitHub {
           owner = "AnthonyDiGirolamo";
           repo = "airline-themes";
-          rev = "b7d06424ce7d596f5bff3105d3eaa416f173436a";
-          sha256 = "0q9m7lih760p7yrpqvpxdks5h6ac7dj4fi0qviyicbjlz9mqw7wp";
+          rev = "3c5f127daf1cf8a74e3c9956e11e56eedf5f3e76";
+          sha256 = "0blrpqn8wy9pwzikgzb0v6x4hk7axv93j4byfci62fh1905zfkkb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/airline-themes";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/airline-themes";
           sha256 = "0jkhb6nigyjmwqny7g59h4ssfy64vl3qnwcw46wnx5k9i73cjyih";
           name = "airline-themes";
         };
@@ -903,7 +903,7 @@
           sha256 = "0m05wxvvygc4rpkgnnmk6zrp3d8fylzzjz5ag7lh0jk5al4gfay5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/alchemist";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/alchemist";
           sha256 = "18jxw0zb7y34qbm4bcpfpb2656f0h9grmrbfskgp4ra4q5q3n369";
           name = "alchemist";
         };
@@ -924,7 +924,7 @@
           sha256 = "1pk5dgjqrynap85700wdivq41bdqvwd5hkfimgmcd48l5lhj9pbj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/alect-themes";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/alect-themes";
           sha256 = "04fq65qnxlvl5nc2q037c6yb4nf422dfw2913gv6zfh9rdmxsks8";
           name = "alect-themes";
         };
@@ -945,7 +945,7 @@
           sha256 = "1vpc3q40m6dcrslki4bg725j4kv6c6xfxwjjl1ilg7la49fwwf26";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/alert";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/alert";
           sha256 = "0x3cvczq09jvshz435jw2fjm69457x2wxdvvbbjq46nfnybhi118";
           name = "alert";
         };
@@ -966,7 +966,7 @@
           sha256 = "00kfnkr0rclzbir2xxzr9wf2g0hf1alc004v8i9mqf3ab6dgdqiy";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/amd-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/amd-mode";
           sha256 = "17ry6vm5xlmdfs0mykdyn05cik38yswq5axdgn8hxrvvb6f58d06";
           name = "amd-mode";
         };
@@ -987,7 +987,7 @@
           sha256 = "0sj6cr2bghy80dnwgl7rg61abdlvgfzi0jjc7jrxz7fdzwkcq714";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/anaconda-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/anaconda-mode";
           sha256 = "0gz16aam4zrm3s9ms13h4qcdflf55506kgkpyncq3bi54cvv8n1r";
           name = "anaconda-mode";
         };
@@ -1008,7 +1008,7 @@
           sha256 = "0fnxxvw81c34zhmiyr5awl92wr5941n4gklvzjc4jphaf2nhkg4w";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/anaphora";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/anaphora";
           sha256 = "1wb7fb3pc4gxvpjlm6gjbyx0rbhjiwd93qwc4vfw6p865ikl19y2";
           name = "anaphora";
         };
@@ -1029,7 +1029,7 @@
           sha256 = "0gjynmzqlqz0d57fb4np6xrklqdn11y4vjbm18rlpvmk92bgw740";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/android-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/android-mode";
           sha256 = "1nqrvq411yg4b9xb5cvc7ai7lfalwc2rfhclzprvymc4vxh6k4cc";
           name = "android-mode";
         };
@@ -1050,7 +1050,7 @@
           sha256 = "1798nv4djhxzbin68zf6w7dbfm9sc39d0kygky52ii36arg5r1zp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/angular-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/angular-mode";
           sha256 = "1bwfmjldnxki0lqi3ys6r2a3nlhbwm1dibsg2dvzirq8qql02w1i";
           name = "angular-mode";
         };
@@ -1071,7 +1071,7 @@
           sha256 = "0h9i0iimanbvhbqy0cj9na335rs961pvhxjj4k8y53qc73xm102a";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/angular-snippets";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/angular-snippets";
           sha256 = "057phgizn1c6njvdfigb23ljs31knq247gr0rcpqfrdaxsnnzm5c";
           name = "angular-snippets";
         };
@@ -1092,7 +1092,7 @@
           sha256 = "18ninv1z8zdqpqnablbds4zgxgk4c1nmznlfdicj6qs738c5c30s";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/annotate";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/annotate";
           sha256 = "1ajykgara2m713blj2kfmdz12fzm8jw7klyakkyi6i3c3a9m44jy";
           name = "annotate";
         };
@@ -1113,7 +1113,7 @@
           sha256 = "1ppq3kszzj2fgr7mwj565bjs8bs285ymy384cnnw7paddgcr9z02";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/annoying-arrows-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/annoying-arrows-mode";
           sha256 = "13bwqv3mv7kgi1gms58f5g03q5g7q98n4vv6n28zqmppxm5z33s7";
           name = "annoying-arrows-mode";
         };
@@ -1134,7 +1134,7 @@
           sha256 = "1hbddxarr40ygvaw4pwaivq2l4f0brszw73w1r50lkjlggb7bl3g";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ansi";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ansi";
           sha256 = "04n0kvaqq8214prdk20bplqyzlsnlzfzsg23ifkrzjgqjjpdcyi1";
           name = "ansi";
         };
@@ -1155,7 +1155,7 @@
           sha256 = "03d240jngxw51ybrsjw8kdxygrr0ymdckzwga2jr1bqf26v559j2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ansible";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ansible";
           sha256 = "1xdc05fdglqfbizra6s1zl6knnvaq526dkxqnw9g7w269j8f4z8g";
           name = "ansible";
         };
@@ -1176,7 +1176,7 @@
           sha256 = "05z379k6a7xq9d2zapf687x3f37jpmh6kfghpgxdd18v0hzca8ds";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ansible-doc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ansible-doc";
           sha256 = "03idvnn79fr9id81aivkm7g7cmlsg0c520wcq4da8g013xvi342w";
           name = "ansible-doc";
         };
@@ -1197,7 +1197,7 @@
           sha256 = "1i1xb04g17f6029w0n8fp55gklgr9kh6c24m9dfrkn5q3dlvd26p";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/anti-zenburn-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/anti-zenburn-theme";
           sha256 = "1sp9p6m2jy4m9fdn1hz25cmasy0mwwgn46qmvm92i56f5x6jlzzk";
           name = "anti-zenburn-theme";
         };
@@ -1218,7 +1218,7 @@
           sha256 = "1z6l72dn98icqsmxb3rrj6l63ijc3xgfa3vdl19yqa2rfy6ya721";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/anyins";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/anyins";
           sha256 = "0ncf3kn8rackcidkgda2zs60km3hx87rwr9daj7ksmbb6am09s7c";
           name = "anyins";
         };
@@ -1238,7 +1238,7 @@
           sha256 = "86b90766ccb31a492998299092a3d0b892a8ac0bdb8e1833ef75fa6d79c7c721";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/anything";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/anything";
           sha256 = "13pmks0bsby57v3vp6jcvvzwb771d4qq62djgvrw4ykxqzkcb8fj";
           name = "anything";
         };
@@ -1259,7 +1259,7 @@
           sha256 = "01lw9159axg5w9bpdy55m4zc902zmsqvk213ky1nmgnln0fvq3rd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/anything-exuberant-ctags";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/anything-exuberant-ctags";
           sha256 = "0p0jq2ggdgaxv2gd9m5iza0y3mjjc82xmgp899yr15pfffa4wihk";
           name = "anything-exuberant-ctags";
         };
@@ -1280,7 +1280,7 @@
           sha256 = "1834yj2vgs4dasdfnppc8iw8ll3yif948biq9hj0sbpsa2d8y44k";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/anything-replace-string";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/anything-replace-string";
           sha256 = "1fagi6cn88p6sf1yhx1qsi7nw9zpyx9hdfl66iyskqwddfvywp71";
           name = "anything-replace-string";
         };
@@ -1301,7 +1301,7 @@
           sha256 = "1bcvin2694ypqgiw0mqk82riq7gw6ra10vbkzng1yp9jp2qr6wmm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/anything-sage";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/anything-sage";
           sha256 = "1878vj8hzrwfyd2yvxcm0f1vm9m0ndwnj0pcq7j8zm9lxj0w48p3";
           name = "anything-sage";
         };
@@ -1314,15 +1314,15 @@
     anzu = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "anzu";
-        version = "0.59";
+        version = "0.60";
         src = fetchFromGitHub {
           owner = "syohex";
           repo = "emacs-anzu";
-          rev = "6fded24b366efc4cf27166104c1928f7d1fedaa7";
-          sha256 = "1d2laybz1igrr9nnkmfsnrvsjw7qmrgby4wnrxprins9gq263lra";
+          rev = "dde4d83cfa4887db7deaf74232c9e051afb33050";
+          sha256 = "1dxaf68przg0hh0p1zhxsq2dysp3ln178yxhbqalxw67bjy8ikny";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/anzu";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/anzu";
           sha256 = "0i2ia0jisj31vc2pjx9bhv8jccbp24q7c406x3nhh9hxjzs1f41i";
           name = "anzu";
         };
@@ -1343,7 +1343,7 @@
           sha256 = "13j2r4nx2x6j3qx50d5rdnqd8nl5idxdkhizsk7ccz3v2607fbyy";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/apples-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/apples-mode";
           sha256 = "05ssnxs9ybc26jhr69xl9jpb41bz1688minmlc9msq2nvyfnj97s";
           name = "apples-mode";
         };
@@ -1364,7 +1364,7 @@
           sha256 = "1wyz8jvdy4m0cn75mm3zvxagm2gl10q51479f91gnqv14b4rndfc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/aproject";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/aproject";
           sha256 = "0v3gx2mff2s7knm69y253pm1yr4svy8w00pqbn1chrvymb62jhp2";
           name = "aproject";
         };
@@ -1385,7 +1385,7 @@
           sha256 = "133c1n4ra7z3vb6y47400y71a6ac19pyji0bgd4kr9fcbx0flx91";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/artbollocks-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/artbollocks-mode";
           sha256 = "0dlnxicn6nzyiz44y92pbl4nzr9jxfb9a99wacjrwq2ahdrwhhjp";
           name = "artbollocks-mode";
         };
@@ -1406,7 +1406,7 @@
           sha256 = "1s973vzivibaqjb8acn4ylrdasxh17jcfmmvqp4wm05nwhg75597";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/asilea";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/asilea";
           sha256 = "1lb8nr6r6yy06m4pxg8w9ja4zv8k5xwhl95v2wv95y1qwhgnwg3j";
           name = "asilea";
         };
@@ -1427,7 +1427,7 @@
           sha256 = "0z91alzf4ajj3r7pnwazynvp81cg67csy9kf87fk98024xldpkdp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/async";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/async";
           sha256 = "063ci4f35x1zm9ixy110i5ds0vsrcafpixrz3xkvpnfqdn29si3f";
           name = "async";
         };
@@ -1448,7 +1448,7 @@
           sha256 = "01ig5v5f2xya7hyq678nd8j8x972yfbni813c0imxkkba996a2k7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/aurel";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/aurel";
           sha256 = "13zyi55ksv426pcksbm3l9s6bmp102w7j1xbry46bc48al6i2nnl";
           name = "aurel";
         };
@@ -1469,7 +1469,7 @@
           sha256 = "0ns1xhpk1awbj3kv946dv11a99p84dhm54vjk72kslxwx42nia28";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/aurora-config-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/aurora-config-mode";
           sha256 = "0yqmpwj1vp0d5w9zw1hbyxzsbvw165dsgk1v1dxizkqwn7b1v7jm";
           name = "aurora-config-mode";
         };
@@ -1490,7 +1490,7 @@
           sha256 = "0gi65n1np63zi2ylc4y1licwvk97jl92s1v98fv5y61kppi1d8sq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/auth-password-store";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/auth-password-store";
           sha256 = "118ll12dhhxmlsp2mxmy5cd91166a1qsk406yhap5zw1qvyg58w5";
           name = "auth-password-store";
         };
@@ -1511,7 +1511,7 @@
           sha256 = "07vnk8az4lcxncqn01jvks38b4hpdmg43nbby2b39zy50agqnwsg";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/auto-compile";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/auto-compile";
           sha256 = "1cdv41hg71mi5ixxi4kiizyg03xai2gyhk0vz7gw59d9a7482yks";
           name = "auto-compile";
         };
@@ -1532,7 +1532,7 @@
           sha256 = "0q880dksf3bj1hixa4zhj3ybvrqf1wcnjnmb37i49qwdy6p1ma06";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/auto-complete";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/auto-complete";
           sha256 = "1c4ij5bnclg94jdzhkqvq2vxwv6wvs051mbki1ibjm5f2hlacvh3";
           name = "auto-complete";
         };
@@ -1553,7 +1553,7 @@
           sha256 = "1kp2l1cgzlg2g3wllz4gl1ssn4lnx2sn26xqigfrpr8y5rj2bsfj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/auto-complete-clang-async";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/auto-complete-clang-async";
           sha256 = "1jj0jn1v3070g7g0j5gvpybv145kki8nsjxqb8fjf9qag8ilfkjh";
           name = "auto-complete-clang-async";
         };
@@ -1574,7 +1574,7 @@
           sha256 = "1fqgyg986fg1dzac5wa97bx82mfddqb6qrfnpr3zksmw3vgykxr0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/auto-complete-exuberant-ctags";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/auto-complete-exuberant-ctags";
           sha256 = "1i2s3ycc8jafkzdsz3kbvx1hh95ydi5s6rq6n0wzw1kyy3km35gd";
           name = "auto-complete-exuberant-ctags";
         };
@@ -1595,7 +1595,7 @@
           sha256 = "18bf1kw85mab0zp7rn85cm1nxjxg5c1dmiv0j0mjwzsv8an4px5y";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/auto-complete-nxml";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/auto-complete-nxml";
           sha256 = "0viscr5k1carn9vhflry16kgihr6fvh6h36b049pgnk6ww085k6a";
           name = "auto-complete-nxml";
         };
@@ -1616,7 +1616,7 @@
           sha256 = "1hf2f903hy9afahrgy2fx9smgn631drs6733188zgqi3nkyizj26";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/auto-complete-pcmp";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/auto-complete-pcmp";
           sha256 = "1mpgkwj8jwpvxphlm6iaprwjrldmihbgg97jav0fbm1kjnm4azna";
           name = "auto-complete-pcmp";
         };
@@ -1637,7 +1637,7 @@
           sha256 = "0l49ciic7g30vklxq6l1ny3mz87l5p8qc30rmkjvkzvg8r52ksn3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/auto-complete-sage";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/auto-complete-sage";
           sha256 = "02sxbir3arvmnkvxgndlkln9y05jnlv6i8czd6a0wcxk4nj43lq1";
           name = "auto-complete-sage";
         };
@@ -1658,7 +1658,7 @@
           sha256 = "191294k92qp8gmfypf0q8j8qrym96aqikzvyb9p03wqvbr3r1dsk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/auto-dictionary";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/auto-dictionary";
           sha256 = "1va485a8lxvb3507kr83cr6wpssxnf8y4l42mamn9daa8sjx3q16";
           name = "auto-dictionary";
         };
@@ -1679,7 +1679,7 @@
           sha256 = "1hlsgsdxpx42kmqkjgy9b9ldz5i4dbi879v87pjd2qbkj8iywb6y";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/auto-indent-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/auto-indent-mode";
           sha256 = "1nk78p8lqs8cx90asfs8iaqnwwyy8fi5bafaprm9c0nrxz299ibz";
           name = "auto-indent-mode";
         };
@@ -1700,7 +1700,7 @@
           sha256 = "05llpa6g4nb4qswmcn7j3bs7hnmkrkax7hsk7wvklr0wrljyg9a2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/auto-package-update";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/auto-package-update";
           sha256 = "0fdcniq5mrwbc7yvma4088r0frdfvc2ydfil0s003faz0nrjcp8k";
           name = "auto-package-update";
         };
@@ -1721,7 +1721,7 @@
           sha256 = "1h8zsgw30axprs7a5kkygbhvilillzazxgqz01ng36il65fi28s6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/auto-shell-command";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/auto-shell-command";
           sha256 = "1i78fh72i8yv91rnabf0vs78r43qrjkr36hndmn5ya2xs3b1g41j";
           name = "auto-shell-command";
         };
@@ -1742,7 +1742,7 @@
           sha256 = "0n3r7j83csby2s7284hy5pycynazyrkljxkn6xqn08gvxbbbdpdq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/auto-yasnippet";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/auto-yasnippet";
           sha256 = "02281gyy07cy72a29fjsixg9byqq3izb9m1jxv98ni8pcy3bpsqa";
           name = "auto-yasnippet";
         };
@@ -1763,7 +1763,7 @@
           sha256 = "1pf2mwnicj5x2kksxwmrzz2vfxj9y9r6rzgc1fl8028mfrmrmg8s";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/autodisass-java-bytecode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/autodisass-java-bytecode";
           sha256 = "1k19nkbxnysm3qkpdhz4gv2x9nnrp94xl40x84q8n84s6xaan4dc";
           name = "autodisass-java-bytecode";
         };
@@ -1784,7 +1784,7 @@
           sha256 = "1hyp49bidwc53cr25wwwyzcd0cbbqzxkfcpnccimphv24qfsai85";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/autodisass-llvm-bitcode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/autodisass-llvm-bitcode";
           sha256 = "0bh73nzll9jp7kiqfnb5dwkipw85p3c3cyq58s0nghig02z63j01";
           name = "autodisass-llvm-bitcode";
         };
@@ -1805,7 +1805,7 @@
           sha256 = "0g6kd1r0wizamw26bhp5jkvpsd98rcybkfchc622b9v5b89a07nq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/autopair";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/autopair";
           sha256 = "161qhk8rc1ldj9hpg0k9phka0gflz9vny7gc8rnylk90p6asmr28";
           name = "autopair";
         };
@@ -1818,21 +1818,42 @@
     avy = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "avy";
-        version = "0.3.0";
+        version = "0.4.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
           repo = "avy";
-          rev = "44d76b9d2aad5477521675747a5c769f3f9a69a0";
-          sha256 = "15xfgmsy4sqs3cmk7dwmj21g3r9dqb3fra7n7ly306bwgzh4vm8k";
+          rev = "369af594e5ea28be1d91b22753aace16baadc046";
+          sha256 = "0rq9ab264565z83cly743nbhrd9m967apmnlhqr1gy8dm4hcy7nm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/avy";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/avy";
           sha256 = "0gjq79f8jagbngp0shkcqmwhisc3hpgwfk34kq30nb929nbnlmag";
           name = "avy";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
           homepage = "http://melpa.org/#/avy";
+          license = lib.licenses.free;
+        };
+      }) {};
+    avy-menu = callPackage ({ avy, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "avy-menu";
+        version = "0.1.0";
+        src = fetchFromGitHub {
+          owner = "mrkkrp";
+          repo = "avy-menu";
+          rev = "9b8c6be09487dd3e804a10761266c4f22923eb9c";
+          sha256 = "1564yv9330vjymw3xnikc2lz20f65n40fbl8m1zs1gp4nlgzkk38";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/avy-menu";
+          sha256 = "1g2bsm0jpig51jwn9f9mx6z5glb0bn4s21194xam768qin0rf4iw";
+          name = "avy-menu";
+        };
+        packageRequires = [ avy emacs ];
+        meta = {
+          homepage = "http://melpa.org/#/avy-menu";
           license = lib.licenses.free;
         };
       }) {};
@@ -1847,7 +1868,7 @@
           sha256 = "098bkqb2cndjx93jacj6p54xfy14m1iknvpv1y5rffy9p4l2cbd3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/avy-migemo";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/avy-migemo";
           sha256 = "1zvgkhma445gj1zjl8j25prw95bdpjbvfy8yr0r5liay6g2hf296";
           name = "avy-migemo";
         };
@@ -1868,7 +1889,7 @@
           sha256 = "0lmv34pi9qdh76fi3w4lrfyfhzr824nsiif4nyjvpnmrabxgk309";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/avy-zap";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/avy-zap";
           sha256 = "1zbkf21ggrmg1w0xaw40i3swgc1g4fz0j8p0r9djm9j120d94zkx";
           name = "avy-zap";
         };
@@ -1889,7 +1910,7 @@
           sha256 = "0px1xggk6qyrwkma1p3d7b4z2id2gbrsxkliw3nwc1q4zndg1zr7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/babel";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/babel";
           sha256 = "0sdpp4iym61ni32zv75n48ylj4jib8ca6n9hyqwj1b7nqg76mm1c";
           name = "babel";
         };
@@ -1910,7 +1931,7 @@
           sha256 = "0hmn3jlsqgpc602lbcs9wzw0hgr5qpjdcxi2hjlc1cp27ilyscnf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/back-button";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/back-button";
           sha256 = "0vyhvm445d0rs14j5xi419akk5nd88d4hvm4251z62fmnvs50j85";
           name = "back-button";
         };
@@ -1937,7 +1958,7 @@
           sha256 = "1plh7i4zhs5p7qkv7p7lnfrmkszn8b3znwvbxgp7wpxay5safc5j";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/badwolf-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/badwolf-theme";
           sha256 = "03plkzpmlh0pgfp1c9padsh4w2g23clsznym8x4jabxnk0ynhq41";
           name = "badwolf-theme";
         };
@@ -1958,7 +1979,7 @@
           sha256 = "11rlmrjdpa3vnf0h9vcd75946q9jyf1mpbm7h12hmpj6g2pavgdd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/bash-completion";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/bash-completion";
           sha256 = "0l41yj0sb87i27hw6dh35l32hg4qkka6r3bpkckjnfm0xifrd9hj";
           name = "bash-completion";
         };
@@ -1979,7 +2000,7 @@
           sha256 = "1xvxz9sk9l57a4kiiavxxdp0v241mfgiy2lg5ilacq1cd6xrrhky";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/bbcode-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/bbcode-mode";
           sha256 = "0ixxavmilr6na56yc148prbh3nlhcwir6rxqvh332cr8vr9gmp89";
           name = "bbcode-mode";
         };
@@ -2000,7 +2021,7 @@
           sha256 = "17nbnkg0zn6p89r27mk9hl6qhv6xscwdsq8iyikdw03svpr16lnp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/bbdb-";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/bbdb-";
           sha256 = "1vzbalcchay4pxl9f1sxg0zclgc095f59dlj15pj0bqq61sbl9jf";
           name = "bbdb-";
         };
@@ -2021,7 +2042,7 @@
           sha256 = "0fg72qnb40djyciy4gzj359lqlcbbrq0indbkzd0dj09zipkx0df";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/bbdb-vcard";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/bbdb-vcard";
           sha256 = "1kn98b7mh9a28933r4yl8qfl9p92rpix4vkp71sar9cka0m71ilj";
           name = "bbdb-vcard";
         };
@@ -2042,7 +2063,7 @@
           sha256 = "1zkh7dcas80wwjvigl27wj8sp4b5z6lh3qj7zkziinwamwnxbdbs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/bbdb2erc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/bbdb2erc";
           sha256 = "0k1f6mq9xd3568vg01dqqvcdbdshbdsi4ivkjyxis6dqfnqhlfdd";
           name = "bbdb2erc";
         };
@@ -2063,7 +2084,7 @@
           sha256 = "01d10algmi9a4xd7mzf7n3zxfs2qf5as66wx17mff5cd8dahxj1q";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/beeminder";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/beeminder";
           sha256 = "0aj7ix7nrsl89f9c449kik8fbzhfk9li50wrh50cdwgfh8gda0fx";
           name = "beeminder";
         };
@@ -2084,7 +2105,7 @@
           sha256 = "1agrci37bni1vfkxg171l53fvsnjdryhf05v54wj07jngnwf3cw9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/beginend";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/beginend";
           sha256 = "1y81kr9q0zrsr3c3s14rm6l86y5wf1a0kia6d98112fy4fwdm7kq";
           name = "beginend";
         };
@@ -2097,15 +2118,15 @@
     better-defaults = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "better-defaults";
-        version = "0.1.2";
+        version = "0.1.3";
         src = fetchFromGitHub {
           owner = "technomancy";
           repo = "better-defaults";
-          rev = "c286d55528f148733c696fe07eb01073dc412fb8";
-          sha256 = "09cn3dnaq88jwmmxfg76168s8f4wbmp6y2dv13rhwagihx9mf20m";
+          rev = "90df5752a0a0602feb47aadfd3542aa7fc841bd8";
+          sha256 = "1rxznx2l0cdpiz8mad8s6q17m1fngpgb1cki7ch6yh18r3qz8ysr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/better-defaults";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/better-defaults";
           sha256 = "13bqcmx2gagm2ykg921ik3awp8zvw5d4lb69rr6gkpjlqp7nq2cm";
           name = "better-defaults";
         };
@@ -2126,7 +2147,7 @@
           sha256 = "07vwg0bg719gb8ln1n5a33103903vvrphnkbvvfn43904pkrf14w";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/bind-key";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/bind-key";
           sha256 = "1qw2c27016d3yfg0w10is1v72y2jvzhq07ca4h6v17yi94ahj5xm";
           name = "bind-key";
         };
@@ -2147,7 +2168,7 @@
           sha256 = "0pmpg54faq0l886f2cmnmwm28d2yfg8adk7gp7623gx0ifggn332";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/bing-dict";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/bing-dict";
           sha256 = "0s5pd08rcnvmgi1hw17xbzvswlv0yni6h2h2gccrjmf6izi8whh1";
           name = "bing-dict";
         };
@@ -2168,7 +2189,7 @@
           sha256 = "1r3f5d67x257g8kvdbdsl4w3y1dvc1d6s9x8bygbkvyahfi5m5hn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/birds-of-paradise-plus-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/birds-of-paradise-plus-theme";
           sha256 = "0vdv2siy30kf1qhzrc39sygjk17lwm3ix58pcs3shwkg1y5amj3m";
           name = "birds-of-paradise-plus-theme";
         };
@@ -2189,7 +2210,7 @@
           sha256 = "1j2ar9sinbrraqvymqmjray48xbr1arhpigzgkgnhkc2zzqv8dwb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/bog";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/bog";
           sha256 = "1ci8xxca7dclmi5v37y5k45qlmzs6a9hi6m7czgiwxii902w5pkl";
           name = "bog";
         };
@@ -2210,7 +2231,7 @@
           sha256 = "1q3ws2vn062dh7ci6jn2k2bcn7szh3ap64sgwkzdd6f1pas37fnr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/bongo";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/bongo";
           sha256 = "07i9gw067r2igp6s2g2iakm1ybvw04q6zznna2cfdf08nax64ghv";
           name = "bongo";
         };
@@ -2231,7 +2252,7 @@
           sha256 = "1apxgj14hgfpz6hjp3384yjf2zrkv4pcncf2zklijs668igvaskq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/boon";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/boon";
           sha256 = "0gryw7x97jd46jgrm93cjagj4p7w93cjc36i2ps9ajf0d8m4gajb";
           name = "boon";
         };
@@ -2252,7 +2273,7 @@
           sha256 = "0235l4f1cxj7nysfnay4fz52mg0c13pzqxbhw65vdpfzz1gl1p73";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/boxquote";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/boxquote";
           sha256 = "0s6cxb8y1y8w9vxxhj1izs8d0gzk4z2zm0cm9gkw1h7k2kyggx6s";
           name = "boxquote";
         };
@@ -2273,7 +2294,7 @@
           sha256 = "0y9m6cv70pzcm0v2v8nwmyh1xx40831chx72m85h5ic5db03gy7b";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/browse-kill-ring";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/browse-kill-ring";
           sha256 = "1d97ap0vrg5ymp96z7y6si98fspxzy02jh1i4clvw5lggjfibhq4";
           name = "browse-kill-ring";
         };
@@ -2294,7 +2315,7 @@
           sha256 = "08qz9l0gb7fvknzkp67srhldzkk8cylnbn0qwkflxgcs6ndfk95y";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/browse-url-dwim";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/browse-url-dwim";
           sha256 = "13bv2ka5pp9k4kwrxfqfawwxzsqlakvpi9a32gxgx7qfi0dcb1rf";
           name = "browse-url-dwim";
         };
@@ -2315,7 +2336,7 @@
           sha256 = "0s43cvkr1za5sd2cvl55ig34wbp8xyjf85snmf67ps04swyyk92q";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/buffer-flip";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/buffer-flip";
           sha256 = "0ka9ynj528yp1p31hbhm89627v6dpwspybly806n92vxavxrn098";
           name = "buffer-flip";
         };
@@ -2336,7 +2357,7 @@
           sha256 = "0xdks4jfqyhkh34y48iq3gz8swp0f526kwnaai5mhgvazvs4za8c";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/buffer-move";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/buffer-move";
           sha256 = "0wysywff2bggrha7lpl83c8x6ln7zgdj9gsqmjva6gramqb260fg";
           name = "buffer-move";
         };
@@ -2357,7 +2378,7 @@
           sha256 = "0rp9hiysy13c4in7b420r7yjza2knlmvphj7l01xbxphbilplqk5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/buffer-utils";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/buffer-utils";
           sha256 = "0cfipdn4fc4fvz513mwiaihvbdi05mza3z5z1379wlljw6r539z2";
           name = "buffer-utils";
         };
@@ -2378,7 +2399,7 @@
           sha256 = "0x9q4amsmawi8jqj9xxg81khvb3gyyf9hjvb0w6vhrgjwpxiq8sy";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/bufshow";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/bufshow";
           sha256 = "027cd0jzb8yxm66q1bhyi75f2m9f2pq3aswgav1d18na3ybwg65h";
           name = "bufshow";
         };
@@ -2399,7 +2420,7 @@
           sha256 = "07jzg58a3jxs4mmsgb35f5f8awazlvzak9wrhif6xb60jq1wrp0v";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/bug-reference-github";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/bug-reference-github";
           sha256 = "18yzxwanbrxsab6ba75z1196x0m6dapdhbvy6df5b5x5viz99cf6";
           name = "bug-reference-github";
         };
@@ -2420,7 +2441,7 @@
           sha256 = "18d74nwcpk1i8adxzfwz1lgqqcxsc4wkrb490v64pph79dxsi80h";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/bundler";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/bundler";
           sha256 = "0i5ybc6i8ackxpaa75kwrg44zdq3jkvy48c42vaaafpddjwjnsy4";
           name = "bundler";
         };
@@ -2441,7 +2462,7 @@
           sha256 = "03hab3iw2jjckal20zwsw7cm38nf7pan0m96d8ab4i75phy6liyw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/bury-successful-compilation";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/bury-successful-compilation";
           sha256 = "1gkq4r1573m6m57fp7x69k7kcpqchpcqfcz3792v0wxr22zhkwr3";
           name = "bury-successful-compilation";
         };
@@ -2462,7 +2483,7 @@
           sha256 = "1pii9dw4skq7nr4na6qxqasl36av8cwjp71bf1fgppqpcd9z8skj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/butler";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/butler";
           sha256 = "1jv74l9jy55qpwf5np9nlj6a1wqsm3xirm7wm89d1h2mbsfcr0mq";
           name = "butler";
         };
@@ -2483,7 +2504,7 @@
           sha256 = "0lpfx7q0qrclxii4ffrrjffb678bsx908za91nsy7mc2g0cxcapb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/buttercup";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/buttercup";
           sha256 = "1grrrdk5pl9l1jvnwzl8g0102gipvxb5qn6k2nmv28jpl57v8dkb";
           name = "buttercup";
         };
@@ -2504,7 +2525,7 @@
           sha256 = "1kqcc1d56jz107bswlzvdng6ny6qwp93yck2i2j921msn62qvbb2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/button-lock";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/button-lock";
           sha256 = "1arrdmb3nm570hgs18y9sz3z9v0wlkr3vwa2zgfnc15lmf0y34mp";
           name = "button-lock";
         };
@@ -2525,7 +2546,7 @@
           sha256 = "1k2hmc87ifww95k3m8ksiswkk2z0y8grssba7381g8dnlp6jgprx";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cacoo";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cacoo";
           sha256 = "0kri4vi6dpsf0zk24psm16f3aa27cq5b54ga7zygmr02csq24a6z";
           name = "cacoo";
         };
@@ -2546,7 +2567,7 @@
           sha256 = "0bvrwzjx93qyx97qqw0imvnkkx4w91yk99rnhcmk029zj1fy0kzg";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cake";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cake";
           sha256 = "06qlqrazz2jr08g44q73hx9vpp6xnjvkpd6ky108g0xc5p9q2hcr";
           name = "cake";
         };
@@ -2567,7 +2588,7 @@
           sha256 = "1w7yq35gzzwyf480d8gc5r6jbnawg09l6663q068ir6zr9pp4far";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cake-inflector";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cake-inflector";
           sha256 = "04mrqcm1igb638skaq2b3nr5yzxnck2vwhln61rnh7lkfxq7wbwf";
           name = "cake-inflector";
         };
@@ -2588,7 +2609,7 @@
           sha256 = "15w21r0gqblbn9wlvb4wlm3706wf01r38mp465snjzi839f6sazb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cake2";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cake2";
           sha256 = "03q8vqqjlhahgnyy976c46x52splwdjpmb9ngrj5c2z7d8n9145x";
           name = "cake2";
         };
@@ -2609,7 +2630,7 @@
           sha256 = "1rv6slk3a7ca2q16isjlkmgxbxmbqx4lx2ip7z33fvnq10r5h60n";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/calfw";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/calfw";
           sha256 = "1lyb0jzpx19mx50d8xjv9sx201518vkvskxbglykaqpjm9ik2ai8";
           name = "calfw";
         };
@@ -2630,7 +2651,7 @@
           sha256 = "0v927m3l5cf0j0rs0nfk5whwqmmxs941d8qalxi19j1ihspjz8d6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/camcorder";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/camcorder";
           sha256 = "1kbnpz3kn8ycpy8nlp8bsnnd1k1h7m02h7w5f7raw97sk4cnpvbi";
           name = "camcorder";
         };
@@ -2651,7 +2672,7 @@
           sha256 = "152d5ym4bqnlnp6rafgy8fafx8246n78ymlcx9k2nyfar4c0lir2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cargo";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cargo";
           sha256 = "06zq657cxfk5l4867qqsvhskcqc9wswyl030wj27a43idj8n41jx";
           name = "cargo";
         };
@@ -2672,7 +2693,7 @@
           sha256 = "0mg49rpz362ipn5qzqhyfs3d6fpb51rfa73kna3gxdw0wxq2sa7g";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/caseformat";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/caseformat";
           sha256 = "1qwyr74jbx4jpfcw8sccg47q1vdg094rr06m111gsz2yaj9m0gfk";
           name = "caseformat";
         };
@@ -2693,7 +2714,7 @@
           sha256 = "1hvm6r6a8rgjwnn2mcamwqrmhz424vlr4mbvbri3wmn0ikbk510l";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cask";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cask";
           sha256 = "11nr6my3vlb1xiyai7qwii3nszda2mnkhkjlbh3d0699h0yw7dk5";
           name = "cask";
         };
@@ -2714,7 +2735,7 @@
           sha256 = "0padb1zfjkmx9kbqnqh744qvpd3ln0khwxifxld9cpcpdp5k04vc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cask-package-toolset";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cask-package-toolset";
           sha256 = "13ix093c0a58rjqj7zfp3914xj3hvj276gb2d8zhvrx9vvs1345g";
           name = "cask-package-toolset";
         };
@@ -2735,13 +2756,34 @@
           sha256 = "1j1lw5zifp7q1ykm6si0nzxfp7n3z2lzla2njkkxmc2s6m7w4x1a";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/caskxy";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/caskxy";
           sha256 = "0x4s3c8m75zxsvqpgfc5xwll0489zzdnngmnq048z9gkgcd7pd2s";
           name = "caskxy";
         };
         packageRequires = [ log4e yaxception ];
         meta = {
           homepage = "http://melpa.org/#/caskxy";
+          license = lib.licenses.free;
+        };
+      }) {};
+    cbm = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "cbm";
+        version = "0.3";
+        src = fetchFromGitHub {
+          owner = "akermu";
+          repo = "cbm.el";
+          rev = "2f319b3ea6d434f9f9f9ace53a0ca968f3787a4c";
+          sha256 = "125d5i7ycdn2hgffc1l3jqcfzvk70m1ciywj4h53qakkl15r9m38";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cbm";
+          sha256 = "02ch0gdw610c8dfxxjxs7ijsc9lzbhklj7hqgwfwksnyc36zcjmn";
+          name = "cbm";
+        };
+        packageRequires = [ cl-lib ];
+        meta = {
+          homepage = "http://melpa.org/#/cbm";
           license = lib.licenses.free;
         };
       }) {};
@@ -2756,7 +2798,7 @@
           sha256 = "1jj9vmhc4s3ych08bjm1c2xwi81z1p20rj7bvxrgvb5aga2ghi9d";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cdlatex";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cdlatex";
           sha256 = "1jsfmzl13fykbg7l4wv9si7z11ai5lzvkndzbxh9cyqlvznq0m64";
           name = "cdlatex";
         };
@@ -2777,7 +2819,7 @@
           sha256 = "07h5g905i1jglsryl0dnqxz8yya5kkyjjggzbk4nl3rcj41lyas7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/celery";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/celery";
           sha256 = "0m3hmvp6xz2m7z1kbb0ii0j3c95zi19652gfixq5a5x23kz8y59h";
           name = "celery";
         };
@@ -2798,7 +2840,7 @@
           sha256 = "08hqgsjvs62l1cfzshbpj80xd8365qmx2b5r5jq20d5cj68s36wl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cerbere";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cerbere";
           sha256 = "1g3svmh5dlh5mvyag3hmiy90dfkk6f7ppd9qpwckxqyll9vl7r06";
           name = "cerbere";
         };
@@ -2811,21 +2853,42 @@
     cfengine-code-style = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "cfengine-code-style";
-        version = "3.8.0.2.1";
+        version = "3.8.1";
         src = fetchFromGitHub {
           owner = "cfengine";
           repo = "core";
-          rev = "afed90c14a2b30bc36595626b959522c34a6565f";
-          sha256 = "11a89pyz8zdjdkimpqaywp702xf9cmwz1djkjp5dghgpwi1aid72";
+          rev = "2df2383cc697250d996630d0a1f88e3a2f0e052b";
+          sha256 = "190gr30bscl80awilcjflwy9n7nvlz0hzmzmpx1wsa3wj3zf89yy";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cfengine-code-style";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cfengine-code-style";
           sha256 = "1ny8xvdnz740qmw9m81xnwd0gh0a516arpvl3nfimglaai5bfc9a";
           name = "cfengine-code-style";
         };
         packageRequires = [];
         meta = {
           homepage = "http://melpa.org/#/cfengine-code-style";
+          license = lib.licenses.free;
+        };
+      }) {};
+    char-menu = callPackage ({ avy-menu, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "char-menu";
+        version = "0.1.0";
+        src = fetchFromGitHub {
+          owner = "mrkkrp";
+          repo = "char-menu";
+          rev = "5bdd7e880f89f27dbabe11def0fd31225b7f1c0a";
+          sha256 = "0vb03k10i8vwy5wv65xl15kcsh9zz4y2xhpgndih87ssckdnhhlw";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/char-menu";
+          sha256 = "11jkwghrmmvpv7piznkpa0wilwjdsps9rix3950pfabhlllw268l";
+          name = "char-menu";
+        };
+        packageRequires = [ avy-menu emacs ];
+        meta = {
+          homepage = "http://melpa.org/#/char-menu";
           license = lib.licenses.free;
         };
       }) {};
@@ -2840,7 +2903,7 @@
           sha256 = "0crnd64cnsnaj5mcy55q0sc1rnamxa1xbpwpmirhyhxz780klww6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/charmap";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/charmap";
           sha256 = "1j7762d2i17ysn9ys8j7wfv989avmax8iylml2hc26mwbpyfpm84";
           name = "charmap";
         };
@@ -2861,7 +2924,7 @@
           sha256 = "09ypxhfad3v1pz0xhw4xgxvfj7ad2kb3ff9zy1mnw7fzsa7gw6nj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/checkbox";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/checkbox";
           sha256 = "17gw6w1m6bs3sfx8nqa8nzdq26m8w85a0fca5qw3bmd18bcmknqa";
           name = "checkbox";
         };
@@ -2882,7 +2945,7 @@
           sha256 = "1jsy43avingxxccs0zw2qm5ysx8g76xhhh1mnyypxskl9m60qb4j";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/chinese-word-at-point";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/chinese-word-at-point";
           sha256 = "0pjs4ckncv84qrdj0pyibrbiy86f1gmjla9n2cgh10xbc7j9y0c4";
           name = "chinese-word-at-point";
         };
@@ -2895,15 +2958,15 @@
     cider = callPackage ({ clojure-mode, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, pkg-info, queue, seq, spinner }:
     melpaBuild {
         pname = "cider";
-        version = "0.10.1";
+        version = "0.10.2";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
           repo = "cider";
-          rev = "93e061b99c1e6f3098b098d884a37778dbca9825";
-          sha256 = "1amj1qad03b7hw6isxh1389mi4i9q0jym57csj95q4mgamgk9vhj";
+          rev = "336055e84b9685a7959fd05bc65a16febd8e83cc";
+          sha256 = "1bk7h7h6sqf1qb5lpmmigx7aviyw65dnj3724q55ld6pgpy5q6vz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cider";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cider";
           sha256 = "1a6hb728a3ir18c2dn9zfd3jn79fi5xjn5gqr7ljy6qb063xd4qx";
           name = "cider";
         };
@@ -2924,7 +2987,7 @@
           sha256 = "1rkd76561h93si4lpisz3qnaj48dx8x01nd59a3lgpqsbbibnccf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cider-eval-sexp-fu";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cider-eval-sexp-fu";
           sha256 = "1n4sgv042qd9560pllabysx0c5snly6i22bk126y8f8rn0zj58iq";
           name = "cider-eval-sexp-fu";
         };
@@ -2945,7 +3008,7 @@
           sha256 = "1w0ya0446rqsg1j59fd1mp4wavv2f3h1k3mw9svm5glymdirw4d1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cil-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cil-mode";
           sha256 = "1h18r086bqspyn5n252yzw8x2zgyaqzdd8pbcf5gqlh1w8kapq4y";
           name = "cil-mode";
         };
@@ -2966,7 +3029,7 @@
           sha256 = "0q3rv6lk37yybkbswmn4pgzca0nfhvf4h3ac395fr16k5ixybc5q";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/circe";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/circe";
           sha256 = "1f54d8490gfx0r0cdvgmcjdxqpni43msy0k2mgqd1qz88a4b5l07";
           name = "circe";
         };
@@ -2987,7 +3050,7 @@
           sha256 = "12vgi5dicx3lxzngjcg9g3nflrhfy9wdw6ldm72zarp1h96jy5cw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cl-lib-highlight";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cl-lib-highlight";
           sha256 = "13qdrvpxq928p27b1xdcbsscyhqk042rwfa17037gp9h02fd42j8";
           name = "cl-lib-highlight";
         };
@@ -3008,7 +3071,7 @@
           sha256 = "11c0zpk8gg70d4xiiyjc7v13knwb2ihbrxnlaxzh3rdg2c12676q";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cliphist";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cliphist";
           sha256 = "0mg6pznijba3kvp3r57pi54v6mgih2vfwj2kg6qmcy1abrc0xq29";
           name = "cliphist";
         };
@@ -3029,7 +3092,7 @@
           sha256 = "0i6sj5rs4b9v8aqq9l6wr15080qb101hdxspx6innhijhajgmssd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/clips-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/clips-mode";
           sha256 = "083wrhjn04rg8vr6j0ziffdbdhbfn63wzl4q7yzpkf8qckh6mxhf";
           name = "clips-mode";
         };
@@ -3050,7 +3113,7 @@
           sha256 = "1w0lv2d916wxfakcy11avmn9f6nsmxff02dpyih5kx6ncgqv1bnd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/clj-refactor";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/clj-refactor";
           sha256 = "1qvds6dylazvrzz1ji2z2ldw72pa2nxqacb9d04gasmkqc32ipvz";
           name = "clj-refactor";
         };
@@ -3080,7 +3143,7 @@
           sha256 = "18gv8vmmpiyq16cq4nr9nk2bmc5y2rsv21wjl4ji29rc7566shha";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cljr-helm";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cljr-helm";
           sha256 = "108a1xgnc6qy088vs41j3npwk25a5vny0xx4r3yh76jsmpdpcgnc";
           name = "cljr-helm";
         };
@@ -3093,15 +3156,15 @@
     clocker = callPackage ({ dash, fetchFromGitHub, fetchurl, lib, melpaBuild, projectile }:
     melpaBuild {
         pname = "clocker";
-        version = "0.0.10";
+        version = "0.0.11";
         src = fetchFromGitHub {
           owner = "roman";
           repo = "clocker.el";
-          rev = "6faf5a23dc9cbe506f21a11fae4f6c4bbb1d4b01";
-          sha256 = "1s05644m048clz0lxizzgarh1bkyjxr96b0mbpxi2p003322aw09";
+          rev = "4a4831ed4e42e18976edd16b844cb16cb78f3c17";
+          sha256 = "0hz6a7gj0zfsdaifkhwf965c96rkjc3kivvqlf50zllsw0ysbnn0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/clocker";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/clocker";
           sha256 = "0cckrk40k1labiqjh7ghzpx5zi136xz70j3ipp117x52qf24k10k";
           name = "clocker";
         };
@@ -3122,7 +3185,7 @@
           sha256 = "1x1kfycf3023z0r3v7xqci59k8jv5wn2vqc9y0nx7k5qgifmswrx";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/clojure-cheatsheet";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/clojure-cheatsheet";
           sha256 = "05sw3bkdcadslpsk64ds0ciavmdgqk7fr5q3z505vvafmszfnaqv";
           name = "clojure-cheatsheet";
         };
@@ -3135,15 +3198,15 @@
     clojure-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "clojure-mode";
-        version = "5.1.0";
+        version = "5.2.0";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
           repo = "clojure-mode";
-          rev = "126c23a9d905da7afd82917494648b5068d47f54";
-          sha256 = "1dkzbvmdyc6gwm8c67blv4a67p7mji417r0pcwzl8brfqlis9gsw";
+          rev = "412bb7ae57c59eb7c99b8273e5c94b38105b18af";
+          sha256 = "1bhgvj4w8k4ycndnxgfnifc065jbxq8vsxfz3s6w64qx54biqxj3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/clojure-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/clojure-mode";
           sha256 = "11n0rjhs1mmlzdqy711g432an5ybdka5xj0ipsk8dx6xcyab70np";
           name = "clojure-mode";
         };
@@ -3156,15 +3219,15 @@
     clojure-mode-extra-font-locking = callPackage ({ clojure-mode, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "clojure-mode-extra-font-locking";
-        version = "5.1.0";
+        version = "5.2.0";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
           repo = "clojure-mode";
-          rev = "126c23a9d905da7afd82917494648b5068d47f54";
-          sha256 = "1dkzbvmdyc6gwm8c67blv4a67p7mji417r0pcwzl8brfqlis9gsw";
+          rev = "412bb7ae57c59eb7c99b8273e5c94b38105b18af";
+          sha256 = "1bhgvj4w8k4ycndnxgfnifc065jbxq8vsxfz3s6w64qx54biqxj3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/clojure-mode-extra-font-locking";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/clojure-mode-extra-font-locking";
           sha256 = "00nff9mkj61i76dj21x87vhz0bbkzgvkx1ypkxcv6yf3pfhq7r8n";
           name = "clojure-mode-extra-font-locking";
         };
@@ -3185,7 +3248,7 @@
           sha256 = "0sw34yjp8934xd2n76lbwyvxkbyz5pxszj6gkflas8lfjvms9z7d";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/clojure-quick-repls";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/clojure-quick-repls";
           sha256 = "10glzyd4y3918pwp048pc1y7y7fa34fkqckn1nbys841dbssmay0";
           name = "clojure-quick-repls";
         };
@@ -3206,7 +3269,7 @@
           sha256 = "1p0w83m9j4a6va4g68a4gcfbdkp8nic0q8cm28l8nr7czd5s0yl6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/clojure-snippets";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/clojure-snippets";
           sha256 = "15622mdd6b3fpwp22d32p78yap08pyscs2vc83sv1xz4338i0lij";
           name = "clojure-snippets";
         };
@@ -3227,7 +3290,7 @@
           sha256 = "1bhnlcsvl1qsi36a5kz8i857spzybprsbsywpqrmjpndn74n8690";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cm-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cm-mode";
           sha256 = "1rgfpxbnp8wiq9j8aywm2n07rxzkhqljigwynrkyvrnsgxlq2a9x";
           name = "cm-mode";
         };
@@ -3248,7 +3311,7 @@
           sha256 = "14z5izpgby7lak6hzjwsph31awg5126hcjzld21ihknhlg09sw7q";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cmake-ide";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cmake-ide";
           sha256 = "0xvy7l80zw67jgvk1rkhwzjvsqjqckmd8zj6s67rgbm56z6ypmcg";
           name = "cmake-ide";
         };
@@ -3261,15 +3324,15 @@
     cmake-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "cmake-mode";
-        version = "3.4.1";
+        version = "3.5.0pre1";
         src = fetchFromGitHub {
           owner = "Kitware";
           repo = "CMake";
-          rev = "fd7180f0c0c2554c31afda235469df986a109fe4";
-          sha256 = "054i416l7kwdnwlb55ya89zpnsyxg9h4b2ll3d4dhx2qpph7w9s2";
+          rev = "8a8d22cf1e5d20b7c3b32c1ec9b5f06b339c2a50";
+          sha256 = "1yppsh0sh2m8m4x34abdiq1d2k7g4gjhf24m9av0h5kg8kd46f2b";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cmake-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cmake-mode";
           sha256 = "0zbn8syb5lw5xp1qcy3qcl75zfiyik30xvqyl38gdqddm9h7qmz7";
           name = "cmake-mode";
         };
@@ -3290,7 +3353,7 @@
           sha256 = "10xlny2agxjknvnjdnw41cyb3d361yy0wvpc8l1d0xwnmmfh3bxk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cmake-project";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cmake-project";
           sha256 = "13n6j9ljvzjzkknbm9zkhxljcn12avl39gxqq95hah44dr11rns3";
           name = "cmake-project";
         };
@@ -3311,7 +3374,7 @@
           sha256 = "14jcxrs3b02pbppvdsabr7c74i3c6d1lmd6l1p9dj8gv413pghsz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/codic";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/codic";
           sha256 = "0fq2qfqhkd6injgl66vcpd61j67shl9xj260aj6cgb2nriq0jxgn";
           name = "codic";
         };
@@ -3332,7 +3395,7 @@
           sha256 = "1axp9hixp4vgaqjd3ii9xwb32jhb964zclmpg3zpsl4rp8b9bdz5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/coffee-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/coffee-mode";
           sha256 = "1px50hs0x30psa5ljndpcc22c0qwcaxslpjf28cfgxinawnp74g1";
           name = "coffee-mode";
         };
@@ -3353,7 +3416,7 @@
           sha256 = "0q9ss11i31iiv0vn8238922fkic7j6d02f9ykbip04sm46p5k6kj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/color-theme-modern";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/color-theme-modern";
           sha256 = "0f662ham430fgxpqw96zcl1whcm28cv710g6wvg4fma60sblaxcm";
           name = "color-theme-modern";
         };
@@ -3374,7 +3437,7 @@
           sha256 = "13jmg05skv409z8pg5m9rzkajj9knyln0ff8a3i1pbpyrnpngmmc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/color-theme-sanityinc-solarized";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/color-theme-sanityinc-solarized";
           sha256 = "0xg79hgb893f1nqx6q4q6hp4w6rvgp1aah1v2r3scg2jk057qxkf";
           name = "color-theme-sanityinc-solarized";
         };
@@ -3395,7 +3458,7 @@
           sha256 = "0w99ypq048xldl1mrgc7qr4n2770dm48aknhp7q0176l43nvxnqf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/color-theme-sanityinc-tomorrow";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/color-theme-sanityinc-tomorrow";
           sha256 = "1k8iwjc7iidq5sxybs47rnswa6c5dwqfdzfw7w0by2h1id2z6nqd";
           name = "color-theme-sanityinc-tomorrow";
         };
@@ -3416,7 +3479,7 @@
           sha256 = "18hzm7yzwlfjlbkx46rgdl31p9xyfqnxlvg8337h2bicpks7kjia";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/colorsarenice-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/colorsarenice-theme";
           sha256 = "09zlglldjbjr97clwyzyz7c0k8hswclnk2zbkm03nnn9n9yyg2qi";
           name = "colorsarenice-theme";
         };
@@ -3437,7 +3500,7 @@
           sha256 = "1j6hhyzww7wfwk6bllbb5mk4hw4qs8hsgfbfdifsam9c6i4spm45";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/commander";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/commander";
           sha256 = "17y0hg6a90hflgwn24ww23qmvc1alzivpipca8zvpf0nih4fl393";
           name = "commander";
         };
@@ -3458,13 +3521,34 @@
           sha256 = "0kzlv2my0cc7d3nki2rlm32nmb2nyjb38inmvlf13z0m2kybg2ps";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/comment-dwim-2";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/comment-dwim-2";
           sha256 = "1w9w2a72ygsj5w47vjqcljajmmbz0mi8dhz5gjnpwxjwsr6fn6lj";
           name = "comment-dwim-2";
         };
         packageRequires = [];
         meta = {
           homepage = "http://melpa.org/#/comment-dwim-2";
+          license = lib.licenses.free;
+        };
+      }) {};
+    commenter = callPackage ({ emacs, fetchFromGitHub, fetchurl, let-alist, lib, melpaBuild }:
+    melpaBuild {
+        pname = "commenter";
+        version = "0.5.1";
+        src = fetchFromGitHub {
+          owner = "yuutayamada";
+          repo = "commenter";
+          rev = "eec3bf91a57ff3aa3b93c36611e136572f031571";
+          sha256 = "1jvjwk776p9qrbr3j0368nqv8ydp8k0s6c66nfpcqf33rz4w1h1g";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/commenter";
+          sha256 = "01bm8jbj6xw23nls4fps6zwjkgvcsjhmn3l3ncqd764kwhxdx8q3";
+          name = "commenter";
+        };
+        packageRequires = [ emacs let-alist ];
+        meta = {
+          homepage = "http://melpa.org/#/commenter";
           license = lib.licenses.free;
         };
       }) {};
@@ -3479,7 +3563,7 @@
           sha256 = "1cc9ak9193m92g6l4mrfxbkkmvljl3c51d0xzdidwww978q3x6ad";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/common-lisp-snippets";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/common-lisp-snippets";
           sha256 = "0ig8cz00cbfx0jckqk1xhsvm18ivl2mjvcn65s941nblsywfvxjl";
           name = "common-lisp-snippets";
         };
@@ -3500,7 +3584,7 @@
           sha256 = "08rrjfp2amgya1hswjz3vd5ja6lg2nfmm7454p0h1naz00hlmmw0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/company";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/company";
           sha256 = "0v4x038ly970lkzb0n8fbqssfqwx1p46xldr7nss32jiqvavr4m4";
           name = "company";
         };
@@ -3521,7 +3605,7 @@
           sha256 = "1i6788qfinh47c5crgr57ykgbp6bvk1afcl00c8gywxsf8srvnvy";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/company-anaconda";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/company-anaconda";
           sha256 = "1s7y47ghy7q35qpfqavh4p9wr91i6r579mdbpvv6h5by856yn4gl";
           name = "company-anaconda";
         };
@@ -3542,7 +3626,7 @@
           sha256 = "1dds3fynbd6yb0874aw6g4qk5zmq3pgl3jmcp38md027qalgqmym";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/company-ansible";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/company-ansible";
           sha256 = "084l9dr2hvm00952y4m3jhchzxjhcd61sfn5ywj9b9a1d4sr110d";
           name = "company-ansible";
         };
@@ -3563,7 +3647,7 @@
           sha256 = "1pja44g15d11kl47abzykrp28j782nkbmb0db0ilpc96xf1fjlsw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/company-cabal";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/company-cabal";
           sha256 = "0pbjidj88c9qri6xw8023yqwnczad5ig224cbsz6vsmdla2nlxra";
           name = "company-cabal";
         };
@@ -3584,7 +3668,7 @@
           sha256 = "1f8sjjms9kxni153pia6b45p2ih2mhm2r07d0j3fmxmz3q2jdldd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/company-emoji";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/company-emoji";
           sha256 = "1mflqqw9gnfcqjb6g8ivdfl7s4mdyjg7j0457hamgyvgvpxsh8x3";
           name = "company-emoji";
         };
@@ -3605,7 +3689,7 @@
           sha256 = "0y9i0q37xjbnlnlxq7xjvnpn6ykzbd55g6nbw10z1wg0m2v7f96r";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/company-ghc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/company-ghc";
           sha256 = "07adykza4dqs64bk8vjmgryr54khxmcy28hms5z8i1qpsk9vmvnn";
           name = "company-ghc";
         };
@@ -3626,7 +3710,7 @@
           sha256 = "03snnra31b5j6iy94gql240vhkynbjql9b4b5j8bsqp9inmbsia3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/company-go";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/company-go";
           sha256 = "1ncy5wlg3ywr17zrxb1d1bap4gdvwr35w9a8b0crz5h3l3y4cp29";
           name = "company-go";
         };
@@ -3647,7 +3731,7 @@
           sha256 = "1gdsaa8zcs3layivn3ndbd5z1zflblmbxl251ld67bq763ga49cz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/company-irony";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/company-irony";
           sha256 = "15adamk1b9y1i6k06i5ahf1wn70cgwlhgk0x6fk8pl5izg05z1km";
           name = "company-irony";
         };
@@ -3668,7 +3752,7 @@
           sha256 = "1ihqapp4dv92794rsgyq0rmhwika60cmradqd4bn9b72ss6plxs1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/company-jedi";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/company-jedi";
           sha256 = "1krrgrjq967c3j02y0i345yx6w4crisnj1k3bhih6j849fvy3fvj";
           name = "company-jedi";
         };
@@ -3689,7 +3773,7 @@
           sha256 = "009f0p0sggfn0yz7sivkcv8zygvv4ssbwqykbxgdxh9n6zk4hjky";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/company-math";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/company-math";
           sha256 = "0chig8k8l65bnd0a6734fiy0ikl20k9v2wlndh3ckz5a8h963g87";
           name = "company-math";
         };
@@ -3710,7 +3794,7 @@
           sha256 = "1lm7rkgf7q5g4ji6v1masfbhxdpwni8d77dapsy5k9p73cr2aqld";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/company-nixos-options";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/company-nixos-options";
           sha256 = "1yrqqdadmf7qfxpqp8wwb325zjnwwjmn2hhnl7i3j0ckg6hqyqf0";
           name = "company-nixos-options";
         };
@@ -3731,7 +3815,7 @@
           sha256 = "0hg3wrfhz3qlfb6zv6j5a4xzmm4jk25pkv8h3ryg7sl7h602idgl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/company-quickhelp";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/company-quickhelp";
           sha256 = "042bwv0wd4hksbm528zb7pbllzk83p8qjq5f8z46p84c8mmxfp9g";
           name = "company-quickhelp";
         };
@@ -3752,7 +3836,7 @@
           sha256 = "0i1fh5lvqwlgn3g3fzh0xacxyljx6gkryipn133vfkv4jbns51n4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/company-restclient";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/company-restclient";
           sha256 = "1md0n4k4wmbh9rmbwqh3kg2fj0c34rzqfd56jsq8lcdg14k0kdcb";
           name = "company-restclient";
         };
@@ -3779,7 +3863,7 @@
           sha256 = "1l9xrw88wq32wm3qx922ihdb9mlv9rrdalwvz9i2790fmw7y84vz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/company-sourcekit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/company-sourcekit";
           sha256 = "0hr5j1ginf43h4qf3fvsh3z53z0c7w5a9lhrvdwmlzj396qhqmzs";
           name = "company-sourcekit";
         };
@@ -3800,7 +3884,7 @@
           sha256 = "11cinjsyf24d4a682ikniprxd1vkwn6mynsp5dzab6yzq09np78i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/company-tern";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/company-tern";
           sha256 = "17pw4jx3f1hymj6sc0ri18jz9ngggj4a41kxx14fnmmm8adqn6wh";
           name = "company-tern";
         };
@@ -3821,7 +3905,7 @@
           sha256 = "0b0k75rg43h48dbcqiid947nspqiqxkiqcmvph9aqpxlfr67bz5r";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/company-web";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/company-web";
           sha256 = "0dj0m6wcc8cyvblp9b5b3am95gc18j9y4va44hvljxv1h7l5hhvy";
           name = "company-web";
         };
@@ -3842,7 +3926,7 @@
           sha256 = "094alkjrh285qy3sds8dkvxsbnaxnppz1ab0i5r575lyhli9lxia";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/company-ycmd";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/company-ycmd";
           sha256 = "0fqmkb0q8ai605jzn2kwd585b2alwxbmnb3yqnn9fgkcvyc9f0pk";
           name = "company-ycmd";
         };
@@ -3863,7 +3947,7 @@
           sha256 = "1br4yys803x3ng4vzhhvblhkqabs46lx8a3ajycqy555q20zqzrf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/concurrent";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/concurrent";
           sha256 = "09wjw69bqrr3424h0mpb2kr5ixh96syjjsqrcyd7z2lsas5ldpnf";
           name = "concurrent";
         };
@@ -3884,7 +3968,7 @@
           sha256 = "0sz3qx1bn0lwjhka2l6wfl4b5486ji9dklgjs7fdlkg3dgpp1ahx";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/conkeror-minor-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/conkeror-minor-mode";
           sha256 = "1ch108f20k7xbf79azsp31hh4wmw7iycsxddcszgxkbm7pj11933";
           name = "conkeror-minor-mode";
         };
@@ -3905,13 +3989,34 @@
           sha256 = "05xfgn9sabi1ykk8zbk2vza1g8pdrg08j5cb58f50nda3q8ndf4s";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/connection";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/connection";
           sha256 = "1y68d2kay8p5vapailxhrc5dl7b8k8nkvp7pa54md3fsivwp1d0q";
           name = "connection";
         };
         packageRequires = [];
         meta = {
           homepage = "http://melpa.org/#/connection";
+          license = lib.licenses.free;
+        };
+      }) {};
+    contextual = callPackage ({ cl-lib ? null, dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "contextual";
+        version = "1.0.1";
+        src = fetchFromGitHub {
+          owner = "lshift-de";
+          repo = "contextual";
+          rev = "8134a2d8034c624f4fdbbb0b3893de12f4257909";
+          sha256 = "0s4b7dkndhnh8q3plvg2whjx8zd7ffz4hnbn3xh86xd3k7sch7av";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/contextual";
+          sha256 = "0vribs0fa1xf5kwkmvzjwhiawni0p3v56c5l4dkz8d7wn2g6wfdx";
+          name = "contextual";
+        };
+        packageRequires = [ cl-lib dash emacs ];
+        meta = {
+          homepage = "http://melpa.org/#/contextual";
           license = lib.licenses.free;
         };
       }) {};
@@ -3926,7 +4031,7 @@
           sha256 = "0gpckp12b0hllgn821q3rqfxh5h7ny5gfhhvfdbvszb7kwl1f6cx";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/corral";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/corral";
           sha256 = "1drccqk4qzkgvkgkzlrrfd1dcgj8ziqriijrjihrzjgjsbpzv6da";
           name = "corral";
         };
@@ -3947,7 +4052,7 @@
           sha256 = "1kahl3h18vsjkbqvd84fb2w45s4srsiydn6jiv49vvg1yaxzxcbm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/counsel";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/counsel";
           sha256 = "0y8cb2q4mqvzan5n8ws5pjpm7bkjcghg5q19mzc3gqrq9vrvyzi6";
           name = "counsel";
         };
@@ -3968,7 +4073,7 @@
           sha256 = "03nzbrvvs31xgaqhxmrj9bypywsg42q06k4z4z1fpjssg9az0j4p";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cpputils-cmake";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cpputils-cmake";
           sha256 = "0fswmmmrjv897n51nidmn8gs8yp00595g35vwjafsq6rzfg58j60";
           name = "cpputils-cmake";
         };
@@ -3989,7 +4094,7 @@
           sha256 = "169ai0xkh3988racnhaapxw0v1pbxvcaq470x1qacdzdpka4a7bs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/creds";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/creds";
           sha256 = "0n11xxaf93bbc9ih25wj09zzw4sj32wb99qig4zcy8bpkl5y3llk";
           name = "creds";
         };
@@ -4010,7 +4115,7 @@
           sha256 = "1kl6blr4dlz40gfc845071nhfms4fm59284ja2177bhghy3wmw6r";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/crm-custom";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/crm-custom";
           sha256 = "14w15skxr44p9ilhpswlgdbqfw8jghxi69l37yk4m449m7g9694c";
           name = "crm-custom";
         };
@@ -4031,7 +4136,7 @@
           sha256 = "1way14a4rhrqkby40wr21q6yxhl4qi0a0x89jzf21jdzsbykvaik";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/crux";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/crux";
           sha256 = "10lim1sngqbdqqwyq6ksqjjqpkm97aj1jk550sgwj28338lnw73c";
           name = "crux";
         };
@@ -4052,7 +4157,7 @@
           sha256 = "00wgbcw09xn9xi52swi4wyi9dj9p9hyin7i431xi6zkhxysw4q7w";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cryptol-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cryptol-mode";
           sha256 = "08iq69gqmps8cckybhj9065b8a2a49p0rpzgx883qxnypsmjfmf2";
           name = "cryptol-mode";
         };
@@ -4073,7 +4178,7 @@
           sha256 = "0dqih7cy57sciqn5vz5fiwynpld96qldyl7jcgn9qpwnzb401ayx";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/csharp-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/csharp-mode";
           sha256 = "17j84qrprq492dsn103dji8mvh29mbdlqlpsszbgfdgnpvfr1rv0";
           name = "csharp-mode";
         };
@@ -4094,7 +4199,7 @@
           sha256 = "13zq8kym1y6bzrpxbcdz32323a6azy5px4ridff6xh8bfprwlay3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ctable";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ctable";
           sha256 = "040qmlgfvjc1f908n52m5ll2fizbrhjzbd0kgrsw37bvm3029rx1";
           name = "ctable";
         };
@@ -4113,7 +4218,7 @@
           sha256 = "1xgrb4ivgz7gmingfafmclqqflxdvkarmfkqqv1zjk6yrjhlcvwf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ctags";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ctags";
           sha256 = "11fp8l99rj4fmi0vd3hkffgpfhk1l82ggglzb74jr3qfzv3dcn6y";
           name = "ctags";
         };
@@ -4134,7 +4239,7 @@
           sha256 = "05vhryqcydvcfm18fwby344931kzzh47x4l5ixy95xkcjkzrj8c7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ctags-update";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ctags-update";
           sha256 = "1k43l667mvr2y33nblachdlvdqvn256gysc1iwv5zgv7gj9i65qf";
           name = "ctags-update";
         };
@@ -4155,7 +4260,7 @@
           sha256 = "1jlr2miwqsg06hk2clvsrw9fa98m2n76qfq8qv5svrb8dpil04wb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ctxmenu";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ctxmenu";
           sha256 = "03g9px858mg19wapqszwav3599slljdyam8bvn1ri85fpa5ydvdp";
           name = "ctxmenu";
         };
@@ -4176,7 +4281,7 @@
           sha256 = "1y685qfdkjyl7dwyvivlgc2lwp102vy6hvcb9zynw84c49f726sn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cuda-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cuda-mode";
           sha256 = "0ip4vax93x72bjrh6prik6ddmrvszpsmgm0fxfz772rp24smc300";
           name = "cuda-mode";
         };
@@ -4189,15 +4294,15 @@
     cyberpunk-theme = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "cyberpunk-theme";
-        version = "1.16";
+        version = "1.17";
         src = fetchFromGitHub {
           owner = "n3mo";
           repo = "cyberpunk-theme.el";
-          rev = "08ac966ce38be4a3de0a6f6051b8763b5c85e534";
-          sha256 = "12lkhlsi48wc5cy3zw57wihh9d4ixs2mcbvz9mdgjyhc2xhx3na8";
+          rev = "4ffdaee0a32b8e235bf44c0daedde66eaf7b1b33";
+          sha256 = "1yhizh8j745hv5ancpvijds9dasvsr2scwjscksp2x3krnd26ssp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cyberpunk-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cyberpunk-theme";
           sha256 = "0l2bwb5afkkhrbh99v2gns1vil9s5911hbnlq5w35nmg1wvbmbc9";
           name = "cyberpunk-theme";
         };
@@ -4218,7 +4323,7 @@
           sha256 = "1vkwm1n0amf0y0jdyvqskp00b6aijqhd7wclzkzrq7glrvj2z1xw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cyphejor";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cyphejor";
           sha256 = "18l5km4xm5j3vv19k3fxs8i3rg4qnhrvx7b62vmyfcqmpiasrh6g";
           name = "cyphejor";
         };
@@ -4239,7 +4344,7 @@
           sha256 = "0kbk2gp2avp0da32mr003ziigmi98zi0fvwia4knylllmrkl3pvq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/cython-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/cython-mode";
           sha256 = "0asai1f1pncrfxx296fn6ky09hj1qam5j0dpxxkzhy0a34xz0k2i";
           name = "cython-mode";
         };
@@ -4260,7 +4365,7 @@
           sha256 = "0apg6cpwjhp8spqq8yyfp56y3pn991sfc85kfnifyhz6v3y6vwv6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/d-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/d-mode";
           sha256 = "060k9ndjx0n5vlpzfxlv5zxnizx72d7y9vk7gz7gdvpm6w2ha0a2";
           name = "d-mode";
         };
@@ -4281,7 +4386,7 @@
           sha256 = "1gdh4izwhyly6dyrmh7lfpd12gnb8hpnafj8br51ksijsssrf21f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/darcula-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/darcula-theme";
           sha256 = "13d21gwzv66ibn0gs56ff3sn76sa2mkjvjmpd2ncxq3mcgxajnjg";
           name = "darcula-theme";
         };
@@ -4302,7 +4407,7 @@
           sha256 = "1p7ih9fmcxnnxkj2mz56xa403m828wyyqvliabf5amklzjlhb3z9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/darktooth-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/darktooth-theme";
           sha256 = "1vss0mg1vz4wvsal1r0ya8lid2c18ig11ip5v9nc80b5slbixzvs";
           name = "darktooth-theme";
         };
@@ -4323,7 +4428,7 @@
           sha256 = "1vkn95dyc0pppnflyqlrlx32g9zc7wdcgc9fgf1hgvqp313ydfcs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dart-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dart-mode";
           sha256 = "0wxfh8v716dhrmx1klhpnsrlsj66llk8brmwryjg2h7c391sb5ff";
           name = "dart-mode";
         };
@@ -4344,7 +4449,7 @@
           sha256 = "1njv5adcm96kdch0jb941l8pm51yfdx7mlz83y0pq6jlzjs9mwaa";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dash";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dash";
           sha256 = "0azm47900bk2frpjsgy108fr3p1jk4h9kmp4b5j5pibgsm26azgz";
           name = "dash";
         };
@@ -4365,7 +4470,7 @@
           sha256 = "1njv5adcm96kdch0jb941l8pm51yfdx7mlz83y0pq6jlzjs9mwaa";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dash-functional";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dash-functional";
           sha256 = "0hx36hs12mf4nmskaaqrqpcgwrfjdqj6qcxn6bwb0s5m2jf9hs8p";
           name = "dash-functional";
         };
@@ -4386,7 +4491,7 @@
           sha256 = "06aprbhhxb6bbzmf0r5yq2ry6x7708vp4d94ja3ir6zcwc96wn0k";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/date-at-point";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/date-at-point";
           sha256 = "0r26df6px6q5jlxj29nhl3qbp6kzy9hs5vd72kpiirgn4wlmagp0";
           name = "date-at-point";
         };
@@ -4407,7 +4512,7 @@
           sha256 = "1lmwnj2fnvijj9qp4rjggl7c4x91vnpb47rqaam6m2wmr5wbrx3w";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/date-field";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/date-field";
           sha256 = "0fmw13sa4ajs1xkrkdpcjpbp0jl9d81cgvwh93myg8yjjn7wbmvk";
           name = "date-field";
         };
@@ -4428,7 +4533,7 @@
           sha256 = "0pba9s0h37sxyqh733vi6k5raa4cs7aradipf3826inw36jcw414";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dedicated";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dedicated";
           sha256 = "1ka8n02r3nd2ksbid23g2qd6707c7xsjx7lbbdi6pcmwam5mglw9";
           name = "dedicated";
         };
@@ -4449,7 +4554,7 @@
           sha256 = "031f8ls1q80j717cg6b4pjd37wk7vrl5hcycsn8ca7yssmqa8q81";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/default-text-scale";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/default-text-scale";
           sha256 = "18r90ic38fnlsbg4gi3r962vban398x2bf3rqhrc6z4jk4aiv3mi";
           name = "default-text-scale";
         };
@@ -4470,7 +4575,7 @@
           sha256 = "1br4yys803x3ng4vzhhvblhkqabs46lx8a3ajycqy555q20zqzrf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/deferred";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/deferred";
           sha256 = "0axbvxrdjgxk4d1bd9ar4r5nnacsi8r0d6649x7mnhqk12940mnr";
           name = "deferred";
         };
@@ -4491,7 +4596,7 @@
           sha256 = "1lyqd9cgj7cb2lasf6ycw5j8wnsx2nrfm8ra4sg3dgcspm01a89g";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/define-word";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/define-word";
           sha256 = "035fdfwnxw0mir1dyvrimygx2gafcgnvlcsmwmry1rsfh39n5b9a";
           name = "define-word";
         };
@@ -4510,7 +4615,7 @@
           sha256 = "eb5c178337c0bd6a001114aac685bb0d23167050970274203d93c1c0caece1e8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/deft";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/deft";
           sha256 = "1c9kps0lw97nl567ynlzk4w719a86a18q697rcmrbrg5imdx4y5p";
           name = "deft";
         };
@@ -4531,7 +4636,7 @@
           sha256 = "13jfhc9gavvb9dxmgi3k7ivp5iwh4yw4m11r2s8wpwn6p056bmfl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/demangle-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/demangle-mode";
           sha256 = "0ky0bb6rc99vrdli4lhs656qjndnla9b7inc2ji9l4n1zki5qxzk";
           name = "demangle-mode";
         };
@@ -4552,7 +4657,7 @@
           sha256 = "13fasbhdjwc4jh3cy25gm5sbbg56hq8la271098qpx6dhqm2wycq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/describe-number";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/describe-number";
           sha256 = "0gvriailni2ppz69g0bwnb1ik1ghjkj341k45vllz30j0frp9iji";
           name = "describe-number";
         };
@@ -4573,7 +4678,7 @@
           sha256 = "184zi5fv7ranghfx1hpx7j2wnk6kim8ysliyw2c5c1294sxxq3f3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/desktop+";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/desktop+";
           sha256 = "0w7i6k4814hwb19l7ly9yq59674xiw57ylrwxq7yprwx52sgs2r8";
           name = "desktop-plus";
         };
@@ -4593,7 +4698,7 @@
           sha256 = "7c7727dd1d63be98e428700bfe340f2c4e7ff713fcc9b2b743a3366d786ae02d";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/desktop-registry";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/desktop-registry";
           sha256 = "02mj0nlawx6vpksqsvp1q7l8rd6b1bs8f9c8c2rmda46jaf5npyr";
           name = "desktop-registry";
         };
@@ -4614,7 +4719,7 @@
           sha256 = "05xfgn9sabi1ykk8zbk2vza1g8pdrg08j5cb58f50nda3q8ndf4s";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dictionary";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dictionary";
           sha256 = "0zr9sm5rmr0frxdr0za72wiffip9391fn9dm5y5x0aj1z4c1n28w";
           name = "dictionary";
         };
@@ -4627,15 +4732,15 @@
     diff-hl = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "diff-hl";
-        version = "1.8.2";
+        version = "1.8.3";
         src = fetchFromGitHub {
           owner = "dgutov";
           repo = "diff-hl";
-          rev = "d0e6660ee501efea3e9b0936ed64fff09e66df02";
-          sha256 = "09fdhpi6qqq5s5mwqz56631jk8l1g0lh4zl62nq4982pl6sciqk9";
+          rev = "f4edea201bc4c38d082ec3143ceec87d2dcadb37";
+          sha256 = "0sjwpvzd4x9c1b9iv66b33llvp96ryyzyp8pn1rnhvxfvjv43cnz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/diff-hl";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/diff-hl";
           sha256 = "0kw0v9xcqidhf26qzrqwdlav2zhq32xx91k7akd2536jpji5pbn6";
           name = "diff-hl";
         };
@@ -4656,7 +4761,7 @@
           sha256 = "1ci2gmyl0i736b2sxh77fyg4hs2pkn6rn9z7v2hzv6xlgqd6j3z6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/diffview";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/diffview";
           sha256 = "0vlzmykvxjwjww313brl1nr13kz41jypsk0s3l8q3rbsnkpfic5k";
           name = "diffview";
         };
@@ -4677,7 +4782,7 @@
           sha256 = "0jzwaivsqh66py9hd3dg1ys5rc3p6pn8ndpwpvgyivk4pg6zhhj6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/digistar-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/digistar-mode";
           sha256 = "0khzxlrm09h31i1nqz6rnzhrdssb3kppc4klpxza612l306fih0s";
           name = "digistar-mode";
         };
@@ -4698,7 +4803,7 @@
           sha256 = "1vrd74vmm60gb69a4in412mjncnhkjbfpakpaa6w9rj7w4kyfiz1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dim";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dim";
           sha256 = "0gsyily47g3g55qmhp1wzfz319l1pkgjz4lbigafjzlzqxyclz52";
           name = "dim";
         };
@@ -4719,7 +4824,7 @@
           sha256 = "0bw1gkaycbbv2glnaa36gwzkl1l6lsq7i2i7jinka92b27zvrans";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dim-autoload";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dim-autoload";
           sha256 = "0lhzzjrgfvbqnzwhjywrk3skdb7x10xdq7d21q6kdk3h5r0np9f9";
           name = "dim-autoload";
         };
@@ -4740,7 +4845,7 @@
           sha256 = "0qpgfgp8hrzz4vdifxq8h25n0a0jlzgf7aa1fpy6r0080v5rqbb6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/diminish";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/diminish";
           sha256 = "1h6a31jllypk47akjflz89xk6h47na96pim17d6g4rpqcafc2k43";
           name = "diminish";
         };
@@ -4761,13 +4866,34 @@
           sha256 = "1xg9cschjd2m0zal296q54ifk5i4s1s3azwfdkbgshxxgvxaky0w";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dionysos";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dionysos";
           sha256 = "1wjgj74dnlwd79gc3l7ymbx75jka8rw9smzbb10dsfppw3rrzfmz";
           name = "dionysos";
         };
         packageRequires = [ dash libmpdee pkg-info s ];
         meta = {
           homepage = "http://melpa.org/#/dionysos";
+          license = lib.licenses.free;
+        };
+      }) {};
+    dired-atool = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "dired-atool";
+        version = "0.1.0";
+        src = fetchFromGitHub {
+          owner = "HKey";
+          repo = "dired-atool";
+          rev = "608675ead3bd57c180e6ef493aef04d9ac4035a3";
+          sha256 = "0k4grfphl2ap8npnfrc8q3xv7nm3jc1lgblgxb1v8jm585ycb7fd";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dired-atool";
+          sha256 = "0qljx6fmz1hal9r2smjyc957wcvcpg16vp5mv65ip6d26k5qsj0w";
+          name = "dired-atool";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "http://melpa.org/#/dired-atool";
           license = lib.licenses.free;
         };
       }) {};
@@ -4782,7 +4908,7 @@
           sha256 = "1m0nx8wd6q56qbp5mbp9n466kyglrz34nflwvgd1qnmi08jwswgv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dired-efap";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dired-efap";
           sha256 = "01j5v6584qi8ia7zmk03kx3i3kmm6hn6ycfgqlh5va6lp2h9sr00";
           name = "dired-efap";
         };
@@ -4803,7 +4929,7 @@
           sha256 = "0lrc4082ghg77x5jl26hj8c7cp48yjvqhv4g3j0pznpzb4qyfnq0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dired-fdclone";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dired-fdclone";
           sha256 = "11aikq2q3m9h4zpgl24f8npvpwd98jgh8ygjwy2x5q8as8i89vf9";
           name = "dired-fdclone";
         };
@@ -4824,7 +4950,7 @@
           sha256 = "088h9yn6wndq4pq6f7q4iz17f9f4ci29z9nh595idljp3vwr7qid";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dired-imenu";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dired-imenu";
           sha256 = "09yix4fkr03jq6j2rmvyg6gkmcnraw49a8m9649r3m525qdnhxs1";
           name = "dired-imenu";
         };
@@ -4845,7 +4971,7 @@
           sha256 = "0rpln6m3j4xbhrmmz18hby6xpzpzbf1c5hr7bxvna265cb0i5rn7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dired-k";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dired-k";
           sha256 = "0lghdmy9qcjykscfxvfrz8cpp87qc0vfd03vw8nfpvwcs2sd28i8";
           name = "dired-k";
         };
@@ -4866,7 +4992,7 @@
           sha256 = "0mfvyjbx7l7a1sfq47m6rb507xxw92nykkkpzmi2mpwv30f1c22j";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dired-single";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dired-single";
           sha256 = "13h8dsn7bkz8ji2rrb7vyrqb2znxarpiynqi65mfli7dn5k086vf";
           name = "dired-single";
         };
@@ -4887,7 +5013,7 @@
           sha256 = "0p8c2hjgr81idm1psv3i3v5hr5rv0875ig8app2yqjwzvl0nn73f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/direx";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/direx";
           sha256 = "1x3rnrhhyrrvgry9n7kc0734la1zp4gc4bpy50f2qpfd452jwqdm";
           name = "direx";
         };
@@ -4908,7 +5034,7 @@
           sha256 = "0swdh0qynpijsv6a2d308i42hfa0jwqsnmf4sm8vrhaf3vv25f5h";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/direx-grep";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/direx-grep";
           sha256 = "0y2wrzq06prm55akwgaqjg56znknyvbayav13asirqzg258skvm2";
           name = "direx-grep";
         };
@@ -4929,7 +5055,7 @@
           sha256 = "0qxw30zrlcxhxb0alrgyiclrk44dysal8xsbz2mvgrb6jli8wg18";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/discover";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/discover";
           sha256 = "1hf57p90jn1zzhjl63zv9ascbgkcbr0p0zmd3fvzpjsw84235dga";
           name = "discover";
         };
@@ -4950,7 +5076,7 @@
           sha256 = "1wlqyl03hhnflbyay3qlvdzqzvv5rbybcjpfddggda7ias9h0pr4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/discover-my-major";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/discover-my-major";
           sha256 = "0ch2y4grdjp7pvw2kxqnqdl7jd3q609n3pm3r0gn6k0xmcw85fgg";
           name = "discover-my-major";
         };
@@ -4971,7 +5097,7 @@
           sha256 = "1b1a1bwc6nv6wkd8jg1cqmjb9m9pxi5i2wbrz97fgii23dwfmlnl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dispass";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dispass";
           sha256 = "08c1s4zgl4rha10mva48cfkxzrqnpdhy03pxq51ihw94v6vxzg3z";
           name = "dispass";
         };
@@ -4992,7 +5118,7 @@
           sha256 = "06vb6r1k9ml799h44fm9jhf3amldzhawxnm0lnr501hrmj4bz36x";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/docker";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/docker";
           sha256 = "10x05vli7lg1w3fdbkrl34y4mwbhp2c7nqdwnbdy53i81jisw2lk";
           name = "docker";
         };
@@ -5013,13 +5139,34 @@
           sha256 = "1cmh8pwwa6dhl4w66wy8s5yqxs326mnaalg1ig2yhl4bjk8gi4m2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dockerfile-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dockerfile-mode";
           sha256 = "1dxvzn35a9qd3x8pjvrvb2g71yf84404g6vz81y0p353rf2zknpa";
           name = "dockerfile-mode";
         };
         packageRequires = [];
         meta = {
           homepage = "http://melpa.org/#/dockerfile-mode";
+          license = lib.licenses.free;
+        };
+      }) {};
+    doom = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "doom";
+        version = "1.3";
+        src = fetchFromGitHub {
+          owner = "emacsorphanage";
+          repo = "doom";
+          rev = "5e2d3f54e5b84eaa533cbdb6cf17b1b6009f0730";
+          sha256 = "04h1hlsc83w4dppw9m44jq7mkcpy0bblvnzrhvsh06pibjywdd73";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/doom";
+          sha256 = "098q77lix7kwpmarv26yndyk1yy1h4k3l9kaf3g7sg6ji6k7d3wl";
+          name = "doom";
+        };
+        packageRequires = [ cl-lib ];
+        meta = {
+          homepage = "http://melpa.org/#/doom";
           license = lib.licenses.free;
         };
       }) {};
@@ -5034,7 +5181,7 @@
           sha256 = "13czcxmmvy4g9ysfjr6lb91c0fqv1xv8ppd27wbfsrgxm3aaqimb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/downplay-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/downplay-mode";
           sha256 = "1v6nga101ljzza8qj3lkmkzzl0vvzj4lsh1m69698s8prnczxr9b";
           name = "downplay-mode";
         };
@@ -5055,7 +5202,7 @@
           sha256 = "1x7hyj5qi9f222zwhwjqr98zzcvqjqfwxlglph8nsbadkv4s8c3v";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dracula-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dracula-theme";
           sha256 = "0ayv00wvajia8kbfrqkrkpb3qp3k70qcnqkav7am16p5kbvzp10r";
           name = "dracula-theme";
         };
@@ -5076,7 +5223,7 @@
           sha256 = "0z3w58zplm5ks195zfsaq8kwbc944p3kbzs702jgz02wcrm4c28y";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/draft-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/draft-mode";
           sha256 = "1wg9cx39f4dhrykb4zx4fh0x5cfrh5aicwwfh1h3yzpc4zlr7xfh";
           name = "draft-mode";
         };
@@ -5097,7 +5244,7 @@
           sha256 = "0wncdlc45flggn6sq5a95y7k6q11hy7zxp0ddhsjqccl30mdwax5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/drag-stuff";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/drag-stuff";
           sha256 = "0hzbh58ijv1akamav8r0zs76pwda2zd9mjaj31ffalzhhsm5jnyc";
           name = "drag-stuff";
         };
@@ -5118,7 +5265,7 @@
           sha256 = "12lxqrcfv5salmcslw3kggymcwwc0lzq1b6iqd7x4zizp0sjf09s";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/drupal-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/drupal-mode";
           sha256 = "14jvk4phq3wcff3yvhygix0c9cpbphh0dvm961i93jpsx7g9awgn";
           name = "drupal-mode";
         };
@@ -5139,7 +5286,7 @@
           sha256 = "156cscpavrp695lp8pgjg5jnq3b8n9c2h8qg8w89dd4vfkc3iikd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/drupal-spell";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/drupal-spell";
           sha256 = "117rr2bfnc99g3qsr127grxwaqp54cxjaj3nl2nr6z78nja0fij3";
           name = "drupal-spell";
         };
@@ -5160,7 +5307,7 @@
           sha256 = "17yldk76mxakhb90bma7r4z9jgx02wankgk17r2di196mc04bj7b";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ducpel";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ducpel";
           sha256 = "1cqrkgg7n9bhjswnpl7yc6w6yjs4gfbliaqsimmf9z43wk2ml4pc";
           name = "ducpel";
         };
@@ -5180,7 +5327,7 @@
           sha256 = "0ghxnzi2iy1g633fshl9wdpg2asrcl0v5rkk61gqd6axm7fjaxcj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dyalog-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dyalog-mode";
           sha256 = "1y17nd2xd8b3mhaybws8dr7yanzwqij9gzfywisy65ckflm9kfyq";
           name = "dyalog-mode";
         };
@@ -5201,7 +5348,7 @@
           sha256 = "1ppwlill1z4vqd566h9zi6zx5jb7hggmnmqrga84j5n7fwqvgz7f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dynamic-fonts";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dynamic-fonts";
           sha256 = "0a210ca41maa755lv1n7hhpxp0f7lfxrxbi0x34icbkfkmijhl6q";
           name = "dynamic-fonts";
         };
@@ -5222,7 +5369,7 @@
           sha256 = "05z7gshrn7wp0qkb9ns6rgmcp375yllmkwhdsm4amg0dk3j2slbr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/dynamic-ruler";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/dynamic-ruler";
           sha256 = "13jc3xbsyc3apkdfy0iafmsfvgqs0zfa5w8jxp7zj4dhb7pxpnmc";
           name = "dynamic-ruler";
         };
@@ -5243,7 +5390,7 @@
           sha256 = "0g0cz5a0vf31w27ljq5sn52mq15ynadl6cfbb97ja5zj1zxsxgjl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/e2wm";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/e2wm";
           sha256 = "0dp360jr3fgxqywkp7g88cp02g37kw2hdsc0f70hjak9n3sy03la";
           name = "e2wm";
         };
@@ -5264,7 +5411,7 @@
           sha256 = "1yf081rac0chvkjha9z9xi1p983gmhjph0hai6ppsz5hzf2vikpp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/e2wm-R";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/e2wm-R";
           sha256 = "09v4fz178lch4d6m801ipclfxm2qrap5601aysnzyvc2apvyr3sh";
           name = "e2wm-R";
         };
@@ -5285,7 +5432,7 @@
           sha256 = "09i7d2rc9zd4s3nqrhd3ggs1ykdpxf0pyhxixxw2xy0q6nbswjia";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/e2wm-direx";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/e2wm-direx";
           sha256 = "0nv8aciq0swxi9ahwc2pvk9c7i3rmlp7vrzqcan58ml0i3nm17wg";
           name = "e2wm-direx";
         };
@@ -5306,7 +5453,7 @@
           sha256 = "1vrlfzy1wynm7x4m7pl8vim7ykqd6qkcilwz7sjc1lbckz11ig0d";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/e2wm-pkgex4pl";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/e2wm-pkgex4pl";
           sha256 = "0hgdbqfw3015fr929m36kfiqqzsid6afs3222iqq0apg7gfj7jil";
           name = "e2wm-pkgex4pl";
         };
@@ -5327,7 +5474,7 @@
           sha256 = "0mz43mwcgyc1c9p9b7nflnjxdxjm2nxbhl0scj6llzphikicr35g";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/e2wm-sww";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/e2wm-sww";
           sha256 = "0x45j62cjivf9v7jp1b41yya3f9akp92md6cbv0v7bwz98g2vsk8";
           name = "e2wm-sww";
         };
@@ -5348,7 +5495,7 @@
           sha256 = "0qv3kh6q3q7vgfsd8x25x8agi3fp96dkpjnxdidkwk6k8h9n0jzw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/e2wm-term";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/e2wm-term";
           sha256 = "0wrq06yap80a96l9l0hs7x7rng7sx6vi1hz778kknb6il4f2f45g";
           name = "e2wm-term";
         };
@@ -5369,7 +5516,7 @@
           sha256 = "0r56nqrj6iaz57ys6hqdq5qkyliv7dj6dv274l228r7x0axrwd9m";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/easy-kill";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/easy-kill";
           sha256 = "10jcv7a4vcnaj3wkabip2xwzcwlmvdlqkl409a9lnzfasxcpf32i";
           name = "easy-kill";
         };
@@ -5390,7 +5537,7 @@
           sha256 = "18fdlxz9k961k8wafdw0gq0y514bvrfvx6qc1lmm4pk3gdcfbbi0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/easy-kill-extras";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/easy-kill-extras";
           sha256 = "0xzlzv57nvrc142saydwfib51fyqcdzjccc1hj6xvgcdbwadlnjy";
           name = "easy-kill-extras";
         };
@@ -5411,7 +5558,7 @@
           sha256 = "18bm5ns1qrxq0rrz9sylshr62wkymh1m6b7ch2y74f8rcwdwjgnq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/easy-repeat";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/easy-repeat";
           sha256 = "1vx57gpw0nbxh976s18va4ali1nqxqffhaxv1c5rhf4pwlk2fa06";
           name = "easy-repeat";
         };
@@ -5424,15 +5571,15 @@
     ebal = callPackage ({ emacs, f, fetchFromGitHub, fetchurl, ido-completing-read-plus, lib, melpaBuild }:
     melpaBuild {
         pname = "ebal";
-        version = "0.1.2";
+        version = "0.2.0";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "ebal";
-          rev = "bd8bca3a57d390c22862179db0afca7008831dd7";
-          sha256 = "0nb0p82fx1qp1q9id88wlfqfvfbqqr20541s59snln1pa25s2agm";
+          rev = "4d2ffa7ffbdfd6ee8a39a268e7c7c0de0905df6b";
+          sha256 = "0ysym38xaqyx1wc7xd3fvjm62dmiq4727dnjvyxv7hs4czff1gcb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ebal";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ebal";
           sha256 = "1kqnlp5n1aig1qbqdq9q50wgqkzd1l6h9wi1gv43cif8qa1kxhwg";
           name = "ebal";
         };
@@ -5453,7 +5600,7 @@
           sha256 = "159w19hx3gmhv8n2amkm6i999vdrz5132bjwk28qpiq37v1v7dd5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ebib";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ebib";
           sha256 = "1kdqf5nk9l6mr3698nqngrkw5dicgf7d24krir5wrcfbrsqrfmid";
           name = "ebib";
         };
@@ -5474,7 +5621,7 @@
           sha256 = "1s9r1qj7cjsjvvphdpyjff6y598xpbrm9qjv5ncq15w6ac7yxzvc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ecb";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ecb";
           sha256 = "097hdskhfh255znrqamcssx4ns1sgkxchlbc7pjqwzpflsi0fx89";
           name = "ecb";
         };
@@ -5495,7 +5642,7 @@
           sha256 = "1r5hlcspznvfm111l1z0r4isd582qj64sa8cqk6hyi3y1hyp1xxs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ecukes";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ecukes";
           sha256 = "0ava8hrc7r1mzv6xgbrb84qak5xrf6fj8g9qr4i4g0cr7843nrw0";
           name = "ecukes";
         };
@@ -5516,7 +5663,7 @@
           sha256 = "0xy3q68i47a3s81jwr0rdvc1722bp78ng56xm53pri05g1z0db9s";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/edbi";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/edbi";
           sha256 = "0qq0j16n8lyvkqqlcsrq1m7r7f0in6b92d74mpx5c6siv6z2vxlr";
           name = "edbi";
         };
@@ -5537,7 +5684,7 @@
           sha256 = "10c84aad1lnr7z9f75k5ylgchykr3srcdmn88hlcx2n2c4jfbkds";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/edit-indirect";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/edit-indirect";
           sha256 = "0q5jjmrvx5kaajllmhaxihsab2kr1vmcsfqrhxdhw3x3nf41s439";
           name = "edit-indirect";
         };
@@ -5558,7 +5705,7 @@
           sha256 = "0981hy1n50yizc3k06vbxqrpfml817a67kab1hkgkw5v6ymm1hc9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/edit-list";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/edit-list";
           sha256 = "0mi12jfgx06i0yr8k5nk80xryqszjv0xykdnri505862rb90xakv";
           name = "edit-list";
         };
@@ -5579,7 +5726,7 @@
           sha256 = "12dp1xj09jrp0kxp9xb6cak9dn6zkyis1wfn4fnhzmxxnrd8c5rn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/edit-server";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/edit-server";
           sha256 = "0ffxcgmnz0f2c1i3vfwm8vlm6jyd7ibf4kq5z8c6n50zkwfdmns0";
           name = "edit-server";
         };
@@ -5592,15 +5739,15 @@
     editorconfig = callPackage ({ editorconfig-core, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "editorconfig";
-        version = "0.7.0";
+        version = "0.7.2";
         src = fetchFromGitHub {
           owner = "editorconfig";
           repo = "editorconfig-emacs";
-          rev = "765797d42784f15d207b5a4bfddce780eae2fbb3";
-          sha256 = "0002i69r4cpka73b8mvnkvh4lpyrrrnj07aq0zs0v62b3xlci22y";
+          rev = "460be7416529ceecd3647f7e15d1d20a202f12b7";
+          sha256 = "03vgcvxpp8inlhmxkd2cpp7ywjbl0ccz0lq7s46212dpk99fbd91";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/editorconfig";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/editorconfig";
           sha256 = "0na5lfi9bs4k1q73pph3ff0v8k8vzrfpzh47chyzk8nxsmvklw35";
           name = "editorconfig";
         };
@@ -5613,15 +5760,15 @@
     editorconfig-core = callPackage ({ cl-lib ? null, editorconfig-fnmatch, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "editorconfig-core";
-        version = "0.7.0";
+        version = "0.7.2";
         src = fetchFromGitHub {
           owner = "editorconfig";
           repo = "editorconfig-emacs";
-          rev = "765797d42784f15d207b5a4bfddce780eae2fbb3";
-          sha256 = "0002i69r4cpka73b8mvnkvh4lpyrrrnj07aq0zs0v62b3xlci22y";
+          rev = "460be7416529ceecd3647f7e15d1d20a202f12b7";
+          sha256 = "03vgcvxpp8inlhmxkd2cpp7ywjbl0ccz0lq7s46212dpk99fbd91";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/editorconfig-core";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/editorconfig-core";
           sha256 = "18d7byqkxn6lyw3nqsvqs5vyj9alh9wjd2mim44a3zcc9r2j061r";
           name = "editorconfig-core";
         };
@@ -5634,15 +5781,15 @@
     editorconfig-fnmatch = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "editorconfig-fnmatch";
-        version = "0.7.0";
+        version = "0.7.2";
         src = fetchFromGitHub {
           owner = "editorconfig";
           repo = "editorconfig-emacs";
-          rev = "765797d42784f15d207b5a4bfddce780eae2fbb3";
-          sha256 = "0002i69r4cpka73b8mvnkvh4lpyrrrnj07aq0zs0v62b3xlci22y";
+          rev = "460be7416529ceecd3647f7e15d1d20a202f12b7";
+          sha256 = "03vgcvxpp8inlhmxkd2cpp7ywjbl0ccz0lq7s46212dpk99fbd91";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/editorconfig-fnmatch";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/editorconfig-fnmatch";
           sha256 = "0ji243vrw527jc3alsgmqi9rdnslxyq48zzx33rbpkqcjssm11iv";
           name = "editorconfig-fnmatch";
         };
@@ -5663,7 +5810,7 @@
           sha256 = "06v34l9dkykrrdfpnm3zi5wjm0fdvy76pbkfnk92wqkjp8fqimhd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/edn";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/edn";
           sha256 = "00cy8axhy2p3zalzl8k2083l5a7s3aswb9qfk9wsmf678m8pqwqg";
           name = "edn";
         };
@@ -5684,7 +5831,7 @@
           sha256 = "1a1apa48n24yisd2zw5k4lfkngx3016x6y11qi80hg75vrnmg7f1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/edts";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/edts";
           sha256 = "0f0rbd0mqqwn743qmr1g5mmi1sbmlcglclww8jxvbvb61jq8vspr";
           name = "edts";
         };
@@ -5705,7 +5852,7 @@
           sha256 = "1ryb7smvf66hk307yazkjn9bqzbwzbyyb5db200fq6j2zdjwsmaj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/egg";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/egg";
           sha256 = "144g1fvs2cmn3px0a98nvxl5cz70kx30v936k5ppyi8gvbj0md5i";
           name = "egg";
         };
@@ -5726,7 +5873,7 @@
           sha256 = "16m7h477z10bmaymmgpj2id6l98iyrsp5wf69wd56534kh6qcajg";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/egison-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/egison-mode";
           sha256 = "0x11fhv8kkx34h831k2q70y5qfz7wnfia4ka5mbmps7mpr68zcwi";
           name = "egison-mode";
         };
@@ -5745,7 +5892,7 @@
           sha256 = "3f41ade3332a3f1dc5cfb0b33077396feb7b683b2cf2c235b7a5f07f0b2e3271";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/eide";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/eide";
           sha256 = "16cf32n2l4wy1px7fm6x4vxx7pbqdp7zh2jn3bymg0b40i2321sz";
           name = "eide";
         };
@@ -5766,7 +5913,7 @@
           sha256 = "1si9zk4iwgkfn5p9x48hy1laz8r5m5vbyahy1andxrfxnb9fi0kj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ein";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ein";
           sha256 = "1nksj1cpf4d9brr3rb80bgp2x05qdq9xmlp8mwbic1s27mw80bpp";
           name = "ein";
         };
@@ -5787,7 +5934,7 @@
           sha256 = "0dbp2zz993cm7mrd58c4iflbzqwg50wzgn2cpwfivk14w1mznh4n";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/el-autoyas";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/el-autoyas";
           sha256 = "0hh5j79f3z82nmb3kqry8k8lgc1qswk6ni3g9jg60pasc3wkbh6c";
           name = "el-autoyas";
         };
@@ -5808,7 +5955,7 @@
           sha256 = "1awyh9ffd6a4cia239s89asb88ddqlnrv757d76vcb701pq412bz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/el-get";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/el-get";
           sha256 = "1438v2sw5n67q404c93y2py226v469nagqwp4w9l6yyy40h4myhz";
           name = "el-get";
         };
@@ -5829,7 +5976,7 @@
           sha256 = "1mzla7ijmq1mgzr6bf16mjdycbf8ylsf4zdk4j6fh5kw5n4k6c5n";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/el-init";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/el-init";
           sha256 = "121n6z8p9kzi7axp4i2kyi621gw20635w4j81i1bryblaqrv5kl5";
           name = "el-init";
         };
@@ -5850,7 +5997,7 @@
           sha256 = "1488wv0f9ihzzf9fl8cki044k61b0kva604hdwpb2qk9gnjr4g1l";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/el-init-viewer";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/el-init-viewer";
           sha256 = "0kkmsml9xf2n8nlrcicfg2l78s3dlhd6ssx0s62v77v4wdpl297m";
           name = "el-init-viewer";
         };
@@ -5871,7 +6018,7 @@
           sha256 = "13mv1rhgkwiww2wh5w926jz7idppp492wir1vdl245c5x50dh4f7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/el-mock";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/el-mock";
           sha256 = "07m7w7n202nijnxidy0j0r4nbcvlnbkm9b0n8qb2bwi3d4cfp77l";
           name = "el-mock";
         };
@@ -5892,7 +6039,7 @@
           sha256 = "0390pfgfgj7hwfmkwikwhip0hmwkgx784l529cqvalc31jchi94i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/el-spice";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/el-spice";
           sha256 = "0i0l3y9w1q9pf5zhvmsq4h427imix67jgcfwq21b6j82dzg5l4hg";
           name = "el-spice";
         };
@@ -5913,7 +6060,7 @@
           sha256 = "1i6j44ssxm1xdg0mf91nh1lnprwsaxsx8vsrf720nan7mfr283h5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/el-x";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/el-x";
           sha256 = "1721d9mljlcbdwb5b9934q7a48y30x6706pp4bjvgys0r64dml5g";
           name = "el-x";
         };
@@ -5934,7 +6081,7 @@
           sha256 = "0hlj6jn9gmi00sqghxswkxpgk65c4gy2k7010vpkr2257rd4f3gq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/elang";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/elang";
           sha256 = "0frhn3hm8351qzljicpzars28af1fghgv45717ml79rwb4vi6yiy";
           name = "elang";
         };
@@ -5955,7 +6102,7 @@
           sha256 = "1fh9dx669czkwy4msylcg64azz3az27akx55ipnazb5ghmsi7ivk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/eldoc-eval";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/eldoc-eval";
           sha256 = "0z4scgi2xgrgd47aqqmyv1ww8alh43s0qny5qmh3f1nnppz3nd7c";
           name = "eldoc-eval";
         };
@@ -5976,7 +6123,7 @@
           sha256 = "1bqdg5sr4hkiqndr4hcdjscfdyj56jb4wr1kqgwy1hy4ccr9mkrr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/electric-operator";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/electric-operator";
           sha256 = "043bkpvvk42lmkll5jnz4q8i0m44y4wdxvkz6hiqhqcp1rv03nw2";
           name = "electric-operator";
         };
@@ -5997,7 +6144,7 @@
           sha256 = "1ln0wprk8m2d33z804ld73jwv9x51xkwl9xfsywbh09w3x2zb51j";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/elfeed";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/elfeed";
           sha256 = "1psga7fcjk2b8xjg10fndp9l0ib72l5ggf43gxp62i4lxixzv8f9";
           name = "elfeed";
         };
@@ -6018,7 +6165,7 @@
           sha256 = "1ln0wprk8m2d33z804ld73jwv9x51xkwl9xfsywbh09w3x2zb51j";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/elfeed-web";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/elfeed-web";
           sha256 = "14ydwvjjc6wbhkj4g4xdh0c3nh4asqsz8ln7my5vjib881vmaq1n";
           name = "elfeed-web";
         };
@@ -6039,7 +6186,7 @@
           sha256 = "1k7kprdknqm18dc0nwl7gachm0rivcpa8ng7p7ximalja3nsg2j1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/elisp-slime-nav";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/elisp-slime-nav";
           sha256 = "009zgp68i4naprpjr8lcp06lh3i5ickn0nh0lgvrqs0niprnzh8c";
           name = "elisp-slime-nav";
         };
@@ -6060,7 +6207,7 @@
           sha256 = "07kgzdla31nc146xya21rn4hyr76h5lyabla8yh4qjsvnknb7cbj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/elixir-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/elixir-mode";
           sha256 = "1dba3jfg210i2rw8qy866396xn2xjgmbcyl006d6fibpr3j4lxaf";
           name = "elixir-mode";
         };
@@ -6081,7 +6228,7 @@
           sha256 = "0dx5h3sfccc2bp1jxnqqki95x5hp1skw8n5n4lnh703yjga5gkrz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/elixir-yasnippets";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/elixir-yasnippets";
           sha256 = "0927znqd9j91wc51hdwcl2rxb66i1h549nyr1h39r13353gbwk3a";
           name = "elixir-yasnippets";
         };
@@ -6094,15 +6241,15 @@
     elm-mode = callPackage ({ emacs, f, fetchFromGitHub, fetchurl, let-alist, lib, melpaBuild, s }:
     melpaBuild {
         pname = "elm-mode";
-        version = "0.9.1";
+        version = "0.9.3";
         src = fetchFromGitHub {
           owner = "jcollard";
           repo = "elm-mode";
-          rev = "74fc1abaef7d3ead80d1bc032d3cd406b7260ed8";
-          sha256 = "1x92r1y9d7jssjnlcx1qbw1dqdghfmmmx603296401w1pdcrhl6r";
+          rev = "61671af42d2162b06ee06b4857bc4a63bf82a57b";
+          sha256 = "0cjxvmsfjki8zal31zbf4ynf7i0gy5vykpq6858qpa68vkd1p0iz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/elm-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/elm-mode";
           sha256 = "1gw9szkyr1spcx7qijddhxlm36h0hmfd53b4yzp1336yx44mlnd1";
           name = "elm-mode";
         };
@@ -6123,7 +6270,7 @@
           sha256 = "0l2iincskpks9yvj3y9zh1b48xli1q39wybr5n96rys5gv0drc9h";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/elmacro";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/elmacro";
           sha256 = "0644rgwawivrq1shsjx1x2p53z7jgr6bxqgn2smzql8pp6azy7xz";
           name = "elmacro";
         };
@@ -6144,7 +6291,7 @@
           sha256 = "080nnw6ddsczbm7gk50x4dkahi77fsybfiki5iyp39fjpa7lfzq3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/elmine";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/elmine";
           sha256 = "1gi94dyz9x50swkvryd4vj36rqgz4s58nrb4h4vwwviiiqmc8fvz";
           name = "elmine";
         };
@@ -6165,7 +6312,7 @@
           sha256 = "1q4krfrc2dy0vr7q148msfpkcwj55mlsrn4n5xjnya4xj0134ib7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/elpa-audit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/elpa-audit";
           sha256 = "0l8har14zrlh9kdkh9vlmkmzg49vb0r8j1wnznryaidalvk84a52";
           name = "elpa-audit";
         };
@@ -6186,7 +6333,7 @@
           sha256 = "1hjmvn3kls63alh0ihb5c8gf90lrfvq1hxrlf4162qiaa0s15f8a";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/elpa-mirror";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/elpa-mirror";
           sha256 = "1jnviav2ybr13cgllg26kfjrwrl25adggnqiiwyjwgbbzxfycah8";
           name = "elpa-mirror";
         };
@@ -6199,15 +6346,15 @@
     elpy = callPackage ({ company, fetchFromGitHub, fetchurl, find-file-in-project, highlight-indentation, lib, melpaBuild, pyvenv, yasnippet }:
     melpaBuild {
         pname = "elpy";
-        version = "1.10.0";
+        version = "1.11.0";
         src = fetchFromGitHub {
           owner = "jorgenschaefer";
           repo = "elpy";
-          rev = "96fa05708629600fd79c4b0fcafe63ec97f5ce07";
-          sha256 = "0kzara7r6gvgf3p06xswxbhq01dbhmwx1pldx3mmv7knvm2mdxq8";
+          rev = "d4cd394236d1d148dcabd5048bd30961687627da";
+          sha256 = "1xjm9b32a9nfzvphj6vm0dqcr4i072zcx29kcgiyyni8zbgbwmwv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/elpy";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/elpy";
           sha256 = "051irp7k0cp1hqp3hzrmapllf2iim7cq0iz38489g4fkh2ybk709";
           name = "elpy";
         };
@@ -6234,7 +6381,7 @@
           sha256 = "091dxsb73bhqmrddwnmvblmfpwa7v7fa0ha18daxc8j0lrhzdhlh";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/elscreen-mew";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/elscreen-mew";
           sha256 = "06g4wcfjs036nn64ac0zsvr08cfmak2hyj83y7a0r35yxr1853w4";
           name = "elscreen-mew";
         };
@@ -6255,7 +6402,7 @@
           sha256 = "06g7fl2c7cvwsrgi462wf6j13ny56y6zvgkizz9f256xjjq77ymf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/elscreen-persist";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/elscreen-persist";
           sha256 = "1rjfvpsx0y5l9b76wa1ilj5lx39jd0m78nb1a4bqn81z0rkfpl4k";
           name = "elscreen-persist";
         };
@@ -6276,7 +6423,7 @@
           sha256 = "1k7npf93xbmrsq607x8zlgrpzqvplgia3ixz5w1lr1jlv1m2m8x2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/elwm";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/elwm";
           sha256 = "0rf663ih3lfg4n4pj4dpp133967zha5m1wr46riaxpha7xr59al9";
           name = "elwm";
         };
@@ -6297,7 +6444,7 @@
           sha256 = "12svv24qclkcdb5sniq0xbbsj34hq835s2v636xkb07dpmy644lg";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/elx";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/elx";
           sha256 = "02nq66c0sds61k2p8cn2l0p2l8ysb38ibr038qn41l9hg1dq065x";
           name = "elx";
         };
@@ -6318,7 +6465,7 @@
           sha256 = "0b9hr3xg53nap6sik9d2cwqi8vfwzv8yqjcin4hab6rg2fkr5mra";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/emacs-eclim";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/emacs-eclim";
           sha256 = "1l55jhz5mb3bqw90cbf4jhcqgwj962br706qhm2wn5i2a1mg8xlv";
           name = "emacs-eclim";
         };
@@ -6339,7 +6486,7 @@
           sha256 = "15l3ab11vcmzqibkd6h5zqw5a83k8dmgcp4n26px29c0gv6bkpy8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/emacs-setup";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/emacs-setup";
           sha256 = "1x4rh8vx6fsb2d6dz2g9j6jamin1vmpppwy3yzbl1dnf7w4hx4kh";
           name = "emacs-setup";
         };
@@ -6360,7 +6507,7 @@
           sha256 = "0ciqxyahlzaxq854jm25zbrbmrhcaj5csdhxa0az9crwha8wkmw2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/emacsagist";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/emacsagist";
           sha256 = "1cyz7nf0zxa21979jf5kdmkgwiyd17vsmpcmrw1af37ly27l8l64";
           name = "emacsagist";
         };
@@ -6381,7 +6528,7 @@
           sha256 = "1r6cpb7fck5znb7q7zrxcsjn7d3xiqhq8dp1ar1rsd6k4h05by4j";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/emacsc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/emacsc";
           sha256 = "1fbf9al3yds0il18jz6hbpj1fsjlpb1kgp450gb6r09lc46x77mk";
           name = "emacsc";
         };
@@ -6402,7 +6549,7 @@
           sha256 = "0ph0462shk00rhrkpvwgsr4biykimky2d89pvkbg377951jdga7i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/emacsql";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/emacsql";
           sha256 = "1x4rn8dmgz871dhz878i2mqci576zccf9i2xmq2ishxgqm0hp8ax";
           name = "emacsql";
         };
@@ -6423,7 +6570,7 @@
           sha256 = "0ph0462shk00rhrkpvwgsr4biykimky2d89pvkbg377951jdga7i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/emacsql-mysql";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/emacsql-mysql";
           sha256 = "1c20zhpdzfqjds6kcjhiq1m5ch53fsx6n1xk30i35kkg1wxaaqzy";
           name = "emacsql-mysql";
         };
@@ -6444,7 +6591,7 @@
           sha256 = "0ph0462shk00rhrkpvwgsr4biykimky2d89pvkbg377951jdga7i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/emacsql-psql";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/emacsql-psql";
           sha256 = "1aa1g9jyjmz6w0lmi2cf67926ad3xvs0qsg7lrccnllr9k0flly3";
           name = "emacsql-psql";
         };
@@ -6465,7 +6612,7 @@
           sha256 = "0ph0462shk00rhrkpvwgsr4biykimky2d89pvkbg377951jdga7i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/emacsql-sqlite";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/emacsql-sqlite";
           sha256 = "1vywq3ypcs61s60y7x0ac8rdm9yj43iwzxh8gk9zdyrcn9qpis0i";
           name = "emacsql-sqlite";
         };
@@ -6486,7 +6633,7 @@
           sha256 = "1a9925n0jcgxcgiz2kmh9zbb1rg9039rlrbr9fr80by9znfwmy67";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/emamux";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/emamux";
           sha256 = "1pg0gzi8rn0yafssrsiqdyj5dbfy984srq1r4dpp8p3bi3n0fkfz";
           name = "emamux";
         };
@@ -6507,7 +6654,7 @@
           sha256 = "1dsa85bk33j90h1ypaz1ylqh9yp2xvlga237h3kwa5y3sb0d5ydi";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/emmet-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/emmet-mode";
           sha256 = "0w5nnhha70mndpk2a58raaxqanv868z05mfy1a8prgapm56mm819";
           name = "emmet-mode";
         };
@@ -6528,7 +6675,7 @@
           sha256 = "1pz2xvv5hzfg4a8s6xnbr14mpwnr94cwsa1bpk83i7x15hmxj938";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/emms-mode-line-cycle";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/emms-mode-line-cycle";
           sha256 = "1jdmfh1i9v84iy7bj2dbc3s2wfzkrby3pabd99gnqzd9gn1cn8ca";
           name = "emms-mode-line-cycle";
         };
@@ -6549,7 +6696,7 @@
           sha256 = "1yy4dmjp53l2df5qix31g4vizhv80wm88vjqq6qqa9p822732n0m";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/emms-player-mpv";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/emms-player-mpv";
           sha256 = "175rmqx3bgys4chw8ylyf9rk07sg0llwbs9ivrv2d3ayhcz1lg9y";
           name = "emms-player-mpv";
         };
@@ -6570,7 +6717,7 @@
           sha256 = "15bb8fp2lwr5brfrsjwa47yvja5g2wyaac5a4sh5rn734s64x2sq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/emms-player-simple-mpv";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/emms-player-simple-mpv";
           sha256 = "15aljprjd74ha7wpzsmv3d873i6fy3x1jwhzm03hvw0sw18m25i1";
           name = "emms-player-simple-mpv";
         };
@@ -6591,7 +6738,7 @@
           sha256 = "1rk7am0xvpnv98yi7a62wlyh576md4n2ddj7nm201bjd4wdl2yxk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/emoji-cheat-sheet-plus";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/emoji-cheat-sheet-plus";
           sha256 = "1ciwlbw0ihm0p5gnnl3safcj7dxwiy53bkj8cmw3i334al0gjnnv";
           name = "emoji-cheat-sheet-plus";
         };
@@ -6612,7 +6759,7 @@
           sha256 = "0qi7p1grann3mhaq8kc0yc27cp9fm983g2gaqddljchn7lmgagrr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/emoji-fontset";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/emoji-fontset";
           sha256 = "19affsvlm1rzrzdh1k6xsv79icdkzx4izxivrd2ia6y2wcg9wc5d";
           name = "emoji-fontset";
         };
@@ -6633,7 +6780,7 @@
           sha256 = "0nrf6p4h66i17nz850kpdrnk5h5ra4l3icjjrq34sxvmsssp6zhp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/emojify";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/emojify";
           sha256 = "15v2h5jfksfc208qphiczplg56yka07qv4w4482c10yzwq76zp17";
           name = "emojify";
         };
@@ -6654,7 +6801,7 @@
           sha256 = "0pl7i2a0mf2s33qpsc14dcvqbl6jm5xrvcnrhfr7visvnih29cy4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/emr";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/emr";
           sha256 = "05vpfxg6lviclnms2zyrza8dc87m60mimlwd11ihvsbngi9gcw8x";
           name = "emr";
         };
@@ -6685,7 +6832,7 @@
           sha256 = "1dsa3r39ip20ddbw0m9vq8z3r4ahrxvb37adyqi4mbdgyr6fq6sw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/engine-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/engine-mode";
           sha256 = "1gg7i93163m7k7lr3pnal1svymnhzwrfpfcdc0798d7ybv26gg8c";
           name = "engine-mode";
         };
@@ -6706,7 +6853,7 @@
           sha256 = "08j6b79vy8ry4ad1abk3hvxjbb4ylrhkvrbrnq1gcikl4h1p2v63";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/enlive";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/enlive";
           sha256 = "1dyayk37zik12qfh8zbjmhsch64yqsx3acrlm7hcnavx465hmhnz";
           name = "enlive";
         };
@@ -6727,7 +6874,7 @@
           sha256 = "1in4wbwkxn8qfcsfjbczzk73z74w4ixlml61wk666dw0kpscgbs5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/enotify";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/enotify";
           sha256 = "0mii6m6zw9y8njgzi79rcf1n251iw7qz3yqjjij3c19rk3zpm5qi";
           name = "enotify";
         };
@@ -6748,7 +6895,7 @@
           sha256 = "05r2m7zghbdrgscg0x78jnhk1g6fq8iylar4cx699zm6pzvlq98z";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/epc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/epc";
           sha256 = "1l9rcx07pa4b9z5654gyw6b64c95lcigzg15amphwr56v2g3rbzx";
           name = "epc";
         };
@@ -6769,7 +6916,7 @@
           sha256 = "0sjxd5y5hxhrbgfkpwx6m724r3841b53hgc61a0g5zwispw5pmrr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/epl";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/epl";
           sha256 = "0zr3r2hn9jaxscrl83hyixznb8l5dzfr6fsac76aa8x12xgsc5hn";
           name = "epl";
         };
@@ -6790,7 +6937,7 @@
           sha256 = "1xw56sir6gkr0p9g4s6p4qc0rajnl6ifbzrky07j28y9vsa59nsz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/erc-crypt";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/erc-crypt";
           sha256 = "1mzzqcxjnll4d9r9n5z80zfb3ywkd8jx6b49g02vwf1iak9h7hv3";
           name = "erc-crypt";
         };
@@ -6803,15 +6950,15 @@
     erc-hl-nicks = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "erc-hl-nicks";
-        version = "1.3.0";
+        version = "1.3.2";
         src = fetchFromGitHub {
           owner = "leathekd";
           repo = "erc-hl-nicks";
-          rev = "f7e9c378072ecc689f2a0ef66d73db8bbcc07d87";
-          sha256 = "0bc71s1cx4z6a9cpfygmzv1xzzx9s74366kzqnlg22sxxpb9ajhq";
+          rev = "be181920ce6af0ab5d00d1c638e4e598b3998643";
+          sha256 = "1k0g3bwp3w0dd6zwdv6k2wpqs2krjayilrzsr1hli649ljcx55d7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/erc-hl-nicks";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/erc-hl-nicks";
           sha256 = "1lhw77n2nrjnb5yhnpm6yhbcp022xxjcmdgqf21z9rd0igss9mja";
           name = "erc-hl-nicks";
         };
@@ -6832,7 +6979,7 @@
           sha256 = "0p1j08rrdsqmkb8zz8h8ba24hr59nx3xh2m044ry468hfd2bp6vd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/erc-youtube";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/erc-youtube";
           sha256 = "12ylxkskkgfv5x7vlkib963ichb3rlmdzkf4zh8a39cgl8wsmacx";
           name = "erc-youtube";
         };
@@ -6853,7 +7000,7 @@
           sha256 = "19jninbf0dhdw3kn4d38bxmklg0v7sh3m9dwj6z69w99r5pcw480";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ercn";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ercn";
           sha256 = "0yvis02bypw6v1zv7i326y8s6j0id558n0bdri52hr5pw85imnlp";
           name = "ercn";
         };
@@ -6874,7 +7021,7 @@
           sha256 = "17i567nfm0rykimh6bpcc5f2l7wsf8zcdy2jzd7sgrl54dvb0g9i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/erefactor";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/erefactor";
           sha256 = "0ma9sbrq4n8y5w7vvbhhgmw25aiykbq5yhxzm0knj32bgpviprw7";
           name = "erefactor";
         };
@@ -6895,7 +7042,7 @@
           sha256 = "19m6chwc2awbsk5z03q1yhq84m481pff2609a8bxymcvm6yaamvf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ergoemacs-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ergoemacs-mode";
           sha256 = "0h99m0n3q41lw5fm33pc1405lrxyc8rzghnc6c7j4a6gr1d82s62";
           name = "ergoemacs-mode";
         };
@@ -6908,15 +7055,15 @@
     erlang = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "erlang";
-        version = "18.2.2";
+        version = "18.2.3";
         src = fetchFromGitHub {
           owner = "erlang";
           repo = "otp";
-          rev = "7cf9a621c5280a3e97967c4c63ab6ca1adde69c3";
-          sha256 = "022yvfh6h6kbxl04jk3r4kzryc7k8hjpizc1ixrsmvh4gpnv3abi";
+          rev = "d96471b3f404f7341279d8598dd74d92fb1a923c";
+          sha256 = "1g7grv3zs5lydkxhwzdc3caqym11m20mx43m3hd5jgc96smg0433";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/erlang";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/erlang";
           sha256 = "1gmrdkfanivb9l5lmkl0853snlhl62w34537r82w11z2fbk9lxhc";
           name = "erlang";
         };
@@ -6937,7 +7084,7 @@
           sha256 = "0hn9i405nfhjd1h9vnwj43nxbbz00khrwkjq0acfyxjaz1shfac9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ert-async";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ert-async";
           sha256 = "004798ckri5j72j0xvzkyciss1iz4lw9gya2749hkjxlamg14cn5";
           name = "ert-async";
         };
@@ -6957,7 +7104,7 @@
           sha256 = "63a8fb532260f56569ce20f911788054624a7a29f149ed6036d9f997ae0457c3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ert-junit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ert-junit";
           sha256 = "0bv22mhh1ahbjwi6s1csxkh11dmy0srabkddjd33l4havykxlg6g";
           name = "ert-junit";
         };
@@ -6978,7 +7125,7 @@
           sha256 = "0rdgdslspzb4s0n4a68hnwfm8vm8baasa8nzrdinf0nryn7rrhbf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ert-runner";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ert-runner";
           sha256 = "0fnb8rmjr5lvc3dq0fnyxhws8ync1lj5xp8ycs63z4ax6gmdqr48";
           name = "ert-runner";
         };
@@ -6999,7 +7146,7 @@
           sha256 = "0jq4yp80wiphlpsc0429rg8n50g8l4lf78q0l3nywz2p93smjy9b";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/es-lib";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/es-lib";
           sha256 = "0mwvgf5385qsp91zsdw75ipif1h90xy277xdmrpwixsxd7abbn0n";
           name = "es-lib";
         };
@@ -7009,22 +7156,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    es-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    es-mode = callPackage ({ dash, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "es-mode";
-        version = "4.0.0";
+        version = "4.1.0";
         src = fetchFromGitHub {
           owner = "dakrone";
           repo = "es-mode";
-          rev = "bee766109b8da1bba925d6998ef288b8a55f3c8f";
-          sha256 = "105ydizdlak951kfr5mjmk7vkqfkj6r1z0gs5ldz1g19wwc7rhjk";
+          rev = "c8674924e566416ead90d837d3f3b00127d4a0e1";
+          sha256 = "1vd5kry46bi3rg4l4330bdkh5slk821a6w4vzzphdqwk61fir81b";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/es-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/es-mode";
           sha256 = "1541c7d8gbi4mgxwk886hgsxhq7bfx8is7hjjg80sfn40z6kdwcp";
           name = "es-mode";
         };
-        packageRequires = [];
+        packageRequires = [ dash ];
         meta = {
           homepage = "http://melpa.org/#/es-mode";
           license = lib.licenses.free;
@@ -7041,7 +7188,7 @@
           sha256 = "0cjchwrhk7bw87bg10zgcwkga50rvs0jn5v2jf6bbsxbcqx2nfc9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/es-windows";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/es-windows";
           sha256 = "112ngkan0hv3y7m71479f46x5gwdmf0vhbqrzs5kcjwlacqlrahx";
           name = "es-windows";
         };
@@ -7062,7 +7209,7 @@
           sha256 = "0nkmwwx224r50y2xnrz3v26l3ngqshvy5hs861gy4zagwllqfmvc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/eshell-autojump";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/eshell-autojump";
           sha256 = "09l2680hknmdbwr4cncv1v4b0adik0c3sm5i9m3qbwyyxm8m41i5";
           name = "eshell-autojump";
         };
@@ -7083,7 +7230,7 @@
           sha256 = "179xqh0rs8w3d03gygg9sy4qp5xqgfgl4c0ycrknip9zrnbmph4i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/eshell-z";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/eshell-z";
           sha256 = "14ixazj0nscyqsdv7brqnfr0q8llir1pwb91yhl9jdqypmadpm6d";
           name = "eshell-z";
         };
@@ -7104,7 +7251,7 @@
           sha256 = "16r4j27j9yfdiy841w9q5ykkc6n3wrm7hvfacagb32mydk821ijg";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/espuds";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/espuds";
           sha256 = "16yzw9l64ahf5v92jzb7vyb4zqxxplq6qh0y9rkfmvm59s4nhk6c";
           name = "espuds";
         };
@@ -7125,7 +7272,7 @@
           sha256 = "0lvr14xlxsdad4ihywkpbwwj9lyal0w4p616ska5rk7gg5i8v74p";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ess";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ess";
           sha256 = "02kz4fjxr0vrj5mg13cq758nzykizq4dmsijraxv46snvh337v5i";
           name = "ess";
         };
@@ -7146,7 +7293,7 @@
           sha256 = "1ya2ay52gkrd31pmw45ban8kkxgnzhhwkzkypwdhjfccq3ys835x";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ess-R-data-view";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ess-R-data-view";
           sha256 = "0r2fzwayf3yb7fqk6f31x4xfqiiczwik8qw4rrvkqx2h3s1kz7i0";
           name = "ess-R-data-view";
         };
@@ -7167,7 +7314,7 @@
           sha256 = "0q8pbaa6wahli6fh0kng5zmnypsxi1fr2bzs2mfk3h8vf4nikpv0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ess-R-object-popup";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ess-R-object-popup";
           sha256 = "1dxwgahfki6d6ywh85ifk3kq6f2a1114kkd8xcv4lcpzqykp93zj";
           name = "ess-R-object-popup";
         };
@@ -7188,7 +7335,7 @@
           sha256 = "1avb6dng4xgw3bp7bw0j60wl6s4y26alfys9vwwj29rlzvjrlh74";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ess-smart-underscore";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ess-smart-underscore";
           sha256 = "01pki1xa8zpgvldcbjwg6vmslj7ddf44hsx976xipc95vrdk15r2";
           name = "ess-smart-underscore";
         };
@@ -7209,7 +7356,7 @@
           sha256 = "1pzbd2ka6h5ipiivfwfgq1hq80ww59xvyldmx406mdd5vn7yqk5z";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/esup";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/esup";
           sha256 = "0cv3zc2zzm38ki3kxq58g9sp4gsk3dffa398wky6z83a3zc02zs0";
           name = "esup";
         };
@@ -7230,7 +7377,7 @@
           sha256 = "0k4vqlbk3h2snfiriraxhnjpdxgs49vcaazl191p9s2f799msd8p";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/esxml";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/esxml";
           sha256 = "0nn074abkxz7p4w59l1za586p5ya392xhl3sx92yys8a3194n6hz";
           name = "esxml";
         };
@@ -7251,7 +7398,7 @@
           sha256 = "1a33yy455yx2188vxnhylgzg4zc0hhrw52dmpc4svxs7h1229pwg";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/eval-in-repl";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/eval-in-repl";
           sha256 = "10h5vy9wdiqf9dgk1d1bsvp93y8sfcxghzg8zbhhn7m5cqg2wh63";
           name = "eval-in-repl";
         };
@@ -7272,7 +7419,7 @@
           sha256 = "0lwpl9akdxml9f51pgsv0g7k7mr8dvqm94l01i7vq8jl6vd6v6i5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/eval-sexp-fu";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/eval-sexp-fu";
           sha256 = "17cazf81z4cszflnfp66zyq2cclw5sp9539pxskdf267cf7r0ycs";
           name = "eval-sexp-fu";
         };
@@ -7282,17 +7429,38 @@
           license = lib.licenses.free;
         };
       }) {};
+    evalator = callPackage ({ fetchFromGitHub, fetchurl, helm-core, lib, melpaBuild }:
+    melpaBuild {
+        pname = "evalator";
+        version = "1.0.0";
+        src = fetchFromGitHub {
+          owner = "seanirby";
+          repo = "evalator";
+          rev = "edf3840f5aa025cf38d0c2677b2f88f59079409e";
+          sha256 = "1a3y69s7lb24zdivxcpsjh9l6adxyjqxbpgradnj0q1n6kdyq679";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evalator";
+          sha256 = "0k6alxwg89gc4v5m2bxmzmj7l6kywhbh4036xgz19q28xnlbr9xk";
+          name = "evalator";
+        };
+        packageRequires = [ helm-core ];
+        meta = {
+          homepage = "http://melpa.org/#/evalator";
+          license = lib.licenses.free;
+        };
+      }) {};
     evil = callPackage ({ fetchhg, fetchurl, goto-chg, lib, melpaBuild, undo-tree }:
     melpaBuild {
         pname = "evil";
         version = "1.2.10";
         src = fetchhg {
           url = "https://bitbucket.com/lyro/evil";
-          rev = "e2c001ecfded";
-          sha256 = "1by2b0qa5hk2jvkxg8j4b0wpnw3mbg0vdggp4nh33m61290jsn5k";
+          rev = "5c0114702ea3";
+          sha256 = "1sysqcvzdnzg5qvawv3c0rwfyacjb80mvfdhdmc07vr4pyma6vcj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil";
           sha256 = "09qrhy7l229w0qk3ba1i2xg4vqz8525v8scrbm031lqp30jp54hc";
           name = "evil";
         };
@@ -7313,7 +7481,7 @@
           sha256 = "0lw7fg4gqwj30r0l6k2ni36sxqkf65zf0d0z3rxnpwbxlf8dlkrr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-anzu";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-anzu";
           sha256 = "19cmc61l370mm4h2m6jw5pdcsvj4wcv9zpa8z7k1fjg57mwmmn70";
           name = "evil-anzu";
         };
@@ -7334,7 +7502,7 @@
           sha256 = "1nh7wa4ynr7ln42x32znzqsmh7ijzy5ymd7rszf49l8677alvazq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-args";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-args";
           sha256 = "1bwdvf1i3jc77bw2as1wr1djm8z3a7wms60694xkyqh0m909hs2w";
           name = "evil-args";
         };
@@ -7355,7 +7523,7 @@
           sha256 = "1qiym8f56a18j5swrxx5is48nz7z76531k8cw2c7czr6611l8l5a";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-commentary";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-commentary";
           sha256 = "151iiimmkpn58pl9zn40qssfahbrqy83axyl9dcd6kx2ywv5gcxz";
           name = "evil-commentary";
         };
@@ -7376,7 +7544,7 @@
           sha256 = "0cj17gk7cxia2p9xzqnlnmqqbw2afd3x61gfw9fpf65j9wik5hbz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-escape";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-escape";
           sha256 = "0rlwnnshcvsb5kn7db5qy39s89qmqlllvg2z8cnxyri8bsssks4k";
           name = "evil-escape";
         };
@@ -7397,7 +7565,7 @@
           sha256 = "0r2367lbzcdhglvjjcamrzn5fmqy0jalcws8r0yc2al1vbsrn0fr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-iedit-state";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-iedit-state";
           sha256 = "1dihyh7vqcp7kvfic613k7v33czr93hz04d635awrsyzgy8savhl";
           name = "evil-iedit-state";
         };
@@ -7418,7 +7586,7 @@
           sha256 = "1yrd9zvp23xwmxvw9hrhfwhwfczh4lxxk65mcvy69q6wwd03z5vn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-jumper";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-jumper";
           sha256 = "0zwsk7slzvcgvgh8fjrwangylishrwc1w0glxcr71sybxph2g46x";
           name = "evil-jumper";
         };
@@ -7439,7 +7607,7 @@
           sha256 = "1k2zinchs0jjllp8zkpggckyy63dkyi5yig3p46vh4w45jdzysk5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-leader";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-leader";
           sha256 = "154s2nb170hzksmc87wnzlwg3ic3w3ravgsfvwkyfi2q285vmra6";
           name = "evil-leader";
         };
@@ -7460,7 +7628,7 @@
           sha256 = "12l3gnhirq8jz0dqyj9m02l1fg5rh78fdyskslprxp5vfa4ngzkh";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-lisp-state";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-lisp-state";
           sha256 = "117irac05fs73n7sgja3zd7yh4nz9h0gw5b1b57lfkav6y3ndgcy";
           name = "evil-lisp-state";
         };
@@ -7481,7 +7649,7 @@
           sha256 = "01hccc49xxb6lnzr0lwkkwndbk4sv0jyyz3khbcxsgkpzjiydihv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-mark-replace";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-mark-replace";
           sha256 = "03cq43vlv1b53w4kw7mjvk026i8rzhhryfb27ddn6ipgc6xh68a0";
           name = "evil-mark-replace";
         };
@@ -7502,7 +7670,7 @@
           sha256 = "0kf4m1ghpxfalqx2zwm1d8xav4d6l6bpk79g5cvssk5jz5913fbi";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-matchit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-matchit";
           sha256 = "01z69n20qs4gngd28ry4kn825cax5km9hn96i87yrvq7nfa64swq";
           name = "evil-matchit";
         };
@@ -7523,7 +7691,7 @@
           sha256 = "16wn74690572n3xpxvnvka524fzswxxni3dy98bwpvsqj6yx2ds5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-nerd-commenter";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-nerd-commenter";
           sha256 = "1pa5gh065hqn5mhs47qvjllwdwwafl0clk555mb6w7svq58r6i8d";
           name = "evil-nerd-commenter";
         };
@@ -7544,7 +7712,7 @@
           sha256 = "13jg2xbh4p02x1nj77b6csb93hh56c1nv8kslcq2hjj3caipk4m8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-numbers";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-numbers";
           sha256 = "1lpmkklwjdf7ayhv99g9zh3l9hzrwm0hr0ijvbc7yz3n398zn1b2";
           name = "evil-numbers";
         };
@@ -7565,7 +7733,7 @@
           sha256 = "09l0ph9rc941kr718zq0dw27fq6l7rb0h2003ihw7q0a5yr8fpk7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-org";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-org";
           sha256 = "18w07fbafry3wb87f55kd8y0yra3s18a52f3m5kkdlcz5zwagi1c";
           name = "evil-org";
         };
@@ -7578,15 +7746,15 @@
     evil-quickscope = callPackage ({ evil, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "evil-quickscope";
-        version = "0.1.3";
+        version = "0.1.4";
         src = fetchFromGitHub {
           owner = "blorbx";
           repo = "evil-quickscope";
-          rev = "d2f512fa4bd0b0603529a441e474ca551f621650";
-          sha256 = "0yx5ry102hzhqx1aql58fkd986xgj250bbcxabpnvy27gim2b977";
+          rev = "37a20e4c56c6058abf186ad4013c155e695e876f";
+          sha256 = "1ja9ggj70wf0nmma4xnc1zdzg2crq9h1cv3cj7cgwjmllflgkfq7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-quickscope";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-quickscope";
           sha256 = "0xym1mh4p68i00l1lshywf5fdg1vw3szxp3fk9fwfcg04z6vd489";
           name = "evil-quickscope";
         };
@@ -7607,7 +7775,7 @@
           sha256 = "1ygrpffa847144i74z2yy5r5vcvd334gad5mg18ffydacddcyqmq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-rsi";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-rsi";
           sha256 = "0mc39n72420n36kwyf9zpw1pgyih0aigfnmkbywb0yxgj7myc345";
           name = "evil-rsi";
         };
@@ -7628,7 +7796,7 @@
           sha256 = "1jfi2k9dm0cc9bx8klppm965ydhdw17a2n664199vhxrap6g27yk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-search-highlight-persist";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-search-highlight-persist";
           sha256 = "0iia136js364iygi1mydyzwvizhic6w5z9pbwmhva4654pq8dzqy";
           name = "evil-search-highlight-persist";
         };
@@ -7649,7 +7817,7 @@
           sha256 = "0j2m3rsszivyjhv8bjid5fdqaf1vwp8rf55b27y4vc2489wrw415";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-smartparens";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-smartparens";
           sha256 = "1viwrd6gfqmwhlil80pk68dikn3cjf9ddsy0z781z3qfx0j35qza";
           name = "evil-smartparens";
         };
@@ -7670,7 +7838,7 @@
           sha256 = "143lgpvbjrddbgnyh9dfdhjj0gp69slv4fkiq53czz85ffwli5ig";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-snipe";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-snipe";
           sha256 = "0gcmpjw3iw7rjk86b2k6clfigp48vakfjd1a9n8qramhnc85rgkn";
           name = "evil-snipe";
         };
@@ -7691,7 +7859,7 @@
           sha256 = "1rchanv0vq9rx6x69608dlpdybvkn8a9ymx8wzm7gqpz9qh6xqrk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-space";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-space";
           sha256 = "1asvh873r1xgffvz3nr653yn8h5ifaphnafp6wf1b1mja6as7f23";
           name = "evil-space";
         };
@@ -7712,7 +7880,7 @@
           sha256 = "0vsf7yzlb2j7c5c7cnk81y1979psy6a9v7klg6c2j9lkcn3cqpvj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-textobj-anyblock";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-textobj-anyblock";
           sha256 = "03vk30s2wkcszcjxmh5ww39rihnag9cp678wdzq4bnqy0c6rnjwa";
           name = "evil-textobj-anyblock";
         };
@@ -7733,7 +7901,7 @@
           sha256 = "1rskvkmz30xyy8xfjf2i35f3dxh663gb3plfy3f0j6z17i086jl2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-tutor";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-tutor";
           sha256 = "1hvc2w5ykrgh62n4sxqqqcdk5sd7nmh6xzv4mir5vf9y2dgqcvsn";
           name = "evil-tutor";
         };
@@ -7754,7 +7922,7 @@
           sha256 = "07cmql8zsqz1qchq2mp3qybbay499dk1yglisig6jfddcmrbbggz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-visual-mark-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-visual-mark-mode";
           sha256 = "1qgr2dfhfz6imnlznicl7lplajd1s8wny7mlxs1bkms3xjcjfi48";
           name = "evil-visual-mark-mode";
         };
@@ -7775,7 +7943,7 @@
           sha256 = "11y2jrwbsw4fcx77zkhj1cn2hl1zcdqy00bv3mpbcrs03jywssrk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evil-visualstar";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evil-visualstar";
           sha256 = "135l9hjfbpn0a6p53picnpydi9qs5vrk2rfn64gxa5ag2apcyycy";
           name = "evil-visualstar";
         };
@@ -7796,7 +7964,7 @@
           sha256 = "0739v0m9vj70a55z0canslyqgafzys815i7a0r6bxj2f9iwq6rhb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/evm";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/evm";
           sha256 = "19l6cs5schbnph0pwhhj66gkxsswd4bmjpy79l9kxzpjf107wc03";
           name = "evm";
         };
@@ -7817,7 +7985,7 @@
           sha256 = "0gs6bi3s2sszc6v2b26929azmn5513kvyin99n4d0ark1jdbjmv2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/eww-lnum";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/eww-lnum";
           sha256 = "1y745z4wa90snizq2g0amdwwgjafd6hkrayn93ca50f1wghdbk79";
           name = "eww-lnum";
         };
@@ -7838,7 +8006,7 @@
           sha256 = "0nhc3m88i6rl2y426ksmjbbaqwfrjnwbzqq1bvd6r0bkcwgfwfml";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/exec-path-from-shell";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/exec-path-from-shell";
           sha256 = "1j6f52qs1m43878ikl6nplgb72pdbxfznkfn66wyzcfiz2hrvvm9";
           name = "exec-path-from-shell";
         };
@@ -7859,7 +8027,7 @@
           sha256 = "0rvkhjfkhamr3ys9iarblfwvwq7n4wishdjgnwj1lx7m80h1hzbg";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/expand-region";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/expand-region";
           sha256 = "1c7f1nqsqdc75h22fxxnyg0m4yxj6l23sirk3c71fqj14paxqnwg";
           name = "expand-region";
         };
@@ -7880,7 +8048,7 @@
           sha256 = "106yh793scbyharsk1dvrirkj3c6666w8jqilpkaz78vwyw3zs5y";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/express";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/express";
           sha256 = "0lhisy4ds96bwpc7k8w9ws1zi1qh0d36nhxsp36bqzfi09ig0nb9";
           name = "express";
         };
@@ -7901,7 +8069,7 @@
           sha256 = "1k2j8szavyq2wy5c0skvs03a88cr9njy7y63b7knh2m92nw4830d";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/extend-dnd";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/extend-dnd";
           sha256 = "0rknpvp8yw051pg3blvmjpp3c9a82jw7f10mq67ggbz98w227417";
           name = "extend-dnd";
         };
@@ -7922,7 +8090,7 @@
           sha256 = "0jc5wv2hkc89yh5ypa324xlfqdna20msr63g30njxq4g2vd0iqa7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/eyebrowse";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/eyebrowse";
           sha256 = "09fkzm8z8nkr4s9fbmfcjc80h50051f48v6n14l76xicglr5p861";
           name = "eyebrowse";
         };
@@ -7943,7 +8111,7 @@
           sha256 = "0lzqfr5xgc3qvpbs6vf63yiw7pc2mybfvsrhczf9ghlmlawqa6k1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/f";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/f";
           sha256 = "0s7fqav0dc9g4y5kqjjyqjs90gi34cahaxyx2s0kf9fwcgn23ja2";
           name = "f";
         };
@@ -7964,7 +8132,7 @@
           sha256 = "0crhkdbxz1ldbrvppi95g005ni5zg99z1271rkrnk5i6cvc4hlq5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fabric";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fabric";
           sha256 = "1mkblsakdhvi10b67bv3j0jsf7hr8lf9sibmprvx8smqsih7l88m";
           name = "fabric";
         };
@@ -7985,7 +8153,7 @@
           sha256 = "01l8dlfpyy97b17djbza46rq11xlbkhd5kn2r26r2xac8klj4pka";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/factlog";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/factlog";
           sha256 = "163482vfpa52b5ya5xps4qnclbaql1x0q54gqdwwmm04as8qbfz7";
           name = "factlog";
         };
@@ -8006,7 +8174,7 @@
           sha256 = "05lwcwf412m717yhwpjrswqkm8c3i7391rmiwv2k8xc1vk6dpp4g";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fancy-battery";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fancy-battery";
           sha256 = "03rkfdkrzyal9abdiv8c73w10sm974hxf3xg5015hibfi6kzg8ii";
           name = "fancy-battery";
         };
@@ -8027,7 +8195,7 @@
           sha256 = "10ds6nlzm1s5xsp53a52qlzrnph7in6gib67qhgnwpj33wp8gs91";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fancy-narrow";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fancy-narrow";
           sha256 = "15i86jz6rdpva1az7gqp1wbm8kispcfc8h6v9fqsbag9sbzvgcyv";
           name = "fancy-narrow";
         };
@@ -8048,7 +8216,7 @@
           sha256 = "0h32w63vv451797zi6206j529fd4j8l3fp7rqip3s8xn8d4728x1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fastnav";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fastnav";
           sha256 = "08hg256w8k9f5nzgpyl1jykbf28vmvv09kkhzs0s2zhwbl2158a5";
           name = "fastnav";
         };
@@ -8069,7 +8237,7 @@
           sha256 = "03w68zbgprly45i6ps7iviwvjf3acbc7f7acvjpzj2plf0g5i19z";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fcitx";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fcitx";
           sha256 = "0a8wd588c26p3czfp5hn2n46f2vwyg5v301sv0y07b55b1i3ynmx";
           name = "fcitx";
         };
@@ -8090,7 +8258,7 @@
           sha256 = "1cxjygg05v8s96c8z6plk3hl34jaiwg7s7dl7dsk20rj5f54kgw7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/feature-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/feature-mode";
           sha256 = "0ryinmpqb3c91qcna6gbijcmqv3skxdc947dlr5s1w623z9nxgqg";
           name = "feature-mode";
         };
@@ -8111,7 +8279,7 @@
           sha256 = "0fghhy5xqsdwal4fwlr6hxr5kpnfw71q79mxpp9db59ldnj9f5y9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fill-column-indicator";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fill-column-indicator";
           sha256 = "0w8cmijv7ihij9yyncz6lixb6awzzl7n9qpjj2bks1d5rx46blma";
           name = "fill-column-indicator";
         };
@@ -8132,7 +8300,7 @@
           sha256 = "1r9y9zschavi28c5ysrlh56vxszjfyhh5r36fhn74i0b5iiy15rx";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/finalize";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/finalize";
           sha256 = "1n0w4kdzc4hv4pprv13lr88gh46slpxdvsc162nqm5mrqp9giqqq";
           name = "finalize";
         };
@@ -8153,7 +8321,7 @@
           sha256 = "1xjb66pydm3yf0jxnm2mri98pxq3b26xvwjkaj1488qgj27i05jr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/find-by-pinyin-dired";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/find-by-pinyin-dired";
           sha256 = "150hvih3mdd1dqffgdcv3nn4qhy86s4lhjkfq0cfzgngfwif8qqq";
           name = "find-by-pinyin-dired";
         };
@@ -8174,7 +8342,7 @@
           sha256 = "0bf32nhpmjvvgnr6g9xqh8pqnhr3dl24y3g40lsv4pc8ffs70ydm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/find-file-in-project";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/find-file-in-project";
           sha256 = "0aznnv82xhnilc9j4cdmcgh6ksv7bhjjm3pa76hynnyrfn7kq7wy";
           name = "find-file-in-project";
         };
@@ -8195,7 +8363,7 @@
           sha256 = "0wbmmrd7brf4498pdyilz17rzv7221cj8sd4h11gac2r72f1q2md";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/find-file-in-repository";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/find-file-in-repository";
           sha256 = "0q1ym06w2yn3nzpj018dj6h68f7rmkxczyl061mirjp8z9c6a9q6";
           name = "find-file-in-repository";
         };
@@ -8216,13 +8384,34 @@
           sha256 = "0lwgbd9zwdv7qs39c3fp4hrc17d9wrwwjgba7a14zwrhb27m7j07";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fiplr";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fiplr";
           sha256 = "0l68rl5cy2maynny6iq6c4qr6c99y44i0i1z613k9rk08z7h0k5i";
           name = "fiplr";
         };
         packageRequires = [ grizzl ];
         meta = {
           homepage = "http://melpa.org/#/fiplr";
+          license = lib.licenses.free;
+        };
+      }) {};
+    firefox-controller = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild, moz, popwin }:
+    melpaBuild {
+        pname = "firefox-controller";
+        version = "2.0";
+        src = fetchFromGitHub {
+          owner = "cute-jumper";
+          repo = "emacs-firefox-controller";
+          rev = "26a2e4b9246a7b5415032799b742b998529fce9e";
+          sha256 = "1rz56n2gmw11w2yxlhn0i8xmig9m8lxihgaikg65xmy9nqa5j7bj";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/firefox-controller";
+          sha256 = "03y96b3l75w9al8ylijnlb8pcfkwddyfnh8xwig1b6k08zxfgal6";
+          name = "firefox-controller";
+        };
+        packageRequires = [ cl-lib moz popwin ];
+        meta = {
+          homepage = "http://melpa.org/#/firefox-controller";
           license = lib.licenses.free;
         };
       }) {};
@@ -8237,7 +8426,7 @@
           sha256 = "174x0qyrwswppc9p1q1nn4424r3zg7g49zk329k5aq18vyjz52d7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fireplace";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fireplace";
           sha256 = "1apcypznq23fc7xgy4xy1c5hvfvjx1xhyq3aaq1lf59v99zchciw";
           name = "fireplace";
         };
@@ -8258,7 +8447,7 @@
           sha256 = "0s8rml5xbskvnjpi8qp7vqflxhh5yis6zr6ay2bxmd2chjlhli55";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/firestarter";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/firestarter";
           sha256 = "1cpx664hyrdnpb1jps1x6lm7idwlfjblkfygj48cjz9pzd6ld5mp";
           name = "firestarter";
         };
@@ -8271,21 +8460,42 @@
     fish-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "fish-mode";
-        version = "0.1.1";
+        version = "0.1.2";
         src = fetchFromGitHub {
           owner = "wwwjfy";
           repo = "emacs-fish";
-          rev = "ac38e249dc260790ae32a24e101311990d9a84df";
-          sha256 = "1vwq0h88yassa0m0cizfvj5b9rrx5cb7w1n5mbczv54q97lq530n";
+          rev = "22aabbccd564883684f6d224b8e0a512f334be41";
+          sha256 = "17djaz79spms9il71m4xdfjhm58dzswb6fpncngkgx8kxvcy9y24";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fish-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fish-mode";
           sha256 = "0l6k06bs0qdhj3h8vf5fv8c3rbhiqfwszrpb0v2cgnb6xhwzmq14";
           name = "fish-mode";
         };
         packageRequires = [ emacs ];
         meta = {
           homepage = "http://melpa.org/#/fish-mode";
+          license = lib.licenses.free;
+        };
+      }) {};
+    fix-input = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "fix-input";
+        version = "0.1.0";
+        src = fetchFromGitHub {
+          owner = "mrkkrp";
+          repo = "fix-input";
+          rev = "728ae9258ebe790a69cf332407cba2f8c0be7d81";
+          sha256 = "16rd23ygh76fs4i7rni94k8gwa9n360h40qmhm65snp31kqnpr1p";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fix-input";
+          sha256 = "03xpr7rlv0xq1d9126j1fk0c2j7ssf366n0yc8yzm9vq32n9pp4p";
+          name = "fix-input";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "http://melpa.org/#/fix-input";
           license = lib.licenses.free;
         };
       }) {};
@@ -8300,7 +8510,7 @@
           sha256 = "1hj5jp4vbkcmnc8l2hqsvjc76f7c9zcsq8znwcwv2nv9xj9hlbkr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fix-word";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fix-word";
           sha256 = "0a8w09cx8p5pkkd4533nd199axkhdhs2a7blp7syfn40bkscx6xc";
           name = "fix-word";
         };
@@ -8321,7 +8531,7 @@
           sha256 = "1hnxdmzqmnp3dr7mpr58pjmigykb3cxwphxzia013kfi37ipf5a0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fixmee";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fixmee";
           sha256 = "0wnp6h8f547fsi1lkk4ajny7g21dnr76qfhxl82n0l5h1ps4w8mp";
           name = "fixmee";
         };
@@ -8349,7 +8559,7 @@
           sha256 = "12b1b7avjdbfm184mcg3bh3s6k0ygfz1sraz8q7qnrsyw4170893";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/floobits";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/floobits";
           sha256 = "1jpk0q4mkf9ag1rqyai993nz5ngzfvxq9n9avmaaq59gkk9cjraf";
           name = "floobits";
         };
@@ -8370,7 +8580,7 @@
           sha256 = "0sjybrcnb2sl33swy3q664vqrparajcl0m455gciiih2j87hwadc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flx";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flx";
           sha256 = "04plfhrnw7jx2jaxhbhw4ypydfcb8v0x2m5hyacvrli1mca2iyf9";
           name = "flx";
         };
@@ -8391,7 +8601,7 @@
           sha256 = "0sjybrcnb2sl33swy3q664vqrparajcl0m455gciiih2j87hwadc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flx-ido";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flx-ido";
           sha256 = "00wcwbvfjbcx8kyap7rl1b6nsgqdwjzlpv6al2cdpdd19rm1vgdc";
           name = "flx-ido";
         };
@@ -8412,7 +8622,7 @@
           sha256 = "19mnx2zm71qrf7qf3mk5kriv5vgq0nl67lj029n63wqd8jcjb5fi";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flycheck";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flycheck";
           sha256 = "045k214dq8bmrai13da6gwdz97a2i998gggxqswqs4g52l1h6hvr";
           name = "flycheck";
         };
@@ -8433,7 +8643,7 @@
           sha256 = "1c3igqfd42dm42kfjm2q2xgr673vws10n9jn2jjlsk4g33brc7h4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flycheck-cask";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flycheck-cask";
           sha256 = "1lq559nyhkpnagncj68h84i3cq85vhdikr534kj018n2zcilsyw7";
           name = "flycheck-cask";
         };
@@ -8446,15 +8656,15 @@
     flycheck-checkbashisms = callPackage ({ emacs, fetchFromGitHub, fetchurl, flycheck, lib, melpaBuild }:
     melpaBuild {
         pname = "flycheck-checkbashisms";
-        version = "1.3";
+        version = "1.4";
         src = fetchFromGitHub {
           owner = "Gnouc";
           repo = "flycheck-checkbashisms";
-          rev = "652c977de277519b07de70d6570082687e39367c";
-          sha256 = "0rvnc574r3fhm85g4n1fn1c4avg0w1x32a4k6fv5v94m5c4331nn";
+          rev = "6acb957a33a21e61764792b80ba4e33e88f2271f";
+          sha256 = "18nhfj0vx8rg2236nb9475s27rhyb34m81i7l6zkhifqba6rb0bb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flycheck-checkbashisms";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flycheck-checkbashisms";
           sha256 = "1rq0ymlr1dl39v0sfyjmdv4pq3q9116cz9wvgpvfgalq8759q5sz";
           name = "flycheck-checkbashisms";
         };
@@ -8475,7 +8685,7 @@
           sha256 = "1i824iyjsg4d786kx5chsb64wlqd8vn2vsrhq6rmdx2x3gzdfcsx";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flycheck-clojure";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flycheck-clojure";
           sha256 = "1b20gcs6fvq9pm4nl2qwsf34sg6wxngdql921q2pyh5n1xsxhm28";
           name = "flycheck-clojure";
         };
@@ -8496,7 +8706,7 @@
           sha256 = "11xc08xld758xx9myqjsiqz8vk3gh4d9c4yswswvky6mrx34c0y5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flycheck-color-mode-line";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flycheck-color-mode-line";
           sha256 = "0hw19nsh5h2l8qbp7brqmml2fhs8a0x850vlvq3qfd7z248gvhrq";
           name = "flycheck-color-mode-line";
         };
@@ -8517,7 +8727,7 @@
           sha256 = "1ap5hgvaccmf2xkfvyp7rqcfjwmiy6mhr6ccgahxm2z0vm51kpyh";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flycheck-dmd-dub";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flycheck-dmd-dub";
           sha256 = "0pg3sf7h6xqv65yqclhlb7fx1mp2w0m3qk4vji6m438kxy6fhzqm";
           name = "flycheck-dmd-dub";
         };
@@ -8538,7 +8748,7 @@
           sha256 = "0j2mvf3zjznwkm8dykcgs1v5sz0i882mrivghxqr3h6n3ni4wag4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flycheck-gometalinter";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flycheck-gometalinter";
           sha256 = "1bnvj5kwgbh0dv989rsjcvmcij1ahwcz0vpr6a8f2p6wwvksw1h2";
           name = "flycheck-gometalinter";
         };
@@ -8559,7 +8769,7 @@
           sha256 = "0143lcn6g46g7skm4r6lqq09s8mr3268rikbzlh65qg80rpg9frj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flycheck-haskell";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flycheck-haskell";
           sha256 = "12lgirz3j6n5ns2ikq4n41z0d33qp1lb5lfz1q11qvpbpn9d0jn7";
           name = "flycheck-haskell";
         };
@@ -8580,7 +8790,7 @@
           sha256 = "136mdg21a8sqxhijsjsvpli7r7sb40nmf80p6gmgb1ghwmhlm8k3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flycheck-hdevtools";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flycheck-hdevtools";
           sha256 = "0ahvai1q4x59ryiyccvqvjisgqbaiahx4gk8ssaxhblhj0sqga93";
           name = "flycheck-hdevtools";
         };
@@ -8601,7 +8811,7 @@
           sha256 = "1pdssw5k88ym5fczllfjv26sp4brlyrywnlzq5baha5pq91h9cb6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flycheck-ledger";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flycheck-ledger";
           sha256 = "0807pd2km4r60wgd6jakscbx63ab22d9kvf1cml0ad8wynsap7jl";
           name = "flycheck-ledger";
         };
@@ -8622,7 +8832,7 @@
           sha256 = "1phfarws2aajkgcl96hqa4ydmb1yncg10q2ldzf8ff6yd6mvk51l";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flycheck-ocaml";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flycheck-ocaml";
           sha256 = "1cv2bb66aql2kj1y1gsl4xji8yrzrq6rd8hxxs5vpfsk47052lf7";
           name = "flycheck-ocaml";
         };
@@ -8643,7 +8853,7 @@
           sha256 = "0aa8cnh9f0f2zr2kkba2kf9djzjnsd51fzj8l578pbj016zdarwd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flycheck-package";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flycheck-package";
           sha256 = "0068kpia17rsgjdmzsjnw0n6x5z9jvfxggxlzkszvwsx73mvcs2d";
           name = "flycheck-package";
         };
@@ -8664,7 +8874,7 @@
           sha256 = "0v23yc8znzjp44lrpfzqb4hc3psad14hsnvqcp8f1yyhgvdx35n8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flycheck-pos-tip";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flycheck-pos-tip";
           sha256 = "09i2jmwj8b915fhyczwdb1j7c551ggbva33avis77ga1s9v3nsf9";
           name = "flycheck-pos-tip";
         };
@@ -8685,7 +8895,7 @@
           sha256 = "0yi2xmk0bxzqmjf9sy3r3gacqw7z1jrf6hwn05zaqqgn7y78z37i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flycheck-status-emoji";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flycheck-status-emoji";
           sha256 = "0p42424b1fsmfcjyl252vhblppmpjwd6br2yqh10fi60wmprvn2p";
           name = "flycheck-status-emoji";
         };
@@ -8706,7 +8916,7 @@
           sha256 = "0azjr5mfb3hnb66m1b2319i035mn5i9qz24y7fj5crhnc9vp8w3s";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flycheck-tip";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flycheck-tip";
           sha256 = "0zab1zknrnsw5xh5pwzzcpz7p40bbywkf9zx99sgsd6b5j1jz656";
           name = "flycheck-tip";
         };
@@ -8727,7 +8937,7 @@
           sha256 = "094alkjrh285qy3sds8dkvxsbnaxnppz1ab0i5r575lyhli9lxia";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flycheck-ycmd";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flycheck-ycmd";
           sha256 = "0m99ssynrqxgzf32d35n17iqyh1lyc6948inxpnwgcb98rfamchv";
           name = "flycheck-ycmd";
         };
@@ -8748,7 +8958,7 @@
           sha256 = "1svj5n7mmzhq03azlv4n33rz0nyqb00qr8ihdbc8hh2xnp63j5rc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flymake-coffee";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flymake-coffee";
           sha256 = "1aig1d4fgjdg31vrg8k43z5hbqiydgfvxi45p1695s3kbdm8pr2d";
           name = "flymake-coffee";
         };
@@ -8769,7 +8979,7 @@
           sha256 = "054ws88fcfz3hf3cha7dvndm52v5n4jc4vzif1lif44xq0iggwqa";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flymake-css";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flymake-css";
           sha256 = "0kqm3wn9symqc9ivnh11gqgq8ql2bhpqvxfm86d8vwm082hd92c5";
           name = "flymake-css";
         };
@@ -8790,7 +9000,7 @@
           sha256 = "1j35k52na02b59yglfb48w6m5qzydvzqfsylb8ax5ks0f287yf0c";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flymake-easy";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flymake-easy";
           sha256 = "19p6s9fllgvs35v167xf624k5dn16l9fnvaqcj9ks162gl9vymn7";
           name = "flymake-easy";
         };
@@ -8811,7 +9021,7 @@
           sha256 = "002s01cymgx4z4l3j2pqirg7899pljdx2hmbz8k6cksdxlymzmkd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flymake-gjshint";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flymake-gjshint";
           sha256 = "19jcd5z4883z3fzlrdn4fzmsvn16f4hfnhgw4vbs5b0ma6a8ka44";
           name = "flymake-gjshint";
         };
@@ -8832,7 +9042,7 @@
           sha256 = "1b3lf5jwan03k7rb97g4bb982dacdwsfdddnwc0inx9gs3qq1zni";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flymake-haml";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flymake-haml";
           sha256 = "0dmdhh12h4xrx6mc0qrwavngk2sx0l4pfqkjjyavabsgcs9wlgp1";
           name = "flymake-haml";
         };
@@ -8853,7 +9063,7 @@
           sha256 = "0k1qc0r0gr7f9l5if2a67cv4k73z5yxd6vxd6l1bqw500y0aajxz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flymake-haskell-multi";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flymake-haskell-multi";
           sha256 = "0cyzmmghwkkv6020s6n436lwymi6dr49i7gkci5n0hw5pdywcaij";
           name = "flymake-haskell-multi";
         };
@@ -8874,7 +9084,7 @@
           sha256 = "1ygg51r4ym4x7h4svizwllsvr72x9np6jvjqpk8ayv3w2fpb9l31";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flymake-hlint";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flymake-hlint";
           sha256 = "0wq1ijhn3ypy31yk8jywl5hnz0r0vlhcxjyznzccwqbdc5vf7b2x";
           name = "flymake-hlint";
         };
@@ -8895,7 +9105,7 @@
           sha256 = "00zkm3wqlss386qd6jiq0siga7c48n5ykh0vf9q5v83rmpd79yri";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flymake-jslint";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flymake-jslint";
           sha256 = "1cq8fni4p0qhigx0qh34ypmcsbnilra1ixgnrn9mgg8x3cvcm4cm";
           name = "flymake-jslint";
         };
@@ -8916,7 +9126,7 @@
           sha256 = "0rzlw80mi39147yqnpzcvw9wvr5svksd3kn6s3w8191f2kc6xzzv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flymake-json";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flymake-json";
           sha256 = "1p5kajiycpqy2id664bs0fb1mbf73a43qqfdi4c57n6j9x7fxp4d";
           name = "flymake-json";
         };
@@ -8937,7 +9147,7 @@
           sha256 = "0ggvmsjj6p6a7cwr2bzhlcf8ab4v6a2bz5djsscd2ryy570p367z";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flymake-less";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flymake-less";
           sha256 = "05k5daphxy94164c73ia7f4l1gv2cmlw8xzs8xnddg7ly22gjhi0";
           name = "flymake-less";
         };
@@ -8958,7 +9168,7 @@
           sha256 = "11r982h5fhjkmm9ld8wfdip0ghinw523nm1w4fmy830g0bbkgkrq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flymake-perlcritic";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flymake-perlcritic";
           sha256 = "0hibnh463wzhvpix7gygpgs04gi6salwjrsjc6d43lxlsn3y1im8";
           name = "flymake-perlcritic";
         };
@@ -8979,7 +9189,7 @@
           sha256 = "0dzyid0av9icp77wv0zcsygpw46z24qibq1ra0iwnkzl3kqvkyzh";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flymake-php";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flymake-php";
           sha256 = "12ds2l5kvs7fz38syp4amasbjkpqd36rlpajnb3xxll0hbk6vffk";
           name = "flymake-php";
         };
@@ -9000,7 +9210,7 @@
           sha256 = "0l8qpcbzfi32h3vy7iwydx3hg2w60x9l3v3rabzjx412m5d00gsh";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flymake-python-pyflakes";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flymake-python-pyflakes";
           sha256 = "0asbjxv03zkbcjayanv13qzbv4z7b6fi0z1j6yv7fl6q9mgvm497";
           name = "flymake-python-pyflakes";
         };
@@ -9021,7 +9231,7 @@
           sha256 = "0d2vmpgr5c2cbpxcqm5x1ckfysbpwcbaa9frcnp2yfp8scvkvqj0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flymake-ruby";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flymake-ruby";
           sha256 = "1shr6d03vx85nmyxnysglzlc1pz0zy3n28nrcmxqgdm02g197bzr";
           name = "flymake-ruby";
         };
@@ -9042,7 +9252,7 @@
           sha256 = "0c74qdgy9c4hv3nyjnbqdzypbg9399vq3p5ngp5lasc7iz6vi0h8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flymake-sass";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flymake-sass";
           sha256 = "0sz6n5r9pdphgvvaljg9zdwj3dqayaxzxmb4s8x4b05c8yx3ba0d";
           name = "flymake-sass";
         };
@@ -9063,7 +9273,7 @@
           sha256 = "0c2lz1p91yhprmlbmp0756d96yiy0w92zf0c9vlp0i9abvd0cvkc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flymake-shell";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flymake-shell";
           sha256 = "13ff4r0k29yqgx8ybxz7hh50cjsadcjb7pd0075s9xcrzia5x63i";
           name = "flymake-shell";
         };
@@ -9084,7 +9294,7 @@
           sha256 = "1g09s57b773nm9xqslzbin5i2h18k55nx00s5nnkvx1qg0n0mzkm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flyspell-lazy";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flyspell-lazy";
           sha256 = "0lzazrhsfh5m7n57dzx0v46d5mg87wpwwkjzf5j9gpv1mc1xfg1y";
           name = "flyspell-lazy";
         };
@@ -9105,7 +9315,7 @@
           sha256 = "1rk7fsill0salrhb4anbf698nd21nxj8pni35brbmv64nj9fhfic";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/flyspell-popup";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/flyspell-popup";
           sha256 = "0wp15ra1ry6xpwal6mb53ixh3f0s4nps0rdyfli7hhaiwbr9bhql";
           name = "flyspell-popup";
         };
@@ -9126,7 +9336,7 @@
           sha256 = "0r2j238iyxnww60xpbxggjmz6y2waayw4m51f0l39hszbhags2cv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fm";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fm";
           sha256 = "118d8fbhlv6i2rsyfqdhi841p96j7q4fab5qdg95ip40wq02dg4f";
           name = "fm";
         };
@@ -9147,7 +9357,7 @@
           sha256 = "0aj5qxzlfxxp7z27fiw9bvir5yi2zj0xzj5kbh17ix4wnhi03bhc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/focus";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/focus";
           sha256 = "0jw26j8npyl3dgsrs7ap2djxmkafn2hl6gfqvi7v76bccs4jkyv8";
           name = "focus";
         };
@@ -9168,7 +9378,7 @@
           sha256 = "1k8z30imlxvqm7lv12kgqdfgc5znxyvl9jxi8j2ymmwlgy11f726";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fold-dwim";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fold-dwim";
           sha256 = "0c9yxx45zlhb1h4ldgkjv7bndwlagpyingaaqn9dcsxidrvp3p5x";
           name = "fold-dwim";
         };
@@ -9189,7 +9399,7 @@
           sha256 = "14jvbkahwvv4wb0s9vp8gqmlpv1d4269j5rsjxn79q5pawjzslxw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fold-dwim-org";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fold-dwim-org";
           sha256 = "0812p351rzvqcfn00k92nfhlg3y772y4z4b9f0xqnpa935y6harn";
           name = "fold-dwim-org";
         };
@@ -9210,7 +9420,7 @@
           sha256 = "1cbabpyp66nl5j8yhyj2jih4mhaljxvjh9ij05clai71z4598ahn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fold-this";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fold-this";
           sha256 = "1iri4a6ixw3q7qr803cj2ik7rvmww1b6ybj5q2pvkf1v25r8655d";
           name = "fold-this";
         };
@@ -9231,7 +9441,7 @@
           sha256 = "1k90w8v5rpswqb8fn1cc8sq5w12gf4sn6say5dhvqd63512b0055";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/font-utils";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/font-utils";
           sha256 = "0k33jdchjkj7j211a23kfp5axg74cfsrrq4axsb1pfp124swh2n5";
           name = "font-utils";
         };
@@ -9252,7 +9462,7 @@
           sha256 = "0qq13jhn9i2ls6n3fbay4i2r0hfs426pkmmif43b87gjxb510irc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fontawesome";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fontawesome";
           sha256 = "07hn4s929xklc74j8s6pd61rxmxw3911dq47wql77vb5pijv6dr3";
           name = "fontawesome";
         };
@@ -9273,7 +9483,7 @@
           sha256 = "1jw888nqmbi9kcd9ycl2fqrmrnqxnmkx72n0b3nf3hp7j956yb21";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/forecast";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/forecast";
           sha256 = "0whag2n1120384w304g0w4bqr7svdxxncdhnz4rznfpxlgiw2rsc";
           name = "forecast";
         };
@@ -9294,7 +9504,7 @@
           sha256 = "199kybf2bvywqfnwr5w893km82829k1j7sp079y6s2601hq8ylw9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/foreman-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/foreman-mode";
           sha256 = "0p3kwbld05wf3dwcv0k6ynz727fiy0ik2srx4js9wvagy57x98kv";
           name = "foreman-mode";
         };
@@ -9315,7 +9525,7 @@
           sha256 = "171jna631b2iqcimfsik9c66gii8nc0zdb58m077w00rn7rcxbh2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/form-feed";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/form-feed";
           sha256 = "1abwjkzi3irw0jwpv3f584zc72my9n8iq8zp5s0354xk6iwrl1rh";
           name = "form-feed";
         };
@@ -9336,7 +9546,7 @@
           sha256 = "0mikksamljps1czacgqavlnzzhgs8s3f8q4jza6v3csf8kgp5zd0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/format-sql";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/format-sql";
           sha256 = "0684xqzs933vj9d3n3lv7afk4gii41kaqykbb05cribaswapsanj";
           name = "format-sql";
         };
@@ -9346,22 +9556,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    fountain-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
+    fountain-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
     melpaBuild {
         pname = "fountain-mode";
-        version = "1.5.0";
+        version = "1.5.1";
         src = fetchFromGitHub {
           owner = "rnkn";
           repo = "fountain-mode";
-          rev = "167238b3cdd5e510300abe3afd02b820f026b501";
-          sha256 = "0yycn339vqglny1bs4c8jsaf85cyj0rzzn8wzsf5k5srh9yivzdq";
+          rev = "a7ba3d78dcffe92105701efbf2630089a068b3da";
+          sha256 = "1187kbw06sv6yirrldbqwi44nfsg4a0rxa8c79p6ld82kcp16kns";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fountain-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fountain-mode";
           sha256 = "1i55gcjy8ycr1ww2fh1a2j0bchx1bsfs0zd6v4cv5zdgy7vw6840";
           name = "fountain-mode";
         };
-        packageRequires = [ s ];
+        packageRequires = [ emacs s ];
         meta = {
           homepage = "http://melpa.org/#/fountain-mode";
           license = lib.licenses.free;
@@ -9378,7 +9588,7 @@
           sha256 = "1vznkbly0lyh5kri9lcgy309ws96q3d5m1lghck9l8ain8hphhqz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/frame-restore";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/frame-restore";
           sha256 = "0b321iyf57nkrm6xv8d1aydivrdapdgng35zcnrg298ws2naysvm";
           name = "frame-restore";
         };
@@ -9399,7 +9609,7 @@
           sha256 = "1c3yx9j3q8fkfiay4nzcabsq9i4ydqf6vxk8vv80h78gg9afrzrj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fringe-helper";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fringe-helper";
           sha256 = "1vki5jd8jfrlrjcfd12gisgk12y20q3943i2qjgg4qvcj9k28cbv";
           name = "fringe-helper";
         };
@@ -9412,15 +9622,15 @@
     fsharp-mode = callPackage ({ auto-complete, dash, fetchFromGitHub, fetchurl, lib, melpaBuild, popup, pos-tip, s }:
     melpaBuild {
         pname = "fsharp-mode";
-        version = "1.7.2";
+        version = "1.7.3";
         src = fetchFromGitHub {
           owner = "rneatherway";
           repo = "emacs-fsharp-mode-bin";
-          rev = "9169baa9290e92d2e0ccc3cfd9c2a423136eb251";
-          sha256 = "1ckq45szq8lfg4spmvrj53s3p1hfl7x8k86cgq254gbs7kq8w7p2";
+          rev = "b2a70da8ba3c573e02c6a9951ef5f0089cec6c78";
+          sha256 = "115xl18nsg2j9sbp3qqzrjfpnzczk1zmrwrfrpqjq3jmv21ilsv3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fsharp-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fsharp-mode";
           sha256 = "07pkj30cawh0diqhrp3jkshgsd0i3y34rdnjb4af8mr7dsbsxb6z";
           name = "fsharp-mode";
         };
@@ -9439,7 +9649,7 @@
           sha256 = "b348e285923e480fe696f888783c95becb392a6e05abc553d8be649987c7d190";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fuel";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fuel";
           sha256 = "0m24p2788r4xzm56hm9kmpzcskwh82vgbs3hqfb9xygpl4isp756";
           name = "fuel";
         };
@@ -9460,7 +9670,7 @@
           sha256 = "0c3w3xs2jbdqgsqw0qmdbwii6p395qfznird4gg0hfr7lby2kmjq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/full-ack";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/full-ack";
           sha256 = "09ikhyhpvkcl6yl6pa4abnw6i7yfsx5jkmzypib94w7khikvb309";
           name = "full-ack";
         };
@@ -9473,15 +9683,15 @@
     fullframe = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "fullframe";
-        version = "0.2.1";
+        version = "0.3.0";
         src = fetchFromGitHub {
           owner = "tomterl";
           repo = "fullframe";
-          rev = "6ce5342191a6837500bcb6d6026103eb53bb6752";
-          sha256 = "0y11yxlfbfb6f20rljpz54crwrmi9yljavfwmh33bq54fck296k7";
+          rev = "684f28fcb306d0232c2a7840f3fe4c933382729c";
+          sha256 = "1cjplkcsq4wlw1ixsfxih2xcx43wgzvmznxmkynqsgvn2f4w4g1f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fullframe";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fullframe";
           sha256 = "08sh8lmb6g8asv28fcb36ilcn0ka4fc6ka0pnslid0h4c32fxp2a";
           name = "fullframe";
         };
@@ -9502,7 +9712,7 @@
           sha256 = "0m7fcw0cswypiwi5abg6vhw7a3agx9vhp10flbbbji6lblb0fya8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/function-args";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/function-args";
           sha256 = "13yfscr993pll5yg019v9dwy71g123a166w114n2m78h0rbnzdak";
           name = "function-args";
         };
@@ -9523,7 +9733,7 @@
           sha256 = "1g7my9ha5cnwg3pjwa86wncg5gphv18xpnpmj3xc3vg7z5m45rss";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fuzzy";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fuzzy";
           sha256 = "1hwdh9bx4g4vzzyc20vdwxsii611za37kc9ik40kwjjk62qmll8h";
           name = "fuzzy";
         };
@@ -9544,7 +9754,7 @@
           sha256 = "0c3g0yfclczdh6nxmg9lljjf288zibqy51bhh1b1cgdmxcbpg8bv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fvwm-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fvwm-mode";
           sha256 = "07y32cnp4qfhncp7s24gmlxljdrj5miicinfaf4gc7hihb4bkrkb";
           name = "fvwm-mode";
         };
@@ -9565,7 +9775,7 @@
           sha256 = "08qnyr945938hwjg1ypkf2x4mfxbh3bbf1xrgz1rk2ddrfv7hmkm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fwb-cmds";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fwb-cmds";
           sha256 = "0wnjvi0v0l2h1mhwlsk2d8ggwh3nk7pks48l55gp18nmj00jxycx";
           name = "fwb-cmds";
         };
@@ -9578,15 +9788,15 @@
     fxrd-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
     melpaBuild {
         pname = "fxrd-mode";
-        version = "0.3";
+        version = "0.4";
         src = fetchFromGitHub {
           owner = "msherry";
           repo = "fxrd-mode";
-          rev = "122afe6b7edeff117edf92dab1ba011ae71a5910";
-          sha256 = "003iqzwzf950dvn6q901y0jjadz7hqaafa9wrhzplay3kjnkjj9b";
+          rev = "7b49c7bec2ed4a579fa0234555667377e8ba0f53";
+          sha256 = "1sk2z71xfi4wqb7ap8jvad8cbzdbilwzqx9vy45zmgx1jh7g4ba9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fxrd-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fxrd-mode";
           sha256 = "17zimg64lqc1yh9gnp5izshkvviz996aym7q6n9p61a4kqq37z4r";
           name = "fxrd-mode";
         };
@@ -9607,7 +9817,7 @@
           sha256 = "0rjn4z7ssl1jy0brvsci44mhpig3zkdbcj8gcylzznhz0qfk1ljj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/fzf";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/fzf";
           sha256 = "0jjzm1gq85fx1gmj6nqaijnjws9bm8hmk40ws3x7fmsp41qq5py0";
           name = "fzf";
         };
@@ -9628,7 +9838,7 @@
           sha256 = "1q9bz294bc6bplwfrfzsczh444v9152wv7zm2l1pcpwv8n8581p6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gather";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gather";
           sha256 = "1f0cqqp1a7w8g1pfvzxxb0hjrxq4m79a4n85dncqj2xhjxrkm0xk";
           name = "gather";
         };
@@ -9649,7 +9859,7 @@
           sha256 = "1667zln7bav0bdhrc4b5z36n8rn36xvwh4y9ffgns67zfgwi64kk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/geiser";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/geiser";
           sha256 = "067rrjvyn5sz60w9h7qn542d9iycm2q4ryvx3n6xlard0dky5596";
           name = "geiser";
         };
@@ -9670,7 +9880,7 @@
           sha256 = "08cw1fa25kbhbq2sp1cpn90bz38i9hjfdj93xf6wvki55b52s0nn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/genrnc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/genrnc";
           sha256 = "1nwbdscl0yh9j1n421can93m6s8j9dkyb3xmpampr6x528g6z0lm";
           name = "genrnc";
         };
@@ -9691,7 +9901,7 @@
           sha256 = "0344w4sbd6wlgl13j163v0hzjw9nwhvpr5s7658xsdd90wp4i701";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/german-holidays";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/german-holidays";
           sha256 = "0fgrxdgyl6va6axjc5l4sp90pyqaz5zha1g73xyhbxblshm5dwxn";
           name = "german-holidays";
         };
@@ -9712,7 +9922,7 @@
           sha256 = "1m9ra9qp7bgf6anfqyn56n3xa9a25ran10k9wd355qknd5skq1zz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ggo-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ggo-mode";
           sha256 = "1403x530n90jlfz3lq2vfiqx84cxsrhgs6hhmniq960cjj31q35p";
           name = "ggo-mode";
         };
@@ -9733,7 +9943,7 @@
           sha256 = "1qjh7av046ax4240iw40hv5fc0k23c36my9hili7fp4y2ak99l8n";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ggtags";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ggtags";
           sha256 = "1cmry4knxbx9257ivhfxsd09z07z3g3wjihi99nrwmhb9h4mpqyw";
           name = "ggtags";
         };
@@ -9754,7 +9964,7 @@
           sha256 = "0a5v91k9gm9vv15d3m8czicv8n39f0hvqhcr6lfw0w82n26xwsms";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gh";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gh";
           sha256 = "1141l8pas3m755yzby4zsan7p81nbnlch3kj1zh69qzjpgqp30c0";
           name = "gh";
         };
@@ -9767,15 +9977,15 @@
     ghc = callPackage ({ fetchFromGitHub, fetchurl, haskell-mode, lib, melpaBuild }:
     melpaBuild {
         pname = "ghc";
-        version = "5.4.0.0";
+        version = "5.5.0.0";
         src = fetchFromGitHub {
           owner = "kazu-yamamoto";
           repo = "ghc-mod";
-          rev = "edfce196107dbd43958d72c174ad66e4a7d30643";
-          sha256 = "1wiwkp4qcgdwnr4h1bn27hh1kyl2wjlrz2bbfv638y9gzc06rgch";
+          rev = "bd021e42b36e6cf3bc2ca3ef908299ba97ceeee5";
+          sha256 = "1m5q2s9nxm0m18njaxzryjly8rl3m598r94nn53xpazd4i5ln8cg";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ghc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ghc";
           sha256 = "0xqriwggd1ahla5aff7k0j4admx6q18rmqsx3ipn4nfk86wrhb8g";
           name = "ghc";
         };
@@ -9796,7 +10006,7 @@
           sha256 = "1ywwyc2kz1c1s26c412nmzh55cinh84cfiazyyi3jsy5zzwhrbhi";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ghc-imported-from";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ghc-imported-from";
           sha256 = "10cxz4c341lknyz4ns63bri00mya39278xav12c73if03llsyzy5";
           name = "ghc-imported-from";
         };
@@ -9817,7 +10027,7 @@
           sha256 = "0q3ps5f6mr9hyf6nq1wshcm1z6a5yhskqd7dbbwq5dm78552z6z8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gist";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gist";
           sha256 = "053fl8aw0ram9wsabzvmlm5w2klwd2pgcn2w9r1yqfs4xqja5sd3";
           name = "gist";
         };
@@ -9838,7 +10048,7 @@
           sha256 = "06ws3x5qa92drmn6rcp502jk2yil6q9gkzdmb2gww9gb2g695wl5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/git";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/git";
           sha256 = "1nd2yvfgin13m368gjn7xah99glspnam4g4fh348x4makxcaw8w5";
           name = "git";
         };
@@ -9859,7 +10069,7 @@
           sha256 = "0psmr7749nzxln4b500sl3vrf24x3qijp12ir0i5z4x25k72hrlh";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/git-auto-commit-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/git-auto-commit-mode";
           sha256 = "0nf4n63xnzcsizjk1yl8qvqj9wjdqy57kvn6r736xvsxwzd44xgl";
           name = "git-auto-commit-mode";
         };
@@ -9880,7 +10090,7 @@
           sha256 = "0a3ws852ypi34ash39srkwzkfish4n3c5lma10d9xzddjrwapgj9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/git-command";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/git-command";
           sha256 = "1hsxak63y6648n0jkzl5ajxg45w84qq8vljvjh0bmwfrbb67kwbg";
           name = "git-command";
         };
@@ -9893,15 +10103,15 @@
     git-commit = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, with-editor }:
     melpaBuild {
         pname = "git-commit";
-        version = "2.4.0";
+        version = "2.5.0";
         src = fetchFromGitHub {
           owner = "magit";
           repo = "magit";
-          rev = "2e757a8c919b53edddb186e36e055e011e3b0ab3";
-          sha256 = "0hklwwzi2gqywysxn16ps1fvn48max52cpk2nx7r4df4h52yk6wn";
+          rev = "a3747edc8a4cddc408f7718a3371b46a4b610744";
+          sha256 = "0dydm0gj6jbybi5nkqrpi5bic5yxhz0p5k5gayqzqzmnb1fhl247";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/git-commit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/git-commit";
           sha256 = "1i7122fydqga68cilgzir80xfq77hnrw75zrvn52mjymfli6aza2";
           name = "git-commit";
         };
@@ -9914,15 +10124,15 @@
     git-gutter = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "git-gutter";
-        version = "0.85";
+        version = "0.87";
         src = fetchFromGitHub {
           owner = "syohex";
           repo = "emacs-git-gutter";
-          rev = "febe69d909beb407d07dfc1b273ae7b7719fdd7c";
-          sha256 = "1721h4i185wj9nxkb19cnbwk5fwsajaqr54qq9xb669mm4pjn3ra";
+          rev = "c08ec4fc7fedf4e04e278c5d8984b0ecdf87fe2b";
+          sha256 = "0n02nss7gp0m898g7zw4rkj2kzrdiwp6mli0753p1fqph28j0gvm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/git-gutter";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/git-gutter";
           sha256 = "12yjl9hsd72dwzl42hdcmjfdbxyi356jcq0kz8k7jvcsn57z4p2k";
           name = "git-gutter";
         };
@@ -9943,7 +10153,7 @@
           sha256 = "1cw5x1w14lxy8mqpxdrd9brgps0nig2prjjjda4a19wfsvy3clmv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/git-gutter-fringe";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/git-gutter-fringe";
           sha256 = "14wyiyyi2rram2sz3habvmygy5a5m2jfi6x9fqcyfr3vpcjn1k4i";
           name = "git-gutter-fringe";
         };
@@ -9964,7 +10174,7 @@
           sha256 = "1c7ijbpa7xw831k55cdm2gl8r597rxnp22jcmqnfpwqkqmk48ln9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/git-gutter-fringe+";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/git-gutter-fringe+";
           sha256 = "1zkjb8p08cq2nqskn79rjszlhp9mrblplgamgi66yskz8qb1bgcc";
           name = "git-gutter-fringe-plus";
         };
@@ -9985,7 +10195,7 @@
           sha256 = "101hracd77mici778x3ixwrcicd6fqkcr9z76kapkr0dq5z42yjb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/git-gutter+";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/git-gutter+";
           sha256 = "1w78p5cz6kyl9kmndgvwnfrs80ha707s8952hycrihgfb6lixmp0";
           name = "git-gutter-plus";
         };
@@ -9998,15 +10208,15 @@
     git-lens = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "git-lens";
-        version = "0.4";
+        version = "0.4.1";
         src = fetchFromGitHub {
           owner = "pidu";
           repo = "git-lens";
-          rev = "1feacc217c58fd4a41f9378eb09658f664036509";
-          sha256 = "0s1adgsigaq47vx8bfbmr5z8jq9y230ykwbw0jqka61n4ibg9ish";
+          rev = "be62df785ae14fa8652fe2cdd342d3256f8c0933";
+          sha256 = "02p73q0kl9z44b9a2bhqg03mkqx6gf61n88qlwwg4420dxrf7sbc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/git-lens";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/git-lens";
           sha256 = "1vv3s89vk5ncinqh2f724z0qbbzp8g4y5y670ryy56w1l6v2acfb";
           name = "git-lens";
         };
@@ -10027,7 +10237,7 @@
           sha256 = "171w8vx1r2v9yclnlk3mwbfaxhg0kbvk575jvi6vr9shpjqnrb0z";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/git-link";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/git-link";
           sha256 = "1vqabnmdw8pxd84c15ghh1rnglwb5i4zxicvpkg1ci8xalayn1c7";
           name = "git-link";
         };
@@ -10048,7 +10258,7 @@
           sha256 = "139yivbxdpmv8j6qz406769b040nbmj3j8r28n9gqy54zlwblgv8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/git-messenger";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/git-messenger";
           sha256 = "1rnqsv389why13cy6462vyq12qc2zk58p01m3hsazp1gpfw2hfzn";
           name = "git-messenger";
         };
@@ -10069,7 +10279,7 @@
           sha256 = "1hyq3il03cm6apfawps60r4km8r6pw0vphzba30smsqfk50z3ya3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/git-ps1-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/git-ps1-mode";
           sha256 = "15gswi9s0m3hrsl1qqyjnjgbglsai95klbdp51h3pcq7zj22wkn6";
           name = "git-ps1-mode";
         };
@@ -10082,15 +10292,15 @@
     git-timemachine = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "git-timemachine";
-        version = "2.8";
+        version = "3.0";
         src = fetchFromGitHub {
           owner = "pidu";
           repo = "git-timemachine";
-          rev = "87804bbf6e633f42a48567f21bca52019632f64f";
-          sha256 = "1fq9lzn8vvjh0ayl5h0lywxr6zfg3k41xa66vqrf1hdan3a7ax1j";
+          rev = "7c66a878ee89861dcd59b5dfc598520daa156052";
+          sha256 = "1brz9dc7ngywndlxbqbi3pbjbjydgqc9bjzf05lgx0pzr1ppc3w3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/git-timemachine";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/git-timemachine";
           sha256 = "0nhl3g31r4a8j7rp5kbh17ixi16w32h80bc92vvjj3dlmk996nzq";
           name = "git-timemachine";
         };
@@ -10111,7 +10321,7 @@
           sha256 = "0igawn43i81icshimj5agv33ab120hd6182knlrn3i46p7lcs3lx";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/git-wip-timemachine";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/git-wip-timemachine";
           sha256 = "02fi51k6l23cgnwjp507ylkiwb8azmnhc0fips68nwn9dghzp6dw";
           name = "git-wip-timemachine";
         };
@@ -10132,7 +10342,7 @@
           sha256 = "1ipr51v7nhbbgxbbz0fp3i78ypp73kyxgc4ni8nnr7yirjhsksfd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gitattributes-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gitattributes-mode";
           sha256 = "1gjs0pjh6ap0h54savamzx94lq6vqrg58jxqaq5n5qplrbg15a6x";
           name = "gitattributes-mode";
         };
@@ -10153,7 +10363,7 @@
           sha256 = "0j0w6ywhiapmx7dk20yw3zgf8803kmccnjsr664am3g85kbb644v";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gitconfig";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gitconfig";
           sha256 = "126znl1c4vwgskj7ka9id8v2bdrdn5nkyx3mmc6cz9ylc27ainm7";
           name = "gitconfig";
         };
@@ -10174,7 +10384,7 @@
           sha256 = "1ipr51v7nhbbgxbbz0fp3i78ypp73kyxgc4ni8nnr7yirjhsksfd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gitconfig-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gitconfig-mode";
           sha256 = "0hqky40kcgxdnghnf56gpi0xp7ik45ssia1x84v0mvfwqc50dgn1";
           name = "gitconfig-mode";
         };
@@ -10195,7 +10405,7 @@
           sha256 = "07vgnmfn0kbg3h3vhf3xk443yi1b55761x881xlmw9sr9nraa578";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/github-browse-file";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/github-browse-file";
           sha256 = "03xvgxlw7wmfby898din7dfcg87ihahkhlav1n7qklw6qi7skjcr";
           name = "github-browse-file";
         };
@@ -10216,7 +10426,7 @@
           sha256 = "18c169nxvdl7iv18pyqx690ldg6pkc8njaxdg1cww6ykqzqnfxh7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/github-clone";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/github-clone";
           sha256 = "0ffrm4lmcj3d9kx3g2d5xbiih7hn4frs0prjrvcjq8acvsbc50q9";
           name = "github-clone";
         };
@@ -10237,7 +10447,7 @@
           sha256 = "1ipr51v7nhbbgxbbz0fp3i78ypp73kyxgc4ni8nnr7yirjhsksfd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gitignore-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gitignore-mode";
           sha256 = "1i98ribmnxr4hwphd95f9hcfm5wfwgdbcxw3g0w17ws7z0ir61mn";
           name = "gitignore-mode";
         };
@@ -10258,7 +10468,7 @@
           sha256 = "1hc7j3gwljb1wk2727f66m3f7ga4icbklp54vlm0vf2bmii1ynil";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gitlab";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gitlab";
           sha256 = "0vxsqfnipgapnd2ijvdnkspk68dlnki3pkpkzg2h6hyazmzrsqnq";
           name = "gitlab";
         };
@@ -10279,7 +10489,7 @@
           sha256 = "0j3pay3gd1wdnpc853gy5j68hbavrwy6cc2bgmd12ag29xki3hcg";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gmail-message-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gmail-message-mode";
           sha256 = "0py0i7b893ihb8l1hmk3jfl0xil450znadcd18q7svr3zl2m0gkk";
           name = "gmail-message-mode";
         };
@@ -10300,7 +10510,7 @@
           sha256 = "0p6n52m3y56nx7chwvmnslrnwc0xmh4fmmlkbkfz9n58hlmw8x1x";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gmail2bbdb";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gmail2bbdb";
           sha256 = "03jhrk4vpjim3ybzjxy7s9r1cgjysj9vlc4criz5k0w7vqz3r28j";
           name = "gmail2bbdb";
         };
@@ -10321,7 +10531,7 @@
           sha256 = "0x0a94bfkk72kqyr5m6arx450qsg1axmp5r0c4r9m84z8j08r4v1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gmpl-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gmpl-mode";
           sha256 = "1f60xim8h85jmqpvgfg402ff8mjd66gla8fa0cwi7l18ijnjblpz";
           name = "gmpl-mode";
         };
@@ -10342,7 +10552,7 @@
           sha256 = "160qm8xf0yghygb52p8cykhb5vpg9ww3gjprcdkcxplr4b230nnc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gnome-calendar";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gnome-calendar";
           sha256 = "00clamlm5b42zqggxywdqrf6s2dnsxir5rpd8mjpyc502kqmsfn6";
           name = "gnome-calendar";
         };
@@ -10363,7 +10573,7 @@
           sha256 = "1nvyjjjydrimpxy4cpg90si7sr8lmldbhlcm2mx8npklp9pn5y3a";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gntp";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gntp";
           sha256 = "1ywj3p082g54dcpy8q4jnkqfr12npikx8yz14r0njxdlr0janh4f";
           name = "gntp";
         };
@@ -10384,7 +10594,7 @@
           sha256 = "0bwri3cvm2vr27kyqkrddm28fs08axnd4nm9amfgp54xp20bn4yn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gnuplot";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gnuplot";
           sha256 = "06c5gqf02fkra8c52xck1lqvf4yg45zfibyf9zqmnbwk7p2jxrds";
           name = "gnuplot";
         };
@@ -10405,7 +10615,7 @@
           sha256 = "08j8x0iaz5s9q0b68d8h3153w0z6vak5l8qgw3dd1drz5p9xnvyw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gnus-desktop-notify";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gnus-desktop-notify";
           sha256 = "0hf2dszk5d7vn80bm0msaqv7iji384n85dxgw8ng64c0f9f6752b";
           name = "gnus-desktop-notify";
         };
@@ -10426,7 +10636,7 @@
           sha256 = "1i3f67x2l9l5c5agspbkxr2mmh3rpq3009d8yzh6r1lih0b4hril";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gnus-x-gm-raw";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gnus-x-gm-raw";
           sha256 = "1a5iccghzqmcndql2bppvr48535sf6jbvc83iypr1031z1b5k4wg";
           name = "gnus-x-gm-raw";
         };
@@ -10447,7 +10657,7 @@
           sha256 = "03snnra31b5j6iy94gql240vhkynbjql9b4b5j8bsqp9inmbsia3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/go-autocomplete";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/go-autocomplete";
           sha256 = "1ldsq81a167dk2r2mvzyp3v3j2mxc4l9p6b12i7pv8zrjlkhma5a";
           name = "go-autocomplete";
         };
@@ -10468,7 +10678,7 @@
           sha256 = "05yc0nylg3457an5j7yp3x23157j0hbi21qhcpgsa01144mwnwln";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/go-direx";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/go-direx";
           sha256 = "0dq5d7fsld4hww8fl68c18qp6fl3781dqqwd98cg68bihw2wwni7";
           name = "go-direx";
         };
@@ -10489,7 +10699,7 @@
           sha256 = "0ha07nhd2g43l84r1r5dz6c8m3fmmn4bx5mhvi6as33achhip7bn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/go-eldoc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/go-eldoc";
           sha256 = "1k115dirfqxdnb6hdzlw41xdy2dxp38g3vq5wlvslqggha7gzhkk";
           name = "go-eldoc";
         };
@@ -10510,7 +10720,7 @@
           sha256 = "1fm6xd3vsi8mqh0idddjpfxlsmz1ljmjppw3qkxl1vr0qz3598k3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/go-errcheck";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/go-errcheck";
           sha256 = "11a75h32cd5h5xjv30x83k60s49k9fhgis31358q46y2gbvqp5bs";
           name = "go-errcheck";
         };
@@ -10531,7 +10741,7 @@
           sha256 = "1qqsck11v3ki18qld7hrb7dis60c2ylmq15s7srsppzwil8wm3fx";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/go-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/go-mode";
           sha256 = "1852zjxandmq0cpbf7m56ar3rbdi7bx613gdgsf1bg8hsdvkgzfx";
           name = "go-mode";
         };
@@ -10552,7 +10762,7 @@
           sha256 = "1a6vg2vwgnafb61pwrd837fwlq5gs80wawbzjsnykawnmcaag8pm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/go-scratch";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/go-scratch";
           sha256 = "11ahvmxbh67wa39cymymxmcpkq0kcn5jz0rrvazjy2p1hx3x1ma5";
           name = "go-scratch";
         };
@@ -10573,7 +10783,7 @@
           sha256 = "00igv83hiyx7x3pf2grmjpd379brn33fm85f05k104mkkrhg99nm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/golden-ratio";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/golden-ratio";
           sha256 = "15fkrv0sgpzmnw2h4fp2gb83d8s42khkfq1h76l241njjayk1f81";
           name = "golden-ratio";
         };
@@ -10594,7 +10804,7 @@
           sha256 = "0j31062zfqmcd0zsbp19f3h7gq7dn78sg4xf2x838sr9421x6w8x";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/google-this";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/google-this";
           sha256 = "0hg9y1b03aiamyn3mam3hyxmxy21wygxrnrww91zcbwlzgp4dd2c";
           name = "google-this";
         };
@@ -10615,7 +10825,7 @@
           sha256 = "0hvxyqkxv5hfsa9sv71m7d98g25a1xc962r961nw6vmbvsf64z6b";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/google-translate";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/google-translate";
           sha256 = "1crgzdd32mk6hrawdypg496dwh51wzwfb5wqw4a2j5l8y958xf47";
           name = "google-translate";
         };
@@ -10628,15 +10838,15 @@
     gotest = callPackage ({ emacs, f, fetchFromGitHub, fetchurl, go-mode, lib, melpaBuild, s }:
     melpaBuild {
         pname = "gotest";
-        version = "0.9.0";
+        version = "0.10.0";
         src = fetchFromGitHub {
           owner = "nlamirault";
           repo = "gotest.el";
-          rev = "ab0da939aad5cec301126c59b7718cd3158b3233";
-          sha256 = "1b6zn1fmqvfb7bcpmhzkgcy5003dl22w3f293arlsd1xkbjgkxa2";
+          rev = "57f894e68b47352aeacaf0d9c61039b24ba42918";
+          sha256 = "0vf42j9jpa75879pxb1h7qgflcrrg78dgq5lg8v0sbpy7z86zaxr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gotest";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gotest";
           sha256 = "1kan3gykhci33jgg67jjiiz7rqlz5mpxp8sh6mb0n6kpfmgb4ly9";
           name = "gotest";
         };
@@ -10657,7 +10867,7 @@
           sha256 = "0pxzi56lw9ry91f70hjnvrsbyhcaqknlwicjjbhf6rhv57fplw8h";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gotham-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gotham-theme";
           sha256 = "0jars6rvf7hkyf71vq06mqki1r840i1dvv43dissqjg5i4lr79cl";
           name = "gotham-theme";
         };
@@ -10678,7 +10888,7 @@
           sha256 = "188q7jr1y872as3w32m8lf6vwl2by1ibgdk6zk7dhpcjwd0ik7x7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/goto-gem";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/goto-gem";
           sha256 = "06vy9m01qccvahxr5xn0plzw9knl5ig7gi5q5r1smfx92bmzkg3a";
           name = "goto-gem";
         };
@@ -10699,7 +10909,7 @@
           sha256 = "1f0zlvva7d7iza1v79yjp0bm7vd011q4cy14g1saryll32z115z5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/goto-last-change";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/goto-last-change";
           sha256 = "1yl9p95ls04bkmf4d6az72pycp27bv7q7wxxzvj8sj97bgwvwajx";
           name = "goto-last-change";
         };
@@ -10720,7 +10930,7 @@
           sha256 = "0k86lrb55d701nj6pvlw3kjp1dcd3lzfya0hv6q56c529y69d782";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gradle-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gradle-mode";
           sha256 = "0lx9qi93wmiy9pxjxqp68scbcb4bx88b6jiqk3y8jg5cajizh24g";
           name = "gradle-mode";
         };
@@ -10741,7 +10951,7 @@
           sha256 = "1rv6klh59y70shc7kwdzlksdzmy0881ss49c0h5m93cn5pd6aj1l";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/grails-projectile-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/grails-projectile-mode";
           sha256 = "0dy8v2mila7ccvb7j5jlfkhfjsjfk3bm3rcy84m0rgbqjai67amn";
           name = "grails-projectile-mode";
         };
@@ -10762,7 +10972,7 @@
           sha256 = "1202fwwwdr74q6s5jv1n0mvmq4n9mra85l14hdhwh2kks513s6vs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/grandshell-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/grandshell-theme";
           sha256 = "1mnnjsw1kx40b6ws8wmk25fz9rq8rd70xia9cjpwdfkg7kh8xvsa";
           name = "grandshell-theme";
         };
@@ -10783,7 +10993,7 @@
           sha256 = "1f34bhjxmbf2jjrkpdvqg2gwp83ka6d5vrxmsxdl3r57yc6rbrwa";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/graphene";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/graphene";
           sha256 = "1wz3rvd8b7gx5d0k7yi4dd69ax5bybcm10vdc7xp4yn296lmyl9k";
           name = "graphene";
         };
@@ -10816,7 +11026,7 @@
           sha256 = "1bidfn4x5lb6dylhadyf05g4l2k7jg83mi058cmv76av1glawk17";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/graphene-meta-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/graphene-meta-theme";
           sha256 = "1cqdr93lccdpxkzgap3r3qc92dh8vqgdlnxvqkw7lrcbs31fvf3q";
           name = "graphene-meta-theme";
         };
@@ -10837,7 +11047,7 @@
           sha256 = "1zk664ilyz14p11csmqgzs73gx08hy32h3pnyymzqkavmgb6h3s0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/graphviz-dot-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/graphviz-dot-mode";
           sha256 = "04rkynsrsk6w4sxn1pc0b9b6pij1p7yraywbrk7qvv05fv69kri2";
           name = "graphviz-dot-mode";
         };
@@ -10858,7 +11068,7 @@
           sha256 = "0xcj1kqzgxifhrhpl9j2nfpnkd6213ix5z7f97269v3inpzaiyf5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/grapnel";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/grapnel";
           sha256 = "019cdx1wdx8sc2ibqwgp1akgckzxxvrayyp2sv806gha0kn6yf6r";
           name = "grapnel";
         };
@@ -10878,7 +11088,7 @@
           sha256 = "0djv2ps2ahw9b1b5i45hgy7l7cch7cgh7rzq601c0r6vi7gm2ac5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/grass-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/grass-mode";
           sha256 = "1lq6bk4bwgcy4ra3d9rlca3fk87ydg7xnnqcqjg0pw4m9xnr3f7v";
           name = "grass-mode";
         };
@@ -10897,7 +11107,7 @@
           sha256 = "0rqpgc50z86j4waijfm6kw4zjmzqfii6nnvyix4rkd4y3ryny1x2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/grin";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/grin";
           sha256 = "0mvzwmws5pi6hpzgkc43fjxs98ngkr0jvqbclza2jbbqawifzzbk";
           name = "grin";
         };
@@ -10918,7 +11128,7 @@
           sha256 = "1bq73kcx744xnlm2yvccrzlbyx91c492sg7blx2a9z643v3gg1zs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/grizzl";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/grizzl";
           sha256 = "1klds0w9qrsgfppq105qr69c26zi91y575db2hxr6h9vypf2rq24";
           name = "grizzl";
         };
@@ -10939,7 +11149,7 @@
           sha256 = "14h0rcd3nkw3pmx8jwip20p6rzl9qdkip5g52gfjjbqfvaffsrkd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gruber-darker-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gruber-darker-theme";
           sha256 = "0vn4msixb77xj6p5mlfchjyyjhzah0lcmp0z82s8849zd194fxqi";
           name = "gruber-darker-theme";
         };
@@ -10960,7 +11170,7 @@
           sha256 = "0zpmhjwj64s72iv3dgsy07pfh20f25ngsy3pszmlrfkxk0926d8k";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/grunt";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/grunt";
           sha256 = "1qdzqcrff9x97kyy0d4j636d5i751qja10liw8i0lf4lk6n0lywz";
           name = "grunt";
         };
@@ -10981,7 +11191,7 @@
           sha256 = "1dfd22629gz0c8r4wplvbn0n7bm20549mg5chq289s826ca0kxqk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/gscholar-bibtex";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/gscholar-bibtex";
           sha256 = "0d41gr9amf9vdn9pl9lamhp2swqllxslv9r3wsgzqvjl7zayd1az";
           name = "gscholar-bibtex";
         };
@@ -11002,7 +11212,7 @@
           sha256 = "1bmcvn8a7g9ahpv2fww673hx9pa7nnrj9kpljq65azf61vq2an2g";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/guide-key";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/guide-key";
           sha256 = "0zjrdvppcg8b2k6hfdj45rswc1ks9xgimcr2yvgpc8prrwk1yjsf";
           name = "guide-key";
         };
@@ -11023,7 +11233,7 @@
           sha256 = "040mcfhj2gggp8w1pgip7rxb1bnb23rxlm02wl6x1qv5i0q7g5x3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/guide-key-tip";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/guide-key-tip";
           sha256 = "0h2vkkbxq361dkn6irm1v19qj7bkhxcjljiksd5wwlq5zsq6bd06";
           name = "guide-key-tip";
         };
@@ -11044,7 +11254,7 @@
           sha256 = "1y46qd9cgkfb0wp2cvksjncyp77hd2jnr4bm4zafqirc3qhbysx0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/guru-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/guru-mode";
           sha256 = "0j25nxs3ndybq1ik36qyqdprmhav4ba8ny7v2z61s23id8hz3xjs";
           name = "guru-mode";
         };
@@ -11065,7 +11275,7 @@
           sha256 = "1ffk39lnmg9gfffkaj595p768d1p99q6sqym5g5ch6fmi6cx3a84";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/hackernews";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/hackernews";
           sha256 = "1x1jf5gkhmpiby5rmy0sziywh6c1f1n0p4f6dlz6ifbwns7har6a";
           name = "hackernews";
         };
@@ -11086,7 +11296,7 @@
           sha256 = "0d3xmagl18pas19zbpg27j0lmdiry23df48z4vkjsrcllqg25v5g";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ham-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ham-mode";
           sha256 = "000qrdby7d6zmp5066vs4gjlc9ik0ybrgcwzcbfgxb16w1g9xpmz";
           name = "ham-mode";
         };
@@ -11107,7 +11317,7 @@
           sha256 = "0fmr7ji8x5ki9fzybpbg3xbhzws6n7ffk7d0zf9jl1x3jd8d6988";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/haml-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/haml-mode";
           sha256 = "0ih0m7zr6kgn6zd45zbp1jgs1ydc5i5gmq6l080wma83v5w1436f";
           name = "haml-mode";
         };
@@ -11128,7 +11338,7 @@
           sha256 = "08l6p9n2ggg4filad1k663qc2gjgfbia4knnnif4sw7h92yb31jl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/hardcore-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/hardcore-mode";
           sha256 = "1bgi1acpw4z7i03d0i8mrd2hpjn6hyvkdsk0ks9q380yp9mqmiwd";
           name = "hardcore-mode";
         };
@@ -11149,7 +11359,7 @@
           sha256 = "0mbdnsm903s380ajjgjjqa0m4mxsddzqfjdafrngy0pxgs16iv1f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/hardhat";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/hardhat";
           sha256 = "16pdbpm647ag9cadmdm75nwwyzrqsd9y1b4zgkl3pg669mi5vl5z";
           name = "hardhat";
         };
@@ -11170,7 +11380,7 @@
           sha256 = "1qgqsy7wnqyzkc3b0wixxb8mapmgpi36dignvf8w2raw9ma3q2n0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/haskell-emacs";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/haskell-emacs";
           sha256 = "1wkh7qws35c32hha0p9rpjz5pls2844920nh919lvp2wmq9l6jd6";
           name = "haskell-emacs";
         };
@@ -11191,7 +11401,7 @@
           sha256 = "1qgqsy7wnqyzkc3b0wixxb8mapmgpi36dignvf8w2raw9ma3q2n0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/haskell-emacs-base";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/haskell-emacs-base";
           sha256 = "1fwkds6qyhbxxdgxfzmgd7dlcxr08ynrrg5jdp9r7f924pd536vb";
           name = "haskell-emacs-base";
         };
@@ -11212,7 +11422,7 @@
           sha256 = "1qgqsy7wnqyzkc3b0wixxb8mapmgpi36dignvf8w2raw9ma3q2n0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/haskell-emacs-text";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/haskell-emacs-text";
           sha256 = "1j18fhhra6lv32xrq8jc6l8i56fgn68da81wymcimpmpbp0hl5fy";
           name = "haskell-emacs-text";
         };
@@ -11225,15 +11435,15 @@
     haskell-mode = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "haskell-mode";
-        version = "13.16";
+        version = "13.18";
         src = fetchFromGitHub {
           owner = "haskell";
           repo = "haskell-mode";
-          rev = "ea81bbb966a839527a786739b7628fd9cd777456";
-          sha256 = "1gmpmfkr54sfzrif87zf92a1i13wx75bhp66h1rxhflg216m62yv";
+          rev = "e37c4e53775067ecc0dad67976bb10971b2b118f";
+          sha256 = "0433ay8azn1q9fk7rc5aw4klc9r2p7s44xzd87i0pgpdp154h52g";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/haskell-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/haskell-mode";
           sha256 = "0wijvcpfdbl17iwzy47vf8brkj2djarfr8y28rw0wqvbs381zzwp";
           name = "haskell-mode";
         };
@@ -11254,7 +11464,7 @@
           sha256 = "0b3d7rvqvvcsp51aqfhl0zg9zg8j0p6vlfvga6jp9xc7626vh6f6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/haskell-snippets";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/haskell-snippets";
           sha256 = "10bvv7q694fahcpm83v8lpqihg1gvfzrp1hdzwiffxydfvdbalh2";
           name = "haskell-snippets";
         };
@@ -11274,7 +11484,7 @@
           sha256 = "02786f437bbbbb221c9c810a8d110bb4af172b986733ac35c932b18b38af7201";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/haskell-tab-indent";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/haskell-tab-indent";
           sha256 = "0vdfmy56w5yi202nbd28v1bzj97v1wxnfnb5z3dh9687p2abgnr7";
           name = "haskell-tab-indent";
         };
@@ -11295,7 +11505,7 @@
           sha256 = "14m8z13nvfqqgx40vzzbn0z9crwi3hhacmk1zfbv9cmhs95dwy6l";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/haxor-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/haxor-mode";
           sha256 = "1y4m058whdqnkkf9s6hzi0h6w0fc8ajfawhpjj0wqjam4adnfkq5";
           name = "haxor-mode";
         };
@@ -11316,7 +11526,7 @@
           sha256 = "15h1wkl1d9f2xfhm0nffqicg31rw7z2q0sizjphys9ljgxm43is4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/hcl-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/hcl-mode";
           sha256 = "1wrs9kj6ahsdnbn3fdaqhclq1ia6w4x726hjvl6pyk01sb0spnin";
           name = "hcl-mode";
         };
@@ -11326,22 +11536,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    helm = callPackage ({ async, cl-lib ? null, emacs, fetchFromGitHub, fetchurl, helm-core, lib, melpaBuild }:
+    helm = callPackage ({ async, emacs, fetchFromGitHub, fetchurl, helm-core, lib, melpaBuild, popup }:
     melpaBuild {
         pname = "helm";
-        version = "1.9.1";
+        version = "1.9.2";
         src = fetchFromGitHub {
           owner = "emacs-helm";
           repo = "helm";
-          rev = "fe96a398aa09ed0d25f6782efa5833085aa63791";
-          sha256 = "0awr4nvzgp1kckxqli1xw4pk16gc22i8hchin63fqvk0gllcy454";
+          rev = "a80e0b48e2ee22a022a76a5f483d1b68efe8a9e3";
+          sha256 = "0cylf0mnfj0m1wm9mxpxrkiinrlvpax99mdnsc6zfj3zrn1qghnp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm";
           sha256 = "0xsf4rg7kn0m5wjlbwhd1mc38lg2822037dyd0h66h6x2gbs3fd9";
           name = "helm";
         };
-        packageRequires = [ async cl-lib emacs helm-core ];
+        packageRequires = [ async emacs helm-core popup ];
         meta = {
           homepage = "http://melpa.org/#/helm";
           license = lib.licenses.free;
@@ -11358,7 +11568,7 @@
           sha256 = "0ps86zpyywibjwcm9drmamla979ad61fyqr8d6bv71fr56k9ak21";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-ack";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-ack";
           sha256 = "1a8sc5gd2g57dl9g18wyydfmihy74yniwhjr27h7vxylnf2g3pni";
           name = "helm-ack";
         };
@@ -11368,22 +11578,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    helm-ag = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, helm, lib, melpaBuild }:
+    helm-ag = callPackage ({ emacs, fetchFromGitHub, fetchurl, helm, lib, melpaBuild }:
     melpaBuild {
         pname = "helm-ag";
-        version = "0.50";
+        version = "0.51";
         src = fetchFromGitHub {
           owner = "syohex";
           repo = "emacs-helm-ag";
-          rev = "e0a4620fcc82d03bec7366542557539e7ecb653a";
-          sha256 = "03vv8arsvpshcfhmi2a3ams3q9q3p67avbbxyd3amyi3j336s2i7";
+          rev = "8f45c7e3294bea1bc583b2b46a02870cc7073311";
+          sha256 = "0ksx48n3g5n7ny2ny65bp3xx3p5g464dwxq30aji2b40yivaj0sz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-ag";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-ag";
           sha256 = "023zvgmi5b5b2qga3jqd7jrq9ap8n3rhvl6jrv9fsi565sg1fv43";
           name = "helm-ag";
         };
-        packageRequires = [ cl-lib helm ];
+        packageRequires = [ emacs helm ];
         meta = {
           homepage = "http://melpa.org/#/helm-ag";
           license = lib.licenses.free;
@@ -11400,7 +11610,7 @@
           sha256 = "015p5sszd54x81qm96gx6xwjkvbi4f3j9i2nhcvlkk75s95w1ijv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-aws";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-aws";
           sha256 = "0sjgdjpznjxsf6nlv2ah45fw17j8j5apdphd1fp43rjv1lskkgc5";
           name = "helm-aws";
         };
@@ -11421,7 +11631,7 @@
           sha256 = "0d6h4gbb69abxxgm85pdi5rsaf9h72yryg72ykd5633i1g4s8a76";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-backup";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-backup";
           sha256 = "182jbm36yzayxi9y3vhpyn25ivrgay37sncqvah35vbw52lnjcn3";
           name = "helm-backup";
         };
@@ -11442,7 +11652,7 @@
           sha256 = "1j9xmlidipsfbz0kfxwz0c6hi9xsbk36h6i30wqdd0ls0zw5xm30";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-bundle-show";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-bundle-show";
           sha256 = "1af5g233kjf04m2fryizk51a1s2mcmj36zip5nyb8skcsfl4riq7";
           name = "helm-bundle-show";
         };
@@ -11463,7 +11673,7 @@
           sha256 = "108584bmadgidqkdfvf333zkyb5v9f84pasz5h01fkh57ks8by9f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-c-yasnippet";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-c-yasnippet";
           sha256 = "0jwj4giv6lxb3h7vqqb2alkwq5kp0shy2nraik33956p4l8dfs90";
           name = "helm-c-yasnippet";
         };
@@ -11484,7 +11694,7 @@
           sha256 = "1iqjc15pz5qr8zjxaxz1b2vys2689ri76jacmipxvgjk0y7vc5f0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-circe";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-circe";
           sha256 = "12jfzg03573lih2aapvv5h2mi3pwqc9nrmv538ivjywix5117k3v";
           name = "helm-circe";
         };
@@ -11505,7 +11715,7 @@
           sha256 = "1l61csd1gqz7kg5zjx60cfy824g42p682z7pk0rqzlrz8498wvkh";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-commandlinefu";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-commandlinefu";
           sha256 = "150nqib0sr4n35vdj1xrxcja8gkv3chzhdbgkjxqgkz2yq10xxnd";
           name = "helm-commandlinefu";
         };
@@ -11515,22 +11725,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    helm-core = callPackage ({ async, cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    helm-core = callPackage ({ async, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "helm-core";
-        version = "1.9.1";
+        version = "1.9.2";
         src = fetchFromGitHub {
           owner = "emacs-helm";
           repo = "helm";
-          rev = "fe96a398aa09ed0d25f6782efa5833085aa63791";
-          sha256 = "0awr4nvzgp1kckxqli1xw4pk16gc22i8hchin63fqvk0gllcy454";
+          rev = "a80e0b48e2ee22a022a76a5f483d1b68efe8a9e3";
+          sha256 = "0cylf0mnfj0m1wm9mxpxrkiinrlvpax99mdnsc6zfj3zrn1qghnp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-core";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-core";
           sha256 = "1dyv8rv1728vwsp6vfdq954sp878jbp3srbfxl9gsgjnv1l6vjda";
           name = "helm-core";
         };
-        packageRequires = [ async cl-lib emacs ];
+        packageRequires = [ async emacs ];
         meta = {
           homepage = "http://melpa.org/#/helm-core";
           license = lib.licenses.free;
@@ -11547,7 +11757,7 @@
           sha256 = "0xnqkc4z22m41v5lgf87dd8xc4gmf932zbnbdhf9xic1gal1779c";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-cscope";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-cscope";
           sha256 = "13a76wc1ia4c0v701dxqc9ycbb43d5k09m5pfsvs8mccisfzk9y4";
           name = "helm-cscope";
         };
@@ -11568,7 +11778,7 @@
           sha256 = "0s503q56acv70i5qahrdgk3nhvdpb3wa22a8jh1kvb7lykaw74ai";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-dash";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-dash";
           sha256 = "1cnxssj2ilszq94v5cc4ixblar1nlilv9askqjp9gfnkj2z1n9cy";
           name = "helm-dash";
         };
@@ -11589,7 +11799,7 @@
           sha256 = "1cm2vaw0j1x2w2m45k6iqbzm7nydfdx1x89673vsvb90whdgvjbp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-descbinds";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-descbinds";
           sha256 = "1890ss4pimjxskzzllf57fg07xbs8zqcrp6r8r6x989llrfvd1h7";
           name = "helm-descbinds";
         };
@@ -11610,7 +11820,7 @@
           sha256 = "0vmlpj6zfif5f3wzgq8lkfqprl3z5gjsqj86347krblgfzhqlz30";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-firefox";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-firefox";
           sha256 = "0677nj0zsk11vvp3q3xl9nk8dhz3ki9yl3kfb57wgnmprp109wgs";
           name = "helm-firefox";
         };
@@ -11631,7 +11841,7 @@
           sha256 = "00ls9v3jdpz3wka90crd193z3ipwnf1b0slmldn4vb9ivrndh6wn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-ghc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-ghc";
           sha256 = "1q5ia8sgpflv2hhvw7hjpkfb25vmrjwlrqz1f9qj2qgmki5mix2d";
           name = "helm-ghc";
         };
@@ -11644,15 +11854,15 @@
     helm-ghq = callPackage ({ fetchFromGitHub, fetchurl, helm, lib, melpaBuild }:
     melpaBuild {
         pname = "helm-ghq";
-        version = "1.5.1";
+        version = "1.6.0";
         src = fetchFromGitHub {
           owner = "masutaka";
           repo = "emacs-helm-ghq";
-          rev = "2997646b2fb5421ab435b772dd2dbaeb92d70166";
-          sha256 = "0rlk9016rxj292kpxrnqgrm4xsjs4m4gk2fwh8z3fcihi013lxaw";
+          rev = "db37bfe290b234ed3f39dcce24667072172ded41";
+          sha256 = "0y379qap3mssz9nslb08vfzq5ihqcm156fbx0dszgz9d6xgkpdhw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-ghq";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-ghq";
           sha256 = "14f3cbsj7jhlhrp561d8pasllnx1cmi7jk6v2fja7ghzj76dnvq6";
           name = "helm-ghq";
         };
@@ -11673,7 +11883,7 @@
           sha256 = "1sbhh3dmb47sy3r2iw6vmvbq5bpjac4xdg8i5a0m0c392a38nfqn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-github-stars";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-github-stars";
           sha256 = "1r4mc4v71171sq9rbbhm346s92fb7jnvvl91y2q52jqmrnzzl9zy";
           name = "helm-github-stars";
         };
@@ -11694,7 +11904,7 @@
           sha256 = "1hc7j3gwljb1wk2727f66m3f7ga4icbklp54vlm0vf2bmii1ynil";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-gitlab";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-gitlab";
           sha256 = "010ihx3yddhb8j3jqcssc49qnf3i7xlz0s380mpgrdxgz6yahsmd";
           name = "helm-gitlab";
         };
@@ -11707,15 +11917,15 @@
     helm-gtags = callPackage ({ emacs, fetchFromGitHub, fetchurl, helm, lib, melpaBuild }:
     melpaBuild {
         pname = "helm-gtags";
-        version = "1.5.2";
+        version = "1.5.4";
         src = fetchFromGitHub {
           owner = "syohex";
           repo = "emacs-helm-gtags";
-          rev = "7fb96b900fb8640993354a2f83732a50da529d03";
-          sha256 = "1gfshy0brlfa8z39savj2a0jlfpqffijshsyjpz28ig2ggv8amnh";
+          rev = "f14ff7140d0f070b089df7567f2cc6b437ab9924";
+          sha256 = "1hqmwbdcjssvvl7prdykhlgbfrf4qylkvqp0nnnxp8r1wy6h6aws";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-gtags";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-gtags";
           sha256 = "0snx0b8b4yc507q3i4fzvrd68xgzqxly8kn5cwp26ik6cv840y29";
           name = "helm-gtags";
         };
@@ -11736,7 +11946,7 @@
           sha256 = "189dv3qqqmfyhsqa1n52cgcn1xv7k49f92ndn43y2v20234nhl9f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-hatena-bookmark";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-hatena-bookmark";
           sha256 = "14091zrp4vj7752rb5s3pkyvrrsdl7iaj3q9ys8rjmbsjwcv30id";
           name = "helm-hatena-bookmark";
         };
@@ -11757,7 +11967,7 @@
           sha256 = "1imfzz6cfdq7fgrcgrafy2nln929mgh31vybk9frm7a9jpamqdxp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-hayoo";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-hayoo";
           sha256 = "0xdvl6q2rpfsma4hx8m4snbd05s4z0bi8psdalixywlp5s4vzr32";
           name = "helm-hayoo";
         };
@@ -11778,7 +11988,7 @@
           sha256 = "0bz2ngw816jvpw1a10j31y5hf1knz0mzz60l073h33qci11jbwid";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-ispell";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-ispell";
           sha256 = "0qyj6whgb2p0v231wn6pvx4awvl1wxppppqqbx5255j8r1f3l1b0";
           name = "helm-ispell";
         };
@@ -11799,7 +12009,7 @@
           sha256 = "1nd562lffc41r3y5x7y46f37ra97avllk2m95w23f9g42h47f1ar";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-lobsters";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-lobsters";
           sha256 = "0dkb78n373kywxj8zba2s5a2g85vx19rdswv9i78xjwv1lqh8cpp";
           name = "helm-lobsters";
         };
@@ -11820,7 +12030,7 @@
           sha256 = "0azs971d7pqd4ddxzy7bfs52cmrjbafwrcnf57afw39d772rzpdf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-ls-git";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-ls-git";
           sha256 = "08rsy9479nk03kinjfkxddrq6wi4sx2a0wrz37cl2q517qi7sibj";
           name = "helm-ls-git";
         };
@@ -11841,7 +12051,7 @@
           sha256 = "1hma79i69l8ilkr3l4b8zqk3ny62vqr1ym2blymia4ibwk4zqbda";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-ls-hg";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-ls-hg";
           sha256 = "0ca0xn7n8bagxb504xgkcv04rpm1vxhx2m77biqrx5886pwl25bh";
           name = "helm-ls-hg";
         };
@@ -11862,7 +12072,7 @@
           sha256 = "17ls0bplnja2qvg3129x2irgsgs7l4bjj0qi7b9z16i6knjkwfya";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-make";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-make";
           sha256 = "1r6jjy1rlsii6p6pinbz7h6gcw4vmcycd3vj338bfbnqp5rrf2mc";
           name = "helm-make";
         };
@@ -11883,7 +12093,7 @@
           sha256 = "03588hanfa20pjp9w1bqy8wsf5x6az0vfq0bmcnr4xvlf6fhkyxs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-migemo";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-migemo";
           sha256 = "1cjvb1lm1fsg5ky63fvrphwl5a7r7xf6qzb4mvl06ikj8hv2h33x";
           name = "helm-migemo";
         };
@@ -11904,7 +12114,7 @@
           sha256 = "1srx5f0s9x7zan7ayqd6scxfhcvr3nkd4yzs96hphd87rb18apzk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-mode-manager";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-mode-manager";
           sha256 = "1w9svq1kyyj8mmljardhbdvykb334nq1y18s956g4rvqyas2ciyd";
           name = "helm-mode-manager";
         };
@@ -11925,7 +12135,7 @@
           sha256 = "0gknncyhr2392xkvghgy5mh6gdv6qzvswidx2wy04ypb4s0vxgq2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-mt";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-mt";
           sha256 = "04hx8cg8wmm2w8g942nc9mvm12ammmjnx4k61ljrq76smd8s3x2a";
           name = "helm-mt";
         };
@@ -11946,7 +12156,7 @@
           sha256 = "1lm7rkgf7q5g4ji6v1masfbhxdpwni8d77dapsy5k9p73cr2aqld";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-nixos-options";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-nixos-options";
           sha256 = "1nsi4hfw53iwn29fp33dkri1c6w8kdyn4sa0yn2fi6144ilmq933";
           name = "helm-nixos-options";
         };
@@ -11967,7 +12177,7 @@
           sha256 = "1hq1nnmgkx0a8sv6g8k4v9f0102qg7jga0hcjnr8lcji51nqrcya";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-open-github";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-open-github";
           sha256 = "121sszwvihbv688nq5lhdclvsjj8759glh42h82r4pcw30lxggxb";
           name = "helm-open-github";
         };
@@ -11988,7 +12198,7 @@
           sha256 = "1zyjxrrda7nxxjqczv2p3sfimxy2pq734kf51j6v2y0biclc4bk3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-orgcard";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-orgcard";
           sha256 = "1a56y8fny7qxxidc357n7l3yi7h66hidhvwhkam8y5wk6k61460p";
           name = "helm-orgcard";
         };
@@ -12009,7 +12219,7 @@
           sha256 = "14ad0b9d07chabjclffjyvnmrasar1di9wmpzf78bw5yg99cbisw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-package";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-package";
           sha256 = "1qab2abx52xcqrnxzl0m3533ngp8m1cqmm3hgpzgx7yfrkanyi4y";
           name = "helm-package";
         };
@@ -12030,7 +12240,7 @@
           sha256 = "1r2ndmrw5ivawb940j8jnmqzxv46qrzd3cqh9fvxx5yicf020fjf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-pages";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-pages";
           sha256 = "1v3w8100invb5wsmm3dyl41pjs7s889s3b1rlr6vlcspa1ncv3wj";
           name = "helm-pages";
         };
@@ -12051,7 +12261,7 @@
           sha256 = "01cj2897hqz02mfz32nxlyyp59iwm0gz1zj11s8ll7pwy9q3r90g";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-perldoc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-perldoc";
           sha256 = "0b0cl2xj5w1r71zrjhnqhrzsnz1296jv21qx5adzslra6lk55q2r";
           name = "helm-perldoc";
         };
@@ -12072,7 +12282,7 @@
           sha256 = "0y0a18bj2k459fk51z7svnnasqkl78bx61y5ha1yv3sqnppgdw2h";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-proc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-proc";
           sha256 = "1bq60giy2bs9m3hlbc5nwvy51702a98s0vqass3b290hdgki4bnx";
           name = "helm-proc";
         };
@@ -12093,7 +12303,7 @@
           sha256 = "1q7hfj8ldwivhjp9ns5pvsn0ds6pyvl2zhl366c22s6q8jmbr8ik";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-project-persist";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-project-persist";
           sha256 = "1n87kn1n3453mpdj6amyrgivslskmnzdafpspvkz7b0smf9mv2ld";
           name = "helm-project-persist";
         };
@@ -12114,7 +12324,7 @@
           sha256 = "0jm6nnnjyd4kmm1knh0mq3xhnw2hvs3linwlynj8yaliqvlv6brv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-pt";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-pt";
           sha256 = "1imhy0bsm9aldv0pvf88280qdya01lznxpx5gi5wffhrz17yh4pi";
           name = "helm-pt";
         };
@@ -12135,7 +12345,7 @@
           sha256 = "1ik0vllakh73kc2zbgii4sm33n9pj388gaz69j4drz2mik307zvs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-pydoc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-pydoc";
           sha256 = "0cnbhjw951f8sci63cvzcc65d0ffdx3rb8l1g38qql5rzkam48fn";
           name = "helm-pydoc";
         };
@@ -12156,7 +12366,7 @@
           sha256 = "1f1ijna97dn190if3nwk5s5rldlpryfb7wvgg0imwqyp25h4all7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-recoll";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-recoll";
           sha256 = "0pr2pllplml55k1xx9inr3dm90ichg2wb62dvgvmbq2sqdf4606b";
           name = "helm-recoll";
         };
@@ -12177,7 +12387,7 @@
           sha256 = "163ljqar3vvbavzc8sk6rnf8awyc2rhh2g117fglswich3c8lnqg";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-robe";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-robe";
           sha256 = "1gi4nkm9xvnxv0frmhiiw8dkmnmhfpr9n0b6jpidlvr8xr4s5kyw";
           name = "helm-robe";
         };
@@ -12198,7 +12408,7 @@
           sha256 = "1sff8kagyhmwcxf9062il1077d4slvr2kq76abj496610gpb75i0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-rubygems-org";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-rubygems-org";
           sha256 = "04ni03ak53z3rggdgf68qh7ksgcf3s0f2cv6skwjqw7v8qhph6qs";
           name = "helm-rubygems-org";
         };
@@ -12219,7 +12429,7 @@
           sha256 = "1s6aw1viyzhhrfiazzi82n7bkvshp7clwi6539660m72lfwc5zdl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-sage";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-sage";
           sha256 = "1vnq15fjaap0ai7dadi64sm4415xssmahk2j7kx45sasy4qaxlbj";
           name = "helm-sage";
         };
@@ -12240,7 +12450,7 @@
           sha256 = "0kz0vfp43n7f9l53rji2pb8v6ylg63i37q0bmidmjjvsinimwj44";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-spaces";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-spaces";
           sha256 = "0hdvkk173k98iycvii5xpbiblx044125pl7jyz4kb8r1vvwcv791";
           name = "helm-spaces";
         };
@@ -12261,7 +12471,7 @@
           sha256 = "1lkjrz9ma2bxr8vskdm3sgrmsyiic798q3271dw38d453bhv4bl1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-swoop";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-swoop";
           sha256 = "1fqbhj75hcmy7c2vdd0m7fk3m34njmv5s6k1i9y94djpbd13i3d8";
           name = "helm-swoop";
         };
@@ -12282,7 +12492,7 @@
           sha256 = "0rzbdrs5d5a0icpxrqik2iaz8i5bacw6nm2caf75s9w9j0j6s9li";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-themes";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-themes";
           sha256 = "1j64w6dnxmq0rfycci9wfy2z5lbddsggf486pknxfgwwqgvns90l";
           name = "helm-themes";
         };
@@ -12303,7 +12513,7 @@
           sha256 = "14lbdvs9xdnipsn3lywbvgsqwqnbm8fxm6d1ilq0cj5z6zkxkya0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-unicode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-unicode";
           sha256 = "052xqzvcfzpsbl75ylqb1khqndvc2dqdymqlwivs0darlds0w8y4";
           name = "helm-unicode";
         };
@@ -12324,7 +12534,7 @@
           sha256 = "0s8zp3kx2kxlfyd26yr3lphwcybhbm8qa9vzmxr3kaylwy6jpz5q";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-w32-launcher";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-w32-launcher";
           sha256 = "0bzn2vhspn6lla815qxwsl9gwfyiwgwmnysr6rjpyacmi17d73ri";
           name = "helm-w32-launcher";
         };
@@ -12345,7 +12555,7 @@
           sha256 = "1j6ssbjbm5ym3pg0icpfp735y4dfhlky9qhl9hwp2n3wmba5g9h1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/helm-zhihu-daily";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/helm-zhihu-daily";
           sha256 = "0hkgail60s9qhxl0pskqxjvfz93iq1qh1kcmcq0x5kq7d08b911r";
           name = "helm-zhihu-daily";
         };
@@ -12366,7 +12576,7 @@
           sha256 = "1s08sgbh5v59lqskd0s1dscs6dy7z5mkqqkabs3gd35agbfvbmlf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/hi2";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/hi2";
           sha256 = "1wxkjg1jnw05lqzggi20jy2jl20d8brvv76vmrf6lnz62g6jv9h2";
           name = "hi2";
         };
@@ -12387,7 +12597,7 @@
           sha256 = "0c65jk00j88qxfki2g88hy9g6n92rzskwcn1fbmwcw3qgaz4b6w5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/highlight-blocks";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/highlight-blocks";
           sha256 = "1a32iv5kgf6g6ygbs559w156dh578k45m860czazfx0d6ap3k5m1";
           name = "highlight-blocks";
         };
@@ -12408,7 +12618,7 @@
           sha256 = "08czwa165rnd5z0dwwdddn7zi5w63sdk31l47bj0598kbly01n7r";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/highlight-defined";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/highlight-defined";
           sha256 = "1vjxm35wf4c2qphpkjh57hf03a5qdssdlmfj0n0gwxsdw1q5rpms";
           name = "highlight-defined";
         };
@@ -12429,7 +12639,7 @@
           sha256 = "00l54k75qk24a0znzl4ij3s3nrnr2wy9ha3za8apphzlm98m907k";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/highlight-indentation";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/highlight-indentation";
           sha256 = "0iblrrbssjwfn71n8xxjcl98pjv1qw1igf3hlz6mh8740fsca3d6";
           name = "highlight-indentation";
         };
@@ -12450,7 +12660,7 @@
           sha256 = "0ffhc5s0h34064bix4qyiiyx30m4hpv0phmxwcrwiyvanj9ggfai";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/highlight-numbers";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/highlight-numbers";
           sha256 = "1bywrjv9ybr65mwkrxggb52jdqn16z8acgs5vqm0faq43an8i5yv";
           name = "highlight-numbers";
         };
@@ -12471,7 +12681,7 @@
           sha256 = "08ld4wjrkd77cghmrf1n2hn2yzid7bdqwz6b1rzzqaiwxl138iy9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/highlight-parentheses";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/highlight-parentheses";
           sha256 = "1b0n9mz4a6baljvvgb881w53391smm35c9pwd45g861hk1qvrk5k";
           name = "highlight-parentheses";
         };
@@ -12492,7 +12702,7 @@
           sha256 = "1ahg9qzss67jpw0wp2izys6lyss4nqjy9320fpa4vdx39msdmjjb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/highlight-quoted";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/highlight-quoted";
           sha256 = "0x6gxi0jfxvpx7r1fm43ikxlxilnbk2xbhdy9xivhgmmdyqiqqkl";
           name = "highlight-quoted";
         };
@@ -12513,7 +12723,7 @@
           sha256 = "09z13kv2g21kjjkkm3iyaz93sdjmdy2d563r8n7r7ng94acrn7f6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/highlight-symbol";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/highlight-symbol";
           sha256 = "0gw8ffr64s58qdbvm034s1b9xz1hynzvbk8ld67j06fxpc98qaj4";
           name = "highlight-symbol";
         };
@@ -12534,7 +12744,7 @@
           sha256 = "0hb74j5137yj3rm2si16xzwmcvkiwx8ywh1qrlnrzv5gl4viyjzb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/hindent";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/hindent";
           sha256 = "1f3vzgnqigwbwvglxv0ziz3kyp5dxjraw3vlghkpw39f57mky4xz";
           name = "hindent";
         };
@@ -12555,7 +12765,7 @@
           sha256 = "0mzk4agkcaaw7gryi0wrxv0blqndqsjf1ivdvr2nrnqi798sdhbr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/hippie-expand-slime";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/hippie-expand-slime";
           sha256 = "0kxyv1lpkg33qgfv1jfqx03640py7525bcnc9dk98w6y6y92zf4m";
           name = "hippie-expand-slime";
         };
@@ -12576,7 +12786,7 @@
           sha256 = "0nfr8ad0klqwi97fjchvwx9mfc672lhv3ll166sr8vn6jlh7rkv0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/hippie-namespace";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/hippie-namespace";
           sha256 = "1bzjhq116ci9c9f0aw121fn3drmg2pw5ny1w6wcasa4p30syxxf0";
           name = "hippie-namespace";
         };
@@ -12597,7 +12807,7 @@
           sha256 = "0dy98sg92xvnr4algm2v2bnjcdwzv0b0vqk0312b0ziinkzisas1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/history";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/history";
           sha256 = "0s8pcz53bk1w4h5847204vb6j838vr8za66ni1b2y4pas76zjr5g";
           name = "history";
         };
@@ -12618,7 +12828,7 @@
           sha256 = "1mxicha6m61qxz1mv9z76x4g9fpqk4ch9i6jf7nnpxd6x4xz3f7z";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/historyf";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/historyf";
           sha256 = "15pcaqfjpkfwcy46yqqw10q8kpw7aamcg0gr4frbdgzbv0yld08s";
           name = "historyf";
         };
@@ -12639,7 +12849,7 @@
           sha256 = "12ab825dldiqymy4md8ssfnbbhrgczkwdiwd3llsdq6sayar16as";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/hl-anything";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/hl-anything";
           sha256 = "15n998nhirvg3f719b7x9s7jpqv6gzkr22kp4zbbq99lbx2wfc1k";
           name = "hl-anything";
         };
@@ -12660,7 +12870,7 @@
           sha256 = "1hgigbgppdhmr7rc901r95kyydjk05dck8mwbryh7kpglns365fa";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/hl-sentence";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/hl-sentence";
           sha256 = "16sjfs0nnpwzj1cqfna9vhmxgznwwhb2qdmjci25hlgrdxwwyahs";
           name = "hl-sentence";
         };
@@ -12681,7 +12891,7 @@
           sha256 = "1fsyj9cmqcz5nfxsfcyvpq2vqrhgl99xvq7ligviawl3x77376kw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/hl-sexp";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/hl-sexp";
           sha256 = "0kg0m20i9ylphf4w0qcvii8yp65abdl2q5flyphilk0jahwbj9jy";
           name = "hl-sexp";
         };
@@ -12702,7 +12912,7 @@
           sha256 = "07irwpg794fdzsixmcbi1lnafj5gynhrdam7frcpmvb26a0l8fxq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/hl-todo";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/hl-todo";
           sha256 = "1iyh68xwldj1r02blar5zi01wnb90dkbmi67vd6h78ksghl3z9j4";
           name = "hl-todo";
         };
@@ -12723,7 +12933,7 @@
           sha256 = "1wg6vc9swwspi6s6jpig3my83i2pq8vkq2cy1q3an87rczacmfzp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/hoa-pp-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/hoa-pp-mode";
           sha256 = "01ijfn0hd645j6j88rids5dsanmzwmky37slf50yqffnv69jwvla";
           name = "hoa-pp-mode";
         };
@@ -12744,7 +12954,7 @@
           sha256 = "1n8r4jrk71dg25ca6bsw11ky0dszdj4pvqwsmy3msqlji1ckvqyn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/homebrew-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/homebrew-mode";
           sha256 = "088wc5fq4r5yj1nbh7mriyqf0xwqmbxvblj9d2wwrkkdm5flc8mj";
           name = "homebrew-mode";
         };
@@ -12765,7 +12975,7 @@
           sha256 = "1yvz9d5h7npxhsdf6s9fgxpmqk5ixx91iwivbhzcz935gs2886hc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/hookify";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/hookify";
           sha256 = "0prls539ifk2fsqklcxmbrwmgbm9hya50z486d7sw426lh648qmy";
           name = "hookify";
         };
@@ -12786,7 +12996,7 @@
           sha256 = "0k09n66jar0prq9aal2h3izp1y67jibdx0gjr0g4jx1p1yxig1dg";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ht";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ht";
           sha256 = "16vmxksannn2wyn8r44jbkdp19jvz1bg57ggbs1vn0yi7nkanwbd";
           name = "ht";
         };
@@ -12807,7 +13017,7 @@
           sha256 = "0c648dl5zwjrqx9n6zr6nyzx2zcnv05d5i4hvhjpl9q3y011ncns";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/html-to-markdown";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/html-to-markdown";
           sha256 = "1gjh9ndqsb3nfb7w5h7carjckkgy6qh63b4mg141j19dsyx9rrjv";
           name = "html-to-markdown";
         };
@@ -12828,7 +13038,7 @@
           sha256 = "1h9n388fi17nbyfciqywgrq3n165kpiildbimx59qyk2ac3v7rqk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/httpcode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/httpcode";
           sha256 = "05k1al1j119x6zf03p7jn2r9qql33859583nbf85k41bhicknpgh";
           name = "httpcode";
         };
@@ -12849,7 +13059,7 @@
           sha256 = "0dd257988bdar9hl2711ch5qshx9jc11fqxcvbrd7rc1va5cshs9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/httprepl";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/httprepl";
           sha256 = "0899qb1yfnsyf04hhvnk47qnq4d1f4vd5ghj43x4743wd2b9qawh";
           name = "httprepl";
         };
@@ -12870,7 +13080,7 @@
           sha256 = "1b8992vzq5bh01pjlj181nzqjrqs4fbjpwvv8h7gjq42sf8w59sm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/hyai";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/hyai";
           sha256 = "00ns7q5b11c5amwkq11fs4p5vrmdfmjljfrcxbwb39gc12yrhn7s";
           name = "hyai";
         };
@@ -12891,7 +13101,7 @@
           sha256 = "0nwsmc4c3v0wbfy917ik9k7yz8yclfac695p7p9sh9y354k3maw4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/hyde";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/hyde";
           sha256 = "18kjcxm7qmv9bfh4crw37zgax8khjqs9zkp4lrb490zlad2asbs3";
           name = "hyde";
         };
@@ -12912,7 +13122,7 @@
           sha256 = "08iw95lyizcyf6cjl37fm8wvay0vsk9758pk9gq9f2xiafcchl7f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/hydra";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/hydra";
           sha256 = "1c59l43p39ins3dn9690gm6llwm4b9p0pk78lip0dwlx736drdbw";
           name = "hydra";
         };
@@ -12933,7 +13143,7 @@
           sha256 = "1zcnp61c9cp2kvns3v499hifk072rxm4rhw4pvdv2mm966vcxzvc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ibuffer-projectile";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ibuffer-projectile";
           sha256 = "1qh4krggmsc6lx5mg60n8aakmi3f6ppl1gw094vfcsni96jl34fk";
           name = "ibuffer-projectile";
         };
@@ -12954,7 +13164,7 @@
           sha256 = "0bqdi5w120256g74k0j4jj81x804x1gcg4dxa74w3mb6fl5xlvs8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ibuffer-vc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ibuffer-vc";
           sha256 = "0bn5qyiq07cgzci10xl57ss5wsk7bfhi3hjq2v6yvpy9v704dvla";
           name = "ibuffer-vc";
         };
@@ -12975,7 +13185,7 @@
           sha256 = "047gzycr49cs8wlmm9j4ry7b7jxmfhmbayx6rbbxs49lba8dgwlk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/identica-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/identica-mode";
           sha256 = "1r69ylykjap305g23cry4wajiqhpgw08nw3b5d9i1y3mwx0j253q";
           name = "identica-mode";
         };
@@ -12996,7 +13206,7 @@
           sha256 = "0x4w1ksrw7dicl84zpf4d4scg672dyan9g95jkn6zvri0lr8xciv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/idle-highlight-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/idle-highlight-mode";
           sha256 = "1i5ky61bq0dpk71yasfpjhsrv29mmp9nly9f5xxin7gz3x0f36fc";
           name = "idle-highlight-mode";
         };
@@ -13017,7 +13227,7 @@
           sha256 = "1ffmsmi31jc0gqnbdxrd8ipsy790bn6hgq3rmayylavmdpg3qfd5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ido-complete-space-or-hyphen";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ido-complete-space-or-hyphen";
           sha256 = "1wk0cq5gjnprmpyvhh80ksz3fash42hckvmx8m95crbzjg9j0gbc";
           name = "ido-complete-space-or-hyphen";
         };
@@ -13038,7 +13248,7 @@
           sha256 = "0byairx5nxbzgdyiw658p7yiysfr7r1bd3b2prawq72bslb1c5cn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ido-completing-read+";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ido-completing-read+";
           sha256 = "034j1q47d57ia5bwbf1w66gw6c7aqbhscpy3dg2a71lwjzfmshwh";
           name = "ido-completing-read-plus";
         };
@@ -13051,15 +13261,15 @@
     ido-describe-bindings = callPackage ({ dash, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "ido-describe-bindings";
-        version = "0.0.8";
+        version = "0.0.9";
         src = fetchFromGitHub {
           owner = "danil";
           repo = "ido-describe-bindings";
-          rev = "c84054942d03a19ee65716db89771c4a157ff696";
-          sha256 = "1q8vqmdfhbmciwn1i1ln7xx2i41kknv030hf6a88grl4rzqffm70";
+          rev = "1f5c78bf56f2cab137a323ec426e906f2215bf7f";
+          sha256 = "0055dda1la7yah33xsi19j4hcdmqp17ily2dvkipm4y6d3ww8yqa";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ido-describe-bindings";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ido-describe-bindings";
           sha256 = "1lsa09h025vd908r9q571iq2ia0zdpnq04mlihb3crpp5v9n9ws2";
           name = "ido-describe-bindings";
         };
@@ -13080,7 +13290,7 @@
           sha256 = "0f1p6cnl0arcc2y1h99nqcflp7byvyf6hj6fmv5xqggs66qc72lb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ido-grid-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ido-grid-mode";
           sha256 = "1wl1yclcxmkbfnvp0il23csdf6gprzf7fkcknpivk784fhl19acr";
           name = "ido-grid-mode";
         };
@@ -13101,7 +13311,7 @@
           sha256 = "1z7az7h90v72llxvdclcywvf1qd0nhkfa45bp99xi7cy7sqsqssf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ido-load-library";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ido-load-library";
           sha256 = "13f83gqh39p3yjy7r7qc7kzgdcmqh4b5c07zl7rwzb8y9rz59lhj";
           name = "ido-load-library";
         };
@@ -13114,15 +13324,15 @@
     ido-occur = callPackage ({ dash, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "ido-occur";
-        version = "0.1.3";
+        version = "0.1.4";
         src = fetchFromGitHub {
           owner = "danil";
           repo = "ido-occur";
-          rev = "247ee110dc085f9f5577aa02241c3ad66164b455";
-          sha256 = "1qvx1v5xrfv1id6lfn767b667m2hn4rsw2nmb61j1i81csdiqjds";
+          rev = "7d2e42bf239cacb90e6240b8014e6b20b24e89cf";
+          sha256 = "0j12li001yq08vzwh1b25qyq09llizrkgaay9k07g9pvfxlx6zb3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ido-occur";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ido-occur";
           sha256 = "058l2pklg12wkvyyshk8va6shphpbc508fv9a8x25pw857a28pji";
           name = "ido-occur";
         };
@@ -13143,7 +13353,7 @@
           sha256 = "0byairx5nxbzgdyiw658p7yiysfr7r1bd3b2prawq72bslb1c5cn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ido-ubiquitous";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ido-ubiquitous";
           sha256 = "143pzpix9aqpzjy8akrxfsxmwlzc9bmaqzp9fyhjgzrhq7zchjsp";
           name = "ido-ubiquitous";
         };
@@ -13164,7 +13374,7 @@
           sha256 = "1lv82q639xjnmvby56nwqn23ijh6f163bk675s33dkingm8csj8k";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ido-vertical-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ido-vertical-mode";
           sha256 = "1vg5s6nd6v2g8ychz1q9cdqvsdw6vag7d9w68sn7blpmlr0nqhfm";
           name = "ido-vertical-mode";
         };
@@ -13185,7 +13395,7 @@
           sha256 = "0i3s80ws3qbhb3vsvf09mbq661c5140v4phgbl4cz6z545ha2bj7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ido-yes-or-no";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ido-yes-or-no";
           sha256 = "0glag4yb9xyf1lxxbdhph2nq6s1vg44i6f2z1ii8bkxpambz2ana";
           name = "ido-yes-or-no";
         };
@@ -13206,7 +13416,7 @@
           sha256 = "0bq0kx0889rdy8aasxbpmb0a4awpk2b24zv6x1dmhacmc5rj11i0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/idomenu";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/idomenu";
           sha256 = "0mg601ak9mhp2fg5n13npcfzphgyms4vkqd18ldmv098z2z1412h";
           name = "idomenu";
         };
@@ -13227,7 +13437,7 @@
           sha256 = "0iwgbaq2797k1f7ql86i2pjfa67cha4s2v0mgmrd0qcgqkxsdq92";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/idris-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/idris-mode";
           sha256 = "0hiiizz976hz3z3ciwg1gs9y10qhxbs8givhz89kvyn4s4861a1s";
           name = "idris-mode";
         };
@@ -13248,7 +13458,7 @@
           sha256 = "06qv95bgcb6n3zcjs2i1q80v9040z7m9pb9xbhxmqzcx68vpbpdm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/iedit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/iedit";
           sha256 = "02gjshvkcvyr58yf6vlg3s2pzls5sd54xpxggdmqajfg8xmpkq04";
           name = "iedit";
         };
@@ -13269,7 +13479,7 @@
           sha256 = "18rlyjsn9w0zbs0c002s84qzark3rrcmjn9vq4nap7i6zpaq8hki";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/iflipb";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/iflipb";
           sha256 = "1nfrrxgi9nlhn477z8ay7jxycpcghhhmmg9dagdhrlrr20fx697d";
           name = "iflipb";
         };
@@ -13290,7 +13500,7 @@
           sha256 = "1j40ldvgd7nr7pabi8mhzdvi0ml9n62m8mfjlh9nrbnkcsifs9rk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ignoramus";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ignoramus";
           sha256 = "1czqdmlrds1l5afi8ldg7nrxcwav86538z2w1npad3dz8xk67da9";
           name = "ignoramus";
         };
@@ -13311,7 +13521,7 @@
           sha256 = "0imvxzcja91cd19zm2frqfpxm8j0bc89w9s7q0pkpvyjz44kjbq8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/image-archive";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/image-archive";
           sha256 = "0x0lv5dr1gc9bnr3dn26bc9s1ccq2rp8c4a1licbi929f0jyxxfp";
           name = "image-archive";
         };
@@ -13332,7 +13542,7 @@
           sha256 = "1n2ya9s0ld257a8iryjd0dz0z2zs1xhzfiwsdkq4l4azwxl54m29";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/image-dired+";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/image-dired+";
           sha256 = "0hhwqfn490n7p12n7ij4xbjh15gfvicmn21fvwbnrmfqc343pcdy";
           name = "image-dired-plus";
         };
@@ -13353,7 +13563,7 @@
           sha256 = "0k69xbih0273xvmj035vcmm67l6hgjb99pb1jbva5x0pnszb1vdv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/image+";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/image+";
           sha256 = "1a9dxswnqn6cvx28180kclpjc0vc6fimzp7n91gpdwnmy123x6hg";
           name = "image-plus";
         };
@@ -13374,7 +13584,7 @@
           sha256 = "0qc96p5f7paxaxzv73w072cba8jb6ibdbhml7n7cm85b0rz1wf16";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/imenu-anywhere";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/imenu-anywhere";
           sha256 = "0p93g7ay9n4nhf1qk24mbax0w9sr06xd2kjmrz00gbg75sr9r2s8";
           name = "imenu-anywhere";
         };
@@ -13395,7 +13605,7 @@
           sha256 = "192i3iaykw5a9fb9xaivfjj2pbziqdnadlrvqbxbl9h5wi52qq9c";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/imenu-list";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/imenu-list";
           sha256 = "092fsn7hnbfabcyakbqyk20pk62sr8xrs45aimkv1l91681np98s";
           name = "imenu-list";
         };
@@ -13416,7 +13626,7 @@
           sha256 = "18nx5z2vn0ikv4gxjprsqr63pcgf9s02gc3f769h8dji560kqxd4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/imenus";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/imenus";
           sha256 = "1q0j6r2n5vjlbgchkz9zdglmmbpd8agawzcg61knqrgzpc4lk82r";
           name = "imenus";
         };
@@ -13437,7 +13647,7 @@
           sha256 = "19jqcbiwqknlpij9q63m1p69k4zb3v1qdx0858drprc2rl1p55cd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/imgix";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/imgix";
           sha256 = "0dh7qsz5c9mflldcw60vc8mrxrw76n2ydd7blv6jfmsnr19ila4q";
           name = "imgix";
         };
@@ -13458,7 +13668,7 @@
           sha256 = "1pf7pqh8yzyvh4gzvp5npfq8kcfjcbzra0kkw7zmz769xxc8v84x";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/immutant-server";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/immutant-server";
           sha256 = "15vcxag1ni41ja4b3q0444sq5ysrisis59la7li6h3617wy8r02i";
           name = "immutant-server";
         };
@@ -13471,15 +13681,15 @@
     import-js = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "import-js";
-        version = "0.3.1";
+        version = "0.4.1";
         src = fetchFromGitHub {
           owner = "trotzig";
           repo = "import-js";
-          rev = "e16a73f16d38d3c30bb2303b176568de6f30f533";
-          sha256 = "1511zk9nm48wr5mhm6xs86n3w7iij6zs20yqza6w3yn460h0kxmb";
+          rev = "732cd36da156398c1ee3b5f08e5c3c3d020f24f8";
+          sha256 = "00gpyz63lqb2ydvjxjagf2cpja8gw6xbyw82cdj64k53mn86cyvl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/import-js";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/import-js";
           sha256 = "1grvzy378qj14wlbmhb3j7fx2zkl9wp65b5g0brjimav08nz7bls";
           name = "import-js";
         };
@@ -13500,7 +13710,7 @@
           sha256 = "0ycsdwwfb27g85aby4jix1aj41a4vq6bf541iwla0xh3wsyxb01w";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/import-popwin";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/import-popwin";
           sha256 = "0vkw6y09m68bvvn1wzah4gzm69z099xnqhn359xfns2ljm74bvgy";
           name = "import-popwin";
         };
@@ -13521,7 +13731,7 @@
           sha256 = "1dmr1arqy2vs9jdjha513mvw3yfwgkn4zs728q83asjy91sfcz7k";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/inf-clojure";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/inf-clojure";
           sha256 = "0n8w0vx1dnbfz88j45a57z9bsmkxr2zyh6ld72ady8asanf17zhl";
           name = "inf-clojure";
         };
@@ -13542,7 +13752,7 @@
           sha256 = "11zsprv5ycnfqi358dd4cx70dbn6a8hccd4prf28lln7vhldbmjz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/inf-ruby";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/inf-ruby";
           sha256 = "02f01vwzr6j9iqcdns4l579bhia99sw8hwdqfwqjs9gk3xampfpp";
           name = "inf-ruby";
         };
@@ -13563,7 +13773,7 @@
           sha256 = "1fm69g4mrmdchvxr062bk7n1jvs2rrscddb02cldb5bgdrcw8g6j";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/inflections";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/inflections";
           sha256 = "0f02bhm2a5xiaxnf2c2hlpa4p121xfyyj3c59fy0yldipdxhvw70";
           name = "inflections";
         };
@@ -13584,7 +13794,7 @@
           sha256 = "031vb7ndz68x0119v4pyizz0ykd341ywcp5s7i4z35zx1vcqj8az";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/init-loader";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/init-loader";
           sha256 = "0rq7759abp0ml0l8dycvdl0j5wsxw9z5y9pyx68973a4ssbx2i0r";
           name = "init-loader";
         };
@@ -13605,7 +13815,7 @@
           sha256 = "06w1vnfhjy8g62z6xajin5akgh30pa0kk56am61kv6mi5ia8fc96";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/init-open-recentf";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/init-open-recentf";
           sha256 = "0xlmfxhxb2car8vfx7krxmxb3d56x0r3zzkj8ds7yqvr65z85x2r";
           name = "init-open-recentf";
         };
@@ -13626,7 +13836,7 @@
           sha256 = "1rfw38a63bvzglqx7mb8wlnzjvlmkhkn35hn66snqqgvnmnvi54g";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/initsplit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/initsplit";
           sha256 = "0n9dk3x62vgxfn39jkmdg8wxsik0xqkprifgvqzyvn8xcx1blyyq";
           name = "initsplit";
         };
@@ -13647,7 +13857,7 @@
           sha256 = "0jipds844432a8m4d5gxbbkk2h1rsq9fg748g6bxy2q066kyzfz6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/inline-crypt";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/inline-crypt";
           sha256 = "04mcyyqa9h6g6wrzphzqalpqxsndmzxpavlpdc24z4a2c5s3yz8n";
           name = "inline-crypt";
         };
@@ -13668,7 +13878,7 @@
           sha256 = "15nasjknmzy57ilj1gaz3w5sj8b3ijcpgwcd6w2r9xhgcl86m40q";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/inlineR";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/inlineR";
           sha256 = "1fflq2gkpfn3jkv4a6yywzmxsq6qszfid1ri85ass1ppw6scdvzw";
           name = "inlineR";
         };
@@ -13689,7 +13899,7 @@
           sha256 = "1mqnz40zirnyn3wa71wzzjph3a0sbgvzcywcr7xnzqpl6sp7g93f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/insert-shebang";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/insert-shebang";
           sha256 = "0z88l1q925v9lwzr6nas9qjy0f57qxilg6smgpx9wj6lll3f7p5v";
           name = "insert-shebang";
         };
@@ -13709,7 +13919,7 @@
           sha256 = "0krscid3yz2b7kv75gd9fs92zgfl7pnl77dbp5gycv5rmw5mivp8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/instapaper";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/instapaper";
           sha256 = "1yibdpj3lx6vr33s75s1y415lxqljrk7pqc901f8nfa01kca7axn";
           name = "instapaper";
         };
@@ -13730,7 +13940,7 @@
           sha256 = "1bidhc4pgszx2gqsm125nw7i5ysy0mzc1ifcfkfgns1cpjr74rpn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/interleave";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/interleave";
           sha256 = "18b3fpxn07y5abkcnaw9is9ihdhik7xjdj6kzl1pz958lk9f4hfy";
           name = "interleave";
         };
@@ -13751,7 +13961,7 @@
           sha256 = "043dnij48zdyg081sa7y64lm35z7zvrv8gcymv3l3a98r1yhy3v6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/iplayer";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/iplayer";
           sha256 = "0wnxvdlnvlmspqsaqx0ldw8j03qjckkqzvx3cbpc2yfs55pm3p7r";
           name = "iplayer";
         };
@@ -13772,7 +13982,7 @@
           sha256 = "036q933yw7pimnnq43ydaqqfccgf4iwvjhjmsavp7l6y1w16rvmy";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ir-black-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ir-black-theme";
           sha256 = "1qpq9zbv63ywzk5mlr8x53g3rn37k0mdv6x1l1hcd90gka7vga9v";
           name = "ir-black-theme";
         };
@@ -13793,7 +14003,7 @@
           sha256 = "1wsh72dzm54srxdnlhnmbi8llc30syhbckycj5wmsamw8b89p7c2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/irony";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/irony";
           sha256 = "1xcxrdrs7imi31nxpszgpaywq4ivni75hrdl4zzrf103xslqpl8a";
           name = "irony";
         };
@@ -13814,7 +14024,7 @@
           sha256 = "09hx28lmldm7z3x22a0qx34id09fdp3z61pdr61flgny213q1ach";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/isgd";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/isgd";
           sha256 = "0yc9mkjzj3w64f48flnjvd193mk9gndrrqbxz3cvmvq3vgahhzyi";
           name = "isgd";
         };
@@ -13835,7 +14045,7 @@
           sha256 = "0rpxh1jv98dl9b5ldjkljk70z4hkl61kcmvy1lhpj3lxn8ysv87a";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ix";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ix";
           sha256 = "1fl76dk8vgw3mrh5iz99lrsllwya6ij9d1lj3szcrs4qnj0b5ql3";
           name = "ix";
         };
@@ -13856,7 +14066,7 @@
           sha256 = "07kbicf760nw4qlb2lkf1ns8yzqy0r5jqqwqjbsnqxx4sm52hml9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/j-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/j-mode";
           sha256 = "0f9lsr9hjhdvmzx565ivlncfzb4iq4rjjn6a41053cjy50bl066i";
           name = "j-mode";
         };
@@ -13875,7 +14085,7 @@
           sha256 = "af89d7052e555c7b5efb0c21387a50699056659fb83698691b70e75c88e4cd34";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/jabber";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/jabber";
           sha256 = "1g5pc80n3cd5pzs3hmpbnmxbldwakd72pdn3vvb0h26j9v073pa8";
           name = "jabber";
         };
@@ -13896,7 +14106,7 @@
           sha256 = "0krbd1qa2408a97pqhl7fv0x8x1n2l3qq33zzj4w4vv0c55jk43n";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/jade-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/jade-mode";
           sha256 = "156j0d9wx6hrhph0nsjsi1jha4h65rcbrbff1j2yr8vdsszjrs94";
           name = "jade-mode";
         };
@@ -13917,7 +14127,7 @@
           sha256 = "0x0vz7m9kn7b2aiqvrdqx8qh84ynbpzy2asz2b18l47bcwa7r5bh";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/jammer";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/jammer";
           sha256 = "01c4bii7gswhp6z9dgx4bhvsywiwbbdv7mg1zj6vp1530l74zx6z";
           name = "jammer";
         };
@@ -13938,13 +14148,34 @@
           sha256 = "08gkxxaw789g1r0dql11skz6i8bdrrz4wp87fzs9f5rgx99xxr6h";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/japanlaw";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/japanlaw";
           sha256 = "1pxss1mjk5660k80r1xqgslnbrsr6r4apgp9abjwjfxpg4f6d0sa";
           name = "japanlaw";
         };
         packageRequires = [];
         meta = {
           homepage = "http://melpa.org/#/japanlaw";
+          license = lib.licenses.free;
+        };
+      }) {};
+    java-imports = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, pcache, s }:
+    melpaBuild {
+        pname = "java-imports";
+        version = "0.1.0";
+        src = fetchFromGitHub {
+          owner = "dakrone";
+          repo = "emacs-java-imports";
+          rev = "275f354c245df741b45e88d085660722e81a12be";
+          sha256 = "1bngn6v6w60qb3zz7s3px7v3wk99a3hfvzrg9l06dz1q7xgyvsi1";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/java-imports";
+          sha256 = "1waz6skyrm1n8wpc0pwa652l11wz8qz1m89mqxk27k3lwyd84n98";
+          name = "java-imports";
+        };
+        packageRequires = [ emacs pcache s ];
+        meta = {
+          homepage = "http://melpa.org/#/java-imports";
           license = lib.licenses.free;
         };
       }) {};
@@ -13959,7 +14190,7 @@
           sha256 = "0ljpqgp2w3lr61n2vr748n3wyshlqnnbin0643jffa319l99z35r";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/javadoc-lookup";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/javadoc-lookup";
           sha256 = "1fffs0iqkk9rg5vbxifvn09j4i2751p81bzcvy5fslr3r1r2nv79";
           name = "javadoc-lookup";
         };
@@ -13980,7 +14211,7 @@
           sha256 = "0xbp9fcxgbf298w05hvf52z41kk7r52975ailgdn8sg60xc98fa7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/jedi";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/jedi";
           sha256 = "1777060q25k9n2g6h1lm5lkki900pmjqkxq72mrk3j19jr4pk9m4";
           name = "jedi";
         };
@@ -14001,7 +14232,7 @@
           sha256 = "0xbp9fcxgbf298w05hvf52z41kk7r52975ailgdn8sg60xc98fa7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/jedi-core";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/jedi-core";
           sha256 = "0pzi32zdb4g9n4kvpmkdflmqypa7nckmnjq60a3ngym4wlzbb32f";
           name = "jedi-core";
         };
@@ -14022,7 +14253,7 @@
           sha256 = "1gf6ir4viy8zr9fwmjz4s7zkr3m7947sa8mai56bnv83r2k3s9ir";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/js-comint";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/js-comint";
           sha256 = "0jvkjb0rmh87mf20v6rjapi2j6qv8klixy0y0kmh3shylkni3an1";
           name = "js-comint";
         };
@@ -14043,7 +14274,7 @@
           sha256 = "0d2hqlgm09rw0azha5dxmq63b56sa8b9qj7gd7invibl6nnyjh4a";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/js2-closure";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/js2-closure";
           sha256 = "19732bf98lk2ah2ssgkr1ngxx7rz3nhsiw84lsfmydb0vvm4fpk7";
           name = "js2-closure";
         };
@@ -14064,7 +14295,7 @@
           sha256 = "0r2szaxr3q0gvxqd9asn03q8jf3nclxv4mqdsjn96s98n45x388l";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/js2-highlight-vars";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/js2-highlight-vars";
           sha256 = "07bq393g2jy8ydvaqyqn6vdyfvyminvgi239yvwzg5g9a1xjc475";
           name = "js2-highlight-vars";
         };
@@ -14085,7 +14316,7 @@
           sha256 = "0xj87grvg7pbhh4d239gaqai5gl72klhpp9yksaqn77qnm98q4fn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/js2-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/js2-mode";
           sha256 = "0f9cj3n55qnlifxwk1yp8n1kfd319jf7qysnkk28xpvglzw24yjv";
           name = "js2-mode";
         };
@@ -14106,7 +14337,7 @@
           sha256 = "08wxsz90x5zhma3q8kqfd01avhzxjmcrjc95s757l5xaynsc2bly";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/js2-refactor";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/js2-refactor";
           sha256 = "09dcfwpxxyw0ffgjjjaaxbsj0x2nwfrmxy1a05h8ba3r3jl4kl1r";
           name = "js2-refactor";
         };
@@ -14127,7 +14358,7 @@
           sha256 = "17d0nf1kz7mgv5qz57q6khy4w5vrmsliqirggahk9s6nnsx1j56n";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/js3-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/js3-mode";
           sha256 = "12s5qf6zfcv4m5kqxvh9b4zgwf433x39a210d957gjjp5mywbb1r";
           name = "js3-mode";
         };
@@ -14148,7 +14379,7 @@
           sha256 = "0pjmslxwmlb9cb3j5qfsyxq1lg1ywzw1p9dvj330c2m7nla1j70x";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/jsfmt";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/jsfmt";
           sha256 = "1syy32sv2d57b3gja0ly65h36mfnyq6hzf5lnnl3r58yvbdzngqd";
           name = "jsfmt";
         };
@@ -14169,7 +14400,7 @@
           sha256 = "0sxkp9m68rvff8dbr8jlsx85w5ngifn19lwhcydysm7grbwzrdi3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/json-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/json-mode";
           sha256 = "014j10wgxsqy6d6aksnkz2dr5cmpsi8c7v4a825si1vgb4622a70";
           name = "json-mode";
         };
@@ -14190,7 +14421,7 @@
           sha256 = "0qp4n2k6s69jj4gwwimkpadjv245y54wk3bxb1x96f034gkp81vs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/json-reformat";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/json-reformat";
           sha256 = "1m5p895w9qdgb8f67xykhzriribgmp20a1lvj64iap4aam6wp8na";
           name = "json-reformat";
         };
@@ -14211,7 +14442,7 @@
           sha256 = "05zsgnk7grgw9jzwl80h5sxfpifxlr37b4mkbvx7mjq4z14xc2jw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/json-snatcher";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/json-snatcher";
           sha256 = "0f6j9g3c5fz3wlqa88706cbzinrs3dnfpgsr2d3h3117gic4iwp4";
           name = "json-snatcher";
         };
@@ -14232,7 +14463,7 @@
           sha256 = "1wx28rr5dk238yz07xn95v88qmv10c1gz9pcxard2kszpnmrn6dx";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/jsx-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/jsx-mode";
           sha256 = "1lnjnyn8qf3biqr92z443z6b58dly7glksp1g986vgqzdprq3n1b";
           name = "jsx-mode";
         };
@@ -14253,7 +14484,7 @@
           sha256 = "0kvk1qiy2cj0iw2c0mx0dyr3jjvhyj1gwym6l43n7clp5kqcij1z";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/julia-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/julia-mode";
           sha256 = "0c5bdgh98hw7484s2is84af7hznd8c4z5vlzfd98s8qxi7bldqjm";
           name = "julia-mode";
         };
@@ -14274,7 +14505,7 @@
           sha256 = "1fm69g4mrmdchvxr062bk7n1jvs2rrscddb02cldb5bgdrcw8g6j";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/jump";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/jump";
           sha256 = "18g0fa9g8m9jscsm6pn7jwdq94l4aj0dfhrv2hqapq1q1x537364";
           name = "jump";
         };
@@ -14295,7 +14526,7 @@
           sha256 = "1s9plmg323m1p625xqnks0yqz0zlsjacdj7pv8f783r0d9jmfq3s";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/jump-to-line";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/jump-to-line";
           sha256 = "09ifhsggl5mrb6l8nqnl38yph0v26v30y98ic8hl23i455hqkkdr";
           name = "jump-to-line";
         };
@@ -14316,7 +14547,7 @@
           sha256 = "1785nsv61m51lpykai2wxrv6zmwbm5654v937fgw177p37054s83";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/jvm-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/jvm-mode";
           sha256 = "1r283b4s0pzq4hgwcz5cnhlvdvq4gy0x51g3vp0762s8qx969a5w";
           name = "jvm-mode";
         };
@@ -14337,7 +14568,7 @@
           sha256 = "03l9w238a5kyfin3v1fy1q2pl0gvmb87j0v89g6nk114s7m4y3r8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/kaesar";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/kaesar";
           sha256 = "0zhi1dv1ay1azh7afq4x6bdg91clwpsr13nrzy7539yrn9sglj5l";
           name = "kaesar";
         };
@@ -14358,7 +14589,7 @@
           sha256 = "03l9w238a5kyfin3v1fy1q2pl0gvmb87j0v89g6nk114s7m4y3r8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/kaesar-file";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/kaesar-file";
           sha256 = "0dcizg82maad98mbqqw5lamwz7n2lpai09jsrc66x3wy8k784alc";
           name = "kaesar-file";
         };
@@ -14379,7 +14610,7 @@
           sha256 = "03l9w238a5kyfin3v1fy1q2pl0gvmb87j0v89g6nk114s7m4y3r8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/kaesar-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/kaesar-mode";
           sha256 = "0yqnlchbpmhsqc8j531n08vybwa32cy0v9sy4f9fgxa90rfqczry";
           name = "kaesar-mode";
         };
@@ -14400,7 +14631,7 @@
           sha256 = "0b6af8hnrn0v4z1xpahjfpw5iga2bmgd3qwfn3is2rygsn5rkm40";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/kakapo-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/kakapo-mode";
           sha256 = "0a99cqflpzasl4wcmmf99aj8xgywkym37j7mvnsajrsk5wawdlss";
           name = "kakapo-mode";
         };
@@ -14421,7 +14652,7 @@
           sha256 = "0avcg307r4navvgj3hjkggk4gr7mzs4mljhxh223r8g69l9bm6m8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/karma";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/karma";
           sha256 = "19wl7js7wmw7jv2q3l4r5zl718lhy2a0jhl79k57ihwhxdc58fwc";
           name = "karma";
         };
@@ -14442,7 +14673,7 @@
           sha256 = "14ijniyvcfmj4y77yhiplsclincng2r3jbdnmmdnwzliv65f7l6q";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/key-combo";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/key-combo";
           sha256 = "1v8saw92jphvjkyy7j9jx7cxzgisl4zpf4wjzdjfw3la5lz11waf";
           name = "key-combo";
         };
@@ -14463,7 +14694,7 @@
           sha256 = "05vpydcgiaya35b62cdjxna9y02vnwzzg6p8jh0dkr9k44h4iy3f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/key-seq";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/key-seq";
           sha256 = "166k6hl9vvsnnksvhrv5cbhv9bdiclnbfv7qf67q4c1an9xzqi74";
           name = "key-seq";
         };
@@ -14484,7 +14715,7 @@
           sha256 = "07h6s1wdc83cqf08vqm4gh2r7bihbar4a31wr0140fn4rbhicwdw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/keychain-environment";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/keychain-environment";
           sha256 = "1w77cg00bwx68h0d6k6r1fzwdwz97q12ch2hmpzjnblqs0i4sv8v";
           name = "keychain-environment";
         };
@@ -14505,7 +14736,7 @@
           sha256 = "0dkc51bmix4b8czs2wg6vz8vk32qlll1b9fjmx6xshrxm85cyhvv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/keydef";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/keydef";
           sha256 = "0yb2vgj7abyg8j7qmv74nsanv50lf350q1m58rjv8wm31yykg992";
           name = "keydef";
         };
@@ -14526,7 +14757,7 @@
           sha256 = "0ways4ksb9pk2kkpgclsxgc0ycfwcr8vghlbv5ic4y0c4ycmlb2d";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/keyfreq";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/keyfreq";
           sha256 = "1rw6hzmw7h5ngvndy7aa41pq911y2hr9kqc9w4gdd5v2p4ln1qh7";
           name = "keyfreq";
         };
@@ -14547,7 +14778,7 @@
           sha256 = "06ajkqxv71hcrwc707ybzwfw4yzbsp6basnbs493ryr41gnvmnzs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/keymap-utils";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/keymap-utils";
           sha256 = "0nbcwz4nls0pva79lbx91bpzkl38g98yavwkvg2rxbhn9vjbhzs9";
           name = "keymap-utils";
         };
@@ -14568,7 +14799,7 @@
           sha256 = "0z6sgz8nywsd00zaayafwy5hfi7kzxfifjkfr5cn1l7wlypyksfv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/keyset";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/keyset";
           sha256 = "1kfw0pfb6qm2ji1v0kb8xgz8q2yd2k9kxmaz5vxcdixdlax3xiqg";
           name = "keyset";
         };
@@ -14589,7 +14820,7 @@
           sha256 = "0ky167xh1hrmqsldybzjhyqjizgjzs1grn5mf8sm2j9qwcvjw2zv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/kibit-helper";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/kibit-helper";
           sha256 = "15viybjqksylvm5ash2kzsil0cpdka56wj1rryixa8y1bwlj8y4s";
           name = "kibit-helper";
         };
@@ -14602,15 +14833,15 @@
     kill-or-bury-alive = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "kill-or-bury-alive";
-        version = "0.1.1";
+        version = "0.1.2";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "kill-or-bury-alive";
-          rev = "6e0d1ff08889d9cf3f89e366e327d9de930cf67c";
-          sha256 = "11cqrjxfiflz89gkl9g5m0wx041s28xz879cvhl3i1yjnwyhzqay";
+          rev = "b488c3dbba657bbd524402f48fde16ab6b1211db";
+          sha256 = "1c5al7cyfnb0p5ya2aa5afadzbrrc079jx3r6zpkr64psskrhdv5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/kill-or-bury-alive";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/kill-or-bury-alive";
           sha256 = "0mm0m8hpy5v98cap4f0s38dcviirm7s6ra4l94mknyvnx0f73lz8";
           name = "kill-or-bury-alive";
         };
@@ -14631,7 +14862,7 @@
           sha256 = "0axvhikhg4fikiz4ifg0p4a5ygphbpjs0wd0gcbx29n0y54d1i93";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/kill-ring-search";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/kill-ring-search";
           sha256 = "1pg4j1rrji64rrdv2xpwz33vlyk8r0hz4j4fikzwpbcbmni3skan";
           name = "kill-ring-search";
         };
@@ -14652,7 +14883,7 @@
           sha256 = "0imylcaiwpzvvb3g8kpsna1vk7v7bwdjfcsa98i41m1rv9yla86l";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/killer";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/killer";
           sha256 = "10z4vqwrpss7mk0gq8xdsbsl0qibpp7s1g0l8wlmrsgn6kjkr2ma";
           name = "killer";
         };
@@ -14673,7 +14904,7 @@
           sha256 = "0rzzjzkzgpiadm9awkj7wrh2hg97lhgwxg74gvdis3fc1xg2hyri";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/kivy-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/kivy-mode";
           sha256 = "02l230rwivr7rbiqm4vg70458z35f9v9w3mdapcrqd5d07y5mvi1";
           name = "kivy-mode";
         };
@@ -14694,7 +14925,7 @@
           sha256 = "08q43k4450kgygyvqv18gwcmmb7y9x445401048lbixc4cp6p3cg";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/know-your-http-well";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/know-your-http-well";
           sha256 = "0k2x0ajxkivim8nfpli716y7f4ssrmvwi56r94y34x4j3ib3px3q";
           name = "know-your-http-well";
         };
@@ -14715,7 +14946,7 @@
           sha256 = "0da4y9pf6vq0i6w7bmvrszg9bji3ylhr44hmyrmxvah28pigb2fz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/kurecolor";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/kurecolor";
           sha256 = "0q0q0dfv376h7j3sgwxqwfpxy1qjbvb6i5clsxz9xp4ly89w4d4f";
           name = "kurecolor";
         };
@@ -14736,7 +14967,7 @@
           sha256 = "1i8wbhc6i88plpq48ccka0avdj2x5rcxm81j93dmwp70ld0zws8p";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/langtool";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/langtool";
           sha256 = "1xq70jyhzg0qmvialy015crbdk9rdibhwpl36khab9hi2999wxyw";
           name = "langtool";
         };
@@ -14757,7 +14988,7 @@
           sha256 = "1rr6cgx70avqf1b19la7g8cav926676a76cflkkw18c1bsw83ss3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/latex-extra";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/latex-extra";
           sha256 = "1w98ngxymafigjpfalybhs12jcf4916wk4nlxflfjcx8ryd9wjcj";
           name = "latex-extra";
         };
@@ -14778,7 +15009,7 @@
           sha256 = "118xrgrnwsmsysmframf6bmb0gkrdrm3jbkgivzxs41cw92fhbzw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/latex-math-preview";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/latex-math-preview";
           sha256 = "14bn0q5czrrkb1vjdkwx6f2x4zwjkxgrc0bcncv23l13qls1gkmr";
           name = "latex-math-preview";
         };
@@ -14795,11 +15026,11 @@
         src = fetchFromGitHub {
           owner = "ledger";
           repo = "ledger";
-          rev = "f612ef0b25a6f679fae47f8371bcd4c25a380b02";
-          sha256 = "011a0l2jx4x687s3mqhhyrgpwxqcjv0cn4alhd55caql6z5cwh5h";
+          rev = "9b49ade03a3e5d9089ee031bdf733004cee8a36e";
+          sha256 = "0cp5ywmk48sd7c8s8d5a0sv0ng4fl0hybss2z8fwhw6z47iypzmi";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ledger-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ledger-mode";
           sha256 = "0hi9waxmw1bbg88brlr3816vhdi0jj05wcwvrvfc1agvrvzyqq8s";
           name = "ledger-mode";
         };
@@ -14820,7 +15051,7 @@
           sha256 = "04h6vk7w25yp4kzkwqnsmc59bm0182qqkyk5nxm3a1lv1v1590lf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/lentic";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/lentic";
           sha256 = "0y94y1qwj23kqp491b1fzqsrjak96k1dmmzmakbl7q8vc9bncl5m";
           name = "lentic";
         };
@@ -14841,7 +15072,7 @@
           sha256 = "1w6mbk4gc63sh2p9rsy851x2kid0dp2ja4ai5badkr5prxkcpfdn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/less-css-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/less-css-mode";
           sha256 = "188iplnwwhawq3dby3388kimy0jh1k9r8v9nxz52hy9rhh9hykf8";
           name = "less-css-mode";
         };
@@ -14862,7 +15093,7 @@
           sha256 = "1l9qjmyb4a3f6i2iimpmjczbx890cd1p24n941s13sg67xfbm7hn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/letcheck";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/letcheck";
           sha256 = "1sjwi1ldg6b1qvj9cvfwxq3qlkfas6pm8zasf43baljmnz38mxh2";
           name = "letcheck";
         };
@@ -14883,7 +15114,7 @@
           sha256 = "1w9n5v4g4w34gii6nk2aan4w230dmm0dhml4s9q1fzmvk1ngld6k";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/lfe-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/lfe-mode";
           sha256 = "06b382ncgk4zz3q8akyzfy55j86a53r97gf0l92qvlca7fbs8jjx";
           name = "lfe-mode";
         };
@@ -14904,7 +15135,7 @@
           sha256 = "0hi8s20vw4a5i5n5jlm5dzgsl1qpfyqbpskqszjls1xrrf3dd4zl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/lice";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/lice";
           sha256 = "1hv2hz3153x0gk7f2js18dbx5pyprfdf2pfxb658fj16vxpp7y6x";
           name = "lice";
         };
@@ -14925,7 +15156,7 @@
           sha256 = "11sw43z5b0vypmhi0yysf2bxjy8fqpzl61y503jb7nhcfywmfkys";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/lingr";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/lingr";
           sha256 = "1445bxiirsxl9kgm0j86xc9d0pbaa5f07c1i66pw2vl40bvhrjff";
           name = "lingr";
         };
@@ -14946,7 +15177,7 @@
           sha256 = "05xfgn9sabi1ykk8zbk2vza1g8pdrg08j5cb58f50nda3q8ndf4s";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/link";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/link";
           sha256 = "17jpsg3f2954b740vyj37ikygrg5gmp0bjhbid8bh8vbz7xx9zy8";
           name = "link";
         };
@@ -14967,7 +15198,7 @@
           sha256 = "1v4fadxv7ym6lc09nd2xpz2k5vrikjv7annw99ii5cqrwhqa5838";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/link-hint";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/link-hint";
           sha256 = "12fb2zm9jnh92fc2nzmzmwjlhi64rhakwbh9lsydx9svsvkgcs89";
           name = "link-hint";
         };
@@ -14988,7 +15219,7 @@
           sha256 = "1m4g4b96cxs05pfln7kdi6gvrdbv76f8dk806py5lq0gq7da2csc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/linum-relative";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/linum-relative";
           sha256 = "0s1lc3lppazv0481dxknm6qrxhvkv0r9hw8xmdrpjc282l91whkj";
           name = "linum-relative";
         };
@@ -15009,7 +15240,7 @@
           sha256 = "05iqhnhj61f30yk4ih63rimmyp134gyq18frc8qgrnwym64dsm6l";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/lispy";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/lispy";
           sha256 = "12qk2gpwzz7chfz7x3wds39r4iiipvcw2rjqncir46b6zzlb1q0g";
           name = "lispy";
         };
@@ -15037,7 +15268,7 @@
           sha256 = "0qyj04p63fdh3iasp5cna1z5fhibmfyl9lvwyh22ajzsfbr3nhnk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/lispyscript-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/lispyscript-mode";
           sha256 = "02biai45l5xl2m9l1drphrlj6r01msmadhyg774ijdk1x4gm5nhr";
           name = "lispyscript-mode";
         };
@@ -15058,7 +15289,7 @@
           sha256 = "197cqkiwxgamhfwbc8h492cmjll3fypkwzcphj26dfnr22v63kwq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/list-packages-ext";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/list-packages-ext";
           sha256 = "15m4888fm5xv697y7jspghg1ra49fyrny4y2x7h8ivcbslvpglvk";
           name = "list-packages-ext";
         };
@@ -15079,7 +15310,7 @@
           sha256 = "05nn4db8s8h4mn3fxhwsa111ayvlq1raf6bifh7jciyw7a2c3aww";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/list-unicode-display";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/list-unicode-display";
           sha256 = "01x9i5k5vhjscmkx0l6r27w1cdp9n6xk1pdjf98z3y88dnsmyfha";
           name = "list-unicode-display";
         };
@@ -15100,7 +15331,7 @@
           sha256 = "0dmcmvf3dxmp1f71nq5xwsdrnyb04qr14ay4ckpaca2bmi7q0x5x";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/list-utils";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/list-utils";
           sha256 = "0bknprr4jb1d20i9lj2aa17vpg1kqwdyzzwmy1kfydnkpf5scnr3";
           name = "list-utils";
         };
@@ -15121,7 +15352,7 @@
           sha256 = "0mr0king5dj20vdycpszxnfs9ch808fhcz3q7svxfngj3d3671wd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/lit-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/lit-mode";
           sha256 = "05rf7ki060nqnvircn0dkpdrg7xbh7phb8bqgsab89ycc7l9vv59";
           name = "lit-mode";
         };
@@ -15142,7 +15373,7 @@
           sha256 = "1fh9wrw5irn0g3dy8gkk63csdcxgi3w2038mxx3sk6ki3r2bmhw8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/literate-coffee-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/literate-coffee-mode";
           sha256 = "1bll1y9q3kcg3v250asjvx2k9kb314qadaq1iwanwgdlp3qvvs40";
           name = "literate-coffee-mode";
         };
@@ -15163,7 +15394,7 @@
           sha256 = "1cwydbhhbs5v9y2s872zxc5lflqmfrdvnc8xz0qars52d7lg4br5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/live-code-talks";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/live-code-talks";
           sha256 = "173mjmxanva13vk2f3a06s4dy62x271kynsa7pbhdg4fd72hdjma";
           name = "live-code-talks";
         };
@@ -15184,7 +15415,7 @@
           sha256 = "1y81qqsjj2sa319xkwhvq7bl3f5gma4cs7w8x2w510ms32fgqa8x";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/live-py-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/live-py-mode";
           sha256 = "0yn1a0gf9yn068xifpv8p77d917mnalc56pll800zlpsdk8ljicq";
           name = "live-py-mode";
         };
@@ -15205,7 +15436,7 @@
           sha256 = "1089sbx20r30sis39vwy29fxhb2n3hh35rdv09lpzdxdq01s8wwp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/loc-changes";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/loc-changes";
           sha256 = "1akgij61b2ixpkchrriabwvx68cg4v5r5w9ncjrjh91hskjprfxh";
           name = "loc-changes";
         };
@@ -15226,7 +15457,7 @@
           sha256 = "1l28n7a0v2zkknc70i1wn6qb5i21dkhfizzk8wcj28v44cgzk022";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/log4e";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/log4e";
           sha256 = "1klj59dv8k4r0hily489dp12ra5hq1jnsdc0wcakh6zirmakhs34";
           name = "log4e";
         };
@@ -15268,7 +15499,7 @@
           sha256 = "0g5vq9xy9lwczs77lr91c1srhhfmasnnnmjvgc55hbl6iwmbizbm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/logalimacs";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/logalimacs";
           sha256 = "0ai7a01bdi3a0amgi63pwgdp8wgcgx10an4nhc627wgb1cqxb7p6";
           name = "logalimacs";
         };
@@ -15289,7 +15520,7 @@
           sha256 = "0jpyd2f33pk984kg0q9hxdl4615jb7sxsggnb30mpz7a2ws479xr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/logito";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/logito";
           sha256 = "0bk4qnz66kvhzsk88lw45209778y53kg17iih70ix4ma1x6a3v5l";
           name = "logito";
         };
@@ -15310,7 +15541,7 @@
           sha256 = "1yacic778ranlqblrcdhyf5igbrcin8aj30vjdm4klpmqb73hf1s";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/logview";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/logview";
           sha256 = "0gks3j5avx8k3427a36lv7gr95id3cylaamgn5qwbg14s54y0vsh";
           name = "logview";
         };
@@ -15331,7 +15562,7 @@
           sha256 = "1rpvw0dvym559vb4nrfy74jq06nbsz2b0n60lcykagcir8mpcidk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/loop";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/loop";
           sha256 = "0pav16kinzljmzx84vfz63fvi39af4628vk1jw79jk0pyg9rjbar";
           name = "loop";
         };
@@ -15352,7 +15583,7 @@
           sha256 = "11y5jyq4xg9zlm1qi2y97nh05vhva9pai9yyr4x2pr41xz3s8fpk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/love-minor-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/love-minor-mode";
           sha256 = "1skg039h2hn8dh47ww6n9l776s2yda8ariab4v9f56kb21bncr4m";
           name = "love-minor-mode";
         };
@@ -15373,7 +15604,7 @@
           sha256 = "1psk4202rmkkfy1ir1ax4x4djfngd5pfry7x30ybq2ifqzymb9qb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/lua-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/lua-mode";
           sha256 = "0gyi7w2h192h3pmrhq39lxwlwd9qyqs303lnp2655pikdzk9js94";
           name = "lua-mode";
         };
@@ -15394,7 +15625,7 @@
           sha256 = "01847f8xmjfxvvi7hf73l7ypkdazwg8ciinm117zp4jkgnv0apz0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/m-buffer";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/m-buffer";
           sha256 = "0l2rayglv48pcwnr1ggmn8c0az0mffgv02ivnzr9jcfs55ki07fc";
           name = "m-buffer";
         };
@@ -15415,7 +15646,7 @@
           sha256 = "0dgsl1x6r8m9vvff1ia0kmz21h0dji2jl5cqlpx1m947zh45dahj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/macro-math";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/macro-math";
           sha256 = "1r7splwq5kdrdhbmw5zn81vxymsrllgil48g8dl0r60293384h00";
           name = "macro-math";
         };
@@ -15436,7 +15667,7 @@
           sha256 = "0dkigxa39f3cmndxw79mgadwsj7w3bphns6l2hzhv6w0wdllpifp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/macrostep";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/macrostep";
           sha256 = "1wjibxbdsp5qfhq8xy0mcf3ms0q74qhdrhqndprn6jh3kcn5q63c";
           name = "macrostep";
         };
@@ -15449,15 +15680,15 @@
     magic-filetype = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
     melpaBuild {
         pname = "magic-filetype";
-        version = "0.1.1";
+        version = "0.1.2";
         src = fetchFromGitHub {
           owner = "zonuexe";
           repo = "magic-filetype.el";
-          rev = "1a3e425ab5b7b6614b7ece5885d23f12f45572f0";
-          sha256 = "128dqgh7kvjywiq0wq6ipnr1l1v2dzrz5j0rd3n2783r9nz0i7r5";
+          rev = "db734bdd7aa429e188a628e772c40542b0216d5c";
+          sha256 = "0i38942lr4b7d624313hgydyy0ynmd6psjkz8xcvbb7gw0kcc436";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/magic-filetype";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/magic-filetype";
           sha256 = "0gcys45cqn5ghppkn0rmyvfybprlfz1x6hqr21yv93mf79h75zhg";
           name = "magic-filetype";
         };
@@ -15470,16 +15701,16 @@
     magit = callPackage ({ async, dash, emacs, fetchFromGitHub, fetchurl, git-commit, lib, magit-popup, melpaBuild, with-editor }:
     melpaBuild {
         pname = "magit";
-        version = "2.4.0";
+        version = "2.5.0";
         src = fetchFromGitHub {
           owner = "magit";
           repo = "magit";
-          rev = "2e757a8c919b53edddb186e36e055e011e3b0ab3";
-          sha256 = "0hklwwzi2gqywysxn16ps1fvn48max52cpk2nx7r4df4h52yk6wn";
+          rev = "a3747edc8a4cddc408f7718a3371b46a4b610744";
+          sha256 = "0dydm0gj6jbybi5nkqrpi5bic5yxhz0p5k5gayqzqzmnb1fhl247";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/magit";
-          sha256 = "099i9h375yfhcylz8mvsm45mkkiyyhx0s1q3icba5n875jvq7smz";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/magit";
+          sha256 = "0518ax2y7y2ji4jp7yghy84yxm0zgb059aqfa4v17grm4kr8p16q";
           name = "magit";
         };
         packageRequires = [
@@ -15506,7 +15737,7 @@
           sha256 = "0d7dick96g1vj6c9wh10rgwhwv5j3ixgw1m3z45szszswlrp1bih";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/magit-annex";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/magit-annex";
           sha256 = "1ri58s1ly416ksmb7mql6vnmx7hq59lmhi7qijknjarw7qs3bqys";
           name = "magit-annex";
         };
@@ -15527,7 +15758,7 @@
           sha256 = "1vn6x53kpwv3zf2b5xjswyz6v853r8b9dg88qhwd2h480hrx6kal";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/magit-filenotify";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/magit-filenotify";
           sha256 = "00a77czdi24n3zkx6jwaj2asablzpxq16iqd8s84kkqxcfiiahn7";
           name = "magit-filenotify";
         };
@@ -15548,7 +15779,7 @@
           sha256 = "1jlww053s580d7rlvmr1dl79wxasa0hhh2jnwb1ra353d6h3a73w";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/magit-find-file";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/magit-find-file";
           sha256 = "1d5flydyhwhvhlhi541zcnz2b03bi07zrp21bfz5sm069bf2c96b";
           name = "magit-find-file";
         };
@@ -15569,7 +15800,7 @@
           sha256 = "0ym24gjd6c04zry08abcb09zvjbgj8nc1j12q0r51fhzzadxcxbb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/magit-gerrit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/magit-gerrit";
           sha256 = "1iwvg10ly6dlf8llz9f8d4qfdbvd3s28wf48qgn1wjlxpka6zrd4";
           name = "magit-gerrit";
         };
@@ -15590,7 +15821,7 @@
           sha256 = "19iqa2kzarpa75xy34hqvpy1y7dzx84pj540wwkj04dnpb4fwj2z";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/magit-gh-pulls";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/magit-gh-pulls";
           sha256 = "0qn9vjxi33pya9s8v3g95scmhwrn2yf5pjm7d24frq766wigjv8d";
           name = "magit-gh-pulls";
         };
@@ -15611,7 +15842,7 @@
           sha256 = "00711dgbzmplqrfww8xf261ymz3jmhisnv9x1rhcw0ywmlfkbckz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/magit-gitflow";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/magit-gitflow";
           sha256 = "0wsqq3xpqqfak4aqwsh5sxjb1m62z3z0ysgdmnrch3qsh480r8vf";
           name = "magit-gitflow";
         };
@@ -15624,15 +15855,15 @@
     magit-popup = callPackage ({ async, dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "magit-popup";
-        version = "2.4.0";
+        version = "2.5.0";
         src = fetchFromGitHub {
           owner = "magit";
           repo = "magit";
-          rev = "2e757a8c919b53edddb186e36e055e011e3b0ab3";
-          sha256 = "0hklwwzi2gqywysxn16ps1fvn48max52cpk2nx7r4df4h52yk6wn";
+          rev = "a3747edc8a4cddc408f7718a3371b46a4b610744";
+          sha256 = "0dydm0gj6jbybi5nkqrpi5bic5yxhz0p5k5gayqzqzmnb1fhl247";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/magit-popup";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/magit-popup";
           sha256 = "0w6m384bbmp3bd4qbss5h1jvcfp4qnpqvzlfykhdgjwpv2b2a2fj";
           name = "magit-popup";
         };
@@ -15653,7 +15884,7 @@
           sha256 = "1pqbrrp4366kwfk1d32h2lb70id32ynfc03i7m2832w97f1xp16c";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/magit-rockstar";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/magit-rockstar";
           sha256 = "1i4fmraiypyd3q6vvibkg9xqfxiq83kcz64b1dr3wmwn30j7986n";
           name = "magit-rockstar";
         };
@@ -15674,7 +15905,7 @@
           sha256 = "1mk8g8rr9vf8jm0mmsj33p8gc71nhlv3847hvqywy6z40nhcjnyb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/magit-stgit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/magit-stgit";
           sha256 = "12wg1ig2jzy2np76brpwxdix9pwv75chviq3c24qyv4y80pd11sv";
           name = "magit-stgit";
         };
@@ -15695,7 +15926,7 @@
           sha256 = "1g8zq0s38di96wlhljp370kyj4a0ir1z3vb94k66v2m5nj83ap68";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/magit-svn";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/magit-svn";
           sha256 = "02n732z06f0bhxqkxzlvm36bpqr40pas09zbzpfdk4pb6f9f80s0";
           name = "magit-svn";
         };
@@ -15716,7 +15947,7 @@
           sha256 = "0dj183vphnvz9k2amga0ydcb4gkjxr28qz67055mxrf89q1qjq33";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/magit-topgit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/magit-topgit";
           sha256 = "1ngrgf40n1g6ncd5nqgr0zgxwlkmv9k4fik96dgzysgwincx683i";
           name = "magit-topgit";
         };
@@ -15737,7 +15968,7 @@
           sha256 = "0fp5gbin1sgsdz39spk74vadkzig3ydwhpzx9vg7f231kk5f6wzx";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/make-color";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/make-color";
           sha256 = "0mrv8b67lpid5m8rfbhcik76bvnjlw4xmcrd2c2iinyl02y07r5k";
           name = "make-color";
         };
@@ -15758,7 +15989,7 @@
           sha256 = "1rr7vpm3xxzcaam3m8xni3ajy8ycyljix07n2jzczayri9sd8csy";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/makey";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/makey";
           sha256 = "06xgrlkqvg288yd4lyhx4vi80jlfarhblxk5m5zzs5as7n08cvk4";
           name = "makey";
         };
@@ -15779,7 +16010,7 @@
           sha256 = "0z0ml7l1a45ych61qfc5fvkybl9hh37pgl6lzkaz6mcif1sl8gn1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/malabar-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/malabar-mode";
           sha256 = "026ing7v22rz1pfzs2j9z09pm6dajpys992n45gzhwirz5f0q1rk";
           name = "malabar-mode";
         };
@@ -15800,7 +16031,7 @@
           sha256 = "0hwxwwjzjxv2mmkxmalr2hp3x8apwcyvn2bz4d4yd4wrzcscay97";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/malinka";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/malinka";
           sha256 = "1245mpxsxwnnpdsf0pd28mddgdfhh7x32a2l3sxfq0dyg2xlgvrp";
           name = "malinka";
         };
@@ -15821,7 +16052,7 @@
           sha256 = "1272fsjzsza9dxm8s64b7x2jzr3ks8wjpwvgcxha2dnsjzklcdcj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mallard-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mallard-mode";
           sha256 = "0y2ikjgy107kb85pz50vv7ywslqgbrrkcfsrd8gsk1jky4qn8izd";
           name = "mallard-mode";
         };
@@ -15842,7 +16073,7 @@
           sha256 = "1fkijm0gikbwmxa9hf7s1rcwb0ipzjygd1mlicsm78rxvdd8k877";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/map-progress";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/map-progress";
           sha256 = "0zc5vii72gbfwbb35w8m30c8r9zck971hwgcn1a4wjczgn4vkln7";
           name = "map-progress";
         };
@@ -15863,7 +16094,7 @@
           sha256 = "0kk1sk3cr4dbmgq4wzml8kdf14dn9jbyq4bwmvk0i7dic9vwn21c";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/map-regexp";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/map-regexp";
           sha256 = "0yiif0033lhaqggywzfizfia3siggwcz7yv4z7przhnr04akdmbj";
           name = "map-regexp";
         };
@@ -15884,7 +16115,7 @@
           sha256 = "0y4b69r2l6kvh7g8f1y9v1pdall3n668ci24lp04lcms6rxcrsnh";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/marcopolo";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/marcopolo";
           sha256 = "1nbck1m7lhync7n474578d2g1zc72c841hi236xjbdd2lnxz3zz0";
           name = "marcopolo";
         };
@@ -15905,7 +16136,7 @@
           sha256 = "0fcyspz7n97n84d9203mxgn8ar4rn52qa49s3vayfrbkn038j5qw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mark-tools";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mark-tools";
           sha256 = "1688y7lnzhwdva2ildjabzi10i87klfsgvs947i7gfgxl7jwhisq";
           name = "mark-tools";
         };
@@ -15925,7 +16156,7 @@
           sha256 = "8091933b49e8dfe57aa10377bd434b7c9b5807e9b78aa7a301885a44db1f7481";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/markdown-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/markdown-mode";
           sha256 = "02lmhihv495drv9cb40h6l0xsbx7yglbvsdzc4r0vf78j87rs33f";
           name = "markdown-mode";
         };
@@ -15946,7 +16177,7 @@
           sha256 = "1adl36fj506kgfw40gpagzsd7aypfdvy60141raggd5844i6y96r";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/markdown-mode+";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/markdown-mode+";
           sha256 = "1535kcj9nmcgmk2448jxc0jmnqy7f50cw2ngffjq5w8bfhgf7q00";
           name = "markdown-mode-plus";
         };
@@ -15967,7 +16198,7 @@
           sha256 = "10h5zh03c3v0c6pqcxvlns6l70k2l916nqvza53ikjpldmc4mln2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/markdown-preview-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/markdown-preview-mode";
           sha256 = "0i0mld45d8y96nkqn2r77nvbyw6wgsf8r54d3c2jrv04mnaxs7pg";
           name = "markdown-preview-mode";
         };
@@ -15988,7 +16219,7 @@
           sha256 = "0jgr327qlh7acwi6sld27xdsvr89parspk6wmfklwszvy1v13633";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/markdown-toc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/markdown-toc";
           sha256 = "0slky735yzmbfi4ld264vw64b4a4nllhywp19ya0sljbsfycbihv";
           name = "markdown-toc";
         };
@@ -16009,7 +16240,7 @@
           sha256 = "0nk2rm14ccwrh1aaxzm80rllsz8g38h9w52m0pf3nnwh6sa757nk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/markup-faces";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/markup-faces";
           sha256 = "12z92j9f0mpn7w2qkiwg54wh743q3inx56q3f8qcpfzyks546grq";
           name = "markup-faces";
         };
@@ -16030,7 +16261,7 @@
           sha256 = "0pbli67wia8pximvgd68x6i9acdgsk51g9hjpqfm49rqg5nqalh9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/marmalade";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/marmalade";
           sha256 = "0ppa2s1fma1lc01byanfxpxfrjqk2snxbsmdbkcipjdi5dpb0a9s";
           name = "marmalade";
         };
@@ -16051,7 +16282,7 @@
           sha256 = "0sriyjjhgis7fgq276j5mw6n84jdwxf8lq0iqqiaqwmc66l985mv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/marshal";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/marshal";
           sha256 = "17ikd8f1k42f28d4v5dn83zb44bsx7g336db60q068w6z8d4jbgl";
           name = "marshal";
         };
@@ -16064,14 +16295,14 @@
     matrix-client = callPackage ({ fetchgit, fetchurl, json ? null, lib, melpaBuild, request }:
     melpaBuild {
         pname = "matrix-client";
-        version = "0.2.0";
+        version = "0.3.0";
         src = fetchgit {
           url = "git://fort.kickass.systems/personal/rrix/pub/matrix.el";
-          rev = "de09c69d2d5ca604839239fe49b10a2ed5ac2809";
-          sha256 = "0516772e4aae604359bee659d101fb62b73cc9016cbbe0b749c77402954ec341";
+          rev = "421ad8ebf3858acc99634a4cca442c57ca2b3707";
+          sha256 = "34e1f7bd0c4ab21b2b0ca6d2a6ba83c9a1a5591e9de9ceb1c5f8fe06a4738acb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/matrix-client";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/matrix-client";
           sha256 = "09mgxk0xngw8j46vz6f5nwkb01iq96bf9m51w2q61wxivypnsyr6";
           name = "matrix-client";
         };
@@ -16092,7 +16323,7 @@
           sha256 = "0x92b1qrhyrdh0z0xriyjc12h0wpk16x4yawj5i828ca6mz0qh5g";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/maven-test-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/maven-test-mode";
           sha256 = "1k9w51rh003p67yalzq1w8am40nnr2khyyb5y4bwxgpms8z391fm";
           name = "maven-test-mode";
         };
@@ -16113,7 +16344,7 @@
           sha256 = "08gbkd8wln89j9yxp0zzd539hbwy1db31gca3vxxrpszixx8280y";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/maxframe";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/maxframe";
           sha256 = "10cwy3gi3xb3pfdh6xiafxp3vvssawci3y26jda6550d0w5vardj";
           name = "maxframe";
         };
@@ -16134,7 +16365,7 @@
           sha256 = "1si2givpzihjb1szbcdm3iy9kkm7bj0hq10s0h2dfm8axdnlirm5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mb-url";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mb-url";
           sha256 = "1nf8ssan00qsn3d4dc6h6qzdwqzh977qb5d2m33kiwi6qb98988h";
           name = "mb-url";
         };
@@ -16155,7 +16386,7 @@
           sha256 = "00gwd2jf5ncgyay5w2jc2mhv18jf4ydnzpfkxaxw9zjbdxg4ym2i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mbe";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mbe";
           sha256 = "0h18mbcjy8nh4gl12kg2v8x6ps320yk7sbgq5alqnx2shp80kri3";
           name = "mbe";
         };
@@ -16176,7 +16407,7 @@
           sha256 = "0252wdq4sd6jhzfy0pn3gdm6aq2h13nnp8hvrn1mpml9x473a5n1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mc-extras";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mc-extras";
           sha256 = "0b110x6ygc95v5pb9lk1i731x5s6dagl5afzv37l1qchys36xrym";
           name = "mc-extras";
         };
@@ -16197,7 +16428,7 @@
           sha256 = "1vsla0a5x4kfyj3ca4r1v8cspp12dadi0frpailclaxfmpmpl5d3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mediawiki";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mediawiki";
           sha256 = "17cbrzfdp6jbbf74mn2fi1cwv7d1hvdbw9j84p43jzscnaa5ikx6";
           name = "mediawiki";
         };
@@ -16218,7 +16449,7 @@
           sha256 = "12cp56ppmwpdgf5afx7hd2qb8d1qq8z27191fbbf5zqw8cq5zkpd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/melpa-upstream-visit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/melpa-upstream-visit";
           sha256 = "0j4afy9ipzr7pwkij8ab207mabd7srganlyyif9h1hvclj9svdmf";
           name = "melpa-upstream-visit";
         };
@@ -16239,7 +16470,7 @@
           sha256 = "1y4ra5z3ayw3w7dszzlkk3qz3nv2jg1vvx8cf0y5j1pqpx8vy3jf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mentor";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mentor";
           sha256 = "0nkf7f90m2qf11l97zwvb114yrpbqk1xxr2bh2nvbx8m1c8nad9s";
           name = "mentor";
         };
@@ -16260,13 +16491,34 @@
           sha256 = "192jamcc7rmvadlqqsjkzsl6hlgwhg9my1qc89fxh1lmd4qdsrpn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/merlin";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/merlin";
           sha256 = "0wnh7512sknagdk56j6gd8vamh9ns3vnggm56s73pik0m009w0xr";
           name = "merlin";
         };
         packageRequires = [];
         meta = {
           homepage = "http://melpa.org/#/merlin";
+          license = lib.licenses.free;
+        };
+      }) {};
+    metafmt = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "metafmt";
+        version = "0.0.1";
+        src = fetchFromGitHub {
+          owner = "lvillani";
+          repo = "metafmt";
+          rev = "19dc36b3d085bba6f8e59ddbb1cbb7e2c085c461";
+          sha256 = "0zxal6alf99a2zfzizckibp5iwdk9kklfhml2r0r3wfvswb0rb3z";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/metafmt";
+          sha256 = "0vx1xrjr10nd90cr6ppgd3kc3c8bhkg3m4clnb50zagkpfqsy9ma";
+          name = "metafmt";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "http://melpa.org/#/metafmt";
           license = lib.licenses.free;
         };
       }) {};
@@ -16281,7 +16533,7 @@
           sha256 = "06mbdb4zb07skq1jpv05hr45k5x96d9hgkb358jiq0kfsqlrbbb4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/metaweblog";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/metaweblog";
           sha256 = "11y5x3a8iv0hjj7ppi2sa7vawn7r475qfsh1jg415j4y4fzwpk6y";
           name = "metaweblog";
         };
@@ -16302,7 +16554,7 @@
           sha256 = "1dhws4a298zrm88cdn66sikdk06n0p60d32cxsgybakkhg5c5wgr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mew";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mew";
           sha256 = "0423xxn3cw6jmsd7vrw30hx9phga5chxzi6x7cvpswg1mhcyn9fk";
           name = "mew";
         };
@@ -16323,7 +16575,7 @@
           sha256 = "1bp4xqklf422n0zwwyj0ag3a4nndg8klazrga6rlvpy01hgg3drl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mhc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mhc";
           sha256 = "02ikn9hx0kcfc2xrx4f38zpkfi6vgz7chcxk6q5d0vcsp93b4lql";
           name = "mhc";
         };
@@ -16344,7 +16596,7 @@
           sha256 = "1ckb5hymwj4wmsxakalsky4mkzn9vxhxr6416b2cr6r5jxj4xgsl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/migemo";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/migemo";
           sha256 = "0y49imdwygv5zd7cyh9ngda4gyb2mld2a4s7zh4yzlh7z5ha9qkr";
           name = "migemo";
         };
@@ -16365,7 +16617,7 @@
           sha256 = "1qg64mxsm2cswk52mlj7sx7k6gfnrsdwnf68i7cachri0i8aq4ap";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/milkode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/milkode";
           sha256 = "07v6xgalx7vcw5sghckwvz584746cba05ql8flv8n556glm7hibh";
           name = "milkode";
         };
@@ -16386,7 +16638,7 @@
           sha256 = "1zyb6c3xwdzk7dpn7xi0mvbcjdfxvzz1a0zlbs053pfar8iim5fk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/minibuffer-complete-cycle";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/minibuffer-complete-cycle";
           sha256 = "0y1mxs6q9a8lzprrlb22qff6x5mvkw4gp2l6p2js2r0j9jzyffq2";
           name = "minibuffer-complete-cycle";
         };
@@ -16407,7 +16659,7 @@
           sha256 = "07nbn2pwlp33kr136xsm6lzddhjs538xkz0fbays89psblmy4kwj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/minibuffer-cua";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/minibuffer-cua";
           sha256 = "1ragvr73ykbvpgynnq3z0z4yzrlfhfqlwc1vbxclb8x2xmxq7pzw";
           name = "minibuffer-cua";
         };
@@ -16428,7 +16680,7 @@
           sha256 = "1850z96gly0jnr50472idqz1drzqarr0n23bbasslrc501xkg0bq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/miniedit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/miniedit";
           sha256 = "10s407q7igdi2hsaaahbw8vckalrl7z3s6l9cflf51q16xh2ih87";
           name = "miniedit";
         };
@@ -16449,7 +16701,7 @@
           sha256 = "0kjhn48sf2ps3k5pv06gqmqc4hlk6di9ld3ssw6vwfh8313x1fc5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/minimal-session-saver";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/minimal-session-saver";
           sha256 = "1ay7wvriga28bdmarpfwagqzmmk93ri9f3idhr6z6iivwggwyy2i";
           name = "minimal-session-saver";
         };
@@ -16470,7 +16722,7 @@
           sha256 = "0nd0jl5r5drnh98wdpqj2i7pgs7zvcizsh4qbvh8n0iw0c3f0pwh";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/minitest";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/minitest";
           sha256 = "0x6nd4kkhiw8hh79r69861pf41j8p1y39kzf2rl61zlmyjz9zpmw";
           name = "minitest";
         };
@@ -16490,7 +16742,7 @@
           sha256 = "0rpp748ym79sxccp9pyrwri14m7624zzb80srfgjfdpysrrs0jrr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mmm-mako";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mmm-mako";
           sha256 = "0a4af5q9wxafrid8visp30cz6073ig0c961b78vmmgqrwvvxd3kn";
           name = "mmm-mako";
         };
@@ -16511,7 +16763,7 @@
           sha256 = "097s4xnwfy8d1wzmz65g2f8bnjjjlj67w1yzwn4d3yasb171nbv8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mmm-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mmm-mode";
           sha256 = "10vkqaf4684cm5yds1xfinvgc3v7871fb203sfl9dbkcgnd5dcjw";
           name = "mmm-mode";
         };
@@ -16532,13 +16784,34 @@
           sha256 = "05nmcx3f63ds31cj3qwwp03ksflkfwlcn3z2xyxbny83r0dxbgvc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mmt";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mmt";
           sha256 = "0hal3qcw6x9658xpdaw6q9l2rr2z107pvg5bdzshf67p1b3lf9dq";
           name = "mmt";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
           homepage = "http://melpa.org/#/mmt";
+          license = lib.licenses.free;
+        };
+      }) {};
+    mocha = callPackage ({ fetchFromGitHub, fetchurl, js2-mode, lib, melpaBuild }:
+    melpaBuild {
+        pname = "mocha";
+        version = "1.0";
+        src = fetchFromGitHub {
+          owner = "scottaj";
+          repo = "mocha.el";
+          rev = "ea042751717b920a61770b6a945999431badbc39";
+          sha256 = "1v915yy920yrwrrnw9bxggm1zvlm9ndjwv9ydln3r07b0a1mkka2";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mocha";
+          sha256 = "0kjgrl5iy7cd3b9csgpjg3y0wp0q6c7c8cvf0mx8gdbsj7296kyx";
+          name = "mocha";
+        };
+        packageRequires = [ js2-mode ];
+        meta = {
+          homepage = "http://melpa.org/#/mocha";
           license = lib.licenses.free;
         };
       }) {};
@@ -16553,7 +16826,7 @@
           sha256 = "1lav7am41v63xgavq8pr88y828jmd1cxd4prjq7jlbxm6nvrwxh2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mocker";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mocker";
           sha256 = "1g90jp1czrrzrmn7n4linby3q4fb4gcflzv2amjv0sdimw1ln1w3";
           name = "mocker";
         };
@@ -16566,15 +16839,15 @@
     modalka = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "modalka";
-        version = "0.1.1";
+        version = "0.1.2";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "modalka";
-          rev = "f8ee86264a8e961b5821e11fdd490d5c4fc489c3";
-          sha256 = "1pgr1zlp26c7xy77qfvjfmv5i2j1c45xp59x83k8nllyhckxyqn6";
+          rev = "5a1e914bb76dfde539df26f3108793bba98bd4f9";
+          sha256 = "0r24186d1q9436h3qhqz1z8q978d01an0dvpvzirf4x9ickrib3k";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/modalka";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/modalka";
           sha256 = "0bkjykvl6sw797h7j76dzn1viy598asly98gcl5wrq13n4w1md4c";
           name = "modalka";
         };
@@ -16594,7 +16867,7 @@
           sha256 = "b7afff1d8fb0b3f044d266af479df51fbb6021ff433628a9dc669695c1ddae40";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mode-icons";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mode-icons";
           sha256 = "18w221zjrrsfcymprv5x75i3qv04zy4bxl9mqjv0ys7qcc8xf1dp";
           name = "mode-icons";
         };
@@ -16615,7 +16888,7 @@
           sha256 = "1lkw9nnlns6v7r6nx915f85whq1ri4w8lccwyxrvam40hfvq60s1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mode-line-debug";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mode-line-debug";
           sha256 = "0ppj14bm3rx3xgg4mfxa5zcm2r129jgmsx817wq3h7akjngcbfkd";
           name = "mode-line-debug";
         };
@@ -16636,7 +16909,7 @@
           sha256 = "02w7k4s4698p4adjy4a36na28sb1s2zw4xsjs7p2hv9iiw9kmyvz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/monokai-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/monokai-theme";
           sha256 = "13mv4vgsmdbf3v748lqi7b42hvr3yp86n97rb6792bcgd3kbdx7a";
           name = "monokai-theme";
         };
@@ -16657,7 +16930,7 @@
           sha256 = "1a0pv8fkv1cjdb0k5bmjd67a273bzcmxjwzgy4jpb3ng1qbb2xnm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/monroe";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/monroe";
           sha256 = "04rhninxppvilk7s90g0wwa0g9vfcg7mk8mrb2m2c7cb9vj6wyig";
           name = "monroe";
         };
@@ -16678,7 +16951,7 @@
           sha256 = "1ndgw4799d816pkn2bwja5kmigydpmj9znn8cax4dxsd9fg2hzjy";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/morlock";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/morlock";
           sha256 = "0693jr1k8mzd7hwp52azkl62c1g1p5yinarjcmdksfyqblqq5jna";
           name = "morlock";
         };
@@ -16699,7 +16972,7 @@
           sha256 = "01mdy7sps0xryz5gfpl083rv7ixkxs2rkz5yaqjlam2rypdcsyy2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/move-dup";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/move-dup";
           sha256 = "0b0lmiisl9yckblwf7619if88qsmbka3bl4qiaqam7fka7psxs7f";
           name = "move-dup";
         };
@@ -16720,7 +16993,7 @@
           sha256 = "1mg7arw4wbbm84frq3sws5937fh901qn0xnjk9jcp3pvc4d0sxwd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mowedline";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mowedline";
           sha256 = "0c2hvvwa7s5iyz517jaskshdcq9zs15zr6xsvrcb3biahrh4bmfb";
           name = "mowedline";
         };
@@ -16741,7 +17014,7 @@
           sha256 = "13bf5jn1kgqg59j5czlzvajq2fw1rz4h5jqfc7x8w1a067nymf2c";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/moz";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/moz";
           sha256 = "0ar2xgsi7csjj6fgiamrjwjc58j942dm32j3f3lz21yn2c4pnyxi";
           name = "moz";
         };
@@ -16762,7 +17035,7 @@
           sha256 = "1w1i1clkjg9mj1g4i2y3xw3hyj8s7h9gr04qgyb9c1q8vh11z8d0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/moz-controller";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/moz-controller";
           sha256 = "18gca1csl9dfi9995mky8cbgi3xzf1if8pzdjiz5404gzcqk0rfd";
           name = "moz-controller";
         };
@@ -16783,7 +17056,7 @@
           sha256 = "1pjhch8vah0kf73fl2fk6khhrx1kflggd3zlxrf7w4fxr0qn8la3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mpv";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mpv";
           sha256 = "1vq308ac6jj1h8qa2b2sypisb38hbvwjimqndhpfir06fghkw94l";
           name = "mpv";
         };
@@ -16804,7 +17077,7 @@
           sha256 = "1draiwbwb8zfi6rdr5irv8091xv2pmnifq7pzi3rrvjb8swb28z3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/msvc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/msvc";
           sha256 = "04gq2klana557qvsi3bv6416l0319jsqb6bdfs7y6729qd94hlq3";
           name = "msvc";
         };
@@ -16825,7 +17098,7 @@
           sha256 = "0wrg6f7czn61f9wmrk27dzcdskznm5i1pwwjck5h768j0y9dfv6a";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mu4e-alert";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mu4e-alert";
           sha256 = "15nwj09iyrvjsc9lrxla6qa0s8izcllxghw5gx3ffncfcrx2l8qm";
           name = "mu4e-alert";
         };
@@ -16846,7 +17119,7 @@
           sha256 = "1lyd8pcawn106zwlbq6gdq05i2zhry1qh9cdyjiw61nvgbbfi0yx";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mu4e-maildirs-extension";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mu4e-maildirs-extension";
           sha256 = "1xz19dxrj1grnl7wy9qglh08xb3dr509232l3xizpkxgqqk8pwbi";
           name = "mu4e-maildirs-extension";
         };
@@ -16867,7 +17140,7 @@
           sha256 = "11zabs7qpdhri6n90ck7pgwcbz46d813nyl73h5m1i8jvz1wzx7v";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/multi";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/multi";
           sha256 = "1c240d1c1g8wb2ld944344zklnv86d9rycmya4z53b2ai10642ig";
           name = "multi";
         };
@@ -16888,7 +17161,7 @@
           sha256 = "1d9y3dw27pgzgv6wk575d5ign55xdqgbl3ycyq1z7sji1477lz6b";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/multi-web-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/multi-web-mode";
           sha256 = "0vi4yvahr10aqpcz4127c8pcqpr5srwc1yhgipnbnm86qnh34ql5";
           name = "multi-web-mode";
         };
@@ -16909,7 +17182,7 @@
           sha256 = "10k4c9vl0bfidrry0msyqamijizjghg54g26yaqbr2vi0mbbz22k";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/multiple-cursors";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/multiple-cursors";
           sha256 = "0mky5p9wpd3270wr5vfna8rkk2ff81wk7vicyxli39195m0qgg0x";
           name = "multiple-cursors";
         };
@@ -16930,7 +17203,7 @@
           sha256 = "15gw4d0hp15rglsj8hzd290li4p0kadj2dsz0dgfcxld7hnimihk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mustache-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mustache-mode";
           sha256 = "076ar57qhwcpl4n634ma827r2rh61670778wqr5za2444a6ax1gs";
           name = "mustache-mode";
         };
@@ -16951,7 +17224,7 @@
           sha256 = "0hvq6z754niqjyv79jzb833wrwbspc7npfg85scwdv8vzwassjx4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mwim";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mwim";
           sha256 = "0bsibwplvyv96y5i5svm2b0jwzs5a7jr2aara7v7xnpj0nqaxm8k";
           name = "mwim";
         };
@@ -16972,7 +17245,7 @@
           sha256 = "0550k0rfm0zai306642v689mcpsw9pbd5vs0il82cihwvrxjifc5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/mykie";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/mykie";
           sha256 = "12ram39fp3m9ar6q184rsnpkxb14y0ajibng7ia2ck54ck7n36cj";
           name = "mykie";
         };
@@ -16993,7 +17266,7 @@
           sha256 = "0amhw630hgc0j8wr8m6aav399ixi3vbwrck79hhlr3pmyh91vv7n";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/name-this-color";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/name-this-color";
           sha256 = "12nrk1ww766jb4gb4iz6w485nimh2iv8wni2jq4l38v8ndh490zb";
           name = "name-this-color";
         };
@@ -17014,7 +17287,7 @@
           sha256 = "0m82g27gwf9mvicivmcilqghz5b24ijmnw0jf0wl2skfbbg0sydh";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/names";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/names";
           sha256 = "1q784606jlakw1z6sx2g2x8hz8c8arywrm2r626wj0v105v510vg";
           name = "names";
         };
@@ -17035,7 +17308,7 @@
           sha256 = "10yn215xb4s6kshk108y75im1xbdp0vwc9kah5bbaflp9234i0zh";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/narrow-reindent";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/narrow-reindent";
           sha256 = "0fybal70kk62zlra63x4jb72694m0mzv4cx746prx9anvq1ss2i0";
           name = "narrow-reindent";
         };
@@ -17056,7 +17329,7 @@
           sha256 = "0ydxj6dc10knambma2hpimqrhfz216nbj96w1dcwgjixs4cd4nax";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/narrowed-page-navigation";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/narrowed-page-navigation";
           sha256 = "1yrmih60dd69qnin505jlmfidm2svzpdrz46286r7nm6pk7s4pb7";
           name = "narrowed-page-navigation";
         };
@@ -17077,7 +17350,7 @@
           sha256 = "1l7asqwi5gcvb2mn8608025lwypf2vqzrkc3a9phdfjp0qn2apdn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/nasm-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/nasm-mode";
           sha256 = "1626yf9mmqlsw8w01vzqsyb5ipa56259d4kl6w871k7rvhxwff17";
           name = "nasm-mode";
         };
@@ -17098,7 +17371,7 @@
           sha256 = "119hy8rs83f17d6zizdaxn2ck3sylxbyz7adszbznjc8zrbaw0ic";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/nav-flash";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/nav-flash";
           sha256 = "0936kr0s6zxxmjwaqm7ywdw2im4dxai1xb7j6xa2gp7c70qvvsx3";
           name = "nav-flash";
         };
@@ -17119,7 +17392,7 @@
           sha256 = "15jh1lsgqfnpbmrikm8kdh5bj60yb96f2as2anppjjsgl6w96glh";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/navi-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/navi-mode";
           sha256 = "0f5db983w9kxq8mcjr22zfrm7cpxydml4viac62lvab2kwbpbrmi";
           name = "navi-mode";
         };
@@ -17140,7 +17413,7 @@
           sha256 = "09cb07f98aclgq8jf5419305zydkk1hz4nvzrwqz7syrlpvx8xi5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/navorski";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/navorski";
           sha256 = "0dnzpsm0ya8rbcik5wp378hc9k7gjb3gwmkqqj889c38q5cdwsx7";
           name = "navorski";
         };
@@ -17161,7 +17434,7 @@
           sha256 = "16i1k1zr6ng1dlxb1b73mxjf25f4kvf3x5vfffsi3qnfm960bg3q";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ncl-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ncl-mode";
           sha256 = "0hmd606xgapzbc79px9l1q6pphrhdzip495yprvg20xsdpmjlfw9";
           name = "ncl-mode";
         };
@@ -17182,7 +17455,7 @@
           sha256 = "19xxg4ya6vndk2ljdnl284zs8qf9dkq4ghr7pmsclp9n7zh46v48";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/nemerle";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/nemerle";
           sha256 = "0698hbgk80w7wp0ssx9pl13aapm7rc6l3y2zydfkyqdfwy5y71v6";
           name = "nemerle";
         };
@@ -17203,7 +17476,7 @@
           sha256 = "1gmi0xxwkh33w5gxc8488m1vv6ycizqhlw1kpn81zhqdzzq3s06n";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/neotree";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/neotree";
           sha256 = "05smm1xsn866lsrak0inn2qw6dvzy24lz6h7rvinlhk5w27xva06";
           name = "neotree";
         };
@@ -17224,7 +17497,7 @@
           sha256 = "08bpyk0brx0x2l0y8hn8zpkaxb2ndmxz22kzxxypj6hdz303wf38";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/nginx-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/nginx-mode";
           sha256 = "07k17m64zhv6gik8v4n73d8l1k6fsp4qp8cl94r384ny0187y65c";
           name = "nginx-mode";
         };
@@ -17245,7 +17518,7 @@
           sha256 = "1wc0cvmfhpvfzdy127d1n812q93dd9sp3mmqnc8jzy8i3frqqqq6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ninja-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ninja-mode";
           sha256 = "1m7f25sbkz8k343giczrnw2ah5i3mk4c7csi8kk9x5y16030asik";
           name = "ninja-mode";
         };
@@ -17258,15 +17531,15 @@
     nix-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "nix-mode";
-        version = "1.10";
+        version = "1.11.1";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "71a5161365f40699092e491bbff88473237fc432";
-          sha256 = "03kbdrar5w475qng4j7bbak5y6ipb7pgpxj3hblcn3pnvgh7whv6";
+          rev = "da4495eb1747a5ab8fe4a8e6ccd1c28fba684a0a";
+          sha256 = "1rxj9rg3rg7yx874nsj65kam26s1bn96cnmys60dp0zh20gc1r1s";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/nix-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/nix-mode";
           sha256 = "00rqawi8zs2x79c91gmk0anfyqbwalvfwmpak20i11lfzmdsza1s";
           name = "nix-mode";
         };
@@ -17287,7 +17560,7 @@
           sha256 = "1lm7rkgf7q5g4ji6v1masfbhxdpwni8d77dapsy5k9p73cr2aqld";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/nixos-options";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/nixos-options";
           sha256 = "1m3jipidk10zj68rzjbacgjlal31jf80gqjxlgj4qs8lm671gxmm";
           name = "nixos-options";
         };
@@ -17308,7 +17581,7 @@
           sha256 = "0wk86gm0by9c8mfbvydz5va07qd30n6wx067inqfa7wjffaq0xr7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/noccur";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/noccur";
           sha256 = "0a8l50v09bgap7rsls808k9wyjpjbcxaffsvz7hh9rw9s7m5fz5g";
           name = "noccur";
         };
@@ -17329,7 +17602,7 @@
           sha256 = "03vcs458rcn1hgfvmgmijadjvri7zlh2z4lxgaplzfnga13mapym";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/nodejs-repl";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/nodejs-repl";
           sha256 = "0rvhhrsw87kfrwdhm8glq6b3nr0v90ivm7fcc0da4yc2jmcyk907";
           name = "nodejs-repl";
         };
@@ -17348,7 +17621,7 @@
           sha256 = "07bhzddaxdjd591xmg59yd657a1is0q515291jd83mjsmgq258bm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/nose";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/nose";
           sha256 = "0l77hsmn3qk934ppdav1gy9sq48g0v1dzc5qy0rp9vv4yz2jx2jk";
           name = "nose";
         };
@@ -17367,7 +17640,7 @@
           sha256 = "fd2669401c276af12b6c9b739e835ee76b7910bba34bf850e4909c00e79adbd4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/notmuch";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/notmuch";
           sha256 = "1sy9k6xbfl035qhnp8sdq9cb3xvgw3lkmdczyd6fw6yrzm5n0g1r";
           name = "notmuch";
         };
@@ -17388,7 +17661,7 @@
           sha256 = "1ss87vlp7625lnn2iah3rc1xfxcbpx4kmiww9n16jx073fs2rj18";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/notmuch-labeler";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/notmuch-labeler";
           sha256 = "1c0cbkk5k8ps01xl63a0xa2adkqaj0znw8qs8ca4ai8v1420bpl0";
           name = "notmuch-labeler";
         };
@@ -17409,7 +17682,7 @@
           sha256 = "1l07nrlfd5qj8jnqacjba7mb6prapg8d8h3881l3kb66sn02ahgy";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/nrepl-sync";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/nrepl-sync";
           sha256 = "01b504b4d8rrhlf3sfq3kk9i222fch6jd5jbm02kqw20fgv6q3jd";
           name = "nrepl-sync";
         };
@@ -17430,7 +17703,7 @@
           sha256 = "0c4qfbb345yna5c30czq8nhcx283z1fnpp6h16p7vjqs6y37czsl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/nsis-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/nsis-mode";
           sha256 = "0pc047ryw906sz5mv0awvl67kh20prsgx6fbh0j1qm0cali2792l";
           name = "nsis-mode";
         };
@@ -17451,7 +17724,7 @@
           sha256 = "1624jj922l0bbav1v8szdr0lpyx0ng959fg3sspg1j15kgkir8kf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/nvm";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/nvm";
           sha256 = "03gy7wavc2q02lnr9pmp3l1pn0lzbdq0kwnmg9fvklmq6r6n3x34";
           name = "nvm";
         };
@@ -17472,7 +17745,7 @@
           sha256 = "14vd0f4y5l470hx7kg54sx3352459mhjnrh7jl822gkl8c904lmw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/nyan-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/nyan-mode";
           sha256 = "1z2wnsbjllqa533g1ab5cgbv3d9hjix7fsd7z9c45nqh5cmadmyv";
           name = "nyan-mode";
         };
@@ -17493,7 +17766,7 @@
           sha256 = "0bgspjy8h3d7v12sfjnd2ghj4183pdf0z48g5xs129jwd3nycykp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/nyan-prompt";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/nyan-prompt";
           sha256 = "1s0qyhpfpncsv9qfxy07rbp4gv8pp5xzb48rbd3r14nkjlnylnfb";
           name = "nyan-prompt";
         };
@@ -17514,7 +17787,7 @@
           sha256 = "0r12023yy8j96bp8z2ml6ffyr2c9rcd5abkh6vqnkwsdxkzx6wrs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/o-blog";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/o-blog";
           sha256 = "08grkyvg27wd5232q3y8p0v7higfq7bmsdzmvhja96v6qy2xsbja";
           name = "o-blog";
         };
@@ -17535,7 +17808,7 @@
           sha256 = "1zbqiqilms8vxqlvzb3gjh8gh2cl7cpmh3yiqsj94jx69w8dy4xl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ob-http";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ob-http";
           sha256 = "0b7ghz9pqbyn3b52cpmnwa2wnd4svj23p6gc48ybwzwiid42wiss";
           name = "ob-http";
         };
@@ -17556,7 +17829,7 @@
           sha256 = "1xx6hyq3gk4bavcx6i9bhipbn4mn5rv2ga9lryq09qgq2l9znclk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ob-sml";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ob-sml";
           sha256 = "04qvzhwjr8ipvq3znnhn0wbl4pbb1rwxi90iidavzk3phbkpaskn";
           name = "ob-sml";
         };
@@ -17577,7 +17850,7 @@
           sha256 = "10hm20dzhkxk61ass3bd5gdn1bs2l60y3zjnpkxinzn7m6aaniia";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ob-translate";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ob-translate";
           sha256 = "1hi0rxbyxvk9sbk2fy3kqw7l4lgri921vya1mn4i1q2i1979r2gz";
           name = "ob-translate";
         };
@@ -17598,7 +17871,7 @@
           sha256 = "05ay599nc6jdw2fjss4izz1ynv2wc4svff932n8j9hvrhygipb2w";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ocodo-svg-modelines";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ocodo-svg-modelines";
           sha256 = "0fa88ns70wsr9i9gf4zx3fvmn1a32mrjsda105n0cx6c965kfmay";
           name = "ocodo-svg-modelines";
         };
@@ -17619,7 +17892,7 @@
           sha256 = "0ynv2yhm7akpvqp72pdabhddwr352s1k85q8m1khsvspgg1mkiqz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ocp-indent";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ocp-indent";
           sha256 = "0wc4z9dsnnyr24n3vg1npvc3rm53av8bpbvrl8kldxxdiwgnbkjw";
           name = "ocp-indent";
         };
@@ -17640,7 +17913,7 @@
           sha256 = "19fg6r7aiirfsbp2h1a824476sn1ln4nz8kvpdzkzvyf1hzx68gw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/octicons";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/octicons";
           sha256 = "02f37bvnc5qvkvfbyx5wp54nz71bqm747mq1p5361sx091lllkxk";
           name = "octicons";
         };
@@ -17661,7 +17934,7 @@
           sha256 = "0az4llfgva4wvpljyc5s2m7ggfnj06ssp32x8bncr5fzksha3r7b";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/offlineimap";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/offlineimap";
           sha256 = "0nza7lrz7cn06njcblwh9hy3050j8ja4awbxx7jzv6nazjg7201b";
           name = "offlineimap";
         };
@@ -17682,7 +17955,7 @@
           sha256 = "1rj97yg2n9fi80qlb4z6iahqid3yinlhx9mrbh6gi1niz58ws69h";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/olivetti";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/olivetti";
           sha256 = "0fkvw2y8r4ww2ar9505xls44j0rcrxc884p5srf1q47011v69mhd";
           name = "olivetti";
         };
@@ -17703,7 +17976,7 @@
           sha256 = "07grj81alrr6qgs3jmqkjzphkvi26w6jm5hf1f5wyx7h6q293ady";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/omni-kill";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/omni-kill";
           sha256 = "03kydl16rd9mnc1rnan2byqa6f70891fhcj16wkavl2r68rfj75k";
           name = "omni-kill";
         };
@@ -17724,7 +17997,7 @@
           sha256 = "030f983n19n64f8irif102nncvam04xpx020vfgja9886wlj40pk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/omni-log";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/omni-log";
           sha256 = "0c29243zq8r89ax4rxlmb8imag12icnldcb0q0xsnhjccw8lyw1r";
           name = "omni-log";
         };
@@ -17745,7 +18018,7 @@
           sha256 = "1rfs6z56pnacy6m7yvm2hrb0ykfvaiyichivcmb9ssdgqp92cbxx";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/omni-scratch";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/omni-scratch";
           sha256 = "190dkqcw8xywzrq8a99w4rqi0y1h2aj23s84g2ln1sf7jaf6d6n9";
           name = "omni-scratch";
         };
@@ -17766,7 +18039,7 @@
           sha256 = "0c34rci5793hd674x2srhqvnj46llrbkrw1xpzf73s4ib5zhh7xi";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/omni-tags";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/omni-tags";
           sha256 = "133ww1jf14jbw02ssbx2a46mp52j18a2wwzb6x77azb0akmf1lzl";
           name = "omni-tags";
         };
@@ -17787,7 +18060,7 @@
           sha256 = "1iq8yzjv7wb0jfi3lqqyx4n7whvb7xf8ls0q0w7pgsrsslrxbwcm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/omnisharp";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/omnisharp";
           sha256 = "0dwya22y92k7x2s223az1g8hmrpfmk1sgwbr9z47raaa8kd52iad";
           name = "omnisharp";
         };
@@ -17817,7 +18090,7 @@
           sha256 = "119pk7gg4fw5bdvir8077ra603b5nbqvd7ph9cqrwxa056jzvry8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/opam";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/opam";
           sha256 = "004r93nn1ranvxkcc0y5m3p8gh4axgghgnsvim38nc1sqda5h6xa";
           name = "opam";
         };
@@ -17838,7 +18111,7 @@
           sha256 = "12q09kdcgv6hl1hmgarl73j4g9gi4h7sj865655mdja0ns9n1pdb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/operate-on-number";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/operate-on-number";
           sha256 = "1rw3fqbzfizgcbz3yaf99rr2546msna4z7dyfa8dbi8h7yzl4fhk";
           name = "operate-on-number";
         };
@@ -17859,7 +18132,7 @@
           sha256 = "1xckin2d6s40kgr2293g72ipc57f8gp6y63303kmqcv3qm8q13ca";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-ac";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-ac";
           sha256 = "059jr3v3558cgw626zbqfwmwwv5f4637ai26h7b6psqh0x9sf3mr";
           name = "org-ac";
         };
@@ -17880,7 +18153,7 @@
           sha256 = "0gkxxzdk8bd1yi5x9217pkq9d01ccq8znxc7h8qcw0p1336rigfc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-agenda-property";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-agenda-property";
           sha256 = "0zsjzjw52asl609q7a2s4jcsm478p4cxzhnd3azyr9ypxydjf6qk";
           name = "org-agenda-property";
         };
@@ -17901,7 +18174,7 @@
           sha256 = "0j6fqgzvbmvvdh0dgwsxq004wxys2zwnq9wa3idm087ynp2a2ani";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-autolist";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-autolist";
           sha256 = "1jvspxhxlvd7h1srk9dbk1v5dykmf8jsjaqicpll7ial6i0qgikj";
           name = "org-autolist";
         };
@@ -17922,7 +18195,7 @@
           sha256 = "10nr4sjffnqbllv6gmak6pviyynrb7pi5nvrq331h5alm3xcpq0w";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-bullets";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-bullets";
           sha256 = "1kxhlabaqi1g6pz215afp65d9cp324s8mvabjh7q1h7ari32an75";
           name = "org-bullets";
         };
@@ -17943,7 +18216,7 @@
           sha256 = "18x8c6jcqkfam79z4hskr8h1lvzvd5rlfgymmj1ps6p6hd3j4ihl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-elisp-help";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-elisp-help";
           sha256 = "0a4wvz52hkcw5nrml3h1yp8w97vg5jw22wnpfbb827zh7iwb259h";
           name = "org-elisp-help";
         };
@@ -17964,7 +18237,7 @@
           sha256 = "1pxfcyf447h18220izi8qlnwdr8rlwn5kds8gr5i1v90s6hpa498";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-gcal";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-gcal";
           sha256 = "1mp6cm0rhd4r9pfvsjjp86sdqxjbbg7gk41zx0zf0s772smddy3q";
           name = "org-gcal";
         };
@@ -17985,7 +18258,7 @@
           sha256 = "0b57ik05iax2h3nrj96kysbk4hxmxlaabd0n6lv1xsayrlli3sj1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-gnome";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-gnome";
           sha256 = "0c37gfs6xs0jbvg6ypd4z5ip1khm26wr5lxgmv1dzcc383ynzg0v";
           name = "org-gnome";
         };
@@ -18006,7 +18279,7 @@
           sha256 = "1iyqv34b7q2k73srshcnpvfzcadq47w4rzkqp6m1d3ajk8x2vypq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-if";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-if";
           sha256 = "0h0jdyawz2j4mp33w85z8q77l37qid8palvw5n4z379qa0wr5h96";
           name = "org-if";
         };
@@ -18027,7 +18300,7 @@
           sha256 = "0980scx1dzslbdzmhv720branc4jd4bdkyji34gahinx4w9brj79";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-journal";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-journal";
           sha256 = "078z9b9hxbvmmxib6098f49rn7n3d0v4x37p7xxb0v8cv4izlb4s";
           name = "org-journal";
         };
@@ -18048,7 +18321,7 @@
           sha256 = "1797pd264zn19zk93nifyw6pwk2a7wrpfir373qclk601yv2g5h8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-link-travis";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-link-travis";
           sha256 = "0hj4x7cw7a3ry8xislkz9bnavy77z4cpmnvns02yi3gnib53mlfs";
           name = "org-link-travis";
         };
@@ -18069,7 +18342,7 @@
           sha256 = "1bggz782ci0z6aw76v51ykbmfzh5g6cxh43w798as1152sn7im3p";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-linkany";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-linkany";
           sha256 = "0arjj3c23yqm1ljvbnl7v9cqvd9lbz4381g8f3jyqbafs25bdc3c";
           name = "org-linkany";
         };
@@ -18089,7 +18362,7 @@
           sha256 = "5cb84c3c4bf3f7c3e0c9ab869dababb785d44198b1e1072dc9c0937fc483aa14";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-mac-iCal";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-mac-iCal";
           sha256 = "1ilzvmw1x5incagp1vf8d9v9mz0krlv7bpv428gg3gpqzpm6kksw";
           name = "org-mac-iCal";
         };
@@ -18110,7 +18383,7 @@
           sha256 = "0yxfhzygiki8sha1dddac4g72r51yi4jnga2scmk51f9jgwqbihp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-multiple-keymap";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-multiple-keymap";
           sha256 = "16iv5575634asvn1b2k535ml8g4lqgy8z5w6ykma5f9phq5idb9f";
           name = "org-multiple-keymap";
         };
@@ -18131,7 +18404,7 @@
           sha256 = "15fy6xpz6mk4j3nkrhiqal2dp77rhxmk8a7xiw037xr1jgq9sd9a";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-outlook";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-outlook";
           sha256 = "0cn8h6yy67jr5h1yxsfqmr8q7ii4f99pgghfp821m01pj55qyjx9";
           name = "org-outlook";
         };
@@ -18152,7 +18425,7 @@
           sha256 = "0zc20m63a1iz9aziid5jsvcbl86k9dg9js4k3almchh55az4a0i3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-page";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-page";
           sha256 = "1326m3w7vz22zk7rx40z28fddsccy5fl1qhbb7clci8l69blcc2v";
           name = "org-page";
         };
@@ -18173,7 +18446,7 @@
           sha256 = "14lshgyrlzjcrqdfsn17llm70ijbs86cv9mccy87vlr01rbsz6lj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-pdfview";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-pdfview";
           sha256 = "1z4gb5lw7ngphixw06b5484kwlxbc098w2xshzml5sywr16a4iab";
           name = "org-pdfview";
         };
@@ -18194,7 +18467,7 @@
           sha256 = "1fjdza723615bhdm5x6gbd03vi7ywzpbjn8p59saimczqngfdpmw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-pomodoro";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-pomodoro";
           sha256 = "1vdi07hrhniyhhvg0hcr5mlixy6bjynvwm89z2lvfyvnnxpx0r27";
           name = "org-pomodoro";
         };
@@ -18215,7 +18488,7 @@
           sha256 = "16aq5p65q5a0an14q9xzsnkaa5bzkrwhm9cv5ljajjfcjsjcvmb6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-projectile";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-projectile";
           sha256 = "078s77wms1n1b29mrn6x25sksfjad0yns51gmahzd7hlgp5d56dm";
           name = "org-projectile";
         };
@@ -18236,7 +18509,7 @@
           sha256 = "1cxjzj955rvp0ijbp7ifpmkxdhimz8hqjw5c9gv6zwjqb5iih9ry";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-protocol-jekyll";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-protocol-jekyll";
           sha256 = "18wg489n2d1sx9jk00ki6p2rxkqz67kqwnmy2kb1ga1rmb6x9wfs";
           name = "org-protocol-jekyll";
         };
@@ -18257,7 +18530,7 @@
           sha256 = "0hhgfw0sqvl9jmmslwxn6v3dii99v09yz2h0ia5np9lzyxsc207a";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-readme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-readme";
           sha256 = "1qqbsgspd006gy0kc614w7bg6na0ygmflvqkmw47899pbgj81hxh";
           name = "org-readme";
         };
@@ -18278,7 +18551,7 @@
           sha256 = "03c88jzwvl95dl39703mknkvnk3cmw4gss5c1y2k9py2rgh6bpr9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-repo-todo";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-repo-todo";
           sha256 = "0l5ns1hs3i4dhrpmvzl34zc9zysgjkfa7j8apbda59n9jdvml5v1";
           name = "org-repo-todo";
         };
@@ -18299,7 +18572,7 @@
           sha256 = "0zx9gpvm5gy9k45lbhaks9s935id727lszsh40gmpdp5zxf3rjk1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-sync";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-sync";
           sha256 = "0n8fz2d1vg9r8dszgasbnb6pgaxr2i8mqrp953prf1nhmfpjpxad";
           name = "org-sync";
         };
@@ -18320,13 +18593,55 @@
           sha256 = "1qx3kd02sxs9k7adlvdlbmyhkc5kr7ni5lw4gxjw3nphnc536bkb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-table-comment";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-table-comment";
           sha256 = "1d40vl8aa1x27z4gwnkzxgrqp7vd3ln2pc445ijjxp1wr8bjxvdz";
           name = "org-table-comment";
         };
         packageRequires = [];
         meta = {
           homepage = "http://melpa.org/#/org-table-comment";
+          license = lib.licenses.free;
+        };
+      }) {};
+    org-tfl = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, org }:
+    melpaBuild {
+        pname = "org-tfl";
+        version = "0.3.1";
+        src = fetchFromGitHub {
+          owner = "storax";
+          repo = "org-tfl";
+          rev = "c9e024ac55d9e0c61a273e75bd68981a623c9ab2";
+          sha256 = "1x241jaw726zjsplwf6svbvr8af09k6kqj7icpvcbyayivkbhxy2";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-tfl";
+          sha256 = "1rqmmw0222vbxfn5wxq9ni2j813x92lpv99jjszqjvgnf2rkhjhf";
+          name = "org-tfl";
+        };
+        packageRequires = [ cl-lib emacs org ];
+        meta = {
+          homepage = "http://melpa.org/#/org-tfl";
+          license = lib.licenses.free;
+        };
+      }) {};
+    org-themis = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "org-themis";
+        version = "0.4.1";
+        src = fetchFromGitHub {
+          owner = "zellio";
+          repo = "org-themis";
+          rev = "4b4bf1fa1e853664bf006dda8afe2db00e522aaa";
+          sha256 = "12fksqi9flf84h1lbmbcjnqxa7dairp50wvlwfhbp1hbb8l9z63a";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-themis";
+          sha256 = "08rajz5y7h88fh94s2ad0f66va4vi31k9hwdv8p212bs276rp7ln";
+          name = "org-themis";
+        };
+        packageRequires = [ cl-lib ];
+        meta = {
+          homepage = "http://melpa.org/#/org-themis";
           license = lib.licenses.free;
         };
       }) {};
@@ -18341,7 +18656,7 @@
           sha256 = "09iw2jffb2qrx5r07zd1j8sk5wafamjkc2khqyfwc5kx6xyp1f46";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-time-budgets";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-time-budgets";
           sha256 = "0r8km586n6xdnjha7xnzlh03nw1dp066hydaz8kxfmhvygl9cpah";
           name = "org-time-budgets";
         };
@@ -18362,7 +18677,7 @@
           sha256 = "0qqa62fsmra6v4061kpki8wbhfcwkgnb2gzxwvnaqlcmhivksg6v";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-toodledo";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-toodledo";
           sha256 = "0c7qr0jsc4iyrwkc22xp9nmk6984v7q1k0rvpd62m07lb5gvbiq3";
           name = "org-toodledo";
         };
@@ -18383,7 +18698,7 @@
           sha256 = "053wf36lq9piyzq7rv2lid34zanj6l9fvawp3r3nsniy5nlfckqx";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-tracktable";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-tracktable";
           sha256 = "0mngf9q2ffxq32cgng0xl30661mj15wmr9y4hr3xddj626kxrp00";
           name = "org-tracktable";
         };
@@ -18404,7 +18719,7 @@
           sha256 = "1h15fr16kgbyrxambmk4hsmha6hx4c4yqkccb82g3wlvzmnqj5x3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-transform-tree-table";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-transform-tree-table";
           sha256 = "0n68cw769nk90ms6w1w6cc1nxjwn1navkz56mf11bsiqvsk3km7r";
           name = "org-transform-tree-table";
         };
@@ -18425,7 +18740,7 @@
           sha256 = "0aacxxwhwjzby0f9r4q0lra5lqcrw5snnm1yc63jrs6c0ifakk45";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-tree-slide";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-tree-slide";
           sha256 = "0v857zplv0wdbg4li667v2p5pn5zcf9fgbqcwa75x8babilkl6jn";
           name = "org-tree-slide";
         };
@@ -18446,7 +18761,7 @@
           sha256 = "1561nxjva8892via0l8315y3fih4r4q9gzycmvh33db8gqzq4l86";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-trello";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-trello";
           sha256 = "1rm91xccvdsqghdnrnjvyp8xfvrw5ac677vzzz24rz9dssh2mz9b";
           name = "org-trello";
         };
@@ -18474,7 +18789,7 @@
           sha256 = "1qf4pqsg12y1qx7di0y5dp0f4slyp69h2q6y21hldzknhwxx4yy4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org-vcard";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org-vcard";
           sha256 = "0l6azshvzl1wws582njqr3qx4h73gwrdqwa3jcic1qbs9hg2l4yl";
           name = "org-vcard";
         };
@@ -18495,7 +18810,7 @@
           sha256 = "0av1477jn3s4s5kymd7sbb0av437vb5mnfc6rpfgzwji7b8mfr7l";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org2blog";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org2blog";
           sha256 = "0ancvn4ji4552k4nfd2ijclsd027am93ngg241ll8f6h6k0wpmzq";
           name = "org2blog";
         };
@@ -18516,7 +18831,7 @@
           sha256 = "064kw64w9snm0lbshxn8d6yd9xvyislhg37fmhq1w7vy8lm61xvf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/org2jekyll";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/org2jekyll";
           sha256 = "1j9d6xf5nsakifxwd4zmjc29lbj46ffn3z109k2y2yhz7q3r9hzv";
           name = "org2jekyll";
         };
@@ -18537,7 +18852,7 @@
           sha256 = "02mxp17p7bj4xamg0m6zk832hmpqcgzc7bjbjcnvbvrawhc255hy";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/orgbox";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/orgbox";
           sha256 = "12wfqlpjh9nr7zgqs4h8kmfsk825n68qcbn8z2fw2mpshg3nj7l8";
           name = "orgbox";
         };
@@ -18550,15 +18865,15 @@
     orgit = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, lib, magit, melpaBuild, org }:
     melpaBuild {
         pname = "orgit";
-        version = "1.0.0";
+        version = "1.1.0";
         src = fetchFromGitHub {
           owner = "magit";
           repo = "orgit";
-          rev = "731c5cb4f1c7e2ee5b819ca159c0c01e2b306c73";
-          sha256 = "0d7rh5bi5v04njj1nh8q8kdr6aw68lcw4ghx6kwq97aff4qmcrp1";
+          rev = "12bfadf603d8a1f616a1bdac5f909a0c20e6aba4";
+          sha256 = "1wxxdx3c5qacsii4kysk438cjr1hnmpir78kp6xgk9xw5g9snlnj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/orgit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/orgit";
           sha256 = "0askccb3h98v8gmylwxaph3gbyv5b1sp4slws76aqz1kq9x0jy7w";
           name = "orgit";
         };
@@ -18579,7 +18894,7 @@
           sha256 = "00vhzblzscp3mkl6x1nz116i4isjwcc5gkpdksym3mr5nqvqhd97";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/orglink";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/orglink";
           sha256 = "0ldrvvqs3hlazj0dch162gsbnbxcg6fgrxid8p7w9gj19vbcl52b";
           name = "orglink";
         };
@@ -18600,7 +18915,7 @@
           sha256 = "0g1xhh88a65vcq6rlh7ii16pra4pv519ajcws0h93ldbbjiy7p0m";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/osx-browse";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/osx-browse";
           sha256 = "06rfzq2hxhzg6jh2zs28r7ffxwlq40nz954j13ly8403c7rmbrfm";
           name = "osx-browse";
         };
@@ -18621,7 +18936,7 @@
           sha256 = "1vywqzw8hydi944q4ghgxbbvvmwfpa9wj5nmrnixfcw8h4mfcxvv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/osx-dictionary";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/osx-dictionary";
           sha256 = "13033fxc5vjd1f7mm6znmprcp3mwxbvblb2d25shr8d4imqqhv82";
           name = "osx-dictionary";
         };
@@ -18642,7 +18957,7 @@
           sha256 = "1csnxpsfnv9lv07kgvc60qx5c33sshmnz60p3qjz7ym7rnjy9b5x";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/osx-location";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/osx-location";
           sha256 = "1p12mmrw70p3b04zlprkdxdfnb7m3vkm6gci3fwhr5zyfvwxvn0c";
           name = "osx-location";
         };
@@ -18663,7 +18978,7 @@
           sha256 = "0830kkmvc3ss7ygqfwz3j75s7mhxfxyadaksrp0v2cc4y6wn6nfv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/osx-plist";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/osx-plist";
           sha256 = "0zaqmhf5nm6jflwgxnknhi8zn97vhsia2xv8jm677l0h23pk2va8";
           name = "osx-plist";
         };
@@ -18684,7 +18999,7 @@
           sha256 = "1pn6xvq41di1jb5d3i8wgs54w0m2414cq3f1vk0xpibshkq7sr4a";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/osx-trash";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/osx-trash";
           sha256 = "1f6pi53mhp2pvrfjm8544lqqj36gzpzxq245lzvv91lvqkxr9ysj";
           name = "osx-trash";
         };
@@ -18705,7 +19020,7 @@
           sha256 = "1v9kx5xr7xcr6i664h2g6j8824yjsjdn5pvgmawvxrrplbjmiqnp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/outorg";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/outorg";
           sha256 = "04swss84p33a9baa4swqc1a9lfp6wziqrwa7vcyi3y0yzllx36cx";
           name = "outorg";
         };
@@ -18726,7 +19041,7 @@
           sha256 = "1v04iyx57w8scw3iqrivii7q0sh8sa7xacswdhd18mw9kvjrbj98";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/outshine";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/outshine";
           sha256 = "1i8c3q6n9hpfbpg2f8n8brwgaq36af1jn3g5js88yiyyb5dknxq4";
           name = "outshine";
         };
@@ -18747,7 +19062,7 @@
           sha256 = "0qxk2rf84j86syxi8xknsq252irwg7sz396v3bb4wqz4prpj0kzc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ov";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ov";
           sha256 = "0d71mpv74cfxcnwixbrl90nr22cw4kv5sdgpny5wycvh6cgmd6qb";
           name = "ov";
         };
@@ -18768,7 +19083,7 @@
           sha256 = "0jz8p6bwpfncxwi6ssmi6ngx8sjjica565i6ln0gsr5i11zfb7nx";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/overseer";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/overseer";
           sha256 = "04wfwcal051jrnmm5dga6vl4c9j10pm416586yxb8smi6fxws2jg";
           name = "overseer";
         };
@@ -18789,7 +19104,7 @@
           sha256 = "0f2psx4lq98l3q3fnibsfqxp2hvvwk7b30zjvjlry3bffg3l7pfk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/owdriver";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/owdriver";
           sha256 = "0j8z7ynan0zj581x50gsi9lljkbi6bwmzpfyha3i6q8ch5qkdxfd";
           name = "owdriver";
         };
@@ -18810,7 +19125,7 @@
           sha256 = "047fcvpvwzaqisw4q3p6hxgjyqsi2n9nms1qx9w4znvxrnjq8jz3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ox-ioslide";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ox-ioslide";
           sha256 = "0z0qnvpw64wxbgz8203rphswlh9hd2i11pz2mlay8l3bzz4gx4vc";
           name = "ox-ioslide";
         };
@@ -18831,7 +19146,7 @@
           sha256 = "0h49pfl97vl796sm7r62rpv3slj0z5krm4zrqkgz0q6zlyrjay29";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ox-pandoc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ox-pandoc";
           sha256 = "0wy6yvwd4vyq6xalkrshnfjjxlh1p24y52z49894nz5fl63b74xc";
           name = "ox-pandoc";
         };
@@ -18852,7 +19167,7 @@
           sha256 = "026g48sgqwnqs5zmrabhiv3l8052l4c1vsbsf6bdxv4a6yp0l654";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ox-twbs";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ox-twbs";
           sha256 = "15csgnph5wh2dvcc2dnvrlm7whh428rq8smqji1509ib7aw9y5mx";
           name = "ox-twbs";
         };
@@ -18873,7 +19188,7 @@
           sha256 = "073qpa223ja673p63mhvy4l6yyv3k7z05ifwvn7bmq4b5fq42hw6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pabbrev";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pabbrev";
           sha256 = "1mbfa40pbzbi00sp155zm43sj6nw221mcayc2rk3ppin9ps95hx3";
           name = "pabbrev";
         };
@@ -18894,7 +19209,7 @@
           sha256 = "1xv0ra130qg0ksgqi4npspnv0ckq77k7f5kcibavj030h578kj97";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/package+";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/package+";
           sha256 = "1mbsxr4llz8ny7n7w3lykld9yvbaywlfqnvr9l0aiv9rvmdv03bn";
           name = "package-plus";
         };
@@ -18915,7 +19230,7 @@
           sha256 = "1pdv6d6bm5jmpgjqf9ycvzasxz1205zdi0zjrmkr33c03azwz7rd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/package-safe-delete";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/package-safe-delete";
           sha256 = "12ss5yjhnyxsif4vlbgxamn5jfa0wxkkphffxnv6drhvmpq226jw";
           name = "package-safe-delete";
         };
@@ -18936,7 +19251,7 @@
           sha256 = "138l07qmxj4fkvf43f1hdn4skadxb50c023bc5101l3njzmf74wa";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/package-utils";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/package-utils";
           sha256 = "02hgh7wg68ysfhw5hckrpshzv4vm1vnm395d34x6vpgl4ccx7v9r";
           name = "package-utils";
         };
@@ -18957,7 +19272,7 @@
           sha256 = "0k5l0l4vjw38r911zd9c9cv015vpw2y8abp82s2s9pm8nqc3bnci";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/packed";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/packed";
           sha256 = "0sw7d2l17bq471i4isrf2xf0z85nqqiciw25whw0c0chdzwzai6z";
           name = "packed";
         };
@@ -18978,7 +19293,7 @@
           sha256 = "1acz3w2zdcds0h6p2k9h3lmjsk519asqrxjw7f3pyrcq7x2qbhc4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/page-break-lines";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/page-break-lines";
           sha256 = "0q1166z190dxznzgf2f29klj2jkaqlic483p4h3bylihkqp93ij7";
           name = "page-break-lines";
         };
@@ -18999,7 +19314,7 @@
           sha256 = "03mlg6dmpjw8fq2s3c4gpqj20kjhzldz3m51bf6s0mxq9bclx2xw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pallet";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pallet";
           sha256 = "0q50cdwnn2w1n5h4bappncjjyi5yaixxannwgy23fngdrz1mxwd7";
           name = "pallet";
         };
@@ -19012,15 +19327,15 @@
     pandoc-mode = callPackage ({ dash, fetchFromGitHub, fetchurl, hydra, lib, melpaBuild }:
     melpaBuild {
         pname = "pandoc-mode";
-        version = "2.13.3";
+        version = "2.14";
         src = fetchFromGitHub {
           owner = "joostkremers";
           repo = "pandoc-mode";
-          rev = "067f9aa8ba27bd50b602dbfdaa155e2f381c7139";
-          sha256 = "14kxmcsgdrq9r8c17x8hz8vid0bn6rikvmddhc6wpbmp7shngvr1";
+          rev = "ebf43f8a62beea6b66c9999e660b0fc82854ac08";
+          sha256 = "1i5mh8bilg7vplb1ps81s5r6zjf2k6yjcmklrql4w7vw9jrvy566";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pandoc-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pandoc-mode";
           sha256 = "0qvc6cf87h1jqf590kd68jfg25snxaxayfds634wj4z6gp70l781";
           name = "pandoc-mode";
         };
@@ -19041,7 +19356,7 @@
           sha256 = "0gmdzagyg0p7q1gyj2a3aqp2g4asljpib3n67nikr0v99c2mki5y";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pangu-spacing";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pangu-spacing";
           sha256 = "082qh26vlk7kifz1800lyai17yvngwjygrfrsh1dsd8dxhk6l9j8";
           name = "pangu-spacing";
         };
@@ -19062,7 +19377,7 @@
           sha256 = "1xh614czldjvfl66vhkyaai5k4qsg1l3mz6wd5b1w6kd45qrc54i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/paper-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/paper-theme";
           sha256 = "04diqm2c9fm29zyms3hplkzb4kb7b2kyrxdsy0jxyjj5kabypd50";
           name = "paper-theme";
         };
@@ -19072,22 +19387,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    paradox = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, hydra, json ? null, let-alist, lib, melpaBuild, seq, spinner }:
+    paradox = callPackage ({ emacs, fetchFromGitHub, fetchurl, hydra, let-alist, lib, melpaBuild, seq, spinner }:
     melpaBuild {
         pname = "paradox";
-        version = "2.3.6";
+        version = "2.3.7";
         src = fetchFromGitHub {
           owner = "Malabarba";
           repo = "paradox";
-          rev = "d62d883b8c980d679970bed79c12091df9120a77";
-          sha256 = "06c2a55bmnhfvjpd43kq6d2l9yijgiq16yq19x6m8050f8hzxnyb";
+          rev = "8eca9880ed52d0d53d7d5e28858ec95987fa22e1";
+          sha256 = "1vc59n9jmsn5d15v2m9xl64564h3q0c78pv4a4n3dhd1iz797l3x";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/paradox";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/paradox";
           sha256 = "1xq14nfvprsq18464qr4mhphq7cl1f570lji5n8z6j9vpfm9a4p2";
           name = "paradox";
         };
-        packageRequires = [ cl-lib emacs hydra json let-alist seq spinner ];
+        packageRequires = [ emacs hydra let-alist seq spinner ];
         meta = {
           homepage = "http://melpa.org/#/paradox";
           license = lib.licenses.free;
@@ -19102,7 +19417,7 @@
           sha256 = "7587cd2cf6e5b245678bbca8cbad07db8576ff976a504cd8d6e52fa85cf99f8f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/paredit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/paredit";
           sha256 = "1rp859y4qyqdfvp261l8mmbd62p1pw0dypm1mng6838b6q6ycakr";
           name = "paredit";
         };
@@ -19123,7 +19438,7 @@
           sha256 = "0jbjwjl92pf0kih3p2x20ms2kpyzzam8fir661nimpmk802ahgkj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/paredit-everywhere";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/paredit-everywhere";
           sha256 = "0gbkwk8mrbjr2l8pz3q4y6j8q4m12zmzl31c88ngs1k5d86wav36";
           name = "paredit-everywhere";
         };
@@ -19144,7 +19459,7 @@
           sha256 = "033gdya7f6p4kkapnmnbxlm88g4rbsmym4cc4jkcmp91idh63syq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/paren-face";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/paren-face";
           sha256 = "0dmzk66m3rd8x0rb925pyrfpc2qsvayks4kmhpb2ccdrx68pg8gf";
           name = "paren-face";
         };
@@ -19165,7 +19480,7 @@
           sha256 = "0i5bc7lyyrx6swqlrp9l5x72yzwi53qn6ldrfs99gh08b3yvsnni";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/parent-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/parent-mode";
           sha256 = "1ndn6m6aasmk9yrml9xqj8141100nw7qi1bhnlsss3v8b6njwwig";
           name = "parent-mode";
         };
@@ -19186,7 +19501,7 @@
           sha256 = "0n91whyjnrdhb9bqfif01ygmwv5biwpz2pvjv5w5y1d4g0k1x9ml";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/parsebib";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/parsebib";
           sha256 = "07br2x68scsxykdk2ajc4mfqhdb7vjkcfgz3vnpy91sirxzgfjdd";
           name = "parsebib";
         };
@@ -19207,7 +19522,7 @@
           sha256 = "18m0973l670cjbzpa1vfv06gymhsa2f1pjcp329s0npb735x5whj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pass";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pass";
           sha256 = "1vvyvnqf6k7wm0p45scwi6ny86slkrcbr36lnxdlkf96cqyrqzfr";
           name = "pass";
         };
@@ -19228,7 +19543,7 @@
           sha256 = "1g0mvg9i8f2qccb4b0m4d74zkjx9gjfv47x57by6cdaf9yywqryi";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/passthword";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/passthword";
           sha256 = "076jayziipjx260yk3p37pf5k0qsagalidah3y6hiflrlq4sfgjn";
           name = "passthword";
         };
@@ -19248,7 +19563,7 @@
           sha256 = "f71d0b36570983c35e08b6672c186b5c308b57536a96a747f09665bab794be30";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/password-store";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/password-store";
           sha256 = "1jh24737l4hccr1k0b9fnq45ag2dsk84fnfs86hcgsadl94d6kss";
           name = "password-store";
         };
@@ -19269,7 +19584,7 @@
           sha256 = "0m6qjsq6qfwwszm95lj8c58l75vbmx9r5hm9bfywyympfgy0fa1n";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pastehub";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pastehub";
           sha256 = "1slvqn5ay6gkbi0ai1gy1wmc02h4g3n6srrh4fqn72y7b9nv5i0v";
           name = "pastehub";
         };
@@ -19290,7 +19605,7 @@
           sha256 = "1v5mpjb8kavbqhvg4rizwg8cypgmi6ngdiy8qp9pimmkb56y42ly";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pastelmac-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pastelmac-theme";
           sha256 = "168zzqhp2dbfcnknwfqxk68rgmibfw71ksghvi6h2j2c1m08l23f";
           name = "pastelmac-theme";
         };
@@ -19311,7 +19626,7 @@
           sha256 = "0kkgqaxyrv65rfg2ng1vmmmrc9bm98yqpsv2pcb760287dn0l27m";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/paxedit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/paxedit";
           sha256 = "06ymilr0zrwfpyzql7dcpg48lhkx73f2jlaw3caxgsjaz7x3n4ic";
           name = "paxedit";
         };
@@ -19332,7 +19647,7 @@
           sha256 = "0xbbq8ddlirhvv921nrf7bwazh0i98bk0a9xzyx8iqpyg66vbfa8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pcache";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pcache";
           sha256 = "1q2wlbc58lyf3dxfs9ppdxvdsp81jmkq874zbd7f39wvc5ckbz0l";
           name = "pcache";
         };
@@ -19353,7 +19668,7 @@
           sha256 = "0h0p4c08z0dqxmg55fzch1d2f38rywfk1j0an2f4sc94lj7ckbm6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pcomplete-extension";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pcomplete-extension";
           sha256 = "0m0c9ir44p21rj93fkisvpvi08936717ljmzsr4qdf69b3i54cwc";
           name = "pcomplete-extension";
         };
@@ -19374,7 +19689,7 @@
           sha256 = "03k3xhrim4s3yvbnl8g8ci5g7chlffycdw7d6a1pz3077mxf1f1z";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pcsv";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pcsv";
           sha256 = "1zphndkbva59g1fd319a240yvq8fjk315b1fyrb8zvmqpgk9n0dl";
           name = "pcsv";
         };
@@ -19395,7 +19710,7 @@
           sha256 = "19sy49r3ijh36m7hl4vspw5c4i8pnfqdn4ldm2sqchxigkw56ayl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pdf-tools";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pdf-tools";
           sha256 = "1hnc8cci00mw78h7d7gs8smzrgihqz871sdc9hfvamb7iglmdlxw";
           name = "pdf-tools";
         };
@@ -19416,7 +19731,7 @@
           sha256 = "0kjz7ch4bn0m4v9zgqyqcrsasnqc5c5drv2hp22j7rnbb7ny0q3n";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/peg";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/peg";
           sha256 = "0nxy9xn99myz0p36m4jflfj48qxhhn1sspbfx8d90030xg3cc2gm";
           name = "peg";
         };
@@ -19436,7 +19751,7 @@
           sha256 = "1rh87jf0a15q35a8h00bx6k5wa931rb6gh600zbs7j4r3y8qsylf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/per-buffer-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/per-buffer-theme";
           sha256 = "1czcaybpfmx4mwff7hs07iayyvgvlhifkickccap6kpd0cp4n6hn";
           name = "per-buffer-theme";
         };
@@ -19457,7 +19772,7 @@
           sha256 = "0h05j55y3csq91a5m2fg99y4rzsh7zca7hnifb6kic5zb3nahi00";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/persistent-scratch";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/persistent-scratch";
           sha256 = "0iai65lsg3zxj07hdb9201w3rwrvdb3wffr6k2jdl8hzg5idghn1";
           name = "persistent-scratch";
         };
@@ -19478,7 +19793,7 @@
           sha256 = "14p20br8vzxs39d4hswzrrkgwql5nnmn5j17cpbabzjvck42rixc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/persistent-soft";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/persistent-soft";
           sha256 = "0a4xiwpgyyynjf69s8p183mqd3z53absv544ggvhb2gkpm6jravc";
           name = "persistent-soft";
         };
@@ -19499,7 +19814,7 @@
           sha256 = "129cl5az4rr5j7krpyyi5khhbl8klw7ji9ysarz0s7ivy096jq7b";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/persp-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/persp-mode";
           sha256 = "1bgni7y5xsn4a21494npr90w3320snfzw1hvql30xrr57pw3765w";
           name = "persp-mode";
         };
@@ -19520,7 +19835,7 @@
           sha256 = "12c2rrhysrcl2arc6hpzv6lxbb1r3bzlvdp23hnp9sci6yc10k3q";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/perspective";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/perspective";
           sha256 = "150dxcsd0ylvfi9mmfpcki1wd3nl8q9mbszd3dgqfnm40yncklml";
           name = "perspective";
         };
@@ -19541,7 +19856,7 @@
           sha256 = "1qxsc5wyk8l9gkgmqy3mzwxdhji1ljqw9s1jfxkax7fyv4d1v31p";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ph";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ph";
           sha256 = "0azx4cpfdn01yrqyn0q1gg9z7w0h0rn7zl39v3dx6yidd76ysh0l";
           name = "ph";
         };
@@ -19562,7 +19877,7 @@
           sha256 = "0r6cl1ng41s6wsy5syjlkaip0mp8h491diipdc1psbhnpk4vabsv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/phi-search-mc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/phi-search-mc";
           sha256 = "07hd80rbyzr5n3yd7hv1j51nl6pvcxmln20g6xvw8gh5yfl9k0m8";
           name = "phi-search-mc";
         };
@@ -19583,7 +19898,7 @@
           sha256 = "0zs11811kx6x1zgc1icd8gw420saa7z6zshpzmrddnbznya4qql6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/php-auto-yasnippets";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/php-auto-yasnippets";
           sha256 = "1hhddvpc80b6wvjpbpibsf24rp5a5p45m0bg7m0c8mx181h9mqgn";
           name = "php-auto-yasnippets";
         };
@@ -19604,7 +19919,7 @@
           sha256 = "0pwhw59ki19f9rkgvvnjzhby67s0y9hpsrg6cwqxakjlm66w96q3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/php-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/php-mode";
           sha256 = "1lc4d3fgxhanqr3b8zr99z0la6cpzs2rksj806lnsfw38klvi89y";
           name = "php-mode";
         };
@@ -19625,7 +19940,7 @@
           sha256 = "09rinyx0621d7613xmbyvrrlav6d4ia332wkgg0m9dn265g3h56z";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/phpcbf";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/phpcbf";
           sha256 = "1hf88ys4grffpqgavrbc72dn3m7crafgid2ygzx9c5j55syh8mfv";
           name = "phpcbf";
         };
@@ -19646,7 +19961,7 @@
           sha256 = "1s4a0ygm79shv6f0rghrkq9jb7jc7sh9cjxzlzj0c8zpvsxl0hlz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/phpunit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/phpunit";
           sha256 = "0nj8ss1yjkcqnbnn4jgbp0403ljjk2xhipzikdrl3dbxlf14i4f8";
           name = "phpunit";
         };
@@ -19667,7 +19982,7 @@
           sha256 = "12jhdkgfck2a6d5jj65l9d98dm34gsyi0ya4h21dbbvz35zivz70";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pinyin-search";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pinyin-search";
           sha256 = "1si693nmmxgg0kp5mxvj5nq946kfc5cv3wfsl4znbqzps8qb2b7z";
           name = "pinyin-search";
         };
@@ -19688,7 +20003,7 @@
           sha256 = "1dsg49156mfhkd8ip4ny03sc06zchxr1qpbcx48f5sn4m9j5d3vs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pip-requirements";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pip-requirements";
           sha256 = "1wsjfyqga7pzp8gsm5x53qrkn40srairbjpifyrqbi2fpzmwhrnz";
           name = "pip-requirements";
         };
@@ -19709,7 +20024,7 @@
           sha256 = "1wg8pcwd70ixn2bxh01934zl12ry4pgx3l9dccpbjdi40gira00d";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pixiv-novel-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pixiv-novel-mode";
           sha256 = "0f1rxvf9nrw984122i6dzsgik9axfjv6yscmg203s065n9lz17px";
           name = "pixiv-novel-mode";
         };
@@ -19730,7 +20045,7 @@
           sha256 = "0nk12dcppdyhav6m6yf7abpywyd7amxd4237zsfd32w4zxsx39k1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pkg-info";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pkg-info";
           sha256 = "0whcvralk76mfmvbvwn57va5dkb1irj7iwffgddi7r0ima49iszx";
           name = "pkg-info";
         };
@@ -19751,7 +20066,7 @@
           sha256 = "0a8qb1ldk6bjs7fpxgxrf90md7q46fhl71gmay8yafdkh6hn0kqr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pkgbuild-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pkgbuild-mode";
           sha256 = "1lp7frjahcpr4xnzxz77qj5hbpxbxm2g28apkixrnc1xjha66v3x";
           name = "pkgbuild-mode";
         };
@@ -19772,7 +20087,7 @@
           sha256 = "1k3bqv5y2xp1jl2hpf8qhs11yzhcl8k40fxqjzv7mvc0ysq9y6wb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/platformio-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/platformio-mode";
           sha256 = "022l20sfyfkvp6kmmqxr7gcmcdx6b1dgsakjjnx8fknrpxr5kyps";
           name = "platformio-mode";
         };
@@ -19793,7 +20108,7 @@
           sha256 = "11cbpgjsnw8fiqf1s12hbm9qxgjcw6y2zxx7wz4wg7idmi7m0b7g";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/plenv";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/plenv";
           sha256 = "0dw9fy5wd9wm76ag6yyw3f9jnlj7rcdcxgdjm30h514qfi9hxbw4";
           name = "plenv";
         };
@@ -19814,7 +20129,7 @@
           sha256 = "0f00dv5jwbhs99j4jc6lvr5n0mv1y80yg7zpp6yrmhww6829l5rg";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/plsense";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/plsense";
           sha256 = "1ka06r4ashhjkfyzql9mfvs3gj7n684h4gaycj29w4nfqrhcw9va";
           name = "plsense";
         };
@@ -19835,13 +20150,55 @@
           sha256 = "0s34nbqqy6aqi113xj452pbmqp43046wfbfbbfv1xwhybgq0c1j1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/plsense-direx";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/plsense-direx";
           sha256 = "0qd4b7gkmn5ydadhp70995rap3643s1aa8gfi5izgllzhg0i864j";
           name = "plsense-direx";
         };
         packageRequires = [ direx log4e plsense yaxception ];
         meta = {
           homepage = "http://melpa.org/#/plsense-direx";
+          license = lib.licenses.free;
+        };
+      }) {};
+    pony-snippets = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, yasnippet }:
+    melpaBuild {
+        pname = "pony-snippets";
+        version = "0.0.1";
+        src = fetchFromGitHub {
+          owner = "seantallen";
+          repo = "pony-snippets";
+          rev = "56018b23a11563c6766ed706024b22aa5a4556b4";
+          sha256 = "0xjvxfkrl6wl31s7rvbv9zczn6d6i9vf20waqlr3c2ff3zy55ygy";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pony-snippets";
+          sha256 = "06rrzfg20kzpscnqr2lin9jvrcydq4wnrv7nj1d0lm6988qz88jx";
+          name = "pony-snippets";
+        };
+        packageRequires = [ yasnippet ];
+        meta = {
+          homepage = "http://melpa.org/#/pony-snippets";
+          license = lib.licenses.free;
+        };
+      }) {};
+    ponylang-mode = callPackage ({ dash, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "ponylang-mode";
+        version = "0.0.1";
+        src = fetchFromGitHub {
+          owner = "SeanTAllen";
+          repo = "ponylang-mode";
+          rev = "d05425eca7c924109263bdac72083137a7967454";
+          sha256 = "0jlycv0ck5kbszwc0v2gbka6k5h39nz8763ws0v8jada7zzmyvxm";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ponylang-mode";
+          sha256 = "02fq0qp7f4bzmynzszrwskfs78nzsmf413qjxqndrh3hamixzpi1";
+          name = "ponylang-mode";
+        };
+        packageRequires = [ dash ];
+        meta = {
+          homepage = "http://melpa.org/#/ponylang-mode";
           license = lib.licenses.free;
         };
       }) {};
@@ -19856,7 +20213,7 @@
           sha256 = "18i0kivn6prh5pwdr7b4pxfxqsc8l4mks1h6cfs7iwnfn15g5k19";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pophint";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pophint";
           sha256 = "1chq2j79hg095jxw5z3pz4qicqrccw0gj4sxrin0a55hnprzzp72";
           name = "pophint";
         };
@@ -19877,7 +20234,7 @@
           sha256 = "1y538siabcf1n00wr4iz5gbxfndw661kx2mn9w1g4lg7yi4n0h0h";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/popup";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/popup";
           sha256 = "151g00h9rkid76qf6c53n8bncsfaikmhj8fqcb3r3a6mbngcd5k2";
           name = "popup";
         };
@@ -19898,7 +20255,7 @@
           sha256 = "084hb3zn1aiabbyxgaalszb2qjf9z64z960ks5fvz8nh7n6y7ny4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/popup-complete";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/popup-complete";
           sha256 = "04bpm31zx87j390r2xi1yl4kyqgalmyqc48xarsm67zfww9fw9c1";
           name = "popup-complete";
         };
@@ -19919,7 +20276,7 @@
           sha256 = "083q5q53j1dcv4m2jdamh28bdk6ajzcypmyb3xr52dnqdm3bw6im";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/popup-imenu";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/popup-imenu";
           sha256 = "0lxwfaa9vhdn55dj3idp8c3fg1g26qsqq46y5bimfd0s89bjbaxn";
           name = "popup-imenu";
         };
@@ -19940,7 +20297,7 @@
           sha256 = "0nips9npm4zmz3f37vvb4s0g1ci0p9cl6w0z4sc6agg4rybjhpdp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/popwin";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/popwin";
           sha256 = "1zp54nv8rh0b3g8y5aj4793miiw2r1ijwbzq31lkwmbdr09mixmf";
           name = "popwin";
         };
@@ -19961,7 +20318,7 @@
           sha256 = "0w8bnspnk871qndp18hs0wk4x9x31xr9rwbvf5dc8mcbnj29ch33";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pos-tip";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pos-tip";
           sha256 = "13qjz112qlrnq34lr70087gshzq8m44knfl6694hfprzjgix84vh";
           name = "pos-tip";
         };
@@ -19982,7 +20339,7 @@
           sha256 = "1nx3b24i26kgm52xw21x4m15qjkxw3sg5r6qyvck0fyhj0gw69gr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/powerline";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/powerline";
           sha256 = "0gsffr6ilmckrzifsmhwd42vr85vs42pc26f1205pbxb7ma34dhx";
           name = "powerline";
         };
@@ -20003,7 +20360,7 @@
           sha256 = "010b151wblgxlfpy590yanbl2r8qhpbqgi02v0pyir340frm9ngn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/powershell";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/powershell";
           sha256 = "162k8y9k2n48whaq93sqk86zy3p9qvsfxgyfv9n1nvk4l5wn70wk";
           name = "powershell";
         };
@@ -20024,7 +20381,7 @@
           sha256 = "0pv671j8g09pn61kkfb3pa9axfa9zd2jdrkgr81rm2gqb2vh1hsq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ppd-sr-speedbar";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ppd-sr-speedbar";
           sha256 = "1m2918hqvb9c6rgb5szs95ds99gdjdxggcbdfqzmbb5sz2936av8";
           name = "ppd-sr-speedbar";
         };
@@ -20045,7 +20402,7 @@
           sha256 = "013fig9i4fyx16krp2vfv953p3rwdzr38zs6i50af4pqz4vrcfvh";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pretty-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pretty-mode";
           sha256 = "1zxi4nj7vnchiiz1ndx17b719a1wipiqniykzn4pa1w7dsnqg21f";
           name = "pretty-mode";
         };
@@ -20066,7 +20423,7 @@
           sha256 = "08ljf39jfmfpdk36nws2dnwpm7y8252zsdprsc85hr1h1ig5xy15";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/processing-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/processing-mode";
           sha256 = "184yg9z14ighz9djg53ji5dgnb98dnxkkwx55m8f0f879x31i89m";
           name = "processing-mode";
         };
@@ -20087,7 +20444,7 @@
           sha256 = "08ljf39jfmfpdk36nws2dnwpm7y8252zsdprsc85hr1h1ig5xy15";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/processing-snippets";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/processing-snippets";
           sha256 = "09vkm9asmjz1in0f63s7bf4amifspsqf5w9pxiy5y0qvmn28fr2r";
           name = "processing-snippets";
         };
@@ -20108,7 +20465,7 @@
           sha256 = "0r32rjfsbna0g2376gdv0c0im1lzw1cwbp9690rgqjj95ls4saa3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/prodigy";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/prodigy";
           sha256 = "032868bgy2wmb2ws48lfibs4118inpna7mmml8m7i4m4y9ll6g85";
           name = "prodigy";
         };
@@ -20129,7 +20486,7 @@
           sha256 = "1hv8ifrpwn434sm41vkgbwni21ma5kfybkwasi6zp0f2b5i9ziw7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/project-explorer";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/project-explorer";
           sha256 = "076lzmyi1n7yrgdgyh9qinq271qk6k64x0msbzarihr3p4psrn8m";
           name = "project-explorer";
         };
@@ -20150,7 +20507,7 @@
           sha256 = "1x7hwda1w59b8hvzxyk996wdz6phs6rchh3f1ydf0ab6x7m7xvjr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/project-persist";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/project-persist";
           sha256 = "0csjwj0qaw0hz2qrj8kxgxlixh2hi3aqib98vm19sr3f1b8qab24";
           name = "project-persist";
         };
@@ -20171,7 +20528,7 @@
           sha256 = "1nq320ph8fs9a197ji4mnw2xa24dld0r1nka476yvkg4azmcc9x8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/project-persist-drawer";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/project-persist-drawer";
           sha256 = "1jv2y2hcqakyvfibclzm7g4diw0bvsv3a8fa43yf19wb64jm8hdb";
           name = "project-persist-drawer";
         };
@@ -20191,7 +20548,7 @@
           sha256 = "08dd2y6hdsj1rxcqa2hnjypnn9c2z43y7z2hz0fi4vny547qybz8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/project-root";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/project-root";
           sha256 = "0xjir204zk254y2x70k9vqwirx2ljmrikpsgn5kn170d1bxvhwmb";
           name = "project-root";
         };
@@ -20212,7 +20569,7 @@
           sha256 = "1rl6n6v9f4m7m969frx8b51a4lzfix2bxx6rfcfbh6kzhc00qnxf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/projectile";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/projectile";
           sha256 = "1kf8hql59nwiy13q0p6p6rf5agjvah43f0sflflfqsrxbihshvdn";
           name = "projectile";
         };
@@ -20225,15 +20582,15 @@
     projectile-rails = callPackage ({ emacs, f, fetchFromGitHub, fetchurl, inf-ruby, inflections, lib, melpaBuild, projectile, rake }:
     melpaBuild {
         pname = "projectile-rails";
-        version = "0.6.7";
+        version = "0.7.0";
         src = fetchFromGitHub {
           owner = "asok";
           repo = "projectile-rails";
-          rev = "dee51e39003489ece8077750d3cf93dee6b373fa";
-          sha256 = "03z9zsldzj0nwksw3bj4j58p7n14n6cqv917pwn1sb67l0wziqg2";
+          rev = "21ce05e412b0efebfeab9f84d38c679758ddbf76";
+          sha256 = "0f0siz230xsv20h8wmwa1i8wdsp964y6qmb2i3l485yh03bz1x95";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/projectile-rails";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/projectile-rails";
           sha256 = "0fgvignqdqh0ma91z9385782l89mvwfn77rp1gmy8cbkwi3b7fkq";
           name = "projectile-rails";
         };
@@ -20254,7 +20611,7 @@
           sha256 = "1ma6djvhvjai07v1g9a36lfa3nw8zsy6x5vliwcdnkf44gs287ra";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/projectile-sift";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/projectile-sift";
           sha256 = "1wbgpwq9yy3v7hqidaczrvvsw5ajj7m3n4gsy3b169xv5h673a0i";
           name = "projectile-sift";
         };
@@ -20275,7 +20632,7 @@
           sha256 = "1rw55w2fpb3rw7j136kclkhppz21f7d7di4cvlv7zj5zpdl5zz88";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/projekt";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/projekt";
           sha256 = "1bhb24701flihl54w8xrj6yxhynpq4dk0fp5ciac7k28n4930lw8";
           name = "projekt";
         };
@@ -20296,7 +20653,7 @@
           sha256 = "1hq8426i8rpb3qzkd5akv3i08pa4jsp9lwsskn38bfgp71pwild2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/prompt-text";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/prompt-text";
           sha256 = "1b9sj9kzx5ydq2zsfmkwsx78pzg0vsvrn92397js6b2cm24vrwwc";
           name = "prompt-text";
         };
@@ -20317,7 +20674,7 @@
           sha256 = "18ap2liz5r5a8ja2zz9182fnfm47jnsbyblpq859zks356k37iwc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/prop-menu";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/prop-menu";
           sha256 = "0dhy52fxxpa058mhhx0slw3sly3dlxm9vkax6fd1sap6f6v00p5i";
           name = "prop-menu";
         };
@@ -20338,7 +20695,7 @@
           sha256 = "03df8zvx2sry3jz2x4pi3l32qyfqa7w8kj8jdbz30nzy0h7aa070";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/protobuf-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/protobuf-mode";
           sha256 = "1hh0w93fg6mfwsbb9wvp335ry8kflj50k8hybchpjcn6f4x39xsj";
           name = "protobuf-mode";
         };
@@ -20359,7 +20716,7 @@
           sha256 = "0wgxrwl7dpy084sc76wiwpixycb171g7xwc66m5gnlrv79qyac73";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/psci";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/psci";
           sha256 = "0sgrz8byz2pcsad2pydinp4hh2xb48pdb03r93wg2vvyy8p15j9g";
           name = "psci";
         };
@@ -20380,7 +20737,7 @@
           sha256 = "0msa8c29djhy5h3zpdvx25f4y1c50rgsk8iz6r127psrxdlfrvg8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/psession";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/psession";
           sha256 = "18va6kvpia5an74vkzccs72z02vg4vq9mjzr5ih7xbcqxna7yv3a";
           name = "psession";
         };
@@ -20401,7 +20758,7 @@
           sha256 = "1p0k770h96iw8bxm8ssi0a91m050s615q036870lrlsz35mzc5kw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pt";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pt";
           sha256 = "0zmz1hcr4ajc2ydvpdxhy1dlhp7hvlkv6y6w1b79ffvq6acdd5mj";
           name = "pt";
         };
@@ -20422,7 +20779,7 @@
           sha256 = "15c2p5ffvkp80v6fvxa3bgrk8mj18famngqkz2dammxnbppvnvvz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/puml-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/puml-mode";
           sha256 = "131ghjq6lsbhbx5hdg36swnkqijdb9bx6zg73hg0nw8qk0z742vn";
           name = "puml-mode";
         };
@@ -20443,7 +20800,7 @@
           sha256 = "1v48i37iqrrwbyy3bscicfq66vbbml4sg0f0n950bnk0qagjx8py";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/punctuality-logger";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/punctuality-logger";
           sha256 = "0q9s74hkfqvcx67xpq9rlvh38nyjnz230bll6ks7y5yzxvl4qhcm";
           name = "punctuality-logger";
         };
@@ -20464,7 +20821,7 @@
           sha256 = "012lv7hrwlhvins81vw3yjkhdwbpi6g1dx55i101qyrpzv5ifngm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pungi";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pungi";
           sha256 = "1v9fsd764z5wdcips63z53rcipdz7bha4q6s4pnn114jn3a93ls1";
           name = "pungi";
         };
@@ -20485,7 +20842,7 @@
           sha256 = "0xr3s56p6fbm6wgw17galsl3kqvv8c7l1l1qvbhbay39yzs4ff14";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/puppet-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/puppet-mode";
           sha256 = "1s2hap6fs6rg5q80dmzhaf4qqaf5sglhs8p896i3i5hq51w0ciyc";
           name = "puppet-mode";
         };
@@ -20506,7 +20863,7 @@
           sha256 = "1wk319akv0scvyyjsd48pisi2i1gkahhsan9hfszrs6xx3anvfd9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/purescript-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/purescript-mode";
           sha256 = "00gz752mh7144nsaka5q3q4681jp845kc5vcy2nbfnqp9b24l55m";
           name = "purescript-mode";
         };
@@ -20527,7 +20884,7 @@
           sha256 = "03ivg3ddhy5zh410wgwxa17m98wywqhk62jgijhjd00b6l8i4aym";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pushbullet";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pushbullet";
           sha256 = "1swzl25rcw7anl7q099qh14yhnwlbn3m20ib9kis0l1rv59kkarl";
           name = "pushbullet";
         };
@@ -20548,7 +20905,7 @@
           sha256 = "06xdq2slwhkcqlbv7x86zmv55drzif9cwjlj543cwhncphl2x9rd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/py-autopep8";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/py-autopep8";
           sha256 = "1argjdmh0x9c90zkb6cr4z3zkpgjp2mkpsw0dr4v6gg83jcggfpp";
           name = "py-autopep8";
         };
@@ -20569,7 +20926,7 @@
           sha256 = "0150q6xcnzzrkn9fa9njm973l1d49c48ad8qia71k4jwrxjjj6zr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/py-isort";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/py-isort";
           sha256 = "0k5gn3bjn5pv6dn6p0m9xghn0sx3m29bj3pfrmyh6gd5ic0l00yb";
           name = "py-isort";
         };
@@ -20590,7 +20947,7 @@
           sha256 = "09z739w4fjg9xnv3mbh7v8j59mnbsfq4ygq616pj4xcw3nsh0rbg";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/py-yapf";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/py-yapf";
           sha256 = "1381x0ffpllxwgkr2d8xxbv1nd4k475m1aff8l5qijw7d1fqga2f";
           name = "py-yapf";
         };
@@ -20611,7 +20968,7 @@
           sha256 = "0qg1kjzsv2mcvlsivqy8ys3djbs5yala37r9h2zcxdicl88q0l11";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pycarddavel";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pycarddavel";
           sha256 = "12k2mnzkd8yv17csfhclsnd479vcabawmac23yw6dsw7ic53jf1a";
           name = "pycarddavel";
         };
@@ -20632,7 +20989,7 @@
           sha256 = "1y3q1k195wp2kgp00a1y34i20zm80wdv2kxigh6gbn2r6qzkqrar";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pyenv-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pyenv-mode";
           sha256 = "00yqrk92knv9gq1m9xcg78gavv70jsjlwzkllzxl63iva9qrch59";
           name = "pyenv-mode";
         };
@@ -20653,7 +21010,7 @@
           sha256 = "0q6bib9nr6xiq6npzbngyfcjk87yyvwzq1zirr3z1h5wadm34lsk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/python-environment";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/python-environment";
           sha256 = "1pq16rddw76ic5d02j5bswl9qcydi47hqmhs7r06jk46vsfzxpl7";
           name = "python-environment";
         };
@@ -20674,7 +21031,7 @@
           sha256 = "00i7cc4r7275l22k3708xi4hqw2j44yivdb1madzrpf314v3kabr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/python-x";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/python-x";
           sha256 = "115mvhqfa0fa8kdk64biba7ri4xjk74qqi6vm1a5z3psam9mjcmn";
           name = "python-x";
         };
@@ -20695,7 +21052,7 @@
           sha256 = "1af9cd8l5ac58mj92xc7a3diy995cv29abnbb3fl6x4208l4xs3c";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pythonic";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pythonic";
           sha256 = "1hq0r3vg8vmgw89wfjdqknwm76pimlk0dy56wmh9vffh06gqsb51";
           name = "pythonic";
         };
@@ -20716,7 +21073,7 @@
           sha256 = "0jidmc608amd0chs4598zkj0nvyll0al093121hkczsbpgbllq9z";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/pyvenv";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/pyvenv";
           sha256 = "0gai9idss1wvryxyqk3pv854mc2xg9hd0r55r2blql8n5rd2yv8v";
           name = "pyvenv";
         };
@@ -20737,7 +21094,7 @@
           sha256 = "110z27n3h7p2yalicfhnv832ikfcf7p0hrf5qkryz1sdmz79wb3f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/qiita";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/qiita";
           sha256 = "1kzk7pc68ks9gxm2l2d28al23gxh56z0cmkl80qwg7sh4gsmhyxl";
           name = "qiita";
         };
@@ -20758,7 +21115,7 @@
           sha256 = "1mlka59gyylj4cabi1b552h11qx54kjqwx3bkmsdngjrd4da222a";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/qml-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/qml-mode";
           sha256 = "123mlibviplzra558x87da4zx0kpbhsgfigjjgjgp3mdg897084n";
           name = "qml-mode";
         };
@@ -20779,7 +21136,7 @@
           sha256 = "0lfmdlb626b3gbmlvacwn84vpqam6gk9lp29wk0hcraw69vaw1v8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/quasi-monochrome-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/quasi-monochrome-theme";
           sha256 = "0h5pqrklyga40jg8qc47lwmf8khn0vcs5jx2sdycl2ipy0ikmfs0";
           name = "quasi-monochrome-theme";
         };
@@ -20800,7 +21157,7 @@
           sha256 = "09sdv5lf5k347415r9fzljm374rb29gq6kldx2awd164fkdnm8ds";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/quickrun";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/quickrun";
           sha256 = "1szgirakfnkn9ksls16p233sr7x9ck5m1f1kbk6ancj36yja2nki";
           name = "quickrun";
         };
@@ -20821,7 +21178,7 @@
           sha256 = "02bddznlqys37fnhdpp2g9xa9m7kfgrj1vl0hc5kr42hggk9wwmg";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/r-autoyas";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/r-autoyas";
           sha256 = "18zifadsgbwnga205jvpx61wa2dvjxmxs5v7cjqhny45a524nbv4";
           name = "r-autoyas";
         };
@@ -20842,7 +21199,7 @@
           sha256 = "0pbswxzgfqcp6vjlwhvnablj91kxq588j2fmcjzhf0aigkj7dxfb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/racer";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/racer";
           sha256 = "1091y5pisbf73i6zg5d7yny2d5yckkjg0z6fpjpmz5qjs3xcm9wi";
           name = "racer";
         };
@@ -20863,7 +21220,7 @@
           sha256 = "02x5ciyafqwak06yk813kl8p92hq03wjsk1882q8axr9q231100c";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rainbow-blocks";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rainbow-blocks";
           sha256 = "08p41wvrw1j3h7j7lyl8nxk1gcc2id9ikljmiklg0kc6s8ijhng8";
           name = "rainbow-blocks";
         };
@@ -20884,7 +21241,7 @@
           sha256 = "0gxc8j5a14bc9mp43cbcz41ipc0z1yvmypg52dnl8hadirry20gd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rainbow-delimiters";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rainbow-delimiters";
           sha256 = "132nslbnszvbgkl0819z811yar3lms1hp5na4ybi9gkmnb7bg4rg";
           name = "rainbow-delimiters";
         };
@@ -20905,7 +21262,7 @@
           sha256 = "05i0jpmxzsj2lsj48cafn3v93z37l7k5kaza2ik3yirdpjdibyrh";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rainbow-identifiers";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rainbow-identifiers";
           sha256 = "0lw790ymrgpyh0sxwmzinl2ik5vl5vggbg14cd0cx5yagkw5y3mp";
           name = "rainbow-identifiers";
         };
@@ -20926,7 +21283,7 @@
           sha256 = "1q65jj6bghvzhlqmpg61a7vn8izc01wp2fjiqx013zxpg9awvzmq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rake";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rake";
           sha256 = "0cw47g6cjnkh3z4hbwwq1f8f5vrvs84spn06k53bx898brqdh8ns";
           name = "rake";
         };
@@ -20947,7 +21304,7 @@
           sha256 = "0fkj89p0rb0r472p1rk8xpx8c74pg968pc2mmw3838y4fpc8i198";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ranger";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ranger";
           sha256 = "14g4r4iaz0nzfsklslrswsik670pvfd0605xfjghvpngn2a8ych4";
           name = "ranger";
         };
@@ -20968,7 +21325,7 @@
           sha256 = "1i16361klpdsxphcjdpxqswab3ing69j1wb9nygws7ghil85h0bx";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rase";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rase";
           sha256 = "1g7v2z7l4csl5by64hc3zg4kgrkvv81iq30mfqq4nvy1jc0xa6j0";
           name = "rase";
         };
@@ -20989,7 +21346,7 @@
           sha256 = "09c6v4lnv6vm2cckbdpx2fdi9xkz9l68qvhx35vaawxhrkgvypzp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rbenv";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rbenv";
           sha256 = "09nw7sz6rdgs7hdw517qwgzgyrdmxb16sgldfkifk41rhiyqhr65";
           name = "rbenv";
         };
@@ -21010,7 +21367,7 @@
           sha256 = "0yhmdkvswnn5rga5xzysfpivbz9wdkzbm49licilc2fp1dgcvd6i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rcirc-styles";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rcirc-styles";
           sha256 = "01dxhnzsnljig769dk9axdi970b3lw2s6p1z3ljf29qlb5j4548r";
           name = "rcirc-styles";
         };
@@ -21031,7 +21388,7 @@
           sha256 = "0r95fzi0x8r18x7r574mp503qaiqyicrq78zlggyz6qihi95pmqj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rdf-prefix";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rdf-prefix";
           sha256 = "1vxgn5f2kws17ndfdv1vj5p9ks3rp6sikzpc258j07bhsfpjz5qm";
           name = "rdf-prefix";
         };
@@ -21052,7 +21409,7 @@
           sha256 = "1ka5q2q18hgh7wl5yn04489121bq4nx369rz8nb7dr5l14cas0xm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/real-auto-save";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/real-auto-save";
           sha256 = "03dbbizpyg62v6zbq8hd16ikrifz8m2bdlbb3g67f2834xqmxha8";
           name = "real-auto-save";
         };
@@ -21073,7 +21430,7 @@
           sha256 = "07j1grdbqv3iv5ghmgsjw678bxjajcxi27clz4krcz3ys5b1h70v";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/realgud";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/realgud";
           sha256 = "15vlln4w4wlgrk5i5nhgvjcbardpahgs9kwwayb1vmj10c8a837s";
           name = "realgud";
         };
@@ -21094,7 +21451,7 @@
           sha256 = "114ssmby614xjs7mrpbbsdd4gj5ra6klfh8h6z8iij8xn3kii83q";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/recover-buffers";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/recover-buffers";
           sha256 = "0g40d7440hzlc9b45v63ng0anvmgip4dhbd9wcm2sn8qjfr4w11b";
           name = "recover-buffers";
         };
@@ -21115,7 +21472,7 @@
           sha256 = "1vpsihrl03hkd6n6b7mrjccm0a023qf3154a8rw4chihikxw27pj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rect+";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rect+";
           sha256 = "0vk0jwpl6yp2md9nh0ghp2qn883a8lr3cq8c9mgq0g552dwdiv5m";
           name = "rect-plus";
         };
@@ -21136,7 +21493,7 @@
           sha256 = "048pjrd04w6w4v6r56yblbqgkjh01xib7k1i6rjc6288jh5vr1vm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rectangle-utils";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rectangle-utils";
           sha256 = "1w5z2gykydsfp30ahqjihpvq04c5v0cfslbrrg429hycys8apws7";
           name = "rectangle-utils";
         };
@@ -21157,7 +21514,7 @@
           sha256 = "19c5rkb4nn6fs85lixrgrv8gagr69h430inig31dvm4fip9xdjp9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/redpen-paragraph";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/redpen-paragraph";
           sha256 = "0jr707ik6fhznq0q421l986w85ah0n9b4is91zrgbk1v6miqrhca";
           name = "redpen-paragraph";
         };
@@ -21178,7 +21535,7 @@
           sha256 = "1r8fhs7d2vkrbv15ic2bm79i9a8swbc38vk566vnxkhl3rfd5a0a";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/relative-line-numbers";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/relative-line-numbers";
           sha256 = "0mj1w5a4ax8hwz41vn02bacxlnifd14hvf3p288ljvwchvlf0hn3";
           name = "relative-line-numbers";
         };
@@ -21199,7 +21556,7 @@
           sha256 = "0lqbhwi1f8b4sv9p1rf0gyjllk0l7g6v6mlws496079wxx1n5j66";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/relax";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/relax";
           sha256 = "0gfr4ym6aakawhkfz40ar2n0rfz503hq428yj6rbf7jmq3ajaysk";
           name = "relax";
         };
@@ -21220,7 +21577,7 @@
           sha256 = "007lqahjbig6yygqik6fgbq114784z6l40a3vrc4qs9361zqizck";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/repeatable-motion";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/repeatable-motion";
           sha256 = "12z4z8apd8ksf6dfvqm54l71mx68j0yg4hrjypa9p77fpcd6p0zw";
           name = "repeatable-motion";
         };
@@ -21233,15 +21590,15 @@
     repl-toggle = callPackage ({ fetchFromGitHub, fetchurl, fullframe, lib, melpaBuild }:
     melpaBuild {
         pname = "repl-toggle";
-        version = "0.3.0";
+        version = "0.3.3";
         src = fetchFromGitHub {
           owner = "tomterl";
           repo = "repl-toggle";
-          rev = "84541e0d734d6608bc8bff87c997aaefe5e1f092";
-          sha256 = "14ij4daddbkpay28g15zfafslh7fd5265j7az0gagvx4qymgficn";
+          rev = "0249c2a72e6bf782c2c15b0cb1d925410543184f";
+          sha256 = "12wylmyz54n1f3kaw9clhvs66dg43xvcvll4pl5ii0ibfv6pls1b";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/repl-toggle";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/repl-toggle";
           sha256 = "1jyaksxgyygfv1wn9c6y8sykb4hicwgs9n5vrdikd2i0iix29zpb";
           name = "repl-toggle";
         };
@@ -21262,7 +21619,7 @@
           sha256 = "1pxvwiqhv2nmsxkdwn9jx7na1vgk9dg9yxidglxpmvpid6fy4qdk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/replace-symbol";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/replace-symbol";
           sha256 = "07ljmw6aw9hsqffhwmiq2pvhry27acg6f4vgxgi91vjr8jj3r4ng";
           name = "replace-symbol";
         };
@@ -21283,7 +21640,7 @@
           sha256 = "0hs80g3npgb6qfcaivdfkpsc9mss1kdmyp5j7s922qcy2k4yxmgl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/repo";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/repo";
           sha256 = "0z4lcswh0c6xnsxlv33bsxh0nh26ydzfl8sv8xabdp5a2gk6bhpb";
           name = "repo";
         };
@@ -21304,7 +21661,7 @@
           sha256 = "1xzp2hnkr9lsjx50cxlpki9mvyhjsv0vyc77480jrlnpspakj7qs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/req-package";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/req-package";
           sha256 = "1438f60dnmc3a2dh6hd0wslrh25nd3af797aif70kv6qc71h87vf";
           name = "req-package";
         };
@@ -21325,7 +21682,7 @@
           sha256 = "0j7nakxj750rhdnm0nk075s7rx38rc9npbb55kg7r9vb2qilnvmr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/request";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/request";
           sha256 = "09gxfy34a13wr0agmhn0nldxaiyc72rx9xi56jirsvji4dg5j6mm";
           name = "request";
         };
@@ -21346,7 +21703,7 @@
           sha256 = "0j7nakxj750rhdnm0nk075s7rx38rc9npbb55kg7r9vb2qilnvmr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/request-deferred";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/request-deferred";
           sha256 = "19s8q9a01v0g897s9ass1mr5wbzy82rrfcnqpvcvp05q4y787dn9";
           name = "request-deferred";
         };
@@ -21367,7 +21724,7 @@
           sha256 = "1b832r7779rmr6rhzj7klc0l5xzwc4rids87g2hczpb5dhqnchca";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/requirejs";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/requirejs";
           sha256 = "09z6r9wcag3gj075wq215zcslyknl1izap595rn48xvizxi06c6k";
           name = "requirejs";
         };
@@ -21388,7 +21745,7 @@
           sha256 = "1ywcnrrr4wp6c951mqfscvdgcmwyvxy80p40vi27nzbl977lb1xv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/resize-window";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/resize-window";
           sha256 = "0h1hlj50hc97wxqpnmvg6w3qhdd9nbnb8r8v39ylv87zqjcmlp8l";
           name = "resize-window";
         };
@@ -21409,7 +21766,7 @@
           sha256 = "0y4ga1lj2x2f0r535ivs09m2l0q76iz72w42wknhsw9lmdsyl5nz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/restart-emacs";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/restart-emacs";
           sha256 = "03aabz7fmy99nwimvjn7qz6pvc94i470hfgiwmjz3348cw02k0n6";
           name = "restart-emacs";
         };
@@ -21430,7 +21787,7 @@
           sha256 = "1q13cgpz4wzhnqv84ablawy3y2wgdwy46sp7454mmfx9m77jzb2v";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/reveal-in-osx-finder";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/reveal-in-osx-finder";
           sha256 = "00jgrmh5s3vlpj1jjf8l3c3h4hjk5x781m95sidw6chimizvfmfc";
           name = "reveal-in-osx-finder";
         };
@@ -21451,7 +21808,7 @@
           sha256 = "15xnz4fi22wsximimwmirlz11v4ksfj8nilyjfw6acd92yrhzg6h";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/reverse-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/reverse-theme";
           sha256 = "1lq8nwhf8n5i280v0kqksndm4b3n6x34wnd5fa5i48ljwr5cinih";
           name = "reverse-theme";
         };
@@ -21472,7 +21829,7 @@
           sha256 = "11hwf9y5ax207w6rwrsmi3pmn7pn7ap6iys0z8hni2f5zzxjrmx3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rich-minority";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rich-minority";
           sha256 = "11xd76w5k3b3q5bxqjb55vi6dsal9drvyc1nh7z83awm59hvgczc";
           name = "rich-minority";
         };
@@ -21493,7 +21850,7 @@
           sha256 = "0p044wg9d4i6f5x7bdshmisgwvw424y16lixac93q6v5bh3xmab5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rigid-tabs";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rigid-tabs";
           sha256 = "06n0bcvc3nnp84pcq3lywwga7l92jz8hnkilhbq59kydf5zbjldp";
           name = "rigid-tabs";
         };
@@ -21514,7 +21871,7 @@
           sha256 = "1wqhqv2fc5h10igv1php51bayx0s7qw4m9gzx9by80dab8lwa0vk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rinari";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rinari";
           sha256 = "0qknicg3vzl7zbkwsdvp10hrvlng6mbi8hgslx4ir522dflrf9p0";
           name = "rinari";
         };
@@ -21535,7 +21892,7 @@
           sha256 = "1drvyf5asjp3lgpss7llff35q8r89vmh73n1axaj2qp9jx5a5jih";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rnc-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rnc-mode";
           sha256 = "09ly7ln6qrcmmim9bl7kd50h4axrhy6ig406r352xm4a9zc8n22q";
           name = "rnc-mode";
         };
@@ -21548,15 +21905,15 @@
     robe = callPackage ({ fetchFromGitHub, fetchurl, inf-ruby, lib, melpaBuild }:
     melpaBuild {
         pname = "robe";
-        version = "0.7.8";
+        version = "0.7.9";
         src = fetchFromGitHub {
           owner = "dgutov";
           repo = "robe";
-          rev = "c5a0ae6f68c699ec3cdbb73a3e01e76f62d75f48";
-          sha256 = "1fckb18x9ikm6dlwwdfg9q4wyjjwdqy3r1w2ic01xb0dbyls41gw";
+          rev = "7c56895b6c2fd5d6c9572182f5de10ebe5bfc977";
+          sha256 = "01xd3nc7bmf4r4d37x08rw2dlsg6gns8mraahi4rwkg6a9lwl44n";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/robe";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/robe";
           sha256 = "19py2lwi7maya90kh1mgwqb16j72f7gm05dwla6xrzq1aks18wrk";
           name = "robe";
         };
@@ -21569,15 +21926,15 @@
     roguel-ike = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, popup }:
     melpaBuild {
         pname = "roguel-ike";
-        version = "0.1";
+        version = "0.1.1";
         src = fetchFromGitHub {
           owner = "stevenremot";
           repo = "roguel-ike";
-          rev = "6d9322ad9d43d0c7465f125c8e08b222866e6923";
-          sha256 = "108j3106n9anas07mj26xlrvscsl5irshd39czkippla84gwmgyc";
+          rev = "706dcb0687e8016d7d776f9d9e5ace9fdbbca43c";
+          sha256 = "0rgv4y9aa5cc2ddz3y5z8d22xmr8kf5c60h0r3g8h91jmcw3rb4z";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/roguel-ike";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/roguel-ike";
           sha256 = "1a7sa6nhgi0s4gjh55bhk5cg6q6s7564fk008ibmrm05gfq9wlg8";
           name = "roguel-ike";
         };
@@ -21598,7 +21955,7 @@
           sha256 = "133ficdghshlmwq5dn42cg3h51jdg4lcwqr4cd2s2s52rz8plw9h";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rope-read-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rope-read-mode";
           sha256 = "0grnn5k6rbck0hz4c6cadgj3a4dv62habyingznisg2kx9i3m0dw";
           name = "rope-read-mode";
         };
@@ -21619,7 +21976,7 @@
           sha256 = "0mfkq8n28lal4lqwp6v0ilz8wrwgg61sbm0jggznwisjqqy3lzrh";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rsense";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rsense";
           sha256 = "1901xqlpc8fg4sl9j58jn40i2djs8s0cdcqcrzrq02lvk8ssfdf5";
           name = "rsense";
         };
@@ -21640,7 +21997,7 @@
           sha256 = "0hrn5n7aaymwimk511kjij44vqaxbmhly1gwmlmsrnbvvma7f2mp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rspec-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rspec-mode";
           sha256 = "0nyib9rx9w9cbsgkcjx9n8fp77xkzxg923z0rdm3f9kc7njcn0zx";
           name = "rspec-mode";
         };
@@ -21653,16 +22010,16 @@
     rtags = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "rtags";
-        version = "2.0";
+        version = "2.1";
         src = fetchFromGitHub {
           owner = "Andersbakken";
           repo = "rtags";
-          rev = "ba85598841648490e64246be802fc2dcdd45bc3c";
-          sha256 = "0ndyvpgbvfcnxf74ffaby36rqsnwj10j1s9vr3gan9mqi6spcggf";
+          rev = "ad85fda48b8c1038bc90c9fb0e8e79f2c5e30bca";
+          sha256 = "0shzxxx7qajmfrxqipmlak899hgmxkqf9zkbmr0g04wamxmyfs65";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rtags";
-          sha256 = "16jvbr4nm48p3dj9wmysjaxyz4ajcay19risqrs9fzrifkr21c9p";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rtags";
+          sha256 = "08clwydx2b9cl4wv61b0p564jpvq7gzkrlcdkchpi4yz6djbp0lw";
           name = "rtags";
         };
         packageRequires = [];
@@ -21682,7 +22039,7 @@
           sha256 = "10djjp1520xc05qkciaiaiiciscaln6c74h7ymba40mvzlf67y9q";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rubocop";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rubocop";
           sha256 = "114azl0fasmnq0fxxyiif3363mpg8qz3ynx91in5acqzh902fa3q";
           name = "rubocop";
         };
@@ -21703,7 +22060,7 @@
           sha256 = "1wqhqv2fc5h10igv1php51bayx0s7qw4m9gzx9by80dab8lwa0vk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ruby-compilation";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ruby-compilation";
           sha256 = "1x1vpkjpx95sfcjhkx4cafypj0nkbd1i0mzxx3lmcrsmg8iv0rjc";
           name = "ruby-compilation";
         };
@@ -21724,7 +22081,7 @@
           sha256 = "1cpz9vkp57nk682c5xm20g7bfj5g2aq5ahpk4nhgx7pvd3xvr1ds";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ruby-end";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ruby-end";
           sha256 = "0cx121hji8ws6s3p2xfdgidm363y05g2n880fqrmzyz27cqkljis";
           name = "ruby-end";
         };
@@ -21745,7 +22102,7 @@
           sha256 = "01n9j7sag49m4bdl6065jklnxnc5kck51izg884s1is459qgy86k";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ruby-hash-syntax";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ruby-hash-syntax";
           sha256 = "0bvwyagfh7mn457iibrpv1ay75089gp8pg608gbm24m0ix82xvb5";
           name = "ruby-hash-syntax";
         };
@@ -21766,7 +22123,7 @@
           sha256 = "008zj9rg2cmh0xd7g6kgx6snm5sspxs4jmfa8hd43wx5y9pmlb8f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ruby-test-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ruby-test-mode";
           sha256 = "113ysf08bfh2ipk55f8h741j05999yrgx57mzh53rim5n63a312w";
           name = "ruby-test-mode";
         };
@@ -21787,7 +22144,7 @@
           sha256 = "1zvhq9l717rjgkm7bxz5gqkmh5i49cshwzlimb3h78kpjw3hxl2k";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ruby-tools";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ruby-tools";
           sha256 = "1zs2vzcrw11xyj2a7lgqzw4slcha20206jvjbxkm68d57rffpk8y";
           name = "ruby-tools";
         };
@@ -21808,7 +22165,7 @@
           sha256 = "0iblk0vagjcg3c8q9hlpwk7426ms7aq0s80izgvascfmyqycv6qm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/rvm";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/rvm";
           sha256 = "08i7cmav2cz73jp88ww0ay2yjhk9dj8146836q4sij1bl1slbaf8";
           name = "rvm";
         };
@@ -21829,7 +22186,7 @@
           sha256 = "08vf62fcrnbmf2ppb759kzznjdz8x72fqdwbc4n8nbswrwgm2ikl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/s";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/s";
           sha256 = "0b2lj6nj08pk5fnxvjkc1d9hvi29rnjjy4n5ns4pq6wxpfnlcw64";
           name = "s";
         };
@@ -21850,7 +22207,7 @@
           sha256 = "06gqqbkn85l2p05whmr4wkg9axqyzb7r7sgm3r8wfshm99kgpxvl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sackspace";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sackspace";
           sha256 = "1m10iw83k6m7v7sg2dxzdy83zxq6svk8h9fh4ankyn3baqrdxg5z";
           name = "sackspace";
         };
@@ -21871,7 +22228,7 @@
           sha256 = "0aw95qkql6apyn79la0jbpr0nlixhl9zvi9miry2h5y5pawb3yvf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sage-shell-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sage-shell-mode";
           sha256 = "18k7yh8rczng0kn2wsawjml70cb5bnc5jr2gj0hini5f7jq449wx";
           name = "sage-shell-mode";
         };
@@ -21892,7 +22249,7 @@
           sha256 = "0lxrq3mzabkwj5bv0mgd7fnx3dsx8vxd5kjgb79rjfra0m7pfgln";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sass-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sass-mode";
           sha256 = "1byjk5zpzjlyiwkp780c4kh7s9l56y686sxji89wc59d19rp8800";
           name = "sass-mode";
         };
@@ -21913,7 +22270,7 @@
           sha256 = "1mcag7qad1npjn096byakb8pmmi2g64nlf2vcc12irzmwia85fml";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sauron";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sauron";
           sha256 = "01fk1xfh7r16fb1xg5ibbs7gci9dja49msdlf7964hiq7pnnhxgb";
           name = "sauron";
         };
@@ -21934,7 +22291,7 @@
           sha256 = "1gh97rc528cpam3jsncc03cyf4pps71b8blmdikml71lks07lgwb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/save-sexp";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/save-sexp";
           sha256 = "12jx47picdpw668q75qsp9gncrnxnlk1slhzvxsk5pvkdwh26h66";
           name = "save-sexp";
         };
@@ -21955,7 +22312,7 @@
           sha256 = "0y846zmcz5x2jn5bndm0mfi18jc5cd1fkidgc4wvqmm0w30gyx4q";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sbt-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sbt-mode";
           sha256 = "0v0n70czgkdijnw5jd4na41vlrmqcshvr8gdpv0bv55ilqhiihc8";
           name = "sbt-mode";
         };
@@ -21976,7 +22333,7 @@
           sha256 = "1gfhk595vnf6565nv6m1v8dc4a3a9z34jj1qdh02lk8azg5ylk89";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/scala-mode2";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/scala-mode2";
           sha256 = "0rnkln6jwwqc968w3qpc6zjjv8ylw0w6c2hsjpq2slja3jn5khch";
           name = "scala-mode2";
         };
@@ -21997,7 +22354,7 @@
           sha256 = "0hhsgyil8aqdkkip5325yrdq89gnijglcbf1dsvl4wvnmq7a1rik";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/scala-outline-popup";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/scala-outline-popup";
           sha256 = "1fq0k6l57wkya1ycm4cc190kg90j2k9clnl0sc70achp4i47qbk7";
           name = "scala-outline-popup";
         };
@@ -22018,7 +22375,7 @@
           sha256 = "13s8hp16wxd9fb8gf05dn0xr692kkgiqg7v49fgr00gas4xgpfpm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/scpaste";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/scpaste";
           sha256 = "02dqmx6v3jxdn5yz1z74624sc6sz2bm4qjyi78w9akhp2jplwlk1";
           name = "scpaste";
         };
@@ -22039,7 +22396,7 @@
           sha256 = "0zpjf9cp8g4rgnwgmhlpwnanf9lzqm3rm1mkihf0gk5qzxvwsdh9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/scss-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/scss-mode";
           sha256 = "1g27xnp6bjaicxjlb9m0njc6fg962j3hlvvzmxvmyk7gsdgcgpkv";
           name = "scss-mode";
         };
@@ -22060,7 +22417,7 @@
           sha256 = "08yc67a4ji7z8s0zh500wiscziqsxi92i1d33fjla2mcr8sxxn0i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/search-web";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/search-web";
           sha256 = "0qqx9l8dn1as4gqpq80jfacn6lz0132m91pjzxv0fx6al2iz0m36";
           name = "search-web";
         };
@@ -22081,7 +22438,7 @@
           sha256 = "0nsm7z056rh32sq7abgdwyaz4dbz8v9pgbha5jvpk7y0zmnabrgs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sekka";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sekka";
           sha256 = "1jj4ly9p7m3xvb31nfn171lbpm9y70y8cbf8p24w0fhv665dx0cp";
           name = "sekka";
         };
@@ -22102,7 +22459,7 @@
           sha256 = "18xdkisxvdizsk51pnyimp9mwc6k9cpcxqr5hgndkz9q97p5dp79";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/selectric-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/selectric-mode";
           sha256 = "1k4l0lr68rqyi37wvqp1cnfci6jfkz0gvrd1hwbgx04cjgmz56n4";
           name = "selectric-mode";
         };
@@ -22123,7 +22480,7 @@
           sha256 = "15lx6qvmq3vp84ys8dzbx1nzxcnzlq41whawc2yhrnd1dbq4mv2d";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/servant";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/servant";
           sha256 = "048xg0gcwnf4l2p56iw4iawi3ywjz7f6icnjfi8qzk1z912iyl9h";
           name = "servant";
         };
@@ -22144,7 +22501,7 @@
           sha256 = "1h58q41wixjlapia1ggf83jxcllq7492k55mc0fq7hbx3hw1q1y2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/serverspec";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/serverspec";
           sha256 = "001d57yd0wmz4d7qmhnanac8g29wls0sqw194003hrgirakg82id";
           name = "serverspec";
         };
@@ -22165,7 +22522,7 @@
           sha256 = "0sp952abz7dkq8b8kkzzmnwnkq5w15zsx5dr3h8lzxb92lnank9v";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/session";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/session";
           sha256 = "0fghxbnf1d5iyrx1q8xd0lbw9nvkdgg2v2f89j6apnawisrsbhwx";
           name = "session";
         };
@@ -22186,7 +22543,7 @@
           sha256 = "11h5z2gmwq07c4gqzj2c9apksvqk3k8kpbb9kg78bbif2xfajr3m";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sexp-move";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sexp-move";
           sha256 = "0lcxmr2xqh8z7xinxbv1wyrh786zlahhhj5nnbv83i8m23i3ymmd";
           name = "sexp-move";
         };
@@ -22207,7 +22564,7 @@
           sha256 = "0yy162sz7vwj0i9w687a5x1c2fq31vc3i6gqhbywspviczdp4q1y";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/shackle";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/shackle";
           sha256 = "159z0cwg7afrmym0xk902d8z093sqv39jig25ds7z4a224yrv5w6";
           name = "shackle";
         };
@@ -22228,7 +22585,7 @@
           sha256 = "11g9lsgakq8nf689k49p9l536ffi62g3bh11mh9ix1l058xamqw2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/shampoo";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/shampoo";
           sha256 = "01ssgw4cnnx8d86g3r1d5hqcib4qyhmpqvcvx47xs7zh0jscps61";
           name = "shampoo";
         };
@@ -22249,7 +22606,7 @@
           sha256 = "0fzywfdaisvvdbcl813n1shz0r8v1k9kcgxgynv5l0i4nkrgkww5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/shell-pop";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/shell-pop";
           sha256 = "02s17ln0hbi9gy3di8fksp3mqc7d8ahhf5vwyz4vrc1bg77glxw8";
           name = "shell-pop";
         };
@@ -22270,7 +22627,7 @@
           sha256 = "0mcxp74sk9bn36gbhhimgns07iqa4dgbq2pvpqy41igqwb84w306";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/shell-split-string";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/shell-split-string";
           sha256 = "1yj1h7za4ylxh2nikj7s1qqlilpsk05x9571a2fymfyznm3iq77m";
           name = "shell-split-string";
         };
@@ -22291,7 +22648,7 @@
           sha256 = "0ia7sdip4hl27avckv3qpqgm3k4ynvp3xxq1cy53bqfzzx0gcria";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/shell-switcher";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/shell-switcher";
           sha256 = "07g9naiv2jk9jxwjywrbb05dy0pbfdx6g8pkra38rn3vqrjzvhyx";
           name = "shell-switcher";
         };
@@ -22312,7 +22669,7 @@
           sha256 = "0wvaa5nrbblayjvzjyj6cd942ywg7xz5d8fqaffxcvwlcdihvm7q";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/shell-toggle";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/shell-toggle";
           sha256 = "1ai0ks7smr8b221j9hmsikswpxqraa9b13fpwv4wwagavnlah446";
           name = "shell-toggle";
         };
@@ -22333,7 +22690,7 @@
           sha256 = "1nli26llyfkj1cz2dwn18c5pz1pnpz3866hapfibvdmwrg4z6cax";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/shelldoc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/shelldoc";
           sha256 = "1xlp03aaidp7dp8349v8drzhl4lcngvxgdrwwn9cahfqlrvvbbbx";
           name = "shelldoc";
         };
@@ -22354,7 +22711,7 @@
           sha256 = "0mn7bwvj1yv75a2531jp929j6ypckdfqdg6b5ig0kkbcrrwb7kxs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/shelltest-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/shelltest-mode";
           sha256 = "1inb0vq34fbwkr0jg4dv2lljag8djggi8kyssrzhfawri50m81nh";
           name = "shelltest-mode";
         };
@@ -22375,7 +22732,7 @@
           sha256 = "1vf766ja8f4xp1f5pmwgz6a85km0nxvc5dn571lwidfrrdbr9rkk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/shm";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/shm";
           sha256 = "1qmp8cc83dcz25xbyqd4987i0d8ywvh16wq2wfs4km3ia8a2vi3c";
           name = "shm";
         };
@@ -22396,7 +22753,7 @@
           sha256 = "09454mcjd8n1090pjc5mk1dc6bn3bgh60ddpnv9hkajkzpcjxx4h";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/shpec-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/shpec-mode";
           sha256 = "155hc1nym3fsvflps8d3ixaqw1cafqp97zcaywdppp47n7vj8zjl";
           name = "shpec-mode";
         };
@@ -22417,7 +22774,7 @@
           sha256 = "050gmxdk88zlfjwi07jsj2mvsfcv5imhzcpa6ip3cqkzpmw3pl32";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/shrink-whitespace";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/shrink-whitespace";
           sha256 = "12if0000i3rrxcm732layrv2h464wbb4xflbbfc844c83dbx1jmq";
           name = "shrink-whitespace";
         };
@@ -22438,7 +22795,7 @@
           sha256 = "103yvfgkj78i4bnv1fwk76izsa8h4wyj3vwj1vq7xggj607hkxzq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/shut-up";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/shut-up";
           sha256 = "1bcqrnnafnimfcg1s7vrgq4cb4rxi5sgpd92jj7xywvkalr3kh26";
           name = "shut-up";
         };
@@ -22459,7 +22816,7 @@
           sha256 = "1ma6djvhvjai07v1g9a36lfa3nw8zsy6x5vliwcdnkf44gs287ra";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sift";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sift";
           sha256 = "0mv5zk140kjilwvzccj75ym7wlkkqryb532mbsy7i9bs3q7m916d";
           name = "sift";
         };
@@ -22480,7 +22837,7 @@
           sha256 = "1qmkc0w28l53zzf5yd2grrk1sq222g5qnsm35ph25s1cfvc1qb2g";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/simple-httpd";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/simple-httpd";
           sha256 = "18dharsdiwfkmhd9ibz9f47yfq9c2d78i886pi6gsjh8iwcpzx59";
           name = "simple-httpd";
         };
@@ -22501,7 +22858,7 @@
           sha256 = "0v0vmkix9f0hb2183irr6xra8mwi47g6rn843sas7jy2ycaqd91v";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/simpleclip";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/simpleclip";
           sha256 = "07qkfwlg8vw5kb097qbsv082hxir047q2bcvc8scbak2dr6pl12s";
           name = "simpleclip";
         };
@@ -22522,7 +22879,7 @@
           sha256 = "04giklbd1fsw2zysr7aqg17h6cpyn4i9jbknm4d4v6581f2pcl93";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/simplenote2";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/simplenote2";
           sha256 = "1qdzbwhzmsga65wmrd0mb3rbs71nlyqqb6f4v7kvfxzyis50cswm";
           name = "simplenote2";
         };
@@ -22543,13 +22900,34 @@
           sha256 = "1p1771qm3jndnf4rdhb1bri5cjiksvxizagi7vfb7mjmsmx18w61";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/simplezen";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/simplezen";
           sha256 = "13f2anhfsxmx1vdd209gxkhpywsi3nn6pazhc6bkswmn27yiig7j";
           name = "simplezen";
         };
         packageRequires = [];
         meta = {
           homepage = "http://melpa.org/#/simplezen";
+          license = lib.licenses.free;
+        };
+      }) {};
+    sisyphus = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, lib, m-buffer, melpaBuild }:
+    melpaBuild {
+        pname = "sisyphus";
+        version = "0.1";
+        src = fetchFromGitHub {
+          owner = "phillord";
+          repo = "sisyphus";
+          rev = "880d519d6b1e7202a72b1632733690310efb197f";
+          sha256 = "0jy08kj7cy744lbdyil0j50b08vm76bzxwmzd99v4sz12s3qcd2s";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sisyphus";
+          sha256 = "08400jazj7w63l8g9ypy6w9dj8r0xh4d2yg3nfwqqf5lhfnj9bnj";
+          name = "sisyphus";
+        };
+        packageRequires = [ dash emacs m-buffer ];
+        meta = {
+          homepage = "http://melpa.org/#/sisyphus";
           license = lib.licenses.free;
         };
       }) {};
@@ -22564,7 +22942,7 @@
           sha256 = "101xn4glqi7b5vhdqqahj2ib4pm30pzq8sad7zagxw9csihcri3q";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/skeletor";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/skeletor";
           sha256 = "1vfvg5l12dzksr24dxwc6ngawsqzpxjs97drw48qav9dy1vyl10v";
           name = "skeletor";
         };
@@ -22585,7 +22963,7 @@
           sha256 = "0g5sapd76pjnfhxlw149zj0fpn6l3pz3l8qlcn2c237vm8vn6qv3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/skewer-less";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/skewer-less";
           sha256 = "0fhv5cnp5bgw3krfmb0jl18kw2hzx2p81falj57lg3p8rn23dryl";
           name = "skewer-less";
         };
@@ -22606,7 +22984,7 @@
           sha256 = "05jndz0c26q60s416vqgvr66axdmxb7qsr2g70fvl5iqavnayhpv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/skewer-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/skewer-mode";
           sha256 = "1zp4myi9f7pw6zkgc0xg12585iihn7khcsf20pvqyc0vn4ajdwqm";
           name = "skewer-mode";
         };
@@ -22627,7 +23005,7 @@
           sha256 = "09ccdgg2wgw3xmlkpjsaqmnmf7f8rhjy4g6ypsn1sk5rgbgk8aj8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/slamhound";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/slamhound";
           sha256 = "14zlcw0zw86awd6g98l4h2whav9amz4m8ik877d1wsdjf69g7k9x";
           name = "slamhound";
         };
@@ -22648,7 +23026,7 @@
           sha256 = "0rk12am1dq52khwkwrmg70zarhni2avj4sy44jqckb4x7sv7djfk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/slideview";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/slideview";
           sha256 = "0zr08yrnrz49zds1651ysmgjqgbnhfdcqbg90sbsb086iw89rxl1";
           name = "slideview";
         };
@@ -22669,7 +23047,7 @@
           sha256 = "1cl8amk1kc7a953l1khjms04j40mfkpnbsjz3qa123msgachrsg7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/slim-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/slim-mode";
           sha256 = "1hip0r22irr9sah3b65ky71ic508bhqvj9hj95a81qvy1zi9rcac";
           name = "slim-mode";
         };
@@ -22682,15 +23060,15 @@
     slime = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "slime";
-        version = "2.15";
+        version = "2.16";
         src = fetchFromGitHub {
           owner = "slime";
           repo = "slime";
-          rev = "da7c32d0c54a6f2d9a4be0662c7b2d576b11eda1";
-          sha256 = "10ydinwsm7m5jlggynhsihxl18zl8cph4rliic8i72hjc3nhqfmy";
+          rev = "0d8c192c12a0a3d055f9bf4cc554083fc931995c";
+          sha256 = "1sx7g0g2j3pz9gqj76773asv1912c0p4zmh3jbssnyy2vp942h27";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/slime";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/slime";
           sha256 = "04zcvjg0bbx5mdbsk9yn7rlprakl89dq6jmnq5v2g0n6q0mh6ign";
           name = "slime";
         };
@@ -22711,7 +23089,7 @@
           sha256 = "0rdhd6kymbzhkc96dxy3nr21ajrkc7iy6zvq1va22r90f96jj9x4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/slime-company";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/slime-company";
           sha256 = "195s5fi2dl3h2jyy4d45q22jac35sciz81n13b4lgw94mkxx4rq2";
           name = "slime-company";
         };
@@ -22732,7 +23110,7 @@
           sha256 = "0lp584k35asqlvbhglv124jazdgp3h7pzl0akfwbdmby9zayqk96";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/slime-ritz";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/slime-ritz";
           sha256 = "1y1439y07l1a0sp9wn110hw4yyxj8n1cnd6h17rmsr549m2qbg1a";
           name = "slime-ritz";
         };
@@ -22753,7 +23131,7 @@
           sha256 = "00v4mh04affd8kkw4rn51djpyga2rb8f63mgy86napglqnkz40r3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/slime-volleyball";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/slime-volleyball";
           sha256 = "1dzvj8z3l5l9ixjl3nc3c7zzi23zc2300r7jzw2l3bvg64cfbdg7";
           name = "slime-volleyball";
         };
@@ -22774,7 +23152,7 @@
           sha256 = "1aihr5pbdqjb5j6xsghi7qbrmp46kddv76xmyx5z98m93n70wzqf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sly";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sly";
           sha256 = "1pmyqjk8fdlzwvrlx8h6fq0savksfny78fhmr8r7b07pi20y6n9l";
           name = "sly";
         };
@@ -22795,7 +23173,7 @@
           sha256 = "11p89pz6zmnjng5177w31ilcmifvnhv9mfjy79ic7amg01h09hsr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sly-company";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sly-company";
           sha256 = "1n8bx0qis2bs49c589cbh59xcv06r8sx6y4lxprc9pfpycx7h6v2";
           name = "sly-company";
         };
@@ -22816,7 +23194,7 @@
           sha256 = "0yvlmwnhdph5qj1998jz0idcl7901j6fxa9hivr7kic57j8kbq71";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/smart-mode-line";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/smart-mode-line";
           sha256 = "0qmhzlkc6mfqyaw4jaw6195b8sw0wg9pfjcijb4p0mlywf5mh5q6";
           name = "smart-mode-line";
         };
@@ -22837,7 +23215,7 @@
           sha256 = "0yvlmwnhdph5qj1998jz0idcl7901j6fxa9hivr7kic57j8kbq71";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/smart-mode-line-powerline-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/smart-mode-line-powerline-theme";
           sha256 = "0hv3mx39m3l35xhz351zp98321ilr6qq9wzwn1f0ziiv814khcn4";
           name = "smart-mode-line-powerline-theme";
         };
@@ -22858,7 +23236,7 @@
           sha256 = "1kfihh4s8578cwqyzn5kp3iib7f9vvg6rfc3klqzgads187ryd4z";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/smart-tabs-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/smart-tabs-mode";
           sha256 = "1fmbi0ypzhsizzb1vm92hfaq23swiyiqvg0pmibavzqyc9lczhhl";
           name = "smart-tabs-mode";
         };
@@ -22879,7 +23257,7 @@
           sha256 = "1mx4hdbrk6v52y5r47fbd6kgqyk3lvqgq8lw3hkww0pqfwwp4x6h";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/smartparens";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/smartparens";
           sha256 = "025nfrfw0992024i219jzm4phwf29smc5hib45s6h1s67942mqh6";
           name = "smartparens";
         };
@@ -22900,7 +23278,7 @@
           sha256 = "0j5lg9gryl8vbzw8d3r2fl0c9wxa0c193mcvdfidd25b98wccc3f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/smartrep";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/smartrep";
           sha256 = "1ypls52d51lcqhz737rqg73c6jwl6q8b3bwb29z51swyamf37rbn";
           name = "smartrep";
         };
@@ -22921,7 +23299,7 @@
           sha256 = "1sd7dh9114mvr4xnp43xx4b7qmwkaj1a1fv7pwc28fhiy89d2md4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/smartscan";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/smartscan";
           sha256 = "0vghgmx8vnjbvsw7q5zs0qz2wm6dcng9m69b8dq81g2cq9dflbwb";
           name = "smartscan";
         };
@@ -22942,7 +23320,7 @@
           sha256 = "1pcpg3lalbrc24z3vwcaysps8dbdzmncdgqdd5ig6yk2a9wyj9ng";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/smeargle";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/smeargle";
           sha256 = "1dy87ah1w21csvrkq5icnx7g7g7nxqkcyggxyazqwwxvh2silibd";
           name = "smeargle";
         };
@@ -22963,7 +23341,7 @@
           sha256 = "1hcjh577xz3inx28r8wb4g2b1424ccw8pffvgdmpf80xp1llldj5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/smex";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/smex";
           sha256 = "1rwyi7gdzswafkwpfqd6zkxka1mrf4xz17kld95d2ram6cxl6zda";
           name = "smex";
         };
@@ -22984,7 +23362,7 @@
           sha256 = "05kf3hb3nb32jzw50a2z9vlf3f0pj40klzxvqj4fxlci777imsvk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/smooth-scrolling";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/smooth-scrolling";
           sha256 = "0zy2xsmr05l2narslfgril36d7qfb55f52qm2ki6fy1r18lfiyc6";
           name = "smooth-scrolling";
         };
@@ -23005,7 +23383,7 @@
           sha256 = "0zcj9jf8nlsj9vms888z2vs76q54n8g8r9sh381xad3x8d6lrlb3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/solarized-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/solarized-theme";
           sha256 = "15d8k32sj8i11806byvf7r57rivz391ljr0zb4dx8n8vjjkyja12";
           name = "solarized-theme";
         };
@@ -23026,7 +23404,7 @@
           sha256 = "0b5w3vdr8llg3hqd22gnc6b6y089lq6vfk0ajkws6gfldz2gg2v1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sos";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sos";
           sha256 = "1gkd0plx7152s3dj8a9lwlwh8bgs1m006s80l10agclx6aay8rvb";
           name = "sos";
         };
@@ -23047,7 +23425,7 @@
           sha256 = "1wbd7v5bnd4qgqk8rrgllal0i949n8xzvb3yhf0vnxr06wdzy0a4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sotlisp";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sotlisp";
           sha256 = "0zjnn6hhwy6cjvc5rhvhxcq5pmrhcyil14a48fcgwvg4lv7fbljk";
           name = "sotlisp";
         };
@@ -23068,7 +23446,7 @@
           sha256 = "0q2ragq4hw89d3w48ykwljb19n2nhz8z6bsmb10shimaf203652g";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sound-wav";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sound-wav";
           sha256 = "1vrwzk6zqma7r0w5ivbx16shys6hsifj52fwlf5rxs6jg1gqdb4f";
           name = "sound-wav";
         };
@@ -23089,7 +23467,7 @@
           sha256 = "1l9xrw88wq32wm3qx922ihdb9mlv9rrdalwvz9i2790fmw7y84vz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sourcekit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sourcekit";
           sha256 = "1lvk3m86awlinivpg89h6zvrwrdqa5ljdp563k3i4h9384w82pks";
           name = "sourcekit";
         };
@@ -23110,7 +23488,7 @@
           sha256 = "1k2gfw4dydzqxbfdmcghajbb2lyg1j4wgdhp8chlql3dax1f503d";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sourcemap";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sourcemap";
           sha256 = "0cjg90y6a0l59a9v7d7p12pgmr21gwd7x5msil3h6xkm15f0qcc5";
           name = "sourcemap";
         };
@@ -23131,7 +23509,7 @@
           sha256 = "0j4qm1y7rhb95k1zbl3c60a46l9rchzslzq36mayyw61s6yysjnv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sourcetalk";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sourcetalk";
           sha256 = "0qaf2q784xgl1s3m88jpwdzghpi4f3nybga3lnr1w7sb7b3yvj3z";
           name = "sourcetalk";
         };
@@ -23144,15 +23522,15 @@
     spaceline = callPackage ({ cl-lib ? null, dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, powerline, s }:
     melpaBuild {
         pname = "spaceline";
-        version = "1.1.0";
+        version = "1.1.2";
         src = fetchFromGitHub {
           owner = "TheBB";
           repo = "spaceline";
-          rev = "3ad012e9a86a40c86460408dcdde704b125a1888";
-          sha256 = "13sqigkw41jmh0f7c1lmx4ipvcrlsp7k8h7vs2drpacf84yl6dn9";
+          rev = "88e22c1c9c69093efc7310ca996d2efb3cbbba1d";
+          sha256 = "1ncwv6sqm1ch396qi1c8276dc910rnm0f3m8xjkskplv3cjaq0ai";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/spaceline";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/spaceline";
           sha256 = "0jpcj0i8ckdylrisx9b4l9kam6kkjzhhv1s7mwwi4b744rx942iw";
           name = "spaceline";
         };
@@ -23173,7 +23551,7 @@
           sha256 = "1gmmmkzxxlpz2ml6qk24vndlrbyl55r5cba76jn342zrxvb357ny";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sparkline";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sparkline";
           sha256 = "081jzaxjb32nydvr1kmyafxqxi610n0yf8lwz9vldm84famf3g7y";
           name = "sparkline";
         };
@@ -23194,7 +23572,7 @@
           sha256 = "1gk2ps7fn9z8n6r923qzn518gz9mrj7mb6j726cz8qb585ndjbij";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sparql-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sparql-mode";
           sha256 = "1xicrfmgxpb31lz30qj450w8v7dl4ipjp7b2wz54s4kn88nsfj7d";
           name = "sparql-mode";
         };
@@ -23215,7 +23593,7 @@
           sha256 = "1k6c7450v0ln6l9b8z1hib2s2b4rmjbskynvwwyilgdnvginfhi3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/speech-tagger";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/speech-tagger";
           sha256 = "0sqil949ny9qjxq7kpb4zmjd7770r0qvq4sz80agw6a27mqnaajc";
           name = "speech-tagger";
         };
@@ -23236,7 +23614,7 @@
           sha256 = "1q6v0xfdxm57lyj4zxyqv6n5ik5w9drk7yf9w8spb5r22jg0dg8c";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sphinx-doc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sphinx-doc";
           sha256 = "00h3wx2p5hzbw6sggggdrzv4jrn1wc051iqql5y2m1hsh772ic5z";
           name = "sphinx-doc";
         };
@@ -23257,7 +23635,7 @@
           sha256 = "17qsmjsbk8aq3azjxid6h9fzz77bils74scp21sqn8vdnijx8991";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/splitjoin";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/splitjoin";
           sha256 = "0l1x98fvvia8qx8g125h4d76slv0xnb3h1zxiq9xb5qh7a1h069l";
           name = "splitjoin";
         };
@@ -23278,7 +23656,7 @@
           sha256 = "05y8xv6zapspwr5bii41lgirslas22wsbm0kgb4dm79qbk9j1kzw";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/spotify";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/spotify";
           sha256 = "0pmsvxi1dsi580wkhhx8iw329agkh5yzk61bqvxzign3cd6fbq6k";
           name = "spotify";
         };
@@ -23299,7 +23677,7 @@
           sha256 = "06rk07h92s5sljprs41y3q31q64cprx9kgs56c2j6v4c8cmsq5h6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sprintly-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sprintly-mode";
           sha256 = "15i3rrv27ccpn12wwj9raaxpj7nlnrrj3lsp8vdfwph6ydvnfza4";
           name = "sprintly-mode";
         };
@@ -23320,7 +23698,7 @@
           sha256 = "1dcb18fq84vlfgb038i2x6vy7mhin2q6jn4jl9fh256n12cx4nrn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sqlup-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sqlup-mode";
           sha256 = "06a0v2qagpd9p2bh19bfw14a6if8kjjc4yyhm5nwp8a8d2vnl5l7";
           name = "sqlup-mode";
         };
@@ -23341,7 +23719,7 @@
           sha256 = "0wx8l8gkh8rbf2g149f35gpnmkk45s9x4r844aqw5by4zkvix4rc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/srefactor";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/srefactor";
           sha256 = "01cd40jm4h00c5q2ix7cskp7klbkcd3n5763y5lqfv59bjxwdqd2";
           name = "srefactor";
         };
@@ -23362,7 +23740,7 @@
           sha256 = "0igqifws73cayvjnhhrsqpy14sr27avymfhaqzrpj76m2fsh6fj4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/stash";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/stash";
           sha256 = "116k40ispv7sq3jskwc1lvmhmk3jjz4j967r732s07f5h11vk1z9";
           name = "stash";
         };
@@ -23383,7 +23761,7 @@
           sha256 = "0jpxmzfvg4k5q3h3gn6lrg891wjzlcps2kkij1jbdjk4jkgq386i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/status";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/status";
           sha256 = "0a9lqa7a5nki5711bjrmx214kah5ndqpwh3i240gdd08mcm07ps3";
           name = "status";
         };
@@ -23404,7 +23782,7 @@
           sha256 = "0pik6mq8syhxk9l9ns8wgvg5312qkckm3cilb3irwdm1dvnl5hpf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/stekene-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/stekene-theme";
           sha256 = "0v1kwlnrqaygzaz376a5njg9kv4yf5l35k87xga4wdd2mxfwrmf1";
           name = "stekene-theme";
         };
@@ -23423,7 +23801,7 @@
           sha256 = "12c5df549d653c8ec3476ed271a4e9a4065a61a467229c070bb2e6295e285e16";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/stgit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/stgit";
           sha256 = "102s9lllrcxsqs0lgbrcljwq1l3s8ri4276wck6rcypck5zgzj89";
           name = "stgit";
         };
@@ -23444,7 +23822,7 @@
           sha256 = "15gdcpbba3h84s7xnpk69nav6bixdixnirdh5n1rly010q0m5s5x";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/string-edit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/string-edit";
           sha256 = "1l1hqsfyi6pp4x4g1rk4s7x9zjc03wfmhy16izia8nkjhzz88fi8";
           name = "string-edit";
         };
@@ -23465,7 +23843,7 @@
           sha256 = "03azfs6z0jg66ppalijcxl973vdbhj4c3g84sm5dm8xv6rnxrv2s";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/string-utils";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/string-utils";
           sha256 = "1vsvxc06fd3wardldb83i5hjfibvmiqnxvcgdns7i5i8qlsrsx4v";
           name = "string-utils";
         };
@@ -23486,7 +23864,7 @@
           sha256 = "035ym1c1vzg6hjsnd258z4dkrfc11lj4c0y4gpgybhk54dq3w9dk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/stripe-buffer";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/stripe-buffer";
           sha256 = "02wkb9y6vykrn6a5nfnimaplj7ig8i8h6m2rvwv08f5ilbccj16a";
           name = "stripe-buffer";
         };
@@ -23506,7 +23884,7 @@
           sha256 = "f5e3b0fdbdb1c747c40f7b6746de195e37bd4caccdcc05c6aa14124f29e71428";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/stumpwm-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/stumpwm-mode";
           sha256 = "0a77mh7h7033adfbwg2fbx84789962par43q31s9msjlqw15gs86";
           name = "stumpwm-mode";
         };
@@ -23527,13 +23905,34 @@
           sha256 = "0krbd1qa2408a97pqhl7fv0x8x1n2l3qq33zzj4w4vv0c55jk43n";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/stylus-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/stylus-mode";
           sha256 = "152k74q6qn2xa38v2zyd5y7ya5n26nvai5v7z5fmq7jrcndp27r5";
           name = "stylus-mode";
         };
         packageRequires = [ sws-mode ];
         meta = {
           homepage = "http://melpa.org/#/stylus-mode";
+          license = lib.licenses.free;
+        };
+      }) {};
+    subatomic-theme = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "subatomic-theme";
+        version = "1.8.1";
+        src = fetchFromGitHub {
+          owner = "cryon";
+          repo = "subatomic";
+          rev = "6a4086af748b1ecb27f6ba2aa2614988db16d594";
+          sha256 = "1j63rzxnrzzqizh7fpd99dcgsy5hd7w4d2lpwl5armmixlycl5m8";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/subatomic-theme";
+          sha256 = "0mqas67qms492n3hn74c5nrkjpsgf9b42lp02s2dh366c075dpqc";
+          name = "subatomic-theme";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "http://melpa.org/#/subatomic-theme";
           license = lib.licenses.free;
         };
       }) {};
@@ -23548,7 +23947,7 @@
           sha256 = "189547d0g9ax0nr221bkdchlfcj60dsy8lgbbrvq3n3xrmlvl362";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/subemacs";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/subemacs";
           sha256 = "0sqh80jhh3v37l5af7w6k9lqvj39bd91pn6a9rwdlfk389hp90zm";
           name = "subemacs";
         };
@@ -23569,7 +23968,7 @@
           sha256 = "0mx892vn4a32df30iqmf2vsz1gdl3i557fw0194g6a66n9w2q7xf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/subshell-proc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/subshell-proc";
           sha256 = "1fnp49yhnhsj7paj0b25vr6r03hr5kpgcrci439ffpbd2c85fkw2";
           name = "subshell-proc";
         };
@@ -23590,7 +23989,7 @@
           sha256 = "1kmyivsyxr6gb2k36ssyr779rpk8qsrb27q5rjsir9fgc95qhvjb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sudden-death";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sudden-death";
           sha256 = "1wrhb3d27j07i64hvjggyajm752w4mhrhq09lfvyhz6ykp1ly3fh";
           name = "sudden-death";
         };
@@ -23611,7 +24010,7 @@
           sha256 = "1b637p2cyc8a83qv9vba4yamzhk08f62zykqh5p35jwvym8wkann";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/suomalainen-kalenteri";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/suomalainen-kalenteri";
           sha256 = "1wzijbgcr3jc47ccr7nrdkqha16s6gw0xiccnmdczi48cvnvvlkh";
           name = "suomalainen-kalenteri";
         };
@@ -23632,7 +24031,7 @@
           sha256 = "1pq71simdb4pcbzzavlxdfbgh548m15f493h821k04n67ydzlmj3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/super-save";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/super-save";
           sha256 = "0ikfw7n2rvm3xcgnj1si92ly8w75x26071ki551ims7a8sawh52p";
           name = "super-save";
         };
@@ -23653,7 +24052,7 @@
           sha256 = "14h40s0arc2i898r9yysn256z6l8jkrnmqvrdg7p7658c0klz5ic";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/svg-mode-line-themes";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/svg-mode-line-themes";
           sha256 = "12lnszcb9bl32n9wir7vf8xiyyv7njw4xg21aj9x4dasmidyx506";
           name = "svg-mode-line-themes";
         };
@@ -23674,7 +24073,7 @@
           sha256 = "1h56qkbx5abz1l94wrdpbzspiz24mfgkppzfalvbvx5qwl079cvs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sweetgreen";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sweetgreen";
           sha256 = "1v75wk0gq5fkz8i1r8pl4gqnxbv1d80isyn48w2hxj2fmdn2xhpy";
           name = "sweetgreen";
         };
@@ -23687,15 +24086,15 @@
     swift-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "swift-mode";
-        version = "0.3.0";
+        version = "0.4.0";
         src = fetchFromGitHub {
           owner = "chrisbarrett";
           repo = "swift-mode";
-          rev = "e09694f0f95a64b2c96487cbdcb66636a77ea22a";
-          sha256 = "1fi5zdvplw7h5hnyi37k92c8s8qnjgizbnv1mah18y8d30n1r77n";
+          rev = "4e9da69ba776ec2a4a97c75534e6274bffc4fc8a";
+          sha256 = "07xrcg33vsw19kz692hm7blzvnf7b6isllsz79fvs8q3l5c9mfjx";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/swift-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/swift-mode";
           sha256 = "1imr53f8agfza9zxs1h1mwyhg7yaywqqffd1lsvm1m84nvxvri2d";
           name = "swift-mode";
         };
@@ -23716,7 +24115,7 @@
           sha256 = "1kahl3h18vsjkbqvd84fb2w45s4srsiydn6jiv49vvg1yaxzxcbm";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/swiper";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/swiper";
           sha256 = "13lld7kjz1n1ryxvrfsy0iym5l9m9ybrf7bpcmkzsalpp15j3mvm";
           name = "swiper";
         };
@@ -23737,7 +24136,7 @@
           sha256 = "1y2dbd3ikdpjvi8xz10jkrx2773h7cgr6jxm5b2bldm81lvi8x64";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/swiper-helm";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/swiper-helm";
           sha256 = "011ln6vny7z5vw67cpzldxf5n6sk2hjdkllyf7v6sf4m62ws93ph";
           name = "swiper-helm";
         };
@@ -23758,7 +24157,7 @@
           sha256 = "1zpfilcaycj0l2q3zyvpjbwp5j3d9rrkacd5swzlr1n1klvbji48";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/switch-window";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/switch-window";
           sha256 = "02f0zjvlzms66w1ryhk1cbr4rqwklzvgcjfiicj0lcnqqx61m2k2";
           name = "switch-window";
         };
@@ -23779,7 +24178,7 @@
           sha256 = "0krbd1qa2408a97pqhl7fv0x8x1n2l3qq33zzj4w4vv0c55jk43n";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sws-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sws-mode";
           sha256 = "0b12dsad0piih1qygjj0n7rni0pl8cizbzwqm9h1dr8imy53ak4i";
           name = "sws-mode";
         };
@@ -23800,7 +24199,7 @@
           sha256 = "02f63k8rzb3bcch6vj6w5c5ncccqg83siqnc8hyi0lhy1bfx240p";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/sx";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/sx";
           sha256 = "1ml1rkhhk3hkd16ij2zwng591rxs2yppsfq9gwd4ppk02if4v517";
           name = "sx";
         };
@@ -23821,7 +24220,7 @@
           sha256 = "0hi2jflrlpp7xkbj852vp9hcl8bfmf04jqw1hawxrw4bxdp95jh2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/synosaurus";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/synosaurus";
           sha256 = "16i2ag4l824h1kq4cy01zf01zrms4v6ldwlsixwfyb1mh97lqljg";
           name = "synosaurus";
         };
@@ -23842,7 +24241,7 @@
           sha256 = "1pn69f4w48jdj3wd1myj6qq2mhvygmlzbq2dws2qkjlp3kbwa6da";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/syntactic-sugar";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/syntactic-sugar";
           sha256 = "12b2vpvz5h4wzxrk8jrbgc8v0w6bzzvxcyfs083fi1791qq1rw7r";
           name = "syntactic-sugar";
         };
@@ -23862,7 +24261,7 @@
           sha256 = "1p9bp09nibw7rra3r6nj496zdx09db6k82dxnxs1lfgdiswfdq2h";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/syntax-subword";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/syntax-subword";
           sha256 = "1as89ffqz2h69fdwybgs5wibnrvskm7hd58vagfjkla9pjlpffpm";
           name = "syntax-subword";
         };
@@ -23883,7 +24282,7 @@
           sha256 = "1hixilnnybv2v3p1wpn7a0ybwah17grawszs3jycsjgzahpgckv7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/system-specific-settings";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/system-specific-settings";
           sha256 = "1ydmxi8aw2lf78wv4m39yswbqkmcadqg0wmzg9s8b5h9bxxwvppp";
           name = "system-specific-settings";
         };
@@ -23904,7 +24303,7 @@
           sha256 = "0axskr4q0kw8pmnl1pv2z3n6x3pn6v28qcgz3qf745lqgmsgbng9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/systemd";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/systemd";
           sha256 = "1biais0cmidy3d0hf2ifdlr6qv1z8k8c8bczi07bsfk4md3idbir";
           name = "systemd";
         };
@@ -23925,7 +24324,7 @@
           sha256 = "09nndx83ws5v2i9x0dzk6l1a0lq29ffzh3y05n0n64nf5j0a7zvk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ta";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ta";
           sha256 = "0kn2k4n0xfwsrniaqb36v3rxj2pf2sai3bmjksbn1g2kf5g156ll";
           name = "ta";
         };
@@ -23946,7 +24345,7 @@
           sha256 = "1xd67s92gyr49v73j7r7cbhsc40bkw8aqh21whgbypdgzpyc7azc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/tabbar-ruler";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/tabbar-ruler";
           sha256 = "10dwjj6r74g9rzdd650wa1wxhqc0q6dmff4j0qbbhmjsxvsr3y0d";
           name = "tabbar-ruler";
         };
@@ -23967,7 +24366,7 @@
           sha256 = "0gy9hxm7bca0l1hfy2pzn86avpifrz3bs8xzpicj4kxw5wi4ygns";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/tablist";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/tablist";
           sha256 = "0c10g86xjhzpmc2sqjmzcmi393qskyw6d9bydqzjk3ffjzklm45p";
           name = "tablist";
         };
@@ -23988,7 +24387,7 @@
           sha256 = "0kq40g46s8kgiafrhdq99h79rz9h5fvgz59k7ralmf86bl4sdmdb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/tagedit";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/tagedit";
           sha256 = "0vfkbrxmrw4fwdz324s734zxdxm2nj3df6i8m6lgb9pizqyp2g6z";
           name = "tagedit";
         };
@@ -24009,7 +24408,7 @@
           sha256 = "16kr1p4lzi1ysd5r2dh0mxk60zsm5fvwa9345nfyrgdic340yscc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/telepathy";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/telepathy";
           sha256 = "0c3d6vk7d6vqzjndlym2kk7d2zm0b15ac4142ir03p6f19rqq9pr";
           name = "telepathy";
         };
@@ -24030,7 +24429,7 @@
           sha256 = "0smdlzrcbmip6c6c3rd0871wv5xyagavwsxhhgvki6ybyzdj9a19";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/telephone-line";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/telephone-line";
           sha256 = "0dyh9h1yk9y0217b6rxsm7m372n910vpfgw5w23lkkrwa8x8qpx3";
           name = "telephone-line";
         };
@@ -24051,7 +24450,7 @@
           sha256 = "1d1hrnxhi7h5d5i4198hx5lj7fbc280lpkxmk2nb8z6j7z0aki7g";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/term-alert";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/term-alert";
           sha256 = "0x4rc1y311ivaj6mlks1j8sgzrrwqn8vx171vw7s1kgf1qzk826n";
           name = "term-alert";
         };
@@ -24072,7 +24471,7 @@
           sha256 = "1idz9c38q47lll55w1znya00hlkwa42029ys70sb14inc51cml51";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/term-cmd";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/term-cmd";
           sha256 = "0fn4f32zpl0p2lid159q59lzjv4xqmc23a64kcclqp9db8b1m5fy";
           name = "term-cmd";
         };
@@ -24093,7 +24492,7 @@
           sha256 = "149pl3zxg5kriydk5h6j95jyly6i23w4w4g4a99s4zi6ljiny6c6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/term-run";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/term-run";
           sha256 = "1bx3s68rgr9slsw9k01gfg7sxd4z7sarg4pi2ivril7108mhg2cs";
           name = "term-run";
         };
@@ -24114,7 +24513,7 @@
           sha256 = "0gfsqpza8phvma5y3ck0n6p197x1i33w39m3c7jmja4ml121n73d";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/termbright-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/termbright-theme";
           sha256 = "14q88qdbnyzxr8sr8i5glj674sb4150b9y6nag0dqrxs629is6xj";
           name = "termbright-theme";
         };
@@ -24135,7 +24534,7 @@
           sha256 = "1n4z5hgpv1f0360zgdxz1q4gmhjjrxm7ygxh1g4zjy6kbhgylmxb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/tern";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/tern";
           sha256 = "06bgwizn9dcd8hsvimjvb28j0mpxg7rrv9knhv5kkdapa6gggxif";
           name = "tern";
         };
@@ -24156,7 +24555,7 @@
           sha256 = "1n4z5hgpv1f0360zgdxz1q4gmhjjrxm7ygxh1g4zjy6kbhgylmxb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/tern-auto-complete";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/tern-auto-complete";
           sha256 = "0lq924c5f6bhlgyqqzc346n381qf0fp66h50a0zqz2ch66kanni1";
           name = "tern-auto-complete";
         };
@@ -24177,7 +24576,7 @@
           sha256 = "0l63lzm96gg3ihgc4l671i342qxigwdbn4xfkbxnarb0206gnb5p";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/tern-django";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/tern-django";
           sha256 = "1pjaaffadaw8h2n7yv01ks19gw59dmh8bp8vw51hx1082r3yfvv0";
           name = "tern-django";
         };
@@ -24198,7 +24597,7 @@
           sha256 = "0mz2yl9jaw7chzv9d9hhv7gcvdwwvi676y9wpn7vp85hxpda7xg7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/terraform-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/terraform-mode";
           sha256 = "1m3s390mn4pba7zk17xfk045dqr4rrpv5gw63jm18fyqipsi6scn";
           name = "terraform-mode";
         };
@@ -24219,7 +24618,7 @@
           sha256 = "108csr1d7w0105rb6brzgbksb9wmq1p573vxbq0miv5k894j447f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/test-case-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/test-case-mode";
           sha256 = "1iba97yvbi5vr7gvc58gq2ah6jg2s7apc9ssq7mdzki823n8z2qi";
           name = "test-case-mode";
         };
@@ -24240,7 +24639,7 @@
           sha256 = "02vp4m3aw7rs4gxn91v6j3y8pr04hpydrg05ck3ivv46snkfagdn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/test-kitchen";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/test-kitchen";
           sha256 = "1bl3yvj56dq147yplrcwphcxiwvmx5n97y4qpkm9imiv8cnjm1g0";
           name = "test-kitchen";
         };
@@ -24261,7 +24660,7 @@
           sha256 = "08g7fan1y3wi4w7cdij14awadqss6prqg3k7qzf0wrnbm13dzhmk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/test-simple";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/test-simple";
           sha256 = "1l6y77fqd0l0mh2my23psi66v5ya6pbr2hgvcbsaqjnpmfm90w3g";
           name = "test-simple";
         };
@@ -24282,7 +24681,7 @@
           sha256 = "1a0fzn66gv421by0x6wj3z6bvzv274a9p8c2aaax0dskncl5lgk1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/textmate";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/textmate";
           sha256 = "119w944pwarpqzcr9vys17svy1rkfs9hiln8903q9ff4lnjkpf1v";
           name = "textmate";
         };
@@ -24303,7 +24702,7 @@
           sha256 = "0fjapb7naysf34g4ac5gsa90b2s2ss7qgpyd9mfv3mdqrsp2dyw7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/textmate-to-yas";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/textmate-to-yas";
           sha256 = "04agz4a41h0givfdw88qjd3c7pd418qyigsij4la5f37j5rh338l";
           name = "textmate-to-yas";
         };
@@ -24324,7 +24723,7 @@
           sha256 = "09vf3qs949n4iqzd14iq2kgvypwdwdv8ii8l5jcqfppgspd8m8yd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/theme-changer";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/theme-changer";
           sha256 = "1qbmsghkl5gs728q0gaalc7p8q7nzv3l045jc0jdxxnb7na3gc5w";
           name = "theme-changer";
         };
@@ -24345,7 +24744,7 @@
           sha256 = "1srylw9wwkyq92f9v6ds9zp9z8sl800wbxjbir80g1lwv4hghaii";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/thrift";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/thrift";
           sha256 = "0p1hxmm7gvhyigz8aylncgqbhk6cyf75rbcqis7x552g605mhiy9";
           name = "thrift";
         };
@@ -24366,7 +24765,7 @@
           sha256 = "1vq5yp6pyjam2csz22mcp353a4d5r7f9m6bsjizfmgr2ld7bwhx7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/timer-revert";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/timer-revert";
           sha256 = "0lvm2irfx9rb5psm1lf53fv2jjx745n1c172xmyqip5xwgmf6msy";
           name = "timer-revert";
         };
@@ -24387,7 +24786,7 @@
           sha256 = "0p7piqbhwxp2idslqnzl5x4y9aqgba9ryxrjy3d0avky5z9kappl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/timesheet";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/timesheet";
           sha256 = "1gy6bf4wqvp8cw2wjnrr9ijnzwav3p7j46m7qrn6l0517shwl506";
           name = "timesheet";
         };
@@ -24408,7 +24807,7 @@
           sha256 = "16217i8rjhgaa5kv8iq0s14b42v5rs8m2qlr60a0x6qzy65chq39";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/tox";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/tox";
           sha256 = "1z81x8fs5q6r19hpqphsilk8wdwwnfr8w78x5x298x74s9mcsywl";
           name = "tox";
         };
@@ -24429,7 +24828,7 @@
           sha256 = "0q3rv6lk37yybkbswmn4pgzca0nfhvf4h3ac395fr16k5ixybc5q";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/tracking";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/tracking";
           sha256 = "096h5bl7jcwz5hpbm2139bf8a784hijfy40vzf42y1c9794al46z";
           name = "tracking";
         };
@@ -24450,7 +24849,7 @@
           sha256 = "14fzgpafry3v072f22krap81jfpdc17bpimp16hv7f20sny29a5v";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/transmission";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/transmission";
           sha256 = "0w0hlr4y4xpcrpvclqqqasggkgrwnzrdib51mhkh3f3mqyiw8gs9";
           name = "transmission";
         };
@@ -24471,7 +24870,7 @@
           sha256 = "1jd7xsvs4m55fscp62a9lk59ip4sgifv4kazl55b7543nz1i31bz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/travis";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/travis";
           sha256 = "1km496cq1vni9gy2d3z4c9524q62750ywz745rjz4r7178ip9mix";
           name = "travis";
         };
@@ -24492,7 +24891,7 @@
           sha256 = "18na22fhwqz80qinmnpsvp6ghc9irva1scixi6s4q6plmgr4m397";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/truthy";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/truthy";
           sha256 = "1a56zmqars9fd03bkqzwpvgblq5fvq19n4jw04c4hpga92sq8wqg";
           name = "truthy";
         };
@@ -24513,7 +24912,7 @@
           sha256 = "1ma3k9bbw427cj1n2gjajbqii482jhs2lgjggz9clpc21bn5wqfb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/tss";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/tss";
           sha256 = "0d16x5r2xfy6mrwy0mqzpr9b3inqmyyxgawrxlfh83j1xb903dhm";
           name = "tss";
         };
@@ -24534,7 +24933,7 @@
           sha256 = "060jksd9aamqx1n4l0bb9v4icsf7cr8jkyw0mbhgyz32nmxh3v6g";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ttrss";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ttrss";
           sha256 = "08921cssvwpq33w87v08dafi2rz2rl1b3bhbhijn4bwjqgxi9w7z";
           name = "ttrss";
         };
@@ -24555,7 +24954,7 @@
           sha256 = "0jpcjy2a77mywba2vm61knj26pgylsmv5a21cdp80q40bac4i6bb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/tuareg";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/tuareg";
           sha256 = "0wx723dmjlpm86xdabl9n8p22zbbxpapyfn6ifz0b0pvhh49ip7q";
           name = "tuareg";
         };
@@ -24576,7 +24975,7 @@
           sha256 = "0ihjjw5wxz5ybl3600k937pszw3442cijs4gbqqip9vhd5y9m8gy";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/tumble";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/tumble";
           sha256 = "1c9ybq0mb2a0pw15fmm13vfwcnr2h9fb1xsm5nrff1cg7913pgv9";
           name = "tumble";
         };
@@ -24597,7 +24996,7 @@
           sha256 = "0asd024n5v23wdsg1959sszq568wg3a1bp4jrk0cllfji1z0n78y";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/tup-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/tup-mode";
           sha256 = "0pzpn1ljfcc2dl9fg7jc8lmjwz2baays4axjqk1qsbj0kqbc8j0l";
           name = "tup-mode";
         };
@@ -24618,7 +25017,7 @@
           sha256 = "0glw5lns7hwp8jznnfm6dyjw454sv2n84gy07ma7s1q3yczhq5bc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/twilight-anti-bright-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/twilight-anti-bright-theme";
           sha256 = "1qfybk5akaxdahmjffqaw712v8d7kk4jqkj3hzp96kys2zv1r6f9";
           name = "twilight-anti-bright-theme";
         };
@@ -24639,7 +25038,7 @@
           sha256 = "193v98i84xybm3n0f30jin5q10i87vbcnbdhl4zqi7jij9p5v98z";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/twittering-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/twittering-mode";
           sha256 = "0v9ijxw5jazh2hc0qab48y71za2l9ryff0mpkxhr3f79irlqy0a1";
           name = "twittering-mode";
         };
@@ -24660,7 +25059,7 @@
           sha256 = "1risfbsaafh760vnl4ryys91g4k78g0fxj2zlcndpxxv34gwkhy7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/typed-clojure-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/typed-clojure-mode";
           sha256 = "1579zkhk2lwl5ij7dm9n2drggs5fmhpljrshc4ghhvig7nlyqjy3";
           name = "typed-clojure-mode";
         };
@@ -24681,7 +25080,7 @@
           sha256 = "1jhd4grch5iz12gyxwfbsgh4dmz5hj4bg4gnvphccg8dsnni05k2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/typo";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/typo";
           sha256 = "07hmqrnbxbrhcbxdls8i4786lkqmfr3hv6va41xih1lxj0mk60bx";
           name = "typo";
         };
@@ -24702,7 +25101,7 @@
           sha256 = "0k41hwb6jgv3hngfrphlyhmfhvy4k05mvn0brm64xk7lj56y8q2c";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ubuntu-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ubuntu-theme";
           sha256 = "160z59aaxb2v6c24nki6bn7pjm9r4jl1mgxs4h4sivzxkaw811s2";
           name = "ubuntu-theme";
         };
@@ -24723,7 +25122,7 @@
           sha256 = "0qw9vwl1p0pjw1xmshxar1a8kn6gmin5rdvvnnly8b5z9hpkjf3m";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ucs-utils";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ucs-utils";
           sha256 = "111fwg2cqqzpa79rcqxidppb12c8g12zszppph2ydfvkgkryb6z2";
           name = "ucs-utils";
         };
@@ -24744,7 +25143,7 @@
           sha256 = "0dmkn8qlnyvgaj7dqh82mqj1fik59zfi2yxcic9i6q9walxc3cas";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/undercover";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/undercover";
           sha256 = "1s30c3i6y4r3mgrrs3lda3rrwmy9ff11ihdmshyziv9v5879sdjf";
           name = "undercover";
         };
@@ -24765,7 +25164,7 @@
           sha256 = "1g1ldyz42q3i2xlgvhd4s93cvkh0fm8m3l344zjcw8rvqaisyphj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/underwater-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/underwater-theme";
           sha256 = "0ab2bcqfdi9ml3z9d511pbfwcbp8hkkd36xxp61k36gkyi3acvlr";
           name = "underwater-theme";
         };
@@ -24786,7 +25185,7 @@
           sha256 = "1qy0q1fp7cmvmxynqrb086dkb727lmk5h1k98y14j75b94ilpy0w";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/unfill";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/unfill";
           sha256 = "0b21dk45vbz4vqdbdx0n6wx30rm38w1jjqbsxfj7b96p3i5shwqv";
           name = "unfill";
         };
@@ -24807,7 +25206,7 @@
           sha256 = "0n06dvf6r7qblz8vz38qc37xrn29wa1c0jyzis1qw9zzf6hmmzj7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/unicode-enbox";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/unicode-enbox";
           sha256 = "1phb2qq3pg6z6bl96kl9yfq4jxhgardjpaa4lhgqbxymmqdm7gzv";
           name = "unicode-enbox";
         };
@@ -24828,7 +25227,7 @@
           sha256 = "0fbwncna6gxlynq9196djpkjhayzk8kxlsxg0gasdgqx1nyxl0mk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/unicode-fonts";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/unicode-fonts";
           sha256 = "0plipwb30qqay8691qzqdyg6smpbs9dsxxi49psb8sq0xnxl84q3";
           name = "unicode-fonts";
         };
@@ -24855,7 +25254,7 @@
           sha256 = "0qy1hla7vf674ynqdzsaw2cnk92nhpcimww5q94rc0a95pzw64wd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/unicode-progress-reporter";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/unicode-progress-reporter";
           sha256 = "03z7p27470fqy3gd356l9cpp44a35sfrxz94dxmx388rzlygk7y7";
           name = "unicode-progress-reporter";
         };
@@ -24876,7 +25275,7 @@
           sha256 = "0q7cbl89yg3fjxaxsqsksxhw7ibdslbb004z5y1m579n7zgcrljy";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/unicode-whitespace";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/unicode-whitespace";
           sha256 = "1b3jgha8va42b89pdp41sab2w9wllp7dicqg4lxl67bg6wn147wy";
           name = "unicode-whitespace";
         };
@@ -24897,7 +25296,7 @@
           sha256 = "1vbx10s2zmhpxjg26ik947bcg9f7w3g2w45wmm0shjp743fsdq8p";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/unify-opening";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/unify-opening";
           sha256 = "1gpmklbdbmv8va8d3yr94r1ydkcyvdzcgxv56rp0bxwbcgmk0as8";
           name = "unify-opening";
         };
@@ -24918,7 +25317,7 @@
           sha256 = "1w2w0gmyr0nbq8kv3ldj30h9xma76gi1khbdia1y30kss677rr8m";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/unkillable-scratch";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/unkillable-scratch";
           sha256 = "0ghbpa9pf7k6vd2mjxkpqg2qfl4sd40ir6mrk1rxr1rv8s0afkf7";
           name = "unkillable-scratch";
         };
@@ -24939,7 +25338,7 @@
           sha256 = "07vwg0bg719gb8ln1n5a33103903vvrphnkbvvfn43904pkrf14w";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/use-package";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/use-package";
           sha256 = "0z7k77yfvsndql719qy4vypnwvi9izal8k8vhdx0pw8msaz4xqd8";
           name = "use-package";
         };
@@ -24960,7 +25359,7 @@
           sha256 = "1azv6grd5h2r1spy996nv6q1c5l6qawv6k0dc2i5k96szl0r668r";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/utop";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/utop";
           sha256 = "0lv16kl29gc9hdcpn04l85pf7x93vkl41s4mgqp678cllzyr0cq7";
           name = "utop";
         };
@@ -24981,7 +25380,7 @@
           sha256 = "0z53n9qsglp87f6q1pa3sixrjni9k46j31zg15gcwrmflmfrw8ds";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/uzumaki";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/uzumaki";
           sha256 = "1fvhzz2qpyc819rjvzyf42jmb70hlg7a9ybqwi81w7rydpabg61q";
           name = "uzumaki";
         };
@@ -25002,7 +25401,7 @@
           sha256 = "04r73s3fhvdcryv0l57awkpg1hi3kg6zcqxbxb03jc89h0f9vdlh";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/vagrant";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/vagrant";
           sha256 = "0g6sqzsx3lixcn09fkxhhcfp45qnqgf1ms0l7nkzyljavb7151cf";
           name = "vagrant";
         };
@@ -25023,7 +25422,7 @@
           sha256 = "19j5q2f6pybvjq3ryjcyihzlw348hqyjhfcy3qflry6w786dqcgn";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/vbasense";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/vbasense";
           sha256 = "1440q2bi4arpl5lbqh7zscg7v3884clqx54p2fdfcfkz47ky4z9n";
           name = "vbasense";
         };
@@ -25044,7 +25443,7 @@
           sha256 = "07dx3dyvkwcin0gb6j4jx0ldfxs4rqhygl56a8i81yy05adkaq2x";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/vcomp";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/vcomp";
           sha256 = "02cj2nlyxvgvl2rjfgacljvcsnfm9crmmkhcm2pznj9xw10y8pq0";
           name = "vcomp";
         };
@@ -25065,7 +25464,7 @@
           sha256 = "034475m2d2vlrlc2l88gdx0ga3krsdh08wkjxwnbb2dfyz3p8r9v";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/vdirel";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/vdirel";
           sha256 = "11cc7bw7x5h3bwnlsjyhw6k5fh2fk7wffarrcny562v4cmr013cj";
           name = "vdirel";
         };
@@ -25086,7 +25485,7 @@
           sha256 = "0lzq31zqnk32vfp3kicnvgfr3nkv8amjzxmk9nrz1kwgmq7gvkjk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/vector-utils";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/vector-utils";
           sha256 = "07armr23pq5pd47lqhir6a59r86c84zikbc51d8vfcaw8y71yr5n";
           name = "vector-utils";
         };
@@ -25107,7 +25506,7 @@
           sha256 = "0k8wbylvws4yxh2jzxkz0fw5kwgblxvmagz54igbjj5mfm45pgsp";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/vhdl-tools";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/vhdl-tools";
           sha256 = "006d9xv60a90xalagczkziiimwsr1np9nn25zvnc4nlbf8j3fbbw";
           name = "vhdl-tools";
         };
@@ -25128,7 +25527,7 @@
           sha256 = "1750gx65ymibam8ahx5blfv5jc26f3mzbklk1jrmfwpsalyghdd9";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/vim-region";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/vim-region";
           sha256 = "1dcnx799lpjsdnnjxqzgskkfj2nx7f4kwf0xjhbg35ny4nyn81dx";
           name = "vim-region";
         };
@@ -25149,7 +25548,7 @@
           sha256 = "1f94qx8rbnn21cl0grxqa9gzkbrz68vmqsihv8vvi8qf1c1dmd0i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/vimgolf";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/vimgolf";
           sha256 = "1hvw2pfa5a984hm6wd33bf6zz6hmlprc6qs3g789dfx91qm890vn";
           name = "vimgolf";
         };
@@ -25170,7 +25569,7 @@
           sha256 = "082qrbljlahkq1fz2dfl434f1xv47jc1v9k0srh7lrm14616dzq3";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/vimish-fold";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/vimish-fold";
           sha256 = "017by9w53d8pqlsazfycmhdv16yylks308p5vxp1rcw2qacpc5m3";
           name = "vimish-fold";
         };
@@ -25191,7 +25590,7 @@
           sha256 = "100w8rxdqln4xiwi0df15pvyaiyhjlwcjdh8nb0j95qpwji41vmf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/visual-fill-column";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/visual-fill-column";
           sha256 = "19y0pwaybjal2rc7migdbnafpi4dfbxvrzgfqr8dlvd9q68v08y5";
           name = "visual-fill-column";
         };
@@ -25212,7 +25611,7 @@
           sha256 = "0vl0hwxzzvgna8sysf517qq08fi1zsff3dmcgwvsgzhc47sq8mng";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/vlf";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/vlf";
           sha256 = "1ipkv5kmda0l39xwbf7ns9p0mx3kb781mxsm9vmbkhr5x577s2j8";
           name = "vlf";
         };
@@ -25233,7 +25632,7 @@
           sha256 = "0q1rwqjwqcnsr57s531pwlm464q8wx5vvdm5rj2xy9b3yi6phis1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/voca-builder";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/voca-builder";
           sha256 = "0mbw87mpbb8rw7xzhmg6yjla2c80x9820kw4q00x00ny5rbhm76y";
           name = "voca-builder";
         };
@@ -25254,7 +25653,7 @@
           sha256 = "0jl3n79wmbxnrbf83qjq0v5pzhvv67i9r5sp2zj8nc86hh7dvjsd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/wacspace";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/wacspace";
           sha256 = "1xy0mprvyi37zmgj1yrlh5ni08j47lpag1jm3a76cgghgmlfjxrl";
           name = "wacspace";
         };
@@ -25275,7 +25674,7 @@
           sha256 = "0mnfk2ys8axjh696cq5msr5cdr91icl1i3mi0dd2y00lvh6sbm7w";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/wc-goal-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/wc-goal-mode";
           sha256 = "0l3gh96njjldp7n13jn1zjrp17h7ivjak102j6wwspgg6v2h5419";
           name = "wc-goal-mode";
         };
@@ -25288,15 +25687,15 @@
     wcheck-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "wcheck-mode";
-        version = "2015.11.29";
+        version = "2016.1.30";
         src = fetchFromGitHub {
           owner = "tlikonen";
           repo = "wcheck-mode";
-          rev = "866954f040217059607633cf4c0f5e8a1ff5fd9a";
-          sha256 = "1l92k59yvdfhmj4yghcl5bqprynavr3s28v7h8y98v82laxp2q9m";
+          rev = "adb9dd9f39cb0bd0000d140d6e778c4864dfde08";
+          sha256 = "113prlamr2j6y6n0w43asffawwa4qiq63mgwm85v04h6pr8bd90l";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/wcheck-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/wcheck-mode";
           sha256 = "0cmdvhgax6r5svn3wkwll4j271qj70g8182c58riwnkhiajxmn3k";
           name = "wcheck-mode";
         };
@@ -25317,7 +25716,7 @@
           sha256 = "0qx92jqzsimjk92pql2h8pzhq66mqijwqgjqwp7rmq5b6k0nvx1z";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/weather-metno";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/weather-metno";
           sha256 = "0h7p4l8y75h27pgk45f0mk3gjd43jk8q97gjf85a9b0afd63d3f6";
           name = "weather-metno";
         };
@@ -25338,7 +25737,7 @@
           sha256 = "1w7jnsc6lzlrlkj0nrlfnyca78lw53144hrf9k43b0g0zl8n9zqj";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/web-completion-data";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/web-completion-data";
           sha256 = "1zzdmhyn6bjaidk808s4pdk25a5rn4287949ps5vbpyniaf6gny9";
           name = "web-completion-data";
         };
@@ -25359,7 +25758,7 @@
           sha256 = "00fzzjqa1v2dzlpgjxb2qj3nn6iizg177mk7vjvcv4814g4dhcal";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/web-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/web-mode";
           sha256 = "1vyhyc5nf4yj2m63inpwmcqvlsihaqw8nn8xvfdg44nhl6vjz97i";
           name = "web-mode";
         };
@@ -25379,7 +25778,7 @@
           sha256 = "1z7ld9d0crwdh778fyaapx75vpnlnslsh9nf07ywkylhz4w68yyv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/weblogger";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/weblogger";
           sha256 = "189zs1321rybgi4zihps7d2jll5z13726jsg5mi7iycg85nkv2fk";
           name = "weblogger";
         };
@@ -25400,7 +25799,7 @@
           sha256 = "0f90m2s40jish4wjwfpmbgw024r7n2l5b9q9wr6rd3vdcwks3mcl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/weechat";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/weechat";
           sha256 = "0sxrms5024bi4irv8x8s8j1zcyd62cpqm0zv4dgpm65wnpc7xc46";
           name = "weechat";
         };
@@ -25421,7 +25820,7 @@
           sha256 = "14vmgfz45wmpjfhfx3pfjn3bak8qvj1zk1w4xc5w1cfl6vnij6hv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/weibo";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/weibo";
           sha256 = "1ndgfqqb0gvy8p2fisi57s9bsa2nrnv80smg78m89i4cwagbz6yd";
           name = "weibo";
         };
@@ -25442,7 +25841,7 @@
           sha256 = "11mi23djk690n4984hk3pv61rrkdnxpkmywsqibi3xki27v2al36";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/which-key";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/which-key";
           sha256 = "0vqbhfzcv9m58w41zdhpiymhgl38n15c6d7ffd99narxlkckcj59";
           name = "which-key";
         };
@@ -25463,7 +25862,7 @@
           sha256 = "01fwhrfi92pcrwc4yn03pflc9wj07mhzj0a0i5amar4f9bj6m5b4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/whitaker";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/whitaker";
           sha256 = "17fnvb3jh6fi4wddn5qnp6i6ndidg8jf9ac69q9j032c2msr07nj";
           name = "whitaker";
         };
@@ -25484,7 +25883,7 @@
           sha256 = "0xmwhybb8x6wwfr55ym5xg4dhy1aqx1abxy9qskn7h3zf1z4pgg2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/whitespace-cleanup-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/whitespace-cleanup-mode";
           sha256 = "1fhdjrxxyfx4xsgfjqq9p7vhj98wmqf2r00mv8k27vdaxwsnm5p3";
           name = "whitespace-cleanup-mode";
         };
@@ -25505,7 +25904,7 @@
           sha256 = "0ip0vkqb4dm88xqzgwc9yaxzf4sc4x006m6z73a3lbfmrncy2c1d";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/whole-line-or-region";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/whole-line-or-region";
           sha256 = "1vs2i4cy1zc6nj660i9h36jbfgc3kvqivjnzlq5zwlxk5hcibqa1";
           name = "whole-line-or-region";
         };
@@ -25526,7 +25925,7 @@
           sha256 = "0fqv63m8z5m5ghh4j8ccdnmgcdkvi4jqpg9z7lp17g4p9pq3xfjf";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/widget-mvc";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/widget-mvc";
           sha256 = "0njzvdlxb7z480r6dvmksgivhz7rvnil517aj86qx0jbc5mr3l2f";
           name = "widget-mvc";
         };
@@ -25547,7 +25946,7 @@
           sha256 = "1kqcc1d56jz107bswlzvdng6ny6qwp93yck2i2j921msn62qvbb2";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/wiki-nav";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/wiki-nav";
           sha256 = "19mabz0y3fcqsm68ijwwbbqylxgp71anc0a31zgc1blha9jivvwy";
           name = "wiki-nav";
         };
@@ -25568,7 +25967,7 @@
           sha256 = "0ib20zl8l1fs69ca9rry27qz69sgf6ws1ca5nhm5llvpkjcgv53i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/win-switch";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/win-switch";
           sha256 = "1s6inp5kf763rngn58r02fd7n7z3dd55j6hb7s9dgvc856d5z3my";
           name = "win-switch";
         };
@@ -25589,7 +25988,7 @@
           sha256 = "049bwa5g0z1b9nrsc1vc4511aqcq9fvl16xg493wj651g6q9qigb";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/window-end-visible";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/window-end-visible";
           sha256 = "1p78n7yysj18404cdc6vahfrzwn5pixyfnja8ch48rj4fm4jbxwq";
           name = "window-end-visible";
         };
@@ -25610,7 +26009,7 @@
           sha256 = "0jyymmbz03zj2ydca1rv6ra0b2brjl7pyl4897zd00j5kvqjdyif";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/window-layout";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/window-layout";
           sha256 = "1n4a6z00lxsffirjrmbaaw432w798b9vv34qawgn1k17y9l7gb85";
           name = "window-layout";
         };
@@ -25631,7 +26030,7 @@
           sha256 = "1rz2a1l3apavsknlfy0faaivqgpj4x9jz3hbysbg9pydpcwqgf64";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/window-numbering";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/window-numbering";
           sha256 = "0x3n0ni16q69lfpyjz61spqghmhvc3cwa4aj80ihii3pk80f769x";
           name = "window-numbering";
         };
@@ -25652,7 +26051,7 @@
           sha256 = "08j0akwjp4arkw3zm0lazb13f6dq0m8y9k9nmypd7xk0m77byymd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/window-purpose";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/window-purpose";
           sha256 = "1ib5ia7armghvmcw8qywcil4nxzwwakmfsp7ybawb0xr53h1w96d";
           name = "window-purpose";
         };
@@ -25673,7 +26072,7 @@
           sha256 = "1f4v0xd341qs4kfnjqhgf8j26valvg6pz4rwcz0zj0s23niy2yil";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/windsize";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/windsize";
           sha256 = "1xhfw77168942rcn246qndii0hv0q6vkgzj67jg4mxh8n46m50m9";
           name = "windsize";
         };
@@ -25689,11 +26088,11 @@
         version = "0.9.0";
         src = fetchhg {
           url = "https://bitbucket.com/ArneBab/wisp";
-          rev = "34fc6f12d740";
-          sha256 = "0ppj8mrlc20i2syyiwvj5rp53swrm929h0ksxxlqvn3nvl9gsajd";
+          rev = "f41388ee99f1";
+          sha256 = "16711d1ds508nmjw81jm2cfdpqzc55gc175fkhayk0f5swlvd11m";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/wisp-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/wisp-mode";
           sha256 = "10zkp1qbvl8dmxij7zz4p1fixs3891xr1nr57vyb3llar9fgzglc";
           name = "wisp-mode";
         };
@@ -25714,7 +26113,7 @@
           sha256 = "188h1sy4mxzrkwi3zgiw108c5f71rkj5agdkf9yy9v8c1bkawm4x";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/wispjs-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/wispjs-mode";
           sha256 = "0qzm0dcvjndasnbqpkdc56f1qv66gxv8dfgfcwq5l1bp5wyx813p";
           name = "wispjs-mode";
         };
@@ -25727,16 +26126,16 @@
     with-editor = callPackage ({ async, dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "with-editor";
-        version = "2.4.0";
+        version = "2.5.0";
         src = fetchFromGitHub {
           owner = "magit";
-          repo = "magit";
-          rev = "2e757a8c919b53edddb186e36e055e011e3b0ab3";
-          sha256 = "0hklwwzi2gqywysxn16ps1fvn48max52cpk2nx7r4df4h52yk6wn";
+          repo = "with-editor";
+          rev = "580f225a6c4476feb36b707c6c705b027339717b";
+          sha256 = "0dymhkbkzicjw0379bdzbb594x5xcjbgbn428a30i2i0jwv66pfz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/with-editor";
-          sha256 = "042fa55yakdn2di4l5dilnmqpslac46wpr1zpl4xk3v3i4nn9ndv";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/with-editor";
+          sha256 = "1wsl1vwvywlc32r5pcc9jqd0pbzq1sn4fppxk3vwl0s5h40v8rnb";
           name = "with-editor";
         };
         packageRequires = [ async dash emacs ];
@@ -25756,7 +26155,7 @@
           sha256 = "0nmzh6dynbm8vglp4pqz81s2z68jbnasvamvi1x1iawf8g9zfyix";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/wn-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/wn-mode";
           sha256 = "1qy1pkfdnm4pska4cnff9cx2c812ilymajhpmsfc9jdbvhzwrwg3";
           name = "wn-mode";
         };
@@ -25777,7 +26176,7 @@
           sha256 = "018r35dz8z03wcrx9s28pjisayy21549i232mp6wy9mxkrkxbzpc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/wonderland";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/wonderland";
           sha256 = "1b4p49mbzqffm2b2y8sbbi56vnkxap2jscsmla9l6l8brybqjppi";
           name = "wonderland";
         };
@@ -25798,7 +26197,7 @@
           sha256 = "0s3mjmfjiidn3spklndw0dvcwbb9x034xyphp60aad8vjaflbchs";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/wordsmith-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/wordsmith-mode";
           sha256 = "1570h1sjjaks6bnhd4xrbx6nna4v7hz6dmrzwjq37rwvallasg1n";
           name = "wordsmith-mode";
         };
@@ -25819,7 +26218,7 @@
           sha256 = "03hjwm51sngkh7jjiwnqhflllqq6i99ib47rm2ja9ii0qyhj1qa0";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/wrap-region";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/wrap-region";
           sha256 = "0mby3m49vm2pw127divspgivqam27zd4r70wx5ra05xwfxywaibq";
           name = "wrap-region";
         };
@@ -25840,7 +26239,7 @@
           sha256 = "1nnjn1r669hvvzfycllwap4w04m8rfsk4nzcg8057m1f263kj31b";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/writegood-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/writegood-mode";
           sha256 = "1lxammisaj04g5vr5lwms64ywf39w8knrq72x4i94wwzwx5ywi1d";
           name = "writegood-mode";
         };
@@ -25861,7 +26260,7 @@
           sha256 = "0f554h834p12255mhwjnxbh1ls65476k60cwddqyl844ph75w8jv";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/writeroom-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/writeroom-mode";
           sha256 = "1kpsrp3agw8bg3qbf5rf5k1a7ww30q5xsa8z5ywxajsaywjzx1bk";
           name = "writeroom-mode";
         };
@@ -25882,7 +26281,7 @@
           sha256 = "1lv0l27lrp6xyl0c5yhlnyjwx872izq02z8x34da9jv3walxpk8f";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ws-butler";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ws-butler";
           sha256 = "072k67z2lx0ampwzdiszi64xs0w6frp4nbmrd2r0wpx0pd211vbn";
           name = "ws-butler";
         };
@@ -25903,7 +26302,7 @@
           sha256 = "0qfbf9xmln60yd0na1508xmxkvnx0pis4dvbf16cjv0i41dq6i87";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/wsd-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/wsd-mode";
           sha256 = "07vclmnj18wx9wlrcnsl99f9jlk3sb9g6pcdv8x1smk84gccpakc";
           name = "wsd-mode";
         };
@@ -25924,7 +26323,7 @@
           sha256 = "13id1vf590gc0kwkhh6mgq2gj2bra2kycxjlvql7v0s7cdvamjhq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/x86-lookup";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/x86-lookup";
           sha256 = "1clv1npvdkzsy0a08xrb880yflwzl4d5cc2c5xrs7b837mqpj8hd";
           name = "x86-lookup";
         };
@@ -25945,7 +26344,7 @@
           sha256 = "154xnfcmil9xjjmq4cyrfpir4ga4mgcmmbd7dja1m7rpk1734xk6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/xbm-life";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/xbm-life";
           sha256 = "1pglxjd4cs630sayx17ai1xflpbyj3hry3156682bgwhqs1vw68q";
           name = "xbm-life";
         };
@@ -25966,7 +26365,7 @@
           sha256 = "1n1msmqap4a2qnjwrchf9cjkzcl20hbrx0vsc4lkbvq3p5riv5p7";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/xcscope";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/xcscope";
           sha256 = "06xh29cm5v3b5xwj32y0i0h0kvvy995840db4hvab2wn9jw68m8w";
           name = "xcscope";
         };
@@ -25979,15 +26378,15 @@
     xquery-tool = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "xquery-tool";
-        version = "0.1.3";
+        version = "0.1.8";
         src = fetchFromGitHub {
           owner = "paddymcall";
           repo = "xquery-tool.el";
-          rev = "248db2c5bace1232508ad69a5616205dda92d5cf";
-          sha256 = "1yxf0byq6d4cl3g25q4f2fqp4x9zpz1hm74yg9v1nr0lk5sgas95";
+          rev = "126164abeb77bd7932c73590939637895005c48b";
+          sha256 = "1yy759qc4njc8bqh8hmgc0mq5vk5spz5syxgflqhjijk8nrvyfgl";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/xquery-tool";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/xquery-tool";
           sha256 = "069injmvv9zzcbqbms94qx5wjj740jnik6sf3b4xjhln7z1yskp0";
           name = "xquery-tool";
         };
@@ -26008,7 +26407,7 @@
           sha256 = "1zdj4664gvwc4kyx7fx5232l3c5anm0xyrrnrw596q604q6xxj2x";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/xterm-color";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/xterm-color";
           sha256 = "0bvzi1mkxgm4vbq2va1sr0k9h3fdmppq79hkvbizc2xgk72sazpj";
           name = "xterm-color";
         };
@@ -26029,7 +26428,7 @@
           sha256 = "1wqx6hlqcmqiljydih5fx89dw06g8w728pyn4iqsap8jwgjngb09";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/xtest";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/xtest";
           sha256 = "1vbs4sb4frzg8d3l96ip9cc6lc86nbj50vpdfqazvxmdfd1sg4i7";
           name = "xtest";
         };
@@ -26050,7 +26449,7 @@
           sha256 = "1rplafm6mldsirj7xg66vsx03n263yii3il3fkws69xmv7sx1a6i";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/yafolding";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/yafolding";
           sha256 = "1z70ismfwmh9a83a7h5lbhw7iywfib5fis7y8gx8020wfjq9g2yq";
           name = "yafolding";
         };
@@ -26071,7 +26470,7 @@
           sha256 = "0l9b888wv72j4hhkcfzsh09iqjxp2qjbjcjcfmvfhxf7il11pv8h";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/yagist";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/yagist";
           sha256 = "1mz86fq0pb4w54c66vd19m2492mkrzq2qi6ssnn2xwmn8vv02wdd";
           name = "yagist";
         };
@@ -26092,7 +26491,7 @@
           sha256 = "1mj1gwrflpdlmc7wl1axygn1jqlrjys1dh3cpdh27zrgsjvhd6c1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/yaml-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/yaml-mode";
           sha256 = "0afp83xcr8h153cayyaszwkgpap0iyk351dlykmv6bv9d2m774mc";
           name = "yaml-mode";
         };
@@ -26113,7 +26512,7 @@
           sha256 = "007837w6gd7k253h7g2in6l3ihcbwv733yiffs26pnymgk21xdqz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/yascroll";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/yascroll";
           sha256 = "11g7wn4hgdwnx3n7ra0sh8gk6rykwvrg9g2cihvcv7mjbqgcv53f";
           name = "yascroll";
         };
@@ -26126,15 +26525,15 @@
     yasnippet = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "yasnippet";
-        version = "0.9.0.1";
+        version = "0.9.1snapshot";
         src = fetchFromGitHub {
           owner = "capitaomorte";
           repo = "yasnippet";
-          rev = "be2f815c43deb74e0f809ed47debc4aa2e67ea1e";
-          sha256 = "04cqcv10i6mym8j9fhd4fklmwa1q4nfg99kpp0bwx7issqhziqv5";
+          rev = "80941c077f8248ee1e8dcc64b3b57e741b9e5755";
+          sha256 = "0m6y2m2nsg6camwh0hjv9jcw6p5a0b4dwig1d58s2g15n3hca3dy";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/yasnippet";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/yasnippet";
           sha256 = "1j6hcpzxljz1axh0xfbwr4ysbixkwgxawsvsgicls8r8kl2xvjvf";
           name = "yasnippet";
         };
@@ -26155,7 +26554,7 @@
           sha256 = "1yplaj7pry43qps8hvqxj9983ah4jvaiq94l171a7f8qi28386s8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/yatemplate";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/yatemplate";
           sha256 = "05gd9sxdiqpw2p1kdagwgxd94wiw1fmmcsp9v4p74i9sqmf6qn6q";
           name = "yatemplate";
         };
@@ -26174,7 +26573,7 @@
           sha256 = "08iwfpsjs36pqr2l85avxhsjx8z0sdfw8cqwwf3brn7i4x67f7z5";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/yatex";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/yatex";
           sha256 = "17np4am7yan1bh4706azf8in60c41158h3z591478j5b1w13y5a6";
           name = "yatex";
         };
@@ -26195,7 +26594,7 @@
           sha256 = "0nqyn1b01v1qxv7rcf46qypca61lmpm8d7kqv63jazw3n05qdnj8";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/yaxception";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/yaxception";
           sha256 = "18n2kjbgfhkhcwigxmv8dk72jp57vsqqd20lc26v5amx6mrhgh58";
           name = "yaxception";
         };
@@ -26216,7 +26615,7 @@
           sha256 = "094alkjrh285qy3sds8dkvxsbnaxnppz1ab0i5r575lyhli9lxia";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/ycmd";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/ycmd";
           sha256 = "06psmcr5132vn72l0amzj14dy43aradnbmlvvms55srvici6r60q";
           name = "ycmd";
         };
@@ -26237,7 +26636,7 @@
           sha256 = "0yvz7lmid4jcikb9jmc7h2lcry3fdyy809k25nyasj2bk41xqqsd";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/yesql-ghosts";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/yesql-ghosts";
           sha256 = "1hxzbnfd15f0ifdqjbw9nhxd0z46x705v2bc0xl71nav78fgpswf";
           name = "yesql-ghosts";
         };
@@ -26258,7 +26657,7 @@
           sha256 = "0016qff7hdnd0xkyhxakfzzscwlwkpzppvc4wxfw0iacpjkz1fnr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/youdao-dictionary";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/youdao-dictionary";
           sha256 = "1qfk7s18br9jask1bpida0cjxks098qpz0ssmw8misi3bjax0fym";
           name = "youdao-dictionary";
         };
@@ -26279,7 +26678,7 @@
           sha256 = "0bgq34k7p9qkxhrg7dvmkfpi1r47czyw12l0cm93z3m817z5hjrk";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/zenburn-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/zenburn-theme";
           sha256 = "1kb371j9aissj0vy07jw4ydfn554blc8b2rbi0x1dvfksr2rhsn9";
           name = "zenburn-theme";
         };
@@ -26300,7 +26699,7 @@
           sha256 = "1pxy6ia7di3i5kigybkz78f7fgbsyr1js9asrfbbx3kkpxpm2vfc";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/zerodark-theme";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/zerodark-theme";
           sha256 = "1nqzswmnq6h0av4rivqm237h7ghp7asa2nvls7nz4ma467p9qhp9";
           name = "zerodark-theme";
         };
@@ -26321,7 +26720,7 @@
           sha256 = "1ksjd3askc3k1l0b3nia5mzkxa74bidh2x0xlrj4qs4im5445vnz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/zombie-trellys-mode";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/zombie-trellys-mode";
           sha256 = "19xzvppw7f35s82hm0y7sga8dyjjyy0dxy6vji4hxdpjziz7lggv";
           name = "zombie-trellys-mode";
         };
@@ -26342,7 +26741,7 @@
           sha256 = "1lrgirfvcvbir7csshkhhwj99jj1x5aprhw7xfiicv7nan9m6gjy";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/zone-nyan";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/zone-nyan";
           sha256 = "165sgjaahz038isii971m02hr2g5iqhbhiwf5kdn8c739cjaa17b";
           name = "zone-nyan";
         };
@@ -26363,7 +26762,7 @@
           sha256 = "1dwf3980rnwc85s73j8accwgpcdhsa6fqdrppbrqb8f7c05q8303";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/zoom-window";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/zoom-window";
           sha256 = "0l9683nk2bdm49likk9c55c23qfy6f1pn04drqwd1vhpanz4l4b3";
           name = "zoom-window";
         };
@@ -26384,7 +26783,7 @@
           sha256 = "0j6x3az8vpq2ggafjxdl8x3ln7lhh58c27z72mwywp4a2ca1g496";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/zop-to-char";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/zop-to-char";
           sha256 = "0jnspvqqvnaplld083j7cqqxw122qazh88ab7hymci36m3ka9hga";
           name = "zop-to-char";
         };
@@ -26405,7 +26804,7 @@
           sha256 = "0qwdbzfi8mddmchdd9ab9ms1ynlc8dx08i6g2mf3za1sbcivdqsr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/zotelo";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/zotelo";
           sha256 = "0ai516lqj9yw7ymvfm4n5inv53sp6mg90wy56lr1laflizwxzg8z";
           name = "zotelo";
         };
@@ -26426,7 +26825,7 @@
           sha256 = "0v73fgb0gf81vlihiicy32v6x86rr2hv0bxlpw7d3pk4ng1a0l3z";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/zygospore";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/zygospore";
           sha256 = "03mmxqbliwd1g73cxd9kqkngdy4jdavcs6j12b4wp27xmhgaj40z";
           name = "zygospore";
         };
@@ -26439,15 +26838,15 @@
     zzz-to-char = callPackage ({ avy, cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "zzz-to-char";
-        version = "0.1.0";
+        version = "0.1.1";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "zzz-to-char";
-          rev = "82dc3382e58091ae32160a91e8c781b813faf856";
-          sha256 = "1hif9jrp4w7xvca0a4qm29scpkwhf5n61c4i5x8n5p7gbwjhh98q";
+          rev = "efbe99c9163602f23408abaea70ffe292632bf26";
+          sha256 = "0y0hhar3krkvbpb5y9k197mb0wfpz8cl6fmxazq8msjml7hkk339";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/553e27a3523ade9dc4951086d9340e8240d5d943/recipes/zzz-to-char";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/0fe7b0857828a041ee06b30edd2cd488cc3394c7/recipes/zzz-to-char";
           sha256 = "16vwp0krshmn5x3ry1j512g4kydx39znjqzri4j7wgg49bz1n7vh";
           name = "zzz-to-char";
         };

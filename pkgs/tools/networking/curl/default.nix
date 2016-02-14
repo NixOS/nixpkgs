@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   name = "curl-7.45.0";
 
   src = fetchurl {
-    url = "http://curl.haxx.se/download/${name}.tar.bz2";
+    url = "http://ngcobalt13.uxnr.de/mirror/curl/${name}.tar.bz2";
     sha256 = "1slq5c0v9wa8hajgimhkxhvsrd07jmih8sa3gjsl597qp5k4w5b5";
   };
 

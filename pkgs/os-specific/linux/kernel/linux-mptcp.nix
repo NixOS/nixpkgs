@@ -7,7 +7,7 @@ import ./generic.nix (args // rec {
 
   extraMeta = {
     branch = "3.18";
-    maintainer = stdenv.lib.maintainers.layus;
+    maintainers = stdenv.lib.maintainers.layus;
   };
 
   src = fetchurl {

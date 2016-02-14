@@ -34,7 +34,7 @@ python2Packages.buildPythonPackage rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/andreafrancia/trash-cli;
     description = "Command line tool for the desktop trash can";
-    maintainer = [ maintainers.rycee ];
+    maintainers = [ maintainers.rycee ];
     license = licenses.gpl2;
   };
 }

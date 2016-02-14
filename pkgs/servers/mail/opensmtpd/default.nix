@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     "--with-queue-user=smtpq"
     "--with-ca-file=/etc/ssl/certs/ca-certificates.crt"
     "--with-libevent-dir=${libevent.dev}"
+    "--enable-table-db"
   ];
 
   installFlags = [

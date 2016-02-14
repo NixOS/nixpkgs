@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    substituteInPlace configure --replace gmcs mcs
     substituteInPlace lib/poppler-sharp/poppler-sharp/poppler-sharp.dll.config \
       --replace libpoppler-glib.so.4 libpoppler-glib.so
   '';

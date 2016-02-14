@@ -64,7 +64,7 @@ in {
     environment.gnome3.packageSet = mkOption {
       type = types.nullOr types.package;
       default = null;
-      example = literalExample "pkgs.gnome3_16";
+      example = literalExample "pkgs.gnome3_18";
       description = "Which GNOME 3 package set to use.";
       apply = p: if p == null then pkgs.gnome3 else p;
     };

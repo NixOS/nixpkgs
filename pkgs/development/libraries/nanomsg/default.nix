@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description= "Socket library that provides several common communication patterns";
     homepage = http://nanomsg.org/;
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

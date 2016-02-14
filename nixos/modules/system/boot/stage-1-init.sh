@@ -150,10 +150,6 @@ udevadm trigger --action=add
 udevadm settle
 
 
-# Additional devices initialization.
-@postEarlyDeviceCommands@
-
-
 # Load boot-time keymap before any LVM/LUKS initialization
 @extraUtils@/bin/busybox loadkmap < "@busyboxKeymap@"
 

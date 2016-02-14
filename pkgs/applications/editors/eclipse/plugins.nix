@@ -171,12 +171,12 @@ rec {
 
   checkstyle = buildEclipseUpdateSite rec {
     name = "checkstyle-${version}";
-    version = "6.11.1.201510102004";
+    version = "6.14.0.201601142217";
 
     src = fetchzip {
       stripRoot = false;
-      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.11.1/net.sf.eclipsecs-updatesite_${version}-bin.zip";
-      sha256 = "0l9nfx7a3qdx1pvjgc6ck4rxh7yrvqsskr190yrxxwmpnyj9cjs4";
+      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.14.0/net.sf.eclipsecs-updatesite_${version}-bin.zip";
+      sha256 = "0ysxir1fv0mb9xnidc9hv6llnk48lkav0sryjbx7pw7vy1f8nd4c";
     };
 
     meta = with stdenv.lib; {
@@ -318,12 +318,12 @@ rec {
 
   gnuarmeclipse = buildEclipseUpdateSite rec {
     name = "gnuarmeclipse-${version}";
-    version = "2.8.1-201504061754";
+    version = "2.11.1-201512141335";
 
     src = fetchzip {
       stripRoot = false;
-      url = "mirror://sourceforge/project/gnuarmeclipse/Current%20Releases/2.x/ilg.gnuarmeclipse.repository-${version}.zip";
-      sha256 = "08jsnyis1ry62cidr9sl11ylyxbkwh834nlhx6qp31gh1l439px9";
+      url = "https://github.com/gnuarmeclipse/plug-ins/releases/download/v${version}/ilg.gnuarmeclipse.repository-${version}.zip";
+      sha256 = "1ijvnahfw2wc860la7kj8b52z2sfm8k1yk62bl0d4lq60y3aycg9";
     };
 
     meta = with stdenv.lib; {

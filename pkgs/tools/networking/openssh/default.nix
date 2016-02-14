@@ -23,11 +23,11 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "openssh-6.9p1";
+  name = "openssh-7.1p2";
 
   src = fetchurl {
     url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-    sha256 = "1zkci5nbpb4frmzj2vr3kv9j47x2h72kvybcpr0d8mzk73sls1vf";
+    sha256 = "1gbbvszz74lkc7b2mqr3ccgpm65zj0k5h7a2ssh0c7pjvhjg0xfx";
   };
 
   prePatch = optionalString hpnSupport
@@ -36,7 +36,16 @@ stdenv.mkDerivation rec {
       export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
     '';
 
-  patches = [ ./locale_archive.patch ./openssh-6.9p1-security-7.0.patch ./disable-roaming.patch ]
+  patches =
+    [ ./locale_archive.patch
+
+      # Fix "HostKeyAlgoritms +...", which we need to enable DSA
+      # host key support.
+      (fetchurl {
+        url = "https://pkgs.fedoraproject.org/cgit/rpms/openssh.git/plain/openssh-7.1p1-hostkeyalgorithms.patch?id=c98f5597250d6f9a8e8d96960beb6306d150ef0f";
+        sha256 = "029lzp9qv1af8wdm0wwj7qwjj1nimgsjj214jqm3amwz0857qgvp";
+      })
+    ]
     ++ optional withGssapiPatches gssapiSrc;
 
   buildInputs = [ zlib openssl libedit pkgconfig pam ]

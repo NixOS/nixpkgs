@@ -42,6 +42,7 @@ nixos.path = ./nixpkgs-unstable-2015-12-06/nixos;
   <itemizedlist>
     <listitem><para><literal>services/monitoring/longview.nix</literal></para></listitem>
     <listitem><para><literal>services/web-apps/pump.io.nix</literal></para></listitem>
+    <listitem><para><literal>services/security/haka.nix</literal></para></listitem>
   </itemizedlist>
 </para>
 
@@ -153,6 +154,21 @@ nginx.override {
     module has also received many improvements, such as correct directories' access
     rights, new <literal>aliasFiles</literal> and <literal>mapFiles</literal>
     options and more.</para>
+  </listitem>
+
+  <listitem>
+    <para>Filesystem options should now be configured as a list of strings, not
+    a comma-separated string. The old style will continue to work, but print a
+    warning, until the 16.09 release. An example of the new style:
+
+<programlisting>
+fileSystems."/example" = {
+  device = "/dev/sdc";
+  fsType = "btrfs";
+  options = [ "noatime" "compress=lzo" "space_cache" "autodefrag" ];
+};
+</programlisting>
+    </para>
   </listitem>
 
   <listitem>

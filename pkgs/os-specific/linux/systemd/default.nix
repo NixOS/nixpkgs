@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, gperf, libcap, kmod
 , zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
-, glib, kbd, libxslt, coreutils, libgcrypt, libapparmor, audit, lz4
+, glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libapparmor, audit, lz4
 , kexectools, libmicrohttpd, linuxHeaders, libseccomp
 , autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , enableKDbus ? false
@@ -9,14 +9,14 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  version = "228";
+  version = "229";
   name = "systemd-${version}";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "b737c07cc0234acfa87282786025d556bca91c3f";
-    sha256 = "0wca8zkn39914c232andvf3v0ni6ylv154kz3s9fcvg47rhpd5n1";
+    rev = "4936f6e6c05162516a685ebd227b55816cf2b670";
+    sha256 = "1q0pyrljmq73qcan9rfqsiw66l1g159m5in5qgb8zwlwhl928670";
   };
 
   patches = [ ./hwdb-location.diff ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
-      /* cryptsetup */ libuuid m4 glib libxslt libgcrypt
+      /* cryptsetup */ libuuid m4 glib libxslt libgcrypt libgpgerror
       libmicrohttpd kexectools libseccomp libffi audit lz4 libapparmor
       /* FIXME: we may be able to prevent the following dependencies
          by generating an autoconf'd tarball, but that's probably not
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
       "--with-sysvinit-path="
       "--with-sysvrcnd-path="
       "--with-rc-local-script-path-stop=/etc/halt.local"
-    ] ++ stdenv.lib.optional enableKDbus "--enable-kdbus";
+    ] ++ (if enableKDbus then [ "--enable-kdbus" ] else [ "--disable-kdbus" ]);
 
   preConfigure =
     ''

@@ -133,14 +133,14 @@ in {
 
   firefox-unwrapped = common {
     pname = "firefox";
-    version = "43.0.4";
-    sha256 = "0xjs4j26h8fyy8izrcc482vfvgg4gqzap5kh17jfv7flhn9akkvn";
+    version = "44.0.2";
+    sha256 = "17id7ala1slb2mjqkikryqjadcsmdzqmkxrrnb5m1316m50qichb";
   };
 
   firefox-esr-unwrapped = common {
     pname = "firefox-esr";
-    version = "38.5.2esr";
-    sha256 = "0xqirpiys2pgzk9hs4s93svknc0sss8ry60zar7n9jj74cgz590m";
+    version = "38.6.1esr";
+    sha256 = "1zyhzczhknplxfmk2r7cczavbsml8ckyimibj2sphwdc300ls5wi";
   };
 
 }

@@ -1,20 +1,44 @@
-{ ruby, fetchgit, buildRubyGem, bundler }:
+{ buildRubyGem, lib, bundler, ruby, nix, nix-prefetch-scripts }:
 
-let
-  thor = buildRubyGem {
-    gemName = "thor";
-    version = "0.19.1";
-    type = "gem";
-    sha256 = "08p5gx18yrbnwc6xc0mxvsfaxzgy2y9i78xq7ds0qmdm67q39y4z";
-  };
+buildRubyGem rec {
+  inherit ruby;
 
-in buildRubyGem {
+  name = "${gemName}-${version}";
   gemName = "bundix";
-  version = "1.0.4";
-  gemPath = [ thor bundler ];
-  src = fetchgit {
-    url = "https://github.com/cstrahan/bundix.git";
-    rev = "6dcf1f71c61584f5c9b919ee9df7b0c554862076";
-    sha256 = "1w17bvc9srcgr4ry81ispcj35g9kxihbyknmqp8rnd4h5090b7b2";
+  version = "2.0.5";
+
+  sha256 = "0bsynhr44jz6nih0xn7v32h1qvywnb5335ka208gn7jp6bjwabhy";
+
+  buildInputs = [bundler];
+
+  postInstall = ''
+    gem_root=$GEM_HOME/gems/${gemName}-${version}
+    sed \
+      -e 's|NIX_INSTANTIATE =.*|NIX_INSTANTIATE = "${nix}/bin/nix-instantiate"|' \
+      -i $gem_root/lib/bundix.rb
+    sed \
+      -e 's|NIX_HASH =.*|NIX_HASH = "${nix}/bin/nix-hash"|' \
+      -i $gem_root/lib/bundix.rb
+    sed \
+      -e 's|NIX_PREFETCH_URL =.*|NIX_PREFETCH_URL = "${nix}/bin/nix-prefetch-url"|' \
+      -i $gem_root/lib/bundix.rb
+    sed \
+      -e 's|NIX_PREFETCH_GIT =.*|NIX_PREFETCH_GIT = "${nix-prefetch-scripts}/bin/nix-prefetch-git"|' \
+      -i $gem_root/lib/bundix.rb
+  '';
+
+  meta = {
+    inherit version;
+    description = "Creates Nix packages from Gemfiles";
+    longDescription = ''
+      This is a tool that converts Gemfile.lock files to nix expressions.
+
+      The output is then usable by the bundlerEnv derivation to list all the
+      dependencies of a ruby package.
+    '';
+    homepage = "https://github.com/manveru/bundix";
+    license = "MIT";
+    maintainers = with lib.maintainers; [ manveru zimbatm ];
+    platforms = lib.platforms.all;
   };
 }

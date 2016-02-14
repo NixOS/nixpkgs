@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://zdoom.org/;
     description = "Enhanced port of the official DOOM source code";
-    maintainer = [ stdenv.lib.maintainers.lassulus ];
+    maintainers = [ stdenv.lib.maintainers.lassulus ];
   };
 }
 

@@ -22,6 +22,14 @@ buildPythonPackage rec {
     requests
     slowaes
     tlslite
+
+    # plugins
+    trezor
+    keepkey
+    # TODO plugins
+    # matplotlib
+    # btchip
+    # amodem
   ];
 
   preInstall = ''
@@ -40,6 +48,6 @@ buildPythonPackage rec {
     '';
     homepage = https://electrum.org;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ehmry joachifm ];
+    maintainers = with maintainers; [ ehmry joachifm np ];
   };
 }

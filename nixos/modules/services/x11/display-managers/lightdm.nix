@@ -86,7 +86,7 @@ in
       };
 
       background = mkOption {
-        type = types.path;
+        type = types.str;
         description = ''
           The background image or color to use.
         '';

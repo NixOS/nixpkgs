@@ -1,4 +1,5 @@
-{stdenv, fetchurl, intltool, pkgconfig, qt4, gtk2, gtk3, kdelibs, cmake, anthy}:
+{stdenv, fetchurl, intltool, pkgconfig, qt4, gtk2, gtk3, kdelibs,
+ cmake, anthy, automoc4, m17n_lib, m17n_db}:
 
 stdenv.mkDerivation rec {
   version = "1.8.6";
@@ -13,6 +14,9 @@ stdenv.mkDerivation rec {
     kdelibs
     cmake
     anthy
+    automoc4
+    m17n_lib
+    m17n_db
   ];
 
   patches = [ ./immodules_cache.patch ];

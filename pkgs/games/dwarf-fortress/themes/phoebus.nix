@@ -1,16 +1,16 @@
 { stdenv, fetchFromGitHub }:
 
-# On upgrade check https://github.com/fricy/Phoebus/blob/master/manifest.json
+# On upgrade check https://github.com/DFgraphics/Phoebus/blob/master/manifest.json
 # for compatibility information.
 
 stdenv.mkDerivation {
-  name = "phoebus-theme-20160118";
+  name = "phoebus-theme-20160128";
 
   src = fetchFromGitHub {
-    owner = "fricy";
+    owner = "DFgraphics";
     repo = "Phoebus";
-    rev = "2c5777b0f307b1d752a8a484c6a05b67531c84a9";
-    sha256 = "0a5ixm181wz7crr3rpa2mh0drb371j5hvizqninvdnhah2mypz8v";
+    rev = "52b19b69c7323f9002ad195ecd68ac02ff0099a2";
+    sha256 = "1pw5l5v7l1bvxzjf4fivmagpmghffvz0wlws2ksc7d5vy48ybcmg";
   };
 
   installPhase = ''

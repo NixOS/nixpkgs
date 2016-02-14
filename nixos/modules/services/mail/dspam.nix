@@ -109,6 +109,9 @@ in {
           Group = cfg.group;
           RuntimeDirectory = optional (cfg.domainSocket == defaultSock) "dspam";
           PermissionsStartOnly = true;
+          # DSPAM segfaults on just about every error
+          Restart = "on-failure";
+          RestartSec = "1s";
         };
 
         preStart = ''
@@ -136,7 +139,7 @@ in {
         restartTriggers = [ cfgfile ];
 
         serviceConfig = {
-          ExecStart = "${dspam}/bin/dspam_maintenance";
+          ExecStart = "${dspam}/bin/dspam_maintenance --verbose";
           Type = "oneshot";
           User = cfg.user;
           Group = cfg.group;

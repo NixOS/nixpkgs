@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = "SHELL=${stdenv.shell}";
 
-  installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc INITDIR=$(out)/etc/init.d";
+  installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc INITDIR=$(out)/etc/init.d DESTDIR=$(out)";
 
   meta = {
     homepage = http://www.drbd.org/;

@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     # for bluez4 compatibility for NixOS
     mkdir $out/sbin
     ln -s ../libexec/bluetooth/bluetoothd $out/sbin/bluetoothd
+    ln -s ../libexec/bluetooth/obexd $out/sbin/obexd
   '';
 
   meta = with stdenv.lib; {

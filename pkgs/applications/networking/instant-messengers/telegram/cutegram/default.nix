@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Telegram client forked from sigram";
     homepage = "http://aseman.co/en/products/cutegram/";
     license = licenses.gpl3;
-    maintainer = [ maintainers.profpatsch ];
+    maintainers = [ maintainers.profpatsch ];
   };
 
 }

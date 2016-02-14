@@ -83,9 +83,6 @@ let
 
         # Publish access credentials in the root window.
         ${config.hardware.pulseaudio.package.out}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
-
-        # Keep track of devices.  Mostly useful for Phonon/KDE.
-        ${config.hardware.pulseaudio.package.out}/bin/pactl load-module module-device-manager "do_routing=1"
       ''}
 
       # Tell systemd about our $DISPLAY. This is needed by the

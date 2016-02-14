@@ -55,7 +55,15 @@ in
     services.xserver.desktopManager.session = singleton {
       name = "kde5";
       bgSupport = true;
-      start = ''exec startkde;'';
+      start = ''
+        # Load PulseAudio module for routing support.
+        # See http://colin.guthr.ie/2009/10/so-how-does-the-kde-pulseaudio-support-work-anyway/
+        ${optionalString config.hardware.pulseaudio.enable ''
+          ${config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
+        ''}
+
+        exec startkde
+      '';
     };
 
     security.setuidOwners = singleton {

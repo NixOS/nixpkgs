@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "Font files available from Google Font";
     license = with licenses; [ asl20 ofl ufl ];
     platforms = platforms.all;
-    maintainer = with maintainers; [ manveru ];
+    maintainers = with maintainers; [ manveru ];
   };
 }

@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vstakhov/rmilter";
     license = licenses.bsd2; 
     description = "server, used to integrate rspamd and milter compatible MTA, for example postfix or sendmail";
-    maintainer = maintainers.avnik;
+    maintainers = maintainers.avnik;
   };
 }

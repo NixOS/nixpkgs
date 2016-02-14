@@ -12,6 +12,7 @@
 , midiSupport ? false, wildmidi ? null
 , wavpackSupport ? false, wavpack ? null
 , ffmpegSupport ? false, ffmpeg ? null
+, apeSupport ? true, yasm ? null
 # misc plugins
 , zipSupport ? true, libzip ? null
 , artworkSupport ? true, imlib2 ? null
@@ -38,6 +39,7 @@ assert cdaSupport -> (libcdio != null && libcddb != null);
 assert aacSupport -> faad2 != null;
 assert zipSupport -> libzip != null;
 assert ffmpegSupport -> ffmpeg != null;
+assert apeSupport -> yasm != null;
 assert artworkSupport -> imlib2 != null;
 assert hotkeysSupport -> libX11 != null;
 assert osdSupport -> dbus != null;
@@ -68,6 +70,7 @@ stdenv.mkDerivation rec {
     ++ optional aacSupport faad2
     ++ optional zipSupport libzip
     ++ optional ffmpegSupport ffmpeg
+    ++ optional apeSupport yasm
     ++ optional artworkSupport imlib2
     ++ optional hotkeysSupport libX11
     ++ optional osdSupport dbus

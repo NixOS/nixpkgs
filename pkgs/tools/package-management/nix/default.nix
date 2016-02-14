@@ -86,25 +86,25 @@ let
 
 in rec {
 
-   nix = nixStable;
+  nix = nixStable;
 
-   nixStable = common rec {
-     name = "nix-1.11.1";
-     src = fetchurl {
-       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-       sha256 = "21a99b3d0afdbe10241aaf506738fd0a81ff868e3d7c666e3cb6b621a926ea7a";
-     };
-   };
+  nixStable = common rec {
+    name = "nix-1.11.2";
+    src = fetchurl {
+      url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
+      sha256 = "fc1233814ebb385a2a991c1fb88c97b344267281e173fea7d9acd3f9caf969d6";
+    };
+  };
 
-   nixUnstable = nixStable;
-   /*
-   nixUnstable = lib.lowPrio (common rec {
-     name = "nix-1.11pre4379_786046c";
-     src = fetchurl {
-       url = "http://hydra.nixos.org/build/30375557/download/4/${name}.tar.xz";
-       sha256 = "ff42c70697fce7ca6eade622a31e5fbe45aed0edf1204fb491b40df207a807d5";
-     };
-   });
-   */
+  nixUnstable = nixStable;
+  /*
+  nixUnstable = lib.lowPrio (common rec {
+    name = "nix-1.11pre4379_786046c";
+    src = fetchurl {
+      url = "http://hydra.nixos.org/build/30375557/download/4/${name}.tar.xz";
+      sha256 = "ff42c70697fce7ca6eade622a31e5fbe45aed0edf1204fb491b40df207a807d5";
+    };
+  });
+  */
 
 }

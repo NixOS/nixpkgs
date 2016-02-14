@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, python, cairomm, sparsehash, pycairo, automake, m4,
-pkgconfig, boost, expat, scipy, numpy, cgal, gmp, mpfr, lndir, makeWrapper,
+{ stdenv, fetchurl, python, cairomm, sparsehash, pycairo, autoreconfHook,
+pkgconfig, boost, expat, scipy, numpy, cgal, gmp, mpfr, lndir,
 gobjectIntrospection, pygobject3, gtk3, matplotlib }:
 
 stdenv.mkDerivation rec {
-  version = "2.2.42";
+  version = "2.12";
   name = "${python.libPrefix}-graph-tool-${version}";
 
   meta = with stdenv.lib; {
@@ -15,15 +15,16 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "http://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    sha256 = "124qmd0mgam7hm87gscp3836ymhhwwnlfm2c5pzpml06da1w0xg9";
+    url = "https://github.com/count0/graph-tool/archive/release-${version}.tar.gz";
+    sha256 = "12w58djyx6nn00wixqnxnxby9ksabhzdkkvynl8b89parfvfbpwl";
   };
 
-  preConfigure = ''
-    configureFlags="--with-python-module-path=$out/${python.sitePackages} --enable-openmp"
-  '';
+  configureFlags = [
+    "--with-python-module-path=$(out)/${python.sitePackages}"
+    "--enable-openmp"
+  ];
 
-  buildInputs = [ automake m4 pkgconfig makeWrapper ];
+  buildInputs = [ pkgconfig autoreconfHook ];
 
   propagatedBuildInputs = [
     boost

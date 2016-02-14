@@ -1838,6 +1838,38 @@ let
     };
   };
 
+  hmacauth = buildGoPackage {
+    name = "hmacauth";
+    goPackagePath = "github.com/18F/hmacauth";
+    src = fetchFromGitHub {
+      rev = "9232a6386b737d7d1e5c1c6e817aa48d5d8ee7cd";
+      owner = "18F";
+      repo = "hmacauth";
+      sha256 = "056mcqrf2bv0g9gn2ixv19srk613h4sasl99w9375mpvmadb3pz1";
+    };
+  };
+
+  hound = buildGoPackage rec {
+    rev  = "0a364935ba9db53e6f3f5563b02fcce242e0930f";
+    name = "hound-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/etsy/hound";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "etsy";
+      repo   = "hound";
+      sha256 = "0jhnjskpm15nfa1cvx0h214lx72zjvnkjwrbgwgqqyn9afrihc7q";
+    };
+    buildInputs = [ go-bindata.bin pkgs.nodejs pkgs.nodePackages.react-tools pkgs.python pkgs.rsync ];
+    postInstall = ''
+      pushd go
+      python src/github.com/etsy/hound/tools/setup
+      sed -i 's|bin/go-bindata||' Makefile
+      sed -i 's|$<|#go-bindata|' Makefile
+      make
+    '';
+  };
+
   hologram = buildGoPackage rec {
     rev  = "63014b81675e1228818bf36ef6ef0028bacad24b";
     name = "hologram-${stdenv.lib.strings.substring 0 7 rev}";
@@ -2360,6 +2392,21 @@ let
     owner  = "beevik";
     repo   = "ntp";
     sha256 = "03fvgbjf2aprjj1s6wdc35wwa7k1w5phkixzvp5n1j21sf6w4h24";
+  };
+
+  oauth2_proxy = buildGoPackage {
+    name = "oauth2_proxy";
+    goPackagePath = "github.com/bitly/oauth2_proxy";
+    src = fetchFromGitHub {
+      rev = "10f47e325b782a60b8689653fa45360dee7fbf34";
+      owner = "bitly";
+      repo = "oauth2_proxy";
+      sha256 = "13f6kaq15f6ial9gqzrsx7i94jhd5j70js2k93qwxcw1vkh1b6si";
+    };
+    buildInputs = [
+      go-assert go-options go-simplejson toml fsnotify.v1 oauth2
+      google-api-go-client hmacauth
+    ];
   };
 
   objx = buildFromGitHub {
@@ -3651,5 +3698,39 @@ let
         sort -u |
         xargs -d '\n' sed -i -e s,github.com/ericchiang/pup/Godeps/_workspace/src/,,g
     '';
+  };
+
+  textsecure = buildFromGitHub rec {
+    rev = "505e129c42fc4c5cb2d105520cef7c04fa3a6b64";
+    owner = "janimo";
+    repo = "textsecure";
+    sha256 = "0sdcqd89dlic0bllb6mjliz4x54rxnm1r3xqd5qdp936n7xs3mc6";
+    propagatedBuildInputs = [ crypto protobuf ed25519 yaml-v2 logrus ];
+    disabled = isGo14;
+  };
+
+  interlock = buildFromGitHub rec {
+    version = "2016.01.14";
+    rev = "v${version}";
+    owner = "inversepath";
+    repo = "interlock";
+    sha256 = "0wabx6vqdxh2aprsm2rd9mh71q7c2xm6xk9a6r1bn53r9dh5wrsb";
+    buildInputs = [ crypto textsecure ];
+    nativeBuildInputs = [ pkgs.sudo ];
+    buildFlags = [ "-tags textsecure" ];
+    subPackages = [ "./cmd/interlock" ];
+    postPatch = ''
+      grep -lr '/s\?bin/' | xargs sed -i \
+        -e 's|/bin/mount|${pkgs.utillinux}/bin/mount|' \
+        -e 's|/bin/umount|${pkgs.utillinux}/bin/umount|' \
+        -e 's|/bin/cp|${pkgs.coreutils}/bin/cp|' \
+        -e 's|/bin/mv|${pkgs.coreutils}/bin/mv|' \
+        -e 's|/bin/chown|${pkgs.coreutils}/bin/chown|' \
+        -e 's|/bin/date|${pkgs.coreutils}/bin/date|' \
+        -e 's|/sbin/poweroff|${pkgs.systemd}/sbin/poweroff|' \
+        -e 's|/usr/bin/sudo|/var/setuid-wrappers/sudo|' \
+        -e 's|/sbin/cryptsetup|${pkgs.cryptsetup}/bin/cryptsetup|'
+    '';
+    disabled = isGo14;
   };
 }; in self
