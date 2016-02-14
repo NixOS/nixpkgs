@@ -15725,6 +15725,8 @@ let
 
   refind = callPackage ../tools/bootloaders/refind { };
 
+  spectrojack = callPackage ../applications/audio/spectrojack { };
+
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
 
   xtrlock-pam = callPackage ../misc/screensavers/xtrlock-pam { };
