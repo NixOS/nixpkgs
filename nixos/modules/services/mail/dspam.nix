@@ -19,7 +19,10 @@ let
     SystemLog on
     UserLog on
 
-    ${optionalString (cfg.domainSocket != null) ''ServerDomainSocketPath "${cfg.domainSocket}"''}
+    ${optionalString (cfg.domainSocket != null) ''
+      ServerDomainSocketPath "${cfg.domainSocket}"
+      ClientHost "${cfg.domainSocket}"
+    ''}
 
     ${cfg.extraConfig}
   '';
