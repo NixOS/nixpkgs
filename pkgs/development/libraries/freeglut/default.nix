@@ -11,6 +11,14 @@ in stdenv.mkDerivation {
 
   buildInputs = [ libXi libXrandr libXxf86vm mesa xlibsWrapper cmake ];
 
+  cmakeFlags = stdenv.lib.optionals stdenv.isDarwin [
+                 "-DOPENGL_INCLUDE_DIR=${mesa}/include"
+                 "-DOPENGL_gl_LIBRARY:FILEPATH=${mesa}/lib/libGL.dylib"
+                 "-DOPENGL_glu_LIBRARY:FILEPATH=${mesa}/lib/libGLU.dylib"
+                 "-DFREEGLUT_BUILD_DEMOS:BOOL=OFF"
+                 "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
+               ];
+
   meta = with stdenv.lib; {
     description = "Create and manage windows containing OpenGL contexts";
     longDescription = ''
