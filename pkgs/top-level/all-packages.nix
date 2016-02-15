@@ -1948,6 +1948,8 @@ let
 
   iasl = callPackage ../development/compilers/iasl { };
 
+  iannix = callPackage ../applications/audio/iannix { };
+
   icecast = callPackage ../servers/icecast { };
 
   darkice = callPackage ../tools/audio/darkice { };
