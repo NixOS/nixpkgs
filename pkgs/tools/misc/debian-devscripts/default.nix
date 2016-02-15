@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.15.10";
+  version = "2.16.1";
   name = "debian-devscripts-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/devscripts/devscripts_${version}.tar.xz";
-    sha256 = "1yb26xpjxp9q5vsjzc9bv8vydpx2rs1v0i7phxhylfjn0fgpfnc6";
+    sha256 = "096f26b0z6kwv47qy99gak40wcc8mp24n0nvqwgifcicr18qv4rz";
   };
 
   buildInputs = [ perl CryptSSLeay LWP unzip xz dpkg TimeDate DBFile 
