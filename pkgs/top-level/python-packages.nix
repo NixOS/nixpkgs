@@ -8040,11 +8040,11 @@ in modules // {
 
 
   django_tagging = buildPythonPackage rec {
-    name = "django-tagging-0.3.1";
+    name = "django-tagging-0.3.6";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/d/django-tagging/${name}.tar.gz";
-      md5 = "a0855f2b044db15f3f8a025fa1016ddf";
+      md5 = "4fd92fd6ed7e05491b8cb868860ecbc8";
     };
 
     # error: invalid command 'test'
@@ -23375,11 +23375,11 @@ in modules // {
 
   whisper = buildPythonPackage rec {
     name = "whisper-${version}";
-    version = "0.9.12";
+    version = "0.9.15";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/w/whisper/${name}.tar.gz";
-      md5 = "5fac757cc4822ab0678dbe0d781d904e";
+      sha256 = "1chkphxwnwvy2cs7jc2h2i0lqqvi9jx6vqj3ly88lwk7m35r4ss2";
     };
 
     # error: invalid command 'test'
@@ -23563,14 +23563,14 @@ in modules // {
 
   graphite_web = buildPythonPackage rec {
     name = "graphite-web-${version}";
-    version = "0.9.12";
+    version = "0.9.15";
 
     src = pkgs.fetchurl rec {
       url = "https://pypi.python.org/packages/source/g/graphite-web/${name}.tar.gz";
-      md5 = "8edbb61f1ffe11c181bd2cb9ec977c72";
+      sha256 = "1c0kclbv8shv9nvjx19wqm4asia58s3qmd9fapchc6y9fjpjax6q";
     };
 
-    propagatedBuildInputs = with self; [ django_1_5 django_tagging modules.sqlite3 whisper pkgs.pycairo ldap memcached ];
+    propagatedBuildInputs = with self; [ django_1_5 django_tagging pysqlite whisper cairocffi ldap memcached pytz ];
 
     postInstall = ''
       wrapProgram $out/bin/run-graphite-devel-server.py \
