@@ -790,6 +790,8 @@ let
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
+  cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns { };
+
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
 
   cli53 = callPackage ../tools/admin/cli53 { };
