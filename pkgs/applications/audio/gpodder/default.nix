@@ -7,11 +7,11 @@ let
   inherit (pythonPackages) coverage feedparser minimock sqlite3 dbus pygtk eyeD3;
 
 in buildPythonPackage rec {
-  name = "gpodder-3.8.4";
+  name = "gpodder-3.9.0";
 
   src = fetchurl {
     url = "http://gpodder.org/src/${name}.tar.gz";
-    sha256 = "0cjpk92qjsws7ddbnq0r2h7vm5019zlpafgbxwsgllmjzkknj6pn";
+    sha256 = "1ik954idi0ldnw0wrv7mm71smyb6x66332jxcaf1dxsl12ccm44l";
   };
 
   buildInputs = [
