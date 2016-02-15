@@ -24,9 +24,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ giblib xlibsWrapper ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://linuxbrit.co.uk/scrot/;
     description = "A command-line screen capture utility";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ garbas ];
   };
 }
