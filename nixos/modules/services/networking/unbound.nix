@@ -39,26 +39,31 @@ in
 
       enable = mkOption {
         default = false;
+        type = types.bool;
         description = "Whether to enable the Unbound domain name server.";
       };
 
       allowedAccess = mkOption {
         default = ["127.0.0.0/24"];
+        type = types.listOf types.str;
         description = "What networks are allowed to use unbound as a resolver.";
       };
 
       interfaces = mkOption {
         default = [ "127.0.0.1" "::1" ];
+        type = types.listOf types.str;
         description = "What addresses the server should listen on.";
       };
 
       forwardAddresses = mkOption {
         default = [ ];
+        type = types.listOf types.str;
         description = "What servers to forward queries to.";
       };
 
       extraConfig = mkOption {
         default = "";
+        type = types.str;
         description = "Extra lines of unbound config.";
       };
 
