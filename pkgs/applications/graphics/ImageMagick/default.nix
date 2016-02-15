@@ -7,6 +7,7 @@ let
   arch =
     if stdenv.system == "i686-linux" then "i686"
     else if stdenv.system == "x86_64-linux" || stdenv.system == "x86_64-darwin" then "x86-64"
+    else if stdenv.system == "armv7l-linux" then "armv7l"
     else throw "ImageMagick is not supported on this platform.";
 in
 
