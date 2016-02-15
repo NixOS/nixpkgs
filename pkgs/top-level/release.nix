@@ -245,14 +245,6 @@ let
 
       #rPackages = packagePlatforms pkgs.rPackages;
 
-      strategoPackages = {
-        sdf = linux;
-        strategoxt = linux;
-        javafront = linux;
-        strategoShell = linux ++ darwin;
-        dryad = linux;
-      };
-
       ocamlPackages = { };
 
       perlPackages = { };

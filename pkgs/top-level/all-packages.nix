@@ -5041,8 +5041,6 @@ let
 
   vs90wrapper = callPackage ../development/compilers/vs90wrapper { };
 
-  webdsl = callPackage ../development/compilers/webdsl { };
-
   win32hello = callPackage ../development/compilers/visual-c++/test { };
 
   wrapCCWith = ccWrapper: libc: extraBuildCommands: baseCC: ccWrapper {
