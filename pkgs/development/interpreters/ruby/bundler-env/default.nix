@@ -7,7 +7,7 @@
 , tree
 }@defs:
 
-{ name, gemset, gemfile, lockfile, ruby ? defs.ruby, gemConfig ? defaultGemConfig
+{ name, gemset, ruby ? defs.ruby, gemConfig ? defaultGemConfig
 , postBuild ? null
 , document ? []
 , meta ? {}
@@ -35,21 +35,6 @@ let
       gemName = name;
       gemPath = map (gemName: gems."${gemName}") (attrs.dependencies or []);
     }));
-  # We have to normalize the Gemfile.lock, otherwise bundler tries to be
-  # helpful by doing so at run time, causing executables to immediately bail
-  # out. Yes, I'm serious.
-  confFiles = runCommand "gemfile-and-lockfile" {} ''
-    mkdir -p $out
-    cp ${gemfile} $out/Gemfile
-    cp ${lockfile} $out/Gemfile.lock
-
-    cd $out
-    chmod +w Gemfile.lock
-    source ${rubygems}/nix-support/setup-hook
-    export GEM_PATH=${bundler}/${ruby.gemPath}
-    ${ruby}/bin/ruby -rubygems -e \
-      "require 'bundler'; Bundler.definition.lock('Gemfile.lock')"
-  '';
   envPaths = lib.attrValues gems ++ lib.optional (!hasBundler) bundler;
   bundlerEnv = buildEnv {
     inherit name ignoreCollisions;
@@ -60,7 +45,6 @@ let
 
       ${ruby}/bin/ruby ${./gen-bin-stubs.rb} \
         "${ruby}/bin/ruby" \
-        "${confFiles}/Gemfile" \
         "$out/${ruby.gemPath}" \
         "${bundler}/${ruby.gemPath}" \
         ${shellEscape (toString envPaths)}
@@ -79,7 +63,6 @@ let
           name = "interactive-${name}-environment";
           nativeBuildInputs = [ ruby bundlerEnv ];
           shellHook = ''
-            export BUNDLE_GEMFILE=${confFiles}/Gemfile
             export BUNDLE_PATH=${bundlerEnv}/${ruby.gemPath}
             export GEM_HOME=${bundlerEnv}/${ruby.gemPath}
             export GEM_PATH=${bundlerEnv}/${ruby.gemPath}
