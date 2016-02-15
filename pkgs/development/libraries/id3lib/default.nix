@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "id3lib-3.8.3";
 
-  patches = [ ./id3lib-3.8.3-gcc43-1.patch ];
+  patches = [ ./id3lib-3.8.3-gcc43-1.patch ./id3lib-3.8.3-UTF16_writing_bug.patch ];
 
   buildInputs = [ zlib ];
   
