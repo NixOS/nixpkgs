@@ -4359,8 +4359,8 @@ let
     bootstrapMavenSite31Jar = self.mavenPlugins.bootstrapMavenSite.mavenSite31Jar;
 
     bootstrapModelloMaven = callPackage ../development/java-modules/maven-plugins/modello-maven-plugin/bootstrap.nix { };
-    bootstrapModelloMaven10alpha15Jar = self.mavenPlugins.bootstrapModelloMaven.bootstrapModelloMaven10alpha15Jar;
-    bootstrapModelloMaven141Jar = self.mavenPlugins.bootstrapModelloMaven.bootstrapModelloMaven141Jar;
+    bootstrapModelloMaven10alpha15Jar = self.mavenPlugins.bootstrapModelloMaven.modelloMaven10alpha15Jar;
+    bootstrapModelloMaven141Jar = self.mavenPlugins.bootstrapModelloMaven.modelloMaven141Jar;
 
     mavenCleanGen = callPackage ../development/java-modules/maven-plugins/maven-clean-plugin { };
     mavenClean22 = self.mavenPlugins.mavenCleanGen.mavenClean22;
@@ -4371,6 +4371,7 @@ let
 
     mavenCompilerGen = callPackage ../development/java-modules/maven-plugins/maven-compiler-plugin { };
     mavenCompiler202 = self.mavenPlugins.mavenCompilerGen.mavenCompiler202;
+    mavenCompiler21 = self.mavenPlugins.mavenCompilerGen.mavenCompiler21;
     mavenCompiler232 = self.mavenPlugins.mavenCompilerGen.mavenCompiler232;
     mavenCompiler31 = self.mavenPlugins.mavenCompilerGen.mavenCompiler31;
 
