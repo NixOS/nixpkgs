@@ -7,13 +7,13 @@ in
 
 buildPythonPackage rec {
   name = "qtile-${version}";
-  version = "0.10.3";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
     rev = "v${version}";
-    sha256 = "02252sfcniijkpk5rfgb800wvdpl223xrx1bhrxpzgggpgfbnmn6";
+    sha256 = "0rwklzgkp3x242xql6qmfpfnhr788hd3jc1l80pc5ybxlwyfx59i";
   };
 
   patches = [
