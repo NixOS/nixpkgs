@@ -82,4 +82,15 @@ rec {
     mavenDeps = [ bootstrapMavenRemoteResources121Jar apacheParent10 mavenParent21 mavenPluginTools31 mavenSite31 ];
     m2Path = "/org/apache/maven/plugins/maven-plugin-plugin/3.1";
   };
+
+  mavenPlugin32 = mavenPluginGen {
+    name = "maven-plugin-plugin-3.2";
+    src = fetchsvn {
+      url = "https://svn.apache.org/repos/asf/maven/plugin-tools/tags/maven-plugin-tools-3.2/maven-plugin-plugin/";
+      rev = 1724719;
+      sha256 = "1dv59q4i6rf7yd70zqzl5k0k9dd0rd7g4jimhaasvd5iz9jy2lpc";
+    };
+    mavenDeps = [ bootstrapMavenRemoteResources13Jar apacheParent11 mavenParent22 mavenPluginTools32 ];
+    m2Path = "/org/apache/maven/plugins/maven-plugin-plugin/3.2";
+  };
 }
