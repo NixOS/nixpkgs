@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     "--with-libevent=${libevent}"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
+    "--enable-pie"
+    "--enable-relro-now"
   ];
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
