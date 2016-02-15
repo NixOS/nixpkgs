@@ -11260,11 +11260,11 @@ in modules // {
 
   rainbowstream = buildPythonPackage rec {
     name = "rainbowstream-${version}";
-    version = "1.3.1";
+    version = "1.3.3";
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/r/rainbowstream/${name}.tar.gz";
-      sha256 = "0dhhgr0ww4x85pgl6mzp327sy4v6mv6hz3wvnsrwl0knkxknbadv";
+      sha256 = "08598slbn8sm2hjs0q1041fv7m56k2ky4q66rsihacjw0mg7blai";
     };
 
     doCheck = false;
