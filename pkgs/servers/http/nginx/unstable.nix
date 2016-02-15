@@ -7,10 +7,10 @@
 with stdenv.lib;
 
 let
-  version = "1.9.10";
+  version = "1.9.11";
   mainSrc = fetchurl {
     url = "http://nginx.org/download/nginx-${version}.tar.gz";
-    sha256 = "1n9icvi9hq7gak21ixlhcyazjx2yjqlbws07i2habc6a8ildf57v";
+    sha256 = "07x5d2ryf547xrj4wp8w90kz2d93sxjhkfjb0vdscmxgmzs74p3a";
   };
 
 in

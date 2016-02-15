@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux
-, glib, kbd, libxslt, coreutils, libgcrypt, libapparmor, audit, lz4
+, glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libapparmor, audit, lz4
 , kexectools, libmicrohttpd, linuxHeaders, libseccomp
 , autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , enableKDbus ? false
@@ -8,24 +8,22 @@
 
 assert stdenv.isLinux;
 
-# FIXME: When updating, please remove makeFlags -- `hwdb_bin` flag is not supported anymore.
-
 stdenv.mkDerivation rec {
-  version = "228";
+  version = "229";
   name = "systemd-${version}";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "b737c07cc0234acfa87282786025d556bca91c3f";
-    sha256 = "0wca8zkn39914c232andvf3v0ni6ylv154kz3s9fcvg47rhpd5n1";
+    rev = "4936f6e6c05162516a685ebd227b55816cf2b670";
+    sha256 = "1q0pyrljmq73qcan9rfqsiw66l1g159m5in5qgb8zwlwhl928670";
   };
 
   outputs = [ "out" "man" "doc" ];
 
   buildInputs =
     [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
-      /* cryptsetup */ libuuid m4 glib libxslt libgcrypt
+      /* cryptsetup */ libuuid m4 glib libxslt libgcrypt libgpgerror
       libmicrohttpd kexectools libseccomp audit lz4 libapparmor
       /* FIXME: we may be able to prevent the following dependencies
          by generating an autoconf'd tarball, but that's probably not
@@ -66,7 +64,7 @@ stdenv.mkDerivation rec {
       "--with-sysvinit-path="
       "--with-sysvrcnd-path="
       "--with-rc-local-script-path-stop=/etc/halt.local"
-    ] ++ stdenv.lib.optional enableKDbus "--enable-kdbus";
+    ] ++ (if enableKDbus then [ "--enable-kdbus" ] else [ "--disable-kdbus" ]);
 
   preConfigure =
     ''
@@ -108,13 +106,6 @@ stdenv.mkDerivation rec {
 
       "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
     ];
-
-  # Use /var/lib/udev rather than /etc/udev for the generated hardware
-  # database.  Upstream doesn't want this (see commit
-  # 1e1954f53386cb773e2a152748dd31c4d36aa2d8) because using /var is
-  # forbidden in early boot, but in NixOS the initrd guarantees that
-  # /var is mounted.
-  makeFlags = "hwdb_bin=/var/lib/udev/hwdb.bin";
 
   installFlags =
     [ "localstatedir=$(TMPDIR)/var"

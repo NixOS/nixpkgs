@@ -6628,13 +6628,13 @@ in modules // {
     };
   };
 
-  plotly = buildPythonPackage rec {
-    name = "plotly-1.9.1";
+  plotly = self.buildPythonPackage rec {
+    name = "plotly-1.9.5";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/plotly/${name}.tar.gz";
-      md5 = "84fe80b294b639357f12fa210ce09f95";
+      md5 = "56fb77dff80325413c8cf40cf229ce90";
     };
 
     propagatedBuildInputs = with self; [ self.pytz self.six self.requests ];
@@ -11508,6 +11508,31 @@ in modules // {
       description = "An MPD (Music Player Daemon) client library written in pure Python";
       homepage = http://jatreuman.indefero.net/p/python-mpd/;
       license = licenses.gpl3;
+    };
+  };
+
+  mpd2 = buildPythonPackage rec {
+    name = "mpd2-${version}";
+    version = "0.5.5";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-mpd2/python-mpd2-${version}.tar.bz2";
+      sha256 = "1gfrxf71xll1w6zb69znqg5c9j0g7036fsalkvqprh2id640cl3a";
+    };
+
+    propagatedBuildInputs = [ pkgs.mpd_clientlib ];
+
+    buildInputs = with self; [ mock ];
+    patchPhase = ''
+      sed -i -e '/tests_require/d' \
+          -e 's/cmdclass.*/test_suite="mpd_test",/' setup.py
+    '';
+
+    meta = {
+      description = "A Python client module for the Music Player Daemon";
+      homepage = "https://github.com/Mic92/python-mpd2";
+      license = licenses.lgpl3Plus;
+      maintainers = with maintainers; [ rvl ];
     };
   };
 
@@ -22035,14 +22060,17 @@ in modules // {
 
   zope_exceptions = buildPythonPackage rec {
      name = "zope.exceptions-${version}";
-     version = "4.0.5";
+     version = "4.0.8";
 
      src = pkgs.fetchurl {
        url = "http://pypi.python.org/packages/source/z/zope.exceptions/${name}.tar.gz";
-       md5 = "c95569fcb444ae541777de7ae5297492";
+       sha256 = "0zwxaaa66sqxg5k7zcrvs0fbg9ym1njnxnr28dfmchzhwjvwnfzl";
      };
 
      propagatedBuildInputs = with self; [ zope_interface ];
+
+     # circular deps
+     doCheck = false;
 
      meta = {
        description = "Exception interfaces and implementations";
@@ -22139,14 +22167,17 @@ in modules // {
 
 
   zope_proxy = buildPythonPackage rec {
-    name = "zope.proxy-4.1.4";
+    name = "zope.proxy-4.1.6";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.proxy/${name}.tar.gz";
-      md5 = "3bcaf8b8512a99649ecf2f158c11d05b";
+      sha256 = "0pqwwmvm1prhwv1ziv9lp8iirz7xkwb6n2kyj36p2h0ppyyhjnm4";
     };
 
     propagatedBuildInputs = with self; [ zope_interface ];
+
+    # circular deps
+    doCheck = false;
 
     meta = {
         maintainers = with maintainers; [ goibhniu ];
@@ -22276,18 +22307,12 @@ in modules // {
 
     propagatedBuildInputs = with self; [ zope_interface zope_exceptions zope_testing six ] ++ optional (!python.is_py3k or false) subunit;
 
-    # https://github.com/zopefoundation/zope.testrunner/issues/35
-    doCheck = !(isPy27 || isPy34);
-
     meta = {
       description = "A flexible test runner with layer support";
       homepage = http://pypi.python.org/pypi/zope.testrunner;
       license = licenses.zpt20;
       maintainers = with maintainers; [ goibhniu ];
     };
-
-    # Python 3.5 is not yet supported.
-    disabled = isPy35;
   };
 
 
@@ -22311,11 +22336,11 @@ in modules // {
 
 
   zope_interface = buildPythonPackage rec {
-    name = "zope.interface-4.1.1";
+    name = "zope.interface-4.1.3";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.interface/${name}.tar.gz";
-      md5 = "edcd5f719c5eb2e18894c4d06e29b6c6";
+      sha256 = "0ks8h73b2g4bkad821qbv0wzjppdrwys33i7ka45ik3wxjg1l8if";
     };
 
     propagatedBuildInputs = with self; [ zope_event ];
