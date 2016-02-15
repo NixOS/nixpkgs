@@ -7862,8 +7862,27 @@ in modules // {
     };
   };
 
+  django_compat = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
+    name = "django-compat-${version}";
+    version = "1.0.8";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/d/django-compat/${name}.tar.gz";
+      sha256 = "195dgr55vzpw1fbjvbw2h35k9bfhvm5zchh2p7nzbq57xmwb3sra";
+    };
+
+    buildInputs = [ (self.django_nose.override { inherit django; }) ];
+    propagatedBuildInputs = [ django self.six ];
+
+    meta = {
+      description = "Forward and backwards compatibility layer for Django 1.4, 1.7, 1.8, and 1.9";
+      homepage = https://github.com/arteria/django-compat;
+    };
+  }) {};
+
   django_evolution = buildPythonPackage rec {
     name = "django_evolution-0.7.5";
+    
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -7959,6 +7978,43 @@ in modules // {
       license = licenses.bsd2;
     };
   };
+
+  django_hijack = ({ django ? self.django }: buildPythonPackage rec {
+    name = "django-hijack-${version}";
+    version = "2.0.3";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/d/django-hijack/${name}.tar.gz";
+      sha256 = "1s2pnm2ynbs03m5m2asg06szkw634c56mcnp0jq29vgma49jdlyd";
+    };
+
+    propagatedBuildInputs = [ django (self.django_compat.override { inherit django; }) ];
+
+    meta = {
+      description = "Allows superusers to hijack (=login as) and work on behalf of another user";
+      homepage = https://github.com/arteria/django-hijack;
+    };
+  }) {};
+
+  django_nose = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
+    name = "django-nose-${version}";
+    version = "1.4.3";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/d/django-nose/${name}.tar.gz";
+      sha256 = "0rl9ipa98smprlw56xqlhzhps28p84wg0640qlyn0rjyrpsdmf0r";
+    };
+
+    # vast dependency list
+    doCheck = false;
+
+    propagatedBuildInputs = [ django self.nose ];
+
+    meta = {
+      description = "Provides all the goodness of nose in your Django tests";
+      homepage = https://github.com/django-nose/django-nose;
+    };
+  }) {};
 
   django_redis = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
     name = "django-redis-${version}";
