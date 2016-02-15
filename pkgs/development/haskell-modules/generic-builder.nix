@@ -36,6 +36,7 @@
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? []
 , testTarget ? ""
 , broken ? false
+, preCompileBuildDriver ? "", postCompileBuildDriver ? ""
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
 , preConfigure ? "", postConfigure ? ""
@@ -303,6 +304,8 @@ stdenv.mkDerivation ({
          ;
 
 }
+// optionalAttrs (preCompileBuildDriver != "")  { inherit preCompileBuildDriver; }
+// optionalAttrs (postCompileBuildDriver != "") { inherit postCompileBuildDriver; }
 // optionalAttrs (preUnpack != "")      { inherit preUnpack; }
 // optionalAttrs (postUnpack != "")     { inherit postUnpack; }
 // optionalAttrs (configureFlags != []) { inherit configureFlags; }
