@@ -10726,36 +10726,15 @@ let
   ubootChooser = name: ubootTools;
 
   # Upstream U-Boots:
-  ubootTools = callPackage ../misc/uboot {
-    toolsOnly = true;
-    targetPlatforms = lib.platforms.linux;
-    filesToInstall = ["tools/dumpimage" "tools/mkenvimage" "tools/mkimage"];
-  };
-
-  ubootJetsonTK1 = callPackage ../misc/uboot {
-    defconfig = "jetson-tk1_defconfig";
-    targetPlatforms = ["armv7l-linux"];
-    filesToInstall = ["u-boot" "u-boot.dtb" "u-boot-dtb-tegra.bin" "u-boot-nodtb-tegra.bin"];
-  };
-
-  ubootPcduino3Nano = callPackage ../misc/uboot {
-    defconfig = "Linksprite_pcDuino3_Nano_defconfig";
-    targetPlatforms = ["armv7l-linux"];
-    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
-  };
-
-  ubootRaspberryPi = callPackage ../misc/uboot {
-    defconfig = "rpi_defconfig";
-    targetPlatforms = ["armv6l-linux"];
-    filesToInstall = ["u-boot.bin"];
-  };
-
-  # Intended only for QEMU's vexpress-a9 emulation target!
-  ubootVersatileExpressCA9 = callPackage ../misc/uboot {
-    defconfig = "vexpress_ca9x4_defconfig";
-    targetPlatforms = ["armv7l-linux"];
-    filesToInstall = ["u-boot"];
-  };
+  inherit (callPackage ../misc/uboot {})
+    buildUBoot
+    ubootBananaPi
+    ubootJetsonTK1
+    ubootPcduino3Nano
+    ubootRaspberryPi
+    ubootVersatileExpressCA9
+    ubootWandboard
+    ;
 
   # Non-upstream U-Boots:
   ubootSheevaplug = callPackage ../misc/uboot/sheevaplug.nix { };
