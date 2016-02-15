@@ -1154,6 +1154,10 @@ let
     libmysql = mysql.lib;
   };
 
+  collectdMinimal = callPackage ../tools/system/collectd {
+    minimal = true;
+  };
+
   colormake = callPackage ../development/tools/build-managers/colormake { };
 
   cowsay = callPackage ../tools/misc/cowsay { };
