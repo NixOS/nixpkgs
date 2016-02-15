@@ -5644,6 +5644,8 @@ in
 
   racket = callPackage ../development/interpreters/racket { };
 
+  racerd = callPackage ../development/tools/racerd { };
+
   rakudo = callPackage ../development/interpreters/rakudo { };
 
   rascal = callPackage ../development/interpreters/rascal { };
