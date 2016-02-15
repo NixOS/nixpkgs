@@ -464,6 +464,17 @@ rec {
     m2File = "plexus-2.0.5.pom";
   };
 
+  surefireParent243 = fetchmaven {
+    version = "2.4.3";
+    name = "surefire-pom-2.4.3";
+    src = fetchurl rec {
+      url = "https://raw.githubusercontent.com/sonatype/plexus-pom/plexus-2.0.5/pom.xml";
+      sha256 = "4882f9y732q5nb7c39ysv6rs744hcmqz2s66nqcyn3ckxdn8y655";
+    };
+    m2Path = "org/apache/maven/surefire/surefire/2.4.3";
+    m2File = "surefire-2.4.3.pom";
+  };
+
   wagon10beta2 = fetchmaven {
     version = "1.0-beta2";
     name = "wagon";

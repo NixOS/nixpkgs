@@ -90,7 +90,7 @@ rec {
       rev = 1724719;
       sha256 = "1dv59q4i6rf7yd70zqzl5k0k9dd0rd7g4jimhaasvd5iz9jy2lpc";
     };
-    mavenDeps = [ bootstrapMavenRemoteResources13Jar apacheParent11 mavenParent22 mavenPluginTools32 ];
+    mavenDeps = [ bootstrapMavenClean25Jar bootstrapMavenEnforcer101Jar bootstrapMavenPlugin31Jar bootstrapMavenRemoteResources13Jar bootstrapMavenSite31Jar bootstrapModelloMaven141Jar apacheParent11 mavenParent22 mavenPluginTools32 mavenResources25 ];
     m2Path = "/org/apache/maven/plugins/maven-plugin-plugin/3.2";
   };
 }

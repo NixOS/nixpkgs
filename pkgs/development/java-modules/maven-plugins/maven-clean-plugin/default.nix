@@ -50,6 +50,17 @@ rec {
     m2Path = "/org/apache/maven/plugins/maven-clean-plugin/2.4";
   };
 
+  mavenClean241 = mavenCleanGen {
+    name = "maven-clean-plugin-2.4.1";
+    src = fetchsvn {
+      url = "https://svn.apache.org/repos/asf/maven/plugins/tags/maven-clean-plugin-2.4.1/";
+      rev = 1724719;
+      sha256 = "02hz8659nv9lma9vgrhzlbbg0qjvc52xqsqmhws2wyn089gi8k7y";
+    };
+    mavenDeps = [ bootstrapMavenClean241Jar bootstrapMavenEnforcer10Jar bootstrapMavenPlugin26Jar bootstrapMavenRemoteResources11Jar apacheParent9 mavenParent16 mavenPlugins18 mavenResources243 ];
+    m2Path = "/org/apache/maven/plugins/maven-clean-plugin/2.4.1";
+  };
+
   mavenClean25 = mavenCleanGen {
     name = "maven-clean-plugin-2.5";
     src = fetchsvn {

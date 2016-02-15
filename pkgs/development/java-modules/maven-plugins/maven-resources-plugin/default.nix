@@ -28,6 +28,28 @@ rec {
     m2Path = "/org/apache/maven/plugins/maven-resources-plugin/2.3";
   };
 
+  mavenResources243 = mavenResourcesGen {
+    name = "maven-resources-plugin-2.4.3";
+    src = fetchsvn {
+      url = "http://svn.apache.org/repos/asf/maven/plugins/tags/maven-resources-plugin-2.4.3/";
+      rev = 1723938;
+      sha256 = "0d3mz9gr3cppk6gjysiaq427bmjia34i9mkzk1wbf35imjgsil4a";
+    };
+    mavenDeps = [ bootstrapMavenClean241Jar bootstrapMavenEnforcer10Jar bootstrapMavenPlugin26Jar bootstrapMavenRemoteResources11Jar bootstrapMavenResources243Jar apacheParent9 mavenCompiler232 mavenParent16 mavenPlugins18 ];
+    m2Path = "/org/apache/maven/plugins/maven-resources-plugin/2.4.3";
+  };
+
+  mavenResources25 = mavenResourcesGen {
+    name = "maven-resources-plugin-2.5";
+    src = fetchsvn {
+      url = "http://svn.apache.org/repos/asf/maven/plugins/tags/maven-resources-plugin-2.5/";
+      rev = 1723938;
+      sha256 = "04rgy391qyzy4fqw9r3pbdqij3f3hygxa1sxxyz5jipvs7b14ndp";
+    };
+    mavenDeps = [ bootstrapMavenEnforcer10Jar bootstrapMavenPlugin27Jar bootstrapMavenRemoteResources11Jar apacheParent9 mavenClean241 mavenParent19 mavenPlugins19 ];
+    m2Path = "/org/apache/maven/plugins/maven-resources-plugin/2.5";
+  };
+
   mavenResources26 = mavenResourcesGen {
     name = "maven-resources-plugin-2.6";
     src = fetchsvn {

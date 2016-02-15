@@ -34,6 +34,17 @@ rec {
     m2File = "maven-plugin-plugin-2.6.jar";
   };
 
+  mavenPlugin27Jar = fetchmaven {
+    version = "2.7";
+    name = "bootstrap-maven-plugin-plugin-jar-2.7";
+    src = fetchurl rec {
+      url = "https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-plugin-plugin/2.7/maven-plugin-plugin-2.7.jar";
+      sha256 = "155cphfjyy82rwya30pb34klsq49gr91aakvivl0f9cg1rs25qvc";
+    };
+    m2Path = "/org/apache/maven/plugins/maven-plugin-plugin/2.7";
+    m2File = "maven-plugin-plugin-2.7.jar";
+  };
+
   mavenPlugin28Jar = fetchmaven {
     version = "2.8";
     name = "bootstrap-maven-plugin-plugin-jar-2.8";
@@ -43,5 +54,16 @@ rec {
     };
     m2Path = "/org/apache/maven/plugins/maven-plugin-plugin/2.8";
     m2File = "maven-plugin-plugin-2.8.jar";
+  };
+
+  mavenPlugin31Jar = fetchmaven {
+    version = "3.1";
+    name = "bootstrap-maven-plugin-plugin-jar-3.1";
+    src = fetchurl rec {
+      url = "https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-plugin-plugin/3.1/maven-plugin-plugin-3.1.jar";
+      sha256 = "131dyxh8f5l5ygflf6j1yr3wnzzjnkvlhil04a4k77ld5k0dycv6";
+    };
+    m2Path = "/org/apache/maven/plugins/maven-plugin-plugin/3.1";
+    m2File = "maven-plugin-plugin-3.1.jar";
   };
 }
