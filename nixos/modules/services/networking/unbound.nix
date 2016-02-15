@@ -16,6 +16,11 @@ let
     "forward-zone:\n  name: .\n" +
     concatMapStrings (x: "  forward-addr: ${x}\n") cfg.forwardAddresses;
 
+  rootTrustAnchorFile = "${stateDir}/root.key";
+
+  trustAnchor = optionalString cfg.enableRootTrustAnchor
+    "auto-trust-anchor-file: ${rootTrustAnchorFile}";
+
   confFile = pkgs.writeText "unbound.conf" ''
     server:
       directory: "${stateDir}"
@@ -24,6 +29,7 @@ let
       pidfile: ""
       ${interfaces}
       ${access}
+      ${trustAnchor}
     ${cfg.extraConfig}
     ${forward}
   '';
@@ -61,6 +67,12 @@ in
         description = "What servers to forward queries to.";
       };
 
+      enableRootTrustAnchor = mkOption {
+        default = true;
+        type = types.bool;
+        description = "Use and update root trust anchor for DNSSEC validation.";
+      };
+
       extraConfig = mkOption {
         default = "";
         type = types.str;
@@ -94,7 +106,8 @@ in
       preStart = ''
         mkdir -m 0755 -p ${stateDir}/dev/
         cp ${confFile} ${stateDir}/unbound.conf
-        chown unbound ${stateDir}
+        ${pkgs.unbound}/bin/unbound-anchor -a ${rootTrustAnchorFile}
+        chown unbound ${stateDir} ${rootTrustAnchorFile}
         touch ${stateDir}/dev/random
         ${pkgs.utillinux}/bin/mount --bind -n /dev/random ${stateDir}/dev/random
       '';
