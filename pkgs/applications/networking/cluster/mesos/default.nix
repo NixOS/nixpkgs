@@ -1,5 +1,5 @@
 { stdenv, lib, makeWrapper, fetchurl, curl, sasl, openssh, autoconf
-, automake114x, libtool, unzip, gnutar, jdk, maven, python, wrapPython
+, automake, libtool, unzip, gnutar, jdk, maven, python, wrapPython
 , setuptools, boto, pythonProtobuf, apr, subversion
 , leveldb, glog, perf, utillinux, libnl, iproute
 }:
@@ -9,14 +9,15 @@ let
   soext = if stdenv.system == "x86_64-darwin" then "dylib" else "so";
 
 in stdenv.mkDerivation rec {
-  version = "0.23.0";
+  version = "0.26.0";
   name = "mesos-${version}";
 
   dontDisableStatic = true;
+  enableParallelBuilding = true;
 
   src = fetchurl {
     url = "mirror://apache/mesos/${version}/${name}.tar.gz";
-    sha256 = "1v5xpn4wal4vcrvcklchx9slkpa8xlwqkdbnxzy9zkzpq5g3arxr";
+    sha256 = "0csvaql9gky15w23gmiw6cvlfnrlhfxvdqd2pv3j3grr44ph0ab5";
   };
 
   patches = [
@@ -25,7 +26,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    makeWrapper autoconf automake114x libtool curl sasl jdk maven
+    makeWrapper autoconf automake libtool curl sasl jdk maven
     python wrapPython boto setuptools leveldb
     subversion apr glog
   ] ++ lib.optionals stdenv.isLinux [
@@ -46,7 +47,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace src/cli/mesos-scp        \
       --replace "'scp " "'${openssh}/bin/scp "
 
-    substituteInPlace src/cli/python/mesos/cli.py \
+    substituteInPlace src/python/cli/src/mesos/cli.py \
       --replace "['mesos-resolve'" "['$out/bin/mesos-resolve'"
 
   '' + lib.optionalString (stdenv.isLinux) ''
@@ -57,13 +58,13 @@ in stdenv.mkDerivation rec {
     substituteInPlace src/linux/perf.cpp       \
       --replace '"perf ' '"${perf}/bin/perf '
 
-    substituteInPlace src/slave/containerizer/isolators/filesystem/shared.cpp \
+    substituteInPlace src/slave/containerizer/mesos/isolators/filesystem/shared.cpp \
       --replace '"mount ' '"${utillinux}/bin/mount ' \
 
-    substituteInPlace src/slave/containerizer/isolators/namespaces/pid.cpp \
+    substituteInPlace src/slave/containerizer/mesos/isolators/namespaces/pid.cpp \
       --replace '"mount ' '"${utillinux}/bin/mount ' \
 
-    substituteInPlace src/slave/containerizer/isolators/network/port_mapping.cpp \
+    substituteInPlace src/slave/containerizer/mesos/isolators/network/port_mapping.cpp \
       --replace '"tc ' '"${iproute}/bin/tc '   \
       --replace '"ip ' '"${iproute}/bin/ip '   \
       --replace '"mount ' '"${utillinux}/bin/mount ' \
@@ -105,6 +106,14 @@ in stdenv.mkDerivation rec {
       --install-lib=$out/lib/${python.libPrefix}/site-packages \
       --old-and-unmanageable \
       --prefix="$out"
+
+    pushd cli
+    ${python}/bin/${python.executable} setup.py install \
+      --install-lib=$out/lib/${python.libPrefix}/site-packages \
+      --old-and-unmanageable \
+      --prefix="$out"
+    popd
+
     rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
     popd
   '';
@@ -127,7 +136,7 @@ in stdenv.mkDerivation rec {
     # wrap the python programs
     for prog in mesos-cat mesos-ps mesos-scp mesos-tail; do
       wrapProgram "$out/bin/$prog" \
-        --prefix PYTHONPATH ":" "$out/libexec/mesos/python"
+        --prefix PYTHONPATH ":" "$out/lib/python2.7/site-packages"
       true
     done
   '';
