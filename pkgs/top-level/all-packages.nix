@@ -6062,7 +6062,9 @@ let
   };
 
 
-  ragel = callPackage ../development/tools/parsing/ragel { };
+  ragel = callPackage ../development/tools/parsing/ragel {
+    tex = texlive.combined.scheme-small;
+  };
 
   hammer = callPackage ../development/tools/parsing/hammer { };
 

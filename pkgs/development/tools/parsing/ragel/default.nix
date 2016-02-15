@@ -1,5 +1,4 @@
-{stdenv, fetchurl, transfig, texLiveAggregationFun, texLive, texLiveExtra
-, ghostscript, colm,  build-manual ? false
+{stdenv, fetchurl, transfig, tex , ghostscript, colm,  build-manual ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -11,8 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ns3kbcvhinn4rwm54ajg49d1la8filxskl3rgbwws0irzw507vs";
   };
 
-  buildInputs = stdenv.lib.optional build-manual [ transfig ghostscript
-    (texLiveAggregationFun { paths=[ texLive texLiveExtra ]; }) ];
+  buildInputs = stdenv.lib.optional build-manual [ transfig ghostscript tex ];
    
   preConfigure = stdenv.lib.optional build-manual ''
     sed -i "s/build_manual=no/build_manual=yes/g" DIST
