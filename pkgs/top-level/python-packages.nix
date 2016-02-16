@@ -3275,11 +3275,11 @@ in modules // {
 
 
   consul = buildPythonPackage (rec {
-    name = "python-consul-0.4.7";
+    name = "python-consul-0.6.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/python-consul/${name}.tar.gz";
-      sha256 = "1vb0hgl11n8krpk5n22bk90agm31004ipv4xnbcadzczj5xackg7";
+      sha256 = "0vfyr499sbc4nnhhijp2lznyj507nnak95bvv9w8y78ngxggskbh";
     };
 
     buildInputs = with self; [ requests2 six pytest ];
