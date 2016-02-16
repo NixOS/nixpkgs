@@ -40,7 +40,7 @@ in
     flyingcircus.enc = mkOption {
       default = null;
       type = types.nullOr types.attrs;
-      description = "Essential node configuration";
+      description = "Data from the external node classifier.";
     };
 
     flyingcircus.load_enc = mkOption {
