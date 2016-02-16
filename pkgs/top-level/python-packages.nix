@@ -177,6 +177,8 @@ in modules // {
 
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
+  pyxml = if !isPy3k then callPackage ../development/python-modules/pyxml{ } else throw "pyxml not supported for interpreter ${python.executable}";
+
   sip = callPackage ../development/python-modules/sip { };
 
   sip_4_16 = callPackage ../development/python-modules/sip/4.16.nix { };
