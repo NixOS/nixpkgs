@@ -1,0 +1,46 @@
+diff -ru orig/linux/makefile patched/linux/makefile
+--- orig/linux/makefile	2015-08-09 21:06:18.000000000 +0100
++++ patched/linux/makefile	2016-02-16 16:25:45.988662423 +0000
+@@ -25,8 +25,8 @@
+ CPP = g++
+ CPPFLAGS = -I.. -I../gwnum -O2 -march=i486 -malign-double
+ 
+-LFLAGS = -Wl,-M -Wl,-L/usr/local/lib
+-LIBS = ../gwnum/gwnum.a ../gwnum/gwnum.ld -lm -lpthread -Wl,-Bstatic -lcurl -Wl,-Bdynamic -lrt -lstdc++ -ldl
++LFLAGS =
++LIBS = ../gwnum/gwnum.a ../gwnum/gwnum.ld -lm -lpthread -lrt -lstdc++ -ldl
+ 
+ FACTOROBJ = factor32.o
+ LINUXOBJS = prime.o menu.o
+diff -ru orig/linux64/makefile patched/linux64/makefile
+--- orig/linux64/makefile	2015-08-09 21:06:20.000000000 +0100
++++ patched/linux64/makefile	2016-02-16 16:25:57.076531585 +0000
+@@ -13,13 +13,13 @@
+ #	LIBS = ../gwnum/gwnum.a ../gwnum/gwnum.ld -lm -lpthread -Wl,-Bstatic $(shell pkg-config --static --libs libcurl) -lstdc++ -Wl,-Bdynamic -ldl
+ 
+ CC = gcc
+-CFLAGS = -I.. -I../gwnum -I/usr/local/include -DX86_64 -O2 
++CFLAGS = -I.. -I../gwnum -I/usr/local/include -DX86_64 -O2
+ 
+ CPP = g++
+ CPPFLAGS = -I.. -I../gwnum -DX86_64 -O2
+ 
+-LFLAGS = -Wl,-M -Wl,-L/usr/local/lib
+-LIBS = ../gwnum/gwnum.a ../gwnum/gwnum.ld -lm -lpthread -Wl,-Bstatic -lcurl -Wl,-Bdynamic -lrt -lstdc++ -ldl
++LFLAGS =
++LIBS = ../gwnum/gwnum.a ../gwnum/gwnum.ld -lm -lpthread -lrt -lstdc++ -ldl
+ 
+ FACTOROBJ = factor64.o
+ LINUXOBJS = prime.o menu.o
+diff -ru orig/macosx64/makefile patched/macosx64/makefile
+--- orig/macosx64/makefile	2015-08-09 21:06:22.000000000 +0100
++++ patched/macosx64/makefile	2016-02-16 16:19:03.988415925 +0000
+@@ -10,7 +10,7 @@
+ CPPFLAGS = -I.. -I../gwnum -I../linux -O2 -DX86_64 -DCOMMAND_LINE_MPRIME -m64
+ 
+ LFLAGS = -m64 -Wl,-no_pie
+-LIBS   = ../gwnum/amd64/release/gwnum.a -lm -lpthread -lcurl -framework IOKit -framework CoreFoundation -lstdc++
++LIBS   = ../gwnum/amd64/release/gwnum.a -lm -lpthread -framework IOKit -framework CoreFoundation -lstdc++
+ 
+ FACTOROBJ = ../prime95/macosx64/factor64.o
+ OBJS = prime.o menu.o

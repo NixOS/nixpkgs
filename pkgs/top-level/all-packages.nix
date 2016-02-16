@@ -2305,6 +2305,8 @@ let
 
   mpage = callPackage ../tools/text/mpage { };
 
+  mprime = callPackage ../tools/misc/mprime { };
+
   mr = callPackage ../applications/version-management/mr { };
 
   mrtg = callPackage ../tools/misc/mrtg { };
