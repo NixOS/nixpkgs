@@ -6288,6 +6288,8 @@ let
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreServices;
   };
 
+  aws-sdk-cpp = callPackage ../development/libraries/aws-sdk-cpp { };
+
   babl = callPackage ../development/libraries/babl { };
 
   beecrypt = callPackage ../development/libraries/beecrypt { };
