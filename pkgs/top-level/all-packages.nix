@@ -10304,10 +10304,10 @@ let
   linux_grsec_stable_server_xen = throw "No longer supporteddue to https://grsecurity.net/announce.php. "
     + "Please use linux_grsec_testing_server_xen.";
 
-  # Testing kernels: outdated ATM
-  #linux_grsec_testing_desktop = grKernel grFlavors.linux_grsec_testing_desktop;
-  #linux_grsec_testing_server  = grKernel grFlavors.linux_grsec_testing_server;
-  #linux_grsec_testing_server_xen = grKernel grFlavors.linux_grsec_testing_server_xen;
+  # Testing kernels
+  linux_grsec_testing_desktop = grKernel grFlavors.linux_grsec_testing_desktop;
+  linux_grsec_testing_server  = grKernel grFlavors.linux_grsec_testing_server;
+  linux_grsec_testing_server_xen = grKernel grFlavors.linux_grsec_testing_server_xen;
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
@@ -10454,7 +10454,7 @@ let
   linuxPackages_grsec_stable_server     = grPackage grFlavors.linux_grsec_stable_server;
   linuxPackages_grsec_stable_server_xen = grPackage grFlavors.linux_grsec_stable_server_xen;
 
-  # Testing kernels: outdated ATM
+  # Testing kernels
   linuxPackages_grsec_testing_desktop = grPackage grFlavors.linux_grsec_testing_desktop;
   linuxPackages_grsec_testing_server  = grPackage grFlavors.linux_grsec_testing_server;
   linuxPackages_grsec_testing_server_xen = grPackage grFlavors.linux_grsec_testing_server_xen;
