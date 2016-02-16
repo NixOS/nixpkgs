@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames
+{ stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
 , toolset ? if stdenv.cc.isClang then "clang" else null
 , enableRelease ? true
 , enableDebug ? false
@@ -151,7 +151,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ expat zlib bzip2 ]
+  buildInputs = [ expat zlib bzip2 libiconv ]
     ++ stdenv.lib.optionals (! stdenv ? cross) [ python icu ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
