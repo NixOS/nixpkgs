@@ -6,56 +6,42 @@ let
 
   cfg = config.flyingcircus.services.sensu-server;
 
-  urls = [
-"www.google.com"
-"flyingcircus.io"
-"portal.staralliance.com"
-"karl.soros.org"
-];
-
-  http_checks = lib.concatStringsSep ",\n" (map (x: ''
-    "check_${x}": {
-      "notification": "${x} HTTP failed",
-      "command": "check_http ${x}",
-      "subscribers": ["default"],
-      "interval": 60,
-      "handlers": [],
-      "source": "${x}"
-    }
-'') urls);
+  enc_clients = if builtins.hasAttr "sensuserver" config.flyingcircus.enc_service_clients
+    then config.flyingcircus.enc_service_clients.sensuserver
+    else [];
 
   sensu_server_json = pkgs.writeText "sensu-server.json"
     ''
     {
-      "checks": {
-        ${http_checks}
-    },
-
-  "mailer": {
-    "mail_from": "admin@flyingcircus.io",
-    "mail_to": "admin@flyingcircus.io",
-    "smtp_address": "mail.gocept.net",
-    "smtp_port": "25",
-    "smtp_domain": "flyingcircus.io"
-  },
-
-   "handlers": {
-    "mailer": {
-      "type": "pipe",
-      "command": "${pkgs.sensu_plugins}/bin/handler-mailer.rb"
-    },
-    "default": {
-      "handlers": [
-        "mailer"
-      ],
-      "type": "set"
-    }
-  }
+      "mailer": {
+        "mail_from": "admin@flyingcircus.io",
+        "mail_to": "admin@flyingcircus.io",
+        "smtp_address": "mail.gocept.net",
+        "smtp_port": "25",
+        "smtp_domain": "flyingcircus.io"
+      },
+      "rabbitmq": {
+        "host": "${config.networking.hostName}.gocept.net",
+        "user": "sensu-server",
+        "password": "asdf1",
+        "vhost": "/sensu"
+      },
+      "handlers": {
+        "mailer": {
+          "type": "pipe",
+          "command": "${pkgs.sensu_plugins}/bin/handler-mailer.rb"
+        },
+        "default": {
+          "handlers": [
+            "mailer"
+          ],
+          "type": "set"
+        }
+      }
 
     ${cfg.config}
 
     }
-
     '';
 
 in {
@@ -92,11 +78,16 @@ in {
     # Dependencies
 
     services.rabbitmq.enable = true;
+    services.rabbitmq.listenAddress = "::";
     services.redis.enable = true;
     services.postfix.enable = true;
 
     ##############
     # Sensu Server
+
+    networking.firewall.extraCommands = ''
+    iptables -A INPUT -i ethsrv -p tcp --dport 5672 -j ACCEPT
+    '';
 
     users.extraGroups.sensuserver.gid = config.ids.gids.sensuserver;
 
@@ -106,9 +97,40 @@ in {
       group = "sensuserver";
     };
 
+    systemd.services.prepare-rabbitmq-for-sensu = {
+      description = "Prepare rabbitmq for sensu-server.";
+      requires = [ "rabbitmq.service" ];
+      path = [ pkgs.rabbitmq_server ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "rabbitmq";
+      };
+      script = let
+        clients = (lib.concatMapStrings (client: ''
+          rabbitmqctl add_user ${client.node} ${client.password} || true
+          rabbitmqctl change_password ${client.node} ${client.password}
+          rabbitmqctl set_permissions -p /sensu ${client.node} ".*" ".*" ".*"
+          '') enc_clients);
+      in
+       ''
+        set -ex
+        rabbitmqctl start_app
+        rabbitmqctl delete_user guest || true
+        rabbitmqctl add_vhost /sensu || true
+
+        rabbitmqctl add_user sensu-server asdf1 || true
+        rabbitmqctl change_password sensu-server asdf1
+        rabbitmqctl set_permissions -p /sensu sensu-server ".*" ".*" ".*"
+
+        ${clients}
+
+      '';
+    };
+
     systemd.services.sensu-server = {
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.sensu pkgs.sensu_plugins pkgs.openssl pkgs.bash pkgs.mailutils ];
+      requires = [ "prepare-rabbitmq-for-sensu.service" ];
       serviceConfig = {
         User = "sensuserver";
         ExecStart = "${pkgs.sensu}/bin/sensu-server -v -c ${sensu_server_json}";

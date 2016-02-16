@@ -39,6 +39,7 @@ in
     ./user.nix
     ./network.nix
     ./ssl/certificate.nix
+    ./sensu-client.nix
   ];
 
   options = {

@@ -5,19 +5,22 @@ with lib;
 
 let
 
-  sensu = pkgs.callPackage ../pkgs/sensu { };
-  sensu_plugins = pkgs.callPackage ../pkgs/sensu-plugins { };
-
   cfg = config.flyingcircus.services.sensu-client;
 
   client_json = writeText "client.json" ''
     {
       "client": {
         "name": "${config.networking.hostName}",
-        "address": "localhost",
+        "address": "${config.networking.hostName}.gocept.net",
         "subscriptions": ["default"]
       },
-     "checks": {
+      "rabbitmq": {
+        "host": "${cfg.server}",
+        "user": "${config.networking.hostName}.gocept.net",
+        "password": "${cfg.password}",
+        "vhost": "/sensu"
+      },
+      "checks": {
         "load": {
             "notification": "Load is too high",
             "command": "check_load -r -w 0.8,0.8,0.8 -c 2,2,2",
@@ -83,6 +86,18 @@ in {
           Enable the Sensu monitoring client daemon.
         '';
       };
+      server = mkOption {
+        type = types.str;
+        description = ''
+          The address of the server (RabbitMQ) to connect to.
+        '';
+      };
+      password = mkOption {
+        type = types.str;
+        description = ''
+          The password to connect with to server (RabbitMQ).
+        '';
+      };
       config = mkOption {
         type = types.lines;
         description = ''
@@ -114,7 +129,7 @@ in {
 
     systemd.services.sensu-client = {
       wantedBy = [ "multi-user.target" ];
-      path = [ sensu sensu_plugins pkgs.nagiosPluginsOfficial pkgs.bash pkgs.lm_sensors ];
+      path = [ pkgs.sensu pkgs.sensu_plugins pkgs.nagiosPluginsOfficial pkgs.bash pkgs.lm_sensors ];
       serviceConfig = {
         User = "sensuclient";
         ExecStart = "${sensu}/bin/sensu-client -c ${client_json} -v";
