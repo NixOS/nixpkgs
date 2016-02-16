@@ -6,6 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/xclip/code/trunk";
+    rev = 85;
     sha256 = "0d6r38xas5l79l700sdm14l41vvjqhah613367ha8kcvx54zkddz";
   };
 
