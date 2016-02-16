@@ -14,15 +14,6 @@ in
   options = {
 
     i18n.inputMethod.fcitx = {
-      enable = mkOption {
-        type    = types.bool;
-        default = false;
-        example = true;
-        description = ''
-          Enable Fcitx input method.
-          Fcitx can be used to input of Chinese, Korean, Japanese and other special characters.
-        '';
-      };
       engines = mkOption {
         type    = with types; listOf fcitxEngine;
         default = [];
@@ -36,7 +27,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (config.i18n.inputMethod.enabled == "fcitx") {
     environment.systemPackages = [ fcitxPackage ];
     gtkPlugins = [ fcitxPackage ];
     qtPlugins  = [ fcitxPackage ];

@@ -43,6 +43,7 @@
   ./hardware/video/nvidia.nix
   ./hardware/video/ati.nix
   ./hardware/video/webcam/facetimehd.nix
+  ./i18n/inputMethod/default.nix
   ./i18n/inputMethod/fcitx.nix
   ./i18n/inputMethod/ibus.nix
   ./i18n/inputMethod/nabi.nix

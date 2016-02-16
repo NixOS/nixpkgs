@@ -1,28 +1,8 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
-let 
-  cfg = config.i18n.inputMethod.nabi;
-in
 {
-  options = {
-
-    i18n.inputMethod.nabi = {
-      enable = mkOption {
-        type    = types.bool;
-        default = false;
-        example = true;
-        description = ''
-          Enable nabi input method.
-          Nabi can be used to input Korean.
-        '';
-      };
-    };
-
-  };
-{
-  config = mkIf cfg.enable {
+  config = mkIf (config.i18n.inputMethod.enabled == "nabi") {
     environment.systemPackages = [ pkgs.nabi ];
     qtPlugins  = [ pkgs.nabi ];
 

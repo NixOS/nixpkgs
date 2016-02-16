@@ -13,15 +13,6 @@ in
 {
   options = {
     i18n.inputMethod.ibus = {
-      enable = mkOption {
-        type    = types.bool;
-        default = false;
-        example = true;
-        description = ''
-          Enable IBus input method.
-          IBus can be used input of Chinese, Korean, Japanese and other special characters.
-        '';
-      };
       engines = mkOption {
         type    = with types; listOf ibusEngine;
         default = [];
@@ -34,7 +25,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (config.i18n.inputMethod.enabled == "ibus") {
     # Without dconf enabled it is impossible to use IBus
     environment.systemPackages = [ ibusPackage pkgs.gnome3.dconf ];
 
