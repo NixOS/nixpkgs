@@ -249,6 +249,7 @@
       rspamd = 225;
       rmilter = 226;
       cfdyndns = 227;
+      gammu-smsd = 228;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
