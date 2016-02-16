@@ -44,6 +44,7 @@ nixos.path = ./nixpkgs-unstable-2015-12-06/nixos;
     <listitem><para><literal>services/networking/pdnsd.nix</literal></para></listitem>
     <listitem><para><literal>services/web-apps/pump.io.nix</literal></para></listitem>
     <listitem><para><literal>services/security/haka.nix</literal></para></listitem>
+    <listitem><para><literal>i18n/inputMethod/default.nix</literal></para></listitem>
   </itemizedlist>
 </para>
 
@@ -197,6 +198,32 @@ fileSystems."/example" = {
     <literal>services.hardware.opengl.extraPackages{,32}</literal> instead. You can
     also specify VDPAU drivers there.</para>
   </listitem>
+
+  <listitem>
+    <para>
+    <literal>programs.ibus</literal> moved to <literal>i18n.inputMethod.ibus</literal>.
+    The option <literal>programs.ibus.plugins</literal> changed to <literal>i18n.inputMethod.ibus.engines</literal>
+    and the option to enable ibus changed from <literal>programs.ibus.enable</literal> to
+    <literal>i18n.inputMethod.enabled</literal>.
+    <literal>i18n.inputMethod.enabled</literal> should be set to the used input method name,
+    <literal>"ibus"</literal> for ibus.
+    An example of the new style:
+
+<programlisting>
+i18n.inputMethod.enabled = "ibus";
+i18n.inputMethod.ibus.engines = with pkgs.ibus-engines; [ anthy mozc ];
+</programlisting>
+
+That is equivalent to the old version:
+
+<programlisting>
+programs.ibus.enable = true;
+programs.ibus.plugins = with pkgs; [ ibus-anthy mozc ];
+</programlisting>
+
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 
@@ -213,6 +240,12 @@ fileSystems."/example" = {
   <listitem>
     <para><literal>ejabberd</literal> module is brought back and now works on
     NixOS.</para>
+  </listitem>
+
+  <listitem>
+    <para>Input method support was improved. New NixOS modules (fcitx, nabi and uim),
+    fcitx engines (chewing, hangul, m17n, mozc and table-other) and ibus engines (hangul and m17n)
+    have been added.</para>
   </listitem>
 
 </itemizedlist></para>
