@@ -95,7 +95,8 @@ def build_channel():
             'https://hydra.flyingcircus.io/channels/branches/{} nixos'.format(
                 enc['parameters']['environment']))
         os.system('nix-channel --update')
-        os.system('nixos-rebuild --no-build-output switch')
+        os.system('nixos-rebuild --no-build-output switch {}'.format(
+                  ' '.join(buildOptions)))
     except Exception:
         logging.exception('Error switching channel ')
 
@@ -107,11 +108,16 @@ def build_dev():
             'nix-channel --remove nixos')
     except Exception:
         logging.exception('Error removing channel ')
-    os.system('nixos-rebuild -I nixpkgs=/root/nixpkgs switch')
+    os.system('nixos-rebuild -I nixpkgs=/root/nixpkgs switch {}'.format(
+              ' '.join(buildOptions)))
 
 
 logging.basicConfig()
 
+buildOptions = []
+
+if '--show-trace' in sys.argv:
+    buildOptions.append('--show-trace')
 
 if '--directory' in sys.argv:
     load_enc()
