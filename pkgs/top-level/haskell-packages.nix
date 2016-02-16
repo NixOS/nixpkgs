@@ -55,8 +55,7 @@ rec {
       inherit (bootPkgs) alex happy;
     };
 
-    ghcjs = packages.ghc7103.callPackage ../development/compilers/ghcjs {
-    ghcjs = packages.ghc7102.callPackage ../development/compilers/ghcjs rec {
+    ghcjs = callPackage ../development/compilers/ghcjs {
       bootPkgs = packages.lts-3_6;
     };
 
