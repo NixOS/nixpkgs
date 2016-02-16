@@ -3801,6 +3801,8 @@ let
 
   yank = callPackage ../tools/misc/yank { };
 
+  yaml-merge = callPackage ../tools/text/yaml-merge { };
+
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
 
