@@ -6,8 +6,8 @@ let
     sha256 = "ea8033fc9905804e652f75474d33410a07404c1a78dd3c949a66863bd1050ebd";
   };
   setuptools_source = fetchurl {
-    url = "https://pypi.python.org/packages/3.5/s/setuptools/setuptools-19.4-py2.py3-none-any.whl";
-    sha256 = "0801e6d862ca4ce24d918420d62f07ee2fe736dc016e3afa99d2103e7a02e9a6";
+    url = "https://pypi.python.org/packages/3.5/s/setuptools/setuptools-20.0-py2.py3-none-any.whl";
+    sha256 = "4c15b00b76fbb296d7fdee314f21e339fc5f9b913264ce07a9ab2445a3d594a7";
   };
 in stdenv.mkDerivation rec {
   name = "python-${python.version}-bootstrapped-pip-${version}";
