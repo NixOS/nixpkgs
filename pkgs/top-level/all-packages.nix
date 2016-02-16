@@ -6009,6 +6009,8 @@ let
 
   audiofile = callPackage ../development/libraries/audiofile { };
 
+  aws-sdk-cpp = callPackage ../development/libraries/aws-sdk-cpp { };
+
   babl = callPackage ../development/libraries/babl { };
 
   beecrypt = callPackage ../development/libraries/beecrypt { };
