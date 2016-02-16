@@ -342,6 +342,7 @@
   ./services/networking/openntpd.nix
   ./services/networking/openvpn.nix
   ./services/networking/ostinato.nix
+  ./services/networking/pdnsd.nix
   ./services/networking/polipo.nix
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
