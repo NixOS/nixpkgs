@@ -22,6 +22,12 @@ let
     get_json cfg.enc_path
     (get_json /etc/nixos/enc.json {});
 
+  enc_services =
+    get_json cfg.enc_services_path {};
+
+  enc_service_clients =
+    get_json cfg.enc_service_clients_path {};
+
   system_state =
     get_json cfg.system_state_path {};
 
@@ -68,6 +74,30 @@ in
       description = "Where to find the system state json file.";
     };
 
+    flyingcircus.enc_services = mkOption {
+      default = {};
+      type = types.attrs;
+      description = "Services in the environment as provided by the ENC.";
+    };
+
+    flyingcircus.enc_services_path = mkOption {
+      default = /etc/nixos/services.json;
+      type = types.path;
+      description = "Where to find the ENC services json file.";
+    };
+
+    flyingcircus.enc_service_clients = mkOption {
+      default = {};
+      type = types.attrs;
+      description = "Service clients in the environment as provided by the ENC.";
+    };
+
+    flyingcircus.enc_service_clients_path = mkOption {
+      default = /etc/nixos/service_clients.json;
+      type = types.path;
+      description = "Where to find the ENC service clients json file.";
+    };
+
   };
 
   config = {
@@ -83,6 +113,8 @@ in
     ];
 
     flyingcircus.enc = lib.optionalAttrs cfg.load_enc enc;
+    flyingcircus.enc_services = enc_services;
+    flyingcircus.enc_service_clients = enc_service_clients;
     flyingcircus.system_state = system_state;
 
     users.motd = ''
