@@ -14944,6 +14944,10 @@ in modules // {
   python3pika = buildPythonPackage {
     name = "python3-pika-0.9.14";
     disabled = !isPy3k;
+
+    # Unit tests adds dependencies on pyev, tornado and twisted (and twisted is disabled for Python 3)
+    doCheck = false;
+
     src = pkgs.fetchurl {
       url = https://pypi.python.org/packages/source/p/python3-pika/python3-pika-0.9.14.tar.gz;
       md5 = "f3a3ee58afe0ae06f1fa553710e1aa28";
