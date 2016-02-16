@@ -1,21 +1,31 @@
-{ stdenv, fetchdarcs, ocaml, findlib, cryptokit, yojson, lmdb, zlib }:
+{ stdenv, fetchdarcs, rustUnstable, openssl, libssh }:
 
-stdenv.mkDerivation rec {
+with rustUnstable;
+
+buildRustPackage rec {
   name = "pijul-${version}";
-  version = "0.1";
+  version = "0.2-6ab9ba";
 
   src = fetchdarcs {
     url = "http://pijul.org/";
-    rev = version;
-    sha256 = "0r189xx900w4smq6nyy1wnrjf9sgqrqw5as0l7k6gq0ra36szzff";
+    context = ./pijul.org.context;
+    sha256 = "1cgkcr5wdkwj7s0rda90bfchbwmchgi60w5d637894w20hkplsr4";
   };
 
-  buildInputs = [ ocaml findlib cryptokit yojson lmdb zlib ];
+  sourceRoot = "fetchdarcs/pijul";
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp pijul $out/bin/
+  depsSha256 = "110bj2lava1xs75z6k34aip7zb7rcmnxk5hmiyi32i9hs0ddsdrz";
+
+  cargoUpdateHook = ''
+    cp -r ../libpijul src/
   '';
+
+  setSourceRoot = ''
+    chmod -R u+w "$sourceRoot"
+    cp -r "$sourceRoot"/../libpijul "$sourceRoot"/src/
+  '';
+
+  buildInputs = [ openssl libssh ];
 
   meta = with stdenv.lib; {
     homepage = https://pijul.org/;
