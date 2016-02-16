@@ -57,7 +57,7 @@ rec {
 
     ghcjs = packages.ghc7103.callPackage ../development/compilers/ghcjs {
     ghcjs = packages.ghc7102.callPackage ../development/compilers/ghcjs rec {
-      bootPkgs = packages.ghc7102;
+      bootPkgs = packages.lts-3_6;
     };
 
     jhc = callPackage ../development/compilers/jhc {

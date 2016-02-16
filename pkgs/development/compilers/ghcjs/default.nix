@@ -1,126 +1,194 @@
-{ mkDerivation
-, test-framework
-, test-framework-hunit
-, test-framework-quickcheck2
-, data-default
-, ghc-paths
-, haskell-src-exts
-, haskell-src-meta
-, optparse-applicative
-, system-fileio
-, system-filepath
-, text-binary
-, unordered-containers
-, cabal-install
-, wl-pprint-text
-, base16-bytestring
-, executable-path
-, transformers-compat
-, haddock-api
-, ghcjs-prim
-, regex-posix
+{ stdenv, lib, fetchFromGitHub, runCommand, buildEnv, makeWrapper
+, writeText
 
-, bootPkgs, gmp
-, jailbreak-cabal
-
-, nodejs, stdenv, filepath, HTTP, HUnit, mtl, network, QuickCheck, random, stm
-, time
-, zlib, aeson, attoparsec, bzlib, hashable
-, lens
-, parallel, safe, shelly, split, stringsearch, syb
-, tar, terminfo
-, vector, yaml, fetchgit, fetchFromGitHub, Cabal
-, alex, happy, git, gnumake, autoconf, patch
-, automake, libtool
-, cryptohash
-, haddock, hspec, xhtml, primitive, cacert, pkgs
-, coreutils
-, libiconv
-
-, ghcjsBoot ? import ./ghcjs-boot.nix { inherit fetchgit; }
-, shims ? import ./shims.nix { inherit fetchFromGitHub; }
+, bootPkgs, haskellPackages, haskell
+, nodejs
 }:
-let
-  inherit (bootPkgs) ghc;
-  version = "0.2.0";
 
-in mkDerivation (rec {
-  pname = "ghcjs";
-  inherit version;
+with haskell.lib;
+rec {
+  dynamicCabal2nix = dir: runCommand "dynamic-cabal2nix" {
+    nativeBuildInputs = [ haskellPackages.cabal2nix ];
+  } "cabal2nix ${dir} > $out";
+
   src = fetchFromGitHub {
-    owner = "ghcjs";
+    owner = "forked-upstream-packages-for-ghcjs";
     repo = "ghcjs";
-    rev = "561365ba1667053b5dc5846e2a8edb33eaa3f6dd";
-    sha256 = "1vfa7j0ql3sng29m944iznjw9hcmyl57nfkgxa33dvi2ival8dl2";
-  };
-  isLibrary = true;
-  isExecutable = true;
-  jailbreak = true;
-  doHaddock = false;
-  doCheck = false;
-  buildDepends = [
-    filepath HTTP mtl network random stm time zlib aeson attoparsec
-    bzlib data-default ghc-paths hashable haskell-src-exts haskell-src-meta
-    lens optparse-applicative parallel safe shelly split
-    stringsearch syb system-fileio system-filepath tar terminfo text-binary
-    unordered-containers vector wl-pprint-text yaml
-    alex happy git gnumake autoconf automake libtool patch gmp
-    base16-bytestring cryptohash executable-path haddock-api
-    transformers-compat QuickCheck haddock hspec xhtml
-    ghcjs-prim regex-posix libiconv
-  ];
-  buildTools = [ nodejs git ];
-  testDepends = [
-    HUnit test-framework test-framework-hunit
-  ];
-  patches = [ ./ghcjs.patch ];
-  postPatch = ''
-    substituteInPlace Setup.hs \
-      --replace "/usr/bin/env" "${coreutils}/bin/env"
 
-    substituteInPlace src/Compiler/Info.hs \
-      --replace "@PREFIX@" "$out"          \
-      --replace "@VERSION@" "${version}"
+    #rev = "4ebfa7cae3d96732b55a4bf8c5ab8e3aec148869";
+    #sha256 = "1qrmhz2q81639brks8v17673inxw2xihaz8m4xk9k1y3n6kgw7zh";
 
-    substituteInPlace src-bin/Boot.hs \
-      --replace "@PREFIX@" "$out"     \
-      --replace "@CC@"     "${stdenv.cc}/bin/cc"
-  '';
-  preBuild = ''
-    local topDir=$out/lib/ghcjs-${version}
-    mkdir -p $topDir
+    #rev = "c883be65b0f0441135ea1d244c342c8634b79ed6";
+    #sha256 = "1spbrdhnhlr0l13a3hixbbaxicz96yw655vv6kbfnqqljssilv4z";
 
-    cp -r ${ghcjsBoot} $topDir/ghcjs-boot
-    chmod -R u+w $topDir/ghcjs-boot
-
-    cp -r ${shims} $topDir/shims
-    chmod -R u+w $topDir/shims
-
-    # Make the patches be relative their corresponding package's directory.
-    # See: https://github.com/ghcjs/ghcjs-boot/pull/12
-    for patch in "$topDir/ghcjs-boot/patches/"*.patch; do
-      echo "fixing patch: $patch"
-      sed -i -e 's@ \(a\|b\)/boot/[^/]\+@ \1@g' $patch
-    done
-  '';
-  postInstall = ''
-    PATH=$out/bin:$PATH LD_LIBRARY_PATH=${gmp}/lib:${stdenv.cc}/lib64:$LD_LIBRARY_PATH \
-      env -u GHC_PACKAGE_PATH $out/bin/ghcjs-boot \
-        --dev \
-        --with-cabal ${cabal-install}/bin/cabal \
-        --with-gmp-includes ${gmp}/include \
-        --with-gmp-libraries ${gmp}/lib
-  '';
-  passthru = {
-    inherit bootPkgs;
-    isCross = true;
-    isGhcjs = true;
-    inherit nodejs;
+    rev = "ec48bbdd600d8f39dc26961b4b18c75d80c05625";
+    sha256 = "0d5s96h0qx08rdg15y9zq61rs4x8s2g3d0x4bpldnabnrvilhywk";
   };
 
-  homepage = "https://github.com/ghcjs/ghcjs";
-  description = "A Haskell to JavaScript compiler that uses the GHC API";
-  license = stdenv.lib.licenses.bsd3;
-  platforms = ghc.meta.platforms;
-  maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan ];
-})
+  ghcFork = fetchFromGitHub {
+    owner = "forked-upstream-packages-for-ghcjs";
+    repo = "ghc";
+    rev = "08987969fb59453b54fdaea4e8fbf4cd1260f993";
+    sha256 = "1ch7sg1j9276fxfv6nx5b6fqvv742z6npn0ziryg3l0rxa0m65y4";
+  };
+
+  stage0Pkgs = bootPkgs.override {
+    overrides = self: super: {
+      ghcjs = overrideCabal (self.callPackage (dynamicCabal2nix "${src}/ghcjs") {}) (drv: {
+        doCheck   = false;
+        doHaddock = false;
+      });
+      ghcjs-prim = self.callPackage ./ghcjs-prim.nix {
+        src = "${src}/ghcjs-prim";
+      }; # cannot autogenerate for now
+      genprimopcode = addBuildTools
+        (self.callPackage (dynamicCabal2nix "${ghcFork}/utils/genprimopcode") {})
+        (with self; [ alex happy ]);
+    };
+  };
+
+  stage1Pkgs = bootPkgs.override {
+    ghc = let
+      ghc                = stage0Pkgs.ghc;
+      ghcLibDir          = "${ghc}/lib/ghc-${ghc.version}";
+      ghcPackageCfgDir   = "${ghcLibDir}/package.conf.d";
+
+      ghcjs              = stage0Pkgs.ghcjs;
+      ghcjsLibDir        = "$out/lib/ghcjs-${ghcjs.version}";
+      ghcjsPackageCfgDir = "${ghcjsLibDir}/package.conf.d";
+    in buildEnv {
+      inherit (ghcjs) name;
+      paths = [];
+      postBuild = ''
+        # Wrap Exectutables
+        . ${makeWrapper}/nix-support/setup-hook
+
+        for prg in ghcjs ghcjsi ghcjs-${ghcjs.version} ghcjsi-${ghcjs.version}; do
+          if [[ -x "${ghcjs}/bin/$prg" ]]; then
+            rm -f $out/bin/$prg
+            makeWrapper ${ghcjs}/bin/$prg $out/bin/$prg \
+              --add-flags "-B${ghcjsLibDir}"
+          fi
+        done
+
+        for prg in runghcjs; do
+          if [[ -x "${ghcjs}/bin/$prg" ]]; then
+            rm -f $out/bin/$prg
+            makeWrapper ${ghcjs}/bin/$prg $out/bin/$prg \
+              --add-flags "-f $out/bin/ghcjs"
+          fi
+        done
+
+        for prg in ghcjs-pkg ghcjs-pkg-${ghcjs.version}; do
+          if [[ -x "${ghcjs}/bin/$prg" ]]; then
+            rm -f $out/bin/$prg
+            makeWrapper ${ghcjs}/bin/$prg $out/bin/$prg --add-flags \
+              "--global-package-db=${ghcjsPackageCfgDir}"
+          fi
+        done
+
+        mkdir -p ${ghcjsLibDir}
+        mkdir -p ${ghcjsPackageCfgDir}
+
+        # Install dummy RTS
+        cp ${ghcPackageCfgDir}/builtin_rts.conf ${ghcjsPackageCfgDir}/
+        sed -E -i ${ghcjsPackageCfgDir}/builtin_rts.conf \
+          -e "s_^(library-dirs:).*_\1 ${ghcjsPackageCfgDir}/include_" \
+          -e "s_^(library-dirs:).*_\1 ${ghcjsPackageCfgDir}/lib_"
+
+        # Install dummy configuration
+        cp ${ghcLibDir}/settings ${ghcjsLibDir}/
+        cp ${ghcLibDir}/platformConstants ${ghcjsLibDir}/
+
+        # Install dummy configuration
+        cp -r ${ghcFork}/data/include/ ${ghcjsLibDir}
+
+        # Install unlit
+        cp ${ghcLibDir}/unlit ${ghcjsLibDir}/
+
+        # Create empty object file for "src/Gen2/DynamicLinking.hs"
+        ${ghc}/bin/ghc -c ${writeText "empty.c" ""} -o ${ghcjsLibDir}/empty.o
+
+        # Finalize package DB
+        $out/bin/ghcjs-pkg recache
+        $out/bin/ghcjs-pkg check
+
+        touch ${ghcjsLibDir}/ghcjs_boot.completed
+      '';
+      passthru = {
+        preferLocalBuild = true;
+        inherit (ghcjs) version meta;
+        bootPkgs = stage0Pkgs;
+        isCross = true;
+        isGhcjs = true;
+        inherit nodejs;
+      };
+    };
+    overrides = self: super: {
+      inherit (self.ghc.bootPkgs) hscolour alex happy jailbreak-cabal genprimopcode;
+
+      # Disable haddock everywhere
+      mkDerivation = drv: super.mkDerivation ({ doHaddock = false; } // drv);
+
+      # Libraries from ghc repo
+      base = overrideCabal (self.callPackage (dynamicCabal2nix "${ghcFork}/libraries/base") {}) (drv: {
+        extraSetupCompileFlags = [ "-Dghcjs_HOST_OS" ];
+        configureFlags = [ "-v3" "--extra-include-dirs=${ghcFork}/data/include/" ];
+      });
+      ghc-prim = overrideCabal (self.callPackage (dynamicCabal2nix "${ghcFork}/libraries/ghc-prim") {}) (drv: {
+        buildTools = (drv.buildTools or []) ++ (with stage0Pkgs; [ genprimopcode ]);
+        preConfigure = ''
+          cpp -P -I${ghcFork}/data/js/ ${ghcFork}/data/primops.txt.pp primops.txt
+        '';
+
+        # TODO: GRRRR we run afoul of special casing in ghc
+        #       Hacking exposed modules instead
+        #configureFlags = (drv.configureFlags or []) ++ [ "--flags=include-ghc-prim" ];
+        postInstall = ''
+          ghcjs-pkg --package-db=$packageConfDir describe ghc-prim \
+            | sed '/GHC\.PrimopWrappers/ s/$/ GHC.Prim/' \
+            | ghcjs-pkg --package-db=$packageConfDir update -
+        '';
+      });
+      integer-gmp = self.callPackage (dynamicCabal2nix "${ghcFork}/libraries/integer-gmp") {};
+      integer-simple = self.callPackage (dynamicCabal2nix "${ghcFork}/libraries/integer-simple") {};
+      template-haskell = self.callPackage (dynamicCabal2nix "${ghcFork}/libraries/template-haskell") {};
+
+      # Other "core" libraries
+      array = self.array_0_5_1_0;
+      binary = overrideCabal self.binary_0_7_6_1 (drv: {
+        version = "0.7.5.0";
+        sha256 = "06gg61srfva7rvzf4s63c068s838i5jf33d6cnjb9769gjmca2a7";
+      });
+      bytestring = overrideCabal self.bytestring_0_10_6_0 (drv: {
+        # Missing import of GHC.Integer
+        prePatch = ''
+          sed -i Data/ByteString/Builder/ASCII.hs \
+            -e '/import *GHC.Types/a import GHC.Integer'
+        '';
+      });
+      containers = overrideCabal self.containers_0_5_7_1 (drv: {
+        version = "0.5.6.2";
+        sha256 = "1r9dipm2bw1dvdjyb2s1j9qmqy8xzbldgiz7a885fz0p1ygy9bdi";
+      });
+      deepseq = overrideCabal self.deepseq_1_4_1_2 (drv: {
+        version = "1.4.1.1";
+        sha256 = "1gxk6bdqfplvq0lma2sjcxl8ibix5k60g71dncpvwsmc63mmi0ch";
+      });
+      pretty = overrideCabal self.pretty_1_1_3_2 (drv: {
+        version = "1.1.2.0";
+        sha256 = "043kcl2wjip51al5kx3r9qgazq5w002q520wdgdlv2c9xr74fabw";
+      });
+      transformers = overrideCabal self.transformers_0_4_3_0 (drv: {
+        version = "0.4.2.0";
+        sha256 = "0a364zfcm17mhpy0c4ms2j88sys4yvgd6071qsgk93la2wjm8mkr";
+        editedCabalFile = "1q7y5mh3bxrnxinkvgwyssgrbbl4pp183ncww8dwzgsplf0zav0n";
+      });
+
+      # GHCJS libraries
+      ghcjs-prim = self.callPackage ./ghcjs-prim.nix {
+        src = "${src}/ghcjs-prim";
+      }; # cannot autogenerate for now
+    };
+  };
+}
