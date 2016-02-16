@@ -45,6 +45,7 @@
   ./hardware/video/webcam/facetimehd.nix
   ./i18n/inputMethod/fcitx.nix
   ./i18n/inputMethod/ibus.nix
+  ./i18n/inputMethod/uim.nix
   ./installer/tools/auto-upgrade.nix
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix
