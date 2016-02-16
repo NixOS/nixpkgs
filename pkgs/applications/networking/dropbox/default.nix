@@ -19,11 +19,11 @@
 
 let
   # NOTE: When updating, please also update in current stable, as older versions stop working
-  version = "3.12.6";
+  version = "3.14.5";
   sha256 =
     {
-      "x86_64-linux" = "16d0g9bygvaixv4r42p72z6a6wqhkf5qzb058lijih93zjr8zjlj";
-      "i686-linux" = "1pgqz6axzzyaahql01g0l80an39hd9j4dnq0vfavwvb2qkb27dph";
+      "x86_64-linux" = "02yjc910j3m61yd19akfv5yxh0a06cqwx2rxb2xhdbf1cb6c2wdg";
+      "i686-linux" = "0aqni6gsnbmshczxwn10qbp43qqnprxr18spx7dc9cz9cq27rgrv";
     }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   arch =
@@ -44,7 +44,7 @@ let
   ldpath = stdenv.lib.makeSearchPath "lib"
     [
       dbus_libs gcc glib libdrm libffi libICE libSM libX11
-      libXmu ncurses popt qt5.base qt5.declarative qt5.webkit
+      libXmu ncurses popt qt5.qtbase qt5.qtdeclarative qt5.qtwebkit
       zlib
     ];
 
