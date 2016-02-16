@@ -119,6 +119,7 @@ in
         python27Packages.virtualenv
         vim
         zlib
+        psmisc
         fcagent
         zsh
     ];
