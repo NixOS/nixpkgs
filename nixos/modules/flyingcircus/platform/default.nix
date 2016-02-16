@@ -61,7 +61,6 @@ in
       description = "Where to find the ENC json file.";
     };
 
-
     flyingcircus.system_state = mkOption {
       default = {};
       type = types.attrs;
