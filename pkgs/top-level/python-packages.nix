@@ -9535,14 +9535,14 @@ in modules // {
   };
 
   gunicorn = buildPythonPackage rec {
-    name = "gunicorn-19.1.0";
+    name = "gunicorn-19.4.5";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/g/gunicorn/${name}.tar.gz";
-      md5 = "3d759bec3c46a680ff010775258c4c56";
+      sha256 = "03gfl4iany6aqhcyr46jyjnj9dsl385mi37i59rrvmsafr281dak";
     };
 
-    buildInputs = with self; [ pytest ];
+    buildInputs = with self; [ pytest pytestcov ];
 
     meta = {
       homepage = http://pypi.python.org/pypi/gunicorn;
