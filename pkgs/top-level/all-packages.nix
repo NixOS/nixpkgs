@@ -3151,6 +3151,8 @@ let
 
   simplescreenrecorder = callPackage ../applications/video/simplescreenrecorder { };
 
+  sipsak = callPackage ../tools/networking/sipsak { };
+
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
   skydns = goPackages.skydns.bin // { outputs = [ "bin" ]; };
