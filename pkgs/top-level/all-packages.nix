@@ -4340,6 +4340,7 @@ let
     bootstrapMavenPlugin27Jar = self.mavenPlugins.bootstrapMavenPlugin.mavenPlugin27Jar;
     bootstrapMavenPlugin28Jar = self.mavenPlugins.bootstrapMavenPlugin.mavenPlugin28Jar;
     bootstrapMavenPlugin31Jar = self.mavenPlugins.bootstrapMavenPlugin.mavenPlugin31Jar;
+    bootstrapMavenPlugin32Jar = self.mavenPlugins.bootstrapMavenPlugin.mavenPlugin32Jar;
 
     bootstrapMavenRemoteResources = callPackage ../development/java-modules/maven-plugins/maven-remote-resources-plugin/bootstrap.nix { };
     bootstrapMavenRemoteResources10alpha6Jar = self.mavenPlugins.bootstrapMavenRemoteResources.mavenRemoteResourcesAlpha6Jar;
@@ -4414,6 +4415,8 @@ let
     mavenSite31 = self.mavenPlugins.mavenSiteGen.mavenSite31;
 
     mavenSurefireGen = callPackage ../development/java-modules/maven-plugins/maven-surefire-plugin { };
+    mavenSurefire23 = self.mavenPlugins.mavenSurefireGen.mavenSurefire23;
+    mavenSurefire231 = self.mavenPlugins.mavenSurefireGen.mavenSurefire231;
     mavenSurefire243 = self.mavenPlugins.mavenSurefireGen.mavenSurefire243;
 
     modelloMavenGen = callPackage ../development/java-modules/maven-plugins/modello-maven-plugin { };

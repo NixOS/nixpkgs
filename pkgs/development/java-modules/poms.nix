@@ -464,12 +464,34 @@ rec {
     m2File = "plexus-2.0.5.pom";
   };
 
+  surefireParent23 = fetchmaven {
+    version = "2.3";
+    name = "surefire-pom-2.3";
+    src = fetchurl rec {
+      url = "http://svn.apache.org/repos/asf/maven/surefire/tags/surefire-2.3/pom.xml";
+      sha256 = "1v9l261fa6bvwippnh4v3780zjiy254hj56j7za1hcsl4cf53pfb";
+    };
+    m2Path = "org/apache/maven/surefire/surefire/2.3";
+    m2File = "surefire-2.3.pom";
+  };
+
+  surefireParent231 = fetchmaven {
+    version = "2.3.1";
+    name = "surefire-pom-2.3.1";
+    src = fetchurl rec {
+      url = "http://svn.apache.org/repos/asf/maven/surefire/tags/surefire-2.3.1/pom.xml";
+      sha256 = "1bkm8j884gng2n8f61xj2yhqgj2m7pxxdd3aw96v2j4iyqh6i0n8";
+    };
+    m2Path = "org/apache/maven/surefire/surefire/2.3.1";
+    m2File = "surefire-2.3.1.pom";
+  };
+
   surefireParent243 = fetchmaven {
     version = "2.4.3";
     name = "surefire-pom-2.4.3";
     src = fetchurl rec {
-      url = "https://raw.githubusercontent.com/sonatype/plexus-pom/plexus-2.0.5/pom.xml";
-      sha256 = "4882f9y732q5nb7c39ysv6rs744hcmqz2s66nqcyn3ckxdn8y655";
+      url = "http://svn.apache.org/repos/asf/maven/surefire/tags/surefire-2.4.3/pom.xml";
+      sha256 = "1app47rsdqa44q6c7c20ddmjzirg76i4phz21d6d1cj0xfqlar76";
     };
     m2Path = "org/apache/maven/surefire/surefire/2.4.3";
     m2File = "surefire-2.4.3.pom";
