@@ -46,6 +46,7 @@
 , preFixup ? "", postFixup ? ""
 , shellHook ? ""
 , coreSetup ? ghc.isCross or false # Use only core packages to build Setup.hs. True for cross-compilers.
+, extraSetupCompileFlags ? []
 , useCpphs ? false
 } @ args:
 
@@ -59,7 +60,7 @@ let
 
   isCross = ghc.isCross or false;
   isGhcjs = ghc.isGhcjs or false;
-  packageDbFlag = if isGhcjs || versionOlder "7.6" ghc.version
+  packageDbFlag = if versionOlder "7.6" ghc.version
                   then "package-db"
                   else "package-conf";
 
@@ -110,9 +111,9 @@ let
 
   setupCompileFlags = [
     (optionalString (!coreSetup) "-${nativePackageDbFlag}=$packageConfDir")
-    (optionalString (isGhcjs || versionOlder "7.8" nativeGhc.version) "-j$NIX_BUILD_CORES")
+    (optionalString (versionOlder "7.8" nativeGhc.version) "-j$NIX_BUILD_CORES")
     (optionalString (versionOlder "7.10" nativeGhc.version) "-threaded") # https://github.com/haskell/cabal/issues/2398
-  ];
+  ] ++ extraSetupCompileFlags;
 
   isHaskellPkg = x: (x ? pname) && (x ? version) && (x ? env);
   isSystemPkg = x: !isHaskellPkg x;
