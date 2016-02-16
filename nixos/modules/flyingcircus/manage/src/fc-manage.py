@@ -84,6 +84,10 @@ def update_inventory():
          'permissions.json'),
         (lambda: directory.lookup_resourcegroup('admins'),
          'admins.json'),
+        (lambda: directory.list_services(),
+         'services.json'),
+        (lambda: directory.list_service_clients(),
+         'service_clients.json')
     ])
 
 
