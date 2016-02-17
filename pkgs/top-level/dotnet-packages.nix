@@ -420,6 +420,38 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
+  MonoAddins = buildDotnetPackage rec {
+    baseName = "Mono.Addins";
+    version = "1.2";
+
+    xBuildFiles = [
+      "Mono.Addins/Mono.Addins.csproj"
+      "Mono.Addins.Setup/Mono.Addins.Setup.csproj"
+      "Mono.Addins.Gui/Mono.Addins.Gui.csproj"
+      "Mono.Addins.CecilReflector/Mono.Addins.CecilReflector.csproj"
+    ];
+    outputFiles = [ "bin/*" ];
+
+    src = fetchFromGitHub {
+      owner = "mono";
+      repo = "mono-addins";
+      rev = "mono-addins-${version}";
+      sha256 = "1hnn0a2qsjcjprsxas424bzvhsdwy0yc2jj5xbp698c0m9kfk24y";
+    };
+
+    buildInputs = [ pkgs.gtk-sharp ];
+
+    meta = {
+      description = "A generic framework for creating extensible applications";
+      homepage = http://www.mono-project.com/Mono.Addins;
+      longDescription = ''
+        A generic framework for creating extensible applications,
+        and for creating libraries which extend those applications.
+      '';
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   MonoDevelopFSharpBinding = buildDotnetPackage rec {
     baseName = "MonoDevelop.FSharpBinding";
     version = "git-a09c8185eb";

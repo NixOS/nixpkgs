@@ -148,7 +148,7 @@ sub pciCheck {
          $device eq "0x4331" || $device eq "0x43a0" || $device eq "0x43b1"
         ) )
      {
-        push @modulePackages, "\${config.boot.kernelPackages.broadcom_sta}";
+        push @modulePackages, "config.boot.kernelPackages.broadcom_sta";
         push @kernelModules, "wl";
      }
 
@@ -406,10 +406,17 @@ EOF
 
 # Generate the hardware configuration file.
 
-sub toNixExpr {
+sub toNixStringList {
     my $res = "";
     foreach my $s (@_) {
         $res .= " \"$s\"";
+    }
+    return $res;
+}
+sub toNixList {
+    my $res = "";
+    foreach my $s (@_) {
+        $res .= " $s";
     }
     return $res;
 }
@@ -428,9 +435,9 @@ sub multiLineList {
     return $res;
 }
 
-my $initrdAvailableKernelModules = toNixExpr(uniq @initrdAvailableKernelModules);
-my $kernelModules = toNixExpr(uniq @kernelModules);
-my $modulePackages = toNixExpr(uniq @modulePackages);
+my $initrdAvailableKernelModules = toNixStringList(uniq @initrdAvailableKernelModules);
+my $kernelModules = toNixStringList(uniq @kernelModules);
+my $modulePackages = toNixList(uniq @modulePackages);
 
 my $fsAndSwap = "";
 if (!$noFilesystems) {

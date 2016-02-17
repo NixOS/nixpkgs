@@ -121,6 +121,7 @@ in
       disnix =
         { description = "Disnix server";
         
+          wants = [ "dysnomia.target" ];
           wantedBy = [ "multi-user.target" ];
           after = [ "dbus.service" ]
             ++ optional config.services.httpd.enable "httpd.service"
@@ -137,6 +138,17 @@ in
           environment = {
             HOME = "/root";
           };
+          
+          preStart = ''
+            mkdir -p /etc/systemd-mutable/system
+            if [ ! -f /etc/systemd-mutable/system/dysnomia.target ]
+            then
+                ( echo "[Unit]"
+                  echo "Description=Services that are activated and deactivated by Dysnomia"
+                  echo "After=final.target"
+                ) > /etc/systemd-mutable/system/dysnomia.target
+            fi
+          '';
 
           exec = "disnix-service";
         };

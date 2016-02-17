@@ -18,13 +18,17 @@ stdenv.mkDerivation rec {
       # slim's broken PAM session handling (see
       # http://developer.berlios.de/bugs/?func=detailbug&bug_id=19102&group_id=2663).
       ./run-once.patch
+
+      # Ensure that sessions appear in sort order, rather than in
+      # directory order.
+      ./sort-sessions.patch
     ];
 
   preConfigure = "substituteInPlace CMakeLists.txt --replace /lib $out/lib";
 
   cmakeFlags = [ "-DUSE_PAM=1" ];
 
-  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype";
+  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype -std=c++11";
 
   enableParallelBuilding = true;
 

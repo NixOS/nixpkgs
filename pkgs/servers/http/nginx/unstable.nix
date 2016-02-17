@@ -10,10 +10,10 @@
 with stdenv.lib;
 
 let
-  version = "1.9.3";
+  version = "1.9.10";
   mainSrc = fetchurl {
     url = "http://nginx.org/download/nginx-${version}.tar.gz";
-    sha256 = "1svkyrh31g9hzfmj0xwc167sz0b1fn4i62mwipdjy9ia3cscb622";
+    sha256 = "1n9icvi9hq7gak21ixlhcyazjx2yjqlbws07i2habc6a8ildf57v";
   };
 
   rtmp-ext = fetchFromGitHub {
@@ -83,7 +83,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-http_ssl_module"
-    "--with-http_spdy_module"
     "--with-http_realip_module"
     "--with-http_addition_module"
     "--with-http_xslt_module"

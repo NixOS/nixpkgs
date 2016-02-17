@@ -714,7 +714,7 @@ let
 
   bc = callPackage ../tools/misc/bc { };
 
-  bdf2psf = callPackage ../tools/misc/bdf2psf { };  
+  bdf2psf = callPackage ../tools/misc/bdf2psf { };
 
   bcache-tools = callPackage ../tools/filesystems/bcache-tools { };
 
@@ -1720,8 +1720,7 @@ let
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
-  grafana-frontend = callPackage ../development/tools/misc/grafana { };
-  grafana-backend = goPackages.grafana.bin // { outputs = [ "bin" ]; };
+  grafana-old = callPackage ../development/tools/misc/grafana { };
 
   grafx2 = callPackage ../applications/graphics/grafx2 {};
 
@@ -1879,6 +1878,8 @@ let
   highlight = callPackage ../tools/text/highlight {
     lua = lua5;
   };
+
+  homesick = callPackage ../tools/misc/homesick { };
 
   honcho = callPackage ../tools/system/honcho { };
 
@@ -4076,7 +4077,7 @@ let
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = haskell.packages.ghc7102.override {
+  haskellPackages = haskell.packages.ghc7103.override {
     overrides = config.haskellPackageOverrides or (self: super: {});
   };
   inherit (haskellPackages) ghc cabal-install stack;
@@ -6315,8 +6316,8 @@ let
   freealut = callPackage ../development/libraries/freealut { };
 
   freeglut = callPackage ../development/libraries/freeglut { };
-  
-  freenect = callPackage ../development/libraries/freenect { 
+
+  freenect = callPackage ../development/libraries/freenect {
       inherit (xorg) libXi libXmu;
   };
 
@@ -8065,6 +8066,8 @@ let
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
+  quicksynergy = callPackage ../applications/misc/quicksynergy { };
+
   qwt = callPackage ../development/libraries/qwt {};
 
   qwt6 = callPackage ../development/libraries/qwt/6.nix { };
@@ -9051,6 +9054,8 @@ let
 
   ghostOne = callPackage ../servers/games/ghost-one { };
 
+  grafana = (callPackage ../servers/monitoring/grafana { }).bin // { outputs = ["bin"]; };
+
   groovebasin = callPackage ../applications/audio/groovebasin { };
 
   hbase = callPackage ../servers/hbase {};
@@ -9131,6 +9136,8 @@ let
   nsd = callPackage ../servers/dns/nsd (config.nsd or {});
 
   nsq = goPackages.nsq.bin // { outputs = [ "bin" ]; };
+
+  oauth2_proxy = goPackages.oauth2_proxy.bin // { outputs = [ "bin" ]; };
 
   openpts = callPackage ../servers/openpts { };
 
@@ -9257,7 +9264,8 @@ let
     postgresql91
     postgresql92
     postgresql93
-    postgresql94;
+    postgresql94
+    postgresql95;
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
@@ -9831,16 +9839,6 @@ let
       ];
   };
 
-  linux_4_2 = makeOverridable (import ../os-specific/linux/kernel/linux-4.2.nix) {
-    inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
   linux_4_3 = callPackage ../os-specific/linux/kernel/linux-4.3.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -10023,7 +10021,6 @@ let
   linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
   linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18 linuxPackages_3_18);
   linuxPackages_4_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_1 linuxPackages_4_1);
-  linuxPackages_4_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_2 linuxPackages_4_2);
   linuxPackages_4_3 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_3 linuxPackages_4_3);
   linuxPackages_testing = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing linuxPackages_testing);
   linuxPackages_custom = {version, src, configfile}:
@@ -11467,11 +11464,11 @@ let
     fftw = fftwFloat;
   };
 
-  gnuradio-wrapper = callPackage ../applications/misc/gnuradio/wrapper.nix { };
-
-  gnuradio-full = gnuradio-wrapper.override {
-    extraPackages = [ gnuradio-osmosdr ];
+  gnuradio-with-packages = callPackage ../applications/misc/gnuradio/wrapper.nix {
+    extraPackages = [ gnuradio-nacl gnuradio-osmosdr ];
   };
+
+  gnuradio-nacl = callPackage ../applications/misc/gnuradio-nacl { };
 
   gnuradio-osmosdr = callPackage ../applications/misc/gnuradio-osmosdr { };
 
@@ -12964,8 +12961,8 @@ let
 
   symlinks = callPackage ../tools/system/symlinks { };
 
-  # syncthing is pinned to go1.4 until https://github.com/golang/go/issues/12301 is resolved
-  syncthing = go14Packages.syncthing.bin // { outputs = [ "bin" ]; };
+  syncthing = go15Packages.syncthing.bin // { outputs = [ "bin" ]; };
+  syncthing011 = go15Packages.syncthing011.bin // { outputs = [ "bin" ]; };
 
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
@@ -14671,6 +14668,10 @@ let
 
   caneda = callPackage ../applications/science/electronics/caneda { };
 
+  geda = callPackage ../applications/science/electronics/geda { };
+
+  gerbv = callPackage ../applications/science/electronics/gerbv { };
+
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
 
   kicad = callPackage ../applications/science/electronics/kicad {
@@ -15353,6 +15354,8 @@ aliases = with self; rec {
   cool-old-term = cool-retro-term; # added 2015-01-31
   cupsBjnp = cups-bjnp; # added 2016-01-02
   firefoxWrapper = firefox-wrapper;
+  gnuradio-full = gnuradio-with-packages; # 2016-01-30, deleted in master @ 2015-08
+  gnuradio-wrapper = gnuradio-with-packages; # 2016-01-30, deleted in master @ 2015-08
   haskell-ng = haskell;                 # 2015-04-19
   haskellngPackages = haskellPackages;  # 2015-04-19
   htmlTidy = html-tidy;  # added 2014-12-06
@@ -15380,4 +15383,3 @@ tweakAlias = _n: alias: with lib;
   else alias;
 
 in lib.mapAttrs tweakAlias aliases // self; in pkgs
-

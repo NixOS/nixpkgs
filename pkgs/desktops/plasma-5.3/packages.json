@@ -10,7 +10,7 @@
         ],
         "name": "bluez-qt-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/bluez-qt-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/bluez-qt-5.3.2.tar.xz",
             "name": "bluez-qt-5.3.2.tar.xz",
             "sha256": "0bc9pi8zbfh66h3p9i76hq1jh7ygavax3zw2wygl269f1k92brlh"
         },
@@ -34,7 +34,7 @@
         "propagatedBuildInputs": [],
         "name": "kmenuedit-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/kmenuedit-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/kmenuedit-5.3.2.tar.xz",
             "name": "kmenuedit-5.3.2.tar.xz",
             "sha256": "13nsjh698h09ai6b7r8zi2hlkkxfv8c00b5b6dl0pb2b474a16di"
         },
@@ -64,7 +64,7 @@
         "propagatedBuildInputs": [],
         "name": "plasma-nm-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/plasma-nm-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/plasma-nm-5.3.2.tar.xz",
             "name": "plasma-nm-5.3.2.tar.xz",
             "sha256": "0w3cs66rn7k4fzsr7qihzcgxjwmp2safnfr78lp69md59clc45ag"
         },
@@ -114,7 +114,7 @@
         "propagatedBuildInputs": [],
         "name": "khotkeys-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/khotkeys-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/khotkeys-5.3.2.tar.xz",
             "name": "khotkeys-5.3.2.tar.xz",
             "sha256": "0f7z6vwkmi54jbvvqgyxn1mvh1gjwmrihj3afd4w7zd4cbyf61ka"
         },
@@ -144,7 +144,7 @@
         "propagatedBuildInputs": [],
         "name": "plasma-workspace-wallpapers-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/plasma-workspace-wallpapers-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/plasma-workspace-wallpapers-5.3.2.tar.xz",
             "name": "plasma-workspace-wallpapers-5.3.2.tar.xz",
             "sha256": "1h3w824dv5yyjz6l9vsi6lddlb5xxmmaqdvvacz7qypy06f808aa"
         },
@@ -161,7 +161,7 @@
         "propagatedBuildInputs": [],
         "name": "kscreen-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/kscreen-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/kscreen-5.3.2.tar.xz",
             "name": "kscreen-5.3.2.tar.xz",
             "sha256": "15dnraav3sn5rcz88nj3h6n95w4jiynn45n29pfv7yc3p41yahwd"
         },
@@ -189,7 +189,7 @@
         "propagatedBuildInputs": [],
         "name": "oxygen-fonts-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/oxygen-fonts-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/oxygen-fonts-5.3.2.tar.xz",
             "name": "oxygen-fonts-5.3.2.tar.xz",
             "sha256": "0x78fbllqd8ssxlr2d0xy76pvr4v6f5xans4mvr3f3aa6xhr05ya"
         },
@@ -206,7 +206,7 @@
         "propagatedBuildInputs": [],
         "name": "breeze-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/breeze-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/breeze-5.3.2.tar.xz",
             "name": "breeze-5.3.2.tar.xz",
             "sha256": "0rnw5cblz6rdcx4n6x2wwr0blrk2xlkkq1gsbr06c969hp9gq4iy"
         },
@@ -241,7 +241,7 @@
         "propagatedBuildInputs": [],
         "name": "oxygen-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/oxygen-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/oxygen-5.3.2.tar.xz",
             "name": "oxygen-5.3.2.tar.xz",
             "sha256": "19z18n7zq8616r1dwvnw0s73wxh114d3z952x3p3z42dhl0lkrw0"
         },
@@ -280,7 +280,7 @@
         ],
         "name": "plasma-workspace-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/plasma-workspace-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/plasma-workspace-5.3.2.tar.xz",
             "name": "plasma-workspace-5.3.2.tar.xz",
             "sha256": "1i2lz9acxl63nd6nlvgvnv7lm3nq4bvj2kyj2lmd97f5xx3sara1"
         },
@@ -353,7 +353,7 @@
         "propagatedBuildInputs": [],
         "name": "kwrited-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/kwrited-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/kwrited-5.3.2.tar.xz",
             "name": "kwrited-5.3.2.tar.xz",
             "sha256": "1h499rpp7jss5vikapm1247xn1bg5axq4bwwfr6frlyq03vcpga1"
         },
@@ -380,7 +380,7 @@
         ],
         "name": "plasma-desktop-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/plasma-desktop-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/plasma-desktop-5.3.2.tar.xz",
             "name": "plasma-desktop-5.3.2.tar.xz",
             "sha256": "190g0nmm97a0403nvyp1478fpk8r3d7jkxpg0mif9nvws25qfvz1"
         },
@@ -459,7 +459,7 @@
         "propagatedBuildInputs": [],
         "name": "systemsettings-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/systemsettings-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/systemsettings-5.3.2.tar.xz",
             "name": "systemsettings-5.3.2.tar.xz",
             "sha256": "0lgl15hfr3na3v1dry8r5bd7z3d8jlrzh6a3avq9l9297lwfgaxd"
         },
@@ -493,7 +493,7 @@
         ],
         "name": "libkscreen-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/libkscreen-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/libkscreen-5.3.2.tar.xz",
             "name": "libkscreen-5.3.2.tar.xz",
             "sha256": "1k6j4nxy41d2jgwydi0ah2v0idn6zhb1lmxziyrcshqpklhwiff2"
         },
@@ -519,7 +519,7 @@
         "propagatedBuildInputs": [],
         "name": "plasma-sdk-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/plasma-sdk-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/plasma-sdk-5.3.2.tar.xz",
             "name": "plasma-sdk-5.3.2.tar.xz",
             "sha256": "13vkxbayxggj4bx1l40rspck59j4l736gr5hg0sd1j7hmlwcys2z"
         },
@@ -572,7 +572,7 @@
         "propagatedBuildInputs": [],
         "name": "kwin-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/kwin-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/kwin-5.3.2.tar.xz",
             "name": "kwin-5.3.2.tar.xz",
             "sha256": "0p2pf6aq9zy0l4f7px2p0wj1kfgax8qjmal6yn3mifx1al244xvz"
         },
@@ -635,7 +635,7 @@
         "propagatedBuildInputs": [],
         "name": "kdeplasma-addons-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/kdeplasma-addons-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/kdeplasma-addons-5.3.2.tar.xz",
             "name": "kdeplasma-addons-5.3.2.tar.xz",
             "sha256": "08k3736ssir41r37y3f6bdf52l1whkr7q5qc2rfhbzm6c9lhqvn4"
         },
@@ -688,7 +688,7 @@
         "propagatedBuildInputs": [],
         "name": "sddm-kcm-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/sddm-kcm-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/sddm-kcm-5.3.2.tar.xz",
             "name": "sddm-kcm-5.3.2.tar.xz",
             "sha256": "17pk95xqr08gjn16i4gs7gnp2ksc6082myywdarywf66nz4whind"
         },
@@ -722,7 +722,7 @@
         "propagatedBuildInputs": [],
         "name": "khelpcenter-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/khelpcenter-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/khelpcenter-5.3.2.tar.xz",
             "name": "khelpcenter-5.3.2.tar.xz",
             "sha256": "1nd4kj4zhw21lfdj6yrmww2rx629mia5w0fb769y5wdas82w9wb3"
         },
@@ -749,7 +749,7 @@
         "propagatedBuildInputs": [],
         "name": "bluedevil-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/bluedevil-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/bluedevil-5.3.2.tar.xz",
             "name": "bluedevil-5.3.2.tar.xz",
             "sha256": "0pdm4fpr4piaqd52nbyv3plib4z6y9dr7qgbh1cfk3bzfwi1jwn8"
         },
@@ -784,7 +784,7 @@
         "propagatedBuildInputs": [],
         "name": "ksysguard-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/ksysguard-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/ksysguard-5.3.2.tar.xz",
             "name": "ksysguard-5.3.2.tar.xz",
             "sha256": "1vf2gdihrvfjrlkg5dmpg9f5yqgxawqa2cf8h9f96n2n0cd46gq7"
         },
@@ -819,7 +819,7 @@
         ],
         "name": "baloo-5.9.2",
         "src": {
-            "url": "stable/plasma/5.3.2/baloo-5.9.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/baloo-5.9.2.tar.xz",
             "name": "baloo-5.9.2.tar.xz",
             "sha256": "1rhrdri90xb4g23x92nv72x19lxrdzkzc16w5ivbglrnq5ipga8w"
         },
@@ -854,7 +854,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-cli-tools-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/kde-cli-tools-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/kde-cli-tools-5.3.2.tar.xz",
             "name": "kde-cli-tools-5.3.2.tar.xz",
             "sha256": "1ac36rhffw85yzck4mqj1l4yj20g6yrjxi40vrkakln5j26vxb3x"
         },
@@ -886,7 +886,7 @@
         "propagatedBuildInputs": [],
         "name": "milou-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/milou-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/milou-5.3.2.tar.xz",
             "name": "milou-5.3.2.tar.xz",
             "sha256": "1wlnis5ph7vxg7wj410qs8qvdc2b0s8ji1vgqpv0g19zhkph95kw"
         },
@@ -917,7 +917,7 @@
         "propagatedBuildInputs": [],
         "name": "powerdevil-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/powerdevil-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/powerdevil-5.3.2.tar.xz",
             "name": "powerdevil-5.3.2.tar.xz",
             "sha256": "1zyfqi9qppra2hw0i18wil1xym84pgqdgmh9yn577c778grr4kgk"
         },
@@ -961,7 +961,7 @@
         ],
         "name": "libksysguard-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/libksysguard-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/libksysguard-5.3.2.tar.xz",
             "name": "libksysguard-5.3.2.tar.xz",
             "sha256": "137dr7p4q3aldm7fs2rldchq4d3irij4rpqc3c799blrgmdrp98p"
         },
@@ -1000,7 +1000,7 @@
         "propagatedBuildInputs": [],
         "name": "plasma-mediacenter-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/plasma-mediacenter-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/plasma-mediacenter-5.3.2.tar.xz",
             "name": "plasma-mediacenter-5.3.2.tar.xz",
             "sha256": "0nlkzhyfi87k2r567h0hdlj1a9115mwxac55yjg7j3bpm7jr36g6"
         },
@@ -1043,7 +1043,7 @@
         ],
         "name": "kfilemetadata-5.9.2",
         "src": {
-            "url": "stable/plasma/5.3.2/kfilemetadata-5.9.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/kfilemetadata-5.9.2.tar.xz",
             "name": "kfilemetadata-5.9.2.tar.xz",
             "sha256": "070m5v54birqwh8cmik6n80nbcfjh38lay4w5i3ic0hqj6as2n89"
         },
@@ -1072,7 +1072,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-gtk-config-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/kde-gtk-config-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/kde-gtk-config-5.3.2.tar.xz",
             "name": "kde-gtk-config-5.3.2.tar.xz",
             "sha256": "0rw4yv8svbjnv06pqva81m9xvpl75bvka53kckz0nqi6v96rdg2m"
         },
@@ -1105,7 +1105,7 @@
         ],
         "name": "kwayland-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/kwayland-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/kwayland-5.3.2.tar.xz",
             "name": "kwayland-5.3.2.tar.xz",
             "sha256": "1z8k3vhrbfmnbaaji2akzgqvwm990cqk1jqd3crgzv26pbhinvci"
         },
@@ -1134,7 +1134,7 @@
         "propagatedBuildInputs": [],
         "name": "ksshaskpass-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/ksshaskpass-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/ksshaskpass-5.3.2.tar.xz",
             "name": "ksshaskpass-5.3.2.tar.xz",
             "sha256": "1v4p02141pd7xkyfxmhf7lf5385krri2zdh3vb90d8pr802mv3g7"
         },
@@ -1159,7 +1159,7 @@
         "propagatedBuildInputs": [],
         "name": "kinfocenter-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/kinfocenter-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/kinfocenter-5.3.2.tar.xz",
             "name": "kinfocenter-5.3.2.tar.xz",
             "sha256": "1w8q9xq2rl1g8axf7n7l7cq49ahhw0r1zc0sdgv4409k5iwsrikr"
         },
@@ -1205,7 +1205,7 @@
         "propagatedBuildInputs": [],
         "name": "polkit-kde-agent-1-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/polkit-kde-agent-1-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/polkit-kde-agent-1-5.3.2.tar.xz",
             "name": "polkit-kde-agent-1-5.3.2.tar.xz",
             "sha256": "0khbkgd3s0b2xl062rcxqimym8f3c9y6xadl5av27d4d78ayqmfn"
         },
@@ -1239,7 +1239,7 @@
         ],
         "name": "kdecoration-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/kdecoration-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/kdecoration-5.3.2.tar.xz",
             "name": "kdecoration-5.3.2.tar.xz",
             "sha256": "192infj8s4rd3jwiy8fcvbg265zvng4xbmwj7a3bqz4h9jcrjc7v"
         },
@@ -1261,7 +1261,7 @@
         "propagatedBuildInputs": [],
         "name": "kio-extras-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/kio-extras-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/kio-extras-5.3.2.tar.xz",
             "name": "kio-extras-5.3.2.tar.xz",
             "sha256": "1vfp203mmpqvwa9dqkkpgz9rgk07f11pwhg5drvkw03azi9hbjbw"
         },
@@ -1310,7 +1310,7 @@
         "propagatedBuildInputs": [],
         "name": "muon-5.3.2",
         "src": {
-            "url": "stable/plasma/5.3.2/muon-5.3.2.tar.xz",
+            "url": "Attic/plasma/5.3.2/muon-5.3.2.tar.xz",
             "name": "muon-5.3.2.tar.xz",
             "sha256": "0c2c94yirfrkcxp30gf77xzy9gmgznx0kkhn93idggdhc4qdyf9z"
         },

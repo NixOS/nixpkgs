@@ -17,7 +17,7 @@ index 8c5a0eb..27ebf16 100644
  #endif
      {
 -        lib.setFileName(QLatin1String("resolv"));
-+        lib.setFileName(QLatin1String("@glibc/lib/resolv"));
++        lib.setFileName(QLatin1String("@glibc@/lib/resolv"));
          if (!lib.load())
              return;
      }

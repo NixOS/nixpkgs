@@ -1,6 +1,4 @@
-# TODO share code with thunderbird-bin/generate_sources.rb
-
-require "open-uri"
+# TODO share code with thunderbird-bin/generate_nix.rb
 
 version = if ARGV.empty?
             "latest"
@@ -8,38 +6,58 @@ version = if ARGV.empty?
             ARGV[0]
           end
 
-base_path = "http://archive.mozilla.org/pub/firefox/releases"
-
-Source = Struct.new(:hash, :arch, :locale, :filename)
-
-sources = open("#{base_path}/#{version}/SHA1SUMS") do |input|
-  input.readlines
-end.select do |line|
-  /\/firefox-.*\.tar\.bz2$/ === line && !(/source/ === line)
-end.map do |line|
-  hash, name = line.chomp.split(/ +/)
-  Source.new(hash, *(name.split("/")))
-end.sort_by do |source|
-  [source.locale, source.arch]
-end
-
-real_version = sources[0].filename.match(/firefox-([0-9.]*)\.tar\.bz2/)[1]
+base_path = "archive.mozilla.org/pub/firefox/releases"
 
 arches = ["linux-i686", "linux-x86_64"]
 
+arches.each do |arch|
+  system("wget", "--recursive", "--continue", "--no-parent", "--reject-regex", ".*\\?.*", "--reject", "xpi", "http://#{base_path}/#{version}/#{arch}/")
+end
+
+locales = Dir.glob("#{base_path}/#{version}/#{arches[0]}/*").map do |path|
+  File.basename(path)
+end.sort
+
+locales.delete("index.html")
+locales.delete("xpi")
+
+# real version number, e.g. "30.0" instead of "latest".
+real_version = Dir.glob("#{base_path}/#{version}/#{arches[0]}/#{locales[0]}/firefox-*")[0].match(/firefox-([0-9.]*)/)[1][0..-2]
+
+locale_arch_path_tuples = locales.flat_map do |locale|
+  arches.map do |arch|
+    path = Dir.glob("#{base_path}/#{version}/#{arch}/#{locale}/firefox-*")[0]
+
+    [locale, arch, path]
+  end
+end
+
+paths = locale_arch_path_tuples.map do |tuple| tuple[2] end
+
+hashes = IO.popen(["sha256sum", "--binary", *paths]) do |input|
+  input.each_line.map do |line|
+    $stderr.puts(line)
+
+    line.match(/^[0-9a-f]*/)[0]
+  end
+end
+
+
 puts(<<"EOH")
-# This file is generated from generate_nix.rb. DO NOT EDIT.
+# This file is generated from generate_sources.rb. DO NOT EDIT.
 # Execute the following command in a temporary directory to update the file.
 #
-# ruby generate_source.rb > source.nix
+# ruby generate_sources.rb > sources.nix
 
 {
   version = "#{real_version}";
   sources = [
 EOH
 
-sources.each do |source|
-  puts(%Q|    { locale = "#{source.locale}"; arch = "#{source.arch}"; sha1 = "#{source.hash}"; }|)
+locale_arch_path_tuples.zip(hashes) do |tuple, hash|
+  locale, arch, path = tuple
+
+  puts(%Q|    { locale = "#{locale}"; arch = "#{arch}"; sha256 = "#{hash}"; }|)
 end
 
 puts(<<'EOF')
