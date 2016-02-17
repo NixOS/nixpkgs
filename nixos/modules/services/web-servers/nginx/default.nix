@@ -203,7 +203,7 @@ in
 
       sslCiphers = mkOption {
         type = types.str;
-        default = "EDH+aRSA+CHACHA20:EDH+aRSA+AES:ECDHE+aRSA+AES:+AES128";
+        default = "EDH+CHACHA20:EDH+AES:EECDHE+CHACHA20:ECDHE+AES:+AES128:-DSS";
         description = "Ciphers to choose from when negotiating tls handshakes.";
       };
 
