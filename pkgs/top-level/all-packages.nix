@@ -8803,6 +8803,8 @@ let
 
   vcdimager = callPackage ../development/libraries/vcdimager { };
 
+  vcg = callPackage ../development/libraries/vcg { };
+
   vid-stab = callPackage ../development/libraries/vid-stab { };
 
   vigra = callPackage ../development/libraries/vigra {
