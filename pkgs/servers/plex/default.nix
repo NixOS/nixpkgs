@@ -5,9 +5,9 @@
 
 let
   plexpkg = if enablePlexPass then {
-    version = "0.9.15.3.1674";
-    vsnHash = "f46e7e6";
-    sha256 = "086njnjcmknmbn90mmvf60ls7q73g2m955yk621jjdngs4ybvm19";
+    version = "0.9.15.4.1679";
+    vsnHash = "e4df231";
+    sha256 = "1l6kw5dkqam1fyihp02p4slxq3yy232dqp0m5dcg1vi146s911dh";
   } else {
     version = "0.9.15.2.1663";
     vsnHash = "7efd046";
