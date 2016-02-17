@@ -10431,15 +10431,19 @@ in modules // {
 
 
   keyring = buildPythonPackage rec {
-    name = "keyring-3.3";
+    name = "keyring-8.4.1";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/k/keyring/${name}.zip";
-      md5 = "81291e0c7337affb71442e6c7671e77f";
+      url = "https://pypi.python.org/packages/source/k/keyring/${name}.tar.gz";
+      sha256 = "1286sh5g53168qxbl4g5bmns9ci0ld0jl3h44b7h8is5nw1421ar";
     };
 
     buildInputs = with self;
-      [ fs gdata python_keyczar mock pyasn1 pycrypto pytest six ];
+      [ fs gdata python_keyczar mock pyasn1 pycrypto pytest_28 six setuptools_scm pytestrunner ];
+
+    checkPhase = ''
+      py.test $out
+    '';
 
     meta = {
       description = "Store and access your passwords safely";
