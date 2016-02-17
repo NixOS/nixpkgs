@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, libnghttp2, pkgconfig, perl
+{ stdenv, fetchurl, pkgconfig, perl
+, http2Support ? true, libnghttp2
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
 , zlibSupport ? false, zlib ? null
@@ -8,6 +9,7 @@
 , c-aresSupport ? false, c-ares ? null
 }:
 
+assert http2Support -> libnghttp2 != null;
 assert idnSupport -> libidn != null;
 assert ldapSupport -> openldap != null;
 assert zlibSupport -> zlib != null;
@@ -29,7 +31,7 @@ stdenv.mkDerivation rec {
   # "-lz -lssl", which aren't necessary direct build inputs of
   # applications that use Curl.
   propagatedBuildInputs = with stdenv.lib;
-    [ libnghttp2 ] ++
+    optional http2Support libnghttp2 ++
     optional idnSupport libidn ++
     optional ldapSupport openldap ++
     optional zlibSupport zlib ++
@@ -47,7 +49,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
       "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
       "--disable-manual"
-      "--with-nghttp2=${libnghttp2}"
+      ( if http2Support then "--with-nghttp2=${libnghttp2}" else "--without-nghttp2" )
       ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
       ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
