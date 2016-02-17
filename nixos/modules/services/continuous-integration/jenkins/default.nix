@@ -101,6 +101,23 @@ in {
         '';
       };
 
+      plugins = mkOption {
+        default = [ ];
+        type = types.listOf types.package;
+        description = ''
+          A list of plugins to activate. This is declarative and will overwrite
+          whatever plugins have been installed manually. Note that we're not
+          doing dependency resolution so you need to add all plugins by hand
+          for now.
+        '';
+        example = literalExample ''
+          services.jenkins.plugins = with pkgs; [
+            jenkins-plugins."git-2.4.1"
+            jenkins-plugins."git-client-1.19.2"
+          ];
+          '';
+      };
+
       extraOptions = mkOption {
         type = types.listOf types.str;
         default = [ ];
@@ -151,6 +168,19 @@ in {
       # Force .war (re)extraction, or else we might run stale Jenkins.
       preStart = ''
         rm -rf ${cfg.home}/war
+
+        # Jenkis plugins need to be exactly in `plugins`, .hpi files
+        # in subdirectories are not recognised. To distinguish the
+        # automatically installed from the pre-installed plugins we
+        # prefix them with "nix-plugin-". Then we can safely remove
+        # them:
+        mkdir -p ${cfg.home}/plugins # plugins dir is created by
+                                     # Jenkins on first startup but
+                                     # this script runs before startup.
+        rm -f ${cfg.home}/plugins/nix-plugin-*.hpi
+        for path in ${concatMapStrings (x: x + "/*.hpi ") cfg.plugins}; do
+          cp $path ${cfg.home}/plugins/nix-plugin-$(basename $path)
+        done
       '';
 
       script = ''

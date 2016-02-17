@@ -5958,6 +5958,8 @@ let
 
   jenkins-job-builder = pythonPackages.jenkins-job-builder;
 
+  jenkins-plugins = callPackage ../development/tools/continuous-integration/jenkins-plugins { };
+
   kcov = callPackage ../development/tools/analysis/kcov { };
 
   lcov = callPackage ../development/tools/analysis/lcov { };
