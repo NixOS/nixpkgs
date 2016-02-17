@@ -1,11 +1,22 @@
-# This module automatically grows the root partition on Amazon EC2 HVM
-# instances. This allows an instance to be created with a bigger root
-# filesystem than provided by the AMI.
+# This module automatically grows the root partition on virtual machines.
+# This allows an instance to be created with a bigger root filesystem
+# than provided by the machine image.
 
 { config, lib, pkgs, ... }:
 
 {
-  config = lib.mkIf config.ec2.hvm {
+
+  options = {
+
+    virtualisation.growPartition = mkOption {
+      type = types.bool;
+      default = true;
+    };
+
+  };
+
+  config = mkIf config.virtualisation.growPartition {
+
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.gawk}/bin/gawk
       copy_bin_and_libs ${pkgs.gnused}/bin/sed
@@ -24,5 +35,7 @@
         udevadm settle
       fi
     '';
+
   };
+
 }
