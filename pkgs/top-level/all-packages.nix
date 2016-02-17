@@ -4637,6 +4637,8 @@ let
 
     config-file = callPackage ../development/ocaml-modules/config-file { };
 
+    containers = callPackage ../development/ocaml-modules/containers { };
+
     cpdf = callPackage ../development/ocaml-modules/cpdf { };
 
     cppo = callPackage ../development/tools/ocaml/cppo { };
