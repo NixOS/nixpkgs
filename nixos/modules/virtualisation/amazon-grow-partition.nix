@@ -10,13 +10,17 @@
       copy_bin_and_libs ${pkgs.gawk}/bin/gawk
       copy_bin_and_libs ${pkgs.gnused}/bin/sed
       copy_bin_and_libs ${pkgs.utillinux}/sbin/sfdisk
+      copy_bin_and_libs ${pkgs.utillinux}/sbin/lsblk
       cp -v ${pkgs.cloud-utils}/bin/growpart $out/bin/growpart
       ln -s sed $out/bin/gnused
     '';
 
     boot.initrd.postDeviceCommands = ''
-      if [ -e /dev/xvda ] && [ -e /dev/xvda1 ]; then
-        TMPDIR=/run sh $(type -P growpart) /dev/xvda 1
+      rootDevice="${config.fileSystems."/".device}"
+      if [ -e "$rootDevice" ]; then
+        rootDevice="$(readlink -f "$rootDevice")"
+        parentDevice="$(lsblk -npo PKNAME "$rootDevice")"
+        TMPDIR=/run sh $(type -P growpart) "$parentDevice" "''${rootDevice#$parentDevice}"
         udevadm settle
       fi
     '';
