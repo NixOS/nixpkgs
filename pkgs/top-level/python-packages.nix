@@ -12538,16 +12538,16 @@ in modules // {
   };
 
   numexpr = buildPythonPackage rec {
-    version = "2.4.6";
+    version = "2.5";
     name = "numexpr-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/numexpr/${name}.tar.gz";
-      sha256 = "052397670dc56d7845ff894cd7d858e4f115491ecd93bcc0eda5cb83990c5da3";
+      sha256 = "319cdf4e402177a1c8ed4972cffd09f523446f186d347b7c1974787cdabf0294";
     };
 
     # Tests fail with python 3. https://github.com/pydata/numexpr/issues/177
-    doCheck = !isPy3k;
+    # doCheck = !isPy3k;
 
     propagatedBuildInputs = with self; [ numpy ];
 
