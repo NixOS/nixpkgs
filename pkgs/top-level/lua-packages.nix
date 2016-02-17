@@ -59,13 +59,14 @@ let
   };
 
   luaevent = buildLuaPackage rec {
-    version = "0.4.3";
+    version = "0.4.3-2015-12-26";
     name = "luaevent-${version}";
-    disabled = isLua52;
 
-    src = fetchzip {
-      url = "https://github.com/harningt/luaevent/archive/v${version}.tar.gz";
-      sha256 = "1c1n2zqx5rwfwkqaq1jj8gvx1vswvbihj2sy445w28icz1xfhpik";
+    src = fetchFromGitHub {
+      owner = "harningt";
+      repo = "luaevent";
+      rev = "3995b7e2a2c98bed5b321163b45818805f002dc3";
+      sha256 = "0wh3y8hy3q3djwd5p65xjlxxx3wk6ln0140hsi3icp40yyv6h1j4";
     };
 
     preBuild = ''
