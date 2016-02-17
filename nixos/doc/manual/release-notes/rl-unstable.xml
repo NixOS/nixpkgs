@@ -172,6 +172,13 @@ fileSystems."/example" = {
     </para>
   </listitem>
 
+  <listitem>
+    <para><literal>services.udev.extraRules</literal> option now writes rules
+    to <filename>99-local.rules</filename> instead of <filename>10-local.rules</filename>.
+    This makes all the user rules apply after others, so their results wouldn't be
+    overriden by anything else.</para>
+  </listitem>
+
 </itemizedlist>
 
 
