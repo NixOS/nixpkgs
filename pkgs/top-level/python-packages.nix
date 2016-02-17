@@ -1802,14 +1802,23 @@ in modules // {
 
   cycler = buildPythonPackage rec {
     name = "cycler-${version}";
-    version = "0.9.0";
+    version = "0.10.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/C/Cycler/${name}.tar.gz";
-      sha256 = "96dc4ddf27ef62c09990c6196ac1167685e89168042ec0ae4db586de023355bc";
+      sha256 = "cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8";
     };
 
+    buildInputs = with self; [ coverage nose ];
     propagatedBuildInputs = with self; [ six ];
+
+    checkPhase = ''
+      ${python.interpreter} run_tests.py
+    '';
+
+    # Tests were not included in release.
+    # https://github.com/matplotlib/cycler/issues/31
+    doCheck = false;
 
     meta = {
       description = "Composable style cycles";
