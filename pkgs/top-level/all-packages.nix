@@ -259,6 +259,15 @@ let
     { substitutions = { inherit autoconf automake gettext libtool; }; }
     ../build-support/setup-hooks/autoreconf.sh;
 
+  ensureNewerSourcesHook = { year }: makeSetupHook {}
+    (writeScript "ensure-newer-sources-hook.sh" ''
+      postUnpackHooks+=(_ensureNewerSources)
+      _ensureNewerSources() {
+        '${findutils}/bin/find' "$sourceRoot" \
+          '!' -newermt '${year}-01-01' -exec touch -d '${year}-01-02' '{}' '+'
+      }
+    '');
+
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
   buildFHSEnv = callPackage ../build-support/build-fhs-chrootenv/env.nix {
@@ -6604,6 +6613,11 @@ let
       inherit fontconfig fontDirectories;
     };
 
+  makeFontsCache = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
+    callPackage ../development/libraries/fontconfig/make-fonts-cache.nix {
+      inherit fontconfig fontDirectories;
+    };
+
   freealut = callPackage ../development/libraries/freealut { };
 
   freeglut = callPackage ../development/libraries/freeglut { };
@@ -7838,6 +7852,8 @@ let
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
+  libvdpau-va-gl = callPackage ../development/libraries/libvdpau-va-gl { };
+
   libvirt = callPackage ../development/libraries/libvirt { };
 
   libvirt-glib = callPackage ../development/libraries/libvirt-glib { };
@@ -8181,21 +8197,16 @@ let
   wolfssl = callPackage ../development/libraries/wolfssl { };
 
   openssl = openssl_1_0_1;
-  openssl_1_0_1 = callPackage ../development/libraries/openssl {
-    fetchurl = fetchurlBoot;
-    cryptodevHeaders = linuxPackages.cryptodev.override {
-      fetchurl = fetchurlBoot;
-      onlyHeaders = true;
-    };
-  };
 
-  openssl_1_0_2 = callPackage ../development/libraries/openssl/1.0.2.x.nix {
-    fetchurl = fetchurlBoot;
-    cryptodevHeaders = linuxPackages.cryptodev.override {
+  inherit (callPackages ../development/libraries/openssl {
       fetchurl = fetchurlBoot;
-      onlyHeaders = true;
-    };
-  };
+      cryptodevHeaders = linuxPackages.cryptodev.override {
+        fetchurl = fetchurlBoot;
+        onlyHeaders = true;
+      };
+    })
+    openssl_1_0_1
+    openssl_1_0_2;
 
   openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix {
     cryptodevHeaders = linuxPackages.cryptodev.override {

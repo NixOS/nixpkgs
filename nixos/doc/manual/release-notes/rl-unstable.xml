@@ -169,10 +169,34 @@ fileSystems."/example" = {
   options = [ "noatime" "compress=lzo" "space_cache" "autodefrag" ];
 };
 </programlisting>
-
     </para>
   </listitem>
 
+  <listitem>
+    <para>CUPS, installed by <literal>services.printing</literal> module, now
+    has its data directory in <filename>/var/lib/cups</filename>. Old
+    configurations from <filename>/etc/cups</filename> are moved there
+    automatically, but there might be problems. Also configuration options
+    <literal>services.printing.cupsdConf</literal> and
+    <literal>services.printing.cupsdFilesConf</literal> were removed
+    because they had been allowing one to override configuration variables
+    required for CUPS to work at all on NixOS. For most use cases,
+    <literal>services.printing.extraConf</literal> and new option
+    <literal>services.printing.extraFilesConf</literal> should be enough;
+    if you encounter a situation when they are not, please file a bug.</para>
+
+    <para>There are also Gutenprint improvements; in particular, a new option
+    <literal>services.printing.gutenprint</literal> is added to enable automatic
+    updating of Gutenprint PPMs; it's greatly recommended to enable it instead
+    of adding <literal>gutenprint</literal> to the <literal>drivers</literal> list.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para><literal>services.xserver.vaapiDrivers</literal> has been removed. Use
+    <literal>services.hardware.opengl.extraPackages{,32}</literal> instead. You can
+    also specify VDPAU drivers there.</para>
+  </listitem>
 </itemizedlist>
 
 

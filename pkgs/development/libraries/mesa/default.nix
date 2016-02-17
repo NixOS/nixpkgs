@@ -22,7 +22,7 @@ else
 */
 
 let
-  version = "11.0.8";
+  version = "11.1.1";
   # this is the default search path for DRI drivers
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
         + head (splitString "." version) + ''.x/${version}/mesa-${version}.tar.xz'')
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "5696e4730518b6805d2ed5def393c4293f425a2c2c01bd5ed4bdd7ad62f7ad75";
+    sha256 = "087xlxl8dzmhzjilpsdiy19dn106spq120c9ndgnn4qlqm7hgnv4";
   };
 
   prePatch = "patchShebangs .";
@@ -158,8 +158,6 @@ stdenv.mkDerivation {
     done
   '' + /* set the default search path for DRI drivers; used e.g. by X server */ ''
     substituteInPlace "$out/lib/pkgconfig/dri.pc" --replace '$(drivers)' "${driverLink}"
-  '' + /* move vdpau drivers to $drivers/lib, so they are found */ ''
-    mv "$drivers"/lib/vdpau/* "$drivers"/lib/ && rmdir "$drivers"/lib/vdpau
   '';
   #ToDo: @vcunat isn't sure if drirc will be found when in $out/etc/, but it doesn't seem important ATM
 

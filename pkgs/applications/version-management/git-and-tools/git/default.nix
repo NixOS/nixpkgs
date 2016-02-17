@@ -24,8 +24,6 @@ stdenv.mkDerivation {
   patches = [
     ./docbook2texi.patch
     ./symlinks-in-bin.patch
-    ./cert-path.patch
-    ./ssl-cert-file.patch
   ];
 
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv]

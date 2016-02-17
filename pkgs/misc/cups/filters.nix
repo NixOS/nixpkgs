@@ -1,26 +1,24 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, cups, poppler, poppler_utils, fontconfig
-, libjpeg, libpng, perl, ijs, qpdf, dbus, substituteAll, bash, avahi }:
+{ stdenv, fetchurl, pkgconfig, cups, poppler, poppler_utils, fontconfig
+, libjpeg, libpng, perl, ijs, qpdf, dbus, substituteAll, bash, avahi
+, makeWrapper, coreutils, gnused, bc, gawk, gnugrep, which
+}:
 
-stdenv.mkDerivation rec {
+let
+  binPath = stdenv.lib.makeSearchPath "bin" [ coreutils gnused bc gawk gnugrep which ];
+
+in stdenv.mkDerivation rec {
   name = "cups-filters-${version}";
-  version = "1.0.71";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "http://openprinting.org/download/cups-filters/${name}.tar.xz";
-    sha256 = "07wwlqcykfjfqcwj1bxk60ggahyaw7wcx32n5s104d1qkhham01i";
+    sha256 = "0cjrh4wpdhkvmahfkg8f2a2qzilcq12i78q5arwr7dnmx1j8hapj";
   };
 
-  patches = [
-    ./longer-shell-path.patch
-    (fetchpatch { # drop on update
-      name = "poppler-0.34.patch";
-      url = "https://bugs.linuxfoundation.org/attachment.cgi?id=493";
-      sha256 = "18za83q0b0n4hpvvw76jsv0hm89zmijvps2z5kg1srickqlxj891";
-    })
-  ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
 
   buildInputs = [
-    pkgconfig cups poppler poppler_utils fontconfig libjpeg libpng perl
+    cups poppler poppler_utils fontconfig libjpeg libpng perl
     ijs qpdf dbus avahi
   ];
 
@@ -29,9 +27,10 @@ stdenv.mkDerivation rec {
     "--enable-imagefilters"
     "--with-rcdir=no"
     "--with-shell=${stdenv.shell}"
+    "--with-test-font-path=/path-does-not-exist"
   ];
 
-  makeFlags = "CUPS_SERVERBIN=$(out)/lib/cups CUPS_DATADIR=$(out)/share/cups CUPS_SERVERROOT=$(out)/etc/cups";
+  makeFlags = [ "CUPS_SERVERBIN=$(out)/lib/cups" "CUPS_DATADIR=$(out)/share/cups" "CUPS_SERVERROOT=$(out)/etc/cups" ];
 
   postConfigure =
     ''
@@ -46,10 +45,12 @@ stdenv.mkDerivation rec {
 
   postInstall =
     ''
-      for i in $out/lib/cups/filter/{pstopdf,texttops,imagetops}; do
-        substituteInPlace $i --replace 'which ' 'type -p '
+      for i in $out/lib/cups/filter/*; do
+        wrapProgram "$i" --prefix PATH ':' ${binPath}
       done
     '';
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = http://www.linuxfoundation.org/collaborate/workgroups/openprinting/cups-filters;
