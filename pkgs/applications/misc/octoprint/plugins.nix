@@ -60,4 +60,24 @@ in {
     };
   };
 
+  stlviewer = buildPlugin rec {
+    name = "OctoPrint-STLViewer-${version}";
+    version = "0.3.0";
+
+    src = fetchFromGitHub {
+      owner = "jneilliii";
+      repo = "OctoPrint-STLViewer";
+      rev = "v${version}";
+      sha256 = "1a6sa8pw9ay7x27pfwr3nzb22x3jaw0c9vwyz4mrj76zkiw6svfi";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/jneilliii/Octoprint-STLViewer;
+      description = "A simple stl viewer tab for OctoPrint";
+      platforms = platforms.all;
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
 }
