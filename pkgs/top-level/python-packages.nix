@@ -17764,11 +17764,11 @@ in modules // {
   };
 
   redis = buildPythonPackage rec {
-    name = "redis-2.10.3";
+    name = "redis-2.10.5";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/r/redis/${name}.tar.gz";
-      sha256 = "1701qjwn4n05q90fdg4bsg96s27xf5s4hsb4gxhv3xk052q3gyx4";
+      sha256 = "0csmrkxb29x7xs9b51zplwkkq2hwnbh9jns1g85dykn5rxmaxysx";
     };
 
     # tests require a running redis
