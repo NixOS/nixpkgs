@@ -8859,7 +8859,9 @@ in modules // {
       sha256 = "10ivzk88m8nn3bqbg6xgv6yfy2dgp6yzbcvr645y93pzlash4xpj";
     };
 
-    propagatedBuildInputs = with self; [ coverage ddt nose pyyaml requests2 six testtools python_mimeparse ];
+    # The dependencies needed for the unit tests are removed because there is a circular dependency
+    # between "testtools 2.0" and "fixtures 1.3" that prevents a successful build.
+    propagatedBuildInputs = with self; [ pyyaml requests2 six python_mimeparse ];
 
     # The travis build fails since the migration from multiprocessing to threading for hosting the API under test.
     # OSError: [Errno 98] Address already in use
