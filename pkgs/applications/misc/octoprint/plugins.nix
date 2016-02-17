@@ -40,4 +40,24 @@ in {
     };
   };
 
+  titlestatus = buildPlugin rec {
+    name = "OctoPrint-TitleStatus-${version}";
+    version = "0.0.2";
+
+    src = fetchFromGitHub {
+      owner = "MoonshineSG";
+      repo = "OctoPrint-TitleStatus";
+      rev = version;
+      sha256 = "0rfbpxbcmadyihcrynh6bjywy3yqnzsnjn3yiwifisbrjgpm6sfw";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/MoonshineSG/OctoPrint-TitleStatus;
+      description = "Show printers status in window title";
+      platforms = platforms.all;
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
 }
