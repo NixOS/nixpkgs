@@ -1,5 +1,6 @@
 { stdenv, fetchurl, libidn, openssl, makeWrapper, fetchhg
-, lua5, luasocket, luasec, luaexpat, luafilesystem, luabitop, luaevent ? null, luazlib ? null
+, lua5, luasocket, luasec, luaexpat, luafilesystem, luabitop
+, luaevent ? null, luazlib ? null
 , withLibevent ? true, withZlib ? true }:
 
 assert withLibevent -> luaevent != null;
@@ -19,18 +20,18 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "0.9.10";
+  version = "0.10-1nightly213";
   name = "prosody-${version}";
 
   src = fetchurl {
-    url = "http://prosody.im/downloads/source/${name}.tar.gz";
-    sha256 = "0bv6s5c0iizz015hh1lxlwlw1iwvisywajm2rcrbdfyrskzfwdj8";
+    url = "https://prosody.im/nightly/0.10/build213/${name}.tar.gz";
+    sha256 = "03na7kdraq030a2mwss4pqiv98yr6yzv107h35ificzs843qagbr";
   };
 
   communityModules = fetchhg {
-    url = "http://prosody-modules.googlecode.com/hg/";
-    rev = "4b55110b0aa8";
-    sha256 = "0010x2rl9f9ihy2nwqan2jdlz25433srj2zna1xh10490mc28hij";
+    url = "https://hg.prosody.im/prosody-modules/";
+    rev = "50c188cf0ae3";
+    sha256 = "1hz1vn0llghvjq4h96sy96rqnidmylxky4hjwnmhvj23ij2b319f";
   };
 
   buildInputs = [ lua5 luasocket luasec luaexpat luabitop libidn openssl makeWrapper ]
