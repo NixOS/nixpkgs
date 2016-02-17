@@ -12997,6 +12997,8 @@ let
 
   openbox-menu = callPackage ../applications/misc/openbox-menu { };
 
+  openbrf = callPackage ../applications/misc/openbrf { };
+
   openimageio = callPackage ../applications/graphics/openimageio { };
 
   openjump = callPackage ../applications/misc/openjump { };
