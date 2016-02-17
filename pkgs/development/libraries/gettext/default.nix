@@ -47,6 +47,12 @@ stdenv.mkDerivation (rec {
     sed -i -e "s/\(am_libgettextlib_la_OBJECTS = \)error.lo/\\1/" gettext-tools/gnulib-lib/Makefile.in
   '';
 
+  postInstall = ''
+    substituteInPlace "$out/bin/gettext.sh" \
+      --replace "  gettext " "  $out/bin/gettext " \
+      --replace "  ngettext " "  $out/bin/ngettext "
+  '';
+
   buildInputs = [ xz ] ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
 
   enableParallelBuilding = true;
