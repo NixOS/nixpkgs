@@ -59,6 +59,7 @@ in
 
       package = mkOption {
         default = pkgs.haka;
+        defaultText = "pkgs.haka";
         type = types.package;
         description = "
           Which Haka derivation to use.
