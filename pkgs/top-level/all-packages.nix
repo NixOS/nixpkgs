@@ -4842,6 +4842,8 @@ let
 
     re2 = callPackage ../development/ocaml-modules/re2 { };
 
+    sequence = callPackage ../development/ocaml-modules/sequence { };
+
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
 
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
