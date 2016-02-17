@@ -8960,10 +8960,11 @@ in modules // {
       ${python.interpreter} -m unittest discover
     '';
 
-    # Judging from SyntaxError
-    disabled = isPy3k;
-
-    # Lots of errors. Likely due to being in a chroot
+    # Because 2to3 is used the tests in $out need to be run.
+    # Both when using unittest and pytest this resulted in many errors,
+    # some Python byte/str errors, and others specific to resources tested.
+    # Failing tests due to the latter is to be expected with this type of package.
+    # Tests are therefore disabled.
     doCheck = false;
 
     meta = {
