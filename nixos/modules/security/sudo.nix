@@ -34,7 +34,16 @@ in
           Whether users of the <code>wheel</code> group can execute
           commands as super user without entering a password.
         '';
-      };
+    };
+
+    security.sudo.enableInsults = mkOption {
+      type = types.bool;
+      default = false;
+      description =
+        ''
+          Just what do you think you're doing Dave?
+        '';
+    };
 
     security.sudo.configFile = mkOption {
       type = types.lines;
@@ -73,11 +82,13 @@ in
         # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
         Defaults env_keep+=SSH_AUTH_SOCK
 
+        ${lib.optionalString cfg.enableInsults "Defaults insults"}
+
         # "root" is allowed to do anything.
         root        ALL=(ALL) SETENV: ALL
 
         # Users in the "wheel" group can do anything.
-        %wheel      ALL=(ALL:ALL) ${if cfg.wheelNeedsPassword then "" else "NOPASSWD: ALL, "}SETENV: ALL
+        %wheel      ALL=(ALL:ALL) ${lib.optionalString (!cfg.wheelNeedsPassword) "NOPASSWD: ALL, "}SETENV: ALL
         ${cfg.extraConfig}
       '';
 
