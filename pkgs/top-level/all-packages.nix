@@ -5988,6 +5988,8 @@ let
 
   mk = callPackage ../development/tools/build-managers/mk { };
 
+  msitools = callPackage ../development/tools/misc/msitools { };
+
   multi-ghc-travis = callPackage ../development/tools/haskell/multi-ghc-travis { };
 
   neoload = callPackage ../development/tools/neoload {
