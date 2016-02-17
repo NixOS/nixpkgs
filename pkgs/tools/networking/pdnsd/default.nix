@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sed -i 's/.*(cachedir).*/:/' Makefile.in
   '';
 
+  configureFlags = [ "--enable-ipv6" ];
+
   meta = { 
     description = "Permanent DNS caching";
     homepage = http://www.phys.uu.nl/~rombouts/pdnsd.html;

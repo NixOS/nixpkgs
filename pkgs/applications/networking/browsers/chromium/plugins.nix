@@ -80,7 +80,7 @@ let
       wvName = "Widevine Content Decryption Module";
       wvDescription = "Playback of encrypted HTML audio/video content";
       wvMimeTypes = "application/x-ppapi-widevine-cdm";
-      wvModule = "$widevine/lib/libwidevinecdmadapter.so";
+      wvModule = "@widevine@/lib/libwidevinecdmadapter.so";
       wvInfo = "#${wvName}#${wvDescription};${wvMimeTypes}";
     in ''
       flashVersion="$(

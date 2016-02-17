@@ -62,6 +62,13 @@ in {
         description = "Cursor speed factor for highest-speed finger motion.";
       };
 
+      scrollDelta = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        example = 75;
+        description = "Move distance of the finger for a scroll event.";
+      };
+
       twoFingerScroll = mkOption {
         type = types.bool;
         default = false;
@@ -122,6 +129,20 @@ in {
         description = "Whether to enable palm detection (hardware support required)";
       };
 
+      palmMinWidth = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        example = 5;
+        description = "Minimum finger width at which touch is considered a palm";
+      };
+
+      palmMinZ = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        example = 20;
+        description = "Minimum finger pressure at which touch is considered a palm";
+      };
+
       horizontalScroll = mkOption {
         type = types.bool;
         default = true;
@@ -174,8 +195,12 @@ in {
           Option "HorizTwoFingerScroll" "${if cfg.horizTwoFingerScroll then "1" else "0"}"
           Option "VertEdgeScroll" "${if cfg.vertEdgeScroll then "1" else "0"}"
           Option "HorizEdgeScroll" "${if cfg.horizEdgeScroll then "1" else "0"}"
-          ${if cfg.palmDetect then ''Option "PalmDetect" "1"'' else ""}
-          ${if cfg.horizontalScroll then "" else ''Option "HorizScrollDelta" "0"''}
+          ${optionalString cfg.palmDetect ''Option "PalmDetect" "1"''}
+          ${optionalString (cfg.palmMinWidth != null) ''Option "PalmMinWidth" "${toString cfg.palmMinWidth}"''}
+          ${optionalString (cfg.palmMinZ != null) ''Option "PalmMinZ" "${toString cfg.palmMinZ}"''}
+          ${optionalString (cfg.scrollDelta != null) ''Option "VertScrollDelta" "${toString cfg.scrollDelta}"''}
+          ${if !cfg.horizontalScroll then ''Option "HorizScrollDelta" "0"''
+            else (optionalString (cfg.scrollDelta != null) ''Option "HorizScrollDelta" "${toString cfg.scrollDelta}"'')}
           ${cfg.additionalOptions}
         EndSection
       '';

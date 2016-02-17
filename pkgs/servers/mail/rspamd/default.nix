@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vstakhov/rspamd";
     license = licenses.bsd2; 
     description = "advanced spam filtering system";
-    maintainer = maintainers.avnik;
+    maintainers = maintainers.avnik;
   };
 }

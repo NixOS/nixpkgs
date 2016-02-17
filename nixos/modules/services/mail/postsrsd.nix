@@ -95,7 +95,11 @@ in {
       preStart = ''
         if [ ! -e "${cfg.secretsFile}" ]; then
           echo "WARNING: secrets file not found, autogenerating!"
-          mkdir -p -m750 "$(dirname "${cfg.secretsFile}")"
+          DIR="$(dirname "${cfg.secretsFile}")"
+          if [ ! -d "$DIR" ]; then
+            mkdir -p -m750 "$DIR"
+            chown "${cfg.user}:${cfg.group}" "$DIR"
+          fi
           dd if=/dev/random bs=18 count=1 | base64 > "${cfg.secretsFile}"
           chmod 600 "${cfg.secretsFile}"
         fi

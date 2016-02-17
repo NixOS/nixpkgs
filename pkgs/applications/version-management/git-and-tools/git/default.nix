@@ -83,6 +83,10 @@ stdenv.mkDerivation {
              -e 's|	perl -e|	${perl}/bin/perl -e|g' \
              $out/libexec/git-core/{git-am,git-submodule}
 
+      # Fix references to gettext.
+      substituteInPlace $out/libexec/git-core/git-sh-i18n \
+          --replace 'gettext.sh' '${gettext}/bin/gettext.sh'
+
       # gzip (and optionally bzip2, xz, zip) are runtime dependencies for
       # gitweb.cgi, need to patch so that it's found
       sed -i -e "s|'compressor' => \['gzip'|'compressor' => ['${gzip}/bin/gzip'|" \

@@ -2,17 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "colm-${version}";
-  version = "0.12.0";
+  version = "0.13.0.3";
 
   src = fetchurl {
     url = "http://www.colm.net/files/colm/${name}.tar.gz";
-    sha256 = "0kbfipxv3nvggd1a2nahk3jg22iifp2l7lkm55i5r7qkpms5sm3v";
+    sha256 = "0dadfsnkbxcrf5kihvncbprb6w64jz2myylfmj952gdmcsim4zj2";
   };
 
   buildInputs = [ makeWrapper ];
 
   doCheck = true;
-  checkPhase = ''sh ./test/runtests.sh'';
 
   postInstall = ''
     wrapProgram $out/bin/colm \

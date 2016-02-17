@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "A fork of libqtelegram by Aseman, using qmake";
     homepage = src.meta.homepage;
     license = stdenv.lib.licenses.gpl3;
-    maintainer = [ maintainers.profpatsch ];
+    maintainers = [ maintainers.profpatsch ];
   };
 
 }

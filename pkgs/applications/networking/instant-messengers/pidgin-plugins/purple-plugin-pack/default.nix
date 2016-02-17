@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
     description = "Plugin pack for Pidgin 2.x";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainters = with maintainers; [ bdimcheff ];
+    maintainers = with maintainers; [ bdimcheff ];
   };
 }

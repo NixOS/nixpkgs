@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Precision colors for machines and people";
     homepage = http://ethanschoonover.com/solarized;
-    maintainer = "Samuel Rivas <samuelrivas@gmail.com>";
+    maintainers = "Samuel Rivas <samuelrivas@gmail.com>";
     license = stdenv.lib.licenses.mit;
 
     platforms = stdenv.lib.platforms.all;

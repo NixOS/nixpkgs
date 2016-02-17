@@ -26,6 +26,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl3;
     description = "A simple cross-platform OCaml code editor built for top-level evaluation";
     platforms = ocamlPackages.ocaml.meta.platforms;
-    maintainer = with stdenv.lib.maintainers; [ vbgl ];
+    maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };
 }

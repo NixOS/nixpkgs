@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, yacc, ncurses, libxml2 }:
+{ stdenv, fetchFromGitHub, yacc, ncurses, libxml2 }:
 
 let
   version = "0.2.1";
@@ -7,9 +7,11 @@ stdenv.mkDerivation rec {
 
   name = "sc-im-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/andmarti1424/sc-im/archive/v${version}.tar.gz";
-    sha256 = "08yks8grj5w434r81dy2knzbdhdnkc23r0d9v848mcl706xnjl6j";
+  src = fetchFromGitHub {
+    owner = "andmarti1424";
+    repo = "sc-im";
+    rev = "v${version}";
+    sha256 = "0v6b8xksvd12vmz198vik2ranyr5mhnp85hl9yxh9svibs7jxsbb";
   };
 
   buildInputs = [ yacc ncurses libxml2 ];
@@ -28,12 +30,12 @@ stdenv.mkDerivation rec {
     make install prefix=
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "https://github.com/andmarti1424/sc-im";
     description = "SC-IM - Spreadsheet Calculator Improvised - SC fork";
-    license = stdenv.lib.licenses.bsdOriginal;
-    maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
-    platforms = with stdenv.lib.platforms; linux; # Cannot test others
+    license = licenses.bsdOriginal;
+    maintainers = [ maintainers.matthiasbeyer ];
+    platforms = platforms.linux; # Cannot test others
   };
 
 }

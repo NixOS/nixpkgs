@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Telegram API tools for QtQml and Qml";
     homepage = src.meta.homepage;
     license = stdenv.lib.licenses.gpl3;
-    maintainer = [ maintainers.profpatsch ];
+    maintainers = [ maintainers.profpatsch ];
   };
 
 }

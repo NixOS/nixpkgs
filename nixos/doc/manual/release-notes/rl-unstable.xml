@@ -41,6 +41,7 @@ nixos.path = ./nixpkgs-unstable-2015-12-06/nixos;
 
   <itemizedlist>
     <listitem><para><literal>services/monitoring/longview.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/pdnsd.nix</literal></para></listitem>
     <listitem><para><literal>services/web-apps/pump.io.nix</literal></para></listitem>
     <listitem><para><literal>services/security/haka.nix</literal></para></listitem>
   </itemizedlist>

@@ -878,10 +878,11 @@ let
   };
 
   git-lfs = buildFromGitHub {
-    rev = "v1.0.0";
+    date = "1.1.1";  # "date" is effectively "version"
+    rev = "v1.1.1";
     owner = "github";
     repo = "git-lfs";
-    sha256 = "1zlg3rm5yxak6d88brffv1wpj0iq4qgzn6sgg8xn0pbnzxjd1284";
+    sha256 = "1m7kii57jrsb22m5x9v8xa3s1qmipfkpk6cscgxrbrj7g0a75fnc";
 
     # Tests fail with 'lfstest-gitserver.go:46: main redeclared in this block'
     excludedPackages = [ "test" ];
@@ -1847,6 +1848,27 @@ let
       repo = "hmacauth";
       sha256 = "056mcqrf2bv0g9gn2ixv19srk613h4sasl99w9375mpvmadb3pz1";
     };
+  };
+
+  hound = buildGoPackage rec {
+    rev  = "0a364935ba9db53e6f3f5563b02fcce242e0930f";
+    name = "hound-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/etsy/hound";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "etsy";
+      repo   = "hound";
+      sha256 = "0jhnjskpm15nfa1cvx0h214lx72zjvnkjwrbgwgqqyn9afrihc7q";
+    };
+    buildInputs = [ go-bindata.bin pkgs.nodejs pkgs.nodePackages.react-tools pkgs.python pkgs.rsync ];
+    postInstall = ''
+      pushd go
+      python src/github.com/etsy/hound/tools/setup
+      sed -i 's|bin/go-bindata||' Makefile
+      sed -i 's|$<|#go-bindata|' Makefile
+      make
+    '';
   };
 
   hologram = buildGoPackage rec {

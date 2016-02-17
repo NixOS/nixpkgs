@@ -22,6 +22,8 @@ stdenv.mkDerivation {
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.cc libX11 zlib libxml2 cups pango atk gtk glib gdk_pixbuf ];
 
+  passthru.mozillaPlugin = "/libexec/adobe-reader/Browser/intellinux";
+
   meta = {
     description = "Adobe Reader, a viewer for PDF documents";
     homepage = http://www.adobe.com/products/reader;

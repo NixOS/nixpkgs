@@ -605,14 +605,8 @@ self: super: {
   # https://github.com/junjihashimoto/test-sandbox-compose/issues/2
   test-sandbox-compose = dontCheck super.test-sandbox-compose;
 
-  # https://github.com/jgm/pandoc/issues/2190
-  pandoc = overrideCabal super.pandoc (drv: {
-    enableSharedExecutables = false;
-    postInstall = ''            # install man pages
-      mv man $out/
-      find $out/man -type f ! -name "*.[0-9]" -exec rm {} +
-    '';
-  });
+  # https://github.com/jgm/pandoc/issues/2709
+  pandoc = disableSharedExecutables super.pandoc;
 
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
@@ -626,14 +620,6 @@ self: super: {
 
   # https://github.com/haskell/haddock/issues/378
   haddock-library = dontCheck super.haddock-library;
-
-  # Already fixed in upstream darcs repo.
-  xmonad-contrib = overrideCabal super.xmonad-contrib (drv: {
-    postPatch = ''
-      sed -i -e '24iimport Control.Applicative' XMonad/Util/Invisible.hs
-      sed -i -e '22iimport Control.Applicative' XMonad/Hooks/DebugEvents.hs
-    '';
-  });
 
   # https://github.com/anton-k/csound-expression-dynamic/issues/1
   csound-expression-dynamic = dontHaddock super.csound-expression-dynamic;
@@ -772,9 +758,6 @@ self: super: {
   elm-repl = markBroken super.elm-repl;
   elm-server = markBroken super.elm-server;
   elm-yesod = markBroken super.elm-yesod;
-
-  # https://github.com/GaloisInc/HaNS/pull/8
-  hans = appendPatch super.hans ./patches/hans-disable-webserver.patch;
 
   # https://github.com/athanclark/sets/issues/2
   sets = dontCheck super.sets;

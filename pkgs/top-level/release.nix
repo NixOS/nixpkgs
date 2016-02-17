@@ -233,7 +233,7 @@ let
       zsh = linux;
       zsnes = ["i686-linux"];
 
-      emacs24PackagesNg = packagePlatforms pkgs.emacs24PackagesNg;
+      #emacs24PackagesNg = packagePlatforms pkgs.emacs24PackagesNg;
 
       gnome = {
         gnome_panel = linux;
@@ -244,7 +244,7 @@ let
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
 
-      rPackages = packagePlatforms pkgs.rPackages;
+      #rPackages = packagePlatforms pkgs.rPackages;
 
       strategoPackages = {
         sdf = linux;
@@ -254,9 +254,15 @@ let
         dryad = linux;
       };
 
-      pythonPackages = {
-        zfec = linux;
-      };
+      ocamlPackages = { };
+
+      perlPackages = { };
+
+      pythonPackages = { };
+      python2Packages = { };
+      python27Packages = { };
+      python3Packages = { };
+      python35Packages = { };
 
       xorg = {
         fontadobe100dpi = linux ++ darwin;
