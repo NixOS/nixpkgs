@@ -12985,6 +12985,8 @@ let
 
   octoprint = callPackage ../applications/misc/octoprint { };
 
+  octoprint-plugins = callPackage ../applications/misc/octoprint/plugins.nix { };
+
   ocrad = callPackage ../applications/graphics/ocrad { };
 
   offrss = callPackage ../applications/networking/offrss { };
