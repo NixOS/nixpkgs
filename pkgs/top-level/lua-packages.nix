@@ -179,9 +179,12 @@ let
   luasocket = buildLuaPackage rec {
     name = "socket-${version}";
     version = "3.0-rc1";
-    src = fetchurl {
-      url = "https://github.com/diegonehab/luasocket/archive/v${version}.tar.gz";
-      sha256 = "0j8jx8bjicvp9khs26xjya8c495wrpb7parxfnabdqa5nnsxjrwb";
+
+    src = fetchFromGitHub {
+      owner = "diegonehab";
+      repo = "luasocket";
+      rev = "v${version}";
+      sha256 = "1chs7z7a3i3lck4x7rz60ziwbf793gw169hpjdfca8y4yf1hzsxk";
     };
 
     patchPhase = ''
