@@ -214,10 +214,10 @@ in
 
       pidfile = "/var/lib/prosody/prosody.pid"
 
-
       log = "*syslog"
 
       data_path = "/var/lib/prosody"
+      plugin_paths = { "${pkgs.prosody.modules}" }
 
       allow_registration = ${ if cfg.allowRegistration then "true" else "false" };
 

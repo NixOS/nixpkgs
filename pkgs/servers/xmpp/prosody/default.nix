@@ -45,7 +45,9 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-      cp $communityModules/mod_websocket/mod_websocket.lua $out/lib/prosody/modules/
+      mkdir $modules
+      cp -r $communityModules/* $modules
+
       wrapProgram $out/bin/prosody \
         --set LUA_PATH '"${luaPath};"' \
         --set LUA_CPATH '"${luaCPath};"'
@@ -54,6 +56,8 @@ stdenv.mkDerivation rec {
         --set LUA_PATH '"${luaPath};"' \
         --set LUA_CPATH '"${luaCPath};"'
     '';
+
+  outputs = [ "out" "modules" ];
 
   meta = {
     description = "Open-source XMPP application server written in Lua";
