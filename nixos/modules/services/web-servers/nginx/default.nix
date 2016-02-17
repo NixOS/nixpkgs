@@ -78,6 +78,15 @@ let
         ssl = vhost.enableSSL || vhost.forceSSL;
         port = if vhost.port != null then vhost.port else (if ssl then 443 else 80);
         listenString = toString port + optionalString ssl " ssl spdy";
+        acmeLocation = optionalString vhost.enableACME ''
+          location /.well-known/acme-challenge {
+            try_files $uri @acme-fallback;
+            root ${vhost.acmeRoot};
+          }
+          location @acme-fallback {
+            proxy_pass http://${vhost.acmeFallbackHost};
+          }
+        '';
       in ''
         ${optionalString vhost.forceSSL ''
           server {
@@ -85,7 +94,7 @@ let
             listen [::]:80;
 
             server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
-            ${optionalString vhost.enableACME "location /.well-known/acme-challenge { root ${vhost.acmeRoot}; }"}
+            ${acmeLocation}
             location / {
               return 301 https://$host${optionalString (port != 443) ":${port}"}$request_uri;
             }
@@ -97,7 +106,7 @@ let
           listen [::]:${listenString};
 
           server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
-          ${optionalString vhost.enableACME "location /.well-known/acme-challenge { root ${vhost.acmeRoot}; }"}
+          ${acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
             return 301 https://${vhost.globalRedirect}$request_uri;
