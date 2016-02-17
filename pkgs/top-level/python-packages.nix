@@ -8958,9 +8958,6 @@ in modules // {
       ${python.interpreter} -m unittest discover
     '';
 
-    # Judging from SyntaxError
-    disabled = isPy3k;
-
     # Lots of errors. Likely due to being in a chroot
     doCheck = false;
 
