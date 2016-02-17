@@ -4687,6 +4687,8 @@ let
 
     functory = callPackage ../development/ocaml-modules/functory { };
 
+    gen = callPackage ../development/ocaml-modules/gen { };
+
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
     io-page = callPackage ../development/ocaml-modules/io-page { };
