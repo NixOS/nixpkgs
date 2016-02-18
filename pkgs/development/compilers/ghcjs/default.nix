@@ -100,8 +100,8 @@ in buildEnv {
     # Install dummy RTS
     cp ${ghcPackageCfgDir}/builtin_rts.conf ${ghcjsPackageCfgDir}/
     sed -E -i ${ghcjsPackageCfgDir}/builtin_rts.conf \
-      -e "s_^(library-dirs:).*_\1 ${ghcjsPackageCfgDir}/include_" \
-      -e "s_^(library-dirs:).*_\1 ${ghcjsPackageCfgDir}/lib_"
+      -e "s_^(include-dirs:).*_\1 ${ghcjsLibDir}/include_" \
+      -e "s_^(library-dirs:).*_\1 ${ghcLibDir}/rts_"
 
     # Install dummy configuration
     cp ${ghcLibDir}/settings ${ghcjsLibDir}/
@@ -132,7 +132,7 @@ in buildEnv {
     $out/bin/ghcjs-pkg check
 
     # symlink node
-    echo ${nodejs}/bin/node > 2${ghcjsLibDir}/node
+    echo ${nodejs}/bin/node > ${ghcjsLibDir}/node
 
     touch ${ghcjsLibDir}/ghcjs_boot.completed
   '';
