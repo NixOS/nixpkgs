@@ -47,11 +47,6 @@ in
         description = "Whether to run the rmilter daemon.";
       };
 
-      debug = mkOption {
-        default = false;
-        description = "Whether to run the rmilter daemon in debug mode.";
-      };
-
       user = mkOption {
         type = types.string;
         default = "rmilter";
@@ -168,7 +163,7 @@ milter_default_action = accept
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.rmilter}/bin/rmilter ${optionalString cfg.debug "-d"} -n -c ${rmilterConfigFile}";
+        ExecStart = "${pkgs.rmilter}/bin/rmilter -n -c ${rmilterConfigFile}";
         User = cfg.user;
         Group = cfg.group;
         PermissionsStartOnly = true;
