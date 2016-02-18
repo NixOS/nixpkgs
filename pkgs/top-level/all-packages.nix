@@ -12437,7 +12437,7 @@ let
   inferno = callPackage_i686 ../applications/inferno { };
 
   inkscape = callPackage ../applications/graphics/inkscape {
-    inherit (pythonPackages) lxml;
+    inherit (pythonPackages) python pyxml lxml numpy;
     lcms = lcms2;
   };
 
