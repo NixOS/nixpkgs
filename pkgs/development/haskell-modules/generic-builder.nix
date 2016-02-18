@@ -125,15 +125,8 @@ let
 
   ghcEnv = ghc.withPackages (p: haskellBuildInputs);
 
-  setupBuilder = if isGhcjs
-                 then (if !(builtins.elem pname ["Cabal" "hscolour"])
-                       then ghcCommand
-                       else "${nativeGhc}/bin/ghc")
-                 else ghcCommand;
-
-  setupCommand = if isGhcjs && !(builtins.elem pname ["Cabal" "hscolour"])
-                 then "${ghc.nodejs}/bin/node ./Setup.jsexe/all.js"
-                 else "./Setup";
+  setupBuilder = if isGhcjs then "${nativeGhc}/bin/ghc" else ghcCommand;
+  setupCommand = "./Setup";
   ghcCommand = if isGhcjs then "ghcjs" else "ghc";
   ghcCommandCaps = toUpper ghcCommand;
 
