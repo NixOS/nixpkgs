@@ -67,6 +67,9 @@ with lib;
           mkdir -p /mnt/etc
           touch /mnt/etc/NIXOS
 
+          # /srv must be accessible for unprivileged users
+          install -d -m 0755 /mnt/srv
+
           # `switch-to-configuration' requires a /bin/sh
           mkdir -p /mnt/bin
           ln -s ${config.system.build.binsh}/bin/sh /mnt/bin/sh
