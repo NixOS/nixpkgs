@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, runCommand, buildEnv, makeWrapper
-, writeText
+, writeText, rsync
 
 , bootPkgs, haskellPackages, haskell
 , nodejs
@@ -16,12 +16,12 @@ let
     repo = "ghcjs";
 
     # dyn keys
-    #rev = "10a9ecaec4cfd180b29c3e443ec04a2694d5643f";
-    #sha256 = "1a3k30yi9r9c4x713b2w4ka13lazz7sx79fhq6k7wmnn8dzf0xg7";
+    rev = "10a9ecaec4cfd180b29c3e443ec04a2694d5643f";
+    sha256 = "1a3k30yi9r9c4x713b2w4ka13lazz7sx79fhq6k7wmnn8dzf0xg7";
 
     # hard keys
-    rev = "91880ffac598320c1b5b20fbde6926a30b3abece";
-    sha256 = "1759hrp4qykns806f73bbj5iz4sy22azw0vq39d2jb14x6vgdba5";
+    #rev = "91880ffac598320c1b5b20fbde6926a30b3abece";
+    #sha256 = "1759hrp4qykns806f73bbj5iz4sy22azw0vq39d2jb14x6vgdba5";
   };
 
   ghcFork = fetchFromGitHub {
@@ -46,6 +46,13 @@ let
     };
   };
 
+  shims = fetchFromGitHub {
+    owner = "ghcjs";
+    repo = "shims";
+    rev = "45f44f5f027ec03264b61b8049951e765cc0b23a";
+    sha256 = "090pz4rzwlcrjavbbzxhf6c7rq7rzmr10g89hmhw4c65c4fyyykp";
+  };
+
   ghc                = stage0Pkgs.ghc;
   ghcLibDir          = "${ghc}/lib/ghc-${ghc.version}";
   ghcPackageCfgDir   = "${ghcLibDir}/package.conf.d";
@@ -56,6 +63,7 @@ let
 
 # Bare-bones boot process
 in buildEnv {
+  buildInputs = [ rsync ];
   inherit (ghcjs) name;
   paths = [];
   postBuild = ''
@@ -100,16 +108,21 @@ in buildEnv {
     cp ${ghcLibDir}/platformConstants ${ghcjsLibDir}/
 
     # Install real configuration
-    cp -r ${src}/ghcjs/lib/etc/* ${ghcjsLibDir}/
+    rsync -r ${src}/ghcjs/lib/etc/ ${ghcjsLibDir}/
 
     # Install headers
-    cp -r ${ghcFork}/data/include/ ${ghcjsLibDir}
+    mkdir ${ghcjsLibDir}/include/
+    rsync -r ${ghcFork}/data/include/ ${ghcjsLibDir}/include/
+    rsync -r ${src}/ghcjs/lib/include/* ${ghcjsLibDir}/include/
 
     # Install unlit
     cp ${ghcLibDir}/unlit ${ghcjsLibDir}/
 
     # Create empty object file for "src/Gen2/DynamicLinking.hs"
     ${ghc}/bin/ghc -c ${writeText "empty.c" ""} -o ${ghcjsLibDir}/empty.o
+
+    # Install shims
+    cp -r ${shims} ${ghcjsLibDir}/shims
 
     # Finalize package DB
     $out/bin/ghcjs-pkg recache
