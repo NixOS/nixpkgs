@@ -21,13 +21,6 @@ self: super:
     '';
   });
 
-  mkDerivation = drv: super.mkDerivation (drv // {
-    # Need Cabal lib to be available.
-    libraryHaskellDepends = drv.libraryHaskellDepends
-      # Be careful not to end up in infinite recursion!
-      ++ pkgs.lib.optional (!(builtins.elem drv.pname ["Cabal" "hscolour"])) self.Cabal;
-  });
-
   # LLVM is not supported on this GHC; use the latest one.
   inherit (pkgs) llvmPackages;
 
