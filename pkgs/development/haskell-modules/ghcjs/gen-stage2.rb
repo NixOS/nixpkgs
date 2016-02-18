@@ -28,16 +28,26 @@ stage2_packages = [
 nixpkgs = File.expand_path("../../../../..", __FILE__)
 boot = `nix-build #{nixpkgs} -A haskell.packages.ghcjs.ghc.ghcjsBoot`.chomp
 
+out = "".dup
+out << "{ ghcjsBoot, callPackage }:\n"
+out << "\n"
+out << "{\n"
+
 stage2_packages.each do |package|
   name = Pathname.new(package).basename
   nix = `cabal2nix file://#{boot}/#{package}  --jailbreak`
   nix.sub!(/src =.*?$/, "src = \"${ghcjsBoot}/#{package}\";")
   nix.sub!("libraryHaskellDepends", "doCheck = false;\n  libraryHaskellDepends")
-  nix = nix.split("\n").join("\n    ")
+  # cabal2nix somehow generates the deps for 'text' as if it had selected flag
+  # 'integer-simple' (despite not passing the flag within the generated
+  # expression). We want integer-gmp instead.
+  nix.gsub!(/integer-simple/, "integer-gmp")
+  nix = nix.split("\n").join("\n      ")
 
-  out = "".dup
-  out << "#{name} = callPackage\n"
-  out << "  (#{nix}) {};"
-
-  puts out
+  out << "  #{name} = callPackage\n"
+  out << "    (#{nix}) {};\n"
 end
+
+out << "}"
+
+puts out

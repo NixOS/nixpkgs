@@ -49,7 +49,11 @@ self: super:
   time = null;
   transformers = null;
   unix = null;
-  integer-simple = null;
+
+  # Don't set integer-simple to null!
+  # GHCJS uses integer-gmp, so any package expression that depends on
+  # integer-simple is wrong.
+  #integer-simple = null;
 
   # These packages are core libraries in GHC 7.10.x, but not here.
   bin-package-db = null;
