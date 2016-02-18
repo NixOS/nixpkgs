@@ -13,7 +13,7 @@ cross:
 
 let
 
-  version = "2.21";
+  version = "2.22";
 
 in
 
@@ -57,10 +57,6 @@ stdenv.mkDerivation ({
          patch extends the search path by "/run/current-system/sw/bin". */
       ./fix_path_attribute_in_getconf.patch
 
-      ./security-4a28f4d5.patch
-      ./security-bdf1ff05.patch
-      ./cve-2014-8121.patch
-      ./cve-2015-1781.patch
       ./cve-2015-7547.patch
 
       ./glibc-locale-incompatibility.patch
@@ -165,7 +161,7 @@ stdenv.mkDerivation ({
     }
     else fetchurl {
       url = "mirror://gnu/glibc/glibc-${version}.tar.gz";
-      sha256 = "0f4prv4c0fcpi85wv4028wqxn075197gwxhgf0vp571fiw2pi3wd";
+      sha256 = "1rcby0cqgswgqaxyqz0yqc4zizb1kvpi5vlfqp7dh3sa132109m6";
     };
 
   # Remove absolute paths from `configure' & co.; build out-of-tree.
