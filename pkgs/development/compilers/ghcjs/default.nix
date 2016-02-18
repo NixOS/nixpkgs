@@ -1,122 +1,148 @@
-{ mkDerivation
-, test-framework
-, test-framework-hunit
-, test-framework-quickcheck2
-, data-default
-, ghc-paths
-, haskell-src-exts
-, haskell-src-meta
-, optparse-applicative
-, system-fileio
-, system-filepath
-, text-binary
-, unordered-containers
-, cabal-install
-, wl-pprint-text
-, base16-bytestring
-, executable-path
-, transformers-compat
-, haddock-api
-, ghcjs-prim
-, regex-posix
+{ stdenv, lib, fetchFromGitHub, runCommand, buildEnv, makeWrapper
+, writeText, rsync
 
-, ghc, gmp
-, jailbreak-cabal
-
-, nodejs, stdenv, filepath, HTTP, HUnit, mtl, network, QuickCheck, random, stm
-, time
-, zlib, aeson, attoparsec, bzlib, hashable
-, lens
-, parallel, safe, shelly, split, stringsearch, syb
-, tar, terminfo
-, vector, yaml, fetchgit, fetchFromGitHub, Cabal
-, alex, happy, git, gnumake, autoconf, patch
-, automake, libtool
-, cryptohash
-, haddock, hspec, xhtml, primitive, cacert, pkgs
-, coreutils
-, libiconv
-
-, ghcjsBoot ? import ./ghcjs-boot.nix { inherit fetchgit; }
-, shims ? import ./shims.nix { inherit fetchFromGitHub; }
+, bootPkgs, haskellPackages, haskell
+, nodejs
 }:
-let version = "0.2.0"; in
-mkDerivation (rec {
-  pname = "ghcjs";
-  inherit version;
+
+with haskell.lib;
+let
+  dynamicCabal2nix = dir: runCommand "dynamic-cabal2nix" {
+    nativeBuildInputs = [ haskellPackages.cabal2nix ];
+  } "cabal2nix ${dir} > $out";
+
   src = fetchFromGitHub {
-    owner = "ghcjs";
+    owner = "forked-upstream-packages-for-ghcjs";
     repo = "ghcjs";
-    rev = "561365ba1667053b5dc5846e2a8edb33eaa3f6dd";
-    sha256 = "1vfa7j0ql3sng29m944iznjw9hcmyl57nfkgxa33dvi2ival8dl2";
+
+    # dyn keys
+    rev = "10a9ecaec4cfd180b29c3e443ec04a2694d5643f";
+    sha256 = "1a3k30yi9r9c4x713b2w4ka13lazz7sx79fhq6k7wmnn8dzf0xg7";
+
+    # hard keys
+    #rev = "91880ffac598320c1b5b20fbde6926a30b3abece";
+    #sha256 = "1759hrp4qykns806f73bbj5iz4sy22azw0vq39d2jb14x6vgdba5";
   };
-  isLibrary = true;
-  isExecutable = true;
-  jailbreak = true;
-  doHaddock = false;
-  doCheck = false;
-  buildDepends = [
-    filepath HTTP mtl network random stm time zlib aeson attoparsec
-    bzlib data-default ghc-paths hashable haskell-src-exts haskell-src-meta
-    lens optparse-applicative parallel safe shelly split
-    stringsearch syb system-fileio system-filepath tar terminfo text-binary
-    unordered-containers vector wl-pprint-text yaml
-    alex happy git gnumake autoconf automake libtool patch gmp
-    base16-bytestring cryptohash executable-path haddock-api
-    transformers-compat QuickCheck haddock hspec xhtml
-    ghcjs-prim regex-posix libiconv
-  ];
-  buildTools = [ nodejs git ];
-  testDepends = [
-    HUnit test-framework test-framework-hunit
-  ];
-  patches = [ ./ghcjs.patch ];
-  postPatch = ''
-    substituteInPlace Setup.hs \
-      --replace "/usr/bin/env" "${coreutils}/bin/env"
 
-    substituteInPlace src/Compiler/Info.hs \
-      --replace "@PREFIX@" "$out"          \
-      --replace "@VERSION@" "${version}"
+  ghcFork = fetchFromGitHub {
+    owner = "forked-upstream-packages-for-ghcjs";
+    repo = "ghc";
+    rev = "08987969fb59453b54fdaea4e8fbf4cd1260f993";
+    sha256 = "1ch7sg1j9276fxfv6nx5b6fqvv742z6npn0ziryg3l0rxa0m65y4";
+  };
 
-    substituteInPlace src-bin/Boot.hs \
-      --replace "@PREFIX@" "$out"     \
-      --replace "@CC@"     "${stdenv.cc}/bin/cc"
-  '';
-  preBuild = ''
-    local topDir=$out/lib/ghcjs-${version}
-    mkdir -p $topDir
+  stage0Pkgs = bootPkgs.override {
+    overrides = self: super: {
+      ghcjs = overrideCabal (self.callPackage (dynamicCabal2nix "${src}/ghcjs") {}) (drv: {
+        doCheck   = false;
+        doHaddock = false;
+      });
+      ghcjs-prim = self.callPackage ./ghcjs-prim.nix {
+        src = "${src}/ghcjs-prim";
+      }; # cannot autogenerate for now
+      genprimopcode = addBuildTools
+        (self.callPackage (dynamicCabal2nix "${ghcFork}/utils/genprimopcode") {})
+        (with self; [ alex happy ]);
+    };
+  };
 
-    cp -r ${ghcjsBoot} $topDir/ghcjs-boot
-    chmod -R u+w $topDir/ghcjs-boot
+  shims = fetchFromGitHub {
+    owner = "ghcjs";
+    repo = "shims";
+    rev = "45f44f5f027ec03264b61b8049951e765cc0b23a";
+    sha256 = "090pz4rzwlcrjavbbzxhf6c7rq7rzmr10g89hmhw4c65c4fyyykp";
+  };
 
-    cp -r ${shims} $topDir/shims
-    chmod -R u+w $topDir/shims
+  ghc                = stage0Pkgs.ghc;
+  ghcLibDir          = "${ghc}/lib/ghc-${ghc.version}";
+  ghcPackageCfgDir   = "${ghcLibDir}/package.conf.d";
 
-    # Make the patches be relative their corresponding package's directory.
-    # See: https://github.com/ghcjs/ghcjs-boot/pull/12
-    for patch in "$topDir/ghcjs-boot/patches/"*.patch; do
-      echo "fixing patch: $patch"
-      sed -i -e 's@ \(a\|b\)/boot/[^/]\+@ \1@g' $patch
+  ghcjs              = stage0Pkgs.ghcjs;
+  ghcjsLibDir        = "$out/lib/ghcjs-${ghcjs.version}";
+  ghcjsPackageCfgDir = "${ghcjsLibDir}/package.conf.d";
+
+# Bare-bones boot process
+in buildEnv {
+  buildInputs = [ rsync ];
+  inherit (ghcjs) name;
+  paths = [];
+  postBuild = ''
+    # Wrap Exectutables
+    . ${makeWrapper}/nix-support/setup-hook
+
+    for prg in ghcjs ghcjsi ghcjs-${ghcjs.version} ghcjsi-${ghcjs.version}; do
+      if [[ -x "${ghcjs}/bin/$prg" ]]; then
+        rm -f $out/bin/$prg
+        makeWrapper ${ghcjs}/bin/$prg $out/bin/$prg \
+          --add-flags "-B${ghcjsLibDir}"
+      fi
     done
-  '';
-  postInstall = ''
-    PATH=$out/bin:$PATH LD_LIBRARY_PATH=${gmp}/lib:${stdenv.cc}/lib64:$LD_LIBRARY_PATH \
-      env -u GHC_PACKAGE_PATH $out/bin/ghcjs-boot \
-        --dev \
-        --with-cabal ${cabal-install}/bin/cabal \
-        --with-gmp-includes ${gmp}/include \
-        --with-gmp-libraries ${gmp}/lib
+
+    for prg in runghcjs; do
+      if [[ -x "${ghcjs}/bin/$prg" ]]; then
+        rm -f $out/bin/$prg
+        makeWrapper ${ghcjs}/bin/$prg $out/bin/$prg \
+          --add-flags "-f $out/bin/ghcjs"
+      fi
+    done
+
+    for prg in ghcjs-pkg ghcjs-pkg-${ghcjs.version}; do
+      if [[ -x "${ghcjs}/bin/$prg" ]]; then
+        rm -f $out/bin/$prg
+        makeWrapper ${ghcjs}/bin/$prg $out/bin/$prg --add-flags \
+          "--global-package-db=${ghcjsPackageCfgDir}"
+      fi
+    done
+
+    mkdir -p ${ghcjsLibDir}
+    mkdir -p ${ghcjsPackageCfgDir}
+
+    # Install dummy RTS
+    cp ${ghcPackageCfgDir}/builtin_rts.conf ${ghcjsPackageCfgDir}/
+    sed -E -i ${ghcjsPackageCfgDir}/builtin_rts.conf \
+      -e "s_^(include-dirs:).*_\1 ${ghcjsLibDir}/include_" \
+      -e "s_^(library-dirs:).*_\1 ${ghcLibDir}/rts_"
+
+    # Install dummy configuration
+    cp ${ghcLibDir}/settings ${ghcjsLibDir}/
+    cp ${ghcLibDir}/platformConstants ${ghcjsLibDir}/
+
+    # Install real configuration
+    rsync -r ${src}/ghcjs/lib/etc/ ${ghcjsLibDir}/
+
+    # Install headers
+    mkdir ${ghcjsLibDir}/include/
+    rsync -r ${ghcFork}/data/include/ ${ghcjsLibDir}/include/
+    rsync -r ${src}/ghcjs/lib/include/ ${ghcjsLibDir}/include/
+
+    # Install unlit
+    cp ${ghcLibDir}/unlit ${ghcjsLibDir}/
+
+    # Create empty object file for "src/Gen2/DynamicLinking.hs"
+    ${ghc}/bin/ghc -c ${writeText "empty.c" ""} -o ${ghcjsLibDir}/empty.o
+
+    # Install shims
+    cp -r ${shims} ${ghcjsLibDir}/shims
+
+    # Install documentation
+    cp -r ${src}/ghcjs/doc/ ${ghcjsLibDir}/
+
+    # Finalize package DB
+    $out/bin/ghcjs-pkg recache
+    $out/bin/ghcjs-pkg check
+
+    # symlink node
+    echo ${nodejs}/bin/node > ${ghcjsLibDir}/node
+
+    touch ${ghcjsLibDir}/ghcjs_boot.completed
   '';
   passthru = {
+    preferLocalBuild = true;
+    inherit (ghcjs) version meta;
+    bootPkgs = stage0Pkgs;
+    isCross = true;
     isGhcjs = true;
-    nativeGhc = ghc;
     inherit nodejs;
+    inherit src ghcFork;
   };
-
-  homepage = "https://github.com/ghcjs/ghcjs";
-  description = "A Haskell to JavaScript compiler that uses the GHC API";
-  license = stdenv.lib.licenses.bsd3;
-  platforms = ghc.meta.platforms;
-  maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan ];
-})
+}

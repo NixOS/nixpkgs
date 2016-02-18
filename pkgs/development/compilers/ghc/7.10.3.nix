@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, fetchpatch, ghc, perl, gmp, ncurses, libiconv, binutils, coreutils
+{ stdenv, fetchurl, fetchpatch, bootPkgs, perl, gmp, ncurses, libiconv, binutils, coreutils
 , libxml2, libxslt, docbook_xsl, docbook_xml_dtd_45, docbook_xml_dtd_42, hscolour
 }:
 
 let
+  inherit (bootPkgs) ghc;
 
   docFixes = fetchurl {
     url = "https://downloads.haskell.org/~ghc/7.10.3/ghc-7.10.3a.patch";
@@ -60,6 +61,10 @@ stdenv.mkDerivation rec {
       sed -i -e '2i export PATH="$PATH:${binutils}/bin:${coreutils}/bin"' $i
     done
   '';
+
+  passthru = {
+    inherit bootPkgs;
+  };
 
   meta = {
     homepage = "http://haskell.org/ghc";

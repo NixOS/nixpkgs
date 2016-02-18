@@ -3,67 +3,100 @@
 let
   removeLibraryHaskellDepends = pnames: depends:
     builtins.filter (e: !(builtins.elem (e.pname or "") pnames)) depends;
+
+  dynamicCabal2nix = dir: pkgs.runCommand "dynamic-cabal2nix" {
+    nativeBuildInputs = [ pkgs.haskellPackages.cabal2nix ];
+  } "cabal2nix ${dir} > $out";
 in
 
 with import ./lib.nix { inherit pkgs; };
 
 self: super: {
-
   # LLVM is not supported on this GHC; use the latest one.
   inherit (pkgs) llvmPackages;
 
-  inherit (pkgs.haskell.packages.ghc7103) jailbreak-cabal alex happy gtk2hs-buildtools rehoo hoogle;
+  # These build tools are never cross-compiled
+  inherit (self.ghc.bootPkgs)
+    jailbreak-cabal hscolour alex happy genprimopcode gtk2hs-buildtools rehoo hoogle;
 
-  # This is the list of packages that are built into a booted ghcjs installation
-  # It can be generated with the command:
-  # nix-shell -p haskell.packages.ghcjs.ghc --command "ghcjs-pkg list | sed -n 's/^    \(.*\)-\([0-9.]*\)$/\1_\2/ p' | sed 's/\./_/g' | sed 's/-\(.\)/\U\1/' | sed 's/^\([^_]*\)\(.*\)$/\1 = null;/'"
-  Cabal = null;
-  aeson = null;
-  array = null;
-  async = null;
-  attoparsec = null;
-  base = null;
-  binary = null;
+  mkDerivation = drv: super.mkDerivation (drv
+    // { doHaddock = false; } # Disable haddock everywhere
+    // pkgs.lib.optionalAttrs (drv.isExecutable or false) {
+      # Linker needs ghcjs-prim
+      executableHaskellDepends = drv.executableHaskellDepends ++ [ self.ghcjs-prim ];
+    });
+
+  # Libraries from ghc repo
   rts = null;
-  bytestring = null;
-  case-insensitive = null;
-  containers = null;
-  deepseq = null;
-  directory = null;
-  dlist = null;
-  extensible-exceptions = null;
-  filepath = null;
-  ghc-prim = null;
-  ghcjs-base = null;
-  ghcjs-prim = null;
-  hashable = null;
-  integer-gmp = null;
-  mtl = null;
-  old-locale = null;
-  old-time = null;
-  parallel = null;
-  pretty = null;
-  primitive = null;
-  process = null;
-  scientific = null;
-  stm = null;
-  syb = null;
-  template-haskell = null;
-  text = null;
-  time = null;
-  transformers = null;
-  unix = null;
-  unordered-containers = null;
-  vector = null;
+  base = overrideCabal (self.callPackage (dynamicCabal2nix "${self.ghc.ghcFork}/libraries/base") {}) (drv: {
+    extraSetupCompileFlags = [ "-Dghcjs_HOST_OS" ];
+    configureFlags = [ "-v3" "--extra-include-dirs=${self.ghc.ghcFork}/data/include/" ];
+  });
+  ghc-prim = overrideCabal (self.callPackage (dynamicCabal2nix "${self.ghc.ghcFork}/libraries/ghc-prim") {}) (drv: {
+    buildTools = (drv.buildTools or []) ++ (with self.ghc.bootPkgs; [ genprimopcode ]);
+    preConfigure = ''
+      cpp -P -I${self.ghc.ghcFork}/data/js/ ${self.ghc.ghcFork}/data/primops.txt.pp primops.txt
+    '';
 
-  # These packages are core libraries in GHC 7.10.x, but not here.
+    # TODO: GRRRR we run afoul of special casing in ghc
+    #       Hacking exposed modules instead
+    #configureFlags = (drv.configureFlags or []) ++ [ "--flags=include-ghc-prim" ];
+    postInstall = ''
+      ghcjs-pkg --package-db=$packageConfDir describe ghc-prim \
+        | sed '/GHC\.PrimopWrappers/ s/$/ GHC.Prim/' \
+        | ghcjs-pkg --package-db=$packageConfDir update -
+    '';
+  });
+  integer-gmp = self.callPackage (dynamicCabal2nix "${self.ghc.ghcFork}/libraries/integer-gmp") {};
+  integer-simple = self.callPackage (dynamicCabal2nix "${self.ghc.ghcFork}/libraries/integer-simple") {};
+  template-haskell = self.callPackage (dynamicCabal2nix "${self.ghc.ghcFork}/libraries/template-haskell") {};
+
+  # These other packages are core libraries in GHC 7.10.x
+  array = self.array_0_5_1_0;
   bin-package-db = null;
+  binary = overrideCabal self.binary_0_7_6_1 (drv: {
+    version = "0.7.5.0";
+    sha256 = "06gg61srfva7rvzf4s63c068s838i5jf33d6cnjb9769gjmca2a7";
+  });
+  bytestring = overrideCabal self.bytestring_0_10_6_0 (drv: {
+    # Missing import of GHC.Integer
+    prePatch = ''
+      sed -i Data/ByteString/Builder/ASCII.hs \
+        -e '/import *GHC.Types/a import GHC.Integer'
+    '';
+  });
+  Cabal = assert false "Shouldn't need"; null;
+  containers = overrideCabal self.containers_0_5_7_1 (drv: {
+    version = "0.5.6.2";
+    sha256 = "1r9dipm2bw1dvdjyb2s1j9qmqy8xzbldgiz7a885fz0p1ygy9bdi";
+  });
+  directory = assert false "Shouldn't need"; null;
+  deepseq = overrideCabal self.deepseq_1_4_1_2 (drv: {
+    version = "1.4.1.1";
+    sha256 = "1gxk6bdqfplvq0lma2sjcxl8ibix5k60g71dncpvwsmc63mmi0ch";
+  });
+  filepath = assert false "Shouldn't need"; null;
   haskeline = self.haskeline_0_7_2_1;
   hoopl = self.hoopl_3_10_2_1;
   hpc = self.hpc_0_6_0_2;
+  pretty = overrideCabal self.pretty_1_1_3_2 (drv: {
+    version = "1.1.2.0";
+    sha256 = "043kcl2wjip51al5kx3r9qgazq5w002q520wdgdlv2c9xr74fabw";
+  });
   terminfo = self.terminfo_0_4_0_1;
+  transformers = overrideCabal self.transformers_0_4_3_0 (drv: {
+    version = "0.4.2.0";
+    sha256 = "0a364zfcm17mhpy0c4ms2j88sys4yvgd6071qsgk93la2wjm8mkr";
+    editedCabalFile = "1q7y5mh3bxrnxinkvgwyssgrbbl4pp183ncww8dwzgsplf0zav0n";
+  });
   xhtml = self.xhtml_3000_2_1;
 
+  # GHCJS libraries
+  ghcjs-prim = self.callPackage ../compilers/ghcjs/ghcjs-prim.nix {
+    src = "${self.ghc.src}/ghcjs-prim";
+  }; # cannot autogenerate for now
+
+  # Misc fixes
   pqueue = overrideCabal super.pqueue (drv: {
     postPatch = ''
       sed -i -e '12s|null|Data.PQueue.Internals.null|' Data/PQueue/Internals.hs
