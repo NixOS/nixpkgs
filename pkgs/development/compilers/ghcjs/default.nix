@@ -15,14 +15,13 @@ let
     owner = "forked-upstream-packages-for-ghcjs";
     repo = "ghcjs";
 
-    #rev = "4ebfa7cae3d96732b55a4bf8c5ab8e3aec148869";
-    #sha256 = "1qrmhz2q81639brks8v17673inxw2xihaz8m4xk9k1y3n6kgw7zh";
+    # dyn keys
+    #rev = "10a9ecaec4cfd180b29c3e443ec04a2694d5643f";
+    #sha256 = "1a3k30yi9r9c4x713b2w4ka13lazz7sx79fhq6k7wmnn8dzf0xg7";
 
-    #rev = "c883be65b0f0441135ea1d244c342c8634b79ed6";
-    #sha256 = "1spbrdhnhlr0l13a3hixbbaxicz96yw655vv6kbfnqqljssilv4z";
-
-    rev = "ec48bbdd600d8f39dc26961b4b18c75d80c05625";
-    sha256 = "0d5s96h0qx08rdg15y9zq61rs4x8s2g3d0x4bpldnabnrvilhywk";
+    # hard keys
+    rev = "91880ffac598320c1b5b20fbde6926a30b3abece";
+    sha256 = "1759hrp4qykns806f73bbj5iz4sy22azw0vq39d2jb14x6vgdba5";
   };
 
   ghcFork = fetchFromGitHub {
@@ -100,7 +99,10 @@ in buildEnv {
     cp ${ghcLibDir}/settings ${ghcjsLibDir}/
     cp ${ghcLibDir}/platformConstants ${ghcjsLibDir}/
 
-    # Install dummy configuration
+    # Install real configuration
+    cp -r ${src}/ghcjs/lib/etc/* ${ghcjsLibDir}/
+
+    # Install headers
     cp -r ${ghcFork}/data/include/ ${ghcjsLibDir}
 
     # Install unlit

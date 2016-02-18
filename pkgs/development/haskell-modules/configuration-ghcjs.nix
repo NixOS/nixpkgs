@@ -19,8 +19,12 @@ self: super: {
   inherit (self.ghc.bootPkgs)
     jailbreak-cabal hscolour alex happy genprimopcode gtk2hs-buildtools rehoo hoogle;
 
-  # Disable haddock everywhere
-  mkDerivation = drv: super.mkDerivation ({ doHaddock = false; } // drv);
+  mkDerivation = drv: super.mkDerivation (drv
+    // { doHaddock = false; } # Disable haddock everywhere
+    // pkgs.lib.optionalAttrs (drv.isExecutable or false) {
+      # Linker needs ghcjs-prim
+      executableHaskellDepends = drv.executableHaskellDepends ++ [ self.ghcjs-prim ];
+    });
 
   # Libraries from ghc repo
   rts = null;
