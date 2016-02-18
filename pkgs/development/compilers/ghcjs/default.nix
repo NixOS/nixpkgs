@@ -23,6 +23,7 @@
 , ghc, gmp
 , jailbreak-cabal
 
+, runCommand
 , nodejs, stdenv, filepath, HTTP, HUnit, mtl, network, QuickCheck, random, stm
 , time
 , zlib, aeson, attoparsec, bzlib, hashable
@@ -37,7 +38,7 @@
 , coreutils
 , libiconv
 
-, ghcjsBoot ? import ./ghcjs-boot.nix { inherit fetchgit; }
+, ghcjsBoot ? import ./ghcjs-boot.nix { inherit fetchgit runCommand; }
 , shims ? import ./shims.nix { inherit fetchFromGitHub; }
 }:
 let version = "0.2.0"; in
@@ -100,10 +101,14 @@ mkDerivation (rec {
       sed -i -e 's@ \(a\|b\)/boot/[^/]\+@ \1@g' $patch
     done
   '';
+  # We build with --quick so we can build stage 2 packages separately.
+  # This is necessary due to: https://github.com/haskell/cabal/commit/af19fb2c2d231d8deff1cb24164a2bf7efb8905a
+  # Cabal otherwise fails to build: http://hydra.nixos.org/build/31824079/nixlog/1/raw
   postInstall = ''
     PATH=$out/bin:$PATH LD_LIBRARY_PATH=${gmp}/lib:${stdenv.cc}/lib64:$LD_LIBRARY_PATH \
       env -u GHC_PACKAGE_PATH $out/bin/ghcjs-boot \
         --dev \
+        --quick \
         --with-cabal ${cabal-install}/bin/cabal \
         --with-gmp-includes ${gmp}/include \
         --with-gmp-libraries ${gmp}/lib
@@ -111,7 +116,7 @@ mkDerivation (rec {
   passthru = {
     isGhcjs = true;
     nativeGhc = ghc;
-    inherit nodejs;
+    inherit nodejs ghcjsBoot;
   };
 
   homepage = "https://github.com/ghcjs/ghcjs";
