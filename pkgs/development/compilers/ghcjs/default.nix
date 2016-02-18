@@ -113,7 +113,7 @@ in buildEnv {
     # Install headers
     mkdir ${ghcjsLibDir}/include/
     rsync -r ${ghcFork}/data/include/ ${ghcjsLibDir}/include/
-    rsync -r ${src}/ghcjs/lib/include/* ${ghcjsLibDir}/include/
+    rsync -r ${src}/ghcjs/lib/include/ ${ghcjsLibDir}/include/
 
     # Install unlit
     cp ${ghcLibDir}/unlit ${ghcjsLibDir}/
@@ -123,6 +123,9 @@ in buildEnv {
 
     # Install shims
     cp -r ${shims} ${ghcjsLibDir}/shims
+
+    # Install documentation
+    cp -r ${src}/ghcjs/doc/ ${ghcjsLibDir}/
 
     # Finalize package DB
     $out/bin/ghcjs-pkg recache
