@@ -131,6 +131,9 @@ in buildEnv {
     $out/bin/ghcjs-pkg recache
     $out/bin/ghcjs-pkg check
 
+    # symlink node
+    echo ${nodejs}/bin/node > 2${ghcjsLibDir}/node
+
     touch ${ghcjsLibDir}/ghcjs_boot.completed
   '';
   passthru = {
