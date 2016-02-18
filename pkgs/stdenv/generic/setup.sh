@@ -1,7 +1,8 @@
+#!bash
 set -e
 set -o pipefail
 
-: ${outputs:=out}
+: "${outputs:=out}"
 
 
 ######################################################################
@@ -16,8 +17,8 @@ runHook() {
     local hookName="$1"
     shift
     local var="$hookName"
-    if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
-    eval "local -a dummy=(\"\${$var[@]}\")"
+    if [[ $hookName =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
+    eval "local -a dummy=(\"\${${var[*]}}\")"
     for hook in "_callImplicitHook 0 $hookName" "${dummy[@]}"; do
         _eval "$hook" "$@"
     done
@@ -31,7 +32,7 @@ runOneHook() {
     local hookName="$1"
     shift
     local var="$hookName"
-    if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
+    if [[ $hookName =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
     eval "local -a dummy=(\"\${$var[@]}\")"
     for hook in "_callImplicitHook 1 $hookName" "${dummy[@]}"; do
         if _eval "$hook" "$@"; then
@@ -48,13 +49,13 @@ runOneHook() {
 # environment variables) and from shell scripts (as functions). If you
 # want to allow multiple hooks, use runHook instead.
 _callImplicitHook() {
-    local def="$1"
-    local hookName="$2"
-    case "$(type -t $hookName)" in
+    local def=$1
+    local hookName=$2
+    case $(type -t "$hookName") in
         (function|alias|builtin) $hookName;;
-        (file) source $hookName;;
+        (file) source "$hookName";;
         (keyword) :;;
-        (*) if [ -z "${!hookName}" ]; then return "$def"; else eval "${!hookName}"; fi;;
+        (*) if [[ -z "${!hookName}" ]]; then return "$def"; else eval "${!hookName}"; fi;;
     esac
 }
 
@@ -62,9 +63,9 @@ _callImplicitHook() {
 # A function wrapper around ‘eval’ that ensures that ‘return’ inside
 # hooks exits the hook, not the caller.
 _eval() {
-    local code="$1"
+    local code=$1
     shift
-    if [ "$(type -t $code)" = function ]; then
+    if [[ $(type -t "$code") = function ]]; then
         eval "$code \"\$@\""
     else
         eval "$code"
@@ -78,12 +79,12 @@ _eval() {
 nestingLevel=0
 
 startNest() {
-    nestingLevel=$(($nestingLevel + 1))
+    nestingLevel=$((nestingLevel + 1))
     echo -en "\033[$1p"
 }
 
 stopNest() {
-    nestingLevel=$(($nestingLevel - 1))
+    nestingLevel=$((nestingLevel - 1))
     echo -en "\033[q"
 }
 
@@ -95,7 +96,7 @@ header() {
 # Make sure that even when we exit abnormally, the original nesting
 # level is properly restored.
 closeNest() {
-    while [ $nestingLevel -gt 0 ]; do
+    while [[ $nestingLevel -gt 0 ]]; do
         stopNest
     done
 }
@@ -110,25 +111,25 @@ exitHandler() {
 
     closeNest
 
-    if [ -n "$showBuildStats" ]; then
+    if [[ -n $showBuildStats ]]; then
         times > "$NIX_BUILD_TOP/.times"
-        local -a times=($(cat "$NIX_BUILD_TOP/.times"))
+        local -a times=($(< "$NIX_BUILD_TOP/.times"))
         # Print the following statistics:
         # - user time for the shell
         # - system time for the shell
         # - user time for all child processes
         # - system time for all child processes
-        echo "build time elapsed: " ${times[*]}
+        echo "build time elapsed: ${times[*]}"
     fi
 
-    if [ $exitCode != 0 ]; then
+    if [[ $exitCode != 0 ]]; then
         runHook failureHook
 
         # If the builder had a non-zero exit code and
         # $succeedOnFailure is set, create the file
         # ‘$out/nix-support/failed’ to signal failure, and exit
         # normally.  Otherwise, return the original exit code.
-        if [ -n "$succeedOnFailure" ]; then
+        if [[ -n $succeedOnFailure ]]; then
             echo "build failed with exit code $exitCode (ignored)"
             mkdir -p "$out/nix-support"
             printf "%s" $exitCode > "$out/nix-support/failed"
@@ -153,7 +154,7 @@ addToSearchPathWithCustomDelimiter() {
     local delimiter=$1
     local varName=$2
     local dir=$3
-    if [ -d "$dir" ]; then
+    if [[ -d $dir ]]; then
         eval export ${varName}=${!varName}${!varName:+$delimiter}${dir}
     fi
 }
@@ -169,14 +170,14 @@ ensureDir() {
     echo "warning: ‘ensureDir’ is deprecated; use ‘mkdir’ instead" >&2
     local dir
     for dir in "$@"; do
-        if ! [ -x "$dir" ]; then mkdir -p "$dir"; fi
+        if ! [[ -x $dir ]]; then mkdir -p "$dir"; fi
     done
 }
 
 
 installBin() {
-    mkdir -p $out/bin
-    cp "$@" $out/bin
+    mkdir -p "$out/bin"
+    cp "$@" "$out/bin"
 }
 
 
@@ -189,7 +190,7 @@ installBin() {
 # time. Note that 1 = 1970-01-01 00:00:01. We don't use 0 because it
 # confuses some applications.
 export SOURCE_DATE_EPOCH
-: ${SOURCE_DATE_EPOCH:=1}
+: "${SOURCE_DATE_EPOCH:=1}"
 
 
 # Wildcard expansions that don't match should expand to an empty list.
@@ -201,24 +202,24 @@ shopt -s nullglob
 # Set up the initial path.
 PATH=
 for i in $initialPath; do
-    if [ "$i" = / ]; then i=; fi
-    addToSearchPath PATH $i/bin
-    addToSearchPath PATH $i/sbin
+    if [[ $i = / ]]; then i=; fi
+    addToSearchPath PATH "$i/bin"
+    addToSearchPath PATH "$i/sbin"
 done
 
-if [ "$NIX_DEBUG" = 1 ]; then
+if [[ $NIX_DEBUG = 1 ]]; then
     echo "initial path: $PATH"
 fi
 
 
 # Check that the pre-hook initialised SHELL.
-if [ -z "$SHELL" ]; then echo "SHELL not set"; exit 1; fi
+if [[ -z $SHELL ]]; then echo "SHELL not set"; exit 1; fi
 BASH="$SHELL"
 export CONFIG_SHELL="$SHELL"
 
 
 # Execute the pre-hook.
-if [ -z "$shell" ]; then export shell=$SHELL; fi
+if [[ -z $shell ]]; then export shell=$SHELL; fi
 runHook preHook
 
 
@@ -230,7 +231,7 @@ runHook addInputsHook
 
 # Recursively find all build inputs.
 findInputs() {
-    local pkg="$1"
+    local pkg=$1
     local var=$2
     local propagatedBuildInputsFile=$3
 
@@ -242,22 +243,22 @@ findInputs() {
 
     eval $var="'${!var} $pkg '"
 
-    if ! [ -e "$pkg" ]; then
+    if ! [[ -e $pkg ]]; then
         echo "build input $pkg does not exist" >&2
         exit 1
     fi
 
-    if [ -f "$pkg" ]; then
+    if [[ -f $pkg ]]; then
         source "$pkg"
     fi
 
-    if [ -f "$pkg/nix-support/setup-hook" ]; then
+    if [[ -f $pkg/nix-support/setup-hook ]]; then
         source "$pkg/nix-support/setup-hook"
     fi
 
-    if [ -f "$pkg/nix-support/$propagatedBuildInputsFile" ]; then
-        for i in $(cat "$pkg/nix-support/$propagatedBuildInputsFile"); do
-            findInputs "$i" $var $propagatedBuildInputsFile
+    if [[ -f $pkg/nix-support/$propagatedBuildInputsFile ]]; then
+        for i in $(< "$pkg/nix-support/$propagatedBuildInputsFile"); do
+            findInputs "$i" "$var" "$propagatedBuildInputsFile"
         done
     fi
 }
@@ -353,9 +354,9 @@ export NIX_INDENT_MAKE=1
 # means that we're supposed to try and auto-detect the number of
 # available CPU cores at run-time.
 
-if [ -z "${NIX_BUILD_CORES:-}" ]; then
+if [[ -z $NIX_BUILD_CORES ]]; then
   NIX_BUILD_CORES="1"
-elif [ "$NIX_BUILD_CORES" -le 0 ]; then
+elif [[ $NIX_BUILD_CORES -le 0 ]]; then
   NIX_BUILD_CORES=$(nproc 2>/dev/null || true)
   if expr >/dev/null 2>&1 "$NIX_BUILD_CORES" : "^[0-9][0-9]*$"; then
     :
