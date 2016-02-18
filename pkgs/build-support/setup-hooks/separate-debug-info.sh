@@ -13,11 +13,7 @@ _separateDebugInfo() {
     # Find executables and dynamic libraries.
     local i magic
     while IFS= read -r -d $'\0' i; do
-        # Skip non-ELF files.
-        exec {fd}< "$i"
-        read -n 4 -u $fd magic
-        exec {fd}<&-
-        if ! [[ "$magic" =~ ELF ]]; then continue; fi
+        if ! isELF "$i"; then continue; fi
 
         # Extract the Build ID. FIXME: there's probably a cleaner way.
         local id="$(readelf -n "$i" | sed 's/.*Build ID: \([0-9a-f]*\).*/\1/; t; d')"
@@ -34,7 +30,7 @@ _separateDebugInfo() {
 
         # Also a create a symlink <original-name>.debug.
         ln -sfn ".build-id/${id:0:2}/${id:2}.debug" "$dst/../$(basename "$i")"
-    done < <(find "$prefix" -type f -a \( -perm /0100 -o -name "*.so" -o -name "*.so.*" \) -print0)
+    done < <(find "$prefix" -type f -print0)
 }
 
 # - We might prefer to compress the debug info during link-time already,

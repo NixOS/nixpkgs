@@ -5,12 +5,15 @@
 fixupOutputHooks+=('if [ -z "$dontPatchELF" ]; then patchELF "$prefix"; fi')
 
 patchELF() {
-    header "patching ELF executables and libraries in $prefix"
-    if [ -e "$prefix" ]; then
-        find "$prefix" \( \
-            \( -type f -a -name "*.so*" \) -o \
-            \( -type f -a -perm -0100 \) \
-            \) -print -exec patchelf --shrink-rpath '{}' \;
-    fi
+    header "shrinking RPATHs of ELF executables and libraries in $prefix"
+
+    local i
+    while IFS= read -r -d $'\0' i; do
+        if [[ "$i" =~ .build-id ]]; then continue; fi
+        if ! isELF "$i"; then continue; fi
+        echo "shrinking $i"
+        patchelf --shrink-rpath "$i" || true
+    done < <(find "$prefix" -type f -print0)
+
     stopNest
 }
