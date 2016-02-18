@@ -225,7 +225,7 @@
       }) {};
   text = callPackage
     ({ mkDerivation, array, base, binary, bytestring, deepseq, directory
-      , ghc-prim, HUnit, integer-simple, QuickCheck, quickcheck-unicode
+      , ghc-prim, HUnit, integer-gmp, QuickCheck, quickcheck-unicode
       , random, stdenv, test-framework, test-framework-hunit
       , test-framework-quickcheck2
       }:
@@ -235,11 +235,11 @@
         src = "${ghcjsBoot}/boot/text";
         doCheck = false;
         libraryHaskellDepends = [
-          array base binary bytestring deepseq ghc-prim integer-simple
+          array base binary bytestring deepseq ghc-prim integer-gmp
         ];
         testHaskellDepends = [
           array base binary bytestring deepseq directory ghc-prim HUnit
-          integer-simple QuickCheck quickcheck-unicode random test-framework
+          integer-gmp QuickCheck quickcheck-unicode random test-framework
           test-framework-hunit test-framework-quickcheck2
         ];
         jailbreak = true;
