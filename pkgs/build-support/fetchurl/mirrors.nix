@@ -333,4 +333,10 @@ rec {
     ftp://ftp.halifax.rwth-aachen.de/pub/OpenBSD/
     ftp://mirror.switch.ch/pub/OpenBSD/
   ];
+
+  # Steam Runtime mirrors
+  steamrt = [
+    http://repo.steampowered.com/steamrt/
+    https://abbradar.net/steamrt/
+  ];
 }
