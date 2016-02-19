@@ -15015,7 +15015,7 @@ let
 
   kde5 =
     let
-      frameworks = import ../development/libraries/kde-frameworks-5.18 { inherit pkgs; };
+      frameworks = import ../development/libraries/kde-frameworks-5.19 { inherit pkgs; };
       plasma = import ../desktops/plasma-5.5 { inherit pkgs; };
       apps = import ../applications/kde-apps-15.12 { inherit pkgs; };
       named = self: { plasma = plasma self; frameworks = frameworks self; apps = apps self; };
