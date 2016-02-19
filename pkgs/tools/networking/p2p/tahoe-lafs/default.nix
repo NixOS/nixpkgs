@@ -5,7 +5,7 @@
 # store path. The problem appears to be non-fatal, but there's probably
 # some loss of functionality because of it.
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   version = "1.10.2";
   name = "tahoe-lafs-${version}";
   namePrefix = "";

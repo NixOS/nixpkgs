@@ -1,6 +1,6 @@
 { stdenv, pythonPackages, fetchurl, dialog }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   version = "0.1.0";
   name = "letsencrypt-${version}";
 

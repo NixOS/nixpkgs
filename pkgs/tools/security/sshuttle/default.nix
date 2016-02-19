@@ -1,7 +1,7 @@
 { stdenv, pythonPackages, fetchurl, makeWrapper, pandoc
 , coreutils, iptables, nettools, openssh, procps }:
   
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "sshuttle-${version}";
   version = "0.76";
 

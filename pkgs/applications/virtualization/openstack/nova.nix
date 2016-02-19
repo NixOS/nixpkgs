@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pythonPackages, openssl, openssh }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "nova-${version}";
   version = "12.0.0";
   namePrefix = "";

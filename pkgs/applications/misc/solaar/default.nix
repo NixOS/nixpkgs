@@ -1,5 +1,5 @@
 {fetchurl, stdenv, gtk3, python34Packages, gobjectIntrospection}:
-python34Packages.buildPythonPackage rec {
+python34Packages.buildPythonApplication rec {
   name = "solaar-${version}";
   version = "0.9.2";
   namePrefix = "";

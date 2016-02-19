@@ -7,7 +7,7 @@
 with stdenv.lib;
 with pythonPackages;
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "virt-manager-${version}";
   version = "1.3.1";
   namePrefix = "";

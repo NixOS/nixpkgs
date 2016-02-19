@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, writeScript, glibcLocales
-, buildPythonPackage, pythonPackages, python, imagemagick
+, buildPythonApplication, pythonPackages, python, imagemagick
 
 , enableAcousticbrainz ? true
 , enableAcoustid       ? true
@@ -68,7 +68,7 @@ let
   testShell = "${bashInteractive}/bin/bash --norc";
   completion = "${bashCompletion}/share/bash-completion/bash_completion";
 
-in buildPythonPackage rec {
+in buildPythonApplication rec {
   name = "beets-${version}";
   version = "1.3.17";
   namePrefix = "";
@@ -103,7 +103,7 @@ in buildPythonPackage rec {
     ++ optional enableThumbnails   pythonPackages.pyxdg
     ++ optional enableWeb          pythonPackages.flask
     ++ optional enableAlternatives (import ./alternatives-plugin.nix {
-      inherit stdenv buildPythonPackage pythonPackages fetchFromGitHub;
+      inherit stdenv buildPythonApplication pythonPackages fetchFromGitHub;
     });
 
   buildInputs = with pythonPackages; [

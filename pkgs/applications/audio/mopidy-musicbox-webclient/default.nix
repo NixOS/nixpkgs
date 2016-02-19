@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pythonPackages, mopidy }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "mopidy-musicbox-webclient-${version}";
 
   version = "2.0.0";

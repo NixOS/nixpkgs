@@ -4,7 +4,7 @@
 , enableBloat ? false
 }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "diffoscope-${version}";
   version = "45";
 

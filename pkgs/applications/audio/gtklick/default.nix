@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pythonPackages, gettext, klick}:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "gtklick-${version}";
   namePrefix = "";
   version = "0.6.4";

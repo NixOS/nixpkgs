@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pythonPackages, lzop, postgresql, pv }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "wal-e-${version}";
   version = "0.6.10";
 
