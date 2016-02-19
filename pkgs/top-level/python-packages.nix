@@ -1130,6 +1130,26 @@ in modules // {
     };
   }));
 
+  awesome-slugify = buildPythonPackage rec {
+    name = "awesome-slugify-${version}";
+    version = "1.6.5";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/awesome-slugify/${name}.tar.gz";
+      sha256 = "0wgxrhr8s5vk2xmcz9s1z1aml4ppawmhkbggl9rp94c747xc7pmv";
+    };
+
+    propagatedBuildInputs = with self; [ unidecode regex ];
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/dimka665/awesome-slugify;
+      description = "Python flexible slugify function";
+      license = licenses.gpl3;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
   awscli = buildPythonPackage rec {
     name = "awscli-${version}";
     version = "1.10.1";
@@ -1149,7 +1169,6 @@ in modules // {
       colorama
       docutils
       rsa
-      pyasn1
       pkgs.groff
       pkgs.less
     ];
@@ -3643,7 +3662,6 @@ in modules // {
     };
   };
 
-
   openstackclient = buildPythonPackage rec {
     name = "openstackclient-${version}";
     version = "1.7.1";
@@ -4742,7 +4760,7 @@ in modules // {
     doCheck = false; # requires redis server
     propagatedBuildInputs = with self; [
       setuptools docker_registry_core blinker flask gevent gunicorn pyyaml
-      requests2 rsa sqlalchemy9 setuptools backports_lzma pyasn1 m2crypto
+      requests2 rsa sqlalchemy9 setuptools backports_lzma m2crypto
     ];
 
     patchPhase = "> requirements/main.txt";
@@ -7116,6 +7134,24 @@ in modules // {
     doCheck = false;
   };
 
+  sarge = buildPythonPackage rec {
+    name = "sarge-${version}";
+    version = "0.1.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sarge/${name}.tar.gz";
+      sha256 = "08s8896973bz1gg0pkr592w6g4p6v47bkfvws5i91p9xf8b35yar";
+    };
+
+    meta = {
+      homepage = http://sarge.readthedocs.org/;
+      description = "A wrapper for subprocess which provides command pipeline functionality";
+      license = licenses.bsd3;
+      platform = platforms.all;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
   hyp = buildPythonPackage rec {
     name = "hyp-server-${version}";
     version = "1.2.0";
@@ -7413,6 +7449,23 @@ in modules // {
     };
   };
 
+  regex = buildPythonPackage rec {
+    name = "regex-${version}";
+    version = "2016.01.10";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/regex/${name}.tar.gz";
+      sha256 = "1q3rbmnijjzn7y3cm3qy49b5lqw1fq38zv974xma387lwc37d9q2";
+    };
+
+    meta = {
+      description = "Alternative regular expression module, to replace re";
+      homepage = https://bitbucket.org/mrabarnett/mrab-regex;
+      license = licenses.psfl;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
 
   repoze_lru = buildPythonPackage rec {
     name = "repoze.lru-0.6";
@@ -8609,6 +8662,26 @@ in modules // {
     };
   };
 
+  flask_assets = buildPythonPackage rec {
+    name = "Flask-Assets-${version}";
+    version = "0.10";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/F/Flask-Assets/${name}.tar.gz";
+      sha256 = "1v6ika3ias21xzhg7kglki99nwfx1i33rdhnw9kdqbwxkpwbwkyl";
+    };
+
+    propagatedBuildInputs = with self; [ flask webassets flask_script nose ];
+
+    meta = {
+      homepage = http://github.com/miracle2k/flask-assets;
+      description = "Asset management for Flask, to compress and merge CSS and Javascript files";
+      license = licenses.bsd2;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
   flask_cache = buildPythonPackage rec {
     name = "Flask-Cache-0.13.1";
 
@@ -8645,6 +8718,49 @@ in modules // {
     };
   };
 
+  flask_login = buildPythonPackage rec {
+    name = "Flask-Login-${version}";
+    version = "0.2.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/F/Flask-Login/${name}.tar.gz";
+      sha256 = "09ygn0r3i3jz065a5psng6bhlsqm78msnly4z6x39bs48r5ww17p";
+    };
+
+    propagatedBuildInputs = with self; [ flask ];
+
+    # FIXME
+    doCheck = false;
+
+    meta = {
+      homepage = http://github.com/miracle2k/flask-assets;
+      description = "User session management for Flask";
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
+  flask_principal = buildPythonPackage rec {
+    name = "Flask-Principal-${version}";
+    version = "0.4.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/F/Flask-Principal/${name}.tar.gz";
+      sha256 = "0lwlr5smz8vfm5h9a9i7da3q1c24xqc6vm9jdywdpgxfbi5i7mpm";
+    };
+
+    propagatedBuildInputs = with self; [ flask blinker nose ];
+
+    meta = {
+      homepage = http://packages.python.org/Flask-Principal/;
+      description = "Identity management for flask";
+      license = licenses.bsd2;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
   flask-pymongo = buildPythonPackage rec {
     name = "Flask-PyMongo-${version}";
     version = "0.3.1";
@@ -8660,6 +8776,27 @@ in modules // {
       homepage = "http://flask-pymongo.readthedocs.org/";
       description = "PyMongo support for Flask applications";
       license = licenses.bsd2;
+    };
+  };
+
+  flask_script = buildPythonPackage rec {
+    name = "Flask-Script-${version}";
+    version = "2.0.5";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/F/Flask-Script/${name}.tar.gz";
+      sha256 = "0zqh2yq8zk7m9b4xw1ryqmrljkdigfb3hk5155a3b5hkfnn6xxyf";
+    };
+
+    nativeBuildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ flask ];
+
+    meta = {
+      homepage = http://github.com/smurfix/flask-script;
+      description = "Scripting support for Flask";
+      license = licenses.bsd3;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ abbradar ];
     };
   };
 
@@ -10567,6 +10704,24 @@ in modules // {
       homepage = http://code.google.com/p/pylast/;
       description = "A python interface to last.fm (and compatibles)";
       license = licenses.asl20;
+    };
+  };
+
+  pylru = buildPythonPackage rec {
+    name = "pylru-${version}";
+    version = "1.0.9";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pylru/${name}.tar.gz";
+      sha256 = "0b0pq0l7xv83dfsajsc49jcxzc99kb9jfx1a1dlx22hzcy962dvi";
+    };
+
+    meta = {
+      homepage = https://github.com/jlhutch/pylru;
+      description = "A least recently used (LRU) cache implementation";
+      license = licenses.gpl2;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ abbradar ];
     };
   };
 
@@ -12742,7 +12897,7 @@ in modules // {
       sha256 = "0phfk6s8bgpap5xihdk1xv2lakdk1pb3rg6hp2wsg94hxcxnrakl";
     };
 
-    propagatedBuildInputs = with self; [ six httplib2 pyasn1 pyasn1-modules rsa ];
+    propagatedBuildInputs = with self; [ six httplib2 pyasn1-modules rsa ];
     doCheck = false;
 
     meta = {
@@ -18346,7 +18501,8 @@ in modules // {
       sha256 = "03f3d9bebad06681771016b8752a40b12f615ff32363c7aa19b3798e73ccd615";
     };
 
-    buildInputs = with self; [ pyasn1 unittest2 ];
+    nativeBuildInputs = with self; [ unittest2 ];
+    propagatedBuildInputs = with self; [ pyasn1 ];
 
     checkPhase = ''
       ${python.interpreter} run_tests.py
@@ -19015,6 +19171,27 @@ in modules // {
     meta = {
       description = "Geometric objects, predicates, and operations";
       homepage = "https://pypi.python.org/pypi/Shapely/";
+    };
+  };
+
+  sockjs-tornado = buildPythonPackage rec {
+    name = "sockjs-tornado-${version}";
+    version = "1.0.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sockjs-tornado/${name}.tar.gz";
+      sha256 = "15lcy40h2cm0l8aknbrk48p2sni5wzybsqjx1hxwpk9lfa1xryyv";
+    };
+
+    # This is needed for compatibility with OctoPrint
+    propagatedBuildInputs = with self; [ tornado_4_0_1 ];
+
+    meta = {
+      description = "SockJS python server implementation on top of Tornado framework";
+      homepage = http://github.com/mrjoes/sockjs-tornado/;
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ abbradar ];
     };
   };
 
@@ -21335,6 +21512,25 @@ in modules // {
     };
   };
 
+  webassets = buildPythonPackage rec {
+    name = "webassets-${version}";
+    version = "0.11.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/w/webassets/${name}.tar.gz";
+      sha256 = "0p1qypcbq9b88ipcylxh3bbnby5n6dr421wb4bwmrlcrgvj4r5lz";
+    };
+
+    propagatedBuildInputs = with self; [ pyyaml ];
+
+    meta = {
+      description = "Media asset management for Python, with glue code for various web frameworks";
+      homepage = http://github.com/miracle2k/webassets/;
+      license = licenses.bsd2;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
 
   webcolors = buildPythonPackage rec {
     name = "webcolors-1.4";
@@ -22458,6 +22654,18 @@ in modules // {
     };
   };
 
+  tornado_4_0_1 = buildPythonPackage rec {
+    name = "tornado-${version}";
+    version = "4.0.1";
+
+    propagatedBuildInputs = with self; [ backports_ssl_match_hostname_3_4_0_2 certifi ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
+      sha256 = "00crp5vnasxg7qyjv89qgssb69vd7qr13jfghdryrcbnn9l8c1df";
+    };
+  };
+
   tokenlib = buildPythonPackage rec {
     name = "tokenlib-${version}";
     version = "0.3.1";
@@ -23389,7 +23597,7 @@ in modules // {
       sha256 = "0k7vk4k54y55ma0nx2k5s0phfqbriwslhy5shh3b0d046q7ibzaa";
     };
 
-    buildInputs = with self; [ flask jinja2 speaklater Babel pytz ];
+    propagatedBuildInputs = with self; [ flask jinja2 speaklater Babel pytz ];
 
     meta = {
       description = "Adds i18n/l10n support to Flask applications";

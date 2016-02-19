@@ -3801,6 +3801,8 @@ let
 
   yank = callPackage ../tools/misc/yank { };
 
+  yaml-merge = callPackage ../tools/text/yaml-merge { };
+
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
 
@@ -12986,6 +12988,10 @@ let
     pulseaudioSupport = config.pulseaudio or true;
   };
 
+  octoprint = callPackage ../applications/misc/octoprint { };
+
+  octoprint-plugins = callPackage ../applications/misc/octoprint/plugins.nix { };
+
   ocrad = callPackage ../applications/graphics/ocrad { };
 
   offrss = callPackage ../applications/networking/offrss { };
@@ -15713,6 +15719,8 @@ let
   DisnixWebService = callPackage ../tools/package-management/disnix/DisnixWebService { };
 
   lkproof = callPackage ../tools/typesetting/tex/lkproof { };
+
+  m3d-linux = callPackage ../misc/drivers/m3d-linux { };
 
   mysqlWorkbench = newScope gnome ../applications/misc/mysql-workbench {
     lua = lua5_1;
