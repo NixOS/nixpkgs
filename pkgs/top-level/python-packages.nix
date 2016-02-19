@@ -16821,6 +16821,23 @@ in modules // {
     propagatedBuildInputs = with self; [pkgs.openldap pkgs.cyrus_sasl pkgs.openssl];
   };
 
+  ptest = buildPythonPackage rec {
+    name = pname + "-" + version;
+    pname = "ptest";
+    version =  "1.5.3";
+    src = pkgs.fetchFromGitHub {
+      owner = "KarlGong";
+      repo = pname;
+      rev = version + "-release";
+      sha256 = "1r50lm6n59jzdwpp53n0c0hp3aj1jxn304bk5gh830226gsaf2hn";
+    };
+    meta = {
+      description = "Test classes and test cases using decorators, execute test cases by command line, and get clear reports.";
+      homepage = https://pypi.python.org/pypi/ptest;
+      license = licenses.asl20;
+    };
+  };
+
   ptyprocess = buildPythonPackage rec {
     name = "ptyprocess-${version}";
     version = "0.5";
