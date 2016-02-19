@@ -13,34 +13,35 @@ makeWrapper() {
     for ((n = 2; n < ${#params[*]}; n += 1)); do
         p=${params[$n]}
 
-        if test "$p" = "--set"; then
+        case "$p" in
+          --set)
             varName=${params[$((n + 1))]}
             value=${params[$((n + 2))]}
             n=$((n + 2))
             echo "export $varName=$value" >> "$wrapper"
-        fi
+            ;;
 
-        if test "$p" = "--run"; then
+          --run)
             command=${params[$((n + 1))]}
             n=$((n + 1))
             echo "$command" >> "$wrapper"
-        fi
+            ;;
 
-        if test "$p" = "--suffix" -o "$p" = "--prefix"; then
+          --suffix|--prefix)
             varName=${params[$((n + 1))]}
             separator=${params[$((n + 2))]}
             value=${params[$((n + 3))]}
             n=$((n + 3))
-            if test -n "$value"; then
-                if test "$p" = "--suffix"; then
+            if [[ -n $value ]]; then
+                if [[ $p = --suffix ]]; then
                     echo "export $varName=\$$varName\${$varName:+$separator}$value" >> "$wrapper"
                 else
                     echo "export $varName=$value\${$varName:+$separator}\$$varName" >> "$wrapper"
                 fi
             fi
-        fi
+            ;;
 
-        if test "$p" = "--suffix-each"; then
+          --suffix-each)
             varName=${params[$((n + 1))]}
             separator=${params[$((n + 2))]}
             values=${params[$((n + 3))]}
@@ -48,37 +49,42 @@ makeWrapper() {
             for value in $values; do
                 echo "export $varName=\$$varName\${$varName:+$separator}$value" >> "$wrapper"
             done
-        fi
+            ;;
 
-        if test "$p" = "--suffix-contents" -o "$p" = "--prefix-contents"; then
+          --suffix-contents|--prefix-contents)
             varName=${params[$((n + 1))]}
             separator=${params[$((n + 2))]}
             fileNames=${params[$((n + 3))]}
             n=$((n + 3))
             for fileName in $fileNames; do
-                if test "$p" = "--suffix-contents"; then
+                if [[ $p = --suffix-contents ]]; then
                     echo "export $varName=\$$varName\${$varName:+$separator}$(< "$fileName")" >> "$wrapper"
                 else
                     echo "export $varName=$(< "$fileName")\${$varName:+$separator}\$$varName" >> "$wrapper"
                 fi
             done
-        fi
+            ;;
 
-        if test "$p" = "--add-flags"; then
+          --add-flags)
             flags=${params[$((n + 1))]}
             n=$((n + 1))
             flagsBefore="$flagsBefore $flags"
-        fi
+            ;;
 
-        if test "$p" = "--argv0"; then
+          --argv0)
             argv0=${params[$((n + 1))]}
             n=$((n + 1))
-        fi
+            ;;
+
+          *)
+            echo "Unknown option $p"
+            exit 1
+        esac
     done
 
     # Note: extraFlagsArray is an array containing additional flags
     # that may be set by --run actions.
-    echo exec ${argv0:+-a $argv0} "$original" \
+    echo "exec ${argv0:+-a $argv0 }$original" \
          "$flagsBefore" '"${extraFlagsArray[@]}"' '"$@"' >> "$wrapper"
 
     chmod +x "$wrapper"
