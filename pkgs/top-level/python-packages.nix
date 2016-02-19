@@ -24730,12 +24730,12 @@ in modules // {
   };
 
   jenkins-job-builder = buildPythonPackage rec {
-    name = "jenkins-job-builder-1.3.0";
+    name = "jenkins-job-builder-1.4.0";
     disabled = ! (isPy26 || isPy27);
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jenkins-job-builder/${name}.tar.gz";
-      sha256 = "111vpf6hzzb2mcdqi0a9r1dkf28ln9w6sgfqri0qxwf1ffbdqx6x";
+      sha256 = "10zipq3dyyfhwvrcyk70zky07b0fssiahwig2h8daw977aszsfqb";
     };
 
     patchPhase = ''
