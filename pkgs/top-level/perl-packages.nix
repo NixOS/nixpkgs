@@ -8149,10 +8149,10 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXRoleWithOverloading = buildPerlPackage {
-    name = "MooseX-Role-WithOverloading-0.13";
+  MooseXRoleWithOverloading = buildPerlPackage rec {
+    name = "MooseX-Role-WithOverloading-0.17";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Role-WithOverloading-0.13.tar.gz;
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "01mqpvbz7yw993918hgp72vl22i6mgicpq5b3zrrsp6vl8sqj2sw";
     };
     buildInputs = [ TestCheckDeps TestNoWarnings ModuleMetadata];
