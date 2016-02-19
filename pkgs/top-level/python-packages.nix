@@ -14362,6 +14362,24 @@ in modules // {
     };
   };
 
+  pamqp = buildPythonPackage rec {
+    version = "1.6.1";
+    name = "pamqp-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pamqp/${name}.tar.gz";
+      sha256 = "1vmyvynqzx5zvbipaxff4fnzy3h3dvl3zicyr15yb816j93jl2ca";
+    };
+
+    buildInputs = with self; [ mock nose pep8 pylint ];
+
+    meta = {
+      description = "RabbitMQ Focused AMQP low-level library";
+      homepage = https://pypi.python.org/pypi/pamqp;
+      license = licenses.bsd3;
+    };
+  };
+
   parsedatetime = buildPythonPackage rec {
     name = "parsedatetime-${version}";
     version = "1.4";
@@ -17460,6 +17478,25 @@ in modules // {
     };
   });
 
+  rabbitpy = buildPythonPackage rec {
+    version = "0.26.2";
+    name = "rabbitpy-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/rabbitpy/${name}.tar.gz";
+      sha256 = "0pgijv7mgxc4sm7p9s716dhl600l8isisxzyg4hz7ng1sk09p1w3";
+    };
+
+    buildInputs = with self; [ mock nose ];
+
+    propagatedBuildInputs = with self; [ pamqp ];
+
+    meta = {
+      description = "A pure python, thread-safe, minimalistic and pythonic RabbitMQ client library";
+      homepage = https://pypi.python.org/pypi/rabbitpy;
+      license = licenses.bsd3;
+    };
+  };
 
   recaptcha_client = buildPythonPackage rec {
     name = "recaptcha-client-1.0.6";
