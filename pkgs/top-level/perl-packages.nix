@@ -9739,11 +9739,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  podlators = buildPerlPackage {
-    name = "podlators-2.5.3";
+  podlators = buildPerlPackage rec {
+    name = "podlators-4.06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RR/RRA/podlators-2.5.3.tar.gz;
-      sha256 = "c80d6d65a8694720deff1c6b2067d7564727db713b6d6b536afbad70299647d1";
+      url = "mirror://cpan/authors/id/R/RR/RRA/${name}.tar.gz";
+      sha256 = "0fsb1k88fsqwgmk5fkcz57jf27g6ip4ncikawslm596d1si2h48a";
     };
     meta = {
       description = "Convert POD data to various other formats";
