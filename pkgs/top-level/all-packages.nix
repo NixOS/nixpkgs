@@ -6116,6 +6116,8 @@ let
 
   rman = callPackage ../development/tools/misc/rman { };
 
+  rolespec = callPackage ../development/tools/misc/rolespec { };
+
   rr = callPackage ../development/tools/analysis/rr {
     stdenv = stdenv_32bit;
   };
