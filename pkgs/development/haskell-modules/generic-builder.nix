@@ -36,6 +36,7 @@
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? []
 , testTarget ? ""
 , broken ? false
+, preCompileBuildDriver ? "", postCompileBuildDriver ? ""
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
 , preConfigure ? "", postConfigure ? ""
@@ -56,6 +57,7 @@ let
                        concatStringsSep enableFeature optionalAttrs toUpper;
 
   isGhcjs = ghc.isGhcjs or false;
+  nativeGhc = if isGhcjs then ghc.nativeGhc else ghc;
 
   newCabalFileUrl = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
@@ -123,7 +125,8 @@ let
 
   ghcEnv = ghc.withPackages (p: haskellBuildInputs);
 
-  setupCommand = if isGhcjs then "${ghc.nodejs}/bin/node ./Setup.jsexe/all.js" else "./Setup";
+  setupBuilder = if isGhcjs then "${nativeGhc}/bin/ghc" else ghcCommand;
+  setupCommand = "./Setup";
   ghcCommand = if isGhcjs then "ghcjs" else "ghc";
   ghcCommandCaps = toUpper ghcCommand;
 
@@ -199,7 +202,7 @@ stdenv.mkDerivation ({
     done
 
     echo setupCompileFlags: $setupCompileFlags
-    ${ghcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+    ${setupBuilder} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
     runHook postCompileBuildDriver
   '';
@@ -295,6 +298,8 @@ stdenv.mkDerivation ({
          ;
 
 }
+// optionalAttrs (preCompileBuildDriver != "")  { inherit preCompileBuildDriver; }
+// optionalAttrs (postCompileBuildDriver != "") { inherit postCompileBuildDriver; }
 // optionalAttrs (preUnpack != "")      { inherit preUnpack; }
 // optionalAttrs (postUnpack != "")     { inherit postUnpack; }
 // optionalAttrs (configureFlags != []) { inherit configureFlags; }
