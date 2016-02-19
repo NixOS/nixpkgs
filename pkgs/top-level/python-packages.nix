@@ -686,12 +686,12 @@ in modules // {
   };
 
   ansible2 = buildPythonPackage rec {
-    version    = "v2.0.0_0.6.rc1";
+    version    = "v2.0.0.2";
     name       = "ansible-${version}";
 
     src = pkgs.fetchurl {
-      url    = "http://releases.ansible.com/ansible/ansible-2.0.0-0.6.rc1.tar.gz";
-      sha256 = "0v7fqi7qg9lzvpsjlaw9rzas8n1cdsyp3y9jrqzjxs9nbknwcibd";
+      url    = "http://releases.ansible.com/ansible/ansible-2.0.0.2.tar.gz";
+      sha256 = "0a2qgshbpbg2c8rz36jcc5f7zam0j1viqdhc8fqqbarz26chpnr7";
     };
 
     prePatch = ''
