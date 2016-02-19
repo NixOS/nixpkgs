@@ -3477,6 +3477,8 @@ let
 
   uwsgi = callPackage ../servers/uwsgi {
     plugins = [];
+    withPAM = stdenv.isLinux;
+    withSystemd = stdenv.isLinux;
   };
 
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
