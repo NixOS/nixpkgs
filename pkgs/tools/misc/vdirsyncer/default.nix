@@ -20,6 +20,11 @@ pythonPackages.buildPythonPackage rec {
     atomicwrites
   ];
 
+  # Unfortunately, checking this package seems a bit too complex
+  # https://github.com/NixOS/nixpkgs/pull/13098#issuecomment-185914025
+  # https://github.com/untitaker/vdirsyncer/issues/334#issuecomment-185872854
+  doCheck = false;
+
   meta = with stdenv.lib; {
     homepage = https://github.com/untitaker/vdirsyncer;
     description = "Synchronize calendars and contacts";
