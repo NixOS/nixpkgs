@@ -113,21 +113,24 @@ in {
             vassals = {
               moin = {
                 type = "normal";
-                python2Packages = self: with self; [ moinmoin ];
+                pythonPackages = self: with self; [ moinmoin ];
                 socket = "${config.services.uwsgi.runDir}/uwsgi.sock";
               };
             };
           }
         '';
         description = ''
-          uWSGI configuration. This awaits either a path to file or a set which will be made into one.
-          If given a set, it awaits an attribute <literal>type</literal> which can be either <literal>normal</literal>
-          or <literal>emperor</literal>.
+          uWSGI configuration. It awaits an attribute <literal>type</literal> inside which can be either
+          <literal>normal</literal> or <literal>emperor</literal>.
 
-          For <literal>normal</literal> mode you can specify <literal>python2Packages</literal> and
-          <literal>python3Packages</literal> as functions from libraries set into lists of libraries.
+          For <literal>normal</literal> mode you can specify <literal>pythonPackages</literal> as a function
+          from libraries set into a list of libraries. <literal>pythonpath</literal> will be set accordingly.
+
           For <literal>emperor</literal> mode, you should use <literal>vassals</literal> attribute
           which should be either a set of names and configurations or a path to a directory.
+
+          Other attributes will be used in configuration file as-is. Notice that you can redefine
+          <literal>plugins</literal> setting here.
         '';
       };
 
