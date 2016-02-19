@@ -400,10 +400,10 @@
       };
     }
     rec {
-      name = "libgcrypt11_1.5.0-3ubuntu0.4+srt1_amd64";
-      md5 = "e97b1a78944b7b07871dd36116b07bfe";
+      name = "libgcrypt11_1.5.0-3ubuntu0.5+srt1_amd64";
+      md5 = "502feac74b4fdda9c2b4a12efd15c82e";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/libg/libgcrypt11/libgcrypt11_1.5.0-3ubuntu0.4+srt1_amd64.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/libg/libgcrypt11/libgcrypt11_1.5.0-3ubuntu0.5+srt1_amd64.deb";
         inherit md5;
         name = "libgcrypt11.deb";
       };
@@ -463,10 +463,10 @@
       };
     }
     rec {
-      name = "libgnutls26_2.12.14-5ubuntu3.9+srt1_amd64";
-      md5 = "110f432d9438cf534f1a2cb3e0269900";
+      name = "libgnutls26_2.12.14-5ubuntu3.11+srt1_amd64";
+      md5 = "5393d7b8c652fcdb4bc7b0063e7bc595";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/g/gnutls26/libgnutls26_2.12.14-5ubuntu3.9+srt1_amd64.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/g/gnutls26/libgnutls26_2.12.14-5ubuntu3.11+srt1_amd64.deb";
         inherit md5;
         name = "libgnutls26.deb";
       };
@@ -490,10 +490,10 @@
       };
     }
     rec {
-      name = "libgssapi-krb5-2_1.10+dfsg~beta1-2ubuntu0.6+srt1_amd64";
-      md5 = "29fa7b271e5177464705bba4042c800a";
+      name = "libgssapi-krb5-2_1.10+dfsg~beta1-2ubuntu0.7+srt1_amd64";
+      md5 = "68cc7194070bc391898a2ac64f60238d";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/k/krb5/libgssapi-krb5-2_1.10+dfsg~beta1-2ubuntu0.6+srt1_amd64.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/k/krb5/libgssapi-krb5-2_1.10+dfsg~beta1-2ubuntu0.7+srt1_amd64.deb";
         inherit md5;
         name = "libgssapi-krb5-2.deb";
       };
@@ -652,10 +652,10 @@
       };
     }
     rec {
-      name = "libk5crypto3_1.10+dfsg~beta1-2ubuntu0.6+srt1_amd64";
-      md5 = "d82d1f7b8a31f69ccebdd1f4e28f7763";
+      name = "libk5crypto3_1.10+dfsg~beta1-2ubuntu0.7+srt1_amd64";
+      md5 = "14a85bce181c6fe78bd00c156bd71033";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/k/krb5/libk5crypto3_1.10+dfsg~beta1-2ubuntu0.6+srt1_amd64.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/k/krb5/libk5crypto3_1.10+dfsg~beta1-2ubuntu0.7+srt1_amd64.deb";
         inherit md5;
         name = "libk5crypto3.deb";
       };
@@ -679,19 +679,19 @@
       };
     }
     rec {
-      name = "libkrb5-3_1.10+dfsg~beta1-2ubuntu0.6+srt1_amd64";
-      md5 = "3e8acba6db5d5e1f36f4b2792f726b63";
+      name = "libkrb5-3_1.10+dfsg~beta1-2ubuntu0.7+srt1_amd64";
+      md5 = "39ce748ff830b7e01f93e12e3829c90e";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/k/krb5/libkrb5-3_1.10+dfsg~beta1-2ubuntu0.6+srt1_amd64.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/k/krb5/libkrb5-3_1.10+dfsg~beta1-2ubuntu0.7+srt1_amd64.deb";
         inherit md5;
         name = "libkrb5-3.deb";
       };
     }
     rec {
-      name = "libkrb5support0_1.10+dfsg~beta1-2ubuntu0.6+srt1_amd64";
-      md5 = "8198e8fc9f96d9310d41a5b2f3d70870";
+      name = "libkrb5support0_1.10+dfsg~beta1-2ubuntu0.7+srt1_amd64";
+      md5 = "dda5082adc17603046892b6c9a6f8d96";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/k/krb5/libkrb5support0_1.10+dfsg~beta1-2ubuntu0.6+srt1_amd64.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/k/krb5/libkrb5support0_1.10+dfsg~beta1-2ubuntu0.7+srt1_amd64.deb";
         inherit md5;
         name = "libkrb5support0.deb";
       };
@@ -778,19 +778,19 @@
       };
     }
     rec {
-      name = "libnspr4_4.10.7-0ubuntu0.12.04.1+srt1_amd64";
-      md5 = "81f950d909bd07f87fd03828bc1b0b76";
+      name = "libnspr4_4.10.10-0ubuntu0.12.04.1+srt1_amd64";
+      md5 = "189258c833f8ddf0eb22fe26ad3fa3b9";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/n/nspr/libnspr4_4.10.7-0ubuntu0.12.04.1+srt1_amd64.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/n/nspr/libnspr4_4.10.10-0ubuntu0.12.04.1+srt1_amd64.deb";
         inherit md5;
         name = "libnspr4.deb";
       };
     }
     rec {
-      name = "libnss3_3.19.2-0ubuntu0.12.04.1+srt1_amd64";
-      md5 = "ba6be27b60728d1bbdc849354376adf8";
+      name = "libnss3_3.19.2.1-0ubuntu0.12.04.2+srt1_amd64";
+      md5 = "9e73637724364e1e0f95df26ccee054a";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/n/nss/libnss3_3.19.2-0ubuntu0.12.04.1+srt1_amd64.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/n/nss/libnss3_3.19.2.1-0ubuntu0.12.04.2+srt1_amd64.deb";
         inherit md5;
         name = "libnss3.deb";
       };
@@ -877,10 +877,10 @@
       };
     }
     rec {
-      name = "libpng12-0_1.2.46-3ubuntu4+srt4_amd64";
-      md5 = "2365d5fa1080d019aed6810031301476";
+      name = "libpng12-0_1.2.46-3ubuntu4.2+srt1_amd64";
+      md5 = "0e79e11954e9dd12b345de34ae9dda6d";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/libp/libpng/libpng12-0_1.2.46-3ubuntu4+srt4_amd64.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/libp/libpng/libpng12-0_1.2.46-3ubuntu4.2+srt1_amd64.deb";
         inherit md5;
         name = "libpng12-0.deb";
       };
@@ -967,46 +967,46 @@
       };
     }
     rec {
-      name = "libsdl2_2.0.3+steamrt1+srt4_amd64";
-      md5 = "cf7de8c8621e0aabdee673ee7bbac873";
+      name = "libsdl2_2.0.4+steamrt1+srt1_amd64";
+      md5 = "95ea5d6fb188e0ef66881e699cbf95b2";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2/libsdl2_2.0.3+steamrt1+srt4_amd64.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2/libsdl2_2.0.4+steamrt1+srt1_amd64.deb";
         inherit md5;
         name = "libsdl2.deb";
       };
     }
     rec {
-      name = "libsdl2-image_2.0.0+steamrt1+srt4_amd64";
-      md5 = "0ae2b72c2271d9ec01be98c0cec205f9";
+      name = "libsdl2-image_2.0.1+steamrt2+srt1_amd64";
+      md5 = "7a16e55edbcc24311753260947eb2574";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2-image/libsdl2-image_2.0.0+steamrt1+srt4_amd64.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2-image/libsdl2-image_2.0.1+steamrt2+srt1_amd64.deb";
         inherit md5;
         name = "libsdl2-image.deb";
       };
     }
     rec {
-      name = "libsdl2-mixer_2.0.0+steamrt1+srt4_amd64";
-      md5 = "18f22f3f91e55cb361f7ab75ae1bc9ac";
+      name = "libsdl2-mixer_2.0.1+steamrt1+srt1_amd64";
+      md5 = "00c0fceba317e355e52353f1b453419c";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2-mixer/libsdl2-mixer_2.0.0+steamrt1+srt4_amd64.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2-mixer/libsdl2-mixer_2.0.1+steamrt1+srt1_amd64.deb";
         inherit md5;
         name = "libsdl2-mixer.deb";
       };
     }
     rec {
-      name = "libsdl2-net_2.0.0+srt4_amd64";
-      md5 = "012b3825100003918c26f9e66bdea246";
+      name = "libsdl2-net_2.0.1+srt1_amd64";
+      md5 = "9544e9d02e1aacdaaefcae68f57baa44";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2-net/libsdl2-net_2.0.0+srt4_amd64.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2-net/libsdl2-net_2.0.1+srt1_amd64.deb";
         inherit md5;
         name = "libsdl2-net.deb";
       };
     }
     rec {
-      name = "libsdl2-ttf_2.0.12+srt4_amd64";
-      md5 = "703513c348e3456f6035ddcd41bc5785";
+      name = "libsdl2-ttf_2.0.14+srt1_amd64";
+      md5 = "7bdbbba9e9150b8596a28afb4c49dd13";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2-ttf/libsdl2-ttf_2.0.12+srt4_amd64.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2-ttf/libsdl2-ttf_2.0.14+srt1_amd64.deb";
         inherit md5;
         name = "libsdl2-ttf.deb";
       };
@@ -1066,10 +1066,10 @@
       };
     }
     rec {
-      name = "libssl1.0.0_1.0.1-4ubuntu5.31+srt1_amd64";
-      md5 = "0ea8b768e93487f8108336c5da92b952";
+      name = "libssl1.0.0_1.0.1-4ubuntu5.33+srt1_amd64";
+      md5 = "eabb32b42b50ae68d5a4b2ef0b323c95";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/o/openssl/libssl1.0.0_1.0.1-4ubuntu5.31+srt1_amd64.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/o/openssl/libssl1.0.0_1.0.1-4ubuntu5.33+srt1_amd64.deb";
         inherit md5;
         name = "libssl1.0.0.deb";
       };
@@ -1633,10 +1633,10 @@
       };
     }
     rec {
-      name = "libxml2_2.7.8.dfsg-5.1ubuntu4.11+srt1_amd64";
-      md5 = "65ae8b0560c18f4618bd0c9414e881fa";
+      name = "libxml2_2.7.8.dfsg-5.1ubuntu4.14+srt1_amd64";
+      md5 = "cca32ece7e930886fc2667e6f4849af5";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/libx/libxml2/libxml2_2.7.8.dfsg-5.1ubuntu4.11+srt1_amd64.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/libx/libxml2/libxml2_2.7.8.dfsg-5.1ubuntu4.14+srt1_amd64.deb";
         inherit md5;
         name = "libxml2.deb";
       };
@@ -2139,10 +2139,10 @@
       };
     }
     rec {
-      name = "libgcrypt11_1.5.0-3ubuntu0.4+srt1_i386";
-      md5 = "3ee78c6888bcf55b43fb6830059c65e3";
+      name = "libgcrypt11_1.5.0-3ubuntu0.5+srt1_i386";
+      md5 = "a77e997aabfde09c5cdf4b5f5d8e305f";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/libg/libgcrypt11/libgcrypt11_1.5.0-3ubuntu0.4+srt1_i386.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/libg/libgcrypt11/libgcrypt11_1.5.0-3ubuntu0.5+srt1_i386.deb";
         inherit md5;
         name = "libgcrypt11.deb";
       };
@@ -2202,10 +2202,10 @@
       };
     }
     rec {
-      name = "libgnutls26_2.12.14-5ubuntu3.9+srt1_i386";
-      md5 = "51da86a2dd3205580f9cbc43cabf921f";
+      name = "libgnutls26_2.12.14-5ubuntu3.11+srt1_i386";
+      md5 = "360d15ec7d327371bcb69a8b51b1e556";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/g/gnutls26/libgnutls26_2.12.14-5ubuntu3.9+srt1_i386.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/g/gnutls26/libgnutls26_2.12.14-5ubuntu3.11+srt1_i386.deb";
         inherit md5;
         name = "libgnutls26.deb";
       };
@@ -2229,10 +2229,10 @@
       };
     }
     rec {
-      name = "libgssapi-krb5-2_1.10+dfsg~beta1-2ubuntu0.6+srt1_i386";
-      md5 = "8fc7da47074cdac1c721b280db75b571";
+      name = "libgssapi-krb5-2_1.10+dfsg~beta1-2ubuntu0.7+srt1_i386";
+      md5 = "bba863478cbafe60780618b9e2e3ba39";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/k/krb5/libgssapi-krb5-2_1.10+dfsg~beta1-2ubuntu0.6+srt1_i386.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/k/krb5/libgssapi-krb5-2_1.10+dfsg~beta1-2ubuntu0.7+srt1_i386.deb";
         inherit md5;
         name = "libgssapi-krb5-2.deb";
       };
@@ -2391,10 +2391,10 @@
       };
     }
     rec {
-      name = "libk5crypto3_1.10+dfsg~beta1-2ubuntu0.6+srt1_i386";
-      md5 = "9d903a775501687794f3579a439f62b0";
+      name = "libk5crypto3_1.10+dfsg~beta1-2ubuntu0.7+srt1_i386";
+      md5 = "09e0b933d71e0b842906f22334845104";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/k/krb5/libk5crypto3_1.10+dfsg~beta1-2ubuntu0.6+srt1_i386.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/k/krb5/libk5crypto3_1.10+dfsg~beta1-2ubuntu0.7+srt1_i386.deb";
         inherit md5;
         name = "libk5crypto3.deb";
       };
@@ -2418,19 +2418,19 @@
       };
     }
     rec {
-      name = "libkrb5-3_1.10+dfsg~beta1-2ubuntu0.6+srt1_i386";
-      md5 = "b68e1bfee0598418a0a6b4280302f5f6";
+      name = "libkrb5-3_1.10+dfsg~beta1-2ubuntu0.7+srt1_i386";
+      md5 = "4efd6dd3da5e989b7aaf990cb5dae9a4";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/k/krb5/libkrb5-3_1.10+dfsg~beta1-2ubuntu0.6+srt1_i386.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/k/krb5/libkrb5-3_1.10+dfsg~beta1-2ubuntu0.7+srt1_i386.deb";
         inherit md5;
         name = "libkrb5-3.deb";
       };
     }
     rec {
-      name = "libkrb5support0_1.10+dfsg~beta1-2ubuntu0.6+srt1_i386";
-      md5 = "b6a905144b615ef32e1a1ca67a10379e";
+      name = "libkrb5support0_1.10+dfsg~beta1-2ubuntu0.7+srt1_i386";
+      md5 = "ce8372e9411aa5d734ef44773820cd3b";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/k/krb5/libkrb5support0_1.10+dfsg~beta1-2ubuntu0.6+srt1_i386.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/k/krb5/libkrb5support0_1.10+dfsg~beta1-2ubuntu0.7+srt1_i386.deb";
         inherit md5;
         name = "libkrb5support0.deb";
       };
@@ -2517,19 +2517,19 @@
       };
     }
     rec {
-      name = "libnspr4_4.10.7-0ubuntu0.12.04.1+srt1_i386";
-      md5 = "78d9dc08637bd09f425821c8d35f3b03";
+      name = "libnspr4_4.10.10-0ubuntu0.12.04.1+srt1_i386";
+      md5 = "6d15e2401761ea09428c7170381a3ff3";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/n/nspr/libnspr4_4.10.7-0ubuntu0.12.04.1+srt1_i386.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/n/nspr/libnspr4_4.10.10-0ubuntu0.12.04.1+srt1_i386.deb";
         inherit md5;
         name = "libnspr4.deb";
       };
     }
     rec {
-      name = "libnss3_3.19.2-0ubuntu0.12.04.1+srt1_i386";
-      md5 = "35330de1ca02b0034f468c0df11882bd";
+      name = "libnss3_3.19.2.1-0ubuntu0.12.04.2+srt1_i386";
+      md5 = "bc611346e46985b47d0cf7fe0464e4af";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/n/nss/libnss3_3.19.2-0ubuntu0.12.04.1+srt1_i386.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/n/nss/libnss3_3.19.2.1-0ubuntu0.12.04.2+srt1_i386.deb";
         inherit md5;
         name = "libnss3.deb";
       };
@@ -2616,10 +2616,10 @@
       };
     }
     rec {
-      name = "libpng12-0_1.2.46-3ubuntu4+srt4_i386";
-      md5 = "23f4f520f160d48dc127ce8ad88900c3";
+      name = "libpng12-0_1.2.46-3ubuntu4.2+srt1_i386";
+      md5 = "978502e6116df1c98dd985dd07bc1022";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/libp/libpng/libpng12-0_1.2.46-3ubuntu4+srt4_i386.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/libp/libpng/libpng12-0_1.2.46-3ubuntu4.2+srt1_i386.deb";
         inherit md5;
         name = "libpng12-0.deb";
       };
@@ -2706,46 +2706,46 @@
       };
     }
     rec {
-      name = "libsdl2_2.0.3+steamrt1+srt4_i386";
-      md5 = "f34b318dc7daf934125d09cceeafe10c";
+      name = "libsdl2_2.0.4+steamrt1+srt1_i386";
+      md5 = "b88ec76ac0c55871648c51749ba2e661";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2/libsdl2_2.0.3+steamrt1+srt4_i386.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2/libsdl2_2.0.4+steamrt1+srt1_i386.deb";
         inherit md5;
         name = "libsdl2.deb";
       };
     }
     rec {
-      name = "libsdl2-image_2.0.0+steamrt1+srt4_i386";
-      md5 = "715fde2a619afc4335720d0aba7895b2";
+      name = "libsdl2-image_2.0.1+steamrt2+srt1_i386";
+      md5 = "076b0df6aff11c3a828eb5978be1ff66";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2-image/libsdl2-image_2.0.0+steamrt1+srt4_i386.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2-image/libsdl2-image_2.0.1+steamrt2+srt1_i386.deb";
         inherit md5;
         name = "libsdl2-image.deb";
       };
     }
     rec {
-      name = "libsdl2-mixer_2.0.0+steamrt1+srt4_i386";
-      md5 = "7795a5fb826960a5078a2d73f3ee2113";
+      name = "libsdl2-mixer_2.0.1+steamrt1+srt1_i386";
+      md5 = "1883cd445c1e5d3ad12bbb7f8d1932cc";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2-mixer/libsdl2-mixer_2.0.0+steamrt1+srt4_i386.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2-mixer/libsdl2-mixer_2.0.1+steamrt1+srt1_i386.deb";
         inherit md5;
         name = "libsdl2-mixer.deb";
       };
     }
     rec {
-      name = "libsdl2-net_2.0.0+srt4_i386";
-      md5 = "d10bb11e6231b93d06e5f3254c0de8fd";
+      name = "libsdl2-net_2.0.1+srt1_i386";
+      md5 = "f97097f7e4594a691f7e866e1f4bd6d4";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2-net/libsdl2-net_2.0.0+srt4_i386.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2-net/libsdl2-net_2.0.1+srt1_i386.deb";
         inherit md5;
         name = "libsdl2-net.deb";
       };
     }
     rec {
-      name = "libsdl2-ttf_2.0.12+srt4_i386";
-      md5 = "26ba9191716e3f7f3971fd68e7e8d4c1";
+      name = "libsdl2-ttf_2.0.14+srt1_i386";
+      md5 = "6b4c6e4c15de54d5222da1ccab849b69";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2-ttf/libsdl2-ttf_2.0.12+srt4_i386.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/libs/libsdl2-ttf/libsdl2-ttf_2.0.14+srt1_i386.deb";
         inherit md5;
         name = "libsdl2-ttf.deb";
       };
@@ -2805,10 +2805,10 @@
       };
     }
     rec {
-      name = "libssl1.0.0_1.0.1-4ubuntu5.31+srt1_i386";
-      md5 = "40b412b5964f9f48ef4f5997702da3d5";
+      name = "libssl1.0.0_1.0.1-4ubuntu5.33+srt1_i386";
+      md5 = "abed18b597fc44363a47caf1f4d760c4";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/o/openssl/libssl1.0.0_1.0.1-4ubuntu5.31+srt1_i386.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/o/openssl/libssl1.0.0_1.0.1-4ubuntu5.33+srt1_i386.deb";
         inherit md5;
         name = "libssl1.0.0.deb";
       };
@@ -3372,10 +3372,10 @@
       };
     }
     rec {
-      name = "libxml2_2.7.8.dfsg-5.1ubuntu4.11+srt1_i386";
-      md5 = "c6a64d2f5324a6af10fb70988649a3bb";
+      name = "libxml2_2.7.8.dfsg-5.1ubuntu4.14+srt1_i386";
+      md5 = "426d497ed13c731342e5af754975e6ef";
       source = fetchurl {
-        url = "http://repo.steampowered.com/steamrt/pool/main/libx/libxml2/libxml2_2.7.8.dfsg-5.1ubuntu4.11+srt1_i386.deb";
+        url = "http://repo.steampowered.com/steamrt/pool/main/libx/libxml2/libxml2_2.7.8.dfsg-5.1ubuntu4.14+srt1_i386.deb";
         inherit md5;
         name = "libxml2.deb";
       };
