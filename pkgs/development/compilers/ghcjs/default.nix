@@ -118,8 +118,8 @@ in mkDerivation (rec {
   '';
   passthru = {
     inherit bootPkgs;
+    isCross = true;
     isGhcjs = true;
-    nativeGhc = ghc;
     inherit nodejs ghcjsBoot;
   };
 

@@ -56,8 +56,9 @@ let
   inherit (stdenv.lib) optional optionals optionalString versionOlder
                        concatStringsSep enableFeature optionalAttrs toUpper;
 
+  isCross = ghc.isCross or false;
   isGhcjs = ghc.isGhcjs or false;
-  nativeGhc = if isGhcjs then ghc.nativeGhc else ghc;
+  nativeGhc = if isCross then ghc.bootPkgs.ghc else ghc;
 
   newCabalFileUrl = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
@@ -97,7 +98,7 @@ let
     (optionalString (isGhcjs || versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
     (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
   ] ++ optionals isGhcjs [
-    "--with-hsc2hs=${ghc.nativeGhc}/bin/hsc2hs"
+    "--with-hsc2hs=${nativeGhc}/bin/hsc2hs"
     "--ghcjs"
   ];
 
