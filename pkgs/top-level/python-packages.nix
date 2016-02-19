@@ -19,6 +19,8 @@ let
     bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
   });
 
+  buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
+
   # Unique python version identifier
   pythonName =
     if isPy26 then "python26" else
@@ -38,7 +40,7 @@ let
 
 in modules // {
 
-  inherit python isPy26 isPy27 isPy33 isPy34 isPy35 isPyPy isPy3k pythonName buildPythonPackage;
+  inherit python isPy26 isPy27 isPy33 isPy34 isPy35 isPyPy isPy3k pythonName buildPythonPackage buildPythonApplication;
 
   # helpers
 

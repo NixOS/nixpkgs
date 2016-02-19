@@ -9161,6 +9161,7 @@ let
 
   # python function with default python interpreter
   buildPythonPackage = pythonPackages.buildPythonPackage;
+  buildPythonApplication = pythonPackages.buildPythonApplication;
 
   # `nix-env -i python-nose` installs for 2.7, the default python.
   # Therefore we do not recurse into attributes here, in contrast to
