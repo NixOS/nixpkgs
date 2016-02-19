@@ -18588,25 +18588,18 @@ in modules // {
 
   scikitlearn = buildPythonPackage rec {
     name = "scikit-learn-${version}";
-    version = "0.17";
+    version = "0.17.1";
     disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
     src = pkgs.fetchurl {
-      url = "https://github.com/scikit-learn/scikit-learn/archive/${version}.tar.gz";
-      sha256 = "9946ab26bec8ba771a366c6c496514e37da88b9cb4cd05b3bb1c031eb1da1168";
+      url = "https://pypi.python.org/packages/source/s/scikit-learn/${name}.tar.gz";
+      sha256 = "9f4cf58e57d81783289fc503caaed1f210bab49b7a6f680bf3c04b1e0a96e5f0";
     };
 
     buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
     propagatedBuildInputs = with self; [ numpy scipy numpy.blas ];
 
     LC_ALL="en_US.UTF-8";
-
-    # Exclude "test_image.py" because the Lena function/image was removed from SciPy since 0.17
-    # Should be fixed in next release.
-    # Using the -I switch broke nosetests...?
-    patchPhase = ''
-      rm sklearn/feature_extraction/tests/test_image.py
-    '';
 
     checkPhase = ''
       HOME=$TMPDIR OMP_NUM_THREADS=1 nosetests $out/${python.sitePackages}/sklearn/
