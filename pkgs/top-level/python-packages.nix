@@ -17615,7 +17615,7 @@ in modules // {
 
     propagatedBuildInputs = with self; [ requests2 ];
 
-    buildInputs = with self; [ betamax ];
+    buildInputs = with self; [ betamax mock pytest ];
 
     meta = {
       description = "A toolbelt of useful classes and functions to be used with python-requests";
