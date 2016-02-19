@@ -58,7 +58,15 @@ let
 
   isCross = ghc.isCross or false;
   isGhcjs = ghc.isGhcjs or false;
+  packageDbFlag = if isGhcjs || versionOlder "7.6" ghc.version
+                  then "package-db"
+                  else "package-conf";
+
   nativeGhc = if isCross then ghc.bootPkgs.ghc else ghc;
+  nativeIsCross = nativeGhc.isCross or false;
+  nativePackageDbFlag = if versionOlder "7.6" nativeGhc.version
+                        then "package-db"
+                        else "package-conf";
 
   newCabalFileUrl = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
@@ -71,9 +79,6 @@ let
                      import Distribution.Simple
                      main = defaultMain
                    '';
-
-  ghc76xOrLater = isGhcjs || stdenv.lib.versionOlder "7.6" ghc.version;
-  packageDbFlag = if ghc76xOrLater then "package-db" else "package-conf";
 
   hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
 
@@ -126,7 +131,7 @@ let
 
   ghcEnv = ghc.withPackages (p: haskellBuildInputs);
 
-  setupBuilder = if isGhcjs then "${nativeGhc}/bin/ghc" else ghcCommand;
+  setupBuilder = if isCross then "${nativeGhc}/bin/ghc" else ghcCommand;
   setupCommand = "./Setup";
   ghcCommand = if isGhcjs then "ghcjs" else "ghc";
   ghcCommandCaps = toUpper ghcCommand;
