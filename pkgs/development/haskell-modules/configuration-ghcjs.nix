@@ -7,54 +7,53 @@ in
 
 with import ./lib.nix { inherit pkgs; };
 
-self: super: {
+self: super:
+  # The stage 2 packages. Regenerate with ./ghcjs/gen-stage2.rb
+  let stage2 =
+    (import ./ghcjs/stage2.nix {
+       inherit (self) callPackage;
+       inherit (self.ghc) ghcjsBoot;
+    }); in stage2 // {
+
+  old-time = overrideCabal stage2.old-time (drv: {
+    postPatch = ''
+      ${pkgs.autoconf}/bin/autoreconf --install --force --verbose
+    '';
+  });
 
   # LLVM is not supported on this GHC; use the latest one.
   inherit (pkgs) llvmPackages;
 
   inherit (pkgs.haskell.packages.ghc7103) jailbreak-cabal alex happy gtk2hs-buildtools rehoo hoogle;
 
-  # This is the list of packages that are built into a booted ghcjs installation
+  # This is the list of the Stage 1 packages that are built into a booted ghcjs installation
   # It can be generated with the command:
   # nix-shell -p haskell.packages.ghcjs.ghc --command "ghcjs-pkg list | sed -n 's/^    \(.*\)-\([0-9.]*\)$/\1_\2/ p' | sed 's/\./_/g' | sed 's/-\(.\)/\U\1/' | sed 's/^\([^_]*\)\(.*\)$/\1 = null;/'"
-  Cabal = null;
-  aeson = null;
   array = null;
-  async = null;
-  attoparsec = null;
   base = null;
   binary = null;
   rts = null;
   bytestring = null;
-  case-insensitive = null;
   containers = null;
   deepseq = null;
   directory = null;
-  dlist = null;
-  extensible-exceptions = null;
   filepath = null;
   ghc-prim = null;
-  ghcjs-base = null;
   ghcjs-prim = null;
-  hashable = null;
   integer-gmp = null;
-  mtl = null;
   old-locale = null;
-  old-time = null;
-  parallel = null;
   pretty = null;
   primitive = null;
   process = null;
-  scientific = null;
-  stm = null;
-  syb = null;
   template-haskell = null;
-  text = null;
   time = null;
   transformers = null;
   unix = null;
-  unordered-containers = null;
-  vector = null;
+
+  # Don't set integer-simple to null!
+  # GHCJS uses integer-gmp, so any package expression that depends on
+  # integer-simple is wrong.
+  #integer-simple = null;
 
   # These packages are core libraries in GHC 7.10.x, but not here.
   bin-package-db = null;
@@ -105,7 +104,7 @@ self: super: {
      }) {};
 
   ghcjs-dom = overrideCabal super.ghcjs-dom (drv: {
-    libraryHaskellDepends =
+    libraryHaskellDepends = [ self.ghcjs-base ] ++
       removeLibraryHaskellDepends [
         "glib" "gtk" "gtk3" "webkitgtk" "webkitgtk3"
       ] drv.libraryHaskellDepends;

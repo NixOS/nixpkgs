@@ -61,6 +61,7 @@ stdenv.mkDerivation ({
       ./security-bdf1ff05.patch
       ./cve-2014-8121.patch
       ./cve-2015-1781.patch
+      ./cve-2015-7547.patch
 
       ./glibc-locale-incompatibility.patch
     ];

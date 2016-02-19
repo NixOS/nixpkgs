@@ -34,6 +34,15 @@ in {
       type = bool;
     };
 
+    package = mkOption {
+      default = pkgs.collectd;
+      defaultText = "pkgs.collectd";
+      description = ''
+        Which collectd package to use.
+      '';
+      type = package;
+    };
+
     user = mkOption {
       default = "collectd";
       description = ''

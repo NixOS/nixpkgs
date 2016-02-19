@@ -3,6 +3,8 @@
 , python ? null
 , guile ? null
 , target ? null
+# Support all known targets in one gdb binary.
+, multitarget ? false
 # Additional dependencies for GNU/Hurd.
 , mig ? null, hurd ? null
 
@@ -47,6 +49,7 @@ stdenv.mkDerivation rec {
       "--with-separate-debug-dir=/run/current-system/sw/lib/debug"
     ]
     ++ optional (target != null) "--target=${target.config}"
+    ++ optional multitarget "--enable-targets=all"
     ++ optional (elem stdenv.system platforms.cygwin) "--without-python";
 
   crossAttrs = {
@@ -54,7 +57,9 @@ stdenv.mkDerivation rec {
     configureFlags = with stdenv.lib;
       [ "--with-gmp=${gmp.crossDrv}" "--with-mpfr=${mpfr.crossDrv}" "--with-system-readline"
         "--with-system-zlib" "--with-expat" "--with-libexpat-prefix=${expat.crossDrv}" "--without-python"
-      ] ++ optional (target != null) "--target=${target.config}";
+      ]
+      ++ optional (target != null) "--target=${target.config}"
+      ++ optional multitarget "--enable-targets=all";
   };
 
   postInstall =

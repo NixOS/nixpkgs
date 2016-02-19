@@ -259,6 +259,15 @@ let
     { substitutions = { inherit autoconf automake gettext libtool; }; }
     ../build-support/setup-hooks/autoreconf.sh;
 
+  ensureNewerSourcesHook = { year }: makeSetupHook {}
+    (writeScript "ensure-newer-sources-hook.sh" ''
+      postUnpackHooks+=(_ensureNewerSources)
+      _ensureNewerSources() {
+        '${findutils}/bin/find' "$sourceRoot" \
+          '!' -newermt '${year}-01-01' -exec touch -d '${year}-01-02' '{}' '+'
+      }
+    '');
+
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
   buildFHSEnv = callPackage ../build-support/build-fhs-chrootenv/env.nix {
@@ -297,6 +306,8 @@ let
   dotnetbuildhelpers = callPackage ../build-support/dotnetbuildhelpers {
     inherit helperFunctions;
   };
+
+  dispad = callPackage ../tools/X11/dispad { };
 
   scatterOutputHook = makeSetupHook {} ../build-support/setup-hooks/scatter_output.sh;
 
@@ -789,6 +800,8 @@ let
   image-analyzer = callPackage ../misc/emulators/cdemu/analyzer.nix { };
 
   ccnet = callPackage ../tools/networking/ccnet { };
+
+  cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns { };
 
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
 
@@ -1468,6 +1481,8 @@ let
 
   evtest = callPackage ../applications/misc/evtest { };
 
+  exa = callPackage ../tools/misc/exa { };
+
   exempi = callPackage ../development/libraries/exempi { };
 
   execline = callPackage ../tools/misc/execline { };
@@ -1655,6 +1670,8 @@ let
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
   git-hub = callPackage ../applications/version-management/git-and-tools/git-hub { };
+
+  git-lfs = goPackages.git-lfs.bin // { outputs = [ "bin" ]; };
 
   gitfs = callPackage ../tools/filesystems/gitfs { };
 
@@ -1908,6 +1925,8 @@ let
 
   hevea = callPackage ../tools/typesetting/hevea { };
 
+  hfsprogs = callPackage ../tools/filesystems/hfsprogs { };
+
   highlight = callPackage ../tools/text/highlight {
     lua = lua5;
   };
@@ -1941,6 +1960,8 @@ let
   i2pd = callPackage ../tools/networking/i2pd {};
 
   iasl = callPackage ../development/compilers/iasl { };
+
+  iannix = callPackage ../applications/audio/iannix { };
 
   icecast = callPackage ../servers/icecast { };
 
@@ -2128,6 +2149,8 @@ let
   mkcast = callPackage ../applications/video/mkcast { };
 
   multitail = callPackage ../tools/misc/multitail { };
+
+  mxt-app = callPackage ../misc/mxt-app { };
 
   netperf = callPackage ../applications/networking/netperf { };
 
@@ -2808,7 +2831,7 @@ let
   platformioPackages = callPackage ../development/arduino/platformio { };
   platformio = platformioPackages.platformio-chrootenv.override {};
 
-  plex = callPackage ../servers/plex { };
+  plex = callPackage ../servers/plex { enablePlexPass = config.plex.enablePlexPass or false; };
 
   ploticus = callPackage ../tools/graphics/ploticus {
     libpng = libpng12;
@@ -3102,6 +3125,8 @@ let
 
   sg3_utils = callPackage ../tools/system/sg3_utils { };
 
+  shadowsocks-libev = callPackage ../tools/networking/shadowsocks-libev { };
+
   sharutils = callPackage ../tools/archivers/sharutils { };
 
   shotwell = callPackage ../applications/graphics/shotwell {
@@ -3128,6 +3153,8 @@ let
   silver-searcher = callPackage ../tools/text/silver-searcher { };
 
   simplescreenrecorder = callPackage ../applications/video/simplescreenrecorder { };
+
+  sipsak = callPackage ../tools/networking/sipsak { };
 
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
@@ -3609,6 +3636,8 @@ let
 
   xxkb = callPackage ../applications/misc/xxkb { };
 
+  ugarit = callPackage ../tools/backup/ugarit { };
+
   unarj = callPackage ../tools/archivers/unarj { };
 
   unshield = callPackage ../tools/archivers/unshield { };
@@ -3767,6 +3796,8 @@ let
   xwinmosaic = callPackage ../tools/X11/xwinmosaic {};
 
   yank = callPackage ../tools/misc/yank { };
+
+  yaml-merge = callPackage ../tools/text/yaml-merge { };
 
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
@@ -4604,6 +4635,8 @@ let
 
     config-file = callPackage ../development/ocaml-modules/config-file { };
 
+    containers = callPackage ../development/ocaml-modules/containers { };
+
     cpdf = callPackage ../development/ocaml-modules/cpdf { };
 
     cppo = callPackage ../development/tools/ocaml/cppo { };
@@ -4653,6 +4686,8 @@ let
     };
 
     functory = callPackage ../development/ocaml-modules/functory { };
+
+    gen = callPackage ../development/ocaml-modules/gen { };
 
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
@@ -4806,6 +4841,8 @@ let
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
 
     re2 = callPackage ../development/ocaml-modules/re2 { };
+
+    sequence = callPackage ../development/ocaml-modules/sequence { };
 
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
 
@@ -5196,9 +5233,10 @@ let
 
   lolcode = callPackage ../development/interpreters/lolcode { };
 
-  love = callPackage ../development/interpreters/love {lua=lua5_1;};
-  love_luajit = callPackage ../development/interpreters/love {lua=luajit;};
+  love_0_8 = callPackage ../development/interpreters/love/0.8.nix { };
   love_0_9 = callPackage ../development/interpreters/love/0.9.nix { };
+  love_0_10 = callPackage ../development/interpreters/love/0.10.nix { };
+  love = love_0_10;
 
   ### LUA MODULES
 
@@ -5933,6 +5971,8 @@ let
 
   mk = callPackage ../development/tools/build-managers/mk { };
 
+  msitools = callPackage ../development/tools/misc/msitools { };
+
   multi-ghc-travis = callPackage ../development/tools/haskell/multi-ghc-travis { };
 
   neoload = callPackage ../development/tools/neoload {
@@ -6044,6 +6084,8 @@ let
   rhc = callPackage ../development/tools/rhc { };
 
   rman = callPackage ../development/tools/misc/rman { };
+
+  rolespec = callPackage ../development/tools/misc/rolespec { };
 
   rr = callPackage ../development/tools/analysis/rr {
     stdenv = stdenv_32bit;
@@ -6244,6 +6286,8 @@ let
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreServices;
   };
 
+  aws-sdk-cpp = callPackage ../development/libraries/aws-sdk-cpp { };
+
   babl = callPackage ../development/libraries/babl { };
 
   beecrypt = callPackage ../development/libraries/beecrypt { };
@@ -6430,6 +6474,8 @@ let
     fltk = fltk13;
   };
 
+  dirac = callPackage ../development/libraries/dirac { };
+
   directfb = callPackage ../development/libraries/directfb { };
 
   dlib = callPackage ../development/libraries/dlib { };
@@ -6549,6 +6595,11 @@ let
 
   makeFontsConf = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
     callPackage ../development/libraries/fontconfig/make-fonts-conf.nix {
+      inherit fontconfig fontDirectories;
+    };
+
+  makeFontsCache = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
+    callPackage ../development/libraries/fontconfig/make-fonts-cache.nix {
       inherit fontconfig fontDirectories;
     };
 
@@ -7786,6 +7837,8 @@ let
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
+  libvdpau-va-gl = callPackage ../development/libraries/libvdpau-va-gl { };
+
   libvirt = callPackage ../development/libraries/libvirt { };
 
   libvirt-glib = callPackage ../development/libraries/libvirt-glib { };
@@ -8129,21 +8182,16 @@ let
   wolfssl = callPackage ../development/libraries/wolfssl { };
 
   openssl = openssl_1_0_1;
-  openssl_1_0_1 = callPackage ../development/libraries/openssl {
-    fetchurl = fetchurlBoot;
-    cryptodevHeaders = linuxPackages.cryptodev.override {
-      fetchurl = fetchurlBoot;
-      onlyHeaders = true;
-    };
-  };
 
-  openssl_1_0_2 = callPackage ../development/libraries/openssl/1.0.2.x.nix {
-    fetchurl = fetchurlBoot;
-    cryptodevHeaders = linuxPackages.cryptodev.override {
+  inherit (callPackages ../development/libraries/openssl {
       fetchurl = fetchurlBoot;
-      onlyHeaders = true;
-    };
-  };
+      cryptodevHeaders = linuxPackages.cryptodev.override {
+        fetchurl = fetchurlBoot;
+        onlyHeaders = true;
+      };
+    })
+    openssl_1_0_1
+    openssl_1_0_2;
 
   openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix {
     cryptodevHeaders = linuxPackages.cryptodev.override {
@@ -8738,6 +8786,8 @@ let
 
   vcdimager = callPackage ../development/libraries/vcdimager { };
 
+  vcg = callPackage ../development/libraries/vcg { };
+
   vid-stab = callPackage ../development/libraries/vid-stab { };
 
   vigra = callPackage ../development/libraries/vigra {
@@ -9092,6 +9142,7 @@ let
 
   # python function with default python interpreter
   buildPythonPackage = pythonPackages.buildPythonPackage;
+  buildPythonApplication = pythonPackages.buildPythonApplication;
 
   # `nix-env -i python-nose` installs for 2.7, the default python.
   # Therefore we do not recurse into attributes here, in contrast to
@@ -9176,7 +9227,7 @@ let
 
   pysideShiboken = pythonPackages.pysideShiboken;
 
-  pyxml = callPackage ../development/python-modules/pyxml { };
+  pyxml = pythonPackages.pyxml;
 
   rbtools = pythonPackages.rbtools;
 
@@ -9363,6 +9414,8 @@ let
   freeswitch = callPackage ../servers/sip/freeswitch { };
 
   gatling = callPackage ../servers/http/gatling { };
+
+  glabels = callPackage ../applications/graphics/glabels { };
 
   grafana = (callPackage ../servers/monitoring/grafana { }).bin // { outputs = ["bin"]; };
 
@@ -10052,6 +10105,8 @@ let
 
   ima-evm-utils = callPackage ../os-specific/linux/ima-evm-utils { };
 
+  intel2200BGFirmware = callPackage ../os-specific/linux/firmware/intel2200BGFirmware { };
+
   iomelt = callPackage ../os-specific/linux/iomelt { };
 
   iotop = callPackage ../os-specific/linux/iotop { };
@@ -10260,10 +10315,10 @@ let
   linux_grsec_stable_server_xen = throw "No longer supporteddue to https://grsecurity.net/announce.php. "
     + "Please use linux_grsec_testing_server_xen.";
 
-  # Testing kernels: outdated ATM
-  #linux_grsec_testing_desktop = grKernel grFlavors.linux_grsec_testing_desktop;
-  #linux_grsec_testing_server  = grKernel grFlavors.linux_grsec_testing_server;
-  #linux_grsec_testing_server_xen = grKernel grFlavors.linux_grsec_testing_server_xen;
+  # Testing kernels
+  linux_grsec_testing_desktop = grKernel grFlavors.linux_grsec_testing_desktop;
+  linux_grsec_testing_server  = grKernel grFlavors.linux_grsec_testing_server;
+  linux_grsec_testing_server_xen = grKernel grFlavors.linux_grsec_testing_server_xen;
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
@@ -10410,7 +10465,7 @@ let
   linuxPackages_grsec_stable_server     = grPackage grFlavors.linux_grsec_stable_server;
   linuxPackages_grsec_stable_server_xen = grPackage grFlavors.linux_grsec_stable_server_xen;
 
-  # Testing kernels: outdated ATM
+  # Testing kernels
   linuxPackages_grsec_testing_desktop = grPackage grFlavors.linux_grsec_testing_desktop;
   linuxPackages_grsec_testing_server  = grPackage grFlavors.linux_grsec_testing_server;
   linuxPackages_grsec_testing_server_xen = grPackage grFlavors.linux_grsec_testing_server_xen;
@@ -10479,6 +10534,8 @@ let
   lsscsi = callPackage ../os-specific/linux/lsscsi { };
 
   lvm2 = callPackage ../os-specific/linux/lvm2 { };
+
+  thin_provisioning_tools = callPackage ../os-specific/linux/thin-provisioning-tools { };
 
   mbpfan = callPackage ../os-specific/linux/mbpfan { };
 
@@ -12362,7 +12419,7 @@ let
   inferno = callPackage_i686 ../applications/inferno { };
 
   inkscape = callPackage ../applications/graphics/inkscape {
-    inherit (pythonPackages) lxml;
+    inherit (pythonPackages) python pyxml lxml numpy;
     lcms = lcms2;
   };
 
@@ -12910,6 +12967,10 @@ let
     pulseaudioSupport = config.pulseaudio or true;
   };
 
+  octoprint = callPackage ../applications/misc/octoprint { };
+
+  octoprint-plugins = callPackage ../applications/misc/octoprint/plugins.nix { };
+
   ocrad = callPackage ../applications/graphics/ocrad { };
 
   offrss = callPackage ../applications/networking/offrss { };
@@ -12923,6 +12984,8 @@ let
   openbox = callPackage ../applications/window-managers/openbox { };
 
   openbox-menu = callPackage ../applications/misc/openbox-menu { };
+
+  openbrf = callPackage ../applications/misc/openbrf { };
 
   openimageio = callPackage ../applications/graphics/openimageio { };
 
@@ -13456,11 +13519,7 @@ let
 
   tagainijisho = callPackage ../applications/office/tagainijisho {};
 
-  tahoelafs = callPackage ../tools/networking/p2p/tahoe-lafs {
-    inherit (pythonPackages) twisted foolscap simplejson nevow zfec
-      pycryptopp sqlite3 darcsver setuptoolsTrial setuptoolsDarcs
-      numpy pyasn1 mock zope_interface;
-  };
+  tahoelafs = callPackage ../tools/networking/p2p/tahoe-lafs {};
 
   tailor = callPackage ../applications/version-management/tailor {};
 
@@ -14546,6 +14605,8 @@ let
 
   urbanterror = callPackage ../games/urbanterror { };
 
+  ue4 = callPackage ../games/ue4 { };
+
   ue4demos = recurseIntoAttrs (callPackage ../games/ue4demos { });
 
   ut2004demo = callPackage ../games/ut2004demo { };
@@ -14952,7 +15013,7 @@ let
 
   kde5 =
     let
-      frameworks = import ../development/libraries/kde-frameworks-5.18 { inherit pkgs; };
+      frameworks = import ../development/libraries/kde-frameworks-5.19 { inherit pkgs; };
       plasma = import ../desktops/plasma-5.5 { inherit pkgs; };
       apps = import ../applications/kde-apps-15.12 { inherit pkgs; };
       named = self: { plasma = plasma self; frameworks = frameworks self; apps = apps self; };
@@ -15639,6 +15700,8 @@ let
   DisnixWebService = callPackage ../tools/package-management/disnix/DisnixWebService { };
 
   lkproof = callPackage ../tools/typesetting/tex/lkproof { };
+
+  m3d-linux = callPackage ../misc/drivers/m3d-linux { };
 
   mysqlWorkbench = newScope gnome ../applications/misc/mysql-workbench {
     lua = lua5_1;

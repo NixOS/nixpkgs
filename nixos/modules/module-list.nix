@@ -201,6 +201,7 @@
   ./services/misc/bepasty.nix
   ./services/misc/canto-daemon.nix
   ./services/misc/calibre-server.nix
+  ./services/misc/cfdyndns.nix
   ./services/misc/cpuminer-cryptonight.nix
   ./services/misc/cgminer.nix
   ./services/misc/confd.nix
@@ -211,6 +212,7 @@
   ./services/misc/etcd.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
+  ./services/misc/gammu-smsd.nix
   #./services/misc/gitit.nix
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
@@ -227,6 +229,7 @@
   ./services/misc/nix-gc.nix
   ./services/misc/nixos-manual.nix
   ./services/misc/nix-ssh-serve.nix
+  ./services/misc/octoprint.nix
   ./services/misc/parsoid.nix
   ./services/misc/phd.nix
   ./services/misc/plex.nix
@@ -340,6 +343,7 @@
   ./services/networking/openntpd.nix
   ./services/networking/openvpn.nix
   ./services/networking/ostinato.nix
+  ./services/networking/pdnsd.nix
   ./services/networking/polipo.nix
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix

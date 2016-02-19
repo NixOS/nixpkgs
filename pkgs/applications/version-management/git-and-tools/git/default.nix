@@ -26,8 +26,6 @@ stdenv.mkDerivation {
   patches = [
     ./docbook2texi.patch
     ./symlinks-in-bin.patch
-    ./cert-path.patch
-    ./ssl-cert-file.patch
   ];
 
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv]
@@ -86,6 +84,10 @@ stdenv.mkDerivation {
       sed -i -e 's|	perl -ne|	${perl}/bin/perl -ne|g' \
              -e 's|	perl -e|	${perl}/bin/perl -e|g' \
              $out/libexec/git-core/{git-am,git-submodule}
+
+      # Fix references to gettext.
+      substituteInPlace $out/libexec/git-core/git-sh-i18n \
+          --replace 'gettext.sh' '${gettext}/bin/gettext.sh'
 
       # gzip (and optionally bzip2, xz, zip) are runtime dependencies for
       # gitweb.cgi, need to patch so that it's found

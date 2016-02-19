@@ -11,6 +11,7 @@ rec {
   });
 
   curlMinimal = curl.override {
+    http2Support = false;
     zlibSupport = false;
     sslSupport = false;
     scpSupport = false;

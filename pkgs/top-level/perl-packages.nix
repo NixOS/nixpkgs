@@ -1898,6 +1898,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Clipboard = buildPerlPackage {
+    name = "Clipboard-0.13";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/K/KI/KING/Clipboard-0.13.tar.gz;
+      sha256 = "eebf1c9cb2484be850abdae017147967cf47f8ccd99293771517674b0046ec8a";
+    };
+    meta = {
+      description = "Clipboard - Copy and Paste with any OS";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+
   Clone = buildPerlPackage rec {
     name = "Clone-0.38";
     src = fetchurl {
@@ -6943,7 +6956,6 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/G/GA/GAAS/LWP-Protocol-https-6.04.tar.gz;
       sha256 = "0agnga5dg94222h6rlzqxa0dri2sh3gayncvfb7jad9nxr87gxhy";
     };
-    patches = [ ../development/perl-modules/lwp-protocol-https-cert-file.patch ];
     propagatedBuildInputs = [ LWP IOSocketSSL ];
     doCheck = false; # tries to connect to https://www.apache.org/.
     meta = {
@@ -10484,10 +10496,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   strictures = buildPerlPackage rec {
-    name = "strictures-2.000001";
+    name = "strictures-2.000002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
-      sha256 = "1lr0br982xb49wxra5ywq9vk4jhjmq28670i8yscks1wss58lwqy";
+      sha256 = "0021m9k1f6dfqn88znlp24g7xsqxwwjbj91w474c7n5gngf5a0qk";
     };
     meta = {
       homepage = http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=p5sagit/strictures.git;

@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
 
   #configureFlags = [ "--disable-print" ];
 
+  enableParallelBuilding = true;
+
   # "screenshot" needs this.
   NIX_LDFLAGS = "-rpath ${xorg.libX11}/lib"
     + stdenv.lib.optionalString stdenv.isDarwin " -lintl";

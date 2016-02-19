@@ -61,6 +61,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.matrix-synapse;
+        defaultText = "pkgs.matrix-synapse";
         description = ''
           Overridable attribute of the matrix synapse server package to use.
         '';

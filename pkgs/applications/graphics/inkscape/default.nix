@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, perl, perlXMLParser, gtk, libXft
 , libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm
 , glibmm, libsigcxx, lcms, boost, gettext, makeWrapper, intltool
-, gsl, python, pyxml, lxml, poppler, imagemagick, libwpg, librevenge
+, gsl, python, numpy, pyxml, lxml, poppler, imagemagick, libwpg, librevenge
 , libvisio, libcdr, libexif, unzip
 , boxMakerPlugin ? false # boxmaker plugin
 }:
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     # Python is used at run-time to execute scripts, e.g., those from
     # the "Effects" menu.
-    python pyxml lxml
+    python pyxml numpy lxml
   ];
 
   buildInputs = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     for i in "$out/bin/"*
     do
       wrapProgram "$i" --prefix PYTHONPATH :      \
-       "$(toPythonPath ${pyxml}):$(toPythonPath ${lxml})"  \
+       "$(toPythonPath ${pyxml}):$(toPythonPath ${lxml}):$(toPythonPath ${numpy})"  \
        --prefix PATH : ${python}/bin ||  \
         exit 2
     done

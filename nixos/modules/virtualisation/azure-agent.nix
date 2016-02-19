@@ -157,12 +157,6 @@ in
       after = [ "ip-up.target" ];
       wants = [ "ip-up.target" ];
 
-      environment = {
-        GIT_SSL_CAINFO = "/etc/ssl/certs/ca-certificates.crt";
-        OPENSSL_X509_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
-        SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
-      };
-
       path = [ pkgs.e2fsprogs ];
       description = "Windows Azure Agent Service";
       unitConfig.ConditionPathExists = "/etc/waagent.conf";

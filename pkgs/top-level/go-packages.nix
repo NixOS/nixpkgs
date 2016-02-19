@@ -878,10 +878,11 @@ let
   };
 
   git-lfs = buildFromGitHub {
-    rev = "v1.0.0";
+    date = "1.1.1";  # "date" is effectively "version"
+    rev = "v1.1.1";
     owner = "github";
     repo = "git-lfs";
-    sha256 = "1zlg3rm5yxak6d88brffv1wpj0iq4qgzn6sgg8xn0pbnzxjd1284";
+    sha256 = "1m7kii57jrsb22m5x9v8xa3s1qmipfkpk6cscgxrbrj7g0a75fnc";
 
     # Tests fail with 'lfstest-gitserver.go:46: main redeclared in this block'
     excludedPackages = [ "test" ];
@@ -3346,11 +3347,11 @@ let
   };
 
   syncthing = buildFromGitHub rec {
-    version = "0.12.10";
+    version = "0.12.19";
     rev = "v${version}";
     owner = "syncthing";
     repo = "syncthing";
-    sha256 = "1xvar4mm6f33mg8d8z8h49cni6sj1vfns379zspqvszs404fra0z";
+    sha256 = "11ij8whaqrrzriavxa08jpsmbd1zkc2qxsni1nbgszw2hymmv38g";
     buildFlags = [ "-tags noupgrade,release" ];
     disabled = isGo14;
     buildInputs = [

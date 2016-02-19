@@ -8,8 +8,8 @@ mkDerivation {
   version = "0.16";
   src = fetchgit {
     url = "https://github.com/elm-lang/elm-make";
-    sha256 = "bae1206c8066fb4e191345a3da79b89a5ec488929370b210203c8b4dcb35cebc";
-    rev = "e3bfc3e3d04c9b47e18fac289c796caec88d4fef";
+    sha256 = "fc0a6ed08b236dfab43e9af73f8e83a3b88a155695a9671a2b291dc596a75116";
+    rev = "54e0b33fea0cd72400ac6a3dec7643bf1b900741";
   };
   isLibrary = false;
   isExecutable = true;
