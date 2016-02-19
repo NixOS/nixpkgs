@@ -15074,6 +15074,12 @@ let
 
   emboss = callPackage ../applications/science/biology/emboss { };
 
+  neuron = callPackage ../applications/science/biology/neuron { };
+
+  neuron-mpi = appendToName "mpi" (neuron.override {
+    mpi = pkgs.openmpi;
+  });
+
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
 
   ncbi_tools = callPackage ../applications/science/biology/ncbi-tools { };
