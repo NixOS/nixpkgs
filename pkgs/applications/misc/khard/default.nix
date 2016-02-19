@@ -11,14 +11,15 @@ pythonPackages.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with pythonPackages; [
+    atomicwrites
     configobj
     vobject
     argparse
+    pyyaml
   ];
 
   buildInputs = with pythonPackages; [
     pkgs.vdirsyncer
-    pyyaml
   ];
 
   meta = {
