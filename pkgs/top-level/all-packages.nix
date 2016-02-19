@@ -14734,7 +14734,7 @@ let
 
           kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
 
-          kdeconnect = callPackage ../applications/misc/kdeconnect { };
+          kdeconnect = callPackage ../applications/misc/kdeconnect/0.7.nix { };
 
           kdenlive = callPackage ../applications/video/kdenlive { mlt = mlt-qt4; };
 
@@ -14925,6 +14925,8 @@ let
     fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
 
     k9copy = callPackage ../applications/video/k9copy {};
+
+    kdeconnect = callPackage ../applications/misc/kdeconnect { };
 
     konversation = callPackage ../applications/networking/irc/konversation/1.6.nix {
     };
