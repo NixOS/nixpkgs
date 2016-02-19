@@ -3133,6 +3133,8 @@ let
 
   sg3_utils = callPackage ../tools/system/sg3_utils { };
 
+  shadowsocks-libev = callPackage ../tools/networking/shadowsocks-libev { };
+
   sharutils = callPackage ../tools/archivers/sharutils { };
 
   shotwell = callPackage ../applications/graphics/shotwell {
