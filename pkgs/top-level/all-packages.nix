@@ -4643,6 +4643,8 @@ let
 
     config-file = callPackage ../development/ocaml-modules/config-file { };
 
+    containers = callPackage ../development/ocaml-modules/containers { };
+
     cpdf = callPackage ../development/ocaml-modules/cpdf { };
 
     cppo = callPackage ../development/tools/ocaml/cppo { };
@@ -4692,6 +4694,8 @@ let
     };
 
     functory = callPackage ../development/ocaml-modules/functory { };
+
+    gen = callPackage ../development/ocaml-modules/gen { };
 
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
@@ -4845,6 +4849,8 @@ let
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
 
     re2 = callPackage ../development/ocaml-modules/re2 { };
+
+    sequence = callPackage ../development/ocaml-modules/sequence { };
 
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
 
