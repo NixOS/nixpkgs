@@ -85,7 +85,7 @@ in
 }:
 
 assert builtins.isList urls;
-assert urls == [] || url == "";
+assert (urls == []) != (url == "");
 
 
 let
