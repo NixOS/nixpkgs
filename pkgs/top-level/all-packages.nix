@@ -7336,6 +7336,8 @@ let
 
   libfakekey = callPackage ../development/libraries/libfakekey { };
 
+  libfilezilla = callPackage ../development/libraries/libfilezilla { };
+
   libfm = callPackage ../development/libraries/libfm { };
   libfm-extra = callPackage ../development/libraries/libfm {
     extraOnly = true;
