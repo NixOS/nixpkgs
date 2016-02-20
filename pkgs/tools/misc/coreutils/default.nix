@@ -19,24 +19,13 @@ let
       sha256 = "11yfrnb94xzmvi4lhclkcmkqsbhww64wf234ya1aacjvg82prrii";
     };
 
-    patches =
-      lib.optional stdenv.isCygwin ./coreutils-8.23-4.cygwin.patch
-      ++ lib.optional stdenv.isArm
-        (fetchurl {
-          url = "http://git.savannah.gnu.org/cgit/coreutils.git/patch/?id=3ba68f9e64fa2eb8af22d510437a0c6441feb5e0";
-          sha256 = "1dnlszhc8lihhg801i9sz896mlrgfsjfcz62636prb27k5hmixqz";
-          name = "coreutils-tail-inotify-race.patch";
-        });
+    patches = optional stdenv.isCygwin ./coreutils-8.23-4.cygwin.patch;
 
     # The test tends to fail on btrfs and maybe other unusual filesystems.
     postPatch = optionalString (!stdenv.isDarwin) ''
       sed '2i echo Skipping dd sparse test && exit 0' -i ./tests/dd/sparse.sh
       sed '2i echo Skipping cp sparse test && exit 0' -i ./tests/cp/sparse.sh
-    '' +
-       # This is required by coreutils-tail-inotify-race.patch to avoid more deps
-       optionalString stdenv.isArm ''
-         touch -r src/stat.c src/tail.c
-       '';
+    '';
 
     configureFlags = optionalString stdenv.isSunOS "ac_cv_func_inotify_init=no";
 
@@ -84,7 +73,7 @@ let
     enableParallelBuilding = false;
 
     NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
-    FORCE_UNSAFE_CONFIGURE = optionalString (stdenv.system == "armv7l-linux" || stdenv.isSunOS) "1";
+    FORCE_UNSAFE_CONFIGURE = optionalString stdenv.isSunOS "1";
 
     makeFlags = optionalString stdenv.isDarwin "CFLAGS=-D_FORTIFY_SOURCE=0";
 
