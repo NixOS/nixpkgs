@@ -12904,9 +12904,7 @@ let
 
   pig = callPackage ../applications/networking/cluster/pig { };
 
-  pijul = callPackage ../applications/version-management/pijul {
-    inherit (ocamlPackages) findlib cryptokit yojson;
-  };
+  pijul = callPackage ../applications/version-management/pijul { };
 
   playonlinux = callPackage ../applications/misc/playonlinux {
      stdenv = stdenv_32bit;
