@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "icmake-${version}";
-  version = "8.00.05";
+  version = "8.01.00";
 
   src = fetchFromGitHub {
-    sha256 = "06bfz9awi2vh2mzikw4sp7wqrp0nlcg89b9br43awz2801k15hpf";
+    sha256 = "1vgjywbc4w1agkakfndr2qf0z0ncxisihdv8sz9ipry9f170np39";
     rev = version;
     repo = "icmake";
     owner = "fbb-git";

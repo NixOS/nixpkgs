@@ -3638,6 +3638,8 @@ let
 
   ugarit = callPackage ../tools/backup/ugarit { };
 
+  ugarit-manifest-maker = callPackage ../tools/backup/ugarit-manifest-maker { };
+
   unarj = callPackage ../tools/archivers/unarj { };
 
   unshield = callPackage ../tools/archivers/unshield { };
@@ -7300,6 +7302,8 @@ let
   libfaketime = callPackage ../development/libraries/libfaketime { };
 
   libfakekey = callPackage ../development/libraries/libfakekey { };
+
+  libfilezilla = callPackage ../development/libraries/libfilezilla { };
 
   libfm = callPackage ../development/libraries/libfm { };
   libfm-extra = callPackage ../development/libraries/libfm {
@@ -12861,11 +12865,11 @@ let
 
   pcmanfm = callPackage ../applications/misc/pcmanfm { };
 
+  pcmanx-gtk2 = callPackage ../applications/misc/pcmanx-gtk2 { };
+
   pig = callPackage ../applications/networking/cluster/pig { };
 
-  pijul = callPackage ../applications/version-management/pijul {
-    inherit (ocamlPackages) findlib cryptokit yojson;
-  };
+  pijul = callPackage ../applications/version-management/pijul { };
 
   playonlinux = callPackage ../applications/misc/playonlinux {
      stdenv = stdenv_32bit;
