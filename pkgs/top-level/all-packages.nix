@@ -1180,6 +1180,8 @@ let
 
     hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
 
+    m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
+
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
       inherit (pythonPackages) gyp;
     };
