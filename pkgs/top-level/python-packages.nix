@@ -9112,6 +9112,22 @@ in modules // {
     };
   });
 
+  forbiddenfruit = buildPythonPackage rec {
+    version = "0.1.0";
+    name = "forbiddenfruit-${version}";
+
+    src = pkgs.fetchurl {
+      url= "https://pypi.python.org/packages/source/f/forbiddenfruit/${name}.tar.gz";
+      sha256 = "0xra2kw6m8ag29ifwmhi5zqksh4cr0yy1waqd488rm59kcr3zl79";
+    };
+
+    meta = {
+      description = "Patch python built-in objects";
+      homepage = https://pypi.python.org/pypi/forbiddenfruit;
+      license = licenses.mit;
+    };
+  };
+
   fs = buildPythonPackage rec {
     name = "fs-0.5.4";
 
@@ -9654,6 +9670,32 @@ in modules // {
     meta = {
       description = "Google Spreadsheets client library";
       homepage = "https://github.com/burnash/gspread";
+      license = licenses.mit;
+    };
+  };
+
+  gssapi = buildPythonPackage rec {
+    version = "1.1.4";
+    name = "gssapi-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gssapi/${name}.tar.gz";
+      sha256 = "0mdl7m6h57n0zkfmm6fqz0hldfxrb2d7d48k2lhc8hqbr3962c7x";
+    };
+
+    GSSAPI_SUPPORT_DETECT = "false";
+    LD_LIBRARY_PATH="${pkgs.krb5Full}/lib";
+
+    buildInputs = [ pkgs.gss pkgs.krb5Full pkgs.which
+                    self.nose self.shouldbe ];
+
+    propagatedBuildInputs = with self; [ decorator enum34 six ];
+
+    doCheck = false; # No such file or directory: '/usr/sbin/kadmin.local'
+
+    meta = {
+      homepage = https://pypi.python.org/pypi/gssapi;
+      description = "Python GSSAPI Wrapper";
       license = licenses.mit;
     };
   };
@@ -17016,6 +17058,26 @@ in modules // {
     propagatedBuildInputs = with self; [pkgs.openldap pkgs.cyrus_sasl pkgs.openssl];
   };
 
+  ldap3 = buildPythonPackage rec {
+    version = "1.0.4";
+    name = "ldap3-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/ldap3/${name}.tar.gz";
+      sha256 = "0j4qqj9vq022hy7wfqn8s0j4vm2g6paabbzas1vbyspawvcfai98";
+    };
+
+    buildInputs = with self; [ gssapi ];
+
+    propagatedBuildInputs = with self; [ pyasn1 ];
+
+    meta = {
+      homepage = https://pypi.python.org/pypi/ldap3;
+      description = "A strictly RFC 4510 conforming LDAP V3 pure Python client library";
+      license = licenses.lgpl3;
+    };
+  };
+
   ptest = buildPythonPackage rec {
     name = pname + "-" + version;
     pname = "ptest";
@@ -19023,6 +19085,27 @@ in modules // {
     };
   };
 
+  shouldbe = buildPythonPackage rec {
+    version = "0.1.0";
+    name = "shouldbe-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/s/shouldbe/${name}.tar.gz";
+      sha256 = "07pchxpv1xvjbck0xy44k3a1jrvklg0wbyccn14w0i7d135d4174";
+    };
+
+    buildInputs = with self; [ nose ];
+
+    propagatedBuildInputs = with self; [ forbiddenfruit ];
+
+    doCheck = false;  # Segmentation fault on py 3.5
+
+    meta = {
+      description = "Python Assertion Helpers inspired by Shouldly";
+      homepage =  https://pypi.python.org/pypi/shouldbe/;
+      license = licenses.mit;
+    };
+  };
 
   simplejson = buildPythonPackage (rec {
     name = "simplejson-3.8.1";
