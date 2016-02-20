@@ -127,6 +127,7 @@ in {
       in {
         description = "WPA Supplicant";
 
+        after = [ "network-interfaces.target" ];
         wantedBy = [ "network.target" ];
 
         path = [ pkgs.wpa_supplicant ];
