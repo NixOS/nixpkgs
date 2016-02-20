@@ -1,11 +1,12 @@
 { stdenv, fetchurl, libiconv, xz }:
 
 stdenv.mkDerivation (rec {
-  name = "gettext-0.19.6";
+  name = "gettext-${version}";
+  version = "0.19.7";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${name}.tar.gz";
-    sha256 = "0pb9vp4ifymvdmc31ks3xxcnfqgzj8shll39czmk8c1splclqjzd";
+    sha256 = "0gy2b2aydj8r0sapadnjw8cmb8j2rynj28d5qs1mfa800njd51jk";
   };
   patches = [ ./absolute-paths.diff ];
 
@@ -47,6 +48,12 @@ stdenv.mkDerivation (rec {
     fi
   '' + stdenv.lib.optionalString stdenv.isCygwin ''
     sed -i -e "s/\(am_libgettextlib_la_OBJECTS = \)error.lo/\\1/" gettext-tools/gnulib-lib/Makefile.in
+  '';
+
+  postInstall = ''
+    substituteInPlace "$out/bin/gettext.sh" \
+      --replace "  gettext " "  $out/bin/gettext " \
+      --replace "  ngettext " "  $out/bin/ngettext "
   '';
 
   buildInputs = [ xz ] ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
