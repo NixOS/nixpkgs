@@ -5001,6 +5001,8 @@ let
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
 
+    tsdl = callPackage ../development/ocaml-modules/tsdl { };
+
     twt = callPackage ../development/ocaml-modules/twt { };
 
     typerep = callPackage ../development/ocaml-modules/typerep { };
