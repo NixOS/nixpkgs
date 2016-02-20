@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/mpv-player/mpv/archive/v${meta.version}.tar.gz";
-    sha256 = "0cqjwl0xyg0sv1jflipfkvqjg32y0kqfh4gc3lyhqgv0hgs3fa84";
+    sha256 = "1p0b83048g66icpz5n66v3k4ldr1z0rmg5d2rr7kcbspm1xj2cbx";
   };
 
   patchPhase = ''
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    version = "0.14.0";
+    version = "0.15.0";
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
     homepage = http://mpv.io;
     license = licenses.gpl2Plus;
