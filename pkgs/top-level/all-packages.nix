@@ -1529,6 +1529,8 @@ let
 
     hangul = callPackage ../tools/inputmethods/fcitx-engines/fcitx-hangul { };
 
+    m17n = callPackage ../tools/inputmethods/fcitx-engines/fcitx-m17n { };
+
     mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
       inherit (pythonPackages) gyp;
     };
