@@ -1,4 +1,5 @@
 [
+  ../lib/typechecker.nix
   ./config/debug-info.nix
   ./config/fonts/corefonts.nix
   ./config/fonts/fontconfig-ultimate.nix

@@ -155,18 +155,21 @@ in {
       packages.gitlab = mkOption {
         type = types.package;
         default = pkgs.gitlab;
+        defaultText = "pkgs.gitlab";
         description = "Reference to the gitlab package";
       };
 
       packages.gitlab-shell = mkOption {
         type = types.package;
         default = pkgs.gitlab-shell;
+        defaultText = "pkgs.gitlab-shell";
         description = "Reference to the gitlab-shell package";
       };
 
       packages.gitlab-workhorse = mkOption {
         type = types.package;
         default = pkgs.gitlab-workhorse;
+        defaultText = "pkgs.gitlab-workhorse";
         description = "Reference to the gitlab-workhorse package";
       };
 

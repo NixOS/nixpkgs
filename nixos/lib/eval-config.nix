@@ -20,8 +20,13 @@
 , # !!! See comment about args in lib/modules.nix
   specialArgs ? {}
 , modules
+, # Pass through a configuration of the internal modules declared
+  # in lib/modules.nix.
+  _module ? {}
+, # !!! See comment about typeInference in lib/modules.nix
+  typeInference ? null
 , # !!! See comment about check in lib/modules.nix
-  check ? true
+  check ? null
 , prefix ? []
 , lib ? import ../../lib
 }:
@@ -41,13 +46,17 @@ let
     };
   };
 
+  internalModule = { _module = (_module
+                     // (if isNull check then {} else { inherit check; })
+                     // (if isNull typeInference then {} else { inherit typeInference; })); };
+
 in rec {
 
   # Merge the option definitions in all modules, forming the full
   # system configuration.
   inherit (lib.evalModules {
-    inherit prefix check;
-    modules = modules ++ extraModules ++ baseModules ++ [ pkgsModule ];
+    inherit prefix;
+    modules = modules ++ extraModules ++ baseModules ++ [ pkgsModule ] ++ [ internalModule ];
     args = extraArgs;
     specialArgs = { modulesPath = ../modules; } // specialArgs;
   }) config options;

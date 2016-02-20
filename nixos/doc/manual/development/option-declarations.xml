@@ -8,7 +8,7 @@
 
 <para>An option declaration specifies the name, type and description
 of a NixOS configuration option.  It is illegal to define an option
-that hasn’t been declared in any module.  A option declaration
+that has not been declared in any module. A option declaration
 generally looks like this:
 
 <programlisting>
@@ -145,6 +145,108 @@ options = {
 
 You can also create new types using the function
 <varname>mkOptionType</varname>.  See
-<filename>lib/types.nix</filename> in Nixpkgs for details.</para>
+<filename>lib/types.nix</filename> in Nixpkgs for details.
+
+An option declaration must follow the following rules:
+<itemizedlist mark='bullet'>
+
+  <listitem>
+    <para>A <varname>defaultText</varname> must be defined if and only if the type of the option
+    derives from <varname>package</varname>, <varname>packageSet</varname> or <varname>nixpkgsConfig
+    </varname>, and if and only if a <varname>default</varname> attribute is defined and if and only if
+    the value of the <varname>default</varname> attribute is not the default of the type of the
+    option declaration.
+
+    For example, a <varname>defaultText</varname> must be defined for
+<programlisting>
+type = types.listOf types.package;
+default = [ pkgs.foo; ];
+defaultText = "[ pkgs.foo; ]";
+</programlisting>.
+
+    But no <varname>defaultText</varname> must be defined for
+<programlisting>
+type = types.listOf types.package;
+default = [];
+</programlisting>,
+    as <varname>[]</varname> is the default of <varname>types.listOf types.package</varname>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>A <varname>defaultText</varname> can be defined if the type of the option derives from
+    <varname>path</varname> and if a <varname>default</varname> attribute is defined.</para>
+  </listitem>
+
+  <listitem>
+    <para>The value of the <varname>example</varname> attribute must be wrapped with <varname>
+    literalExample</varname> if the type of the option derives from <varname>package</varname>,
+    <varname>packageSet</varname> or <varname>nixpkgsConfig</varname>.</para>
+  </listitem>
+
+  <listitem>
+    <para>The value of <varname>defaultText</varname> and <varname>literalExample</varname> must
+    be a string which contains a valid nix expression. The nix expression has to evaluate in
+    <code>{pkgs}: <replaceable>value</replaceable></code>.
+    For example:
+    <itemizedlist>
+      <listitem>
+	<para>A <varname>defaultText</varname> could, e.g., be:
+<programlisting>
+type = types.package;
+default = pkgs.foo;
+defaultText = "pkgs.foo";
+</programlisting>
+        But not <code>defaultText = "pkgs.foo;";</code>, as that
+        corresponds to <code>{pkgs}: pkgs.foo;</code>, which is an
+	invalid nix expression due to the ending with <varname>;</varname>.</para>
+      </listitem>
+    
+      <listitem>
+	<para>A <varname>literalExample</varname> could be used as, e.g.:
+<programlisting>
+type = types.path;
+example = literalExample "\"\${pkgs.bar}/bin/bar\"";
+</programlisting>
+        But not <code>literalExample "\${pkgs.bar}/bin/bar";</code>, as that corresponds
+	to <code>{pkgs}: ${pkgs.bar}/bin/bar</code>, which is an invalid nix expression
+	as the <varname>path</varname> is not a <varname>string</varname> anymore.</para>
+      </listitem>
+    </itemizedlist></para>
+  </listitem>
+
+  <listitem>
+    <para>The <varname>type</varname> attribute must be defined for every option declaration.</para>
+  </listitem>
+
+</itemizedlist>
+
+NixOS ships the tool <varname>nixos-typecheck</varname> that can check an option declaration to:
+
+<itemizedlist mark='bullet'>
+
+  <listitem>
+    <para>Enforce that an option declaration has a <varname>defaultText</varname> if and only if the
+    type of the option derives from <varname>package</varname>, <varname>packageSet</varname> or
+    <varname>nixpkgsConfig</varname> and if a <varname>default</varname> attribute is defined.</para>
+  </listitem>
+
+  <listitem>
+    <para>Enforce that the value of the <varname>example</varname> attribute is wrapped with <varname>
+    literalExample</varname> if the type of the option derives from <varname>package</varname>,
+    <varname>packageSet</varname> or <varname>nixpkgsConfig</varname>.</para>
+  </listitem>
+
+  <listitem>
+    <para>Warn if a <varname>defaultText</varname> is defined in an option declaration if the type of
+    the option does not derive from <varname>package</varname>, <varname>packageSet</varname> or
+    <varname>nixpkgsConfig</varname>.</para>
+  </listitem>
+
+  <listitem>
+    <para>Warn if no <varname>type</varname> is defined in an option declaration.</para>
+  </listitem>
+
+</itemizedlist></para>
 
 </section>
