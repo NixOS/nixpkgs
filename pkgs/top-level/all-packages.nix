@@ -3648,6 +3648,8 @@ let
 
   ugarit = callPackage ../tools/backup/ugarit { };
 
+  ugarit-manifest-maker = callPackage ../tools/backup/ugarit-manifest-maker { };
+
   unarj = callPackage ../tools/archivers/unarj { };
 
   unshield = callPackage ../tools/archivers/unshield { };
