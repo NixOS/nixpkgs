@@ -17,14 +17,15 @@ in rec {
 
   unitOption = mkOptionType {
     name = "systemd option";
-    merge = loc: defs:
+    typerep = "(systemdOption)";
+    merge = _module: loc: defs:
       let
         defs' = filterOverrides defs;
         defs'' = getValues defs';
       in
         if isList (head defs'')
         then concatLists defs''
-        else mergeOneOption loc defs';
+        else mergeOneOption _module loc defs';
   };
 
   sharedOptions = {

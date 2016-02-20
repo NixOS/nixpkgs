@@ -16,6 +16,7 @@ in
     services.xserver.windowManager.xmonad = {
       enable = mkEnableOption "xmonad";
       haskellPackages = mkOption {
+        type = lib.types.packageSet;
         default = pkgs.haskellPackages;
         defaultText = "pkgs.haskellPackages";
         example = literalExample "pkgs.haskell.packages.ghc784";
@@ -28,7 +29,9 @@ in
       };
 
       extraPackages = mkOption {
+        type = lib.types.functionTo (lib.types.listOf lib.types.package);
         default = self: [];
+        defaultText = "self: []";
         example = literalExample ''
           haskellPackages: [
             haskellPackages.xmonad-contrib

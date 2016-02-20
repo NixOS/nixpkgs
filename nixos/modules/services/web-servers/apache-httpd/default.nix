@@ -48,8 +48,7 @@ let
           if svc ? function then svc.function
           else import (toString "${toString ./.}/${if svc ? serviceType then svc.serviceType else svc.serviceName}.nix");
         config = (evalModules
-          { modules = [ { options = res.options; config = svc.config or svc; } ];
-            check = false;
+          { modules = [ { options = res.options; config = svc.config or svc; } ] ++ [ { _module.check = false; } ];
           }).config;
         defaults = {
           extraConfig = "";
