@@ -1683,6 +1683,12 @@ let
 
   gawp = goPackages.gawp.bin // { outputs = [ "bin" ]; };
 
+  gazebo6 = callPackage ../applications/science/misc/gazebo/6.nix { };
+
+  gazebo7 = callPackage ../applications/science/misc/gazebo { };
+
+  gazebo = gazebo7;
+
   gbdfed = callPackage ../tools/misc/gbdfed {
     gtk = gtk2;
   };
@@ -2014,6 +2020,16 @@ let
   iftop = callPackage ../tools/networking/iftop { };
 
   ifuse = callPackage ../tools/filesystems/ifuse/default.nix { };
+
+  ignition-math = callPackage ../development/libraries/ignition-math { };
+  
+  ignition-math2 = ignition-math;
+
+  ignition-transport0 = callPackage ../development/libraries/ignition-transport/0.9.0.nix { };
+
+  ignition-transport1 = callPackage ../development/libraries/ignition-transport/1.0.1.nix { };
+
+  ignition-transport = ignition-transport0;
 
   ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
     inherit (haskellPackages) ihaskell ghcWithPackages;
@@ -8804,6 +8820,8 @@ let
 
   tinyxml2 = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
 
+  tinyxml-2 = callPackage ../development/libraries/tinyxml-2 { };
+
   tk = tk-8_6;
 
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
@@ -10788,6 +10806,12 @@ let
   scanmem = callPackage ../tools/misc/scanmem { };
 
   schedtool = callPackage ../os-specific/linux/schedtool { };
+
+  sdformat = sdformat4;
+
+  sdformat3 = callPackage ../development/libraries/sdformat/3.nix { };
+
+  sdformat4 = callPackage ../development/libraries/sdformat { };
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
