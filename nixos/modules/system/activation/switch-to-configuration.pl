@@ -323,7 +323,7 @@ foreach my $device (keys %$prevSwaps) {
 
 
 # Should we have systemd re-exec itself?
-my $prevSystemd = abs_path("/proc/1/exe") or die;
+my $prevSystemd = abs_path("/proc/1/exe") // "/unknown";
 my $newSystemd = abs_path("@systemd@/lib/systemd/systemd") or die;
 my $restartSystemd = $prevSystemd ne $newSystemd;
 

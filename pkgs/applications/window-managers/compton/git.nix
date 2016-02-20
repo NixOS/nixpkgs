@@ -48,7 +48,7 @@ stdenv.mkDerivation {
       additional features, such as additional effects, and a fork at a
       well-defined and proper place.
     '';
-    maintainer = maintainers.ertes;
+    maintainers = maintainers.ertes;
     platforms = platforms.linux;
   };
 }

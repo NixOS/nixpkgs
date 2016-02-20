@@ -144,15 +144,12 @@ in
                   fi
                   ${config.systemd.package}/bin/systemctl start ip-up.target
                 '';
-            preStop =
-              ''
-                echo "releasing configured ip's..."
-              '' + flip concatMapStrings (ips) (ip:
+            preStop = flip concatMapStrings (ips) (ip:
                 let
                   address = "${ip.address}/${toString ip.prefixLength}";
                 in
                 ''
-                  echo -n "Deleting ${address}..."
+                  echo -n "deleting ${address}..."
                   ip addr del "${address}" dev "${i.name}" >/dev/null 2>&1 || echo -n " Failed"
                   echo ""
                 '');

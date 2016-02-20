@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "ricochet-${version}";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchurl {
     url = "https://github.com/ricochet-im/ricochet/archive/v${version}.tar.gz";
-    sha256 = "0y79igzgl9xn00981zcyxdlks7vnqxhb4rq3x8gwxm0yr98p39ms";
+    sha256 = "1szb5vmlqal0vhan87kgbks184f7xbfay1hr3d3vm8r1lvcjjfkr";
   };
 
   desktopItem = makeDesktopItem {

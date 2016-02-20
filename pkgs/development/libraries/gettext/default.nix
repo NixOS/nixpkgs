@@ -7,6 +7,7 @@ stdenv.mkDerivation (rec {
     url = "mirror://gnu/gettext/${name}.tar.gz";
     sha256 = "0pb9vp4ifymvdmc31ks3xxcnfqgzj8shll39czmk8c1splclqjzd";
   };
+  patches = [ ./absolute-paths.diff ];
 
   outputs = [ "out" "doc" ];
 
@@ -28,7 +29,8 @@ stdenv.mkDerivation (rec {
         "gt_cv_func_CFLocaleCopyCurrent=no"
       ]);
 
-  patchPhase = ''
+  postPatch = ''
+   substituteAllInPlace gettext-runtime/src/gettext.sh.in
    substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
    substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
    substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd

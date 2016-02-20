@@ -32,6 +32,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.ejabberd;
+        defaultText = "pkgs.ejabberd";
         description = "ejabberd server package to use";
       };
 

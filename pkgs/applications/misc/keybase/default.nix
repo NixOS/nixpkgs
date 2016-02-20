@@ -11,11 +11,11 @@ let
 
 in nodePackages.buildNodePackage rec {
   name = "keybase-${version}";
-  version = "0.8.22";
+  version = "0.8.25";
 
   src = [(fetchurl {
     url = "https://github.com/keybase/node-client/archive/v${version}.tar.gz";
-    sha256 = "1dvwz2iqcybd687hp6zbw6lkpx27vp8ah6kk251147vxvwfjb422";
+    sha256 = "1zc357hwh26lsg8ngj7iwjdmywyzk6fz3wxmcqq1qyp2927i4jz3";
   })];
 
   deps = (filter (v: nixType v == "derivation") (attrValues nodePackages));

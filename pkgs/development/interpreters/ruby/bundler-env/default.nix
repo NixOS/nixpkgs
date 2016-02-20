@@ -65,8 +65,24 @@ let
         "${bundler}/${ruby.gemPath}" \
         ${shellEscape (toString envPaths)}
     '' + lib.optionalString (postBuild != null) postBuild;
-    passthru = {
+    passthru = rec {
       inherit ruby bundler meta gems;
+
+      wrappedRuby = stdenv.mkDerivation {
+        name = "wrapped-ruby-${name}";
+        nativeBuildInputs = [ makeWrapper ];
+        buildCommand = ''
+          mkdir -p $out/bin
+          for i in ${ruby}/bin/*; do
+            makeWrapper "$i" $out/bin/$(basename "$i") \
+              --set BUNDLE_GEMFILE ${confFiles}/Gemfile \
+              --set BUNDLE_PATH ${bundlerEnv}/${ruby.gemPath} \
+              --set GEM_HOME ${bundlerEnv}/${ruby.gemPath} \
+              --set GEM_PATH ${bundlerEnv}/${ruby.gemPath}
+          done
+        '';
+      };
+
       env = let
         irbrc = builtins.toFile "irbrc" ''
           if !(ENV["OLD_IRBRC"].nil? || ENV["OLD_IRBRC"].empty?)
@@ -77,12 +93,8 @@ let
         '';
         in stdenv.mkDerivation {
           name = "interactive-${name}-environment";
-          nativeBuildInputs = [ ruby bundlerEnv ];
+          nativeBuildInputs = [ wrappedRuby bundlerEnv ];
           shellHook = ''
-            export BUNDLE_GEMFILE=${confFiles}/Gemfile
-            export BUNDLE_PATH=${bundlerEnv}/${ruby.gemPath}
-            export GEM_HOME=${bundlerEnv}/${ruby.gemPath}
-            export GEM_PATH=${bundlerEnv}/${ruby.gemPath}
             export OLD_IRBRC="$IRBRC"
             export IRBRC=${irbrc}
           '';

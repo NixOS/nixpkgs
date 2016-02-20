@@ -62,7 +62,6 @@ stdenv.mkDerivation rec {
       --prefix "PATH" : "$out/share/panamax-api/bin:${env.ruby}/bin:$PATH" \
       --prefix "HOME" : "$out/share/panamax-api" \
       --prefix "GEM_HOME" : "${env}/${env.ruby.gemPath}" \
-      --prefix "SSL_CERT_FILE" : /etc/ssl/certs/ca-certificates.crt \
       --prefix "GEM_PATH" : "$out/share/panamax-api:${bundler}/${env.ruby.gemPath}"
   '';
 

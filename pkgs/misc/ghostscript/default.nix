@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, zlib, expat, openssl
+{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, zlib, expat, openssl, autoconf
 , libjpeg, libpng, libtiff, freetype, fontconfig, lcms2, libpaper, jbig2dec
-, libiconv
+, libiconv, ijs
 , x11Support ? false, xlibsWrapper ? null
 , cupsSupport ? false, cups ? null
 }:
@@ -8,8 +8,8 @@
 assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
 let
-  version = "9.15";
-  sha256 = "0p1isp6ssfay141klirn7n9s8b546vcz6paksfmksbwy0ljsypg6";
+  version = "9.18";
+  sha256 = "18ad90za28dxybajqwf3y3dld87cgkx1ljllmcnc7ysspfxzbnl3";
 
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
@@ -45,47 +45,76 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ pkgconfig autoconf ];
   buildInputs =
-    [ pkgconfig zlib expat openssl
+    [ zlib expat openssl
       libjpeg libpng libtiff freetype fontconfig lcms2 libpaper jbig2dec
-      libiconv
+      libiconv ijs
     ]
-    ++ stdenv.lib.optional x11Support xlibsWrapper
-    ++ stdenv.lib.optional cupsSupport cups
-    # [] # maybe sometimes jpeg2000 support
+    ++ lib.optional x11Support xlibsWrapper
+    ++ lib.optional cupsSupport cups
     ;
 
   patches = [
     ./urw-font-files.patch
-    # fetched from debian's ghostscript 9.15_dfsg-1 (called 020150707~0c0b085.patch there)
-    ./CVE-2015-3228.patch
+    # http://bugs.ghostscript.com/show_bug.cgi?id=696281
+    (fetchpatch {
+      name = "fix-check-for-using-shared-freetype-lib.patch";
+      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=8f5d285";
+      sha256 = "1f0k043rng7f0rfl9hhb89qzvvksqmkrikmm38p61yfx51l325xr";
+    })
+    # http://bugs.ghostscript.com/show_bug.cgi?id=696301
+    (fetchpatch {
+      name = "add-gserrors.h-to-the-installed-files.patch";
+      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=feafe5e5";
+      sha256 = "0s4ayzakjv809dkn7vilxwvs4dw35p3pw942ml91bk9z4kkaxyz7";
+    })
+    # http://bugs.ghostscript.com/show_bug.cgi?id=696246
+    (fetchpatch {
+      name = "guard-against-NULL-base-for-non-clist-devices.patch";
+      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=007bd77d08d800e6b07274d62e3c91be7c4a3f47";
+      sha256 = "1la53273agl92lpy7qd0qhgzynx8b90hrk8g9jsj3055ssn6rqwh";
+    })
+    (fetchpatch {
+      name = "ensure-plib-devices-always-use-the-clist.patch";
+      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=1bdbe4f87dc57648821e613ebcc591b84e8b35b3";
+      sha256 = "1cq83fgyvrycapxm69v4r9f9qhzsr40ygrc3bkp8pk15wsmvq0k7";
+    })
+    (fetchpatch {
+      name = "prevent-rinkj-device-crash-when-misconfigured.patch";
+      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=5571ddfa377c5d7d98f55af40e693814ac287ae4";
+      sha256 = "08iqdlrngi6k0ml2b71dj5q136fyp1s9g0rr87ayyshn0k0lxwkv";
+    })
   ];
 
-  makeFlags = [ "cups_serverroot=$(out)" "cups_serverbin=$(out)/lib/cups" ];
-
   preConfigure = ''
-    rm -rf jpeg libpng zlib jasper expat tiff lcms{,2} jbig2dec openjpeg freetype cups/libs
+    # requires in-tree (heavily patched) openjpeg
+    rm -rf jpeg libpng zlib jasper expat tiff lcms{,2} jbig2dec freetype cups/libs ijs
 
     sed "s@if ( test -f \$(INCLUDE)[^ ]* )@if ( true )@; s@INCLUDE=/usr/include@INCLUDE=/no-such-path@" -i base/unix-aux.mak
+    sed "s@^ZLIBDIR=.*@ZLIBDIR=${zlib}/include@" -i configure.ac
+
+    autoconf
+  '' + lib.optionalString cupsSupport ''
+    configureFlags="$configureFlags --with-cups-serverbin=$out/lib/cups --with-cups-serverroot=$out/etc/cups --with-cups-datadir=$out/share/cups"
   '';
 
   configureFlags =
     [ "--with-system-libtiff"
       "--enable-dynamic"
-      (if x11Support then "--with-x" else "--without-x")
-      (if cupsSupport then "--enable-cups" else "--disable-cups")
-    ];
+    ] ++ lib.optional x11Support "--with-x"
+      ++ lib.optional cupsSupport "--enable-cups";
 
   doCheck = true;
-  preCheck = "mkdir ./obj";
-  # parallel check sometimes gave: Fatal error: can't create ./obj/whitelst.o
 
   # don't build/install statically linked bin/gs
-  buildFlags = "so";
-  installTargets="soinstall";
+  buildFlags = [ "so" ];
+  installTargets = [ "soinstall" ];
 
   postInstall = ''
     ln -s gsc "$out"/bin/gs
+
+    cp -r Resource "$out/share/ghostscript/${version}"
 
     mkdir -p "$doc/share/ghostscript/${version}"
     mv "$out/share/ghostscript/${version}"/{doc,examples} "$doc/share/ghostscript/${version}/"
@@ -93,7 +122,7 @@ stdenv.mkDerivation rec {
     ln -s "${fonts}" "$out/share/ghostscript/fonts"
   '';
 
-  preFixup = stdenv.lib.strings.optionalString stdenv.isDarwin ''
+  preFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libgs.dylib.${version} $out/lib/libgs.dylib.${version} $out/bin/gs
   '';
 

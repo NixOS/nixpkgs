@@ -6,14 +6,14 @@
 }:
 
 let pname = "liferea";
-    version = "1.10.17";
+    version = "1.10.18";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${name}.tar.bz2";
-    sha256 = "0svgl50w3hai31n5sm42sl0cd86c32cka0xzfy4r8gi0lyjdjxyx";
+    sha256 = "0xyy0qm3h22b69if2hmg36jzvvljxb1w0zy2m2a28kdqfzpa6m8g";
   };
 
   buildInputs = with gst_all_1; [

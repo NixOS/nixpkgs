@@ -55,7 +55,15 @@ in
     services.xserver.desktopManager.session = singleton {
       name = "kde5";
       bgSupport = true;
-      start = ''exec ${kde5.plasma-workspace}/bin/startkde;'';
+      start = ''
+        # Load PulseAudio module for routing support.
+        # See http://colin.guthr.ie/2009/10/so-how-does-the-kde-pulseaudio-support-work-anyway/
+        ${optionalString config.hardware.pulseaudio.enable ''
+          ${config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
+        ''}
+
+        exec ${kde5.plasma-workspace}/bin/startkde
+      '';
     };
 
     security.setuidOwners = singleton {
@@ -68,8 +76,6 @@ in
 
     environment.systemPackages =
       [
-        pkgs.qt4 # qtconfig is the only way to set Qt 4 theme
-
         kde5.frameworkintegration
         kde5.kinit
 
@@ -95,16 +101,12 @@ in
         kde5.plasma-workspace
         kde5.plasma-workspace-wallpapers
 
-        kde5.ark
         kde5.dolphin
         kde5.dolphin-plugins
         kde5.ffmpegthumbs
-        kde5.gwenview
-        kde5.kate
         kde5.kdegraphics-thumbnailers
         kde5.kio-extras
         kde5.konsole
-        kde5.okular
         kde5.print-manager
 
         # Oxygen icons moved to KDE Frameworks 5.16 and later.

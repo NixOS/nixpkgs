@@ -1898,6 +1898,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Clipboard = buildPerlPackage {
+    name = "Clipboard-0.13";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/K/KI/KING/Clipboard-0.13.tar.gz;
+      sha256 = "eebf1c9cb2484be850abdae017147967cf47f8ccd99293771517674b0046ec8a";
+    };
+    meta = {
+      description = "Clipboard - Copy and Paste with any OS";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+
   Clone = buildPerlPackage rec {
     name = "Clone-0.38";
     src = fetchurl {
@@ -6943,7 +6956,6 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/G/GA/GAAS/LWP-Protocol-https-6.04.tar.gz;
       sha256 = "0agnga5dg94222h6rlzqxa0dri2sh3gayncvfb7jad9nxr87gxhy";
     };
-    patches = [ ../development/perl-modules/lwp-protocol-https-cert-file.patch ];
     propagatedBuildInputs = [ LWP IOSocketSSL ];
     doCheck = false; # tries to connect to https://www.apache.org/.
     meta = {
@@ -8137,10 +8149,10 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXRoleWithOverloading = buildPerlPackage {
-    name = "MooseX-Role-WithOverloading-0.13";
+  MooseXRoleWithOverloading = buildPerlPackage rec {
+    name = "MooseX-Role-WithOverloading-0.17";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Role-WithOverloading-0.13.tar.gz;
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "01mqpvbz7yw993918hgp72vl22i6mgicpq5b3zrrsp6vl8sqj2sw";
     };
     buildInputs = [ TestCheckDeps TestNoWarnings ModuleMetadata];
@@ -9727,11 +9739,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  podlators = buildPerlPackage {
-    name = "podlators-2.5.3";
+  podlators = buildPerlPackage rec {
+    name = "podlators-4.06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RR/RRA/podlators-2.5.3.tar.gz;
-      sha256 = "c80d6d65a8694720deff1c6b2067d7564727db713b6d6b536afbad70299647d1";
+      url = "mirror://cpan/authors/id/R/RR/RRA/${name}.tar.gz";
+      sha256 = "0fsb1k88fsqwgmk5fkcz57jf27g6ip4ncikawslm596d1si2h48a";
     };
     meta = {
       description = "Convert POD data to various other formats";
@@ -10484,10 +10496,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   strictures = buildPerlPackage rec {
-    name = "strictures-2.000001";
+    name = "strictures-2.000002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
-      sha256 = "1lr0br982xb49wxra5ywq9vk4jhjmq28670i8yscks1wss58lwqy";
+      sha256 = "0021m9k1f6dfqn88znlp24g7xsqxwwjbj91w474c7n5gngf5a0qk";
     };
     meta = {
       homepage = http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=p5sagit/strictures.git;
@@ -12179,10 +12191,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextCSVEncoded = buildPerlPackage rec {
-    name = "Text-CSV-Encoded-0.24";
+    name = "Text-CSV-Encoded-0.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZA/ZARQUON/${name}.tar.gz";
-      sha256 = "ce8f307dabdcb623cfc385c175152b0f465096d449b9c828efbe6611efcab0d5";
+      sha256 = "1l5rwlmnpnhjszb200a94lwvkwslsvyxm24ycf37gm8dla1mk2i4";
     };
     propagatedBuildInputs = [ TextCSV ];
     meta = {

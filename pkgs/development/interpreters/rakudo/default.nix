@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "rakudo-star-${version}";
-  version = "2015.03";
+  version = "2015.11";
 
   src = fetchurl {
     url    = "http://rakudo.org/downloads/star/${name}.tar.gz";
-    sha256 = "1fwvmjyc1bv3kq7p25xyl4sqinp19mbrspmf0h7rvxlwnfcrr5mv";
+    sha256 = "1rzabg8daxf2g4l1njhdv3gfav91mp3y9my0mpz2xw06cxqfsjki";
   };
 
   buildInputs = [ icu zlib gmp readline jdk perl ];

@@ -1,15 +1,15 @@
 { stdenv, fetchurl, perl, buildLinux, ... } @ args:
 
 import ./generic.nix (args // rec {
-  version = "4.1.15";
+  version = "4.1.18";
   extraMeta.branch = "4.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
-    sha256 = "18sr0dl5ax6pcx6nqp9drb4l6a38g07vxihiqpbwb231jv68h8j7";
+    sha256 = "1n838dg058knmx4n5mfqxh2ai9d3x6w9zs1apkwzm89rpisc1ijb";
   };
 
-  kernelPatches = args.kernelPatches ++ [ { name = "cve-2016-0728"; patch = ./cve-2016-0728.patch; } ];
+  kernelPatches = args.kernelPatches;
 
   features.iwlwifi = true;
   features.efiBootStub = true;

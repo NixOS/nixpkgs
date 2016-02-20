@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, makeWrapper
-, gawk, gnused, gnugrep, coreutils
+, gawk, gnused, gnugrep, coreutils, which
 , perl, NetSMTP
 , withMySQL ? false, zlib, libmysql
 , withPgSQL ? false, postgresql
@@ -15,7 +15,7 @@ let
              ++ lib.optional withSQLite "sqlite3_drv"
              ++ lib.optional withDB "libdb4_drv"
             );
-  maintenancePath = lib.makeSearchPath "bin" [ gawk gnused gnugrep coreutils ];
+  maintenancePath = lib.makeSearchPath "bin" [ gawk gnused gnugrep coreutils which ];
 
 in stdenv.mkDerivation rec {
   name = "dspam-3.10.2";
@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
     # Install maintenance script
     install -Dm755 contrib/dspam_maintenance/dspam_maintenance.sh $out/bin/dspam_maintenance
     sed -i \
-      -e '2iexport PATH=${maintenancePath}:$PATH' \
+      -e "2iexport PATH=$out/bin:${maintenancePath}:\$PATH" \
       -e 's,/usr/[a-z0-9/]*,,g' \
       -e 's,^DSPAM_CONFIGDIR=.*,DSPAM_CONFIGDIR=/etc/dspam,' \
       -e "s,^DSPAM_HOMEDIR=.*,DSPAM_HOMEDIR=/var/lib/dspam," \
@@ -93,6 +93,7 @@ in stdenv.mkDerivation rec {
       -e "s,^PGSQL_BIN_DIR=.*,PGSQL_BIN_DIR=/run/current-system/sw/bin," \
       -e "s,^SQLITE_BIN_DIR=.*,SQLITE_BIN_DIR=/run/current-system/sw/bin," \
       -e "s,^SQLITE3_BIN_DIR=.*,SQLITE3_BIN_DIR=/run/current-system/sw/bin," \
+      -e 's,^DSPAM_CRON_LOCKFILE=.*,DSPAM_CRON_LOCKFILE=/run/dspam/dspam_maintenance.pid,' \
       $out/bin/dspam_maintenance
   '';
 

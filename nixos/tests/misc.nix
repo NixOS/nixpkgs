@@ -16,7 +16,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
       fileSystems = mkVMOverride { "/tmp2" =
         { fsType = "tmpfs";
-          options = "mode=1777,noauto";
+          options = [ "mode=1777" "noauto" ];
         };
       };
       systemd.automounts = singleton

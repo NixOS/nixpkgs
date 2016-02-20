@@ -26,6 +26,12 @@
 let
   inherit (srcs.qt5) version;
   system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
+
+  dontInvalidateBacking = fetchurl {
+    url = "https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=patch;h=0f68f8920573cdce1729a285a92ac8582df32841;hp=24c50f8dcf7fa61ac3c3d4d6295c259a104a2b8c";
+    name = "qtbug-48321-dont-invalidate-backing-store.patch";
+    sha256 = "07vnndmvri73psz0nrs2hg0zw2i4b1k1igy2al6kwjbp7d5xpglr";
+  };
 in
 
 stdenv.mkDerivation {
@@ -49,6 +55,10 @@ stdenv.mkDerivation {
 
   postPatch =
     ''
+      cd qtbase
+      patch -p1 <${dontInvalidateBacking}
+      cd ..
+
       substituteInPlace configure --replace /bin/pwd pwd
       substituteInPlace qtbase/configure --replace /bin/pwd pwd
       substituteInPlace qtbase/src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls

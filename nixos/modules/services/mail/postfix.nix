@@ -13,6 +13,18 @@ let
   haveTransport = cfg.transport != "";
   haveVirtual = cfg.virtual != "";
 
+  clientAccess =
+    if (cfg.dnsBlacklistOverrides != "")
+    then [ "check_client_access hash:/etc/postfix/client_access" ]
+    else [];
+
+  dnsBl =
+    if (cfg.dnsBlacklists != [])
+    then [ (concatStringsSep ", " (map (s: "reject_rbl_client " + s) cfg.dnsBlacklists)) ]
+    else [];
+
+  clientRestrictions = concatStringsSep ", " (clientAccess ++ dnsBl);
+
   mainCf =
     ''
       compatibility_level = 2
@@ -104,6 +116,9 @@ let
     + optionalString haveVirtual ''
       virtual_alias_maps = hash:/etc/postfix/virtual
     ''
+    + optionalString (cfg.dnsBlacklists != []) ''
+      smtpd_client_restrictions = ${clientRestrictions}
+    ''
     + cfg.extraConfig;
 
   masterCf = ''
@@ -161,6 +176,7 @@ let
 
   aliasesFile = pkgs.writeText "postfix-aliases" aliases;
   virtualFile = pkgs.writeText "postfix-virtual" cfg.virtual;
+  checkClientAccessFile = pkgs.writeText "postfix-check-client-access" cfg.dnsBlacklistOverrides;
   mainCfFile = pkgs.writeText "postfix-main.cf" mainCf;
   masterCfFile = pkgs.writeText "postfix-master.cf" masterCf;
   transportFile = pkgs.writeText "postfix-transport" cfg.transport;
@@ -366,6 +382,17 @@ in
         ";
       };
 
+      dnsBlacklists = mkOption {
+        default = [];
+        type = with types; listOf string;
+        description = "dns blacklist servers to use with smtpd_client_restrictions";
+      };
+
+      dnsBlacklistOverrides = mkOption {
+        default = "";
+        description = "contents of check_client_access for overriding dnsBlacklists";
+      };
+
       extraMasterConf = mkOption {
         type = types.lines;
         default = "";
@@ -461,7 +488,7 @@ in
             rm -rf /var/lib/postfix/conf
             mkdir -p /var/lib/postfix/conf
             chmod 0755 /var/lib/postfix/conf
-            ln -sf ${pkgs.postfix}/etc/postfix/postfix-files
+            ln -sf ${pkgs.postfix}/etc/postfix/postfix-files /var/lib/postfix/conf/postfix-files
             ln -sf ${mainCfFile} /var/lib/postfix/conf/main.cf
             ln -sf ${masterCfFile} /var/lib/postfix/conf/master.cf
 
@@ -493,6 +520,9 @@ in
     })
     (mkIf haveVirtual {
       services.postfix.mapFiles."virtual" = virtualFile;
+    })
+    (mkIf (cfg.dnsBlacklists != []) {
+      services.postfix.mapFiles."client_access" = checkClientAccessFile;
     })
   ]);
 

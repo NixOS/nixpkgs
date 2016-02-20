@@ -42,6 +42,7 @@
   ./hardware/video/bumblebee.nix
   ./hardware/video/nvidia.nix
   ./hardware/video/ati.nix
+  ./hardware/video/webcam/facetimehd.nix
   ./installer/tools/auto-upgrade.nix
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix
@@ -200,6 +201,7 @@
   ./services/misc/bepasty.nix
   ./services/misc/canto-daemon.nix
   ./services/misc/calibre-server.nix
+  ./services/misc/cfdyndns.nix
   ./services/misc/cpuminer-cryptonight.nix
   ./services/misc/cgminer.nix
   ./services/misc/confd.nix
@@ -210,6 +212,7 @@
   ./services/misc/etcd.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
+  ./services/misc/gammu-smsd.nix
   #./services/misc/gitit.nix
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
@@ -226,6 +229,7 @@
   ./services/misc/nix-gc.nix
   ./services/misc/nixos-manual.nix
   ./services/misc/nix-ssh-serve.nix
+  ./services/misc/octoprint.nix
   ./services/misc/parsoid.nix
   ./services/misc/phd.nix
   ./services/misc/plex.nix
@@ -339,6 +343,7 @@
   ./services/networking/openntpd.nix
   ./services/networking/openvpn.nix
   ./services/networking/ostinato.nix
+  ./services/networking/pdnsd.nix
   ./services/networking/polipo.nix
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
@@ -395,6 +400,7 @@
   ./services/security/fprintd.nix
   ./services/security/fprot.nix
   ./services/security/frandom.nix
+  ./services/security/haka.nix
   ./services/security/haveged.nix
   ./services/security/hologram.nix
   ./services/security/munge.nix
@@ -460,10 +466,10 @@
   ./system/boot/coredump.nix
   ./system/boot/emergency-mode.nix
   ./system/boot/initrd-network.nix
+  ./system/boot/initrd-ssh.nix
   ./system/boot/kernel.nix
   ./system/boot/kexec.nix
   ./system/boot/loader/efi.nix
-  ./system/boot/loader/loader.nix
   ./system/boot/loader/generations-dir/generations-dir.nix
   ./system/boot/loader/generic-extlinux-compatible
   ./system/boot/loader/grub/grub.nix
@@ -471,15 +477,16 @@
   ./system/boot/loader/grub/memtest.nix
   ./system/boot/loader/gummiboot/gummiboot.nix
   ./system/boot/loader/init-script/init-script.nix
+  ./system/boot/loader/loader.nix
   ./system/boot/loader/raspberrypi/raspberrypi.nix
   ./system/boot/luksroot.nix
   ./system/boot/modprobe.nix
+  ./system/boot/networkd.nix
+  ./system/boot/resolved.nix
   ./system/boot/shutdown.nix
   ./system/boot/stage-1.nix
   ./system/boot/stage-2.nix
   ./system/boot/systemd.nix
-  ./system/boot/networkd.nix
-  ./system/boot/resolved.nix
   ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
   ./system/etc/etc.nix

@@ -41,7 +41,9 @@ nixos.path = ./nixpkgs-unstable-2015-12-06/nixos;
 
   <itemizedlist>
     <listitem><para><literal>services/monitoring/longview.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/pdnsd.nix</literal></para></listitem>
     <listitem><para><literal>services/web-apps/pump.io.nix</literal></para></listitem>
+    <listitem><para><literal>services/security/haka.nix</literal></para></listitem>
   </itemizedlist>
 </para>
 
@@ -153,6 +155,47 @@ nginx.override {
     module has also received many improvements, such as correct directories' access
     rights, new <literal>aliasFiles</literal> and <literal>mapFiles</literal>
     options and more.</para>
+  </listitem>
+
+  <listitem>
+    <para>Filesystem options should now be configured as a list of strings, not
+    a comma-separated string. The old style will continue to work, but print a
+    warning, until the 16.09 release. An example of the new style:
+
+<programlisting>
+fileSystems."/example" = {
+  device = "/dev/sdc";
+  fsType = "btrfs";
+  options = [ "noatime" "compress=lzo" "space_cache" "autodefrag" ];
+};
+</programlisting>
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>CUPS, installed by <literal>services.printing</literal> module, now
+    has its data directory in <filename>/var/lib/cups</filename>. Old
+    configurations from <filename>/etc/cups</filename> are moved there
+    automatically, but there might be problems. Also configuration options
+    <literal>services.printing.cupsdConf</literal> and
+    <literal>services.printing.cupsdFilesConf</literal> were removed
+    because they had been allowing one to override configuration variables
+    required for CUPS to work at all on NixOS. For most use cases,
+    <literal>services.printing.extraConf</literal> and new option
+    <literal>services.printing.extraFilesConf</literal> should be enough;
+    if you encounter a situation when they are not, please file a bug.</para>
+
+    <para>There are also Gutenprint improvements; in particular, a new option
+    <literal>services.printing.gutenprint</literal> is added to enable automatic
+    updating of Gutenprint PPMs; it's greatly recommended to enable it instead
+    of adding <literal>gutenprint</literal> to the <literal>drivers</literal> list.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para><literal>services.xserver.vaapiDrivers</literal> has been removed. Use
+    <literal>services.hardware.opengl.extraPackages{,32}</literal> instead. You can
+    also specify VDPAU drivers there.</para>
   </listitem>
 </itemizedlist>
 

@@ -287,19 +287,14 @@ let
 
 in {
 
-  php54 = generic {
-    version = "5.4.45";
-    sha256 = "10k59j7zjx2mrldmgfvjrrcg2cslr2m68azslspcz5acanqjh3af";
-  };
-
   php55 = generic {
-    version = "5.5.31";
-    sha256 = "0xx23gb70jsgbd772hy8f79wh2rja617s17gnx4vgklxk8mkhjpv";
+    version = "5.5.32";
+    sha256 = "1vljdvyqsq0vas4yhvpqycqyxl2gfndbmak6cfgxn1cfvc4c3wmh";
   };
 
   php56 = generic {
-    version = "5.6.17";
-    sha256 = "0fyxg95m918ngi6lnxyfb4y0ii4f8f5znb5l4axpagp6l5b5zd3p";
+    version = "5.6.18";
+    sha256 = "1vgl2zjq6ws5cjjb3llhwpfwg9gasq3q84ibdv9hj8snm4llmkf3";
   };
 
   php70 = generic {

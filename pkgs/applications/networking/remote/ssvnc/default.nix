@@ -1,5 +1,5 @@
 { stdenv, fetchurl, imake, zlib, jdk, libX11, libXt, libXmu
-, libXaw, libXext, libXpm, openjpeg, openssl, tcl, tk }:
+, libXaw, libXext, libXpm, openjpeg, openssl, tcl, tk, perl }:
 
 stdenv.mkDerivation rec {
   name = "ssvnc-${version}";
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     sed -i -e 's|exec wish|exec ${tk}/bin/wish|' $out/lib/ssvnc/util/ssvnc.tcl
+    sed -i -e 's|/usr/bin/perl|${perl}/bin/perl|' $out/lib/ssvnc/util/ss_vncviewer
   '';
 
   meta = {
