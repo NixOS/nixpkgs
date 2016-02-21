@@ -15496,7 +15496,7 @@ in modules // {
       ${python.executable} setup.py test
     '';
 
-    installFlags = optional (versionAtLeast protobuf.version "2.6.0") "--cpp_implementation";
+    installFlags = optional (versionAtLeast protobuf.version "2.6.0") "--install-option='--cpp_implementation'";
 
     doCheck = true;
 
