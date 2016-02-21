@@ -21,7 +21,12 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = if (!interactive) # conditional to avoid mass rebuild ATM
+    then [ "out" "doc" ]
+    else [ "out" "doc" "info" ];
+
+  # the man pages are small and useful enough
+  outputMan = if interactive then "out" else null;
 
   NIX_CFLAGS_COMPILE = ''
     -DSYS_BASHRC="/etc/bashrc"
