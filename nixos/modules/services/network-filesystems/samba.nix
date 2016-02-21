@@ -79,6 +79,14 @@ in
         description = ''
           Whether to enable Samba, which provides file and print
           services to Windows clients through the SMB/CIFS protocol.
+
+          <note>
+            <para>If you use the firewall consider adding the following:</para>
+            <programlisting>
+              networking.firewall.allowedTCPPorts = [ 139 445 ];
+              networking.firewall.allowedUDPPorts = [ 137 138 ];
+            </programlisting>
+          </note>
         '';
       };
 
@@ -86,7 +94,7 @@ in
         type = types.package;
         default = pkgs.samba;
         defaultText = "pkgs.samba";
-        example = literalExample "pkgs.samba4";
+        example = literalExample "pkgs.samba3";
         description = ''
           Defines which package should be used for the samba server.
         '';
@@ -117,6 +125,10 @@ in
         default = "";
         description = ''
           Additional global section and extra section lines go in here.
+        '';
+        example = ''
+          guest account = nobody
+          map to guest = bad user
         '';
       };
 
@@ -154,9 +166,11 @@ in
         '';
         type = types.attrsOf (types.attrsOf types.unspecified);
         example =
-          { srv =
-             { path = "/srv";
+          { public =
+             { path = "/srv/public";
                "read only" = true;
+               browseable = "yes";
+               "guest ok" = "yes";
                 comment = "Public samba share.";
              };
           };
