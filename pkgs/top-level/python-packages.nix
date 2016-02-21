@@ -15067,6 +15067,10 @@ in modules // {
       sha256 = "46f4bd0d8dfd51125a554568d646fe4200a3c2c6c36b9f2d06d2212148439521";
     };
 
+    # pip detects that we already have bootstrapped_pip "installed", so we need
+    # to force it a little.
+    installFlags = [ "--ignore-installed" ];
+
     buildInputs = with self; [ mock scripttest virtualenv pytest ];
   };
 
@@ -15492,7 +15496,7 @@ in modules // {
       ${python.executable} setup.py test
     '';
 
-    installFlags = optional (versionAtLeast protobuf.version "2.6.0") "--cpp_implementation";
+    installFlags = optional (versionAtLeast protobuf.version "2.6.0") "--install-option='--cpp_implementation'";
 
     doCheck = true;
 
