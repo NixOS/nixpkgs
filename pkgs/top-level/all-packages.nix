@@ -11371,6 +11371,7 @@ let
 
   ethereum = recurseIntoAttrs ( callPackage ../applications/altcoins/ethereum {} );
   geth = ethereum.geth;
+  mist = ethereum.mist;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
