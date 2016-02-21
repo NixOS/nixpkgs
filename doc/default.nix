@@ -45,6 +45,10 @@ stdenv.mkDerivation {
   + toDocbook {
       inputFile = ./introduction.md;
       outputFile = "introduction.xml";
+    }
+  + toDocbook {
+      inputFile = ./languages-frameworks/python.md;
+      outputFile = "./languages-frameworks/python.xml";
       useChapters = true;
     }
   + toDocbook {
@@ -61,6 +65,8 @@ stdenv.mkDerivation {
       outputFile = "languages-frameworks/r.xml";
     }
   + ''
+    cat -n languages-frameworks/python.xml
+
     echo ${nixpkgsVersion} > .version
 
     xmllint --noout --nonet --xinclude --noxincludenode \
