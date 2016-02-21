@@ -1,0 +1,14 @@
+--- a/lib/Makefile.in
++++ b/lib/Makefile.in
+@@ -106,10 +106,7 @@ else
+ endif
+ 
+ install-data-hook:
+-	@if test -n "@CURL_CA_BUNDLE@"; then \
+-	  $(mkinstalldirs) `dirname $(DESTDIR)@CURL_CA_BUNDLE@`; \
+-	  @INSTALL_DATA@ $(srcdir)/ca-bundle.crt $(DESTDIR)@CURL_CA_BUNDLE@; \
+-        fi
++	echo "install-data-hook disabled"
+ 
+ # this hook is mainly for non-unix systems to build even if configure
+ # isn't run
