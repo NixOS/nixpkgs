@@ -8,18 +8,17 @@ in {
 
   m3d-fio = buildPlugin rec {
     name = "M3D-Fio-${version}";
-    version = "0.26";
+    version = "0.27";
 
     src = fetchFromGitHub {
       owner = "donovan6000";
       repo = "M3D-Fio";
       rev = "V${version}";
-      sha256 = "1dl8m0cxp2vzla2a729r3jrq5ahxkj10pygp7m9bblj5nn2s0rll";
+      sha256 = "14zva61dhnsyapapw8q2qadfq5hzv5ykb7qxlz8a3x5j6wfhjn6h";
     };
 
     patches = [
       ./0001-Don-t-use-static-library.patch
-      ./0002-Try-to-create-connection-several-times-if-printer-is.patch
     ];
 
     postInstall = ''
