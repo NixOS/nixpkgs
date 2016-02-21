@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
 
   meta = base.meta // {
     description = "A fast incremental file transfer utility";
+    maintainers = with stdenv.lib.maintainers; [ simons ehmry kampfschlaefer ];
   };
 }

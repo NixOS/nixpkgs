@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
 
   meta = base.meta // {
     description = "A helper to run rsync-only environments from ssh-logins";
+    maintainers = [ stdenv.lib.maintainers.kampfschlaefer ];
   };
 }
