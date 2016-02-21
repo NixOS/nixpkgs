@@ -331,6 +331,27 @@ in
             '';
           });
 
+        createVethPair = n: v: nameValuePair "${n}-netdev"
+          ({
+            description = "Veth Pair ${n}";
+            wantedBy = [ "network.target" (subsystemDevice n) ];
+            after = [ "network-pre.target" ];
+            before = [ "network-interfaces.target" (subsystemDevice n) ];
+            serviceConfig.type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.iproute ];
+            script = ''
+              # Remove Dead Interfaces
+              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+              ip link add name "${n}" type veth peer name "${v.peername}"
+              ip link set "${n}" up
+              ip link set "${v.peername}" up
+            '';
+            postStop = ''
+              ip link delete "${n}"
+            '';
+          });
+
       in listToAttrs (
            map configureAddrs interfaces ++
            map createTunDevice (filter (i: i.virtual) interfaces))
@@ -339,6 +360,7 @@ in
          // mapAttrs' createMacvlanDevice cfg.macvlans
          // mapAttrs' createSitDevice cfg.sits
          // mapAttrs' createVlanDevice cfg.vlans
+         // mapAttrs' createVethPair cfg.veths
          // {
            "network-setup" = networkSetup;
            "network-local-commands" = networkLocalCommands;

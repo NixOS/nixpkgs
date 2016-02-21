@@ -265,9 +265,9 @@ in
         generate a random 32-bit ID using the following commands:
 
         <literal>cksum /etc/machine-id | while read c rest; do printf "%x" $c; done</literal>
-        
+
         (this derives it from the machine-id that systemd generates) or
-        
+
         <literal>head -c4 /dev/urandom | od -A none -t x4</literal>
       '';
     };
@@ -609,6 +609,31 @@ in
           description = "The interface the vlan will transmit packets through.";
         };
 
+      };
+    };
+
+    networking.veths = mkOption {
+      default = { };
+      example = {
+        veth0 = {
+          peername = "veth0-peer";
+        };
+        container0 = {
+          peername = "container0-inside";
+        };
+      };
+      description = ''
+        This option allows you to define veth-pairs which are virtual network interfaces that are pair-wise connected. One side can be placed in a network namespace like a container.
+      '';
+
+      type = types.attrsOf types.optionSet;
+
+      options = {
+        peername = mkOption {
+          example = "veth0-peer";
+          type = types.string;
+          description = "Name of the other end of the veth pair.";
+        };
       };
     };
 
