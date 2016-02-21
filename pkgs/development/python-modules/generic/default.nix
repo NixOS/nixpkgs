@@ -42,6 +42,9 @@
 # generated binaries.
 , makeWrapperArgs ? []
 
+# Additional flags to pass to "pip install".
+, installFlags ? []
+
 , ... } @ attrs:
 
 
@@ -88,6 +91,8 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
     runHook postBuild
   '';
 
+  # FIXME: cleanup `installFlags` expansion to just ` ${toString installFlags}` --
+  # it's done this way now to avoid a mass rebuild.
   installPhase = attrs.installPhase or ''
     runHook preInstall
 
@@ -95,7 +100,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
     export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
 
     pushd dist
-    ${bootstrapped-pip}/bin/pip install *.whl --no-index --prefix=$out --no-cache
+    ${bootstrapped-pip}/bin/pip install *.whl --no-index --prefix=$out --no-cache${if installFlags == [] then "" else " ${toString installFlags}"}
     popd
 
     runHook postInstall
