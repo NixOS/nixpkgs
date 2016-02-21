@@ -5807,6 +5807,8 @@ let
 
   libsigrokdecode = callPackage ../development/tools/libsigrokdecode { };
 
+  dcadec = callPackage ../development/tools/dcadec { };
+
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
 
   dfeet = callPackage ../development/tools/misc/d-feet {
