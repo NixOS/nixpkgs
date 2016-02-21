@@ -7232,6 +7232,8 @@ let
 
   libcrafter = callPackage ../development/libraries/libcrafter { };
 
+  libcrossguid = callPackage ../development/libraries/libcrossguid { };
+
   libuchardet = callPackage ../development/libraries/libuchardet { };
 
   libchop = callPackage ../development/libraries/libchop { };
