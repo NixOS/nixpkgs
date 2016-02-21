@@ -14582,11 +14582,7 @@ let
     libpng = libpng12;
   };
 
-  torcs = callPackage ../games/torcs {
-    # Torcs wants to make shared libraries linked with plib libraries (it provides static).
-    # i686 is the only platform I know than can do that linking without plib built with -fPIC
-    plib = plib.override { enablePIC = !stdenv.isi686; };
-  };
+  torcs = callPackage ../games/torcs { };
 
   trigger = callPackage ../games/trigger { };
 
