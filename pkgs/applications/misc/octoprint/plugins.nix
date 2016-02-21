@@ -41,13 +41,13 @@ in {
 
   titlestatus = buildPlugin rec {
     name = "OctoPrint-TitleStatus-${version}";
-    version = "0.0.2";
+    version = "0.0.4";
 
     src = fetchFromGitHub {
       owner = "MoonshineSG";
       repo = "OctoPrint-TitleStatus";
       rev = version;
-      sha256 = "0rfbpxbcmadyihcrynh6bjywy3yqnzsnjn3yiwifisbrjgpm6sfw";
+      sha256 = "1l78xrabn5hcly2mgxwi17nwgnp2s6jxi9iy4wnw8k8icv74ag7k";
     };
 
     meta = with stdenv.lib; {
