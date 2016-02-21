@@ -3,6 +3,8 @@
 , libusb ? null, gnutls ? null, avahi ? null, libpaper ? null
 }:
 
+### IMPORTANT: before updating cups, make sure the nixos/tests/printing.nix test
+### works at least for your platform.
 let version = "2.0.4"; in
 
 with stdenv.lib;
