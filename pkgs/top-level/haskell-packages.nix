@@ -34,24 +34,29 @@ rec {
     ghc784 = callPackage ../development/compilers/ghc/7.8.4.nix {
       ghc = compiler.ghc742Binary;
     };
-    ghc7102 = callPackage ../development/compilers/ghc/7.10.2.nix {
-      ghc = compiler.ghc784; inherit (packages.ghc784) hscolour;
+    ghc7102 = callPackage ../development/compilers/ghc/7.10.2.nix rec {
+      bootPkgs = packages.ghc784;
+      inherit (bootPkgs) hscolour;
     };
-    ghc7103 = callPackage ../development/compilers/ghc/7.10.3.nix {
-      ghc = compiler.ghc784; inherit (packages.ghc784) hscolour;
+    ghc7103 = callPackage ../development/compilers/ghc/7.10.3.nix rec {
+      bootPkgs = packages.ghc784;
+      inherit (bootPkgs) hscolour;
     };
-    ghc801 = callPackage ../development/compilers/ghc/8.0.1.nix {
-      ghc = compiler.ghc7103; inherit (packages.ghc7103) hscolour;
+    ghc801 = callPackage ../development/compilers/ghc/8.0.1.nix rec {
+      bootPkgs = packages.ghc7103;
+      inherit (bootPkgs) hscolour;
     };
-    ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-      inherit (packages.ghc784) ghc alex happy;
+    ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
+      bootPkgs = packages.ghc784;
+      inherit (bootPkgs) alex happy;
     };
-    ghcNokinds = callPackage ../development/compilers/ghc/nokinds.nix {
-      inherit (packages.ghc784) ghc alex happy;
+    ghcNokinds = callPackage ../development/compilers/ghc/nokinds.nix rec {
+      bootPkgs = packages.ghc784;
+      inherit (bootPkgs) alex happy;
     };
 
     ghcjs = packages.ghc7103.callPackage ../development/compilers/ghcjs {
-      ghc = compiler.ghc7103;
+      bootPkgs = packages.ghc7103;
     };
 
     jhc = callPackage ../development/compilers/jhc {
