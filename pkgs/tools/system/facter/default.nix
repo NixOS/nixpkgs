@@ -8,9 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ngp3xjdh6x1w7lsi4lji2xzqp0x950jngcdlq11lcr0wfnzwyxj";
   };
 
-  libyamlcpp_ = libyamlcpp.override { makePIC = true; };
-
-  buildInputs = [ boost cmake curl libyamlcpp_ openssl utillinux ];
+  buildInputs = [ boost cmake curl libyamlcpp openssl utillinux ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/puppetlabs/facter;
