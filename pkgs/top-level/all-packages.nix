@@ -14964,18 +14964,17 @@ let
 
     calamares = callPackage ../tools/misc/calamares rec {
       python = python3;
-      boost = pkgs.boost.override { python=python3; };
-      libyamlcpp = callPackage ../development/libraries/libyaml-cpp { makePIC=true; boost=boost; };
+      boost = pkgs.boost.override { python = python3; };
+      libyamlcpp = callPackage ../development/libraries/libyaml-cpp { boost = boost; };
     };
 
     dfilemanager = callPackage ../applications/misc/dfilemanager { };
 
     fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
 
-    k9copy = callPackage ../applications/video/k9copy {};
+    k9copy = callPackage ../applications/video/k9copy { };
 
-    konversation = callPackage ../applications/networking/irc/konversation/1.6.nix {
-    };
+    konversation = callPackage ../applications/networking/irc/konversation/1.6.nix { };
 
     quassel = callPackage ../applications/networking/irc/quassel/qt-5.nix {
       monolithic = true;
