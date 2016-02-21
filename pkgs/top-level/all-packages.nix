@@ -6675,12 +6675,6 @@ let
 
   gettext = callPackage ../development/libraries/gettext { };
 
-  gettextWithExpat = if stdenv.isDarwin
-    then gettext.overrideDerivation (drv: {
-      configureFlags = drv.configureFlags ++ [ "--with-libexpat-prefix=${expat}" ];
-    })
-    else callPackage ../development/libraries/gettext/expat.nix { };
-
   gd = callPackage ../development/libraries/gd { };
 
   gdal = callPackage ../development/libraries/gdal { };
@@ -6913,9 +6907,7 @@ let
     cupsSupport = config.gtk2.cups or stdenv.isLinux;
   };
 
-  gtk3 = callPackage ../development/libraries/gtk+/3.x.nix {
-    gettext = gettextWithExpat;
-  };
+  gtk3 = callPackage ../development/libraries/gtk+/3.x.nix { };
 
   gtk = pkgs.gtk2;
 
@@ -16065,6 +16057,7 @@ aliases = with self; rec {
   firefox-wrapper = firefox;          # 2016-01
   firefox-esr-wrapper = firefox-esr;  # 2016-01
   fuse_exfat = exfat;                   # 2015-09-11
+  gettextWithExpat = gettext; # 2016-02-19
   grantlee5 = qt5.grantlee;  # added 2015-12-19
   gupnptools = gupnp-tools;  # added 2015-12-19
   htmlTidy = html-tidy;  # added 2014-12-06
