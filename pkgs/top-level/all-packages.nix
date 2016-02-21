@@ -15029,6 +15029,8 @@ let
 
     kdeconnect = callPackage ../applications/misc/kdeconnect { };
 
+    kile = callPackage ../applications/editors/kile/frameworks.nix { };
+
     konversation = callPackage ../applications/networking/irc/konversation/1.6.nix {
     };
 
