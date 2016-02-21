@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, kodi, steam, libcec_platform, tinyxml }:
+{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, cmake, kodi, steam, libcec_platform, tinyxml, unzip }:
 
 let
 
@@ -70,17 +70,15 @@ in
 
   };
 
-  genesis = mkKodiPlugin rec {
+  genesis = (mkKodiPlugin rec {
 
     plugin = "genesis";
     namespace = "plugin.video.genesis";
-    version = "5.1.3";
+    version = "5.1.4";
 
-    src = fetchFromGitHub {
-      owner = "lambda81";
-      repo = "lambda-addons";
-      rev = "f2cd04f33af88d60e1330573bbf2ef9cee7f0a56";
-      sha256 = "0z0ldckqqif9v5nhnjr5n2495cm3z9grjmrh7czl4xlnq4bvviqq";
+    src = fetchurl {
+      url = "https://offshoregit.com/lambda81/lambda-repo/${namespace}/${namespace}-${version}.zip";
+      sha256 = "0b0pdzgg42mgxgkb6sb83rldh4k19c3l9z7g2wnvxm3s2p6rjy3v";
     };
 
     meta = with stdenv.lib; {
@@ -89,8 +87,7 @@ in
       platforms = platforms.all;
       maintainers = with maintainers; [ edwtjo ];
     };
-
-  };
+  }).override { buildInputs = [ unzip ]; };
 
   urlresolver = (mkKodiPlugin rec {
 
