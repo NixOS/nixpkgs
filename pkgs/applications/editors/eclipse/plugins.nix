@@ -240,7 +240,8 @@ rec {
       mkdir -p $dropinDir/features
       unzip ${srcFeature} -d $dropinDir/features/
       mkdir -p $dropinDir/plugins
-      cp -v ${srcPlugin1} ${srcPlugin2} $dropinDir/plugins/
+      cp -v ${srcPlugin1} $dropinDir/plugins/''${srcPlugin1#*-}
+      cp -v ${srcPlugin2} $dropinDir/plugins/''${srcPlugin2#*-}
     '';
 
     meta = with stdenv.lib; {
