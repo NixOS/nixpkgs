@@ -2489,6 +2489,8 @@ let
 
   netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
 
+  nco = callPackage ../development/libraries/nco { };
+
   nc6 = callPackage ../tools/networking/nc6 { };
 
   ncat = callPackage ../tools/networking/ncat { };
