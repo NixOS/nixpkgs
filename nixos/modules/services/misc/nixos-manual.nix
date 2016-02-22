@@ -72,7 +72,8 @@ in
     };
 
     services.nixosManual.ttyNumber = mkOption {
-      default = "8";
+      type = types.int;
+      default = 8;
       description = ''
         Virtual console on which to show the manual.
       '';
@@ -96,7 +97,7 @@ in
       [ manual.manual help ]
       ++ optional config.programs.man.enable manual.manpages;
 
-    boot.extraTTYs = mkIf cfg.showManual ["tty${cfg.ttyNumber}"];
+    boot.extraTTYs = mkIf cfg.showManual ["tty${toString cfg.ttyNumber}"];
 
     systemd.services = optionalAttrs cfg.showManual
       { "nixos-manual" =
@@ -106,7 +107,7 @@ in
             { ExecStart = "${cfg.browser} ${entry}";
               StandardInput = "tty";
               StandardOutput = "tty";
-              TTYPath = "/dev/tty${cfg.ttyNumber}";
+              TTYPath = "/dev/tty${toString cfg.ttyNumber}";
               TTYReset = true;
               TTYVTDisallocate = true;
               Restart = "always";
