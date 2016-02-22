@@ -1,7 +1,8 @@
 { stdenv, lib, makeWrapper, fetchurl, curl, sasl, openssh, autoconf
 , automake115x, libtool, unzip, gnutar, jdk, maven, python, wrapPython
-, setuptools, boto, pythonProtobuf, apr, subversion, gzip
+, setuptools, boto, pythonProtobuf, apr, subversion, gzip, systemd
 , leveldb, glog, perf, utillinux, libnl, iproute, openssl, libevent
+, bash
 }:
 
 let
@@ -9,14 +10,15 @@ let
   soext = if stdenv.system == "x86_64-darwin" then "dylib" else "so";
 
 in stdenv.mkDerivation rec {
-  version = "0.26.0";
+  version = "0.27.1";
   name = "mesos-${version}";
 
+  enableParallelBuilding = true;
   dontDisableStatic = true;
 
   src = fetchurl {
     url = "mirror://apache/mesos/${version}/${name}.tar.gz";
-    sha256 = "0csvaql9gky15w23gmiw6cvlfnrlhfxvdqd2pv3j3grr44ph0ab5";
+    sha256 = "147iq7vwi09kqblx1h8r6lkrg9g50i257qk1cph1zr5j3rncz7l8";
   };
 
   patches = [
@@ -70,6 +72,15 @@ in stdenv.mkDerivation rec {
       --replace '"ip ' '"${iproute}/bin/ip '   \
       --replace '"mount ' '"${utillinux}/bin/mount ' \
       --replace '/bin/sh' "${stdenv.shell}"
+    
+    substituteInPlace src/launcher/executor.cpp \
+      --replace '"sh"' '"${bash}/bin/bash"'
+    
+    substituteInPlace src/slave/containerizer/mesos/launch.cpp \
+      --replace '"sh"' '"${bash}/bin/bash"'
+    
+    substituteInPlace src/linux/systemd.cpp \
+      --replace 'os::realpath("/sbin/init")' '"${systemd}/lib/systemd/systemd"'
   '';
 
   configureFlags = [
@@ -114,7 +125,7 @@ in stdenv.mkDerivation rec {
     rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
     popd
 
-    # optional python dependency for mesos cli 
+    # optional python dependency for mesos cli
     pushd src/python/cli
     ${python}/bin/${python.executable} setup.py install \
       --install-lib=$out/lib/${python.libPrefix}/site-packages \
@@ -150,7 +161,7 @@ in stdenv.mkDerivation rec {
     homepage    = "http://mesos.apache.org";
     license     = licenses.asl20;
     description = "A cluster manager that provides efficient resource isolation and sharing across distributed applications, or frameworks";
-    maintainers = with maintainers; [ cstrahan offline rushmorem ];
+    maintainers = with maintainers; [ cstrahan kevincox offline rushmorem ];
     platforms   = platforms.linux;
   };
 }
