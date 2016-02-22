@@ -2393,6 +2393,8 @@ let
 
   mpage = callPackage ../tools/text/mpage { };
 
+  mprime = callPackage ../tools/misc/mprime { };
+
   mpw = callPackage ../tools/security/mpw { };
 
   mr = callPackage ../applications/version-management/mr { };
@@ -3304,6 +3306,8 @@ let
 
   stricat = callPackage ../tools/security/stricat { };
 
+  staruml = callPackage ../tools/misc/staruml { inherit (gnome) GConf; libgcrypt = libgcrypt_1_5; };
+  
   privoxy = callPackage ../tools/networking/privoxy {
     w3m = w3m-batch;
   };
@@ -4290,6 +4294,10 @@ let
   };
 
   go_1_5 = callPackage ../development/compilers/go/1.5.nix {
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  };
+
+  go_1_6 = callPackage ../development/compilers/go/1.6.nix {
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
@@ -5770,6 +5778,8 @@ let
 
   libsigrokdecode = callPackage ../development/tools/libsigrokdecode { };
 
+  dcadec = callPackage ../development/tools/dcadec { };
+
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
 
   dfeet = callPackage ../development/tools/misc/d-feet {
@@ -6491,6 +6501,8 @@ let
   eigen = callPackage ../development/libraries/eigen {};
 
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix {};
+  
+  vmmlib = callPackage ../development/libraries/vmmlib {};  
 
   enchant = callPackage ../development/libraries/enchant { };
 
@@ -7188,6 +7200,8 @@ let
   libchewing = callPackage ../development/libraries/libchewing { };
 
   libcrafter = callPackage ../development/libraries/libcrafter { };
+
+  libcrossguid = callPackage ../development/libraries/libcrossguid { };
 
   libuchardet = callPackage ../development/libraries/libuchardet { };
 
@@ -9095,6 +9109,15 @@ let
     buildGoPackage = callPackage ../development/go-modules/generic {
       go = go_1_5;
       govers = go15Packages.govers.bin;
+    };
+    overrides = (config.goPackageOverrides or (p: {})) pkgs;
+  };
+
+  go16Packages = callPackage ./go-packages.nix {
+    go = go_1_6;
+    buildGoPackage = callPackage ../development/go-modules/generic {
+      go = go_1_6;
+      govers = go16Packages.govers.bin;
     };
     overrides = (config.goPackageOverrides or (p: {})) pkgs;
   };
@@ -13259,6 +13282,7 @@ let
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD);
     enableCopyDevicesPatch = (config.rsync.enableCopyDevicesPatch or false);
   };
+  rrsync = callPackage ../applications/networking/sync/rsync/rrsync.nix {};
 
   rtl-sdr = callPackage ../applications/misc/rtl-sdr { };
 
@@ -14778,7 +14802,7 @@ let
 
           kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
 
-          kdeconnect = callPackage ../applications/misc/kdeconnect { };
+          kdeconnect = callPackage ../applications/misc/kdeconnect/0.7.nix { };
 
           kdenlive = callPackage ../applications/video/kdenlive { mlt = mlt-qt4; };
 
@@ -14970,6 +14994,10 @@ let
 
     k9copy = callPackage ../applications/video/k9copy { };
 
+    kdeconnect = callPackage ../applications/misc/kdeconnect { };
+
+    kile = callPackage ../applications/editors/kile/frameworks.nix { };
+
     konversation = callPackage ../applications/networking/irc/konversation/1.6.nix { };
 
     quassel = callPackage ../applications/networking/irc/quassel/qt-5.nix {
@@ -15060,6 +15088,12 @@ let
   archimedes = callPackage ../applications/science/electronics/archimedes { };
 
   emboss = callPackage ../applications/science/biology/emboss { };
+
+  neuron = callPackage ../applications/science/biology/neuron { };
+
+  neuron-mpi = appendToName "mpi" (neuron.override {
+    mpi = pkgs.openmpi;
+  });
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
 

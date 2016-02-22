@@ -20,7 +20,7 @@
 , ghcjs-prim
 , regex-posix
 
-, ghc, gmp
+, bootPkgs, gmp
 , jailbreak-cabal
 
 , runCommand
@@ -41,8 +41,11 @@
 , ghcjsBoot ? import ./ghcjs-boot.nix { inherit fetchgit runCommand; }
 , shims ? import ./shims.nix { inherit fetchFromGitHub; }
 }:
-let version = "0.2.0"; in
-mkDerivation (rec {
+let
+  inherit (bootPkgs) ghc;
+  version = "0.2.0";
+
+in mkDerivation (rec {
   pname = "ghcjs";
   inherit version;
   src = fetchFromGitHub {
@@ -114,8 +117,9 @@ mkDerivation (rec {
         --with-gmp-libraries ${gmp}/lib
   '';
   passthru = {
+    inherit bootPkgs;
+    isCross = true;
     isGhcjs = true;
-    nativeGhc = ghc;
     inherit nodejs ghcjsBoot;
   };
 

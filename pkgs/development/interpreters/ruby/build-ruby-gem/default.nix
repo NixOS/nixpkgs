@@ -50,24 +50,24 @@ lib.makeOverridable (
 , passthru ? {}
 , ...} @ attrs:
 
-if ! builtins.elem type [ "git" "gem" ]
-then throw "buildRubyGem: don't know how to build a gem of type \"${type}\""
-else
-
 let
   shellEscape = x: "'${lib.replaceChars ["'"] [("'\\'" + "'")] x}'";
   rubygems = (attrs.rubygems or defs.rubygems).override {
     inherit ruby;
   };
   src = attrs.src or (
-    if type == "gem"
-    then fetchurl {
-      urls = map (remote: "${remote}/gems/${gemName}-${version}.gem") remotes;
-      inherit (attrs) sha256;
-    } else fetchgit {
-      inherit (attrs) url rev sha256 fetchSubmodules;
-      leaveDotGit = true;
-    }
+    if type == "gem" then
+      fetchurl {
+        urls = map (remote: "${remote}/gems/${gemName}-${version}.gem") remotes;
+        inherit (attrs) sha256;
+      }
+    else if type == "git" then
+      fetchgit {
+        inherit (attrs) url rev sha256 fetchSubmodules;
+        leaveDotGit = true;
+      }
+    else
+      throw "buildRubyGem: don't know how to build a gem of type \"${type}\""
   );
   documentFlag =
     if document == []
