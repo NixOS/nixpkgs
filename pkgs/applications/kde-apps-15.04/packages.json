@@ -8,7 +8,7 @@
         "propagatedBuildInputs": [],
         "name": "libkexiv2-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/libkexiv2-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/libkexiv2-15.04.3.tar.xz",
             "name": "libkexiv2-15.04.3.tar.xz",
             "sha256": "0f5cfkdlqmngpj0sr9i6w2n57jgnhj6j6gvr8cc26n11zrdv9w04"
         },
@@ -26,7 +26,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-bg-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-bg-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-bg-15.04.3.tar.xz",
             "name": "kde-l10n-bg-15.04.3.tar.xz",
             "sha256": "1s2qm9dlih7yfs83pywkn1q5mk9xik70rmzqvp1fj0zj66gxhf9i"
         },
@@ -47,7 +47,7 @@
         "propagatedBuildInputs": [],
         "name": "kqtquickcharts-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kqtquickcharts-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kqtquickcharts-15.04.3.tar.xz",
             "name": "kqtquickcharts-15.04.3.tar.xz",
             "sha256": "1fmyyiy2ahxxbf9cy5aqpb5zvcqk0yrig9h586hzhw028mdblj5a"
         },
@@ -65,7 +65,7 @@
         "propagatedBuildInputs": [],
         "name": "palapeli-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/palapeli-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/palapeli-15.04.3.tar.xz",
             "name": "palapeli-15.04.3.tar.xz",
             "sha256": "04l94nwwzqgsf54hg0yrbmv5fc2lljcgpxg4fcfbp8j58ypqv6kq"
         },
@@ -84,7 +84,7 @@
         "propagatedBuildInputs": [],
         "name": "kmahjongg-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kmahjongg-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kmahjongg-15.04.3.tar.xz",
             "name": "kmahjongg-15.04.3.tar.xz",
             "sha256": "1066qmvkxzi83mnd736ldfqm6qmdwwj7bw1daixfarkr2mws7i51"
         },
@@ -105,7 +105,7 @@
         ],
         "name": "analitza-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/analitza-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/analitza-15.04.3.tar.xz",
             "name": "analitza-15.04.3.tar.xz",
             "sha256": "0ljydfchs0928damms87k5v049w9g021k42y1a000z3z09154rm2"
         },
@@ -133,7 +133,7 @@
         "propagatedBuildInputs": [],
         "name": "kfourinline-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kfourinline-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kfourinline-15.04.3.tar.xz",
             "name": "kfourinline-15.04.3.tar.xz",
             "sha256": "07rxjp7i9nhgy57zrh21qmc8352b915ykny6jsds80jrc2fl8hbs"
         },
@@ -174,7 +174,7 @@
         "propagatedBuildInputs": [],
         "name": "juk-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/juk-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/juk-15.04.3.tar.xz",
             "name": "juk-15.04.3.tar.xz",
             "sha256": "1zdax89bzpmxs6yi196ybd805y9k6p7cgnnn9c7kba35zn96wj91"
         },
@@ -193,7 +193,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-id-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-id-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-id-15.04.3.tar.xz",
             "name": "kde-l10n-id-15.04.3.tar.xz",
             "sha256": "1rhn68s7zxaifm92i33ik99hc51p242hpqr4d0pdsgwnjbp2n76w"
         },
@@ -214,7 +214,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-wallpapers-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-wallpapers-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-wallpapers-15.04.3.tar.xz",
             "name": "kde-wallpapers-15.04.3.tar.xz",
             "sha256": "1s2kgxx97jvl2xsnpz7cqzpg22j1mvybbvv793gpa8awsfsvhddw"
         },
@@ -231,7 +231,7 @@
         "propagatedBuildInputs": [],
         "name": "libkipi-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/libkipi-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/libkipi-15.04.3.tar.xz",
             "name": "libkipi-15.04.3.tar.xz",
             "sha256": "05ryh1lkghlkn7877k5nspmrny1ijx0vgwimv4bmlc6faifpgfjx"
         },
@@ -248,7 +248,7 @@
         "propagatedBuildInputs": [],
         "name": "artikulate-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/artikulate-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/artikulate-15.04.3.tar.xz",
             "name": "artikulate-15.04.3.tar.xz",
             "sha256": "17nmlh58vxlidgw2g060kvpscch14813zcpzhdykq0mr3293a05z"
         },
@@ -267,7 +267,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-it-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-it-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-it-15.04.3.tar.xz",
             "name": "kde-l10n-it-15.04.3.tar.xz",
             "sha256": "1azijn9zz650r899d1ybvlj0qmiwgsyg9m5qd7iln0hxa01fw89i"
         },
@@ -288,7 +288,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-da-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-da-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-da-15.04.3.tar.xz",
             "name": "kde-l10n-da-15.04.3.tar.xz",
             "sha256": "182dyyx7knny4rs19aiwxd19c355z2fm93psck0ja4rgwhs1qxr3"
         },
@@ -309,7 +309,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-km-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-km-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-km-15.04.3.tar.xz",
             "name": "kde-l10n-km-15.04.3.tar.xz",
             "sha256": "0f9wkks5mrh9ap8810d9k46dbhqvhn6g8wwfb777iss18jx6g8jd"
         },
@@ -330,7 +330,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-ca_valencia-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-ca@valencia-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-ca@valencia-15.04.3.tar.xz",
             "name": "kde-l10n-ca_valencia-15.04.3.tar.xz",
             "sha256": "0h21x45hbm0iahf3c8qjfc9cdx5z36js40bqr5klzm7xvwpc596p"
         },
@@ -351,7 +351,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-wa-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-wa-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-wa-15.04.3.tar.xz",
             "name": "kde-l10n-wa-15.04.3.tar.xz",
             "sha256": "10lidmp54db9f8f3xzf2samvi6s0mck0azhyyiz17amcrfj28nkp"
         },
@@ -372,7 +372,7 @@
         "propagatedBuildInputs": [],
         "name": "libkomparediff2-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/libkomparediff2-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/libkomparediff2-15.04.3.tar.xz",
             "name": "libkomparediff2-15.04.3.tar.xz",
             "sha256": "1i9y5qjxcg5yl5q8ldczy3cssn3rw9p04wcjqx347faqv3dy4nxf"
         },
@@ -400,7 +400,7 @@
         "propagatedBuildInputs": [],
         "name": "kwalletmanager-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kwalletmanager-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kwalletmanager-15.04.3.tar.xz",
             "name": "kwalletmanager-15.04.3.tar.xz",
             "sha256": "1h5c4vjspzw29j0xqlwaxpdk7k3n0zlkjram25hy3c3vs40hihil"
         },
@@ -417,7 +417,7 @@
         "propagatedBuildInputs": [],
         "name": "ktp-auth-handler-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ktp-auth-handler-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ktp-auth-handler-15.04.3.tar.xz",
             "name": "ktp-auth-handler-15.04.3.tar.xz",
             "sha256": "0782lzh3ykk50cpdrh5djvxlgsp88hirbhivdpnwp8bcck3iiha9"
         },
@@ -452,7 +452,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-ga-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-ga-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-ga-15.04.3.tar.xz",
             "name": "kde-l10n-ga-15.04.3.tar.xz",
             "sha256": "1h83illxc04i0m116rxy8x23s22fksmxb9kaimn3bglbcd5jgi95"
         },
@@ -473,7 +473,7 @@
         "propagatedBuildInputs": [],
         "name": "ksnapshot-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ksnapshot-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ksnapshot-15.04.3.tar.xz",
             "name": "ksnapshot-15.04.3.tar.xz",
             "sha256": "00mj98bdbldw9klfw7qd332migh0gfzdy7pq89am8n2rbp84a0jw"
         },
@@ -491,7 +491,7 @@
         "propagatedBuildInputs": [],
         "name": "kreversi-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kreversi-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kreversi-15.04.3.tar.xz",
             "name": "kreversi-15.04.3.tar.xz",
             "sha256": "0nhg2jz0y79yhq68ax10l06sh1dkwn1mjh2qmkhsc6ks80wfq0lp"
         },
@@ -510,7 +510,7 @@
         "propagatedBuildInputs": [],
         "name": "kmix-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kmix-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kmix-15.04.3.tar.xz",
             "name": "kmix-15.04.3.tar.xz",
             "sha256": "1sjh9a4xp981h91ydlxbsxhz0sxdd5ajwn5zn39r3hnfnxh8vx9l"
         },
@@ -542,7 +542,7 @@
         "propagatedBuildInputs": [],
         "name": "signon-kwallet-extension-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/signon-kwallet-extension-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/signon-kwallet-extension-15.04.3.tar.xz",
             "name": "signon-kwallet-extension-15.04.3.tar.xz",
             "sha256": "07waf72xwgpdska42ydi9pifs2d2l7idaf0jwamrqrwf5s19vdf0"
         },
@@ -566,7 +566,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-es-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-es-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-es-15.04.3.tar.xz",
             "name": "kde-l10n-es-15.04.3.tar.xz",
             "sha256": "0nqz9lal9f2s0ryydyy0xxh53q2pxjmpbhkad1l9107shjsy9ry7"
         },
@@ -587,7 +587,7 @@
         "propagatedBuildInputs": [],
         "name": "kompare-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kompare-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kompare-15.04.3.tar.xz",
             "name": "kompare-15.04.3.tar.xz",
             "sha256": "1dl0sddskmxm2h6qshgmv06glk740ih0ldw6d9vvlk9a4mnpk3yw"
         },
@@ -619,7 +619,7 @@
         "propagatedBuildInputs": [],
         "name": "kdiamond-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdiamond-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdiamond-15.04.3.tar.xz",
             "name": "kdiamond-15.04.3.tar.xz",
             "sha256": "066bf4vjcfnidj7yw04g0wdz09wqskvbjskljwndgx178bwb1zn1"
         },
@@ -654,7 +654,7 @@
         ],
         "name": "kaccounts-integration-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kaccounts-integration-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kaccounts-integration-15.04.3.tar.xz",
             "name": "kaccounts-integration-15.04.3.tar.xz",
             "sha256": "1rx957mbx8fjy0i9al3axpwsqkydgzp2ksqa0lisjcp59sw93zsf"
         },
@@ -688,7 +688,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-gl-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-gl-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-gl-15.04.3.tar.xz",
             "name": "kde-l10n-gl-15.04.3.tar.xz",
             "sha256": "09j27a65nbk4l96yjhfpk409va7vk5cq7s77h6wpy8pa1vdgl944"
         },
@@ -709,7 +709,7 @@
         "propagatedBuildInputs": [],
         "name": "kwordquiz-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kwordquiz-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kwordquiz-15.04.3.tar.xz",
             "name": "kwordquiz-15.04.3.tar.xz",
             "sha256": "00r977c2pi7v512j1h7lr3vs4mxqz6cvfz94a5nicp7khnqy9ysq"
         },
@@ -749,7 +749,7 @@
         "propagatedBuildInputs": [],
         "name": "kigo-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kigo-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kigo-15.04.3.tar.xz",
             "name": "kigo-15.04.3.tar.xz",
             "sha256": "0zhs5lhmd44kzr50ccb9f0dbdpnb2g2cgc7fwr4jsccfd5yz6974"
         },
@@ -767,7 +767,7 @@
         "propagatedBuildInputs": [],
         "name": "ktp-desktop-applets-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ktp-desktop-applets-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ktp-desktop-applets-15.04.3.tar.xz",
             "name": "ktp-desktop-applets-15.04.3.tar.xz",
             "sha256": "038d7wlgrzwyyldxb1iq2yha8plkmxwvmi7wf6gs8q1nwy7dfwvw"
         },
@@ -789,7 +789,7 @@
         "propagatedBuildInputs": [],
         "name": "kolourpaint-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kolourpaint-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kolourpaint-15.04.3.tar.xz",
             "name": "kolourpaint-15.04.3.tar.xz",
             "sha256": "0lyik49wpa9wngj7y2yraklkl2fl1g7jnbyjzcircczaq9s644fk"
         },
@@ -810,7 +810,7 @@
         "propagatedBuildInputs": [],
         "name": "kapptemplate-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kapptemplate-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kapptemplate-15.04.3.tar.xz",
             "name": "kapptemplate-15.04.3.tar.xz",
             "sha256": "0hs063g2khrghrglwy7r1amrj46xr39dlh1gnbbfpadc5fmk2x6s"
         },
@@ -844,7 +844,7 @@
         "propagatedBuildInputs": [],
         "name": "kdegraphics-thumbnailers-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdegraphics-thumbnailers-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdegraphics-thumbnailers-15.04.3.tar.xz",
             "name": "kdegraphics-thumbnailers-15.04.3.tar.xz",
             "sha256": "07cc7mp1c59hccn30670yzvmbr14f78whyxz5dwcwxpbcgaklq1a"
         },
@@ -863,7 +863,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-pt_BR-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-pt_BR-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-pt_BR-15.04.3.tar.xz",
             "name": "kde-l10n-pt_BR-15.04.3.tar.xz",
             "sha256": "0yyfk4whymblp4gy0zxvyri254x898lmg78n07amzddxz22dml5f"
         },
@@ -884,7 +884,7 @@
         "propagatedBuildInputs": [],
         "name": "ksystemlog-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ksystemlog-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ksystemlog-15.04.3.tar.xz",
             "name": "ksystemlog-15.04.3.tar.xz",
             "sha256": "117xkjgqrivyjyzh4jz3z5xvcj2l1f3x665kgc3rrw4y4zpwwcnm"
         },
@@ -901,7 +901,7 @@
         "propagatedBuildInputs": [],
         "name": "kuser-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kuser-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kuser-15.04.3.tar.xz",
             "name": "kuser-15.04.3.tar.xz",
             "sha256": "1q1f9l3lwcszpfiyfjaf7cjbw325cfjpbkc6rfvl3jp157w5nr4m"
         },
@@ -919,7 +919,7 @@
         "propagatedBuildInputs": [],
         "name": "libksane-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/libksane-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/libksane-15.04.3.tar.xz",
             "name": "libksane-15.04.3.tar.xz",
             "sha256": "0i5ynf3g2i6vlhzl5cga8imprblmdz418cfkznwkw1yj35g236c3"
         },
@@ -934,7 +934,7 @@
         "propagatedBuildInputs": [],
         "name": "knavalbattle-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/knavalbattle-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/knavalbattle-15.04.3.tar.xz",
             "name": "knavalbattle-15.04.3.tar.xz",
             "sha256": "10nri1fvi057cvb6qwlhqyv9x1rjavsdhhipgrdhqpzmm0y84sd1"
         },
@@ -952,7 +952,7 @@
         "propagatedBuildInputs": [],
         "name": "kaccessible-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kaccessible-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kaccessible-15.04.3.tar.xz",
             "name": "kaccessible-15.04.3.tar.xz",
             "sha256": "1a413cv32xsqx9aalkrqh3ybw6phvh4ckgzr15kxca3lc78zw00s"
         },
@@ -972,7 +972,7 @@
         "propagatedBuildInputs": [],
         "name": "knetwalk-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/knetwalk-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/knetwalk-15.04.3.tar.xz",
             "name": "knetwalk-15.04.3.tar.xz",
             "sha256": "1bmn1avq2xpvrvaryzl25izdh7xn1c5pdxll51kj7l017590pa43"
         },
@@ -1010,7 +1010,7 @@
         "propagatedBuildInputs": [],
         "name": "kdewebdev-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdewebdev-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdewebdev-15.04.3.tar.xz",
             "name": "kdewebdev-15.04.3.tar.xz",
             "sha256": "05wxb6swr3dpjw8vvsz9ylznx2rcjg2glzj9blnckkd7wl35r3q1"
         },
@@ -1031,7 +1031,7 @@
         "propagatedBuildInputs": [],
         "name": "kget-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kget-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kget-15.04.3.tar.xz",
             "name": "kget-15.04.3.tar.xz",
             "sha256": "17wlqx55r3yrnl149rydmmdksll9wg40dnqqq45knv2gx9mdxlwg"
         },
@@ -1059,7 +1059,7 @@
         "propagatedBuildInputs": [],
         "name": "kalzium-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kalzium-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kalzium-15.04.3.tar.xz",
             "name": "kalzium-15.04.3.tar.xz",
             "sha256": "0hdffpyhg8dk4hhnkg0isizrdz65wbgndr6zja733p7n3gsrias6"
         },
@@ -1077,7 +1077,7 @@
         "propagatedBuildInputs": [],
         "name": "marble-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/marble-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/marble-15.04.3.tar.xz",
             "name": "marble-15.04.3.tar.xz",
             "sha256": "1fjbfarf8zp1d7ailvx017qb28sjk318r2jdb7pz5x8x4yl6b82s"
         },
@@ -1123,7 +1123,7 @@
         "propagatedBuildInputs": [],
         "name": "kig-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kig-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kig-15.04.3.tar.xz",
             "name": "kig-15.04.3.tar.xz",
             "sha256": "1k19pfp8b4k3spfcs70fgjhk78jkhbb7bfilyzf0ahzrjcpgp8c8"
         },
@@ -1155,7 +1155,7 @@
         "propagatedBuildInputs": [],
         "name": "kiten-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kiten-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kiten-15.04.3.tar.xz",
             "name": "kiten-15.04.3.tar.xz",
             "sha256": "0f4kmm01ikn54dy2z2lnv0kdqx7rn77mnfrwv25470h6ar4w89w1"
         },
@@ -1185,7 +1185,7 @@
         "propagatedBuildInputs": [],
         "name": "ktp-contact-list-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ktp-contact-list-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ktp-contact-list-15.04.3.tar.xz",
             "name": "ktp-contact-list-15.04.3.tar.xz",
             "sha256": "02vvp0i2bi3j7gk037pqzfhn44khln0wddwbql3kq49v4q2i5s7d"
         },
@@ -1218,7 +1218,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-pt-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-pt-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-pt-15.04.3.tar.xz",
             "name": "kde-l10n-pt-15.04.3.tar.xz",
             "sha256": "0gy7y8xns0kxl7n8wa073xypnyvdyq56gz1ahj0k8mpadfak6vk0"
         },
@@ -1239,7 +1239,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-fr-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-fr-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-fr-15.04.3.tar.xz",
             "name": "kde-l10n-fr-15.04.3.tar.xz",
             "sha256": "0z1ga48y5zih85cdmb165kyxm9z7ydhxykj4ci40ckdqiwzjhkag"
         },
@@ -1260,7 +1260,7 @@
         "propagatedBuildInputs": [],
         "name": "kmouth-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kmouth-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kmouth-15.04.3.tar.xz",
             "name": "kmouth-15.04.3.tar.xz",
             "sha256": "1ak1nvc0y0yi1gd9kdhhjw64j6fkf7bw11nnxxhpq9gvgmyyfm7r"
         },
@@ -1277,7 +1277,7 @@
         "propagatedBuildInputs": [],
         "name": "filelight-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/filelight-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/filelight-15.04.3.tar.xz",
             "name": "filelight-15.04.3.tar.xz",
             "sha256": "05ak727bkij70zc5lr458snq346ndc32r5icjz6jgmyxqxsdk17d"
         },
@@ -1308,7 +1308,7 @@
         "propagatedBuildInputs": [],
         "name": "kdesdk-kioslaves-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdesdk-kioslaves-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdesdk-kioslaves-15.04.3.tar.xz",
             "name": "kdesdk-kioslaves-15.04.3.tar.xz",
             "sha256": "0f5cjlssylgr42bnrsdaw64xl17zr0sl989digqg47hrd7np1zf7"
         },
@@ -1327,7 +1327,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-baseapps-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-baseapps-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-baseapps-15.04.3.tar.xz",
             "name": "kde-baseapps-15.04.3.tar.xz",
             "sha256": "1inkzj984qy0ab4ks5m002phs6a00cjfn25gri9jglcqn3jzy85a"
         },
@@ -1352,7 +1352,7 @@
         "propagatedBuildInputs": [],
         "name": "ksirk-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ksirk-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ksirk-15.04.3.tar.xz",
             "name": "ksirk-15.04.3.tar.xz",
             "sha256": "1km9423k6hdkb58and8sqz0wwyab8k6k4jg534xppjph7x8a3rm0"
         },
@@ -1371,7 +1371,7 @@
         "propagatedBuildInputs": [],
         "name": "killbots-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/killbots-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/killbots-15.04.3.tar.xz",
             "name": "killbots-15.04.3.tar.xz",
             "sha256": "10pvgwmc2s8cz6cz7lr3gracia654qzwjh3b01z3sha7gjfd5ly2"
         },
@@ -1405,7 +1405,7 @@
         "propagatedBuildInputs": [],
         "name": "kjumpingcube-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kjumpingcube-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kjumpingcube-15.04.3.tar.xz",
             "name": "kjumpingcube-15.04.3.tar.xz",
             "sha256": "0ls4v7ip4vh5h9jn9966bwr00aic64psmwnp96j6zmvrlkmz5saf"
         },
@@ -1446,7 +1446,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-sr-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-sr-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-sr-15.04.3.tar.xz",
             "name": "kde-l10n-sr-15.04.3.tar.xz",
             "sha256": "03mpd7cf4zh144jwl0lzv68jbl2805idx68a2zfy50jifbx9k8qa"
         },
@@ -1467,7 +1467,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-et-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-et-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-et-15.04.3.tar.xz",
             "name": "kde-l10n-et-15.04.3.tar.xz",
             "sha256": "10jqj02dz1bklabrda8h0hd6gvfxhfxa7mfl7zdn142xz6qs1194"
         },
@@ -1488,7 +1488,7 @@
         "propagatedBuildInputs": [],
         "name": "kmag-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kmag-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kmag-15.04.3.tar.xz",
             "name": "kmag-15.04.3.tar.xz",
             "sha256": "1k2jnqjm1ky6mgqlyz47c4n6ivqlnyva25siyrx466anzbjn5ffp"
         },
@@ -1506,7 +1506,7 @@
         "propagatedBuildInputs": [],
         "name": "kdenetwork-strigi-analyzers-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdenetwork-strigi-analyzers-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdenetwork-strigi-analyzers-15.04.3.tar.xz",
             "name": "kdenetwork-strigi-analyzers-15.04.3.tar.xz",
             "sha256": "04xikfhzdl56vkz9zsk1whcikwdwqbs72y9mam40wd9qr0pzfxcw"
         },
@@ -1525,7 +1525,7 @@
         "propagatedBuildInputs": [],
         "name": "kcharselect-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kcharselect-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kcharselect-15.04.3.tar.xz",
             "name": "kcharselect-15.04.3.tar.xz",
             "sha256": "12p85b7yplmm4v8v9znq0r4p8y3m2f088brdvlxgmb04x5158m9s"
         },
@@ -1550,7 +1550,7 @@
         "propagatedBuildInputs": [],
         "name": "kdegraphics-strigi-analyzer-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdegraphics-strigi-analyzer-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdegraphics-strigi-analyzer-15.04.3.tar.xz",
             "name": "kdegraphics-strigi-analyzer-15.04.3.tar.xz",
             "sha256": "1mya983vbkxa1q0lwn7gz0fc52y8cdkpadkvfnzal5kpbwvbh96r"
         },
@@ -1573,7 +1573,7 @@
         ],
         "name": "libkmahjongg-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/libkmahjongg-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/libkmahjongg-15.04.3.tar.xz",
             "name": "libkmahjongg-15.04.3.tar.xz",
             "sha256": "0b0zrb3bbkphqq96gc8y5xn28g19l5c60pr0s1h5rmm70021ixk6"
         },
@@ -1602,7 +1602,7 @@
         "propagatedBuildInputs": [],
         "name": "ktp-kded-module-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ktp-kded-module-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ktp-kded-module-15.04.3.tar.xz",
             "name": "ktp-kded-module-15.04.3.tar.xz",
             "sha256": "1zr0h1yzn9m4b4xld8lp5dx4xx6phw6fnp0z3i27mjbr0a1n6qa1"
         },
@@ -1635,7 +1635,7 @@
         "propagatedBuildInputs": [],
         "name": "ktuberling-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ktuberling-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ktuberling-15.04.3.tar.xz",
             "name": "ktuberling-15.04.3.tar.xz",
             "sha256": "0alxdrjzalngg2y1fyzcsgglsqjk4gcihkndmr25s0c663fzdrrn"
         },
@@ -1653,7 +1653,7 @@
         "propagatedBuildInputs": [],
         "name": "kcron-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kcron-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kcron-15.04.3.tar.xz",
             "name": "kcron-15.04.3.tar.xz",
             "sha256": "0kwhzfmlgcj3fbi9kj08lnikz37z3gpywfcx940d4gw4n9hg26av"
         },
@@ -1680,7 +1680,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-nl-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-nl-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-nl-15.04.3.tar.xz",
             "name": "kde-l10n-nl-15.04.3.tar.xz",
             "sha256": "0id9rl05jp3ff6jd22qnfzs40dlnijsr2mkfwzvnf08h3nk6c8id"
         },
@@ -1701,7 +1701,7 @@
         "propagatedBuildInputs": [],
         "name": "parley-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/parley-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/parley-15.04.3.tar.xz",
             "name": "parley-15.04.3.tar.xz",
             "sha256": "1lvqih1vav234jvf18z00kdd6hn8vq7pm9659bchn02j5ic110d3"
         },
@@ -1746,7 +1746,7 @@
         "propagatedBuildInputs": [],
         "name": "kgoldrunner-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kgoldrunner-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kgoldrunner-15.04.3.tar.xz",
             "name": "kgoldrunner-15.04.3.tar.xz",
             "sha256": "171q6v3nivr64vq2wn25hfv1zhrrmlf97rd128nxscb4qzk0zcnm"
         },
@@ -1764,7 +1764,7 @@
         "propagatedBuildInputs": [],
         "name": "kiriki-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kiriki-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kiriki-15.04.3.tar.xz",
             "name": "kiriki-15.04.3.tar.xz",
             "sha256": "14s37qs7f0qgpms1syakjj9amkwa0d1va8yrbmlwfbk5dvx953ls"
         },
@@ -1782,7 +1782,7 @@
         "propagatedBuildInputs": [],
         "name": "sweeper-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/sweeper-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/sweeper-15.04.3.tar.xz",
             "name": "sweeper-15.04.3.tar.xz",
             "sha256": "156vmxapddlbdhwpdal2s2jr8i4zbn1yccpafqnn8qf0k0384v0l"
         },
@@ -1799,7 +1799,7 @@
         "propagatedBuildInputs": [],
         "name": "lokalize-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/lokalize-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/lokalize-15.04.3.tar.xz",
             "name": "lokalize-15.04.3.tar.xz",
             "sha256": "1dpbzcgx32n27v2k39w944dzl0i2pph84a02ck4c8864w31d0vf5"
         },
@@ -1834,7 +1834,7 @@
         "propagatedBuildInputs": [],
         "name": "kbounce-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kbounce-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kbounce-15.04.3.tar.xz",
             "name": "kbounce-15.04.3.tar.xz",
             "sha256": "1i0hyc3hb9qibqynkvi9n98a1gcvanw8k6rg0vngifzc3nv4750g"
         },
@@ -1871,7 +1871,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-eo-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-eo-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-eo-15.04.3.tar.xz",
             "name": "kde-l10n-eo-15.04.3.tar.xz",
             "sha256": "0ac3mmflgnfy3qgsbl8938cf2j0961xh5vvhxwk7wp5j0y1g7nd0"
         },
@@ -1892,7 +1892,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-is-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-is-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-is-15.04.3.tar.xz",
             "name": "kde-l10n-is-15.04.3.tar.xz",
             "sha256": "0lv7hcq6qp422y0byv8sak7wf62ws1ssmyggm6izsxaw01z6di9m"
         },
@@ -1913,7 +1913,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-sl-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-sl-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-sl-15.04.3.tar.xz",
             "name": "kde-l10n-sl-15.04.3.tar.xz",
             "sha256": "12zg0wbdrvx61qqdv11mx99ncxsnbs6ywf2qa2s5pv9ccj81zl0y"
         },
@@ -1934,7 +1934,7 @@
         "propagatedBuildInputs": [],
         "name": "libkcompactdisc-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/libkcompactdisc-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/libkcompactdisc-15.04.3.tar.xz",
             "name": "libkcompactdisc-15.04.3.tar.xz",
             "sha256": "0xfb10zvrmvp9hxzh05mk75wd2q8c17kd28kxzy6vzsys1ml23fy"
         },
@@ -1952,7 +1952,7 @@
         "propagatedBuildInputs": [],
         "name": "picmi-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/picmi-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/picmi-15.04.3.tar.xz",
             "name": "picmi-15.04.3.tar.xz",
             "sha256": "08r5k1hs4ja724d3hgq17cwjr96xqhi09l1fr1ls6hrij6vw2qaj"
         },
@@ -1971,7 +1971,7 @@
         "propagatedBuildInputs": [],
         "name": "superkaramba-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/superkaramba-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/superkaramba-15.04.3.tar.xz",
             "name": "superkaramba-15.04.3.tar.xz",
             "sha256": "1qd2gi0jllqr2f3wmv5n3smljfgirray8hba5k062ka3fjl6ssqx"
         },
@@ -1990,7 +1990,7 @@
         "propagatedBuildInputs": [],
         "name": "gwenview-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/gwenview-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/gwenview-15.04.3.tar.xz",
             "name": "gwenview-15.04.3.tar.xz",
             "sha256": "16p6dz8z63h5d6l5cjz61shpd30bawxgcasn55g6v7gk6rxdrvn2"
         },
@@ -2030,7 +2030,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-fa-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-fa-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-fa-15.04.3.tar.xz",
             "name": "kde-l10n-fa-15.04.3.tar.xz",
             "sha256": "0fslss3bz1kzjca3zy923sq8p54jyl1bvqk1qsmv3lmws2881djl"
         },
@@ -2051,7 +2051,7 @@
         "propagatedBuildInputs": [],
         "name": "kpat-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kpat-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kpat-15.04.3.tar.xz",
             "name": "kpat-15.04.3.tar.xz",
             "sha256": "08zb9r291wig1iwh3j7h493ncjfj55255f3pf5ag9nrq44ykvk11"
         },
@@ -2095,7 +2095,7 @@
         "propagatedBuildInputs": [],
         "name": "klettres-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/klettres-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/klettres-15.04.3.tar.xz",
             "name": "klettres-15.04.3.tar.xz",
             "sha256": "0pqdjm5ixkfrxbp20ypgqx18wxyk0mnrmv2bqf6nk3ybwrdfb5y5"
         },
@@ -2129,7 +2129,7 @@
         "propagatedBuildInputs": [],
         "name": "kdelibs-4.14.10",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdelibs-4.14.10.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdelibs-4.14.10.tar.xz",
             "name": "kdelibs-4.14.10.tar.xz",
             "sha256": "156ajl4al6s2vqyl920yxd2rrs7b77348233xa3bgg5jn2ysgx80"
         },
@@ -2202,7 +2202,7 @@
         "propagatedBuildInputs": [],
         "name": "katomic-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/katomic-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/katomic-15.04.3.tar.xz",
             "name": "katomic-15.04.3.tar.xz",
             "sha256": "0j3khd1yiyq2y9c4rm36cf79frml7xhzb1jgxab6hshyzcr10lc3"
         },
@@ -2235,7 +2235,7 @@
         "propagatedBuildInputs": [],
         "name": "kollision-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kollision-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kollision-15.04.3.tar.xz",
             "name": "kollision-15.04.3.tar.xz",
             "sha256": "0x45mjm6irhgrv0jmpaxa55d38h1m3c4jry5hmv8r8x4c7l7z565"
         },
@@ -2273,7 +2273,7 @@
         "propagatedBuildInputs": [],
         "name": "klines-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/klines-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/klines-15.04.3.tar.xz",
             "name": "klines-15.04.3.tar.xz",
             "sha256": "0v5r720i996qq8hrlz8x9avrdh0dnqxbxz7h1wr4mhmz5iqj2s9c"
         },
@@ -2312,7 +2312,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-ru-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-ru-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-ru-15.04.3.tar.xz",
             "name": "kde-l10n-ru-15.04.3.tar.xz",
             "sha256": "0blm1fmvx7i0dzvf46qngq7cb9p16pw93v3j4bf63r24671w40xj"
         },
@@ -2333,7 +2333,7 @@
         "propagatedBuildInputs": [],
         "name": "kcalc-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kcalc-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kcalc-15.04.3.tar.xz",
             "name": "kcalc-15.04.3.tar.xz",
             "sha256": "0hxva8l2x5v6k2ry25zzzral6cdia1ypk1iz37qfnb20myfv7x6q"
         },
@@ -2363,7 +2363,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-mr-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-mr-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-mr-15.04.3.tar.xz",
             "name": "kde-l10n-mr-15.04.3.tar.xz",
             "sha256": "1yvjwcdsnf5pf8izb8fifsd2rsrvmkw704iw5m6yzh7fzdy6qyhg"
         },
@@ -2384,7 +2384,7 @@
         "propagatedBuildInputs": [],
         "name": "lskat-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/lskat-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/lskat-15.04.3.tar.xz",
             "name": "lskat-15.04.3.tar.xz",
             "sha256": "188pq09afxyapwnx7bc4v5hc5224049q2nkywgnl161sl8jhb40v"
         },
@@ -2402,7 +2402,7 @@
         "propagatedBuildInputs": [],
         "name": "kcolorchooser-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kcolorchooser-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kcolorchooser-15.04.3.tar.xz",
             "name": "kcolorchooser-15.04.3.tar.xz",
             "sha256": "1rq4r3sn3rhd6whqhchzy2cvpqik43naikh8sdzinwpp968sbz0l"
         },
@@ -2419,7 +2419,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-kk-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-kk-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-kk-15.04.3.tar.xz",
             "name": "kde-l10n-kk-15.04.3.tar.xz",
             "sha256": "0ywz646pv3dfbhbsijrk7l47l96hw3n7mds2zplmw5624wlfz7dn"
         },
@@ -2440,7 +2440,7 @@
         "propagatedBuildInputs": [],
         "name": "kblocks-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kblocks-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kblocks-15.04.3.tar.xz",
             "name": "kblocks-15.04.3.tar.xz",
             "sha256": "1iizgcj75ayr4ckpw85igcy8r6ia594sshgy1x5yir4i2jiaxr1m"
         },
@@ -2480,7 +2480,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-lt-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-lt-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-lt-15.04.3.tar.xz",
             "name": "kde-l10n-lt-15.04.3.tar.xz",
             "sha256": "1y8a7py2r3b35kvjmzpw4vgzjjmfhl44bjd0qjsyh4323q6mc4lw"
         },
@@ -2501,7 +2501,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-cs-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-cs-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-cs-15.04.3.tar.xz",
             "name": "kde-l10n-cs-15.04.3.tar.xz",
             "sha256": "0pjvyhg2x85l2ns5zhhyn4ij26l3kaq7yf4nb3qh67radqm4kd3w"
         },
@@ -2522,7 +2522,7 @@
         "propagatedBuildInputs": [],
         "name": "kblackbox-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kblackbox-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kblackbox-15.04.3.tar.xz",
             "name": "kblackbox-15.04.3.tar.xz",
             "sha256": "1al2qzfy9773zqs6f98zqi110dmzlaa60a45pzfmmamjlh0nf5ay"
         },
@@ -2550,7 +2550,7 @@
         "propagatedBuildInputs": [],
         "name": "libkdeedu-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/libkdeedu-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/libkdeedu-15.04.3.tar.xz",
             "name": "libkdeedu-15.04.3.tar.xz",
             "sha256": "0sm3aqchxmv6nap003mpklk6yrkqlqrp5zlyvc6hn764mjm80mxr"
         },
@@ -2567,7 +2567,7 @@
         "propagatedBuildInputs": [],
         "name": "amor-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/amor-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/amor-15.04.3.tar.xz",
             "name": "amor-15.04.3.tar.xz",
             "sha256": "197vvdw6zsn19j5xnddaz60xsmk6hv4846hxvqsybi3k0sldnb8f"
         },
@@ -2584,7 +2584,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-eu-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-eu-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-eu-15.04.3.tar.xz",
             "name": "kde-l10n-eu-15.04.3.tar.xz",
             "sha256": "0cq453v58yw4nkj3a3zmk0994779f6ay1vvgmk8fz6ychy1sx4mw"
         },
@@ -2605,7 +2605,7 @@
         "propagatedBuildInputs": [],
         "name": "kamera-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kamera-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kamera-15.04.3.tar.xz",
             "name": "kamera-15.04.3.tar.xz",
             "sha256": "1xngcscz2cj3x292gf1fn6yigbq7nafwf4k3f2dgghb8yxnxzqrz"
         },
@@ -2623,7 +2623,7 @@
         "propagatedBuildInputs": [],
         "name": "pairs-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/pairs-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/pairs-15.04.3.tar.xz",
             "name": "pairs-15.04.3.tar.xz",
             "sha256": "1pzmxahr82rwahvcn8573qnw843nfyrqpmffngz02lj7fhxc7n9v"
         },
@@ -2640,7 +2640,7 @@
         "propagatedBuildInputs": [],
         "name": "dragon-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/dragon-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/dragon-15.04.3.tar.xz",
             "name": "dragon-15.04.3.tar.xz",
             "sha256": "0i1zl23hsf9rykd415xjh5p2v1cmkifwljxhvqyhn1x4bv729mk1"
         },
@@ -2657,7 +2657,7 @@
         "propagatedBuildInputs": [],
         "name": "kmplot-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kmplot-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kmplot-15.04.3.tar.xz",
             "name": "kmplot-15.04.3.tar.xz",
             "sha256": "1ymhw5iwdksbh6il0ivcagmhv0qchxmh17bawkd20bn2yh8w9njd"
         },
@@ -2686,7 +2686,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-base-artwork-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-base-artwork-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-base-artwork-15.04.3.tar.xz",
             "name": "kde-base-artwork-15.04.3.tar.xz",
             "sha256": "10g3335ghz4pkyqqym8ay7lm6aw85gkk1y8bykpskyzpgv9kpc7r"
         },
@@ -2703,7 +2703,7 @@
         "propagatedBuildInputs": [],
         "name": "blinken-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/blinken-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/blinken-15.04.3.tar.xz",
             "name": "blinken-15.04.3.tar.xz",
             "sha256": "0ngg0l75vshcw288kd1141038dq1ayggid6g9r1c6djm7is17fn0"
         },
@@ -2731,7 +2731,7 @@
         "propagatedBuildInputs": [],
         "name": "konquest-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/konquest-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/konquest-15.04.3.tar.xz",
             "name": "konquest-15.04.3.tar.xz",
             "sha256": "092z41v548yns87n677ic3jqcjs11lya7znakw1wg8il2iq4p8ad"
         },
@@ -2749,7 +2749,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-he-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-he-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-he-15.04.3.tar.xz",
             "name": "kde-l10n-he-15.04.3.tar.xz",
             "sha256": "083c5gxxgvibg5xryyh919h4sli3z129cwqi8x9bjzmqdjd1b3a7"
         },
@@ -2770,7 +2770,7 @@
         "propagatedBuildInputs": [],
         "name": "bovo-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/bovo-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/bovo-15.04.3.tar.xz",
             "name": "bovo-15.04.3.tar.xz",
             "sha256": "0fjvxvz8f3vr8sv8grpkwyhfvbcv7hayvsvmw7f1gpiamq7m7aab"
         },
@@ -2800,7 +2800,7 @@
         "propagatedBuildInputs": [],
         "name": "ktimer-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ktimer-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ktimer-15.04.3.tar.xz",
             "name": "ktimer-15.04.3.tar.xz",
             "sha256": "1pixq0nh6n4rm4pvpabrly2wxsq58a719k7fj70w6a541chsmy77"
         },
@@ -2829,7 +2829,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-hu-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-hu-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-hu-15.04.3.tar.xz",
             "name": "kde-l10n-hu-15.04.3.tar.xz",
             "sha256": "0ql1yh5hmzdxmr6dnzsl08rxmvgrb4zcs6rk1r0jqkcfnwlhdf53"
         },
@@ -2850,7 +2850,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-ro-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-ro-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-ro-15.04.3.tar.xz",
             "name": "kde-l10n-ro-15.04.3.tar.xz",
             "sha256": "0ix4p8alq6xrsgbwv23xijcnwpd8gcf96zsd59bfpmvykxqmwpdq"
         },
@@ -2871,7 +2871,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-sv-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-sv-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-sv-15.04.3.tar.xz",
             "name": "kde-l10n-sv-15.04.3.tar.xz",
             "sha256": "0qpkl0dqw6jwb0xy1adjibhabga32hzk0rhwl75dw7bw257aka6f"
         },
@@ -2892,7 +2892,7 @@
         "propagatedBuildInputs": [],
         "name": "kgamma-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kgamma-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kgamma-15.04.3.tar.xz",
             "name": "kgamma-15.04.3.tar.xz",
             "sha256": "0wdx2xv2jkhdlbcy46ylg6c2aib4rj1gfbwc7zxwfcm52amra6a8"
         },
@@ -2910,7 +2910,7 @@
         "propagatedBuildInputs": [],
         "name": "kanagram-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kanagram-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kanagram-15.04.3.tar.xz",
             "name": "kanagram-15.04.3.tar.xz",
             "sha256": "18aix8r0ziprk2i8hdp6jis2i5b23q2r46x3y4lncgxs1ldgv74b"
         },
@@ -2946,7 +2946,7 @@
         "propagatedBuildInputs": [],
         "name": "kstars-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kstars-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kstars-15.04.3.tar.xz",
             "name": "kstars-15.04.3.tar.xz",
             "sha256": "1lnspbgg037id7jq2fjf3p7rr819jd0h4hs21hxqifcsx2qm90qp"
         },
@@ -2997,7 +2997,7 @@
         "propagatedBuildInputs": [],
         "name": "kdeartwork-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdeartwork-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdeartwork-15.04.3.tar.xz",
             "name": "kdeartwork-15.04.3.tar.xz",
             "sha256": "1ay8xwnniy9gd4vfnnd9h5i1yybv4w5fjpycn58xdkhwf0zi229p"
         },
@@ -3019,7 +3019,7 @@
         "propagatedBuildInputs": [],
         "name": "kfloppy-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kfloppy-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kfloppy-15.04.3.tar.xz",
             "name": "kfloppy-15.04.3.tar.xz",
             "sha256": "0jzvcm1kkb0zzvmb96zl2xv0ya4a3ilirqq8zwjgzh36s06y1h7j"
         },
@@ -3036,7 +3036,7 @@
         "propagatedBuildInputs": [],
         "name": "jovie-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/jovie-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/jovie-15.04.3.tar.xz",
             "name": "jovie-15.04.3.tar.xz",
             "sha256": "02bfx985wggmb8bbca6yz5hgfjxg0zniqsbxap3h4baiba5n2rpn"
         },
@@ -3055,7 +3055,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-zh_TW-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-zh_TW-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-zh_TW-15.04.3.tar.xz",
             "name": "kde-l10n-zh_TW-15.04.3.tar.xz",
             "sha256": "1p19mzpa0cm7x5afc6x9j7xr83850hrz9fvn27h4gdc8s0gbmc9m"
         },
@@ -3076,7 +3076,7 @@
         "propagatedBuildInputs": [],
         "name": "kscd-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kscd-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kscd-15.04.3.tar.xz",
             "name": "kscd-15.04.3.tar.xz",
             "sha256": "0dy41w2vc53qks0z19azrwmf6p1y4jrh7bycj81prh2dinnpkra1"
         },
@@ -3096,7 +3096,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-uk-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-uk-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-uk-15.04.3.tar.xz",
             "name": "kde-l10n-uk-15.04.3.tar.xz",
             "sha256": "19xwxm3bjwjxzr7axr5my6n6pm12jn9gz6xrxxjpdnf1b8386y48"
         },
@@ -3117,7 +3117,7 @@
         "propagatedBuildInputs": [],
         "name": "konsole-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/konsole-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/konsole-15.04.3.tar.xz",
             "name": "konsole-15.04.3.tar.xz",
             "sha256": "147cx1ana0z5hg0vx0zgqavizk65s17a2pmyxd3fhdy3ad3c2ld0"
         },
@@ -3163,7 +3163,7 @@
         "propagatedBuildInputs": [],
         "name": "kruler-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kruler-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kruler-15.04.3.tar.xz",
             "name": "kruler-15.04.3.tar.xz",
             "sha256": "0ljssj6fqbpzsc7rvm8vyy6mpzll443w1xxbrima0dgvdc656lx0"
         },
@@ -3192,7 +3192,7 @@
         "propagatedBuildInputs": [],
         "name": "kubrick-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kubrick-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kubrick-15.04.3.tar.xz",
             "name": "kubrick-15.04.3.tar.xz",
             "sha256": "1gvamla9pxd0dj0yc8108pr31f1yf79x6ng87gmbi10nriw4dz27"
         },
@@ -3211,7 +3211,7 @@
         "propagatedBuildInputs": [],
         "name": "kdenetwork-filesharing-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdenetwork-filesharing-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdenetwork-filesharing-15.04.3.tar.xz",
             "name": "kdenetwork-filesharing-15.04.3.tar.xz",
             "sha256": "083j6159sjcq0d8j2n6id6fyha5a4wk4ii7sl177md63xsl4xax1"
         },
@@ -3228,7 +3228,7 @@
         "propagatedBuildInputs": [],
         "name": "dolphin-plugins-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/dolphin-plugins-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/dolphin-plugins-15.04.3.tar.xz",
             "name": "dolphin-plugins-15.04.3.tar.xz",
             "sha256": "0pfrydfb7qn3r5zjs6x83i05fqvzizrw0idh1faqv5br4hra9pzp"
         },
@@ -3246,7 +3246,7 @@
         "propagatedBuildInputs": [],
         "name": "kmines-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kmines-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kmines-15.04.3.tar.xz",
             "name": "kmines-15.04.3.tar.xz",
             "sha256": "0p8bfk8brh9y32qk9rpqcvpxk8if3y2m9mzh5mmg6d5bqv4r8v5a"
         },
@@ -3280,7 +3280,7 @@
         "propagatedBuildInputs": [],
         "name": "kspaceduel-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kspaceduel-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kspaceduel-15.04.3.tar.xz",
             "name": "kspaceduel-15.04.3.tar.xz",
             "sha256": "1w4b1vd6p16fg7j08sbmhd3cqd8n1y6xm761yziz20mkkgr1yvjm"
         },
@@ -3298,7 +3298,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-tr-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-tr-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-tr-15.04.3.tar.xz",
             "name": "kde-l10n-tr-15.04.3.tar.xz",
             "sha256": "0p201cjaf67ixcfdmqvxmigz5frly3w036ry15hmkqq3l2hz6q4l"
         },
@@ -3319,7 +3319,7 @@
         "propagatedBuildInputs": [],
         "name": "libkdcraw-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/libkdcraw-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/libkdcraw-15.04.3.tar.xz",
             "name": "libkdcraw-15.04.3.tar.xz",
             "sha256": "0hi5i07qzvw8mbk1yrv8w8l5zhbzgnfvvpv44ym56pcz4a9fmjfg"
         },
@@ -3337,7 +3337,7 @@
         "propagatedBuildInputs": [],
         "name": "ktp-approver-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ktp-approver-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ktp-approver-15.04.3.tar.xz",
             "name": "ktp-approver-15.04.3.tar.xz",
             "sha256": "051398wxm9cfnid2dvi4sycb61iygj8smg8f5xdfm31mfxdva3hn"
         },
@@ -3364,7 +3364,7 @@
         "propagatedBuildInputs": [],
         "name": "ktp-contact-runner-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ktp-contact-runner-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ktp-contact-runner-15.04.3.tar.xz",
             "name": "ktp-contact-runner-15.04.3.tar.xz",
             "sha256": "0bv83if7mwqwsblpnmdf87k6fvvjb21i6kwa7i1q9vnr7avka0yg"
         },
@@ -3392,7 +3392,7 @@
         "propagatedBuildInputs": [],
         "name": "kdepim-runtime-4.14.10",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdepim-runtime-4.14.10.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdepim-runtime-4.14.10.tar.xz",
             "name": "kdepim-runtime-4.14.10.tar.xz",
             "sha256": "0lndmza6x4969g9dgyl3p5zqh371nm1x8gciqy13wv34g0r1x3fn"
         },
@@ -3423,7 +3423,7 @@
         "propagatedBuildInputs": [],
         "name": "print-manager-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/print-manager-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/print-manager-15.04.3.tar.xz",
             "name": "print-manager-15.04.3.tar.xz",
             "sha256": "15mmypcxmgrypapss3nzi3vjrbmw7f547jbpbmsprcpij1klip6q"
         },
@@ -3462,7 +3462,7 @@
         "propagatedBuildInputs": [],
         "name": "oxygen-icons-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/oxygen-icons-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/oxygen-icons-15.04.3.tar.xz",
             "name": "oxygen-icons-15.04.3.tar.xz",
             "sha256": "07npzyrbw2fn1qd04imnv7cz0sisk7yllrwr2y21yr2i1gbncfqk"
         },
@@ -3477,7 +3477,7 @@
         "propagatedBuildInputs": [],
         "name": "umbrello-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/umbrello-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/umbrello-15.04.3.tar.xz",
             "name": "umbrello-15.04.3.tar.xz",
             "sha256": "0qil8814zc3pa11xqf0lz3lwkvp57j3iahhjzaw7famn8vfzjpmh"
         },
@@ -3496,7 +3496,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-ar-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-ar-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-ar-15.04.3.tar.xz",
             "name": "kde-l10n-ar-15.04.3.tar.xz",
             "sha256": "19kzdyjcrbjp5hwccvzyi2fd3gy3pm8yay64jpg9iln28ahzbx3b"
         },
@@ -3517,7 +3517,7 @@
         "propagatedBuildInputs": [],
         "name": "ktp-filetransfer-handler-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ktp-filetransfer-handler-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ktp-filetransfer-handler-15.04.3.tar.xz",
             "name": "ktp-filetransfer-handler-15.04.3.tar.xz",
             "sha256": "12z8zcrj2nhlhh1kyx565aaacczh7884hnid6rzrb2fmm58sx39h"
         },
@@ -3546,7 +3546,7 @@
         "propagatedBuildInputs": [],
         "name": "kdepimlibs-4.14.10",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdepimlibs-4.14.10.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdepimlibs-4.14.10.tar.xz",
             "name": "kdepimlibs-4.14.10.tar.xz",
             "sha256": "1hl4wmdsp3lswvzvspy8h9x31n38z9gj6l50plhz3v6nmna9dk68"
         },
@@ -3575,7 +3575,7 @@
         "propagatedBuildInputs": [],
         "name": "step-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/step-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/step-15.04.3.tar.xz",
             "name": "step-15.04.3.tar.xz",
             "sha256": "1nnjyw4jrqwdx0n34xw897kwq543vzyia8csyiadiqdq9hyzmlpg"
         },
@@ -3611,7 +3611,7 @@
         "propagatedBuildInputs": [],
         "name": "kmousetool-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kmousetool-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kmousetool-15.04.3.tar.xz",
             "name": "kmousetool-15.04.3.tar.xz",
             "sha256": "1allf52fw55fcwxzg43cqjhfan060xyv4avmqjf43bn23h25fmjs"
         },
@@ -3628,7 +3628,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-ja-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-ja-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-ja-15.04.3.tar.xz",
             "name": "kde-l10n-ja-15.04.3.tar.xz",
             "sha256": "1423jd7lkldnqslvww1ypvmdgzbydlibjy19gmrazlsnmfrp6zzs"
         },
@@ -3649,7 +3649,7 @@
         "propagatedBuildInputs": [],
         "name": "kdenlive-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdenlive-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdenlive-15.04.3.tar.xz",
             "name": "kdenlive-15.04.3.tar.xz",
             "sha256": "17v5r0fcb0j52a89v6ygsbap03cg4ah5v5jqy2lpck8y57vslvgv"
         },
@@ -3698,7 +3698,7 @@
         "propagatedBuildInputs": [],
         "name": "kbreakout-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kbreakout-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kbreakout-15.04.3.tar.xz",
             "name": "kbreakout-15.04.3.tar.xz",
             "sha256": "1wpc1r8xgz985514iiym49268rn4qa6msbslmc55r6bgyawjm1g1"
         },
@@ -3736,7 +3736,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-workspace-4.11.21",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-workspace-4.11.21.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-workspace-4.11.21.tar.xz",
             "name": "kde-workspace-4.11.21.tar.xz",
             "sha256": "13vwgzz838nlqryh8nhlx70c5msyl5alrqdqlcamncxg0a4cd5ki"
         },
@@ -3787,7 +3787,7 @@
         "propagatedBuildInputs": [],
         "name": "ffmpegthumbs-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ffmpegthumbs-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ffmpegthumbs-15.04.3.tar.xz",
             "name": "ffmpegthumbs-15.04.3.tar.xz",
             "sha256": "1di5v6bpf8zvw243dc7rdrzynvvwgnk6pnckg9zafhwsds6br5wc"
         },
@@ -3805,7 +3805,7 @@
         "propagatedBuildInputs": [],
         "name": "ktux-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ktux-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ktux-15.04.3.tar.xz",
             "name": "ktux-15.04.3.tar.xz",
             "sha256": "00b6fl056pcxdsgqzv81by10l8xpbijk8589nd0dmj74kca31qrn"
         },
@@ -3823,7 +3823,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-dev-utils-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-dev-utils-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-dev-utils-15.04.3.tar.xz",
             "name": "kde-dev-utils-15.04.3.tar.xz",
             "sha256": "0mykd3w2l0yfi18b8jpzdvhy2dzm9avwzfpbsscb8s19vsarqf2x"
         },
@@ -3840,7 +3840,7 @@
         "propagatedBuildInputs": [],
         "name": "libkeduvocdocument-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/libkeduvocdocument-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/libkeduvocdocument-15.04.3.tar.xz",
             "name": "libkeduvocdocument-15.04.3.tar.xz",
             "sha256": "1lx72m98x60ddzhqlf5jmnw64jh5pzh02hs4gv9vsgsvbjiizmix"
         },
@@ -3864,7 +3864,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-pl-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-pl-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-pl-15.04.3.tar.xz",
             "name": "kde-l10n-pl-15.04.3.tar.xz",
             "sha256": "1kzhwhf2jxmvkr3070qfhn51d7i44ni62dacghssdiisxkcvw0xi"
         },
@@ -3885,7 +3885,7 @@
         "propagatedBuildInputs": [],
         "name": "ktp-send-file-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ktp-send-file-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ktp-send-file-15.04.3.tar.xz",
             "name": "ktp-send-file-15.04.3.tar.xz",
             "sha256": "1yv4gmgcgi4rlxkispmlrlzi8jp3v1mfansh6w21lafallf3k8kf"
         },
@@ -3910,7 +3910,7 @@
         "propagatedBuildInputs": [],
         "name": "cantor-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/cantor-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/cantor-15.04.3.tar.xz",
             "name": "cantor-15.04.3.tar.xz",
             "sha256": "02n2pavs8wqngjm9lnw0g1ipdyv42d2pzii57p3nwplfhr8n0ia4"
         },
@@ -3951,7 +3951,7 @@
         "propagatedBuildInputs": [],
         "name": "libkcddb-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/libkcddb-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/libkcddb-15.04.3.tar.xz",
             "name": "libkcddb-15.04.3.tar.xz",
             "sha256": "0050h4g99wxggiqibfgrmc9zyqkv1l49x0h2k1r32gxl9lf6iid8"
         },
@@ -3969,7 +3969,7 @@
         "propagatedBuildInputs": [],
         "name": "bomber-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/bomber-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/bomber-15.04.3.tar.xz",
             "name": "bomber-15.04.3.tar.xz",
             "sha256": "15b79l3m280miaf32w9m48w5rysrizv7kqpc4dg8pwp7i4zbjigc"
         },
@@ -3998,7 +3998,7 @@
         "propagatedBuildInputs": [],
         "name": "libkface-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/libkface-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/libkface-15.04.3.tar.xz",
             "name": "libkface-15.04.3.tar.xz",
             "sha256": "1k3m8qhqw7xlqg0biidp5ckc1z73m0syxw20shjbmzhhwag5qlql"
         },
@@ -4016,7 +4016,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-nb-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-nb-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-nb-15.04.3.tar.xz",
             "name": "kde-l10n-nb-15.04.3.tar.xz",
             "sha256": "0p07mwcdk2anazcx2f86dxywmkpgxb5qnwlaah9zfqzlv915v4mp"
         },
@@ -4037,7 +4037,7 @@
         "propagatedBuildInputs": [],
         "name": "kturtle-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kturtle-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kturtle-15.04.3.tar.xz",
             "name": "kturtle-15.04.3.tar.xz",
             "sha256": "0qxymwmd7fdqqzbkj7jjziddmgr01vhnfhfy891m6mzrmhak6dcb"
         },
@@ -4064,7 +4064,7 @@
         "propagatedBuildInputs": [],
         "name": "svgpart-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/svgpart-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/svgpart-15.04.3.tar.xz",
             "name": "svgpart-15.04.3.tar.xz",
             "sha256": "1b6apnppn2qal1jc0z1mfss71dscvfx2i8wr25wq6mzy8y1ajwzr"
         },
@@ -4081,7 +4081,7 @@
         "propagatedBuildInputs": [],
         "name": "kdegraphics-mobipocket-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdegraphics-mobipocket-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdegraphics-mobipocket-15.04.3.tar.xz",
             "name": "kdegraphics-mobipocket-15.04.3.tar.xz",
             "sha256": "123fa5x6zdnm2c18i02azp9ingr2vkrxsrhfafa38v5b4y3jki6g"
         },
@@ -4099,7 +4099,7 @@
         "propagatedBuildInputs": [],
         "name": "krfb-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/krfb-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/krfb-15.04.3.tar.xz",
             "name": "krfb-15.04.3.tar.xz",
             "sha256": "0pa2xnbgg6rlb3my92kc4kr0sgifrjf8r0j594sdsyfz960hzd2l"
         },
@@ -4119,7 +4119,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-ko-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-ko-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-ko-15.04.3.tar.xz",
             "name": "kde-l10n-ko-15.04.3.tar.xz",
             "sha256": "0qs4mcds85rs4kqhck7n450makj295bnfrjlx2hgx1bzk8jpgl19"
         },
@@ -4140,7 +4140,7 @@
         "propagatedBuildInputs": [],
         "name": "libkgeomap-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/libkgeomap-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/libkgeomap-15.04.3.tar.xz",
             "name": "libkgeomap-15.04.3.tar.xz",
             "sha256": "1h0w1vdnxawgibp479vh1rsqz17gps459wxcixwxmcgb4xxrf1dk"
         },
@@ -4160,7 +4160,7 @@
         "propagatedBuildInputs": [],
         "name": "kalgebra-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kalgebra-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kalgebra-15.04.3.tar.xz",
             "name": "kalgebra-15.04.3.tar.xz",
             "sha256": "1h67lcxsvsccqk66k6xs1ah2nb1p05p1mcdkcbqjfs0bpw8mby5z"
         },
@@ -4195,7 +4195,7 @@
         "propagatedBuildInputs": [],
         "name": "rocs-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/rocs-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/rocs-15.04.3.tar.xz",
             "name": "rocs-15.04.3.tar.xz",
             "sha256": "123kj345nh1pq1d3w04k2ssf26q2hp6w8mnvlpza4fgav9lrw57m"
         },
@@ -4237,7 +4237,7 @@
         "propagatedBuildInputs": [],
         "name": "kbruch-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kbruch-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kbruch-15.04.3.tar.xz",
             "name": "kbruch-15.04.3.tar.xz",
             "sha256": "0fivkpa5cr5ahhh1h1z90vl1sr35ks0kmw2mnpk42wgpgipdfbfx"
         },
@@ -4264,7 +4264,7 @@
         "propagatedBuildInputs": [],
         "name": "ksudoku-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ksudoku-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ksudoku-15.04.3.tar.xz",
             "name": "ksudoku-15.04.3.tar.xz",
             "sha256": "130v3fhhcxf2fkrhkgb7lqjdv4h7kwzn6z133hmqd617s53pnmfw"
         },
@@ -4283,7 +4283,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-el-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-el-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-el-15.04.3.tar.xz",
             "name": "kde-l10n-el-15.04.3.tar.xz",
             "sha256": "1h5hj8li66h5p309rcyk4f6sahdgs25ihdfy673bd7hjz51hk3da"
         },
@@ -4304,7 +4304,7 @@
         "propagatedBuildInputs": [],
         "name": "kopete-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kopete-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kopete-15.04.3.tar.xz",
             "name": "kopete-15.04.3.tar.xz",
             "sha256": "07d51in5h6f07gf12pr2fb2w7gkwyca04ra8vy7m373lrkv71i35"
         },
@@ -4352,7 +4352,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-de-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-de-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-de-15.04.3.tar.xz",
             "name": "kde-l10n-de-15.04.3.tar.xz",
             "sha256": "1yvc9z5fzhpv6xvc2r69fvfxhr6p6fp2b7hpfs7l0v2p1vlw59fl"
         },
@@ -4373,7 +4373,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-nds-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-nds-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-nds-15.04.3.tar.xz",
             "name": "kde-l10n-nds-15.04.3.tar.xz",
             "sha256": "135ibbcddyqw65v0gvb1cvd6d736wwdvqy2q819808z44ylah8ha"
         },
@@ -4394,7 +4394,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-pa-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-pa-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-pa-15.04.3.tar.xz",
             "name": "kde-l10n-pa-15.04.3.tar.xz",
             "sha256": "0dksyld8jn3qngnb7r4g0ir2zy6c7dm2gx8ws5zz3k7ism61fqby"
         },
@@ -4426,7 +4426,7 @@
         ],
         "name": "okteta-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/okteta-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/okteta-15.04.3.tar.xz",
             "name": "okteta-15.04.3.tar.xz",
             "sha256": "1z52n88kjkzjdsvyr0sksh0kmjya5gwjra6gnjaqfd25nbralgnc"
         },
@@ -4471,7 +4471,7 @@
         "propagatedBuildInputs": [],
         "name": "ktp-accounts-kcm-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ktp-accounts-kcm-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ktp-accounts-kcm-15.04.3.tar.xz",
             "name": "ktp-accounts-kcm-15.04.3.tar.xz",
             "sha256": "00gvcps8h5bi612fwyy5xgb855avv7ad4gfhbbpqz2bykgsjfgj7"
         },
@@ -4508,7 +4508,7 @@
         "propagatedBuildInputs": [],
         "name": "zeroconf-ioslave-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/zeroconf-ioslave-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/zeroconf-ioslave-15.04.3.tar.xz",
             "name": "zeroconf-ioslave-15.04.3.tar.xz",
             "sha256": "141hfbcikpwsr9il3ysjslprcqp1687ncrrhjw3h1qq5pdm8z96p"
         },
@@ -4525,7 +4525,7 @@
         "propagatedBuildInputs": [],
         "name": "kremotecontrol-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kremotecontrol-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kremotecontrol-15.04.3.tar.xz",
             "name": "kremotecontrol-15.04.3.tar.xz",
             "sha256": "0zia5j0svgprglckfkf9vb7d5dkgggil7a2qc55yhpr2ihnvryvl"
         },
@@ -4543,7 +4543,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-bs-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-bs-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-bs-15.04.3.tar.xz",
             "name": "kde-l10n-bs-15.04.3.tar.xz",
             "sha256": "0lf1nxf068fyl7vck3vqdzaj8f5mpq3lzs10rg5qkm3a3qli0drc"
         },
@@ -4564,7 +4564,7 @@
         "propagatedBuildInputs": [],
         "name": "ark-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ark-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ark-15.04.3.tar.xz",
             "name": "ark-15.04.3.tar.xz",
             "sha256": "1065i6vs1cswjd0lb7b01b7fl6k5p73pfbp5nfzjxi9a1sl4sql5"
         },
@@ -4599,7 +4599,7 @@
         ],
         "name": "libkdegames-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/libkdegames-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/libkdegames-15.04.3.tar.xz",
             "name": "libkdegames-15.04.3.tar.xz",
             "sha256": "051bn6f3f1blzxkm16lqnplwba9c6q0ig6ah819vadw7qbmls44n"
         },
@@ -4650,7 +4650,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-hi-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-hi-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-hi-15.04.3.tar.xz",
             "name": "kde-l10n-hi-15.04.3.tar.xz",
             "sha256": "1xjicw98r69jlby116xy3g5z6kbblry1h0wfrsyp1m8s8fm4f2gm"
         },
@@ -4671,7 +4671,7 @@
         "propagatedBuildInputs": [],
         "name": "cervisia-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/cervisia-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/cervisia-15.04.3.tar.xz",
             "name": "cervisia-15.04.3.tar.xz",
             "sha256": "18fl0krby18y94xqc8g78rplgsidqwzxwvv4j3xypsjvhaalrw7q"
         },
@@ -4688,7 +4688,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-en_GB-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-en_GB-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-en_GB-15.04.3.tar.xz",
             "name": "kde-l10n-en_GB-15.04.3.tar.xz",
             "sha256": "0wlca0rp01x8z4ff26db8nsiafly2frk4fvxsw86rc7cwb15ck7q"
         },
@@ -4709,7 +4709,7 @@
         "propagatedBuildInputs": [],
         "name": "kapman-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kapman-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kapman-15.04.3.tar.xz",
             "name": "kapman-15.04.3.tar.xz",
             "sha256": "0avlvf4nw89xa224g5h53rf4xmmb32z25ia4ilpiaglsm5lavkf8"
         },
@@ -4740,7 +4740,7 @@
         "propagatedBuildInputs": [],
         "name": "kdeedu-data-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdeedu-data-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdeedu-data-15.04.3.tar.xz",
             "name": "kdeedu-data-15.04.3.tar.xz",
             "sha256": "14k0dcbhxkfpb7rwrp08lzd3m201v3gahv1cd9hy1wzga513kbm2"
         },
@@ -4757,7 +4757,7 @@
         "propagatedBuildInputs": [],
         "name": "kgeography-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kgeography-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kgeography-15.04.3.tar.xz",
             "name": "kgeography-15.04.3.tar.xz",
             "sha256": "1qra3j6zrwihm5c896adh0acy7lgbkpcw8ja22dv519926slbi84"
         },
@@ -4787,7 +4787,7 @@
         "propagatedBuildInputs": [],
         "name": "kdesdk-thumbnailers-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdesdk-thumbnailers-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdesdk-thumbnailers-15.04.3.tar.xz",
             "name": "kdesdk-thumbnailers-15.04.3.tar.xz",
             "sha256": "06vznwg9fhrky5bf46hfaxw4dyh9nfr0v0slh77ys0szn18cns7c"
         },
@@ -4805,7 +4805,7 @@
         "propagatedBuildInputs": [],
         "name": "kppp-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kppp-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kppp-15.04.3.tar.xz",
             "name": "kppp-15.04.3.tar.xz",
             "sha256": "0ibmc0axcxg4x4dcwdjhq4mgvfrcm18n2g12qd2b27czhiffbq7b"
         },
@@ -4822,7 +4822,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-ug-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-ug-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-ug-15.04.3.tar.xz",
             "name": "kde-l10n-ug-15.04.3.tar.xz",
             "sha256": "1mrgcx242jnh32kz522jnc3wihn7a72231pibw6sh2hmykcv5yjl"
         },
@@ -4843,7 +4843,7 @@
         "propagatedBuildInputs": [],
         "name": "kgpg-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kgpg-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kgpg-15.04.3.tar.xz",
             "name": "kgpg-15.04.3.tar.xz",
             "sha256": "13hswfxfs4h58aizydl4v8i8zlac0k7qp5br7aqa5p9fpaj8496b"
         },
@@ -4862,7 +4862,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-lv-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-lv-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-lv-15.04.3.tar.xz",
             "name": "kde-l10n-lv-15.04.3.tar.xz",
             "sha256": "1ac377lba57wjmnqr9jqjmq8qn9a15hvydbnbj35akqchppcvpk2"
         },
@@ -4883,7 +4883,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-hr-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-hr-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-hr-15.04.3.tar.xz",
             "name": "kde-l10n-hr-15.04.3.tar.xz",
             "sha256": "12n0s8a8iy1bldnjzhg9jiy896c9vyj5zj23mxlbmzchz5gz9bby"
         },
@@ -4904,7 +4904,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-ca-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-ca-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-ca-15.04.3.tar.xz",
             "name": "kde-l10n-ca-15.04.3.tar.xz",
             "sha256": "1yag38xhairw08zm0q5qrwzria3hzs75cipgf4xrwii946rx3g44"
         },
@@ -4925,7 +4925,7 @@
         "propagatedBuildInputs": [],
         "name": "mplayerthumbs-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/mplayerthumbs-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/mplayerthumbs-15.04.3.tar.xz",
             "name": "mplayerthumbs-15.04.3.tar.xz",
             "sha256": "0ah79wl2qi15y874ds39f53pz2qsc0iwy7h33jzrqmy85sx92g71"
         },
@@ -4942,7 +4942,7 @@
         "propagatedBuildInputs": [],
         "name": "kate-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kate-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kate-15.04.3.tar.xz",
             "name": "kate-15.04.3.tar.xz",
             "sha256": "0lr0f23ylv6rlm3yqzkrklnj9c0rsfnsmn0gnkd7bw7hwcgb0wfz"
         },
@@ -4973,7 +4973,7 @@
         "propagatedBuildInputs": [],
         "name": "ksaneplugin-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ksaneplugin-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ksaneplugin-15.04.3.tar.xz",
             "name": "ksaneplugin-15.04.3.tar.xz",
             "sha256": "1zy2ybdgihji4blz9vwfmnw0k1b8s60qfhpjcmrgzlbc4kp0wag7"
         },
@@ -4993,7 +4993,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-runtime-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-runtime-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-runtime-15.04.3.tar.xz",
             "name": "kde-runtime-15.04.3.tar.xz",
             "sha256": "0fyd9wksb7lxqsbq24q2vhy35a7pfr9mqa1xgpx5rjcml3n1vlpq"
         },
@@ -5034,7 +5034,7 @@
         "propagatedBuildInputs": [],
         "name": "ktp-text-ui-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ktp-text-ui-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ktp-text-ui-15.04.3.tar.xz",
             "name": "ktp-text-ui-15.04.3.tar.xz",
             "sha256": "0my4gxw73pmpi45xa2s3ny933kmbfal733iq235vpsqqmdyz7mah"
         },
@@ -5073,7 +5073,7 @@
         "propagatedBuildInputs": [],
         "name": "kaccounts-providers-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kaccounts-providers-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kaccounts-providers-15.04.3.tar.xz",
             "name": "kaccounts-providers-15.04.3.tar.xz",
             "sha256": "0lpdcjqqrl3c9l6asfqjbas79g145i6a8ix6dhzc8s77vp1wqxil"
         },
@@ -5092,7 +5092,7 @@
         "propagatedBuildInputs": [],
         "name": "kteatime-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kteatime-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kteatime-15.04.3.tar.xz",
             "name": "kteatime-15.04.3.tar.xz",
             "sha256": "1359y527nlwzb6jhid5wl3y93ajxawbjd1hf0pmfg5pxpy7aykzg"
         },
@@ -5124,7 +5124,7 @@
         "propagatedBuildInputs": [],
         "name": "krdc-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/krdc-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/krdc-15.04.3.tar.xz",
             "name": "krdc-15.04.3.tar.xz",
             "sha256": "0ylq0dpn45cp1s3y3gb7mrvkjx798knpfmb50lhl3397z1niw4zv"
         },
@@ -5144,7 +5144,7 @@
         "propagatedBuildInputs": [],
         "name": "klickety-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/klickety-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/klickety-15.04.3.tar.xz",
             "name": "klickety-15.04.3.tar.xz",
             "sha256": "0zxnclm74l77f6lwz74wkk831sidwcsd6lc94p853gngmrra5a0c"
         },
@@ -5162,7 +5162,7 @@
         "propagatedBuildInputs": [],
         "name": "kolf-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kolf-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kolf-15.04.3.tar.xz",
             "name": "kolf-15.04.3.tar.xz",
             "sha256": "1vhhy3pffp4f92zm1k1ksx18gvv404jfa6p28ybsp23fb22z8f90"
         },
@@ -5180,7 +5180,7 @@
         "propagatedBuildInputs": [],
         "name": "ktouch-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ktouch-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ktouch-15.04.3.tar.xz",
             "name": "ktouch-15.04.3.tar.xz",
             "sha256": "03xvj2rpamw5b6bpbiqkk01jhnkhcqi3c4rxhd0dxqi3da0r1211"
         },
@@ -5200,7 +5200,7 @@
         "propagatedBuildInputs": [],
         "name": "kdepim-4.14.10",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdepim-4.14.10.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdepim-4.14.10.tar.xz",
             "name": "kdepim-4.14.10.tar.xz",
             "sha256": "1qmpbgwchjzfrw8nyvx5ibd6zl05w4kn341519w334r5h5dqdbgd"
         },
@@ -5230,7 +5230,7 @@
         "propagatedBuildInputs": [],
         "name": "poxml-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/poxml-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/poxml-15.04.3.tar.xz",
             "name": "poxml-15.04.3.tar.xz",
             "sha256": "1n49q5rrhi878jwcvgzy8cri2dd2ycv24m4b0js7j1vxl3cy26n9"
         },
@@ -5249,7 +5249,7 @@
         "propagatedBuildInputs": [],
         "name": "okular-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/okular-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/okular-15.04.3.tar.xz",
             "name": "okular-15.04.3.tar.xz",
             "sha256": "03mmdvnjbaaph4zdpddpfs55v7idn95cf1wvxv540flx3qzn9s7z"
         },
@@ -5282,7 +5282,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-fi-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-fi-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-fi-15.04.3.tar.xz",
             "name": "kde-l10n-fi-15.04.3.tar.xz",
             "sha256": "07vk6c62g1fywpqbvaa29gwgl4prcyxk4l1j15cj2zwrkl35hi20"
         },
@@ -5307,7 +5307,7 @@
         ],
         "name": "ktp-common-internals-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ktp-common-internals-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ktp-common-internals-15.04.3.tar.xz",
             "name": "ktp-common-internals-15.04.3.tar.xz",
             "sha256": "1i59k2063590y1nbzbpgdmnxyk4nap2sazr57pi8y4lqzzycr7qv"
         },
@@ -5349,7 +5349,7 @@
         "propagatedBuildInputs": [],
         "name": "kcachegrind-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kcachegrind-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kcachegrind-15.04.3.tar.xz",
             "name": "kcachegrind-15.04.3.tar.xz",
             "sha256": "1njlky2gsp9ac00id7kk0m19ygwfp5wpzjncmzvkcx65gdafhnwi"
         },
@@ -5366,7 +5366,7 @@
         "propagatedBuildInputs": [],
         "name": "kdf-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdf-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdf-15.04.3.tar.xz",
             "name": "kdf-15.04.3.tar.xz",
             "sha256": "1s8jhz9k4c913fzp88gxsrpxp183vk3rpj497aj0qqh5xrl4pz7a"
         },
@@ -5383,7 +5383,7 @@
         "propagatedBuildInputs": [],
         "name": "kajongg-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kajongg-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kajongg-15.04.3.tar.xz",
             "name": "kajongg-15.04.3.tar.xz",
             "sha256": "0gs7h6mx9ngvk2vhn4qn3qbcyf18aw97r1j7if4hqc3lr836zpbg"
         },
@@ -5401,7 +5401,7 @@
         "propagatedBuildInputs": [],
         "name": "ksquares-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ksquares-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ksquares-15.04.3.tar.xz",
             "name": "ksquares-15.04.3.tar.xz",
             "sha256": "0pczn92b0bbgqwqcah4dlhsj5qwqcm0v58j5schpxqvsxz7p26jx"
         },
@@ -5434,7 +5434,7 @@
         "propagatedBuildInputs": [],
         "name": "kshisen-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kshisen-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kshisen-15.04.3.tar.xz",
             "name": "kshisen-15.04.3.tar.xz",
             "sha256": "0kagbvw8kilv5908d4b20b7ayj8y44p8bm3av3rijvvz0mn7b4zx"
         },
@@ -5466,7 +5466,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-nn-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-nn-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-nn-15.04.3.tar.xz",
             "name": "kde-l10n-nn-15.04.3.tar.xz",
             "sha256": "1xizqrxakgfa3hqfcdm4q97vgzj0lsx8np2jr4xvmd94bh2caw56"
         },
@@ -5487,7 +5487,7 @@
         "propagatedBuildInputs": [],
         "name": "kdesdk-strigi-analyzers-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kdesdk-strigi-analyzers-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kdesdk-strigi-analyzers-15.04.3.tar.xz",
             "name": "kdesdk-strigi-analyzers-15.04.3.tar.xz",
             "sha256": "0n821gwvj2il1zf5s6nqaq58i5r4pn2vzcck1yl2y901shqw6vzb"
         },
@@ -5505,7 +5505,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-zh_CN-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-zh_CN-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-zh_CN-15.04.3.tar.xz",
             "name": "kde-l10n-zh_CN-15.04.3.tar.xz",
             "sha256": "0i3d9dqcb5222k9ys7n14lp9llv7pdcc1fwymnmzrsszr38vd24j"
         },
@@ -5526,7 +5526,7 @@
         "propagatedBuildInputs": [],
         "name": "ksnakeduel-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/ksnakeduel-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/ksnakeduel-15.04.3.tar.xz",
             "name": "ksnakeduel-15.04.3.tar.xz",
             "sha256": "08q6r4r5d29ikiqpbx8mfw79nxjjphw2r2capkbs3bd6ly30bzpx"
         },
@@ -5544,7 +5544,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-ia-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-ia-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-ia-15.04.3.tar.xz",
             "name": "kde-l10n-ia-15.04.3.tar.xz",
             "sha256": "17b42p7jw5nb97fp88lbg2f2pqy1zcsavisfp2h8wmd8sk4hfpd1"
         },
@@ -5565,7 +5565,7 @@
         "propagatedBuildInputs": [],
         "name": "granatier-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/granatier-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/granatier-15.04.3.tar.xz",
             "name": "granatier-15.04.3.tar.xz",
             "sha256": "1bi6p2xzgxzn6wdfjmxpxfms8z2cksgkkhsa6p0ngd6ln8plmdj9"
         },
@@ -5600,7 +5600,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-dev-scripts-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-dev-scripts-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-dev-scripts-15.04.3.tar.xz",
             "name": "kde-dev-scripts-15.04.3.tar.xz",
             "sha256": "0isa27ijgcqjcsh30cjg6hbrzpfwm1vjv1zi2blxxnfwmq2n1j0l"
         },
@@ -5619,7 +5619,7 @@
         "propagatedBuildInputs": [],
         "name": "khangman-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/khangman-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/khangman-15.04.3.tar.xz",
             "name": "khangman-15.04.3.tar.xz",
             "sha256": "13rbm2g29hvjia1c28r0svw5xjgvr133vqgkhp8b5vsrvz9kqjrn"
         },
@@ -5656,7 +5656,7 @@
         "propagatedBuildInputs": [],
         "name": "kde-l10n-sk-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/kde-l10n/kde-l10n-sk-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/kde-l10n/kde-l10n-sk-15.04.3.tar.xz",
             "name": "kde-l10n-sk-15.04.3.tar.xz",
             "sha256": "05vvxphhapc4kc90a4p2f7j447varc4jz69n6y0fkh0xg2rpk12j"
         },
@@ -5677,7 +5677,7 @@
         "propagatedBuildInputs": [],
         "name": "audiocd-kio-15.04.3",
         "src": {
-            "url": "stable/applications/15.04.3/src/audiocd-kio-15.04.3.tar.xz",
+            "url": "Attic/applications/15.04.3/src/audiocd-kio-15.04.3.tar.xz",
             "name": "audiocd-kio-15.04.3.tar.xz",
             "sha256": "0fwrjz4bkxinkzk52yv52jx2i6r9rm1nip056kddk718rqr224qi"
         },
