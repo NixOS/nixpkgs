@@ -8833,6 +8833,24 @@ in modules // {
     };
   };
 
+  flask_sqlalchemy = buildPythonPackage rec {
+    name = "Flask-SQLAlchemy-${version}";
+    version = "2.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/F/Flask-SQLAlchemy/${name}.tar.gz";
+      sha256 = "1i9ps5d5snih9xlqhrvmi3qfiygkmqzxh92n25kj4pf89kj4s965";
+    };
+
+    propagatedBuildInputs = with self ; [ flask sqlalchemy_1_0 ];
+
+    meta = {
+      description = "SQLAlchemy extension for Flask";
+      homepage = http://flask-sqlalchemy.pocoo.org/;
+      license = licenses.bsd3;
+    };
+  };
+
   wtforms = buildPythonPackage rec {
     version = "2.0.2";
     name = "wtforms-${version}";
