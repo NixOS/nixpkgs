@@ -2737,6 +2737,19 @@ in modules // {
     };
   };
 
+  github-cli = buildPythonPackage rec {
+    name = "github-cli-1.0.0";
+
+    propagatedBuildInputs = with self; [ simplejson ];
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/github-cli/${name}.tar.gz";
+      sha256 = "0csr8q208a0nixxs8mx6nbak19sylcpjcng50c2i6qldsxfbh1af";
+    };
+    meta.maintainers = with maintainers; [ garbas ];
+  };
+
   cassandra-driver = buildPythonPackage rec {
     name = "cassandra-driver-2.6.0c2";
 
