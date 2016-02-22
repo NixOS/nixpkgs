@@ -9,7 +9,7 @@ let
   common = { name, src }: stdenv.mkDerivation rec {
     inherit name src;
 
-    outputs = [ "out" "doc" ];
+    outputs = [ "out" "man" "doc" ];
 
     nativeBuildInputs = [ perl pkgconfig ];
 
