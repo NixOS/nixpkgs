@@ -929,6 +929,8 @@ let
     pynotify = pythonPackages.notify;
   };
 
+  playerctl = callPackage ../tools/audio/playerctl { };
+
   syscall_limiter = callPackage ../os-specific/linux/syscall_limiter {};
 
   syslogng = callPackage ../tools/system/syslog-ng { };
