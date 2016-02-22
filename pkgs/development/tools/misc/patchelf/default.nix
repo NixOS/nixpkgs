@@ -10,6 +10,9 @@ stdenv.mkDerivation rec {
 
   setupHook = [ ./setup-hook.sh ];
 
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardening_stackprotector = false;
+
   meta = {
     homepage = http://nixos.org/patchelf.html;
     license = "GPL";

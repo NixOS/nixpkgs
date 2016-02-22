@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
   # mpfr.h requires gmp.h
   propagatedBuildInputs = [ gmp ];
 
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardening_stackprotector = false;
+
   configureFlags =
     stdenv.lib.optional stdenv.isSunOS "--disable-thread-safe" ++
     stdenv.lib.optional stdenv.is64bit "--with-pic";

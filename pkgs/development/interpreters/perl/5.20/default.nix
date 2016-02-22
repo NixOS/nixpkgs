@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardening_stackprotector = false;
+
   patches =
     [ # Do not look in /usr etc. for dependencies.
       ./no-sys-dirs.patch

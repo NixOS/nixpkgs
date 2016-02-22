@@ -74,7 +74,7 @@ let version = "4.9.3";
       ++ optional langFortran ../gfortran-driving.patch
       # The NXConstStr.patch can be removed at 4.9.4
       ++ optional stdenv.isDarwin ../gfortran-darwin-NXConstStr.patch; 
-	  
+
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
       # `configure' time.
@@ -220,6 +220,8 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardening_stackprotector = false;
   hardening_format = false;
 
   postPatch =

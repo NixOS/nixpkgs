@@ -11,6 +11,8 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "doc" ];
 
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardening_stackprotector = false;
   hardening_format = false;
 
   LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";

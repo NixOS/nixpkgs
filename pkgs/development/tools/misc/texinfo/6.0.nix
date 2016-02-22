@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = stdenv.lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
 
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardening_stackprotector = false;
+
   preInstall = ''
     installFlags="TEXMF=$out/texmf-dist";
     installTargets="install install-tex";

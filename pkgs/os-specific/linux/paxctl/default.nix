@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
     "MANDIR=share/man/man1"
   ];
 
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardening_stackprotector = false;
+
   setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {

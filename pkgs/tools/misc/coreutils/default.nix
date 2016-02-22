@@ -20,6 +20,9 @@ let
       sha256 = "0w11jw3fb5sslf0f72kxy7llxgk1ia3a6bcw0c9kmvxrlj355mx2";
     };
 
+    # FIXME needs gcc 4.9 in bootstrap tools
+    hardening_stackprotector = false;
+
     patches = if stdenv.isCygwin then ./coreutils-8.23-4.cygwin.patch else
               (if stdenv.isArm then (fetchurl {
                   url = "http://git.savannah.gnu.org/cgit/coreutils.git/patch/?id=3ba68f9e64fa2eb8af22d510437a0c6441feb5e0";
