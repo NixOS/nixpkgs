@@ -200,8 +200,8 @@ let
 
     inherit (config.boot) resumeDevice devSize runSize;
 
-    inherit (config.boot.initrd) checkJournalingFS
-      preLVMCommands preDeviceCommands postDeviceCommands postMountCommands kernelModules;
+    inherit (config.boot.initrd) checkJournalingFS 
+      logCommands preLVMCommands preDeviceCommands postDeviceCommands postMountCommands kernelModules;
 
     resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
                     (filter (sd: (sd ? label || hasPrefix "/dev/" sd.device) && !sd.randomEncryption) config.swapDevices);
@@ -266,6 +266,14 @@ in
         Specify here the device where the file resides.
         You should also use <varname>boot.kernelParams</varname> to specify
         <literal><replaceable>resume_offset</replaceable></literal>.
+      '';
+    };
+
+    boot.initrd.logCommands = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether to replicate command output of stage-1 booting to <filename>/dev/kmsg</filename> or <filename>/run/log/stage-1-init.log</filename> if <filename>/dev/kmsg</filename> is not writable.
       '';
     };
 
