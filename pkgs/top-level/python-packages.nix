@@ -8774,6 +8774,31 @@ in modules // {
     };
   };
 
+  flask_migrate = buildPythonPackage rec {
+    name = "Flask-Migrate-${version}";
+    version = "1.7.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/F/Flask-Migrate/Flask-Migrate-1.7.0.tar.gz";
+      sha256 = "16d7vnaj9xmxvb3qbcmhahm3ldfdhzzi6y221h62x4v1v1jayx7v";
+    };
+
+    # When tests run with python3*, tests should run commands as "python3 <args>",
+    # not "python <args>"
+    patchPhase = ''
+      substituteInPlace tests/test_migrate.py --replace "python" "${python.executable}"
+      substituteInPlace tests/test_multidb_migrate.py --replace "python" "${python.executable}"
+    '';
+
+    propagatedBuildInputs = with self ; [ flask flask_sqlalchemy flask_script alembic ];
+
+    meta = {
+      description = "SQLAlchemy database migrations for Flask applications using Alembic";
+      license = licenses.mit;
+      homepage = https://github.com/miguelgrinberg/Flask-Migrate;
+    };
+  };
+
   flask_principal = buildPythonPackage rec {
     name = "Flask-Principal-${version}";
     version = "0.4.0";
