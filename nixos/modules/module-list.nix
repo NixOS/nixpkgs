@@ -43,6 +43,11 @@
   ./hardware/video/nvidia.nix
   ./hardware/video/ati.nix
   ./hardware/video/webcam/facetimehd.nix
+  ./i18n/inputMethod/default.nix
+  ./i18n/inputMethod/fcitx.nix
+  ./i18n/inputMethod/ibus.nix
+  ./i18n/inputMethod/nabi.nix
+  ./i18n/inputMethod/uim.nix
   ./installer/tools/auto-upgrade.nix
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix
@@ -66,7 +71,6 @@
   ./programs/environment.nix
   ./programs/freetds.nix
   ./programs/fish.nix
-  ./programs/ibus.nix
   ./programs/kbdlight.nix
   ./programs/light.nix
   ./programs/man.nix

@@ -12,10 +12,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ ibus pkgconfig python3 pythonPackages.pygobject3 ];
 
   meta = with stdenv.lib; {
-    description = "An IBus framework for table-based input methods";
-    homepage    = https://github.com/kaio/ibus-table/wiki;
-    license     = licenses.lgpl21;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ mudri ];
+    isIbusEngine = true;
+    description  = "An IBus framework for table-based input methods";
+    homepage     = https://github.com/kaio/ibus-table/wiki;
+    license      = licenses.lgpl21;
+    platforms    = platforms.linux;
+    maintainers  = with maintainers; [ mudri ];
   };
 }

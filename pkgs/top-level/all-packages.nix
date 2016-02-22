@@ -1172,19 +1172,31 @@ let
 
   m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
 
-  mozc = callPackage ../tools/inputmethods/mozc {
-    inherit (pythonPackages) gyp;
-  };
-
   ibus = callPackage ../tools/inputmethods/ibus { };
 
-  ibus-qt = callPackage ../tools/inputmethods/ibus-qt { };
+  ibus-qt = callPackage ../tools/inputmethods/ibus/ibus-qt.nix { };
 
-  ibus-anthy = callPackage ../tools/inputmethods/ibus-anthy { };
+  ibus-engines = {
 
-  ibus-table = callPackage ../tools/inputmethods/ibus-table { };
+    anthy = callPackage ../tools/inputmethods/ibus-engines/ibus-anthy { };
 
-  ibus-table-others = callPackage ../tools/inputmethods/ibus-table-others { };
+    hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
+
+    m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
+
+    mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
+      inherit (pythonPackages) gyp;
+    };
+
+    table = callPackage ../tools/inputmethods/ibus-engines/ibus-table { };
+
+    table-others = callPackage ../tools/inputmethods/ibus-engines/ibus-table-others { };
+
+  };
+
+  ibus-with-plugins = callPackage ../tools/inputmethods/ibus/wrapper.nix {
+    plugins = [ ];
+  };
 
   brotli = callPackage ../tools/compression/brotli { };
 
@@ -1513,7 +1525,23 @@ let
 
   fcitx = callPackage ../tools/inputmethods/fcitx { };
 
-  fcitx-anthy = callPackage ../tools/inputmethods/fcitx/fcitx-anthy.nix { };
+  fcitx-engines = {
+
+    anthy = callPackage ../tools/inputmethods/fcitx-engines/fcitx-anthy { };
+
+    chewing = callPackage ../tools/inputmethods/fcitx-engines/fcitx-chewing { };
+
+    hangul = callPackage ../tools/inputmethods/fcitx-engines/fcitx-hangul { };
+
+    m17n = callPackage ../tools/inputmethods/fcitx-engines/fcitx-m17n { };
+
+    mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
+      inherit (pythonPackages) gyp;
+    };
+
+    table-other = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-other { };
+
+  };
 
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
 
