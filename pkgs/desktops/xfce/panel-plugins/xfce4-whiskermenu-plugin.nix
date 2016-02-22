@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake pkgconfig intltool libxfce4util libxfcegui4 xfce4panel
                   gtk exo garcon ];
 
+  preFixup = ''
+    substituteInPlace $out/bin/xfce4-popup-whiskermenu \
+      --replace $out/bin/xfce4-panel ${xfce4panel}/bin/xfce4-panel
+  '';
+
   meta = {
     homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
     description = "Whisker Menu is an alternate application launcher for Xfce.";
