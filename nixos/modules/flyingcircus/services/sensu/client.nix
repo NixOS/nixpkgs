@@ -7,6 +7,11 @@ let
 
   cfg = config.flyingcircus.services.sensu-client;
 
+  local_sensu_configuration =
+    if  pathExists /etc/local/sensu-client
+    then "-d ${/etc/local/sensu-client}"
+    else "";
+
   client_json = writeText "client.json" ''
     {
       "client": {
@@ -119,6 +124,15 @@ in {
     ids.gids.sensuclient = 207;
     ids.uids.sensuclient = 207;
 
+    jobs.fcio-stubs-sensu-client = {
+        description = "Create FC IO stubs for sensu";
+        task = true;
+        startOn = "started networking";
+        script = ''
+          install -d -o sensuclient -g service -m 775 /etc/local/sensu-client
+        '';
+    };
+
     users.extraGroups.sensuclient.gid = config.ids.gids.sensuclient;
 
     users.extraUsers.sensuclient = {
@@ -132,7 +146,7 @@ in {
       path = [ pkgs.sensu pkgs.sensu_plugins pkgs.nagiosPluginsOfficial pkgs.bash pkgs.lm_sensors ];
       serviceConfig = {
         User = "sensuclient";
-        ExecStart = "${sensu}/bin/sensu-client -c ${client_json} -v";
+        ExecStart = "${sensu}/bin/sensu-client -c ${client_json} ${local_sensu_configuration} -v";
         Restart = "always";
         RestartSec = "5s";
       };
