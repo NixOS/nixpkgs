@@ -82,7 +82,7 @@ stdenv.mkDerivation ({
     ++ optional langJava ./java-jvgenmain-link.patch
     ++ optional langVhdl ./ghdl-ortho-cflags.patch
     ++ optional langVhdl ./ghdl-runtime-o2.patch;
-    
+
   inherit noSysDirs profiledCompiler staticCompiler crossStageStatic
     binutilsCross libcCross;
   targetConfig = if cross != null then cross.config else null;
@@ -94,6 +94,8 @@ stdenv.mkDerivation ({
     ++ (optionals (cross != null) [binutilsCross])
     ++ (optionals langVhdl [gnat])
     ;
+
+  hardening_format = false;
 
   configureFlags = "
     ${if enableMultilib then "" else "--disable-multilib"}
@@ -124,7 +126,7 @@ stdenv.mkDerivation ({
   NIX_EXTRA_LDFLAGS = if staticCompiler then "-static" else "";
 
   inherit gmp mpfr;
-  
+
   passthru = { inherit langC langCC langFortran langVhdl langTreelang
       enableMultilib; };
 
