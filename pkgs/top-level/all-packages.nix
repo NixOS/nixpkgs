@@ -866,6 +866,8 @@ let
 
   dlx = callPackage ../misc/emulators/dlx { };
 
+  dpic = callPackage ../tools/graphics/dpic { };
+
   dragon-drop = callPackage ../tools/X11/dragon-drop {
     gtk = gtk3;
   };
