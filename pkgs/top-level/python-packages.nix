@@ -2738,15 +2738,22 @@ in modules // {
   };
 
   github-cli = buildPythonPackage rec {
-    name = "github-cli-1.0.0";
-
-    propagatedBuildInputs = with self; [ simplejson ];
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/g/github-cli/${name}.tar.gz";
-      sha256 = "0csr8q208a0nixxs8mx6nbak19sylcpjcng50c2i6qldsxfbh1af";
+    version = "1.0.0";
+    name = "github-cli-${version}";
+    src = pkgs.fetchFromGitHub {
+      owner = "jsmits";
+      repo = "github-cli";
+      rev = version;
+      sha256 = "16bwn42wqd76zs97v8p6mqk79p5i2mb06ljk67lf8gy6kvqc1x8y";
     };
+
+    buildInputs = with self; [ nose pkgs.git ];
+    propagatedBuildInputs = with self; [ simplejson ];
+
+    # skipping test_issues_cli.py since it requires access to the github.com
+    patchPhase = "rm tests/test_issues_cli.py";
+    checkPhase = "nosetests tests/";
+
     meta.maintainers = with maintainers; [ garbas ];
   };
 
