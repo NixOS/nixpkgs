@@ -59,7 +59,6 @@ stdenv.mkDerivation rec {
     pythonPackages.pyxdg
     pythonPackages.nbxmpp
     pythonPackages.pyopenssl pythonDBus
-    pythonPackages.python-axolotl
   ] ++ optionals enableJingle [ farstream gst_plugins_bad libnice ]
     ++ optional enableE2E pythonPackages.pycrypto
     ++ optional enableRST pythonPackages.docutils
