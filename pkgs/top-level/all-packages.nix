@@ -7308,6 +7308,8 @@ let
 
   libdaemon = callPackage ../development/libraries/libdaemon { };
 
+  libdap = callPackage ../development/libraries/libdap { };
+
   libdbi = callPackage ../development/libraries/libdbi { };
 
   libdbiDriversBase = callPackage ../development/libraries/libdbi-drivers {
