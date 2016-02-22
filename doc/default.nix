@@ -56,8 +56,11 @@ stdenv.mkDerivation {
       inputFile = ./../pkgs/development/idris-modules/README.md;
       outputFile = "languages-frameworks/idris.xml";
     }
+  + toDocbook {
+      inputFile = ./../pkgs/development/r-modules/README.md;
+      outputFile = "languages-frameworks/r.xml";
+    }
   + ''
-    cat languages-frameworks/idris.xml
     echo ${nixpkgsVersion} > .version
 
     xmllint --noout --nonet --xinclude --noxincludenode \
