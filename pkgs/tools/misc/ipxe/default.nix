@@ -18,6 +18,10 @@ stdenv.mkDerivation {
 
   preConfigure = "cd src";
 
+  # not possible due to assembler code
+  hardening_pic = false;
+  hardening_stackprotector = false;
+
   makeFlags =
     [ "ECHO_E_BIN_ECHO=echo" "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.
       "ISOLINUX_BIN_LIST=${syslinux}/share/syslinux/isolinux.bin"
