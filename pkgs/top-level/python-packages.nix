@@ -16884,6 +16884,28 @@ in modules // {
     };
   });
 
+  pyrsistent = buildPythonPackage (rec {
+    name = "pyrsistent-0.11.12";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyrsistent/${name}.tar.gz";
+      sha256 = "0jgyhkkq36wn36rymn4jiyqh2vdslmradq4a2mjkxfbk2cz6wpi5";
+    };
+
+    buildInputs = with self; [ six pytest hypothesis ] ++ optional (!isPy3k) modules.sqlite3;
+
+    checkPhase = ''
+      py.test
+    '';
+
+    meta = {
+      homepage = http://github.com/tobgu/pyrsistent/;
+      description = "Persistent/Functional/Immutable data structures";
+      license = licenses.mit;
+      maintainers = with maintainers; [ desiderius ];
+    };
+  });
+
   pyrss2gen = buildPythonPackage (rec {
     name = "PyRSS2Gen-1.0.0";
 
