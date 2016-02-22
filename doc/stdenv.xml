@@ -1342,6 +1342,22 @@ in the default system locations.</para>
 cc1plus: some warnings being treated as errors
     </programlisting></listitem>
   </varlistentry>
+
+  <varlistentry>
+    <term><varname>hardening_stackprotector</varname></term>
+    <listitem><para>Adds the <option>-fstack-protector-strong</option>
+    compiler options. This adds safety checks against stack overwrites
+    rendering many potential code injection attacks into aborting situations.
+    In the best case this turns code injection vulnerabilities into denial
+    of service or into non-issues (depending on the application).</para>
+
+    <para>This needs to be turned off or fixed for errors similar to:</para>
+
+    <programlisting>
+bin/blib.a(bios_console.o): In function `bios_handle_cup':
+/tmp/nix-build-ipxe-20141124-5cbdc41.drv-0/ipxe-5cbdc41/src/arch/i386/firmware/pcbios/bios_console.c:86: undefined reference to `__stack_chk_fail'
+    </programlisting></listitem>
+  </varlistentry>
 </variablelist>
 </section>
 
