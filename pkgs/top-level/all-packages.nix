@@ -13965,6 +13965,8 @@ let
     inherit (python27Packages) cheetah;
   };
 
+  wpsoffice = callPackage ../applications/office/wpsoffice {};
+
   wrapFirefox = callPackage ../applications/networking/browsers/firefox/wrapper.nix { };
 
   retroArchCores =
