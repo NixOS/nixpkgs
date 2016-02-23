@@ -5777,11 +5777,11 @@ in modules // {
   hovercraft = buildPythonPackage rec {
     disabled = ! isPy3k;
     name = "hovercraft-${version}";
-    version = "2.0b1";
+    version = "2.0";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/h/hovercraft/${name}.zip";
-      sha256 = "1l88xp563miwwkahil1sxn4kz9khjcx6z85j8d6mq8gjc8rxz3j6";
+      url = "https://pypi.python.org/packages/source/h/hovercraft/${name}.tar.gz";
+      sha256 = "0lqxr816lymgnywln8bbv9nrmkyahjjcjkm9kjyny9bflayz4f1g";
     };
 
     propagatedBuildInputs = with self; [ docutils lxml manuel pygments svg-path watchdog ];
