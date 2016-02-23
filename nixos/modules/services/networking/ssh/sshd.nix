@@ -304,7 +304,7 @@ in
     services.openssh.authorizedKeysFiles =
       [ ".ssh/authorized_keys" ".ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
 
-    services.openssh.extraConfig =
+    services.openssh.extraConfig = mkOrder 0
       ''
         PidFile /run/sshd.pid
 
