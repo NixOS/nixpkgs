@@ -2956,11 +2956,11 @@ in modules // {
   };
 
   click = buildPythonPackage rec {
-    name = "click-6.2";
+    name = "click-6.3";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/click/${name}.tar.gz";
-      sha256 = "10kavbisnk9m93jl2wi34pw7ryr2qbxshh2cysxwxd7bymqgz87v";
+      sha256 = "076cr1xbhfyfrzkvflz1i0950jgjn2161hp3f5xji4z1mgxdj85p";
     };
 
     buildInputs = with self; [ pytest ];
