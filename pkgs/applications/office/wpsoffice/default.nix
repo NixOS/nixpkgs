@@ -15,7 +15,7 @@ stdenv.mkDerivation rec{
     homepage = http://wps-community.org/;
     platforms = [ "x86_64-linux" ];
     # Binary for i686 is also available if someone can package it
-    license = lib.licenses.unfree-redistributable;
+    license = lib.licenses.unfreeRedistributable;
   };
 
   libPath = stdenv.lib.makeLibraryPath [
