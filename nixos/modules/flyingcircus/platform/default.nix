@@ -153,8 +153,9 @@ in
         zlib
         psmisc
         fcagent
-        zsh
     ];
+
+    programs.zsh.enable = true;
 
     environment.pathsToLink = [ "/include" ];
     environment.shellInit = ''
