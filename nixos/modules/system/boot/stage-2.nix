@@ -17,7 +17,7 @@ let
     src = ./stage-2-init.sh;
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
     isExecutable = true;
-    inherit (config.boot) logCommands devShmSize runSize;
+    inherit (config.boot) devShmSize runSize;
     inherit (config.nix) readOnlyStore;
     inherit (config.networking) useHostResolvConf;
     ttyGid = config.ids.gids.tty;
@@ -39,14 +39,6 @@ in
   options = {
 
     boot = {
-
-      logCommands = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Whether to replicate command output of stage-1 booting to <filename>/dev/kmsg</filename> or <filename>/run/log/stage-2-init.log</filename> if <filename>/dev/kmsg</filename> is not writable.
-        '';
-      };
 
       postBootCommands = mkOption {
         default = "";
