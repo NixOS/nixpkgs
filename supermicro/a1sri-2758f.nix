@@ -6,11 +6,25 @@
 { pkgs, ... }:
 
 {
+  imports = [ ../lib/hardware-notes.nix ];
+
   environment.systemPackages = [ pkgs.ipmitool ];
   boot.kernelModules = [ "ipmi_devintf" "ipmi_si" ];
 
-  # The Linux NIC driver seems to have faulty link state reporting
-  # that causes dhcpcd to release every few seconds, which is
-  # more annoying than not releasing when a cable is unplugged.
   networking.dhcpcd.extraConfig = "nolink";
+
+  hardwareNotes =
+    [ { title = "IPMI";
+        text = "Load IPMI kernel modules and ipmitool to system environment.";
+      }
+      { title = "Nolink";
+        text =
+          ''
+            Interface link state detection is disabled in dhcpcd because
+            the Linux driver seems to send erronous loss of link messages
+            that cause dhcpcd to release every few seconds, which is
+            more annoying than not releasing when a cable is unplugged.
+          '';
+      }
+    ];
 }
