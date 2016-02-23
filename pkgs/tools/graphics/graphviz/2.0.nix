@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [pkgconfig xlibsWrapper libpng libjpeg expat libXaw yacc libtool fontconfig pango gd];
-  
+
+  hardening_format = false;
+  hardening_fortify = false;
+
   configureFlags =
     [ "--with-pngincludedir=${libpng}/include"
       "--with-pnglibdir=${libpng}/lib"
