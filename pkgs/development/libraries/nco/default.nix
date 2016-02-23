@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "4.5.5";
-  name = "nco";
+  name = "nco-${version}";
 
   buildInputs = [ netcdf netcdfcxx4 gsl udunits antlr which curl ];
 
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = { 
-    description = "The NCO (netCDF Operator) toolkit manipulates and analyzes data stored in netCDF-accessible formats, including DAP, HDF4, and HDF5";
+    description = "NetCDF Operator toolkit";
+    longDescription = "The NCO (netCDF Operator) toolkit manipulates and analyzes data stored in netCDF-accessible formats, including DAP, HDF4, and HDF5";
     homepage = http://nco.sourceforge.net/;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.bzizou ];
