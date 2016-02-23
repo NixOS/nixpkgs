@@ -15638,6 +15638,8 @@ let
 
   crashplan = callPackage ../applications/backup/crashplan { };
 
+  epson-escpr = callPackage ../misc/drivers/epson-escpr { };
+
   gutenprint = callPackage ../misc/drivers/gutenprint { };
 
   gutenprintBin = callPackage ../misc/drivers/gutenprint/bin.nix { };
