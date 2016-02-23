@@ -5062,11 +5062,7 @@ let
   rtags = callPackage ../development/tools/rtags/default.nix {};
 
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
-  rustc = callPackage ../development/compilers/rustc {
-    callPackage = newScope ({
-      procps = if stdenv.isDarwin then darwin.ps else procps;
-    });
-  };
+  rustc = callPackage ../development/compilers/rustc {};
 
   rustPlatform = rustStable;
 
