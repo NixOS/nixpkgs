@@ -5792,6 +5792,8 @@ let
 
   chruby = callPackage ../development/tools/misc/chruby { rubies = null; };
 
+  cide = callPackage ../development/tools/continuous-integration/cide { };
+
   "cl-launch" = callPackage ../development/tools/misc/cl-launch {};
 
   coan = callPackage ../development/tools/analysis/coan { };
