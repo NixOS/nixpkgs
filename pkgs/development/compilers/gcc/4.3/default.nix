@@ -96,6 +96,7 @@ stdenv.mkDerivation ({
     ;
 
   hardening_format = false;
+  hardening_stackprotector = false;
 
   configureFlags = "
     ${if enableMultilib then "" else "--disable-multilib"}
