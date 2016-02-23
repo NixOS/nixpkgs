@@ -9,10 +9,10 @@ let
   waagent = with pkgs; stdenv.mkDerivation rec {
     name = "waagent-2.0";
     src = pkgs.fetchFromGitHub {
-      owner = "phreedom";
+      owner = "Azure";
       repo = "WALinuxAgent";
-      rev = "1d31fe8cbc7f842993eed9b33a3d3f5410c364e3";
-      sha256 = "1s53pfmy3azp0rmympmnphyq96sr9jy07pbsfza6mdzpalx1ripl";
+      rev = "1b3a8407a95344d9d12a2a377f64140975f1e8e4";
+      sha256 = "10byzvmpgrmr4d5mdn2kq04aapqb3sgr1admk13wjmy5cd6bwd2x";
     };
     buildInputs = [ makeWrapper python pythonPackages.wrapPython ];
     runtimeDeps = [ findutils gnugrep gawk coreutils openssl openssh
