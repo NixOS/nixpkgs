@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   version = "3.15.1";
-  name = "libdap";
+  name = "libdap-${version}";
 
   buildInputs = [ bison libuuid curl libxml2 flex ];
 
   src = fetchurl {
-    url = "http://www.opendap.org/pub/source/${name}-${version}.tar.gz";
+    url = "http://www.opendap.org/pub/source/${name}.tar.gz";
     sha256 = "6ee13cc69ae0b5e7552ddfd17013ebb385859bba66f42a2cfba3b3be7aa4ef0f";
   };
 
