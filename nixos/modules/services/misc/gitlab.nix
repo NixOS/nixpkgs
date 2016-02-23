@@ -39,6 +39,7 @@ let
   '';
 
   gitlabConfig = {
+    # These are the default settings from config/gitlab.example.yml
     production = flip recursiveUpdate cfg.extraConfig {
       gitlab = {
         host = cfg.host;
@@ -52,7 +53,7 @@ let
         default_projects_features = {
           issues = true;
           merge_requests = true;
-          wiki = false;
+          wiki = true;
           snippets = false;
           builds = true;
         };
@@ -241,7 +242,7 @@ in {
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = "";
+        default = {};
         example = {
           gitlab = {
             default_projects_features = {
@@ -348,7 +349,6 @@ in {
         gitAndTools.git
         openssh
         nodejs
-        sudo
       ];
       preStart = ''
         mkdir -p ${cfg.backupPath}
@@ -400,7 +400,7 @@ in {
 
         if [ "${cfg.databaseHost}" = "127.0.0.1" ]; then
           if ! test -e "${cfg.statePath}/db-created"; then
-            psql postgres -c "CREATE ROLE gitlab WITH LOGIN CREATEDB NOCREATEROLE NOCREATEUSER ENCRYPTED PASSWORD '${cfg.databasePassword}'"
+            psql postgres -c "CREATE ROLE gitlab WITH LOGIN NOCREATEDB NOCREATEROLE NOCREATEUSER ENCRYPTED PASSWORD '${cfg.databasePassword}'"
             ${config.services.postgresql.package}/bin/createdb --owner gitlab gitlab || true
             touch "${cfg.statePath}/db-created"
 
