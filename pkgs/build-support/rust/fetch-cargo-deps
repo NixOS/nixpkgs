@@ -43,6 +43,9 @@ set -u
 # Do any possible 'cargo update -p <pkgName> --precise <version>' ad-hoc updates
 eval "$cargoUpdateHook"
 
+# stdenv setup sets SSL_CERT_FILE to a nonexistent path; cargo doesn't like that
+unset SSL_CERT_FILE
+
 # Do the fetch
 cargo fetch --verbose
 
