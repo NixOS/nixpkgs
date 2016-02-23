@@ -1,5 +1,5 @@
 { stdenv, buildPythonApplication, fetchurl, gettext, gtk3, pythonPackages
-, gdk_pixbuf, libnotify, gst_all_1
+, gdk_pixbuf, libnotify, gst_all_1, wrapGAppsHook
 , libgnome_keyring3 ? null, networkmanager ? null
 }:
 
@@ -17,18 +17,10 @@ buildPythonApplication rec {
     pythonPackages.pyxdg gdk_pixbuf libnotify gst_all_1.gstreamer
     gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad libgnome_keyring3 networkmanager
+    wrapGAppsHook
   ];
 
-  preFixup = ''
-    for script in mailnag mailnag-config; do
-      wrapProgram $out/bin/$script \
-        --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-        --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-        --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share" \
-        --prefix PYTHONPATH : "$PYTHONPATH"
-    done
-  '';
+  wrapPrefixVariables = [ "PYTHONPATH" ];
 
   meta = with stdenv.lib; {
     description = "An extensible mail notification daemon";
