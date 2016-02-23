@@ -69,6 +69,7 @@ def _load_and_write_json(calls):
         try:
             data = lookup()
             with open('/etc/nixos/{}'.format(target), 'w') as f:
+                os.chmod(f.fileno(), 0o600)
                 json.dump(data, f, ensure_ascii=False)
         except Exception:
             logging.exception('Error retrieving data:')
