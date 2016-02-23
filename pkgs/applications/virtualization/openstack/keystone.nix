@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pythonPackages, xmlsec, which, openssl }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "keystone-${version}";
   version = "8.0.0";
   namePrefix = "";

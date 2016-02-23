@@ -1,6 +1,6 @@
-{ pkgs, stdenv, buildPythonPackage, pythonPackages, fetchurl, fetchFromGitHub }:
+{ pkgs, stdenv, buildPythonApplication, pythonPackages, fetchurl, fetchFromGitHub }:
 let
-  matrix-angular-sdk = buildPythonPackage rec {
+  matrix-angular-sdk = buildPythonApplication rec {
     name = "matrix-angular-sdk-${version}";
     version = "0.6.6";
 
@@ -10,7 +10,7 @@ let
     };
   };
 in
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "matrix-synapse-${version}";
   version = "0.12.0";
 

@@ -1,6 +1,6 @@
 { pkgs, lib, mercurial, pyPackages ? pkgs.python27Packages }:
 
-pkgs.buildPythonPackage rec {
+pkgs.buildPythonApplication rec {
     name = "tortoisehg-${version}";
     version = "3.6";
     namePrefix = "";

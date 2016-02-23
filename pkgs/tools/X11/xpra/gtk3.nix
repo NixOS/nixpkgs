@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, buildPythonPackage
+{ stdenv, fetchurl, buildPythonApplication
 , python, cython, pkgconfig
 , xorg, gtk3, glib, pango, cairo, gdk_pixbuf, atk, pygobject3, pycairo, gobjectIntrospection
 , makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf, xkeyboard_config
 , ffmpeg, x264, libvpx, libwebp
 , libfakeXinerama }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "xpra-0.14.19";
   namePrefix = "";
 

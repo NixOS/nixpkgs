@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pythonPackages, xmlsec, which, dnsmasq }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "neutron-${version}";
   version = "7.0.0";
   namePrefix = "";

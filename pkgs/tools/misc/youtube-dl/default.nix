@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, makeWrapper, ffmpeg, zip
+{ stdenv, fetchurl, buildPythonApplication, makeWrapper, ffmpeg, zip
 , pandoc ? null
 }:
 
@@ -9,7 +9,7 @@
 # case someone wants to use this derivation to build a Git version of
 # the tool that doesn't have the formatted man page included.
 
-buildPythonPackage rec {
+buildPythonApplication rec {
 
   name = "youtube-dl-${version}";
   version = "2016.02.13";

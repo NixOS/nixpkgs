@@ -1,7 +1,7 @@
 
 { stdenv, fetchurl, pythonPackages, sqlite, which, strace }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "glance-${version}";
   version = "11.0.0";
   namePrefix = "";

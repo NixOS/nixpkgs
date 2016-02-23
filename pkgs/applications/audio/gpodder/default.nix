@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages, mygpoclient, intltool
+{ stdenv, fetchurl, buildPythonApplication, pythonPackages, mygpoclient, intltool
 , ipodSupport ? true, libgpod
 , gnome3
 }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "gpodder-${version}";
   namePrefix = "";
 

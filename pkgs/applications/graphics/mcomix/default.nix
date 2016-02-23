@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonPackage, python27Packages }:
+{ stdenv, fetchurl, buildPythonApplication, python27Packages }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
     namePrefix = "";
     name = "mcomix-1.01";
 

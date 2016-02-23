@@ -1,6 +1,6 @@
 { stdenv, fetchzip, python3Packages, openssl, acl }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   name = "attic-${version}";
   version = "0.16";
   namePrefix = "";

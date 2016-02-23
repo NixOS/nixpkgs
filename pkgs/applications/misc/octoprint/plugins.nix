@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, octoprint, pythonPackages }:
 
 let
-  buildPlugin = args: pythonPackages.buildPythonPackage (args // {
+  buildPlugin = args: pythonPackages.buildPythonApplication (args // {
     buildInputs = (args.buildInputs or []) ++ [ octoprint ];
   });
 in {

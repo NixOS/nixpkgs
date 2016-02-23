@@ -3239,7 +3239,7 @@ let
   solvespace = callPackage ../applications/graphics/solvespace { };
 
   sonata = callPackage ../applications/audio/sonata {
-    inherit (python3Packages) buildPythonPackage python isPy3k dbus pygobject3 mpd2;
+    inherit (python3Packages) buildPythonApplication python isPy3k dbus pygobject3 mpd2;
   };
 
   sparsehash = callPackage ../development/libraries/sparsehash { };
@@ -13297,7 +13297,7 @@ let
   };
 
   qutebrowser = qt55.callPackage ../applications/networking/browsers/qutebrowser {
-    inherit (python34Packages) buildPythonPackage python pyqt5 jinja2 pygments pyyaml pypeg2;
+    inherit (python34Packages) buildPythonApplication python pyqt5 jinja2 pygments pyyaml pypeg2;
     inherit (gst_all_1) gst-plugins-base gst-plugins-good gst-plugins-bad gst-libav;
   };
 
@@ -14172,7 +14172,7 @@ let
   xpra = callPackage ../tools/X11/xpra { inherit (texFunctions) fontsConf; };
   libfakeXinerama = callPackage ../tools/X11/xpra/libfakeXinerama.nix { };
   #TODO: 'pil' is not available for python3, yet
-  xpraGtk3 = callPackage ../tools/X11/xpra/gtk3.nix { inherit (texFunctions) fontsConf; inherit (python3Packages) buildPythonPackage python cython pygobject3 pycairo; };
+  xpraGtk3 = callPackage ../tools/X11/xpra/gtk3.nix { inherit (texFunctions) fontsConf; inherit (python3Packages) buildPythonApplication python cython pygobject3 pycairo; };
 
   xrestop = callPackage ../tools/X11/xrestop { };
 

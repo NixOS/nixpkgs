@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python3Packages, acl, lz4, openssl }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   name = "borgbackup-${version}";
   version = "0.30.0";
   namePrefix = "";
