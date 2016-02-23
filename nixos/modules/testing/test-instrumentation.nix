@@ -20,7 +20,15 @@ let kernel = config.boot.kernelPackages.kernel; in
             export USER=root
             export HOME=/root
             export DISPLAY=:0.0
+
             source /etc/profile
+
+            # Don't use a pager when executing backdoor
+            # actions. Because we use a tty, commands like systemctl
+            # or nix-store get confused into thinking they're running
+            # interactively.
+            export PAGER=
+
             cd /tmp
             exec < /dev/hvc0 > /dev/hvc0
             while ! exec 2> /dev/ttyS0; do sleep 0.1; done
@@ -37,11 +45,6 @@ let kernel = config.boot.kernelPackages.kernel; in
     # with EIO).  Likewise for hvc0.
     systemd.services."serial-getty@ttyS0".enable = false;
     systemd.services."serial-getty@hvc0".enable = false;
-
-    # Don't use a pager when executing backdoor actions. Because we
-    # use a tty, commands like systemctl or nix-store get confused
-    # into thinking they're running interactively.
-    environment.variables.PAGER = "";
 
     boot.initrd.preDeviceCommands =
       ''
