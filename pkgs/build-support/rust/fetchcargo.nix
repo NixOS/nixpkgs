@@ -9,6 +9,7 @@ stdenv.mkDerivation {
   phases = "unpackPhase installPhase";
 
   installPhase = ''
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
     bash ${./fetch-cargo-deps} . "$out"
   '';
 
