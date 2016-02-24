@@ -24,7 +24,7 @@ rec {
       rev = 1724719;
       sha256 = "1zm4sh9j0ghnng8lyc7qmhi0p7jf6ns8zvmrdfmq9r5s91xgbbgz";
     };
-    mavenDeps = [  ];
+    mavenDeps = [ bootstrapMavenClean241Jar bootstrapMavenCompiler232Jar bootstrapMavenEnforcer10Jar bootstrapMavenInstall231Jar bootstrapMavenJar231Jar bootstrapMavenPlugin26Jar bootstrapMavenRemoteResources11Jar bootstrapMavenResources243Jar bootstrapMavenSurefire272Jar apacheParent9 mavenParent16 mavenPlugins18 ];
     m2Path = "/org/apache/maven/plugins/maven-jar-plugin/2.3.1";
   };
 

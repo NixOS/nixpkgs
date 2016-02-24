@@ -4334,6 +4334,12 @@ let
     bootstrapMavenEnforcer10Pom = self.mavenPlugins.bootstrapMavenEnforcer.mavenEnforcer10Pom;
     bootstrapMavenEnforcer101Jar = self.mavenPlugins.bootstrapMavenEnforcer.mavenEnforcer101Jar;
 
+    bootstrapMavenInstall = callPackage ../development/java-modules/maven-plugins/maven-install-plugin/bootstrap.nix { };
+    bootstrapMavenInstall231Jar = self.mavenPlugins.bootstrapMavenInstall.mavenInstall231Jar;
+
+    bootstrapMavenJar = callPackage ../development/java-modules/maven-plugins/maven-jar-plugin/bootstrap.nix { };
+    bootstrapMavenJar231Jar = self.mavenPlugins.bootstrapMavenJar.mavenJar231Jar;
+
     bootstrapMavenPlugin = callPackage ../development/java-modules/maven-plugins/maven-plugin-plugin/bootstrap.nix { };
     bootstrapMavenPlugin243Jar = self.mavenPlugins.bootstrapMavenPlugin.mavenPlugin243Jar;
     bootstrapMavenPlugin251Jar = self.mavenPlugins.bootstrapMavenPlugin.mavenPlugin251Jar;
