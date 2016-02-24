@@ -1,6 +1,5 @@
 { fetchmaven, fetchurl }:
 
-
 rec {
   apacheCommonsParent24 = fetchmaven {
     version = 24;
@@ -66,6 +65,17 @@ rec {
     };
     m2Path = "org/apache/apache/7";
     m2File = "apache-7.pom";
+  };
+
+  apacheParent8 = fetchmaven {
+    version = 8;
+    name = "apache-parent";
+    src = fetchurl rec {
+      url = "https://repo1.maven.org/maven2/org/apache/apache/8/apache-8.pom";
+      sha256 = "07id266pgmvd092y3zkvmxx1nd3lz58347zh366mvwd6grj0alcy";
+    };
+    m2Path = "org/apache/apache/8";
+    m2File = "apache-8.pom";
   };
 
   apacheParent9 = fetchmaven {
@@ -231,6 +241,17 @@ rec {
     };
     m2Path = "org/apache/maven/maven-parent/17";
     m2File = "maven-parent-17.pom";
+  };
+
+  mavenParent18 = fetchmaven {
+    version = 18;
+    name = "maven-parent";
+    src = fetchurl rec {
+      url = "http://svn.apache.org/repos/asf/maven/pom/tags/maven-parent-18/pom.xml";
+      sha256 = "1fylyndpdhzgawrx1zhigl17kxywvnqa6sw6g9ay6sw9hjj1fl84";
+    };
+    m2Path = "org/apache/maven/maven-parent/18";
+    m2File = "maven-parent-18.pom";
   };
 
   mavenParent19 = fetchmaven {
@@ -495,6 +516,39 @@ rec {
     };
     m2Path = "org/apache/maven/surefire/surefire/2.4.3";
     m2File = "surefire-2.4.3.pom";
+  };
+
+  surefireParent272 = fetchmaven {
+    version = "2.7.2";
+    name = "surefire-pom-2.7.2";
+    src = fetchurl rec {
+      url = "http://svn.apache.org/repos/asf/maven/surefire/tags/surefire-2.7.2/pom.xml";
+      sha256 = "1wsr23f38viz14md090k0f6p6rq7mkn89d9yssngi25zf90j7dlf";
+    };
+    m2Path = "org/apache/maven/surefire/surefire/2.7.2";
+    m2File = "surefire-2.7.2.pom";
+  };
+
+  surefireParent28 = fetchmaven {
+    version = "2.8";
+    name = "surefire-pom-2.8";
+    src = fetchurl rec {
+      url = "http://svn.apache.org/repos/asf/maven/surefire/tags/surefire-2.8/pom.xml";
+      sha256 = "00zvjjlbrwb43710dkp4km9j2vsf153w9q80dy5ra06x6fq0yd1w";
+    };
+    m2Path = "org/apache/maven/surefire/surefire/2.8";
+    m2File = "surefire-2.8.pom";
+  };
+
+  surefireParent29 = fetchmaven {
+    version = "2.9";
+    name = "surefire-pom-2.9";
+    src = fetchurl rec {
+      url = "http://svn.apache.org/repos/asf/maven/surefire/tags/surefire-2.9/pom.xml";
+      sha256 = "1pz20f5lfwnamgbr51hdy7gj0zpk0gs8c4zgidkkwpi39qssjkxy";
+    };
+    m2Path = "org/apache/maven/surefire/surefire/2.9";
+    m2File = "surefire-2.9.pom";
   };
 
   wagon10beta2 = fetchmaven {

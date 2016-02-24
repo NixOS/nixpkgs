@@ -4324,6 +4324,7 @@ let
 
     bootstrapMavenCompiler = callPackage ../development/java-modules/maven-plugins/maven-compiler-plugin/bootstrap.nix { };
     bootstrapMavenCompiler202Jar = self.mavenPlugins.bootstrapMavenCompiler.mavenCompiler202Jar;
+    bootstrapMavenCompiler232Jar = self.mavenPlugins.bootstrapMavenCompiler.mavenCompiler232Jar;
     bootstrapMavenCompiler31Jar = self.mavenPlugins.bootstrapMavenCompiler.mavenCompiler31Jar;
 
     bootstrapMavenEnforcer = callPackage ../development/java-modules/maven-plugins/maven-enforcer-plugin/bootstrap.nix { };
@@ -4354,10 +4355,15 @@ let
     bootstrapMavenResources = callPackage ../development/java-modules/maven-plugins/maven-resources-plugin/bootstrap.nix { };
     bootstrapMavenResources23Jar = self.mavenPlugins.bootstrapMavenResources.mavenResources23Jar;
     bootstrapMavenResources243Jar = self.mavenPlugins.bootstrapMavenResources.mavenResources243Jar;
+    bootstrapMavenResources25Jar = self.mavenPlugins.bootstrapMavenResources.mavenResources25Jar;
     bootstrapMavenResources26Jar = self.mavenPlugins.bootstrapMavenResources.mavenResources26Jar;
 
     bootstrapMavenSite = callPackage ../development/java-modules/maven-plugins/maven-site-plugin/bootstrap.nix { };
     bootstrapMavenSite31Jar = self.mavenPlugins.bootstrapMavenSite.mavenSite31Jar;
+
+    bootstrapMavenSurefire = callPackage ../development/java-modules/maven-plugins/maven-surefire-plugin/bootstrap.nix { };
+    bootstrapMavenSurefire23Jar = self.mavenPlugins.bootstrapMavenSurefire.mavenSurefire23Jar;
+    bootstrapMavenSurefire272Jar = self.mavenPlugins.bootstrapMavenSurefire.mavenSurefire272Jar;
 
     bootstrapModelloMaven = callPackage ../development/java-modules/maven-plugins/modello-maven-plugin/bootstrap.nix { };
     bootstrapModelloMaven10alpha15Jar = self.mavenPlugins.bootstrapModelloMaven.modelloMaven10alpha15Jar;
@@ -4386,6 +4392,10 @@ let
     mavenInstall23 = self.mavenPlugins.mavenInstallGen.mavenInstall23;
     mavenInstall231 = self.mavenPlugins.mavenInstallGen.mavenInstall231;
 
+    mavenJarGen = callPackage ../development/java-modules/maven-plugins/maven-jar-plugin { };
+    mavenJar231 = self.mavenPlugins.mavenJarGen.mavenJar231;
+    mavenJar24 = self.mavenPlugins.mavenJarGen.mavenJar24;
+
     mavenPluginGen = callPackage ../development/java-modules/maven-plugins/maven-plugin-plugin { };
     mavenPlugin243 = self.mavenPlugins.mavenPluginGen.mavenPlugin243;
     mavenPlugin251 = self.mavenPlugins.mavenPluginGen.mavenPlugin251;
@@ -4411,6 +4421,7 @@ let
     mavenRemoteResources14 = self.mavenPlugins.mavenRemoteResourcesGen.mavenRemoteResources14;
 
     mavenSiteGen = callPackage ../development/java-modules/maven-plugins/maven-site-plugin { };
+    mavenSite22 = self.mavenPlugins.mavenSiteGen.mavenSite22;
     mavenSite30beta3 = self.mavenPlugins.mavenSiteGen.mavenSite30beta3;
     mavenSite31 = self.mavenPlugins.mavenSiteGen.mavenSite31;
 
@@ -4418,6 +4429,9 @@ let
     mavenSurefire23 = self.mavenPlugins.mavenSurefireGen.mavenSurefire23;
     mavenSurefire231 = self.mavenPlugins.mavenSurefireGen.mavenSurefire231;
     mavenSurefire243 = self.mavenPlugins.mavenSurefireGen.mavenSurefire243;
+    mavenSurefire272 = self.mavenPlugins.mavenSurefireGen.mavenSurefire272;
+    mavenSurefire28 = self.mavenPlugins.mavenSurefireGen.mavenSurefire28;
+    mavenSurefire29 = self.mavenPlugins.mavenSurefireGen.mavenSurefire29;
 
     modelloMavenGen = callPackage ../development/java-modules/maven-plugins/modello-maven-plugin { };
     modelloMavenPlugin10Alpha15 = self.mavenPlugins.modelloMavenGen.modelloMavenPlugin10Alpha15;

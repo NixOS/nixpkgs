@@ -17,6 +17,17 @@ rec {
     };
   };
 
+  mavenSite22 = mavenSiteGen {
+    name = "maven-site-plugin-2.2";
+    src = fetchsvn {
+      url = "https://svn.apache.org/repos/asf/maven/plugins/tags/maven-site-plugin-2.2/";
+      rev = 1724719;
+      sha256 = "0y3zgfpzvn5f633nanngn3v4g02gys2avx8hpx6q7v26ml4b7zh5";
+    };
+    mavenDeps = [ bootstrapMavenClean241Jar bootstrapMavenCompiler232Jar bootstrapMavenEnforcer10Jar bootstrapMavenPlugin26Jar bootstrapMavenRemoteResources11Jar bootstrapMavenResources243Jar bootstrapMavenSurefire272Jar apacheParent9 mavenJar231 mavenParent16 mavenPlugins18 ];
+    m2Path = "/org/apache/maven/plugins/maven-site-plugin/2.2";
+  };
+
   mavenSite30beta3 = mavenSiteGen {
     name = "maven-site-plugin-3.0-beta-3";
     src = fetchsvn {

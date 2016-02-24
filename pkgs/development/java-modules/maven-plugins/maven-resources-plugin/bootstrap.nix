@@ -23,6 +23,17 @@ rec {
     m2File = "maven-resources-plugin-2.4.3.jar";
   };
 
+  mavenResources25Jar = fetchmaven {
+    version = "2.5";
+    name = "bootstrap-maven-resources-plugin-jar-2.5";
+    src = fetchurl rec {
+      url = "https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-resources-plugin/2.5/maven-resources-plugin-2.5.jar";
+      sha256 = "1x4srw9q2bix17l5bfqnn92dw8mwgr2riz1mgmmh3amd5kc9267x";
+    };
+    m2Path = "/org/apache/maven/plugins/maven-resources-plugin/2.5";
+    m2File = "maven-resources-plugin-2.5.jar";
+  };
+
   mavenResources26Jar = fetchmaven {
     version = "2.6";
     name = "bootstrap-maven-resources-plugin-jar-2.6";
