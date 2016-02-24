@@ -2,14 +2,14 @@
 
 let version = "0.16.8.15"; in
   stdenv.mkDerivation {
-    name = "enlightenment-${version}";
+    name = "enlightenment16-${version}";
 
     src = fetchurl {
       url = "mirror://sourceforge/enlightenment/e16-${version}.tar.gz";
       sha256 = "0f8hg79mrk6b3fsvynvsrnqh1zgmvnnza0lf7qn4pq2mqyigbhgk";
     };
 
-    buildInputs = [pkgconfig imlib2 freetype 
+    buildInputs = [pkgconfig imlib2 freetype
       xorg.libX11 xorg.libXt xorg.libXext xorg.libXrender xorg.libXft ];
 
     meta = {
