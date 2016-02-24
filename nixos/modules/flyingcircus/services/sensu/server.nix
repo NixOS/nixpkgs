@@ -10,6 +10,8 @@ let
     then config.flyingcircus.enc_service_clients.sensuserver
     else [];
 
+  directory_handler = "${pkgs.fcmanage}/bin/fc-monitor handle-result";
+
   sensu_server_json = pkgs.writeText "sensu-server.json"
     ''
     {
@@ -30,6 +32,10 @@ let
         "mailer": {
           "type": "pipe",
           "command": "${pkgs.sensu_plugins}/bin/handler-mailer.rb"
+        },
+        "directory": {
+          "type": "pipe",
+          "command": "/var/setuid-wrappers/sudo ${directory_handler}"
         },
         "default": {
           "handlers": [
@@ -97,6 +103,13 @@ in {
       uid = config.ids.uids.sensuserver;
       group = "sensuserver";
     };
+
+    security.sudo.extraConfig = ''
+      Cmnd_Alias  SENSU_DIRECTORY_HANDLER = ${directory_handler}
+
+      sensuserver ALL=(root) SENSU_DIRECTORY_HANDLER
+
+    '';
 
     systemd.services.prepare-rabbitmq-for-sensu = {
       description = "Prepare rabbitmq for sensu-server.";

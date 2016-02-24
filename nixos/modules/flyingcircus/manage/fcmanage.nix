@@ -46,5 +46,14 @@ pkgs.stdenv.mkDerivation {
 
     echo "SUBSYSTEM==\"block\", PROGRAM=\"$out/bin/fc-get-disk-alias %k\", SYMLINK+=\"%c\"" > $out/etc/udev/rules.d/10-fc-disk-alias.rules
 
+    cat <<__EOF__ > $out/bin/fc-monitor
+    #!/bin/bash
+    # The current system reference is bad because I wasn't able tof figure out
+    # retrieving the path of all all dependencies (and theirs).
+    PATH=${pkgs.utillinux}/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin
+    ${pkgs.python3}/bin/python3 $out/fc-monitor.py \$@
+    __EOF__
+    chmod +x $out/bin/fc-monitor
+
     '';
 }
