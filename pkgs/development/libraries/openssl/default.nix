@@ -21,7 +21,7 @@ let
     patches =
       [ ./use-etc-ssl-certs.patch ]
       ++ optional stdenv.isCygwin ./1.0.1-cygwin64.patch
-      ++ optional (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem")) ./darwin-arch.patch;
+      ++ optional (stdenv.lib.versionOlder version "1.0.2" && (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem"))) ./darwin-arch.patch;
 
     nativeBuildInputs = [ perl ];
     buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
