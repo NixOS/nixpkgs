@@ -11919,6 +11919,29 @@ in modules // {
     };
   };
 
+  neuronpy = buildPythonPackage rec {
+    name = "neuronpy-${version}";
+    version = "0.1.6";
+    disabled = !isPy27;
+
+    propagatedBuildInputs = with self; [ numpy matplotlib scipy ];
+   
+    meta = {
+      description = "Interfaces and utilities for the NEURON simulator and analysis of neural data";
+      maintainers = [ maintainers.nico202 ];
+      license = licenses.mit;
+    };
+
+    #No tests included
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/neuronpy/neuronpy-${version}.tar.gz";
+      sha256 = "1clhc2b5fy2l8nfrji4dagmj9419nj6kam090yqxhq5c28sngk25";
+    };
+  };
+
+
   plover = buildPythonPackage rec {
     name = "plover-${version}";
     version = "2.5.8";
