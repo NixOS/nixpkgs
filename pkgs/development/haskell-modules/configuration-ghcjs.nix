@@ -19,7 +19,11 @@ self: super:
     postPatch = ''
       ${pkgs.autoconf}/bin/autoreconf --install --force --verbose
     '';
+    buildTools = pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.libiconv;
   });
+
+  network = addBuildTools super.network (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.libiconv);
+  zlib = addBuildTools super.zlib (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.libiconv);
 
   # LLVM is not supported on this GHC; use the latest one.
   inherit (pkgs) llvmPackages;
