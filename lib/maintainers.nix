@@ -15,6 +15,7 @@
   aespinosa = "Allan Espinosa <allan.espinosa@outlook.com>";
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
   aflatter = "Alexander Flatter <flatter@fastmail.fm>";
+  afranchuk = "Alex Franchuk <alex.franchuk@gmail.com>";
   aherrmann = "Andreas Herrmann <andreash87@gmx.ch>";
   ak = "Alexander Kjeldaas <ak@formalprivacy.com>";
   akaWolf = "Artjom Vejsel <akawolf0@gmail.com>";
