@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = http://mediaarea.net/;
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.devhell ];
+    maintainers = with maintainers; [ devhell koral ];
   };
 }
