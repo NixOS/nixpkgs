@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ ibus ibus-table pkgconfig python3 ];
 
   preBuild = ''
-    export HOME=/tmp/ibus-table-others
+    export HOME=$(mktemp -d)/ibus-table-others
   '';
 
   postFixup = ''
-    rm -rf /tmp/ibus-table-others
+    rm -rf $HOME
   '';
 
   meta = with stdenv.lib; {
