@@ -6530,6 +6530,26 @@ in modules // {
     };
   };
 
+  pdfminer = buildPythonPackage rec {
+    version = "20140328";
+    name = "pdfminer-${version}";
+
+    disabled = ! isPy27;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pdfminer/pdfminer-${version}.tar.gz";
+      sha256 = "0qpjv4b776dwvpf5a7v19g41qsz97bv0qqsyvm7a31k50n9pn65s";
+    };
+
+    propagatedBuildInputs = with self; [  ];
+
+    meta = {
+      description = "Tool for extracting information from PDF documents";
+      homepage = http://euske.github.io/pdfminer/index.html;
+      license = licenses.mit;
+      maintainers = with maintainers; [ DamienCassou ];
+    };
+  };
 
   peppercorn = buildPythonPackage rec {
     name = "peppercorn-0.5";
@@ -23937,17 +23957,17 @@ in modules // {
   };
 
   weboob = buildPythonPackage rec {
-    name = "weboob-1.0";
+    name = "weboob-1.1";
     disabled = ! isPy27;
 
     src = pkgs.fetchurl {
-      url = "https://symlink.me/attachments/download/289/${name}.tar.gz";
-      md5 = "38f832f1b8654441adafe8558faa7109";
+      url = "https://symlink.me/attachments/download/324/${name}.tar.gz";
+      sha256 = "0736c5wsck2abxlwvx8i4496kafk9xchkkzhg4dcfbj0isldih6b";
     };
 
     setupPyBuildFlags = ["--qt" "--xdg"];
 
-    propagatedBuildInputs = with self; [ pillow prettytable pyyaml dateutil gdata requests2 mechanize feedparser lxml pkgs.gnupg pyqt4 pkgs.libyaml simplejson cssselect futures ];
+    propagatedBuildInputs = with self; [ pillow prettytable pyyaml dateutil gdata requests2 mechanize feedparser lxml pkgs.gnupg pyqt4 pkgs.libyaml simplejson cssselect futures pdfminer termcolor ];
 
     meta = {
       homepage = http://weboob.org;
