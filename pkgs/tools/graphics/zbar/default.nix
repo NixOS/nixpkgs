@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
     [ imagemagickBig pkgconfig python pygtk perl libX11
       libv4l qt4 lzma gtk2 ];
 
-  configureFlags = ["--disable-video"];
+  configureFlags = [ "--disable-video" ];
+
+  hardening_fortify = false;
 
   meta = with stdenv.lib; {
     description = "Bar code reader";
