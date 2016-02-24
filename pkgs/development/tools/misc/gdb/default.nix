@@ -12,7 +12,7 @@
 
 let
 
-  basename = "gdb-7.10.1";
+  basename = "gdb-7.11";
 
   # Whether (cross-)building for GNU/Hurd.  This is an approximation since
   # having `stdenv ? cross' doesn't tell us if we're building `crossDrv' and
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "1mfnjcwnwm5cg4rc9pncs9v356a0bz6ymjyac56mbj6784yjzir5";
+    sha256 = "1hg5kwwdvi9b9nxzxfjnx8fx3gip75fqyvkp82xpf3b3rcb42hvs";
   };
 
   nativeBuildInputs = [ pkgconfig texinfo perl ]
