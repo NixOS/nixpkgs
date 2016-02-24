@@ -5973,41 +5973,6 @@ in modules // {
     };
   };
 
-  i3pystatus = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    version = "3.33";
-    pname = "i3pystatus";
-    namePrefix = "";
-    disabled = !isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/i/${pname}/${name}.tar.gz";
-      sha256 = "1fs2nlzm9in8bwg8cm3567ayiha0v7k8pn793pm5fb7lywaalasy";
-    };
-
-    propagatedBuildInputs = with self; [ keyring colour netifaces praw psutil
-      basiciw pkgs.libpulseaudio ];
-    ldWrapperSuffix = "--suffix LD_LIBRARY_PATH : \"${pkgs.libpulseaudio}/lib\"";
-    makeWrapperArgs = [ ldWrapperSuffix ]; # libpulseaudio.so is loaded manually
-
-    postInstall = ''
-      makeWrapper ${python.interpreter} $out/bin/${pname}-python-interpreter \
-        --prefix PYTHONPATH : "$PYTHONPATH" \
-        ${ldWrapperSuffix}
-    '';
-
-    meta = {
-      homepage = https://github.com/enkore/i3pystatus;
-      description = "A complete replacement for i3status";
-      longDescription = ''
-        i3pystatus is a growing collection of python scripts for status output compatible
-        to i3status / i3bar of the i3 window manager.
-      '';
-      license = licenses.mit;
-      platforms = platforms.linux;
-    };
-  };
-
   jdcal = buildPythonPackage rec {
     version = "1.0";
     name = "jdcal-${version}";
