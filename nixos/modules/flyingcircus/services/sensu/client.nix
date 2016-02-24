@@ -17,7 +17,8 @@ let
       "client": {
         "name": "${config.networking.hostName}",
         "address": "${config.networking.hostName}.gocept.net",
-        "subscriptions": ["default"]
+        "subscriptions": ["default"],
+        "signature": "${cfg.password}"
       },
       "rabbitmq": {
         "host": "${cfg.server}",

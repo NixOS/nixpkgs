@@ -12,7 +12,7 @@ let
     {
       "sensu": [
         {
-          "name": "Local Site",
+          "name": "${config.flyingcircus.enc.parameters.location}",
           "host": "localhost",
           "port": 4567
         }
