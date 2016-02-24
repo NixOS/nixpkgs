@@ -14,6 +14,8 @@ stdenv.mkDerivation rec{
   buildInputs = [ autoconf automake libtool ];
   preConfigure = "./autogen.sh";
 
+  hardening_fortify = false;
+
   meta = with stdenv.lib; {
     description = "Command line utility for Atmel maXTouch devices";
     homepage = http://github.com/atmel-maxtouch/mxt-app;
