@@ -1192,7 +1192,9 @@ let
 
     table = callPackage ../tools/inputmethods/ibus-engines/ibus-table { };
 
-    table-others = callPackage ../tools/inputmethods/ibus-engines/ibus-table-others { };
+    table-others = callPackage ../tools/inputmethods/ibus-engines/ibus-table-others {
+      ibus-table = ibus-engines.table;
+    };
 
   };
 
