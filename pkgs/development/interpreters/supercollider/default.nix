@@ -3,10 +3,10 @@
 , libXt, qt, readline
 , useSCEL ? false, emacs
 }:
-  
+
 let optional = stdenv.lib.optional; in
 
-stdenv.mkDerivation rec {  
+stdenv.mkDerivation rec {
   name = "supercollider-3.6.6";
 
   meta = {
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "11khrv6jchs0vv0lv43am8lp0x1rr3h6l2xj9dmwrxcpdayfbalr";
   };
 
+  hardening_stackprotector = false;
+
   # QGtkStyle unavailable
   patchPhase = ''
     substituteInPlace editors/sc-ide/widgets/code_editor/autocompleter.cpp \
@@ -29,12 +31,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = ''
     -DSC_WII=OFF
-    -DSC_EL=${if useSCEL then "ON" else "OFF"} 
+    -DSC_EL=${if useSCEL then "ON" else "OFF"}
   '';
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ 
+  buildInputs = [
     gcc libjack2 libsndfile fftw curl libXt qt readline ]
     ++ optional useSCEL emacs;
 }
