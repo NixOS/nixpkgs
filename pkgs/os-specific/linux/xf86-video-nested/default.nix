@@ -16,10 +16,9 @@ stdenv.mkDerivation {
       pkgconfig renderproto utilmacros xorgserver
     ];
 
+  hardening_fortify = false;
 
-  configurePhase = ''
-    ./configure --prefix=$out CFLAGS="-I${pixman}/include/pixman-1"
-  '';
+  CFLAGS = "-I${pixman}/include/pixman-1";
 
   meta = {
     homepage = http://cgit.freedesktop.org/xorg/driver/xf86-video-nested;
