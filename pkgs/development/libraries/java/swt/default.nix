@@ -28,6 +28,8 @@ in stdenv.mkDerivation rec {
 
   builder = ./builder.sh;
 
+  hardening_format = false;
+
   # Alas, the Eclipse Project apparently doesn't produce source-only
   # releases of SWT.  So we just grab a binary release and extract
   # "src.zip" from that.
