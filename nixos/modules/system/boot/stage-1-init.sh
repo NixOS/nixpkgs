@@ -71,14 +71,13 @@ mount -t devtmpfs -o "size=@devSize@" devtmpfs /dev
 mkdir -p /run
 mount -t tmpfs -o "mode=0755,size=@runSize@" tmpfs /run
 
-
-# Optionally log the script output to /dev/kmsg or /run/log/stage-1-init.log.
+# Log the script output to /dev/kmsg or /run/log/stage-1-init.log.
 mkdir -p /tmp
 mkfifo /tmp/stage-1-init.log.fifo
 logOutFd=8 && logErrFd=9
 eval "exec $logOutFd>&1 $logErrFd>&2"
 if test -w /dev/kmsg; then
-    tee -i < /tmp/stage-1-init.log.fifo /proc/self/fd/"$logOutFd" | while read line; do
+    tee -i < /tmp/stage-1-init.log.fifo /proc/self/fd/"$logOutFd" | while read -r line; do
         if test -n "$line"; then
             echo "<7>stage-1-init: $line" > /dev/kmsg
         fi

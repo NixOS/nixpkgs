@@ -155,11 +155,11 @@ mkdir -m 0755 -p /var/setuid-wrappers
 mount -t tmpfs -o "mode=0755" tmpfs /var/setuid-wrappers
 
 
-# Optionally log the script output to /dev/kmsg or /run/log/stage-2-init.log.
+# Log the script output to /dev/kmsg or /run/log/stage-2-init.log.
 # Only at this point are all the necessary prerequisites ready for these commands.
 exec {logOutFd}>&1 {logErrFd}>&2
 if test -w /dev/kmsg; then
-    exec > >(tee -i /proc/self/fd/"$logOutFd" | while read line; do
+    exec > >(tee -i /proc/self/fd/"$logOutFd" | while read -r line; do
         if test -n "$line"; then
             echo "<7>stage-2-init: $line" > /dev/kmsg
         fi
