@@ -178,6 +178,16 @@ in
               IP_MULTIPLE_TABLES y
             '';
         };
+        nagiosPluginsOfficial = pkgs.nagiosPluginsOfficial.overrideDerivation (oldAttrs: {
+          buildInputs = [ pkgs.openssh pkgs.openssl ];
+          preConfigure= "
+            configureFlagsArray=(
+              --with-openssl=${pkgs.openssl}
+              --with-ping-command='/var/setuid-wrappers/ping -n -U -w %d -c %d %s'
+              --with-ping6-command='/var/setuid-wrappers/ping6 -n -U -w %d -c %d %s'
+            )
+          ";
+        });
       };
 
     security.sudo.extraConfig =
