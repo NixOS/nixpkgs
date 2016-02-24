@@ -16265,6 +16265,32 @@ in modules // {
     };
   });
 
+  pyelftools = buildPythonPackage rec {
+    pname = "pyelftools";
+    version = "0.23";
+    name = "${pname}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/${pname}/${name}.tar.gz";
+      sha256 = "1pi1mdzfffgl5qcz0prsa7hlbriycy7mgagi0fdrp3vf17fslmzw";
+    };
+
+    checkPhase = ''
+      ${python.interpreter} test/all_tests.py
+    '';
+    # Tests cannot pass against system-wide readelf
+    # https://github.com/eliben/pyelftools/issues/65
+    doCheck = false;
+
+    meta = {
+      description = "A library for analyzing ELF files and DWARF debugging information";
+      homepage = https://github.com/eliben/pyelftools;
+      license = licenses.publicDomain;
+      platforms = platforms.all;
+      maintainers = maintainers.igsha;
+    };
+  };
+
   pyenchant = buildPythonPackage rec {
     name = "pyenchant-1.6.6";
 
