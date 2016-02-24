@@ -1936,6 +1936,8 @@ let
 
   halibut = callPackage ../tools/typesetting/halibut { };
 
+  hdapsd = callPackage ../os-specific/linux/hdapsd { };
+
   hddtemp = callPackage ../tools/misc/hddtemp { };
 
   hdf5 = callPackage ../tools/misc/hdf5 {
