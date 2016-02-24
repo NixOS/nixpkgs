@@ -149,6 +149,7 @@ in
         openssl
         python27Full
         python27Packages.virtualenv
+        python3
         vim
         zlib
         psmisc
