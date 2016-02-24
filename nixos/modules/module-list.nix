@@ -257,6 +257,7 @@
   ./services/monitoring/dd-agent.nix
   ./services/monitoring/grafana.nix
   ./services/monitoring/graphite.nix
+  ./services/monitoring/hdaps.nix
   ./services/monitoring/heapster.nix
   ./services/monitoring/longview.nix
   ./services/monitoring/monit.nix
