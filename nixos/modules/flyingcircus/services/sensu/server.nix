@@ -79,6 +79,7 @@ in {
 
     services.rabbitmq.enable = true;
     services.rabbitmq.listenAddress = "::";
+    services.rabbitmq.plugins = [ "rabbitmq_management" ];
     services.redis.enable = true;
     services.postfix.enable = true;
 
@@ -109,7 +110,7 @@ in {
         clients = (lib.concatMapStrings (client: ''
           rabbitmqctl add_user ${client.node} ${client.password} || true
           rabbitmqctl change_password ${client.node} ${client.password}
-          rabbitmqctl set_permissions -p /sensu ${client.node} ".*" ".*" ".*"
+          rabbitmqctl set_permissions -p /sensu ${client.node} "^${client.node}-.*" "^(keepalives|results)$" "^${client.node}-.*"
           '') enc_clients);
       in
        ''
