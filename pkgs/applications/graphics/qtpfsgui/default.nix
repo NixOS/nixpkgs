@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 exiv2 openexr fftwSinglePrec libtiff ];
 
+  hardening_format = false;
+
   configurePhase = ''
     export CPATH="${ilmbase}/include/OpenEXR:$CPATH"
     qmake PREFIX=$out EXIV2PATH=${exiv2}/include/exiv2  \
