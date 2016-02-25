@@ -86,7 +86,7 @@ in {
 
     services.rabbitmq.enable = true;
     services.rabbitmq.listenAddress = "::";
-    services.rabbitmq.plugins = [ "rabbitmq_management" ];
+    #services.rabbitmq.plugins = [ "rabbitmq_management" ];
     services.redis.enable = true;
     services.postfix.enable = true;
 
@@ -129,7 +129,8 @@ in {
       in
        ''
         set -ex
-        rabbitmqctl start_app
+
+        # rabbitmqctl start_app
         rabbitmqctl delete_user guest || true
         rabbitmqctl add_vhost /sensu || true
 
