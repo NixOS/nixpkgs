@@ -6,7 +6,8 @@ let
 
   cfg = config.flyingcircus.services.sensu-server;
 
-  enc_clients = if builtins.hasAttr "sensuserver" config.flyingcircus.enc_service_clients
+  enc_clients =
+    if builtins.hasAttr "sensuserver" config.flyingcircus.enc_service_clients
     then config.flyingcircus.enc_service_clients.sensuserver
     else [];
 
