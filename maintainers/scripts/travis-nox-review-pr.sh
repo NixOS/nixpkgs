@@ -27,6 +27,9 @@ elif [[ $1 == nox ]]; then
 elif [[ $1 == build ]]; then
     source $HOME/.nix-profile/etc/profile.d/nix.sh
 
+    echo "=== Checking tarball creation"
+    nix-build pkgs/top-level/release.nix -A tarball
+
     if [[ $TRAVIS_PULL_REQUEST == false ]]; then
         echo "=== Not a pull request"
     else
@@ -41,8 +44,6 @@ elif [[ $1 == build ]]; then
             exit 1
         fi
     fi
-    # echo "=== Checking tarball creation"
-    # nix-build pkgs/top-level/release.nix -A tarball
 else
     echo "$0: Unknown option $1" >&2
     false
