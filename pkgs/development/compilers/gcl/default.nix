@@ -27,22 +27,7 @@ stdenv.mkDerivation rec {
     "--enable-ansi"
   ];
 
-  # Upstream bug submitted - http://savannah.gnu.org/bugs/index.php?30371
-  # $TMPDIR must have no extension
-  # setVars = a.noDepEntry ''
-  #   export TMPDIR="''${TMPDIR:-''${TMP:-''${TEMP}}}/tmp-for-gcl"
-  #   mkdir -p "$TMPDIR"
-  # '';
-
-  preBuild = ''
-    # sed -re "s@/bin/cat@$(which cat)@g" -i configure */configure
-    # sed -re "s@if test -d /proc/self @if false @" -i configure
-    # sed -re 's^([ \t])cpp ^\1cpp -I${stdenv.cc.cc}/include -I${stdenv.cc.libc}/include ^g' -i makefile
-  '';
-
-  /* doConfigure should be removed if not needed */
-  # phaseNames = ["setVars" "doUnpack" "preBuild"
-  #   "doConfigure" "doMakeInstall"];
+  hardening_pic = false;
 
   meta = {
     description = "GNU Common Lisp compiler working via GCC";
