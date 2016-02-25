@@ -3018,6 +3018,8 @@ let
 
   rarcrack = callPackage ../tools/security/rarcrack { };
 
+  ratools = callPackage ../tools/networking/ratools { };
+
   rawdog = callPackage ../applications/networking/feedreaders/rawdog { };
 
   read-edid = callPackage ../os-specific/linux/read-edid { };
