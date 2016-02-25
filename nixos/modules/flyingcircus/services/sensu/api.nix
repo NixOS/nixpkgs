@@ -8,6 +8,18 @@ let
 
   cfg = config.flyingcircus.services.sensu-api;
 
+
+  sensu_api_cfg = pkgs.writeText "sensu-api.json" ''
+   {
+      "rabbitmq": {
+        "host": "${config.networking.hostName}.gocept.net",
+        "user": "sensu-server",
+        "password": "asdf1",
+        "vhost": "/sensu"
+      }
+    }
+  '';
+
 in  {
 
   options = {
@@ -54,7 +66,7 @@ in  {
       path = [ sensu ];
       serviceConfig = {
         User = "sensuapi";
-        ExecStart = "${sensu}/bin/sensu-api";
+        ExecStart = "${sensu}/bin/sensu-api -c ${sensu_api_cfg}";
         Restart = "always";
         RestartSec = "5s";
       };
