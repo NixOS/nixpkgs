@@ -346,7 +346,7 @@ with stdenv.lib;
   X86_MCE y
 
   # PCI-Expresscard hotplug support
-  HOTPLUG_PCI_PCIE y
+  ${optionalString (versionAtLeast version "3.12") "HOTPLUG_PCI_PCIE y"}
 
   # Linux containers.
   NAMESPACES? y #  Required by 'unshare' used by 'nixos-install'
