@@ -2,17 +2,27 @@
 
 stdenv.mkDerivation rec {
   name = "termite-${version}";
-  version = "10";
+  version = "11";
 
   src = fetchgit {
     url = "https://github.com/thestinger/termite";
     rev = "refs/tags/v${version}";
-    sha256 = "107v59x8q2m1cx1x3i5ciibw4nl1qbq7p58bfw0irkhp7sl7kjk2";
+    sha256 = "1k91nw19c0p5ghqhs00mn9npa91idfkyiwik3ng6hb4jbnblp5ph";
   };
 
-  makeFlags = [ "VERSION=v${version}" "PREFIX=$(out)" ];
+  makeFlags = [ "VERSION=v${version}" "PREFIX=" "DESTDIR=$(out)" ];
 
   buildInputs = [ pkgconfig vte gtk3 ncurses ];
+
+  outputs = [ "out" "terminfo" ];
+
+  postInstall = ''
+    mkdir -p $terminfo/share
+    mv $out/share/terminfo $terminfo/share/terminfo
+
+    mkdir -p $out/nix-support
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+  '';
 
   meta = with stdenv.lib; {
     description = "A simple VTE-based terminal";
