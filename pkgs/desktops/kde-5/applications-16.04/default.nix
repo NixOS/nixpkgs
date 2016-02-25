@@ -53,6 +53,7 @@ let
     kldap = callPackage ./kldap.nix {};
     kmime = callPackage ./kmime.nix {};
     konsole = callPackage ./konsole.nix {};
+    kpimtextedit = callPackage ./kpimtextedit.nix {};
     libkdcraw = callPackage ./libkdcraw.nix {};
     libkexiv2 = callPackage ./libkexiv2.nix {};
     libkipi = callPackage ./libkipi.nix {};
