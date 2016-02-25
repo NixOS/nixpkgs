@@ -62,20 +62,22 @@ let
   };
 
   get_policy_routing_for_interface = interfaces: interface_name:
-    map
-    (network: {
-       priority =
-        if builtins.hasAttr interface_name routing_priorities
-        then builtins.getAttr interface_name routing_priorities
-        else 100;
-       network = network;
-       interface = interface_name;
-       gateway = builtins.getAttr network (builtins.getAttr interface_name interfaces).gateways;
-       addresses = builtins.getAttr network (builtins.getAttr interface_name interfaces).networks;
-       family = if (is_ip4 network) then "4" else "6";
-     })
-    (builtins.attrNames
-      (builtins.getAttr interface_name interfaces).gateways);
+    builtins.filter
+      (ruleset: (builtins.length ruleset.addresses) > 0)
+      (map
+        (network: {
+           priority =
+            if builtins.hasAttr interface_name routing_priorities
+            then builtins.getAttr interface_name routing_priorities
+            else 100;
+           network = network;
+           interface = interface_name;
+           gateway = builtins.getAttr network (builtins.getAttr interface_name interfaces).gateways;
+           addresses = builtins.getAttr network (builtins.getAttr interface_name interfaces).networks;
+           family = if (is_ip4 network) then "4" else "6";
+         })
+        (builtins.attrNames
+          (builtins.getAttr interface_name interfaces).gateways));
 
 
   render_policy_routing_rule = ruleset:
