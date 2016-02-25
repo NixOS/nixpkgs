@@ -1,14 +1,15 @@
-{ stdenv, fetchgit, talloc, docutils
+{ stdenv, fetchFromGitHub, talloc, docutils
 , enableStatic ? false }:
 
 stdenv.mkDerivation rec {
   name = "proot-${version}";
-  version = "4.0.3";
+  version = "5.1.0";
 
-  src = fetchgit {
-    url = "git://github.com/cedric-vincent/proot.git";
-    rev = "refs/tags/v${version}";
-    sha256 = "95a52b2fa47b2891eb2c6b6b0e14d42f6d48f6fd5181e359b007831f1a046e84";
+  src = fetchFromGitHub {
+    sha256 = "0azsqis99gxldmbcg43girch85ysg4hwzf0h1b44bmapnsm89fbz";
+    rev = "v${version}";
+    repo = "proot";
+    owner = "cedric-vincent";
   };
 
   buildInputs = [ talloc ];
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "User-space implementation of chroot, mount --bind and binfmt_misc";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = [ maintainers.ianwookim ];
+    maintainers = with maintainers; [ ianwookim nckx ];
   };
 }
 
