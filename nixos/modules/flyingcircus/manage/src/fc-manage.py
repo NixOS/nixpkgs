@@ -76,6 +76,9 @@ def _load_and_write_json(calls):
 
 
 def update_inventory():
+    if directory is None:
+        print('No directory. Not updating inventory.')
+        return
     _load_and_write_json([
         (lambda: directory.lookup_node(enc['name']),
          'enc.json'),
