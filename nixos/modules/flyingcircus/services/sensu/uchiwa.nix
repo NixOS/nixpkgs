@@ -8,11 +8,16 @@ let
 
   cfg = config.flyingcircus.services.uchiwa;
 
+  sensu_name =
+    if lib.hasAttrByPath ["parameters" "location"] config.flyingcircus.enc
+    then config.flyingcircus.enc.parameters.location
+    else "local";
+
   uchiwa_json = pkgs.writeText "uchiwa.json" ''
     {
       "sensu": [
         {
-          "name": "${config.flyingcircus.enc.parameters.location}",
+          "name": "${sensu_name}",
           "host": "localhost",
           "port": 4567
         }
