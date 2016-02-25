@@ -9,7 +9,8 @@ import <nixpkgs/nixos/tests/make-test.nix> ({ pkgs, ...} : {
       { pkgs, config, ... }:
 
       {
-        imports = [ ../services/default.nix
+        imports = [ ../manage/default.nix
+                    ../services/default.nix
                     ../packages/default.nix
                     ../platform/default.nix ];
 
