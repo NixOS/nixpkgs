@@ -1,4 +1,4 @@
-{ stdenv, lib, bundlerEnv, makeWrapper, docker }:
+{ stdenv, lib, bundlerEnv, makeWrapper, docker, git }:
 
 stdenv.mkDerivation rec {
   name = "cide-${version}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     makeWrapper ${env}/bin/cide $out/bin/cide \
-      --set PATH ${docker}/bin
+      --set PATH ${docker}/bin:${git}/bin
   '';
 
   meta = with lib; {
