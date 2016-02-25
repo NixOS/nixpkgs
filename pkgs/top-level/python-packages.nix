@@ -6118,8 +6118,9 @@ in modules // {
       sha256 = "f19fa66e656309825887171d84a462e64676b1cc36b62e4dd8679ff63926a469";
     };
 
+    propagatedBuildInputs = with self; [ ofxclient ];
+
     buildInputs = with self; [
-      ofxclient
       mock
       nose
       # Used at runtime to translate ofx entries to the ledger
