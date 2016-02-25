@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ghc libedit perl gmp];
 
+  hardening_format = false;
+
   configureFlags = [
     "--with-gmp-libraries=${gmp}/lib"
     "--with-gmp-includes=${gmp}/include"
