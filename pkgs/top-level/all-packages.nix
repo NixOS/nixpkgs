@@ -12231,6 +12231,11 @@ let
 
   gimp = gimp_2_8;
 
+  gimp-with-plugins = callPackage ../applications/graphics/gimp/wrapper.nix {
+    gimp = gimp_2_8;
+    plugins = null; # All packaged plugins enabled, if not explicit plugin list supplied
+  };
+
   gimpPlugins = recurseIntoAttrs (callPackage ../applications/graphics/gimp/plugins {});
 
   gitAndTools = recurseIntoAttrs (callPackage ../applications/version-management/git-and-tools {});
