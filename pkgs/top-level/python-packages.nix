@@ -10254,12 +10254,12 @@ in modules // {
   };
 
   ipykernel = buildPythonPackage rec {
-    version = "4.2.2";
+    version = "4.3.0";
     name = "ipykernel-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipykernel/${name}.tar.gz";
-      sha256 = "a876da43e01acec2c305abdd8e6aa55f052bab1196171ccf1cb9a6aa230298b0";
+      sha256 = "1av769gbzfm1zy9p94wicwwwxmyc7s7zk1ginq16x0wc69hwc57j";
     };
 
     buildInputs = with self; [ nose ] ++ optionals isPy27 [mock];
@@ -10268,6 +10268,7 @@ in modules // {
       jupyter_client
       pexpect
       traitlets
+      tornado
     ];
 
     # Tests require backends.
