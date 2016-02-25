@@ -235,7 +235,7 @@ in modules // {
       sha256 = "1ywimbisgb5g7xl9nrfwcm7dv3j8fsrjfp7bxb3l58zbsrzj6z2s";
     };
 
-    propagatedBuildInputs = with self; [ appdirs colorama dateutil requests2 requests_toolbelt sqlalchemy ];
+    propagatedBuildInputs = with self; [ appdirs colorama dateutil requests2 requests_toolbelt sqlalchemy7 ];
 
     makeWrapperArgs = [ "--prefix LIBFUSE_PATH : ${pkgs.fuse}/lib/libfuse.so" ];
 
@@ -457,7 +457,7 @@ in modules // {
     };
 
     buildInputs = with self; [ pytest pytestcov mock coverage ];
-    propagatedBuildInputs = with self; [ Mako sqlalchemy_1_0 python-editor ];
+    propagatedBuildInputs = with self; [ Mako sqlalchemy python-editor ];
 
     meta = {
       homepage = http://bitbucket.org/zzzeek/alembic;
@@ -1575,7 +1575,7 @@ in modules // {
     };
 
     buildInputs =
-      [ self.sqlalchemy
+      [ self.sqlalchemy7
         self.pycryptopp
         self.nose
         self.mock
@@ -2101,7 +2101,7 @@ in modules // {
       pymongo
       pyyaml
       requests2
-      sqlalchemy_1_0
+      sqlalchemy
       tables
       toolz
     ];
@@ -3188,7 +3188,7 @@ in modules // {
       sed -i '/distribute/d' setup.py
     '';
 
-    buildInputs = with self; [ self.coverage self.sqlalchemy ];
+    buildInputs = with self; [ self.coverage self.sqlalchemy7 ];
 
     # ValueError: Could not parse auth file:
     # /tmp/nix-build-.../CoilMQ-0.6.1/coilmq/tests/resources/auth.ini
@@ -7087,7 +7087,7 @@ in modules // {
     propagatedBuildInputs = with self; [
       flup
       ldap
-      sqlalchemy
+      sqlalchemy7
     ];
 
     doCheck = true;
@@ -8894,7 +8894,7 @@ in modules // {
       sha256 = "1i9ps5d5snih9xlqhrvmi3qfiygkmqzxh92n25kj4pf89kj4s965";
     };
 
-    propagatedBuildInputs = with self ; [ flask sqlalchemy_1_0 ];
+    propagatedBuildInputs = with self ; [ flask sqlalchemy ];
 
     meta = {
       description = "SQLAlchemy extension for Flask";
@@ -13699,7 +13699,7 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; [
-      six stevedore sqlalchemy_migrate sqlalchemy_1_0 oslo-utils oslo-context
+      six stevedore sqlalchemy_migrate sqlalchemy oslo-utils oslo-context
       oslo-config oslo-i18n iso8601 Babel alembic pbr psycopg2
     ];
     buildInputs = with self; [
@@ -13844,7 +13844,7 @@ in modules // {
       singledispatch logutils
     ];
     buildInputs = with self; [
-      webtest Mako genshi Kajiki sqlalchemy_1_0 gunicorn jinja2 virtualenv
+      webtest Mako genshi Kajiki sqlalchemy gunicorn jinja2 virtualenv
     ];
 
     meta = with stdenv.lib; {
@@ -14567,7 +14567,7 @@ in modules // {
       pytz
       xlrd
       bottleneck
-      sqlalchemy_1_0
+      sqlalchemy
       lxml
       # Disabling this because an upstream dependency, pep8, is broken on v3.5.
       (if isPy35 then null else html5lib)
@@ -20132,7 +20132,7 @@ in modules // {
     rope = if isPy3k then null else self.rope;
   };
 
-  sqlalchemy = self.sqlalchemy9.override rec {
+  sqlalchemy7 = buildPythonPackage rec {
     name = "SQLAlchemy-0.7.10";
     disabled = isPy34 || isPy35;
     doCheck = !isPyPy;
@@ -20141,17 +20141,32 @@ in modules // {
       url = "http://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
       sha256 = "0rhxgr85xdhjn467qfs0dkyj8x46zxcv6ad3dfx3w14xbkb3kakp";
     };
+
     patches = [
       # see https://groups.google.com/forum/#!searchin/sqlalchemy/module$20logging$20handlers/sqlalchemy/ukuGhmQ2p6g/2_dOpBEYdDYJ
       # waiting for 0.7.11 release
       ../development/python-modules/sqlalchemy-0.7.10-test-failures.patch
     ];
+
     preConfigure = optionalString isPy3k ''
       python3 sa2to3.py --no-diffs -w lib test examples
     '';
+
+    buildInputs = with self; [ nose mock ]
+      ++ stdenv.lib.optional doCheck pysqlite;
+    propagatedBuildInputs = with self; [ modules.sqlite3 ];
+
+    checkPhase = ''
+      ${python.executable} sqla_nose.py
+    '';
+
+    meta = {
+      homepage = http://www.sqlalchemy.org/;
+      description = "A Python SQL toolkit and Object Relational Mapper";
+    };
   };
 
-  sqlalchemy8 = self.sqlalchemy9.override rec {
+  sqlalchemy8 = buildPythonPackage rec {
     name = "SQLAlchemy-0.8.7";
     disabled = isPy34 || isPy35;
     doCheck = !isPyPy;
@@ -20160,9 +20175,23 @@ in modules // {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
       md5 = "4f3377306309e46739696721b1785335";
     };
+
     preConfigure = optionalString isPy3k ''
       python3 sa2to3.py --no-diffs -w lib test examples
     '';
+
+    buildInputs = with self; [ nose mock ]
+      ++ stdenv.lib.optional doCheck pysqlite;
+    propagatedBuildInputs = with self; [ modules.sqlite3 ];
+
+    checkPhase = ''
+      ${python.executable} sqla_nose.py
+    '';
+
+    meta = {
+      homepage = http://www.sqlalchemy.org/;
+      description = "A Python SQL toolkit and Object Relational Mapper";
+    };
   };
 
   sqlalchemy9 = buildPythonPackage rec {
@@ -20191,13 +20220,31 @@ in modules // {
     };
   };
 
-  sqlalchemy_1_0 = self.sqlalchemy9.override rec {
-    name = "SQLAlchemy-1.0.10";
-    doCheck = !isPyPy;  # lots of tests fail
+  sqlalchemy = buildPythonPackage rec {
+    name = "SQLAlchemy-${version}";
+    version = "1.0.10";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
       sha256 = "963415bf4ea4fa13698893464bc6917d291331e0e8202dddd0ebfed2864ef7e3";
+    };
+
+    buildInputs = with self; [ nose mock ]
+      ++ stdenv.lib.optional doCheck pysqlite;
+    propagatedBuildInputs = with self; [ modules.sqlite3 ];
+
+    # Test-only dependency pysqlite doesn't build on Python 3. This isn't an
+    # acceptable reason to make all dependents unavailable on Python 3 as well
+    doCheck = !(isPyPy || isPy3k);
+
+    checkPhase = ''
+      ${python.executable} sqla_nose.py
+    '';
+
+    meta = {
+      homepage = http://www.sqlalchemy.org/;
+      description = "A Python SQL toolkit and Object Relational Mapper";
+      license = licenses.mit;
     };
   };
 
@@ -20261,8 +20308,8 @@ in modules // {
     };
   };
 
-  sqlalchemy_migrate = self.sqlalchemy_migrate_func self.sqlalchemy_1_0;
-  sqlalchemy_migrate_0_7 = self.sqlalchemy_migrate_func self.sqlalchemy;
+  sqlalchemy_migrate = self.sqlalchemy_migrate_func self.sqlalchemy;
+  sqlalchemy_migrate_0_7 = self.sqlalchemy_migrate_func self.sqlalchemy7;
 
   sqlparse = buildPythonPackage rec {
     name = "sqlparse-${version}";
@@ -24810,7 +24857,7 @@ in modules // {
         thrift
         beautifulsoup4
         markdown2
-        sqlalchemy
+        sqlalchemy7
         html2text
         evernote
     ];

@@ -1,5 +1,5 @@
 { stdenv, buildPythonApplication, fetchurl, twisted, dateutil, jinja2
-, sqlalchemy , sqlalchemy_migrate_0_7
+, sqlalchemy_migrate_0_7
 , enableDebugClient ? false, pygobject ? null, pyGtkGlade ? null
 }:
 

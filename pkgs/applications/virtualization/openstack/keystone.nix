@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
   # https://github.com/openstack/keystone/blob/stable/liberty/requirements.txt
   propagatedBuildInputs = with pythonPackages; [
     pbr webob eventlet greenlet PasteDeploy paste routes cryptography six
-    sqlalchemy_1_0 sqlalchemy_migrate stevedore passlib keystoneclient memcached
+    sqlalchemy sqlalchemy_migrate stevedore passlib keystoneclient memcached
     keystonemiddleware oauthlib pysaml2 dogpile_cache jsonschema pycadf msgpack
     xmlsec MySQL_python
 
