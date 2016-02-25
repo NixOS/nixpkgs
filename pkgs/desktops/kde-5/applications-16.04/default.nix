@@ -43,6 +43,7 @@ let
     kcalc = callPackage ./kcalc.nix {};
     kcalcore = callPackage ./kcalcore.nix {};
     kcolorchooser = callPackage ./kcolorchooser.nix {};
+    kcontacts = callPackage ./kcontacts.nix {};
     kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
     kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
     kgpg = callPackage ./kgpg.nix { inherit (pkgs.kde4) kdepimlibs; };
