@@ -23958,17 +23958,23 @@ in modules // {
     };
   };
 
-  pythonefl_1_15 = buildPythonPackage rec {
+  pythonefl_1_16 = buildPythonPackage rec {
     name = "python-efl-${version}";
-    version = "1.15.0";
+    version = "1.16.0";
     src = pkgs.fetchurl {
-      url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.gz";
-      sha256 = "1k3vb7pb70l2v1s2mzg91wvmncq93vb04vn60pzdlrnbcns0grhi";
+      url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.xz";
+      sha256 = "142ffki41xj0z2dnf011g8j4b35waviprk4x1dhvy1wgqdywl61l";
     };
+
     preConfigure = ''
       export NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl) -I${self.dbus}/include/dbus-1.0 $NIX_CFLAGS_COMPILE"
     '';
+    preBuild = "${python}/bin/${python.executable} setup.py build_ext";
+    installPhase= "${python}/bin/${python.executable} setup.py install --prefix=$out";
+
     buildInputs = with self; [ pkgs.pkgconfig pkgs.e19.efl pkgs.e19.elementary ];
+    doCheck = false;
+
     meta = {
       description = "Python bindings for EFL and Elementary";
       homepage = http://enlightenment.org/;
