@@ -54,7 +54,7 @@
 "github:nbouscal/vim-stylish-haskell"
 "github:osyo-manga/shabadou.vim"
 "github:osyo-manga/vim-watchdogs"
-"github:phildawes/racer"
+"github:racer-rust/vim-racer"
 "github:shougo/neocomplete.vim"
 "github:shougo/neosnippet-snippets"
 "github:shougo/neosnippet.vim"
