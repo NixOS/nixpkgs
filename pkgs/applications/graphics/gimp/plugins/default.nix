@@ -6,9 +6,7 @@
 { pkgs, gimp }:
 let
   inherit (pkgs) stdenv fetchurl pkgconfig glib;
-  targetPluginDir = "$out/${gimp.name}-plugins";
-  targetScriptDir = "$out/${gimp.name}-scripts";
-  prefix = "plugin-gimp-";
+  inherit (gimp) targetPluginDir targetScriptDir;
 
   pluginDerivation = a: stdenv.mkDerivation ({
     prePhases = "extraLib";
