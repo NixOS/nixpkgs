@@ -1,14 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, glib, fuse }:
+{ stdenv, fetchFromGitHub, pkgconfig, glib, fuse, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "sshfs-fuse-2.5";
+  name = "sshfs-fuse-2.6";
   
-  src = fetchurl {
-    url = "mirror://sourceforge/fuse/${name}.tar.gz";
-    sha256 = "0gp6qr33l2p0964j0kds0dfmvyyf5lpgsn11daf0n5fhwm9185z9";
+  src = fetchFromGitHub {
+    repo = "sshfs";
+    owner = "libfuse";
+    rev = "sshfs_2_6";
+    sha256 = "08ffvviinjf8ncs8z494q739a8lky9z46i09ghj1y38qzgvk3fpw";
   };
   
-  buildInputs = [ pkgconfig glib fuse ];
+  buildInputs = [ pkgconfig glib fuse autoreconfHook ];
+
   postInstall = ''
     mkdir -p $out/sbin
     ln -sf $out/bin/sshfs $out/sbin/mount.sshfs
