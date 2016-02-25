@@ -1,4 +1,5 @@
-{ stdenv, fetchgit, talloc, enableStatic ? false }:
+{ stdenv, fetchgit, talloc, docutils
+, enableStatic ? false }:
 
 stdenv.mkDerivation rec {
   name = "proot-${version}";
@@ -11,14 +12,25 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ talloc ];
+  nativeBuildInputs = [ docutils ];
+
+  enableParallelBuilding = true;
 
   preBuild = stdenv.lib.optionalString enableStatic ''
     export LDFLAGS="-static -L${talloc}/lib"
-  '' + ''
-    substituteInPlace GNUmakefile --replace "/usr/local" "$out"
   '';
 
-  sourceRoot = "proot/src";
+  makeFlags = [ "-C src" ];
+
+  postBuild = ''
+    make -C doc proot/man.1
+  '';
+
+  installFlags = [ "PREFIX=$(out)" ];
+
+  postInstall = ''
+    install -Dm644 doc/proot/man.1 $out/share/man/man1/proot.1
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://proot.me;
