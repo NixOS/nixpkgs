@@ -30,6 +30,7 @@ let
 
     kdelibs = callPackage ./kdelibs { inherit (pkgs) attica phonon; };
 
+    akonadi = callPackage ./akonadi.nix {};
     ark = callPackage ./ark.nix {};
     baloo-widgets = callPackage ./baloo-widgets.nix {};
     dolphin = callPackage ./dolphin.nix {};
