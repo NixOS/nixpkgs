@@ -904,6 +904,8 @@ let
 
   gmic = callPackage ../tools/graphics/gmic { };
 
+  gti = callPackage ../tools/misc/gti { };
+
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
   interlock = goPackages.interlock.bin // { outputs = [ "bin" ]; };
