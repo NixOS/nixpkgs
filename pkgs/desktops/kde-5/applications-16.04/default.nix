@@ -46,6 +46,7 @@ let
     kcontacts = callPackage ./kcontacts.nix {};
     kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
     kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
+    kmbox = callPackage ./kmbox.nix {};
     kgpg = callPackage ./kgpg.nix { inherit (pkgs.kde4) kdepimlibs; };
     kio-extras = callPackage ./kio-extras.nix {};
     kldap = callPackage ./kldap.nix {};
