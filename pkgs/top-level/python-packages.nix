@@ -1804,14 +1804,23 @@ in modules // {
 
   cycler = buildPythonPackage rec {
     name = "cycler-${version}";
-    version = "0.9.0";
+    version = "0.10.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/C/Cycler/${name}.tar.gz";
-      sha256 = "96dc4ddf27ef62c09990c6196ac1167685e89168042ec0ae4db586de023355bc";
+      sha256 = "cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8";
     };
 
+    buildInputs = with self; [ coverage nose ];
     propagatedBuildInputs = with self; [ six ];
+
+    checkPhase = ''
+      ${python.interpreter} run_tests.py
+    '';
+
+    # Tests were not included in release.
+    # https://github.com/matplotlib/cycler/issues/31
+    doCheck = false;
 
     meta = {
       description = "Composable style cycles";
@@ -8960,10 +8969,11 @@ in modules // {
       ${python.interpreter} -m unittest discover
     '';
 
-    # Judging from SyntaxError
-    disabled = isPy3k;
-
-    # Lots of errors. Likely due to being in a chroot
+    # Because 2to3 is used the tests in $out need to be run.
+    # Both when using unittest and pytest this resulted in many errors,
+    # some Python byte/str errors, and others specific to resources tested.
+    # Failing tests due to the latter is to be expected with this type of package.
+    # Tests are therefore disabled.
     doCheck = false;
 
     meta = {
@@ -10433,15 +10443,19 @@ in modules // {
 
 
   keyring = buildPythonPackage rec {
-    name = "keyring-3.3";
+    name = "keyring-8.4.1";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/k/keyring/${name}.zip";
-      md5 = "81291e0c7337affb71442e6c7671e77f";
+      url = "https://pypi.python.org/packages/source/k/keyring/${name}.tar.gz";
+      sha256 = "1286sh5g53168qxbl4g5bmns9ci0ld0jl3h44b7h8is5nw1421ar";
     };
 
     buildInputs = with self;
-      [ fs gdata python_keyczar mock pyasn1 pycrypto pytest six ];
+      [ fs gdata python_keyczar mock pyasn1 pycrypto pytest_28 six setuptools_scm pytestrunner ];
+
+    checkPhase = ''
+      py.test $out
+    '';
 
     meta = {
       description = "Store and access your passwords safely";
@@ -12528,16 +12542,16 @@ in modules // {
   };
 
   numexpr = buildPythonPackage rec {
-    version = "2.4.6";
+    version = "2.5";
     name = "numexpr-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/numexpr/${name}.tar.gz";
-      sha256 = "052397670dc56d7845ff894cd7d858e4f115491ecd93bcc0eda5cb83990c5da3";
+      sha256 = "319cdf4e402177a1c8ed4972cffd09f523446f186d347b7c1974787cdabf0294";
     };
 
     # Tests fail with python 3. https://github.com/pydata/numexpr/issues/177
-    doCheck = !isPy3k;
+    # doCheck = !isPy3k;
 
     propagatedBuildInputs = with self; [ numpy ];
 

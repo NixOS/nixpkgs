@@ -5988,6 +5988,8 @@ let
 
   mk = callPackage ../development/tools/build-managers/mk { };
 
+  msitools = callPackage ../development/tools/misc/msitools { };
+
   multi-ghc-travis = callPackage ../development/tools/haskell/multi-ghc-travis { };
 
   neoload = callPackage ../development/tools/neoload {
@@ -6699,22 +6701,18 @@ let
   glfw3 = callPackage ../development/libraries/glfw/3.x.nix { };
 
   glibc = callPackage ../development/libraries/glibc {
-    kernelHeaders = linuxHeaders;
     installLocales = config.glibc.locales or false;
-    machHeaders = null;
-    hurdHeaders = null;
     gccCross = null;
   };
 
   glibc_memusage = callPackage ../development/libraries/glibc {
-    kernelHeaders = linuxHeaders;
     installLocales = false;
     withGd = true;
   };
 
   glibcCross = forceNativeDrv (glibc.override {
     gccCross = gccCrossStageStatic;
-    kernelHeaders = linuxHeadersCross;
+    linuxHeaders = linuxHeadersCross;
   });
 
   # We can choose:
@@ -12427,7 +12425,7 @@ let
   inferno = callPackage_i686 ../applications/inferno { };
 
   inkscape = callPackage ../applications/graphics/inkscape {
-    inherit (pythonPackages) lxml;
+    inherit (pythonPackages) python pyxml lxml numpy;
     lcms = lcms2;
   };
 

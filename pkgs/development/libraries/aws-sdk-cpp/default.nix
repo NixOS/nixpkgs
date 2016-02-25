@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl }:
+{ lib, stdenv, fetchFromGitHub, cmake, curl
+, # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
+  apis ? ["*"]
+, # Whether to enable AWS' custom memory management.
+  customMemoryManagement ? true
+}:
 
 stdenv.mkDerivation rec {
   name = "aws-sdk-cpp-${version}";
@@ -13,9 +18,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake curl ];
 
-  # FIXME: provide flags to build only part of the SDK, or put them in
-  # different outputs.
-  # cmakeFlags = "-DBUILD_ONLY=aws-cpp-sdk-s3";
+  cmakeFlags =
+    lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
+    ++ lib.optional (apis != ["*"])
+      "-DBUILD_ONLY=${lib.concatMapStringsSep ";" (api: "aws-cpp-sdk-" + api) apis}";
 
   enableParallelBuilding = true;
 

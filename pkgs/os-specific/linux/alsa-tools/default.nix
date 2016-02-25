@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
       "ftp://ftp.alsa-project.org/pub/tools/${name}.tar.bz2"
       "http://alsa.cybermirror.org/tools/${name}.tar.bz2"
     ];
-    sha256 = "3b1c3135b76e14532d3dd23fb15759ddd7daf9ffbc183f7a9a0a3a86374748f1";
+    sha256 = "0ldbaz3qr7z0639xg37ba7cmrb512rrjavap6r5jjl0ab665ad3x";
   };
 
   buildInputs = [ alsaLib pkgconfig gtk gtk3 fltk13 ];

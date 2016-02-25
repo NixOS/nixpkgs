@@ -33,6 +33,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.consul;
+        defaultText = "pkgs.consul";
         description = ''
           The package used for the Consul agent and CLI.
         '';

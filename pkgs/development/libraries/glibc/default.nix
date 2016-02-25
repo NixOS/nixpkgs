@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, fetchgit ? null, kernelHeaders
-, machHeaders ? null, hurdHeaders ? null, libpthreadHeaders ? null
-, mig ? null
+{ lib, stdenv, fetchurl, linuxHeaders
 , installLocales ? true
 , profilingLibraries ? false
 , gccCross ? null
@@ -16,11 +14,10 @@ let
 in
   build cross ({
     name = "glibc"
-      + stdenv.lib.optionalString (hurdHeaders != null) "-hurd"
-      + stdenv.lib.optionalString debugSymbols "-debug"
-      + stdenv.lib.optionalString withGd "-gd";
+      + lib.optionalString debugSymbols "-debug"
+      + lib.optionalString withGd "-gd";
 
-    inherit fetchurl fetchgit stdenv kernelHeaders installLocales
+    inherit lib stdenv fetchurl linuxHeaders installLocales
       profilingLibraries gccCross withGd gd libpng;
 
     builder = ./builder.sh;
@@ -55,23 +52,6 @@ in
      NIX_STRIP_DEBUG = 0;
    }
    else {})
-
-  //
-
-  (if hurdHeaders != null
-   then rec {
-     inherit machHeaders hurdHeaders libpthreadHeaders mig fetchgit;
-
-     propagatedBuildInputs = [ machHeaders hurdHeaders libpthreadHeaders ];
-
-     passthru = {
-       # When building GCC itself `propagatedBuildInputs' above is not
-       # honored, so we pass it here so that the GCC builder can do the right
-       # thing.
-       inherit propagatedBuildInputs;
-     };
-   }
-   else { })
 
   //
 
