@@ -121,11 +121,22 @@ in {
         User = "rabbitmq";
       };
       script = let
-        clients = (lib.concatMapStrings (client: ''
-          rabbitmqctl add_user ${client.node} ${client.password} || true
-          rabbitmqctl change_password ${client.node} ${client.password}
-          rabbitmqctl set_permissions -p /sensu ${client.node} "^${client.node}-.*" "^(keepalives|results)$" "^${client.node}-.*"
-          '') enc_clients);
+        clients = (lib.concatMapStrings (
+          client:
+            let client_name = builtins.head (lib.splitString "." client.node);
+            in ''
+              rabbitmqctl add_user ${client.node} ${client.password} || true
+              rabbitmqctl change_password ${client.node} ${client.password}
+              # Permission for clients in order: conf, write, read
+              # exchange.declare -> configure "keepalives"
+              # queue.declate -> configure "node-*"
+              # queue.bind -> write "node-*"
+              rabbitmqctl set_permissions -p /sensu ${client.node} \
+                "^((default|results|keepalives)$)|${client_name}-.*" \
+                "^((keepalives|results)$)|${client_name}-.*" \
+                "^(default$)|${client_name}-.*"
+              '')
+          enc_clients);
       in
        ''
         set -ex
