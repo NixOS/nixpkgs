@@ -157,7 +157,10 @@ in {
     systemd.services.sensu-server = {
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.sensu pkgs.sensu_plugins pkgs.openssl pkgs.bash pkgs.mailutils ];
-      requires = [ "prepare-rabbitmq-for-sensu.service" ];
+      requires = [
+        "rabbitmq.service"
+        "redis.service"
+        "prepare-rabbitmq-for-sensu.service" ];
       serviceConfig = {
         User = "sensuserver";
         ExecStart = "${pkgs.sensu}/bin/sensu-server -v -c ${sensu_server_json}";

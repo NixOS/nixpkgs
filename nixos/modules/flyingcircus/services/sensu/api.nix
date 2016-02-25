@@ -63,6 +63,9 @@ in  {
 
     systemd.services.sensu-api = {
       wantedBy = [ "multi-user.target" ];
+      requires = [
+        "rabbitmq.service"
+        "redis.service"];
       path = [ sensu ];
       serviceConfig = {
         User = "sensuapi";
