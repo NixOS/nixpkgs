@@ -50,6 +50,7 @@ let
     kgpg = callPackage ./kgpg.nix { inherit (pkgs.kde4) kdepimlibs; };
     kio-extras = callPackage ./kio-extras.nix {};
     kldap = callPackage ./kldap.nix {};
+    kmime = callPackage ./kmime.nix {};
     konsole = callPackage ./konsole.nix {};
     libkdcraw = callPackage ./libkdcraw.nix {};
     libkexiv2 = callPackage ./libkexiv2.nix {};
