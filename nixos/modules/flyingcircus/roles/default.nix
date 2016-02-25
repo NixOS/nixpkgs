@@ -23,6 +23,7 @@ in
      ./nginx.nix
      ./postgresql93.nix
      ./sensuserver.nix
+     ./servicecheck.nix
      ./varnish.nix
     ];
 
