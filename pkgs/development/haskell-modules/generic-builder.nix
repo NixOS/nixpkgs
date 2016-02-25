@@ -36,6 +36,7 @@
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? []
 , testTarget ? ""
 , broken ? false
+, preCompileBuildDriver ? "", postCompileBuildDriver ? ""
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
 , preConfigure ? "", postConfigure ? ""
@@ -55,7 +56,17 @@ let
   inherit (stdenv.lib) optional optionals optionalString versionOlder
                        concatStringsSep enableFeature optionalAttrs toUpper;
 
+  isCross = ghc.isCross or false;
   isGhcjs = ghc.isGhcjs or false;
+  packageDbFlag = if isGhcjs || versionOlder "7.6" ghc.version
+                  then "package-db"
+                  else "package-conf";
+
+  nativeGhc = if isCross then ghc.bootPkgs.ghc else ghc;
+  nativeIsCross = nativeGhc.isCross or false;
+  nativePackageDbFlag = if versionOlder "7.6" nativeGhc.version
+                        then "package-db"
+                        else "package-conf";
 
   newCabalFileUrl = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
@@ -68,9 +79,6 @@ let
                      import Distribution.Simple
                      main = defaultMain
                    '';
-
-  ghc76xOrLater = isGhcjs || stdenv.lib.versionOlder "7.6" ghc.version;
-  packageDbFlag = if ghc76xOrLater then "package-db" else "package-conf";
 
   hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
 
@@ -95,7 +103,7 @@ let
     (optionalString (isGhcjs || versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
     (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
   ] ++ optionals isGhcjs [
-    "--with-hsc2hs=${ghc.nativeGhc}/bin/hsc2hs"
+    "--with-hsc2hs=${nativeGhc}/bin/hsc2hs"
     "--ghcjs"
   ];
 
@@ -123,7 +131,8 @@ let
 
   ghcEnv = ghc.withPackages (p: haskellBuildInputs);
 
-  setupCommand = if isGhcjs then "${ghc.nodejs}/bin/node ./Setup.jsexe/all.js" else "./Setup";
+  setupBuilder = if isCross then "${nativeGhc}/bin/ghc" else ghcCommand;
+  setupCommand = "./Setup";
   ghcCommand = if isGhcjs then "ghcjs" else "ghc";
   ghcCommandCaps = toUpper ghcCommand;
 
@@ -199,7 +208,7 @@ stdenv.mkDerivation ({
     done
 
     echo setupCompileFlags: $setupCompileFlags
-    ${ghcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+    ${setupBuilder} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
     runHook postCompileBuildDriver
   '';
@@ -295,6 +304,8 @@ stdenv.mkDerivation ({
          ;
 
 }
+// optionalAttrs (preCompileBuildDriver != "")  { inherit preCompileBuildDriver; }
+// optionalAttrs (postCompileBuildDriver != "") { inherit postCompileBuildDriver; }
 // optionalAttrs (preUnpack != "")      { inherit preUnpack; }
 // optionalAttrs (postUnpack != "")     { inherit postUnpack; }
 // optionalAttrs (configureFlags != []) { inherit configureFlags; }

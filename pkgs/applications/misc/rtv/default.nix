@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgs, lib, python, pythonPackages }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   version = "1.8.0";
   name = "rtv-${version}";
 

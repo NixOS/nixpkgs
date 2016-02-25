@@ -173,7 +173,8 @@ let
     SSLRandomSeed connect builtin
 
     SSLProtocol All -SSLv2 -SSLv3
-    SSLCipherSuite HIGH:MEDIUM:!aNULL:!MD5:!EXP
+    SSLCipherSuite HIGH:!aNULL:!MD5:!EXP
+    SSLHonorCipherOrder on
   '';
 
 

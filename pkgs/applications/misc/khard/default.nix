@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgs, pythonPackages }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   version = "0.8.1";
   name = "khard-${version}";
   namePrefix = "";
@@ -11,14 +11,15 @@ pythonPackages.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with pythonPackages; [
+    atomicwrites
     configobj
     vobject
     argparse
+    pyyaml
   ];
 
   buildInputs = with pythonPackages; [
     pkgs.vdirsyncer
-    pyyaml
   ];
 
   meta = {

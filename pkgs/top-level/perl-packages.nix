@@ -1898,6 +1898,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Clipboard = buildPerlPackage {
+    name = "Clipboard-0.13";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/K/KI/KING/Clipboard-0.13.tar.gz;
+      sha256 = "eebf1c9cb2484be850abdae017147967cf47f8ccd99293771517674b0046ec8a";
+    };
+    meta = {
+      description = "Clipboard - Copy and Paste with any OS";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+
   Clone = buildPerlPackage rec {
     name = "Clone-0.38";
     src = fetchurl {
@@ -8136,10 +8149,10 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXRoleWithOverloading = buildPerlPackage {
-    name = "MooseX-Role-WithOverloading-0.13";
+  MooseXRoleWithOverloading = buildPerlPackage rec {
+    name = "MooseX-Role-WithOverloading-0.17";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Role-WithOverloading-0.13.tar.gz;
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "01mqpvbz7yw993918hgp72vl22i6mgicpq5b3zrrsp6vl8sqj2sw";
     };
     buildInputs = [ TestCheckDeps TestNoWarnings ModuleMetadata];
@@ -9726,11 +9739,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  podlators = buildPerlPackage {
-    name = "podlators-2.5.3";
+  podlators = buildPerlPackage rec {
+    name = "podlators-4.06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RR/RRA/podlators-2.5.3.tar.gz;
-      sha256 = "c80d6d65a8694720deff1c6b2067d7564727db713b6d6b536afbad70299647d1";
+      url = "mirror://cpan/authors/id/R/RR/RRA/${name}.tar.gz";
+      sha256 = "0fsb1k88fsqwgmk5fkcz57jf27g6ip4ncikawslm596d1si2h48a";
     };
     meta = {
       description = "Convert POD data to various other formats";

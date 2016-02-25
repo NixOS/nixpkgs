@@ -34,24 +34,29 @@ rec {
     ghc784 = callPackage ../development/compilers/ghc/7.8.4.nix {
       ghc = compiler.ghc742Binary;
     };
-    ghc7102 = callPackage ../development/compilers/ghc/7.10.2.nix {
-      ghc = compiler.ghc784; inherit (packages.ghc784) hscolour;
+    ghc7102 = callPackage ../development/compilers/ghc/7.10.2.nix rec {
+      bootPkgs = packages.ghc784;
+      inherit (bootPkgs) hscolour;
     };
-    ghc7103 = callPackage ../development/compilers/ghc/7.10.3.nix {
-      ghc = compiler.ghc784; inherit (packages.ghc784) hscolour;
+    ghc7103 = callPackage ../development/compilers/ghc/7.10.3.nix rec {
+      bootPkgs = packages.ghc784;
+      inherit (bootPkgs) hscolour;
     };
-    ghc801 = callPackage ../development/compilers/ghc/8.0.1.nix {
-      ghc = compiler.ghc7103; inherit (packages.ghc7103) hscolour;
+    ghc801 = callPackage ../development/compilers/ghc/8.0.1.nix rec {
+      bootPkgs = packages.ghc7103;
+      inherit (bootPkgs) hscolour;
     };
-    ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-      inherit (packages.ghc784) ghc alex happy;
+    ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
+      bootPkgs = packages.ghc784;
+      inherit (bootPkgs) alex happy;
     };
-    ghcNokinds = callPackage ../development/compilers/ghc/nokinds.nix {
-      inherit (packages.ghc784) ghc alex happy;
+    ghcNokinds = callPackage ../development/compilers/ghc/nokinds.nix rec {
+      bootPkgs = packages.ghc784;
+      inherit (bootPkgs) alex happy;
     };
 
     ghcjs = packages.ghc7103.callPackage ../development/compilers/ghcjs {
-      ghc = compiler.ghc7103;
+      bootPkgs = packages.ghc7103;
     };
 
     jhc = callPackage ../development/compilers/jhc {
@@ -149,6 +154,7 @@ rec {
     lts-0_7 = packages.ghc783.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-0.7.nix { };
     };
+    lts-0 = packages.lts-0_7;
 
     lts-1_0 = packages.ghc784.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-1.0.nix { };
@@ -192,6 +198,7 @@ rec {
     lts-1_15 =packages.ghc784.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-1.15.nix { };
     };
+    lts-1 = packages.lts-1_15;
 
     lts-2_0 = packages.ghc784.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.0.nix { };
@@ -262,6 +269,7 @@ rec {
     lts-2_22 = packages.ghc784.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-2.22.nix { };
     };
+    lts-2 = packages.lts-2_22;
 
     lts-3_0 = packages.ghc7102.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.0.nix { };
@@ -326,6 +334,7 @@ rec {
     lts-3_20 = packages.ghc7102.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-3.20.nix { };
     };
+    lts-3 = packages.lts-3_20;
 
     lts-4_0 = packages.ghc7103.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-4.0.nix { };
@@ -336,6 +345,7 @@ rec {
     lts-4_2 = packages.ghc7103.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-4.2.nix { };
     };
+    lts-4 = packages.lts-4_2;
 
     lts-5_0 = packages.ghc7103.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-5.0.nix { };
@@ -346,6 +356,11 @@ rec {
     lts-5_2 = packages.ghc7103.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-5.2.nix { };
     };
+    lts-5_3 = packages.ghc7103.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-5.3.nix { };
+    };
+    lts-5 = packages.lts-5_3;
 
+    lts = packages.lts-5;
   };
 }

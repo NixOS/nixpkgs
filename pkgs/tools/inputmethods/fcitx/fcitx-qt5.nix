@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "fcitx-qt5-${version}";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchurl {
     url = "http://download.fcitx-im.org/fcitx-qt5/${name}.tar.xz";
-    sha256 = "070dlmwkim7sg0xwxfcbb46li1jk8yd3rmj0j5fkmgyr12044aml";
+    sha256 = "1pj1b04n8r4kl7jh1qdv0xshgzb3zrmizfa3g5h3yk589h191vwc";
   };
 
   buildInputs = [ cmake fcitx extra-cmake-modules qtbase ];

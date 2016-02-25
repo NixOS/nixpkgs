@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, python, buildPythonPackage, qtmultimedia, pyqt5
+{ stdenv, fetchurl, python, buildPythonApplication, qtmultimedia, pyqt5
 , jinja2, pygments, pyyaml, pypeg2, gst-plugins-base, gst-plugins-good
 , gst-plugins-bad, gst-libav, wrapGAppsHook, glib_networking }:
 
 let version = "0.5.1"; in
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "qutebrowser-${version}";
   namePrefix = "";
 

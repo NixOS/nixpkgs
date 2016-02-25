@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, python, buildPythonPackage, parted, e2fsprogs }:
+{ stdenv, fetchurl, pkgconfig, python, buildPythonApplication, parted, e2fsprogs }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "pyparted-${version}";
   version = "3.10";
 

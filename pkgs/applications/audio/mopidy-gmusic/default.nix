@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pythonPackages, mopidy }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "mopidy-gmusic-${version}";
   version = "1.0.0";
 

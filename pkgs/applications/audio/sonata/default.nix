@@ -1,11 +1,11 @@
 { pkgs, stdenv, fetchFromGitHub, pkgconfig, intltool, wrapGAppsHook,
-  python, buildPythonPackage, isPy3k,
+  python, buildPythonApplication, isPy3k,
   gnome3, gtk3, gobjectIntrospection,
   dbus, pygobject3, mpd2 }:
 
 with pkgs.lib;
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "sonata-${version}";
   version = "1.7b1";
   namePrefix = "";

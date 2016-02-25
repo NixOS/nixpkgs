@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonPackage, python, w3m, file }:
+{ stdenv, fetchurl, buildPythonApplication, python, w3m, file }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "ranger-1.7.2";
 
   meta = {

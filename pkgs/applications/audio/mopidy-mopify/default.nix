@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pythonPackages, mopidy }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "mopidy-mopify-${version}";
 
   version = "1.5.8";

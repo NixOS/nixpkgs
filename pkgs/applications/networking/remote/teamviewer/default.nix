@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     ${if stdenv.system == "x86_64-linux" then ''
       sed -i "s,TV_LD64_PATH=.*,TV_LD64_PATH=$(cat ${ld64})," script/tvw_config
     '' else ''
-      sed -i ",TV_LD64_PATH=.*,d" script/tvw_config
+      sed -i "/TV_LD64_PATH=.*/d" script/tvw_config
     ''}
 
     sed -i "s,/opt/teamviewer,$out/share/teamviewer,g" desktop/teamviewer-*.desktop

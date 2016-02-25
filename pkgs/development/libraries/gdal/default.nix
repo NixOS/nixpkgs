@@ -1,18 +1,22 @@
 { stdenv, fetchurl, composableDerivation, unzip, libjpeg, libtiff, zlib
 , postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
-, libpng }:
+, libpng
+, netcdf, hdf5 , curl
+, netcdfSupport ? true
+ }:
 
 composableDerivation.composableDerivation {} (fixed: rec {
-  version = "2.0.1";
+  version = "2.0.2";
   name = "gdal-${version}";
 
   src = fetchurl {
     url = "http://download.osgeo.org/gdal/${version}/${name}.tar.gz";
-    sha256 = "b55f794768e104a2fd0304eaa61bb8bda3dc7c4e14f2c9d0913baca3e55b83ab";
+    sha256 = "db7722caf8d9dd798ec18012b9cacf40a518918466126a88b9fd277bd7d40cc4";
   };
 
   buildInputs = [ unzip libjpeg libtiff libpng proj openssl ]
-  ++ (with pythonPackages; [ python numpy wrapPython ]);
+  ++ (with pythonPackages; [ python numpy wrapPython ])
+  ++ (stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ]);
 
   patches = [
     # This ensures that the python package is installed into gdal's prefix,
@@ -36,6 +40,7 @@ composableDerivation.composableDerivation {} (fixed: rec {
     "--with-python"               # optional
     "--with-static-proj4=${proj}" # optional
     "--with-geos=${geos}/bin/geos-config"# optional
+    (if netcdfSupport then "--with-netcdf=${netcdf}" else "")
   ];
 
   # Prevent this:

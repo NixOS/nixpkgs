@@ -258,45 +258,54 @@ a value from <varname>stdenv.lib.licenses</varname> defined in
 <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix">
 <filename>nixpkgs/lib/licenses.nix</filename></link>,
 or in-place license description of the same format if the license is
-unlikely to be useful in another expression.
+unlikely to be useful in another expression.</para>
 
-A few generic options are available, although it's typically better
-to indicate the specific license:
+<para>Although it's typically better to indicate the specific license,
+a few generic options are available:
+
 <variablelist>
 
   <varlistentry>
-    <term><varname>free</varname></term>
+    <term><varname>stdenv.lib.licenses.free</varname>,
+    <varname>"free"</varname></term>
+
     <listitem><para>Catch-all for free software licenses not listed
     above.</para></listitem>
   </varlistentry>
 
   <varlistentry>
-    <term><varname>unfree-redistributable</varname></term>
+    <term><varname>stdenv.lib.licenses.unfreeRedistributable</varname>,
+    <varname>"unfree-redistributable"</varname></term>
+
     <listitem><para>Unfree package that can be redistributed in binary
-    form.  That is, it’s legal to redistribute the
+    form. That is, it’s legal to redistribute the
     <emphasis>output</emphasis> of the derivation.  This means that
     the package can be included in the Nixpkgs
     channel.</para>
 
     <para>Sometimes proprietary software can only be redistributed
-    unmodified.  Make sure the builder doesn’t actually modify the
+    unmodified. Make sure the builder doesn’t actually modify the
     original binaries; otherwise we’re breaking the license.  For
     instance, the NVIDIA X11 drivers can be redistributed unmodified,
     but our builder applies <command>patchelf</command> to make them
-    work.  Thus, its license is <varname>unfree</varname> and it
+    work. Thus, its license is <varname>"unfree"</varname> and it
     cannot be included in the Nixpkgs channel.</para></listitem>
   </varlistentry>
 
   <varlistentry>
-    <term><varname>unfree</varname></term>
-    <listitem><para>Unfree package that cannot be redistributed.  You
+    <term><varname>stdenv.lib.licenses.unfree</varname>,
+    <varname>"unfree"</varname></term>
+
+    <listitem><para>Unfree package that cannot be redistributed. You
     can build it yourself, but you cannot redistribute the output of
-    the derivation.  Thus it cannot be included in the Nixpkgs
+    the derivation. Thus it cannot be included in the Nixpkgs
     channel.</para></listitem>
   </varlistentry>
 
   <varlistentry>
-    <term><varname>unfree-redistributable-firmware</varname></term>
+    <term><varname>stdenv.lib.licenses.unfreeRedistributableFirmware</varname>,
+    <varname>"unfree-redistributable-firmware"</varname></term>
+
     <listitem><para>This package supplies unfree, redistributable
     firmware.  This is a separate value from
     <varname>unfree-redistributable</varname> because not everybody

@@ -17,7 +17,7 @@ let
   ];
 
 in
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "ocropus-${version}";
   version = "20150316";
 

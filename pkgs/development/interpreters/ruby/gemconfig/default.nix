@@ -21,6 +21,7 @@
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, gecode_3, curl
+, libmsgpack
 }:
 
 let
@@ -40,6 +41,10 @@ in
     '';
   };
 
+  eventmachine = attrs: {
+    buildInputs = [ openssl ];
+  };
+
   ffi = attrs: {
     buildInputs = [ libffi pkgconfig ];
   };
@@ -54,6 +59,10 @@ in
   libv8 = attrs: {
     buildInputs = [ which v8 python ];
     buildFlags = [ "--with-system-v8=true" ];
+  };
+
+  msgpack = attrs: {
+    buildInputs = [ libmsgpack ];
   };
 
   mysql2 = attrs: {

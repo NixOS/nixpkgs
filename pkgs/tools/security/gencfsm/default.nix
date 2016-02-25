@@ -2,12 +2,12 @@
 , glib , gnome3, gtk3, libgnome_keyring, vala, wrapGAppsHook, xorg }:
 
 stdenv.mkDerivation rec {
-  version = "1.8.15";
+  version = "1.8.16";
   name = "gnome-encfs-manager-${version}";
 
   src = fetchurl {
     url = "https://launchpad.net/gencfsm/trunk/1.8/+download/gnome-encfs-manager_${version}.tar.gz";
-    sha256 = "1iryli6fgw6a45abkrjacfac7dwjhbrhw652rqf0s183373db0mx";
+    sha256 = "06sz6zcmvxkqww5gx4brcqs4hlpy9d8sal9nmw0pdsvh8k5vmpgn";
   };
 
   buildInputs = [ autoconf automake intltool libtool pkgconfig vala glib encfs

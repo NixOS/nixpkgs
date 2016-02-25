@@ -75,7 +75,7 @@ in stdenv.mkDerivation (args // {
     (
         set -euo pipefail
 
-        cd ../deps/registry/src/*
+        cd $NIX_BUILD_TOP/deps/registry/src/*
 
         for script in $patchRegistryDeps/*; do
           # Run in a subshell so that directory changes and shell options don't

@@ -1,6 +1,6 @@
-{ stdenv, fetchzip, buildPythonPackage }:
+{ stdenv, fetchzip, buildPythonApplication }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "gitinspector-${version}";
   version = "0.4.1";
   namePrefix = "";

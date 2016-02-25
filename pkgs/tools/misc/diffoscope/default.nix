@@ -1,19 +1,19 @@
 { lib, stdenv, fetchgit, fetchpatch, pythonPackages, docutils
-, acl, binutils, bzip2, cbfstool, cdrkit, cpio, diffutils, e2fsprogs, file, fpc, gettext, ghc, gnupg1
-, gzip, jdk, libcaca, mono, pdftk, poppler_utils, rpm, sng, sqlite, squashfsTools, unzip, vim, xz
+, acl, binutils, bzip2, cbfstool, cdrkit, colord, cpio, diffutils, e2fsprogs, file, fpc, gettext, ghc
+, gnupg1, gzip, jdk, libcaca, mono, pdftk, poppler_utils, rpm, sng, sqlite, squashfsTools, unzip, vim, xz
 , enableBloat ? false
 }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "diffoscope-${version}";
-  version = "45";
+  version = "49";
 
   namePrefix = "";
 
   src = fetchgit {
     url = "git://anonscm.debian.org/reproducible/diffoscope.git";
     rev = "refs/tags/${version}";
-    sha256 = "1wdphcmr2n0pyg7zwvczy7ik1bzjlrjb76jwbzk971lwba3ajazk";
+    sha256 = "0kh96h95rp7bk8rgc1z18jwv89dyp1n36bawqyqxhwwklmrgxr66";
   };
 
   patches =
@@ -29,13 +29,13 @@ pythonPackages.buildPythonPackage rec {
     sed -i setup.py -e "/'rpm-python',/d"
   '';
 
-  # Still missing these tools: enjarify otool(maybe OS X only) showttf
+  # Still missing these tools: enjarify, otool & lipo (maybe OS X only), showttf
   # Also these libraries: python3-guestfs
   # FIXME: move xxd into a separate package so we don't have to pull in all of vim.
   propagatedBuildInputs = (with pythonPackages; [ debian libarchive-c python_magic tlsh ]) ++
     [ acl binutils bzip2 cbfstool cdrkit cpio diffutils e2fsprogs file gettext
       gzip libcaca poppler_utils rpm sng sqlite squashfsTools unzip vim xz
-    ] ++ lib.optionals enableBloat [ jdk ghc fpc gnupg1 pdftk mono ];
+    ] ++ lib.optionals enableBloat [ colord fpc ghc gnupg1 jdk mono pdftk ];
 
   doCheck = false; # Calls 'mknod' in squashfs tests, which needs root
 

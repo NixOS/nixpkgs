@@ -2,7 +2,7 @@
 , glib_networking, gst_plugins_good, gst_plugins_base, gst_plugins_ugly
 }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "mopidy-${version}";
 
   version = "1.1.2";

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, python, llvmPackages, boost, pythonPackages, buildPythonPackage, makeWrapper
+{ stdenv, fetchgit, cmake, python, llvmPackages, boost, pythonPackages, buildPythonApplication, makeWrapper
 }:
 
 stdenv.mkDerivation rec {

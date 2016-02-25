@@ -12,6 +12,7 @@
   abaldeau = "Andreas Baldeau <andreas@baldeau.net>";
   abbradar = "Nikolay Amiantov <ab@fmap.me>";
   adev	   = "Adrien Devresse <adev@adev.name>";
+  aespinosa = "Allan Espinosa <allan.espinosa@outlook.com>";
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
   aflatter = "Alexander Flatter <flatter@fastmail.fm>";
   aherrmann = "Andreas Herrmann <andreash87@gmx.ch>";
@@ -58,6 +59,7 @@
   bosu = "Boris Sukholitko <boriss@gmail.com>";
   bramd = "Bram Duvigneau <bram@bramd.nl>";
   bstrik = "Berno Strik <dutchman55@gmx.com>";
+  bzizou = "Bruno Bzeznik <Bruno@bzizou.net>";
   c0dehero = "CodeHero <codehero@nerdpol.ch>";
   calrama = "Moritz Maxeiner <moritz@ucworks.org>";
   campadrenalin = "Philip Horger <campadrenalin@gmail.com>";
@@ -122,6 +124,7 @@
   ftrvxmtrx = "Siarhei Zirukin <ftrvxmtrx@gmail.com>";
   funfunctor = "Edward O'Callaghan <eocallaghan@alterapraxis.com>";
   fuuzetsu = "Mateusz Kowalczyk <fuuzetsu@fuuzetsu.co.uk>";
+  fxfactorial = "Edgar Aroutiounian <edgar.factorial@gmail.com>";
   gal_bolle = "Florent Becker <florent.becker@ens-lyon.org>";
   garbas = "Rok Garbas <rok@garbas.si>";
   garrison = "Jim Garrison <jim@garrison.cc>";
@@ -211,6 +214,7 @@
   meisternu = "Matt Miemiec <meister@krutt.org>";
   michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
   michaelpj = "Michael Peyton Jones <michaelpj@gmail.com>";
+  mingchuan = "Ming Chuan <ming@culpring.com>";
   mirdhyn = "Merlin Gaillard <mirdhyn@gmail.com>";
   mschristiansen = "Mikkel Christiansen <mikkel@rheosystems.com>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";

@@ -5,13 +5,13 @@
 
 let
   plexpkg = if enablePlexPass then {
+    version = "0.9.15.5.1712";
+    vsnHash = "ba5070a";
+    sha256 = "0nwcjlfbs8dacp6wzmga75hkx16ngyaqrmdhcx8vqvgwm8l31rxs";
+  } else {
     version = "0.9.15.3.1674";
     vsnHash = "f46e7e6";
     sha256 = "086njnjcmknmbn90mmvf60ls7q73g2m955yk621jjdngs4ybvm19";
-  } else {
-    version = "0.9.15.2.1663";
-    vsnHash = "7efd046";
-    sha256 = "1kzr826khn0n69mr2kbr5hxcb56mj12fryhwr95r3132gj02aqph";
   };
 
 in stdenv.mkDerivation rec {

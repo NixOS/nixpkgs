@@ -1,10 +1,10 @@
-{ stdenv, buildPythonPackage, fetchurl, gettext
+{ stdenv, buildPythonApplication, fetchurl, gettext
 , pkgconfig, libofa, ffmpeg, chromaprint
 , pyqt4, mutagen, python-libdiscid
 }:
 
 let version = "1.3.2"; in
-buildPythonPackage {
+buildPythonApplication {
   name = "picard-${version}";
   namePrefix = "";
 
