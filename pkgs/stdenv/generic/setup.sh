@@ -384,7 +384,9 @@ paxmark() { true; }
 
 # Prevent OpenSSL-based applications from using certificates in
 # /etc/ssl.
-export SSL_CERT_FILE=/no-cert-file.crt
+if [ -z "$SSL_CERT_FILE" ]; then
+  export SSL_CERT_FILE=/no-cert-file.crt
+fi
 
 
 ######################################################################
