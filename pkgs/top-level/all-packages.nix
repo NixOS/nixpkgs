@@ -4312,6 +4312,21 @@ let
 
   javaPackages = {
     commonsIo = callPackage ../development/java-modules/commons-io.nix {};
+
+    mavenArchiver = callPackage ../development/java-modules/maven-archiver.nix {};
+    mavenArchiver241 = self.javaPackages.mavenArchiver.mavenArchiver241;
+
+    mavenArtifact = callPackage ../development/java-modules/maven-artifact.nix {};
+    mavenArtifact206 = self.javaPackages.mavenArtifact.mavenArtifact206;
+
+    mavenModel = callPackage ../development/java-modules/maven-model.nix {};
+    mavenModel206 = self.javaPackages.mavenModel.mavenModel206;
+
+    mavenPluginApi = callPackage ../development/java-modules/maven-plugin-api.nix {};
+    mavenPluginApi206 = self.javaPackages.mavenPluginApi.mavenPluginApi206;
+
+    mavenProject = callPackage ../development/java-modules/maven-project.nix {};
+    mavenProject206 = self.javaPackages.mavenProject.mavenProject206;
   };
 
   mavenPlugins = {
