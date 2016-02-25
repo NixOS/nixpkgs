@@ -5412,10 +5412,18 @@ let
 
   php = php56;
 
-  phpPackages = recurseIntoAttrs (callPackage ./php-packages.nix {});
+  phpPackages = php56Packages;
 
   php55Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php55;
+  });
+
+  php56Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
+    php = php56;
+  });
+
+  php70Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
+    php = php70;
   });
 
   inherit (callPackages ../development/interpreters/php { })
