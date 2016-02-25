@@ -54,8 +54,15 @@ def get_sensucheck_configuration(servicechecks):
 def write_checks(directory=None, config_file=None, **kw):
     servicechecks = directory.list_servicechecks()
     sensu_checks = get_sensucheck_configuration(servicechecks)
-    with open(config_file, 'w') as f:
-        json.dump(sensu_checks, f)
+
+    try:
+        with open(config_file, 'r') as f:
+            old_check_configuration = json.load(f)
+    except IOError:
+        old_check_configuration = None
+    if old_check_configuration != sensu_checks:
+        with open(config_file, 'w') as f:
+            json.dump(sensu_checks, f)
 
 
 def handle_result(directory=None, enc=None, **kw):
