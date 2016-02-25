@@ -10538,7 +10538,7 @@ let
   };
 
   # The current default kernel / kernel modules.
-  linuxPackages = linuxPackages_4_1;
+  linuxPackages = linuxPackages_4_4;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
