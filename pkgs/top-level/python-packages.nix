@@ -16287,7 +16287,7 @@ in modules // {
       homepage = https://github.com/eliben/pyelftools;
       license = licenses.publicDomain;
       platforms = platforms.all;
-      maintainers = maintainers.igsha;
+      maintainers = [ maintainers.igsha ];
     };
   };
 
