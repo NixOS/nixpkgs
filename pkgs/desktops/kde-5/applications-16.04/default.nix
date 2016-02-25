@@ -49,6 +49,7 @@ let
     kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
     kdepim = callPackage ./kdepim.nix {};
     kdepimlibs = callPackage ./kdepimlibs.nix {};
+    kdepim-runtime = callPackage ./kdepim-runtime.nix {};
     kmailtransport = callPackage ./kmailtransport.nix {};
     kmbox = callPackage ./kmbox.nix {};
     kgpg = callPackage ./kgpg.nix { inherit (pkgs.kde4) kdepimlibs; };
