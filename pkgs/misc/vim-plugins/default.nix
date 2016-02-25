@@ -343,6 +343,17 @@ rec {
 
   };
 
+  vim-autoformat = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-autoformat-2016-02-24";
+    src = fetchgit {
+      url = "git://github.com/Chiel92/vim-autoformat";
+      rev = "a2f9b88bcd66fe47a44ae8b5e1002c2d8e6f4ad4";
+      sha256 = "1fahm3dzcmpr7f9rrhzhyrj6fz95fblxal57gajcc3g136bizbnj";
+    };
+    dependencies = [];
+
+  };
+
   vim-css-color = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-css-color-2015-10-03";
     src = fetchgit {
