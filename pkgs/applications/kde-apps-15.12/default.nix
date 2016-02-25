@@ -35,6 +35,7 @@ let
     dolphin = callPackage ./dolphin.nix {};
     dolphin-plugins = callPackage ./dolphin-plugins.nix {};
     ffmpegthumbs = callPackage ./ffmpegthumbs.nix {};
+    filelight = callPackage ./filelight.nix {};
     gpgmepp = callPackage ./gpgmepp.nix {};
     gwenview = callPackage ./gwenview.nix {};
     kate = callPackage ./kate.nix {};
