@@ -14845,6 +14845,7 @@ let
           perlBindings = true;
           pythonBindings = true;
         };
+        ruby = ruby_2_2; # see https://github.com/NixOS/nixpkgs/pull/12610#issuecomment-188666473
       }
       ../desktops/kde-4.14;
 
