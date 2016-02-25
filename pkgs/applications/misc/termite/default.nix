@@ -14,6 +14,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig vte gtk3 ncurses ];
 
+  outputs = [ "out" "terminfo" ];
+
+  postInstall = ''
+    mkdir -p $terminfo/share
+    mv $out/share/terminfo $terminfo/share/terminfo
+
+    mkdir -p $out/nix-support
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+  '';
+
   meta = with stdenv.lib; {
     description = "A simple VTE-based terminal";
     license = licenses.lgpl2Plus;
