@@ -47,6 +47,7 @@ let
     kcontacts = callPackage ./kcontacts.nix {};
     kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
     kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
+    kdepim = callPackage ./kdepim.nix {};
     kdepimlibs = callPackage ./kdepimlibs.nix {};
     kmailtransport = callPackage ./kmailtransport.nix {};
     kmbox = callPackage ./kmbox.nix {};
