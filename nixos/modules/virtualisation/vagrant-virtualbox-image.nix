@@ -1,0 +1,44 @@
+# Vagrant + VirtualBox
+
+{ config, pkgs, ... }:
+
+{
+  imports = [
+    ./vagrant-guest.nix
+    ./virtualbox-image.nix
+  ];
+
+  users.extraUsers.vagrant.extraGroups = [ "vboxsf" ];
+
+  # generate the box v1 format which is much easier to generate
+  # https://www.vagrantup.com/docs/boxes/format.html
+  system.build.virtualboxVagrant = pkgs.runCommand
+    "virtualbox-vagrant.box"
+    {}
+    ''
+      mkdir workdir
+      cd workdir
+
+      # 1. create that metadata.json file
+      echo '{"provider":"virtualbox"}' > metadata.json
+
+      # 2. create a default Vagrantfile config
+      cat <<VAGRANTFILE > Vagrantfile
+      Vagrant.configure("2") do |config|
+        config.vm.base_mac = "0800275F0936"
+      end
+      VAGRANTFILE
+
+      # 3. add the exported VM files
+      tar xvf ${config.system.build.virtualBoxOVA}/*.ova
+
+      # 4. move the ovf to the fixed location
+      mv *.ovf box.ovf
+
+      # TODO: fix the checksum file instead of removing it
+      rm *.mf
+
+      # 5. compress everything back together
+      tar --owner=0 --group=0 --sort=name --numeric-owner -czf $out .
+    '';
+}
