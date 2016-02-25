@@ -8,13 +8,13 @@ in {
 
   m3d-fio = buildPlugin rec {
     name = "M3D-Fio-${version}";
-    version = "0.27";
+    version = "0.27.1";
 
     src = fetchFromGitHub {
       owner = "donovan6000";
       repo = "M3D-Fio";
       rev = "V${version}";
-      sha256 = "14zva61dhnsyapapw8q2qadfq5hzv5ykb7qxlz8a3x5j6wfhjn6h";
+      sha256 = "0jfb417wgdq6fzpxwq6xrrlpkndjwq69h4cdm0ixbyqkp7a3kcm2";
     };
 
     patches = [
