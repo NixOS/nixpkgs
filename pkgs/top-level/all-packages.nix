@@ -15555,6 +15555,8 @@ let
 
   pari = callPackage ../applications/science/math/pari {};
 
+  calc = callPackage ../applications/science/math/calc { };
+
   pcalc = callPackage ../applications/science/math/pcalc { };
 
   pspp = callPackage ../applications/science/math/pssp {
