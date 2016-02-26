@@ -44,6 +44,9 @@ self: super: {
   c2hs = pkgs.lib.overrideDerivation (dontCheck super.c2hs) (drv: {
     hardening_format = false;
   });
+  epanet-haskell = pkgs.lib.overrideDerivation super.epanet-haskell (drv: {
+    hardening_format = false;
+  });
 
   # The package doesn't compile with ruby 1.9, which is our default at the moment.
   hruby = super.hruby.override { ruby = pkgs.ruby_2_1; };
