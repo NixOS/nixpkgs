@@ -22,20 +22,20 @@
     version = "0.19.1";
   };
   jmespath = {
-    version = "1.1.3";
     source = {
-      type = "gem";
       remotes = ["https://rubygems.org"];
       sha256 = "0vpvd61kc60f98jn28kw7x7vi82qrwgglam42nvzh98i43yxwsfb";
+      type = "gem";
     };
+    version = "1.1.3";
   };
   ice_nine = {
-    version = "0.11.2";
     source = {
-      type = "gem";
       remotes = ["https://rubygems.org"];
       sha256 = "1nv35qg1rps9fsis28hz2cq2fx1i96795f91q4nmkm934xynll2x";
+      type = "gem";
     };
+    version = "0.11.2";
   };
   equalizer = {
     source = {
@@ -61,11 +61,11 @@
     version = "1.0.0";
   };
   cide = {
-    version = "0.8.1";
+    version = "0.9.0";
     source = {
       type = "gem";
       remotes = ["https://rubygems.org"];
-      sha256 = "1vsa7smab5dj6mcf0csl9wm18x95h6yphm7x18is53bv5hrzgill";
+      sha256 = "1wykwv0jnrh49jm9zsy1cb5wddv65iw4ixh072hr242wb83dcyl0";
     };
   };
   axiom-types = {
@@ -77,27 +77,27 @@
     version = "0.1.1";
   };
   aws-sdk-resources = {
-    version = "2.2.17";
     source = {
-      type = "gem";
       remotes = ["https://rubygems.org"];
       sha256 = "0vdnpjmil99n9d1fpk1w6ssgvmzx4wfmrqcij8nyd0iqdaacx3fj";
+      type = "gem";
     };
+    version = "2.2.17";
   };
   aws-sdk-core = {
-    version = "2.2.17";
     source = {
-      type = "gem";
       remotes = ["https://rubygems.org"];
       sha256 = "1vq7ny5n3rdfzkdqdm76r48slmp2a5v7565llrl4bw5hb5k4p75z";
+      type = "gem";
     };
+    version = "2.2.17";
   };
   aws-sdk = {
-    version = "2.2.17";
     source = {
-      type = "gem";
       remotes = ["https://rubygems.org"];
       sha256 = "1cwycrdk21blzjzf8fj1wlmdix94rj9aixj6phx6lwbqykn2dzx9";
+      type = "gem";
     };
+    version = "2.2.17";
   };
 }
