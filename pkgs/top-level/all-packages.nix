@@ -1705,14 +1705,14 @@ let
   gitinspector = callPackage ../applications/version-management/gitinspector { };
 
   gitlab = callPackage ../applications/version-management/gitlab {
-    ruby = ruby_2_2;
+    ruby = ruby_2_2_2;
   };
 
   gitlab-shell = callPackage ../applications/version-management/gitlab-shell {
-    ruby = ruby_2_2;
+    ruby = ruby_2_2_2;
   };
 
-  gitlab-workhorse = callPackage ../applications/version-management/gitlab-workhorse { };
+  gitlab-git-http-server = callPackage ../applications/version-management/gitlab-git-http-server { };
 
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
@@ -12692,6 +12692,7 @@ let
   libreoffice = callPackage ../applications/office/libreoffice {
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2 gnome_vfs;
+    inherit (gnome3) gsettings_desktop_schemas defaultIconTheme;
     zip = zip.override { enableNLS = false; };
     #glm = glm_0954;
     bluez5 = bluez5_28;
