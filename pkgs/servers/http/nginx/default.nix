@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
 
+  hardening_pie = true;
+
   meta = {
     description = "A reverse proxy and lightweight webserver";
     homepage    = http://nginx.org;
