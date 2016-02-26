@@ -1,5 +1,10 @@
-{ stdenv, fetchFromGitHub, ncurses, gettext, pkgconfig
-
+{ stdenv, fetchFromGitHub, fetchurl, ncurses, gettext, pkgconfig
+# default vimrc
+, vimrc ? fetchurl {
+    name = "default-vimrc";
+    url = https://projects.archlinux.org/svntogit/packages.git/plain/trunk/archlinux.vim?h=packages/vim?id=68f6d131750aa778807119e03eed70286a17b1cb;
+    sha256 = "18ifhv5q9prd175q3vxbqf6qyvkk6bc7d2lhqdk0q78i68kv9y0c";
+  }
 # apple frameworks
 , CoreServices, CoreData, Cocoa, Foundation, libobjc }:
 
@@ -31,7 +36,11 @@ stdenv.mkDerivation rec {
     "--enable-nls"
   ];
 
-  postInstall = "ln -s $out/bin/vim $out/bin/vi";
+  postInstall = ''
+    ln -s $out/bin/vim $out/bin/vi
+    mkdir -p $out/share/vim
+    cp "${vimrc}" $out/share/vim/vimrc
+  '';
 
   crossAttrs = {
     configureFlags = [
