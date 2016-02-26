@@ -65,10 +65,7 @@ rec {
 
     uhc = callPackage ../development/compilers/uhc/default.nix ({
       stdenv = pkgs.clangStdenv;
-      # UHC 1.1.9.2 is incompatible with hashable 1.2.4.0,
-      # latest LTS with a compatible hashable is LTS 4.1
-      # See also https://github.com/UU-ComputerScience/uhc/issues/69
-      inherit (pkgs.haskell.packages.lts-4_1) ghcWithPackages;
+      inherit (pkgs.haskellPackages) ghcWithPackages;
     });
 
   };
