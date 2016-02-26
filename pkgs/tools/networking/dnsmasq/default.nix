@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     "LOCALEDIR=$(out)/share/locale"
   ];
 
+  hardening_pie = true;
+
   postBuild = optionalString stdenv.isLinux ''
     make -C contrib/wrt
   '';
