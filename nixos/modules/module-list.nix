@@ -93,6 +93,7 @@
   ./security/ca.nix
   ./security/duosec.nix
   ./security/grsecurity.nix
+  ./security/oath.nix
   ./security/pam.nix
   ./security/pam_usb.nix
   ./security/pam_mount.nix
