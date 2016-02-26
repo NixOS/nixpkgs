@@ -6973,6 +6973,8 @@ let
 
   glib_networking = callPackage ../development/libraries/glib-networking {};
 
+  ace = callPackage ../development/libraries/ace { };
+
   atk = callPackage ../development/libraries/atk { };
   atkmm = callPackage ../development/libraries/atkmm { };
 
@@ -14256,6 +14258,8 @@ let
   };
 
   pahole = callPackage ../development/tools/misc/pahole {};
+
+  yarp = callPackage ../applications/science/misc/yarp {};
 
   yed = callPackage ../applications/graphics/yed {};
 
