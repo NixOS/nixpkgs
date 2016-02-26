@@ -481,6 +481,7 @@ GEM
     net-ldap (0.12.1)
     net-ssh (3.0.1)
     netrc (0.11.0)
+    newrelic_rpm (3.14.1.311)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     nprogress-rails (0.1.6.7)
@@ -724,7 +725,7 @@ GEM
       activesupport (>= 3.1, < 4.3)
     select2-rails (3.5.9.3)
       thor (~> 0.14)
-    sentry-raven (0.15.4)
+    sentry-raven (0.15.6)
       faraday (>= 0.7.6)
     settingslogic (2.0.9)
     sexp_processor (4.6.0)
@@ -963,6 +964,7 @@ DEPENDENCIES
   nested_form (~> 0.3.2)
   net-ssh (~> 3.0.1)
   nokogiri (~> 1.6.7, >= 1.6.7.2)
+  newrelic_rpm (~> 3.14)
   nprogress-rails (~> 0.1.6.7)
   oauth2 (~> 1.0.0)
   octokit (~> 3.8.0)
@@ -1010,6 +1012,7 @@ DEPENDENCIES
   sdoc (~> 0.3.20)
   seed-fu (~> 2.3.5)
   select2-rails (~> 3.5.9)
+  sentry-raven (~> 0.15)
   sentry-raven
   settingslogic (~> 2.0.9)
   sham_rack

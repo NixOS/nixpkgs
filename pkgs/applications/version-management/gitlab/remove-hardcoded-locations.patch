@@ -18,10 +18,10 @@ index 9095266..694a4c5 100644
    config.action_mailer.raise_delivery_errors = true
  
 diff --git a/config/gitlab.yml.example b/config/gitlab.yml.example
-index 05f127d..1daef74 100644
+index 05f127d..6a4ae68 100644
 --- a/config/gitlab.yml.example
 +++ b/config/gitlab.yml.example
-@@ -423,7 +422,7 @@ production: &base
+@@ -423,7 +423,7 @@ production: &base
    # CAUTION!
    # Use the default values unless you really know what you are doing
    git:
@@ -30,7 +30,6 @@ index 05f127d..1daef74 100644
      # The next value is the maximum memory size grit can use
      # Given in number of bytes per git object (e.g. a commit)
      # This value can be increased if you have very large commits
-
 diff --git a/lib/gitlab/logger.rb b/lib/gitlab/logger.rb
 index 59b2114..4f4a39a 100644
 --- a/lib/gitlab/logger.rb
@@ -73,7 +72,7 @@ index be8fcc7..7642d74 100644
    end
  end
 diff --git a/lib/tasks/gitlab/check.rake b/lib/tasks/gitlab/check.rake
-index 81099cb..a40b1ad 100644
+index d59872d..0b8007f 100644
 --- a/lib/tasks/gitlab/check.rake
 +++ b/lib/tasks/gitlab/check.rake
 @@ -223,7 +223,7 @@ namespace :gitlab do
@@ -95,8 +94,8 @@ index 81099cb..a40b1ad 100644
 +      unless File.directory?(uploads_dir)
          puts "no".red
          try_fixing_it(
--          "sudo -u #{gitlab_user} mkdir -m 750 #{Rails.root}/public/uploads"
-+          "sudo -u #{gitlab_user} mkdir -m 750 #{uploads_dir}"
+-          "sudo -u #{gitlab_user} mkdir #{Rails.root}/public/uploads"
++          "sudo -u #{gitlab_user} mkdir #{uploads_dir}"
          )
          for_more_information(
            see_installation_guide_section "GitLab"
@@ -108,4 +107,4 @@ index 81099cb..a40b1ad 100644
 +      upload_path = File.realpath(Rails.root.join(uploads_dir))
        upload_path_tmp = File.join(upload_path, 'tmp')
  
-       if File.stat(upload_path).mode == 040750
+       if File.stat(upload_path).mode == 040700

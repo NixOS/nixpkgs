@@ -218,7 +218,7 @@ gem 'virtus',             '~> 1.0.1'
 gem 'net-ssh',            '~> 3.0.1'
 
 # Sentry integration
-gem 'sentry-raven'
+gem 'sentry-raven', '~> 0.15'
 
 # Metrics
 group :metrics do
@@ -302,6 +302,8 @@ end
 group :production do
   gem "gitlab_meta", '7.0'
 end
+
+gem "newrelic_rpm", '~> 3.14'
 
 gem 'octokit', '~> 3.8.0'
 
